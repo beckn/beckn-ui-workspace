@@ -2,7 +2,7 @@
 
 ## Description
 
-Beckn-ui-workspace is a monorepo consisting of all Beckn possible frontend use-cases and BAPs (Beckn Application Protocols).
+Beckn-ui-workspace is a monorepo consisting of all Beckn possible frontend use-cases and BAPs.
 
 ## Installation and Usage
 
