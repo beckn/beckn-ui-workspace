@@ -1,7 +1,6 @@
 import React from 'react'
 import { render, fireEvent } from '@testing-library/react'
 import Button from '../../src/components/button' // Assuming Button component is in a separate file
-import '@testing-library/jest-dom'
 
 // A mock function for the handleClick prop
 const mockHandleClick = jest.fn()

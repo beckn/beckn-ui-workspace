@@ -1,11 +1,10 @@
 {
-  "name": "@beckn-ui/common",
+  "name": "@beckn-ui/osm",
   "version": "0.1.0",
   "private": true,
-  "main": "./index.ts",
   "scripts": {
     "dev": "next dev",
-    "prepare": "next build",
+    "build": "next build",
     "start": "next start",
     "postbuild": "next-sitemap",
     "export": "next export"
@@ -14,7 +13,6 @@
   "dependencies": {
     "@chakra-ui/icons": "^2.0.19",
     "@chakra-ui/react": "^2.7.0",
-    "@chakra-ui/react-types": "^2.0.6",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@fullhuman/postcss-purgecss": "^4.1.3",
@@ -68,7 +66,7 @@
     "@types/react-dom": "18.0.3",
     "autoprefixer": "^10.4.7",
     "eslint": "8.14.0",
-    "eslint-config-next": "12.1.6",
+    "eslint-config-next": "latest",
     "postcss": "^8.4.14",
     "postcss-import": "^14.1.0",
     "tailwindcss": "^3.1.4",

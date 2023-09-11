@@ -3,8 +3,10 @@
   "packageManager": "yarn@3.6.3",
   "private": true,
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "apps/*"
   ],
+  "prettier": "@beckn-ui/prettier-config",
   "scripts": {
     "postinstall": "yarn prepare",
     "prepare": "npx husky install && yarn workspace @beckn-ui/common prepare",
@@ -20,13 +22,15 @@
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx}": [
-      "yarn format"
+      "yarn format",
+      "yarn lint"
     ]
   },
   "dependencies": {
     "eslint-config-next": "latest"
   },
   "devDependencies": {
+    "@beckn-ui/prettier-config": "workspace:^",
     "@commitlint/cli": "^17.7.1",
     "@commitlint/config-conventional": "^17.7.0",
     "@testing-library/jest-dom": "^6.1.3",
