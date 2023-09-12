@@ -29,7 +29,7 @@ const Card: React.FC<Props> = ({ product }) => {
           query: { productDetails: encodedProduct }
         }}
       >
-        <a className="flex md:items-center md:flex-col relative w-full ">
+        <div className="flex md:items-center md:flex-col relative w-full ">
           <Box
             w={'125px'}
             className=" md:w-full relative bg-slate-400/30  md:px-6  rounded-bl-xl rounded-tl-xl md:rounded-tr-xl md:rounded-bl-none rtl:order-2 rtl:md:order-none flex flex-col justify-between items-center"
@@ -94,7 +94,7 @@ const Card: React.FC<Props> = ({ product }) => {
               </Flex>
             </Flex>
           </Box>
-        </a>
+        </div>
       </Link>
 
       <CardActions product={product} />
