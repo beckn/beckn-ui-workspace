@@ -1,0 +1,22 @@
+.emptyCart_container {
+  padding-top: 15px;
+  flex-direction: column;
+  width: 100%;
+}
+.cartHeadingText {
+  color: #000;
+  text-align: center;
+  font-family: Poppins;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 25px;
+}
+.cartSpanText {
+  color: #000;
+  text-align: center;
+  font-family: Poppins;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 21px;
+  margin-bottom: 20px;
+}

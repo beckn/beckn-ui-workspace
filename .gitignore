@@ -5,6 +5,10 @@
 !.yarn/sdks
 !.yarn/versions
 
+
+**/.DS_Store
+
+
 node_modules
 .next
 out
