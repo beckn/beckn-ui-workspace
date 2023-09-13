@@ -1,2 +1,8 @@
 export { default as Accordion } from './accordion'
 export { default as Button } from './button'
+export { default as Loader } from './Loader'
+export { default as ProductCard } from './ProductCard'
+export { default as Sort } from './sort'
+export { default as productList } from './productList'
+export { default as ProductPrice } from './productPrice'
+export { default as SearchInputOnSearchResultsPage } from './searchInputOnSearchResultsPage'
