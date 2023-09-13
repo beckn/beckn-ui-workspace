@@ -7,6 +7,7 @@ import Image from 'next/image'
 import { FaSearch } from 'react-icons/fa'
 import Router from 'next/router'
 import { useState } from 'react'
+import { Search } from '@beckn-ui/common'
 
 const LandingPage: React.FC = () => {
   const { t } = useLanguage()
@@ -23,26 +24,13 @@ const LandingPage: React.FC = () => {
         <Box className={Styles.para_Text}>
           <Text>{t.homeText}</Text>
         </Box>
-        <Box className={Styles.input_group}>
-          <input
-            className={Styles.input_box}
-            type="text"
-            name="search_input"
-            placeholder="Search for courses"
-            onChange={(e: React.BaseSyntheticEvent) => setSearchTerm(e.target.value)}
-            onKeyDown={event => event.key === 'Enter' && navigateToSearchResults()}
-          />
-          <button className={Styles.search_button}>
-            <FaSearch
-              onClick={e => {
-                if (searchTerm) {
-                  navigateToSearchResults()
-                }
-                e.preventDefault()
-              }}
-            />
-          </button>
-        </Box>
+        <Search
+          handleOnChange={value => setSearchTerm(value)}
+          handlePressEnter={() => navigateToSearchResults()}
+          handleOnSearchClick={() => {
+            if (searchTerm) navigateToSearchResults()
+          }}
+        />
         <Flex className={Styles.footer_container}>
           <Text className={Styles.footerText}>{t.footerText}</Text>
           <Image src={beckenFooter} alt="footerLogo" width={39} height={13} />

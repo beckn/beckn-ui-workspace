@@ -10,6 +10,8 @@ import cs from 'classnames'
 import { Image } from '@chakra-ui/react'
 import { useLanguage } from '../hooks/useLanguage'
 import { Button } from '@beckn-ui/common'
+import MapSearch from '../components/Map/MapSearch'
+import { isEmpty } from 'lodash'
 
 const tagValuetoApiMap: { [key: string]: string } = {
   Books: 'books',
@@ -63,9 +65,6 @@ const getStaticTags = (tag: string) => {
   if (tag === StoreType.books) return ['inStoreShopping', 'delivery', 'clickAndCollect']
   else return ['dineIn', 'takeAway', 'delivery']
 }
-
-import MapSearch from '../components/Map/MapSearch'
-import { isEmpty } from 'lodash'
 
 const Homepage = () => {
   const MapWithNoSSR = dynamic(() => import('../components/Map'), {
