@@ -9,7 +9,7 @@
   "prettier": "@beckn-ui/prettier-config",
   "scripts": {
     "postinstall": "yarn prepare",
-    "prepare": "npx husky install && yarn workspace @beckn-ui/common prepare",
+    "prepare": "npx husky install",
     "dev:osm": "yarn workspace @beckn-ui/osm dev",
     "build:osm": "yarn workspace @beckn-ui/osm build",
     "export:osm": "yarn workspace @beckn-ui/osm build && yarn workspace @beckn-ui/osm export",
