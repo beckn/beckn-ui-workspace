@@ -30,7 +30,7 @@
 }
 .did_floating_input:focus {
   outline: none;
-  border-color: #a71b4a;
+  border-color: rgba(var(--color-primary));
 }
 .did_floating_input.otp_number_input:focus {
   outline: none;
@@ -39,7 +39,7 @@
 .did_floating_input:focus ~ .did_floating_label {
   top: -8px;
   font-size: 14px;
-  color: #a71b4a;
+  color: rgba(var(--color-primary));
 }
 .did_floating_input:focus ~ .did_floating_label.otp_number {
   top: -8px;
@@ -62,7 +62,7 @@
 }
 .error {
   font-size: 10px;
-  color: #a71b4a;
+  color: rgba(var(--color-primary));
 }
 
 .did_floating_label_content:has(.error) {

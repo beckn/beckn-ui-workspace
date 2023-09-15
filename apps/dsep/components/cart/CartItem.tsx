@@ -1,4 +1,4 @@
-import Image from 'next/image'
+import { Image } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import { HiMinusSm, HiOutlinePlusSm, HiOutlineTrash } from 'react-icons/hi'
 import { useSelector } from 'react-redux'
@@ -76,13 +76,7 @@ const CartItem: React.FC<Props> = ({ product, setIsLoadingForCartCountChange }) 
               position: 'relative'
             }}
           >
-            <Image
-              src={product.descriptor.images[0]}
-              width={200}
-              height={200}
-              alt={product.descriptor.name}
-              className="object-contain"
-            />
+            <Image src={product.descriptor.images[0]} alt={product.descriptor.name} className="object-contain" />
           </div>
           {counter === 1 ? (
             <div

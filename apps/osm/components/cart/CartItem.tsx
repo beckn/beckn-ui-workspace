@@ -1,4 +1,4 @@
-import Image from 'next/image'
+import { Image } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import { HiMinusSm, HiOutlinePlusSm, HiOutlineTrash } from 'react-icons/hi'
 import { useSelector } from 'react-redux'
@@ -64,13 +64,7 @@ const CartItem: React.FC<Props> = ({ product, setIsLoadingForCartCountChange }) 
         > */}
         <a className="flex flex-wrap sm:flex-nowrap justify-center items-center flex-grow">
           <div style={{ width: '80px', height: '80px', marginBottom: '5px' }}>
-            <Image
-              src={product.descriptor.images[0]}
-              width={200}
-              height={200}
-              alt={product.descriptor.name}
-              className="object-contain"
-            />
+            <Image src={product.descriptor.images[0]} alt={product.descriptor.name} className="object-contain" />
           </div>
           <div
             className="flex-grow text-sm font-semibold mb-2 sm:mb-0 mx-2 w-full text-center pt-1"

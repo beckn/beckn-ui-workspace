@@ -1,4 +1,4 @@
-import Image from 'next/image'
+import { Image } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import { RetailItem } from '../../lib/types/products'
 import ProductPageActions from './ProductPageActions'

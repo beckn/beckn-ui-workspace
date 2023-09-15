@@ -1,5 +1,5 @@
 import { Box, Flex, Text } from '@chakra-ui/react'
-import Image from 'next/image'
+import { Image } from '@chakra-ui/react'
 import React from 'react'
 import CartEmpty from '../../public/images/cartEmptyIcon.svg'
 import Styles from './EmptyCart.module.css'

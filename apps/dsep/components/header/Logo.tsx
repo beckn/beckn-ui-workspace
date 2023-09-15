@@ -1,4 +1,4 @@
-import Image from 'next/image'
+import { Image } from '@chakra-ui/react'
 import Link from 'next/link'
 import React from 'react'
 

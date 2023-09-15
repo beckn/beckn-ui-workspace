@@ -1,5 +1,5 @@
 import React from 'react'
-import Image from 'next/image'
+import { Image } from '@chakra-ui/react'
 import { useDispatch } from 'react-redux'
 import { toast } from 'react-toastify'
 import { favoriteActions } from '../../store/favorite-slice'

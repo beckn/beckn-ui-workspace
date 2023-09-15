@@ -74,6 +74,10 @@ const Card: React.FC<Props> = ({ product }) => {
               ) : null}
             </Flex>
             <Flex fontSize={'12px'} alignItems={'center'} mb={'8px'}>
+              <Text fontWeight={'600'}>Duration:</Text>
+              <Text pl={'3px'}>1 Month</Text>
+            </Flex>
+            <Flex fontSize={'12px'} alignItems={'center'} mb={'8px'}>
               <Text fontWeight={'600'}>Sold by:</Text>
               <Text pl={'3px'}>{(product as any).bppName}</Text>
             </Flex>
@@ -81,7 +85,7 @@ const Card: React.FC<Props> = ({ product }) => {
               justifyContent={'space-between'}
               alignItems={'center'}
               position={'absolute'}
-              bottom={'11px'}
+              bottom={'-15px'}
               width={'calc(100% - 30px)'}
             >
               <ProductPrice price={parseFloat(product.price.value)} />

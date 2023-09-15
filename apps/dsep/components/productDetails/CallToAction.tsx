@@ -88,7 +88,7 @@ const CallToAction: React.FC<Props> = ({ product }) => {
       <Button
         buttonText={
           <Flex justifyContent={'center'} alignItems={'center'}>
-            <BsCartPlus style={{ fontSize: '1.2rem', margin: '0 0.4rem' }} />
+            {/* <BsCartPlus style={{ fontSize: '1.2rem', margin: '0 0.4rem' }} /> */}
             {t.addToCart}
           </Flex>
         }
