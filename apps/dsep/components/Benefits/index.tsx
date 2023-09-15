@@ -1,5 +1,5 @@
 import React from 'react'
-import Image from 'next/image'
+import { Image } from '@chakra-ui/react'
 import { useLanguage } from '../../hooks/useLanguage'
 import { benefitContent } from '../../mock/benefits'
 

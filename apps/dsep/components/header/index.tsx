@@ -17,12 +17,13 @@ const cartIconBlackList = [
   '/mobileOtp',
   '/cart',
   '/checkoutPage',
-  '/paymentMode'
+  '/paymentMode',
+  '/createProfile'
 ]
 
 const backIconList = ['/', '/orderDetails']
 
-const homeIconBlackList = ['/orderHistory', '/', '/homePage', '/mobileOtp']
+const homeIconBlackList = ['/orderHistory', '/', '/homePage', '/mobileOtp', '/createProfile']
 
 const storeHeaderBlackList = [
   '/checkoutPage',
@@ -34,7 +35,8 @@ const storeHeaderBlackList = [
   'feedback',
   '/',
   '/mobileOtp',
-  '/paymentMode'
+  '/paymentMode',
+  '/createProfile'
 ]
 const headerValues = {
   '/checkoutPage': 'Billing & Shipping',
@@ -44,6 +46,7 @@ const headerValues = {
   '/mobileOtp': 'Sign In',
   '/cart': 'Cart',
   '/paymentMode': 'Select Payment Method',
+  '/createProfile': 'Create Profile',
   feedback: 'Feedback'
 }
 
@@ -55,6 +58,7 @@ const headerValuesFrench = {
   '/mobileOtp': 'Se Connecter',
   '/cart': 'Panier',
   '/paymentMode': 'Sélectionner la Méthode de Paiement',
+  '/createProfile': 'Create Profile',
   feedback: "Retour d'Information"
 }
 
@@ -63,6 +67,7 @@ const topHeaderBlackList: string[] = []
 const bottomHeaderBlackList = ['/homePage', '/orderConfirmation']
 
 const menuIconWhiteList = ['/homePage']
+const skipWhiteList = ['/createProfile']
 
 const languageIconWhiteList = ['/homePage', '/', '/mobileOtp']
 
@@ -166,7 +171,6 @@ const BottomHeader = () => {
       setOptionTags(JSON.parse(localStorage.getItem('optionTags') as string))
     })
   }, [])
-
   const router = useRouter()
 
   return (
@@ -182,7 +186,14 @@ const BottomHeader = () => {
           </div>
 
           {getHeaderTitleForPage(optionTags?.name, optionTags?.logo, router.pathname, locale)}
-          <div className="flex gap-4">{!cartIconBlackList.includes(router.pathname) && <CartIcon />}</div>
+          <div className="flex gap-4">
+            {!cartIconBlackList.includes(router.pathname) && <CartIcon />}
+            {skipWhiteList.includes(router.pathname) && (
+              <Box cursor={'pointer'} fontSize={'15px'} color="rgba(var(--color-primary))" onClick={() => {}}>
+                Skip
+              </Box>
+            )}
+          </div>
         </div>
       </div>
     </header>

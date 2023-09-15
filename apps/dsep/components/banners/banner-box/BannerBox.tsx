@@ -1,4 +1,4 @@
-import Image from 'next/image'
+import { Image } from '@chakra-ui/react'
 import React from 'react'
 import DiscountCountdown from '../../UI/discountCountdown/DiscountCountdown'
 import { useLanguage } from '../../../hooks/useLanguage'

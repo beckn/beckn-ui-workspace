@@ -1,6 +1,6 @@
 import type { NextPage } from 'next'
 import { useLanguage } from '../hooks/useLanguage'
-import Image from 'next/image'
+import { Image } from '@chakra-ui/react'
 import { RiDoubleQuotesL, RiDoubleQuotesR } from 'react-icons/ri'
 
 const About: NextPage = () => {

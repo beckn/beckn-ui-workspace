@@ -1,7 +1,7 @@
-import Image from 'next/image'
 import React, { useState } from 'react'
 import { RetailItem } from '../../lib/types/products'
 import ProductPageActions from './ProductPageActions'
+import { Image } from '@chakra-ui/react'
 
 interface Props {
   imgArray: string[]

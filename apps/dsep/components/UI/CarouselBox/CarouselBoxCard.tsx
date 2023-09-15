@@ -1,5 +1,5 @@
 import React from 'react'
-import Image from 'next/image'
+import { Image } from '@chakra-ui/react'
 import { urlFor } from '../../../lib/client'
 import { RetailItem } from '../../../lib/types/products'
 import Link from 'next/link'
