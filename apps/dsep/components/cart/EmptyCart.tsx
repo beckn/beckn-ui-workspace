@@ -10,7 +10,7 @@ import Router from 'next/router'
 const EmptyCart: React.FC = () => {
   const { t } = useLanguage()
   const handleGoBack = (): void => {
-    Router.push('/homePage')
+    Router.push('/myScholarship')
   }
 
   return (
@@ -18,10 +18,13 @@ const EmptyCart: React.FC = () => {
       <Box mb={'40px'} display={'flex'} justifyContent={'center'}>
         <Image src={CartEmpty} width={'306px'} height={'245px'} alt="cartEmpty" />
       </Box>
-      <Text className={Styles.cartHeadingText}>{t.cartEmpty}</Text>
-      <Text className={Styles.cartSpanText}>{t.cartEmptySpan}</Text>
+      <Text className={Styles.cartHeadingText}>{t.noScholarship}</Text>
+      <Text className={Styles.cartSpanText}>{t.noScholarshipText1}</Text>
+      <Text className={Styles.cartSpanText} mb="40px">
+        {t.noScholarshipText2}
+      </Text>
       <Button
-        buttonText={t.goBackBtn}
+        buttonText={t.searchScholarships}
         background={'rgba(var(--color-primary))'}
         color={'rgba(var(--text-color))'}
         isDisabled={false}

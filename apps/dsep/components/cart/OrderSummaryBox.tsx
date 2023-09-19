@@ -55,7 +55,7 @@ const OrderSummaryBox: React.FC<OrderSummaryBoxPropsModel> = props => {
             </div>
           </div>
           <Button
-            buttonText={t.orderBtn}
+            buttonText={t.checkout}
             background={'rgba(var(--color-primary))'}
             color={'rgba(var(--text-color))'}
             isDisabled={false}

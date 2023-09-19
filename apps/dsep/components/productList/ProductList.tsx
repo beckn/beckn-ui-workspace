@@ -40,7 +40,10 @@ const ProductList: React.FC<Props> = ({ productList }) => {
         {sortedProductList && sortedProductList.length ? (
           <div>
             <Sort selectedBtn={selectedRadioBtn} onChangeSelectedBtn={onChangeHandler} />
-            <div className="grid gap-4 md:gap-2 grid-cols-6 md:grid-cols-12" style={{ marginTop: '140px' }}>
+            <div
+              className="grid gap-4 md:gap-2 grid-cols-6 md:grid-cols-12 hideScroll"
+              style={{ marginTop: '140px', maxHeight: 'Calc(100vh - 260px)', overflowY: 'scroll' }}
+            >
               {sortedProductList.map((product: RetailItem) => {
                 return <Card key={product.id} product={product} />
               })}
