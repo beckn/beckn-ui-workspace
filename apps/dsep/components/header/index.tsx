@@ -18,7 +18,8 @@ const cartIconBlackList = [
   '/cart',
   '/checkoutPage',
   '/paymentMode',
-  '/createProfile'
+  '/createProfile',
+  '/myScholarship'
 ]
 
 const backIconList = ['/', '/orderDetails']
@@ -36,7 +37,8 @@ const storeHeaderBlackList = [
   '/',
   '/mobileOtp',
   '/paymentMode',
-  '/createProfile'
+  '/createProfile',
+  '/myScholarship'
 ]
 const headerValues = {
   '/checkoutPage': 'Billing & Shipping',
@@ -47,6 +49,7 @@ const headerValues = {
   '/cart': 'Cart',
   '/paymentMode': 'Select Payment Method',
   '/createProfile': 'Create Profile',
+  '/myScholarship': 'My Scholarships',
   feedback: 'Feedback'
 }
 
@@ -59,6 +62,7 @@ const headerValuesFrench = {
   '/cart': 'Panier',
   '/paymentMode': 'Sélectionner la Méthode de Paiement',
   '/createProfile': 'Create Profile',
+  '/myScholarship': 'My Scholarships',
   feedback: "Retour d'Information"
 }
 

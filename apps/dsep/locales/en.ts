@@ -370,6 +370,14 @@ const en: { [key: string]: string } = {
   viewCourseBtn: 'View Course Details',
   naText: 'NA',
   startCourse: 'Start Course',
-  duration: 'Duration'
+  duration: 'Duration',
+  checkforScholarship: 'Check for Scholarship',
+  scholarship: 'Scholarship',
+  noScholarship: 'No Scholarship!',
+  noScholarshipText1: 'Look like you haven’t applied for any',
+  noScholarshipText2: 'Scholarship!',
+  searchScholarships: 'Search Scholarships',
+  searchMoreScholarships: 'Search More Scholarships',
+  applyNow: 'Apply Now'
 }
 export default en

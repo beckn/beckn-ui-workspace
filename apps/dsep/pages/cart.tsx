@@ -16,6 +16,7 @@ import {
 import { responseDataActions } from '../store/responseData-slice'
 import { getCartItemsPerBpp, getItemsForCart, getPayloadForQuoteRequest } from '../utilities/cart-utils'
 import EmptyCart from '../components/cart/EmptyCart'
+import { Box } from '@chakra-ui/react'
 
 const Cart = () => {
   const [itemsForCart, setItemsForCart] = useState<CartRetailItem[]>([])
@@ -73,13 +74,13 @@ const Cart = () => {
   }
 
   return (
-    <div>
+    <Box className="hideScroll" maxH={'calc(100vh - 100px)'} overflowY="scroll">
       {/* <Breadcrumb /> */}
       <div className="flex justify-center flex-col md:flex-row items-start relative max-w-[2100px] mx-auto">
         <CartList setIsLoadingForCartCountChange={setIsLoadingForCartCountChange} />
         <OrderSummaryBox onOrderClick={onOrderClick} />
       </div>
-    </div>
+    </Box>
   )
 }
 
