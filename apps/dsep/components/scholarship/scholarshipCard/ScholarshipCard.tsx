@@ -1,14 +1,19 @@
-import { Box, Card, CardBody, Flex, Text } from '@chakra-ui/react'
+import { Box, Card, CardBody, Divider, Flex, Text, Image } from '@chakra-ui/react'
 import React, { FC } from 'react'
+import { useLanguage } from '../../../hooks/useLanguage'
 
 interface ScholarshipCardProps {
   heading: string
   time: string
   id: string
+  img: string
   review: string
+  isStatus: boolean
+  addScholarshipCard: () => void
 }
 
 const ScholarshipCard: FC<ScholarshipCardProps> = props => {
+  const { t } = useLanguage()
   return (
     <Box>
       <Card
@@ -23,8 +28,26 @@ const ScholarshipCard: FC<ScholarshipCardProps> = props => {
           <Text pb={'5px'}>{props.time}</Text>
           <Flex alignItems={'center'} justifyContent="space-between">
             <Text pr={'10px'}>ID: {props.id}</Text>
-            <Text>{props.review}</Text>
+            <Flex alignItems={'center'}>
+              <Image src={props.img} pr="10px" />
+              <Text>{props.review}</Text>
+            </Flex>
           </Flex>
+          {!props.isStatus ? (
+            <>
+              <Divider mt={'15px'} marginLeft="-20px" mr={'-20px'} width="unset" />
+              <Box
+                textAlign={'center'}
+                padding="10px 10px 0"
+                fontSize={'15px'}
+                cursor="pointer"
+                color={'rgba(var(--color-primary))'}
+                onClick={props.addScholarshipCard}
+              >
+                {t.add}
+              </Box>
+            </>
+          ) : null}
         </CardBody>
       </Card>
     </Box>

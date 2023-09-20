@@ -378,6 +378,16 @@ const en: { [key: string]: string } = {
   noScholarshipText2: 'Scholarship!',
   searchScholarships: 'Search Scholarships',
   searchMoreScholarships: 'Search More Scholarships',
-  applyNow: 'Apply Now'
+  applyNow: 'Apply Now',
+  aboutScholarship: 'Tell us why you need this scholarship',
+  errorAboutScholarship: 'This field is required',
+  submit: 'Submit',
+  applicationSubmitted: 'Application Submitted!',
+  gotoCart: 'Go to Cart',
+  confirmText1: 'We will evaluate your',
+  confirmText2: 'application ID',
+  confirmText3: 'and respond',
+  confirmText4: 'as soon as possible.',
+  add: 'Add'
 }
 export default en
