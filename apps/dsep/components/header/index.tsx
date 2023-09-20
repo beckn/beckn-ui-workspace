@@ -18,6 +18,9 @@ const cartIconBlackList = [
   '/cart',
   '/checkoutPage',
   '/paymentMode',
+  '/jobSearch',
+  '/jobDetails',
+  '/jobApply',
   '/createProfile',
   '/myScholarship'
 ]
@@ -37,6 +40,10 @@ const storeHeaderBlackList = [
   '/',
   '/mobileOtp',
   '/paymentMode',
+  '/jobApply',
+  '/jobDetails',
+  '/jobSearch',
+
   '/createProfile',
   '/myScholarship'
 ]
@@ -48,9 +55,12 @@ const headerValues = {
   '/mobileOtp': 'Sign In',
   '/cart': 'Cart',
   '/paymentMode': 'Select Payment Method',
+  '/jobSearch': 'Jobs',
+  feedback: 'Feedback',
+  '/jobDetails': 'Jobs',
+  '/jobApply': 'Senior UX Analyst',
   '/createProfile': 'Create Profile',
-  '/myScholarship': 'My Scholarships',
-  feedback: 'Feedback'
+  '/myScholarship': 'My Scholarships'
 }
 
 const headerValuesFrench = {
@@ -68,7 +78,7 @@ const headerValuesFrench = {
 
 const topHeaderBlackList: string[] = []
 
-const bottomHeaderBlackList = ['/homePage', '/orderConfirmation']
+const bottomHeaderBlackList = ['/homePage', '/orderConfirmation', '/applicationSent']
 
 const menuIconWhiteList = ['/homePage']
 const skipWhiteList = ['/createProfile']

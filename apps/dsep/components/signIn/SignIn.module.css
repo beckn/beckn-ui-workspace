@@ -1,0 +1,53 @@
+.main_container {
+  width: 100%;
+  height: 100%;
+  margin-top: 40px;
+  font-family: Poppins;
+}
+.logo_container {
+  padding-left: 6px;
+  padding-right: 60px;
+}
+.logo_skillup {
+  padding-left: 6px;
+}
+.signin_container {
+  width: 100%;
+  height: 100%;
+}
+.signin {
+  flex-direction: column;
+  align-items: center;
+  margin-top: 40px;
+}
+.signIn_text {
+  width: 188px;
+  text-align: center;
+  color: black;
+  font-size: 15px;
+  font-weight: 400;
+  padding-bottom: 23px;
+}
+.signin_button_conatiner {
+  flex-direction: row;
+}
+.signin_button {
+  width: 335px;
+  width: 335px;
+  height: 48px;
+  border-radius: 12px;
+  background: #e5e5e5 !important;
+  padding: 0px;
+
+  .google_icon {
+    position: relative;
+    right: 4rem;
+  }
+}
+.signin_button_text {
+  width: 143px;
+  height: 23px;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 400;
+}

@@ -1,3 +1,4 @@
+import React from 'react'
 import LandingPage from '../components/landingPage/LandingPage'
 const Homepage = () => {
   return <LandingPage />
