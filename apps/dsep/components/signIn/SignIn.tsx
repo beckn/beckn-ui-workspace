@@ -7,7 +7,9 @@ import SkillUp from '../../public/images/SkillUpLogo.svg'
 import Styles from './SignIn.module.css'
 import { useLanguage } from '../../hooks/useLanguage'
 import GoogleLogo from '../../public/images/Google_logo.svg'
-const HomePage = () => {
+import { SignInPropsModel } from './Signin.types'
+
+const SignIn: React.FC<SignInPropsModel> = props => {
   const { t } = useLanguage()
   return (
     <Box className={Styles.main_container}>
@@ -18,7 +20,7 @@ const HomePage = () => {
       <Box className={Styles.signin_container}>
         <Flex className={Styles.signin}>
           <Text className={Styles.signIn_text}>{t.signInText}</Text>
-          <Button className={Styles.signin_button}>
+          <Button onClick={props.buttonClickHandler} className={Styles.signin_button}>
             <Flex className={Styles.signin_button_conatiner}>
               <Image src={GoogleLogo} className={Styles.google_icon} alt="google signin" width={16} height={16} />
               <Text className={Styles.signin_button_text}>{t.googleSignInText}</Text>
@@ -30,4 +32,4 @@ const HomePage = () => {
   )
 }
 
-export default HomePage
+export default SignIn

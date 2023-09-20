@@ -111,7 +111,7 @@ const CreateProfile: React.FC<CreateProfileProps> = () => {
         </div>
       </div>
       <Button
-        buttonText={t.saveShippingDetails}
+        buttonText={t.createAccount}
         background={'rgba(var(--color-primary))'}
         color={'rgba(var(--text-color))'}
         handleOnClick={handleButtonClick}

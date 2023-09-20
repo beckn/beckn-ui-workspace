@@ -9,7 +9,7 @@ interface ScholarshipAddButtonProps {
 
 const ScholarshipAddButton: React.FC<ScholarshipAddButtonProps> = props => {
   return (
-    <Box>
+    <Box cursor={'pointer'}>
       <Card
         className="border_radius_all"
         mb={'20px'}

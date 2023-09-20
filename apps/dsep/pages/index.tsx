@@ -1,10 +1,17 @@
+import axios from 'axios'
 import React from 'react'
-import HomePage from '../components/signIn/SignIn'
+import SignIn from '../components/signIn/SignIn'
 
 const Home = () => {
+  const googleSignIn = () => {
+    axios
+      .get('https://strapi-bap.becknprotocol.io/api/connect/google')
+      .then(res => console.log(res))
+      .catch(e => console.error(e))
+  }
   return (
     <div>
-      <HomePage />
+      <SignIn buttonClickHandler={() => googleSignIn()} />
     </div>
   )
 }

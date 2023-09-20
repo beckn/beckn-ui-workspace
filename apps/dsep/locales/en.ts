@@ -407,6 +407,7 @@ const en: { [key: string]: string } = {
   confirmText2: 'application ID',
   confirmText3: 'and respond',
   confirmText4: 'as soon as possible.',
-  add: 'Add'
+  add: 'Add',
+  createAccount: 'Create Account'
 }
 export default en

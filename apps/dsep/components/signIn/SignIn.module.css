@@ -2,6 +2,10 @@
   width: 100%;
   height: 100%;
   margin-top: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
   font-family: Poppins;
 }
 .logo_container {
@@ -38,11 +42,10 @@
   border-radius: 12px;
   background: #e5e5e5 !important;
   padding: 0px;
-
-  .google_icon {
-    position: relative;
-    right: 4rem;
-  }
+}
+.google_icon {
+  position: relative;
+  right: 4rem;
 }
 .signin_button_text {
   width: 143px;
