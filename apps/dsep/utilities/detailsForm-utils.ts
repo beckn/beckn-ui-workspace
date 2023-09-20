@@ -2,6 +2,7 @@ import { ShippingFormData } from '../pages/checkoutPage'
 
 export interface FormErrors {
   name?: string
+  scholarshipInfo?: string
   mobileNumber?: string
   email?: string
   address?: string
@@ -14,6 +15,9 @@ export const validateForm = (formData: ShippingFormData): FormErrors => {
   if (formData.name.trim() === '') {
     errors.name = 'errorName'
   }
+  // if (formData.scholarshipInfo.trim() === '') {
+  //   errors.scholarshipInfo = 'errorAboutScholarship'
+  // }
 
   if (formData.mobileNumber.trim() === '') {
     errors.mobileNumber = 'errorNumber'

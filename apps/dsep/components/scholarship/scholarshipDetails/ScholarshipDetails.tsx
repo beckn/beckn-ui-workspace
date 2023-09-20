@@ -1,4 +1,5 @@
 import { Box, Text } from '@chakra-ui/react'
+import Router from 'next/router'
 import React from 'react'
 import { useLanguage } from '../../../hooks/useLanguage'
 import { RetailItem } from '../../../lib/types/products'
@@ -45,7 +46,9 @@ const ScholarshipDetails: React.FC<Props> = ({ product }) => {
         background={'rgba(var(--color-primary))'}
         color={'rgba(var(--text-color))'}
         isDisabled={false}
-        handleOnClick={() => {}}
+        handleOnClick={() => {
+          Router.push('/scholarshipAddDetailsPage')
+        }}
       />
     </Box>
   )

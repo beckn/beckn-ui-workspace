@@ -2,13 +2,13 @@ import React, { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { Box, HStack, Image, Stack, Text, VStack } from '@chakra-ui/react'
 import { useSelector } from 'react-redux'
-import orderConfirmmark from '../public/images/orderConfirmmark.svg'
 import { useLanguage } from '../hooks/useLanguage'
 import useRequest from '../hooks/useRequest'
 import { getInitMetaDataPerBpp, getPayloadForConfirmRequest } from '../utilities/confirm-utils'
 import Loader from '../components/loader/Loader'
 import { TransactionIdRootState } from '../lib/types/cart'
 import Button from '../components/button/Button'
+import ConfirmOrder from '../components/confirmOrder/ConfirmOrder'
 
 const OrderConfirmation = () => {
   const { t } = useLanguage()
@@ -63,17 +63,21 @@ const OrderConfirmation = () => {
   }
   return (
     <Box>
-      {/* eslint-disable-next-line jsx-a11y/alt-text */}
-      <Image src={orderConfirmmark} margin={'20px auto'} />
-      <Text fontSize={'17px'} fontWeight={'600'} textAlign={'center'}>
-        {t.orderPlaced}
-      </Text>
-      <Stack>
-        <Text textAlign={'center'} marginTop={'8px'} marginBottom={'40px'} fontSize={'15px'}>
-          {t.confirmMessage1} <br />
-          {t.confirmMessage2}
-        </Text>
-      </Stack>
+      <ConfirmOrder
+        confirmationText={
+          <>
+            <Text fontSize={'17px'} fontWeight={'600'} textAlign={'center'}>
+              {t.orderPlaced}
+            </Text>
+            <Stack>
+              <Text textAlign={'center'} marginTop={'8px'} marginBottom={'40px'} fontSize={'15px'}>
+                {t.confirmMessage1} <br />
+                {t.confirmMessage2}
+              </Text>
+            </Stack>
+          </>
+        }
+      />
       <VStack>
         <Button
           buttonText={t.startCourse}
