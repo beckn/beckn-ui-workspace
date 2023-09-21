@@ -5,7 +5,7 @@ import { HiMinusSm, HiOutlineTrash } from 'react-icons/hi'
 import ProductPrice from '../productPrice/ProductPrice'
 import Button from '../button'
 
-export const Cart: React.FC<ICartProduct> = (props = () => {
+export const Cart: React.FC<ICartProduct> = props => {
   const { image, name, price, quantity, ...restProps } = props
   const [counter, setCounter] = useState(quantity)
 
@@ -46,7 +46,7 @@ export const Cart: React.FC<ICartProduct> = (props = () => {
           <Box w="107px" h="107px" mb="5px" position="relative">
             <Image src={image} width={200} height={200} alt={name} objectFit="contain" />
           </Box>
-          <Box onClick={} p="1" position={{ base: 'static', sm: 'absolute' }} top="0" right="0">
+          <Box onClick={() => {}} p="1" position={{ base: 'static', sm: 'absolute' }} top="0" right="0">
             {counter === 1 ? <HiOutlineTrash fontSize="1.3rem" color="black" /> : <HiMinusSm fontSize="1rem" />}
           </Box>
           <Text flex="1" fontSize="17px" textAlign="center" mb={{ base: '2', sm: '0' }}>
@@ -55,7 +55,7 @@ export const Cart: React.FC<ICartProduct> = (props = () => {
         </Flex>
         <Flex flexWrap="wrap" flexGrow="1" alignItems="center" justifyContent="center" fontSize="15px">
           <Text marginRight="10px">Price</Text>
-          <ProductPrice price={parseFloat(price) * counter} isLargeSize />
+          <ProductPrice price={price * counter} isLargeSize />
         </Flex>
       </Box>
       <Divider />
@@ -76,16 +76,16 @@ export const Cart: React.FC<ICartProduct> = (props = () => {
           </div>
           <div className="flex flex-wrap items-baseline justify-between flex-grow my-1 md:my-4">
             <p className="tracking-wide text-md sm:text-base md:text-palette-base">Subtotal</p>
-            <ProductPrice price={parseFloat(price) * counter} isLargeSize />
+            <ProductPrice price={price * counter} isLargeSize />
           </div>
           <Divider my={'10px'} />
           <div className="flex flex-wrap items-baseline justify-between flex-grow my-1 md:my-4">
             <p className="font-extrabold tracking-wide text-md sm:text-base md:text-palette-base">Total</p>
-            <ProductPrice isLargeSize price={parseFloat(price) * counter} />
+            <ProductPrice isLargeSize price={price * counter} />
           </div>
         </div>
       </div>
       <Button handleClick={onClickOrder}>Order</Button>
     </Flex>
   )
-})
+}
