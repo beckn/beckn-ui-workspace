@@ -15,6 +15,7 @@ import ButtonComp from '../button/Button'
 import crossIcon from '../../public/images/crossIcon.svg'
 import { useLanguage } from '../../hooks/useLanguage'
 import { generateAlphanumericID } from '../../utilities/orderDetails-utils'
+import Router from 'next/router'
 
 export interface ViewMoreOrderModalProps {
   isOpen: boolean
@@ -53,15 +54,20 @@ const ViewMoreOrderModal: React.FC<ViewMoreOrderModalProps> = props => {
           <ModalBody padding={'15px 20px'}>
             {props.items.map((item: any) => {
               return (
-                <Flex key={item.id} mb={'20px'} justifyContent={'space-between'}>
+                <Box>
                   <Box>
-                    <Text>{item.descriptor.name}</Text>
+                    <Text pb={'8px'}>{item.descriptor.name}</Text>
                   </Box>
-                  <Text fontSize={'15px'} fontWeight={'600'} color={'rgba(var(--color-primary))'}>
-                    {t.currencySymbol}
-                    {item.price.offered_value}
+                  <Text
+                    fontSize={'15px'}
+                    color={'rgba(var(--color-primary))'}
+                    pb="25px"
+                    cursor={'pointer'}
+                    onClick={() => Router.push('/myScholarship')}
+                  >
+                    {t.viewCourse}
                   </Text>
-                </Flex>
+                </Box>
               )
             })}
 

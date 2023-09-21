@@ -9,6 +9,7 @@ import sideNavBarReducer from './sideNavBar-slice'
 import megaMenuReducer from './megaMenu-slice'
 import activeMenuItemReducer from './activeMenuItem-slice'
 import settingBoxReducer from './settingBox-slice'
+import scholarshipCartReducer from './scholarshipCart-slice'
 import favoriteReducer from './favorite-slice'
 import responseDataReducer from './responseData-slice'
 
@@ -28,7 +29,8 @@ const store = configureStore({
     transactionId: responseDataReducer,
     quoteResponse: responseDataReducer,
     customerDetails: responseDataReducer,
-    initResponse: responseDataReducer
+    initResponse: responseDataReducer,
+    scholarshipCart: scholarshipCartReducer
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({

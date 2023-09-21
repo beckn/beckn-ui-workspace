@@ -70,7 +70,7 @@ const OrderConfirmation = () => {
               {t.orderPlaced}
             </Text>
             <Stack>
-              <Text textAlign={'center'} marginTop={'8px'} marginBottom={'40px'} fontSize={'15px'}>
+              <Text textAlign={'center'} marginTop={'8px'} marginBottom={'40px'} fontSize={'15px'} fontWeight="400">
                 {t.confirmMessage1} <br />
                 {t.confirmMessage2}
               </Text>
@@ -80,14 +80,14 @@ const OrderConfirmation = () => {
       />
       <VStack>
         <Button
-          buttonText={t.startCourse}
+          buttonText={t.viewOrderDetails}
           background={'rgba(var(--color-primary))'}
           color={'rgba(var(--text-color))'}
           isDisabled={false}
           handleOnClick={handleViewCource}
         />
         <Button
-          buttonText={t.goBackBtn}
+          buttonText={t.myLearnings}
           background={'transparent'}
           color={'rgba(var(--color-primary))'}
           isDisabled={false}
