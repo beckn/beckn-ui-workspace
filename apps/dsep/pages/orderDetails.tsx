@@ -1,4 +1,4 @@
-import { Box, CardBody, Divider, Flex, Text, Image, Card, useDisclosure } from '@chakra-ui/react'
+import { Box, CardBody, Divider, Flex, Text, Image, Card, useDisclosure, Stack } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import Accordion from '../components/accordion/Accordion'
 import { useLanguage } from '../hooks/useLanguage'
@@ -16,7 +16,7 @@ import ViewMoreOrderModal from '../components/orderDetails/ViewMoreOrderModal'
 import { useSelector } from 'react-redux'
 import { TransactionIdRootState } from '../lib/types/cart'
 import useRequest from '../hooks/useRequest'
-import { useRouter } from 'next/router'
+import Router, { useRouter } from 'next/router'
 import DetailsCard from '../components/detailsCard/DetailsCard'
 import Button from '../components/button/Button'
 
@@ -31,6 +31,7 @@ const OrderDetails = () => {
   const trackRequest = useRequest()
   const router = useRouter()
   const { orderId } = router.query
+  const [status, setStatus] = useState('progress')
 
   const { t } = useLanguage()
 
@@ -141,7 +142,23 @@ const OrderDetails = () => {
     window.open(courseUrl, '_blank')
   }
   return (
-    <>
+    <Box className="hideScroll" maxH={'calc(100vh - 100px)'} overflowY="scroll">
+      <DetailsCard>
+        <Flex alignItems={'center'} pb={'8px'}>
+          <Image src="/images/jobSearch.svg" alt=" " />
+          <Text fontSize="17px" fontWeight={'600'} pl="8px">
+            {t.lookingtojobs}
+          </Text>
+        </Flex>
+        <Box pl={'28px'}>
+          <Text fontSize={'15px'} as="span">
+            {t.jobChangeInfo}
+          </Text>
+          <Text pl="5px" fontSize={'15px'} as="span" color={'rgba(var(--color-primary))'} cursor={'pointer'}>
+            {t.searchForJob}
+          </Text>
+        </Box>
+      </DetailsCard>
       {allOrderDelivered ? (
         <Card mb={'20px'} border={'1px solid rgba(94, 196, 1, 1)'} className="border_radius_all">
           <CardBody padding={'15px 20px'}>
@@ -161,48 +178,36 @@ const OrderDetails = () => {
           </CardBody>
         </Card>
       ) : null}
-      <Accordion
-        accordionHeader={
-          <Box>
-            <Text>{t.orderSummary}</Text>
+
+      <DetailsCard>
+        <Box fontWeight={600} fontSize={'17px'} pr={'8px'} pb="10px">
+          {t.orderSummary}
+        </Box>
+        <Flex pt={'unset'} justifyContent={'space-between'} alignItems={'center'}>
+          <Text>{t.orderPlacedAt}</Text>
+          <Text>{getOrderPlacementTimeline(orderFromConfirmData.created_at)}</Text>
+        </Flex>
+        {Object.keys(confirmDataPerBpp).map(key => (
+          <Box key={confirmDataPerBpp[key].id}>
+            <Flex pt={4} justifyContent={'space-between'} alignItems={'center'}>
+              <Text>{t.ordersFulfilled}</Text>
+              <Box>
+                <Text as={'span'} pr={'2px'}>
+                  {confirmData.length}
+                </Text>
+                <Text as={'span'}>of</Text>
+                <Text as={'span'} pl={'2px'}>
+                  {confirmData.length}
+                </Text>
+              </Box>
+            </Flex>
           </Box>
-        }
-      >
-        <CardBody pt={'unset'} fontSize={'15px'}>
-          <Flex pt={'unset'} justifyContent={'space-between'} alignItems={'center'}>
-            <Text>{t.orderPlacedAt}</Text>
-            <Text>{getOrderPlacementTimeline(orderFromConfirmData.created_at)}</Text>
-          </Flex>
-          {Object.keys(confirmDataPerBpp).map(key => (
-            <Box key={confirmDataPerBpp[key].id}>
-              <Flex pt={4} justifyContent={'space-between'} alignItems={'center'}>
-                <Text>{t.ordersFulfilled}</Text>
-                <Box>
-                  <Text as={'span'} pr={'2px'}>
-                    {confirmData.length}
-                  </Text>
-                  <Text as={'span'}>of</Text>
-                  <Text as={'span'} pl={'2px'}>
-                    {confirmData.length}
-                  </Text>
-                </Box>
-              </Flex>
-            </Box>
-          ))}
-        </CardBody>
-      </Accordion>
+        ))}
+      </DetailsCard>
 
       {statusResponse.map((res: any, index: number) => (
-        <div key={index}>
-          <ViewMoreOrderModal
-            isOpen={isOpen}
-            onOpen={onOpen}
-            onClose={onClose}
-            items={res.message.order.items}
-            orderId={res.message.order.displayId}
-          />
-          <Divider mb={'20px'} />
-          <DetailsCard>
+        <Accordion
+          accordionHeader={
             <Box>
               <Flex mb={'15px'} fontSize={'17px'} alignItems={'center'}>
                 <Text fontWeight={600} fontSize={'17px'} pr={'8px'}>
@@ -236,10 +241,54 @@ const OrderDetails = () => {
                     </Text>
                   )}
                 </Flex>
+                {status === 'progress' ? (
+                  <Text fontSize={'12px'} fontWeight="600" color={'#FDC025'}>
+                    In Progress
+                  </Text>
+                ) : (
+                  <Text fontSize={'12px'} fontWeight="600" color={'#5EC401'}>
+                    Completed
+                  </Text>
+                )}
               </Flex>
             </Box>
-          </DetailsCard>
-        </div>
+          }
+        >
+          <ViewMoreOrderModal
+            isOpen={isOpen}
+            onOpen={onOpen}
+            onClose={onClose}
+            items={res.message.order.items}
+            orderId={res.message.order.displayId}
+          />
+          <Divider mb={'20px'} />
+          <CardBody pt={'unset'} fontSize={'15px'}>
+            <Box>
+              <Flex alignItems={'center'}>
+                <Image src="/images/done.svg" alt="" />
+                <Text pl={'8px'} fontSize="15px" fontWeight={'600'}>
+                  Courses Purchased
+                </Text>
+              </Flex>
+              <Text pl="28px" fontSize={'12px'}>
+                21st Jun 2021, 12:11pm
+              </Text>
+            </Box>
+            {status === 'progress' ? (
+              <Box
+                fontSize={'15px'}
+                color={'rgba(var(--color-primary))'}
+                pt="10px"
+                pl="28px"
+                onClick={() => {
+                  Router.push('/myScholarship')
+                }}
+              >
+                {t.viewCourse}
+              </Box>
+            ) : null}
+          </CardBody>
+        </Accordion>
       ))}
       <Accordion accordionHeader={t.paymentText}>
         <CardBody pt={'unset'} pb={'unset'}>
@@ -251,7 +300,7 @@ const OrderDetails = () => {
             </Text>
           </Flex>
           <Flex pb={'15px'} justifyContent={'space-between'} alignItems={'center'}>
-            <Text>{t.discountApplied}</Text>
+            <Text>{t.scholaarshipApplied}</Text>
             <Text>
               - {t.currencySymbol}
               {subTotal}
@@ -270,16 +319,7 @@ const OrderDetails = () => {
           </Flex>
         </CardBody>
       </Accordion>
-      <Box mt={'40px'}>
-        <Button
-          buttonText={t.startCourse}
-          background={'rgba(var(--color-primary))'}
-          color={'rgba(var(--text-color))'}
-          isDisabled={false}
-          handleOnClick={handleViewCource}
-        />
-      </Box>
-    </>
+    </Box>
   )
 }
 

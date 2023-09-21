@@ -256,7 +256,7 @@ const en: { [key: string]: string } = {
   checkout: 'Checkout',
   items: 'Items',
   shipping: 'Shipping',
-  billing: 'Billing',
+  billing: 'Billing Details',
   changeText: 'Change',
   paymentText: 'Payment',
   orderDetailsCheckboxText: 'Same as Shipping Details',
@@ -408,6 +408,13 @@ const en: { [key: string]: string } = {
   confirmText3: 'and respond',
   confirmText4: 'as soon as possible.',
   add: 'Add',
-  createAccount: 'Create Account'
+  scholarshipApplied: 'scholarship applied!',
+  scholaarshipApplied: 'scholarship applied',
+  viewOrderDetails: 'View Order Details',
+  myLearnings: 'My Learnings',
+  viewCourse: 'View Course',
+  lookingtojobs: 'Looking to switch jobs? ',
+  jobChangeInfo: 'Click here for a tailored job search experience! ',
+  searchForJob: 'Search for jobs'
 }
 export default en

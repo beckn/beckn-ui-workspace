@@ -58,6 +58,9 @@ const CheckoutPage = () => {
   const cartItems = useSelector((state: ICartRootState) => state.cart.items)
   const transactionId = useSelector((state: { transactionId: TransactionIdRootState }) => state.transactionId)
 
+  const scholarshipId = useSelector((state: any) => state.scholarshipCart.scholarshipId)
+  const scholarshipTitle = useSelector((state: any) => state.scholarshipCart.scholarshipTitle)
+
   useEffect(() => {
     if (localStorage) {
       if (localStorage.getItem('userPhone')) {
@@ -151,7 +154,7 @@ const CheckoutPage = () => {
   }
 
   return (
-    <>
+    <Box className="hideScroll" maxH={'calc(100vh - 100px)'} overflowY="scroll">
       {/* <AppHeader appHeaderText={t.checkout} /> */}
       {/* start Item Details */}
       <Box>
@@ -224,16 +227,18 @@ const CheckoutPage = () => {
       {/* end shipping detals */}
       <Box>
         <Flex pb={'10px'} mt={'20px'} justifyContent={'space-between'}>
-          <Text fontSize={'17px'}>{t.offersDiscounts}</Text>
+          <Text fontSize={'17px'}>{t.scholarship}</Text>
         </Flex>
         <DetailsCard>
           <Flex alignItems={'center'}>
-            <Image alt="shippingBtnImage" src={addShippingBtn} />{' '}
+            <Image alt="shippingBtnImage" src={addShippingBtn} />
             <Text ml={'8px'}>
-              <span style={{ fontWeight: 'bold' }}>‘FirstLearn5k’</span>
-              discount applied!
+              <span style={{ fontWeight: 'bold' }}>
+                ‘{scholarshipId}-{scholarshipTitle}’
+              </span>
             </Text>
           </Flex>
+          <Text ml={'35px'}>{t.scholarshipApplied}</Text>
         </DetailsCard>
       </Box>
       {/* start payment details */}
@@ -246,7 +251,7 @@ const CheckoutPage = () => {
             <PaymentDetails
               subtotalText={t.subtotalText}
               subtotalValue={`${t.currencySymbol} ${getSubTotalAndDeliveryCharges(initRequest.data).subTotal}`}
-              deliveryChargesText={t.discountApplied}
+              deliveryChargesText={t.scholaarshipApplied}
               deliveryChargesValue={`- ${t.currencySymbol} ${getSubTotalAndDeliveryCharges(initRequest.data).subTotal}`}
               totalText={t.totalText}
               totalValue={'0.00'}
@@ -274,7 +279,7 @@ const CheckoutPage = () => {
           isDisabled={false}
         />
       )}
-    </>
+    </Box>
   )
 }
 export default CheckoutPage

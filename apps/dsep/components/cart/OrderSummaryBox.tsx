@@ -17,6 +17,7 @@ const OrderSummaryBox: React.FC<OrderSummaryBoxPropsModel> = props => {
   const totalAmount = useSelector((state: ICartRootState) => state.cart.totalAmount)
 
   const totalQuantity = useSelector((state: ICartRootState) => state.cart.totalQuantity)
+  const scholarshipId = useSelector((state: any) => state.scholarshipCart.scholarshipId)
 
   return (
     <>
@@ -34,10 +35,6 @@ const OrderSummaryBox: React.FC<OrderSummaryBoxPropsModel> = props => {
           >
             <div className="flex flex-col my-1 sm:my-2" style={{ fontSize: '15px' }}>
               <div className=" my-1 flex items-center justify-between md:my-4">
-                <p className="text-md sm:text-base md:text-palette-base tracking-wide">{t.totalQuantity}</p>
-                <p className="rtl:ml-1 ltr:mr-1">{totalQuantity}</p>
-              </div>
-              <div className=" my-1 flex flex-wrap items-baseline justify-between flex-grow md:my-4">
                 <p className="text-md sm:text-base md:text-palette-base tracking-wide">{t.subtotalText}</p>
                 <ProductPrice
                   price={totalAmount}
@@ -47,6 +44,12 @@ const OrderSummaryBox: React.FC<OrderSummaryBoxPropsModel> = props => {
                   }}
                 />
               </div>
+              {scholarshipId ? (
+                <div className=" my-1 flex flex-wrap items-baseline justify-between flex-grow md:my-4">
+                  <p className="text-md sm:text-base md:text-palette-base tracking-wide">{t.scholaarshipApplied}</p>
+                  <p>00</p>
+                </div>
+              ) : null}
               <Divider my={'10px'} />
               <div className=" my-1 flex flex-wrap items-baseline justify-between flex-grow md:my-4">
                 <p className="text-md sm:text-base md:text-palette-base tracking-wide font-extrabold">{t.totalText}</p>

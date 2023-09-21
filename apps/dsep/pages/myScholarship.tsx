@@ -1,12 +1,15 @@
 import { Box } from '@chakra-ui/react'
 import Router from 'next/router'
 import React, { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import Button from '../components/button/Button'
 import ScholarshipCard from '../components/scholarship/scholarshipCard/ScholarshipCard'
 import ScholarshipListCard from '../components/scholarship/scholarshipCard/scholarshipListCard'
 import ScholarshipDetails from '../components/scholarship/scholarshipDetails/ScholarshipDetails'
 import { useLanguage } from '../hooks/useLanguage'
 import { RetailItem } from '../lib/types/products'
+import { scholarshipCartProps } from '../lib/types/scholarshipCartProps'
+import { scholarshipCartActions } from '../store/scholarshipCart-slice'
 
 interface Props {
   product: RetailItem
@@ -14,22 +17,30 @@ interface Props {
 
 const myScholarship: React.FC<Props> = ({ product }) => {
   const { t } = useLanguage()
-  const [status, setStatus] = useState(true)
+  const [scholarshipStatus, setScholarshipStatus] = useState('Approved')
+
+  const dispatch = useDispatch()
 
   const handleScholarship = () => {
     Router.push('/myScholarship')
   }
 
+  const handleScholarshipDetails = () => {
+    const id = '789171'
+    const title = 'Extended Learning'
+    dispatch(scholarshipCartActions.setScholarshipId(id))
+    dispatch(scholarshipCartActions.setScholarshipTitle(title))
+    Router.push('/cart')
+  }
+
   return (
     <Box className="hideScroll" maxH={'calc(100vh - 100px)'} overflowY="scroll">
       <ScholarshipCard
-        heading={'Scholarship Name Placeholder Text'}
+        heading={'Extended Learning'}
         time={'21st Jun 2021, 3.30pm'}
         id={'789171'}
-        img={status ? '/images/inProgress.svg' : '/images/approvedIcon.svg'}
-        review={'In Review'}
-        isStatus={status}
-        addScholarshipCard={() => {}}
+        scholarshipStatus={scholarshipStatus}
+        addScholarshipCard={handleScholarshipDetails}
       />
       <Button
         buttonText={t.searchMoreScholarships}
