@@ -395,7 +395,8 @@ const en: { [key: string]: string } = {
   docText: 'Documents',
   declarationText: 'I hereby declare that the details mentioned above are correct',
   appSubmitText: 'Application Submitted!',
-  appSubmitSpan: 'The company will evaluate your application and get back to you soon',
+  appSubmitSpan1: 'The company will evaluate your ',
+  appSubmitSpan2: 'application and get back to you soon',
   searchMoreJobs: 'Search More Jobs',
   jobsBy: 'Jobs By:',
   aboutScholarship: 'Tell us why you need this scholarship',
@@ -415,6 +416,13 @@ const en: { [key: string]: string } = {
   viewCourse: 'View Course',
   lookingtojobs: 'Looking to switch jobs? ',
   jobChangeInfo: 'Click here for a tailored job search experience! ',
-  searchForJob: 'Search for jobs'
+  searchForJob: 'Search for jobs',
+  myScholarships: 'My Scholarships',
+  myJobs: 'My Jobs',
+  appliedOn: 'Applied on',
+  contactInformation: 'Contact Information',
+  mobileNo: 'Mobile no.',
+  emailId: 'Email Id',
+  certificates: 'Resume & Certificates'
 }
 export default en

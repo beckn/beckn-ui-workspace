@@ -4,8 +4,6 @@ import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import Button from '../components/button/Button'
 import ScholarshipCard from '../components/scholarship/scholarshipCard/ScholarshipCard'
-import ScholarshipListCard from '../components/scholarship/scholarshipCard/scholarshipListCard'
-import ScholarshipDetails from '../components/scholarship/scholarshipDetails/ScholarshipDetails'
 import { useLanguage } from '../hooks/useLanguage'
 import { RetailItem } from '../lib/types/products'
 import { scholarshipCartProps } from '../lib/types/scholarshipCartProps'
@@ -22,7 +20,7 @@ const myScholarship: React.FC<Props> = ({ product }) => {
   const dispatch = useDispatch()
 
   const handleScholarship = () => {
-    Router.push('/myScholarship')
+    Router.push('/scholarshipCardPage')
   }
 
   const handleScholarshipDetails = () => {
@@ -49,13 +47,6 @@ const myScholarship: React.FC<Props> = ({ product }) => {
         isDisabled={false}
         handleOnClick={handleScholarship}
       />
-      {/* <ScholarshipListCard
-        scholarshipName={'Scholarship Name Placeholder Text'}
-        scholarshipDetails={'Extended learning scholarship for design placeholder description text for very brief...'}
-        scholarshipBy={'ShopNotch'}
-        handleCardClick={() => {}}
-      /> */}
-      {/* <ScholarshipDetails product={product} /> */}
     </Box>
   )
 }

@@ -1,21 +1,28 @@
 import React from 'react'
-import Styles from './LandingPage.module.css'
-import { Image } from '@chakra-ui/react'
+import { Box, Image, Flex } from '@chakra-ui/react'
 
 interface ImageCardProps {
   image: string
   text: string
   onClick: () => void
-  className: string
+  isActive: boolean
 }
 
-const ImageCard: React.FC<ImageCardProps> = ({ image, text, onClick, className }) => {
+const ImageCard: React.FC<ImageCardProps> = ({ image, text, onClick, isActive }) => {
   return (
-    <div className={Styles.image_container} onClick={onClick}>
-      <Image src={image} alt="displayed image" width={35} height={35} />
-
-      <p className={`${Styles.image_text} ${className}`}>{text}</p>
-    </div>
+    <Box
+      onClick={onClick}
+      boxShadow="0px 10px 24px 0px rgba(0, 0, 0, 0.10)"
+      width={'105px'}
+      p="18px"
+      bg={isActive ? 'rgba(var(--color-primary))' : 'transparent'}
+      borderRadius="6px"
+    >
+      <Flex alignItems={'center'} flexDirection="column" fontSize={'15px'}>
+        <Image src={image} alt="displayed image" width={35} height={35} pb="5px" />
+        <p className={`text-sm text-center ${isActive ? 'text-white' : 'text-black'}`}>{text}</p>
+      </Flex>
+    </Box>
   )
 }
 

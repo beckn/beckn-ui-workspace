@@ -53,7 +53,7 @@ const UploadFile = () => {
             >
               <Flex alignItems={'center'}>
                 <Image src="/images/pdfIcon.svg" />
-                <Box>
+                <Box w={'100%'}>
                   <Flex alignItems={'center'} justifyContent="space-between">
                     <Text fontWeight="600" pr={'5px'}>
                       {file.name}

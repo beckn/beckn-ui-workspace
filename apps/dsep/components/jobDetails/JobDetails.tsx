@@ -1,68 +1,50 @@
 import React from 'react'
 import { Box, Flex, Text } from '@chakra-ui/react'
-import Styles from './JobDetails.module.css'
 import { useLanguage } from '../../hooks/useLanguage'
 import Button from '../../components/button/Button'
+import Router from 'next/router'
 
-interface ResponseProps {
-  jobTitle: string
-  companyName: string
-  jobDesc: string
-  requirements: string
-  qualifications: string
-  jobType: string
-}
-
-interface JobDetailsProps {
-  response: ResponseProps
-}
-
-const { t } = useLanguage()
-
-const JobDetails = (props: JobDetailsProps) => {
+const JobDetails = () => {
+  const { t } = useLanguage()
   return (
-    <Box className={Styles.mainContainer}>
-      <Flex className={Styles.flexContainer}>
-        <Box className={Styles.headingContainer}>
-          <Text fontWeight={600} fontSize={'17px'}>
-            {props.response.jobTitle}
-          </Text>
-          <Text>{props.response.companyName}</Text>
-        </Box>
-        <Box className={Styles.boxContainer}>
-          <Box>
-            <Text paddingBottom={'7px'} fontWeight={'bold'} fontSize={'12px'}>
-              {t.jobDesc}
-            </Text>
-            <Text fontSize={'12px'}>{props.response.jobDesc}</Text>
-          </Box>
-          <Box className={Styles.reqContainer}>
-            <Text paddingBottom={'7px'} fontWeight={'bold'} paddingTop={'12px'} fontSize={'12px'}>
-              {t.requirements}
-            </Text>
-            <Text fontSize={'12px'}>{props.response.requirements}</Text>
-          </Box>
-          <Box className={Styles.qualContainer}>
-            <Text fontWeight={'bold'}>{t.qualifications} </Text>
-            <Text>{props.response.qualifications}</Text>
-          </Box>
-          <Box className={Styles.qualContainer}>
-            <Text fontWeight={'bold'}>{t.jobType}</Text>
-            <Text>{props.response.jobType}</Text>
-            <Text marginTop={'15px'}>Lorem ipsum dolor sit amet consectetur adipisicing elit.</Text>
-          </Box>
-        </Box>
-
-        <Box className={Styles.buttonContainer}>
-          <Button
-            buttonText={t.applyNow}
-            color={'rgba(var(--text-color))'}
-            background={'rgba(var(--color-primary))'}
-            isDisabled={false}
-            handleOnClick={() => {}}
-          ></Button>
-        </Box>
-      </Flex>
+    <Box>
+      <Text fontSize={'17px'} fontWeight="600" textAlign={'center'} pb="10px">
+        Senior UX Analyst
+      </Text>
+      <Text fontSize={'15px'} textAlign={'center'}>
+        Company Name
+      </Text>
+      <Box
+        className="mt-4 product_description_text border-2 border_radius_all hideScroll"
+        mb={'20px'}
+        style={{
+          padding: '5px 10px',
+          maxHeight: 'calc(100vh - 254px)',
+          overflow: 'auto'
+        }}
+      >
+        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quos eligendi, odio laborum tempore repellat itaque
+        quod fugiat pariatur architecto officiis incidunt sunt quas alias saepe eveniet velit excepturi. Modi, sequi?
+        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quos eligendi, odio laborum tempore repellat itaque
+        quod fugiat pariatur architecto officiis incidunt sunt quas alias saepe eveniet velit excepturi. Modi, sequi?
+        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quos eligendi, odio laborum tempore repellat itaque
+        quod fugiat pariatur architecto officiis incidunt sunt quas alias saepe eveniet velit excepturi. Modi, sequi?
+        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quos eligendi, odio laborum tempore repellat itaque
+        quod fugiat pariatur architecto officiis incidunt sunt quas alias saepe eveniet velit excepturi. Modi, sequi?
+        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quos eligendi, odio laborum tempore repellat itaque
+        quod fugiat pariatur architecto officiis incidunt sunt quas alias saepe eveniet velit excepturi. Modi, sequi?
+        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quos eligendi, odio laborum tempore repellat itaque
+        quod fugiat pariatur architecto officiis incidunt sunt quas alias saepe eveniet velit excepturi. Modi, sequi?
+      </Box>
+      <Button
+        buttonText={t.applyNow}
+        background={'rgba(var(--color-primary))'}
+        color={'rgba(var(--text-color))'}
+        isDisabled={false}
+        handleOnClick={() => {
+          Router.push('/jobApply')
+        }}
+      />
     </Box>
   )
 }

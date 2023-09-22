@@ -32,7 +32,7 @@ const scholarshipConfirmationPage = () => {
         color={'rgba(var(--color-primary))'}
         isDisabled={false}
         handleOnClick={() => {
-          Router.push('/')
+          Router.push('/cart')
         }}
       />
     </Box>

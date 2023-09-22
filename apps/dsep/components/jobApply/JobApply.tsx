@@ -1,50 +1,73 @@
-import React from 'react'
-import { Box, Flex, FormControl, FormLabel, Text } from '@chakra-ui/react'
-import Styles from './JobApply.module.css'
+import React, { useState } from 'react'
+import { Box } from '@chakra-ui/react'
 import { useLanguage } from '../../hooks/useLanguage'
-
-import Button from '../../components/button/Button'
-import UploadFile from '../uploadFile/UploadFile'
+import style from '../detailsCard/ShippingForm.module.css'
+import { FormErrors } from '../../utilities/detailsForm-utils'
 
 const JobApply = () => {
+  const [formData, setFormData] = useState({
+    name: '',
+    mobileNumber: '',
+    email: ''
+  })
+
+  const [formErrors, setFormErrors] = useState<FormErrors>({})
   const { t } = useLanguage()
 
-  return (
-    <Box className={Styles.mainContainer} maxH={'calc(100vh - 100px)'} overflowY="scroll">
-      <Flex className={Styles.inputConatiner}>
-        <FormControl fontSize={'15px'}>
-          <FormLabel className={Styles.label}>{t.nameText}</FormLabel>
-          <input type="string" className={Styles.input} />
-          <div style={{ marginTop: '30px' }}>
-            <FormLabel className={Styles.label}>{t.formNumber}</FormLabel>
-            <input type="string" className={Styles.input} />
-          </div>
-          <div style={{ marginTop: '30px' }}>
-            <FormLabel className={Styles.label}>{t.formEmail}</FormLabel>
-            <input type="string" className={Styles.input} />
-          </div>
-        </FormControl>
-      </Flex>
-      <Box pt={'15px'} pb={'20px'}>
-        <Text fontSize={'15px'} pt={'30px'} pb={'5px'}>
-          {t.docText}
-        </Text>
-        <UploadFile />
-      </Box>
-      <Box className={Styles.declareBox} pt={'0px'}>
-        <input type="checkbox" />
-        <Text pl={'15px'} pt={'16px'}>
-          {t.declarationText}
-        </Text>
-      </Box>
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    if (name === 'mobileNumber' && !/^\d*$/.test(value)) {
+      return
+    }
 
-      <Button
-        buttonText={t.applyNow}
-        color={'rgba(var(--text-color))'}
-        background={'rgba(var(--color-primary))'}
-        isDisabled
-        handleOnClick={() => {}}
-      ></Button>
+    setFormData(prevData => ({
+      ...prevData,
+      [name]: value
+    }))
+  }
+
+  return (
+    <Box>
+      <div className={style.container}>
+        <div className={style.did_floating_label_content}>
+          <input
+            className={style.did_floating_input}
+            type="text"
+            placeholder=" "
+            name="name"
+            value={formData.name}
+            onChange={handleInputChange}
+          />
+          <label className={style.did_floating_label}>{t.formName}</label>
+          {formErrors.name && <div className={style.error}>{t[`${formErrors.name}`]}</div>}
+        </div>
+        <div className={style.did_floating_label_content}>
+          <input
+            className={style.did_floating_input}
+            type="text"
+            placeholder=" "
+            name="mobileNumber"
+            value={formData.mobileNumber}
+            onChange={handleInputChange}
+          />
+          <label className={style.did_floating_label}>{t.formNumber}</label>
+          {formErrors.mobileNumber && <span className={style.error}>{t[`${formErrors.mobileNumber}`]}</span>}
+        </div>
+
+        <div className={style.did_floating_label_content}>
+          <input
+            className={style.did_floating_input}
+            type="text"
+            placeholder=" "
+            name="email"
+            value={formData.email}
+            onChange={handleInputChange}
+          />
+
+          <label className={style.did_floating_label}>{t.formEmail}</label>
+          {formErrors.email && <span className={style.error}>{t[`${formErrors.email}`]}</span>}
+        </div>
+      </div>
     </Box>
   )
 }

@@ -272,7 +272,11 @@ select:-webkit-autofill:focus {
 }
 .font-bold {
   color: rgba(var(--color-primary));
+  font-weight: 600;
 }
 .hideScroll::-webkit-scrollbar {
   display: none;
+}
+.job-search-bar > div {
+  width: 100% !important;
 }
