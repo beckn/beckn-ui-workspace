@@ -23,7 +23,7 @@ const ScholarshipDetails: React.FC<Props> = ({ product }) => {
         className="mt-4 product_description_text border-2 border_radius_all hideScroll"
         mb={'20px'}
         style={{
-          padding: '0px 10px',
+          padding: '5px 10px',
           maxHeight: 'calc(100vh - 254px)',
           overflow: 'auto'
         }}

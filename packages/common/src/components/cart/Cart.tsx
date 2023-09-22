@@ -55,6 +55,7 @@ export const Cart: React.FC<ICartProduct> = props => {
         </Flex>
         <Flex flexWrap="wrap" flexGrow="1" alignItems="center" justifyContent="center" fontSize="15px">
           <Text marginRight="10px">Price</Text>
+
           <ProductPrice price={price * counter} isLargeSize />
         </Flex>
       </Box>
@@ -76,11 +77,13 @@ export const Cart: React.FC<ICartProduct> = props => {
           </div>
           <div className="flex flex-wrap items-baseline justify-between flex-grow my-1 md:my-4">
             <p className="tracking-wide text-md sm:text-base md:text-palette-base">Subtotal</p>
+
             <ProductPrice price={price * counter} isLargeSize />
           </div>
           <Divider my={'10px'} />
           <div className="flex flex-wrap items-baseline justify-between flex-grow my-1 md:my-4">
             <p className="font-extrabold tracking-wide text-md sm:text-base md:text-palette-base">Total</p>
+
             <ProductPrice isLargeSize price={price * counter} />
           </div>
         </div>

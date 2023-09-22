@@ -26,7 +26,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, partialClose }
           leaveTo="translate-y-full"
           style={{ width: '100vw' }}
         >
-          <div className="w-full   px-4 pb-4 pt-2 mx-auto bg-[#F3F4F5]  rounded-t-[1rem] shadow-lg sm:rounded-lg sm:overflow-hidden">
+          <div className="w-full   px-8 pb-4 pt-2 mx-auto bg-[#F3F4F5]  rounded-t-[1rem] shadow-lg sm:rounded-lg sm:overflow-hidden">
             <Image src="/images/Indicator.svg" className="mx-auto mb-3" alt="indicator" />
             {children}
           </div>

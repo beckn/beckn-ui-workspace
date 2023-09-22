@@ -20,7 +20,7 @@ const ProductPrice: React.FC<ProductPriceProps> = ({
   //style base on component position
   const textMainPriceSize = isLargeSize ? ' md:text-3xl' : ' md:text-lg'
   const textDiscountPriceSize = isLargeSize ? ' md:text-xl' : ' md:text-md'
-  const fontWeight = isLargeSize ? 'font-extrabold' : 'font-bold'
+  const fontWeight = isLargeSize ? 'font-semibold' : 'font-bold'
   const justifyContent = isInSlider && locale === 'fa' ? 'flex-start' : ''
   const flexDirection = 'row'
 

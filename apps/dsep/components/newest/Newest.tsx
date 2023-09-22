@@ -18,7 +18,10 @@ const Newest = () => {
     <div className="mx-auto my-4 md:my-8 flex flex-col xl:max-w-[2130px]">
       <SectionTitle title={'newest'} />
 
-      <div className="grid gap-4 md:gap-2 grid-cols-6 md:grid-cols-12 ">
+      <div
+        className="grid gap-4 md:gap-2 grid-cols-6 md:grid-cols-12 hideScroll"
+        style={{ marginTop: '140px', maxHeight: 'Calc(100vh - 260px)', overflowY: 'scroll' }}
+      >
         {newestProducts
           ? newestProducts.slice(0, numProductToShow).map((product: RetailItem) => {
               return <Card key={product.descriptor.name} product={product} />

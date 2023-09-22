@@ -22,7 +22,10 @@ const cartIconBlackList = [
   '/jobDetails',
   '/jobApply',
   '/createProfile',
-  '/myScholarship'
+  '/myScholarship',
+  '/myLearningOrderHistory',
+  '/myJobsOrderHistory',
+  '/applyJobsPrefilled'
 ]
 
 const backIconList = ['/', '/orderDetails']
@@ -45,7 +48,12 @@ const storeHeaderBlackList = [
   '/jobSearch',
 
   '/createProfile',
-  '/myScholarship'
+  '/myScholarship',
+  '/scholarshipCardPage',
+  '/scholarshipDetailsPage',
+  '/myLearningOrderHistory',
+  '/myJobsOrderHistory',
+  '/applyJobsPrefilled'
 ]
 const headerValues = {
   '/checkoutPage': 'Billing & Shipping',
@@ -60,7 +68,12 @@ const headerValues = {
   '/jobDetails': 'Jobs',
   '/jobApply': 'Senior UX Analyst',
   '/createProfile': 'Create Profile',
-  '/myScholarship': 'My Scholarships'
+  '/myScholarship': 'My Scholarships',
+  '/scholarshipCardPage': 'Scholarships',
+  '/scholarshipDetailsPage': 'Scholarships',
+  '/myLearningOrderHistory': 'My Learnings',
+  '/myJobsOrderHistory': 'My Jobs',
+  '/applyJobsPrefilled': 'My Jobs'
 }
 
 const headerValuesFrench = {
@@ -78,7 +91,7 @@ const headerValuesFrench = {
 
 const topHeaderBlackList: string[] = []
 
-const bottomHeaderBlackList = ['/homePage', '/orderConfirmation', '/applicationSent']
+const bottomHeaderBlackList = ['/homePage', '/orderConfirmation', '/applicationSent', '/scholarshipConfirmationPage']
 
 const menuIconWhiteList = ['/homePage']
 const skipWhiteList = ['/createProfile']
@@ -163,12 +176,30 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
       <BottomModal isOpen={isMenuModalOpen} onClose={handleMenuModalClose}>
         <div
           onClick={() => {
-            router.push('/orderHistory')
+            router.push('/myLearningOrderHistory')
           }}
-          className="flex gap-2 py-5"
+          className="flex gap-2 py-3 text-[15px]"
         >
-          <Image src="/images/orderHistory.svg" alt="Order history icon" />
-          {t['orderHistory']}
+          <Image src="/images/myLearningIcon.svg" alt="myLearnings icon" />
+          {t['myLearnings']}
+        </div>
+        <div
+          onClick={() => {
+            router.push('/myScholarship')
+          }}
+          className="flex gap-2 py-3 text-[15px]"
+        >
+          <Image src="/images/myScholarshipIcon.svg" alt="myScholarships icon" />
+          {t['myScholarships']}
+        </div>
+        <div
+          onClick={() => {
+            router.push('/myJobsOrderHistory')
+          }}
+          className="flex gap-2 py-3 text-[15px]"
+        >
+          <Image src="/images/myJobIcon.svg" alt="myJobs icon" />
+          {t['myJobs']}
         </div>
       </BottomModal>
     </>
