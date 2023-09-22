@@ -423,6 +423,7 @@ const en: { [key: string]: string } = {
   contactInformation: 'Contact Information',
   mobileNo: 'Mobile no.',
   emailId: 'Email Id',
-  certificates: 'Resume & Certificates'
+  certificates: 'Resume & Certificates',
+  createAccount: 'Create Account'
 }
 export default en

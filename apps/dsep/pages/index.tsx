@@ -3,11 +3,9 @@ import React from 'react'
 import SignIn from '../components/signIn/SignIn'
 
 const Home = () => {
+  const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
   const googleSignIn = () => {
-    axios
-      .get('https://strapi-bap.becknprotocol.io/api/connect/google')
-      .then(res => console.log(res))
-      .catch(e => console.error(e))
+    window.location.href = `${strapiUrl}/connect/google`
   }
   return (
     <div>

@@ -4,11 +4,14 @@ import Button from '../button/Button'
 import { validateForm, FormErrors } from '../../utilities/detailsForm-utils'
 import { useLanguage } from '../../hooks/useLanguage'
 import { Box } from '@chakra-ui/react'
+import { UserData } from './createProfile.types'
 
-export interface CreateProfileProps {}
+export interface CreateProfileProps {
+  createProfileSubmitHandler: Function
+}
 
-const CreateProfile: React.FC<CreateProfileProps> = () => {
-  const [formData, setFormData] = useState({
+const CreateProfile: React.FC<CreateProfileProps> = props => {
+  const [formData, setFormData] = useState<UserData>({
     name: '',
     mobileNumber: '',
     email: '',
@@ -37,9 +40,9 @@ const CreateProfile: React.FC<CreateProfileProps> = () => {
 
     const hasErrors = Object.values(errors).some(error => !!error)
 
-    // if (!hasErrors) {
-    //   onSubmit(formData)
-    // }
+    if (!hasErrors) {
+      return props.createProfileSubmitHandler(formData)
+    }
   }
 
   return (

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import Link from 'next/link'
 import BottomModal from '../BottomModal'
 import { Box, Image, Text } from '@chakra-ui/react'
 import Settings from './Settings'
@@ -234,9 +235,11 @@ const BottomHeader = () => {
           <div className="flex gap-4">
             {!cartIconBlackList.includes(router.pathname) && <CartIcon />}
             {skipWhiteList.includes(router.pathname) && (
-              <Box cursor={'pointer'} fontSize={'15px'} color="rgba(var(--color-primary))" onClick={() => {}}>
-                Skip
-              </Box>
+              <Link href={'/homePage'}>
+                <Box cursor={'pointer'} fontSize={'15px'} color="rgba(var(--color-primary))" onClick={() => {}}>
+                  Skip
+                </Box>
+              </Link>
             )}
           </div>
         </div>

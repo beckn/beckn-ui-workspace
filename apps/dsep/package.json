@@ -36,7 +36,7 @@
     "bcryptjs": "^2.4.3",
     "classnames": "^2.3.2",
     "framer-motion": "^10.12.16",
-    "js-cookie": "^3.0.1",
+    "js-cookie": "^3.0.5",
     "jsonwebtoken": "^8.5.1",
     "leaflet": "^1.9.4",
     "next": "^13.4.19",
