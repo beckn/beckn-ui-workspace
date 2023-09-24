@@ -2,7 +2,7 @@
 
 const nextConfig = {
   reactStrictMode: false,
-  transpilePackages: ['@beckn-ui/common'],
+  transpilePackages: ['@beckn-ui/molecules', '@beckn-ui/becknified-components'],
   output: 'export',
   trailingSlash: true,
   images: {

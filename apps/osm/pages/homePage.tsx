@@ -9,7 +9,7 @@ import useRequest from '../hooks/useRequest'
 import cs from 'classnames'
 import { Image } from '@chakra-ui/react'
 import { useLanguage } from '../hooks/useLanguage'
-import { Button } from '@beckn-ui/common'
+import { Button } from '@beckn-ui/molecules'
 import MapSearch from '../components/Map/MapSearch'
 import { isEmpty } from 'lodash'
 

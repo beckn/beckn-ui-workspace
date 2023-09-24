@@ -13,7 +13,7 @@ import ProductPrice from '../UI/ProductPrice'
 
 interface Props {
   product: RetailItem
-  setIsLoadingForCartCountChange: Function
+  setIsLoadingForCartCountChange: React.Dispatch<React.SetStateAction<boolean>>
 }
 const CartItem: React.FC<Props> = ({ product, setIsLoadingForCartCountChange }) => {
   const quoteRequest = useRequest()
