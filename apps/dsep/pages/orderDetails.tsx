@@ -19,6 +19,7 @@ import useRequest from '../hooks/useRequest'
 import Router, { useRouter } from 'next/router'
 import DetailsCard from '../components/detailsCard/DetailsCard'
 import Button from '../components/button/Button'
+import Link from 'next/link'
 
 const OrderDetails = () => {
   const [allOrderDelivered, setAllOrderDelivered] = useState(false)
@@ -154,9 +155,11 @@ const OrderDetails = () => {
           <Text fontSize={'15px'} as="span">
             {t.jobChangeInfo}
           </Text>
-          <Text pl="5px" fontSize={'15px'} as="span" color={'rgba(var(--color-primary))'} cursor={'pointer'}>
-            {t.searchForJob}
-          </Text>
+          <Link href={'/jobSearch'}>
+            <Text pl="5px" fontSize={'15px'} as="span" color={'rgba(var(--color-primary))'} cursor={'pointer'}>
+              {t.searchForJob}
+            </Text>
+          </Link>
         </Box>
       </DetailsCard>
       {allOrderDelivered ? (

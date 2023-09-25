@@ -1,25 +1,30 @@
-import React from 'react'
-import JobDetails from '../components/jobDetails/JobDetails'
+import Router from 'next/router'
+import React, { useEffect, useState } from 'react'
+import JobDetailsPage from '../components/jobDetails/JobDetailsPage'
+import { fromBinary } from '../utilities/common-utils'
 
-const jobDetailsResponse = [
-  {
-    jobTitle: 'Senior UX Analyst',
-    companyName: 'EMinds',
-    jobDesc:
-      'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Magnam perspiciatis eum exercitationem blanditiis reiciendis sequi? Nihil velit ipsa facere veritatis ipsam, reprehenderit obcaecati consectetur assumenda nesciunt nulla minima non nisi!',
-    requirements:
-      'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eos voluptatem incidunt modi excepturi omnis provident. Nihil quaerat a doloribus accusamus temporibus corrupti perferendis sequi? Facere autem id repellat! Veniam, necessitatibus?',
-    qualifications: 'BTech/Mtech',
-    jobType: 'Full Time'
+const JobDetails = () => {
+  const [jobDetailsData, setJobDetailsData] = useState<string | string[] | null>(null)
+  const [encodedJobDetails, setEncodedJobDetails] = useState<string | string[] | undefined>('')
+
+  useEffect(() => {
+    const { jobDetails } = Router.query
+
+    if (jobDetails) {
+      setEncodedJobDetails(jobDetails)
+      setJobDetailsData(JSON.parse(fromBinary(window.atob(jobDetails as string))))
+    }
+  }, [])
+
+  if (!jobDetailsData || !encodedJobDetails) {
+    return <></>
   }
-]
 
-const jobDetails = () => {
   return (
     <div>
-      <JobDetails response={jobDetailsResponse[0]} />
+      <JobDetailsPage encodedJobDetails={encodedJobDetails} jobDetails={jobDetailsData as any} />
     </div>
   )
 }
 
-export default jobDetails
+export default JobDetails

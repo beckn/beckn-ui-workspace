@@ -3,24 +3,20 @@ import SearchBar from '../header/SearchBar'
 import JobsCard from './JobsCard'
 
 import { Box } from '@chakra-ui/react'
-import Router from 'next/router'
+import { JobInfo, JobsSearchPropsModel } from './JobsSearch.types'
+import { getTransformedDataFromJobsResponse } from './JobsCard.utils'
 
-const JobSearch = () => {
-  const handleJobsCard = () => {
-    Router.push('/jobDetails')
-  }
+const JobSearch: React.FC<JobsSearchPropsModel> = props => {
+  const transformedData: JobInfo[] = getTransformedDataFromJobsResponse(props.jobs)
+
   return (
     <div>
       <Box className="job-search-bar">
         <SearchBar searchString={''} handleChange={() => {}} />
       </Box>
-      <JobsCard
-        handleJobsCard={handleJobsCard}
-        position={'Senior UI Analyst'}
-        companyName={'EMinds'}
-        location={'Pune, Maharashtra'}
-        platformName={'BuyZilla'}
-      />
+      {transformedData.map(data => (
+        <JobsCard job={data} />
+      ))}
     </div>
   )
 }
