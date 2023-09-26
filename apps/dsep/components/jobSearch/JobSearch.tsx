@@ -14,8 +14,8 @@ const JobSearch: React.FC<JobsSearchPropsModel> = props => {
       <Box className="job-search-bar">
         <SearchBar searchString={''} handleChange={() => {}} />
       </Box>
-      {transformedData.map(data => (
-        <JobsCard job={data} />
+      {transformedData.map((data, idx) => (
+        <JobsCard key={idx} job={data} />
       ))}
     </div>
   )

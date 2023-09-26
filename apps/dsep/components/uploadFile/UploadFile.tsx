@@ -1,8 +1,9 @@
 import { Box, Flex, Image, Input, Text } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
+import { UploadFilepropsModel } from './UploadFile.types'
 
-const UploadFile = () => {
-  const [selectedFiles, setSelectedFiles] = useState<File[]>([])
+const UploadFile: React.FC<UploadFilepropsModel> = props => {
+  const { selectedFiles, setSelectedFiles } = props
   const [uploadTimes, setUploadTimes] = useState<string[]>([])
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {

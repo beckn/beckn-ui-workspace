@@ -20,7 +20,7 @@ const myScholarship: React.FC<Props> = ({ product }) => {
   const dispatch = useDispatch()
 
   const handleScholarship = () => {
-    Router.push('/scholarshipCardPage')
+    Router.push('/scholarshipSearchPage')
   }
 
   const handleScholarshipDetails = () => {

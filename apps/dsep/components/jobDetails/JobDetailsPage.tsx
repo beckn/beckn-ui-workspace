@@ -7,7 +7,7 @@ import { JobDetailsPagePropsModel } from './JobDetails.types'
 
 const JobDetailsPage: React.FC<JobDetailsPagePropsModel> = props => {
   const { t } = useLanguage()
-  const { jobDetails } = props
+  const { jobDetails, encodedJobDetails } = props
 
   return (
     <Box>
@@ -34,7 +34,7 @@ const JobDetailsPage: React.FC<JobDetailsPagePropsModel> = props => {
         color={'rgba(var(--text-color))'}
         isDisabled={false}
         handleOnClick={() => {
-          Router.push('/jobApply')
+          Router.push(`/jobApply?jobDetails=${encodedJobDetails}`)
         }}
       />
     </Box>

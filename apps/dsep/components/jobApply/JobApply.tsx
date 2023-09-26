@@ -3,13 +3,10 @@ import { Box } from '@chakra-ui/react'
 import { useLanguage } from '../../hooks/useLanguage'
 import style from '../detailsCard/ShippingForm.module.css'
 import { FormErrors } from '../../utilities/detailsForm-utils'
+import { JobApplyPropsMdoel } from './JobApply.types'
 
-const JobApply = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    mobileNumber: '',
-    email: ''
-  })
+const JobApply: React.FC<JobApplyPropsMdoel> = props => {
+  const { formData, setFormData } = props
 
   const [formErrors, setFormErrors] = useState<FormErrors>({})
   const { t } = useLanguage()

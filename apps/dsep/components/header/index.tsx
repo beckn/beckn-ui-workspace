@@ -50,7 +50,7 @@ const storeHeaderBlackList = [
 
   '/createProfile',
   '/myScholarship',
-  '/scholarshipCardPage',
+  '/scholarshipSearchPage',
   '/scholarshipDetailsPage',
   '/myLearningOrderHistory',
   '/myJobsOrderHistory',
@@ -70,7 +70,7 @@ const headerValues = {
   '/jobApply': 'Senior UX Analyst',
   '/createProfile': 'Create Profile',
   '/myScholarship': 'My Scholarships',
-  '/scholarshipCardPage': 'Scholarships',
+  '/scholarshipSearchPage': 'Scholarships',
   '/scholarshipDetailsPage': 'Scholarships',
   '/myLearningOrderHistory': 'My Learnings',
   '/myJobsOrderHistory': 'My Jobs',
