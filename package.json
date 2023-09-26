@@ -17,6 +17,8 @@
     "build:common": "yarn workspace @beckn-ui/common prepare",
     "dev:dsep": "yarn workspace @beckn-ui/dsep dev",
     "build:dsep": "yarn workspace @beckn-ui/dsep build",
+    "dev:dhp": "yarn workspace @beckn-ui/dhp dev",
+    "build:dhp": "yarn workspace @beckn-ui/dhp build",
     "export:dsep": "yarn workspace @beckn-ui/dsep build && yarn workspace @beckn-ui/dsep export",
     "test": "jest",
     "lint:fix": "eslint --fix",
