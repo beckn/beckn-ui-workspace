@@ -10,9 +10,6 @@ import { CartItemForRequest, DataPerBpp, ICartRootState, TransactionIdRootState 
 import { RetailItem } from '../../lib/types/products'
 import { cartActions } from '../../store/cart-slice'
 import { getCartItemsPerBpp, getPayloadForQuoteRequest } from '../../utilities/cart-utils'
-import AddBillingButton from '../detailsCard/AddBillingButton'
-import DetailsCard from '../detailsCard/DetailsCard'
-import ScholarshipAddButton from '../scholarship/scholarshipAddButton/ScholarshipAddButton'
 import ProductPrice from '../UI/ProductPrice'
 import addShippingBtn from '../../public/images/offer.svg'
 
@@ -27,9 +24,6 @@ const CartItem: React.FC<Props> = ({ product, setIsLoadingForCartCountChange }) 
   const cartItemsPerBppPerProvider: DataPerBpp = getCartItemsPerBpp(cartItems as CartItemForRequest[])
   const payLoadForQuoteRequest = getPayloadForQuoteRequest(cartItemsPerBppPerProvider, transactionId)
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
-
-  const scholarshipId = useSelector((state: any) => state.scholarshipCart.scholarshipId)
-  const scholarshipTitle = useSelector((state: any) => state.scholarshipCart.scholarshipTitle)
 
   const productQuantity = useSelector(
     (state: ICartRootState) => state.cart.items.find(item => item.id === product.id)?.quantity
@@ -134,30 +128,6 @@ const CartItem: React.FC<Props> = ({ product, setIsLoadingForCartCountChange }) 
           </div>
         </div>
       </div>
-      <Box>
-        <Text mb="10px" fontSize={'17px'}>
-          {t.scholarship}
-        </Text>
-        {scholarshipId ? (
-          <DetailsCard>
-            <Flex alignItems={'center'}>
-              <Image alt="shippingBtnImage" src={addShippingBtn} />
-              <Text ml={'8px'}>
-                <span style={{ fontWeight: 'bold' }}>
-                  ‘{scholarshipId}-{scholarshipTitle}’
-                </span>
-              </Text>
-            </Flex>
-            <Text ml={'35px'}>{t.scholarshipApplied}</Text>
-          </DetailsCard>
-        ) : (
-          <ScholarshipAddButton
-            image={'+'}
-            text={t.checkforScholarship}
-            handleButtonClick={() => router.push('/myScholarship')}
-          />
-        )}
-      </Box>
     </>
   )
 }

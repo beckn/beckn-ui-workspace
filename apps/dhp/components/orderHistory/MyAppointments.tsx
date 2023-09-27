@@ -2,14 +2,16 @@ import { Box, Card, CardBody, Divider, Flex, Text, Image } from '@chakra-ui/reac
 import React from 'react'
 import { useLanguage } from '../../hooks/useLanguage'
 
-interface MyJobsProps {
-  heading: string
+interface MyAppointmentsProps {
+  labName: string
+  address: string
   time: string
-  myJobsStatus: string
-  handleJobsStatus: () => void
+  OrderId: string
+  MyAppointmentsStatus: string
+  handleHistoryOrderDetails: () => void
 }
 
-const MyJob: React.FC<MyJobsProps> = props => {
+const MyAppointments: React.FC<MyAppointmentsProps> = props => {
   const { t } = useLanguage()
   return (
     <Box>
@@ -17,23 +19,30 @@ const MyJob: React.FC<MyJobsProps> = props => {
         className="border_radius_all"
         mb={'20px'}
         boxShadow={'0px 8px 10px -6px rgba(0, 0, 0, 0.1), 0px 20px 25px -5px rgba(0, 0, 0, 0.1)'}
-        onClick={props.handleJobsStatus}
+        onClick={props.handleHistoryOrderDetails}
       >
         <CardBody padding={'15px 20px'} fontSize="12px">
-          <Text fontWeight={'600'} pb={'5px'}>
-            {props.heading}
+          <Text fontWeight={'600'} pb={'10px'}>
+            {props.labName}
           </Text>
+          <Text pb={'5px'}>{props.address}</Text>
+          <Text pb={'5px'}>{props.time}</Text>
+
+          <Text pr={'10px'}>
+            {t.orderId}: {props.OrderId}
+          </Text>
+
           <Flex alignItems={'center'} justifyContent="space-between" pt={'5px'}>
-            <Text pb={'5px'}>
-              {t.appliedOn} {props.time}
+            <Text fontWeight={'600'} color={'rgba(var(--color-primary))'}>
+              {t.currencySymbol} 1000
             </Text>
             <Flex alignItems={'center'}>
-              {props.myJobsStatus === 'In Progress' ? (
+              {props.MyAppointmentsStatus === 'Upcoming' ? (
                 <Image src="/images/inProgress.svg" alt="" pr="10px" />
               ) : (
                 <Image src="/images/approvedIcon.svg" alt="" pr="10px" />
               )}
-              <Text>{props.myJobsStatus}</Text>
+              <Text>{props.MyAppointmentsStatus}</Text>
             </Flex>
           </Flex>
         </CardBody>
@@ -42,4 +51,4 @@ const MyJob: React.FC<MyJobsProps> = props => {
   )
 }
 
-export default MyJob
+export default MyAppointments

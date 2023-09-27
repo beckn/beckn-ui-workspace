@@ -10,7 +10,7 @@
 
 .checkbox label:after {
   border: 1px solid #fff;
-  content: "";
+  content: '';
   height: 12px;
   opacity: 0;
   position: absolute;
@@ -21,15 +21,15 @@
   top: 2px;
 }
 
-.checkbox input[type="checkbox"] {
+.checkbox input[type='checkbox'] {
   visibility: hidden;
 }
 
-.checkbox input[type="checkbox"]:checked + label::after {
-  background-color: #3aa5e1;
-  border-color: #3aa5e1;
+.checkbox input[type='checkbox']:checked + label::after {
+  background-color: #19998e;
+  border-color: #19998e;
 }
 
-.checkbox input[type="checkbox"]:checked + label:after {
+.checkbox input[type='checkbox']:checked + label:after {
   opacity: 1;
 }

@@ -63,7 +63,7 @@ const Cart = () => {
   }, [])
 
   const onOrderClick = () => {
-    router.push('/checkoutPage')
+    router.push('/checkoutForMedicine')
   }
 
   if (quoteRequest.loading || isLoadingForCartCountChange) {

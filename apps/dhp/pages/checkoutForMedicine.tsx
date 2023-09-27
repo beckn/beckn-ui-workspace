@@ -22,6 +22,7 @@ import {
 import Loader from '../components/loader/Loader'
 import AddBillingButton from '../components/detailsCard/AddBillingButton'
 import { useRouter } from 'next/router'
+import ItemDetailsForMedicine from '../components/detailsCard/ItemDetailsForMedicine'
 
 export type ShippingFormData = {
   name: string
@@ -31,7 +32,7 @@ export type ShippingFormData = {
   pinCode: string
 }
 
-const CheckoutPage = () => {
+const checkoutForMedicine = () => {
   const [formData, setFormData] = useState<ShippingFormData>({
     name: 'Santosh Kumar',
     mobileNumber: '9876543210',
@@ -120,13 +121,6 @@ const CheckoutPage = () => {
 
   const formSubmitHandler = () => {
     if (formData) {
-      // TODO :_ To check this again
-
-      // if (isBillingAddressSameAsShippingAddress) {
-      //   const copiedFormData = structuredClone(formData);
-      //   setBillingFormData(copiedFormData);
-      // }
-
       const cartItemsPerBppPerProvider: DataPerBpp = getCartItemsPerBpp(cartItems as CartItemForRequest[])
 
       const payLoadForInitRequest = getPayloadForInitRequest(
@@ -161,27 +155,16 @@ const CheckoutPage = () => {
         <Box pb={'10px'}>
           <Text fontSize={'17px'}>{t.items}</Text>
         </Box>
-        {/* {cartItems.map((item) => (
-          <DetailsCard key={item.id}>
-            <ItemDetails
-              title={item.descriptor.name}
-              description={item.descriptor.short_desc}
-              quantity={item.quantity}
-              price={`${t.currencySymbol}${item.totalPrice}`}
-            />
-          </DetailsCard>
-        ))} */}
+
         <DetailsCard>
           {cartItems.map(item => {
             return (
-              <>
-                <ItemDetails
-                  title={item.descriptor.name}
-                  provider={(item as any).bppName}
-                  quantity={item.quantity}
-                  price={item.totalPrice}
-                />
-              </>
+              <ItemDetailsForMedicine
+                medicineName={item.descriptor.name}
+                quantity={item.quantity}
+                description={(item as any).bppName}
+                price={item.totalPrice}
+              />
             )
           })}
         </DetailsCard>
@@ -191,33 +174,33 @@ const CheckoutPage = () => {
       {!isInitResultPresent() ? (
         <Box>
           <Flex pb={'10px'} mt={'20px'} justifyContent={'space-between'}>
-            <Text fontSize={'17px'}>{t.billing}</Text>
+            <Text fontSize={'17px'}>{t.shipping}</Text>
           </Flex>
           <DetailsCard>
-            <AddBillingButton
+            <AddShippingButton
               imgFlag={!initRequest.data}
-              billingFormData={formData}
-              setBillingFormData={setFormData}
-              addBillingdetailsBtnText={t.addBillingdetailsBtnText}
-              billingFormSubmitHandler={formSubmitHandler}
+              formData={formData}
+              setFormData={setFormData}
+              addShippingdetailsBtnText={t.addShippingdetailsBtnText}
+              formSubmitHandler={formSubmitHandler}
             />
           </DetailsCard>
         </Box>
       ) : (
         <Box>
           <Flex pb={'10px'} mt={'20px'} justifyContent={'space-between'}>
-            <Text fontSize={'17px'}>{t.billing}</Text>
-            <AddBillingButton
+            <Text fontSize={'17px'}>{t.shipping}</Text>
+            <AddShippingButton
               imgFlag={!isInitResultPresent()}
-              billingFormData={formData}
-              setBillingFormData={setFormData}
-              addBillingdetailsBtnText={t.changeText}
-              billingFormSubmitHandler={formSubmitHandler}
+              formData={formData}
+              setFormData={setFormData}
+              addShippingdetailsBtnText={t.changeText}
+              formSubmitHandler={formSubmitHandler}
             />
           </Flex>
 
           <ShippingOrBillingDetails
-            accordionHeader={t.billing}
+            accordionHeader={t.shipping}
             name={formData.name}
             location={formData.address}
             number={formData.mobileNumber}
@@ -225,7 +208,55 @@ const CheckoutPage = () => {
         </Box>
       )}
       {/* end shipping detals */}
+      {isBillingAddressSameAsShippingAddress ? (
+        <Box>
+          <Flex pb={'20px'} mt={'20px'} justifyContent={'space-between'}>
+            <Text fontSize={'17px'}>{t.billing}</Text>
+            <AddBillingButton
+              billingFormData={billingFormData}
+              setBillingFormData={setBillingFormData}
+              addBillingdetailsBtnText={t.changeText}
+              billingFormSubmitHandler={formSubmitHandler}
+              imgFlag={false}
+            />
+            {/* TODO :- Will enable this button after demo */}
+            {/* <Text
+             fontSize={"15px"}
+             color={"rgba(var(--color-primary))"}
+             cursor={"pointer"}
+           >
+             {t.changeText}
+           </Text> */}
+          </Flex>
+          <DetailsCard>
+            <Stack spacing={5} direction="row">
+              <Checkbox colorScheme={'red'} pr={'12px'} fontSize={'17px'} defaultChecked>
+                {t.orderDetailsCheckboxText}
+              </Checkbox>
+            </Stack>
+          </DetailsCard>
+        </Box>
+      ) : (
+        <Box>
+          <Flex pb={'20px'} mt={'20px'} justifyContent={'space-between'}>
+            <Text fontSize={'17px'}>{t.billing}</Text>
+            <AddBillingButton
+              billingFormData={billingFormData}
+              setBillingFormData={setBillingFormData}
+              addBillingdetailsBtnText={t.changeText}
+              billingFormSubmitHandler={formSubmitHandler}
+              imgFlag={false}
+            />
+          </Flex>
 
+          <ShippingOrBillingDetails
+            accordionHeader={t.billing}
+            name={billingFormData.name}
+            location={billingFormData.address}
+            number={billingFormData.mobileNumber}
+          />
+        </Box>
+      )}
       {/* start payment details */}
       {initRequest.data && (
         <Box>
@@ -236,7 +267,7 @@ const CheckoutPage = () => {
             <PaymentDetails
               subtotalText={t.subtotalText}
               subtotalValue={`${t.currencySymbol} ${getSubTotalAndDeliveryCharges(initRequest.data).subTotal}`}
-              deliveryChargesText={t.scholaarshipApplied}
+              deliveryChargesText={t.deliveryChargesText}
               deliveryChargesValue={`- ${t.currencySymbol} ${getSubTotalAndDeliveryCharges(initRequest.data).subTotal}`}
               totalText={t.totalText}
               totalValue={'0.00'}
@@ -267,4 +298,4 @@ const CheckoutPage = () => {
     </Box>
   )
 }
-export default CheckoutPage
+export default checkoutForMedicine
