@@ -20,6 +20,8 @@
     "dev:dhp": "yarn workspace @beckn-ui/dhp dev",
     "build:dhp": "yarn workspace @beckn-ui/dhp build",
     "export:dsep": "yarn workspace @beckn-ui/dsep build && yarn workspace @beckn-ui/dsep export",
+    "dev:pg": "yarn workspace @beckn-ui/osm dev",
+    "build:pg": "yarn workspace @beckn-ui/osm build",
     "test": "jest",
     "lint:fix": "eslint --fix",
     "lint": "eslint",
