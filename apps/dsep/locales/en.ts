@@ -194,7 +194,7 @@ const en: { [key: string]: string } = {
   ssd: 'SSD Hard',
   warranty: 'Warranty',
   addToCart: 'Add to Cart',
-  stars: 'Star',
+  stars: 'Stars',
   price: 'Course Price',
   similarProducts: 'You May Be Interested In',
   cart: 'Shopping Cart',
@@ -260,7 +260,7 @@ const en: { [key: string]: string } = {
   changeText: 'Change',
   paymentText: 'Payment',
   orderDetailsCheckboxText: 'Same as Shipping Details',
-  subtotalText: 'Subtotal',
+  subtotalText: 'Sub-Total',
   deliveryChargesText: 'Delivery Charges',
   totalText: 'Total',
   orderpolicyText: 'Order policy',
@@ -300,7 +300,6 @@ const en: { [key: string]: string } = {
   explorePlaces: 'Explore Nearby Places',
   comingSoon: 'Coming Soon !',
   confirmOrder: 'Confirm Order',
-  orderPlacedAt: 'Placed At',
   ordersFulfilled: 'Orders Fulfilled',
   subTotal: 'Subtotal',
   deliveryCharge: 'Delivery Charges',
@@ -362,7 +361,7 @@ const en: { [key: string]: string } = {
   homeHeading: 'Skill Up',
   headingSpan: 'for All',
   homeText:
-    'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Velit delectus necessitatibus excepturi distinctio, aliquid iste maxime eum, esse minima beatae laborum sed voluptatibus asperiores ab ad qui. Soluta, voluptate consequatur.',
+    'Discover diverse online resources, scholarships, and job opportunities in one convenient platform, enhancing your expertise across multiple fields.',
   footerText: 'Powered by',
   cartEmpty: 'The Cart is Empty',
   cartEmptySpan: 'Look like you haven’t made your choice yet',
@@ -410,7 +409,7 @@ const en: { [key: string]: string } = {
   confirmText4: 'as soon as possible.',
   add: 'Add',
   scholarshipApplied: 'scholarship applied!',
-  scholaarshipApplied: 'scholarship applied',
+  scholaarshipApplied: 'Scholarship Applied',
   viewOrderDetails: 'View Order Details',
   myLearnings: 'My Learnings',
   viewCourse: 'View Course',
@@ -424,6 +423,8 @@ const en: { [key: string]: string } = {
   mobileNo: 'Mobile no.',
   emailId: 'Email Id',
   certificates: 'Resume & Certificates',
-  createAccount: 'Create Account'
+  createAccount: 'Create Account',
+  overview: 'Overview',
+  bookedIn: 'Booked in'
 }
 export default en

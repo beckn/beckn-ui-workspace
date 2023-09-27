@@ -47,7 +47,7 @@ const jobSearch = () => {
   }, [])
 
   if (isLoading) {
-    return <Loader />
+    return <Loader loadingText="Searching for jobs" />
   }
 
   return (

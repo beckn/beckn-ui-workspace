@@ -47,7 +47,7 @@ const storeHeaderBlackList = [
   '/jobApply',
   '/jobDetails',
   '/jobSearch',
-
+  '/search',
   '/createProfile',
   '/myScholarship',
   '/scholarshipSearchPage',
@@ -57,7 +57,7 @@ const storeHeaderBlackList = [
   '/applyJobsPrefilled'
 ]
 const headerValues = {
-  '/checkoutPage': 'Billing & Shipping',
+  '/checkoutPage': 'Checkout',
   '/orderHistory': 'My Courses',
   '/orderDetails': 'Order Details',
   '/': 'Sign In',
@@ -74,11 +74,12 @@ const headerValues = {
   '/scholarshipDetailsPage': 'Scholarships',
   '/myLearningOrderHistory': 'My Learnings',
   '/myJobsOrderHistory': 'My Jobs',
-  '/applyJobsPrefilled': 'My Jobs'
+  '/applyJobsPrefilled': 'My Jobs',
+  '/search': 'Search Results'
 }
 
 const headerValuesFrench = {
-  '/checkoutPage': 'Facturation et Livraison',
+  '/checkoutPage': 'Checkout',
   '/orderHistory': 'Historique des Commandes',
   '/orderDetails': 'Détails de la Commande',
   '/': 'Se Connecter',
@@ -87,6 +88,7 @@ const headerValuesFrench = {
   '/paymentMode': 'Sélectionner la Méthode de Paiement',
   '/createProfile': 'Create Profile',
   '/myScholarship': 'My Scholarships',
+  '/search': 'Search Results',
   feedback: "Retour d'Information"
 }
 
@@ -103,7 +105,7 @@ const getHeaderTitleForPage = (name: string, logo: string, pathName: string, loc
   const values = locale === 'en' ? headerValues : headerValuesFrench
   switch (true) {
     case storeHeaderBlackList.includes(pathName):
-      return <Text>{values[pathName]}</Text>
+      return <Text fontSize={'17px'}>{values[pathName]}</Text>
     default:
       return (
         <Box width={'260px'} className="md:hidden ml-2  flex gap-1 my-2">

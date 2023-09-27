@@ -1,4 +1,6 @@
 import { Box, Flex, Image, Input, Text } from '@chakra-ui/react'
+import axios from 'axios'
+import Cookies from 'js-cookie'
 import React, { useEffect, useState } from 'react'
 import { UploadFilepropsModel } from './UploadFile.types'
 
@@ -6,7 +8,22 @@ const UploadFile: React.FC<UploadFilepropsModel> = props => {
   const { selectedFiles, setSelectedFiles } = props
   const [uploadTimes, setUploadTimes] = useState<string[]>([])
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const dataPayload = {
+    type: 'resume',
+    description: 'resume doc'
+  }
+
+  const bearerToken = Cookies.get('authToken')
+  const axiosConfig = {
+    headers: {
+      Authorization: `Bearer ${bearerToken}`,
+      'Content-Type': 'application/json' // You can set the content type as needed
+    }
+  }
+
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
+
     const files = event.target.files
     if (files) {
       const selectedFileArray: File[] = Array.from(files)
@@ -21,6 +38,20 @@ const UploadFile: React.FC<UploadFilepropsModel> = props => {
 
       setSelectedFiles([...selectedFiles, ...selectedFileArray])
       setUploadTimes([...uploadTimes, currentTime])
+
+      let uploadData = new FormData()
+
+      uploadData.append('data', JSON.stringify(dataPayload))
+      uploadData.append('files.attachment', selectedFileArray[0])
+
+      try {
+        const uploadDocumentResponse = await axios.post(`${strapiUrl}/documents`, uploadData, axiosConfig)
+        if (uploadDocumentResponse.data) {
+          return
+        }
+      } catch (error) {
+        console.error(error)
+      }
     }
   }
 

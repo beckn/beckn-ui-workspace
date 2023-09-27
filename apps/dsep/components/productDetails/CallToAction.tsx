@@ -9,7 +9,7 @@ import { RetailItem } from '../../lib/types/products'
 import ProductPrice from '../UI/ProductPrice'
 import { toast } from 'react-toastify'
 import Button from '../button/Button'
-import { Flex } from '@chakra-ui/react'
+import { Flex, Text } from '@chakra-ui/react'
 
 interface Props {
   product: RetailItem
@@ -59,7 +59,9 @@ const CallToAction: React.FC<Props> = ({ product }) => {
   return (
     <div className="flex flex-col items-center flex-grow sticky top-10 md:top-36 mt-8 rtl:mr-auto ltr:ml-auto xl:rtl:ml-2 px-6 py-4 sm:p-4 xl:p-6 border-2 shadow-lg border_radius_all">
       <div className="w-full  items-center ">
-        <p className="text-lg pb-1">{t.price}</p>
+        <Text fontSize={'15px'} fontWeight={'600'} className="text-lg pb-1">
+          {t.price}
+        </Text>
         <ProductPrice price={parseFloat(product.price.value)} isLargeSize={false} />
       </div>
       {/* <div className="flex items-center justify-between mt-6 cursor-pointer">

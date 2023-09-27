@@ -187,7 +187,7 @@ const OrderDetails = () => {
           {t.orderSummary}
         </Box>
         <Flex pt={'unset'} justifyContent={'space-between'} alignItems={'center'}>
-          <Text>{t.orderPlacedAt}</Text>
+          <Text>{t.bookedIn}</Text>
           <Text>{getOrderPlacementTimeline(orderFromConfirmData.created_at)}</Text>
         </Flex>
         {Object.keys(confirmDataPerBpp).map(key => (

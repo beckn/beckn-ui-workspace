@@ -159,7 +159,7 @@ const CheckoutPage = () => {
       {/* start Item Details */}
       <Box>
         <Box pb={'10px'}>
-          <Text fontSize={'17px'}>{t.items}</Text>
+          <Text fontSize={'17px'}>{t.overview}</Text>
         </Box>
         {/* {cartItems.map((item) => (
           <DetailsCard key={item.id}>

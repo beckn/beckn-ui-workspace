@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Image, Flex } from '@chakra-ui/react'
+import { Box, Image, Flex, Text } from '@chakra-ui/react'
 
 interface ImageCardProps {
   image: string
@@ -20,7 +20,9 @@ const ImageCard: React.FC<ImageCardProps> = ({ image, text, onClick, isActive })
     >
       <Flex alignItems={'center'} flexDirection="column" fontSize={'15px'}>
         <Image src={image} alt="displayed image" width={35} height={35} pb="5px" />
-        <p className={`text-sm text-center ${isActive ? 'text-white' : 'text-black'}`}>{text}</p>
+        <Text fontSize={'15px'} className={`text-sm text-center ${isActive ? 'text-white' : 'text-black'}`}>
+          {text}
+        </Text>
       </Flex>
     </Box>
   )

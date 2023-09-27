@@ -3,8 +3,12 @@
 const nextConfig = {
   reactStrictMode: false,
   transpilePackages: ['@beckn-ui/molecules', '@beckn-ui/becknified-components'],
-  output: 'export',
   trailingSlash: true,
+  i18n: {
+    locales: ['en', 'fa'],
+    defaultLocale: 'en',
+    localeDetection: false
+  },
   images: {
     loader: 'akamai',
     path: '',

@@ -39,12 +39,13 @@ const DetailsSection: React.FC<Props> = ({ product }) => {
           style={{
             fontSize: '20px',
             fontWeight: '600',
-            color: '#000'
+            color: '#000',
+            textAlign: 'center'
           }}
         >
           {product.descriptor.name}
         </h2>
-        <Text mb={'10px'} fontSize={'14px'}>
+        <Text mt={'10px'} mb={'10px'} fontSize={'14px'}>
           by {product.bppName}
         </Text>
 

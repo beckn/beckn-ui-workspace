@@ -287,7 +287,6 @@ const fa: { [key: string]: string } = {
   comingSoon: 'À venir !',
   proceedToCheckout: 'Vérifier',
   confirmOrder: 'Confirmer la commande',
-  orderPlacedAt: 'Passée à ',
   ordersFulfilled: 'Commande honorée',
   subTotal: 'Sous-total',
   deliveryCharge: 'Frais de livraison',
@@ -346,6 +345,8 @@ const fa: { [key: string]: string } = {
   addCommentsHere: 'Ajoutez vos commentaires ici',
   writeExperience: 'Décrivez votre expérience..',
   completed: 'Complété',
-  createAccount: 'créer un compte'
+  createAccount: 'créer un compte',
+  overview: 'aperçu',
+  bookedIn: 'Réservé à'
 }
 export default fa
