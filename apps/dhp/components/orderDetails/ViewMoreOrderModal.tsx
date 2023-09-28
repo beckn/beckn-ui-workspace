@@ -21,8 +21,10 @@ export interface ViewMoreOrderModalProps {
   isOpen: boolean
   onOpen: () => void
   onClose: () => void
-  items: any
   orderId: string
+  medicineName: string
+  medicinePrice: string
+  count: string | number
 }
 
 const ViewMoreOrderModal: React.FC<ViewMoreOrderModalProps> = props => {
@@ -52,25 +54,30 @@ const ViewMoreOrderModal: React.FC<ViewMoreOrderModalProps> = props => {
           </Box>
 
           <ModalBody padding={'15px 20px'}>
-            {props.items.map((item: any) => {
-              return (
-                <Box>
-                  <Box>
-                    <Text pb={'8px'}>{item.descriptor.name}</Text>
-                  </Box>
-                  <Text
-                    fontSize={'15px'}
-                    color={'rgba(var(--color-primary))'}
-                    pb="25px"
-                    cursor={'pointer'}
-                    onClick={() => Router.push('/myScholarship')}
-                  >
-                    {t.viewCourse}
-                  </Text>
-                </Box>
-              )
-            })}
-
+            {/* {props.items.map((item: any) => {
+            return ( */}
+            <Box>
+              <Flex justifyContent={'space-between'} alignItems="center">
+                <Text pb={'8px'}>{props.medicineName}</Text>
+                <Text fontSize={'15px'} fontWeight="600" color={'rgba(var(--color-primary))'}>
+                  {t.currencySymbol}
+                  {props.medicinePrice}
+                </Text>
+              </Flex>
+              <Text fontSize={'12px'} fontWeight="600">
+                x {props.count}
+              </Text>
+              <Text
+                fontSize={'15px'}
+                color={'rgba(var(--color-primary))'}
+                pb="25px"
+                cursor={'pointer'}
+                onClick={() => Router.push('/myScholarship')}
+              >
+                {t.viewCourse}
+              </Text>
+            </Box>
+            {/* )})} */}
             <ButtonComp
               buttonText={'Close'}
               background={'rgba(var(--color-primary))'}

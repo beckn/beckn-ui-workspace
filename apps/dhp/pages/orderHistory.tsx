@@ -1,5 +1,6 @@
 import { Box } from '@chakra-ui/react'
 import Link from 'next/link'
+import Router from 'next/router'
 import React, { useEffect, useState } from 'react'
 import DetailsCard from '../components/detailsCard/DetailsCard'
 import Loader from '../components/loader/Loader'
@@ -58,6 +59,10 @@ const OrderHistory = () => {
 
     const orderedItemName = orderInHistory.orders[0].message.responses[0].message.order.items[0].descriptor.name
 
+    const handleOrderHistory = () => {
+      Router.push('/orderDetails')
+    }
+
     return (
       <Link
         key={index}
@@ -75,6 +80,7 @@ const OrderHistory = () => {
               totalAmount={totalPriceOfSingleOrder}
               orderState={t[`${orderStatusMap[orderState]}`]}
               orderedItemName={orderedItemName}
+              handleOrderHistory={handleOrderHistory}
             />
           </DetailsCard>
         </Box>

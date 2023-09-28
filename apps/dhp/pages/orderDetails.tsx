@@ -1,4 +1,4 @@
-import { Box, CardBody, Divider, Flex, Text, Image, Card, useDisclosure, Stack } from '@chakra-ui/react'
+import { Box, CardBody, Divider, Flex, Text, Image, Card, useDisclosure, Stack, StackDivider } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import Accordion from '../components/accordion/Accordion'
 import { useLanguage } from '../hooks/useLanguage'
@@ -18,8 +18,11 @@ import { TransactionIdRootState } from '../lib/types/cart'
 import useRequest from '../hooks/useRequest'
 import Router, { useRouter } from 'next/router'
 import DetailsCard from '../components/detailsCard/DetailsCard'
-import Button from '../components/button/Button'
-import Link from 'next/link'
+import CallphoneIcon from '../public/images/CallphoneIcon.svg'
+import locationIcon from '../public/images/locationIcon.svg'
+import nameIcon from '../public/images/nameIcon.svg'
+import TrackOrder from './trackOrder'
+import { RenderOrderStatusList } from '../components/orderDetails/RenderOrderStatusTree'
 
 const OrderDetails = () => {
   const [allOrderDelivered, setAllOrderDelivered] = useState(false)
@@ -144,24 +147,6 @@ const OrderDetails = () => {
   }
   return (
     <Box className="hideScroll" maxH={'calc(100vh - 100px)'} overflowY="scroll">
-      <DetailsCard>
-        <Flex alignItems={'center'} pb={'8px'}>
-          <Image src="/images/jobSearch.svg" alt=" " />
-          <Text fontSize="17px" fontWeight={'600'} pl="8px">
-            {t.lookingtojobs}
-          </Text>
-        </Flex>
-        <Box pl={'28px'}>
-          <Text fontSize={'15px'} as="span">
-            {t.jobChangeInfo}
-          </Text>
-          <Link href={'/jobSearch'}>
-            <Text pl="5px" fontSize={'15px'} as="span" color={'rgba(var(--color-primary))'} cursor={'pointer'}>
-              {t.searchForJob}
-            </Text>
-          </Link>
-        </Box>
-      </DetailsCard>
       {allOrderDelivered ? (
         <Card mb={'20px'} border={'1px solid rgba(94, 196, 1, 1)'} className="border_radius_all">
           <CardBody padding={'15px 20px'}>
@@ -261,38 +246,38 @@ const OrderDetails = () => {
             isOpen={isOpen}
             onOpen={onOpen}
             onClose={onClose}
-            items={res.message.order.items}
             orderId={res.message.order.displayId}
+            medicineName={'Paracetamol 650mg by BuyZilla'}
+            medicinePrice={'50'}
+            count={'1'}
           />
           <Divider mb={'20px'} />
-          <CardBody pt={'unset'} fontSize={'15px'}>
-            <Box>
-              <Flex alignItems={'center'}>
-                <Image src="/images/done.svg" alt="" />
-                <Text pl={'8px'} fontSize="15px" fontWeight={'600'}>
-                  Courses Purchased
-                </Text>
-              </Flex>
-              <Text pl="28px" fontSize={'12px'}>
-                21st Jun 2021, 12:11pm
-              </Text>
-            </Box>
-            {status === 'progress' ? (
-              <Box
-                fontSize={'15px'}
-                color={'rgba(var(--color-primary))'}
-                pt="10px"
-                pl="28px"
-                onClick={() => {
-                  Router.push('/myScholarship')
-                }}
-              >
-                {t.viewCourse}
-              </Box>
-            ) : null}
-          </CardBody>
+          <CardBody pt={'unset'}>{RenderOrderStatusList(res)}</CardBody>
         </Accordion>
       ))}
+      <Accordion accordionHeader={t.shipping}>
+        <CardBody pt={'unset'} pb={'15px'}>
+          <Box>
+            <Stack divider={<StackDivider />} spacing="4">
+              <Flex alignItems={'center'}>
+                {/* eslint-disable-next-line jsx-a11y/alt-text */}
+                <Image src={nameIcon} pr={'12px'} />
+                <Text fontSize={'17px'}>{shippingDetails.name}</Text>
+              </Flex>
+              <Flex alignItems={'center'}>
+                {/* eslint-disable-next-line jsx-a11y/alt-text */}
+                <Image src={locationIcon} pr={'12px'} />
+                <Text fontSize={'15px'}>{shippingDetails.address}</Text>
+              </Flex>
+              <Flex alignItems={'center'}>
+                {/* eslint-disable-next-line jsx-a11y/alt-text */}
+                <Image src={CallphoneIcon} pr={'12px'} />
+                <Text fontSize={'15px'}>{shippingDetails.phone}</Text>
+              </Flex>
+            </Stack>
+          </Box>
+        </CardBody>
+      </Accordion>
       <Accordion accordionHeader={t.paymentText}>
         <CardBody pt={'unset'} pb={'unset'}>
           <Flex pb={'15px'} justifyContent={'space-between'} alignItems={'center'}>
@@ -303,9 +288,9 @@ const OrderDetails = () => {
             </Text>
           </Flex>
           <Flex pb={'15px'} justifyContent={'space-between'} alignItems={'center'}>
-            <Text>{t.scholaarshipApplied}</Text>
+            <Text>{t.deliveryChargesText}</Text>
             <Text>
-              - {t.currencySymbol}
+              {t.currencySymbol}
               {subTotal}
             </Text>
           </Flex>
@@ -315,10 +300,6 @@ const OrderDetails = () => {
           <Flex pb={'15px'} justifyContent={'space-between'} alignItems={'center'} fontSize={'17px'} fontWeight={'600'}>
             <Text>{t.total}</Text>
             <Text>{t.currencySymbol}0.00</Text>
-          </Flex>
-          <Flex fontSize={'15px'} justifyContent={'space-between'} alignItems={'center'} pb={'15px'}>
-            <Text>{t.paymentMethod}</Text>
-            <Text>{t.naText}</Text>
           </Flex>
         </CardBody>
       </Accordion>

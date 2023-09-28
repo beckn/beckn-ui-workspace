@@ -33,6 +33,7 @@ const ProductPrice: React.FC<ProductPriceProps> = ({
             // color={'rgba(var( --color-bold-text))'}
             className={`flex items-center ${textMainPriceSize} ${fontWeight} no-underline`}
             style={{ flexDirection, ...customStyleObject }}
+            fontSize="15px"
           >
             <span className="mr-1 rtl:block">{t.currencySymbol}</span>
             <span>{price}</span>
