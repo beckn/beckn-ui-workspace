@@ -1,16 +1,16 @@
-import { Box, Flex, Image, Text } from '@chakra-ui/react'
+import { Box, Flex, Text } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import StarRatingComponent from 'react-star-rating-component'
-import { useLanguage } from '../../hooks/useLanguage'
-import { RetailItem } from '../../lib/types/products'
-import CallToAction from './CallToAction'
-import greenVegIcon from '../../public/images/greenVeg.svg'
-import redNonVegIcon from '../../public/images/redNonVeg.svg'
+import { useLanguage } from '../../../hooks/useLanguage'
+import { RetailItem } from '../../../lib/types/products'
+import LabCallToAction from './LabCallToAction'
+// import greenVegIcon from '../../public/images/greenVeg.svg'
+// import redNonVegIcon from '../../public/images/redNonVeg.svg'
 
 interface Props {
   product: RetailItem
 }
-const DetailsSection: React.FC<Props> = ({ product }) => {
+const LabDetailsSection: React.FC<Props> = ({ product }) => {
   const { t } = useLanguage()
   const [showComponent, setShowComponent] = useState(false)
 
@@ -47,14 +47,6 @@ const DetailsSection: React.FC<Props> = ({ product }) => {
         <Text mb={'10px'} fontSize={'14px'}>
           {product.bppName}
         </Text>
-
-        {product.tags.foodType ? (
-          product.tags.foodType === 'veg' ? (
-            <Image pt={'4px'} src={greenVegIcon} alt="greenVegIcon" />
-          ) : (
-            <Image pt={'4px'} src={redNonVegIcon} alt="redNonVegIcon" />
-          )
-        ) : null}
       </Flex>
       <hr className="mt-1 hidden md:block" />
       <div className="flex items-start flex-wrap relative ">
@@ -78,10 +70,10 @@ const DetailsSection: React.FC<Props> = ({ product }) => {
             }}
           ></div>
         </div>
-        <CallToAction product={product} />
+        <LabCallToAction product={product} />
       </div>
     </Box>
   )
 }
 
-export default DetailsSection
+export default LabDetailsSection

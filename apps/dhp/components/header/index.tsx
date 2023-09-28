@@ -24,7 +24,13 @@ const cartIconBlackList = [
   '/orderDetailsHistoryPage',
   '/PrescriptionPage',
   '/checkoutForMedicine',
-  '/orderConfirmationForMedicine'
+  '/orderConfirmationForMedicine',
+  '/bookDoctorAppointment',
+  '/search',
+  '/product',
+  '/searchLabs',
+  '/labDetails',
+  '/bookLabAppointment'
 ]
 
 const backIconList = ['/', '/orderDetails']
@@ -47,7 +53,11 @@ const storeHeaderBlackList = [
   '/orderDetailsHistoryPage',
   '/PrescriptionPage',
   '/searchMedicine',
-  '/checkoutForMedicine'
+  '/checkoutForMedicine',
+  '/bookDoctorAppointment',
+  '/search',
+  '/searchLabs',
+  '/bookLabAppointment'
 ]
 const headerValues = {
   '/checkoutPage': 'Billing & Shipping',
@@ -66,7 +76,11 @@ const headerValues = {
   '/orderDetailsHistoryPage': 'Order Details',
   '/PrescriptionPage': 'Prescription',
   '/searchMedicine': 'Medicines',
-  '/checkoutForMedicine': 'Billing & Shipping'
+  '/checkoutForMedicine': 'Billing & Shipping',
+  '/bookDoctorAppointment': 'Book Appointment',
+  '/search': 'Search Results',
+  '/searchLabs': 'Labs',
+  '/bookLabAppointment': 'Book Appointment'
 }
 
 const headerValuesFrench = {
