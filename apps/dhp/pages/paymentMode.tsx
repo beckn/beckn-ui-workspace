@@ -36,7 +36,7 @@ function PaymentMode() {
         <Text marginBottom={'8px'} fontSize={'17px'}>
           Other
         </Text>
-        <CardWithCheckBox setChecked={setChecked} paymentMethod={t.freeCourse} />
+        <CardWithCheckBox setChecked={setChecked} paymentMethod={t.cashMethod} />
       </Box>
       <Box position={'absolute'} bottom={'10px'} width={'90%'}>
         <Button
@@ -46,7 +46,7 @@ function PaymentMode() {
           isDisabled={!checked}
           handleOnClick={() => {
             dispatch(cartActions.clearCart())
-            router.push('/orderConfirmation')
+            router.push('/orderConfirmationForMedicine')
           }}
         />
       </Box>

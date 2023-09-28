@@ -35,7 +35,7 @@ const ProductPrice: React.FC<ProductPriceProps> = ({
             style={{ flexDirection, ...customStyleObject }}
           >
             <span className="mr-1 rtl:block">{t.currencySymbol}</span>
-            <span>{price.toFixed(2)}</span>
+            <span>{price}</span>
           </Box>
         </div>
       </div>

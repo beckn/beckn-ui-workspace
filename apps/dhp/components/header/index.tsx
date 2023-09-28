@@ -19,14 +19,12 @@ const cartIconBlackList = [
   '/cart',
   '/checkoutPage',
   '/paymentMode',
-  '/jobSearch',
-  '/jobDetails',
-  '/jobApply',
   '/createProfile',
-  '/myScholarship',
-  '/myLearningOrderHistory',
-  '/myJobsOrderHistory',
-  '/applyJobsPrefilled'
+  '/myAppointments',
+  '/orderDetailsHistoryPage',
+  '/PrescriptionPage',
+  '/checkoutForMedicine',
+  '/orderConfirmationForMedicine'
 ]
 
 const backIconList = ['/', '/orderDetails']
@@ -42,19 +40,14 @@ const storeHeaderBlackList = [
   '/orderConfirmation',
   'feedback',
   '/',
-  '/mobileOtp',
   '/paymentMode',
-  '/jobApply',
-  '/jobDetails',
-  '/jobSearch',
 
   '/createProfile',
-  '/myScholarship',
-  '/scholarshipSearchPage',
-  '/scholarshipDetailsPage',
-  '/myLearningOrderHistory',
-  '/myJobsOrderHistory',
-  '/applyJobsPrefilled'
+  '/myAppointments',
+  '/orderDetailsHistoryPage',
+  '/PrescriptionPage',
+  '/searchMedicine',
+  '/checkoutForMedicine'
 ]
 const headerValues = {
   '/checkoutPage': 'Billing & Shipping',
@@ -69,12 +62,11 @@ const headerValues = {
   '/jobDetails': 'Jobs',
   '/jobApply': 'Senior UX Analyst',
   '/createProfile': 'Create Profile',
-  '/myScholarship': 'My Scholarships',
-  '/scholarshipSearchPage': 'Scholarships',
-  '/scholarshipDetailsPage': 'Scholarships',
-  '/myLearningOrderHistory': 'My Learnings',
-  '/myJobsOrderHistory': 'My Jobs',
-  '/applyJobsPrefilled': 'My Jobs'
+  '/myAppointments': 'My Appointments',
+  '/orderDetailsHistoryPage': 'Order Details',
+  '/PrescriptionPage': 'Prescription',
+  '/searchMedicine': 'Medicines',
+  '/checkoutForMedicine': 'Billing & Shipping'
 }
 
 const headerValuesFrench = {
@@ -86,13 +78,18 @@ const headerValuesFrench = {
   '/cart': 'Panier',
   '/paymentMode': 'Sélectionner la Méthode de Paiement',
   '/createProfile': 'Create Profile',
-  '/myScholarship': 'My Scholarships',
   feedback: "Retour d'Information"
 }
 
 const topHeaderBlackList: string[] = []
 
-const bottomHeaderBlackList = ['/homePage', '/orderConfirmation', '/applicationSent', '/scholarshipConfirmationPage']
+const bottomHeaderBlackList = [
+  '/homePage',
+  '/orderConfirmation',
+  '/applicationSent',
+  '/scholarshipConfirmationPage',
+  '/orderConfirmationForMedicine'
+]
 
 const menuIconWhiteList = ['/homePage']
 const skipWhiteList = ['/createProfile']

@@ -4,7 +4,7 @@ import { useLanguage } from '../../hooks/useLanguage'
 import { ICartRootState } from '../../lib/types/cart'
 import Button from '../button/Button'
 import ProductPrice from '../UI/ProductPrice'
-import { Divider } from '@chakra-ui/react'
+import { Divider, Flex, Text } from '@chakra-ui/react'
 import { Router } from 'next/router'
 import EmptyCart from './EmptyCart'
 
@@ -17,7 +17,6 @@ const OrderSummaryBox: React.FC<OrderSummaryBoxPropsModel> = props => {
   const totalAmount = useSelector((state: ICartRootState) => state.cart.totalAmount)
 
   const totalQuantity = useSelector((state: ICartRootState) => state.cart.totalQuantity)
-  const scholarshipId = useSelector((state: any) => state.scholarshipCart.scholarshipId)
 
   return (
     <>
@@ -33,6 +32,10 @@ const OrderSummaryBox: React.FC<OrderSummaryBoxPropsModel> = props => {
               zIndex: '9'
             }}
           >
+            <Flex justifyContent={'space-between'} alignItems="center" fontSize={'15px'} pb="5px">
+              <Text>{t.totalQuantity}</Text>
+              <Text>02</Text>
+            </Flex>
             <div className="flex flex-col my-1 sm:my-2" style={{ fontSize: '15px' }}>
               <div className=" my-1 flex items-center justify-between md:my-4">
                 <p className="text-md sm:text-base md:text-palette-base tracking-wide">{t.subtotalText}</p>
@@ -44,12 +47,6 @@ const OrderSummaryBox: React.FC<OrderSummaryBoxPropsModel> = props => {
                   }}
                 />
               </div>
-              {scholarshipId ? (
-                <div className=" my-1 flex flex-wrap items-baseline justify-between flex-grow md:my-4">
-                  <p className="text-md sm:text-base md:text-palette-base tracking-wide">{t.scholaarshipApplied}</p>
-                  <p>00</p>
-                </div>
-              ) : null}
               <Divider my={'10px'} />
               <div className=" my-1 flex flex-wrap items-baseline justify-between flex-grow md:my-4">
                 <p className="text-md sm:text-base md:text-palette-base tracking-wide font-extrabold">{t.totalText}</p>
@@ -58,7 +55,7 @@ const OrderSummaryBox: React.FC<OrderSummaryBoxPropsModel> = props => {
             </div>
           </div>
           <Button
-            buttonText={t.checkout}
+            buttonText={t.order}
             background={'rgba(var(--color-primary))'}
             color={'rgba(var(--text-color))'}
             isDisabled={false}

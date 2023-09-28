@@ -4,7 +4,7 @@
 
 @layer base {
   :root {
-    --color-primary: 58, 165, 225, 1; /* #3AA5E1*/
+    --color-primary: 25, 153, 142, 1; /* #19998E*/
     --color-secondary: 74, 76, 90; /* #4a4c5a*/
     --color-bold-text: 36, 42, 54; /* #242A36*/
 
@@ -18,7 +18,7 @@
     --house-category-bgc: #ccd5ae;
     --toy-category-bgc: #cce3de;
     --stationery-category-bgc: #fbb13c;
-    --disabled-btn-color: 177, 215, 237; /*"#B1D7ED"*/
+    --disabled-btn-color: 131, 183, 178, 1; /*"#83B7B2"*/
 
     --color-text-base: 66, 71, 80; /* #424750*/
     --color-text-muted: 107, 114, 128; /*#6b7280*/
@@ -249,12 +249,12 @@ select:-webkit-autofill:focus {
 }
 .css-690el4[aria-checked='true'],
 .css-690el4[data-checked] {
-  background-color: #a71b4a !important;
-  border-color: #a71b4a !important;
+  background-color: #19998e !important;
+  border-color: #19998e !important;
 }
 .css-690el4 {
   border: 1px solid !important;
-  border-color: #a71b4a !important;
+  border-color: #19998e !important;
 }
 .product_description_text p {
   font-size: 15px;
