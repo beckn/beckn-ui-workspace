@@ -1,0 +1,5 @@
+.TopSheet ::before {
+    content: '';
+    border-left: 18px solid transparent;
+    border-right: 18px solid transparent;
+}

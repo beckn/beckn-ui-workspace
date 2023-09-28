@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { Box } from '@chakra-ui/react'
 import SearchBar from '../components/header/SearchBar'
@@ -146,7 +146,7 @@ const Search = () => {
                 fontWeight: '600',
                 fontSize: '16px'
               }}
-              subLoadingText={t.coursesCatalogLoader}
+              subLoadingText={t.doctorCatalogLoader}
               loadingText={t.catalogLoader}
             />
           </div>

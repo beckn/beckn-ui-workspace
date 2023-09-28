@@ -203,10 +203,10 @@ select {
   font-size: inherit;
 }
 
-input:focus,
+/* input:focus,
 select:focus {
   background-color: transparent;
-}
+} */
 
 input:-webkit-autofill,
 input:-webkit-autofill:hover,

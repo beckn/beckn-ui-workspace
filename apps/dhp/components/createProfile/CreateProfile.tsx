@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
 import style from '../detailsCard/ShippingForm.module.css'
 import Button from '../button/Button'
-import { validateForm, FormErrors } from '../../utilities/detailsForm-utils'
+import { validateForm, FormErrors } from '../../utilities/createProfileForm-utils'
 import { useLanguage } from '../../hooks/useLanguage'
-import { Box } from '@chakra-ui/react'
+import { Box, Grid, Text } from '@chakra-ui/react'
+import { useToast } from '@chakra-ui/react'
 import { UserData } from './createProfile.types'
+import { useRouter } from 'next/router'
 
 export interface CreateProfileProps {
   createProfileSubmitHandler: Function
@@ -15,34 +17,56 @@ const CreateProfile: React.FC<CreateProfileProps> = props => {
     name: '',
     mobileNumber: '',
     email: '',
-    address: '',
-    pinCode: ''
+    dob: '',
+    gender: ''
   })
+  const toast = useToast()
+  const router = useRouter()
 
   const [formErrors, setFormErrors] = useState<FormErrors>({})
   const { t } = useLanguage()
+  const [selectedGender, setSelectedGender] = useState<string>('')
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     if (name === 'mobileNumber' && !/^\d*$/.test(value)) {
       return
     }
-
     setFormData(prevData => ({
       ...prevData,
       [name]: value
     }))
   }
 
-  const handleButtonClick = () => {
+  const handleGenderSelection = (gender: string) => {
+    setSelectedGender(gender)
+    setFormData(prevData => ({
+      ...prevData,
+      gender: gender
+    }))
+  }
+
+  const handleAccountCreate = () => {
     const errors = validateForm(formData)
     setFormErrors(errors)
-
     const hasErrors = Object.values(errors).some(error => !!error)
 
+    if (!formData.gender) {
+      toast({
+        title: 'Error',
+        description: 'Please select a gender',
+        status: 'error',
+        position: 'top',
+        duration: 3000,
+        isClosable: true
+      })
+    }
     if (!hasErrors) {
       return props.createProfileSubmitHandler(formData)
     }
+  }
+  const handleSkipClick = () => {
+    router.push('/homepage')
   }
 
   return (
@@ -89,35 +113,59 @@ const CreateProfile: React.FC<CreateProfileProps> = props => {
             className={style.did_floating_input}
             type="text"
             placeholder=" "
-            name="address"
-            value={formData.address}
+            name="dob"
+            value={formData.dob}
             onChange={handleInputChange}
           />
-          <label className={style.did_floating_label}>{t.formAddress}</label>
-          {formErrors.address && <span className={style.error}>{t[`${formErrors.address}`]}</span>}
+          <label className={style.did_floating_label}>{t.formDOB}</label>
+          {formErrors.dob && <span className={style.error}>{t[`${formErrors.dob}`]}</span>}
         </div>
+        <Box mb={'100px'}>
+          <Text fontFamily={'Poppins'} fontSize={'15px'} fontWeight={400} mb={3}>
+            {t.formSelectGender}
+          </Text>
+          <Grid templateColumns={'repeat(2, 1fr)'} columnGap="10px">
+            <Button
+              buttonText={'Male'}
+              handleOnClick={() => handleGenderSelection('Male')}
+              background={selectedGender === 'Male' ? 'rgba(var(--color-primary))' : 'transparent'}
+              color={selectedGender === 'Male' ? 'rgba(var(--text-color))' : 'rgba(var(--color-primary))'}
+              isDisabled={false}
+            />
 
-        <div className={style.did_floating_label_content}>
-          <input
-            className={style.did_floating_input}
-            type="text"
-            placeholder=" "
-            name="pinCode"
-            value={formData.pinCode}
-            onChange={e => {
-              e.currentTarget.value = e.currentTarget.value.replace(/[^0-9]/g, '')
-              handleInputChange(e)
-            }}
-          />
-          <label className={style.did_floating_label}>{t.formZipCode}</label>
-          {formErrors.pinCode && <span className={style.error}>{t[`${formErrors.pinCode}`]}</span>}
-        </div>
+            <Button
+              buttonText={'Female'}
+              handleOnClick={() => handleGenderSelection('Female')}
+              background={selectedGender === 'Female' ? 'rgba(var(--color-primary))' : 'transparent'}
+              color={selectedGender === 'Female' ? 'rgba(var(--text-color))' : 'rgba(var(--color-primary))'}
+              isDisabled={false}
+            />
+
+            <Button
+              buttonText={'Other'}
+              handleOnClick={() => handleGenderSelection('Other')}
+              background={selectedGender === 'Other' ? 'rgba(var(--color-primary))' : 'transparent'}
+              color={selectedGender === 'Other' ? 'rgba(var(--text-color))' : 'rgba(var(--color-primary))'}
+              isDisabled={false}
+            />
+          </Grid>
+          {/* {formErrors.gender && (
+            <span className={style.error}>{t[`${formErrors.gender}`]}</span>
+          )} */}
+        </Box>
       </div>
       <Button
         buttonText={t.createAccount}
         background={'rgba(var(--color-primary))'}
         color={'rgba(var(--text-color))'}
-        handleOnClick={handleButtonClick}
+        handleOnClick={handleAccountCreate}
+        isDisabled={false}
+      />
+      <Button
+        buttonText={'Skip'}
+        background={'transparent'}
+        color={'rgba(var(--color-primary))'}
+        handleOnClick={handleSkipClick}
         isDisabled={false}
       />
     </Box>
