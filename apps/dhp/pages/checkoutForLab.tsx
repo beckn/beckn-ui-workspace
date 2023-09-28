@@ -36,7 +36,7 @@ export type CreateProfileFormData = {
   gender: string
 }
 
-const CheckoutPage = () => {
+const CheckoutForLab = () => {
   const [formData, setFormData] = useState<ShippingFormData>({
     name: 'Santosh Kumar',
     mobileNumber: '9876543210',
@@ -220,7 +220,6 @@ const CheckoutPage = () => {
           />
         </Box>
       )}
-      {/* end shipping detals */}
 
       {/* start payment details */}
       {initRequest.data && (
@@ -256,11 +255,11 @@ const CheckoutPage = () => {
           buttonText={t.proceedToPayment}
           background={'rgba(var(--color-primary))'}
           color={'rgba(var(--text-color))'}
-          handleOnClick={() => router.push('/doctorPaymentMode')}
+          handleOnClick={() => router.push('/labPaymentMode')}
           isDisabled={false}
         />
       )}
     </Box>
   )
 }
-export default CheckoutPage
+export default CheckoutForLab

@@ -10,7 +10,7 @@ import { TransactionIdRootState } from '../lib/types/cart'
 import Button from '../components/button/Button'
 import ConfirmOrder from '../components/confirmOrder/ConfirmOrder'
 
-const OrderConfirmation = () => {
+const OrderConfirmationForLab = () => {
   const { t } = useLanguage()
   const confirmRequest = useRequest()
   const router = useRouter()
@@ -52,10 +52,10 @@ const OrderConfirmation = () => {
   if (confirmRequest.loading) {
     return <Loader loadingText={t.categoryLoadPrimary} subLoadingText={t.confirmingOrderLoader} />
   }
-  const handleAppDetails = () => {
+  const handleOrderDetails = () => {
     if (confirmRequest.data) {
       localStorage.setItem('confirmData', JSON.stringify(confirmRequest.data))
-      router.push('/myAppointments')
+      router.push('/orderDetails')
     }
   }
   const handleGoBack = (): void => {
@@ -80,11 +80,11 @@ const OrderConfirmation = () => {
       />
       <VStack mt={'80px'}>
         <Button
-          buttonText={t.viewAppDetails}
+          buttonText={t.viewOrderDetails}
           background={'rgba(var(--color-primary))'}
           color={'rgba(var(--text-color))'}
           isDisabled={false}
-          handleOnClick={handleAppDetails}
+          handleOnClick={handleOrderDetails}
         />
         <Button
           buttonText={t.backToHome}
@@ -98,4 +98,4 @@ const OrderConfirmation = () => {
   )
 }
 
-export default OrderConfirmation
+export default OrderConfirmationForLab

@@ -17,6 +17,9 @@ export interface ICartProduct {
 }
 
 export interface CartRetailItem extends RetailItem {
+  duration: any
+  timeSlot: any
+  address: any
   quantity: number
   totalPrice: number
 }

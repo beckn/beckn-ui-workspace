@@ -10,12 +10,12 @@ const createProfile = () => {
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
 
   const createProfileSubmitHandler = async (formData: UserData) => {
-    const { name, mobileNumber, address, pinCode } = formData
+    const { name, mobileNumber, dob, gender } = formData
     const payload = {
       name: name,
       phone: mobileNumber,
-      address: address,
-      zip_code: pinCode
+      dob: dob,
+      gender: gender
     }
     const bearerToken = Cookies.get('authToken')
     const axiosConfig = {

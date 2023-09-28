@@ -10,6 +10,9 @@ import { useLanguage } from '../../hooks/useLanguage'
 
 const cartIconBlackList = [
   '/orderConfirmation',
+  '/checkoutForLab',
+  '/doctorPaymentMode',
+  '/labPaymentMode',
   '/orderDetails',
   '/trackOrder',
   '/feedback',
@@ -35,7 +38,7 @@ const cartIconBlackList = [
 
 const backIconList = ['/', '/orderDetails']
 
-const homeIconBlackList = ['/orderHistory', '/', '/homePage', '/mobileOtp', '/createProfile']
+const homeIconBlackList = ['/orderHistory', '/', '/homePage', '/mobileOtp', '/createProfile', '/search']
 
 const storeHeaderBlackList = [
   '/checkoutPage',
@@ -57,10 +60,19 @@ const storeHeaderBlackList = [
   '/bookDoctorAppointment',
   '/search',
   '/searchLabs',
-  '/bookLabAppointment'
+  '/bookLabAppointment',
+  '/myScholarship',
+  '/scholarshipSearchPage',
+  '/scholarshipDetailsPage',
+  '/myLearningOrderHistory',
+  '/myJobsOrderHistory',
+  '/applyJobsPrefilled',
+  '/checkoutForLab',
+  '/doctorPaymentMode',
+  '/labPaymentMode'
 ]
 const headerValues = {
-  '/checkoutPage': 'Billing & Shipping',
+  '/checkoutPage': 'Checkout',
   '/orderHistory': 'My Courses',
   '/orderDetails': 'Order Details',
   '/': 'Sign In',
@@ -80,7 +92,16 @@ const headerValues = {
   '/bookDoctorAppointment': 'Book Appointment',
   '/search': 'Search Results',
   '/searchLabs': 'Labs',
-  '/bookLabAppointment': 'Book Appointment'
+  '/bookLabAppointment': 'Book Appointment',
+  '/myScholarship': 'My Scholarships',
+  '/scholarshipSearchPage': 'Scholarships',
+  '/scholarshipDetailsPage': 'Scholarships',
+  '/myLearningOrderHistory': 'My Learnings',
+  '/myJobsOrderHistory': 'My Jobs',
+  '/applyJobsPrefilled': 'My Jobs',
+  '/checkoutForLab': 'Checkout',
+  '/doctorPaymentMode': 'Payment',
+  '/labPaymentMode': 'Payment'
 }
 
 const headerValuesFrench = {
@@ -91,7 +112,8 @@ const headerValuesFrench = {
   '/mobileOtp': 'Se Connecter',
   '/cart': 'Panier',
   '/paymentMode': 'Sélectionner la Méthode de Paiement',
-  '/createProfile': 'Create Profile',
+  '/createProfile': 'Profile',
+  '/myScholarship': 'My Scholarships',
   feedback: "Retour d'Information"
 }
 
@@ -102,13 +124,24 @@ const bottomHeaderBlackList = [
   '/orderConfirmation',
   '/applicationSent',
   '/scholarshipConfirmationPage',
-  '/orderConfirmationForMedicine'
+  '/orderConfirmationForMedicine',
+  '/orderConfirmationForLab'
 ]
 
-const menuIconWhiteList = ['/homePage']
+const menuIconWhiteList = [
+  '/homePage',
+  '/search',
+  '/product',
+  '/checkoutPage',
+  '/doctorPaymentMode',
+  '/orderConfirmation',
+  '/checkoutForLab',
+  '/labPaymentMode'
+]
+//,'/product',
 const skipWhiteList = ['/createProfile']
 
-const languageIconWhiteList = ['/homePage', '/', '/mobileOtp']
+const languageIconWhiteList = ['/', '/createProfile']
 
 const getHeaderTitleForPage = (name: string, logo: string, pathName: string, locale: string | undefined) => {
   const values = locale === 'en' ? headerValues : headerValuesFrench
@@ -117,7 +150,7 @@ const getHeaderTitleForPage = (name: string, logo: string, pathName: string, loc
       return <Text>{values[pathName]}</Text>
     default:
       return (
-        <Box width={'260px'} className="md:hidden ml-2  flex gap-1 my-2">
+        <Box width={'260px'} className="flex gap-1 my-2 ml-2 md:hidden">
           <Text
             margin={'0 auto'}
             textAlign={'center'}
@@ -149,21 +182,12 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
   return (
     <>
       <div className="h-7 w-full bg-[#efefef] fixed z-[9999]">
-        <div className="px-5 h-full flex items-center">
+        <div className="flex items-center h-full px-5">
           <div>
-            <Image src="/images/CommerceLogo.svg" alt="App logo" />
+            <Image src="/images/genHeal.svg" alt="App logo" />
           </div>
-          <div className="ml-auto flex gap-4">
+          <div className="flex gap-4 ml-auto">
             {languageIconWhiteList.includes(router.pathname) && <Settings />}
-
-            {menuIconWhiteList.includes(router.pathname) && (
-              <Image
-                onClick={() => setMenuModalOpen(true)}
-                className="block"
-                src="/images/3-dots.svg"
-                alt="menu icon"
-              />
-            )}
 
             {!homeIconBlackList.includes(router.pathname) && (
               <Image
@@ -178,6 +202,14 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
                 }}
                 src="/images/Home_icon.svg"
                 alt="home Icon"
+              />
+            )}
+            {menuIconWhiteList.includes(router.pathname) && (
+              <Image
+                onClick={() => setMenuModalOpen(true)}
+                className="block"
+                src="/images/3-dots.svg"
+                alt="menu icon"
               />
             )}
           </div>
@@ -233,8 +265,8 @@ const BottomHeader = () => {
   return (
     <header className="md:fixed left-0 right-0 mb-4 top-0 md:bg-palette-fill shadow-sm pt-4 z-[1000] app_header_b fixed mt-7 z-[99] bg-[#fff]">
       <div className="flex flex-col md:px-4">
-        <div className="flex items-center justify-between md:order-2 md:mt-2 py-4  relative">
-          <div className="flex gap-4 items-center">
+        <div className="relative flex items-center justify-between py-4 md:order-2 md:mt-2">
+          <div className="flex items-center gap-4">
             {!backIconList.includes(router.pathname) && (
               <div onClick={() => router.back()}>
                 <Image src="/images/Back.svg" alt="Back icon" />
@@ -243,16 +275,7 @@ const BottomHeader = () => {
           </div>
 
           {getHeaderTitleForPage(optionTags?.name, optionTags?.logo, router.pathname, locale)}
-          <div className="flex gap-4">
-            {!cartIconBlackList.includes(router.pathname) && <CartIcon />}
-            {skipWhiteList.includes(router.pathname) && (
-              <Link href={'/homePage'}>
-                <Box cursor={'pointer'} fontSize={'15px'} color="rgba(var(--color-primary))" onClick={() => {}}>
-                  Skip
-                </Box>
-              </Link>
-            )}
-          </div>
+          <div className="flex gap-4">{!cartIconBlackList.includes(router.pathname) && <CartIcon />}</div>
         </div>
       </div>
     </header>

@@ -1,5 +1,5 @@
 import type { AppProps } from 'next/app'
-
+import React from 'react'
 import Layout from '../components/layout/Layout'
 
 import 'slick-carousel/slick/slick.css'
@@ -9,13 +9,17 @@ import 'react-toastify/dist/ReactToastify.css'
 import { ChakraProvider } from '@chakra-ui/react'
 
 import '../styles/globals.css'
+import { Provider } from 'react-redux'
+import store from '../store'
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ChakraProvider>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
+      <Provider store={store}>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </Provider>
     </ChakraProvider>
   )
 }
