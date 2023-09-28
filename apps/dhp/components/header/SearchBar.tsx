@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { GoSearch } from 'react-icons/go'
+
 import { useLanguage } from '../../hooks/useLanguage'
 import { SearchBarPropsModel } from '../../lib/types/search'
 

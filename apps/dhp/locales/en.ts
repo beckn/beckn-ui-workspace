@@ -403,6 +403,11 @@ const en: { [key: string]: string } = {
   emailId: 'Email Id',
   certificates: 'Resume & Certificates',
   createAccount: 'Create Account',
+  consultationFee: 'Consultation Fees',
+  bookAppointment: 'Book Appointment',
+  priceText: 'Price',
+  bookAppointmentText: 'Select & Book Appointment',
+  confirmAppointmentText: 'Confirm Appointment',
   bookedIn: 'Booked in',
   taxes: 'Taxes',
   viewPrescription: 'View Prescription',
@@ -416,6 +421,10 @@ const en: { [key: string]: string } = {
   emptyCartText1: 'Looks like you haven’t made your',
   emptyCartText2: 'choice yet',
   confirmationText1: 'Thank you! your order has been ',
-  viewOrderDetails: 'View Order Details'
+  viewOrderDetails: 'View Order Details',
+  xray: 'X-Ray',
+  selectService: 'Select Service',
+  selectDate: 'Select Date',
+  selectTimeSlot: ' Select Time Slot:'
 }
 export default en

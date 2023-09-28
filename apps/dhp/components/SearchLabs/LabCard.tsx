@@ -1,19 +1,17 @@
 import React from 'react'
 import Link from 'next/link'
-import { RetailItem } from '../../../lib/types/products'
-import CardActions from './CardActions'
-import ProductPrice from '../ProductPrice'
-import { toBinary } from '../../../utilities/common-utils'
-import { Box, Flex, Text, Image, Spacer, Icon } from '@chakra-ui/react'
-import StarIcon from '../../../public/images/Star.svg'
-
-import { FaLocationDot } from 'react-icons/fa6'
+import { RetailItem } from '../../lib/types/products'
+import CardActions from '../UI/card/CardActions'
+import ProductPrice from '../UI/ProductPrice'
+import { toBinary } from '../../utilities/common-utils'
+import { Box, Flex, Text, Image } from '@chakra-ui/react'
+import StarIcon from '../../public/images/Star.svg'
 
 interface Props {
   product: RetailItem
 }
 
-const Card: React.FC<Props> = ({ product }) => {
+const LabCard: React.FC<Props> = ({ product }) => {
   const encodedProduct = window.btoa(toBinary(JSON.stringify(product)))
 
   return (
@@ -24,7 +22,7 @@ const Card: React.FC<Props> = ({ product }) => {
     >
       <Link
         href={{
-          pathname: '/product',
+          pathname: '/labDetails',
           query: { productDetails: encodedProduct }
         }}
       >
@@ -64,20 +62,13 @@ const Card: React.FC<Props> = ({ product }) => {
                 {product.descriptor.name}
               </Text>
               <Text fontSize={'12px'} fontWeight={400}>
-                Orthopaedic Surgeon
+                X-Ray, Blood Test & More
               </Text>
             </Flex>
 
-            <Flex fontSize={'12px'} alignItems={'center'} mb={'10px'} mt={'10px'}>
-              <Text fontWeight={'600'}>Fees</Text>
-              <Spacer />
-              <Flex align={'center'} gap={'5px'}>
-                <Icon as={FaLocationDot} w={'6px'} h={'8px'}></Icon>
-                <Text fontWeight={400} fontSize={'12px'} fontFamily={'Poppins'}>
-                  800 m
-                </Text>
-              </Flex>
-            </Flex>
+            <Box fontSize={'12px'} mb={'10px'} mt={'10px'}>
+              <Text fontWeight={'600'}>Sold by: </Text>
+            </Box>
             <Flex
               justifyContent={'space-between'}
               alignItems={'center'}
@@ -102,4 +93,4 @@ const Card: React.FC<Props> = ({ product }) => {
   )
 }
 
-export default Card
+export default LabCard
