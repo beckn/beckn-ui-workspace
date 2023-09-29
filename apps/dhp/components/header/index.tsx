@@ -38,7 +38,7 @@ const cartIconBlackList = [
 
 const backIconList = ['/', '/orderDetails']
 
-const homeIconBlackList = ['/orderHistory', '/', '/homePage', '/mobileOtp', '/createProfile', '/search']
+const homeIconBlackList = ['/', '/homePage', '/createProfile']
 
 const storeHeaderBlackList = [
   '/checkoutPage',
@@ -121,6 +121,17 @@ const menuIconWhiteList = [
   '/doctorPaymentMode',
   '/orderConfirmation',
   '/checkoutForLab',
+  '/labPaymentMode',
+  '/myAppointments',
+  '/orderDetailsHistoryPage',
+  '/PrescriptionPage',
+  '/searchMedicine',
+  '/checkoutForMedicine',
+  '/bookDoctorAppointment',
+  '/searchLabs',
+  '/bookLabAppointment',
+  '/checkoutForLab',
+  '/doctorPaymentMode',
   '/labPaymentMode'
 ]
 

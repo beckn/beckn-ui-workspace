@@ -319,11 +319,9 @@ const en: { [key: string]: string } = {
   dineIn: 'Dine-in',
   takeAway: 'Takeaway',
   bookstore: 'Bookstore',
-  formName: 'Enter Your Full Name',
-  formNumber: 'Enter Mobile Number',
-  formEmail: 'Enter Email ID',
-  formDOB: 'Enter Your Birth Date (DD/MM/YYYY)',
-  formSelectGender: 'Select Gender',
+  formName: 'Name',
+  formNumber: 'Number',
+  formEmail: 'Email ID',
   formAddress: 'Address',
   formZipCode: 'Zip Code',
   errorDOB: 'Please enter a date of birth',
@@ -431,6 +429,11 @@ const en: { [key: string]: string } = {
   date: 'Date :',
   timeslot: 'Time Slot:',
   viewAppDetails: 'View Appointment Details',
-  myAppointments: 'My Appointments'
+  myAppointments: 'My Appointments',
+  createformName: 'Enter Your Full Name',
+  createformNumber: 'Enter Mobile Number',
+  createformEmail: 'Enter Email ID',
+  formDOB: 'Enter Your Birth Date (DD/MM/YYYY)',
+  formSelectGender: 'Select Gender'
 }
 export default en

@@ -22,9 +22,9 @@ function PaymentMode() {
         <Box>
           <Flex justifyContent={'space-between'} alignItems={'center'} fontSize={'17px'} mb={'10px'}>
             <Text className="text-ellipsis">{t.cards}</Text>
-            <Text color={'rgba(var(--color-primary))'} fontSize={'15px'}>
+            {/* <Text color={'rgba(var(--color-primary))'} fontSize={'15px'}>
               {t.addCard}
-            </Text>
+            </Text> */}
           </Flex>
           <Card className="border_radius_all" mb={'20px'}>
             <CardBody padding={'15px 20px'}>

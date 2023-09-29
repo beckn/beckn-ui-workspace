@@ -156,7 +156,7 @@ const checkoutForMedicine = () => {
       {/* start Item Details */}
       <Box>
         <Box pb={'10px'}>
-          <Text fontSize={'17px'}>{t.items}</Text>
+          <Text fontSize={'17px'}>{t.orderOverview}</Text>
         </Box>
 
         <DetailsCard>

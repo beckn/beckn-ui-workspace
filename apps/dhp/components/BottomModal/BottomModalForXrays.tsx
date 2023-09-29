@@ -10,7 +10,7 @@ import {
   Text,
   Image
 } from '@chakra-ui/react'
-import React from 'react'
+import React, { useState } from 'react'
 import ButtonComp from '../button/Button'
 import crossIconHz from '../../public/images/crossIconHz.svg'
 import { useLanguage } from '../../hooks/useLanguage'
@@ -27,6 +27,12 @@ export interface BottomModalForXraysProps {
 
 const BottomModalForXrays: React.FC<BottomModalForXraysProps> = props => {
   const { t } = useLanguage()
+  const [searchTerm, setSearchTerm] = useState('')
+
+  const handleSearchLab = () => {
+    localStorage.setItem('optionTags', JSON.stringify({ name: searchTerm }))
+    Router.push(`/searchLabs?searchTerm=${searchTerm}`)
+  }
 
   return (
     <>
@@ -65,9 +71,7 @@ const BottomModalForXrays: React.FC<BottomModalForXraysProps> = props => {
               background={'rgba(var(--color-primary))'}
               color={'rgba(var(--text-color))'}
               isDisabled={false}
-              handleOnClick={() => {
-                Router.push('/searchLabs')
-              }}
+              handleOnClick={handleSearchLab}
             />
           </ModalBody>
         </ModalContent>

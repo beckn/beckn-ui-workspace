@@ -81,7 +81,7 @@ const CreateProfile: React.FC<CreateProfileProps> = props => {
             value={formData.name}
             onChange={handleInputChange}
           />
-          <label className={style.did_floating_label}>{t.formName}</label>
+          <label className={style.did_floating_label}>{t.createformName}</label>
           {formErrors.name && <div className={style.error}>{t[`${formErrors.name}`]}</div>}
         </div>
         <div className={style.did_floating_label_content}>
@@ -93,7 +93,7 @@ const CreateProfile: React.FC<CreateProfileProps> = props => {
             value={formData.mobileNumber}
             onChange={handleInputChange}
           />
-          <label className={style.did_floating_label}>{t.formNumber}</label>
+          <label className={style.did_floating_label}>{t.createformNumber}</label>
           {formErrors.mobileNumber && <span className={style.error}>{t[`${formErrors.mobileNumber}`]}</span>}
         </div>
         <div className={style.did_floating_label_content}>
@@ -105,7 +105,7 @@ const CreateProfile: React.FC<CreateProfileProps> = props => {
             value={formData.email}
             onChange={handleInputChange}
           />
-          <label className={style.did_floating_label}>{t.formEmail}</label>
+          <label className={style.did_floating_label}>{t.createformEmail}</label>
           {formErrors.email && <span className={style.error}>{t[`${formErrors.email}`]}</span>}
         </div>
         <div className={style.did_floating_label_content}>

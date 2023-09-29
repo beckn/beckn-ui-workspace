@@ -237,7 +237,7 @@ const CheckoutForLab = () => {
       )}
 
       {/* start payment details */}
-      {!initRequest.data && (
+      {initRequest.data && (
         <Box>
           <Flex pb={'10px'} mt={'20px'} justifyContent={'space-between'}>
             <Text fontSize={'17px'}>{t.paymentText}</Text>

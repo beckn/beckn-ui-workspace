@@ -13,7 +13,7 @@ const bookLabAppointment = () => {
     <Box className="hideScroll" maxH={'calc(100vh - 100px)'} overflowY="scroll">
       <Box>
         <Text fontSize={'17px'} fontWeight={400} mb={'3px'}>
-          {t.selectService}
+          {t.selectService}:
         </Text>
 
         <Box w={'100%'} borderRadius={'12px'} border={'1px solid #C9C9C9'} p={'10px 15px'}>
@@ -23,11 +23,11 @@ const bookLabAppointment = () => {
         </Box>
       </Box>
       <Flex flexDirection={'column'} justify={'start'} mt={'20px'}>
-        <Text fontSize={'17px'}>{t.selectDate}</Text>
+        <Text fontSize={'17px'}>{t.selectDate}:</Text>
         <AppointmentDateList />
         <Box mt={'20px'}>
           <Text fontSize={'17px'} mb={'10px'}>
-            {t.selectTimeSlot}
+            {t.selectTimeSlot}:
           </Text>
           <TimeSlotList />
         </Box>
