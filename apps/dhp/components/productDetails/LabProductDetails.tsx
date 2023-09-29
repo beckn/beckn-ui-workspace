@@ -1,16 +1,16 @@
-import { Box, Flex, Text } from '@chakra-ui/react'
+import { Box, Flex, Image, Text } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import StarRatingComponent from 'react-star-rating-component'
-import { useLanguage } from '../../../hooks/useLanguage'
-import { RetailItem } from '../../../lib/types/products'
+import { useLanguage } from '../../hooks/useLanguage'
+import { RetailItem } from '../../lib/types/products'
+import greenVegIcon from '../../public/images/greenVeg.svg'
+import redNonVegIcon from '../../public/images/redNonVeg.svg'
 import LabCallToAction from './LabCallToAction'
-// import greenVegIcon from '../../public/images/greenVeg.svg'
-// import redNonVegIcon from '../../public/images/redNonVeg.svg'
 
 interface Props {
   product: RetailItem
 }
-const LabDetailsSection: React.FC<Props> = ({ product }) => {
+const LabProductDetails: React.FC<Props> = ({ product }) => {
   const { t } = useLanguage()
   const [showComponent, setShowComponent] = useState(false)
 
@@ -76,4 +76,4 @@ const LabDetailsSection: React.FC<Props> = ({ product }) => {
   )
 }
 
-export default LabDetailsSection
+export default LabProductDetails

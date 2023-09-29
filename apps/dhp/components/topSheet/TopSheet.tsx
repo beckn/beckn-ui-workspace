@@ -60,7 +60,7 @@ const TopSheet: React.FC<TopSheetPropsModel> = props => {
     <ChakraProvider theme={theme}>
       <Box
         boxShadow="0px 4px 20px 0px rgba(0, 0, 0, 0.08)"
-        margin={'-20px -25px 0px -25px'}
+        margin={'-20px -20px 0px -20px'}
         padding={'14px'}
         background={'#FFF'}
       >

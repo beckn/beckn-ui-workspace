@@ -140,7 +140,7 @@ const OrderDetails = () => {
     let courseUrl = ''
 
     Object.keys(confirmDataPerBpp).map(key => {
-      courseUrl = confirmDataPerBpp[key].items[0].tags.Url
+      // courseUrl = confirmDataPerBpp[key].items[0].tags.Url
     })
 
     window.open(courseUrl, '_blank')
@@ -176,7 +176,7 @@ const OrderDetails = () => {
           <Text>{getOrderPlacementTimeline(orderFromConfirmData.created_at)}</Text>
         </Flex>
         {Object.keys(confirmDataPerBpp).map(key => (
-          <Box key={confirmDataPerBpp[key].id}>
+          <Box>
             <Flex pt={4} justifyContent={'space-between'} alignItems={'center'}>
               <Text>{t.ordersFulfilled}</Text>
               <Box>

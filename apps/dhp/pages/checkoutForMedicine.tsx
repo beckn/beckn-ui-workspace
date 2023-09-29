@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Box, Flex, Text, Stack, Checkbox, Image } from '@chakra-ui/react'
+import { Box, Flex, Text, Stack, Checkbox, Image, StackDivider } from '@chakra-ui/react'
 import DetailsCard from '../components/detailsCard/DetailsCard'
 import ItemDetails from '../components/detailsCard/ItemDetails'
 import ButtonComp from '../components/button/Button'
@@ -9,6 +9,9 @@ import ShippingOrBillingDetails from '../components/detailsCard/ShippingOrBillin
 import PaymentDetails from '../components/detailsCard/PaymentDetails'
 import AddShippingButton from '../components/detailsCard/AddShippingButton'
 import addShippingBtn from '../public/images/offer.svg'
+import CallphoneIcon from '../public/images/CallphoneIcon.svg'
+import locationIcon from '../public/images/locationIcon.svg'
+import nameIcon from '../public/images/nameIcon.svg'
 import { CartItemForRequest, DataPerBpp, ICartRootState, TransactionIdRootState } from '../lib/types/cart'
 import { getCartItemsPerBpp } from '../utilities/cart-utils'
 import useRequest from '../hooks/useRequest'
@@ -134,7 +137,7 @@ const checkoutForMedicine = () => {
   }
 
   if (initRequest.loading) {
-    return <Loader loadingText={t['initializingOrderLoader']} />
+    return <Loader subLoadingText={t['initializingOrderLoader']} />
   }
 
   const isInitResultPresent = () => {
@@ -199,12 +202,25 @@ const checkoutForMedicine = () => {
             />
           </Flex>
 
-          <ShippingOrBillingDetails
-            accordionHeader={t.shipping}
-            name={formData.name}
-            location={formData.address}
-            number={formData.mobileNumber}
-          />
+          <DetailsCard>
+            <Stack divider={<StackDivider />} spacing="4">
+              <Flex alignItems={'center'}>
+                {/* eslint-disable-next-line jsx-a11y/alt-text */}
+                <Image src={nameIcon} pr={'12px'} />
+                <Text fontSize={'15px'}>{formData.name}</Text>
+              </Flex>
+              <Flex alignItems={'center'}>
+                {/* eslint-disable-next-line jsx-a11y/alt-text */}
+                <Image src={locationIcon} pr={'12px'} />
+                <Text fontSize={'15px'}>{formData.address}</Text>
+              </Flex>
+              <Flex alignItems={'center'}>
+                {/* eslint-disable-next-line jsx-a11y/alt-text */}
+                <Image src={CallphoneIcon} pr={'12px'} />
+                <Text fontSize={'15px'}>{formData.mobileNumber}</Text>
+              </Flex>
+            </Stack>
+          </DetailsCard>
         </Box>
       )}
       {/* end shipping detals */}
@@ -249,12 +265,25 @@ const checkoutForMedicine = () => {
             />
           </Flex>
 
-          <ShippingOrBillingDetails
-            accordionHeader={t.billing}
-            name={billingFormData.name}
-            location={billingFormData.address}
-            number={billingFormData.mobileNumber}
-          />
+          <DetailsCard>
+            <Stack divider={<StackDivider />} spacing="4">
+              <Flex alignItems={'center'}>
+                {/* eslint-disable-next-line jsx-a11y/alt-text */}
+                <Image src={nameIcon} pr={'12px'} />
+                <Text fontSize={'15px'}>{formData.name}</Text>
+              </Flex>
+              <Flex alignItems={'center'}>
+                {/* eslint-disable-next-line jsx-a11y/alt-text */}
+                <Image src={locationIcon} pr={'12px'} />
+                <Text fontSize={'15px'}>{formData.address}</Text>
+              </Flex>
+              <Flex alignItems={'center'}>
+                {/* eslint-disable-next-line jsx-a11y/alt-text */}
+                <Image src={CallphoneIcon} pr={'12px'} />
+                <Text fontSize={'15px'}>{formData.mobileNumber}</Text>
+              </Flex>
+            </Stack>
+          </DetailsCard>
         </Box>
       )}
       {/* start payment details */}
@@ -277,7 +306,7 @@ const checkoutForMedicine = () => {
       )}
       {/* end payment details */}
       {!isInitResultPresent() ? (
-        <Box position={'absolute'} left={'5%'} width={'90%'} bottom={'0'}>
+        <Box>
           <ButtonComp
             buttonText={t.continue}
             background={'rgba(var(--color-primary))'}

@@ -67,7 +67,7 @@ const Cart = () => {
   }
 
   if (quoteRequest.loading || isLoadingForCartCountChange) {
-    return <Loader loadingText={t.quoteRequestLoader} />
+    return <Loader subLoadingText={t.quoteRequestLoader} />
   }
 
   if (!cartItems.length) {

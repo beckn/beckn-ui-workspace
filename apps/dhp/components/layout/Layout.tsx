@@ -39,7 +39,7 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
                 { [paddingStyles]: !isHomepage },
                 { [marginStyles]: !isHomepage && !isSearch },
                 { ['mt-[24px]']: isHomepage },
-                { ['mt-[118px]']: isSearch }
+                { ['mt-[103px]']: isSearch }
               )}
             >
               {children}

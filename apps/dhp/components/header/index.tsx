@@ -61,19 +61,13 @@ const storeHeaderBlackList = [
   '/search',
   '/searchLabs',
   '/bookLabAppointment',
-  '/myScholarship',
-  '/scholarshipSearchPage',
-  '/scholarshipDetailsPage',
-  '/myLearningOrderHistory',
-  '/myJobsOrderHistory',
-  '/applyJobsPrefilled',
   '/checkoutForLab',
   '/doctorPaymentMode',
   '/labPaymentMode'
 ]
 const headerValues = {
   '/checkoutPage': 'Checkout',
-  '/orderHistory': 'My Courses',
+  '/orderHistory': 'Order History',
   '/orderDetails': 'Order Details',
   '/': 'Sign In',
   '/mobileOtp': 'Sign In',
@@ -93,12 +87,6 @@ const headerValues = {
   '/search': 'Search Results',
   '/searchLabs': 'Labs',
   '/bookLabAppointment': 'Book Appointment',
-  '/myScholarship': 'My Scholarships',
-  '/scholarshipSearchPage': 'Scholarships',
-  '/scholarshipDetailsPage': 'Scholarships',
-  '/myLearningOrderHistory': 'My Learnings',
-  '/myJobsOrderHistory': 'My Jobs',
-  '/applyJobsPrefilled': 'My Jobs',
   '/checkoutForLab': 'Checkout',
   '/doctorPaymentMode': 'Payment',
   '/labPaymentMode': 'Payment'
@@ -113,7 +101,6 @@ const headerValuesFrench = {
   '/cart': 'Panier',
   '/paymentMode': 'Sélectionner la Méthode de Paiement',
   '/createProfile': 'Profile',
-  '/myScholarship': 'My Scholarships',
   feedback: "Retour d'Information"
 }
 
@@ -122,8 +109,6 @@ const topHeaderBlackList: string[] = []
 const bottomHeaderBlackList = [
   '/homePage',
   '/orderConfirmation',
-  '/applicationSent',
-  '/scholarshipConfirmationPage',
   '/orderConfirmationForMedicine',
   '/orderConfirmationForLab'
 ]
@@ -138,8 +123,6 @@ const menuIconWhiteList = [
   '/checkoutForLab',
   '/labPaymentMode'
 ]
-//,'/product',
-const skipWhiteList = ['/createProfile']
 
 const languageIconWhiteList = ['/', '/createProfile']
 
@@ -150,11 +133,10 @@ const getHeaderTitleForPage = (name: string, logo: string, pathName: string, loc
       return <Text>{values[pathName]}</Text>
     default:
       return (
-        <Box width={'260px'} className="flex gap-1 my-2 ml-2 md:hidden">
+        <Box width={'260px'} className="flex gap-1 ml-2 md:hidden">
           <Text
             margin={'0 auto'}
             textAlign={'center'}
-            fontSize={'17px'}
             textOverflow={'ellipsis'}
             whiteSpace={'nowrap'}
             overflow={'hidden'}
@@ -191,7 +173,7 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
 
             {!homeIconBlackList.includes(router.pathname) && (
               <Image
-                w={'88%'}
+                w={'20px'}
                 onClick={() => {
                   // localStorage.clear();
                   // router.push("/");
@@ -220,30 +202,21 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
       <BottomModal isOpen={isMenuModalOpen} onClose={handleMenuModalClose}>
         <div
           onClick={() => {
-            router.push('/myLearningOrderHistory')
+            router.push('/orderHistory')
           }}
-          className="flex gap-2 py-3 text-[15px]"
+          className="flex gap-2 py-4 text-[15px]"
         >
-          <Image src="/images/myLearningIcon.svg" alt="myLearnings icon" />
-          {t['myLearnings']}
+          <Image src="/images/orderHistoryIcon.svg" alt="orderHistory icon" />
+          {t['orderHistory']}
         </div>
         <div
           onClick={() => {
-            router.push('/myScholarship')
+            router.push('/myAppointments')
           }}
-          className="flex gap-2 py-3 text-[15px]"
+          className="flex gap-2 py-4 text-[15px]"
         >
-          <Image src="/images/myScholarshipIcon.svg" alt="myScholarships icon" />
-          {t['myScholarships']}
-        </div>
-        <div
-          onClick={() => {
-            router.push('/myJobsOrderHistory')
-          }}
-          className="flex gap-2 py-3 text-[15px]"
-        >
-          <Image src="/images/myJobIcon.svg" alt="myJobs icon" />
-          {t['myJobs']}
+          <Image src="/images/myAppointmentsIcon.svg" alt="myAppointments icon" />
+          {t['myAppointments']}
         </div>
       </BottomModal>
     </>
