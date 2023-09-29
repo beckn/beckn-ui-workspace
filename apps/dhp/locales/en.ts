@@ -275,7 +275,7 @@ const en: { [key: string]: string } = {
   continue: 'Continue',
   discountApplied: 'Discount Applied',
   offersDiscounts: 'Offers & Discounts',
-  orderHistory: 'Order history',
+  orderHistory: 'Order History',
   bottomModalTitle: 'Search',
   optionRestaurants: 'Restaurants',
   optionRestaurant: 'Restaurant',
@@ -382,29 +382,10 @@ const en: { [key: string]: string } = {
 
   requirements: 'Requirements',
   qualifications: 'Qualifications: ',
-
   applyBtnText: 'Apply Now',
   nameText: 'Name',
-
-
-
-
   duration: 'Duration :',
-  checkforScholarship: 'Check for Scholarship',
-  scholarship: 'Scholarship',
-  noScholarship: 'No Scholarship!',
-  noScholarshipText1: 'Look like you haven’t applied for any',
-  noScholarshipText2: 'Scholarship!',
-  searchScholarships: 'Search Scholarships',
-  searchMoreScholarships: 'Search More Scholarships',
   applyNow: 'Apply Now',
-  uploadDoc: 'Upload Documents',
-  docText: 'Documents',
-  declarationText: 'I hereby declare that the details mentioned above are correct',
-  appSubmitText: 'Application Submitted!',
-  appSubmitSpan1: 'The company will evaluate your ',
-  appSubmitSpan2: 'application and get back to you soon',
-
   submit: 'Submit',
   applicationSubmitted: 'Application Submitted!',
   gotoCart: 'Go to Cart',
@@ -413,8 +394,6 @@ const en: { [key: string]: string } = {
   confirmText3: 'and respond',
   confirmText4: 'as soon as possible.',
   add: 'Add',
-
-  
   appliedOn: 'Applied on',
   contactInformation: 'Contact Information',
   mobileNo: 'Mobile no.',
@@ -451,5 +430,7 @@ const en: { [key: string]: string } = {
   or: ' Or',
   date: 'Date :',
   timeslot: 'Time Slot:',
+  viewAppDetails: 'View Appointment Details',
+  myAppointments: 'My Appointments'
 }
 export default en

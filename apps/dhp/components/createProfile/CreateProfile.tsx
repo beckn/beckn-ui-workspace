@@ -66,7 +66,7 @@ const CreateProfile: React.FC<CreateProfileProps> = props => {
     }
   }
   const handleSkipClick = () => {
-    router.push('/homepage')
+    router.push('/homePage')
   }
 
   return (
@@ -120,7 +120,7 @@ const CreateProfile: React.FC<CreateProfileProps> = props => {
           <label className={style.did_floating_label}>{t.formDOB}</label>
           {formErrors.dob && <span className={style.error}>{t[`${formErrors.dob}`]}</span>}
         </div>
-        <Box mb={'100px'}>
+        <Box mb={'20px'}>
           <Text fontFamily={'Poppins'} fontSize={'15px'} fontWeight={400} mb={3}>
             {t.formSelectGender}
           </Text>

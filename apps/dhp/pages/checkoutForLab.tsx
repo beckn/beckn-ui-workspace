@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Box, Divider, Flex, Text } from '@chakra-ui/react'
+import { Box, Divider, Flex, Stack, StackDivider, Text, Image } from '@chakra-ui/react'
 import DetailsCard from '../components/detailsCard/DetailsCard'
 import ItemDetails from '../components/detailsCard/ItemDetails'
 import ButtonComp from '../components/button/Button'
 import { useLanguage } from '../hooks/useLanguage'
 import ShippingOrBillingDetails from '../components/detailsCard/ShippingOrBillingDetails'
 import PaymentDetails from '../components/detailsCard/PaymentDetails'
+import CallphoneIcon from '../public/images/CallphoneIcon.svg'
+import locationIcon from '../public/images/locationIcon.svg'
+import nameIcon from '../public/images/nameIcon.svg'
 
 import { CartItemForRequest, DataPerBpp, ICartRootState, TransactionIdRootState } from '../lib/types/cart'
 import { getCartItemsPerBpp } from '../utilities/cart-utils'
@@ -45,7 +48,7 @@ const CheckoutForLab = () => {
     pinCode: '201016'
   })
 
-  const [isBillingAddressSameAsShippingAddress, setIsBillingAddressSameAsShippingAddress] = useState(true)
+  // const [isBillingAddressSameAsShippingAddress, setIsBillingAddressSameAsShippingAddress] = useState(true)
 
   const [billingFormData, setBillingFormData] = useState<ShippingFormData>({
     name: 'Santosh Kumar',
@@ -101,12 +104,12 @@ const CheckoutForLab = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initRequest.data])
 
-  useEffect(() => {
-    const shippingAddressComplete = Object.values(formData).every(value => value.length > 0)
-    if (shippingAddressComplete && typeof window !== 'undefined') {
-      localStorage.setItem('shippingAdress', JSON.stringify(formData))
-    }
-  }, [formData])
+  // useEffect(() => {
+  //   const shippingAddressComplete = Object.values(formData).every(value => value.length > 0)
+  //   if (shippingAddressComplete && typeof window !== 'undefined') {
+  //     localStorage.setItem('shippingAdress', JSON.stringify(formData))
+  //   }
+  // }, [formData])
 
   useEffect(() => {
     const isBillingAddressComplete = Object.values(billingFormData).every(value => value.length > 0)
@@ -114,9 +117,9 @@ const CheckoutForLab = () => {
     if (isBillingAddressComplete && typeof window !== 'undefined') {
       localStorage.setItem('billingAddress', JSON.stringify(billingFormData))
     }
-    setIsBillingAddressSameAsShippingAddress(
-      areShippingAndBillingDetailsSame(isBillingAddressComplete, formData, billingFormData)
-    )
+    // setIsBillingAddressSameAsShippingAddress(
+    //   areShippingAndBillingDetailsSame(isBillingAddressComplete, formData, billingFormData)
+    // )
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [billingFormData])
 
@@ -142,7 +145,7 @@ const CheckoutForLab = () => {
   }
 
   if (initRequest.loading) {
-    return <Loader loadingText={t['initializingOrderLoader']} />
+    return <Loader subLoadingText={t['initializingOrderLoader']} />
   }
 
   const isInitResultPresent = () => {
@@ -211,18 +214,30 @@ const CheckoutForLab = () => {
               billingFormSubmitHandler={formSubmitHandler}
             />
           </Flex>
-
-          <ShippingOrBillingDetails
-            accordionHeader={t.billing}
-            name={formData.name}
-            location={formData.address}
-            number={formData.mobileNumber}
-          />
+          <DetailsCard>
+            <Stack divider={<StackDivider />} spacing="4">
+              <Flex alignItems={'center'}>
+                {/* eslint-disable-next-line jsx-a11y/alt-text */}
+                <Image src={nameIcon} pr={'12px'} />
+                <Text fontSize={'15px'}>{formData.name}</Text>
+              </Flex>
+              <Flex alignItems={'center'}>
+                {/* eslint-disable-next-line jsx-a11y/alt-text */}
+                <Image src={locationIcon} pr={'12px'} />
+                <Text fontSize={'15px'}>{formData.address}</Text>
+              </Flex>
+              <Flex alignItems={'center'}>
+                {/* eslint-disable-next-line jsx-a11y/alt-text */}
+                <Image src={CallphoneIcon} pr={'12px'} />
+                <Text fontSize={'15px'}>{formData.mobileNumber}</Text>
+              </Flex>
+            </Stack>
+          </DetailsCard>
         </Box>
       )}
 
       {/* start payment details */}
-      {initRequest.data && (
+      {!initRequest.data && (
         <Box>
           <Flex pb={'10px'} mt={'20px'} justifyContent={'space-between'}>
             <Text fontSize={'17px'}>{t.paymentText}</Text>
@@ -241,7 +256,7 @@ const CheckoutForLab = () => {
       )}
       {/* end payment details */}
       {!isInitResultPresent() ? (
-        <Box position={'absolute'} left={'5%'} width={'90%'} bottom={'0'}>
+        <Box>
           <ButtonComp
             buttonText={t.proceedToPayment}
             background={'rgba(var(--color-primary))'}

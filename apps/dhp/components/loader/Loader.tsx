@@ -16,7 +16,11 @@ const Loader: React.FC<LoaderPropsModel> = props => {
           {props.loadingText}
         </Text>
       )}
-      {props.subLoadingText && <Text textAlign="center">{props.subLoadingText}</Text>}
+      {props.subLoadingText && (
+        <Text textAlign="center" pt={'5px'}>
+          {props.subLoadingText}
+        </Text>
+      )}
     </div>
   )
 }

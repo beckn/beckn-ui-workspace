@@ -4,6 +4,7 @@ import axios from 'axios'
 import Cookies from 'js-cookie'
 import { UserData } from '../components/createProfile/createProfile.types'
 import { useRouter } from 'next/router'
+import { Box } from '@chakra-ui/react'
 
 const createProfile = () => {
   const router = useRouter()
@@ -34,9 +35,9 @@ const createProfile = () => {
     }
   }
   return (
-    <div>
+    <Box className="hideScroll" maxH={'calc(100vh - 100px)'} overflowY="scroll">
       <CreateProfile createProfileSubmitHandler={createProfileSubmitHandler} />
-    </div>
+    </Box>
   )
 }
 

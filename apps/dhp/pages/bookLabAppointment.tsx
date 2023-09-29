@@ -10,13 +10,13 @@ import Router from 'next/router'
 const bookLabAppointment = () => {
   const { t } = useLanguage()
   return (
-    <Box mt={'20px'} fontFamily={'Poppins'}>
+    <Box className="hideScroll" maxH={'calc(100vh - 100px)'} overflowY="scroll">
       <Box>
         <Text fontSize={'17px'} fontWeight={400} mb={'3px'}>
           {t.selectService}
         </Text>
 
-        <Box w={'100%'} h={'48px'} borderRadius={'12px'} border={'1px solid #C9C9C9'} pl={'10px'} pt={'10px'}>
+        <Box w={'100%'} borderRadius={'12px'} border={'1px solid #C9C9C9'} p={'10px 15px'}>
           <Text fontSize={'15px'} fontWeight={400}>
             {t.xray}
           </Text>

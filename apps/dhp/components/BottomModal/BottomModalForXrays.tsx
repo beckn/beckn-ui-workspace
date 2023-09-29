@@ -65,7 +65,9 @@ const BottomModalForXrays: React.FC<BottomModalForXraysProps> = props => {
               background={'rgba(var(--color-primary))'}
               color={'rgba(var(--text-color))'}
               isDisabled={false}
-              handleOnClick={() => {}}
+              handleOnClick={() => {
+                Router.push('/searchLabs')
+              }}
             />
           </ModalBody>
         </ModalContent>

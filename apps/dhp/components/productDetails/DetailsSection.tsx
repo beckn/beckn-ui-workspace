@@ -3,9 +3,9 @@ import React, { useEffect, useState } from 'react'
 import StarRatingComponent from 'react-star-rating-component'
 import { useLanguage } from '../../hooks/useLanguage'
 import { RetailItem } from '../../lib/types/products'
-import CallToAction from './CallToAction'
 import greenVegIcon from '../../public/images/greenVeg.svg'
 import redNonVegIcon from '../../public/images/redNonVeg.svg'
+import CallToAction from './CallToAction'
 
 interface Props {
   product: RetailItem
@@ -47,14 +47,6 @@ const DetailsSection: React.FC<Props> = ({ product }) => {
         <Text mb={'10px'} fontSize={'14px'}>
           {product.bppName}
         </Text>
-
-        {product.tags.foodType ? (
-          product.tags.foodType === 'veg' ? (
-            <Image pt={'4px'} src={greenVegIcon} alt="greenVegIcon" />
-          ) : (
-            <Image pt={'4px'} src={redNonVegIcon} alt="redNonVegIcon" />
-          )
-        ) : null}
       </Flex>
       <hr className="mt-1 hidden md:block" />
       <div className="flex items-start flex-wrap relative ">

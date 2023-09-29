@@ -1,6 +1,6 @@
 import Router from 'next/router'
 import React, { useEffect, useState } from 'react'
-import LabDetails from '../components/SearchLabs/LabDetails'
+import LabDetails from '../components/productDetails/LabDetails'
 import { RetailItem } from '../lib/types/products'
 import { fromBinary } from '../utilities/common-utils'
 

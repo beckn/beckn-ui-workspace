@@ -70,7 +70,7 @@ const OrderConfirmation = () => {
               {t.congratulation}
             </Text>
             <Stack>
-              <Text textAlign={'center'} marginTop={'8px'} marginBottom={'40px'} fontSize={'15px'} fontWeight="600">
+              <Text textAlign={'center'} marginTop={'8px'} marginBottom={'40px'} fontSize={'15px'} fontWeight="400">
                 {t.confirmMessage1} <br />
                 {t.confirmMessage2}
               </Text>

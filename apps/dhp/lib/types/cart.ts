@@ -17,9 +17,9 @@ export interface ICartProduct {
 }
 
 export interface CartRetailItem extends RetailItem {
-  duration: any
-  timeSlot: any
-  address: any
+  duration: string | number
+  timeSlot: string | number
+  address: string
   quantity: number
   totalPrice: number
 }

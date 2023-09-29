@@ -72,7 +72,7 @@ export interface RetailItem {
   location_id?: string
   recommended?: boolean
   tags: {
-    fulfillment_start_time: any
+    fulfillment_start_time: string
     fulfillment_start_loc?: string
     Category?: string
     Trekking?: string
