@@ -4,20 +4,21 @@ import React from 'react'
 import { useLanguage } from '../../../hooks/useLanguage'
 import { RetailItem } from '../../../lib/types/products'
 import Button from '../../button/Button'
+import { ParsedScholarshipData } from '../scholarshipCard/Scholarship.types'
 
 interface Props {
-  product: RetailItem
+  scholarship: ParsedScholarshipData
 }
 
-const ScholarshipDetails: React.FC<Props> = ({ product }) => {
+const ScholarshipDetails: React.FC<Props> = ({ scholarship }) => {
   const { t } = useLanguage()
   return (
     <Box>
       <Text fontSize={'17px'} fontWeight="600" textAlign={'center'} pb="10px">
-        Extended Learning Scholarship
+        {scholarship.name}
       </Text>
       <Text fontSize={'15px'} textAlign={'center'}>
-        by H.G. Infra Engineering Ltd
+        by {scholarship.platformName}
       </Text>
       <Box
         className="mt-4 product_description_text border-2 border_radius_all hideScroll"
@@ -28,18 +29,7 @@ const ScholarshipDetails: React.FC<Props> = ({ product }) => {
           overflow: 'auto'
         }}
       >
-        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quos eligendi, odio laborum tempore repellat itaque
-        quod fugiat pariatur architecto officiis incidunt sunt quas alias saepe eveniet velit excepturi. Modi, sequi?
-        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quos eligendi, odio laborum tempore repellat itaque
-        quod fugiat pariatur architecto officiis incidunt sunt quas alias saepe eveniet velit excepturi. Modi, sequi?
-        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quos eligendi, odio laborum tempore repellat itaque
-        quod fugiat pariatur architecto officiis incidunt sunt quas alias saepe eveniet velit excepturi. Modi, sequi?
-        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quos eligendi, odio laborum tempore repellat itaque
-        quod fugiat pariatur architecto officiis incidunt sunt quas alias saepe eveniet velit excepturi. Modi, sequi?
-        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quos eligendi, odio laborum tempore repellat itaque
-        quod fugiat pariatur architecto officiis incidunt sunt quas alias saepe eveniet velit excepturi. Modi, sequi?
-        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quos eligendi, odio laborum tempore repellat itaque
-        quod fugiat pariatur architecto officiis incidunt sunt quas alias saepe eveniet velit excepturi. Modi, sequi?
+        {scholarship.description}
       </Box>
       <Button
         buttonText={t.applyNow}

@@ -70,7 +70,7 @@ const Cart = () => {
     return <Loader loadingText={t.quoteRequestLoader} />
   }
 
-  if (!cartItems.length) {
+  if (!itemsForCart.length) {
     return <EmptyCart />
   }
 

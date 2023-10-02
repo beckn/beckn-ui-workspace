@@ -16,7 +16,7 @@ import ViewMoreOrderModal from '../components/orderDetails/ViewMoreOrderModal'
 import { useSelector } from 'react-redux'
 import { TransactionIdRootState } from '../lib/types/cart'
 import useRequest from '../hooks/useRequest'
-import Router, { useRouter } from 'next/router'
+import { useRouter } from 'next/router'
 import DetailsCard from '../components/detailsCard/DetailsCard'
 import Button from '../components/button/Button'
 import Link from 'next/link'
@@ -284,7 +284,7 @@ const OrderDetails = () => {
                 pt="10px"
                 pl="28px"
                 onClick={() => {
-                  Router.push('/myScholarship')
+                  window.location.href = 'https://www.google.com'
                 }}
               >
                 {t.viewCourse}

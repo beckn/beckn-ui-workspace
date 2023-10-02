@@ -3,19 +3,14 @@ import style from '../../detailsCard/ShippingForm.module.css'
 import { Box } from '@chakra-ui/react'
 import { useLanguage } from '../../../hooks/useLanguage'
 import { FormErrors, validateForm } from '../../../utilities/detailsForm-utils'
+import { ScholarshipApplyFormDataModel } from '../scholarshipCard/Scholarship.types'
 
-export interface CreateProfileProps {}
+export interface CreateProfileProps {
+  formData: ScholarshipApplyFormDataModel
+  setFormData: React.Dispatch<React.SetStateAction<ScholarshipApplyFormDataModel>>
+}
 
-const ScholarshipAddDetails: React.FC<CreateProfileProps> = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    mobileNumber: '',
-    email: '',
-    address: '',
-    pinCode: '',
-    scholarshipInfo: ''
-  })
-
+const ScholarshipAddDetails: React.FC<CreateProfileProps> = ({ formData, setFormData }) => {
   const [formErrors, setFormErrors] = useState<FormErrors>({})
   const { t } = useLanguage()
 
@@ -59,14 +54,12 @@ const ScholarshipAddDetails: React.FC<CreateProfileProps> = () => {
           {formErrors.mobileNumber && <span className={style.error}>{t[`${formErrors.mobileNumber}`]}</span>}
         </div>
         <div className={style.did_floating_label_content}>
-          <textarea
+          <input
             className={style.did_floating_input}
             placeholder=" "
             name="scholarshipInfo"
-            value={
-              ' Lorem ipsum, dolor sit amet consectetur adipisicing elit. Et molestias fugit libero soluta a excepturi maiores temporibus cupiditate ullam ipsum optio magni accusamus suscipit ex, ducimus unde provident. Eius, ducimus!'
-            }
-            style={{ height: '62px', resize: 'none', overflow: 'hidden', fontSize: '15px' }}
+            value={formData.scholarshipInfo}
+            onChange={handleInputChange}
           />
           <label className={style.did_floating_label}>{t.aboutScholarship}</label>
           {/* {formErrors.email && <span className={style.error}>{t[`${formErrors.email}`]}</span>} */}

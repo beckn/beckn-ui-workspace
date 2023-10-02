@@ -3,6 +3,7 @@ import Router from 'next/router'
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import Button from '../components/button/Button'
+import EmptyScholarship from '../components/scholarship/emptyScholarship/EmptyScholarship'
 import ScholarshipCard from '../components/scholarship/scholarshipCard/ScholarshipCard'
 import { useLanguage } from '../hooks/useLanguage'
 import { RetailItem } from '../lib/types/products'
@@ -24,11 +25,20 @@ const myScholarship: React.FC<Props> = ({ product }) => {
   }
 
   const handleScholarshipDetails = () => {
-    const id = '789171'
-    const title = 'Extended Learning'
-    dispatch(scholarshipCartActions.setScholarshipId(id))
-    dispatch(scholarshipCartActions.setScholarshipTitle(title))
+    const mockScholarship = {
+      id: '789171',
+      title: 'Extended Learning'
+    }
+
+    localStorage.setItem('approvedScholarship', JSON.stringify(mockScholarship))
+
+    dispatch(scholarshipCartActions.setScholarshipId(mockScholarship.id))
+    dispatch(scholarshipCartActions.setScholarshipTitle(mockScholarship.title))
     Router.push('/cart')
+  }
+
+  if (false) {
+    return <EmptyScholarship />
   }
 
   return (

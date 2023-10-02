@@ -2,49 +2,59 @@ import { Box } from '@chakra-ui/react'
 import axios from 'axios'
 import Router from 'next/router'
 import React, { useEffect, useState } from 'react'
+import Loader from '../components/loader/Loader'
+import { ParsedScholarshipData } from '../components/scholarship/scholarshipCard/Scholarship.types'
+import { getTransformedDataFromScholarshipsResponse } from '../components/scholarship/scholarshipCard/ScholarshipCard.utils'
 import ScholarshipListCard from '../components/scholarship/scholarshipCard/scholarshipListCard'
 
 const ScholarshipCard = () => {
   const [isLoading, setIsLoading] = useState(true)
-  const dsepScholarshipUrl = process.env.NEXT_PUBLIC_SCHOLARSHIP_URL
+  const [scholarShips, setScholarships] = useState<ParsedScholarshipData[]>([])
+  const dsepScholarshipUrl = process.env.NEXT_PUBLIC_DSEP_URL
 
   const fetchScholarships = async () => {
     try {
       const scholarshipSearchResponse = await axios.post(`${dsepScholarshipUrl}/scholarship/search`, {
-        name: 'Undergraduation scholarship',
-        gender: 'Female',
-        finStatus: {
-          family_income: '200000'
-        },
-        casteCategory: [
-          {
-            caste: 'SC'
-          }
-        ],
-        categories: [
-          {
-            code: 'ug'
-          }
-        ]
+        name: 'Undergraduation scholarship'
       })
-      console.log('scholarshipSearchResponse', scholarshipSearchResponse)
-    } catch (error) {}
+      if (scholarshipSearchResponse.data) {
+        const parsedScholarshipData: ParsedScholarshipData[] = getTransformedDataFromScholarshipsResponse(
+          scholarshipSearchResponse.data
+        )
+        setScholarships(parsedScholarshipData)
+        setIsLoading(false)
+      }
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   useEffect(() => {
     fetchScholarships()
   }, [])
 
+  if (isLoading) {
+    return <Loader />
+  }
+
+  if (!scholarShips.length) {
+    return <></>
+  }
+
   return (
     <Box className="hideScroll" maxH={'calc(100vh - 100px)'} overflowY="scroll">
-      <ScholarshipListCard
-        scholarshipName={'Scholarship Name Placeholder Text'}
-        scholarshipDetails={'Extended learning scholarship for design placeholder description text for very brief...'}
-        scholarshipBy={'ShopNotch'}
-        handleCardClick={() => {
-          Router.push('/scholarshipDetailsPage')
-        }}
-      />
+      {scholarShips.map(scholarship => (
+        <ScholarshipListCard
+          key={scholarship.id}
+          scholarshipName={scholarship.name}
+          scholarshipDetails={scholarship.description}
+          scholarshipBy={scholarship.platformName}
+          handleCardClick={() => {
+            localStorage.setItem('selectedScholarship', JSON.stringify(scholarship))
+            Router.push('/scholarshipDetailsPage')
+          }}
+        />
+      ))}
     </Box>
   )
 }
