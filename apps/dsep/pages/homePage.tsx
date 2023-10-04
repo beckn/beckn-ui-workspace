@@ -10,6 +10,12 @@ const Homepage = () => {
 
   const { id_token, access_token } = router.query
 
+  useEffect(() => {
+    if (localStorage) {
+      localStorage.clear()
+    }
+  }, [])
+
   const fetchUserInfoAndProfile = async () => {
     try {
       const userData = await axios.get(

@@ -37,7 +37,7 @@ const ScholarshipDetails: React.FC<Props> = ({ scholarship }) => {
         color={'rgba(var(--text-color))'}
         isDisabled={false}
         handleOnClick={() => {
-          Router.push('/scholarshipAddDetailsPage')
+          Router.push('/applyScholarship')
         }}
       />
     </Box>

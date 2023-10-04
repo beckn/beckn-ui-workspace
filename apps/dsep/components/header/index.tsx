@@ -54,7 +54,8 @@ const storeHeaderBlackList = [
   '/scholarshipDetailsPage',
   '/myLearningOrderHistory',
   '/myJobsOrderHistory',
-  '/applyJobsPrefilled'
+  '/applyJobsPrefilled',
+  '/applyScholarship'
 ]
 const headerValues = {
   '/checkoutPage': 'Checkout',
@@ -75,7 +76,8 @@ const headerValues = {
   '/myLearningOrderHistory': 'My Learnings',
   '/myJobsOrderHistory': 'My Jobs',
   '/applyJobsPrefilled': 'My Jobs',
-  '/search': 'Search Results'
+  '/search': 'Search Results',
+  '/applyScholarship': 'Add details'
 }
 
 const headerValuesFrench = {

@@ -8,12 +8,13 @@ import Loader from '../components/loader/Loader'
 import ScholarshipAddDetails from '../components/scholarship/addDetails/ScholarshipAddDetails'
 import {
   ParsedScholarshipData,
-  ScholarshipApplyFormDataModel
+  ScholarshipApplyFormDataModel,
+  ScholarshipConfirmResponseModel
 } from '../components/scholarship/scholarshipCard/Scholarship.types'
 import UploadFile from '../components/uploadFile/UploadFile'
 import { useLanguage } from '../hooks/useLanguage'
 
-const ScholarshipAddDetailsPage = () => {
+const ApplyScholarship = () => {
   const [formData, setFormData] = useState<ScholarshipApplyFormDataModel>({
     name: '',
     mobileNumber: '',
@@ -84,8 +85,37 @@ const ScholarshipAddDetailsPage = () => {
 
           const scholarshipConfirmResponse = await axios.post(`${dsepUrl}/scholarship/confirm`, payloadForConfirm)
           if (scholarshipConfirmResponse.data) {
-            setIsLoading(false)
-            Router.push('/scholarshipConfirmationPage')
+            const originalScholarshipConfirmData: ScholarshipConfirmResponseModel =
+              scholarshipConfirmResponse.data.original
+
+            const { context, message } = originalScholarshipConfirmData
+            const { order } = message
+
+            const ordersPayload = {
+              context: context,
+              message: {
+                order: {
+                  id: order.id,
+                  provider: {
+                    id: order.provider.id,
+                    descriptor: {
+                      name: order.provider.descriptor.name,
+                      short_desc: order.provider.descriptor.short_desc
+                    }
+                  },
+                  items: order.items,
+                  fulfillments: order.fulfillments
+                }
+              },
+              category: {
+                set: [2]
+              }
+            }
+            const fulfillOrderRequest = await axios.post(`${strapiUrl}/orders`, ordersPayload, axiosConfig)
+            if (fulfillOrderRequest.data) {
+              setIsLoading(false)
+              Router.push('/scholarshipConfirmationPage')
+            }
           }
         }
       }
@@ -118,4 +148,4 @@ const ScholarshipAddDetailsPage = () => {
   )
 }
 
-export default ScholarshipAddDetailsPage
+export default ApplyScholarship

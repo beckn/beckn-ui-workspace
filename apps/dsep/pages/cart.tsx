@@ -20,7 +20,7 @@ import EmptyCart from '../components/cart/EmptyCart'
 import { Box } from '@chakra-ui/react'
 
 const Cart = () => {
-  const [itemsForCart, setItemsForCart] = useState<CartRetailItem[]>([])
+  const [itemsForCart, setItemsForCart] = useState<CartRetailItem[] | null>(null)
   const [isLoadingForCartCountChange, setIsLoadingForCartCountChange] = useState<boolean>(false)
 
   const quoteRequest = useRequest()
@@ -68,6 +68,10 @@ const Cart = () => {
 
   if (quoteRequest.loading || isLoadingForCartCountChange) {
     return <Loader loadingText={t.quoteRequestLoader} />
+  }
+
+  if (!itemsForCart) {
+    return <></>
   }
 
   if (!itemsForCart.length) {

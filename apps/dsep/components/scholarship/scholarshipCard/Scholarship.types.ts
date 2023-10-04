@@ -80,3 +80,144 @@ export interface ScholarshipApplyFormDataModel {
   pinCode: string
   scholarshipInfo: string
 }
+
+interface MessageDescriptor {
+  name: string
+  short_desc: string
+}
+
+interface ItemDescriptor {
+  name: string
+  short_desc: string
+}
+
+interface FormData {
+  name: string
+  phone: string
+  address: string
+  needOfScholarship: string
+  docUrl: string
+}
+
+interface Form {
+  required: boolean
+  url: string
+  data: FormData
+  mime_type: string
+  submission_id: string
+}
+
+interface Tag {
+  display: boolean
+  descriptor: {
+    code: string
+    name: string
+  }
+  list: {
+    descriptor: {
+      code: string
+      name: string
+    }
+    value: string
+    display: boolean
+  }[]
+}
+
+interface Price {
+  currency: string
+  value: string
+}
+
+interface Contact {
+  phone: string
+  email: string
+}
+
+interface TimeStamp {
+  timestamp: string
+}
+
+interface Stop {
+  type: string
+  time: TimeStamp
+}
+
+interface Fulfillment {
+  id: string
+  type: string
+  tracking: boolean
+  customer: {
+    person: {
+      name: string
+      gender: string
+    }
+  }
+  contact: Contact
+  stops: Stop[]
+}
+
+interface Item {
+  id: string
+  descriptor: ItemDescriptor
+  price: Price
+  xinput: Form
+  rateable: boolean
+  tags: Tag[]
+  category_ids: string[]
+}
+
+interface ProviderDescriptor {
+  name: string
+  short_desc: string
+}
+
+interface Provider {
+  id: string
+  descriptor: ProviderDescriptor
+  rateable: boolean
+}
+
+interface LocationDescriptor {
+  name: string
+  code: string
+}
+
+interface Location {
+  city: LocationDescriptor
+  country: LocationDescriptor
+}
+
+interface Context {
+  domain: string
+  action: string
+  version: string
+  bpp_id: string
+  bpp_uri: string
+  country: string
+  city: string
+  location: Location
+  bap_id: string
+  bap_uri: string
+  transaction_id: string
+  message_id: string
+  ttl: string
+  timestamp: string
+}
+
+interface Order {
+  id: string
+  status: string
+  type: string
+  provider: Provider
+  items: Item[]
+  fulfillments: Fulfillment[]
+}
+
+interface Message {
+  order: Order
+}
+
+export interface ScholarshipConfirmResponseModel {
+  context: Context
+  message: Message
+}
