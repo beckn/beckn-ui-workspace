@@ -13,6 +13,7 @@ import {
 } from '../components/scholarship/scholarshipCard/Scholarship.types'
 import UploadFile from '../components/uploadFile/UploadFile'
 import { useLanguage } from '../hooks/useLanguage'
+import { FormErrors, validateForm } from '../utilities/detailsForm-utils'
 
 const ApplyScholarship = () => {
   const [formData, setFormData] = useState<ScholarshipApplyFormDataModel>({
@@ -27,10 +28,11 @@ const ApplyScholarship = () => {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [appliedScholarship, setAppliedScholarship] = useState<ParsedScholarshipData | null>(null)
+  const [formErrors, setFormErrors] = useState<FormErrors>({})
+  const [btnDisabled, setBtnDisabled] = useState(false)
 
   const dsepUrl = process.env.NEXT_PUBLIC_DSEP_URL
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
-
   useEffect(() => {
     if (localStorage) {
       const storedSelectedScholarship = localStorage.getItem('selectedScholarship')
@@ -41,8 +43,13 @@ const ApplyScholarship = () => {
   }, [])
 
   const handleButtonClick = async () => {
-    setIsLoading(true)
+    const validationErrors = validateForm(formData)
 
+    if (Object.keys(validationErrors).length > 0) {
+      setFormErrors(validationErrors)
+      return
+    }
+    setIsLoading(true)
     const { address, email, mobileNumber, name, pinCode, scholarshipInfo } = formData
 
     const bearerToken = Cookies.get('authToken')
@@ -130,6 +137,20 @@ const ApplyScholarship = () => {
   if (!appliedScholarship) {
     return <></>
   }
+  const areAllFieldsFilled = () => {
+    for (const key in formData) {
+      if (formData.hasOwnProperty(key)) {
+        const value = formData[key]
+
+        if (!value && value !== 0) {
+          return false
+        }
+      }
+    }
+    return true
+  }
+
+  const areFilesSelected = selectedFiles.length !== 0
 
   return (
     <Box className="hideScroll" maxH={'calc(100vh - 100px)'} overflowY="scroll">
@@ -142,7 +163,7 @@ const ApplyScholarship = () => {
         background={'rgba(var(--color-primary))'}
         color={'rgba(var(--text-color))'}
         handleOnClick={handleButtonClick}
-        isDisabled={false}
+        isDisabled={!(areAllFieldsFilled() && areFilesSelected)}
       />
     </Box>
   )

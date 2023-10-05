@@ -325,7 +325,7 @@ const en: { [key: string]: string } = {
   errorNumber2: 'Invalid Mobile Number',
   errorNumber3: 'Mobile Number must have 10 digits',
   errorEmail: 'Email is required',
-  errorEmail2: 'Email Mobile Number',
+  errorEmail2: 'Invalid Email',
   errorAddress: 'Address is required',
   errorZipcode: 'Zip Code is required',
   errorZipcode2: 'Invalid Zip Code',

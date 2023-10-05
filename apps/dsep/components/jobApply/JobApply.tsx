@@ -2,8 +2,8 @@ import React, { useState } from 'react'
 import { Box } from '@chakra-ui/react'
 import { useLanguage } from '../../hooks/useLanguage'
 import style from '../detailsCard/ShippingForm.module.css'
-import { FormErrors } from '../../utilities/detailsForm-utils'
-import { JobApplyPropsMdoel } from './JobApply.types'
+import { FormErrors, validateJobForm } from '../../utilities/detailsForm-utils'
+import { JobApplyFormData, JobApplyPropsMdoel } from './JobApply.types'
 
 const JobApply: React.FC<JobApplyPropsMdoel> = props => {
   const { formData, setFormData } = props
@@ -16,10 +16,20 @@ const JobApply: React.FC<JobApplyPropsMdoel> = props => {
     if (name === 'mobileNumber' && !/^\d*$/.test(value)) {
       return
     }
-
-    setFormData(prevData => ({
-      ...prevData,
+    setFormData((prevFormData: JobApplyFormData) => ({
+      ...prevFormData,
       [name]: value
+    }))
+
+    const updatedFormData = {
+      ...formData,
+      [name]: value
+    }
+
+    const errors = validateJobForm(updatedFormData) as any
+    setFormErrors(prevErrors => ({
+      ...prevErrors,
+      [name]: errors[name] || ''
     }))
   }
 

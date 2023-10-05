@@ -2,8 +2,8 @@ import React, { useState } from 'react'
 import style from '../../detailsCard/ShippingForm.module.css'
 import { Box } from '@chakra-ui/react'
 import { useLanguage } from '../../../hooks/useLanguage'
-import { FormErrors, validateForm } from '../../../utilities/detailsForm-utils'
 import { ScholarshipApplyFormDataModel } from '../scholarshipCard/Scholarship.types'
+import { FormErrors, validateForm } from '../../../utilities/detailsForm-utils'
 
 export interface CreateProfileProps {
   formData: ScholarshipApplyFormDataModel
@@ -19,10 +19,20 @@ const ScholarshipAddDetails: React.FC<CreateProfileProps> = ({ formData, setForm
     if (name === 'mobileNumber' && !/^\d*$/.test(value)) {
       return
     }
-
-    setFormData(prevData => ({
-      ...prevData,
+    setFormData((prevFormData: ScholarshipApplyFormDataModel) => ({
+      ...prevFormData,
       [name]: value
+    }))
+
+    const updatedFormData = {
+      ...formData,
+      [name]: value
+    }
+
+    const errors = validateForm(updatedFormData) as any
+    setFormErrors(prevErrors => ({
+      ...prevErrors,
+      [name]: errors[name] || ''
     }))
   }
 
