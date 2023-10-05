@@ -21,17 +21,31 @@ const CreateProfile: React.FC<CreateProfileProps> = props => {
 
   const [formErrors, setFormErrors] = useState<FormErrors>({})
   const { t } = useLanguage()
+  const [isFormFilled, setIsFormFilled] = useState(false)
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     if (name === 'mobileNumber' && !/^\d*$/.test(value)) {
       return
     }
-
-    setFormData(prevData => ({
-      ...prevData,
+    setFormData((prevFormData: UserData) => ({
+      ...prevFormData,
       [name]: value
     }))
+
+    const updatedFormData = {
+      ...formData,
+      [name]: value
+    }
+
+    const errors = validateForm(updatedFormData) as any
+    setFormErrors(prevErrors => ({
+      ...prevErrors,
+      [name]: errors[name] || ''
+    }))
+    const isFormFilled = Object.values(updatedFormData).every(value => value.trim() !== '')
+
+    setIsFormFilled(isFormFilled)
   }
 
   const handleButtonClick = () => {
@@ -40,7 +54,7 @@ const CreateProfile: React.FC<CreateProfileProps> = props => {
 
     const hasErrors = Object.values(errors).some(error => !!error)
 
-    if (!hasErrors) {
+    if (!hasErrors && isFormFilled) {
       return props.createProfileSubmitHandler(formData)
     }
   }
@@ -118,7 +132,7 @@ const CreateProfile: React.FC<CreateProfileProps> = props => {
         background={'rgba(var(--color-primary))'}
         color={'rgba(var(--text-color))'}
         handleOnClick={handleButtonClick}
-        isDisabled={false}
+        isDisabled={!isFormFilled}
       />
     </Box>
   )
