@@ -55,8 +55,6 @@ const Cart: React.FC<CartProps> = ({
     return <Loader loadingText={loadingText} />
   }
 
-  console.log('Dank', cartItems, isEmptyCart)
-
   if (cartItems.length == 0) {
     return (
       <>

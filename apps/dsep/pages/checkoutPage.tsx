@@ -225,22 +225,25 @@ const CheckoutPage = () => {
         </Box>
       )}
       {/* end shipping detals */}
-      <Box>
-        <Flex pb={'10px'} mt={'20px'} justifyContent={'space-between'}>
-          <Text fontSize={'17px'}>{t.scholarship}</Text>
-        </Flex>
-        <DetailsCard>
-          <Flex alignItems={'center'}>
-            <Image alt="shippingBtnImage" src={addShippingBtn} />
-            <Text ml={'8px'}>
-              <span style={{ fontWeight: 'bold' }}>
-                ‘{scholarshipId}-{scholarshipTitle}’
-              </span>
-            </Text>
+      {scholarshipTitle.length !== 0 && (
+        <Box>
+          <Flex pb={'10px'} mt={'20px'} justifyContent={'space-between'}>
+            <Text fontSize={'17px'}>{t.scholarship}</Text>
           </Flex>
-          <Text ml={'35px'}>{t.scholarshipApplied}</Text>
-        </DetailsCard>
-      </Box>
+
+          <DetailsCard>
+            <Flex alignItems={'center'}>
+              <Image alt="shippingBtnImage" src={addShippingBtn} />
+              <Text ml={'8px'}>
+                <span style={{ fontWeight: 'bold' }}>
+                  ‘{scholarshipId}-{scholarshipTitle}’
+                </span>
+              </Text>
+            </Flex>
+            <Text ml={'35px'}>{t.scholarshipApplied}</Text>
+          </DetailsCard>
+        </Box>
+      )}
       {/* start payment details */}
       {initRequest.data && (
         <Box>

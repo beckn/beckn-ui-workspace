@@ -347,6 +347,10 @@ const fa: { [key: string]: string } = {
   completed: 'Complété',
   createAccount: 'créer un compte',
   overview: 'aperçu',
-  bookedIn: 'Réservé à'
+  bookedIn: 'Réservé à',
+  fetchingScholarships: 'Récupérer des bourses',
+  noCourse: 'Pas de cours !',
+  noCouseSubText: "On dirait que vous n'avez pas sélectionné de cours !",
+  fetchingCourses: 'Récupérer des cours'
 }
 export default fa

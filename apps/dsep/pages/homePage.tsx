@@ -25,7 +25,7 @@ const Homepage = () => {
         const jwtToken = userData.data.jwt
         Cookies.set('authToken', jwtToken)
 
-        const profileData = await axios.get(`${strapiUrl}/profiles`, {
+        const profileData = await axios.get(`${strapiUrl}/profiles?populate[0]=documents.attachment`, {
           headers: {
             Authorization: `Bearer ${jwtToken}`
           }
@@ -33,6 +33,7 @@ const Homepage = () => {
         return
       }
     } catch (error: any) {
+      console.error(error)
       if (error.response.data.error.message === 'Not Found') {
         router.push('/createProfile')
       }

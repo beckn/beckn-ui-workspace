@@ -10,7 +10,7 @@ import Router from 'next/router'
 const EmptyCart: React.FC = () => {
   const { t } = useLanguage()
   const handleGoBack = (): void => {
-    Router.push('/myScholarship')
+    Router.push('/search/?searchTerm=courses')
   }
 
   return (
@@ -18,18 +18,17 @@ const EmptyCart: React.FC = () => {
       <Box mb={'40px'} display={'flex'} justifyContent={'center'}>
         <Image src={CartEmpty} width={'306px'} height={'245px'} alt="cartEmpty" />
       </Box>
-      <Text className={Styles.cartHeadingText}>{t.noScholarship}</Text>
-      <Text className={Styles.cartSpanText}>{t.noScholarshipText1}</Text>
-      <Text className={Styles.cartSpanText} mb="40px">
-        {t.noScholarshipText2}
-      </Text>
-      <Button
-        buttonText={t.searchScholarships}
-        background={'rgba(var(--color-primary))'}
-        color={'rgba(var(--text-color))'}
-        isDisabled={false}
-        handleOnClick={handleGoBack}
-      />
+      <Text className={Styles.cartHeadingText}>{t.noCourse}</Text>
+      <Text className={Styles.cartSpanText}>{t.noCouseSubText}</Text>
+      <Box mt={'40%'}>
+        <Button
+          buttonText={t.searchCourses}
+          background={'rgba(var(--color-primary))'}
+          color={'rgba(var(--text-color))'}
+          isDisabled={false}
+          handleOnClick={handleGoBack}
+        />
+      </Box>
     </Flex>
   )
 }

@@ -24,7 +24,6 @@ const CartItem: React.FC<Props> = ({
   t,
   locale
 }) => {
-  // console.log("Dank",product?.quantity)
   const [counter, setCounter] = useState(product?.quantity)
 
   const fetchQuotes = () => {

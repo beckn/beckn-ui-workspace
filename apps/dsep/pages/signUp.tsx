@@ -38,8 +38,6 @@ const SignUp: NextPage = () => {
         jsCookie.set('userInfo', JSON.stringify(user))
       }
       setErrorMessage(getError(err))
-      console.log(getError(err))
-      // router.push("/");
     }
   }
   return <EnteringBox title="signUp" submitHandler={signUpHandler} errorMessage={errorMessage} />

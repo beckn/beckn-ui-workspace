@@ -10,7 +10,7 @@ import Button from '../../button/Button'
 const EmptyScholarship: React.FC = () => {
   const { t } = useLanguage()
   const handleGoBack = (): void => {
-    Router.push('/myScholarship')
+    Router.push('/scholarshipSearchPage')
   }
 
   return (

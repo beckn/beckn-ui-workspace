@@ -91,7 +91,7 @@ const jobApply = () => {
             }
           })
 
-          const mockPayload = {
+          const jobConfirmPayload = {
             jobId: jobForApply.jobId,
             context: {
               bppId: jobForApply.bppId,
@@ -99,7 +99,7 @@ const jobApply = () => {
               transactionId: jobForApply.transactionId
             },
             confirmation: {
-              JobFulfillmentCategoryId: '1',
+              JobFulfillmentCategoryId: '2',
               jobApplicantProfile: {
                 name: formData.name,
                 languages: ['ENG', 'HIN'],
@@ -111,10 +111,38 @@ const jobApply = () => {
           }
           setIsLoading(true)
 
-          const jobConfirmResponse = await axios.post(`${dsepUrl}/job/confirm`, mockPayload)
+          const jobConfirmResponse = await axios.post(`${dsepUrl}/job/confirm`, jobConfirmPayload)
           if (jobConfirmResponse.data) {
-            setIsLoading(false)
-            Router.push('/applicationSent')
+            const originalJobConfirmData = jobConfirmResponse.data.original
+
+            const { context, message } = originalJobConfirmData
+            const { order } = message
+
+            const ordersPayload = {
+              context: context,
+              message: {
+                order: {
+                  id: order.id,
+                  provider: {
+                    id: order.provider.id,
+                    descriptor: {
+                      name: order.provider.descriptor.name,
+                      short_desc: order.provider.descriptor.short_desc
+                    }
+                  },
+                  items: order.items,
+                  fulfillments: order.fulfillments
+                }
+              },
+              category: {
+                set: [3]
+              }
+            }
+            const fulfillOrderRequest = await axios.post(`${strapiUrl}/orders`, ordersPayload, axiosConfig)
+            if (fulfillOrderRequest.data) {
+              setIsLoading(false)
+              Router.push('/applicationSent')
+            }
           }
         }
       }
@@ -140,8 +168,6 @@ const jobApply = () => {
     return true
   }
 
-  const areFilesSelected = selectedFiles.length !== 0
-
   return (
     <Box className="hideScroll" maxH={'calc(100vh - 100px)'} overflowY="scroll">
       <Box pb={'20px'}>
@@ -166,7 +192,7 @@ const jobApply = () => {
         background={'rgba(var(--color-primary))'}
         color={'rgba(var(--text-color))'}
         handleOnClick={handleButtonClick}
-        isDisabled={!(areAllFieldsFilled() && areFilesSelected && isDeclarationChecked)}
+        isDisabled={!(areAllFieldsFilled() && isDeclarationChecked)}
       />
     </Box>
   )

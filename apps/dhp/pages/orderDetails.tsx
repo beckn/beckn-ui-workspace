@@ -98,8 +98,6 @@ const OrderDetails = () => {
     }
   }, [statusRequest.data])
 
-  //   console.log("confirmData", confirmData);
-
   if (!confirmData.length) {
     return <></>
   }

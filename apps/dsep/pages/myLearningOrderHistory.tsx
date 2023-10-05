@@ -1,21 +1,65 @@
 import { Box } from '@chakra-ui/react'
+import Cookies from 'js-cookie'
 import Router from 'next/router'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import Loader from '../components/loader/Loader'
 import MyLearing from '../components/orderHistory/MyLearing'
+import { useLanguage } from '../hooks/useLanguage'
+import { getOrderPlacementTimeline } from '../utilities/confirm-utils'
 
 const myLearningOrderHistory = () => {
-  const [myLearningStatus, setMyLearningStatus] = useState('Approved')
+  const [coursesOrders, setCoursesOrders] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
+
+  const { t } = useLanguage()
+  const apiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
+
+  const fetchCoursesOrders = async () => {
+    const bearerToken = Cookies.get('authToken')
+    let myHeaders = new Headers()
+    myHeaders.append('Authorization', `Bearer ${bearerToken}`)
+
+    let requestOptions = {
+      method: 'GET',
+      headers: myHeaders,
+      redirect: 'follow'
+    } as RequestInit
+
+    fetch(`${apiUrl}/orders?filters[category]=1`, requestOptions)
+      .then(response => response.json())
+      .then(result => {
+        setCoursesOrders(result.data)
+        setIsLoading(false)
+      })
+      .catch(error => console.log('error', error))
+  }
+
+  useEffect(() => {
+    fetchCoursesOrders()
+  }, [])
+
+  if (isLoading) {
+    return <Loader loadingText={t.fetchingScholarships} />
+  }
+
+  if (!coursesOrders.length) {
+    return <></>
+  }
+
   return (
     <Box className="hideScroll" maxH={'calc(100vh - 100px)'} overflowY="scroll">
-      <MyLearing
-        heading={'Extended Learning'}
-        time={'21st Jun 2021, 3.30pm'}
-        id={'789171'}
-        myLearingStatus={myLearningStatus}
-        handleViewCourses={() => {
-          Router.push('/orderDetails')
-        }}
-      />
+      {coursesOrders.map((courseOrder: any, index) => (
+        <MyLearing
+          key={index}
+          heading={courseOrder.attributes.items[0].descriptor.name}
+          time={getOrderPlacementTimeline(courseOrder.attributes.createdAt)}
+          id={courseOrder.id}
+          myLearingStatus={courseOrder.attributes.delivery_status}
+          handleViewCourses={() => {
+            window.location.href = 'https://www.google.com'
+          }}
+        />
+      ))}
     </Box>
   )
 }

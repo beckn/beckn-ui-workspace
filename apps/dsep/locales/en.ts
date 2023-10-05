@@ -425,6 +425,11 @@ const en: { [key: string]: string } = {
   certificates: 'Resume & Certificates',
   createAccount: 'Create Account',
   overview: 'Overview',
-  bookedIn: 'Booked in'
+  bookedIn: 'Booked in',
+  fetchingScholarships: 'Fetching scholarships',
+  noCourse: 'No Course!',
+  noCouseSubText: "Seems like you haven't selected a course!",
+  searchCourses: 'Search Courses',
+  fetchingCourses: 'Fetching Courses'
 }
 export default en
