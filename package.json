@@ -22,6 +22,8 @@
     "export:dsep": "yarn workspace @beckn-ui/dsep build && yarn workspace @beckn-ui/dsep export",
     "dev:pg": "yarn workspace @beckn-ui/osm dev",
     "build:pg": "yarn workspace @beckn-ui/osm build",
+    "dev:dsnp": "yarn workspace @beckn-ui/dsnp dev",
+    "build:dsnp": "yarn workspace @beckn-ui/dsnp build",
     "test": "jest",
     "lint:fix": "eslint --fix",
     "lint": "eslint",

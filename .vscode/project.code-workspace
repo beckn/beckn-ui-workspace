@@ -25,6 +25,10 @@
       "path": "../apps/dsep"
     },
     {
+      "name": "Dsnp",
+      "path": "../apps/dsnp"
+    },
+    {
       "name": "Playground",
       "path": "../apps/playground"
     },
