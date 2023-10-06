@@ -40,11 +40,6 @@ const OrderSummaryBox: React.FC<OrderSummaryBoxPropsModel> = props => {
                 <ProductPrice price={totalAmount} />
               </div>
             </div>
-            <Divider bg={'#000'} />
-            <div className="flex flex-wrap items-baseline justify-between flex-grow my-2 md:my-4">
-              <p className="text-base font-normal">{t('total')}</p>
-              <ProductPrice price={totalAmount} />
-            </div>
           </div>
           <Button
             buttonText={t('order')}

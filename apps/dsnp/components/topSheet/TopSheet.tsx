@@ -56,7 +56,7 @@ const TopSheet: React.FC<TopSheetPropsModel> = props => {
 
   return (
     <ChakraProvider theme={theme}>
-      <Box boxShadow="0px 4px 20px 0px rgba(0, 0, 0, 0.08)" margin={'-48px -25px 0px -25px'} padding={'14px'}>
+      <Box boxShadow="0px 4px 20px 0px rgba(0, 0, 0, 0.08)" margin={'28px -20px 0px -20px'} padding={'14px'}>
         <Box>
           <Flex alignItems={'center'}>
             <Image pr={'6px'} src={'/images/LocationIcon1.svg'} />
