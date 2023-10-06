@@ -395,6 +395,12 @@ const en: { [key: string]: string } = {
   selectdelivery: 'Select delivery',
   selectdeliveryText: 'Where would you like the order to be delivered? ',
   searchForanything: 'Search for anything',
-  searchforlocation: 'Search For Location'
+  searchforlocation: 'Search For Location',
+  topReviews: 'Top Reviews',
+  seeMoreReviews: 'See More Reviews',
+  verifiedPurchase: 'Verified Purchase',
+  foundHelpfulText: 'people found this helpful',
+  customerReviews: ' Customer Reviews',
+  verifiedUsersText: ' reviews and ratings from verified users'
 }
 export default en
