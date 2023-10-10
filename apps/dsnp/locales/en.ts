@@ -9,12 +9,12 @@ const en: { [key: string]: string } = {
   signIn: 'Sign in',
   seeCart: 'See Cart',
   product: 'Product',
-  subtotal: 'Subtotal',
+  subtotal: 'Total',
   total: 'Total',
   shopBtn: 'Shop',
   cartEmpty: 'The Cart is Empty',
   cartEmptySpan: 'Look like you haven’t made your choice yet',
-  totalQuantity: 'Total Quantity',
+  totalQuantity: 'Quantity',
   payableAmount: 'Payable Amount',
   loginAndOrder: 'Login and Order',
   orderSummary: 'Order Summary',
@@ -357,8 +357,8 @@ const en: { [key: string]: string } = {
   orderDelivered: 'Order Delivered',
   rateStore: 'Rate the store',
   rateDeliveryExperience: 'Rate the delivery experience',
-  addCommentsHere: 'Add your comments here',
-  writeExperience: 'Write about your experience..',
+  addCommentsHere: 'Write review',
+  writeExperience: 'Why did you like or dislike this product?',
   completed: 'Completed',
   bookNow: 'Book Now',
   soldBy: 'Sold by:',
@@ -401,6 +401,10 @@ const en: { [key: string]: string } = {
   verifiedPurchase: 'Verified Purchase',
   foundHelpfulText: 'people found this helpful',
   customerReviews: ' Customer Reviews',
-  verifiedUsersText: ' reviews and ratings from verified users'
+  verifiedUsersText: ' reviews and ratings from verified users',
+  ratetheproduct: 'Rate the product',
+  selectProduct: 'Select Product',
+  loginToYourAccount: 'Login to your account',
+  signInWithGamail: 'Sign in with Gmail'
 }
 export default en

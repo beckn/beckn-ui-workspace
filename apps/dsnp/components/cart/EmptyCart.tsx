@@ -1,5 +1,5 @@
+import React from 'react'
 import { Box, Flex, Text } from '@chakra-ui/react'
-// import Image from 'next/image'
 import { Image } from '@chakra-ui/react'
 import CartEmpty from '../../public/images/emptyCard.svg'
 import Styles from './EmptyCart.module.css'
@@ -10,7 +10,7 @@ import Router from 'next/router'
 const EmptyCart: React.FC = () => {
   const { t } = useLanguage()
   const handleShopbtn = (): void => {
-    Router.push(`/`)
+    Router.push(`/homePage`)
   }
 
   return (

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import BottomModal from '../BottomModal'
-import { Box, Image, Text } from '@chakra-ui/react'
-import Settings from './Settings'
+import { Box, Image, Text, Flex } from '@chakra-ui/react'
 import CartIcon from '../cart/CartIcon'
 import { useRouter } from 'next/router'
 
@@ -22,7 +21,7 @@ const cartIconBlackList = [
 
 const backIconList = ['/', '/orderDetails']
 
-const homeIconBlackList = ['/orderHistory', '/']
+const homeIconBlackList = ['/orderHistory', '/', '/homePage', '/checkoutPage', '/paymentMode', '/orderConfirmation']
 
 const storeHeaderBlackList = [
   '/checkoutPage',
@@ -30,7 +29,7 @@ const storeHeaderBlackList = [
   '/orderDetails',
   '/cart',
   '/orderConfirmation',
-  'feedback',
+  '/feedback',
   '/',
   '/mobileOtp',
   '/paymentMode'
@@ -43,7 +42,7 @@ const headerValues = {
   '/mobileOtp': 'Sign In',
   '/cart': 'Cart',
   '/paymentMode': 'Select Payment Method',
-  feedback: 'Feedback'
+  '/feedback': 'Review & Rate the Product'
 }
 
 const headerValuesFrench = {
@@ -59,11 +58,11 @@ const headerValuesFrench = {
 
 const topHeaderBlackList: string[] = []
 
-const bottomHeaderBlackList = ['/', '/importedOrder', '/orderConfirmation']
+const bottomHeaderBlackList = ['/homePage', '/orderConfirmation']
 
-const menuIconWhiteList = ['/']
+const menuIconWhiteList = ['/homePage', '/search', '/product']
 
-const languageIconWhiteList = ['/', '/mobileOtp']
+const languageIconWhiteList = ['/mobileOtp']
 
 const getHeaderTitleForPage = (name: string, logo: string, pathName: string, locale: string | undefined) => {
   const values = locale === 'en' ? headerValues : headerValuesFrench
@@ -104,56 +103,51 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
   return (
     <>
       {/* TODO :- enable this after language change and order history implementation */}
-      {/* <div className="h-7 w-full bg-[#efefef] fixed z-[9999]">
-                <div className="flex items-center h-full px-5">
-
-                    <div className="flex gap-4 ml-auto">
-                        {languageIconWhiteList.includes(router.pathname) && (
-                            <Image
-                                src="/images/BottomModalIcon.svg"
-                                alt="BottomModalIcon icon"
-                            />
-                        )}
-
-                        {menuIconWhiteList.includes(router.pathname) && (
-                            <Image
-                                onClick={() => setMenuModalOpen(true)}
-                                className="block"
-                                src="/images/3-dots.svg"
-                                alt="menu icon"
-                            />
-                        )}
-
-                        {!homeIconBlackList.includes(router.pathname) && (
-                            <Image
-                                w={'88%'}
-                                onClick={() => {
-                                    let user = localStorage.getItem(
-                                        'userPhone'
-                                    ) as string
-                                    localStorage.clear()
-                                    localStorage.setItem('userPhone', user)
-                                    router.push(`/?lang=${query?.lang}`)
-                                }}
-                                src="/images/Home_icon.svg"
-                                alt="home Icon"
-                            />
-                        )}
-                    </div>
-                </div>
-            </div> */}
+      <div className="h-7 w-full bg-[#efefef] fixed z-[9999]">
+        <div className="flex items-center h-full px-5">
+          <div className="flex gap-4 ml-auto">
+            {languageIconWhiteList.includes(router.pathname) && (
+              <Image src="/images/BottomModalIcon.svg" alt="BottomModalIcon icon" />
+            )}
+            {!homeIconBlackList.includes(router.pathname) && (
+              <Image
+                w={'88%'}
+                onClick={() => {
+                  let user = localStorage.getItem('userPhone') as string
+                  localStorage.clear()
+                  localStorage.setItem('userPhone', user)
+                  router.push(`/homePage`)
+                }}
+                src="/images/Home_icon.svg"
+                alt="home Icon"
+              />
+            )}
+            {menuIconWhiteList.includes(router.pathname) && (
+              <Image
+                onClick={() => setMenuModalOpen(true)}
+                className="block"
+                src="/images/3-dots.svg"
+                alt="menu icon"
+              />
+            )}
+          </div>
+        </div>
+      </div>
 
       {/* Menu Modal */}
       <BottomModal isOpen={isMenuModalOpen} onClose={handleMenuModalClose}>
-        <div
+        <Flex
+          pb={'20px'}
+          ml={'20px'}
+          gap={4}
           onClick={() => {
             router.push(`/orderHistory`)
+            setMenuModalOpen(false)
           }}
-          className="flex gap-2 py-5"
         >
           <Image src="/images/orderHistory.svg" alt="Order history icon" />
           {t('orderHistory')}
-        </div>
+        </Flex>
       </BottomModal>
     </>
   )

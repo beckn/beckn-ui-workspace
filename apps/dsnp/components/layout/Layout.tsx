@@ -17,6 +17,7 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const { locale } = useLanguage()
   const router = useRouter()
   const isHomepage = router.pathname === '/'
+  const isLandingPage = router.pathname === '/homePage'
   const isSearch = router.pathname === '/search'
   const paddingStyles = 'px-5 xl:px-16'
   const marginStyles = 'mt-[100px]'
@@ -38,7 +39,7 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
               className={cs(
                 'flex-grow',
                 { [paddingStyles]: !isHomepage },
-                { [marginStyles]: !isHomepage && !isSearch },
+                { [marginStyles]: !isHomepage && !isLandingPage && !isSearch },
                 { ['mt-[24px] p-[25px]']: isHomepage },
                 { ['mt-[118px]']: isSearch }
               )}

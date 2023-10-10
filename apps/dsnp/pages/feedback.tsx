@@ -1,47 +1,83 @@
-import { Box, Text, Image, Textarea } from '@chakra-ui/react'
+import { Box, Text, Flex, Textarea } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 import Button from '../components/button/Button'
 import StarRating from '../components/starRating/StarRating'
 import { useLanguage } from '../hooks/useLanguage'
-import feedbackImg from '../public/images/feedbackImg.svg'
+import { MdKeyboardArrowUp, MdKeyboardArrowDown } from 'react-icons/md'
 
+const products = ['FORCLAZ - Men Trekking Water-Rep...', 'Another Product...', 'Yet Another Product...']
 const Feedback = () => {
   const { t } = useLanguage()
   const router = useRouter()
   const [ratingForStore, setRatingForStore] = useState(0)
-  const [rating, setRating] = useState(0)
+  const [selectedProduct, setSelectedProduct] = useState('')
+  const [isOpen, setIsOpen] = useState(false)
+  const [product, setProduct] = useState(products)
+  const toggleDropDown = () => {
+    setIsOpen(!isOpen)
+  }
+
+  const handleProductSelect = (userSelectProduct: string) => {
+    console.log(userSelectProduct)
+    setSelectedProduct(userSelectProduct)
+    setProduct([
+      userSelectProduct,
+      ...(() => {
+        return product.filter(item => item !== userSelectProduct)
+      })()
+    ])
+    setIsOpen(false)
+  }
+
   return (
     <>
-      <Box pt={'12px'} textAlign={'center'} pb={'15px'}>
-        <Text fontSize={'17px'} fontWeight={600}>
-          {t('orderDeliveredOnTime')}
-        </Text>
-        <Text fontSize={'12px'} fontWeight={400}>
-          {t('shareYourfeedback')}
+      <Box pt={'12px'} pb={'15px'}>
+        <Text fontSize={'15px'} fontWeight={400}>
+          {t('selectProduct')}
+          <div
+            style={{
+              width: '332px',
+              height: isOpen ? 'auto' : '40px',
+              border: '1px solid #ccc',
+              overflow: 'hidden',
+              position: 'relative',
+              boxShadow: '0px 2px 4px -2px rgba(0, 0, 0, 0.10), 0px 4px 6px -1px rgba(0, 0, 0, 0.10)',
+              borderRadius: '8px',
+              marginTop: '10px'
+            }}
+          >
+            <button
+              style={{
+                position: 'absolute',
+                top: isOpen ? '7px' : '7px',
+                right: '7px',
+                cursor: 'pointer'
+              }}
+              onClick={toggleDropDown}
+            >
+              {isOpen ? <MdKeyboardArrowDown size={26} /> : <MdKeyboardArrowUp size={26} />}
+            </button>
+            <Flex style={{ padding: '9px', fontSize: '14px', fontWeight: 400 }} flexDir={'column'} gap={2}>
+              {product.map((product, index) => (
+                <Box key={index} onClick={() => handleProductSelect(product)}>
+                  {product}
+                </Box>
+              ))}
+            </Flex>
+          </div>
         </Text>
       </Box>
-      <Box mb={'10px'}>
-        {/* eslint-disable-next-line jsx-a11y/alt-text */}
-        <Image src={feedbackImg} margin={'0 auto'} />
-      </Box>
+
       <StarRating
-        ratingText={t('rateStore')}
+        ratingText={t('ratetheproduct')}
         rating={ratingForStore}
         setRating={setRatingForStore}
         count={5}
         size={20}
         transition={''}
       />
-      <StarRating
-        ratingText={t('rateDeliveryExperience')}
-        rating={rating}
-        setRating={setRating}
-        count={5}
-        size={20}
-        transition={''}
-      />
-      <Box>
+      <Box mb={9}>
         <Text fontSize={'15px'} fontWeight={400} mb={'10px'}>
           {t('addCommentsHere')}
         </Text>
@@ -68,7 +104,7 @@ const Feedback = () => {
         isDisabled={false}
       />
       <Button
-        buttonText={t('skipForNow')}
+        buttonText={t('goBack')}
         background={'rgba(var(--text-color))'}
         color={'rgba(var(--color-primary))'}
         handleOnClick={() => {

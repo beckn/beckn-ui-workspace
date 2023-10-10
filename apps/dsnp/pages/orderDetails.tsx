@@ -19,11 +19,9 @@ import {
   getPayloadForTrackRequest
 } from '../utilities/confirm-utils'
 
-import { generateAlphanumericID, getDataPerBpp, storeOrderDetails } from '../utilities/orderDetails-utils'
+import { getDataPerBpp } from '../utilities/orderDetails-utils'
 
 import { getSubTotalAndDeliveryChargesForOrder } from '../utilities/orderHistory-utils'
-
-import lineBlack from '../public/images/lineBlack.svg'
 
 import TrackIcon from '../public/images/TrackIcon.svg'
 
@@ -41,10 +39,8 @@ import { useRouter } from 'next/router'
 
 import { useLanguage } from '../hooks/useLanguage'
 
-import { useTranslation } from 'next-export-i18n'
-
 const OrderDetails = () => {
-  const [allOrderDelivered, setAllOrderDelivered] = useState(false)
+  const [allOrderDelivered, setAllOrderDelivered] = useState(true)
 
   const [confirmData, setConfirmData] = useState<ResponseModel[]>([])
 
@@ -64,7 +60,7 @@ const OrderDetails = () => {
 
   const { orderId } = router.query
 
-  const { t } = useTranslation()
+  const { t } = useLanguage()
 
   useEffect(() => {
     if (orderId && localStorage && localStorage.getItem('orderHistoryArray')) {
@@ -239,7 +235,7 @@ const OrderDetails = () => {
               <Text>How did we do?</Text>
 
               <Text onClick={() => router.push('/feedback')} pl={'10px'} color={'rgba(var(--color-primary))'}>
-                Rate Us
+                Add a Review
               </Text>
             </Flex>
           </CardBody>
