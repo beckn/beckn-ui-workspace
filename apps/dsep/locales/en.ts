@@ -430,6 +430,7 @@ const en: { [key: string]: string } = {
   noCourse: 'No Course!',
   noCouseSubText: "Seems like you haven't selected a course!",
   searchCourses: 'Search Courses',
-  fetchingCourses: 'Fetching Courses'
+  fetchingCourses: 'Fetching Courses',
+  fetchingJobs: 'Fetching Jobs'
 }
 export default en

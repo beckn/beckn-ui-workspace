@@ -351,6 +351,7 @@ const fa: { [key: string]: string } = {
   fetchingScholarships: 'Récupérer des bourses',
   noCourse: 'Pas de cours !',
   noCouseSubText: "On dirait que vous n'avez pas sélectionné de cours !",
-  fetchingCourses: 'Récupérer des cours'
+  fetchingCourses: 'Récupérer des cours',
+  fetchingJobs: 'Récupérer des tâches'
 }
 export default fa

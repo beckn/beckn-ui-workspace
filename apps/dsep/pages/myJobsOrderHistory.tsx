@@ -39,7 +39,7 @@ const myJobsOrderHistory = () => {
   }, [])
 
   if (isLoading) {
-    return <Loader loadingText={t.fetchingScholarships} />
+    return <Loader loadingText={t.fetchingJobs} />
   }
 
   if (!jobsOrders.length) {
