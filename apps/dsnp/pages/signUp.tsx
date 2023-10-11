@@ -10,6 +10,7 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { IUserInfoRootState } from '../lib/types/user'
 import { useLanguage } from '../hooks/useLanguage'
+
 const SignUp: NextPage = () => {
   const dispatch = useDispatch()
   const router = useRouter()
@@ -21,6 +22,7 @@ const SignUp: NextPage = () => {
       router.push(`${redirect as string}` || `/`)
     }
   }, [userInfo, redirect, router])
+
   async function signUpHandler(user: IUser) {
     const { name, email, password } = user
     try {
