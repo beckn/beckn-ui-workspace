@@ -18,7 +18,7 @@ const Product = () => {
   if (product && !reviewSubmitted) {
     return <ProductDetails product={product} />
   } else if (product && reviewSubmitted) {
-    return <Confirmation reviewSubmitted={Boolean(reviewSubmitted)} />
+    return <Confirmation reviewSubmitted={Boolean(reviewSubmitted)} product={product} />
   } else return <></>
 }
 
