@@ -6,7 +6,7 @@
     "dev": "next dev -p 3000",
     "build": "next build",
     "start": "next start",
-    "ec2-start":"next start -p 3001",
+    "ec2-start": "next start -p 3001",
     "lint": "next lint",
     "postbuild": "next-sitemap",
     "export": "next build && next export"
