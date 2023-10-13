@@ -28,7 +28,7 @@ const MyJob: React.FC<MyJobsProps> = props => {
               {t.appliedOn} {props.time}
             </Text>
             <Flex alignItems={'center'}>
-              {props.myJobsStatus === 'In Progress' ? (
+              {props.myJobsStatus === 'In Review' ? (
                 <Image src="/images/inProgress.svg" alt="" pr="10px" />
               ) : (
                 <Image src="/images/approvedIcon.svg" alt="" pr="10px" />
