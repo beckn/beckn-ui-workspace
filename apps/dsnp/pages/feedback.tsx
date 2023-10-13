@@ -1,26 +1,29 @@
 import { Box, Text, Flex, Textarea } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
-import Button from '../components/button/Button'
-import StarRating from '../components/starRating/StarRating'
-import { useLanguage } from '../hooks/useLanguage'
+import Button from '@components/button/Button'
+import { fromBinary } from '@utils/common-utils'
+import StarRating from '@components/starRating/StarRating'
+import { useLanguage } from '@hooks/useLanguage'
 import { MdKeyboardArrowUp, MdKeyboardArrowDown } from 'react-icons/md'
+import { useSelector } from 'react-redux'
+import ImageSection from '@components/productDetails/ImageSection'
+import { IProductRootState, RetailItem } from '@lib/types/products'
+import { getLocalStorage } from '@utils/localStorage'
+import { toBinary } from '@utils/common-utils'
 
-const products = ['FORCLAZ - Men Trekking Water-Rep...', 'Another Product...', 'Yet Another Product...']
+const getReviewLink = (review: string, productURL: string, productName: string, productImage: string) => {
+  const myUrlWithParams = new URL(`${process.env.NEXT_PUBLIC_DSNP_GATEWAY_URL}/review`)
 
-const productURL =
-  'http://localhost:3000/product?productDetails=ewAiAGIAcABwAF8AaQBkACIAOgAiAGIAYQB6AGEAYQByAC4AYgBlAGMAawBuAHAAcgBvAHQAbwBjAG8AbAAuAGkAbwAiACwAIgBiAHAAcABfAHUAcgBpACIAOgAiAGgAdAB0AHAAcwA6AC8ALwBiAGEAegBhAGEAcgAuAGIAZQBjAGsAbgBwAHIAbwB0AG8AYwBvAGwALgBpAG8ALwAvAGIAbwBjAC8AYgBwAHAAIgAsACIAZQB4AHQAZQBuAGQAZQBkAF8AYQB0AHQAcgBpAGIAdQB0AGUAcwAiADoAewB9ACwAIgBwAHIAaQBjAGUAIgA6AHsAIgBsAGkAcwB0AGUAZABfAHYAYQBsAHUAZQAiADoAIgAxADYAOQA5AC4AMAAiACwAIgBjAHUAcgByAGUAbgBjAHkAIgA6ACIASQBOAFIAIgAsACIAdgBhAGwAdQBlACIAOgAiADEANgA5ADkALgAwACIAfQAsACIAbQBhAHQAYwBoAGUAZAAiADoAdAByAHUAZQAsACIAaQBkACIAOgAiAC4ALwByAGUAdABhAGkAbAAuAGsAaQByAGEAbgBhAC8AaQBuAGQALgBiAGwAcgAvADIAOQA5AEAAYgBhAHoAYQBhAHIALgBiAGUAYwBrAG4AcAByAG8AdABvAGMAbwBsAC4AaQBvAC4AaQB0AGUAbQAiACwAIgBkAGUAcwBjAHIAaQBwAHQAbwByACIAOgB7ACIAaQBtAGEAZwBlAHMAIgA6AFsAIgBoAHQAdABwAHMAOgAvAC8AYgBhAHoAYQBhAHIALgBiAGUAYwBrAG4AcAByAG8AdABvAGMAbwBsAC4AaQBvAC8AYQB0AHQAYQBjAGgAbQBlAG4AdABzAC8AdgBpAGUAdwAvADIANQA4AC4AagBwAGcAIgBdACwAIgBuAGEAbQBlACIAOgAiAEEAZAB1AGwAdAAgAEgAaQBrAGkAbgBnACAAUwB1AG4AZwBsAGEAcwBzAGUAcwAgAEMAYQB0ACAAMwAgAC0AIABNAEgAMQA0ADAAIABEAGEAcgBrACAARwByAGUAeQAgAC0AIABFAEEAQwBIACIALAAiAHMAaABvAHIAdABfAGQAZQBzAGMAIgA6ACIAUAByAG8AdABlAGMAdAAgAHkAbwB1ACAAZgByAG8AbQAgAHMAdQBuACAAcgBhAHkAcwAgAGEAbgBkACAAdwBpAG4AZAAiACwAIgBsAG8AbgBnAF8AZABlAHMAYwAiADoAIgA8AGQAaQB2AD4AIAA8AHUAbAA%2BACAAPABsAGkAPgBQAG8AbABhAHIAaQBzAGUAZAAtACAAUABvAGwAYQByAGkAcwBpAG4AZwAgAGwAZQBuAHMAOgAgAHIAZQBkAHUAYwBlAHMAIAByAGUAZgBsAGUAYwB0AGkAbwBuAHMAIABmAHIAbwBtACAAYgByAGkAZwBoAHQAIABzAHUAcgBmAGEAYwBlAHMAPAAvAGwAaQA%2BACAAPABsAGkAPgBTAHUAbgAgAFAAcgBvAHQAZQBjAHQAaQBvAG4ALQAgAEMAYQB0AGUAZwBvAHIAeQAgADMAIABsAGUAbgBzACAALQAgADEAMAAwACUAIABVAFYAIABmAGkAbAB0AGUAcgA6ACAAcABlAHIAZgBlAGMAdAAgAGYAbwByACAAcwB1AG4AbgB5ACAAdwBlAGEAdABoAGUAcgAuADwALwBsAGkAPgAgADwAbABpAD4ATABpAGcAaAB0AHcAZQBpAGcAaAB0AC0AIABPAG4AbAB5ACAAMgA2ACAAZwAuADwALwBsAGkAPgAgADwAbABpAD4AUwB0AGEAYgBpAGwAaQB0AHkALQAgAFIAdQBiAGIAZQByACAAbwBuACAAdABoAGUAIAB0AGUAbQBwAGwAZQAgAHQAaQBwAHMAOgAgAHAAcgBlAHYAZQBuAHQAcwAgAHQAaABlACAAZwBsAGEAcwBzAGUAcwAgAGYAcgBvAG0AIABzAGwAaQBwAHAAaQBuAGcALgA8AC8AbABpAD4AIAA8AGwAaQA%2BAEMAbwB2AGUAcgBhAGcAZQAtAFcAcgBhAHAAYQByAG8AdQBuAGQAIABzAGgAYQBwAGUAOgAgAHAAcgBvAHQAZQBjAHQAcwAgAHkAbwB1AHIAIABlAHkAZQBzACAAZgByAG8AbQAgAHcAaQBuAGQALAAgAHMAcAByAGEAeQAgAGEAbgBkACAAaQBuAGMAbABlAG0AZQBuAHQAIAB3AGUAYQB0AGgAZQByAC4APAAvAGwAaQA%2BACAAPABsAGkAPgBSAG8AYgB1AHMAdABuAGUAcwBzAC0AIABQAG8AbAB5AGMAYQByAGIAbwBuAGEAdABlACAAZwBsAGEAcwBzAGUAcwAgAG0AYQBkAGUAIABmAHIAbwBtACAAaABpAGcAaAAgAHIAZQBzAGkAcwB0AGEAbgBjAGUAIABwAGwAYQBzAHQAaQBjAC4AIAAyAC0AeQBlAGEAcgAgAGcAdQBhAHIAYQBuAHQAZQBlAC4APAAvAGwAaQA%2BACAAPABsAGkAPgBDAG8AbQBwAGEAdABpAGIAaQBsAGkAdAB5AC0AQwBvAG0AcABhAHQAaQBiAGwAZQAgAHcAaQB0AGgAIAB0AGgAZQAgAE0ASAAgAEEAQwBDACAAMQAwADAAIABMACAAKAA0ADEANAA1ADgANwA0ACkAIABhAG4AZAAgADUAMAAwACAATAAgACgANAAxADcANAA2ADgANAApACAAcgBlAHQAYQBpAG4AZQByACAAcwB0AHIAYQBwAHMAPAAvAGwAaQA%2BACAAPAAvAHUAbAA%2BACAAPABkAGkAdgA%2BACAAPABwAD4APABiAD4AUAByAG8AZAB1AGMAdAAgAEQAZQB0AGEAaQBsAHMAPAAvAGIAPgA8AC8AcAA%2BACAAPAB1AGwAPgAgADwAbABpAD4AVwByAGEAcABhAHIAbwB1AG4AZAAgAHMAaABhAHAAZQA6ACAAcAByAG8AdABlAGMAdABzACAAeQBvAHUAcgAgAGUAeQBlAHMAIABmAHIAbwBtACAAdwBpAG4AZAAsACAAcwBwAHIAYQB5ACAAYQBuAGQAIABpAG4AYwBsAGUAbQBlAG4AdAAgAHcAZQBhAHQAaABlAHIALgA8AC8AbABpAD4AIAA8AGwAaQA%2BAFAAbwBsAGEAcgBpAHMAaQBuAGcAIABsAGUAbgBzADoAIAByAGUAZAB1AGMAZQBzACAAcgBlAGYAbABlAGMAdABpAG8AbgBzACAAZgByAG8AbQAgAGIAcgBpAGcAaAB0ACAAcwB1AHIAZgBhAGMAZQBzADwALwBsAGkAPgAgADwAbABpAD4AQwBhAHQAZQBnAG8AcgB5ACAAMwAgAGwAZQBuAHMAIAAtACAAMQAwADAAJQAgAFUAVgAgAGYAaQBsAHQAZQByADoAIABwAGUAcgBmAGUAYwB0ACAAZgBvAHIAIABzAHUAbgBuAHkAIAB3AGUAYQB0AGgAZQByAC4APAAvAGwAaQA%2BACAAPABsAGkAPgBPAG4AbAB5ACAAMgA2ACAAZwAuADwALwBsAGkAPgAgADwAbABpAD4ATABhAHIAZwBlACAAbABlAG4AcwBlAHMAIABmAG8AcgAgAHMAdQBwAGUAcgBpAG8AcgAgAHAAZQByAGkAcABoAGUAcgBhAGwAIAB2AGkAcwBpAG8AbgAuADwALwBsAGkAPgAgADwAbABpAD4AUwBwAGUAYwBpAGEAbAAgAHMAaABhAHAAZQAgAG8AZgAgAHQAaABlACAAdABlAG0AcABsAGUAcwA6ACAAaABvAGwAZABzACAAdABoAGUAIABzAHUAbgBnAGwAYQBzAHMAZQBzACAAaQBuACAAcABsAGEAYwBlAC4APAAvAGwAaQA%2BACAAPABsAGkAPgBQAG8AbAB5AGMAYQByAGIAbwBuAGEAdABlACAAZwBsAGEAcwBzAGUAcwAgAG0AYQBkAGUAIABmAHIAbwBtACAAaABpAGcAaAAgAHIAZQBzAGkAcwB0AGEAbgBjAGUAIABwAGwAYQBzAHQAaQBjAC4APAAvAGwAaQA%2BACAAPABsAGkAPgBDAG8AbQBwAGEAdABpAGIAbABlACAAdwBpAHQAaAAgAE0ASAAgAEEAQwBDACAAMQAwADAAIABMACAAKAA0ADEANAA1ADgANwA0ACkAIABhAG4AZAAgADUAMAAwACAATAAgAHIAZQB0AGUAbgB0AGkAbwBuACAAcwB0AHIAYQBwAHMAIAAoADQAMQA3ADQANgA4ADQAKQAuADwALwBsAGkAPgAgADwAbABpAD4AIABPAHUAcgAgAGcAbABhAHMAcwBlAHMAIAB3AGkAbABsACAAagBvAGkAbgAgAHkAbwB1ACAAbwBuACAAeQBvAHUAcgAgAG0AbwB1AG4AdABhAGkAbgAgAHcAYQBsAGsAcwAuACAAWQBvAHUAcgAgAGwAZQBuAHMAZQBzACAAbQBhAHkAIABzAGMAcgBhAHQAYwBoACAAbwB2AGUAcgAgAHQAaQBtAGUALgAgAFQAbwAgAGgAZQBsAHAAIAB0AG8AIAByAGUAcABhAGkAcgAgAHQAaABlAG0ALAAgAG8AdQByACAAcABvAGwAYQByAGkAcwBlAGQAIABsAGUAbgBzAGUAcwAgACgAcgBlAGYAZQByAGUAbgBjAGUAIAA4ADYANQA1ADMAOAA2ACkAIABvAHIAIABuAG8AbgAtAHAAbwBsAGEAcgBpAHMAZQBkACAAKAByAGUAZgBlAHIAZQBuAGMAZQAgADgANgA1ADUAMwA4ADIAKQAgAGEAcgBlACAAYQB2AGEAaQBsAGEAYgBsAGUAIABzAG8AIAB5AG8AdQAgAGMAYQBuACAAcgBlAHAAbABhAGMAZQAgAHQAaABlAG0AIAB5AG8AdQByAHMAZQBsAGYAIABxAHUAaQBjAGsAbAB5ACAAYQBuAGQAIABlAGEAcwBpAGwAeQAuACAATwB1AHIAIABlAG4AdgBpAHIAbwBuAG0AZQBuAHQAYQBsACAAYQBwAHAAcgBvAGEAYwBoACAAYQB0ACAAUQB1AGUAYwBoAHUAYQAgAGEAbABzAG8AIABzAHUAcABwAG8AcgB0AHMAIABtAGEAawBpAG4AZwAgAHQAaABlAHMAZQAgAHAAYQByAHQAcwAgAGEAdgBhAGkAbABhAGIAbABlACAAdABvACAAeQBvAHUALgAgAEQAbwBuACcAdAAgAHQAaAByAG8AdwAgAGEAdwBhAHkALAAgAHIAZQBwAGEAaQByACEAPAAvAGwAaQA%2BACAAPABsAGkAPgAgAFMAaQB6AGUAOgAgAE4AbwAgAFMAaQB6AGUAPAAvAGwAaQA%2BACAAPABsAGkAPgAgAEkAbQBwAG8AcgB0AGUAZAAgAEIAeQAgAEQAZQBjAGEAdABoAGwAbwBuACAAUwBwAG8AcgB0AHMAIABJAG4AZABpAGEAIAA8AC8AbABpAD4AIAA8AC8AdQBsAD4AIAA8AC8AZABpAHYAPgAiAH0ALAAiAGwAbwBjAGEAdABpAG8AbgBfAGkAZAAiADoAIgAuAC8AcgBlAHQAYQBpAGwALgBrAGkAcgBhAG4AYQAvAGkAbgBkAC4AYgBsAHIALwAzADQAQABiAGEAegBhAGEAcgAuAGIAZQBjAGsAbgBwAHIAbwB0AG8AYwBvAGwALgBpAG8ALgBwAHIAbwB2AGkAZABlAHIAXwBsAG8AYwBhAHQAaQBvAG4AIgAsACIAcgBlAGMAbwBtAG0AZQBuAGQAZQBkACIAOgB0AHIAdQBlACwAIgB0AGEAZwBzACIAOgB7ACIAQwBhAHQAZQBnAG8AcgB5ACIAOgAiAFIAZQB0AGEAaQBsAEUAbgBnAGwAaQBzAGgAIgAsACIAVAByAGUAawBrAGkAbgBnACIAOgAiAFkAIgAsACIAUwBrAGkAaQBuAGcAIgA6ACIAWQAiACwAIgBSAGEAdABpAG4AZwAiADoAIgA0AC4AMwAiACwAIgBHAGwAYQBzAHMAZQBzACIAOgAiAFkAIgAsACIAUwB1AG4AIgA6ACIAWQAiACwAIgBTAGgAYQBkAGUAcwAiADoAIgBZACIALAAiAFMAdQBuAGcAbABhAHMAcwBlAHMAIgA6ACIAWQAiAH0ALAAiAHAAcgBvAHYAaQBkAGUAcgBJAGQAIgA6ACIALgAvAHIAZQB0AGEAaQBsAC4AawBpAHIAYQBuAGEALwBpAG4AZAAuAGIAbAByAC8AMwAzAEAAYgBhAHoAYQBhAHIALgBiAGUAYwBrAG4AcAByAG8AdABvAGMAbwBsAC4AaQBvAC4AcAByAG8AdgBpAGQAZQByACIALAAiAGwAbwBjAGEAdABpAG8AbgBzACIAOgBbAHsAIgBpAGQAIgA6ACIALgAvAHIAZQB0AGEAaQBsAC4AawBpAHIAYQBuAGEALwBpAG4AZAAuAGIAbAByAC8AMwA0AEAAYgBhAHoAYQBhAHIALgBiAGUAYwBrAG4AcAByAG8AdABvAGMAbwBsAC4AaQBvAC4AcAByAG8AdgBpAGQAZQByAF8AbABvAGMAYQB0AGkAbwBuACIALAAiAGcAcABzACIAOgAiADEAMgAuADgAMQAxADEANAAwACwANwA3AC4ANgA2ADMANAAwADIAIgB9AF0ALAAiAGIAcABwAE4AYQBtAGUAIgA6ACIASABCAE8AIgB9AA%3D%3D'
-
-const getReviewLink = (review: string) => {
-  const myUrlWithParams = new URL('http://localhost:3001/review')
   const queryParameters = {
     href: productURL,
+    // href: "https://www.etsy.com/listing/1292521772/melting-clock-salvador-dali-the",
     reference: {
       hello: 'world'
     },
     attributeSetType: 'dsnp://1#OndcProofOfPurchase',
-    success_url: `${productURL}&reviewSubmitted=true`,
-    error_url: `${productURL}&reviewSubmitted=false`
+    success_url: `${window.location.origin}/product?productName=${productName}&productImage=${productImage}&reviewSubmitted=true`,
+    error_url: `${window.location.origin}/product?productName=${productName}&productImage=${productImage}&reviewSubmitted=false`
   }
 
   const text = `⭐⭐⭐⭐⭐\n\n${review}`
@@ -39,64 +42,26 @@ const Feedback = () => {
   const { t } = useLanguage()
   const router = useRouter()
   const [ratingForStore, setRatingForStore] = useState(0)
-  const [selectedProduct, setSelectedProduct] = useState('')
   const [review, setReview] = useState('')
-  const [isOpen, setIsOpen] = useState(false)
-  const [product, setProduct] = useState(products)
 
-  const toggleDropDown = () => {
-    setIsOpen(!isOpen)
-  }
+  const product = getLocalStorage('productDetails').product as RetailItem
+  const encodedProduct = getLocalStorage('productDetails').encodedProduct as string
 
-  const handleProductSelect = (userSelectProduct: string) => {
-    console.log(userSelectProduct)
-    setSelectedProduct(userSelectProduct)
-    setProduct([
-      userSelectProduct,
-      ...(() => {
-        return product.filter(item => item !== userSelectProduct)
-      })()
-    ])
-    setIsOpen(false)
-  }
+  const productURL = typeof window !== 'undefined' && new URL(`${window.location.origin}/product`)
+  productURL && productURL.searchParams.append('productDetails', encodedProduct)
+
+  if (!product) return <></>
 
   return (
     <>
       <Box pt={'12px'} pb={'15px'}>
-        <Text fontSize={'15px'} fontWeight={400}>
-          {t('selectProduct')}
-          <div
-            style={{
-              width: '332px',
-              height: isOpen ? 'auto' : '40px',
-              border: '1px solid #ccc',
-              overflow: 'hidden',
-              position: 'relative',
-              boxShadow: '0px 2px 4px -2px rgba(0, 0, 0, 0.10), 0px 4px 6px -1px rgba(0, 0, 0, 0.10)',
-              borderRadius: '8px',
-              marginTop: '10px'
-            }}
-          >
-            <button
-              style={{
-                position: 'absolute',
-                top: isOpen ? '7px' : '7px',
-                right: '7px',
-                cursor: 'pointer'
-              }}
-              onClick={toggleDropDown}
-            >
-              {isOpen ? <MdKeyboardArrowDown size={26} /> : <MdKeyboardArrowUp size={26} />}
-            </button>
-            <Flex style={{ padding: '9px', fontSize: '14px', fontWeight: 400 }} flexDir={'column'} gap={2}>
-              {product.map((product, index) => (
-                <Box key={index} onClick={() => handleProductSelect(product)}>
-                  {product}
-                </Box>
-              ))}
-            </Flex>
-          </div>
-        </Text>
+        <Text fontSize={'15px'}>{t('selectProduct')}</Text>
+        <Flex alignItems={'center'}>
+          <Box height={'80px'} width="100px" className="review_image" margin={'0 auto'} mb={'10px'}>
+            <ImageSection imgArray={product.descriptor.images} />
+          </Box>
+          <Text>{product.descriptor.name}</Text>
+        </Flex>
       </Box>
 
       <StarRating
@@ -130,7 +95,13 @@ const Feedback = () => {
           const user = localStorage.getItem('userPhone') as string
           localStorage.clear()
           localStorage.setItem('userPhone', user)
-          if (window) window.location.href = getReviewLink(review)
+          if (window)
+            window.location.href = getReviewLink(
+              review,
+              productURL.href,
+              product.descriptor.name,
+              product.descriptor.images[0]
+            )
           // router.push(`/homePage`)
         }}
         isDisabled={false}

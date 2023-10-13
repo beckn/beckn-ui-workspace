@@ -81,7 +81,7 @@ const getHeaderTitleForPage = (name: string, logo: string, pathName: string, loc
             whiteSpace={'nowrap'}
             overflow={'hidden'}
           >
-            {name}
+            {/* {name} */}
           </Text>
         </Box>
       )
@@ -169,8 +169,6 @@ const BottomHeader = () => {
   useEffect(() => {
     setOptionTags(JSON.parse(localStorage.getItem('optionTags') as string))
   }, [])
-
-  console.log('Dank', storedHeaderText)
 
   const router = useRouter()
 

@@ -8,15 +8,20 @@ import ImageSection from '../productDetails/ImageSection'
 
 interface ConfirmationProps {
   reviewSubmitted: boolean
-  product: RetailItem
+  productName: string
+  productImage: string
 }
 
-const Confirmation: React.FC<ConfirmationProps> = ({ reviewSubmitted, product }) => {
+const Confirmation: React.FC<ConfirmationProps> = ({ reviewSubmitted, productImage, productName }) => {
   const message = reviewSubmitted ? 'Success' : 'Failure'
 
   const { t } = useLanguage()
   const handleShopbtn = (): void => {
     Router.push(`/homePage`)
+  }
+
+  const handleCheckReview = () => {
+    window.location.href = `${process.env.NEXT_PUBLIC_DSNP_GATEWAY_URL}/feed`
   }
 
   return (
@@ -32,9 +37,9 @@ const Confirmation: React.FC<ConfirmationProps> = ({ reviewSubmitted, product })
             {message === 'Success' ? 'Review Submitted!' : 'Failed!'}
           </Text>
           <Box height={'80px'} width="100px" className="review_image" margin={'0 auto'} mb={'10px'}>
-            <ImageSection imgArray={product.descriptor.images} product={product} />
+            <ImageSection imgArray={[productImage]} />
           </Box>
-          <Text>{product.descriptor.name}</Text>
+          <Text>{productName}</Text>
         </CardBody>
       </Card>
       <Button
@@ -49,7 +54,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({ reviewSubmitted, product })
         color={'rgba(var(--color-primary))'}
         background={'rgba(var(--text-color))'}
         isDisabled={false}
-        handleOnClick={handleShopbtn}
+        handleOnClick={handleCheckReview}
       />
     </>
   )
