@@ -230,7 +230,7 @@ const en: { [key: string]: string } = {
   snacks: 'Snacks',
   dairy: 'Dairy',
   cashOnDelivery: 'Cash on Delivery',
-  freeCourse: 'Free Course',
+  payOnline: 'Pay online',
   selectPaymentMethod: 'Select payment method',
   orderDetails: 'Order details',
   trackOrder: 'Track Order',

@@ -73,7 +73,8 @@ const OrderConfirmation = () => {
                 price: {
                   value: order.items[0].price.value,
                   currency: order.items[0].price.currency
-                }
+                },
+                tags: order.items[0].tags
               }
             ],
             fulfillments: [order.fulfillment],

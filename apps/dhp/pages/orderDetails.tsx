@@ -138,7 +138,7 @@ const OrderDetails = () => {
     let courseUrl = ''
 
     Object.keys(confirmDataPerBpp).map(key => {
-      // courseUrl = confirmDataPerBpp[key].items[0].tags.Url
+      courseUrl = confirmDataPerBpp[key].items[0].tags.Url
     })
 
     window.open(courseUrl, '_blank')

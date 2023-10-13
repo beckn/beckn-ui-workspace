@@ -73,12 +73,12 @@ export interface ParsedScholarshipData {
 }
 
 export interface ScholarshipApplyFormDataModel {
-  name: string
-  mobileNumber: string
-  email: string
-  address: string
-  pinCode: string
-  scholarshipInfo: string
+  name?: string
+  mobileNumber?: string
+  email?: string
+  address?: string
+  pinCode?: string
+  scholarshipInfo?: string
 }
 
 interface MessageDescriptor {
@@ -220,4 +220,41 @@ interface Message {
 export interface ScholarshipConfirmResponseModel {
   context: Context
   message: Message
+}
+
+interface Amount {
+  amount: string
+  currency: string
+}
+
+interface AdditionalFormData {
+  formUrl: string
+  formMimeType: string
+  data: any[] // Change to a more specific type if needed
+}
+
+interface Scholarship {
+  id: string
+  name: string
+  description: string
+  amount: Amount
+  additionalFormData: AdditionalFormData
+}
+
+interface ScholarshipProvider {
+  id: string
+  name: string
+  description: string
+  scholarships: Scholarship[]
+}
+
+interface Context {
+  transactionId: string
+  bppId: string
+  bppUri: string
+}
+
+export interface ScholarShipSelectResponseModel {
+  context: Context
+  scholarshipProviders: ScholarshipProvider[]
 }

@@ -11,12 +11,16 @@ const createProfile = () => {
 
   const createProfileSubmitHandler = async (formData: UserData) => {
     const { name, mobileNumber, address, pinCode } = formData
-    const payload = {
+    const formDataForPayload = new FormData()
+
+    const profileCreatePayload = {
       name: name,
       phone: mobileNumber,
       address: address,
       zip_code: pinCode
     }
+    formDataForPayload.append('data', JSON.stringify(profileCreatePayload))
+
     const bearerToken = Cookies.get('authToken')
     const axiosConfig = {
       headers: {
@@ -25,8 +29,9 @@ const createProfile = () => {
       }
     }
     try {
-      const createProfileResponse = await axios.post(`${strapiUrl}/profiles`, payload, axiosConfig)
-      if (createProfileResponse.data === 'OK') {
+      const createProfileResponse = await axios.post(`${strapiUrl}/profiles`, formDataForPayload, axiosConfig)
+
+      if (createProfileResponse.status === 200) {
         router.push('/homePage')
       }
     } catch (error) {

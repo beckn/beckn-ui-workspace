@@ -22,14 +22,19 @@ const Homepage = () => {
         `${strapiUrl}/auth/google/callback?id_token=${id_token}&access_token=${access_token}`
       )
       if (userData.data) {
-        const jwtToken = userData.data.jwt
+        const userDataFromResponse = userData.data
+        const jwtToken = userDataFromResponse.jwt
+        const email = userDataFromResponse.user.email
+
         Cookies.set('authToken', jwtToken)
+        Cookies.set('userEmail', email)
 
         const profileData = await axios.get(`${strapiUrl}/profiles?populate[0]=documents.attachment`, {
           headers: {
             Authorization: `Bearer ${jwtToken}`
           }
         })
+
         return
       }
     } catch (error: any) {

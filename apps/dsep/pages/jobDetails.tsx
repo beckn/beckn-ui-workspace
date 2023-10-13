@@ -1,10 +1,11 @@
 import Router from 'next/router'
 import React, { useEffect, useState } from 'react'
 import JobDetailsPage from '../components/jobDetails/JobDetailsPage'
+import { JobInfo } from '../components/jobSearch/JobsSearch.types'
 import { fromBinary } from '../utilities/common-utils'
 
 const JobDetails = () => {
-  const [jobDetailsData, setJobDetailsData] = useState<string | string[] | null>(null)
+  const [jobDetailsData, setJobDetailsData] = useState<string | string[] | null | JobInfo>(null)
   const [encodedJobDetails, setEncodedJobDetails] = useState<string | string[] | undefined>('')
 
   useEffect(() => {
@@ -22,7 +23,7 @@ const JobDetails = () => {
 
   return (
     <div>
-      <JobDetailsPage encodedJobDetails={encodedJobDetails} jobDetails={jobDetailsData as any} />
+      <JobDetailsPage encodedJobDetails={encodedJobDetails} jobDetails={jobDetailsData as JobInfo} />
     </div>
   )
 }

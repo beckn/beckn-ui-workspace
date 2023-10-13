@@ -4,12 +4,14 @@ import Cookies from 'js-cookie'
 import Router from 'next/router'
 import React, { useEffect, useState } from 'react'
 import Button from '../components/button/Button'
+import { JobCredential } from '../components/jobApply/JobApply.types'
 import Loader from '../components/loader/Loader'
 import ScholarshipAddDetails from '../components/scholarship/addDetails/ScholarshipAddDetails'
 import {
   ParsedScholarshipData,
   ScholarshipApplyFormDataModel,
-  ScholarshipConfirmResponseModel
+  ScholarshipConfirmResponseModel,
+  ScholarShipSelectResponseModel
 } from '../components/scholarship/scholarshipCard/Scholarship.types'
 import UploadFile from '../components/uploadFile/UploadFile'
 import { useLanguage } from '../hooks/useLanguage'
@@ -28,11 +30,24 @@ const ApplyScholarship = () => {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [appliedScholarship, setAppliedScholarship] = useState<ParsedScholarshipData | null>(null)
+  const [scholarShipSelectResponse, setScholarShipSelectResponse] = useState<ScholarShipSelectResponseModel | null>(
+    null
+  )
+  const [isLoadingInSelect, setIsLoadingInSelect] = useState(true)
   const [formErrors, setFormErrors] = useState<FormErrors>({})
-  const [btnDisabled, setBtnDisabled] = useState(false)
 
   const dsepUrl = process.env.NEXT_PUBLIC_DSEP_URL
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
+  const coreStrapiUrl = process.env.NEXT_PUBLIC_CORE_STRAPI_URL
+
+  const bearerToken = Cookies.get('authToken')
+  const axiosConfig = {
+    headers: {
+      Authorization: `Bearer ${bearerToken}`,
+      'Content-Type': 'application/json' // You can set the content type as needed
+    }
+  }
+
   useEffect(() => {
     if (localStorage) {
       const storedSelectedScholarship = localStorage.getItem('selectedScholarship')
@@ -42,8 +57,49 @@ const ApplyScholarship = () => {
     }
   }, [])
 
+  useEffect(() => {
+    const email = Cookies.get('userEmail') as string
+    axios
+      .get(`${strapiUrl}/profiles?populate[0]=attachment`, axiosConfig)
+      .then(res => {
+        const profileData = res.data
+        const { address, name, phone, zip_code } = profileData.data.attributes
+        setFormData({
+          email: email,
+          mobileNumber: phone,
+          name: name,
+          pinCode: zip_code,
+          address
+        })
+      })
+      .catch(e => console.error(e))
+  }, [])
+
+  useEffect(() => {
+    if (appliedScholarship) {
+      const { providerId, id, bppId, bppUri, transactionId } = appliedScholarship
+      const payloadForjobSelect = {
+        scholarshipProviderId: providerId,
+        scholarshipId: id,
+        context: {
+          transactionId: transactionId,
+          bppId: bppId,
+          bppUri: bppUri
+        }
+      }
+
+      axios
+        .post(`${dsepUrl}/scholarship/select`, payloadForjobSelect)
+        .then(res => {
+          setScholarShipSelectResponse(res.data)
+          setIsLoadingInSelect(false)
+        })
+        .catch(e => console.error(e))
+    }
+  }, [appliedScholarship])
+
   const handleButtonClick = async () => {
-    const validationErrors = validateForm(formData)
+    const validationErrors = validateForm(formData as any)
 
     if (Object.keys(validationErrors).length > 0) {
       setFormErrors(validationErrors)
@@ -82,46 +138,202 @@ const ApplyScholarship = () => {
           axiosConfig
         )
         if (fetchProfilesResponse.data) {
-          const payloadForConfirm = {
-            context: {
-              transactionId: appliedScholarship?.transactionId,
-              bppId: appliedScholarship?.bppId,
-              bppUri: appliedScholarship?.bppUri
+          let docCredArray: JobCredential[] = []
+
+          fetchProfilesResponse.data.data.attributes.documents.data.map((doc: any) => {
+            if (doc.attributes.attachment.data && doc.attributes.type) {
+              const docUrl = coreStrapiUrl + doc.attributes.attachment.data.attributes.url
+              const docType = doc.attributes.attachment.data.attributes.mime
+
+              docCredArray.push({
+                url: docUrl,
+                type: docType
+              })
             }
-          }
+          })
 
-          const scholarshipConfirmResponse = await axios.post(`${dsepUrl}/scholarship/confirm`, payloadForConfirm)
-          if (scholarshipConfirmResponse.data) {
-            const originalScholarshipConfirmData: ScholarshipConfirmResponseModel =
-              scholarshipConfirmResponse.data.original
+          if (scholarShipSelectResponse) {
+            const { context, scholarshipProviders } = scholarShipSelectResponse
+            const { description, id, name, scholarships } = scholarshipProviders[0]
+            const { transactionId, bppId, bppUri } = context
+            const {
+              id: scholarshipId,
+              name: scholarshipName,
+              description: scholarshipDesc,
+              amount,
+              categories
+            } = scholarships[0]
 
-            const { context, message } = originalScholarshipConfirmData
-            const { order } = message
-
-            const ordersPayload = {
-              context: context,
-              message: {
-                order: {
-                  id: order.id,
-                  provider: {
-                    id: order.provider.id,
-                    descriptor: {
-                      name: order.provider.descriptor.name,
-                      short_desc: order.provider.descriptor.short_desc
-                    }
-                  },
-                  items: order.items,
-                  fulfillments: order.fulfillments
-                }
+            const scholarShipInitPayload = {
+              context: {
+                transactionId,
+                bppId,
+                bppUri
               },
-              category: {
-                set: [2]
+              scholarshipProvider: {
+                id,
+                name,
+                scholarships: [
+                  {
+                    id: scholarshipId,
+                    name: scholarshipName,
+                    description: scholarshipDesc,
+                    amount: amount,
+                    categoryId: 'DSEP_CAT_1',
+                    scholarshipDetails: {
+                      id: appliedScholarship?.scholarshipDetails[0].id,
+                      type: appliedScholarship?.scholarshipDetails[0].type,
+                      applicationStartDate: appliedScholarship?.scholarshipDetails[0].applicationStartDate,
+                      applicationEndDate: appliedScholarship?.scholarshipDetails[0].applicationEndDate,
+                      supportContact: appliedScholarship?.scholarshipDetails[0].supportContact,
+                      scholarshipRequestor: {
+                        name: formData.name,
+                        phone: formData.mobileNumber,
+                        address: formData.address,
+                        needOfScholarship: 'higher education',
+                        docUrl: docCredArray[0].url
+                      }
+                    },
+
+                    academicQualificationsCriteria: [
+                      {
+                        code: 'gr',
+                        name: 'Grade',
+                        value: 'Grade 12'
+                      },
+                      {
+                        code: 'percentage_grade',
+                        name: 'Percentage/Grade',
+                        value: '>= 50'
+                      },
+                      {
+                        code: 'passing_year',
+                        name: 'Passing Year',
+                        value: 2021
+                      }
+                    ],
+                    finStatusCriteria: [
+                      {
+                        code: 'family_income',
+                        name: 'Family Income',
+                        value: '<= 2000000'
+                      }
+                    ],
+                    benefits: [
+                      {
+                        code: 'scholarship-amount',
+                        name: 'Scholarship Amount',
+                        value: 'Upto Rs.30000 per year'
+                      }
+                    ]
+                  }
+                ]
               }
             }
-            const fulfillOrderRequest = await axios.post(`${strapiUrl}/orders`, ordersPayload, axiosConfig)
-            if (fulfillOrderRequest.data) {
-              setIsLoading(false)
-              Router.push('/scholarshipConfirmationPage')
+            const scholarshipInitResponse = await axios.post(`${dsepUrl}/scholarship/init`, scholarShipInitPayload)
+            if (scholarshipInitResponse.data) {
+              const payloadForConfirm = {
+                context: {
+                  transactionId,
+                  bppId,
+                  bppUri
+                },
+                scholarshipProvider: {
+                  id,
+                  name,
+                  description,
+                  scholarships: [
+                    {
+                      id: scholarshipId,
+                      name: scholarshipName,
+                      description: scholarshipDesc,
+                      amount: amount,
+                      categoryId: 'DSEP_CAT_1',
+                      scholarshipDetails: {
+                        id: appliedScholarship?.scholarshipDetails[0].id,
+                        type: appliedScholarship?.scholarshipDetails[0].type,
+                        applicationStartDate: appliedScholarship?.scholarshipDetails[0].applicationStartDate,
+                        applicationEndDate: appliedScholarship?.scholarshipDetails[0].applicationEndDate,
+                        supportContact: appliedScholarship?.scholarshipDetails[0].supportContact,
+                        scholarshipRequestor: {
+                          name: formData.name,
+                          phone: formData.mobileNumber,
+                          address: formData.address,
+                          needOfScholarship: 'higher education',
+                          docUrl: docCredArray[0].url
+                        }
+                      },
+
+                      academicQualificationsCriteria: [
+                        {
+                          code: 'gr',
+                          name: 'Grade',
+                          value: 'Grade 12'
+                        },
+                        {
+                          code: 'percentage_grade',
+                          name: 'Percentage/Grade',
+                          value: '>= 50'
+                        },
+                        {
+                          code: 'passing_year',
+                          name: 'Passing Year',
+                          value: 2021
+                        }
+                      ],
+                      finStatusCriteria: [
+                        {
+                          code: 'family_income',
+                          name: 'Family Income',
+                          value: '<= 2000000'
+                        }
+                      ],
+                      benefits: [
+                        {
+                          code: 'scholarship-amount',
+                          name: 'Scholarship Amount',
+                          value: 'Upto Rs.30000 per year'
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+
+              const scholarshipConfirmResponse = await axios.post(`${dsepUrl}/scholarship/confirm`, payloadForConfirm)
+              if (scholarshipConfirmResponse.data) {
+                const originalScholarshipConfirmData: ScholarshipConfirmResponseModel =
+                  scholarshipConfirmResponse.data.original
+
+                const { context, message } = originalScholarshipConfirmData
+                const { order } = message
+
+                const ordersPayload = {
+                  context: context,
+                  message: {
+                    order: {
+                      id: order.id,
+                      provider: {
+                        id: order.provider.id,
+                        descriptor: {
+                          name: order.provider.descriptor.name,
+                          short_desc: order.provider.descriptor.short_desc
+                        }
+                      },
+                      items: order.items,
+                      fulfillments: order.fulfillments
+                    }
+                  },
+                  category: {
+                    set: [2]
+                  }
+                }
+                const fulfillOrderRequest = await axios.post(`${strapiUrl}/orders`, ordersPayload, axiosConfig)
+                if (fulfillOrderRequest.data) {
+                  setIsLoading(false)
+                  Router.push('/scholarshipConfirmationPage')
+                }
+              }
             }
           }
         }
@@ -130,8 +342,12 @@ const ApplyScholarship = () => {
     } catch (error) {}
   }
 
-  if (isLoading) {
+  if (isLoadingInSelect) {
     return <Loader />
+  }
+
+  if (isLoading) {
+    return <Loader loadingText="Confirming Application" />
   }
 
   if (!appliedScholarship) {

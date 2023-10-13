@@ -31,7 +31,7 @@ const myJobsOrderHistory = () => {
         setJobsOrders(result.data)
         setIsLoading(false)
       })
-      .catch(error => console.log('error', error))
+      .catch(error => console.error('error', error))
   }
 
   useEffect(() => {
@@ -55,7 +55,7 @@ const myJobsOrderHistory = () => {
           time={getOrderPlacementTimeline(jobOrder.attributes.createdAt)}
           myJobsStatus={jobOrder.attributes.delivery_status}
           handleJobsStatus={() => {
-            Router.push('/applyJobsPrefilled')
+            Router.push(`/applyJobsPrefilled?jobId=${jobOrder.id}`)
           }}
         />
       ))}

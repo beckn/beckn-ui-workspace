@@ -22,6 +22,8 @@ import {
 import Loader from '../components/loader/Loader'
 import AddBillingButton from '../components/detailsCard/AddBillingButton'
 import { useRouter } from 'next/router'
+import Cookies from 'js-cookie'
+import axios from 'axios'
 
 export type ShippingFormData = {
   name: string
@@ -43,11 +45,11 @@ const CheckoutPage = () => {
   const [isBillingAddressSameAsShippingAddress, setIsBillingAddressSameAsShippingAddress] = useState(true)
 
   const [billingFormData, setBillingFormData] = useState<ShippingFormData>({
-    name: 'Santosh Kumar',
-    mobileNumber: '9876543210',
-    email: 'santosh.k@gmail.com',
-    address: '151-E, Janpath Road, New Delhi',
-    pinCode: '201016'
+    name: '',
+    mobileNumber: '',
+    email: '',
+    address: '',
+    pinCode: ''
   })
 
   const router = useRouter()
@@ -55,11 +57,41 @@ const CheckoutPage = () => {
   const dispatch = useDispatch()
   const { t, locale } = useLanguage()
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
+  const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
   const cartItems = useSelector((state: ICartRootState) => state.cart.items)
   const transactionId = useSelector((state: { transactionId: TransactionIdRootState }) => state.transactionId)
 
   const scholarshipId = useSelector((state: any) => state.scholarshipCart.scholarshipId)
   const scholarshipTitle = useSelector((state: any) => state.scholarshipCart.scholarshipTitle)
+
+  const bearerToken = Cookies.get('authToken')
+  const axiosConfig = {
+    headers: {
+      Authorization: `Bearer ${bearerToken}`,
+      'Content-Type': 'application/json' // You can set the content type as needed
+    }
+  }
+
+  useEffect(() => {
+    const email = Cookies.get('userEmail') as string
+    axios
+      .get(`${strapiUrl}/profiles?populate[0]=documents.attachment`, axiosConfig)
+      .then(res => {
+        const profileResponse = res.data
+        const documents = profileResponse.data.attributes.documents.data
+
+        const profileData = profileResponse.data.attributes
+        const { name, phone, address, zip_code } = profileData
+        setFormData({
+          address,
+          email,
+          mobileNumber: phone,
+          pinCode: zip_code,
+          name
+        })
+      })
+      .catch(e => console.error(e))
+  }, [])
 
   useEffect(() => {
     if (localStorage) {

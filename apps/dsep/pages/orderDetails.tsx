@@ -95,8 +95,6 @@ const OrderDetails = () => {
     }
   }, [statusRequest.data])
 
-  //   console.log("confirmData", confirmData);
-
   if (!confirmData.length) {
     return <></>
   }
@@ -139,8 +137,7 @@ const OrderDetails = () => {
     Object.keys(confirmDataPerBpp).map(key => {
       courseUrl = confirmDataPerBpp[key].items[0].tags.Url
     })
-
-    window.open(courseUrl, '_blank')
+    window.location.href = courseUrl
   }
   return (
     <Box className="hideScroll" maxH={'calc(100vh - 100px)'} overflowY="scroll">
@@ -283,9 +280,7 @@ const OrderDetails = () => {
                 color={'rgba(var(--color-primary))'}
                 pt="10px"
                 pl="28px"
-                onClick={() => {
-                  window.location.href = 'https://www.google.com'
-                }}
+                onClick={handleViewCource}
               >
                 {t.viewCourse}
               </Box>

@@ -1,4 +1,5 @@
 import { JobApplyFormData } from '../components/jobApply/JobApply.types'
+import { ScholarshipApplyFormDataModel } from '../components/scholarship/scholarshipCard/Scholarship.types'
 import { ShippingFormData } from '../pages/checkoutPage'
 
 export interface FormErrors {

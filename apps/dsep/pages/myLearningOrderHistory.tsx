@@ -31,7 +31,7 @@ const myLearningOrderHistory = () => {
         setCoursesOrders(result.data)
         setIsLoading(false)
       })
-      .catch(error => console.log('error', error))
+      .catch(error => console.error('error', error))
   }
 
   useEffect(() => {
@@ -56,7 +56,7 @@ const myLearningOrderHistory = () => {
           id={courseOrder.id}
           myLearingStatus={courseOrder.attributes.delivery_status}
           handleViewCourses={() => {
-            window.location.href = 'https://www.google.com'
+            window.location.href = courseOrder.attributes.items[0].tags.Url
           }}
         />
       ))}

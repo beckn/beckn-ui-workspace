@@ -15,7 +15,7 @@ const ScholarshipCard = () => {
   const fetchScholarships = async () => {
     try {
       const scholarshipSearchResponse = await axios.post(`${dsepScholarshipUrl}/scholarship/search`, {
-        name: 'Undergraduation scholarship'
+        name: 'scholarship'
       })
       if (scholarshipSearchResponse.data) {
         const parsedScholarshipData: ParsedScholarshipData[] = getTransformedDataFromScholarshipsResponse(
@@ -34,7 +34,7 @@ const ScholarshipCard = () => {
   }, [])
 
   if (isLoading) {
-    return <Loader />
+    return <Loader loadingText="Searching for Scholarships" />
   }
 
   if (!scholarShips.length) {

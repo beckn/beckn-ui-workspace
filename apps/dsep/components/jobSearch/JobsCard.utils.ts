@@ -2,32 +2,30 @@ import { JobResponse } from './JobsSearch.types'
 
 export const getTransformedDataFromJobsResponse = (jobs: JobResponse[]) => {
   const transformedData = []
+  try {
+    for (const platformData of jobs) {
+      const {
+        jobProviderPlatform,
+        context: { transactionId, bppId, bppUri },
+        jobResults
+      } = platformData
 
-  for (const platformData of jobs) {
-    const {
-      jobProviderPlatform,
-      context: { transactionId, bppId, bppUri },
-      jobResults
-    } = platformData
+      for (const companyData of jobResults) {
+        const { company, jobs } = companyData
 
-    for (const companyData of jobResults) {
-      const { company, jobs } = companyData
-
-      for (const job of jobs) {
-        const { jobId, role: jobRole, description, locations } = job
-
-        for (const location of locations) {
-          const { id: locationId, city, state, country } = location
+        for (const job of jobs) {
+          const { jobId, role: jobRole, description, locations } = job
 
           const transformedItem = {
             jobRole,
             jobId,
             companyName: company.name,
+            companyId: company.id,
             platformName: jobProviderPlatform,
             bppId,
             bppUri,
             transactionId,
-            location: city,
+            location: 'Bengaluru',
             jobDescription: description
           }
 
@@ -35,6 +33,8 @@ export const getTransformedDataFromJobsResponse = (jobs: JobResponse[]) => {
         }
       }
     }
+  } catch (error) {
+    console.error(error)
   }
 
   return transformedData

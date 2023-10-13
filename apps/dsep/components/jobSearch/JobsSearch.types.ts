@@ -40,6 +40,8 @@ export interface JobResponse {
 
 export interface JobsSearchPropsModel {
   jobs: JobResponse[]
+  searchvalue?: string
+  handleChange?: Function
 }
 
 export interface JobInfo {
@@ -52,4 +54,5 @@ export interface JobInfo {
   transactionId: string
   location: string
   jobDescription: string
+  companyId: string
 }
