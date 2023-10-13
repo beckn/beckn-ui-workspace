@@ -16,7 +16,8 @@ const getReviewLink = (review: string, productURL: string, productName: string, 
   const myUrlWithParams = new URL(`${process.env.NEXT_PUBLIC_DSNP_GATEWAY_URL}/review`)
 
   const queryParameters = {
-    href: productURL,
+    // href: productURL,
+    href: `${window.location.origin}/homePage`,
     // href: "https://www.etsy.com/listing/1292521772/melting-clock-salvador-dali-the",
     reference: {
       hello: 'world'
