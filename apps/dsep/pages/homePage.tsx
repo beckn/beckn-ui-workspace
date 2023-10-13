@@ -16,40 +16,42 @@ const Homepage = () => {
     }
   }, [])
 
-  const fetchUserInfoAndProfile = async () => {
-    try {
-      const userData = await axios.get(
-        `${strapiUrl}/auth/google/callback?id_token=${id_token}&access_token=${access_token}`
-      )
-      if (userData.data) {
-        const userDataFromResponse = userData.data
-        const jwtToken = userDataFromResponse.jwt
-        const email = userDataFromResponse.user.email
+  // TODO ;- Check the below code later
 
-        Cookies.set('authToken', jwtToken)
-        Cookies.set('userEmail', email)
+  // const fetchUserInfoAndProfile = async () => {
+  //   try {
+  //     const userData = await axios.get(
+  //       `${strapiUrl}/auth/google/callback?id_token=${id_token}&access_token=${access_token}`
+  //     )
+  //     if (userData.data) {
+  //       const userDataFromResponse = userData.data
+  //       const jwtToken = userDataFromResponse.jwt
+  //       const email = userDataFromResponse.user.email
 
-        const profileData = await axios.get(`${strapiUrl}/profiles?populate[0]=documents.attachment`, {
-          headers: {
-            Authorization: `Bearer ${jwtToken}`
-          }
-        })
+  //       Cookies.set('authToken', jwtToken)
+  //       Cookies.set('userEmail', email)
 
-        return
-      }
-    } catch (error: any) {
-      console.error(error)
-      if (error.response.data.error.message === 'Not Found') {
-        router.push('/createProfile')
-      }
-    }
-  }
+  //       const profileData = await axios.get(`${strapiUrl}/profiles?populate[0]=documents.attachment`, {
+  //         headers: {
+  //           Authorization: `Bearer ${jwtToken}`
+  //         }
+  //       })
 
-  useEffect(() => {
-    if (id_token && access_token) {
-      fetchUserInfoAndProfile()
-    }
-  }, [id_token, access_token])
+  //       return
+  //     }
+  //   } catch (error: any) {
+  //     console.error(error)
+  //     if (error.response.data.error.message === 'Not Found') {
+  //       router.push('/createProfile')
+  //     }
+  //   }
+  // }
+
+  // useEffect(() => {
+  //   if (id_token && access_token) {
+  //     fetchUserInfoAndProfile()
+  //   }
+  // }, [id_token, access_token])
 
   return <LandingPage />
 }
