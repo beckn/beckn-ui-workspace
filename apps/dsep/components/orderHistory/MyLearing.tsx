@@ -30,7 +30,7 @@ const MyLearing: React.FC<MyLearningProps> = props => {
           <Flex alignItems={'center'} justifyContent="space-between" pt={'5px'}>
             <Text fontWeight={'600'}>{t.currencySymbol} 1000</Text>
             <Flex alignItems={'center'}>
-              {props.myLearingStatus === 'In Progress' ? (
+              {props.myLearingStatus === 'In Review' ? (
                 <Image src="/images/inProgress.svg" alt="" pr="10px" />
               ) : (
                 <Image src="/images/approvedIcon.svg" alt="" pr="10px" />
