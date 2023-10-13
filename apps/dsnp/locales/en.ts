@@ -405,6 +405,7 @@ const en: { [key: string]: string } = {
   ratetheproduct: 'Rate the product',
   selectProduct: 'Select Product',
   loginToYourAccount: 'Login to your account',
-  signInWithGamail: 'Sign in with Gmail'
+  signInWithGamail: 'Sign in with Gmail',
+  checkReview: 'Check Review'
 }
 export default en

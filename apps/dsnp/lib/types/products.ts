@@ -88,3 +88,8 @@ export interface RetailItem {
     foodType?: string
   }
 }
+
+export interface IProductRootState {
+  product: RetailItem
+  encodedProduct: string
+}

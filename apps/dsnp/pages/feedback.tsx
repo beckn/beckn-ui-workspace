@@ -1,72 +1,67 @@
 import { Box, Text, Flex, Textarea } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
-import Button from '../components/button/Button'
-import StarRating from '../components/starRating/StarRating'
-import { useLanguage } from '../hooks/useLanguage'
+import Button from '@components/button/Button'
+import { fromBinary } from '@utils/common-utils'
+import StarRating from '@components/starRating/StarRating'
+import { useLanguage } from '@hooks/useLanguage'
 import { MdKeyboardArrowUp, MdKeyboardArrowDown } from 'react-icons/md'
+import { useSelector } from 'react-redux'
+import ImageSection from '@components/productDetails/ImageSection'
+import { IProductRootState, RetailItem } from '@lib/types/products'
+import { getLocalStorage } from '@utils/localStorage'
+import { toBinary } from '@utils/common-utils'
 
-const products = ['FORCLAZ - Men Trekking Water-Rep...', 'Another Product...', 'Yet Another Product...']
+const getReviewLink = (review: string, productURL: string, productName: string, productImage: string) => {
+  const myUrlWithParams = new URL(`${process.env.NEXT_PUBLIC_DSNP_GATEWAY_URL}/review`)
+
+  const queryParameters = {
+    href: productURL,
+    // href: "https://www.etsy.com/listing/1292521772/melting-clock-salvador-dali-the",
+    reference: {
+      hello: 'world'
+    },
+    attributeSetType: 'dsnp://1#OndcProofOfPurchase',
+    success_url: `${window.location.origin}/product?productName=${productName}&productImage=${productImage}&reviewSubmitted=true`,
+    error_url: `${window.location.origin}/product?productName=${productName}&productImage=${productImage}&reviewSubmitted=false`
+  }
+
+  const text = `⭐⭐⭐⭐⭐\n\n${review}`
+
+  myUrlWithParams.searchParams.append('href', queryParameters.href)
+  myUrlWithParams.searchParams.append('reference', JSON.stringify(queryParameters.reference))
+  myUrlWithParams.searchParams.append('attributeSetType', queryParameters.attributeSetType)
+  myUrlWithParams.searchParams.append('text', text)
+  myUrlWithParams.searchParams.append('success_url', queryParameters.success_url)
+  myUrlWithParams.searchParams.append('error_url', queryParameters.error_url)
+
+  return myUrlWithParams.href
+}
+
 const Feedback = () => {
   const { t } = useLanguage()
   const router = useRouter()
   const [ratingForStore, setRatingForStore] = useState(0)
-  const [selectedProduct, setSelectedProduct] = useState('')
-  const [isOpen, setIsOpen] = useState(false)
-  const [product, setProduct] = useState(products)
-  const toggleDropDown = () => {
-    setIsOpen(!isOpen)
-  }
+  const [review, setReview] = useState('')
 
-  const handleProductSelect = (userSelectProduct: string) => {
-    console.log(userSelectProduct)
-    setSelectedProduct(userSelectProduct)
-    setProduct([
-      userSelectProduct,
-      ...(() => {
-        return product.filter(item => item !== userSelectProduct)
-      })()
-    ])
-    setIsOpen(false)
-  }
+  const product = getLocalStorage('productDetails').product as RetailItem
+  const encodedProduct = getLocalStorage('productDetails').encodedProduct as string
+
+  const productURL = typeof window !== 'undefined' && new URL(`${window.location.origin}/product`)
+  productURL && productURL.searchParams.append('productDetails', encodedProduct)
+
+  if (!product) return <></>
 
   return (
     <>
       <Box pt={'12px'} pb={'15px'}>
-        <Text fontSize={'15px'} fontWeight={400}>
-          {t('selectProduct')}
-          <div
-            style={{
-              width: '332px',
-              height: isOpen ? 'auto' : '40px',
-              border: '1px solid #ccc',
-              overflow: 'hidden',
-              position: 'relative',
-              boxShadow: '0px 2px 4px -2px rgba(0, 0, 0, 0.10), 0px 4px 6px -1px rgba(0, 0, 0, 0.10)',
-              borderRadius: '8px',
-              marginTop: '10px'
-            }}
-          >
-            <button
-              style={{
-                position: 'absolute',
-                top: isOpen ? '7px' : '7px',
-                right: '7px',
-                cursor: 'pointer'
-              }}
-              onClick={toggleDropDown}
-            >
-              {isOpen ? <MdKeyboardArrowDown size={26} /> : <MdKeyboardArrowUp size={26} />}
-            </button>
-            <Flex style={{ padding: '9px', fontSize: '14px', fontWeight: 400 }} flexDir={'column'} gap={2}>
-              {product.map((product, index) => (
-                <Box key={index} onClick={() => handleProductSelect(product)}>
-                  {product}
-                </Box>
-              ))}
-            </Flex>
-          </div>
-        </Text>
+        <Text fontSize={'15px'}>{t('selectProduct')}</Text>
+        <Flex alignItems={'center'}>
+          <Box height={'80px'} width="100px" className="review_image" margin={'0 auto'} mb={'10px'}>
+            <ImageSection imgArray={product.descriptor.images} />
+          </Box>
+          <Text>{product.descriptor.name}</Text>
+        </Flex>
       </Box>
 
       <StarRating
@@ -82,6 +77,7 @@ const Feedback = () => {
           {t('addCommentsHere')}
         </Text>
         <Textarea
+          onChange={e => setReview(e.target.value)}
           fontSize={'12px'}
           fontWeight={400}
           height={'124px'}
@@ -99,7 +95,14 @@ const Feedback = () => {
           const user = localStorage.getItem('userPhone') as string
           localStorage.clear()
           localStorage.setItem('userPhone', user)
-          router.push(`/homePage`)
+          if (window)
+            window.location.href = getReviewLink(
+              review,
+              productURL.href,
+              product.descriptor.name,
+              product.descriptor.images[0]
+            )
+          // router.push(`/homePage`)
         }}
         isDisabled={false}
       />

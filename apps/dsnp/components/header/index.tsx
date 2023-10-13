@@ -66,6 +66,7 @@ const languageIconWhiteList = ['/mobileOtp']
 
 const getHeaderTitleForPage = (name: string, logo: string, pathName: string, locale: string | undefined) => {
   const values = locale === 'en' ? headerValues : headerValuesFrench
+
   switch (true) {
     case storeHeaderBlackList.includes(pathName):
       return <Text fontWeight={600}>{values[pathName]}</Text>
@@ -80,7 +81,7 @@ const getHeaderTitleForPage = (name: string, logo: string, pathName: string, loc
             whiteSpace={'nowrap'}
             overflow={'hidden'}
           >
-            {name}
+            {/* {name} */}
           </Text>
         </Box>
       )
@@ -113,7 +114,7 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
               <Image
                 w={'88%'}
                 onClick={() => {
-                  let user = localStorage.getItem('userPhone') as string
+                  const user = localStorage.getItem('userPhone') as string
                   localStorage.clear()
                   localStorage.setItem('userPhone', user)
                   router.push(`/homePage`)

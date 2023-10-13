@@ -1,24 +1,43 @@
-import Router from 'next/router'
+import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import ProductDetails from '../components/productDetails'
+import Confirmation from '../components/review/confirmation'
 import { RetailItem } from '../lib/types/products'
 import { fromBinary } from '../utilities/common-utils'
+import Head from 'next/head'
 
 const Product = () => {
   const [product, setProduct] = useState<RetailItem | null>(null)
+  const { productDetails, reviewSubmitted, productName, productImage } = useRouter().query
 
   useEffect(() => {
-    const { productDetails } = Router.query
     if (productDetails) {
       setProduct(JSON.parse(fromBinary(window.atob(productDetails as string))))
     }
-  }, [])
+  }, [productDetails])
 
-  if (!product) {
-    return <></>
-  }
+  if (product && !reviewSubmitted) {
+    return (
+      <div>
+        <Head>
+          <title>{product.descriptor.name}</title>
+          <meta property="og:title" content={product.descriptor.name} />
+          <meta property="og:description" content={product.descriptor.short_desc} />
+          <meta property="og:image" content={product.descriptor.images[0]} />
+        </Head>
 
-  return <ProductDetails product={product} />
+        <ProductDetails product={product} />
+      </div>
+    )
+  } else if (!product && reviewSubmitted && productName) {
+    return (
+      <Confirmation
+        reviewSubmitted={Boolean(reviewSubmitted)}
+        productImage={productImage as string}
+        productName={productName as string}
+      />
+    )
+  } else return <></>
 }
 
 export default Product
