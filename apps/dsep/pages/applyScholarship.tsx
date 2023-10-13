@@ -68,8 +68,8 @@ const ApplyScholarship = () => {
           email: email,
           mobileNumber: phone,
           name: name,
-          pinCode: zip_code,
-          address
+          pinCode: zip_code ? zip_code : '',
+          address: address ? address : ''
         })
       })
       .catch(e => console.error(e))

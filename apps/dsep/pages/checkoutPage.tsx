@@ -83,10 +83,10 @@ const CheckoutPage = () => {
         const profileData = profileResponse.data.attributes
         const { name, phone, address, zip_code } = profileData
         setFormData({
-          address,
+          address: address ? address : '',
           email,
           mobileNumber: phone,
-          pinCode: zip_code,
+          pinCode: zip_code ? zip_code : '',
           name
         })
       })

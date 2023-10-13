@@ -24,7 +24,7 @@ const ScholarshipAddDetails: React.FC<CreateProfileProps> = ({ formData, setForm
       [name]: value
     }))
 
-    const updatedFormData = {
+    const updatedFormData: any = {
       ...formData,
       [name]: value
     }
