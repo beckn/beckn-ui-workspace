@@ -406,6 +406,7 @@ const en: { [key: string]: string } = {
   selectProduct: 'Select Product',
   loginToYourAccount: 'Login to your account',
   signInWithGamail: 'Sign in with Gmail',
+  errorPassword: 'Invalid password',
   checkReview: 'Check Review'
 }
 export default en

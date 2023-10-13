@@ -8,7 +8,7 @@ const Home = () => {
   }
   return (
     <div>
-      <SignIn buttonClickHandler={() => googleSignIn()} />
+      <SignIn />
     </div>
   )
 }
