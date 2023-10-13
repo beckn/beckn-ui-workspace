@@ -71,7 +71,7 @@ const SignUp = () => {
   }
   return (
     <>
-      <Box className={Styles.main_container}>
+      <Box className={Styles.main_container} mt="40px">
         <Flex className={Styles.logo_container}>
           <Image className={Styles.logo_skillup} src={OpenCommerce} alt="OpenCommerce" pt="15px" />
         </Flex>
