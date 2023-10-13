@@ -16,7 +16,8 @@ const cartIconBlackList = [
   '/mobileOtp',
   '/cart',
   '/checkoutPage',
-  '/paymentMode'
+  '/paymentMode',
+  '/signUp'
 ]
 
 const backIconList = ['/', '/orderDetails']
@@ -32,7 +33,8 @@ const storeHeaderBlackList = [
   '/feedback',
   '/',
   '/mobileOtp',
-  '/paymentMode'
+  '/paymentMode',
+  '/signUp'
 ]
 const headerValues = {
   '/checkoutPage': 'Billing & Shipping',
@@ -42,7 +44,8 @@ const headerValues = {
   '/mobileOtp': 'Sign In',
   '/cart': 'Cart',
   '/paymentMode': 'Select Payment Method',
-  '/feedback': 'Review & Rate the Product'
+  '/feedback': 'Review & Rate the Product',
+  '/signUp': 'Sign Up'
 }
 
 const headerValuesFrench = {
