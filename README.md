@@ -6,13 +6,20 @@ Beckn-ui-workspace is a monorepo consisting of all Beckn possible frontend use-c
 
 ## Installation and Usage
 
-1. **Install Dependencies**: To get started, run the following command in the root of the repository to install all the required modules using Yarn:
+
+1. **Use specific node version**: First install nvm on your local machine and then run the below commad to ensure accurate node version. This will automatically switch the node version.
+
+   ```bash
+   nvm use
+   ```
+
+2. **Install Dependencies**: To get started, run the following command in the root of the repository to install all the required modules using Yarn:
 
    ```bash
    yarn
    ```
 
-2. **Running Individual Projects**: Each sub-project can be run individually by executing their specific commands. You can find these commands in the `package.json` file located in the root directory.
+3. **Running Individual Projects**: Each sub-project can be run individually by executing their specific commands. You can find these commands in the `package.json` file located in the root directory.
 
 ## Configurations
 

@@ -1,0 +1,43 @@
+.time_slot {
+  width: 90px;
+  border-radius: 6px;
+  border: 1px solid #979797;
+  padding: 8px;
+  text-align: center;
+  font-size: 15px;
+  font-family: Poppins;
+  color: black;
+}
+
+.selected {
+  width: 96px;
+  border: 1px solid gray;
+  border-radius: 12px;
+  background-color: rgba(var(--color-primary));
+}
+.select_date {
+  width: 60px;
+  height: 70px;
+
+  padding: 8px;
+  text-align: center;
+  gap: 8px;
+
+  font-size: 15px;
+  font-weight: 400;
+
+  border-radius: 12px;
+  border: 1px solid #bfbfbf;
+  background: #fff;
+}
+.isActive {
+  background-color: rgba(var(--color-primary));
+  color: white;
+}
+.date_container {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: row;
+  gap: 8px;
+  margin-top: 8px;
+}

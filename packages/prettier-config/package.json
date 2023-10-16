@@ -1,0 +1,13 @@
+{
+  "name": "@beckn-ui/prettier-config",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Custom prettier configuration for Beckn",
+  "license": "UNLICENSED",
+  "author": "Frontend Team",
+  "main": ".prettierrc.json",
+  "devDependencies": {
+    "lint-staged": "^14.0.1",
+    "prettier": "^3.0.3"
+  }
+}

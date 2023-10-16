@@ -1,0 +1,34 @@
+
+.input_group {
+  display: flex;
+  margin-top: 50px;
+}
+
+.input_box {
+  flex: 1;
+  border: none; 
+  padding-left: 14px;
+  padding-top: 18px;
+  padding-bottom: 18px;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  color: #7f898e;
+  font-size: 16px;
+  font-weight: 400;
+}
+.input_box:focus {
+  background-color: #fff;
+  outline: none;
+}
+
+.search_button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 18px 21px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}

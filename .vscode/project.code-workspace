@@ -1,0 +1,42 @@
+{
+  "folders": [
+    {
+      "name": "Root",
+      "path": "../"
+    },
+    {
+      "name": "Molecules",
+      "path": "../packages/molecules"
+    },
+    {
+      "name": "Becknified-components",
+      "path": "../packages/becknified-components"
+    },
+		{
+      "name": "Dhp",
+      "path": "../apps/dhp"
+    },
+    {
+      "name": "Osm",
+      "path": "../apps/osm"
+    },
+		{
+      "name": "Dsep",
+      "path": "../apps/dsep"
+    },
+    {
+      "name": "Dsnp",
+      "path": "../apps/dsnp"
+    },
+    {
+      "name": "Playground",
+      "path": "../apps/playground"
+    },
+  ],
+	"settings": {
+    "files.exclude": {
+      "node_modules/": true,
+      "packages/": true
+    },
+		}
+}
