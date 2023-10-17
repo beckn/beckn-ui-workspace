@@ -12,13 +12,18 @@ import { IProductRootState, RetailItem } from '@lib/types/products'
 import { getLocalStorage } from '@utils/localStorage'
 import { toBinary } from '@utils/common-utils'
 
-const getReviewLink = (review: string, productURL: string, productName: string, productImage: string) => {
+const getReviewLink = (
+  review: string,
+  productURL: string,
+  productName: string,
+  productImage: string,
+  productDesc: string
+) => {
   const myUrlWithParams = new URL(`${process.env.NEXT_PUBLIC_DSNP_GATEWAY_URL}/review`)
 
   const queryParameters = {
-    // href: productURL,
-    href: `${window.location.origin}/homePage`,
-    // href: "https://www.etsy.com/listing/1292521772/melting-clock-salvador-dali-the",
+    href: `${window.location.origin}/product?productName=${productName}&productImage=${productImage}&productDesc=${productDesc}&becknified=true`,
+    // href: `https://dsnp-stage.becknprotocol.io/product?productName=${productName}&productImage=${productImage}&productDesc=${productDesc}&becknified=true`,
     reference: {
       hello: 'world'
     },
@@ -101,7 +106,8 @@ const Feedback = () => {
               review,
               productURL.href,
               product.descriptor.name,
-              product.descriptor.images[0]
+              product.descriptor.images[0],
+              product.descriptor.long_desc
             )
           // router.push(`/homePage`)
         }}

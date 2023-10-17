@@ -5,10 +5,11 @@ import Confirmation from '../components/review/confirmation'
 import { RetailItem } from '../lib/types/products'
 import { fromBinary } from '../utilities/common-utils'
 import Head from 'next/head'
+import ProductPreview from '@components/productPreview'
 
 const Product = () => {
   const [product, setProduct] = useState<RetailItem | null>(null)
-  const { productDetails, reviewSubmitted, productName, productImage } = useRouter().query
+  const { productDetails, reviewSubmitted, productName, productImage, productDesc } = useRouter().query
 
   useEffect(() => {
     if (productDetails) {
@@ -37,7 +38,15 @@ const Product = () => {
         productName={productName as string}
       />
     )
-  } else return <></>
+  } else if (productDesc)
+    return (
+      <ProductPreview
+        productImage={productImage as string}
+        productName={productName as string}
+        productDesc={productDesc as string}
+      />
+    )
+  else return <></>
 }
 
 export default Product
