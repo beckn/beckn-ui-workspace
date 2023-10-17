@@ -31,7 +31,7 @@ const Search = () => {
   }
 
   useEffect(() => {
-    if (!!searchKeyword) {
+    if (searchKeyword) {
       localStorage.removeItem('searchItems')
       localStorage.setItem('optionTags', JSON.stringify({ name: searchKeyword }))
       window.dispatchEvent(new Event('storage-optiontags'))
@@ -58,7 +58,7 @@ const Search = () => {
     message: {
       criteria: {
         dropLocation: '12.9715987,77.5945627',
-        categoryName: 'RetailEnglish',
+        categoryName: 'Retail',
         searchString: searchKeyword
       }
     }
