@@ -24,6 +24,7 @@
     "build:pg": "yarn workspace @beckn-ui/osm build",
     "dev:dsnp": "yarn workspace @beckn-ui/dsnp dev",
     "build:dsnp": "yarn workspace @beckn-ui/dsnp build",
+    "start:dsnp": "yarn workspace @beckn-ui/dsnp start",
     "test": "jest",
     "lint:fix": "eslint --fix",
     "lint": "eslint",

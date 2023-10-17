@@ -84,7 +84,7 @@ const getHeaderTitleForPage = (name: string, logo: string, pathName: string, loc
             whiteSpace={'nowrap'}
             overflow={'hidden'}
           >
-            {/* {name} */}
+            {name}
           </Text>
         </Box>
       )

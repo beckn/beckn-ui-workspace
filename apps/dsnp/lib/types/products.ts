@@ -89,6 +89,12 @@ export interface RetailItem {
   }
 }
 
+export interface SanitizedProduct {
+  productName: string
+  productImage: string
+  productDescription: string
+}
+
 export interface IProductRootState {
   product: RetailItem
   encodedProduct: string

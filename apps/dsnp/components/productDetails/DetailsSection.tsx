@@ -2,21 +2,26 @@ import { Box, Flex, Image, Text } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import StarRatingComponent from 'react-star-rating-component'
 import { useLanguage } from '../../hooks/useLanguage'
-import { RetailItem } from '../../lib/types/products'
+import { RetailItem, SanitizedProduct } from '../../lib/types/products'
 import CallToAction from './CallToAction'
 import greenVegIcon from '../../public/images/greenVeg.svg'
 import redNonVegIcon from '../../public/images/redNonVeg.svg'
 
 interface Props {
-  product: RetailItem
+  product?: RetailItem
+  sanitizedProduct?: SanitizedProduct
+  isPreview: boolean
 }
-const DetailsSection: React.FC<Props> = ({ product }) => {
+const DetailsSection: React.FC<Props> = ({ product, sanitizedProduct, isPreview = false }) => {
   const { t } = useLanguage()
   const [showComponent, setShowComponent] = useState(false)
 
   useEffect(() => {
     localStorage.removeItem('optionTags')
-    localStorage.setItem('optionTags', JSON.stringify({ name: product.descriptor.name }))
+    localStorage.setItem(
+      'optionTags',
+      JSON.stringify({ name: !isPreview ? product.descriptor.name : sanitizedProduct?.productName })
+    )
     window.dispatchEvent(new Event('storage-optiontags'))
   }, [product])
 
@@ -42,7 +47,7 @@ const DetailsSection: React.FC<Props> = ({ product }) => {
             color: '#000'
           }}
         >
-          {product.descriptor.name}
+          {!isPreview ? product.descriptor.name : sanitizedProduct?.productName}
         </h2>
       </Flex>
       <hr className="mt-1 hidden md:block" />
@@ -50,7 +55,8 @@ const DetailsSection: React.FC<Props> = ({ product }) => {
         <div className="flex-grow ">
           <div
             dangerouslySetInnerHTML={{
-              __html: product.descriptor.long_desc
+              __html: !isPreview ? product.descriptor.long_desc : sanitizedProduct.productDescription
+              // __html: product.descriptor.long_desc
             }}
             className="mt-4 product_description_text border-2 border_radius_all hideScroll"
             style={{
@@ -60,7 +66,7 @@ const DetailsSection: React.FC<Props> = ({ product }) => {
             }}
           ></div>
         </div>
-        <CallToAction product={product} />
+        {!isPreview && <CallToAction product={product} />}
       </div>
     </Box>
   )
