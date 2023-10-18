@@ -260,7 +260,7 @@ const en: { [key: string]: string } = {
   changeText: 'Change',
   paymentText: 'Payment',
   orderDetailsCheckboxText: 'Same as Shipping Details',
-  subtotalText: 'Sub-Total',
+  subtotalText: 'Subtotal',
   deliveryChargesText: 'Delivery Charges',
   totalText: 'Total',
   orderpolicyText: 'Order policy',

@@ -39,21 +39,24 @@ const OrderSummaryBox: React.FC<OrderSummaryBoxPropsModel> = props => {
                 <ProductPrice
                   price={totalAmount}
                   customStyleObject={{
-                    fontWeight: 400,
                     color: 'black'
                   }}
                 />
               </div>
-              {scholarshipId ? (
+              {scholarshipId.length > 0 ? (
                 <div className=" my-1 flex flex-wrap items-baseline justify-between flex-grow md:my-4">
                   <p className="text-md sm:text-base md:text-palette-base tracking-wide">{t.scholaarshipApplied}</p>
-                  <p>00</p>
+                  <ProductPrice price={-totalAmount} customStyleObject={{ color: '#5EC401' }} />
                 </div>
               ) : null}
               <Divider my={'10px'} />
               <div className=" my-1 flex flex-wrap items-baseline justify-between flex-grow md:my-4">
                 <p className="text-md sm:text-base md:text-palette-base tracking-wide font-extrabold">{t.totalText}</p>
-                <ProductPrice isLargeSize price={totalAmount} />
+                {scholarshipId.length > 0 ? (
+                  <ProductPrice isLargeSize price={0} />
+                ) : (
+                  <ProductPrice isLargeSize price={totalAmount} />
+                )}
               </div>
             </div>
           </div>
