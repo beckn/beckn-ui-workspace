@@ -1,0 +1,6 @@
+.mainContainer {
+  background: url('/images/SetLocation.svg');
+  height: calc(100vh - 25px);
+  background-repeat: no-repeat;
+  background-size: cover;
+}

@@ -3,16 +3,28 @@
   "packageManager": "yarn@3.6.3",
   "private": true,
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "apps/*"
   ],
+  "prettier": "@beckn-ui/prettier-config",
   "scripts": {
     "postinstall": "yarn prepare",
-    "prepare": "npx husky install && yarn workspace @beckn-ui/common prepare",
+    "prepare": "npx husky install",
     "dev:osm": "yarn workspace @beckn-ui/osm dev",
     "build:osm": "yarn workspace @beckn-ui/osm build",
     "export:osm": "yarn workspace @beckn-ui/osm build && yarn workspace @beckn-ui/osm export",
     "start:osm": "yarn workspace @beckn-ui/osm start",
     "build:common": "yarn workspace @beckn-ui/common prepare",
+    "dev:dsep": "yarn workspace @beckn-ui/dsep dev",
+    "build:dsep": "yarn workspace @beckn-ui/dsep build",
+    "dev:dhp": "yarn workspace @beckn-ui/dhp dev",
+    "build:dhp": "yarn workspace @beckn-ui/dhp build",
+    "export:dsep": "yarn workspace @beckn-ui/dsep build && yarn workspace @beckn-ui/dsep export",
+    "dev:pg": "yarn workspace @beckn-ui/osm dev",
+    "build:pg": "yarn workspace @beckn-ui/osm build",
+    "dev:dsnp": "yarn workspace @beckn-ui/dsnp dev",
+    "build:dsnp": "yarn workspace @beckn-ui/dsnp build",
+    "start:dsnp": "yarn workspace @beckn-ui/dsnp start",
     "test": "jest",
     "lint:fix": "eslint --fix",
     "lint": "eslint",
@@ -27,6 +39,7 @@
     "eslint-config-next": "latest"
   },
   "devDependencies": {
+    "@beckn-ui/prettier-config": "workspace:^",
     "@commitlint/cli": "^17.7.1",
     "@commitlint/config-conventional": "^17.7.0",
     "@testing-library/jest-dom": "^6.1.3",

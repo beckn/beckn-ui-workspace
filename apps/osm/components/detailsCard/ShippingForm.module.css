@@ -1,0 +1,70 @@
+.container {
+  margin-top: 10px;
+}
+.did_floating_label_content {
+  position: relative;
+  margin-bottom: 35px;
+}
+.did_floating_label {
+  font-size: 14px;
+  position: absolute;
+  pointer-events: none;
+  top: 11px;
+  background: #fff;
+  transition: 0.2s ease all;
+  -moz-transition: 0.2s ease all;
+  -webkit-transition: 0.2s ease all;
+}
+.did_floating_input {
+  font-size: 15px;
+  display: block;
+  padding: 15px 0 0 0;
+  width: 100%;
+  height: 36px;
+  background: #fff;
+  border-bottom: 1px solid #43464e;
+  box-sizing: border-box;
+}
+.otp_number {
+  left: 0;
+}
+.did_floating_input:focus {
+  outline: none;
+  border-color: #a71b4a;
+}
+.did_floating_input.otp_number_input:focus {
+  outline: none;
+  border-color: #000;
+}
+.did_floating_input:focus ~ .did_floating_label {
+  top: -8px;
+  font-size: 14px;
+  color: #a71b4a;
+}
+.did_floating_input:focus ~ .did_floating_label.otp_number {
+  top: -8px;
+  font-size: 14px;
+  color: #000;
+}
+.did_floating_input:focus ~ .did_floating_label.otp_number {
+  top: -12px;
+  font-size: 14px;
+  color: #000;
+}
+
+.did_floating_input:not(:placeholder-shown) ~ .did_floating_label {
+  top: -8px;
+  font-size: 14px;
+}
+.did_floating_input:not(:placeholder-shown) ~ .did_floating_label.otp_number {
+  top: -12px;
+  font-size: 14px;
+}
+.error {
+  font-size: 10px;
+  color: #a71b4a;
+}
+
+.did_floating_label_content:has(.error) {
+  margin-bottom: 25px;
+}
