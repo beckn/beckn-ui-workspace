@@ -9,8 +9,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (req.method === 'POST') {
     try {
       // Create a new token document
-      const tokenList = await Token.find()
-      console.log('Dank', tokenList)
       const newToken = await Token.create({ token: uuidv4() })
       res.status(201).json(newToken)
     } catch (error) {

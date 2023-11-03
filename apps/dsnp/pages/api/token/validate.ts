@@ -14,7 +14,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         await Token.deleteOne({ token: req.body.token })
         res.status(200).json({ validate: true })
       } else {
-        res.status(201).json({ validate: false })
+        res.status(400).json({ validate: false })
       }
     } catch (error) {
       res.status(500).json({ error: 'Error validating token' })
