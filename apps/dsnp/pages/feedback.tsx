@@ -57,7 +57,7 @@ const Feedback = () => {
 
   const getReviewToken = async () => {
     try {
-      const response = await axios.request({ url: `${window.location.origin}/api/token`, method: 'POST' })
+      const response = await axios.request({ url: `https://dsnp-stage.becknprotocol.io/api/token`, method: 'POST' })
       return response.data.token
     } catch (err) {
       console.log('Error', err)
