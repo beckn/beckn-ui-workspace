@@ -98,6 +98,8 @@ export const signUpValidateForm = (formData: SignUpPropsModel): FormErrors => {
     errors.name = 'Name is required'
   } else if (!/^[A-Za-z\s]*$/.test(formData.name)) {
     errors.name = 'Name can only contain letters and spaces'
+  } else if (formData.name.length < 3) {
+    errors.name = 'Name must contain at least 3 characters'
   }
 
   if (formData.email.trim() === '') {
