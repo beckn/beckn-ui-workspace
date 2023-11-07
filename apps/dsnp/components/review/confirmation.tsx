@@ -25,7 +25,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({ reviewSubmitted, productIma
   }
 
   return (
-    <>
+    <Box className="hideScroll" maxH={'calc(100vh - 100px)'} overflowY="scroll">
       <Card mb={'40px'}>
         <CardBody textAlign={'center'}>
           {message === 'Success' ? (
@@ -36,7 +36,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({ reviewSubmitted, productIma
           <Text fontSize={'18px'} fontWeight="600">
             {message === 'Success' ? 'Review Submitted!' : 'Failed!'}
           </Text>
-          <Box height={'80px'} width="100px" className="review_image" margin={'0 auto'} mb={'10px'}>
+          <Box width="100px" className="review_image" margin={'0 auto'} mt="10px">
             <ImageSection imgArray={[productImage]} />
           </Box>
           <Text>{productName}</Text>
@@ -56,7 +56,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({ reviewSubmitted, productIma
         isDisabled={false}
         handleOnClick={handleCheckReview}
       />
-    </>
+    </Box>
   )
 }
 
