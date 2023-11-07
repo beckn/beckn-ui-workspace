@@ -36,7 +36,11 @@
     ]
   },
   "dependencies": {
-    "eslint-config-next": "latest"
+    "@types/mongoose": "^5.11.97",
+    "eslint-config-next": "latest",
+    "mongodb": "^6.2.0",
+    "mongoose": "^8.0.0",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@beckn-ui/prettier-config": "workspace:^",
