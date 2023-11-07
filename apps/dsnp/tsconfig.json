@@ -12,7 +12,8 @@
       "@utils/*": ["./utilities/*"],
       "@styles/*": ["./styles/*"],
       "@public/*": ["./public/*"],
-      "@locales/*": ["./locales/*"]
+      "@locales/*": ["./locales/*"],
+      "@modals/*": ["./modals/*"]
     }
   }
 }

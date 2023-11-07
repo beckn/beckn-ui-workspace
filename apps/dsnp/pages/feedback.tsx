@@ -6,6 +6,7 @@ import { fromBinary } from '@utils/common-utils'
 import StarRating from '@components/starRating/StarRating'
 import { useLanguage } from '@hooks/useLanguage'
 import { MdKeyboardArrowUp, MdKeyboardArrowDown } from 'react-icons/md'
+import axios from 'axios'
 import { useSelector } from 'react-redux'
 import ImageSection from '@components/productDetails/ImageSection'
 import { IProductRootState, RetailItem } from '@lib/types/products'
@@ -17,7 +18,8 @@ const getReviewLink = (
   productURL: string,
   productName: string,
   productImage: string,
-  productDesc: string
+  productDesc: string,
+  token: string
 ) => {
   const myUrlWithParams = new URL(`${process.env.NEXT_PUBLIC_DSNP_GATEWAY_URL}/review`)
 
@@ -25,7 +27,7 @@ const getReviewLink = (
     href: `${window.location.origin}/product?productName=${productName}&productImage=${productImage}&productDesc=${productDesc}&becknified=true`,
     // href: `https://dsnp-stage.becknprotocol.io/product?productName=${productName}&productImage=${productImage}&productDesc=${productDesc}&becknified=true`,
     reference: {
-      hello: 'world'
+      token
     },
     attributeSetType: 'dsnp://1#OndcProofOfPurchase',
     success_url: `${window.location.origin}/product?productName=${productName}&productImage=${productImage}&reviewSubmitted=true`,
@@ -52,6 +54,15 @@ const Feedback = () => {
 
   const product = getLocalStorage('productDetails').product as RetailItem
   const encodedProduct = getLocalStorage('productDetails').encodedProduct as string
+
+  const getReviewToken = async () => {
+    try {
+      const response = await axios.request({ url: `https://dsnp-stage.becknprotocol.io/api/token`, method: 'POST' })
+      return response.data.token
+    } catch (err) {
+      console.log('Error', err)
+    }
+  }
 
   const productURL = typeof window !== 'undefined' && new URL(`${window.location.origin}/product`)
   productURL && productURL.searchParams.append('productDetails', encodedProduct)
@@ -101,15 +112,17 @@ const Feedback = () => {
           const user = localStorage.getItem('userPhone') as string
           localStorage.clear()
           localStorage.setItem('userPhone', user)
-          if (window)
-            window.location.href = getReviewLink(
-              review,
-              productURL.href,
-              product.descriptor.name,
-              product.descriptor.images[0],
-              product.descriptor.long_desc
-            )
-          // router.push(`/homePage`)
+          getReviewToken().then(token => {
+            if (window)
+              window.location.href = getReviewLink(
+                review,
+                productURL.href,
+                product.descriptor.name,
+                product.descriptor.images[0],
+                product.descriptor.long_desc,
+                token
+              )
+          })
         }}
         isDisabled={false}
       />

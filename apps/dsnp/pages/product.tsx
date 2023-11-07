@@ -33,7 +33,7 @@ const Product = () => {
   } else if (!product && reviewSubmitted && productName) {
     return (
       <Confirmation
-        reviewSubmitted={Boolean(reviewSubmitted)}
+        reviewSubmitted={reviewSubmitted === 'true' ? true : false}
         productImage={productImage as string}
         productName={productName as string}
       />
