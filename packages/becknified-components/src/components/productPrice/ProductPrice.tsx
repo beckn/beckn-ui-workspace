@@ -1,6 +1,7 @@
 import { Box } from '@chakra-ui/react'
 import React from 'react'
 import { ProductPriceProps } from './ProductPrice.types'
+import Styles from './product-price.module.css'
 
 const ProductPrice: React.FC<ProductPriceProps> = props => {
   const {
@@ -15,12 +16,8 @@ const ProductPrice: React.FC<ProductPriceProps> = props => {
 
   return (
     <>
-      <Box
-        color={color}
-        className={`flex items-center md:text-lg font-semibold no-underline ${className}_product_Price`}
-        flexDirection={'row'}
-      >
-        <span className="mr-1 rtl:block">{currencySymbol}</span>
+      <Box color={color} className={`${Styles.product_price_container} ${className}_product_Price`}>
+        <span className={Styles.currency_symbol_span}>{currencySymbol}</span>
         <span>{price.toFixed(toFixed)}</span>
       </Box>
     </>

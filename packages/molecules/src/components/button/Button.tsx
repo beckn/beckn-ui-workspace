@@ -1,6 +1,6 @@
 //types
 import React from 'react'
-import { ButtonProps } from './Button.types'
+import { ButtonProps } from './button.types'
 
 const Button: React.FC<ButtonProps> = ({ handleClick, className, children }) => {
   return (

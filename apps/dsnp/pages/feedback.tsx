@@ -51,6 +51,7 @@ const Feedback = () => {
   const router = useRouter()
   const [ratingForStore, setRatingForStore] = useState(0)
   const [review, setReview] = useState('')
+  const [reviewValidationMessage, setReviewValidationMessage] = useState('')
 
   const product = getLocalStorage('productDetails').product as RetailItem
   const encodedProduct = getLocalStorage('productDetails').encodedProduct as string
@@ -63,6 +64,15 @@ const Feedback = () => {
       console.log('Error', err)
     }
   }
+  const handleReviewChange = (e: any) => {
+    const text = e.target.value
+    if (text.length <= 120) {
+      setReview(text)
+      setReviewValidationMessage('')
+    } else {
+      setReviewValidationMessage('Review should be within 120 letters.')
+    }
+  }
 
   const productURL = typeof window !== 'undefined' && new URL(`${window.location.origin}/product`)
   productURL && productURL.searchParams.append('productDetails', encodedProduct)
@@ -70,11 +80,11 @@ const Feedback = () => {
   if (!product) return <></>
 
   return (
-    <>
+    <Box className="hideScroll" maxH={'calc(100vh - 100px)'} overflowY="scroll">
       <Box pt={'12px'} pb={'15px'}>
         <Text fontSize={'15px'}>{t('selectProduct')}</Text>
         <Flex alignItems={'center'}>
-          <Box height={'80px'} width="100px" className="review_image" margin={'0 auto'} mb={'10px'}>
+          <Box width="100px" className="review_image" mr={'10px'} pt="20px">
             <ImageSection imgArray={product.descriptor.images} />
           </Box>
           <Text>{product.descriptor.name}</Text>
@@ -94,15 +104,19 @@ const Feedback = () => {
           {t('addCommentsHere')}
         </Text>
         <Textarea
-          onChange={e => setReview(e.target.value)}
-          fontSize={'12px'}
+          onChange={handleReviewChange}
+          value={review}
+          fontSize={'14px'}
           fontWeight={400}
           height={'124px'}
           resize={'none'}
-          mb={'20px'}
+          mb={'10px'}
           placeholder={t('writeExperience')}
           boxShadow={'0px 4px 6px -1px rgba(0, 0, 0, 0.1), 0px 2px 4px -2px rgba(0, 0, 0, 0.1)'}
         />
+        <Text fontSize="12px" color="#F37A20">
+          {reviewValidationMessage}
+        </Text>
       </Box>
       <Button
         buttonText={t('submitReview')}
@@ -138,7 +152,7 @@ const Feedback = () => {
         }}
         isDisabled={false}
       />
-    </>
+    </Box>
   )
 }
 

@@ -1,0 +1,40 @@
+.currency_symbol {
+  margin-right: 0.25rem;
+  @media (direction: rtl) {
+    display: block;
+  }
+}
+
+.prouct_price_layout_container {
+  display: flex;
+  justify-content: flex-end;
+  align-self: flex-end;
+  text-align: left;
+
+  @media (direction: ltr) {
+    justify-content: flex-start;
+    align-self: flex-start;
+  }
+}
+
+.large_product_price_container {
+  display: flex;
+  align-items: center;
+
+  font-weight: 600;
+  text-decoration: none;
+  @media (min-width: 768px) {
+    font-size: 1.75rem;
+  }
+}
+
+.small_product_price_container {
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  text-decoration: none;
+
+  @media (min-width: 768px) {
+    font-size: 1.25rem;
+  }
+}

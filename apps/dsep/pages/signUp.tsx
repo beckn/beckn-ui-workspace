@@ -2,10 +2,10 @@ import React, { useState } from 'react'
 import { useLanguage } from '../hooks/useLanguage'
 import HomeImg from '../public/images/HomePageLogo.svg'
 import SkillUp from '../public/images/SkillUpLogo.svg'
-import { FormErrors, signInValidateForm, signUpValidateForm } from '../utilities/detailsForm-utils'
+import { FormErrors, signUpValidateForm } from '../utilities/detailsForm-utils'
 import style from '../components/detailsCard/ShippingForm.module.css'
 import Styles from '../components/signIn/SignIn.module.css'
-import { Box, Flex, Image } from '@chakra-ui/react'
+import { Box, Flex, Image, useToast } from '@chakra-ui/react'
 
 import Button from '../components/button/Button'
 import Router from 'next/router'
@@ -13,6 +13,7 @@ import { SignUpPropsModel } from '../components/signIn/Signin.types'
 import Cookies from 'js-cookie'
 const SignUp = () => {
   const { t } = useLanguage()
+  const toast = useToast()
   const [formData, setFormData] = useState<SignUpPropsModel>({ name: '', email: '', password: '' })
   const [formErrors, setFormErrors] = useState<FormErrors>({ name: '', email: '', password: '' })
   const [isFormFilled, setIsFormFilled] = useState(false)
@@ -66,6 +67,14 @@ const SignUp = () => {
         Cookies.set('authToken', token)
         Router.push('/homePage')
       } else {
+        const errorData = await response.json()
+        toast({
+          title: 'Error!.',
+          description: errorData.error.message,
+          status: 'error',
+          duration: 3000,
+          isClosable: true
+        })
         console.error('Registration failed')
       }
     } catch (error) {

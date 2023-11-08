@@ -1,6 +1,6 @@
 import React from 'react'
-import { Spinner, Text } from '@chakra-ui/react'
-import { LoaderPropsModel } from './Loader.types'
+import { Spinner, Text, Box } from '@chakra-ui/react'
+import { LoaderPropsModel } from './loader.types'
 
 const Loader: React.ForwardRefRenderFunction<HTMLDivElement, LoaderPropsModel> = (props, ref) => {
   const {
@@ -18,10 +18,15 @@ const Loader: React.ForwardRefRenderFunction<HTMLDivElement, LoaderPropsModel> =
   } = props
 
   return (
-    <div
+    <Box
       style={restProps.style}
       ref={ref}
-      className={`flex flex-col justify-center items-center h-[60vh] ${className}_loader`}
+      display="flex"
+      flexDirection={'column'}
+      justifyContent={'center'}
+      alignItems={'center'}
+      height={'60vh'}
+      className={`${className}_loader`}
     >
       <Spinner
         className={`${className}_spinner`}
@@ -47,7 +52,7 @@ const Loader: React.ForwardRefRenderFunction<HTMLDivElement, LoaderPropsModel> =
         </Text>
       )}
       {children}
-    </div>
+    </Box>
   )
 }
 

@@ -1,5 +1,7 @@
 import { Box } from '@chakra-ui/react'
+import classNames from 'classnames'
 import React from 'react'
+import Styles from './product-price.module.css'
 
 interface Props {
   price: number
@@ -10,23 +12,25 @@ interface Props {
   t: any
 }
 const ProductPrice: React.FC<Props> = ({ price, isLargeSize = false, isInSlider, t, locale }) => {
-  //style base on component position
-  const textMainPriceSize = isLargeSize ? ' md:text-3xl' : ' md:text-lg'
-  const textDiscountPriceSize = isLargeSize ? ' md:text-xl' : ' md:text-md'
   const justifyContent = isInSlider && locale === 'fa' ? 'flex-start' : ''
   const flexDirection = 'row'
 
+  const prouctPriceContainerClassNames = classNames({
+    product_price_container: true,
+    large_product_price_container: isLargeSize,
+    small_product_price_container: !isLargeSize
+  })
+
   return (
     <div>
-      <div className={`flex rtl:justify-end rtl:self-end ltr:self-start text-left `} style={{ justifyContent }}>
+      <div className={Styles.prouct_price_layout_container} style={{ justifyContent }}>
         <div>
-          {/* ☝slider cards (.slick-slide=>Slider component) are float and because of that, they don't accept height so, for making cards the same height, I have to do this hack*/}
           <Box
             color={'rgba(var(--color-primary))'}
-            className={`flex items-center ${textMainPriceSize} font-semibold no-underline`}
+            className={Styles[`${prouctPriceContainerClassNames}`]}
             style={{ flexDirection }}
           >
-            <span className="mr-1 rtl:block">{t.currencySymbol}</span>
+            <span className={Styles.currency_symbol}>{t.currencySymbol}</span>
             <span>{price.toFixed(2)}</span>
           </Box>
         </div>
