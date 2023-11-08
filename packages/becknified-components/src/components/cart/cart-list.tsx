@@ -1,6 +1,7 @@
 import React from 'react'
 import { CartRetailItem } from './cart.types'
 import CartItem from './cart-item'
+import Styles from './cart-list.module.css'
 
 export interface CartListPropsModel {
   setIsLoadingForCartCountChange: React.Dispatch<React.SetStateAction<boolean>>
@@ -23,7 +24,7 @@ const CartList: React.FC<CartListPropsModel> = ({
 }) => {
   return (
     <div>
-      <div className="w-full xl:max-w-[2100px] mx-auto">
+      <div className={Styles.cart_list_container}>
         {cartItems.length !== 0
           ? cartItems.map((cartItem: CartRetailItem) => {
               return (

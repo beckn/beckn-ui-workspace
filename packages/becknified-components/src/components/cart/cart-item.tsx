@@ -1,8 +1,9 @@
-import { Image } from '@chakra-ui/react'
+import { Image, Box } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import { HiMinusSm, HiOutlinePlusSm, HiOutlineTrash } from 'react-icons/hi'
-import { CartRetailItem } from './cart.types'
+import { CartRetailItem, RetailItem } from './cart.types'
 import ProductPrice from './product-price'
+import Styles from './cart-item.module.css'
 
 const totalAmount = 1234
 
@@ -52,28 +53,23 @@ const CartItem: React.FC<Props> = ({
   }
 
   return (
-    <div className="flex items-center flex-wrap sm:my-4 sm:py-4 px-2 border-b-2 mb-4">
-      <div style={{ width: '100%' }} className="lg:w-1/2 sm:min-w-[290px]">
-        <a className="flex flex-wrap sm:flex-nowrap justify-center items-center flex-grow">
-          <div style={{ width: '80px', height: '80px', marginBottom: '5px' }}>
+    <div className={Styles.cart_item_layout_container}>
+      <div className={Styles.prouct_details_container}>
+        <a className={Styles.product_details}>
+          <div className={Styles.product_image_container}>
             <Image src={product.descriptor.images[0]} alt={product.descriptor.name} className="object-contain" />
           </div>
-          <div
-            className="flex-grow text-sm font-semibold mb-2 sm:mb-0 mx-2 w-full text-center pt-1"
-            style={{ direction: 'ltr', fontSize: '17px' }}
-          >
-            {product.descriptor.name}
-          </div>
+          <div className={Styles.product_name}>{product.descriptor.name}</div>
         </a>
       </div>
-      <div className="flex flex-wrap flex-grow md:items-center mb-4 sm:mb-0">
-        <div className="flex-grow my-2 sm:my-0">
-          <div className="flex items-center justify-start lg:justify-center cursor-pointer">
-            <div className="p-2" onClick={() => increment(product)}>
-              <HiOutlinePlusSm style={{ fontSize: '1rem' }} />
+      <div className={Styles.product_count_price_container}>
+        <div className={Styles.product_counter_layout_container}>
+          <div className={Styles.product_counter_container}>
+            <div className={Styles.plus_icon_container} onClick={() => increment(product)}>
+              <HiOutlinePlusSm className={Styles.plus_icon} />
             </div>
             <input
-              className="inline-block w-[65px] rtl:pr-7 ltr:pl-7 py-2 mx-1 border-[1px] border-gray-400 text-center border_radius_all"
+              className={Styles.product_counter_input}
               type="number"
               min={1}
               max={10}
@@ -81,17 +77,17 @@ const CartItem: React.FC<Props> = ({
               onChange={onInputNumberChangeHandler}
             />
             {counter === 1 ? (
-              <div onClick={() => decrement(product.id)} className="p-1">
-                <HiOutlineTrash style={{ fontSize: '1.3rem', color: 'red' }} />
+              <div className={Styles.delete_icon_container} onClick={() => decrement(product.id)}>
+                <HiOutlineTrash className={Styles.delete_icon} />
               </div>
             ) : (
-              <div onClick={() => decrement(product.id)} className="p-1">
-                <HiMinusSm style={{ fontSize: '1rem' }} />
+              <div onClick={() => decrement(product.id)} className={Styles.minus_icon_container}>
+                <HiMinusSm className={Styles.minus_icon} />
               </div>
             )}
           </div>
         </div>
-        <div className="flex flex-col flex-grow font-normal rtl:mr-1 lrt:ml-1" style={{ fontSize: '15px' }}>
+        <div className={Styles.total_amount_container}>
           <p>{totalAmount}</p>
           <ProductPrice t={t} locale={locale} price={parseFloat(product.price.value) * counter!} />
         </div>

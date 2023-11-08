@@ -3,6 +3,7 @@ import { Box, Flex, Text, Image } from '@chakra-ui/react'
 import StarIcon from '../../../public/images/Star.svg'
 import { ProductCardProps } from './ProductCard.types'
 import ProductPrice from '../productPrice'
+import Styles from './prouct-card.module.css'
 
 const ProductCard: React.FC<ProductCardProps> = props => {
   const { product, productInfoDataSource, CustomInfoComponent, productClickHandler, className = '' } = props
@@ -16,30 +17,21 @@ const ProductCard: React.FC<ProductCardProps> = props => {
           onClick={productClickHandler}
           minH={'168px'}
           maxH={'100%'}
-          className={`${className}_product_card col-span-6 sm:col-span-3 md:col-span-4 lg:col-span-3 2xl:col-span-2 shadow-xl my-1 md:my-4 ltr:mr-2 rtl:ml-1 md:mx-6  bg-[#fff] rounded-xl flex relative`}
+          className={`${Styles.product_card_layout_container} ${className}_product_card `}
         >
-          <div className="flex md:items-center md:flex-col relative w-full ">
-            <Box
-              w={'125px'}
-              className=" md:w-full relative bg-slate-400/30  md:px-6  rounded-bl-xl rounded-tl-xl md:rounded-tr-xl md:rounded-bl-none rtl:order-2 rtl:md:order-none flex flex-col justify-between items-center"
-            >
-              <div className="flex items-center h-full  product-img-span">
+          <div className={Styles.product_card_container}>
+            <Box w={'125px'} className={Styles.product_img_lay_cont}>
+              <div className={Styles.product_img_cont}>
                 <Image
                   src={product.descriptor.images[0]}
                   width={'110px'}
                   height={'133px'}
                   alt={product.descriptor.name}
-                  className=" drop-shadow-xl object-contain hover:scale-110 transition-transform duration-300 ease-in-out "
+                  className={Styles.product_img}
                 />
               </div>
             </Box>
-            <Box
-              p={'15px'}
-              pt={'11px'}
-              w={'63%'}
-              position={'relative'}
-              className="flex flex-col md:w-full md:px-3  md:py-4"
-            >
+            <Box p={'15px'} pt={'11px'} w={'63%'} position={'relative'} className={Styles.product_name_container}>
               <Flex justifyContent={'space-between'} alignItems={'flex-start'} w={'100%'}>
                 <Text
                   w={'80%'}

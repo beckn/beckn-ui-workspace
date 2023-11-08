@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { Item, ParsedItem, Provider, SearchResponse, SearchResultsProps } from './searchResults.types'
+import { Item, ParsedItem, SearchResponse, SearchResultsProps } from './searchResults.types'
 import axios, { AxiosError } from 'axios'
-import Loader from '../../components/Loader/Loader'
 import ProductList from '../../components/productList'
 import { SearchInputOnSearchResultsPage } from '../../components'
 import { Box } from '@chakra-ui/react'
 import { formattedItems } from './searchResults.utils'
+import { Loader } from '@beckn-ui/molecules'
 
 const SearchResults: React.FC<SearchResultsProps> = props => {
   const { apiUrl, searchPayload, onFailure, onSuccess, ...restProps } = props
