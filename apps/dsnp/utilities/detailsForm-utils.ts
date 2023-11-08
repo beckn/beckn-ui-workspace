@@ -58,6 +58,10 @@ export const signInValidateForm = (formData: SignInPropsModel): FormErrors => {
     errors.password = 'Password must contain at least one uppercase letter'
   } else if (!/[$&+,:;=?@#|'<>.^*()%!-]/.test(formData.password)) {
     errors.password = 'Password must contain at least one special character'
+  } else if (/^\d+$/.test(formData.password)) {
+    errors.password = 'Password cannot consist of only digits'
+  } else if (!/[0-9]/.test(formData.password)) {
+    errors.password = 'Password must contain at least one digit'
   }
 
   return errors
@@ -69,6 +73,8 @@ export const signUpValidateForm = (formData: SignUpPropsModel): FormErrors => {
     errors.name = 'Name is required'
   } else if (!/^[A-Za-z\s]*$/.test(formData.name)) {
     errors.name = 'Name can only contain letters and spaces'
+  } else if (formData.name.length < 3) {
+    errors.name = 'Name must contain at least 3 characters'
   }
 
   if (formData.email.trim() === '') {
@@ -80,10 +86,14 @@ export const signUpValidateForm = (formData: SignUpPropsModel): FormErrors => {
     errors.password = 'Password is required'
   } else if (formData.password.length < 8) {
     errors.password = 'Password must be at least 8 characters long'
+  } else if (/^\d+$/.test(formData.password)) {
+    errors.password = 'Password cannot consist of only digits'
   } else if (!/[A-Z]/.test(formData.password)) {
     errors.password = 'Password must contain at least one uppercase letter'
   } else if (!/[$&+,:;=?@#|'<>.^*()%!-]/.test(formData.password)) {
     errors.password = 'Password must contain at least one special character'
+  } else if (!/[0-9]/.test(formData.password)) {
+    errors.password = 'Password must contain at least one digit'
   }
 
   return errors

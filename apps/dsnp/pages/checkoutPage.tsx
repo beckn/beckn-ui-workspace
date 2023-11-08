@@ -55,6 +55,8 @@ const CheckoutPage = () => {
   const { t, locale } = useLanguage()
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
   const cartItems = useSelector((state: ICartRootState) => state.cart.items)
+  const totalAmount = useSelector((state: ICartRootState) => state.cart.totalAmount)
+
   const transactionId = useSelector((state: { transactionId: TransactionIdRootState }) => state.transactionId)
 
   useEffect(() => {
@@ -163,7 +165,7 @@ const CheckoutPage = () => {
                   title={item.descriptor.name}
                   description={item.descriptor.short_desc}
                   quantity={item.quantity}
-                  price={`${t('currencySymbol')}${item.totalPrice}`}
+                  price={`${t('currencySymbol')}${totalAmount}`}
                 />
                 {cartItems.length - 1 !== id ? <Divider mb={'15px'} /> : null}
               </>
