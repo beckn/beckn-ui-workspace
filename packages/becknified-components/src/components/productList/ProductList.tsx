@@ -5,6 +5,7 @@ import { ProductListProps } from './ProductList.types'
 import { ParsedItem } from '../../pages/searchResults/searchResults.types'
 import { sortByCheapest, sortByExpensive } from './ProductList.utils'
 import { Box } from '@chakra-ui/react'
+import Styles from './product-list.module.css'
 
 const ProductList: React.FC<ProductListProps> = props => {
   const { productList, ...restProps } = props
@@ -31,21 +32,18 @@ const ProductList: React.FC<ProductListProps> = props => {
   }
 
   return (
-    <Box pt={'25px'} className="w-full xl:max-w-[2100px] mx-auto product-list-container">
+    <Box className={Styles.product_list_layout_container}>
       {sortedProductList && sortedProductList.length ? (
         <div className="sort-list-container">
           <Sort selectedBtn={selectedRadioBtn} onChangeSelectedBtn={onChangeHandler} />
-          <Box
-            paddingTop={'70px'}
-            className="grid gap-4 md:gap-2 grid-cols-6 md:grid-cols-12 product-card-list-container"
-          >
+          <Box className={Styles.product_card_list_container}>
             {sortedProductList.map(product => {
               return <ProductCard key={product.id} product={product} {...restProps} />
             })}
           </Box>
         </div>
       ) : (
-        <p className="text-palette-mute text-center mt-14">
+        <p className={Styles.no_category_text}>
           There are no products in this category yet! New products will be added soon
         </p>
       )}

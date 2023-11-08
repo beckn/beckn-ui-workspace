@@ -2,6 +2,7 @@ import React from 'react'
 import { BsFilterLeft } from 'react-icons/bs'
 import { Box } from '@chakra-ui/react'
 import { SortComponentProps } from './Sort.types'
+import Styles from './sort.module.css'
 
 const radioBtnValue = ['all', 'cheapest', 'expensive']
 
@@ -13,29 +14,30 @@ const Sort: React.FC<SortComponentProps> = ({ selectedBtn: selectedRadioBtn, onC
       <Box
         width={'calc(100% - 40px)'}
         margin={'0 auto'}
-        className="my-4 pb-2 flex flex-wrap border-b-2 border-slate-300"
+        // className="my-4 pb-2 flex flex-wrap border-b-2 border-slate-300"
+        mt={'1rem'}
+        mb={'0.5rem'}
+        display={'flex'}
+        flexWrap={'wrap'}
+        borderBottom={'2px solid #f2f2f2'}
       >
-        <div className="flex items-center" style={{ fontSize: '15px' }}>
-          <div className="flex items-center" style={{ fontSize: '12px' }}>
+        <Box fontSize={'15px'} className="flex items-center">
+          <Box fontSize={'12px'} className="flex items-center">
             <BsFilterLeft style={{ fontSize: '1.5rem', paddingRight: '5px' }} />
-          </div>
-          <h5 className="ltr:ml-1 rtl:mr-1">sort</h5>
-        </div>
+          </Box>
+          <h5 className={Styles.sort_text}>sort</h5>
+        </Box>
 
         <Box marginTop={'5px'} className="flex flex-wrap items-center">
           {radioBtnValue.map(radioInput => {
             return (
-              <div
-                key={radioInput}
-                className="px-2 md:px-2 mx-2 my-1 sm:my-0"
-                style={{ marginRight: 'unset !important' }}
-              >
+              <div key={radioInput} className={Styles.radio_input}>
                 <label
                   htmlFor={radioInput}
-                  className={`text-sm  cursor-pointer ${
+                  className={`${Styles.radio_input_label} ${
                     radioInput === selectedRadioBtn
-                      ? 'text-palette-primary font-bold'
-                      : 'text-palette-mute/80 hover:text-palette-base transition-all'
+                      ? Styles.selected_radio_input_label
+                      : Styles.unselected_radio_input_label
                   }`}
                 >
                   {radioInput}

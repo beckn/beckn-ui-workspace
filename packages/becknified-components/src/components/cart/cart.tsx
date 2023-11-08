@@ -10,6 +10,7 @@ import { Box } from '@chakra-ui/react'
 import { CartRetailItem } from './cart.types'
 import { Loader } from '@beckn-ui/molecules'
 import CartList from './cart-list'
+import Styles from './cart.module.css'
 // import OrderSummaryBox from './order-summary-box'
 
 const emptyCardText = 'Empty cart'
@@ -58,18 +59,13 @@ const Cart: React.FC<CartProps> = ({
   if (cartItems.length == 0) {
     return (
       <>
-        <p className="mt-20 text-center text-palette-mute font-normal">{emptyCardText}</p>
+        <p className={Styles.empty_cart_text}>{emptyCardText}</p>
       </>
     )
   }
 
   return (
-    <Box
-      className={cl(
-        `${classNames}`,
-        'flex justify-center flex-col md:flex-row items-start relative max-w-[2100px] mx-auto'
-      )}
-    >
+    <Box className={cl(`${classNames}`, Styles.cart_list_comp_container)}>
       <CartList
         setIsLoadingForCartCountChange={setIsLoadingForCartCountChange}
         cartItems={cartItems}
