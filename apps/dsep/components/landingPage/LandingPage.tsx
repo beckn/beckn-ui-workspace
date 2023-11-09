@@ -69,7 +69,7 @@ const LandingPage: React.FC = () => {
           p={'26px 15px'}
           type="text"
           name="search_input"
-          placeholder="Search for courses"
+          placeholder={`Search for ${activeCard}`}
           onChange={(e: React.BaseSyntheticEvent) => setSearchTerm(e.target.value)}
           onKeyDown={event => event.key === 'Enter' && navigateToSearchResults()}
           _focusVisible={{

@@ -285,3 +285,6 @@ select:-webkit-autofill:focus {
   height: unset;
   width: unset;
 }
+.hideScroll::-webkit-scrollbar {
+  display: none;
+}

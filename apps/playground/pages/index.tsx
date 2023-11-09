@@ -5,6 +5,7 @@ import LoginIcon from '../public/images/LoginIcon.svg'
 import style from '../components/detailsCard/ShippingForm.module.css'
 import Button from '../components/button/Button'
 import Router from 'next/router'
+import { Loader } from '@beckn-ui/molecules/src/components'
 
 const MobileLogin = () => {
   const [phoneNumber, setPhoneNumber] = useState('')
@@ -40,6 +41,10 @@ const MobileLogin = () => {
   }
 
   const { t, locale } = useLanguage()
+
+  if (true) {
+    return <Loader />
+  }
 
   return (
     <Box padding={'0 21px'}>

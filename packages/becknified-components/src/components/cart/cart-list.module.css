@@ -1,0 +1,8 @@
+.cart_list_container {
+  width: 100%;
+
+  @media (min-width: 1280px) {
+    max-width: 2100px;
+    margin: 0 auto;
+  }
+}

@@ -60,6 +60,7 @@ const CheckoutPage = () => {
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
   const cartItems = useSelector((state: ICartRootState) => state.cart.items)
   const transactionId = useSelector((state: { transactionId: TransactionIdRootState }) => state.transactionId)
+  const totalAmount = useSelector((state: ICartRootState) => state.cart.totalAmount)
 
   const scholarshipId = useSelector((state: any) => state.scholarshipCart.scholarshipId)
   const scholarshipTitle = useSelector((state: any) => state.scholarshipCart.scholarshipTitle)
@@ -193,16 +194,6 @@ const CheckoutPage = () => {
         <Box pb={'10px'}>
           <Text fontSize={'17px'}>{t.overview}</Text>
         </Box>
-        {/* {cartItems.map((item) => (
-          <DetailsCard key={item.id}>
-            <ItemDetails
-              title={item.descriptor.name}
-              description={item.descriptor.short_desc}
-              quantity={item.quantity}
-              price={`${t.currencySymbol}${item.totalPrice}`}
-            />
-          </DetailsCard>
-        ))} */}
         <DetailsCard>
           {cartItems.map(item => {
             return (
@@ -211,7 +202,7 @@ const CheckoutPage = () => {
                   title={item.descriptor.name}
                   provider={(item as any).bppName}
                   quantity={item.quantity}
-                  price={item.totalPrice}
+                  price={totalAmount}
                 />
               </>
             )
