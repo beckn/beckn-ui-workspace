@@ -42,42 +42,51 @@ const SignUp = () => {
   }
 
   const handleRegister = async () => {
-    const registrationData = {
-      username: formData.name,
-      email: formData.email,
-      password: formData.password
-    }
+    const errors = signUpValidateForm(formData)
 
-    try {
-      const response = await fetch(`${baseUrl}/auth/local/register`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(registrationData)
-      })
+    const isFormValid = Object.values(errors).every(error => error === '')
 
-      if (response.ok) {
-        const data = await response.json()
-        const token = data.jwt
-
-        localStorage.setItem('token', token)
-        Router.push('/homePage')
-      } else {
-        const errorData = await response.json()
-        toast({
-          title: 'Error!.',
-          description: errorData.error.message,
-          status: 'error',
-          duration: 3000,
-          isClosable: true
-        })
-        console.error('Registration failed')
+    if (isFormValid) {
+      const registrationData = {
+        username: formData.name,
+        email: formData.email,
+        password: formData.password
       }
-    } catch (error) {
-      console.error('An error occurred:', error)
+
+      try {
+        const response = await fetch(`${baseUrl}/auth/local/register`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(registrationData)
+        })
+
+        if (response.ok) {
+          const data = await response.json()
+          const token = data.jwt
+
+          localStorage.setItem('token', token)
+          Router.push('/homePage')
+        } else {
+          const errorData = await response.json()
+          toast({
+            title: 'Error!.',
+            description: errorData.error.message,
+            status: 'error',
+            duration: 3000,
+            isClosable: true
+          })
+          console.error('Registration failed')
+        }
+      } catch (error) {
+        console.error('An error occurred:', error)
+      }
+    } else {
+      setFormErrors(errors)
     }
   }
+
   return (
     <>
       <Box className={Styles.main_container} mt="40px">
