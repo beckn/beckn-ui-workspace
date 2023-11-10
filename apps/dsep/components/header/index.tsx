@@ -15,6 +15,7 @@ const cartIconBlackList = [
   '/feedback',
   '/orderHistory',
   '/',
+  '/signUp',
   '/mobileOtp',
   '/cart',
   '/checkoutPage',
@@ -31,7 +32,7 @@ const cartIconBlackList = [
 
 const backIconList = ['/', '/orderDetails']
 
-const homeIconBlackList = ['/orderHistory', '/', '/homePage', '/mobileOtp', '/createProfile']
+const homeIconBlackList = ['/orderHistory', '/', '/homePage', '/mobileOtp', '/createProfile', '/signUp']
 
 const storeHeaderBlackList = [
   '/checkoutPage',
@@ -55,13 +56,15 @@ const storeHeaderBlackList = [
   '/myLearningOrderHistory',
   '/myJobsOrderHistory',
   '/applyJobsPrefilled',
-  '/applyScholarship'
+  '/applyScholarship',
+  '/signUp'
 ]
 const headerValues = {
   '/checkoutPage': 'Checkout',
   '/orderHistory': 'My Courses',
   '/orderDetails': 'Order Details',
   '/': 'Sign In',
+  '/signUp': 'Sign Up',
   '/mobileOtp': 'Sign In',
   '/cart': 'Cart',
   '/paymentMode': 'Select Payment Method',
