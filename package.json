@@ -30,7 +30,11 @@
     "lint": "eslint",
     "format": "prettier  \"./**/*.{js,jsx,ts,tsx,json}\" --write"
   },
- 
+   "lint-staged": {
+    "**/*.{js,jsx,ts,tsx}": [
+      "yarn format"
+    ]
+  },
   "dependencies": {
     "@types/mongoose": "^5.11.97",
     "eslint-config-next": "latest",
