@@ -40,7 +40,10 @@ const OptionCard: React.FC<OptionCardProps> = ({
             className: 'bg-[#fff] text-[#000]'
           })
         } else {
-          setOption({ tagName, tagValue })
+          setOption({
+            tagName,
+            tagValue
+          })
         }
       }}
     >
@@ -48,12 +51,19 @@ const OptionCard: React.FC<OptionCardProps> = ({
       <div
         className={cs(
           'mb-2 min-w-[40px] min-h-[40px]  rounded-xl p-3 shadow-custom',
-          { ['bg-palette-primary']: isSelected },
-          { ['bg-white']: !isSelected }
+          {
+            ['bg-palette-primary']: isSelected
+          },
+          {
+            ['bg-white']: !isSelected
+          }
         )}
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={isSelected ? iconUrlLight : iconUrl} alt="" />
+        <img
+          src={isSelected ? iconUrlLight : iconUrl}
+          alt=""
+        />
       </div>
       <p
         className={cs('text-xs', {

@@ -47,7 +47,11 @@ const Loader: React.ForwardRefRenderFunction<HTMLDivElement, LoaderPropsModel> =
         </Text>
       )}
       {subLoadingText && (
-        <Text className={`${className}_sub_loading_text`} style={stylesForSubLoadingText} textAlign="center">
+        <Text
+          className={`${className}_sub_loading_text`}
+          style={stylesForSubLoadingText}
+          textAlign="center"
+        >
           {subLoadingText}
         </Text>
       )}

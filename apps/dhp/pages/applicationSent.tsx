@@ -12,11 +12,21 @@ const applicationSent = () => {
       <ApplicationSent
         confirmationText={
           <>
-            <Text fontSize={'17px'} fontWeight={'600'} textAlign={'center'}>
+            <Text
+              fontSize={'17px'}
+              fontWeight={'600'}
+              textAlign={'center'}
+            >
               {t.applicationSubmitted}
             </Text>
             <Stack>
-              <Text textAlign={'center'} marginTop={'8px'} marginBottom={'40px'} fontSize={'15px'} fontWeight="400">
+              <Text
+                textAlign={'center'}
+                marginTop={'8px'}
+                marginBottom={'40px'}
+                fontSize={'15px'}
+                fontWeight="400"
+              >
                 {t.appSubmitSpan1} <br />
                 {t.appSubmitSpan2}
               </Text>

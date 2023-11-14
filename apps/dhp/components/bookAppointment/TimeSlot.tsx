@@ -14,7 +14,10 @@ const TimeSlot: React.FC<TimeSlotProps> = ({ time, selected, onSelect }) => {
   }
 
   return (
-    <Box className={`${style.time_slot} ${selected === time ? `${style.isActive}` : ''}`} onClick={handleClick}>
+    <Box
+      className={`${style.time_slot} ${selected === time ? `${style.isActive}` : ''}`}
+      onClick={handleClick}
+    >
       {time}
     </Box>
   )

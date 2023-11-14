@@ -30,16 +30,26 @@ const LabCallToAction: React.FC<Props> = ({ product }) => {
   return (
     <div className="flex flex-col items-center flex-grow sticky top-10 md:top-36 mt-8 rtl:mr-auto ltr:ml-auto xl:rtl:ml-2 px-6 py-4 sm:p-4 xl:p-6 border-2 shadow-lg border_radius_all">
       <div className="w-full  items-center ">
-        <Text fontSize={'12px'} fontWeight={600} className="pb-1">
+        <Text
+          fontSize={'12px'}
+          fontWeight={600}
+          className="pb-1"
+        >
           {t.priceText}
         </Text>
-        <ProductPrice price={parseFloat(product.price.value)} isLargeSize={false} />
+        <ProductPrice
+          price={parseFloat(product.price.value)}
+          isLargeSize={false}
+        />
       </div>
 
       <br />
       <Button
         buttonText={
-          <Flex justifyContent={'center'} alignItems={'center'}>
+          <Flex
+            justifyContent={'center'}
+            alignItems={'center'}
+          >
             {t.bookAppointmentText}
           </Flex>
         }

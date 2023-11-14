@@ -6,6 +6,7 @@ import style from '../components/detailsCard/ShippingForm.module.css'
 import Button from '../components/button/Button'
 import Router from 'next/router'
 import { Loader } from '@beckn-ui/molecules/src/components'
+import { BecknLogin } from '@beckn-ui/becknified-components'
 
 const MobileLogin = () => {
   const [phoneNumber, setPhoneNumber] = useState('')
@@ -42,42 +43,9 @@ const MobileLogin = () => {
 
   const { t, locale } = useLanguage()
 
-  if (true) {
-    return <Loader />
-  }
-
   return (
     <Box padding={'0 21px'}>
-      <Box mt={'30px'}>
-        {/* eslint-disable-next-line jsx-a11y/alt-text */}
-        <Image src={LoginIcon} />
-      </Box>
-      <Box mt={'60px'} mb={'37px'}>
-        <div className={style.container}>
-          <div className={style.did_floating_label_content}>
-            <input
-              className={`${style['did_floating_input']} {$style["otp_number_input"]}`}
-              type="text"
-              placeholder=" "
-              name="mobileNumber"
-              value={phoneNumber}
-              onChange={handlePhoneNumberChange}
-            />
-
-            {phoneNumberError && <span className={style.error}>{t[`${phoneNumberError}`]}</span>}
-
-            <label className={`${style['did_floating_label']} ${style['otp_number']}`}>{t.formNumber}</label>
-          </div>
-        </div>
-      </Box>
-
-      <Button
-        buttonText={t.sendOtpButton}
-        background={'rgba(var(--color-primary))'}
-        color={'rgba(var(--text-color))'}
-        isDisabled={phoneNumber.length === 0 || phoneNumberError.length !== 0}
-        handleOnClick={handleFormSubmit}
-      />
+      <BecknLogin />
     </Box>
   )
 }

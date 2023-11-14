@@ -28,7 +28,10 @@ const CarouselBoxCard: React.FC<Props> = ({ product }) => {
           )}
         </div>
         <p className="truncate">{product?.descriptor.name}</p>
-        <ProductPrice price={parseFloat(product.price.value)} isInSlider={true} />
+        <ProductPrice
+          price={parseFloat(product.price.value)}
+          isInSlider={true}
+        />
       </a>
       {/* </Link> */}
     </div>

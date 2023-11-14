@@ -27,30 +27,75 @@ const OrderDetails: FC<OrderDetailsProps> = ({ backOnImportedOrder, importedOrde
 
   return (
     <>
-      <BottomModal isOpen={isOpen} onClose={onClose} modalHeader={t('orderDetails')}>
+      <BottomModal
+        isOpen={isOpen}
+        onClose={onClose}
+        modalHeader={t('orderDetails')}
+      >
         <Box p={'0px 20px'}>
-          <Box position={'relative'} width={'335px'} height={'142px'}>
-            <Image width={'100%'} height={'100%'} alt="item-image" src={itemData.descriptor.images[0]} />
+          <Box
+            position={'relative'}
+            width={'335px'}
+            height={'142px'}
+          >
+            <Image
+              width={'100%'}
+              height={'100%'}
+              alt="item-image"
+              src={itemData.descriptor.images[0]}
+            />
           </Box>
-          <Flex pt={'20px'} pb={'25px'} fontSize={'15px'} justifyContent="space-between" alignItems={'center'}>
+          <Flex
+            pt={'20px'}
+            pb={'25px'}
+            fontSize={'15px'}
+            justifyContent="space-between"
+            alignItems={'center'}
+          >
             <Text width={'50%'}>{itemData.descriptor.name}</Text>
             <Text pr={'2px'}>
               {t('orderId')}
-              <span style={{ fontWeight: '600' }}>:{orderId}</span>
+              <span
+                style={{
+                  fontWeight: '600'
+                }}
+              >
+                :{orderId}
+              </span>
             </Text>
           </Flex>
-          <Text textAlign={'center'} fontSize={'15px'} fontWeight="600" pb={'20px'}>
+          <Text
+            textAlign={'center'}
+            fontSize={'15px'}
+            fontWeight="600"
+            pb={'20px'}
+          >
             {providerName}
           </Text>
-          <Flex fontSize={'15px'} justifyContent={'space-between'} alignItems={'center'} pb={'20px'}>
+          <Flex
+            fontSize={'15px'}
+            justifyContent={'space-between'}
+            alignItems={'center'}
+            pb={'20px'}
+          >
             <Text>{t('bookedon')}</Text>
             <Text>{createdAtTimeline}</Text>
           </Flex>
-          <Flex fontSize={'15px'} justifyContent={'space-between'} alignItems={'center'} pb={'20px'}>
+          <Flex
+            fontSize={'15px'}
+            justifyContent={'space-between'}
+            alignItems={'center'}
+            pb={'20px'}
+          >
             <Text>{t('noofTravellers')}</Text>
             <Text>01</Text>
           </Flex>
-          <Flex fontSize={'15px'} pb={'25px'} justifyContent={'space-between'} alignItems={'center'}>
+          <Flex
+            fontSize={'15px'}
+            pb={'25px'}
+            justifyContent={'space-between'}
+            alignItems={'center'}
+          >
             <Text>{t('totalPrice')}</Text>
             <Text>₹{totalPrice}</Text>
           </Flex>

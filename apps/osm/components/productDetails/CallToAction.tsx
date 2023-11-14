@@ -60,11 +60,21 @@ const CallToAction: React.FC<Props> = ({ product }) => {
     <div className="flex flex-col items-center flex-grow sticky top-10 md:top-36 max-w-[350px] mt-8 rtl:mr-auto ltr:ml-auto xl:rtl:ml-2 px-6 py-4 sm:p-4 xl:p-6 border-2 shadow-lg border_radius_all bg-[#fcfbfe]">
       <div className="flex  w-full justify-between items-center ">
         <p className="text-lg">{t.price}</p>
-        <ProductPrice price={parseFloat(product.price.value)} isLargeSize={true} />
+        <ProductPrice
+          price={parseFloat(product.price.value)}
+          isLargeSize={true}
+        />
       </div>
       <div className="flex items-center justify-between mt-6 cursor-pointer">
-        <div className="p-2" onClick={increment}>
-          <HiOutlinePlusSm style={{ fontSize: '1.5rem' }} />
+        <div
+          className="p-2"
+          onClick={increment}
+        >
+          <HiOutlinePlusSm
+            style={{
+              fontSize: '1.5rem'
+            }}
+          />
         </div>
         <input
           className="inline-block w-[70px] rtl:pr-8 ltr:pl-7 py-2 mx-1 sm:mx-4 border-[1px] border-gray-400 text-center"
@@ -74,15 +84,30 @@ const CallToAction: React.FC<Props> = ({ product }) => {
           value={counter}
           onChange={onInputNumberChangeHandler}
         />
-        <div onClick={decrement} className="p-2">
-          <HiMinusSm style={{ fontSize: '1.5rem' }} />
+        <div
+          onClick={decrement}
+          className="p-2"
+        >
+          <HiMinusSm
+            style={{
+              fontSize: '1.5rem'
+            }}
+          />
         </div>
       </div>
       <br />
       <Button
         buttonText={
-          <Flex justifyContent={'center'} alignItems={'center'}>
-            <BsCartPlus style={{ fontSize: '1.2rem', margin: '0 0.4rem' }} />
+          <Flex
+            justifyContent={'center'}
+            alignItems={'center'}
+          >
+            <BsCartPlus
+              style={{
+                fontSize: '1.2rem',
+                margin: '0 0.4rem'
+              }}
+            />
             {t.addToCart}
           </Flex>
         }

@@ -36,9 +36,20 @@ const Card: React.FC<Props> = ({ product }) => {
       <a
         onClick={e => {
           e.preventDefault()
-          dispatch(productInfoActions.setProductDetails({ encodedProduct, product }))
+          dispatch(
+            productInfoActions.setProductDetails({
+              encodedProduct,
+              product
+            })
+          )
           if (typeof window !== 'undefined')
-            localStorage.setItem('productDetails', JSON.stringify({ encodedProduct: encodedProduct, product: product }))
+            localStorage.setItem(
+              'productDetails',
+              JSON.stringify({
+                encodedProduct: encodedProduct,
+                product: product
+              })
+            )
 
           router.push({
             pathname: '/product',
@@ -63,8 +74,18 @@ const Card: React.FC<Props> = ({ product }) => {
             />
           </div>
         </Box>
-        <Box p={'15px'} pt={'11px'} w={'63%'} position={'relative'} className="flex flex-col md:w-full md:px-3 md:py-4">
-          <Flex justifyContent={'space-between'} alignItems={'flex-start'} w={'100%'}>
+        <Box
+          p={'15px'}
+          pt={'11px'}
+          w={'63%'}
+          position={'relative'}
+          className="flex flex-col md:w-full md:px-3 md:py-4"
+        >
+          <Flex
+            justifyContent={'space-between'}
+            alignItems={'flex-start'}
+            w={'100%'}
+          >
             <Text
               w={'80%'}
               fontWeight={'600'}
@@ -80,14 +101,26 @@ const Card: React.FC<Props> = ({ product }) => {
 
             {product.tags.foodType ? (
               product.tags.foodType === 'veg' ? (
-                <Image pt={'4px'} src={greenVegIcon} alt="greenVegIcon" />
+                <Image
+                  pt={'4px'}
+                  src={greenVegIcon}
+                  alt="greenVegIcon"
+                />
               ) : (
-                <Image pt={'4px'} src={redNonVegIcon} alt="nonVegIcon" />
+                <Image
+                  pt={'4px'}
+                  src={redNonVegIcon}
+                  alt="nonVegIcon"
+                />
               )
             ) : null}
           </Flex>
 
-          <Flex fontSize={'12px'} alignItems={'center'} mb={'8px'}>
+          <Flex
+            fontSize={'12px'}
+            alignItems={'center'}
+            mb={'8px'}
+          >
             <Text fontWeight={700}>{t('soldBy')}</Text>
             <Text pl={'3px'}>{(product as any).bppName}</Text>
           </Flex>
@@ -100,8 +133,14 @@ const Card: React.FC<Props> = ({ product }) => {
           >
             <ProductPrice price={parseFloat(product.price.value)} />
             <Flex alignItems={'center'}>
-              <Image src={StarIcon} alt="startIcon" />
-              <Text fontSize={'12px'} pl={'5px'}>
+              <Image
+                src={StarIcon}
+                alt="startIcon"
+              />
+              <Text
+                fontSize={'12px'}
+                pl={'5px'}
+              >
                 {product.tags.Rating}
               </Text>
             </Flex>

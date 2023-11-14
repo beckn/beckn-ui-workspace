@@ -47,7 +47,11 @@ const myJobsOrderHistory = () => {
   }
 
   return (
-    <Box className="hideScroll" maxH={'calc(100vh - 100px)'} overflowY="scroll">
+    <Box
+      className="hideScroll"
+      maxH={'calc(100vh - 100px)'}
+      overflowY="scroll"
+    >
       {jobsOrders.map((jobOrder: any, index) => (
         <MyJob
           key={index}

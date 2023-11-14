@@ -10,8 +10,15 @@ const ConfirmOrder: FC<ConfirmOrderProps> = props => {
   return (
     <Box>
       {/* eslint-disable-next-line jsx-a11y/alt-text */}
-      <Image src={orderConfirmmark} margin={'20px auto'} />
-      <Box fontSize={'17px'} fontWeight={'600'} textAlign={'center'}>
+      <Image
+        src={orderConfirmmark}
+        margin={'20px auto'}
+      />
+      <Box
+        fontSize={'17px'}
+        fontWeight={'600'}
+        textAlign={'center'}
+      >
         {props.confirmationText}
       </Box>
     </Box>

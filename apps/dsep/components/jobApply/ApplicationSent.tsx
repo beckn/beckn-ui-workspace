@@ -8,8 +8,15 @@ interface ApplicationSentProps {
 const ApplicationSent: React.FC<ApplicationSentProps> = props => {
   return (
     <Box>
-      <Image src={orderConfirmmark} margin={'20px auto'} />
-      <Box fontSize={'17px'} fontWeight={'600'} textAlign={'center'}>
+      <Image
+        src={orderConfirmmark}
+        margin={'20px auto'}
+      />
+      <Box
+        fontSize={'17px'}
+        fontWeight={'600'}
+        textAlign={'center'}
+      >
         {props.confirmationText}
       </Box>
     </Box>

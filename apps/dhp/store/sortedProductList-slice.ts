@@ -12,7 +12,13 @@ const SortedProductsListSlice = createSlice({
   name: 'sortedProductsList',
   initialState,
   reducers: {
-    sortProductsList(state, action: PayloadAction<{ productsList: RetailItem[]; sortBasedOn: string }>) {
+    sortProductsList(
+      state,
+      action: PayloadAction<{
+        productsList: RetailItem[]
+        sortBasedOn: string
+      }>
+    ) {
       switch (action.payload.sortBasedOn) {
         case 'all':
           state.productsList = action.payload.productsList

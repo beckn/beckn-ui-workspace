@@ -151,7 +151,11 @@ const checkoutForMedicine = () => {
   }
 
   return (
-    <Box className="hideScroll" maxH={'calc(100vh - 100px)'} overflowY="scroll">
+    <Box
+      className="hideScroll"
+      maxH={'calc(100vh - 100px)'}
+      overflowY="scroll"
+    >
       {/* <AppHeader appHeaderText={t.checkout} /> */}
       {/* start Item Details */}
       <Box>
@@ -176,7 +180,11 @@ const checkoutForMedicine = () => {
       {/* start shipping detals */}
       {!isInitResultPresent() ? (
         <Box>
-          <Flex pb={'10px'} mt={'20px'} justifyContent={'space-between'}>
+          <Flex
+            pb={'10px'}
+            mt={'20px'}
+            justifyContent={'space-between'}
+          >
             <Text fontSize={'17px'}>{t.shipping}</Text>
           </Flex>
           <DetailsCard>
@@ -191,7 +199,11 @@ const checkoutForMedicine = () => {
         </Box>
       ) : (
         <Box>
-          <Flex pb={'10px'} mt={'20px'} justifyContent={'space-between'}>
+          <Flex
+            pb={'10px'}
+            mt={'20px'}
+            justifyContent={'space-between'}
+          >
             <Text fontSize={'17px'}>{t.shipping}</Text>
             <AddShippingButton
               imgFlag={!isInitResultPresent()}
@@ -203,20 +215,32 @@ const checkoutForMedicine = () => {
           </Flex>
 
           <DetailsCard>
-            <Stack divider={<StackDivider />} spacing="4">
+            <Stack
+              divider={<StackDivider />}
+              spacing="4"
+            >
               <Flex alignItems={'center'}>
                 {/* eslint-disable-next-line jsx-a11y/alt-text */}
-                <Image src={nameIcon} pr={'12px'} />
+                <Image
+                  src={nameIcon}
+                  pr={'12px'}
+                />
                 <Text fontSize={'15px'}>{formData.name}</Text>
               </Flex>
               <Flex alignItems={'center'}>
                 {/* eslint-disable-next-line jsx-a11y/alt-text */}
-                <Image src={locationIcon} pr={'12px'} />
+                <Image
+                  src={locationIcon}
+                  pr={'12px'}
+                />
                 <Text fontSize={'15px'}>{formData.address}</Text>
               </Flex>
               <Flex alignItems={'center'}>
                 {/* eslint-disable-next-line jsx-a11y/alt-text */}
-                <Image src={CallphoneIcon} pr={'12px'} />
+                <Image
+                  src={CallphoneIcon}
+                  pr={'12px'}
+                />
                 <Text fontSize={'15px'}>{formData.mobileNumber}</Text>
               </Flex>
             </Stack>
@@ -226,7 +250,11 @@ const checkoutForMedicine = () => {
       {/* end shipping detals */}
       {isBillingAddressSameAsShippingAddress ? (
         <Box>
-          <Flex pb={'20px'} mt={'20px'} justifyContent={'space-between'}>
+          <Flex
+            pb={'20px'}
+            mt={'20px'}
+            justifyContent={'space-between'}
+          >
             <Text fontSize={'17px'}>{t.billing}</Text>
             <AddBillingButton
               billingFormData={billingFormData}
@@ -245,8 +273,16 @@ const checkoutForMedicine = () => {
            </Text> */}
           </Flex>
           <DetailsCard>
-            <Stack spacing={5} direction="row">
-              <Checkbox colorScheme={'red'} pr={'12px'} fontSize={'17px'} defaultChecked>
+            <Stack
+              spacing={5}
+              direction="row"
+            >
+              <Checkbox
+                colorScheme={'red'}
+                pr={'12px'}
+                fontSize={'17px'}
+                defaultChecked
+              >
                 {t.orderDetailsCheckboxText}
               </Checkbox>
             </Stack>
@@ -254,7 +290,11 @@ const checkoutForMedicine = () => {
         </Box>
       ) : (
         <Box>
-          <Flex pb={'20px'} mt={'20px'} justifyContent={'space-between'}>
+          <Flex
+            pb={'20px'}
+            mt={'20px'}
+            justifyContent={'space-between'}
+          >
             <Text fontSize={'17px'}>{t.billing}</Text>
             <AddBillingButton
               billingFormData={billingFormData}
@@ -266,20 +306,32 @@ const checkoutForMedicine = () => {
           </Flex>
 
           <DetailsCard>
-            <Stack divider={<StackDivider />} spacing="4">
+            <Stack
+              divider={<StackDivider />}
+              spacing="4"
+            >
               <Flex alignItems={'center'}>
                 {/* eslint-disable-next-line jsx-a11y/alt-text */}
-                <Image src={nameIcon} pr={'12px'} />
+                <Image
+                  src={nameIcon}
+                  pr={'12px'}
+                />
                 <Text fontSize={'15px'}>{formData.name}</Text>
               </Flex>
               <Flex alignItems={'center'}>
                 {/* eslint-disable-next-line jsx-a11y/alt-text */}
-                <Image src={locationIcon} pr={'12px'} />
+                <Image
+                  src={locationIcon}
+                  pr={'12px'}
+                />
                 <Text fontSize={'15px'}>{formData.address}</Text>
               </Flex>
               <Flex alignItems={'center'}>
                 {/* eslint-disable-next-line jsx-a11y/alt-text */}
-                <Image src={CallphoneIcon} pr={'12px'} />
+                <Image
+                  src={CallphoneIcon}
+                  pr={'12px'}
+                />
                 <Text fontSize={'15px'}>{formData.mobileNumber}</Text>
               </Flex>
             </Stack>
@@ -289,7 +341,11 @@ const checkoutForMedicine = () => {
       {/* start payment details */}
       {initRequest.data && (
         <Box>
-          <Flex pb={'10px'} mt={'20px'} justifyContent={'space-between'}>
+          <Flex
+            pb={'10px'}
+            mt={'20px'}
+            justifyContent={'space-between'}
+          >
             <Text fontSize={'17px'}>{t.paymentText}</Text>
           </Flex>
           <DetailsCard>

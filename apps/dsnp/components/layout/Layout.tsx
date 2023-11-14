@@ -31,17 +31,35 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
         <Head>
           <title>Retails App</title>
         </Head>
-        <div className={cs('flex flex-col ', { ['h-[100vh]']: isHomepage }, { ['min-h-[100vh]']: !isHomepage })}>
+        <div
+          className={cs(
+            'flex flex-col ',
+            {
+              ['h-[100vh]']: isHomepage
+            },
+            {
+              ['min-h-[100vh]']: !isHomepage
+            }
+          )}
+        >
           <NextNProgress height={7} />
           <Header />
           {!geoLocationSearchPageVisible ? (
             <main
               className={cs(
                 'flex-grow',
-                { [paddingStyles]: !isHomepage },
-                { [marginStyles]: !isHomepage && !isLandingPage && !isSearch },
-                { ['mt-[24px] p-[25px]']: isHomepage },
-                { ['mt-[118px]']: isSearch }
+                {
+                  [paddingStyles]: !isHomepage
+                },
+                {
+                  [marginStyles]: !isHomepage && !isLandingPage && !isSearch
+                },
+                {
+                  ['mt-[24px] p-[25px]']: isHomepage
+                },
+                {
+                  ['mt-[118px]']: isSearch
+                }
               )}
             >
               {children}

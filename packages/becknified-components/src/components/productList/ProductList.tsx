@@ -35,10 +35,19 @@ const ProductList: React.FC<ProductListProps> = props => {
     <Box className={Styles.product_list_layout_container}>
       {sortedProductList && sortedProductList.length ? (
         <div className="sort-list-container">
-          <Sort selectedBtn={selectedRadioBtn} onChangeSelectedBtn={onChangeHandler} />
+          <Sort
+            selectedBtn={selectedRadioBtn}
+            onChangeSelectedBtn={onChangeHandler}
+          />
           <Box className={Styles.product_card_list_container}>
             {sortedProductList.map(product => {
-              return <ProductCard key={product.id} product={product} {...restProps} />
+              return (
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  {...restProps}
+                />
+              )
             })}
           </Box>
         </div>

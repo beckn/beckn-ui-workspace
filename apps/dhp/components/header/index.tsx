@@ -144,7 +144,10 @@ const getHeaderTitleForPage = (name: string, logo: string, pathName: string, loc
       return <Text>{values[pathName]}</Text>
     default:
       return (
-        <Box width={'260px'} className="flex gap-1 ml-2 md:hidden">
+        <Box
+          width={'260px'}
+          className="flex gap-1 ml-2 md:hidden"
+        >
           <Text
             margin={'0 auto'}
             textAlign={'center'}
@@ -177,7 +180,10 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
       <div className="h-7 w-full bg-[#efefef] fixed z-[9999]">
         <div className="flex items-center h-full px-5">
           <div>
-            <Image src="/images/genHeal.svg" alt="App logo" />
+            <Image
+              src="/images/genHeal.svg"
+              alt="App logo"
+            />
           </div>
           <div className="flex gap-4 ml-auto">
             {languageIconWhiteList.includes(router.pathname) && <Settings />}
@@ -210,14 +216,20 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
       </div>
 
       {/* Menu Modal */}
-      <BottomModal isOpen={isMenuModalOpen} onClose={handleMenuModalClose}>
+      <BottomModal
+        isOpen={isMenuModalOpen}
+        onClose={handleMenuModalClose}
+      >
         <div
           onClick={() => {
             router.push('/orderHistory')
           }}
           className="flex gap-2 py-4 text-[15px]"
         >
-          <Image src="/images/orderHistoryIcon.svg" alt="orderHistory icon" />
+          <Image
+            src="/images/orderHistoryIcon.svg"
+            alt="orderHistory icon"
+          />
           {t['orderHistory']}
         </div>
         <div
@@ -226,7 +238,10 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
           }}
           className="flex gap-2 py-4 text-[15px]"
         >
-          <Image src="/images/myAppointmentsIcon.svg" alt="myAppointments icon" />
+          <Image
+            src="/images/myAppointmentsIcon.svg"
+            alt="myAppointments icon"
+          />
           {t['myAppointments']}
         </div>
       </BottomModal>
@@ -253,7 +268,10 @@ const BottomHeader = () => {
           <div className="flex items-center gap-4">
             {!backIconList.includes(router.pathname) && (
               <div onClick={() => router.back()}>
-                <Image src="/images/Back.svg" alt="Back icon" />
+                <Image
+                  src="/images/Back.svg"
+                  alt="Back icon"
+                />
               </div>
             )}
           </div>

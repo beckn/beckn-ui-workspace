@@ -42,7 +42,11 @@ const ScholarshipCard = () => {
   }
 
   return (
-    <Box className="hideScroll" maxH={'calc(100vh - 100px)'} overflowY="scroll">
+    <Box
+      className="hideScroll"
+      maxH={'calc(100vh - 100px)'}
+      overflowY="scroll"
+    >
       {scholarShips.map(scholarship => (
         <ScholarshipListCard
           key={scholarship.id}

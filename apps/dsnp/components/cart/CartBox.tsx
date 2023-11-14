@@ -36,7 +36,10 @@ const CartBox = () => {
             {t('product')}
           </span>
           <span onClick={onCloseCartBoxHandler}>
-            <Link legacyBehavior href={`/cart`}>
+            <Link
+              legacyBehavior
+              href={`/cart`}
+            >
               <a className="text-cyan-500">{t('seeCart')}</a>
             </Link>
           </span>
@@ -46,7 +49,13 @@ const CartBox = () => {
           <>
             {cartItems.length ? (
               cartItems.map(item => {
-                return <CartItem setIsLoadingForCartCountChange={() => {}} key={item.id} product={item} />
+                return (
+                  <CartItem
+                    setIsLoadingForCartCountChange={() => {}}
+                    key={item.id}
+                    product={item}
+                  />
+                )
               })
             ) : (
               <p className="mt-20 text-center text-palette-mute font-normal">{t('cartIsEmpty')}</p>
@@ -63,7 +72,10 @@ const CartBox = () => {
             </div>
             {!userInfo ? (
               <div onClick={onCloseCartBoxHandler}>
-                <Link legacyBehavior href={'/login'}>
+                <Link
+                  legacyBehavior
+                  href={'/login'}
+                >
                   <a className="py-2 px-3 bg-palette-primary text-[12px] text-palette-side rounded-lg">
                     {t('loginAndOrder')}
                   </a>
@@ -71,7 +83,10 @@ const CartBox = () => {
               </div>
             ) : (
               <div onClick={onCloseCartBoxHandler}>
-                <Link legacyBehavior href={'/cart'}>
+                <Link
+                  legacyBehavior
+                  href={'/cart'}
+                >
                   <a className="py-2 px-10 bg-palette-primary text-[12px] text-palette-side rounded-lg">{t('order')}</a>
                 </Link>
               </div>

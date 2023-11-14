@@ -369,10 +369,23 @@ const ApplyScholarship = () => {
   const areFilesSelected = selectedFiles.length !== 0
 
   return (
-    <Box className="hideScroll" maxH={'calc(100vh - 100px)'} overflowY="scroll">
-      <Box pt={'15px'} pb={'20px'}>
-        <ScholarshipAddDetails formData={formData} setFormData={setFormData} />
-        <UploadFile selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles} />
+    <Box
+      className="hideScroll"
+      maxH={'calc(100vh - 100px)'}
+      overflowY="scroll"
+    >
+      <Box
+        pt={'15px'}
+        pb={'20px'}
+      >
+        <ScholarshipAddDetails
+          formData={formData}
+          setFormData={setFormData}
+        />
+        <UploadFile
+          selectedFiles={selectedFiles}
+          setSelectedFiles={setSelectedFiles}
+        />
       </Box>
       <Button
         buttonText={t.submit}

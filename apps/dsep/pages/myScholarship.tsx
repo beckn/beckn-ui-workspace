@@ -70,7 +70,11 @@ const myScholarship = () => {
   }
 
   return (
-    <Box className="hideScroll" maxH={'calc(100vh - 100px)'} overflowY="scroll">
+    <Box
+      className="hideScroll"
+      maxH={'calc(100vh - 100px)'}
+      overflowY="scroll"
+    >
       {scholarshipOrders.map((scholarshipOrder: any, index) => (
         <ScholarshipCard
           key={index}

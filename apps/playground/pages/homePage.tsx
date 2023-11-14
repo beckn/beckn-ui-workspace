@@ -210,7 +210,11 @@ const Homepage = () => {
           </div>
 
           <div className="bottom-0 absolute z-[1000] max-h-fit w-[100vw]  flex items-end justify-center  sm:p-0">
-            <Transition nodeRef={nodeRef} in={isMenuModalOpen} timeout={duration}>
+            <Transition
+              nodeRef={nodeRef}
+              in={isMenuModalOpen}
+              timeout={duration}
+            >
               {state => (
                 <div
                   ref={nodeRef}
@@ -223,14 +227,22 @@ const Homepage = () => {
                   )}
                 >
                   <div onClick={() => setIsMenuModalOpen(prev => !prev)}>
-                    <Image src="/images/Indicator.svg" className="mx-auto mb-3" alt="swipe indicator" />
+                    <Image
+                      src="/images/Indicator.svg"
+                      className="mx-auto mb-3"
+                      alt="swipe indicator"
+                    />
                     <h3 className="text-[17px]/[20px]">{t.explorePlaces}</h3>
                   </div>
                   <div
                     className={cs(
                       'justify-between  py-5',
-                      { ['flex']: isMenuModalOpen },
-                      { ['hidden']: !isMenuModalOpen }
+                      {
+                        ['flex']: isMenuModalOpen
+                      },
+                      {
+                        ['hidden']: !isMenuModalOpen
+                      }
                     )}
                   >
                     {optionData.map((currentOption, index) => {
@@ -260,7 +272,10 @@ const Homepage = () => {
             </Transition>
           </div>
 
-          <BottomModal isOpen={isOptionDetailOpen} onClose={handleOptionDetailClose}>
+          <BottomModal
+            isOpen={isOptionDetailOpen}
+            onClose={handleOptionDetailClose}
+          >
             <div className="flex flex-col gap-2">
               <p className="text-[16px] leading-[20px]">
                 {t[option?.tagValue === StoreType.books ? 'localStores' : 'restaurants']}{' '}
@@ -292,7 +307,10 @@ const Homepage = () => {
               <div className="flex justify-between w-[90%] ">
                 {getStaticTags(option?.tagValue).map((tag, i) => {
                   return (
-                    <div key={tag} className="flex items-center">
+                    <div
+                      key={tag}
+                      className="flex items-center"
+                    >
                       <div className="h-2 w-2 bg-palette-primary mr-2 rounded-full"></div>
                       <p className="text-[10px] leading-[15px]">{t[`${tag}`]}</p>
                     </div>

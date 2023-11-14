@@ -30,17 +30,37 @@ const ImportedOrder: FC<ImportedOrderProps> = ({
 
   return (
     <>
-      <BottomModal isOpen={isOpen} onClose={onClose} modalHeader={t('importedOrder')}>
+      <BottomModal
+        isOpen={isOpen}
+        onClose={onClose}
+        modalHeader={t('importedOrder')}
+      >
         <Box p={'0px 20px'}>
-          <Box position={'relative'} width={'335px'} height={'142px'}>
-            <Image width={'100%'} height={'100%'} alt="item-image" src={importedOrderedItem[0].descriptor.images[0]} />
+          <Box
+            position={'relative'}
+            width={'335px'}
+            height={'142px'}
+          >
+            <Image
+              width={'100%'}
+              height={'100%'}
+              alt="item-image"
+              src={importedOrderedItem[0].descriptor.images[0]}
+            />
           </Box>
-          <Text pt={'20px'} pb={'25px'} fontSize={'15px'}>
+          <Text
+            pt={'20px'}
+            pb={'25px'}
+            fontSize={'15px'}
+          >
             {t('importedOrderDetails1', {
               itemName: importedOrderedItem[0].descriptor.name
             })}
           </Text>
-          <Text fontSize={'15px'} pb={'20px'}>
+          <Text
+            fontSize={'15px'}
+            pb={'20px'}
+          >
             {t('importedOrderDetails2')}
           </Text>
           <Box

@@ -186,7 +186,11 @@ const CheckoutPage = () => {
       {/* start shipping detals */}
       {!isInitResultPresent() ? (
         <Box>
-          <Flex pb={'10px'} mt={'20px'} justifyContent={'space-between'}>
+          <Flex
+            pb={'10px'}
+            mt={'20px'}
+            justifyContent={'space-between'}
+          >
             <Text fontSize={'17px'}>{t.shipping}</Text>
           </Flex>
           <DetailsCard>
@@ -201,7 +205,11 @@ const CheckoutPage = () => {
         </Box>
       ) : (
         <Box>
-          <Flex pb={'10px'} mt={'20px'} justifyContent={'space-between'}>
+          <Flex
+            pb={'10px'}
+            mt={'20px'}
+            justifyContent={'space-between'}
+          >
             <Text fontSize={'17px'}>{t.shipping}</Text>
             <AddShippingButton
               imgFlag={!isInitResultPresent()}
@@ -224,7 +232,11 @@ const CheckoutPage = () => {
       {/* start payment method */}
       {isBillingAddressSameAsShippingAddress ? (
         <Box>
-          <Flex pb={'20px'} mt={'20px'} justifyContent={'space-between'}>
+          <Flex
+            pb={'20px'}
+            mt={'20px'}
+            justifyContent={'space-between'}
+          >
             <Text fontSize={'17px'}>{t.billing}</Text>
             <AddBillingButton
               billingFormData={billingFormData}
@@ -242,8 +254,16 @@ const CheckoutPage = () => {
           </Text> */}
           </Flex>
           <DetailsCard>
-            <Stack spacing={5} direction="row">
-              <Checkbox colorScheme={'red'} pr={'12px'} fontSize={'17px'} defaultChecked>
+            <Stack
+              spacing={5}
+              direction="row"
+            >
+              <Checkbox
+                colorScheme={'red'}
+                pr={'12px'}
+                fontSize={'17px'}
+                defaultChecked
+              >
                 {t.orderDetailsCheckboxText}
               </Checkbox>
             </Stack>
@@ -251,7 +271,11 @@ const CheckoutPage = () => {
         </Box>
       ) : (
         <Box>
-          <Flex pb={'20px'} mt={'20px'} justifyContent={'space-between'}>
+          <Flex
+            pb={'20px'}
+            mt={'20px'}
+            justifyContent={'space-between'}
+          >
             <Text fontSize={'17px'}>{t.billing}</Text>
             <AddBillingButton
               billingFormData={billingFormData}
@@ -274,7 +298,11 @@ const CheckoutPage = () => {
       {/* start payment details */}
       {initRequest.data && (
         <Box>
-          <Flex pb={'10px'} mt={'20px'} justifyContent={'space-between'}>
+          <Flex
+            pb={'10px'}
+            mt={'20px'}
+            justifyContent={'space-between'}
+          >
             <Text fontSize={'17px'}>{t.paymentText}</Text>
           </Flex>
           <DetailsCard>
@@ -296,7 +324,12 @@ const CheckoutPage = () => {
       )}
       {/* end payment details */}
       {!isInitResultPresent() ? (
-        <Box position={'absolute'} left={'5%'} width={'90%'} bottom={'0'}>
+        <Box
+          position={'absolute'}
+          left={'5%'}
+          width={'90%'}
+          bottom={'0'}
+        >
           <ButtonComp
             buttonText={t.proceedToPay}
             background={'rgba(var(--color-primary))'}

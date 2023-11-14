@@ -22,7 +22,10 @@ const SubMenu: React.FC<Props> = ({ subMenuItems }) => {
       <div className="flex items-center hover:text-palette-primary transition-color duration-300">
         {subMenuItems ? (
           <>
-            <Link legacyBehavior href={`/${activeMenuItemText}`}>
+            <Link
+              legacyBehavior
+              href={`/${activeMenuItemText}`}
+            >
               <a
                 className="block rtl:ml-4 lrt:mr-4 text-[16px] "
                 onClick={() => dispatch(megaMenuActions.closeMegaMenu())}
@@ -30,7 +33,12 @@ const SubMenu: React.FC<Props> = ({ subMenuItems }) => {
                 {t.seeAllProduct}
               </a>
             </Link>
-            <ArrowDirection style={{ fontSize: '1rem', color: 'inherit' }} />
+            <ArrowDirection
+              style={{
+                fontSize: '1rem',
+                color: 'inherit'
+              }}
+            />
           </>
         ) : null}
       </div>
@@ -40,8 +48,14 @@ const SubMenu: React.FC<Props> = ({ subMenuItems }) => {
           <>
             {subMenuItems.map((menuTitle, index) => {
               return (
-                <div className="py-3" key={`${menuTitle}-${index}`}>
-                  <Link legacyBehavior href={`/${activeMenuItemText}/${menuTitle.title}`}>
+                <div
+                  className="py-3"
+                  key={`${menuTitle}-${index}`}
+                >
+                  <Link
+                    legacyBehavior
+                    href={`/${activeMenuItemText}/${menuTitle.title}`}
+                  >
                     <a
                       className="block text-sm rtl:ml-10 ltr:mr-10 font-bold px-2 ltr:border-l-4 rtl:border-r-4 border-palette-primary rounded-sm hover:text-palette-primary transition-color duration-300"
                       onClick={() => dispatch(megaMenuActions.closeMegaMenu())}

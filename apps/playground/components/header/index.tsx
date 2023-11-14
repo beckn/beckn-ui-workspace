@@ -75,7 +75,10 @@ const getHeaderTitleForPage = (name: string, logo: string, pathName: string, loc
       return <Text>{values[pathName]}</Text>
     default:
       return (
-        <Box width={'260px'} className="md:hidden ml-2  flex gap-1 my-2">
+        <Box
+          width={'260px'}
+          className="md:hidden ml-2  flex gap-1 my-2"
+        >
           <Text
             margin={'0 auto'}
             textAlign={'center'}
@@ -109,7 +112,10 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
       <div className="h-7 w-full bg-[#efefef] fixed z-[9999]">
         <div className="px-5 h-full flex items-center">
           <div>
-            <Image src="/images/CommerceLogo.svg" alt="App logo" />
+            <Image
+              src="/images/CommerceLogo.svg"
+              alt="App logo"
+            />
           </div>
           <div className="ml-auto flex gap-4">
             {languageIconWhiteList.includes(router.pathname) && <Settings />}
@@ -143,14 +149,20 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
       </div>
 
       {/* Menu Modal */}
-      <BottomModal isOpen={isMenuModalOpen} onClose={handleMenuModalClose}>
+      <BottomModal
+        isOpen={isMenuModalOpen}
+        onClose={handleMenuModalClose}
+      >
         <div
           onClick={() => {
             router.push('/orderHistory')
           }}
           className="flex gap-2 py-5"
         >
-          <Image src="/images/orderHistory.svg" alt="Order history icon" />
+          <Image
+            src="/images/orderHistory.svg"
+            alt="Order history icon"
+          />
           {t['orderHistory']}
         </div>
       </BottomModal>
@@ -175,7 +187,10 @@ const BottomHeader = () => {
           <div className="flex gap-4 items-center">
             {!backIconList.includes(router.pathname) && (
               <div onClick={() => router.back()}>
-                <Image src="/images/Back.svg" alt="Back icon" />
+                <Image
+                  src="/images/Back.svg"
+                  alt="Back icon"
+                />
               </div>
             )}
           </div>

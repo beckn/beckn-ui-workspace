@@ -86,11 +86,21 @@ const UploadFile: React.FC<UploadFilepropsModel> = props => {
               <Flex alignItems={'center'}>
                 <Image src="/images/pdfIcon.svg" />
                 <Box w={'100%'}>
-                  <Flex alignItems={'center'} justifyContent="space-between">
-                    <Text fontWeight="600" pr={'5px'}>
+                  <Flex
+                    alignItems={'center'}
+                    justifyContent="space-between"
+                  >
+                    <Text
+                      fontWeight="600"
+                      pr={'5px'}
+                    >
                       {file.name}
                     </Text>
-                    <Image cursor={'pointer'} src="/images/deleteIcon.svg" onClick={() => handleDeletePdf(index)} />
+                    <Image
+                      cursor={'pointer'}
+                      src="/images/deleteIcon.svg"
+                      onClick={() => handleDeletePdf(index)}
+                    />
                   </Flex>
                   <Flex alignItems={'center'}>
                     <Text pr={'10px'}>Last Used -</Text>
@@ -102,10 +112,23 @@ const UploadFile: React.FC<UploadFilepropsModel> = props => {
           ))}
         </Box>
       )}
-      <Box padding={'20px 80px'} border="dashed 1px" borderRadius={'12px'} cursor="pointer" position={'relative'}>
-        <Flex alignItems={'center'} justifyContent="center">
+      <Box
+        padding={'20px 80px'}
+        border="dashed 1px"
+        borderRadius={'12px'}
+        cursor="pointer"
+        position={'relative'}
+      >
+        <Flex
+          alignItems={'center'}
+          justifyContent="center"
+        >
           <Image src="/images/uploadIcon.svg" />
-          <Text pl={'10px'} pt="5px" fontSize="12px">
+          <Text
+            pl={'10px'}
+            pt="5px"
+            fontSize="12px"
+          >
             Upload Documents
             <Input
               type="file"

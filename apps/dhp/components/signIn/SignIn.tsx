@@ -13,8 +13,16 @@ const SignIn: React.FC<SignInPropsModel> = props => {
   return (
     <Box className={Styles.main_container}>
       <Flex className={Styles.logo_container}>
-        <Image src={HomeImg} alt="Home Icon" />
-        <Image className={Styles.logo_skillup} src={GeneHealLogo} alt="Skill Up Icon" pt="15px" />
+        <Image
+          src={HomeImg}
+          alt="Home Icon"
+        />
+        <Image
+          className={Styles.logo_skillup}
+          src={GeneHealLogo}
+          alt="Skill Up Icon"
+          pt="15px"
+        />
       </Flex>
       <Box className={Styles.signin_container}>
         <Flex className={Styles.signin}>
@@ -27,7 +35,11 @@ const SignIn: React.FC<SignInPropsModel> = props => {
             borderRadius={'12px'}
           >
             <Flex className={Styles.signin_button_conatiner}>
-              <Image src={GoogleLogo} className={Styles.google_icon} alt="google signin" />
+              <Image
+                src={GoogleLogo}
+                className={Styles.google_icon}
+                alt="google signin"
+              />
               <Text className={Styles.signin_button_text}>{t.googleSignInText}</Text>
             </Flex>
           </Button>

@@ -9,9 +9,18 @@ const Offers = () => {
 
   return (
     <div className="md:mt-10 w-full xl:max-w-[2100px] mx-auto">
-      <CarouselBox title="offers" className="bg-offersBG" href="/">
+      <CarouselBox
+        title="offers"
+        className="bg-offersBG"
+        href="/"
+      >
         {OfferProducts.slice(0, 10).map((product: RetailItem) => {
-          return <CarouselBoxCard key={product.descriptor.name} product={product} />
+          return (
+            <CarouselBoxCard
+              key={product.descriptor.name}
+              product={product}
+            />
+          )
         })}
       </CarouselBox>
     </div>

@@ -19,21 +19,43 @@ const Language = () => {
       <div className="md:hidden">
         <h3>{t('language')}</h3>
         <div className={`ltr:ml-2 rtl:mr-2 mt-2 z-10`}>
-          <LanguageItem language="en" onCloseBox={() => dispatch(settingBoxActions.closeSettingBox())} />
-          <LanguageItem language="fa" onCloseBox={() => dispatch(settingBoxActions.closeSettingBox())} />
+          <LanguageItem
+            language="en"
+            onCloseBox={() => dispatch(settingBoxActions.closeSettingBox())}
+          />
+          <LanguageItem
+            language="fa"
+            onCloseBox={() => dispatch(settingBoxActions.closeSettingBox())}
+          />
         </div>
       </div>
 
-      <div className="hidden md:flex items-center cursor-pointer" onClick={() => setOpenLang(prevState => !prevState)}>
+      <div
+        className="hidden md:flex items-center cursor-pointer"
+        onClick={() => setOpenLang(prevState => !prevState)}
+      >
         <p className="mx-[0.3rem] text-sm font-bold font-english">{locale === 'en' ? 'En' : 'Fr'}</p>
-        <MdLanguage style={{ fontSize: '1.3rem' }} />
+        <MdLanguage
+          style={{
+            fontSize: '1.3rem'
+          }}
+        />
       </div>
       {openLang ? (
         <>
-          <div className="fixed inset-0 -z-1" onClick={() => setOpenLang(false)}></div>
+          <div
+            className="fixed inset-0 -z-1"
+            onClick={() => setOpenLang(false)}
+          ></div>
           <div className={`absolute top-6 ltr:right-0 rtl:left-0 bg-palette-card py-3 px-6 shadow-md rounded-md z-10`}>
-            <LanguageItem language="fa" onCloseBox={onCloseLangBox} />
-            <LanguageItem language="en" onCloseBox={onCloseLangBox} />
+            <LanguageItem
+              language="fa"
+              onCloseBox={onCloseLangBox}
+            />
+            <LanguageItem
+              language="en"
+              onCloseBox={onCloseLangBox}
+            />
           </div>
         </>
       ) : null}

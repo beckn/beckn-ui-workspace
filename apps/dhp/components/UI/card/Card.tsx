@@ -24,7 +24,9 @@ const Card: React.FC<Props> = ({ product }) => {
       <Link
         href={{
           pathname: '/product',
-          query: { productDetails: encodedProduct }
+          query: {
+            productDetails: encodedProduct
+          }
         }}
         style={{ width: '100%' }}
       >
@@ -47,7 +49,12 @@ const Card: React.FC<Props> = ({ product }) => {
             position={'relative'}
             className="flex flex-col md:w-full md:px-3  md:py-4"
           >
-            <Flex justifyContent={'space-between'} alignItems={'flex-start'} w={'100%'} flexDirection={'column'}>
+            <Flex
+              justifyContent={'space-between'}
+              alignItems={'flex-start'}
+              w={'100%'}
+              flexDirection={'column'}
+            >
               <Text
                 w={'90%'}
                 fontWeight={'600'}
@@ -60,26 +67,51 @@ const Card: React.FC<Props> = ({ product }) => {
               >
                 {product.descriptor.name}
               </Text>
-              <Text fontSize={'12px'} fontWeight={400}>
+              <Text
+                fontSize={'12px'}
+                fontWeight={400}
+              >
                 Orthopaedic Surgeon
               </Text>
             </Flex>
 
-            <Flex fontSize={'12px'} alignItems={'center'} mb={'10px'} mt={'10px'}>
+            <Flex
+              fontSize={'12px'}
+              alignItems={'center'}
+              mb={'10px'}
+              mt={'10px'}
+            >
               <Text fontWeight={'600'}>Fees</Text>
               <Spacer />
-              <Flex align={'center'} gap={'5px'}>
-                <Icon as={FaLocationDot} w={'6px'} h={'8px'}></Icon>
-                <Text fontWeight={400} fontSize={'12px'} fontFamily={'Poppins'}>
+              <Flex
+                align={'center'}
+                gap={'5px'}
+              >
+                <Icon
+                  as={FaLocationDot}
+                  w={'6px'}
+                  h={'8px'}
+                ></Icon>
+                <Text
+                  fontWeight={400}
+                  fontSize={'12px'}
+                  fontFamily={'Poppins'}
+                >
                   800 m
                 </Text>
               </Flex>
             </Flex>
-            <Flex justifyContent={'space-between'} alignItems={'center'}>
+            <Flex
+              justifyContent={'space-between'}
+              alignItems={'center'}
+            >
               <ProductPrice price={parseFloat(product.price.value)} />
               <Flex alignItems={'center'}>
                 <Image src={StarIcon} />
-                <Text fontSize={'12px'} pl={'5px'}>
+                <Text
+                  fontSize={'12px'}
+                  pl={'5px'}
+                >
                   {product.tags.Rating}
                 </Text>
               </Flex>

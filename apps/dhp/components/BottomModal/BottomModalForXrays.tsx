@@ -44,7 +44,13 @@ const BottomModalForXrays: React.FC<BottomModalForXraysProps> = props => {
         motionPreset="slideInBottom"
       >
         <ModalOverlay height="100vh" />
-        <ModalContent position="fixed" bottom="0px" mb="0" borderRadius="0.75rem 0.75rem 0px 0px" maxW="lg">
+        <ModalContent
+          position="fixed"
+          bottom="0px"
+          mb="0"
+          borderRadius="0.75rem 0.75rem 0px 0px"
+          maxW="lg"
+        >
           <Box padding={'20px 20px 5px'}>
             <Text>{props.items}</Text>
             <ModalCloseButton
@@ -53,7 +59,9 @@ const BottomModalForXrays: React.FC<BottomModalForXraysProps> = props => {
               justifyContent={'center'}
               top="-10px"
               w={'100%'}
-              _focusVisible={{ boxHhadow: 'unset' }}
+              _focusVisible={{
+                boxHhadow: 'unset'
+              }}
             >
               <Image src={crossIconHz} />
             </ModalCloseButton>
@@ -62,7 +70,10 @@ const BottomModalForXrays: React.FC<BottomModalForXraysProps> = props => {
           <Divider />
 
           <ModalBody padding={'15px 20px'}>
-            <Box mb="20px" fontSize={'15px'}>
+            <Box
+              mb="20px"
+              fontSize={'15px'}
+            >
               <Text pb={'8px'}> {props.description}</Text>
             </Box>
 

@@ -37,8 +37,19 @@ const ViewMoreOrderModal: React.FC<ViewMoreOrderModalProps> = props => {
         motionPreset="slideInBottom"
       >
         <ModalOverlay height="100vh" />
-        <ModalContent position="fixed" bottom="0px" mb="0" borderRadius="0.75rem 0.75rem 0px 0px" maxW="lg">
-          <Flex justifyContent={'space-between'} alignItems={'center'} padding={'15px 20px'} fontSize={'17px'}>
+        <ModalContent
+          position="fixed"
+          bottom="0px"
+          mb="0"
+          borderRadius="0.75rem 0.75rem 0px 0px"
+          maxW="lg"
+        >
+          <Flex
+            justifyContent={'space-between'}
+            alignItems={'center'}
+            padding={'15px 20px'}
+            fontSize={'17px'}
+          >
             <Text>
               {t.orderId}: {props.orderId}
             </Text>

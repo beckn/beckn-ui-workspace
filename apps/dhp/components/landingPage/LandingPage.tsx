@@ -66,15 +66,32 @@ const LandingPage: React.FC = () => {
   }, [])
 
   return (
-    <Box p={'20px'} className={styles.mainContainer}>
+    <Box
+      p={'20px'}
+      className={styles.mainContainer}
+    >
       <TopSheet currentAddress={currentAddress} />
-      <Text fontSize={'30px'} fontWeight={800} color={'rgba(var(--color-primary))'} pt="40px">
+      <Text
+        fontSize={'30px'}
+        fontWeight={800}
+        color={'rgba(var(--color-primary))'}
+        pt="40px"
+      >
         {t.homeHeading}
       </Text>
-      <Text fontSize={'30px'} fontWeight={800} pb={'15px'} color={'#EBF2F5'}>
+      <Text
+        fontSize={'30px'}
+        fontWeight={800}
+        pb={'15px'}
+        color={'#EBF2F5'}
+      >
         {t.headingSpan}
       </Text>
-      <Text fontSize={'15px'} fontWeight={400} color={'#FFF'}>
+      <Text
+        fontSize={'15px'}
+        fontWeight={400}
+        color={'#FFF'}
+      >
         {t.homeText}
       </Text>
       <Flex pt={'25px'}>
@@ -111,11 +128,26 @@ const LandingPage: React.FC = () => {
           />
         </Flex>
       </Flex>
-      <Flex justifyContent={'center'} alignItems="center" width=" calc(100% - 40px)" position={'fixed'} bottom="15px">
-        <Text pr={'8px'} fontSize="12px" color={'#FFF'}>
+      <Flex
+        justifyContent={'center'}
+        alignItems="center"
+        width=" calc(100% - 40px)"
+        position={'fixed'}
+        bottom="15px"
+      >
+        <Text
+          pr={'8px'}
+          fontSize="12px"
+          color={'#FFF'}
+        >
           {t.footerText}
         </Text>
-        <Image src={beckenFooter} alt="footerLogo" width={39} height={13} />
+        <Image
+          src={beckenFooter}
+          alt="footerLogo"
+          width={39}
+          height={13}
+        />
       </Flex>
     </Box>
   )

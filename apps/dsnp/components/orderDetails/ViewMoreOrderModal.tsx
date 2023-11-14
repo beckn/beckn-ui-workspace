@@ -36,8 +36,19 @@ const ViewMoreOrderModal: React.FC<ViewMoreOrderModalProps> = props => {
         motionPreset="slideInBottom"
       >
         <ModalOverlay height="100vh" />
-        <ModalContent position="fixed" bottom="0px" mb="0" borderRadius="0.75rem 0.75rem 0px 0px" maxW="lg">
-          <Flex justifyContent={'space-between'} alignItems={'center'} padding={'15px 20px'} fontSize={'17px'}>
+        <ModalContent
+          position="fixed"
+          bottom="0px"
+          mb="0"
+          borderRadius="0.75rem 0.75rem 0px 0px"
+          maxW="lg"
+        >
+          <Flex
+            justifyContent={'space-between'}
+            alignItems={'center'}
+            padding={'15px 20px'}
+            fontSize={'17px'}
+          >
             <Text>
               {t('orderId')}: {props.orderId}
             </Text>
@@ -53,14 +64,26 @@ const ViewMoreOrderModal: React.FC<ViewMoreOrderModalProps> = props => {
           <ModalBody padding={'15px 20px'}>
             {props.items.map((item: any) => {
               return (
-                <Flex key={item.id} mb={'20px'} justifyContent={'space-between'}>
+                <Flex
+                  key={item.id}
+                  mb={'20px'}
+                  justifyContent={'space-between'}
+                >
                   <Box>
                     <Text>{item.descriptor.name}</Text>
-                    <Text fontSize={'12px'} fontWeight={'600'} pt={'5px'}>
+                    <Text
+                      fontSize={'12px'}
+                      fontWeight={'600'}
+                      pt={'5px'}
+                    >
                       x {item.quantity.count}
                     </Text>
                   </Box>
-                  <Text fontSize={'15px'} fontWeight={'600'} color={'rgba(var(--color-primary))'}>
+                  <Text
+                    fontSize={'15px'}
+                    fontWeight={'600'}
+                    color={'rgba(var(--color-primary))'}
+                  >
                     {t('currencySymbol')}
                     {item.price.offered_value}
                   </Text>
