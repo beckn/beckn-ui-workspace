@@ -5,4 +5,7 @@ export interface ButtonProps {
   className?: string
   handleClick?: MouseEventHandler<HTMLButtonElement>
   children?: ReactNode
+  disabled?: boolean
+  fullWidth?: boolean
+  variant?: 'outline' | 'solid'
 }

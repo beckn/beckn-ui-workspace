@@ -28,13 +28,31 @@ const scholarshipConfirmationPage = () => {
       <ConfirmOrder
         confirmationText={
           <>
-            <Text fontSize={'17px'} fontWeight={'600'} textAlign={'center'}>
+            <Text
+              fontSize={'17px'}
+              fontWeight={'600'}
+              textAlign={'center'}
+            >
               {t.applicationSubmitted}
             </Text>
             <Stack>
-              <Text textAlign={'center'} marginTop={'8px'} marginBottom={'40px'} fontSize={'15px'} fontWeight="400">
+              <Text
+                textAlign={'center'}
+                marginTop={'8px'}
+                marginBottom={'40px'}
+                fontSize={'15px'}
+                fontWeight="400"
+              >
                 {t.confirmText1} <br />
-                {t.confirmText2} <span style={{ fontWeight: '600' }}>{appliedScholarship.id}</span> {t.confirmText3}
+                {t.confirmText2}{' '}
+                <span
+                  style={{
+                    fontWeight: '600'
+                  }}
+                >
+                  {appliedScholarship.id}
+                </span>{' '}
+                {t.confirmText3}
                 <br />
                 {t.confirmText4}
               </Text>

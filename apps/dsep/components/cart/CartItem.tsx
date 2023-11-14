@@ -68,7 +68,12 @@ const CartItem: React.FC<Props> = ({ product, setIsLoadingForCartCountChange }) 
   return (
     <>
       <div className="flex items-center flex-wrap sm:my-4 sm:py-4 px-2 border-b-2 mb-4">
-        <div style={{ width: '100%' }} className="lg:w-1/2 sm:min-w-[290px]">
+        <div
+          style={{
+            width: '100%'
+          }}
+          className="lg:w-1/2 sm:min-w-[290px]"
+        >
           {/* <Link
           href={`/${product.category[0]}/${product.category[1]}/${product.category[2]}/${product.slug.current}`}
         > */}
@@ -86,7 +91,11 @@ const CartItem: React.FC<Props> = ({ product, setIsLoadingForCartCountChange }) 
                 position: 'relative'
               }}
             >
-              <Image src={product.descriptor.images[0]} alt={product.descriptor.name} className="object-contain" />
+              <Image
+                src={product.descriptor.images[0]}
+                alt={product.descriptor.name}
+                className="object-contain"
+              />
             </div>
             {counter === 1 ? (
               <div
@@ -98,7 +107,12 @@ const CartItem: React.FC<Props> = ({ product, setIsLoadingForCartCountChange }) 
                   right: '0'
                 }}
               >
-                <HiOutlineTrash style={{ fontSize: '1.3rem', color: 'black' }} />
+                <HiOutlineTrash
+                  style={{
+                    fontSize: '1.3rem',
+                    color: 'black'
+                  }}
+                />
               </div>
             ) : (
               <div
@@ -110,13 +124,20 @@ const CartItem: React.FC<Props> = ({ product, setIsLoadingForCartCountChange }) 
                   right: '0'
                 }}
               >
-                <HiMinusSm style={{ fontSize: '1rem' }} />
+                <HiMinusSm
+                  style={{
+                    fontSize: '1rem'
+                  }}
+                />
               </div>
             )}
 
             <div
               className="flex-grow text-sm font-normal mb-2 sm:mb-0 mx-2 w-full text-center pt-1"
-              style={{ direction: 'ltr', fontSize: '17px' }}
+              style={{
+                direction: 'ltr',
+                fontSize: '17px'
+              }}
             >
               {product.descriptor.name}
             </div>
@@ -126,24 +147,45 @@ const CartItem: React.FC<Props> = ({ product, setIsLoadingForCartCountChange }) 
         <div className="flex flex-wrap flex-grow md:items-center mb-4 sm:mb-0">
           <div
             className="flex flex-grow items-center justify-center font-normal rtl:mr-1 lrt:ml-1"
-            style={{ fontSize: '15px' }}
+            style={{
+              fontSize: '15px'
+            }}
           >
-            <p style={{ marginRight: '10px' }}>{t.totalAmount}</p>
+            <p
+              style={{
+                marginRight: '10px'
+              }}
+            >
+              {t.totalAmount}
+            </p>
 
-            <ProductPrice price={parseFloat(product.price.value) * counter!} isLargeSize />
+            <ProductPrice
+              price={parseFloat(product.price.value) * counter!}
+              isLargeSize
+            />
           </div>
         </div>
       </div>
       <Box>
-        <Text mb="10px" fontSize={'17px'}>
+        <Text
+          mb="10px"
+          fontSize={'17px'}
+        >
           {t.scholarship}
         </Text>
         {scholarshipId ? (
           <DetailsCard>
             <Flex alignItems={'center'}>
-              <Image alt="shippingBtnImage" src={addShippingBtn} />
+              <Image
+                alt="shippingBtnImage"
+                src={addShippingBtn}
+              />
               <Text ml={'8px'}>
-                <span style={{ fontWeight: 'bold' }}>
+                <span
+                  style={{
+                    fontWeight: 'bold'
+                  }}
+                >
                   ‘{scholarshipId}-{scholarshipTitle}’
                 </span>
               </Text>

@@ -87,11 +87,29 @@ const BillingForm: React.FC<ShippingFormProps> = props => {
         motionPreset="slideInBottom"
       >
         <ModalOverlay height="100vh" />
-        <ModalContent position="fixed" bottom="0px" mb="0" borderRadius="1.75rem 1.75rem 0px 0px" maxW="lg">
-          <ModalCloseButton height={'unset'} pt={'5px'} margin={'0 auto'} position={'unset'}>
-            <Image src={crossIcon} alt="Close Icon" />
+        <ModalContent
+          position="fixed"
+          bottom="0px"
+          mb="0"
+          borderRadius="1.75rem 1.75rem 0px 0px"
+          maxW="lg"
+        >
+          <ModalCloseButton
+            height={'unset'}
+            pt={'5px'}
+            margin={'0 auto'}
+            position={'unset'}
+          >
+            <Image
+              src={crossIcon}
+              alt="Close Icon"
+            />
           </ModalCloseButton>
-          <Flex justifyContent={'space-between'} alignItems={'center'} padding={'15px 20px'}>
+          <Flex
+            justifyContent={'space-between'}
+            alignItems={'center'}
+            padding={'15px 20px'}
+          >
             <Text>{t.addBillingDetails}</Text>
           </Flex>
           <Box>

@@ -12,7 +12,15 @@ interface Props {
 const CategorySmBox: React.FC<Props> = ({ imgSrc, bgc, categoryTitle, href }) => {
   const { t, locale } = useLanguage()
   return (
-    <Link legacyBehavior href={{ pathname: '/search', query: { keyword: t[`${categoryTitle}`] } }}>
+    <Link
+      legacyBehavior
+      href={{
+        pathname: '/search',
+        query: {
+          keyword: t[`${categoryTitle}`]
+        }
+      }}
+    >
       <a>
         <div
           className={`flex flex-col items-center text-center  ${

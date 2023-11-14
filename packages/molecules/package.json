@@ -8,7 +8,8 @@
     "prepare": "next build",
     "start": "next start",
     "postbuild": "next-sitemap",
-    "export": "next export"
+    "export": "next export",
+    "format": "prettier  \"./**/*.{js,jsx,ts,tsx,json}\" --write"
   },
   "prettier": "@beckn-ui/prettier-config",
   "dependencies": {

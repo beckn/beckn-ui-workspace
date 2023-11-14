@@ -22,7 +22,9 @@ const LabCard: React.FC<Props> = ({ product }) => {
       <Link
         href={{
           pathname: '/labDetails',
-          query: { productDetails: encodedProduct }
+          query: {
+            productDetails: encodedProduct
+          }
         }}
       >
         <div className="flex md:items-center md:flex-col relative w-full ">
@@ -44,7 +46,12 @@ const LabCard: React.FC<Props> = ({ product }) => {
             position={'relative'}
             className="flex flex-col md:w-full md:px-3  md:py-4"
           >
-            <Flex justifyContent={'space-between'} alignItems={'flex-start'} w={'100%'} flexDirection={'column'}>
+            <Flex
+              justifyContent={'space-between'}
+              alignItems={'flex-start'}
+              w={'100%'}
+              flexDirection={'column'}
+            >
               <Text
                 w={'90%'}
                 fontWeight={'600'}
@@ -57,19 +64,32 @@ const LabCard: React.FC<Props> = ({ product }) => {
               >
                 {product.descriptor.name}
               </Text>
-              <Text fontSize={'12px'} fontWeight={400}>
+              <Text
+                fontSize={'12px'}
+                fontWeight={400}
+              >
                 X-Ray, Blood Test & More
               </Text>
             </Flex>
 
-            <Box fontSize={'12px'} mb={'10px'} mt={'10px'}>
+            <Box
+              fontSize={'12px'}
+              mb={'10px'}
+              mt={'10px'}
+            >
               <Text fontWeight={'600'}>Sold by: </Text>
             </Box>
-            <Flex justifyContent={'space-between'} alignItems={'center'}>
+            <Flex
+              justifyContent={'space-between'}
+              alignItems={'center'}
+            >
               <ProductPrice price={parseFloat(product.price.value)} />
               <Flex alignItems={'center'}>
                 <Image src={StarIcon} />
-                <Text fontSize={'12px'} pl={'5px'}>
+                <Text
+                  fontSize={'12px'}
+                  pl={'5px'}
+                >
                   {product.tags.Rating}
                 </Text>
               </Flex>

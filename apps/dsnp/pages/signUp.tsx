@@ -89,11 +89,22 @@ const SignUp = () => {
 
   return (
     <>
-      <Box className={Styles.main_container} mt="40px">
+      <Box
+        className={Styles.main_container}
+        mt="40px"
+      >
         <Flex className={Styles.logo_container}>
-          <Image className={Styles.logo_skillup} src={OpenCommerce} alt="OpenCommerce" pt="15px" />
+          <Image
+            className={Styles.logo_skillup}
+            src={OpenCommerce}
+            alt="OpenCommerce"
+            pt="15px"
+          />
         </Flex>
-        <Box className={Styles.signin_container} pt="40px">
+        <Box
+          className={Styles.signin_container}
+          pt="40px"
+        >
           <div className={style.container}>
             <div className={style.did_floating_label_content}>
               <input

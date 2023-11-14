@@ -14,10 +14,18 @@ const ScholarshipDetails: React.FC<Props> = ({ scholarship }) => {
   const { t } = useLanguage()
   return (
     <Box>
-      <Text fontSize={'17px'} fontWeight="600" textAlign={'center'} pb="10px">
+      <Text
+        fontSize={'17px'}
+        fontWeight="600"
+        textAlign={'center'}
+        pb="10px"
+      >
         {scholarship.name}
       </Text>
-      <Text fontSize={'15px'} textAlign={'center'}>
+      <Text
+        fontSize={'15px'}
+        textAlign={'center'}
+      >
         by {scholarship.platformName}
       </Text>
       <Box

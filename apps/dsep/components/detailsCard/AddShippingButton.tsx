@@ -16,10 +16,17 @@ const AddShippingButton: React.FC<AddShippingButtonProps> = props => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   return (
     <>
-      <Flex alignItems={'center'} onClick={onOpen}>
+      <Flex
+        alignItems={'center'}
+        onClick={onOpen}
+      >
         {/* eslint-disable-next-line jsx-a11y/alt-text */}
         {props.imgFlag ? <Image src={addShippingBtn} /> : null}
-        <Text fontSize={'15px'} color={'rgba(var(--color-primary))'} pl={'10px'}>
+        <Text
+          fontSize={'15px'}
+          color={'rgba(var(--color-primary))'}
+          pl={'10px'}
+        >
           {props.addShippingdetailsBtnText}
         </Text>
       </Flex>

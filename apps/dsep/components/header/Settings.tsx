@@ -36,7 +36,10 @@ const Settings = () => {
             </div> */}
       {isSettingBoxOpen ? (
         <>
-          <div className="fixed inset-0  bg-black/20" onClick={onCloseSettingBox}></div>
+          <div
+            className="fixed inset-0  bg-black/20"
+            onClick={onCloseSettingBox}
+          ></div>
           <div className="absolute right-0 top-8 ltr:right-0 rtl:left-0 bg-palette-card shadow-md rounded-lg px-6 py-3 z-[9999] ">
             <Language />
           </div>

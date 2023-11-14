@@ -34,7 +34,10 @@ const CategoryLgBox: React.FC<Props> = ({ name, title, description, styles, href
       <div className="mx-[0.5rem]">
         <h3 className="text-xl 2xl:text-2xl font-[500]">{t(`${title}`)}</h3>
         <p className="mt-2 text-sm">{t(`${description}`)}</p>
-        <Link legacyBehavior href={href}>
+        <Link
+          legacyBehavior
+          href={href}
+        >
           <a className="inline-block px-2 py-3 mt-4 transition-transform duration-300 rounded-lg shadow-xl 2xl:px-4 bg-palette-primary hover:scale-105 ltr:text-sm rtl:text-xs text-palette-side">
             {t('seeAllProducts')}
           </a>

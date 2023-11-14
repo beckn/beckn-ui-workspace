@@ -44,7 +44,13 @@ const About: NextPage = () => {
         <p>{t.myName}</p>
       </div>
       <div className="hidden md:block flex-grow text-center">
-        <Image src="/images/about-me.svg" alt="about me" width={500} height={500} className="object-contain" />
+        <Image
+          src="/images/about-me.svg"
+          alt="about me"
+          width={500}
+          height={500}
+          className="object-contain"
+        />
       </div>
     </div>
   )

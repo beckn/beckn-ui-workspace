@@ -23,12 +23,17 @@ const ProductPrice: React.FC<Props> = ({ price, isLargeSize = false, isInSlider,
 
   return (
     <div>
-      <div className={Styles.prouct_price_layout_container} style={{ justifyContent }}>
+      <div
+        className={Styles.prouct_price_layout_container}
+        style={{ justifyContent }}
+      >
         <div>
           <Box
             color={'rgba(var(--color-primary))'}
             className={Styles[`${prouctPriceContainerClassNames}`]}
-            style={{ flexDirection }}
+            style={{
+              flexDirection
+            }}
           >
             <span className={Styles.currency_symbol}>{t.currencySymbol}</span>
             <span>{price.toFixed(2)}</span>

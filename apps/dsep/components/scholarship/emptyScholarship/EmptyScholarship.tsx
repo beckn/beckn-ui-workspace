@@ -15,12 +15,24 @@ const EmptyScholarship: React.FC = () => {
 
   return (
     <Flex className={Styles.emptyCart_container}>
-      <Box mb={'40px'} display={'flex'} justifyContent={'center'}>
-        <Image src={CartEmpty} width={'306px'} height={'245px'} alt="cartEmpty" />
+      <Box
+        mb={'40px'}
+        display={'flex'}
+        justifyContent={'center'}
+      >
+        <Image
+          src={CartEmpty}
+          width={'306px'}
+          height={'245px'}
+          alt="cartEmpty"
+        />
       </Box>
       <Text className={Styles.cartHeadingText}>{t.noScholarship}</Text>
       <Text className={Styles.cartSpanText}>{t.noScholarshipText1}</Text>
-      <Text className={Styles.cartSpanText} mb="40px">
+      <Text
+        className={Styles.cartSpanText}
+        mb="40px"
+      >
         {t.noScholarshipText2}
       </Text>
       <Button

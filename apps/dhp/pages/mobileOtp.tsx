@@ -53,11 +53,18 @@ const MobileOtp = () => {
     <>
       <Box padding={'0 11px'}>
         <Box mt={'20px'}>
-          <Text fontSize={'30px'} fontWeight={'600'} color={'rgba(var(--color-primary))'}>
+          <Text
+            fontSize={'30px'}
+            fontWeight={'600'}
+            color={'rgba(var(--color-primary))'}
+          >
             {t.verifyMobile}
           </Text>
 
-          <Text pt={'10px'} fontSize={'15px'}>
+          <Text
+            pt={'10px'}
+            fontSize={'15px'}
+          >
             {t.otpMessage1} <br />
             {t.otpMessage2} {phoneNumber}
           </Text>

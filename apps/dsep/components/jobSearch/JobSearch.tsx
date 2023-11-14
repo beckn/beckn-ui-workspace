@@ -12,10 +12,16 @@ const JobSearch: React.FC<JobsSearchPropsModel> = props => {
   return (
     <div>
       <Box className="job-search-bar">
-        <SearchBar searchString={''} handleChange={() => {}} />
+        <SearchBar
+          searchString={''}
+          handleChange={() => {}}
+        />
       </Box>
       {transformedData.map((data, idx) => (
-        <JobsCard key={idx} job={data} />
+        <JobsCard
+          key={idx}
+          job={data}
+        />
       ))}
     </div>
   )

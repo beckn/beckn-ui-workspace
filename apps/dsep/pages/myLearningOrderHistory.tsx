@@ -47,7 +47,11 @@ const myLearningOrderHistory = () => {
   }
 
   return (
-    <Box className="hideScroll" maxH={'calc(100vh - 100px)'} overflowY="scroll">
+    <Box
+      className="hideScroll"
+      maxH={'calc(100vh - 100px)'}
+      overflowY="scroll"
+    >
       {coursesOrders.map((courseOrder: any, index) => (
         <MyLearing
           key={index}

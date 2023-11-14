@@ -65,7 +65,13 @@ const EnteringBox: React.FC<Props> = ({ title, submitHandler, errorMessage }) =>
         <form onSubmit={onSubmitHandler}>
           <div className="mt-8">
             {title === 'signUp' ? (
-              <Input ref={userNameRef} type="text" id="userName" placeholder="enterYourUserName" required={true} />
+              <Input
+                ref={userNameRef}
+                type="text"
+                id="userName"
+                placeholder="enterYourUserName"
+                required={true}
+              />
             ) : null}
 
             <Input
@@ -87,7 +93,10 @@ const EnteringBox: React.FC<Props> = ({ title, submitHandler, errorMessage }) =>
             />
           </div>
           {errorMessage && (
-            <span ref={errorMessageRef} className="text-rose-600 block -mt-4 mb-4">
+            <span
+              ref={errorMessageRef}
+              className="text-rose-600 block -mt-4 mb-4"
+            >
               {t(`${errorMessage}`) ? t(`${errorMessage}`) : errorMessage}
             </span>
           )}
@@ -99,7 +108,10 @@ const EnteringBox: React.FC<Props> = ({ title, submitHandler, errorMessage }) =>
             {t(`${title}`)}
           </button>
         </form>
-        <Link legacyBehavior href={`/${linkHref}`}>
+        <Link
+          legacyBehavior
+          href={`/${linkHref}`}
+        >
           <a className="block my-4">
             <span className="text-sm text-palette-mute">
               {title === 'login' ? t('doHaveAnAccount') : t('alreadyHaveAnAccount')}

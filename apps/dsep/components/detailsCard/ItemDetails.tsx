@@ -13,10 +13,17 @@ const ItemDetails: React.FC<ItemDetailProps> = props => {
   return (
     <>
       <Box pb={'10px'}>
-        <Flex pb={'5px'} justifyContent={'space-between'} alignItems={'center'}>
+        <Flex
+          pb={'5px'}
+          justifyContent={'space-between'}
+          alignItems={'center'}
+        >
           <Text fontSize={'15px'}>{props.title}</Text> {/* <Text fontSize={"12px"}>x{props.quantity}</Text> */}
         </Flex>
-        <Flex justifyContent={'space-between'} alignItems={'center'}>
+        <Flex
+          justifyContent={'space-between'}
+          alignItems={'center'}
+        >
           <Text fontSize={'12px'}>Sold by {props.provider}</Text>
           <ProductPrice price={props.price as number} />
         </Flex>

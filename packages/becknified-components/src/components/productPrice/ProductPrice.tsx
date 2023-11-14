@@ -16,7 +16,10 @@ const ProductPrice: React.FC<ProductPriceProps> = props => {
 
   return (
     <>
-      <Box color={color} className={`${Styles.product_price_container} ${className}_product_Price`}>
+      <Box
+        color={color}
+        className={`${Styles.product_price_container} ${className}_product_Price`}
+      >
         <span className={Styles.currency_symbol_span}>{currencySymbol}</span>
         <span>{price.toFixed(toFixed)}</span>
       </Box>

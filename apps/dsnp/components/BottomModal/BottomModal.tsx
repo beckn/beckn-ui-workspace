@@ -14,15 +14,40 @@ const BottomModal: React.FC<ModalProps> = ({ isOpen, onClose, children, modalHea
 
   return (
     <>
-      <Modal isCentered onClose={onClose} isOpen={isOpen} scrollBehavior="outside" motionPreset="slideInBottom">
+      <Modal
+        isCentered
+        onClose={onClose}
+        isOpen={isOpen}
+        scrollBehavior="outside"
+        motionPreset="slideInBottom"
+      >
         <ModalOverlay height="100vh" />
-        <ModalContent position="fixed" bottom="0px" pb="20px" borderRadius="1rem 1rem 0px 0px" maxW="lg">
-          <Flex alignItems={'center'} justifyContent={'space-between'} padding={'20px 24px'}>
-            <ModalHeader textAlign="left" fontSize="17px" fontWeight={'600'} p={'unset'} flex={'unset'}>
+        <ModalContent
+          position="fixed"
+          bottom="0px"
+          pb="20px"
+          borderRadius="1rem 1rem 0px 0px"
+          maxW="lg"
+        >
+          <Flex
+            alignItems={'center'}
+            justifyContent={'space-between'}
+            padding={'20px 24px'}
+          >
+            <ModalHeader
+              textAlign="left"
+              fontSize="17px"
+              fontWeight={'600'}
+              p={'unset'}
+              flex={'unset'}
+            >
               {modalHeader}
             </ModalHeader>
             <Box onClick={onClose}>
-              <Image alt="cross-icon" src="/images/crossIcon.svg" />
+              <Image
+                alt="cross-icon"
+                src="/images/crossIcon.svg"
+              />
             </Box>
           </Flex>
           <Divider mb={'20px'} />

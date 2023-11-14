@@ -1,4 +1,5 @@
 import axios from 'axios'
+import React from 'react'
 import type { NextPage } from 'next'
 import { useDispatch } from 'react-redux'
 import { useRouter } from 'next/router'
@@ -9,6 +10,8 @@ import { userInfoActions } from '../store/user-slice'
 import { getError } from '../utilities/error'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
+import { BecknLogin } from '@beckn-ui/becknified-components'
+
 const Login: NextPage = () => {
   const dispatch = useDispatch()
   const router = useRouter()
@@ -36,7 +39,7 @@ const Login: NextPage = () => {
       console.log(getError(err))
     }
   }
-  return <EnteringBox title="login" submitHandler={LoginHandler} errorMessage={errorMessage} />
+  return <BecknLogin />
 }
 
 export default Login

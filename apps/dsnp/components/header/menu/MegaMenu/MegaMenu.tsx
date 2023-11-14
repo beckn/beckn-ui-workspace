@@ -20,16 +20,33 @@ const MegaMenu = () => {
   const isMegaMenuOpen = useSelector((state: IMegaMenuRootState) => state.megaMenu.isMegaMenuOpen)
 
   return (
-    <div className="flex items-center" onMouseOver={showMegaMenuHandler} onMouseOut={closeMegaMenuHandler}>
+    <div
+      className="flex items-center"
+      onMouseOver={showMegaMenuHandler}
+      onMouseOut={closeMegaMenuHandler}
+    >
       <div className="flex items-center font-bold cursor-pointer">
-        <GoGrabber style={{ fontSize: '2rem' }} />
+        <GoGrabber
+          style={{
+            fontSize: '2rem'
+          }}
+        />
         <h3 className="ltr:ml-1 rtl:mr-1">{t('CategoryOfGoods')}</h3>
       </div>
 
-      <Transition nodeRef={nodeRef} in={isMegaMenuOpen!} timeout={300} mountOnEnter unmountOnExit>
+      <Transition
+        nodeRef={nodeRef}
+        in={isMegaMenuOpen!}
+        timeout={300}
+        mountOnEnter
+        unmountOnExit
+      >
         {state => {
           return (
-            <div ref={nodeRef} className="z-[100]">
+            <div
+              ref={nodeRef}
+              className="z-[100]"
+            >
               <div
                 className={`fixed top-[8.2rem] inset-0 bg-gray-600/60
                 ${

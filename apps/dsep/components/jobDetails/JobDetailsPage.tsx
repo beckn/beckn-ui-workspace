@@ -11,10 +11,18 @@ const JobDetailsPage: React.FC<JobDetailsPagePropsModel> = props => {
 
   return (
     <Box>
-      <Text fontSize={'17px'} fontWeight="600" textAlign={'center'} pb="10px">
+      <Text
+        fontSize={'17px'}
+        fontWeight="600"
+        textAlign={'center'}
+        pb="10px"
+      >
         {jobDetails.jobRole}
       </Text>
-      <Text fontSize={'15px'} textAlign={'center'}>
+      <Text
+        fontSize={'15px'}
+        textAlign={'center'}
+      >
         {jobDetails.companyName}
       </Text>
       <Box

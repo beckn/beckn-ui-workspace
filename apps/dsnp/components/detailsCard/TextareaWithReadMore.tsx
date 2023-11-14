@@ -17,7 +17,10 @@ const TextAreaWithReadMore: React.FC<TextAreaWithReadMoreProps> = props => {
   const truncatedText = expanded ? props.orderPolicyText : props.orderPolicyText?.slice(0, 190) + '...'
 
   return (
-    <Box padding={'0 15px'} fontSize={'13px'}>
+    <Box
+      padding={'0 15px'}
+      fontSize={'13px'}
+    >
       <Text
         textOverflow="ellipsis"
         whiteSpace="pre-wrap"

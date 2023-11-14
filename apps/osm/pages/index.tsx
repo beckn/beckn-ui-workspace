@@ -47,7 +47,10 @@ const MobileLogin = () => {
         {/* eslint-disable-next-line jsx-a11y/alt-text */}
         <Image src={LoginIcon} />
       </Box>
-      <Box mt={'60px'} mb={'37px'}>
+      <Box
+        mt={'60px'}
+        mb={'37px'}
+      >
         <div className={style.container}>
           <div className={style.did_floating_label_content}>
             <input

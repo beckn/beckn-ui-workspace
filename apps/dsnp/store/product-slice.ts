@@ -13,7 +13,13 @@ const productInfoSlice = createSlice({
   name: 'productInfo',
   initialState,
   reducers: {
-    setProductDetails(state, action: PayloadAction<{ product: RetailItem; encodedProduct: string }>) {
+    setProductDetails(
+      state,
+      action: PayloadAction<{
+        product: RetailItem
+        encodedProduct: string
+      }>
+    ) {
       ;(state.productDetails = action.payload.product), (state.encodedProduct = action.payload.encodedProduct)
     }
   }

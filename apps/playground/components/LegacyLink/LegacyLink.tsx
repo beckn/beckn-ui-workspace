@@ -8,7 +8,10 @@ interface LegacyLinkProps {
 
 const LegacyLink: React.FC<LegacyLinkProps> = ({ children, href }) => {
   return (
-    <Link legacyBehavior href={href}>
+    <Link
+      legacyBehavior
+      href={href}
+    >
       {children}
     </Link>
   )

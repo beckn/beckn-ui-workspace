@@ -13,7 +13,10 @@ const Favorites = () => {
       {favoriteItems.length ? (
         <div className="grid gap-4 grid-cols-6 lg:grid-cols-12">
           {favoriteItems.map(favoriteItem => (
-            <FavoriteItem key={favoriteItem.id} product={favoriteItem} />
+            <FavoriteItem
+              key={favoriteItem.id}
+              product={favoriteItem}
+            />
           ))}
         </div>
       ) : (

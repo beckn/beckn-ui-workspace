@@ -75,7 +75,10 @@ const getHeaderTitleForPage = (name: string, logo: string, pathName: string, loc
       return <Text fontWeight={600}>{values[pathName]}</Text>
     default:
       return (
-        <Box width={'260px'} className="flex gap-1 my-2 ml-2 md:hidden">
+        <Box
+          width={'260px'}
+          className="flex gap-1 my-2 ml-2 md:hidden"
+        >
           <Text
             margin={'0 auto'}
             textAlign={'center'}
@@ -111,7 +114,10 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
         <div className="flex items-center h-full px-5">
           <div className="flex gap-4 ml-auto">
             {languageIconWhiteList.includes(router.pathname) && (
-              <Image src="/images/BottomModalIcon.svg" alt="BottomModalIcon icon" />
+              <Image
+                src="/images/BottomModalIcon.svg"
+                alt="BottomModalIcon icon"
+              />
             )}
             {!homeIconBlackList.includes(router.pathname) && (
               <Image
@@ -139,7 +145,10 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
       </div>
 
       {/* Menu Modal */}
-      <BottomModal isOpen={isMenuModalOpen} onClose={handleMenuModalClose}>
+      <BottomModal
+        isOpen={isMenuModalOpen}
+        onClose={handleMenuModalClose}
+      >
         <Flex
           pb={'20px'}
           ml={'20px'}
@@ -149,7 +158,10 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
             setMenuModalOpen(false)
           }}
         >
-          <Image src="/images/orderHistory.svg" alt="Order history icon" />
+          <Image
+            src="/images/orderHistory.svg"
+            alt="Order history icon"
+          />
           {t('orderHistory')}
         </Flex>
       </BottomModal>
@@ -182,7 +194,10 @@ const BottomHeader = () => {
           <div className="flex items-center gap-4">
             {!backIconList.includes(router.pathname) && (
               <div onClick={() => router.back()}>
-                <Image src="/images/Back.svg" alt="Back icon" />
+                <Image
+                  src="/images/Back.svg"
+                  alt="Back icon"
+                />
               </div>
             )}
           </div>

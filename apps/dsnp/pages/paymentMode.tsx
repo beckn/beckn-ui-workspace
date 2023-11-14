@@ -17,25 +17,46 @@ function PaymentMode() {
 
   return (
     <>
-      <Box height={'72vh'} position={'relative'}>
+      <Box
+        height={'72vh'}
+        position={'relative'}
+      >
         {/* <AppHeader appHeaderText={t.selectPaymentMethod} /> */}
         <Box>
-          <Flex justifyContent={'space-between'} alignItems={'center'} fontSize={'17px'} mb={'10px'}>
+          <Flex
+            justifyContent={'space-between'}
+            alignItems={'center'}
+            fontSize={'17px'}
+            mb={'10px'}
+          >
             <Text className="text-ellipsis">{t('cards')}</Text>
           </Flex>
-          <Card className="border_radius_all" mb={'20px'}>
+          <Card
+            className="border_radius_all"
+            mb={'20px'}
+          >
             <CardBody padding={'15px 20px'}>
               {/* eslint-disable-next-line jsx-a11y/alt-text */}
               <Image src={creditCardImg} />
             </CardBody>
           </Card>
         </Box>
-        <Text marginBottom={'8px'} fontSize={'17px'}>
+        <Text
+          marginBottom={'8px'}
+          fontSize={'17px'}
+        >
           Other
         </Text>
-        <CardWithCheckBox setChecked={setChecked} paymentMethod={t('cashOnDelivery')} />
+        <CardWithCheckBox
+          setChecked={setChecked}
+          paymentMethod={t('cashOnDelivery')}
+        />
       </Box>
-      <Box position={'absolute'} bottom={'10px'} width={'90%'}>
+      <Box
+        position={'absolute'}
+        bottom={'10px'}
+        width={'90%'}
+      >
         <Button
           buttonText={t('confirmOrder')}
           background={'rgba(var(--color-primary))'}

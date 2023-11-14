@@ -74,98 +74,186 @@ const TrackOrder = () => {
       {/* <AppHeader appHeaderText={t.trackOrder} /> */}
       <Stack marginBottom={'50px'}>
         {/* eslint-disable-next-line jsx-a11y/alt-text */}
-        <Image src={trackOrderMap} margin={'0 auto'} />
+        <Image
+          src={trackOrderMap}
+          margin={'0 auto'}
+        />
       </Stack>
       <Stack>
         <Text>
           {t.orderId}
-          <Text as={'span'} color={'rgba(var(--color-primary))'}>
+          <Text
+            as={'span'}
+            color={'rgba(var(--color-primary))'}
+          >
             456789120
           </Text>
         </Text>
         <Text fontSize={'12px'}>{t.estimatedDelivery} 21st Jun 2021, 12:21pm</Text>
       </Stack>
-      <Divider ml={'-20px'} mr={'-20px'} pb={'20px'} width={'unset'} borderColor={'#D3D3D3'} />
+      <Divider
+        ml={'-20px'}
+        mr={'-20px'}
+        pb={'20px'}
+        width={'unset'}
+        borderColor={'#D3D3D3'}
+      />
       <Box mt={'30px'}>
         <Box>
-          <Flex alignItems={'center'} justifyContent={'space-between'}>
+          <Flex
+            alignItems={'center'}
+            justifyContent={'space-between'}
+          >
             <Flex alignItems={'center'}>
               {/* eslint-disable-next-line jsx-a11y/alt-text */}
-              <Image width={'12px'} height={'13px'} src={getStepImage(0)} />
-              <Text color={getStepColor(0)} paddingLeft={'7px'} fontSize={'12px'}>
+              <Image
+                width={'12px'}
+                height={'13px'}
+                src={getStepImage(0)}
+              />
+              <Text
+                color={getStepColor(0)}
+                paddingLeft={'7px'}
+                fontSize={'12px'}
+              >
                 {t.orderConfirmed}
               </Text>
             </Flex>
-            <Text color={getStepColor(0)} fontSize={'12px'}>
+            <Text
+              color={getStepColor(0)}
+              fontSize={'12px'}
+            >
               {t.orderConfirmedTime}
             </Text>
           </Flex>
           <Flex paddingTop={'12px'}>
             {/* eslint-disable-next-line jsx-a11y/alt-text */}
-            <Image src={getStepLineImage(0)} width={'12px'} height={'40px'} />
-            <Text paddingLeft={'7px'} fontSize={'10px'}>
+            <Image
+              src={getStepLineImage(0)}
+              width={'12px'}
+              height={'40px'}
+            />
+            <Text
+              paddingLeft={'7px'}
+              fontSize={'10px'}
+            >
               {t.orderConfirmedMssg}
             </Text>
           </Flex>
         </Box>
         <Box paddingTop={'15px'}>
-          <Flex alignItems={'center'} justifyContent={'space-between'}>
+          <Flex
+            alignItems={'center'}
+            justifyContent={'space-between'}
+          >
             <Flex alignItems={'center'}>
               {/* eslint-disable-next-line jsx-a11y/alt-text */}
-              <Image width={'12px'} height={'13px'} src={getStepImage(1)} />
-              <Text paddingLeft={'7px'} fontSize={'12px'} color={getStepColor(1)}>
+              <Image
+                width={'12px'}
+                height={'13px'}
+                src={getStepImage(1)}
+              />
+              <Text
+                paddingLeft={'7px'}
+                fontSize={'12px'}
+                color={getStepColor(1)}
+              >
                 {t.agentAssigned}
               </Text>
             </Flex>
-            <Text color={getStepColor(0)} fontSize={'12px'}>
+            <Text
+              color={getStepColor(0)}
+              fontSize={'12px'}
+            >
               {activeSteps[1] ? t.agentAssignedTime : null}
             </Text>
           </Flex>
           <Flex paddingTop={'12px'}>
             {/* eslint-disable-next-line jsx-a11y/alt-text */}
-            <Image src={getStepLineImage(1)} width={'12px'} height={'40px'} />
-            <Text paddingLeft={'7px'} fontSize={'10px'}>
+            <Image
+              src={getStepLineImage(1)}
+              width={'12px'}
+              height={'40px'}
+            />
+            <Text
+              paddingLeft={'7px'}
+              fontSize={'10px'}
+            >
               {activeSteps[1] ? t.agentAssignedMssg : '--'}
             </Text>
           </Flex>
         </Box>
         <Box paddingTop={'15px'}>
-          <Flex alignItems={'center'} justifyContent={'space-between'}>
+          <Flex
+            alignItems={'center'}
+            justifyContent={'space-between'}
+          >
             <Flex alignItems={'center'}>
               {/* eslint-disable-next-line jsx-a11y/alt-text */}
               <Image src={getStepImage(2)} />
-              <Text paddingLeft={'7px'} fontSize={'12px'} color={getStepColor(2)}>
+              <Text
+                paddingLeft={'7px'}
+                fontSize={'12px'}
+                color={getStepColor(2)}
+              >
                 {t.OFD}
               </Text>
             </Flex>
-            <Text color={getStepColor(0)} fontSize={'12px'}>
+            <Text
+              color={getStepColor(0)}
+              fontSize={'12px'}
+            >
               {activeSteps[2] ? t.OFDTime : null}
             </Text>
           </Flex>
           <Flex paddingTop={'12px'}>
             {/* eslint-disable-next-line jsx-a11y/alt-text */}
-            <Image src={getStepLineImage(2)} width={'12px'} height={'40px'} />
-            <Text paddingLeft={'7px'} fontSize={'10px'}>
+            <Image
+              src={getStepLineImage(2)}
+              width={'12px'}
+              height={'40px'}
+            />
+            <Text
+              paddingLeft={'7px'}
+              fontSize={'10px'}
+            >
               {activeSteps[2] ? t.OFDMssg : '--'}
             </Text>
           </Flex>
         </Box>
         <Box paddingTop={'15px'}>
-          <Flex alignItems={'center'} justifyContent={'space-between'}>
+          <Flex
+            alignItems={'center'}
+            justifyContent={'space-between'}
+          >
             <Flex alignItems={'center'}>
               {/* eslint-disable-next-line jsx-a11y/alt-text */}
-              <Image width={'12px'} height={'13px'} src={getStepImage(3)} />
-              <Text paddingLeft={'7px'} fontSize={'12px'} color={getStepColor(3)}>
+              <Image
+                width={'12px'}
+                height={'13px'}
+                src={getStepImage(3)}
+              />
+              <Text
+                paddingLeft={'7px'}
+                fontSize={'12px'}
+                color={getStepColor(3)}
+              >
                 {t.orderDelivered}
               </Text>
             </Flex>
-            <Text color={getStepColor(0)} fontSize={'12px'}>
+            <Text
+              color={getStepColor(0)}
+              fontSize={'12px'}
+            >
               {activeSteps[3] ? t.orderDeliveredTime : null}
             </Text>
           </Flex>
           <Flex paddingTop={'12px'}>
             <Text width={'12px'}></Text>
-            <Text paddingLeft={'7px'} fontSize={'10px'}>
+            <Text
+              paddingLeft={'7px'}
+              fontSize={'10px'}
+            >
               {activeSteps[3] ? t.orderDeliveredMssg : '--'}
             </Text>
           </Flex>

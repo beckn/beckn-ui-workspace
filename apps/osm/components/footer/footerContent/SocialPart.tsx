@@ -13,7 +13,11 @@ const SocialPart = () => {
         <div className="flex mt-3">
           {socialMedia.map(SocialItem => {
             return (
-              <Link legacyBehavior href={SocialItem.href} key={SocialItem.name}>
+              <Link
+                legacyBehavior
+                href={SocialItem.href}
+                key={SocialItem.name}
+              >
                 <a
                   className="px-2 opacity-60 hover:opacity-100 transition-opacity duration-300 ease-in-out"
                   aria-label={SocialItem.name}

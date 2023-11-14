@@ -20,7 +20,9 @@ const DetailsSection: React.FC<Props> = ({ product, sanitizedProduct, isPreview 
     localStorage.removeItem('optionTags')
     localStorage.setItem(
       'optionTags',
-      JSON.stringify({ name: !isPreview ? product.descriptor.name : sanitizedProduct?.productName })
+      JSON.stringify({
+        name: !isPreview ? product.descriptor.name : sanitizedProduct?.productName
+      })
     )
     window.dispatchEvent(new Event('storage-optiontags'))
   }, [product])
@@ -38,7 +40,11 @@ const DetailsSection: React.FC<Props> = ({ product, sanitizedProduct, isPreview 
       padding={'15px 15px'}
       className="bg-[#fff] md:bg-transparent  md:w-auto  flex-grow self-center lg:self-start md:mt-0  lg:ltr:ml-4 lg:rtl:mr-4 md:py-3.5 rounded-tl-xl rounded-tr-xl flex flex-col z-10"
     >
-      <Flex justifyContent={'center'} alignItems={'center'} flexDirection="column">
+      <Flex
+        justifyContent={'center'}
+        alignItems={'center'}
+        flexDirection="column"
+      >
         <h2
           className="text-palette-mute whitespace-normal border_radius_all"
           style={{

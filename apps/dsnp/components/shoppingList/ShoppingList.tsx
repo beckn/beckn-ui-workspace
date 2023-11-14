@@ -66,13 +66,30 @@ const ShoppingList: React.FC<ShoppingListProps> = ({
 
   return (
     <>
-      <BottomModal isOpen={isOpen} onClose={onClose} modalHeader={t('shoppingList')}>
+      <BottomModal
+        isOpen={isOpen}
+        onClose={onClose}
+        modalHeader={t('shoppingList')}
+      >
         {isLoadingForChatGptRequest ? (
-          <Loader loadingText={t('catalogLoader')} subLoadingText={t('loaderSubText')} />
+          <Loader
+            loadingText={t('catalogLoader')}
+            subLoadingText={t('loaderSubText')}
+          />
         ) : (
-          <Box m={'20px'} mt={'unset'} mb={'unset'}>
-            <Box fontSize={'15px'} pb={'10px'}>
-              <TypeAnimation cursor={false} sequence={[t('shoppingListSubText')]} />
+          <Box
+            m={'20px'}
+            mt={'unset'}
+            mb={'unset'}
+          >
+            <Box
+              fontSize={'15px'}
+              pb={'10px'}
+            >
+              <TypeAnimation
+                cursor={false}
+                sequence={[t('shoppingListSubText')]}
+              />
             </Box>
             <Box
               fontSize={'12px'}
@@ -94,16 +111,27 @@ const ShoppingList: React.FC<ShoppingListProps> = ({
                         checked={selectedValues.includes(item)}
                         onChange={() => handleCheckboxChange(item)}
                       >
-                        <TypeAnimation cursor={false} sequence={[item]} />
+                        <TypeAnimation
+                          cursor={false}
+                          sequence={[item]}
+                        />
                       </Checkbox>
                     )}
                   </div>
                 )
               })}
             </Box>
-            <Flex fontSize={'10px'} justifyContent={'center'} alignItems={'center'} pb={'20px'}>
+            <Flex
+              fontSize={'10px'}
+              justifyContent={'center'}
+              alignItems={'center'}
+              pb={'20px'}
+            >
               <Text pr={'5px'}>{t('poweredby')}</Text>
-              <Image alt="chat-gpt-imag" src="/images/chatGtp.svg" />
+              <Image
+                alt="chat-gpt-imag"
+                src="/images/chatGtp.svg"
+              />
             </Flex>
             <Button
               buttonText={t('selectDeliveryLocation')}
@@ -112,7 +140,12 @@ const ShoppingList: React.FC<ShoppingListProps> = ({
               isDisabled={false}
               handleOnClick={selectDeliveryLocation}
             />
-            <Box textAlign={'center'} fontSize={'15px'} cursor={'pointer'} color={'rgba(var(--color-primary))'}>
+            <Box
+              textAlign={'center'}
+              fontSize={'15px'}
+              cursor={'pointer'}
+              color={'rgba(var(--color-primary))'}
+            >
               {t('cancel')}
             </Box>
           </Box>

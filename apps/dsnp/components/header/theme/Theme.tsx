@@ -12,9 +12,19 @@ const Theme = () => {
 
   const renderThemeChanger = () => {
     if (currentTheme === 'dark') {
-      return <ThemeItem theme="light" Icon={MdOutlineLightMode} />
+      return (
+        <ThemeItem
+          theme="light"
+          Icon={MdOutlineLightMode}
+        />
+      )
     } else {
-      return <ThemeItem theme="dark" Icon={BiMoon} />
+      return (
+        <ThemeItem
+          theme="dark"
+          Icon={BiMoon}
+        />
+      )
     }
   }
 
@@ -23,8 +33,16 @@ const Theme = () => {
       <div className="md:hidden">
         <h3>{t('theme')}</h3>
         <div className="mt-2 ml-1 z-10">
-          <ThemeItem theme="light" Icon={MdOutlineLightMode} currentTheme={currentTheme} />
-          <ThemeItem theme="dark" Icon={BiMoon} currentTheme={currentTheme} />
+          <ThemeItem
+            theme="light"
+            Icon={MdOutlineLightMode}
+            currentTheme={currentTheme}
+          />
+          <ThemeItem
+            theme="dark"
+            Icon={BiMoon}
+            currentTheme={currentTheme}
+          />
         </div>
       </div>
       <div className="hidden md:block">{renderThemeChanger()}</div>

@@ -113,7 +113,10 @@ const getHeaderTitleForPage = (name: string, logo: string, pathName: string, loc
       return <Text fontSize={'17px'}>{values[pathName]}</Text>
     default:
       return (
-        <Box width={'260px'} className="md:hidden ml-2  flex gap-1 my-2">
+        <Box
+          width={'260px'}
+          className="md:hidden ml-2  flex gap-1 my-2"
+        >
           <Text
             margin={'0 auto'}
             textAlign={'center'}
@@ -147,7 +150,10 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
       <div className="h-7 w-full bg-[#efefef] fixed z-[9999]">
         <div className="px-5 h-full flex items-center">
           <div>
-            <Image src="/images/CommerceLogo.svg" alt="App logo" />
+            <Image
+              src="/images/CommerceLogo.svg"
+              alt="App logo"
+            />
           </div>
           <div className="ml-auto flex gap-4">
             {languageIconWhiteList.includes(router.pathname) && <Settings />}
@@ -181,14 +187,20 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
       </div>
 
       {/* Menu Modal */}
-      <BottomModal isOpen={isMenuModalOpen} onClose={handleMenuModalClose}>
+      <BottomModal
+        isOpen={isMenuModalOpen}
+        onClose={handleMenuModalClose}
+      >
         <div
           onClick={() => {
             router.push('/myLearningOrderHistory')
           }}
           className="flex gap-2 py-3 text-[15px]"
         >
-          <Image src="/images/myLearningIcon.svg" alt="myLearnings icon" />
+          <Image
+            src="/images/myLearningIcon.svg"
+            alt="myLearnings icon"
+          />
           {t['myLearnings']}
         </div>
         <div
@@ -197,7 +209,10 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
           }}
           className="flex gap-2 py-3 text-[15px]"
         >
-          <Image src="/images/myScholarshipIcon.svg" alt="myScholarships icon" />
+          <Image
+            src="/images/myScholarshipIcon.svg"
+            alt="myScholarships icon"
+          />
           {t['myScholarships']}
         </div>
         <div
@@ -206,7 +221,10 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
           }}
           className="flex gap-2 py-3 text-[15px]"
         >
-          <Image src="/images/myJobIcon.svg" alt="myJobs icon" />
+          <Image
+            src="/images/myJobIcon.svg"
+            alt="myJobs icon"
+          />
           {t['myJobs']}
         </div>
       </BottomModal>
@@ -233,7 +251,10 @@ const BottomHeader = () => {
           <div className="flex gap-4 items-center">
             {!backIconList.includes(router.pathname) && (
               <div onClick={() => router.back()}>
-                <Image src="/images/Back.svg" alt="Back icon" />
+                <Image
+                  src="/images/Back.svg"
+                  alt="Back icon"
+                />
               </div>
             )}
           </div>
@@ -243,7 +264,12 @@ const BottomHeader = () => {
             {!cartIconBlackList.includes(router.pathname) && <CartIcon />}
             {skipWhiteList.includes(router.pathname) && (
               <Link href={'/homePage'}>
-                <Box cursor={'pointer'} fontSize={'15px'} color="rgba(var(--color-primary))" onClick={() => {}}>
+                <Box
+                  cursor={'pointer'}
+                  fontSize={'15px'}
+                  color="rgba(var(--color-primary))"
+                  onClick={() => {}}
+                >
                   Skip
                 </Box>
               </Link>

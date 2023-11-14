@@ -17,7 +17,9 @@ const CategorySmBox: React.FC<Props> = ({ imgSrc, bgc, categoryTitle, href }) =>
       legacyBehavior
       href={{
         pathname: '/search',
-        query: { keyword: t(`${categoryTitle}`) }
+        query: {
+          keyword: t(`${categoryTitle}`)
+        }
       }}
     >
       <a>

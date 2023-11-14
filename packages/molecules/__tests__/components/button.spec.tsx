@@ -8,7 +8,10 @@ const mockHandleClick = jest.fn()
 describe('Button Component', () => {
   it('renders the button with the provided className and children', () => {
     const { getByText, container } = render(
-      <Button handleClick={mockHandleClick} className="custom-class">
+      <Button
+        handleClick={mockHandleClick}
+        className="custom-class"
+      >
         Click me
       </Button>
     )

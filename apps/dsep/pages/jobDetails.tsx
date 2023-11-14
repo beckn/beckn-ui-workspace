@@ -23,7 +23,10 @@ const JobDetails = () => {
 
   return (
     <div>
-      <JobDetailsPage encodedJobDetails={encodedJobDetails} jobDetails={jobDetailsData as JobInfo} />
+      <JobDetailsPage
+        encodedJobDetails={encodedJobDetails}
+        jobDetails={jobDetailsData as JobInfo}
+      />
     </div>
   )
 }

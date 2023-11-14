@@ -76,10 +76,24 @@ const SignIn = () => {
   return (
     <Box className={Styles.main_container}>
       <Flex className={Styles.logo_container}>
-        <Image src={HomeImg} alt="Home Icon" width={77} height={76} />
-        <Image className={Styles.logo_skillup} src={SkillUp} alt="Skill Up Icon" width={188} height={56} />
+        <Image
+          src={HomeImg}
+          alt="Home Icon"
+          width={77}
+          height={76}
+        />
+        <Image
+          className={Styles.logo_skillup}
+          src={SkillUp}
+          alt="Skill Up Icon"
+          width={188}
+          height={56}
+        />
       </Flex>
-      <Box className={Styles.signin_container} pt="40px">
+      <Box
+        className={Styles.signin_container}
+        pt="40px"
+      >
         <div className={style.container}>
           <div className={style.did_floating_label_content}>
             <input

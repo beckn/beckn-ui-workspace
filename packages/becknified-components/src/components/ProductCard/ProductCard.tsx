@@ -3,7 +3,7 @@ import { Box, Flex, Text, Image } from '@chakra-ui/react'
 import StarIcon from '../../../public/images/Star.svg'
 import { ProductCardProps } from './ProductCard.types'
 import ProductPrice from '../productPrice'
-import Styles from './prouct-card.module.css'
+import Styles from './product-card.module.css'
 
 const ProductCard: React.FC<ProductCardProps> = props => {
   const { product, productInfoDataSource, CustomInfoComponent, productClickHandler, className = '' } = props
@@ -20,7 +20,10 @@ const ProductCard: React.FC<ProductCardProps> = props => {
           className={`${Styles.product_card_layout_container} ${className}_product_card `}
         >
           <div className={Styles.product_card_container}>
-            <Box w={'125px'} className={Styles.product_img_lay_cont}>
+            <Box
+              w={'125px'}
+              className={Styles.product_img_lay_cont}
+            >
               <div className={Styles.product_img_cont}>
                 <Image
                   src={product.descriptor.images[0]}
@@ -31,8 +34,18 @@ const ProductCard: React.FC<ProductCardProps> = props => {
                 />
               </div>
             </Box>
-            <Box p={'15px'} pt={'11px'} w={'63%'} position={'relative'} className={Styles.product_name_container}>
-              <Flex justifyContent={'space-between'} alignItems={'flex-start'} w={'100%'}>
+            <Box
+              p={'15px'}
+              pt={'11px'}
+              w={'63%'}
+              position={'relative'}
+              className={Styles.product_name_container}
+            >
+              <Flex
+                justifyContent={'space-between'}
+                alignItems={'flex-start'}
+                w={'100%'}
+              >
                 <Text
                   w={'80%'}
                   fontWeight={'600'}
@@ -49,7 +62,12 @@ const ProductCard: React.FC<ProductCardProps> = props => {
 
               {productInfoDataSource &&
                 Object.entries(productInfoDataSource).map(([key, value]) => (
-                  <Flex fontSize="12px" alignItems="center" mb="8px" key={key}>
+                  <Flex
+                    fontSize="12px"
+                    alignItems="center"
+                    mb="8px"
+                    key={key}
+                  >
                     <Text fontWeight="600">{key}:</Text>
                     <Text
                       pl="3px"
@@ -72,8 +90,14 @@ const ProductCard: React.FC<ProductCardProps> = props => {
               >
                 <ProductPrice price={parseFloat(product.price.value)} />
                 <Flex alignItems={'center'}>
-                  <Image alt="star-icon" src={StarIcon} />
-                  <Text fontSize={'12px'} pl={'5px'}>
+                  <Image
+                    alt="star-icon"
+                    src={StarIcon}
+                  />
+                  <Text
+                    fontSize={'12px'}
+                    pl={'5px'}
+                  >
                     {4.5}
                   </Text>
                 </Flex>
