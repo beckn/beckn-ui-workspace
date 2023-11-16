@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { Box } from '@chakra-ui/react'
 import SearchBar from '../components/header/SearchBar'
@@ -84,7 +84,7 @@ const Search = () => {
       }
     }
   }, [])
-
+  console.log(items)
   useEffect(() => {
     if (data) {
       dispatch(responseDataActions.addTransactionId(data.context.transaction_id))
