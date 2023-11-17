@@ -7,6 +7,7 @@ import Button from '../components/button/Button'
 import Router from 'next/router'
 import { Loader } from '@beckn-ui/molecules/src/components'
 import { BecknLogin } from '@beckn-ui/becknified-components'
+import Signin from '@components/signIn/SignIn'
 
 const MobileLogin = () => {
   const [phoneNumber, setPhoneNumber] = useState('')
@@ -45,7 +46,7 @@ const MobileLogin = () => {
 
   return (
     <Box padding={'0 21px'}>
-      <BecknLogin />
+      <Signin />
     </Box>
   )
 }

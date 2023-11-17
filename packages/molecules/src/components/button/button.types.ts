@@ -8,4 +8,5 @@ export interface ButtonProps {
   disabled?: boolean
   fullWidth?: boolean
   variant?: 'outline' | 'solid'
+  colorScheme?: 'primary' | 'secondary'
 }

@@ -8,6 +8,8 @@ interface BecknProivderProps {
   children: ReactNode
 }
 
+//  Default theme https://github.com/chakra-ui/chakra-ui/tree/main/packages/components/theme/src/foundations
+
 const BecknProvider: React.FC<BecknProivderProps> = ({ theme, children }) => {
   const generatedTheme = generateTheme(theme)
   return <ChakraProvider theme={generatedTheme}>{children}</ChakraProvider>

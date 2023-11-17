@@ -9,7 +9,8 @@ const BecknButton: React.FC<ButtonProps> = ({
   children,
   disabled = false,
   fullWidth = true,
-  variant = 'solid'
+  variant = 'solid',
+  colorScheme = 'primary'
 }) => {
   return (
     <Button
@@ -18,6 +19,7 @@ const BecknButton: React.FC<ButtonProps> = ({
       className={className}
       isDisabled={disabled}
       variant={variant}
+      colorScheme={colorScheme}
     >
       {children ? children : text}
     </Button>

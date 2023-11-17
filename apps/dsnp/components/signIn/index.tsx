@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Box, Flex, Image } from '@chakra-ui/react'
-import OpenCommerce from '../../public/images/openCommerce.svg'
+import OpenCommerce from '@public/images/openCommerce.svg'
 import Styles from './SignIn.module.css'
 import { useLanguage } from '../../hooks/useLanguage'
 import { SignInPropsModel } from './SignIn.types'

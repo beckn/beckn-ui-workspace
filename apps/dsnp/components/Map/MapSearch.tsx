@@ -4,6 +4,7 @@ import { GoSearch } from 'react-icons/go'
 import { isEmpty } from 'lodash'
 import { Image } from '@chakra-ui/react'
 import { useLanguage } from '../../hooks/useLanguage'
+import { Typography } from '@beckn-ui/molecules'
 import useDebounce from '../../hooks/useDebounce'
 
 interface LocalNameFormat {
@@ -112,6 +113,10 @@ const SearchBar: React.FC<SearchBarProp> = ({
                 />
                 <div>
                   <h3 className="text-[15px]/[22.5px] font-[600] text-[#37474F]">{primaryName}</h3>
+                  <Typography
+                    text={primaryName}
+                    color="text"
+                  />
                   <h4 className="text-[15px]/[17.5px] font-[400] text-[#7C7C7C]">{secondaryName}</h4>
                 </div>
               </div>

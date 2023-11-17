@@ -3,8 +3,8 @@ import { defineStyleConfig } from '@chakra-ui/react'
 const ButtonConfig = defineStyleConfig({
   // The styles all button have in common
   baseStyle: {
-    fontWeight: 'bold',
-    borderRadius: 'base', // <-- border radius is same for all variants and sizes
+    fontWeight: 'normal',
+    borderRadius: '12px', // <-- border radius is same for all variants and sizes
     marginBottom: '10px'
   },
   // Two sizes: sm and md
@@ -17,19 +17,25 @@ const ButtonConfig = defineStyleConfig({
     md: {
       fontSize: 'md',
       px: 6, // <-- these values are tokens from the design system
-      py: 4 // <-- these values are tokens from the design system
+      py: 6 // <-- these values are tokens from the design system
     }
   },
   // Two variants: outline and solid
   variants: {
-    outline: {
-      border: '2px solid',
-      borderColor: 'primary.100',
-      color: 'primary.100'
+    outline: props => {
+      const colorScheme = props.colorScheme || 'primary'
+      return {
+        border: '2px solid',
+        borderColor: `${colorScheme}.100`,
+        color: `${colorScheme}.100`
+      }
     },
-    solid: {
-      bg: 'primary.100',
-      color: 'white'
+    solid: props => {
+      const colorScheme = props.colorScheme || 'primary'
+      return {
+        bg: `${colorScheme}.100`,
+        color: 'white'
+      }
     }
   },
   // The default size and variant values
