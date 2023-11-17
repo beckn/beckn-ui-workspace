@@ -68,7 +68,10 @@ const CartItem: React.FC<Props> = ({ product, setIsLoadingForCartCountChange }) 
   return (
     <>
       <div className="flex items-center flex-wrap sm:my-4 sm:py-4 px-2 border-b-2 mb-4">
-        <div style={{ width: '100%' }} className="lg:w-1/2 sm:min-w-[290px]">
+        <div
+          style={{ width: '100%' }}
+          className="lg:w-1/2 sm:min-w-[290px]"
+        >
           {/* <Link
           href={`/${product.category[0]}/${product.category[1]}/${product.category[2]}/${product.slug.current}`}
         > */}
@@ -86,7 +89,11 @@ const CartItem: React.FC<Props> = ({ product, setIsLoadingForCartCountChange }) 
                 position: 'relative'
               }}
             >
-              <Image src={product.descriptor.images[0]} alt={product.descriptor.name} className="object-contain" />
+              <Image
+                src={product.descriptor.images[0]}
+                alt={product.descriptor.name}
+                className="object-contain"
+              />
             </div>
             {counter === 1 ? (
               <div
@@ -130,18 +137,27 @@ const CartItem: React.FC<Props> = ({ product, setIsLoadingForCartCountChange }) 
           >
             <p style={{ marginRight: '10px' }}>{t.totalAmount}</p>
 
-            <ProductPrice price={parseFloat(product.price.value) * counter!} isLargeSize />
+            <ProductPrice
+              price={parseFloat(product.price.value) * counter!}
+              isLargeSize
+            />
           </div>
         </div>
       </div>
       <Box>
-        <Text mb="10px" fontSize={'17px'}>
+        <Text
+          mb="10px"
+          fontSize={'17px'}
+        >
           {t.scholarship}
         </Text>
         {scholarshipId ? (
           <DetailsCard>
             <Flex alignItems={'center'}>
-              <Image alt="shippingBtnImage" src={addShippingBtn} />
+              <Image
+                alt="shippingBtnImage"
+                src={addShippingBtn}
+              />
               <Text ml={'8px'}>
                 <span style={{ fontWeight: 'bold' }}>
                   ‘{scholarshipId}-{scholarshipTitle}’

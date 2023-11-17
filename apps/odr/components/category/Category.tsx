@@ -13,7 +13,10 @@ const Loading = () => {
   return (
     <div className="h-[40vh] flex justify-center items-center">
       <div className="flex flex-col items-center gap-2">
-        <Spinner color="#A71B4A" size="xl" />
+        <Spinner
+          color="#A71B4A"
+          size="xl"
+        />
         <h4 className="font-bold text-[16px] leading-[25px]">{t['categoryLoadPrimary']}</h4>
         <p>{t['categoryLoadSecondary']}</p>
       </div>

@@ -24,9 +24,18 @@ const CardWithCheckBox: React.FC<CardWithCheckBoxPropsModel> = props => {
           // mb={'15px'}
           fontSize={'15px'}
         >
-          <input type="checkbox" id="checkbox" onChange={handleChange} />
+          <input
+            type="checkbox"
+            id="checkbox"
+            onChange={handleChange}
+          />
           <label htmlFor="checkbox">
-            <Text mt={'-3px'} position={'absolute'} width={'50vw'} marginLeft="40px">
+            <Text
+              mt={'-3px'}
+              position={'absolute'}
+              width={'50vw'}
+              marginLeft="40px"
+            >
               {props.paymentMethod}
             </Text>
           </label>

@@ -53,7 +53,10 @@ const OptionCard: React.FC<OptionCardProps> = ({
         )}
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={isSelected ? iconUrlLight : iconUrl} alt="" />
+        <img
+          src={isSelected ? iconUrlLight : iconUrl}
+          alt=""
+        />
       </div>
       <p
         className={cs('text-xs', {

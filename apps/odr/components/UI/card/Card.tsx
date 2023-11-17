@@ -51,7 +51,11 @@ const Card: React.FC<Props> = ({ product }) => {
             position={'relative'}
             className="flex flex-col md:w-full md:px-3  md:py-4"
           >
-            <Flex justifyContent={'space-between'} alignItems={'flex-start'} w={'100%'}>
+            <Flex
+              justifyContent={'space-between'}
+              alignItems={'flex-start'}
+              w={'100%'}
+            >
               <Text
                 w={'80%'}
                 fontWeight={'600'}
@@ -67,17 +71,33 @@ const Card: React.FC<Props> = ({ product }) => {
 
               {product.tags.foodType ? (
                 product.tags.foodType === 'veg' ? (
-                  <Image pt={'4px'} src={greenVegIcon} alt="greenVegIcon" />
+                  <Image
+                    pt={'4px'}
+                    src={greenVegIcon}
+                    alt="greenVegIcon"
+                  />
                 ) : (
-                  <Image pt={'4px'} src={redNonVegIcon} alt="nonVegIcon" />
+                  <Image
+                    pt={'4px'}
+                    src={redNonVegIcon}
+                    alt="nonVegIcon"
+                  />
                 )
               ) : null}
             </Flex>
-            <Flex fontSize={'12px'} alignItems={'center'} mb={'8px'}>
+            <Flex
+              fontSize={'12px'}
+              alignItems={'center'}
+              mb={'8px'}
+            >
               <Text fontWeight={'600'}>Duration:</Text>
               <Text pl={'3px'}>1 Month</Text>
             </Flex>
-            <Flex fontSize={'12px'} alignItems={'center'} mb={'8px'}>
+            <Flex
+              fontSize={'12px'}
+              alignItems={'center'}
+              mb={'8px'}
+            >
               <Text fontWeight={'600'}>Sold by:</Text>
               <Text pl={'3px'}>{(product as any).bppName}</Text>
             </Flex>
@@ -92,7 +112,10 @@ const Card: React.FC<Props> = ({ product }) => {
               <Flex alignItems={'center'}>
                 {/* eslint-disable-next-line jsx-a11y/alt-text */}
                 <Image src={StarIcon} />
-                <Text fontSize={'12px'} pl={'5px'}>
+                <Text
+                  fontSize={'12px'}
+                  pl={'5px'}
+                >
                   {product.tags.Rating}
                 </Text>
               </Flex>

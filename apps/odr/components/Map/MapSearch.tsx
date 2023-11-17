@@ -80,7 +80,12 @@ const SearchBar: React.FC<SearchBarProp> = ({
           placeholder={`${t.search}`}
           onChange={e => setValue(e.target.value)}
         />
-        {loading && <Spinner color="#A71B4A" size="sm" />}
+        {loading && (
+          <Spinner
+            color="#A71B4A"
+            size="sm"
+          />
+        )}
       </div>
       {!isEmpty(value) && locations && !isEmpty(locations) && (
         <div className="flex flex-col overflow-scroll max-h-[100vh]  bg-white  rounded-md h-[100vh] relative z-[9995] divide-y">
@@ -96,7 +101,11 @@ const SearchBar: React.FC<SearchBarProp> = ({
                   setValue('')
                 }}
               >
-                <Image className="mt-1" src="/images/SearchLocationMarker.svg" alt="Location point" />
+                <Image
+                  className="mt-1"
+                  src="/images/SearchLocationMarker.svg"
+                  alt="Location point"
+                />
                 <div>
                   <h3 className="text-[15px]/[22.5px] font-[600] text-[#37474F]">{primaryName}</h3>
                   <h4 className="text-[15px]/[17.5px] font-[400] text-[#7C7C7C]">{secondaryName}</h4>

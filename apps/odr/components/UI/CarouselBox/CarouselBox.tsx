@@ -72,7 +72,10 @@ const CarouselBox: React.FC<Props> = ({ title, className, children, href, full }
           {t[`${title}`]}
         </h2>
         {!full ? (
-          <Link legacyBehavior href={`/offers`}>
+          <Link
+            legacyBehavior
+            href={`/offers`}
+          >
             <a className="text-palette-primary/80 dark:text-rose-300 text-sm font-bold py-2 px-6 -mb-4 shadow-lg block rounded-lg backdrop-filter backdrop-blur-[10px] bg-palette-card/80">
               {t.seeAll}
             </a>

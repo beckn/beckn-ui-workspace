@@ -18,9 +18,22 @@ const ImageCard: React.FC<ImageCardProps> = ({ image, text, onClick, isActive })
       bg={isActive ? 'rgba(var(--color-primary))' : 'transparent'}
       borderRadius="6px"
     >
-      <Flex alignItems={'center'} flexDirection="column" fontSize={'15px'}>
-        <Image src={image} alt="displayed image" width={35} height={35} pb="5px" />
-        <Text fontSize={'15px'} className={`text-sm text-center ${isActive ? 'text-white' : 'text-black'}`}>
+      <Flex
+        alignItems={'center'}
+        flexDirection="column"
+        fontSize={'15px'}
+      >
+        <Image
+          src={image}
+          alt="displayed image"
+          width={35}
+          height={35}
+          pb="5px"
+        />
+        <Text
+          fontSize={'15px'}
+          className={`text-sm text-center ${isActive ? 'text-white' : 'text-black'}`}
+        >
           {text}
         </Text>
       </Flex>

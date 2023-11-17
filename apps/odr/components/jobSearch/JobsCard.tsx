@@ -25,9 +25,19 @@ const JobsCard: React.FC<JobsCardProps> = props => {
         mb={'20px'}
         boxShadow={'0px 8px 10px -6px rgba(0, 0, 0, 0.1), 0px 20px 25px -5px rgba(0, 0, 0, 0.1)'}
       >
-        <CardBody padding={'15px 20px'} fontSize="12px">
-          <Flex direction={'column'} justifyContent={'center'}>
-            <Text fontWeight={600} fontSize={'15px'} pb={'10px'}>
+        <CardBody
+          padding={'15px 20px'}
+          fontSize="12px"
+        >
+          <Flex
+            direction={'column'}
+            justifyContent={'center'}
+          >
+            <Text
+              fontWeight={600}
+              fontSize={'15px'}
+              pb={'10px'}
+            >
               {job.jobRole}
             </Text>
             <Text pb={'10px'}>{job.companyName}</Text>

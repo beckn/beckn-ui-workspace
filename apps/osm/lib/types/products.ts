@@ -89,7 +89,6 @@ export interface RetailItem {
   }
 }
 
-
 export interface IndustryItem {
   extended_attributes?: any
   price: {
@@ -104,97 +103,8 @@ export interface IndustryItem {
     long_desc: string
   }
   tags: {
-    assembly?:string
-    automated?:string
+    assembly?: string
+    automated?: string
   }
   bppName?: string
 }
-
-return {
-  price: {
-    value: provider.items[0].value
-  },
-  id: provider.id,
-  descriptor: {
-    images: provider.images
-    name: provider.name
-    short_desc: provider.short_desc
-    long_desc: provider.long_desc
-  },
-  tags: {
-    authorName: 'Industry 4.0'
-    rating:'5'
-  }
-}
-
-
-{
-  "context": {
-      "transactionId": "e27ec30a-b3e3-4fc2-85f7-bc6ba2365aeb",
-      "messageId": "700dc1c5-2f4b-406e-88bc-faee63c90e18",
-      "bppId": "bpp.supply-chain.makerspace.io",
-      "bppUri": "https://bpp.supply-chain.makerspace.io"
-  },
-  "serviceProviders": [
-      {
-          "id": "1",
-          "name": "Makerspace",
-          "short_desc": "Makerspace",
-          "long_desc": "Makerspace, Hof.",
-          "images": [
-              "https://makerspace/assembly/makerspace_logo.png"
-          ],
-          "categories": [
-              {
-                  "id": "p2",
-                  "code": "assembly",
-                  "name": "Assembly"
-              },
-              {
-                  "id": "p2c1",
-                  "code": "classic",
-                  "name": "Classic"
-              },
-              {
-                  "id": "p2c2",
-                  "code": "automated",
-                  "name": "Automated"
-              },
-              {
-                  "id": "p2c3",
-                  "code": "intermittent",
-                  "name": "Intermittent"
-              },
-              {
-                  "id": "p2c4",
-                  "code": "lean",
-                  "name": "Lean"
-              }
-          ],
-          "items": [
-              {
-                  "id": "66b7b9bad166-4a3f-ada6-ca063dc9d321",
-                  "descriptor": "Intermittent assembly type",
-                  "category_id": [
-                      "c3"
-                  ],
-                  "fulfillment_id": [
-                      "f1"
-                  ],
-                  "tags": [
-                      
-                      {
-                          "code": "assembly-info",
-                          "name": "Assembly Information",
-                          "display": true
-                      },
-                      
-                  ],
-                  "currency": "EUR",
-                  "value": "starting from 50 EUR"
-              }
-          ]
-      }
-  ]
-}
-

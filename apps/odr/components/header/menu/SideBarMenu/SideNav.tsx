@@ -33,7 +33,10 @@ const SideNav = forwardRef<HTMLDivElement, Props>(({ state, onClose }, ref) => {
       >
         <IoClose />
       </div>
-      <div className="pt-5 pb-3 ltr:pl-4 rtl:pr-5" onClick={onClose}>
+      <div
+        className="pt-5 pb-3 ltr:pl-4 rtl:pr-5"
+        onClick={onClose}
+      >
         <Logo />
       </div>
       <hr />

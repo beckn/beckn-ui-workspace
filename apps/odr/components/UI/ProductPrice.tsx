@@ -26,7 +26,10 @@ const ProductPrice: React.FC<ProductPriceProps> = ({
 
   return (
     <div>
-      <div className={`flex rtl:justify-end rtl:self-end ltr:self-start text-left `} style={{ justifyContent }}>
+      <div
+        className={`flex rtl:justify-end rtl:self-end ltr:self-start text-left `}
+        style={{ justifyContent }}
+      >
         <div>
           {/* ☝slider cards (.slick-slide=>Slider component) are float and because of that, they don't accept height so, for making cards the same height, I have to do this hack*/}
           <Box

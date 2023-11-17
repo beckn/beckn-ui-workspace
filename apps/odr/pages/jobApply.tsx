@@ -246,21 +246,40 @@ const jobApply = () => {
   }
 
   return (
-    <Box className="hideScroll" maxH={'calc(100vh - 100px)'} overflowY="scroll">
+    <Box
+      className="hideScroll"
+      maxH={'calc(100vh - 100px)'}
+      overflowY="scroll"
+    >
       <Box pb={'20px'}>
-        <JobApply formData={formData} setFormData={setFormData} />
-        <Text pb={'10px'} fontSize={'15px'}>
+        <JobApply
+          formData={formData}
+          setFormData={setFormData}
+        />
+        <Text
+          pb={'10px'}
+          fontSize={'15px'}
+        >
           {t.docText}
         </Text>
-        <UploadFile selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles} />
+        <UploadFile
+          selectedFiles={selectedFiles}
+          setSelectedFiles={setSelectedFiles}
+        />
       </Box>
-      <Flex alignItems={'baseline'} pb="30px">
+      <Flex
+        alignItems={'baseline'}
+        pb="30px"
+      >
         <input
           onChange={() => setIsDeclarationChecked(prevValue => !prevValue)}
           type="checkbox"
           style={{ position: 'relative', top: '2px' }}
         />
-        <Text fontSize={'12px'} pl="10px">
+        <Text
+          fontSize={'12px'}
+          pl="10px"
+        >
           {t.declarationText}
         </Text>
       </Flex>

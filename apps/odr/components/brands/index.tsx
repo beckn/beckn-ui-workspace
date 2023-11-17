@@ -42,7 +42,13 @@ const Brands = () => {
       <SectionTitle title={'popularBrands'} />
       <Slider {...settings}>
         {brandContent.map(brandItem => {
-          return <BrandBox key={brandItem.id} brandName={brandItem.name} imageSrc={brandItem.imgSrc} />
+          return (
+            <BrandBox
+              key={brandItem.id}
+              brandName={brandItem.name}
+              imageSrc={brandItem.imgSrc}
+            />
+          )
         })}
       </Slider>
     </div>

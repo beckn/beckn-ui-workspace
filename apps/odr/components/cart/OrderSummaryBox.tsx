@@ -23,7 +23,10 @@ const OrderSummaryBox: React.FC<OrderSummaryBoxPropsModel> = props => {
     <>
       {totalQuantity > 0 ? (
         <>
-          <h3 className=" sm:text-lg md:text-xl" style={{ fontSize: '17px' }}>
+          <h3
+            className=" sm:text-lg md:text-xl"
+            style={{ fontSize: '17px' }}
+          >
             {t.orderSummary}
           </h3>
           <div
@@ -33,7 +36,10 @@ const OrderSummaryBox: React.FC<OrderSummaryBoxPropsModel> = props => {
               zIndex: '9'
             }}
           >
-            <div className="flex flex-col my-1 sm:my-2" style={{ fontSize: '15px' }}>
+            <div
+              className="flex flex-col my-1 sm:my-2"
+              style={{ fontSize: '15px' }}
+            >
               <div className=" my-1 flex items-center justify-between md:my-4">
                 <p className="text-md sm:text-base md:text-palette-base tracking-wide">{t.subtotalText}</p>
                 <ProductPrice
@@ -53,7 +59,10 @@ const OrderSummaryBox: React.FC<OrderSummaryBoxPropsModel> = props => {
               <Divider my={'10px'} />
               <div className=" my-1 flex flex-wrap items-baseline justify-between flex-grow md:my-4">
                 <p className="text-md sm:text-base md:text-palette-base tracking-wide font-extrabold">{t.totalText}</p>
-                <ProductPrice isLargeSize price={totalAmount} />
+                <ProductPrice
+                  isLargeSize
+                  price={totalAmount}
+                />
               </div>
             </div>
           </div>

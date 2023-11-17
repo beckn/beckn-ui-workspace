@@ -33,7 +33,7 @@
     "lint": "eslint",
     "format": "prettier  \"./**/*.{js,jsx,ts,tsx,json}\" --write"
   },
-   "lint-staged": {
+  "lint-staged": {
     "**/*.{js,jsx,ts,tsx}": [
       "yarn format"
     ]

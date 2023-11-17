@@ -51,7 +51,10 @@ const MenuItems: React.FC<Props> = props => {
                 {item.productsGroup ? <ArrowDirection style={{ fontSize: '1rem' }} /> : null}
               </div>
             ) : (
-              <Link legacyBehavior href={`/${item.category}`}>
+              <Link
+                legacyBehavior
+                href={`/${item.category}`}
+              >
                 <a
                   className={`flex items-center mt-3 px-5  cursor-pointer text-sm ${
                     index === activeMenuItemIndex ? 'md:text-palette-primary' : ''

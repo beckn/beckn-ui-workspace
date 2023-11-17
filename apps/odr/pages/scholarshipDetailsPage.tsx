@@ -25,7 +25,11 @@ const ScholarshipDetailsPage: React.FC<Props> = ({ product }) => {
   }
 
   return (
-    <Box className="hideScroll" maxH={'calc(100vh - 100px)'} overflowY="scroll">
+    <Box
+      className="hideScroll"
+      maxH={'calc(100vh - 100px)'}
+      overflowY="scroll"
+    >
       <ScholarshipDetails scholarship={selectedScholarship} />
     </Box>
   )

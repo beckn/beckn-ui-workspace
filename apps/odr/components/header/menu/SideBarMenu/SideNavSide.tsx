@@ -34,7 +34,13 @@ const SideNavSide = () => {
   return (
     <>
       {dropDownList.length ? (
-        <Transition nodeRef={nodeRef} in={isSidebarOpen} timeout={300} mountOnEnter unmountOnExit>
+        <Transition
+          nodeRef={nodeRef}
+          in={isSidebarOpen}
+          timeout={300}
+          mountOnEnter
+          unmountOnExit
+        >
           {state => {
             return (
               <div
@@ -62,9 +68,15 @@ const SideNavSide = () => {
                 <hr className="mb-6" />
 
                 <div className=" ltr:pr-6 rtl:pl-6 pb-6 mb-3 border-b-2 border-slate-400-600">
-                  <Link legacyBehavior href={`/${activeMenuItemText}`}>
+                  <Link
+                    legacyBehavior
+                    href={`/${activeMenuItemText}`}
+                  >
                     <a className="flex items-center justify-between">
-                      <div className="font-bold ltr:ml-6 rtl:mr-6" onClick={closeNavbar}>
+                      <div
+                        className="font-bold ltr:ml-6 rtl:mr-6"
+                        onClick={closeNavbar}
+                      >
                         {t.seeAllProduct}
                       </div>
                       {locale === 'en' ? (
