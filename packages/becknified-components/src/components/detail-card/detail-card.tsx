@@ -6,11 +6,12 @@ interface DetailsCardProps {
   className?: string
 }
 
-const DetailCard: React.FC<DetailsCardProps> = props => {
+const DetailCard: React.ForwardRefRenderFunction<HTMLDivElement, DetailsCardProps> = (props, ref) => {
   const { className, children } = props
   return (
     <>
       <Card
+        ref={ref}
         className={`${className} card_container`}
         mb={'20px'}
         boxShadow={'0px 8px 10px -6px rgba(0, 0, 0, 0.1), 0px 20px 25px -5px rgba(0, 0, 0, 0.1)'}
