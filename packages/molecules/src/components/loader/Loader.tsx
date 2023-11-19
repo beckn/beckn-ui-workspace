@@ -12,7 +12,7 @@ const Loader: React.ForwardRefRenderFunction<HTMLDivElement, LoaderPropsModel> =
       flexDirection={'column'}
       justifyContent={'center'}
       alignItems={'center'}
-      className={`${className}_loader`}
+      className={className}
     >
       <Spinner
         className={className}

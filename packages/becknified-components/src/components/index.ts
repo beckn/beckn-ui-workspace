@@ -6,3 +6,4 @@ export { default as SearchInputOnSearchResultsPage } from './searchInputOnSearch
 export { default as Search } from './search'
 export { default as Cart } from './cart'
 export { default as ProductRating } from './ProductRating'
+export { default as DetailCard } from './detail-card'
