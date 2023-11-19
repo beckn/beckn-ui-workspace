@@ -19,6 +19,7 @@ interface TypographyProps {
   fontWeight?: string
   fontSize?: string
   fontStyle?: string
+  className?: string
 }
 
 const Typography: React.FC<TypographyProps> = ({
@@ -28,10 +29,12 @@ const Typography: React.FC<TypographyProps> = ({
   fontSize,
   fontWeight,
   color,
-  fontStyle
+  fontStyle,
+  className
 }) => {
   return (
     <Text
+      className={className}
       variant={variant}
       color={color}
       fontFamily={fontFamily}
