@@ -7,7 +7,7 @@ import { SignInPropsModel } from './SignIn.types'
 import style from '../detailsCard/ShippingForm.module.css'
 import { FormErrors, signInValidateForm } from '@utils/detailsForm-utils'
 import Button from '../button/Button'
-import { Button as BecknButton } from '@beckn-ui/molecules'
+import { Button as BecknButton, Input as BecknInput } from '@beckn-ui/molecules'
 import Router from 'next/router'
 
 const SignIn = () => {
@@ -83,42 +83,24 @@ const SignIn = () => {
         pt="40px"
       >
         <div className={style.container}>
-          {/* <div className={style.did_floating_label_content}>
-            <input
-              className={style.did_floating_input}
-              type="text"
-              placeholder=" "
-              name="email"
-              value={formData.email}
-              onChange={handleInputChange}
-            />
-            <label className={style.did_floating_label}>{t[]}</label>
-          </div> */}
-          <div className={style.did_floating_label_content}>
-            <input
-              className={style.did_floating_input}
-              type="password"
-              placeholder=" "
-              name="password"
-              value={formData.password}
-              onChange={handleInputChange}
-            />
-            <label className={style.did_floating_label}>{t['password']}</label>
-            {/* {formErrors.password && <div className={style.error}>{formErrors.password}</div>} */}
-          </div>
-          <div className={style.did_floating_label_content}>
-            <Input
-              // className={style.did_floating_input}
-              variant="flushed"
-              type="password"
-              placeholder="Password"
-              name="password"
-              value={formData.password}
-              onChange={handleInputChange}
-            />
-            <label className={style.did_floating_label}>{t['password']}</label>
-            {/* {formErrors.password && <div className={style.error}>{formErrors.password}</div>} */}
-          </div>
+          <BecknInput
+            variant="flushed"
+            type="text"
+            name="email"
+            value={formData.email}
+            handleChange={handleInputChange}
+            label="Email"
+            placeholder=""
+          />
+          <BecknInput
+            variant="flushed"
+            type="password"
+            name="password"
+            value={formData.password}
+            handleChange={handleInputChange}
+            label="Password"
+            placeholder=""
+          />
         </div>
       </Box>
       <BecknButton

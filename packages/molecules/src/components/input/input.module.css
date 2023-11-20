@@ -22,3 +22,48 @@
   border-bottom: 1px solid #43464e;
   box-sizing: border-box;
 }
+.error {
+  font-size: 10px;
+  color: rgba(var(--color-primary));
+}
+
+.input:focus {
+  outline: none;
+  border-color: #a71b4a;
+}
+.input.otp_number_input:focus {
+  outline: none;
+  border-color: #000;
+}
+.input:focus ~ .input_label {
+  top: -8px;
+  font-size: 14px;
+  color: #a71b4a;
+}
+.input:focus ~ .input_label.otp_number {
+  top: -8px;
+  font-size: 14px;
+  color: #000;
+}
+.input:focus ~ .input_label.otp_number {
+  top: -12px;
+  font-size: 14px;
+  color: #000;
+}
+
+.input:not(:placeholder-shown) ~ .input_label {
+  top: -8px;
+  font-size: 14px;
+}
+.input:not(:placeholder-shown) ~ .input_label.otp_number {
+  top: -12px;
+  font-size: 14px;
+}
+.error {
+  font-size: 10px;
+  color: #a71b4a;
+}
+
+.input_container:has(.error) {
+  margin-bottom: 25px;
+}
