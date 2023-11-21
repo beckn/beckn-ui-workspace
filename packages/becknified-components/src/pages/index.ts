@@ -1,2 +1,2 @@
 export { default as SearchResults } from './searchResults'
-export { default as BecknLogin } from './login'
+export { default as BecknAuth } from './auth'
