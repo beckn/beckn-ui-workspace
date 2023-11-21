@@ -4,7 +4,7 @@ import { Input as ChakraInput } from '@chakra-ui/react'
 import Styles from './input.module.css'
 
 const Input: React.FC<InputProps> = ({
-  variant,
+  variant = 'flushed',
   type,
   value,
   name,
