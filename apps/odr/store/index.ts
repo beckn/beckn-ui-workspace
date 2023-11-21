@@ -30,6 +30,8 @@ const store = configureStore({
     quoteResponse: responseDataReducer,
     customerDetails: responseDataReducer,
     initResponse: responseDataReducer,
+    disputeDetails: responseDataReducer,
+    consentDetails: responseDataReducer,
     scholarshipCart: scholarshipCartReducer
   },
   middleware: getDefaultMiddleware =>

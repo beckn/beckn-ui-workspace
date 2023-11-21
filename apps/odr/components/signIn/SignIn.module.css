@@ -9,10 +9,10 @@
   font-family: Poppins;
 }
 .logo_container {
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  column-gap: 15px;
+  row-gap: 15px;
 }
 .logo_skillup {
   padding-left: 6px;

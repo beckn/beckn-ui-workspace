@@ -25,14 +25,16 @@ const cartIconBlackList = [
   '/jobApply',
   '/createProfile',
   '/myScholarship',
-  '/myLearningOrderHistory',
+  '/myCasesOrderHistory',
   '/myJobsOrderHistory',
-  '/applyJobsPrefilled'
+  '/applyJobsPrefilled',
+  '/search',
+  '/product'
 ]
 
 const backIconList = ['/', '/orderDetails']
 
-const homeIconBlackList = ['/orderHistory', '/', '/homePage', '/mobileOtp', '/createProfile', '/signUp']
+const homeIconBlackList = ['/orderHistory', '/', '/homePage', '/mobileOtp', '/createProfile', '/signUp', '']
 
 const storeHeaderBlackList = [
   '/checkoutPage',
@@ -41,7 +43,7 @@ const storeHeaderBlackList = [
   '/cart',
   '/homePage',
   '/orderConfirmation',
-  'feedback',
+  '/feedback',
   '/',
   '/mobileOtp',
   '/paymentMode',
@@ -53,30 +55,32 @@ const storeHeaderBlackList = [
   '/myScholarship',
   '/scholarshipSearchPage',
   '/scholarshipDetailsPage',
-  '/myLearningOrderHistory',
+  '/myCasesOrderHistory',
   '/myJobsOrderHistory',
   '/applyJobsPrefilled',
   '/applyScholarship',
-  '/signUp'
+  '/signUp',
+  '/product'
 ]
 const headerValues = {
-  '/checkoutPage': 'Checkout',
+  '/product': 'Service Details',
+  '/checkoutPage': 'Additional Information',
   '/orderHistory': 'My Courses',
-  '/orderDetails': 'Order Details',
+  '/orderDetails': 'Case Details',
   '/': 'Sign In',
   '/signUp': 'Sign Up',
   '/mobileOtp': 'Sign In',
   '/cart': 'Cart',
   '/paymentMode': 'Select Payment Method',
   '/jobSearch': 'Jobs',
-  feedback: 'Feedback',
+  '/feedback': 'Feedback',
   '/jobDetails': 'Jobs',
   '/jobApply': 'Senior UX Analyst',
   '/createProfile': 'Create Profile',
   '/myScholarship': 'My Scholarships',
   '/scholarshipSearchPage': 'Scholarships',
   '/scholarshipDetailsPage': 'Scholarships',
-  '/myLearningOrderHistory': 'My Learnings',
+  '/myCasesOrderHistory': 'My Cases',
   '/myJobsOrderHistory': 'My Jobs',
   '/applyJobsPrefilled': 'My Jobs',
   '/search': 'Search Results',
@@ -151,7 +155,7 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
         <div className="px-5 h-full flex items-center">
           <div>
             <Image
-              src="/images/CommerceLogo.svg"
+              src="/images/topHeader.svg"
               alt="App logo"
             />
           </div>
@@ -162,7 +166,7 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
               <Image
                 onClick={() => setMenuModalOpen(true)}
                 className="block"
-                src="/images/3-dots.svg"
+                src="/images/threeDot.svg"
                 alt="menu icon"
               />
             )}
@@ -193,39 +197,15 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
       >
         <div
           onClick={() => {
-            router.push('/myLearningOrderHistory')
+            router.push('/myCasesOrderHistory')
           }}
           className="flex gap-2 py-3 text-[15px]"
         >
           <Image
-            src="/images/myLearningIcon.svg"
-            alt="myLearnings icon"
+            src="/images/bottomModal.svg"
+            alt="myCases icon"
           />
-          {t['myLearnings']}
-        </div>
-        <div
-          onClick={() => {
-            router.push('/myScholarship')
-          }}
-          className="flex gap-2 py-3 text-[15px]"
-        >
-          <Image
-            src="/images/myScholarshipIcon.svg"
-            alt="myScholarships icon"
-          />
-          {t['myScholarships']}
-        </div>
-        <div
-          onClick={() => {
-            router.push('/myJobsOrderHistory')
-          }}
-          className="flex gap-2 py-3 text-[15px]"
-        >
-          <Image
-            src="/images/myJobIcon.svg"
-            alt="myJobs icon"
-          />
-          {t['myJobs']}
+          {t['myCases']}
         </div>
       </BottomModal>
     </>

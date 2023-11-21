@@ -1,29 +1,23 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Box, Flex, Text, Stack, Checkbox, Image } from '@chakra-ui/react'
+import { Box, Flex, Text } from '@chakra-ui/react'
 import DetailsCard from '../components/detailsCard/DetailsCard'
-import ItemDetails from '../components/detailsCard/ItemDetails'
 import ButtonComp from '../components/button/Button'
 import { useLanguage } from '../hooks/useLanguage'
 import ShippingOrBillingDetails from '../components/detailsCard/ShippingOrBillingDetails'
-import PaymentDetails from '../components/detailsCard/PaymentDetails'
 import AddShippingButton from '../components/detailsCard/AddShippingButton'
-import addShippingBtn from '../public/images/offer.svg'
 import { CartItemForRequest, DataPerBpp, ICartRootState, TransactionIdRootState } from '../lib/types/cart'
 import { getCartItemsPerBpp } from '../utilities/cart-utils'
 import useRequest from '../hooks/useRequest'
 import { responseDataActions } from '../store/responseData-slice'
-import {
-  areShippingAndBillingDetailsSame,
-  getPayloadForInitRequest,
-  getSubTotalAndDeliveryCharges,
-  getTotalCartItems
-} from '../utilities/checkout-utils'
+import { areShippingAndBillingDetailsSame, getPayloadForInitRequest } from '../utilities/checkout-utils'
 import Loader from '../components/loader/Loader'
 import AddBillingButton from '../components/detailsCard/AddBillingButton'
 import { useRouter } from 'next/router'
-import Cookies from 'js-cookie'
-import axios from 'axios'
+import AddDisputeButton from '../components/detailsCard/AddDisputeButton'
+import DisputeFillingDetails from '../components/detailsCard/DisputeFillingDetails'
+import AddConsentButton from '../components/detailsCard/AddConsentButton'
+import ConsentFillingDetails from '../components/detailsCard/ConsentFillingDetails'
 
 export type ShippingFormData = {
   name: string
@@ -32,67 +26,49 @@ export type ShippingFormData = {
   address: string
   pinCode: string
 }
+export type DisputeFormData = {
+  name: string
+  claimValue: string
+  address: string
+}
+export type ConsentFormData = {
+  name: string
+  address: string
+}
 
 const CheckoutPage = () => {
+  const [billingFormData, setBillingFormData] = useState<ShippingFormData>({
+    name: 'Santosh Kumar',
+    mobileNumber: '9612345678',
+    email: 'santosh.kumar@gmail.com',
+    address: '15 Jawahar nagar, New Delhi',
+    pinCode: '475001'
+  })
   const [formData, setFormData] = useState<ShippingFormData>({
     name: 'Santosh Kumar',
-    mobileNumber: '9876543210',
-    email: 'santosh.k@gmail.com',
-    address: '151-E, Janpath Road, New Delhi',
-    pinCode: '201016'
+    mobileNumber: '9612345678',
+    email: 'santosh.kumar@gmail.com',
+    address: '15 Jawahar nagar, New Delhi',
+    pinCode: '475001'
   })
-
-  const [isBillingAddressSameAsShippingAddress, setIsBillingAddressSameAsShippingAddress] = useState(true)
-
-  const [billingFormData, setBillingFormData] = useState<ShippingFormData>({
+  const [disputeformData, setDisputeFormData] = useState<DisputeFormData>({
     name: '',
-    mobileNumber: '',
-    email: '',
-    address: '',
-    pinCode: ''
+    claimValue: '',
+    address: ''
   })
+  const [consentformData, setConsentFormData] = useState<ConsentFormData>({
+    name: '',
+    address: ''
+  })
+  const [isBillingAddressSameAsShippingAddress, setIsBillingAddressSameAsShippingAddress] = useState(true)
 
   const router = useRouter()
   const initRequest = useRequest()
   const dispatch = useDispatch()
   const { t, locale } = useLanguage()
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
-  const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
   const cartItems = useSelector((state: ICartRootState) => state.cart.items)
   const transactionId = useSelector((state: { transactionId: TransactionIdRootState }) => state.transactionId)
-  const totalAmount = useSelector((state: ICartRootState) => state.cart.totalAmount)
-
-  const scholarshipId = useSelector((state: any) => state.scholarshipCart.scholarshipId)
-  const scholarshipTitle = useSelector((state: any) => state.scholarshipCart.scholarshipTitle)
-
-  const bearerToken = Cookies.get('authToken')
-  const axiosConfig = {
-    headers: {
-      Authorization: `Bearer ${bearerToken}`,
-      'Content-Type': 'application/json' // You can set the content type as needed
-    }
-  }
-
-  useEffect(() => {
-    const email = Cookies.get('userEmail') as string
-    axios
-      .get(`${strapiUrl}/profiles?populate[0]=documents.attachment`, axiosConfig)
-      .then(res => {
-        const profileResponse = res.data
-        const documents = profileResponse.data.attributes.documents.data
-
-        const profileData = profileResponse.data.attributes
-        const { name, phone, address, zip_code } = profileData
-        setFormData({
-          address: address ? address : '',
-          email,
-          mobileNumber: phone,
-          pinCode: zip_code ? zip_code : '',
-          name
-        })
-      })
-      .catch(e => console.error(e))
-  }, [])
 
   useEffect(() => {
     if (localStorage) {
@@ -118,6 +94,12 @@ const CheckoutPage = () => {
       if (localStorage.getItem('billingAddress')) {
         setBillingFormData(JSON.parse(localStorage.getItem('billingAddress') as string))
       }
+      if (localStorage.getItem('disputeAddress')) {
+        setDisputeFormData(JSON.parse(localStorage.getItem('disputeAddress') as string))
+      }
+      if (localStorage.getItem('consentAddress')) {
+        setConsentFormData(JSON.parse(localStorage.getItem('consentAddress') as string))
+      }
     }
   }, [])
 
@@ -141,7 +123,6 @@ const CheckoutPage = () => {
 
   useEffect(() => {
     const isBillingAddressComplete = Object.values(billingFormData).every(value => value.length > 0)
-
     if (isBillingAddressComplete && typeof window !== 'undefined') {
       localStorage.setItem('billingAddress', JSON.stringify(billingFormData))
     }
@@ -150,6 +131,19 @@ const CheckoutPage = () => {
     )
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [billingFormData])
+
+  useEffect(() => {
+    const isDisputeAddressComplete = Object.values(disputeformData).every(value => value.length > 0)
+    if (isDisputeAddressComplete && typeof window !== 'undefined') {
+      localStorage.setItem('disputeAdress', JSON.stringify(disputeformData))
+    }
+  }, [disputeformData])
+  useEffect(() => {
+    const isConsentAddressComplete = Object.values(consentformData).every(value => value.length > 0)
+    if (isConsentAddressComplete && typeof window !== 'undefined') {
+      localStorage.setItem('consentAdress', JSON.stringify(consentformData))
+    }
+  }, [consentformData])
 
   const formSubmitHandler = () => {
     if (formData) {
@@ -192,29 +186,6 @@ const CheckoutPage = () => {
       maxH={'calc(100vh - 100px)'}
       overflowY="scroll"
     >
-      {/* <AppHeader appHeaderText={t.checkout} /> */}
-      {/* start Item Details */}
-      <Box>
-        <Box pb={'10px'}>
-          <Text fontSize={'17px'}>{t.overview}</Text>
-        </Box>
-        <DetailsCard>
-          {cartItems.map(item => {
-            return (
-              <>
-                <ItemDetails
-                  title={item.descriptor.name}
-                  provider={(item as any).bppName}
-                  quantity={item.quantity}
-                  price={totalAmount}
-                />
-              </>
-            )
-          })}
-        </DetailsCard>
-      </Box>
-      {/* end item details */}
-      {/* start shipping detals */}
       {!isInitResultPresent() ? (
         <Box>
           <Flex
@@ -222,14 +193,14 @@ const CheckoutPage = () => {
             mt={'20px'}
             justifyContent={'space-between'}
           >
-            <Text fontSize={'17px'}>{t.billing}</Text>
+            <Text fontSize={'17px'}>{t.complaintDetails}</Text>
           </Flex>
           <DetailsCard>
             <AddBillingButton
               imgFlag={!initRequest.data}
               billingFormData={formData}
               setBillingFormData={setFormData}
-              addBillingdetailsBtnText={t.addBillingdetailsBtnText}
+              addBillingdetailsBtnText={t.addCompalintDetailsBtn}
               billingFormSubmitHandler={formSubmitHandler}
             />
           </DetailsCard>
@@ -241,7 +212,7 @@ const CheckoutPage = () => {
             mt={'20px'}
             justifyContent={'space-between'}
           >
-            <Text fontSize={'17px'}>{t.billing}</Text>
+            <Text fontSize={'17px'}>{t.complaintDetails}</Text>
             <AddBillingButton
               imgFlag={!isInitResultPresent()}
               billingFormData={formData}
@@ -250,65 +221,135 @@ const CheckoutPage = () => {
               billingFormSubmitHandler={formSubmitHandler}
             />
           </Flex>
-
           <ShippingOrBillingDetails
-            accordionHeader={t.billing}
+            accordionHeader={t.complaintDetails}
             name={formData.name}
             location={formData.address}
             number={formData.mobileNumber}
           />
         </Box>
       )}
-      {/* end shipping detals */}
-      {scholarshipTitle.length !== 0 && (
+      {!isInitResultPresent() ? (
         <Box>
           <Flex
             pb={'10px'}
             mt={'20px'}
             justifyContent={'space-between'}
           >
-            <Text fontSize={'17px'}>{t.scholarship}</Text>
-          </Flex>
-
-          <DetailsCard>
-            <Flex alignItems={'center'}>
-              <Image
-                alt="shippingBtnImage"
-                src={addShippingBtn}
-              />
-              <Text ml={'8px'}>
-                <span style={{ fontWeight: 'bold' }}>
-                  ‘{scholarshipId}-{scholarshipTitle}’
-                </span>
-              </Text>
-            </Flex>
-            <Text ml={'35px'}>{t.scholarshipApplied}</Text>
-          </DetailsCard>
-        </Box>
-      )}
-      {/* start payment details */}
-      {initRequest.data && (
-        <Box>
-          <Flex
-            pb={'10px'}
-            mt={'20px'}
-            justifyContent={'space-between'}
-          >
-            <Text fontSize={'17px'}>{t.paymentText}</Text>
+            <Text fontSize={'17px'}>{t.respondentDetails}</Text>
           </Flex>
           <DetailsCard>
-            <PaymentDetails
-              subtotalText={t.subtotalText}
-              subtotalValue={`${t.currencySymbol} ${getSubTotalAndDeliveryCharges(initRequest.data).subTotal}`}
-              deliveryChargesText={t.scholaarshipApplied}
-              deliveryChargesValue={`- ${t.currencySymbol} ${getSubTotalAndDeliveryCharges(initRequest.data).subTotal}`}
-              totalText={t.totalText}
-              totalValue={'0.00'}
+            <AddShippingButton
+              imgFlag={!initRequest.data}
+              formData={formData}
+              setFormData={setFormData}
+              addShippingdetailsBtnText={t.addRespondentDetaislBtn}
+              formSubmitHandler={formSubmitHandler}
             />
           </DetailsCard>
         </Box>
+      ) : (
+        <Box>
+          <Flex
+            pb={'10px'}
+            mt={'20px'}
+            justifyContent={'space-between'}
+          >
+            <Text fontSize={'17px'}>{t.respondentDetails}</Text>
+            <AddShippingButton
+              imgFlag={!isInitResultPresent()}
+              formData={formData}
+              setFormData={setFormData}
+              addShippingdetailsBtnText={t.changeText}
+              formSubmitHandler={formSubmitHandler}
+            />
+          </Flex>
+
+          <ShippingOrBillingDetails
+            accordionHeader={t.respondentDetails}
+            name={formData.name}
+            location={formData.address}
+            number={formData.mobileNumber}
+          />
+        </Box>
       )}
-      {/* end payment details */}
+      {!isInitResultPresent() ? (
+        <Box>
+          <Flex
+            pb={'10px'}
+            mt={'20px'}
+            justifyContent={'space-between'}
+          >
+            <Text fontSize={'17px'}>{t.disputeDetails}</Text>
+          </Flex>
+          <DetailsCard>
+            <AddDisputeButton
+              imgFlag={!initRequest.data}
+              formData={disputeformData}
+              setFormData={setDisputeFormData}
+              addShippingdetailsBtnText={t.addDisputeDetailsBtn}
+              formSubmitHandler={formSubmitHandler}
+            />
+          </DetailsCard>
+        </Box>
+      ) : (
+        <Box>
+          <Flex
+            pb={'10px'}
+            mt={'20px'}
+            justifyContent={'space-between'}
+          >
+            <Text fontSize={'17px'}>{t.disputeDetails}</Text>
+            <AddDisputeButton
+              imgFlag={!isInitResultPresent()}
+              formData={disputeformData}
+              setFormData={setDisputeFormData}
+              addShippingdetailsBtnText={t.changeText}
+              formSubmitHandler={formSubmitHandler}
+            />
+          </Flex>
+          <DisputeFillingDetails accordionHeader={t.disputeDetails} />
+        </Box>
+      )}
+
+      {!isInitResultPresent() ? (
+        <Box>
+          <Flex
+            pb={'10px'}
+            mt={'20px'}
+            justifyContent={'space-between'}
+          >
+            <Text fontSize={'17px'}>{t.consent}</Text>
+          </Flex>
+          <DetailsCard>
+            <AddConsentButton
+              imgFlag={!initRequest.data}
+              formData={consentformData}
+              setFormData={setConsentFormData}
+              addShippingdetailsBtnText={t.fillConsentForm}
+              formSubmitHandler={formSubmitHandler}
+            />
+          </DetailsCard>
+        </Box>
+      ) : (
+        <Box>
+          <Flex
+            pb={'10px'}
+            mt={'20px'}
+            justifyContent={'space-between'}
+          >
+            <Text fontSize={'17px'}>{t.consent}</Text>
+            <AddConsentButton
+              imgFlag={!isInitResultPresent()}
+              formData={consentformData}
+              setFormData={setConsentFormData}
+              addShippingdetailsBtnText={t.changeText}
+              formSubmitHandler={formSubmitHandler}
+            />
+          </Flex>
+          <ConsentFillingDetails accordionHeader={t.disputeDetails} />
+        </Box>
+      )}
       {!isInitResultPresent() ? (
         <Box
           position={'absolute'}
@@ -317,7 +358,7 @@ const CheckoutPage = () => {
           bottom={'0'}
         >
           <ButtonComp
-            buttonText={t.continue}
+            buttonText={'Confirm'}
             background={'rgba(var(--color-primary))'}
             color={'rgba(var(--text-color))'}
             handleOnClick={() => {}}
@@ -326,10 +367,10 @@ const CheckoutPage = () => {
         </Box>
       ) : (
         <ButtonComp
-          buttonText={t.continue}
+          buttonText={'Confirm'}
           background={'rgba(var(--color-primary))'}
           color={'rgba(var(--text-color))'}
-          handleOnClick={() => router.push('/paymentMode')}
+          handleOnClick={() => router.push('/orderConfirmation')}
           isDisabled={false}
         />
       )}

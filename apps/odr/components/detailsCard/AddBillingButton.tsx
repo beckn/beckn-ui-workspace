@@ -1,6 +1,6 @@
 import { Flex, Text, useDisclosure, Image } from '@chakra-ui/react'
 import React from 'react'
-import addShippingBtn from '../../public/images/addShippingBtn.svg'
+import addShippingBtn from '../../public/images/addBtn.svg'
 import { ShippingFormData } from '../../pages/checkoutPage'
 import BillingForm from './BillingForm'
 

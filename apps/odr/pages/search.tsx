@@ -10,12 +10,11 @@ import Loader from '../components/loader/Loader'
 import { useLanguage } from '../hooks/useLanguage'
 import { useRouter } from 'next/router'
 
-//Mock data for testing search API. Will remove after the resolution of CORS issue
-
 const Search = () => {
   const [items, setItems] = useState([])
   const router = useRouter()
   const [searchKeyword, setSearchKeyword] = useState(router.query?.searchTerm || '')
+  const [selectedCategory, setSelectedCategory] = useState(router.query?.selectedItem || '')
   const dispatch = useDispatch()
   const [providerId, setProviderId] = useState('')
   const { t, locale } = useLanguage()
@@ -24,11 +23,6 @@ const Search = () => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
   const { data, loading, error, fetchData } = useRequest()
-
-  const categoryMap = {
-    Books: { en: 'BookEnglish', fa: 'BookFrench' },
-    restaurant: { en: 'FoodEnglish', fa: 'FoodFrench' }
-  }
 
   useEffect(() => {
     if (!!searchKeyword) {
@@ -53,23 +47,20 @@ const Search = () => {
 
   const searchPayload = {
     context: {
-      domain: 'retail'
+      domain: 'online-dispute-resolution:0.1.0'
     },
-    message: {
-      criteria: {
-        dropLocation: '12.9715987,77.5945627',
-        categoryName: 'Courses',
-        searchString: searchKeyword
-      }
+    searchString: searchKeyword,
+    category: {
+      categoryName: selectedCategory
     }
   }
 
-  const fetchDataForSearch = () => fetchData(`${apiUrl}/client/v2/search`, 'POST', searchPayload)
+  const fetchDataForSearch = () => fetchData(`${apiUrl}/search`, 'POST', searchPayload)
 
   useEffect(() => {
     if (localStorage && !localStorage.getItem('searchItems')) {
       if (providerId) {
-        fetchData(`${apiUrl}/client/v2/search`, 'POST', searchPayload)
+        fetchData(`${apiUrl}/search`, 'POST', searchPayload)
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -84,7 +75,7 @@ const Search = () => {
       }
     }
   }, [])
-  console.log(items)
+  console.log(data)
   useEffect(() => {
     if (data) {
       dispatch(responseDataActions.addTransactionId(data.context.transaction_id))

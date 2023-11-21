@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import Button from '../components/button/Button'
 import StarRating from '../components/starRating/StarRating'
 import { useLanguage } from '../hooks/useLanguage'
-import feedbackImg from '../public/images/feedbackImg.svg'
+// import feedbackImg from '../public/images/feedback.svg'
 
 const Feedback = () => {
   const { t } = useLanguage()
@@ -18,35 +18,22 @@ const Feedback = () => {
         textAlign={'center'}
         pb={'15px'}
       >
-        <Text fontSize={'18px'}>{t.orderDeliveredOnTime}</Text>
-        <Text fontSize={'12px'}>{t.shareYourfeedback}</Text>
+        <Text
+          fontSize={'17px'}
+          fontWeight={600}
+        >
+          {t.shareYourfeedback}
+        </Text>
       </Box>
       <Box mb={'10px'}>
-        {/* eslint-disable-next-line jsx-a11y/alt-text */}
         <Image
-          src={feedbackImg}
+          src={'/images/feedback.svg'}
           margin={'0 auto'}
         />
       </Box>
-      <StarRating
-        ratingText={t.rateStore}
-        rating={ratingForStore}
-        setRating={setRatingForStore}
-        count={5}
-        size={20}
-        transition={''}
-      />
-      <StarRating
-        ratingText={t.rateDeliveryExperience}
-        rating={rating}
-        setRating={setRating}
-        count={5}
-        size={20}
-        transition={''}
-      />
       <Box>
         <Text
-          fontSize={'12px'}
+          fontSize={'15px'}
           mb={'10px'}
         >
           {t.addCommentsHere}

@@ -3,11 +3,11 @@ import Cookies from 'js-cookie'
 import Router from 'next/router'
 import React, { useEffect, useState } from 'react'
 import Loader from '../components/loader/Loader'
-import MyLearing from '../components/orderHistory/MyLearing'
 import { useLanguage } from '../hooks/useLanguage'
 import { getOrderPlacementTimeline } from '../utilities/confirm-utils'
+import MyCases from '../components/orderHistory/MyCases'
 
-const myLearningOrderHistory = () => {
+const myCasesOrderHistory = () => {
   const [coursesOrders, setCoursesOrders] = useState([])
   const [isLoading, setIsLoading] = useState(true)
 
@@ -15,23 +15,25 @@ const myLearningOrderHistory = () => {
   const apiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
 
   const fetchCoursesOrders = async () => {
-    const bearerToken = Cookies.get('authToken')
-    let myHeaders = new Headers()
-    myHeaders.append('Authorization', `Bearer ${bearerToken}`)
+    try {
+      const bearerToken = Cookies.get('authToken')
+      const myHeaders = new Headers()
+      myHeaders.append('Authorization', `Bearer ${bearerToken}`)
 
-    let requestOptions = {
-      method: 'GET',
-      headers: myHeaders,
-      redirect: 'follow'
-    } as RequestInit
+      const requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow'
+      } as RequestInit
 
-    fetch(`${apiUrl}/orders?filters[category]=1`, requestOptions)
-      .then(response => response.json())
-      .then(result => {
-        setCoursesOrders(result.data)
-        setIsLoading(false)
-      })
-      .catch(error => console.error('error', error))
+      const response = await fetch(`${apiUrl}/orders?filters[category]=1`, requestOptions)
+      const result = await response.json()
+      console.log(result.data)
+      setCoursesOrders(result.data)
+      setIsLoading(false)
+    } catch (error) {
+      console.error('error', error)
+    }
   }
 
   useEffect(() => {
@@ -53,14 +55,14 @@ const myLearningOrderHistory = () => {
       overflowY="scroll"
     >
       {coursesOrders.map((courseOrder: any, index) => (
-        <MyLearing
+        <MyCases
           key={index}
           heading={courseOrder.attributes.items[0].descriptor.name}
           time={getOrderPlacementTimeline(courseOrder.attributes.createdAt)}
           id={courseOrder.id}
           myLearingStatus={courseOrder.attributes.delivery_status}
           handleViewCourses={() => {
-            window.location.href = courseOrder.attributes.items[0].tags.Url
+            Router.push('/orderDetails')
           }}
         />
       ))}
@@ -68,4 +70,4 @@ const myLearningOrderHistory = () => {
   )
 }
 
-export default myLearningOrderHistory
+export default myCasesOrderHistory
