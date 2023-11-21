@@ -49,7 +49,7 @@ const ProductCard: React.FC<ProductCardProps> = props => {
                   src={product.descriptor.images[0]}
                   width={'110px'}
                   height={'133px'}
-                  alt={product.descriptor.name}
+                  alt={'item_image'}
                   boxShadow={'0 20px 25px rgba(0, 0, 0, 0.1),0 8px 10px rgba(0, 0, 0, 0.05)'}
                   objectFit={'contain'}
                 />
