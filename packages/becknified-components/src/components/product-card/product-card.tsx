@@ -1,9 +1,9 @@
 import React from 'react'
 import { Box, Flex, Text, Image } from '@chakra-ui/react'
 import StarIcon from '../../../public/images/Star.svg'
-import { ProductCardProps } from './ProductCard.types'
+import { ProductCardProps } from './product-card.types'
 import ProductPrice from '../productPrice'
-import Styles from './product-card.module.css'
+import ProductRating from '../ProductRating'
 
 const ProductCard: React.FC<ProductCardProps> = props => {
   const { product, productInfoDataSource, CustomInfoComponent, productClickHandler, className = '' } = props
@@ -14,32 +14,54 @@ const ProductCard: React.FC<ProductCardProps> = props => {
         <CustomInfoComponent product={product} />
       ) : (
         <Box
+          className={`${className}-product_card_layout_container`}
           onClick={productClickHandler}
           minH={'168px'}
-          maxH={'100%'}
-          className={`${Styles.product_card_layout_container} ${className}_product_card `}
+          width={'100%'}
+          backgroundColor={'#fff'}
+          borderRadius={'0.75rem'}
+          display={'flex'}
+          position={'relative'}
+          boxShadow={'0 20px 25px rgba(0, 0, 0, 0.1),0 8px 10px rgba(0, 0, 0, 0.05)'}
         >
-          <div className={Styles.product_card_container}>
+          <Box
+            display={'flex'}
+            position={'relative'}
+            width={'100%'}
+          >
             <Box
               w={'125px'}
-              className={Styles.product_img_lay_cont}
+              position="relative"
+              backgroundColor={'rgba(140, 158, 175, 0.3)'}
+              borderTopLeftRadius={'1rem'}
+              borderTopRightRadius={'1rem'}
+              display={'flex'}
+              flexDirection={'column'}
+              justifyContent={'space-between'}
+              alignItems={'center'}
             >
-              <div className={Styles.product_img_cont}>
+              <Box
+                display={'flex'}
+                alignItems={'center'}
+                height={'100%'}
+              >
                 <Image
                   src={product.descriptor.images[0]}
                   width={'110px'}
                   height={'133px'}
                   alt={product.descriptor.name}
-                  className={Styles.product_img}
+                  boxShadow={'0 20px 25px rgba(0, 0, 0, 0.1),0 8px 10px rgba(0, 0, 0, 0.05)'}
+                  objectFit={'contain'}
                 />
-              </div>
+              </Box>
             </Box>
             <Box
               p={'15px'}
               pt={'11px'}
               w={'63%'}
               position={'relative'}
-              className={Styles.product_name_container}
+              display={'flex'}
+              flexDir={'column'}
             >
               <Flex
                 justifyContent={'space-between'}
@@ -47,7 +69,6 @@ const ProductCard: React.FC<ProductCardProps> = props => {
                 w={'100%'}
               >
                 <Text
-                  w={'80%'}
                   fontWeight={'600'}
                   fontSize={'15px'}
                   mb={'10px'}
@@ -89,21 +110,13 @@ const ProductCard: React.FC<ProductCardProps> = props => {
                 width={'calc(100% - 30px)'}
               >
                 <ProductPrice price={parseFloat(product.price.value)} />
-                <Flex alignItems={'center'}>
-                  <Image
-                    alt="star-icon"
-                    src={StarIcon}
-                  />
-                  <Text
-                    fontSize={'12px'}
-                    pl={'5px'}
-                  >
-                    {4.5}
-                  </Text>
-                </Flex>
+                <ProductRating
+                  ratingValue="4.5"
+                  ratingIcon={StarIcon}
+                />
               </Flex>
             </Box>
-          </div>
+          </Box>
         </Box>
       )}
     </>

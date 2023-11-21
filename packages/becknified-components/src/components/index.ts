@@ -1,4 +1,4 @@
-export { default as ProductCard } from './ProductCard'
+export { default as ProductCard } from './product-card'
 export { default as Sort } from './sort'
 export { default as productList } from './productList'
 export { default as ProductPrice } from './productPrice'
