@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useLanguage } from '../hooks/useLanguage'
-import HomeImg from '../public/images/HomePageLogo.svg'
-import SkillUp from '../public/images/SkillUpLogo.svg'
+import HomeImg from '../../odr/public/images/HomeImg.svg'
+import ODRName from '../../odr/public/images/LegalEase.svg'
 import { FormErrors, signUpValidateForm } from '../utilities/detailsForm-utils'
 import style from '../components/detailsCard/ShippingForm.module.css'
 import Styles from '../components/signIn/SignIn.module.css'
@@ -105,9 +105,8 @@ const SignUp = () => {
           />
           <Image
             className={Styles.logo_skillup}
-            src={SkillUp}
+            src={ODRName}
             alt="OpenCommerce"
-            pt="15px"
           />
         </Flex>
         <Box
@@ -154,7 +153,7 @@ const SignUp = () => {
           </div>
         </Box>
         <Button
-          buttonText={'Register'}
+          buttonText={'Sign Up'}
           background={'rgba(var(--color-primary))'}
           color={'rgba(var(--text-color))'}
           handleOnClick={handleRegister}

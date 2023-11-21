@@ -1,25 +1,24 @@
 // 'use client'
 import React, { useState } from 'react'
-import { Box, Flex, Text } from '@chakra-ui/react'
+import { Box, Flex, useToast } from '@chakra-ui/react'
 import Image from 'next/image'
-import HomeImg from '../../public/images/HomePageLogo.svg'
-import SkillUp from '../../public/images/SkillUpLogo.svg'
 import Styles from './SignIn.module.css'
 import style from '../detailsCard/ShippingForm.module.css'
 import { useLanguage } from '../../hooks/useLanguage'
-import GoogleLogo from '../../public/images/Google_logo.svg'
 import { SignInPropsModel } from './Signin.types'
 import Button from '../button/Button'
 import { FormErrors, signInValidateForm } from '../../utilities/detailsForm-utils'
-import Router from 'next/router'
+import Router, { useRouter } from 'next/router'
 import Cookies from 'js-cookie'
+import HomeImg from '../../public/images/HomeImg.svg'
+import LegalEase from '../../public/images/LegalEase.svg'
 
 const SignIn = () => {
   const { t } = useLanguage()
   const [formData, setFormData] = useState<SignInPropsModel>({ email: '', password: '' })
   const [formErrors, setFormErrors] = useState<FormErrors>({ email: '', password: '' })
   const [isFormFilled, setIsFormFilled] = useState(false)
-
+  const toast = useToast()
   const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -67,6 +66,14 @@ const SignIn = () => {
         Cookies.set('userEmail', email)
         Router.push('/homePage')
       } else {
+        const errorData = await response.json()
+        toast({
+          title: 'Error!.',
+          description: errorData.error.message,
+          status: 'error',
+          duration: 3000,
+          isClosable: true
+        })
         console.error('Sign In failed')
       }
     } catch (error) {
@@ -84,7 +91,7 @@ const SignIn = () => {
         />
         <Image
           className={Styles.logo_skillup}
-          src={SkillUp}
+          src={LegalEase}
           alt="Skill Up Icon"
           width={188}
           height={56}

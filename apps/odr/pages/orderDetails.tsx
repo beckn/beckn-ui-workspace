@@ -1,4 +1,16 @@
-import { Box, CardBody, Divider, Flex, Text, Image, Card, useDisclosure, Stack } from '@chakra-ui/react'
+import {
+  Box,
+  CardBody,
+  Divider,
+  Flex,
+  Text,
+  Image,
+  Card,
+  useDisclosure,
+  Stack,
+  HStack,
+  StackDivider
+} from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import Accordion from '../components/accordion/Accordion'
 import { useLanguage } from '../hooks/useLanguage'
@@ -12,14 +24,15 @@ import {
 import { getDataPerBpp } from '../utilities/orderDetails-utils'
 import { getSubTotalAndDeliveryChargesForOrder } from '../utilities/orderHistory-utils'
 import TrackIcon from '../public/images/TrackIcon.svg'
-import ViewMoreOrderModal from '../components/orderDetails/ViewMoreOrderModal'
 import { useSelector } from 'react-redux'
 import { TransactionIdRootState } from '../lib/types/cart'
 import useRequest from '../hooks/useRequest'
 import { useRouter } from 'next/router'
 import DetailsCard from '../components/detailsCard/DetailsCard'
-import Button from '../components/button/Button'
-import Link from 'next/link'
+import attached from '../public/images/attached.svg'
+import ShippingOrBillingDetails from '../components/detailsCard/ShippingOrBillingDetails'
+import ViewMoreOrderModal from '../components/orderDetails/ViewMoreOrderModal'
+import { RenderOrderStatusList } from '../components/orderDetails/RenderOrderStatusTree'
 
 const OrderDetails = () => {
   const [allOrderDelivered, setAllOrderDelivered] = useState(false)
@@ -139,49 +152,13 @@ const OrderDetails = () => {
     })
     window.location.href = courseUrl
   }
+  console.log(statusResponse)
   return (
     <Box
       className="hideScroll"
       maxH={'calc(100vh - 100px)'}
       overflowY="scroll"
     >
-      <DetailsCard>
-        <Flex
-          alignItems={'center'}
-          pb={'8px'}
-        >
-          <Image
-            src="/images/jobSearch.svg"
-            alt=" "
-          />
-          <Text
-            fontSize="17px"
-            fontWeight={'600'}
-            pl="8px"
-          >
-            {t.lookingtojobs}
-          </Text>
-        </Flex>
-        <Box pl={'28px'}>
-          <Text
-            fontSize={'15px'}
-            as="span"
-          >
-            {t.jobChangeInfo}
-          </Text>
-          <Link href={'/jobSearch'}>
-            <Text
-              pl="5px"
-              fontSize={'15px'}
-              as="span"
-              color={'rgba(var(--color-primary))'}
-              cursor={'pointer'}
-            >
-              {t.searchForJob}
-            </Text>
-          </Link>
-        </Box>
-      </DetailsCard>
       {allOrderDelivered ? (
         <Card
           mb={'20px'}
@@ -204,7 +181,7 @@ const OrderDetails = () => {
                 fontSize={'17px'}
                 fontWeight={'600'}
               >
-                All orders delivered!
+                All request have been fulfilled!
               </Text>
             </Flex>
             <Flex
@@ -232,216 +209,146 @@ const OrderDetails = () => {
           pr={'8px'}
           pb="10px"
         >
-          {t.orderSummary}
+          {t.caseSummary}
         </Box>
-        <Flex
-          pt={'unset'}
-          justifyContent={'space-between'}
-          alignItems={'center'}
-        >
-          <Text>{t.bookedIn}</Text>
-          <Text>{getOrderPlacementTimeline(orderFromConfirmData.created_at)}</Text>
-        </Flex>
+
         {Object.keys(confirmDataPerBpp).map(key => (
           <Box key={confirmDataPerBpp[key].id}>
             <Flex
-              pt={4}
+              flexDir={'column'}
               justifyContent={'space-between'}
-              alignItems={'center'}
+              alignItems={'flex-start'}
             >
-              <Text>{t.ordersFulfilled}</Text>
+              <Text
+                fontSize={'15px'}
+                fontWeight={400}
+              >
+                Harvey Spectre Law Firm{' '}
+              </Text>
               <Box>
                 <Text
+                  fontSize={'15px'}
+                  fontWeight={400}
                   as={'span'}
                   pr={'2px'}
                 >
-                  {confirmData.length}
-                </Text>
-                <Text as={'span'}>of</Text>
-                <Text
-                  as={'span'}
-                  pl={'2px'}
-                >
-                  {confirmData.length}
+                  Family Dispute, Mediation
                 </Text>
               </Box>
+              <Text
+                fontSize={'15px'}
+                fontWeight={400}
+              >
+                Case Id: #789171
+              </Text>
+              <HStack
+                justifyContent={'space-between'}
+                gap={'3.5rem'}
+              >
+                <Text
+                  fontSize={'15px'}
+                  fontWeight={400}
+                >
+                  {t.lodgedOn}
+                </Text>
+                <Text
+                  fontSize={'15px'}
+                  fontWeight={400}
+                >
+                  {getOrderPlacementTimeline(orderFromConfirmData.created_at)}
+                </Text>
+              </HStack>
             </Flex>
           </Box>
         ))}
       </DetailsCard>
-
-      {statusResponse.map((res: any, index: number) => (
-        <Accordion
-          accordionHeader={
-            <Box>
-              <Flex
-                mb={'15px'}
-                fontSize={'17px'}
-                alignItems={'center'}
-              >
-                <Text
-                  fontWeight={600}
-                  fontSize={'17px'}
-                  pr={'8px'}
-                >
-                  {t.orderId}:
-                </Text>
-
-                <Text
-                  textOverflow={'ellipsis'}
-                  overflow={'hidden'}
-                  whiteSpace={'nowrap'}
-                >
-                  {res.message.order.displayId}
-                </Text>
-              </Flex>
-              <Flex
-                justifyContent={'space-between'}
-                alignItems={'center'}
-              >
-                <Flex maxWidth={'57vw'}>
-                  <Text
-                    textOverflow={'ellipsis'}
-                    overflow={'hidden'}
-                    whiteSpace={'nowrap'}
-                    fontSize={'12px'}
-                    fontWeight={'400'}
-                  >
-                    {res.message.order.items[0].descriptor.name}
-                  </Text>
-                  {totalQuantityOfOrder(res) !== 1 && (
-                    <Text
-                      pl={'5px'}
-                      color={'rgba(var(--color-primary))'}
-                      fontSize={'12px'}
-                      fontWeight={'600'}
-                      onClick={onOpen}
-                    >
-                      +{totalQuantityOfOrder(res) - 1}
-                    </Text>
-                  )}
-                </Flex>
-                {status === 'progress' ? (
-                  <Text
-                    fontSize={'12px'}
-                    fontWeight="600"
-                    color={'#FDC025'}
-                  >
-                    In Progress
-                  </Text>
-                ) : (
-                  <Text
-                    fontSize={'12px'}
-                    fontWeight="600"
-                    color={'#5EC401'}
-                  >
-                    Completed
-                  </Text>
-                )}
-              </Flex>
-            </Box>
-          }
-        >
-          <ViewMoreOrderModal
-            isOpen={isOpen}
-            onOpen={onOpen}
-            onClose={onClose}
-            items={res.message.order.items}
-            orderId={res.message.order.displayId}
-          />
-          <Divider mb={'20px'} />
-          <CardBody
-            pt={'unset'}
-            fontSize={'15px'}
-          >
-            <Box>
-              <Flex alignItems={'center'}>
-                <Image
-                  src="/images/done.svg"
-                  alt=""
-                />
-                <Text
-                  pl={'8px'}
-                  fontSize="15px"
-                  fontWeight={'600'}
-                >
-                  Courses Purchased
-                </Text>
-              </Flex>
+      <DetailsCard>
+        {statusResponse.map((res: any, index: number) => (
+          <>
+            <HStack
+              pb="10px"
+              key={index}
+              justifyContent={'space-between'}
+            >
               <Text
-                pl="28px"
-                fontSize={'12px'}
+                fontWeight={600}
+                fontSize={'17px'}
               >
-                21st Jun 2021, 12:11pm
+                {t.caseId} {res.message.order.displayId}
               </Text>
-            </Box>
-            {status === 'progress' ? (
-              <Box
-                fontSize={'15px'}
-                color={'rgba(var(--color-primary))'}
-                pt="10px"
-                pl="28px"
-                onClick={handleViewCource}
-              >
-                {t.viewCourse}
-              </Box>
-            ) : null}
-          </CardBody>
-        </Accordion>
-      ))}
-      <Accordion accordionHeader={t.paymentText}>
-        <CardBody
-          pt={'unset'}
-          pb={'unset'}
-        >
-          <Flex
-            pb={'15px'}
-            justifyContent={'space-between'}
-            alignItems={'center'}
-          >
-            <Text>{t.subTotal}</Text>
-            <Text>
-              {t.currencySymbol}
-              {subTotal}
+              <Flex>
+                {res.message.order.state === 'INITIATED' ? (
+                  <Image
+                    src="/images/inProgress.svg"
+                    alt=""
+                    pr={'6px'}
+                  />
+                ) : (
+                  <Image
+                    src="/images/approvedIcon.svg"
+                    alt=""
+                    pr={'6px'}
+                  />
+                )}
+                <Text
+                  fontWeight={300}
+                  fontSize={'12px'}
+                >
+                  {res.message.order.state === 'INITIATED' ? 'In Progress' : 'Case Closed'}
+                </Text>
+              </Flex>
+            </HStack>
+            <Text
+              textOverflow={'ellipsis'}
+              overflow={'hidden'}
+              whiteSpace={'nowrap'}
+              fontSize={'12px'}
+              fontWeight={'400'}
+            >
+              {res.message.order.items[0].descriptor.name}
             </Text>
-          </Flex>
-          <Flex
-            pb={'15px'}
-            justifyContent={'space-between'}
-            alignItems={'center'}
-          >
-            <Text>{t.scholaarshipApplied}</Text>
-            <Text>
-              - {t.currencySymbol}
-              {subTotal}
-            </Text>
-          </Flex>
-          <Divider />
-        </CardBody>
-        <CardBody
-          pb={'unset'}
-          pt={'15px'}
+            <Divider
+              mt={'15px'}
+              mb={'15px'}
+            />
+            <CardBody pt={'unset'}>{RenderOrderStatusList(res)}</CardBody>
+          </>
+        ))}
+      </DetailsCard>
+      <ShippingOrBillingDetails
+        accordionHeader={'Complainant & Billing Details'}
+        name={'Jay D.'}
+        location={'2111, 30th Main, HSR Layout, Sector 2, Bangalore-560102'}
+        number={'+91 9876543210'}
+      />
+
+      <ShippingOrBillingDetails
+        accordionHeader={'Dispute Details'}
+        name={'Maria'}
+        location={'2702, 31st Main, HSR Layout, Sector 1, Bangalore-560102'}
+        number={'+91 9871432309'}
+      />
+      <Accordion accordionHeader={'Dispute Details'}>
+        <Stack
+          divider={<StackDivider />}
+          spacing="4"
         >
-          <Flex
-            pb={'15px'}
-            justifyContent={'space-between'}
-            alignItems={'center'}
-            fontSize={'17px'}
-            fontWeight={'600'}
-          >
-            <Text>{t.total}</Text>
-            <Text>{t.currencySymbol}0.00</Text>
+          <Flex p={'15px'}>
+            <Image src={attached} />
+            <Text fontSize={'15px'}>Dispute details added</Text>
           </Flex>
-          <Flex
-            fontSize={'15px'}
-            justifyContent={'space-between'}
-            alignItems={'center'}
-            pb={'15px'}
-          >
-            <Text>{t.paymentMethod}</Text>
-            <Text>{t.naText}</Text>
+        </Stack>
+      </Accordion>
+      <Accordion accordionHeader={'Consent'}>
+        <Stack
+          divider={<StackDivider />}
+          spacing="4"
+        >
+          <Flex p={'15px'}>
+            <Image src={attached} />
+            <Text fontSize={'15px'}>Consent Form Filled</Text>
           </Flex>
-        </CardBody>
+        </Stack>
       </Accordion>
     </Box>
   )

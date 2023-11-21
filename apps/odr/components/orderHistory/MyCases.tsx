@@ -2,7 +2,7 @@ import { Box, Card, CardBody, Divider, Flex, Text, Image } from '@chakra-ui/reac
 import React from 'react'
 import { useLanguage } from '../../hooks/useLanguage'
 
-interface MyLearningProps {
+interface MyCasesProps {
   heading: string
   time: string
   id: string
@@ -10,7 +10,7 @@ interface MyLearningProps {
   handleViewCourses: () => void
 }
 
-const MyLearing: React.FC<MyLearningProps> = props => {
+const MyCases: React.FC<MyCasesProps> = props => {
   const { t } = useLanguage()
   return (
     <Box>
@@ -29,16 +29,25 @@ const MyLearing: React.FC<MyLearningProps> = props => {
           >
             {props.heading}
           </Text>
-          <Text pb={'5px'}>{props.time}</Text>
+          <Text
+            fontWeight={'400'}
+            pb={'10px'}
+          >
+            Harvey Spectre Law Firm
+          </Text>
 
-          <Text pr={'10px'}>ID: {props.id}</Text>
+          <Text pr={'10px'}>
+            {' '}
+            <span style={{ fontSize: '15px', fontWeight: 600 }}>CaseID: </span>
+            {props.id}
+          </Text>
 
           <Flex
             alignItems={'center'}
             justifyContent="space-between"
             pt={'5px'}
           >
-            <Text fontWeight={'600'}>{t.currencySymbol} 1000</Text>
+            <Text pb={'5px'}>{props.time}</Text>
             <Flex alignItems={'center'}>
               {props.myLearingStatus === 'In Review' ? (
                 <Image
@@ -66,11 +75,12 @@ const MyLearing: React.FC<MyLearningProps> = props => {
             textAlign={'center'}
             padding="10px 10px 0"
             fontSize={'15px'}
+            fontWeight={600}
             cursor="pointer"
             color={'rgba(var(--color-primary))'}
             onClick={props.handleViewCourses}
           >
-            {t.viewCourse}
+            {t.viewCase}
           </Box>
         </CardBody>
       </Card>
@@ -78,4 +88,4 @@ const MyLearing: React.FC<MyLearningProps> = props => {
   )
 }
 
-export default MyLearing
+export default MyCases

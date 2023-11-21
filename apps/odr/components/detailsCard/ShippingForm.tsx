@@ -106,7 +106,7 @@ const ShippingForm: React.FC<ShippingFormProps> = props => {
             alignItems={'center'}
             padding={'15px 20px'}
           >
-            <Text>{t.addShippingdetailsBtnText}</Text>
+            <Text>{t.addRespondentDetaislBtn}</Text>
           </Flex>
           <Box>
             <Divider />
@@ -177,7 +177,7 @@ const ShippingForm: React.FC<ShippingFormProps> = props => {
               </div>
             </div>
             <Button
-              buttonText={t.saveShippingDetails}
+              buttonText={'Save'}
               background={'rgba(var(--color-primary))'}
               color={'rgba(var(--text-color))'}
               handleOnClick={handleButtonClick}

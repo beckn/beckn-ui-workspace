@@ -1,18 +1,19 @@
 import { Flex, Image, Text, useDisclosure } from '@chakra-ui/react'
 import React from 'react'
-import { ShippingFormData } from '../../pages/checkoutPage'
+import { ConsentFormData } from '../../pages/checkoutPage'
 import addShippingBtn from '../../public/images/addBtn.svg'
-import ShippingForm from './ShippingForm'
 
-export interface AddShippingButtonProps {
+import ConsentForm from './ConsentForm'
+
+export interface AddConsentButtonProps {
   addShippingdetailsBtnText: string
   setFormData: Function
-  formData: ShippingFormData
+  formData: ConsentFormData
   formSubmitHandler: Function
   imgFlag: boolean
 }
 
-const AddShippingButton: React.FC<AddShippingButtonProps> = props => {
+const AddConsentButton: React.FC<AddConsentButtonProps> = props => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   return (
     <>
@@ -30,7 +31,7 @@ const AddShippingButton: React.FC<AddShippingButtonProps> = props => {
           {props.addShippingdetailsBtnText}
         </Text>
       </Flex>
-      <ShippingForm
+      <ConsentForm
         formData={props.formData}
         setFormData={props.setFormData}
         isOpen={isOpen}
@@ -42,4 +43,4 @@ const AddShippingButton: React.FC<AddShippingButtonProps> = props => {
   )
 }
 
-export default AddShippingButton
+export default AddConsentButton

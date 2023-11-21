@@ -33,7 +33,6 @@ export const RenderOrderStatusList = (res: any) => {
           justifyContent={'space-between'}
         >
           <Flex alignItems={'center'}>
-            {/* eslint-disable-next-line jsx-a11y/alt-text */}
             <Image
               width={'12px'}
               height={'13px'}
@@ -57,7 +56,6 @@ export const RenderOrderStatusList = (res: any) => {
           )}
         </Flex>
         <Flex>
-          {/* eslint-disable-next-line jsx-a11y/alt-text */}
           <Image
             src={lineBlack}
             width={'12px'}
@@ -68,6 +66,13 @@ export const RenderOrderStatusList = (res: any) => {
             fontSize={'10px'}
             pt={'10px'}
           >
+            <Text fontSize={'12px'}>Adv. Vishal Singh, 9832445890</Text>
+            <Text
+              fontSize={'12px'}
+              color={'#7B2A2F'}
+            >
+              Provider Link
+            </Text>
             {getOrderPlacementTimeline(res.context.timestamp)}
           </Text>
         </Flex>
@@ -259,6 +264,12 @@ export const RenderOrderStatusList = (res: any) => {
               width={'12px'}
               height={'40px'}
             />
+            <Text
+              fontSize={'12px'}
+              color={'#7B2A2F'}
+            >
+              Make Payment
+            </Text>
             <Text
               paddingLeft={'10px'}
               fontSize={'10px'}

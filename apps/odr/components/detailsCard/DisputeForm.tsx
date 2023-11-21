@@ -15,46 +15,42 @@ import { useDispatch } from 'react-redux'
 import style from './ShippingForm.module.css'
 import crossIcon from '../../public/images/Indicator.svg'
 import Button from '../button/Button'
-import { ShippingFormData } from '../../pages/checkoutPage'
+import { DisputeFormData } from '../../pages/checkoutPage'
 import { responseDataActions } from '../../store/responseData-slice'
-import { validateForm, FormErrors } from '../../utilities/detailsForm-utils'
+import { FormErrors, validateDisputeForm } from '../../utilities/detailsForm-utils'
 import { useLanguage } from '../../hooks/useLanguage'
+import UploadFile from '../uploadFile/UploadFile'
 
-export interface ShippingFormProps {
+export interface DisputeFormProps {
   isOpen: boolean
   onOpen: () => void
   onClose: () => void
-  setBillingFormData: Function
-  billingFormData: ShippingFormData
+  setFormData: Function
+  formData: DisputeFormData
   formSubmitHandler: Function
 }
-const nameRegex = /^[A-Za-z\s]*$/
-const mobNumberRegex = /^\d*$/
-const BillingForm: React.FC<ShippingFormProps> = props => {
+
+const DisputeForm: React.FC<DisputeFormProps> = props => {
   const dispatch = useDispatch()
   const [formErrors, setFormErrors] = useState<FormErrors>({})
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([])
 
   const { t } = useLanguage()
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     const { name, value } = e.target
-    if (name === 'name' && !nameRegex.test(value)) {
-      return
-    }
-    if (name === 'mobileNumber' && !mobNumberRegex.test(value)) {
-      return
-    }
-    props.setBillingFormData((prevFormData: ShippingFormData) => ({
+
+    props.setFormData((prevFormData: DisputeFormData) => ({
       ...prevFormData,
       [name]: value
     }))
 
     const updatedFormData = {
-      ...props.billingFormData,
+      ...props.formData,
       [name]: value
     }
 
-    const errors = validateForm(updatedFormData)
+    const errors = validateDisputeForm(updatedFormData)
     setFormErrors(prevErrors => ({
       ...prevErrors,
       [name]: errors[name] || ''
@@ -62,18 +58,18 @@ const BillingForm: React.FC<ShippingFormProps> = props => {
   }
 
   const handleButtonClick = () => {
-    const errors = validateForm(props.billingFormData)
+    const errors = validateDisputeForm(props.formData)
     setFormErrors(errors)
     if (Object.keys(errors).length === 0) {
-      dispatch(responseDataActions.addCustomerDetails(props.billingFormData))
-      props.setBillingFormData(props.billingFormData)
+      dispatch(responseDataActions.addDisputeDetails(props.formData))
+      props.setFormData(props.formData)
       props.formSubmitHandler()
     } else {
       setFormErrors(errors)
     }
   }
 
-  const isFormValid = Object.entries(props.billingFormData)
+  const isFormValid = Object.entries(props.formData)
     .filter(([key]) => key !== 'landmark')
     .every(([_, value]) => value.trim() !== '')
 
@@ -83,8 +79,9 @@ const BillingForm: React.FC<ShippingFormProps> = props => {
         isCentered
         onClose={props.onClose}
         isOpen={props.isOpen}
-        scrollBehavior="outside"
+        scrollBehavior="inside"
         motionPreset="slideInBottom"
+        size="xl"
       >
         <ModalOverlay height="100vh" />
         <ModalContent
@@ -93,6 +90,7 @@ const BillingForm: React.FC<ShippingFormProps> = props => {
           mb="0"
           borderRadius="1.75rem 1.75rem 0px 0px"
           maxW="lg"
+          top={'100px'}
         >
           <ModalCloseButton
             height={'unset'}
@@ -110,7 +108,7 @@ const BillingForm: React.FC<ShippingFormProps> = props => {
             alignItems={'center'}
             padding={'15px 20px'}
           >
-            <Text>{t.addCompalintandBillingDetailsBtn}</Text>
+            <Text>{t.addDisputeDetailsBtn}</Text>
           </Flex>
           <Box>
             <Divider />
@@ -119,40 +117,33 @@ const BillingForm: React.FC<ShippingFormProps> = props => {
           <ModalBody>
             <div className={style.container}>
               <div className={style.did_floating_label_content}>
-                <input
+                <textarea
+                  style={{ minHeight: '136px' }}
                   className={style.did_floating_input}
-                  type="text"
                   placeholder=" "
                   name="name"
-                  value={props.billingFormData.name}
+                  value={props.formData.name}
                   onChange={handleInputChange}
                 />
-                <label className={style.did_floating_label}>{t.formName}</label>
+                <label
+                  className={style.did_floating_label}
+                  style={{ display: 'block', width: '100%' }}
+                >
+                  {t.disputeDetails}
+                </label>
                 {formErrors.name && <div className={style.error}>{t[`${formErrors.name}`]}</div>}
               </div>
               <div className={style.did_floating_label_content}>
                 <input
                   className={style.did_floating_input}
-                  type="number"
-                  placeholder=" "
-                  name="mobileNumber"
-                  value={props.billingFormData.mobileNumber}
-                  onChange={handleInputChange}
-                />
-                <label className={style.did_floating_label}>{t.formNumber}</label>
-                {formErrors.mobileNumber && <span className={style.error}>{t[`${formErrors.mobileNumber}`]}</span>}
-              </div>
-              <div className={style.did_floating_label_content}>
-                <input
-                  className={style.did_floating_input}
                   type="text"
                   placeholder=" "
-                  name="email"
-                  value={props.billingFormData.email}
+                  name="claimValue"
+                  value={props.formData.claimValue}
                   onChange={handleInputChange}
                 />
-                <label className={style.did_floating_label}>{t.formEmail}</label>
-                {formErrors.email && <span className={style.error}>{t[`${formErrors.email}`]}</span>}
+                <label className={style.did_floating_label}>{t.claimValue}</label>
+                {formErrors.claimValue && <span className={style.error}>{t[`${formErrors.claimValue}`]}</span>}
               </div>
               <div className={style.did_floating_label_content}>
                 <input
@@ -160,36 +151,26 @@ const BillingForm: React.FC<ShippingFormProps> = props => {
                   type="text"
                   placeholder=" "
                   name="address"
-                  value={props.billingFormData.address}
+                  value={props.formData.address}
                   onChange={handleInputChange}
                 />
                 <label className={style.did_floating_label}>{t.formAddress}</label>
                 {formErrors.address && <span className={style.error}>{t[`${formErrors.address}`]}</span>}
               </div>
-
-              <div className={style.did_floating_label_content}>
-                <input
-                  className={style.did_floating_input}
-                  type="text"
-                  placeholder=" "
-                  name="pinCode"
-                  value={props.billingFormData.pinCode}
-                  onChange={e => {
-                    e.currentTarget.value = e.currentTarget.value.replace(/[^0-9]/g, '')
-                    handleInputChange(e)
-                  }}
-                />
-                <label className={style.did_floating_label}>{t.formZipCode}</label>
-                {formErrors.pinCode && <span className={style.error}>{t[`${formErrors.pinCode}`]}</span>}
-              </div>
             </div>
-            <Button
-              buttonText={'Save'}
-              background={'rgba(var(--color-primary))'}
-              color={'rgba(var(--text-color))'}
-              handleOnClick={handleButtonClick}
-              isDisabled={!isFormValid}
+            <UploadFile
+              selectedFiles={selectedFiles}
+              setSelectedFiles={setSelectedFiles}
             />
+            <Box mt={'50px'}>
+              <Button
+                buttonText={'Save'}
+                background={'rgba(var(--color-primary))'}
+                color={'rgba(var(--text-color))'}
+                handleOnClick={handleButtonClick}
+                isDisabled={!isFormValid}
+              />
+            </Box>
           </ModalBody>
         </ModalContent>
       </Modal>
@@ -197,4 +178,4 @@ const BillingForm: React.FC<ShippingFormProps> = props => {
   )
 }
 
-export default BillingForm
+export default DisputeForm

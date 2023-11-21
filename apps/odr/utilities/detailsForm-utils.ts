@@ -1,7 +1,6 @@
 import { JobApplyFormData } from '../components/jobApply/JobApply.types'
-import { ScholarshipApplyFormDataModel } from '../components/scholarship/scholarshipCard/Scholarship.types'
 import { SignInPropsModel, SignUpPropsModel } from '../components/signIn/Signin.types'
-import { ShippingFormData } from '../pages/checkoutPage'
+import { ConsentFormData, DisputeFormData, ShippingFormData } from '../pages/checkoutPage'
 
 export interface FormErrors {
   name?: string
@@ -11,6 +10,32 @@ export interface FormErrors {
   address?: string
   pinCode?: string
   password?: string
+  claimValue?: string
+}
+
+export const validateDisputeForm = (formData: DisputeFormData): FormErrors => {
+  const errors: FormErrors = {}
+  if (formData.name.trim() === '') {
+    errors.name = 'errorName'
+  }
+  if (formData.claimValue.trim() === '') {
+    errors.claimValue = 'claimError'
+  }
+  if (formData.address.trim() === '') {
+    errors.address = 'errorAddress'
+  }
+  return errors
+}
+export const validateConsentForm = (formData: ConsentFormData): FormErrors => {
+  const errors: FormErrors = {}
+
+  if (formData.name.trim() === '') {
+    errors.name = 'errorName'
+  }
+  if (formData.address.trim() === '') {
+    errors.address = 'errorAddress'
+  }
+  return errors
 }
 
 export const validateForm = (formData: ShippingFormData): FormErrors => {
@@ -19,10 +44,6 @@ export const validateForm = (formData: ShippingFormData): FormErrors => {
   if (formData.name.trim() === '') {
     errors.name = 'errorName'
   }
-  // if (formData.scholarshipInfo.trim() === '') {
-  //   errors.scholarshipInfo = 'errorAboutScholarship'
-  // }
-
   if (formData.mobileNumber.trim() === '') {
     errors.mobileNumber = 'errorNumber'
   } else if (!/^\d{10}$/.test(formData.mobileNumber)) {
@@ -53,10 +74,6 @@ export const validateJobForm = (formData: JobApplyFormData): FormErrors => {
   if (formData.name.trim() === '') {
     errors.name = 'errorName'
   }
-  // if (formData.scholarshipInfo.trim() === '') {
-  //   errors.scholarshipInfo = 'errorAboutScholarship'
-  // }
-
   if (formData.mobileNumber.trim() === '') {
     errors.mobileNumber = 'errorNumber'
   } else if (!/^\d{10}$/.test(formData.mobileNumber)) {

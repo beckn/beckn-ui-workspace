@@ -8,53 +8,48 @@ import {
   ModalOverlay,
   Divider,
   ModalCloseButton,
-  Box
+  Box,
+  Checkbox
 } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import style from './ShippingForm.module.css'
 import crossIcon from '../../public/images/Indicator.svg'
 import Button from '../button/Button'
-import { ShippingFormData } from '../../pages/checkoutPage'
+import { ConsentFormData } from '../../pages/checkoutPage'
 import { responseDataActions } from '../../store/responseData-slice'
-import { validateForm, FormErrors } from '../../utilities/detailsForm-utils'
+import { FormErrors, validateConsentForm } from '../../utilities/detailsForm-utils'
 import { useLanguage } from '../../hooks/useLanguage'
 
-export interface ShippingFormProps {
+export interface ConsentFormProps {
   isOpen: boolean
   onOpen: () => void
   onClose: () => void
-  setBillingFormData: Function
-  billingFormData: ShippingFormData
+  setFormData: Function
+  formData: ConsentFormData
   formSubmitHandler: Function
 }
-const nameRegex = /^[A-Za-z\s]*$/
-const mobNumberRegex = /^\d*$/
-const BillingForm: React.FC<ShippingFormProps> = props => {
+
+const ConsentForm: React.FC<ConsentFormProps> = props => {
   const dispatch = useDispatch()
   const [formErrors, setFormErrors] = useState<FormErrors>({})
+  const [isDeclarationChecked, setIsDeclarationChecked] = useState(false)
 
   const { t } = useLanguage()
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
-    if (name === 'name' && !nameRegex.test(value)) {
-      return
-    }
-    if (name === 'mobileNumber' && !mobNumberRegex.test(value)) {
-      return
-    }
-    props.setBillingFormData((prevFormData: ShippingFormData) => ({
+    props.setFormData((prevFormData: ConsentFormData) => ({
       ...prevFormData,
       [name]: value
     }))
 
     const updatedFormData = {
-      ...props.billingFormData,
+      ...props.formData,
       [name]: value
     }
 
-    const errors = validateForm(updatedFormData)
+    const errors = validateConsentForm(updatedFormData)
     setFormErrors(prevErrors => ({
       ...prevErrors,
       [name]: errors[name] || ''
@@ -62,18 +57,18 @@ const BillingForm: React.FC<ShippingFormProps> = props => {
   }
 
   const handleButtonClick = () => {
-    const errors = validateForm(props.billingFormData)
+    const errors = validateConsentForm(props.formData)
     setFormErrors(errors)
     if (Object.keys(errors).length === 0) {
-      dispatch(responseDataActions.addCustomerDetails(props.billingFormData))
-      props.setBillingFormData(props.billingFormData)
+      dispatch(responseDataActions.addConsentDetails(props.formData))
+      props.setFormData(props.formData)
       props.formSubmitHandler()
     } else {
       setFormErrors(errors)
     }
   }
 
-  const isFormValid = Object.entries(props.billingFormData)
+  const isFormValid = Object.entries(props.formData)
     .filter(([key]) => key !== 'landmark')
     .every(([_, value]) => value.trim() !== '')
 
@@ -83,16 +78,19 @@ const BillingForm: React.FC<ShippingFormProps> = props => {
         isCentered
         onClose={props.onClose}
         isOpen={props.isOpen}
-        scrollBehavior="outside"
+        scrollBehavior="inside"
         motionPreset="slideInBottom"
+        size="xl"
       >
         <ModalOverlay height="100vh" />
+
         <ModalContent
           position="fixed"
           bottom="0px"
           mb="0"
           borderRadius="1.75rem 1.75rem 0px 0px"
           maxW="lg"
+          top={'100px'}
         >
           <ModalCloseButton
             height={'unset'}
@@ -110,13 +108,32 @@ const BillingForm: React.FC<ShippingFormProps> = props => {
             alignItems={'center'}
             padding={'15px 20px'}
           >
-            <Text>{t.addCompalintandBillingDetailsBtn}</Text>
+            <Text>{t.consentForm}</Text>
           </Flex>
           <Box>
             <Divider />
           </Box>
-
           <ModalBody>
+            <Flex
+              flexDir={'column'}
+              rowGap={'5px'}
+            >
+              <Text
+                fontSize={'15px'}
+                fontWeight={600}
+              >
+                Term and Conditions
+              </Text>
+              <Text>
+                <span style={{ fontSize: '15px', fontWeight: 600 }}>I, [Complainant’s Full Legal Name],</span> confirm
+                that I’ve read and understand the terms of representation by{' '}
+                <span style={{ fontSize: '15px', fontWeight: 600 }}>[Service Provider Name].</span> I agree to be
+                represented in the described legal matter and acknowledge the fee structure, billing terms, and
+                potential costs.I understand the attorney-client privilege and agree to communicate promptly and
+                honestly. I’m aware of the conditions for terminating the relationship and its consequences.
+              </Text>
+            </Flex>
+
             <div className={style.container}>
               <div className={style.did_floating_label_content}>
                 <input
@@ -124,7 +141,7 @@ const BillingForm: React.FC<ShippingFormProps> = props => {
                   type="text"
                   placeholder=" "
                   name="name"
-                  value={props.billingFormData.name}
+                  value={props.formData.name}
                   onChange={handleInputChange}
                 />
                 <label className={style.did_floating_label}>{t.formName}</label>
@@ -133,61 +150,56 @@ const BillingForm: React.FC<ShippingFormProps> = props => {
               <div className={style.did_floating_label_content}>
                 <input
                   className={style.did_floating_input}
-                  type="number"
-                  placeholder=" "
-                  name="mobileNumber"
-                  value={props.billingFormData.mobileNumber}
-                  onChange={handleInputChange}
-                />
-                <label className={style.did_floating_label}>{t.formNumber}</label>
-                {formErrors.mobileNumber && <span className={style.error}>{t[`${formErrors.mobileNumber}`]}</span>}
-              </div>
-              <div className={style.did_floating_label_content}>
-                <input
-                  className={style.did_floating_input}
-                  type="text"
-                  placeholder=" "
-                  name="email"
-                  value={props.billingFormData.email}
-                  onChange={handleInputChange}
-                />
-                <label className={style.did_floating_label}>{t.formEmail}</label>
-                {formErrors.email && <span className={style.error}>{t[`${formErrors.email}`]}</span>}
-              </div>
-              <div className={style.did_floating_label_content}>
-                <input
-                  className={style.did_floating_input}
                   type="text"
                   placeholder=" "
                   name="address"
-                  value={props.billingFormData.address}
+                  value={props.formData.address}
                   onChange={handleInputChange}
                 />
                 <label className={style.did_floating_label}>{t.formAddress}</label>
                 {formErrors.address && <span className={style.error}>{t[`${formErrors.address}`]}</span>}
               </div>
-
-              <div className={style.did_floating_label_content}>
-                <input
-                  className={style.did_floating_input}
-                  type="text"
-                  placeholder=" "
-                  name="pinCode"
-                  value={props.billingFormData.pinCode}
-                  onChange={e => {
-                    e.currentTarget.value = e.currentTarget.value.replace(/[^0-9]/g, '')
-                    handleInputChange(e)
+              <Flex
+                alignItems={'center'}
+                pb="30px"
+                textAlign={'center'}
+              >
+                {/* <input
+                  onChange={() => setIsDeclarationChecked(prevValue => !prevValue)}
+                  type="checkbox"
+                  style={{
+                    position: 'relative',
+                    top: '2px',
+                    width: '20px',
+                    height: '20px',
+                    backgroundColor: isDeclarationChecked ? '#8D353A' : 'transparent'
                   }}
+                /> */}
+                <Checkbox
+                  colorScheme="red"
+                  onChange={() => setIsDeclarationChecked(prevValue => !prevValue)}
                 />
-                <label className={style.did_floating_label}>{t.formZipCode}</label>
-                {formErrors.pinCode && <span className={style.error}>{t[`${formErrors.pinCode}`]}</span>}
-              </div>
+                <Text
+                  fontSize={'15px'}
+                  fontWeight={400}
+                  pl="10px"
+                >
+                  {t.declarationText}
+                </Text>
+              </Flex>
             </div>
             <Button
-              buttonText={'Save'}
+              buttonText={'Confirm'}
               background={'rgba(var(--color-primary))'}
               color={'rgba(var(--text-color))'}
               handleOnClick={handleButtonClick}
+              isDisabled={!isDeclarationChecked}
+            />
+            <Button
+              buttonText={'Cancle'}
+              background={'transparent'}
+              color={'rgba(var(--color-primary))'}
+              handleOnClick={() => props.onClose}
               isDisabled={!isFormValid}
             />
           </ModalBody>
@@ -197,4 +209,4 @@ const BillingForm: React.FC<ShippingFormProps> = props => {
   )
 }
 
-export default BillingForm
+export default ConsentForm
