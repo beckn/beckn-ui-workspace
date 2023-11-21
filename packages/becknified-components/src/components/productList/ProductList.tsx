@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Sort from '../sort'
-import ProductCard from '../ProductCard'
+import ProductCard from '../product-card'
 import { ProductListProps } from './ProductList.types'
 import { ParsedItem } from '../../pages/searchResults/searchResults.types'
 import { sortByCheapest, sortByExpensive } from './ProductList.utils'
