@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react'
+import { Box } from '@chakra-ui/react'
 import Sort from '../sort'
 import ProductCard from '../product-card'
-import { ProductListProps } from './ProductList.types'
-import { ParsedItem } from '../../pages/searchResults/searchResults.types'
-import { sortByCheapest, sortByExpensive } from './ProductList.utils'
-import { Box } from '@chakra-ui/react'
-import Styles from './product-list.module.css'
+import { ProductListProps } from './product-list.types'
+import { sortByCheapest, sortByExpensive } from './product-list.utils'
+import { ParsedItem } from '../../pages/search-results/search-results.types'
+import { Typography } from '@beckn-ui/molecules'
 
 const ProductList: React.FC<ProductListProps> = props => {
-  const { productList, ...restProps } = props
+  const { productList, productClickHandler, CustomInfoComponentForProductCard } = props
   const [selectedRadioBtn, setSelectedRadioBtn] = useState<string>('all')
   const [sortedProductList, setSortedProductList] = useState<ParsedItem[]>(productList)
 
@@ -32,29 +32,37 @@ const ProductList: React.FC<ProductListProps> = props => {
   }
 
   return (
-    <Box className={Styles.product_list_layout_container}>
+    <Box width={'100%'}>
       {sortedProductList && sortedProductList.length ? (
-        <div className="sort-list-container">
+        <Box>
           <Sort
             selectedBtn={selectedRadioBtn}
             onChangeSelectedBtn={onChangeHandler}
           />
-          <Box className={Styles.product_card_list_container}>
+          <Box
+            display={'grid'}
+            gridGap={'1rem'}
+            paddingTop={'70px'}
+          >
             {sortedProductList.map(product => {
               return (
                 <ProductCard
+                  ComponentRenderer={CustomInfoComponentForProductCard}
+                  productClickHandler={productClickHandler}
                   key={product.id}
                   product={product}
-                  {...restProps}
                 />
               )
             })}
           </Box>
-        </div>
+        </Box>
       ) : (
-        <p className={Styles.no_category_text}>
-          There are no products in this category yet! New products will be added soon
-        </p>
+        <Box textAlign={'center'}>
+          <Typography
+            color="#757575"
+            text="No Data found"
+          />
+        </Box>
       )}
     </Box>
   )

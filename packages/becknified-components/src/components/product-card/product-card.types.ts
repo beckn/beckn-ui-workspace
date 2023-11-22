@@ -1,10 +1,10 @@
-import { ParsedItem } from '../../pages/searchResults/searchResults.types'
+import { ParsedItem } from '../../pages/search-results/search-results.types'
 // TODO :- to change the type once the schema of the new API is defined
 
 export interface ProductCardProps {
   product: ParsedItem
   productInfoDataSource?: Record<string, any>
-  CustomInfoComponent?: React.ComponentType<{ product: ParsedItem }>
+  ComponentRenderer?: React.ComponentType<{ product: ParsedItem }>
   productClickHandler?: React.MouseEventHandler<HTMLDivElement>
   className?: string
 }

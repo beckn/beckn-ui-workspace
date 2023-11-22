@@ -11,7 +11,19 @@ const SearchInputOnSearchResultsPage: React.FC<SearchInputOnSearchResultsPagePro
   }
 
   return (
-    <Box className={Styles.search_input_container}>
+    <Box
+      maxWidth={'50rem'}
+      pl={'1rem'}
+      pr={'1rem'}
+      backgroundColor={'white'}
+      display={'flex'}
+      alignItems={'center'}
+      flexGrow={1}
+      borderRadius={'0.25rem'}
+      border={'1px solid #c9c9c9'}
+      margin={'20px auto'}
+      width={'calc(100% - 40px)'}
+    >
       <input
         className={Styles.search_input}
         type="search"

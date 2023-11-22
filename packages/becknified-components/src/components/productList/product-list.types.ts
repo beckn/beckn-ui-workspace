@@ -1,4 +1,6 @@
-import { ParsedItem } from '../../pages/searchResults/searchResults.types'
+import { ParsedItem } from '../../pages/search-results/search-results.types'
+
+// TODO :- will have to chekc the type when the generic client layer is built
 
 export interface ProductListProps {
   productList: ParsedItem[]

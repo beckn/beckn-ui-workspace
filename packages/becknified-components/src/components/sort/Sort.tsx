@@ -1,12 +1,14 @@
 import React from 'react'
 import { BsFilterLeft } from 'react-icons/bs'
-import { Box } from '@chakra-ui/react'
+import { Box, FormLabel, Input, useTheme } from '@chakra-ui/react'
 import { SortComponentProps } from './Sort.types'
 import Styles from './sort.module.css'
+import { Typography } from '@beckn-ui/molecules'
 
 const radioBtnValue = ['all', 'cheapest', 'expensive']
 
 const Sort: React.FC<SortComponentProps> = ({ selectedBtn: selectedRadioBtn, onChangeSelectedBtn }) => {
+  const theme = useTheme()
   const isRadioSelected = (value: string): boolean => (value === selectedRadioBtn ? true : false)
 
   return (
@@ -14,14 +16,12 @@ const Sort: React.FC<SortComponentProps> = ({ selectedBtn: selectedRadioBtn, onC
       position={'fixed'}
       zIndex={'8'}
       background={'#fff'}
-      padding={'20px 0 0 0'}
       width={'100%'}
       ml={'-20px'}
     >
       <Box
         width={'calc(100% - 40px)'}
         margin={'0 auto'}
-        // className="my-4 pb-2 flex flex-wrap border-b-2 border-slate-300"
         mt={'1rem'}
         mb={'0.5rem'}
         display={'flex'}
@@ -43,30 +43,39 @@ const Sort: React.FC<SortComponentProps> = ({ selectedBtn: selectedRadioBtn, onC
               }}
             />
           </Box>
-          <h5 className={Styles.sort_text}>sort</h5>
+
+          <Typography
+            text="sort"
+            variant="subTitleRegular"
+          />
         </Box>
 
         <Box
-          marginTop={'5px'}
-          className="flex flex-wrap items-center"
+          display={'flex'}
+          flexWrap={'wrap'}
+          alignItems={'center'}
+          ml={'7px'}
         >
           {radioBtnValue.map(radioInput => {
             return (
-              <div
+              <Box
                 key={radioInput}
-                className={Styles.radio_input}
+                pl={'0.5rem'}
+                pr={'0.5rem'}
+                mr={'unset'}
+                mt={'0.25rem'}
+                mb={'0.25rem'}
               >
-                <label
+                <FormLabel
+                  color={radioInput === selectedRadioBtn ? theme.colors.primary['100'] : 'rgba(117, 117, 117, 0.8)'}
                   htmlFor={radioInput}
-                  className={`${Styles.radio_input_label} ${
-                    radioInput === selectedRadioBtn
-                      ? Styles.selected_radio_input_label
-                      : Styles.unselected_radio_input_label
-                  }`}
+                  fontSize={'0.875rem'}
+                  mb={'unset'}
                 >
                   {radioInput}
-                </label>
-                <input
+                </FormLabel>
+
+                <Input
                   type="radio"
                   className="hidden"
                   id={radioInput}
@@ -75,7 +84,7 @@ const Sort: React.FC<SortComponentProps> = ({ selectedBtn: selectedRadioBtn, onC
                   checked={isRadioSelected(radioInput)}
                   onChange={onChangeSelectedBtn}
                 />
-              </div>
+              </Box>
             )
           })}
         </Box>
