@@ -129,14 +129,14 @@ const SignIn = () => {
         </div>
       </Box>
       <Button
-        buttonText={'SignIn'}
+        buttonText={'Sign In'}
         background={'rgba(var(--color-primary))'}
         color={'rgba(var(--text-color))'}
         handleOnClick={handleSignIn}
         isDisabled={!isFormFilled}
       />
       <Button
-        buttonText={'SignUp'}
+        buttonText={'Sign Up'}
         color={'rgba(var(--color-primary))'}
         background={'rgba(var(--text-color))'}
         handleOnClick={() => {

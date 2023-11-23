@@ -6,6 +6,8 @@ import { Flex, Text, Input, Image, Box, Icon, Divider } from '@chakra-ui/react'
 
 import beckenFooter from '../../public/images/beckenFooterLogo.svg'
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md'
+
+const items = ['Civil Disputes', 'Financial Disputes', 'Family Disputes', 'Employment Disputes', 'Commercial Disputes']
 const LandingPage: React.FC = () => {
   const { t } = useLanguage()
   const [searchTerm, setSearchTerm] = useState('')
@@ -13,14 +15,8 @@ const LandingPage: React.FC = () => {
   const [selectedItem, setSelectedItem] = useState(null)
   const dropdownRef = useRef(null)
 
-  const items = [
-    'Civil Disputes',
-    'Financial Disputes',
-    'Family Disputes',
-    'Employment Disputes',
-    'Commercial Disputes'
-  ]
-
+  const isButtonDisabled = !selectedItem || !searchTerm.trim()
+  const buttonBackgroundColor = isButtonDisabled ? '#B89092' : 'rgba(var(--color-primary))'
   const toggleDropdown = () => {
     setIsOpen(!isOpen)
   }
@@ -122,7 +118,6 @@ const LandingPage: React.FC = () => {
               zIndex="1"
               width={'100%'}
               borderRadius={'5px'}
-              // _hover={{ backgroundColor: '#E9C378' }}
             >
               {items.map((item, index) => (
                 <Box
@@ -130,7 +125,6 @@ const LandingPage: React.FC = () => {
                   className="dropdown-item"
                   padding="10px"
                   cursor="pointer"
-                  // _hover={{ backgroundColor: '#E9C378' }}
                   onClick={() => handleItemClick(item)}
                 >
                   {item}
@@ -170,12 +164,16 @@ const LandingPage: React.FC = () => {
             }}
           />
           <Flex
-            bg={'rgba(var(--color-primary))'}
+            bg={buttonBackgroundColor}
             borderRightRadius={'6px'}
             boxShadow="0px 0px 24px rgba(0, 0, 0, 0.10)"
             justifyContent={'center'}
             alignItems="center"
             width={'55px'}
+            cursor={isButtonDisabled ? 'not-allowed' : 'pointer'}
+            opacity={isButtonDisabled ? 0.5 : 1}
+            onClick={isButtonDisabled ? undefined : navigateToSearchResults}
+            _disabled={isButtonDisabled}
           >
             <Image
               src="/images/searchIcon.svg"

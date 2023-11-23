@@ -14,7 +14,7 @@ const DetailsSection: React.FC<Props> = ({ product }) => {
 
   useEffect(() => {
     localStorage.removeItem('optionTags')
-    localStorage.setItem('optionTags', JSON.stringify({ name: product.descriptor.name }))
+    localStorage.setItem('optionTags', JSON.stringify({ name: product.name }))
     window.dispatchEvent(new Event('storage-optiontags'))
   }, [product])
 
@@ -45,7 +45,7 @@ const DetailsSection: React.FC<Props> = ({ product }) => {
             textAlign: 'center'
           }}
         >
-          {product.descriptor.name}
+          {product.name}
         </h2>
         <Text
           mt={'10px'}
@@ -59,22 +59,8 @@ const DetailsSection: React.FC<Props> = ({ product }) => {
       <div className="flex items-start flex-wrap relative ">
         <div className="flex-grow ">
           <div
-            className="flex items-center self-center"
-            style={{ justifyContent: 'center' }}
-          >
-            <StarRatingComponent
-              name="product_rate"
-              starCount={5}
-              value={parseFloat(product.tags.Rating)}
-            />
-            <p className="text-sm text-palette-mute rtl:mr-2 ltr:ml-2 pl-1 ">
-              {parseFloat(product.tags.Rating)} {t.stars}
-            </p>
-          </div>
-
-          <div
             dangerouslySetInnerHTML={{
-              __html: product.descriptor.long_desc
+              __html: product.longDesc
             }}
             className="mt-4 product_description_text border-2 border_radius_all"
             style={{

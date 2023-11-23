@@ -11,7 +11,7 @@ import { useLanguage } from '../hooks/useLanguage'
 import { useRouter } from 'next/router'
 
 const Search = () => {
-  const [items, setItems] = useState([])
+  const [items, setItems] = useState<RetailItem[]>([])
   const router = useRouter()
   const [searchKeyword, setSearchKeyword] = useState(router.query?.searchTerm || '')
   const [selectedCategory, setSelectedCategory] = useState(router.query?.selectedItem || '')
@@ -46,15 +46,11 @@ const Search = () => {
   }, [searchKeyword])
 
   const searchPayload = {
-    context: {
-      domain: 'online-dispute-resolution:0.1.0'
-    },
-    searchString: searchKeyword,
+    name: searchKeyword,
     category: {
-      categoryName: selectedCategory
+      name: selectedCategory
     }
   }
-
   const fetchDataForSearch = () => fetchData(`${apiUrl}/search`, 'POST', searchPayload)
 
   useEffect(() => {
@@ -75,35 +71,29 @@ const Search = () => {
       }
     }
   }, [])
-  console.log(data)
   useEffect(() => {
-    if (data) {
-      dispatch(responseDataActions.addTransactionId(data.context.transaction_id))
-      const allItems = data.message.catalogs.flatMap((catalog: any) => {
-        if (catalog.message && catalog.message.catalog && catalog.message.catalog['bpp/providers'].length > 0) {
-          const providers = catalog.message.catalog['bpp/providers']
-          return providers.flatMap((provider: any) => {
-            if (provider.items && provider.items.length > 0) {
-              return provider.items.map((item: RetailItem) => {
-                return {
-                  bpp_id: catalog.context.bpp_id,
-                  bpp_uri: catalog.context.bpp_uri,
-                  ...item,
-                  providerId: provider.id,
-                  locations: provider.locations,
-                  bppName: catalog.message.catalog['bpp/descriptor'].name
-                }
-              })
+    if (data && data.length > 0) {
+      const allItems = data.flatMap(dataObject => {
+        dispatch(responseDataActions.addTransactionId(dataObject.context.transactionId))
+
+        return dataObject.scholarshipProviders.flatMap(provider => {
+          return provider.items.map(item => {
+            return {
+              bpp_id: dataObject.context.bppId,
+              bpp_uri: dataObject.context.bppUri,
+              ...item,
+              providerId: provider.id,
+              locations: provider.locations,
+              bppName: provider.name
             }
-            return []
           })
-        }
-        return []
+        })
       })
+
       localStorage.setItem('searchItems', JSON.stringify(allItems))
       setItems(allItems)
+      console.log(allItems)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data])
 
   return (

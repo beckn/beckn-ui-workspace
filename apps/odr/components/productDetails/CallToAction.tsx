@@ -2,22 +2,13 @@ import React from 'react'
 import { RetailItem } from '../../lib/types/products'
 import Button from '../button/Button'
 import { useRouter } from 'next/router'
-import { cartActions } from '../../store/cart-slice'
-import { useDispatch } from 'react-redux'
 
 interface Props {
   product: RetailItem
 }
 const CallToAction: React.FC<Props> = ({ product }) => {
-  const dispatch = useDispatch()
   const router = useRouter()
   function addToCartHandler() {
-    dispatch(
-      cartActions.addItemToCart({
-        product: product,
-        quantity: 0
-      })
-    )
     router.push('/checkoutPage')
   }
 

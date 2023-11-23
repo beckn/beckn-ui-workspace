@@ -1,4 +1,6 @@
 export interface RetailContext {
+  bppUri: string
+  bppId: string
   action?: string
   bap_id?: string
   bap_uri?: string
@@ -11,11 +13,12 @@ export interface RetailContext {
   max_callbacks?: number
   message_id?: string
   timestamp?: string
-  transaction_id: string
+  transactionId: string
   ttl?: string
 }
 
 export interface ResponseModel {
+  scholarshipProviders: any
   context: RetailContext
   message: any
   // Hacky fix

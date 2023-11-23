@@ -1,14 +1,8 @@
-import React, { useState } from 'react'
+import React from 'react'
 import Link from 'next/link'
-import StarRatingComponent from 'react-star-rating-component'
 import { RetailItem } from '../../../lib/types/products'
-import CardActions from './CardActions'
-import ProductPrice from '../ProductPrice'
 import { toBinary } from '../../../utilities/common-utils'
 import { Box, Flex, Text, Image } from '@chakra-ui/react'
-import StarIcon from '../../../public/images/Star.svg'
-import greenVegIcon from '../../../public/images/greenVeg.svg'
-import redNonVegIcon from '../../../public/images/redNonVeg.svg'
 
 interface Props {
   product: RetailItem
@@ -19,7 +13,7 @@ const Card: React.FC<Props> = ({ product }) => {
 
   return (
     <Box
-      minH={product.tags.foodType ? '138px' : '168px'}
+      minH={product?.tags?.foodType ? '138px' : '168px'}
       maxH={'100%'}
       p={'10px'}
       className="col-span-6 sm:col-span-3 md:col-span-4 lg:col-span-3 2xl:col-span-2 shadow-xl my-1 md:my-4 ltr:mr-2 rtl:ml-1 md:mx-6  bg-[#fff] rounded-xl flex relative"
@@ -37,10 +31,10 @@ const Card: React.FC<Props> = ({ product }) => {
           >
             <div className="flex items-center h-full  product-img-span">
               <Image
-                src={product.descriptor.images[0]}
+                src={product.images[0].url}
                 width={'110px'}
                 height={'133px'}
-                alt={product.descriptor.name}
+                alt={product.name}
                 className=" drop-shadow-xl object-contain hover:scale-110 transition-transform duration-300 ease-in-out "
               />
             </div>
@@ -59,7 +53,7 @@ const Card: React.FC<Props> = ({ product }) => {
             >
               <Text
                 w={'80%'}
-                fontWeight={'600'}
+                fontWeight={'700'}
                 fontSize={'15px'}
                 mb={'10px'}
                 noOfLines={2}
@@ -67,7 +61,7 @@ const Card: React.FC<Props> = ({ product }) => {
                 whiteSpace="pre-wrap"
                 overflowWrap="break-word"
               >
-                {product.descriptor.name}
+                {product.name}
               </Text>
             </Flex>
             <Flex
@@ -78,7 +72,7 @@ const Card: React.FC<Props> = ({ product }) => {
                 fontSize={'12px'}
                 fontWeight={'400'}
               >
-                Harvey Spectre Law Firm
+                {product.bppName}
               </Text>
             </Flex>
             <Flex
@@ -107,14 +101,12 @@ const Card: React.FC<Props> = ({ product }) => {
                 fontWeight={'400'}
                 fontSize={'12px'}
               >
-                Family Dispute
+                {product.categories[0].name}
               </Text>
             </Flex>
           </Box>
         </div>
       </Link>
-
-      <CardActions product={product} />
     </Box>
   )
 }
