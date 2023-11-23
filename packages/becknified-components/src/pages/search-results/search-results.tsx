@@ -1,16 +1,16 @@
 import React from 'react'
 import { SearchResultsProps } from './search-results.types'
-import { Box } from '@chakra-ui/react'
 import ProductList from '../../components/productList'
 
-const SearchResults: React.FC<SearchResultsProps> = props => {
-  const { productList, productClickHandler, CustomInfoComponentForProductCard } = props
+const SearchResults: React.FC<SearchResultsProps> = ({ schema }) => {
+  const { productList, productCard } = schema
 
   return (
     <>
       <ProductList
-        CustomInfoComponentForProductCard={CustomInfoComponentForProductCard}
-        productClickHandler={productClickHandler}
+        CustomInfoComponentForProductCard={productCard.productCardRenderer}
+        productClickHandler={productCard.productClickHandler}
+        productInfoDataSource={productCard.productInfoDataSource}
         productList={productList}
       />
     </>

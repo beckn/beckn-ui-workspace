@@ -4,13 +4,13 @@ import Sort from '../sort'
 import ProductCard from '../product-card'
 import { ProductListProps } from './product-list.types'
 import { sortByCheapest, sortByExpensive } from './product-list.utils'
-import { ParsedItem } from '../../pages/search-results/search-results.types'
 import { Typography } from '@beckn-ui/molecules'
+import { Product } from '../product-card/product-card.types'
 
 const ProductList: React.FC<ProductListProps> = props => {
-  const { productList, productClickHandler, CustomInfoComponentForProductCard } = props
+  const { productList, productClickHandler, CustomInfoComponentForProductCard, productInfoDataSource } = props
   const [selectedRadioBtn, setSelectedRadioBtn] = useState<string>('all')
-  const [sortedProductList, setSortedProductList] = useState<ParsedItem[]>(productList)
+  const [sortedProductList, setSortedProductList] = useState<Product[]>(productList)
 
   useEffect(() => {
     const clonedproductList = structuredClone(productList)
@@ -51,6 +51,7 @@ const ProductList: React.FC<ProductListProps> = props => {
                   productClickHandler={productClickHandler}
                   key={product.id}
                   product={product}
+                  productInfoDataSource={productInfoDataSource}
                 />
               )
             })}

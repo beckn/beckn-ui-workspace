@@ -46,7 +46,7 @@ const ProductCard: React.FC<ProductCardProps> = props => {
                 height={'100%'}
               >
                 <Image
-                  src={product.descriptor.images[0]}
+                  src={product.images[0]}
                   width={'110px'}
                   height={'133px'}
                   alt={'item_image'}
@@ -77,7 +77,7 @@ const ProductCard: React.FC<ProductCardProps> = props => {
                   whiteSpace="pre-wrap"
                   overflowWrap="break-word"
                 >
-                  {product.descriptor.name}
+                  {product.name}
                 </Text>
               </Flex>
 
@@ -109,7 +109,7 @@ const ProductCard: React.FC<ProductCardProps> = props => {
                 bottom={'11px'}
                 width={'calc(100% - 30px)'}
               >
-                <ProductPrice price={parseFloat(product.price.value)} />
+                <ProductPrice price={parseFloat(product.price)} />
                 <ProductRating
                   ratingValue="4.5"
                   ratingIcon={StarIcon}
