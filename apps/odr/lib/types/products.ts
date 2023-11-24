@@ -55,6 +55,11 @@ export interface IProduct {
  */
 
 export interface RetailItem {
+  longDesc: string
+  images: any
+  long_desc: string
+  name: ReactNode
+  categories: any
   extended_attributes?: any
   price: {
     listed_value?: string
