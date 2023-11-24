@@ -35,7 +35,6 @@ export type ConsentFormData = {
   name: string
   address: string
 }
-
 const CheckoutPage = () => {
   const [billingFormData, setBillingFormData] = useState<ShippingFormData>({
     name: 'Santosh Kumar',
@@ -61,7 +60,7 @@ const CheckoutPage = () => {
     address: ''
   })
   const [isBillingAddressSameAsShippingAddress, setIsBillingAddressSameAsShippingAddress] = useState(true)
-
+  const { data, loading, error, fetchData } = useRequest()
   const router = useRouter()
   const initRequest = useRequest()
   const dispatch = useDispatch()
@@ -69,6 +68,9 @@ const CheckoutPage = () => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
   const cartItems = useSelector((state: ICartRootState) => state.cart.items)
   const transactionId = useSelector((state: { transactionId: TransactionIdRootState }) => state.transactionId)
+  const [providerId, setProviderId] = useState(router.query?.providerId || '')
+  const [productId, setProductId] = useState(router.query?.productId || '')
+  const [loadingSelectData, setLoadingSelectData] = useState(true)
 
   useEffect(() => {
     if (localStorage) {
@@ -147,13 +149,6 @@ const CheckoutPage = () => {
 
   const formSubmitHandler = () => {
     if (formData) {
-      // TODO :_ To check this again
-
-      // if (isBillingAddressSameAsShippingAddress) {
-      //   const copiedFormData = structuredClone(formData);
-      //   setBillingFormData(copiedFormData);
-      // }
-
       const cartItemsPerBppPerProvider: DataPerBpp = getCartItemsPerBpp(cartItems as CartItemForRequest[])
 
       const payLoadForInitRequest = getPayloadForInitRequest(
@@ -166,7 +161,32 @@ const CheckoutPage = () => {
     }
   }
 
-  if (initRequest.loading) {
+  const fetchSelectData = () => {
+    const selectPayload = {
+      scholarshipProviderId: providerId,
+      scholarshipId: productId,
+      context: {
+        transactionId: transactionId.transactionId,
+        bppId: 'beckn-sandbox-bpp.becknprotocol.io',
+        bppUri: 'https://sandbox-bpp-network.becknprotocol.io'
+      }
+    }
+
+    fetchData(`${apiUrl}/select`, 'POST', selectPayload)
+      .then(() => {
+        setLoadingSelectData(false)
+      })
+      .catch(error => {
+        console.error('Error fetching select data:', error)
+        setLoadingSelectData(false)
+      })
+  }
+
+  useEffect(() => {
+    fetchSelectData()
+  }, [])
+
+  if (initRequest.loading || loadingSelectData) {
     return <Loader loadingText={t['initializingOrderLoader']} />
   }
 
@@ -377,4 +397,5 @@ const CheckoutPage = () => {
     </Box>
   )
 }
+
 export default CheckoutPage

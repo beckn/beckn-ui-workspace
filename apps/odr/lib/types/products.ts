@@ -55,6 +55,7 @@ export interface IProduct {
  */
 
 export interface RetailItem {
+  providerId: string
   longDesc: string
   images: any
   long_desc: string
