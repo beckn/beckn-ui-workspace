@@ -9,7 +9,7 @@ interface Props {
 const CallToAction: React.FC<Props> = ({ product }) => {
   const router = useRouter()
   function addToCartHandler() {
-    router.push('/checkoutPage')
+    router.push(`/checkoutPage?providerId=${product.providerId}$productId=${product.id}`)
   }
 
   return (
