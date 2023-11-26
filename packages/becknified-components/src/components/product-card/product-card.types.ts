@@ -5,6 +5,7 @@ export interface Product {
   name: string
   price: string
   id: string
+  rating?: string
 }
 
 export interface ProductCardProps {

@@ -110,10 +110,12 @@ const ProductCard: React.FC<ProductCardProps> = props => {
                 width={'calc(100% - 30px)'}
               >
                 <ProductPrice price={parseFloat(product.price)} />
-                <ProductRating
-                  ratingValue="4.5"
-                  ratingIcon={StarIcon}
-                />
+                {product.rating && (
+                  <ProductRating
+                    ratingValue={product.rating}
+                    ratingIcon={StarIcon}
+                  />
+                )}
               </Flex>
             </Box>
           </Box>
