@@ -1,10 +1,9 @@
 import React from 'react'
-import { RetailItem } from '../../lib/types/products'
-import ImageSection from './ImageSection'
 import DetailsSection from './DetailsSection'
+import { ParsedScholarshipData } from '../productList/ProductList.utils'
 
 interface Props {
-  product: RetailItem
+  product: ParsedScholarshipData
 }
 const ProductDetails: React.FC<Props> = ({ product }) => {
   return (
