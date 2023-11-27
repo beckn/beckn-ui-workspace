@@ -1,14 +1,17 @@
 import React from 'react'
-import { RetailItem } from '../../lib/types/products'
 import Button from '../button/Button'
 import { useRouter } from 'next/router'
+import { ParsedScholarshipData } from '../productList/ProductList.utils'
 
 interface Props {
-  product: RetailItem
+  product: ParsedScholarshipData
 }
 const CallToAction: React.FC<Props> = ({ product }) => {
   const router = useRouter()
+
   function addToCartHandler() {
+    localStorage.setItem('selectedItem', JSON.stringify(product))
+
     router.push(`/checkoutPage?providerId=${product.providerId}$productId=${product.id}`)
   }
 
