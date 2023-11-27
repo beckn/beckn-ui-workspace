@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { useLanguage } from '../../hooks/useLanguage'
 import { RetailItem } from '../../lib/types/products'
 import Card from '../UI/card/Card'
-import Sort from './Sort'
 import { useDispatch, useSelector } from 'react-redux'
 import { SortedProductsListActions } from '../../store/sortedProductList-slice'
 import { IProductListRootState } from '../../lib/types/productList'
@@ -33,19 +32,12 @@ const ProductList: React.FC<Props> = ({ productList }) => {
 
   return (
     <div>
-      {/* <Breadcrumb /> */}
-      {/* <SubmenuCategory /> */}
-
       <div className="w-full xl:max-w-[2100px] mx-auto">
         {sortedProductList && sortedProductList.length ? (
           <div>
-            <Sort
-              selectedBtn={selectedRadioBtn}
-              onChangeSelectedBtn={onChangeHandler}
-            />
             <div
               className="grid gap-4 md:gap-2 grid-cols-6 md:grid-cols-12 hideScroll"
-              style={{ marginTop: '140px', maxHeight: 'Calc(100vh - 260px)', overflowY: 'scroll' }}
+              style={{ marginTop: '40px', maxHeight: 'Calc(100vh - 260px)', overflowY: 'scroll' }}
             >
               {sortedProductList.map((product: RetailItem) => {
                 return (

@@ -14,7 +14,7 @@ const Loader: React.FC<LoaderPropsModel> = props => {
         thickness="4px"
         speed="0.65s"
         emptyColor="gray.200"
-        color="#3AA5E1"
+        color="#8D353A"
         size="xl"
       />
       {props.loadingText && (

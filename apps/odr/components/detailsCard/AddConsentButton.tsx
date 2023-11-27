@@ -11,6 +11,7 @@ export interface AddConsentButtonProps {
   formData: ConsentFormData
   formSubmitHandler: Function
   imgFlag: boolean
+  isDisabled: boolean
 }
 
 const AddConsentButton: React.FC<AddConsentButtonProps> = props => {
@@ -20,6 +21,8 @@ const AddConsentButton: React.FC<AddConsentButtonProps> = props => {
       <Flex
         alignItems={'center'}
         onClick={onOpen}
+        pointerEvents={props.isDisabled ? 'none' : 'auto'}
+        opacity={props.isDisabled ? 0.5 : 1}
       >
         {/* eslint-disable-next-line jsx-a11y/alt-text */}
         {props.imgFlag ? <Image src={addShippingBtn} /> : null}

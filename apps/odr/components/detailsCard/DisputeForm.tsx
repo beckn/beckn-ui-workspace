@@ -10,7 +10,7 @@ import {
   ModalCloseButton,
   Box
 } from '@chakra-ui/react'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import style from './ShippingForm.module.css'
 import crossIcon from '../../public/images/Indicator.svg'
@@ -19,7 +19,6 @@ import { DisputeFormData } from '../../pages/checkoutPage'
 import { responseDataActions } from '../../store/responseData-slice'
 import { FormErrors, validateDisputeForm } from '../../utilities/detailsForm-utils'
 import { useLanguage } from '../../hooks/useLanguage'
-import UploadFile from '../uploadFile/UploadFile'
 
 export interface DisputeFormProps {
   isOpen: boolean
@@ -28,6 +27,7 @@ export interface DisputeFormProps {
   setFormData: Function
   formData: DisputeFormData
   formSubmitHandler: Function
+  isFormValid: (isFormValid: boolean) => void
 }
 
 const DisputeForm: React.FC<DisputeFormProps> = props => {
@@ -72,6 +72,10 @@ const DisputeForm: React.FC<DisputeFormProps> = props => {
   const isFormValid = Object.entries(props.formData)
     .filter(([key]) => key !== 'landmark')
     .every(([_, value]) => value.trim() !== '')
+
+  useEffect(() => {
+    props.isFormValid(isFormValid)
+  }, [isFormValid, props.isFormValid])
 
   return (
     <>
@@ -158,10 +162,6 @@ const DisputeForm: React.FC<DisputeFormProps> = props => {
                 {formErrors.address && <span className={style.error}>{t[`${formErrors.address}`]}</span>}
               </div>
             </div>
-            <UploadFile
-              selectedFiles={selectedFiles}
-              setSelectedFiles={setSelectedFiles}
-            />
             <Box mt={'50px'}>
               <Button
                 buttonText={'Save'}
