@@ -44,11 +44,11 @@ const CheckoutPage = () => {
     pinCode: '475001'
   })
   const [formData, setFormData] = useState<ShippingFormData>({
-    name: 'Santosh Kumar',
+    name: 'Ashwin Kumar',
     mobileNumber: '9612345678',
-    email: 'santosh.kumar@gmail.com',
-    address: '15 Jawahar nagar, New Delhi',
-    pinCode: '475001'
+    email: 'ashwin.kumar@gmail.com',
+    address: '151,saket nagar, New Delhi',
+    pinCode: '475003'
   })
   const [disputeformData, setDisputeFormData] = useState<DisputeFormData>({
     name: '',
@@ -149,15 +149,8 @@ const CheckoutPage = () => {
 
   const formSubmitHandler = () => {
     if (formData) {
-      const cartItemsPerBppPerProvider: DataPerBpp = getCartItemsPerBpp(cartItems as CartItemForRequest[])
-
-      const payLoadForInitRequest = getPayloadForInitRequest(
-        cartItemsPerBppPerProvider,
-        transactionId,
-        formData,
-        billingFormData
-      )
-      initRequest.fetchData(`${apiUrl}/client/v2/initialize_order`, 'POST', payLoadForInitRequest)
+      const payLoadForInitRequest = getPayloadForInitRequest(data, formData, billingFormData)
+      initRequest.fetchData(`${apiUrl}/init`, 'POST', payLoadForInitRequest)
     }
   }
 
@@ -218,8 +211,8 @@ const CheckoutPage = () => {
           <DetailsCard>
             <AddBillingButton
               imgFlag={!initRequest.data}
-              billingFormData={formData}
-              setBillingFormData={setFormData}
+              billingFormData={billingFormData}
+              setBillingFormData={setBillingFormData}
               addBillingdetailsBtnText={t.addCompalintDetailsBtn}
               billingFormSubmitHandler={formSubmitHandler}
             />
@@ -235,17 +228,17 @@ const CheckoutPage = () => {
             <Text fontSize={'17px'}>{t.complaintDetails}</Text>
             <AddBillingButton
               imgFlag={!isInitResultPresent()}
-              billingFormData={formData}
-              setBillingFormData={setFormData}
+              billingFormData={billingFormData}
+              setBillingFormData={setBillingFormData}
               addBillingdetailsBtnText={t.changeText}
               billingFormSubmitHandler={formSubmitHandler}
             />
           </Flex>
           <ShippingOrBillingDetails
             accordionHeader={t.complaintDetails}
-            name={formData.name}
-            location={formData.address}
-            number={formData.mobileNumber}
+            name={billingFormData.name}
+            location={billingFormData.address}
+            number={billingFormData.mobileNumber}
           />
         </Box>
       )}
@@ -381,7 +374,7 @@ const CheckoutPage = () => {
             buttonText={'Confirm'}
             background={'rgba(var(--color-primary))'}
             color={'rgba(var(--text-color))'}
-            handleOnClick={() => {}}
+            handleOnClick={() => router.push('/orderConfirmation')}
             isDisabled={true}
           />
         </Box>

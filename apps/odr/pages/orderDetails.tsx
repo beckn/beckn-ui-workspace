@@ -15,14 +15,8 @@ import React, { useEffect, useState } from 'react'
 import Accordion from '../components/accordion/Accordion'
 import { useLanguage } from '../hooks/useLanguage'
 import { ResponseModel } from '../lib/types/responseModel'
-import {
-  getConfirmMetaDataForBpp,
-  getOrderPlacementTimeline,
-  getPayloadForStatusRequest,
-  getPayloadForTrackRequest
-} from '../utilities/confirm-utils'
+import { getOrderPlacementTimeline } from '../utilities/confirm-utils'
 import { getDataPerBpp } from '../utilities/orderDetails-utils'
-import { getSubTotalAndDeliveryChargesForOrder } from '../utilities/orderHistory-utils'
 import TrackIcon from '../public/images/TrackIcon.svg'
 import { useSelector } from 'react-redux'
 import { TransactionIdRootState } from '../lib/types/cart'
@@ -31,11 +25,10 @@ import { useRouter } from 'next/router'
 import DetailsCard from '../components/detailsCard/DetailsCard'
 import attached from '../public/images/attached.svg'
 import ShippingOrBillingDetails from '../components/detailsCard/ShippingOrBillingDetails'
-import ViewMoreOrderModal from '../components/orderDetails/ViewMoreOrderModal'
 import { RenderOrderStatusList } from '../components/orderDetails/RenderOrderStatusTree'
 
 const OrderDetails = () => {
-  const [allOrderDelivered, setAllOrderDelivered] = useState(false)
+  const [allOrderDelivered, setAllOrderDelivered] = useState(true)
   const [confirmData, setConfirmData] = useState<ResponseModel[]>([])
   const [statusResponse, setStatusResponse] = useState([])
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -46,67 +39,53 @@ const OrderDetails = () => {
   const router = useRouter()
   const { orderId } = router.query
   const [status, setStatus] = useState('progress')
-
   const { t } = useLanguage()
 
   useEffect(() => {
-    if (orderId && localStorage && localStorage.getItem('orderHistoryArray')) {
-      const parsedOrderHistoryArray = JSON.parse(localStorage.getItem('orderHistoryArray') as string)
+    const fetchStatusData = async () => {
+      if (localStorage) {
+        const stringifiedConfirmData = localStorage.getItem('confirmData')
+        if (stringifiedConfirmData) {
+          try {
+            const parsedConfirmedData = JSON.parse(stringifiedConfirmData)
+            setConfirmData(parsedConfirmedData)
 
-      const relatedOrder = parsedOrderHistoryArray.find((parsedOrder: any) => parsedOrder.parentOrderId === orderId)
+            const payloadForStatusRequest = {
+              scholarshipApplicationId: parsedConfirmedData?.scholarshipApplicationId,
+              context: {
+                transactionId: transactionId?.transactionId,
+                bppId: parsedConfirmedData.context.bppId,
+                key: 'completed',
+                bppUri: parsedConfirmedData?.context?.bppUri
+              }
+            }
 
-      setConfirmData(relatedOrder.orders)
+            const intervalId = setInterval(() => {
+              statusRequest.fetchData(`${apiUrl}/status`, 'POST', payloadForStatusRequest)
+            }, 2000)
 
-      const confirmOrderMetaDataPerBpp = getConfirmMetaDataForBpp(relatedOrder.orders)
-      const payloadForStatusRequest = getPayloadForStatusRequest(confirmOrderMetaDataPerBpp, transactionId)
-      const payloadForTrackRequest = getPayloadForTrackRequest(confirmOrderMetaDataPerBpp, transactionId)
-
-      trackRequest.fetchData(`${apiUrl}/client/v2/track`, 'POST', payloadForTrackRequest)
-
-      const intervalId = setInterval(() => {
-        statusRequest.fetchData(`${apiUrl}/client/v2/status`, 'POST', payloadForStatusRequest)
-      }, 2000)
-
-      return () => {
-        clearInterval(intervalId)
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  useEffect(() => {
-    if (localStorage) {
-      const stringifiedConfirmData = localStorage.getItem('confirmData')
-      if (stringifiedConfirmData) {
-        const parsedConfirmedData = JSON.parse(stringifiedConfirmData)
-        setConfirmData(parsedConfirmedData)
-
-        const confirmOrderMetaDataPerBpp = getConfirmMetaDataForBpp(parsedConfirmedData)
-        const payloadForStatusRequest = getPayloadForStatusRequest(confirmOrderMetaDataPerBpp, transactionId)
-        const payloadForTrackRequest = getPayloadForTrackRequest(confirmOrderMetaDataPerBpp, transactionId)
-
-        trackRequest.fetchData(`${apiUrl}/client/v2/track`, 'POST', payloadForTrackRequest)
-
-        const intervalId = setInterval(() => {
-          statusRequest.fetchData(`${apiUrl}/client/v2/status`, 'POST', payloadForStatusRequest)
-        }, 2000)
-
-        return () => {
-          clearInterval(intervalId)
+            return () => {
+              clearInterval(intervalId)
+            }
+          } catch (error) {
+            console.error('Error parsing confirmData:', error)
+          }
         }
       }
     }
+
+    fetchStatusData()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  useEffect(() => {
-    if (statusRequest.data) {
-      setStatusResponse(statusRequest.data as any)
-      if (statusRequest.data.every(res => res.message.order.state === 'DELIVERED')) {
-        setAllOrderDelivered(true)
-      }
-    }
-  }, [statusRequest.data])
+  // useEffect(() => {
+  //   if (statusRequest.data) {
+  //     setStatusResponse(statusRequest.data as any)
+  //     if (statusRequest.data.every(res => res.message.order.state === 'DELIVERED')) {
+  //       setAllOrderDelivered(true)
+  //     }
+  //   }
+  // }, [statusRequest.data])
 
   if (!confirmData.length) {
     return <></>
@@ -116,42 +95,8 @@ const OrderDetails = () => {
 
   const orderFromConfirmData = confirmData[0].message.responses[0].message.order
 
-  const { subTotal, totalDeliveryCharge } = getSubTotalAndDeliveryChargesForOrder(confirmData)
-
   const orderState = orderFromConfirmData.payment.status
 
-  const totalQuantityOfOrder = (res: any) => {
-    let count = 0
-    res.message.order.items.forEach((item: any) => {
-      count += item.quantity.count
-    })
-    return count
-  }
-
-  const getExtractedName = (str: string) => {
-    const parts = str
-      .trim()
-      .split('/')
-      .filter(part => part !== '')
-    const extracted = parts[parts.length - 1]
-
-    return extracted
-  }
-
-  const shippingDetails = {
-    name: getExtractedName(orderFromConfirmData.billing.name),
-    address: orderFromConfirmData.billing.address.state,
-    phone: orderFromConfirmData.billing.phone
-  }
-
-  const handleViewCource = () => {
-    let courseUrl = ''
-
-    Object.keys(confirmDataPerBpp).map(key => {
-      courseUrl = confirmDataPerBpp[key].items[0].tags.Url
-    })
-    window.location.href = courseUrl
-  }
   console.log(statusResponse)
   return (
     <Box
@@ -211,121 +156,118 @@ const OrderDetails = () => {
         >
           {t.caseSummary}
         </Box>
-
-        {Object.keys(confirmDataPerBpp).map(key => (
-          <Box key={confirmDataPerBpp[key].id}>
-            <Flex
-              flexDir={'column'}
-              justifyContent={'space-between'}
-              alignItems={'flex-start'}
-            >
-              <Text
-                fontSize={'15px'}
-                fontWeight={400}
-              >
-                Harvey Spectre Law Firm{' '}
-              </Text>
-              <Box>
-                <Text
-                  fontSize={'15px'}
-                  fontWeight={400}
-                  as={'span'}
-                  pr={'2px'}
-                >
-                  Family Dispute, Mediation
-                </Text>
-              </Box>
-              <Text
-                fontSize={'15px'}
-                fontWeight={400}
-              >
-                Case Id: #789171
-              </Text>
-              <HStack
-                justifyContent={'space-between'}
-                gap={'3.5rem'}
-              >
-                <Text
-                  fontSize={'15px'}
-                  fontWeight={400}
-                >
-                  {t.lodgedOn}
-                </Text>
-                <Text
-                  fontSize={'15px'}
-                  fontWeight={400}
-                >
-                  {getOrderPlacementTimeline(orderFromConfirmData.created_at)}
-                </Text>
-              </HStack>
-            </Flex>
-          </Box>
-        ))}
-      </DetailsCard>
-      <DetailsCard>
-        {statusResponse.map((res: any, index: number) => (
-          <>
-            <HStack
-              pb="10px"
-              key={index}
-              justifyContent={'space-between'}
-            >
-              <Text
-                fontWeight={600}
-                fontSize={'17px'}
-              >
-                {t.caseId} {res.message.order.displayId}
-              </Text>
-              <Flex>
-                {res.message.order.state === 'INITIATED' ? (
-                  <Image
-                    src="/images/inProgress.svg"
-                    alt=""
-                    pr={'6px'}
-                  />
-                ) : (
-                  <Image
-                    src="/images/approvedIcon.svg"
-                    alt=""
-                    pr={'6px'}
-                  />
-                )}
-                <Text
-                  fontWeight={300}
-                  fontSize={'12px'}
-                >
-                  {res.message.order.state === 'INITIATED' ? 'In Progress' : 'Case Closed'}
-                </Text>
-              </Flex>
-            </HStack>
+        <Box>
+          <Flex
+            flexDir={'column'}
+            justifyContent={'space-between'}
+            alignItems={'flex-start'}
+          >
             <Text
-              textOverflow={'ellipsis'}
-              overflow={'hidden'}
-              whiteSpace={'nowrap'}
-              fontSize={'12px'}
-              fontWeight={'400'}
+              fontSize={'15px'}
+              fontWeight={400}
             >
-              {res.message.order.items[0].descriptor.name}
+              {confirmData?.scholarshipProvider?.scholarships[0]?.name}
             </Text>
-            <Divider
-              mt={'15px'}
-              mb={'15px'}
-            />
-            <CardBody pt={'unset'}>{RenderOrderStatusList(res)}</CardBody>
-          </>
-        ))}
+            <Box>
+              <Text
+                fontSize={'15px'}
+                fontWeight={400}
+                as={'span'}
+                pr={'2px'}
+              >
+                {confirmData?.scholarshipProvider?.scholarships[0]?.categories[0]?.descriptor?.name}
+              </Text>
+            </Box>
+            <Text
+              fontSize={'15px'}
+              fontWeight={400}
+            >
+              Case Id: {confirmData?.scholarshipProvider?.scholarships[0]?.categories[0]?.id}
+            </Text>
+            <HStack
+              justifyContent={'space-between'}
+              gap={'3.5rem'}
+            >
+              <Text
+                fontSize={'15px'}
+                fontWeight={400}
+              >
+                {t.lodgedOn}
+              </Text>
+              <Text
+                fontSize={'15px'}
+                fontWeight={400}
+              >
+                {getOrderPlacementTimeline(confirmData?.created_at)}
+              </Text>
+            </HStack>
+          </Flex>
+        </Box>
       </DetailsCard>
+      {/* <DetailsCard>
+      {statusResponse.map((res: any, index: number) => (
+        <>
+          <HStack
+            pb="10px"
+            key={index}
+            justifyContent={'space-between'}
+          >
+            <Text
+              fontWeight={600}
+              fontSize={'17px'}
+            >
+              {t.caseId} {res.message.order.displayId}
+            </Text>
+            <Flex>
+              {res.message.order.state === 'INITIATED' ? (
+                <Image
+                  src="/images/inProgress.svg"
+                  alt=""
+                  pr={'6px'}
+                />
+              ) : (
+                <Image
+                  src="/images/approvedIcon.svg"
+                  alt=""
+                  pr={'6px'}
+                />
+              )}
+              <Text
+                fontWeight={300}
+                fontSize={'12px'}
+              >
+                {res.message.order.state === 'INITIATED' ? 'In Progress' : 'Case Closed'}
+              </Text>
+            </Flex>
+          </HStack>
+          <Text
+            textOverflow={'ellipsis'}
+            overflow={'hidden'}
+            whiteSpace={'nowrap'}
+            fontSize={'12px'}
+            fontWeight={'400'}
+          >
+            {res.message.order.items[0].descriptor.name}
+          </Text>
+          <Divider
+            mt={'15px'}
+            mb={'15px'}
+          />
+          <CardBody pt={'unset'}>{RenderOrderStatusList(res)}</CardBody>
+        </>
+      ))}
+    </DetailsCard> */}
       <ShippingOrBillingDetails
         accordionHeader={'Complainant & Billing Details'}
-        name={'Jay D.'}
-        location={'2111, 30th Main, HSR Layout, Sector 2, Bangalore-560102'}
-        number={'+91 9876543210'}
+        name={confirmData?.billingDetails?.name}
+        location={confirmData?.billingDetails?.address}
+        number={confirmData?.billingDetails?.mobileNumber}
       />
 
       <ShippingOrBillingDetails
         accordionHeader={'Dispute Details'}
-        name={'Maria'}
-        location={'2702, 31st Main, HSR Layout, Sector 1, Bangalore-560102'}
+        name={confirmData?.billingDetails?.name}
+        location={confirmData?.billingDetails?.address} // it should be dispute Details "need to discuss"
         number={'+91 9871432309'}
       />
       <Accordion accordionHeader={'Dispute Details'}>
