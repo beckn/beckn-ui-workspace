@@ -35,7 +35,7 @@ const ProductList: React.FC<Props> = ({ productList }) => {
       <div className="w-full xl:max-w-[2100px] mx-auto">
         {sortedProductList && sortedProductList.length ? (
           <div>
-            <div className="grid gap-4 md:gap-2 grid-cols-6 md:grid-cols-12 hideScroll mt-10 max-h-[calc(100vh-260px)] overflow-y-scroll">
+            <div className="grid gap-4 md:gap-2 grid-cols-6 md:grid-cols-12 hideScroll mt-10 max-h-[calc(100vh-150px)] overflow-y-scroll">
               {sortedProductList.map((product: ParsedScholarshipData) => {
                 return (
                   <Card
