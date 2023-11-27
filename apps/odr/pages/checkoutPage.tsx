@@ -60,13 +60,26 @@ const CheckoutPage = () => {
     address: ''
   })
   const [isBillingAddressSameAsShippingAddress, setIsBillingAddressSameAsShippingAddress] = useState(true)
+
   const { data, loading, error, fetchData } = useRequest()
+  const [isDisabled, setIsDisabled] = useState<boolean>(false)
+  const [isDisputeButtonDisabled, setIsDisputeButtonDisabaled] = useState<boolean>(false)
+  const [filledDetails, setFilledDetails] = useState({
+    complainant: false,
+    respondent: false,
+    dispute: false,
+    consent: false
+  })
+  const [selectedData, setSelectedData] = useState([])
+
+  const initResponse = useSelector((state: any) => state.initResponse.initResponse)
+
   const router = useRouter()
   const initRequest = useRequest()
+  const selectRequest = useRequest()
   const dispatch = useDispatch()
   const { t, locale } = useLanguage()
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
-  const cartItems = useSelector((state: ICartRootState) => state.cart.items)
   const transactionId = useSelector((state: { transactionId: TransactionIdRootState }) => state.transactionId)
   const [providerId, setProviderId] = useState(router.query?.providerId || '')
   const [productId, setProductId] = useState(router.query?.productId || '')
@@ -87,6 +100,14 @@ const CheckoutPage = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  useEffect(() => {
+    if (data) {
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('providerName', JSON.stringify(data?.scholarshipProviders[0].name))
+      }
+    }
+  }, [data])
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -113,8 +134,15 @@ const CheckoutPage = () => {
 
       dispatch(responseDataActions.addInitResponse(initRequest.data))
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initRequest.data])
+
+  useEffect(() => {
+    if (selectRequest.data && typeof window !== 'undefined') {
+      localStorage.setItem('selectResult', JSON.stringify(selectRequest.data))
+    }
+  }, [selectRequest.data])
 
   useEffect(() => {
     const shippingAddressComplete = Object.values(formData).every(value => value.length > 0)
@@ -147,7 +175,18 @@ const CheckoutPage = () => {
     }
   }, [consentformData])
 
-  const formSubmitHandler = () => {
+  const formSubmitHandler = (type: string) => {
+    if (!filledDetails.complainant && type === 'complainant') {
+      setFilledDetails(prevDetails => ({ ...prevDetails, complainant: true }))
+    } else if (!filledDetails.respondent && type === 'respondent') {
+      setFilledDetails(prevDetails => ({ ...prevDetails, respondent: true }))
+    } else if (!filledDetails.dispute && type === 'dispute') {
+      setFilledDetails(prevDetails => ({ ...prevDetails, dispute: true }))
+    } else if (!filledDetails.consent && type === 'consent') {
+      setFilledDetails(prevDetails => ({ ...prevDetails, consent: true }))
+      console.log(filledDetails)
+    }
+
     if (formData) {
       const payLoadForInitRequest = getPayloadForInitRequest(data, formData, billingFormData)
       initRequest.fetchData(`${apiUrl}/init`, 'POST', payLoadForInitRequest)
@@ -165,7 +204,8 @@ const CheckoutPage = () => {
       }
     }
 
-    fetchData(`${apiUrl}/select`, 'POST', selectPayload)
+    selectRequest
+      .fetchData(`${apiUrl}/select`, 'POST', selectPayload)
       .then(() => {
         setLoadingSelectData(false)
       })
@@ -180,17 +220,39 @@ const CheckoutPage = () => {
   }, [])
 
   if (initRequest.loading || loadingSelectData) {
-    return <Loader loadingText={t['initializingOrderLoader']} />
+    return (
+      <Loader
+        stylesForLoadingText={{
+          fontWeight: '600',
+          fontSize: '16px'
+        }}
+        subLoadingText={t.caseFormLoaderText}
+        loadingText={t.catalogLoader}
+      />
+    )
   }
 
   const isInitResultPresent = () => {
     if (typeof window !== 'undefined') {
-      if (localStorage.getItem('initResult')) {
+      if (
+        localStorage.getItem('initResult') &&
+        filledDetails.complainant &&
+        filledDetails.respondent &&
+        filledDetails.dispute &&
+        filledDetails.consent
+      ) {
         return true
       }
     }
 
-    return !!initRequest.data
+    return false
+  }
+
+  const handleFormValidity = (newFormValidity: boolean) => {
+    setIsDisabled(!newFormValidity)
+  }
+  const handleDisputeFormValidity = (newFormValidity: boolean) => {
+    setIsDisputeButtonDisabaled(!newFormValidity)
   }
 
   return (
@@ -199,7 +261,7 @@ const CheckoutPage = () => {
       maxH={'calc(100vh - 100px)'}
       overflowY="scroll"
     >
-      {!isInitResultPresent() ? (
+      {!isInitResultPresent() && !filledDetails.complainant ? (
         <Box>
           <Flex
             pb={'10px'}
@@ -210,11 +272,12 @@ const CheckoutPage = () => {
           </Flex>
           <DetailsCard>
             <AddBillingButton
-              imgFlag={!initRequest.data}
+              checkFormValidity={handleFormValidity}
+              imgFlag={!isInitResultPresent() && !filledDetails.complainant}
               billingFormData={billingFormData}
               setBillingFormData={setBillingFormData}
               addBillingdetailsBtnText={t.addCompalintDetailsBtn}
-              billingFormSubmitHandler={formSubmitHandler}
+              billingFormSubmitHandler={() => formSubmitHandler('complainant')}
             />
           </DetailsCard>
         </Box>
@@ -227,11 +290,12 @@ const CheckoutPage = () => {
           >
             <Text fontSize={'17px'}>{t.complaintDetails}</Text>
             <AddBillingButton
-              imgFlag={!isInitResultPresent()}
+              checkFormValidity={handleFormValidity}
+              imgFlag={isInitResultPresent() && !filledDetails.complainant}
               billingFormData={billingFormData}
               setBillingFormData={setBillingFormData}
               addBillingdetailsBtnText={t.changeText}
-              billingFormSubmitHandler={formSubmitHandler}
+              billingFormSubmitHandler={() => formSubmitHandler('complainant')}
             />
           </Flex>
           <ShippingOrBillingDetails
@@ -242,7 +306,7 @@ const CheckoutPage = () => {
           />
         </Box>
       )}
-      {!isInitResultPresent() ? (
+      {!isInitResultPresent() && !filledDetails.respondent ? (
         <Box>
           <Flex
             pb={'10px'}
@@ -253,11 +317,11 @@ const CheckoutPage = () => {
           </Flex>
           <DetailsCard>
             <AddShippingButton
-              imgFlag={!initRequest.data}
+              imgFlag={!isInitResultPresent() && !filledDetails.respondent}
               formData={formData}
               setFormData={setFormData}
               addShippingdetailsBtnText={t.addRespondentDetaislBtn}
-              formSubmitHandler={formSubmitHandler}
+              formSubmitHandler={() => formSubmitHandler('respondent')}
             />
           </DetailsCard>
         </Box>
@@ -270,11 +334,11 @@ const CheckoutPage = () => {
           >
             <Text fontSize={'17px'}>{t.respondentDetails}</Text>
             <AddShippingButton
-              imgFlag={!isInitResultPresent()}
+              imgFlag={isInitResultPresent() && !filledDetails.respondent}
               formData={formData}
               setFormData={setFormData}
               addShippingdetailsBtnText={t.changeText}
-              formSubmitHandler={formSubmitHandler}
+              formSubmitHandler={() => formSubmitHandler('respondent')}
             />
           </Flex>
 
@@ -286,7 +350,7 @@ const CheckoutPage = () => {
           />
         </Box>
       )}
-      {!isInitResultPresent() ? (
+      {!isInitResultPresent() && !filledDetails.dispute ? (
         <Box>
           <Flex
             pb={'10px'}
@@ -297,11 +361,13 @@ const CheckoutPage = () => {
           </Flex>
           <DetailsCard>
             <AddDisputeButton
-              imgFlag={!initRequest.data}
+              checkFormValidity={handleDisputeFormValidity}
+              isDisabled={isDisabled}
+              imgFlag={!isInitResultPresent() && !filledDetails.dispute}
               formData={disputeformData}
               setFormData={setDisputeFormData}
               addShippingdetailsBtnText={t.addDisputeDetailsBtn}
-              formSubmitHandler={formSubmitHandler}
+              formSubmitHandler={() => formSubmitHandler('dispute')}
             />
           </DetailsCard>
         </Box>
@@ -314,18 +380,20 @@ const CheckoutPage = () => {
           >
             <Text fontSize={'17px'}>{t.disputeDetails}</Text>
             <AddDisputeButton
-              imgFlag={!isInitResultPresent()}
+              checkFormValidity={handleDisputeFormValidity}
+              isDisabled={isDisabled}
+              imgFlag={isInitResultPresent() && !filledDetails.dispute}
               formData={disputeformData}
               setFormData={setDisputeFormData}
               addShippingdetailsBtnText={t.changeText}
-              formSubmitHandler={formSubmitHandler}
+              formSubmitHandler={() => formSubmitHandler('dispute')}
             />
           </Flex>
           <DisputeFillingDetails accordionHeader={t.disputeDetails} />
         </Box>
       )}
 
-      {!isInitResultPresent() ? (
+      {!isInitResultPresent() && !filledDetails.consent ? (
         <Box>
           <Flex
             pb={'10px'}
@@ -336,11 +404,12 @@ const CheckoutPage = () => {
           </Flex>
           <DetailsCard>
             <AddConsentButton
-              imgFlag={!initRequest.data}
+              isDisabled={isDisputeButtonDisabled}
+              imgFlag={!isInitResultPresent() && !filledDetails.consent}
               formData={consentformData}
               setFormData={setConsentFormData}
               addShippingdetailsBtnText={t.fillConsentForm}
-              formSubmitHandler={formSubmitHandler}
+              formSubmitHandler={() => formSubmitHandler('consent')}
             />
           </DetailsCard>
         </Box>
@@ -353,14 +422,15 @@ const CheckoutPage = () => {
           >
             <Text fontSize={'17px'}>{t.consent}</Text>
             <AddConsentButton
-              imgFlag={!isInitResultPresent()}
+              isDisabled={isDisputeButtonDisabled}
+              imgFlag={isInitResultPresent() && !filledDetails.consent}
               formData={consentformData}
               setFormData={setConsentFormData}
               addShippingdetailsBtnText={t.changeText}
-              formSubmitHandler={formSubmitHandler}
+              formSubmitHandler={() => formSubmitHandler('consent')}
             />
           </Flex>
-          <ConsentFillingDetails accordionHeader={t.disputeDetails} />
+          <ConsentFillingDetails accordionHeader={t.fillConsentForm} />
         </Box>
       )}
       {!isInitResultPresent() ? (

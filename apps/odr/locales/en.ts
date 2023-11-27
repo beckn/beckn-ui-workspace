@@ -6,7 +6,7 @@ const en: { [key: string]: string } = {
   favorites: 'Favorites',
   delete: 'Delete',
   thereAreNoFavorites: 'currently, there are no favorite items',
-  signIn: 'Sign in',
+  signIn: 'Sign In',
   seeCart: 'See Cart',
   product: 'Product',
   totalAmount: 'Price',
@@ -453,6 +453,9 @@ const en: { [key: string]: string } = {
   caseID: 'Case Id :',
   myCases: 'My Cases',
   disputeTextareaError: 'Add some input here',
-  caseId: ' Case ID :'
+  caseId: ' Case ID :',
+  casesCatalogLoader: "We're looking for ODR service providers related to your search",
+  caseFormLoaderText: 'while we setup forms to understand your case in detail.',
+  caseAssignedLoaderText: 'you are being assigned a case manager'
 }
 export default en

@@ -11,7 +11,7 @@ import {
   Box,
   Checkbox
 } from '@chakra-ui/react'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import style from './ShippingForm.module.css'
 import crossIcon from '../../public/images/Indicator.svg'
@@ -34,6 +34,8 @@ const ConsentForm: React.FC<ConsentFormProps> = props => {
   const dispatch = useDispatch()
   const [formErrors, setFormErrors] = useState<FormErrors>({})
   const [isDeclarationChecked, setIsDeclarationChecked] = useState(false)
+  const [providerName, setProviderName] = useState('')
+  const [complainantName, setComplainantName] = useState('')
 
   const { t } = useLanguage()
 
@@ -55,6 +57,17 @@ const ConsentForm: React.FC<ConsentFormProps> = props => {
       [name]: errors[name] || ''
     }))
   }
+  useEffect(() => {
+    if (localStorage && typeof window !== 'undefined') {
+      setProviderName(JSON.parse(localStorage.getItem('providerName') as string))
+    }
+  }, [])
+  useEffect(() => {
+    if (localStorage && typeof window !== 'undefined') {
+      const billingAddress = JSON.parse(localStorage.getItem('billingAddress') as string)
+      setComplainantName(billingAddress.name)
+    }
+  }, [])
 
   const handleButtonClick = () => {
     const errors = validateConsentForm(props.formData)
@@ -125,12 +138,12 @@ const ConsentForm: React.FC<ConsentFormProps> = props => {
                 Term and Conditions
               </Text>
               <Text>
-                <span style={{ fontSize: '15px', fontWeight: 600 }}>I, [Complainant’s Full Legal Name],</span> confirm
-                that I’ve read and understand the terms of representation by{' '}
-                <span style={{ fontSize: '15px', fontWeight: 600 }}>[Service Provider Name].</span> I agree to be
-                represented in the described legal matter and acknowledge the fee structure, billing terms, and
-                potential costs.I understand the attorney-client privilege and agree to communicate promptly and
-                honestly. I’m aware of the conditions for terminating the relationship and its consequences.
+                <span style={{ fontSize: '15px', fontWeight: 600 }}>I, {complainantName},</span> confirm that I’ve read
+                and understand the terms of representation by{''}
+                <span style={{ fontSize: '15px', fontWeight: 600 }}> {providerName}.</span> I agree to be represented in
+                the described legal matter and acknowledge the fee structure, billing terms, and potential costs.I
+                understand the attorney-client privilege and agree to communicate promptly and honestly. I’m aware of
+                the conditions for terminating the relationship and its consequences.
               </Text>
             </Flex>
 
