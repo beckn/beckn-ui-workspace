@@ -36,6 +36,10 @@
       "name": "Playground",
       "path": "../apps/playground"
     },
+    {
+      "name": "Odr",
+      "path": "../apps/odr"
+    },
   ],
 	"settings": {
     "files.exclude": {

@@ -1,7 +1,8 @@
+import { ParsedScholarshipData } from '../../components/productList/ProductList.utils'
 import { RetailItem } from './products'
 
 export interface IProductList {
-  productsList: RetailItem[] | []
+  productsList: ParsedScholarshipData[] | []
 }
 
 export interface IProductListRootState {
