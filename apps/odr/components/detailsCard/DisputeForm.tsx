@@ -33,13 +33,13 @@ export interface DisputeFormProps {
 const DisputeForm: React.FC<DisputeFormProps> = props => {
   const dispatch = useDispatch()
   const [formErrors, setFormErrors] = useState<FormErrors>({})
-  const [selectedFiles, setSelectedFiles] = useState<File[]>([])
 
   const { t } = useLanguage()
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     const { name, value } = e.target
-
+    e.target.style.height = '40px'
+    e.target.style.height = e.target.scrollHeight + 'px'
     props.setFormData((prevFormData: DisputeFormData) => ({
       ...prevFormData,
       [name]: value
@@ -122,8 +122,7 @@ const DisputeForm: React.FC<DisputeFormProps> = props => {
             <div className={style.container}>
               <div className={style.did_floating_label_content}>
                 <textarea
-                  style={{ minHeight: '136px' }}
-                  className={style.did_floating_input}
+                  className={`${style.did_floating_input} ${style.did_floating_textarea}`}
                   placeholder=" "
                   name="name"
                   value={props.formData.name}

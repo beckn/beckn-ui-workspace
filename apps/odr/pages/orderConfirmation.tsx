@@ -41,8 +41,12 @@ const OrderConfirmation = () => {
   if (confirmRequest.loading) {
     return (
       <Loader
-        loadingText={t.categoryLoadPrimary}
-        subLoadingText={t.confirmingOrderLoader}
+        stylesForLoadingText={{
+          fontWeight: '600',
+          fontSize: '16px'
+        }}
+        subLoadingText={t.caseAssignedLoaderText}
+        loadingText={t.catalogLoader}
       />
     )
   }
