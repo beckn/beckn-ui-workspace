@@ -25,6 +25,10 @@
   border-bottom: 1px solid #43464e;
   box-sizing: border-box;
 }
+.did_floating_textarea {
+  overflow-y: hidden;
+  resize: none;
+}
 .otp_number {
   left: 0;
 }

@@ -80,7 +80,7 @@ const Search = () => {
                 fontWeight: '600',
                 fontSize: '16px'
               }}
-              subLoadingText={t.coursesCatalogLoader}
+              subLoadingText={t.casesCatalogLoader}
               loadingText={t.catalogLoader}
             />
           </div>
