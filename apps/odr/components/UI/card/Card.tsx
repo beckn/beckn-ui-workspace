@@ -1,11 +1,11 @@
 import React from 'react'
 import Link from 'next/link'
-import { RetailItem } from '../../../lib/types/products'
 import { toBinary } from '../../../utilities/common-utils'
 import { Box, Flex, Text, Image } from '@chakra-ui/react'
+import { ParsedScholarshipData } from '../../productList/ProductList.utils'
 
 interface Props {
-  product: RetailItem
+  product: ParsedScholarshipData
 }
 
 const Card: React.FC<Props> = ({ product }) => {
@@ -13,7 +13,7 @@ const Card: React.FC<Props> = ({ product }) => {
 
   return (
     <Box
-      minH={product?.tags?.foodType ? '138px' : '168px'}
+      minH={'168px'}
       maxH={'100%'}
       p={'10px'}
       className="col-span-6 sm:col-span-3 md:col-span-4 lg:col-span-3 2xl:col-span-2 shadow-xl my-1 md:my-4 ltr:mr-2 rtl:ml-1 md:mx-6  bg-[#fff] rounded-xl flex relative"
@@ -31,7 +31,7 @@ const Card: React.FC<Props> = ({ product }) => {
           >
             <div className="flex items-center h-full  product-img-span">
               <Image
-                src={product.images[0].url}
+                src={product.itemImages[0].url}
                 width={'110px'}
                 height={'133px'}
                 alt={product.name}
@@ -72,7 +72,7 @@ const Card: React.FC<Props> = ({ product }) => {
                 fontSize={'12px'}
                 fontWeight={'400'}
               >
-                {product.bppName}
+                {product.platformName}
               </Text>
             </Flex>
             <Flex

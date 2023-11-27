@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { useLanguage } from '../../hooks/useLanguage'
-import { RetailItem } from '../../lib/types/products'
 import Card from '../UI/card/Card'
 import { useDispatch, useSelector } from 'react-redux'
 import { SortedProductsListActions } from '../../store/sortedProductList-slice'
 import { IProductListRootState } from '../../lib/types/productList'
+import { ParsedScholarshipData } from './ProductList.utils'
 
 interface Props {
-  productList: RetailItem[]
+  productList: ParsedScholarshipData[]
 }
 const ProductList: React.FC<Props> = ({ productList }) => {
   const { t } = useLanguage()
@@ -39,7 +39,7 @@ const ProductList: React.FC<Props> = ({ productList }) => {
               className="grid gap-4 md:gap-2 grid-cols-6 md:grid-cols-12 hideScroll"
               style={{ marginTop: '40px', maxHeight: 'Calc(100vh - 260px)', overflowY: 'scroll' }}
             >
-              {sortedProductList.map((product: RetailItem) => {
+              {sortedProductList.map((product: ParsedScholarshipData) => {
                 return (
                   <Card
                     key={product.id}
