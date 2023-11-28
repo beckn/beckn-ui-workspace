@@ -21,9 +21,6 @@ export const validateDisputeForm = (formData: DisputeFormData): FormErrors => {
   if (formData.claimValue.trim() === '') {
     errors.claimValue = 'claimError'
   }
-  if (formData.address.trim() === '') {
-    errors.address = 'errorAddress'
-  }
   return errors
 }
 export const validateConsentForm = (formData: ConsentFormData): FormErrors => {

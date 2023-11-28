@@ -41,6 +41,7 @@ const LandingPage: React.FC = () => {
   }, [])
   const navigateToSearchResults = () => {
     localStorage.setItem('optionTags', JSON.stringify({ name: searchTerm }))
+    localStorage.setItem('optionTags1', JSON.stringify({ name: selectedItem }))
     Router.push(`/search?searchTerm=${searchTerm}&selectedItem=${selectedItem}`)
   }
 

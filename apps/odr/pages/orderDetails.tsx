@@ -53,7 +53,7 @@ const OrderDetails = () => {
             const payloadForStatusRequest = {
               scholarshipApplicationId: parsedConfirmedData?.scholarshipApplicationId,
               context: {
-                transactionId: transactionId?.transactionId,
+                transactionId: parsedConfirmedData?.context?.transactionId,
                 bppId: parsedConfirmedData.context.bppId,
                 key: 'completed',
                 bppUri: parsedConfirmedData?.context?.bppUri
@@ -78,26 +78,23 @@ const OrderDetails = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  // useEffect(() => {
-  //   if (statusRequest.data) {
-  //     setStatusResponse(statusRequest.data as any)
-  //     if (statusRequest.data.every(res => res.message.order.state === 'DELIVERED')) {
-  //       setAllOrderDelivered(true)
-  //     }
-  //   }
-  // }, [statusRequest.data])
+  useEffect(() => {
+    if (statusRequest.data) {
+      setStatusResponse(statusRequest.data as any)
+      // if (statusRequest.data.every(res => res.scholarshipProvider.scholarship[].state === '')) {
+      //   setAllOrderDelivered(true)
+      // }
+    }
+  }, [statusRequest.data])
 
-  if (!confirmData.length) {
-    return <></>
+  // if (!confirmData.length) {
+  //   return <></>
+  // }
+
+  const handleDetails = (url: string) => {
+    window.open(url, '_blank')
   }
 
-  const confirmDataPerBpp = getDataPerBpp(confirmData)
-
-  const orderFromConfirmData = confirmData[0].message.responses[0].message.order
-
-  const orderState = orderFromConfirmData.payment.status
-
-  console.log(statusResponse)
   return (
     <Box
       className="hideScroll"
@@ -126,7 +123,7 @@ const OrderDetails = () => {
                 fontSize={'17px'}
                 fontWeight={'600'}
               >
-                All request have been fulfilled!
+                All requests have been fulfilled!
               </Text>
             </Flex>
             <Flex
@@ -161,6 +158,7 @@ const OrderDetails = () => {
             flexDir={'column'}
             justifyContent={'space-between'}
             alignItems={'flex-start'}
+            gap={'10px'}
           >
             <Text
               fontSize={'15px'}
@@ -204,59 +202,59 @@ const OrderDetails = () => {
           </Flex>
         </Box>
       </DetailsCard>
-      {/* <DetailsCard>
-      {statusResponse.map((res: any, index: number) => (
-        <>
-          <HStack
-            pb="10px"
-            key={index}
-            justifyContent={'space-between'}
-          >
-            <Text
-              fontWeight={600}
-              fontSize={'17px'}
+      <DetailsCard>
+        {statusResponse?.map((res: any, index: number) => (
+          <>
+            <HStack
+              pb="10px"
+              key={index}
+              justifyContent={'space-between'}
             >
-              {t.caseId} {res.message.order.displayId}
-            </Text>
-            <Flex>
-              {res.message.order.state === 'INITIATED' ? (
-                <Image
-                  src="/images/inProgress.svg"
-                  alt=""
-                  pr={'6px'}
-                />
-              ) : (
-                <Image
-                  src="/images/approvedIcon.svg"
-                  alt=""
-                  pr={'6px'}
-                />
-              )}
               <Text
-                fontWeight={300}
-                fontSize={'12px'}
+                fontWeight={600}
+                fontSize={'17px'}
               >
-                {res.message.order.state === 'INITIATED' ? 'In Progress' : 'Case Closed'}
+                {t.caseId}
               </Text>
-            </Flex>
-          </HStack>
-          <Text
-            textOverflow={'ellipsis'}
-            overflow={'hidden'}
-            whiteSpace={'nowrap'}
-            fontSize={'12px'}
-            fontWeight={'400'}
-          >
-            {res.message.order.items[0].descriptor.name}
-          </Text>
-          <Divider
-            mt={'15px'}
-            mb={'15px'}
-          />
-          <CardBody pt={'unset'}>{RenderOrderStatusList(res)}</CardBody>
-        </>
-      ))}
-    </DetailsCard> */}
+              <Flex>
+                {res.message.order.state === 'INITIATED' ? (
+                  <Image
+                    src="/images/inProgress.svg"
+                    alt=""
+                    pr={'6px'}
+                  />
+                ) : (
+                  <Image
+                    src="/images/approvedIcon.svg"
+                    alt=""
+                    pr={'6px'}
+                  />
+                )}
+                <Text
+                  fontWeight={300}
+                  fontSize={'12px'}
+                >
+                  {/* {res.message.order.state === 'INITIATED' ? 'In Progress' : 'Case Closed'} */}
+                </Text>
+              </Flex>
+            </HStack>
+            <Text
+              textOverflow={'ellipsis'}
+              overflow={'hidden'}
+              whiteSpace={'nowrap'}
+              fontSize={'12px'}
+              fontWeight={'400'}
+            >
+              {/* {res.message.order.items[0].descriptor.name} */}
+            </Text>
+            <Divider
+              mt={'15px'}
+              mb={'15px'}
+            />
+            <CardBody pt={'unset'}>{RenderOrderStatusList(res)}</CardBody>
+          </>
+        ))}
+      </DetailsCard>
       <ShippingOrBillingDetails
         accordionHeader={'Complainant & Billing Details'}
         name={confirmData?.billingDetails?.name}
@@ -264,34 +262,27 @@ const OrderDetails = () => {
         number={confirmData?.billingDetails?.mobileNumber}
       />
 
-      <ShippingOrBillingDetails
-        accordionHeader={'Dispute Details'}
-        name={confirmData?.billingDetails?.name}
-        location={confirmData?.billingDetails?.address} // it should be dispute Details "need to discuss"
-        number={'+91 9871432309'}
-      />
-      <Accordion accordionHeader={'Dispute Details'}>
-        <Stack
-          divider={<StackDivider />}
-          spacing="4"
-        >
-          <Flex p={'15px'}>
-            <Image src={attached} />
-            <Text fontSize={'15px'}>Dispute details added</Text>
-          </Flex>
-        </Stack>
-      </Accordion>
-      <Accordion accordionHeader={'Consent'}>
-        <Stack
-          divider={<StackDivider />}
-          spacing="4"
-        >
-          <Flex p={'15px'}>
-            <Image src={attached} />
-            <Text fontSize={'15px'}>Consent Form Filled</Text>
-          </Flex>
-        </Stack>
-      </Accordion>
+      {statusResponse?.caseDocs?.length
+        ? statusResponse?.caseDocs?.map((item, i) => (
+            <Accordion
+              accordionHeader={item.descriptor.name}
+              key={i}
+            >
+              <Stack
+                divider={<StackDivider />}
+                spacing="4"
+              >
+                <Flex
+                  p={'15px'}
+                  onClick={() => handleDetails(item.url)}
+                >
+                  <Image src={attached} />
+                  <Text fontSize={'15px'}>{item.descriptor.name} Added</Text>
+                </Flex>
+              </Stack>
+            </Accordion>
+          ))
+        : null}
     </Box>
   )
 }

@@ -40,7 +40,7 @@ const Card: React.FC<Props> = ({ product }) => {
             </div>
           </Box>
           <Box
-            p={'15px'}
+            p={'10px'}
             pt={'11px'}
             w={'63%'}
             position={'relative'}
@@ -78,19 +78,18 @@ const Card: React.FC<Props> = ({ product }) => {
             <Flex
               alignItems={'center'}
               mb={'8px'}
+              gap={'5px'}
             >
+              <Image
+                src="/images/language.svg"
+                w={'12px'}
+                h={'12px'}
+              />
               <Text
                 fontWeight={'400'}
                 fontSize={'12px'}
               >
-                Service Language:
-              </Text>
-              <Text
-                pl={'3px'}
-                fontWeight={'600'}
-                fontSize={'12px'}
-              >
-                English
+                English, Hindi, Kannada +3
               </Text>
             </Flex>
             <Flex
