@@ -1,157 +1,51 @@
 import { ResponseModel } from '../lib/types/responseModel'
 
-export const getInitMetaDataPerBpp = (initRes: ResponseModel[]) => {
-  const itemsPerBpp = {}
-  initRes.forEach(res => {
-    const bppId = res.context.bpp_id
-    const bpp_uri = res.context.bpp_uri
+export const getPayloadForConfirmRequest = (initResponse: ResponseModel, transactionId: any) => {
+  const payload: any = {}
 
-    itemsPerBpp[bppId] = {
-      ...res.message.catalogs.responses[0].message.order,
-      bpp_uri
-    }
-  })
-
-  return itemsPerBpp
-}
-
-export const getConfirmMetaDataForBpp = (initRes: ResponseModel[]) => {
-  const itemsPerBpp = {}
-  initRes.forEach(res => {
-    const bppId = res.context.bpp_id
-    const bpp_uri = res.context.bpp_uri
-
-    itemsPerBpp[bppId] = {
-      ...res.message.responses[0].message.order,
-      bpp_uri
-    }
-  })
-
-  return itemsPerBpp
-}
-
-export const getPayloadForConfirmRequest = (
-  initMetaDataPerBpp: any,
-  transactionId: { transactionId: string },
-  userId: string
-) => {
-  const payload: any = {
-    confirmRequestDto: [],
-    userId: userId
+  payload.context = {
+    transactionId: transactionId.transactionId,
+    bppId: initResponse?.context?.bppId,
+    bppUri: initResponse?.context?.bppUri
   }
 
-  Object.keys(initMetaDataPerBpp).forEach(bppId => {
-    const confirmItem: any = {
-      context: {
-        transaction_id: transactionId.transactionId,
-        bpp_id: bppId,
-        bpp_uri: initMetaDataPerBpp[bppId].bpp_uri,
-        domain: 'retail'
-      },
-
-      message: {
-        order: {
-          provider: {
-            id: initMetaDataPerBpp[bppId].provider.id
+  payload.scholarshipProvider = {
+    id: initResponse?.scholarshipProvider?.id,
+    name: initResponse?.scholarshipProvider?.name,
+    description: initResponse?.scholarshipProvider?.shortDesc,
+    scholarships: [
+      {
+        id: initResponse?.scholarshipProvider?.scholarships[0]?.id,
+        name: initResponse?.scholarshipProvider?.scholarships[0]?.name,
+        description: initResponse?.scholarshipProvider?.scholarships[0]?.categories[0]?.descriptor?.name,
+        categoryId: initResponse?.scholarshipProvider?.scholarships[0]?.categories[0]?.id,
+        amount: {
+          amount: 30000,
+          currency: 'INR'
+        },
+        scholarshipDetails: {
+          id: initResponse?.scholarshipProvider?.scholarships[0]?.id,
+          type: 'SCHOLARSHIP',
+          applicationEndDate: '2023-03-31T00:00:00.000Z',
+          applicationStartDate: '2023-01-01T00:00:00.000Z',
+          supportContact: {
+            //it should be initResponse?.scholarshipProvider?.scholarships[0]?.scholarshipDetails.supportContact
+            name: 'Mary G',
+            phone: '9876543210',
+            email: 'maryg@xyz.com'
           },
-          addOns: [],
-          offers: [],
-          billing: initMetaDataPerBpp[bppId].billing,
-          fulfillment: {
-            type: initMetaDataPerBpp[bppId].fulfillment.type,
-            end: {
-              location: {
-                gps: initMetaDataPerBpp[bppId].fulfillment.end.location.gps,
-                address: initMetaDataPerBpp[bppId].billing.address
-              },
-              contact: {
-                phone: initMetaDataPerBpp[bppId].billing.phone,
-                email: 'testemail1@mailinator.com'
-              }
-            },
-            customer: {
-              person: {
-                name: initMetaDataPerBpp[bppId].billing.name
-              }
-            },
-            id: initMetaDataPerBpp[bppId].fulfillment.id
-          },
-          payment: initMetaDataPerBpp[bppId].payment,
-          items: []
+          scholarshipRequestor: {
+            name: transactionId.customerDetails.name,
+            phone: transactionId.customerDetails.mobileNumber,
+            address: transactionId.customerDetails.address
+          }
         }
       }
-    }
-
-    initMetaDataPerBpp[bppId].items.forEach((item: any) => {
-      const itemObject = {
-        quantity: item.quantity,
-        id: item.id
-      }
-      confirmItem.message.order.items.push(itemObject)
-    })
-
-    payload.confirmRequestDto.push(confirmItem)
-  })
-
-  return payload
-}
-
-export const getPayloadForStatusRequest = (
-  confirmOrderMetaDataPerBpp: any,
-  transactionId: { transactionId: string }
-) => {
-  const payload: any = {
-    statusRequestDto: []
+    ]
   }
 
-  Object.keys(confirmOrderMetaDataPerBpp).forEach(bppId => {
-    const statusItem: any = {
-      context: {
-        transaction_id: transactionId.transactionId,
-        bpp_id: bppId,
-        bpp_uri: confirmOrderMetaDataPerBpp[bppId].bpp_uri,
-        domain: 'retail'
-      },
-
-      message: {
-        order_id: confirmOrderMetaDataPerBpp[bppId].id
-      }
-    }
-
-    payload.statusRequestDto.push(statusItem)
-  })
-
   return payload
 }
-
-export const getPayloadForTrackRequest = (
-  confirmOrderMetaDataPerBpp: any,
-  transactionId: { transactionId: string }
-) => {
-  const payload: any = {
-    trackRequestDto: []
-  }
-
-  Object.keys(confirmOrderMetaDataPerBpp).forEach(bppId => {
-    const statusItem: any = {
-      context: {
-        transaction_id: transactionId.transactionId,
-        bpp_id: bppId,
-        bpp_uri: confirmOrderMetaDataPerBpp[bppId].bpp_uri,
-        domain: 'retail'
-      },
-
-      message: {
-        order_id: confirmOrderMetaDataPerBpp[bppId].id
-      }
-    }
-
-    payload.trackRequestDto.push(statusItem)
-  })
-
-  return payload
-}
-
 export const getOrderPlacementTimeline = (timeStamp: string) => {
   const localDateAndTime = new Date(timeStamp)
   const localTime = localDateAndTime.toLocaleTimeString()

@@ -1,30 +1,20 @@
-import { Box, Flex, Image, Text } from '@chakra-ui/react'
+import { Box, Flex, Text } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
-import StarRatingComponent from 'react-star-rating-component'
 import { useLanguage } from '../../hooks/useLanguage'
-import { RetailItem } from '../../lib/types/products'
+import { ParsedScholarshipData } from '../productList/ProductList.utils'
 import CallToAction from './CallToAction'
 
 interface Props {
-  product: RetailItem
+  product: ParsedScholarshipData
 }
 const DetailsSection: React.FC<Props> = ({ product }) => {
   const { t } = useLanguage()
-  const [showComponent, setShowComponent] = useState(false)
 
   useEffect(() => {
     localStorage.removeItem('optionTags')
     localStorage.setItem('optionTags', JSON.stringify({ name: product.name }))
     window.dispatchEvent(new Event('storage-optiontags'))
   }, [product])
-
-  useEffect(() => {
-    setShowComponent(true)
-  }, [])
-
-  if (!showComponent) {
-    return <></>
-  }
 
   return (
     <Box
@@ -52,7 +42,7 @@ const DetailsSection: React.FC<Props> = ({ product }) => {
           mb={'10px'}
           fontSize={'14px'}
         >
-          by {product.bppName}
+          by {product.platformName}
         </Text>
       </Flex>
       <hr className="mt-1 hidden md:block" />

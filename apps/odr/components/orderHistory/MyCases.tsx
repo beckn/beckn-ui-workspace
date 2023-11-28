@@ -7,7 +7,8 @@ interface MyCasesProps {
   time: string
   id: string
   myLearingStatus: string
-  handleViewCourses: () => void
+  handleViewCaseDetails: () => void
+  providerName: string
 }
 
 const MyCases: React.FC<MyCasesProps> = props => {
@@ -33,12 +34,12 @@ const MyCases: React.FC<MyCasesProps> = props => {
             fontWeight={'400'}
             pb={'10px'}
           >
-            Harvey Spectre Law Firm
+            {props.providerName}
           </Text>
 
           <Text pr={'10px'}>
             {' '}
-            <span style={{ fontSize: '15px', fontWeight: 600 }}>CaseID: </span>
+            <span style={{ fontSize: '12px', fontWeight: 700 }}>CaseID: </span>
             {props.id}
           </Text>
 
@@ -78,7 +79,7 @@ const MyCases: React.FC<MyCasesProps> = props => {
             fontWeight={600}
             cursor="pointer"
             color={'rgba(var(--color-primary))'}
-            onClick={props.handleViewCourses}
+            onClick={props.handleViewCaseDetails}
           >
             {t.viewCase}
           </Box>

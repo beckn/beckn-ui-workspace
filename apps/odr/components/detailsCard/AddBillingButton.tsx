@@ -1,5 +1,5 @@
 import { Flex, Text, useDisclosure, Image } from '@chakra-ui/react'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import addShippingBtn from '../../public/images/addBtn.svg'
 import { ShippingFormData } from '../../pages/checkoutPage'
 import BillingForm from './BillingForm'
@@ -10,10 +10,20 @@ export interface AddBillingButtonProps {
   billingFormData: ShippingFormData
   billingFormSubmitHandler: Function
   imgFlag: boolean
+  checkFormValidity: (isFormValid: boolean) => void
 }
 
 const AddBillingButton: React.FC<AddBillingButtonProps> = props => {
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const [isFormValid, setIsFormValid] = useState<boolean>(false)
+
+  const handleFormValidity = (newFormValidity: boolean) => {
+    setIsFormValid(newFormValidity)
+  }
+  useEffect(() => {
+    props.checkFormValidity(isFormValid)
+  }, [isFormValid])
+
   return (
     <>
       <Flex
@@ -35,6 +45,7 @@ const AddBillingButton: React.FC<AddBillingButtonProps> = props => {
         </Text>
       </Flex>
       <BillingForm
+        isFormValid={handleFormValidity}
         billingFormData={props.billingFormData}
         setBillingFormData={props.setBillingFormData}
         isOpen={isOpen}

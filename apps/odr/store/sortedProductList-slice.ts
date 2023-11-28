@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { ParsedScholarshipData } from '../components/productList/ProductList.utils'
 
 import { IProductList } from '../lib/types/productList'
 import { RetailItem } from '../lib/types/products'
@@ -12,7 +13,7 @@ const SortedProductsListSlice = createSlice({
   name: 'sortedProductsList',
   initialState,
   reducers: {
-    sortProductsList(state, action: PayloadAction<{ productsList: RetailItem[]; sortBasedOn: string }>) {
+    sortProductsList(state, action: PayloadAction<{ productsList: ParsedScholarshipData[]; sortBasedOn: string }>) {
       switch (action.payload.sortBasedOn) {
         case 'all':
           state.productsList = action.payload.productsList

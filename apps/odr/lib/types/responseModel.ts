@@ -18,7 +18,9 @@ export interface RetailContext {
 }
 
 export interface ResponseModel {
-  scholarshipProviders: any
+  customerDetails: any
+  transactionId: any
+  scholarshipProvider: any
   context: RetailContext
   message: any
   // Hacky fix

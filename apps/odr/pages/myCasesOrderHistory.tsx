@@ -2,13 +2,14 @@ import { Box } from '@chakra-ui/react'
 import Cookies from 'js-cookie'
 import Router from 'next/router'
 import React, { useEffect, useState } from 'react'
-import Loader from '../components/loader/Loader'
 import { useLanguage } from '../hooks/useLanguage'
 import { getOrderPlacementTimeline } from '../utilities/confirm-utils'
 import MyCases from '../components/orderHistory/MyCases'
+import Loader from '../components/loader/Loader'
+import EmptyScholarship from '../components/scholarship/emptyScholarship/EmptyScholarship'
 
 const myCasesOrderHistory = () => {
-  const [coursesOrders, setCoursesOrders] = useState([])
+  const [casesOrders, setCasesOrders] = useState([])
   const [isLoading, setIsLoading] = useState(true)
 
   const { t } = useLanguage()
@@ -26,10 +27,10 @@ const myCasesOrderHistory = () => {
         redirect: 'follow'
       } as RequestInit
 
-      const response = await fetch(`${apiUrl}/orders?filters[category]=1`, requestOptions)
+      const response = await fetch(`${apiUrl}/orders?filters[category]=4`, requestOptions)
       const result = await response.json()
-      console.log(result.data)
-      setCoursesOrders(result.data)
+
+      setCasesOrders(result.data)
       setIsLoading(false)
     } catch (error) {
       console.error('error', error)
@@ -41,11 +42,11 @@ const myCasesOrderHistory = () => {
   }, [])
 
   if (isLoading) {
-    return <Loader loadingText={t.fetchingScholarships} />
+    return <Loader loadingText={t.fetchingCases} />
   }
 
-  if (!coursesOrders.length) {
-    return <></>
+  if (!casesOrders.length) {
+    return <EmptyScholarship />
   }
 
   return (
@@ -54,15 +55,27 @@ const myCasesOrderHistory = () => {
       maxH={'calc(100vh - 100px)'}
       overflowY="scroll"
     >
-      {coursesOrders.map((courseOrder: any, index) => (
+      {casesOrders.map((courseOrder: any, index) => (
         <MyCases
           key={index}
-          heading={courseOrder.attributes.items[0].descriptor.name}
+          providerName={courseOrder.attributes.descriptor.name}
+          heading={courseOrder.attributes.items[0].name}
           time={getOrderPlacementTimeline(courseOrder.attributes.createdAt)}
           id={courseOrder.id}
           myLearingStatus={courseOrder.attributes.delivery_status}
-          handleViewCourses={() => {
-            Router.push('/orderDetails')
+          handleViewCaseDetails={() => {
+            const confirmedOrder = {
+              scholarshipApplicationId: courseOrder.attributes.order_id,
+              context: {
+                // transactionId: '',
+                bppId: courseOrder.attributes.bpp_id,
+                bppUri: courseOrder.attributes.bpp_uri
+              }
+            }
+            localStorage.setItem('confirmData', JSON.stringify(confirmedOrder))
+            if (localStorage.getItem('confirmData')) {
+              Router.push('/orderDetails')
+            }
           }}
         />
       ))}

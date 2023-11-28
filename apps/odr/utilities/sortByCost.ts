@@ -1,9 +1,10 @@
+import { ParsedScholarshipData } from '../components/productList/ProductList.utils'
 import { RetailItem } from '../lib/types/products'
 
-export const sortByExpensive = (product1: RetailItem, product2: RetailItem): number => {
-  return parseFloat(product2.price.value) - parseFloat(product1.price.value)
+export const sortByExpensive = (product1: ParsedScholarshipData, product2: ParsedScholarshipData): number => {
+  return parseFloat(product2.amount.amount) - parseFloat(product1.amount.amount)
 }
 
-export const sortByCheapest = (product1: RetailItem, product2: RetailItem): number => {
-  return parseFloat(product1.price.value) - parseFloat(product2.price.value)
+export const sortByCheapest = (product1: ParsedScholarshipData, product2: ParsedScholarshipData): number => {
+  return parseFloat(product1.amount.amount) - parseFloat(product2.amount.amount)
 }

@@ -6,7 +6,7 @@ const en: { [key: string]: string } = {
   favorites: 'Favorites',
   delete: 'Delete',
   thereAreNoFavorites: 'currently, there are no favorite items',
-  signIn: 'Sign in',
+  signIn: 'Sign In',
   seeCart: 'See Cart',
   product: 'Product',
   totalAmount: 'Price',
@@ -358,7 +358,7 @@ const en: { [key: string]: string } = {
   rateStore: 'Rate the store',
   rateDeliveryExperience: 'Rate the delivery experience',
   addCommentsHere: 'Share your review',
-  writeExperience: 'Why did you like or dislike this service?',
+  writeExperience: 'Please share your experience with this service',
   completed: 'Completed',
   homeHeading: 'LegalEase',
   headingSpan: 'for All',
@@ -429,7 +429,7 @@ const en: { [key: string]: string } = {
   createAccount: 'Create Account',
   overview: 'Overview',
   lodgedOn: 'Lodged on',
-  fetchingScholarships: 'Fetching scholarships',
+  fetchingCases: 'Fetching Cases',
   noCourse: 'No Course!',
   noCouseSubText: "Seems like you haven't selected a course!",
   searchCourses: 'Search Courses',
@@ -453,6 +453,9 @@ const en: { [key: string]: string } = {
   caseID: 'Case Id :',
   myCases: 'My Cases',
   disputeTextareaError: 'Add some input here',
-  caseId: ' Case ID :'
+  caseId: ' Case ID :',
+  casesCatalogLoader: "We're looking for services related to your search",
+  caseFormLoaderText: 'while we setup forms to understand your case in detail.',
+  caseAssignedLoaderText: 'you are being assigned a case manager'
 }
 export default en

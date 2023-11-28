@@ -10,7 +10,7 @@ import {
   ModalCloseButton,
   Box
 } from '@chakra-ui/react'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import style from './ShippingForm.module.css'
 import crossIcon from '../../public/images/Indicator.svg'
@@ -19,7 +19,6 @@ import { DisputeFormData } from '../../pages/checkoutPage'
 import { responseDataActions } from '../../store/responseData-slice'
 import { FormErrors, validateDisputeForm } from '../../utilities/detailsForm-utils'
 import { useLanguage } from '../../hooks/useLanguage'
-import UploadFile from '../uploadFile/UploadFile'
 
 export interface DisputeFormProps {
   isOpen: boolean
@@ -28,18 +27,19 @@ export interface DisputeFormProps {
   setFormData: Function
   formData: DisputeFormData
   formSubmitHandler: Function
+  isFormValid: (isFormValid: boolean) => void
 }
 
 const DisputeForm: React.FC<DisputeFormProps> = props => {
   const dispatch = useDispatch()
   const [formErrors, setFormErrors] = useState<FormErrors>({})
-  const [selectedFiles, setSelectedFiles] = useState<File[]>([])
 
   const { t } = useLanguage()
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     const { name, value } = e.target
-
+    e.target.style.height = '40px'
+    e.target.style.height = e.target.scrollHeight + 'px'
     props.setFormData((prevFormData: DisputeFormData) => ({
       ...prevFormData,
       [name]: value
@@ -58,20 +58,24 @@ const DisputeForm: React.FC<DisputeFormProps> = props => {
   }
 
   const handleButtonClick = () => {
-    const errors = validateDisputeForm(props.formData)
-    setFormErrors(errors)
-    if (Object.keys(errors).length === 0) {
-      dispatch(responseDataActions.addDisputeDetails(props.formData))
-      props.setFormData(props.formData)
-      props.formSubmitHandler()
-    } else {
-      setFormErrors(errors)
-    }
+    // const errors = validateDisputeForm(props.formData)
+    // setFormErrors(errors)
+    // if (Object.keys(errors).length === 0) {
+    dispatch(responseDataActions.addDisputeDetails(props.formData))
+    props.setFormData(props.formData)
+    props.formSubmitHandler()
+    // } else {
+    //   setFormErrors(errors)
+    // }
   }
 
   const isFormValid = Object.entries(props.formData)
-    .filter(([key]) => key !== 'landmark')
+    .filter(([key]) => key !== 'claimValue')
     .every(([_, value]) => value.trim() !== '')
+
+  useEffect(() => {
+    props.isFormValid(isFormValid)
+  }, [isFormValid, props.isFormValid])
 
   return (
     <>
@@ -118,8 +122,7 @@ const DisputeForm: React.FC<DisputeFormProps> = props => {
             <div className={style.container}>
               <div className={style.did_floating_label_content}>
                 <textarea
-                  style={{ minHeight: '136px' }}
-                  className={style.did_floating_input}
+                  className={`${style.did_floating_input} ${style.did_floating_textarea}`}
                   placeholder=" "
                   name="name"
                   value={props.formData.name}
@@ -143,25 +146,9 @@ const DisputeForm: React.FC<DisputeFormProps> = props => {
                   onChange={handleInputChange}
                 />
                 <label className={style.did_floating_label}>{t.claimValue}</label>
-                {formErrors.claimValue && <span className={style.error}>{t[`${formErrors.claimValue}`]}</span>}
-              </div>
-              <div className={style.did_floating_label_content}>
-                <input
-                  className={style.did_floating_input}
-                  type="text"
-                  placeholder=" "
-                  name="address"
-                  value={props.formData.address}
-                  onChange={handleInputChange}
-                />
-                <label className={style.did_floating_label}>{t.formAddress}</label>
-                {formErrors.address && <span className={style.error}>{t[`${formErrors.address}`]}</span>}
+                {/* {formErrors.claimValue && <span className={style.error}>{t[`${formErrors.claimValue}`]}</span>} */}
               </div>
             </div>
-            <UploadFile
-              selectedFiles={selectedFiles}
-              setSelectedFiles={setSelectedFiles}
-            />
             <Box mt={'50px'}>
               <Button
                 buttonText={'Save'}
