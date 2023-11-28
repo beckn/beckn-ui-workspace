@@ -38,18 +38,18 @@ export type ConsentFormData = {
 
 const CheckoutPage = () => {
   const [billingFormData, setBillingFormData] = useState<ShippingFormData>({
-    name: 'Santosh Kumar',
-    mobileNumber: '9612345678',
-    email: 'santosh.kumar@gmail.com',
-    address: '15 Jawahar nagar, New Delhi',
-    pinCode: '475001'
+    name: 'Marie Sampath',
+    mobileNumber: '9876543210',
+    email: 'marie.sampath@gmail.com',
+    address: '2111, HSR Layout, Sector 2, Bangalore',
+    pinCode: '560112'
   })
   const [formData, setFormData] = useState<ShippingFormData>({
-    name: 'Ashwin Kumar',
-    mobileNumber: '9612345678',
-    email: 'ashwin.kumar@gmail.com',
-    address: '151,saket nagar, New Delhi',
-    pinCode: '475003'
+    name: 'Jay D',
+    mobileNumber: '9871432309',
+    email: 'jay.d@gmail.com',
+    address: '2702, HSR Layout,Sector 1, Bangalore',
+    pinCode: '560102'
   })
   const [disputeformData, setDisputeFormData] = useState<DisputeFormData>({
     name: '',
