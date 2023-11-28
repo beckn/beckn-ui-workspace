@@ -29,7 +29,6 @@ export type ShippingFormData = {
 export type DisputeFormData = {
   name: string
   claimValue: string
-  address: string
 }
 export type ConsentFormData = {
   name: string
@@ -53,14 +52,14 @@ const CheckoutPage = () => {
   })
   const [disputeformData, setDisputeFormData] = useState<DisputeFormData>({
     name: '',
-    claimValue: '',
-    address: ''
+    claimValue: ''
   })
   const [consentformData, setConsentFormData] = useState<ConsentFormData>({
     name: '',
     address: ''
   })
 
+  // const { data, loading, error, fetchData } = useRequest()
   const [isDisabled, setIsDisabled] = useState<boolean>(false)
   const [isDisputeButtonDisabled, setIsDisputeButtonDisabaled] = useState<boolean>(false)
   const [filledDetails, setFilledDetails] = useState({
@@ -102,6 +101,7 @@ const CheckoutPage = () => {
       setSelectedItem(item)
     }
   }, [])
+  console.log(selectedItem)
 
   useEffect(() => {
     if (selectedItem) {
@@ -227,14 +227,18 @@ const CheckoutPage = () => {
 
   if (initRequest.loading || loadingSelectData) {
     return (
-      <Loader
-        stylesForLoadingText={{
-          fontWeight: '600',
-          fontSize: '16px'
-        }}
-        subLoadingText={t.caseFormLoaderText}
-        loadingText={t.catalogLoader}
-      />
+      <Loader>
+        <Box
+          mt={'13px'}
+          display={'flex'}
+          flexDir={'column'}
+          alignItems={'center'}
+        >
+          <Text fontWeight={700}>Please wait!</Text>
+          <Text>while we setup forms to</Text>
+          <Text>understand your case in detail.</Text>
+        </Box>
+      </Loader>
     )
   }
 
@@ -451,7 +455,7 @@ const CheckoutPage = () => {
             background={'rgba(var(--color-primary))'}
             color={'rgba(var(--text-color))'}
             handleOnClick={() => router.push('/orderConfirmation')}
-            isDisabled={true}
+            isDisabled={false}
           />
         </Box>
       ) : (

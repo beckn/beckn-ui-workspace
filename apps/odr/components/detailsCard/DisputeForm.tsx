@@ -148,18 +148,6 @@ const DisputeForm: React.FC<DisputeFormProps> = props => {
                 <label className={style.did_floating_label}>{t.claimValue}</label>
                 {formErrors.claimValue && <span className={style.error}>{t[`${formErrors.claimValue}`]}</span>}
               </div>
-              <div className={style.did_floating_label_content}>
-                <input
-                  className={style.did_floating_input}
-                  type="text"
-                  placeholder=" "
-                  name="address"
-                  value={props.formData.address}
-                  onChange={handleInputChange}
-                />
-                <label className={style.did_floating_label}>{t.formAddress}</label>
-                {formErrors.address && <span className={style.error}>{t[`${formErrors.address}`]}</span>}
-              </div>
             </div>
             <Box mt={'50px'}>
               <Button

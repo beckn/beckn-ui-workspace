@@ -3,9 +3,10 @@ import { GoSearch } from 'react-icons/go'
 import { useLanguage } from '../../hooks/useLanguage'
 import { SearchBarPropsModel } from '../../lib/types/search'
 
-const SearchBar: React.FC<SearchBarPropsModel> = ({ searchString, handleChange, className }) => {
+const SearchBar: React.FC<SearchBarPropsModel> = ({ searchString, handleChange, className, selectedCategory }) => {
   const { t } = useLanguage()
   const [searchText, setSearchText] = useState(searchString)
+  const [selectCategory, setSelectCategory] = useState(selectedCategory)
 
   const inputChangeHandler = (event: React.BaseSyntheticEvent) => {
     setSearchText(event.target.value)
@@ -29,7 +30,7 @@ const SearchBar: React.FC<SearchBarPropsModel> = ({ searchString, handleChange, 
         type="search"
         placeholder={`${t.search}`}
         onChange={inputChangeHandler}
-        value={searchText}
+        value={`${selectCategory} ; ${searchText}`}
         onKeyDown={event => event.key === 'Enter' && handleSubmit()}
       />
     </div>

@@ -358,7 +358,7 @@ const en: { [key: string]: string } = {
   rateStore: 'Rate the store',
   rateDeliveryExperience: 'Rate the delivery experience',
   addCommentsHere: 'Share your review',
-  writeExperience: 'Why did you like or dislike this service?',
+  writeExperience: 'Please share your experience with this service',
   completed: 'Completed',
   homeHeading: 'LegalEase',
   headingSpan: 'for All',
@@ -454,7 +454,7 @@ const en: { [key: string]: string } = {
   myCases: 'My Cases',
   disputeTextareaError: 'Add some input here',
   caseId: ' Case ID :',
-  casesCatalogLoader: "We're looking for ODR service providers related to your search",
+  casesCatalogLoader: "We're looking for services related to your search",
   caseFormLoaderText: 'while we setup forms to understand your case in detail.',
   caseAssignedLoaderText: 'you are being assigned a case manager'
 }

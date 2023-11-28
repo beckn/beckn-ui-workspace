@@ -57,6 +57,7 @@ const ConsentForm: React.FC<ConsentFormProps> = props => {
       [name]: errors[name] || ''
     }))
   }
+
   useEffect(() => {
     if (localStorage && typeof window !== 'undefined') {
       setProviderName(JSON.parse(localStorage.getItem('providerName') as string))
@@ -140,10 +141,10 @@ const ConsentForm: React.FC<ConsentFormProps> = props => {
               <Text>
                 <span style={{ fontSize: '15px', fontWeight: 600 }}>I, {complainantName},</span> confirm that I’ve read
                 and understand the terms of representation by{''}
-                <span style={{ fontSize: '15px', fontWeight: 600 }}> {providerName}.</span> I agree to be represented in
-                the described legal matter and acknowledge the fee structure, billing terms, and potential costs.I
-                understand the attorney-client privilege and agree to communicate promptly and honestly. I’m aware of
-                the conditions for terminating the relationship and its consequences.
+                <span style={{ fontSize: '15px', fontWeight: 600 }}> Digital Accord Pvt. Ltd. </span> I agree to be
+                represented in the described legal matter and acknowledge the fee structure, billing terms, and
+                potential costs.I understand the attorney-client privilege and agree to communicate promptly and
+                honestly. I’m aware of the conditions for terminating the relationship and its consequences.
               </Text>
             </Flex>
 
@@ -209,7 +210,7 @@ const ConsentForm: React.FC<ConsentFormProps> = props => {
               isDisabled={!isDeclarationChecked}
             />
             <Button
-              buttonText={'Cancle'}
+              buttonText={'Cancel'}
               background={'transparent'}
               color={'rgba(var(--color-primary))'}
               handleOnClick={() => props.onClose}
