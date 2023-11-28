@@ -1,16 +1,4 @@
-import {
-  Box,
-  CardBody,
-  Divider,
-  Flex,
-  Text,
-  Image,
-  Card,
-  useDisclosure,
-  Stack,
-  HStack,
-  StackDivider
-} from '@chakra-ui/react'
+import { Box, CardBody, Divider, Flex, Text, Image, Card, Stack, HStack, StackDivider } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import { useLanguage } from '../hooks/useLanguage'
 import { ResponseModel } from '../lib/types/responseModel'
@@ -117,7 +105,6 @@ const OrderDetails = () => {
   const handleDetails = (url: string) => {
     window.open(url, '_blank')
   }
-  // Please wait! while we update the current status of your case.
 
   if (isLoading) {
     return (
@@ -135,8 +122,6 @@ const OrderDetails = () => {
       </Loader>
     )
   }
-
-  console.log('statusResponse', statusResponse)
 
   const { caseDocs, context, scholarshipApplicationId, scholarshipProviders, createdAt } = statusResponse as any
   const { scholarships, name } = scholarshipProviders[0]
@@ -254,49 +239,38 @@ const OrderDetails = () => {
       <DetailsCard>
         <HStack
           pb="10px"
-          // key={index}
           justifyContent={'space-between'}
         >
           <Text
             fontWeight={600}
             fontSize={'17px'}
           >
-            {t.caseId}
+            {t.caseId}: {scholarshipProviders[0].id}
           </Text>
-          {/* <Flex>
-                {res.message.order.state === 'INITIATED' ? (
-                  <Image
-                    src="/images/inProgress.svg"
-                    alt=""
-                    pr={'6px'}
-                  />
-                ) : (
-                  <Image
-                    src="/images/approvedIcon.svg"
-                    alt=""
-                    pr={'6px'}
-                  />
-                )}
-                <Text
-                  fontWeight={300}
-                  fontSize={'12px'}
-                ></Text>
-              </Flex> */}
           <Flex>
             {statusResponse.scholarshipProviders[0].scholarships[0].scholarshipDetails.state.code ===
             'arbitration-completed' ? (
-              <Image
-                src="/images/inProgress.svg"
-                alt=""
-                pr={'6px'}
-              />
-            ) : (
               <Image
                 src="/images/approvedIcon.svg"
                 alt=""
                 pr={'6px'}
               />
+            ) : (
+              <Image
+                src="/images/inProgress.svg"
+                alt=""
+                pr={'6px'}
+              />
             )}
+            <Text
+              fontWeight={300}
+              fontSize={'12px'}
+            >
+              {statusResponse.scholarshipProviders[0].scholarships[0].scholarshipDetails.state.code ===
+              'arbitration-completed'
+                ? 'Case Closed'
+                : 'In Progress'}
+            </Text>
           </Flex>
         </HStack>
         <Text
