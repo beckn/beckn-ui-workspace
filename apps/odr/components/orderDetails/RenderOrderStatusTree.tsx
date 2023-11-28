@@ -22,12 +22,12 @@ export const orderCardStatusMap = {
 }
 
 export const RenderOrderStatusList = (res: any) => {
-  const order = res.message.order
+  const order = res.scholarshipProviders[0].scholarships[0].scholarshipDetails
   const { t } = useLanguage()
 
-  if (order.state === 'INITIATED') {
+  if (order.state.code === 'arbitration-in-progress') {
     return (
-      <Box>
+      <Box mb={'10px'}>
         <Flex
           alignItems={'center'}
           justifyContent={'space-between'}
@@ -43,17 +43,17 @@ export const RenderOrderStatusList = (res: any) => {
               fontSize={'15px'}
               fontWeight={'600'}
             >
-              {t[`${orderStatusMap['INITIATED']}`]}
+              Case Submitted
             </Text>
           </Flex>
-          {order.fulfillment.tracking && (
+          {/* {true && (
             <Text
               fontSize={'15px'}
               color={'rgba(var(--color-primary))'}
             >
               Track
             </Text>
-          )}
+          )} */}
         </Flex>
         <Flex>
           <Image
@@ -62,9 +62,9 @@ export const RenderOrderStatusList = (res: any) => {
             height={'40px'}
           />
           <Text
+            mt={'5px'}
             paddingLeft={'10px'}
             fontSize={'10px'}
-            pt={'10px'}
           >
             <Text fontSize={'12px'}>Adv. Vishal Singh, 9832445890</Text>
             <Text
@@ -73,22 +73,21 @@ export const RenderOrderStatusList = (res: any) => {
             >
               Provider Link
             </Text>
-            {getOrderPlacementTimeline(res.context.timestamp)}
+            {getOrderPlacementTimeline(order.state.updatedAt)}
           </Text>
         </Flex>
       </Box>
     )
   }
-  if (order.state === 'ACKNOWLEDGED') {
+  if (order.state.code === 'partial-payment') {
     return (
       <>
-        <Box>
+        <Box mb={'10px'}>
           <Flex
             alignItems={'center'}
             justifyContent={'space-between'}
           >
             <Flex alignItems={'center'}>
-              {/* eslint-disable-next-line jsx-a11y/alt-text */}
               <Image
                 width={'12px'}
                 height={'13px'}
@@ -99,23 +98,37 @@ export const RenderOrderStatusList = (res: any) => {
                 fontSize={'15px'}
                 fontWeight={'600'}
               >
-                {t[`${orderStatusMap['INITIATED']}`]}
+                Case Submitted
               </Text>
             </Flex>
+            {/* {true && (
+            <Text
+              fontSize={'15px'}
+              color={'rgba(var(--color-primary))'}
+            >
+              Track
+            </Text>
+          )} */}
           </Flex>
           <Flex>
-            {/* eslint-disable-next-line jsx-a11y/alt-text */}
             <Image
               src={lineBlack}
               width={'12px'}
               height={'40px'}
             />
             <Text
+              marginTop={'5px'}
               paddingLeft={'10px'}
               fontSize={'10px'}
-              pt={'10px'}
             >
-              {getOrderPlacementTimeline(res.context.timestamp)}
+              <Text fontSize={'12px'}>Adv. Vishal Singh, 9832445890</Text>
+              <Text
+                fontSize={'12px'}
+                color={'#7B2A2F'}
+              >
+                Provider Link
+              </Text>
+              {getOrderPlacementTimeline(order.state.updatedAt)}
             </Text>
           </Flex>
         </Box>
@@ -136,7 +149,7 @@ export const RenderOrderStatusList = (res: any) => {
                 fontSize={'15px'}
                 fontWeight={'600'}
               >
-                {t[`${orderStatusMap['ACKNOWLEDGED']}`]}
+                Case in Progress
               </Text>
             </Flex>
           </Flex>
@@ -150,25 +163,23 @@ export const RenderOrderStatusList = (res: any) => {
             <Text
               paddingLeft={'10px'}
               fontSize={'10px'}
-              pt={'10px'}
             >
-              {getOrderPlacementTimeline(res.context.timestamp)}
+              {getOrderPlacementTimeline(order.state.updatedAt)}
             </Text>
           </Flex>
         </Box>
       </>
     )
   }
-  if (order.state === 'PACKED') {
+  if (order.state.code === 'arbitration-completed') {
     return (
       <>
-        <Box>
+        <Box mb={'10px'}>
           <Flex
             alignItems={'center'}
             justifyContent={'space-between'}
           >
             <Flex alignItems={'center'}>
-              {/* eslint-disable-next-line jsx-a11y/alt-text */}
               <Image
                 width={'12px'}
                 height={'13px'}
@@ -179,23 +190,29 @@ export const RenderOrderStatusList = (res: any) => {
                 fontSize={'15px'}
                 fontWeight={'600'}
               >
-                {t[`${orderStatusMap['INITIATED']}`]}
+                Case Submitted
               </Text>
             </Flex>
           </Flex>
           <Flex>
-            {/* eslint-disable-next-line jsx-a11y/alt-text */}
             <Image
               src={lineBlack}
               width={'12px'}
               height={'40px'}
             />
             <Text
+              mt={'5px'}
               paddingLeft={'10px'}
               fontSize={'10px'}
-              pt={'10px'}
             >
-              {getOrderPlacementTimeline(res.context.timestamp)}
+              <Text fontSize={'12px'}>Adv. Vishal Singh, 9832445890</Text>
+              <Text
+                fontSize={'12px'}
+                color={'#7B2A2F'}
+              >
+                Provider Link
+              </Text>
+              {getOrderPlacementTimeline(order.state.updatedAt)}
             </Text>
           </Flex>
         </Box>
@@ -216,7 +233,7 @@ export const RenderOrderStatusList = (res: any) => {
                 fontSize={'15px'}
                 fontWeight={'600'}
               >
-                {t[`${orderStatusMap['ACKNOWLEDGED']}`]}
+                Case in Progress
               </Text>
             </Flex>
           </Flex>
@@ -230,9 +247,8 @@ export const RenderOrderStatusList = (res: any) => {
             <Text
               paddingLeft={'10px'}
               fontSize={'10px'}
-              pt={'10px'}
             >
-              {getOrderPlacementTimeline(res.context.timestamp)}
+              {getOrderPlacementTimeline(order.state.updatedAt)}
             </Text>
           </Flex>
         </Box>
@@ -253,56 +269,7 @@ export const RenderOrderStatusList = (res: any) => {
                 fontSize={'15px'}
                 fontWeight={'600'}
               >
-                {t[`${orderStatusMap['PACKED']}`]}
-              </Text>
-            </Flex>
-          </Flex>
-          <Flex>
-            {/* eslint-disable-next-line jsx-a11y/alt-text */}
-            <Image
-              src={lineBlack}
-              width={'12px'}
-              height={'40px'}
-            />
-            <Text
-              fontSize={'12px'}
-              color={'#7B2A2F'}
-            >
-              Make Payment
-            </Text>
-            <Text
-              paddingLeft={'10px'}
-              fontSize={'10px'}
-              pt={'10px'}
-            >
-              {getOrderPlacementTimeline(res.context.timestamp)}
-            </Text>
-          </Flex>
-        </Box>
-      </>
-    )
-  }
-  if (order.state === 'SHIPPED') {
-    return (
-      <>
-        <Box>
-          <Flex
-            alignItems={'center'}
-            justifyContent={'space-between'}
-          >
-            <Flex alignItems={'center'}>
-              {/* eslint-disable-next-line jsx-a11y/alt-text */}
-              <Image
-                width={'12px'}
-                height={'13px'}
-                src={TrackIcon}
-              />
-              <Text
-                paddingLeft={'10px'}
-                fontSize={'15px'}
-                fontWeight={'600'}
-              >
-                {t[`${orderStatusMap['INITIATED']}`]}
+                Dispute Resolved
               </Text>
             </Flex>
           </Flex>
@@ -316,311 +283,8 @@ export const RenderOrderStatusList = (res: any) => {
             <Text
               paddingLeft={'10px'}
               fontSize={'10px'}
-              pt={'10px'}
             >
-              {getOrderPlacementTimeline(res.context.timestamp)}
-            </Text>
-          </Flex>
-        </Box>
-        <Box>
-          <Flex
-            alignItems={'center'}
-            justifyContent={'space-between'}
-          >
-            <Flex alignItems={'center'}>
-              {/* eslint-disable-next-line jsx-a11y/alt-text */}
-              <Image
-                width={'12px'}
-                height={'13px'}
-                src={TrackIcon}
-              />
-              <Text
-                paddingLeft={'10px'}
-                fontSize={'15px'}
-                fontWeight={'600'}
-              >
-                {t[`${orderStatusMap['ACKNOWLEDGED']}`]}
-              </Text>
-            </Flex>
-          </Flex>
-          <Flex>
-            {/* eslint-disable-next-line jsx-a11y/alt-text */}
-            <Image
-              src={lineBlack}
-              width={'12px'}
-              height={'40px'}
-            />
-            <Text
-              paddingLeft={'10px'}
-              fontSize={'10px'}
-              pt={'10px'}
-            >
-              {getOrderPlacementTimeline(res.context.timestamp)}
-            </Text>
-          </Flex>
-        </Box>
-        <Box>
-          <Flex
-            alignItems={'center'}
-            justifyContent={'space-between'}
-          >
-            <Flex alignItems={'center'}>
-              {/* eslint-disable-next-line jsx-a11y/alt-text */}
-              <Image
-                width={'12px'}
-                height={'13px'}
-                src={TrackIcon}
-              />
-              <Text
-                paddingLeft={'10px'}
-                fontSize={'15px'}
-                fontWeight={'600'}
-              >
-                {t[`${orderStatusMap['PACKED']}`]}
-              </Text>
-            </Flex>
-          </Flex>
-          <Flex>
-            {/* eslint-disable-next-line jsx-a11y/alt-text */}
-            <Image
-              src={lineBlack}
-              width={'12px'}
-              height={'40px'}
-            />
-            <Text
-              paddingLeft={'10px'}
-              fontSize={'10px'}
-              pt={'10px'}
-            >
-              {getOrderPlacementTimeline(res.context.timestamp)}
-            </Text>
-          </Flex>
-        </Box>
-        <Box>
-          <Flex
-            alignItems={'center'}
-            justifyContent={'space-between'}
-          >
-            <Flex alignItems={'center'}>
-              {/* eslint-disable-next-line jsx-a11y/alt-text */}
-              <Image
-                width={'12px'}
-                height={'13px'}
-                src={TrackIcon}
-              />
-              <Text
-                paddingLeft={'10px'}
-                fontSize={'15px'}
-                fontWeight={'600'}
-              >
-                {t[`${orderStatusMap['SHIPPED']}`]}
-              </Text>
-            </Flex>
-          </Flex>
-          <Flex>
-            {/* eslint-disable-next-line jsx-a11y/alt-text */}
-            <Image
-              src={lineBlack}
-              width={'12px'}
-              height={'40px'}
-            />
-            <Text
-              paddingLeft={'10px'}
-              fontSize={'10px'}
-              pt={'10px'}
-            >
-              {getOrderPlacementTimeline(res.context.timestamp)}
-            </Text>
-          </Flex>
-        </Box>
-      </>
-    )
-  }
-  if (order.state === 'DELIVERED') {
-    return (
-      <>
-        <Box>
-          <Flex
-            alignItems={'center'}
-            justifyContent={'space-between'}
-          >
-            <Flex alignItems={'center'}>
-              {/* eslint-disable-next-line jsx-a11y/alt-text */}
-              <Image
-                width={'12px'}
-                height={'13px'}
-                src={TrackIcon}
-              />
-              <Text
-                paddingLeft={'10px'}
-                fontSize={'15px'}
-                fontWeight={'600'}
-              >
-                {t[`${orderStatusMap['INITIATED']}`]}
-              </Text>
-            </Flex>
-          </Flex>
-          <Flex>
-            {/* eslint-disable-next-line jsx-a11y/alt-text */}
-            <Image
-              src={lineBlack}
-              width={'12px'}
-              height={'40px'}
-            />
-            <Text
-              paddingLeft={'10px'}
-              fontSize={'10px'}
-              pt={'10px'}
-            >
-              {getOrderPlacementTimeline(res.context.timestamp)}
-            </Text>
-          </Flex>
-        </Box>
-        <Box>
-          <Flex
-            alignItems={'center'}
-            justifyContent={'space-between'}
-          >
-            <Flex alignItems={'center'}>
-              {/* eslint-disable-next-line jsx-a11y/alt-text */}
-              <Image
-                width={'12px'}
-                height={'13px'}
-                src={TrackIcon}
-              />
-              <Text
-                paddingLeft={'10px'}
-                fontSize={'15px'}
-                fontWeight={'600'}
-              >
-                {t[`${orderStatusMap['ACKNOWLEDGED']}`]}
-              </Text>
-            </Flex>
-          </Flex>
-          <Flex>
-            {/* eslint-disable-next-line jsx-a11y/alt-text */}
-            <Image
-              src={lineBlack}
-              width={'12px'}
-              height={'40px'}
-            />
-            <Text
-              paddingLeft={'10px'}
-              fontSize={'10px'}
-              pt={'10px'}
-            >
-              {getOrderPlacementTimeline(res.context.timestamp)}
-            </Text>
-          </Flex>
-        </Box>
-        <Box>
-          <Flex
-            alignItems={'center'}
-            justifyContent={'space-between'}
-          >
-            <Flex alignItems={'center'}>
-              {/* eslint-disable-next-line jsx-a11y/alt-text */}
-              <Image
-                width={'12px'}
-                height={'13px'}
-                src={TrackIcon}
-              />
-              <Text
-                paddingLeft={'10px'}
-                fontSize={'15px'}
-                fontWeight={'600'}
-              >
-                {t[`${orderStatusMap['PACKED']}`]}
-              </Text>
-            </Flex>
-          </Flex>
-          <Flex>
-            {/* eslint-disable-next-line jsx-a11y/alt-text */}
-            <Image
-              src={lineBlack}
-              width={'12px'}
-              height={'40px'}
-            />
-            <Text
-              paddingLeft={'10px'}
-              fontSize={'10px'}
-              pt={'10px'}
-            >
-              {getOrderPlacementTimeline(res.context.timestamp)}
-            </Text>
-          </Flex>
-        </Box>
-        <Box>
-          <Flex
-            alignItems={'center'}
-            justifyContent={'space-between'}
-          >
-            <Flex alignItems={'center'}>
-              {/* eslint-disable-next-line jsx-a11y/alt-text */}
-              <Image
-                width={'12px'}
-                height={'13px'}
-                src={TrackIcon}
-              />
-              <Text
-                paddingLeft={'10px'}
-                fontSize={'15px'}
-                fontWeight={'600'}
-              >
-                {t[`${orderStatusMap['SHIPPED']}`]}
-              </Text>
-            </Flex>
-          </Flex>
-          <Flex>
-            {/* eslint-disable-next-line jsx-a11y/alt-text */}
-            <Image
-              src={lineBlack}
-              width={'12px'}
-              height={'40px'}
-            />
-            <Text
-              paddingLeft={'10px'}
-              fontSize={'10px'}
-              pt={'10px'}
-            >
-              {getOrderPlacementTimeline(res.context.timestamp)}
-            </Text>
-          </Flex>
-        </Box>
-        <Box>
-          <Flex
-            alignItems={'center'}
-            justifyContent={'space-between'}
-          >
-            <Flex alignItems={'center'}>
-              {/* eslint-disable-next-line jsx-a11y/alt-text */}
-              <Image
-                width={'12px'}
-                height={'13px'}
-                src={TrackIcon}
-              />
-              <Text
-                paddingLeft={'10px'}
-                fontSize={'15px'}
-                fontWeight={'600'}
-              >
-                {t[`${orderStatusMap['DELIVERED']}`]}
-              </Text>
-            </Flex>
-          </Flex>
-          <Flex>
-            {/* eslint-disable-next-line jsx-a11y/alt-text */}
-            <Image
-              src={lineBlack}
-              width={'12px'}
-              height={'40px'}
-            />
-            <Text
-              paddingLeft={'10px'}
-              fontSize={'10px'}
-              pt={'10px'}
-            >
-              {getOrderPlacementTimeline(res.context.timestamp)}
+              {getOrderPlacementTimeline(order.state.updatedAt)}
             </Text>
           </Flex>
         </Box>

@@ -1,6 +1,6 @@
 import { ResponseModel } from '../lib/types/responseModel'
 
-export const getPayloadForConfirmRequest = (initResponse: ResponseModel, transactionId: ResponseModel) => {
+export const getPayloadForConfirmRequest = (initResponse: ResponseModel, transactionId: any) => {
   const payload: any = {}
 
   payload.context = {

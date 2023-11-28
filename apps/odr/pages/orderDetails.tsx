@@ -12,27 +12,24 @@ import {
   StackDivider
 } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
-import Accordion from '../components/accordion/Accordion'
 import { useLanguage } from '../hooks/useLanguage'
 import { ResponseModel } from '../lib/types/responseModel'
 import { getOrderPlacementTimeline } from '../utilities/confirm-utils'
-import { getDataPerBpp } from '../utilities/orderDetails-utils'
 import TrackIcon from '../public/images/TrackIcon.svg'
-import { useSelector } from 'react-redux'
-import { TransactionIdRootState } from '../lib/types/cart'
 import useRequest from '../hooks/useRequest'
 import { useRouter } from 'next/router'
 import DetailsCard from '../components/detailsCard/DetailsCard'
 import attached from '../public/images/attached.svg'
 import ShippingOrBillingDetails from '../components/detailsCard/ShippingOrBillingDetails'
 import { RenderOrderStatusList } from '../components/orderDetails/RenderOrderStatusTree'
+import Loader from '../components/loader/Loader'
+import Accordion from '../components/accordion/Accordion'
 
 const OrderDetails = () => {
-  const [allOrderDelivered, setAllOrderDelivered] = useState(true)
+  const [allOrderDelivered, setAllOrderDelivered] = useState(false)
   const [confirmData, setConfirmData] = useState<ResponseModel[]>([])
-  const [statusResponse, setStatusResponse] = useState([])
-  const { isOpen, onOpen, onClose } = useDisclosure()
-  const transactionId = useSelector((state: { transactionId: TransactionIdRootState }) => state.transactionId)
+  const [statusResponse, setStatusResponse] = useState<any>(null)
+  const [isLoading, setIsLoading] = useState<boolean>(true)
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
   const statusRequest = useRequest()
   const trackRequest = useRequest()
@@ -42,44 +39,64 @@ const OrderDetails = () => {
   const { t } = useLanguage()
 
   useEffect(() => {
-    const fetchStatusData = async () => {
-      if (localStorage) {
-        const stringifiedConfirmData = localStorage.getItem('confirmData')
-        if (stringifiedConfirmData) {
-          try {
-            const parsedConfirmedData = JSON.parse(stringifiedConfirmData)
-            setConfirmData(parsedConfirmedData)
+    let intervalId: any
+    let payloadIndex = 0
+
+    if (localStorage) {
+      const stringifiedConfirmData = localStorage.getItem('confirmData')
+      if (stringifiedConfirmData) {
+        try {
+          const parsedConfirmedData = JSON.parse(stringifiedConfirmData)
+          setConfirmData(parsedConfirmedData)
+
+          const payloads = [
+            {
+              key: 'in-progress'
+            },
+            {
+              key: 'in-progress-payment-after-hearing'
+            },
+            {
+              key: 'completed'
+            }
+          ]
+
+          intervalId = setInterval(() => {
+            const currentPayload = payloads[payloadIndex]
 
             const payloadForStatusRequest = {
               scholarshipApplicationId: parsedConfirmedData?.scholarshipApplicationId,
               context: {
                 transactionId: parsedConfirmedData?.context?.transactionId,
                 bppId: parsedConfirmedData.context.bppId,
-                key: 'completed',
+                key: currentPayload.key,
                 bppUri: parsedConfirmedData?.context?.bppUri
               }
             }
 
-            const intervalId = setInterval(() => {
-              statusRequest.fetchData(`${apiUrl}/status`, 'POST', payloadForStatusRequest)
-            }, 2000)
+            statusRequest.fetchData(`${apiUrl}/status`, 'POST', payloadForStatusRequest)
 
-            return () => {
+            payloadIndex += 1
+
+            if (payloadIndex === payloads.length) {
               clearInterval(intervalId)
             }
-          } catch (error) {
-            console.error('Error parsing confirmData:', error)
-          }
+          }, 5000)
+        } catch (error) {
+          console.error('Error parsing confirmData:', error)
         }
       }
     }
 
-    fetchStatusData()
+    return () => {
+      clearInterval(intervalId)
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
     if (statusRequest.data) {
+      setIsLoading(false)
       setStatusResponse(statusRequest.data as any)
       // if (statusRequest.data.every(res => res.scholarshipProvider.scholarship[].state === '')) {
       //   setAllOrderDelivered(true)
@@ -87,13 +104,44 @@ const OrderDetails = () => {
     }
   }, [statusRequest.data])
 
-  // if (!confirmData.length) {
-  //   return <></>
-  // }
+  useEffect(() => {
+    if (statusResponse) {
+      if (
+        statusResponse.scholarshipProviders[0].scholarships[0].scholarshipDetails.state.code === 'arbitration-completed'
+      ) {
+        setAllOrderDelivered(true)
+      }
+    }
+  }, [statusResponse])
 
   const handleDetails = (url: string) => {
     window.open(url, '_blank')
   }
+  // Please wait! while we update the current status of your case.
+
+  if (isLoading) {
+    return (
+      <Loader>
+        <Box
+          mt={'13px'}
+          display={'flex'}
+          flexDir={'column'}
+          alignItems={'center'}
+        >
+          <Text fontWeight={700}>Please wait!</Text>
+          <Text>while we update the current</Text>
+          <Text>status of your case.</Text>
+        </Box>
+      </Loader>
+    )
+  }
+
+  console.log('statusResponse', statusResponse)
+
+  const { caseDocs, context, scholarshipApplicationId, scholarshipProviders, createdAt } = statusResponse as any
+  const { scholarships, name } = scholarshipProviders[0]
+
+  console.log('scholarships', scholarships)
 
   return (
     <Box
@@ -164,7 +212,7 @@ const OrderDetails = () => {
               fontSize={'15px'}
               fontWeight={400}
             >
-              {confirmData?.scholarshipProvider?.scholarships[0]?.name}
+              {name}
             </Text>
             <Box>
               <Text
@@ -173,14 +221,15 @@ const OrderDetails = () => {
                 as={'span'}
                 pr={'2px'}
               >
-                {confirmData?.scholarshipProvider?.scholarships[0]?.categories[0]?.descriptor?.name}
+                {/* {scholarships[0]?.categories[0]?.descriptor?.name} */}
+                {scholarships[0].name}, {scholarships[0].categories[0].descriptor.name}
               </Text>
             </Box>
             <Text
               fontSize={'15px'}
               fontWeight={400}
             >
-              Case Id: {confirmData?.scholarshipProvider?.scholarships[0]?.categories[0]?.id}
+              Case ID: {scholarshipProviders[0].id}
             </Text>
             <HStack
               justifyContent={'space-between'}
@@ -196,27 +245,25 @@ const OrderDetails = () => {
                 fontSize={'15px'}
                 fontWeight={400}
               >
-                {getOrderPlacementTimeline(confirmData?.created_at)}
+                {getOrderPlacementTimeline(createdAt)}
               </Text>
             </HStack>
           </Flex>
         </Box>
       </DetailsCard>
       <DetailsCard>
-        {statusResponse?.map((res: any, index: number) => (
-          <>
-            <HStack
-              pb="10px"
-              key={index}
-              justifyContent={'space-between'}
-            >
-              <Text
-                fontWeight={600}
-                fontSize={'17px'}
-              >
-                {t.caseId}
-              </Text>
-              <Flex>
+        <HStack
+          pb="10px"
+          // key={index}
+          justifyContent={'space-between'}
+        >
+          <Text
+            fontWeight={600}
+            fontSize={'17px'}
+          >
+            {t.caseId}
+          </Text>
+          {/* <Flex>
                 {res.message.order.state === 'INITIATED' ? (
                   <Image
                     src="/images/inProgress.svg"
@@ -233,37 +280,47 @@ const OrderDetails = () => {
                 <Text
                   fontWeight={300}
                   fontSize={'12px'}
-                >
-                  {/* {res.message.order.state === 'INITIATED' ? 'In Progress' : 'Case Closed'} */}
-                </Text>
-              </Flex>
-            </HStack>
-            <Text
-              textOverflow={'ellipsis'}
-              overflow={'hidden'}
-              whiteSpace={'nowrap'}
-              fontSize={'12px'}
-              fontWeight={'400'}
-            >
-              {/* {res.message.order.items[0].descriptor.name} */}
-            </Text>
-            <Divider
-              mt={'15px'}
-              mb={'15px'}
-            />
-            <CardBody pt={'unset'}>{RenderOrderStatusList(res)}</CardBody>
-          </>
-        ))}
+                ></Text>
+              </Flex> */}
+          <Flex>
+            {statusResponse.scholarshipProviders[0].scholarships[0].scholarshipDetails.state.code ===
+            'arbitration-completed' ? (
+              <Image
+                src="/images/inProgress.svg"
+                alt=""
+                pr={'6px'}
+              />
+            ) : (
+              <Image
+                src="/images/approvedIcon.svg"
+                alt=""
+                pr={'6px'}
+              />
+            )}
+          </Flex>
+        </HStack>
+        <Text
+          textOverflow={'ellipsis'}
+          overflow={'hidden'}
+          whiteSpace={'nowrap'}
+          fontSize={'12px'}
+          fontWeight={'400'}
+        ></Text>
+        <Divider
+          mt={'15px'}
+          mb={'15px'}
+        />
+        <CardBody pt={'unset'}>{RenderOrderStatusList(statusResponse)}</CardBody>
       </DetailsCard>
       <ShippingOrBillingDetails
         accordionHeader={'Complainant & Billing Details'}
-        name={confirmData?.billingDetails?.name}
-        location={confirmData?.billingDetails?.address}
-        number={confirmData?.billingDetails?.mobileNumber}
+        name={statusResponse?.billingDetails.name}
+        location={statusResponse?.billingDetails.address}
+        number={7000507141}
       />
 
       {statusResponse?.caseDocs?.length
-        ? statusResponse?.caseDocs?.map((item, i) => (
+        ? statusResponse?.caseDocs?.map((item: any, i: any) => (
             <Accordion
               accordionHeader={item.descriptor.name}
               key={i}

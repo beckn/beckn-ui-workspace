@@ -429,7 +429,7 @@ const en: { [key: string]: string } = {
   createAccount: 'Create Account',
   overview: 'Overview',
   lodgedOn: 'Lodged on',
-  fetchingScholarships: 'Fetching scholarships',
+  fetchingCases: 'Fetching Cases',
   noCourse: 'No Course!',
   noCouseSubText: "Seems like you haven't selected a course!",
   searchCourses: 'Search Courses',

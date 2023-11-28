@@ -325,7 +325,7 @@ const ApplyScholarship = () => {
                     }
                   },
                   category: {
-                    set: [2]
+                    set: [4]
                   }
                 }
                 const fulfillOrderRequest = await axios.post(`${strapiUrl}/orders`, ordersPayload, axiosConfig)

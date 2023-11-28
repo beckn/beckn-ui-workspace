@@ -8,6 +8,7 @@ interface MyCasesProps {
   id: string
   myLearingStatus: string
   handleViewCaseDetails: () => void
+  providerName: string
 }
 
 const MyCases: React.FC<MyCasesProps> = props => {
@@ -33,7 +34,7 @@ const MyCases: React.FC<MyCasesProps> = props => {
             fontWeight={'400'}
             pb={'10px'}
           >
-            Harvey Spectre Law Firm
+            {props.providerName}
           </Text>
 
           <Text pr={'10px'}>
