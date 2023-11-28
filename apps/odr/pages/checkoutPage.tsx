@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import axios from 'axios'
+import { useDispatch } from 'react-redux'
 import { Box, Flex, Text } from '@chakra-ui/react'
 import DetailsCard from '../components/detailsCard/DetailsCard'
 import ButtonComp from '../components/button/Button'
 import { useLanguage } from '../hooks/useLanguage'
 import ShippingOrBillingDetails from '../components/detailsCard/ShippingOrBillingDetails'
 import AddShippingButton from '../components/detailsCard/AddShippingButton'
-import { CartItemForRequest, DataPerBpp, ICartRootState, TransactionIdRootState } from '../lib/types/cart'
-import { getCartItemsPerBpp } from '../utilities/cart-utils'
 import useRequest from '../hooks/useRequest'
 import { responseDataActions } from '../store/responseData-slice'
 import { areShippingAndBillingDetailsSame, getPayloadForInitRequest } from '../utilities/checkout-utils'
@@ -18,6 +17,7 @@ import AddDisputeButton from '../components/detailsCard/AddDisputeButton'
 import DisputeFillingDetails from '../components/detailsCard/DisputeFillingDetails'
 import AddConsentButton from '../components/detailsCard/AddConsentButton'
 import ConsentFillingDetails from '../components/detailsCard/ConsentFillingDetails'
+import { ParsedScholarshipData } from '../components/productList/ProductList.utils'
 
 export type ShippingFormData = {
   name: string
@@ -35,6 +35,7 @@ export type ConsentFormData = {
   name: string
   address: string
 }
+
 const CheckoutPage = () => {
   const [billingFormData, setBillingFormData] = useState<ShippingFormData>({
     name: 'Santosh Kumar',
@@ -59,9 +60,7 @@ const CheckoutPage = () => {
     name: '',
     address: ''
   })
-  const [isBillingAddressSameAsShippingAddress, setIsBillingAddressSameAsShippingAddress] = useState(true)
 
-  const { data, loading, error, fetchData } = useRequest()
   const [isDisabled, setIsDisabled] = useState<boolean>(false)
   const [isDisputeButtonDisabled, setIsDisputeButtonDisabaled] = useState<boolean>(false)
   const [filledDetails, setFilledDetails] = useState({
@@ -70,19 +69,15 @@ const CheckoutPage = () => {
     dispute: false,
     consent: false
   })
-  const [selectedData, setSelectedData] = useState([])
-
-  const initResponse = useSelector((state: any) => state.initResponse.initResponse)
+  const [selectedItem, setSelectedItem] = useState<ParsedScholarshipData | null>(null)
 
   const router = useRouter()
   const initRequest = useRequest()
-  const selectRequest = useRequest()
   const dispatch = useDispatch()
-  const { t, locale } = useLanguage()
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL
-  const transactionId = useSelector((state: { transactionId: TransactionIdRootState }) => state.transactionId)
-  const [providerId, setProviderId] = useState(router.query?.providerId || '')
-  const [productId, setProductId] = useState(router.query?.productId || '')
+  const { t } = useLanguage()
+
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL as string
+  const [quoteResponse, setQuoteResponse] = useState<any>(null)
   const [loadingSelectData, setLoadingSelectData] = useState(true)
 
   useEffect(() => {
@@ -102,12 +97,32 @@ const CheckoutPage = () => {
   }, [])
 
   useEffect(() => {
-    if (data) {
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('providerName', JSON.stringify(data?.scholarshipProviders[0].name))
-      }
+    if (localStorage && localStorage.getItem('selectedItem')) {
+      const item: ParsedScholarshipData = JSON.parse(localStorage.getItem('selectedItem') as string)
+      setSelectedItem(item)
     }
-  }, [data])
+  }, [])
+
+  useEffect(() => {
+    if (selectedItem) {
+      const { transactionId, bppId, bppUri, id, providerId } = selectedItem
+      axios
+        .post(`${apiUrl}/select`, {
+          scholarshipProviderId: providerId,
+          scholarshipId: id,
+          context: {
+            transactionId,
+            bppId,
+            bppUri
+          }
+        })
+        .then(res => {
+          setQuoteResponse(res.data)
+          setLoadingSelectData(false)
+        })
+        .catch(err => console.error(err))
+    }
+  }, [selectedItem])
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -139,12 +154,6 @@ const CheckoutPage = () => {
   }, [initRequest.data])
 
   useEffect(() => {
-    if (selectRequest.data && typeof window !== 'undefined') {
-      localStorage.setItem('selectResult', JSON.stringify(selectRequest.data))
-    }
-  }, [selectRequest.data])
-
-  useEffect(() => {
     const shippingAddressComplete = Object.values(formData).every(value => value.length > 0)
     if (shippingAddressComplete && typeof window !== 'undefined') {
       localStorage.setItem('shippingAdress', JSON.stringify(formData))
@@ -156,9 +165,7 @@ const CheckoutPage = () => {
     if (isBillingAddressComplete && typeof window !== 'undefined') {
       localStorage.setItem('billingAddress', JSON.stringify(billingFormData))
     }
-    setIsBillingAddressSameAsShippingAddress(
-      areShippingAndBillingDetailsSame(isBillingAddressComplete, formData, billingFormData)
-    )
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [billingFormData])
 
@@ -168,6 +175,7 @@ const CheckoutPage = () => {
       localStorage.setItem('disputeAdress', JSON.stringify(disputeformData))
     }
   }, [disputeformData])
+
   useEffect(() => {
     const isConsentAddressComplete = Object.values(consentformData).every(value => value.length > 0)
     if (isConsentAddressComplete && typeof window !== 'undefined') {
@@ -175,49 +183,47 @@ const CheckoutPage = () => {
     }
   }, [consentformData])
 
-  const formSubmitHandler = (type: string) => {
-    if (!filledDetails.complainant && type === 'complainant') {
-      setFilledDetails(prevDetails => ({ ...prevDetails, complainant: true }))
-    } else if (!filledDetails.respondent && type === 'respondent') {
-      setFilledDetails(prevDetails => ({ ...prevDetails, respondent: true }))
-    } else if (!filledDetails.dispute && type === 'dispute') {
-      setFilledDetails(prevDetails => ({ ...prevDetails, dispute: true }))
-    } else if (!filledDetails.consent && type === 'consent') {
-      setFilledDetails(prevDetails => ({ ...prevDetails, consent: true }))
-      console.log(filledDetails)
+  const formSubmitHandler = (type: string, quoteResponse: any) => {
+    const setFilledDetailsAndUpdate = (field: string) => {
+      setFilledDetails(prevDetails => ({ ...prevDetails, [field]: true }))
     }
 
-    if (formData) {
-      const payLoadForInitRequest = getPayloadForInitRequest(data, formData, billingFormData)
-      initRequest.fetchData(`${apiUrl}/init`, 'POST', payLoadForInitRequest)
+    switch (type) {
+      case 'complainant':
+      case 'respondent':
+        const commonPayload = getPayloadForInitRequest(quoteResponse, formData, billingFormData)
+        setFilledDetailsAndUpdate(type)
+        if (formData) {
+          const payLoadForInitRequest = commonPayload
+
+          return initRequest.fetchData(`${apiUrl}/init`, 'POST', payLoadForInitRequest)
+        }
+        break
+
+      case 'dispute':
+      case 'consent':
+        setFilledDetailsAndUpdate(type)
+        const formField = type === 'dispute' ? disputeformData : consentformData
+
+        return axios.post('https://bpp-adapter.becknprotocol.io', {
+          context: {
+            action: 'xInput'
+          },
+          message: {
+            disputeDetails: {
+              name: formField.name,
+              area: 600098
+            },
+            formId: `${type}-form`,
+            itemName: selectedItem?.name,
+            providerName: selectedItem?.providerName
+          }
+        })
+
+      default:
+        break
     }
   }
-
-  const fetchSelectData = () => {
-    const selectPayload = {
-      scholarshipProviderId: providerId,
-      scholarshipId: productId,
-      context: {
-        transactionId: transactionId.transactionId,
-        bppId: 'beckn-sandbox-bpp.becknprotocol.io',
-        bppUri: 'https://sandbox-bpp-network.becknprotocol.io'
-      }
-    }
-
-    selectRequest
-      .fetchData(`${apiUrl}/select`, 'POST', selectPayload)
-      .then(() => {
-        setLoadingSelectData(false)
-      })
-      .catch(error => {
-        console.error('Error fetching select data:', error)
-        setLoadingSelectData(false)
-      })
-  }
-
-  useEffect(() => {
-    fetchSelectData()
-  }, [])
 
   if (initRequest.loading || loadingSelectData) {
     return (
@@ -261,7 +267,7 @@ const CheckoutPage = () => {
       maxH={'calc(100vh - 100px)'}
       overflowY="scroll"
     >
-      {!isInitResultPresent() && !filledDetails.complainant ? (
+      {!filledDetails.complainant ? (
         <Box>
           <Flex
             pb={'10px'}
@@ -277,7 +283,7 @@ const CheckoutPage = () => {
               billingFormData={billingFormData}
               setBillingFormData={setBillingFormData}
               addBillingdetailsBtnText={t.addCompalintDetailsBtn}
-              billingFormSubmitHandler={() => formSubmitHandler('complainant')}
+              billingFormSubmitHandler={() => formSubmitHandler('complainant', quoteResponse)}
             />
           </DetailsCard>
         </Box>
@@ -295,7 +301,7 @@ const CheckoutPage = () => {
               billingFormData={billingFormData}
               setBillingFormData={setBillingFormData}
               addBillingdetailsBtnText={t.changeText}
-              billingFormSubmitHandler={() => formSubmitHandler('complainant')}
+              billingFormSubmitHandler={() => formSubmitHandler('complainant', quoteResponse)}
             />
           </Flex>
           <ShippingOrBillingDetails
@@ -306,7 +312,7 @@ const CheckoutPage = () => {
           />
         </Box>
       )}
-      {!isInitResultPresent() && !filledDetails.respondent ? (
+      {!filledDetails.respondent ? (
         <Box>
           <Flex
             pb={'10px'}
@@ -321,7 +327,7 @@ const CheckoutPage = () => {
               formData={formData}
               setFormData={setFormData}
               addShippingdetailsBtnText={t.addRespondentDetaislBtn}
-              formSubmitHandler={() => formSubmitHandler('respondent')}
+              formSubmitHandler={() => formSubmitHandler('respondent', quoteResponse)}
             />
           </DetailsCard>
         </Box>
@@ -338,7 +344,7 @@ const CheckoutPage = () => {
               formData={formData}
               setFormData={setFormData}
               addShippingdetailsBtnText={t.changeText}
-              formSubmitHandler={() => formSubmitHandler('respondent')}
+              formSubmitHandler={() => formSubmitHandler('respondent', quoteResponse)}
             />
           </Flex>
 
@@ -350,7 +356,7 @@ const CheckoutPage = () => {
           />
         </Box>
       )}
-      {!isInitResultPresent() && !filledDetails.dispute ? (
+      {!filledDetails.dispute ? (
         <Box>
           <Flex
             pb={'10px'}
@@ -367,7 +373,7 @@ const CheckoutPage = () => {
               formData={disputeformData}
               setFormData={setDisputeFormData}
               addShippingdetailsBtnText={t.addDisputeDetailsBtn}
-              formSubmitHandler={() => formSubmitHandler('dispute')}
+              formSubmitHandler={() => formSubmitHandler('dispute', quoteResponse)}
             />
           </DetailsCard>
         </Box>
@@ -386,14 +392,14 @@ const CheckoutPage = () => {
               formData={disputeformData}
               setFormData={setDisputeFormData}
               addShippingdetailsBtnText={t.changeText}
-              formSubmitHandler={() => formSubmitHandler('dispute')}
+              formSubmitHandler={() => formSubmitHandler('dispute', quoteResponse)}
             />
           </Flex>
           <DisputeFillingDetails accordionHeader={t.disputeDetails} />
         </Box>
       )}
 
-      {!isInitResultPresent() && !filledDetails.consent ? (
+      {!filledDetails.consent ? (
         <Box>
           <Flex
             pb={'10px'}
@@ -409,7 +415,7 @@ const CheckoutPage = () => {
               formData={consentformData}
               setFormData={setConsentFormData}
               addShippingdetailsBtnText={t.fillConsentForm}
-              formSubmitHandler={() => formSubmitHandler('consent')}
+              formSubmitHandler={() => formSubmitHandler('consent', quoteResponse)}
             />
           </DetailsCard>
         </Box>
@@ -427,7 +433,7 @@ const CheckoutPage = () => {
               formData={consentformData}
               setFormData={setConsentFormData}
               addShippingdetailsBtnText={t.changeText}
-              formSubmitHandler={() => formSubmitHandler('consent')}
+              formSubmitHandler={() => formSubmitHandler('consent', quoteResponse)}
             />
           </Flex>
           <ConsentFillingDetails accordionHeader={t.fillConsentForm} />

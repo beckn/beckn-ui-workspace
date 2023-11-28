@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Box } from '@chakra-ui/react'
+import { Box, Text } from '@chakra-ui/react'
 import axios from 'axios'
 import SearchBar from '../components/header/SearchBar'
 import ProductList from '../components/productList/ProductList'
@@ -12,7 +12,6 @@ const Search = () => {
   const router = useRouter()
   const [searchKeyword, setSearchKeyword] = useState(router.query?.searchTerm || '')
   const [scholarShips, setScholarships] = useState<ParsedScholarshipData[]>([])
-  const { t, locale } = useLanguage()
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
   const [isLoading, setIsLoading] = useState(true)
@@ -47,6 +46,8 @@ const Search = () => {
     fetchScholarships()
   }, [])
 
+  // TODO :- have to put the loader strings into translation
+
   return (
     <>
       <Box
@@ -73,14 +74,20 @@ const Search = () => {
       <div>
         {isLoading ? (
           <div>
-            <Loader
-              stylesForLoadingText={{
-                fontWeight: '600',
-                fontSize: '16px'
-              }}
-              subLoadingText={t.casesCatalogLoader}
-              loadingText={t.catalogLoader}
-            />
+            <Loader>
+              <Box
+                mt={'13px'}
+                display={'flex'}
+                flexDir={'column'}
+                alignItems={'center'}
+              >
+                <Text fontWeight={700}>Please wait!</Text>
+                <Text>
+                  We're looking for <i>services</i>
+                </Text>
+                <Text>related to your search</Text>
+              </Box>
+            </Loader>
           </div>
         ) : (
           <ProductList productList={scholarShips} />

@@ -63,7 +63,7 @@ const ConsentForm: React.FC<ConsentFormProps> = props => {
     }
   }, [])
   useEffect(() => {
-    if (localStorage && typeof window !== 'undefined') {
+    if (localStorage && localStorage.getItem('billingAddress') && typeof window !== 'undefined') {
       const billingAddress = JSON.parse(localStorage.getItem('billingAddress') as string)
       setComplainantName(billingAddress.name)
     }

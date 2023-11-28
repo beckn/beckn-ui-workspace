@@ -5,6 +5,7 @@ interface LoaderPropsModel {
   loadingText?: string
   subLoadingText?: string
   stylesForLoadingText?: React.CSSProperties
+  children?: any
 }
 
 const Loader: React.FC<LoaderPropsModel> = props => {
@@ -17,6 +18,7 @@ const Loader: React.FC<LoaderPropsModel> = props => {
         color="#8D353A"
         size="xl"
       />
+      {props.children && props.children}
       {props.loadingText && (
         <Text
           style={props.stylesForLoadingText}
