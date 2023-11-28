@@ -290,7 +290,7 @@ const OrderDetails = () => {
         accordionHeader={'Complainant & Billing Details'}
         name={statusResponse?.billingDetails.name}
         location={statusResponse?.billingDetails.address}
-        number={7000507141}
+        number={9876543210}
       />
 
       {statusResponse?.caseDocs?.length
