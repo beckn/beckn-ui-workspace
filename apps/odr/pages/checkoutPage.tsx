@@ -444,20 +444,13 @@ const CheckoutPage = () => {
         </Box>
       )}
       {!isInitResultPresent() ? (
-        <Box
-          position={'absolute'}
-          left={'5%'}
-          width={'90%'}
-          bottom={'0'}
-        >
-          <ButtonComp
-            buttonText={'Confirm'}
-            background={'rgba(var(--color-primary))'}
-            color={'rgba(var(--text-color))'}
-            handleOnClick={() => router.push('/orderConfirmation')}
-            isDisabled={false}
-          />
-        </Box>
+        <ButtonComp
+          buttonText={'Confirm'}
+          background={'rgba(var(--color-primary))'}
+          color={'rgba(var(--text-color))'}
+          handleOnClick={() => router.push('/orderConfirmation')}
+          isDisabled={false}
+        />
       ) : (
         <ButtonComp
           buttonText={'Confirm'}
