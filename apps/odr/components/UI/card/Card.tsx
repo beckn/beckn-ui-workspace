@@ -75,6 +75,18 @@ const Card: React.FC<Props> = ({ product }) => {
                 {product.platformName}
               </Text>
             </Flex>
+
+            <Flex
+              alignItems={'center'}
+              mb={'8px'}
+            >
+              <Text
+                fontWeight={'400'}
+                fontSize={'12px'}
+              >
+                {product.categories[0].name}
+              </Text>
+            </Flex>
             <Flex
               alignItems={'center'}
               mb={'8px'}
@@ -90,17 +102,6 @@ const Card: React.FC<Props> = ({ product }) => {
                 fontSize={'12px'}
               >
                 English, Hindi, Kannada +3
-              </Text>
-            </Flex>
-            <Flex
-              alignItems={'center'}
-              mb={'8px'}
-            >
-              <Text
-                fontWeight={'400'}
-                fontSize={'12px'}
-              >
-                {product.categories[0].name}
               </Text>
             </Flex>
           </Box>

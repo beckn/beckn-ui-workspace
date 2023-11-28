@@ -58,19 +58,19 @@ const DisputeForm: React.FC<DisputeFormProps> = props => {
   }
 
   const handleButtonClick = () => {
-    const errors = validateDisputeForm(props.formData)
-    setFormErrors(errors)
-    if (Object.keys(errors).length === 0) {
-      dispatch(responseDataActions.addDisputeDetails(props.formData))
-      props.setFormData(props.formData)
-      props.formSubmitHandler()
-    } else {
-      setFormErrors(errors)
-    }
+    // const errors = validateDisputeForm(props.formData)
+    // setFormErrors(errors)
+    // if (Object.keys(errors).length === 0) {
+    dispatch(responseDataActions.addDisputeDetails(props.formData))
+    props.setFormData(props.formData)
+    props.formSubmitHandler()
+    // } else {
+    //   setFormErrors(errors)
+    // }
   }
 
   const isFormValid = Object.entries(props.formData)
-    .filter(([key]) => key !== 'landmark')
+    .filter(([key]) => key !== 'claimValue')
     .every(([_, value]) => value.trim() !== '')
 
   useEffect(() => {
@@ -146,7 +146,7 @@ const DisputeForm: React.FC<DisputeFormProps> = props => {
                   onChange={handleInputChange}
                 />
                 <label className={style.did_floating_label}>{t.claimValue}</label>
-                {formErrors.claimValue && <span className={style.error}>{t[`${formErrors.claimValue}`]}</span>}
+                {/* {formErrors.claimValue && <span className={style.error}>{t[`${formErrors.claimValue}`]}</span>} */}
               </div>
             </div>
             <Box mt={'50px'}>
