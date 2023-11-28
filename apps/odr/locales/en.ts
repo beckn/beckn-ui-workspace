@@ -395,7 +395,7 @@ const en: { [key: string]: string } = {
   applyNow: 'Apply Now',
   uploadDoc: 'Upload Documents',
   docText: 'Documents',
-  declarationText: 'Add Digital Signature',
+  declarationText: 'Add Digital Signature (optional)',
   appSubmitText: 'Application Submitted!',
   appSubmitSpan1: 'The company will evaluate your ',
   appSubmitSpan2: 'application and get back to you soon',

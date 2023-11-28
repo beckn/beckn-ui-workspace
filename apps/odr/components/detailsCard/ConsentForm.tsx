@@ -33,7 +33,7 @@ export interface ConsentFormProps {
 const ConsentForm: React.FC<ConsentFormProps> = props => {
   const dispatch = useDispatch()
   const [formErrors, setFormErrors] = useState<FormErrors>({})
-  const [isDeclarationChecked, setIsDeclarationChecked] = useState(false)
+  const [isDeclarationChecked, setIsDeclarationChecked] = useState(true)
   const [providerName, setProviderName] = useState('')
   const [complainantName, setComplainantName] = useState('')
 
@@ -191,7 +191,7 @@ const ConsentForm: React.FC<ConsentFormProps> = props => {
                 /> */}
                 <Checkbox
                   colorScheme="red"
-                  onChange={() => setIsDeclarationChecked(prevValue => !prevValue)}
+                  // onChange={() => setIsDeclarationChecked(prevValue => !prevValue)}
                 />
                 <Text
                   fontSize={'15px'}
@@ -207,7 +207,7 @@ const ConsentForm: React.FC<ConsentFormProps> = props => {
               background={'rgba(var(--color-primary))'}
               color={'rgba(var(--text-color))'}
               handleOnClick={handleButtonClick}
-              isDisabled={!isDeclarationChecked}
+              isDisabled={!isFormValid}
             />
             <Button
               buttonText={'Cancel'}
