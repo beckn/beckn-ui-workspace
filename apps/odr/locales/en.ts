@@ -456,6 +456,8 @@ const en: { [key: string]: string } = {
   caseId: ' Case ID :',
   casesCatalogLoader: "We're looking for services related to your search",
   caseFormLoaderText: 'while we setup forms to understand your case in detail.',
-  caseAssignedLoaderText: 'you are being assigned a case manager'
+  caseAssignedLoaderText: 'you are being assigned a case manager',
+  noCases: ' No Cases!',
+  noCasesDiscription: ' Looks like you haven’t filed any cases!'
 }
 export default en

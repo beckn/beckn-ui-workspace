@@ -6,7 +6,7 @@ import { useLanguage } from '../hooks/useLanguage'
 import { getOrderPlacementTimeline } from '../utilities/confirm-utils'
 import MyCases from '../components/orderHistory/MyCases'
 import Loader from '../components/loader/Loader'
-import EmptyScholarship from '../components/scholarship/emptyScholarship/EmptyScholarship'
+import Nocases from '../components/noCases/Nocases'
 
 const myCasesOrderHistory = () => {
   const [casesOrders, setCasesOrders] = useState([])
@@ -46,7 +46,7 @@ const myCasesOrderHistory = () => {
   }
 
   if (!casesOrders.length) {
-    return <EmptyScholarship />
+    return <Nocases />
   }
 
   return (
