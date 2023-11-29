@@ -407,6 +407,7 @@ const CheckoutPage = () => {
               setFormData={setConsentFormData}
               addShippingdetailsBtnText={t.fillConsentForm}
               formSubmitHandler={() => formSubmitHandler('consent', quoteResponse)}
+              providerName={selectedItem?.providerName}
             />
           </DetailsCard>
         </Box>
@@ -425,6 +426,7 @@ const CheckoutPage = () => {
               setFormData={setConsentFormData}
               addShippingdetailsBtnText={t.changeText}
               formSubmitHandler={() => formSubmitHandler('consent', quoteResponse)}
+              providerName={selectedItem?.providerName}
             />
           </Flex>
           <ConsentFillingDetails accordionHeader={t.fillConsentForm} />
