@@ -16,6 +16,8 @@ const DetailsSection: React.FC<Props> = ({ product }) => {
     window.dispatchEvent(new Event('storage-optiontags'))
   }, [product])
 
+  const { quote } = product
+
   return (
     <Box
       padding={'15px 5px'}
@@ -42,7 +44,7 @@ const DetailsSection: React.FC<Props> = ({ product }) => {
           mb={'10px'}
           fontSize={'14px'}
         >
-          by {product.platformName}
+          by {product.providerName}
         </Text>
       </Flex>
       <hr className="mt-1 hidden md:block" />
@@ -74,24 +76,21 @@ const DetailsSection: React.FC<Props> = ({ product }) => {
         >
           Estimated Service Fee
         </Text>
-        <Flex
-          fontSize={'15px'}
-          justifyContent="space-between"
-          alignItems={'center'}
-          pb="10px"
-        >
-          <Text>Base Fee</Text>
-          <Text>{t.currencySymbol}1,000</Text>
-        </Flex>
-        <Flex
-          fontSize={'15px'}
-          justifyContent="space-between"
-          alignItems={'center'}
-          pb="10px"
-        >
-          <Text>Fee per hearing</Text>
-          <Text>{t.currencySymbol}9,000</Text>
-        </Flex>
+
+        {quote?.breakup.map((item, idx) => {
+          return (
+            <Flex
+              key={idx}
+              fontSize={'15px'}
+              justifyContent="space-between"
+              alignItems={'center'}
+              pb="10px"
+            >
+              <Text>{item.title}</Text>
+              <Text>{t.currencySymbol + item.price.value}</Text>
+            </Flex>
+          )
+        })}
       </Box>
 
       <CallToAction product={product} />

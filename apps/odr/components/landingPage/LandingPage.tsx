@@ -1,32 +1,36 @@
 import React, { useEffect, useRef, useState } from 'react'
-import Router from 'next/router'
-
-import { useLanguage } from '../../hooks/useLanguage'
 import { Flex, Text, Input, Image, Box, Icon, Divider } from '@chakra-ui/react'
-
-import beckenFooter from '../../public/images/beckenFooterLogo.svg'
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md'
+import Router from 'next/router'
+import { useLanguage } from '../../hooks/useLanguage'
+import beckenFooter from '../../public/images/beckenFooterLogo.svg'
 
 const items = ['Civil Disputes', 'Financial Disputes', 'Family Disputes', 'Employment Disputes', 'Commercial Disputes']
+const disputeCategoryMapper: any = {
+  ['Civil Disputes']: 'civil-dispute',
+  ['Family Disputes']: 'family-dispute',
+  ['Employment Disputes']: 'employment-dispute',
+  ['Commercial Disputes']: 'commercial-dispute'
+}
+
 const LandingPage: React.FC = () => {
   const { t } = useLanguage()
   const [searchTerm, setSearchTerm] = useState('')
   const [isOpen, setIsOpen] = useState(false)
-  const [selectedItem, setSelectedItem] = useState(null)
-  const dropdownRef = useRef(null)
+  const [selectedItem, setSelectedItem] = useState('')
+  const dropdownRef = useRef<any>(null)
 
-  const isButtonDisabled = !selectedItem || !searchTerm.trim()
-  const buttonBackgroundColor = isButtonDisabled ? '#B89092' : 'rgba(var(--color-primary))'
+  const isButtonDisabled = !selectedItem && !searchTerm.trim()
   const toggleDropdown = () => {
     setIsOpen(!isOpen)
   }
 
-  const handleItemClick = item => {
+  const handleItemClick = (item: string) => {
     setSelectedItem(item)
     setIsOpen(false)
   }
 
-  const handleOutsideClick = e => {
+  const handleOutsideClick = (e: any) => {
     if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
       setIsOpen(false)
     }
@@ -42,7 +46,8 @@ const LandingPage: React.FC = () => {
   const navigateToSearchResults = () => {
     localStorage.setItem('optionTags', JSON.stringify({ name: searchTerm }))
     localStorage.setItem('optionTags1', JSON.stringify({ name: selectedItem }))
-    Router.push(`/search?searchTerm=${searchTerm}&selectedItem=${selectedItem}`)
+    const selectedCategory = selectedItem.trim().length ? disputeCategoryMapper[selectedItem] : ''
+    Router.push(`/search?searchTerm=${searchTerm}&selectedItem=${selectedCategory}`)
   }
 
   return (
@@ -94,21 +99,13 @@ const LandingPage: React.FC = () => {
             color={'#747474'}
           >
             {selectedItem || 'Select Category'}
-            {isOpen ? (
-              <Icon
-                as={MdKeyboardArrowUp}
-                ml="2"
-                w={'20px'}
-                h={'20px'}
-              />
-            ) : (
-              <Icon
-                as={MdKeyboardArrowDown}
-                ml="2"
-                w={'20px'}
-                h={'20px'}
-              />
-            )}
+
+            <Icon
+              as={isOpen ? MdKeyboardArrowUp : MdKeyboardArrowDown}
+              ml="2"
+              w={'20px'}
+              h={'20px'}
+            />
           </Box>
           {isOpen && (
             <Box
@@ -165,16 +162,19 @@ const LandingPage: React.FC = () => {
             }}
           />
           <Flex
-            bg={buttonBackgroundColor}
+            bg={'rgba(var(--color-primary))'}
             borderRightRadius={'6px'}
             boxShadow="0px 0px 24px rgba(0, 0, 0, 0.10)"
             justifyContent={'center'}
             alignItems="center"
+            aria-disabled={isButtonDisabled}
             width={'55px'}
             cursor={isButtonDisabled ? 'not-allowed' : 'pointer'}
-            opacity={isButtonDisabled ? 0.5 : 1}
             onClick={isButtonDisabled ? undefined : navigateToSearchResults}
-            _disabled={isButtonDisabled}
+            _disabled={{
+              backgroundColor: 'B89092',
+              opacity: 0.5
+            }}
           >
             <Image
               src="/images/searchIcon.svg"

@@ -73,6 +73,19 @@ export interface ParsedScholarshipData {
     code: string
     name: string
   }[]
+  quote?: {
+    price: {
+      currency: string
+      value: string
+    }
+    breakup: {
+      title: string
+      price: {
+        currency: string
+        value: string
+      }
+    }[]
+  }
 }
 
 export interface ScholarshipApplyFormDataModel {
@@ -300,4 +313,29 @@ export const getTransformedDataFromOdrResponse = (scholarShips: ScholarshipSearc
   }
 
   return transformedData
+}
+
+export const getTransformDataForSelectFromSelectRespnse = (selectResponse: any) => {
+  const { context, scholarshipProviders } = selectResponse
+  const { qoute, scholarships, id: providerId, name: providerName } = scholarshipProviders[0]
+  const { amount, categories, id, images, longDesc, name, shortDesc } = scholarships[0]
+
+  const transformedItem: ParsedScholarshipData = {
+    quote: qoute,
+    amount: amount,
+    bppId: context.bppId,
+    bppUri: context.bppUri,
+    transactionId: context.transactionId,
+    categories: categories,
+    id: id,
+    itemImages: images,
+    longDesc: longDesc,
+    name: name,
+    providerId: providerId,
+    providerName: providerName,
+    shortDesc: shortDesc,
+    platformName: ''
+  }
+
+  return transformedItem
 }
