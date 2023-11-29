@@ -60,8 +60,41 @@ const DetailsSection: React.FC<Props> = ({ product }) => {
             }}
           ></div>
         </div>
-        <CallToAction product={product} />
       </div>
+      <Box
+        mt={'20px'}
+        border={'1px solid #BFBFBF'}
+        borderRadius="5px"
+        padding={'15px 10px'}
+      >
+        <Text
+          fontSize={'15px'}
+          fontWeight="600"
+          pb="10px"
+        >
+          Estimated Service Fee
+        </Text>
+        <Flex
+          fontSize={'15px'}
+          justifyContent="space-between"
+          alignItems={'center'}
+          pb="10px"
+        >
+          <Text>Base Fee</Text>
+          <Text>{t.currencySymbol}1,000</Text>
+        </Flex>
+        <Flex
+          fontSize={'15px'}
+          justifyContent="space-between"
+          alignItems={'center'}
+          pb="10px"
+        >
+          <Text>Fee per hearing</Text>
+          <Text>{t.currencySymbol}9,000</Text>
+        </Flex>
+      </Box>
+
+      <CallToAction product={product} />
     </Box>
   )
 }
