@@ -77,7 +77,6 @@ const CheckoutPage = () => {
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL as string
   const [quoteResponse, setQuoteResponse] = useState<any>(null)
-  const [loadingSelectData, setLoadingSelectData] = useState(true)
 
   useEffect(() => {
     if (localStorage) {
@@ -96,33 +95,21 @@ const CheckoutPage = () => {
   }, [])
 
   useEffect(() => {
-    if (localStorage && localStorage.getItem('selectedItem')) {
-      const item: ParsedScholarshipData = JSON.parse(localStorage.getItem('selectedItem') as string)
-      setSelectedItem(item)
+    if (localStorage) {
+      const selectedItemData = localStorage.getItem('selectedItem')
+      const quoteResponseData = localStorage.getItem('quoteResponse')
+
+      if (selectedItemData) {
+        const selectedItem = JSON.parse(selectedItemData) as ParsedScholarshipData
+        setSelectedItem(selectedItem)
+      }
+
+      if (quoteResponseData) {
+        const quoteResponse = JSON.parse(quoteResponseData)
+        setQuoteResponse(quoteResponse)
+      }
     }
   }, [])
-  console.log(selectedItem)
-
-  useEffect(() => {
-    if (selectedItem) {
-      const { transactionId, bppId, bppUri, id, providerId } = selectedItem
-      axios
-        .post(`${apiUrl}/select`, {
-          scholarshipProviderId: providerId,
-          scholarshipId: id,
-          context: {
-            transactionId,
-            bppId,
-            bppUri
-          }
-        })
-        .then(res => {
-          setQuoteResponse(res.data)
-          setLoadingSelectData(false)
-        })
-        .catch(err => console.error(err))
-    }
-  }, [selectedItem])
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -225,7 +212,7 @@ const CheckoutPage = () => {
     }
   }
 
-  if (initRequest.loading || loadingSelectData) {
+  if (initRequest.loading) {
     return (
       <Loader>
         <Box

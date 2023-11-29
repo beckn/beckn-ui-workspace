@@ -72,7 +72,7 @@ const Card: React.FC<Props> = ({ product }) => {
                 fontSize={'12px'}
                 fontWeight={'400'}
               >
-                {product.platformName}
+                {product.providerName}
               </Text>
             </Flex>
 
