@@ -286,10 +286,11 @@ const OrderDetails = () => {
         />
         <CardBody pt={'unset'}>{RenderOrderStatusList(statusResponse)}</CardBody>
       </DetailsCard>
+      {/* TODO :- change this */}
       <ShippingOrBillingDetails
         accordionHeader={'Complainant & Billing Details'}
-        name={statusResponse?.billingDetails.name}
-        location={statusResponse?.billingDetails.address}
+        name={'Marie Sampath'}
+        location={'2111, HSR Layout, Sector 2, Bangalore'}
         number={9876543210}
       />
 
