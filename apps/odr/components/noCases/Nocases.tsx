@@ -33,7 +33,7 @@ const Nocases = () => {
           buttonText={t.goBackBtn}
           background={'rgba(var(--color-primary))'}
           color={'rgba(var(--text-color))'}
-          handleOnClick={() => router.push('/')}
+          handleOnClick={() => router.push('/homePage')}
           isDisabled={false}
         />
       </Box>
