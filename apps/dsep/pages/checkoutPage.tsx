@@ -313,6 +313,7 @@ const CheckoutPage = () => {
         </Box>
       )}
       {/* end payment details */}
+
       {!isInitResultPresent() ? (
         <Box
           position={'absolute'}
