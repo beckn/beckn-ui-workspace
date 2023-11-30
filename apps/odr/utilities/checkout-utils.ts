@@ -1,5 +1,3 @@
-import { CartRetailItem, DataPerBpp } from '../lib/types/cart'
-import { ResponseModel } from '../lib/types/responseModel'
 import { ShippingFormData } from '../pages/checkoutPage'
 import { areObjectPropertiesEqual } from './common-utils'
 
@@ -35,7 +33,7 @@ export const getPayloadForInitRequest = (
           amount: 30000,
           currency: 'INR'
         },
-        categoryId: selectData?.scholarshipProviders[0]?.scholarships[0]?.categories[0]?.id,
+        categoryId: '',
         scholarshipDetails: {
           id: selectData?.scholarshipProviders[0]?.scholarships[0]?.id,
           supportContact: {

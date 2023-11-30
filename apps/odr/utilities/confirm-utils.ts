@@ -4,7 +4,7 @@ export const getPayloadForConfirmRequest = (initResponse: ResponseModel, transac
   const payload: any = {}
 
   payload.context = {
-    transactionId: transactionId.transactionId,
+    transactionId: initResponse.context.transactionId,
     bppId: initResponse?.context?.bppId,
     bppUri: initResponse?.context?.bppUri
   }
@@ -17,8 +17,8 @@ export const getPayloadForConfirmRequest = (initResponse: ResponseModel, transac
       {
         id: initResponse?.scholarshipProvider?.scholarships[0]?.id,
         name: initResponse?.scholarshipProvider?.scholarships[0]?.name,
-        description: initResponse?.scholarshipProvider?.scholarships[0]?.categories[0]?.descriptor?.name,
-        categoryId: initResponse?.scholarshipProvider?.scholarships[0]?.categories[0]?.id,
+        description: '',
+        categoryId: '',
         amount: {
           amount: 30000,
           currency: 'INR'
