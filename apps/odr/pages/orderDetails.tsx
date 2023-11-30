@@ -137,8 +137,6 @@ const OrderDetails = () => {
   const { caseDocs, context, scholarshipApplicationId, scholarshipProviders, createdAt } = statusResponse as any
   const { scholarships, name } = scholarshipProviders[0]
 
-  console.log('complainantAddress', complainantAddress)
-
   return (
     <Box
       className="hideScroll"
