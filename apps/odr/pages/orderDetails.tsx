@@ -25,7 +25,33 @@ const OrderDetails = () => {
 
   useEffect(() => {
     let intervalId: any
-    let payloadIndex = 0
+    let payloadIndex = 1 // Start with the second payload after the initial call
+
+    const fetchDataWithPayload = (payload: any, confirmData: any) => {
+      const payloadForStatusRequest = {
+        scholarshipApplicationId: confirmData?.scholarshipApplicationId,
+        context: {
+          transactionId: confirmData?.context?.transactionId,
+          bppId: confirmData.context.bppId,
+          key: payload.key,
+          bppUri: confirmData?.context?.bppUri
+        }
+      }
+
+      statusRequest.fetchData(`${apiUrl}/status`, 'POST', payloadForStatusRequest)
+    }
+
+    const payloads = [
+      {
+        key: 'in-progress'
+      },
+      {
+        key: 'in-progress-payment-after-hearing'
+      },
+      {
+        key: 'completed'
+      }
+    ]
 
     if (localStorage) {
       const stringifiedConfirmData = localStorage.getItem('confirmData')
@@ -34,32 +60,14 @@ const OrderDetails = () => {
           const parsedConfirmedData = JSON.parse(stringifiedConfirmData)
           setConfirmData(parsedConfirmedData)
 
-          const payloads = [
-            {
-              key: 'in-progress'
-            },
-            {
-              key: 'in-progress-payment-after-hearing'
-            },
-            {
-              key: 'completed'
-            }
-          ]
+          // Initial status call
+          fetchDataWithPayload({ key: 'in-progress' }, parsedConfirmedData)
 
+          // Setup interval for subsequent calls
           intervalId = setInterval(() => {
             const currentPayload = payloads[payloadIndex]
 
-            const payloadForStatusRequest = {
-              scholarshipApplicationId: parsedConfirmedData?.scholarshipApplicationId,
-              context: {
-                transactionId: parsedConfirmedData?.context?.transactionId,
-                bppId: parsedConfirmedData.context.bppId,
-                key: currentPayload.key,
-                bppUri: parsedConfirmedData?.context?.bppUri
-              }
-            }
-
-            statusRequest.fetchData(`${apiUrl}/status`, 'POST', payloadForStatusRequest)
+            fetchDataWithPayload(currentPayload, parsedConfirmedData)
 
             payloadIndex += 1
 
@@ -203,7 +211,6 @@ const OrderDetails = () => {
                 as={'span'}
                 pr={'2px'}
               >
-                {/* {scholarships[0]?.categories[0]?.descriptor?.name} */}
                 {scholarships[0].name}, {scholarships[0].categories[0].descriptor.name}
               </Text>
             </Box>
@@ -211,7 +218,7 @@ const OrderDetails = () => {
               fontSize={'15px'}
               fontWeight={400}
             >
-              Case ID: {scholarshipProviders[0].id}
+              Case ID: {`#${statusResponse.scholarshipApplicationId}`}
             </Text>
             <HStack
               justifyContent={'space-between'}

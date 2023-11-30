@@ -104,44 +104,20 @@ const OrderConfirmation = () => {
 
   const handleViewOrder = () => {
     if (confirmRequest.data) {
-      const confirmData = confirmRequest.data
       localStorage.setItem('confirmData', JSON.stringify(confirmRequest.data))
-      console.log('confirmData', confirmData)
-      // const originalScholarshipConfirmData =
-      //             scholarshipConfirmResponse.data.original
-
-      //           const { context, message } = originalScholarshipConfirmData
-      //           const { order } = message
-
-      //           const ordersPayload = {
-      //             context: context,
-      //             message: {
-      //               order: {
-      //                 id: order.id,
-      //                 provider: {
-      //                   id: order.provider.id,
-      //                   descriptor: {
-      //                     name: order.provider.descriptor.name,
-      //                     short_desc: order.provider.descriptor.short_desc
-      //                   }
-      //                 },
-      //                 items: order.items,
-      //                 fulfillments: order.fulfillments
-      //               }
-      //             },
-      //             category: {
-      //               set: [4]
-      //             }
-      //           }
-      //           const fulfillOrderRequest = await axios.post(`${strapiUrl}/orders`, ordersPayload, axiosConfig)
 
       router.push('/orderDetails')
     }
   }
 
-  const agentName = confirmRequest.data?.scholarshipProvider?.scholarships[0]?.scholarshipDetails?.agentDetails?.name
+  const confirmData: any = confirmRequest.data
+  const agentName =
+    confirmRequest?.data?.scholarshipProvider?.scholarships?.[0]?.scholarshipDetails?.agentDetails?.name ?? 'Dr. Smith'
   const agentNumber =
-    confirmRequest.data?.scholarshipProvider?.scholarships[0]?.scholarshipDetails?.agentDetails?.contactDetails?.phone
+    confirmRequest?.data?.scholarshipProvider?.scholarships[0]?.scholarshipDetails?.agentDetails?.contactDetails
+      ?.phone ?? '+91 9837465789'
+
+  const caseId = confirmData.scholarshipApplicationId
 
   return (
     <Box>
@@ -149,7 +125,7 @@ const OrderConfirmation = () => {
         confirmationText={
           <>
             <Text>
-              {t.caseID} <span style={{ fontSize: '17px', fontWeight: 600 }}>#789171 Submitted!</span>
+              {t.caseID} <span style={{ fontSize: '17px', fontWeight: 600 }}>#{caseId ?? 789171} Submitted!</span>
             </Text>
             <Text>{t.caseManagerText}</Text>
             <Stack

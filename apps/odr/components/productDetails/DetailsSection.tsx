@@ -12,11 +12,13 @@ const DetailsSection: React.FC<Props> = ({ product }) => {
 
   useEffect(() => {
     localStorage.removeItem('optionTags')
-    localStorage.setItem('optionTags', JSON.stringify({ name: product.name }))
+    localStorage.setItem('optionTags', JSON.stringify({ name: product.name ?? 'Mediation Service' }))
     window.dispatchEvent(new Event('storage-optiontags'))
   }, [product])
 
   const { quote } = product
+  const defaultLongDescription =
+    '<html><body><p>At HarmonyArbitrators, our mediation services are designed to guide you through civil, family, employment, commercial, and financial disputes with skill and compassion. Our experienced mediators foster open communication, facilitating collaborative solutions that prioritize fairness and client satisfaction.</p><p>Trust HarmonyArbitrators for a dedicated, transparent, and effective approach to achieving harmonious resolutions in complex legal matters.</p></body></html>'
 
   return (
     <Box
@@ -37,14 +39,14 @@ const DetailsSection: React.FC<Props> = ({ product }) => {
             textAlign: 'center'
           }}
         >
-          {product.name}
+          {product.name ?? 'Mediation Service'}
         </h2>
         <Text
           mt={'10px'}
           mb={'10px'}
           fontSize={'14px'}
         >
-          by {product.providerName}
+          by {product.providerName ?? 'Presolv360'}
         </Text>
       </Flex>
       <hr className="mt-1 hidden md:block" />
@@ -52,7 +54,7 @@ const DetailsSection: React.FC<Props> = ({ product }) => {
         <div className="flex-grow ">
           <div
             dangerouslySetInnerHTML={{
-              __html: product.longDesc
+              __html: product.longDesc ?? defaultLongDescription
             }}
             className="mt-4 product_description_text border-2 border_radius_all"
             style={{
