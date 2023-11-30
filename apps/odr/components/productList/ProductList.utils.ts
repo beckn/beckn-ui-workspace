@@ -39,6 +39,7 @@ interface ScholarshipProvider {
     url: string
     size_type: string
   }[]
+  longDesc: string
 }
 
 interface Context {
@@ -91,6 +92,7 @@ export interface ParsedScholarshipData {
     }[]
   }
   providerImage: string
+  providerDesc: string
 }
 
 export interface ScholarshipApplyFormDataModel {
@@ -291,7 +293,7 @@ export const getTransformedDataFromOdrResponse = (scholarShips: ScholarshipSearc
     } = platformData
 
     for (const provider of scholarshipProviders) {
-      const { id: providerId, name: providerName, items, images: providerImages } = provider
+      const { id: providerId, name: providerName, items, images: providerImages, longDesc: providerDesc } = provider
 
       for (const scholarship of items) {
         const { amount, longDesc, id, name, shortDesc, images, categories } = scholarship
@@ -310,7 +312,8 @@ export const getTransformedDataFromOdrResponse = (scholarShips: ScholarshipSearc
           providerId,
           itemImages: images,
           categories,
-          providerImage: providerImages[0].url
+          providerImage: providerImages[0].url,
+          providerDesc: providerDesc
         }
 
         transformedData.push(transformedItem)
@@ -323,7 +326,14 @@ export const getTransformedDataFromOdrResponse = (scholarShips: ScholarshipSearc
 
 export const getTransformDataForSelectFromSelectRespnse = (selectResponse: any) => {
   const { context, scholarshipProviders } = selectResponse
-  const { qoute, scholarships, id: providerId, name: providerName, images: providerImages } = scholarshipProviders[0]
+  const {
+    qoute,
+    scholarships,
+    id: providerId,
+    name: providerName,
+    images: providerImages,
+    longDesc: providerDesc
+  } = scholarshipProviders[0]
   const { amount, categories, id, images, longDesc, name, shortDesc } = scholarships[0]
 
   const transformedItem: ParsedScholarshipData = {
@@ -341,7 +351,8 @@ export const getTransformDataForSelectFromSelectRespnse = (selectResponse: any) 
     providerName: providerName,
     shortDesc: shortDesc,
     platformName: '',
-    providerImage: providerImages[0].url
+    providerImage: providerImages[0].url,
+    providerDesc: providerDesc
   }
 
   return transformedItem
