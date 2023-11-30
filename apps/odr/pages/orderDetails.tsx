@@ -2,7 +2,7 @@ import { Box, CardBody, Divider, Flex, Text, Image, Card, Stack, HStack, StackDi
 import React, { useEffect, useState } from 'react'
 import { useLanguage } from '../hooks/useLanguage'
 import { ResponseModel } from '../lib/types/responseModel'
-import { getOrderPlacementTimeline } from '../utilities/confirm-utils'
+import { convertTimestampToDdMmYyyyHhMmPM } from '../utilities/confirm-utils'
 import TrackIcon from '../public/images/TrackIcon.svg'
 import useRequest from '../hooks/useRequest'
 import { useRouter } from 'next/router'
@@ -20,10 +20,7 @@ const OrderDetails = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
   const statusRequest = useRequest()
-  const trackRequest = useRequest()
   const router = useRouter()
-  const { orderId } = router.query
-  const [status, setStatus] = useState('progress')
   const { t } = useLanguage()
 
   useEffect(() => {
@@ -230,7 +227,7 @@ const OrderDetails = () => {
                 fontSize={'15px'}
                 fontWeight={400}
               >
-                {getOrderPlacementTimeline(createdAt)}
+                {convertTimestampToDdMmYyyyHhMmPM(createdAt)}
               </Text>
             </HStack>
           </Flex>

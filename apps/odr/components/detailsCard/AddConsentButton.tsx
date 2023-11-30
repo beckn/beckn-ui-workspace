@@ -12,10 +12,12 @@ export interface AddConsentButtonProps {
   formSubmitHandler: Function
   imgFlag: boolean
   isDisabled: boolean
+  providerName?: string
 }
 
 const AddConsentButton: React.FC<AddConsentButtonProps> = props => {
   const { isOpen, onOpen, onClose } = useDisclosure()
+  console.log(props.providerName)
   return (
     <>
       <Flex
@@ -41,6 +43,7 @@ const AddConsentButton: React.FC<AddConsentButtonProps> = props => {
         onOpen={onOpen}
         onClose={onClose}
         formSubmitHandler={props.formSubmitHandler}
+        providerName={props.providerName}
       />
     </>
   )

@@ -54,3 +54,25 @@ export const getOrderPlacementTimeline = (timeStamp: string) => {
 
   return `${localDateWithoutDay}, ${localTime}`
 }
+
+export function convertTimestampToDdMmYyyyHhMmPM(timestamp: string) {
+  const date = new Date(timestamp)
+
+  const day = date.getDate()
+  const month = date.getMonth() + 1
+  const year = date.getFullYear()
+
+  let hour = date.getHours()
+  const minute = date.getMinutes()
+  const second = date.getSeconds()
+
+  const ampm = hour >= 12 ? 'pm' : 'am'
+  hour = hour % 12
+  if (hour === 0) {
+    hour = 12
+  }
+
+  const formattedTimestamp = `${day}/${month}/${year}, ${hour}:${minute} ${ampm}`
+
+  return formattedTimestamp
+}

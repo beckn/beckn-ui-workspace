@@ -3,7 +3,7 @@ import Cookies from 'js-cookie'
 import Router from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { useLanguage } from '../hooks/useLanguage'
-import { getOrderPlacementTimeline } from '../utilities/confirm-utils'
+import { convertTimestampToDdMmYyyyHhMmPM } from '../utilities/confirm-utils'
 import MyCases from '../components/orderHistory/MyCases'
 import Loader from '../components/loader/Loader'
 import Nocases from '../components/noCases/Nocases'
@@ -60,7 +60,7 @@ const myCasesOrderHistory = () => {
           key={index}
           providerName={courseOrder.attributes.descriptor.name}
           heading={courseOrder.attributes.items[0].name}
-          time={getOrderPlacementTimeline(courseOrder.attributes.createdAt)}
+          time={convertTimestampToDdMmYyyyHhMmPM(courseOrder.attributes.createdAt)}
           id={courseOrder.id}
           myLearingStatus={courseOrder.attributes.delivery_status}
           handleViewCaseDetails={() => {
