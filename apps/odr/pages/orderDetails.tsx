@@ -15,9 +15,9 @@ import Accordion from '../components/accordion/Accordion'
 
 const OrderDetails = () => {
   const [allOrderDelivered, setAllOrderDelivered] = useState(false)
-  const [confirmData, setConfirmData] = useState<ResponseModel[]>([])
   const [statusResponse, setStatusResponse] = useState<any>(null)
   const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [complainantAddress, setComplainantAddress] = useState<any>(null)
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
   const statusRequest = useRequest()
   const router = useRouter()
@@ -58,7 +58,6 @@ const OrderDetails = () => {
       if (stringifiedConfirmData) {
         try {
           const parsedConfirmedData = JSON.parse(stringifiedConfirmData)
-          setConfirmData(parsedConfirmedData)
 
           // Initial status call
           fetchDataWithPayload({ key: 'in-progress' }, parsedConfirmedData)
@@ -107,6 +106,13 @@ const OrderDetails = () => {
     }
   }, [statusResponse])
 
+  useEffect(() => {
+    if (localStorage && localStorage.getItem('billingAddress')) {
+      const billingAdress = JSON.parse(localStorage.getItem('billingAddress') as string)
+      setComplainantAddress(billingAdress)
+    }
+  }, [])
+
   const handleDetails = (url: string) => {
     window.open(url, '_blank')
   }
@@ -131,7 +137,7 @@ const OrderDetails = () => {
   const { caseDocs, context, scholarshipApplicationId, scholarshipProviders, createdAt } = statusResponse as any
   const { scholarships, name } = scholarshipProviders[0]
 
-  console.log('scholarships', scholarships)
+  console.log('complainantAddress', complainantAddress)
 
   return (
     <Box
@@ -293,9 +299,9 @@ const OrderDetails = () => {
       {/* TODO :- change this */}
       <ShippingOrBillingDetails
         accordionHeader={'Complainant & Billing Details'}
-        name={'Marie Sampath'}
-        location={'2111, HSR Layout, Sector 2, Bangalore'}
-        number={9876543210}
+        name={complainantAddress ? complainantAddress.name : 'Marie Sampath'}
+        location={complainantAddress ? complainantAddress.address : '2111, HSR Layout, Sector 2, Bangalore'}
+        number={complainantAddress ? complainantAddress.mobileNumber : '9876543210'}
       />
 
       {statusResponse?.caseDocs?.length
