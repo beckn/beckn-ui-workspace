@@ -1,6 +1,6 @@
 import React from 'react'
 import { Box, Flex, Text, Image } from '@chakra-ui/react'
-import { getOrderPlacementTimeline } from '../../utilities/confirm-utils'
+import { convertTimestampToDdMmYyyyHhMmPM, getOrderPlacementTimeline } from '../../utilities/confirm-utils'
 import lineBlack from '../../public/images/lineBlack.svg'
 import TrackIcon from '../../public/images/TrackIcon.svg'
 import { useLanguage } from '../../hooks/useLanguage'
@@ -13,15 +13,8 @@ const orderStatusMap = {
   DELIVERED: 'orderDelivered'
 }
 
-export const orderCardStatusMap = {
-  INITIATED: 'pending',
-  ACKNOWLEDGED: 'confirmed',
-  PACKED: 'confirmed',
-  SHIPPED: 'confirmed',
-  DELIVERED: 'delivered'
-}
-
 export const RenderOrderStatusList = (res: any) => {
+  const scholarShip = res.scholarshipProviders[0].scholarships[0]
   const order = res.scholarshipProviders[0].scholarships[0].scholarshipDetails
   const { t } = useLanguage()
 
@@ -66,14 +59,17 @@ export const RenderOrderStatusList = (res: any) => {
             paddingLeft={'10px'}
             fontSize={'10px'}
           >
-            <Text fontSize={'12px'}>Adv. Vishal Singh, 9832445890</Text>
+            <Text fontSize={'12px'}>
+              {scholarShip.scholarshipDetails.agentDetails.person.name},{' '}
+              {scholarShip.scholarshipDetails.agentDetails.contact.phone}
+            </Text>
             <Text
               fontSize={'12px'}
               color={'#7B2A2F'}
             >
               Provider Link
             </Text>
-            {getOrderPlacementTimeline(order.state.updatedAt)}
+            {convertTimestampToDdMmYyyyHhMmPM(order.state.updatedAt)}
           </Text>
         </Flex>
       </Box>
@@ -121,14 +117,18 @@ export const RenderOrderStatusList = (res: any) => {
               paddingLeft={'10px'}
               fontSize={'10px'}
             >
-              <Text fontSize={'12px'}>Adv. Vishal Singh, 9832445890</Text>
+              <Text fontSize={'12px'}>
+                {' '}
+                {scholarShip.scholarshipDetails.agentDetails.person.name},{' '}
+                {scholarShip.scholarshipDetails.agentDetails.contact.phone}
+              </Text>
               <Text
                 fontSize={'12px'}
                 color={'#7B2A2F'}
               >
                 Provider Link
               </Text>
-              {getOrderPlacementTimeline(order.state.updatedAt)}
+              {convertTimestampToDdMmYyyyHhMmPM(order.state.updatedAt)}
             </Text>
           </Flex>
         </Box>
@@ -164,7 +164,7 @@ export const RenderOrderStatusList = (res: any) => {
               paddingLeft={'10px'}
               fontSize={'10px'}
             >
-              {getOrderPlacementTimeline(order.state.updatedAt)}
+              {convertTimestampToDdMmYyyyHhMmPM(order.state.updatedAt)}
             </Text>
           </Flex>
         </Box>
@@ -205,14 +205,18 @@ export const RenderOrderStatusList = (res: any) => {
               paddingLeft={'10px'}
               fontSize={'10px'}
             >
-              <Text fontSize={'12px'}>Adv. Vishal Singh, 9832445890</Text>
+              <Text fontSize={'12px'}>
+                {' '}
+                {scholarShip.scholarshipDetails.agentDetails.person.name},{' '}
+                {scholarShip.scholarshipDetails.agentDetails.contact.phone}
+              </Text>
               <Text
                 fontSize={'12px'}
                 color={'#7B2A2F'}
               >
                 Provider Link
               </Text>
-              {getOrderPlacementTimeline(order.state.updatedAt)}
+              {convertTimestampToDdMmYyyyHhMmPM(order.state.updatedAt)}
             </Text>
           </Flex>
         </Box>
@@ -248,7 +252,7 @@ export const RenderOrderStatusList = (res: any) => {
               paddingLeft={'10px'}
               fontSize={'10px'}
             >
-              {getOrderPlacementTimeline(order.state.updatedAt)}
+              {convertTimestampToDdMmYyyyHhMmPM(order.state.updatedAt)}
             </Text>
           </Flex>
         </Box>
@@ -284,7 +288,7 @@ export const RenderOrderStatusList = (res: any) => {
               paddingLeft={'10px'}
               fontSize={'10px'}
             >
-              {getOrderPlacementTimeline(order.state.updatedAt)}
+              {convertTimestampToDdMmYyyyHhMmPM(order.state.updatedAt)}
             </Text>
           </Flex>
         </Box>
