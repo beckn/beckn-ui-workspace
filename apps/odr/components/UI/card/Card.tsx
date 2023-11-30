@@ -32,7 +32,7 @@ const Card: React.FC<Props> = ({ product }) => {
             <div className="flex items-center h-full  product-img-span">
               <Image
                 src={
-                  product.itemImages?.[0]?.url ??
+                  (product.itemImages?.[0]?.url || product.providerImage) ??
                   'https://imgs.search.brave.com/dP8znd4KG19WF0aZ3xL1B4KCu9ek1bHi6FICyW2GokU/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9zdDIu/ZGVwb3NpdHBob3Rv/cy5jb20vOTcxNDA2/MC80NzgxNS9pLzQ1/MC9kZXBvc2l0cGhv/dG9zXzQ3ODE1MDA1/Mi1zdG9jay1waG90/by1tZWRpYXRpb24t/d29yZC13b29kZW4t/YmxvY2tzLWNvbW11/bmljYXRpb24uanBn'
                 }
                 width={'110px'}

@@ -35,6 +35,10 @@ interface ScholarshipProvider {
   id: string
   name: string
   items: Scholarship[]
+  images: {
+    url: string
+    size_type: string
+  }[]
 }
 
 interface Context {
@@ -86,6 +90,7 @@ export interface ParsedScholarshipData {
       }
     }[]
   }
+  providerImage: string
 }
 
 export interface ScholarshipApplyFormDataModel {
@@ -286,7 +291,7 @@ export const getTransformedDataFromOdrResponse = (scholarShips: ScholarshipSearc
     } = platformData
 
     for (const provider of scholarshipProviders) {
-      const { id: providerId, name: providerName, items } = provider
+      const { id: providerId, name: providerName, items, images: providerImages } = provider
 
       for (const scholarship of items) {
         const { amount, longDesc, id, name, shortDesc, images, categories } = scholarship
@@ -304,7 +309,8 @@ export const getTransformedDataFromOdrResponse = (scholarShips: ScholarshipSearc
           shortDesc,
           providerId,
           itemImages: images,
-          categories
+          categories,
+          providerImage: providerImages[0].url
         }
 
         transformedData.push(transformedItem)
@@ -317,7 +323,7 @@ export const getTransformedDataFromOdrResponse = (scholarShips: ScholarshipSearc
 
 export const getTransformDataForSelectFromSelectRespnse = (selectResponse: any) => {
   const { context, scholarshipProviders } = selectResponse
-  const { qoute, scholarships, id: providerId, name: providerName } = scholarshipProviders[0]
+  const { qoute, scholarships, id: providerId, name: providerName, images: providerImages } = scholarshipProviders[0]
   const { amount, categories, id, images, longDesc, name, shortDesc } = scholarships[0]
 
   const transformedItem: ParsedScholarshipData = {
@@ -334,7 +340,8 @@ export const getTransformDataForSelectFromSelectRespnse = (selectResponse: any) 
     providerId: providerId,
     providerName: providerName,
     shortDesc: shortDesc,
-    platformName: ''
+    platformName: '',
+    providerImage: providerImages[0].url
   }
 
   return transformedItem
