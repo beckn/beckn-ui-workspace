@@ -17,7 +17,7 @@ export interface AddConsentButtonProps {
 
 const AddConsentButton: React.FC<AddConsentButtonProps> = props => {
   const { isOpen, onOpen, onClose } = useDisclosure()
-  console.log(props.providerName)
+
   return (
     <>
       <Flex
