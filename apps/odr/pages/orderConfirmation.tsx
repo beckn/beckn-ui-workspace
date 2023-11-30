@@ -110,14 +110,11 @@ const OrderConfirmation = () => {
     }
   }
 
-  const confirmData: any = confirmRequest.data
   const agentName =
     confirmRequest?.data?.scholarshipProvider?.scholarships?.[0]?.scholarshipDetails?.agentDetails?.name ?? 'Dr. Smith'
   const agentNumber =
     confirmRequest?.data?.scholarshipProvider?.scholarships[0]?.scholarshipDetails?.agentDetails?.contactDetails
       ?.phone ?? '+91 9837465789'
-
-  const caseId = confirmData.scholarshipApplicationId
 
   return (
     <Box>
@@ -125,7 +122,10 @@ const OrderConfirmation = () => {
         confirmationText={
           <>
             <Text>
-              {t.caseID} <span style={{ fontSize: '17px', fontWeight: 600 }}>#{caseId ?? 789171} Submitted!</span>
+              {t.caseID}{' '}
+              <span style={{ fontSize: '17px', fontWeight: 600 }}>
+                #{(confirmRequest?.data as any)?.scholarshipApplicationId ?? 789171} Submitted!
+              </span>
             </Text>
             <Text>{t.caseManagerText}</Text>
             <Stack
