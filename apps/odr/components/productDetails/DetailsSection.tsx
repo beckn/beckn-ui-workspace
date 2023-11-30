@@ -54,7 +54,7 @@ const DetailsSection: React.FC<Props> = ({ product }) => {
         <div className="flex-grow ">
           <div
             dangerouslySetInnerHTML={{
-              __html: product.longDesc ?? defaultLongDescription
+              __html: (product.longDesc || product.providerDesc) ?? defaultLongDescription
             }}
             className="mt-4 product_description_text border-2 border_radius_all"
             style={{
