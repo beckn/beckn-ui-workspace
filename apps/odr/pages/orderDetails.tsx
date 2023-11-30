@@ -253,7 +253,7 @@ const OrderDetails = () => {
             fontWeight={600}
             fontSize={'17px'}
           >
-            {t.caseId}: {scholarshipProviders[0].id}
+            {t.caseId} {`${scholarshipApplicationId}`}
           </Text>
           <Flex>
             {statusResponse.scholarshipProviders[0].scholarships[0].scholarshipDetails.state.code ===
