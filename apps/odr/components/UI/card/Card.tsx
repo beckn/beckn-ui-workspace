@@ -31,10 +31,13 @@ const Card: React.FC<Props> = ({ product }) => {
           >
             <div className="flex items-center h-full  product-img-span">
               <Image
-                src={product.itemImages[0].url}
+                src={
+                  product.itemImages?.[0]?.url ??
+                  'https://imgs.search.brave.com/dP8znd4KG19WF0aZ3xL1B4KCu9ek1bHi6FICyW2GokU/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9zdDIu/ZGVwb3NpdHBob3Rv/cy5jb20vOTcxNDA2/MC80NzgxNS9pLzQ1/MC9kZXBvc2l0cGhv/dG9zXzQ3ODE1MDA1/Mi1zdG9jay1waG90/by1tZWRpYXRpb24t/d29yZC13b29kZW4t/YmxvY2tzLWNvbW11/bmljYXRpb24uanBn'
+                }
                 width={'110px'}
                 height={'133px'}
-                alt={product.name}
+                alt={product.name ?? 'Mediation Service'}
                 className=" drop-shadow-xl object-contain hover:scale-110 transition-transform duration-300 ease-in-out "
               />
             </div>
@@ -61,7 +64,7 @@ const Card: React.FC<Props> = ({ product }) => {
                 whiteSpace="pre-wrap"
                 overflowWrap="break-word"
               >
-                {product.name}
+                {product.name ?? 'Mediation Service'}
               </Text>
             </Flex>
             <Flex
@@ -72,7 +75,7 @@ const Card: React.FC<Props> = ({ product }) => {
                 fontSize={'12px'}
                 fontWeight={'400'}
               >
-                {product.providerName}
+                {product.providerName ?? 'Presolv360'}
               </Text>
             </Flex>
 
@@ -84,7 +87,7 @@ const Card: React.FC<Props> = ({ product }) => {
                 fontWeight={'400'}
                 fontSize={'12px'}
               >
-                {product.categories[0].name}
+                {product.categories?.[0]?.name ?? 'Commercial Dispute'}
               </Text>
             </Flex>
             <Flex
