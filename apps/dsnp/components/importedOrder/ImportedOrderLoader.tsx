@@ -8,8 +8,15 @@ const ImportedOrderLoader = () => {
   const { isOpen, onOpen, onClose } = useDisclosure({ defaultIsOpen: true })
   const { t, locale } = useLanguage()
   return (
-    <BottomModal isOpen={isOpen} onClose={onClose} modalHeader={t.importedOrder}>
-      <Loader loadingText={t.Pleasewait} subLoadingText={t.loaderSubText} />
+    <BottomModal
+      isOpen={isOpen}
+      onClose={onClose}
+      modalHeader={t.importedOrder}
+    >
+      <Loader
+        loadingText={t.Pleasewait}
+        subLoadingText={t.loaderSubText}
+      />
     </BottomModal>
   )
 }

@@ -22,9 +22,18 @@ const Product = () => {
       <div>
         <Head>
           <title>{product.descriptor.name}</title>
-          <meta property="og:title" content={product.descriptor.name} />
-          <meta property="og:description" content={product.descriptor.short_desc} />
-          <meta property="og:image" content={product.descriptor.images[0]} />
+          <meta
+            property="og:title"
+            content={product.descriptor.name}
+          />
+          <meta
+            property="og:description"
+            content={product.descriptor.short_desc}
+          />
+          <meta
+            property="og:image"
+            content={product.descriptor.images[0]}
+          />
         </Head>
 
         <ProductDetails product={product} />

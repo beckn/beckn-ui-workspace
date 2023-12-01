@@ -34,7 +34,9 @@ const StarRating: React.FC<StarRatingProps> = props => {
                 name="rating"
                 onChange={() => props.setRating(ratingValue)}
                 value={ratingValue}
-                style={{ display: 'none' }}
+                style={{
+                  display: 'none'
+                }}
               />
               <FaStar
                 cursor="pointer"

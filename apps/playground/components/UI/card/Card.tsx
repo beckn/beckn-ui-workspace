@@ -27,7 +27,9 @@ const Card: React.FC<Props> = ({ product }) => {
         legacyBehavior
         href={{
           pathname: '/product',
-          query: { productDetails: encodedProduct }
+          query: {
+            productDetails: encodedProduct
+          }
         }}
       >
         <a className="flex md:items-center md:flex-col relative w-full ">
@@ -52,7 +54,11 @@ const Card: React.FC<Props> = ({ product }) => {
             position={'relative'}
             className="flex flex-col md:w-full md:px-3  md:py-4"
           >
-            <Flex justifyContent={'space-between'} alignItems={'flex-start'} w={'100%'}>
+            <Flex
+              justifyContent={'space-between'}
+              alignItems={'flex-start'}
+              w={'100%'}
+            >
               <Text
                 w={'80%'}
                 fontWeight={'600'}
@@ -68,24 +74,46 @@ const Card: React.FC<Props> = ({ product }) => {
 
               {product.tags.foodType ? (
                 product.tags.foodType === 'veg' ? (
-                  <Image pt={'4px'} src={greenVegIcon} alt="greenVegIcon" />
+                  <Image
+                    pt={'4px'}
+                    src={greenVegIcon}
+                    alt="greenVegIcon"
+                  />
                 ) : (
-                  <Image pt={'4px'} src={redNonVegIcon} alt="nonVegIcon" />
+                  <Image
+                    pt={'4px'}
+                    src={redNonVegIcon}
+                    alt="nonVegIcon"
+                  />
                 )
               ) : null}
             </Flex>
 
             {!product.tags.foodType ? (
-              <Flex fontSize={'12px'} alignItems={'center'} mb={'8px'}>
+              <Flex
+                fontSize={'12px'}
+                alignItems={'center'}
+                mb={'8px'}
+              >
                 <Text fontWeight={'600'}>Author:</Text>
 
-                <Text pl={'3px'} noOfLines={1} textOverflow="ellipsis" whiteSpace="pre-wrap" overflowWrap="break-word">
+                <Text
+                  pl={'3px'}
+                  noOfLines={1}
+                  textOverflow="ellipsis"
+                  whiteSpace="pre-wrap"
+                  overflowWrap="break-word"
+                >
                   {product.tags.authorName}
                 </Text>
               </Flex>
             ) : null}
 
-            <Flex fontSize={'12px'} alignItems={'center'} mb={'8px'}>
+            <Flex
+              fontSize={'12px'}
+              alignItems={'center'}
+              mb={'8px'}
+            >
               <Text fontWeight={'600'}>Sold by:</Text>
               <Text pl={'3px'}>{(product as any).bppName}</Text>
             </Flex>
@@ -100,7 +128,10 @@ const Card: React.FC<Props> = ({ product }) => {
               <Flex alignItems={'center'}>
                 {/* eslint-disable-next-line jsx-a11y/alt-text */}
                 <Image src={StarIcon} />
-                <Text fontSize={'12px'} pl={'5px'}>
+                <Text
+                  fontSize={'12px'}
+                  pl={'5px'}
+                >
                   {product.tags.rating}
                 </Text>
               </Flex>

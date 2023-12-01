@@ -39,10 +39,23 @@ const ProductList: React.FC<Props> = ({ productList }) => {
       <div className="w-full xl:max-w-[2100px] mx-auto">
         {sortedProductList && sortedProductList.length ? (
           <div>
-            <Sort selectedBtn={selectedRadioBtn} onChangeSelectedBtn={onChangeHandler} />
-            <div className="grid gap-4 md:gap-2 grid-cols-6 md:grid-cols-12" style={{ marginTop: '140px' }}>
+            <Sort
+              selectedBtn={selectedRadioBtn}
+              onChangeSelectedBtn={onChangeHandler}
+            />
+            <div
+              className="grid gap-4 md:gap-2 grid-cols-6 md:grid-cols-12"
+              style={{
+                marginTop: '140px'
+              }}
+            >
               {sortedProductList.map((product: RetailItem) => {
-                return <Card key={product.id} product={product} />
+                return (
+                  <Card
+                    key={product.id}
+                    product={product}
+                  />
+                )
               })}
             </div>
           </div>

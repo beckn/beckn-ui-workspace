@@ -4,7 +4,10 @@ import React from 'react'
 
 const Logo = () => {
   return (
-    <Link legacyBehavior href="/">
+    <Link
+      legacyBehavior
+      href="/"
+    >
       <a className="block md:flex items-center justify-center w-full flex-grow md:flex-grow-0">
         <Image
           src="/images/logo.png"

@@ -1,13 +1,29 @@
-//types
 import React from 'react'
 import { ButtonProps } from './button.types'
+import { Button } from '@chakra-ui/react'
 
-const Button: React.FC<ButtonProps> = ({ handleClick, className, children }) => {
+const BecknButton: React.FC<ButtonProps> = ({
+  text,
+  handleClick,
+  className,
+  children,
+  disabled = false,
+  fullWidth = true,
+  variant = 'solid',
+  colorScheme = 'primary'
+}) => {
   return (
-    <button onClick={handleClick} className={className}>
-      {children}
-    </button>
+    <Button
+      width={fullWidth ? 'full' : 'initial'}
+      onClick={handleClick}
+      className={className}
+      isDisabled={disabled}
+      variant={variant}
+      colorScheme={colorScheme}
+    >
+      {children ? children : text}
+    </Button>
   )
 }
 
-export default Button
+export default BecknButton

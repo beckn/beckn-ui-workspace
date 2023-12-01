@@ -57,7 +57,11 @@ const CartItem: React.FC<Props> = ({
       <div className={Styles.prouct_details_container}>
         <a className={Styles.product_details}>
           <div className={Styles.product_image_container}>
-            <Image src={product.descriptor.images[0]} alt={product.descriptor.name} className="object-contain" />
+            <Image
+              src={product.descriptor.images[0]}
+              alt={product.descriptor.name}
+              className="object-contain"
+            />
           </div>
           <div className={Styles.product_name}>{product.descriptor.name}</div>
         </a>
@@ -65,7 +69,10 @@ const CartItem: React.FC<Props> = ({
       <div className={Styles.product_count_price_container}>
         <div className={Styles.product_counter_layout_container}>
           <div className={Styles.product_counter_container}>
-            <div className={Styles.plus_icon_container} onClick={() => increment(product)}>
+            <div
+              className={Styles.plus_icon_container}
+              onClick={() => increment(product)}
+            >
               <HiOutlinePlusSm className={Styles.plus_icon} />
             </div>
             <input
@@ -77,11 +84,17 @@ const CartItem: React.FC<Props> = ({
               onChange={onInputNumberChangeHandler}
             />
             {counter === 1 ? (
-              <div className={Styles.delete_icon_container} onClick={() => decrement(product.id)}>
+              <div
+                className={Styles.delete_icon_container}
+                onClick={() => decrement(product.id)}
+              >
                 <HiOutlineTrash className={Styles.delete_icon} />
               </div>
             ) : (
-              <div onClick={() => decrement(product.id)} className={Styles.minus_icon_container}>
+              <div
+                onClick={() => decrement(product.id)}
+                className={Styles.minus_icon_container}
+              >
                 <HiMinusSm className={Styles.minus_icon} />
               </div>
             )}
@@ -89,7 +102,11 @@ const CartItem: React.FC<Props> = ({
         </div>
         <div className={Styles.total_amount_container}>
           <p>{totalAmount}</p>
-          <ProductPrice t={t} locale={locale} price={parseFloat(product.price.value) * counter!} />
+          <ProductPrice
+            t={t}
+            locale={locale}
+            price={parseFloat(product.price.value) * counter!}
+          />
         </div>
       </div>
     </div>

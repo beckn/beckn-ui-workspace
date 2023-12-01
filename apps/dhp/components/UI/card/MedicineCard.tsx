@@ -23,7 +23,9 @@ const MedicineCard: React.FC<Props> = ({ product }) => {
       <Link
         href={{
           pathname: '/medicineProduct',
-          query: { productDetails: encodedProduct }
+          query: {
+            productDetails: encodedProduct
+          }
         }}
         style={{ width: '100%' }}
       >
@@ -60,19 +62,33 @@ const MedicineCard: React.FC<Props> = ({ product }) => {
                 {product.descriptor.name}
               </Text>
             </Box>
-            <Flex fontSize={'12px'} alignItems={'center'} mb={'8px'}>
+            <Flex
+              fontSize={'12px'}
+              alignItems={'center'}
+              mb={'8px'}
+            >
               <Text pl={'3px'}>Painkiller Tablet</Text>
             </Flex>
-            <Flex fontSize={'12px'} alignItems={'center'} mb={'8px'}>
+            <Flex
+              fontSize={'12px'}
+              alignItems={'center'}
+              mb={'8px'}
+            >
               <Text fontWeight={'600'}>Sold by:</Text>
               <Text pl={'3px'}>{(product as any).bppName}</Text>
             </Flex>
-            <Flex justifyContent={'space-between'} alignItems={'center'}>
+            <Flex
+              justifyContent={'space-between'}
+              alignItems={'center'}
+            >
               <ProductPrice price={parseFloat(product.price.value)} />
               <Flex alignItems={'center'}>
                 {/* eslint-disable-next-line jsx-a11y/alt-text */}
                 <Image src={StarIcon} />
-                <Text fontSize={'12px'} pl={'5px'}>
+                <Text
+                  fontSize={'12px'}
+                  pl={'5px'}
+                >
                   {product.tags.Rating}
                 </Text>
               </Flex>

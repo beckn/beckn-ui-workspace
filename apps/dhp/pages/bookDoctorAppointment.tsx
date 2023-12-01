@@ -9,12 +9,21 @@ import Router from 'next/router'
 const bookDoctorAppointment = () => {
   const { t } = useLanguage()
   return (
-    <Box m={'20px 0 20px 0'} fontFamily={'Poppins'}>
-      <Flex flexDirection={'column'} justify={'start'}>
+    <Box
+      m={'20px 0 20px 0'}
+      fontFamily={'Poppins'}
+    >
+      <Flex
+        flexDirection={'column'}
+        justify={'start'}
+      >
         <Text fontSize={'17px'}>Select Date:</Text>
         <AppointmentDateList />
         <Box mt={'20px'}>
-          <Text fontSize={'17px'} mb={'10px'}>
+          <Text
+            fontSize={'17px'}
+            mb={'10px'}
+          >
             Select Time Slot:
           </Text>
           <TimeSlotList />

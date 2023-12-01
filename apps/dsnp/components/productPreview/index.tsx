@@ -30,11 +30,20 @@ const ProductPreview: React.FC<ProductPreviewProps> = ({ productImage, productNa
   }
 
   return (
-    <div className="flex flex-col mt-4 hideScroll" style={{ maxHeight: 'calc(100vh - 118px)', overflowY: 'scroll' }}>
+    <div
+      className="flex flex-col mt-4 hideScroll"
+      style={{
+        maxHeight: 'calc(100vh - 118px)',
+        overflowY: 'scroll'
+      }}
+    >
       <div className="w-full xl:max-w-[2100px] mx-auto">
         <div className="flex flex-col md:flex-row flex-wrap md:flex-nowrap items-start md:items-start relative">
           <ImageSection imgArray={[productImage]} />
-          <DetailsSection sanitizedProduct={sanitizedProduct} isPreview={true} />
+          <DetailsSection
+            sanitizedProduct={sanitizedProduct}
+            isPreview={true}
+          />
           <Button
             buttonText={t('shopBtn')}
             background={'rgba(var(--color-primary))'}

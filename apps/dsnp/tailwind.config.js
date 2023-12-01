@@ -47,20 +47,38 @@ module.exports = {
       },
       keyframes: {
         sidenavLTR: {
-          '0%': { transform: 'translateX(-100%)' },
-          '100%': { transform: 'translateX(0px)' }
+          '0%': {
+            transform: 'translateX(-100%)'
+          },
+          '100%': {
+            transform: 'translateX(0px)'
+          }
         },
         sidenavRTL: {
-          '0%': { transform: 'translateX(100%)' },
-          '100%': { transform: 'translateX(0px)' }
+          '0%': {
+            transform: 'translateX(100%)'
+          },
+          '100%': {
+            transform: 'translateX(0px)'
+          }
         },
         fade: {
-          '0%': { opacity: 0 },
-          '100%': { opacity: 1 }
+          '0%': {
+            opacity: 0
+          },
+          '100%': {
+            opacity: 1
+          }
         },
         dropDown: {
-          '0%': { opacity: 0, transform: 'scaleY(0)' },
-          '100%': { opacity: 1, transform: 'scaleY(1)' }
+          '0%': {
+            opacity: 0,
+            transform: 'scaleY(0)'
+          },
+          '100%': {
+            opacity: 1,
+            transform: 'scaleY(1)'
+          }
         }
       },
       animation: {

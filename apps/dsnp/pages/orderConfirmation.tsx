@@ -70,12 +70,24 @@ const OrderConfirmation = () => {
   return (
     <Box position={'relative'}>
       {/* eslint-disable-next-line jsx-a11y/alt-text */}
-      <Image src={orderConfirmmark} margin={'41px auto'} />
-      <Text fontSize={'17px'} fontWeight={'600'} textAlign={'center'}>
+      <Image
+        src={orderConfirmmark}
+        margin={'41px auto'}
+      />
+      <Text
+        fontSize={'17px'}
+        fontWeight={'600'}
+        textAlign={'center'}
+      >
         {t('orderPlaced')}
       </Text>
       <Stack>
-        <Text textAlign={'center'} marginTop={'8px'} marginBottom={'15px'} fontSize={'15px'}>
+        <Text
+          textAlign={'center'}
+          marginTop={'8px'}
+          marginBottom={'15px'}
+          fontSize={'15px'}
+        >
           {t('confirmMessage1')} <br />
           {t('confirmMessage2')}
         </Text>

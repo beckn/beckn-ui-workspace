@@ -9,12 +9,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (req.method === 'POST') {
     try {
       // Create a new token document
-      const fetchedToken = await Token.findOne({ token: req.body.token })
+      const fetchedToken = await Token.findOne({
+        token: req.body.token
+      })
       if (fetchedToken) {
-        await Token.deleteOne({ token: req.body.token })
+        await Token.deleteOne({
+          token: req.body.token
+        })
         res.status(200).json({ validate: true })
       } else {
-        res.status(400).json({ validate: false })
+        res.status(400).json({
+          validate: false
+        })
       }
     } catch (error) {
       res.status(500).json({ error: 'Error validating token' })

@@ -21,8 +21,14 @@ const UserAccountBox: React.FC<Props> = ({ onClose }) => {
   return (
     <div>
       <ul>
-        <li className="my-1 py-1" onClick={onClose}>
-          <Link legacyBehavior href={'/favorite'}>
+        <li
+          className="my-1 py-1"
+          onClick={onClose}
+        >
+          <Link
+            legacyBehavior
+            href={'/favorite'}
+          >
             <a className="flex items-center hover:text-palette-primary">
               <AiOutlineHeart
                 style={{
@@ -34,8 +40,14 @@ const UserAccountBox: React.FC<Props> = ({ onClose }) => {
             </a>
           </Link>
         </li>
-        <li className="my-1 py-1" onClick={onLogoutClickHandler}>
-          <Link legacyBehavior href={`/`}>
+        <li
+          className="my-1 py-1"
+          onClick={onLogoutClickHandler}
+        >
+          <Link
+            legacyBehavior
+            href={`/`}
+          >
             <a className="flex items-center hover:text-palette-primary">
               <IoLogOutOutline
                 style={{

@@ -13,7 +13,13 @@ const geoLocationSearchPage = createSlice({
     toggleLocationSearchPageVisibility(state, action: PayloadAction<boolean>) {
       state.geoLocationSearchPageVisible = action.payload
     },
-    setGeoAddressAndLatLong(state, action: PayloadAction<{ geoAddress: string; geoLatLong: string }>) {
+    setGeoAddressAndLatLong(
+      state,
+      action: PayloadAction<{
+        geoAddress: string
+        geoLatLong: string
+      }>
+    ) {
       state.geoAddress = action.payload.geoAddress
       state.geoLatLong = action.payload.geoLatLong
     }

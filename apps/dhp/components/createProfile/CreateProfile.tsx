@@ -121,10 +121,18 @@ const CreateProfile: React.FC<CreateProfileProps> = props => {
           {formErrors.dob && <span className={style.error}>{t[`${formErrors.dob}`]}</span>}
         </div>
         <Box mb={'20px'}>
-          <Text fontFamily={'Poppins'} fontSize={'15px'} fontWeight={400} mb={3}>
+          <Text
+            fontFamily={'Poppins'}
+            fontSize={'15px'}
+            fontWeight={400}
+            mb={3}
+          >
             {t.formSelectGender}
           </Text>
-          <Grid templateColumns={'repeat(2, 1fr)'} columnGap="10px">
+          <Grid
+            templateColumns={'repeat(2, 1fr)'}
+            columnGap="10px"
+          >
             <Button
               buttonText={'Male'}
               handleOnClick={() => handleGenderSelection('Male')}

@@ -132,7 +132,12 @@ const Search = () => {
           handleChange={(text: string) => {
             setSearchKeyword(text)
             localStorage.removeItem('optionTags')
-            localStorage.setItem('optionTags', JSON.stringify({ name: text }))
+            localStorage.setItem(
+              'optionTags',
+              JSON.stringify({
+                name: text
+              })
+            )
             window.dispatchEvent(new Event('storage-optiontags'))
             fetchDataForSearch()
           }}

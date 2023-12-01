@@ -16,7 +16,11 @@ const StarRating: React.FC<StarRatingProps> = props => {
 
   return (
     <Box mb="20px">
-      <Text pb={'5px'} fontSize={'15px'} fontWeight={400}>
+      <Text
+        pb={'5px'}
+        fontSize={'15px'}
+        fontWeight={400}
+      >
         {props.ratingText}
       </Text>
       <Box display={'flex'}>
@@ -36,7 +40,9 @@ const StarRating: React.FC<StarRatingProps> = props => {
                 name="rating"
                 onChange={() => props.setRating(ratingValue)}
                 value={ratingValue}
-                style={{ display: 'none' }}
+                style={{
+                  display: 'none'
+                }}
               />
               <FaStar
                 cursor="pointer"

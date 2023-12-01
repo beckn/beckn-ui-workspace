@@ -17,12 +17,22 @@ export const AppHeader: React.FC<AppHeaderPropsModel> = props => {
       borderRadius={'none'}
       marginBottom={'32px'}
     >
-      <CardBody display={'flex'} alignItems={'center'}>
-        <Box onClick={() => goBack()} cursor={'pointer'}>
+      <CardBody
+        display={'flex'}
+        alignItems={'center'}
+      >
+        <Box
+          onClick={() => goBack()}
+          cursor={'pointer'}
+        >
           {/* eslint-disable-next-line jsx-a11y/alt-text */}
           <Image src={backArrow} />
         </Box>
-        <Text fontSize={'18px'} textAlign={'center'} width={'100%'}>
+        <Text
+          fontSize={'18px'}
+          textAlign={'center'}
+          width={'100%'}
+        >
           {props.appHeaderText}
         </Text>
       </CardBody>

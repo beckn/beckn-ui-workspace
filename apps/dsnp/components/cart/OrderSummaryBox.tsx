@@ -30,7 +30,12 @@ const OrderSummaryBox: React.FC<OrderSummaryBoxPropsModel> = props => {
             }}
           >
             <h3 className="text-base font-bold sm:text-lg md:text-xl">{t('orderSummary')}</h3>
-            <div className="flex flex-col my-1 sm:my-2" style={{ fontSize: '15px' }}>
+            <div
+              className="flex flex-col my-1 sm:my-2"
+              style={{
+                fontSize: '15px'
+              }}
+            >
               <div className="flex items-center justify-between my-2 md:my-4">
                 <p className="text-base font-normal">{t('totalQuantity')}</p>
                 <p className="font-bold rtl:ml-1 ltr:mr-1">{totalQuantity}</p>

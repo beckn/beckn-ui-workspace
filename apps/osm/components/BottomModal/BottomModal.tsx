@@ -14,7 +14,10 @@ interface ModalProps {
 const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, partialClose }) => {
   const { t } = useLanguage()
   return (
-    <Transition show={isOpen} onClick={() => onClose()}>
+    <Transition
+      show={isOpen}
+      onClick={() => onClose()}
+    >
       <div className="fixed z-[9999] inset-0 flex items-end justify-center  sm:p-0">
         <Transition.Child
           unmount={false}
@@ -24,10 +27,16 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, partialClose }
           leave="transition-transform duration-300"
           leaveFrom="translate-y-0"
           leaveTo="translate-y-full"
-          style={{ width: '100vw' }}
+          style={{
+            width: '100vw'
+          }}
         >
           <div className="w-full   px-4 pb-4 pt-2 mx-auto bg-[#F3F4F5]  rounded-t-[1rem] shadow-lg sm:rounded-lg sm:overflow-hidden">
-            <Image src="/images/Indicator.svg" className="mx-auto mb-3" alt="indicator" />
+            <Image
+              src="/images/Indicator.svg"
+              className="mx-auto mb-3"
+              alt="indicator"
+            />
             {children}
           </div>
         </Transition.Child>

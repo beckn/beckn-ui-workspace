@@ -19,13 +19,18 @@ const ProductPrice: React.FC<Props> = ({ price, isLargeSize = false, isInSlider 
 
   return (
     <div>
-      <div className={`flex rtl:justify-end rtl:self-end ltr:self-start text-left `} style={{ justifyContent }}>
+      <div
+        className={`flex rtl:justify-end rtl:self-end ltr:self-start text-left `}
+        style={{ justifyContent }}
+      >
         <div>
           {/* ☝slider cards (.slick-slide=>Slider component) are float and because of that, they don't accept height so, for making cards the same height, I have to do this hack*/}
           <Box
             color={'rgba(var(--color-primary))'}
             className={`flex items-center ${textMainPriceSize} font-semibold no-underline`}
-            style={{ flexDirection }}
+            style={{
+              flexDirection
+            }}
           >
             <span className="mr-1 rtl:block">{t.currencySymbol}</span>
             <span>{price.toFixed(2)}</span>

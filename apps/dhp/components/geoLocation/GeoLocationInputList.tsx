@@ -36,8 +36,17 @@ const GeoLocationInputList: React.FC = () => {
       >
         {({ getInputProps, suggestions, getSuggestionItemProps }) => (
           <Flex flexDirection={'column'}>
-            <Flex flexDirection={'row'} marginTop="20px">
-              <Box p={3} width="10" style={{ border: '0px solid black' }}>
+            <Flex
+              flexDirection={'row'}
+              marginTop="20px"
+            >
+              <Box
+                p={3}
+                width="10"
+                style={{
+                  border: '0px solid black'
+                }}
+              >
                 <Image
                   src={backArrow}
                   onClick={() => {
@@ -46,7 +55,11 @@ const GeoLocationInputList: React.FC = () => {
                   alt="backArrow"
                 />
               </Box>
-              <Box p={2} width="-moz-max-content" className={Styles.search_box_container}>
+              <Box
+                p={2}
+                width="-moz-max-content"
+                className={Styles.search_box_container}
+              >
                 <Flex flexDirection={'row'}>
                   <input
                     {...getInputProps()}
@@ -56,7 +69,10 @@ const GeoLocationInputList: React.FC = () => {
                     placeholder="Search for Location"
                     className={`${Styles.search_box_input}`}
                   />
-                  <Image src={searchMagnifyIcon} alt="searchMagnifyIcon" />
+                  <Image
+                    src={searchMagnifyIcon}
+                    alt="searchMagnifyIcon"
+                  />
                 </Flex>
               </Box>
             </Flex>
@@ -71,7 +87,10 @@ const GeoLocationInputList: React.FC = () => {
                         key={suggestion.placeId}
                       >
                         <Box className={Styles.location_pointer_wrapper}>
-                          <Image src={locationMarker} alt="locationMarker" />
+                          <Image
+                            src={locationMarker}
+                            alt="locationMarker"
+                          />
                         </Box>
                         <Box className={Styles.location_listitem_content}>
                           <Text className={Styles.location_listitem_content_main_text}>

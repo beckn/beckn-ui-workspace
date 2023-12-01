@@ -14,8 +14,15 @@ const AddBillingButton: React.FC<AddBillingButtonProps> = props => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   return (
     <>
-      <Flex alignItems={'center'} onClick={onOpen}>
-        <Text fontSize={'15px'} color={'rgba(var(--color-primary))'} pl={'10px'}>
+      <Flex
+        alignItems={'center'}
+        onClick={onOpen}
+      >
+        <Text
+          fontSize={'15px'}
+          color={'rgba(var(--color-primary))'}
+          pl={'10px'}
+        >
           {props.addBillingdetailsBtnText}
         </Text>
       </Flex>

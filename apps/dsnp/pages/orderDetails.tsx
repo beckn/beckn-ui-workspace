@@ -215,26 +215,54 @@ const OrderDetails = () => {
   }
 
   return (
-    <Box className="hideScroll" maxH={'calc(100vh - 100px)'} overflowY="scroll">
+    <Box
+      className="hideScroll"
+      maxH={'calc(100vh - 100px)'}
+      overflowY="scroll"
+    >
       {/* <AppHeader appHeaderText={t.selectPaymentMethod} /> */}
 
       {allOrderDelivered ? (
-        <Card mb={'20px'} border={'1px solid rgba(94, 196, 1, 1)'} className="border_radius_all">
+        <Card
+          mb={'20px'}
+          border={'1px solid rgba(94, 196, 1, 1)'}
+          className="border_radius_all"
+        >
           <CardBody padding={'15px 20px'}>
-            <Flex alignItems={'center'} pb={'3px'}>
+            <Flex
+              alignItems={'center'}
+              pb={'3px'}
+            >
               {/* eslint-disable-next-line jsx-a11y/alt-text */}
 
-              <Image width={'12px'} height={'13px'} src={TrackIcon} alt="track" />
+              <Image
+                width={'12px'}
+                height={'13px'}
+                src={TrackIcon}
+                alt="track"
+              />
 
-              <Text pl={'8px'} fontSize={'17px'} fontWeight={'600'}>
+              <Text
+                pl={'8px'}
+                fontSize={'17px'}
+                fontWeight={'600'}
+              >
                 All orders delivered!
               </Text>
             </Flex>
 
-            <Flex alignItems={'center'} fontSize={'15px'} pl={'20px'}>
+            <Flex
+              alignItems={'center'}
+              fontSize={'15px'}
+              pl={'20px'}
+            >
               <Text>How did we do?</Text>
 
-              <Text onClick={() => router.push('/feedback')} pl={'10px'} color={'rgba(var(--color-primary))'}>
+              <Text
+                onClick={() => router.push('/feedback')}
+                pl={'10px'}
+                color={'rgba(var(--color-primary))'}
+              >
                 Add a Review
               </Text>
             </Flex>
@@ -249,8 +277,15 @@ const OrderDetails = () => {
           </Box>
         }
       >
-        <CardBody pt={'unset'} fontSize={'15px'}>
-          <Flex pt={'unset'} justifyContent={'space-between'} alignItems={'center'}>
+        <CardBody
+          pt={'unset'}
+          fontSize={'15px'}
+        >
+          <Flex
+            pt={'unset'}
+            justifyContent={'space-between'}
+            alignItems={'center'}
+          >
             <Text>{t('orderPlacedAt')}</Text>
 
             <Text>{getOrderPlacementTimeline(orderFromConfirmData.created_at)}</Text>
@@ -258,17 +293,27 @@ const OrderDetails = () => {
 
           {Object.keys(confirmDataPerBpp).map(key => (
             <Box key={confirmDataPerBpp[key].id}>
-              <Flex pt={4} justifyContent={'space-between'} alignItems={'center'}>
+              <Flex
+                pt={4}
+                justifyContent={'space-between'}
+                alignItems={'center'}
+              >
                 <Text>{t('ordersFulfilled')}</Text>
 
                 <Box>
-                  <Text as={'span'} pr={'2px'}>
+                  <Text
+                    as={'span'}
+                    pr={'2px'}
+                  >
                     {statusResponse.filter((res: any) => res.message.order.state === 'DELIVERED').length}
                   </Text>
 
                   <Text as={'span'}>of</Text>
 
-                  <Text as={'span'} pl={'2px'}>
+                  <Text
+                    as={'span'}
+                    pl={'2px'}
+                  >
                     {confirmData.length}
                   </Text>
                 </Box>
@@ -283,14 +328,25 @@ const OrderDetails = () => {
           key={index}
           accordionHeader={
             <Box>
-              <Flex mb={'15px'} fontSize={'17px'} alignItems={'center'}>
+              <Flex
+                mb={'15px'}
+                fontSize={'17px'}
+                alignItems={'center'}
+              >
                 <Text pr={'8px'}>{t('orderId')}:</Text>
-                <Text textOverflow={'ellipsis'} overflow={'hidden'} whiteSpace={'nowrap'}>
+                <Text
+                  textOverflow={'ellipsis'}
+                  overflow={'hidden'}
+                  whiteSpace={'nowrap'}
+                >
                   {res.message.order.displayId}
                 </Text>
               </Flex>
 
-              <Flex justifyContent={'space-between'} alignItems={'center'}>
+              <Flex
+                justifyContent={'space-between'}
+                alignItems={'center'}
+              >
                 <Flex maxWidth={'57vw'}>
                   <Text
                     textOverflow={'ellipsis'}
@@ -343,13 +399,23 @@ const OrderDetails = () => {
       ))}
 
       <Accordion accordionHeader={t('shipping')}>
-        <CardBody pt={'unset'} pb={'15px'}>
+        <CardBody
+          pt={'unset'}
+          pb={'15px'}
+        >
           <Box>
-            <Stack divider={<StackDivider />} spacing="4">
+            <Stack
+              divider={<StackDivider />}
+              spacing="4"
+            >
               <Flex alignItems={'center'}>
                 {/* eslint-disable-next-line jsx-a11y/alt-text */}
 
-                <Image src={nameIcon} pr={'12px'} alt="nameIcon" />
+                <Image
+                  src={nameIcon}
+                  pr={'12px'}
+                  alt="nameIcon"
+                />
 
                 <Text fontSize={'17px'}>{shippingDetails.name}</Text>
               </Flex>
@@ -357,7 +423,11 @@ const OrderDetails = () => {
               <Flex alignItems={'center'}>
                 {/* eslint-disable-next-line jsx-a11y/alt-text */}
 
-                <Image src={locationIcon} pr={'12px'} alt="location" />
+                <Image
+                  src={locationIcon}
+                  pr={'12px'}
+                  alt="location"
+                />
 
                 <Text fontSize={'15px'}>{shippingDetails.address}</Text>
               </Flex>
@@ -365,7 +435,11 @@ const OrderDetails = () => {
               <Flex alignItems={'center'}>
                 {/* eslint-disable-next-line jsx-a11y/alt-text */}
 
-                <Image src={CallphoneIcon} pr={'12px'} alt="callphone" />
+                <Image
+                  src={CallphoneIcon}
+                  pr={'12px'}
+                  alt="callphone"
+                />
 
                 <Text fontSize={'15px'}>{shippingDetails.phone}</Text>
               </Flex>
@@ -375,8 +449,15 @@ const OrderDetails = () => {
       </Accordion>
 
       <Accordion accordionHeader={t('paymentText')}>
-        <CardBody pt={'unset'} pb={'unset'}>
-          <Flex pb={'15px'} justifyContent={'space-between'} alignItems={'center'}>
+        <CardBody
+          pt={'unset'}
+          pb={'unset'}
+        >
+          <Flex
+            pb={'15px'}
+            justifyContent={'space-between'}
+            alignItems={'center'}
+          >
             <Text>{t('subtotal')}</Text>
 
             <Text>
@@ -386,7 +467,11 @@ const OrderDetails = () => {
             </Text>
           </Flex>
 
-          <Flex justifyContent={'space-between'} alignItems={'center'} pb={'20px'}>
+          <Flex
+            justifyContent={'space-between'}
+            alignItems={'center'}
+            pb={'20px'}
+          >
             <Text>{t('CGST')}</Text>
 
             <Text>
@@ -396,7 +481,11 @@ const OrderDetails = () => {
             </Text>
           </Flex>
 
-          <Flex justifyContent={'space-between'} alignItems={'center'} pb={'20px'}>
+          <Flex
+            justifyContent={'space-between'}
+            alignItems={'center'}
+            pb={'20px'}
+          >
             <Text>{t('SGST')}</Text>
 
             <Text>
@@ -409,8 +498,17 @@ const OrderDetails = () => {
           <Divider />
         </CardBody>
 
-        <CardBody pb={'unset'} pt={'15px'}>
-          <Flex pb={'15px'} justifyContent={'space-between'} alignItems={'center'} fontSize={'17px'} fontWeight={'600'}>
+        <CardBody
+          pb={'unset'}
+          pt={'15px'}
+        >
+          <Flex
+            pb={'15px'}
+            justifyContent={'space-between'}
+            alignItems={'center'}
+            fontSize={'17px'}
+            fontWeight={'600'}
+          >
             <Text>{t('total')}</Text>
 
             <Text>

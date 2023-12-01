@@ -10,23 +10,46 @@ import Router from 'next/router'
 const bookLabAppointment = () => {
   const { t } = useLanguage()
   return (
-    <Box className="hideScroll" maxH={'calc(100vh - 100px)'} overflowY="scroll">
+    <Box
+      className="hideScroll"
+      maxH={'calc(100vh - 100px)'}
+      overflowY="scroll"
+    >
       <Box>
-        <Text fontSize={'17px'} fontWeight={400} mb={'3px'}>
+        <Text
+          fontSize={'17px'}
+          fontWeight={400}
+          mb={'3px'}
+        >
           {t.selectService}:
         </Text>
 
-        <Box w={'100%'} borderRadius={'12px'} border={'1px solid #C9C9C9'} p={'10px 15px'}>
-          <Text fontSize={'15px'} fontWeight={400}>
+        <Box
+          w={'100%'}
+          borderRadius={'12px'}
+          border={'1px solid #C9C9C9'}
+          p={'10px 15px'}
+        >
+          <Text
+            fontSize={'15px'}
+            fontWeight={400}
+          >
             {t.xray}
           </Text>
         </Box>
       </Box>
-      <Flex flexDirection={'column'} justify={'start'} mt={'20px'}>
+      <Flex
+        flexDirection={'column'}
+        justify={'start'}
+        mt={'20px'}
+      >
         <Text fontSize={'17px'}>{t.selectDate}:</Text>
         <AppointmentDateList />
         <Box mt={'20px'}>
-          <Text fontSize={'17px'} mb={'10px'}>
+          <Text
+            fontSize={'17px'}
+            mb={'10px'}
+          >
             {t.selectTimeSlot}:
           </Text>
           <TimeSlotList />

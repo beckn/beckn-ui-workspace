@@ -152,7 +152,11 @@ const CheckoutPage = () => {
   }
 
   return (
-    <Box className="hideScroll" maxH={'calc(100vh - 100px)'} overflowY="scroll">
+    <Box
+      className="hideScroll"
+      maxH={'calc(100vh - 100px)'}
+      overflowY="scroll"
+    >
       <Box>
         <Box pb={'10px'}>
           <Text fontSize={'17px'}>{t('items')}</Text>
@@ -177,7 +181,11 @@ const CheckoutPage = () => {
       {/* start shipping detals */}
       {!isInitResultPresent() ? (
         <Box>
-          <Flex pb={'10px'} mt={'20px'} justifyContent={'space-between'}>
+          <Flex
+            pb={'10px'}
+            mt={'20px'}
+            justifyContent={'space-between'}
+          >
             <Text fontSize={'17px'}>{t('shipping')}</Text>
           </Flex>
           <DetailsCard>
@@ -192,7 +200,11 @@ const CheckoutPage = () => {
         </Box>
       ) : (
         <Box>
-          <Flex pb={'10px'} mt={'20px'} justifyContent={'space-between'}>
+          <Flex
+            pb={'10px'}
+            mt={'20px'}
+            justifyContent={'space-between'}
+          >
             <Text fontSize={'17px'}>{t('shipping')}</Text>
             <AddShippingButton
               imgFlag={!isInitResultPresent()}
@@ -225,8 +237,16 @@ const CheckoutPage = () => {
             />
           </Flex>
           <DetailsCard>
-            <Stack spacing={5} direction="row">
-              <Checkbox colorScheme={'red'} pr={'12px'} fontSize={'17px'} defaultChecked>
+            <Stack
+              spacing={5}
+              direction="row"
+            >
+              <Checkbox
+                colorScheme={'red'}
+                pr={'12px'}
+                fontSize={'17px'}
+                defaultChecked
+              >
                 {t('orderDetailsCheckboxText')}
               </Checkbox>
             </Stack>
@@ -234,7 +254,11 @@ const CheckoutPage = () => {
         </Box>
       ) : (
         <Box>
-          <Flex pb={'20px'} mt={'20px'} justifyContent={'space-between'}>
+          <Flex
+            pb={'20px'}
+            mt={'20px'}
+            justifyContent={'space-between'}
+          >
             <Text fontSize={'17px'}>{t('billing')}</Text>
             <AddBillingButton
               billingFormData={billingFormData}
@@ -257,7 +281,11 @@ const CheckoutPage = () => {
       {/* start payment details */}
       {initRequest.data && (
         <Box>
-          <Flex pb={'10px'} mt={'20px'} justifyContent={'space-between'}>
+          <Flex
+            pb={'10px'}
+            mt={'20px'}
+            justifyContent={'space-between'}
+          >
             <Text fontSize={'17px'}>{t('paymentText')}</Text>
           </Flex>
           <DetailsCard>

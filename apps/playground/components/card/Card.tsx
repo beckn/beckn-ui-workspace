@@ -19,15 +19,33 @@ const CardWithCheckBox: React.FC<CardWithCheckBoxPropsModel> = props => {
   return (
     <Card className="border_radius_all">
       <CardBody padding={'15px 20px'}>
-        <Box className={styles.checkbox} mb={'15px'} fontSize={'15px'}>
-          <input type="checkbox" id="checkbox" onChange={handleChange} />
+        <Box
+          className={styles.checkbox}
+          mb={'15px'}
+          fontSize={'15px'}
+        >
+          <input
+            type="checkbox"
+            id="checkbox"
+            onChange={handleChange}
+          />
           <label htmlFor="checkbox">
-            <Text mt={'-3px'} position={'absolute'} width={'50vw'} marginLeft="40px">
+            <Text
+              mt={'-3px'}
+              position={'absolute'}
+              width={'50vw'}
+              marginLeft="40px"
+            >
               {props.paymentMethod}
             </Text>
           </label>
         </Box>
-        <Box pointerEvents={'none'} opacity={'0.5'} className={styles.checkbox} fontSize={'15px'}>
+        <Box
+          pointerEvents={'none'}
+          opacity={'0.5'}
+          className={styles.checkbox}
+          fontSize={'15px'}
+        >
           <input
             type="checkbox"
             id="checkbox_Click_Collect"
@@ -36,7 +54,12 @@ const CardWithCheckBox: React.FC<CardWithCheckBoxPropsModel> = props => {
             onChange={handleChange}
           />
           <label htmlFor="checkbox_Click_Collect">
-            <Text mt={'-3px'} position={'absolute'} width={'50vw'} marginLeft="40px">
+            <Text
+              mt={'-3px'}
+              position={'absolute'}
+              width={'50vw'}
+              marginLeft="40px"
+            >
               {t.clickAndCollect}
             </Text>
           </label>

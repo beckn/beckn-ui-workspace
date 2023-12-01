@@ -1,13 +1,10 @@
-import { SpinnerProps } from '@chakra-ui/react'
+import { ReactNode } from 'react'
 
-export interface LoaderPropsModel extends SpinnerProps {
-  loadingText?: string
-  subLoadingText?: string
-  stylesForLoadingText?: React.CSSProperties
-  stylesForSubLoadingText?: React.CSSProperties
+export interface LoaderPropsModel {
   className?: string
   thickness?: string
   emptyColor?: string
   color?: string
   size?: string
+  children?: ReactNode
 }

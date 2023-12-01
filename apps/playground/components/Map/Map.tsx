@@ -94,7 +94,10 @@ const Map: React.FC<MapProps> = ({
         contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      <Control prepend position="topright">
+      <Control
+        prepend
+        position="topright"
+      >
         <div className="flex flex-col basis-4">
           <Image
             className="translate-x-0.5"
@@ -123,7 +126,10 @@ const Map: React.FC<MapProps> = ({
             ></Marker>
           )
         })}
-      <Marker icon={customCenterMarker} position={[lat, long]}></Marker>
+      <Marker
+        icon={customCenterMarker}
+        position={[lat, long]}
+      ></Marker>
       <ZoomControl position="topright" />
 
       <MapView />

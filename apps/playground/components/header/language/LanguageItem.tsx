@@ -17,9 +17,16 @@ const LanguageItem: React.FC<Props> = ({ language, onCloseBox }) => {
   }
 
   return (
-    <Link legacyBehavior href={`${router.asPath}`} locale={language}>
+    <Link
+      legacyBehavior
+      href={`${router.asPath}`}
+      locale={language}
+    >
       <a className="whitespace-nowrap flex justify-between items-center py-1 md:py-2">
-        <div className="flex items-center" onClick={() => onCloseBox(false)}>
+        <div
+          className="flex items-center"
+          onClick={() => onCloseBox(false)}
+        >
           <input
             type="radio"
             id={language}
@@ -29,7 +36,10 @@ const LanguageItem: React.FC<Props> = ({ language, onCloseBox }) => {
             checked={locale === language ? true : false}
             onChange={onChangeHandler}
           />
-          <label htmlFor={language} className={`font-farsi mx-3 grow ${locale === language && 'font-bold'}`}>
+          <label
+            htmlFor={language}
+            className={`font-farsi mx-3 grow ${locale === language && 'font-bold'}`}
+          >
             {t[`${language}`]}
           </label>
         </div>

@@ -34,7 +34,12 @@ const AppointmentDateList: React.FC<AppointmentDateListProps> = () => {
   }
 
   const renderedDays = days.map((day, index) => (
-    <AppointmentDate dateStr={day} isActive={isActive} onSelect={handleSelect} key={index} />
+    <AppointmentDate
+      dateStr={day}
+      isActive={isActive}
+      onSelect={handleSelect}
+      key={index}
+    />
   ))
 
   return <Box className={style.date_container}>{renderedDays}</Box>

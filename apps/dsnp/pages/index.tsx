@@ -1,5 +1,5 @@
 import React from 'react'
-import SignIn from '../components/signIn/SignIn'
+import SignIn from '@components/signIn'
 
 const Home = () => {
   React.useEffect(() => {

@@ -187,7 +187,11 @@ const CheckoutPage = () => {
   }
 
   return (
-    <Box className="hideScroll" maxH={'calc(100vh - 100px)'} overflowY="scroll">
+    <Box
+      className="hideScroll"
+      maxH={'calc(100vh - 100px)'}
+      overflowY="scroll"
+    >
       {/* <AppHeader appHeaderText={t.checkout} /> */}
       {/* start Item Details */}
       <Box>
@@ -213,7 +217,11 @@ const CheckoutPage = () => {
       {/* start shipping detals */}
       {!isInitResultPresent() ? (
         <Box>
-          <Flex pb={'10px'} mt={'20px'} justifyContent={'space-between'}>
+          <Flex
+            pb={'10px'}
+            mt={'20px'}
+            justifyContent={'space-between'}
+          >
             <Text fontSize={'17px'}>{t.billing}</Text>
           </Flex>
           <DetailsCard>
@@ -228,7 +236,11 @@ const CheckoutPage = () => {
         </Box>
       ) : (
         <Box>
-          <Flex pb={'10px'} mt={'20px'} justifyContent={'space-between'}>
+          <Flex
+            pb={'10px'}
+            mt={'20px'}
+            justifyContent={'space-between'}
+          >
             <Text fontSize={'17px'}>{t.billing}</Text>
             <AddBillingButton
               imgFlag={!isInitResultPresent()}
@@ -250,15 +262,26 @@ const CheckoutPage = () => {
       {/* end shipping detals */}
       {scholarshipTitle.length !== 0 && (
         <Box>
-          <Flex pb={'10px'} mt={'20px'} justifyContent={'space-between'}>
+          <Flex
+            pb={'10px'}
+            mt={'20px'}
+            justifyContent={'space-between'}
+          >
             <Text fontSize={'17px'}>{t.scholarship}</Text>
           </Flex>
 
           <DetailsCard>
             <Flex alignItems={'center'}>
-              <Image alt="shippingBtnImage" src={addShippingBtn} />
+              <Image
+                alt="shippingBtnImage"
+                src={addShippingBtn}
+              />
               <Text ml={'8px'}>
-                <span style={{ fontWeight: 'bold' }}>
+                <span
+                  style={{
+                    fontWeight: 'bold'
+                  }}
+                >
                   ‘{scholarshipId}-{scholarshipTitle}’
                 </span>
               </Text>
@@ -270,7 +293,11 @@ const CheckoutPage = () => {
       {/* start payment details */}
       {initRequest.data && (
         <Box>
-          <Flex pb={'10px'} mt={'20px'} justifyContent={'space-between'}>
+          <Flex
+            pb={'10px'}
+            mt={'20px'}
+            justifyContent={'space-between'}
+          >
             <Text fontSize={'17px'}>{t.paymentText}</Text>
           </Flex>
           <DetailsCard>
@@ -286,8 +313,14 @@ const CheckoutPage = () => {
         </Box>
       )}
       {/* end payment details */}
+
       {!isInitResultPresent() ? (
-        <Box position={'absolute'} left={'5%'} width={'90%'} bottom={'0'}>
+        <Box
+          position={'absolute'}
+          left={'5%'}
+          width={'90%'}
+          bottom={'0'}
+        >
           <ButtonComp
             buttonText={t.continue}
             background={'rgba(var(--color-primary))'}
