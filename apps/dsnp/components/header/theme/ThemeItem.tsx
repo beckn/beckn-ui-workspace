@@ -27,7 +27,11 @@ const ThemeItem: React.FC<Props> = ({ theme, Icon, currentTheme }) => {
       className={`flex items-center justify-start py-1 ${currentTheme && currentTheme === theme ? 'font-bold' : ''}`}
       onClick={onThemeClickHandler}
     >
-      <button className="border-none" aria-label="theme-toggle" role="button">
+      <button
+        className="border-none"
+        aria-label="theme-toggle"
+        role="button"
+      >
         <Icon
           style={{
             fontSize: '1.3rem',

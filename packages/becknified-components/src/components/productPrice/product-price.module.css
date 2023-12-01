@@ -1,19 +1,8 @@
-.product_price_container {
+/* .product_price_container {
   display: flex;
   align-items: center;
-  flex-direction: row;
-  font-weight: 600;
-  text-decoration: none;
-
-  @media (min-width: 768px) {
-    font-size: 1.25rem;
-  }
-}
-
-.currency_symbol_span {
-  margin-right: 0.25rem;
-
-  @media (direction: rtl) {
-    display: block;
-  }
-}
+  font-size: 15px;
+  width: 55px;
+  justify-content: space-between;
+  font-weight: 400;
+} */

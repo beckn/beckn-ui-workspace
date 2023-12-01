@@ -33,7 +33,11 @@ const LabProductDetails: React.FC<Props> = ({ product }) => {
       padding={'15px 5px'}
       className="bg-[#fff] md:bg-transparent  md:w-auto  flex-grow self-center lg:self-start md:mt-0  lg:ltr:ml-4 lg:rtl:mr-4 md:py-0 rounded-tl-xl rounded-tr-xl flex flex-col z-10"
     >
-      <Flex justifyContent={'center'} alignItems={'center'} flexDirection="column">
+      <Flex
+        justifyContent={'center'}
+        alignItems={'center'}
+        flexDirection="column"
+      >
         <h2
           className="text-palette-mute whitespace-normal border_radius_all"
           style={{
@@ -44,15 +48,27 @@ const LabProductDetails: React.FC<Props> = ({ product }) => {
         >
           {product.descriptor.name}
         </h2>
-        <Text mb={'10px'} fontSize={'14px'}>
+        <Text
+          mb={'10px'}
+          fontSize={'14px'}
+        >
           {product.bppName}
         </Text>
       </Flex>
       <hr className="mt-1 hidden md:block" />
       <div className="flex items-start flex-wrap relative ">
         <div className="flex-grow ">
-          <div className="flex items-center self-center" style={{ justifyContent: 'center' }}>
-            <StarRatingComponent name="product_rate" starCount={5} value={parseFloat(product.tags.Rating)} />
+          <div
+            className="flex items-center self-center"
+            style={{
+              justifyContent: 'center'
+            }}
+          >
+            <StarRatingComponent
+              name="product_rate"
+              starCount={5}
+              value={parseFloat(product.tags.Rating)}
+            />
             <p className="text-sm text-palette-mute rtl:mr-2 ltr:ml-2 pl-1 ">
               {parseFloat(product.tags.Rating)} {t.stars}
             </p>

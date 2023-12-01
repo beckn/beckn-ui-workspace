@@ -35,7 +35,11 @@ const createProfile = () => {
     }
   }
   return (
-    <Box className="hideScroll" maxH={'calc(100vh - 100px)'} overflowY="scroll">
+    <Box
+      className="hideScroll"
+      maxH={'calc(100vh - 100px)'}
+      overflowY="scroll"
+    >
       <CreateProfile createProfileSubmitHandler={createProfileSubmitHandler} />
     </Box>
   )

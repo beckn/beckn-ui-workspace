@@ -15,10 +15,22 @@ const SelectDeliveryModal: React.FC<SelectDeliveryModalProps> = props => {
   const { isOpen, onOpen, onClose } = useDisclosure({ defaultIsOpen: true })
   const { t } = useLanguage()
   return (
-    <BottomModal isOpen={isOpen} onClose={onClose} modalHeader={t('selectdelivery')}>
-      <Box p={'20px'} pt={'unset'} pb={'unset'}>
+    <BottomModal
+      isOpen={isOpen}
+      onClose={onClose}
+      modalHeader={t('selectdelivery')}
+    >
+      <Box
+        p={'20px'}
+        pt={'unset'}
+        pb={'unset'}
+      >
         <Text fontSize={'15px'}> {t('selectdeliveryText')}</Text>
-        <RadioGroup defaultValue="2" pt={'20px'} pb={'20px'}>
+        <RadioGroup
+          defaultValue="2"
+          pt={'20px'}
+          pb={'20px'}
+        >
           <Stack spacing={4}>
             <Radio
               _checked={{
@@ -28,7 +40,13 @@ const SelectDeliveryModal: React.FC<SelectDeliveryModalProps> = props => {
               size="md"
               value="1"
             >
-              <span style={{ fontSize: '15px' }}>{props.addressOfTheEndLocation}</span>
+              <span
+                style={{
+                  fontSize: '15px'
+                }}
+              >
+                {props.addressOfTheEndLocation}
+              </span>
             </Radio>
             {/* TODO :- will have to check for the behaviour here */}
             {/* <Radio
@@ -56,7 +74,12 @@ const SelectDeliveryModal: React.FC<SelectDeliveryModalProps> = props => {
             router.push(`/search?searchTerm=${selectedItems}`)
           }}
         />
-        <Box textAlign={'center'} fontSize={'15px'} cursor={'pointer'} color={'rgba(var(--color-primary))'}>
+        <Box
+          textAlign={'center'}
+          fontSize={'15px'}
+          cursor={'pointer'}
+          color={'rgba(var(--color-primary))'}
+        >
           {t('cancel')}
         </Box>
       </Box>

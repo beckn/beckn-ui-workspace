@@ -15,8 +15,17 @@ const EmptyCart: React.FC = () => {
 
   return (
     <Flex className={Styles.emptyCart_container}>
-      <Box mb={'40px'} display={'flex'} justifyContent={'center'}>
-        <Image src={CartEmpty} width={'306px'} height={'245px'} alt="cartEmpty" />
+      <Box
+        mb={'40px'}
+        display={'flex'}
+        justifyContent={'center'}
+      >
+        <Image
+          src={CartEmpty}
+          width={'306px'}
+          height={'245px'}
+          alt="cartEmpty"
+        />
       </Box>
       <Text className={Styles.cartHeadingText}>{t('cartEmpty')}</Text>
       <Text className={Styles.cartSpanText}>{t('cartEmptySpan')}</Text>

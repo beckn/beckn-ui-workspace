@@ -73,7 +73,13 @@ const Cart = () => {
   }
 
   return (
-    <div className="hideScroll" style={{ maxHeight: 'calc(100vh - 100px)', overflowY: 'scroll' }}>
+    <div
+      className="hideScroll"
+      style={{
+        maxHeight: 'calc(100vh - 100px)',
+        overflowY: 'scroll'
+      }}
+    >
       {/* <Breadcrumb /> */}
       <div className="flex justify-center flex-col md:flex-row items-start relative max-w-[2100px] mx-auto">
         <CartList setIsLoadingForCartCountChange={setIsLoadingForCartCountChange} />

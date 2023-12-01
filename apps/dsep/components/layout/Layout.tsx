@@ -25,16 +25,34 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
         <Head>
           <title>Skill Seeker</title>
         </Head>
-        <div className={cs('flex flex-col ', { ['h-[100vh]']: isHomepage }, { ['min-h-[100vh]']: !isHomepage })}>
+        <div
+          className={cs(
+            'flex flex-col ',
+            {
+              ['h-[100vh]']: isHomepage
+            },
+            {
+              ['min-h-[100vh]']: !isHomepage
+            }
+          )}
+        >
           <NextNProgress height={7} />
           <Header />
           <main
             className={cs(
               'flex-grow',
-              { [paddingStyles]: !isHomepage },
-              { [marginStyles]: !isHomepage && !isSearch },
-              { ['mt-[24px]']: isHomepage },
-              { ['mt-[118px]']: isSearch }
+              {
+                [paddingStyles]: !isHomepage
+              },
+              {
+                [marginStyles]: !isHomepage && !isSearch
+              },
+              {
+                ['mt-[24px]']: isHomepage
+              },
+              {
+                ['mt-[118px]']: isSearch
+              }
             )}
           >
             {children}

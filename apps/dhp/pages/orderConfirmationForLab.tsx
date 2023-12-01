@@ -50,7 +50,12 @@ const OrderConfirmationForLab = () => {
   }, [])
 
   if (confirmRequest.loading) {
-    return <Loader loadingText={t.categoryLoadPrimary} subLoadingText={t.confirmingOrderLoader} />
+    return (
+      <Loader
+        loadingText={t.categoryLoadPrimary}
+        subLoadingText={t.confirmingOrderLoader}
+      />
+    )
   }
   const handleOrderDetails = () => {
     if (confirmRequest.data) {
@@ -66,11 +71,21 @@ const OrderConfirmationForLab = () => {
       <ConfirmOrder
         confirmationText={
           <>
-            <Text fontSize={'17px'} fontWeight={'600'} textAlign={'center'}>
+            <Text
+              fontSize={'17px'}
+              fontWeight={'600'}
+              textAlign={'center'}
+            >
               {t.congratulation}
             </Text>
             <Stack>
-              <Text textAlign={'center'} marginTop={'8px'} marginBottom={'40px'} fontSize={'15px'} fontWeight="400">
+              <Text
+                textAlign={'center'}
+                marginTop={'8px'}
+                marginBottom={'40px'}
+                fontSize={'15px'}
+                fontWeight="400"
+              >
                 {t.confirmMessage1} <br />
                 {t.confirmMessage2}
               </Text>

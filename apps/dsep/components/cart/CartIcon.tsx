@@ -26,9 +26,16 @@ const Basket = () => {
       onMouseOver={() => onMouseHoverHandler(true)}
       onMouseOut={() => onMouseHoverHandler(false)}
     >
-      <Link legacyBehavior href="/cart">
+      <Link
+        legacyBehavior
+        href="/cart"
+      >
         <a className="relative flex items-center ltr:md:pl-6 rtl:md:pr-6 rtl:md:border-r-2 rtl:md:border-r-slate-300 ltr:md:border-l-2 ltr:md:border-l-slate-300 z-50">
-          <AiOutlineShoppingCart style={{ fontSize: '1.6rem' }} />
+          <AiOutlineShoppingCart
+            style={{
+              fontSize: '1.6rem'
+            }}
+          />
           <span
             style={{
               backgroundColor: 'rgba(var(--color-primary))'
@@ -39,10 +46,19 @@ const Basket = () => {
           </span>
         </a>
       </Link>
-      <Transition nodeRef={nodeRef} in={showCartBox} timeout={300} mountOnEnter unmountOnExit>
+      <Transition
+        nodeRef={nodeRef}
+        in={showCartBox}
+        timeout={300}
+        mountOnEnter
+        unmountOnExit
+      >
         {state => {
           return (
-            <div ref={nodeRef} className="z-[100]">
+            <div
+              ref={nodeRef}
+              className="z-[100]"
+            >
               <CartBox />
             </div>
           )

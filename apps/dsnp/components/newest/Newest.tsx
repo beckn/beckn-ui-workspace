@@ -21,13 +21,21 @@ const Newest = () => {
       <div className="grid gap-4 md:gap-2 grid-cols-6 md:grid-cols-12 ">
         {newestProducts
           ? newestProducts.slice(0, numProductToShow).map((product: RetailItem) => {
-              return <Card key={product.descriptor.name} product={product} />
+              return (
+                <Card
+                  key={product.descriptor.name}
+                  product={product}
+                />
+              )
             })
           : null}
       </div>
 
       <div className="text-center">
-        <Link legacyBehavior href="/newestProducts">
+        <Link
+          legacyBehavior
+          href="/newestProducts"
+        >
           <a className="inline-block py-3 px-8 md:px-12 mt-4 text-sm md:text-base bg-palette-primary text-palette-side rounded-xl shadow-lg">
             {t('seeAllNewProducts')}
           </a>

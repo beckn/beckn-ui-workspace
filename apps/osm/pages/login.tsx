@@ -36,7 +36,13 @@ const Login: NextPage = () => {
       console.log(getError(err))
     }
   }
-  return <EnteringBox title="login" submitHandler={LoginHandler} errorMessage={errorMessage} />
+  return (
+    <EnteringBox
+      title="login"
+      submitHandler={LoginHandler}
+      errorMessage={errorMessage}
+    />
+  )
 }
 
 export default Login

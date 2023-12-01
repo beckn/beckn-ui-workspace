@@ -42,7 +42,13 @@ const SignUp: NextPage = () => {
       // router.push("/");
     }
   }
-  return <EnteringBox title="signUp" submitHandler={signUpHandler} errorMessage={errorMessage} />
+  return (
+    <EnteringBox
+      title="signUp"
+      submitHandler={signUpHandler}
+      errorMessage={errorMessage}
+    />
+  )
 }
 
 export default SignUp

@@ -119,7 +119,12 @@ const OrderConfirmation = () => {
   }, [confirmRequest.data])
 
   if (confirmRequest.loading) {
-    return <Loader loadingText={t.categoryLoadPrimary} subLoadingText={t.confirmingOrderLoader} />
+    return (
+      <Loader
+        loadingText={t.categoryLoadPrimary}
+        subLoadingText={t.confirmingOrderLoader}
+      />
+    )
   }
   const handleViewCource = () => {
     if (confirmRequest.data) {
@@ -137,11 +142,21 @@ const OrderConfirmation = () => {
       <ConfirmOrder
         confirmationText={
           <>
-            <Text fontSize={'17px'} fontWeight={'600'} textAlign={'center'}>
+            <Text
+              fontSize={'17px'}
+              fontWeight={'600'}
+              textAlign={'center'}
+            >
               {t.orderPlaced}
             </Text>
             <Stack>
-              <Text textAlign={'center'} marginTop={'8px'} marginBottom={'40px'} fontSize={'15px'} fontWeight="400">
+              <Text
+                textAlign={'center'}
+                marginTop={'8px'}
+                marginBottom={'40px'}
+                fontSize={'15px'}
+                fontWeight="400"
+              >
                 {t.confirmMessage1} <br />
                 {t.confirmMessage2}
               </Text>

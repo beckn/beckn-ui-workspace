@@ -21,13 +21,27 @@ const SideBar = () => {
   return (
     <div className="md:hidden">
       <div onClick={openNavBar}>
-        <GoGrabber style={{ fontSize: '2rem' }} />
+        <GoGrabber
+          style={{
+            fontSize: '2rem'
+          }}
+        />
       </div>
-      <Transition nodeRef={nodeRef} in={isNavbarOpen!} timeout={300} mountOnEnter unmountOnExit>
+      <Transition
+        nodeRef={nodeRef}
+        in={isNavbarOpen!}
+        timeout={300}
+        mountOnEnter
+        unmountOnExit
+      >
         {state => {
           return (
             <>
-              <SideNav ref={nodeRef} state={state} onClose={closeNav} />
+              <SideNav
+                ref={nodeRef}
+                state={state}
+                onClose={closeNav}
+              />
               <div
                 className={`fixed inset-0 z-[999] bg-black/60
                   ${

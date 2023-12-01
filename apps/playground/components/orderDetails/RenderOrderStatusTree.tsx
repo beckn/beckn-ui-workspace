@@ -28,24 +28,46 @@ export const RenderOrderStatusList = (res: any) => {
   if (order.state === 'INITIATED') {
     return (
       <Box>
-        <Flex alignItems={'center'} justifyContent={'space-between'}>
+        <Flex
+          alignItems={'center'}
+          justifyContent={'space-between'}
+        >
           <Flex alignItems={'center'}>
             {/* eslint-disable-next-line jsx-a11y/alt-text */}
-            <Image width={'12px'} height={'13px'} src={TrackIcon} />
-            <Text paddingLeft={'10px'} fontSize={'15px'} fontWeight={'600'}>
+            <Image
+              width={'12px'}
+              height={'13px'}
+              src={TrackIcon}
+            />
+            <Text
+              paddingLeft={'10px'}
+              fontSize={'15px'}
+              fontWeight={'600'}
+            >
               {t[`${orderStatusMap['INITIATED']}`]}
             </Text>
           </Flex>
           {order.fulfillment.tracking && (
-            <Text fontSize={'15px'} color={'rgba(var(--color-primary))'}>
+            <Text
+              fontSize={'15px'}
+              color={'rgba(var(--color-primary))'}
+            >
               Track
             </Text>
           )}
         </Flex>
         <Flex>
           {/* eslint-disable-next-line jsx-a11y/alt-text */}
-          <Image src={lineBlack} width={'12px'} height={'40px'} />
-          <Text paddingLeft={'10px'} fontSize={'10px'} pt={'10px'}>
+          <Image
+            src={lineBlack}
+            width={'12px'}
+            height={'40px'}
+          />
+          <Text
+            paddingLeft={'10px'}
+            fontSize={'10px'}
+            pt={'10px'}
+          >
             {getOrderPlacementTimeline(res.context.timestamp)}
           </Text>
         </Flex>
@@ -56,37 +78,75 @@ export const RenderOrderStatusList = (res: any) => {
     return (
       <>
         <Box>
-          <Flex alignItems={'center'} justifyContent={'space-between'}>
+          <Flex
+            alignItems={'center'}
+            justifyContent={'space-between'}
+          >
             <Flex alignItems={'center'}>
               {/* eslint-disable-next-line jsx-a11y/alt-text */}
-              <Image width={'12px'} height={'13px'} src={TrackIcon} />
-              <Text paddingLeft={'10px'} fontSize={'15px'} fontWeight={'600'}>
+              <Image
+                width={'12px'}
+                height={'13px'}
+                src={TrackIcon}
+              />
+              <Text
+                paddingLeft={'10px'}
+                fontSize={'15px'}
+                fontWeight={'600'}
+              >
                 {t[`${orderStatusMap['INITIATED']}`]}
               </Text>
             </Flex>
           </Flex>
           <Flex>
             {/* eslint-disable-next-line jsx-a11y/alt-text */}
-            <Image src={lineBlack} width={'12px'} height={'40px'} />
-            <Text paddingLeft={'10px'} fontSize={'10px'} pt={'10px'}>
+            <Image
+              src={lineBlack}
+              width={'12px'}
+              height={'40px'}
+            />
+            <Text
+              paddingLeft={'10px'}
+              fontSize={'10px'}
+              pt={'10px'}
+            >
               {getOrderPlacementTimeline(res.context.timestamp)}
             </Text>
           </Flex>
         </Box>
         <Box>
-          <Flex alignItems={'center'} justifyContent={'space-between'}>
+          <Flex
+            alignItems={'center'}
+            justifyContent={'space-between'}
+          >
             <Flex alignItems={'center'}>
               {/* eslint-disable-next-line jsx-a11y/alt-text */}
-              <Image width={'12px'} height={'13px'} src={TrackIcon} />
-              <Text paddingLeft={'10px'} fontSize={'15px'} fontWeight={'600'}>
+              <Image
+                width={'12px'}
+                height={'13px'}
+                src={TrackIcon}
+              />
+              <Text
+                paddingLeft={'10px'}
+                fontSize={'15px'}
+                fontWeight={'600'}
+              >
                 {t[`${orderStatusMap['ACKNOWLEDGED']}`]}
               </Text>
             </Flex>
           </Flex>
           <Flex>
             {/* eslint-disable-next-line jsx-a11y/alt-text */}
-            <Image src={lineBlack} width={'12px'} height={'40px'} />
-            <Text paddingLeft={'10px'} fontSize={'10px'} pt={'10px'}>
+            <Image
+              src={lineBlack}
+              width={'12px'}
+              height={'40px'}
+            />
+            <Text
+              paddingLeft={'10px'}
+              fontSize={'10px'}
+              pt={'10px'}
+            >
               {getOrderPlacementTimeline(res.context.timestamp)}
             </Text>
           </Flex>
@@ -98,55 +158,112 @@ export const RenderOrderStatusList = (res: any) => {
     return (
       <>
         <Box>
-          <Flex alignItems={'center'} justifyContent={'space-between'}>
+          <Flex
+            alignItems={'center'}
+            justifyContent={'space-between'}
+          >
             <Flex alignItems={'center'}>
               {/* eslint-disable-next-line jsx-a11y/alt-text */}
-              <Image width={'12px'} height={'13px'} src={TrackIcon} />
-              <Text paddingLeft={'10px'} fontSize={'15px'} fontWeight={'600'}>
+              <Image
+                width={'12px'}
+                height={'13px'}
+                src={TrackIcon}
+              />
+              <Text
+                paddingLeft={'10px'}
+                fontSize={'15px'}
+                fontWeight={'600'}
+              >
                 {t[`${orderStatusMap['INITIATED']}`]}
               </Text>
             </Flex>
           </Flex>
           <Flex>
             {/* eslint-disable-next-line jsx-a11y/alt-text */}
-            <Image src={lineBlack} width={'12px'} height={'40px'} />
-            <Text paddingLeft={'10px'} fontSize={'10px'} pt={'10px'}>
+            <Image
+              src={lineBlack}
+              width={'12px'}
+              height={'40px'}
+            />
+            <Text
+              paddingLeft={'10px'}
+              fontSize={'10px'}
+              pt={'10px'}
+            >
               {getOrderPlacementTimeline(res.context.timestamp)}
             </Text>
           </Flex>
         </Box>
         <Box>
-          <Flex alignItems={'center'} justifyContent={'space-between'}>
+          <Flex
+            alignItems={'center'}
+            justifyContent={'space-between'}
+          >
             <Flex alignItems={'center'}>
               {/* eslint-disable-next-line jsx-a11y/alt-text */}
-              <Image width={'12px'} height={'13px'} src={TrackIcon} />
-              <Text paddingLeft={'10px'} fontSize={'15px'} fontWeight={'600'}>
+              <Image
+                width={'12px'}
+                height={'13px'}
+                src={TrackIcon}
+              />
+              <Text
+                paddingLeft={'10px'}
+                fontSize={'15px'}
+                fontWeight={'600'}
+              >
                 {t[`${orderStatusMap['ACKNOWLEDGED']}`]}
               </Text>
             </Flex>
           </Flex>
           <Flex>
             {/* eslint-disable-next-line jsx-a11y/alt-text */}
-            <Image src={lineBlack} width={'12px'} height={'40px'} />
-            <Text paddingLeft={'10px'} fontSize={'10px'} pt={'10px'}>
+            <Image
+              src={lineBlack}
+              width={'12px'}
+              height={'40px'}
+            />
+            <Text
+              paddingLeft={'10px'}
+              fontSize={'10px'}
+              pt={'10px'}
+            >
               {getOrderPlacementTimeline(res.context.timestamp)}
             </Text>
           </Flex>
         </Box>
         <Box>
-          <Flex alignItems={'center'} justifyContent={'space-between'}>
+          <Flex
+            alignItems={'center'}
+            justifyContent={'space-between'}
+          >
             <Flex alignItems={'center'}>
               {/* eslint-disable-next-line jsx-a11y/alt-text */}
-              <Image width={'12px'} height={'13px'} src={TrackIcon} />
-              <Text paddingLeft={'10px'} fontSize={'15px'} fontWeight={'600'}>
+              <Image
+                width={'12px'}
+                height={'13px'}
+                src={TrackIcon}
+              />
+              <Text
+                paddingLeft={'10px'}
+                fontSize={'15px'}
+                fontWeight={'600'}
+              >
                 {t[`${orderStatusMap['PACKED']}`]}
               </Text>
             </Flex>
           </Flex>
           <Flex>
             {/* eslint-disable-next-line jsx-a11y/alt-text */}
-            <Image src={lineBlack} width={'12px'} height={'40px'} />
-            <Text paddingLeft={'10px'} fontSize={'10px'} pt={'10px'}>
+            <Image
+              src={lineBlack}
+              width={'12px'}
+              height={'40px'}
+            />
+            <Text
+              paddingLeft={'10px'}
+              fontSize={'10px'}
+              pt={'10px'}
+            >
               {getOrderPlacementTimeline(res.context.timestamp)}
             </Text>
           </Flex>
@@ -158,73 +275,149 @@ export const RenderOrderStatusList = (res: any) => {
     return (
       <>
         <Box>
-          <Flex alignItems={'center'} justifyContent={'space-between'}>
+          <Flex
+            alignItems={'center'}
+            justifyContent={'space-between'}
+          >
             <Flex alignItems={'center'}>
               {/* eslint-disable-next-line jsx-a11y/alt-text */}
-              <Image width={'12px'} height={'13px'} src={TrackIcon} />
-              <Text paddingLeft={'10px'} fontSize={'15px'} fontWeight={'600'}>
+              <Image
+                width={'12px'}
+                height={'13px'}
+                src={TrackIcon}
+              />
+              <Text
+                paddingLeft={'10px'}
+                fontSize={'15px'}
+                fontWeight={'600'}
+              >
                 {t[`${orderStatusMap['INITIATED']}`]}
               </Text>
             </Flex>
           </Flex>
           <Flex>
             {/* eslint-disable-next-line jsx-a11y/alt-text */}
-            <Image src={lineBlack} width={'12px'} height={'40px'} />
-            <Text paddingLeft={'10px'} fontSize={'10px'} pt={'10px'}>
+            <Image
+              src={lineBlack}
+              width={'12px'}
+              height={'40px'}
+            />
+            <Text
+              paddingLeft={'10px'}
+              fontSize={'10px'}
+              pt={'10px'}
+            >
               {getOrderPlacementTimeline(res.context.timestamp)}
             </Text>
           </Flex>
         </Box>
         <Box>
-          <Flex alignItems={'center'} justifyContent={'space-between'}>
+          <Flex
+            alignItems={'center'}
+            justifyContent={'space-between'}
+          >
             <Flex alignItems={'center'}>
               {/* eslint-disable-next-line jsx-a11y/alt-text */}
-              <Image width={'12px'} height={'13px'} src={TrackIcon} />
-              <Text paddingLeft={'10px'} fontSize={'15px'} fontWeight={'600'}>
+              <Image
+                width={'12px'}
+                height={'13px'}
+                src={TrackIcon}
+              />
+              <Text
+                paddingLeft={'10px'}
+                fontSize={'15px'}
+                fontWeight={'600'}
+              >
                 {t[`${orderStatusMap['ACKNOWLEDGED']}`]}
               </Text>
             </Flex>
           </Flex>
           <Flex>
             {/* eslint-disable-next-line jsx-a11y/alt-text */}
-            <Image src={lineBlack} width={'12px'} height={'40px'} />
-            <Text paddingLeft={'10px'} fontSize={'10px'} pt={'10px'}>
+            <Image
+              src={lineBlack}
+              width={'12px'}
+              height={'40px'}
+            />
+            <Text
+              paddingLeft={'10px'}
+              fontSize={'10px'}
+              pt={'10px'}
+            >
               {getOrderPlacementTimeline(res.context.timestamp)}
             </Text>
           </Flex>
         </Box>
         <Box>
-          <Flex alignItems={'center'} justifyContent={'space-between'}>
+          <Flex
+            alignItems={'center'}
+            justifyContent={'space-between'}
+          >
             <Flex alignItems={'center'}>
               {/* eslint-disable-next-line jsx-a11y/alt-text */}
-              <Image width={'12px'} height={'13px'} src={TrackIcon} />
-              <Text paddingLeft={'10px'} fontSize={'15px'} fontWeight={'600'}>
+              <Image
+                width={'12px'}
+                height={'13px'}
+                src={TrackIcon}
+              />
+              <Text
+                paddingLeft={'10px'}
+                fontSize={'15px'}
+                fontWeight={'600'}
+              >
                 {t[`${orderStatusMap['PACKED']}`]}
               </Text>
             </Flex>
           </Flex>
           <Flex>
             {/* eslint-disable-next-line jsx-a11y/alt-text */}
-            <Image src={lineBlack} width={'12px'} height={'40px'} />
-            <Text paddingLeft={'10px'} fontSize={'10px'} pt={'10px'}>
+            <Image
+              src={lineBlack}
+              width={'12px'}
+              height={'40px'}
+            />
+            <Text
+              paddingLeft={'10px'}
+              fontSize={'10px'}
+              pt={'10px'}
+            >
               {getOrderPlacementTimeline(res.context.timestamp)}
             </Text>
           </Flex>
         </Box>
         <Box>
-          <Flex alignItems={'center'} justifyContent={'space-between'}>
+          <Flex
+            alignItems={'center'}
+            justifyContent={'space-between'}
+          >
             <Flex alignItems={'center'}>
               {/* eslint-disable-next-line jsx-a11y/alt-text */}
-              <Image width={'12px'} height={'13px'} src={TrackIcon} />
-              <Text paddingLeft={'10px'} fontSize={'15px'} fontWeight={'600'}>
+              <Image
+                width={'12px'}
+                height={'13px'}
+                src={TrackIcon}
+              />
+              <Text
+                paddingLeft={'10px'}
+                fontSize={'15px'}
+                fontWeight={'600'}
+              >
                 {t[`${orderStatusMap['SHIPPED']}`]}
               </Text>
             </Flex>
           </Flex>
           <Flex>
             {/* eslint-disable-next-line jsx-a11y/alt-text */}
-            <Image src={lineBlack} width={'12px'} height={'40px'} />
-            <Text paddingLeft={'10px'} fontSize={'10px'} pt={'10px'}>
+            <Image
+              src={lineBlack}
+              width={'12px'}
+              height={'40px'}
+            />
+            <Text
+              paddingLeft={'10px'}
+              fontSize={'10px'}
+              pt={'10px'}
+            >
               {getOrderPlacementTimeline(res.context.timestamp)}
             </Text>
           </Flex>
@@ -236,91 +429,186 @@ export const RenderOrderStatusList = (res: any) => {
     return (
       <>
         <Box>
-          <Flex alignItems={'center'} justifyContent={'space-between'}>
+          <Flex
+            alignItems={'center'}
+            justifyContent={'space-between'}
+          >
             <Flex alignItems={'center'}>
               {/* eslint-disable-next-line jsx-a11y/alt-text */}
-              <Image width={'12px'} height={'13px'} src={TrackIcon} />
-              <Text paddingLeft={'10px'} fontSize={'15px'} fontWeight={'600'}>
+              <Image
+                width={'12px'}
+                height={'13px'}
+                src={TrackIcon}
+              />
+              <Text
+                paddingLeft={'10px'}
+                fontSize={'15px'}
+                fontWeight={'600'}
+              >
                 {t[`${orderStatusMap['INITIATED']}`]}
               </Text>
             </Flex>
           </Flex>
           <Flex>
             {/* eslint-disable-next-line jsx-a11y/alt-text */}
-            <Image src={lineBlack} width={'12px'} height={'40px'} />
-            <Text paddingLeft={'10px'} fontSize={'10px'} pt={'10px'}>
+            <Image
+              src={lineBlack}
+              width={'12px'}
+              height={'40px'}
+            />
+            <Text
+              paddingLeft={'10px'}
+              fontSize={'10px'}
+              pt={'10px'}
+            >
               {getOrderPlacementTimeline(res.context.timestamp)}
             </Text>
           </Flex>
         </Box>
         <Box>
-          <Flex alignItems={'center'} justifyContent={'space-between'}>
+          <Flex
+            alignItems={'center'}
+            justifyContent={'space-between'}
+          >
             <Flex alignItems={'center'}>
               {/* eslint-disable-next-line jsx-a11y/alt-text */}
-              <Image width={'12px'} height={'13px'} src={TrackIcon} />
-              <Text paddingLeft={'10px'} fontSize={'15px'} fontWeight={'600'}>
+              <Image
+                width={'12px'}
+                height={'13px'}
+                src={TrackIcon}
+              />
+              <Text
+                paddingLeft={'10px'}
+                fontSize={'15px'}
+                fontWeight={'600'}
+              >
                 {t[`${orderStatusMap['ACKNOWLEDGED']}`]}
               </Text>
             </Flex>
           </Flex>
           <Flex>
             {/* eslint-disable-next-line jsx-a11y/alt-text */}
-            <Image src={lineBlack} width={'12px'} height={'40px'} />
-            <Text paddingLeft={'10px'} fontSize={'10px'} pt={'10px'}>
+            <Image
+              src={lineBlack}
+              width={'12px'}
+              height={'40px'}
+            />
+            <Text
+              paddingLeft={'10px'}
+              fontSize={'10px'}
+              pt={'10px'}
+            >
               {getOrderPlacementTimeline(res.context.timestamp)}
             </Text>
           </Flex>
         </Box>
         <Box>
-          <Flex alignItems={'center'} justifyContent={'space-between'}>
+          <Flex
+            alignItems={'center'}
+            justifyContent={'space-between'}
+          >
             <Flex alignItems={'center'}>
               {/* eslint-disable-next-line jsx-a11y/alt-text */}
-              <Image width={'12px'} height={'13px'} src={TrackIcon} />
-              <Text paddingLeft={'10px'} fontSize={'15px'} fontWeight={'600'}>
+              <Image
+                width={'12px'}
+                height={'13px'}
+                src={TrackIcon}
+              />
+              <Text
+                paddingLeft={'10px'}
+                fontSize={'15px'}
+                fontWeight={'600'}
+              >
                 {t[`${orderStatusMap['PACKED']}`]}
               </Text>
             </Flex>
           </Flex>
           <Flex>
             {/* eslint-disable-next-line jsx-a11y/alt-text */}
-            <Image src={lineBlack} width={'12px'} height={'40px'} />
-            <Text paddingLeft={'10px'} fontSize={'10px'} pt={'10px'}>
+            <Image
+              src={lineBlack}
+              width={'12px'}
+              height={'40px'}
+            />
+            <Text
+              paddingLeft={'10px'}
+              fontSize={'10px'}
+              pt={'10px'}
+            >
               {getOrderPlacementTimeline(res.context.timestamp)}
             </Text>
           </Flex>
         </Box>
         <Box>
-          <Flex alignItems={'center'} justifyContent={'space-between'}>
+          <Flex
+            alignItems={'center'}
+            justifyContent={'space-between'}
+          >
             <Flex alignItems={'center'}>
               {/* eslint-disable-next-line jsx-a11y/alt-text */}
-              <Image width={'12px'} height={'13px'} src={TrackIcon} />
-              <Text paddingLeft={'10px'} fontSize={'15px'} fontWeight={'600'}>
+              <Image
+                width={'12px'}
+                height={'13px'}
+                src={TrackIcon}
+              />
+              <Text
+                paddingLeft={'10px'}
+                fontSize={'15px'}
+                fontWeight={'600'}
+              >
                 {t[`${orderStatusMap['SHIPPED']}`]}
               </Text>
             </Flex>
           </Flex>
           <Flex>
             {/* eslint-disable-next-line jsx-a11y/alt-text */}
-            <Image src={lineBlack} width={'12px'} height={'40px'} />
-            <Text paddingLeft={'10px'} fontSize={'10px'} pt={'10px'}>
+            <Image
+              src={lineBlack}
+              width={'12px'}
+              height={'40px'}
+            />
+            <Text
+              paddingLeft={'10px'}
+              fontSize={'10px'}
+              pt={'10px'}
+            >
               {getOrderPlacementTimeline(res.context.timestamp)}
             </Text>
           </Flex>
         </Box>
         <Box>
-          <Flex alignItems={'center'} justifyContent={'space-between'}>
+          <Flex
+            alignItems={'center'}
+            justifyContent={'space-between'}
+          >
             <Flex alignItems={'center'}>
               {/* eslint-disable-next-line jsx-a11y/alt-text */}
-              <Image width={'12px'} height={'13px'} src={TrackIcon} />
-              <Text paddingLeft={'10px'} fontSize={'15px'} fontWeight={'600'}>
+              <Image
+                width={'12px'}
+                height={'13px'}
+                src={TrackIcon}
+              />
+              <Text
+                paddingLeft={'10px'}
+                fontSize={'15px'}
+                fontWeight={'600'}
+              >
                 {t[`${orderStatusMap['DELIVERED']}`]}
               </Text>
             </Flex>
           </Flex>
           <Flex>
             {/* eslint-disable-next-line jsx-a11y/alt-text */}
-            <Image src={lineBlack} width={'12px'} height={'40px'} />
-            <Text paddingLeft={'10px'} fontSize={'10px'} pt={'10px'}>
+            <Image
+              src={lineBlack}
+              width={'12px'}
+              height={'40px'}
+            />
+            <Text
+              paddingLeft={'10px'}
+              fontSize={'10px'}
+              pt={'10px'}
+            >
               {getOrderPlacementTimeline(res.context.timestamp)}
             </Text>
           </Flex>

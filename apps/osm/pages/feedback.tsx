@@ -13,13 +13,20 @@ const Feedback = () => {
   const [rating, setRating] = useState(0)
   return (
     <>
-      <Box pt={'12px'} textAlign={'center'} pb={'15px'}>
+      <Box
+        pt={'12px'}
+        textAlign={'center'}
+        pb={'15px'}
+      >
         <Text fontSize={'18px'}>{t.orderDeliveredOnTime}</Text>
         <Text fontSize={'12px'}>{t.shareYourfeedback}</Text>
       </Box>
       <Box mb={'10px'}>
         {/* eslint-disable-next-line jsx-a11y/alt-text */}
-        <Image src={feedbackImg} margin={'0 auto'} />
+        <Image
+          src={feedbackImg}
+          margin={'0 auto'}
+        />
       </Box>
       <StarRating
         ratingText={t.rateStore}
@@ -38,7 +45,10 @@ const Feedback = () => {
         transition={''}
       />
       <Box>
-        <Text fontSize={'12px'} mb={'10px'}>
+        <Text
+          fontSize={'12px'}
+          mb={'10px'}
+        >
           {t.addCommentsHere}
         </Text>
         <Textarea

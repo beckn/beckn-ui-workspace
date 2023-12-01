@@ -61,7 +61,9 @@ const OrderHistory = () => {
         key={index}
         href={{
           pathname: '/orderDetails',
-          query: { orderId: orderInHistory.parentOrderId }
+          query: {
+            orderId: orderInHistory.parentOrderId
+          }
         }}
       >
         <Box pt={'20px'}>

@@ -19,7 +19,10 @@ interface AccordionPropsModel {
 const Accordion: React.FC<AccordionPropsModel> = props => {
   return (
     <>
-      <Card marginBottom={'20px'} className="border_radius_all">
+      <Card
+        marginBottom={'20px'}
+        className="border_radius_all"
+      >
         <AccordionComp allowMultiple>
           <AccordionItem
             background={'unset'}
@@ -28,8 +31,17 @@ const Accordion: React.FC<AccordionPropsModel> = props => {
           >
             <CardBody padding={'15px 20px'}>
               <h2>
-                <AccordionButton padding={'unset'} background={'unset !important'}>
-                  <Box as="span" flex="1" textAlign="left" fontSize={'17px'} fontWeight={'600'}>
+                <AccordionButton
+                  padding={'unset'}
+                  background={'unset !important'}
+                >
+                  <Box
+                    as="span"
+                    flex="1"
+                    textAlign="left"
+                    fontSize={'17px'}
+                    fontWeight={'600'}
+                  >
                     {props.accordionHeader}
                   </Box>
                   <AccordionIcon />

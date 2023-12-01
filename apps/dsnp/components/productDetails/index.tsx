@@ -45,10 +45,19 @@ const ProductDetails: React.FC<Props> = ({ product }) => {
     )
   })
   return (
-    <div className="flex flex-col mt-4 hideScroll" style={{ maxHeight: 'calc(100vh - 118px)', overflowY: 'scroll' }}>
+    <div
+      className="flex flex-col mt-4 hideScroll"
+      style={{
+        maxHeight: 'calc(100vh - 118px)',
+        overflowY: 'scroll'
+      }}
+    >
       <div className="w-full xl:max-w-[2100px] mx-auto">
         <div className="flex flex-col md:flex-row flex-wrap md:flex-nowrap items-start md:items-start relative">
-          <ImageSection imgArray={product.descriptor.images} product={product} />
+          <ImageSection
+            imgArray={product.descriptor.images}
+            product={product}
+          />
           <DetailsSection product={product} />
           {/* <AvgReviews avgRating={avgRating} numOfReviewers={numOfReviewers} /> */}
           {/* <Box fontFamily={'Poppins'} p={'15px'} w={'100%'}>

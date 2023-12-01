@@ -72,7 +72,10 @@ const CarouselBox: React.FC<Props> = ({ title, className, children, href, full }
           {t[`${title}`]}
         </h2>
         {!full ? (
-          <Link legacyBehavior href={`/offers`}>
+          <Link
+            legacyBehavior
+            href={`/offers`}
+          >
             <a className="text-palette-primary/80 dark:text-rose-300 text-sm font-bold py-2 px-6 -mb-4 shadow-lg block rounded-lg backdrop-filter backdrop-blur-[10px] bg-palette-card/80">
               {t.seeAll}
             </a>
@@ -83,10 +86,18 @@ const CarouselBox: React.FC<Props> = ({ title, className, children, href, full }
         <Slider {...settings}>{children}</Slider>
         <div>
           <div className="absolute top-[45%] right-4 md:right-1 shadow-lg rounded-full bg-palette-card p-1 drop-shadow-lg text-[0.8rem] md:text-[1.8rem]">
-            <HiOutlineChevronRight style={{ color: 'gray' }} />
+            <HiOutlineChevronRight
+              style={{
+                color: 'gray'
+              }}
+            />
           </div>
           <div className="absolute top-[45%] left-4 md:-left-1 shadow-lg rounded-full bg-palette-card p-1 drop-shadow-lg text-[0.8rem] md:text-[1.8rem]">
-            <HiOutlineChevronLeft style={{ color: 'gray' }} />
+            <HiOutlineChevronLeft
+              style={{
+                color: 'gray'
+              }}
+            />
           </div>
         </div>
       </div>

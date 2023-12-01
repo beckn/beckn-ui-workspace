@@ -15,7 +15,10 @@ const AppointmentDate: React.FC<AppointmentDateProps> = ({ dateStr, isActive, on
   const [day, date]: string[] = dateStr.split(' ')
 
   return (
-    <Box className={`${style.select_date} ${isActive === dateStr ? `${style.isActive}` : ''}`} onClick={handleClick}>
+    <Box
+      className={`${style.select_date} ${isActive === dateStr ? `${style.isActive}` : ''}`}
+      onClick={handleClick}
+    >
       {day} <br />
       {date}
     </Box>

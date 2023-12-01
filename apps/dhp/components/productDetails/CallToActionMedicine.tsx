@@ -59,14 +59,30 @@ const CallToActionMedicine: React.FC<Props> = ({ product }) => {
   return (
     <div className="flex flex-col items-center flex-grow sticky top-10 md:top-36 mt-8 rtl:mr-auto ltr:ml-auto xl:rtl:ml-2 px-6 py-4 sm:p-4 xl:p-6 border-2 shadow-lg border_radius_all">
       <div className="w-full  items-center ">
-        <p className="pb-1" style={{ fontSize: '12px', fontWeight: '600' }}>
+        <p
+          className="pb-1"
+          style={{
+            fontSize: '12px',
+            fontWeight: '600'
+          }}
+        >
           {t.totalText}
         </p>
-        <ProductPrice price={parseFloat(product.price.value)} isLargeSize={false} />
+        <ProductPrice
+          price={parseFloat(product.price.value)}
+          isLargeSize={false}
+        />
       </div>
       <div className="flex items-center justify-between mt-6 cursor-pointer">
-        <div className="p-2" onClick={increment}>
-          <HiOutlinePlusSm style={{ fontSize: '1.5rem' }} />
+        <div
+          className="p-2"
+          onClick={increment}
+        >
+          <HiOutlinePlusSm
+            style={{
+              fontSize: '1.5rem'
+            }}
+          />
         </div>
         <input
           className="inline-block w-[70px] rtl:pr-8 ltr:pl-7 py-1 mx-1 sm:mx-4 border-[1px] border-gray-300 text-center"
@@ -75,16 +91,28 @@ const CallToActionMedicine: React.FC<Props> = ({ product }) => {
           max={10}
           value={counter}
           onChange={onInputNumberChangeHandler}
-          style={{ color: 'rgba(var(--color-primary))' }}
+          style={{
+            color: 'rgba(var(--color-primary))'
+          }}
         />
-        <div onClick={decrement} className="p-2">
-          <HiMinusSm style={{ fontSize: '1.5rem' }} />
+        <div
+          onClick={decrement}
+          className="p-2"
+        >
+          <HiMinusSm
+            style={{
+              fontSize: '1.5rem'
+            }}
+          />
         </div>
       </div>
       <br />
       <Button
         buttonText={
-          <Flex justifyContent={'center'} alignItems={'center'}>
+          <Flex
+            justifyContent={'center'}
+            alignItems={'center'}
+          >
             {/* <BsCartPlus style={{ fontSize: '1.2rem', margin: '0 0.4rem' }} /> */}
             {t.addToCart}
           </Flex>

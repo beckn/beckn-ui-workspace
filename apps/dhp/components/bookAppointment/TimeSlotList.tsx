@@ -22,12 +22,20 @@ const TimeSlotList: React.FC = () => {
     setIsActive(time)
   }
   const renderedTimeSlots = timeSlots.map((slot, index) => (
-    <TimeSlot key={index} time={slot} selected={isActive} onSelect={handleSelect} />
+    <TimeSlot
+      key={index}
+      time={slot}
+      selected={isActive}
+      onSelect={handleSelect}
+    />
   ))
 
   return (
     <Box className={style.appointment_booking}>
-      <Flex wrap={'wrap'} gap={'8px'}>
+      <Flex
+        wrap={'wrap'}
+        gap={'8px'}
+      >
         {renderedTimeSlots}
       </Flex>
     </Box>

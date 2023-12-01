@@ -28,15 +28,28 @@ const DropDown = forwardRef<HTMLDivElement, Props>(({ dropDown }, ref) => {
   }
 
   return (
-    <div className="origin-top" ref={ref}>
+    <div
+      className="origin-top"
+      ref={ref}
+    >
       <div
         className="flex items-center cursor-pointer py-4 px-6"
         onClick={() => setOpenDropDown(prevState => !prevState)}
       >
         <h3 className="ltr:mr-3 rtl:ml-3 text-md font-bold grow">{t[`${dropDown.title}`]}</h3>
-        <ArrowDirection style={{ fontSize: '1.5rem' }} />
+        <ArrowDirection
+          style={{
+            fontSize: '1.5rem'
+          }}
+        />
       </div>
-      <Transition mountOnEnter unmountOnExit in={openDropdown} timeout={300} nodeRef={nodeRef}>
+      <Transition
+        mountOnEnter
+        unmountOnExit
+        in={openDropdown}
+        timeout={300}
+        nodeRef={nodeRef}
+      >
         {state => (
           <>
             <div
@@ -53,8 +66,15 @@ const DropDown = forwardRef<HTMLDivElement, Props>(({ dropDown }, ref) => {
             >
               {dropDown.subtitles.map((item, index) => {
                 return (
-                  <div className="ltr:pl-6 rtl:pr-6 py-3" ref={ref} key={`${item}-${index}`}>
-                    <Link legacyBehavior href={`/${activeMenuItemText}/${dropDown.title}/${item}`}>
+                  <div
+                    className="ltr:pl-6 rtl:pr-6 py-3"
+                    ref={ref}
+                    key={`${item}-${index}`}
+                  >
+                    <Link
+                      legacyBehavior
+                      href={`/${activeMenuItemText}/${dropDown.title}/${item}`}
+                    >
                       <a>
                         <div onClick={closeNavbar}>{t[`${item}`]}</div>
                       </a>

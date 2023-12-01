@@ -10,7 +10,11 @@ const myAppointments = () => {
     Router.push('/orderDetailsHistoryPage')
   }
   return (
-    <Box className="hideScroll" maxH={'calc(100vh - 100px)'} overflowY="scroll">
+    <Box
+      className="hideScroll"
+      maxH={'calc(100vh - 100px)'}
+      overflowY="scroll"
+    >
       <MyAppointments
         labName={'Gio Labs'}
         address={'Akshya Nagar 1st Block 1st Cross, Rammurthy nagar, Bangalore-560016'}

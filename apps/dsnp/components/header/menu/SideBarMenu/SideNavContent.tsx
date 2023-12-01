@@ -22,9 +22,15 @@ const SideNavContent = () => {
       <div className="flex flex-col mt-3 pt-3 ltr:px-5 rtl:px-5 cursor-pointer">
         {extraMenu.map(menuItem => {
           return (
-            <div className="flex items-center py-3 text-palette-mute " key={menuItem.title}>
+            <div
+              className="flex items-center py-3 text-palette-mute "
+              key={menuItem.title}
+            >
               <menuItem.icon />
-              <Link legacyBehavior href={menuItem.href}>
+              <Link
+                legacyBehavior
+                href={menuItem.href}
+              >
                 <a className="mx-4">{t(`${menuItem.title}`)}</a>
               </Link>
             </div>

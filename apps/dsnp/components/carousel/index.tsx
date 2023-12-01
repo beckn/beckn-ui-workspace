@@ -28,7 +28,12 @@ const Carousel = () => {
     <div className="relative">
       <Slider {...settings}>
         {sliderContent.map(slideContent => {
-          return <Slide key={slideContent.ID} {...slideContent} />
+          return (
+            <Slide
+              key={slideContent.ID}
+              {...slideContent}
+            />
+          )
         })}
       </Slider>
       <>

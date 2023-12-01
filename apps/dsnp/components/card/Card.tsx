@@ -19,10 +19,22 @@ const CardWithCheckBox: React.FC<CardWithCheckBoxPropsModel> = props => {
   return (
     <Card className="border_radius_all">
       <CardBody padding={'20px 20px'}>
-        <Box className={styles.checkbox} fontSize={'15px'}>
-          <input type="checkbox" id="checkbox" onChange={handleChange} />
+        <Box
+          className={styles.checkbox}
+          fontSize={'15px'}
+        >
+          <input
+            type="checkbox"
+            id="checkbox"
+            onChange={handleChange}
+          />
           <label htmlFor="checkbox">
-            <Text mt={'-3px'} position={'absolute'} width={'50vw'} marginLeft="40px">
+            <Text
+              mt={'-3px'}
+              position={'absolute'}
+              width={'50vw'}
+              marginLeft="40px"
+            >
               {props.paymentMethod}
             </Text>
           </label>

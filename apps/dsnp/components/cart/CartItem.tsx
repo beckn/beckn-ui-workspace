@@ -59,7 +59,10 @@ const CartItem: React.FC<Props> = ({ product, setIsLoadingForCartCountChange }) 
 
   return (
     <div className="flex flex-wrap items-center px-2 mb-4 border-b-2 sm:my-4 sm:py-4">
-      <div style={{ width: '100%' }} className="lg:w-1/2 sm:min-w-[290px]">
+      <div
+        style={{ width: '100%' }}
+        className="lg:w-1/2 sm:min-w-[290px]"
+      >
         {/* <Link legacyBehavior
           href={`/${product.category[0]}/${product.category[1]}/${product.category[2]}/${product.slug.current}`}
         > */}
@@ -75,7 +78,10 @@ const CartItem: React.FC<Props> = ({ product, setIsLoadingForCartCountChange }) 
           </div>
           <div
             className="flex-grow w-full pt-1 mx-2 mb-2 text-sm font-semibold text-center sm:mb-0"
-            style={{ direction: 'ltr', fontSize: '17px' }}
+            style={{
+              direction: 'ltr',
+              fontSize: '17px'
+            }}
           >
             {product.descriptor.name}
           </div>
@@ -85,8 +91,15 @@ const CartItem: React.FC<Props> = ({ product, setIsLoadingForCartCountChange }) 
       <div className="flex flex-wrap flex-grow mb-4 md:items-center sm:mb-0">
         <div className="flex-grow my-2 sm:my-0">
           <div className="flex items-center justify-start cursor-pointer lg:justify-center">
-            <div className="p-2" onClick={() => increment(product)}>
-              <HiOutlinePlusSm style={{ fontSize: '1rem' }} />
+            <div
+              className="p-2"
+              onClick={() => increment(product)}
+            >
+              <HiOutlinePlusSm
+                style={{
+                  fontSize: '1rem'
+                }}
+              />
             </div>
             <input
               className=" text-[#F37A20] inline-block w-[65px] rtl:pr-7 ltr:pl-7 py-2 mx-1 border-[1px] border-gray-400 text-center rounded-md"
@@ -96,8 +109,15 @@ const CartItem: React.FC<Props> = ({ product, setIsLoadingForCartCountChange }) 
               value={counter}
               onChange={onInputNumberChangeHandler}
             />
-            <div onClick={() => decrement(product.id)} className="p-1">
-              <HiMinusSm style={{ fontSize: '1rem' }} />
+            <div
+              onClick={() => decrement(product.id)}
+              className="p-1"
+            >
+              <HiMinusSm
+                style={{
+                  fontSize: '1rem'
+                }}
+              />
             </div>
           </div>
         </div>

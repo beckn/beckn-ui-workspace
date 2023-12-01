@@ -17,32 +17,67 @@ const ItemDetails: React.FC<ItemDetailProps> = props => {
   return (
     <>
       <Box pb={'10px'}>
-        <Flex pb={'5px'} justifyContent={'space-between'} alignItems={'center'}>
-          <Text fontSize={'15px'} fontWeight={700}>
+        <Flex
+          pb={'5px'}
+          justifyContent={'space-between'}
+          alignItems={'center'}
+        >
+          <Text
+            fontSize={'15px'}
+            fontWeight={700}
+          >
             {props.title}
           </Text>{' '}
         </Flex>
-        <Flex justifyContent={'space-between'} flexDir={'column'} pb={'5px'}>
-          <Text fontSize={'12px'} fontWeight={500}>
+        <Flex
+          justifyContent={'space-between'}
+          flexDir={'column'}
+          pb={'5px'}
+        >
+          <Text
+            fontSize={'12px'}
+            fontWeight={500}
+          >
             {props.provider}
           </Text>
-          <Text fontSize={'12px'} fontWeight={500}>
+          <Text
+            fontSize={'12px'}
+            fontWeight={500}
+          >
             {props.address}
           </Text>
         </Flex>
-        <Flex justifyContent={'start'} alignItems={'center'} pb={'5px'}>
-          <Text fontSize={'12px'} fontWeight={600}>
+        <Flex
+          justifyContent={'start'}
+          alignItems={'center'}
+          pb={'5px'}
+        >
+          <Text
+            fontSize={'12px'}
+            fontWeight={600}
+          >
             {t.date}
           </Text>
           <Text fontSize={'12px'}>{props.date}</Text>
         </Flex>
-        <Flex justifyContent={'space-between'} alignItems={'center'} flexDir={'row'} pb={'5px'}>
-          <Text fontSize={'12px'} fontWeight={600}>
+        <Flex
+          justifyContent={'space-between'}
+          alignItems={'center'}
+          flexDir={'row'}
+          pb={'5px'}
+        >
+          <Text
+            fontSize={'12px'}
+            fontWeight={600}
+          >
             {t.timeslot}
           </Text>
           <Text fontSize={'12px'}>{props.timeSlot}</Text>
 
-          <Text fontSize={'12px'} fontWeight={600}>
+          <Text
+            fontSize={'12px'}
+            fontWeight={600}
+          >
             {t.duration}
           </Text>
           <Text fontSize={'12px'}>{props.duration}</Text>

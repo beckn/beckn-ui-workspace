@@ -66,7 +66,10 @@ const TopSheet: React.FC<TopSheetPropsModel> = props => {
       >
         <Box>
           <Flex alignItems={'center'}>
-            <Image pr={'6px'} src={'/images/LocationIcon1.svg'} />
+            <Image
+              pr={'6px'}
+              src={'/images/LocationIcon1.svg'}
+            />
 
             <Box>
               <Text fontSize={'12px'}>{t.setLocation}</Text>
@@ -82,7 +85,11 @@ const TopSheet: React.FC<TopSheetPropsModel> = props => {
                 >
                   {geoLocationSearchPageSelectedAddress ? geoLocationSearchPageSelectedAddress : props.currentAddress}
                 </Text>
-                <Image onClick={onOpen} pt={'4px'} src="/images/DownArrow.svg" />
+                <Image
+                  onClick={onOpen}
+                  pt={'4px'}
+                  src="/images/DownArrow.svg"
+                />
               </Flex>
             </Box>
           </Flex>
@@ -108,19 +115,40 @@ const TopSheet: React.FC<TopSheetPropsModel> = props => {
             pb={'25px'}
           >
             <Box>
-              <Image position={'absolute'} top={'-12px'} left={'30%'} src="/images/UpArrow.svg" />
+              <Image
+                position={'absolute'}
+                top={'-12px'}
+                left={'30%'}
+                src="/images/UpArrow.svg"
+              />
             </Box>
             <Box>
-              <Text fontSize={'12px'} fontWeight={'700'} pb={'6px'}>
+              <Text
+                fontSize={'12px'}
+                fontWeight={'700'}
+                pb={'6px'}
+              >
                 {t.devicelocationisnotenabled}
               </Text>
               <Text fontSize={'12px'}>{t.accessToProvideLocation}</Text>
-              <Box position={'relative'} mt="20px">
-                <Image position={'absolute'} bottom={'8px'} src="/images/LocationIcon2.svg" width={'24px'} />
+              <Box
+                position={'relative'}
+                mt="20px"
+              >
+                <Image
+                  position={'absolute'}
+                  bottom={'8px'}
+                  src="/images/LocationIcon2.svg"
+                  width={'24px'}
+                />
                 <Input
                   pl="30px"
-                  _active={{ outline: 'unset' }}
-                  _focusVisible={{ borderColor: 'unset' }}
+                  _active={{
+                    outline: 'unset'
+                  }}
+                  _focusVisible={{
+                    borderColor: 'unset'
+                  }}
                   outline="unset"
                   border="unset"
                   borderRadius={'unset'}
@@ -128,9 +156,19 @@ const TopSheet: React.FC<TopSheetPropsModel> = props => {
                   placeholder={t.searchforlocation}
                   onChange={onFocusChange}
                 />
-                <Image position={'absolute'} right="0" bottom={'8px'} src="/images/SearchIcon1.svg" width={'24px'} />
+                <Image
+                  position={'absolute'}
+                  right="0"
+                  bottom={'8px'}
+                  src="/images/SearchIcon1.svg"
+                  width={'24px'}
+                />
               </Box>
-              <Box textAlign={'center'} pt={'20px'} fontSize="12px">
+              <Box
+                textAlign={'center'}
+                pt={'20px'}
+                fontSize="12px"
+              >
                 {t.or}
               </Box>
               <Button
@@ -142,7 +180,11 @@ const TopSheet: React.FC<TopSheetPropsModel> = props => {
                 ml={'55px'}
                 mt={5}
               >
-                <Flex flexDir={'row'} justifyContent={'space-around'} alignItems={'center'}>
+                <Flex
+                  flexDir={'row'}
+                  justifyContent={'space-around'}
+                  alignItems={'center'}
+                >
                   <MdMyLocation size={20} />
                   <Text ml={3}>{t.enableLocation}</Text>
                 </Flex>

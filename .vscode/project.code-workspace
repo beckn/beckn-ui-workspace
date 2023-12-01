@@ -9,6 +9,10 @@
       "path": "../packages/molecules"
     },
     {
+      "name": "Prettier",
+      "path": "../packages/prettier-config"
+    },
+    {
       "name": "Becknified-components",
       "path": "../packages/becknified-components"
     },
@@ -31,6 +35,10 @@
     {
       "name": "Playground",
       "path": "../apps/playground"
+    },
+    {
+      "name": "Odr",
+      "path": "../apps/odr"
     },
   ],
 	"settings": {

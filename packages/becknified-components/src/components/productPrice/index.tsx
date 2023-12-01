@@ -1,3 +1,3 @@
-import ProductPrice from './ProductPrice'
+import ProductPrice from './product-price'
 
 export default ProductPrice

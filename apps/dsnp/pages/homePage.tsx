@@ -84,17 +84,31 @@ const HomePage = () => {
   return (
     <>
       <TopSheet currentAddress={currentAddress} />
-      <Box pt={'40px'} fontSize={'40px'} fontWeight={'800'} color={'rgba(var(--color-primary))'} lineHeight={'110%'}>
+      <Box
+        pt={'40px'}
+        fontSize={'40px'}
+        fontWeight={'800'}
+        color={'rgba(var(--color-primary))'}
+        lineHeight={'110%'}
+      >
         {t('openCommerce1')}
         <br />
         {t('openCommerce2')}
       </Box>
 
-      <Box fontSize={'27px'} fontWeight={'800'} pt={'10px'}>
+      <Box
+        fontSize={'27px'}
+        fontWeight={'800'}
+        pt={'10px'}
+      >
         {t('forAll')}
       </Box>
 
-      <Box fontSize={'15px'} pt={'15px'} pb={'40px'}>
+      <Box
+        fontSize={'15px'}
+        pt={'15px'}
+        pb={'40px'}
+      >
         {t('openCommerceDescription')}
       </Box>
 

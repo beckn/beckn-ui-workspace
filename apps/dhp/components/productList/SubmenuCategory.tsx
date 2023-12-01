@@ -31,7 +31,11 @@ const SubmenuCategory = () => {
             key={subCategory.title}
             onClick={() => onClickHandler(subCategory.title)}
           >
-            <subCategory.icon style={{ fontSize: iconFontSize }} />
+            <subCategory.icon
+              style={{
+                fontSize: iconFontSize
+              }}
+            />
             <h4 className="text-center text-[12px] md:text-base md:pt-3">{t[subCategory.title]}</h4>
           </div>
         ))}

@@ -58,7 +58,10 @@ const Feedback = () => {
 
   const getReviewToken = async () => {
     try {
-      const response = await axios.request({ url: `https://dsnp.becknprotocol.io/api/token`, method: 'POST' })
+      const response = await axios.request({
+        url: `https://dsnp.becknprotocol.io/api/token`,
+        method: 'POST'
+      })
       return response.data.token
     } catch (err) {
       console.log('Error', err)
@@ -80,11 +83,23 @@ const Feedback = () => {
   if (!product) return <></>
 
   return (
-    <Box className="hideScroll" maxH={'calc(100vh - 100px)'} overflowY="scroll">
-      <Box pt={'12px'} pb={'15px'}>
+    <Box
+      className="hideScroll"
+      maxH={'calc(100vh - 100px)'}
+      overflowY="scroll"
+    >
+      <Box
+        pt={'12px'}
+        pb={'15px'}
+      >
         <Text fontSize={'15px'}>{t('selectProduct')}</Text>
         <Flex alignItems={'center'}>
-          <Box width="100px" className="review_image" mr={'10px'} pt="20px">
+          <Box
+            width="100px"
+            className="review_image"
+            mr={'10px'}
+            pt="20px"
+          >
             <ImageSection imgArray={product.descriptor.images} />
           </Box>
           <Text>{product.descriptor.name}</Text>
@@ -100,7 +115,11 @@ const Feedback = () => {
         transition={''}
       />
       <Box mb={9}>
-        <Text fontSize={'15px'} fontWeight={400} mb={'10px'}>
+        <Text
+          fontSize={'15px'}
+          fontWeight={400}
+          mb={'10px'}
+        >
           {t('addCommentsHere')}
         </Text>
         <Textarea
@@ -114,7 +133,10 @@ const Feedback = () => {
           placeholder={t('writeExperience')}
           boxShadow={'0px 4px 6px -1px rgba(0, 0, 0, 0.1), 0px 2px 4px -2px rgba(0, 0, 0, 0.1)'}
         />
-        <Text fontSize="12px" color="#F37A20">
+        <Text
+          fontSize="12px"
+          color="#F37A20"
+        >
           {reviewValidationMessage}
         </Text>
       </Box>
