@@ -1,81 +1,36 @@
-// Native
 import React from 'react'
-import { useEffect, useState } from 'react'
-
-// Installed
 import cl from 'classnames'
 import { Box } from '@chakra-ui/react'
 
 // Custom
-import { CartRetailItem } from './cart.types'
-import { Loader } from '@beckn-ui/molecules'
+import { CartProps } from './cart.types'
 import CartList from './cart-list'
 import Styles from './cart.module.css'
-// import OrderSummaryBox from './order-summary-box'
-
-const emptyCardText = 'Empty cart'
-
-interface CartProps {
-  classNames?: string
-  loadingText: string
-  cartItems: CartRetailItem[]
-  fetchCartData: () => Promise<void>
-  loading: boolean
-  fetchOnLoad: boolean
-  handleOrderClick: () => void
-  isEmptyCart: boolean
-  onIncrement: (any) => void
-  onDecrement: (slug: string) => void
-  t: any
-  locale: string
-}
+import { Loader } from '@beckn-ui/molecules'
+import OrderSummaryBox from './order-summary-box'
 
 const Cart: React.FC<CartProps> = ({
-  loading,
-  loadingText,
-  cartItems,
-  classNames,
-  fetchCartData,
-  fetchOnLoad,
-  handleOrderClick,
-  isEmptyCart,
-  onIncrement,
-  onDecrement,
-  t,
-  locale
+  schema: { loader, cartItems, orderSummary },
+  isLoading = false,
+  emptyText = 'Empty cart',
+  className
 }) => {
-  const [isLoadingForCartCountChange, setIsLoadingForCartCountChange] = useState<boolean>(false)
-
-  useEffect(() => {
-    if (fetchOnLoad) {
-      fetchCartData()
-    }
-  }, [])
-
-  if (loading || isLoadingForCartCountChange) {
-    return <Loader loadingText={loadingText} />
+  if (isLoading) {
+    return <Loader {...loader} />
   }
 
   if (cartItems.length == 0) {
     return (
       <>
-        <p className={Styles.empty_cart_text}>{emptyCardText}</p>
+        <p className={Styles.empty_cart_text}>{emptyText}</p>
       </>
     )
   }
 
   return (
-    <Box className={cl(`${classNames}`, Styles.cart_list_comp_container)}>
-      <CartList
-        setIsLoadingForCartCountChange={setIsLoadingForCartCountChange}
-        cartItems={cartItems}
-        onDecrement={onDecrement}
-        onIncrement={onIncrement}
-        fetchCartData={fetchCartData}
-        t={t}
-        locale={locale}
-      />
-      {/* <OrderSummaryBox onOrderClick={onOrderClick} /> */}
+    <Box className={cl(`${className}`, Styles.cart_list_comp_container)}>
+      <CartList cartItems={cartItems} />
+      <OrderSummaryBox {...orderSummary} />
     </Box>
   )
 }

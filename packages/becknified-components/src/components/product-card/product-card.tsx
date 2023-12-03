@@ -1,9 +1,9 @@
 import React from 'react'
 import { Box, Flex, Text, Image } from '@chakra-ui/react'
-import StarIcon from '../../../public/images/Star.svg'
+import StarIcon from '@public/images/Star.svg'
 import { ProductCardProps } from './product-card.types'
-import ProductPrice from '../productPrice'
-import ProductRating from '../ProductRating'
+import ProductPrice from '../product-price'
+import ProductRating from '../product-rating'
 
 const ProductCard: React.FC<ProductCardProps> = props => {
   const { product, productInfoDataSource, ComponentRenderer, productClickHandler, className = '' } = props

@@ -7,7 +7,6 @@
 
 .prouct_price_layout_container {
   display: flex;
-  justify-content: flex-end;
   align-self: flex-end;
   text-align: left;
 
