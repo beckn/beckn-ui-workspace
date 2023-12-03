@@ -1,6 +1,6 @@
 import React from 'react'
 import { SearchResultsProps } from './search-results.types'
-import ProductList from '../../components/productList'
+import ProductList from '../../components/product-list'
 
 const SearchResults: React.FC<SearchResultsProps> = ({ schema }) => {
   const { productList, productCard } = schema

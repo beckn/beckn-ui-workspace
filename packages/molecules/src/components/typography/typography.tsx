@@ -1,26 +1,7 @@
 import React from 'react'
 import { Text } from '@chakra-ui/react'
 
-type TextVariant =
-  | 'titleSemibold'
-  | 'titleRegular'
-  | 'subTitleSemibold'
-  | 'subTitleRegular'
-  | 'subTextSemibold'
-  | 'subTextRegular'
-  | 'tagSemibold'
-  | 'tagRegular'
-
-interface TypographyProps {
-  text: string
-  variant?: TextVariant
-  color?: string
-  fontFamily?: string
-  fontWeight?: string
-  fontSize?: string
-  fontStyle?: string
-  className?: string
-}
+import { TypographyProps } from './typography.types'
 
 const Typography: React.FC<TypographyProps> = ({
   text,
