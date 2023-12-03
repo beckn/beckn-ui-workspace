@@ -1,12 +1,7 @@
-import React, { ReactNode } from 'react'
+import React from 'react'
 import { ChakraProvider } from '@chakra-ui/react'
-import { becknTheme } from '@lib/types'
 import { generateTheme } from './beckn-provider.utils'
-
-interface BecknProivderProps {
-  theme: becknTheme
-  children: ReactNode
-}
+import { BecknProivderProps } from './beckn-provider.types'
 
 //  Default theme https://github.com/chakra-ui/chakra-ui/tree/main/packages/components/theme/src/foundations
 

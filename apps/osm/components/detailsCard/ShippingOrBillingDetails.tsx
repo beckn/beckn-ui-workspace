@@ -3,7 +3,7 @@ import { Flex, Image, Text, Stack, StackDivider, Box, CardBody } from '@chakra-u
 import CallphoneIcon from '../../public/images/CallphoneIcon.svg'
 import locationIcon from '../../public/images/locationIcon.svg'
 import nameIcon from '../../public/images/nameIcon.svg'
-import { Accordion } from '@beckn-ui/common'
+import { Accordion } from '@beckn-ui/molecules'
 
 export interface ShippingOrBillingDetailsProps {
   name: string

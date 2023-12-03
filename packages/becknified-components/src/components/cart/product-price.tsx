@@ -1,19 +1,31 @@
 import { Box } from '@chakra-ui/react'
+import { useTheme, Theme } from '@chakra-ui/react'
 import classNames from 'classnames'
 import React from 'react'
 import Styles from './product-price.module.css'
 
-interface Props {
+import { CustomThemeType } from '@beckn-ui/molecules'
+
+export interface ProductPriceProps {
   price: number
   discount?: number
   isLargeSize?: boolean
   isInSlider?: boolean
-  locale: string
-  t: any
+  symbol: string
+  isRtl?: boolean
 }
-const ProductPrice: React.FC<Props> = ({ price, isLargeSize = false, isInSlider, t, locale }) => {
-  const justifyContent = isInSlider && locale === 'fa' ? 'flex-start' : ''
+
+const ProductPrice: React.FC<ProductPriceProps> = ({
+  price,
+  isLargeSize = false,
+  isInSlider,
+  symbol = '€',
+  isRtl = false
+}) => {
+  const justifyContent = isInSlider && isRtl ? 'flex-start' : ''
   const flexDirection = 'row'
+  const theme = useTheme<CustomThemeType>()
+  const color = theme.colors.primary[100]
 
   const prouctPriceContainerClassNames = classNames({
     product_price_container: true,
@@ -29,13 +41,13 @@ const ProductPrice: React.FC<Props> = ({ price, isLargeSize = false, isInSlider,
       >
         <div>
           <Box
-            color={'rgba(var(--color-primary))'}
+            color={color}
             className={Styles[`${prouctPriceContainerClassNames}`]}
             style={{
               flexDirection
             }}
           >
-            <span className={Styles.currency_symbol}>{t.currencySymbol}</span>
+            <span className={Styles.currency_symbol}>{symbol}</span>
             <span>{price.toFixed(2)}</span>
           </Box>
         </div>

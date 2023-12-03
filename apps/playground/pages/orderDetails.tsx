@@ -1,6 +1,6 @@
 import { Box, CardBody, Divider, Flex, Stack, Text, Image, StackDivider, Card, useDisclosure } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
-import { Accordion } from '@beckn-ui/common'
+import { Accordion } from '@beckn-ui/molecules'
 import CallphoneIcon from '../public/images/CallphoneIcon.svg'
 import locationIcon from '../public/images/locationIcon.svg'
 import nameIcon from '../public/images/nameIcon.svg'

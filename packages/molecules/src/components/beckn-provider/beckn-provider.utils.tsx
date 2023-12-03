@@ -1,9 +1,9 @@
 import { extendTheme } from '@chakra-ui/react'
-import { becknTheme } from '@lib/types'
+import { becknTheme } from '../../lib/types'
 import { ButtonConfig, TextConfig } from '../../styles/configs'
 
 export const generateTheme = (theme: becknTheme) => {
-  return extendTheme({
+  const customTheme = extendTheme({
     components: {
       Button: ButtonConfig,
       Text: TextConfig
@@ -20,4 +20,6 @@ export const generateTheme = (theme: becknTheme) => {
       }
     }
   })
+
+  return customTheme
 }
