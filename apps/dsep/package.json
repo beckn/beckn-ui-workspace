@@ -36,6 +36,7 @@
     "bcryptjs": "^2.4.3",
     "classnames": "^2.3.2",
     "framer-motion": "^10.12.16",
+    "garudaa": "file:garudaa-1.0.0.tgz",
     "js-cookie": "^3.0.5",
     "jsonwebtoken": "^8.5.1",
     "leaflet": "^1.9.4",
