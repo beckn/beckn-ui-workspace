@@ -214,8 +214,8 @@ const ConsentForm: React.FC<ConsentFormProps> = props => {
               buttonText={'Cancel'}
               background={'transparent'}
               color={'rgba(var(--color-primary))'}
-              handleOnClick={() => props.onClose}
-              isDisabled={!isFormValid}
+              handleOnClick={() => props.onClose()}
+              isDisabled={false}
             />
           </ModalBody>
         </ModalContent>
