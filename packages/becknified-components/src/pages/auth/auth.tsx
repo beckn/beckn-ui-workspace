@@ -2,20 +2,9 @@ import React from 'react'
 import { Box, Flex, Image } from '@chakra-ui/react'
 
 // Custom
-import { InputProps, ButtonProps } from '@beckn-ui/molecules'
 import { Button, Input } from '@beckn-ui/molecules'
 import Styles from './auth.module.css'
-
-export interface AuthProps {
-  schema: {
-    logo: {
-      src: string
-      alt: string
-    }
-    inputs: InputProps[]
-    buttons: ButtonProps[]
-  }
-}
+import { AuthProps } from './auth.types'
 
 const Auth: React.FC<AuthProps> = ({ schema }) => {
   const { logo, inputs, buttons } = schema
