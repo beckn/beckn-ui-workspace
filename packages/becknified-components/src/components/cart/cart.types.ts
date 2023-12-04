@@ -1,4 +1,5 @@
-import { LoaderProps } from '@beckn-ui/molecules'
+import { LoaderProps, TypographyProps, ButtonProps } from '@beckn-ui/molecules'
+import { ProductPriceProps } from '../types'
 export interface RetailItem {
   extended_attributes?: any
   price: {
@@ -56,9 +57,9 @@ export interface CartListProps {
 }
 
 export interface OrderSummaryProps {
-  handleOrderClick: () => void
-  totalQuantity: number
-  totalAmount: number
+  totalQuantity: TypographyProps
+  totalAmount: ProductPriceProps
+  pageCTA: ButtonProps
 }
 
 export interface CartProps {

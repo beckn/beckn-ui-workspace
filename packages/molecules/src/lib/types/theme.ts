@@ -2,9 +2,10 @@ export type becknTheme = {
   color: {
     primary?: string
     secondary?: string
-    text?: string
+    textPrimary?: string
+    textSecondary?: string
   }
-  font: {
+  font?: {
     fontFamily?: string
   }
 }
