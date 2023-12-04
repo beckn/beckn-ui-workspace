@@ -100,9 +100,17 @@ const Cart = () => {
           })),
           loader: { text: 'Loading....' },
           orderSummary: {
-            handleOrderClick: onOrderClick,
-            totalAmount: 25,
-            totalQuantity: 3
+            totalAmount: {
+              price: 25
+            },
+            totalQuantity: {
+              text: '3',
+              variant: 'subTitleSemibold'
+            },
+            pageCTA: {
+              text: 'Proceed to buy',
+              handleClick: onOrderClick
+            }
           }
         }}
       />

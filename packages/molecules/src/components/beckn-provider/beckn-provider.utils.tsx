@@ -16,7 +16,8 @@ export const generateTheme = (theme: becknTheme) => {
         100: theme.color.secondary
       },
       text: {
-        100: theme.color.text
+        100: theme.color.textSecondary,
+        200: theme.color.textPrimary
       }
     }
   })
