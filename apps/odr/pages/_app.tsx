@@ -13,7 +13,7 @@ import '../styles/globals.css'
 import { Garuda } from 'garudaa'
 
 Garuda.init({
-  projectId: '656dad5ed5a5a7d831fc43ac',
+  projectId: '656db1d34a0b12a59ecef6cb',
   host: 'https://garuda-api.becknprotocol.io',
   globalConfigFlags: {
     disableNetworkPayload: true
