@@ -84,7 +84,7 @@ const ConsentForm: React.FC<ConsentFormProps> = props => {
   }
 
   const isFormValid = Object.entries(props.formData)
-    .filter(([key]) => key !== 'landmark')
+    .filter(([key]) => key !== 'checkbox')
     .every(([_, value]) => value.trim() !== '')
 
   return (
@@ -179,17 +179,6 @@ const ConsentForm: React.FC<ConsentFormProps> = props => {
                 pb="30px"
                 textAlign={'center'}
               >
-                {/* <input
-                  onChange={() => setIsDeclarationChecked(prevValue => !prevValue)}
-                  type="checkbox"
-                  style={{
-                    position: 'relative',
-                    top: '2px',
-                    width: '20px',
-                    height: '20px',
-                    backgroundColor: isDeclarationChecked ? '#8D353A' : 'transparent'
-                  }}
-                /> */}
                 <Checkbox
                   colorScheme="red"
                   onChange={() => setIsDeclarationChecked(prevValue => !prevValue)}
@@ -208,7 +197,7 @@ const ConsentForm: React.FC<ConsentFormProps> = props => {
               background={'rgba(var(--color-primary))'}
               color={'rgba(var(--text-color))'}
               handleOnClick={handleButtonClick}
-              isDisabled={!isDeclarationChecked}
+              isDisabled={!isFormValid}
             />
             <Button
               buttonText={'Cancel'}
