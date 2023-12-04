@@ -17,9 +17,13 @@ export interface AddDisputeButtonProps {
 const AddDisputeButton: React.FC<AddDisputeButtonProps> = props => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [isFormValid, setIsFormValid] = useState<boolean>(false)
-  const handleFormValidity = (newFormValidity: boolean) => {
-    setIsFormValid(newFormValidity)
+  // passed up the value of isFormValid state to the parent component checkoutPage by passing the state in the checkFormValidity function received as prop
+
+  const handleFormValidity = (isFilled: boolean) => {
+    setIsFormValid(isFilled)
   }
+
+  // passed up the value of isFormValid state to the parent component checkoutPage by passing the state in the checkFormValidity function received as prop
   useEffect(() => {
     props.checkFormValidity(isFormValid)
   }, [isFormValid])
@@ -42,7 +46,7 @@ const AddDisputeButton: React.FC<AddDisputeButtonProps> = props => {
         </Text>
       </Flex>
       <DisputeForm
-        isFormValid={handleFormValidity}
+        isFormFilled={handleFormValidity}
         formData={props.formData}
         setFormData={props.setFormData}
         isOpen={isOpen}
