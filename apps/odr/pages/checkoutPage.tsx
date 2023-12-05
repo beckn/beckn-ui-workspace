@@ -9,7 +9,7 @@ import ShippingOrBillingDetails from '../components/detailsCard/ShippingOrBillin
 import AddShippingButton from '../components/detailsCard/AddShippingButton'
 import useRequest from '../hooks/useRequest'
 import { responseDataActions } from '../store/responseData-slice'
-import { areShippingAndBillingDetailsSame, getPayloadForInitRequest } from '../utilities/checkout-utils'
+import { getPayloadForInitRequest } from '../utilities/checkout-utils'
 import Loader from '../components/loader/Loader'
 import AddBillingButton from '../components/detailsCard/AddBillingButton'
 import { useRouter } from 'next/router'
@@ -17,7 +17,7 @@ import AddDisputeButton from '../components/detailsCard/AddDisputeButton'
 import DisputeFillingDetails from '../components/detailsCard/DisputeFillingDetails'
 import AddConsentButton from '../components/detailsCard/AddConsentButton'
 import ConsentFillingDetails from '../components/detailsCard/ConsentFillingDetails'
-import { ParsedScholarshipData } from '../components/productList/ProductList.utils'
+import { ParsedScholarshipData, ScholarshipSearchResponse } from '../components/productList/ProductList.utils'
 
 export type ShippingFormData = {
   name: string
@@ -59,9 +59,12 @@ const CheckoutPage = () => {
     address: ''
   })
 
-  // const { data, loading, error, fetchData } = useRequest()
-  const [isDisabled, setIsDisabled] = useState<boolean>(false)
-  const [isDisputeButtonDisabled, setIsDisputeButtonDisabaled] = useState<boolean>(false)
+  const [isDisabled, setIsDisabled] = useState({
+    respondentButton: false,
+    disputeButton: false,
+    consentButton: false
+  })
+
   const [filledDetails, setFilledDetails] = useState({
     complainant: false,
     respondent: false,
@@ -76,23 +79,7 @@ const CheckoutPage = () => {
   const { t } = useLanguage()
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL as string
-  const [quoteResponse, setQuoteResponse] = useState<any>(null)
-
-  useEffect(() => {
-    if (localStorage) {
-      if (localStorage.getItem('userPhone')) {
-        const copiedFormData = structuredClone(formData)
-        const copiedBillingFormData = structuredClone(billingFormData)
-
-        copiedFormData.mobileNumber = localStorage.getItem('userPhone') as string
-        copiedBillingFormData.mobileNumber = localStorage.getItem('userPhone') as string
-
-        setFormData(copiedFormData)
-        setBillingFormData(copiedBillingFormData)
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  const [quoteResponse, setQuoteResponse] = useState<ScholarshipSearchResponse>(null)
 
   useEffect(() => {
     if (localStorage) {
@@ -245,12 +232,16 @@ const CheckoutPage = () => {
     return false
   }
 
-  const handleFormValidity = (newFormValidity: boolean) => {
-    setIsDisabled(!newFormValidity)
+  const createFormValidityHandler = (formType: string) => (isFormvalid: boolean) => {
+    setIsDisabled(prevDetails => ({ ...prevDetails, [`${formType}Button`]: !isFormvalid }))
   }
-  const handleDisputeFormValidity = (newFormValidity: boolean) => {
-    setIsDisputeButtonDisabaled(!newFormValidity)
-  }
+
+  const handleComplainantFormValidity = createFormValidityHandler('respondent')
+  const handleRespondentFormValidity = createFormValidityHandler('dispute')
+  const handleDisputeFormValidity = createFormValidityHandler('consent')
+
+  const isDisputeButtonDisabled = isDisabled.respondentButton || isDisabled.disputeButton
+  const isConsentButtonDisabled = isDisabled.consentButton || isDisabled.respondentButton || isDisabled.disputeButton
 
   return (
     <Box
@@ -269,8 +260,8 @@ const CheckoutPage = () => {
           </Flex>
           <DetailsCard>
             <AddBillingButton
-              checkFormValidity={handleFormValidity}
-              imgFlag={!isInitResultPresent() && !filledDetails.complainant}
+              checkFormValidity={handleComplainantFormValidity}
+              imgFlag={!filledDetails.complainant}
               billingFormData={billingFormData}
               setBillingFormData={setBillingFormData}
               addBillingdetailsBtnText={t.addCompalintDetailsBtn}
@@ -287,8 +278,8 @@ const CheckoutPage = () => {
           >
             <Text fontSize={'17px'}>{t.complaintDetails}</Text>
             <AddBillingButton
-              checkFormValidity={handleFormValidity}
-              imgFlag={isInitResultPresent() && !filledDetails.complainant}
+              checkFormValidity={handleComplainantFormValidity}
+              imgFlag={!filledDetails.complainant}
               billingFormData={billingFormData}
               setBillingFormData={setBillingFormData}
               addBillingdetailsBtnText={t.changeText}
@@ -314,7 +305,9 @@ const CheckoutPage = () => {
           </Flex>
           <DetailsCard>
             <AddShippingButton
-              imgFlag={!isInitResultPresent() && !filledDetails.respondent}
+              isDisabled={isDisabled.respondentButton}
+              checkFormValidity={handleRespondentFormValidity}
+              imgFlag={!filledDetails.respondent}
               formData={formData}
               setFormData={setFormData}
               addShippingdetailsBtnText={t.addRespondentDetaislBtn}
@@ -331,7 +324,9 @@ const CheckoutPage = () => {
           >
             <Text fontSize={'17px'}>{t.respondentDetails}</Text>
             <AddShippingButton
-              imgFlag={isInitResultPresent() && !filledDetails.respondent}
+              isDisabled={isDisabled.respondentButton}
+              checkFormValidity={handleRespondentFormValidity}
+              imgFlag={!filledDetails.respondent}
               formData={formData}
               setFormData={setFormData}
               addShippingdetailsBtnText={t.changeText}
@@ -359,8 +354,8 @@ const CheckoutPage = () => {
           <DetailsCard>
             <AddDisputeButton
               checkFormValidity={handleDisputeFormValidity}
-              isDisabled={isDisabled}
-              imgFlag={!isInitResultPresent() && !filledDetails.dispute}
+              isDisabled={isDisputeButtonDisabled}
+              imgFlag={!filledDetails.dispute}
               formData={disputeformData}
               setFormData={setDisputeFormData}
               addShippingdetailsBtnText={t.addDisputeDetailsBtn}
@@ -378,8 +373,8 @@ const CheckoutPage = () => {
             <Text fontSize={'17px'}>{t.disputeDetails}</Text>
             <AddDisputeButton
               checkFormValidity={handleDisputeFormValidity}
-              isDisabled={isDisabled}
-              imgFlag={isInitResultPresent() && !filledDetails.dispute}
+              isDisabled={isDisputeButtonDisabled}
+              imgFlag={!filledDetails.dispute}
               formData={disputeformData}
               setFormData={setDisputeFormData}
               addShippingdetailsBtnText={t.changeText}
@@ -401,8 +396,8 @@ const CheckoutPage = () => {
           </Flex>
           <DetailsCard>
             <AddConsentButton
-              isDisabled={isDisputeButtonDisabled}
-              imgFlag={!isInitResultPresent() && !filledDetails.consent}
+              isDisabled={isConsentButtonDisabled}
+              imgFlag={!filledDetails.consent}
               formData={consentformData}
               setFormData={setConsentFormData}
               addShippingdetailsBtnText={t.fillConsentForm}
@@ -420,8 +415,8 @@ const CheckoutPage = () => {
           >
             <Text fontSize={'17px'}>{t.consent}</Text>
             <AddConsentButton
-              isDisabled={isDisputeButtonDisabled}
-              imgFlag={isInitResultPresent() && !filledDetails.consent}
+              isDisabled={isConsentButtonDisabled}
+              imgFlag={!filledDetails.consent}
               formData={consentformData}
               setFormData={setConsentFormData}
               addShippingdetailsBtnText={t.changeText}
@@ -437,8 +432,8 @@ const CheckoutPage = () => {
           buttonText={'Confirm'}
           background={'rgba(var(--color-primary))'}
           color={'rgba(var(--text-color))'}
-          handleOnClick={() => router.push('/orderConfirmation')}
-          isDisabled={false}
+          handleOnClick={() => {}}
+          isDisabled={true}
         />
       ) : (
         <ButtonComp

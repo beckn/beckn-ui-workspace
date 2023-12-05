@@ -17,9 +17,12 @@ const AddBillingButton: React.FC<AddBillingButtonProps> = props => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [isFormValid, setIsFormValid] = useState<boolean>(false)
 
-  const handleFormValidity = (newFormValidity: boolean) => {
-    setIsFormValid(newFormValidity)
+  // passed down as isFormFilled prop to the child component BillingForm to get the value as a boolean if the form is filled or not.
+  const handleFormValidity = (isFilled: boolean) => {
+    setIsFormValid(isFilled)
   }
+
+  // passed up the value of isFormValid state to the parent component checkoutPage by passing the state in the checkFormValidity function received as prop
   useEffect(() => {
     props.checkFormValidity(isFormValid)
   }, [isFormValid])
@@ -45,7 +48,7 @@ const AddBillingButton: React.FC<AddBillingButtonProps> = props => {
         </Text>
       </Flex>
       <BillingForm
-        isFormValid={handleFormValidity}
+        isFormFilled={handleFormValidity}
         billingFormData={props.billingFormData}
         setBillingFormData={props.setBillingFormData}
         isOpen={isOpen}
