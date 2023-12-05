@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Box, Flex, Text } from '@chakra-ui/react'
 import { useLanguage } from '../../hooks/useLanguage'
 import Button from '../button/Button'
@@ -42,6 +42,7 @@ const JobDetailsPage: React.FC<JobDetailsPagePropsModel> = props => {
         color={'rgba(var(--text-color))'}
         isDisabled={false}
         handleOnClick={() => {
+          localStorage.setItem('jobRoles', JSON.stringify({ name: jobDetails.jobRole }))
           Router.push(`/jobApply?jobDetails=${encodedJobDetails}`)
         }}
       />

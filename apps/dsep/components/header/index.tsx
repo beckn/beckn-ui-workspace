@@ -45,7 +45,6 @@ const storeHeaderBlackList = [
   '/',
   '/mobileOtp',
   '/paymentMode',
-  '/jobApply',
   '/jobDetails',
   '/jobSearch',
   '/search',
@@ -71,7 +70,6 @@ const headerValues = {
   '/jobSearch': 'Jobs',
   feedback: 'Feedback',
   '/jobDetails': 'Jobs',
-  '/jobApply': 'Senior UX Analyst',
   '/createProfile': 'Create Profile',
   '/myScholarship': 'My Scholarships',
   '/scholarshipSearchPage': 'Scholarships',
@@ -234,12 +232,15 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
 
 const BottomHeader = () => {
   const [optionTags, setOptionTags] = useState<any>()
+  const [jobRole, setJobRole] = useState<any>()
   const { t, locale } = useLanguage()
 
   useEffect(() => {
     setOptionTags(JSON.parse(localStorage.getItem('optionTags') as string))
+    setJobRole(JSON.parse(localStorage.getItem('jobRoles') as string))
     window.addEventListener('storage-optiontags', () => {
       setOptionTags(JSON.parse(localStorage.getItem('optionTags') as string))
+      setJobRole(JSON.parse(localStorage.getItem('jobRoles') as string))
     })
   }, [])
   const router = useRouter()
@@ -259,7 +260,7 @@ const BottomHeader = () => {
             )}
           </div>
 
-          {getHeaderTitleForPage(optionTags?.name, optionTags?.logo, router.pathname, locale)}
+          {getHeaderTitleForPage(jobRole?.name || optionTags?.name, optionTags?.logo, router.pathname, locale)}
           <div className="flex gap-4">
             {!cartIconBlackList.includes(router.pathname) && <CartIcon />}
             {skipWhiteList.includes(router.pathname) && (

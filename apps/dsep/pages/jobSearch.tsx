@@ -1,5 +1,6 @@
 import axios from 'axios'
 import Cookies from 'js-cookie'
+import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import JobSearch from '../components/jobSearch/JobSearch'
 import { JobResponse } from '../components/jobSearch/JobsSearch.types'
