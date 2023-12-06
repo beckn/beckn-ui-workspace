@@ -363,7 +363,7 @@ const en: { [key: string]: string } = {
   homeHeading: 'LegalEase',
   headingSpan: 'for All',
   homeText:
-    'LegalEase allows anyone to easily discover online dispute resolution services (ODR). ODR enables anyone to get their grievances resolved in a quick and cost-effective way.',
+    'LegalEase allows anyone to discover lawyers, online dispute resolution (ODR) service providers, paralegals and other legal services and information in a quick and seamless manner',
   homeTextSpan: 'Click here to know more',
   footerText: 'Powered by',
   cartEmpty: 'The Cart is Empty',
