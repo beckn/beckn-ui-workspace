@@ -75,6 +75,7 @@ const CheckoutPage = () => {
 
   const router = useRouter()
   const initRequest = useRequest()
+  const customRequest = useRequest()
   const dispatch = useDispatch()
   const { t } = useLanguage()
 
@@ -156,7 +157,6 @@ const CheckoutPage = () => {
       localStorage.setItem('consentAdress', JSON.stringify(consentformData))
     }
   }, [consentformData])
-
   const formSubmitHandler = (type: string, quoteResponse: any) => {
     const setFilledDetailsAndUpdate = (field: string) => {
       setFilledDetails(prevDetails => ({ ...prevDetails, [field]: true }))
@@ -164,22 +164,22 @@ const CheckoutPage = () => {
 
     switch (type) {
       case 'complainant':
-      case 'respondent':
+      case 'respondent': {
         const commonPayload = getPayloadForInitRequest(quoteResponse, formData, billingFormData)
         setFilledDetailsAndUpdate(type)
         if (formData) {
           const payLoadForInitRequest = commonPayload
-
           return initRequest.fetchData(`${apiUrl}/init`, 'POST', payLoadForInitRequest)
         }
         break
+      }
 
       case 'dispute':
-      case 'consent':
+      case 'consent': {
         setFilledDetailsAndUpdate(type)
         const formField = type === 'dispute' ? disputeformData : consentformData
 
-        return axios.post('https://bpp-adapter.becknprotocol.io', {
+        const disputeConsentPayload = {
           context: {
             action: 'xInput'
           },
@@ -192,14 +192,15 @@ const CheckoutPage = () => {
             itemName: selectedItem?.name,
             providerName: selectedItem?.providerName
           }
-        })
-
+        }
+        return customRequest.fetchData('https://bpp-adapter.becknprotocol.io', 'POST', disputeConsentPayload)
+      }
       default:
         break
     }
   }
 
-  if (initRequest.loading) {
+  if (initRequest.loading || customRequest.loading) {
     return (
       <Loader>
         <Box
@@ -215,7 +216,6 @@ const CheckoutPage = () => {
       </Loader>
     )
   }
-
   const isInitResultPresent = () => {
     if (typeof window !== 'undefined') {
       if (

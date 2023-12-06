@@ -136,6 +136,7 @@ const OrderDetails = () => {
 
   const { caseDocs, context, scholarshipApplicationId, scholarshipProviders, createdAt } = statusResponse as any
   const { scholarships, name } = scholarshipProviders[0]
+  console.log(scholarships)
 
   return (
     <Box
@@ -215,7 +216,7 @@ const OrderDetails = () => {
                 as={'span'}
                 pr={'2px'}
               >
-                {scholarships[0].name}, {scholarships[0].categories[0].descriptor.name}
+                {scholarships[0]?.name}, {scholarships[0]?.categories[0]?.descriptor.name}
               </Text>
             </Box>
             <Text
