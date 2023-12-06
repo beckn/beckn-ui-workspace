@@ -108,7 +108,7 @@ const Cart = () => {
               variant: 'subTitleSemibold'
             },
             pageCTA: {
-              text: 'Proceed to buy',
+              text: 'Proceed to checkout',
               handleClick: onOrderClick
             }
           }

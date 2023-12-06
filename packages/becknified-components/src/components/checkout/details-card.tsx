@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react'
-import { Box, Card, CardBody, Text } from '@chakra-ui/react'
+import { Box, Card, CardBody } from '@chakra-ui/react'
 
 interface DetailsCardProps {
   children: ReactNode

@@ -1,6 +1,15 @@
+export type InputType = 'text' | 'password' | 'email' | 'number'
+
+export enum InputTypeEnum {
+  Text = 'text',
+  Password = 'password',
+  Email = 'email',
+  Number = 'number'
+}
+
 //TODO type and variant to be changed into enum
 export interface InputProps {
-  type: string
+  type: InputType
   variant?: string
   placeholder?: string
   name: string

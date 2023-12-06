@@ -4,7 +4,7 @@ import { defineStyleConfig } from '@chakra-ui/react'
 const TextConfig = defineStyleConfig({
   baseStyle: {
     fontFamily: 'Poppins',
-    color: 'text.100'
+    color: 'text.200'
   },
   sizes: {
     xl: {
@@ -39,7 +39,7 @@ const TextConfig = defineStyleConfig({
     subTitleRegular: {
       fontWeight: 'normal',
       fontSize: '15px',
-      color: 'text.100'
+      color: 'text.200'
     },
     subTextSemibold: {
       fontWeight: 'semibold',
@@ -49,7 +49,7 @@ const TextConfig = defineStyleConfig({
     subTextRegular: {
       fontWeight: 'normal',
       fontSize: '12px',
-      color: 'text.100'
+      color: 'text.200'
     },
     tagSemibold: {
       fontWeight: 'semibold',
@@ -59,7 +59,7 @@ const TextConfig = defineStyleConfig({
     tagRegular: {
       fontWeight: 'normal',
       fontSize: '11px',
-      color: 'text.100'
+      color: 'text.200'
     }
   },
   defaultProps: {

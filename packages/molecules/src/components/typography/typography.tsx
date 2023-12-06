@@ -11,7 +11,8 @@ const Typography: React.FC<TypographyProps> = ({
   fontWeight,
   color,
   fontStyle,
-  className
+  className,
+  style
 }) => {
   return (
     <Text
@@ -22,6 +23,7 @@ const Typography: React.FC<TypographyProps> = ({
       fontSize={fontSize}
       fontWeight={fontWeight}
       fontStyle={fontStyle}
+      style={style}
     >
       {text}
     </Text>
