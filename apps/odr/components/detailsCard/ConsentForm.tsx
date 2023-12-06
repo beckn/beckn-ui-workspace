@@ -34,7 +34,7 @@ export interface ConsentFormProps {
 const ConsentForm: React.FC<ConsentFormProps> = props => {
   const dispatch = useDispatch()
   const [formErrors, setFormErrors] = useState<FormErrors>({})
-  const [isDeclarationChecked, setIsDeclarationChecked] = useState(true)
+  const [isDeclarationChecked, setIsDeclarationChecked] = useState(false)
   const [providerName, setProviderName] = useState('')
   const [complainantName, setComplainantName] = useState('')
 
@@ -84,7 +84,7 @@ const ConsentForm: React.FC<ConsentFormProps> = props => {
   }
 
   const isFormValid = Object.entries(props.formData)
-    .filter(([key]) => key !== 'landmark')
+    .filter(([key]) => key !== 'checkbox')
     .every(([_, value]) => value.trim() !== '')
 
   return (
@@ -179,20 +179,9 @@ const ConsentForm: React.FC<ConsentFormProps> = props => {
                 pb="30px"
                 textAlign={'center'}
               >
-                {/* <input
-                  onChange={() => setIsDeclarationChecked(prevValue => !prevValue)}
-                  type="checkbox"
-                  style={{
-                    position: 'relative',
-                    top: '2px',
-                    width: '20px',
-                    height: '20px',
-                    backgroundColor: isDeclarationChecked ? '#8D353A' : 'transparent'
-                  }}
-                /> */}
                 <Checkbox
                   colorScheme="red"
-                  // onChange={() => setIsDeclarationChecked(prevValue => !prevValue)}
+                  onChange={() => setIsDeclarationChecked(prevValue => !prevValue)}
                 />
                 <Text
                   fontSize={'15px'}
@@ -214,8 +203,8 @@ const ConsentForm: React.FC<ConsentFormProps> = props => {
               buttonText={'Cancel'}
               background={'transparent'}
               color={'rgba(var(--color-primary))'}
-              handleOnClick={() => props.onClose()}
-              isDisabled={false}
+              handleOnClick={() => props.onClose}
+              isDisabled={!isFormValid}
             />
           </ModalBody>
         </ModalContent>
