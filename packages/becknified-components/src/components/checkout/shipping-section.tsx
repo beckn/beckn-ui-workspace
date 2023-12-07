@@ -2,25 +2,25 @@ import React from 'react'
 import { Box, Flex, Image, useDisclosure } from '@chakra-ui/react'
 import DetailsCard from './details-card'
 import ShippingForm from './shipping-form'
-import { ShippingFormProps } from './checkout.types'
+import { ShippingFormProps, ShippingSectionProps, ShippingFormInitialValuesType } from './checkout.types'
 import AddShippingButtonImage from '../../../public/images/addShippingBtn.svg'
 
-import { BottomModal, FormField, Typography } from '@beckn-ui/molecules'
+import { BottomModal, FormField, Typography, FormData } from '@beckn-ui/molecules'
 
-export interface ShippingSectionProps<T extends FormField[]> {
-  shippingForm: ShippingFormProps<T>
-  sectionTitle?: string
-  sectionSubtitle?: string
-  formTitle?: string
-}
+import ShippingDetails from './shipping-details'
 
 const ShippingSection: React.FC<ShippingSectionProps<FormField[]>> = ({
   shippingForm,
   sectionSubtitle = 'Add Shipping Details',
   sectionTitle = 'Shipping',
-  formTitle = 'Add Shipping Details'
+  formTitle = 'Add Shipping Details',
+  triggerFormTitle = 'change',
+  showDetails = false,
+  isBilling = false,
+  shippingDetails
 }) => {
   const { isOpen, onClose, onOpen } = useDisclosure()
+
   return (
     <Box>
       <Flex
@@ -32,28 +32,41 @@ const ShippingSection: React.FC<ShippingSectionProps<FormField[]>> = ({
           variant="titleRegular"
           text={sectionTitle}
         />
-      </Flex>
-      <DetailsCard>
-        <Flex
-          alignItems={'center'}
-          onClick={onOpen}
-        >
-          <Image src={AddShippingButtonImage} />
+        {(showDetails || isBilling) && (
           <Typography
             variant="subTitleRegular"
-            text={sectionSubtitle}
             color="primary.100"
-            style={{ paddingLeft: '10px' }}
+            text={triggerFormTitle}
+            onClick={onOpen}
           />
-        </Flex>
-        <BottomModal
-          title={formTitle}
-          isOpen={isOpen}
-          onClose={onClose}
-        >
-          <ShippingForm {...shippingForm} />
-        </BottomModal>
-      </DetailsCard>
+        )}
+      </Flex>
+      {!showDetails ? (
+        <DetailsCard>
+          <Flex
+            alignItems={'center'}
+            onClick={onOpen}
+          >
+            <Image src={AddShippingButtonImage} />
+            <Typography
+              variant="subTitleRegular"
+              text={sectionSubtitle}
+              color="primary.100"
+              style={{ paddingLeft: '10px' }}
+            />
+          </Flex>
+        </DetailsCard>
+      ) : (
+        <ShippingDetails {...shippingDetails} />
+      )}
+
+      <BottomModal
+        title={formTitle}
+        isOpen={isOpen}
+        onClose={onClose}
+      >
+        <ShippingForm {...shippingForm} />
+      </BottomModal>
     </Box>
   )
 }

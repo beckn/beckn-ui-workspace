@@ -22,4 +22,6 @@ export interface FormProps<T extends FormField[]> {
   onSubmit: (data: FormData<T>) => void
   onFieldChange?: () => void
   submitButton: ButtonProps
+  values?: FormData<T>
+  onChange?: (data: FormData<T>) => void
 }

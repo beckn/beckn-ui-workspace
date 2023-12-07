@@ -1,15 +1,9 @@
 import React from 'react'
 import { Text, Box, Flex, Divider } from '@chakra-ui/react'
 import { Typography } from '@beckn-ui/molecules'
+import { ItemDetailProps } from './checkout.types'
 
-export interface ItemDetailProps {
-  title: string
-  description: string
-  quantity: number
-  price: string | number
-}
-
-const ItemDetails: React.FC<ItemDetailProps> = ({ title, quantity, price }) => {
+const ItemDetails: React.FC<ItemDetailProps> = ({ title, quantity, priceWithSymbol }) => {
   return (
     <>
       <Box pb={'10px'}>
@@ -36,7 +30,7 @@ const ItemDetails: React.FC<ItemDetailProps> = ({ title, quantity, price }) => {
             variant="subTextRegular"
           />
           <Typography
-            text={price.toString()}
+            text={priceWithSymbol}
             color="primary.100"
             variant="subTitleRegular"
           />

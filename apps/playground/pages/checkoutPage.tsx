@@ -1,13 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Box, Flex, Text, Stack, Checkbox } from '@chakra-ui/react'
-import DetailsCard from '../components/detailsCard/DetailsCard'
-import ItemDetails from '../components/detailsCard/ItemDetails'
-import ButtonComp from '../components/button/Button'
+
 import { useLanguage } from '../hooks/useLanguage'
-import ShippingOrBillingDetails from '../components/detailsCard/ShippingOrBillingDetails'
-import PaymentDetails from '../components/detailsCard/PaymentDetails'
-import AddShippingButton from '../components/detailsCard/AddShippingButton'
+
 import { CartItemForRequest, DataPerBpp, ICartRootState, TransactionIdRootState } from '../lib/types/cart'
 import { getCartItemsPerBpp } from '../utilities/cart-utils'
 import useRequest from '../hooks/useRequest'
@@ -15,13 +11,12 @@ import { responseDataActions } from '../store/responseData-slice'
 import {
   areShippingAndBillingDetailsSame,
   getPayloadForInitRequest,
-  getSubTotalAndDeliveryCharges,
-  getTotalCartItems
+  getSubTotalAndDeliveryCharges
 } from '../utilities/checkout-utils'
-import Loader from '../components/loader/Loader'
 import { Checkout } from '@beckn-ui/becknified-components'
-import AddBillingButton from '../components/detailsCard/AddBillingButton'
-import { useRouter } from 'next/router'
+
+import { Router, useRouter } from 'next/router'
+import { ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
 
 export type ShippingFormData = {
   name: string
@@ -32,22 +27,30 @@ export type ShippingFormData = {
 }
 
 const CheckoutPage = () => {
-  const [formData, setFormData] = useState<ShippingFormData>({
+  const [formData, setFormData] = useState<ShippingFormInitialValuesType>({
     name: 'Antoine Dubois',
     mobileNumber: '0612345678',
     email: 'antoine.dubois@gmail.com',
     address: '15 Rue du Soleil, Paris, France',
-    zipCode: '75001'
+    pinCode: '75001'
+  })
+
+  const [submittedDetails, setSubmittedDetails] = useState<ShippingFormInitialValuesType>({
+    name: 'Antoine Dubois',
+    mobileNumber: '0612345678',
+    email: 'antoine.dubois@gmail.com',
+    address: '15 Rue du Soleil, Paris, France',
+    pinCode: '75001'
   })
 
   const [isBillingAddressSameAsShippingAddress, setIsBillingAddressSameAsShippingAddress] = useState(true)
 
-  const [billingFormData, setBillingFormData] = useState<ShippingFormData>({
+  const [billingFormData, setBillingFormData] = useState<ShippingFormInitialValuesType>({
     name: 'Antoine Dubois',
     mobileNumber: '0612345678',
     email: 'antoine.dubois@gmail.com',
     address: '15 Rue du Soleil, Paris, France',
-    zipCode: '75001'
+    pinCode: '75001'
   })
 
   const router = useRouter()
@@ -115,12 +118,12 @@ const CheckoutPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [billingFormData])
 
-  const formSubmitHandler = () => {
-    if (formData) {
+  const formSubmitHandler = data => {
+    if (data) {
       // TODO :_ To check this again
 
       // if (isBillingAddressSameAsShippingAddress) {
-      //   const copiedFormData = structuredClone(formData);
+      //   const copiedFormData = structuredClone(data);
       //   setBillingFormData(copiedFormData);
       // }
 
@@ -129,15 +132,11 @@ const CheckoutPage = () => {
       const payLoadForInitRequest = getPayloadForInitRequest(
         cartItemsPerBppPerProvider,
         transactionId,
-        formData,
+        data,
         billingFormData
       )
       initRequest.fetchData(`${apiUrl}/client/v2/initialize_order`, 'POST', payLoadForInitRequest)
     }
-  }
-
-  if (initRequest.loading) {
-    return <Loader loadingText={t['initializingOrderLoader']} />
   }
 
   const isInitResultPresent = () => {
@@ -153,7 +152,59 @@ const CheckoutPage = () => {
   return (
     <>
       {/* start Item Details */}
-      <Checkout />
+      <Checkout
+        schema={{
+          items: {
+            title: 'Items',
+            data: cartItems.map(singleItem => ({
+              title: singleItem.descriptor.name,
+              description: singleItem.descriptor.short_desc,
+              quantity: singleItem.quantity,
+              priceWithSymbol: `${t.currencySymbol}${singleItem.totalPrice}`
+            }))
+          },
+          shipping: {
+            showDetails: isInitResultPresent(),
+            shippingDetails: {
+              name: submittedDetails.name,
+              location: submittedDetails.address,
+              number: submittedDetails.mobileNumber,
+              title: 'Shipping'
+            },
+            shippingForm: {
+              onSubmit: formSubmitHandler,
+              submitButton: { text: 'Save Shipping Details' },
+              values: formData,
+              onChange: data => setSubmittedDetails(data)
+            }
+          },
+          payment: {
+            title: 'Payment',
+            paymentDetails: {
+              subtotalText: 'Subtotal',
+              deliveryChargesText: 'Delivery Charges',
+              deliveryChargesValue: `${t.currencySymbol} ${
+                getSubTotalAndDeliveryCharges(initRequest.data).totalDeliveryCharge
+              }`,
+              subtotalValue: `${t.currencySymbol} ${getSubTotalAndDeliveryCharges(initRequest.data).subTotal}`,
+              totalText: 'Total',
+              totalValueWithSymbol: `${t.currencySymbol}${
+                getSubTotalAndDeliveryCharges(initRequest.data).subTotal +
+                getSubTotalAndDeliveryCharges(initRequest.data).totalDeliveryCharge
+              }`
+            }
+          },
+          loader: {
+            text: 'Initializing Order'
+          },
+          pageCTA: {
+            text: 'Proceed to Checkout',
+            handleClick: () => router.push('/paymentMode')
+          }
+        }}
+        isLoading={initRequest.loading}
+        hasInitResult={isInitResultPresent()}
+      />
     </>
   )
 }

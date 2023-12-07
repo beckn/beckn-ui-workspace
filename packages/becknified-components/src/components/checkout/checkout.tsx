@@ -1,94 +1,73 @@
-import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { Box, Flex, Text, useDisclosure, Image } from '@chakra-ui/react'
-import { BottomModal, Form, Typography } from '@beckn-ui/molecules'
+import React from 'react'
+import { Box } from '@chakra-ui/react'
+import { FormField, Typography, Loader, Button } from '@beckn-ui/molecules'
 import DetailsCard from './details-card'
 import ItemDetails from './checkout-item-details'
 import ShippingSection from './shipping-section'
-import { CartItemForRequest, DataPerBpp, ICartRootState, TransactionIdRootState } from '../../lib/types/cart'
+import { CheckoutProps } from './checkout.types'
+import PaymentDetails from './payment-details'
 
-import { useRouter } from 'next/router'
+const Checkout: React.FC<CheckoutProps<FormField[]>> = ({
+  schema: { items, loader, shipping, payment, pageCTA },
+  isLoading = false,
+  hasInitResult = false
+}) => {
+  if (isLoading) return <Loader {...loader} />
 
-export type ShippingFormData = {
-  name: string
-  mobileNumber: string
-  email: string
-  address: string
-  zipCode: string
-}
-
-const CheckoutPage = () => {
-  const [formData, setFormData] = useState<ShippingFormData>({
-    name: 'Antoine Dubois',
-    mobileNumber: '0612345678',
-    email: 'antoine.dubois@gmail.com',
-    address: '15 Rue du Soleil, Paris, France',
-    zipCode: '75001'
-  })
-
-  const [billingFormData, setBillingFormData] = useState<ShippingFormData>({
-    name: 'Antoine Dubois',
-    mobileNumber: '0612345678',
-    email: 'antoine.dubois@gmail.com',
-    address: '15 Rue du Soleil, Paris, France',
-    zipCode: '75001'
-  })
-
-  // const initRequest = useRequest()
-  const cartItems = useSelector((state: ICartRootState) => state.cart.items)
-
-  useEffect(() => {
-    if (localStorage) {
-      if (localStorage.getItem('userPhone')) {
-        const copiedFormData = structuredClone(formData)
-        const copiedBillingFormData = structuredClone(billingFormData)
-
-        copiedFormData.mobileNumber = localStorage.getItem('userPhone') as string
-        copiedBillingFormData.mobileNumber = localStorage.getItem('userPhone') as string
-
-        setFormData(copiedFormData)
-        setBillingFormData(copiedBillingFormData)
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      if (localStorage.getItem('shippingAdress')) {
-        setFormData(JSON.parse(localStorage.getItem('shippingAdress') as string))
-      }
-      if (localStorage.getItem('billingAddress')) {
-        setBillingFormData(JSON.parse(localStorage.getItem('billingAddress') as string))
-      }
-    }
-  }, [])
+  const { disabled, ...restButtonProps } = pageCTA
 
   return (
     <>
-      {/* start Item Details */}
       <Box>
         <Box pb={'10px'}>
-          <Text fontSize={'17px'}>Items</Text>
+          <Typography
+            variant="titleRegular"
+            text={items.title}
+          />
         </Box>
 
         <DetailsCard>
-          {cartItems.map(item => {
+          {items.data.map(item => {
             return (
               <>
                 <ItemDetails
-                  title={item.descriptor.name}
-                  description={item.descriptor.short_desc}
+                  title={item.title}
+                  description={item.description}
                   quantity={item.quantity}
-                  price={`$${item.totalPrice}`}
+                  priceWithSymbol={item.priceWithSymbol}
                 />
               </>
             )
           })}
         </DetailsCard>
-        {/* <ShippingSection shippingForm={{onSubmit}} /> */}
+        <ShippingSection {...shipping} />
+
+        {hasInitResult && (
+          <>
+            <Box pb={'10px'}>
+              <Typography
+                variant="titleRegular"
+                text={payment.title}
+              />
+            </Box>
+            <DetailsCard>
+              <PaymentDetails {...payment.paymentDetails} />
+            </DetailsCard>
+          </>
+        )}
+        <Button
+          {...restButtonProps}
+          disabled={!hasInitResult}
+        />
+
+        {/* Billing Section */}
+        {/* <ShippingSection
+          shippingForm={{ onSubmit: () => {}, submitButton: { text: 'Save Billing Details' } }}
+          sectionSubtitle="Add Billing Details"
+          sectionTitle="Billing"
+        /> */}
       </Box>
     </>
   )
 }
-export default CheckoutPage
+export default Checkout

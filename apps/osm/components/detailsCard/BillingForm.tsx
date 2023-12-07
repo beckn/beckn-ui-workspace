@@ -50,8 +50,6 @@ const BillingForm: React.FC<ShippingFormProps> = props => {
       [name]: value
     }
 
-    console.log('Dank', props.billingFormData)
-
     const errors = validateForm(updatedFormData)
     setFormErrors(prevErrors => ({
       ...prevErrors,

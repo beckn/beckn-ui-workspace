@@ -2,12 +2,13 @@ import { CartRetailItem, DataPerBpp } from '../lib/types/cart'
 import { ResponseModel } from '../lib/types/responseModel'
 import { ShippingFormData } from '../pages/checkoutPage'
 import { areObjectPropertiesEqual } from './common-utils'
+import { ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
 
 export const getPayloadForInitRequest = (
   cartItemsPerBppPerProvider: DataPerBpp,
   transactionId: { transactionId: string },
-  customerAddress: ShippingFormData,
-  billingFormData: ShippingFormData
+  customerAddress: ShippingFormInitialValuesType,
+  billingFormData: ShippingFormInitialValuesType
 ) => {
   const payload: any = {
     initRequestDto: []
@@ -43,7 +44,7 @@ export const getPayloadForInitRequest = (
               city: customerAddress.address,
               state: customerAddress.address,
               country: 'IND',
-              area_code: customerAddress.zipCode
+              area_code: customerAddress.pinCode
             },
             email: 'testemail1@mailinator.com'
           },

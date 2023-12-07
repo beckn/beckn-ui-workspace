@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FormControl, Box } from '@chakra-ui/react'
 
 //Custom
@@ -6,9 +6,25 @@ import { Input, Button } from '../index'
 import { InputTypeEnum } from '../types'
 import { FormErrors, FormField, FormProps, FormData } from './form.types'
 
-const Form = <T extends FormField[]>({ onSubmit, onFieldChange, fields, submitButton }: FormProps<T>) => {
-  const [formData, setFormData] = useState<FormData<T>>({} as FormData<T>)
+const Form = <T extends FormField[]>({
+  onSubmit,
+  onFieldChange,
+  fields,
+  submitButton,
+  values,
+  onChange
+}: FormProps<T>) => {
+  const [formData, setFormData] = useState<FormData<T>>(values || ({} as FormData<T>))
   const [formErrors, setFormErrors] = useState<FormErrors>({})
+  const { type, disabled, ...restButtonProps } = submitButton
+
+  useEffect(() => {
+    if (values) setFormData(values)
+  }, [values])
+
+  useEffect(() => {
+    if (onChange) onChange(formData)
+  }, [])
 
   const validateField = (name: string, value: any): string | undefined => {
     const field = fields.find(f => f.name === name)
@@ -21,10 +37,14 @@ const Form = <T extends FormField[]>({ onSubmit, onFieldChange, fields, submitBu
     const value = e.target.value
     const error = validateField(name, value)
 
-    setFormData({
+    const newFormData = {
       ...formData,
       [name]: value
-    })
+    }
+
+    setFormData(newFormData)
+
+    if (onChange) onChange(newFormData)
 
     setFormErrors({
       ...formErrors,
@@ -91,7 +111,11 @@ const Form = <T extends FormField[]>({ onSubmit, onFieldChange, fields, submitBu
             {renderFormFields(field)}
           </FormControl>
         ))}
-        <Button {...submitButton} />
+        <Button
+          {...restButtonProps}
+          type="submit"
+          disabled={Object.keys(formErrors).length !== 0}
+        />
       </form>
     </Box>
   )
