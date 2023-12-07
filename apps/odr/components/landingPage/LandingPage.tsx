@@ -20,7 +20,7 @@ const LandingPage: React.FC = () => {
   const [selectedItem, setSelectedItem] = useState('')
   const dropdownRef = useRef<any>(null)
 
-  const isButtonDisabled = !selectedItem && !searchTerm.trim()
+  const isButtonDisabled = !selectedItem || !searchTerm.trim()
   const toggleDropdown = () => {
     setIsOpen(!isOpen)
   }
