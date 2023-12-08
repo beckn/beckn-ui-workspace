@@ -1,3 +1,5 @@
+import React from 'react'
+
 type TextVariant =
   | 'titleSemibold'
   | 'titleRegular'
@@ -17,4 +19,6 @@ export interface TypographyProps {
   fontSize?: string
   fontStyle?: string
   className?: string
+  style?: React.CSSProperties
+  onClick?: (event: React.MouseEvent<HTMLElement>) => void
 }

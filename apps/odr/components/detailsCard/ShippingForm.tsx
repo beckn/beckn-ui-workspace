@@ -10,7 +10,7 @@ import {
   ModalCloseButton,
   Box
 } from '@chakra-ui/react'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import style from './ShippingForm.module.css'
 import crossIcon from '../../public/images/Indicator.svg'
@@ -27,6 +27,7 @@ export interface ShippingFormProps {
   setFormData: Function
   formData: ShippingFormData
   formSubmitHandler: Function
+  isFormFilled: (isFilled: boolean) => void
 }
 
 const ShippingForm: React.FC<ShippingFormProps> = props => {
@@ -72,6 +73,10 @@ const ShippingForm: React.FC<ShippingFormProps> = props => {
   const isFormValid = Object.entries(props.formData)
     .filter(([key]) => key !== 'landmark')
     .every(([_, value]) => value.trim() !== '')
+
+  useEffect(() => {
+    props.isFormFilled(isFormValid)
+  }, [isFormValid])
 
   return (
     <>

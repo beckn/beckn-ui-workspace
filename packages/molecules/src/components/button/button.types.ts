@@ -1,5 +1,7 @@
 import { MouseEventHandler, ReactNode } from 'react'
 
+type ButtonType = 'submit' | 'reset' | 'button'
+
 export interface ButtonProps {
   text?: string
   className?: string
@@ -9,4 +11,5 @@ export interface ButtonProps {
   fullWidth?: boolean
   variant?: 'outline' | 'solid'
   colorScheme?: 'primary' | 'secondary'
+  type?: ButtonType
 }
