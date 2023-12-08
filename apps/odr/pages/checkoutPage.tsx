@@ -40,15 +40,15 @@ const CheckoutPage = () => {
     name: 'Marie Sampath',
     mobileNumber: '9876543210',
     email: 'marie.sampath@gmail.com',
-    address: '2111, HSR Layout, Sector 2, Bangalore',
-    pinCode: '560112'
+    address: '343, B Block, Sector 4, Rohini, Delhi',
+    pinCode: '110042'
   })
   const [formData, setFormData] = useState<ShippingFormData>({
     name: 'Jay D',
     mobileNumber: '9871432309',
     email: 'jay.d@gmail.com',
-    address: '2702, HSR Layout,Sector 1, Bangalore',
-    pinCode: '560102'
+    address: ' 23, East end , sector 10, Pritampura, Delhi',
+    pinCode: '110034'
   })
   const [disputeformData, setDisputeFormData] = useState<DisputeFormData>({
     name: '',
