@@ -63,7 +63,8 @@ const LandingPage: React.FC = () => {
       </Text>
       <Text
         fontSize={'15px'}
-        mt={'10px'}
+        mt={'15px'}
+        fontFamily="Poppins"
       >
         {t.homeText}{' '}
       </Text>
@@ -121,12 +122,23 @@ const LandingPage: React.FC = () => {
                 <Box
                   key={index}
                   className="dropdown-item"
-                  padding="10px"
                   cursor="pointer"
                   onClick={() => handleItemClick(item)}
+                  p="0 15px 15px 15px"
+                  _hover={{
+                    bg: '#E9C378',
+                    fontWeight: '500'
+                  }}
                 >
-                  {item}
-                  {items.length - 1 !== index ? <Divider mb={'5px'} /> : null}
+                  <Box pt="15px">
+                    {item}
+                    {items.length - 1 !== index ? (
+                      <Divider
+                        position={'relative'}
+                        top={'15px'}
+                      />
+                    ) : null}
+                  </Box>
                 </Box>
               ))}
             </Box>
