@@ -3,9 +3,7 @@ import { Box } from '@chakra-ui/react'
 import React from 'react'
 import { ProductDescription, ProductSummary } from '../../components'
 
-{
-  /* <WIP></WIP> */
-}
+//TODO :- This component is in progress
 
 const ProductDetailPage = () => {
   return (

@@ -10,6 +10,22 @@ import { ChakraProvider } from '@chakra-ui/react'
 
 import '../styles/globals.css'
 
+import { Garuda } from 'garudaa'
+
+Garuda.init({
+  projectId: '656db1d34a0b12a59ecef6cb',
+  host: 'https://garuda-api.becknprotocol.io',
+  globalConfigFlags: {
+    disableNetworkPayload: true
+  }
+})
+
+Garuda.identify({
+  email: 'ujjwal.tiwari@eminds.ai',
+  name: 'Ujjwal',
+  uId: ''
+})
+
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ChakraProvider>

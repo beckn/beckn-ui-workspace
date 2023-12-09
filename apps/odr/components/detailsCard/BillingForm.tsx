@@ -27,7 +27,7 @@ export interface ShippingFormProps {
   setBillingFormData: Function
   billingFormData: ShippingFormData
   formSubmitHandler: Function
-  isFormValid: (isFormValid: boolean) => void
+  isFormFilled: (isFilled: boolean) => void
 }
 const nameRegex = /^[A-Za-z\s]*$/
 const mobNumberRegex = /^\d*$/
@@ -79,8 +79,8 @@ const BillingForm: React.FC<ShippingFormProps> = props => {
     .every(([_, value]) => value.trim() !== '')
 
   useEffect(() => {
-    props.isFormValid(isFormValid)
-  }, [isFormValid, props.isFormValid])
+    props.isFormFilled(isFormValid)
+  }, [isFormValid])
 
   return (
     <>

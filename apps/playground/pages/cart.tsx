@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router'
+
 import React from 'react'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -6,6 +7,7 @@ import CartList from '../components/cart/CartList'
 import OrderSummaryBox from '../components/cart/OrderSummaryBox'
 import { useLanguage } from '../hooks/useLanguage'
 import Loader from '../components/loader/Loader'
+import { Cart as BecknCart } from '@beckn-ui/becknified-components'
 import useRequest from '../hooks/useRequest'
 import {
   DataPerBpp,
@@ -31,6 +33,9 @@ const Cart = () => {
   const transactionId = useSelector((state: { transactionId: TransactionIdRootState }) => state.transactionId)
   const cartItemsPerBppPerProvider: DataPerBpp = getCartItemsPerBpp(cartItems as CartItemForRequest[])
   const payLoadForQuoteRequest = getPayloadForQuoteRequest(cartItemsPerBppPerProvider, transactionId)
+  const fetchItems = () => {
+    return new Promise(() => {})
+  }
 
   useEffect(() => {
     if ((localStorage && !localStorage.getItem('quoteResponse')) || localStorage.getItem('quoteResponse')) {
@@ -75,14 +80,40 @@ const Cart = () => {
       </>
     )
   }
-
   return (
     <div>
-      {/* <Breadcrumb /> */}
-      <div className="flex justify-center flex-col md:flex-row items-start relative max-w-[2100px] mx-auto">
-        <CartList setIsLoadingForCartCountChange={setIsLoadingForCartCountChange} />
-        <OrderSummaryBox onOrderClick={onOrderClick} />
-      </div>
+      <BecknCart
+        schema={{
+          cartItems: cartItems.map(singleItem => ({
+            id: singleItem.id,
+            quantity: singleItem.quantity,
+            name: singleItem.descriptor.name,
+            image: singleItem.descriptor.images[0],
+            price: Number(singleItem.price.value),
+            symbol: '€',
+            handleIncrement: () => {
+              console.log('Incremented')
+            },
+            handleDecrement: () => {
+              console.log('Decremented')
+            }
+          })),
+          loader: { text: 'Loading....' },
+          orderSummary: {
+            totalAmount: {
+              price: 25
+            },
+            totalQuantity: {
+              text: '3',
+              variant: 'subTitleSemibold'
+            },
+            pageCTA: {
+              text: 'Proceed to checkout',
+              handleClick: onOrderClick
+            }
+          }
+        }}
+      />
     </div>
   )
 }
