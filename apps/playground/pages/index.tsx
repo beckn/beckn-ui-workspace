@@ -5,7 +5,7 @@ import LoginIcon from '../public/images/LoginIcon.svg'
 import style from '../components/detailsCard/ShippingForm.module.css'
 import Button from '../components/button/Button'
 import Router from 'next/router'
-import { Loader } from '@beckn-ui/molecules/src/components'
+import { Accordion, Loader } from '@beckn-ui/molecules/src/components'
 // import { BecknLogin } from '@beckn-ui/becknified-components'
 import Signin from '@components/signIn/SignIn'
 
@@ -16,7 +16,11 @@ const MobileLogin = () => {
 
   return (
     <Box padding={'0 21px'}>
-      <Signin />
+      {/* <Signin /> */}
+      <Accordion accordionHeader={'my name'}>
+        <h1>Ujjwal</h1>
+        <p>This is my name</p>
+      </Accordion>
     </Box>
   )
 }
