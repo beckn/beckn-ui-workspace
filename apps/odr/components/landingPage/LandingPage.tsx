@@ -10,7 +10,8 @@ const disputeCategoryMapper: any = {
   ['Civil Disputes']: 'civil-dispute',
   ['Family Disputes']: 'family-dispute',
   ['Employment Disputes']: 'employment-dispute',
-  ['Commercial Disputes']: 'commercial-dispute'
+  ['Commercial Disputes']: 'commercial-dispute',
+  ['Financial Disputes']: 'financial-dispute'
 }
 
 const LandingPage: React.FC = () => {
@@ -20,7 +21,7 @@ const LandingPage: React.FC = () => {
   const [selectedItem, setSelectedItem] = useState('')
   const dropdownRef = useRef<any>(null)
 
-  const isButtonDisabled = !selectedItem || !searchTerm.trim()
+  const isButtonDisabled = !selectedItem && !searchTerm.trim()
   const toggleDropdown = () => {
     setIsOpen(!isOpen)
   }
