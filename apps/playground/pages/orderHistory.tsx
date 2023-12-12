@@ -1,3 +1,7 @@
+import {
+  OrderHistoryDetailsProps,
+  OrderHistoryProps
+} from '@beckn-ui/becknified-components/src/components/order-history/order-history.types'
 import { Box } from '@chakra-ui/react'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
@@ -8,6 +12,7 @@ import { useLanguage } from '../hooks/useLanguage'
 import useRequest from '../hooks/useRequest'
 import { getOrderPlacementTimeline } from '../utilities/confirm-utils'
 import { getTotalPriceOfSingleOrder, getTotalQuantityOfSingleOrder } from '../utilities/orderHistory-utils'
+import { OrderHistory as BecknOrderHistory } from '@beckn-ui/becknified-components'
 
 const orderStatusMap = {
   INITIATED: 'pending',
@@ -16,6 +21,30 @@ const orderStatusMap = {
   SHIPPED: 'outForDelivery',
   DELIVERED: 'completed'
 }
+
+const orderHistoryData: OrderHistoryDetailsProps[] = [
+  {
+    orderId: 'c5c44f4f-884a-4621-91f7-395829e100c2',
+    orderState: 'pending',
+    totalAmountWithSymbol: '₹ 250',
+    quantity: 1,
+    createdAt: 'Dec 12 2023, 18:05:41'
+  },
+  {
+    orderId: 'c5c44f4f-884a-4621-91f7-395829e100c4',
+    orderState: 'completed',
+    totalAmountWithSymbol: '₹ 1230',
+    quantity: 3,
+    createdAt: 'Aug 12 2023, 18:05:41'
+  },
+  {
+    orderId: 'c5c44f4f-884a-4621-91f7-395829e100c6',
+    orderState: 'pending',
+    totalAmountWithSymbol: '₹ 450',
+    quantity: 2,
+    createdAt: 'Dec 22 2023, 18:05:41'
+  }
+]
 
 const OrderHistory = () => {
   const [orderHistoryList, setOrderHistoryList] = useState<any>([])
@@ -38,48 +67,18 @@ const OrderHistory = () => {
     }
   }, [data])
 
-  if (loading) {
-    return <Loader />
-  }
-
-  if (!orderHistoryList.length) {
-    return <p>No orders placed</p>
-  }
-
-  return orderHistoryList.map((orderInHistory: any, index: number) => {
-    const createdAt = getOrderPlacementTimeline(
-      orderInHistory.orders.length > 0 ? orderInHistory.orders[0].message.responses[0].message.order.created_at : ''
-    )
-
-    const totalQuantityOfSingleOrder = getTotalQuantityOfSingleOrder(orderInHistory.orders)
-    const totalPriceOfSingleOrder = getTotalPriceOfSingleOrder(orderInHistory.orders)
-    const orderState = orderInHistory.orders[0].message.responses[0].message.order.state
-
-    return (
-      <Link
-        legacyBehavior
-        key={index}
-        href={{
-          pathname: '/orderDetails',
-          query: {
-            orderId: orderInHistory.parentOrderId
-          }
-        }}
-      >
-        <Box pt={'20px'}>
-          <DetailsCard>
-            <OrderHistoryDetails
-              createdAt={createdAt}
-              orderId={orderInHistory.parentOrderId}
-              quantity={totalQuantityOfSingleOrder}
-              totalAmount={totalPriceOfSingleOrder}
-              orderState={t[`${orderStatusMap[orderState]}`]}
-            />
-          </DetailsCard>
-        </Box>
-      </Link>
-    )
-  })
+  return (
+    <BecknOrderHistory
+      schema={{
+        orderHistoryDetails: orderHistoryData,
+        loader: {
+          text: 'Loading order history'
+        }
+      }}
+      isLoading={loading}
+      isEmptyText="No Orders Found"
+    />
+  )
 }
 
 export default OrderHistory
