@@ -18,6 +18,8 @@ const Form = <T extends FormField[]>({
   const [formErrors, setFormErrors] = useState<FormErrors>({})
   const { type, disabled, ...restButtonProps } = submitButton
 
+  console.log('Dank', formErrors)
+
   useEffect(() => {
     if (values) setFormData(values)
   }, [values])
@@ -46,10 +48,14 @@ const Form = <T extends FormField[]>({
 
     if (onChange) onChange(newFormData)
 
-    setFormErrors({
-      ...formErrors,
-      [name]: error
-    })
+    if (error) {
+      setFormErrors({
+        ...formErrors,
+        [name]: error
+      })
+    } else {
+      delete formErrors[name]
+    }
   }
 
   const handleSubmit = (e: React.FormEvent) => {

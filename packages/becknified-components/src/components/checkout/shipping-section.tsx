@@ -1,11 +1,11 @@
-import React from 'react'
-import { Box, Flex, Image, useDisclosure } from '@chakra-ui/react'
+import React, { useState } from 'react'
+import { Box, Flex, Image, useDisclosure, Checkbox } from '@chakra-ui/react'
 import DetailsCard from './details-card'
 import ShippingForm from './shipping-form'
 import { ShippingFormProps, ShippingSectionProps, ShippingFormInitialValuesType } from './checkout.types'
 import AddShippingButtonImage from '../../../public/images/addShippingBtn.svg'
 
-import { BottomModal, FormField, Typography, FormData } from '@beckn-ui/molecules'
+import { BottomModal, FormField, Typography, FormData, Input } from '@beckn-ui/molecules'
 
 import ShippingDetails from './shipping-details'
 
@@ -20,6 +20,9 @@ const ShippingSection: React.FC<ShippingSectionProps<FormField[]>> = ({
   shippingDetails
 }) => {
   const { isOpen, onClose, onOpen } = useDisclosure()
+  const [isChecked, setIsChecked] = useState<boolean>(true)
+
+  console.log('Dank', isChecked)
 
   return (
     <Box>
@@ -32,7 +35,7 @@ const ShippingSection: React.FC<ShippingSectionProps<FormField[]>> = ({
           variant="titleRegular"
           text={sectionTitle}
         />
-        {(showDetails || isBilling) && (
+        {((isBilling && !isChecked) || (!isBilling && showDetails)) && (
           <Typography
             variant="subTitleRegular"
             color="primary.100"
@@ -41,7 +44,20 @@ const ShippingSection: React.FC<ShippingSectionProps<FormField[]>> = ({
           />
         )}
       </Flex>
-      {!showDetails ? (
+      {isBilling ? (
+        <DetailsCard>
+          <Checkbox
+            colorScheme={'red'}
+            pr={'12px'}
+            fontSize={'17px'}
+            checked={isChecked}
+            defaultChecked
+            onChange={() => setIsChecked(!isChecked)}
+          >
+            Same as shipping address
+          </Checkbox>
+        </DetailsCard>
+      ) : !showDetails ? (
         <DetailsCard>
           <Flex
             alignItems={'center'}

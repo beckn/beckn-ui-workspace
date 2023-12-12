@@ -178,6 +178,25 @@ const CheckoutPage = () => {
               onChange: data => setSubmittedDetails(data)
             }
           },
+          billing: {
+            sectionSubtitle: 'Add Billing Details',
+            sectionTitle: 'Billing',
+            formTitle: 'Add Billing Details',
+            isBilling: true,
+            showDetails: isInitResultPresent(),
+            shippingDetails: {
+              name: submittedDetails.name,
+              location: submittedDetails.address,
+              number: submittedDetails.mobileNumber,
+              title: 'Billing'
+            },
+            shippingForm: {
+              onSubmit: formSubmitHandler,
+              submitButton: { text: 'Save Shipping Details' },
+              values: formData,
+              onChange: data => setSubmittedDetails(data)
+            }
+          },
           payment: {
             title: 'Payment',
             paymentDetails: {

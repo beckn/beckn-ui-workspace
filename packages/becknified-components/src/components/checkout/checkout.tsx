@@ -8,7 +8,7 @@ import { CheckoutProps } from './checkout.types'
 import PaymentDetails from './payment-details'
 
 const Checkout: React.FC<CheckoutProps<FormField[]>> = ({
-  schema: { items, loader, shipping, payment, pageCTA },
+  schema: { items, loader, shipping, billing, payment, pageCTA },
   isLoading = false,
   hasInitResult = false
 }) => {
@@ -41,6 +41,7 @@ const Checkout: React.FC<CheckoutProps<FormField[]>> = ({
           })}
         </DetailsCard>
         <ShippingSection {...shipping} />
+        <ShippingSection {...billing} />
 
         {hasInitResult && (
           <>
@@ -59,13 +60,6 @@ const Checkout: React.FC<CheckoutProps<FormField[]>> = ({
           {...restButtonProps}
           disabled={!hasInitResult}
         />
-
-        {/* Billing Section */}
-        {/* <ShippingSection
-          shippingForm={{ onSubmit: () => {}, submitButton: { text: 'Save Billing Details' } }}
-          sectionSubtitle="Add Billing Details"
-          sectionTitle="Billing"
-        /> */}
       </Box>
     </>
   )
