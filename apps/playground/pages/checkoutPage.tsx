@@ -214,7 +214,7 @@ const CheckoutPage = () => {
             }
           },
           loader: {
-            text: 'Initializing Order'
+            text: 'Initializing your request'
           },
           pageCTA: {
             text: 'Proceed to Checkout',

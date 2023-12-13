@@ -18,8 +18,6 @@ const Form = <T extends FormField[]>({
   const [formErrors, setFormErrors] = useState<FormErrors>({})
   const { type, disabled, ...restButtonProps } = submitButton
 
-  console.log('Dank', formErrors)
-
   useEffect(() => {
     if (values) setFormData(values)
   }, [values])
