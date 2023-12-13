@@ -458,6 +458,7 @@ const en: { [key: string]: string } = {
   caseFormLoaderText: 'while we setup forms to understand your case in detail.',
   caseAssignedLoaderText: 'you are being assigned a case manager',
   noCases: ' No Cases!',
-  noCasesDiscription: ' Looks like you haven’t filed any cases!'
+  noCasesDiscription: ' Looks like you haven’t filed any cases!',
+  consentformCompleted: 'Consent form completed'
 }
 export default en
