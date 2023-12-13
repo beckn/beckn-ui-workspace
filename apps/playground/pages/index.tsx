@@ -8,6 +8,7 @@ import Router from 'next/router'
 import { Accordion, Loader } from '@beckn-ui/molecules/src/components'
 // import { BecknLogin } from '@beckn-ui/becknified-components'
 import Signin from '@components/signIn/SignIn'
+import { OrderStatusProgress } from '@beckn-ui/becknified-components'
 
 const MobileLogin = () => {
   useEffect(() => {
@@ -16,11 +17,18 @@ const MobileLogin = () => {
 
   return (
     <Box padding={'0 21px'}>
-      {/* <Signin /> */}
-      <Accordion accordionHeader={'my name'}>
-        <h1>Ujjwal</h1>
-        <p>This is my name</p>
-      </Accordion>
+      <Signin />
+      {/* <OrderStatusProgress
+        orderState="PACKED"
+        orderStatusMap={{
+          INITIATED: 'pending',
+          ACKNOWLEDGED: 'confirmed',
+          PACKED: 'confirmed',
+          SHIPPED: 'confirmed',
+          DELIVERED: 'delivered'
+        }}
+        statusTime="2/3/010"
+      /> */}
     </Box>
   )
 }
