@@ -19,8 +19,8 @@ const OrderStatusBox: React.FC<OrderStatusBoxProps> = ({ label, statusTime, clas
       justifyContent="space-between"
     >
       <Flex alignItems="center">
-        {/* eslint-disable-next-line jsx-a11y/alt-text */}
         <Image
+          alt="track-icon"
           width="12px"
           height="13px"
           src={TrackIcon}
@@ -36,8 +36,8 @@ const OrderStatusBox: React.FC<OrderStatusBoxProps> = ({ label, statusTime, clas
       </Flex>
     </Flex>
     <Flex>
-      {/* eslint-disable-next-line jsx-a11y/alt-text */}
       <Image
+        alt="line-icon"
         src={LineBlack}
         width="12px"
         height="40px"
