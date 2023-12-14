@@ -9,6 +9,7 @@ import { useRouter } from 'next/router'
 import { getTransformedDataFromOdrResponse, ParsedScholarshipData } from '../components/productList/ProductList.utils'
 
 const Search = () => {
+  const { t } = useLanguage()
   const router = useRouter()
   const [searchKeyword, setSearchKeyword] = useState(router.query?.searchTerm || '')
   const [scholarShips, setScholarships] = useState<ParsedScholarshipData[]>([])
@@ -82,11 +83,11 @@ const Search = () => {
                 flexDir={'column'}
                 alignItems={'center'}
               >
-                <Text fontWeight={700}>Please wait!</Text>
+                <Text fontWeight={700}>{t.categoryLoadPrimary}</Text>
                 <Text>
-                  We're looking for <i>services</i>
+                  {t.casesCatalogLoader} <i>{t.services}</i>
                 </Text>
-                <Text>related to your search</Text>
+                <Text>{t.relatedToYourSearches}</Text>
               </Box>
             </Loader>
           </div>

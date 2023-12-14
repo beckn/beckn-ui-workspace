@@ -182,7 +182,7 @@ const ShippingForm: React.FC<ShippingFormProps> = props => {
               </div>
             </div>
             <Button
-              buttonText={'Save'}
+              buttonText={t.save}
               background={'rgba(var(--color-primary))'}
               color={'rgba(var(--text-color))'}
               handleOnClick={handleButtonClick}
