@@ -46,7 +46,7 @@ const DetailsSection: React.FC<Props> = ({ product }) => {
           mb={'10px'}
           fontSize={'14px'}
         >
-          by {product.providerName ?? 'Presolv360'}
+          {t.by} {product.providerName ?? 'Presolv360'}
         </Text>
       </Flex>
       <hr className="mt-1 hidden md:block" />
@@ -76,7 +76,7 @@ const DetailsSection: React.FC<Props> = ({ product }) => {
           fontWeight="600"
           pb="10px"
         >
-          Estimated Service Fee
+          {t.estimatedSerivceFee}
         </Text>
 
         {quote?.breakup.map((item, idx) => {

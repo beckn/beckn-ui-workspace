@@ -1,7 +1,6 @@
 import { Box, CardBody, Divider, Flex, Text, Image, Card, Stack, HStack, StackDivider } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import { useLanguage } from '../hooks/useLanguage'
-import { ResponseModel } from '../lib/types/responseModel'
 import { convertTimestampToDdMmYyyyHhMmPM } from '../utilities/confirm-utils'
 import TrackIcon from '../public/images/TrackIcon.svg'
 import useRequest from '../hooks/useRequest'
@@ -126,9 +125,9 @@ const OrderDetails = () => {
           flexDir={'column'}
           alignItems={'center'}
         >
-          <Text fontWeight={700}>Please wait!</Text>
-          <Text>while we update the current</Text>
-          <Text>status of your case.</Text>
+          <Text fontWeight={700}>{t.categoryLoadPrimary}</Text>
+          <Text>{t.whileWeUpdate}</Text>
+          <Text>{t.statusOfOdr}</Text>
         </Box>
       </Loader>
     )
@@ -165,7 +164,7 @@ const OrderDetails = () => {
                 fontSize={'17px'}
                 fontWeight={'600'}
               >
-                All requests have been fulfilled!
+                {t.allRequestFullfilled}
               </Text>
             </Flex>
             <Flex
@@ -173,13 +172,13 @@ const OrderDetails = () => {
               fontSize={'15px'}
               pl={'20px'}
             >
-              <Text>How did we do?</Text>
+              <Text>{t.howTodo}</Text>
               <Text
                 onClick={() => router.push('/feedback')}
                 pl={'10px'}
                 color={'rgba(var(--color-primary))'}
               >
-                Rate Us
+                {t.rateUs}
               </Text>
             </Flex>
           </CardBody>
@@ -222,7 +221,7 @@ const OrderDetails = () => {
               fontSize={'15px'}
               fontWeight={400}
             >
-              Case ID: {`#${statusResponse.scholarshipApplicationId}`}
+              {t.caseId} {`#${statusResponse.scholarshipApplicationId}`}
             </Text>
             <HStack
               justifyContent={'space-between'}
@@ -296,7 +295,7 @@ const OrderDetails = () => {
       </DetailsCard>
       {/* TODO :- change this */}
       <ShippingOrBillingDetails
-        accordionHeader={'Complainant & Billing Details'}
+        accordionHeader={t.complaintAndBilling}
         name={complainantAddress ? complainantAddress.name : 'Marie Sampath'}
         location={complainantAddress ? complainantAddress.address : '2111, HSR Layout, Sector 2, Bangalore'}
         number={complainantAddress ? complainantAddress.mobileNumber : '9876543210'}
@@ -317,7 +316,9 @@ const OrderDetails = () => {
                   onClick={() => handleDetails(item.url)}
                 >
                   <Image src={attached} />
-                  <Text fontSize={'15px'}>{item.descriptor.name} Added</Text>
+                  <Text fontSize={'15px'}>
+                    {item.descriptor.name} {t.added}
+                  </Text>
                 </Flex>
               </Stack>
             </Accordion>

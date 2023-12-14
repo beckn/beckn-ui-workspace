@@ -38,8 +38,7 @@ const MyCases: React.FC<MyCasesProps> = props => {
           </Text>
 
           <Text pr={'10px'}>
-            {' '}
-            <span style={{ fontSize: '12px', fontWeight: 700 }}>CaseID: </span>
+            <span style={{ fontSize: '12px', fontWeight: 700 }}>{t.caseId} </span>
             {props.id}
           </Text>
 

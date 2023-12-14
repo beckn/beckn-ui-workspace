@@ -153,7 +153,7 @@ const SignUp = () => {
           </div>
         </Box>
         <Button
-          buttonText={'Sign Up'}
+          buttonText={t.signUp}
           background={'rgba(var(--color-primary))'}
           color={'rgba(var(--text-color))'}
           handleOnClick={handleRegister}

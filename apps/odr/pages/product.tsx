@@ -9,11 +9,13 @@ import {
   ParsedScholarshipData
 } from '../components/productList/ProductList.utils'
 import { fromBinary } from '../utilities/common-utils'
+import { useLanguage } from '../hooks/useLanguage'
 
 const Product = () => {
   const [selectedProduct, setSelectedProduct] = useState<ParsedScholarshipData | null>(null)
   const [product, setProduct] = useState<ParsedScholarshipData | null>(null)
   const router = useRouter()
+  const { t } = useLanguage()
   const apiUrl = process.env.NEXT_PUBLIC_API_URL as string
   const [isLoading, setIsLoadig] = useState<boolean>(true)
 
@@ -57,9 +59,9 @@ const Product = () => {
           flexDir={'column'}
           alignItems={'center'}
         >
-          <Text fontWeight={700}>Please wait!</Text>
-          <Text>We are fetching details</Text>
-          <Text>of the ODR service</Text>
+          <Text fontWeight={700}>{t.categoryLoadPrimary}</Text>
+          <Text>{t.fetchingDetails}</Text>
+          <Text>{t.ofOdrService}</Text>
         </Box>
       </Loader>
     )

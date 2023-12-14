@@ -150,7 +150,7 @@ const DisputeForm: React.FC<DisputeFormProps> = props => {
             </div>
             <Box mt={'50px'}>
               <Button
-                buttonText={'Save'}
+                buttonText={t.save}
                 background={'rgba(var(--color-primary))'}
                 color={'rgba(var(--text-color))'}
                 handleOnClick={handleButtonClick}
