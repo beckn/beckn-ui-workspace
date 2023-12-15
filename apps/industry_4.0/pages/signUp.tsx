@@ -1,53 +1,104 @@
-import type { NextPage } from 'next'
-import { useDispatch, useSelector } from 'react-redux'
-import { userInfoActions } from '../store/user-slice'
-import jsCookie from 'js-cookie'
-import EnteringBox from '../components/entering/EnteringBox'
-import { IUser } from '../lib/types/user'
-import axios from 'axios'
-import { getError } from '../utilities/error'
-import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
-import { IUserInfoRootState } from '../lib/types/user'
-const SignUp: NextPage = () => {
-  const dispatch = useDispatch()
-  const router = useRouter()
-  const [errorMessage, setErrorMessage] = useState('')
-  const { redirect } = router.query
-  const userInfo = useSelector((state: IUserInfoRootState) => state.userInfo.userInformation)
-  useEffect(() => {
-    if (userInfo) {
-      router.push((redirect as string) || '/')
+import React, { useState } from 'react'
+import { useLanguage } from '@hooks/useLanguage'
+import { SignUpPropsModel } from '@components/signIn/SignIn.types'
+import { FormErrors, signUpValidateForm } from '@utils/form-utils'
+import { BecknAuth } from '@beckn-ui/becknified-components'
+import Router from 'next/router'
+
+const SignUp = () => {
+  const { t } = useLanguage()
+
+  const [formData, setFormData] = useState<SignUpPropsModel>({ name: '', email: '', password: '', mobileNumber: '' })
+  const [formErrors, setFormErrors] = useState<FormErrors>({ name: '', email: '', password: '', mobileNumber: '' })
+  const [isFormFilled, setIsFormFilled] = useState(true)
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+
+    setFormData((prevFormData: SignUpPropsModel) => ({
+      ...prevFormData,
+      [name]: value
+    }))
+
+    const updatedFormData = {
+      ...formData,
+      [name]: value
     }
-  }, [userInfo, redirect, router])
-  async function signUpHandler(user: IUser) {
-    const { name, email, password } = user
-    try {
-      const { data } = await axios.post('/api/users/register', {
-        name,
-        email,
-        password
-      })
-      dispatch(userInfoActions.userLogin(data))
-      jsCookie.set('userInfo', JSON.stringify(data))
-      router.push('/')
-    } catch (err: any) {
-      /* sanity.io is boycott for the people from Iran so I set cookies for whom don't use VPN in Iran*/
-      if (err.response.data.status == 500) {
-        dispatch(userInfoActions.userLogin(user))
-        jsCookie.set('userInfo', JSON.stringify(user))
-      }
-      setErrorMessage(getError(err))
-      console.log(getError(err))
-      // router.push("/");
-    }
+
+    const errors = signUpValidateForm(updatedFormData) as any
+    setFormErrors(prevErrors => ({
+      ...prevErrors,
+      [name]: t[`${errors[name]}`] || ''
+    }))
+    setIsFormFilled(
+      updatedFormData.name.trim() !== '' &&
+        updatedFormData.email.trim() !== '' &&
+        updatedFormData.password.trim() !== '' &&
+        updatedFormData.mobileNumber.trim() !== ''
+    )
   }
+
+  const handleSignUp = async () => {}
+
   return (
-    <EnteringBox
-      title="signUp"
-      submitHandler={signUpHandler}
-      errorMessage={errorMessage}
-    />
+    <>
+      <BecknAuth
+        schema={{
+          buttons: [
+            {
+              text: 'SignUp',
+              handleClick: handleSignUp,
+              disabled: !isFormFilled,
+              variant: 'solid',
+              colorScheme: 'primary'
+            },
+            {
+              text: 'SignUp',
+              handleClick: () => {
+                Router.push('/signUp')
+              },
+              disabled: false,
+              variant: 'outline',
+              colorScheme: 'primary'
+            }
+          ],
+          inputs: [
+            {
+              type: 'text',
+              name: 'name',
+              value: formData.name,
+              handleChange: handleInputChange,
+              label: 'Enter Your Full Name',
+              error: formErrors.name
+            },
+            {
+              type: 'text',
+              name: 'email',
+              value: formData.email,
+              handleChange: handleInputChange,
+              label: 'Enter Email ID',
+              error: formErrors.email
+            },
+            {
+              type: 'password',
+              name: 'password',
+              value: formData.password,
+              handleChange: handleInputChange,
+              label: 'Enter Password',
+              error: formErrors.password
+            },
+            {
+              type: 'number',
+              name: 'mobileNumber',
+              value: formData.mobileNumber,
+              handleChange: handleInputChange,
+              label: 'Enter Mobile Number',
+              error: formErrors.mobileNumber
+            }
+          ]
+        }}
+      />
+    </>
   )
 }
 

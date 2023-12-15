@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import Suppliflow_logo from '../../public/images/Suppliflow_logo.svg'
 import { useLanguage } from '@hooks/useLanguage'
 import { SignInPropsModel } from './SignIn.types'
-import { FormErrors, signInValidateForm } from '@utils/detailsForm-utils'
+import { FormErrors, signInValidateForm } from '@utils/form-utils'
 import { BecknAuth } from '@beckn-ui/becknified-components'
 import Router from 'next/router'
 
@@ -27,11 +27,11 @@ const SignIn = () => {
       [name]: value
     }
 
-    // const errors = signInValidateForm(updatedFormData) as any
-    // setFormErrors(prevErrors => ({
-    //   ...prevErrors,
-    //   [name]: errors[name] || ''
-    // }))
+    const errors = signInValidateForm(updatedFormData) as any
+    setFormErrors(prevErrors => ({
+      ...prevErrors,
+      [name]: errors[name] || ''
+    }))
     setIsFormFilled(updatedFormData.email.trim() !== '' && updatedFormData.password.trim() !== '')
   }
 
@@ -95,14 +95,16 @@ const SignIn = () => {
             name: 'email',
             value: formData.email,
             handleChange: handleInputChange,
-            label: 'Email'
+            label: 'Email',
+            error: formErrors.email
           },
           {
             type: 'password',
             name: 'password',
             value: formData.password,
             handleChange: handleInputChange,
-            label: 'Password'
+            label: 'Password',
+            error: formErrors.password
           }
         ]
       }}

@@ -19,3 +19,8 @@ export interface InputProps {
   handleChange: React.ChangeEventHandler<HTMLInputElement>
   label?: string
 }
+export interface signInField {
+  name: string
+  type: InputType
+  validate?: (value: any) => string | undefined
+}
