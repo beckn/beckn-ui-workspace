@@ -24,3 +24,6 @@
   width: 100%;
   height: 100%;
 }
+Button.auth_btn {
+  border: 1px solid;
+}
