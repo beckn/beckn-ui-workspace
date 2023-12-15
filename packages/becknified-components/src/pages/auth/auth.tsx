@@ -37,6 +37,7 @@ const Auth: React.FC<AuthProps> = ({ schema }) => {
       {buttons.map(singleButton => {
         return (
           <Button
+            className={Styles.auth_btn}
             key={singleButton.text}
             {...singleButton}
           />
