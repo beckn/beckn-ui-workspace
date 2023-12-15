@@ -19,7 +19,8 @@ const cartIconBlackList: string[] = [
   '/mobileOtp',
   '/cart',
   '/checkoutPage',
-  '/paymentMode'
+  '/paymentMode',
+  '/signUp'
 ]
 
 const backIconList = ['/', '/orderDetails']
@@ -35,6 +36,7 @@ const storeHeaderBlackList = [
   '/orderConfirmation',
   'feedback',
   '/',
+  '/signUp',
   '/mobileOtp',
   '/paymentMode'
 ]
@@ -43,6 +45,7 @@ const headerValues: PathnameObjectType = {
   '/orderHistory': 'Order History',
   '/orderDetails': 'Order Details',
   '/': 'Sign In',
+  '/signUp': 'SignUp',
   '/cart': 'Cart',
   '/paymentMode': 'Select Payment Method',
   feedback: 'Feedback'
@@ -96,23 +99,23 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
 
   return (
     <>
-      <div className={styles.top_header}>
-        <div className={styles.top_header_wrapper}>
-          <div>
+      <Box className={styles.top_header}>
+        <Box className={styles.top_header_wrapper}>
+          <Box>
             <Image
               src="/images/Suppliflow_app_logo.svg"
               alt="App logo"
             />
-          </div>
-        </div>
-      </div>
+          </Box>
+        </Box>
+      </Box>
 
       {/* Menu Modal */}
       <BottomModal
         isOpen={isMenuModalOpen}
         onClose={handleMenuModalClose}
       >
-        <div
+        <Box
           onClick={() => {
             router.push('/orderHistory')
           }}
@@ -123,7 +126,7 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
             alt="Order history icon"
           />
           {t['orderHistory']}
-        </div>
+        </Box>
       </BottomModal>
     </>
   )
@@ -141,25 +144,25 @@ const BottomHeader = () => {
 
   return (
     <header className={styles.bottom_header}>
-      <div className={styles.bottom_header_wrapper}>
-        <div className={styles.bottom_header_innr}>
-          <div className={styles.bottom_header_backIcon}>
+      <Box className={styles.bottom_header_wrapper}>
+        <Box className={styles.bottom_header_innr}>
+          <Box className={styles.bottom_header_backIcon}>
             {!backIconList.includes(router.pathname) && (
-              <div onClick={() => router.back()}>
+              <Box onClick={() => router.back()}>
                 <Image
                   src="/images/Back.svg"
                   alt="Back icon"
                 />
-              </div>
+              </Box>
             )}
-          </div>
+          </Box>
 
           {getHeaderTitleForPage(optionTags?.name, optionTags?.logo, router.pathname, locale)}
-          <div className={styles.bottom_header_cartIcon}>
+          <Box className={styles.bottom_header_cartIcon}>
             {!cartIconBlackList.includes(router.pathname) && <CartIcon />}
-          </div>
-        </div>
-      </div>
+          </Box>
+        </Box>
+      </Box>
     </header>
   )
 }
@@ -171,10 +174,10 @@ const Header = () => {
   const renderBottomHeader = !bottomHeaderBlackList.includes(router.pathname)
 
   return (
-    <div>
+    <Box>
       {renderTopHeader && <TopHeader />}
       {renderBottomHeader && <BottomHeader />}
-    </div>
+    </Box>
   )
 }
 

@@ -24,6 +24,9 @@
 .main.withMargin {
   margin-top: 40px;
 }
+.main.withMarginSignUp {
+  margin-top: 10px;
+}
 
 .main.homepageMargin {
   margin-top: 24px;

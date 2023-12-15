@@ -27,10 +27,10 @@
   color: rgba(var(--color-primary));
 }
 
-.input:focus {
+/* .input:focus {
   outline: none;
   border-color: #a71b4a;
-}
+} */
 .input.otp_number_input:focus {
   outline: none;
   border-color: #000;
@@ -38,7 +38,6 @@
 .input:focus ~ .input_label {
   top: -8px;
   font-size: 14px;
-  color: #a71b4a;
 }
 .input:focus ~ .input_label.otp_number {
   top: -8px;
