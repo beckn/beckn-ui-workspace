@@ -15,6 +15,7 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const router = useRouter()
   const isHomepage = router.pathname === '/homePage'
   const isSearch = router.pathname === '/search'
+  const isSignUp = router.pathname === '/signUp'
 
   return (
     <Provider store={store}>
@@ -28,7 +29,8 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
           <main
             className={`${styles.main} ${!isHomepage ? styles.withPadding : ''} ${
               !isHomepage && !isSearch ? styles.withMargin : ''
-            } ${isHomepage ? styles.homepageMargin : isSearch ? styles.searchMargin : ''}`}
+            } ${isHomepage ? styles.homepageMargin : isSearch ? styles.searchMargin : ''}
+            } ${isSignUp ? styles.withMarginSignUp : ''}`}
           >
             {children}
           </main>
