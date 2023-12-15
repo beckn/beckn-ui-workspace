@@ -210,9 +210,9 @@ const CheckoutPage = () => {
           flexDir={'column'}
           alignItems={'center'}
         >
-          <Text fontWeight={700}>Please wait!</Text>
-          <Text>while we setup forms to</Text>
-          <Text>understand your case in detail.</Text>
+          <Text fontWeight={700}>{t.catalogLoader}</Text>
+          <Text>{t.caseFormLoaderText}</Text>
+          <Text>{t.understandYourCase}</Text>
         </Box>
       </Loader>
     )
@@ -431,7 +431,7 @@ const CheckoutPage = () => {
       )}
       {!isInitResultPresent() ? (
         <ButtonComp
-          buttonText={'Confirm'}
+          buttonText={t.confirm}
           background={'rgba(var(--color-primary))'}
           color={'rgba(var(--text-color))'}
           handleOnClick={() => {}}
@@ -439,7 +439,7 @@ const CheckoutPage = () => {
         />
       ) : (
         <ButtonComp
-          buttonText={'Confirm'}
+          buttonText={t.confirm}
           background={'rgba(var(--color-primary))'}
           color={'rgba(var(--text-color))'}
           handleOnClick={() => router.push('/orderConfirmation')}

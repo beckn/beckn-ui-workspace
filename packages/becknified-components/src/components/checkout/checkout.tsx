@@ -1,20 +1,24 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Box } from '@chakra-ui/react'
 import { FormField, Typography, Loader, Button } from '@beckn-ui/molecules'
 import DetailsCard from './details-card'
 import ItemDetails from './checkout-item-details'
 import ShippingSection from './shipping-section'
-import { CheckoutProps } from './checkout.types'
+import { CheckoutProps, ShippingFormInitialValuesType } from './checkout.types'
 import PaymentDetails from './payment-details'
 
 const Checkout: React.FC<CheckoutProps<FormField[]>> = ({
-  schema: { items, loader, shipping, payment, pageCTA },
+  schema: { items, loader, shipping, billing, payment, pageCTA },
   isLoading = false,
   hasInitResult = false
 }) => {
   if (isLoading) return <Loader {...loader} />
 
   const { disabled, ...restButtonProps } = pageCTA
+
+  const [shippingData, setShippingData] = useState<ShippingFormInitialValuesType>(
+    shipping.shippingForm.values || ({} as ShippingFormInitialValuesType)
+  )
 
   return (
     <>
@@ -40,7 +44,12 @@ const Checkout: React.FC<CheckoutProps<FormField[]>> = ({
             )
           })}
         </DetailsCard>
+
+        {/* Shipping section */}
         <ShippingSection {...shipping} />
+
+        {/* Billing Section */}
+        <ShippingSection {...billing} />
 
         {hasInitResult && (
           <>
@@ -59,13 +68,6 @@ const Checkout: React.FC<CheckoutProps<FormField[]>> = ({
           {...restButtonProps}
           disabled={!hasInitResult}
         />
-
-        {/* Billing Section */}
-        {/* <ShippingSection
-          shippingForm={{ onSubmit: () => {}, submitButton: { text: 'Save Billing Details' } }}
-          sectionSubtitle="Add Billing Details"
-          sectionTitle="Billing"
-        /> */}
       </Box>
     </>
   )

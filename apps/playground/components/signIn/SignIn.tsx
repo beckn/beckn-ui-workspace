@@ -67,10 +67,6 @@ const SignIn = () => {
   return (
     <BecknAuth
       schema={{
-        logo: {
-          src: OpenCommerce,
-          alt: 'Open Commerce'
-        },
         buttons: [
           {
             text: 'SignIn',

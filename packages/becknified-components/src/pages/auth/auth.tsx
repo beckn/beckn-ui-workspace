@@ -11,14 +11,17 @@ const Auth: React.FC<AuthProps> = ({ schema }) => {
 
   return (
     <Box className={Styles.main_container}>
-      <Flex className={Styles.logo_container}>
-        <Image
-          className={Styles.logo_skillup}
-          src={logo.src}
-          alt={logo.alt}
-          pt="15px"
-        />
-      </Flex>
+      {logo && logo.src && (
+        <Flex className={Styles.logo_container}>
+          <Image
+            className={Styles.logo_skillup}
+            src={logo.src}
+            alt={logo.alt}
+            pt="15px"
+          />
+        </Flex>
+      )}
+
       <Box
         className={Styles.signin_container}
         pt="40px"
@@ -37,6 +40,7 @@ const Auth: React.FC<AuthProps> = ({ schema }) => {
       {buttons.map(singleButton => {
         return (
           <Button
+            className={Styles.auth_btn}
             key={singleButton.text}
             {...singleButton}
           />
