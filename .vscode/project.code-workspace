@@ -40,6 +40,10 @@
       "name": "Odr",
       "path": "../apps/odr"
     },
+    {
+      "name": "Industry_4.0",
+      "path": "../apps/industry_4.0"
+    }
   ],
 	"settings": {
     "files.exclude": {
