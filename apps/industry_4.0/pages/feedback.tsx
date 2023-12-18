@@ -2,7 +2,7 @@ import { Box, Text, Image, Textarea } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 import Button from '../components/button/Button'
-import StarRating from '../components/starRating/StarRating'
+// import StarRating from '../components/starRating/StarRating'
 import { useLanguage } from '../hooks/useLanguage'
 import feedbackImg from '../public/images/feedbackImg.svg'
 
@@ -28,7 +28,7 @@ const Feedback = () => {
           margin={'0 auto'}
         />
       </Box>
-      <StarRating
+      {/* <StarRating
         ratingText={t.rateStore}
         rating={ratingForStore}
         setRating={setRatingForStore}
@@ -43,7 +43,7 @@ const Feedback = () => {
         count={5}
         size={20}
         transition={''}
-      />
+      /> */}
       <Box>
         <Text
           fontSize={'12px'}

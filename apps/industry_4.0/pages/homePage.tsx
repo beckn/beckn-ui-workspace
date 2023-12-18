@@ -2,15 +2,15 @@ import React, { useRef, useEffect, useState } from 'react'
 import { Transition } from 'react-transition-group'
 import dynamic from 'next/dynamic'
 import BottomModal from '../components/BottomModal'
-import OptionCard from '../components/Map/OptionCard'
-import { optionData } from '../components/Map/StoreMarkerData'
+// import OptionCard from '../components/Map/OptionCard'
+// import { optionData } from '../components/Map/StoreMarkerData'
 import { useRouter } from 'next/router'
 import useRequest from '../hooks/useRequest'
 import cs from 'classnames'
 import { Image } from '@chakra-ui/react'
 import { useLanguage } from '../hooks/useLanguage'
 import { Button } from '@beckn-ui/molecules'
-import MapSearch from '../components/Map/MapSearch'
+// import MapSearch from '../components/Map/MapSearch'
 import { isEmpty } from 'lodash'
 
 const tagValuetoApiMap: { [key: string]: string } = {
@@ -67,9 +67,9 @@ const getStaticTags = (tag: string) => {
 }
 
 const Homepage = () => {
-  const MapWithNoSSR = dynamic(() => import('../components/Map'), {
-    ssr: false
-  })
+  // const MapWithNoSSR = dynamic(() => import('../components/Map'), {
+  //   ssr: false
+  // })
 
   const nodeRef = useRef(null)
   const [showSuggestions, setShowSuggestions] = useState(false)
@@ -188,25 +188,25 @@ const Homepage = () => {
 
   return (
     <div>
-      <MapSearch
+      {/* <MapSearch
         setQuery={setQuery}
         locations={searchedLocationData as any}
         query={query}
         handleLocationClick={handleLocationClick}
         fetchResults={fetchLocationByQuery}
         setShowSuggestions={setShowSuggestions}
-      />
+      /> */}
       {!showSuggestions && (
         <>
           <div className="overflow-hidden max-h-[85vh]">
-            <MapWithNoSSR
+            {/* <MapWithNoSSR
               stores={stores}
               coords={coords}
               selectedStore={selectedStore}
               handleModalOpen={handleModalOpen}
               handleOptionDetailOpen={handleOptionDetailOpen}
               setSelectedStore={setSelectedStore}
-            />
+            /> */}
           </div>
 
           <div className="bottom-0 absolute z-[1000] max-h-fit w-[100vw]  flex items-end justify-center  sm:p-0">
@@ -219,8 +219,8 @@ const Homepage = () => {
                 <div
                   ref={nodeRef}
                   style={{
-                    ...defaultStyle,
-                    ...transitionStyles[state]
+                    ...defaultStyle
+                    // ...transitionStyles[state]
                   }}
                   className={cs(
                     'w-full   px-4 pb-4 pt-2 mx-auto bg-[#F3F4F5]  rounded-t-[1rem] shadow-lg sm:rounded-lg sm:overflow-hidden'
@@ -245,7 +245,7 @@ const Homepage = () => {
                       }
                     )}
                   >
-                    {optionData.map((currentOption, index) => {
+                    {/* {optionData.map((currentOption, index) => {
                       const isSelected = option ? option.tagValue === currentOption.tagValue : false
                       const optionMeta = {
                         tagName: currentOption.tagName,
@@ -265,7 +265,7 @@ const Homepage = () => {
                           optionIcons={optionIcons}
                         />
                       )
-                    })}
+                    })} */}
                   </div>
                 </div>
               )}
