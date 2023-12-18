@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
-import { useRouter } from 'next/router'
-import { Box, Image, Stack, Text } from '@chakra-ui/react'
+import { Router, useRouter } from 'next/router'
+import { Box, Button, Image, Stack, Text } from '@chakra-ui/react'
 import { useSelector } from 'react-redux'
 import orderConfirmmark from '../public/images/orderConfirmmark.svg'
 import { useLanguage } from '../hooks/useLanguage'
@@ -8,6 +8,7 @@ import useRequest from '../hooks/useRequest'
 import { getInitMetaDataPerBpp, getPayloadForConfirmRequest } from '../utilities/confirm-utils'
 import Loader from '../components/loader/Loader'
 import { TransactionIdRootState } from '../lib/types/cart'
+import { ConfirmationPage } from '@beckn-ui/becknified-components'
 
 const OrderConfirmation = () => {
   const { t } = useLanguage()
@@ -68,31 +69,33 @@ const OrderConfirmation = () => {
   }
 
   return (
-    <Box position={'relative'}>
-      {/* eslint-disable-next-line jsx-a11y/alt-text */}
-      <Image
-        src={orderConfirmmark}
-        margin={'41px auto'}
-      />
-      <Text
-        fontSize={'17px'}
-        fontWeight={'600'}
-        textAlign={'center'}
-      >
-        {t.orderPlaced}
-      </Text>
-      <Stack>
-        <Text
-          textAlign={'center'}
-          marginTop={'8px'}
-          marginBottom={'15px'}
-          fontSize={'15px'}
-        >
-          {t.confirmMessage1} <br />
-          {t.confirmMessage2}
-        </Text>
-      </Stack>
-    </Box>
+    <ConfirmationPage
+      schema={{
+        iconSrc: orderConfirmmark,
+        content: t.orderPlaced,
+        contentMessage: t.orderSuccesfully,
+        buttons: [
+          {
+            text: 'View Details',
+            handleClick: () => {
+              router.push('/orderHistory')
+            },
+            disabled: false,
+            variant: 'solid',
+            colorScheme: 'primary'
+          },
+          {
+            text: 'Go Back Home',
+            handleClick: () => {
+              router.push('/homePage')
+            },
+            disabled: false,
+            variant: 'outline',
+            colorScheme: 'primary'
+          }
+        ]
+      }}
+    />
   )
 }
 

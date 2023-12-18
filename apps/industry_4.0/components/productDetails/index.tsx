@@ -1,24 +1,63 @@
 import React from 'react'
 import { RetailItem } from '../../lib/types/products'
-import ImageSection from './ImageSection'
-import DetailsSection from './DetailsSection'
+import { Box, Flex, Text } from '@chakra-ui/react'
+import { ProductDescription, ProductSummary } from '@beckn-ui/becknified-components'
+import CallToAction from './CallToAction'
+import StarRatingComponent from 'react-star-rating-component'
 
 interface Props {
   product: RetailItem
 }
+
 const ProductDetails: React.FC<Props> = ({ product }) => {
   return (
-    <div className="flex flex-col mt-4">
-      <div className="w-full xl:max-w-[2100px] mx-auto">
-        <div className="flex flex-col md:flex-row flex-wrap md:flex-nowrap items-center md:items-start relative">
-          <ImageSection
-            imgArray={product.descriptor.images}
-            product={product}
+    <Flex
+      direction="column"
+      mt={'60px'}
+    >
+      <Box
+        w="full"
+        maxW="2100px"
+        mx="auto"
+      >
+        <Flex
+          direction={{ base: 'column', md: 'row' }}
+          wrap={{ base: 'wrap', md: 'nowrap' }}
+          alignItems={{ base: 'center', md: 'flex-start' }}
+          pos="relative"
+        >
+          <ProductSummary
+            imageSrc={product.descriptor.images}
+            name={product.descriptor.name}
           />
-          <DetailsSection product={product} />
-        </div>
-      </div>
-    </div>
+          <Text
+            fontSize={'15px'}
+            fontWeight={400}
+          >
+            {product.descriptor.short_desc}
+          </Text>
+          <Flex
+            alignItems="center"
+            justifyContent="center"
+          >
+            <StarRatingComponent
+              name="product_rate"
+              starCount={5}
+              value={parseFloat(product.tags.Rating)}
+            />
+            <Text
+              fontSize="sm"
+              color="text-palette-mute"
+              pl="1"
+            >
+              {product.tags.Rating ? `${parseFloat(product.tags.Rating)} stars` : null}
+            </Text>
+          </Flex>
+          <ProductDescription description={product.descriptor.long_desc} />
+          <CallToAction product={product} />
+        </Flex>
+      </Box>
+    </Flex>
   )
 }
 

@@ -20,6 +20,7 @@ export interface RetailItem {
   location_id?: string
   recommended?: boolean
   tags: {
+    Rating: string
     fulfillment_start_loc?: string
     Category?: string
     Trekking?: string

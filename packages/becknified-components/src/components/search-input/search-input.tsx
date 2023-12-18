@@ -28,7 +28,7 @@ const SearchInput: React.FC<SearchInputPropsModel> = props => {
         name={name}
         placeholder={placeHolder}
         onChange={onChangeHandler}
-        onKeyDown={event => event.key === 'Enter' && onEnterHandler()}
+        onKeyDown={(event: React.KeyboardEvent<HTMLInputElement>) => event.key === 'Enter' && onEnterHandler(event)}
         _focusVisible={{
           borderColor: 'transparent',
           boxShadow: 'transparent'

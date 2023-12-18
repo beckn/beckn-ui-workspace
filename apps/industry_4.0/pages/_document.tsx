@@ -26,6 +26,11 @@ export default function Document() {
         />
       </Head>
       <body>
+        <script
+          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDj_jBuujsEk8mkIva0xG6_H73oJEytXEA&callback=Function.prototype&libraries=places"
+          async
+          defer
+        ></script>
         <Main />
         <NextScript />
       </body>
