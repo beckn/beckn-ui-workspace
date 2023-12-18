@@ -9,13 +9,14 @@ export interface Product {
 }
 
 export interface ProductCardProps {
-  product: Product
+  dataSource?: any
+  product?: Product
   productInfoDataSource?: Record<string, any>
-  ComponentRenderer?: React.ComponentType<{ product: Product }>
+  ComponentRenderer?: React.ComponentType<{ dataSource: any }>
   productClickHandler?: React.MouseEventHandler<HTMLDivElement>
   className?: string
 }
 
 export interface CustomInfoComponentProps {
-  product: Product
+  dataSource: any
 }

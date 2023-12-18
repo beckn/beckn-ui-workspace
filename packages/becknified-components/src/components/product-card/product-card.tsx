@@ -6,13 +6,14 @@ import ProductPrice from '../product-price'
 import ProductRating from '../product-rating'
 
 const ProductCard: React.FC<ProductCardProps> = props => {
-  const { product, productInfoDataSource, ComponentRenderer, productClickHandler, className = '' } = props
+  const { product, productInfoDataSource, ComponentRenderer, productClickHandler, dataSource, className = '' } = props
 
+  if (ComponentRenderer) {
+    return <ComponentRenderer dataSource={dataSource} />
+  }
   return (
     <>
-      {ComponentRenderer ? (
-        <ComponentRenderer product={product} />
-      ) : (
+      {product ? (
         <Box
           className={`${className}-product_card_layout_container`}
           onClick={productClickHandler}
@@ -120,6 +121,8 @@ const ProductCard: React.FC<ProductCardProps> = props => {
             </Box>
           </Box>
         </Box>
+      ) : (
+        <></>
       )}
     </>
   )
