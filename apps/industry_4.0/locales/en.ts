@@ -20,6 +20,20 @@ const en: { [key: string]: string } = {
   errorEmail: 'Invalid Email',
   errorName: 'Name is required',
   errorName2: 'Name can only contain letters and spaces',
-  errorName3: 'Name must contain at least 3 characters'
+  errorName3: 'Name must contain at least 3 characters',
+  searchforService: 'search for service',
+  homePara: 'To proceed with creating your workflow, please set your location and search for services.',
+  footerText: 'Powered by',
+  yourLocation: 'Select location',
+  devicelocationisnotenabled: '  Device location is not enabled',
+  accessToProvideLocation: '  Please provide the permission to access better & hassle free services',
+  enableLocation: '  Enable Location',
+  or: ' Or',
+  searchforlocation: 'Search For Location',
+  search: 'Search',
+  viewDetails: 'View Details',
+  book: 'Book',
+  orderSuccesfully: 'The order has been placed successfully.',
+  orderPlaced: ' Order Placed'
 }
 export default en

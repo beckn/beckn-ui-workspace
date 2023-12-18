@@ -1,5 +1,5 @@
 export interface ProductSummaryPropsModel {
-  imageSrc: string
+  imageSrc: string[]
   name: string
   itemForRenderer?: any
   ProductSummaryRenderer?: React.ComponentType<{ item: any }>
