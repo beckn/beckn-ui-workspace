@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { Box } from '@chakra-ui/react'
 import SearchBar from '../components/header/SearchBar'
@@ -8,27 +8,30 @@ import { responseDataActions } from '../store/responseData-slice'
 import { RetailItem } from '../lib/types/products'
 import Loader from '../components/loader/Loader'
 import { useLanguage } from '../hooks/useLanguage'
+import { useRouter } from 'next/router'
 
 //Mock data for testing search API. Will remove after the resolution of CORS issue
 
 const Search = () => {
   const [items, setItems] = useState([])
+  const router = useRouter()
+  const [searchKeyword, setSearchKeyword] = useState(router.query?.searchTerm || '')
   const dispatch = useDispatch()
   const [providerId, setProviderId] = useState('')
   const { t, locale } = useLanguage()
   const [tagValue, setTagValue] = useState('')
-  const [searchString, setSearchString] = useState('')
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
   const { data, loading, error, fetchData } = useRequest()
 
-  const categoryMap = {
-    Books: { en: 'BookEnglish', fa: 'BookFrench' },
-    restaurant: { en: 'FoodEnglish', fa: 'FoodFrench' }
-  }
-
   useEffect(() => {
+    if (searchKeyword) {
+      localStorage.removeItem('searchItems')
+      localStorage.setItem('optionTags', JSON.stringify({ name: searchKeyword }))
+      window.dispatchEvent(new Event('storage-optiontags'))
+      fetchDataForSearch()
+    }
     if (localStorage) {
       const stringifiedOptiontags = localStorage.getItem('optionTags')
       const stringifiedSelectedOption = localStorage.getItem('selectedOption')
@@ -40,13 +43,8 @@ const Search = () => {
         setTagValue(JSON.parse(stringifiedSelectedOption).tagValue)
       }
     }
-  }, [])
-
-  const categoryName = () => {
-    if (tagValue && categoryMap[tagValue]) {
-      return categoryMap[tagValue][locale] || categoryMap[tagValue]['en']
-    }
-  }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchKeyword])
 
   const searchPayload = {
     context: {
@@ -54,24 +52,14 @@ const Search = () => {
     },
     message: {
       criteria: {
-        dropLocation: '48.85041854,2.343660801',
-        categoryName: categoryName(),
-        providerId: providerId
+        dropLocation: '12.9715987,77.5945627',
+        categoryName: 'Retail',
+        searchString: searchKeyword
       }
     }
   }
 
-  const fetchDataForSearch = (searchString: string) =>
-    fetchData(`${apiUrl}/client/v2/search`, 'POST', {
-      ...searchPayload,
-      message: {
-        ...searchPayload.message,
-        criteria: {
-          ...searchPayload.message.criteria,
-          searchString: searchString
-        }
-      }
-    })
+  const fetchDataForSearch = () => fetchData(`${apiUrl}/client/v2/search`, 'POST', searchPayload)
 
   useEffect(() => {
     if (localStorage && !localStorage.getItem('searchItems')) {
@@ -124,22 +112,20 @@ const Search = () => {
 
   return (
     <>
-      <Box
-        height={'61px'}
-        ml={'-20px'}
-        mr={'-20px'}
-        position={'fixed'}
-        zIndex={'9'}
-        background={'#fff'}
-        width={'100%'}
-        mt={'-20px'}
-      >
+      <Box>
         <SearchBar
-          searchString={searchString}
+          searchString={searchKeyword}
           handleChange={(text: string) => {
-            localStorage.removeItem('searchItems')
-            setSearchString(text)
-            fetchDataForSearch(text)
+            setSearchKeyword(text)
+            localStorage.removeItem('optionTags')
+            localStorage.setItem(
+              'optionTags',
+              JSON.stringify({
+                name: text
+              })
+            )
+            window.dispatchEvent(new Event('storage-optiontags'))
+            fetchDataForSearch()
           }}
         />
       </Box>

@@ -1,4 +1,4 @@
-import { Spinner, Text } from '@chakra-ui/react'
+import { Spinner, Text, VStack } from '@chakra-ui/react'
 import React from 'react'
 
 interface LoaderPropsModel {
@@ -9,12 +9,15 @@ interface LoaderPropsModel {
 
 const Loader: React.FC<LoaderPropsModel> = props => {
   return (
-    <div className="flex flex-col justify-center items-center h-[60vh]">
+    <VStack
+      justify="center"
+      align="center"
+    >
       <Spinner
         thickness="4px"
         speed="0.65s"
         emptyColor="gray.200"
-        color="#A71B4A"
+        color="#0560FA"
         size="xl"
       />
       {props.loadingText && (
@@ -27,7 +30,7 @@ const Loader: React.FC<LoaderPropsModel> = props => {
         </Text>
       )}
       {props.subLoadingText && <Text textAlign="center">{props.subLoadingText}</Text>}
-    </div>
+    </VStack>
   )
 }
 
