@@ -13,18 +13,27 @@ interface OrderStatusBoxProps {
 
 const OrderStatusBox: React.FC<OrderStatusBoxProps> = ({ label, statusTime, className }) => (
   <Box>
-    <Flex
-      className={className}
-      alignItems="center"
-      justifyContent="space-between"
-    >
-      <Flex alignItems="center">
+    <Flex>
+      <Flex
+        flexDirection={'column'}
+        justifyContent="space-between"
+        alignItems={'center'}
+        pt="2px"
+      >
         <Image
           alt="track-icon"
-          width="12px"
-          height="13px"
+          width="18px"
+          height="18px"
           src={TrackIcon}
         />
+        <Image
+          alt="line-icon"
+          src={LineBlack}
+          width="12px"
+          height="60px"
+        />
+      </Flex>
+      <Box>
         <Box pl={'10px'}>
           <Typography
             className={`${className}_order_state_text`}
@@ -33,21 +42,14 @@ const OrderStatusBox: React.FC<OrderStatusBoxProps> = ({ label, statusTime, clas
             fontWeight={'500'}
           />
         </Box>
-      </Flex>
-    </Flex>
-    <Flex>
-      <Image
-        alt="line-icon"
-        src={LineBlack}
-        width="12px"
-        height="40px"
-      />
-      <Box pl={'10px'}>
-        <Typography
-          className={`${className}_order_state_time`}
-          fontSize="10px"
-          text={statusTime}
-        />
+
+        <Box pl={'10px'}>
+          <Typography
+            className={`${className}_order_state_time`}
+            fontSize="10px"
+            text={statusTime}
+          />
+        </Box>
       </Box>
     </Flex>
   </Box>

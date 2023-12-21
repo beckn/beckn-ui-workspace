@@ -30,7 +30,7 @@ const SignIn = () => {
     const errors = signInValidateForm(updatedFormData) as any
     setFormErrors(prevErrors => ({
       ...prevErrors,
-      [name]: errors[name] || ''
+      [name]: t[`${errors[name]}`] || ''
     }))
     setIsFormFilled(updatedFormData.email.trim() !== '' && updatedFormData.password.trim() !== '')
   }
@@ -73,14 +73,14 @@ const SignIn = () => {
         },
         buttons: [
           {
-            text: 'SignIn',
+            text: t.signIn,
             handleClick: handleSignIn,
             disabled: !isFormFilled,
             variant: 'solid',
             colorScheme: 'primary'
           },
           {
-            text: 'SignUp',
+            text: t.signUp,
             handleClick: () => {
               Router.push('/signUp')
             },
@@ -95,7 +95,7 @@ const SignIn = () => {
             name: 'email',
             value: formData.email,
             handleChange: handleInputChange,
-            label: 'Email',
+            label: t.email,
             error: formErrors.email
           },
           {
@@ -103,7 +103,7 @@ const SignIn = () => {
             name: 'password',
             value: formData.password,
             handleChange: handleInputChange,
-            label: 'Password',
+            label: t.password,
             error: formErrors.password
           }
         ]
