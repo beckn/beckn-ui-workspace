@@ -20,6 +20,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { IGeoLocationSearchPageRootState } from '../../lib/types/geoLocationSearchPage'
 import { toggleLocationSearchPageVisibility } from '../../store/geoMapLocationSearch-slice'
 import { MdMyLocation } from 'react-icons/md'
+import { BiSolidUpArrow } from 'react-icons/bi'
+import { useRouter } from 'next/router'
 
 interface TopSheetPropsModel {
   currentAddress: string
@@ -28,10 +30,12 @@ interface TopSheetPropsModel {
 
 const TopSheet: React.FC<TopSheetPropsModel> = props => {
   const theme = useTheme()
+  const router = useRouter()
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { t } = useLanguage()
   const dispatch = useDispatch()
   const bgColorOfSearchIcon = theme.colors.primary['100']
+  const isSearchPage = router.pathname === '/search'
 
   const geoLocationSearchPageSelectedAddress = useSelector((state: IGeoLocationSearchPageRootState) => {
     return state.geoLocationSearchPageUI.geoAddress
@@ -47,7 +51,7 @@ const TopSheet: React.FC<TopSheetPropsModel> = props => {
 
   return (
     <ChakraProvider theme={theme}>
-      <Box className={style.top_Sheet_Wrapper}>
+      <Box className={isSearchPage ? style.searchTopSheetMargin : style.top_Sheet_Wrapper}>
         <Box>
           <Flex
             justifyContent={'space-between'}
@@ -105,13 +109,13 @@ const TopSheet: React.FC<TopSheetPropsModel> = props => {
             p={'16px 24px'}
             pb={'25px'}
           >
-            <Box>
-              <Image
-                position={'absolute'}
-                top={'-12px'}
-                left={'30%'}
-                src="/images/uparrow.svg"
-              />
+            <Box
+              position={'absolute'}
+              top={'-12px'}
+              left={'67%'}
+              color={bgColorOfSearchIcon}
+            >
+              <BiSolidUpArrow />
             </Box>
             <Box>
               <Text

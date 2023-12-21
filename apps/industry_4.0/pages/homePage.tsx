@@ -65,9 +65,8 @@ const HomePage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   const navigateToSearchResults = () => {
-    console.log('click')
     localStorage.setItem('optionTags', JSON.stringify({ name: searchTerm }))
-    router.push(`/search?searchTerm=${searchTerm}`)
+    router.push(`/search?searchTerm=${searchTerm}&currentAddress=${currentAddress}`)
   }
 
   const searchIconClickHandler = (e: any) => {

@@ -51,6 +51,27 @@ const en: { [key: string]: string } = {
   overviewofBillingDetails: 'Overview of Billing Details',
   completed: 'Completed',
   pending: 'Pending',
-  progressSummary: 'Progress Summary'
+  progressSummary: 'Progress Summary',
+  cards: 'Credit & Debit cards',
+  addCard: 'Add',
+  upi: 'UPI',
+  other: 'Other',
+  confirmOrder: 'Confirm Order',
+  phonePay: 'PhonePe UPI',
+  cashOnDelivery: 'Cash on Delivery',
+  netBanking: ' Net Banking',
+  orderHistory: 'Order History',
+  invoiceDetails: 'Invoice Details',
+  cardNumber: '**** **** **** 1234',
+  procced: 'Proceed',
+  clicktheShopbuttontobuyitemsforthistrip: 'Click ‘Proceed’ to continue',
+  toImportthisorderanotherapp: 'to Import this order another app',
+  scanthisQR: 'Scan this QR ',
+  scanQR: 'Scan QR',
+  openInWallet: 'Open in Wallet',
+  viewJSON: 'View JSON',
+  payment: 'Payment',
+  catalogLoader: 'Please wait!',
+  catalogSubLoader: ' While we find service providers near you '
 }
 export default en
