@@ -24,6 +24,7 @@ export interface ShippingSectionProps<T extends FormField[]> {
   formTitle?: string
   showDetails?: boolean
   isBilling?: boolean
+  addButtonImage?: string
 }
 
 export interface ItemDetailProps {
@@ -41,10 +42,7 @@ export interface ShippingDetailsProps {
 }
 
 export interface PaymentDetailsProps {
-  subtotalText: string
-  subtotalValue: number | string
-  deliveryChargesText: string
-  deliveryChargesValue: number | string
+  paymentBreakDown: Record<string, string>
   totalText: string
   totalValueWithSymbol: string
 }

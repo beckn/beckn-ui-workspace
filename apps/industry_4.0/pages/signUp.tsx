@@ -46,16 +46,16 @@ const SignUp = () => {
         schema={{
           buttons: [
             {
-              text: 'SignUp',
+              text: t.signUp,
               handleClick: handleSignUp,
               disabled: !isFormFilled,
               variant: 'solid',
               colorScheme: 'primary'
             },
             {
-              text: 'SignUp',
+              text: t.signIn,
               handleClick: () => {
-                Router.push('/signUp')
+                Router.push('/')
               },
               disabled: false,
               variant: 'outline',
@@ -68,7 +68,7 @@ const SignUp = () => {
               name: 'name',
               value: formData.name,
               handleChange: handleInputChange,
-              label: 'Enter Your Full Name',
+              label: t.fullName,
               error: formErrors.name
             },
             {
@@ -76,7 +76,7 @@ const SignUp = () => {
               name: 'email',
               value: formData.email,
               handleChange: handleInputChange,
-              label: 'Enter Email ID',
+              label: t.enterEmailID,
               error: formErrors.email
             },
             {
@@ -84,7 +84,7 @@ const SignUp = () => {
               name: 'password',
               value: formData.password,
               handleChange: handleInputChange,
-              label: 'Enter Password',
+              label: t.enterPassword,
               error: formErrors.password
             },
             {
@@ -92,7 +92,7 @@ const SignUp = () => {
               name: 'mobileNumber',
               value: formData.mobileNumber,
               handleChange: handleInputChange,
-              label: 'Enter Mobile Number',
+              label: t.enterMobileNumber,
               error: formErrors.mobileNumber
             }
           ]

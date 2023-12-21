@@ -1,230 +1,157 @@
 import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { Box, Flex, Text, Stack, Checkbox } from '@chakra-ui/react'
-
 import { useLanguage } from '../hooks/useLanguage'
-
-import { CartItemForRequest, DataPerBpp, ICartRootState, TransactionIdRootState } from '../lib/types/cart'
-import { getCartItemsPerBpp } from '../utilities/cart-utils'
-import useRequest from '../hooks/useRequest'
-import { responseDataActions } from '../store/responseData-slice'
-import {
-  areShippingAndBillingDetailsSame,
-  getPayloadForInitRequest,
-  getSubTotalAndDeliveryCharges
-} from '../utilities/checkout-utils'
-import { Checkout } from '@beckn-ui/becknified-components'
-
 import { Router, useRouter } from 'next/router'
-import { ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
-
-export type ShippingFormData = {
-  name: string
-  mobileNumber: string
-  email: string
-  address: string
-  zipCode: string
-}
+import { CheckoutProps, ShippingDetailsProps, ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
+import { Box, Divider, Flex } from '@chakra-ui/react'
+import { Typography } from '@beckn-ui/molecules'
+import DetailsCard from '@beckn-ui/becknified-components/src/components/checkout/details-card'
+import ShippingSection from '@beckn-ui/becknified-components/src/components/checkout/shipping-section'
+import PaymentDetails from '@beckn-ui/becknified-components/src/components/checkout/payment-details'
+import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 
 const CheckoutPage = () => {
-  const [formData, setFormData] = useState<ShippingFormInitialValuesType>({
-    name: 'Antoine Dubois',
-    mobileNumber: '0612345678',
-    email: 'antoine.dubois@gmail.com',
-    address: '15 Rue du Soleil, Paris, France',
-    pinCode: '75001'
-  })
-
-  const [submittedDetails, setSubmittedDetails] = useState<ShippingFormInitialValuesType>({
-    name: 'Antoine Dubois',
-    mobileNumber: '0612345678',
-    email: 'antoine.dubois@gmail.com',
-    address: '15 Rue du Soleil, Paris, France',
-    pinCode: '75001'
-  })
-
-  const [isBillingAddressSameAsShippingAddress, setIsBillingAddressSameAsShippingAddress] = useState(true)
-
-  const [billingFormData, setBillingFormData] = useState<ShippingFormInitialValuesType>({
-    name: 'Antoine Dubois',
-    mobileNumber: '0612345678',
-    email: 'antoine.dubois@gmail.com',
-    address: '15 Rue du Soleil, Paris, France',
-    pinCode: '75001'
-  })
-
-  const router = useRouter()
-  const initRequest = useRequest()
-  const dispatch = useDispatch()
   const { t, locale } = useLanguage()
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL
-  const cartItems = useSelector((state: ICartRootState) => state.cart.items)
-  const transactionId = useSelector((state: { transactionId: TransactionIdRootState }) => state.transactionId)
-
-  useEffect(() => {
-    if (localStorage) {
-      if (localStorage.getItem('userPhone')) {
-        const copiedFormData = structuredClone(formData)
-        const copiedBillingFormData = structuredClone(billingFormData)
-
-        copiedFormData.mobileNumber = localStorage.getItem('userPhone') as string
-        copiedBillingFormData.mobileNumber = localStorage.getItem('userPhone') as string
-
-        setFormData(copiedFormData)
-        setBillingFormData(copiedBillingFormData)
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      if (localStorage.getItem('shippingAdress')) {
-        setFormData(JSON.parse(localStorage.getItem('shippingAdress') as string))
-      }
-      if (localStorage.getItem('billingAddress')) {
-        setBillingFormData(JSON.parse(localStorage.getItem('billingAddress') as string))
-      }
-    }
-  }, [])
-
-  useEffect(() => {
-    if (initRequest.data) {
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('initResult', JSON.stringify(initRequest.data))
-      }
-
-      dispatch(responseDataActions.addInitResponse(initRequest.data))
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initRequest.data])
-
-  useEffect(() => {
-    const shippingAddressComplete = Object.values(formData).every(value => value.length > 0)
-    if (shippingAddressComplete && typeof window !== 'undefined') {
-      localStorage.setItem('shippingAdress', JSON.stringify(formData))
-    }
-  }, [formData])
-
-  useEffect(() => {
-    const isBillingAddressComplete = Object.values(billingFormData).every(value => value.length > 0)
-
-    if (isBillingAddressComplete && typeof window !== 'undefined') {
-      localStorage.setItem('billingAddress', JSON.stringify(billingFormData))
-    }
-    setIsBillingAddressSameAsShippingAddress(
-      areShippingAndBillingDetailsSame(isBillingAddressComplete, formData, billingFormData)
-    )
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [billingFormData])
-
-  const formSubmitHandler = data => {
-    if (data) {
-      // TODO :_ To check this again
-
-      // if (isBillingAddressSameAsShippingAddress) {
-      //   const copiedFormData = structuredClone(data);
-      //   setBillingFormData(copiedFormData);
-      // }
-
-      const cartItemsPerBppPerProvider: DataPerBpp = getCartItemsPerBpp(cartItems as CartItemForRequest[])
-
-      const payLoadForInitRequest = getPayloadForInitRequest(
-        cartItemsPerBppPerProvider,
-        transactionId,
-        data,
-        billingFormData
-      )
-      initRequest.fetchData(`${apiUrl}/client/v2/initialize_order`, 'POST', payLoadForInitRequest)
-    }
-  }
-
-  const isInitResultPresent = () => {
-    if (typeof window !== 'undefined') {
-      if (localStorage.getItem('initResult')) {
-        return true
-      }
-    }
-
-    return !!initRequest.data
-  }
-
+  const [submittedDetails, setSubmittedDetails] = useState<ShippingDetailsProps>({
+    name: 'Antoine Dubois',
+    number: '0612345678',
+    location: '15 Rue du Soleil, Paris, France',
+    title: '75001'
+  })
+  const [detailsForm, setdetailsForm] = useState<ShippingFormInitialValuesType>({
+    name: 'Antoine Dubois',
+    mobileNumber: '0612345678',
+    email: 'antoine.dubois@gmail.com',
+    address: '15 Rue du Soleil, Paris, France',
+    pinCode: '75001'
+  })
   return (
-    <>
-      {/* start Item Details */}
-      <Checkout
-        schema={{
-          items: {
-            title: 'Items',
-            data: cartItems.map(singleItem => ({
-              title: singleItem.descriptor.name,
-              description: singleItem.descriptor.short_desc,
-              quantity: singleItem.quantity,
-              priceWithSymbol: `${t.currencySymbol}${singleItem.totalPrice}`
-            }))
-          },
-          shipping: {
-            showDetails: isInitResultPresent(),
-            shippingDetails: {
-              name: submittedDetails.name,
-              location: submittedDetails.address,
-              number: submittedDetails.mobileNumber,
-              title: 'Shipping'
-            },
-            shippingForm: {
-              onSubmit: formSubmitHandler,
-              submitButton: { text: 'Save Shipping Details' },
-              values: formData,
-              onChange: data => setSubmittedDetails(data)
-            }
-          },
-          billing: {
-            sectionSubtitle: 'Add Billing Details',
-            sectionTitle: 'Billing',
-            formTitle: 'Add Billing Details',
-            isBilling: true,
-            showDetails: isInitResultPresent(),
-            shippingDetails: {
-              name: submittedDetails.name,
-              location: submittedDetails.address,
-              number: submittedDetails.mobileNumber,
-              title: 'Billing'
-            },
-            shippingForm: {
-              onSubmit: formSubmitHandler,
-              submitButton: { text: 'Save Shipping Details' },
-              values: formData,
-              onChange: data => setSubmittedDetails(data)
-            }
-          },
-          payment: {
-            title: 'Payment',
-            paymentDetails: {
-              subtotalText: 'Subtotal',
-              deliveryChargesText: 'Delivery Charges',
-              deliveryChargesValue: `${t.currencySymbol} ${
-                getSubTotalAndDeliveryCharges(initRequest.data).totalDeliveryCharge
-              }`,
-              subtotalValue: `${t.currencySymbol} ${getSubTotalAndDeliveryCharges(initRequest.data).subTotal}`,
-              totalText: 'Total',
-              totalValueWithSymbol: `${t.currencySymbol}${
-                getSubTotalAndDeliveryCharges(initRequest.data).subTotal +
-                getSubTotalAndDeliveryCharges(initRequest.data).totalDeliveryCharge
-              }`
-            }
-          },
-          loader: {
-            text: 'Initializing your request'
-          },
-          pageCTA: {
-            text: 'Proceed to Checkout',
-            handleClick: () => router.push('/paymentMode')
-          }
-        }}
-        isLoading={initRequest.loading}
-        hasInitResult={isInitResultPresent()}
+    <Box
+      className="hideScroll"
+      maxH={'calc(100vh - 100px)'}
+      overflowY="scroll"
+    >
+      <Box>
+        <DetailsCard>
+          <Box pb={'15px'}>
+            <Typography
+              variant="titleSemibold"
+              text={t.orderOverview}
+            />
+          </Box>
+          <Flex
+            pb={'4px'}
+            justifyContent={'space-between'}
+            alignItems="center"
+          >
+            <Typography
+              variant="subTitleSemibold"
+              text={'Assembly'}
+            />
+            <Typography
+              variant="subTitleRegular"
+              text={'€ 30,000'}
+            />
+          </Flex>
+          <Box pb={'4px'}>
+            <Typography
+              variant="subTitleRegular"
+              text={'RTAL Assembly Lines'}
+            />
+          </Box>
+          <Box pb={'4px'}>
+            <Typography
+              variant="subTitleRegular"
+              text={'Qty: 150'}
+            />
+          </Box>
+          <Divider
+            mt="10px"
+            mb="10px"
+          />
+          <Flex
+            pb={'15px'}
+            pt="10px"
+            justifyContent={'space-between'}
+            alignItems="center"
+          >
+            <Typography
+              variant="subTitleSemibold"
+              text={'Assembly'}
+            />
+            <Typography
+              variant="subTitleRegular"
+              text={'€ 30,000'}
+            />
+          </Flex>
+          <Typography
+            variant="subTitleRegular"
+            text={'RTAL Assembly Lines'}
+          />
+        </DetailsCard>
+        <ShippingSection
+          sectionSubtitle={t.addShippingDetails}
+          addButtonImage="./images/addShippingBtn.svg"
+          showDetails={false}
+          shippingDetails={{
+            name: detailsForm.name,
+            location: detailsForm.address,
+            number: detailsForm.mobileNumber,
+            title: t.shipping
+          }}
+          shippingForm={{
+            onSubmit: () => console.log('jdkasd'),
+            submitButton: { text: 'Save Shipping Details' },
+            values: detailsForm,
+            onChange: data => () => console.log('ajsdhasd')
+          }}
+        />
+        <ShippingSection
+          sectionSubtitle={t.addBillingDetails}
+          addButtonImage="./images/addShippingBtn.svg"
+          sectionTitle="Billing"
+          formTitle="Add Billing Details"
+          showDetails={false}
+          shippingDetails={{
+            name: detailsForm.name,
+            location: detailsForm.address,
+            number: detailsForm.mobileNumber,
+            title: t.billing
+          }}
+          shippingForm={{
+            onSubmit: () => console.log('jdkasd'),
+            submitButton: { text: 'Save Billing Details' },
+            values: detailsForm,
+            onChange: data => () => console.log('ajsdhasd')
+          }}
+        />
+        <DetailsCard>
+          <Box pb={'15px'}>
+            <Typography
+              variant="titleSemibold"
+              text={t.overviewofBillingDetails}
+            />
+          </Box>
+          <PaymentDetails
+            paymentBreakDown={{
+              'Total Manufacturing Cost': `${t.currencySymbol} 999`,
+              'Shipping Cost': `${t.currencySymbol} 999`,
+              Taxes: `${t.currencySymbol} 999`
+            }}
+            totalText="Total"
+            totalValueWithSymbol={`${t.currencySymbol} 999`}
+          />
+        </DetailsCard>
+      </Box>
+      <BecknButton
+        children="Proceed to Payment"
+        className="checkout_btn "
       />
-    </>
+      <BecknButton
+        children="Cancel Order"
+        variant="outline"
+        className="checkout_btn"
+      />
+    </Box>
   )
 }
 export default CheckoutPage
