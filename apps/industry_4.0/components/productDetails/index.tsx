@@ -1,15 +1,22 @@
 import React from 'react'
-import { RetailItem } from '../../lib/types/products'
 import { Box, Flex, Text } from '@chakra-ui/react'
 import { ProductDescription, ProductSummary } from '@beckn-ui/becknified-components'
-import CallToAction from './CallToAction'
 import StarRatingComponent from 'react-star-rating-component'
+import { Button } from '@beckn-ui/molecules'
+import { useRouter } from 'next/router'
+import { useLanguage } from '@hooks/useLanguage'
+import { ParsedItemModel } from '../../types/search.types'
 
 interface Props {
-  product: RetailItem
+  product: ParsedItemModel
 }
 
+// TODO :- remove the static value and add dynamic value for the description
+
 const ProductDetails: React.FC<Props> = ({ product }) => {
+  const router = useRouter()
+  const { t } = useLanguage()
+
   return (
     <Flex
       direction="column"
@@ -27,14 +34,15 @@ const ProductDetails: React.FC<Props> = ({ product }) => {
           pos="relative"
         >
           <ProductSummary
-            imageSrc={product.descriptor.images}
-            name={product.descriptor.name}
+            imageSrc={product.item.images[0].url}
+            name={product.item.name}
           />
           <Text
             fontSize={'15px'}
             fontWeight={400}
           >
-            {product.descriptor.short_desc}
+            mock short description
+            {/* {product.descriptor.short_desc} */}
           </Text>
           <Flex
             alignItems="center"
@@ -43,18 +51,26 @@ const ProductDetails: React.FC<Props> = ({ product }) => {
             <StarRatingComponent
               name="product_rate"
               starCount={5}
-              value={parseFloat(product.tags.Rating)}
+              value={parseFloat(product.rating)}
             />
             <Text
               fontSize="sm"
               color="text-palette-mute"
               pl="1"
             >
-              {product.tags.Rating ? `${parseFloat(product.tags.Rating)} stars` : null}
+              {product.rating ? `${parseFloat(product.rating)} stars` : null}
             </Text>
           </Flex>
-          <ProductDescription description={product.descriptor.long_desc} />
-          <CallToAction product={product} />
+          {/* <ProductDescription description={product.descriptor.long_desc} /> */}
+          <ProductDescription description={'<p>Long mock description</p>'} />
+          <Box
+            as={Button}
+            marginTop={5}
+            text={t.book}
+            handleClick={() => {
+              router.push('/checkoutPage')
+            }}
+          ></Box>
         </Flex>
       </Box>
     </Flex>

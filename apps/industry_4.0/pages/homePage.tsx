@@ -10,7 +10,7 @@ import { SearchInput } from '@beckn-ui/becknified-components'
 
 const HomePage = () => {
   const [address, setAddress] = useState('')
-  const [searchTerm, setSearchTerm] = useState<string[]>([])
+  const [searchTerm, setSearchTerm] = useState<string>('')
   const [currentAddress, setCurrentAddress] = useState('')
   const [loadingForCurrentAddress, setLoadingForCurrentAddress] = useState(true)
   const [error, setFetchCurrentLocationError] = useState('')
@@ -70,19 +70,24 @@ const HomePage = () => {
     router.push(`/search?searchTerm=${searchTerm}`)
   }
 
+  const searchIconClickHandler = (e: any) => {
+    if (searchTerm) {
+      navigateToSearchResults()
+    }
+    e.preventDefault()
+  }
+
   return (
     <>
-      <TopSheet currentAddress={currentAddress} />
+      <TopSheet
+        loadingForCurrentAddress={loadingForCurrentAddress}
+        currentAddress={currentAddress}
+      />
       <Box p={'0 20px'}>
         <SearchInput
           onChangeHandler={(e: React.BaseSyntheticEvent) => setSearchTerm(e.target.value)}
           searchIcon={'/images/searchHome.svg'}
-          searchIconClickHandler={e => {
-            if (searchTerm) {
-              navigateToSearchResults()
-            }
-            e.preventDefault()
-          }}
+          searchIconClickHandler={searchIconClickHandler}
           onEnterHandler={(e: { key: string }) => e.key === 'Enter' && navigateToSearchResults()}
           placeHolder="Search for Service"
         />
