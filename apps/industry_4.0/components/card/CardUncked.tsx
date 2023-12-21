@@ -1,10 +1,8 @@
-import { Box, Card, CardBody, Flex, Image, Text } from '@chakra-ui/react'
+import { Card, CardBody, Flex, Image, Text } from '@chakra-ui/react'
 import React from 'react'
-import { useLanguage } from '../../hooks/useLanguage'
-
 import styles from './Card.module.css'
 
-export interface CardWithCheckBoxPropsModel {
+export interface CardWithUncheckedPropsModel {
   paymentMethod: string
   paymentMethodNet: string
   img1: string
@@ -12,9 +10,7 @@ export interface CardWithCheckBoxPropsModel {
   setChecked: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const CardWithCheckBox: React.FC<CardWithCheckBoxPropsModel> = props => {
-  const { t } = useLanguage()
-
+const CardWithUnchecked: React.FC<CardWithUncheckedPropsModel> = props => {
   const handleChange = () => {
     props.setChecked(prevValue => !prevValue)
   }
@@ -55,18 +51,26 @@ const CardWithCheckBox: React.FC<CardWithCheckBoxPropsModel> = props => {
           </label>
         </Flex>
         <Flex
+          pointerEvents={'none'}
+          opacity={'0.5'}
           className={styles.checkbox}
           fontSize={'15px'}
-          columnGap={'20px'}
+          mb={'20px'}
           alignItems={'center'}
+          columnGap={'20px'}
         >
           <input
             type="checkbox"
-            id="checkbox"
+            id="checkbox_Click_Collect"
+            checked={false}
             onChange={handleChange}
           />
-
-          <label htmlFor="checkbox">
+          <Image
+            src={props.img2}
+            w={'62px'}
+            h={'40px'}
+          />
+          <label htmlFor="checkbox_Click_Collect">
             <Text
               position={'absolute'}
               width={'50vw'}
@@ -74,20 +78,13 @@ const CardWithCheckBox: React.FC<CardWithCheckBoxPropsModel> = props => {
               fontSize={'15px'}
               fontWeight={400}
             >
-              {props.paymentMethod}
+              {props.paymentMethodNet}
             </Text>
           </label>
-          <Box>
-            <Image
-              src={props.img2}
-              w={'62px'}
-              h={'40px'}
-            />
-          </Box>
         </Flex>
       </CardBody>
     </Card>
   )
 }
 
-export default React.memo(CardWithCheckBox)
+export default React.memo(CardWithUnchecked)

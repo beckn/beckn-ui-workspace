@@ -6,7 +6,6 @@ import React from 'react'
 import StarIcon from '../../public/images/Star.svg'
 
 const ProductCardRenderer = (data: any) => {
-  console.log('data of the prodcardren', data)
   const { dataSource } = data
   const { t } = useLanguage()
   const router = useRouter()
@@ -78,7 +77,11 @@ const ProductCardRenderer = (data: any) => {
           position="absolute"
           width="calc(100% - 30px)"
         >
-          <Text>800 m</Text>
+          <Flex columnGap={'5px'}>
+            <Image src={'images/meter.svg'} />
+            <Text>800 m</Text>
+          </Flex>
+
           <Flex alignItems="center">
             <Image src={StarIcon} />
             <Text

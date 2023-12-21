@@ -10,6 +10,7 @@ import ProductCardRenderer from '@components/productCard/product-card-renderer'
 import SearchBar from '../components/header/SearchBar'
 import { useLanguage } from '../hooks/useLanguage'
 import { ParsedItemModel } from '../types/search.types'
+import TopSheet from '@components/topSheet/TopSheet'
 
 //Mock data for testing search API. Will remove after the resolution of CORS issue
 
@@ -72,6 +73,7 @@ const Search = () => {
   return (
     <>
       <Box>
+        <TopSheet currentAddress={router.query?.currentAddress} />
         <SearchBar
           searchString={searchKeyword}
           handleChange={(text: string) => {
@@ -102,8 +104,18 @@ const Search = () => {
                 flexDir={'column'}
                 alignItems={'center'}
               >
-                <Text fontWeight={700}>{t.catalogLoader}</Text>
-                <Text>{t.catalogSubLoader}</Text>
+                <Text
+                  fontWeight={700}
+                  fontSize={'17px'}
+                >
+                  {t.catalogLoader}
+                </Text>
+                <Text
+                  fontWeight={400}
+                  fontSize={'15px'}
+                >
+                  {t.catalogSubLoader}
+                </Text>
               </Box>
             </Loader>
           </Box>
