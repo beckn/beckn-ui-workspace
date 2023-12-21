@@ -60,6 +60,7 @@
   justify-content: space-between;
   position: relative;
   height: 60px;
+  padding: 0 20px;
 }
 .bottom_header_backIcon {
   display: flex;

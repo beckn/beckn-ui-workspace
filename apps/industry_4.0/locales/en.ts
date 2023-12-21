@@ -1,12 +1,18 @@
 const en: { [key: string]: string } = {
+  name: 'Name',
+  fullName: 'Enter Your Full Name',
   password: 'Password',
+  enterPassword: 'Enter Password',
   email: 'Email',
+  enterEmailID: 'Enter Email ID',
+  signIn: 'SignIn',
+  signUp: 'SignUp',
+  enterMobileNumber: 'Enter Mobile Number',
   enterYourUserName: 'Please Enter Your UserName',
   enterYourPassword: 'Please Enter Your Password',
   enterYourEmail: 'Please Enter Your Email',
   doHaveAnAccount: "Don't You Have An Account? ",
   alreadyHaveAnAccount: 'Already You Have An Account? ',
-  signUp: 'Sign Up',
   Invalid_email_or_password: 'Invalid email or password',
   Email_already_exists: 'Email already exists',
   errorNumber: 'Mobile Number is required',
@@ -34,6 +40,17 @@ const en: { [key: string]: string } = {
   viewDetails: 'View Details',
   book: 'Book',
   orderSuccesfully: 'The order has been placed successfully.',
-  orderPlaced: ' Order Placed'
+  orderPlaced: ' Order Placed',
+  currencySymbol: '€',
+  orderOverview: 'Order Overview',
+  assembly: 'Assembly',
+  shipping: 'Shipping',
+  billing: 'Billing',
+  addBillingDetails: 'Add Billing Details',
+  addShippingDetails: 'Add Shipping Details',
+  overviewofBillingDetails: 'Overview of Billing Details',
+  completed: 'Completed',
+  pending: 'Pending',
+  progressSummary: 'Progress Summary'
 }
 export default en

@@ -6,34 +6,40 @@ import { PaymentDetailsProps } from './checkout.types'
 const PaymentDetails: React.FC<PaymentDetailsProps> = props => {
   return (
     <Box>
-      <Flex
-        justifyContent={'space-between'}
-        alignItems={'center'}
-        pb={'15px'}
-        fontSize={'15px'}
-      >
-        <Typography text={props.subtotalText} />
-        <Typography text={props.subtotalValue.toString()} />
-      </Flex>
-      <Flex
-        justifyContent={'space-between'}
-        alignItems={'center'}
-        pb={'15px'}
-        fontSize={'15px'}
-      >
-        <Typography text={props.deliveryChargesText} />
-        <Typography text={props.deliveryChargesValue.toString()} />
-      </Flex>
+      {Object.entries(props.paymentBreakDown).map(([property, value]) => (
+        <Flex
+          justifyContent={'space-between'}
+          alignItems={'center'}
+          pb={'15px'}
+        >
+          <Typography
+            text={property}
+            fontSize={'15px'}
+          />
+          <Typography
+            text={value}
+            fontSize={'15px'}
+          />
+        </Flex>
+      ))}
+
       <Divider mb={'15px'} />
       <Flex
         justifyContent={'space-between'}
         alignItems={'center'}
-        fontSize={'15px'}
         fontWeight={'600'}
       >
-        <Typography text={props.totalText} />
+        <Typography
+          variant="titleSemibold"
+          text={props.totalText}
+          fontSize={'15px'}
+        />
         <div className="flex">
-          <Typography text={props.totalValueWithSymbol} />
+          <Typography
+            variant="titleSemibold"
+            text={props.totalValueWithSymbol}
+            fontSize={'15px'}
+          />
         </div>
       </Flex>
     </Box>

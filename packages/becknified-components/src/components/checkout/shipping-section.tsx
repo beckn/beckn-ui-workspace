@@ -17,7 +17,8 @@ const ShippingSection: React.FC<ShippingSectionProps<FormField[]>> = ({
   triggerFormTitle = 'change',
   showDetails = false,
   isBilling = false,
-  shippingDetails
+  shippingDetails,
+  addButtonImage = AddShippingButtonImage
 }) => {
   const { isOpen, onClose, onOpen } = useDisclosure()
   const [isChecked, setIsChecked] = useState<boolean>(true)
@@ -61,7 +62,7 @@ const ShippingSection: React.FC<ShippingSectionProps<FormField[]>> = ({
             alignItems={'center'}
             onClick={onOpen}
           >
-            <Image src={AddShippingButtonImage} />
+            <Image src={addButtonImage} />
             <Typography
               variant="subTitleRegular"
               text={sectionSubtitle}

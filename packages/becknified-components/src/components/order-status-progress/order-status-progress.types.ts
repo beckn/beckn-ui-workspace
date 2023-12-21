@@ -1,5 +1,5 @@
 export interface OrderStatusProgressProps {
-  orderStatusMap: Record<string, any>
+  orderStatusMap: Record<string, string>
   orderState: string
   statusTime: string
   className?: string

@@ -35,7 +35,8 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
             <main
               className={`${styles.main} ${!isHomepage ? styles.withPadding : ''} ${
                 !isHomepage && !isSearch ? styles.withMargin : ''
-              } ${isHomepage ? styles.homepageMargin : isSearch ? styles.searchMargin : ''}`}
+              } ${isHomepage ? styles.homepageMargin : isSearch ? styles.searchMargin : ''} 
+               ${isSignUp ? styles.withMarginSignUp : ''} `}
             >
               {children}
             </main>
