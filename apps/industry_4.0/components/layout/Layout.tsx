@@ -18,6 +18,7 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const isHomepage = router.pathname === '/homePage'
   const isSearch = router.pathname === '/search'
   const isSignUp = router.pathname === '/signUp'
+  const isSearchPage = router.pathname === '/search'
   const geoLocationSearchPageVisible = useSelector((state: IGeoLocationSearchPageRootState) => {
     return state.geoLocationSearchPageUI.geoLocationSearchPageVisible
   })
@@ -36,7 +37,9 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
               className={`${styles.main} ${!isHomepage ? styles.withPadding : ''} ${
                 !isHomepage && !isSearch ? styles.withMargin : ''
               } ${isHomepage ? styles.homepageMargin : isSearch ? styles.searchMargin : ''} 
-               ${isSignUp ? styles.withMarginSignUp : ''} `}
+               ${isSignUp ? styles.withMarginSignUp : ''} 
+              ${isSearchPage ? styles.searchPageMargin : ''}
+              `}
             >
               {children}
             </main>

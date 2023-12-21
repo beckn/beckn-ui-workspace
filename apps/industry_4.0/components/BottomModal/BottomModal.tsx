@@ -1,8 +1,6 @@
-import { useState } from 'react'
+import React from 'react'
+import { Image, Box } from '@chakra-ui/react'
 import { Transition } from '@headlessui/react'
-import { AiOutlineClose } from 'react-icons/ai'
-import { useLanguage } from '../../hooks/useLanguage'
-import { Image } from '@chakra-ui/react'
 
 interface ModalProps {
   isOpen: boolean
@@ -12,13 +10,20 @@ interface ModalProps {
 }
 
 const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, partialClose }) => {
-  const { t } = useLanguage()
   return (
     <Transition
       show={isOpen}
       onClick={() => onClose()}
     >
-      <div className="fixed z-[9999] inset-0 flex items-end justify-center  sm:p-0">
+      <Box
+        position="fixed"
+        zIndex="9999"
+        inset="0"
+        display="flex"
+        alignItems="flex-end"
+        justifyContent="center"
+        padding={partialClose ? '0' : 'sm:p-0'}
+      >
         <Transition.Child
           unmount={false}
           enter="transition-transform duration-300"
@@ -31,16 +36,28 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, partialClose }
             width: '100vw'
           }}
         >
-          <div className="w-full   px-4 pb-4 pt-2 mx-auto bg-[#F3F4F5]  rounded-t-[1rem] shadow-lg sm:rounded-lg sm:overflow-hidden">
+          <Box
+            width="full"
+            px="4"
+            pb="4"
+            pt="2"
+            mx="auto"
+            bg="#F3F4F5"
+            roundedTop="1rem"
+            shadow="lg"
+            overflow="hidden"
+            className="sm:rounded-lg"
+          >
             <Image
               src="/images/Indicator.svg"
-              className="mx-auto mb-3"
+              mx="auto"
+              mb="3"
               alt="indicator"
             />
             {children}
-          </div>
+          </Box>
         </Transition.Child>
-      </div>
+      </Box>
     </Transition>
   )
 }

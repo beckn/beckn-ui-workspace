@@ -27,6 +27,7 @@
   display: flex;
   height: 100%;
   align-items: center;
+  justify-content: space-between;
 }
 .top_header_lan {
   margin-left: auto;

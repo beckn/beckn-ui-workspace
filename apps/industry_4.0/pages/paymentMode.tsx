@@ -1,19 +1,26 @@
 import React, { useState } from 'react'
-import { Box, Flex, Text, Image, Card, CardBody } from '@chakra-ui/react'
+import { Box, Flex, Text, Image, Card, CardBody, useTheme } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { useDispatch } from 'react-redux'
-import Button from '../components/button/Button'
 import CardWithCheckBox from '../components/card/Card'
+import CardWithUnchecked from '../components/card/CardUncked'
 import { useLanguage } from '../hooks/useLanguage'
-import creditCardImg from '../public/images/creditCardImg.svg'
 import { cartActions } from '../store/cart-slice'
+import phonePay from '../public/images/phonePayPayment.svg'
+import CashOnDelivery from '../public/images/cash.svg'
+import Visa from '../public/images/visa.svg'
+import masterCard from '../public/images/masterCard.svg'
+
+import NetBanking from '../public/images/netbanking.svg'
+import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 
 function PaymentMode() {
   const [checked, setChecked] = useState(false)
+  const theme = useTheme()
 
   const { t } = useLanguage()
   const router = useRouter()
-  const dispatch = useDispatch()
+  const bgColorPrimary = theme.colors.primary['100']
 
   return (
     <>
@@ -21,7 +28,6 @@ function PaymentMode() {
         height={'72vh'}
         position={'relative'}
       >
-        {/* <AppHeader appHeaderText={t.selectPaymentMethod} /> */}
         <Box>
           <Flex
             justifyContent={'space-between'}
@@ -29,49 +35,79 @@ function PaymentMode() {
             fontSize={'17px'}
             mb={'10px'}
           >
-            <Text className="text-ellipsis">{t.cards}</Text>
             <Text
-              color={'rgba(var(--color-primary))'}
+              fontSize={'17px'}
+              fontWeight={400}
+            >
+              {t.cards}
+            </Text>
+            <Text
+              color={bgColorPrimary}
               fontSize={'15px'}
+              fontWeight={400}
             >
               {t.addCard}
             </Text>
           </Flex>
-          <Card
-            className="border_radius_all"
-            mb={'20px'}
+          <CardWithUnchecked
+            setChecked={setChecked}
+            img1={Visa}
+            img2={masterCard}
+            paymentMethod={t.cardNumber}
+            paymentMethodNet={t.cardNumber}
+          />
+          <Flex
+            justifyContent={'space-between'}
+            alignItems={'center'}
+            fontSize={'17px'}
+            mb={'10px'}
           >
+            <Text
+              fontSize={'17px'}
+              fontWeight={400}
+            >
+              {t.upi}
+            </Text>
+            <Text
+              color={bgColorPrimary}
+              fontSize={'15px'}
+              fontWeight={400}
+            >
+              {t.addCard}
+            </Text>
+          </Flex>
+          <Card>
             <CardBody padding={'15px 20px'}>
-              {/* eslint-disable-next-line jsx-a11y/alt-text */}
-              <Image src={creditCardImg} />
+              <Image src={phonePay} />
             </CardBody>
           </Card>
         </Box>
-        <Text
-          marginBottom={'8px'}
-          fontSize={'17px'}
-        >
-          Other
-        </Text>
-        <CardWithCheckBox
-          setChecked={setChecked}
-          paymentMethod={t.cashOnDelivery}
-        />
+
+        <Box mt={'20px'}>
+          <Text
+            marginBottom={'8px'}
+            fontSize={'17px'}
+          >
+            {t.other}
+          </Text>
+          <CardWithCheckBox
+            setChecked={setChecked}
+            img1={NetBanking}
+            img2={CashOnDelivery}
+            paymentMethod={t.cashOnDelivery}
+            paymentMethodNet={t.netBanking}
+          />
+        </Box>
       </Box>
       <Box
         position={'absolute'}
         bottom={'10px'}
         width={'90%'}
       >
-        <Button
-          buttonText={t.confirmOrder}
-          background={'rgba(var(--color-primary))'}
-          color={'rgba(var(--text-color))'}
-          isDisabled={!checked}
-          handleOnClick={() => {
-            dispatch(cartActions.clearCart())
-            router.push('/orderConfirmation')
-          }}
+        <BecknButton
+          children={t.confirmOrder}
+          handleClick={() => router.push('/orderConfirmation')}
+          disabled={!checked}
         />
       </Box>
     </>
