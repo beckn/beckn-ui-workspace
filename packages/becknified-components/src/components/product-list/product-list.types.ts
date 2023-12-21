@@ -5,6 +5,6 @@ import { Product } from '../product-card/product-card.types'
 export interface ProductListProps {
   productList: Product[]
   productInfoDataSource?: Record<string, any>
-  CustomInfoComponentForProductCard?: React.ComponentType<{ product: Product }>
+  CustomInfoComponentForProductCard?: React.ComponentType<{ dataSource: any }>
   productClickHandler?: React.MouseEventHandler<HTMLDivElement>
 }

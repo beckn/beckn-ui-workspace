@@ -1,11 +1,11 @@
 import Router from 'next/router'
 import React, { useEffect, useState } from 'react'
 import ProductDetails from '../components/productDetails'
-import { RetailItem } from '../lib/types/products'
+import { ParsedItemModel } from '../types/search.types'
 import { fromBinary } from '../utilities/common-utils'
 
 const Product = () => {
-  const [product, setProduct] = useState<RetailItem | null>(null)
+  const [product, setProduct] = useState<ParsedItemModel | null>(null)
 
   useEffect(() => {
     const { productDetails } = Router.query

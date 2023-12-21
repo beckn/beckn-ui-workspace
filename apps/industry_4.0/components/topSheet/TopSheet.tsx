@@ -14,7 +14,6 @@ import {
   Button,
   useTheme
 } from '@chakra-ui/react'
-import { extendTheme } from '@chakra-ui/react'
 import style from './TopSheet.module.css'
 import { useLanguage } from '../../hooks/useLanguage'
 import { useDispatch, useSelector } from 'react-redux'
@@ -22,20 +21,9 @@ import { IGeoLocationSearchPageRootState } from '../../lib/types/geoLocationSear
 import { toggleLocationSearchPageVisibility } from '../../store/geoMapLocationSearch-slice'
 import { MdMyLocation } from 'react-icons/md'
 
-const theme = extendTheme({
-  components: {
-    Modal: {
-      baseStyle: {
-        overlay: {
-          top: '98px'
-        }
-      }
-    }
-  }
-})
-
 interface TopSheetPropsModel {
   currentAddress: string
+  loadingForCurrentAddress: boolean
 }
 
 const TopSheet: React.FC<TopSheetPropsModel> = props => {
