@@ -103,7 +103,7 @@ const Search = () => {
                 alignItems={'center'}
               >
                 <Text
-                  fontWeight={700}
+                  fontWeight={600}
                   fontSize={'17px'}
                 >
                   {t.catalogLoader}

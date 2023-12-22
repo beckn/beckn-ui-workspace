@@ -10,6 +10,7 @@ const ProductCardRenderer = (data: any) => {
   const { t } = useLanguage()
   const router = useRouter()
   const encodedProduct = window.btoa(toBinary(JSON.stringify(dataSource)))
+  console.log(dataSource)
 
   //   TODO :- have to fix CSS as well as remove mock data and add dynamic data
   return (
@@ -22,14 +23,17 @@ const ProductCardRenderer = (data: any) => {
       rounded="xl"
       bg="#fff"
       position="relative"
+      mb={'20px'}
     >
       <Box w="125px">
         <Box>
           <Image
-            src={dataSource.item.images[0].url}
             width={'110px'}
-            height={'133px'}
+            height={'168px'}
+            src={dataSource.item.images[0].url}
             alt={dataSource.item.name}
+            borderTopLeftRadius={'10px'}
+            borderBottomLeftRadius={'10px'}
           />
         </Box>
       </Box>

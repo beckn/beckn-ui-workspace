@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
-import { Router, useRouter } from 'next/router'
-import { Box, Button, Image, Stack, Text } from '@chakra-ui/react'
+import { useRouter } from 'next/router'
 import { useSelector } from 'react-redux'
 import orderConfirmmark from '../public/images/orderConfirmmark.svg'
 import { useLanguage } from '../hooks/useLanguage'
@@ -78,7 +77,7 @@ const OrderConfirmation = () => {
           {
             text: 'View Details',
             handleClick: () => {
-              router.push('/orderHistory')
+              router.push('/orderDetails')
             },
             disabled: false,
             variant: 'solid',

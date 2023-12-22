@@ -9,7 +9,11 @@ import React from 'react'
 const invoiceDetails = ({ props }) => {
   const { t } = useLanguage()
   return (
-    <Box>
+    <Box
+      className="hideScroll"
+      maxH={'calc(100vh - 100px)'}
+      overflowY="scroll"
+    >
       <DetailsCard>
         <Box pb={'15px'}>
           <Typography
