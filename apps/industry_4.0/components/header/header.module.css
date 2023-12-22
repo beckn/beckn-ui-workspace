@@ -37,7 +37,7 @@
 .top_header_modal {
   display: flex;
   gap: 8px;
-  padding-top: 20px;
+  padding: 15px 0px;
 }
 .bottom_header {
   position: fixed;

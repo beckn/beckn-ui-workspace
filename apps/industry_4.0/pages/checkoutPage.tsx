@@ -11,19 +11,21 @@ import { ParsedItemModel } from '../types/search.types'
 import { getPayloadForInitRequest, getPayloadForSelectRequest } from '@utils/checkout-utils'
 import axios from 'axios'
 import { SelectResponseModel } from '../types/select.types'
+import { useRouter } from 'next/router'
 
 const CheckoutPage = () => {
   const { t } = useLanguage()
   const [selectedProduct, setSelectedProduct] = useState<ParsedItemModel | null>(null)
   const [isLoadingForSelect, setIsLoadingForSelect] = useState(true)
   const [selectData, setSelectData] = useState<SelectResponseModel[]>([])
+  const router = useRouter()
   const [submittedDetails, setSubmittedDetails] = useState<ShippingDetailsProps>({
     name: 'Antoine Dubois',
     number: '0612345678',
     location: '15 Rue du Soleil, Paris, France',
     title: '750013'
   })
-  const [detailsForm, setdetailsForm] = useState<ShippingFormInitialValuesType>({
+  const [detailsForm, setDetailsForm] = useState<ShippingFormInitialValuesType>({
     name: 'Antoine Dubois',
     mobileNumber: '0612345678',
     email: 'antoine.dubois@gmail.com',
@@ -79,8 +81,18 @@ const CheckoutPage = () => {
             flexDir={'column'}
             alignItems={'center'}
           >
-            <Text fontWeight={700}>{t.catalogLoader}</Text>
-            <Text>{t.catalogSubLoader}</Text>
+            <Text
+              fontWeight={600}
+              fontSize={'15px'}
+            >
+              {t.catalogLoader}
+            </Text>
+            <Text
+              fontWeight={400}
+              fontSize={'15px'}
+            >
+              {t.catalogSubLoader}
+            </Text>
           </Box>
         </Loader>
       </Box>
@@ -197,11 +209,13 @@ const CheckoutPage = () => {
       <BecknButton
         children="Proceed to Payment"
         className="checkout_btn "
+        handleClick={() => router.push('/paymentMode')}
       />
       <BecknButton
         children="Cancel Order"
         variant="outline"
         className="checkout_btn"
+        handleClick={() => router.push('/homePage')}
       />
     </Box>
   )

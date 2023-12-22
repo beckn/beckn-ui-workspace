@@ -68,16 +68,22 @@ const OrderHistory = () => {
   }, [data])
 
   return (
-    <BecknOrderHistory
-      schema={{
-        orderHistoryDetails: orderHistoryData,
-        loader: {
-          text: 'Loading order history'
-        }
-      }}
-      isLoading={loading}
-      isEmptyText="No Orders Found"
-    />
+    <Box
+      className="hideScroll"
+      maxH={'calc(100vh - 100px)'}
+      overflowY="scroll"
+    >
+      <BecknOrderHistory
+        schema={{
+          orderHistoryDetails: orderHistoryData,
+          loader: {
+            text: 'Loading order history'
+          }
+        }}
+        isLoading={loading}
+        isEmptyText="No Orders Found"
+      />
+    </Box>
   )
 }
 

@@ -4,13 +4,17 @@ import { SignUpPropsModel } from '@components/signIn/SignIn.types'
 import { FormErrors, signUpValidateForm } from '@utils/form-utils'
 import { BecknAuth } from '@beckn-ui/becknified-components'
 import Router from 'next/router'
+import Cookies from 'js-cookie'
+import { useToast } from '@chakra-ui/react'
+import { CustomToast } from '@components/signIn/SignIn'
 
 const SignUp = () => {
   const { t } = useLanguage()
-
+  const toast = useToast()
   const [formData, setFormData] = useState<SignUpPropsModel>({ name: '', email: '', password: '', mobileNumber: '' })
   const [formErrors, setFormErrors] = useState<FormErrors>({ name: '', email: '', password: '', mobileNumber: '' })
-  const [isFormFilled, setIsFormFilled] = useState(true)
+  const [isFormFilled, setIsFormFilled] = useState(false)
+  const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -38,7 +42,56 @@ const SignUp = () => {
     )
   }
 
-  const handleSignUp = async () => {}
+  const handleSignUp = async () => {
+    const errors = signUpValidateForm(formData)
+
+    const isFormValid = Object.values(errors).every(error => error === '')
+
+    if (isFormValid) {
+      const registrationData = {
+        username: formData.name,
+        email: formData.email,
+        password: formData.password,
+        mobile: formData.mobileNumber
+      }
+
+      try {
+        const response = await fetch(`${baseUrl}/auth/local/register`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(registrationData)
+        })
+
+        if (response.ok) {
+          const data = await response.json()
+          const token = data.jwt
+
+          Cookies.set('authToken', token)
+          Router.push('/homePage')
+        } else {
+          const errorData = await response.json()
+          toast({
+            render: () => (
+              <CustomToast
+                title="Error!"
+                message={errorData.error.message}
+              />
+            ),
+            position: 'top',
+            duration: 2000,
+            isClosable: true
+          })
+          console.error('Registration failed')
+        }
+      } catch (error) {
+        console.error('An error occurred:', error)
+      }
+    } else {
+      setFormErrors(errors)
+    }
+  }
 
   return (
     <>
