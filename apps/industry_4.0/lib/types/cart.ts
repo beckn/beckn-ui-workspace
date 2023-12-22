@@ -1,20 +1,4 @@
-import { IProductDetails, RetailItem, TSlug } from './products'
-
-export interface ICartProduct {
-  image: any
-  name: string
-  slug: TSlug
-  price: number
-  discount?: number
-  brand: string
-  category: string[]
-  starRating: number
-  isOffer?: boolean
-  details?: IProductDetails[]
-  registerDate?: string
-  quantity: number
-  totalPrice: number
-}
+import { RetailItem } from './products'
 
 export interface CartRetailItem extends RetailItem {
   quantity: number

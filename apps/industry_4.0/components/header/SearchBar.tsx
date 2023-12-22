@@ -17,7 +17,7 @@ const SearchBar: React.FC<SearchBarPropsModel> = ({ searchString, handleChange }
 
   return (
     <Box
-      width="calc(100% - 40px)"
+      width="100%"
       margin="20px auto"
     >
       <Input
@@ -25,7 +25,6 @@ const SearchBar: React.FC<SearchBarPropsModel> = ({ searchString, handleChange }
         bg="transparent"
         borderRadius={'12px'}
         _focus={{ outline: 'none' }}
-        _focusVisible={'none'}
         w="full"
         type="search"
         placeholder={t.search}

@@ -1,29 +1,104 @@
 import React, { useEffect, useState } from 'react'
 import { useLanguage } from '../hooks/useLanguage'
-import { Router, useRouter } from 'next/router'
-import { CheckoutProps, ShippingDetailsProps, ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
-import { Box, Divider, Flex } from '@chakra-ui/react'
-import { Typography } from '@beckn-ui/molecules'
+import { ShippingDetailsProps, ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
+import { Box, Flex, Text } from '@chakra-ui/react'
+import { Loader, Typography } from '@beckn-ui/molecules'
 import DetailsCard from '@beckn-ui/becknified-components/src/components/checkout/details-card'
 import ShippingSection from '@beckn-ui/becknified-components/src/components/checkout/shipping-section'
 import PaymentDetails from '@beckn-ui/becknified-components/src/components/checkout/payment-details'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
+import { ParsedItemModel } from '../types/search.types'
+import { getPayloadForInitRequest, getPayloadForSelectRequest } from '@utils/checkout-utils'
+import axios from 'axios'
+import { SelectResponseModel } from '../types/select.types'
 
 const CheckoutPage = () => {
-  const { t, locale } = useLanguage()
+  const { t } = useLanguage()
+  const [selectedProduct, setSelectedProduct] = useState<ParsedItemModel | null>(null)
+  const [isLoadingForSelect, setIsLoadingForSelect] = useState(true)
+  const [selectData, setSelectData] = useState<SelectResponseModel[]>([])
   const [submittedDetails, setSubmittedDetails] = useState<ShippingDetailsProps>({
     name: 'Antoine Dubois',
     number: '0612345678',
     location: '15 Rue du Soleil, Paris, France',
-    title: '75001'
+    title: '750013'
   })
   const [detailsForm, setdetailsForm] = useState<ShippingFormInitialValuesType>({
     name: 'Antoine Dubois',
     mobileNumber: '0612345678',
     email: 'antoine.dubois@gmail.com',
     address: '15 Rue du Soleil, Paris, France',
-    pinCode: '75001'
+    pinCode: '750013'
   })
+
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL
+
+  const fetchSelectData = (selectPayload: any) => {
+    axios
+      .post(`${apiUrl}/select`, selectPayload)
+      .then(res => {
+        setSelectData(res.data.data)
+        setIsLoadingForSelect(false)
+      })
+      .catch(e => {
+        console.error(e)
+        setIsLoadingForSelect(false)
+      })
+  }
+
+  useEffect(() => {
+    if (localStorage && localStorage.getItem('selectedItem')) {
+      const parsedSelectedItem = JSON.parse(localStorage.getItem('selectedItem') as string)
+      setSelectedProduct(parsedSelectedItem)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (selectedProduct) {
+      const selectPayload = getPayloadForSelectRequest(selectedProduct)
+      fetchSelectData(selectPayload)
+    }
+  }, [selectedProduct])
+
+  if (!selectedProduct) {
+    return <></>
+  }
+
+  if (isLoadingForSelect) {
+    return (
+      <Box
+        height={'calc(100vh - 300px)'}
+        display={'flex'}
+        justifyContent={'center'}
+        alignItems={'center'}
+      >
+        <Loader>
+          <Box
+            mt={'13px'}
+            display={'flex'}
+            flexDir={'column'}
+            alignItems={'center'}
+          >
+            <Text fontWeight={700}>{t.catalogLoader}</Text>
+            <Text>{t.catalogSubLoader}</Text>
+          </Box>
+        </Loader>
+      </Box>
+    )
+  }
+
+  const {
+    message: {
+      order: {
+        quote: {
+          price: { currency, value }
+        },
+        items
+      }
+    }
+  } = selectData[0]
+  const { name } = items[0]
+
   return (
     <Box
       className="hideScroll"
@@ -45,48 +120,19 @@ const CheckoutPage = () => {
           >
             <Typography
               variant="subTitleSemibold"
-              text={'Assembly'}
+              text={t.assembly}
             />
             <Typography
               variant="subTitleRegular"
-              text={'€ 30,000'}
+              text={`${currency} ${value}`}
             />
           </Flex>
           <Box pb={'4px'}>
             <Typography
               variant="subTitleRegular"
-              text={'RTAL Assembly Lines'}
+              text={name}
             />
           </Box>
-          <Box pb={'4px'}>
-            <Typography
-              variant="subTitleRegular"
-              text={'Qty: 150'}
-            />
-          </Box>
-          <Divider
-            mt="10px"
-            mb="10px"
-          />
-          <Flex
-            pb={'15px'}
-            pt="10px"
-            justifyContent={'space-between'}
-            alignItems="center"
-          >
-            <Typography
-              variant="subTitleSemibold"
-              text={'Assembly'}
-            />
-            <Typography
-              variant="subTitleRegular"
-              text={'€ 30,000'}
-            />
-          </Flex>
-          <Typography
-            variant="subTitleRegular"
-            text={'RTAL Assembly Lines'}
-          />
         </DetailsCard>
         <ShippingSection
           sectionSubtitle={t.addShippingDetails}
@@ -99,10 +145,16 @@ const CheckoutPage = () => {
             title: t.shipping
           }}
           shippingForm={{
-            onSubmit: () => console.log('jdkasd'),
+            onSubmit: data => {
+              const initPayload = getPayloadForInitRequest(selectedProduct)
+              axios
+                .post(`${apiUrl}/init`, initPayload)
+                .then(res => console.log(res))
+                .catch(e => console.error(e))
+            },
             submitButton: { text: 'Save Shipping Details' },
             values: detailsForm,
-            onChange: data => () => console.log('ajsdhasd')
+            onChange: data => () => console.log('ajsdhasd', data)
           }}
         />
         <ShippingSection
@@ -118,7 +170,7 @@ const CheckoutPage = () => {
             title: t.billing
           }}
           shippingForm={{
-            onSubmit: () => console.log('jdkasd'),
+            onSubmit: data => console.log('form data in the billing', data),
             submitButton: { text: 'Save Billing Details' },
             values: detailsForm,
             onChange: data => () => console.log('ajsdhasd')

@@ -159,36 +159,6 @@ const TopSheet: React.FC<TopSheetPropsModel> = props => {
                   width={'24px'}
                 />
               </Box>
-              <Box
-                textAlign={'center'}
-                pt={'20px'}
-                fontSize="12px"
-              >
-                {t.or}
-              </Box>
-              <Button
-                onClick={() => alert('button clicked')}
-                p={'25px 40px'}
-                borderRadius={'12px'}
-                background={bgColorOfSearchIcon}
-                color={'#FFFFFF'}
-                ml={'55px'}
-                mt={5}
-              >
-                <Flex
-                  flexDir={'row'}
-                  justifyContent={'space-around'}
-                  alignItems={'center'}
-                >
-                  <MdMyLocation size={20} />
-                  <Text
-                    ml={3}
-                    color={'#FFFFFF'}
-                  >
-                    {t.enableLocation}
-                  </Text>
-                </Flex>
-              </Button>
             </Box>
           </ModalContent>
         </Modal>
