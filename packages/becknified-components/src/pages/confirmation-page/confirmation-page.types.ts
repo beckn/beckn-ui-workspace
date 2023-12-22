@@ -1,8 +1,12 @@
-import { ButtonProps } from '@beckn-ui/molecules'
+import { ButtonProps, LoaderProps } from '@beckn-ui/molecules'
 
 export interface ConfirmationPageProps {
-  iconSrc: string
-  content: JSX.Element
-  buttons: ButtonProps[]
+  schema: {
+    iconSrc: string
+    content: JSX.Element
+    buttons: ButtonProps[]
+    loader: LoaderProps
+  }
   className?: string
+  isLoading?: boolean
 }
