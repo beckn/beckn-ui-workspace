@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Box, Flex, Image } from '@chakra-ui/react'
 import OpenCommerce from '@public/images/openCommerce.svg'
 import Styles from './SignIn.module.css'
@@ -7,7 +7,12 @@ import { SignInPropsModel } from './SignIn.types'
 import style from '../detailsCard/ShippingForm.module.css'
 import { FormErrors, signInValidateForm } from '../../utilities/detailsForm-utils'
 import Button from '../button/Button'
+import { fetchHandles, fetchChallenge, dsnpLogin } from './signin.utils'
+import { signPayloadWithExtension } from '../../utilities/signTransaction'
+import { dsnpCreate } from '../../utilities/auth'
+import { setLocalStorage } from '../../utilities/localStorage'
 import Router from 'next/router'
+import { toast } from 'react-toastify'
 
 const SignIn = () => {
   const { t } = useLanguage()
@@ -15,6 +20,10 @@ const SignIn = () => {
   const [formErrors, setFormErrors] = useState<FormErrors>({ email: '', password: '' })
   const [isFormFilled, setIsFormFilled] = useState(false)
   const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL
+  const [challenge, setChallenge] = useState('')
+  const [handles, setHandles] = useState([])
+  const [selectedAddress, setSelectedAddress] = useState('')
+  const [providerInfo, setProviderInfo] = useState({})
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -44,6 +53,24 @@ const SignIn = () => {
     }
 
     try {
+      if (selectedAddress) {
+        if (handles.length > 0) {
+          const signedChallenge = await signPayloadWithExtension(selectedAddress, challenge.challenge)
+          const loginData = await dsnpLogin(signedChallenge, handles[0]?.publicKey, challenge.challenge)
+          setLocalStorage('dsnpAuth', loginData)
+          console.log('Dank login data', loginData)
+        } else {
+          const createData = await dsnpCreate('Ankit', providerInfo, selectedAddress)
+          setLocalStorage('dsnpAuth', createData)
+          console.log('Dank create data', createData)
+        }
+      } else {
+        toast.error('No polka address found', {
+          theme: 'light'
+        })
+        throw Error('No polka address found')
+      }
+
       const response = await fetch(`${baseUrl}/auth/local`, {
         method: 'POST',
         headers: {
@@ -65,6 +92,20 @@ const SignIn = () => {
       console.error('An error occurred:', error)
     }
   }
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setProviderInfo(JSON.parse(localStorage.getItem('provider') as string))
+      const accounts = JSON.parse(localStorage.getItem('polkaAddresses') as string)
+      if (accounts && accounts.length > 0) {
+        setSelectedAddress(accounts[0].address)
+        fetchHandles(accounts[0].address).then(handles => {
+          setHandles(handles)
+        })
+        fetchChallenge().then(challenge => setChallenge(challenge))
+      }
+    }
+  }, [])
 
   return (
     <Box className={Styles.main_container}>
