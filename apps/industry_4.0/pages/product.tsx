@@ -10,7 +10,9 @@ const Product = () => {
   useEffect(() => {
     const { productDetails } = Router.query
     if (productDetails) {
-      setProduct(JSON.parse(fromBinary(window.atob(productDetails as string))))
+      const parsedProduct = JSON.parse(fromBinary(window.atob(productDetails as string)))
+      localStorage.setItem('selectedItem', JSON.stringify(parsedProduct))
+      setProduct(parsedProduct)
     }
   }, [])
 

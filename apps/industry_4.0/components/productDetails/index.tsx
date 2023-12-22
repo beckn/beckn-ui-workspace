@@ -62,7 +62,10 @@ const ProductDetails: React.FC<Props> = ({ product }) => {
             </Text>
           </Flex>
           {/* <ProductDescription description={product.descriptor.long_desc} /> */}
-          <ProductDescription description={'<p>Long mock description</p>'} />
+          <ProductDescription
+            description={`<h1>Intermittent Assembly Product - Enhanced Efficiency, Unmatched Performance!</h1></br><p>Welcome to the future of assembly technology! Our Intermittent Assembly product is designed to revolutionize your workflow, providing unparalleled efficiency and precision. </p></br><p>Key Features:</p> </br><ul><li>Intermittent Assembly Technology for precise and controlled assembly processes.</li><li>Advanced automation to streamline repetitive tasks, saving you time and resources.</li><li>Durable materials ensuring longevity and reliability.</li><li>Customizable settings to adapt to various assembly requirements.</li></ul> <p>Whether you are in manufacturing, engineering, or a related field, our Intermittent Assembly product is your gateway to increased productivity and reduced production times.</p><p>Don't miss out on the advantages:</p><ul><li>Enhanced precision in every assembly task.</li><li>Seamless integration into existing workflows.</li><li>Intuitive user interface for easy operation.</li></ul></br><p>Invest in the future of assembly technology. Elevate your production capabilities with our Intermittent Assembly product today!</p><footer>
+        <p>For inquiries, please contact us at info@yourcompany.com</p></footer>`}
+          />
           <Box
             as={Button}
             marginTop={5}

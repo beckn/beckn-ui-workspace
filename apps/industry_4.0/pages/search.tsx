@@ -23,8 +23,6 @@ const Search = () => {
   const { t } = useLanguage()
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
-
-  // const { data, loading, error, fetchData } = useRequest()
   const searchPayload = {
     context: {
       domain: 'supply-chain-services:assembly'
