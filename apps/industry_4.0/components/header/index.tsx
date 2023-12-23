@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import BottomModal from '../BottomModal'
+import { BottomModal } from '@beckn-ui/molecules'
+
 import { Box, Divider, Flex, HStack, Image, Text } from '@chakra-ui/react'
 import CartIcon from '../cart/CartIcon'
 import { useRouter } from 'next/router'
@@ -48,7 +49,7 @@ const storeHeaderBlackList = [
   '/invoiceDetails'
 ]
 const headerValues: PathnameObjectType = {
-  '/checkoutPage': 'Billing & Shipping',
+  '/checkoutPage': 'Review Purchase Order',
   '/orderHistory': 'Order History',
   '/orderDetails': 'Order Details',
   '/invoiceDetails': 'Invoice Details',
@@ -152,6 +153,7 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
         <Box
           onClick={() => {
             router.push('/orderHistory')
+            setMenuModalOpen(false)
           }}
           className={styles.top_header_modal}
         >
@@ -226,6 +228,7 @@ const BottomHeader = () => {
         <Box
           onClick={() => {
             router.push('/invoiceDetails')
+            setOrderModalOpen(false)
           }}
           className={styles.top_header_modal}
         >

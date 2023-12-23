@@ -5,13 +5,16 @@ import { SignInPropsModel } from './SignIn.types'
 import { FormErrors, signInValidateForm } from '@utils/form-utils'
 import { BecknAuth } from '@beckn-ui/becknified-components'
 import Router from 'next/router'
+import { Box, useToast, Text } from '@chakra-ui/react'
 
 const SignIn = () => {
   const { t } = useLanguage()
 
   const [formData, setFormData] = useState<SignInPropsModel>({ email: '', password: '' })
   const [formErrors, setFormErrors] = useState<FormErrors>({ email: '', password: '' })
-  const [isFormFilled, setIsFormFilled] = useState(true)
+  const [isFormFilled, setIsFormFilled] = useState(false)
+  const toast = useToast()
+
   const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -57,7 +60,19 @@ const SignIn = () => {
         localStorage.setItem('token', token)
         Router.push('/homePage')
       } else {
-        console.error('Sign In failed')
+        const errorData = await response.json()
+        toast({
+          render: () => (
+            <CustomToast
+              title="Error!"
+              message={errorData.error.message}
+            />
+          ),
+          position: 'top',
+          duration: 2000,
+          isClosable: true
+        })
+        console.error('Registration failed')
       }
     } catch (error) {
       console.error('An error occurred:', error)
@@ -113,3 +128,31 @@ const SignIn = () => {
 }
 
 export default SignIn
+
+export const CustomToast: React.FC<{ title: string; message: string }> = ({ title, message }) => (
+  <Box
+    mt="2rem"
+    p={4}
+    bg="red.500"
+    color="white"
+    borderRadius="md"
+    boxShadow="md"
+  >
+    <Text
+      fontWeight={700}
+      fontSize={'15px'}
+      color={'white'}
+      textAlign={'center'}
+    >
+      {title}
+    </Text>
+    <Text
+      fontWeight={500}
+      fontSize={'15px'}
+      color={'white'}
+      textAlign={'center'}
+    >
+      {message}
+    </Text>
+  </Box>
+)

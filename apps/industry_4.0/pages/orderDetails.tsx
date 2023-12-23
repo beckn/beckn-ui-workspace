@@ -16,7 +16,11 @@ const OrderDetails = () => {
   const [status, setStatus] = useState('Completed')
   const { t, locale } = useLanguage()
   return (
-    <>
+    <Box
+      className="hideScroll"
+      maxH={'calc(100vh - 100px)'}
+      overflowY="scroll"
+    >
       <Box
         pb="15px"
         pt={'20px'}
@@ -104,7 +108,7 @@ const OrderDetails = () => {
           }
         />
       </Box>
-    </>
+    </Box>
   )
 }
 
