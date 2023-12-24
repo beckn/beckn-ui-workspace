@@ -11,8 +11,8 @@ import {
   Flex,
   ChakraProvider,
   Input,
-  Button,
-  useTheme
+  useTheme,
+  Skeleton
 } from '@chakra-ui/react'
 import style from './TopSheet.module.css'
 import { useLanguage } from '../../hooks/useLanguage'
@@ -26,9 +26,11 @@ import { useRouter } from 'next/router'
 interface TopSheetPropsModel {
   currentAddress: string
   loadingForCurrentAddress: boolean
+  currentLocationFetchError: string
 }
 
 const TopSheet: React.FC<TopSheetPropsModel> = props => {
+  const { currentAddress, currentLocationFetchError, loadingForCurrentAddress } = props
   const theme = useTheme()
   const router = useRouter()
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -45,9 +47,7 @@ const TopSheet: React.FC<TopSheetPropsModel> = props => {
     dispatch(toggleLocationSearchPageVisibility(true))
   }
 
-  if (!props.currentAddress && !geoLocationSearchPageSelectedAddress) {
-    return <></>
-  }
+  const renderAddresstext = currentLocationFetchError || geoLocationSearchPageSelectedAddress || currentAddress || ''
 
   return (
     <ChakraProvider theme={theme}>
@@ -69,22 +69,31 @@ const TopSheet: React.FC<TopSheetPropsModel> = props => {
                 {t.yourLocation}
               </Text>
               <Flex alignItems={'center'}>
-                <Text
-                  maxWidth={'200px'}
-                  overflow={'hidden'}
-                  textOverflow={'ellipsis'}
-                  whiteSpace={'nowrap'}
-                  pr={'5px'}
-                  fontSize={'12px'}
-                  fontWeight={'500'}
-                >
-                  {geoLocationSearchPageSelectedAddress ? geoLocationSearchPageSelectedAddress : props.currentAddress}
-                </Text>
-                <Image
-                  onClick={onOpen}
-                  pt={'4px'}
-                  src="/images/downArrow.svg"
-                />
+                {loadingForCurrentAddress ? (
+                  <Skeleton
+                    height={'10px'}
+                    width={'200px'}
+                  />
+                ) : (
+                  <>
+                    <Text
+                      maxWidth={'200px'}
+                      overflow={'hidden'}
+                      textOverflow={'ellipsis'}
+                      whiteSpace={'nowrap'}
+                      pr={'5px'}
+                      fontSize={'12px'}
+                      fontWeight={'500'}
+                    >
+                      {renderAddresstext}
+                    </Text>
+                    <Image
+                      onClick={onOpen}
+                      pt={'4px'}
+                      src="/images/downArrow.svg"
+                    />
+                  </>
+                )}
               </Flex>
             </Box>
           </Flex>

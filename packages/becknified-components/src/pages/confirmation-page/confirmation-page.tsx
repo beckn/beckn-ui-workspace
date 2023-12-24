@@ -3,10 +3,8 @@ import { ConfirmationPageProps } from './confirmation-page.types'
 import { Image, Box, Flex, VStack } from '@chakra-ui/react'
 import { Button, Loader } from '@beckn-ui/molecules'
 
-const ConfirmationPage: React.FC<ConfirmationPageProps> = ({ schema, className, isLoading = false }) => {
-  const { iconSrc, content, contentMessage, buttons, loader } = schema
-
-  if (isLoading) return <Loader {...loader} />
+const ConfirmationPage: React.FC<ConfirmationPageProps> = ({ schema, className }) => {
+  const { iconSrc, content, contentMessage, buttons } = schema
 
   return (
     <Flex

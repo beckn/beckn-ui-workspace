@@ -9,11 +9,10 @@ import beckenFooter from '../public/images/footer.svg'
 import { SearchInput } from '@beckn-ui/becknified-components'
 
 const HomePage = () => {
-  const [address, setAddress] = useState('')
   const [searchTerm, setSearchTerm] = useState<string>('')
   const [currentAddress, setCurrentAddress] = useState('')
   const [loadingForCurrentAddress, setLoadingForCurrentAddress] = useState(true)
-  const [error, setFetchCurrentLocationError] = useState('')
+  const [currentLocationFetchError, setFetchCurrentLocationError] = useState('')
   const { t } = useLanguage()
 
   const router = useRouter()
@@ -44,20 +43,24 @@ const HomePage = () => {
                   setFetchCurrentLocationError('No address found for the given coordinates.')
                 }
               } else {
+                setFetchCurrentLocationError('Failed to fetch address data.')
                 alert('Failed to fetch address data.')
               }
             } catch (error) {
+              setFetchCurrentLocationError('Error fetching address data: ' + (error as any).message)
               alert('Error fetching address data: ' + (error as any).message)
             } finally {
               setLoadingForCurrentAddress(false)
             }
           },
           error => {
+            setFetchCurrentLocationError('Error getting location: ' + error.message)
             alert('Error getting location: ' + error.message)
             setLoadingForCurrentAddress(false)
           }
         )
       } else {
+        setFetchCurrentLocationError('Geolocation is not available in this browser.')
         alert('Geolocation is not available in this browser.')
         setLoadingForCurrentAddress(false)
       }
@@ -79,6 +82,7 @@ const HomePage = () => {
   return (
     <>
       <TopSheet
+        currentLocationFetchError={currentLocationFetchError}
         loadingForCurrentAddress={loadingForCurrentAddress}
         currentAddress={currentAddress}
       />

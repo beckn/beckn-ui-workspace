@@ -1,4 +1,4 @@
-import { ButtonProps, LoaderProps } from '@beckn-ui/molecules'
+import { ButtonProps } from '@beckn-ui/molecules'
 
 export interface ConfirmationPageProps {
   schema: {
@@ -6,8 +6,6 @@ export interface ConfirmationPageProps {
     content: string
     contentMessage: string
     buttons: ButtonProps[]
-    loader: LoaderProps
   }
   className?: string
-  isLoading?: boolean
 }
