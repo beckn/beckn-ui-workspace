@@ -8,11 +8,9 @@ const Product = () => {
   const [product, setProduct] = useState<ParsedItemModel | null>(null)
 
   useEffect(() => {
-    const { productDetails } = Router.query
-    if (productDetails) {
-      const parsedProduct = JSON.parse(fromBinary(window.atob(productDetails as string)))
-      localStorage.setItem('selectedItem', JSON.stringify(parsedProduct))
-      setProduct(parsedProduct)
+    if (localStorage && localStorage.getItem('selectedItem')) {
+      const parsedItem = JSON.parse(localStorage.getItem('selectedItem') as string)
+      setProduct(parsedItem)
     }
   }, [])
 

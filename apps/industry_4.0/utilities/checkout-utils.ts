@@ -1,9 +1,5 @@
-import { CartRetailItem, DataPerBpp } from '../lib/types/cart'
-import { ResponseModel } from '../lib/types/responseModel'
-import { areObjectPropertiesEqual } from './common-utils'
-import { ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
 import { ParsedItemModel } from '../types/search.types'
-import { SelectResponseModel } from '../types/select.types'
+import { InitResponseModel } from '../types/init.types'
 
 export const getPayloadForSelectRequest = (selectedProduct: ParsedItemModel) => {
   const {
@@ -53,9 +49,10 @@ export const getPayloadForSelectRequest = (selectedProduct: ParsedItemModel) => 
   return selectPayload
 }
 
-export const getPayloadForInitRequest = (selectData: ParsedItemModel) => {
+export const getPayloadForInitRequest = (selectData: ParsedItemModel, shippingDetails: any) => {
   const { providerId, bppId, bppUri, domain, transactionId, item } = selectData
   const { fulfillments } = item
+  const { name, address, email, mobileNumber, pinCode } = shippingDetails
 
   const initPayload = {
     data: [
@@ -75,16 +72,16 @@ export const getPayloadForInitRequest = (selectData: ParsedItemModel) => {
               items: [item],
               fulfillments: fulfillments,
               billing: {
-                name: 'Industry buyer',
-                address: 'B005 aspire heights, Jurong East, SGP, 680230',
+                name,
+                address: address,
                 state: {
                   name: 'Jurong East'
                 },
                 city: {
                   name: 'Jurong East'
                 },
-                email: 'nobody@nomail.com',
-                phone: '9886098860'
+                email: email,
+                phone: mobileNumber
               }
             }
           ]
@@ -96,45 +93,21 @@ export const getPayloadForInitRequest = (selectData: ParsedItemModel) => {
   return initPayload
 }
 
-export const getSubTotalAndDeliveryCharges = (initData: (ResponseModel & ResponseModel[]) | null) => {
-  let subTotal = 0
-  let totalDeliveryCharge = 0
+export const getPaymentBreakDown = (initData: InitResponseModel[]) => {
+  const quote = initData[0].message.order.quote
+  const breakUp = quote.breakup
+  const totalPricewithCurrent = `${quote.price.currency} ${quote.price.value}`
 
-  if (initData) {
-    initData.forEach(data => {
-      const deliveryAmount = parseFloat(
-        data.message.catalogs.responses[0].message.order.quote.breakup[1].price.value
-      ).toFixed(2)
-      totalDeliveryCharge += parseFloat(deliveryAmount)
+  const breakUpMap: Record<string, string> = {}
 
-      const subTotalAmount = parseFloat(
-        data.message.catalogs.responses[0].message.order.quote.breakup[0].price.value
-      ).toFixed(2)
+  breakUp.forEach(item => {
+    const {
+      title,
+      price: { currency, value }
+    } = item
 
-      subTotal += parseFloat(parseFloat(subTotalAmount).toFixed(2))
-    })
-  }
-
-  return { subTotal, totalDeliveryCharge }
-}
-
-export const getTotalCartItems = (cartItems: CartRetailItem[]) => {
-  let quantity = 0
-
-  cartItems.forEach(item => {
-    quantity += item.quantity
+    breakUpMap[title] = `${currency} ${value} `
   })
 
-  return quantity
+  return { breakUpMap, totalPricewithCurrent }
 }
-
-// export const areShippingAndBillingDetailsSame = (
-//   isBillingAddressComplete: boolean,
-//   formData: ShippingFormData,
-//   billingFormData: ShippingFormData
-// ) => {
-//   if (isBillingAddressComplete) {
-//     return areObjectPropertiesEqual(formData, billingFormData)
-//   }
-//   return !isBillingAddressComplete
-// }

@@ -98,6 +98,7 @@ const ProductCardRenderer = (data: any) => {
         </Flex>
         <Box
           onClick={() => {
+            localStorage.setItem('selectedItem', JSON.stringify(dataSource))
             router.push(`/product?productDetails=${encodedProduct}`)
           }}
           mt={'30px'}

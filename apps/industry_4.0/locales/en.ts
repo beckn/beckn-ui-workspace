@@ -72,6 +72,7 @@ const en: { [key: string]: string } = {
   viewJSON: 'View JSON',
   payment: 'Payment',
   catalogLoader: 'Please wait!',
-  catalogSubLoader: ' While we find service providers near you '
+  catalogSubLoader: ' While we find service providers near you',
+  total: 'Total'
 }
 export default en
