@@ -6,7 +6,8 @@ import { ConfirmationPage } from '@beckn-ui/becknified-components'
 import { InitResponseModel } from '../types/init.types'
 import { getPayloadForConfirm } from '@utils/confirm-utils'
 import axios from 'axios'
-import { Loader } from '@beckn-ui/molecules'
+import { Loader, Typography } from '@beckn-ui/molecules'
+import { Box, Text } from '@chakra-ui/react'
 
 const OrderConfirmation = () => {
   const { t } = useLanguage()
@@ -23,6 +24,7 @@ const OrderConfirmation = () => {
       axios
         .post(`${apiUrl}/confirm`, payLoad)
         .then(res => {
+          localStorage.setItem('confirmResponse', JSON.stringify(res.data.data))
           setIsLoading(false)
         })
         .catch(err => {
@@ -33,7 +35,38 @@ const OrderConfirmation = () => {
   }, [])
 
   if (isLoading) {
-    return <Loader />
+    return (
+      <Box
+        display={'grid'}
+        height={'calc(100vh - 300px)'}
+        alignContent={'center'}
+      >
+        <Loader>
+          <Box
+            mt={'13px'}
+            display={'flex'}
+            flexDir={'column'}
+            alignItems={'center'}
+          >
+            <Text
+              as={Typography}
+              fontWeight={600}
+              fontSize={'15px'}
+              text={t.pleaseWait}
+            />
+
+            <Text
+              as={Typography}
+              text={t.confirmLoaderSubtext}
+              textAlign={'center'}
+              alignSelf={'center'}
+              fontWeight={400}
+              fontSize={'15px'}
+            />
+          </Box>
+        </Loader>
+      </Box>
+    )
   }
 
   return (

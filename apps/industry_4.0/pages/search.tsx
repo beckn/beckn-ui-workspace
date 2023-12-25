@@ -68,10 +68,12 @@ const Search = () => {
     }
   }, [])
 
+  const currentAddress = router.query?.currentAddress
+
   return (
     <>
       <Box>
-        <TopSheet currentAddress={router.query?.currentAddress} />
+        <TopSheet currentAddress={currentAddress as string} />
         <SearchBar
           searchString={searchKeyword}
           handleChange={(text: string) => {
@@ -106,13 +108,13 @@ const Search = () => {
                   fontWeight={600}
                   fontSize={'17px'}
                 >
-                  {t.catalogLoader}
+                  {t.pleaseWait}
                 </Text>
                 <Text
                   fontWeight={400}
                   fontSize={'15px'}
                 >
-                  {t.catalogSubLoader}
+                  {t.searchLoaderSubText}
                 </Text>
               </Box>
             </Loader>

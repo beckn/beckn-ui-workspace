@@ -25,8 +25,8 @@ import { useRouter } from 'next/router'
 
 interface TopSheetPropsModel {
   currentAddress: string
-  loadingForCurrentAddress: boolean
-  currentLocationFetchError: string
+  loadingForCurrentAddress?: boolean
+  currentLocationFetchError?: string
 }
 
 const TopSheet: React.FC<TopSheetPropsModel> = props => {

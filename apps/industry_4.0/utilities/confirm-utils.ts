@@ -1,33 +1,5 @@
+import { ConfirmResponseModel } from '../types/confirm.types'
 import { InitResponseModel } from '../types/init.types'
-
-export const getPayloadForStatusRequest = (
-  confirmOrderMetaDataPerBpp: any,
-  transactionId: { transactionId: string }
-) => {
-  const payload: any = {
-    statusRequestDto: []
-  }
-
-  Object.keys(confirmOrderMetaDataPerBpp).forEach(bppId => {
-    const statusItem: any = {
-      context: {
-        transaction_id: transactionId.transactionId,
-        bpp_id: bppId,
-        bpp_uri: confirmOrderMetaDataPerBpp[bppId].bpp_uri,
-        domain: 'retail'
-      },
-
-      message: {
-        order_id: confirmOrderMetaDataPerBpp[bppId].id
-      }
-    }
-
-    payload.statusRequestDto.push(statusItem)
-  })
-
-  return payload
-}
-
 export const getPayloadForTrackRequest = (
   confirmOrderMetaDataPerBpp: any,
   transactionId: { transactionId: string }
@@ -101,4 +73,28 @@ export const getPayloadForConfirm = (initResponse: InitResponseModel[]) => {
   }
 
   return payload
+}
+
+export const getPayloadForOrderStatus = (confirmResponse: ConfirmResponseModel[]) => {
+  const {
+    context: { transaction_id, bpp_id, bpp_uri, domain },
+    message: { orderId }
+  } = confirmResponse[0]
+  const payLoad = {
+    data: [
+      {
+        context: {
+          transaction_id: transaction_id,
+          bpp_id: bpp_id,
+          bpp_uri: bpp_uri,
+          domain: domain
+        },
+        message: {
+          order_id: orderId
+        }
+      }
+    ]
+  }
+
+  return payLoad
 }

@@ -71,10 +71,9 @@ const CheckoutPage = () => {
   if (isLoadingForSelect || isLoadingForInit) {
     return (
       <Box
+        display={'grid'}
         height={'calc(100vh - 300px)'}
-        display={'flex'}
-        justifyContent={'center'}
-        alignItems={'center'}
+        alignContent={'center'}
       >
         <Loader>
           <Box
@@ -84,17 +83,20 @@ const CheckoutPage = () => {
             alignItems={'center'}
           >
             <Text
+              as={Typography}
               fontWeight={600}
               fontSize={'15px'}
-            >
-              {t.catalogLoader}
-            </Text>
+              text={t.pleaseWait}
+            />
+
             <Text
+              as={Typography}
+              text={t.checkoutLoaderSubText}
+              textAlign={'center'}
+              alignSelf={'center'}
               fontWeight={400}
               fontSize={'15px'}
-            >
-              {t.catalogSubLoader}
-            </Text>
+            />
           </Box>
         </Loader>
       </Box>

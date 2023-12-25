@@ -1,12 +1,40 @@
 import DetailsCard from '@beckn-ui/becknified-components/src/components/checkout/details-card'
+import React, { useEffect, useState } from 'react'
 import PaymentDetails from '@beckn-ui/becknified-components/src/components/checkout/payment-details'
 import { Accordion, Typography } from '@beckn-ui/molecules/src/components'
 import { Box, Divider, Flex, HStack, Stack } from '@chakra-ui/react'
 import Qrcode from '@components/qrCode/Qrcode'
 import { useLanguage } from '@hooks/useLanguage'
-import React from 'react'
+import { getPaymentBreakDown } from '@utils/checkout-utils'
+import { StatusResponseModel } from '../types/status.types'
 
-const invoiceDetails = ({ props }) => {
+const invoiceDetails = () => {
+  const [statusData, setStatusData] = useState<StatusResponseModel[]>([])
+
+  useEffect(() => {
+    if (localStorage && localStorage.getItem('statusResponse')) {
+      const parsedStatusResponse = JSON.parse(localStorage.getItem('statusResponse') as string)
+      setStatusData(parsedStatusResponse)
+    }
+  }, [])
+
+  if (!statusData.length) {
+    return <></>
+  }
+
+  const {
+    message: {
+      order: {
+        quote: {
+          price: { currency, value }
+        },
+        items
+      }
+    }
+  } = statusData[0]
+
+  const { name } = items
+
   const { t } = useLanguage()
   return (
     <Box
@@ -28,48 +56,19 @@ const invoiceDetails = ({ props }) => {
         >
           <Typography
             variant="subTitleSemibold"
-            text={'Assembly'}
+            text={t.assembly}
           />
           <Typography
             variant="subTitleRegular"
-            text={'€ 30,000'}
+            text={`${currency} ${value}`}
           />
         </Flex>
         <Box pb={'4px'}>
           <Typography
             variant="subTitleRegular"
-            text={'RTAL Assembly Lines'}
+            text={name}
           />
         </Box>
-        <Box pb={'4px'}>
-          <Typography
-            variant="subTitleRegular"
-            text={'Qty: 150'}
-          />
-        </Box>
-        <Divider
-          mt="10px"
-          mb="10px"
-        />
-        <Flex
-          pb={'15px'}
-          pt="10px"
-          justifyContent={'space-between'}
-          alignItems="center"
-        >
-          <Typography
-            variant="subTitleSemibold"
-            text={'Shipping'}
-          />
-          <Typography
-            variant="subTitleRegular"
-            text={'€ 30,000'}
-          />
-        </Flex>
-        <Typography
-          variant="subTitleRegular"
-          text={'151-e, Janpath Road, New Delhi'}
-        />
       </DetailsCard>
       <DetailsCard>
         <Box pb={'15px'}>
@@ -79,13 +78,9 @@ const invoiceDetails = ({ props }) => {
           />
         </Box>
         <PaymentDetails
-          paymentBreakDown={{
-            'Total Manufacturing Cost': `${t.currencySymbol} 1,20,000`,
-            'Logistic Services': `${t.currencySymbol} 28,000`,
-            Taxes: `${t.currencySymbol} 12000`
-          }}
+          paymentBreakDown={getPaymentBreakDown(statusData).breakUpMap}
           totalText="Total"
-          totalValueWithSymbol={`${t.currencySymbol} 1,60,000`}
+          totalValueWithSymbol={getPaymentBreakDown(statusData).totalPricewithCurrent}
         />
       </DetailsCard>
       <Stack>
