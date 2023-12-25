@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { BottomModal } from '@beckn-ui/molecules'
 
 import { Box, Divider, Flex, HStack, Image, Text } from '@chakra-ui/react'
-import CartIcon from '../cart/CartIcon'
 import { useRouter } from 'next/router'
 import styles from './header.module.css'
 
@@ -200,9 +199,6 @@ const BottomHeader = () => {
             )}
           </Box>
           {getHeaderTitleForPage(optionTags?.name, optionTags?.logo, router.pathname, locale)}
-          <Box className={styles.bottom_header_cartIcon}>
-            {!cartIconBlackList.includes(router.pathname) && <CartIcon />}
-          </Box>
           {orderIconList.includes(router.pathname) && (
             <Image
               onClick={() => setOrderModalOpen(true)}

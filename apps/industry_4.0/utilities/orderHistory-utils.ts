@@ -1,5 +1,3 @@
-import { ResponseModel } from '../lib/types/responseModel'
-
 export const getTotalQuantityOfSingleOrder = (orderArray: any) => {
   let totalQuantity = 0
   orderArray.map((res: any) => {
