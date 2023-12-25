@@ -20,65 +20,75 @@ const OrderDetails = () => {
   const [status, setStatus] = useState('Completed')
   const [isLoading, setIsLoading] = useState(true)
   const [statusData, setStatusData] = useState<StatusResponseModel[]>([])
+  const [apiCalled, setApiCalled] = useState(false)
   const { t } = useLanguage()
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
   useEffect(() => {
-    if (localStorage && localStorage.getItem('confirmResponse')) {
-      const parsedConfirmData: ConfirmResponseModel[] = JSON.parse(localStorage.getItem('confirmResponse') as string)
-      const statusPayload = getPayloadForOrderStatus(parsedConfirmData)
-      setIsLoading(true)
-      axios
-        .post(`${apiUrl}/status`, statusPayload)
-        .then(res => {
-          const resData = res.data.data
-          setStatusData(resData)
-          localStorage.setItem('statusResponse', JSON.stringify(resData))
-          setIsLoading(false)
-        })
-        .catch(err => {
-          console.error(err)
-          setIsLoading(false)
-        })
-    }
-  }, [])
+    const fetchData = () => {
+      if (localStorage && localStorage.getItem('confirmResponse')) {
+        const parsedConfirmData: ConfirmResponseModel[] = JSON.parse(localStorage.getItem('confirmResponse') as string)
+        const statusPayload = getPayloadForOrderStatus(parsedConfirmData)
+        setIsLoading(true)
 
-  if (isLoading) {
-    if (isLoading) {
-      return (
-        <Box
-          display={'grid'}
-          height={'calc(100vh - 300px)'}
-          alignContent={'center'}
-        >
-          <Loader>
-            <Box
-              mt={'13px'}
-              display={'flex'}
-              flexDir={'column'}
-              alignItems={'center'}
-            >
-              <Text
-                as={Typography}
-                fontWeight={600}
-                fontSize={'15px'}
-                text={t.pleaseWait}
-              />
-
-              <Text
-                as={Typography}
-                text={t.statusLoaderSubText}
-                textAlign={'center'}
-                alignSelf={'center'}
-                fontWeight={400}
-                fontSize={'15px'}
-              />
-            </Box>
-          </Loader>
-        </Box>
-      )
+        axios
+          .post(`${apiUrl}/status`, statusPayload)
+          .then(res => {
+            const resData = res.data.data
+            setStatusData(resData)
+            localStorage.setItem('statusResponse', JSON.stringify(resData))
+          })
+          .catch(err => {
+            console.error('Error fetching order status:', err)
+          })
+          .finally(() => {
+            setIsLoading(false)
+            setApiCalled(true) // Set the flag to true after the first API call
+          })
+      }
     }
+
+    fetchData()
+
+    const intervalId = setInterval(fetchData, 30000)
+
+    return () => clearInterval(intervalId)
+  }, [apiUrl])
+
+  if (isLoading && !apiCalled) {
+    return (
+      <Box
+        display={'grid'}
+        height={'calc(100vh - 300px)'}
+        alignContent={'center'}
+      >
+        <Loader>
+          <Box
+            mt={'13px'}
+            display={'flex'}
+            flexDir={'column'}
+            alignItems={'center'}
+          >
+            <Text
+              as={Typography}
+              fontWeight={600}
+              fontSize={'15px'}
+              text={t.pleaseWait}
+            />
+
+            <Text
+              as={Typography}
+              text={t.statusLoaderSubText}
+              textAlign={'center'}
+              alignSelf={'center'}
+              fontWeight={400}
+              fontSize={'15px'}
+            />
+          </Box>
+        </Loader>
+      </Box>
+    )
   }
 
   return (
