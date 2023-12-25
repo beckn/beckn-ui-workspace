@@ -71,8 +71,11 @@ const en: { [key: string]: string } = {
   openInWallet: 'Open in Wallet',
   viewJSON: 'View JSON',
   payment: 'Payment',
-  catalogLoader: 'Please wait!',
-  catalogSubLoader: ' While we find service providers near you',
-  total: 'Total'
+  pleaseWait: 'Please wait!',
+  searchLoaderSubText: ' While we find service providers near you',
+  total: 'Total',
+  checkoutLoaderSubText: 'while we setup a form to understand your requirements',
+  confirmLoaderSubtext: 'while we confirm your order',
+  statusLoaderSubText: 'while we update the current status of your order.'
 }
 export default en

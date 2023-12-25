@@ -1,5 +1,6 @@
 import { ParsedItemModel } from '../types/search.types'
 import { InitResponseModel } from '../types/init.types'
+import { StatusResponseModel } from '../types/status.types'
 
 export const getPayloadForSelectRequest = (selectedProduct: ParsedItemModel) => {
   const {
@@ -93,7 +94,7 @@ export const getPayloadForInitRequest = (selectData: ParsedItemModel, shippingDe
   return initPayload
 }
 
-export const getPaymentBreakDown = (initData: InitResponseModel[]) => {
+export const getPaymentBreakDown = (initData: InitResponseModel[] | StatusResponseModel[]) => {
   const quote = initData[0].message.order.quote
   const breakUp = quote.breakup
   const totalPricewithCurrent = `${quote.price.currency} ${quote.price.value}`

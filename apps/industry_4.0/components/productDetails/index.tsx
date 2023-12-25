@@ -25,7 +25,7 @@ const ProductDetails: React.FC<Props> = ({ product }) => {
     >
       <Flex
         direction="column"
-        mt={'60px'}
+        mt={'10px'}
       >
         <Box
           w="full"
