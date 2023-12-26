@@ -8,9 +8,8 @@ const toRadians = (degrees: number): number => {
 }
 
 export const calculateDistance = (coord1: Coordinate, coord2: Coordinate): number => {
-  const R = 6371 // Earth's radius in kilometers
+  const R = 6371
 
-  // Convert degrees to radians
   const dLat = toRadians(coord2.latitude - coord1.latitude)
   const dLon = toRadians(coord2.longitude - coord1.longitude)
 
