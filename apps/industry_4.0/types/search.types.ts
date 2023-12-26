@@ -1,3 +1,5 @@
+import { Coordinate } from '@utils/homePage.utils'
+
 interface Location {
   id: string
   city: {
@@ -93,4 +95,5 @@ export interface ParsedItemModel {
   providerName: string
   item: Item
   rating: string
+  providerCoordinates: Coordinate
 }

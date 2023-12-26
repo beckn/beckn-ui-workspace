@@ -98,3 +98,60 @@ export const getPayloadForOrderStatus = (confirmResponse: ConfirmResponseModel[]
 
   return payLoad
 }
+
+export const getPayloadForOrderHistoryPost = (confirmData: ConfirmResponseModel[]) => {
+  const { bpp_id, bpp_uri, transaction_id } = confirmData[0].context
+  const {
+    orderId,
+    provider: { id, name, short_desc },
+    items
+  } = confirmData[0].message
+
+  const ordersPayload = {
+    context: {
+      bpp_id,
+      bpp_uri,
+      transaction_id
+    },
+    message: {
+      order: {
+        id: orderId,
+        provider: {
+          id,
+          descriptor: {
+            name,
+            short_desc
+          }
+        },
+        items
+      }
+    },
+    category: {
+      set: [5]
+    }
+  }
+
+  return ordersPayload
+}
+
+export function convertTimestampToDdMmYyyyHhMmPM(timestamp: string) {
+  const date = new Date(timestamp)
+
+  const day = date.getDate()
+  const month = date.getMonth() + 1
+  const year = date.getFullYear()
+
+  let hour = date.getHours()
+  const minute = date.getMinutes()
+  const second = date.getSeconds()
+
+  const ampm = hour >= 12 ? 'pm' : 'am'
+  hour = hour % 12
+  if (hour === 0) {
+    hour = 12
+  }
+
+  const formattedTimestamp = `${day}/${month}/${year}, ${hour}:${minute} ${ampm}`
+
+  return formattedTimestamp
+}
