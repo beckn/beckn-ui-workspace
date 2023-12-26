@@ -6,6 +6,7 @@ import { FormErrors, signInValidateForm } from '@utils/form-utils'
 import { BecknAuth } from '@beckn-ui/becknified-components'
 import Router from 'next/router'
 import { Box, useToast, Text } from '@chakra-ui/react'
+import Cookies from 'js-cookie'
 
 const SignIn = () => {
   const { t } = useLanguage()
@@ -57,7 +58,7 @@ const SignIn = () => {
         const data = await response.json()
         const token = data.jwt
 
-        localStorage.setItem('token', token)
+        Cookies.set('authToken', token)
         Router.push('/homePage')
       } else {
         const errorData = await response.json()

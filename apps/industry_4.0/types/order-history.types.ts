@@ -22,19 +22,35 @@ interface Item {
   short_desc: string
 }
 
+type QuoteBreakupInfo = {
+  price: {
+    currency: string
+    value: string
+  }
+  title: string
+}
+
+type QuoteInfo = {
+  breakup: Array<QuoteBreakupInfo>
+  price: {
+    currency: string
+    value: string
+  }
+}
+
 interface Attributes {
   order_id: string
   bpp_id: string
   bpp_uri: string
-  currency: null
+  currency: string
   delivery_status: string
   descriptor: Descriptor
-  price: null
+  price: number
   billing: null
   fulfillments: null
   created_date: null
   last_updated_date: null
-  quote: null
+  quote: QuoteInfo
   transaction_id: string
   message_id: null
   payments: null

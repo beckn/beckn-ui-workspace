@@ -2,7 +2,7 @@ import { OrderStatusProgress } from '@beckn-ui/becknified-components'
 import { Accordion, Loader, Typography } from '@beckn-ui/molecules'
 import { Box, Divider, Flex, Text } from '@chakra-ui/react'
 import { useLanguage } from '@hooks/useLanguage'
-import { getPayloadForOrderStatus } from '@utils/confirm-utils'
+import { formatTimestamp, getPayloadForOrderStatus } from '@utils/confirm-utils'
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { ConfirmResponseModel } from '../types/confirm.types'
@@ -44,7 +44,7 @@ const OrderDetails = () => {
           })
           .finally(() => {
             setIsLoading(false)
-            setApiCalled(true) // Set the flag to true after the first API call
+            setApiCalled(true)
           })
       }
     }
@@ -138,53 +138,13 @@ const OrderDetails = () => {
                 <OrderStatusProgress
                   orderStatusMap={orderStatusMap}
                   orderState={'INTIATED'}
-                  statusTime={'21th June'}
+                  statusTime={formatTimestamp(statusData[0].message.order.fulfillments[0].state.updated_at)}
                 />
               </Box>
             </>
           }
         />
       </Box>
-      {/* TODO :- this is not in scope right now */}
-      {/* <Box pt="20px">
-        <Accordion
-          className="order_progress_accordian"
-          accordionHeader={
-            <>
-              {t.shipping}
-              <Flex
-                justifyContent={'space-between'}
-                alignItems="center"
-                pt={'10px'}
-              >
-                <Typography
-                  variant="subTitleRegular"
-                  text={'DNL Embossing'}
-                  fontSize="12px"
-                />
-                <Typography
-                  variant="subTitleRegular"
-                  text={t.pending}
-                  fontSize="15px"
-                  className={status === 'Pending' ? 'order_status_text_pending' : ''}
-                />
-              </Flex>
-            </>
-          }
-          children={
-            <>
-              <Divider />
-              <Box className="order_status_progress">
-                <OrderStatusProgress
-                  orderStatusMap={orderStatusMap}
-                  orderState={'INTIATED'}
-                  statusTime={'21th June'}
-                />
-              </Box>
-            </>
-          }
-        />
-      </Box> */}
     </Box>
   )
 }
