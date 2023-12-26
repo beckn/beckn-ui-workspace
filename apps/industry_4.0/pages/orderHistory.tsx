@@ -2,11 +2,11 @@ import Cookies from 'js-cookie'
 import { DetailCard } from '@beckn-ui/becknified-components'
 import { Loader, Typography } from '@beckn-ui/molecules'
 import { Box, Text, Flex, Image } from '@chakra-ui/react'
-import { useLanguage } from '@hooks/useLanguage'
 import React, { useEffect, useState } from 'react'
 import pendingIcon from '../public/images/pendingStatus.svg'
 import { orderHistoryData } from '../types/order-history.types'
 import { formatTimestamp } from '@utils/confirm-utils'
+import { useRouter } from 'next/router'
 
 const orderStatusMap: Record<string, string> = {
   'In Review': 'Pending'
@@ -19,6 +19,7 @@ const OrderHistory = () => {
   const [error, setError] = useState('')
 
   const bearerToken = Cookies.get('authToken')
+  const router = useRouter()
 
   useEffect(() => {
     let myHeaders = new Headers()
@@ -81,6 +82,15 @@ const OrderHistory = () => {
         return (
           <DetailCard key={idx}>
             <Flex
+              onClick={() => {
+                const orderObjectForStatusCall = {
+                  bppId: order.attributes.bpp_id,
+                  bppUri: order.attributes.bpp_uri,
+                  orderId: order.attributes.order_id
+                }
+                localStorage.setItem('selectedOrder', JSON.stringify(orderObjectForStatusCall))
+                router.push('/orderDetails')
+              }}
               gap={'5px'}
               flexDirection={'column'}
             >
