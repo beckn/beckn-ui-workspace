@@ -1,9 +1,10 @@
 import { OrderStatusProgress } from '@beckn-ui/becknified-components'
 import { Accordion, Loader, Typography } from '@beckn-ui/molecules'
-import { Box, Divider, Flex, Text } from '@chakra-ui/react'
+import { Box, Divider, Flex, Text, useRadio } from '@chakra-ui/react'
 import { useLanguage } from '@hooks/useLanguage'
 import { formatTimestamp, getPayloadForOrderStatus } from '@utils/confirm-utils'
 import axios from 'axios'
+import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { ConfirmResponseModel } from '../types/confirm.types'
 import { StatusResponseModel } from '../types/status.types'
@@ -27,12 +28,47 @@ const OrderDetails = () => {
 
   useEffect(() => {
     const fetchData = () => {
+      if (localStorage && localStorage.getItem('selectedOrder')) {
+        const selectedOrderData = JSON.parse(localStorage.getItem('selectedOrder') as string)
+        const { bppId, bppUri, orderId } = selectedOrderData
+        const statusPayload = {
+          data: [
+            {
+              context: {
+                transaction_id: '',
+                bpp_id: bppId,
+                bpp_uri: bppUri,
+                domain: 'supply-chain-services:assembly'
+              },
+              message: {
+                order_id: orderId
+              }
+            }
+          ]
+        }
+        setIsLoading(true)
+
+        return axios
+          .post(`${apiUrl}/status`, statusPayload)
+          .then(res => {
+            const resData = res.data.data
+            setStatusData(resData)
+            localStorage.setItem('statusResponse', JSON.stringify(resData))
+          })
+          .catch(err => {
+            console.error('Error fetching order status:', err)
+          })
+          .finally(() => {
+            setIsLoading(false)
+            setApiCalled(true)
+          })
+      }
       if (localStorage && localStorage.getItem('confirmResponse')) {
         const parsedConfirmData: ConfirmResponseModel[] = JSON.parse(localStorage.getItem('confirmResponse') as string)
         const statusPayload = getPayloadForOrderStatus(parsedConfirmData)
         setIsLoading(true)
 
-        axios
+        return axios
           .post(`${apiUrl}/status`, statusPayload)
           .then(res => {
             const resData = res.data.data
