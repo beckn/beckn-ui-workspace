@@ -104,7 +104,7 @@ const ProductCardRenderer = (data: any) => {
               fontSize="12px"
               pl="5px"
             >
-              3
+              {dataSource.rating}
             </Text>
           </Flex>
         </Flex>

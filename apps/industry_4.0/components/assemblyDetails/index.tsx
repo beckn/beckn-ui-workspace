@@ -1,7 +1,7 @@
 import { Button } from '@beckn-ui/molecules'
 import { ChakraProvider, FormControl, FormLabel, Input, extendTheme, Box, Select, Flex } from '@chakra-ui/react'
 import Router from 'next/router'
-import { useState } from 'react'
+import React, { useState } from 'react'
 
 const activeLabelStyles = {
   transform: 'scale(1) translateY(-24px)'
@@ -93,7 +93,7 @@ export default function AssemblyDetails() {
             <Select
               onChange={e => handleSelectChange(e.target.value, 'type')}
               value={formData.type}
-              placeholder="Select option"
+              // placeholder="Select option"
               border={'unset'}
               borderRadius="unset"
               borderBottom={'1px solid'}
@@ -108,8 +108,15 @@ export default function AssemblyDetails() {
                 }
               }}
             >
+              <option
+                value=""
+                disabled
+                hidden
+              >
+                Select Type
+              </option>
               <option value="Plastic Box">Plastic Box</option>
-              <option value="Plastic Box">Wooden Box</option>
+              <option value="Wooden Box">Wooden Box</option>
             </Select>
 
             <FormLabel className="dropDown_label">Type</FormLabel>
@@ -126,7 +133,6 @@ export default function AssemblyDetails() {
               <Select
                 onChange={e => handleSelectChange(e.target.value, 'colour')}
                 value={formData.colour}
-                placeholder="Select Colour"
                 border={'unset'}
                 borderRadius="unset"
                 borderBottom={'1px solid'}
@@ -141,12 +147,19 @@ export default function AssemblyDetails() {
                   }
                 }}
               >
+                <option
+                  value=""
+                  disabled
+                  hidden
+                >
+                  Select Color
+                </option>
                 <option value="Blue">Blue</option>
                 <option value="Red">Red</option>
-                <option value="Blue">Blue</option>
+                <option value="Green">Green</option>
               </Select>
 
-              <FormLabel className="dropDown_label">Colour</FormLabel>
+              <FormLabel className="dropDown_label">Color</FormLabel>
             </FormControl>
             <FormControl
               variant="floating"
@@ -155,7 +168,6 @@ export default function AssemblyDetails() {
               <Select
                 onChange={e => handleSelectChange(e.target.value, 'shape')}
                 value={formData.shape}
-                placeholder="Select Shape"
                 border={'unset'}
                 borderRadius="unset"
                 borderBottom={'1px solid'}
@@ -170,7 +182,14 @@ export default function AssemblyDetails() {
                   }
                 }}
               >
-                <option value="Cirlce">Cirlce</option>
+                <option
+                  value=""
+                  disabled
+                  hidden
+                >
+                  Select Shape
+                </option>
+                <option value="Cirlce">Circle</option> circle
                 <option value="Square">Square</option>
               </Select>
 

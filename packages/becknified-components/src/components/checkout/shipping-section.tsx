@@ -46,7 +46,6 @@ const ShippingSection: React.FC<ShippingSectionProps<FormField[]>> = ({
       {isBilling ? (
         <DetailsCard>
           <Checkbox
-            colorScheme={'red'}
             pr={'12px'}
             fontSize={'17px'}
             checked={isChecked}

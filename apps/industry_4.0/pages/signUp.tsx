@@ -44,7 +44,6 @@ const SignUp = () => {
 
   const handleSignUp = async () => {
     const errors = signUpValidateForm(formData)
-
     const isFormValid = Object.values(errors).every(error => error === '')
 
     if (isFormValid) {
@@ -89,7 +88,10 @@ const SignUp = () => {
         console.error('An error occurred:', error)
       }
     } else {
-      setFormErrors(errors)
+      setFormErrors({
+        ...formErrors,
+        name: t[`${errors.name}`] || ''
+      })
     }
   }
 

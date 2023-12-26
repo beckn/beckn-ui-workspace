@@ -102,7 +102,7 @@ const HomePage = () => {
       <Box p={'0 20px'}>
         <SearchInput
           onChangeHandler={(e: React.BaseSyntheticEvent) => setSearchTerm(e.target.value)}
-          searchIcon={'/images/searchHome.svg'}
+          searchIcon={'/images/search.svg'}
           searchIconClickHandler={searchIconClickHandler}
           onEnterHandler={(e: { key: string }) => e.key === 'Enter' && navigateToSearchResults()}
           placeHolder="Search for Service"
