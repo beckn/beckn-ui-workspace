@@ -22,7 +22,7 @@ export default function Document() {
         />
         <link
           rel="shortcut icon"
-          href="/images/zishop.ico"
+          href="/images/supFevIcon.svg"
         />
       </Head>
       <body>

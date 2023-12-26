@@ -40,7 +40,7 @@ function PaymentMode() {
               {t.cards}
             </Text>
             <Text
-              color={bgColorPrimary}
+              color={'#979797'}
               fontSize={'15px'}
               fontWeight={400}
             >
@@ -59,6 +59,7 @@ function PaymentMode() {
             alignItems={'center'}
             fontSize={'17px'}
             mb={'10px'}
+            mt={'10px'}
           >
             <Text
               fontSize={'17px'}
@@ -67,7 +68,7 @@ function PaymentMode() {
               {t.upi}
             </Text>
             <Text
-              color={bgColorPrimary}
+              color={'#979797'}
               fontSize={'15px'}
               fontWeight={400}
             >

@@ -85,3 +85,7 @@ select.chakra-select {
   bottom: 20px;
   width: 90%;
 }
+.css-1ydjfm6[aria-checked=true], .css-1ydjfm6[data-checked]
+{
+  background: #0560FA !important;   border-color:#0560FA !important;
+}
