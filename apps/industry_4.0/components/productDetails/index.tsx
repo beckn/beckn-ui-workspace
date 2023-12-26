@@ -77,7 +77,7 @@ const ProductDetails: React.FC<Props> = ({ product }) => {
               marginTop={5}
               text={t.book}
               handleClick={() => {
-                router.push('/checkoutPage')
+                router.push('/assemblyDetails')
               }}
             ></Box>
           </Flex>

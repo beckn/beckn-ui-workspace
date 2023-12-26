@@ -71,3 +71,17 @@ body {
 .chakra-button.checkout_btn:last-child:active {
   background: transparent;
 }
+select.chakra-select {
+  padding-inline-start: unset;
+  padding-inline-end: unset;
+}
+.chakra-form__label.dropDown_label {
+  margin: unset;
+  font-weight: unset;
+  padding: unset;
+}
+.chakra-button.assembly_details_btn {
+  position: absolute;
+  bottom: 20px;
+  width: 90%;
+}
