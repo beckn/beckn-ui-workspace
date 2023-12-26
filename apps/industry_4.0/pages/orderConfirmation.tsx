@@ -4,17 +4,29 @@ import orderConfirmmark from '../public/images/orderConfirmmark.svg'
 import { useLanguage } from '../hooks/useLanguage'
 import { ConfirmationPage } from '@beckn-ui/becknified-components'
 import { InitResponseModel } from '../types/init.types'
-import { getPayloadForConfirm } from '@utils/confirm-utils'
+import { getPayloadForConfirm, getPayloadForOrderHistoryPost } from '@utils/confirm-utils'
 import axios from 'axios'
 import { Loader, Typography } from '@beckn-ui/molecules'
 import { Box, Text } from '@chakra-ui/react'
+import Cookies from 'js-cookie'
+import { ConfirmResponseModel } from '../types/confirm.types'
 
 const OrderConfirmation = () => {
   const { t } = useLanguage()
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(true)
+  const [confirmData, setConfirmData] = useState<ConfirmResponseModel[]>([])
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
+  const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
+
+  const bearerToken = Cookies.get('authToken')
+  const axiosConfig = {
+    headers: {
+      Authorization: `Bearer ${bearerToken}`,
+      'Content-Type': 'application/json' // You can set the content type as needed
+    }
+  }
 
   useEffect(() => {
     if (localStorage && localStorage.getItem('initResult')) {
@@ -24,7 +36,10 @@ const OrderConfirmation = () => {
       axios
         .post(`${apiUrl}/confirm`, payLoad)
         .then(res => {
-          localStorage.setItem('confirmResponse', JSON.stringify(res.data.data))
+          const responseData: ConfirmResponseModel[] = res.data.data
+          setConfirmData(responseData)
+          localStorage.setItem('confirmResponse', JSON.stringify(responseData))
+
           setIsLoading(false)
         })
         .catch(err => {
@@ -33,6 +48,18 @@ const OrderConfirmation = () => {
         })
     }
   }, [])
+
+  useEffect(() => {
+    if (confirmData.length > 0) {
+      const ordersPayload = getPayloadForOrderHistoryPost(confirmData)
+      axios
+        .post(`${strapiUrl}/orders`, ordersPayload, axiosConfig)
+        .then(res => {
+          return res
+        })
+        .catch(err => console.error(err))
+    }
+  }, [confirmData])
 
   if (isLoading) {
     return (

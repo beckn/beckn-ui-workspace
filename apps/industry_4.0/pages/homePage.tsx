@@ -19,6 +19,12 @@ const HomePage = () => {
   const apiKeyForGoogle = process.env.NEXT_PUBLIC_GOOGLE_API_KEY
 
   useEffect(() => {
+    if (localStorage) {
+      localStorage.clear()
+    }
+  }, [])
+
+  useEffect(() => {
     // Check if geolocation is available in the browser
     if (navigator) {
       if ('geolocation' in navigator) {
@@ -26,7 +32,13 @@ const HomePage = () => {
           async position => {
             const latitude = position.coords.latitude
             const longitude = position.coords.longitude
-            // Replace with your Google Maps Geocoding API key
+
+            const coordinates = {
+              latitude,
+              longitude
+            }
+
+            localStorage.setItem('coordinates', JSON.stringify(coordinates))
 
             try {
               const response = await fetch(
@@ -67,6 +79,7 @@ const HomePage = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
   const navigateToSearchResults = () => {
     localStorage.setItem('optionTags', JSON.stringify({ name: searchTerm }))
     router.push(`/search?searchTerm=${searchTerm}&currentAddress=${currentAddress}`)

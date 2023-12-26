@@ -130,6 +130,7 @@ const CheckoutPage = () => {
 
   return (
     <Box
+      mt={'20px'}
       className="hideScroll"
       maxH={'calc(100vh - 100px)'}
       overflowY="scroll"

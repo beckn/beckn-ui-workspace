@@ -11,6 +11,17 @@ export const parsedSearchlist = (data: SearchResponseModel[]) => {
     const bppUri = context.bpp_uri
 
     message.providers.forEach(provider => {
+      const stringifiedLatLong = provider.locations[0].gps
+      const [stringifiedLatitude, stringifiedLongitude] = stringifiedLatLong.split(', ')
+
+      const latitude = parseFloat(stringifiedLatitude)
+      const longitude = parseFloat(stringifiedLongitude)
+
+      const providerCoordinates = {
+        latitude,
+        longitude
+      }
+
       const providerId = provider.id
       const rating = provider.rating
 
@@ -23,7 +34,8 @@ export const parsedSearchlist = (data: SearchResponseModel[]) => {
           providerId: providerId,
           providerName: provider.name,
           item,
-          rating
+          rating,
+          providerCoordinates
         })
       })
     })

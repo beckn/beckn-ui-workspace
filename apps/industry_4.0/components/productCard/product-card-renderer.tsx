@@ -1,16 +1,26 @@
 import { Flex, Box, Image, Text, Link } from '@chakra-ui/react'
 import { useLanguage } from '@hooks/useLanguage'
 import { toBinary } from '@utils/common-utils'
+import { calculateDistance, Coordinate } from '@utils/homePage.utils'
 import { useRouter } from 'next/router'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import StarIcon from '../../public/images/Star.svg'
 
 const ProductCardRenderer = (data: any) => {
+  const [distance, setDistance] = useState(0)
   const { dataSource } = data
   const { t } = useLanguage()
   const router = useRouter()
   const encodedProduct = window.btoa(toBinary(JSON.stringify(dataSource)))
   console.log(dataSource)
+
+  useEffect(() => {
+    const stringifiedCoords = localStorage.getItem('coordinates') as string
+    const parsedThing: Coordinate = JSON.parse(stringifiedCoords)
+
+    const distance = calculateDistance(parsedThing, dataSource.providerCoordinates)
+    setDistance(Math.floor(distance))
+  }, [])
 
   //   TODO :- have to fix CSS as well as remove mock data and add dynamic data
   return (
@@ -83,7 +93,9 @@ const ProductCardRenderer = (data: any) => {
         >
           <Flex columnGap={'5px'}>
             <Image src={'images/meter.svg'} />
-            <Text>800 m</Text>
+            <Text>
+              {distance} {distance > 1 ? 'km' : 'm'}
+            </Text>
           </Flex>
 
           <Flex alignItems="center">
