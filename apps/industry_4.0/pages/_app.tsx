@@ -1,7 +1,7 @@
 import React from 'react'
 import type { AppProps } from 'next/app'
 
-import Layout from '../components/layout/Layout'
+import Layout from '@components/layout/Layout'
 import { BecknProvider } from '@beckn-ui/molecules'
 
 import 'slick-carousel/slick/slick.css'
