@@ -97,3 +97,13 @@ export interface ParsedItemModel {
   rating: string
   providerCoordinates: Coordinate
 }
+
+export interface AssemblyData {
+  type: string
+  colour: string
+  shape: string
+  length: string
+  width: string
+  quantity?: number
+  weight: string
+}

@@ -7,7 +7,7 @@ import DetailsCard from '@beckn-ui/becknified-components/src/components/checkout
 import ShippingSection from '@beckn-ui/becknified-components/src/components/checkout/shipping-section'
 import PaymentDetails from '@beckn-ui/becknified-components/src/components/checkout/payment-details'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
-import { ParsedItemModel } from '../types/search.types'
+import { AssemblyData, ParsedItemModel } from '../types/search.types'
 import { getPayloadForInitRequest, getPayloadForSelectRequest, getPaymentBreakDown } from '@utils/checkout-utils'
 import axios from 'axios'
 import { SelectResponseModel } from '../types/select.types'
@@ -24,6 +24,7 @@ const CheckoutPage = () => {
   const [showShippingDetails, setShowShippingDetails] = useState(false)
   const [showBillingDetails, setShowBillingDetails] = useState(false)
   const [error, setError] = useState('')
+  const [assemblyDetails, setAssemblyDetails] = useState<AssemblyData>(null)
   const [detailsForm, setdetailsForm] = useState<ShippingFormInitialValuesType>({
     name: 'Antoine Dubois',
     mobileNumber: '0612345678',
@@ -54,6 +55,13 @@ const CheckoutPage = () => {
     if (localStorage && localStorage.getItem('selectedItem')) {
       const parsedSelectedItem = JSON.parse(localStorage.getItem('selectedItem') as string)
       setSelectedProduct(parsedSelectedItem)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (localStorage && localStorage.getItem('assemblyDetails')) {
+      const parsedAssemblyDetails = JSON.parse(localStorage.getItem('assemblyDetails') as string)
+      setAssemblyDetails(parsedAssemblyDetails)
     }
   }, [])
 
@@ -161,6 +169,12 @@ const CheckoutPage = () => {
             <Typography
               variant="subTitleRegular"
               text={name}
+            />
+          </Box>
+          <Box pb={'4px'}>
+            <Typography
+              variant="subTitleRegular"
+              text={`Qty: ${assemblyDetails.quantity}`}
             />
           </Box>
         </DetailsCard>
