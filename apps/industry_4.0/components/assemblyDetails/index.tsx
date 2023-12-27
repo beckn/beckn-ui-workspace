@@ -1,7 +1,7 @@
 import { Button } from '@beckn-ui/molecules'
 import { ChakraProvider, FormControl, FormLabel, Input, extendTheme, Box, Select, Flex } from '@chakra-ui/react'
 import Router from 'next/router'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 const activeLabelStyles = {
   transform: 'scale(1) translateY(-24px)'
@@ -52,6 +52,12 @@ export default function AssemblyDetails() {
     quantity: count,
     weight: ''
   })
+  const [isFormDataFilled, setIsFormDataFilled] = useState<boolean>(false)
+
+  useEffect(() => {
+    const areAllFieldsFilled = Object.values(formData).every(value => value !== '')
+    setIsFormDataFilled(areAllFieldsFilled)
+  }, [formData])
 
   function increment() {
     setCount(prevCount => prevCount + 1)
@@ -336,6 +342,7 @@ export default function AssemblyDetails() {
         </Box>
       </ChakraProvider>
       <Button
+        disabled={!isFormDataFilled}
         className="assembly_details_btn"
         text="Add Shipping Details"
         handleClick={submitAssemblyDetails}
