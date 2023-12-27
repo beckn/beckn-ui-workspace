@@ -22,10 +22,15 @@ export default function Document() {
         />
         <link
           rel="shortcut icon"
-          href="/images/zishop.ico"
+          href="/images/supFevIcon.svg"
         />
       </Head>
       <body>
+        <script
+          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDj_jBuujsEk8mkIva0xG6_H73oJEytXEA&callback=Function.prototype&libraries=places"
+          async
+          defer
+        ></script>
         <Main />
         <NextScript />
       </body>

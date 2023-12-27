@@ -3,10 +3,8 @@ import { ConfirmationPageProps } from './confirmation-page.types'
 import { Image, Box, Flex, VStack } from '@chakra-ui/react'
 import { Button, Loader } from '@beckn-ui/molecules'
 
-const ConfirmationPage: React.FC<ConfirmationPageProps> = ({ schema, className, isLoading = false }) => {
-  const { iconSrc, content, buttons, loader } = schema
-
-  if (isLoading) return <Loader {...loader} />
+const ConfirmationPage: React.FC<ConfirmationPageProps> = ({ schema, className }) => {
+  const { iconSrc, content, contentMessage, buttons } = schema
 
   return (
     <Flex
@@ -22,11 +20,18 @@ const ConfirmationPage: React.FC<ConfirmationPageProps> = ({ schema, className, 
           src={iconSrc}
         />
       </Box>
-      <Box mt={'20px'}>{content}</Box>
+      <Box
+        mt={'20px'}
+        fontSize={'15px'}
+        fontWeight={700}
+      >
+        {content}
+      </Box>
+      <Box mt={'10px'}>{contentMessage}</Box>
       {buttons.length ? (
         <VStack
           className={`${className}-confirm-buttons-container`}
-          mt={'21px'}
+          mt={'100px'}
           width={'100%'}
         >
           {buttons.map((button, idx) => {

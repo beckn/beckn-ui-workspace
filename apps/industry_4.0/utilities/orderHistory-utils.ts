@@ -1,5 +1,3 @@
-import { ResponseModel } from '../lib/types/responseModel'
-
 export const getTotalQuantityOfSingleOrder = (orderArray: any) => {
   let totalQuantity = 0
   orderArray.map((res: any) => {
@@ -16,24 +14,6 @@ export const getTotalPriceOfSingleOrder = (orderArray: any) => {
     totalPrice += price
   })
   return totalPrice
-}
-
-export const getSubTotalAndDeliveryChargesForOrder = (confirmData: ResponseModel[] | null) => {
-  let subTotal = 0
-  let totalDeliveryCharge = 0
-
-  if (confirmData) {
-    confirmData.forEach(data => {
-      const deliveryAmount = parseFloat(data.message.responses[0].message.order.quote.breakup[1].price.value)
-      totalDeliveryCharge += parseFloat(deliveryAmount.toFixed(2))
-
-      const subTotalAmount = parseFloat(data.message.responses[0].message.order.quote.breakup[0].price.value)
-
-      subTotal += parseFloat(subTotalAmount.toFixed(2))
-    })
-  }
-
-  return { subTotal, totalDeliveryCharge }
 }
 
 export const retrieveArrayById = (id: string, data: any) => {

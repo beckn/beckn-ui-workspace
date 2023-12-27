@@ -1,98 +1,129 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import { Box, Image, Stack, Text } from '@chakra-ui/react'
-import { useSelector } from 'react-redux'
 import orderConfirmmark from '../public/images/orderConfirmmark.svg'
 import { useLanguage } from '../hooks/useLanguage'
-import useRequest from '../hooks/useRequest'
-import { getInitMetaDataPerBpp, getPayloadForConfirmRequest } from '../utilities/confirm-utils'
-import Loader from '../components/loader/Loader'
-import { TransactionIdRootState } from '../lib/types/cart'
+import { ConfirmationPage } from '@beckn-ui/becknified-components'
+import { InitResponseModel } from '../types/init.types'
+import { getPayloadForConfirm, getPayloadForOrderHistoryPost } from '@utils/confirm-utils'
+import axios from 'axios'
+import { Loader, Typography } from '@beckn-ui/molecules'
+import { Box, Text } from '@chakra-ui/react'
+import Cookies from 'js-cookie'
+import { ConfirmResponseModel } from '../types/confirm.types'
 
 const OrderConfirmation = () => {
   const { t } = useLanguage()
-  const confirmRequest = useRequest()
   const router = useRouter()
-  const initResponse = useSelector((state: any) => state.initResponse.initResponse)
-
-  const transactionId = useSelector((state: { transactionId: TransactionIdRootState }) => state.transactionId)
+  const [isLoading, setIsLoading] = useState(true)
+  const [confirmData, setConfirmData] = useState<ConfirmResponseModel[]>([])
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
+  const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
+
+  const bearerToken = Cookies.get('authToken')
+  const axiosConfig = {
+    headers: {
+      Authorization: `Bearer ${bearerToken}`,
+      'Content-Type': 'application/json' // You can set the content type as needed
+    }
+  }
 
   useEffect(() => {
-    if (initResponse) {
-      const initMetaDataPerBpp = getInitMetaDataPerBpp(initResponse)
+    if (localStorage && localStorage.getItem('initResult')) {
+      const parsedInitResult: InitResponseModel[] = JSON.parse(localStorage.getItem('initResult') as string)
+      const payLoad = getPayloadForConfirm(parsedInitResult)
+      setIsLoading(true)
+      axios
+        .post(`${apiUrl}/confirm`, payLoad)
+        .then(res => {
+          const responseData: ConfirmResponseModel[] = res.data.data
+          setConfirmData(responseData)
+          localStorage.setItem('confirmResponse', JSON.stringify(responseData))
 
-      const payLoadForConfirmRequest = getPayloadForConfirmRequest(
-        initMetaDataPerBpp,
-        transactionId,
-        localStorage.getItem('userPhone') as string
-      )
-      confirmRequest.fetchData(`${apiUrl}/client/v2/confirm`, 'POST', payLoadForConfirmRequest)
+          setIsLoading(false)
+        })
+        .catch(err => {
+          setIsLoading(false)
+          console.error(err)
+        })
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
-    if (!initResponse && localStorage && localStorage.getItem('initResult')) {
-      const parsedInitResult = JSON.parse(localStorage.getItem('initResult') as string)
-      const initMetaDataPerBpp = getInitMetaDataPerBpp(parsedInitResult)
-
-      const payLoadForConfirmRequest = getPayloadForConfirmRequest(
-        initMetaDataPerBpp,
-        transactionId,
-        localStorage.getItem('userPhone') as string
-      )
-      confirmRequest.fetchData(`${apiUrl}/client/v2/confirm`, 'POST', payLoadForConfirmRequest)
+    if (confirmData.length > 0) {
+      const ordersPayload = getPayloadForOrderHistoryPost(confirmData)
+      axios
+        .post(`${strapiUrl}/orders`, ordersPayload, axiosConfig)
+        .then(res => {
+          return res
+        })
+        .catch(err => console.error(err))
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [confirmData])
 
-  useEffect(() => {
-    if (confirmRequest.data) {
-      localStorage.setItem('confirmData', JSON.stringify(confirmRequest.data))
-      const timeout = setTimeout(() => {
-        router.push('/orderDetails')
-      }, 3000)
+  if (isLoading) {
+    return (
+      <Box
+        display={'grid'}
+        height={'calc(100vh - 300px)'}
+        alignContent={'center'}
+      >
+        <Loader>
+          <Box
+            mt={'13px'}
+            display={'flex'}
+            flexDir={'column'}
+            alignItems={'center'}
+          >
+            <Text
+              as={Typography}
+              fontWeight={600}
+              fontSize={'15px'}
+              text={t.pleaseWait}
+            />
 
-      // Clean up the timeout on component unmount
-      return () => {
-        clearTimeout(timeout)
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [confirmRequest.data])
-
-  if (confirmRequest.loading) {
-    return <Loader loadingText={t.confirmingOrderLoader} />
+            <Text
+              as={Typography}
+              text={t.confirmLoaderSubtext}
+              textAlign={'center'}
+              alignSelf={'center'}
+              fontWeight={400}
+              fontSize={'15px'}
+            />
+          </Box>
+        </Loader>
+      </Box>
+    )
   }
 
   return (
-    <Box position={'relative'}>
-      {/* eslint-disable-next-line jsx-a11y/alt-text */}
-      <Image
-        src={orderConfirmmark}
-        margin={'41px auto'}
-      />
-      <Text
-        fontSize={'17px'}
-        fontWeight={'600'}
-        textAlign={'center'}
-      >
-        {t.orderPlaced}
-      </Text>
-      <Stack>
-        <Text
-          textAlign={'center'}
-          marginTop={'8px'}
-          marginBottom={'15px'}
-          fontSize={'15px'}
-        >
-          {t.confirmMessage1} <br />
-          {t.confirmMessage2}
-        </Text>
-      </Stack>
-    </Box>
+    <ConfirmationPage
+      schema={{
+        iconSrc: orderConfirmmark,
+        content: t.orderPlaced,
+        contentMessage: t.orderSuccesfully,
+        buttons: [
+          {
+            text: 'View Details',
+            handleClick: () => {
+              router.push('/orderDetails')
+            },
+            disabled: false,
+            variant: 'solid',
+            colorScheme: 'primary'
+          },
+          {
+            text: 'Go Back Home',
+            handleClick: () => {
+              router.push('/homePage')
+            },
+            disabled: false,
+            variant: 'outline',
+            colorScheme: 'primary'
+          }
+        ]
+      }}
+    />
   )
 }
 

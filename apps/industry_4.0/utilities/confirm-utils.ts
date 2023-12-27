@@ -1,128 +1,5 @@
-import { ResponseModel } from '../lib/types/responseModel'
-
-export const getInitMetaDataPerBpp = (initRes: ResponseModel[]) => {
-  const itemsPerBpp = {}
-  initRes.forEach(res => {
-    const bppId = res.context.bpp_id
-    const bpp_uri = res.context.bpp_uri
-
-    itemsPerBpp[bppId] = {
-      ...res.message.catalogs.responses[0].message.order,
-      bpp_uri
-    }
-  })
-
-  return itemsPerBpp
-}
-
-export const getConfirmMetaDataForBpp = (initRes: ResponseModel[]) => {
-  const itemsPerBpp = {}
-  initRes.forEach(res => {
-    const bppId = res.context.bpp_id
-    const bpp_uri = res.context.bpp_uri
-
-    itemsPerBpp[bppId] = {
-      ...res.message.responses[0].message.order,
-      bpp_uri
-    }
-  })
-
-  return itemsPerBpp
-}
-
-export const getPayloadForConfirmRequest = (
-  initMetaDataPerBpp: any,
-  transactionId: { transactionId: string },
-  userId: string
-) => {
-  const payload: any = {
-    confirmRequestDto: [],
-    userId: userId
-  }
-
-  Object.keys(initMetaDataPerBpp).forEach(bppId => {
-    const confirmItem: any = {
-      context: {
-        transaction_id: transactionId.transactionId,
-        bpp_id: bppId,
-        bpp_uri: initMetaDataPerBpp[bppId].bpp_uri,
-        domain: 'retail'
-      },
-
-      message: {
-        order: {
-          provider: {
-            id: initMetaDataPerBpp[bppId].provider.id
-          },
-          addOns: [],
-          offers: [],
-          billing: initMetaDataPerBpp[bppId].billing,
-          fulfillment: {
-            type: initMetaDataPerBpp[bppId].fulfillment.type,
-            end: {
-              location: {
-                gps: initMetaDataPerBpp[bppId].fulfillment.end.location.gps,
-                address: initMetaDataPerBpp[bppId].billing.address
-              },
-              contact: {
-                phone: initMetaDataPerBpp[bppId].billing.phone,
-                email: 'testemail1@mailinator.com'
-              }
-            },
-            customer: {
-              person: {
-                name: initMetaDataPerBpp[bppId].billing.name
-              }
-            },
-            id: initMetaDataPerBpp[bppId].fulfillment.id
-          },
-          payment: initMetaDataPerBpp[bppId].payment,
-          items: []
-        }
-      }
-    }
-
-    initMetaDataPerBpp[bppId].items.forEach((item: any) => {
-      const itemObject = {
-        quantity: item.quantity,
-        id: item.id
-      }
-      confirmItem.message.order.items.push(itemObject)
-    })
-
-    payload.confirmRequestDto.push(confirmItem)
-  })
-
-  return payload
-}
-
-export const getPayloadForStatusRequest = (
-  confirmOrderMetaDataPerBpp: any,
-  transactionId: { transactionId: string }
-) => {
-  const payload: any = {
-    statusRequestDto: []
-  }
-
-  Object.keys(confirmOrderMetaDataPerBpp).forEach(bppId => {
-    const statusItem: any = {
-      context: {
-        transaction_id: transactionId.transactionId,
-        bpp_id: bppId,
-        bpp_uri: confirmOrderMetaDataPerBpp[bppId].bpp_uri,
-        domain: 'retail'
-      },
-
-      message: {
-        order_id: confirmOrderMetaDataPerBpp[bppId].id
-      }
-    }
-
-    payload.statusRequestDto.push(statusItem)
-  })
-
-  return payload
-}
+import { ConfirmResponseModel } from '../types/confirm.types'
+import { InitResponseModel } from '../types/init.types'
 
 export const getPayloadForTrackRequest = (
   confirmOrderMetaDataPerBpp: any,
@@ -159,4 +36,160 @@ export const getOrderPlacementTimeline = (timeStamp: string) => {
   const localDateWithoutDay = localDate.split(' ').slice(1).join(' ')
 
   return `${localDateWithoutDay}, ${localTime}`
+}
+
+export const getPayloadForConfirm = (initResponse: InitResponseModel[]) => {
+  const {
+    context,
+    message: {
+      order: { billing, fulfillments, items, payments, provider, quote, type }
+    }
+  } = initResponse[0]
+  const { transaction_id, bpp_id, bpp_uri, domain } = context
+
+  const payload = {
+    data: [
+      {
+        context: {
+          transaction_id: transaction_id,
+          bpp_id: bpp_id,
+          bpp_uri: bpp_uri,
+          domain: domain
+        },
+        message: {
+          orders: [
+            {
+              provider: {
+                id: provider.id
+              },
+              items: [items],
+              fulfillments: fulfillments,
+              billing: billing,
+              payments: payments
+            }
+          ]
+        }
+      }
+    ]
+  }
+
+  return payload
+}
+
+export const getPayloadForOrderStatus = (confirmResponse: ConfirmResponseModel[]) => {
+  const {
+    context: { transaction_id, bpp_id, bpp_uri, domain },
+    message: { orderId }
+  } = confirmResponse[0]
+  const payLoad = {
+    data: [
+      {
+        context: {
+          transaction_id: transaction_id,
+          bpp_id: bpp_id,
+          bpp_uri: bpp_uri,
+          domain: domain
+        },
+        message: {
+          order_id: orderId
+        }
+      }
+    ]
+  }
+
+  return payLoad
+}
+
+export const getPayloadForOrderHistoryPost = (confirmData: ConfirmResponseModel[]) => {
+  const { bpp_id, bpp_uri, transaction_id } = confirmData[0].context
+  const {
+    orderId,
+    provider: { id, name, short_desc },
+    items,
+    quote,
+    payments
+  } = confirmData[0].message
+
+  const ordersPayload = {
+    context: {
+      bpp_id,
+      bpp_uri,
+      transaction_id
+    },
+    message: {
+      order: {
+        id: orderId,
+        provider: {
+          id,
+          descriptor: {
+            name,
+            short_desc
+          }
+        },
+        items,
+        quote,
+        payments
+      }
+    },
+    category: {
+      set: [5]
+    }
+  }
+
+  return ordersPayload
+}
+
+export function convertTimestampToDdMmYyyyHhMmPM(timestamp: string) {
+  const date = new Date(timestamp)
+
+  const day = date.getDate()
+  const month = date.getMonth() + 1
+  const year = date.getFullYear()
+
+  let hour = date.getHours()
+  const minute = date.getMinutes()
+  const second = date.getSeconds()
+
+  const ampm = hour >= 12 ? 'pm' : 'am'
+  hour = hour % 12
+  if (hour === 0) {
+    hour = 12
+  }
+
+  const formattedTimestamp = `${day}/${month}/${year}, ${hour}:${minute} ${ampm}`
+
+  return formattedTimestamp
+}
+
+function getOrdinalSuffix(day: number) {
+  if (day >= 11 && day <= 13) {
+    return 'th'
+  }
+  switch (day % 10) {
+    case 1:
+      return 'st'
+    case 2:
+      return 'nd'
+    case 3:
+      return 'rd'
+    default:
+      return 'th'
+  }
+}
+
+export function formatTimestamp(timestamp: string) {
+  const date = new Date(timestamp)
+
+  const day = date.getDate()
+  const month = date.toLocaleString('default', { month: 'short' })
+  const year = date.getFullYear()
+  const hours = date.getHours() % 12 || 12
+  const minutes = date.getMinutes()
+  const period = date.getHours() < 12 ? 'am' : 'pm'
+
+  const ordinalSuffix = getOrdinalSuffix(day)
+
+  const formattedDate = `${day}${ordinalSuffix} ${month} ${year}, ${hours}.${minutes}${period}`
+
+  return formattedDate
 }
