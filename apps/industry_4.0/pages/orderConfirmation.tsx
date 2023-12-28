@@ -6,10 +6,11 @@ import { ConfirmationPage } from '@beckn-ui/becknified-components'
 import { InitResponseModel } from '../types/init.types'
 import { getPayloadForConfirm, getPayloadForOrderHistoryPost } from '@utils/confirm-utils'
 import axios from 'axios'
-import { Loader, Typography } from '@beckn-ui/molecules'
 import { Box, Text } from '@chakra-ui/react'
 import Cookies from 'js-cookie'
 import { ConfirmResponseModel } from '../types/confirm.types'
+import Typography from '@beckn-ui/molecules/src/components/typography/typography'
+import { Loader } from '@beckn-ui/molecules/src/components'
 
 const OrderConfirmation = () => {
   const { t } = useLanguage()
