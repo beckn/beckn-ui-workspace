@@ -118,7 +118,7 @@ const CheckoutPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [billingFormData])
 
-  const formSubmitHandler = data => {
+  const formSubmitHandler = (data: any) => {
     if (data) {
       // TODO :_ To check this again
 
@@ -200,12 +200,13 @@ const CheckoutPage = () => {
           payment: {
             title: 'Payment',
             paymentDetails: {
-              subtotalText: 'Subtotal',
-              deliveryChargesText: 'Delivery Charges',
-              deliveryChargesValue: `${t.currencySymbol} ${
-                getSubTotalAndDeliveryCharges(initRequest.data).totalDeliveryCharge
-              }`,
-              subtotalValue: `${t.currencySymbol} ${getSubTotalAndDeliveryCharges(initRequest.data).subTotal}`,
+              paymentBreakDown: {
+                ['Delivery Charges']: `${t.currencySymbol} ${
+                  getSubTotalAndDeliveryCharges(initRequest.data).totalDeliveryCharge
+                }`,
+                Subtotal: `${t.currencySymbol} ${getSubTotalAndDeliveryCharges(initRequest.data).subTotal}`
+              },
+
               totalText: 'Total',
               totalValueWithSymbol: `${t.currencySymbol}${
                 getSubTotalAndDeliveryCharges(initRequest.data).subTotal +

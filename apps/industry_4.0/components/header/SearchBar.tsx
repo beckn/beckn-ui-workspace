@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import { GoSearch } from 'react-icons/go'
 import { useLanguage } from '../../hooks/useLanguage'
 import { SearchBarPropsModel } from '../../lib/types/search'
+import { Box, Flex, Image, Input } from '@chakra-ui/react'
 
 const SearchBar: React.FC<SearchBarPropsModel> = ({ searchString, handleChange }) => {
   const { t } = useLanguage()
@@ -16,23 +16,33 @@ const SearchBar: React.FC<SearchBarPropsModel> = ({ searchString, handleChange }
   }
 
   return (
-    <div
-      className="max-w-[50rem] w-full md:w-[90%] px-4 md:ltr:ml-4 md:rtl:mr-4  dark:bg-slate-800 flex items-center flex-grow border_radius_all  pl-5 "
-      style={{
-        border: '1px solid #c9c9c9',
-        width: 'calc(100% - 40px)',
-        margin: '20px auto'
-      }}
+    <Box
+      width="100%"
+      margin="20px auto"
     >
-      <input
-        className=" py-2 md:py-3 bg-transparent outline-none w-full"
-        type="search"
-        placeholder={`${t.search}`}
-        onChange={inputChangeHandler}
-        value={searchText}
-        onKeyDown={event => event.key === 'Enter' && handleSubmit()}
-      />
-    </div>
+      <Flex>
+        <Input
+          p={'20px'}
+          bg="transparent"
+          borderRadius={'12px'}
+          _focus={{ outline: 'none' }}
+          w="full"
+          type="search"
+          placeholder={t.search}
+          onChange={inputChangeHandler}
+          value={searchText}
+          onKeyDown={event => event.key === 'Enter' && handleSubmit()}
+        />
+        <Box
+          position={'relative'}
+          right={'30px'}
+          top={'13px'}
+          onClick={handleSubmit}
+        >
+          <Image src={'/images/searchInput.svg'} />
+        </Box>
+      </Flex>
+    </Box>
   )
 }
 

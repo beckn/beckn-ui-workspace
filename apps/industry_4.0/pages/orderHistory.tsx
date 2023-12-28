@@ -1,83 +1,152 @@
-import {
-  OrderHistoryDetailsProps,
-  OrderHistoryProps
-} from '@beckn-ui/becknified-components/src/components/order-history/order-history.types'
-import { Box } from '@chakra-ui/react'
-import Link from 'next/link'
+import Cookies from 'js-cookie'
+import { DetailCard } from '@beckn-ui/becknified-components'
+import { Loader, Typography } from '@beckn-ui/molecules'
+import { Box, Text, Flex, Image } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
-import DetailsCard from '../components/detailsCard/DetailsCard'
-import Loader from '../components/loader/Loader'
-import OrderHistoryDetails from '../components/orderHistory/OrderHistoryDetails'
-import { useLanguage } from '../hooks/useLanguage'
-import useRequest from '../hooks/useRequest'
-import { getOrderPlacementTimeline } from '../utilities/confirm-utils'
-import { getTotalPriceOfSingleOrder, getTotalQuantityOfSingleOrder } from '../utilities/orderHistory-utils'
-import { OrderHistory as BecknOrderHistory } from '@beckn-ui/becknified-components'
+import pendingIcon from '../public/images/pendingStatus.svg'
+import { orderHistoryData } from '../types/order-history.types'
+import { formatTimestamp } from '@utils/confirm-utils'
+import { useRouter } from 'next/router'
+import EmptyOrder from '@components/orderHistory/emptyOrder'
 
-const orderStatusMap = {
-  INITIATED: 'pending',
-  ACKNOWLEDGED: 'Confirmed',
-  PACKED: 'Packed',
-  SHIPPED: 'outForDelivery',
-  DELIVERED: 'completed'
+const orderStatusMap: Record<string, string> = {
+  'In Review': 'Pending'
 }
 
-const orderHistoryData: OrderHistoryDetailsProps[] = [
-  {
-    orderId: 'c5c44f4f-884a-4621-91f7-395829e100c2',
-    orderState: 'pending',
-    totalAmountWithSymbol: '₹ 250',
-    quantity: 1,
-    createdAt: 'Dec 12 2023, 18:05:41'
-  },
-  {
-    orderId: 'c5c44f4f-884a-4621-91f7-395829e100c4',
-    orderState: 'completed',
-    totalAmountWithSymbol: '₹ 1230',
-    quantity: 3,
-    createdAt: 'Aug 12 2023, 18:05:41'
-  },
-  {
-    orderId: 'c5c44f4f-884a-4621-91f7-395829e100c6',
-    orderState: 'pending',
-    totalAmountWithSymbol: '₹ 450',
-    quantity: 2,
-    createdAt: 'Dec 22 2023, 18:05:41'
-  }
-]
-
 const OrderHistory = () => {
-  const [orderHistoryList, setOrderHistoryList] = useState<any>([])
-  const { data, fetchData, loading, error } = useRequest()
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL
-  const { t } = useLanguage()
+  const [orderHistoryList, setOrderHistoryList] = useState<orderHistoryData[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
+  const [error, setError] = useState('')
+
+  const bearerToken = Cookies.get('authToken')
+  const router = useRouter()
 
   useEffect(() => {
-    if (localStorage && localStorage.getItem('userPhone')) {
-      fetchData(`${apiUrl}/client/v2/orders?userId=${localStorage.getItem('userPhone')}`, 'GET')
+    let myHeaders = new Headers()
+    myHeaders.append('Authorization', `Bearer ${bearerToken}`)
+
+    let requestOptions: RequestInit = {
+      method: 'GET',
+      headers: myHeaders,
+      redirect: 'follow'
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    fetch(`${strapiUrl}/orders?filters[category]=5`, requestOptions)
+      .then(response => response.json())
+      .then(result => {
+        console.log('resluttt', result)
+        if (result.error) {
+          return setError(result.error.message)
+        }
+        setOrderHistoryList(result.data)
+        setIsLoading(false)
+      })
+      .catch(error => {
+        setIsLoading(false)
+      })
+      .finally(() => setIsLoading(false))
   }, [])
 
-  useEffect(() => {
-    if (data) {
-      const ordersArray = (data as any).orders
-      localStorage.setItem('orderHistoryArray', JSON.stringify(ordersArray))
-      setOrderHistoryList(ordersArray)
-    }
-  }, [data])
+  if (isLoading) {
+    return (
+      <Box
+        display={'grid'}
+        height={'calc(100vh - 300px)'}
+        alignContent={'center'}
+      >
+        <Loader />
+      </Box>
+    )
+  }
+
+  if (error.length) {
+    return (
+      <Box
+        display={'grid'}
+        height={'calc(100vh - 300px)'}
+        alignContent={'center'}
+      >
+        <Text
+          fontWeight={500}
+          fontSize={'15px'}
+          textAlign={'center'}
+        >
+          {error}
+        </Text>
+      </Box>
+    )
+  }
 
   return (
-    <BecknOrderHistory
-      schema={{
-        orderHistoryDetails: orderHistoryData,
-        loader: {
-          text: 'Loading order history'
-        }
-      }}
-      isLoading={loading}
-      isEmptyText="No Orders Found"
-    />
+    <>
+      {!orderHistoryList.length ? (
+        <EmptyOrder />
+      ) : (
+        <Box mt={'23px'}>
+          {orderHistoryList.map((order, idx) => {
+            return (
+              <DetailCard key={idx}>
+                <Flex
+                  onClick={() => {
+                    const orderObjectForStatusCall = {
+                      bppId: order.attributes.bpp_id,
+                      bppUri: order.attributes.bpp_uri,
+                      orderId: order.attributes.order_id
+                    }
+                    localStorage.setItem('selectedOrder', JSON.stringify(orderObjectForStatusCall))
+                    router.push('/orderDetails')
+                  }}
+                  gap={'5px'}
+                  flexDirection={'column'}
+                >
+                  <Text
+                    as={Typography}
+                    text={`Placed at ${formatTimestamp(order.attributes.createdAt)}`}
+                    fontWeight="400"
+                    fontSize={'12px'}
+                  />
+
+                  <Text
+                    as={Typography}
+                    text={`Order ID: ${order.attributes.order_id}`}
+                    fontWeight="400"
+                    fontSize={'12px'}
+                  />
+
+                  <Text
+                    as={Typography}
+                    text={`${order.attributes.quote.price.currency} ${order.attributes.quote.price.value}`}
+                    fontWeight="600"
+                    fontSize={'12px'}
+                  />
+
+                  <Flex
+                    fontSize={'10px'}
+                    justifyContent={'space-between'}
+                    alignItems={'center'}
+                  >
+                    <Text
+                      as={Typography}
+                      text={'1 Item'}
+                      fontWeight="400"
+                      fontSize={'12px'}
+                    />
+
+                    <Flex>
+                      <Image
+                        src={pendingIcon}
+                        paddingRight={'6px'}
+                      />
+                      <Text>{orderStatusMap[order.attributes.delivery_status]}</Text>
+                    </Flex>
+                  </Flex>
+                </Flex>
+              </DetailCard>
+            )
+          })}
+        </Box>
+      )}
+    </>
   )
 }
 

@@ -27,6 +27,7 @@
   display: flex;
   height: 100%;
   align-items: center;
+  justify-content: space-between;
 }
 .top_header_lan {
   margin-left: auto;
@@ -36,16 +37,18 @@
 .top_header_modal {
   display: flex;
   gap: 8px;
-  padding-top: 20px;
+  padding: 15px 0px;
 }
 .bottom_header {
   position: fixed;
   left: 0;
   right: 0;
+  padding-left: 10px;
   margin-bottom: 16px;
   top: 30px;
   background-color: #ffffff;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.07);
+  z-index: 1;
 }
 .bottom_header_wrapper {
   display: flex;
@@ -54,9 +57,9 @@
 .bottom_header_innr {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   position: relative;
   height: 60px;
+  padding: 0 20px;
 }
 .bottom_header_backIcon {
   display: flex;

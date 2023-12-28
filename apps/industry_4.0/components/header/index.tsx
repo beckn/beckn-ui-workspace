@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import BottomModal from '../BottomModal'
-import { Box, Image, Text } from '@chakra-ui/react'
-import CartIcon from '../cart/CartIcon'
+import { BottomModal } from '@beckn-ui/molecules'
+
+import { Box, Divider, Flex, HStack, Image, Text } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import styles from './header.module.css'
 
 import { useLanguage } from '../../hooks/useLanguage'
+import Qrcode from '@components/qrCode/Qrcode'
+import BottomModalScan from '@components/BottomModal/BottomModalScan'
+import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 
 type PathnameObjectType = { [key: string]: string }
 
@@ -19,12 +22,16 @@ const cartIconBlackList: string[] = [
   '/mobileOtp',
   '/cart',
   '/checkoutPage',
-  '/paymentMode'
+  '/paymentMode',
+  '/search',
+  '/product',
+  '/signUp',
+  '/invoiceDetails'
 ]
 
-const backIconList = ['/', '/orderDetails']
+const backIconList = ['/']
 
-const homeIconBlackList = ['/orderHistory', '/', '/homePage', '/mobileOtp']
+const homeIconBlackList = ['/', '/homePage', '/mobileOtp', '/paymentMode']
 
 const storeHeaderBlackList = [
   '/checkoutPage',
@@ -35,14 +42,18 @@ const storeHeaderBlackList = [
   '/orderConfirmation',
   'feedback',
   '/',
+  '/signUp',
   '/mobileOtp',
-  '/paymentMode'
+  '/paymentMode',
+  '/invoiceDetails'
 ]
 const headerValues: PathnameObjectType = {
-  '/checkoutPage': 'Billing & Shipping',
+  '/checkoutPage': 'Review Purchase Order',
   '/orderHistory': 'Order History',
   '/orderDetails': 'Order Details',
+  '/invoiceDetails': 'Invoice Details',
   '/': 'Sign In',
+  '/signUp': 'SignUp',
   '/cart': 'Cart',
   '/paymentMode': 'Select Payment Method',
   feedback: 'Feedback'
@@ -61,11 +72,11 @@ const headerValuesFrench: PathnameObjectType = {
 
 const topHeaderBlackList: string[] = []
 
-const bottomHeaderBlackList = ['/homePage', '/orderConfirmation']
+const bottomHeaderBlackList = ['/homePage', '/search', '/orderConfirmation']
 
 const menuIconWhiteList = ['/homePage']
-
-const languageIconWhiteList = ['/homePage', '/', '/mobileOtp']
+const orderIconList = ['/orderDetails']
+const invoiceDownloadIcon = ['/invoiceDetails']
 
 const getHeaderTitleForPage = (name: string, logo: string, pathName: string, locale: string | undefined) => {
   const values = locale === 'en' ? headerValues : headerValuesFrench
@@ -87,6 +98,7 @@ export interface TopHeaderProps {
 
 const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
   const [isMenuModalOpen, setMenuModalOpen] = useState(false)
+
   const { t, locale } = useLanguage()
   const router = useRouter()
 
@@ -96,25 +108,51 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
 
   return (
     <>
-      <div className={styles.top_header}>
-        <div className={styles.top_header_wrapper}>
-          <div>
+      <Box className={styles.top_header}>
+        <Box className={styles.top_header_wrapper}>
+          <Box>
             <Image
               src="/images/Suppliflow_app_logo.svg"
               alt="App logo"
             />
-          </div>
-        </div>
-      </div>
+          </Box>
+          <Flex columnGap={'10px'}>
+            {!homeIconBlackList.includes(router.pathname) && (
+              <Image
+                w={'20px'}
+                h={'20px'}
+                onClick={() => {
+                  const user = localStorage.getItem('userPhone') as string
+                  localStorage.clear()
+                  localStorage.setItem('userPhone', user)
+                  router.push(`/homePage`)
+                }}
+                src="/images/Home_icon.svg"
+                alt="home Icon"
+              />
+            )}
+
+            {menuIconWhiteList.includes(router.pathname) && (
+              <Image
+                onClick={() => setMenuModalOpen(true)}
+                className="block"
+                src="/images/threeDots.svg"
+                alt="menu icon"
+              />
+            )}
+          </Flex>
+        </Box>
+      </Box>
 
       {/* Menu Modal */}
       <BottomModal
         isOpen={isMenuModalOpen}
         onClose={handleMenuModalClose}
       >
-        <div
+        <Box
           onClick={() => {
             router.push('/orderHistory')
+            setMenuModalOpen(false)
           }}
           className={styles.top_header_modal}
         >
@@ -123,7 +161,7 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
             alt="Order history icon"
           />
           {t['orderHistory']}
-        </div>
+        </Box>
       </BottomModal>
     </>
   )
@@ -132,7 +170,14 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
 const BottomHeader = () => {
   const [optionTags, setOptionTags] = useState<any>()
   const { t, locale } = useLanguage()
-
+  const [isOrderModalOpen, setOrderModalOpen] = useState(false)
+  const [isInvoiceModalOpen, setInvoiceModalOpen] = useState(false)
+  const handleInvoiceModalClose = () => {
+    setInvoiceModalOpen(false)
+  }
+  const handleOrderModalClose = () => {
+    setOrderModalOpen(false)
+  }
   useEffect(() => {
     setOptionTags(JSON.parse(localStorage.getItem('optionTags') as string))
   }, [])
@@ -141,25 +186,102 @@ const BottomHeader = () => {
 
   return (
     <header className={styles.bottom_header}>
-      <div className={styles.bottom_header_wrapper}>
-        <div className={styles.bottom_header_innr}>
-          <div className={styles.bottom_header_backIcon}>
+      <Box className={styles.bottom_header_wrapper}>
+        <Box className={styles.bottom_header_innr}>
+          <Box className={styles.bottom_header_backIcon}>
             {!backIconList.includes(router.pathname) && (
-              <div onClick={() => router.back()}>
+              <Box onClick={() => router.back()}>
                 <Image
                   src="/images/Back.svg"
                   alt="Back icon"
                 />
-              </div>
+              </Box>
             )}
-          </div>
-
+          </Box>
           {getHeaderTitleForPage(optionTags?.name, optionTags?.logo, router.pathname, locale)}
-          <div className={styles.bottom_header_cartIcon}>
-            {!cartIconBlackList.includes(router.pathname) && <CartIcon />}
-          </div>
-        </div>
-      </div>
+          {orderIconList.includes(router.pathname) && (
+            <Image
+              onClick={() => setOrderModalOpen(true)}
+              src="/images/threeDots.svg"
+              alt="order icon"
+              mr={'20px'}
+            />
+          )}
+          {invoiceDownloadIcon.includes(router.pathname) && (
+            <Image
+              onClick={() => setInvoiceModalOpen(true)}
+              src="/images/downloadInvoice.svg"
+              alt="invoice icon"
+              mr={'20px'}
+            />
+          )}
+        </Box>
+      </Box>
+      <BottomModal
+        isOpen={isOrderModalOpen}
+        onClose={handleOrderModalClose}
+      >
+        <Box
+          onClick={() => {
+            router.push('/invoiceDetails')
+            setOrderModalOpen(false)
+          }}
+          className={styles.top_header_modal}
+        >
+          <Image
+            src="/images/invoiceDetails.svg"
+            alt="invoice Details icon"
+          />
+          {t['invoiceDetails']}
+        </Box>
+      </BottomModal>
+      <BottomModalScan
+        isOpen={isInvoiceModalOpen}
+        onClose={handleInvoiceModalClose}
+        modalHeader={t.scanQR}
+      >
+        <Box p={'0px 24px'}>
+          <Box
+            textAlign={'center'}
+            fontSize={'15px'}
+          >
+            <Text>{t.scanthisQR}</Text>
+            <Text mb={'20px'}>{t.toImportthisorderanotherapp}</Text>
+          </Box>
+
+          <HStack
+            alignItems={'center'}
+            justifyContent={'center'}
+            p={'20px'}
+          >
+            <Qrcode value={'https://odr-dev.becknprotocol.io/'} />
+          </HStack>
+
+          <Flex
+            align="center"
+            pt={'20px'}
+            w={'70%'}
+            margin={'0 auto'}
+          >
+            <Divider />
+            <Text
+              padding="2"
+              fontSize={'12px'}
+            >
+              {t.or}
+            </Text>
+            <Divider />
+          </Flex>
+          <Text
+            pb={'20px'}
+            fontSize={'12px'}
+            textAlign={'center'}
+          >
+            {t.clicktheShopbuttontobuyitemsforthistrip}
+          </Text>
+          <BecknButton children="Proceed" />
+        </Box>
+      </BottomModalScan>
     </header>
   )
 }
@@ -171,10 +293,10 @@ const Header = () => {
   const renderBottomHeader = !bottomHeaderBlackList.includes(router.pathname)
 
   return (
-    <div>
+    <Box>
       {renderTopHeader && <TopHeader />}
       {renderBottomHeader && <BottomHeader />}
-    </div>
+    </Box>
   )
 }
 

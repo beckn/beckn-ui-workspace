@@ -2,16 +2,20 @@ import React, { useState } from 'react'
 import Suppliflow_logo from '../../public/images/Suppliflow_logo.svg'
 import { useLanguage } from '@hooks/useLanguage'
 import { SignInPropsModel } from './SignIn.types'
-import { FormErrors, signInValidateForm } from '@utils/detailsForm-utils'
+import { FormErrors, signInValidateForm } from '@utils/form-utils'
 import { BecknAuth } from '@beckn-ui/becknified-components'
 import Router from 'next/router'
+import { Box, useToast, Text } from '@chakra-ui/react'
+import Cookies from 'js-cookie'
 
 const SignIn = () => {
   const { t } = useLanguage()
 
   const [formData, setFormData] = useState<SignInPropsModel>({ email: '', password: '' })
   const [formErrors, setFormErrors] = useState<FormErrors>({ email: '', password: '' })
-  const [isFormFilled, setIsFormFilled] = useState(true)
+  const [isFormFilled, setIsFormFilled] = useState(false)
+  const toast = useToast()
+
   const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -27,11 +31,11 @@ const SignIn = () => {
       [name]: value
     }
 
-    // const errors = signInValidateForm(updatedFormData) as any
-    // setFormErrors(prevErrors => ({
-    //   ...prevErrors,
-    //   [name]: errors[name] || ''
-    // }))
+    const errors = signInValidateForm(updatedFormData) as any
+    setFormErrors(prevErrors => ({
+      ...prevErrors,
+      [name]: t[`${errors[name]}`] || ''
+    }))
     setIsFormFilled(updatedFormData.email.trim() !== '' && updatedFormData.password.trim() !== '')
   }
 
@@ -54,10 +58,22 @@ const SignIn = () => {
         const data = await response.json()
         const token = data.jwt
 
-        localStorage.setItem('token', token)
+        Cookies.set('authToken', token)
         Router.push('/homePage')
       } else {
-        console.error('Sign In failed')
+        const errorData = await response.json()
+        toast({
+          render: () => (
+            <CustomToast
+              title="Error!"
+              message={errorData.error.message}
+            />
+          ),
+          position: 'top',
+          duration: 2000,
+          isClosable: true
+        })
+        console.error('Registration failed')
       }
     } catch (error) {
       console.error('An error occurred:', error)
@@ -73,14 +89,14 @@ const SignIn = () => {
         },
         buttons: [
           {
-            text: 'SignIn',
+            text: t.signIn,
             handleClick: handleSignIn,
             disabled: !isFormFilled,
             variant: 'solid',
             colorScheme: 'primary'
           },
           {
-            text: 'SignUp',
+            text: t.signUp,
             handleClick: () => {
               Router.push('/signUp')
             },
@@ -95,14 +111,16 @@ const SignIn = () => {
             name: 'email',
             value: formData.email,
             handleChange: handleInputChange,
-            label: 'Email'
+            label: t.email,
+            error: formErrors.email
           },
           {
             type: 'password',
             name: 'password',
             value: formData.password,
             handleChange: handleInputChange,
-            label: 'Password'
+            label: t.password,
+            error: formErrors.password
           }
         ]
       }}
@@ -111,3 +129,31 @@ const SignIn = () => {
 }
 
 export default SignIn
+
+export const CustomToast: React.FC<{ title: string; message: string }> = ({ title, message }) => (
+  <Box
+    mt="2rem"
+    p={4}
+    bg="red.500"
+    color="white"
+    borderRadius="md"
+    boxShadow="md"
+  >
+    <Text
+      fontWeight={700}
+      fontSize={'15px'}
+      color={'white'}
+      textAlign={'center'}
+    >
+      {title}
+    </Text>
+    <Text
+      fontWeight={500}
+      fontSize={'15px'}
+      color={'white'}
+      textAlign={'center'}
+    >
+      {message}
+    </Text>
+  </Box>
+)

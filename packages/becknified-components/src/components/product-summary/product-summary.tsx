@@ -26,6 +26,8 @@ const ProductSummary: React.FC<ProductSummaryPropsModel> = props => {
             <Box className={`${className}-product_summary_image_container`}>
               <Image
                 src={imageSrc}
+                width={350}
+                height={200}
                 alt={'product_img'}
                 objectFit={'contain'}
                 className={`${className}-product_summary_image`}

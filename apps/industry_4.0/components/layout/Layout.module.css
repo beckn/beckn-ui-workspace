@@ -15,6 +15,7 @@
 
 .main {
   flex-grow: 1;
+  background: #fbfcff;
 }
 
 .main.withPadding {
@@ -22,7 +23,10 @@
 }
 
 .main.withMargin {
-  margin-top: 40px;
+  margin-top: 100px;
+}
+.main.withMarginSignUp {
+  margin-top: 60px;
 }
 
 .main.homepageMargin {
@@ -30,5 +34,8 @@
 }
 
 .main.searchMargin {
-  margin-top: 118px;
+  margin-top: 95px;
+}
+.main.searchPageMargin {
+  margin-top: 30px;
 }

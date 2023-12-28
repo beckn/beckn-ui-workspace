@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { useLanguage } from '../../hooks/useLanguage'
-import { RetailItem } from '../../lib/types/products'
 import Card from '../UI/card/Card'
-import Sort from './Sort'
 import { useDispatch, useSelector } from 'react-redux'
 import { SortedProductsListActions } from '../../store/sortedProductList-slice'
 import { IProductListRootState } from '../../lib/types/productList'
+import { ParsedScholarshipData } from './ProductList.utils'
+import { Box, Flex, Grid, Text } from '@chakra-ui/react'
 
 interface Props {
-  productList: RetailItem[]
+  productList: ParsedScholarshipData[]
 }
 const ProductList: React.FC<Props> = ({ productList }) => {
   const { t } = useLanguage()
@@ -27,43 +27,41 @@ const ProductList: React.FC<Props> = ({ productList }) => {
 
   const sortedProductList = useSelector((state: IProductListRootState) => state.sortedProductsList.productsList)
 
-  function onChangeHandler(e: React.ChangeEvent<HTMLInputElement>) {
-    setSelectedRadioBtn(e.currentTarget.id)
-  }
-
   return (
-    <div>
-      {/* <Breadcrumb /> */}
-      {/* <SubmenuCategory /> */}
-
-      <div className="w-full xl:max-w-[2100px] mx-auto">
-        {sortedProductList && sortedProductList.length ? (
-          <div>
-            <Sort
-              selectedBtn={selectedRadioBtn}
-              onChangeSelectedBtn={onChangeHandler}
-            />
-            <div
-              className="grid gap-4 md:gap-2 grid-cols-6 md:grid-cols-12"
-              style={{
-                marginTop: '140px'
-              }}
-            >
-              {sortedProductList.map((product: RetailItem) => {
-                return (
-                  <Card
-                    key={product.id}
-                    product={product}
-                  />
-                )
-              })}
-            </div>
-          </div>
-        ) : (
-          <p className="text-palette-mute text-center mt-14">{t.noProduct}</p>
-        )}
-      </div>
-    </div>
+    <Box
+      w="full"
+      maxW="2100px"
+      mx="auto"
+    >
+      {sortedProductList && sortedProductList.length ? (
+        <Flex
+          display={{ base: 'grid', md: 'flex' }}
+          flexWrap={{ md: 'wrap' }}
+          flexDirection={{ base: 'column', md: 'row' }}
+          gridGap={{ base: 4, md: 2 }}
+          overflowY="scroll"
+          mt={10}
+          maxH="calc(100vh - 150px)"
+          sx={{
+            '&::-webkit-scrollbar': {
+              display: 'none'
+            },
+            scrollbarWidth: 'none'
+          }}
+        >
+          {sortedProductList.map(product => {
+            return (
+              <Card
+                key={product.id}
+                product={product}
+              />
+            )
+          })}
+        </Flex>
+      ) : (
+        <Text>{t.noProduct}</Text>
+      )}
+    </Box>
   )
 }
 

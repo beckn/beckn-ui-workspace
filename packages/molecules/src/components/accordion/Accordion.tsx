@@ -27,8 +27,10 @@ const Accordion: React.FC<AccordionProps> = props => {
         >
           <CardBody padding={'15px 20px'}>
             <AccordionButton
+              className={`${className}-accordion-button`}
               padding={'unset'}
               background={'unset !important'}
+              position="relative"
             >
               <Box
                 as="span"
@@ -40,7 +42,11 @@ const Accordion: React.FC<AccordionProps> = props => {
               >
                 {accordionHeader}
               </Box>
-              <AccordionIcon />
+              <AccordionIcon
+                position={'absolute'}
+                top="0"
+                right={'0'}
+              />
             </AccordionButton>
           </CardBody>
           <AccordionPanel

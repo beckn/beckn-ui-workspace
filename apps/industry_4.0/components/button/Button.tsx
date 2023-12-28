@@ -1,5 +1,5 @@
 import React, { ReactElement, useState } from 'react'
-import { Button as ButtonComp } from '@chakra-ui/react'
+import { Button as ButtonComp, useTheme } from '@chakra-ui/react'
 
 export interface ButtonPropsModel {
   buttonText: string | ReactElement
@@ -10,7 +10,9 @@ export interface ButtonPropsModel {
 }
 
 const Button: React.FC<ButtonPropsModel> = props => {
+  const theme = useTheme()
   const isDisabled = props.isDisabled
+  const bgColorOfSearchIcon = theme.colors.primary['100']
 
   return (
     <>
@@ -22,7 +24,7 @@ const Button: React.FC<ButtonPropsModel> = props => {
         backgroundColor={!isDisabled ? props.background : 'rgba(var(--disabled-btn-color))'}
         color={props.color}
         width={'100%'}
-        border={!isDisabled ? '1px solid rgba(var(--color-primary))' : 'rgba(var(--disabled-btn-color))'}
+        border={!isDisabled ? bgColorOfSearchIcon : 'rgba(var(--disabled-btn-color))'}
         marginBottom={'12px'}
         __css={{ '&:active': {} }}
         onClick={props.handleOnClick}
