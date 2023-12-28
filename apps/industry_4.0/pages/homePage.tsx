@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react'
 import TopSheet from '../components/topSheet/TopSheet'
 import { useLanguage } from '../hooks/useLanguage'
 import beckenFooter from '../public/images/footer.svg'
-import { SearchInput } from '@beckn-ui/becknified-components'
+import SearchInput from '@beckn-ui/becknified-components/src/components/search-input'
 
 const HomePage = () => {
   const [searchTerm, setSearchTerm] = useState<string>('')
