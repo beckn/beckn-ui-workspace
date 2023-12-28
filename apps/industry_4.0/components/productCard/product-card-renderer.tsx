@@ -12,7 +12,6 @@ const ProductCardRenderer = (data: any) => {
   const { t } = useLanguage()
   const router = useRouter()
   const encodedProduct = window.btoa(toBinary(JSON.stringify(dataSource)))
-  console.log(dataSource)
 
   useEffect(() => {
     const stringifiedCoords = localStorage.getItem('coordinates') as string
@@ -76,11 +75,19 @@ const ProductCardRenderer = (data: any) => {
           alignItems="center"
           mb="8px"
         >
-          <Flex flexDir={'column'}>
+          <Flex
+            flexDir={'column'}
+            gap={'5px'}
+          >
             <Text pl="3px">{dataSource.providerName}</Text>
-            <Text pl="3px">
-              Mock description
-              {/* {product.descriptor.short_desc} */}
+            <Text
+              pl="3px"
+              textOverflow={'ellipsis'}
+              overflow={'hidden'}
+              noOfLines={2}
+              w={'100%'}
+            >
+              {dataSource.item.short_desc}
             </Text>
           </Flex>
         </Flex>

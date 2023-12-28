@@ -76,6 +76,8 @@ const en: { [key: string]: string } = {
   total: 'Total',
   checkoutLoaderSubText: 'while we setup a form to understand your requirements',
   confirmLoaderSubtext: 'while we confirm your order',
-  statusLoaderSubText: 'while we update the current status of your order.'
+  statusLoaderSubText: 'while we update the current status of your order.',
+  emptyOrderHistoryText: 'This space appears quite empty!',
+  noExistingWorkflowText: 'No existing workflows found; create a new workflow to proceed.'
 }
 export default en

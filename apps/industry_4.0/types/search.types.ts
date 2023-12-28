@@ -37,6 +37,8 @@ interface Image {
 }
 
 interface Item {
+  long_desc: string
+  short_desc: string
   id: string
   name: string
   price: Price
