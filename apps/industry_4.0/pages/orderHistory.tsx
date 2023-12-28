@@ -7,6 +7,7 @@ import pendingIcon from '../public/images/pendingStatus.svg'
 import { orderHistoryData } from '../types/order-history.types'
 import { formatTimestamp } from '@utils/confirm-utils'
 import { useRouter } from 'next/router'
+import EmptyOrder from '@components/orderHistory/emptyOrder'
 
 const orderStatusMap: Record<string, string> = {
   'In Review': 'Pending'
@@ -77,69 +78,75 @@ const OrderHistory = () => {
   }
 
   return (
-    <Box mt={'23px'}>
-      {orderHistoryList.map((order, idx) => {
-        return (
-          <DetailCard key={idx}>
-            <Flex
-              onClick={() => {
-                const orderObjectForStatusCall = {
-                  bppId: order.attributes.bpp_id,
-                  bppUri: order.attributes.bpp_uri,
-                  orderId: order.attributes.order_id
-                }
-                localStorage.setItem('selectedOrder', JSON.stringify(orderObjectForStatusCall))
-                router.push('/orderDetails')
-              }}
-              gap={'5px'}
-              flexDirection={'column'}
-            >
-              <Text
-                as={Typography}
-                text={`Placed at ${formatTimestamp(order.attributes.createdAt)}`}
-                fontWeight="400"
-                fontSize={'12px'}
-              />
-
-              <Text
-                as={Typography}
-                text={`Order ID: ${order.attributes.order_id}`}
-                fontWeight="400"
-                fontSize={'12px'}
-              />
-
-              <Text
-                as={Typography}
-                text={`${order.attributes.quote.price.currency} ${order.attributes.quote.price.value}`}
-                fontWeight="600"
-                fontSize={'12px'}
-              />
-
-              <Flex
-                fontSize={'10px'}
-                justifyContent={'space-between'}
-                alignItems={'center'}
-              >
-                <Text
-                  as={Typography}
-                  text={'1 Item'}
-                  fontWeight="400"
-                  fontSize={'12px'}
-                />
-
-                <Flex>
-                  <Image
-                    src={pendingIcon}
-                    paddingRight={'6px'}
+    <>
+      {!orderHistoryList.length ? (
+        <EmptyOrder />
+      ) : (
+        <Box mt={'23px'}>
+          {orderHistoryList.map((order, idx) => {
+            return (
+              <DetailCard key={idx}>
+                <Flex
+                  onClick={() => {
+                    const orderObjectForStatusCall = {
+                      bppId: order.attributes.bpp_id,
+                      bppUri: order.attributes.bpp_uri,
+                      orderId: order.attributes.order_id
+                    }
+                    localStorage.setItem('selectedOrder', JSON.stringify(orderObjectForStatusCall))
+                    router.push('/orderDetails')
+                  }}
+                  gap={'5px'}
+                  flexDirection={'column'}
+                >
+                  <Text
+                    as={Typography}
+                    text={`Placed at ${formatTimestamp(order.attributes.createdAt)}`}
+                    fontWeight="400"
+                    fontSize={'12px'}
                   />
-                  <Text>{orderStatusMap[order.attributes.delivery_status]}</Text>
+
+                  <Text
+                    as={Typography}
+                    text={`Order ID: ${order.attributes.order_id}`}
+                    fontWeight="400"
+                    fontSize={'12px'}
+                  />
+
+                  <Text
+                    as={Typography}
+                    text={`${order.attributes.quote.price.currency} ${order.attributes.quote.price.value}`}
+                    fontWeight="600"
+                    fontSize={'12px'}
+                  />
+
+                  <Flex
+                    fontSize={'10px'}
+                    justifyContent={'space-between'}
+                    alignItems={'center'}
+                  >
+                    <Text
+                      as={Typography}
+                      text={'1 Item'}
+                      fontWeight="400"
+                      fontSize={'12px'}
+                    />
+
+                    <Flex>
+                      <Image
+                        src={pendingIcon}
+                        paddingRight={'6px'}
+                      />
+                      <Text>{orderStatusMap[order.attributes.delivery_status]}</Text>
+                    </Flex>
+                  </Flex>
                 </Flex>
-              </Flex>
-            </Flex>
-          </DetailCard>
-        )
-      })}
-    </Box>
+              </DetailCard>
+            )
+          })}
+        </Box>
+      )}
+    </>
   )
 }
 
