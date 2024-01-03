@@ -31,7 +31,7 @@ const cartIconBlackList: string[] = [
 
 const backIconList = ['/']
 
-const homeIconBlackList = ['/', '/homePage', '/mobileOtp', '/paymentMode']
+const homeIconBlackList = ['/', '/homePage', '/mobileOtp', '/paymentMode', '/signUp']
 
 const storeHeaderBlackList = [
   '/checkoutPage',
@@ -45,7 +45,8 @@ const storeHeaderBlackList = [
   '/signUp',
   '/mobileOtp',
   '/paymentMode',
-  '/invoiceDetails'
+  '/invoiceDetails',
+  '/assemblyDetails'
 ]
 const headerValues: PathnameObjectType = {
   '/checkoutPage': 'Review Purchase Order',
@@ -53,10 +54,10 @@ const headerValues: PathnameObjectType = {
   '/orderDetails': 'Order Details',
   '/invoiceDetails': 'Invoice Details',
   '/': 'Sign In',
-  '/signUp': 'SignUp',
+  '/signUp': 'Sign Up',
   '/cart': 'Cart',
   '/paymentMode': 'Select Payment Method',
-  feedback: 'Feedback'
+  '/assemblyDetails': 'Add Assembly Details'
 }
 
 const headerValuesFrench: PathnameObjectType = {

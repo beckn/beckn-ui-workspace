@@ -38,7 +38,7 @@ const ProductCardRenderer = (data: any) => {
         <Box>
           <Image
             width={'110px'}
-            height={'168px'}
+            height={'188px'}
             src={dataSource.item.images[0].url}
             alt={dataSource.item.name}
             borderTopLeftRadius={'10px'}
