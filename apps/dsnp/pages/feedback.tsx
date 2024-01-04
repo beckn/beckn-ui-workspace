@@ -104,8 +104,8 @@ const Feedback = () => {
   const getReviewToken = async () => {
     try {
       const response = await axios.request({
-        // url: `https://dsnp.becknprotocol.io/api/token`,
-        url: `http://localhost:3000/api/token`,
+        url: `https://dsnp.becknprotocol.io/api/token`,
+        // url: `https://localhost:3000/api/token`,
         method: 'POST'
       })
       return response.data.token
