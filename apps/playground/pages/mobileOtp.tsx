@@ -11,6 +11,7 @@ const MobileOtp = () => {
   const [phoneNumber, setPhoneNumber] = useState('')
   const { t, locale } = useLanguage()
   console.log('Dank 1')
+  console.log('Dank 2')
 
   const handleOTP = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value
