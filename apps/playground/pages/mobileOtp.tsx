@@ -15,6 +15,7 @@ const MobileOtp = () => {
   console.log('Dank 3')
   console.log('Dank 4')
   console.log('Dank 5')
+  console.log('Dank 6')
 
   const handleOTP = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value
