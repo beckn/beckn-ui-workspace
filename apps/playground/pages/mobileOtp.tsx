@@ -12,6 +12,7 @@ const MobileOtp = () => {
   const { t, locale } = useLanguage()
   console.log('Dank 1')
   console.log('Dank 2')
+  console.log('Dank 3')
 
   const handleOTP = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value
