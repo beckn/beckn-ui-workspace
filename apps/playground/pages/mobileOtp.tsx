@@ -10,6 +10,7 @@ const MobileOtp = () => {
   const [OTPError, setOTPError] = useState('')
   const [phoneNumber, setPhoneNumber] = useState('')
   const { t, locale } = useLanguage()
+  console.log('Dank 1')
 
   const handleOTP = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value
@@ -20,7 +21,7 @@ const MobileOtp = () => {
 
   useEffect(() => {
     if (localStorage && localStorage.getItem('userPhone')) {
-      let str = localStorage.getItem('userPhone') as string
+      const str = localStorage.getItem('userPhone') as string
       const storedPhoneNumber = str.substring(str.length - 4)
       setPhoneNumber(storedPhoneNumber)
     }
