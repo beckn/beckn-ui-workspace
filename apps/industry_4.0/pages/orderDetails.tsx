@@ -140,50 +140,48 @@ const OrderDetails = () => {
           fontSize="17px"
         />
       </Box>
-      <Box>
-        <Accordion
-          accordionHeader={
-            <>
-              {t.assembly}
-              <Flex
-                justifyContent={'space-between'}
-                alignItems="center"
-                pt={'10px'}
-              >
-                <Typography
-                  variant="subTitleRegular"
-                  text={'RTAL Assembly Line'}
-                  fontSize="12px"
-                />
-                <Typography
-                  variant="subTitleRegular"
-                  text={
-                    statusData[0].message.order.fulfillments[0].state.descriptor.code === 'DELIVERED' ? t.completed : ''
-                  }
-                  fontSize="15px"
-                  className={
-                    statusData[0].message.order.fulfillments[0].state.descriptor.code === 'DELIVERED'
-                      ? 'order_status_text_completed'
-                      : ''
-                  }
-                />
-              </Flex>
-            </>
-          }
-          children={
-            <>
-              <Divider />
-              <Box className="order_status_progress">
-                <OrderStatusProgress
-                  orderStatusMap={orderStatusMap}
-                  orderState={statusData[0].message.order.fulfillments[0].state.descriptor.code}
-                  statusTime={formatTimestamp(statusData[0].message.order.fulfillments[0].state.updated_at)}
-                />
-              </Box>
-            </>
-          }
-        />
-      </Box>
+      <Accordion
+        accordionHeader={
+          <>
+            {t.assembly}
+            <Flex
+              justifyContent={'space-between'}
+              alignItems="center"
+              pt={'10px'}
+            >
+              <Typography
+                variant="subTitleRegular"
+                text={'RTAL Assembly Line'}
+                fontSize="12px"
+              />
+              <Typography
+                variant="subTitleRegular"
+                text={
+                  statusData[0].message.order.fulfillments[0].state.descriptor.code === 'DELIVERED' ? t.completed : ''
+                }
+                fontSize="15px"
+                className={
+                  statusData[0].message.order.fulfillments[0].state.descriptor.code === 'DELIVERED'
+                    ? 'order_status_text_completed'
+                    : ''
+                }
+              />
+            </Flex>
+          </>
+        }
+        children={
+          <>
+            <Divider />
+            <Box className="order_status_progress">
+              <OrderStatusProgress
+                orderStatusMap={orderStatusMap}
+                orderState={statusData[0].message.order.fulfillments[0].state.descriptor.code}
+                statusTime={formatTimestamp(statusData[0].message.order.fulfillments[0].state.updated_at)}
+              />
+            </Box>
+          </>
+        }
+      />
     </Box>
   )
 }
