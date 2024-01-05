@@ -14,6 +14,11 @@ import { getLocalStorage } from '@utils/localStorage'
 import { toBinary } from '@utils/common-utils'
 import { makeInteractionIdAndNonce } from '@utils/review'
 
+type ReviewProcessorValues = {
+  message: string
+  images: UploadFile[]
+}
+
 const getReviewLink = (
   review: string,
   productURL: string,
@@ -47,11 +52,48 @@ const getReviewLink = (
   return myUrlWithParams.href
 }
 
-// {
-//   "accessToken": "ea064c54-3c33-4392-a42b-aad26528c075",
-//   "expires": 1704298216177,
-//   "dsnpId": "27"
-// }
+const createPost = async (
+  formValues: ReviewProcessorValues,
+  href: string,
+  nonce: any,
+  attributeSetType: string,
+  interactionTicket: any,
+  accessToken: string
+) => {
+  try {
+    const body = new FormData()
+    body.append('content', formValues.message)
+    ;(formValues.images || []).forEach(upload => {
+      if (upload.originFileObj) body.append('images', upload.originFileObj)
+    })
+    body.append(
+      'tag',
+      JSON.stringify([
+        {
+          type: 'Interaction',
+          href,
+          rel: attributeSetType,
+          nonce,
+          ticket: interactionTicket
+        }
+      ])
+    )
+
+    const resp = axios.request({
+      url: `https://api.dsnp-social-web.becknprotocol.io/v1/content/create`,
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: body
+    })
+    console.log('postActivityContentCreated', { resp })
+    return resp
+    //success();
+  } catch (e) {
+    throw Error(e)
+  }
+}
 
 const Feedback = () => {
   const { t } = useLanguage()
@@ -72,12 +114,14 @@ const Feedback = () => {
     token: string
   ) => {
     const dsnpAuth = getLocalStorage('dsnpAuth')
-    console.log('Dank', dsnpAuth)
+    const successUrl = `/product?productName=${productName}&productImage=${productImage}&reviewSubmitted=true`
+    const errorUrl = `/product?productName=${productName}&productImage=${productImage}&reviewSubmitted=false`
     if (Object.keys(dsnpAuth).length !== 0) {
       const { accessToken, dsnpId } = dsnpAuth
       const { interactionId, nonce } = await makeInteractionIdAndNonce(dsnpId)
       const reqBody = {
         href: `${window.location.origin}/product?productName=${productName}&productImage=${productImage}&productDesc=${productDesc}&becknified=true`,
+        // href: `https://dsnp-stage.becknprotocol.io/product?productName=${productName}&productImage=${productImage}&productDesc=${productDesc}&becknified=true`,
         reference: {
           token
         },
@@ -85,8 +129,8 @@ const Feedback = () => {
         interactionId
       }
 
-      try {
-        const response = await axios.request({
+      axios
+        .request({
           url: `https://api.dsnp-social-web.becknprotocol.io/v1/interactions`,
           method: 'POST',
           headers: {
@@ -94,10 +138,26 @@ const Feedback = () => {
           },
           data: reqBody
         })
-        console.log('Dank', response)
-      } catch (err) {
-        console.log('Error', err)
-      }
+        .then(interactionResponse => {
+          return createPost(
+            {
+              message: review,
+              images: []
+            },
+            productURL,
+            nonce,
+            'dsnp://1#OndcProofOfPurchase',
+            interactionResponse.data.ticket,
+            accessToken
+          )
+        })
+        .then(res => {
+          router.push(successUrl)
+        })
+        .catch(err => {
+          console.log('Error', err)
+          router.push(errorUrl)
+        })
     }
   }
 
@@ -202,7 +262,7 @@ const Feedback = () => {
               product.descriptor.long_desc,
               token
             )
-            localStorage.clear()
+            // localStorage.clear()
             // if (window)
             //   window.location.href = getReviewLink(
             //     review,

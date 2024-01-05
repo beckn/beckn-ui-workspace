@@ -19,16 +19,16 @@ import axios from 'axios'
 
 function MyApp({ Component, pageProps }: AppProps) {
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      localStorage.setItem(
-        'dsnpAuth',
-        JSON.stringify({
-          accessToken: '3918010f-eb34-4450-a037-0495781e0231',
-          expires: 1704377141680,
-          dsnpId: '27'
-        })
-      )
-    }
+    // if (typeof window !== 'undefined') {
+    //   localStorage.setItem(
+    //     'dsnpAuth',
+    //     JSON.stringify({
+    //       accessToken: '3918010f-eb34-4450-a037-0495781e0231',
+    //       expires: 1704377141680,
+    //       dsnpId: '27'
+    //     })
+    //   )
+    // }
 
     const enableWeb3 = async () => {
       const { web3Enable, web3Accounts, web3FromSource } = await import('@polkadot/extension-dapp')
