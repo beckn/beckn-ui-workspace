@@ -10,15 +10,12 @@ import { ConfirmResponseModel } from '../types/confirm.types'
 import { StatusResponseModel } from '../types/status.types'
 
 const orderStatusMap = {
-  INTIATED: 'Order Received from DNL Embossing',
-  PROGRESS: 'In Progress',
-  COMPLETE: 'Order Complete',
-  PICKUP: 'Ready for Pick-up',
-  ORDERPICKED: 'Order Picked up by DHL Logistics'
+  IN_ASSEMBLY_LINE: 'In Assembly Line',
+  ITEM_DISPATCHED: 'Item Dispatched',
+  DELIVERED: 'Delivered'
 }
 
 const OrderDetails = () => {
-  const [status, setStatus] = useState('Completed')
   const [isLoading, setIsLoading] = useState(true)
   const [statusData, setStatusData] = useState<StatusResponseModel[]>([])
   const [apiCalled, setApiCalled] = useState(false)
@@ -143,44 +140,48 @@ const OrderDetails = () => {
           fontSize="17px"
         />
       </Box>
-      <Box>
-        <Accordion
-          accordionHeader={
-            <>
-              {t.assembly}
-              <Flex
-                justifyContent={'space-between'}
-                alignItems="center"
-                pt={'10px'}
-              >
-                <Typography
-                  variant="subTitleRegular"
-                  text={'RTAL Assembly Line'}
-                  fontSize="12px"
-                />
-                <Typography
-                  variant="subTitleRegular"
-                  text={t.completed}
-                  fontSize="15px"
-                  className={status === 'Completed' ? 'order_status_text_completed' : ''}
-                />
-              </Flex>
-            </>
-          }
-          children={
-            <>
-              <Divider />
-              <Box className="order_status_progress">
-                <OrderStatusProgress
-                  orderStatusMap={orderStatusMap}
-                  orderState={'INTIATED'}
-                  statusTime={formatTimestamp(statusData[0].message.order.fulfillments[0].state.updated_at)}
-                />
-              </Box>
-            </>
-          }
-        />
-      </Box>
+      <Accordion
+        accordionHeader={
+          <>
+            {t.assembly}
+            <Flex
+              justifyContent={'space-between'}
+              alignItems="center"
+              pt={'10px'}
+            >
+              <Typography
+                variant="subTitleRegular"
+                text={'RTAL Assembly Line'}
+                fontSize="12px"
+              />
+              <Typography
+                variant="subTitleRegular"
+                text={
+                  statusData[0].message.order.fulfillments[0].state.descriptor.code === 'DELIVERED' ? t.completed : ''
+                }
+                fontSize="15px"
+                className={
+                  statusData[0].message.order.fulfillments[0].state.descriptor.code === 'DELIVERED'
+                    ? 'order_status_text_completed'
+                    : ''
+                }
+              />
+            </Flex>
+          </>
+        }
+        children={
+          <>
+            <Divider />
+            <Box className="order_status_progress">
+              <OrderStatusProgress
+                orderStatusMap={orderStatusMap}
+                orderState={statusData[0].message.order.fulfillments[0].state.descriptor.code}
+                statusTime={formatTimestamp(statusData[0].message.order.fulfillments[0].state.updated_at)}
+              />
+            </Box>
+          </>
+        }
+      />
     </Box>
   )
 }

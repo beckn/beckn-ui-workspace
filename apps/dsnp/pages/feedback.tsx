@@ -12,6 +12,7 @@ import ImageSection from '@components/productDetails/ImageSection'
 import { IProductRootState, RetailItem } from '@lib/types/products'
 import { getLocalStorage } from '@utils/localStorage'
 import { toBinary } from '@utils/common-utils'
+import { makeInteractionIdAndNonce } from '@utils/review'
 
 const getReviewLink = (
   review: string,
@@ -46,6 +47,12 @@ const getReviewLink = (
   return myUrlWithParams.href
 }
 
+// {
+//   "accessToken": "ea064c54-3c33-4392-a42b-aad26528c075",
+//   "expires": 1704298216177,
+//   "dsnpId": "27"
+// }
+
 const Feedback = () => {
   const { t } = useLanguage()
   const router = useRouter()
@@ -56,10 +63,49 @@ const Feedback = () => {
   const product = getLocalStorage('productDetails').product as RetailItem
   const encodedProduct = getLocalStorage('productDetails').encodedProduct as string
 
+  const submitReview = async (
+    review: string,
+    productURL: string,
+    productName: string,
+    productImage: string,
+    productDesc: string,
+    token: string
+  ) => {
+    const dsnpAuth = getLocalStorage('dsnpAuth')
+    console.log('Dank', dsnpAuth)
+    if (Object.keys(dsnpAuth).length !== 0) {
+      const { accessToken, dsnpId } = dsnpAuth
+      const { interactionId, nonce } = await makeInteractionIdAndNonce(dsnpId)
+      const reqBody = {
+        href: `${window.location.origin}/product?productName=${productName}&productImage=${productImage}&productDesc=${productDesc}&becknified=true`,
+        reference: {
+          token
+        },
+        attributeSetType: 'dsnp://1#OndcProofOfPurchase',
+        interactionId
+      }
+
+      try {
+        const response = await axios.request({
+          url: `https://api.dsnp-social-web.becknprotocol.io/v1/interactions`,
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          },
+          data: reqBody
+        })
+        console.log('Dank', response)
+      } catch (err) {
+        console.log('Error', err)
+      }
+    }
+  }
+
   const getReviewToken = async () => {
     try {
       const response = await axios.request({
         url: `https://dsnp.becknprotocol.io/api/token`,
+        // url: `https://localhost:3000/api/token`,
         method: 'POST'
       })
       return response.data.token
@@ -146,18 +192,26 @@ const Feedback = () => {
         color={'rgba(var(--text-color))'}
         handleOnClick={() => {
           const user = localStorage.getItem('userPhone') as string
-          localStorage.clear()
           localStorage.setItem('userPhone', user)
           getReviewToken().then(token => {
-            if (window)
-              window.location.href = getReviewLink(
-                review,
-                productURL.href,
-                product.descriptor.name,
-                product.descriptor.images[0],
-                product.descriptor.long_desc,
-                token
-              )
+            submitReview(
+              review,
+              productURL.href,
+              product.descriptor.name,
+              product.descriptor.images[0],
+              product.descriptor.long_desc,
+              token
+            )
+            localStorage.clear()
+            // if (window)
+            //   window.location.href = getReviewLink(
+            //     review,
+            //     productURL.href,
+            //     product.descriptor.name,
+            //     product.descriptor.images[0],
+            //     product.descriptor.long_desc,
+            //     token
+            //   )
           })
         }}
         isDisabled={false}

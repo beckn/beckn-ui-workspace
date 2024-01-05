@@ -69,11 +69,9 @@ const SignUp = () => {
             const signedChallenge = await signPayloadWithExtension(selectedAddress, challenge.challenge)
             const loginData = await dsnpLogin(signedChallenge, handles[0]?.publicKey, challenge.challenge)
             setLocalStorage('dsnpAuth', loginData)
-            console.log('Dank login data', loginData)
           } else {
             const createData = await dsnpCreate(formData.name || 'Beckn_user', providerInfo, selectedAddress)
             setLocalStorage('dsnpAuth', createData)
-            console.log('Dank create data', createData)
           }
         } else {
           toast({

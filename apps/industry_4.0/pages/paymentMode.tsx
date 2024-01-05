@@ -14,11 +14,9 @@ import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 
 function PaymentMode() {
   const [checked, setChecked] = useState(false)
-  const theme = useTheme()
 
   const { t } = useLanguage()
   const router = useRouter()
-  const bgColorPrimary = theme.colors.primary['100']
 
   return (
     <>
