@@ -1,6 +1,6 @@
 import { OrderStatusProgress } from '@beckn-ui/becknified-components'
 import { Accordion, Loader, Typography } from '@beckn-ui/molecules'
-import { Box, Divider, Flex, Text, useRadio } from '@chakra-ui/react'
+import { Box, CardBody, Divider, Flex, Text, Image, Card } from '@chakra-ui/react'
 import { useLanguage } from '@hooks/useLanguage'
 import { formatTimestamp, getPayloadForOrderStatus } from '@utils/confirm-utils'
 import axios from 'axios'
@@ -8,6 +8,7 @@ import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { ConfirmResponseModel } from '../types/confirm.types'
 import { StatusResponseModel } from '../types/status.types'
+import TrackIcon from '../public/images/TrackIcon.svg'
 
 const orderStatusMap = {
   IN_ASSEMBLY_LINE: 'In Assembly Line',
@@ -20,7 +21,8 @@ const OrderDetails = () => {
   const [statusData, setStatusData] = useState<StatusResponseModel[]>([])
   const [apiCalled, setApiCalled] = useState(false)
   const { t } = useLanguage()
-
+  const [allOrderDelivered, setAllOrderDelivered] = useState(false)
+  const router = useRouter()
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
   useEffect(() => {
@@ -89,6 +91,13 @@ const OrderDetails = () => {
     return () => clearInterval(intervalId)
   }, [apiUrl])
 
+  const isDelivered = statusData?.[0]?.message?.order?.fulfillments?.[0]?.state?.descriptor?.code === 'DELIVERED'
+  useEffect(() => {
+    if (isDelivered) {
+      setAllOrderDelivered(true)
+    }
+  }, [isDelivered])
+
   if (isLoading && !apiCalled) {
     return (
       <Box
@@ -130,6 +139,52 @@ const OrderDetails = () => {
       maxH={'calc(100vh - 100px)'}
       overflowY="scroll"
     >
+      {allOrderDelivered ? (
+        <Card
+          mt={'20px'}
+          border={'1px solid rgba(94, 196, 1, 1)'}
+          className="border_radius_all"
+        >
+          <CardBody padding={'15px 20px'}>
+            <Flex
+              alignItems={'center'}
+              pb={'3px'}
+            >
+              {/* eslint-disable-next-line jsx-a11y/alt-text */}
+              <Image
+                width={'20px'}
+                height={'20px'}
+                src={TrackIcon}
+              />
+              <Text
+                as={Typography}
+                text={t.allRequestFullfilled}
+                pl={'8px'}
+                fontSize={'17px'}
+                fontWeight={'600'}
+              />
+            </Flex>
+            <Flex
+              alignItems={'center'}
+              fontSize={'15px'}
+              pl={'20px'}
+            >
+              <Text
+                pl={'8px'}
+                as={Typography}
+                text={t.howTodo}
+              />
+              <Text
+                onClick={() => router.push('/feedback')}
+                pl={'10px'}
+                color={'#0560FA'}
+                as={Typography}
+                text={t.rateUs}
+              />
+            </Flex>
+          </CardBody>
+        </Card>
+      ) : null}
       <Box
         pb="15px"
         pt={'20px'}
