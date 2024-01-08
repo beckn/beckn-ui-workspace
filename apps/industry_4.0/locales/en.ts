@@ -87,6 +87,7 @@ const en: { [key: string]: string } = {
   rateDeliveryExperience: 'Rate the overall experience',
   addCommentsHere: 'Add your comments here',
   writeExperience: 'Write about your experience..',
+  shippingDetails: 'Shipping Details',
   orderCancellation: 'Order Cancellation',
   pleaseSelectReason: 'Please select the reason for cancellation',
   orderCancel: 'Order Cancelled!',
