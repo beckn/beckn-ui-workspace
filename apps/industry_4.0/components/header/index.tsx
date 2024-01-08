@@ -47,6 +47,7 @@ const storeHeaderBlackList = [
   '/paymentMode',
   '/invoiceDetails',
   '/assemblyDetails',
+  '/updateShippingDetails',
   '/orderCancellation'
 ]
 const headerValues: PathnameObjectType = {
@@ -59,6 +60,7 @@ const headerValues: PathnameObjectType = {
   '/cart': 'Cart',
   '/paymentMode': 'Select Payment Method',
   '/assemblyDetails': 'Add Assembly Details',
+  '/updateShippingDetails': 'Shipping Details',
   '/orderCancellation': 'Order Cancel'
 }
 

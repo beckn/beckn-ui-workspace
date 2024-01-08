@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import { useRouter } from 'next/router'
+import Router, { useRouter } from 'next/router'
 import { Box, Card, CardBody, Divider, Flex, Image, Radio, RadioGroup, Stack, Text, Textarea } from '@chakra-ui/react'
 import { BottomModal, Loader, Typography } from '@beckn-ui/molecules'
 import { DetailCard, OrderStatusProgress } from '@beckn-ui/becknified-components'
@@ -78,8 +78,20 @@ const OrderDetails = () => {
 
   // Define menu items for the main menu
   const menuItems = [
-    { image: '/images/trackOrder.svg', text: 'Track Order', onClick: () => {} },
-    { image: '/images/updateOrder.svg', text: 'Update Order', onClick: () => {} },
+    {
+      image: '/images/trackOrder.svg',
+      text: 'Track Order',
+      onClick: () => {
+        Router.push('/www.google.com')
+      }
+    },
+    {
+      image: '/images/updateOrder.svg',
+      text: 'Update Order',
+      onClick: () => {
+        Router.push('/updateShippingDetails')
+      }
+    },
     {
       image: '/images/cancelOrder.svg',
       text: (
