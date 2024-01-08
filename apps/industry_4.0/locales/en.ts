@@ -78,6 +78,20 @@ const en: { [key: string]: string } = {
   confirmLoaderSubtext: 'while we confirm your order',
   statusLoaderSubText: 'while we update the current status of your order.',
   emptyOrderHistoryText: 'This space appears quite empty!',
-  noExistingWorkflowText: 'No existing workflows found; create a new workflow to proceed.'
+  noExistingWorkflowText: 'No existing workflows found; create a new workflow to proceed.',
+  allRequestFullfilled: 'All orders delivered!',
+  howTodo: 'How did we do?',
+  rateUs: 'Rate Us',
+  orderDeliveredOnTime: 'Order Delivered on Time!',
+  pleaseShareYourFeedback: 'Please share your feedback with us',
+  rateDeliveryExperience: 'Rate the overall experience',
+  addCommentsHere: 'Add your comments here',
+  writeExperience: 'Write about your experience..',
+  orderCancellation: 'Order Cancellation',
+  pleaseSelectReason: 'Please select the reason for cancellation',
+  orderCancel: 'Order Cancelled!',
+  yourOrderHasBeencancel: 'Your order has been cancelled,',
+  ifYouPaid: 'If you have paid already, it will get ',
+  refundedSoon: 'refunded soon'
 }
 export default en
