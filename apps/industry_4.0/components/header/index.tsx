@@ -46,7 +46,8 @@ const storeHeaderBlackList = [
   '/mobileOtp',
   '/paymentMode',
   '/invoiceDetails',
-  '/assemblyDetails'
+  '/assemblyDetails',
+  '/orderCancellation'
 ]
 const headerValues: PathnameObjectType = {
   '/checkoutPage': 'Review Purchase Order',
@@ -57,7 +58,8 @@ const headerValues: PathnameObjectType = {
   '/signUp': 'Sign Up',
   '/cart': 'Cart',
   '/paymentMode': 'Select Payment Method',
-  '/assemblyDetails': 'Add Assembly Details'
+  '/assemblyDetails': 'Add Assembly Details',
+  '/orderCancellation': 'Order Cancel'
 }
 
 const headerValuesFrench: PathnameObjectType = {
@@ -203,7 +205,7 @@ const BottomHeader = () => {
           {orderIconList.includes(router.pathname) && (
             <Image
               onClick={() => setOrderModalOpen(true)}
-              src="/images/threeDots.svg"
+              src="/images/orderDetailsIcon.svg"
               alt="order icon"
               mr={'20px'}
             />
