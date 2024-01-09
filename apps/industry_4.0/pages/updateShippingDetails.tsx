@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import ShippingForm from '@beckn-ui/becknified-components/src/components/checkout/shipping-form'
+import { Box } from '@chakra-ui/react'
 
 const UpdateShippingDetails = () => {
   const [shippingDetails, setShippingDetails] = useState({
@@ -19,14 +20,18 @@ const UpdateShippingDetails = () => {
   }
 
   return (
-    <>
+    <Box
+      className="hideScroll"
+      maxH={'calc(100vh - 100px)'}
+      overflowY="scroll"
+    >
       <ShippingForm
         onSubmit={handleSubmit}
         values={shippingDetails}
         onChange={handleFormChange}
         submitButton={{ text: 'Submit' }}
       />
-    </>
+    </Box>
   )
 }
 
