@@ -1,16 +1,102 @@
 import { Box, Text, Image, Textarea } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import StarRating from '../components/starRating/StarRating'
 import { useLanguage } from '../hooks/useLanguage'
 import feedbackImg from '../public/images/feedbackImg.svg'
-import { Typography } from '@beckn-ui/molecules'
+import { Loader, Typography } from '@beckn-ui/molecules'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
+import { ConfirmResponseModel } from '../types/confirm.types'
+import axios from 'axios'
 
 const Feedback = () => {
   const { t } = useLanguage()
   const router = useRouter()
   const [ratingForStore, setRatingForStore] = useState(0)
+  const [feedback, setFeedback] = useState('')
+  const [confirmData, setConfirmData] = useState<ConfirmResponseModel[] | null>(null)
+  const [isLoadingForRating, setIsLoadingForRating] = useState(false)
+
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL
+
+  useEffect(() => {
+    if (localStorage && localStorage.getItem('confirmResponse')) {
+      const parsedConfirmData: ConfirmResponseModel[] = JSON.parse(localStorage.getItem('confirmResponse') as string)
+      setConfirmData(parsedConfirmData)
+    }
+  }, [])
+
+  const handleSubmitReview = async (confirmData: ConfirmResponseModel[]) => {
+    try {
+      setIsLoadingForRating(true)
+      const { domain, bpp_id, bpp_uri, transaction_id } = confirmData[0].context
+      const orderId = confirmData[0].message.orderId
+      const ratingPayload = {
+        data: [
+          {
+            context: {
+              transaction_id,
+              bpp_id,
+              bpp_uri,
+              domain
+            },
+            message: {
+              id: orderId,
+              rating_category: 'Order',
+              value: ratingForStore
+            }
+          }
+        ]
+      }
+
+      const ratingResponse = await axios.post(`${apiUrl}/rating`, ratingPayload)
+      if (ratingResponse.data.data.length > 0) {
+        router.push('/homePage')
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  if (!confirmData || confirmData.length === 0) {
+    return <></>
+  }
+
+  if (isLoadingForRating) {
+    return (
+      <Box
+        display={'grid'}
+        height={'calc(100vh - 300px)'}
+        alignContent={'center'}
+      >
+        <Loader>
+          <Box
+            mt={'13px'}
+            display={'flex'}
+            flexDir={'column'}
+            alignItems={'center'}
+          >
+            <Text
+              as={Typography}
+              fontWeight={600}
+              fontSize={'15px'}
+              text={t.pleaseWait}
+            />
+
+            <Text
+              as={Typography}
+              text={t.rateOrderLoaderSubText}
+              textAlign={'center'}
+              alignSelf={'center'}
+              fontWeight={400}
+              fontSize={'15px'}
+            />
+          </Box>
+        </Loader>
+      </Box>
+    )
+  }
+
   return (
     <Box
       className="hideScroll"
@@ -58,6 +144,8 @@ const Feedback = () => {
           mb={'10px'}
         />
         <Textarea
+          value={feedback}
+          onChange={e => setFeedback(e.target.value)}
           height={'124px'}
           resize={'none'}
           mb={'20px'}
@@ -67,7 +155,8 @@ const Feedback = () => {
         <BecknButton
           children="Submit Review"
           className="checkout_btn "
-          handleClick={() => router.push('/homePage')}
+          disabled={!ratingForStore}
+          handleClick={() => handleSubmitReview(confirmData)}
         />
         <BecknButton
           children="Skip for Now"

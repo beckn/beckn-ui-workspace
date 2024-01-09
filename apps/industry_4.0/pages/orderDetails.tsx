@@ -491,7 +491,7 @@ const OrderDetails = () => {
 
               <Text
                 as={Typography}
-                text={t.fetchingTrack}
+                text={t.fetchingTrackLoaderSubtext}
                 textAlign={'center'}
                 alignSelf={'center'}
                 fontWeight={400}
@@ -592,7 +592,9 @@ const OrderDetails = () => {
             disabled={uiState.isProceedDisabled}
             children="Proceed"
             className="checkout_btn"
-            handleClick={() => router.push('/orderCancellation')}
+            handleClick={() => {
+              router.push('/orderCancellation')
+            }}
           />
         </Box>
       </BottomModalScan>
