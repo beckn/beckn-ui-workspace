@@ -93,6 +93,7 @@ const en: { [key: string]: string } = {
   orderCancel: 'Order Cancelled!',
   yourOrderHasBeencancel: 'Your order has been cancelled,',
   ifYouPaid: 'If you have paid already, it will get ',
-  refundedSoon: 'refunded soon'
+  refundedSoon: 'refunded soon',
+  fetchingTrack: 'While we fetch for tracking and support details'
 }
 export default en

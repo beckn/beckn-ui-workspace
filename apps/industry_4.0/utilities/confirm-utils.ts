@@ -62,7 +62,7 @@ export const getPayloadForConfirm = (initResponse: InitResponseModel[]) => {
               provider: {
                 id: provider.id
               },
-              items: [items],
+              items: items,
               fulfillments: fulfillments,
               billing: billing,
               payments: payments
