@@ -46,7 +46,9 @@ const storeHeaderBlackList = [
   '/mobileOtp',
   '/paymentMode',
   '/invoiceDetails',
-  '/assemblyDetails'
+  '/assemblyDetails',
+  '/updateShippingDetails',
+  '/orderCancellation'
 ]
 const headerValues: PathnameObjectType = {
   '/checkoutPage': 'Review Purchase Order',
@@ -57,7 +59,10 @@ const headerValues: PathnameObjectType = {
   '/signUp': 'Sign Up',
   '/cart': 'Cart',
   '/paymentMode': 'Select Payment Method',
-  '/assemblyDetails': 'Add Assembly Details'
+  '/assemblyDetails': 'Add Assembly Details',
+  '/updateShippingDetails': 'Shipping Details',
+  '/orderCancellation': 'Order Cancel',
+  '/feedback': ''
 }
 
 const headerValuesFrench: PathnameObjectType = {
@@ -68,7 +73,7 @@ const headerValuesFrench: PathnameObjectType = {
   '/mobileOtp': 'Se Connecter',
   '/cart': 'Panier',
   '/paymentMode': 'Sélectionner la Méthode de Paiement',
-  feedback: "Retour d'Information"
+  '/feedback': ''
 }
 
 const topHeaderBlackList: string[] = []
@@ -147,6 +152,7 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
 
       {/* Menu Modal */}
       <BottomModal
+        title=""
         isOpen={isMenuModalOpen}
         onClose={handleMenuModalClose}
       >
@@ -203,7 +209,7 @@ const BottomHeader = () => {
           {orderIconList.includes(router.pathname) && (
             <Image
               onClick={() => setOrderModalOpen(true)}
-              src="/images/threeDots.svg"
+              src="/images/orderDetailsIcon.svg"
               alt="order icon"
               mr={'20px'}
             />
@@ -219,6 +225,7 @@ const BottomHeader = () => {
         </Box>
       </Box>
       <BottomModal
+        title=""
         isOpen={isOrderModalOpen}
         onClose={handleOrderModalClose}
       >

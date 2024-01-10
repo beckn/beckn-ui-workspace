@@ -78,7 +78,11 @@ const OrderHistory = () => {
   }
 
   return (
-    <>
+    <Box
+      className="hideScroll"
+      maxH={'calc(100vh - 100px)'}
+      overflowY="scroll"
+    >
       {!orderHistoryList.length ? (
         <EmptyOrder />
       ) : (
@@ -146,7 +150,7 @@ const OrderHistory = () => {
           })}
         </Box>
       )}
-    </>
+    </Box>
   )
 }
 
