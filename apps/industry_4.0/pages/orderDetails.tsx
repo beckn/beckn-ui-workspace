@@ -17,6 +17,7 @@ interface UIState {
   isLoadingForTrackAndSupport: boolean
   isMenuModalOpen: boolean
   isCancelMenuModalOpen: boolean
+  isLoadingForCancel: boolean
 }
 
 interface DataState {
@@ -38,7 +39,8 @@ const OrderDetails = () => {
     isLoading: true,
     isLoadingForTrackAndSupport: false,
     isMenuModalOpen: false,
-    isCancelMenuModalOpen: false
+    isCancelMenuModalOpen: false,
+    isLoadingForCancel: false
   })
 
   const [data, setData] = useState<DataState>({
@@ -343,6 +345,47 @@ const OrderDetails = () => {
     )
   }
 
+  if (!data.confirmData?.length) {
+    return <></>
+  }
+
+  const handleCancelButton = async (confirmData: ConfirmResponseModel[], cancellationReason: string) => {
+    try {
+      setUiState(prevState => ({
+        ...prevState,
+        isLoadingForCancel: true
+      }))
+      const { transaction_id, bpp_id, bpp_uri, domain } = confirmData[0].context
+      const orderId = confirmData[0].message.orderId
+      const cancelPayload = {
+        data: [
+          {
+            context: {
+              transaction_id,
+              bpp_id,
+              bpp_uri,
+              domain
+            },
+            message: {
+              order_id: orderId,
+              cancellation_reason_id: '4',
+              descriptor: {
+                short_desc: cancellationReason
+              }
+            }
+          }
+        ]
+      }
+
+      const cancelResponse = await axios.post(`${apiUrl}/cancel`, cancelPayload)
+      if (cancelResponse.data.data.length > 0) {
+        router.push('/orderCancellation')
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   return (
     <Box
       className="hideScroll"
@@ -547,56 +590,85 @@ const OrderDetails = () => {
         onClose={handleCancelMenuModalClose}
         modalHeader={t.orderCancellation}
       >
-        <Text
-          as={Typography}
-          text={t.pleaseSelectReason}
-          fontSize="15px"
-          fontWeight={500}
-          textAlign="center"
-          pb="20px"
-        />
-        <RadioGroup
-          onChange={value => {
-            setProcessState(prevValue => ({
-              ...prevValue,
-              radioValue: value
-            }))
-            setUiState(prevValue => ({
-              ...prevValue,
-              isProceedDisabled: false
-            }))
-          }}
-          value={processState.radioValue}
-          pl="20px"
-        >
-          {orderCancelReason.map(reasonObj => (
-            <Stack
-              pb="10px"
-              direction="column"
-              key={reasonObj.id}
+        {uiState.isLoadingForCancel ? (
+          <Loader>
+            <Box
+              mt={'13px'}
+              display={'flex'}
+              flexDir={'column'}
+              alignItems={'center'}
             >
-              <Radio value={reasonObj.reason}>{reasonObj.reason}</Radio>
-            </Stack>
-          ))}
-        </RadioGroup>
-        <Textarea
-          w="332px"
-          m="20px"
-          height="124px"
-          resize="none"
-          placeholder="Please specify the reason"
-          boxShadow="0px 4px 6px -1px rgba(0, 0, 0, 0.1), 0px 2px 4px -2px rgba(0, 0, 0, 0.1)"
-        />
-        <Box m="20px">
-          <BecknButton
-            disabled={uiState.isProceedDisabled}
-            children="Proceed"
-            className="checkout_btn"
-            handleClick={() => {
-              router.push('/orderCancellation')
-            }}
-          />
-        </Box>
+              <Text
+                as={Typography}
+                fontWeight={600}
+                fontSize={'15px'}
+                text={t.pleaseWait}
+              />
+
+              <Text
+                as={Typography}
+                text={t.cancelLoaderSubText}
+                textAlign={'center'}
+                alignSelf={'center'}
+                fontWeight={400}
+                fontSize={'15px'}
+              />
+            </Box>
+          </Loader>
+        ) : (
+          <>
+            <Text
+              as={Typography}
+              text={t.pleaseSelectReason}
+              fontSize="15px"
+              fontWeight={500}
+              textAlign="center"
+              pb="20px"
+            />
+            <RadioGroup
+              onChange={value => {
+                setProcessState(prevValue => ({
+                  ...prevValue,
+                  radioValue: value
+                }))
+                setUiState(prevValue => ({
+                  ...prevValue,
+                  isProceedDisabled: false
+                }))
+              }}
+              value={processState.radioValue}
+              pl="20px"
+            >
+              {orderCancelReason.map(reasonObj => (
+                <Stack
+                  pb="10px"
+                  direction="column"
+                  key={reasonObj.id}
+                >
+                  <Radio value={reasonObj.reason}>{reasonObj.reason}</Radio>
+                </Stack>
+              ))}
+            </RadioGroup>
+            <Textarea
+              w="332px"
+              m="20px"
+              height="124px"
+              resize="none"
+              placeholder="Please specify the reason"
+              boxShadow="0px 4px 6px -1px rgba(0, 0, 0, 0.1), 0px 2px 4px -2px rgba(0, 0, 0, 0.1)"
+            />
+            <Box m="20px">
+              <BecknButton
+                disabled={uiState.isProceedDisabled}
+                children="Proceed"
+                className="checkout_btn"
+                handleClick={() => {
+                  handleCancelButton(data.confirmData as ConfirmResponseModel[], processState.radioValue)
+                }}
+              />
+            </Box>
+          </>
+        )}
       </BottomModalScan>
     </Box>
   )
