@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import Router, { useRouter } from 'next/router'
 import { Box, Card, CardBody, Divider, Flex, Image, Radio, RadioGroup, Stack, Text, Textarea } from '@chakra-ui/react'
-import { BottomModal, Loader, Typography } from '@beckn-ui/molecules'
+import { BottomModal, Typography } from '@beckn-ui/molecules'
 import { DetailCard, OrderStatusProgress } from '@beckn-ui/becknified-components'
 import { StatusResponseModel, SupportModel } from '../types/status.types'
 import { useLanguage } from '@hooks/useLanguage'
@@ -10,6 +10,7 @@ import { formatTimestamp, getPayloadForOrderStatus } from '@utils/confirm-utils'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import BottomModalScan from '@components/BottomModal/BottomModalScan'
 import { ConfirmResponseModel } from '../types/confirm.types'
+import LoaderWithMessage from '@components/loader/LoaderWithMessage'
 
 interface UIState {
   isProceedDisabled: boolean
@@ -317,30 +318,10 @@ const OrderDetails = () => {
         height="calc(100vh - 300px)"
         alignContent="center"
       >
-        <Loader>
-          <Box
-            mt="13px"
-            display="flex"
-            flexDir="column"
-            alignItems="center"
-          >
-            <Text
-              as={Typography}
-              fontWeight={600}
-              fontSize="15px"
-              text={t.pleaseWait}
-            />
-
-            <Text
-              as={Typography}
-              text={t.statusLoaderSubText}
-              textAlign="center"
-              alignSelf="center"
-              fontWeight={400}
-              fontSize="15px"
-            />
-          </Box>
-        </Loader>
+        <LoaderWithMessage
+          loadingText={t.pleaseWait}
+          loadingSubText={t.statusLoaderSubText}
+        />
       </Box>
     )
   }
@@ -518,30 +499,10 @@ const OrderDetails = () => {
         onClose={handleMenuModalClose}
       >
         {uiState.isLoadingForTrackAndSupport ? (
-          <Loader>
-            <Box
-              mt={'13px'}
-              display={'flex'}
-              flexDir={'column'}
-              alignItems={'center'}
-            >
-              <Text
-                as={Typography}
-                fontWeight={600}
-                fontSize={'15px'}
-                text={t.pleaseWait}
-              />
-
-              <Text
-                as={Typography}
-                text={t.fetchingTrackLoaderSubtext}
-                textAlign={'center'}
-                alignSelf={'center'}
-                fontWeight={400}
-                fontSize={'15px'}
-              />
-            </Box>
-          </Loader>
+          <LoaderWithMessage
+            loadingText={t.pleaseWait}
+            loadingSubText={t.fetchingTrackLoaderSubtext}
+          />
         ) : (
           <Stack
             gap="20px"
@@ -591,30 +552,10 @@ const OrderDetails = () => {
         modalHeader={t.orderCancellation}
       >
         {uiState.isLoadingForCancel ? (
-          <Loader>
-            <Box
-              mt={'13px'}
-              display={'flex'}
-              flexDir={'column'}
-              alignItems={'center'}
-            >
-              <Text
-                as={Typography}
-                fontWeight={600}
-                fontSize={'15px'}
-                text={t.pleaseWait}
-              />
-
-              <Text
-                as={Typography}
-                text={t.cancelLoaderSubText}
-                textAlign={'center'}
-                alignSelf={'center'}
-                fontWeight={400}
-                fontSize={'15px'}
-              />
-            </Box>
-          </Loader>
+          <LoaderWithMessage
+            loadingText={t.pleaseWait}
+            loadingSubText={t.cancelLoaderSubText}
+          />
         ) : (
           <>
             <Text

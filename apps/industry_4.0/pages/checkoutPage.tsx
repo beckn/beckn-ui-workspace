@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useLanguage } from '../hooks/useLanguage'
-import { ShippingDetailsProps, ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
-import { Box, Flex, Text, useTheme } from '@chakra-ui/react'
-import { Loader, Typography } from '@beckn-ui/molecules'
+import { ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
+import { Box, Flex } from '@chakra-ui/react'
+import { Typography } from '@beckn-ui/molecules'
 import DetailsCard from '@beckn-ui/becknified-components/src/components/checkout/details-card'
 import ShippingSection from '@beckn-ui/becknified-components/src/components/checkout/shipping-section'
 import PaymentDetails from '@beckn-ui/becknified-components/src/components/checkout/payment-details'
@@ -13,6 +13,7 @@ import axios from 'axios'
 import { SelectResponseModel } from '../types/select.types'
 import { useRouter } from 'next/router'
 import { InitResponseModel } from '../types/init.types'
+import LoaderWithMessage from '@components/loader/LoaderWithMessage'
 
 const CheckoutPage = () => {
   const { t } = useLanguage()
@@ -83,30 +84,10 @@ const CheckoutPage = () => {
         height={'calc(100vh - 300px)'}
         alignContent={'center'}
       >
-        <Loader>
-          <Box
-            mt={'13px'}
-            display={'flex'}
-            flexDir={'column'}
-            alignItems={'center'}
-          >
-            <Text
-              as={Typography}
-              fontWeight={600}
-              fontSize={'15px'}
-              text={t.pleaseWait}
-            />
-
-            <Text
-              as={Typography}
-              text={t.checkoutLoaderSubText}
-              textAlign={'center'}
-              alignSelf={'center'}
-              fontWeight={400}
-              fontSize={'15px'}
-            />
-          </Box>
-        </Loader>
+        <LoaderWithMessage
+          loadingText={t.pleaseWait}
+          loadingSubText={t.checkoutLoaderSubText}
+        />
       </Box>
     )
   }
