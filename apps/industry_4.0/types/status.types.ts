@@ -167,3 +167,8 @@ export interface StatusResponseModel {
   context: Context
   message: Message
 }
+
+export interface SupportModel {
+  phone: string
+  email: string
+}

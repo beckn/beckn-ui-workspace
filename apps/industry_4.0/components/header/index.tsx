@@ -47,6 +47,7 @@ const storeHeaderBlackList = [
   '/paymentMode',
   '/invoiceDetails',
   '/assemblyDetails',
+  '/updateShippingDetails',
   '/orderCancellation'
 ]
 const headerValues: PathnameObjectType = {
@@ -59,7 +60,9 @@ const headerValues: PathnameObjectType = {
   '/cart': 'Cart',
   '/paymentMode': 'Select Payment Method',
   '/assemblyDetails': 'Add Assembly Details',
-  '/orderCancellation': 'Order Cancel'
+  '/updateShippingDetails': 'Shipping Details',
+  '/orderCancellation': 'Order Cancel',
+  '/feedback': ''
 }
 
 const headerValuesFrench: PathnameObjectType = {
@@ -70,7 +73,7 @@ const headerValuesFrench: PathnameObjectType = {
   '/mobileOtp': 'Se Connecter',
   '/cart': 'Panier',
   '/paymentMode': 'Sélectionner la Méthode de Paiement',
-  feedback: "Retour d'Information"
+  '/feedback': ''
 }
 
 const topHeaderBlackList: string[] = []
@@ -149,6 +152,7 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
 
       {/* Menu Modal */}
       <BottomModal
+        title=""
         isOpen={isMenuModalOpen}
         onClose={handleMenuModalClose}
       >
@@ -221,6 +225,7 @@ const BottomHeader = () => {
         </Box>
       </Box>
       <BottomModal
+        title=""
         isOpen={isOrderModalOpen}
         onClose={handleOrderModalClose}
       >

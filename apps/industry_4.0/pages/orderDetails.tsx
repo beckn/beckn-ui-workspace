@@ -1,39 +1,68 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import { useRouter } from 'next/router'
+import Router, { useRouter } from 'next/router'
 import { Box, Card, CardBody, Divider, Flex, Image, Radio, RadioGroup, Stack, Text, Textarea } from '@chakra-ui/react'
 import { BottomModal, Loader, Typography } from '@beckn-ui/molecules'
 import { DetailCard, OrderStatusProgress } from '@beckn-ui/becknified-components'
-import { StatusResponseModel } from '../types/status.types'
+import { StatusResponseModel, SupportModel } from '../types/status.types'
 import { useLanguage } from '@hooks/useLanguage'
 import { formatTimestamp, getPayloadForOrderStatus } from '@utils/confirm-utils'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import BottomModalScan from '@components/BottomModal/BottomModalScan'
 import { ConfirmResponseModel } from '../types/confirm.types'
 
-// Define the main functional component
+interface UIState {
+  isProceedDisabled: boolean
+  isLoading: boolean
+  isLoadingForTrackAndSupport: boolean
+  isMenuModalOpen: boolean
+  isCancelMenuModalOpen: boolean
+}
+
+interface DataState {
+  confirmData: ConfirmResponseModel[] | null
+  statusData: StatusResponseModel[]
+  trackUrl: string | null
+  supportData: SupportModel | null
+}
+
+interface ProcessState {
+  apiCalled: boolean
+  allOrderDelivered: boolean
+  radioValue: string
+}
+
 const OrderDetails = () => {
-  // Define state variables
-  const [isProceedDisabled, setIsProceedDisabled] = useState(true)
-  const [isLoading, setIsLoading] = useState(true)
-  const [statusData, setStatusData] = useState<StatusResponseModel[]>([])
-  const [apiCalled, setApiCalled] = useState(false)
-  const [allOrderDelivered, setAllOrderDelivered] = useState(false)
-  const [isMenuModalOpen, setMenuModalOpen] = useState(false)
-  const [isCancelMenuModalOpen, setCancelMenuModalOpen] = useState(false)
-  const [radioValue, setRadioValue] = useState('')
+  const [uiState, setUiState] = useState<UIState>({
+    isProceedDisabled: true,
+    isLoading: true,
+    isLoadingForTrackAndSupport: false,
+    isMenuModalOpen: false,
+    isCancelMenuModalOpen: false
+  })
+
+  const [data, setData] = useState<DataState>({
+    confirmData: null,
+    statusData: [],
+    trackUrl: null,
+    supportData: null
+  })
+
+  const [processState, setProcessState] = useState<ProcessState>({
+    apiCalled: false,
+    allOrderDelivered: false,
+    radioValue: ''
+  })
   const router = useRouter()
   const { t } = useLanguage()
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
-  // Define a mapping for order status
   const orderStatusMap = {
     IN_ASSEMBLY_LINE: 'In Assembly Line',
     ITEM_DISPATCHED: 'Item Dispatched',
     DELIVERED: 'Delivered'
   }
 
-  // Define cancellation reasons
   const orderCancelReason = [
     { id: 1, reason: 'Merchant is taking too long' },
     { id: 2, reason: 'Ordered by mistake' },
@@ -41,45 +70,79 @@ const OrderDetails = () => {
     { id: 4, reason: 'Other' }
   ]
 
+  useEffect(() => {
+    if (localStorage && localStorage.getItem('confirmResponse')) {
+      const parsedConfirmData: ConfirmResponseModel[] = JSON.parse(localStorage.getItem('confirmResponse') as string)
+      setData(prevState => ({
+        ...prevState,
+        confirmData: parsedConfirmData
+      }))
+    }
+  }, [])
+
   // Define functions to handle menu modal opening and closing
   const handleMenuModalClose = () => {
-    setMenuModalOpen(false)
+    setUiState(prevState => ({
+      ...prevState,
+      isMenuModalOpen: false
+    }))
   }
 
   const handleCancelMenuModalClose = () => {
-    setCancelMenuModalOpen(false)
+    setUiState(prevState => ({
+      ...prevState,
+      isCancelMenuModalOpen: false
+    }))
   }
 
   const handleCancelMenuModalOpen = () => {
-    setCancelMenuModalOpen(true)
-    setMenuModalOpen(false)
+    setUiState(prevState => ({
+      ...prevState,
+      isCancelMenuModalOpen: true,
+      isMenuModalOpen: false
+    }))
   }
 
-  const handleEmailCustomer = () => {
-    const emailAddress = 'customer@example.com'
+  const handleEmailCustomer = (email: string) => {
     const subject = 'Regarding Your Order'
     const body = 'Dear Customer,\n\n'
 
-    const mailtoLink = `mailto:${emailAddress}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+    const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
 
     window.open(mailtoLink, '_blank')
-    setMenuModalOpen(false)
+    setUiState(prevState => ({
+      ...prevState,
+      isMenuModalOpen: false
+    }))
   }
-  const handleCallCustomer = () => {
-    const phoneNumber = '+1234567890' // Replace with the actual phone number
-
+  const handleCallCustomer = (phoneNumber: string) => {
     // Use tel: protocol to initiate the phone call
     const telLink = `tel:${phoneNumber}`
 
     // Open the phone app to initiate the call
     window.open(telLink, '_blank')
-    setMenuModalOpen(false)
+    setUiState(prevState => ({
+      ...prevState,
+      isMenuModalOpen: false
+    }))
   }
 
   // Define menu items for the main menu
-  const menuItems = [
-    { image: '/images/trackOrder.svg', text: 'Track Order', onClick: () => {} },
-    { image: '/images/updateOrder.svg', text: 'Update Order', onClick: () => {} },
+  const menuItems = (trackingUrl: string) => [
+    {
+      image: '/images/trackOrder.svg',
+      text: 'Track Order',
+      onClick: () => {
+        window.open(trackingUrl, '_blank')
+      }
+    },
+    {
+      image: '/images/updateOrder.svg',
+      text: 'Update Order',
+      onClick: () => {
+        Router.push('/updateShippingDetails')
+      }
+    },
     {
       image: '/images/cancelOrder.svg',
       text: (
@@ -97,67 +160,53 @@ const OrderDetails = () => {
   ]
 
   // Define menu items for the call menu
-  const callMenuItem = [
-    { image: '/images/callCustomer.svg', text: 'Call Customer Service', onClick: handleCallCustomer },
-    { image: '/images/emailCustomer.svg', text: 'Email Customer Service', onClick: handleEmailCustomer }
+  const callMenuItem = (supportInfo: SupportModel) => [
+    {
+      image: '/images/callCustomer.svg',
+      text: 'Call Customer Service',
+      onClick: () => handleCallCustomer(supportInfo.phone)
+    },
+    {
+      image: '/images/emailCustomer.svg',
+      text: 'Email Customer Service',
+      onClick: () => handleEmailCustomer(supportInfo.email)
+    }
   ]
 
   // Fetch data on component
   useEffect(() => {
     const fetchData = () => {
-      if (localStorage && localStorage.getItem('selectedOrder')) {
-        const selectedOrderData = JSON.parse(localStorage.getItem('selectedOrder') as string)
-        const { bppId, bppUri, orderId } = selectedOrderData
-        const statusPayload = {
-          data: [
-            {
-              context: {
-                transaction_id: '',
-                bpp_id: bppId,
-                bpp_uri: bppUri,
-                domain: 'supply-chain-services:assembly'
-              },
-              message: {
-                order_id: orderId
-              }
-            }
-          ]
-        }
-        setIsLoading(true)
-
-        return axios
-          .post(`${apiUrl}/status`, statusPayload)
-          .then(res => {
-            const resData = res.data.data
-            setStatusData(resData)
-            localStorage.setItem('statusResponse', JSON.stringify(resData))
-          })
-          .catch(err => {
-            console.error('Error fetching order status:', err)
-          })
-          .finally(() => {
-            setIsLoading(false)
-            setApiCalled(true)
-          })
-      }
-      if (localStorage && localStorage.getItem('confirmResponse')) {
+      if (data.confirmData && data.confirmData.length > 0) {
         const parsedConfirmData: ConfirmResponseModel[] = JSON.parse(localStorage.getItem('confirmResponse') as string)
         const statusPayload = getPayloadForOrderStatus(parsedConfirmData)
-        setIsLoading(true)
+        setUiState(prevState => ({
+          ...prevState,
+          isLoading: true
+        }))
 
         return axios
           .post(`${apiUrl}/status`, statusPayload)
           .then(res => {
             const resData = res.data.data
-            setStatusData(resData)
+            setData(prevState => ({
+              ...prevState,
+              statusData: resData
+            }))
+
             localStorage.setItem('statusResponse', JSON.stringify(resData))
           })
           .catch(err => {
             console.error('Error fetching order status:', err)
           })
           .finally(() => {
-            setIsLoading(false)
-            setApiCalled(true)
+            setUiState(prevState => ({
+              ...prevState,
+              isLoading: false
+            }))
+            setProcessState(prevState => ({
+              ...prevState,
+              apiCalled: true
+            }))
           })
       }
     }
@@ -167,19 +216,99 @@ const OrderDetails = () => {
     const intervalId = setInterval(fetchData, 30000)
 
     return () => clearInterval(intervalId)
-  }, [apiUrl])
+  }, [apiUrl, data.confirmData])
 
   // Check if the order is delivered
-  const isDelivered = statusData?.[0]?.message?.order?.fulfillments?.[0]?.state?.descriptor?.code === 'DELIVERED'
+  const isDelivered = data.statusData?.[0]?.message?.order?.fulfillments?.[0]?.state?.descriptor?.code === 'DELIVERED'
 
   useEffect(() => {
     if (isDelivered) {
-      setAllOrderDelivered(true)
+      setProcessState(prevState => ({
+        ...prevState,
+        allOrderDelivered: true
+      }))
     }
   }, [isDelivered])
 
+  const handleOrderDotsClick = async () => {
+    setUiState(prevState => ({
+      ...prevState,
+      isLoadingForTrackAndSupport: true
+    }))
+
+    try {
+      setUiState(prevState => ({
+        ...prevState,
+        isMenuModalOpen: true
+      }))
+
+      if (data.confirmData && data.confirmData.length > 0) {
+        const { domain, bpp_id, bpp_uri, transaction_id } = data.confirmData[0].context
+        const orderId = data.confirmData[0].message.orderId
+        const trackPayload = {
+          data: [
+            {
+              context: {
+                domain: domain,
+                bpp_id: bpp_id,
+                bpp_uri: bpp_uri,
+                transaction_id: transaction_id
+              },
+              orderId,
+              callbackUrl: 'https://dhp-network-bap.becknprotocol.io/track/callback'
+            }
+          ]
+        }
+
+        const supportPayload = {
+          data: [
+            {
+              context: {
+                domain,
+                bpp_id,
+                bpp_uri,
+                transaction_id
+              },
+              message: {
+                order_id: orderId,
+                support: {
+                  callback_phone: '+91-8858150053',
+                  ref_id: '894789-43954',
+                  phone: '+91 9988776543',
+                  email: 'supportperson@gmail.com'
+                }
+              }
+            }
+          ]
+        }
+        const trackRequest = await axios.post(`${apiUrl}/track`, trackPayload)
+        const supportRequest = await axios.post(`${apiUrl}/support`, supportPayload)
+
+        const [trackResponse, supportResponse] = await Promise.all([trackRequest, supportRequest])
+
+        if (trackResponse.data && supportResponse.data) {
+          setData(prevState => ({
+            ...prevState,
+            trackUrl: trackResponse.data.data[0].message.tracking.url,
+            supportData: {
+              email: supportResponse.data.data[0].message.support.email,
+              phone: supportResponse.data.data[0].message.support.phone
+            }
+          }))
+
+          setUiState(prevState => ({
+            ...prevState,
+            isLoadingForTrackAndSupport: false
+          }))
+        }
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   // Display loading state if data is still being fetched
-  if (isLoading && !apiCalled) {
+  if (uiState.isLoading && !processState.apiCalled) {
     return (
       <Box
         display="grid"
@@ -214,15 +343,13 @@ const OrderDetails = () => {
     )
   }
 
-  // Return the main JSX structure
   return (
     <Box
       className="hideScroll"
       maxH="calc(100vh - 100px)"
       overflowY="scroll"
     >
-      {/* Display completion message if all orders are delivered */}
-      {allOrderDelivered && (
+      {processState.allOrderDelivered && (
         <Card
           mt="20px"
           border="1px solid rgba(94, 196, 1, 1)"
@@ -296,7 +423,7 @@ const OrderDetails = () => {
                 fontWeight="600"
               />
               <Image
-                onClick={() => setMenuModalOpen(true)}
+                onClick={handleOrderDotsClick}
                 src="/images/threeDots.svg"
                 alt="threeDots"
               />
@@ -315,13 +442,13 @@ const OrderDetails = () => {
               <Typography
                 variant="subTitleRegular"
                 text={
-                  statusData[0]?.message?.order?.fulfillments[0]?.state?.descriptor?.code === 'DELIVERED'
+                  data.statusData[0]?.message?.order?.fulfillments[0]?.state?.descriptor?.code === 'DELIVERED'
                     ? t.completed
                     : ''
                 }
                 fontSize="15px"
                 className={
-                  statusData[0]?.message?.order?.fulfillments[0]?.state?.descriptor?.code === 'DELIVERED'
+                  data.statusData[0]?.message?.order?.fulfillments[0]?.state?.descriptor?.code === 'DELIVERED'
                     ? 'order_status_text_completed'
                     : ''
                 }
@@ -334,8 +461,8 @@ const OrderDetails = () => {
           <Box className="order_status_progress">
             <OrderStatusProgress
               orderStatusMap={orderStatusMap}
-              orderState={statusData[0]?.message?.order?.fulfillments[0]?.state?.descriptor?.code}
-              statusTime={formatTimestamp(statusData[0]?.message?.order?.fulfillments[0]?.state?.updated_at)}
+              orderState={data.statusData[0]?.message?.order?.fulfillments[0]?.state?.descriptor?.code}
+              statusTime={formatTimestamp(data.statusData[0]?.message?.order?.fulfillments[0]?.state?.updated_at)}
             />
           </Box>
         </CardBody>
@@ -343,52 +470,80 @@ const OrderDetails = () => {
 
       {/* Display main bottom modal */}
       <BottomModal
-        isOpen={isMenuModalOpen}
+        title=""
+        isOpen={uiState.isMenuModalOpen}
         onClose={handleMenuModalClose}
       >
-        <Stack
-          gap="20px"
-          p={'20px 0px'}
-        >
-          {menuItems.map((menuItem, index) => (
-            <Flex
-              key={index}
-              columnGap="10px"
-              alignItems="center"
-              onClick={menuItem.onClick}
+        {uiState.isLoadingForTrackAndSupport ? (
+          <Loader>
+            <Box
+              mt={'13px'}
+              display={'flex'}
+              flexDir={'column'}
+              alignItems={'center'}
             >
-              <Image src={menuItem.image} />
               <Text
                 as={Typography}
-                text={menuItem.text}
-                fontSize="15px"
-                fontWeight={400}
+                fontWeight={600}
+                fontSize={'15px'}
+                text={t.pleaseWait}
               />
-            </Flex>
-          ))}
-          <Divider />
-          {callMenuItem.map((menuItem, index) => (
-            <Flex
-              key={index}
-              columnGap="10px"
-              alignItems="center"
-              onClick={menuItem.onClick}
-            >
-              <Image src={menuItem.image} />
+
               <Text
                 as={Typography}
-                text={menuItem.text}
-                fontSize="15px"
+                text={t.fetchingTrackLoaderSubtext}
+                textAlign={'center'}
+                alignSelf={'center'}
                 fontWeight={400}
+                fontSize={'15px'}
               />
-            </Flex>
-          ))}
-        </Stack>
+            </Box>
+          </Loader>
+        ) : (
+          <Stack
+            gap="20px"
+            p={'20px 0px'}
+          >
+            {menuItems(data.trackUrl as string).map((menuItem, index) => (
+              <Flex
+                key={index}
+                columnGap="10px"
+                alignItems="center"
+                onClick={menuItem.onClick}
+              >
+                <Image src={menuItem.image} />
+                <Text
+                  as={Typography}
+                  text={menuItem.text}
+                  fontSize="15px"
+                  fontWeight={400}
+                />
+              </Flex>
+            ))}
+            <Divider />
+            {callMenuItem(data.supportData as SupportModel).map((menuItem, index) => (
+              <Flex
+                key={index}
+                columnGap="10px"
+                alignItems="center"
+                onClick={menuItem.onClick}
+              >
+                <Image src={menuItem.image} />
+                <Text
+                  as={Typography}
+                  text={menuItem.text}
+                  fontSize="15px"
+                  fontWeight={400}
+                />
+              </Flex>
+            ))}
+          </Stack>
+        )}
       </BottomModal>
 
       {/* Display cancellation bottom modal */}
       <BottomModalScan
-        isOpen={isCancelMenuModalOpen}
+        isOpen={uiState.isCancelMenuModalOpen}
         onClose={handleCancelMenuModalClose}
         modalHeader={t.orderCancellation}
       >
@@ -402,10 +557,16 @@ const OrderDetails = () => {
         />
         <RadioGroup
           onChange={value => {
-            setRadioValue(value)
-            setIsProceedDisabled(false)
+            setProcessState(prevValue => ({
+              ...prevValue,
+              radioValue: value
+            }))
+            setUiState(prevValue => ({
+              ...prevValue,
+              isProceedDisabled: false
+            }))
           }}
-          value={radioValue}
+          value={processState.radioValue}
           pl="20px"
         >
           {orderCancelReason.map(reasonObj => (
@@ -428,10 +589,12 @@ const OrderDetails = () => {
         />
         <Box m="20px">
           <BecknButton
-            disabled={isProceedDisabled}
+            disabled={uiState.isProceedDisabled}
             children="Proceed"
             className="checkout_btn"
-            handleClick={() => router.push('/orderCancellation')}
+            handleClick={() => {
+              router.push('/orderCancellation')
+            }}
           />
         </Box>
       </BottomModalScan>

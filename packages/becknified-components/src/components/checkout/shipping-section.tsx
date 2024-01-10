@@ -27,7 +27,6 @@ const ShippingSection: React.FC<ShippingSectionProps<FormField[]>> = ({
     <Box>
       <Flex
         pb={'10px'}
-        mt={'20px'}
         justifyContent={'space-between'}
       >
         <Typography

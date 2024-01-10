@@ -87,11 +87,15 @@ const en: { [key: string]: string } = {
   rateDeliveryExperience: 'Rate the overall experience',
   addCommentsHere: 'Add your comments here',
   writeExperience: 'Write about your experience..',
+  shippingDetails: 'Shipping Details',
   orderCancellation: 'Order Cancellation',
   pleaseSelectReason: 'Please select the reason for cancellation',
   orderCancel: 'Order Cancelled!',
   yourOrderHasBeencancel: 'Your order has been cancelled,',
   ifYouPaid: 'If you have paid already, it will get ',
-  refundedSoon: 'refunded soon'
+  refundedSoon: 'refunded soon',
+  fetchingTrackLoaderSubtext: 'While we fetch for tracking and support details',
+  updateOrderLoaderSubText: 'While we update your order',
+  rateOrderLoaderSubText: 'While we submit your feedback'
 }
 export default en
