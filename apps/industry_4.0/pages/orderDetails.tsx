@@ -499,10 +499,17 @@ const OrderDetails = () => {
         onClose={handleMenuModalClose}
       >
         {uiState.isLoadingForTrackAndSupport ? (
-          <LoaderWithMessage
-            loadingText={t.pleaseWait}
-            loadingSubText={t.fetchingTrackLoaderSubtext}
-          />
+          <Box
+            display={'flex'}
+            alignItems="center"
+            justifyContent={'center'}
+            height={'300px'}
+          >
+            <LoaderWithMessage
+              loadingText={t.pleaseWait}
+              loadingSubText={t.fetchingTrackLoaderSubtext}
+            />
+          </Box>
         ) : (
           <Stack
             gap="20px"
