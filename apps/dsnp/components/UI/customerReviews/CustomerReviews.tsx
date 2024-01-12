@@ -48,7 +48,7 @@ const CustomerReviews: React.FC<ReviewProps> = ({ name, rating, reviewHeading, r
             fontSize={'15px'}
             fontWeight={400}
           >
-            {name} |{' '}
+            {name && name.split('.')[0]} |{' '}
             <span
               style={{
                 fontSize: '12px'
