@@ -62,6 +62,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   }, [])
 
   useEffect(() => {
+    console.log('Dank code for iframe')
     function handleMessage(event: MessageEvent) {
       if (!parentURLs.includes(event.origin)) return
       if (event.data.type && event.data.type === 'polkaAccounts') {
