@@ -69,7 +69,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         const allAccounts = event.data.data
         console.log('From EC', allAccounts)
         localStorage.setItem('polkaAddresses', JSON.stringify(allAccounts))
-        window.location.reload()
+        // if(!localStorage.getItem('polkaAddresses')) window.location.reload()
       }
     }
 
