@@ -179,6 +179,54 @@ const OrderDetails = () => {
   // Fetch data on component
   useEffect(() => {
     const fetchData = () => {
+      if (localStorage && localStorage.getItem('selectedOrder')) {
+        const selectedOrderData = JSON.parse(localStorage.getItem('selectedOrder') as string)
+        const { bppId, bppUri, orderId } = selectedOrderData
+        const statusPayload = {
+          data: [
+            {
+              context: {
+                transaction_id: '',
+                bpp_id: bppId,
+                bpp_uri: bppUri,
+                domain: 'supply-chain-services:assembly'
+              },
+              message: {
+                order_id: orderId
+              }
+            }
+          ]
+        }
+        setUiState(prevState => ({
+          ...prevState,
+          isLoading: true
+        }))
+
+        return axios
+          .post(`${apiUrl}/status`, statusPayload)
+          .then(res => {
+            const resData = res.data.data
+            setData(prevState => ({
+              ...prevState,
+              statusData: resData
+            }))
+            localStorage.setItem('statusResponse', JSON.stringify(resData))
+          })
+          .catch(err => {
+            console.error('Error fetching order status:', err)
+          })
+          .finally(() => {
+            setUiState(prevState => ({
+              ...prevState,
+              isLoading: false
+            }))
+
+            setProcessState(prevState => ({
+              ...prevState,
+              apiCalled: true
+            }))
+          })
+      }
       if (data.confirmData && data.confirmData.length > 0) {
         const parsedConfirmData: ConfirmResponseModel[] = JSON.parse(localStorage.getItem('confirmResponse') as string)
         const statusPayload = getPayloadForOrderStatus(parsedConfirmData)
