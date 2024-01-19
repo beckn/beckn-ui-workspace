@@ -164,6 +164,7 @@ interface Message {
 }
 
 export interface StatusResponseModel {
+  length: number
   context: Context
   message: Message
 }

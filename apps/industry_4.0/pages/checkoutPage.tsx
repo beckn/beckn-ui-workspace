@@ -233,18 +233,20 @@ const CheckoutPage = () => {
           </DetailsCard>
         )}
       </Box>
-      <BecknButton
-        disabled={!initData.length}
-        children="Proceed to Payment"
-        className="checkout_btn "
-        handleClick={() => router.push('/paymentMode')}
-      />
-      <BecknButton
-        children="Cancel Order"
-        variant="outline"
-        className="checkout_btn"
-        handleClick={() => router.push('/homePage')}
-      />
+      <Box m={'20px 0px'}>
+        <BecknButton
+          disabled={!initData.length}
+          children="Proceed to Payment"
+          className="checkout_btn "
+          handleClick={() => router.push('/paymentMode')}
+        />
+        <BecknButton
+          children="Cancel Order"
+          variant="outline"
+          className="checkout_btn"
+          handleClick={() => router.push('/homePage')}
+        />
+      </Box>
     </Box>
   )
 }

@@ -332,10 +332,73 @@ const OrderDetails = () => {
             }
           ]
         }
-        const trackRequest = await axios.post(`${apiUrl}/track`, trackPayload)
-        const supportRequest = await axios.post(`${apiUrl}/support`, supportPayload)
 
-        const [trackResponse, supportResponse] = await Promise.all([trackRequest, supportRequest])
+        const [trackResponse, supportResponse] = await Promise.all([
+          axios.post(`${apiUrl}/track`, trackPayload),
+          axios.post(`${apiUrl}/support`, supportPayload)
+        ])
+
+        if (trackResponse.data && supportResponse.data) {
+          setData(prevState => ({
+            ...prevState,
+            trackUrl: trackResponse.data.data[0].message.tracking.url,
+            supportData: {
+              email: supportResponse.data.data[0].message.support.email,
+              phone: supportResponse.data.data[0].message.support.phone
+            }
+          }))
+
+          setUiState(prevState => ({
+            ...prevState,
+            isLoadingForTrackAndSupport: false
+          }))
+        }
+      } else if (localStorage.getItem('selectedOrder') && localStorage.getItem('statusResponse')) {
+        const selectedOrderData = JSON.parse(localStorage.getItem('selectedOrder') as string)
+        const { bppId, bppUri, orderId } = selectedOrderData
+        const statusResponseData = JSON.parse(localStorage.getItem('statusResponse') as string)
+        const { domain, transaction_id } = statusResponseData[0].context
+        const trackPayload = {
+          data: [
+            {
+              context: {
+                domain: domain,
+                bpp_id: bppId,
+                bpp_uri: bppUri,
+                transaction_id: transaction_id
+              },
+              orderId,
+              callbackUrl: 'https://dhp-network-bap.becknprotocol.io/track/callback'
+            }
+          ]
+        }
+
+        const supportPayload = {
+          data: [
+            {
+              context: {
+                domain: domain,
+                bpp_id: bppId,
+                bpp_uri: bppUri,
+                transaction_id: transaction_id
+              },
+              message: {
+                order_id: orderId,
+                support: {
+                  callback_phone: '+91-8858150053',
+                  ref_id: '894789-43954',
+                  phone: '+91 9988776543',
+                  email: 'supportperson@gmail.com'
+                }
+              }
+            }
+          ]
+        }
+
+        const [trackResponse, supportResponse] = await Promise.all([
+          axios.post(`${apiUrl}/track`, trackPayload),
+          axios.post(`${apiUrl}/support`, supportPayload)
+        ])
 
         if (trackResponse.data && supportResponse.data) {
           setData(prevState => ({
@@ -374,44 +437,86 @@ const OrderDetails = () => {
     )
   }
 
-  if (!data.confirmData?.length) {
+  if (!data.confirmData?.length && !localStorage.getItem('selectedOrder')) {
     return <></>
   }
 
-  const handleCancelButton = async (confirmData: ConfirmResponseModel[], cancellationReason: string) => {
+  const handleCancelButton = async (
+    confirmData: ConfirmResponseModel[] | null | undefined,
+    statusData: StatusResponseModel,
+    cancellationReason: string
+  ) => {
     try {
       setUiState(prevState => ({
         ...prevState,
         isLoadingForCancel: true
       }))
-      const { transaction_id, bpp_id, bpp_uri, domain } = confirmData[0].context
-      const orderId = confirmData[0].message.orderId
-      const cancelPayload = {
-        data: [
-          {
-            context: {
-              transaction_id,
-              bpp_id,
-              bpp_uri,
-              domain
-            },
-            message: {
-              order_id: orderId,
-              cancellation_reason_id: '4',
-              descriptor: {
-                short_desc: cancellationReason
+
+      // console.log(confirmData)
+      if (confirmData && confirmData.length > 0) {
+        const { transaction_id, bpp_id, bpp_uri, domain } = confirmData[0].context
+        const orderId = confirmData[0].message.orderId
+        const cancelPayload = {
+          data: [
+            {
+              context: {
+                transaction_id,
+                bpp_id,
+                bpp_uri,
+                domain
+              },
+              message: {
+                order_id: orderId,
+                cancellation_reason_id: '4',
+                descriptor: {
+                  short_desc: cancellationReason
+                }
               }
             }
-          }
-        ]
-      }
+          ]
+        }
 
-      const cancelResponse = await axios.post(`${apiUrl}/cancel`, cancelPayload)
-      if (cancelResponse.data.data.length > 0) {
-        router.push('/orderCancellation')
+        const cancelResponse = await axios.post(`${apiUrl}/cancel`, cancelPayload)
+
+        if (cancelResponse.data.data.length > 0) {
+          router.push('/orderCancellation')
+        }
+      } else if (statusData && statusData.length > 0 && localStorage.getItem('selectedOrder')) {
+        const selectedOrderData = JSON.parse(localStorage.getItem('selectedOrder') as string)
+        const { orderId } = selectedOrderData
+        const { transaction_id, bpp_id, bpp_uri, domain } = statusData[0].context
+        const cancelPayload = {
+          data: [
+            {
+              context: {
+                transaction_id,
+                bpp_id,
+                bpp_uri,
+                domain
+              },
+              message: {
+                order_id: orderId,
+                cancellation_reason_id: '4',
+                descriptor: {
+                  short_desc: cancellationReason
+                }
+              }
+            }
+          ]
+        }
+
+        const cancelResponse = await axios.post(`${apiUrl}/cancel`, cancelPayload)
+        if (cancelResponse.data.data.length > 0) {
+          router.push('/orderCancellation')
+        }
       }
     } catch (error) {
       console.error(error)
+    } finally {
+      setUiState(prevState => ({
+        ...prevState,
+        isLoadingForCancel: false
+      }))
     }
   }
 
@@ -659,7 +764,11 @@ const OrderDetails = () => {
                 children="Proceed"
                 className="checkout_btn"
                 handleClick={() => {
-                  handleCancelButton(data.confirmData as ConfirmResponseModel[], processState.radioValue)
+                  handleCancelButton(
+                    data.confirmData as ConfirmResponseModel[],
+                    data.statusData as StatusResponseModel,
+                    processState.radioValue
+                  )
                 }}
               />
             </Box>
