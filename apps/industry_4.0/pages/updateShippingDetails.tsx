@@ -32,35 +32,70 @@ const UpdateShippingDetails = () => {
   const handleSubmit = async (formData: any, confirmData: ConfirmResponseModel[]) => {
     try {
       setIsLoadingForUpdate(true)
-      const { domain, bpp_id, bpp_uri, transaction_id } = confirmData[0].context
-      const orderId = confirmData[0].message.orderId
-      const { name, address, email, mobileNumber } = formData
-      const updateRequestPayload = {
-        data: [
-          {
-            context: {
-              domain,
-              bpp_id,
-              bpp_uri,
-              transaction_id
-            },
-            orderId,
-            updateDetails: {
-              updateTarget: 'order.billing',
+      if (confirmData && confirmData.length > 0) {
+        const { domain, bpp_id, bpp_uri, transaction_id } = confirmData[0].context
+        const orderId = confirmData[0].message.orderId
+        const { name, address, email, mobileNumber } = formData
+        const updateRequestPayload = {
+          data: [
+            {
+              context: {
+                domain,
+                bpp_id,
+                bpp_uri,
+                transaction_id
+              },
+              orderId,
+              updateDetails: {
+                updateTarget: 'order.billing',
 
-              billing: {
-                name: name,
-                address: address,
-                email: email,
-                phone: mobileNumber
+                billing: {
+                  name: name,
+                  address: address,
+                  email: email,
+                  phone: mobileNumber
+                }
               }
             }
-          }
-        ]
-      }
-      const updateResponse = await axios.post(`${apiUrl}/update`, updateRequestPayload)
-      if (updateResponse.data.data.length > 0) {
-        router.push('/orderDetails')
+          ]
+        }
+        const updateResponse = await axios.post(`${apiUrl}/update`, updateRequestPayload)
+        if (updateResponse.data.data.length > 0) {
+          router.push('/orderDetails')
+        }
+      } else if (localStorage.getItem('selectedOrder') && localStorage.getItem('statusResponse')) {
+        const statusResponseData = JSON.parse(localStorage.getItem('statusResponse') as string)
+        const { domain, transaction_id, bpp_id, bpp_uri } = statusResponseData[0].context
+        const selectedOrderData = JSON.parse(localStorage.getItem('selectedOrder') as string)
+        const { orderId } = selectedOrderData
+        const { name, address, email, mobileNumber } = formData
+        const updateRequestPayload = {
+          data: [
+            {
+              context: {
+                domain,
+                bpp_id,
+                bpp_uri,
+                transaction_id
+              },
+              orderId,
+              updateDetails: {
+                updateTarget: 'order.billing',
+
+                billing: {
+                  name: name,
+                  address: address,
+                  email: email,
+                  phone: mobileNumber
+                }
+              }
+            }
+          ]
+        }
+        const updateResponse = await axios.post(`${apiUrl}/update`, updateRequestPayload)
+        if (updateResponse.data.data.length > 0) {
+          router.push('/orderDetails')
+        }
       }
     } catch (error) {
       console.error('error in update', error)
@@ -71,10 +106,9 @@ const UpdateShippingDetails = () => {
     setShippingDetails(prevDetails => ({ ...prevDetails, ...changedData }))
   }
 
-  if (!confirmData || confirmData.length === 0) {
+  if (!confirmData?.length && !localStorage.getItem('selectedOrder')) {
     return <></>
   }
-
   if (isLoadingForUpdate) {
     return (
       <Box
