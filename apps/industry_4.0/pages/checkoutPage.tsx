@@ -33,6 +33,13 @@ const CheckoutPage = () => {
     address: '15 Rue du Soleil, Paris, France',
     pinCode: '750013'
   })
+  const [shippingForm, setShippingForm] = useState<ShippingFormInitialValuesType>({
+    name: 'Antoine Dubois',
+    mobileNumber: '0612345678',
+    email: 'antoine.dubois@gmail.com',
+    address: '15 Rue du Soleil, Paris, France',
+    pinCode: '750013'
+  })
 
   const router = useRouter()
 
@@ -190,9 +197,7 @@ const CheckoutPage = () => {
             },
             submitButton: { text: 'Save Shipping Details' },
             values: detailsForm,
-            onChange: data => () => {
-              return
-            }
+            onChange: data => setdetailsForm(data)
           }}
         />
         <ShippingSection
@@ -203,18 +208,32 @@ const CheckoutPage = () => {
           isBilling={true}
           showDetails={showBillingDetails}
           shippingDetails={{
-            name: detailsForm.name,
-            location: detailsForm.address,
-            number: detailsForm.mobileNumber,
+            name: shippingForm.name,
+            location: shippingForm.address,
+            number: shippingForm.mobileNumber,
             title: t.billing
           }}
           shippingForm={{
-            onSubmit: data => setShowBillingDetails(true),
+            onSubmit: data => {
+              setIsLoadingForInit(true)
+              const initPayload = getPayloadForInitRequest(selectedProduct, data)
+              axios
+                .post(`${apiUrl}/init`, initPayload)
+                .then(res => {
+                  const initResponseData = res.data.data
+                  setInitData(initResponseData) //Need to check
+                  setIsLoadingForInit(false)
+                  setShowBillingDetails(true)
+                })
+                .catch(e => {
+                  setError(e.message)
+                  setIsLoadingForInit(false)
+                  console.error(e)
+                })
+            },
             submitButton: { text: 'Save Billing Details' },
-            values: detailsForm,
-            onChange: data => () => {
-              return
-            }
+            values: shippingForm,
+            onChange: data => setShippingForm(data)
           }}
         />
         {initData.length > 0 && (
