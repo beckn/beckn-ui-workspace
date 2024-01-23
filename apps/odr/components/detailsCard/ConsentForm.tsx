@@ -87,6 +87,9 @@ const ConsentForm: React.FC<ConsentFormProps> = props => {
     .filter(([key]) => key !== 'checkbox')
     .every(([_, value]) => value.trim() !== '')
 
+  const handleCancel = () => {
+    props.onClose()
+  }
   return (
     <>
       <Modal
@@ -201,7 +204,7 @@ const ConsentForm: React.FC<ConsentFormProps> = props => {
               buttonText={t.cancel}
               background={'transparent'}
               color={'rgba(var(--color-primary))'}
-              handleOnClick={() => props.onClose}
+              handleOnClick={handleCancel}
               isDisabled={false}
             />
           </ModalBody>
