@@ -11,28 +11,7 @@ import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import BottomModalScan from '@components/BottomModal/BottomModalScan'
 import { ConfirmResponseModel } from '../types/confirm.types'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
-
-interface UIState {
-  isProceedDisabled: boolean
-  isLoading: boolean
-  isLoadingForTrackAndSupport: boolean
-  isMenuModalOpen: boolean
-  isCancelMenuModalOpen: boolean
-  isLoadingForCancel: boolean
-}
-
-interface DataState {
-  confirmData: ConfirmResponseModel[] | null
-  statusData: StatusResponseModel[]
-  trackUrl: string | null
-  supportData: SupportModel | null
-}
-
-interface ProcessState {
-  apiCalled: boolean
-  allOrderDelivered: boolean
-  radioValue: string
-}
+import { UIState, DataState, ProcessState } from '../types/order-details.types'
 
 const OrderDetails = () => {
   const [uiState, setUiState] = useState<UIState>({
@@ -61,6 +40,8 @@ const OrderDetails = () => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
   const orderStatusMap = {
+    CANCELLED: 'Cancelled',
+    ['ITEM PRINTING']: 'Item Printing',
     IN_ASSEMBLY_LINE: 'In Assembly Line',
     ITEM_DISPATCHED: 'Item Dispatched',
     DELIVERED: 'Delivered'
@@ -443,7 +424,7 @@ const OrderDetails = () => {
 
   const handleCancelButton = async (
     confirmData: ConfirmResponseModel[] | null | undefined,
-    statusData: StatusResponseModel,
+    statusData: StatusResponseModel[],
     cancellationReason: string
   ) => {
     try {
@@ -766,7 +747,7 @@ const OrderDetails = () => {
                 handleClick={() => {
                   handleCancelButton(
                     data.confirmData as ConfirmResponseModel[],
-                    data.statusData as StatusResponseModel,
+                    data.statusData as StatusResponseModel[],
                     processState.radioValue
                   )
                 }}
