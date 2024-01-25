@@ -72,9 +72,6 @@ export const dsnpCreate = async (handle: string, providerInfo: any, address: str
 
   const handlePayload = await payloadHandle(expiration, handle)
   // const handlePayload = payloadData;
-
-  console.log('Dank', handlePayload)
-
   const handleSignature = await signPayloadWithExtension(address, handlePayload.toU8a())
 
   if (!handleSignature.startsWith('0x')) throw Error('Unable to sign: ' + handleSignature)
@@ -85,6 +82,17 @@ export const dsnpCreate = async (handle: string, providerInfo: any, address: str
 
   if (!addProviderSignature.startsWith('0x')) throw Error('Unable to sign: ' + handleSignature)
 
+  return dsnpRegister(expiration, handle, address, addProviderSignature, handleSignature)
+}
+
+export const dsnpRegister = async (
+  expiration: number,
+  handle: string,
+  address: string,
+  addProviderSignature: any,
+  handleSignature: any
+) => {
+  console.log('Dank', handle)
   const data = {
     algo: 'SR25519',
     encoding: 'hex',

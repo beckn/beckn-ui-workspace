@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useDispatch } from 'react-redux'
-import { Box, Text } from '@chakra-ui/react'
+import { Box } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
-import { Loader } from '@beckn-ui/molecules'
 import { parsedSearchlist } from '@utils/search-results.utils'
 import { ProductCard } from '@beckn-ui/becknified-components'
 import ProductCardRenderer from '@components/productCard/product-card-renderer'
@@ -11,6 +10,7 @@ import SearchBar from '../components/header/SearchBar'
 import { useLanguage } from '../hooks/useLanguage'
 import { ParsedItemModel } from '../types/search.types'
 import TopSheet from '@components/topSheet/TopSheet'
+import LoaderWithMessage from '@components/loader/LoaderWithMessage'
 
 //Mock data for testing search API. Will remove after the resolution of CORS issue
 
@@ -97,27 +97,10 @@ const Search = () => {
             height={'calc(100vh - 300px)'}
             alignContent={'center'}
           >
-            <Loader>
-              <Box
-                mt={'13px'}
-                display={'flex'}
-                flexDir={'column'}
-                alignItems={'center'}
-              >
-                <Text
-                  fontWeight={600}
-                  fontSize={'17px'}
-                >
-                  {t.pleaseWait}
-                </Text>
-                <Text
-                  fontWeight={400}
-                  fontSize={'15px'}
-                >
-                  {t.searchLoaderSubText}
-                </Text>
-              </Box>
-            </Loader>
+            <LoaderWithMessage
+              loadingText={t.pleaseWait}
+              loadingSubText={t.searchLoaderSubText}
+            />
           </Box>
         ) : (
           <>

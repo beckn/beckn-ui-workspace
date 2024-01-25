@@ -111,7 +111,8 @@ const Feedback = () => {
     productName: string,
     productImage: string,
     productDesc: string,
-    token: string
+    token: string,
+    id: string
   ) => {
     const dsnpAuth = getLocalStorage('dsnpAuth')
     const successUrl = `/product?productName=${productName}&productImage=${productImage}&reviewSubmitted=true`
@@ -120,7 +121,7 @@ const Feedback = () => {
       const { accessToken, dsnpId } = dsnpAuth
       const { interactionId, nonce } = await makeInteractionIdAndNonce(dsnpId)
       const reqBody = {
-        href: `${window.location.origin}/product?productName=${productName}&productImage=${productImage}&productDesc=${productDesc}&becknified=true`,
+        href: `${window.location.origin}/product?productName=${productName}&productImage=${productImage}&productDesc=${productDesc}&productId=${id}&becknified=true`,
         // href: `https://dsnp-stage.becknprotocol.io/product?productName=${productName}&productImage=${productImage}&productDesc=${productDesc}&becknified=true`,
         reference: {
           token
@@ -144,7 +145,7 @@ const Feedback = () => {
               message: review,
               images: []
             },
-            productURL,
+            `${window.location.origin}/product?productName=${productName}&productImage=${productImage}&productDesc=${productDesc}&becknified=true`,
             nonce,
             'dsnp://1#OndcProofOfPurchase',
             interactionResponse.data.ticket,
@@ -260,18 +261,9 @@ const Feedback = () => {
               product.descriptor.name,
               product.descriptor.images[0],
               product.descriptor.long_desc,
-              token
-            )
-            // localStorage.clear()
-            // if (window)
-            //   window.location.href = getReviewLink(
-            //     review,
-            //     productURL.href,
-            //     product.descriptor.name,
-            //     product.descriptor.images[0],
-            //     product.descriptor.long_desc,
-            //     token
-            //   )
+              token,
+              product.id
+            ) // localStorage.clear()
           })
         }}
         isDisabled={false}

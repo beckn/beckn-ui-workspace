@@ -6,11 +6,10 @@ import { ConfirmationPage } from '@beckn-ui/becknified-components'
 import { InitResponseModel } from '../types/init.types'
 import { getPayloadForConfirm, getPayloadForOrderHistoryPost } from '@utils/confirm-utils'
 import axios from 'axios'
-import { Box, Text } from '@chakra-ui/react'
+import { Box } from '@chakra-ui/react'
 import Cookies from 'js-cookie'
 import { ConfirmResponseModel } from '../types/confirm.types'
-import Typography from '@beckn-ui/molecules/src/components/typography/typography'
-import { Loader } from '@beckn-ui/molecules/src/components'
+import LoaderWithMessage from '@components/loader/LoaderWithMessage'
 
 const OrderConfirmation = () => {
   const { t } = useLanguage()
@@ -69,30 +68,10 @@ const OrderConfirmation = () => {
         height={'calc(100vh - 300px)'}
         alignContent={'center'}
       >
-        <Loader>
-          <Box
-            mt={'13px'}
-            display={'flex'}
-            flexDir={'column'}
-            alignItems={'center'}
-          >
-            <Text
-              as={Typography}
-              fontWeight={600}
-              fontSize={'15px'}
-              text={t.pleaseWait}
-            />
-
-            <Text
-              as={Typography}
-              text={t.confirmLoaderSubtext}
-              textAlign={'center'}
-              alignSelf={'center'}
-              fontWeight={400}
-              fontSize={'15px'}
-            />
-          </Box>
-        </Loader>
+        <LoaderWithMessage
+          loadingText={t.pleaseWait}
+          loadingSubText={t.confirmLoaderSubtext}
+        />
       </Box>
     )
   }

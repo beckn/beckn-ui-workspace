@@ -4,10 +4,11 @@ import React, { useEffect, useState } from 'react'
 import StarRating from '../components/starRating/StarRating'
 import { useLanguage } from '../hooks/useLanguage'
 import feedbackImg from '../public/images/feedbackImg.svg'
-import { Loader, Typography } from '@beckn-ui/molecules'
+import { Typography } from '@beckn-ui/molecules'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import { ConfirmResponseModel } from '../types/confirm.types'
 import axios from 'axios'
+import LoaderWithMessage from '@components/loader/LoaderWithMessage'
 
 const Feedback = () => {
   const { t } = useLanguage()
@@ -69,30 +70,10 @@ const Feedback = () => {
         height={'calc(100vh - 300px)'}
         alignContent={'center'}
       >
-        <Loader>
-          <Box
-            mt={'13px'}
-            display={'flex'}
-            flexDir={'column'}
-            alignItems={'center'}
-          >
-            <Text
-              as={Typography}
-              fontWeight={600}
-              fontSize={'15px'}
-              text={t.pleaseWait}
-            />
-
-            <Text
-              as={Typography}
-              text={t.rateOrderLoaderSubText}
-              textAlign={'center'}
-              alignSelf={'center'}
-              fontWeight={400}
-              fontSize={'15px'}
-            />
-          </Box>
-        </Loader>
+        <LoaderWithMessage
+          loadingText={t.pleaseWait}
+          loadingSubText={t.rateOrderLoaderSubText}
+        />
       </Box>
     )
   }

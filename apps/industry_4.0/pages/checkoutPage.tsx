@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from 'react'
-import { useLanguage } from '../hooks/useLanguage'
-import { ShippingDetailsProps, ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
-import { Box, Flex, Text, useTheme } from '@chakra-ui/react'
-import { Loader, Typography } from '@beckn-ui/molecules'
+import axios from 'axios'
+import { useRouter } from 'next/router'
+import { ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
+import { Box, Flex } from '@chakra-ui/react'
+import { Typography } from '@beckn-ui/molecules'
 import DetailsCard from '@beckn-ui/becknified-components/src/components/checkout/details-card'
 import ShippingSection from '@beckn-ui/becknified-components/src/components/checkout/shipping-section'
 import PaymentDetails from '@beckn-ui/becknified-components/src/components/checkout/payment-details'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
-import { AssemblyData, ParsedItemModel } from '../types/search.types'
 import { getPayloadForInitRequest, getPayloadForSelectRequest, getPaymentBreakDown } from '@utils/checkout-utils'
-import axios from 'axios'
+
+import { useLanguage } from '../hooks/useLanguage'
+import { AssemblyData, ParsedItemModel } from '../types/search.types'
 import { SelectResponseModel } from '../types/select.types'
-import { useRouter } from 'next/router'
 import { InitResponseModel } from '../types/init.types'
+import LoaderWithMessage from '@components/loader/LoaderWithMessage'
 
 const CheckoutPage = () => {
   const { t } = useLanguage()
@@ -24,7 +26,7 @@ const CheckoutPage = () => {
   const [showShippingDetails, setShowShippingDetails] = useState(false)
   const [showBillingDetails, setShowBillingDetails] = useState(false)
   const [error, setError] = useState('')
-  const [assemblyDetails, setAssemblyDetails] = useState<AssemblyData>(null)
+  const [assemblyDetails, setAssemblyDetails] = useState<AssemblyData | null>(null)
   const [detailsForm, setdetailsForm] = useState<ShippingFormInitialValuesType>({
     name: 'Antoine Dubois',
     mobileNumber: '0612345678',
@@ -32,6 +34,16 @@ const CheckoutPage = () => {
     address: '15 Rue du Soleil, Paris, France',
     pinCode: '750013'
   })
+
+  const [billingFormData, setBillingFormData] = useState<ShippingFormInitialValuesType>({
+    name: 'Antoine Dubois',
+    mobileNumber: '0612345678',
+    email: 'antoine.dubois@gmail.com',
+    address: '15 Rue du Soleil, Paris, France',
+    pinCode: '750013'
+  })
+
+  const [isBilling, setIsBilling] = useState(true)
 
   const router = useRouter()
 
@@ -83,33 +95,15 @@ const CheckoutPage = () => {
         height={'calc(100vh - 300px)'}
         alignContent={'center'}
       >
-        <Loader>
-          <Box
-            mt={'13px'}
-            display={'flex'}
-            flexDir={'column'}
-            alignItems={'center'}
-          >
-            <Text
-              as={Typography}
-              fontWeight={600}
-              fontSize={'15px'}
-              text={t.pleaseWait}
-            />
-
-            <Text
-              as={Typography}
-              text={t.checkoutLoaderSubText}
-              textAlign={'center'}
-              alignSelf={'center'}
-              fontWeight={400}
-              fontSize={'15px'}
-            />
-          </Box>
-        </Loader>
+        <LoaderWithMessage
+          loadingText={t.pleaseWait}
+          loadingSubText={t.checkoutLoaderSubText}
+        />
       </Box>
     )
   }
+
+  console.log(error)
 
   if (error.length) {
     return (
@@ -174,7 +168,7 @@ const CheckoutPage = () => {
           <Box pb={'4px'}>
             <Typography
               variant="subTitleRegular"
-              text={`Qty: ${assemblyDetails.quantity}`}
+              text={`Qty: ${assemblyDetails?.quantity}`}
             />
           </Box>
         </DetailsCard>
@@ -189,23 +183,36 @@ const CheckoutPage = () => {
             title: t.shipping
           }}
           shippingForm={{
-            onSubmit: data => {
-              setIsLoadingForInit(true)
-              const initPayload = getPayloadForInitRequest(selectedProduct, data)
-              axios
-                .post(`${apiUrl}/init`, initPayload)
-                .then(res => {
-                  const initResponseData = res.data.data
-                  localStorage.setItem('initResult', JSON.stringify(initResponseData))
-                  setInitData(initResponseData)
-                  setIsLoadingForInit(false)
-                  setShowShippingDetails(true)
-                })
-                .catch(e => {
-                  setError(e.message)
-                  setIsLoadingForInit(false)
-                  console.error(e)
-                })
+            onSubmit: async shippingData => {
+              try {
+                setIsLoadingForInit(true)
+                const initPayload = await getPayloadForInitRequest(selectedProduct, shippingData, billingFormData)
+                axios
+                  .post(`${apiUrl}/init`, initPayload)
+                  .then(res => {
+                    const initResponseData: InitResponseModel[] = res.data.data
+                    const { email, mobileNumber, name, pinCode, address } = shippingData
+                    setdetailsForm({
+                      address,
+                      email,
+                      mobileNumber,
+                      name,
+                      pinCode
+                    })
+
+                    localStorage.setItem('initResult', JSON.stringify(initResponseData))
+                    setInitData(initResponseData)
+                    setIsLoadingForInit(false)
+                    setShowShippingDetails(true)
+                  })
+                  .catch(e => {
+                    setError(e.message)
+                    setIsLoadingForInit(false)
+                    console.error(e)
+                  })
+              } catch (error) {
+                console.error(error)
+              }
             },
             submitButton: { text: 'Save Shipping Details' },
             values: detailsForm,
@@ -219,16 +226,46 @@ const CheckoutPage = () => {
           addButtonImage="./images/addShippingBtn.svg"
           sectionTitle="Billing"
           formTitle="Add Billing Details"
-          isBilling={true}
+          isBilling={isBilling}
           showDetails={showBillingDetails}
           shippingDetails={{
-            name: detailsForm.name,
-            location: detailsForm.address,
-            number: detailsForm.mobileNumber,
+            name: billingFormData.name,
+            location: billingFormData.address,
+            number: billingFormData.mobileNumber,
             title: t.billing
           }}
           shippingForm={{
-            onSubmit: data => setShowBillingDetails(true),
+            onSubmit: async billingData => {
+              try {
+                setIsLoadingForInit(true)
+                const initPayload = await getPayloadForInitRequest(selectedProduct, detailsForm, billingData)
+                axios
+                  .post(`${apiUrl}/init`, initPayload)
+                  .then(res => {
+                    const initResponseData: InitResponseModel[] = res.data.data
+                    const { email, mobileNumber, name, pinCode, address } = billingData
+                    setBillingFormData({
+                      address,
+                      email,
+                      mobileNumber,
+                      name,
+                      pinCode
+                    })
+                    localStorage.setItem('initResult', JSON.stringify(initResponseData))
+                    setInitData(initResponseData)
+                    setIsLoadingForInit(false)
+                    setShowBillingDetails(true)
+                    setIsBilling(false)
+                  })
+                  .catch(e => {
+                    setError(e.message)
+                    setIsLoadingForInit(false)
+                    console.error(e)
+                  })
+              } catch (error) {
+                console.error(error)
+              }
+            },
             submitButton: { text: 'Save Billing Details' },
             values: detailsForm,
             onChange: data => () => {
@@ -252,18 +289,20 @@ const CheckoutPage = () => {
           </DetailsCard>
         )}
       </Box>
-      <BecknButton
-        disabled={!initData.length}
-        children="Proceed to Payment"
-        className="checkout_btn "
-        handleClick={() => router.push('/paymentMode')}
-      />
-      <BecknButton
-        children="Cancel Order"
-        variant="outline"
-        className="checkout_btn"
-        handleClick={() => router.push('/homePage')}
-      />
+      <Box m={'20px 0px'}>
+        <BecknButton
+          disabled={!initData.length}
+          children="Proceed to Payment"
+          className="checkout_btn "
+          handleClick={() => router.push('/paymentMode')}
+        />
+        <BecknButton
+          children="Cancel Order"
+          variant="outline"
+          className="checkout_btn"
+          handleClick={() => router.push('/homePage')}
+        />
+      </Box>
     </Box>
   )
 }

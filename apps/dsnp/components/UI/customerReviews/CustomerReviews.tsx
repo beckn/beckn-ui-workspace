@@ -8,10 +8,10 @@ import { renderStarsBasedOnRating } from '../../../utilities/customerReviews-uti
 
 interface ReviewProps {
   name: string
-  rating: number
-  reviewHeading: string
+  rating?: number
+  reviewHeading?: string
   review: string
-  foundHelpful: number
+  foundHelpful?: number
 }
 
 const CustomerReviews: React.FC<ReviewProps> = ({ name, rating, reviewHeading, review, foundHelpful }) => {
@@ -48,7 +48,7 @@ const CustomerReviews: React.FC<ReviewProps> = ({ name, rating, reviewHeading, r
             fontSize={'15px'}
             fontWeight={400}
           >
-            {name} |{' '}
+            {name && name.split('.')[0]} |{' '}
             <span
               style={{
                 fontSize: '12px'
@@ -58,7 +58,7 @@ const CustomerReviews: React.FC<ReviewProps> = ({ name, rating, reviewHeading, r
               {t('verifiedPurchase')}
             </span>
           </Text>
-          <Flex gap={'9px'}>
+          {/* <Flex gap={'9px'}>
             <HStack spacing={'none'}>{renderStarsBasedOnRating(rating)}</HStack>
             <Text
               fontSize={'11px'}
@@ -66,17 +66,17 @@ const CustomerReviews: React.FC<ReviewProps> = ({ name, rating, reviewHeading, r
             >
               {rating} {rating > 1 ? 'Stars' : 'Star'}
             </Text>
-          </Flex>
+          </Flex> */}
         </Flex>
       </Flex>
       <Box mt={'12px'}>
-        <Text
+        {/* <Text
           fontSize={'12px'}
           fontWeight={600}
           mb={'5px'}
         >
           {reviewHeading}
-        </Text>
+        </Text> */}
         <Text
           fontSize={'12px'}
           fontWeight={400}
@@ -84,13 +84,13 @@ const CustomerReviews: React.FC<ReviewProps> = ({ name, rating, reviewHeading, r
         >
           {review}
         </Text>
-        <Text
+        {/* <Text
           fontSize={'11px'}
           fontWeight={400}
           mb={'20px'}
         >
           {foundHelpful} {t('foundHelpfulText')}
-        </Text>
+        </Text> */}
       </Box>
       <Divider
         h={'1px'}
