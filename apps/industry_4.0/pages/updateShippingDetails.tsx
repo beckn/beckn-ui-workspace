@@ -23,7 +23,7 @@ const UpdateShippingDetails = () => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
   useEffect(() => {
-    if (localStorage && localStorage.getItem('confirmResponse')) {
+    if (typeof window !== 'undefined' && localStorage && localStorage.getItem('confirmResponse')) {
       const parsedConfirmData: ConfirmResponseModel[] = JSON.parse(localStorage.getItem('confirmResponse') as string)
       setConfirmData(parsedConfirmData)
     }
@@ -106,7 +106,7 @@ const UpdateShippingDetails = () => {
     setShippingDetails(prevDetails => ({ ...prevDetails, ...changedData }))
   }
 
-  if (!confirmData?.length && !localStorage.getItem('selectedOrder')) {
+  if (typeof window === 'undefined' || (!confirmData?.length && !localStorage.getItem('selectedOrder'))) {
     return <></>
   }
   if (isLoadingForUpdate) {
