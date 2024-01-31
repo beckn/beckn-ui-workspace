@@ -21,7 +21,7 @@ interface Props {
 
 const Card: React.FC<Props> = ({ product }) => {
   const { t } = useLanguage()
-
+  const fallbackImageUrl = 'https://mandi.succinct.in/attachments/view/17592186045679.jpg'
   const encodedProduct = window.btoa(toBinary(JSON.stringify(product)))
   const dispatch = useDispatch()
   const router = useRouter()
@@ -66,7 +66,11 @@ const Card: React.FC<Props> = ({ product }) => {
         >
           <div className="flex items-center h-full product-img-span">
             <Image
-              src={product.descriptor.images[0]}
+              src={
+                product.descriptor.images && product.descriptor.images.length > 0
+                  ? product.descriptor.images[0]
+                  : fallbackImageUrl
+              }
               width={'110px'}
               height={'133px'}
               alt={product.descriptor.name}
