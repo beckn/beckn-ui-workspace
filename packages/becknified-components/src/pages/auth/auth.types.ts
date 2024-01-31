@@ -1,7 +1,7 @@
 import { InputProps, ButtonProps } from '@beckn-ui/molecules'
 export interface AuthProps {
   schema: {
-    logo: {
+    logo?: {
       src: string
       alt: string
     }

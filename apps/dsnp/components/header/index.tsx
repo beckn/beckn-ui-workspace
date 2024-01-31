@@ -22,7 +22,15 @@ const cartIconBlackList = [
 
 const backIconList = ['/', '/orderDetails']
 
-const homeIconBlackList = ['/orderHistory', '/', '/homePage', '/checkoutPage', '/paymentMode', '/orderConfirmation']
+const homeIconBlackList = [
+  '/orderHistory',
+  '/signUp',
+  '/',
+  '/homePage',
+  '/checkoutPage',
+  '/paymentMode',
+  '/orderConfirmation'
+]
 
 const storeHeaderBlackList = [
   '/checkoutPage',
@@ -63,7 +71,8 @@ const topHeaderBlackList: string[] = []
 
 const bottomHeaderBlackList = ['/homePage', '/orderConfirmation']
 
-const menuIconWhiteList = ['/homePage', '/search', '/product']
+// const menuIconWhiteList = ['/homePage', '/search', '/product']
+const menuIconWhiteList = []
 
 const languageIconWhiteList = ['/mobileOtp']
 

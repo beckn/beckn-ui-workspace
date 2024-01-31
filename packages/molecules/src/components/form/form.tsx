@@ -46,10 +46,14 @@ const Form = <T extends FormField[]>({
 
     if (onChange) onChange(newFormData)
 
-    setFormErrors({
-      ...formErrors,
-      [name]: error
-    })
+    if (error) {
+      setFormErrors({
+        ...formErrors,
+        [name]: error
+      })
+    } else {
+      delete formErrors[name]
+    }
   }
 
   const handleSubmit = (e: React.FormEvent) => {

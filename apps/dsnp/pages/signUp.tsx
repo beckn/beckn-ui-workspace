@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useLanguage } from '../hooks/useLanguage'
 import OpenCommerce from '../public/images/openCommerce.svg'
 import { FormErrors, signUpValidateForm } from '../utilities/detailsForm-utils'
@@ -8,13 +8,25 @@ import { Box, Flex, Image, useToast } from '@chakra-ui/react'
 import { SignUpPropsModel } from '../components/signIn/SignIn.types'
 import Button from '../components/button/Button'
 import Router from 'next/router'
+import { fetchHandles, fetchChallenge, dsnpLogin } from '../components/signIn/signin.utils'
+import { signPayloadWithExtension, payloadHandle } from '../utilities/signTransaction'
+import { setLocalStorage } from '../utilities/localStorage'
+import { dsnpCreate, dsnpRegister, getBlockNumber } from '../utilities/auth'
+import { parentURLs } from '@utils/polka'
+import { toast } from 'react-toastify'
+
 const SignUp = () => {
   const { t } = useLanguage()
   const toast = useToast()
   const [formData, setFormData] = useState<SignUpPropsModel>({ name: '', email: '', password: '' })
   const [formErrors, setFormErrors] = useState<FormErrors>({ name: '', email: '', password: '' })
+  const [expiration, setExpiration] = useState(0)
   const [isFormFilled, setIsFormFilled] = useState(false)
   const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL
+  const [challenge, setChallenge] = useState('')
+  const [handles, setHandles] = useState([])
+  const [selectedAddress, setSelectedAddress] = useState('')
+  const [providerInfo, setProviderInfo] = useState({})
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -43,6 +55,7 @@ const SignUp = () => {
 
   const handleRegister = async () => {
     const errors = signUpValidateForm(formData)
+    let isIframe = false
 
     const isFormValid = Object.values(errors).every(error => error === '')
 
@@ -54,6 +67,67 @@ const SignUp = () => {
       }
 
       try {
+        if (selectedAddress && formData.name) {
+          if (handles.length > 0) {
+            if (window.location !== window.parent.location) {
+              isIframe = true
+              window.parent.postMessage(
+                {
+                  type: 'signTransaction',
+                  data: { selectedAccount: selectedAddress, challenge: challenge.challenge }
+                },
+                '*'
+              )
+            } else {
+              const signedChallenge = await signPayloadWithExtension(selectedAddress, challenge.challenge)
+              const loginData = await dsnpLogin(signedChallenge, handles[0]?.publicKey, challenge.challenge)
+              setLocalStorage('dsnpAuth', loginData)
+            }
+          } else {
+            const dsnpHandle = formData.email.split('@')[0] || 'Beckn_user'
+
+            if (window.location !== window.parent.location) {
+              isIframe = true
+              const blockNumber = await getBlockNumber(providerInfo.nodeUrl)
+              const expiration = blockNumber + 50
+              setExpiration(expiration)
+
+              const handlePayload = await payloadHandle(expiration, dsnpHandle)
+
+              const payloadData = {
+                handlePayload: handlePayload.toU8a(),
+                expiration,
+                accountAddress: selectedAddress,
+                providerId: providerInfo.providerId,
+                providerSchemas: providerInfo.schemas,
+                handle: dsnpHandle,
+                signingAccount: selectedAddress
+              }
+
+              window.parent.postMessage(
+                {
+                  type: 'signCiTransaction',
+                  data: payloadData
+                },
+                '*'
+              )
+            } else {
+              const createData = await dsnpCreate(dsnpHandle, providerInfo, selectedAddress)
+              setLocalStorage('dsnpAuth', createData)
+              console.log('Dank create data', createData)
+            }
+          }
+        } else {
+          toast({
+            title: 'Error!.',
+            description: 'No polka address found',
+            status: 'error',
+            duration: 3000,
+            isClosable: true
+          })
+          throw Error('No polka address found')
+        }
+
         const response = await fetch(`${baseUrl}/auth/local/register`, {
           method: 'POST',
           headers: {
@@ -67,7 +141,7 @@ const SignUp = () => {
           const token = data.jwt
 
           localStorage.setItem('token', token)
-          Router.push('/homePage')
+          if (!isIframe) Router.push('/homePage')
         } else {
           const errorData = await response.json()
           toast({
@@ -86,6 +160,49 @@ const SignUp = () => {
       setFormErrors(errors)
     }
   }
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setProviderInfo(JSON.parse(localStorage.getItem('provider') as string))
+      const accounts = JSON.parse(localStorage.getItem('polkaAddresses') as string)
+      if (accounts && accounts.length > 0) {
+        setSelectedAddress(accounts[0].address)
+        fetchHandles(accounts[0].address).then(handles => {
+          setHandles(handles)
+        })
+        fetchChallenge().then(challenge => setChallenge(challenge))
+      }
+    }
+  }, [])
+
+  useEffect(() => {
+    function handleMessage(event: MessageEvent) {
+      if (!parentURLs.includes(event.origin)) return
+      console.log('From Ec signed challenge', event.data)
+      if (event.data.type && event.data.type === 'signTransaction') {
+        const { signedChallenge } = event.data.data
+        dsnpLogin(signedChallenge, handles[0]?.publicKey, challenge.challenge).then(loginData => {
+          setLocalStorage('dsnpAuth', loginData)
+          console.log('Dank login data', loginData)
+          Router.push('/homePage')
+        })
+      } else if (event.data.type && event.data.type === 'signCiTransaction') {
+        const { handleSignature, addProviderSignature, handle, signingAccount } = event.data.data
+        console.log('Dank 2', handle)
+        dsnpRegister(expiration, handle, signingAccount, addProviderSignature, handleSignature).then(createData => {
+          setLocalStorage('dsnpAuth', createData)
+          console.log('Dank create data', createData)
+          Router.push('/homePage')
+        })
+      }
+    }
+
+    window.addEventListener('message', handleMessage)
+
+    return () => {
+      window.removeEventListener('message', handleMessage)
+    }
+  }, [handles, challenge])
 
   return (
     <>

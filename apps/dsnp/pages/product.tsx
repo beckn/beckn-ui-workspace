@@ -6,14 +6,40 @@ import { RetailItem } from '../lib/types/products'
 import { fromBinary } from '../utilities/common-utils'
 import Head from 'next/head'
 import ProductPreview from '@components/productPreview'
+import axios from 'axios'
+import { getLocalStorage } from '@utils/localStorage'
 
 const Product = () => {
   const [product, setProduct] = useState<RetailItem | null>(null)
+  const [feed, setFeed] = useState<any>([])
   const { productDetails, reviewSubmitted, productName, productImage, productDesc } = useRouter().query
+
+  // https://api.dsnp-social-web.becknprotocol.io/v1/content/discover
+
+  const getReviews = async () => {
+    const { accessToken, dsnpId } = getLocalStorage('dsnpAuth')
+    if (accessToken) {
+      try {
+        const response = await axios.request({
+          url: `https://api.dsnp-social-web.becknprotocol.io/v1/content/discover`,
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          }
+        })
+        console.log('Dank', response.data)
+        return response.data.posts
+      } catch (err) {
+        console.log('Error', err)
+        throw Error(err)
+      }
+    }
+  }
 
   useEffect(() => {
     if (productDetails) {
       setProduct(JSON.parse(fromBinary(window.atob(productDetails as string))))
+      getReviews().then(data => setFeed(data))
     }
   }, [productDetails])
 
@@ -36,7 +62,10 @@ const Product = () => {
           />
         </Head>
 
-        <ProductDetails product={product} />
+        <ProductDetails
+          product={product}
+          feed={feed}
+        />
       </div>
     )
   } else if (!product && reviewSubmitted && productName) {

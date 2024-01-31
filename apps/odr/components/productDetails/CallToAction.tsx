@@ -2,12 +2,14 @@ import React from 'react'
 import Button from '../button/Button'
 import { useRouter } from 'next/router'
 import { ParsedScholarshipData } from '../productList/ProductList.utils'
+import { useLanguage } from '../../hooks/useLanguage'
 
 interface Props {
   product: ParsedScholarshipData
 }
 const CallToAction: React.FC<Props> = ({ product }) => {
   const router = useRouter()
+  const { t } = useLanguage()
 
   function addToCartHandler() {
     localStorage.setItem('selectedItem', JSON.stringify(product))
@@ -18,7 +20,7 @@ const CallToAction: React.FC<Props> = ({ product }) => {
   return (
     <div className="flex flex-col items-center flex-grow sticky top-10 md:top-36 mt-8 rtl:mr-auto ltr:ml-auto xl:rtl:ml-2 sm:p-4 xl:p-6">
       <Button
-        buttonText={'Proceed'}
+        buttonText={t.proceed}
         background={'rgba(var(--color-primary))'}
         color={'rgba(var(--text-color))'}
         isDisabled={false}

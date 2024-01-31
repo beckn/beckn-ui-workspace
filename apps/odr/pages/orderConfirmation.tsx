@@ -121,13 +121,22 @@ const OrderConfirmation = () => {
       <ConfirmOrder
         confirmationText={
           <>
-            <Text>
+            <Text
+              fontSize={'15px'}
+              fontWeight={400}
+            >
               {t.caseID}{' '}
               <span style={{ fontSize: '17px', fontWeight: 600 }}>
-                #{(confirmRequest?.data as any)?.scholarshipApplicationId ?? 789171} Submitted!
+                {t.hash}
+                {(confirmRequest?.data as any)?.scholarshipApplicationId ?? 789171} {t.submitted}
               </span>
             </Text>
-            <Text>{t.caseManagerText}</Text>
+            <Text
+              fontSize={'15px'}
+              fontWeight={400}
+            >
+              {t.caseManagerText}
+            </Text>
             <Stack
               justifyContent={'center'}
               align={'center'}
@@ -139,14 +148,24 @@ const OrderConfirmation = () => {
                   src={nameIcon}
                   pr={'12px'}
                 />
-                <Text fontSize={'15px'}>{agentName}</Text>
+                <Text
+                  fontSize={'15px'}
+                  fontWeight={400}
+                >
+                  {agentName}
+                </Text>
               </Flex>
               <Flex alignItems={'center'}>
                 <Image
                   src={CallphoneIcon}
                   pr={'12px'}
                 />
-                <Text fontSize={'15px'}>{agentNumber}</Text>
+                <Text
+                  fontSize={'15px'}
+                  fontWeight={400}
+                >
+                  {agentNumber}
+                </Text>
               </Flex>
             </Stack>
             <Stack>
@@ -163,7 +182,7 @@ const OrderConfirmation = () => {
                   style={{ color: '#8D353A' }}
                   target="blank"
                 >
-                  provider link
+                  {t.providerLink}
                 </a>{' '}
                 {t.confirmMessage2}
               </Text>

@@ -1,4 +1,5 @@
 import { Product } from '../../components/product-card/product-card.types'
+import { LoaderProps } from '@beckn-ui/molecules'
 
 export interface SearchResultsProps {
   schema: {
@@ -8,5 +9,7 @@ export interface SearchResultsProps {
       productCardRenderer?: React.ComponentType<{ product: Product }>
       productInfoDataSource?: Record<string, any>
     }
+    loader: LoaderProps
   }
+  isLoading?: boolean
 }

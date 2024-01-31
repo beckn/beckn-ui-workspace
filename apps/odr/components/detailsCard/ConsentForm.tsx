@@ -87,6 +87,9 @@ const ConsentForm: React.FC<ConsentFormProps> = props => {
     .filter(([key]) => key !== 'checkbox')
     .every(([_, value]) => value.trim() !== '')
 
+  const handleCancel = () => {
+    props.onClose()
+  }
   return (
     <>
       <Modal
@@ -137,18 +140,16 @@ const ConsentForm: React.FC<ConsentFormProps> = props => {
                 fontSize={'15px'}
                 fontWeight={600}
               >
-                Term and Conditions
+                {t.termAndCondition}
               </Text>
               <Text>
-                <span style={{ fontSize: '15px', fontWeight: 600 }}>I, {complainantName},</span> confirm that I’ve read
-                and understand the terms of representation by{''}
-                <span style={{ fontSize: '15px', fontWeight: 600 }}> {props.providerName} </span> I agree to be
-                represented in the described legal matter and acknowledge the fee structure, billing terms, and
-                potential costs.I understand the attorney-client privilege and agree to communicate promptly and
-                honestly. I’m aware of the conditions for terminating the relationship and its consequences.
+                <span style={{ fontSize: '15px', fontWeight: 600 }}>
+                  {t.i}, {complainantName},
+                </span>
+                {t.confirmThat}
+                <span style={{ fontSize: '15px', fontWeight: 600 }}> {props.providerName} </span> {t.consentPara}
               </Text>
             </Flex>
-
             <div className={style.container}>
               <div className={style.did_floating_label_content}>
                 <input
@@ -193,18 +194,18 @@ const ConsentForm: React.FC<ConsentFormProps> = props => {
               </Flex>
             </div>
             <Button
-              buttonText={'Confirm'}
+              buttonText={t.confirm}
               background={'rgba(var(--color-primary))'}
               color={'rgba(var(--text-color))'}
               handleOnClick={handleButtonClick}
               isDisabled={!isFormValid}
             />
             <Button
-              buttonText={'Cancel'}
+              buttonText={t.cancel}
               background={'transparent'}
               color={'rgba(var(--color-primary))'}
-              handleOnClick={() => props.onClose}
-              isDisabled={!isFormValid}
+              handleOnClick={handleCancel}
+              isDisabled={false}
             />
           </ModalBody>
         </ModalContent>

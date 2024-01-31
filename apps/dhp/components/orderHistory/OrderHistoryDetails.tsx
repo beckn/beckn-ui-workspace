@@ -50,7 +50,6 @@ const OrderHistoryDetails: React.FC<OrderHistoryDetailsPropsModel> = props => {
       >
         <Text>{props.quantity} items</Text>
         <Flex>
-          {/* eslint-disable-next-line jsx-a11y/alt-text */}
           <Image
             src={completedIcon}
             paddingRight={'6px'}
