@@ -21,7 +21,8 @@ interface Props {
 
 const Card: React.FC<Props> = ({ product }) => {
   const { t } = useLanguage()
-  const fallbackImageUrl = 'https://mandi.succinct.in/attachments/view/17592186045679.jpg'
+  const fallbackImageUrl =
+    'https://static.vecteezy.com/system/resources/thumbnails/004/141/669/small/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg'
   const encodedProduct = window.btoa(toBinary(JSON.stringify(product)))
   const dispatch = useDispatch()
   const router = useRouter()
