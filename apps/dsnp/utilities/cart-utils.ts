@@ -2,7 +2,7 @@ import { CartItemForRequest, CartRetailItem, DataPerBpp } from '../lib/types/car
 import { ResponseModel } from '../lib/types/responseModel'
 
 export const getCartItemsPerBpp = (cart: CartItemForRequest[]) => {
-  const itemsPerBpp = {}
+  const itemsPerBpp: any = {}
 
   cart.map((item: CartItemForRequest) => {
     const bppId = item.bpp_id
@@ -39,7 +39,7 @@ export const getPayloadForQuoteRequest = (
           provider: {
             id: cartItemsPerBppPerProvider[bppId][0].providerId
           },
-          locations: cartItemsPerBppPerProvider[bppId][0].locations
+          locations: [cartItemsPerBppPerProvider[bppId][0].locations[0]]
         }
       }
     }
