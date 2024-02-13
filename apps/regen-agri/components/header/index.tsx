@@ -157,7 +157,7 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
                                     ) as string
                                     localStorage.clear()
                                     localStorage.setItem('userPhone', user)
-                                    router.push('/homePage')
+                                    router.push('/')
                                 }}
                                 src="/images/Home_icon.svg"
                                 alt="home Icon"
