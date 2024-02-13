@@ -17,10 +17,11 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
     const { locale } = useLanguage()
     const router = useRouter()
     const isHomepage = router.pathname === '/homePage'
+    const isLandingPage = router.pathname === '/'
     const isSearchByLocation = router.pathname === '/searchByLocation'
     const isSearch = router.pathname === '/search'
     const paddingStyles = 'px-5 xl:px-16'
-    const marginStyles = 'mt-[30px]'
+    const marginStyles = 'mt-[100px]'
 
     const geoLocationSearchPageVisible = useSelector(
         (state: IGeoLocationSearchPageRootState) => {
@@ -58,13 +59,15 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
                                     [marginStyles]:
                                         !isHomepage &&
                                         !isSearch &&
-                                        !isSearchByLocation,
+                                        !isSearchByLocation &&
+                                        !isLandingPage,
                                 },
                                 {
                                     ['mt-[24px]']:
                                         isHomepage || isSearchByLocation,
                                 },
-                                { ['mt-[118px]']: isSearch }
+                                { ['mt-[118px]']: isSearch },
+                                { ['mt-[30px]']: isLandingPage }
                             )}
                         >
                             {children}

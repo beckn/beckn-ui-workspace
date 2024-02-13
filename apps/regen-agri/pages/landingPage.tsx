@@ -8,7 +8,7 @@ import { RiArrowRightSLine } from 'react-icons/ri'
 import { useLanguage } from '../hooks/useLanguage'
 import { IGeoLocationSearchPageRootState } from '../lib/types/geoLocationSearchPage'
 
-const HomePage = () => {
+const LandingPage = () => {
     const [searchTerm, setSearchTerm] = useState<string>('')
     const [currentAddress, setCurrentAddress] = useState('')
     const [isSearchInputDisabled, setIsSearchInputDisabled] = useState(true)
@@ -128,18 +128,17 @@ const HomePage = () => {
                 fontWeight={'800'}
                 color={'rgba(var(--color-primary))'}
                 lineHeight={'110%'}
-                m={'0px 26px'}
             >
                 {t.agriLoop}
             </Box>
 
             <Box
                 fontSize={'15px'}
-                m={'20px 26px'}
+                m={'20px 0px'}
             >
                 {t.homePara}
             </Box>
-            <Box m={'0px 26px'}>
+            <Box>
                 <GeoLocationInput
                     disabled={isSearchInputDisabled}
                     searchInputValue={searchTerm}
@@ -167,4 +166,4 @@ const HomePage = () => {
     )
 }
 
-export default HomePage
+export default LandingPage

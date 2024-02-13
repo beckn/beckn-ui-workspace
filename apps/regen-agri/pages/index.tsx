@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import HomePage from './homePage'
+import LandingPage from './landingPage'
 
 const Home = () => {
     useEffect(() => {
@@ -10,7 +10,7 @@ const Home = () => {
 
     return (
         <div>
-            <HomePage />
+            <LandingPage />
         </div>
     )
 }

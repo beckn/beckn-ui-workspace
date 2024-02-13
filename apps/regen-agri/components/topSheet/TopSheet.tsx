@@ -69,6 +69,8 @@ const TopSheet: React.FC<TopSheetPropsModel> = (props) => {
             <Box
                 boxShadow="0px 4px 20px 0px rgba(0, 0, 0, 0.08)"
                 padding={'14px'}
+                mr={'-20px'}
+                ml={'-20px'}
             >
                 <Box>
                     <Flex alignItems={'center'}>
