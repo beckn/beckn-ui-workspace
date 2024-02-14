@@ -19,39 +19,6 @@ type ReviewProcessorValues = {
   images: UploadFile[]
 }
 
-const getReviewLink = (
-  review: string,
-  productURL: string,
-  productName: string,
-  productImage: string,
-  productDesc: string,
-  token: string
-) => {
-  const myUrlWithParams = new URL(`${process.env.NEXT_PUBLIC_DSNP_GATEWAY_URL}/review`)
-
-  const queryParameters = {
-    href: `${window.location.origin}/product?productName=${productName}&productImage=${productImage}&productDesc=${productDesc}&becknified=true`,
-    // href: `https://dsnp-stage.becknprotocol.io/product?productName=${productName}&productImage=${productImage}&productDesc=${productDesc}&becknified=true`,
-    reference: {
-      token
-    },
-    attributeSetType: 'dsnp://1#OndcProofOfPurchase',
-    success_url: `${window.location.origin}/product?productName=${productName}&productImage=${productImage}&reviewSubmitted=true`,
-    error_url: `${window.location.origin}/product?productName=${productName}&productImage=${productImage}&reviewSubmitted=false`
-  }
-
-  const text = `⭐⭐⭐⭐⭐\n\n${review}`
-
-  myUrlWithParams.searchParams.append('href', queryParameters.href)
-  myUrlWithParams.searchParams.append('reference', JSON.stringify(queryParameters.reference))
-  myUrlWithParams.searchParams.append('attributeSetType', queryParameters.attributeSetType)
-  myUrlWithParams.searchParams.append('text', text)
-  myUrlWithParams.searchParams.append('success_url', queryParameters.success_url)
-  myUrlWithParams.searchParams.append('error_url', queryParameters.error_url)
-
-  return myUrlWithParams.href
-}
-
 const createPost = async (
   formValues: ReviewProcessorValues,
   href: string,
@@ -101,6 +68,7 @@ const Feedback = () => {
   const [ratingForStore, setRatingForStore] = useState(0)
   const [review, setReview] = useState('')
   const [reviewValidationMessage, setReviewValidationMessage] = useState('')
+  const [loading, setLoading] = useState(false)
 
   const product = getLocalStorage('productDetails').product as RetailItem
   const encodedProduct = getLocalStorage('productDetails').encodedProduct as string
@@ -129,6 +97,7 @@ const Feedback = () => {
         attributeSetType: 'dsnp://1#OndcProofOfPurchase',
         interactionId
       }
+      setLoading(true)
 
       axios
         .request({
@@ -158,6 +127,7 @@ const Feedback = () => {
         .catch(err => {
           console.log('Error', err)
           router.push(errorUrl)
+          setLoading(false)
         })
     }
   }

@@ -1,11 +1,12 @@
 import { Card, CardBody, Text, Box, Image } from '@chakra-ui/react'
 import Router from 'next/router'
-import React from 'react'
+import React, { useState } from 'react'
 import { useLanguage } from '../../hooks/useLanguage'
 import { RetailItem, SanitizedProduct } from '../../lib/types/products'
 import Button from '@components/button/Button'
 import ImageSection from '../productDetails/ImageSection'
 import DetailsSection from '@components/productDetails/DetailsSection'
+import Loader from '../loader/Loader'
 
 interface ProductPreviewProps {
   productName: string
@@ -15,6 +16,7 @@ interface ProductPreviewProps {
 
 const ProductPreview: React.FC<ProductPreviewProps> = ({ productImage, productName, productDesc }) => {
   const { t } = useLanguage()
+  const [loader, setLoader] = useState(true)
   const handleShopbtn = (): void => {
     Router.push(`/homePage`)
   }

@@ -1,10 +1,11 @@
 import { Card, CardBody, Text, Box, Image } from '@chakra-ui/react'
 import Router from 'next/router'
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { useLanguage } from '../../hooks/useLanguage'
 import { RetailItem } from '../../lib/types/products'
 import Button from '../button/Button'
 import ImageSection from '../productDetails/ImageSection'
+import Loader from '../loader/Loader'
 
 interface ConfirmationProps {
   reviewSubmitted: boolean
@@ -15,6 +16,8 @@ interface ConfirmationProps {
 const Confirmation: React.FC<ConfirmationProps> = ({ reviewSubmitted, productImage, productName }) => {
   const message = reviewSubmitted ? 'Success' : 'Failure'
 
+  const [loader, setLoader] = useState(true)
+
   const { t } = useLanguage()
   const handleShopbtn = (): void => {
     Router.push(`/homePage`)
@@ -23,6 +26,22 @@ const Confirmation: React.FC<ConfirmationProps> = ({ reviewSubmitted, productIma
   const handleCheckReview = () => {
     window.location.href = `${process.env.NEXT_PUBLIC_DSNP_GATEWAY_URL}/feed`
   }
+
+  useEffect(() => {
+    if (loader) {
+      setTimeout(() => {
+        setLoader(false)
+      }, 5000)
+    }
+  }, [loader])
+
+  if (loader)
+    return (
+      <Loader
+        loadingText={'Please wait!'}
+        subLoadingText={'While we confirm your review is authentic for your order'}
+      />
+    )
 
   return (
     <Box
