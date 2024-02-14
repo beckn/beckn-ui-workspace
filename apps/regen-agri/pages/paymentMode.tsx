@@ -12,54 +12,59 @@ import {
     HStack,
     Select,
 } from '@chakra-ui/react'
+
 import Router from 'next/router'
 import { useDispatch } from 'react-redux'
-import Button from '../components/button/Button'
-import CardWithCheckBox, { PaymentMethodsInfo } from '../components/card/Card'
-import { useLanguage } from '../hooks/useLanguage'
-import { cartActions } from '../store/cart-slice'
-import styles from '../components/card/Card.module.css'
-import BottomModalScan from '../components/BottomModal/BottomModalScan'
-import { FaCreditCard } from 'react-icons/fa'
-import { BsThreeDots } from 'react-icons/bs'
 
+import Button from '../components/button/Button'
+import BottomModalScan from '../components/BottomModal/BottomModalScan'
+import styles from '../components/card/Card.module.css'
+import CardWithCheckBox, { PaymentMethodsInfo } from '../components/card/Card'
+
+import { useLanguage } from '../hooks/useLanguage'
+import { validateCardPaymentForm } from '../utilities/cardPaymentForm-utils'
+
+import { BsThreeDots } from 'react-icons/bs'
 import { dbCountry } from '../mock/dbCountry.js'
 
+export interface PaymentFormData {
+    cardNumber: string
+    expiryDate: string
+    cvv: string
+    country: string
+    postalCode: string
+}
+
 const PaymentMode = () => {
-    const [checked, setChecked] = useState(false)
+    const { t } = useLanguage()
+
+    const [formData, setFormData] = useState<PaymentFormData>({
+        cardNumber: '',
+        expiryDate: '',
+        cvv: '',
+        country: '',
+        postalCode: '',
+    })
+
     const [selectedCard, setSelectedCard] = useState(null)
     const [transcationOpenModal, setTransacationOpenModal] = useState(false)
-    const handleTranscationModalClose = () => {
-        setTransacationOpenModal(false)
-    }
-
-    const { t } = useLanguage()
+    const [paymentLink, setPaymentLink] = useState('')
     const [filterMethods, setFilterMethods] = useState<PaymentMethodsInfo[]>([
         {
-            id: 'direct_pay',
-            isDisabled: false,
-            paymentMethod: t.directPay,
-        },
-        {
-            id: 'pay_at_store',
+            id: 'stripe',
             isDisabled: false,
             paymentMethod: t.payAtStore,
         },
     ])
     const paymentTypeMapper = {
-        direct_pay: 'PRE_FULFILLMENT',
-        pay_at_store: 'POST_FULFILLMENT',
+        stripe: 'POST_FULFILLMENT',
     }
+
     const [initResult, setInitResult] = useState<any>(null)
-    const [paymentLink, setPaymentLink] = useState('')
+
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<
         string | null
     >(null)
-
-    const dispatch = useDispatch()
-    const handleTransactionOpenModal = () => {
-        setTransacationOpenModal(!transcationOpenModal)
-    }
 
     useEffect(() => {
         if (localStorage && localStorage.getItem('initResult')) {
@@ -80,12 +85,68 @@ const PaymentMode = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
+    const handleTranscationModalClose = () => {
+        setTransacationOpenModal(false)
+    }
+    // cardPaymentForm onChange handler
+    const handleCardInputChange = (
+        event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    ) => {
+        const { name, value } = event.target
+        if (name === 'cardNumber' && !/^\d*$/.test(value)) {
+            return
+        }
+        if (name === 'expiryDate' && !/^\d*$/.test(value)) {
+            return
+        }
+        if (name === 'cvv' && !/^\d*$/.test(value)) {
+            return
+        }
+        if (name === 'postalCode' && !/^\d*$/.test(value)) {
+            return
+        }
+        setFormData((prevFormData: PaymentFormData) => ({
+            ...prevFormData,
+            [name]: value,
+        }))
+    }
+    // cardPaymentForm onSubmit handler
+    const handleCardFormSubmit = (event: React.FormEvent) => {
+        event.preventDefault()
+
+        if (
+            validateCardPaymentForm(formData) &&
+            selectedPaymentMethod === 'stripe'
+        ) {
+            Router.push({
+                pathname: '/orderConfirmation',
+                query: {
+                    paymentType:
+                        paymentTypeMapper[selectedPaymentMethod as string],
+                },
+            })
+        }
+    }
+
+    // enable/disable the payment button based on return value from validateForm fn.
+    const isFormFilled = () => {
+        return validateCardPaymentForm(formData)
+    }
+
+    const handleTransactionOpenModal = () => {
+        setTransacationOpenModal(!transcationOpenModal)
+    }
+
     if (!initResult) {
         return <></>
     }
     const handleChange = (id: any) => {
         setSelectedCard(id)
     }
+
+    const totalPrice =
+        initResult[0].message.catalogs.responses[0].message.order.quote.price
+            .value
 
     return (
         <>
@@ -199,7 +260,7 @@ const PaymentMode = () => {
                 width={'90%'}
             >
                 <Button
-                    buttonText={t.confirmOrder}
+                    buttonText={t.continueToPayment}
                     type={'solid'}
                     isDisabled={!selectedPaymentMethod}
                     handleOnClick={handleTransactionOpenModal}
@@ -222,11 +283,20 @@ const PaymentMode = () => {
                         justifyContent={'center'}
                         flexDir={'column'}
                         p={'10px'}
-                        border={'2px solid #E0E0E0'}
+                        border={'2px solid #0570DE'}
                         borderRadius={'10px'}
                     >
-                        <FaCreditCard />
-                        <Text>Card</Text>
+                        <Image
+                            src="/images/card.svg"
+                            alt="eps icon"
+                        />
+                        <Text
+                            color={'#0570DE'}
+                            fontWeight={600}
+                            fontSize={'13px'}
+                        >
+                            Card
+                        </Text>
                     </Flex>
                     <Box
                         w={'71px'}
@@ -246,7 +316,13 @@ const PaymentMode = () => {
                                 src="/images/EPS.svg"
                                 alt="eps icon"
                             />
-                            <Text color={'#DFDFDF'}>EPS</Text>
+                            <Text
+                                color={'#DFDFDF'}
+                                fontWeight={600}
+                                fontSize={'13px'}
+                            >
+                                EPS
+                            </Text>
                         </Flex>
                     </Box>
                     <Box
@@ -267,7 +343,13 @@ const PaymentMode = () => {
                                 src="/images/Giropay.svg"
                                 alt="eps icon"
                             />
-                            <Text color={'#DFDFDF'}>Giropay</Text>
+                            <Text
+                                color={'#DFDFDF'}
+                                fontWeight={600}
+                                fontSize={'13px'}
+                            >
+                                Giropay
+                            </Text>
                         </Flex>
                     </Box>
                     <Flex
@@ -280,7 +362,10 @@ const PaymentMode = () => {
                         <BsThreeDots />
                     </Flex>
                 </Flex>
-                <FormControl m={'0px 26px'}>
+                <FormControl
+                    m={'0px 26px'}
+                    onSubmit={handleCardFormSubmit}
+                >
                     <FormLabel>Card number</FormLabel>
                     <Flex
                         alignItems={'center'}
@@ -294,6 +379,10 @@ const PaymentMode = () => {
                             placeholder="1234 1234 1234 1234"
                             border={'2px solid #E0E0E0'}
                             borderRadius={'10px'}
+                            name="cardNumber"
+                            onChange={handleCardInputChange}
+                            value={formData.cardNumber}
+                            maxLength={16}
                         />
                         <Image
                             src="/images/banks.svg"
@@ -312,6 +401,10 @@ const PaymentMode = () => {
                                 placeholder="MM / YY"
                                 border={'2px solid #E0E0E0'}
                                 borderRadius={'10px'}
+                                name="expiryDate"
+                                onChange={handleCardInputChange}
+                                value={formData.expiryDate}
+                                maxLength={4}
                             />
                         </Box>
                         <Box>
@@ -323,6 +416,10 @@ const PaymentMode = () => {
                                 placeholder="CVV"
                                 border={'2px solid #E0E0E0'}
                                 borderRadius={'10px'}
+                                name="cvv"
+                                onChange={handleCardInputChange}
+                                value={formData.cvv}
+                                maxLength={3}
                             />
                         </Box>
                     </HStack>
@@ -330,8 +427,12 @@ const PaymentMode = () => {
                         <Box>
                             <FormLabel>Country</FormLabel>
                             <Select
+                                fontSize={'14px'}
                                 placeholder="Select Country"
                                 w={'155px'}
+                                name="country"
+                                onChange={handleCardInputChange}
+                                value={formData.country}
                             >
                                 {dbCountry.map((country) => (
                                     <option
@@ -352,6 +453,10 @@ const PaymentMode = () => {
                                 placeholder="90210"
                                 border={'2px solid #E0E0E0'}
                                 borderRadius={'10px'}
+                                name="postalCode"
+                                onChange={handleCardInputChange}
+                                value={formData.postalCode}
+                                maxLength={6}
                             />
                         </Box>
                     </HStack>
@@ -363,12 +468,12 @@ const PaymentMode = () => {
                                 width: '315px',
                                 padding: '15px',
                                 borderRadius: '10px',
+                                opacity: isFormFilled() ? 1 : 0.5,
                             }}
-                            onClick={() => {
-                                Router.push('/orderConfirmation')
-                            }}
+                            onClick={handleCardFormSubmit}
+                            disabled={!isFormFilled()}
                         >
-                            pay $1502
+                            pay $ {totalPrice}
                         </button>
                     </Box>
                 </FormControl>

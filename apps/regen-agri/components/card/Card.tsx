@@ -32,7 +32,6 @@ const CardWithCheckBox: React.FC<CardWithCheckBoxPropsModel> = (props) => {
                         <Box
                             key={method.id}
                             className={styles.checkbox}
-                            mb={'15px'}
                             fontSize={'15px'}
                             pointerEvents={method.isDisabled ? 'none' : 'auto'}
                             opacity={method.isDisabled ? '0.5' : '1'}

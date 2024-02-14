@@ -65,7 +65,7 @@ const Feedback = () => {
                     let user = localStorage.getItem('userPhone') as string
                     localStorage.clear()
                     localStorage.setItem('userPhone', user)
-                    router.push('/homePage')
+                    router.push('/')
                 }}
                 isDisabled={false}
             />
@@ -76,7 +76,7 @@ const Feedback = () => {
                     let user = localStorage.getItem('userPhone') as string
                     localStorage.clear()
                     localStorage.setItem('userPhone', user)
-                    router.push('/homePage')
+                    router.push('/')
                 }}
                 isDisabled={false}
             />
