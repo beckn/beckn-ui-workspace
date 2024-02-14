@@ -1084,8 +1084,8 @@ __metadata:
     "@types/jsonwebtoken": ^8.5.8
     "@types/leaflet": ^1.9.3
     "@types/node": 17.0.31
-    "@types/react": ^18.2.55
-    "@types/react-dom": ^18.2.18
+    "@types/react": 18.0.8
+    "@types/react-dom": 18.0.3
     "@types/react-places-autocomplete": ^7.2.14
     "@types/react-redux": ^7.1.24
     "@types/react-slick": ^0.23.8
@@ -1099,7 +1099,6 @@ __metadata:
     eslint: 8.14.0
     eslint-config-next: 12.1.6
     framer-motion: ^10.12.16
-    garudaa: "file:garudaa-1.0.0.tgz"
     js-cookie: ^3.0.1
     jsonwebtoken: ^8.5.1
     leaflet: ^1.9.4
@@ -1113,8 +1112,8 @@ __metadata:
     postcss: ^8.4.14
     postcss-import: ^14.1.0
     prop-types: ^15.8.1
-    react: 18.1.0
-    react-dom: 18.1.0
+    react: ^18.2.0
+    react-dom: ^18.2.0
     react-hot-toast: ^2.2.0
     react-icons: ^4.3.1
     react-leaflet: ^4.2.1
@@ -4403,15 +4402,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-dom@npm:^18.2.18":
-  version: 18.2.19
-  resolution: "@types/react-dom@npm:18.2.19"
-  dependencies:
-    "@types/react": "*"
-  checksum: 087a19d8e4c1c0900ec4ac5ddb749a811a38274b25683d233c11755d2895cc6e475e8bf9bea3dee36519769298e078d4c2feab9ab4bd13b26bc2a6170716437e
-  languageName: node
-  linkType: hard
-
 "@types/react-places-autocomplete@npm:^7.2.14":
   version: 7.2.14
   resolution: "@types/react-places-autocomplete@npm:7.2.14"
@@ -4490,17 +4480,6 @@ __metadata:
     "@types/scheduler": "*"
     csstype: ^3.0.2
   checksum: 12d0e6bc390709926d8eaeb7d2edb4ef9c9fbe8eac41cb0619d958386700547bff91c880c2a12a9eb1e0d09afa4f1e86fd1b93164c627824465b72123f149f3b
-  languageName: node
-  linkType: hard
-
-"@types/react@npm:^18.2.55":
-  version: 18.2.55
-  resolution: "@types/react@npm:18.2.55"
-  dependencies:
-    "@types/prop-types": "*"
-    "@types/scheduler": "*"
-    csstype: ^3.0.2
-  checksum: a8eb4fa77f73831b9112d4f11a7006217dc0740361649b9b0da3fd441d151a9cd415d5d68b91c0af4e430e063424d301c77489e5edaddc9f711c4e46cf9818a5
   languageName: node
   linkType: hard
 
@@ -7878,16 +7857,6 @@ __metadata:
 "garudaa@file:./garudaa-1.0.0.tgz::locator=%40beckn-ui%2Findustry_4.0%40workspace%3Aapps%2Findustry_4.0":
   version: 1.0.0
   resolution: "garudaa@file:./garudaa-1.0.0.tgz::locator=%40beckn-ui%2Findustry_4.0%40workspace%3Aapps%2Findustry_4.0"
-  dependencies:
-    rrweb: ^2.0.0-alpha.1
-    rxjs: ^7.5.6
-  checksum: db3abbb9f05912ca6db4383a8b882cbe36e44277e7c673bc28b72f6432392c9f59b72c7d1948b659aa60132477819c98cd58192824033033cc46bc93fda9f9e6
-  languageName: node
-  linkType: hard
-
-"garudaa@file:garudaa-1.0.0.tgz::locator=%40beckn-ui%2Fregen-agri%40workspace%3Aapps%2Fregen-agri":
-  version: 1.0.0
-  resolution: "garudaa@file:garudaa-1.0.0.tgz::locator=%40beckn-ui%2Fregen-agri%40workspace%3Aapps%2Fregen-agri"
   dependencies:
     rrweb: ^2.0.0-alpha.1
     rxjs: ^7.5.6
