@@ -9,6 +9,7 @@
         "lint": "next lint",
         "postbuild": "next-sitemap"
     },
+    "prettier": "@beckn-ui/prettier-config",
     "dependencies": {
         "@chakra-ui/icons": "^2.0.19",
         "@chakra-ui/react": "^2.7.0",
@@ -38,7 +39,7 @@
         "jsonwebtoken": "^8.5.1",
         "leaflet": "^1.9.4",
         "lodash": "^4.17.21",
-        "next": "12.1.6",
+        "next": "^13.4.19",
         "next-connect": "^0.12.2",
         "next-sanity-image": "^3.2.1",
         "next-sitemap": "^3.1.17",
@@ -63,14 +64,16 @@
         "url-loader": "^4.1.1"
     },
     "devDependencies": {
+        "@beckn-ui/prettier-config": "workspace:^",
         "@types/node": "17.0.31",
         "@types/react": "18.0.8",
         "@types/react-dom": "18.0.3",
         "autoprefixer": "^10.4.7",
         "eslint": "8.14.0",
-        "eslint-config-next": "12.1.6",
+        "eslint-config-next": "latest",
         "postcss": "^8.4.14",
         "postcss-import": "^14.1.0",
+        "prettier": "^3.0.3",
         "tailwindcss": "^3.1.4",
         "typescript": "4.6.4"
     }
