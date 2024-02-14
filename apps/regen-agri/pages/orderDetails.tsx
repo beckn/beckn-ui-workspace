@@ -651,7 +651,7 @@ const OrderDetails = () => {
                 isDisabled={false}
                 type={'solid'}
                 handleOnClick={() => {
-                    Router.push('/homePage')
+                    Router.push('/')
                 }}
             />
             <Button

@@ -148,7 +148,7 @@ const OrderConfirmation = () => {
                         buttonText={'Go Back Home'}
                         isDisabled={false}
                         type={'outline'}
-                        handleOnClick={() => router.push('/homePage')}
+                        handleOnClick={() => router.push('/')}
                     />
                 </Box>
             </Stack>

@@ -59,7 +59,7 @@ const OrderCancellation = () => {
                     buttonText={'Go Back Home'}
                     isDisabled={false}
                     type={'solid'}
-                    handleOnClick={() => router.push('/homePage')}
+                    handleOnClick={() => router.push('/')}
                 />
                 <Button
                     buttonText={'View Details'}

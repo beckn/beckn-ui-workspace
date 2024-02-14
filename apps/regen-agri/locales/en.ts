@@ -239,7 +239,7 @@ const en: { [key: string]: string } = {
     beverages: 'Beverages',
     snacks: 'Snacks',
     dairy: 'Dairy',
-    payAtStore: 'Pay At Store',
+    payAtStore: 'Stripe',
     selectPaymentMethod: 'Select payment method',
     orderDetails: 'Order details',
     trackOrder: 'Track Order',
@@ -413,6 +413,8 @@ const en: { [key: string]: string } = {
     termCondition: 'Terms & Condition',
     termConditionText:
         'By clicking on ‘Accept & Continue’ you are confirming to have read & accepted the Terms & Conditions.',
+
+    continueToPayment: 'Continue to Payment',
 }
 
 export default en

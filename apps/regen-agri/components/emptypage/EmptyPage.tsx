@@ -46,7 +46,7 @@ const EmptyPage = () => {
                 isDisabled={false}
                 type={'solid'}
                 handleOnClick={() => {
-                    router.push('/homePage')
+                    router.push('/')
                 }}
             />
         </Flex>
