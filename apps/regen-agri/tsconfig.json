@@ -1,20 +1,20 @@
 {
-  "extends": "../../tsconfig.json",
-  "compilerOptions": {
-    "jsx": "preserve",
-    "paths": {
-      "@components/*": ["./components/*"],
-      "@hooks/*": ["./hooks/*"],
-      "@lib/*": ["./lib/*"],
-      "@pages/*": ["./pages/*"],
-      "@store/*": ["./store/*"],
-      "@utils/*": ["./utilities/*"],
-      "@styles/*": ["./styles/*"],
-      "@public/*": ["./public/*"],
-      "@locales/*": ["./locales/*"],
-      "@modals/*": ["./modals/*"]
-    }
-  },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"]
+    "extends": "../../tsconfig.json",
+    "compilerOptions": {
+        "jsx": "preserve",
+        "paths": {
+            "@components/*": ["./components/*"],
+            "@hooks/*": ["./hooks/*"],
+            "@lib/*": ["./lib/*"],
+            "@pages/*": ["./pages/*"],
+            "@store/*": ["./store/*"],
+            "@utils/*": ["./utilities/*"],
+            "@styles/*": ["./styles/*"],
+            "@public/*": ["./public/*"],
+            "@locales/*": ["./locales/*"],
+            "@modals/*": ["./modals/*"]
+        }
+    },
+    "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+    "exclude": ["node_modules"]
 }
