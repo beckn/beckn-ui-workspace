@@ -17,9 +17,5 @@ export const validateCardPaymentForm = (formData: PaymentFormData) => {
         return false
     }
 
-    if (formData.postalCode.trim().length !== 6) {
-        return false
-    }
-
     return true
 }

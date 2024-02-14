@@ -23,6 +23,7 @@ import CardWithCheckBox, { PaymentMethodsInfo } from '../components/card/Card'
 
 import { useLanguage } from '../hooks/useLanguage'
 import { validateCardPaymentForm } from '../utilities/cardPaymentForm-utils'
+import { formatCurrency } from '../utilities/currencyFormat'
 
 import { BsThreeDots } from 'react-icons/bs'
 import { dbCountry } from '../mock/dbCountry.js'
@@ -102,9 +103,7 @@ const PaymentMode = () => {
         if (name === 'cvv' && !/^\d*$/.test(value)) {
             return
         }
-        if (name === 'postalCode' && !/^\d*$/.test(value)) {
-            return
-        }
+
         setFormData((prevFormData: PaymentFormData) => ({
             ...prevFormData,
             [name]: value,
@@ -144,9 +143,11 @@ const PaymentMode = () => {
         setSelectedCard(id)
     }
 
-    const totalPrice =
+    const initQuoteRes =
         initResult[0].message.catalogs.responses[0].message.order.quote.price
-            .value
+    const { currency, value } = initQuoteRes
+
+    const formattedCurrency = formatCurrency(parseFloat(value), currency)
 
     return (
         <>
@@ -456,7 +457,7 @@ const PaymentMode = () => {
                                 name="postalCode"
                                 onChange={handleCardInputChange}
                                 value={formData.postalCode}
-                                maxLength={6}
+                                // maxLength={6}
                             />
                         </Box>
                     </HStack>
@@ -473,7 +474,7 @@ const PaymentMode = () => {
                             onClick={handleCardFormSubmit}
                             disabled={!isFormFilled()}
                         >
-                            pay $ {totalPrice}
+                            Pay {formattedCurrency}
                         </button>
                     </Box>
                 </FormControl>
