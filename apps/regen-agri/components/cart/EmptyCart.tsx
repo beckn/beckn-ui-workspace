@@ -8,35 +8,35 @@ import Button from '../button/Button'
 import Router from 'next/router'
 
 const EmptyCart: React.FC = () => {
-    const { t } = useLanguage()
-    const handleGoBack = (): void => {
-        Router.push('/homePage')
-    }
+  const { t } = useLanguage()
+  const handleGoBack = (): void => {
+    Router.push('/homePage')
+  }
 
-    return (
-        <Flex className={Styles.emptyCart_container}>
-            <Box
-                mb={'40px'}
-                display={'flex'}
-                justifyContent={'center'}
-            >
-                <Image
-                    src={CartEmpty}
-                    width={'306px'}
-                    height={'245px'}
-                    alt="cartEmpty"
-                />
-            </Box>
-            <Text className={Styles.cartHeadingText}>{t.cartEmpty}</Text>
-            <Text className={Styles.cartSpanText}>{t.cartEmptySpan}</Text>
-            <Button
-                buttonText={t.shopButton}
-                type={'solid'}
-                isDisabled={false}
-                handleOnClick={handleGoBack}
-            />
-        </Flex>
-    )
+  return (
+    <Flex className={Styles.emptyCart_container}>
+      <Box
+        mb={'40px'}
+        display={'flex'}
+        justifyContent={'center'}
+      >
+        <Image
+          src={CartEmpty}
+          width={306}
+          height={245}
+          alt="cartEmpty"
+        />
+      </Box>
+      <Text className={Styles.cartHeadingText}>{t.cartEmpty}</Text>
+      <Text className={Styles.cartSpanText}>{t.cartEmptySpan}</Text>
+      <Button
+        buttonText={t.shopButton}
+        type={'solid'}
+        isDisabled={false}
+        handleOnClick={handleGoBack}
+      />
+    </Flex>
+  )
 }
 
 export default EmptyCart

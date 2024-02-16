@@ -54,18 +54,22 @@ const LandingPage = () => {
 
                 if (data.results.length > 0) {
                   const formattedAddress = data.results[0].formatted_address
-                  setCurrentAddress(formattedAddress)
+                  setCurrentAddress('Napa,California')
                 } else {
+                  setCurrentAddress('Napa,California')
                   setFetchCurrentLocationError('No address found for the given coordinates.')
                 }
               } else {
+                setCurrentAddress('Napa,California')
                 setFetchCurrentLocationError('Failed to fetch address data.')
                 alert('Failed to fetch address data.')
               }
             } catch (error) {
+              setCurrentAddress('Napa,California')
               setFetchCurrentLocationError('Error fetching address data: ' + (error as any).message)
               alert('Error fetching address data: ' + (error as any).message)
             } finally {
+              setCurrentAddress('Napa,California')
               setLoadingForCurrentAddress(false)
             }
           },
