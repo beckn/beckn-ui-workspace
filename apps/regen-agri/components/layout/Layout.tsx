@@ -46,10 +46,6 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
           <Header />
           {!geoLocationSearchPageVisible ? (
             <main
-              style={{
-                maxHeight: isHomepage ? 'calc(100vh - 28px)' : 'calc(100vh - 102px)',
-                overflowY: 'scroll'
-              }}
               className={cs(
                 'flex-grow',
                 {
