@@ -1,16 +1,10 @@
 ---
-name: Simple issue template
+name: FIDE issue template
 about: Template for issue creation
 title: ''
 labels: ''
 assignees: ''
 
----
-
-name: BOC
-about: BOC Community Issues Template
-title: "[BOC] Button for likes"
-labels: BOC
 ---
 
 ## Description
@@ -53,13 +47,7 @@ labels: BOC
 
 [Product Name: For eg: Beckn, Sunbird Obsrv etc]
 
-### Project Name
 
-[Project Name: Descriptive of the ticket]
-
-### Organization Name:
-
-[Organization Name]
 
 ### Domain
 
@@ -76,7 +64,3 @@ Pick one of [High]/[Medium]/[Low]
 ### Category
 
 Pick one or more of [CI/CD], [Integrations], [Performance Improvement], [Security], [UI/UX/Design], [Bug], [Feature], [Documentation], [Deployment], [Test], [PoC]
-
-### Sub Category
-
-Pick one or more of [API], [Database], [Analytics], [Refactoring], [Data Science], [Machine Learning], [Accessibility], [Internationalization], [Localization], [Frontend], [Backend], [Mobile], [SEO], [Configuration], [Deprecation], [Breaking Change], [Maintenance], [Support], [Question], [Technical Debt], [Beginner friendly], [Research], [Reproducible], [Needs Reproduction].
