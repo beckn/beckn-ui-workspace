@@ -92,7 +92,6 @@ export const dsnpRegister = async (
   addProviderSignature: any,
   handleSignature: any
 ) => {
-  console.log('Dank', handle)
   const data = {
     algo: 'SR25519',
     encoding: 'hex',

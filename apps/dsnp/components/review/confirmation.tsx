@@ -24,14 +24,14 @@ const Confirmation: React.FC<ConfirmationProps> = ({ reviewSubmitted, productIma
   }
 
   const handleCheckReview = () => {
-    window.location.href = `${process.env.NEXT_PUBLIC_DSNP_GATEWAY_URL}/feed`
+    window.location.href = `${process.env.NEXT_PUBLIC_DSNP_SOCIAL_URL}/feed`
   }
 
   useEffect(() => {
     if (loader) {
       setTimeout(() => {
         setLoader(false)
-      }, 5000)
+      }, 4000)
     }
   }, [loader])
 

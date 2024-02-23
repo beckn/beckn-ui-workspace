@@ -3,7 +3,7 @@ import axios from 'axios'
 export const fetchHandles = async (address: string) => {
   try {
     const response = await axios.post(
-      'https://api.dsnp-social-web.becknprotocol.io/v1/auth/handles',
+      `${process.env.NEXT_PUBLIC_DSNP_GATEWAY_URL}/v1/auth/handles`,
       [address] // This is the data-raw part
     )
 
@@ -15,7 +15,7 @@ export const fetchHandles = async (address: string) => {
 
 export const fetchChallenge = async () => {
   try {
-    const response = await axios.get('https://api.dsnp-social-web.becknprotocol.io/v1/auth/challenge')
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_DSNP_GATEWAY_URL}/v1/auth/challenge`)
     return response.data
   } catch (err) {
     console.log('')
@@ -31,7 +31,7 @@ export const dsnpLogin = async (signedChallenge: string, selectedAccount: string
     challenge
   }
   try {
-    const response = await axios.post('https://api.dsnp-social-web.becknprotocol.io/v1/auth/login', data)
+    const response = await axios.post(`${process.env.NEXT_PUBLIC_DSNP_GATEWAY_URL}/v1/auth/login`, data)
     return response.data
   } catch (err) {
     console.log(err)

@@ -91,7 +91,5 @@ export const payloadAddProvider = async (expiration: number, providerId: string,
     schemaIds
   })
 
-  console.log('Dank 2', claimHandlePayload)
-
   return claimHandlePayload
 }

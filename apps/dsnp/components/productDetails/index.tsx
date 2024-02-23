@@ -90,9 +90,8 @@ const ProductDetails: React.FC<Props> = ({ product, feed }) => {
       const isProductReview = productId
         ? productId === product.id
         : productName
-        ? productName === product.descriptor.name
-        : false
-      console.log('Dank inside', isProductReview)
+          ? productName === product.descriptor.name
+          : false
       if (isProductReview)
         return (
           <CustomerReviews
