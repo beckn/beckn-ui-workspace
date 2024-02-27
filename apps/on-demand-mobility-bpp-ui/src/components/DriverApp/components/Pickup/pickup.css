@@ -1,0 +1,132 @@
+.me-2{
+    background-color: #34C759;
+    color:white;
+    position: fixed;
+    border-color: #34C759;
+    bottom: 35px;
+    bottom: 60px;
+    height: 60px;
+    width: 100%;
+    border: none;
+}
+
+.popupbottom{
+    top: 50%;
+    vertical-align: bottom;
+}
+
+.popup{
+    background-color: #f5f1ed;
+    position:relative;
+    padding-bottom:20%;
+  }
+.carLog-P {
+    width: 46.7px;
+    height: 46.7px;
+    position: fixed;
+    top: 15%;
+    left: 1%;
+}
+.callLog-P{
+    position: fixed;
+    display: flex;
+    right: 1%;
+    top: 15%;
+}
+
+.titlle-P {
+    position:absolute;
+    text-align: center;
+    width: 100%;
+    font-size: 24px;
+    font-weight: 500;
+    top: 15%;
+}
+
+.h6-P{
+    position: fixed;
+    bottom: 55%;
+    width: 100%;
+    /* left: 68px; */
+    top: 30%;
+    text-align: center;
+    /* height: 21px; */
+    font-weight: 400;
+    font-size: 14px;
+}
+
+.hr-P{
+    margin-bottom: 20px;
+    top: 40px;
+    position: relative;  
+}
+
+.loc-P{
+    position: relative;
+    left: 20px;
+    top: 40px;
+    margin-bottom: 10px;
+}
+
+.sub-P {
+    position: fixed;
+    /*bottom: 80px;*/
+    left: 27%;
+    top: 55%;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 18px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.min-P{
+   position: fixed;
+   left: 18%;
+   top: 63%;
+   font-weight: 400;
+   font-size: 14px;
+}
+
+.kms-P{
+    position: fixed;
+    /*bottom: 95px;*/
+    right: 40%;
+    top: 63%;
+    font-weight: 400;
+    font-size: 14px;
+    /*line-height: 21px;  */  
+ }
+
+ .bottomModal-P{
+    bottom: 10%;
+    width: 100%;
+    height: 260px;
+    background: #FFFFFF;
+    backdrop-filter: blur(80px);
+    /* Note: backdrop-filter has minimal browser support */
+    border-radius: 10px;
+    position: fixed;
+ }
+
+ 
+
+ .rectangle-bar-P{
+    text-align: center;
+    position: absolute;
+    width: 100%;
+    margin-bottom: 10px;
+    top: -5px;
+ }
+
+ .nevigate-body-P{
+    position: relative;
+    top: 5%;
+}
+ 
+.recbar-P{
+    height: 1%;
+    background-color: transparent;
+    border: none;
+}

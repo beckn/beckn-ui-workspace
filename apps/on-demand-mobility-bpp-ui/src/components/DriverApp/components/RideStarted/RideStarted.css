@@ -1,0 +1,186 @@
+.me-2{
+    background-color: #34C759;
+    color:white;
+    position: fixed;
+    border-color: #34C759;
+    bottom: 35px;
+    bottom: 60px;
+    height: 60px;
+    width: 100%;
+    border: none;
+}
+
+.popupbottom{
+    top: 50%;
+    vertical-align: bottom;
+}
+
+.popup{
+    background-color: #f5f1ed;
+    position:relative;
+    padding-bottom:20%;
+  }
+.carLog {
+    width: 46.7px;
+    height: 46.7px;
+    position: fixed;
+    top: 18%;
+    left: 1%;
+}
+.callLog{
+    position: fixed;
+    display: flex;
+    right: 1%;
+    top: 15%;
+}
+.titlle {
+    position:absolute;
+    text-align: center;
+    width: 100%;
+    font-size: 24px;
+    font-weight: 500;
+    top: 15%;
+}
+.titlle-text {
+    position: absolute;
+    text-align: center;
+    width: 100%;
+    /* font-size: 24px; */
+    /* font-weight: 500; */
+    top: 34%;
+}
+
+ .bottomModal{
+    bottom: 10%;
+    width: 100%;
+    height: 260px;
+    background: #FFFFFF;
+    backdrop-filter: blur(80px);
+    /* Note: backdrop-filter has minimal browser support */
+    border-radius: 10px;
+    position: fixed;
+ }
+
+ .rectangle-bar{
+    text-align: center;
+    position: absolute;
+    width: 100%;
+    margin-bottom: 10px;
+    top: -5px;
+ }
+
+ .nevigate-body{
+    position: relative;
+    top: 5%;
+}
+ 
+.recbar{
+    height: 1%;
+    background-color: transparent;
+    border: none;
+}
+
+.hr-RS{
+    margin-bottom: 20px;
+    top: 24%;
+    width: 100%;
+    position: fixed;
+}
+
+.loc-RS{
+    position: relative;
+    left: 20px;
+    top: 44px;
+    margin-bottom: 10px;
+}
+
+.MapPin-RS{
+    display: flex;
+    position: fixed;
+    /* bottom: -35px; */
+    /* right: 5px; */
+    top: 44%;
+    left: 5%;
+}
+
+.map-RS{
+    display: flex;
+    position: relative;
+    bottom:-px;
+    right: 15px;
+     
+}
+
+.hrs-RS{
+    display: flex;
+    position: fixed;
+    width: 100%;
+    top: 51%;
+}
+
+.Cancelridehr-RS{
+    display: flex;
+    position: fixed;
+    width: 100%;
+    top: 76%;
+}
+
+.hd-RS{
+    display: flex;
+    position: fixed;
+    top: 59%;
+    left: 1%;
+}
+
+.rs-RS{
+    display: flex;
+    position: fixed;
+    right: 1%;
+    top: 59%;
+    /* bottom: 90px; */
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+}
+
+.ps-RS{
+    display: flex;
+    position: fixed;
+    /* bottom: 70px; */
+    top: 70%;
+    left: 1%;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 21px;
+}
+
+.dest-RS{
+    left: 18%;
+    width: 100%;
+    position: fixed;
+}
+
+.sub-RS {
+    position: fixed;
+    /*bottom: 80px;*/
+    top: 34%;
+    left: 18%;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 18px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.SourceAddress-RS{
+    top: 34%;
+    position: fixed;
+}
+
+.text-address {
+    white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 45ch;
+  }

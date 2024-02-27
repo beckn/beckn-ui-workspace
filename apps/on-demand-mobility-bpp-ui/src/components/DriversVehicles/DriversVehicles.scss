@@ -1,0 +1,43 @@
+.drivers-vehicles {
+  .main-tab-content .nested-tabs .nav-tabs .nav-link {
+    font-size: 0.9rem;
+  }
+
+  .btn-icon {
+    &.shift-down {
+      display: flex;
+      margin-bottom: -2.5rem;
+    }
+  }
+
+  .arrow-right {
+    display: flex;
+    align-items: center;
+    div.icon {
+      margin: 0 auto;
+    }
+    svg {
+      color: rgba(62, 64, 89, 0.1);
+    }
+  }
+
+  .line-right {
+    display: flex;
+    align-items: center;
+    div.icon {
+      height: 64px;
+      margin: 0 auto;
+      border: 2px solid rgba(62, 64, 89, 0.1);
+    }
+  }
+  
+}
+
+.nested-tabs {
+  position: relative;
+  .btn-icon {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+}

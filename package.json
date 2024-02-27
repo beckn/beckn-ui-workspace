@@ -36,6 +36,8 @@
     "dev:regen-agri": "yarn workspace @beckn-ui/regen-agri dev",
     "build:regen-agri": "yarn workspace @beckn-ui/regen-agri build",
     "start:regen-agri": "yarn workspace @beckn-ui/regen-agri start",
+    "build:taxibpp-ui": "yarn workspace @beckn-ui/taxibpp-ui build",
+    "start:taxibpp-ui": "yarn workspace @beckn-ui/taxibpp-ui start",
     "test": "jest",
     "lint:fix": "eslint --fix",
     "lint": "eslint",

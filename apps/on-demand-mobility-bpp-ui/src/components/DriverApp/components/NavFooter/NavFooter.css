@@ -1,0 +1,31 @@
+.Container{
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: space-around;
+    flex-direction: row;
+    flex-wrap: wrap;
+    bottom: 20px;
+}
+.homeicon {
+    padding-left: 10px;
+    cursor: pointer;
+
+}
+.caricon {
+  padding-left: 10px;
+ 
+}
+.profileicon{
+  padding-left: 10px;
+  cursor: pointer;
+}
+.fixed-bottom1{
+  position: fixed;
+  right: 0;
+  bottom: 15px;
+  left: 0;
+  z-index: 1030;
+  height: 5%;
+  background-color: white;
+}
