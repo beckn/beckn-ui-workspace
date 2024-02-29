@@ -58,7 +58,9 @@ body {
 }
 .order_status_progress {
   padding: 20px;
+  padding-left: unset;
 }
+
 .chakra-text.order_status_text_completed {
   color: #5ec401;
 }
@@ -85,7 +87,8 @@ select.chakra-select {
   bottom: 20px;
   width: 90%;
 }
-.css-1ydjfm6[aria-checked=true], .css-1ydjfm6[data-checked]
-{
-  background: #0560FA !important;   border-color:#0560FA !important;
+.css-1ydjfm6[aria-checked='true'],
+.css-1ydjfm6[data-checked] {
+  background: #0560fa !important;
+  border-color: #0560fa !important;
 }

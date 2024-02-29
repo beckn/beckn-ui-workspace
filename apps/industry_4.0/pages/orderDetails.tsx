@@ -3,7 +3,7 @@ import axios from 'axios'
 import Router, { useRouter } from 'next/router'
 import { Box, Card, CardBody, Divider, Flex, Image, Radio, RadioGroup, Stack, Text, Textarea } from '@chakra-ui/react'
 import { BottomModal, Typography } from '@beckn-ui/molecules'
-import { DetailCard, OrderStatusProgress } from '@beckn-ui/becknified-components'
+import { DetailCard, OrderStatusProgress, OrderStatusProgressProps } from '@beckn-ui/becknified-components'
 import { StatusResponseModel, SupportModel } from '../types/status.types'
 import { useLanguage } from '@hooks/useLanguage'
 import { formatTimestamp, getPayloadForOrderStatus } from '@utils/confirm-utils'
@@ -38,14 +38,34 @@ const OrderDetails = () => {
   const router = useRouter()
   const { t } = useLanguage()
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
+  const [orderStatusMap, setOrderStatusMap] = useState<any[]>([])
+  const [currentStatusLabel, setCurrentStatusLabel] = useState('')
 
-  const orderStatusMap = {
-    CANCELLED: 'Cancelled',
-    ['ITEM PRINTING']: 'Item Printing',
-    IN_ASSEMBLY_LINE: 'In Assembly Line',
-    ITEM_DISPATCHED: 'Item Dispatched',
-    DELIVERED: 'Delivered'
-  }
+  useEffect(() => {
+    const storedOrderStatusMap = JSON.parse(localStorage.getItem('orderStatusMap') || '[]')
+    setOrderStatusMap(storedOrderStatusMap)
+  }, [])
+
+  useEffect(() => {
+    if (orderStatusMap.length > 0) {
+      localStorage.setItem('orderStatusMap', JSON.stringify(orderStatusMap))
+      setCurrentStatusLabel(orderStatusMap[orderStatusMap.length - 1].label)
+    }
+  }, [orderStatusMap])
+
+  useEffect(() => {
+    if (data.statusData.length > 0) {
+      const newData = data.statusData
+        .map((status: any) => ({
+          label: status?.message?.order?.fulfillments[0]?.state?.descriptor?.short_desc,
+          statusTime: status?.message?.order?.fulfillments[0]?.state?.updated_at
+        }))
+        .filter((status: any) => status.label)
+
+      const labelSet = new Set(orderStatusMap.map(status => status.label))
+      setOrderStatusMap(prevState => [...prevState, ...newData.filter(status => !labelSet.has(status.label))])
+    }
+  }, [data.statusData])
 
   const orderCancelReason = [
     { id: 1, reason: 'Merchant is taking too long' },
@@ -568,7 +588,7 @@ const OrderDetails = () => {
 
       {/* Display order status details */}
       <DetailCard>
-        <CardBody>
+        <CardBody p={'unset'}>
           <>
             <Flex
               justifyContent="space-between"
@@ -613,15 +633,22 @@ const OrderDetails = () => {
               />
             </Flex>
           </>
-          <Divider />
+          <Divider
+            mr={'-20px'}
+            ml="-20px"
+            width={'unset'}
+            pt="15px"
+          />
 
           {/* Display order status progress */}
           <Box className="order_status_progress">
-            <OrderStatusProgress
-              orderStatusMap={orderStatusMap}
-              orderState={data.statusData[0]?.message?.order?.fulfillments[0]?.state?.descriptor?.code}
-              statusTime={formatTimestamp(data.statusData[0]?.message?.order?.fulfillments[0]?.state?.updated_at)}
-            />
+            {orderStatusMap.map((status: OrderStatusProgressProps, index: number) => (
+              <OrderStatusProgress
+                key={index}
+                label={status.label}
+                statusTime={formatTimestamp(status.statusTime)}
+              />
+            ))}
           </Box>
         </CardBody>
       </DetailCard>
