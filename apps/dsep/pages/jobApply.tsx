@@ -2,6 +2,8 @@ import { Box, Flex, Text } from '@chakra-ui/react'
 import { JobApplyFormData, JobCredential, JobSelectResponseModel } from '../components/jobApply/JobApply.types'
 import React, { useEffect, useState } from 'react'
 import Router, { useRouter } from 'next/router'
+import { toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 import Button from '../components/button/Button'
 import Cookies from 'js-cookie'
@@ -219,8 +221,18 @@ const jobApply = () => {
           }
         }
       }
-    } catch (error) {
-      console.error(error)
+    } catch (error: any) {
+      if (error.response && error.response.data) {
+        const errorMessage = error.response.data.error.message
+        console.log(error.response.config.url)
+        if (error.response.config.url.includes(`${strapiUrl}/orders`)) {
+          toast.error(errorMessage, { autoClose: 5000 })
+          Router.push('/applicationSent')
+        } else {
+          toast.error(errorMessage, { autoClose: 5000 })
+          console.log(errorMessage)
+        }
+      }
     }
   }
 
