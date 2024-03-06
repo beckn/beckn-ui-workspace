@@ -607,6 +607,7 @@ __metadata:
     eslint: 8.14.0
     eslint-config-next: 12.1.6
     framer-motion: ^10.12.16
+    garudaa: "file:garudaa-1.0.0.tgz"
     js-cookie: ^3.0.5
     jsonwebtoken: ^8.5.1
     leaflet: ^1.9.4
@@ -880,6 +881,7 @@ __metadata:
     eslint: 8.14.0
     eslint-config-next: 12.1.6
     framer-motion: ^10.12.16
+    garudaa: "file:garudaa-1.0.0.tgz"
     js-cookie: ^3.0.5
     jsonwebtoken: ^8.5.1
     leaflet: ^1.9.4
@@ -7974,6 +7976,26 @@ __metadata:
 "garudaa@file:./garudaa-1.0.0.tgz::locator=%40beckn-ui%2Findustry_4.0%40workspace%3Aapps%2Findustry_4.0":
   version: 1.0.0
   resolution: "garudaa@file:./garudaa-1.0.0.tgz::locator=%40beckn-ui%2Findustry_4.0%40workspace%3Aapps%2Findustry_4.0"
+  dependencies:
+    rrweb: ^2.0.0-alpha.1
+    rxjs: ^7.5.6
+  checksum: db3abbb9f05912ca6db4383a8b882cbe36e44277e7c673bc28b72f6432392c9f59b72c7d1948b659aa60132477819c98cd58192824033033cc46bc93fda9f9e6
+  languageName: node
+  linkType: hard
+
+"garudaa@file:garudaa-1.0.0.tgz::locator=%40beckn-ui%2Fdsep%40workspace%3Aapps%2Fdsep":
+  version: 1.0.0
+  resolution: "garudaa@file:garudaa-1.0.0.tgz::locator=%40beckn-ui%2Fdsep%40workspace%3Aapps%2Fdsep"
+  dependencies:
+    rrweb: ^2.0.0-alpha.1
+    rxjs: ^7.5.6
+  checksum: db3abbb9f05912ca6db4383a8b882cbe36e44277e7c673bc28b72f6432392c9f59b72c7d1948b659aa60132477819c98cd58192824033033cc46bc93fda9f9e6
+  languageName: node
+  linkType: hard
+
+"garudaa@file:garudaa-1.0.0.tgz::locator=%40beckn-ui%2Fodr%40workspace%3Aapps%2Fodr":
+  version: 1.0.0
+  resolution: "garudaa@file:garudaa-1.0.0.tgz::locator=%40beckn-ui%2Fodr%40workspace%3Aapps%2Fodr"
   dependencies:
     rrweb: ^2.0.0-alpha.1
     rxjs: ^7.5.6
