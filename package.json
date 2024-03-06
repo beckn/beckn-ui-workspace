@@ -38,7 +38,7 @@
     "start:regen-agri": "yarn workspace @beckn-ui/regen-agri start",
     "dev:taxi-bpp": "yarn workspace @beckn-ui/taxi-bpp dev",
     "build:taxi-bpp": "yarn workspace @beckn-ui/taxi-bpp build",
-    "start:taxi-boo": "yarn workspace @beckn-ui/taxi-bpp start",
+    "start:taxi-bpp": "yarn workspace @beckn-ui/taxi-bpp start",
     "test": "jest",
     "lint:fix": "eslint --fix",
     "lint": "eslint",
