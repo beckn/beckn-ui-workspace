@@ -36,8 +36,6 @@
     "dev:regen-agri": "yarn workspace @beckn-ui/regen-agri dev",
     "build:regen-agri": "yarn workspace @beckn-ui/regen-agri build",
     "start:regen-agri": "yarn workspace @beckn-ui/regen-agri start",
-    "build:taxibpp-ui": "yarn workspace @beckn-ui/taxibpp-ui build",
-    "start:taxibpp-ui": "yarn workspace @beckn-ui/taxibpp-ui start",
     "dev:taxi-bpp": "yarn workspace @beckn-ui/taxi-bpp dev",
     "build:taxi-bpp": "yarn workspace @beckn-ui/taxi-bpp build",
     "start:taxi-boo": "yarn workspace @beckn-ui/taxi-bpp start",
