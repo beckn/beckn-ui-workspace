@@ -51,6 +51,10 @@
     {
       "name": "on-demand-mobility-bpp-ui",
       "path": "../apps/on-demand-mobility-bpp-ui"
+    },
+    {
+      "name": "taxi-bpp",
+      "path": "../apps/taxi-bpp"
     }
   ],
 	"settings": {
