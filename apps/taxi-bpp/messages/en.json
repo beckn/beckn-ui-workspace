@@ -1,0 +1,47 @@
+{
+  "Home": {
+    "title": "Hello world!"
+  },
+
+  "examplePage": {
+    "welcome": "Welcome to the Taxi Admin App",
+    "emailSignIn": "Sign in with Email Id",
+    "mobileSignIn": "Sign in with Mobile Number",
+    "newUser": "New User",
+    "signUp": "Sign Up",
+    "signIn": "Sign In",
+    "cancel": "Cancel",
+    "submit": "Submit",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "mobileNumber": "Enter Mobile Number",
+    "emailId": "Enter email Id",
+    "password": "Enter Password",
+    "forgot": "Forgot Passsword",
+    "otp": "Send OTP",
+    "newPassword": "Create New Password",
+    "confirmPassword": "Confirm Password",
+    "associationName": "Select Association Name",
+    "selectRole": "Select your Role",
+    "existingUser": "Existing User",
+    "firstNameRequired": "First name is required",
+    "lastNameRequired": "Last name is required",
+    "emailRequired": "Email is required",
+    "passwordRequired": "Password is required",
+    "selectCompany": "Select Company",
+    "wait": "Please Wait",
+    "processing": "Processing your request",
+    "personalInfo": "Personal Information",
+    "addressInfo": "Address Info",
+    "personalDoc": "Personal Documents",
+    "pickupUser": "Going for Pickup",
+    "reachPickup": "Reached Pickup",
+    "navigate": "Navigate",
+    "reachPickupMessage": "you have reached Pickup location",
+    "available": "Available",
+    "startRide": "Start Ride",
+    "totalFare": "Total Fare",
+    "fareCollect": "To be collected at the end of the ride.",
+    "wayDropMessage": "You are on your way towards the drop location."
+  }
+}
