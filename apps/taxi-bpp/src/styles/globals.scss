@@ -1,6 +1,5 @@
 @import "./custom.scss";
 @import "~bootstrap/scss/bootstrap";
-
 @import "./utility.scss";
 @import "./desktop.scss";
 @import "~react-dates/lib/css/_datepicker.css";
@@ -12,6 +11,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
 }
 
 code {
