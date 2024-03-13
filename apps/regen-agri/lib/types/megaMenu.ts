@@ -1,7 +1,7 @@
 export interface IMegaMenuShow {
-    isMegaMenuOpen: boolean
+  isMegaMenuOpen: boolean
 }
 
 export interface IMegaMenuRootState {
-    megaMenu: IMegaMenuShow
+  megaMenu: IMegaMenuShow
 }

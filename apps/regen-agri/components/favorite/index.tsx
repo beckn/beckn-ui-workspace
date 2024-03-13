@@ -5,27 +5,25 @@ import { IFavoriteRootState } from '../../lib/types/favorite'
 import FavoriteItem from './FavoriteItem'
 
 const Favorites = () => {
-    const { t } = useLanguage()
-    const favoriteItems = useSelector(
-        (state: IFavoriteRootState) => state.favorite.items
-    )
+  const { t } = useLanguage()
+  const favoriteItems = useSelector((state: IFavoriteRootState) => state.favorite.items)
 
-    return (
-        <div className="w-full xl:max-w-[2100px] mx-auto">
-            {favoriteItems.length ? (
-                <div className="grid gap-4 grid-cols-6 lg:grid-cols-12">
-                    {favoriteItems.map((favoriteItem) => (
-                        <FavoriteItem
-                            key={favoriteItem.id}
-                            product={favoriteItem}
-                        />
-                    ))}
-                </div>
-            ) : (
-                <p>{t.thereAreNoFavorites}</p>
-            )}
+  return (
+    <div className="w-full xl:max-w-[2100px] mx-auto">
+      {favoriteItems.length ? (
+        <div className="grid gap-4 grid-cols-6 lg:grid-cols-12">
+          {favoriteItems.map(favoriteItem => (
+            <FavoriteItem
+              key={favoriteItem.id}
+              product={favoriteItem}
+            />
+          ))}
         </div>
-    )
+      ) : (
+        <p>{t.thereAreNoFavorites}</p>
+      )}
+    </div>
+  )
 }
 
 export default Favorites

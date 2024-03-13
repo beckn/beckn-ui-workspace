@@ -1,7 +1,7 @@
 export interface ISettingBox {
-    isOpen: boolean
+  isOpen: boolean
 }
 
 export interface ISettingBoxRootState {
-    settingBox: ISettingBox
+  settingBox: ISettingBox
 }

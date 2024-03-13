@@ -3,12 +3,12 @@ import SideBarMenu from './SideBarMenu'
 import MegaMenu from './MegaMenu'
 
 const index = () => {
-    return (
-        <>
-            <SideBarMenu />
-            <MegaMenu />
-        </>
-    )
+  return (
+    <>
+      <SideBarMenu />
+      <MegaMenu />
+    </>
+  )
 }
 
 export default index

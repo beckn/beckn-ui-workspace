@@ -14,28 +14,28 @@ import responseDataReducer from './responseData-slice'
 import geoMapLocationSearchReducer from './geoMapLocationSearch-slice'
 
 const store = configureStore({
-    reducer: {
-        specialOfferProductsList: specialOfferProductsReducer,
-        newestProductsList: newestProductReducer,
-        sortedProductsList: SortedProductsListReducer,
-        cartUi: cartUiReducer,
-        cart: cartSliceReducer,
-        userInfo: userInfoReducer,
-        sideNavBar: sideNavBarReducer,
-        megaMenu: megaMenuReducer,
-        activeMenuItem: activeMenuItemReducer,
-        settingBox: settingBoxReducer,
-        favorite: favoriteReducer,
-        transactionId: responseDataReducer,
-        quoteResponse: responseDataReducer,
-        customerDetails: responseDataReducer,
-        initResponse: responseDataReducer,
-        geoLocationSearchPageUI: geoMapLocationSearchReducer,
-    },
-    middleware: (getDefaultMiddleware) =>
-        getDefaultMiddleware({
-            serializableCheck: false,
-        }),
+  reducer: {
+    specialOfferProductsList: specialOfferProductsReducer,
+    newestProductsList: newestProductReducer,
+    sortedProductsList: SortedProductsListReducer,
+    cartUi: cartUiReducer,
+    cart: cartSliceReducer,
+    userInfo: userInfoReducer,
+    sideNavBar: sideNavBarReducer,
+    megaMenu: megaMenuReducer,
+    activeMenuItem: activeMenuItemReducer,
+    settingBox: settingBoxReducer,
+    favorite: favoriteReducer,
+    transactionId: responseDataReducer,
+    quoteResponse: responseDataReducer,
+    customerDetails: responseDataReducer,
+    initResponse: responseDataReducer,
+    geoLocationSearchPageUI: geoMapLocationSearchReducer
+  },
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware({
+      serializableCheck: false
+    })
 })
 
 export default store

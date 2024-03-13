@@ -4,17 +4,17 @@ import { RetailItem } from '../lib/types/products'
 import { IProductList } from '../lib/types/productList'
 
 const initialState: IProductList = {
-    productsList: [],
+  productsList: []
 }
 
 const newestProductsSlice = createSlice({
-    name: 'newestProducts',
-    initialState,
-    reducers: {
-        addProducts(state, action: PayloadAction<RetailItem[]>) {
-            state.productsList = action.payload
-        },
-    },
+  name: 'newestProducts',
+  initialState,
+  reducers: {
+    addProducts(state, action: PayloadAction<RetailItem[]>) {
+      state.productsList = action.payload
+    }
+  }
 })
 
 export const newestProductsActions = newestProductsSlice.actions
