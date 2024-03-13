@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 // import PropTypes from "prop-types";
 // import { Link, useNavigate } from "react-router-dom";
 import { Col, Container, Row } from 'react-bootstrap'
@@ -8,7 +8,9 @@ import { Col, Container, Row } from 'react-bootstrap'
 // import { AppRoutes } from '../../../core/constant'
 import { LeftSection } from '../../../lib/shared/graphics/left-section'
 
-import './sign-in-with-email.module.scss'
+import styles from './sign-in-with-email.module.scss'
+
+// import './sign-in-with-email.module.scss'
 // import { userAction } from '../Login.services'
 // import { triggerEvent } from '../../DriverApp/components/SwitchButton/Driver.Services'
 import { DarkLayout } from '@/lib/shared/layout/dark-layout'
@@ -16,7 +18,7 @@ import Link from 'next/link'
 
 // TODO :- To check the styles and functionality of the following component
 
-const SignInWithEmail = (props: any) => {
+const SignInWithEmail = () => {
   //   const navigate = useNavigate();
 
   const [Name, setName] = useState('')
@@ -65,7 +67,7 @@ const SignInWithEmail = (props: any) => {
               className="d-flex align-items-center justify-content-center"
             >
               <div className="w-100">
-                <div className="row w-100 justify-content-center p-3">
+                <div className={`${styles.row} w-100 justify-content-center p-3`}>
                   <div className="col-6 mb-3 col-12 col-lg-6 ">
                     <h2>
                       Welcome to
@@ -75,14 +77,15 @@ const SignInWithEmail = (props: any) => {
                   </div>
                 </div>
                 <form
-                  onSubmit={e => {
+                  onSubmit={() => {
+                    // TODO :- To enable event after proper implementation of components
                     // handleSubmit(e)
                     console.log('formIsSubmitted')
                   }}
                 >
-                  <div className="row w-100 justify-content-center">
+                  <div className={`${styles.row} w-100 justify-content-center`}>
                     <div className="col-6 col-12 col-lg-6">
-                      <div className="row">
+                      <div className={styles.row}>
                         <div className="col mb-4 ">
                           <input
                             type="text"
@@ -93,7 +96,7 @@ const SignInWithEmail = (props: any) => {
                           />
                         </div>
                       </div>
-                      <div className="row">
+                      <div className={styles.row}>
                         <div className="col mb-3 ">
                           <input
                             type="password"
@@ -104,7 +107,7 @@ const SignInWithEmail = (props: any) => {
                           />
                         </div>
                       </div>
-                      <div className="row mb-3">
+                      <div className={`${styles.row} mb-3`}>
                         <div className="col ">
                           <Link
                             href={'#'}
@@ -124,10 +127,10 @@ const SignInWithEmail = (props: any) => {
                           </Link>
                         </div> */}
                       </div>
-                      <div className="row btn-lg btn-block">
+                      <div className={`${styles.row} btn-lg btn-block`}>
                         <button
                           type="submit"
-                          className="btn btn-primary"
+                          className="btn w-100 btn-primary"
                           disabled={!Name || !Password}
                         >
                           Sign In
@@ -142,7 +145,7 @@ const SignInWithEmail = (props: any) => {
                           Cancel
                         </Link>
                       </div> */}
-                      <div className="row mt-5">
+                      <div className={`${styles.row} mt-5`}>
                         <div className="col-12 col-lg-6 ">
                           New User?{' '}
                           <Link
