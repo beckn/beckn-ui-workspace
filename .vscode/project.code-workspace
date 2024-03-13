@@ -47,6 +47,10 @@
     {
       "name": "regen-agri",
       "path": "../apps/regen-agri"
+    },
+    {
+      "name": "taxi-bpp",
+      "path": "../apps/taxi-bpp"
     }
   ],
 	"settings": {

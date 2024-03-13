@@ -58,6 +58,7 @@ const myLearningOrderHistory = () => {
           heading={courseOrder.attributes.items[0].descriptor.name}
           time={getOrderPlacementTimeline(courseOrder.attributes.createdAt)}
           id={courseOrder.id}
+          price={courseOrder.attributes.price}
           myLearingStatus={courseOrder.attributes.delivery_status}
           handleViewCourses={() => {
             window.location.href = courseOrder.attributes.items[0].tags.Url
