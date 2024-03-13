@@ -1,0 +1,49 @@
+$enable-negative-margins: true;
+
+// scss-docs-start theme-colors-map
+$theme-colors: (
+  "primary": #abd4fa,
+  "secondary": #6c757d,
+  "success": #198754,
+  "info": #0dcaf0,
+  "warning": #ffc107,
+  "danger": #dc3545,
+  "light": #f8f9fa,
+  "dark": #050505,
+);
+// scss-docs-end theme-colors-map
+
+// scss-docs-start input-btn-variables
+$input-btn-padding-y: 0.65rem;
+$input-btn-padding-x: 0.9rem;
+$input-btn-font-family: null;
+
+// scss-docs-start border-radius-variables
+$border-radius: 0.5rem;
+$border-radius-sm: 0.2rem;
+$border-radius-lg: 0.3rem;
+$border-radius-pill: 50rem;
+// scss-docs-end border-radius-variables
+
+// Links
+//
+// Style anchor elements.
+
+// $link-color: $primary;
+$link-decoration: none;
+$link-shade-percentage: 20%;
+// $link-hover-color: shift-color($link-color, $link-shade-percentage);
+$link-hover-decoration: underline;
+
+// tabs
+$nav-link-padding-y: 0.8rem;
+$nav-tabs-link-active-color: black;
+$nav-tabs-border-width: 2px;
+$nav-tabs-border-radius: 0px;
+$nav-tabs-border-color: black;
+$nav-tabs-link-hover-border-color: transparent transparent transparent;
+$nav-tabs-link-active-border-color: transparent transparent #abd4fa;
+$nav-pills-border-radius: 0;
+$nav-pills-link-active-color: black;
+$nav-pills-link-active-bg: white;
+$nav-link-color: white;
