@@ -11,5 +11,6 @@ export interface ButtonProps {
   fullWidth?: boolean
   variant?: 'outline' | 'solid'
   colorScheme?: 'primary' | 'secondary'
+  textColor?: 'textPrimary' | 'textSecondary'
   type?: ButtonType
 }

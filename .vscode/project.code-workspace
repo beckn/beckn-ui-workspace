@@ -51,6 +51,10 @@
     {
       "name": "taxi-bpp",
       "path": "../apps/taxi-bpp"
+    },
+    {
+      "name": "retail",
+      "path": "../apps/retail"
     }
   ],
 	"settings": {
