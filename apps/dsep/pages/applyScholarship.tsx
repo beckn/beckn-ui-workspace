@@ -17,6 +17,9 @@ import UploadFile from '../components/uploadFile/UploadFile'
 import { useLanguage } from '../hooks/useLanguage'
 import { FormErrors, validateForm } from '../utilities/detailsForm-utils'
 
+import { toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+
 const ApplyScholarship = () => {
   const [formData, setFormData] = useState<ScholarshipApplyFormDataModel>({
     name: '',
@@ -339,7 +342,19 @@ const ApplyScholarship = () => {
         }
       }
       setIsLoading(false)
-    } catch (error) {}
+    } catch (error: any) {
+      if (error.response && error.response.data) {
+        const errorMessage = error.response.data.error.message
+
+        if (error.response.config.url.includes(`${strapiUrl}/orders`)) {
+          toast.error(errorMessage, { autoClose: 5000 })
+          Router.push('/scholarshipConfirmationPage')
+        } else {
+          toast.error(errorMessage, { autoClose: 5000 })
+        }
+      }
+      setIsLoading(false)
+    }
   }
 
   if (isLoadingInSelect) {

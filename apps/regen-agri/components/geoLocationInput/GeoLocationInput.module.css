@@ -1,0 +1,124 @@
+.parent_container {
+    height: 150px;
+}
+.flex_container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+}
+
+.flex_input_group {
+    display: flex;
+    flex-direction: row;
+}
+.location_drop_down_container {
+    margin-top: 8px;
+    max-height: 200px;
+    margin-bottom: 1px;
+    background-color: #f0f0f0;
+    overflow: scroll;
+}
+.location_drop_down_list {
+    width: 100%;
+    height: 200px;
+}
+
+.location_list_label {
+    border-bottom: 1px solid #ddd;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    cursor: pointer;
+}
+
+.input_box {
+    flex: 1;
+    border: none;
+    padding-left: 14px;
+    padding-top: 18px;
+    padding-bottom: 18px;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    color: #7f898e;
+    font-size: 16px;
+    font-weight: 400;
+    filter: drop-shadow(0px 10px 24px rgba(0, 0, 0, 0.1));
+}
+.input_box:focus {
+    background-color: #fff;
+    outline: none;
+}
+
+.search_button {
+    background-color: rgba(var(--color-primary));
+    color: #fff;
+    border: none;
+    padding: 18px 21px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+/* -----------*/
+
+.main_container2 {
+    background: #fff;
+    height: calc(100vh - 0px);
+    background-repeat: no-repeat;
+    margin-top: 3.5vh;
+    padding-left: 5px;
+    background-size: cover;
+}
+
+.search_box_container {
+    border-bottom: 2px solid rgba(var(--color-primary));
+    width: 85%;
+}
+.search_box_input {
+    outline: none;
+    width: 90%;
+    margin-right: 12px;
+}
+.border {
+    border-top: 1px solid black;
+    border-right: 1px solid black;
+}
+
+.location_pointer_wrapper {
+    height: 20px;
+    width: 20px;
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: 20px;
+}
+.location_listitem_content {
+    max-width: 80%;
+    margin-left: 10px;
+    margin-bottom: 5px;
+}
+.location_list_item {
+    border-bottom: 1px solid #f0f0f0;
+    height: max-content;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.location_listitem_content_main_text {
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 14.32px;
+    color: #37474f;
+}
+.location_listitem_content_secondary_text {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 15px;
+    color: #7c7c7c;
+}
+.location_listitem_container {
+    margin-top: 10px;
+}

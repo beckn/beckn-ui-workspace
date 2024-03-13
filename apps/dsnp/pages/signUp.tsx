@@ -114,7 +114,6 @@ const SignUp = () => {
             } else {
               const createData = await dsnpCreate(dsnpHandle, providerInfo, selectedAddress)
               setLocalStorage('dsnpAuth', createData)
-              console.log('Dank create data', createData)
             }
           }
         } else {
@@ -183,15 +182,12 @@ const SignUp = () => {
         const { signedChallenge } = event.data.data
         dsnpLogin(signedChallenge, handles[0]?.publicKey, challenge.challenge).then(loginData => {
           setLocalStorage('dsnpAuth', loginData)
-          console.log('Dank login data', loginData)
           Router.push('/homePage')
         })
       } else if (event.data.type && event.data.type === 'signCiTransaction') {
         const { handleSignature, addProviderSignature, handle, signingAccount } = event.data.data
-        console.log('Dank 2', handle)
         dsnpRegister(expiration, handle, signingAccount, addProviderSignature, handleSignature).then(createData => {
           setLocalStorage('dsnpAuth', createData)
-          console.log('Dank create data', createData)
           Router.push('/homePage')
         })
       }

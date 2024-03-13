@@ -43,6 +43,10 @@
     {
       "name": "Industry_4.0",
       "path": "../apps/industry_4.0"
+    },
+    {
+      "name": "regen-agri",
+      "path": "../apps/regen-agri"
     }
   ],
 	"settings": {

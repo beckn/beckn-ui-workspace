@@ -27,7 +27,6 @@ const Product = () => {
             Authorization: `Bearer ${accessToken}`
           }
         })
-        console.log('Dank', response.data)
         return response.data.posts
       } catch (err) {
         console.log('Error', err)

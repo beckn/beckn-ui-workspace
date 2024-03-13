@@ -10,46 +10,15 @@ import axios from 'axios'
 import { useSelector } from 'react-redux'
 import ImageSection from '@components/productDetails/ImageSection'
 import { IProductRootState, RetailItem } from '@lib/types/products'
+import { TransactionIdRootState } from '@lib/types/cart'
 import { getLocalStorage } from '@utils/localStorage'
 import { toBinary } from '@utils/common-utils'
+import { getConfirmMetaDataForBpp, getPayloadForStatusRequest } from '@utils/confirm-utils'
 import { makeInteractionIdAndNonce } from '@utils/review'
 
 type ReviewProcessorValues = {
   message: string
   images: UploadFile[]
-}
-
-const getReviewLink = (
-  review: string,
-  productURL: string,
-  productName: string,
-  productImage: string,
-  productDesc: string,
-  token: string
-) => {
-  const myUrlWithParams = new URL(`${process.env.NEXT_PUBLIC_DSNP_GATEWAY_URL}/review`)
-
-  const queryParameters = {
-    href: `${window.location.origin}/product?productName=${productName}&productImage=${productImage}&productDesc=${productDesc}&becknified=true`,
-    // href: `https://dsnp-stage.becknprotocol.io/product?productName=${productName}&productImage=${productImage}&productDesc=${productDesc}&becknified=true`,
-    reference: {
-      token
-    },
-    attributeSetType: 'dsnp://1#OndcProofOfPurchase',
-    success_url: `${window.location.origin}/product?productName=${productName}&productImage=${productImage}&reviewSubmitted=true`,
-    error_url: `${window.location.origin}/product?productName=${productName}&productImage=${productImage}&reviewSubmitted=false`
-  }
-
-  const text = `⭐⭐⭐⭐⭐\n\n${review}`
-
-  myUrlWithParams.searchParams.append('href', queryParameters.href)
-  myUrlWithParams.searchParams.append('reference', JSON.stringify(queryParameters.reference))
-  myUrlWithParams.searchParams.append('attributeSetType', queryParameters.attributeSetType)
-  myUrlWithParams.searchParams.append('text', text)
-  myUrlWithParams.searchParams.append('success_url', queryParameters.success_url)
-  myUrlWithParams.searchParams.append('error_url', queryParameters.error_url)
-
-  return myUrlWithParams.href
 }
 
 const createPost = async (
@@ -80,7 +49,7 @@ const createPost = async (
     )
 
     const resp = axios.request({
-      url: `https://api.dsnp-social-web.becknprotocol.io/v1/content/create`,
+      url: `${process.env.NEXT_PUBLIC_DSNP_GATEWAY_URL}/v1/content/create`,
       method: 'POST',
       headers: {
         Authorization: `Bearer ${accessToken}`
@@ -101,6 +70,9 @@ const Feedback = () => {
   const [ratingForStore, setRatingForStore] = useState(0)
   const [review, setReview] = useState('')
   const [reviewValidationMessage, setReviewValidationMessage] = useState('')
+  const [loading, setLoading] = useState(false)
+
+  const transactionId = useSelector((state: { transactionId: TransactionIdRootState }) => state.transactionId)
 
   const product = getLocalStorage('productDetails').product as RetailItem
   const encodedProduct = getLocalStorage('productDetails').encodedProduct as string
@@ -111,7 +83,6 @@ const Feedback = () => {
     productName: string,
     productImage: string,
     productDesc: string,
-    token: string,
     id: string
   ) => {
     const dsnpAuth = getLocalStorage('dsnpAuth')
@@ -120,19 +91,37 @@ const Feedback = () => {
     if (Object.keys(dsnpAuth).length !== 0) {
       const { accessToken, dsnpId } = dsnpAuth
       const { interactionId, nonce } = await makeInteractionIdAndNonce(dsnpId)
+      let payloadForStatusRequest
+
+      if (localStorage) {
+        const stringifiedConfirmData = localStorage.getItem('confirmData')
+
+        if (stringifiedConfirmData) {
+          const parsedConfirmedData = JSON.parse(stringifiedConfirmData)
+
+          const confirmOrderMetaDataPerBpp = getConfirmMetaDataForBpp(parsedConfirmedData)
+
+          payloadForStatusRequest = getPayloadForStatusRequest(
+            confirmOrderMetaDataPerBpp,
+
+            transactionId
+          )
+        }
+      }
       const reqBody = {
         href: `${window.location.origin}/product?productName=${productName}&productImage=${productImage}&productDesc=${productDesc}&productId=${id}&becknified=true`,
         // href: `https://dsnp-stage.becknprotocol.io/product?productName=${productName}&productImage=${productImage}&productDesc=${productDesc}&becknified=true`,
         reference: {
-          token
+          orderDetails: JSON.stringify(payloadForStatusRequest)
         },
         attributeSetType: 'dsnp://1#OndcProofOfPurchase',
         interactionId
       }
+      setLoading(true)
 
       axios
         .request({
-          url: `https://api.dsnp-social-web.becknprotocol.io/v1/interactions`,
+          url: `${process.env.NEXT_PUBLIC_DSNP_GATEWAY_URL}/v1/interactions`,
           method: 'POST',
           headers: {
             Authorization: `Bearer ${accessToken}`
@@ -158,22 +147,11 @@ const Feedback = () => {
         .catch(err => {
           console.log('Error', err)
           router.push(errorUrl)
+          setLoading(false)
         })
     }
   }
 
-  const getReviewToken = async () => {
-    try {
-      const response = await axios.request({
-        url: `https://dsnp.becknprotocol.io/api/token`,
-        // url: `https://localhost:3000/api/token`,
-        method: 'POST'
-      })
-      return response.data.token
-    } catch (err) {
-      console.log('Error', err)
-    }
-  }
   const handleReviewChange = (e: any) => {
     const text = e.target.value
     if (text.length <= 120) {
@@ -254,17 +232,14 @@ const Feedback = () => {
         handleOnClick={() => {
           const user = localStorage.getItem('userPhone') as string
           localStorage.setItem('userPhone', user)
-          getReviewToken().then(token => {
-            submitReview(
-              review,
-              productURL.href,
-              product.descriptor.name,
-              product.descriptor.images[0],
-              product.descriptor.long_desc,
-              token,
-              product.id
-            ) // localStorage.clear()
-          })
+          submitReview(
+            review,
+            productURL.href,
+            product.descriptor.name,
+            product.descriptor.images[0],
+            product.descriptor.long_desc,
+            product.id
+          ) // localStorage.clear()
         }}
         isDisabled={false}
       />
