@@ -6,6 +6,7 @@ interface MyLearningProps {
   heading: string
   time: string
   id: string
+  price: string
   myLearingStatus: string
   handleViewCourses: () => void
 }
@@ -38,7 +39,9 @@ const MyLearing: React.FC<MyLearningProps> = props => {
             justifyContent="space-between"
             pt={'5px'}
           >
-            <Text fontWeight={'600'}>{t.currencySymbol} 1000</Text>
+            <Text fontWeight={'600'}>
+              {t.currencySymbol} {props.price}
+            </Text>
             <Flex alignItems={'center'}>
               {props.myLearingStatus === 'In Review' ? (
                 <Image
