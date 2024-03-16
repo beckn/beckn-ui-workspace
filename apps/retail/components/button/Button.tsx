@@ -20,6 +20,7 @@ const Button: React.FC<ButtonPropsModel> = props => {
         className="border_radius_all"
         isDisabled={isDisabled}
         fontSize={'15px'}
+        borderRadius="12px"
         height={'48px'}
         backgroundColor={!isDisabled ? props.background : 'rgba(var(--disabled-btn-color))'}
         color={props.color}
