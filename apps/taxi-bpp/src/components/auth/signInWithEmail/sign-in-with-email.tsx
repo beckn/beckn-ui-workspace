@@ -1,52 +1,37 @@
 'use client'
 
 import { useState } from 'react'
-// import PropTypes from "prop-types";
-// import { Link, useNavigate } from "react-router-dom";
 import { Col, Container, Row } from 'react-bootstrap'
-// import { isAuthenticated } from '../../../core/common.functions'
-// import { AppRoutes } from '../../../core/constant'
 import { LeftSection } from '../../../lib/shared/graphics/left-section'
 
 import styles from './sign-in-with-email.module.scss'
-
-// import './sign-in-with-email.module.scss'
-// import { userAction } from '../Login.services'
-// import { triggerEvent } from '../../DriverApp/components/SwitchButton/Driver.Services'
 import { DarkLayout } from '@/lib/shared/layout/dark-layout'
-import Link from 'next/link'
+import { userAction } from '../auth-services'
+import { Link, useRouter } from '@/navigation'
+import { AppRoutes } from '@/lib/constant'
 
 // TODO :- To check the styles and functionality of the following component
 
 const SignInWithEmail = () => {
-  //   const navigate = useNavigate();
+  const router = useRouter()
 
   const [Name, setName] = useState('')
   const [Password, setPassword] = useState('')
 
-  //   useEffect(() => {
-  //     isAuthenticated(navigate);
-  //     document.title = `taxi BPP`;
-  //     // console.log(props);
-  //     // spinnerService.show("mySpinner");
-  //     // eslint-disable-next-line react-hooks/exhaustive-deps
-  //   }, []);
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
 
-  //   const handleSubmit = e => {
-  //     e.preventDefault()
-  //     //if (!Name || !Password) return;
-  //     let path = 'login'
-  //     let data = {
-  //       User: {
-  //         Name: Name,
-  //         Password: Password
-  //       }
-  //     }
-  //     userAction(path, data).then(res => {
-  //       window.location.href = AppRoutes.driverDashboard
-  //       triggerEvent('mbth_login')
-  //     })
-  //   }
+    let path = 'login'
+    let data = {
+      User: {
+        Name: Name,
+        Password: Password
+      }
+    }
+    userAction(path, data, null).then(res => {
+      router.push('/dashboard')
+    })
+  }
 
   return (
     <DarkLayout>
@@ -77,10 +62,9 @@ const SignInWithEmail = () => {
                   </div>
                 </div>
                 <form
-                  onSubmit={() => {
+                  onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
                     // TODO :- To enable event after proper implementation of components
-                    // handleSubmit(e)
-                    console.log('formIsSubmitted')
+                    handleSubmit(e)
                   }}
                 >
                   <div className={`${styles.row} w-100 justify-content-center`}>
@@ -149,7 +133,7 @@ const SignInWithEmail = () => {
                         <div className="col-12 col-lg-6 ">
                           New User?{' '}
                           <Link
-                            href={'#'}
+                            href={AppRoutes.signUp}
                             className="link-primary d-lg-block"
                           >
                             Sign Up
