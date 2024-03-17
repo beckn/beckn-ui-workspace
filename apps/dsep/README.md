@@ -1,6 +1,6 @@
 ## Project Introduction
 
-This repository contains UI source code for the implementation of the Decentralized Skiling and Education protocol.
+This repository contains UI source code for the implementation of the Decentralized Skiling and Education protocol.This is created using the UI components.
 
 
 ## Release Notes
@@ -18,7 +18,7 @@ This repository contains UI source code for the implementation of the Decentrali
 
 ## Link to Experience Center
 
-[Since this is a headless application there is no Experience Center UI application. ](https://experience-guide.becknprotocol.io/dsep-unified)
+[DSEP ](https://experience-guide.becknprotocol.io/dsep-unified)
 
 
 ## Contributing guidelines
