@@ -73,6 +73,5 @@
 @media (min-width: 768px) {
   .bottom_header {
     z-index: 99;
-    margin-top: 28px;
   }
 }
