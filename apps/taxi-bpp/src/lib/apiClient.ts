@@ -2,11 +2,10 @@ import axios from 'axios'
 import { config } from '../config/config'
 import { spinnerService } from '@simply007org/react-spinners'
 import { toast } from 'react-toastify'
-// import { getErrorMessage } from 'utils/functionUtils/commonFunctions';
-import { AppRoutes, LocalKey, NoLoader, NoLoaderPath } from './constant.js'
-import { removeCookie } from './CookiesHandler.js'
-import { setUser } from './common.functions.js'
-import { UserFields } from './fieldsSet.js'
+import { LocalKey, AppRoutes, NoLoaderPath, NoLoader } from './constant'
+import { removeCookie } from './CookiesHandler'
+import { setUser } from './common.functions'
+import { UserFields } from './fieldsSet'
 const apiBaseURL = config.API_BASE_URL
 
 export const axiosInstance = axios.create({
@@ -20,7 +19,6 @@ export const axiosInstance = axios.create({
 })
 
 const getErrorMessage = function getErrorMessage(error: any) {
-  console.log('logging test message')
   const errorTxt =
     error && error.response && error.response.data
       ? error.response.data.SWFHttpResponse.Error
@@ -36,7 +34,6 @@ const isHandlerEnabled = (config = {} as any) => {
 
 const errorHandler = (error: any) => {
   if (isHandlerEnabled(error.config)) {
-    // console.log("requestHandler", error.response.status);
     if (error.response.status === 401) {
       removeCookie(LocalKey.saveApi)
       removeCookie(LocalKey.saveUser)
@@ -63,7 +60,6 @@ const requestHandler = (request: any) => {
   if (isHandlerEnabled(request)) {
     const URL = request.url
     const isShowLoader = URL.includes(NoLoaderPath)
-    console.log({ isShowLoader, URL })
     if (request.url && !NoLoader.includes(request.url.split('?')[0]) && !isShowLoader)
       spinnerService.show(LocalKey.spinnerKey)
     // Modify request here
@@ -148,7 +144,6 @@ export const getUser = async (UserId: any, roleType = 'driver') => {
 
 export const userSave = (path: any, data: any, fieldsList: any, IsStoreUpdate: any, roleType: any) => {
   return postRequestData(path, data, fieldsList).then(res => {
-    console.log('userUpdate', res.data.Users[0])
     roleType === 'agent' && makeAgent(res.data.Users[0].Id)
     IsStoreUpdate && getUser(res.data.Users[0].Id, roleType)
     return res

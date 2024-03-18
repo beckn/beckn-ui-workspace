@@ -1204,6 +1204,8 @@ __metadata:
     "@simply007org/react-spinners": ^0.0.3
     "@types/node": ^20
     "@types/react": ^18
+    "@types/react-autocomplete": ^1.8.10
+    "@types/react-datepicker": ^6.2.0
     "@types/react-dom": ^18
     axios: ^1.6.7
     bootstrap: ^5.3.3
@@ -4860,6 +4862,26 @@ __metadata:
   version: 1.5.8
   resolution: "@types/q@npm:1.5.8"
   checksum: ff3b7f09c2746d068dee8d39501f09dbf71728c4facdc9cb0e266ea6615ad97e61267c0606ab3da88d11ef1609ce904cef45a9c56b2b397f742388d7f15bb740
+  languageName: node
+  linkType: hard
+
+"@types/react-autocomplete@npm:^1.8.10":
+  version: 1.8.10
+  resolution: "@types/react-autocomplete@npm:1.8.10"
+  dependencies:
+    "@types/react": "*"
+  checksum: 0b5ab4820593249078075bcb4dd95b1a4d51ea1cf171bfdb9bf65d589151bdadd7b9f7c8d11ad577b6ce3c2a8be4a4151b605471505b7e6e9fd34874b039473c
+  languageName: node
+  linkType: hard
+
+"@types/react-datepicker@npm:^6.2.0":
+  version: 6.2.0
+  resolution: "@types/react-datepicker@npm:6.2.0"
+  dependencies:
+    "@floating-ui/react": ^0.26.2
+    "@types/react": "*"
+    date-fns: ^3.3.1
+  checksum: 3276a99c3df11bf3ac1ced172f5fd95e03f155f7a6c56d4f0d78f9aef7fcf30211347a18f61b5847c28fec936383830d6786997a96d7f344ad48e2fee4827dc1
   languageName: node
   linkType: hard
 
