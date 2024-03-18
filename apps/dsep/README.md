@@ -1,24 +1,46 @@
 ## Project Introduction
 
-This repository contains UI source code for the implementation of the Decentralized Skiling and Education protocol.This is created using the UI components.
+Skillup is a buyer reference application designed to facilitate the discovery and transaction of services within the skilling and education domain. Built on the beckn framework, it operates within an open network, providing users with access to a wide range of offerings. The application covers the following use cases:
 
+- Jobs and Internships
+- Scholarships and Grants
+- Courses and Training
+- Mentorship and Tutoring
+
+
+## Features
+1. Users can search for courses, access a variety of educational programs tailored to their interests and needs.
+2. Users can explore job opportunities, finding employment options that match their skills and career aspirations.
+3. Users can seek out scholarships, access financial aid resources to support their educational endeavors and alleviate financial burdens.
+4. The platform offers a signup feature, enabling users to create accounts securely. Additionally, it provides a secure login option for authenticated access to user-specific features and content.
+5. The profile section displays a summary of the user's completed jobs, scholarships, and learning activities, providing insights into their accomplishments and interests.
+
+
+## Technical stack
+React JS
 
 ## Release Notes
 
-| Version | Release Date |
+| Name | Version |
 |---------|--------------|
-| 1.0     | 2024-02-02   |
+| Skillup     | 1.0.0  |
 
 
 ## Installation/Setup Guide 
-
-
-## User Guide
-
+Clone this repo
+Run npm install -f
+Run npm start
+Keep node version updated
 
 ## Link to Experience Center
 
 [DSEP ](https://experience-guide.becknprotocol.io/dsep-unified)
+
+## User Guide
+![image](https://github.com/beckn/beckn-ui-workspace/assets/69658165/9d7f7b32-2470-48a8-ae5d-dff75b66ee6e)
+![image](https://github.com/beckn/beckn-ui-workspace/assets/69658165/624f1bb3-cba3-495e-8ef7-0f5eddaa0359)
+
+
 
 
 ## Contributing guidelines
