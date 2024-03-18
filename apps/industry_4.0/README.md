@@ -1,19 +1,44 @@
 ## Project Introduction
 
-This repository contains UI source code for the implementation of Industry 4.0 usecse.This is created using the UI components.
+Suppliflow is a buyer reference application designed to facilitate the discovery and transaction of services within the industry 4.0 domain. Built on the beckn framework, it operates within an open network, providing users with access to a wide range of offerings. The application covers the following use cases:
 
+- 3D printing
+
+## Features
+**Custom Requirement**
+
+Users have the ability to provide custom requirements for their products, enabling them to personalize their purchases according to their specific preferences and needs. This feature allows users to specify details such as size, color, materials, or any other customizations they desire, ensuring that their products are tailored to meet their individual preferences and requirements.
+
+**Multiple Payment Options**
+
+Users can place orders with different payment options, providing them with flexibility and convenience in completing their transactions. Whether it's credit/debit card payments, digital wallets, bank transfers, or other payment methods, users can choose the option that best suits their preferences and requirements. This feature enhances the user experience by offering a seamless and secure payment process, accommodating a variety of payment preferences.
+
+**Order Tracking**
+
+Users have the capability to track their orders, allowing them to monitor the status and progress of their purchases from placement to delivery. Through order tracking functionalities, users can stay informed about estimated delivery times, shipment updates, and any potential delays. This feature provides users with visibility and transparency into the logistics of their orders, enhancing their overall shopping experience and ensuring timely receipt of their desired items.
+
+## Technical stack
+React JS
+
+Next
+
+Tailwind
 
 ## Release Notes
 
-| Version | Release Date |
+| Name | Version |
 |---------|--------------|
-| 1.0     | 2024-02-02   |
+| suppliflow    | 1.0.0   |
 
 
 ## Installation/Setup Guide 
-
+Clone this repo
+Run npm install -f
+Run npm start
+Keep node version updated
 
 ## User Guide
+![image](https://github.com/beckn/beckn-ui-workspace/assets/69658165/adda6526-83fc-49a7-a69e-89f0fede95f4)
 
 
 ## Link to Experience Center
