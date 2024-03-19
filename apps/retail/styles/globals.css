@@ -92,3 +92,8 @@ select.chakra-select {
   background: #0560fa !important;
   border-color: #0560fa !important;
 }
+.chakra-button.social_btn {
+  color: #717070;
+  border: 1px solid;
+  border-color: var(--chakra-colors-primary-100);
+}
