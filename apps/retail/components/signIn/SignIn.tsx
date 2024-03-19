@@ -8,6 +8,8 @@ import { useBreakpoint } from '@chakra-ui/react'
 import { BecknAuth } from '@beckn-ui/becknified-components'
 import api from '../../services/Users'
 
+import { FaGoogle } from 'react-icons/fa'
+
 import Router from 'next/router'
 import { Box, useToast, Text } from '@chakra-ui/react'
 import Cookies from 'js-cookie'
@@ -111,6 +113,17 @@ const SignIn = () => {
             disabled: false,
             variant: 'outline',
             colorScheme: 'primary'
+          }
+        ],
+        socialButtons: [
+          {
+            text: t.signInwithGoogle,
+            handleClick: handleSignIn,
+            disabled: false,
+            variant: 'outline',
+            colorScheme: 'primary',
+            leftIcon: <FaGoogle />,
+            className: 'social_btn'
           }
         ],
         inputs: [

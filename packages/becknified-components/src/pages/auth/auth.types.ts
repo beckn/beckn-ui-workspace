@@ -7,5 +7,6 @@ export interface AuthProps {
     }
     inputs: InputProps[]
     buttons: ButtonProps[]
+    socialButtons?: ButtonProps[]
   }
 }

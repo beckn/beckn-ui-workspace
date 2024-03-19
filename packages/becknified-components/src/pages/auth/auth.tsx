@@ -5,9 +5,10 @@ import { Box, Flex, Image } from '@chakra-ui/react'
 import { Button, Input } from '@beckn-ui/molecules'
 import Styles from './auth.module.css'
 import { AuthProps } from './auth.types'
+import AuthDivider from './authDivider'
 
 const Auth: React.FC<AuthProps> = ({ schema }) => {
-  const { logo, inputs, buttons } = schema
+  const { logo, inputs, buttons, socialButtons } = schema
 
   return (
     <Box
@@ -52,6 +53,20 @@ const Auth: React.FC<AuthProps> = ({ schema }) => {
             />
           )
         })}
+        {socialButtons && socialButtons.length > 0 && (
+          <>
+            <AuthDivider />
+            {socialButtons?.map(singleButton => {
+              return (
+                <Button
+                  className={Styles.auth_btn}
+                  key={singleButton.text}
+                  {...singleButton}
+                />
+              )
+            })}
+          </>
+        )}
       </Box>
     </Box>
   )

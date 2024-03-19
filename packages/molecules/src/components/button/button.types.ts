@@ -1,3 +1,4 @@
+import { IconProps } from '@chakra-ui/icons'
 import { MouseEventHandler, ReactNode } from 'react'
 
 type ButtonType = 'submit' | 'reset' | 'button'
@@ -13,4 +14,5 @@ export interface ButtonProps {
   colorScheme?: 'primary' | 'secondary'
   textColor?: 'textPrimary' | 'textSecondary'
   type?: ButtonType
+  leftIcon?: React.FC<IconProps>
 }
