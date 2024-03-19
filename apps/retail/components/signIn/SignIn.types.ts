@@ -9,3 +9,15 @@ export interface SignUpPropsModel {
   password: string
   mobileNumber: string
 }
+
+export interface profilePageProp {
+  name: string
+  mobileNumber: string
+  email: string
+  flatNumber: string
+  street: string
+  city: string
+  pincode: string
+  state: string
+  country: string
+}
