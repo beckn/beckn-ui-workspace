@@ -6,7 +6,7 @@ import { FormErrors, signUpValidateForm } from '@utils/form-utils'
 import { BecknAuth } from '@beckn-ui/becknified-components'
 import Router from 'next/router'
 import Cookies from 'js-cookie'
-import { useBreakpoint, useToast } from '@chakra-ui/react'
+import { Box, useBreakpoint, useToast } from '@chakra-ui/react'
 import { CustomToast } from '@components/signIn/SignIn'
 import Logo from '@public/images/Logo.svg'
 
@@ -102,7 +102,7 @@ const SignUp = () => {
   }
 
   return (
-    <>
+    <Box mt={'30px'}>
       <BecknAuth
         schema={{
           logo: {
@@ -163,7 +163,7 @@ const SignUp = () => {
           ]
         }}
       />
-    </>
+    </Box>
   )
 }
 
