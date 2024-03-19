@@ -16,8 +16,8 @@ const Auth: React.FC<AuthProps> = ({ schema }) => {
       display="flex"
       marginTop={{ base: '10px', md: '60px', lg: '70px' }}
     >
-      <Box width={'100%'}>
-        {logo && logo.src && (
+      {logo && logo.src && (
+        <Box width={'100%'}>
           <Flex className={Styles.logo_container}>
             <Image
               className={Styles.logo_skillup}
@@ -26,8 +26,8 @@ const Auth: React.FC<AuthProps> = ({ schema }) => {
               pt="15px"
             />
           </Flex>
-        )}
-      </Box>
+        </Box>
+      )}
       <Box width={'100%'}>
         <Box
           className={Styles.signin_container}

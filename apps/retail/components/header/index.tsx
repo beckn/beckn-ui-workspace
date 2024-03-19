@@ -48,7 +48,8 @@ const storeHeaderBlackList = [
   '/invoiceDetails',
   '/assemblyDetails',
   '/updateShippingDetails',
-  '/orderCancellation'
+  '/orderCancellation',
+  '/profile'
 ]
 const headerValues: PathnameObjectType = {
   '/checkoutPage': 'Review Purchase Order',
@@ -62,7 +63,8 @@ const headerValues: PathnameObjectType = {
   '/assemblyDetails': 'Add Assembly Details',
   '/updateShippingDetails': 'Shipping Details',
   '/orderCancellation': 'Order Cancel',
-  '/feedback': ''
+  '/feedback': '',
+  '/profile': 'Profile'
 }
 
 const headerValuesFrench: PathnameObjectType = {

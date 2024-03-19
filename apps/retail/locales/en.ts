@@ -98,6 +98,13 @@ const en: { [key: string]: string } = {
   updateOrderLoaderSubText: 'While we update your Order',
   rateOrderLoaderSubText: 'While we submit your feedback',
   cancelLoaderSubText: 'While we process your request',
-  signInwithGoogle: 'Sign In with Google'
+  signInwithGoogle: 'Sign In with Google',
+  saveContinue: 'Save & Continue',
+  enterFlatDetails: 'Enter Flat, House no, Building , etc',
+  enterStreetDetails: 'Enter Area , Street , Sector, Village',
+  enterCity: 'Enter City /Town',
+  enterPincode: 'Enter Pincode',
+  enterState: 'Enter State / Province',
+  enterCountry: 'Enter Country'
 }
 export default en
