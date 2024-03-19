@@ -1,20 +1,26 @@
 ## Project Introduction
 
-This repository contains UI source code for the implementation of PULSE / ODR usecse. This is created using the UI components.
+The platform facilitates online search for advocates, offering a wide range of categories for dispute resolution services. Users can conveniently book these services online, streamlining the process of finding legal assistance and resolving disputes efficiently.
 
 
 ## Release Notes
 
-| Version | Release Date |
+| Name | Version |
 |---------|--------------|
-| 1.0     | 2024-02-02   |
+| Legal Ease     | 1.0.0   |
 
 
 ## Installation/Setup Guide 
+To get started with this server, follow these steps:
 
+1. Clone this repo
+2. Run npm install -f
+3. Run npm start
+4. Keep node version updated
 
 ## User Guide
 
+<img width="1154" alt="Screenshot 2024-03-19 at 9 05 24 AM" src="https://github.com/beckn/beckn-ui-workspace/assets/104425465/9345e0f8-8846-4717-9af8-e9eff44bd9a5">
 
 ## Link to Experience Center
 
