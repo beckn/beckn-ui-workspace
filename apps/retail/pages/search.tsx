@@ -26,7 +26,8 @@ const Search = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [isFilterOpen, setIsFilterOpen] = useState(false)
   const breakpoint = useBreakpoint()
-  const mobileBreakpoints = ['base', 'sm', 'md', 'lg']
+  const mobileBreakpoints = ['base', 'sm']
+  const isMediumScreen = breakpoint === 'md'
   const isSmallScreen = mobileBreakpoints.includes(breakpoint)
   const handleFilterClose = () => {
     setIsFilterOpen(false)
@@ -39,10 +40,13 @@ const Search = () => {
     context: {
       domain: 'retail'
     },
-    category: {
-      categoryName: searchKeyword
-    },
-    location: '12.423423,77.325647'
+    message: {
+      criteria: {
+        dropLocation: '12.9715987,77.5945627',
+        categoryName: 'Retail',
+        searchString: searchKeyword
+      }
+    }
   }
 
   const fetchDataForSearch = () => {
@@ -80,11 +84,18 @@ const Search = () => {
     }
   }, [])
 
+  const handleImageClick = () => {
+    setIsFilterOpen(!isFilterOpen)
+  }
+
   return (
     <>
       <Box display="flex">
-        {!isSmallScreen && <Filter />}
-        <Box>
+        {!isSmallScreen && !isMediumScreen && <Filter />}
+        <Box
+          w="100%"
+          ml={['unset', 'unset', 'unset', '36px']}
+        >
           <Box
             display="flex"
             alignItems="center"
@@ -104,21 +115,24 @@ const Search = () => {
                 fetchDataForSearch()
               }}
             />
-            {isSmallScreen && (
+            {(isSmallScreen || isMediumScreen) && (
               <Image
-                onClick={() => setIsFilterOpen(true)}
+                onClick={handleImageClick}
                 cursor={'pointer'}
                 src="./images/filter-btn.svg"
                 alt=""
               />
             )}
           </Box>
-          <BottomModal
-            isOpen={isFilterOpen}
-            onClose={handleFilterClose}
-          >
-            <Filter />
-          </BottomModal>
+          {isSmallScreen && (
+            <BottomModal
+              isOpen={isFilterOpen}
+              onClose={handleFilterClose}
+            >
+              <Filter />
+            </BottomModal>
+          )}
+          {isMediumScreen && isFilterOpen && <Filter />}
 
           <Box>
             {isLoading ? (

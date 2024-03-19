@@ -11,6 +11,7 @@ import NextNProgress from 'nextjs-progressbar'
 import styles from './Layout.module.css'
 import { IGeoLocationSearchPageRootState } from '@lib/types/geoLocationSearchPage'
 import GeoLocationInputList from '@components/geoLocationInput/GeoLocationInputList'
+import { Box } from '@chakra-ui/react'
 
 const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const { locale } = useLanguage()
@@ -33,7 +34,10 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
         <NextNProgress height={7} />
         <Header />
         {!geoLocationSearchPageVisible ? (
-          <main
+          <Box
+            maxW={['unset', 'unset', 'unset', '70rem']}
+            w="100%"
+            margin="0 auto"
             className={`${styles.main} ${!isHomepage ? styles.withPadding : ''} ${
               !isHomepage && !isSearch ? styles.withMargin : ''
             } ${isHomepage ? styles.homepageMargin : isSearch ? styles.searchMargin : ''} 
@@ -42,7 +46,7 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
               `}
           >
             {children}
-          </main>
+          </Box>
         ) : (
           <GeoLocationInputList></GeoLocationInputList>
         )}
