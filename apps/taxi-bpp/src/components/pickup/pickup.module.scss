@@ -40,7 +40,7 @@
     width: 100%;
     font-size: 24px;
     font-weight: 500;
-    top: 15%;
+    top: 24%;
 }
 
 .h6-P{
@@ -71,7 +71,7 @@
 .sub-P {
     position: fixed;
     /*bottom: 80px;*/
-    left: 27%;
+    left: 36%;
     top: 55%;
     font-style: normal;
     font-weight: 300;
@@ -83,7 +83,7 @@
 
 .min-P{
    position: fixed;
-   left: 18%;
+   left: 14%;
    top: 63%;
    font-weight: 400;
    font-size: 14px;
@@ -92,7 +92,7 @@
 .kms-P{
     position: fixed;
     /*bottom: 95px;*/
-    right: 40%;
+    right: 10%;
     top: 63%;
     font-weight: 400;
     font-size: 14px;
@@ -129,4 +129,8 @@
     height: 1%;
     background-color: transparent;
     border: none;
+}
+
+.h6-p {
+    text-align: center;
 }

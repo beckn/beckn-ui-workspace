@@ -15,6 +15,7 @@ function DriverDashboard() {
 
   const router = useRouter()
   const User = JSON.parse(getCookie(LocalKey.saveUser)) || null
+
   const isVerified = User?.Approved === 'Y' ? true : false
 
   const { latitude, longitude, error } = usePosition()
