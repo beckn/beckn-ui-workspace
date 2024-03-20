@@ -6,6 +6,10 @@ import { SignInPropsModel } from './SignIn.types'
 import { FormErrors, signInValidateForm } from '@utils/form-utils'
 import { useBreakpoint } from '@chakra-ui/react'
 import { BecknAuth } from '@beckn-ui/becknified-components'
+import api from '../../services/Users'
+
+import { FaGoogle } from 'react-icons/fa'
+
 import Router from 'next/router'
 import { Box, useToast, Text } from '@chakra-ui/react'
 import Cookies from 'js-cookie'
@@ -18,8 +22,8 @@ const SignIn = () => {
   const [isFormFilled, setIsFormFilled] = useState(false)
   const toast = useToast()
   const breakpoint = useBreakpoint()
+  // const [updatePost, result] = useSignInMutation()
   const mobileBreakpoints = ['base', 'sm', 'md', 'lg']
-  console.log('Dank', breakpoint)
   const currentLogo = mobileBreakpoints.includes(breakpoint) ? Logo : AlternateLogo
 
   const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL
@@ -109,6 +113,17 @@ const SignIn = () => {
             disabled: false,
             variant: 'outline',
             colorScheme: 'primary'
+          }
+        ],
+        socialButtons: [
+          {
+            text: t.signInwithGoogle,
+            handleClick: handleSignIn,
+            disabled: false,
+            variant: 'outline',
+            colorScheme: 'primary',
+            leftIcon: <FaGoogle />,
+            className: 'social_btn'
           }
         ],
         inputs: [

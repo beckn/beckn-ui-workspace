@@ -3,6 +3,7 @@ import { ButtonProps } from './button.types'
 import { Button } from '@chakra-ui/react'
 
 const BecknButton: React.FC<ButtonProps> = ({
+  leftIcon,
   text,
   handleClick,
   className,
@@ -12,10 +13,11 @@ const BecknButton: React.FC<ButtonProps> = ({
   variant = 'solid',
   colorScheme = 'primary',
   type = 'button',
-  textColor = 'textSecondary'
+  textColor
 }) => {
   return (
     <Button
+      leftIcon={leftIcon}
       width={fullWidth ? 'full' : 'initial'}
       onClick={handleClick}
       className={className}

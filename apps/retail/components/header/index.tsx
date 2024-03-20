@@ -9,6 +9,7 @@ import { useLanguage } from '../../hooks/useLanguage'
 import Qrcode from '@components/qrCode/Qrcode'
 import BottomModalScan from '@components/BottomModal/BottomModalScan'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
+import TopSheet from '@components/topSheet/TopSheet'
 
 type PathnameObjectType = { [key: string]: string }
 
@@ -29,7 +30,7 @@ const cartIconBlackList: string[] = [
   '/invoiceDetails'
 ]
 
-const backIconList = ['/']
+const backIconList = ['/', '/homePage']
 
 const homeIconBlackList = ['/', '/homePage', '/mobileOtp', '/paymentMode', '/signUp']
 
@@ -48,7 +49,8 @@ const storeHeaderBlackList = [
   '/invoiceDetails',
   '/assemblyDetails',
   '/updateShippingDetails',
-  '/orderCancellation'
+  '/orderCancellation',
+  '/profile'
 ]
 const headerValues: PathnameObjectType = {
   '/checkoutPage': 'Review Purchase Order',
@@ -62,7 +64,9 @@ const headerValues: PathnameObjectType = {
   '/assemblyDetails': 'Add Assembly Details',
   '/updateShippingDetails': 'Shipping Details',
   '/orderCancellation': 'Order Cancel',
-  '/feedback': ''
+  '/feedback': '',
+  '/profile': 'Profile'
+  // '/search':'Search results'
 }
 
 const headerValuesFrench: PathnameObjectType = {
@@ -78,11 +82,12 @@ const headerValuesFrench: PathnameObjectType = {
 
 const topHeaderBlackList: string[] = []
 
-const bottomHeaderBlackList = ['/homePage', '/search', '/orderConfirmation']
+const bottomHeaderBlackList = ['/orderConfirmation']
 
-const menuIconWhiteList = ['/homePage']
+const menuIconWhiteList = ['/homePage', '/search', '/profile']
 const orderIconList = ['/orderDetails']
 const invoiceDownloadIcon = ['/invoiceDetails']
+const currentLocation = ['/homePage']
 
 const getHeaderTitleForPage = (name: string, logo: string, pathName: string, locale: string | undefined) => {
   const values = locale === 'en' ? headerValues : headerValuesFrench
@@ -114,7 +119,10 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
 
   return (
     <>
-      <Box className={styles.top_header}>
+      <Box
+        className={styles.top_header}
+        padding={['0 20px', '0 20px', '0 20px', '0 10rem']}
+      >
         <Box className={styles.top_header_wrapper}>
           <Box>
             {/* <Image
@@ -122,9 +130,10 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
               alt="App logo"
             /> */}
           </Box>
-          <Flex columnGap={'10px'}>
+          <Flex columnGap={['10px', '10px', '2rem', '2rem']}>
             {!homeIconBlackList.includes(router.pathname) && (
               <Image
+                cursor="pointer"
                 w={'20px'}
                 h={'20px'}
                 onClick={() => {
@@ -140,6 +149,7 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
 
             {menuIconWhiteList.includes(router.pathname) && (
               <Image
+                cursor="pointer"
                 onClick={() => setMenuModalOpen(true)}
                 className="block"
                 src="/images/threeDots.svg"
@@ -179,6 +189,10 @@ const BottomHeader = () => {
   const { t, locale } = useLanguage()
   const [isOrderModalOpen, setOrderModalOpen] = useState(false)
   const [isInvoiceModalOpen, setInvoiceModalOpen] = useState(false)
+
+  const [currentAddress, setCurrentAddress] = useState('')
+  const [loadingForCurrentAddress, setLoadingForCurrentAddress] = useState(true)
+  const [currentLocationFetchError, setFetchCurrentLocationError] = useState('')
   const handleInvoiceModalClose = () => {
     setInvoiceModalOpen(false)
   }
@@ -189,25 +203,109 @@ const BottomHeader = () => {
     setOptionTags(JSON.parse(localStorage.getItem('optionTags') as string))
   }, [])
 
+  const apiKeyForGoogle = process.env.NEXT_PUBLIC_GOOGLE_API_KEY
   const router = useRouter()
+
+  useEffect(() => {
+    // Check if geolocation is available in the browser
+    if (navigator) {
+      if ('geolocation' in navigator) {
+        navigator.geolocation.getCurrentPosition(
+          async position => {
+            const latitude = position.coords.latitude
+            const longitude = position.coords.longitude
+
+            const coordinates = {
+              latitude,
+              longitude
+            }
+
+            localStorage.setItem('coordinates', JSON.stringify(coordinates))
+
+            try {
+              const response = await fetch(
+                `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKeyForGoogle}`
+              )
+
+              if (response.ok) {
+                const data = await response.json()
+
+                if (data.results.length > 0) {
+                  const formattedAddress = data.results[0].formatted_address
+                  setCurrentAddress(formattedAddress)
+                } else {
+                  setFetchCurrentLocationError('No address found for the given coordinates.')
+                }
+              } else {
+                setFetchCurrentLocationError('Failed to fetch address data.')
+                alert('Failed to fetch address data.')
+              }
+            } catch (error) {
+              setFetchCurrentLocationError('Error fetching address data: ' + (error as any).message)
+              alert('Error fetching address data: ' + (error as any).message)
+            } finally {
+              setLoadingForCurrentAddress(false)
+            }
+          },
+          error => {
+            setFetchCurrentLocationError('Error getting location: ' + error.message)
+            alert('Error getting location: ' + error.message)
+            setLoadingForCurrentAddress(false)
+          }
+        )
+      } else {
+        setFetchCurrentLocationError('Geolocation is not available in this browser.')
+        alert('Geolocation is not available in this browser.')
+        setLoadingForCurrentAddress(false)
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <header className={styles.bottom_header}>
       <Box className={styles.bottom_header_wrapper}>
-        <Box className={styles.bottom_header_innr}>
+        <Box
+          className={styles.bottom_header_innr}
+          padding={['0 20px', '0 20px', '0 20px', '0 10rem']}
+        >
           <Box className={styles.bottom_header_backIcon}>
             {!backIconList.includes(router.pathname) && (
-              <Box onClick={() => router.back()}>
+              <Box
+                onClick={() => router.back()}
+                cursor="pointer"
+              >
                 <Image
                   src="/images/Back.svg"
                   alt="Back icon"
                 />
               </Box>
             )}
+            {currentLocation.includes(router.pathname) && (
+              <TopSheet
+                currentLocationFetchError={currentLocationFetchError}
+                loadingForCurrentAddress={loadingForCurrentAddress}
+                currentAddress={currentAddress}
+              />
+            )}
           </Box>
           {getHeaderTitleForPage(optionTags?.name, optionTags?.logo, router.pathname, locale)}
+          <div className="flex gap-4">
+            {!cartIconBlackList.includes(router.pathname) && (
+              <Box
+                onClick={() => router.push('/cart')}
+                cursor="pointer"
+              >
+                <Image
+                  src="/images/cartIcon.svg"
+                  alt="Cart icon"
+                />
+              </Box>
+            )}
+          </div>
           {orderIconList.includes(router.pathname) && (
             <Image
+              cursor="pointer"
               onClick={() => setOrderModalOpen(true)}
               src="/images/orderDetailsIcon.svg"
               alt="order icon"
@@ -216,6 +314,7 @@ const BottomHeader = () => {
           )}
           {invoiceDownloadIcon.includes(router.pathname) && (
             <Image
+              cursor="pointer"
               onClick={() => setInvoiceModalOpen(true)}
               src="/images/downloadInvoice.svg"
               alt="invoice icon"

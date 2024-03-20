@@ -74,7 +74,7 @@ const Filter = () => {
           w={['100%', '350px']}
           p={['unset', '20px']}
           boxShadow={['unset', '0px 8px 10px 0px #0000001A']}
-          margin={['unset', '0 auto', '0 auto', 'unset']}
+          margin={['unset', '0 auto', '0 auto', '20px 0 0 0']}
         >
           <Flex
             pb={'2px'}

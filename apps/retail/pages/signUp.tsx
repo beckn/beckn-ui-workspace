@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
 import { useLanguage } from '@hooks/useLanguage'
+import AlternateLogo from '../public/images/KuzaLogo.svg'
 import { SignUpPropsModel } from '@components/signIn/SignIn.types'
 import { FormErrors, signUpValidateForm } from '@utils/form-utils'
 import { BecknAuth } from '@beckn-ui/becknified-components'
 import Router from 'next/router'
 import Cookies from 'js-cookie'
-import { useToast } from '@chakra-ui/react'
+import { Box, useBreakpoint, useToast } from '@chakra-ui/react'
 import { CustomToast } from '@components/signIn/SignIn'
 import Logo from '@public/images/Logo.svg'
 
@@ -15,6 +16,10 @@ const SignUp = () => {
   const [formData, setFormData] = useState<SignUpPropsModel>({ name: '', email: '', password: '', mobileNumber: '' })
   const [formErrors, setFormErrors] = useState<FormErrors>({ name: '', email: '', password: '', mobileNumber: '' })
   const [isFormFilled, setIsFormFilled] = useState(false)
+  const breakpoint = useBreakpoint()
+  const mobileBreakpoints = ['base', 'sm', 'md', 'lg']
+  const currentLogo = mobileBreakpoints.includes(breakpoint) ? Logo : AlternateLogo
+
   const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -97,11 +102,11 @@ const SignUp = () => {
   }
 
   return (
-    <>
+    <Box mt={'30px'}>
       <BecknAuth
         schema={{
           logo: {
-            src: Logo,
+            src: currentLogo,
             alt: 'Suppliflow logo'
           },
           buttons: [
@@ -158,7 +163,7 @@ const SignUp = () => {
           ]
         }}
       />
-    </>
+    </Box>
   )
 }
 

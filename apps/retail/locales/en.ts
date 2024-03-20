@@ -97,6 +97,14 @@ const en: { [key: string]: string } = {
   fetchingTrackLoaderSubtext: 'While we fetch for tracking and support details',
   updateOrderLoaderSubText: 'While we update your Order',
   rateOrderLoaderSubText: 'While we submit your feedback',
-  cancelLoaderSubText: 'While we process your request'
+  cancelLoaderSubText: 'While we process your request',
+  signInwithGoogle: 'Sign In with Google',
+  saveContinue: 'Save & Continue',
+  enterFlatDetails: 'Enter Flat, House no, Building , etc',
+  enterStreetDetails: 'Enter Area , Street , Sector, Village',
+  enterCity: 'Enter City /Town',
+  enterPincode: 'Enter Pincode',
+  enterState: 'Enter State / Province',
+  enterCountry: 'Enter Country'
 }
 export default en

@@ -5,9 +5,10 @@ import { Box, Flex, Image } from '@chakra-ui/react'
 import { Button, Input } from '@beckn-ui/molecules'
 import Styles from './auth.module.css'
 import { AuthProps } from './auth.types'
+import AuthDivider from './authDivider'
 
 const Auth: React.FC<AuthProps> = ({ schema }) => {
-  const { logo, inputs, buttons } = schema
+  const { logo, inputs, buttons, socialButtons } = schema
 
   return (
     <Box
@@ -15,8 +16,8 @@ const Auth: React.FC<AuthProps> = ({ schema }) => {
       display="flex"
       marginTop={{ base: '10px', md: '60px', lg: '70px' }}
     >
-      <Box width={'100%'}>
-        {logo && logo.src && (
+      {logo && logo.src && (
+        <Box width={'100%'}>
           <Flex className={Styles.logo_container}>
             <Image
               className={Styles.logo_skillup}
@@ -25,8 +26,8 @@ const Auth: React.FC<AuthProps> = ({ schema }) => {
               pt="15px"
             />
           </Flex>
-        )}
-      </Box>
+        </Box>
+      )}
       <Box width={'100%'}>
         <Box
           className={Styles.signin_container}
@@ -52,6 +53,20 @@ const Auth: React.FC<AuthProps> = ({ schema }) => {
             />
           )
         })}
+        {socialButtons && socialButtons.length > 0 && (
+          <>
+            <AuthDivider />
+            {socialButtons?.map(singleButton => {
+              return (
+                <Button
+                  className={Styles.auth_btn}
+                  key={singleButton.text}
+                  {...singleButton}
+                />
+              )
+            })}
+          </>
+        )}
       </Box>
     </Box>
   )
