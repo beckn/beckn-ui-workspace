@@ -18,9 +18,10 @@ const ProductCard: React.FC<ProductCardProps> = props => {
           className={`${className}-product_card_layout_container`}
           onClick={productClickHandler}
           minH={'168px'}
-          width={'100%'}
+          width={['100%', '100%', '100%', 'calc(50% - 16px)']}
+          m={['0 0 16px 0', '0 0 16px 0', '8px', '8px']}
           backgroundColor={'#fff'}
-          borderRadius={'0.75rem'}
+          borderRadius={'1rem'}
           display={'flex'}
           position={'relative'}
           boxShadow={'0 20px 25px rgba(0, 0, 0, 0.1),0 8px 10px rgba(0, 0, 0, 0.05)'}
@@ -35,7 +36,7 @@ const ProductCard: React.FC<ProductCardProps> = props => {
               position="relative"
               backgroundColor={'rgba(140, 158, 175, 0.3)'}
               borderTopLeftRadius={'1rem'}
-              borderTopRightRadius={'1rem'}
+              borderBottomLeftRadius={'1rem'}
               display={'flex'}
               flexDirection={'column'}
               justifyContent={'space-between'}
@@ -59,7 +60,7 @@ const ProductCard: React.FC<ProductCardProps> = props => {
             <Box
               p={'15px'}
               pt={'11px'}
-              w={'63%'}
+              w={'66%'}
               position={'relative'}
               display={'flex'}
               flexDir={'column'}

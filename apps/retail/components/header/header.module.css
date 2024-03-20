@@ -5,6 +5,7 @@
   margin-top: 4px;
   margin-bottom: 4px;
   gap: 4px;
+  margin: 0 auto;
 }
 .header_title_text {
   margin: 0 auto;
@@ -20,7 +21,7 @@
   background-color: #efefef;
   position: fixed;
   z-index: 9999;
-  padding: 0 20px;
+  /* padding: 0 10rem; */
   top: 0;
 }
 .top_header_wrapper {
@@ -59,7 +60,7 @@
   align-items: center;
   position: relative;
   height: 60px;
-  padding: 0 20px;
+  /* padding: 0 10rem; */
 }
 .bottom_header_backIcon {
   display: flex;
@@ -73,5 +74,11 @@
 @media (min-width: 768px) {
   .bottom_header {
     z-index: 99;
+  }
+}
+@media screen and (min-width: 1024px) and (max-width: 1366px) {
+  .bottom_header_innr,
+  .top_header {
+    padding: 0 20px !important;
   }
 }

@@ -97,3 +97,7 @@ select.chakra-select {
   border: 1px solid;
   border-color: var(--chakra-colors-primary-100);
 }
+.product_card_retail {
+  display: flex;
+  flex-wrap: wrap;
+}

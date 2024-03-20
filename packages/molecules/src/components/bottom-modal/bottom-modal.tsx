@@ -30,7 +30,7 @@ const BottomModal: React.FC<BottomModalProps> = ({ onClose, isOpen, title, child
         bottom="0px"
         mb="0"
         borderRadius="1.75rem 1.75rem 0px 0px"
-        maxW="lg"
+        maxW="sm"
       >
         <ModalCloseButton
           height={'unset'}
