@@ -3,6 +3,7 @@ import axios from 'axios'
 import { useDispatch } from 'react-redux'
 import { Box, Flex, Image } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
+import { toBinary } from '@utils/common-utils'
 import { parsedSearchlist } from '@utils/search-results.utils'
 import { ProductCard } from '@beckn-ui/becknified-components'
 import { BottomModal } from '@beckn-ui/molecules'
@@ -188,16 +189,37 @@ const Search = () => {
                 margin="0 auto"
               >
                 {items.map((item, idx) => {
+                  const product = {
+                    id: item.id,
+                    images: item.descriptor.images,
+                    name: item.descriptor.name,
+                    price: item.price.value,
+                    rating: '4'
+                  }
                   return (
                     <ProductCard
                       key={idx}
-                      product={{
-                        id: item.id,
-                        images: item.descriptor.images,
-                        name: item.descriptor.name,
-                        price: item.price.value,
-                        rating: '4'
+                      productClickHandler={e => {
+                        e.preventDefault()
+                        if (typeof window !== 'undefined') {
+                          const encodedProduct = window.btoa(toBinary(JSON.stringify(item)))
+                          localStorage.setItem(
+                            'productDetails',
+                            JSON.stringify({
+                              encodedProduct: encodedProduct,
+                              product: product
+                            })
+                          )
+
+                          router.push({
+                            pathname: '/product',
+                            query: {
+                              productDetails: encodedProduct
+                            }
+                          })
+                        }
                       }}
+                      product={product}
                     />
                   )
                 })}
