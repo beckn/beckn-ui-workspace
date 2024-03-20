@@ -29,7 +29,11 @@ const ProfilePage = () => {
     country: ''
   })
   return (
-    <Box mt="-20px">
+    <Box
+      margin={'0 auto'}
+      mt={['-20px', '-20px', '-70px', '-70px']}
+      maxW={['100%', '100%', '40rem', '40rem']}
+    >
       <BecknAuth
         schema={{
           buttons: [

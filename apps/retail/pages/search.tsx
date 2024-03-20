@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useDispatch } from 'react-redux'
-import { Box, Image } from '@chakra-ui/react'
+import { Box, Flex, Image } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { parsedSearchlist } from '@utils/search-results.utils'
 import { ProductCard } from '@beckn-ui/becknified-components'
@@ -116,10 +116,7 @@ const Search = () => {
 
   return (
     <>
-      <Box
-        display="flex"
-        marginTop="60px"
-      >
+      <Box display="flex">
         {!isSmallScreen && !isMediumScreen && <Filter />}
         <Box
           w="100%"
@@ -161,7 +158,16 @@ const Search = () => {
               <Filter />
             </BottomModal>
           )}
-          {isMediumScreen && isFilterOpen && <Filter />}
+          {isMediumScreen && isFilterOpen && (
+            <Box
+              position={'absolute'}
+              zIndex="9"
+              backgroundColor={'#fff'}
+              left="28%"
+            >
+              <Filter />
+            </Box>
+          )}
 
           <Box>
             {isLoading ? (
@@ -176,7 +182,11 @@ const Search = () => {
                 />
               </Box>
             ) : (
-              <>
+              <Flex
+                flexWrap={'wrap'}
+                w={['100%', '100%', '51%', '100%']}
+                margin="0 auto"
+              >
                 {items.map((item, idx) => {
                   return (
                     <ProductCard
@@ -191,7 +201,7 @@ const Search = () => {
                     />
                   )
                 })}
-              </>
+              </Flex>
             )}
           </Box>
         </Box>

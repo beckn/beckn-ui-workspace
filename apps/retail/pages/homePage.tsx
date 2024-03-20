@@ -12,77 +12,17 @@ import SearchInput from '@beckn-ui/becknified-components/src/components/search-i
 
 const HomePage = () => {
   const [searchTerm, setSearchTerm] = useState<string>('')
-  const [currentAddress, setCurrentAddress] = useState('')
-  const [loadingForCurrentAddress, setLoadingForCurrentAddress] = useState(true)
-  const [currentLocationFetchError, setFetchCurrentLocationError] = useState('')
   const breakpoint = useBreakpoint()
   const mobileBreakpoints = ['base', 'sm', 'md', 'lg']
   const currentLogo = mobileBreakpoints.includes(breakpoint) ? KuzaLogo : AlternateLogo
   const { t } = useLanguage()
 
   const router = useRouter()
-  const apiKeyForGoogle = process.env.NEXT_PUBLIC_GOOGLE_API_KEY
 
   useEffect(() => {
     if (localStorage) {
       localStorage.clear()
     }
-  }, [])
-
-  useEffect(() => {
-    // Check if geolocation is available in the browser
-    if (navigator) {
-      if ('geolocation' in navigator) {
-        navigator.geolocation.getCurrentPosition(
-          async position => {
-            const latitude = position.coords.latitude
-            const longitude = position.coords.longitude
-
-            const coordinates = {
-              latitude,
-              longitude
-            }
-
-            localStorage.setItem('coordinates', JSON.stringify(coordinates))
-
-            try {
-              const response = await fetch(
-                `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKeyForGoogle}`
-              )
-
-              if (response.ok) {
-                const data = await response.json()
-
-                if (data.results.length > 0) {
-                  const formattedAddress = data.results[0].formatted_address
-                  setCurrentAddress(formattedAddress)
-                } else {
-                  setFetchCurrentLocationError('No address found for the given coordinates.')
-                }
-              } else {
-                setFetchCurrentLocationError('Failed to fetch address data.')
-                alert('Failed to fetch address data.')
-              }
-            } catch (error) {
-              setFetchCurrentLocationError('Error fetching address data: ' + (error as any).message)
-              alert('Error fetching address data: ' + (error as any).message)
-            } finally {
-              setLoadingForCurrentAddress(false)
-            }
-          },
-          error => {
-            setFetchCurrentLocationError('Error getting location: ' + error.message)
-            alert('Error getting location: ' + error.message)
-            setLoadingForCurrentAddress(false)
-          }
-        )
-      } else {
-        setFetchCurrentLocationError('Geolocation is not available in this browser.')
-        alert('Geolocation is not available in this browser.')
-        setLoadingForCurrentAddress(false)
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const navigateToSearchResults = () => {
