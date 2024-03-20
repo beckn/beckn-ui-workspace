@@ -20,7 +20,7 @@ import { BsFilterSquare } from 'react-icons/bs'
 //Mock data for testing search API. Will remove after the resolution of CORS issue
 
 const Search = () => {
-  const [items, setItems] = useState<ParsedItemModel[]>([])
+  const [items, setItems] = useState([])
   const router = useRouter()
   const [searchKeyword, setSearchKeyword] = useState(router.query?.searchTerm || '')
   const [isLoading, setIsLoading] = useState(false)
@@ -49,12 +49,38 @@ const Search = () => {
     }
   }
 
+  const transformData = data => {
+    const allItems = data.message.catalogs.flatMap((catalog: any) => {
+      if (catalog.message && catalog.message.catalog && catalog.message.catalog['bpp/providers'].length > 0) {
+        const providers = catalog.message.catalog['bpp/providers']
+        return providers.flatMap((provider: any) => {
+          if (provider.items && provider.items.length > 0) {
+            return provider.items.map((item: RetailItem) => {
+              return {
+                bpp_id: catalog.context.bpp_id,
+                bpp_uri: catalog.context.bpp_uri,
+                ...item,
+                providerId: provider.id,
+                locations: provider.locations,
+                bppName: catalog.message.catalog['bpp/descriptor'].name
+              }
+            })
+          }
+          return []
+        })
+      }
+      return []
+    })
+
+    return allItems
+  }
+
   const fetchDataForSearch = () => {
     setIsLoading(true)
     axios
-      .post(`${apiUrl}/search`, searchPayload)
+      .post(`${apiUrl}/client/v2/search`, searchPayload)
       .then(res => {
-        const parsedSearchItems = parsedSearchlist(res.data.data)
+        const parsedSearchItems = transformData(res.data)
         localStorage.setItem('searchItems', JSON.stringify(parsedSearchItems))
         setItems(parsedSearchItems)
         setIsLoading(false)
@@ -90,7 +116,10 @@ const Search = () => {
 
   return (
     <>
-      <Box display="flex">
+      <Box
+        display="flex"
+        marginTop="60px"
+      >
         {!isSmallScreen && !isMediumScreen && <Filter />}
         <Box
           w="100%"
@@ -152,8 +181,13 @@ const Search = () => {
                   return (
                     <ProductCard
                       key={idx}
-                      ComponentRenderer={ProductCardRenderer}
-                      dataSource={item}
+                      product={{
+                        id: item.id,
+                        images: item.descriptor.images,
+                        name: item.descriptor.name,
+                        price: item.price.value,
+                        rating: '4'
+                      }}
                     />
                   )
                 })}

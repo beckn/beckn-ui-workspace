@@ -65,6 +65,7 @@ const headerValues: PathnameObjectType = {
   '/orderCancellation': 'Order Cancel',
   '/feedback': '',
   '/profile': 'Profile'
+  // '/search':'Search results'
 }
 
 const headerValuesFrench: PathnameObjectType = {
@@ -80,7 +81,7 @@ const headerValuesFrench: PathnameObjectType = {
 
 const topHeaderBlackList: string[] = []
 
-const bottomHeaderBlackList = ['/homePage', '/search', '/orderConfirmation']
+const bottomHeaderBlackList = ['/orderConfirmation']
 
 const menuIconWhiteList = ['/homePage']
 const orderIconList = ['/orderDetails']

@@ -89,6 +89,7 @@ export interface SearchResponseModel {
 }
 
 export interface ParsedItemModel {
+  id: string
   bppId: string
   bppUri: string
   domain: string
