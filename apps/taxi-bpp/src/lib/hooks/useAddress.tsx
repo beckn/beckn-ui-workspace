@@ -16,7 +16,12 @@ const coordinateToAddress = async ({ latitude, longitude }: any) => {
       console.error(error)
     }
   )
-  const address = response?.results[0]?.formatted_address
+  let address: string
+  if (response?.results.length === 0) {
+    return response?.plus_code?.compound_code
+  }
+
+  address = response?.results[0]?.formatted_address
   if (!address) {
     return response?.plus_code?.compound_code
   }
