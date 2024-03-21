@@ -5,23 +5,23 @@ import { RetailItem } from '../lib/types/products'
 import ProductList from '../components/productList/ProductList'
 
 const offers: NextPage<{
-    products: RetailItem[]
+  products: RetailItem[]
 }> = ({ products }) => {
-    return (
-        <div>
-            <ProductList productList={products} />
-        </div>
-    )
+  return (
+    <div>
+      <ProductList productList={products} />
+    </div>
+  )
 }
 
 export default offers
 
 export const getStaticProps: GetStaticProps = async () => {
-    const productQuery = `*[_type=='product'&& isOffer==true]`
-    const products = await client.fetch(productQuery)
-    return {
-        props: {
-            products: products,
-        },
+  const productQuery = `*[_type=='product'&& isOffer==true]`
+  const products = await client.fetch(productQuery)
+  return {
+    props: {
+      products: products
     }
+  }
 }

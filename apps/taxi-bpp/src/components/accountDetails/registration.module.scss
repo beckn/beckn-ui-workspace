@@ -1,0 +1,149 @@
+.text-white{
+    color: white;
+}
+
+.Registration-body{
+    padding-right: 4%;
+    padding-left: 4%;
+    /* position: absolute; */
+    width: 100%;
+    top: 88px;
+    margin-bottom: 70px;
+}
+
+.Registrationsubmit{
+  padding-right: 4%;
+  padding-left: 4%;
+  position: absolute;
+  width: 100%;
+  top: 14%;
+}
+
+.profileimg{
+  border-radius: 50%;
+  border-color: #000000;
+  height: 30%;
+  width: 150px;
+}
+
+.imgcenter{
+  padding-top: 10px;
+  padding-bottom: 10px;
+  text-align: center;
+}
+
+.btn-secondary{
+    width: 100%;
+    height: 60px;
+    position: fixed;
+    left: 0%;
+    right: 0%;
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 14px;
+    color: white;
+    letter-spacing: 0.38px;
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 24px;
+    bottom: 8%;
+}
+
+
+
+.top-padding{
+  padding-top: 6%;
+}
+
+.top-padding4{
+  padding-top: 4%;
+}
+
+.top-padding2{
+  padding-top: 8%;
+}
+
+.AccountIcon{
+    height: 20px;
+    width: 20px;
+}
+
+.position-relative{
+  position: relative;
+}
+ 
+.upload-btn-wrapper {
+    position: absolute;
+    overflow: hidden;
+    display: inline-block;
+    left: 90%;
+    
+  }
+  .align-left{
+    text-align: left;
+    padding-top: 0;
+  }
+  .uploadbtn{
+    /*border: 2px solid gray;*/
+    border: none;
+    color: gray;
+    background-color: white;
+    font-size: 10px;
+    font-weight: bold;
+    height: 30px;
+    width: 35px;
+    bottom: 60px;
+  }
+  
+  .upload-btn-wrapper input[type=file] {
+    font-size: 100px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+  }
+  
+.coloract{
+  background-color: #9DAFF0;
+}
+
+.bold-text{
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 22px;
+  letter-spacing: -0.408px;
+  color: #000000;
+}
+
+.close {
+  border: none;
+  font-size: 30px;
+  float: right;
+  padding-right: 20px;
+  background-color: transparent;
+}
+.m-header{
+  right: 0px;
+}
+
+.success{
+  height: 110px;
+  width: 50%;
+  text-align: center;
+}
+ 
+.mbody{
+  text-align: center;
+}
+.logout {
+  text-align: right;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.color-red{
+  color: red;
+}

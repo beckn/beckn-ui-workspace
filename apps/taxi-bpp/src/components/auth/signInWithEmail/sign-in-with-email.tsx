@@ -1,50 +1,37 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-// import PropTypes from "prop-types";
-// import { Link, useNavigate } from "react-router-dom";
+import { useState } from 'react'
 import { Col, Container, Row } from 'react-bootstrap'
-// import { isAuthenticated } from '../../../core/common.functions'
-// import { AppRoutes } from '../../../core/constant'
 import { LeftSection } from '../../../lib/shared/graphics/left-section'
 
-import './sign-in-with-email.module.scss'
-// import { userAction } from '../Login.services'
-// import { triggerEvent } from '../../DriverApp/components/SwitchButton/Driver.Services'
+import styles from './sign-in-with-email.module.scss'
 import { DarkLayout } from '@/lib/shared/layout/dark-layout'
-import Link from 'next/link'
+import { userAction } from '../auth-services'
+import { Link, useRouter } from '@/navigation'
+import { AppRoutes } from '@/lib/constant'
 
 // TODO :- To check the styles and functionality of the following component
 
-const SignInWithEmail = (props: any) => {
-  //   const navigate = useNavigate();
+const SignInWithEmail = () => {
+  const router = useRouter()
 
   const [Name, setName] = useState('')
   const [Password, setPassword] = useState('')
 
-  //   useEffect(() => {
-  //     isAuthenticated(navigate);
-  //     document.title = `taxi BPP`;
-  //     // console.log(props);
-  //     // spinnerService.show("mySpinner");
-  //     // eslint-disable-next-line react-hooks/exhaustive-deps
-  //   }, []);
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
 
-  //   const handleSubmit = e => {
-  //     e.preventDefault()
-  //     //if (!Name || !Password) return;
-  //     let path = 'login'
-  //     let data = {
-  //       User: {
-  //         Name: Name,
-  //         Password: Password
-  //       }
-  //     }
-  //     userAction(path, data).then(res => {
-  //       window.location.href = AppRoutes.driverDashboard
-  //       triggerEvent('mbth_login')
-  //     })
-  //   }
+    let path = 'login'
+    let data = {
+      User: {
+        Name: Name,
+        Password: Password
+      }
+    }
+    userAction(path, data, null).then(res => {
+      router.push('/dashboard')
+    })
+  }
 
   return (
     <DarkLayout>
@@ -65,7 +52,7 @@ const SignInWithEmail = (props: any) => {
               className="d-flex align-items-center justify-content-center"
             >
               <div className="w-100">
-                <div className="row w-100 justify-content-center p-3">
+                <div className={`${styles.row} w-100 justify-content-center p-3`}>
                   <div className="col-6 mb-3 col-12 col-lg-6 ">
                     <h2>
                       Welcome to
@@ -75,14 +62,14 @@ const SignInWithEmail = (props: any) => {
                   </div>
                 </div>
                 <form
-                  onSubmit={e => {
-                    // handleSubmit(e)
-                    console.log('formIsSubmitted')
+                  onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
+                    // TODO :- To enable event after proper implementation of components
+                    handleSubmit(e)
                   }}
                 >
-                  <div className="row w-100 justify-content-center">
+                  <div className={`${styles.row} w-100 justify-content-center`}>
                     <div className="col-6 col-12 col-lg-6">
-                      <div className="row">
+                      <div className={styles.row}>
                         <div className="col mb-4 ">
                           <input
                             type="text"
@@ -93,7 +80,7 @@ const SignInWithEmail = (props: any) => {
                           />
                         </div>
                       </div>
-                      <div className="row">
+                      <div className={styles.row}>
                         <div className="col mb-3 ">
                           <input
                             type="password"
@@ -104,7 +91,7 @@ const SignInWithEmail = (props: any) => {
                           />
                         </div>
                       </div>
-                      <div className="row mb-3">
+                      <div className={`${styles.row} mb-3`}>
                         <div className="col ">
                           <Link
                             href={'#'}
@@ -124,10 +111,10 @@ const SignInWithEmail = (props: any) => {
                           </Link>
                         </div> */}
                       </div>
-                      <div className="row btn-lg btn-block">
+                      <div className={`${styles.row} btn-lg btn-block`}>
                         <button
                           type="submit"
-                          className="btn btn-primary"
+                          className="btn w-100 btn-primary"
                           disabled={!Name || !Password}
                         >
                           Sign In
@@ -142,11 +129,11 @@ const SignInWithEmail = (props: any) => {
                           Cancel
                         </Link>
                       </div> */}
-                      <div className="row mt-5">
+                      <div className={`${styles.row} mt-5`}>
                         <div className="col-12 col-lg-6 ">
                           New User?{' '}
                           <Link
-                            href={'#'}
+                            href={AppRoutes.signUp}
                             className="link-primary d-lg-block"
                           >
                             Sign Up

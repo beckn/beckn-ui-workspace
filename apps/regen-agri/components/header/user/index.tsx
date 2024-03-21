@@ -5,10 +5,8 @@ import UserAccountBtn from './UserAccountBtn'
 import LoginBtn from './LoginBtn'
 
 const User = () => {
-    const userInfo = useSelector(
-        (state: IUserInfoRootState) => state.userInfo.userInformation
-    )
-    return <div>{userInfo ? <UserAccountBtn /> : <LoginBtn />}</div>
+  const userInfo = useSelector((state: IUserInfoRootState) => state.userInfo.userInformation)
+  return <div>{userInfo ? <UserAccountBtn /> : <LoginBtn />}</div>
 }
 
 export default User

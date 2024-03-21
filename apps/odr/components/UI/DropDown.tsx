@@ -55,8 +55,8 @@ const DropDown = forwardRef<HTMLDivElement, Props>(({ dropDown }, ref) => {
             state === 'entering'
               ? `animate-dropDown`
               : state === 'entered'
-              ? 'scale-y-100 opacity-100'
-              : 'animate-dropDownExit'
+                ? 'scale-y-100 opacity-100'
+                : 'animate-dropDownExit'
           }
           `}
             >

@@ -14,15 +14,15 @@ import { Provider } from 'react-redux'
 import store from '../store/index'
 
 function MyApp({ Component, pageProps }: AppProps) {
-    return (
-        <ChakraProvider>
-            <Provider store={store}>
-                <Layout>
-                    <Component {...pageProps} />
-                </Layout>
-            </Provider>
-        </ChakraProvider>
-    )
+  return (
+    <ChakraProvider>
+      <Provider store={store}>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </Provider>
+    </ChakraProvider>
+  )
 }
 
 export default MyApp

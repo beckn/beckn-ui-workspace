@@ -1,8 +1,8 @@
 export interface IActiveMenuItem {
-    activeMenuItemIndex: number
-    activeMenuItemText: string
+  activeMenuItemIndex: number
+  activeMenuItemText: string
 }
 
 export interface IActiveMenuItemRootState {
-    activeMenuItem: IActiveMenuItem
+  activeMenuItem: IActiveMenuItem
 }

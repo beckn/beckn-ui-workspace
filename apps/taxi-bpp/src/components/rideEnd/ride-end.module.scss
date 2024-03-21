@@ -1,0 +1,105 @@
+.titleP {
+    display: flex;
+    position: relative;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 22px;
+    left: 10px;
+    top: 10px;
+  }
+  .subP {
+    display: flex;
+    position: relative;
+    font-weight: 275;
+    font-size: 16px;
+    line-height: 22px;
+    left: 10px;
+    top: 12px;
+  }
+  .Rp {
+    color: #34c759;
+    font-weight: 600;
+    font-size: 32px;
+    line-height: 22px;
+  }
+  .hrp {
+    display: flex;
+    /* position: relative; */
+    top: 25px;
+  }
+  .date {
+    display: flex;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 22px;
+    position: relative;
+    top: 30px;
+    left: 10px;
+  }
+  .dist {
+    display: flex;
+    position: relative;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 22px;
+    padding-left: 6.5cm;
+    bottom: 2px;
+  }
+  .tm {
+    display: flex;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 22px;
+    position: relative;
+    padding-left: 8.5cm;
+    bottom: 32px;
+  }
+  
+  .locationI {
+    display: flex;
+    position: relative;
+    bottom: 20px;
+    left: 10px;
+  }
+  
+  .LP {
+    display: flex;
+    position: relative;
+    left: 18px;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 24px;
+    color: rgba(0, 0, 0, 0.4);
+  }
+  .MaP {
+    position: relative;
+    display: flex;
+    top: 60px;
+    right: 6.1cm;
+  }
+  .Mpin {
+    display: flex;
+    position: relative;
+    left: 15px;
+    color: #000000;
+  }
+  
+  .End {
+    background-color: #9daff0;
+    color: white;
+    position: fixed;
+    border-color: #9daff0;
+    bottom: 35px;
+    bottom: 60px;
+    height: 60px;
+    width: 100%;
+    border: none;
+  }
+  
+  .text-address {
+    white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 45ch;
+  }
+  

@@ -61,13 +61,13 @@ const LandingPage: React.FC = () => {
                 ? type === 'course'
                   ? couresImageWhite
                   : type === 'scholarship'
-                  ? scholarshipImageWhite
-                  : jobsImageWhite
+                    ? scholarshipImageWhite
+                    : jobsImageWhite
                 : type === 'course'
-                ? coursesImageBlack
-                : type === 'scholarship'
-                ? scholarshipImageBlack
-                : jobsImageBlack
+                  ? coursesImageBlack
+                  : type === 'scholarship'
+                    ? scholarshipImageBlack
+                    : jobsImageBlack
             }
             text={type === 'course' ? t.courseImgText : type === 'scholarship' ? t.scholarshipImgText : t.jobsImgText}
             onClick={() => handleClick(type)}

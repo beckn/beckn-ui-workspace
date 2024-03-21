@@ -18,3 +18,21 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+input {
+  outline: 0;
+  border-width: 0 0 1px;
+  border-color: rgba(0, 0, 0, 0.3);
+  left: 0;
+  width: 100%;
+  text-align: left;
+  color: black;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 22px;
+}
+
+input:focus {
+  border-color:rgba(0, 0, 0, 0.6);
+}

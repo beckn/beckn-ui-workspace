@@ -2,7 +2,7 @@ import { VehicleTags } from './shared/constant'
 import { AppRoutes, LocalKey } from './constant'
 import { getCookie, setCookie } from './CookiesHandler'
 // TODO :- have to add this in the components folder and then restore this
-// import { triggerEvent } from '../components/DriverApp/components/SwitchButton/Driver.Services'
+// import { triggerEvent } from '../components/DriverApp/components/SwitchButton/driver.Services'
 
 // @typescript-eslint/no-explicit-any
 export const setValue: any = (propertyPath: any, value: any, obj: any) => {
@@ -32,16 +32,15 @@ export const getValue = (propertyPath: any, obj: any) => {
 }
 
 //TODO :- To check for the naviage code here. Navigation is different for next js
-export const isAuthenticated = (navigate: any) => {
+export const isAuthenticated = (router: any) => {
   if (getCookie(LocalKey.saveApi)) {
     // triggerEvent('mbth_login')
     //window.location.href = AppRoutes.driverDashboard;
-    navigate(AppRoutes.driverDashboard)
+    router.push('/dashboard')
   }
 }
 
 export const getAddress = function getAddress(address: any) {
-  // console.log('getaddress', address.AddressLine1);
   let userAddress: any = []
   if (
     address.AddressLine1 &&

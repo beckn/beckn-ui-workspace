@@ -1,9 +1,9 @@
 import { RetailItem } from './products'
 
 export interface IProductList {
-    productsList: RetailItem[] | []
+  productsList: RetailItem[] | []
 }
 
 export interface IProductListRootState {
-    sortedProductsList: IProductList
+  sortedProductsList: IProductList
 }
