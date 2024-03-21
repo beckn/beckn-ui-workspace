@@ -48,8 +48,8 @@ const SideBar = () => {
                     state === 'entering'
                       ? 'animate-fadeEntering'
                       : state === 'entered'
-                      ? 'opacity-100'
-                      : 'animate-fadeExit'
+                        ? 'opacity-100'
+                        : 'animate-fadeExit'
                   }
                   `}
                 onClick={closeNav}

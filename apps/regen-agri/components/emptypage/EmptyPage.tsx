@@ -5,52 +5,52 @@ import Button from '../button/Button'
 import { useLanguage } from '../../hooks/useLanguage'
 
 const EmptyPage = () => {
-    const { t } = useLanguage()
-    const router = useRouter()
-    return (
-        <Flex
-            pt={'29px'}
-            direction={'column'}
-            align={'center'}
-            gap={'6px'}
+  const { t } = useLanguage()
+  const router = useRouter()
+  return (
+    <Flex
+      pt={'29px'}
+      direction={'column'}
+      align={'center'}
+      gap={'6px'}
+    >
+      <Flex
+        direction={'column'}
+        mb={'20px'}
+        gap={'6px'}
+      >
+        <Image
+          src={'/images/emptyPage.svg'}
+          alt={'empty page icon'}
+        />
+
+        <Text
+          mt={'20px'}
+          fontWeight="600"
+          fontSize={'15px'}
+          align={'center'}
         >
-            <Flex
-                direction={'column'}
-                mb={'20px'}
-                gap={'6px'}
-            >
-                <Image
-                    src={'/images/emptyPage.svg'}
-                    alt={'empty page icon'}
-                />
+          {t.emptyOrderHistoryText}
+        </Text>
+        <Text
+          fontWeight="400"
+          fontSize={'15px'}
+          align={'center'}
+        >
+          {t.noExistingWorkflowText}
+        </Text>
+      </Flex>
 
-                <Text
-                    mt={'20px'}
-                    fontWeight="600"
-                    fontSize={'15px'}
-                    align={'center'}
-                >
-                    {t.emptyOrderHistoryText}
-                </Text>
-                <Text
-                    fontWeight="400"
-                    fontSize={'15px'}
-                    align={'center'}
-                >
-                    {t.noExistingWorkflowText}
-                </Text>
-            </Flex>
-
-            <Button
-                buttonText={'Go Back Home'}
-                isDisabled={false}
-                type={'solid'}
-                handleOnClick={() => {
-                    router.push('/')
-                }}
-            />
-        </Flex>
-    )
+      <Button
+        buttonText={'Go Back Home'}
+        isDisabled={false}
+        type={'solid'}
+        handleOnClick={() => {
+          router.push('/')
+        }}
+      />
+    </Flex>
+  )
 }
 
 export default EmptyPage

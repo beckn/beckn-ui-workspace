@@ -3,6 +3,11 @@
   "rules": {
     "@typescript-eslint/no-explicit-any": "off",
     "@next/next/no-img-element": "off",
-    "no-prototype-builtins": "off"
+    "no-prototype-builtins": "off",
+    "@typescript-eslint/no-unused-vars": "off",
+    "prefer-const": "off",
+    "react-hooks/exhaustive-deps": "off",
+    "no-useless-escape": "off",
+    "no-unsafe-optional-chaining": "off"
   }
 }

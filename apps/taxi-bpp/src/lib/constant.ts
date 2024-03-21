@@ -4,7 +4,7 @@ export const AppRoutes = {
   signInOtp: '/sign-in-phone',
   signInPassword: '/sign-in-password',
   adminDashboard: '/admin-dashboard',
-  driverDashboard: '/driver-dashboard',
+  driverDashboard: '/dashboard',
   addVehicle: '/add-vehicles',
   accountRegistration: '/account-Registration',
   endRide: '/ride-end'
@@ -40,13 +40,13 @@ export const commonMsg = {
   NoValue: 'Not Available'
 }
 
-export const SearchGroupsCode = {
+export const SearchGroupsCode: any = {
   PinCode: 'pin_codes',
   State: 'states',
   City: 'cities'
 }
 
-export const GroupsCode = {
+export const GroupsCode: any = {
   PinCode: 'PinCodes',
   State: 'States',
   City: 'Cities'

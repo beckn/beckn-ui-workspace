@@ -22,8 +22,8 @@ const SideNav = forwardRef<HTMLDivElement, Props>(({ state, onClose }, ref) => {
           state === 'entering'
             ? 'ltr:animate-sidenavLTREntering rtl:animate-sidenavRTLEntering'
             : state === 'entered'
-            ? 'translate-x-0'
-            : 'ltr:animate-sidenavLTRExit rtl:animate-sidenavRTLExit'
+              ? 'translate-x-0'
+              : 'ltr:animate-sidenavLTRExit rtl:animate-sidenavRTLExit'
         }
         `}
     >

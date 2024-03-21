@@ -291,7 +291,7 @@ export const getTransformedDataFromOdrResponse = (scholarShips: ScholarshipSearc
       context: { transactionId, bppId, bppUri },
       scholarshipProviders
     } = platformData
-
+    if (!scholarshipProviders) break
     for (const provider of scholarshipProviders) {
       const { id: providerId, name: providerName, items, images: providerImages, longDesc: providerDesc } = provider
 

@@ -1,0 +1,234 @@
+.me-2{
+    background-color: #34C759;
+    color:white;
+    position: fixed;
+    border-color: #34C759;
+    bottom: 35px;
+    bottom: 60px;
+    height: 60px;
+    width: 100%;
+    border: none;
+}
+
+.popupbottom{
+    top: 50%;
+    vertical-align: bottom;
+}
+
+.popup{
+    background-color: #f5f1ed;
+    position:relative;
+    padding-bottom:20%;
+  }
+
+.carLog-R {
+    width: 46.7px;
+    height: 46.7px;
+    position: fixed;
+    top: 7%;
+    left: 1%;
+}
+
+.callLog-R {
+    position: fixed;
+    display: flex;
+    right: 1%;
+    top: 5%;
+}
+
+.titlle-R {
+    position: fixed;
+    text-align: center;
+    width: 100%;
+    font-size: 24px;
+    font-weight: 500;
+    top: 5%;
+}
+
+.h6-R{
+    position: fixed;
+    bottom: 55%;
+    width: 100%;
+    /* left: 68px; */
+    top: 16%;
+    text-align: center;
+    /* height: 21px; */
+    font-weight: 400;
+    font-size: 14px;
+}
+
+.h5-R{
+    display: flex;
+    position:absolute;
+    bottom: 76%;
+    left: 70px;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 21px;
+}
+
+.hr-R{
+    margin-bottom: 20px;
+    top: 20%;
+    width: 100%;
+    position: fixed;
+}
+
+.loc-R{
+    position: relative;
+    left: 20px;
+    top: 40px;
+    margin-bottom: 10px;
+}
+
+.MapPin-R{
+    display: flex;
+    position: fixed;
+    /* bottom: -35px; */
+    /* right: 5px; */
+    top: 40%;
+    left: 8%;
+}
+
+.map-R{
+    display: flex;
+    position: relative;
+    bottom:-px;
+    right: 15px;
+     
+}
+
+.hrs-R{
+    display: flex;
+    position: fixed;
+    width: 100%;
+    top: 47%;
+}
+
+.Cancelridehr-R{
+    display: flex;
+    position: fixed;
+    width: 100%;
+    top: 68%;
+}
+
+.hd-R{
+    display: flex;
+    position: fixed;
+    top: 55%;
+    left: 1%;
+}
+
+.rs-R{
+    display: flex;
+    position: fixed;
+    right: 1%;
+    top: 55%;
+    /* bottom: 90px; */
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+}
+
+.ps-R{
+    display: flex;
+    position: fixed;
+    /* bottom: 70px; */
+    top: 63%;
+    left: 1%;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 21px;
+}
+
+.ride-R{
+    display: flex;
+    position: fixed;
+    /* bottom: 40px; */
+    color: red;
+    top: 78%;
+    left: 1%;
+}
+
+.dest-R{
+    left: 18%;
+    width: 100%;
+    position: fixed;
+}
+
+.sub-R {
+    position: fixed;
+    /*bottom: 80px;*/
+    top: 30%;
+    left: 18%;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 18px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.min-R{
+   position: fixed;
+   left: 18%;
+   top: 63%;
+   font-weight: 400;
+   font-size: 14px;
+}
+
+.kms-R{
+    position: fixed;
+    /*bottom: 95px;*/
+    right: 40%;
+    top: 63%;
+    font-weight: 400;
+    font-size: 14px;
+    /*line-height: 21px;  */  
+ }
+
+ .bottomModal-R{
+    bottom: 10%;
+    width: 100%;
+    height: 370px;
+    background: #FFFFFF;
+    -webkit-backdrop-filter: blur(80px);
+    backdrop-filter: blur(80px);
+    border-radius: 10px;
+    position: fixed;
+ }
+
+
+ .rectangle-bar-R{
+    text-align: center;
+    position: absolute;
+    width: 100%;
+    margin-bottom: 10px;
+    top: -5px;
+ }
+
+ .nevigate-body-R{
+    position: relative;
+    top: 5%;
+}
+ 
+.recbar-R{
+    height: 1%;
+    background-color: transparent;
+    border: none;
+}
+
+.SourceAddress-R{
+    top: 30%;
+    position: fixed;
+}
+
+.fixed-bottom1{
+    position: fixed;
+    right: 0;
+    bottom: 15px;
+    left: 0;
+    z-index: 1030;
+    height: 5%;
+    background-color: white;
+  }

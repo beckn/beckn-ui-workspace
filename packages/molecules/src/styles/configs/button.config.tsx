@@ -23,15 +23,14 @@ const ButtonConfig = defineStyleConfig({
       const colorScheme = props.colorScheme || 'primary'
       return {
         border: '2px solid',
-        borderColor: `${colorScheme}.100`,
         color: `${colorScheme}.100`
       }
     },
     solid: props => {
       const colorScheme = props.colorScheme || 'primary'
       return {
-        bg: `${colorScheme}.100`,
-        color: 'white'
+        bg: `${colorScheme}.100`
+        // color:'textSecondary.100',
       }
     }
   },
