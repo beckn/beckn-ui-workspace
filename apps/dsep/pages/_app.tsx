@@ -11,6 +11,7 @@ import { ChakraProvider } from '@chakra-ui/react'
 import '../styles/globals.css'
 
 import { Garuda } from 'garudaa'
+import { BecknProvider } from '@beckn-ui/molecules'
 
 Garuda.init({
   projectId: '656dad5ed5a5a7d831fc43ac',
@@ -28,11 +29,20 @@ Garuda.identify({
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <ChakraProvider>
+    <BecknProvider
+      theme={{
+        color: {
+          primary: '#3AA5E1',
+          secondary: '#84B3F9',
+          textPrimary: '#1A202C',
+          textSecondary: '#6B7280'
+        }
+      }}
+    >
       <Layout>
         <Component {...pageProps} />
       </Layout>
-    </ChakraProvider>
+    </BecknProvider>
   )
 }
 
