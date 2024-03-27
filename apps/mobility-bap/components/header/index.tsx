@@ -33,7 +33,6 @@ const storeHeaderBlackList = [
   '/homePage',
   '/orderConfirmation',
   'feedback',
-  '/',
   '/mobileOtp',
   '/paymentMode'
 ]
@@ -41,7 +40,6 @@ const headerValues: PathnameObjectType = {
   '/checkoutPage': 'Billing & Shipping',
   '/orderHistory': 'Order History',
   '/orderDetails': 'Order Details',
-  '/': 'Sign In',
   '/mobileOtp': 'Sign In',
   '/cart': 'Cart',
   '/paymentMode': 'Select Payment Method',
@@ -61,7 +59,7 @@ const headerValuesFrench: PathnameObjectType = {
 
 const topHeaderBlackList: string[] = []
 
-const bottomHeaderBlackList = ['/homePage', '/orderConfirmation']
+const bottomHeaderBlackList = ['/homePage', '/', '/orderConfirmation']
 
 const menuIconWhiteList = ['/homePage']
 
