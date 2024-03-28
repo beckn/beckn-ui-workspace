@@ -9,51 +9,26 @@ import { RetailItem } from '../lib/types/products'
 import Loader from '../components/loader/Loader'
 import { useLanguage } from '../hooks/useLanguage'
 import { useRouter } from 'next/router'
+import { getParsedSearchlist } from '../utilities/search-utils'
+import { ParsedItemModel, SearchResponseModel } from '../types/search.types'
+import CustomToast from '../components/customToast/custom-toast'
 
 //Mock data for testing search API. Will remove after the resolution of CORS issue
 
 const Search = () => {
-  const [items, setItems] = useState([])
+  const [items, setItems] = useState<ParsedItemModel[]>([])
   const router = useRouter()
   const [searchKeyword, setSearchKeyword] = useState(router.query?.searchTerm || '')
   const dispatch = useDispatch()
-  const [providerId, setProviderId] = useState('')
   const { t, locale } = useLanguage()
-  const [tagValue, setTagValue] = useState('')
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
   const { data, loading, error, fetchData } = useRequest()
 
-  const categoryMap = {
-    Books: { en: 'BookEnglish', fa: 'BookFrench' },
-    restaurant: { en: 'FoodEnglish', fa: 'FoodFrench' }
-  }
-
-  useEffect(() => {
-    if (!!searchKeyword) {
-      localStorage.removeItem('searchItems')
-      localStorage.setItem('optionTags', JSON.stringify({ name: searchKeyword }))
-      window.dispatchEvent(new Event('storage-optiontags'))
-      fetchDataForSearch()
-    }
-    if (localStorage) {
-      const stringifiedOptiontags = localStorage.getItem('optionTags')
-      const stringifiedSelectedOption = localStorage.getItem('selectedOption')
-      if (stringifiedOptiontags) {
-        const providerId = JSON.parse(stringifiedOptiontags).providerId
-        setProviderId(providerId)
-      }
-      if (stringifiedSelectedOption) {
-        setTagValue(JSON.parse(stringifiedSelectedOption).tagValue)
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchKeyword])
-
   const searchPayload = {
     context: {
-      domain: 'retail'
+      domain: 'dsep:courses'
     },
     message: {
       criteria: {
@@ -64,16 +39,14 @@ const Search = () => {
     }
   }
 
-  const fetchDataForSearch = () => fetchData(`${apiUrl}/client/v2/search`, 'POST', searchPayload)
+  const fetchDataForSearch = () => fetchData(`${apiUrl}/search`, 'POST', searchPayload)
 
   useEffect(() => {
     if (localStorage && !localStorage.getItem('searchItems')) {
-      if (providerId) {
-        fetchData(`${apiUrl}/client/v2/search`, 'POST', searchPayload)
-      }
+      fetchData(`${apiUrl}/search`, 'POST', searchPayload)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [providerId])
+  }, [])
 
   useEffect(() => {
     if (localStorage) {
@@ -84,36 +57,20 @@ const Search = () => {
       }
     }
   }, [])
-  console.log(items)
   useEffect(() => {
     if (data) {
-      dispatch(responseDataActions.addTransactionId(data.context.transaction_id))
-      const allItems = data.message.catalogs.flatMap((catalog: any) => {
-        if (catalog.message && catalog.message.catalog && catalog.message.catalog['bpp/providers'].length > 0) {
-          const providers = catalog.message.catalog['bpp/providers']
-          return providers.flatMap((provider: any) => {
-            if (provider.items && provider.items.length > 0) {
-              return provider.items.map((item: RetailItem) => {
-                return {
-                  bpp_id: catalog.context.bpp_id,
-                  bpp_uri: catalog.context.bpp_uri,
-                  ...item,
-                  providerId: provider.id,
-                  locations: provider.locations,
-                  bppName: catalog.message.catalog['bpp/descriptor'].name
-                }
-              })
-            }
-            return []
-          })
-        }
-        return []
-      })
-      localStorage.setItem('searchItems', JSON.stringify(allItems))
-      setItems(allItems)
+      const parsedItems = getParsedSearchlist(data.data as SearchResponseModel[])
+      dispatch(responseDataActions.addTransactionId(data.data[0].context.transaction_id))
+
+      localStorage.setItem('searchItems', JSON.stringify(parsedItems))
+      setItems(parsedItems)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data])
+
+  if (error) {
+    return <></>
+  }
 
   return (
     <>

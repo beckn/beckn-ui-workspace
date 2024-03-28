@@ -3,7 +3,7 @@ import axios from 'axios'
 import { ResponseModel } from '../lib/types/responseModel'
 
 const useRequest = () => {
-  const [data, setData] = useState<(ResponseModel & ResponseModel[]) | null>(null)
+  const [data, setData] = useState<any>(null)
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string>('')
 
