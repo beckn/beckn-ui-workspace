@@ -8,7 +8,8 @@ import { SortedProductsListActions } from '../../store/sortedProductList-slice'
 import { IProductListRootState } from '../../lib/types/productList'
 
 interface Props {
-  productList: RetailItem[]
+  // TODO :- to change this after the proper data mapping in the product cards
+  productList: any
 }
 const ProductList: React.FC<Props> = ({ productList }) => {
   const { t } = useLanguage()
