@@ -11,6 +11,7 @@ import activeMenuItemReducer from './activeMenuItem-slice'
 import settingBoxReducer from './settingBox-slice'
 import favoriteReducer from './favorite-slice'
 import responseDataReducer from './responseData-slice'
+import geoMapLocationSearchReducer from './geoMapLocationSearch-slice'
 
 const store = configureStore({
   reducer: {
@@ -28,7 +29,8 @@ const store = configureStore({
     transactionId: responseDataReducer,
     quoteResponse: responseDataReducer,
     customerDetails: responseDataReducer,
-    initResponse: responseDataReducer
+    initResponse: responseDataReducer,
+    geoLocationSearchPageUI: geoMapLocationSearchReducer
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({

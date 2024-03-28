@@ -1,5 +1,5 @@
 import React from 'react'
-import { Provider } from 'react-redux'
+import { Provider, useSelector } from 'react-redux'
 import Head from 'next/head'
 import { ThemeProvider } from 'next-themes'
 import { useRouter } from 'next/router'
@@ -10,6 +10,8 @@ import { ToastContainer } from 'react-toastify'
 import { useLanguage } from '../../hooks/useLanguage'
 import NextNProgress from 'nextjs-progressbar'
 import cs from 'classnames'
+import { IGeoLocationSearchPageRootState } from '../../lib/types/geoLocationSearchPage'
+import GeoLocationInputList from '../geoLocationInput/GeoLocationInputList'
 
 const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const { locale } = useLanguage()
@@ -18,6 +20,9 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const isSearch = router.pathname === '/search'
   const paddingStyles = 'px-5 xl:px-16'
   const marginStyles = 'mt-[100px]'
+  const geoLocationSearchPageVisible = useSelector((state: IGeoLocationSearchPageRootState) => {
+    return state.geoLocationSearchPageUI.geoLocationSearchPageVisible
+  })
 
   return (
     <Provider store={store}>
@@ -38,26 +43,29 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
         >
           <NextNProgress height={7} />
           <Header />
-          <main
-            className={cs(
-              'flex-grow',
-              {
-                [paddingStyles]: !isHomepage
-              },
-              {
-                [marginStyles]: !isHomepage && !isSearch
-              },
-              {
-                ['mt-[24px]']: isHomepage
-              },
-              {
-                ['mt-[118px]']: isSearch
-              }
-            )}
-          >
-            {children}
-          </main>
-          {/* <Footer /> */}
+          {!geoLocationSearchPageVisible ? (
+            <main
+              className={cs(
+                'flex-grow',
+                {
+                  [paddingStyles]: !isHomepage
+                },
+                {
+                  [marginStyles]: !isHomepage && !isSearch
+                },
+                {
+                  ['mt-[24px]']: isHomepage
+                },
+                {
+                  ['mt-[118px]']: isSearch
+                }
+              )}
+            >
+              {children}
+            </main>
+          ) : (
+            <GeoLocationInputList />
+          )}
         </div>
         <ToastContainer
           autoClose={2000}
