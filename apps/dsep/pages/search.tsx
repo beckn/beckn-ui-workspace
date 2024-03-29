@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { Box } from '@chakra-ui/react'
+import { LoaderWithMessage } from '@beckn-ui/molecules'
+import { ProductCard, Sort } from '@beckn-ui/becknified-components'
 import SearchBar from '../components/header/SearchBar'
 import ProductList from '../components/productList/ProductList'
 import useRequest from '../hooks/useRequest'
@@ -12,6 +14,7 @@ import { useRouter } from 'next/router'
 import { getParsedSearchlist } from '../utilities/search-utils'
 import { ParsedItemModel, SearchResponseModel } from '../types/search.types'
 import CustomToast from '../components/customToast/custom-toast'
+import ProductCardRenderer from '../components/productCard/product-card-renderer'
 
 //Mock data for testing search API. Will remove after the resolution of CORS issue
 
@@ -100,22 +103,21 @@ const Search = () => {
           }}
         />
       </Box>
-      <div>
-        {loading ? (
-          <div>
-            <Loader
-              stylesForLoadingText={{
-                fontWeight: '600',
-                fontSize: '16px'
-              }}
-              subLoadingText={t.coursesCatalogLoader}
-              loadingText={t.catalogLoader}
-            />
-          </div>
-        ) : (
-          <ProductList productList={items} />
-        )}
-      </div>
+
+      {loading ? (
+        <Box
+          display={'grid'}
+          height={'calc(100vh - 300px)'}
+          alignContent={'center'}
+        >
+          <LoaderWithMessage
+            loadingText={t.catalogLoader}
+            loadingSubText={t.coursesCatalogLoader}
+          />
+        </Box>
+      ) : (
+        <ProductList productList={items} />
+      )}
     </>
   )
 }

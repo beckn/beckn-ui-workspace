@@ -15,7 +15,6 @@ const Sort: React.FC<Props> = ({ selectedBtn: selectedRadioBtn, onChangeSelected
 
   return (
     <Box
-      mt={'-106px'}
       position={'fixed'}
       zIndex={'8'}
       background={'#fff'}

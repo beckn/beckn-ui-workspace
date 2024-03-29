@@ -1,72 +1,71 @@
 import React, { useEffect, useState } from 'react'
 import { useLanguage } from '../../hooks/useLanguage'
-import { RetailItem } from '../../lib/types/products'
-import Card from '../UI/card/Card'
 import Sort from './Sort'
-import { useDispatch, useSelector } from 'react-redux'
-import { SortedProductsListActions } from '../../store/sortedProductList-slice'
-import { IProductListRootState } from '../../lib/types/productList'
+import { Box } from '@chakra-ui/react'
+import { ParsedItemModel } from '../../types/search.types'
+import { ProductCard } from '@beckn-ui/becknified-components'
+import ProductCardRenderer from '../productCard/product-card-renderer'
 
 interface Props {
   // TODO :- to change this after the proper data mapping in the product cards
-  productList: any
+  productList: ParsedItemModel[]
 }
+
+export const sortByExpensive = (product1: ParsedItemModel, product2: ParsedItemModel): number => {
+  return parseFloat(product2.item.price.value) - parseFloat(product1.item.price.value)
+}
+
+export const sortByCheapest = (product1: ParsedItemModel, product2: ParsedItemModel): number => {
+  return parseFloat(product1.item.price.value) - parseFloat(product2.item.price.value)
+}
+
 const ProductList: React.FC<Props> = ({ productList }) => {
   const { t } = useLanguage()
-
   const [selectedRadioBtn, setSelectedRadioBtn] = useState<string>('all')
-  const dispatch = useDispatch()
+  const [sortedProductList, setSortedProductList] = useState<ParsedItemModel[]>(productList)
 
   useEffect(() => {
-    dispatch(
-      SortedProductsListActions.sortProductsList({
-        productsList: productList,
-        sortBasedOn: selectedRadioBtn
-      })
-    )
-  }, [dispatch, productList, selectedRadioBtn])
+    const clonedproductList = structuredClone(productList)
+    if (selectedRadioBtn === 'expensive') {
+      return setSortedProductList(clonedproductList.sort(sortByExpensive))
+    }
 
-  const sortedProductList = useSelector((state: IProductListRootState) => state.sortedProductsList.productsList)
+    if (selectedRadioBtn === 'cheapest') {
+      return setSortedProductList(clonedproductList.sort(sortByCheapest))
+    }
+
+    if (selectedRadioBtn === 'all') {
+      return setSortedProductList(clonedproductList)
+    }
+  }, [selectedRadioBtn])
 
   function onChangeHandler(e: React.ChangeEvent<HTMLInputElement>) {
     setSelectedRadioBtn(e.currentTarget.id)
   }
 
   return (
-    <div>
-      {/* <Breadcrumb /> */}
-      {/* <SubmenuCategory /> */}
-
-      <div className="w-full xl:max-w-[2100px] mx-auto">
-        {sortedProductList && sortedProductList.length ? (
-          <div>
-            <Sort
-              selectedBtn={selectedRadioBtn}
-              onChangeSelectedBtn={onChangeHandler}
+    <>
+      <Box
+        mt={'50px'}
+        className="hideScroll"
+        maxH={'calc(100vh - 168px)'}
+        overflowY="scroll"
+      >
+        <Sort
+          onChangeSelectedBtn={onChangeHandler}
+          selectedBtn={selectedRadioBtn}
+        />
+        <Box marginTop={'107px'}>
+          {sortedProductList.map((item, idx) => (
+            <ProductCard
+              key={idx}
+              ComponentRenderer={ProductCardRenderer}
+              dataSource={item}
             />
-            <div
-              className="grid gap-4 md:gap-2 grid-cols-6 md:grid-cols-12 hideScroll"
-              style={{
-                marginTop: '140px',
-                maxHeight: 'Calc(100vh - 260px)',
-                overflowY: 'scroll'
-              }}
-            >
-              {sortedProductList.map((product: RetailItem) => {
-                return (
-                  <Card
-                    key={product.id}
-                    product={product}
-                  />
-                )
-              })}
-            </div>
-          </div>
-        ) : (
-          <p className="text-palette-mute text-center mt-14">{t.noProduct}</p>
-        )}
-      </div>
-    </div>
+          ))}
+        </Box>
+      </Box>
+    </>
   )
 }
 
