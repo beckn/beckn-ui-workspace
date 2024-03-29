@@ -16,37 +16,38 @@ const ProductSummary: React.FC<ProductSummaryPropsModel> = props => {
           display={'flex'}
           width={'100%'}
           mb={'20px'}
+          mt={{ base: '2rem', xl: '5rem' }}
           className={`${className}-product_summary_container`}
         >
           <Flex
             gap={'10px'}
-            direction={'row'}
+            direction={'column'}
             alignItems={'center'}
             width={'100%'}
           >
             <Box className={`${className}-product_summary_image_container`}>
               <Image
                 src={imageSrc}
-                width={1000}
-                height={600}
+                width={350}
+                height={200}
                 alt={'product_img'}
                 objectFit={'contain'}
                 className={`${className}-product_summary_image`}
               />
             </Box>
-            <Box>
-              <Box textAlign={'center'}>
-                <Typography
-                  className={`${className}-product_summary_name`}
-                  text={name}
-                  fontSize={'20px'}
-                  fontWeight={'500'}
-                />
-              </Box>
-              <Box minHeight="10rem">
-                <ProductDescription description={desc as string} />
-              </Box>
+            {/* <Box> */}
+            <Box textAlign={'center'}>
+              <Typography
+                className={`${className}-product_summary_name`}
+                text={name}
+                fontSize={'20px'}
+                fontWeight={'500'}
+              />
             </Box>
+            {/* <Box minHeight="10rem">
+                <ProductDescription description={desc as string} />
+              </Box> */}
+            {/* </Box> */}
           </Flex>
         </Box>
       )}
