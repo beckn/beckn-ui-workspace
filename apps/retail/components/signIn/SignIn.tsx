@@ -1,18 +1,17 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Logo from '../../public/images/Logo.svg'
 import AlternateLogo from '../../public/images/KuzaLogo.svg'
 import { useLanguage } from '@hooks/useLanguage'
 import { SignInPropsModel } from './SignIn.types'
 import { FormErrors, signInValidateForm } from '@utils/form-utils'
-import { useBreakpoint } from '@chakra-ui/react'
+import { useDispatch } from 'react-redux'
+import { useLoginMutation } from '@services/users'
 import { BecknAuth } from '@beckn-ui/becknified-components'
-import api from '../../services/Users'
 
 import { FaGoogle } from 'react-icons/fa'
 
 import Router from 'next/router'
-import { Box, useToast, Text } from '@chakra-ui/react'
-import Cookies from 'js-cookie'
+import { Box, useToast, Text, useBreakpoint } from '@chakra-ui/react'
 
 const SignIn = () => {
   const { t } = useLanguage()
@@ -20,13 +19,12 @@ const SignIn = () => {
   const [formData, setFormData] = useState<SignInPropsModel>({ email: '', password: '' })
   const [formErrors, setFormErrors] = useState<FormErrors>({ email: '', password: '' })
   const [isFormFilled, setIsFormFilled] = useState(false)
-  const toast = useToast()
   const breakpoint = useBreakpoint()
-  // const [updatePost, result] = useSignInMutation()
   const mobileBreakpoints = ['base', 'sm', 'md', 'lg']
   const currentLogo = mobileBreakpoints.includes(breakpoint) ? Logo : AlternateLogo
+  const [login, { isLoading }] = useLoginMutation()
 
-  const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL
+  const toast = useToast()
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -56,37 +54,20 @@ const SignIn = () => {
     }
 
     try {
-      const response = await fetch(`${baseUrl}/auth/local`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(signInData)
-      })
-
-      if (response.ok) {
-        const data = await response.json()
-        const token = data.jwt
-
-        Cookies.set('authToken', token)
-        Router.push('/homePage')
-      } else {
-        const errorData = await response.json()
-        toast({
-          render: () => (
-            <CustomToast
-              title="Error!"
-              message={errorData.error.message}
-            />
-          ),
-          position: 'top',
-          duration: 2000,
-          isClosable: true
-        })
-        console.error('Registration failed')
-      }
+      login(signInData).unwrap()
     } catch (error) {
       console.error('An error occurred:', error)
+      toast({
+        render: () => (
+          <CustomToast
+            title="Error!"
+            message="Unable to login"
+          />
+        ),
+        position: 'top',
+        duration: 2000,
+        isClosable: true
+      })
     }
   }
 
@@ -103,7 +84,8 @@ const SignIn = () => {
             handleClick: handleSignIn,
             disabled: !isFormFilled,
             variant: 'solid',
-            colorScheme: 'primary'
+            colorScheme: 'primary',
+            isLoading: isLoading
           },
           {
             text: t.signUp,
@@ -112,7 +94,8 @@ const SignIn = () => {
             },
             disabled: false,
             variant: 'outline',
-            colorScheme: 'primary'
+            colorScheme: 'primary',
+            isLoading: isLoading
           }
         ],
         socialButtons: [

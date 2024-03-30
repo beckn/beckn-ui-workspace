@@ -39,16 +39,26 @@ const Search = () => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
   const searchPayload = {
     context: {
-      domain: 'retail'
+      domain: 'retail:1.1.0'
     },
-    message: {
-      criteria: {
-        dropLocation: '12.9715987,77.5945627',
-        categoryName: 'Retail',
-        searchString: searchKeyword
-      }
-    }
+    category: {
+      categoryName: 'Retail',
+      searchString: searchKeyword
+    },
+    location: '12.423423,77.325647'
   }
+  // const searchPayload = {
+  //   context: {
+  //     domain: 'retail'
+  //   },
+  //   message: {
+  //     criteria: {
+  //       dropLocation: '12.9715987,77.5945627',
+  //       categoryName: 'Retail',
+  //       searchString: searchKeyword
+  //     }
+  //   }
+  // }
 
   const transformData = data => {
     const allItems = data.message.catalogs.flatMap((catalog: any) => {
@@ -79,7 +89,7 @@ const Search = () => {
   const fetchDataForSearch = () => {
     setIsLoading(true)
     axios
-      .post(`${apiUrl}/client/v2/search`, searchPayload)
+      .post(`${apiUrl}/search`, searchPayload)
       .then(res => {
         const parsedSearchItems = transformData(res.data)
         localStorage.setItem('searchItems', JSON.stringify(parsedSearchItems))

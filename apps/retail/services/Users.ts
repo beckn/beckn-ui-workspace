@@ -1,36 +1,66 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query'
+import { retry } from '@reduxjs/toolkit/query/react'
+import { api } from './api'
 // Assuming User is a type representing the user object in your application
-import type { User } from './types'
 
-const api = createApi({
-  baseQuery: fetchBaseQuery({
-    baseUrl: process.env.NEXT_PUBLIC_STRAPI_URL
-  }),
-  tagTypes: ['User'], // Changed from 'Post' to 'User'
+export interface User {
+  blocked: boolean
+  confirmed: boolean
+  createdAt: Date
+  email: string
+  id: number
+  provider: string
+  updatedAt: Date
+  username: string
+}
+
+export interface UserResponse {
+  user: User
+  jwt: string
+}
+
+export interface LoginRequest {
+  identifier: string
+  password: string
+}
+
+export interface SignupRequest {
+  email: string
+  mobile: string
+  password: string
+  username: string
+}
+
+export const authApi = api.injectEndpoints({
   endpoints: build => ({
-    // The mutation accepts login credentials and returns user data
-    useSignInMutation: build.mutation<User, { email: string; password: string }>({
-      // The query that sends the login credentials to the backend
+    login: build.mutation<UserResponse, LoginRequest>({
       query: credentials => ({
-        url: `signin`, // Endpoint for the sign-in operation
-        method: 'POST', // Changed from 'PATCH' to 'POST'
-        body: credentials // Sends the email and password
+        url: '/auth/local',
+        method: 'POST',
+        body: credentials
       }),
-      // Transform the response to directly return the user data
-      transformResponse: (response: { data: User }) => {
-        console.log('Dank', response.data)
-      },
-      // Optional: Customize error handling if needed
-      transformErrorResponse: (response: { status: string | number }) => response.status,
-      // Invalidate user-related data as needed, or manage cache/tags based on your app's logic
-      invalidatesTags: ['User'],
-      // Optional: Implement onQueryStarted for optimistic updates or additional side effects
-      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
-        // Example: Handle optimistic updates or trigger additional actions
+      extraOptions: {
+        backoff: () => {
+          retry.fail({ fake: 'error' })
+        }
       }
-      // Optional: Implement onCacheEntryAdded for cache-related side effects
+    }),
+    register: build.mutation<UserResponse, SignupRequest>({
+      query: credentials => ({
+        url: '/auth/local/register',
+        method: 'POST',
+        body: credentials
+      }),
+      extraOptions: {
+        backoff: () => {
+          retry.fail({ fake: 'error' })
+        }
+      }
     })
   })
 })
 
-export default api
+export const { useLoginMutation, useRegisterMutation } = authApi
+
+export const {
+  endpoints: { login, register }
+} = authApi

@@ -19,7 +19,7 @@ const cartIconBlackList: string[] = [
   '/trackOrder',
   '/feedback',
   '/orderHistory',
-  '/',
+  '/signin',
   '/mobileOtp',
   '/cart',
   '/checkoutPage',
@@ -30,16 +30,16 @@ const cartIconBlackList: string[] = [
   '/invoiceDetails'
 ]
 
-const backIconList = ['/', '/homePage']
+const backIconList = ['/', '/signin']
 
-const homeIconBlackList = ['/', '/homePage', '/mobileOtp', '/paymentMode', '/signUp']
+const homeIconBlackList = ['/', '/signin', '/mobileOtp', '/paymentMode', '/signUp']
 
 const storeHeaderBlackList = [
   '/checkoutPage',
   '/orderHistory',
   '/orderDetails',
   '/cart',
-  '/homePage',
+  '/',
   '/orderConfirmation',
   'feedback',
   '/',
@@ -57,7 +57,7 @@ const headerValues: PathnameObjectType = {
   '/orderHistory': 'Order History',
   '/orderDetails': 'Order Details',
   '/invoiceDetails': 'Invoice Details',
-  '/': 'Sign In',
+  '/signin': 'Sign In',
   '/signUp': 'Sign Up',
   '/cart': 'Cart',
   '/paymentMode': 'Select Payment Method',
@@ -84,10 +84,10 @@ const topHeaderBlackList: string[] = []
 
 const bottomHeaderBlackList = ['/orderConfirmation']
 
-const menuIconWhiteList = ['/homePage', '/search', '/profile']
+const menuIconWhiteList = ['/', '/search', '/profile']
 const orderIconList = ['/orderDetails']
 const invoiceDownloadIcon = ['/invoiceDetails']
-const currentLocation = ['/homePage']
+const currentLocation = ['/']
 
 const getHeaderTitleForPage = (name: string, logo: string, pathName: string, locale: string | undefined) => {
   const values = locale === 'en' ? headerValues : headerValuesFrench
@@ -140,7 +140,7 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
                   const user = localStorage.getItem('userPhone') as string
                   localStorage.clear()
                   localStorage.setItem('userPhone', user)
-                  router.push(`/homePage`)
+                  router.push(`/`)
                 }}
                 src="/images/Home_icon.svg"
                 alt="home Icon"

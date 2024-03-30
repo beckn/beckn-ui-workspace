@@ -15,4 +15,5 @@ export interface ButtonProps {
   textColor?: 'textPrimary' | 'textSecondary'
   type?: ButtonType
   leftIcon?: React.FC<IconProps>
+  loading?: boolean
 }

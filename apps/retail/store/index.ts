@@ -9,12 +9,16 @@ import sideNavBarReducer from './sideNavBar-slice'
 import megaMenuReducer from './megaMenu-slice'
 import activeMenuItemReducer from './activeMenuItem-slice'
 import settingBoxReducer from './settingBox-slice'
+import { api } from '@services/api'
 import favoriteReducer from './favorite-slice'
 import responseDataReducer from './responseData-slice'
 import geoMapLocationSearchReducer from './geoMapLocationSearch-slice'
+import authReducer from './authslice'
 
 const store = configureStore({
   reducer: {
+    auth: authReducer,
+    [api.reducerPath]: api.reducer,
     specialOfferProductsList: specialOfferProductsReducer,
     newestProductsList: newestProductReducer,
     sortedProductsList: SortedProductsListReducer,
@@ -35,7 +39,9 @@ const store = configureStore({
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
       serializableCheck: false
-    })
+    }).concat(api.middleware)
 })
+
+export type RootState = ReturnType<typeof store.getState>
 
 export default store

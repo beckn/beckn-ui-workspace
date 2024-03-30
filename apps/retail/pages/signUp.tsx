@@ -6,7 +6,8 @@ import { FormErrors, signUpValidateForm } from '@utils/form-utils'
 import { BecknAuth } from '@beckn-ui/becknified-components'
 import Router from 'next/router'
 import Cookies from 'js-cookie'
-import { Box, useBreakpoint, useToast } from '@chakra-ui/react'
+import { Box, useBreakpoint, useToast, Text } from '@chakra-ui/react'
+import { useRegisterMutation } from '@services/users'
 import { CustomToast } from '@components/signIn/SignIn'
 import Logo from '@public/images/Logo.svg'
 
@@ -19,6 +20,7 @@ const SignUp = () => {
   const breakpoint = useBreakpoint()
   const mobileBreakpoints = ['base', 'sm', 'md', 'lg']
   const currentLogo = mobileBreakpoints.includes(breakpoint) ? Logo : AlternateLogo
+  const [register, { isLoading }] = useRegisterMutation()
 
   const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL
 
@@ -53,45 +55,26 @@ const SignUp = () => {
     const isFormValid = Object.values(errors).every(error => error === '')
 
     if (isFormValid) {
-      const registrationData = {
-        username: formData.name,
-        email: formData.email,
-        password: formData.password,
-        mobile: formData.mobileNumber
-      }
-
       try {
-        const response = await fetch(`${baseUrl}/auth/local/register`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(registrationData)
+        register({
+          username: formData.name,
+          email: formData.email,
+          password: formData.password,
+          mobile: formData.mobileNumber
         })
-
-        if (response.ok) {
-          const data = await response.json()
-          const token = data.jwt
-
-          Cookies.set('authToken', token)
-          Router.push('/homePage')
-        } else {
-          const errorData = await response.json()
-          toast({
-            render: () => (
-              <CustomToast
-                title="Error!"
-                message={errorData.error.message}
-              />
-            ),
-            position: 'top',
-            duration: 2000,
-            isClosable: true
-          })
-          console.error('Registration failed')
-        }
       } catch (error) {
         console.error('An error occurred:', error)
+        toast({
+          render: () => (
+            <CustomToast
+              title="Error!"
+              message="Unable to register"
+            />
+          ),
+          position: 'top',
+          duration: 2000,
+          isClosable: true
+        })
       }
     } else {
       setFormErrors({
@@ -115,7 +98,8 @@ const SignUp = () => {
               handleClick: handleSignUp,
               disabled: !isFormFilled,
               variant: 'solid',
-              colorScheme: 'primary'
+              colorScheme: 'primary',
+              isLoading: isLoading
             },
             {
               text: t.signIn,
@@ -124,7 +108,8 @@ const SignUp = () => {
               },
               disabled: false,
               variant: 'outline',
-              colorScheme: 'primary'
+              colorScheme: 'primary',
+              isLoading: isLoading
             }
           ],
           inputs: [
