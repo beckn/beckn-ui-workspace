@@ -59,7 +59,7 @@ const headerValuesFrench: PathnameObjectType = {
 
 const topHeaderBlackList: string[] = []
 
-const bottomHeaderBlackList = ['/homePage', '/', '/orderConfirmation']
+const bottomHeaderBlackList = ['/homePage', '/', '/orderConfirm']
 
 const menuIconWhiteList = ['/homePage']
 
