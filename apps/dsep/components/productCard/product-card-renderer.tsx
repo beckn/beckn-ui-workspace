@@ -3,7 +3,6 @@ import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { useLanguage } from '../../hooks/useLanguage'
 import StarIcon from '../../public/images/Star.svg'
-import { Coordinate } from '../../types/common.types'
 import { toBinary } from '../../utilities/common-utils'
 import ProductPrice from '../UI/ProductPrice'
 
@@ -20,12 +19,13 @@ const ProductCardRenderer = (data: any) => {
     ['Sold by']: dataSource.providerName
   }
 
-  console.log(extraInfoMapper)
-
   //   TODO :- to do some refactoring here and get some components from buolding block
   return (
     <Flex
-      onClick={() => console.log('this is a product clicked ')}
+      onClick={() => {
+        localStorage.setItem('selectedItem', JSON.stringify(dataSource))
+        router.push(`/product?productDetails=${encodedProduct}`)
+      }}
       minH={'168px'}
       maxH={'100%'}
       boxShadow="0px 20px 25px rgba(0, 0, 0, 0.10), 0px 8px 10px rgba(0, 0, 0, 0.10)"

@@ -1,11 +1,26 @@
-import { Text, Flex } from '@chakra-ui/react'
+import { Flex } from '@chakra-ui/react'
 import React from 'react'
-import { ProductPriceProps } from './ProductPrice.types'
-import Styles from './product-price.module.css'
+import { CurrencyType, ProductPriceProps } from './ProductPrice.types'
 import { Typography } from '@beckn-ui/molecules'
 
+const formatCurrency = (price: number, currencyType: CurrencyType) => {
+  const currencyOptions = {
+    GBP: { locale: 'en-GB', currency: 'GBP' },
+    EUR: { locale: 'de-DE', currency: 'EUR' },
+    INR: { locale: 'en-IN', currency: 'INR' },
+    USD: { locale: 'en-US', currency: 'USD' }
+  }
+
+  const { locale, currency } = currencyOptions[currencyType]
+
+  return new Intl.NumberFormat(locale, {
+    style: 'currency',
+    currency: currency
+  }).format(price)
+}
+
 const ProductPrice: React.FC<ProductPriceProps> = props => {
-  const { price, currencySymbol = '₹', toFixed = 2, color = 'primary.100', className = '', rtl = false } = props
+  const { price, currencyType = 'INR', color = 'primary.100', className = '' } = props
 
   return (
     <Flex
@@ -17,15 +32,8 @@ const ProductPrice: React.FC<ProductPriceProps> = props => {
       color={color}
       className={className}
     >
-      <Text
-        order={rtl ? 1 : 0}
-        className={Styles.currency_symbol_span}
-        color={color}
-      >
-        {currencySymbol}
-      </Text>
       <Typography
-        text={price.toFixed(toFixed)}
+        text={formatCurrency(price, currencyType)}
         color={color}
       />
     </Flex>

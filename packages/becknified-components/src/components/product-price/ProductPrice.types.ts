@@ -1,8 +1,8 @@
 export interface ProductPriceProps {
   price: number
-  toFixed?: number
-  currencySymbol?: string
+  currencyType?: CurrencyType
   color?: string
   className?: string
-  rtl?: boolean
 }
+
+export type CurrencyType = 'GBP' | 'EUR' | 'INR' | 'USD'

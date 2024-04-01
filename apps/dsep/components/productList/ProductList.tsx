@@ -22,7 +22,11 @@ export const sortByCheapest = (product1: ParsedItemModel, product2: ParsedItemMo
 const ProductList: React.FC<Props> = ({ productList }) => {
   const { t } = useLanguage()
   const [selectedRadioBtn, setSelectedRadioBtn] = useState<string>('all')
-  const [sortedProductList, setSortedProductList] = useState<ParsedItemModel[]>(productList)
+  const [sortedProductList, setSortedProductList] = useState<ParsedItemModel[]>([])
+
+  useEffect(() => {
+    setSortedProductList(productList)
+  }, [productList])
 
   useEffect(() => {
     const clonedproductList = structuredClone(productList)
