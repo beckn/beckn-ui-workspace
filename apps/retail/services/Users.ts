@@ -1,6 +1,5 @@
 import { retry } from '@reduxjs/toolkit/query/react'
-import { api } from './api'
-// Assuming User is a type representing the user object in your application
+import { api } from './api.ts'
 
 export interface User {
   blocked: boolean

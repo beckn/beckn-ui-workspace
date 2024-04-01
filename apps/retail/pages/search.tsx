@@ -15,13 +15,15 @@ import { ParsedItemModel } from '../types/search.types'
 import TopSheet from '@components/topSheet/TopSheet'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
 import Filter from '../components/filter/Filter'
+import { LocalStorage } from '@lib/types'
 import FilterIcon from '../public/images/filter-icon.svg'
 import { BsFilterSquare } from 'react-icons/bs'
+import search from '@beckn-ui/becknified-components/src/components/search'
 
 //Mock data for testing search API. Will remove after the resolution of CORS issue
 
 const Search = () => {
-  const [items, setItems] = useState([])
+  const [items, setItems] = useState<ParsedItemModel[]>([])
   const router = useRouter()
   const [searchKeyword, setSearchKeyword] = useState(router.query?.searchTerm || '')
   const [isLoading, setIsLoading] = useState(false)
@@ -37,61 +39,35 @@ const Search = () => {
   const { t } = useLanguage()
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
+
+  console.log('Dank', items)
+
   const searchPayload = {
     context: {
       domain: 'retail:1.1.0'
     },
+    searchString: searchKeyword,
     category: {
-      categoryName: 'Retail',
-      searchString: searchKeyword
+      categoryCode: 'farming'
     },
-    location: '12.423423,77.325647'
-  }
-  // const searchPayload = {
-  //   context: {
-  //     domain: 'retail'
-  //   },
-  //   message: {
-  //     criteria: {
-  //       dropLocation: '12.9715987,77.5945627',
-  //       categoryName: 'Retail',
-  //       searchString: searchKeyword
-  //     }
-  //   }
-  // }
-
-  const transformData = data => {
-    const allItems = data.message.catalogs.flatMap((catalog: any) => {
-      if (catalog.message && catalog.message.catalog && catalog.message.catalog['bpp/providers'].length > 0) {
-        const providers = catalog.message.catalog['bpp/providers']
-        return providers.flatMap((provider: any) => {
-          if (provider.items && provider.items.length > 0) {
-            return provider.items.map((item: RetailItem) => {
-              return {
-                bpp_id: catalog.context.bpp_id,
-                bpp_uri: catalog.context.bpp_uri,
-                ...item,
-                providerId: provider.id,
-                locations: provider.locations,
-                bppName: catalog.message.catalog['bpp/descriptor'].name
-              }
-            })
-          }
-          return []
-        })
-      }
-      return []
-    })
-
-    return allItems
+    fulfillment: {
+      type: 'Delivery',
+      stops: [
+        {
+          location: '28.4594965,77.0266383'
+        }
+      ]
+    }
   }
 
   const fetchDataForSearch = () => {
+    if (!searchKeyword) return
     setIsLoading(true)
     axios
       .post(`${apiUrl}/search`, searchPayload)
       .then(res => {
-        const parsedSearchItems = transformData(res.data)
+        console.log('Dank', res.data.data)
+        const parsedSearchItems = parsedSearchlist(res.data.data)
         localStorage.setItem('searchItems', JSON.stringify(parsedSearchItems))
         setItems(parsedSearchItems)
         setIsLoading(false)
@@ -198,11 +174,12 @@ const Search = () => {
                 w={['100%', '100%', '51%', '100%']}
                 margin="0 auto"
               >
-                {items.map((item, idx) => {
+                {items.map((singleItem, idx) => {
+                  const { item } = singleItem
                   const product = {
                     id: item.id,
-                    images: item.descriptor.images,
-                    name: item.descriptor.name,
+                    images: item.images.map(singleImage => singleImage.url),
+                    name: item.name,
                     price: item.price.value,
                     rating: '4'
                   }
@@ -214,7 +191,7 @@ const Search = () => {
                         if (typeof window !== 'undefined') {
                           const encodedProduct = window.btoa(toBinary(JSON.stringify(item)))
                           localStorage.setItem(
-                            'productDetails',
+                            LocalStorage.Product,
                             JSON.stringify({
                               encodedProduct: encodedProduct,
                               product: product
@@ -224,12 +201,13 @@ const Search = () => {
                           router.push({
                             pathname: '/product',
                             query: {
-                              productDetails: encodedProduct
+                              id: item.id
                             }
                           })
                         }
                       }}
                       product={product}
+                      currency={item.price.currency}
                     />
                   )
                 })}

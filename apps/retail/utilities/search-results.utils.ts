@@ -1,5 +1,12 @@
 import { ParsedItemModel, SearchResponseModel } from '../types/search.types'
 
+const dummyLocation = [
+  {
+    id: './retail.kirana/ind.blr/1@tourism-bpp-infra2.becknprotocol.io.provider_location',
+    gps: '12.909955,77.596316'
+  }
+]
+
 export const parsedSearchlist = (data: SearchResponseModel[]) => {
   const itemsarray: ParsedItemModel[] = []
   data.forEach(entry => {
@@ -11,7 +18,7 @@ export const parsedSearchlist = (data: SearchResponseModel[]) => {
     const bppUri = context.bpp_uri
 
     message.providers.forEach(provider => {
-      const stringifiedLatLong = provider.locations[0].gps
+      const stringifiedLatLong = provider.locations ? provider.locations[0].gps : dummyLocation[0].gps
       const [stringifiedLatitude, stringifiedLongitude] = stringifiedLatLong.split(', ')
 
       const latitude = parseFloat(stringifiedLatitude)
@@ -27,6 +34,7 @@ export const parsedSearchlist = (data: SearchResponseModel[]) => {
 
       provider.items.forEach(item => {
         itemsarray.push({
+          id: providerId,
           bppId: bppId,
           bppUri: bppUri,
           domain,
@@ -34,7 +42,6 @@ export const parsedSearchlist = (data: SearchResponseModel[]) => {
           providerId: providerId,
           providerName: provider.name,
           item,
-          rating,
           providerCoordinates
         })
       })
