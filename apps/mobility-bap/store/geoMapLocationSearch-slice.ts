@@ -5,7 +5,7 @@ const initialState: IGeoLocationSearchPage = {
   geoLocationSearchPageVisible: false,
   pickupAddress: '',
   dropoffAddress: '',
-  geoLatLong: ''
+  geoLatLong: { lat: 0, long: 0 }
 }
 
 const geoLocationSearchPage = createSlice({
@@ -30,7 +30,7 @@ const geoLocationSearchPage = createSlice({
     setDropoffAddress(state, action: PayloadAction<string>) {
       state.dropoffAddress = action.payload
     },
-    setGeoLatLong(state, action: PayloadAction<string>) {
+    setGeoLatLong(state, action: PayloadAction<{ lat: number; long: number }>) {
       state.geoLatLong = action.payload
     }
   }
