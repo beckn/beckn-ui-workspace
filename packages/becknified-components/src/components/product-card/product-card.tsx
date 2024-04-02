@@ -6,7 +6,15 @@ import ProductPrice from '../product-price'
 import ProductRating from '../product-rating'
 
 const ProductCard: React.FC<ProductCardProps> = props => {
-  const { product, productInfoDataSource, ComponentRenderer, productClickHandler, dataSource, className = '' } = props
+  const {
+    product,
+    productInfoDataSource,
+    ComponentRenderer,
+    productClickHandler,
+    dataSource,
+    className = '',
+    currency
+  } = props
 
   if (ComponentRenderer) {
     return <ComponentRenderer dataSource={dataSource} />
@@ -23,6 +31,9 @@ const ProductCard: React.FC<ProductCardProps> = props => {
           backgroundColor={'#fff'}
           borderRadius={'1rem'}
           display={'flex'}
+          cursor="pointer"
+          _hover={{ transform: 'translate(5%,-5%)' }}
+          transition="0.5s all"
           position={'relative'}
           boxShadow={'0 20px 25px rgba(0, 0, 0, 0.1),0 8px 10px rgba(0, 0, 0, 0.05)'}
         >
@@ -111,7 +122,10 @@ const ProductCard: React.FC<ProductCardProps> = props => {
                 bottom={'11px'}
                 width={'calc(100% - 30px)'}
               >
-                <ProductPrice price={parseFloat(product.price)} />
+                <ProductPrice
+                  price={parseFloat(product.price)}
+                  currencySymbol={currency}
+                />
                 {product.rating && (
                   <ProductRating
                     ratingValue={product.rating}

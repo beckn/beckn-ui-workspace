@@ -1,17 +1,8 @@
 import { createApi, fetchBaseQuery, retry } from '@reduxjs/toolkit/query/react'
-import { RootState } from '../store'
 
 // Create our baseQuery instance
 const baseQuery = fetchBaseQuery({
-  baseUrl: process.env.NEXT_PUBLIC_STRAPI_URL,
-  prepareHeaders: (headers, { getState }) => {
-    // By default, if we have a token in the store, let's use that for authenticated requests
-    const token = (getState() as RootState).auth.token
-    if (token) {
-      headers.set('authentication', `Bearer ${token}`)
-    }
-    return headers
-  }
+  baseUrl: process.env.NEXT_PUBLIC_API_URL
 })
 
 const baseQueryWithRetry = retry(baseQuery, { maxRetries: 6 })
@@ -39,7 +30,7 @@ export const api = createApi({
    * Tag types must be defined in the original API definition
    * for any tags that would be provided by injected endpoints
    */
-  tagTypes: ['Auth'],
+  tagTypes: ['Discovery'],
   /**
    * This api has endpoints injected in adjacent files,
    * which is why no endpoints are shown below.

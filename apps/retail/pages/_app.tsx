@@ -11,8 +11,9 @@ import 'react-toastify/dist/ReactToastify.css'
 
 import '../styles/globals.css'
 import { Provider } from 'react-redux'
-import store from '@store/index'
+import store, { persistor } from '@store/index'
 import { Garuda } from 'garudaa'
+import { PersistGate } from 'redux-persist/integration/react'
 
 Garuda.init({
   projectId: '65c0d663cbe90cafae9185f6',
@@ -31,9 +32,14 @@ function MyApp({ Component, pageProps }: AppProps) {
       }}
     >
       <Provider store={store}>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
+        <PersistGate
+          loading={null}
+          persistor={persistor}
+        >
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </PersistGate>
       </Provider>
     </BecknProvider>
   )
