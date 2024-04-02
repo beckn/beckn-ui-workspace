@@ -20,7 +20,7 @@ const formatCurrency = (price: number, currencyType: CurrencyType) => {
 }
 
 const ProductPrice: React.FC<ProductPriceProps> = props => {
-  const { price, currencyType = 'INR', color = 'primary.100', className = '' } = props
+  const { price, currencyType = 'INR', color = 'primary.100', className = '', variant = 'subTextSemibold' } = props
 
   return (
     <Flex
@@ -33,6 +33,7 @@ const ProductPrice: React.FC<ProductPriceProps> = props => {
       className={className}
     >
       <Typography
+        variant={variant}
         text={formatCurrency(price, currencyType)}
         color={color}
       />
