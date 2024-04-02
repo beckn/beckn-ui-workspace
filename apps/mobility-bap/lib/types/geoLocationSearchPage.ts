@@ -1,7 +1,10 @@
 export interface IGeoLocationSearchPage {
   geoLocationSearchPageVisible: boolean
   // geoAddre??ss: string
-  geoLatLong: string
+  geoLatLong: {
+    lat: number
+    long: number
+  }
   pickupAddress: string
   dropoffAddress: string
 }

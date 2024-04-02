@@ -25,14 +25,10 @@ const GeoLocationInputList: React.FC = () => {
 
     if (pickupAddress === '') {
       dispatch(setPickupAddress(data))
-      dispatch(setGeoLatLong(`${latLong.lat},${latLong.lng}`))
+      dispatch(setGeoLatLong({ lat: latLong.lat, long: latLong.lng }))
     } else if (dropoffAddress === '') {
       dispatch(setDropoffAddress(data))
-      dispatch(setGeoLatLong(`${latLong.lat},${latLong.lng}`))
-    } else {
-      dispatch(setPickupAddress(dropoffAddress))
-      dispatch(setDropoffAddress(data))
-      dispatch(setGeoLatLong(`${latLong.lat},${latLong.lng}`))
+      dispatch(setGeoLatLong({ lat: latLong.lat, long: latLong.lng }))
     }
 
     closeGeoLocationSearchPage()
@@ -53,7 +49,7 @@ const GeoLocationInputList: React.FC = () => {
           <Flex flexDirection="column">
             <Flex
               flexDirection="row"
-              marginTop="20px"
+              marginTop="60px"
             >
               <Box
                 p={3}

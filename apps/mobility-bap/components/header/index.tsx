@@ -57,9 +57,9 @@ const headerValuesFrench: PathnameObjectType = {
   feedback: "Retour d'Information"
 }
 
-const topHeaderBlackList: string[] = []
+const topHeaderBlackList = ['/']
 
-const bottomHeaderBlackList = ['/homePage', '/', '/orderConfirm']
+const bottomHeaderBlackList = ['/homePage', '/orderConfirm']
 
 const menuIconWhiteList = ['/homePage']
 
@@ -178,19 +178,23 @@ const BottomHeader = () => {
   const router = useRouter()
 
   return (
-    <header className="md:fixed left-0 right-0 mb-4 top-0 md:bg-palette-fill shadow-sm pt-4 z-[1000] app_header_b fixed mt-7 z-[99] bg-[#fff]">
+    <header className="md:fixed left-0 right-0 mb-4 top-0 md:bg-palette-fill shadow-sm pt-4 z-[1000] app_header_b fixed z-[99] bg-[#fff]">
       <div className="flex flex-col md:px-4">
         <div className="flex items-center justify-between md:order-2 md:mt-2 py-4  relative">
           <div className="flex gap-4 items-center">
-            {!backIconList.includes(router.pathname) && (
+            {/* {!backIconList.includes(router.pathname) && (
               <div onClick={() => router.back()}>
                 <Image
                   src="/images/Back.svg"
                   alt="Back icon"
                 />
               </div>
-            )}
+            )} */}
           </div>
+          <Image
+            src="./images/travelbuddy_icon.svg"
+            alt="travelbuddy_icon"
+          />
 
           {getHeaderTitleForPage(optionTags?.name, optionTags?.logo, router.pathname, locale)}
           <div className="flex gap-4">{!cartIconBlackList.includes(router.pathname)}</div>
@@ -208,7 +212,7 @@ const Header = () => {
 
   return (
     <div>
-      {renderTopHeader && <TopHeader />}
+      {/* {renderTopHeader && <TopHeader />} */}
       {renderBottomHeader && <BottomHeader />}
     </div>
   )

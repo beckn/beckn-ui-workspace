@@ -18,8 +18,8 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const router = useRouter()
   const isHomepage = router.pathname === '/homePage'
   const isSearch = router.pathname === '/search'
-  const paddingStyles = 'px-5 xl:px-16'
-  const marginStyles = 'mt-[100px]'
+  const paddingStyles = ' xl:px-16'
+  const marginStyles = 'mt-[64px]'
   const geoLocationSearchPageVisible = useSelector((state: IGeoLocationSearchPageRootState) => {
     return state.geoLocationSearchPageUI.geoLocationSearchPageVisible
   })
