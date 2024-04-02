@@ -4,23 +4,17 @@ import { ProductDetailPage } from '@beckn-ui/becknified-components'
 import { RetailItem } from '@lib/products'
 import { LocalStorage, ICartProduct, ICart, LocalStorageCart, LocalStorageCartItem } from '@lib/types'
 import { cartActions } from '@store/cart-slice'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 import { setLocalStorage, getLocalStorage, addLocalStorage } from '@utils/localstorage'
 import { fromBinary } from '@utils/common-utils'
+import { DiscoveryRootState } from '@store/discovery-slice'
 
 const Product = () => {
-  const [product, setProduct] = useState<RetailItem | null>(null)
+  const selectedProduct = useSelector((state: DiscoveryRootState) => state.discovery.selectedProduct)
   const dispatch = useDispatch()
 
-  useEffect(() => {
-    const productDetails = getLocalStorage(LocalStorage.Product).encodedProduct
-    if (productDetails) {
-      setProduct(JSON.parse(fromBinary(window.atob(productDetails as string))))
-    }
-  }, [])
-
-  if (!product) {
+  if (!selectedProduct) {
     return <></>
   }
 
@@ -28,12 +22,12 @@ const Product = () => {
     <ProductDetailPage
       schema={{
         productSummary: {
-          imageSrc: product.images[0].url,
-          name: product.name,
-          desc: product.long_desc
+          imageSrc: selectedProduct.item.images[0].url,
+          name: selectedProduct.item.name,
+          desc: selectedProduct.item.long_desc
         },
         productDescription: {
-          description: product.long_desc
+          description: selectedProduct.item.long_desc
         },
         buttons: [
           {
@@ -41,29 +35,10 @@ const Product = () => {
             handleClick: () => {
               dispatch(
                 cartActions.addItemToCart({
-                  product: product,
+                  product: selectedProduct,
                   quantity: 1
                 })
               )
-              // const cartItems:LocalStorageCart = getLocalStorage(LocalStorage.Cart)
-              // if(cartItems && cartItems.length > 0){
-              //   const newItems = cartItems.map((singleItem)=>{
-              //     if(singleItem.product.id === product.id){
-              //       return {
-              //         product:product,
-              //         quantity:singleItem.quantity + 1
-              //       }
-              //     }
-              //     else return {
-              //       product:product,
-              //       quantity:1
-              //     }
-              //   })
-              //   setLocalStorage(LocalStorage.Cart,newItems)
-              // }
-              // else{
-              // addLocalStorage(LocalStorage.Cart,{product:product,quantity:1})
-              // }
               toast.success('Product added to cart')
             }
           }

@@ -1,4 +1,5 @@
 import { IProductDetails, RetailItem, TSlug } from './products'
+import { Item } from '@lib/types'
 
 export interface ICartProduct {
   image: any
@@ -17,7 +18,7 @@ export interface ICartProduct {
   totalPrice: number
 }
 
-export interface CartRetailItem extends RetailItem {
+export interface CartRetailItem extends Item {
   quantity: number
   totalPrice: number
 }
@@ -36,7 +37,7 @@ export interface ICartUI {
 }
 
 export interface ICart {
-  items: CartRetailItem[]
+  items: CartItemForRequest[]
   totalQuantity: number
   totalAmount: number
 }

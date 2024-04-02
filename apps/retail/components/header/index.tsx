@@ -4,6 +4,7 @@ import { BottomModal } from '@beckn-ui/molecules'
 import { useTheme, Box, Divider, Flex, HStack, Image, Text } from '@chakra-ui/react'
 import { Router, useRouter } from 'next/router'
 import styles from './header.module.css'
+import { useSelector } from 'react-redux'
 
 import { useLanguage } from '../../hooks/useLanguage'
 import Qrcode from '@components/qrCode/Qrcode'
@@ -11,20 +12,9 @@ import BottomModalScan from '@components/BottomModal/BottomModalScan'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import CartIconWithCount from './CartIcon'
 import TopSheet from '@components/topSheet/TopSheet'
-import { getLocalStorage } from '@utils/localstorage'
-import { LocalStorage, LocalStorageCart } from '@lib/types'
+import { ICartRootState } from '@lib/types'
 
 type PathnameObjectType = { [key: string]: string }
-
-// const calculateCartCount = (cartItems:LocalStorageCart)=>{
-//   const uniqueIds = new Set(); // Create a Set to store unique ids
-
-//   cartItems.forEach(item => {
-//     uniqueIds.add(item.product.id); // Add each id to the Set
-//   });
-
-//   return uniqueIds.size;
-// }
 
 const cartIconBlackList: string[] = [
   '/orderConfirmation',
@@ -199,6 +189,7 @@ const BottomHeader = () => {
   const { t, locale } = useLanguage()
   const [isOrderModalOpen, setOrderModalOpen] = useState(false)
   const [isInvoiceModalOpen, setInvoiceModalOpen] = useState(false)
+  const cartItems = useSelector((state: ICartRootState) => state.cart.items)
   const theme = useTheme()
 
   const [currentAddress, setCurrentAddress] = useState('')
@@ -304,7 +295,7 @@ const BottomHeader = () => {
           <div className="flex gap-4">
             {!cartIconBlackList.includes(router.pathname) && (
               <CartIconWithCount
-                itemCount={3}
+                itemCount={cartItems.length}
                 handleClick={() => router.push('/cart')}
               />
             )}

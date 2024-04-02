@@ -19,6 +19,8 @@ const Cart: React.FC<CartProps> = ({
     return <Loader {...loader} />
   }
 
+  console.log('Dank inside', cartItems)
+
   if (cartItems.length == 0) {
     return (
       <>

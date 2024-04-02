@@ -7,18 +7,14 @@ import { toBinary } from '@utils/common-utils'
 import { parsedSearchlist } from '@utils/search-results.utils'
 import { ProductCard } from '@beckn-ui/becknified-components'
 import { BottomModal } from '@beckn-ui/molecules'
+import { discoveryActions } from '@store/discovery-slice'
 import { useBreakpoint } from '@chakra-ui/react'
-import ProductCardRenderer from '@components/productCard/product-card-renderer'
 import SearchBar from '../components/header/SearchBar'
 import { useLanguage } from '../hooks/useLanguage'
 import { ParsedItemModel } from '../types/search.types'
-import TopSheet from '@components/topSheet/TopSheet'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
 import Filter from '../components/filter/Filter'
 import { LocalStorage } from '@lib/types'
-import FilterIcon from '../public/images/filter-icon.svg'
-import { BsFilterSquare } from 'react-icons/bs'
-import search from '@beckn-ui/becknified-components/src/components/search'
 
 //Mock data for testing search API. Will remove after the resolution of CORS issue
 
@@ -40,24 +36,30 @@ const Search = () => {
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
-  console.log('Dank', items)
+  // const searchPayload = {
+  //   context: {
+  //     domain: 'retail:1.1.0'
+  //   },
+  //   searchString: searchKeyword,
+  //   category: {
+  //     categoryCode: 'farming'
+  //   },
+  //   fulfillment: {
+  //     type: 'Delivery',
+  //     stops: [
+  //       {
+  //         location: '28.4594965,77.0266383'
+  //       }
+  //     ]
+  //   }
+  // }
 
   const searchPayload = {
     context: {
-      domain: 'retail:1.1.0'
+      domain: 'retail'
     },
-    searchString: searchKeyword,
-    category: {
-      categoryCode: 'farming'
-    },
-    fulfillment: {
-      type: 'Delivery',
-      stops: [
-        {
-          location: '28.4594965,77.0266383'
-        }
-      ]
-    }
+    searchString: 'T Shirt',
+    location: '12.423423,77.325647'
   }
 
   const fetchDataForSearch = () => {
@@ -66,9 +68,9 @@ const Search = () => {
     axios
       .post(`${apiUrl}/search`, searchPayload)
       .then(res => {
-        console.log('Dank', res.data.data)
+        dispatch(discoveryActions.addTransactionId({ transactionId: res.data.data[0].context.transaction_id }))
         const parsedSearchItems = parsedSearchlist(res.data.data)
-        localStorage.setItem('searchItems', JSON.stringify(parsedSearchItems))
+        dispatch(discoveryActions.addProducts({ products: parsedSearchItems }))
         setItems(parsedSearchItems)
         setIsLoading(false)
       })
@@ -181,30 +183,39 @@ const Search = () => {
                     images: item.images.map(singleImage => singleImage.url),
                     name: item.name,
                     price: item.price.value,
-                    rating: '4'
+                    rating: '4',
+                    shortDesc: item.short_desc
                   }
                   return (
                     <ProductCard
                       key={idx}
                       productClickHandler={e => {
                         e.preventDefault()
-                        if (typeof window !== 'undefined') {
-                          const encodedProduct = window.btoa(toBinary(JSON.stringify(item)))
-                          localStorage.setItem(
-                            LocalStorage.Product,
-                            JSON.stringify({
-                              encodedProduct: encodedProduct,
-                              product: product
-                            })
-                          )
+                        dispatch(discoveryActions.addSingleProduct({ product: singleItem }))
+                        // if (typeof window !== 'undefined') {
+                        //   const encodedProduct = window.btoa(toBinary(JSON.stringify(item)))
+                        //   localStorage.setItem(
+                        //     LocalStorage.Product,
+                        //     JSON.stringify({
+                        //       encodedProduct: encodedProduct,
+                        //       product: product
+                        //     })
+                        //   )
 
-                          router.push({
-                            pathname: '/product',
-                            query: {
-                              id: item.id
-                            }
-                          })
-                        }
+                        //   router.push({
+                        //     pathname: '/product',
+                        //     query: {
+                        //       id: item.id
+                        //     }
+                        //   })
+                        // }
+                        router.push({
+                          pathname: '/product',
+                          query: {
+                            id: item.id,
+                            search: searchKeyword
+                          }
+                        })
                       }}
                       product={product}
                       currency={item.price.currency}

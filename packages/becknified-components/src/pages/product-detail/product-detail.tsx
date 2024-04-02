@@ -11,7 +11,7 @@ const ProductDetailPage: React.FC<ProductDetailsPagePropsModel> = props => {
   return (
     <>
       <ProductSummary {...productSummary} />
-      {/* <ProductDescription {...productDescription} /> */}
+      <ProductDescription {...productDescription} />
       <Box mt={'20px'}>
         {buttons.map((button, idx) => (
           <Button
