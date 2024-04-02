@@ -233,7 +233,7 @@ const en: { [key: string]: string } = {
   beverages: 'Beverages',
   snacks: 'Snacks',
   dairy: 'Dairy',
-  cashOnDelivery: 'Cash on Delivery',
+  cashOnDelivery: 'Cash',
   selectPaymentMethod: 'Select payment method',
   orderDetails: 'Order details',
   trackOrder: 'Track Order',
@@ -356,6 +356,8 @@ const en: { [key: string]: string } = {
   rateDeliveryExperience: 'Rate the delivery experience',
   addCommentsHere: 'Add your comments here',
   writeExperience: 'Write about your experience..',
-  completed: 'Completed'
+  completed: 'Completed',
+  rideCancle: 'Ride Cancelled!',
+  yourRide: 'Your Ride has been cancelled,If you have paid already, it will get  refunded soon'
 }
 export default en
