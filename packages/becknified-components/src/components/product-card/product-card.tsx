@@ -32,7 +32,7 @@ const ProductCard: React.FC<ProductCardProps> = props => {
           borderRadius={'1rem'}
           display={'flex'}
           cursor="pointer"
-          _hover={{ transform: 'translate(5%,-5%)' }}
+          _hover={{ transform: 'translate(2%,-2%)' }}
           transition="0.5s all"
           position={'relative'}
           boxShadow={'0 20px 25px rgba(0, 0, 0, 0.1),0 8px 10px rgba(0, 0, 0, 0.05)'}

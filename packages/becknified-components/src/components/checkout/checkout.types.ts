@@ -32,6 +32,7 @@ export interface ItemDetailProps {
   description: string
   quantity: number
   priceWithSymbol: string
+  image?: string
 }
 
 export interface ShippingDetailsProps {

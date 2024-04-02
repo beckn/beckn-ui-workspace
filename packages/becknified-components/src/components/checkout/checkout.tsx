@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Box } from '@chakra-ui/react'
+import { Box, useBreakpoint } from '@chakra-ui/react'
 import { FormField, Typography, Loader, Button } from '@beckn-ui/molecules'
 import DetailsCard from './details-card'
 import ItemDetails from './checkout-item-details'
@@ -20,6 +20,10 @@ const Checkout: React.FC<CheckoutProps<FormField[]>> = ({
     shipping.shippingForm.values || ({} as ShippingFormInitialValuesType)
   )
 
+  const breakpoint = useBreakpoint()
+  const mobileBreakpoints = ['base', 'sm', 'md']
+  const isLargeScreen = !mobileBreakpoints.includes(breakpoint)
+
   return (
     <>
       <Box>
@@ -39,6 +43,7 @@ const Checkout: React.FC<CheckoutProps<FormField[]>> = ({
                   description={item.description}
                   quantity={item.quantity}
                   priceWithSymbol={item.priceWithSymbol}
+                  image={item.image}
                 />
               </>
             )
@@ -64,10 +69,15 @@ const Checkout: React.FC<CheckoutProps<FormField[]>> = ({
             </DetailsCard>
           </>
         )}
-        <Button
-          {...restButtonProps}
-          disabled={!hasInitResult}
-        />
+        <Box
+          width={isLargeScreen ? '40%' : '100%'}
+          margin="auto"
+        >
+          <Button
+            {...restButtonProps}
+            disabled={!hasInitResult}
+          />
+        </Box>
       </Box>
     </>
   )

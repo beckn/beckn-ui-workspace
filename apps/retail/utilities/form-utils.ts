@@ -1,5 +1,5 @@
 import { SignInPropsModel, SignUpPropsModel } from '../components/signIn/SignIn.types'
-import { ShippingFormData } from '../pages/checkoutPage'
+import { ShippingFormData } from '../pages/checkout/checkout'
 
 export interface FormErrors {
   name?: string

@@ -27,7 +27,7 @@ const Cart = () => {
   }, [totalQuantity])
 
   const onOrderClick = () => {
-    router.push('/checkoutPage')
+    router.push('/checkout')
   }
 
   return (
@@ -41,7 +41,7 @@ const Cart = () => {
             name: singleItem.name,
             image: singleItem.images[0].url,
             price: Number(singleItem.price.value),
-            symbol: '€',
+            symbol: singleItem.price.currency,
             handleIncrement: id => {
               const selectedItem = productList.find(singleItem => singleItem.id === id)
               if (selectedItem) {

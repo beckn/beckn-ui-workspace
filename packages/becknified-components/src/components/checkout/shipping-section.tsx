@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Box, Flex, Image, useDisclosure, Checkbox } from '@chakra-ui/react'
 import DetailsCard from './details-card'
 import ShippingForm from './shipping-form'
+import { PlusSquareIcon } from '@chakra-ui/icons'
 import { ShippingFormProps, ShippingSectionProps, ShippingFormInitialValuesType } from './checkout.types'
 import AddShippingButtonImage from '../../../public/images/addShippingBtn.svg'
 
@@ -45,6 +46,8 @@ const ShippingSection: React.FC<ShippingSectionProps<FormField[]>> = ({
       {isBilling ? (
         <DetailsCard>
           <Checkbox
+            iconColor="primary.100"
+            colorScheme="primary"
             pr={'12px'}
             fontSize={'17px'}
             checked={isChecked}
@@ -60,7 +63,8 @@ const ShippingSection: React.FC<ShippingSectionProps<FormField[]>> = ({
             alignItems={'center'}
             onClick={onOpen}
           >
-            <Image src={addButtonImage} />
+            {/* <Image src={addButtonImage} /> */}
+            <PlusSquareIcon color="primary.100" />
             <Typography
               variant="subTitleRegular"
               text={sectionSubtitle}
