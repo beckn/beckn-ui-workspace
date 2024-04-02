@@ -1,17 +1,42 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { ProductSummary, ProductDescription, ProductPrice } from '@beckn-ui/becknified-components'
-import { Flex, Box, Text } from '@chakra-ui/react'
+import { Flex, Box, Text, useTheme } from '@chakra-ui/react'
 import router from 'next/router'
 import StarRatingComponent from 'react-star-rating-component'
 import { ParsedItemModel } from '../../types/search.types'
 import { Button, Typography } from '@beckn-ui/molecules'
 import { useLanguage } from '../../hooks/useLanguage'
+import { useDispatch } from 'react-redux'
+import { toast } from 'react-toastify'
+import { cartActions } from '../../store/cart-slice'
 
 interface Props {
   product: ParsedItemModel
 }
 const ProductDetails: React.FC<Props> = ({ product }) => {
   const { t } = useLanguage()
+  const [counter, setCounter] = useState(1)
+  const { theme } = useTheme()
+
+  useEffect(() => {
+    return () => {
+      setCounter(1)
+    }
+  }, [product])
+
+  const dispatch = useDispatch()
+
+  function addToCartHandler() {
+    dispatch(
+      cartActions.addItemToCart({
+        product: product,
+        quantity: counter
+      })
+    )
+    toast.success(t.productAddedToCartMsg, {
+      theme: theme === 'dark' ? 'dark' : 'light'
+    })
+  }
 
   return (
     <Box
@@ -94,7 +119,8 @@ const ProductDetails: React.FC<Props> = ({ product }) => {
                 marginTop={5}
                 text={t.addToCart}
                 handleClick={() => {
-                  router.push('/assemblyDetails')
+                  // router.push('/assemblyDetails')
+                  addToCartHandler()
                 }}
               ></Box>
             </Box>

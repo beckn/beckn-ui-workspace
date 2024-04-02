@@ -4,12 +4,13 @@ import Head from 'next/head'
 import { ThemeProvider } from 'next-themes'
 import { useRouter } from 'next/router'
 import Header from '../header'
-import store from '../../store/index'
+import { persistor, store } from '../../store/index'
 import Footer from '../footer'
 import { ToastContainer } from 'react-toastify'
 import { useLanguage } from '../../hooks/useLanguage'
 import NextNProgress from 'nextjs-progressbar'
 import cs from 'classnames'
+import { PersistGate } from 'redux-persist/integration/react'
 
 const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const { locale } = useLanguage()
@@ -21,51 +22,56 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
 
   return (
     <Provider store={store}>
-      <ThemeProvider enableSystem={true}>
-        <Head>
-          <title>Skill Seeker</title>
-        </Head>
-        <div
-          className={cs(
-            'flex flex-col ',
-            {
-              ['h-[100vh]']: isHomepage
-            },
-            {
-              ['min-h-[100vh]']: !isHomepage
-            }
-          )}
-        >
-          <NextNProgress height={7} />
-          <Header />
-          <main
+      <PersistGate
+        loading={null}
+        persistor={persistor}
+      >
+        <ThemeProvider enableSystem={true}>
+          <Head>
+            <title>Skill Seeker</title>
+          </Head>
+          <div
             className={cs(
-              'flex-grow',
+              'flex flex-col ',
               {
-                [paddingStyles]: !isHomepage
+                ['h-[100vh]']: isHomepage
               },
               {
-                [marginStyles]: !isHomepage && !isSearch
-              },
-              {
-                ['mt-[24px]']: isHomepage
-              },
-              {
-                ['mt-[118px]']: isSearch
+                ['min-h-[100vh]']: !isHomepage
               }
             )}
           >
-            {children}
-          </main>
-          {/* <Footer /> */}
-        </div>
-        <ToastContainer
-          autoClose={2000}
-          hideProgressBar={true}
-          rtl={locale === 'en' ? false : true}
-          position={locale === 'en' ? 'top-right' : 'top-left'}
-        />
-      </ThemeProvider>
+            <NextNProgress height={7} />
+            <Header />
+            <main
+              className={cs(
+                'flex-grow',
+                {
+                  [paddingStyles]: !isHomepage
+                },
+                {
+                  [marginStyles]: !isHomepage && !isSearch
+                },
+                {
+                  ['mt-[24px]']: isHomepage
+                },
+                {
+                  ['mt-[118px]']: isSearch
+                }
+              )}
+            >
+              {children}
+            </main>
+            {/* <Footer /> */}
+          </div>
+          <ToastContainer
+            autoClose={2000}
+            hideProgressBar={true}
+            rtl={locale === 'en' ? false : true}
+            position={locale === 'en' ? 'top-right' : 'top-left'}
+          />
+        </ThemeProvider>
+      </PersistGate>
     </Provider>
   )
 }

@@ -6,13 +6,13 @@ import { fromBinary } from '../utilities/common-utils'
 
 const Product = () => {
   const [product, setProduct] = useState<ParsedItemModel | null>(null)
+  const { productDetails } = Router.query
 
   useEffect(() => {
-    const { productDetails } = Router.query
     if (productDetails) {
       setProduct(JSON.parse(fromBinary(window.atob(productDetails as string))))
     }
-  }, [])
+  }, [productDetails])
 
   if (!product) {
     return <></>

@@ -7,20 +7,16 @@ import OrderSummaryBox from '../components/cart/OrderSummaryBox'
 import { useLanguage } from '../hooks/useLanguage'
 import Loader from '../components/loader/Loader'
 import useRequest from '../hooks/useRequest'
-import {
-  DataPerBpp,
-  CartItemForRequest,
-  ICartRootState,
-  TransactionIdRootState,
-  CartRetailItem
-} from '../lib/types/cart'
+import { ICartRootState } from '../lib/types/cart'
 import { responseDataActions } from '../store/responseData-slice'
-import { getCartItemsPerBpp, getItemsForCart, getPayloadForQuoteRequest } from '../utilities/cart-utils'
+import { getCartItemsPerBpp, getItemsForCart, getPayloadForSelectRequest } from '../utilities/cart-utils'
 import EmptyCart from '../components/cart/EmptyCart'
 import { Box } from '@chakra-ui/react'
+import { Item, SelectResponseModel } from '../lib/types/select.types'
+import LoaderWithMessage from '@beckn-ui/molecules/src/components/LoaderWithMessage/loader-with-message'
 
 const Cart = () => {
-  const [itemsForCart, setItemsForCart] = useState<CartRetailItem[] | null>(null)
+  const [itemsForCart, setItemsForCart] = useState<Item[] | null>(null)
   const [isLoadingForCartCountChange, setIsLoadingForCartCountChange] = useState<boolean>(false)
 
   const quoteRequest = useRequest()
@@ -30,13 +26,12 @@ const Cart = () => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
   const cartItems = useSelector((state: ICartRootState) => state.cart.items)
-  const transactionId = useSelector((state: { transactionId: TransactionIdRootState }) => state.transactionId)
-  const cartItemsPerBppPerProvider: DataPerBpp = getCartItemsPerBpp(cartItems as CartItemForRequest[])
-  const payLoadForQuoteRequest = getPayloadForQuoteRequest(cartItemsPerBppPerProvider, transactionId)
+
+  const payLoadForQuoteRequest = getPayloadForSelectRequest(cartItems)
 
   useEffect(() => {
     if (localStorage && !localStorage.getItem('quoteResponse')) {
-      quoteRequest.fetchData(`${apiUrl}/client/v2/get_quote`, 'POST', payLoadForQuoteRequest)
+      quoteRequest.fetchData(`${apiUrl}/select`, 'POST', payLoadForQuoteRequest)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -46,7 +41,9 @@ const Cart = () => {
       dispatch(responseDataActions.addQuoteResponse(quoteRequest.data))
       localStorage.setItem('quoteResponse', JSON.stringify(quoteRequest.data))
 
-      const items = getItemsForCart(quoteRequest.data)
+      const selectResponse: SelectResponseModel = quoteRequest.data
+
+      const items = getItemsForCart(selectResponse.data)
       setItemsForCart(items)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -57,17 +54,32 @@ const Cart = () => {
       const cachedQuoteResults = localStorage.getItem('quoteResponse')
       if (cachedQuoteResults) {
         const parsedCachedResults = JSON.parse(cachedQuoteResults)
-        setItemsForCart(parsedCachedResults)
+        const items = getItemsForCart(parsedCachedResults.data)
+        setItemsForCart(items)
       }
     }
   }, [])
+
+  console.log('itesmfor caa', itemsForCart)
 
   const onOrderClick = () => {
     router.push('/checkoutPage')
   }
 
   if (quoteRequest.loading || isLoadingForCartCountChange) {
-    return <Loader loadingText={t.quoteRequestLoader} />
+    // return <Loader loadingText={t.quoteRequestLoader} />
+    return (
+      <Box
+        display={'grid'}
+        height={'calc(100vh - 300px)'}
+        alignContent={'center'}
+      >
+        <LoaderWithMessage
+          loadingText={t.categoryLoadPrimary}
+          loadingSubText={t.quoteRequestLoader}
+        />
+      </Box>
+    )
   }
 
   if (!itemsForCart) {
@@ -86,7 +98,10 @@ const Cart = () => {
     >
       {/* <Breadcrumb /> */}
       <div className="flex justify-center flex-col md:flex-row items-start relative max-w-[2100px] mx-auto">
-        <CartList setIsLoadingForCartCountChange={setIsLoadingForCartCountChange} />
+        <CartList
+          cartItemsFromSelect={itemsForCart}
+          setIsLoadingForCartCountChange={setIsLoadingForCartCountChange}
+        />
         <OrderSummaryBox onOrderClick={onOrderClick} />
       </div>
     </Box>
