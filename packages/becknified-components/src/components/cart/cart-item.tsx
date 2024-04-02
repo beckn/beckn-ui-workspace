@@ -22,12 +22,12 @@ const CartItem: React.FC<CartItemProps> = ({
 
   function increment() {
     setCounter(prev => ++prev!)
-    handleIncrement()
+    handleIncrement(id)
   }
 
   function decrement() {
     setCounter(prev => --prev!)
-    handleDecrement()
+    handleDecrement(id)
   }
 
   function onInputNumberChangeHandler(e: React.ChangeEvent<HTMLInputElement>) {

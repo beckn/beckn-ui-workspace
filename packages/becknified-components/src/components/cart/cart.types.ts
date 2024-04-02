@@ -47,8 +47,8 @@ export interface CartItemProps {
   image: string
   price: number
   symbol: CurrencyType
-  handleIncrement: () => void
-  handleDecrement: () => void
+  handleIncrement: (id: string) => void
+  handleDecrement: (id: string) => void
   className?: string
 }
 

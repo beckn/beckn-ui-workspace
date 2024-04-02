@@ -7,7 +7,7 @@
       "@hooks/*": ["./hooks/*"],
       "@services/*": ["./services/*"],
       "@lib/*": ["./lib/*"],
-      "@types/*":["./types/*"],
+      "@types/*": ["./types/*"],
       "@pages/*": ["./pages/*"],
       "@store/*": ["./store/*"],
       "@utils/*": ["./utilities/*"],

@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { ICart } from '../lib/types/cart'
 import { RetailItem } from '../lib/types/products'
+import { Item, ParsedItemModel } from '@lib/types'
 import { calculateDiscountPercentage } from '../utilities/calculateDiscountPercentage'
 
 const initialState: ICart = {
@@ -16,25 +17,30 @@ const cartSlice = createSlice({
     addItemToCart(
       state: ICart,
       action: PayloadAction<{
-        product: RetailItem
+        product: ParsedItemModel
         quantity: number
       }>
     ) {
       const newItem = action.payload.product
 
-      const existingItem = state.items.find(item => item.id === newItem.id)
+      const existingItem = state.items.find(item => item.id === newItem.item.id)
 
       state.totalQuantity = state.totalQuantity + action.payload.quantity
 
-      state.totalAmount = state.totalAmount + action.payload.quantity * parseFloat(action.payload.product.price.value)
+      state.totalAmount =
+        state.totalAmount + action.payload.quantity * parseFloat(action.payload.product.item.price.value)
 
       if (!existingItem) {
-        const totalPrice = parseFloat(newItem.price.value) * action.payload.quantity
+        const totalPrice = parseFloat(newItem.item.price.value) * action.payload.quantity
 
         state.items.push({
-          ...newItem,
+          ...newItem.item,
           quantity: action.payload.quantity,
-          totalPrice
+          totalPrice,
+          bpp_id: newItem.bppId,
+          bpp_uri: newItem.bppUri,
+          providerId: newItem.providerId,
+          locations: newItem.providerCoordinates
         })
       } else {
         const totalPrice =

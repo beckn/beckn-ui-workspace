@@ -9,6 +9,7 @@ export interface Product {
   id: string
   rating?: string
   currencyType?: CurrencyType
+  shortDesc?: string
 }
 
 export interface ProductCardProps {
