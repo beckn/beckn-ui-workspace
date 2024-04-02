@@ -83,6 +83,7 @@ const ProductDetails: React.FC<Props> = ({ product }) => {
                 />
                 <Box pt={'10px'}>
                   <ProductPrice
+                    variant="titleSemibold"
                     price={parseFloat(product.item.price.value)}
                     currencyType={product.item.price.currency}
                   />
