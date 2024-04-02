@@ -1,4 +1,4 @@
-import { Coordinate } from './common.types'
+import { CurrencyType } from '@beckn-ui/becknified-components'
 
 interface Location {
   id: string
@@ -11,7 +11,7 @@ interface Location {
 
 interface Price {
   value: string
-  currency: string
+  currency: CurrencyType
 }
 
 interface Tag {
@@ -46,6 +46,7 @@ interface Item {
   fulfillments: Fulfillment[]
   images: Image[]
   tags: Tag[]
+  rating: string
 }
 
 interface LocationProvider {

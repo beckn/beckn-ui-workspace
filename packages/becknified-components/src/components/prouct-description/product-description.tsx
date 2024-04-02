@@ -8,7 +8,6 @@ const ProductDescription: React.FC<ProductDescriptionPropModel> = props => {
   return (
     <Box className={`${className}-product-description-container`}>
       <Box
-        className={`${className}-product-description-text-container hideScroll`}
         dangerouslySetInnerHTML={{
           __html: description
         }}
