@@ -342,7 +342,7 @@ const en: { [key: string]: string } = {
   catalogLoader: 'Please Wait!',
   catalogSubLoader: 'Fetching store catalog from the network',
   coursesCatalogLoader: 'we are looking for courses related to your search',
-  quoteRequestLoader: 'Please wait! Your order is getting processed',
+  quoteRequestLoader: 'Your order is getting processed',
   estimatedDelivery: 'Estimated delivery time',
   orderId: 'Order ID',
   pending: 'Pending',

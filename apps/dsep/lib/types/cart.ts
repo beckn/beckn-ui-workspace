@@ -1,22 +1,7 @@
+import { ParsedItemModel } from '../../types/search.types'
 import { IProductDetails, RetailItem, TSlug } from './products'
 
-export interface ICartProduct {
-  image: any
-  name: string
-  slug: TSlug
-  price: number
-  discount?: number
-  brand: string
-  category: string[]
-  starRating: number
-  isOffer?: boolean
-  details?: IProductDetails[]
-  registerDate?: string
-  quantity: number
-  totalPrice: number
-}
-
-export interface CartRetailItem extends RetailItem {
+export interface CartRetailItem extends ParsedItemModel {
   quantity: number
   totalPrice: number
 }

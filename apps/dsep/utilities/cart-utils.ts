@@ -1,8 +1,9 @@
-import { CartItemForRequest, CartRetailItem, DataPerBpp } from '../lib/types/cart'
-import { ResponseModel } from '../lib/types/responseModel'
+import { CartItemForRequest, CartRetailItem } from '../lib/types/cart'
+import { Item, SelectData } from '../lib/types/select.types'
+import { ParsedItemModel } from '../types/search.types'
 
 export const getCartItemsPerBpp = (cart: CartItemForRequest[]) => {
-  const itemsPerBpp = {}
+  const itemsPerBpp: Record<string, any> = {}
 
   cart.map((item: CartItemForRequest) => {
     const bppId = item.bpp_id
@@ -17,59 +18,76 @@ export const getCartItemsPerBpp = (cart: CartItemForRequest[]) => {
   return itemsPerBpp
 }
 
-export const getPayloadForQuoteRequest = (
-  cartItemsPerBppPerProvider: DataPerBpp,
-  transactionId: { transactionId: string }
-) => {
-  const payload: any = {
-    selectRequestDto: []
-  }
-
-  Object.keys(cartItemsPerBppPerProvider).forEach(bppId => {
-    const cartItem: any = {
-      context: {
-        transaction_id: transactionId.transactionId,
-        bpp_id: bppId,
-        bpp_uri: cartItemsPerBppPerProvider[bppId][0].bpp_uri,
-        domain: 'retail'
-      },
-      message: {
-        order: {
-          items: [],
-          provider: {
-            id: cartItemsPerBppPerProvider[bppId][0].providerId
-          },
-          locations: cartItemsPerBppPerProvider[bppId][0].locations
-        }
-      }
-    }
-    cartItemsPerBppPerProvider[bppId].forEach((item: any) => {
-      if (item.bpp_id === bppId) {
-        const itemObject = {
-          quantity: {
-            count: item.quantity
-          },
-          id: item.id
-        }
-        cartItem.message.order.items.push(itemObject)
-      }
-    })
-
-    payload.selectRequestDto.push(cartItem)
-  })
-  return payload
-}
-
-export const getItemsForCart = (quoteData: ResponseModel[]) => {
-  const items: CartRetailItem[] = []
+export const getItemsForCart = (quoteData: SelectData[]) => {
+  const items: Item[] = []
 
   quoteData.forEach(data => {
-    const { catalogs } = data.message
-    const { order } = catalogs
+    const { order } = data.message
     const { items: orderItems } = order
+    // const { items: orderItems } = order
 
     items.push(...orderItems)
   })
 
   return items
+}
+
+export const getPayloadForSelectRequest = (cartItems: CartRetailItem[]) => {
+  const payload: any = { data: [] }
+
+  // Group cart items by bppId
+  const groupedByBppId: Record<string, ParsedItemModel[]> = cartItems.reduce(
+    (acc: Record<string, ParsedItemModel[]>, item) => {
+      if (!acc[item.bppId]) {
+        acc[item.bppId] = []
+      }
+      acc[item.bppId].push(item)
+      return acc
+    },
+    {}
+  )
+
+  Object.entries(groupedByBppId).forEach(([bppId, items]) => {
+    const context = {
+      transaction_id: items[0].transactionId,
+      bpp_id: bppId,
+      bpp_uri: items[0].bppUri,
+      domain: items[0].domain
+    }
+
+    // Group items by providerName within each bppId
+    const groupedByProvider: Record<string, ParsedItemModel[]> = items.reduce(
+      (acc: Record<string, ParsedItemModel[]>, item) => {
+        if (!acc[item.providerName]) {
+          acc[item.providerName] = []
+        }
+        acc[item.providerName].push(item)
+        return acc
+      },
+      {}
+    )
+
+    const message = {
+      orders: Object.entries(groupedByProvider).map(([providerName, providerItems]) => {
+        const provider = { id: providerItems[0].providerId }
+        const items = providerItems.map(item => ({
+          id: item.item.id,
+          fulfillments: item.item.fulfillments,
+          tags: [
+            {
+              descriptor: {
+                name: `select-${item.item.id}`
+              }
+            }
+          ]
+        }))
+
+        return { provider, items }
+      })
+    }
+
+    payload.data.push({ context, message })
+  })
+
+  return payload
 }

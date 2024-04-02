@@ -1,9 +1,9 @@
-import { Image, Box, Divider } from '@chakra-ui/react'
+import { Image } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import { HiMinusSm, HiOutlinePlusSm, HiOutlineTrash } from 'react-icons/hi'
+import ProductPrice from '../product-price'
 
 // Custom modules
-import ProductPrice from './product-price'
 import Styles from './cart-item.module.css'
 import { CartItemProps } from './cart.types'
 
@@ -88,8 +88,8 @@ const CartItem: React.FC<CartItemProps> = ({
           <div className={Styles.total_amount_container}>
             <p>Total amount</p>
             <ProductPrice
-              price={price * counter!}
-              symbol={symbol}
+              price={price * counter}
+              currencyType={symbol}
             />
             {/* <BecknProductPrice price={parseFloat(product.price.value) * counter!} /> */}
           </div>

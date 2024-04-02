@@ -123,8 +123,8 @@ const ProductCard: React.FC<ProductCardProps> = props => {
                 width={'calc(100% - 30px)'}
               >
                 <ProductPrice
+                  currencyType={product.currencyType}
                   price={parseFloat(product.price)}
-                  currencySymbol={currency}
                 />
                 {product.rating && (
                   <ProductRating

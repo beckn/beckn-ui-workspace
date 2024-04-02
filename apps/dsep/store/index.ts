@@ -1,4 +1,6 @@
-import { configureStore } from '@reduxjs/toolkit'
+import { combineReducers, configureStore } from '@reduxjs/toolkit'
+import { persistStore, persistReducer } from 'redux-persist'
+// import storage from 'redux-persist/lib/storage'
 import specialOfferProductsReducer from './specialOfferProducts-slice'
 import newestProductReducer from './newestProduct-slice'
 import SortedProductsListReducer from './sortedProductList-slice'
@@ -12,30 +14,40 @@ import settingBoxReducer from './settingBox-slice'
 import scholarshipCartReducer from './scholarshipCart-slice'
 import favoriteReducer from './favorite-slice'
 import responseDataReducer from './responseData-slice'
+import storage from './storage'
 
-const store = configureStore({
-  reducer: {
-    specialOfferProductsList: specialOfferProductsReducer,
-    newestProductsList: newestProductReducer,
-    sortedProductsList: SortedProductsListReducer,
-    cartUi: cartUiReducer,
-    cart: cartSliceReducer,
-    userInfo: userInfoReducer,
-    sideNavBar: sideNavBarReducer,
-    megaMenu: megaMenuReducer,
-    activeMenuItem: activeMenuItemReducer,
-    settingBox: settingBoxReducer,
-    favorite: favoriteReducer,
-    transactionId: responseDataReducer,
-    quoteResponse: responseDataReducer,
-    customerDetails: responseDataReducer,
-    initResponse: responseDataReducer,
-    scholarshipCart: scholarshipCartReducer
-  },
+const persistConfig = {
+  key: 'root',
+  storage
+}
+
+const rootReducer = combineReducers({
+  specialOfferProductsList: specialOfferProductsReducer,
+  newestProductsList: newestProductReducer,
+  sortedProductsList: SortedProductsListReducer,
+  cartUi: cartUiReducer,
+  cart: cartSliceReducer,
+  userInfo: userInfoReducer,
+  sideNavBar: sideNavBarReducer,
+  megaMenu: megaMenuReducer,
+  activeMenuItem: activeMenuItemReducer,
+  settingBox: settingBoxReducer,
+  favorite: favoriteReducer,
+  transactionId: responseDataReducer,
+  quoteResponse: responseDataReducer,
+  customerDetails: responseDataReducer,
+  initResponse: responseDataReducer,
+  scholarshipCart: scholarshipCartReducer
+})
+
+const persistedReducer = persistReducer(persistConfig, rootReducer)
+
+export const store = configureStore({
+  reducer: persistedReducer,
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
       serializableCheck: false
     })
 })
 
-export default store
+export const persistor = persistStore(store)

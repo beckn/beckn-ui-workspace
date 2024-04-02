@@ -1,11 +1,14 @@
 // TODO :- to change the type once the schema of the new API is defined
 
+import { CurrencyType } from '../types'
+
 export interface Product {
   images: string[]
   name: string
   price: string
   id: string
   rating?: string
+  currencyType?: CurrencyType
 }
 
 export interface ProductCardProps {

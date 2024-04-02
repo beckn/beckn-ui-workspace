@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { ICart } from '../lib/types/cart'
 import { RetailItem } from '../lib/types/products'
+import { ParsedItemModel } from '../types/search.types'
 import { calculateDiscountPercentage } from '../utilities/calculateDiscountPercentage'
 
 const initialState: ICart = {
@@ -16,20 +17,21 @@ const cartSlice = createSlice({
     addItemToCart(
       state: ICart,
       action: PayloadAction<{
-        product: RetailItem
+        product: ParsedItemModel
         quantity: number
       }>
     ) {
       const newItem = action.payload.product
 
-      const existingItem = state.items.find(item => item.id === newItem.id)
+      const existingItem = state.items.find(item => item.item.id === newItem.item.id)
 
       state.totalQuantity = state.totalQuantity + action.payload.quantity
 
-      state.totalAmount = state.totalAmount + action.payload.quantity * parseFloat(action.payload.product.price.value)
+      state.totalAmount =
+        state.totalAmount + action.payload.quantity * parseFloat(action.payload.product.item.price.value)
 
       if (!existingItem) {
-        const totalPrice = parseFloat(newItem.price.value) * action.payload.quantity
+        const totalPrice = parseFloat(newItem.item.price.value) * action.payload.quantity
 
         state.items.push({
           ...newItem,
@@ -38,7 +40,8 @@ const cartSlice = createSlice({
         })
       } else {
         const totalPrice =
-          parseFloat(existingItem.price.value) + parseFloat(existingItem.price.value) * action.payload.quantity
+          parseFloat(existingItem.item.price.value) +
+          parseFloat(existingItem.item.price.value) * action.payload.quantity
 
         existingItem.quantity += action.payload.quantity
         existingItem.totalPrice = totalPrice
@@ -50,17 +53,17 @@ const cartSlice = createSlice({
       action: PayloadAction<string> //slug.current as payload
     ) {
       const productSlug = action.payload
-      const existingItem = state.items.find(item => item.id === productSlug)
+      const existingItem = state.items.find(item => item.item.id === productSlug)
 
       state.totalQuantity--
 
-      state.totalAmount = state.totalAmount - parseFloat(existingItem?.price.value!)
+      state.totalAmount = state.totalAmount - parseFloat(existingItem?.item.price.value!)
 
       if (existingItem?.quantity === 1) {
-        state.items = state.items.filter(item => item.id !== productSlug)
+        state.items = state.items.filter(item => item.item.id !== productSlug)
       } else {
         existingItem!.quantity--
-        existingItem!.totalPrice = existingItem!.totalPrice - parseFloat(existingItem?.price.value!)
+        existingItem!.totalPrice = existingItem!.totalPrice - parseFloat(existingItem?.item.price.value!)
       }
     },
 
