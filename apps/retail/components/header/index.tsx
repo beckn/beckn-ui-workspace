@@ -304,7 +304,7 @@ const BottomHeader = () => {
             <Image
               cursor="pointer"
               onClick={() => setOrderModalOpen(true)}
-              src="/images/orderDetailsIcon.svg"
+              src="/images/downloadInvoice.svg"
               alt="order icon"
               mr={'20px'}
             />

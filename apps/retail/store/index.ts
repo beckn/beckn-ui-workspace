@@ -6,6 +6,7 @@ import newestProductReducer from './newestProduct-slice'
 import SortedProductsListReducer from './sortedProductList-slice'
 import cartUiReducer from './cartUI-slice'
 import cartSliceReducer from './cart-slice'
+import checkoutReducer from './checkout-slice'
 import userInfoReducer from './user-slice'
 import sideNavBarReducer from './sideNavBar-slice'
 import DiscoveryReducer from './discovery-slice'
@@ -21,7 +22,7 @@ import authReducer from './authslice'
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['cart', 'discovery']
+  whitelist: ['cart', 'discovery', 'checkout']
 }
 
 const rootReducer = combineReducers({
@@ -32,6 +33,7 @@ const rootReducer = combineReducers({
   sortedProductsList: SortedProductsListReducer,
   cartUi: cartUiReducer,
   cart: cartSliceReducer,
+  checkout: checkoutReducer,
   discovery: DiscoveryReducer,
   userInfo: userInfoReducer,
   sideNavBar: sideNavBarReducer,

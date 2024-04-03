@@ -3,6 +3,8 @@ import axios from 'axios'
 import Router, { useRouter } from 'next/router'
 import { Box, Card, CardBody, Divider, Flex, Image, Radio, RadioGroup, Stack, Text, Textarea } from '@chakra-ui/react'
 import { BottomModal, Typography } from '@beckn-ui/molecules'
+import { useDispatch, useSelector } from 'react-redux'
+import { discoveryActions, DiscoveryRootState } from '@store/discovery-slice'
 import { DetailCard, OrderStatusProgress, OrderStatusProgressProps } from '@beckn-ui/becknified-components'
 import { StatusResponseModel, SupportModel } from '../types/status.types'
 import { useLanguage } from '@hooks/useLanguage'
@@ -39,6 +41,7 @@ const OrderDetails = () => {
   const { t } = useLanguage()
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
   const [orderStatusMap, setOrderStatusMap] = useState<any[]>([])
+  const { transactionId } = useSelector((state: DiscoveryRootState) => state.discovery)
   const [currentStatusLabel, setCurrentStatusLabel] = useState('')
 
   useEffect(() => {
@@ -187,10 +190,10 @@ const OrderDetails = () => {
           data: [
             {
               context: {
-                transaction_id: '',
+                transaction_id: transactionId,
                 bpp_id: bppId,
                 bpp_uri: bppUri,
-                domain: 'supply-chain-services:assembly'
+                domain: 'retail'
               },
               message: {
                 order_id: orderId

@@ -94,26 +94,25 @@ export const getPayloadForInitRequest = (
   return payload
 }
 
-export const getSubTotalAndDeliveryCharges = (initData: (ResponseModel & ResponseModel[]) | null) => {
+export const getSubTotalAndDeliveryCharges = (initData: any) => {
   let subTotal = 0
   let totalDeliveryCharge = 0
+  let currencySymbol
 
-  if (initData) {
+  if (initData && initData.length > 0) {
     initData.forEach(data => {
-      const deliveryAmount = parseFloat(
-        data.message.catalogs.responses[0].message.order.quote.breakup[1].price.value
-      ).toFixed(2)
+      const deliveryAmount = parseFloat(data.message.order.quote.breakup[1].price.value).toFixed(2)
       totalDeliveryCharge += parseFloat(deliveryAmount)
 
-      const subTotalAmount = parseFloat(
-        data.message.catalogs.responses[0].message.order.quote.breakup[0].price.value
-      ).toFixed(2)
+      const subTotalAmount = parseFloat(data.message.order.quote.breakup[0].price.value).toFixed(2)
+
+      currencySymbol = data.message.order.quote.price.currency
 
       subTotal += parseFloat(parseFloat(subTotalAmount).toFixed(2))
     })
   }
 
-  return { subTotal, totalDeliveryCharge }
+  return { subTotal, totalDeliveryCharge, currencySymbol }
 }
 
 export const getTotalCartItems = (cartItems: CartRetailItem[]) => {
@@ -135,4 +134,144 @@ export const areShippingAndBillingDetailsSame = (
     return areObjectPropertiesEqual(formData, billingFormData)
   }
   return !isBillingAddressComplete
+}
+
+const extractAddressComponents = (result: any) => {
+  let country = null,
+    state = null,
+    city = null
+
+  for (const component of result.address_components) {
+    if (component.types.includes('country')) {
+      country = component.long_name
+    } else if (component.types.includes('administrative_area_level_1')) {
+      state = component.long_name
+    } else if (component.types.includes('locality')) {
+      city = component.long_name
+    }
+  }
+  return { country, state, city }
+}
+
+const geocodeFromPincode = async (pincode: any) => {
+  const geocoder = new window.google.maps.Geocoder()
+  try {
+    const response = await geocoder.geocode({ address: pincode })
+    if (response.results.length > 0) {
+      const { country, state, city } = extractAddressComponents(response.results[0])
+      const lat = response.results[0].geometry.location.lat()
+      const lng = response.results[0].geometry.location.lng()
+      return { country, state, city, lat, lng }
+    } else {
+      console.log('No results found')
+    }
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+export const getInitPayload = async (
+  deliveryAddress: any,
+  billingAddress: any,
+  cartItems: any,
+  transaction_id: string
+) => {
+  const cityData = await geocodeFromPincode(deliveryAddress.pinCode)
+
+  const bppGroups = cartItems.reduce((acc, item) => {
+    if (!acc[item.bpp_id]) {
+      acc[item.bpp_id] = []
+    }
+    acc[item.bpp_id].push(item)
+    return acc
+  }, {})
+
+  const data = Object.entries(bppGroups).map(([bpp_id, items]) => {
+    return {
+      context: {
+        transaction_id: transaction_id,
+        bpp_id: bpp_id,
+        bpp_uri: items[0].bpp_uri,
+        domain: 'retail'
+      },
+      message: {
+        orders: transformOrdersByProvider(items)
+      }
+    }
+  })
+
+  function transformOrdersByProvider(items) {
+    const providerGroups = items.reduce((acc, item) => {
+      const providerKey = `${item.bpp_id}_${item.providerId}`
+      if (!acc[providerKey]) {
+        acc[providerKey] = []
+      }
+      acc[providerKey].push(item)
+      return acc
+    }, {})
+
+    return Object.values(providerGroups).map(group => {
+      const providerId = group[0].providerId
+      const items = group.map(item => ({
+        id: item.id,
+        selected: {
+          quantity: {
+            count: item.quantity
+          }
+        }
+      }))
+
+      const fulfillments = [
+        {
+          type: 'Delivery',
+          stops: [
+            {
+              location: {
+                gps: `${cityData.lat},${cityData.lng}`,
+                address: deliveryAddress.address,
+                city: {
+                  name: cityData?.city
+                },
+                state: {
+                  name: cityData?.state
+                },
+                country: {
+                  code: cityData?.country
+                },
+                area_code: deliveryAddress.pinCode
+              },
+              contact: {
+                phone: deliveryAddress.mobileNumber,
+                email: deliveryAddress.email
+              }
+            }
+          ]
+        }
+      ]
+
+      return {
+        provider: {
+          id: providerId
+        },
+        items,
+        fulfillments,
+        customer: {
+          person: {
+            name: deliveryAddress.name
+          },
+          contact: {
+            phone: deliveryAddress.mobileNumber
+          }
+        },
+        billing: {
+          name: billingAddress.name,
+          phone: billingAddress.mobileNumber,
+          address: billingAddress.address,
+          email: billingAddress.email
+        }
+      }
+    })
+  }
+
+  return { data }
 }

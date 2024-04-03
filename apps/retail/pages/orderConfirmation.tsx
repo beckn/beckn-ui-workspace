@@ -1,22 +1,30 @@
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import orderConfirmmark from '../public/images/orderConfirmmark.svg'
+import { useSelector } from 'react-redux'
 import { useLanguage } from '../hooks/useLanguage'
 import { ConfirmationPage } from '@beckn-ui/becknified-components'
 import { InitResponseModel } from '../types/init.types'
+import { CheckoutRootState } from '@store/checkout-slice'
+import { useConfirmMutation } from '@services/confirm'
 import { getPayloadForConfirm, getPayloadForOrderHistoryPost } from '@utils/confirm-utils'
 import axios from 'axios'
 import { Box } from '@chakra-ui/react'
 import Cookies from 'js-cookie'
 import { ConfirmResponseModel } from '../types/confirm.types'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
+import { init } from 'next/dist/compiled/webpack/webpack'
 
 const OrderConfirmation = () => {
   const { t } = useLanguage()
   const router = useRouter()
-  const [isLoading, setIsLoading] = useState(true)
   const [confirmData, setConfirmData] = useState<ConfirmResponseModel[]>([])
+  const [confirm, { isLoading, data }] = useConfirmMutation()
 
+  console.log('Dank confirm', data)
+
+  const initResponse = useSelector((state: CheckoutRootState) => state.checkout.initResponse)
+  const confirmResponse = useSelector((state: CheckoutRootState) => state.checkout.confirmResponse)
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
 
@@ -29,29 +37,16 @@ const OrderConfirmation = () => {
   }
 
   useEffect(() => {
-    if (localStorage && localStorage.getItem('initResult')) {
-      const parsedInitResult: InitResponseModel[] = JSON.parse(localStorage.getItem('initResult') as string)
-      const payLoad = getPayloadForConfirm(parsedInitResult)
-      setIsLoading(true)
-      axios
-        .post(`${apiUrl}/confirm`, payLoad)
-        .then(res => {
-          const responseData: ConfirmResponseModel[] = res.data.data
-          setConfirmData(responseData)
-          localStorage.setItem('confirmResponse', JSON.stringify(responseData))
-
-          setIsLoading(false)
-        })
-        .catch(err => {
-          setIsLoading(false)
-          console.error(err)
-        })
+    if (initResponse && initResponse.length > 0) {
+      const payLoad = getPayloadForConfirm(initResponse)
+      // console.log("Dank payload",payLoad)
+      confirm(payLoad)
     }
   }, [])
 
   useEffect(() => {
-    if (confirmData.length > 0) {
-      const ordersPayload = getPayloadForOrderHistoryPost(confirmData)
+    if (confirmResponse && confirmResponse.length > 0) {
+      const ordersPayload = getPayloadForOrderHistoryPost(confirmResponse)
       axios
         .post(`${strapiUrl}/orders`, ordersPayload, axiosConfig)
         .then(res => {
@@ -59,7 +54,7 @@ const OrderConfirmation = () => {
         })
         .catch(err => console.error(err))
     }
-  }, [confirmData])
+  }, [confirmResponse])
 
   if (isLoading) {
     return (

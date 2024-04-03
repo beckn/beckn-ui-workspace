@@ -19,10 +19,12 @@ function PaymentMode() {
   const router = useRouter()
 
   return (
-    <>
+    <Box>
       <Box
         height={'72vh'}
         position={'relative'}
+        maxWidth={{ base: '90%', md: '70%' }}
+        margin="auto"
       >
         <Box>
           <Flex
@@ -95,19 +97,19 @@ function PaymentMode() {
             paymentMethodNet={t.netBanking}
           />
         </Box>
+
+        <Box
+          width={{ base: '90%', md: '70%' }}
+          style={{ margin: '4rem auto' }}
+        >
+          <BecknButton
+            children={t.confirmOrder}
+            handleClick={() => router.push('/orderConfirmation')}
+            disabled={!checked}
+          />
+        </Box>
       </Box>
-      <Box
-        position={'absolute'}
-        bottom={'10px'}
-        width={'90%'}
-      >
-        <BecknButton
-          children={t.confirmOrder}
-          handleClick={() => router.push('/orderConfirmation')}
-          disabled={!checked}
-        />
-      </Box>
-    </>
+    </Box>
   )
 }
 

@@ -65,7 +65,16 @@ export const getPayloadForConfirm = (initResponse: InitResponseModel[]) => {
               items: items,
               fulfillments: fulfillments,
               billing: billing,
-              payments: payments
+              payments: [
+                {
+                  params: {
+                    amount: quote.price.value,
+                    currency: quote.price.currency
+                  },
+                  status: 'PAID',
+                  type: 'ON-FULFILLMENT'
+                }
+              ]
             }
           ]
         }

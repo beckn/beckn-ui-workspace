@@ -1,4 +1,4 @@
-import { FormData, FormField, ButtonProps, LoaderProps } from '@beckn-ui/molecules'
+import { FormData, FormField, ButtonProps, LoaderProps, LoaderWithMessagePropsModel } from '@beckn-ui/molecules'
 
 export type ShippingFormInitialValuesType = {
   name: string

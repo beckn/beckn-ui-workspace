@@ -5,8 +5,9 @@ import { Box, Flex, Text, Stack, Checkbox } from '@chakra-ui/react'
 import { useLanguage } from '../../hooks/useLanguage'
 
 import { CartItemForRequest, DataPerBpp, ICartRootState, TransactionIdRootState } from '@lib/types/cart'
-import { getCartItemsPerBpp } from '@utils/cart-utils'
+import { getInitPayload } from './checkout.utils'
 import useRequest from '../../hooks/useRequest'
+import { useInitMutation } from '@services/init'
 import { responseDataActions } from '../../store/responseData-slice'
 import {
   areShippingAndBillingDetailsSame,
@@ -17,6 +18,9 @@ import { Checkout } from '@beckn-ui/becknified-components'
 
 import { Router, useRouter } from 'next/router'
 import { ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
+import { CheckoutRootState } from '@store/checkout-slice'
+import { cartActions } from '@store/cart-slice'
+import cart from '@beckn-ui/becknified-components/src/components/cart'
 
 export type ShippingFormData = {
   name: string
@@ -26,13 +30,18 @@ export type ShippingFormData = {
   zipCode: string
 }
 
+export const currencyMap = {
+  EUR: '€',
+  INR: '₹'
+}
+
 const CheckoutPage = () => {
   const [formData, setFormData] = useState<ShippingFormInitialValuesType>({
     name: 'Antoine Dubois',
     mobileNumber: '0612345678',
     email: 'antoine.dubois@gmail.com',
     address: '15 Rue du Soleil, Paris, France',
-    pinCode: '75001'
+    pinCode: '201002'
   })
 
   const [submittedDetails, setSubmittedDetails] = useState<ShippingFormInitialValuesType>({
@@ -40,7 +49,7 @@ const CheckoutPage = () => {
     mobileNumber: '0612345678',
     email: 'antoine.dubois@gmail.com',
     address: '15 Rue du Soleil, Paris, France',
-    pinCode: '75001'
+    pinCode: '201002'
   })
 
   const [isBillingAddressSameAsShippingAddress, setIsBillingAddressSameAsShippingAddress] = useState(true)
@@ -56,10 +65,12 @@ const CheckoutPage = () => {
   const router = useRouter()
   const initRequest = useRequest()
   const dispatch = useDispatch()
+  const [initialize, { isLoading }] = useInitMutation()
   const { t, locale } = useLanguage()
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL
   const cartItems = useSelector((state: ICartRootState) => state.cart.items)
-  const transactionId = useSelector((state: { transactionId: TransactionIdRootState }) => state.transactionId)
+  const initResponse = useSelector((state: CheckoutRootState) => state.checkout.initResponse)
+  console.log('Dank init', initResponse)
+  const { transactionId, productList } = useSelector((state: DiscoveryRootState) => state.discovery)
 
   useEffect(() => {
     if (localStorage) {
@@ -89,17 +100,6 @@ const CheckoutPage = () => {
   }, [])
 
   useEffect(() => {
-    if (initRequest.data) {
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('initResult', JSON.stringify(initRequest.data))
-      }
-
-      dispatch(responseDataActions.addInitResponse(initRequest.data))
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initRequest.data])
-
-  useEffect(() => {
     const shippingAddressComplete = Object.values(formData).every(value => value.length > 0)
     if (shippingAddressComplete && typeof window !== 'undefined') {
       localStorage.setItem('shippingAdress', JSON.stringify(formData))
@@ -120,6 +120,14 @@ const CheckoutPage = () => {
 
   const formSubmitHandler = (data: any) => {
     if (data) {
+      getInitPayload(data, billingFormData, cartItems, transactionId)
+        .then(res => {
+          console.log('Dank checkout', res)
+          return initialize(res)
+        })
+        .then(response => {
+          console.log('Dank', response)
+        })
       // TODO :_ To check this again
 
       // if (isBillingAddressSameAsShippingAddress) {
@@ -127,26 +135,20 @@ const CheckoutPage = () => {
       //   setBillingFormData(copiedFormData);
       // }
 
-      const cartItemsPerBppPerProvider: DataPerBpp = getCartItemsPerBpp(cartItems as CartItemForRequest[])
+      // const cartItemsPerBppPerProvider: DataPerBpp = getCartItemsPerBpp(cartItems as CartItemForRequest[])
 
-      const payLoadForInitRequest = getPayloadForInitRequest(
-        cartItemsPerBppPerProvider,
-        transactionId,
-        data,
-        billingFormData
-      )
-      initRequest.fetchData(`${apiUrl}/client/v2/initialize_order`, 'POST', payLoadForInitRequest)
+      // const payLoadForInitRequest = getPayloadForInitRequest(
+      //   cartItemsPerBppPerProvider,
+      //   transactionId,
+      //   data,
+      //   billingFormData
+      // )
+      // initRequest.fetchData(`${apiUrl}/client/v2/initialize_order`, 'POST', payLoadForInitRequest)
     }
   }
 
   const isInitResultPresent = () => {
-    if (typeof window !== 'undefined') {
-      if (localStorage.getItem('initResult')) {
-        return true
-      }
-    }
-
-    return !!initRequest.data
+    return !!initResponse && initResponse.length > 0
   }
 
   return (
@@ -202,16 +204,16 @@ const CheckoutPage = () => {
             title: 'Payment',
             paymentDetails: {
               paymentBreakDown: {
-                ['Delivery Charges']: `${t.currencySymbol} ${
-                  getSubTotalAndDeliveryCharges(initRequest.data).totalDeliveryCharge
+                ['Tax & Delivery']: `${currencyMap[getSubTotalAndDeliveryCharges(initResponse).currencySymbol as string]} ${
+                  getSubTotalAndDeliveryCharges(initResponse).totalDeliveryCharge
                 }`,
-                Subtotal: `${t.currencySymbol} ${getSubTotalAndDeliveryCharges(initRequest.data).subTotal}`
+                Subtotal: `${currencyMap[getSubTotalAndDeliveryCharges(initResponse).currencySymbol as string]} ${getSubTotalAndDeliveryCharges(initResponse).subTotal}`
               },
 
               totalText: 'Total',
-              totalValueWithSymbol: `${t.currencySymbol}${
-                getSubTotalAndDeliveryCharges(initRequest.data).subTotal +
-                getSubTotalAndDeliveryCharges(initRequest.data).totalDeliveryCharge
+              totalValueWithSymbol: `${currencyMap[getSubTotalAndDeliveryCharges(initResponse).currencySymbol as string]}${
+                getSubTotalAndDeliveryCharges(initResponse).subTotal +
+                getSubTotalAndDeliveryCharges(initResponse).totalDeliveryCharge
               }`
             }
           },
@@ -220,10 +222,13 @@ const CheckoutPage = () => {
           },
           pageCTA: {
             text: 'Proceed to Checkout',
-            handleClick: () => router.push('/paymentMode')
+            handleClick: () => {
+              dispatch(cartActions.clearCart())
+              router.push('/paymentMode')
+            }
           }
         }}
-        isLoading={initRequest.loading}
+        isLoading={isLoading}
         hasInitResult={isInitResultPresent()}
       />
     </>
