@@ -41,6 +41,24 @@ interface DataItemModel {
   optionsList: OptionsList
 }
 
+interface CabCategoryDetails {
+  name: string
+  image: string
+  rating: string
+  mini: {
+    cabDetails: {
+      image: string
+      name: string
+      waitTime: string
+      fare: string
+    }[]
+  }
+}
+
+interface CabDataModal {
+  cabCategory: CabCategoryDetails[]
+}
+
 interface MockDataModel {
   data: DataItemModel[]
 }
@@ -87,6 +105,40 @@ export const mockData: MockDataModel = {
             value: 'others',
             tag: 'riderOptions'
           }
+        ]
+      }
+    }
+  ]
+}
+
+export const mockDataCab: CabDataModal = {
+  cabCategory: [
+    {
+      name: 'OLA Cabs',
+      image: './images/olaCab.svg',
+      rating: '4',
+      mini: {
+        cabDetails: [
+          { image: './images/CabImg.svg', name: 'Ola Mini', waitTime: '5 mins away', fare: '₹80' },
+          { image: './images/CabImg.svg', name: 'Ola Mini', waitTime: '5 mins away', fare: '₹80' },
+          { image: './images/CabImg.svg', name: 'Ola Mini', waitTime: '5 mins away', fare: '₹80' },
+          { image: './images/CabImg.svg', name: 'Ola Mini', waitTime: '5 mins away', fare: '₹80' },
+          { image: './images/CabImg.svg', name: 'Ola Mini', waitTime: '5 mins away', fare: '₹80' }
+        ]
+      }
+    },
+    {
+      name: 'Uber Cabs',
+      image: './images/olaCab.svg',
+      rating: '4',
+      mini: {
+        cabDetails: [
+          { image: './images/CabImg.svg', name: 'Uber Mini', waitTime: '5 mins away', fare: '₹80' },
+          { image: './images/CabImg.svg', name: 'Uber Mini', waitTime: '5 mins away', fare: '₹80' },
+          { image: './images/CabImg.svg', name: 'Uber Mini', waitTime: '5 mins away', fare: '₹80' },
+          { image: './images/CabImg.svg', name: 'Uber Mini', waitTime: '5 mins away', fare: '₹80' },
+          { image: './images/CabImg.svg', name: 'Uber Mini', waitTime: '5 mins away', fare: '₹80' },
+          { image: './images/CabImg.svg', name: 'Uber Mini', waitTime: '5 mins away', fare: '₹80' }
         ]
       }
     }
