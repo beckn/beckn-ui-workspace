@@ -1,3 +1,4 @@
+import TripLocation from '@/components/searchRideForm/TripLocation'
 import { Image, Box, Card, CardBody, Divider, Flex } from '@chakra-ui/react'
 import { IGeoLocationSearchPageRootState } from 'lib/types/geoLocationSearchPage'
 import dynamic from 'next/dynamic'
@@ -58,7 +59,11 @@ const SearchRide = () => {
           <Divider mt="20px" />
 
           <Divider mb="20px" />
-          <Flex
+          <TripLocation
+            pickupLocation={pickupAddress}
+            dropLocation={dropoffAddress}
+          />
+          {/* <Flex
             fontSize={'15px'}
             fontWeight="500"
             alignItems={'center'}
@@ -121,7 +126,7 @@ const SearchRide = () => {
             >
               {dropoffAddress}
             </Box>
-          </Flex>
+          </Flex> */}
         </CardBody>
       </Card>
     </Box>

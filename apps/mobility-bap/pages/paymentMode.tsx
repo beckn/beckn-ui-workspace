@@ -1,33 +1,47 @@
 import React, { useState } from 'react'
-import { Box, Flex, Text, Image, Card, CardBody } from '@chakra-ui/react'
+import { Box, Flex, Text, Image, Card, CardBody, useTheme } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
-import Button from '../components/button/Button'
 import CardWithCheckBox from '../components/card/Card'
 import { useLanguage } from '../hooks/useLanguage'
 import creditCardImg from '../public/images/creditCardImg.svg'
+import { Button } from '@beckn-ui/molecules'
 
 function PaymentMode() {
+  const theme = useTheme()
   const [checked, setChecked] = useState(false)
   const { t } = useLanguage()
   const router = useRouter()
 
   return (
     <>
-      <Box
-        height={'72vh'}
-        position={'relative'}
-      >
-        <Box>
+      <Box position={'relative'}>
+        <Box
+          p={'8px 20px'}
+          mt="4px"
+          ml="-20px"
+          fontSize={'15px'}
+          textAlign="center"
+          mr="-20px"
+          boxShadow="0px 4px 60px 0px #0000001A"
+        >
+          Select Payment Method
+        </Box>
+        <Box mt={'30px'}>
           <Flex
             justifyContent={'space-between'}
             alignItems={'center'}
             fontSize={'17px'}
             fontWeight={400}
-            mb={'10px'}
+            mb={'16px'}
           >
-            <Text className="text-ellipsis">{t.cards}</Text>
             <Text
-              color={'rgba(var(--color-primary))'}
+              className="text-ellipsis"
+              fontSize={'17px'}
+            >
+              {t.cards}
+            </Text>
+            <Text
+              color={theme.colors.primary['100']}
               fontSize={'17px'}
               fontWeight={400}
             >
@@ -60,13 +74,10 @@ function PaymentMode() {
         width={'90%'}
       >
         <Button
-          buttonText={'Continue'}
-          background={'rgba(var(--color-primary))'}
-          color={'rgba(var(--text-color))'}
-          isDisabled={!checked}
-          handleOnClick={() => {
-            router.push('/orderConfirmation')
-          }}
+          text="Continue"
+          variant="solid"
+          disabled={!checked}
+          handleClick={() => router.push('/driverDetails')}
         />
       </Box>
     </>
