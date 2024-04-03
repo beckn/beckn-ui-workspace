@@ -130,11 +130,11 @@ const RideDetails: React.FC<RideDetailsProps> = ({
             alt="contact-support"
           />
         }
-        handleClick={() => router.push('/contactSupport-test')}
+        handleClick={() => router.push('/contactSupport')}
       />
       <Button
         text={t.cancelRide}
-        handleClick={() => router.push('/cancelRide')}
+        handleClick={() => router.push('/cancelRidePage')}
         variant="outline"
       />
     </BottomDrawer>

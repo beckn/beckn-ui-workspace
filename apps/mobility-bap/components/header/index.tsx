@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import BottomModal from '../BottomModal'
 import { Box, Image, Text } from '@chakra-ui/react'
-import Settings from './Settings'
 import { useRouter } from 'next/router'
 
 import { useLanguage } from '../../hooks/useLanguage'
