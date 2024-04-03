@@ -72,7 +72,6 @@ export const getPayloadForSelectRequest = (cartItems: CartRetailItem[]) => {
         const provider = { id: providerItems[0].providerId }
         const items = providerItems.map(item => ({
           id: item.item.id,
-          fulfillments: item.item.fulfillments,
           tags: [
             {
               descriptor: {

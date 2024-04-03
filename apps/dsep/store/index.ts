@@ -1,6 +1,5 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import { persistStore, persistReducer } from 'redux-persist'
-// import storage from 'redux-persist/lib/storage'
 import specialOfferProductsReducer from './specialOfferProducts-slice'
 import newestProductReducer from './newestProduct-slice'
 import SortedProductsListReducer from './sortedProductList-slice'
@@ -9,7 +8,6 @@ import cartSliceReducer from './cart-slice'
 import userInfoReducer from './user-slice'
 import sideNavBarReducer from './sideNavBar-slice'
 import megaMenuReducer from './megaMenu-slice'
-import activeMenuItemReducer from './activeMenuItem-slice'
 import settingBoxReducer from './settingBox-slice'
 import scholarshipCartReducer from './scholarshipCart-slice'
 import favoriteReducer from './favorite-slice'
@@ -30,7 +28,6 @@ const rootReducer = combineReducers({
   userInfo: userInfoReducer,
   sideNavBar: sideNavBarReducer,
   megaMenu: megaMenuReducer,
-  activeMenuItem: activeMenuItemReducer,
   settingBox: settingBoxReducer,
   favorite: favoriteReducer,
   transactionId: responseDataReducer,

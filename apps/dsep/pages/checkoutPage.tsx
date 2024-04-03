@@ -1,29 +1,28 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Box, Flex, Text, Stack, Checkbox, Image } from '@chakra-ui/react'
-import DetailsCard from '../components/detailsCard/DetailsCard'
+import { Box, Flex, Text, Checkbox, Image } from '@chakra-ui/react'
+import { DetailCard } from '@beckn-ui/becknified-components'
 import ItemDetails from '../components/detailsCard/ItemDetails'
-import ButtonComp from '../components/button/Button'
 import { useLanguage } from '../hooks/useLanguage'
 import ShippingOrBillingDetails from '../components/detailsCard/ShippingOrBillingDetails'
-import PaymentDetails from '../components/detailsCard/PaymentDetails'
 import AddShippingButton from '../components/detailsCard/AddShippingButton'
 import addShippingBtn from '../public/images/offer.svg'
-import { CartItemForRequest, DataPerBpp, ICartRootState, TransactionIdRootState } from '../lib/types/cart'
-import { getCartItemsPerBpp } from '../utilities/cart-utils'
+import { ICartRootState } from '../lib/types/cart'
 import useRequest from '../hooks/useRequest'
 import { responseDataActions } from '../store/responseData-slice'
-import {
-  areShippingAndBillingDetailsSame,
-  getPayloadForInitRequest,
-  getSubTotalAndDeliveryCharges,
-  getTotalCartItems
-} from '../utilities/checkout-utils'
-import Loader from '../components/loader/Loader'
-import AddBillingButton from '../components/detailsCard/AddBillingButton'
+import { areShippingAndBillingDetailsSame, getPaymentBreakDown, handleFormSubmit } from '../utilities/checkout-utils'
+
 import { useRouter } from 'next/router'
 import Cookies from 'js-cookie'
 import axios from 'axios'
+import ShippingSection from '@beckn-ui/becknified-components/src/components/checkout/shipping-section'
+import addBillingButton from '../public/images/addShippingBtn.svg'
+import { SelectResponseModel } from '../lib/types/select.types'
+import { Typography } from '@beckn-ui/molecules'
+import { InitResponseModel } from '../lib/types/init.types'
+import LoaderWithMessage from '@beckn-ui/molecules/src/components/LoaderWithMessage/loader-with-message'
+import PaymentDetails from '@beckn-ui/becknified-components/src/components/checkout/payment-details'
+import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 
 export type ShippingFormData = {
   name: string
@@ -41,7 +40,11 @@ const CheckoutPage = () => {
     address: '151-E, Janpath Road, New Delhi',
     pinCode: '201016'
   })
-
+  // TODO :- check for refactoring and some issue fix in this component
+  const [isLoadingForInit, setIsLoadingForInit] = useState(false)
+  const [isError, setIsError] = useState(false)
+  const [initData, setInitData] = useState<InitResponseModel | null>(null)
+  const [selectResponse, setSelectResponse] = useState<SelectResponseModel | null>(null)
   const [isBillingAddressSameAsShippingAddress, setIsBillingAddressSameAsShippingAddress] = useState(true)
 
   const [billingFormData, setBillingFormData] = useState<ShippingFormData>({
@@ -59,7 +62,6 @@ const CheckoutPage = () => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
   const cartItems = useSelector((state: ICartRootState) => state.cart.items)
-  const transactionId = useSelector((state: { transactionId: TransactionIdRootState }) => state.transactionId)
   const totalAmount = useSelector((state: ICartRootState) => state.cart.totalAmount)
 
   const scholarshipId = useSelector((state: any) => state.scholarshipCart.scholarshipId)
@@ -72,6 +74,13 @@ const CheckoutPage = () => {
       'Content-Type': 'application/json' // You can set the content type as needed
     }
   }
+
+  useEffect(() => {
+    if (localStorage && localStorage.getItem('quoteResponse')) {
+      const parsedSelectResponse: SelectResponseModel = JSON.parse(localStorage.getItem('quoteResponse') as string)
+      setSelectResponse(parsedSelectResponse)
+    }
+  }, [])
 
   useEffect(() => {
     const email = Cookies.get('userEmail') as string
@@ -91,7 +100,9 @@ const CheckoutPage = () => {
           name
         })
       })
-      .catch(e => console.error(e))
+      .catch(e => {
+        console.error(e)
+      })
   }, [])
 
   useEffect(() => {
@@ -151,39 +162,23 @@ const CheckoutPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [billingFormData])
 
-  const formSubmitHandler = () => {
-    if (formData) {
-      // TODO :_ To check this again
-
-      // if (isBillingAddressSameAsShippingAddress) {
-      //   const copiedFormData = structuredClone(formData);
-      //   setBillingFormData(copiedFormData);
-      // }
-
-      const cartItemsPerBppPerProvider: DataPerBpp = getCartItemsPerBpp(cartItems as CartItemForRequest[])
-
-      const payLoadForInitRequest = getPayloadForInitRequest(
-        cartItemsPerBppPerProvider,
-        transactionId,
-        formData,
-        billingFormData
-      )
-      initRequest.fetchData(`${apiUrl}/client/v2/initialize_order`, 'POST', payLoadForInitRequest)
-    }
+  if (!selectResponse) {
+    return <></>
   }
 
-  if (initRequest.loading) {
-    return <Loader loadingText={t['initializingOrderLoader']} />
-  }
-
-  const isInitResultPresent = () => {
-    if (typeof window !== 'undefined') {
-      if (localStorage.getItem('initResult')) {
-        return true
-      }
-    }
-
-    return !!initRequest.data
+  if (isLoadingForInit) {
+    return (
+      <Box
+        display={'grid'}
+        height={'calc(100vh - 300px)'}
+        alignContent={'center'}
+      >
+        <LoaderWithMessage
+          loadingText={t.categoryLoadPrimary}
+          loadingSubText={t.initializingOrderLoader}
+        />
+      </Box>
+    )
   }
 
   return (
@@ -196,70 +191,59 @@ const CheckoutPage = () => {
       {/* start Item Details */}
       <Box>
         <Box pb={'10px'}>
-          <Text fontSize={'17px'}>{t.overview}</Text>
+          <Typography
+            text={t.overview}
+            fontSize={'17px'}
+          />
         </Box>
-        <DetailsCard>
+        <DetailCard>
           {cartItems.map(item => {
             return (
               <>
                 <ItemDetails
-                  title={item.descriptor.name}
-                  provider={(item as any).bppName}
+                  key={item.item.id}
+                  title={item.item.name}
+                  provider={item.providerName}
                   quantity={item.quantity}
                   price={totalAmount}
                 />
               </>
             )
           })}
-        </DetailsCard>
+        </DetailCard>
       </Box>
-      {/* end item details */}
-      {/* start shipping detals */}
-      {!isInitResultPresent() ? (
-        <Box>
-          <Flex
-            pb={'10px'}
-            mt={'20px'}
-            justifyContent={'space-between'}
-          >
-            <Text fontSize={'17px'}>{t.billing}</Text>
-          </Flex>
-          <DetailsCard>
-            <AddBillingButton
-              imgFlag={!initRequest.data}
-              billingFormData={formData}
-              setBillingFormData={setFormData}
-              addBillingdetailsBtnText={t.addBillingdetailsBtnText}
-              billingFormSubmitHandler={formSubmitHandler}
-            />
-          </DetailsCard>
-        </Box>
-      ) : (
-        <Box>
-          <Flex
-            pb={'10px'}
-            mt={'20px'}
-            justifyContent={'space-between'}
-          >
-            <Text fontSize={'17px'}>{t.billing}</Text>
-            <AddBillingButton
-              imgFlag={!isInitResultPresent()}
-              billingFormData={formData}
-              setBillingFormData={setFormData}
-              addBillingdetailsBtnText={t.changeText}
-              billingFormSubmitHandler={formSubmitHandler}
-            />
-          </Flex>
-
-          <ShippingOrBillingDetails
-            accordionHeader={t.billing}
-            name={formData.name}
-            location={formData.address}
-            number={formData.mobileNumber}
-          />
-        </Box>
-      )}
-      {/* end shipping detals */}
+      <ShippingSection
+        sectionSubtitle={t.addBillingdetailsBtnText}
+        addButtonImage={addBillingButton}
+        sectionTitle={t.billing}
+        formTitle={t.addBillingdetailsBtnText}
+        isBilling={false}
+        showDetails={!!initData}
+        shippingDetails={{
+          name: formData.name,
+          location: formData.address,
+          number: formData.mobileNumber,
+          title: t.billing
+        }}
+        shippingForm={{
+          onSubmit: formData => {
+            setFormData({ ...(formData as ShippingFormData) })
+            return handleFormSubmit(
+              formData as ShippingFormData,
+              selectResponse,
+              setInitData,
+              setIsLoadingForInit,
+              setIsError,
+              apiUrl as string
+            )
+          },
+          submitButton: { text: 'Save Billing Details' },
+          values: formData,
+          onChange: data => () => {
+            console.log('data in the change', data)
+          }
+        }}
+      />
       {scholarshipTitle.length !== 0 && (
         <Box>
           <Flex
@@ -270,7 +254,7 @@ const CheckoutPage = () => {
             <Text fontSize={'17px'}>{t.scholarship}</Text>
           </Flex>
 
-          <DetailsCard>
+          <DetailCard>
             <Flex alignItems={'center'}>
               <Image
                 alt="shippingBtnImage"
@@ -287,11 +271,11 @@ const CheckoutPage = () => {
               </Text>
             </Flex>
             <Text ml={'35px'}>{t.scholarshipApplied}</Text>
-          </DetailsCard>
+          </DetailCard>
         </Box>
       )}
       {/* start payment details */}
-      {initRequest.data && (
+      {!!initData && (
         <Box>
           <Flex
             pb={'10px'}
@@ -300,44 +284,28 @@ const CheckoutPage = () => {
           >
             <Text fontSize={'17px'}>{t.paymentText}</Text>
           </Flex>
-          <DetailsCard>
-            <PaymentDetails
-              subtotalText={t.subtotalText}
-              subtotalValue={`${t.currencySymbol} ${getSubTotalAndDeliveryCharges(initRequest.data).subTotal}`}
-              deliveryChargesText={t.scholaarshipApplied}
-              deliveryChargesValue={`- ${t.currencySymbol} ${getSubTotalAndDeliveryCharges(initRequest.data).subTotal}`}
-              totalText={t.totalText}
-              totalValue={'0.00'}
-            />
-          </DetailsCard>
+          <DetailCard>
+            {initData.data.map((data, idx) => {
+              return (
+                <PaymentDetails
+                  key={idx}
+                  paymentBreakDown={getPaymentBreakDown(data).breakUpMap}
+                  totalText={t.total}
+                  totalValueWithSymbol={getPaymentBreakDown(data).totalPricewithCurrent}
+                />
+              )
+            })}
+          </DetailCard>
         </Box>
       )}
-      {/* end payment details */}
-
-      {!isInitResultPresent() ? (
-        <Box
-          position={'absolute'}
-          left={'5%'}
-          width={'90%'}
-          bottom={'0'}
-        >
-          <ButtonComp
-            buttonText={t.continue}
-            background={'rgba(var(--color-primary))'}
-            color={'rgba(var(--text-color))'}
-            handleOnClick={() => {}}
-            isDisabled={true}
-          />
-        </Box>
-      ) : (
-        <ButtonComp
-          buttonText={t.continue}
-          background={'rgba(var(--color-primary))'}
-          color={'rgba(var(--text-color))'}
-          handleOnClick={() => router.push('/paymentMode')}
-          isDisabled={false}
+      <Box m={'20px 0px'}>
+        <BecknButton
+          disabled={!!!initData}
+          children="Confirm"
+          className="checkout_btn "
+          handleClick={() => router.push('/paymentMode')}
         />
-      )}
+      </Box>
     </Box>
   )
 }

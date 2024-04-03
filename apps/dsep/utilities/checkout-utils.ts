@@ -1,97 +1,12 @@
+import axios from 'axios'
 import { CartRetailItem, DataPerBpp } from '../lib/types/cart'
+import { InitResponseItem, InitResponseModel } from '../lib/types/init.types'
 import { ResponseModel } from '../lib/types/responseModel'
+import { SelectResponseModel } from '../lib/types/select.types'
 import { ShippingFormData } from '../pages/checkoutPage'
 import { areObjectPropertiesEqual } from './common-utils'
 
-export const getPayloadForInitRequest = (
-  cartItemsPerBppPerProvider: DataPerBpp,
-  transactionId: { transactionId: string },
-  customerAddress: ShippingFormData,
-  billingFormData: ShippingFormData
-) => {
-  const payload: any = {
-    initRequestDto: []
-  }
-
-  Object.keys(cartItemsPerBppPerProvider).forEach(bppId => {
-    const cartItem: any = {
-      context: {
-        transaction_id: transactionId.transactionId,
-        bpp_id: bppId,
-        bpp_uri: cartItemsPerBppPerProvider[bppId][0].bpp_uri,
-        domain: 'retail'
-      },
-      message: {
-        order: {
-          items: [],
-          provider: {
-            id: cartItemsPerBppPerProvider[bppId][0].providerId,
-            locations: [
-              {
-                id: cartItemsPerBppPerProvider[bppId][0].location_id
-              }
-            ]
-          },
-          addOns: [],
-          offers: [],
-          billing: {
-            name: customerAddress.name,
-            phone: customerAddress.mobileNumber,
-            address: {
-              door: '',
-              building: customerAddress.address,
-              city: customerAddress.address,
-              state: customerAddress.address,
-              country: 'IND',
-              area_code: customerAddress.pinCode
-            },
-            email: 'testemail1@mailinator.com'
-          },
-          fulfillment: {
-            type: 'HOME-DELIVERY',
-            end: {
-              location: {
-                gps: cartItemsPerBppPerProvider[bppId][0].locations[0].gps,
-                address: {
-                  door: '',
-                  building: customerAddress.address,
-                  street: customerAddress.address,
-                  city: customerAddress.address,
-                  state: customerAddress.address,
-                  country: 'IND',
-                  area_code: '560076'
-                }
-              },
-              contact: {
-                phone: '9191223433',
-                email: 'testemail1@mailinator.com'
-              }
-            },
-            customer: {
-              person: {
-                name: customerAddress.name
-              }
-            },
-            id: cartItemsPerBppPerProvider[bppId][0].providerId
-          }
-        }
-      }
-    }
-    cartItemsPerBppPerProvider[bppId].forEach((item: any) => {
-      if (item.bpp_id === bppId) {
-        const itemObject = {
-          quantity: {
-            count: item.quantity
-          },
-          id: item.id
-        }
-        cartItem.message.order.items.push(itemObject)
-      }
-    })
-    payload.initRequestDto.push(cartItem)
-  })
-  return payload
-}
+const APIKEY = process.env.NEXT_PUBLIC_GOOGLE_API_KEY as string
 
 export const getSubTotalAndDeliveryCharges = (initData: (ResponseModel & ResponseModel[]) | null) => {
   let subTotal = 0
@@ -133,4 +48,170 @@ export const areShippingAndBillingDetailsSame = (
     return areObjectPropertiesEqual(formData, billingFormData)
   }
   return !isBillingAddressComplete
+}
+
+const extractAddressComponents = (result: any) => {
+  let country = null,
+    state = null,
+    city = null
+
+  for (const component of result.address_components) {
+    if (component.types.includes('country')) {
+      country = component.long_name
+    } else if (component.types.includes('administrative_area_level_1')) {
+      state = component.long_name
+    } else if (component.types.includes('locality')) {
+      city = component.long_name
+    }
+  }
+  return { country, state, city }
+}
+async function addressComponentsFromPincode(pincode: string) {
+  try {
+    const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${pincode}&key=${APIKEY}`
+    const response = await axios.get(url)
+
+    const { country, state, city } = extractAddressComponents(response.data.results[0])
+
+    return { country, state, city }
+  } catch (error) {
+    console.error('Failed to geocode the pindcode', error)
+  }
+}
+
+export const getPayloadForInitRequest = async (selectResponse: SelectResponseModel, formData: ShippingFormData) => {
+  const { address, email, mobileNumber, name, pinCode } = formData
+  const cityData = await addressComponentsFromPincode(pinCode)
+  console.log('cityyyData', cityData)
+  let initPayload: any = {
+    data: []
+  }
+
+  selectResponse.data.forEach(res => {
+    const { transaction_id, bpp_id, bpp_uri, domain } = res.context
+    const { order } = res.message
+    const { items, provider, type, quote } = order
+    const { id: providerId } = provider
+
+    const context = {
+      transaction_id,
+      bpp_id,
+      bpp_uri,
+      domain
+    }
+
+    const message = {
+      orders: [
+        {
+          provider: {
+            id: providerId
+          },
+          items: items,
+          fulfillments: [
+            //   TODO :- we have to map this with real data that ( fulfillment shoould come in select which is not coming)
+            {
+              id: '',
+              customer: {
+                contact: {
+                  email,
+                  mobileNumber
+                },
+                person: {
+                  name
+                }
+              },
+              stops: [
+                {
+                  type: 'end',
+                  location: {
+                    gps: '1.3806217468119772, 103.74636438437074',
+                    address: address,
+                    city: {
+                      name: cityData?.city
+                    },
+                    country: {
+                      code: ''
+                    },
+                    area_code: pinCode,
+                    state: {
+                      name: cityData?.state
+                    }
+                  },
+                  contact: {
+                    phone: mobileNumber
+                  }
+                }
+              ]
+            }
+          ],
+          billing: {
+            name,
+            address,
+            state: {
+              name: cityData?.state
+            },
+            city: {
+              name: cityData?.city
+            },
+            email,
+            phone: mobileNumber
+          }
+        }
+      ]
+    }
+
+    initPayload.data.push({
+      context: context,
+      message: message
+    })
+  })
+  console.log('initPayload', initPayload)
+  return initPayload
+}
+
+export const handleFormSubmit = async (
+  formData: ShippingFormData,
+  selectResponse: SelectResponseModel,
+  setInitData: React.Dispatch<React.SetStateAction<InitResponseModel | null>>,
+  setIsLoadingForInit: React.Dispatch<React.SetStateAction<boolean>>,
+  setIsError: React.Dispatch<React.SetStateAction<boolean>>,
+  apiUrl: string
+) => {
+  setIsLoadingForInit(true)
+  try {
+    const initPayload = await getPayloadForInitRequest(selectResponse, formData)
+    console.log(initPayload)
+    axios
+      .post(`${apiUrl}/init`, initPayload)
+      .then(res => {
+        console.log('resss', res)
+        setInitData(res.data)
+        setIsLoadingForInit(false)
+      })
+      .catch(e => {
+        setIsError(true)
+        setIsLoadingForInit(false)
+        console.error(e)
+      })
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+export const getPaymentBreakDown = (initData: InitResponseItem) => {
+  const { message } = initData
+  const { order } = message
+  const { quote } = order
+  const { breakup, price } = quote
+  const totalPricewithCurrent = `${price.currency} ${price.value}`
+
+  const breakUpMap: Record<string, string> = {}
+  breakup.forEach(item => {
+    const {
+      title,
+      price: { currency, value }
+    } = item
+    breakUpMap[title] = `${currency} ${value} `
+  })
+  return { breakUpMap, totalPricewithCurrent }
 }
