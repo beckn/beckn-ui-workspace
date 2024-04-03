@@ -45,18 +45,8 @@ const CheckoutPage = () => {
   const [isError, setIsError] = useState(false)
   const [initData, setInitData] = useState<InitResponseModel | null>(null)
   const [selectResponse, setSelectResponse] = useState<SelectResponseModel | null>(null)
-  const [isBillingAddressSameAsShippingAddress, setIsBillingAddressSameAsShippingAddress] = useState(true)
-
-  const [billingFormData, setBillingFormData] = useState<ShippingFormData>({
-    name: '',
-    mobileNumber: '',
-    email: '',
-    address: '',
-    pinCode: ''
-  })
 
   const router = useRouter()
-  const initRequest = useRequest()
   const dispatch = useDispatch()
   const { t, locale } = useLanguage()
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
@@ -76,6 +66,12 @@ const CheckoutPage = () => {
   }
 
   useEffect(() => {
+    if (localStorage && localStorage.getItem('initResult')) {
+      setInitData(JSON.parse(localStorage.getItem('initResult') as string))
+    }
+  }, [])
+
+  useEffect(() => {
     if (localStorage && localStorage.getItem('quoteResponse')) {
       const parsedSelectResponse: SelectResponseModel = JSON.parse(localStorage.getItem('quoteResponse') as string)
       setSelectResponse(parsedSelectResponse)
@@ -91,13 +87,13 @@ const CheckoutPage = () => {
         const documents = profileResponse.data.attributes.documents.data
 
         const profileData = profileResponse.data.attributes
-        const { name, phone, address, zip_code } = profileData
-        setFormData({
-          address: address ? address : '',
-          email,
-          mobileNumber: phone,
-          pinCode: zip_code ? zip_code : '',
-          name
+        const { phone } = profileData
+        setFormData(prevData => {
+          return {
+            ...prevData,
+            email,
+            mobileNumber: phone
+          }
         })
       })
       .catch(e => {
@@ -108,14 +104,14 @@ const CheckoutPage = () => {
   useEffect(() => {
     if (localStorage) {
       if (localStorage.getItem('userPhone')) {
-        const copiedFormData = structuredClone(formData)
-        const copiedBillingFormData = structuredClone(billingFormData)
+        const userPhone = localStorage.getItem('userPhone') as string
+        setFormData(prevData => {
+          return {
+            ...prevData,
 
-        copiedFormData.mobileNumber = localStorage.getItem('userPhone') as string
-        copiedBillingFormData.mobileNumber = localStorage.getItem('userPhone') as string
-
-        setFormData(copiedFormData)
-        setBillingFormData(copiedBillingFormData)
+            mobileNumber: userPhone
+          }
+        })
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -126,22 +122,8 @@ const CheckoutPage = () => {
       if (localStorage.getItem('shippingAdress')) {
         setFormData(JSON.parse(localStorage.getItem('shippingAdress') as string))
       }
-      if (localStorage.getItem('billingAddress')) {
-        setBillingFormData(JSON.parse(localStorage.getItem('billingAddress') as string))
-      }
     }
   }, [])
-
-  useEffect(() => {
-    if (initRequest.data) {
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('initResult', JSON.stringify(initRequest.data))
-      }
-
-      dispatch(responseDataActions.addInitResponse(initRequest.data))
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initRequest.data])
 
   useEffect(() => {
     const shippingAddressComplete = Object.values(formData).every(value => value.length > 0)
@@ -149,18 +131,6 @@ const CheckoutPage = () => {
       localStorage.setItem('shippingAdress', JSON.stringify(formData))
     }
   }, [formData])
-
-  useEffect(() => {
-    const isBillingAddressComplete = Object.values(billingFormData).every(value => value.length > 0)
-
-    if (isBillingAddressComplete && typeof window !== 'undefined') {
-      localStorage.setItem('billingAddress', JSON.stringify(billingFormData))
-    }
-    setIsBillingAddressSameAsShippingAddress(
-      areShippingAndBillingDetailsSame(isBillingAddressComplete, formData, billingFormData)
-    )
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [billingFormData])
 
   if (!selectResponse) {
     return <></>
@@ -179,6 +149,11 @@ const CheckoutPage = () => {
         />
       </Box>
     )
+  }
+
+  if (isError) {
+    // TODO :- render toast on the error
+    return <></>
   }
 
   return (
@@ -301,9 +276,9 @@ const CheckoutPage = () => {
       <Box m={'20px 0px'}>
         <BecknButton
           disabled={!!!initData}
-          children="Confirm"
+          children={t.confirm}
           className="checkout_btn "
-          handleClick={() => router.push('/paymentMode')}
+          handleClick={() => router.push('/orderConfirmation')}
         />
       </Box>
     </Box>

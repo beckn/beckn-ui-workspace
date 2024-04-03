@@ -185,6 +185,7 @@ export const handleFormSubmit = async (
       .post(`${apiUrl}/init`, initPayload)
       .then(res => {
         console.log('resss', res)
+        localStorage.setItem('initResult', JSON.stringify(res.data))
         setInitData(res.data)
         setIsLoadingForInit(false)
       })
