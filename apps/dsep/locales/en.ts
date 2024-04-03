@@ -329,8 +329,6 @@ const en: { [key: string]: string } = {
   errorAddress: 'Address is required',
   errorZipcode: 'Zip Code is required',
   errorZipcode2: 'Invalid Zip Code',
-  confirmMessage1: 'Get ready to embark your learning ',
-  confirmMessage2: 'journey!',
   sendOtpButton: 'Send OTP',
   verifyMobile: 'Verify your Mobile Number',
   otpMessage1: 'Have sent an OTP to your mobile',
@@ -432,6 +430,8 @@ const en: { [key: string]: string } = {
   searchCourses: 'Search Courses',
   fetchingCourses: 'Fetching Courses',
   fetchingJobs: 'Fetching Jobs',
-  errorPassword: 'Invalid password'
+  errorPassword: 'Invalid password',
+  confirm: 'Confirm',
+  confirmMessageSubtext: 'Get ready to embark your learning journey!'
 }
 export default en

@@ -4,6 +4,7 @@ import { Typography } from '@beckn-ui/molecules'
 import { PaymentDetailsProps } from './checkout.types'
 
 const PaymentDetails: React.FC<PaymentDetailsProps> = props => {
+  console.log('props', props)
   return (
     <Box>
       {Object.entries(props.paymentBreakDown).map(([property, value]) => (
