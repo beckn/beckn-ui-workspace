@@ -59,6 +59,10 @@ body {
   color: rgb(var(--color-text-base));
 }
 
+main {
+  background: #fbfcff;
+}
+
 ul {
   list-style: unset !important;
 }

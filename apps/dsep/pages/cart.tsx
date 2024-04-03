@@ -5,11 +5,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import CartList from '../components/cart/CartList'
 import OrderSummaryBox from '../components/cart/OrderSummaryBox'
 import { useLanguage } from '../hooks/useLanguage'
-import Loader from '../components/loader/Loader'
 import useRequest from '../hooks/useRequest'
 import { ICartRootState } from '../lib/types/cart'
 import { responseDataActions } from '../store/responseData-slice'
-import { getCartItemsPerBpp, getItemsForCart, getPayloadForSelectRequest } from '../utilities/cart-utils'
+import { getItemsForCart, getPayloadForSelectRequest } from '../utilities/cart-utils'
 import EmptyCart from '../components/cart/EmptyCart'
 import { Box } from '@chakra-ui/react'
 import { Item, SelectResponseModel } from '../lib/types/select.types'
@@ -60,8 +59,6 @@ const Cart = () => {
     }
   }, [])
 
-  console.log('itesmfor caa', itemsForCart)
-
   const onOrderClick = () => {
     router.push('/checkoutPage')
   }
@@ -81,13 +78,12 @@ const Cart = () => {
       </Box>
     )
   }
+  if (!cartItems.length) {
+    return <EmptyCart />
+  }
 
   if (!itemsForCart) {
     return <></>
-  }
-
-  if (!itemsForCart.length) {
-    return <EmptyCart />
   }
 
   return (
