@@ -9,6 +9,8 @@ const en: { [key: string]: string } = {
   cancelReason: 'Please select a reason for cancellation',
   cancelBookingText: 'Cancel Booking Reason',
   cards: 'Credit & Debit cards',
-  addCard: 'Add '
+  addCard: 'Add ',
+  contactSupprtText:
+    'You can reach out to one of our customer support executives for any help, queries or feedback to ABC Mart'
 }
 export default en
