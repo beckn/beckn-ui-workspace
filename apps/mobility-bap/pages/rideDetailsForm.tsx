@@ -29,6 +29,7 @@ const rideDetailsForm = () => {
         pickUp={pickup}
         dropOff={dropOff}
         otp={''}
+        // fare=""
       />
     </>
   )

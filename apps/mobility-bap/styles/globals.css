@@ -269,3 +269,6 @@ select:-webkit-autofill:focus {
 
   margin-left: 16px;
 }
+.hideScroll::-webkit-scrollbar {
+  display: none;
+}
