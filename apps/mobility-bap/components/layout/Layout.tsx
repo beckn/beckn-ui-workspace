@@ -5,7 +5,6 @@ import { ThemeProvider } from 'next-themes'
 import { useRouter } from 'next/router'
 import Header from '../header'
 import store from '../../store/index'
-import Footer from '../footer'
 import { ToastContainer } from 'react-toastify'
 import { useLanguage } from '../../hooks/useLanguage'
 import NextNProgress from 'nextjs-progressbar'
@@ -17,8 +16,9 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const { locale } = useLanguage()
   const router = useRouter()
   const isHomepage = router.pathname === '/homePage'
+  const isPaymentMode = router.pathname === '/paymentMode'
   const isSearch = router.pathname === '/search'
-  const paddingStyles = ' xl:px-16'
+  const paddingStyles = 'px-5 xl:px-16'
   const marginStyles = 'mt-[64px]'
   const geoLocationSearchPageVisible = useSelector((state: IGeoLocationSearchPageRootState) => {
     return state.geoLocationSearchPageUI.geoLocationSearchPageVisible
@@ -28,7 +28,7 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
     <Provider store={store}>
       <ThemeProvider enableSystem={true}>
         <Head>
-          <title>Open Street Commerce</title>
+          <title>Mobility Bap</title>
         </Head>
         <div
           className={cs(
@@ -48,7 +48,7 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
               className={cs(
                 'flex-grow',
                 {
-                  [paddingStyles]: !isHomepage
+                  [paddingStyles]: !isHomepage && isPaymentMode
                 },
                 {
                   [marginStyles]: !isHomepage && !isSearch

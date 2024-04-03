@@ -15,25 +15,29 @@ const CardWithCheckBox: React.FC<CardWithCheckBoxPropsModel> = props => {
 
   return (
     <Card className="border_radius_all">
-      <CardBody padding={'10px 10px'}>
+      <CardBody
+        padding={'20px 10px'}
+        h="54px"
+      >
         <Flex
           className={styles.checkbox}
           fontSize={'15px'}
           alignItems={'center'}
-          columnGap={'12px'}
+          columnGap={'14px'}
         >
           <input
             type="checkbox"
             id="checkbox"
             onChange={handleChange}
           />
-          <Image
-            src={'/images/cash.svg'}
-            w={'62px'}
-            h={'40px'}
-            ml={'15px'}
-          />
           <label htmlFor="checkbox">
+            <Image
+              src={'/images/cash.svg'}
+              w={'62px'}
+              h={'40px'}
+              ml={'30px'}
+              position="fixed"
+            />
             <Text
               position={'absolute'}
               width={'50vw'}
@@ -41,7 +45,7 @@ const CardWithCheckBox: React.FC<CardWithCheckBoxPropsModel> = props => {
               fontSize={'15px'}
               fontWeight={400}
             >
-              {props.paymentMethod}
+              {'Cash'}
             </Text>
           </label>
         </Flex>
