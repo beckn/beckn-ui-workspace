@@ -9,18 +9,23 @@ const ProductDetailPage: React.FC<ProductDetailsPagePropsModel> = props => {
     schema: { buttons, productDescription, productSummary }
   } = props
   return (
-    <>
+    <Box
+      maxWidth={{ md: '70%' }}
+      margin="0 auto"
+    >
       <ProductSummary {...productSummary} />
-      <ProductDescription {...productDescription} />
+      {productDescription && <ProductDescription {...productDescription} />}
       <Box mt={'20px'}>
-        {buttons.map((button, idx) => (
-          <Button
-            key={idx}
-            {...button}
-          />
-        ))}
+        {buttons &&
+          buttons.length > 0 &&
+          buttons.map((button, idx) => (
+            <Button
+              key={idx}
+              {...button}
+            />
+          ))}
       </Box>
-    </>
+    </Box>
   )
 }
 

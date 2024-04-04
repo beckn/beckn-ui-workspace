@@ -8,6 +8,7 @@ import { Cart as BecknCart } from '@beckn-ui/becknified-components'
 import { useSelectMutation } from '@services/select'
 import { getSelectPayload } from './cart.utils'
 import { cartActions } from '@store/cart-slice'
+import { DOMAIN } from '@lib/config'
 
 import { ICartRootState } from '@lib/types'
 import { DiscoveryRootState } from '@store/discovery-slice'
@@ -20,14 +21,15 @@ const Cart = () => {
   const { t } = useLanguage()
 
   const { items, totalQuantity } = useSelector((state: ICartRootState) => state.cart)
+  const totalAmount = useSelector((state: ICartRootState) => state.cart.totalAmount)
   const { transactionId, productList } = useSelector((state: DiscoveryRootState) => state.discovery)
 
   useEffect(() => {
-    fetchQuotes(getSelectPayload(items, transactionId))
+    fetchQuotes(getSelectPayload(items, transactionId, DOMAIN))
   }, [totalQuantity])
 
   const onOrderClick = () => {
-    router.push('/checkoutPage')
+    router.push('/checkout')
   }
 
   return (
@@ -41,7 +43,7 @@ const Cart = () => {
             name: singleItem.name,
             image: singleItem.images[0].url,
             price: Number(singleItem.price.value),
-            symbol: '€',
+            symbol: singleItem.price.currency,
             handleIncrement: id => {
               const selectedItem = productList.find(singleItem => singleItem.id === id)
               if (selectedItem) {
@@ -52,13 +54,17 @@ const Cart = () => {
               dispatch(cartActions.removeItemFromCart(id))
             }
           })),
-          loader: { text: 'Loading....' },
+          loader: { text: 'Loading cart' },
           orderSummary: {
             totalAmount: {
-              price: 25
+              price: totalAmount
             },
             totalQuantity: {
-              text: '3',
+<<<<<<< Updated upstream
+              text: Number(totalQuantity),
+=======
+              text:totalQuantity.toString(),
+>>>>>>> Stashed changes
               variant: 'subTitleSemibold'
             },
             pageCTA: {

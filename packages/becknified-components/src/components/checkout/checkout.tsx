@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { Box } from '@chakra-ui/react'
-import { FormField, Typography, Loader, Button } from '@beckn-ui/molecules'
+import { Box, useBreakpoint } from '@chakra-ui/react'
+import { FormField, Typography, Loader, Button, LoaderWithMessage } from '@beckn-ui/molecules'
 import DetailsCard from './details-card'
 import ItemDetails from './checkout-item-details'
 import ShippingSection from './shipping-section'
@@ -12,13 +12,27 @@ const Checkout: React.FC<CheckoutProps<FormField[]>> = ({
   isLoading = false,
   hasInitResult = false
 }) => {
-  if (isLoading) return <Loader {...loader} />
+  if (isLoading)
+    return (
+      <Box
+        display="flex"
+        height="100vh"
+        justifyContent="center"
+        transform="translateY(-20%)"
+      >
+        <Loader {...loader} />
+      </Box>
+    )
 
   const { disabled, ...restButtonProps } = pageCTA
 
   const [shippingData, setShippingData] = useState<ShippingFormInitialValuesType>(
     shipping.shippingForm.values || ({} as ShippingFormInitialValuesType)
   )
+
+  const breakpoint = useBreakpoint()
+  const mobileBreakpoints = ['base', 'sm', 'md']
+  const isLargeScreen = !mobileBreakpoints.includes(breakpoint)
 
   return (
     <>
@@ -39,6 +53,7 @@ const Checkout: React.FC<CheckoutProps<FormField[]>> = ({
                   description={item.description}
                   quantity={item.quantity}
                   priceWithSymbol={item.priceWithSymbol}
+                  image={item.image}
                 />
               </>
             )
@@ -64,10 +79,15 @@ const Checkout: React.FC<CheckoutProps<FormField[]>> = ({
             </DetailsCard>
           </>
         )}
-        <Button
-          {...restButtonProps}
-          disabled={!hasInitResult}
-        />
+        <Box
+          width={isLargeScreen ? '40%' : '100%'}
+          margin="auto"
+        >
+          <Button
+            {...restButtonProps}
+            disabled={!hasInitResult}
+          />
+        </Box>
       </Box>
     </>
   )

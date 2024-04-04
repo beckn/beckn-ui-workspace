@@ -1,4 +1,4 @@
-import { FormData, FormField, ButtonProps, LoaderProps } from '@beckn-ui/molecules'
+import { FormData, FormField, ButtonProps, LoaderProps, LoaderWithMessagePropsModel } from '@beckn-ui/molecules'
 
 export type ShippingFormInitialValuesType = {
   name: string
@@ -25,6 +25,8 @@ export interface ShippingSectionProps<T extends FormField[]> {
   showDetails?: boolean
   isBilling?: boolean
   addButtonImage?: string
+  isChecked?: boolean
+  onCheckChange?: () => void
 }
 
 export interface ItemDetailProps {
@@ -32,6 +34,7 @@ export interface ItemDetailProps {
   description: string
   quantity: number
   priceWithSymbol: string
+  image?: string
 }
 
 export interface ShippingDetailsProps {

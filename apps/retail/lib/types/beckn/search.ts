@@ -37,6 +37,7 @@ interface Image {
 }
 
 export interface Item {
+  rating: number
   long_desc: string
   short_desc: string
   id: string
@@ -46,6 +47,7 @@ export interface Item {
   fulfillments: Fulfillment[]
   images: Image[]
   tags: Tag[]
+  rating?: string
 }
 
 interface LocationProvider {
@@ -97,7 +99,6 @@ export interface ParsedItemModel {
   providerId: string
   providerName: string
   item: Item
-  rating?: string
   providerCoordinates: Coordinate
 }
 

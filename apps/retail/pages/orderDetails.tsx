@@ -1,8 +1,25 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import Router, { useRouter } from 'next/router'
-import { Box, Card, CardBody, Divider, Flex, Image, Radio, RadioGroup, Stack, Text, Textarea } from '@chakra-ui/react'
-import { BottomModal, Typography } from '@beckn-ui/molecules'
+import {
+  Box,
+  Card,
+  CardBody,
+  Divider,
+  Flex,
+  Image,
+  Radio,
+  RadioGroup,
+  Stack,
+  StackDivider,
+  Text,
+  Textarea,
+  useDisclosure
+} from '@chakra-ui/react'
+import { Accordion, BottomModal, Typography } from '@beckn-ui/molecules'
+import { useDispatch, useSelector } from 'react-redux'
+import ViewMoreOrderModal from '@components/orderDetailComponents/ViewMoreOrder'
+import { discoveryActions, DiscoveryRootState } from '@store/discovery-slice'
 import { DetailCard, OrderStatusProgress, OrderStatusProgressProps } from '@beckn-ui/becknified-components'
 import { StatusResponseModel, SupportModel } from '../types/status.types'
 import { useLanguage } from '@hooks/useLanguage'
@@ -12,6 +29,13 @@ import BottomModalScan from '@components/BottomModal/BottomModalScan'
 import { ConfirmResponseModel } from '../types/confirm.types'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
 import { UIState, DataState, ProcessState } from '../types/order-details.types'
+import CallphoneIcon from '../public/images/CallphoneIcon.svg'
+import locationIcon from '../public/images/locationIcon.svg'
+import nameIcon from '../public/images/nameIcon.svg'
+import { OrdersRootState } from '@store/order-slice'
+import { DOMAIN } from '@lib/config'
+import PaymentDetails from '@beckn-ui/becknified-components/src/components/checkout/payment-details'
+import { getPaymentBreakDown } from '@utils/checkout-utils'
 
 const OrderDetails = () => {
   const [uiState, setUiState] = useState<UIState>({
@@ -36,9 +60,13 @@ const OrderDetails = () => {
     radioValue: ''
   })
   const router = useRouter()
+  console.log('Dank', router.query)
   const { t } = useLanguage()
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
+  const { isOpen, onOpen, onClose } = useDisclosure()
   const [orderStatusMap, setOrderStatusMap] = useState<any[]>([])
+  const { transactionId } = useSelector((state: DiscoveryRootState) => state.discovery)
+  const orderMetaData = useSelector((state: OrdersRootState) => state.orders.selectedOrderDetails)
   const [currentStatusLabel, setCurrentStatusLabel] = useState('')
 
   useEffect(() => {
@@ -183,14 +211,15 @@ const OrderDetails = () => {
       if (localStorage && localStorage.getItem('selectedOrder')) {
         const selectedOrderData = JSON.parse(localStorage.getItem('selectedOrder') as string)
         const { bppId, bppUri, orderId } = selectedOrderData
+        //DANKTODO
         const statusPayload = {
           data: [
             {
               context: {
-                transaction_id: '',
+                transaction_id: transactionId,
                 bpp_id: bppId,
                 bpp_uri: bppUri,
-                domain: 'supply-chain-services:assembly'
+                domain: DOMAIN
               },
               message: {
                 order_id: orderId
@@ -521,6 +550,31 @@ const OrderDetails = () => {
     }
   }
 
+  const ordersLength = data.statusData.length
+  const { timestamp } = data.statusData[0].context
+  const { order } = data.statusData[0].message
+  const {
+    billing,
+    fulfillments,
+    quote: { breakup, price }
+  } = order
+  const { address, name, phone } = billing
+  const {
+    customer: {
+      contact: { phone: shippingPhone },
+      person: { name: shippingName }
+    },
+    stops
+  } = fulfillments[0]
+  const {
+    location: { address: shipmentAddress }
+  } = stops[0]
+
+  const filteredOrder = data.statusData.filter(res => {
+    const { state } = res.message.order.fulfillments[0]
+    state && res.message.order.fulfillments[0].state.descriptor.short_desc === 'Delivered'
+  })
+
   return (
     <Box
       className="hideScroll"
@@ -573,6 +627,48 @@ const OrderDetails = () => {
           </CardBody>
         </Card>
       )}
+      <Box
+        pb="15px"
+        pt="20px"
+      >
+        <Typography
+          variant="subTitleRegular"
+          text={t.orderOverview}
+          fontSize="17px"
+        />
+      </Box>
+
+      <DetailCard>
+        <Flex
+          pt={'unset'}
+          justifyContent={'space-between'}
+          alignItems={'center'}
+        >
+          <Typography
+            variant="subTitleRegular"
+            text={t.placedAt}
+          />
+          <Typography
+            variant="subTitleRegular"
+            text={formatTimestamp(timestamp)}
+          />
+        </Flex>
+        <Box pt={4}>
+          <Flex
+            justifyContent={'space-between'}
+            alignItems={'center'}
+          >
+            <Typography
+              variant="subTitleRegular"
+              text={t.ordersFulfilled}
+            />
+            <Typography
+              variant="subTitleRegular"
+              text={`${filteredOrder.length} of ${ordersLength}`}
+            />
+          </Flex>
+        </Box>
+      </DetailCard>
 
       {/* Display progress summary */}
       <Box
@@ -586,6 +682,7 @@ const OrderDetails = () => {
         />
       </Box>
 
+      {/* DANKTODO */}
       {/* Display order status details */}
       <DetailCard>
         <CardBody p={'unset'}>
@@ -596,7 +693,8 @@ const OrderDetails = () => {
             >
               <Text
                 as={Typography}
-                text={t.assembly}
+                // TODO
+                text={`Order Id: ${orderMetaData.orderIds[0].slice(0, 5)}...`}
                 fontSize="17px"
                 fontWeight="600"
               />
@@ -608,29 +706,36 @@ const OrderDetails = () => {
             </Flex>
 
             <Flex
-              justifyContent="space-between"
-              alignItems="center"
-              pt="10px"
+              justifyContent={'space-between'}
+              alignItems={'center'}
             >
-              <Typography
-                variant="subTitleRegular"
-                text="RTAL Assembly Line"
-                fontSize="12px"
-              />
-              <Typography
-                variant="subTitleRegular"
-                text={
-                  data.statusData[0]?.message?.order?.fulfillments[0]?.state?.descriptor?.code === 'DELIVERED'
-                    ? t.completed
-                    : ''
-                }
-                fontSize="15px"
-                className={
-                  data.statusData[0]?.message?.order?.fulfillments[0]?.state?.descriptor?.code === 'DELIVERED'
-                    ? 'order_status_text_completed'
-                    : ''
-                }
-              />
+              <Flex maxWidth={'57vw'}>
+                <Text
+                  textOverflow={'ellipsis'}
+                  overflow={'hidden'}
+                  whiteSpace={'nowrap'}
+                  fontSize={'12px'}
+                  fontWeight={'400'}
+                >
+                  {data.statusData[0]?.message?.order?.items[0]?.name}
+                </Text>
+                <Text
+                  pl={'5px'}
+                  color={'#5EC401'}
+                  fontSize={'12px'}
+                  fontWeight={'600'}
+                  onClick={onOpen}
+                >
+                  +{data.statusData[0].message.order.items.length - 1}
+                </Text>
+              </Flex>
+
+              <Text
+                fontSize={'15px'}
+                fontWeight={'600'}
+              >
+                pending
+              </Text>
             </Flex>
           </>
           <Divider
@@ -638,6 +743,13 @@ const OrderDetails = () => {
             ml="-20px"
             width={'unset'}
             pt="15px"
+          />
+          <ViewMoreOrderModal
+            isOpen={isOpen}
+            onOpen={onOpen}
+            onClose={onClose}
+            items={data.statusData[0].message.order.items}
+            orderId={`${orderMetaData.orderIds[0].slice(0, 5)}...`}
           />
 
           {/* Display order status progress */}
@@ -652,6 +764,118 @@ const OrderDetails = () => {
           </Box>
         </CardBody>
       </DetailCard>
+
+      {/* shipping and billing address */}
+
+      <Accordion accordionHeader={t.shipping}>
+        <Box
+          pl={'14px'}
+          pr={'11px'}
+          pb={'11px'}
+          pt={'6px'}
+        >
+          <Stack
+            divider={<StackDivider />}
+            spacing="4"
+          >
+            <Flex alignItems={'center'}>
+              <Image
+                alt="name-icon"
+                src={nameIcon}
+                pr={'12px'}
+              />
+              <Typography
+                variant="subTitleRegular"
+                text={shippingName}
+              />
+            </Flex>
+            <Flex alignItems={'center'}>
+              <Image
+                alt="location-icon"
+                src={locationIcon}
+                pr={'12px'}
+              />
+              <Typography
+                variant="subTitleRegular"
+                text={shipmentAddress}
+              />
+            </Flex>
+            <Flex alignItems={'center'}>
+              <Image
+                alt="call-icon"
+                src={CallphoneIcon}
+                pr={'12px'}
+              />
+              <Typography
+                variant="subTitleRegular"
+                text={shippingPhone}
+              />
+            </Flex>
+          </Stack>
+        </Box>
+      </Accordion>
+      <Accordion accordionHeader={t.billing}>
+        <Box
+          pl={'14px'}
+          pr={'11px'}
+          pb={'11px'}
+          pt={'6px'}
+        >
+          <Stack
+            divider={<StackDivider />}
+            spacing="4"
+          >
+            <Flex alignItems={'center'}>
+              <Image
+                alt="name-icon"
+                src={nameIcon}
+                pr={'12px'}
+              />
+              <Typography
+                variant="subTitleRegular"
+                text={name}
+              />
+            </Flex>
+            <Flex alignItems={'center'}>
+              <Image
+                alt="location-icon"
+                src={locationIcon}
+                pr={'12px'}
+              />
+              <Typography
+                variant="subTitleRegular"
+                text={address}
+              />
+            </Flex>
+            <Flex alignItems={'center'}>
+              <Image
+                alt="call-icon"
+                src={CallphoneIcon}
+                pr={'12px'}
+              />
+              <Typography
+                variant="subTitleRegular"
+                text={phone}
+              />
+            </Flex>
+          </Stack>
+        </Box>
+      </Accordion>
+
+      <Accordion accordionHeader={t.payment}>
+        <Box
+          pl={'14px'}
+          pr={'11px'}
+          pb={'11px'}
+          pt={'6px'}
+        >
+          <PaymentDetails
+            paymentBreakDown={getPaymentBreakDown(data.statusData).breakUpMap}
+            totalText="Total"
+            totalValueWithSymbol={getPaymentBreakDown(data.statusData).totalPricewithCurrent}
+          />
+        </Box>
+      </Accordion>
 
       {/* Display main bottom modal */}
       <BottomModal

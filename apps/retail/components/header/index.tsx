@@ -4,7 +4,8 @@ import { BottomModal } from '@beckn-ui/molecules'
 import { useTheme, Box, Divider, Flex, HStack, Image, Text } from '@chakra-ui/react'
 import { Router, useRouter } from 'next/router'
 import styles from './header.module.css'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { logout } from '@store/authSlice'
 
 import { useLanguage } from '../../hooks/useLanguage'
 import Qrcode from '@components/qrCode/Qrcode'
@@ -27,7 +28,9 @@ const cartIconBlackList: string[] = [
   '/checkoutPage',
   '/paymentMode',
   '/signUp',
-  '/invoiceDetails'
+  '/invoiceDetails',
+  '/',
+  '/cart'
 ]
 
 const backIconList = ['/', '/signin']
@@ -50,11 +53,13 @@ const storeHeaderBlackList = [
   '/assemblyDetails',
   '/updateShippingDetails',
   '/orderCancellation',
-  '/profile'
+  '/profile',
+  '/search',
+  '/checkout'
 ]
 const headerValues: PathnameObjectType = {
   '/checkoutPage': 'Review Purchase Order',
-  '/orderHistory': 'Order History',
+  '/orderHistory': 'My Orders',
   '/orderDetails': 'Order Details',
   '/invoiceDetails': 'Invoice Details',
   '/signin': 'Sign In',
@@ -65,8 +70,9 @@ const headerValues: PathnameObjectType = {
   '/updateShippingDetails': 'Shipping Details',
   '/orderCancellation': 'Order Cancel',
   '/feedback': '',
-  '/profile': 'Profile'
-  // '/search':'Search results'
+  '/profile': 'Profile',
+  '/search': 'Search results',
+  '/checkout': 'Billing & Shipping'
 }
 
 const headerValuesFrench: PathnameObjectType = {
@@ -109,6 +115,7 @@ export interface TopHeaderProps {
 
 const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
   const [isMenuModalOpen, setMenuModalOpen] = useState(false)
+  const dispatch = useDispatch()
 
   const { t, locale } = useLanguage()
   const router = useRouter()
@@ -125,10 +132,10 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
       >
         <Box className={styles.top_header_wrapper}>
           <Box>
-            {/* <Image
-              src="/images/Suppliflow_app_logo.svg"
+            <Image
+              src="/images/headerLogo.svg"
               alt="App logo"
-            /> */}
+            />
           </Box>
           <Flex columnGap={['10px', '10px', '2rem', '2rem']}>
             {!homeIconBlackList.includes(router.pathname) && (
@@ -166,22 +173,58 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
         isOpen={isMenuModalOpen}
         onClose={handleMenuModalClose}
       >
-        <Box
-          onClick={() => {
-            router.push('/orderHistory')
-            setMenuModalOpen(false)
-          }}
-          className={styles.top_header_modal}
-        >
-          <Image
-            src="/images/orderHistory.svg"
-            alt="Order history icon"
-          />
-          {t['orderHistory']}
-        </Box>
+        <Flex flexDirection="column">
+          <Box
+            onClick={() => {
+              router.push('/profile')
+              setMenuModalOpen(false)
+            }}
+            className={styles.top_header_modal}
+          >
+            <Image
+              src="/images/userProfile.svg"
+              alt="User profile"
+            />
+            {t['profileIcon']}
+          </Box>
+          <Box
+            onClick={() => {
+              router.push('/orderHistory')
+              setMenuModalOpen(false)
+            }}
+            className={styles.top_header_modal}
+          >
+            <Image
+              src="/images/orderHistoryIcon.svg"
+              alt="Order history icon"
+            />
+            {t['orderHistoryIcon']}
+          </Box>
+          <Box
+            onClick={() => {
+              dispatch(logout())
+              router.push('/signin')
+              setMenuModalOpen(false)
+            }}
+            className={styles.top_header_modal}
+          >
+            <Image
+              src="/images/logOutIcon.svg"
+              alt="Log out"
+            />
+            <span style={{ color: 'red' }}>{t['logoutIcon']}</span>
+          </Box>
+        </Flex>
       </BottomModal>
     </>
   )
+}
+const getLocalStorage = (item: string) => {
+  if (typeof window !== 'undefined' && window.localStorage) {
+    return localStorage.getItem(item)
+  } else {
+    return ''
+  }
 }
 
 const BottomHeader = () => {
@@ -191,6 +234,7 @@ const BottomHeader = () => {
   const [isInvoiceModalOpen, setInvoiceModalOpen] = useState(false)
   const cartItems = useSelector((state: ICartRootState) => state.cart.items)
   const theme = useTheme()
+  const storedHeaderText = getLocalStorage('selectCardHeaderText')
 
   const [currentAddress, setCurrentAddress] = useState('')
   const [loadingForCurrentAddress, setLoadingForCurrentAddress] = useState(true)
@@ -291,7 +335,13 @@ const BottomHeader = () => {
               />
             )}
           </Box>
-          {getHeaderTitleForPage(optionTags?.name, optionTags?.logo, router.pathname, locale)}
+          {getHeaderTitleForPage(
+            // optionTags?.name,
+            storedHeaderText as string,
+            optionTags?.logo,
+            router.pathname,
+            locale
+          )}
           <div className="flex gap-4">
             {!cartIconBlackList.includes(router.pathname) && (
               <CartIconWithCount
@@ -304,7 +354,7 @@ const BottomHeader = () => {
             <Image
               cursor="pointer"
               onClick={() => setOrderModalOpen(true)}
-              src="/images/orderDetailsIcon.svg"
+              src="/images/downloadInvoice.svg"
               alt="order icon"
               mr={'20px'}
             />

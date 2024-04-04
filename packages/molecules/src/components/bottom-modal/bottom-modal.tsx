@@ -15,7 +15,7 @@ import crossIcon from '../../../public/images/Indicator.svg'
 import { BottomModalProps } from './bottom-modal.types'
 import Typography from '../typography'
 
-const BottomModal: React.FC<BottomModalProps> = ({ onClose, isOpen, title, children }) => {
+const BottomModal: React.FC<BottomModalProps> = ({ onClose, isOpen, title, children, responsive = false }) => {
   return (
     <Modal
       isCentered
@@ -27,9 +27,9 @@ const BottomModal: React.FC<BottomModalProps> = ({ onClose, isOpen, title, child
       <ModalOverlay height="100vh" />
       <ModalContent
         position="fixed"
-        bottom="0px"
+        bottom={responsive ? '' : '0'}
         mb="0"
-        borderRadius="1.75rem 1.75rem 0px 0px"
+        borderRadius={responsive ? '1.75rem' : '1.75rem 1.75rem 0px 0px'}
         maxW="sm"
       >
         <ModalCloseButton

@@ -11,7 +11,8 @@ import { discoveryActions } from '@store/discovery-slice'
 import { useBreakpoint } from '@chakra-ui/react'
 import SearchBar from '../components/header/SearchBar'
 import { useLanguage } from '../hooks/useLanguage'
-import { ParsedItemModel } from '../types/search.types'
+import { ParsedItemModel } from '@lib/types/beckn/search'
+import { DOMAIN } from '@lib/config'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
 import Filter from '../components/filter/Filter'
 import { LocalStorage } from '@lib/types'
@@ -20,6 +21,8 @@ import { LocalStorage } from '@lib/types'
 
 const Search = () => {
   const [items, setItems] = useState<ParsedItemModel[]>([])
+  const [originalItems, setOriginalItems] = useState<ParsedItemModel[]>([])
+  const [sortBy, setSortBy] = useState<string>('')
   const router = useRouter()
   const [searchKeyword, setSearchKeyword] = useState(router.query?.searchTerm || '')
   const [isLoading, setIsLoading] = useState(false)
@@ -36,30 +39,19 @@ const Search = () => {
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
-  // const searchPayload = {
-  //   context: {
-  //     domain: 'retail:1.1.0'
-  //   },
-  //   searchString: searchKeyword,
-  //   category: {
-  //     categoryCode: 'farming'
-  //   },
-  //   fulfillment: {
-  //     type: 'Delivery',
-  //     stops: [
-  //       {
-  //         location: '28.4594965,77.0266383'
-  //       }
-  //     ]
-  //   }
-  // }
-
   const searchPayload = {
     context: {
-      domain: 'retail'
+      domain: DOMAIN
     },
-    searchString: 'T Shirt',
-    location: '12.423423,77.325647'
+    searchString: searchKeyword,
+    fulfillment: {
+      type: 'Delivery',
+      stops: [
+        {
+          location: '28.4594965,77.0266383'
+        }
+      ]
+    }
   }
 
   const fetchDataForSearch = () => {
@@ -72,6 +64,7 @@ const Search = () => {
         const parsedSearchItems = parsedSearchlist(res.data.data)
         dispatch(discoveryActions.addProducts({ products: parsedSearchItems }))
         setItems(parsedSearchItems)
+        setOriginalItems(parsedSearchItems)
         setIsLoading(false)
       })
       .catch(e => {
@@ -102,11 +95,37 @@ const Search = () => {
   const handleImageClick = () => {
     setIsFilterOpen(!isFilterOpen)
   }
+  const handleApplyFilter = (sortBy: string) => {
+    setSortBy(sortBy)
+
+    let sortedItemsCopy = [...items]
+    if (sortBy === 'LowtoHigh') {
+      sortedItemsCopy.sort((a, b) => parseFloat(a.item.price.value) - parseFloat(b.item.price.value))
+    } else if (sortBy === 'HightoLow') {
+      sortedItemsCopy.sort((a, b) => parseFloat(b.item.price.value) - parseFloat(a.item.price.value))
+    } else if (sortBy === '4+') {
+      sortedItemsCopy.sort((a, b) => parseFloat(b.item.rating) - parseFloat(a.item.rating))
+    } else if (sortBy === '2+') {
+      sortedItemsCopy.sort((a, b) => parseFloat(b.item.rating) - parseFloat(a.item.rating))
+    }
+    setItems(sortedItemsCopy)
+    setIsFilterOpen(false)
+  }
+
+  const handleResetFilter = () => {
+    setItems(originalItems)
+    setIsFilterOpen(false)
+  }
 
   return (
     <>
       <Box display="flex">
-        {!isSmallScreen && !isMediumScreen && <Filter />}
+        {!isSmallScreen && !isMediumScreen && (
+          <Filter
+            handleApplyFilter={handleApplyFilter}
+            handleResetFilter={handleResetFilter}
+          />
+        )}
         <Box
           w="100%"
           ml={['unset', 'unset', 'unset', '36px']}
@@ -144,7 +163,10 @@ const Search = () => {
               isOpen={isFilterOpen}
               onClose={handleFilterClose}
             >
-              <Filter />
+              <Filter
+                handleApplyFilter={handleApplyFilter}
+                handleResetFilter={handleResetFilter}
+              />
             </BottomModal>
           )}
           {isMediumScreen && isFilterOpen && (
@@ -154,7 +176,10 @@ const Search = () => {
               backgroundColor={'#fff'}
               left="28%"
             >
-              <Filter />
+              <Filter
+                handleApplyFilter={handleApplyFilter}
+                handleResetFilter={handleResetFilter}
+              />
             </Box>
           )}
 
@@ -183,7 +208,7 @@ const Search = () => {
                     images: item.images.map(singleImage => singleImage.url),
                     name: item.name,
                     price: item.price.value,
-                    rating: '4',
+                    rating: item.rating,
                     shortDesc: item.short_desc
                   }
                   return (
@@ -192,23 +217,6 @@ const Search = () => {
                       productClickHandler={e => {
                         e.preventDefault()
                         dispatch(discoveryActions.addSingleProduct({ product: singleItem }))
-                        // if (typeof window !== 'undefined') {
-                        //   const encodedProduct = window.btoa(toBinary(JSON.stringify(item)))
-                        //   localStorage.setItem(
-                        //     LocalStorage.Product,
-                        //     JSON.stringify({
-                        //       encodedProduct: encodedProduct,
-                        //       product: product
-                        //     })
-                        //   )
-
-                        //   router.push({
-                        //     pathname: '/product',
-                        //     query: {
-                        //       id: item.id
-                        //     }
-                        //   })
-                        // }
                         router.push({
                           pathname: '/product',
                           query: {
@@ -216,6 +224,7 @@ const Search = () => {
                             search: searchKeyword
                           }
                         })
+                        localStorage.setItem('selectCardHeaderText', product.name)
                       }}
                       product={product}
                       currency={item.price.currency}

@@ -12,8 +12,9 @@ export interface ButtonProps {
   fullWidth?: boolean
   variant?: 'outline' | 'solid'
   colorScheme?: 'primary' | 'secondary'
-  textColor?: 'textPrimary' | 'textSecondary'
   type?: ButtonType
   leftIcon?: React.FC<IconProps>
-  loading?: boolean
+  isLoading?: boolean
+  loadingText?: string
+  color?: string
 }

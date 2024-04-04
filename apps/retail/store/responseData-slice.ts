@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { ResponseModel } from '../lib/types/responseModel'
-import { ShippingFormData } from '../pages/checkoutPage'
+import { ShippingFormData } from '../pages/checkout/checkout'
 
 const initialState = {
   transactionId: '',

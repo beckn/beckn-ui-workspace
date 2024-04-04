@@ -16,10 +16,17 @@ const Cart: React.FC<CartProps> = ({
   className
 }) => {
   if (isLoading) {
-    return <Loader {...loader} />
+    return (
+      <Box
+        display="flex"
+        height="100vh"
+        justifyContent="center"
+        transform="translateY(-20%)"
+      >
+        <Loader {...loader} />
+      </Box>
+    )
   }
-
-  console.log('Dank inside', cartItems)
 
   if (cartItems.length == 0) {
     return (

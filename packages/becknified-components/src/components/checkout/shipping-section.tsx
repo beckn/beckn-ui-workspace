@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import { Box, Flex, Image, useDisclosure, Checkbox } from '@chakra-ui/react'
 import DetailsCard from './details-card'
+import useResponsive from '../../hooks/useResponsive'
 import ShippingForm from './shipping-form'
+import { PlusSquareIcon } from '@chakra-ui/icons'
 import { ShippingFormProps, ShippingSectionProps, ShippingFormInitialValuesType } from './checkout.types'
 import AddShippingButtonImage from '../../../public/images/addShippingBtn.svg'
 
@@ -18,10 +20,13 @@ const ShippingSection: React.FC<ShippingSectionProps<FormField[]>> = ({
   showDetails = false,
   isBilling = false,
   shippingDetails,
-  addButtonImage = AddShippingButtonImage
+  addButtonImage = AddShippingButtonImage,
+  isChecked = true,
+  onCheckChange
 }) => {
   const { isOpen, onClose, onOpen } = useDisclosure()
-  const [isChecked, setIsChecked] = useState<boolean>(true)
+  // const [isChecked, setIsChecked] = useState<boolean>(true)
+  const { isDesktop, isTablet } = useResponsive()
 
   return (
     <Box>
@@ -45,11 +50,12 @@ const ShippingSection: React.FC<ShippingSectionProps<FormField[]>> = ({
       {isBilling ? (
         <DetailsCard>
           <Checkbox
+            iconColor="primary.100"
+            colorScheme="primary"
             pr={'12px'}
             fontSize={'17px'}
             checked={isChecked}
-            defaultChecked
-            onChange={() => setIsChecked(!isChecked)}
+            onChange={() => onCheckChange && onCheckChange()}
           >
             Same as shipping address
           </Checkbox>
@@ -60,7 +66,8 @@ const ShippingSection: React.FC<ShippingSectionProps<FormField[]>> = ({
             alignItems={'center'}
             onClick={onOpen}
           >
-            <Image src={addButtonImage} />
+            {/* <Image src={addButtonImage} /> */}
+            <PlusSquareIcon color="primary.100" />
             <Typography
               variant="subTitleRegular"
               text={sectionSubtitle}
@@ -77,6 +84,7 @@ const ShippingSection: React.FC<ShippingSectionProps<FormField[]>> = ({
         title={formTitle}
         isOpen={isOpen}
         onClose={onClose}
+        responsive={isTablet || isDesktop}
       >
         <ShippingForm {...shippingForm} />
       </BottomModal>
