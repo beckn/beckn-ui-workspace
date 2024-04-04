@@ -22,7 +22,7 @@
   }
 
   @media (min-width: 640px) {
-    min-width: 480px;
+    /* min-width: 480px; */
   }
 }
 
@@ -30,8 +30,11 @@
   display: flex;
   flex-wrap: wrap;
 
-  @media (min-width: 1200px) {
+  @media (min-width: 640px) {
     flex-wrap: nowrap;
+  }
+  @media (min-width: 640px) and (max-width: 1024px) {
+    display: block;
   }
 
   justify-content: center;
@@ -43,6 +46,9 @@
   width: 80px;
   height: 100%;
   margin-bottom: 20px;
+  @media (min-width: 640px) and (max-width: 1024px) {
+    margin: 0 auto;
+  }
 }
 
 .product_name {
