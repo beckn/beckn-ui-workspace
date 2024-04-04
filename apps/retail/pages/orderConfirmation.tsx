@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import orderConfirmmark from '../public/images/orderConfirmmark.svg'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { useLanguage } from '../hooks/useLanguage'
 import { ConfirmationPage } from '@beckn-ui/becknified-components'
 import { InitResponseModel } from '../types/init.types'
 import { CheckoutRootState } from '@store/checkout-slice'
+import { orderActions } from '@store/order-slice'
 import { useConfirmMutation } from '@services/confirm'
 import { getPayloadForConfirm, getPayloadForOrderHistoryPost } from '@utils/confirm-utils'
 import axios from 'axios'
@@ -14,12 +15,14 @@ import Cookies from 'js-cookie'
 import { ConfirmResponseModel } from '../types/confirm.types'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
 import { init } from 'next/dist/compiled/webpack/webpack'
+import OrderDetails from './orderDetails'
 
 const OrderConfirmation = () => {
   const { t } = useLanguage()
   const router = useRouter()
   const [confirmData, setConfirmData] = useState<ConfirmResponseModel[]>([])
   const [confirm, { isLoading, data }] = useConfirmMutation()
+  const dispatch = useDispatch()
 
   console.log('Dank confirm', data)
 
@@ -81,6 +84,15 @@ const OrderConfirmation = () => {
           {
             text: 'View Details',
             handleClick: () => {
+              dispatch(
+                orderActions.addSelectedOrder({
+                  orderDetails: {
+                    orderId: confirmResponse[0].message.orderId,
+                    bppId: confirmResponse[0].context.bppId,
+                    bppUri: confirmResponse[0].context.bppUri
+                  }
+                })
+              )
               router.push('/orderDetails')
             },
             disabled: false,

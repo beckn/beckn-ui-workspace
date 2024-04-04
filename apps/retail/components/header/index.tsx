@@ -4,7 +4,8 @@ import { BottomModal } from '@beckn-ui/molecules'
 import { useTheme, Box, Divider, Flex, HStack, Image, Text } from '@chakra-ui/react'
 import { Router, useRouter } from 'next/router'
 import styles from './header.module.css'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { logout } from '@store/authSlice'
 
 import { useLanguage } from '../../hooks/useLanguage'
 import Qrcode from '@components/qrCode/Qrcode'
@@ -27,7 +28,8 @@ const cartIconBlackList: string[] = [
   '/checkoutPage',
   '/paymentMode',
   '/signUp',
-  '/invoiceDetails'
+  '/invoiceDetails',
+  '/'
 ]
 
 const backIconList = ['/', '/signin']
@@ -109,6 +111,7 @@ export interface TopHeaderProps {
 
 const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
   const [isMenuModalOpen, setMenuModalOpen] = useState(false)
+  const dispatch = useDispatch()
 
   const { t, locale } = useLanguage()
   const router = useRouter()
@@ -166,19 +169,48 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
         isOpen={isMenuModalOpen}
         onClose={handleMenuModalClose}
       >
-        <Box
-          onClick={() => {
-            router.push('/orderHistory')
-            setMenuModalOpen(false)
-          }}
-          className={styles.top_header_modal}
-        >
-          <Image
-            src="/images/orderHistory.svg"
-            alt="Order history icon"
-          />
-          {t['orderHistory']}
-        </Box>
+        <Flex flexDirection="column">
+          <Box
+            onClick={() => {
+              router.push('/profile')
+              setMenuModalOpen(false)
+            }}
+            className={styles.top_header_modal}
+          >
+            <Image
+              src="/images/userProfile.svg"
+              alt="User profile"
+            />
+            {t['profileIcon']}
+          </Box>
+          <Box
+            onClick={() => {
+              router.push('/orderHistory')
+              setMenuModalOpen(false)
+            }}
+            className={styles.top_header_modal}
+          >
+            <Image
+              src="/images/orderHistoryIcon.svg"
+              alt="Order history icon"
+            />
+            {t['orderHistoryIcon']}
+          </Box>
+          <Box
+            onClick={() => {
+              dispatch(logout())
+              router.push('/signin')
+              setMenuModalOpen(false)
+            }}
+            className={styles.top_header_modal}
+          >
+            <Image
+              src="/images/logOutIcon.svg"
+              alt="Log out"
+            />
+            <span style={{ color: 'red' }}>{t['logoutIcon']}</span>
+          </Box>
+        </Flex>
       </BottomModal>
     </>
   )

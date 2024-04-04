@@ -105,6 +105,10 @@ const en: { [key: string]: string } = {
   enterCity: 'Enter City /Town',
   enterPincode: 'Enter Pincode',
   enterState: 'Enter State / Province',
-  enterCountry: 'Enter Country'
+  enterCountry: 'Enter Country',
+  // New Translations
+  orderHistoryIcon: 'My Orders',
+  profileIcon: 'My Profile',
+  logoutIcon: 'Logout'
 }
 export default en

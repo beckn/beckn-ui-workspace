@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Box, Flex, Image, useDisclosure, Checkbox } from '@chakra-ui/react'
 import DetailsCard from './details-card'
+import useResponsive from '../../hooks/useResponsive'
 import ShippingForm from './shipping-form'
 import { PlusSquareIcon } from '@chakra-ui/icons'
 import { ShippingFormProps, ShippingSectionProps, ShippingFormInitialValuesType } from './checkout.types'
@@ -23,6 +24,8 @@ const ShippingSection: React.FC<ShippingSectionProps<FormField[]>> = ({
 }) => {
   const { isOpen, onClose, onOpen } = useDisclosure()
   const [isChecked, setIsChecked] = useState<boolean>(true)
+  const { isDesktop, isTablet } = useResponsive()
+  console.log('Dank', isDesktop, isTablet)
 
   return (
     <Box>
@@ -81,6 +84,7 @@ const ShippingSection: React.FC<ShippingSectionProps<FormField[]>> = ({
         title={formTitle}
         isOpen={isOpen}
         onClose={onClose}
+        responsive={isTablet || isDesktop}
       >
         <ShippingForm {...shippingForm} />
       </BottomModal>

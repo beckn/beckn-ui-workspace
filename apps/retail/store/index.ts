@@ -10,6 +10,7 @@ import checkoutReducer from './checkout-slice'
 import userInfoReducer from './user-slice'
 import sideNavBarReducer from './sideNavBar-slice'
 import DiscoveryReducer from './discovery-slice'
+import OrderReducer from './order-slice'
 import megaMenuReducer from './megaMenu-slice'
 import activeMenuItemReducer from './activeMenuItem-slice'
 import settingBoxReducer from './settingBox-slice'
@@ -22,7 +23,7 @@ import authReducer from './authslice'
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['cart', 'discovery', 'checkout']
+  whitelist: ['cart', 'discovery', 'checkout', 'orders']
 }
 
 const rootReducer = combineReducers({
@@ -35,6 +36,7 @@ const rootReducer = combineReducers({
   cart: cartSliceReducer,
   checkout: checkoutReducer,
   discovery: DiscoveryReducer,
+  orders: OrderReducer,
   userInfo: userInfoReducer,
   sideNavBar: sideNavBarReducer,
   megaMenu: megaMenuReducer,

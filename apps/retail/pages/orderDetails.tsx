@@ -14,6 +14,7 @@ import BottomModalScan from '@components/BottomModal/BottomModalScan'
 import { ConfirmResponseModel } from '../types/confirm.types'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
 import { UIState, DataState, ProcessState } from '../types/order-details.types'
+import { OrdersRootState } from '@store/order-slice'
 
 const OrderDetails = () => {
   const [uiState, setUiState] = useState<UIState>({
@@ -38,10 +39,12 @@ const OrderDetails = () => {
     radioValue: ''
   })
   const router = useRouter()
+  console.log('Dank', router.query)
   const { t } = useLanguage()
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
   const [orderStatusMap, setOrderStatusMap] = useState<any[]>([])
   const { transactionId } = useSelector((state: DiscoveryRootState) => state.discovery)
+  const orderMetaData = useSelector((state: OrdersRootState) => state.orders.selectedOrderDetails)
   const [currentStatusLabel, setCurrentStatusLabel] = useState('')
 
   useEffect(() => {
@@ -186,6 +189,7 @@ const OrderDetails = () => {
       if (localStorage && localStorage.getItem('selectedOrder')) {
         const selectedOrderData = JSON.parse(localStorage.getItem('selectedOrder') as string)
         const { bppId, bppUri, orderId } = selectedOrderData
+        //DANKTODO
         const statusPayload = {
           data: [
             {
@@ -524,6 +528,8 @@ const OrderDetails = () => {
     }
   }
 
+  console.log('Dank', data.statusData)
+
   return (
     <Box
       className="hideScroll"
@@ -589,6 +595,7 @@ const OrderDetails = () => {
         />
       </Box>
 
+      {/* DANKTODO */}
       {/* Display order status details */}
       <DetailCard>
         <CardBody p={'unset'}>
@@ -599,7 +606,8 @@ const OrderDetails = () => {
             >
               <Text
                 as={Typography}
-                text={t.assembly}
+                // TODO
+                text={`Order Id: ${orderMetaData.orderIds[0]}`}
                 fontSize="17px"
                 fontWeight="600"
               />
@@ -611,6 +619,39 @@ const OrderDetails = () => {
             </Flex>
 
             <Flex
+              justifyContent={'space-between'}
+              alignItems={'center'}
+            >
+              <Flex maxWidth={'57vw'}>
+                <Text
+                  textOverflow={'ellipsis'}
+                  overflow={'hidden'}
+                  whiteSpace={'nowrap'}
+                  fontSize={'12px'}
+                  fontWeight={'400'}
+                >
+                  {data.statusData[0]?.message?.order?.items[0]?.name}
+                </Text>
+                <Text
+                  pl={'5px'}
+                  color={'rgba(var(--color-primary))'}
+                  fontSize={'12px'}
+                  fontWeight={'600'}
+                  // onClick={onOpen}
+                >
+                  +{data.statusData[0].message.order.items.length - 1}
+                </Text>
+              </Flex>
+
+              <Text
+                fontSize={'15px'}
+                fontWeight={'600'}
+              >
+                pending
+              </Text>
+            </Flex>
+
+            {/* <Flex
               justifyContent="space-between"
               alignItems="center"
               pt="10px"
@@ -634,7 +675,7 @@ const OrderDetails = () => {
                     : ''
                 }
               />
-            </Flex>
+            </Flex> */}
           </>
           <Divider
             mr={'-20px'}

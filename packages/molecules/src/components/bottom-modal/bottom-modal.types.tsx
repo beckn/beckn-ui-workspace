@@ -5,4 +5,5 @@ export interface BottomModalProps {
   isOpen: boolean
   title?: string
   children: ReactNode
+  responsive?: boolean
 }

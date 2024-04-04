@@ -5,6 +5,8 @@ import { Box, Text, Flex, Image } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import pendingIcon from '../public/images/pendingStatus.svg'
 import { orderHistoryData } from '../types/order-history.types'
+import { orderActions } from '@store/order-slice'
+import { useDispatch } from 'react-redux'
 import { formatTimestamp } from '@utils/confirm-utils'
 import { useRouter } from 'next/router'
 import EmptyOrder from '@components/orderHistory/emptyOrder'
@@ -17,16 +19,17 @@ const OrderHistory = () => {
   const [orderHistoryList, setOrderHistoryList] = useState<orderHistoryData[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
+  const dispatch = useDispatch()
   const [error, setError] = useState('')
 
   const bearerToken = Cookies.get('authToken')
   const router = useRouter()
 
   useEffect(() => {
-    let myHeaders = new Headers()
+    const myHeaders = new Headers()
     myHeaders.append('Authorization', `Bearer ${bearerToken}`)
 
-    let requestOptions: RequestInit = {
+    const requestOptions: RequestInit = {
       method: 'GET',
       headers: myHeaders,
       redirect: 'follow'
@@ -97,6 +100,7 @@ const OrderHistory = () => {
                       bppUri: order.attributes.bpp_uri,
                       orderId: order.attributes.order_id
                     }
+                    dispatch(orderActions.addSelectedOrder({ orderDetails: orderObjectForStatusCall }))
                     localStorage.setItem('selectedOrder', JSON.stringify(orderObjectForStatusCall))
                     router.push('/orderDetails')
                   }}

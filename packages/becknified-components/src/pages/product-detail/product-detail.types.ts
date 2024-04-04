@@ -5,7 +5,7 @@ import { ProductDescriptionPropModel } from '../../components/prouct-description
 export interface ProductDetailsPagePropsModel {
   schema: {
     productSummary: ProductSummaryPropsModel
-    productDescription: ProductDescriptionPropModel
-    buttons: ButtonProps[]
+    productDescription?: ProductDescriptionPropModel
+    buttons?: ButtonProps[]
   }
 }

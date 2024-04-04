@@ -19,32 +19,54 @@ const Product = () => {
   }
 
   return (
-    <ProductDetailPage
-      schema={{
-        productSummary: {
-          imageSrc: selectedProduct.item.images[0].url,
-          name: selectedProduct.item.name,
-          desc: selectedProduct.item.long_desc
-        },
-        productDescription: {
-          description: selectedProduct.item.long_desc
-        },
-        buttons: [
-          {
-            text: 'Add to cart',
-            handleClick: () => {
-              dispatch(
-                cartActions.addItemToCart({
-                  product: selectedProduct,
-                  quantity: 1
-                })
-              )
-              toast.success('Product added to cart')
+    <>
+      <ProductDetailPage
+        schema={{
+          productSummary: {
+            imageSrc: selectedProduct.item.images[0].url,
+            name: selectedProduct.item.name,
+            secondaryDescription: selectedProduct.item.long_desc,
+            secondaryCTAs: [
+              {
+                text: 'Add to cart',
+                handleClick: () => {
+                  dispatch(
+                    cartActions.addItemToCart({
+                      product: selectedProduct,
+                      quantity: 1
+                    })
+                  )
+                  toast.success('Product added to cart')
+                }
+              }
+            ],
+            starRating: {
+              rating: 4.5,
+              size: 20,
+              setRating: () => {},
+              starCount: 5
             }
           }
-        ]
-      }}
-    />
+          // productDescription: {
+          //   description: selectedProduct.item.long_desc
+          // },
+          // buttons: [
+          //   {
+          //     text: 'Add to cart',
+          //     handleClick: () => {
+          //       dispatch(
+          //         cartActions.addItemToCart({
+          //           product: selectedProduct,
+          //           quantity: 1
+          //         })
+          //       )
+          //       toast.success('Product added to cart')
+          //     }
+          //   }
+          // ]
+        }}
+      />
+    </>
   )
 }
 

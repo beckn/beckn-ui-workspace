@@ -176,52 +176,38 @@ const Search = () => {
                 w={['100%', '100%', '51%', '100%']}
                 margin="0 auto"
               >
-                {items.map((singleItem, idx) => {
-                  const { item } = singleItem
-                  const product = {
-                    id: item.id,
-                    images: item.images.map(singleImage => singleImage.url),
-                    name: item.name,
-                    price: item.price.value,
-                    rating: '4',
-                    shortDesc: item.short_desc
-                  }
-                  return (
-                    <ProductCard
-                      key={idx}
-                      productClickHandler={e => {
-                        e.preventDefault()
-                        dispatch(discoveryActions.addSingleProduct({ product: singleItem }))
-                        // if (typeof window !== 'undefined') {
-                        //   const encodedProduct = window.btoa(toBinary(JSON.stringify(item)))
-                        //   localStorage.setItem(
-                        //     LocalStorage.Product,
-                        //     JSON.stringify({
-                        //       encodedProduct: encodedProduct,
-                        //       product: product
-                        //     })
-                        //   )
-
-                        //   router.push({
-                        //     pathname: '/product',
-                        //     query: {
-                        //       id: item.id
-                        //     }
-                        //   })
-                        // }
-                        router.push({
-                          pathname: '/product',
-                          query: {
-                            id: item.id,
-                            search: searchKeyword
-                          }
-                        })
-                      }}
-                      product={product}
-                      currency={item.price.currency}
-                    />
-                  )
-                })}
+                {Array(5)
+                  .fill([...items])
+                  .flat()
+                  .map((singleItem, idx) => {
+                    const { item } = singleItem
+                    const product = {
+                      id: item.id,
+                      images: item.images.map(singleImage => singleImage.url),
+                      name: item.name,
+                      price: item.price.value,
+                      rating: '4',
+                      shortDesc: item.short_desc
+                    }
+                    return (
+                      <ProductCard
+                        key={idx}
+                        productClickHandler={e => {
+                          e.preventDefault()
+                          dispatch(discoveryActions.addSingleProduct({ product: singleItem }))
+                          router.push({
+                            pathname: '/product',
+                            query: {
+                              id: item.id,
+                              search: searchKeyword
+                            }
+                          })
+                        }}
+                        product={product}
+                        currency={item.price.currency}
+                      />
+                    )
+                  })}
               </Flex>
             )}
           </Box>
