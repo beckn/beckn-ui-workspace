@@ -56,21 +56,27 @@ export const theme = extendTheme({
   }
 })
 
-const Filter = () => {
+const Filter = ({ handleApplyFilter, handleResetFilter }) => {
   const [formData, setFormData] = useState({})
+  const [sortBy, setSortBy] = useState<string>('')
 
   const handleChange = (name: string, value: string) => {
+    setSortBy(value)
     setFormData(prevData => ({
       ...prevData,
       [name]: value
     }))
   }
-
+  const resetFilter = () => {
+    setSortBy('')
+    setFormData({})
+    handleResetFilter()
+  }
   return (
     <>
       <ChakraProvider theme={theme}>
         <Box
-          height={['100%', '450px']}
+          height={['100%', '320px']}
           w={['100%', '350px']}
           p={['unset', '20px']}
           boxShadow={['unset', '0px 8px 10px 0px #0000001A']}
@@ -85,6 +91,8 @@ const Filter = () => {
             <Text
               fontSize={'15px'}
               color="#53A052"
+              cursor={'pointer'}
+              onClick={resetFilter}
             >
               Reset
             </Text>
@@ -93,8 +101,8 @@ const Filter = () => {
           <Box pb={'44px'}>
             <FormControl variant="floating">
               <Select
-                onChange={e => handleChange('searchBy1', e.target.value)}
-                value={formData.searchBy1 || ''}
+                onChange={e => handleChange('searchByPrice', e.target.value)}
+                value={formData.searchByPrice || ''}
                 fontSize="15px"
                 height={'30px'}
                 border={'unset'}
@@ -102,47 +110,24 @@ const Filter = () => {
                 borderBottom={'1px solid'}
                 paddingBottom={'2px'}
               >
-                <option value="">Search by</option>
-                <option value="Relevance1">Relevance1</option>
-                <option value="Relevance2">Relevance2</option>
+                <option value="">Price</option>
+                <option value="LowtoHigh">Price -- Low to High</option>
+                <option value="HightoLow">Price -- High to Low</option>
               </Select>
               <FormLabel
                 className="dropDown_label"
                 fontSize="15px"
               >
-                Search by
+                Sort By Price
               </FormLabel>
             </FormControl>
           </Box>
+
           <Box pb={'44px'}>
             <FormControl variant="floating">
               <Select
-                onChange={e => handleChange('searchBy2', e.target.value)}
-                value={formData.searchBy2 || ''}
-                fontSize="15px"
-                height={'30px'}
-                border={'unset'}
-                borderRadius="unset"
-                borderBottom={'1px solid'}
-                paddingBottom={'2px'}
-              >
-                <option value="">Service Type</option>
-                <option value="Relevance1">Relevance1</option>
-                <option value="Relevance2">Relevance2</option>
-              </Select>
-              <FormLabel
-                className="dropDown_label"
-                fontSize="15px"
-              >
-                Service Type
-              </FormLabel>
-            </FormControl>
-          </Box>
-          <Box pb={'44px'}>
-            <FormControl variant="floating">
-              <Select
-                onChange={e => handleChange('searchBy3', e.target.value)}
-                value={formData.searchBy3 || ''}
+                onChange={e => handleChange('searchByRating', e.target.value)}
+                value={formData.searchByRating || ''}
                 fontSize="15px"
                 height={'30px'}
                 border={'unset'}
@@ -151,51 +136,25 @@ const Filter = () => {
                 paddingBottom={'2px'}
               >
                 <option value="">Rating</option>
-                <option value="1+">1+</option>
                 <option value="2+">2+</option>
+                <option value="4+">4+</option>
               </Select>
               <FormLabel
                 className="dropDown_label"
                 fontSize="15px"
               >
-                Rating
+                Sort By Rating
               </FormLabel>
             </FormControl>
           </Box>
-          <Box pb="30px">
-            <FormControl variant="floating">
-              <Select
-                onChange={e => handleChange('searchBy4', e.target.value)}
-                value={formData.searchBy4 || ''}
-                fontSize="15px"
-                height={'30px'}
-                border={'unset'}
-                borderRadius="unset"
-                borderBottom={'1px solid'}
-                paddingBottom={'2px'}
-              >
-                <option value="">Deals & Discounts</option>
-                <option value="Relevance1">Relevance1</option>
-                <option value="Relevance2">Relevance2</option>
-              </Select>
-              <FormLabel
-                className="dropDown_label"
-                fontSize="15px"
-              >
-                Deals & Discounts
-              </FormLabel>
-            </FormControl>
-          </Box>
-          {/* <Button
-          text="Apply Filter"
-          colorScheme="primary"
-          variant="solid"
-        /> */}
           <Button
             buttonText={'Apply Filter'}
             background={'primary.100'}
             color={'#565555'}
             isDisabled={false}
+            handleOnClick={() => {
+              handleApplyFilter(sortBy)
+            }}
           />
         </Box>
       </ChakraProvider>

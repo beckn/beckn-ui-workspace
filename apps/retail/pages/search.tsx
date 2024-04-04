@@ -21,6 +21,8 @@ import { LocalStorage } from '@lib/types'
 
 const Search = () => {
   const [items, setItems] = useState<ParsedItemModel[]>([])
+  const [originalItems, setOriginalItems] = useState<ParsedItemModel[]>([])
+  const [sortBy, setSortBy] = useState<string>('')
   const router = useRouter()
   const [searchKeyword, setSearchKeyword] = useState(router.query?.searchTerm || '')
   const [isLoading, setIsLoading] = useState(false)
@@ -52,14 +54,6 @@ const Search = () => {
     }
   }
 
-  // const searchPayload = {
-  //   context: {
-  //     domain: 'retail'
-  //   },
-  //   searchString: 'tshirt',
-  //   location: '12.423423,77.325647'
-  // }
-
   const fetchDataForSearch = () => {
     if (!searchKeyword) return
     setIsLoading(true)
@@ -70,6 +64,7 @@ const Search = () => {
         const parsedSearchItems = parsedSearchlist(res.data.data)
         dispatch(discoveryActions.addProducts({ products: parsedSearchItems }))
         setItems(parsedSearchItems)
+        setOriginalItems(parsedSearchItems)
         setIsLoading(false)
       })
       .catch(e => {
@@ -100,11 +95,37 @@ const Search = () => {
   const handleImageClick = () => {
     setIsFilterOpen(!isFilterOpen)
   }
+  const handleApplyFilter = (sortBy: string) => {
+    setSortBy(sortBy)
+
+    let sortedItemsCopy = [...items]
+    if (sortBy === 'LowtoHigh') {
+      sortedItemsCopy.sort((a, b) => parseFloat(a.item.price.value) - parseFloat(b.item.price.value))
+    } else if (sortBy === 'HightoLow') {
+      sortedItemsCopy.sort((a, b) => parseFloat(b.item.price.value) - parseFloat(a.item.price.value))
+    } else if (sortBy === '4+') {
+      sortedItemsCopy.sort((a, b) => parseFloat(b.item.rating) - parseFloat(a.item.rating))
+    } else if (sortBy === '2+') {
+      sortedItemsCopy.sort((a, b) => parseFloat(b.item.rating) - parseFloat(a.item.rating))
+    }
+    setItems(sortedItemsCopy)
+    setIsFilterOpen(false)
+  }
+
+  const handleResetFilter = () => {
+    setItems(originalItems)
+    setIsFilterOpen(false)
+  }
 
   return (
     <>
       <Box display="flex">
-        {!isSmallScreen && !isMediumScreen && <Filter />}
+        {!isSmallScreen && !isMediumScreen && (
+          <Filter
+            handleApplyFilter={handleApplyFilter}
+            handleResetFilter={handleResetFilter}
+          />
+        )}
         <Box
           w="100%"
           ml={['unset', 'unset', 'unset', '36px']}
@@ -142,7 +163,10 @@ const Search = () => {
               isOpen={isFilterOpen}
               onClose={handleFilterClose}
             >
-              <Filter />
+              <Filter
+                handleApplyFilter={handleApplyFilter}
+                handleResetFilter={handleResetFilter}
+              />
             </BottomModal>
           )}
           {isMediumScreen && isFilterOpen && (
@@ -152,7 +176,10 @@ const Search = () => {
               backgroundColor={'#fff'}
               left="28%"
             >
-              <Filter />
+              <Filter
+                handleApplyFilter={handleApplyFilter}
+                handleResetFilter={handleResetFilter}
+              />
             </Box>
           )}
 
@@ -181,7 +208,7 @@ const Search = () => {
                     images: item.images.map(singleImage => singleImage.url),
                     name: item.name,
                     price: item.price.value,
-                    rating:item.rating,
+                    rating: item.rating,
                     shortDesc: item.short_desc
                   }
                   return (
@@ -213,36 +240,3 @@ const Search = () => {
 }
 
 export default Search
-
-// {Array(5)
-//   .fill([...items])
-//   .flat()
-//   .map((singleItem, idx) => {
-//     const { item } = singleItem
-//     const product = {
-//       id: item.id,
-//       images: item.images.map(singleImage => singleImage.url),
-//       name: item.name,
-//       price: item.price.value,
-//       rating: '4',
-//       shortDesc: item.short_desc
-//     }
-//     return (
-//       <ProductCard
-//         key={idx}
-//         productClickHandler={e => {
-//           e.preventDefault()
-//           dispatch(discoveryActions.addSingleProduct({ product: singleItem }))
-//           router.push({
-//             pathname: '/product',
-//             query: {
-//               id: item.id,
-//               search: searchKeyword
-//             }
-//           })
-//         }}
-//         product={product}
-//         currency={item.price.currency}
-//       />
-//     )
-//   })}
