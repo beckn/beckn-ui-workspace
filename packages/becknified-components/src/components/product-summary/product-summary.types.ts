@@ -11,3 +11,12 @@ export interface ProductSummaryPropsModel {
   secondaryCTAs?: ButtonProps[]
   starRating?: StarRatingProps
 }
+
+export interface ProductSummaryBoxProps {
+  title: TypographyProps
+  productPrice: ProductPriceProps
+  button: ButtonProps
+  counter: number
+  incrementCounter: () => void
+  decrementCounter: () => void
+}
