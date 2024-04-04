@@ -37,6 +37,7 @@ interface Image {
 }
 
 export interface Item {
+  rating: number
   long_desc: string
   short_desc: string
   id: string

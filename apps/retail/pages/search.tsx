@@ -224,6 +224,7 @@ const Search = () => {
                             search: searchKeyword
                           }
                         })
+                        localStorage.setItem('selectCardHeaderText', product.name)
                       }}
                       product={product}
                       currency={item.price.currency}

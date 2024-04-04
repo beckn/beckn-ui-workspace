@@ -53,11 +53,13 @@ const storeHeaderBlackList = [
   '/assemblyDetails',
   '/updateShippingDetails',
   '/orderCancellation',
-  '/profile'
+  '/profile',
+  '/search',
+  '/checkout'
 ]
 const headerValues: PathnameObjectType = {
   '/checkoutPage': 'Review Purchase Order',
-  '/orderHistory': 'Order History',
+  '/orderHistory': 'My Orders',
   '/orderDetails': 'Order Details',
   '/invoiceDetails': 'Invoice Details',
   '/signin': 'Sign In',
@@ -68,8 +70,9 @@ const headerValues: PathnameObjectType = {
   '/updateShippingDetails': 'Shipping Details',
   '/orderCancellation': 'Order Cancel',
   '/feedback': '',
-  '/profile': 'Profile'
-  // '/search':'Search results'
+  '/profile': 'Profile',
+  '/search': 'Search results',
+  '/checkout': 'Billing & Shipping'
 }
 
 const headerValuesFrench: PathnameObjectType = {
@@ -216,6 +219,13 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
     </>
   )
 }
+const getLocalStorage = (item: string) => {
+  if (typeof window !== 'undefined' && window.localStorage) {
+    return localStorage.getItem(item)
+  } else {
+    return ''
+  }
+}
 
 const BottomHeader = () => {
   const [optionTags, setOptionTags] = useState<any>()
@@ -224,6 +234,7 @@ const BottomHeader = () => {
   const [isInvoiceModalOpen, setInvoiceModalOpen] = useState(false)
   const cartItems = useSelector((state: ICartRootState) => state.cart.items)
   const theme = useTheme()
+  const storedHeaderText = getLocalStorage('selectCardHeaderText')
 
   const [currentAddress, setCurrentAddress] = useState('')
   const [loadingForCurrentAddress, setLoadingForCurrentAddress] = useState(true)
@@ -324,7 +335,13 @@ const BottomHeader = () => {
               />
             )}
           </Box>
-          {getHeaderTitleForPage(optionTags?.name, optionTags?.logo, router.pathname, locale)}
+          {getHeaderTitleForPage(
+            // optionTags?.name,
+            storedHeaderText as string,
+            optionTags?.logo,
+            router.pathname,
+            locale
+          )}
           <div className="flex gap-4">
             {!cartIconBlackList.includes(router.pathname) && (
               <CartIconWithCount

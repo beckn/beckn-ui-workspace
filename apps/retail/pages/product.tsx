@@ -1,6 +1,6 @@
 import Router from 'next/router'
 import React, { useEffect, useState } from 'react'
-import { ProductDetailPage } from '@beckn-ui/becknified-components'
+import { ProductDetailPage, ProductPrice } from '@beckn-ui/becknified-components'
 import { RetailItem } from '@lib/products'
 import { ProductCard } from '@beckn-ui/becknified-components'
 import { LocalStorage, ICartProduct, ICart, LocalStorageCart, LocalStorageCartItem } from '@lib/types'
@@ -20,7 +20,6 @@ const Product = () => {
   const selectedProduct = useSelector((state: DiscoveryRootState) => state.discovery.selectedProduct)
   const productList = useSelector((state: DiscoveryRootState) => state.discovery.productList)
   const { isMobile, isTablet, isDesktop } = useResponsive()
-  console.log('Dank list', productList, isMobile, isTablet, isDesktop)
   const dispatch = useDispatch()
   const [counter, setCounter] = useState(1)
   const [totalPrice, setTotalPrice] = useState(selectedProduct.item.price.value)
@@ -67,11 +66,12 @@ const Product = () => {
             //     }
             //   }
             // ],
-          starRating:{
-            rating:4.5,
-            size:20,
-            setRating:()=>{} ,
-            starCount:5
+            starRating: {
+              rating: selectedProduct.item.rating,
+              size: 20,
+              setRating: () => {},
+              starCount: 5
+            }
           }
         }}
       }
@@ -104,6 +104,10 @@ const Product = () => {
             variant="subTitleSemibold"
             color={theme.colors.primary[100]}
           />
+          {/* <ProductPrice
+            currencyType={selectedProduct.item.price.currency}
+            price={parseFloat(totalPrice)}
+          /> */}
         </Flex>
         <Flex
           justifyContent={'center'}
