@@ -13,10 +13,12 @@ import {
   Stack,
   StackDivider,
   Text,
-  Textarea
+  Textarea,
+  useDisclosure
 } from '@chakra-ui/react'
 import { Accordion, BottomModal, Typography } from '@beckn-ui/molecules'
 import { useDispatch, useSelector } from 'react-redux'
+import ViewMoreOrderModal from '@components/orderDetailComponents/ViewMoreOrder'
 import { discoveryActions, DiscoveryRootState } from '@store/discovery-slice'
 import { DetailCard, OrderStatusProgress, OrderStatusProgressProps } from '@beckn-ui/becknified-components'
 import { StatusResponseModel, SupportModel } from '../types/status.types'
@@ -61,6 +63,7 @@ const OrderDetails = () => {
   console.log('Dank', router.query)
   const { t } = useLanguage()
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
+  const { isOpen, onOpen, onClose } = useDisclosure()
   const [orderStatusMap, setOrderStatusMap] = useState<any[]>([])
   const { transactionId } = useSelector((state: DiscoveryRootState) => state.discovery)
   const orderMetaData = useSelector((state: OrdersRootState) => state.orders.selectedOrderDetails)
@@ -568,7 +571,8 @@ const OrderDetails = () => {
   } = stops[0]
 
   const filteredOrder = data.statusData.filter(res => {
-    res.message.order.fulfillments[0].state.descriptor.short_desc === 'Delivered'
+    const {state} = res.message.order.fulfillments[0]
+    state && res.message.order.fulfillments[0].state.descriptor.short_desc === 'Delivered'
   })
 
   return (
@@ -690,7 +694,7 @@ const OrderDetails = () => {
               <Text
                 as={Typography}
                 // TODO
-                text={`Order Id: ${orderMetaData.orderIds[0]}`}
+                text={`Order Id: ${orderMetaData.orderIds[0].slice(0,5)}...`}
                 fontSize="17px"
                 fontWeight="600"
               />
@@ -720,7 +724,7 @@ const OrderDetails = () => {
                   color={'rgba(var(--color-primary))'}
                   fontSize={'12px'}
                   fontWeight={'600'}
-                  // onClick={onOpen}
+                  onClick={onOpen}
                 >
                   +{data.statusData[0].message.order.items.length - 1}
                 </Text>
@@ -739,6 +743,13 @@ const OrderDetails = () => {
             ml="-20px"
             width={'unset'}
             pt="15px"
+          />
+            <ViewMoreOrderModal
+            isOpen={isOpen}
+            onOpen={onOpen}
+            onClose={onClose}
+            items={data.statusData[0].message.order.items}
+            orderId={`${orderMetaData.orderIds[0].slice(0,5)}...`}
           />
 
           {/* Display order status progress */}

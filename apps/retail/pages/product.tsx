@@ -67,14 +67,14 @@ const Product = () => {
             //     }
             //   }
             // ],
-            starRating: {
-              rating: 4.5,
-              size: 20,
-              setRating: () => {},
-              starCount: 5
-            }
+          starRating:{
+            rating:4.5,
+            size:20,
+            setRating:()=>{} ,
+            starCount:5
           }
         }}
+      }
       />
       <Box
         maxW={['100%', '100%', '400px', '400px']}

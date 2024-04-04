@@ -11,7 +11,7 @@ import { discoveryActions } from '@store/discovery-slice'
 import { useBreakpoint } from '@chakra-ui/react'
 import SearchBar from '../components/header/SearchBar'
 import { useLanguage } from '../hooks/useLanguage'
-import { ParsedItemModel } from '../types/search.types'
+import { ParsedItemModel } from '@lib/types/beckn/search'
 import { DOMAIN } from '@lib/config'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
 import Filter from '../components/filter/Filter'
@@ -41,15 +41,22 @@ const Search = () => {
     context: {
       domain: DOMAIN
     },
-    searchString: 'tshirt',
-    location: '12.423423,77.325647'
+    searchString: searchKeyword,
+    fulfillment: {
+      type: 'Delivery',
+      stops: [
+        {
+          location: '28.4594965,77.0266383'
+        }
+      ]
+    }
   }
 
   // const searchPayload = {
   //   context: {
   //     domain: 'retail'
   //   },
-  //   searchString: 'T Shirt',
+  //   searchString: 'tshirt',
   //   location: '12.423423,77.325647'
   // }
 
@@ -174,7 +181,7 @@ const Search = () => {
                     images: item.images.map(singleImage => singleImage.url),
                     name: item.name,
                     price: item.price.value,
-                    rating: '4',
+                    rating:item.rating,
                     shortDesc: item.short_desc
                   }
                   return (

@@ -1,7 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
-import { authApi } from '@services/users'
-import type { User } from '@services/users'
+import { authApi,User } from '@services/users'
 import Router from 'next/router'
 import Cookies from 'js-cookie'
 
@@ -15,7 +14,12 @@ const slice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    logout: () => initialState,
+    logout: () => {
+      Cookies.remove('authToken')
+      localStorage.clear();
+      Router.push('/signin')
+      return initialState
+    },
     setCredentials: (state, { payload: { user, jwt } }: PayloadAction<{ user: User; jwt: string }>) => {
       state.user = user
       state.jwt = jwt

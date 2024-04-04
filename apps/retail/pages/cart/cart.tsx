@@ -60,7 +60,11 @@ const Cart = () => {
               price: totalAmount
             },
             totalQuantity: {
+<<<<<<< Updated upstream
               text: Number(totalQuantity),
+=======
+              text:totalQuantity.toString(),
+>>>>>>> Stashed changes
               variant: 'subTitleSemibold'
             },
             pageCTA: {

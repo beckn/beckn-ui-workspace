@@ -102,8 +102,8 @@ const OrderHistory = () => {
                       bppUri: order.attributes.bpp_uri,
                       orderId: order.attributes.order_id
                     }
-                    dispatch(orderActions.addSelectedOrder({ orderDetails: orderObjectForStatusCall }))
                     localStorage.setItem('selectedOrder', JSON.stringify(orderObjectForStatusCall))
+                    dispatch(orderActions.addSelectedOrder({ orderDetails: orderObjectForStatusCall }))
                     router.push('/orderDetails')
                   }}
                   gap={'5px'}

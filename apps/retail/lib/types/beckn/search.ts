@@ -46,6 +46,7 @@ export interface Item {
   fulfillments: Fulfillment[]
   images: Image[]
   tags: Tag[]
+  rating?: string
 }
 
 interface LocationProvider {
@@ -97,7 +98,6 @@ export interface ParsedItemModel {
   providerId: string
   providerName: string
   item: Item
-  rating?: string
   providerCoordinates: Coordinate
 }
 
