@@ -22,7 +22,7 @@
   }
 
   @media (min-width: 640px) {
-    min-width: 290px;
+    min-width: 480px;
   }
 }
 
@@ -30,7 +30,7 @@
   display: flex;
   flex-wrap: wrap;
 
-  @media (min-width: 640px) {
+  @media (min-width: 1200px) {
     flex-wrap: nowrap;
   }
 
@@ -41,8 +41,8 @@
 
 .product_image_container {
   width: 80px;
-  height: 80px;
-  margin-bottom: 5px;
+  height: 100%;
+  margin-bottom: 20px;
 }
 
 .product_name {
@@ -59,7 +59,7 @@
   padding-top: 0.25rem;
 
   @media (min-width: 640px) {
-    margin-bottom: 0;
+    margin-bottom: 8px;
   }
 }
 
