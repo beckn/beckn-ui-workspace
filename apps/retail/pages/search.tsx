@@ -59,7 +59,7 @@ const Search = () => {
   //   context: {
   //     domain: 'retail'
   //   },
-  //   searchString: 'Coffee',
+  //   searchString: 'tshirt',
   //   location: '12.423423,77.325647'
   // }
 

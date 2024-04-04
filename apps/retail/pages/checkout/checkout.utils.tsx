@@ -157,6 +157,7 @@ const geocodeFromPincode = async (pincode: any) => {
   const geocoder = new window.google.maps.Geocoder()
   try {
     const response = await geocoder.geocode({ address: pincode })
+    console.log('Dank', response)
     if (response.results.length > 0) {
       const { country, state, city } = extractAddressComponents(response.results[0])
       const lat = response.results[0].geometry.location.lat()
@@ -224,7 +225,8 @@ export const getInitPayload = async (
 
       const fulfillments = [
         {
-          type: 'Delivery',
+          id: '3',
+          type: 'standard-shipping',
           stops: [
             {
               location: {
@@ -237,7 +239,7 @@ export const getInitPayload = async (
                   name: cityData?.state
                 },
                 country: {
-                  code: cityData?.country
+                  code: 'IND'
                 },
                 area_code: deliveryAddress.pinCode
               },
@@ -268,7 +270,13 @@ export const getInitPayload = async (
           name: billingAddress.name,
           phone: billingAddress.mobileNumber,
           address: billingAddress.address,
-          email: billingAddress.email
+          email: billingAddress.email,
+          city: {
+            name: cityData?.city
+          },
+          state: {
+            name: cityData?.state
+          }
         }
       }
     })

@@ -28,8 +28,6 @@ const Cart: React.FC<CartProps> = ({
     )
   }
 
-  console.log('Dank inside', cartItems)
-
   if (cartItems.length == 0) {
     return (
       <>

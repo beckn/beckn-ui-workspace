@@ -15,6 +15,7 @@ import { ConfirmResponseModel } from '../types/confirm.types'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
 import { UIState, DataState, ProcessState } from '../types/order-details.types'
 import { OrdersRootState } from '@store/order-slice'
+import { DOMAIN } from '@lib/config'
 
 const OrderDetails = () => {
   const [uiState, setUiState] = useState<UIState>({
@@ -197,7 +198,7 @@ const OrderDetails = () => {
                 transaction_id: transactionId,
                 bpp_id: bppId,
                 bpp_uri: bppUri,
-                domain: 'retail'
+                domain: DOMAIN
               },
               message: {
                 order_id: orderId

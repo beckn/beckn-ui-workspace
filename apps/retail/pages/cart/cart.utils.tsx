@@ -14,6 +14,7 @@ export const getSelectPayload = (inputData: any, transactionId: string, domain =
   }, {})
 
   Object.entries(bppGroups).forEach(([bpp_id, items]) => {
+    console.log('Dank', bpp_id)
     const context = {
       transaction_id,
       bpp_id,
