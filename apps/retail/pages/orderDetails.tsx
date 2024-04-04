@@ -721,7 +721,7 @@ const OrderDetails = () => {
                 </Text>
                 <Text
                   pl={'5px'}
-                  color={'rgba(var(--color-primary))'}
+                  color={'#5EC401'}
                   fontSize={'12px'}
                   fontWeight={'600'}
                   onClick={onOpen}

@@ -37,6 +37,7 @@ interface Image {
 }
 
 interface Item {
+  rating: any
   long_desc: string
   short_desc: string
   id: string
