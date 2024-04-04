@@ -1,5 +1,5 @@
 import { ButtonProps, TypographyProps } from '@beckn-ui/molecules'
-import { StarRatingProps, ProductPriceProps } from '@beckn-ui/becknified-components'
+import { StarRatingProps, ProductPriceProps, ProductCtaProps } from '@beckn-ui/becknified-components'
 
 export interface ProductSummaryPropsModel {
   imageSrc: string
@@ -10,13 +10,5 @@ export interface ProductSummaryPropsModel {
   secondaryDescription?: string
   secondaryCTAs?: ButtonProps[]
   starRating?: StarRatingProps
-}
-
-export interface ProductSummaryBoxProps {
-  title: TypographyProps
-  productPrice: ProductPriceProps
-  button: ButtonProps
-  counter: number
-  incrementCounter: () => void
-  decrementCounter: () => void
+  productCta?: ProductCtaProps
 }

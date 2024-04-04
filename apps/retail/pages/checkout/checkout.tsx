@@ -74,7 +74,6 @@ const CheckoutPage = () => {
   const isBillingSameRedux = useSelector((state: CheckoutRootState) => state.checkout.isBillingSame)
   const { transactionId, productList } = useSelector((state: DiscoveryRootState) => state.discovery)
 
-
   useEffect(() => {
     if (localStorage) {
       if (localStorage.getItem('userPhone')) {

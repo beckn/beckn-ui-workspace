@@ -11,7 +11,7 @@ import {
   Image
 } from '@chakra-ui/react'
 import React from 'react'
-import { Button,Typography } from '@beckn-ui/molecules'
+import { Button, Typography } from '@beckn-ui/molecules'
 import ButtonComp from '../button/Button'
 import crossIcon from '../../public/images/crossIcon.svg'
 import { useLanguage } from '../../hooks/useLanguage'
@@ -27,7 +27,7 @@ export interface ViewMoreOrderModalProps {
 
 const ViewMoreOrderModal: React.FC<ViewMoreOrderModalProps> = props => {
   const { t } = useLanguage()
-  console.log("Dank view",props.items)
+  console.log('Dank view', props.items)
   return (
     <>
       <Modal
@@ -84,17 +84,14 @@ const ViewMoreOrderModal: React.FC<ViewMoreOrderModalProps> = props => {
                   <Typography
                     fontWeight={'600'}
                     text={`${currencyMap[item.price.currency]} ${item.price.value} `}
-                    />
-                  
+                  />
                 </Flex>
               )
             })}
 
-
             <Button
-            text='Close'
-            handleClick={props.onClose}
-            
+              text="Close"
+              handleClick={props.onClose}
             />
           </ModalBody>
         </ModalContent>

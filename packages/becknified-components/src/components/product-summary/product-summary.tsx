@@ -4,6 +4,7 @@ import { Box, Image, Flex } from '@chakra-ui/react'
 import React from 'react'
 import { ProductSummaryPropsModel } from './product-summary.types'
 import ProductDescription from '../prouct-description'
+import ProductCTA from '../product-Cta'
 
 const ProductSummary: React.FC<ProductSummaryPropsModel> = props => {
   const {
@@ -14,7 +15,8 @@ const ProductSummary: React.FC<ProductSummaryPropsModel> = props => {
     className = '',
     secondaryCTAs,
     secondaryDescription,
-    starRating
+    starRating,
+    productCta
   } = props
 
   return (
@@ -70,6 +72,7 @@ const ProductSummary: React.FC<ProductSummaryPropsModel> = props => {
                   <Button {...secondaryCTAs[0]} />
                 </Box>
               )}
+              {productCta && <ProductCTA {...productCta} />}
             </Flex>
           </Flex>
         </Box>

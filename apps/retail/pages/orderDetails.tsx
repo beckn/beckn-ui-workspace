@@ -571,7 +571,7 @@ const OrderDetails = () => {
   } = stops[0]
 
   const filteredOrder = data.statusData.filter(res => {
-    const {state} = res.message.order.fulfillments[0]
+    const { state } = res.message.order.fulfillments[0]
     state && res.message.order.fulfillments[0].state.descriptor.short_desc === 'Delivered'
   })
 
@@ -694,7 +694,7 @@ const OrderDetails = () => {
               <Text
                 as={Typography}
                 // TODO
-                text={`Order Id: ${orderMetaData.orderIds[0].slice(0,5)}...`}
+                text={`Order Id: ${orderMetaData.orderIds[0].slice(0, 5)}...`}
                 fontSize="17px"
                 fontWeight="600"
               />
@@ -744,12 +744,12 @@ const OrderDetails = () => {
             width={'unset'}
             pt="15px"
           />
-            <ViewMoreOrderModal
+          <ViewMoreOrderModal
             isOpen={isOpen}
             onOpen={onOpen}
             onClose={onClose}
             items={data.statusData[0].message.order.items}
-            orderId={`${orderMetaData.orderIds[0].slice(0,5)}...`}
+            orderId={`${orderMetaData.orderIds[0].slice(0, 5)}...`}
           />
 
           {/* Display order status progress */}

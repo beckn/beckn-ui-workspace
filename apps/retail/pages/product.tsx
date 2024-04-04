@@ -52,34 +52,39 @@ const Product = () => {
             imageSrc: selectedProduct.item.images[0].url,
             name: selectedProduct.item.name,
             secondaryDescription: selectedProduct.item.long_desc,
-            // secondaryCTAs:[
-            //   {
-            //     text: 'Add to cart',
-            //     handleClick: () => {
-            //       dispatch(
-            //         cartActions.addItemToCart({
-            //           product: selectedProduct,
-            //           quantity: 1
-            //         })
-            //       )
-            //       toast.success('Product added to cart')
-            //     }
-            //   }
-            // ],
             starRating: {
               rating: selectedProduct.item.rating,
               size: 20,
               setRating: () => {},
               starCount: 5
+            },
+            productCta: {
+              currency: selectedProduct.item.price.currency,
+              totalPrice: selectedProduct.item.price.value,
+              handleIncrement: increment,
+              handleDecrement: decrement,
+              counter: counter,
+              cta: {
+                text: 'Add To Cart',
+                color: 'black',
+                handleClick: () => {
+                  dispatch(
+                    cartActions.addItemToCart({
+                      product: selectedProduct,
+                      quantity: counter
+                    })
+                  )
+                  toast.success('Product added to cart')
+                }
+              }
             }
           }
         }}
-      }
       />
-      <Box
+      {/* <Box
         maxW={['100%', '100%', '400px', '400px']}
         margin="0 auto"
-        border={'1px solid #BFBFBF'}
+        // border={'1px solid #BFBFBF'}
         p="20px 20px 10px 20px"
         borderRadius={'4px'}
         mb="20px"
@@ -104,10 +109,7 @@ const Product = () => {
             variant="subTitleSemibold"
             color={theme.colors.primary[100]}
           />
-          {/* <ProductPrice
-            currencyType={selectedProduct.item.price.currency}
-            price={parseFloat(totalPrice)}
-          /> */}
+          
         </Flex>
         <Flex
           justifyContent={'center'}
@@ -148,51 +150,9 @@ const Product = () => {
             toast.success('Product added to cart')
           }}
         />
-      </Box>
+      </Box> */}
     </>
   )
 }
 
 export default Product
-
-{
-  /* {
-      !(isMobile || isTablet) && <Flex overflow='hidden'>
-        {
-      Array(5).fill([...productList]).flat().map((singleItem,idx)=>{
-        const { item } = singleItem
-        const product = {
-          id: item.id,
-          images: item.images.map(singleImage => singleImage.url),
-          name: item.name,
-          price: item.price.value,
-          rating: '4',
-          shortDesc: item.short_desc
-        }
-        return (
-          <ProductCard
-            key={idx}
-            productClickHandler={e => {
-              e.preventDefault()
-              dispatch(discoveryActions.addSingleProduct({ product: singleItem }))
-              router.push({
-                pathname: '/product',
-                query: {
-                  id: item.id,
-                  search: searchKeyword
-                }
-              })
-            }}
-            product={product}
-            currency={item.price.currency}
-          />
-        )
-
-      })
-    }
-
-
-      </Flex>
-
-    } */
-}

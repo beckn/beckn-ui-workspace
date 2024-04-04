@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import orderConfirmmark from '../public/images/orderConfirmmark.svg'
-import { useSelector,useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { useLanguage } from '../hooks/useLanguage'
 import { ConfirmationPage } from '@beckn-ui/becknified-components'
 import { InitResponseModel } from '../types/init.types'
@@ -83,17 +83,17 @@ const OrderConfirmation = () => {
           {
             text: 'View Details',
             handleClick: () => {
-              const  orderId  = confirmResponse[0].message.orderId
-              const bppId  = confirmResponse[0].context.bppId
-              const bppUri  = confirmResponse[0].context.bppUri
+              const orderId = confirmResponse[0].message.orderId
+              const bppId = confirmResponse[0].context.bppId
+              const bppUri = confirmResponse[0].context.bppUri
 
-              dispatch(orderActions.addSelectedOrder({orderDetails:{orderId,bppId,bppUri}}))
-                    const orderObjectForStatusCall = {
-                      bppId: bppId,
-                      bppUri: bppUri,
-                      orderId: orderId
-                    }
-                    localStorage.setItem('selectedOrder', JSON.stringify(orderObjectForStatusCall))
+              dispatch(orderActions.addSelectedOrder({ orderDetails: { orderId, bppId, bppUri } }))
+              const orderObjectForStatusCall = {
+                bppId: bppId,
+                bppUri: bppUri,
+                orderId: orderId
+              }
+              localStorage.setItem('selectedOrder', JSON.stringify(orderObjectForStatusCall))
               router.push('/orderDetails')
             },
             disabled: false,

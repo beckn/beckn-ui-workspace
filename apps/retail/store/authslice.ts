@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
-import { authApi,User } from '@services/users'
+import { authApi, User } from '@services/users'
 import Router from 'next/router'
 import Cookies from 'js-cookie'
 
@@ -16,7 +16,7 @@ const slice = createSlice({
   reducers: {
     logout: () => {
       Cookies.remove('authToken')
-      localStorage.clear();
+      localStorage.clear()
       Router.push('/signin')
       return initialState
     },
