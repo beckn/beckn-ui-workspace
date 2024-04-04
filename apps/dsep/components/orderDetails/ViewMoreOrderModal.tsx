@@ -14,14 +14,14 @@ import React from 'react'
 import ButtonComp from '../button/Button'
 import crossIcon from '../../public/images/crossIcon.svg'
 import { useLanguage } from '../../hooks/useLanguage'
-import { generateAlphanumericID } from '../../utilities/orderDetails-utils'
 import Router from 'next/router'
+import { StatusItem } from '../../lib/types/status.types'
 
 export interface ViewMoreOrderModalProps {
   isOpen: boolean
   onOpen: () => void
   onClose: () => void
-  items: any
+  items: StatusItem[]
   orderId: string
 }
 
@@ -63,11 +63,11 @@ const ViewMoreOrderModal: React.FC<ViewMoreOrderModalProps> = props => {
           </Box>
 
           <ModalBody padding={'15px 20px'}>
-            {props.items.map((item: any) => {
+            {props.items.map(item => {
               return (
                 <Box>
                   <Box>
-                    <Text pb={'8px'}>{item.descriptor.name}</Text>
+                    <Text pb={'8px'}>{item.name}</Text>
                   </Box>
                   <Text
                     fontSize={'15px'}

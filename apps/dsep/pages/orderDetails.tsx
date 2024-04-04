@@ -1,35 +1,29 @@
 import { Box, CardBody, Divider, Flex, Text, Image, Card, useDisclosure, Stack } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
-import Accordion from '../components/accordion/Accordion'
 import { useLanguage } from '../hooks/useLanguage'
-import { ResponseModel } from '../lib/types/responseModel'
-import {
-  getConfirmMetaDataForBpp,
-  getOrderPlacementTimeline,
-  getPayloadForStatusRequest,
-  getPayloadForTrackRequest
-} from '../utilities/confirm-utils'
-import { getDataPerBpp } from '../utilities/orderDetails-utils'
-import { getSubTotalAndDeliveryChargesForOrder } from '../utilities/orderHistory-utils'
+import { formatTimestamp } from '../utilities/confirm-utils'
+import { getStatusPayload } from '../utilities/orderDetails-utils'
 import TrackIcon from '../public/images/TrackIcon.svg'
 import ViewMoreOrderModal from '../components/orderDetails/ViewMoreOrderModal'
 import { useSelector } from 'react-redux'
 import { TransactionIdRootState } from '../lib/types/cart'
 import useRequest from '../hooks/useRequest'
 import { useRouter } from 'next/router'
-import DetailsCard from '../components/detailsCard/DetailsCard'
-import Button from '../components/button/Button'
 import Link from 'next/link'
+import { ConfirmResponseModel } from '../lib/types/confirm.types'
+import { StatusData, StatusResponseModel } from '../lib/types/status.types'
+import { DetailCard, ProductPrice } from '@beckn-ui/becknified-components'
+import LoaderWithMessage from '@beckn-ui/molecules/src/components/LoaderWithMessage/loader-with-message'
+import { Accordion, Typography } from '@beckn-ui/molecules'
+
+// TODO :- to check this order details component
 
 const OrderDetails = () => {
-  const [allOrderDelivered, setAllOrderDelivered] = useState(false)
-  const [confirmData, setConfirmData] = useState<ResponseModel[]>([])
-  const [statusResponse, setStatusResponse] = useState([])
+  const [confirmData, setConfirmData] = useState<ConfirmResponseModel | null>(null)
+  const [statusResponse, setStatusResponse] = useState<StatusResponseModel | null>(null)
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const transactionId = useSelector((state: { transactionId: TransactionIdRootState }) => state.transactionId)
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL as string
   const statusRequest = useRequest()
-  const trackRequest = useRequest()
   const router = useRouter()
   const { orderId } = router.query
   const [status, setStatus] = useState('progress')
@@ -37,115 +31,73 @@ const OrderDetails = () => {
   const { t } = useLanguage()
 
   useEffect(() => {
-    if (orderId && localStorage && localStorage.getItem('orderHistoryArray')) {
-      const parsedOrderHistoryArray = JSON.parse(localStorage.getItem('orderHistoryArray') as string)
-
-      const relatedOrder = parsedOrderHistoryArray.find((parsedOrder: any) => parsedOrder.parentOrderId === orderId)
-
-      setConfirmData(relatedOrder.orders)
-
-      const confirmOrderMetaDataPerBpp = getConfirmMetaDataForBpp(relatedOrder.orders)
-      const payloadForStatusRequest = getPayloadForStatusRequest(confirmOrderMetaDataPerBpp, transactionId)
-      const payloadForTrackRequest = getPayloadForTrackRequest(confirmOrderMetaDataPerBpp, transactionId)
-
-      trackRequest.fetchData(`${apiUrl}/client/v2/track`, 'POST', payloadForTrackRequest)
-
-      const intervalId = setInterval(() => {
-        statusRequest.fetchData(`${apiUrl}/client/v2/status`, 'POST', payloadForStatusRequest)
-      }, 2000)
-
-      return () => {
-        clearInterval(intervalId)
-      }
+    if (localStorage && localStorage.getItem('confirmResponse')) {
+      const parsedConfirmResponse: ConfirmResponseModel = JSON.parse(localStorage.getItem('confirmResponse') as string)
+      setConfirmData(parsedConfirmResponse)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
-    if (localStorage) {
-      const stringifiedConfirmData = localStorage.getItem('confirmData')
-      if (stringifiedConfirmData) {
-        const parsedConfirmedData = JSON.parse(stringifiedConfirmData)
-        setConfirmData(parsedConfirmedData)
-
-        const confirmOrderMetaDataPerBpp = getConfirmMetaDataForBpp(parsedConfirmedData)
-        const payloadForStatusRequest = getPayloadForStatusRequest(confirmOrderMetaDataPerBpp, transactionId)
-        const payloadForTrackRequest = getPayloadForTrackRequest(confirmOrderMetaDataPerBpp, transactionId)
-
-        trackRequest.fetchData(`${apiUrl}/client/v2/track`, 'POST', payloadForTrackRequest)
-
-        const intervalId = setInterval(() => {
-          statusRequest.fetchData(`${apiUrl}/client/v2/status`, 'POST', payloadForStatusRequest)
-        }, 2000)
-
-        return () => {
-          clearInterval(intervalId)
-        }
-      }
+    if (confirmData) {
+      const statusPayload = getStatusPayload(confirmData)
+      statusRequest.fetchData(`${apiUrl}/status`, 'POST', statusPayload)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [confirmData])
 
   useEffect(() => {
     if (statusRequest.data) {
-      setStatusResponse(statusRequest.data as any)
-      if (statusRequest.data.every(res => res.message.order.state === 'DELIVERED')) {
-        setAllOrderDelivered(true)
-      }
+      localStorage.setItem('statusResponse', JSON.stringify(statusRequest.data))
+      setStatusResponse(statusRequest.data)
     }
   }, [statusRequest.data])
 
-  if (!confirmData.length) {
+  if (statusRequest.loading) {
+    return (
+      <Box
+        display={'grid'}
+        height={'calc(100vh - 300px)'}
+        alignContent={'center'}
+      >
+        <LoaderWithMessage
+          loadingText={t.categoryLoadPrimary}
+          loadingSubText={t.statusLoaderSubtext}
+        />
+      </Box>
+    )
+  }
+
+  if (!statusResponse || statusRequest.error) {
     return <></>
   }
 
-  const confirmDataPerBpp = getDataPerBpp(confirmData)
-
-  const orderFromConfirmData = confirmData[0].message.responses[0].message.order
-
-  const { subTotal, totalDeliveryCharge } = getSubTotalAndDeliveryChargesForOrder(confirmData)
-
-  const orderState = orderFromConfirmData.payment.status
-
-  const totalQuantityOfOrder = (res: any) => {
-    let count = 0
-    res.message.order.items.forEach((item: any) => {
-      count += item.quantity.count
-    })
-    return count
+  const { data } = statusResponse
+  const totalOrdersQty = data.length
+  const filteredOrder = data.filter(res => {
+    res.message.order.fulfillments[0].state.descriptor.short_desc === 'Delivered'
+  })
+  const orderSubTotal = data.reduce((acc, curr) => acc + parseFloat(curr.message.order.quote.price.value), 0)
+  const {
+    context,
+    message: {
+      order: {
+        quote: {
+          price: { currency }
+        }
+      }
+    }
+  } = data[0]
+  const { timestamp } = context
+  const totalItemsInAnOrder = (bppStatusData: StatusData) => {
+    return bppStatusData.message.order.items.length
   }
 
-  const getExtractedName = (str: string) => {
-    const parts = str
-      .trim()
-      .split('/')
-      .filter(part => part !== '')
-    const extracted = parts[parts.length - 1]
-
-    return extracted
-  }
-
-  const shippingDetails = {
-    name: getExtractedName(orderFromConfirmData.billing.name),
-    address: orderFromConfirmData.billing.address.state,
-    phone: orderFromConfirmData.billing.phone
-  }
-
-  const handleViewCource = () => {
-    let courseUrl = ''
-
-    Object.keys(confirmDataPerBpp).map(key => {
-      courseUrl = confirmDataPerBpp[key].items[0].tags.Url
-    })
-    window.location.href = courseUrl
-  }
   return (
     <Box
       className="hideScroll"
       maxH={'calc(100vh - 100px)'}
       overflowY="scroll"
     >
-      <DetailsCard>
+      <DetailCard>
         <Flex
           alignItems={'center'}
           pb={'8px'}
@@ -154,35 +106,35 @@ const OrderDetails = () => {
             src="/images/jobSearch.svg"
             alt=" "
           />
-          <Text
-            fontSize="17px"
-            fontWeight={'600'}
-            pl="8px"
-          >
-            {t.lookingtojobs}
-          </Text>
+
+          <Typography
+            style={{
+              paddingLeft: '8px'
+            }}
+            text={t.lookingtojobs}
+            variant="titleSemibold"
+          />
         </Flex>
         <Box pl={'28px'}>
-          <Text
+          <Typography
             fontSize={'15px'}
-            as="span"
-          >
-            {t.jobChangeInfo}
-          </Text>
+            text={t.jobChangeInfo}
+            variant="subTextRegular"
+          />
           <Link href={'/jobSearch'}>
-            <Text
-              pl="5px"
-              fontSize={'15px'}
-              as="span"
-              color={'rgba(var(--color-primary))'}
-              cursor={'pointer'}
-            >
-              {t.searchForJob}
-            </Text>
+            <Typography
+              style={{
+                cursor: 'pointer'
+              }}
+              text={t.searchForJob}
+              color="rgba(var(--color-primary))"
+              variant="subTextRegular"
+              fontSize="15px"
+            />
           </Link>
         </Box>
-      </DetailsCard>
-      {allOrderDelivered ? (
+      </DetailCard>
+      {filteredOrder.length === totalOrdersQty ? (
         <Card
           mb={'20px'}
           border={'1px solid rgba(94, 196, 1, 1)'}
@@ -225,7 +177,7 @@ const OrderDetails = () => {
         </Card>
       ) : null}
 
-      <DetailsCard>
+      <DetailCard>
         <Box
           fontWeight={600}
           fontSize={'17px'}
@@ -239,39 +191,35 @@ const OrderDetails = () => {
           justifyContent={'space-between'}
           alignItems={'center'}
         >
-          <Text>{t.bookedIn}</Text>
-          <Text>{getOrderPlacementTimeline(orderFromConfirmData.created_at)}</Text>
+          <Typography
+            text={t.bookedIn}
+            variant={'subTitleRegular'}
+          />
+          <Typography
+            text={formatTimestamp(timestamp)}
+            variant={'subTitleRegular'}
+          />
         </Flex>
-        {Object.keys(confirmDataPerBpp).map(key => (
-          <Box key={confirmDataPerBpp[key].id}>
-            <Flex
-              pt={4}
-              justifyContent={'space-between'}
-              alignItems={'center'}
-            >
-              <Text>{t.ordersFulfilled}</Text>
-              <Box>
-                <Text
-                  as={'span'}
-                  pr={'2px'}
-                >
-                  {confirmData.length}
-                </Text>
-                <Text as={'span'}>of</Text>
-                <Text
-                  as={'span'}
-                  pl={'2px'}
-                >
-                  {confirmData.length}
-                </Text>
-              </Box>
-            </Flex>
-          </Box>
-        ))}
-      </DetailsCard>
 
-      {statusResponse.map((res: any, index: number) => (
+        <Flex
+          pt={4}
+          justifyContent={'space-between'}
+          alignItems={'center'}
+        >
+          <Typography
+            text={t.ordersFulfilled}
+            variant={'subTitleRegular'}
+          />
+          <Typography
+            text={`${filteredOrder.length} of ${totalOrdersQty}`}
+            variant={'subTitleRegular'}
+          />
+        </Flex>
+      </DetailCard>
+
+      {statusResponse?.data.map((res, index: number) => (
         <Accordion
+          key={index}
           accordionHeader={
             <Box>
               <Flex
@@ -279,64 +227,59 @@ const OrderDetails = () => {
                 fontSize={'17px'}
                 alignItems={'center'}
               >
-                <Text
-                  fontWeight={600}
+                <Typography
+                  style={{
+                    textOverflow: 'ellipsis',
+                    overflow: 'hidden',
+                    whiteSpace: 'nowrap'
+                  }}
+                  fontWeight={'600'}
                   fontSize={'17px'}
-                  pr={'8px'}
-                >
-                  {t.orderId}:
-                </Text>
-
-                <Text
-                  textOverflow={'ellipsis'}
-                  overflow={'hidden'}
-                  whiteSpace={'nowrap'}
-                >
-                  {res.message.order.displayId}
-                </Text>
+                  text={`${t.orderId}: ${res.message.order.id}`}
+                  variant={'subTitleRegular'}
+                />
               </Flex>
               <Flex
                 justifyContent={'space-between'}
                 alignItems={'center'}
               >
                 <Flex maxWidth={'57vw'}>
-                  <Text
-                    textOverflow={'ellipsis'}
-                    overflow={'hidden'}
-                    whiteSpace={'nowrap'}
-                    fontSize={'12px'}
-                    fontWeight={'400'}
-                  >
-                    {res.message.order.items[0].descriptor.name}
-                  </Text>
-                  {totalQuantityOfOrder(res) !== 1 && (
-                    <Text
-                      pl={'5px'}
-                      color={'rgba(var(--color-primary))'}
-                      fontSize={'12px'}
-                      fontWeight={'600'}
+                  <Typography
+                    style={{
+                      textOverflow: 'ellipsis',
+                      overflow: 'hidden',
+                      whiteSpace: 'nowrap'
+                    }}
+                    text={res.message.order.items[0].name}
+                    variant={'subTitleRegular'}
+                  />
+                  {totalItemsInAnOrder(res) > 1 && (
+                    <Typography
                       onClick={onOpen}
-                    >
-                      +{totalQuantityOfOrder(res) - 1}
-                    </Text>
+                      style={{
+                        paddingLeft: '5px'
+                      }}
+                      color="rgba(var(--color-primary))"
+                      fontSize="600"
+                      text={`+${totalItemsInAnOrder(res) - 1}`}
+                      variant={'subTitleRegular'}
+                    />
                   )}
                 </Flex>
                 {status === 'progress' ? (
-                  <Text
-                    fontSize={'12px'}
+                  <Typography
                     fontWeight="600"
+                    text="In Progress"
                     color={'#FDC025'}
-                  >
-                    In Progress
-                  </Text>
+                    variant={'subTitleRegular'}
+                  />
                 ) : (
-                  <Text
-                    fontSize={'12px'}
+                  <Typography
                     fontWeight="600"
-                    color={'#5EC401'}
-                  >
-                    Completed
-                  </Text>
+                    text="Completed"
+                    color={'#FDC025'}
+                    variant={'subTitleRegular'}
+                  />
                 )}
               </Flex>
             </Box>
@@ -347,7 +290,7 @@ const OrderDetails = () => {
             onOpen={onOpen}
             onClose={onClose}
             items={res.message.order.items}
-            orderId={res.message.order.displayId}
+            orderId={res.message.order.id}
           />
           <Divider mb={'20px'} />
           <CardBody
@@ -360,20 +303,22 @@ const OrderDetails = () => {
                   src="/images/done.svg"
                   alt=""
                 />
-                <Text
-                  pl={'8px'}
-                  fontSize="15px"
-                  fontWeight={'600'}
-                >
-                  Courses Purchased
-                </Text>
+                <Typography
+                  style={{
+                    paddingLeft: '8px'
+                  }}
+                  fontWeight="600"
+                  text={t.coursesPurchased}
+                  variant={'subTitleRegular'}
+                />
               </Flex>
-              <Text
-                pl="28px"
-                fontSize={'12px'}
-              >
-                21st Jun 2021, 12:11pm
-              </Text>
+              <Typography
+                style={{
+                  paddingLeft: '28px'
+                }}
+                text={formatTimestamp(timestamp)}
+                variant={'subTitleRegular'}
+              />
             </Box>
             {status === 'progress' ? (
               <Box
@@ -381,7 +326,9 @@ const OrderDetails = () => {
                 color={'rgba(var(--color-primary))'}
                 pt="10px"
                 pl="28px"
-                onClick={handleViewCource}
+                // onClick={handleViewCource}
+                // TODO :- TO check for the presence of course URL in the status response
+                onClick={() => {}}
               >
                 {t.viewCourse}
               </Box>
@@ -399,22 +346,38 @@ const OrderDetails = () => {
             justifyContent={'space-between'}
             alignItems={'center'}
           >
-            <Text>{t.subTotal}</Text>
-            <Text>
-              {t.currencySymbol}
-              {subTotal}
-            </Text>
+            <Typography
+              text={t.subTotal}
+              variant={'subTitleRegular'}
+            />
+
+            <ProductPrice
+              price={orderSubTotal}
+              currencyType={currency}
+              color={'#000000'}
+            />
           </Flex>
           <Flex
             pb={'15px'}
             justifyContent={'space-between'}
             alignItems={'center'}
           >
-            <Text>{t.scholaarshipApplied}</Text>
-            <Text>
-              - {t.currencySymbol}
-              {subTotal}
-            </Text>
+            <Typography
+              text={t.scholaarshipApplied}
+              variant={'subTitleRegular'}
+            />
+            <Box display={'flex'}>
+              <Typography
+                text={'-'}
+                variant={'subTitleRegular'}
+              />
+
+              <ProductPrice
+                price={orderSubTotal}
+                currencyType={currency}
+                color={'#000000'}
+              />
+            </Box>
           </Flex>
           <Divider />
         </CardBody>
@@ -429,11 +392,15 @@ const OrderDetails = () => {
             fontSize={'17px'}
             fontWeight={'600'}
           >
-            <Text>{t.total}</Text>
-            <Text>
-              {t.currencySymbol}
-              0.00
-            </Text>
+            <Typography
+              text={t.total}
+              variant={'subTitleRegular'}
+            />
+            <ProductPrice
+              price={0.0}
+              currencyType={currency}
+              color={'#000000'}
+            />
           </Flex>
           <Flex
             fontSize={'15px'}
@@ -441,8 +408,14 @@ const OrderDetails = () => {
             alignItems={'center'}
             pb={'15px'}
           >
-            <Text>{t.paymentMethod}</Text>
-            <Text>{t.naText}</Text>
+            <Typography
+              text={t.paymentMethod}
+              variant={'subTitleRegular'}
+            />
+            <Typography
+              text={t.naText}
+              variant={'subTitleRegular'}
+            />
           </Flex>
         </CardBody>
       </Accordion>

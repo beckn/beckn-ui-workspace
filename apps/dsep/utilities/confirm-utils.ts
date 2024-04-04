@@ -136,3 +136,36 @@ export const getOrderPlacementTimeline = (timeStamp: string) => {
 
   return `${localDateWithoutDay}, ${localTime}`
 }
+
+function getOrdinalSuffix(day: number) {
+  if (day >= 11 && day <= 13) {
+    return 'th'
+  }
+  switch (day % 10) {
+    case 1:
+      return 'st'
+    case 2:
+      return 'nd'
+    case 3:
+      return 'rd'
+    default:
+      return 'th'
+  }
+}
+
+export function formatTimestamp(timestamp: string) {
+  const date = new Date(timestamp)
+
+  const day = date.getDate()
+  const month = date.toLocaleString('default', { month: 'short' })
+  const year = date.getFullYear()
+  const hours = date.getHours() % 12 || 12
+  const minutes = date.getMinutes()
+  const period = date.getHours() < 12 ? 'am' : 'pm'
+
+  const ordinalSuffix = getOrdinalSuffix(day)
+
+  const formattedDate = `${day}${ordinalSuffix} ${month} ${year}, ${hours}:${minutes}${period}`
+
+  return formattedDate
+}
