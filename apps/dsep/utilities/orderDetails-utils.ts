@@ -1,3 +1,4 @@
+import { ConfirmResponseModel } from '../lib/types/confirm.types'
 import { ResponseModel } from '../lib/types/responseModel'
 
 const generateRandomID = () => {
@@ -15,7 +16,7 @@ export const storeOrderDetails = (orderDetails: ResponseModel[]) => {
   const emptyArr = []
   const orders = localStorage.getItem('orders')
 
-  const orderPerId = {}
+  const orderPerId: any = {}
   if (!orders) {
     orderPerId[generateRandomID()] = orderDetails
     emptyArr.push(orderPerId)
@@ -30,7 +31,7 @@ export const storeOrderDetails = (orderDetails: ResponseModel[]) => {
 }
 
 export const getDataPerBpp = (confirmData: ResponseModel[]) => {
-  const responsesPerBpp = {}
+  const responsesPerBpp: any = {}
 
   confirmData.map(data => {
     const bppId = data.context.bpp_id
@@ -63,3 +64,32 @@ export const generateAlphanumericID = (function () {
     return id
   }
 })()
+
+export const getStatusPayload = (confirmData: ConfirmResponseModel) => {
+  let statusPayload: any = {
+    data: []
+  }
+
+  confirmData.data.forEach(data => {
+    const { transaction_id, bpp_id, bpp_uri, domain } = data.context
+    const { orderId } = data.message
+
+    const context = {
+      transaction_id,
+      bpp_id,
+      bpp_uri,
+      domain
+    }
+
+    const message = {
+      order_id: orderId
+    }
+
+    statusPayload.data.push({
+      context,
+      message
+    })
+  })
+
+  return statusPayload
+}

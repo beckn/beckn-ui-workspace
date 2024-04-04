@@ -29,17 +29,25 @@ const Search = () => {
 
   const { data, loading, error, fetchData } = useRequest()
 
+  // const searchPayload = {
+  //   context: {
+  //     domain: 'dsep:courses'
+  //   },
+  //   message: {
+  //     criteria: {
+  //       dropLocation: '12.9715987,77.5945627',
+  //       categoryName: 'Courses',
+  //       searchString: searchKeyword
+  //     }
+  //   }
+  // }
+
   const searchPayload = {
     context: {
-      domain: 'dsep:courses'
+      domain: 'retail'
     },
-    message: {
-      criteria: {
-        dropLocation: '12.9715987,77.5945627',
-        categoryName: 'Courses',
-        searchString: searchKeyword
-      }
-    }
+    searchString: 'T Shirt',
+    location: '12.423423,77.325647'
   }
 
   const fetchDataForSearch = () => fetchData(`${apiUrl}/search`, 'POST', searchPayload)

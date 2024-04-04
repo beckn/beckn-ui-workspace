@@ -432,6 +432,8 @@ const en: { [key: string]: string } = {
   fetchingJobs: 'Fetching Jobs',
   errorPassword: 'Invalid password',
   confirm: 'Confirm',
-  confirmMessageSubtext: 'Get ready to embark your learning journey!'
+  confirmMessageSubtext: 'Get ready to embark your learning journey!',
+  statusLoaderSubtext: 'While we fetch course details',
+  coursesPurchased: ' Courses Purchased'
 }
 export default en
