@@ -68,6 +68,7 @@ const CheckoutPage = () => {
   const [initialize, { isLoading }] = useInitMutation()
   const { t, locale } = useLanguage()
   const cartItems = useSelector((state: ICartRootState) => state.cart.items)
+  const totalAmount = useSelector((state: ICartRootState) => state.cart.totalAmount)
   const initResponse = useSelector((state: CheckoutRootState) => state.checkout.initResponse)
   console.log('Dank init', initResponse)
   const { transactionId, productList } = useSelector((state: DiscoveryRootState) => state.discovery)
@@ -162,7 +163,7 @@ const CheckoutPage = () => {
               title: singleItem.name,
               description: singleItem.short_desc,
               quantity: singleItem.quantity,
-              priceWithSymbol: `${t.currencySymbol}${singleItem.totalPrice}`,
+              priceWithSymbol: `${t.currencySymbol}${totalAmount}`,
               image: singleItem.images[0].url
             }))
           },

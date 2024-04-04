@@ -20,6 +20,7 @@ const Cart = () => {
   const { t } = useLanguage()
 
   const { items, totalQuantity } = useSelector((state: ICartRootState) => state.cart)
+  const totalAmount = useSelector((state: ICartRootState) => state.cart.totalAmount)
   const { transactionId, productList } = useSelector((state: DiscoveryRootState) => state.discovery)
 
   useEffect(() => {
@@ -55,10 +56,10 @@ const Cart = () => {
           loader: { text: 'Loading....' },
           orderSummary: {
             totalAmount: {
-              price: 25
+              price: totalAmount
             },
             totalQuantity: {
-              text: '3',
+              text: Number(totalQuantity),
               variant: 'subTitleSemibold'
             },
             pageCTA: {
