@@ -8,6 +8,7 @@ import { Cart as BecknCart } from '@beckn-ui/becknified-components'
 import { useSelectMutation } from '@services/select'
 import { getSelectPayload } from './cart.utils'
 import { cartActions } from '@store/cart-slice'
+import { DOMAIN } from '@lib/config'
 
 import { ICartRootState } from '@lib/types'
 import { DiscoveryRootState } from '@store/discovery-slice'
@@ -24,7 +25,7 @@ const Cart = () => {
   const { transactionId, productList } = useSelector((state: DiscoveryRootState) => state.discovery)
 
   useEffect(() => {
-    fetchQuotes(getSelectPayload(items, transactionId))
+    fetchQuotes(getSelectPayload(items, transactionId, DOMAIN))
   }, [totalQuantity])
 
   const onOrderClick = () => {
@@ -53,7 +54,7 @@ const Cart = () => {
               dispatch(cartActions.removeItemFromCart(id))
             }
           })),
-          loader: { text: 'Loading....' },
+          loader: { text: 'Loading cart' },
           orderSummary: {
             totalAmount: {
               price: totalAmount

@@ -174,7 +174,8 @@ export const getInitPayload = async (
   deliveryAddress: any,
   billingAddress: any,
   cartItems: any,
-  transaction_id: string
+  transaction_id: string,
+  domain: string = 'retail:1.1.0'
 ) => {
   const cityData = await geocodeFromPincode(deliveryAddress.pinCode)
 
@@ -192,7 +193,7 @@ export const getInitPayload = async (
         transaction_id: transaction_id,
         bpp_id: bpp_id,
         bpp_uri: items[0].bpp_uri,
-        domain: 'retail'
+        domain: domain
       },
       message: {
         orders: transformOrdersByProvider(items)
@@ -214,8 +215,8 @@ export const getInitPayload = async (
       const providerId = group[0].providerId
       const items = group.map(item => ({
         id: item.id,
-        selected: {
-          quantity: {
+        quantity: {
+          selected: {
             count: item.quantity
           }
         }

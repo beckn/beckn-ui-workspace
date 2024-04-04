@@ -20,12 +20,15 @@ const ShippingSection: React.FC<ShippingSectionProps<FormField[]>> = ({
   showDetails = false,
   isBilling = false,
   shippingDetails,
-  addButtonImage = AddShippingButtonImage
+  addButtonImage = AddShippingButtonImage,
+  isChecked = true,
+  onCheckChange
 }) => {
   const { isOpen, onClose, onOpen } = useDisclosure()
-  const [isChecked, setIsChecked] = useState<boolean>(true)
+  // const [isChecked, setIsChecked] = useState<boolean>(true)
   const { isDesktop, isTablet } = useResponsive()
-  console.log('Dank', isDesktop, isTablet)
+
+  console.log('Dank', isChecked)
 
   return (
     <Box>
@@ -54,8 +57,7 @@ const ShippingSection: React.FC<ShippingSectionProps<FormField[]>> = ({
             pr={'12px'}
             fontSize={'17px'}
             checked={isChecked}
-            defaultChecked
-            onChange={() => setIsChecked(!isChecked)}
+            onChange={() => onCheckChange && onCheckChange()}
           >
             Same as shipping address
           </Checkbox>

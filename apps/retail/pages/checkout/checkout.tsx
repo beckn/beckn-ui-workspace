@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Box, Flex, Text, Stack, Checkbox } from '@chakra-ui/react'
-
+import { DOMAIN } from '@lib/config'
 import { useLanguage } from '../../hooks/useLanguage'
 
 import { CartItemForRequest, DataPerBpp, ICartRootState, TransactionIdRootState } from '@lib/types/cart'
@@ -18,7 +18,7 @@ import { Checkout } from '@beckn-ui/becknified-components'
 
 import { Router, useRouter } from 'next/router'
 import { ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
-import { CheckoutRootState } from '@store/checkout-slice'
+import { CheckoutRootState, checkoutActions } from '@store/checkout-slice'
 import { cartActions } from '@store/cart-slice'
 import cart from '@beckn-ui/becknified-components/src/components/cart'
 
@@ -62,15 +62,16 @@ const CheckoutPage = () => {
     pinCode: '75001'
   })
 
+  const [isBillingSame, setIsBillingSame] = useState(true)
+
   const router = useRouter()
   const initRequest = useRequest()
   const dispatch = useDispatch()
   const [initialize, { isLoading }] = useInitMutation()
   const { t, locale } = useLanguage()
   const cartItems = useSelector((state: ICartRootState) => state.cart.items)
-  const totalAmount = useSelector((state: ICartRootState) => state.cart.totalAmount)
   const initResponse = useSelector((state: CheckoutRootState) => state.checkout.initResponse)
-  console.log('Dank init', initResponse)
+  const isBillingSameRedux = useSelector((state: CheckoutRootState) => state.checkout.isBillingSame)
   const { transactionId, productList } = useSelector((state: DiscoveryRootState) => state.discovery)
 
   useEffect(() => {
@@ -119,9 +120,13 @@ const CheckoutPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [billingFormData])
 
+  // useEffect(()=>{
+  //   setIsBillingSame(isBillingSameRedux)
+  // },[])
+
   const formSubmitHandler = (data: any) => {
     if (data) {
-      getInitPayload(data, billingFormData, cartItems, transactionId)
+      getInitPayload(data, billingFormData, cartItems, transactionId, DOMAIN)
         .then(res => {
           console.log('Dank checkout', res)
           return initialize(res)
@@ -163,7 +168,7 @@ const CheckoutPage = () => {
               title: singleItem.name,
               description: singleItem.short_desc,
               quantity: singleItem.quantity,
-              priceWithSymbol: `${t.currencySymbol}${totalAmount}`,
+              priceWithSymbol: `${t.currencySymbol}${singleItem.totalPrice}`,
               image: singleItem.images[0].url
             }))
           },
@@ -187,6 +192,11 @@ const CheckoutPage = () => {
             sectionTitle: 'Billing',
             formTitle: 'Add Billing Details',
             isBilling: true,
+            isChecked: isBillingSameRedux,
+            onCheckChange: () => {
+              // setIsBillingSame(!isBillingSame)
+              dispatch(checkoutActions.setIsBillingSame({ isBillingSame: !isBillingSameRedux }))
+            },
             showDetails: isInitResultPresent(),
             shippingDetails: {
               name: submittedDetails.name,

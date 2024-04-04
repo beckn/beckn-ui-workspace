@@ -9,11 +9,13 @@ export interface CheckoutRootState {
 export interface Checkout {
   initResponse: any
   confirmResponse: any
+  isBillingSame: boolean
 }
 
 const initialState: Checkout = {
   initResponse: {},
-  confirmResponse: {}
+  confirmResponse: {},
+  isBillingSame: true
 }
 
 const checkoutSlice = createSlice({
@@ -22,6 +24,10 @@ const checkoutSlice = createSlice({
   reducers: {
     addInitResponse(state, action: PayloadAction<{ initResponse: any }>) {
       state.initResponse = action.payload.initResponse
+    },
+    setIsBillingSame(state, action: PayloadAction<{ isBillingSame: boolean }>) {
+      console.log('Dank inside redux', action.payload.isBillingSame)
+      state.isBillingSame = action.payload.isBillingSame
     }
   },
   extraReducers: builder => {

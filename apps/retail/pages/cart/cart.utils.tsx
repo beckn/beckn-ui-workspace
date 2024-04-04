@@ -37,8 +37,8 @@ export const getSelectPayload = (inputData: any, transactionId: string, domain =
         const orderIndex = orders.findIndex(order => order.provider.id === item.providerId)
         const newItem = {
           id: item.id,
-          selected: {
-            quantity: {
+          quantity: {
+            selected: {
               count: item.quantity
             }
           }
@@ -52,9 +52,11 @@ export const getSelectPayload = (inputData: any, transactionId: string, domain =
             provider: {
               id: item.providerId
             },
-            fulfillments: item.fulfillments.map(fulfillment => ({
-              id: fulfillment.id
-            }))
+            fulfillments:
+              item.fulfillments &&
+              item.fulfillments.map(fulfillment => ({
+                id: fulfillment.id
+              }))
           })
         }
       })

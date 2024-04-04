@@ -6,7 +6,7 @@ export default function useResponsive() {
   console.log('Dank breakpoint', breakpoint)
   const isDesktop = breakpoint === 'xl' || breakpoint === 'lg' || breakpoint === '2xl'
   const isTablet = breakpoint === 'md'
-  const isMobile = breakpoint === 'sm' || breakpoint === 'xs'
+  const isMobile = breakpoint === 'sm' || breakpoint === 'xs' || breakpoint === 'base'
 
   return {
     isDesktop,

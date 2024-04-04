@@ -29,7 +29,8 @@ const cartIconBlackList: string[] = [
   '/paymentMode',
   '/signUp',
   '/invoiceDetails',
-  '/'
+  '/',
+  '/cart'
 ]
 
 const backIconList = ['/', '/signin']
@@ -128,10 +129,10 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
       >
         <Box className={styles.top_header_wrapper}>
           <Box>
-            {/* <Image
-              src="/images/Suppliflow_app_logo.svg"
+            <Image
+              src="/images/headerLogo.svg"
               alt="App logo"
-            /> */}
+            />
           </Box>
           <Flex columnGap={['10px', '10px', '2rem', '2rem']}>
             {!homeIconBlackList.includes(router.pathname) && (

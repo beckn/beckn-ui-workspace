@@ -12,6 +12,7 @@ import { useBreakpoint } from '@chakra-ui/react'
 import SearchBar from '../components/header/SearchBar'
 import { useLanguage } from '../hooks/useLanguage'
 import { ParsedItemModel } from '../types/search.types'
+import { DOMAIN } from '@lib/config'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
 import Filter from '../components/filter/Filter'
 import { LocalStorage } from '@lib/types'
@@ -36,31 +37,31 @@ const Search = () => {
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
-  // const searchPayload = {
-  //   context: {
-  //     domain: 'retail:1.1.0'
-  //   },
-  //   searchString: searchKeyword,
-  //   category: {
-  //     categoryCode: 'farming'
-  //   },
-  //   fulfillment: {
-  //     type: 'Delivery',
-  //     stops: [
-  //       {
-  //         location: '28.4594965,77.0266383'
-  //       }
-  //     ]
-  //   }
-  // }
-
   const searchPayload = {
     context: {
-      domain: 'retail'
+      domain: DOMAIN
     },
-    searchString: 'T Shirt',
-    location: '12.423423,77.325647'
+    searchString: searchKeyword,
+    // category: {
+    //   categoryCode: 'farming'
+    // },
+    fulfillment: {
+      type: 'Delivery',
+      stops: [
+        {
+          location: '28.4594965,77.0266383'
+        }
+      ]
+    }
   }
+
+  // const searchPayload = {
+  //   context: {
+  //     domain: 'retail'
+  //   },
+  //   searchString: 'Coffee',
+  //   location: '12.423423,77.325647'
+  // }
 
   const fetchDataForSearch = () => {
     if (!searchKeyword) return
@@ -176,38 +177,35 @@ const Search = () => {
                 w={['100%', '100%', '51%', '100%']}
                 margin="0 auto"
               >
-                {Array(5)
-                  .fill([...items])
-                  .flat()
-                  .map((singleItem, idx) => {
-                    const { item } = singleItem
-                    const product = {
-                      id: item.id,
-                      images: item.images.map(singleImage => singleImage.url),
-                      name: item.name,
-                      price: item.price.value,
-                      rating: '4',
-                      shortDesc: item.short_desc
-                    }
-                    return (
-                      <ProductCard
-                        key={idx}
-                        productClickHandler={e => {
-                          e.preventDefault()
-                          dispatch(discoveryActions.addSingleProduct({ product: singleItem }))
-                          router.push({
-                            pathname: '/product',
-                            query: {
-                              id: item.id,
-                              search: searchKeyword
-                            }
-                          })
-                        }}
-                        product={product}
-                        currency={item.price.currency}
-                      />
-                    )
-                  })}
+                {items.map((singleItem, idx) => {
+                  const { item } = singleItem
+                  const product = {
+                    id: item.id,
+                    images: item.images.map(singleImage => singleImage.url),
+                    name: item.name,
+                    price: item.price.value,
+                    rating: '4',
+                    shortDesc: item.short_desc
+                  }
+                  return (
+                    <ProductCard
+                      key={idx}
+                      productClickHandler={e => {
+                        e.preventDefault()
+                        dispatch(discoveryActions.addSingleProduct({ product: singleItem }))
+                        router.push({
+                          pathname: '/product',
+                          query: {
+                            id: item.id,
+                            search: searchKeyword
+                          }
+                        })
+                      }}
+                      product={product}
+                      currency={item.price.currency}
+                    />
+                  )
+                })}
               </Flex>
             )}
           </Box>
@@ -218,3 +216,36 @@ const Search = () => {
 }
 
 export default Search
+
+// {Array(5)
+//   .fill([...items])
+//   .flat()
+//   .map((singleItem, idx) => {
+//     const { item } = singleItem
+//     const product = {
+//       id: item.id,
+//       images: item.images.map(singleImage => singleImage.url),
+//       name: item.name,
+//       price: item.price.value,
+//       rating: '4',
+//       shortDesc: item.short_desc
+//     }
+//     return (
+//       <ProductCard
+//         key={idx}
+//         productClickHandler={e => {
+//           e.preventDefault()
+//           dispatch(discoveryActions.addSingleProduct({ product: singleItem }))
+//           router.push({
+//             pathname: '/product',
+//             query: {
+//               id: item.id,
+//               search: searchKeyword
+//             }
+//           })
+//         }}
+//         product={product}
+//         currency={item.price.currency}
+//       />
+//     )
+//   })}

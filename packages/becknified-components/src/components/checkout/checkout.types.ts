@@ -25,6 +25,8 @@ export interface ShippingSectionProps<T extends FormField[]> {
   showDetails?: boolean
   isBilling?: boolean
   addButtonImage?: string
+  isChecked?: boolean
+  onCheckChange?: () => void
 }
 
 export interface ItemDetailProps {
