@@ -41,25 +41,15 @@ const Search = () => {
     context: {
       domain: DOMAIN
     },
-    searchString: searchKeyword,
-    // category: {
-    //   categoryCode: 'farming'
-    // },
-    fulfillment: {
-      type: 'Delivery',
-      stops: [
-        {
-          location: '28.4594965,77.0266383'
-        }
-      ]
-    }
+    searchString: 'tshirt',
+    location: '12.423423,77.325647'
   }
 
   // const searchPayload = {
   //   context: {
   //     domain: 'retail'
   //   },
-  //   searchString: 'tshirt',
+  //   searchString: 'T Shirt',
   //   location: '12.423423,77.325647'
   // }
 

@@ -35,6 +35,7 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
         <Header />
         {!geoLocationSearchPageVisible ? (
           <Box
+            background={'#FBFCFF'}
             maxW={['unset', 'unset', 'unset', '70rem']}
             w="100%"
             margin="0 auto"

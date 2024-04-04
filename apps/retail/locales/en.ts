@@ -109,6 +109,8 @@ const en: { [key: string]: string } = {
   // New Translations
   orderHistoryIcon: 'My Orders',
   profileIcon: 'My Profile',
-  logoutIcon: 'Logout'
+  logoutIcon: 'Logout',
+  placedAt: 'Placed at',
+  ordersFulfilled: 'Orders Fulfilled'
 }
 export default en

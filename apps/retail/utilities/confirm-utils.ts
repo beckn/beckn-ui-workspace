@@ -142,7 +142,7 @@ export const getPayloadForOrderHistoryPost = (confirmData: ConfirmResponseModel[
       }
     },
     category: {
-      set: [5]
+      set: [6]
     }
   }
 
@@ -199,7 +199,7 @@ export function formatTimestamp(timestamp: string) {
 
   const ordinalSuffix = getOrdinalSuffix(day)
 
-  const formattedDate = `${day}${ordinalSuffix} ${month} ${year}, ${hours}.${minutes}${period}`
+  const formattedDate = `${day}${ordinalSuffix} ${month} ${year}, ${hours}:${minutes}${period}`
 
   return formattedDate
 }

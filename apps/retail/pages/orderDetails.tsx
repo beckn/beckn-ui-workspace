@@ -1,8 +1,21 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import Router, { useRouter } from 'next/router'
-import { Box, Card, CardBody, Divider, Flex, Image, Radio, RadioGroup, Stack, Text, Textarea } from '@chakra-ui/react'
-import { BottomModal, Typography } from '@beckn-ui/molecules'
+import {
+  Box,
+  Card,
+  CardBody,
+  Divider,
+  Flex,
+  Image,
+  Radio,
+  RadioGroup,
+  Stack,
+  StackDivider,
+  Text,
+  Textarea
+} from '@chakra-ui/react'
+import { Accordion, BottomModal, Typography } from '@beckn-ui/molecules'
 import { useDispatch, useSelector } from 'react-redux'
 import { discoveryActions, DiscoveryRootState } from '@store/discovery-slice'
 import { DetailCard, OrderStatusProgress, OrderStatusProgressProps } from '@beckn-ui/becknified-components'
@@ -14,8 +27,13 @@ import BottomModalScan from '@components/BottomModal/BottomModalScan'
 import { ConfirmResponseModel } from '../types/confirm.types'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
 import { UIState, DataState, ProcessState } from '../types/order-details.types'
+import CallphoneIcon from '../public/images/CallphoneIcon.svg'
+import locationIcon from '../public/images/locationIcon.svg'
+import nameIcon from '../public/images/nameIcon.svg'
 import { OrdersRootState } from '@store/order-slice'
 import { DOMAIN } from '@lib/config'
+import PaymentDetails from '@beckn-ui/becknified-components/src/components/checkout/payment-details'
+import { getPaymentBreakDown } from '@utils/checkout-utils'
 
 const OrderDetails = () => {
   const [uiState, setUiState] = useState<UIState>({
@@ -529,7 +547,29 @@ const OrderDetails = () => {
     }
   }
 
-  console.log('Dank', data.statusData)
+  const ordersLength = data.statusData.length
+  const { timestamp } = data.statusData[0].context
+  const { order } = data.statusData[0].message
+  const {
+    billing,
+    fulfillments,
+    quote: { breakup, price }
+  } = order
+  const { address, name, phone } = billing
+  const {
+    customer: {
+      contact: { phone: shippingPhone },
+      person: { name: shippingName }
+    },
+    stops
+  } = fulfillments[0]
+  const {
+    location: { address: shipmentAddress }
+  } = stops[0]
+
+  const filteredOrder = data.statusData.filter(res => {
+    res.message.order.fulfillments[0].state.descriptor.short_desc === 'Delivered'
+  })
 
   return (
     <Box
@@ -583,6 +623,48 @@ const OrderDetails = () => {
           </CardBody>
         </Card>
       )}
+      <Box
+        pb="15px"
+        pt="20px"
+      >
+        <Typography
+          variant="subTitleRegular"
+          text={t.orderOverview}
+          fontSize="17px"
+        />
+      </Box>
+
+      <DetailCard>
+        <Flex
+          pt={'unset'}
+          justifyContent={'space-between'}
+          alignItems={'center'}
+        >
+          <Typography
+            variant="subTitleRegular"
+            text={t.placedAt}
+          />
+          <Typography
+            variant="subTitleRegular"
+            text={formatTimestamp(timestamp)}
+          />
+        </Flex>
+        <Box pt={4}>
+          <Flex
+            justifyContent={'space-between'}
+            alignItems={'center'}
+          >
+            <Typography
+              variant="subTitleRegular"
+              text={t.ordersFulfilled}
+            />
+            <Typography
+              variant="subTitleRegular"
+              text={`${filteredOrder.length} of ${ordersLength}`}
+            />
+          </Flex>
+        </Box>
+      </DetailCard>
 
       {/* Display progress summary */}
       <Box
@@ -651,32 +733,6 @@ const OrderDetails = () => {
                 pending
               </Text>
             </Flex>
-
-            {/* <Flex
-              justifyContent="space-between"
-              alignItems="center"
-              pt="10px"
-            >
-              <Typography
-                variant="subTitleRegular"
-                text="RTAL Assembly Line"
-                fontSize="12px"
-              />
-              <Typography
-                variant="subTitleRegular"
-                text={
-                  data.statusData[0]?.message?.order?.fulfillments[0]?.state?.descriptor?.code === 'DELIVERED'
-                    ? t.completed
-                    : ''
-                }
-                fontSize="15px"
-                className={
-                  data.statusData[0]?.message?.order?.fulfillments[0]?.state?.descriptor?.code === 'DELIVERED'
-                    ? 'order_status_text_completed'
-                    : ''
-                }
-              />
-            </Flex> */}
           </>
           <Divider
             mr={'-20px'}
@@ -697,6 +753,118 @@ const OrderDetails = () => {
           </Box>
         </CardBody>
       </DetailCard>
+
+      {/* shipping and billing address */}
+
+      <Accordion accordionHeader={t.shipping}>
+        <Box
+          pl={'14px'}
+          pr={'11px'}
+          pb={'11px'}
+          pt={'6px'}
+        >
+          <Stack
+            divider={<StackDivider />}
+            spacing="4"
+          >
+            <Flex alignItems={'center'}>
+              <Image
+                alt="name-icon"
+                src={nameIcon}
+                pr={'12px'}
+              />
+              <Typography
+                variant="subTitleRegular"
+                text={shippingName}
+              />
+            </Flex>
+            <Flex alignItems={'center'}>
+              <Image
+                alt="location-icon"
+                src={locationIcon}
+                pr={'12px'}
+              />
+              <Typography
+                variant="subTitleRegular"
+                text={shipmentAddress}
+              />
+            </Flex>
+            <Flex alignItems={'center'}>
+              <Image
+                alt="call-icon"
+                src={CallphoneIcon}
+                pr={'12px'}
+              />
+              <Typography
+                variant="subTitleRegular"
+                text={shippingPhone}
+              />
+            </Flex>
+          </Stack>
+        </Box>
+      </Accordion>
+      <Accordion accordionHeader={t.billing}>
+        <Box
+          pl={'14px'}
+          pr={'11px'}
+          pb={'11px'}
+          pt={'6px'}
+        >
+          <Stack
+            divider={<StackDivider />}
+            spacing="4"
+          >
+            <Flex alignItems={'center'}>
+              <Image
+                alt="name-icon"
+                src={nameIcon}
+                pr={'12px'}
+              />
+              <Typography
+                variant="subTitleRegular"
+                text={name}
+              />
+            </Flex>
+            <Flex alignItems={'center'}>
+              <Image
+                alt="location-icon"
+                src={locationIcon}
+                pr={'12px'}
+              />
+              <Typography
+                variant="subTitleRegular"
+                text={address}
+              />
+            </Flex>
+            <Flex alignItems={'center'}>
+              <Image
+                alt="call-icon"
+                src={CallphoneIcon}
+                pr={'12px'}
+              />
+              <Typography
+                variant="subTitleRegular"
+                text={phone}
+              />
+            </Flex>
+          </Stack>
+        </Box>
+      </Accordion>
+
+      <Accordion accordionHeader={t.payment}>
+        <Box
+          pl={'14px'}
+          pr={'11px'}
+          pb={'11px'}
+          pt={'6px'}
+        >
+          <PaymentDetails
+            paymentBreakDown={getPaymentBreakDown(data.statusData).breakUpMap}
+            totalText="Total"
+            totalValueWithSymbol={getPaymentBreakDown(data.statusData).totalPricewithCurrent}
+          />
+        </Box>
+      </Accordion>
 
       {/* Display main bottom modal */}
       <BottomModal

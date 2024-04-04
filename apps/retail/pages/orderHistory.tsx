@@ -80,6 +80,8 @@ const OrderHistory = () => {
     )
   }
 
+  console.log('orderHistory:List', orderHistoryList)
+
   return (
     <Box
       className="hideScroll"

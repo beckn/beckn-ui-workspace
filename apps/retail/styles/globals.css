@@ -53,6 +53,7 @@ body {
   background-color: rgb(var(--color-bg));
   color: rgb(var(--color-text-base));
 }
+
 .hideScroll::-webkit-scrollbar {
   display: none;
 }
