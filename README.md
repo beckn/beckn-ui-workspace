@@ -37,4 +37,6 @@ This monorepo is globally configured with the following tools and libraries:
 
 6. **Commit-lint**: Enforces a structured commit message format. Please refer to the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) documentation for commit message conventions.
 
-Feel free to explore and contribute to the various front-end use-cases and BAPs within this monorepo. If you have any questions or need further assistance, please refer to the individual project documentation or reach out to the repository maintainers. Happy coding!
+Feel free to explore and contribute to the various front-end use cases and BAPs within this monorepo. If you have any questions or need any more help, please refer to the individual project documentation or reach out to the repository maintainers. 
+
+Happy coding!
