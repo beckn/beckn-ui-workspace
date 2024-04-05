@@ -136,14 +136,14 @@ const Filter = ({ handleApplyFilter, handleResetFilter }) => {
                 paddingBottom={'2px'}
               >
                 <option value="">Rating</option>
-                <option value="2+">2+</option>
-                <option value="4+">4+</option>
+                <option value="RatingLowtoHigh">Rating -- Low to High</option>
+                <option value="RatingHightoLow">Rating -- High to Low</option>
               </Select>
               <FormLabel
                 className="dropDown_label"
                 fontSize="15px"
               >
-                Sort By Rating
+                Filter By Rating
               </FormLabel>
             </FormControl>
           </Box>

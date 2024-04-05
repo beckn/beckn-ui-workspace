@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useLanguage } from '../hooks/useLanguage'
 import { ConfirmationPage } from '@beckn-ui/becknified-components'
 import { InitResponseModel } from '../types/init.types'
-import { CheckoutRootState,checkoutActions } from '@store/checkout-slice'
+import { CheckoutRootState, checkoutActions } from '@store/checkout-slice'
 import { orderActions } from '@store/order-slice'
 import { useConfirmMutation } from '@services/confirm'
 import { getPayloadForConfirm, getPayloadForOrderHistoryPost } from '@utils/confirm-utils'
@@ -22,7 +22,6 @@ const OrderConfirmation = () => {
   const [confirmData, setConfirmData] = useState<ConfirmResponseModel[]>([])
   const [confirm, { isLoading, data }] = useConfirmMutation()
   const dispatch = useDispatch()
-
 
   const initResponse = useSelector((state: CheckoutRootState) => state.checkout.initResponse)
   const confirmResponse = useSelector((state: CheckoutRootState) => state.checkout.confirmResponse)
@@ -72,51 +71,53 @@ const OrderConfirmation = () => {
   }
 
   return (
-    <ConfirmationPage
-      schema={{
-        iconSrc: orderConfirmmark,
-        content: t.orderPlaced,
-        contentMessage: t.orderSuccesfully,
-        successOrderMessage:'ORDER SUCCESFULL',
-        gratefulMessage:"Thank you for your order!",
-        orderIdMessage:`Order number is: ${confirmResponse && confirmResponse.length > 0 && confirmResponse[0].message.orderId.slice(0, 8)}...`,
-        trackOrderMessage:`You can track your order in "My Order" section`,
-        
-        buttons: [
-          {
-            text: 'View Details',
-            handleClick: () => {
-              const orderId = confirmResponse[0].message.orderId
-              const bppId = confirmResponse[0].context.bppId
-              const bppUri = confirmResponse[0].context.bppUri
+    <Box textAlign={'center'}>
+      <ConfirmationPage
+        schema={{
+          iconSrc: orderConfirmmark,
+          content: t.orderPlaced,
+          contentMessage: t.orderSuccesfully,
+          successOrderMessage: 'ORDER SUCCESFULL',
+          gratefulMessage: 'Thank you for your order!',
+          orderIdMessage: `Order number is: ${confirmResponse && confirmResponse.length > 0 && confirmResponse[0].message.orderId.slice(0, 8)}...`,
+          trackOrderMessage: `You can track your order in "My Order" section`,
 
-              dispatch(orderActions.addSelectedOrder({ orderDetails: { orderId, bppId, bppUri } }))
-              const orderObjectForStatusCall = {
-                bppId: bppId,
-                bppUri: bppUri,
-                orderId: orderId
-              }
-              localStorage.setItem('selectedOrder', JSON.stringify(orderObjectForStatusCall))
-              dispatch(checkoutActions.clearState())
-              router.push('/orderDetails')
+          buttons: [
+            {
+              text: 'View Details',
+              handleClick: () => {
+                const orderId = confirmResponse[0].message.orderId
+                const bppId = confirmResponse[0].context.bppId
+                const bppUri = confirmResponse[0].context.bppUri
+
+                dispatch(orderActions.addSelectedOrder({ orderDetails: { orderId, bppId, bppUri } }))
+                const orderObjectForStatusCall = {
+                  bppId: bppId,
+                  bppUri: bppUri,
+                  orderId: orderId
+                }
+                localStorage.setItem('selectedOrder', JSON.stringify(orderObjectForStatusCall))
+                dispatch(checkoutActions.clearState())
+                router.push('/orderDetails')
+              },
+              disabled: false,
+              variant: 'solid',
+              colorScheme: 'primary'
             },
-            disabled: false,
-            variant: 'solid',
-            colorScheme: 'primary'
-          },
-          {
-            text: 'Go Back Home',
-            handleClick: () => {
-              router.push('/')
-              dispatch(checkoutActions.clearState())
-            },
-            disabled: false,
-            variant: 'outline',
-            colorScheme: 'primary'
-          }
-        ]
-      }}
-    />
+            {
+              text: 'Go Back Home',
+              handleClick: () => {
+                router.push('/')
+                dispatch(checkoutActions.clearState())
+              },
+              disabled: false,
+              variant: 'outline',
+              colorScheme: 'primary'
+            }
+          ]
+        }}
+      />
+    </Box>
   )
 }
 
