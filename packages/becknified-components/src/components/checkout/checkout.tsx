@@ -85,7 +85,7 @@ const Checkout: React.FC<CheckoutProps<FormField[]>> = ({
         >
           <Button
             {...restButtonProps}
-            disabled={!hasInitResult}
+            disabled={!hasInitResult || !billing.isChecked}
           />
         </Box>
       </Box>

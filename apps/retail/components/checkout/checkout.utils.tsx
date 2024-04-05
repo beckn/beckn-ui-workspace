@@ -96,23 +96,19 @@ export const getPayloadForInitRequest = (
 
 export const getSubTotalAndDeliveryCharges = (initData: any) => {
   let subTotal = 0
-  let totalDeliveryCharge = 0
   let currencySymbol
 
   if (initData && initData.length > 0) {
     initData.forEach(data => {
-      const deliveryAmount = parseFloat(data.message.order.quote.breakup[1].price.value).toFixed(2)
-      totalDeliveryCharge += parseFloat(deliveryAmount)
-
-      const subTotalAmount = parseFloat(data.message.order.quote.breakup[0].price.value).toFixed(2)
+       subTotal = parseFloat(data.message.order.quote.price.value).toFixed(2)
 
       currencySymbol = data.message.order.quote.price.currency
 
-      subTotal += parseFloat(parseFloat(subTotalAmount).toFixed(2))
     })
   }
 
-  return { subTotal, totalDeliveryCharge, currencySymbol }
+
+  return { subTotal, currencySymbol }
 }
 
 export const getTotalCartItems = (cartItems: CartRetailItem[]) => {

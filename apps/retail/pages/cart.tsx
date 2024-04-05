@@ -8,14 +8,19 @@ import { Cart as BecknCart } from '@beckn-ui/becknified-components'
 import { useSelectMutation } from '@services/select'
 import { getSelectPayload } from '@components/cart/cart.utils'
 import { cartActions } from '@store/cart-slice'
+import { isEmpty } from '@utils/common-utils'
+import { CustomToast } from '@components/signIn/SignIn'
+import { useToast } from '@chakra-ui/react'
+
 import { DOMAIN } from '@lib/config'
 
 import { ICartRootState } from '@lib/types'
 import { DiscoveryRootState } from '@store/discovery-slice'
 
 const Cart = () => {
-  const [fetchQuotes, { isLoading }] = useSelectMutation()
+  const [fetchQuotes, { isLoading,data,isError }] = useSelectMutation()
   const dispatch = useDispatch()
+  const toast = useToast()
 
   const router = useRouter()
   const { t } = useLanguage()
@@ -27,6 +32,25 @@ const Cart = () => {
   useEffect(() => {
     fetchQuotes(getSelectPayload(items, transactionId, DOMAIN))
   }, [totalQuantity])
+
+
+  useEffect(()=>{
+    if(isError){
+      toast({
+        render: () => (
+          <CustomToast
+            title="Error!"
+            message="Unable to proceed with select request"
+          />
+        ),
+        position: 'top',
+        duration: 2000,
+        isClosable: true
+      })
+    }
+  },[isError])
+
+  console.log("Dank data",data && data)
 
   const onOrderClick = () => {
     router.push('/checkout')
@@ -57,11 +81,11 @@ const Cart = () => {
           loader: { text: 'Loading cart' },
           orderSummary: {
             totalAmount: {
-              price: totalAmount
+              price: !isEmpty(data) ? data.data[0].message.order.quote.price.value : totalAmount,
             },
             totalQuantity: {
               text:totalQuantity.toString(),
-              variant: 'subTitleSemibold'
+              variant: 'subTitleSemibold',
             },
             pageCTA: {
               text: 'Proceed to checkout',

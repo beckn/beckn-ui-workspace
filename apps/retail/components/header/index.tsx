@@ -371,10 +371,10 @@ const BottomHeader = () => {
         </Box>
       </Box>
       <BottomModal
+      responsive={true}
         title=""
         isOpen={isOrderModalOpen}
         onClose={handleOrderModalClose}
-      responsive={true}
       >
         <Box
           onClick={() => {

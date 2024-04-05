@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import { useLanguage } from '@hooks/useLanguage'
 import AlternateLogo from '../public/images/KuzaLogo.svg'
 import { SignUpPropsModel } from '@components/signIn/SignIn.types'
@@ -20,9 +20,25 @@ const SignUp = () => {
   const breakpoint = useBreakpoint()
   const mobileBreakpoints = ['base', 'sm', 'md', 'lg']
   const currentLogo = mobileBreakpoints.includes(breakpoint) ? Logo : AlternateLogo
-  const [register, { isLoading }] = useRegisterMutation()
+  const [register, { isLoading,isError }] = useRegisterMutation()
 
   const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL
+
+  useEffect(()=>{
+    if(isError){
+      toast({
+        render: () => (
+          <CustomToast
+            title="Error!"
+            message="Unable to login"
+          />
+        ),
+        position: 'top',
+        duration: 2000,
+        isClosable: true
+      })
+    }
+  },[isError])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -99,17 +115,16 @@ const SignUp = () => {
               disabled: !isFormFilled,
               variant: 'solid',
               colorScheme: 'primary',
-              isLoading: isLoading
+              isLoading:isLoading
             },
             {
               text: t.signIn,
               handleClick: () => {
                 Router.push('/')
               },
-              disabled: false,
               variant: 'outline',
               colorScheme: 'primary',
-              isLoading: isLoading
+              disabled:isLoading
             }
           ],
           inputs: [

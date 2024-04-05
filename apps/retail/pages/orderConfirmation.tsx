@@ -87,8 +87,8 @@ const OrderConfirmation = () => {
             text: 'View Details',
             handleClick: () => {
               const orderId = confirmResponse[0].message.orderId
-              const bppId = confirmResponse[0].context.bppId
-              const bppUri = confirmResponse[0].context.bppUri
+              const bppId = confirmResponse[0].context.bpp_id
+              const bppUri = confirmResponse[0].context.bpp_uri
 
               dispatch(orderActions.addSelectedOrder({ orderDetails: { orderId, bppId, bppUri } }))
               const orderObjectForStatusCall = {

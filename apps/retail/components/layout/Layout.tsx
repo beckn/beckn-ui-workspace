@@ -11,7 +11,7 @@ import NextNProgress from 'nextjs-progressbar'
 import styles from './Layout.module.css'
 import { IGeoLocationSearchPageRootState } from '@lib/types/geoLocationSearchPage'
 import GeoLocationInputList from '@components/geoLocationInput/GeoLocationInputList'
-import { Box } from '@chakra-ui/react'
+import { Box,Text } from '@chakra-ui/react'
 
 const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const { locale } = useLanguage()
@@ -61,5 +61,34 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
     // </ThemeProvider>
   )
 }
+
+
+export const CustomToast: React.FC<{ title: string; message: string }> = ({ title, message }) => (
+  <Box
+    mt="2rem"
+    p={4}
+    bg="red.500"
+    color="white"
+    borderRadius="md"
+    boxShadow="md"
+  >
+    <Text
+      fontWeight={700}
+      fontSize={'15px'}
+      color={'white'}
+      textAlign={'center'}
+    >
+      {title}
+    </Text>
+    <Text
+      fontWeight={500}
+      fontSize={'15px'}
+      color={'white'}
+      textAlign={'center'}
+    >
+      {message}
+    </Text>
+  </Box>
+)
 
 export default Layout

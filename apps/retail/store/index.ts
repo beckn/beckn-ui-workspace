@@ -26,7 +26,7 @@ const persistConfig = {
   whitelist: ['cart', 'discovery', 'checkout','orders']
 }
 
-const rootReducer = combineReducers({
+const appReducer = combineReducers({
   auth: authReducer,
   [api.reducerPath]: api.reducer,
   specialOfferProductsList: specialOfferProductsReducer,
@@ -49,6 +49,16 @@ const rootReducer = combineReducers({
   initResponse: responseDataReducer,
   geoLocationSearchPageUI: geoMapLocationSearchReducer
 })
+
+const rootReducer = (state, action) => {
+  console.log("Dank action",action.type)
+  if (action.type === 'auth/logout') {
+    if(localStorage) localStorage.removeItem('persist:root');
+    state = undefined;
+  }
+
+  return appReducer(state, action);
+};
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
 

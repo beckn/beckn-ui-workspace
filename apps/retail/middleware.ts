@@ -13,7 +13,7 @@ export default function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL('/', req.url))
   }
 
-  if (!loggedin && pathname !== '/signin') {
+  if (!loggedin && (pathname !== '/signin' && pathname !== '/signUp') ) {
     // Redirect to the signin page if the user is not logged in
     return NextResponse.redirect(new URL('/signin', req.url))
   }
