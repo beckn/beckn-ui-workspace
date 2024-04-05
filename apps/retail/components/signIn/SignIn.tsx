@@ -22,7 +22,9 @@ const SignIn = () => {
   const breakpoint = useBreakpoint()
   const mobileBreakpoints = ['base', 'sm', 'md', 'lg']
   const currentLogo = mobileBreakpoints.includes(breakpoint) ? Logo : AlternateLogo
-  const [login, { isLoading }] = useLoginMutation()
+  const [login, { isLoading,isError,data,error }] = useLoginMutation()
+
+  console.log("Dank",isError,error,data)
 
   const toast = useToast()
 
@@ -46,6 +48,22 @@ const SignIn = () => {
     }))
     setIsFormFilled(updatedFormData.email.trim() !== '' && updatedFormData.password.trim() !== '')
   }
+
+  useEffect(()=>{
+    if(isError){
+      toast({
+        render: () => (
+          <CustomToast
+            title="Error!"
+            message="Unable to login"
+          />
+        ),
+        position: 'top',
+        duration: 2000,
+        isClosable: true
+      })
+    }
+  },[isError])
 
   const handleSignIn = async () => {
     const signInData = {
@@ -92,23 +110,22 @@ const SignIn = () => {
             handleClick: () => {
               Router.push('/signUp')
             },
-            disabled: false,
             variant: 'outline',
             colorScheme: 'primary',
-            isLoading: isLoading
+            disabled: isLoading
           }
         ],
-        socialButtons: [
-          {
-            text: t.signInwithGoogle,
-            handleClick: handleSignIn,
-            disabled: false,
-            variant: 'outline',
-            colorScheme: 'primary',
-            leftIcon: <FaGoogle />,
-            className: 'social_btn'
-          }
-        ],
+        // socialButtons: [
+        //   {
+        //     text: t.signInwithGoogle,
+        //     handleClick: handleSignIn,
+        //     disabled: false,
+        //     variant: 'outline',
+        //     colorScheme: 'primary',
+        //     leftIcon: <FaGoogle />,
+        //     className: 'social_btn'
+        //   }
+        // ],
         inputs: [
           {
             type: 'text',

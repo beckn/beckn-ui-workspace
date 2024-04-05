@@ -16,7 +16,6 @@ const slice = createSlice({
   reducers: {
     logout: () => {
       Cookies.remove('authToken')
-      localStorage.clear()
       Router.push('/signin')
       return initialState
     },

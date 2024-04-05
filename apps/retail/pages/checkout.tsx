@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Box, Flex, Text, Stack, Checkbox } from '@chakra-ui/react'
+import { Box, Flex, Text, Stack, Checkbox,useToast } from '@chakra-ui/react'
 import { DOMAIN } from '@lib/config'
 import { useLanguage } from '../hooks/useLanguage'
 
@@ -12,6 +12,7 @@ import { getInitPayload,
 
 } from '@components/checkout/checkout.utils'
 import useRequest from '../hooks/useRequest'
+import { CustomToast } from '@components/signIn/SignIn'
 import { useInitMutation } from '@services/init'
 import { responseDataActions } from '../store/responseData-slice'
 
@@ -32,7 +33,8 @@ export type ShippingFormData = {
 
 export const currencyMap = {
   EUR: '€',
-  INR: '₹'
+  INR: '₹',
+  USD: '$'
 }
 
 const CheckoutPage = () => {
@@ -43,6 +45,8 @@ const CheckoutPage = () => {
     address: '15 Rue du Soleil, Paris, France',
     pinCode: '201002'
   })
+
+  const toast = useToast()  
 
   const [submittedDetails, setSubmittedDetails] = useState<ShippingFormInitialValuesType>({
     name: 'Antoine Dubois',
@@ -67,7 +71,7 @@ const CheckoutPage = () => {
   const router = useRouter()
   const initRequest = useRequest()
   const dispatch = useDispatch()
-  const [initialize, { isLoading }] = useInitMutation()
+  const [initialize, { isLoading,isError }] = useInitMutation()
   const { t, locale } = useLanguage()
   const cartItems = useSelector((state: ICartRootState) => state.cart.items)
   const initResponse = useSelector((state: CheckoutRootState) => state.checkout.initResponse)
@@ -157,6 +161,48 @@ const CheckoutPage = () => {
     return !!initResponse && initResponse.length > 0
   }
 
+  const createPaymentBreakdownMap = ()=>{
+    const paymentBreakdownMap = {}
+    if(isInitResultPresent()){
+        initResponse[0].message.order.quote.breakup.forEach((breakup)=>{
+        // return {
+        //   [breakup.title]: `${currencyMap[breakup.price.currency as string]} ${breakup.price.value}`
+        // }
+        paymentBreakdownMap[breakup.title] = `${currencyMap[breakup.price.currency as string]} ${breakup.price.value}`
+      })
+    }
+    console.log("Dank",paymentBreakdownMap,isInitResultPresent())
+    return paymentBreakdownMap
+  }
+  
+
+  useEffect(()=>{
+    if(isError){
+      toast({
+        render: () => (
+          <CustomToast
+            title="Error!"
+            message="Unable to proceed with init request"
+          />
+        ),
+        position: 'top',
+        duration: 2000,
+        isClosable: true
+      })
+    }
+  },[isError])
+
+
+
+
+// return {
+//   ['Tax & Delivery']: `${currencyMap[getSubTotalAndDeliveryCharges(initResponse).currencySymbol as string]} ${
+//     getSubTotalAndDeliveryCharges(initResponse).totalDeliveryCharge
+//   }`,
+//   Subtotal: `${currencyMap[getSubTotalAndDeliveryCharges(initResponse).currencySymbol as string]} ${getSubTotalAndDeliveryCharges(initResponse).subTotal}`
+// }
+//   }
+
   return (
     <>
       {/* start Item Details */}
@@ -168,7 +214,7 @@ const CheckoutPage = () => {
               title: singleItem.name,
               description: singleItem.short_desc,
               quantity: singleItem.quantity,
-              priceWithSymbol: `${t.currencySymbol}${singleItem.totalPrice}`,
+              priceWithSymbol: `${currencyMap[singleItem.price.currency]}${singleItem.totalPrice}`,
               image: singleItem.images[0].url
             }))
           },
@@ -216,18 +262,9 @@ const CheckoutPage = () => {
             title: 'Payment',
             paymentDetails: {
               hasBoxShadow:false,
-              paymentBreakDown: {
-                ['Tax & Delivery']: `${currencyMap[getSubTotalAndDeliveryCharges(initResponse).currencySymbol as string]} ${
-                  getSubTotalAndDeliveryCharges(initResponse).totalDeliveryCharge
-                }`,
-                Subtotal: `${currencyMap[getSubTotalAndDeliveryCharges(initResponse).currencySymbol as string]} ${getSubTotalAndDeliveryCharges(initResponse).subTotal}`
-              },
-
+              paymentBreakDown: createPaymentBreakdownMap(),
               totalText: 'Total',
-              totalValueWithSymbol: `${currencyMap[getSubTotalAndDeliveryCharges(initResponse).currencySymbol as string]}${
-                getSubTotalAndDeliveryCharges(initResponse).subTotal +
-                getSubTotalAndDeliveryCharges(initResponse).totalDeliveryCharge
-              }`
+              totalValueWithSymbol: `${currencyMap[getSubTotalAndDeliveryCharges(initResponse).currencySymbol as string]} ${getSubTotalAndDeliveryCharges(initResponse).subTotal }`
             }
           },
           loader: {
