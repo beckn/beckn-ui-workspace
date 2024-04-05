@@ -843,6 +843,8 @@ const OrderDetails = () => {
           >
             <PaymentDetails
             title='Payment'
+            hasBoxShadow={true}
+          
               paymentBreakDown={getPaymentBreakDown(data.statusData).breakUpMap}
               totalText="Total"
               totalValueWithSymbol={getPaymentBreakDown(data.statusData).totalPricewithCurrent}

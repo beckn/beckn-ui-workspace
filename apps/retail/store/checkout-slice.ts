@@ -27,7 +27,11 @@ const checkoutSlice = createSlice({
     },
     setIsBillingSame(state, action: PayloadAction<{ isBillingSame: boolean }>) {
       state.isBillingSame = action.payload.isBillingSame
-    }
+    },
+		clearState(state){
+			state.initResponse = {}
+			state.confirmResponse = {}
+		}
   },
   extraReducers: builder => {
     builder

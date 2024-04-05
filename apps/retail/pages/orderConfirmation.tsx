@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useLanguage } from '../hooks/useLanguage'
 import { ConfirmationPage } from '@beckn-ui/becknified-components'
 import { InitResponseModel } from '../types/init.types'
-import { CheckoutRootState } from '@store/checkout-slice'
+import { CheckoutRootState,checkoutActions } from '@store/checkout-slice'
 import { orderActions } from '@store/order-slice'
 import { useConfirmMutation } from '@services/confirm'
 import { getPayloadForConfirm, getPayloadForOrderHistoryPost } from '@utils/confirm-utils'
@@ -23,7 +23,6 @@ const OrderConfirmation = () => {
   const [confirm, { isLoading, data }] = useConfirmMutation()
   const dispatch = useDispatch()
 
-  console.log('Dank confirm', data)
 
   const initResponse = useSelector((state: CheckoutRootState) => state.checkout.initResponse)
   const confirmResponse = useSelector((state: CheckoutRootState) => state.checkout.confirmResponse)
@@ -41,7 +40,6 @@ const OrderConfirmation = () => {
   useEffect(() => {
     if (initResponse && initResponse.length > 0) {
       const payLoad = getPayloadForConfirm(initResponse)
-      // console.log("Dank payload",payLoad)
       confirm(payLoad)
     }
   }, [])
@@ -81,7 +79,7 @@ const OrderConfirmation = () => {
         contentMessage: t.orderSuccesfully,
         successOrderMessage:'ORDER SUCCESFULL',
         gratefulMessage:"Thank you for your order!",
-        orderIdMessage:`Order number is: ${confirmResponse[0].message.orderId.slice(0, 8)}...`,
+        orderIdMessage:`Order number is: ${confirmResponse && confirmResponse.length > 0 && confirmResponse[0].message.orderId.slice(0, 8)}...`,
         trackOrderMessage:`You can track your order in "My Order" section`,
         
         buttons: [
@@ -99,6 +97,7 @@ const OrderConfirmation = () => {
                 orderId: orderId
               }
               localStorage.setItem('selectedOrder', JSON.stringify(orderObjectForStatusCall))
+              dispatch(checkoutActions.clearState())
               router.push('/orderDetails')
             },
             disabled: false,
@@ -109,6 +108,7 @@ const OrderConfirmation = () => {
             text: 'Go Back Home',
             handleClick: () => {
               router.push('/')
+              dispatch(checkoutActions.clearState())
             },
             disabled: false,
             variant: 'outline',

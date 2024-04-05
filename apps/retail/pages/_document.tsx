@@ -22,7 +22,7 @@ export default function Document() {
         />
         <link
           rel="shortcut icon"
-          href="/images/supFevIcon.svg"
+          href="/images/headerLogo.svg"
         />
       </Head>
       <body>
