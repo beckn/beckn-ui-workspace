@@ -103,7 +103,7 @@ const OrderConfirmation = () => {
           {
             text: 'Go Back Home',
             handleClick: () => {
-              router.push('/homePage')
+              router.push('/')
             },
             disabled: false,
             variant: 'outline',

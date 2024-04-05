@@ -58,7 +58,7 @@ const orderCancellation = () => {
         <BecknButton
           children="Go Back Home"
           className="checkout_btn "
-          handleClick={() => router.push('/homePage')}
+          handleClick={() => router.push('/')}
         />
         <BecknButton
           children="View Details"

@@ -6,7 +6,7 @@ import { useLanguage } from '@hooks/useLanguage'
 const EmptyCart: React.FC = () => {
   const { t } = useLanguage()
   const handleGoBack = (): void => {
-    Router.push('/homePage')
+    Router.push('/')
   }
 
   return <></>

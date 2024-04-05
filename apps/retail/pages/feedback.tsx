@@ -52,7 +52,7 @@ const Feedback = () => {
 
       const ratingResponse = await axios.post(`${apiUrl}/rating`, ratingPayload)
       if (ratingResponse.data.data.length > 0) {
-        router.push('/homePage')
+        router.push('/')
       }
     } catch (error) {
       console.error(error)
