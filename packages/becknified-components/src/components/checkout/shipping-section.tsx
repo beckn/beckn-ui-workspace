@@ -55,6 +55,8 @@ const ShippingSection: React.FC<ShippingSectionProps<FormField[]>> = ({
             pr={'12px'}
             fontSize={'17px'}
             checked={isChecked}
+            defaultChecked={isChecked}
+            defaultValue={isChecked}
             onChange={() => onCheckChange && onCheckChange()}
           >
             Same as shipping address

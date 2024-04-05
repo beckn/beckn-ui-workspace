@@ -9,7 +9,6 @@ import { logout } from '@store/authSlice'
 
 import { useLanguage } from '../../hooks/useLanguage'
 import Qrcode from '@components/qrCode/Qrcode'
-import BottomModalScan from '@components/BottomModal/BottomModalScan'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import CartIconWithCount from './CartIcon'
 import TopSheet from '@components/topSheet/TopSheet'
@@ -169,6 +168,7 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
 
       {/* Menu Modal */}
       <BottomModal
+      responsive={true}
         title=""
         isOpen={isMenuModalOpen}
         onClose={handleMenuModalClose}
@@ -374,6 +374,7 @@ const BottomHeader = () => {
         title=""
         isOpen={isOrderModalOpen}
         onClose={handleOrderModalClose}
+      responsive={true}
       >
         <Box
           onClick={() => {
@@ -389,10 +390,10 @@ const BottomHeader = () => {
           {t['invoiceDetails']}
         </Box>
       </BottomModal>
-      <BottomModalScan
+      <BottomModal
         isOpen={isInvoiceModalOpen}
         onClose={handleInvoiceModalClose}
-        modalHeader={t.scanQR}
+        responsive={true}
       >
         <Box p={'0px 24px'}>
           <Box
@@ -435,7 +436,7 @@ const BottomHeader = () => {
           </Text>
           <BecknButton children="Proceed" />
         </Box>
-      </BottomModalScan>
+      </BottomModal>
     </header>
   )
 }

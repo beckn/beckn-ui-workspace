@@ -48,6 +48,7 @@ export interface PaymentDetailsProps {
   paymentBreakDown: Record<string, string>
   totalText: string
   totalValueWithSymbol: string
+  title?: string
 }
 
 export interface CheckoutProps<T extends FormField[]> {
