@@ -60,6 +60,7 @@ export interface OrderSummaryProps {
   totalQuantity: TypographyProps
   totalAmount: ProductPriceProps
   pageCTA: ButtonProps
+  currency: string
 }
 
 export interface CartProps {

@@ -5,11 +5,11 @@ import { DOMAIN } from '@lib/config'
 import { useLanguage } from '../hooks/useLanguage'
 
 import { CartItemForRequest, DataPerBpp, ICartRootState, TransactionIdRootState } from '@lib/types/cart'
-import { getInitPayload,
+import {
+  getInitPayload,
   areShippingAndBillingDetailsSame,
   getPayloadForInitRequest,
   getSubTotalAndDeliveryCharges
-
 } from '@components/checkout/checkout.utils'
 import useRequest from '../hooks/useRequest'
 import { useInitMutation } from '@services/init'
@@ -73,7 +73,6 @@ const CheckoutPage = () => {
   const initResponse = useSelector((state: CheckoutRootState) => state.checkout.initResponse)
   const isBillingSameRedux = useSelector((state: CheckoutRootState) => state.checkout.isBillingSame)
   const { transactionId, productList } = useSelector((state: DiscoveryRootState) => state.discovery)
-
   useEffect(() => {
     if (localStorage) {
       if (localStorage.getItem('userPhone')) {
@@ -168,7 +167,8 @@ const CheckoutPage = () => {
               title: singleItem.name,
               description: singleItem.short_desc,
               quantity: singleItem.quantity,
-              priceWithSymbol: `${t.currencySymbol}${singleItem.totalPrice}`,
+              price: singleItem.price.value,
+              currency: singleItem.price.currency,
               image: singleItem.images[0].url
             }))
           },
@@ -212,10 +212,9 @@ const CheckoutPage = () => {
             }
           },
           payment: {
-            
             title: 'Payment',
             paymentDetails: {
-              hasBoxShadow:false,
+              hasBoxShadow: false,
               paymentBreakDown: {
                 ['Tax & Delivery']: `${currencyMap[getSubTotalAndDeliveryCharges(initResponse).currencySymbol as string]} ${
                   getSubTotalAndDeliveryCharges(initResponse).totalDeliveryCharge
