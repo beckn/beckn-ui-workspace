@@ -33,7 +33,7 @@ const ProductPrice: React.FC<ProductPriceProps> = props => {
     <Flex
       align={'center'}
       justify={'space-between'}
-      width={'42px'}
+      // width={'42px'}
       fontSize={'15px'}
       fontWeight={'600'}
       color={color}

@@ -877,7 +877,7 @@ const OrderDetails = () => {
           
               paymentBreakDown={getPaymentBreakDown(data.statusData).breakUpMap}
               totalText="Total"
-              totalValueWithSymbol={getPaymentBreakDown(data.statusData).totalPricewithCurrent}
+              totalValueWithCurrency={getPaymentBreakDown(data.statusData).totalPricewithCurrent}
             />
           </Box>
           )
@@ -894,7 +894,7 @@ const OrderDetails = () => {
           <PaymentDetails
             paymentBreakDown={getPaymentBreakDown(data.statusData).breakUpMap}
             totalText="Total"
-            totalValueWithSymbol={getPaymentBreakDown(data.statusData).totalPricewithCurrent}
+            totalValueWithCurrency={getPaymentBreakDown(data.statusData).totalPricewithCurrent}
           />
         </Box>
       </Accordion>

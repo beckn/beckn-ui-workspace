@@ -27,7 +27,7 @@ const BottomModal: React.FC<BottomModalProps> = ({ onClose, isOpen, title, child
       <ModalOverlay height="100vh" />
       <ModalContent
         position="fixed"
-        bottom={{ base: '0', md: '50%' }}
+        bottom={{ base: '0', md: '30%' }}
         mb="0"
         borderRadius={{ base: '1.75rem 1.75rem 0 0', md: '1.75rem', lg: '1.75rem', xl: '1.75rem', '2xl': '1.75rem' }}
         maxW="sm"
