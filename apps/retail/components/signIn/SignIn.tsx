@@ -5,7 +5,7 @@ import { useLanguage } from '@hooks/useLanguage'
 import { SignInPropsModel } from './SignIn.types'
 import { FormErrors, signInValidateForm } from '@utils/form-utils'
 import { useDispatch } from 'react-redux'
-import { useLoginMutation } from '@services/users'
+import { useLoginMutation } from '@services/Users'
 import { BecknAuth } from '@beckn-ui/becknified-components'
 
 import { FaGoogle } from 'react-icons/fa'
