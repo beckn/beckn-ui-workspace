@@ -5,7 +5,7 @@ import { useTheme, Box, Divider, Flex, HStack, Image, Text } from '@chakra-ui/re
 import { Router, useRouter } from 'next/router'
 import styles from './header.module.css'
 import { useSelector, useDispatch } from 'react-redux'
-import { logout } from '@store/authSlice'
+import { logout } from '@store/auth-slice'
 
 import { useLanguage } from '../../hooks/useLanguage'
 import Qrcode from '@components/qrCode/Qrcode'

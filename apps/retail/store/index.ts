@@ -18,12 +18,12 @@ import { api } from '@services/api'
 import favoriteReducer from './favorite-slice'
 import responseDataReducer from './responseData-slice'
 import geoMapLocationSearchReducer from './geoMapLocationSearch-slice'
-import authReducer from './authslice'
+import authReducer from './auth-slice'
 
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['cart', 'discovery', 'checkout', 'orders']
+  whitelist: ['cart', 'discovery', 'checkout','orders']
 }
 
 const rootReducer = combineReducers({
@@ -36,7 +36,7 @@ const rootReducer = combineReducers({
   cart: cartSliceReducer,
   checkout: checkoutReducer,
   discovery: DiscoveryReducer,
-  orders: OrderReducer,
+  orders:OrderReducer,
   userInfo: userInfoReducer,
   sideNavBar: sideNavBarReducer,
   megaMenu: megaMenuReducer,
