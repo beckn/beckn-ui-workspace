@@ -27,7 +27,7 @@ const en: { [key: string]: string } = {
   errorName: 'Name is required',
   errorName2: 'Name can only contain letters and spaces',
   errorName3: 'Name must contain at least 3 characters',
-  searchforService: 'search for service',
+  searchforService: 'search for product',
   homePara: 'To proceed with creating your workflow, please set your location and search for services.',
   footerText: 'Powered by',
   yourLocation: 'Select location',

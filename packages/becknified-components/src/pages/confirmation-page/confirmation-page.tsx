@@ -41,6 +41,7 @@ const ConfirmationPage: React.FC<ConfirmationPageProps> = ({ schema, className }
         justifyContent={'center'}
         alignItems={'center'}
         maxW={{ base: '100%', md: '80%' }}
+        textAlign={{ base: 'center', md: 'left' }}
       >
         <Box
           display="flex"

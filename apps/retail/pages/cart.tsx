@@ -50,7 +50,6 @@ const Cart = () => {
     }
   },[isError])
 
-  console.log("Dank data",data && data)
 
   const onOrderClick = () => {
     router.push('/checkout')
@@ -69,7 +68,8 @@ const Cart = () => {
             price: Number(singleItem.price.value),
             symbol: singleItem.price.currency,
             handleIncrement: id => {
-              const selectedItem = productList.find(singleItem => singleItem.id === id)
+              const selectedItem = productList.find(singleItem => singleItem.item.id === id)
+              console.log("DAnk cart",singleItem,productList)
               if (selectedItem) {
                 dispatch(cartActions.addItemToCart({ product: selectedItem, quantity: 1 }))
               }

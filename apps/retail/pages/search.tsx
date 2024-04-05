@@ -98,16 +98,18 @@ const Search = () => {
   const handleApplyFilter = (sortBy: string) => {
     setSortBy(sortBy)
 
-    let sortedItemsCopy = [...items]
+    const sortedItemsCopy = [...originalItems]
+
     if (sortBy === 'LowtoHigh') {
       sortedItemsCopy.sort((a, b) => parseFloat(a.item.price.value) - parseFloat(b.item.price.value))
     } else if (sortBy === 'HightoLow') {
       sortedItemsCopy.sort((a, b) => parseFloat(b.item.price.value) - parseFloat(a.item.price.value))
-    } else if (sortBy === '4+') {
-      sortedItemsCopy.sort((a, b) => parseFloat(b.item.rating) - parseFloat(a.item.rating))
-    } else if (sortBy === '2+') {
+    } else if (sortBy === 'RatingLowtoHigh') {
+      sortedItemsCopy.sort((a, b) => parseFloat(a.item.rating) - parseFloat(b.item.rating))
+    } else if (sortBy === 'RatingHightoLow') {
       sortedItemsCopy.sort((a, b) => parseFloat(b.item.rating) - parseFloat(a.item.rating))
     }
+
     setItems(sortedItemsCopy)
     setIsFilterOpen(false)
   }

@@ -168,10 +168,13 @@ const CheckoutPage = () => {
         // return {
         //   [breakup.title]: `${currencyMap[breakup.price.currency as string]} ${breakup.price.value}`
         // }
-        paymentBreakdownMap[breakup.title] = `${currencyMap[breakup.price.currency as string]} ${breakup.price.value}`
+        // paymentBreakdownMap[breakup.title] = `${currencyMap[breakup.price.currency as string]} ${breakup.price.value}`
+        paymentBreakdownMap[breakup.title] = {
+          value:breakup.price.value,
+          currency:breakup.price.currency
+        }
       })
     }
-    console.log("Dank",paymentBreakdownMap,isInitResultPresent())
     return paymentBreakdownMap
   }
   
@@ -264,7 +267,10 @@ const CheckoutPage = () => {
               hasBoxShadow:false,
               paymentBreakDown: createPaymentBreakdownMap(),
               totalText: 'Total',
-              totalValueWithSymbol: `${currencyMap[getSubTotalAndDeliveryCharges(initResponse).currencySymbol as string]} ${getSubTotalAndDeliveryCharges(initResponse).subTotal }`
+              totalValueWithCurrency:{
+                value:getSubTotalAndDeliveryCharges(initResponse).subTotal.toString(),
+                currency:getSubTotalAndDeliveryCharges(initResponse).currencySymbol.toString()
+              }
             }
           },
           loader: {

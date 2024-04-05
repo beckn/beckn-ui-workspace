@@ -672,37 +672,44 @@ const OrderDetails = () => {
         />
       </Box>
 
+     
       <DetailCard>
-        <Flex
-          pt={'unset'}
-          justifyContent={'space-between'}
-          alignItems={'center'}
-        >
-          <Typography
-            variant="subTitleRegular"
-            text={t.placedAt}
-          />
-          <Typography
-            variant="subTitleRegular"
-            text={formatTimestamp(timestamp)}
-          />
-        </Flex>
-        <Box pt={4}>
-          <Flex
-            justifyContent={'space-between'}
-            alignItems={'center'}
-          >
-            <Typography
-              variant="subTitleRegular"
-              text={t.ordersFulfilled}
+          <Flex>
+            <Image
+              mr={'15px'}
+              height={['60px', '80px', '80px', '80px']}
+              w={['40px', '80px', '80px', '80px']}
+              src={data.statusData[0]?.message?.order?.items[0]?.images[0].url}
+              alt="product image"
             />
-            <Typography
-              variant="subTitleRegular"
-              text={`${filteredOrder.length} of ${ordersLength}`}
-            />
+            <Box w={'100%'}>
+              <Box
+                pt={'unset'}
+                pb={4}
+              >
+                <Typography
+                  variant="subTitleSemibold"
+                  text={data.statusData[0]?.message?.order?.items[0]?.name}
+                />
+              </Box>
+
+              <Flex
+                pt={'unset'}
+                justifyContent={'space-between'}
+                alignItems={'center'}
+              >
+                <Typography
+                  variant="subTitleRegular"
+                  text={t.placedAt}
+                />
+                <Typography
+                  variant="subTitleRegular"
+                  text={formatTimestamp(timestamp)}
+                />
+              </Flex>
+            </Box>
           </Flex>
-        </Box>
-      </DetailCard>
+        </DetailCard>
 
       {/* Display progress summary */}
       <Box
@@ -870,7 +877,7 @@ const OrderDetails = () => {
           
               paymentBreakDown={getPaymentBreakDown(data.statusData).breakUpMap}
               totalText="Total"
-              totalValueWithSymbol={getPaymentBreakDown(data.statusData).totalPricewithCurrent}
+              totalValueWithCurrency={getPaymentBreakDown(data.statusData).totalPricewithCurrent}
             />
           </Box>
           )
@@ -887,7 +894,7 @@ const OrderDetails = () => {
           <PaymentDetails
             paymentBreakDown={getPaymentBreakDown(data.statusData).breakUpMap}
             totalText="Total"
-            totalValueWithSymbol={getPaymentBreakDown(data.statusData).totalPricewithCurrent}
+            totalValueWithCurrency={getPaymentBreakDown(data.statusData).totalPricewithCurrent}
           />
         </Box>
       </Accordion>

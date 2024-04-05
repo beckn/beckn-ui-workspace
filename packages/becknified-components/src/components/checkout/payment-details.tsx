@@ -6,7 +6,7 @@ import ProductPrice from '../product-price'
 
 const PaymentDetails: React.FC<PaymentDetailsProps> = props => {
   return (
-    <Box>
+    <Box width="100%">
       {props.title && (
         <Box marginBottom="1rem">
           <Typography
@@ -27,26 +27,30 @@ const PaymentDetails: React.FC<PaymentDetailsProps> = props => {
         }
         padding={{ base: '0', md: '11px 14px' }}
       >
-        {Object.entries(props.paymentBreakDown).map(([property, value]) => (
-          <Flex
-            justifyContent={'space-between'}
-            alignItems={'center'}
-            pb={'15px'}
-          >
-            <Typography
-              text={property}
-              fontSize={'15px'}
-            />
-            <ProductPrice
-              fontStyle={{
-                fontWeight: '600',
-                color: '#000000'
-              }}
-              price={value.value}
-              currencyType={value.currency}
-            />
-          </Flex>
-        ))}
+        {Object.entries(props.paymentBreakDown).map(([property, value]) => {
+          console.log('property', property, value)
+          return (
+            <Flex
+              justifyContent={'space-between'}
+              alignItems={'center'}
+              pb={'15px'}
+              key={property}
+            >
+              <Typography
+                text={property}
+                fontSize={'15px'}
+              />
+              <ProductPrice
+                fontStyle={{
+                  fontWeight: '600',
+                  color: '#000000'
+                }}
+                price={value.value}
+                currencyType={value.currency}
+              />
+            </Flex>
+          )
+        })}
 
         <Divider mb={'15px'} />
         <Flex
