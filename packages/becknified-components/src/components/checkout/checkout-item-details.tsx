@@ -3,12 +3,12 @@ import { Text, Box, Flex, Divider, Image } from '@chakra-ui/react'
 import { Typography } from '@beckn-ui/molecules'
 import { ItemDetailProps } from './checkout.types'
 import { useBreakpoint } from '@chakra-ui/react'
+import ProductPrice from '../product-price/product-price'
 
-const ItemDetails: React.FC<ItemDetailProps> = ({ title, quantity, priceWithSymbol, description, image }) => {
+const ItemDetails: React.FC<ItemDetailProps> = ({ title, quantity, price, currency, description, image }) => {
   const breakpoint = useBreakpoint()
   const mobileBreakpoints = ['base', 'sm', 'md']
   const isLargeScreen = !mobileBreakpoints.includes(breakpoint)
-  console.log('Dank', image)
 
   return (
     <>
@@ -50,10 +50,9 @@ const ItemDetails: React.FC<ItemDetailProps> = ({ title, quantity, priceWithSymb
               text={description}
               variant="subTextRegular"
             />
-            <Typography
-              text={priceWithSymbol}
-              color="primary.100"
-              variant="subTitleRegular"
+            <ProductPrice
+              currencyType={currency}
+              price={parseFloat(price)}
             />
           </Flex>
         </Box>

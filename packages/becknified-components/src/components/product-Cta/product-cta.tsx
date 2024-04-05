@@ -3,6 +3,7 @@ import { Box, Flex, useTheme } from '@chakra-ui/react'
 import { Typography, Button } from '@beckn-ui/molecules'
 import { ProductCtaProps } from './product-cta.types'
 import useResponsive from '../../hooks/useResponsive'
+import ProductPrice from '../product-price/product-price'
 
 const ProductCta: React.FC<ProductCtaProps> = ({
   currency,
@@ -37,15 +38,9 @@ const ProductCta: React.FC<ProductCtaProps> = ({
         gap="2"
         mb={'10px'}
       >
-        <Typography
-          text={currency}
-          variant="subTitleSemibold"
-          color={theme.colors.secondary[100]}
-        />
-        <Typography
-          text={totalPrice}
-          variant="subTitleSemibold"
-          color={theme.colors.secondary[100]}
+        <ProductPrice
+          currencyType={currency}
+          price={parseFloat(totalPrice)}
         />
       </Flex>
       <Flex
@@ -63,7 +58,7 @@ const ProductCta: React.FC<ProductCtaProps> = ({
         </Box>
         <Box
           border={'1px solid #D9D9D9'}
-          color={theme.colors.primary[100]}
+          color={theme.colors.secondary[100]}
           p="2px 20px"
           borderRadius={'4px'}
         >

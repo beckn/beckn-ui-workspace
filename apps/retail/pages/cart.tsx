@@ -57,10 +57,11 @@ const Cart = () => {
           loader: { text: 'Loading cart' },
           orderSummary: {
             totalAmount: {
-              price: totalAmount
+              price: totalAmount,
+              currencyType: items[0].price.currency
             },
             totalQuantity: {
-              text:totalQuantity.toString(),
+              text: totalQuantity.toString(),
               variant: 'subTitleSemibold'
             },
             pageCTA: {

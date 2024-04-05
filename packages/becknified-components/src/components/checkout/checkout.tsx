@@ -23,7 +23,6 @@ const Checkout: React.FC<CheckoutProps<FormField[]>> = ({
         <Loader {...loader} />
       </Box>
     )
-
   const { disabled, ...restButtonProps } = pageCTA
 
   const [shippingData, setShippingData] = useState<ShippingFormInitialValuesType>(
@@ -52,7 +51,8 @@ const Checkout: React.FC<CheckoutProps<FormField[]>> = ({
                   title={item.title}
                   description={item.description}
                   quantity={item.quantity}
-                  priceWithSymbol={item.priceWithSymbol}
+                  price={item.price}
+                  currency={item.currency}
                   image={item.image}
                 />
               </>
@@ -85,7 +85,7 @@ const Checkout: React.FC<CheckoutProps<FormField[]>> = ({
         >
           <Button
             {...restButtonProps}
-            disabled={!hasInitResult}
+            disabled={!hasInitResult || !billing.isChecked}
           />
         </Box>
       </Box>
