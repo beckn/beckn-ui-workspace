@@ -4,6 +4,7 @@ import { Typography } from '@beckn-ui/molecules'
 import { PaymentDetailsProps } from './checkout.types'
 
 const PaymentDetails: React.FC<PaymentDetailsProps> = props => {
+  // const boxShadowProp = props.hasBoxShadow ?
   return (
     <Box>
       {props.title && (
@@ -16,10 +17,14 @@ const PaymentDetails: React.FC<PaymentDetailsProps> = props => {
         </Box>
       )}
       <Box
-        boxShadow={{
-          base: '0px 8px 10px -6px rgba(0, 0, 0, 0.1), 0px 20px 25px -5px rgba(0, 0, 0, 0.1)',
-          md: '0px 8px 10px -6px rgba(0, 0, 0, 0.1), 0px 8px 20px -5px rgba(0, 0, 0, 0.1)'
-        }}
+        boxShadow={
+          props.hasBoxShadow
+            ? {
+                base: '0px 8px 10px -6px rgba(0, 0, 0, 0.1), 0px 20px 25px -5px rgba(0, 0, 0, 0.1)',
+                md: '0px 8px 10px -6px rgba(0, 0, 0, 0.1), 0px 8px 20px -5px rgba(0, 0, 0, 0.1)'
+              }
+            : {}
+        }
         padding={{ base: '0', md: '11px 14px' }}
       >
         {Object.entries(props.paymentBreakDown).map(([property, value]) => (

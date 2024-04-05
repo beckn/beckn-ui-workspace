@@ -3,10 +3,10 @@ import { useRouter } from 'next/router'
 import React from 'react'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useLanguage } from '../../hooks/useLanguage'
+import { useLanguage } from '@hooks/useLanguage'
 import { Cart as BecknCart } from '@beckn-ui/becknified-components'
 import { useSelectMutation } from '@services/select'
-import { getSelectPayload } from './cart.utils'
+import { getSelectPayload } from '@components/cart/cart.utils'
 import { cartActions } from '@store/cart-slice'
 import { DOMAIN } from '@lib/config'
 
@@ -60,11 +60,7 @@ const Cart = () => {
               price: totalAmount
             },
             totalQuantity: {
-<<<<<<< Updated upstream
-              text: Number(totalQuantity),
-=======
               text:totalQuantity.toString(),
->>>>>>> Stashed changes
               variant: 'subTitleSemibold'
             },
             pageCTA: {

@@ -2,25 +2,25 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Box, Flex, Text, Stack, Checkbox } from '@chakra-ui/react'
 import { DOMAIN } from '@lib/config'
-import { useLanguage } from '../../hooks/useLanguage'
+import { useLanguage } from '../hooks/useLanguage'
 
 import { CartItemForRequest, DataPerBpp, ICartRootState, TransactionIdRootState } from '@lib/types/cart'
-import { getInitPayload } from './checkout.utils'
-import useRequest from '../../hooks/useRequest'
-import { useInitMutation } from '@services/init'
-import { responseDataActions } from '../../store/responseData-slice'
-import {
+import { getInitPayload,
   areShippingAndBillingDetailsSame,
   getPayloadForInitRequest,
   getSubTotalAndDeliveryCharges
-} from './checkout.utils'
+
+} from '@components/checkout/checkout.utils'
+import useRequest from '../hooks/useRequest'
+import { useInitMutation } from '@services/init'
+import { responseDataActions } from '../store/responseData-slice'
+
 import { Checkout } from '@beckn-ui/becknified-components'
 
 import { Router, useRouter } from 'next/router'
 import { ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
 import { CheckoutRootState, checkoutActions } from '@store/checkout-slice'
 import { cartActions } from '@store/cart-slice'
-import cart from '@beckn-ui/becknified-components/src/components/cart'
 
 export type ShippingFormData = {
   name: string
@@ -212,8 +212,10 @@ const CheckoutPage = () => {
             }
           },
           payment: {
+            
             title: 'Payment',
             paymentDetails: {
+              hasBoxShadow:false,
               paymentBreakDown: {
                 ['Tax & Delivery']: `${currencyMap[getSubTotalAndDeliveryCharges(initResponse).currencySymbol as string]} ${
                   getSubTotalAndDeliveryCharges(initResponse).totalDeliveryCharge
