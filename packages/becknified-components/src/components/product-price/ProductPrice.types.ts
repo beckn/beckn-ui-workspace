@@ -6,6 +6,7 @@ export interface ProductPriceProps {
   color?: string
   className?: string
   variant?: TextVariant
+  fontStyle?: React.CSSProperties
 }
 
 export type CurrencyType = 'GBP' | 'EUR' | 'INR' | 'USD'

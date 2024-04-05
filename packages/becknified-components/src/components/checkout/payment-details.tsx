@@ -2,9 +2,9 @@ import React from 'react'
 import { Box, Divider, Flex } from '@chakra-ui/react'
 import { Typography } from '@beckn-ui/molecules'
 import { PaymentDetailsProps } from './checkout.types'
+import ProductPrice from '../product-price'
 
 const PaymentDetails: React.FC<PaymentDetailsProps> = props => {
-  // const boxShadowProp = props.hasBoxShadow ?
   return (
     <Box>
       {props.title && (
@@ -37,9 +37,13 @@ const PaymentDetails: React.FC<PaymentDetailsProps> = props => {
               text={property}
               fontSize={'15px'}
             />
-            <Typography
-              text={value}
-              fontSize={'15px'}
+            <ProductPrice
+              fontStyle={{
+                fontWeight: '600',
+                color: '#000000'
+              }}
+              price={value.value}
+              currencyType={value.currency}
             />
           </Flex>
         ))}
@@ -56,10 +60,14 @@ const PaymentDetails: React.FC<PaymentDetailsProps> = props => {
             fontSize={'15px'}
           />
           <div className="flex">
-            <Typography
+            <ProductPrice
+              fontStyle={{
+                fontSize: '15px',
+                color: '#000000'
+              }}
               variant="titleSemibold"
-              text={props.totalValueWithSymbol}
-              fontSize={'15px'}
+              price={parseFloat(props.totalValueWithCurrency.value)}
+              currencyType={props.totalValueWithCurrency.currency}
             />
           </div>
         </Flex>

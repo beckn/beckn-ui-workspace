@@ -284,7 +284,7 @@ const CheckoutPage = () => {
             <PaymentDetails
               paymentBreakDown={getPaymentBreakDown(initData).breakUpMap}
               totalText={t.total}
-              totalValueWithSymbol={getPaymentBreakDown(initData).totalPricewithCurrent}
+              totalValueWithCurrency={getPaymentBreakDown(initData).totalPricewithCurrent}
             />
           </DetailsCard>
         )}

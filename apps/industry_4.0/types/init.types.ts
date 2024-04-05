@@ -1,3 +1,5 @@
+import { CurrencyType } from '@beckn-ui/becknified-components'
+
 type ProductInfo = {
   code: string
   name: string
@@ -74,7 +76,7 @@ type QuoteBreakupInfo = {
 type QuoteInfo = {
   breakup: Array<QuoteBreakupInfo>
   price: {
-    currency: string
+    currency: CurrencyType
     value: string
   }
 }

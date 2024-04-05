@@ -1,3 +1,5 @@
+import { CurrencyType } from '@beckn-ui/becknified-components'
+
 interface Location {
   country: {
     name: string
@@ -28,7 +30,7 @@ interface Context {
 
 interface Price {
   value: string
-  currency: string
+  currency: CurrencyType
 }
 
 interface Image {

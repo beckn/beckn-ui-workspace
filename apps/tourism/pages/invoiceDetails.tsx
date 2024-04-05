@@ -81,7 +81,7 @@ const invoiceDetails = () => {
         <PaymentDetails
           paymentBreakDown={getPaymentBreakDown(statusData).breakUpMap}
           totalText="Total"
-          totalValueWithSymbol={getPaymentBreakDown(statusData).totalPricewithCurrent}
+          totalValueWithCurrency={getPaymentBreakDown(statusData).totalPricewithCurrent}
         />
       </DetailsCard>
 

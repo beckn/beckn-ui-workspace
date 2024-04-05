@@ -1,4 +1,5 @@
 import { FormData, FormField, ButtonProps, LoaderProps, LoaderWithMessagePropsModel } from '@beckn-ui/molecules'
+import { CurrencyType } from '../types'
 
 export type ShippingFormInitialValuesType = {
   name: string
@@ -44,12 +45,16 @@ export interface ShippingDetailsProps {
   title: string
 }
 
+type TotalAmountWithCurreny = {
+  currency: CurrencyType
+  value: string
+}
 export interface PaymentDetailsProps {
-  paymentBreakDown: Record<string, string>
+  paymentBreakDown: Record<string, any>
   totalText: string
-  totalValueWithSymbol: string
   title?: string
   hasBoxShadow?: boolean
+  totalValueWithCurrency: TotalAmountWithCurreny
 }
 
 export interface CheckoutProps<T extends FormField[]> {

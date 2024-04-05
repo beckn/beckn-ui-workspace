@@ -87,11 +87,12 @@ const CheckoutPage = () => {
         const documents = profileResponse.data.attributes.documents.data
 
         const profileData = profileResponse.data.attributes
-        const { phone } = profileData
+        const { phone, name, zip_code, address } = profileData
         setFormData(prevData => {
           return {
             ...prevData,
             email,
+            name,
             mobileNumber: phone
           }
         })
@@ -176,6 +177,7 @@ const CheckoutPage = () => {
             return (
               <>
                 <ItemDetails
+                  currencyType={item.item.price.currency}
                   key={item.item.id}
                   title={item.item.name}
                   provider={item.providerName}
@@ -266,7 +268,7 @@ const CheckoutPage = () => {
                   key={idx}
                   paymentBreakDown={getPaymentBreakDown(data).breakUpMap}
                   totalText={t.total}
-                  totalValueWithSymbol={getPaymentBreakDown(data).totalPricewithCurrent}
+                  totalValueWithCurrency={getPaymentBreakDown(data).totalPricewithCurrent}
                 />
               )
             })}

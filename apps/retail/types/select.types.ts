@@ -1,5 +1,7 @@
+import { CurrencyType } from '@beckn-ui/becknified-components'
+
 interface Price {
-  currency: string
+  currency: CurrencyType
   value: string
 }
 

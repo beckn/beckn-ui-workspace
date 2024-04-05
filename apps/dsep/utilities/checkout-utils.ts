@@ -204,15 +204,22 @@ export const getPaymentBreakDown = (initData: InitResponseItem) => {
   const { order } = message
   const { quote } = order
   const { breakup, price } = quote
-  const totalPricewithCurrent = `${price.currency} ${price.value}`
 
-  const breakUpMap: Record<string, string> = {}
+  const totalPricewithCurrent = {
+    currency: price.currency,
+    value: price.value
+  }
+
+  const breakUpMap: Record<string, any> = {}
   breakup.forEach(item => {
     const {
       title,
       price: { currency, value }
     } = item
-    breakUpMap[title] = `${currency} ${value} `
+    breakUpMap[title] = {
+      currency: currency,
+      value: value
+    }
   })
   return { breakUpMap, totalPricewithCurrent }
 }

@@ -1,12 +1,13 @@
 import React from 'react'
 import { Text, Box, Image, Flex, Divider } from '@chakra-ui/react'
-import ProductPrice from '../UI/ProductPrice'
+import { CurrencyType, ProductPrice } from '@beckn-ui/becknified-components'
 
 export interface ItemDetailProps {
   title: string
   provider: string
   quantity: number
   price: string | number
+  currencyType: CurrencyType
 }
 
 const ItemDetails: React.FC<ItemDetailProps> = props => {
@@ -25,7 +26,10 @@ const ItemDetails: React.FC<ItemDetailProps> = props => {
           alignItems={'center'}
         >
           <Text fontSize={'12px'}>Sold by {props.provider}</Text>
-          <ProductPrice price={props.price as number} />
+          <ProductPrice
+            currencyType={props.currencyType}
+            price={parseFloat(props.price as string)}
+          />
         </Flex>
       </Box>
       <Divider mb={'15px'} />
