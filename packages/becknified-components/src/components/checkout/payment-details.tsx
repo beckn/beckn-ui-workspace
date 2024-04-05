@@ -4,45 +4,66 @@ import { Typography } from '@beckn-ui/molecules'
 import { PaymentDetailsProps } from './checkout.types'
 
 const PaymentDetails: React.FC<PaymentDetailsProps> = props => {
-  console.log('props', props)
+  // const boxShadowProp = props.hasBoxShadow ?
   return (
     <Box>
-      {Object.entries(props.paymentBreakDown).map(([property, value]) => (
+      {props.title && (
+        <Box marginBottom="1rem">
+          <Typography
+            variant="subTitleRegular"
+            fontSize="17px"
+            text={props.title}
+          />
+        </Box>
+      )}
+      <Box
+        boxShadow={
+          props.hasBoxShadow
+            ? {
+                base: '0px 8px 10px -6px rgba(0, 0, 0, 0.1), 0px 20px 25px -5px rgba(0, 0, 0, 0.1)',
+                md: '0px 8px 10px -6px rgba(0, 0, 0, 0.1), 0px 8px 20px -5px rgba(0, 0, 0, 0.1)'
+              }
+            : {}
+        }
+        padding={{ base: '0', md: '11px 14px' }}
+      >
+        {Object.entries(props.paymentBreakDown).map(([property, value]) => (
+          <Flex
+            justifyContent={'space-between'}
+            alignItems={'center'}
+            pb={'15px'}
+          >
+            <Typography
+              text={property}
+              fontSize={'15px'}
+            />
+            <Typography
+              text={value}
+              fontSize={'15px'}
+            />
+          </Flex>
+        ))}
+
+        <Divider mb={'15px'} />
         <Flex
           justifyContent={'space-between'}
           alignItems={'center'}
-          pb={'15px'}
+          fontWeight={'600'}
         >
           <Typography
-            text={property}
-            fontSize={'15px'}
-          />
-          <Typography
-            text={value}
-            fontSize={'15px'}
-          />
-        </Flex>
-      ))}
-
-      <Divider mb={'15px'} />
-      <Flex
-        justifyContent={'space-between'}
-        alignItems={'center'}
-        fontWeight={'600'}
-      >
-        <Typography
-          variant="titleSemibold"
-          text={props.totalText}
-          fontSize={'15px'}
-        />
-        <div className="flex">
-          <Typography
             variant="titleSemibold"
-            text={props.totalValueWithSymbol}
+            text={props.totalText}
             fontSize={'15px'}
           />
-        </div>
-      </Flex>
+          <div className="flex">
+            <Typography
+              variant="titleSemibold"
+              text={props.totalValueWithSymbol}
+              fontSize={'15px'}
+            />
+          </div>
+        </Flex>
+      </Box>
     </Box>
   )
 }

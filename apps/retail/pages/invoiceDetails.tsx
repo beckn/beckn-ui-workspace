@@ -1,6 +1,7 @@
 import DetailsCard from '@beckn-ui/becknified-components/src/components/checkout/details-card'
 import React, { useEffect, useState } from 'react'
 import PaymentDetails from '@beckn-ui/becknified-components/src/components/checkout/payment-details'
+import {DetailCard} from '@beckn-ui/becknified-components'
 import Accordion from '@beckn-ui/molecules/src/components/accordion/Accordion'
 import Typography from '@beckn-ui/molecules/src/components/typography/typography'
 import { Box, Flex, HStack, Stack } from '@chakra-ui/react'
@@ -8,6 +9,7 @@ import Qrcode from '@components/qrCode/Qrcode'
 import { useLanguage } from '@hooks/useLanguage'
 import { getPaymentBreakDown } from '@utils/checkout-utils'
 import { StatusResponseModel } from '../types/status.types'
+import { formatTimestamp } from '@utils/confirm-utils'
 
 const invoiceDetails = () => {
   const [statusData, setStatusData] = useState<StatusResponseModel[]>([])
@@ -31,10 +33,16 @@ const invoiceDetails = () => {
         },
         items
       }
-    }
+    },
+    context:{timestamp}
   } = statusData[0]
 
   const { name } = items
+
+  const filteredOrder = statusData.filter(res => {
+    const {state} = res.message.order.fulfillments[0]
+    state && res.message.order.fulfillments[0].state.descriptor.short_desc === 'Delivered'
+  })
 
   const { t } = useLanguage()
   return (
@@ -43,35 +51,38 @@ const invoiceDetails = () => {
       maxH={'calc(100vh - 100px)'}
       overflowY="scroll"
     >
-      <DetailsCard>
-        <Box pb={'15px'}>
-          <Typography
-            variant="titleSemibold"
-            text={t.orderOverview}
-          />
-        </Box>
+      <DetailCard>
         <Flex
-          pb={'4px'}
+          pt={'unset'}
           justifyContent={'space-between'}
-          alignItems="center"
+          alignItems={'center'}
         >
           <Typography
-            variant="subTitleSemibold"
-            text={t.assembly}
+            variant="subTitleRegular"
+            text={t.placedAt}
           />
           <Typography
             variant="subTitleRegular"
-            text={`${currency} ${value}`}
+            text={formatTimestamp(timestamp)}
           />
         </Flex>
-        <Box pb={'4px'}>
-          <Typography
-            variant="subTitleRegular"
-            text={name}
-          />
+        <Box pt={4}>
+          <Flex
+            justifyContent={'space-between'}
+            alignItems={'center'}
+          >
+            <Typography
+              variant="subTitleRegular"
+              text={t.ordersFulfilled}
+            />
+            <Typography
+              variant="subTitleRegular"
+              text={`${filteredOrder.length} of ${statusData.length}`}
+            />
+          </Flex>
         </Box>
-      </DetailsCard>
-      <DetailsCard>
+      </DetailCard>
+      <DetailCard>
         <Box pb={'15px'}>
           <Typography
             variant="titleSemibold"
@@ -83,7 +94,7 @@ const invoiceDetails = () => {
           totalText="Total"
           totalValueWithSymbol={getPaymentBreakDown(statusData).totalPricewithCurrent}
         />
-      </DetailsCard>
+      </DetailCard>
 
       <Accordion accordionHeader={t.openInWallet}>
         <HStack

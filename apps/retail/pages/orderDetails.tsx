@@ -22,6 +22,7 @@ import ViewMoreOrderModal from '@components/orderDetailComponents/ViewMoreOrder'
 import { discoveryActions, DiscoveryRootState } from '@store/discovery-slice'
 import { DetailCard, OrderStatusProgress, OrderStatusProgressProps } from '@beckn-ui/becknified-components'
 import { StatusResponseModel, SupportModel } from '../types/status.types'
+import useResponsive from '@beckn-ui/becknified-components/src/hooks/useResponsive'
 import { useLanguage } from '@hooks/useLanguage'
 import { formatTimestamp, getPayloadForOrderStatus } from '@utils/confirm-utils'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
@@ -33,6 +34,7 @@ import CallphoneIcon from '../public/images/CallphoneIcon.svg'
 import locationIcon from '../public/images/locationIcon.svg'
 import nameIcon from '../public/images/nameIcon.svg'
 import { OrdersRootState } from '@store/order-slice'
+import ShippingBlock from '@components/orderDetailComponents/Shipping'
 import { DOMAIN } from '@lib/config'
 import PaymentDetails from '@beckn-ui/becknified-components/src/components/checkout/payment-details'
 import { getPaymentBreakDown } from '@utils/checkout-utils'
@@ -65,6 +67,7 @@ const OrderDetails = () => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [orderStatusMap, setOrderStatusMap] = useState<any[]>([])
+  const {isDesktop} = useResponsive()
   const { transactionId } = useSelector((state: DiscoveryRootState) => state.discovery)
   const orderMetaData = useSelector((state: OrdersRootState) => state.orders.selectedOrderDetails)
   const [currentStatusLabel, setCurrentStatusLabel] = useState('')
@@ -571,7 +574,7 @@ const OrderDetails = () => {
   } = stops[0]
 
   const filteredOrder = data.statusData.filter(res => {
-    const { state } = res.message.order.fulfillments[0]
+    const {state} = res.message.order.fulfillments[0]
     state && res.message.order.fulfillments[0].state.descriptor.short_desc === 'Delivered'
   })
 
@@ -580,6 +583,11 @@ const OrderDetails = () => {
       className="hideScroll"
       maxH="calc(100vh - 100px)"
       overflowY="scroll"
+      display={{base:'block',lg:'flex'}}
+      justifyContent='space-between'
+      marginTop='2rem'
+      gap='3rem'
+      
     >
       {processState.allOrderDelivered && (
         <Card
@@ -627,6 +635,8 @@ const OrderDetails = () => {
           </CardBody>
         </Card>
       )}
+
+      <Box width={{base:'100%',lg:'80%'}}>
       <Box
         pb="15px"
         pt="20px"
@@ -694,7 +704,7 @@ const OrderDetails = () => {
               <Text
                 as={Typography}
                 // TODO
-                text={`Order Id: ${orderMetaData.orderIds[0].slice(0, 5)}...`}
+                text={`Order Id: ${orderMetaData.orderIds[0].slice(0,5)}...`}
                 fontSize="17px"
                 fontWeight="600"
               />
@@ -721,7 +731,7 @@ const OrderDetails = () => {
                 </Text>
                 <Text
                   pl={'5px'}
-                  color={'#5EC401'}
+                  color={'rgba(var(--color-primary))'}
                   fontSize={'12px'}
                   fontWeight={'600'}
                   onClick={onOpen}
@@ -744,12 +754,12 @@ const OrderDetails = () => {
             width={'unset'}
             pt="15px"
           />
-          <ViewMoreOrderModal
+            <ViewMoreOrderModal
             isOpen={isOpen}
             onOpen={onOpen}
             onClose={onClose}
             items={data.statusData[0].message.order.items}
-            orderId={`${orderMetaData.orderIds[0].slice(0, 5)}...`}
+            orderId={`${orderMetaData.orderIds[0].slice(0,5)}...`}
           />
 
           {/* Display order status progress */}
@@ -764,105 +774,85 @@ const OrderDetails = () => {
           </Box>
         </CardBody>
       </DetailCard>
+      </Box>
+
 
       {/* shipping and billing address */}
 
-      <Accordion accordionHeader={t.shipping}>
-        <Box
-          pl={'14px'}
-          pr={'11px'}
-          pb={'11px'}
-          pt={'6px'}
-        >
-          <Stack
-            divider={<StackDivider />}
-            spacing="4"
-          >
-            <Flex alignItems={'center'}>
-              <Image
-                alt="name-icon"
-                src={nameIcon}
-                pr={'12px'}
-              />
-              <Typography
-                variant="subTitleRegular"
-                text={shippingName}
-              />
-            </Flex>
-            <Flex alignItems={'center'}>
-              <Image
-                alt="location-icon"
-                src={locationIcon}
-                pr={'12px'}
-              />
-              <Typography
-                variant="subTitleRegular"
-                text={shipmentAddress}
-              />
-            </Flex>
-            <Flex alignItems={'center'}>
-              <Image
-                alt="call-icon"
-                src={CallphoneIcon}
-                pr={'12px'}
-              />
-              <Typography
-                variant="subTitleRegular"
-                text={shippingPhone}
-              />
-            </Flex>
-          </Stack>
-        </Box>
-      </Accordion>
-      <Accordion accordionHeader={t.billing}>
-        <Box
-          pl={'14px'}
-          pr={'11px'}
-          pb={'11px'}
-          pt={'6px'}
-        >
-          <Stack
-            divider={<StackDivider />}
-            spacing="4"
-          >
-            <Flex alignItems={'center'}>
-              <Image
-                alt="name-icon"
-                src={nameIcon}
-                pr={'12px'}
-              />
-              <Typography
-                variant="subTitleRegular"
-                text={name}
-              />
-            </Flex>
-            <Flex alignItems={'center'}>
-              <Image
-                alt="location-icon"
-                src={locationIcon}
-                pr={'12px'}
-              />
-              <Typography
-                variant="subTitleRegular"
-                text={address}
-              />
-            </Flex>
-            <Flex alignItems={'center'}>
-              <Image
-                alt="call-icon"
-                src={CallphoneIcon}
-                pr={'12px'}
-              />
-              <Typography
-                variant="subTitleRegular"
-                text={phone}
-              />
-            </Flex>
-          </Stack>
-        </Box>
-      </Accordion>
+      <Box display='flex' flexDir={{base:'column',lg:'column'}} gap='1rem'>
+        {
+          isDesktop && (
+            <ShippingBlock
+            title={t.shipping}
+            name={{text: shippingName, icon: nameIcon}}
+            address={{text: shipmentAddress, icon: locationIcon}}
+            mobile={{text: shippingPhone, icon: CallphoneIcon}}
+            
+            />
 
-      <Accordion accordionHeader={t.payment}>
+
+          )
+
+        }
+        {
+          !isDesktop && (
+<Accordion accordionHeader={t.shipping}>
+      <ShippingBlock
+            // title={t.shipping}
+            name={{text: shippingName, icon: nameIcon}}
+            address={{text: shipmentAddress, icon: locationIcon}}
+            mobile={{text: shippingPhone, icon: CallphoneIcon}}
+            
+            />
+      </Accordion>
+          )
+        }
+
+{
+          isDesktop && (
+            <ShippingBlock
+            title={t.billing}
+            name={{text: name, icon: nameIcon}}
+            address={{text: address, icon: locationIcon}}
+            mobile={{text: phone, icon: CallphoneIcon}}
+            
+            />
+
+
+          )
+
+        }
+        {
+          !isDesktop && (
+<Accordion accordionHeader={t.billing}>
+      <ShippingBlock
+            // title={t.shipping}
+            name={{text: name, icon: nameIcon}}
+            address={{text: address, icon: locationIcon}}
+            mobile={{text: phone, icon: CallphoneIcon}}
+            
+            />
+      </Accordion>
+          )
+        }
+
+
+        {
+          isDesktop && (
+            <Box
+          >
+            <PaymentDetails
+            title='Payment'
+              paymentBreakDown={getPaymentBreakDown(data.statusData).breakUpMap}
+              totalText="Total"
+              totalValueWithSymbol={getPaymentBreakDown(data.statusData).totalPricewithCurrent}
+            />
+          </Box>
+          )
+        }
+
+        {!isDesktop && (
+<Accordion accordionHeader={t.payment}>
         <Box
           pl={'14px'}
           pr={'11px'}
@@ -876,6 +866,11 @@ const OrderDetails = () => {
           />
         </Box>
       </Accordion>
+        )}
+      
+     
+
+      
 
       {/* Display main bottom modal */}
       <BottomModal
@@ -1007,8 +1002,13 @@ const OrderDetails = () => {
           </>
         )}
       </BottomModalScan>
+      </Box>
     </Box>
   )
 }
+
+
+
+
 
 export default OrderDetails

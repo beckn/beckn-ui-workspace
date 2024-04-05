@@ -79,6 +79,11 @@ const OrderConfirmation = () => {
         iconSrc: orderConfirmmark,
         content: t.orderPlaced,
         contentMessage: t.orderSuccesfully,
+        successOrderMessage:'ORDER SUCCESFULL',
+        gratefulMessage:"Thank you for your order!",
+        orderIdMessage:`Order number is: ${confirmResponse[0].message.orderId.slice(0, 8)}...`,
+        trackOrderMessage:`You can track your order in "My Order" section`,
+        
         buttons: [
           {
             text: 'View Details',
@@ -103,7 +108,7 @@ const OrderConfirmation = () => {
           {
             text: 'Go Back Home',
             handleClick: () => {
-              router.push('/homePage')
+              router.push('/')
             },
             disabled: false,
             variant: 'outline',

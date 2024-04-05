@@ -48,6 +48,8 @@ export interface PaymentDetailsProps {
   paymentBreakDown: Record<string, string>
   totalText: string
   totalValueWithSymbol: string
+  title?: string
+  hasBoxShadow?: boolean
 }
 
 export interface CheckoutProps<T extends FormField[]> {

@@ -6,6 +6,10 @@ export interface ConfirmationPageProps {
     content: string
     contentMessage: string
     buttons: ButtonProps[]
+    successOrderMessage: string
+    gratefulMessage: string
+    orderIdMessage: string
+    trackOrderMessage: string
   }
   className?: string
 }
