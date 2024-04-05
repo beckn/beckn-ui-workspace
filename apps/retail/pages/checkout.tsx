@@ -269,7 +269,7 @@ const CheckoutPage = () => {
               totalText: 'Total',
               totalValueWithCurrency:{
                 value:getSubTotalAndDeliveryCharges(initResponse).subTotal.toString(),
-                currency:getSubTotalAndDeliveryCharges(initResponse).currencySymbol.toString()
+                currency:getSubTotalAndDeliveryCharges(initResponse).currencySymbol
               }
             }
           },
