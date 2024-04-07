@@ -1,6 +1,6 @@
-import { JobInfo } from '../jobSearch/JobsSearch.types'
+import { ParsedItemModel } from '../../types/search.types'
 
 export interface JobDetailsPagePropsModel {
-  jobDetails: JobInfo
+  jobDetails: ParsedItemModel
   encodedJobDetails: string | string[]
 }
