@@ -1,26 +1,26 @@
 import React from 'react'
 import SearchBar from '../header/SearchBar'
-import JobsCard from './JobsCard'
-
 import { Box } from '@chakra-ui/react'
-import { JobInfo, JobsSearchPropsModel } from './JobsSearch.types'
-import { getTransformedDataFromJobsResponse } from './JobsCard.utils'
+import { JobsSearchPropsModel } from './JobsSearch.types'
+import { ProductCard } from '@beckn-ui/becknified-components'
+import JobCardRenderer from './job-card-renderer'
 
 const JobSearch: React.FC<JobsSearchPropsModel> = props => {
-  const transformedData: JobInfo[] = getTransformedDataFromJobsResponse(props.jobs)
+  const { jobs, handleChange, searchvalue } = props
 
   return (
     <div>
       <Box className="job-search-bar">
         <SearchBar
-          searchString={''}
           handleChange={() => {}}
+          searchString={searchvalue}
         />
       </Box>
-      {transformedData.map((data, idx) => (
-        <JobsCard
-          key={idx}
-          job={data}
+      {jobs.map(data => (
+        <ProductCard
+          key={data.item.id}
+          ComponentRenderer={JobCardRenderer}
+          dataSource={data}
         />
       ))}
     </div>

@@ -1,31 +1,33 @@
+import LoaderWithMessage from '@beckn-ui/molecules/src/components/LoaderWithMessage/loader-with-message'
+import { Box } from '@chakra-ui/react'
 import axios from 'axios'
 import Cookies from 'js-cookie'
-import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import JobSearch from '../components/jobSearch/JobSearch'
-import { JobResponse } from '../components/jobSearch/JobsSearch.types'
-import Loader from '../components/loader/Loader'
-
-const userEmail = Cookies.get('userEmail')
+import { useLanguage } from '../hooks/useLanguage'
+import { ParsedItemModel, SearchResponseModel } from '../types/search.types'
+import { getParsedSearchlist } from '../utilities/search-utils'
 
 const jobSearch = () => {
-  const [jobs, setJobs] = useState<JobResponse[]>([])
+  const [jobs, setJobs] = useState<ParsedItemModel[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(true)
 
-  const apiUrl = process.env.NEXT_PUBLIC_DSEP_URL
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL
+  const { t } = useLanguage()
 
   const searchPayload = {
-    loggedInUserEmail: userEmail,
-    title: {
-      key: 'senior'
-    }
+    context: {
+      domain: 'dsep:jobs'
+    },
+    searchString: 'Developer'
   }
 
   const fetchJobs = () => {
     axios
-      .post(`${apiUrl}/job/search`, searchPayload)
+      .post(`${apiUrl}/search`, searchPayload)
       .then(res => {
-        const jobResponse = res.data
+        const jobResponse = getParsedSearchlist(res.data.data as SearchResponseModel[])
+
         setJobs(jobResponse)
         setIsLoading(false)
       })
@@ -36,15 +38,24 @@ const jobSearch = () => {
     fetchJobs()
   }, [])
 
+  console.log('jobs', jobs)
+
   if (isLoading) {
-    return <Loader loadingText="Searching for jobs" />
+    return (
+      <Box
+        display={'grid'}
+        height={'calc(100vh - 300px)'}
+        alignContent={'center'}
+      >
+        <LoaderWithMessage
+          loadingText={t.categoryLoadPrimary}
+          loadingSubText={t.jobSearchLoaderText}
+        />
+      </Box>
+    )
   }
 
-  return (
-    <div>
-      <JobSearch jobs={jobs} />
-    </div>
-  )
+  return <JobSearch jobs={jobs} />
 }
 
 export default jobSearch
