@@ -15,6 +15,10 @@ export const getParsedSearchlist = (data: SearchResponseModel[]) => {
     message.providers.forEach(provider => {
       const providerId = provider.id
       const rating = provider.rating
+      const { locations } = provider
+      const {
+        city: { name }
+      } = locations[0]
 
       provider?.items?.forEach(item => {
         itemsarray.push({
@@ -25,8 +29,8 @@ export const getParsedSearchlist = (data: SearchResponseModel[]) => {
           providerId: providerId,
           providerName: provider.name,
           item,
-          rating
-          //   providerCoordinates
+          rating,
+          cityName: name ?? ''
         })
       })
     })

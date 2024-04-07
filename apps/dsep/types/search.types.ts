@@ -98,6 +98,7 @@ export interface ParsedItemModel {
   providerName: string
   item: Item
   rating: string
+  cityName?: string
   //   providerCoordinates: Coordinate
 }
 

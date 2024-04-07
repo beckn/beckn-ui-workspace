@@ -1,3 +1,5 @@
+import { ParsedItemModel } from '../../types/search.types'
+
 export interface Location {
   id: string
   city: string
@@ -39,7 +41,7 @@ export interface JobResponse {
 }
 
 export interface JobsSearchPropsModel {
-  jobs: JobResponse[]
+  jobs: ParsedItemModel[]
   searchvalue?: string
   handleChange?: Function
 }
