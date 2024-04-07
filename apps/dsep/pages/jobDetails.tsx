@@ -1,17 +1,17 @@
 import Router, { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import JobDetailsPage from '../components/jobDetails/JobDetailsPage'
-import { JobInfo } from '../components/jobSearch/JobsSearch.types'
+import { ParsedItemModel } from '../types/search.types'
 import { fromBinary } from '../utilities/common-utils'
 
 const JobDetails = () => {
-  const [jobDetailsData, setJobDetailsData] = useState<null | JobInfo>(null)
+  const [jobDetailsData, setJobDetailsData] = useState<null | ParsedItemModel>(null)
   const [encodedJobDetails, setEncodedJobDetails] = useState<string | string[] | undefined>('')
 
   useEffect(() => {
     if (!!jobDetailsData) {
       localStorage.removeItem('optionTags')
-      localStorage.setItem('jobRoles', JSON.stringify({ name: jobDetailsData?.jobRole }))
+      localStorage.setItem('jobRoles', JSON.stringify({ name: jobDetailsData.item.name }))
       window.dispatchEvent(new Event('storage-optiontags'))
     }
   }, [jobDetailsData])
@@ -33,7 +33,7 @@ const JobDetails = () => {
     <div>
       <JobDetailsPage
         encodedJobDetails={encodedJobDetails}
-        jobDetails={jobDetailsData as JobInfo}
+        jobDetails={jobDetailsData as ParsedItemModel}
       />
     </div>
   )

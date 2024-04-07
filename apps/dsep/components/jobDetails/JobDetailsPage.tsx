@@ -4,37 +4,41 @@ import { useLanguage } from '../../hooks/useLanguage'
 import Button from '../button/Button'
 import Router from 'next/router'
 import { JobDetailsPagePropsModel } from './JobDetails.types'
+import { Typography } from '@beckn-ui/molecules'
 
 const JobDetailsPage: React.FC<JobDetailsPagePropsModel> = props => {
   const { t } = useLanguage()
   const { jobDetails, encodedJobDetails } = props
+  const { item, providerName } = jobDetails
+  const { name } = item
 
   return (
     <Box>
-      <Text
-        fontSize={'17px'}
-        fontWeight="600"
-        textAlign={'center'}
-        pb="10px"
+      <Flex
+        alignItems={'center'}
+        justifyContent={'center'}
+        flexDir={'column'}
+        gap={'10px'}
       >
-        {jobDetails.jobRole}
-      </Text>
-      <Text
-        fontSize={'15px'}
-        textAlign={'center'}
-      >
-        {jobDetails.companyName}
-      </Text>
+        <Typography
+          text={name}
+          fontSize={'17px'}
+          fontWeight={'600'}
+        />
+        <Typography
+          text={providerName}
+          fontSize={'15px'}
+        />
+      </Flex>
+
       <Box
+        padding="5px 10px"
+        maxHeight="calc(100vh - 254px)"
+        overflow="auto"
         className="mt-4 product_description_text border-2 border_radius_all hideScroll"
         mb={'20px'}
-        style={{
-          padding: '5px 10px',
-          maxHeight: 'calc(100vh - 254px)',
-          overflow: 'auto'
-        }}
       >
-        {jobDetails.jobDescription}
+        {jobDetails.item.long_desc}
       </Box>
       <Button
         buttonText={t.applyNow}
@@ -42,7 +46,7 @@ const JobDetailsPage: React.FC<JobDetailsPagePropsModel> = props => {
         color={'rgba(var(--text-color))'}
         isDisabled={false}
         handleOnClick={() => {
-          localStorage.setItem('jobRoles', JSON.stringify({ name: jobDetails.jobRole }))
+          localStorage.setItem('jobRoles', JSON.stringify({ name: jobDetails.item.name }))
           Router.push(`/jobApply?jobDetails=${encodedJobDetails}`)
         }}
       />

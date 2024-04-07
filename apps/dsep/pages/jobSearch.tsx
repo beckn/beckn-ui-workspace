@@ -38,8 +38,6 @@ const jobSearch = () => {
     fetchJobs()
   }, [])
 
-  console.log('jobs', jobs)
-
   if (isLoading) {
     return (
       <Box
