@@ -22,6 +22,7 @@ import { Router, useRouter } from 'next/router'
 import { ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
 import { CheckoutRootState, checkoutActions } from '@store/checkout-slice'
 import { cartActions } from '@store/cart-slice'
+import { isEmpty } from '@utils/common-utils'
 
 export type ShippingFormData = {
   name: string
@@ -66,7 +67,6 @@ const CheckoutPage = () => {
     pinCode: '75001'
   })
 
-  const [isBillingSame, setIsBillingSame] = useState(true)
 
   const router = useRouter()
   const initRequest = useRequest()
@@ -93,6 +93,13 @@ const CheckoutPage = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  useEffect(()=>{
+    if(isBillingSameRedux){
+      setBillingFormData(submittedDetails)
+    }
+
+  },[isBillingSameRedux])
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -130,13 +137,9 @@ const CheckoutPage = () => {
 
   const formSubmitHandler = (data: any) => {
     if (data) {
-      getInitPayload(data, billingFormData, cartItems, transactionId, DOMAIN)
+      getInitPayload(submittedDetails, billingFormData, cartItems, transactionId, DOMAIN)
         .then(res => {
-          console.log('Dank checkout', res)
           return initialize(res)
-        })
-        .then(response => {
-          console.log('Dank', response)
         })
       // TODO :_ To check this again
 
@@ -165,10 +168,6 @@ const CheckoutPage = () => {
     const paymentBreakdownMap = {}
     if(isInitResultPresent()){
         initResponse[0].message.order.quote.breakup.forEach((breakup)=>{
-        // return {
-        //   [breakup.title]: `${currencyMap[breakup.price.currency as string]} ${breakup.price.value}`
-        // }
-        // paymentBreakdownMap[breakup.title] = `${currencyMap[breakup.price.currency as string]} ${breakup.price.value}`
         paymentBreakdownMap[breakup.title] = {
           value:breakup.price.value,
           currency:breakup.price.currency
@@ -197,14 +196,6 @@ const CheckoutPage = () => {
 
 
 
-
-// return {
-//   ['Tax & Delivery']: `${currencyMap[getSubTotalAndDeliveryCharges(initResponse).currencySymbol as string]} ${
-//     getSubTotalAndDeliveryCharges(initResponse).totalDeliveryCharge
-//   }`,
-//   Subtotal: `${currencyMap[getSubTotalAndDeliveryCharges(initResponse).currencySymbol as string]} ${getSubTotalAndDeliveryCharges(initResponse).subTotal}`
-// }
-//   }
 
   return (
     <>
@@ -248,18 +239,18 @@ const CheckoutPage = () => {
               // setIsBillingSame(!isBillingSame)
               dispatch(checkoutActions.setIsBillingSame({ isBillingSame: !isBillingSameRedux }))
             },
-            showDetails: isInitResultPresent(),
+            showDetails: isInitResultPresent() && !isEmpty(submittedDetails),
             shippingDetails: {
-              name: submittedDetails.name,
-              location: submittedDetails.address,
-              number: submittedDetails.mobileNumber,
+              name: billingFormData.name,
+              location: billingFormData.address,
+              number: billingFormData.mobileNumber,
               title: 'Billing'
             },
             shippingForm: {
               onSubmit: formSubmitHandler,
-              submitButton: { text: 'Save Shipping Details' },
+              submitButton: { text: 'Save Billing Details' },
               values: formData,
-              onChange: data => setSubmittedDetails(data)
+              onChange: data => setBillingFormData(data)
             }
           },
           payment: {

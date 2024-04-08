@@ -28,6 +28,8 @@ const ShippingSection: React.FC<ShippingSectionProps<FormField[]>> = ({
   // const [isChecked, setIsChecked] = useState<boolean>(true)
   const { isDesktop, isTablet } = useResponsive()
 
+  console.log("Dank",isChecked)
+
   return (
     <Box>
       <Flex
@@ -47,7 +49,7 @@ const ShippingSection: React.FC<ShippingSectionProps<FormField[]>> = ({
           />
         )}
       </Flex>
-      {isBilling ? (
+      {isBilling && isChecked ? (
         <DetailsCard>
           <Checkbox
             iconColor="primary.100"
