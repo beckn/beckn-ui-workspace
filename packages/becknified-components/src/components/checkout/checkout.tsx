@@ -52,7 +52,8 @@ const Checkout: React.FC<CheckoutProps<FormField[]>> = ({
                   title={item.title}
                   description={item.description}
                   quantity={item.quantity}
-                  priceWithSymbol={item.priceWithSymbol}
+                  price={item.price}
+                  currency={item.currency}
                   image={item.image}
                 />
               </>

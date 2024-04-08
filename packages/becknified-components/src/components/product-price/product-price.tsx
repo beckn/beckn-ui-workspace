@@ -1,4 +1,4 @@
-import { Flex } from '@chakra-ui/react'
+import { Flex,useTheme } from '@chakra-ui/react'
 import React from 'react'
 import { CurrencyType, ProductPriceProps } from './ProductPrice.types'
 import { Typography } from '@beckn-ui/molecules'
@@ -20,14 +20,20 @@ const formatCurrency = (price: number, currencyType: CurrencyType) => {
 }
 
 const ProductPrice: React.FC<ProductPriceProps> = props => {
+  const theme = useTheme();
+
   const {
     price,
     currencyType = 'INR',
-    color = 'primary.100',
+    color = 'secondary.100',
     className = '',
     variant = 'subTextSemibold',
-    fontStyle
+    fontStyle,
+    colorScheme = 'secondary'
   } = props
+
+
+  const textColor = colorScheme === 'primary' ? theme.colors.primary[100] : theme.colors.secondary[100];
 
   return (
     <Flex
@@ -42,7 +48,7 @@ const ProductPrice: React.FC<ProductPriceProps> = props => {
       <Typography
         variant={variant}
         text={formatCurrency(price, currencyType)}
-        color={color}
+        color={color || textColor}
         style={fontStyle}
       />
     </Flex>

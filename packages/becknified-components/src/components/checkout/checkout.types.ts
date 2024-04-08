@@ -34,8 +34,10 @@ export interface ItemDetailProps {
   title: string
   description: string
   quantity: number
-  priceWithSymbol: string
-  image?: string
+  // priceWithSymbol: string
+  image?: string,
+  price:number,
+  currency:CurrencyType
 }
 
 export interface ShippingDetailsProps {

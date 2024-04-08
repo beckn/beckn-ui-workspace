@@ -217,7 +217,9 @@ const CheckoutPage = () => {
               title: singleItem.name,
               description: singleItem.short_desc,
               quantity: singleItem.quantity,
-              priceWithSymbol: `${currencyMap[singleItem.price.currency]}${singleItem.totalPrice}`,
+              // priceWithSymbol: `${currencyMap[singleItem.price.currency]}${singleItem.totalPrice}`,
+              price:singleItem.totalPrice,
+              currency:singleItem.price.currency,
               image: singleItem.images[0].url
             }))
           },

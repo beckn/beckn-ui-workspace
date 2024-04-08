@@ -17,6 +17,7 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const { locale } = useLanguage()
   const router = useRouter()
   const isHomepage = router.pathname === '/homePage'
+  const isHome = router.pathname === '/'
   const isSearch = router.pathname === '/search'
   const isSignUp = router.pathname === '/signUp'
   const isSearchPage = router.pathname === '/search'
@@ -43,6 +44,7 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
             } ${isHomepage ? styles.homepageMargin : isSearch ? styles.searchMargin : ''} 
                ${isSignUp ? styles.withMarginSignUp : ''} 
               ${isSearchPage ? styles.searchPageMargin : ''}
+              ${isHome ? styles.homepageMargin : ''}
               `}
           >
             {children}

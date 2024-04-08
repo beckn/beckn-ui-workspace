@@ -21,7 +21,8 @@ function CartIconWithCount({
         alt="Cart"
         boxSize="30px"
       />
-      <Box
+      {
+        itemCount > 0 && <Box
         position="absolute"
         top="-1"
         right="-1"
@@ -37,6 +38,8 @@ function CartIconWithCount({
       >
         <Text>{itemCount}</Text>
       </Box>
+      }
+      
     </Flex>
   )
 }

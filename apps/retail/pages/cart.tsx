@@ -78,10 +78,11 @@ const Cart = () => {
               dispatch(cartActions.removeItemFromCart(id))
             }
           })),
-          loader: { text: 'Loading cart' },
+          loader: { text: 'Getting quotes' },
           orderSummary: {
             totalAmount: {
               price: !isEmpty(data) ? data.data[0].message.order.quote.price.value : totalAmount,
+              currencyType:items[0].price.currency,
             },
             totalQuantity: {
               text:totalQuantity.toString(),

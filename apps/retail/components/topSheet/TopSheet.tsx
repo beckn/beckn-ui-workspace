@@ -37,7 +37,7 @@ const TopSheet: React.FC<TopSheetPropsModel> = props => {
   const { t } = useLanguage()
   const dispatch = useDispatch()
   const bgColorOfSearchIcon = theme.colors.primary['100']
-  const isSearchPage = router.pathname === '/search'
+  const isSearchPage = router.pathname === '/'
 
   const geoLocationSearchPageSelectedAddress = useSelector((state: IGeoLocationSearchPageRootState) => {
     return state.geoLocationSearchPageUI.geoAddress
@@ -50,7 +50,7 @@ const TopSheet: React.FC<TopSheetPropsModel> = props => {
   const renderAddresstext = currentLocationFetchError || geoLocationSearchPageSelectedAddress || currentAddress || ''
 
   return (
-    <ChakraProvider theme={theme}>
+    // <ChakraProvider theme={theme}>
       <Box className={isSearchPage ? style.searchTopSheetMargin : style.top_Sheet_Wrapper}>
         <Box>
           <Flex
@@ -172,7 +172,7 @@ const TopSheet: React.FC<TopSheetPropsModel> = props => {
           </ModalContent>
         </Modal>
       </Box>
-    </ChakraProvider>
+    // </ChakraProvider>
   )
 }
 

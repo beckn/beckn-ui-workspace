@@ -56,7 +56,7 @@ const OrderConfirmation = () => {
     }
   }, [confirmResponse])
 
-  if (isLoading) {
+  if (isLoading || !confirmResponse) {
     return (
       <Box
         display={'grid'}
@@ -79,7 +79,7 @@ const OrderConfirmation = () => {
         contentMessage: t.orderSuccesfully,
         successOrderMessage:'ORDER SUCCESFULL',
         gratefulMessage:"Thank you for your order!",
-        orderIdMessage:`Order number is: ${confirmResponse && confirmResponse.length > 0 && confirmResponse[0].message.orderId.slice(0, 8)}...`,
+        orderIdMessage:`Order number is: ${confirmResponse && confirmResponse.length > 0 &&confirmResponse[0].message.orderId && confirmResponse[0].message.orderId.slice(0, 8)}...`,
         trackOrderMessage:`You can track your order in "My Order" section`,
         
         buttons: [

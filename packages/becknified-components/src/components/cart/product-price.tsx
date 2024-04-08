@@ -12,7 +12,8 @@ export interface ProductPriceProps {
   isLargeSize?: boolean
   isInSlider?: boolean
   symbol: string
-  isRtl?: boolean
+  isRtl?: boolean,
+  variant?:'primary' | 'secondary'
 }
 
 const ProductPrice: React.FC<ProductPriceProps> = ({
@@ -20,12 +21,13 @@ const ProductPrice: React.FC<ProductPriceProps> = ({
   isLargeSize = false,
   isInSlider,
   symbol = '€',
-  isRtl = false
+  isRtl = false,
+  variant='secondary'
 }) => {
   const justifyContent = isInSlider && isRtl ? 'flex-start' : ''
   const flexDirection = 'row'
   const theme = useTheme<CustomThemeType>()
-  const color = theme.colors.primary[100]
+  const color = variant === 'primary' ? theme.colors.primary[100]: theme.colors.secondary[100]
 
   const prouctPriceContainerClassNames = classNames({
     product_price_container: true,
