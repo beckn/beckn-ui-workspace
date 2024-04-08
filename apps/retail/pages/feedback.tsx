@@ -8,6 +8,7 @@ import { Typography } from '@beckn-ui/molecules'
 import {useSelector} from 'react-redux'
 import { StatusRootState } from '@store/status-slice'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
+import useResponsive from '@beckn-ui/becknified-components/src/hooks/useResponsive'
 import { StatusResponseModel } from '../types/status.types'
 import axios from 'axios'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
@@ -19,6 +20,7 @@ const Feedback = () => {
   const [feedback, setFeedback] = useState('')
   const [isLoadingForRating, setIsLoadingForRating] = useState(false)
   const statusResponse = useSelector((state: StatusRootState) => state.status.statusResponse)
+  const {isDesktop} = useResponsive()
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
@@ -80,11 +82,25 @@ const Feedback = () => {
       className="hideScroll"
       maxH={'calc(100vh - 100px)'}
       overflowY="scroll"
+      display={{base:'block',lg:'flex'}}
+      justifyContent='space-around'
+      padding={{base:'0 10px',lg:'3rem'}}
+      // alignItems="center"
     >
+        <Box mb={'10px'}>
+        <Image
+          src={feedbackImg}
+          margin={'0 auto'}
+        />
+      </Box>
+      <Box>
       <Box
-        pt={'27px'}
-        textAlign={'center'}
+        pt={{base:'2rem',lg:'0'}}
+        textAlign={{base:'center',lg:'left'}}
         pb={'15px'}
+        display={{base:'block',lg:'flex'}}
+        flexDir='column'
+        gap="1rem"
       >
         <Text
           as={Typography}
@@ -92,6 +108,14 @@ const Feedback = () => {
           fontSize={'15px'}
           fontWeight={600}
         />
+        {
+          isDesktop &&                   <Typography
+          fontSize={{ base: '1rem', md: '2rem' }}
+    variant="subTitleSemibold"
+    text="Thank you for your order!"
+  />
+        }
+
         <Text
           as={Typography}
           text={t.pleaseShareYourFeedback}
@@ -99,12 +123,7 @@ const Feedback = () => {
           fontWeight={400}
         />
       </Box>
-      <Box mb={'10px'}>
-        <Image
-          src={feedbackImg}
-          margin={'0 auto'}
-        />
-      </Box>
+    
       <Box>
         <StarRating
           ratingText={t.rateDeliveryExperience}
@@ -130,7 +149,12 @@ const Feedback = () => {
           placeholder={t.writeExperience}
           boxShadow={'0px 4px 6px -1px rgba(0, 0, 0, 0.1), 0px 2px 4px -2px rgba(0, 0, 0, 0.1)'}
         />
-        <BecknButton
+         <Box
+              width={'100%'}
+              display={{ base: 'block', lg: 'flex' }}
+              gap="1rem"
+            >
+                      <BecknButton
           children="Submit Review"
           className="checkout_btn "
           disabled={!ratingForStore}
@@ -142,7 +166,14 @@ const Feedback = () => {
           className="checkout_btn"
           handleClick={() => router.push('/')}
         />
+
+
+            </Box>
+
       </Box>
+
+      </Box>
+
     </Box>
   )
 }
