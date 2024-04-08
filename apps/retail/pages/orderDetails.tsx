@@ -14,13 +14,15 @@ import {
   StackDivider,
   Text,
   Textarea,
-  useDisclosure
+  useDisclosure,
+  useTheme
 } from '@chakra-ui/react'
 import { Accordion, BottomModal, Typography } from '@beckn-ui/molecules'
 import { v4 as uuidv4 } from 'uuid'
 import { useDispatch, useSelector } from 'react-redux'
 import ViewMoreOrderModal from '@components/orderDetailComponents/ViewMoreOrder'
 import { discoveryActions, DiscoveryRootState } from '@store/discovery-slice'
+import {statusActions} from '@store/status-slice'
 import { DetailCard, OrderStatusProgress, OrderStatusProgressProps } from '@beckn-ui/becknified-components'
 import { StatusResponseModel, SupportModel } from '../types/status.types'
 import useResponsive from '@beckn-ui/becknified-components/src/hooks/useResponsive'
@@ -50,6 +52,9 @@ const statusMap = {
   'Delivered':"Order Delivered"
 }
 
+const DELIVERED = 'Delivered'
+const CANCELLED = 'CANCELLED'
+
 const OrderDetails = () => {
   const [uiState, setUiState] = useState<UIState>({
     isProceedDisabled: true,
@@ -59,6 +64,8 @@ const OrderDetails = () => {
     isCancelMenuModalOpen: false,
     isLoadingForCancel: false
   })
+
+  const theme = useTheme()
 
   const [data, setData] = useState<DataState>({
     confirmData: null,
@@ -70,7 +77,8 @@ const OrderDetails = () => {
   const [processState, setProcessState] = useState<ProcessState>({
     apiCalled: false,
     allOrderDelivered: false,
-    radioValue: ''
+    radioValue: '',
+    orderCancelled:false
   })
   const router = useRouter()
   const { t } = useLanguage()
@@ -80,6 +88,7 @@ const OrderDetails = () => {
   const {isDesktop} = useResponsive()
   const { transactionId } = useSelector((state: DiscoveryRootState) => state.discovery)
   const orderMetaData = useSelector((state: OrdersRootState) => state.orders.selectedOrderDetails)
+  const dispatch = useDispatch()
   const [currentStatusLabel, setCurrentStatusLabel] = useState('')
 
 
@@ -321,8 +330,11 @@ const OrderDetails = () => {
     return () => clearInterval(intervalId)
   }, [apiUrl, data.confirmData])
 
-  // Check if the order is delivered
-  const isDelivered = data.statusData?.[0]?.message?.order?.fulfillments?.[0]?.state?.descriptor?.code === 'DELIVERED'
+  // Check if the order is delivered  come her
+  const isDelivered = data.statusData?.[0]?.message?.order?.fulfillments?.[0]?.state?.descriptor?.code === DELIVERED
+  const isCancelled = data.statusData?.[0]?.message?.order?.status === CANCELLED
+
+  console.log("Dank cancel",isCancelled)
 
   useEffect(() => {
     if (isDelivered) {
@@ -332,6 +344,15 @@ const OrderDetails = () => {
       }))
     }
   }, [isDelivered])
+
+  useEffect(() => {
+    if (isCancelled) {
+      setProcessState(prevState => ({
+        ...prevState,
+        orderCancelled: true
+      }))
+    }
+  }, [isCancelled])
 
   const handleOrderDotsClick = async () => {
     setUiState(prevState => ({
@@ -607,16 +628,14 @@ const OrderDetails = () => {
       className="hideScroll"
       maxH="calc(100vh - 100px)"
       overflowY="scroll"
-      display={{base:'block',lg:'flex'}}
-      justifyContent='space-between'
-      marginTop='2rem'
-      gap='3rem'
       
     >
+      <Box maxW={{base:'100%',md:'50%'}} margin='0 auto'>
+
       {processState.allOrderDelivered && (
         <Card
           mt="20px"
-          border="1px solid rgba(94, 196, 1, 1)"
+          border={`1px solid ${theme.colors.primary[100]}`}
           className="border_radius_all"
           boxShadow={'0px 8px 10px -6px rgb(0 0 0 / 10%), 0px 20px 25px -5px rgb(0 0 0 / 10%)'}
         >
@@ -649,7 +668,11 @@ const OrderDetails = () => {
                 text={t.howTodo}
               />
               <Text
-                onClick={() => router.push('/feedback')}
+                onClick={() => {
+
+dispatch(statusActions.addStatusResponse({statusResponse:data.statusData}))
+router.push('/feedback')
+                }}
                 pl="10px"
                 color="#0560FA"
                 as={Typography}
@@ -659,8 +682,19 @@ const OrderDetails = () => {
           </CardBody>
         </Card>
       )}
+      </Box>
+      <Box 
+            display={{base:'block',lg:'flex'}}
+            justifyContent='space-between'
+            marginTop='2rem'
+            gap='3rem'
+      
+      >
+
+
 
       <Box width={{base:'100%',lg:'80%'}}>
+      
       <Box
         pb="15px"
         pt="20px"
@@ -772,9 +806,10 @@ const OrderDetails = () => {
 
               <Text
                 fontSize={'15px'}
-                fontWeight={'600'}
+                fontWeight={'500'}
+                color={data.statusData[0].message.order.status === 'CANCELLED' ? 'red' : 'green'}
               >
-                pending
+                {data.statusData[0].message.order.status}
               </Text>
             </Flex>
           </>
@@ -799,6 +834,8 @@ const OrderDetails = () => {
                 key={index}
                 label={status.label}
                 statusTime={status.statusTime && formatTimestamp(status.statusTime)}
+                noLine={isDelivered || isCancelled}
+                lastElement={orderStatusMap.length - 1 === index}
               />
             ))}
           </Box>
@@ -1034,6 +1071,8 @@ const OrderDetails = () => {
           </>
         )}
       </BottomModalScan>
+      </Box>
+
       </Box>
     </Box>
   )

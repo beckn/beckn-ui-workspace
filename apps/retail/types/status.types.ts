@@ -141,7 +141,9 @@ interface Order {
   billing: Billing
   payments: Payment[]
   cancellation_terms: CancellationTerms[]
-  type: string
+  type: string,
+  status:string,
+  tags:any
 }
 
 interface Context {
@@ -166,7 +168,7 @@ interface Message {
 }
 
 export interface StatusResponseModel {
-  length: number
+  length?: number
   context: Context
   message: Message
 }

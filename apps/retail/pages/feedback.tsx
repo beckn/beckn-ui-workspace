@@ -5,8 +5,10 @@ import StarRating from '../components/starRating/StarRating'
 import { useLanguage } from '../hooks/useLanguage'
 import feedbackImg from '../public/images/feedbackImg.svg'
 import { Typography } from '@beckn-ui/molecules'
+import {useSelector} from 'react-redux'
+import { StatusRootState } from '@store/status-slice'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
-import { ConfirmResponseModel } from '../types/confirm.types'
+import { StatusResponseModel } from '../types/status.types'
 import axios from 'axios'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
 
@@ -15,23 +17,18 @@ const Feedback = () => {
   const router = useRouter()
   const [ratingForStore, setRatingForStore] = useState(0)
   const [feedback, setFeedback] = useState('')
-  const [confirmData, setConfirmData] = useState<ConfirmResponseModel[] | null>(null)
   const [isLoadingForRating, setIsLoadingForRating] = useState(false)
+  const statusResponse = useSelector((state: StatusRootState) => state.status.statusResponse)
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
-  useEffect(() => {
-    if (localStorage && localStorage.getItem('confirmResponse')) {
-      const parsedConfirmData: ConfirmResponseModel[] = JSON.parse(localStorage.getItem('confirmResponse') as string)
-      setConfirmData(parsedConfirmData)
-    }
-  }, [])
 
-  const handleSubmitReview = async (confirmData: ConfirmResponseModel[]) => {
+
+  const handleSubmitReview = async (statusData: StatusResponseModel[]) => {
     try {
       setIsLoadingForRating(true)
-      const { domain, bpp_id, bpp_uri, transaction_id } = confirmData[0].context
-      const orderId = confirmData[0].message.orderId
+      const { domain, bpp_id, bpp_uri, transaction_id } = statusData[0].context
+      const orderId = statusData[0].message.order.id
       const ratingPayload = {
         data: [
           {
@@ -52,14 +49,14 @@ const Feedback = () => {
 
       const ratingResponse = await axios.post(`${apiUrl}/rating`, ratingPayload)
       if (ratingResponse.data.data.length > 0) {
-        router.push('/homePage')
+        router.push('/')
       }
     } catch (error) {
       console.error(error)
     }
   }
 
-  if (!confirmData || confirmData.length === 0) {
+  if (!statusResponse || statusResponse.length === 0) {
     return <></>
   }
 
@@ -137,13 +134,13 @@ const Feedback = () => {
           children="Submit Review"
           className="checkout_btn "
           disabled={!ratingForStore}
-          handleClick={() => handleSubmitReview(confirmData)}
+          handleClick={() => handleSubmitReview(statusResponse)}
         />
         <BecknButton
           children="Skip for Now"
           variant="outline"
           className="checkout_btn"
-          handleClick={() => router.push('/homePage')}
+          handleClick={() => router.push('/')}
         />
       </Box>
     </Box>
