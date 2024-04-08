@@ -30,9 +30,12 @@
 }
 
 .main.homepageMargin {
-  margin-top: 24px;
+  margin-top: 30px;
 }
 
 .main.searchMargin {
   margin-top: 95px;
+}
+.main.isHome{
+  margin-top:30px;
 }

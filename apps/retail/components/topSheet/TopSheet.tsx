@@ -37,7 +37,7 @@ const TopSheet: React.FC<TopSheetPropsModel> = props => {
   const { t } = useLanguage()
   const dispatch = useDispatch()
   const bgColorOfSearchIcon = theme.colors.primary['100']
-  const isSearchPage = router.pathname === '/search'
+  const isSearchPage = router.pathname === '/'
 
   const geoLocationSearchPageSelectedAddress = useSelector((state: IGeoLocationSearchPageRootState) => {
     return state.geoLocationSearchPageUI.geoAddress
