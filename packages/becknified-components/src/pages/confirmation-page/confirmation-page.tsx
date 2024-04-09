@@ -5,16 +5,7 @@ import { Button, Loader, Typography } from '@beckn-ui/molecules'
 import useResponsive from '../../hooks/useResponsive'
 
 const ConfirmationPage: React.FC<ConfirmationPageProps> = ({ schema, className }) => {
-  const {
-    iconSrc,
-    content,
-    contentMessage,
-    buttons,
-    successOrderMessage,
-    gratefulMessage,
-    orderIdMessage,
-    trackOrderMessage
-  } = schema
+  const { iconSrc, buttons, successOrderMessage, gratefulMessage, orderIdMessage, trackOrderMessage } = schema
   const { isMobile } = useResponsive()
 
   return (
@@ -57,12 +48,14 @@ const ConfirmationPage: React.FC<ConfirmationPageProps> = ({ schema, className }
             variant="subTitleSemibold"
             text={gratefulMessage}
           />
-          <Typography
-            style={{ fontSize: '1rem' }}
-            text={orderIdMessage}
-          />
+          {orderIdMessage && (
+            <Typography
+              style={{ fontSize: '1rem' }}
+              text={orderIdMessage}
+            />
+          )}
 
-          {!isMobile && (
+          {!isMobile && trackOrderMessage && (
             <Typography
               style={{ fontSize: '1rem' }}
               text={trackOrderMessage}

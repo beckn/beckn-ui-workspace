@@ -4,8 +4,7 @@ import orderConfirmmark from '../public/images/orderConfirmmark.svg'
 import { useSelector, useDispatch } from 'react-redux'
 import { useLanguage } from '../hooks/useLanguage'
 import { ConfirmationPage } from '@beckn-ui/becknified-components'
-import { InitResponseModel } from '../types/init.types'
-import { CheckoutRootState,checkoutActions } from '@store/checkout-slice'
+import { CheckoutRootState, checkoutActions } from '@store/checkout-slice'
 import { orderActions } from '@store/order-slice'
 import { useConfirmMutation } from '@services/confirm'
 import { getPayloadForConfirm, getPayloadForOrderHistoryPost } from '@utils/confirm-utils'
@@ -14,7 +13,6 @@ import { Box } from '@chakra-ui/react'
 import Cookies from 'js-cookie'
 import { ConfirmResponseModel } from '../types/confirm.types'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
-import { init } from 'next/dist/compiled/webpack/webpack'
 
 const OrderConfirmation = () => {
   const { t } = useLanguage()
@@ -22,7 +20,6 @@ const OrderConfirmation = () => {
   const [confirmData, setConfirmData] = useState<ConfirmResponseModel[]>([])
   const [confirm, { isLoading, data }] = useConfirmMutation()
   const dispatch = useDispatch()
-
 
   const initResponse = useSelector((state: CheckoutRootState) => state.checkout.initResponse)
   const confirmResponse = useSelector((state: CheckoutRootState) => state.checkout.confirmResponse)
@@ -75,13 +72,11 @@ const OrderConfirmation = () => {
     <ConfirmationPage
       schema={{
         iconSrc: orderConfirmmark,
-        content: t.orderPlaced,
-        contentMessage: t.orderSuccesfully,
-        successOrderMessage:'ORDER SUCCESFULL',
-        gratefulMessage:"Thank you for your order!",
-        orderIdMessage:`Order number is: ${confirmResponse && confirmResponse.length > 0 &&confirmResponse[0].message.orderId ? confirmResponse[0].message.orderId.slice(0, 8) : ''}...`,
-        trackOrderMessage:`You can track your order in "My Order" section`,
-        
+        successOrderMessage: 'ORDER SUCCESFULL',
+        gratefulMessage: 'Thank you for your order!',
+        orderIdMessage: `Order number is: ${confirmResponse && confirmResponse.length > 0 && confirmResponse[0].message.orderId.slice(0, 8)}...`,
+        trackOrderMessage: `You can track your order in "My Order" section`,
+
         buttons: [
           {
             text: 'View Details',

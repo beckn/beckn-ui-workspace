@@ -80,8 +80,8 @@ const OrderConfirmation = () => {
     <ConfirmationPage
       schema={{
         iconSrc: orderConfirmmark,
-        content: t.orderPlaced,
-        contentMessage: t.orderSuccesfully,
+        successOrderMessage: t.orderPlaced,
+        gratefulMessage: t.orderSuccesfully,
         buttons: [
           {
             text: 'View Details',

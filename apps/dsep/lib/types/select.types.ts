@@ -70,8 +70,8 @@ interface Tag {
 
 interface XInput {
   url: string
-  mime_type: string
-  html: string
+  mime_type?: string
+  html?: string
 }
 
 export interface Item {

@@ -1,19 +1,26 @@
 import { Box, Flex, Text } from '@chakra-ui/react'
-import { JobApplyFormData, JobCredential, JobSelectResponseModel } from '../components/jobApply/JobApply.types'
+import { Button, Typography } from '@beckn-ui/molecules'
+import LoaderWithMessage from '@beckn-ui/molecules/src/components/LoaderWithMessage/loader-with-message'
+import { toast } from 'react-toastify'
+import axios from 'axios'
+import Cookies from 'js-cookie'
+import { JobApplyFormData, JobCredential } from '../components/jobApply/JobApply.types'
 import React, { useEffect, useState } from 'react'
 import Router, { useRouter } from 'next/router'
-import { toast } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
-
-import Button from '../components/button/Button'
-import Cookies from 'js-cookie'
 import JobApply from '../components/jobApply/JobApply'
-import { JobInfo } from '../components/jobSearch/JobsSearch.types'
-import Loader from '../components/loader/Loader'
 import UploadFile from '../components/uploadFile/UploadFile'
-import axios from 'axios'
 import { fromBinary } from '../utilities/common-utils'
 import { useLanguage } from '../hooks/useLanguage'
+import { ParsedItemModel } from '../types/search.types'
+import {
+  getConfirmPayloadForJobs,
+  getInitPayloadForJobs,
+  getPostOrderPayload,
+  getSelectPayloadForJobs
+} from '../utilities/job-apply-utils'
+import { SelectResponseModel } from '../lib/types/select.types'
+import { ConfirmResponseModel } from '../lib/types/confirm.types'
+import 'react-toastify/dist/ReactToastify.css'
 
 const jobApply = () => {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([])
@@ -24,14 +31,14 @@ const jobApply = () => {
   })
   const { t } = useLanguage()
   const router = useRouter()
-  const [jobForApply, setJobForApply] = useState<JobInfo | null>(null)
+  const [jobForApply, setJobForApply] = useState<ParsedItemModel | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [isLoadingInSelect, setIsLoadingInSelect] = useState(true)
   const [isDeclarationChecked, setIsDeclarationChecked] = useState(false)
-  const [jobSelectResponse, setJobSelectResponse] = useState<JobSelectResponseModel | null>(null)
+  const [jobSelectResponse, setJobSelectResponse] = useState<SelectResponseModel | null>(null)
 
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
-  const dsepUrl = process.env.NEXT_PUBLIC_DSEP_URL
+  const dsepUrl = process.env.NEXT_PUBLIC_API_URL
   const coreStrapiUrl = process.env.NEXT_PUBLIC_CORE_STRAPI_URL
 
   const bearerToken = Cookies.get('authToken')
@@ -67,20 +74,9 @@ const jobApply = () => {
 
   useEffect(() => {
     if (jobForApply) {
-      const { companyId, jobId, bppId, bppUri, transactionId } = jobForApply
-      const payloadForjobSelect = {
-        companyId,
-        jobs: {
-          jobId
-        },
-        context: {
-          transactionId,
-          bppId,
-          bppUri
-        }
-      }
+      const payloadForjobSelect = getSelectPayloadForJobs(jobForApply)
 
-      axios.post(`${dsepUrl}/job/select`, payloadForjobSelect).then(res => {
+      axios.post(`${dsepUrl}/select`, payloadForjobSelect).then(res => {
         setJobSelectResponse(res.data)
         setIsLoadingInSelect(false)
       })
@@ -135,83 +131,16 @@ const jobApply = () => {
           })
 
           if (jobSelectResponse) {
-            const { context, selectedJobs } = jobSelectResponse
-            const { fulfillmentCategory } = selectedJobs[0]
-            const jobInitPayload = {
-              context,
-              companyId: jobForApply.companyId,
-              jobs: {
-                jobId: jobForApply.jobId
-              },
-              jobFulfillments: [
-                {
-                  JobFulfillmentCategoryId: '1',
-                  jobApplicantProfile: {
-                    name: formData.name,
-                    languages: ['ENG', 'HIN'],
-                    profileUrl: 'https://linkedin.com/john-doe',
-                    creds: docCredArray,
-                    skills: ['NodeJS', 'React', 'Project Management', 'Enterprise Architecture']
-                  }
-                }
-              ]
-            }
+            const initPayload = getInitPayloadForJobs(jobSelectResponse, docCredArray, formData.name)
 
-            const jobInitResponse = await axios.post(`${dsepUrl}/job/init`, jobInitPayload)
+            const jobInitResponse = await axios.post(`${dsepUrl}/init`, initPayload)
             if (jobInitResponse.data) {
-              const { bppId, bppUri, transactionId, jobId, companyId, companyName, jobRole } = jobForApply
-              const jobConfirmPayload = {
-                jobId,
-                companyId,
-                jobName: jobRole,
-                company: {
-                  name: companyName
-                },
-                context: {
-                  bppId,
-                  bppUri,
-                  transactionId
-                },
-                confirmation: {
-                  JobFulfillmentCategoryId: '1',
-                  jobApplicantProfile: {
-                    name: formData.name,
-                    languages: ['ENG', 'HIN'],
-                    profileUrl: 'https://linkedin.com/john-doe',
-                    creds: docCredArray,
-                    skills: ['NodeJS', 'React', 'Project Management', 'Enterprise Architecture']
-                  }
-                }
-              }
-              const jobConfirmResponse = await axios.post(`${dsepUrl}/job/confirm`, jobConfirmPayload)
-
-              if (jobConfirmResponse.data) {
-                const originalJobConfirmData = jobConfirmResponse.data.original
-
-                const { context, message } = originalJobConfirmData
-                const { order } = message
-
-                const ordersPayload = {
-                  context: context,
-                  message: {
-                    order: {
-                      id: order.id,
-                      provider: {
-                        id: order.provider.id,
-                        descriptor: {
-                          name: order.provider.descriptor.name,
-                          short_desc: order.provider.descriptor.short_desc
-                        }
-                      },
-                      items: order.items,
-                      fulfillments: order.fulfillments
-                    }
-                  },
-                  category: {
-                    set: [3]
-                  }
-                }
-                const fulfillOrderRequest = await axios.post(`${strapiUrl}/orders`, ordersPayload, axiosConfig)
+              const confirmPayload = getConfirmPayloadForJobs(jobInitResponse.data)
+              const jobConfirmResponse = await axios.post(`${dsepUrl}/confirm`, confirmPayload)
+              const jobConfirmData: ConfirmResponseModel = jobConfirmResponse.data
+              if (jobConfirmData) {
+                const orderPayload = getPostOrderPayload(jobConfirmData)
+                const fulfillOrderRequest = await axios.post(`${strapiUrl}/orders`, orderPayload, axiosConfig)
                 if (fulfillOrderRequest.data) {
                   setIsLoading(false)
                   Router.push('/applicationSent')
@@ -237,11 +166,33 @@ const jobApply = () => {
   }
 
   if (isLoadingInSelect) {
-    return <Loader />
+    return (
+      <Box
+        display={'grid'}
+        height={'calc(100vh - 300px)'}
+        alignContent={'center'}
+      >
+        <LoaderWithMessage
+          loadingSubText=""
+          loadingText=""
+        />
+      </Box>
+    )
   }
 
   if (isLoading) {
-    return <Loader loadingText="Confirming application" />
+    return (
+      <Box
+        display={'grid'}
+        height={'calc(100vh - 300px)'}
+        alignContent={'center'}
+      >
+        <LoaderWithMessage
+          loadingSubText={t.applicationLoaderText}
+          loadingText={t.categoryLoadPrimary}
+        />
+      </Box>
+    )
   }
 
   const areAllFieldsFilled = () => {
@@ -257,23 +208,27 @@ const jobApply = () => {
     return true
   }
 
+  console.log('jobSelectResponse', jobSelectResponse)
+
   return (
     <Box
       className="hideScroll"
       maxH={'calc(100vh - 100px)'}
       overflowY="scroll"
+      mt={'15px'}
     >
       <Box pb={'20px'}>
         <JobApply
           formData={formData}
           setFormData={setFormData}
         />
-        <Text
-          pb={'10px'}
+        <Typography
+          style={{
+            paddingBottom: '10px'
+          }}
+          text={t.docText}
           fontSize={'15px'}
-        >
-          {t.docText}
-        </Text>
+        />
         <UploadFile
           selectedFiles={selectedFiles}
           setSelectedFiles={setSelectedFiles}
@@ -291,19 +246,20 @@ const jobApply = () => {
             top: '2px'
           }}
         />
-        <Text
-          fontSize={'12px'}
-          pl="10px"
-        >
-          {t.declarationText}
-        </Text>
+
+        <Typography
+          text={t.declarationText}
+          fontSize="12px"
+          style={{
+            paddingLeft: '10px'
+          }}
+        />
       </Flex>
       <Button
-        buttonText={t.applyBtnText}
-        background={'rgba(var(--color-primary))'}
+        text={t.applyBtnText}
         color={'rgba(var(--text-color))'}
-        handleOnClick={handleButtonClick}
-        isDisabled={!(areAllFieldsFilled() && isDeclarationChecked)}
+        handleClick={handleButtonClick}
+        disabled={!(areAllFieldsFilled() && isDeclarationChecked)}
       />
     </Box>
   )
