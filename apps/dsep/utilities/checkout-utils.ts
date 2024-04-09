@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { CartRetailItem, DataPerBpp } from '../lib/types/cart'
+import { CartRetailItem } from '../lib/types/cart'
 import { InitResponseItem, InitResponseModel } from '../lib/types/init.types'
 import { ResponseModel } from '../lib/types/responseModel'
 import { SelectResponseModel } from '../lib/types/select.types'
@@ -82,7 +82,6 @@ async function addressComponentsFromPincode(pincode: string) {
 export const getPayloadForInitRequest = async (selectResponse: SelectResponseModel, formData: ShippingFormData) => {
   const { address, email, mobileNumber, name, pinCode } = formData
   const cityData = await addressComponentsFromPincode(pinCode)
-  console.log('cityyyData', cityData)
   let initPayload: any = {
     data: []
   }
@@ -165,7 +164,6 @@ export const getPayloadForInitRequest = async (selectResponse: SelectResponseMod
       message: message
     })
   })
-  console.log('initPayload', initPayload)
   return initPayload
 }
 
@@ -180,11 +178,9 @@ export const handleFormSubmit = async (
   setIsLoadingForInit(true)
   try {
     const initPayload = await getPayloadForInitRequest(selectResponse, formData)
-    console.log(initPayload)
     axios
       .post(`${apiUrl}/init`, initPayload)
       .then(res => {
-        console.log('resss', res)
         localStorage.setItem('initResult', JSON.stringify(res.data))
         setInitData(res.data)
         setIsLoadingForInit(false)

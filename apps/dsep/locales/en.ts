@@ -392,8 +392,7 @@ const en: { [key: string]: string } = {
   docText: 'Documents',
   declarationText: 'I hereby declare that the details mentioned above are correct',
   appSubmitText: 'Application Submitted!',
-  appSubmitSpan1: 'The company will evaluate your ',
-  appSubmitSpan2: 'application and get back to you soon',
+  jobApplicationConfirmation: 'The company will evaluate your application and get back to you soon',
   searchMoreJobs: 'Search More Jobs',
   jobsBy: 'Jobs By:',
   aboutScholarship: 'Tell us why you need this scholarship',
@@ -435,6 +434,7 @@ const en: { [key: string]: string } = {
   confirmMessageSubtext: 'Get ready to embark your learning journey!',
   statusLoaderSubtext: 'While we fetch course details',
   coursesPurchased: ' Courses Purchased',
-  jobSearchLoaderText: 'While we search for jobs'
+  jobSearchLoaderText: 'While we search for jobs',
+  applicationLoaderText: 'While we confirm the application'
 }
 export default en
