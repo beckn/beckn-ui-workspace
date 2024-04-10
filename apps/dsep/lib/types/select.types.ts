@@ -96,6 +96,30 @@ export interface Item {
   }
 }
 
+interface Time {
+  timestamp: string
+}
+
+interface Stop {
+  type: string // "APPLICATION-START" | "APPLICATION-END"
+  time: Time
+}
+
+interface Contact {
+  phone: string
+  email: string
+}
+
+interface Fulfillment {
+  id: string
+  type: string // "SCHOLARSHIP"
+  tracking: boolean
+  contact: Contact
+  stops: Stop[]
+}
+
+export type FulfillmentData = Fulfillment[]
+
 interface Order {
   type: string
   quote?: {
@@ -103,6 +127,7 @@ interface Order {
   }
   provider: Provider
   items: Item[]
+  fulfillments?: FulfillmentData
 }
 
 interface Message {

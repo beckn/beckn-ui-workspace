@@ -1,7 +1,8 @@
+import { Typography } from '@beckn-ui/molecules'
 import { Box, Flex, Image, Input, Text } from '@chakra-ui/react'
 import axios from 'axios'
 import Cookies from 'js-cookie'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { UploadFilepropsModel } from './UploadFile.types'
 
 const UploadFile: React.FC<UploadFilepropsModel> = props => {
@@ -90,12 +91,14 @@ const UploadFile: React.FC<UploadFilepropsModel> = props => {
                     alignItems={'center'}
                     justifyContent="space-between"
                   >
-                    <Text
-                      fontWeight="600"
-                      pr={'5px'}
-                    >
-                      {file.name}
-                    </Text>
+                    <Typography
+                      text={file.name}
+                      fontWeight={'600'}
+                      style={{
+                        paddingRight: '5px'
+                      }}
+                    />
+
                     <Image
                       cursor={'pointer'}
                       src="/images/deleteIcon.svg"
@@ -103,8 +106,13 @@ const UploadFile: React.FC<UploadFilepropsModel> = props => {
                     />
                   </Flex>
                   <Flex alignItems={'center'}>
-                    <Text pr={'10px'}>Last Used -</Text>
-                    <Text>{uploadTimes[index]}</Text>
+                    <Typography
+                      text={'Last Used -'}
+                      style={{
+                        paddingRight: '10px'
+                      }}
+                    />
+                    <Typography text={uploadTimes[index]} />
                   </Flex>
                 </Box>
               </Flex>
@@ -123,7 +131,11 @@ const UploadFile: React.FC<UploadFilepropsModel> = props => {
           alignItems={'center'}
           justifyContent="center"
         >
-          <Image src="/images/uploadIcon.svg" />
+          <Image
+            alt="upload-icon"
+            src="/images/uploadIcon.svg"
+          />
+
           <Text
             pl={'10px'}
             pt="5px"
