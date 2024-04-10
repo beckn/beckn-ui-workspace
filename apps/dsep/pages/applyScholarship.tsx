@@ -3,22 +3,27 @@ import axios from 'axios'
 import Cookies from 'js-cookie'
 import Router from 'next/router'
 import React, { useEffect, useState } from 'react'
-import Button from '../components/button/Button'
+import { Button, LoaderWithMessage } from '@beckn-ui/molecules'
 import { JobCredential } from '../components/jobApply/JobApply.types'
-import Loader from '../components/loader/Loader'
 import ScholarshipAddDetails from '../components/scholarship/addDetails/ScholarshipAddDetails'
-import {
-  ParsedScholarshipData,
-  ScholarshipApplyFormDataModel,
-  ScholarshipConfirmResponseModel,
-  ScholarShipSelectResponseModel
-} from '../components/scholarship/scholarshipCard/Scholarship.types'
+import { ScholarshipApplyFormDataModel } from '../components/scholarship/scholarshipCard/Scholarship.types'
 import UploadFile from '../components/uploadFile/UploadFile'
 import { useLanguage } from '../hooks/useLanguage'
 import { FormErrors, validateForm } from '../utilities/detailsForm-utils'
 
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+
+import { ParsedItemModel } from '../types/search.types'
+import {
+  getConfirmPayloadForScholarship,
+  getInitPayloadForScholarship,
+  getPostOrderPayload,
+  getSelectPayloadForScholarship
+} from '../components/scholarship/scholarship-apply-utils'
+import { SelectResponseModel } from '../lib/types/select.types'
+import { InitResponseModel } from '../lib/types/init.types'
+import { ConfirmResponseModel } from '../lib/types/confirm.types'
 
 const ApplyScholarship = () => {
   const [formData, setFormData] = useState<ScholarshipApplyFormDataModel>({
@@ -32,14 +37,12 @@ const ApplyScholarship = () => {
   const { t } = useLanguage()
   const [selectedFiles, setSelectedFiles] = useState<File[]>([])
   const [isLoading, setIsLoading] = useState(false)
-  const [appliedScholarship, setAppliedScholarship] = useState<ParsedScholarshipData | null>(null)
-  const [scholarShipSelectResponse, setScholarShipSelectResponse] = useState<ScholarShipSelectResponseModel | null>(
-    null
-  )
+  const [appliedScholarship, setAppliedScholarship] = useState<ParsedItemModel | null>(null)
+  const [scholarShipSelectResponse, setScholarShipSelectResponse] = useState<SelectResponseModel | null>(null)
   const [isLoadingInSelect, setIsLoadingInSelect] = useState(true)
   const [formErrors, setFormErrors] = useState<FormErrors>({})
 
-  const dsepUrl = process.env.NEXT_PUBLIC_DSEP_URL
+  const dsepUrl = process.env.NEXT_PUBLIC_API_URL
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
   const coreStrapiUrl = process.env.NEXT_PUBLIC_CORE_STRAPI_URL
 
@@ -80,19 +83,10 @@ const ApplyScholarship = () => {
 
   useEffect(() => {
     if (appliedScholarship) {
-      const { providerId, id, bppId, bppUri, transactionId } = appliedScholarship
-      const payloadForjobSelect = {
-        scholarshipProviderId: providerId,
-        scholarshipId: id,
-        context: {
-          transactionId: transactionId,
-          bppId: bppId,
-          bppUri: bppUri
-        }
-      }
+      const payloadForScholarshipSelect = getSelectPayloadForScholarship(appliedScholarship)
 
       axios
-        .post(`${dsepUrl}/scholarship/select`, payloadForjobSelect)
+        .post(`${dsepUrl}/select`, payloadForScholarshipSelect)
         .then(res => {
           setScholarShipSelectResponse(res.data)
           setIsLoadingInSelect(false)
@@ -156,181 +150,16 @@ const ApplyScholarship = () => {
           })
 
           if (scholarShipSelectResponse) {
-            const { context, scholarshipProviders } = scholarShipSelectResponse
-            const { description, id, name, scholarships } = scholarshipProviders[0]
-            const { transactionId, bppId, bppUri } = context
-            const {
-              id: scholarshipId,
-              name: scholarshipName,
-              description: scholarshipDesc,
-              amount,
-              categories
-            } = scholarships[0]
+            const scholarShipInitPayload = getInitPayloadForScholarship(scholarShipSelectResponse)
+            const scholarshipInitResponse = await axios.post(`${dsepUrl}/init`, scholarShipInitPayload)
+            const scholarshipInitResponseData: InitResponseModel = scholarshipInitResponse.data
+            if (scholarshipInitResponseData) {
+              const payloadForConfirm = getConfirmPayloadForScholarship(scholarshipInitResponseData)
 
-            const scholarShipInitPayload = {
-              context: {
-                transactionId,
-                bppId,
-                bppUri
-              },
-              scholarshipProvider: {
-                id,
-                name,
-                scholarships: [
-                  {
-                    id: scholarshipId,
-                    name: scholarshipName,
-                    description: scholarshipDesc,
-                    amount: amount,
-                    categoryId: 'DSEP_CAT_1',
-                    scholarshipDetails: {
-                      id: appliedScholarship?.scholarshipDetails[0].id,
-                      type: appliedScholarship?.scholarshipDetails[0].type,
-                      applicationStartDate: appliedScholarship?.scholarshipDetails[0].applicationStartDate,
-                      applicationEndDate: appliedScholarship?.scholarshipDetails[0].applicationEndDate,
-                      supportContact: appliedScholarship?.scholarshipDetails[0].supportContact,
-                      scholarshipRequestor: {
-                        name: formData.name,
-                        phone: formData.mobileNumber,
-                        address: formData.address,
-                        needOfScholarship: 'higher education',
-                        docUrl: docCredArray[0].url
-                      }
-                    },
-
-                    academicQualificationsCriteria: [
-                      {
-                        code: 'gr',
-                        name: 'Grade',
-                        value: 'Grade 12'
-                      },
-                      {
-                        code: 'percentage_grade',
-                        name: 'Percentage/Grade',
-                        value: '>= 50'
-                      },
-                      {
-                        code: 'passing_year',
-                        name: 'Passing Year',
-                        value: 2021
-                      }
-                    ],
-                    finStatusCriteria: [
-                      {
-                        code: 'family_income',
-                        name: 'Family Income',
-                        value: '<= 2000000'
-                      }
-                    ],
-                    benefits: [
-                      {
-                        code: 'scholarship-amount',
-                        name: 'Scholarship Amount',
-                        value: 'Upto Rs.30000 per year'
-                      }
-                    ]
-                  }
-                ]
-              }
-            }
-            const scholarshipInitResponse = await axios.post(`${dsepUrl}/scholarship/init`, scholarShipInitPayload)
-            if (scholarshipInitResponse.data) {
-              const payloadForConfirm = {
-                context: {
-                  transactionId,
-                  bppId,
-                  bppUri
-                },
-                scholarshipProvider: {
-                  id,
-                  name,
-                  description,
-                  scholarships: [
-                    {
-                      id: scholarshipId,
-                      name: scholarshipName,
-                      description: scholarshipDesc,
-                      amount: amount,
-                      categoryId: 'DSEP_CAT_1',
-                      scholarshipDetails: {
-                        id: appliedScholarship?.scholarshipDetails[0].id,
-                        type: appliedScholarship?.scholarshipDetails[0].type,
-                        applicationStartDate: appliedScholarship?.scholarshipDetails[0].applicationStartDate,
-                        applicationEndDate: appliedScholarship?.scholarshipDetails[0].applicationEndDate,
-                        supportContact: appliedScholarship?.scholarshipDetails[0].supportContact,
-                        scholarshipRequestor: {
-                          name: formData.name,
-                          phone: formData.mobileNumber,
-                          address: formData.address,
-                          needOfScholarship: 'higher education',
-                          docUrl: docCredArray[0].url
-                        }
-                      },
-
-                      academicQualificationsCriteria: [
-                        {
-                          code: 'gr',
-                          name: 'Grade',
-                          value: 'Grade 12'
-                        },
-                        {
-                          code: 'percentage_grade',
-                          name: 'Percentage/Grade',
-                          value: '>= 50'
-                        },
-                        {
-                          code: 'passing_year',
-                          name: 'Passing Year',
-                          value: 2021
-                        }
-                      ],
-                      finStatusCriteria: [
-                        {
-                          code: 'family_income',
-                          name: 'Family Income',
-                          value: '<= 2000000'
-                        }
-                      ],
-                      benefits: [
-                        {
-                          code: 'scholarship-amount',
-                          name: 'Scholarship Amount',
-                          value: 'Upto Rs.30000 per year'
-                        }
-                      ]
-                    }
-                  ]
-                }
-              }
-
-              const scholarshipConfirmResponse = await axios.post(`${dsepUrl}/scholarship/confirm`, payloadForConfirm)
-              if (scholarshipConfirmResponse.data) {
-                const originalScholarshipConfirmData: ScholarshipConfirmResponseModel =
-                  scholarshipConfirmResponse.data.original
-
-                const { context, message } = originalScholarshipConfirmData
-                const { order } = message
-
-                const ordersPayload = {
-                  context: context,
-                  message: {
-                    order: {
-                      id: order.id,
-                      provider: {
-                        id: order.provider.id,
-                        descriptor: {
-                          name: order.provider.descriptor.name,
-                          short_desc: order.provider.descriptor.short_desc
-                        }
-                      },
-                      items: order.items,
-                      fulfillments: order.fulfillments
-                    }
-                  },
-                  category: {
-                    set: [2]
-                  }
-                }
+              const scholarshipConfirmResponse = await axios.post(`${dsepUrl}/confirm`, payloadForConfirm)
+              const scholarshipConfirmResponseData: ConfirmResponseModel = scholarshipConfirmResponse.data
+              if (scholarshipConfirmResponseData) {
+                const ordersPayload = getPostOrderPayload(scholarshipConfirmResponseData)
                 const fulfillOrderRequest = await axios.post(`${strapiUrl}/orders`, ordersPayload, axiosConfig)
                 if (fulfillOrderRequest.data) {
                   setIsLoading(false)
@@ -358,11 +187,33 @@ const ApplyScholarship = () => {
   }
 
   if (isLoadingInSelect) {
-    return <Loader />
+    return (
+      <Box
+        display={'grid'}
+        height={'calc(100vh - 300px)'}
+        alignContent={'center'}
+      >
+        <LoaderWithMessage
+          loadingSubText=""
+          loadingText=""
+        />
+      </Box>
+    )
   }
 
   if (isLoading) {
-    return <Loader loadingText="Confirming Application" />
+    return (
+      <Box
+        display={'grid'}
+        height={'calc(100vh - 300px)'}
+        alignContent={'center'}
+      >
+        <LoaderWithMessage
+          loadingSubText={t.applicationLoaderText}
+          loadingText={t.categoryLoadPrimary}
+        />
+      </Box>
+    )
   }
 
   if (!appliedScholarship) {
@@ -403,11 +254,10 @@ const ApplyScholarship = () => {
         />
       </Box>
       <Button
-        buttonText={t.submit}
-        background={'rgba(var(--color-primary))'}
+        text={t.submit}
+        handleClick={handleButtonClick}
+        disabled={!(areAllFieldsFilled() && areFilesSelected)}
         color={'rgba(var(--text-color))'}
-        handleOnClick={handleButtonClick}
-        isDisabled={!(areAllFieldsFilled() && areFilesSelected)}
       />
     </Box>
   )
