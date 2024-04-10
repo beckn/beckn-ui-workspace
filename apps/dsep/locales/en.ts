@@ -312,8 +312,6 @@ const en: { [key: string]: string } = {
   inStoreShopping: 'In-store-shopping',
   delivery: 'Delivery',
   clickAndCollect: 'Click & Collect',
-  dineIn: 'Dine-in',
-  takeAway: 'Takeaway',
   bookstore: 'Bookstore',
   formName: 'Name',
   formNumber: 'Mobile Number',
@@ -435,6 +433,8 @@ const en: { [key: string]: string } = {
   statusLoaderSubtext: 'While we fetch course details',
   coursesPurchased: ' Courses Purchased',
   jobSearchLoaderText: 'While we search for jobs',
-  applicationLoaderText: 'While we confirm the application'
+  applicationLoaderText: 'While we confirm the application',
+  scholarshipSearchLoader: 'While we search for scholarships.',
+  errorText: 'Something went wrong'
 }
 export default en
