@@ -3,13 +3,10 @@ import React, { useEffect, useState } from 'react'
 import { ParsedScholarshipData } from '../components/scholarship/scholarshipCard/Scholarship.types'
 import ScholarshipDetails from '../components/scholarship/scholarshipDetails/ScholarshipDetails'
 import { RetailItem } from '../lib/types/products'
+import { ParsedItemModel } from '../types/search.types'
 
-interface Props {
-  product: RetailItem
-}
-
-const ScholarshipDetailsPage: React.FC<Props> = ({ product }) => {
-  const [selectedScholarship, setSelectedScholarship] = useState<ParsedScholarshipData | null>(null)
+const ScholarshipDetailsPage = () => {
+  const [selectedScholarship, setSelectedScholarship] = useState<ParsedItemModel | null>(null)
 
   useEffect(() => {
     if (localStorage) {

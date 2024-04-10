@@ -1,33 +1,33 @@
-import { Box, Text } from '@chakra-ui/react'
+import { Button, Typography } from '@beckn-ui/molecules'
+import { Box, Flex } from '@chakra-ui/react'
 import Router from 'next/router'
 import React from 'react'
 import { useLanguage } from '../../../hooks/useLanguage'
-import { RetailItem } from '../../../lib/types/products'
-import Button from '../../button/Button'
-import { ParsedScholarshipData } from '../scholarshipCard/Scholarship.types'
+import { ParsedItemModel } from '../../../types/search.types'
 
 interface Props {
-  scholarship: ParsedScholarshipData
+  scholarship: ParsedItemModel
 }
 
 const ScholarshipDetails: React.FC<Props> = ({ scholarship }) => {
   const { t } = useLanguage()
   return (
     <Box>
-      <Text
-        fontSize={'17px'}
-        fontWeight="600"
-        textAlign={'center'}
-        pb="10px"
+      <Flex
+        flexDir={'column'}
+        gap={'10px'}
+        alignItems={'center'}
       >
-        {scholarship.name}
-      </Text>
-      <Text
-        fontSize={'15px'}
-        textAlign={'center'}
-      >
-        by {scholarship.platformName}
-      </Text>
+        <Typography
+          text={scholarship.item.name}
+          fontSize={'17px'}
+          fontWeight={'600'}
+        />
+        <Typography
+          text={`by ${scholarship.providerName}`}
+          fontSize={'15px'}
+        />
+      </Flex>
       <Box
         className="mt-4 product_description_text border-2 border_radius_all hideScroll"
         mb={'20px'}
@@ -37,14 +37,13 @@ const ScholarshipDetails: React.FC<Props> = ({ scholarship }) => {
           overflow: 'auto'
         }}
       >
-        {scholarship.description}
+        {scholarship.item.long_desc}
       </Box>
       <Button
-        buttonText={t.applyNow}
-        background={'rgba(var(--color-primary))'}
+        text={t.applyNow}
         color={'rgba(var(--text-color))'}
-        isDisabled={false}
-        handleOnClick={() => {
+        disabled={false}
+        handleClick={() => {
           Router.push('/applyScholarship')
         }}
       />
