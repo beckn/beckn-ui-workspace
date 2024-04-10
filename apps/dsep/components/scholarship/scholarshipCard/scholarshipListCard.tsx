@@ -1,38 +1,34 @@
-import { Flex, Image, Box, Text, Card, CardBody } from '@chakra-ui/react'
+import { DetailCard } from '@beckn-ui/becknified-components'
+import { Typography } from '@beckn-ui/molecules'
+import { Flex } from '@chakra-ui/react'
 import React from 'react'
+import { ParsedItemModel } from '../../../types/search.types'
 
-interface scholarshipListCardProps {
-  scholarshipName: string
-  scholarshipDetails: string
-  scholarshipBy: string
-  handleCardClick: () => void
-}
+const scholarshipListCard = (props: any) => {
+  const dataSource: ParsedItemModel = props.dataSource
+  const {
+    item: { name, long_desc },
+    providerName
+  } = dataSource
 
-const scholarshipListCard: React.FC<scholarshipListCardProps> = props => {
   return (
-    <Box>
-      <Card
-        onClick={props.handleCardClick}
-        className="border_radius_all"
-        mb={'20px'}
-        boxShadow={'0px 8px 10px -6px rgba(0, 0, 0, 0.1), 0px 20px 25px -5px rgba(0, 0, 0, 0.1)'}
+    <DetailCard>
+      <Flex
+        flexDir={'column'}
+        gap={'10px'}
       >
-        <CardBody
-          padding={'15px 20px'}
-          fontSize="12px"
-        >
-          <Text
-            fontWeight={'600'}
-            pb={'10px'}
-          >
-            {props.scholarshipName}
-          </Text>
-          <Text pb={'15px'}>{props.scholarshipDetails}</Text>
+        <Typography
+          text={name}
+          fontWeight={'600'}
+        />
+        <Typography text={long_desc} />
 
-          <Text pr={'10px'}>By: {props.scholarshipBy}</Text>
-        </CardBody>
-      </Card>
-    </Box>
+        <Typography
+          text={`By: ${providerName}`}
+          fontWeight={'600'}
+        />
+      </Flex>
+    </DetailCard>
   )
 }
 

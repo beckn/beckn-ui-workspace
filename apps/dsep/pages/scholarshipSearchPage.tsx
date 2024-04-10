@@ -1,30 +1,36 @@
+import { ProductCard } from '@beckn-ui/becknified-components'
+import LoaderWithMessage from '@beckn-ui/molecules/src/components/LoaderWithMessage/loader-with-message'
 import { Box } from '@chakra-ui/react'
 import axios from 'axios'
-import Router from 'next/router'
 import React, { useEffect, useState } from 'react'
-import Loader from '../components/loader/Loader'
-import { ParsedScholarshipData } from '../components/scholarship/scholarshipCard/Scholarship.types'
-import { getTransformedDataFromScholarshipsResponse } from '../components/scholarship/scholarshipCard/ScholarshipCard.utils'
-import ScholarshipListCard from '../components/scholarship/scholarshipCard/scholarshipListCard'
+import scholarshipListCard from '../components/scholarship/scholarshipCard/scholarshipListCard'
+import { useLanguage } from '../hooks/useLanguage'
+import { ParsedItemModel } from '../types/search.types'
+import { getParsedSearchlist } from '../utilities/search-utils'
+import { toast } from 'react-toastify'
 
 const ScholarshipCard = () => {
   const [isLoading, setIsLoading] = useState(true)
-  const [scholarShips, setScholarships] = useState<ParsedScholarshipData[]>([])
-  const dsepScholarshipUrl = process.env.NEXT_PUBLIC_DSEP_URL
+  const [scholarShips, setScholarships] = useState<ParsedItemModel[]>([])
+  const [isError, setIsError] = useState(false)
+  const dsepScholarshipUrl = process.env.NEXT_PUBLIC_API_URL
+
+  const { t } = useLanguage()
 
   const fetchScholarships = async () => {
     try {
-      const scholarshipSearchResponse = await axios.post(`${dsepScholarshipUrl}/scholarship/search`, {
-        name: 'scholarship'
+      const scholarshipSearchResponse = await axios.post(`${dsepScholarshipUrl}/search`, {
+        context: {
+          domain: 'dsep:scholarships'
+        },
+        searchString: 'scholarship for undergraduate'
       })
-      if (scholarshipSearchResponse.data) {
-        const parsedScholarshipData: ParsedScholarshipData[] = getTransformedDataFromScholarshipsResponse(
-          scholarshipSearchResponse.data
-        )
-        setScholarships(parsedScholarshipData)
-        setIsLoading(false)
-      }
+      const searchData = getParsedSearchlist(scholarshipSearchResponse.data.data)
+      setScholarships(searchData)
+      setIsLoading(false)
     } catch (error) {
+      setIsError(true)
+      setIsLoading(false)
       console.error(error)
     }
   }
@@ -34,11 +40,24 @@ const ScholarshipCard = () => {
   }, [])
 
   if (isLoading) {
-    return <Loader loadingText="Searching for Scholarships" />
+    return (
+      <Box
+        display={'grid'}
+        height={'calc(100vh - 300px)'}
+        alignContent={'center'}
+      >
+        <LoaderWithMessage
+          loadingSubText={t.scholarshipSearchLoader}
+          loadingText={t.categoryLoadPrimary}
+        />
+      </Box>
+    )
   }
 
-  if (!scholarShips.length) {
-    return <></>
+  if (isError) {
+    return toast.error(t.errorText, {
+      position: 'top-center'
+    })
   }
 
   return (
@@ -47,18 +66,19 @@ const ScholarshipCard = () => {
       maxH={'calc(100vh - 100px)'}
       overflowY="scroll"
     >
-      {scholarShips.map(scholarship => (
-        <ScholarshipListCard
-          key={scholarship.id}
-          scholarshipName={scholarship.name}
-          scholarshipDetails={scholarship.description}
-          scholarshipBy={scholarship.platformName}
-          handleCardClick={() => {
-            localStorage.setItem('selectedScholarship', JSON.stringify(scholarship))
-            Router.push('/scholarshipDetailsPage')
-          }}
-        />
-      ))}
+      {scholarShips.length > 0 ? (
+        scholarShips.map(scholarShip => {
+          return (
+            <ProductCard
+              key={scholarShip.item.id}
+              dataSource={scholarShip}
+              ComponentRenderer={scholarshipListCard}
+            />
+          )
+        })
+      ) : (
+        <></>
+      )}
     </Box>
   )
 }
