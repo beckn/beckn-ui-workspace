@@ -11,7 +11,8 @@ const ProductCta: React.FC<ProductCtaProps> = ({
   handleDecrement,
   handleIncrement,
   counter,
-  cta
+  cta,
+  counterTitle
 }) => {
   const theme = useTheme()
   const { isMobile } = useResponsive()
@@ -38,21 +39,19 @@ const ProductCta: React.FC<ProductCtaProps> = ({
         gap="2"
         mb={'10px'}
       >
-        {/* <Typography
-          text={currency}
-          variant="subTitleSemibold"
-          color={theme.colors.secondary[100]}
-        />
-        <Typography
-          text={totalPrice}
-          variant="subTitleSemibold"
-          color={theme.colors.secondary[100]}
-        /> */}
         <ProductPrice
           currencyType={currency}
           price={parseFloat(totalPrice)}
         />
       </Flex>
+      <Flex justifyContent={'center'}>
+        <Typography
+          text={'No Of Travellers'}
+          variant="subTitleRegular"
+          color={'#222A36'}
+        />
+      </Flex>
+
       <Flex
         justifyContent={{ base: 'center', sm: 'center', md: 'flex-start' }}
         alignItems="center"

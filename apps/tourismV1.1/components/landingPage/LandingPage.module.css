@@ -1,0 +1,50 @@
+.main_container {
+  background: url('/images/landingPage.svg');
+  height: 100vh;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.flex_container {
+  padding-left: 27px;
+  padding-top: 99px;
+  padding-right: 27px;
+  flex-direction: column;
+}
+.heading {
+  color: #64a9c2;
+  font-size: 40px;
+  font-weight: 800;
+  line-height: 110%;
+}
+.span_text {
+  color: #ebf2f5;
+  font-size: 27px;
+  font-weight: 800;
+  line-height: 120%;
+  letter-spacing: -0.81px;
+}
+.para_Text p {
+  color: #fff;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 20px;
+  padding-top: 15px;
+}
+.input_group {
+  display: flex;
+  margin-top: 50px;
+}
+
+.footer_container {
+  column-gap: 10px;
+  position: absolute;
+  bottom: 15px;
+  left: 40%;
+  align-items: center;
+}
+.footerText {
+  color: #fff;
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 21px;
+}
