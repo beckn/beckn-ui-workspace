@@ -48,7 +48,10 @@ const ProductCta: React.FC<ProductCtaProps> = ({
           variant="subTitleSemibold"
           color={theme.colors.secondary[100]}
         /> */}
-        <ProductPrice currencyType={currency} price={parseFloat(totalPrice)} />
+        <ProductPrice
+          currencyType={currency}
+          price={parseFloat(totalPrice)}
+        />
       </Flex>
       <Flex
         justifyContent={{ base: 'center', sm: 'center', md: 'flex-start' }}
