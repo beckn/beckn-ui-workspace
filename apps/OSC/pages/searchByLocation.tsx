@@ -336,6 +336,7 @@ const SearchByLocation = () => {
                 onClick={() => {
                   router.push('/search')
                   localStorage.setItem('optionTags', JSON.stringify(selectedStore?.tags))
+                  localStorage.setItem('routerPathname', router.pathname)
                 }}
                 className="px-[47px] mt-1 py-[12px]  bg-palette-primary border_radius_all text-white"
               >

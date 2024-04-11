@@ -34,6 +34,8 @@ const Search = () => {
   const handleFilterClose = () => {
     setIsFilterOpen(false)
   }
+  const searchByLocationPathname = typeof window !== 'undefined' ? localStorage.getItem('routerPathname') : null
+  const homePagePathname = typeof window !== 'undefined' ? localStorage.getItem('homePagePathname') : null
   const [providerId, setProviderId] = useState('')
   const [tagValue, setTagValue] = useState('')
   const dispatch = useDispatch()
@@ -45,24 +47,19 @@ const Search = () => {
     context: {
       domain: DOMAIN
     },
-
-    searchString: searchKeyword,
-    provider: {
-      providerId: providerId
-    },
-
     fulfillment: {
       type: 'Delivery',
-      stops: [
-        {
-          location: '28.4594965,77.0266383'
-        }
-      ]
-    }
+      stops: [{ location: '28.4594965,77.0266383' }]
+    },
+    ...(searchByLocationPathname
+      ? { provider: { providerId: 'meru-coffee' } }
+      : homePagePathname
+        ? { searchString: searchKeyword }
+        : { searchString: searchKeyword })
   }
 
   const fetchDataForSearch = () => {
-    if (!searchKeyword) return
+    if (!searchKeyword && !providerId) return
     setIsLoading(true)
     axios
       .post(`${apiUrl}/search`, searchPayload)
@@ -79,7 +76,22 @@ const Search = () => {
       })
   }
   useEffect(() => {
-    if (typeof window !== 'undefined' && localStorage) {
+    if (searchKeyword || providerId) {
+      localStorage.removeItem('searchItems')
+      localStorage.setItem('optionTags', JSON.stringify({ name: searchKeyword }))
+      window.dispatchEvent(new Event('storage-optiontags'))
+      fetchDataForSearch()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchKeyword, providerId])
+
+  useEffect(() => {
+    if (localStorage) {
+      const cachedSearchResults = localStorage.getItem('searchItems')
+      if (cachedSearchResults) {
+        const parsedCachedResults = JSON.parse(cachedSearchResults)
+        setItems(parsedCachedResults)
+      }
       const stringifiedOptiontags = localStorage.getItem('optionTags')
       const stringifiedSelectedOption = localStorage.getItem('selectedOption')
       if (stringifiedOptiontags) {
@@ -88,25 +100,6 @@ const Search = () => {
       }
       if (stringifiedSelectedOption) {
         setTagValue(JSON.parse(stringifiedSelectedOption).tagValue)
-      }
-    }
-  }, [])
-  useEffect(() => {
-    if (searchKeyword) {
-      localStorage.removeItem('searchItems')
-      localStorage.setItem('optionTags', JSON.stringify({ name: searchKeyword }))
-      window.dispatchEvent(new Event('storage-optiontags'))
-      fetchDataForSearch()
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchKeyword])
-
-  useEffect(() => {
-    if (localStorage) {
-      const cachedSearchResults = localStorage.getItem('searchItems')
-      if (cachedSearchResults) {
-        const parsedCachedResults = JSON.parse(cachedSearchResults)
-        setItems(parsedCachedResults)
       }
     }
   }, [])
@@ -160,6 +153,7 @@ const Search = () => {
               handleChange={(text: string) => {
                 setSearchKeyword(text)
                 localStorage.removeItem('optionTags')
+                localStorage.removeItem('routerPathname')
                 localStorage.setItem(
                   'optionTags',
                   JSON.stringify({
