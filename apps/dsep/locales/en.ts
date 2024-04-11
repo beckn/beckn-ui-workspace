@@ -421,7 +421,7 @@ const en: { [key: string]: string } = {
   createAccount: 'Create Account',
   overview: 'Overview',
   bookedIn: 'Booked in',
-  fetchingScholarships: 'Fetching scholarships',
+  fetchingScholarships: 'While we fetch your scholarships.',
   noCourse: 'No Course!',
   noCouseSubText: "Seems like you haven't selected a course!",
   searchCourses: 'Search Courses',
