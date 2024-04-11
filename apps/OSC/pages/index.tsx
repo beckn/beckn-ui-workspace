@@ -31,6 +31,7 @@ const HomePage = () => {
   const navigateToSearchResults = () => {
     localStorage.setItem('optionTags', JSON.stringify({ name: searchTerm }))
     router.push(`/search?searchTerm=${searchTerm}`)
+    localStorage.setItem('homePathname', router.pathname)
   }
 
   const searchIconClickHandler = (e: any) => {
