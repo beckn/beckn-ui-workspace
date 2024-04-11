@@ -1,20 +1,20 @@
+import { Button } from '@beckn-ui/molecules'
+import LoaderWithMessage from '@beckn-ui/molecules/src/components/LoaderWithMessage/loader-with-message'
 import { Box } from '@chakra-ui/react'
 import Cookies from 'js-cookie'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import Button from '../components/button/Button'
-import Loader from '../components/loader/Loader'
+import { useDispatch } from 'react-redux'
+import { Attributes, OrderData } from '../lib/types/order-history.types'
 import EmptyScholarship from '../components/scholarship/emptyScholarship/EmptyScholarship'
 import ScholarshipCard from '../components/scholarship/scholarshipCard/ScholarshipCard'
 import { useLanguage } from '../hooks/useLanguage'
-
 import { scholarshipCartActions } from '../store/scholarshipCart-slice'
-import { getOrderPlacementTimeline } from '../utilities/confirm-utils'
+import { formatTimestamp } from '../utilities/confirm-utils'
 
 const myScholarship = () => {
   const { t } = useLanguage()
-  const [scholarshipOrders, setScholarshipOrders] = useState([])
+  const [scholarshipOrders, setScholarshipOrders] = useState<OrderData>([])
   const [isLoading, setIsLoading] = useState(true)
   const dispatch = useDispatch()
   const router = useRouter()
@@ -48,10 +48,14 @@ const myScholarship = () => {
     fetchScholarshipOrders()
   }, [])
 
-  const handleScholarshipDetails = (scholarshipOrder: any) => {
+  const handleScholarshipDetails = (scholarshipOrder: Attributes) => {
+    const {
+      attributes: { items },
+      id
+    } = scholarshipOrder
     const mockScholarship = {
-      id: scholarshipOrder.attributes.items[0].id,
-      title: scholarshipOrder.attributes.items[0].descriptor.name
+      id,
+      title: items[0].name
     }
 
     localStorage.setItem('approvedScholarship', JSON.stringify(mockScholarship))
@@ -62,12 +66,25 @@ const myScholarship = () => {
   }
 
   if (isLoading) {
-    return <Loader loadingText={t.fetchingScholarships} />
+    return (
+      <Box
+        display={'grid'}
+        height={'calc(100vh - 300px)'}
+        alignContent={'center'}
+      >
+        <LoaderWithMessage
+          loadingText={t.categoryLoadPrimary}
+          loadingSubText={t.fetchingScholarships}
+        />
+      </Box>
+    )
   }
 
   if (!scholarshipOrders.length) {
     return <EmptyScholarship />
   }
+
+  console.log(scholarshipOrders)
 
   return (
     <Box
@@ -75,23 +92,28 @@ const myScholarship = () => {
       maxH={'calc(100vh - 100px)'}
       overflowY="scroll"
     >
-      {scholarshipOrders.map((scholarshipOrder: any, index) => (
-        <ScholarshipCard
-          key={index}
-          heading={scholarshipOrder.attributes.items[0].descriptor.name}
-          time={getOrderPlacementTimeline(scholarshipOrder.attributes.createdAt)}
-          id={scholarshipOrder.attributes.items[0].id}
-          scholarshipStatus={scholarshipOrder.attributes.delivery_status}
-          addScholarshipCard={() => handleScholarshipDetails(scholarshipOrder)}
-        />
-      ))}
+      {scholarshipOrders.map((scholarshipOrder, index) => {
+        const {
+          attributes: { items, createdAt, order_id, delivery_status },
+          id
+        } = scholarshipOrder
+        return (
+          <ScholarshipCard
+            key={index}
+            heading={items[0].name}
+            time={formatTimestamp(createdAt)}
+            id={id}
+            scholarshipStatus={delivery_status}
+            addScholarshipCard={() => handleScholarshipDetails(scholarshipOrder)}
+          />
+        )
+      })}
 
       <Button
-        buttonText={t.searchMoreScholarships}
-        background={'rgba(var(--color-primary))'}
+        text={t.searchMoreScholarships}
         color={'rgba(var(--text-color))'}
-        isDisabled={false}
-        handleOnClick={handleScholarship}
+        disabled={false}
+        handleClick={handleScholarship}
       />
     </Box>
   )

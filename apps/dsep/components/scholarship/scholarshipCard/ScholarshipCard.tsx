@@ -1,4 +1,6 @@
-import { Box, Card, CardBody, Divider, Flex, Text, Image } from '@chakra-ui/react'
+import { DetailCard } from '@beckn-ui/becknified-components'
+import { Typography } from '@beckn-ui/molecules'
+import { Box, Divider, Flex, Image } from '@chakra-ui/react'
 import React, { FC } from 'react'
 import { useLanguage } from '../../../hooks/useLanguage'
 
@@ -13,68 +15,68 @@ interface ScholarshipCardProps {
 const ScholarshipCard: FC<ScholarshipCardProps> = props => {
   const { t } = useLanguage()
   return (
-    <Box>
-      <Card
-        className="border_radius_all"
-        mb={'20px'}
-        boxShadow={'0px 8px 10px -6px rgba(0, 0, 0, 0.1), 0px 20px 25px -5px rgba(0, 0, 0, 0.1)'}
+    <DetailCard>
+      <Flex
+        pb={'10px'}
+        flexDir={'column'}
+        gap={'10px'}
       >
-        <CardBody
-          padding={'15px 20px'}
-          fontSize="12px"
-        >
-          <Text
-            fontWeight={'600'}
-            pb={'10px'}
+        <Typography
+          text={props.heading}
+          fontWeight={'600'}
+        />
+        <Typography text={props.time} />
+      </Flex>
+
+      <Flex
+        alignItems={'center'}
+        justifyContent="space-between"
+      >
+        <Typography
+          text={`ID: ${props.id}`}
+          style={{
+            paddingRight: '10px'
+          }}
+        />
+
+        <Flex alignItems={'center'}>
+          {props.scholarshipStatus === 'In Review' ? (
+            <Image
+              src="/images/inProgress.svg"
+              alt=""
+              pr="10px"
+            />
+          ) : (
+            <Image
+              src="/images/approvedIcon.svg"
+              alt=""
+              pr="10px"
+            />
+          )}
+          <Typography text={props.scholarshipStatus} />
+        </Flex>
+      </Flex>
+      {props.scholarshipStatus === 'Approved' ? (
+        <>
+          <Divider
+            mt={'15px'}
+            marginLeft="-20px"
+            mr={'-20px'}
+            width="unset"
+          />
+          <Box
+            textAlign={'center'}
+            padding="10px 10px 0"
+            fontSize={'15px'}
+            cursor="pointer"
+            color={'rgba(var(--color-primary))'}
+            onClick={props.addScholarshipCard}
           >
-            {props.heading}
-          </Text>
-          <Text pb={'5px'}>{props.time}</Text>
-          <Flex
-            alignItems={'center'}
-            justifyContent="space-between"
-          >
-            <Text pr={'10px'}>ID: {props.id}</Text>
-            <Flex alignItems={'center'}>
-              {props.scholarshipStatus === 'In Review' ? (
-                <Image
-                  src="/images/inProgress.svg"
-                  alt=""
-                  pr="10px"
-                />
-              ) : (
-                <Image
-                  src="/images/approvedIcon.svg"
-                  alt=""
-                  pr="10px"
-                />
-              )}
-              <Text>{props.scholarshipStatus}</Text>
-            </Flex>
-          </Flex>
-          {props.scholarshipStatus === 'Approved' ? (
-            <>
-              <Divider
-                mt={'15px'}
-                marginLeft="-20px"
-                mr={'-20px'}
-                width="unset"
-              />
-              <Box
-                textAlign={'center'}
-                padding="10px 10px 0"
-                fontSize={'15px'}
-                cursor="pointer"
-                color={'rgba(var(--color-primary))'}
-                onClick={props.addScholarshipCard}
-              >
-                {t.add}
-              </Box>
-            </>
-          ) : null}
-        </CardBody>
-      </Card>
-    </Box>
+            {t.add}
+          </Box>
+        </>
+      ) : null}
+    </DetailCard>
   )
 }
 
