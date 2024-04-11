@@ -1,14 +1,15 @@
-import { Box, Stack, Text } from '@chakra-ui/react'
-import Router from 'next/router'
 import React, { useEffect, useState } from 'react'
-import Button from '../components/button/Button'
-import ConfirmOrder from '../components/confirmOrder/ConfirmOrder'
+import { ConfirmationPage } from '@beckn-ui/becknified-components'
+import { useRouter } from 'next/navigation'
+import orderConfirmmark from '../public/images/orderConfirmmark.svg'
 import { ParsedScholarshipData } from '../components/scholarship/scholarshipCard/Scholarship.types'
 import { useLanguage } from '../hooks/useLanguage'
 
 const scholarshipConfirmationPage = () => {
   const { t } = useLanguage()
   const [appliedScholarship, setAppliedScholarship] = useState<ParsedScholarshipData | null>(null)
+
+  const router = useRouter()
 
   useEffect(() => {
     if (localStorage) {
@@ -24,52 +25,24 @@ const scholarshipConfirmationPage = () => {
   }
 
   return (
-    <Box>
-      <ConfirmOrder
-        confirmationText={
-          <>
-            <Text
-              fontSize={'17px'}
-              fontWeight={'600'}
-              textAlign={'center'}
-            >
-              {t.applicationSubmitted}
-            </Text>
-            <Stack>
-              <Text
-                textAlign={'center'}
-                marginTop={'8px'}
-                marginBottom={'40px'}
-                fontSize={'15px'}
-                fontWeight="400"
-              >
-                {t.confirmText1} <br />
-                {t.confirmText2}{' '}
-                <span
-                  style={{
-                    fontWeight: '600'
-                  }}
-                >
-                  {appliedScholarship.id}
-                </span>{' '}
-                {t.confirmText3}
-                <br />
-                {t.confirmText4}
-              </Text>
-            </Stack>
-          </>
-        }
-      />
-      <Button
-        buttonText={t.gotoCart}
-        background={'transparent'}
-        color={'rgba(var(--color-primary))'}
-        isDisabled={false}
-        handleOnClick={() => {
-          Router.push('/cart')
-        }}
-      />
-    </Box>
+    <ConfirmationPage
+      schema={{
+        iconSrc: orderConfirmmark,
+        successOrderMessage: t.applicationSubmitted,
+        gratefulMessage: t.jobApplicationConfirmation,
+        buttons: [
+          {
+            text: t.gotoCart,
+            handleClick: () => {
+              router.push('/cart')
+            },
+            disabled: false,
+            variant: 'solid',
+            colorScheme: 'primary'
+          }
+        ]
+      }}
+    />
   )
 }
 
