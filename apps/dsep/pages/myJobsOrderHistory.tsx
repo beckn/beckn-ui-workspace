@@ -5,11 +5,11 @@ import React, { useEffect, useState } from 'react'
 import Loader from '../components/loader/Loader'
 import MyJob from '../components/orderHistory/MyJob'
 import { useLanguage } from '../hooks/useLanguage'
-import { getOrderPlacementTimeline } from '../utilities/confirm-utils'
+import { OrderData } from '../lib/types/order-history.types'
+import { formatTimestamp } from '../utilities/confirm-utils'
 
 const myJobsOrderHistory = () => {
-  const [myJobsStatus, setMyJobsStatus] = useState('Approved')
-  const [jobsOrders, setJobsOrders] = useState([])
+  const [jobsOrders, setJobsOrders] = useState<OrderData>([])
   const [isLoading, setIsLoading] = useState(true)
   const { t } = useLanguage()
   const apiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
@@ -52,17 +52,23 @@ const myJobsOrderHistory = () => {
       maxH={'calc(100vh - 100px)'}
       overflowY="scroll"
     >
-      {jobsOrders.map((jobOrder: any, index) => (
-        <MyJob
-          key={index}
-          heading={`${jobOrder.attributes.items[0].descriptor.name} - ${jobOrder.attributes.descriptor.name} `}
-          time={getOrderPlacementTimeline(jobOrder.attributes.createdAt)}
-          myJobsStatus={jobOrder.attributes.delivery_status}
-          handleJobsStatus={() => {
-            Router.push(`/applyJobsPrefilled?jobId=${jobOrder.id}`)
-          }}
-        />
-      ))}
+      {jobsOrders.map((jobOrder, index) => {
+        const {
+          attributes: { items, createdAt, delivery_status }
+        } = jobOrder
+
+        return (
+          <MyJob
+            key={index}
+            heading={`${items[0].name} - ${jobOrder.attributes.descriptor.name} `}
+            time={formatTimestamp(createdAt)}
+            myJobsStatus={delivery_status}
+            handleJobsStatus={() => {
+              Router.push(`/applyJobsPrefilled?jobId=${jobOrder.id}`)
+            }}
+          />
+        )
+      })}
     </Box>
   )
 }

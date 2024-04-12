@@ -1,14 +1,15 @@
-import { Box, Flex, Text, Image, Divider } from '@chakra-ui/react'
+import { Box, Flex, Text, Image } from '@chakra-ui/react'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { useLanguage } from '../hooks/useLanguage'
+import { OrderAttributes } from '../lib/types/order-history.types'
 
 const applyJobsPrefilled = () => {
   const { t } = useLanguage()
   const router = useRouter()
-  const [jobData, setJobData] = useState(null)
+  const [jobData, setJobData] = useState<OrderAttributes | null>(null)
   const [userData, setUserData] = useState({
     name: '',
     email: '',
@@ -22,7 +23,7 @@ const applyJobsPrefilled = () => {
   const axiosConfig = {
     headers: {
       Authorization: `Bearer ${bearerToken}`,
-      'Content-Type': 'application/json' // You can set the content type as needed
+      'Content-Type': 'application/json'
     }
   }
 
@@ -50,6 +51,7 @@ const applyJobsPrefilled = () => {
       axios
         .get(`${apiUrl}/orders/${jobId}?populate[0]=3`, axiosConfig)
         .then(res => {
+          console.log('res.data.data.attributes', res.data.data.attributes)
           setJobData(res.data.data.attributes)
         })
         .catch(e => console.error(e))
@@ -63,9 +65,7 @@ const applyJobsPrefilled = () => {
   const { delivery_status: jobStatus, items } = jobData
   const { email, name: userName, phone } = userData
 
-  const {
-    descriptor: { name }
-  } = items[0]
+  const { name } = items[0]
 
   return (
     <Box>
@@ -157,7 +157,7 @@ const applyJobsPrefilled = () => {
                   fontWeight="600"
                   pr={'5px'}
                 >
-                  {document.attributes.attachment.data.attributes.name}
+                  {document?.attributes?.attachment?.data?.attributes?.name}
                 </Text>
               </Flex>
             </Box>
