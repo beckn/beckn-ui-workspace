@@ -5,19 +5,14 @@ import Cookies from 'js-cookie'
 import { Box } from '@chakra-ui/react'
 import { ConfirmationPage } from '@beckn-ui/becknified-components'
 import { LoaderWithMessage } from '@beckn-ui/molecules'
-
 import { useLanguage } from '../hooks/useLanguage'
 import orderConfirmmark from '../public/images/orderConfirmmark.svg'
-import useRequest from '../hooks/useRequest'
-import { getPayloadForConfirmRequest } from '../utilities/confirm-utils'
-
+import { getPayloadForConfirmRequest, getPostOrderPayload } from '../utilities/confirm-utils'
 import { InitResponseModel } from '../lib/types/init.types'
-
 import { ConfirmResponseModel } from '../lib/types/confirm.types'
 
 const OrderConfirmation = () => {
   const { t } = useLanguage()
-  const confirmRequest = useRequest()
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(true)
   const [confirmResponse, setConfirmResponse] = useState<ConfirmResponseModel | null>(null)
@@ -48,73 +43,23 @@ const OrderConfirmation = () => {
     }
   }, [])
 
-  // TODO :- To enable this code for strapi order history call when the issue is fixed in the confirm response
-  // useEffect(() => {
-  //   if (confirmResponse) {
-  //     const bearerToken = Cookies.get('authToken')
-  //     const context = confirmResponse.data[0].context
-  //     const order = confirmResponse.data[0].message
+  useEffect(() => {
+    if (confirmResponse) {
+      const bearerToken = Cookies.get('authToken')
+      const orderPayload = getPostOrderPayload(confirmResponse)
 
-  //     const orderPayLoad = {
-  //       context: context,
-  //       message: {
-  //         order: {
-  //           id: order.orderId,
-  //           provider: {
-  //             id: order.provider.id,
-  //             descriptor: order.provider.name
-  //           },
-  //           items: [
-  //             {
-  //               id: order.items[0].id,
-  //               descriptor: order.items[0].descriptor,
-  //               price: {
-  //                 value: order.items[0].price.value,
-  //                 currency: order.items[0].price.currency
-  //               },
-  //               tags: order.items[0].tags
-  //             }
-  //           ],
-  //           fulfillments: [order.fulfillment],
-  //           billing: {
-  //             name: order.billing.name,
-  //             address: order.billing.address.door,
-  //             email: order.billing.email,
-  //             phone: order.billing.phone
-  //           },
-  //           quote: {
-  //             price: order.quote.price,
-  //             breakup: order.quote.breakup
-  //           },
-  //           payments: [
-  //             {
-  //               type: order.payment.type,
-  //               status: order.payment.status,
-  //               params: {
-  //                 amount: order.payment.params.amount,
-  //                 currency: order.payment.params.currency
-  //               }
-  //             }
-  //           ]
-  //         }
-  //       },
-  //       category: {
-  //         set: [1]
-  //       }
-  //     }
-
-  //     const axiosConfig = {
-  //       headers: {
-  //         Authorization: `Bearer ${bearerToken}`,
-  //         'Content-Type': 'application/json' // You can set the content type as needed
-  //       }
-  //     }
-  //     axios
-  //       .post(`${strapiUrl}/orders`, orderPayLoad, axiosConfig)
-  //       .then(res => {})
-  //       .catch(err => console.error(err))
-  //   }
-  // }, [confirmRequest.data])
+      const axiosConfig = {
+        headers: {
+          Authorization: `Bearer ${bearerToken}`,
+          'Content-Type': 'application/json' // You can set the content type as needed
+        }
+      }
+      axios
+        .post(`${strapiUrl}/orders`, orderPayload, axiosConfig)
+        .then(res => {})
+        .catch(err => console.error(err))
+    }
+  }, [confirmResponse])
 
   if (isLoading) {
     return (
