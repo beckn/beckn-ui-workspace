@@ -1,8 +1,9 @@
+import { ConfirmResponseModel } from '../lib/types/confirm.types'
 import { InitResponseModel } from '../lib/types/init.types'
 import { ResponseModel } from '../lib/types/responseModel'
 
 export const getConfirmMetaDataForBpp = (initRes: ResponseModel[]) => {
-  const itemsPerBpp = {}
+  const itemsPerBpp: any = {}
   initRes.forEach(res => {
     const bppId = res.context.bpp_id
     const bpp_uri = res.context.bpp_uri
@@ -168,4 +169,28 @@ export function formatTimestamp(timestamp: string) {
   const formattedDate = `${day}${ordinalSuffix} ${month} ${year}, ${hours}:${minutes}${period}`
 
   return formattedDate
+}
+
+export const getPostOrderPayload = (confirmResponse: ConfirmResponseModel) => {
+  const { context, message } = confirmResponse.data[0]
+  const { billing, fulfillments, items, orderId, provider, quote, payments } = message
+  const orderPayLoad = {
+    context: context,
+    message: {
+      order: {
+        id: orderId,
+        provider: provider,
+        items,
+        fulfillments: fulfillments,
+        billing: billing,
+        quote: quote,
+        payments: payments
+      }
+    },
+    category: {
+      set: [1]
+    }
+  }
+
+  return orderPayLoad
 }

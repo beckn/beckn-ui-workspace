@@ -1,83 +1,92 @@
-import { Box, Card, CardBody, Divider, Flex, Text, Image } from '@chakra-ui/react'
 import React from 'react'
+import { CurrencyType, DetailCard, ProductPrice } from '@beckn-ui/becknified-components'
+import { Typography } from '@beckn-ui/molecules'
+import { Box, Divider, Flex, Image } from '@chakra-ui/react'
 import { useLanguage } from '../../hooks/useLanguage'
+
+interface Price {
+  currency: CurrencyType
+  value: string
+}
 
 interface MyLearningProps {
   heading: string
   time: string
   id: string
-  price: string
+  price: Price
   myLearingStatus: string
   handleViewCourses: () => void
 }
 
 const MyLearing: React.FC<MyLearningProps> = props => {
   const { t } = useLanguage()
+  const { currency, value } = props.price
   return (
-    <Box>
-      <Card
-        className="border_radius_all"
-        mb={'20px'}
-        boxShadow={'0px 8px 10px -6px rgba(0, 0, 0, 0.1), 0px 20px 25px -5px rgba(0, 0, 0, 0.1)'}
+    <DetailCard>
+      <Typography
+        text={props.heading}
+        fontWeight={'600'}
+        style={{
+          paddingBottom: '10px'
+        }}
+      />
+      <Typography
+        text={props.time}
+        style={{
+          paddingBottom: '5px'
+        }}
+      />
+      <Typography
+        text={`ID: ${props.id}`}
+        style={{
+          paddingRight: '10px'
+        }}
+      />
+
+      <Flex
+        alignItems={'center'}
+        justifyContent="space-between"
+        pt={'5px'}
       >
-        <CardBody
-          padding={'15px 20px'}
-          fontSize="12px"
-        >
-          <Text
-            fontWeight={'600'}
-            pb={'10px'}
-          >
-            {props.heading}
-          </Text>
-          <Text pb={'5px'}>{props.time}</Text>
-
-          <Text pr={'10px'}>ID: {props.id}</Text>
-
-          <Flex
-            alignItems={'center'}
-            justifyContent="space-between"
-            pt={'5px'}
-          >
-            <Text fontWeight={'600'}>
-              {t.currencySymbol} {props.price}
-            </Text>
-            <Flex alignItems={'center'}>
-              {props.myLearingStatus === 'In Review' ? (
-                <Image
-                  src="/images/inProgress.svg"
-                  alt=""
-                  pr="10px"
-                />
-              ) : (
-                <Image
-                  src="/images/approvedIcon.svg"
-                  alt=""
-                  pr="10px"
-                />
-              )}
-              <Text>{props.myLearingStatus}</Text>
-            </Flex>
-          </Flex>
-          <Divider
-            mt={'15px'}
-            marginLeft="-20px"
-            mr={'-20px'}
-            width="unset"
-          />
-          <Box
-            textAlign={'center'}
-            padding="10px 10px 0"
-            fontSize={'15px'}
-            cursor="pointer"
-            color={'rgba(var(--color-primary))'}
-            onClick={props.handleViewCourses}
-          >
-            {t.viewCourse}
-          </Box>
-        </CardBody>
-      </Card>
-    </Box>
+        <ProductPrice
+          price={parseFloat(value)}
+          currencyType={currency}
+          color={'black'}
+        />
+        <Flex alignItems={'center'}>
+          {props.myLearingStatus === 'In Review' ? (
+            <Image
+              src="/images/inProgress.svg"
+              alt="in progress icon"
+              pr="10px"
+            />
+          ) : (
+            <Image
+              src="/images/approvedIcon.svg"
+              alt="approved icon"
+              pr="10px"
+            />
+          )}
+          <Typography text={props.myLearingStatus} />
+        </Flex>
+      </Flex>
+      <Divider
+        mt={'15px'}
+        marginLeft="-20px"
+        mr={'-20px'}
+        width="unset"
+      />
+      <Box
+        textAlign={'center'}
+        padding="10px 10px 0"
+        fontSize={'15px'}
+        cursor="pointer"
+        color={'rgba(var(--color-primary))'}
+        onClick={props.handleViewCourses}
+      >
+        {t.viewCourse}
+      </Box>
+    </DetailCard>
   )
 }
 

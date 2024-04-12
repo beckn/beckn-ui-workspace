@@ -92,6 +92,15 @@ interface CancellationTerm {
   }
 }
 
+interface Payment {
+  collected_by: string
+  params: any
+  status: string
+  type: string
+}
+
+export type PaymentData = Payment[]
+
 interface Message {
   orderId: string
   provider: {
@@ -118,6 +127,7 @@ interface Message {
   quote: Quote
   billing: BillingAddress
   cancellation_terms: CancellationTerm[]
+  payments: PaymentData
 }
 
 interface ConfirmResponseData {

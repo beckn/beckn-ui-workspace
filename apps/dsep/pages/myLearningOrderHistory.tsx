@@ -1,14 +1,14 @@
 import { Box } from '@chakra-ui/react'
 import Cookies from 'js-cookie'
-import Router from 'next/router'
 import React, { useEffect, useState } from 'react'
 import Loader from '../components/loader/Loader'
 import MyLearing from '../components/orderHistory/MyLearing'
 import { useLanguage } from '../hooks/useLanguage'
-import { getOrderPlacementTimeline } from '../utilities/confirm-utils'
+import { OrderData } from '../lib/types/order-history.types'
+import { formatTimestamp } from '../utilities/confirm-utils'
 
 const myLearningOrderHistory = () => {
-  const [coursesOrders, setCoursesOrders] = useState([])
+  const [coursesOrders, setCoursesOrders] = useState<OrderData>([])
   const [isLoading, setIsLoading] = useState(true)
 
   const { t } = useLanguage()
@@ -52,19 +52,30 @@ const myLearningOrderHistory = () => {
       maxH={'calc(100vh - 100px)'}
       overflowY="scroll"
     >
-      {coursesOrders.map((courseOrder: any, index) => (
-        <MyLearing
-          key={index}
-          heading={courseOrder.attributes.items[0].descriptor.name}
-          time={getOrderPlacementTimeline(courseOrder.attributes.createdAt)}
-          id={courseOrder.id}
-          price={courseOrder.attributes.price}
-          myLearingStatus={courseOrder.attributes.delivery_status}
-          handleViewCourses={() => {
-            window.location.href = courseOrder.attributes.items[0].tags.Url
-          }}
-        />
-      ))}
+      {coursesOrders.map((courseOrder, index) => {
+        console.log('courseOrder', courseOrder)
+        const {
+          attributes: { items, createdAt, order_id, delivery_status, quote },
+          id
+        } = courseOrder
+        const { price } = quote
+        return (
+          <MyLearing
+            key={index}
+            heading={items[0].name}
+            time={formatTimestamp(createdAt)}
+            id={id}
+            // TODO :- to check for price in this value
+            price={price}
+            myLearingStatus={delivery_status}
+            handleViewCourses={() => {
+              // TODO :- to check for the course URL in the catalogs
+              // window.location.href = courseOrder.attributes.items[0].tags.Url
+              window.location.href = 'https://www.google.com'
+            }}
+          />
+        )
+      })}
     </Box>
   )
 }
