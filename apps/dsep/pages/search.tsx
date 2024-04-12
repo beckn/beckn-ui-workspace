@@ -2,21 +2,14 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { Box } from '@chakra-ui/react'
 import { LoaderWithMessage } from '@beckn-ui/molecules'
-import { ProductCard, Sort } from '@beckn-ui/becknified-components'
 import SearchBar from '../components/header/SearchBar'
 import ProductList from '../components/productList/ProductList'
 import useRequest from '../hooks/useRequest'
 import { responseDataActions } from '../store/responseData-slice'
-import { RetailItem } from '../lib/types/products'
-import Loader from '../components/loader/Loader'
 import { useLanguage } from '../hooks/useLanguage'
 import { useRouter } from 'next/router'
 import { getParsedSearchlist } from '../utilities/search-utils'
 import { ParsedItemModel, SearchResponseModel } from '../types/search.types'
-import CustomToast from '../components/customToast/custom-toast'
-import ProductCardRenderer from '../components/productCard/product-card-renderer'
-
-//Mock data for testing search API. Will remove after the resolution of CORS issue
 
 const Search = () => {
   const [items, setItems] = useState<ParsedItemModel[]>([])
@@ -41,14 +34,6 @@ const Search = () => {
       }
     }
   }
-
-  // const searchPayload = {
-  //   context: {
-  //     domain: 'retail'
-  //   },
-  //   searchString: 'T Shirt',
-  //   location: '12.423423,77.325647'
-  // }
 
   const fetchDataForSearch = () => fetchData(`${apiUrl}/search`, 'POST', searchPayload)
 

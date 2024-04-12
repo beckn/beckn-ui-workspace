@@ -19,12 +19,7 @@ export const getSelectPayloadForScholarship = (scholarshipForApply: ParsedItemMo
             provider: {
               id: providerId
             },
-            // TODO :- to check if it is necessary or not
-            // fulfillments: [
-            //   {
-            //     id: 'DSEP_FUL_63587501'
-            //   }
-            // ],
+
             items: [
               {
                 id: item.id
@@ -78,6 +73,7 @@ export const getInitPayloadForScholarship = (scholarshipSelectRes: SelectRespons
                   short_desc: itemShortDesc
                 },
                 price: price,
+                // TODO :- where should I send xInput
                 xinput: {
                   required: true,
                   form: {

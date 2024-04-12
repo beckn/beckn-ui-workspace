@@ -29,12 +29,11 @@ const ProductCardRenderer = (data: any) => {
       minH={'168px'}
       maxH={'100%'}
       boxShadow="0px 20px 25px rgba(0, 0, 0, 0.10), 0px 8px 10px rgba(0, 0, 0, 0.10)"
-      mt={'64px'}
+      mt={'30px'}
       mx={{ md: 6 }}
       rounded="xl"
       bg="#fff"
       position="relative"
-      mb={'20px'}
     >
       <Box w="125px">
         <Box>

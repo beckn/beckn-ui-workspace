@@ -16,9 +16,6 @@ const SignIn = () => {
   const [formErrors, setFormErrors] = useState<FormErrors>({ email: '', password: '' })
   const [isFormFilled, setIsFormFilled] = useState(false)
   const toast = useToast()
-  // TODO :- we can uncomment this if we want something to change on the basis of breakpoint
-  // const breakpoint = useBreakpoint()
-  // const mobileBreakpoints = ['base', 'sm', 'md', 'lg']
 
   const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {

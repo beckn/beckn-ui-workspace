@@ -6,8 +6,7 @@ import { ParsedItemModel } from '../../types/search.types'
 import { ProductCard } from '@beckn-ui/becknified-components'
 import ProductCardRenderer from '../productCard/product-card-renderer'
 
-interface Props {
-  // TODO :- to change this after the proper data mapping in the product cards
+interface ProductListPropsModel {
   productList: ParsedItemModel[]
 }
 
@@ -19,7 +18,7 @@ export const sortByCheapest = (product1: ParsedItemModel, product2: ParsedItemMo
   return parseFloat(product1.item.price.value) - parseFloat(product2.item.price.value)
 }
 
-const ProductList: React.FC<Props> = ({ productList }) => {
+const ProductList: React.FC<ProductListPropsModel> = ({ productList }) => {
   const { t } = useLanguage()
   const [selectedRadioBtn, setSelectedRadioBtn] = useState<string>('all')
   const [sortedProductList, setSortedProductList] = useState<ParsedItemModel[]>([])

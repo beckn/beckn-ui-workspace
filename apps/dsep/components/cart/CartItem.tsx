@@ -51,6 +51,8 @@ const CartItem: React.FC<Props> = ({ product, setIsLoadingForCartCountChange }) 
     fetchQuotes()
   }
 
+  console.log([product])
+
   return (
     <>
       <div className="flex items-center flex-wrap sm:my-4 sm:py-4 px-2 border-b-2 mb-4">
@@ -78,9 +80,7 @@ const CartItem: React.FC<Props> = ({ product, setIsLoadingForCartCountChange }) 
               }}
             >
               <Image
-                // TODO :- To check this after we get image from select
-                src=""
-                // src={product.images[0].url}
+                src={product.images[0].url}
                 alt={'product-name'}
                 className="object-contain"
               />
@@ -124,7 +124,8 @@ const CartItem: React.FC<Props> = ({ product, setIsLoadingForCartCountChange }) 
               className="flex-grow text-sm font-normal mb-2 sm:mb-0 mx-2 w-full text-center pt-1"
               style={{
                 direction: 'ltr',
-                fontSize: '17px'
+                fontSize: '17px',
+                marginTop: '12px'
               }}
             >
               {product.name}

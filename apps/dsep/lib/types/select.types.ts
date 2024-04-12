@@ -79,6 +79,10 @@ export interface Item {
   xinput?: XInput
   name: string
   short_desc?: string
+  images: {
+    url: string
+    size_type: string
+  }[]
   long_desc?: string
   price: Price
   quantity?: Quantity
