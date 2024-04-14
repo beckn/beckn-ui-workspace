@@ -42,6 +42,8 @@ import ShippingBlock from '@components/orderDetailComponents/Shipping'
 import { DOMAIN } from '@lib/config'
 import PaymentDetails from '@beckn-ui/becknified-components/src/components/checkout/payment-details'
 import { getPaymentBreakDown } from '@utils/checkout-utils'
+import { setLocalStorage } from '@utils/localstorage'
+import { LocalStorage } from '@lib/types'
 
 
 const statusMap = {
@@ -258,6 +260,8 @@ const OrderDetails = () => {
             }
           ]
         }
+        setLocalStorage(LocalStorage.STATUSPAYLOAD, statusPayload);
+
         setUiState(prevState => ({
           ...prevState,
           isLoading: true
@@ -632,7 +636,7 @@ const OrderDetails = () => {
     >
       <Box maxW={{base:'100%',md:'50%'}} margin='0 auto'>
 
-      {processState.allOrderDelivered && (
+      
         <Card
           mt="20px"
           border={`1px solid ${theme.colors.primary[100]}`}
@@ -670,8 +674,8 @@ const OrderDetails = () => {
               <Text
                 onClick={() => {
 
-dispatch(statusActions.addStatusResponse({statusResponse:data.statusData}))
-router.push('/feedback')
+                dispatch(statusActions.addStatusResponse({statusResponse:data.statusData}))
+                router.push('/feedback')
                 }}
                 pl="10px"
                 color="#0560FA"
@@ -681,7 +685,6 @@ router.push('/feedback')
             </Flex>
           </CardBody>
         </Card>
-      )}
       </Box>
       <Box 
             display={{base:'block',lg:'flex'}}

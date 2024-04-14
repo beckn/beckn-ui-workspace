@@ -111,6 +111,8 @@ const en: { [key: string]: string } = {
   profileIcon: 'My Profile',
   logoutIcon: 'Logout',
   placedAt: 'Placed at',
-  ordersFulfilled: 'Orders Fulfilled'
+  ordersFulfilled: 'Orders Fulfilled',
+  shopBtn: 'Shop',
+  checkReview: 'Check Review',
 }
 export default en

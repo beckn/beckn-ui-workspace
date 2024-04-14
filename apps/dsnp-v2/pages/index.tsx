@@ -24,11 +24,11 @@ const HomePage = () => {
 
   const router = useRouter()
 
-  useEffect(() => {
-    if (localStorage) {
-      localStorage.clear()
-    }
-  }, [])
+  // useEffect(() => {
+  //   if (localStorage) {
+  //     localStorage.clear()
+  //   }
+  // }, [])
 
   const navigateToSearchResults = () => {
     localStorage.setItem('optionTags', JSON.stringify({ name: searchTerm }))

@@ -52,7 +52,7 @@ useEffect(() => {
 
   // Providers api
   axios
-    .get('https://api.dsnp-social-web.becknprotocol.io/v1/auth/provider')
+    .get(`${process.env.NEXT_PUBLIC_DSNP_GATEWAY_URL}/v1/auth/provider`)
     .then(response => {
       console.log(response.data)
       if (typeof window !== 'undefined') {

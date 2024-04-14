@@ -1,10 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { ParsedItemModel } from '@lib/types'
+import { toBinary } from '@utils/common-utils'
 
 export interface Discovery {
   transactionId: string
   productList: ParsedItemModel[]
   selectedProduct: ParsedItemModel
+  encodedProduct:string
 }
 
 export interface DiscoveryRootState {
@@ -14,7 +16,8 @@ export interface DiscoveryRootState {
 const initialState: Discovery = {
   transactionId: '',
   productList: [],
-  selectedProduct: {} as ParsedItemModel
+  selectedProduct: {} as ParsedItemModel,
+  encodedProduct:''
 }
 
 const discoverySlice = createSlice({
@@ -29,6 +32,7 @@ const discoverySlice = createSlice({
     },
     addSingleProduct(state, action: PayloadAction<{ product: ParsedItemModel }>) {
       state.selectedProduct = action.payload.product
+      state.encodedProduct = window.btoa(toBinary(JSON.stringify(action.payload.product)))
     }
   }
 })

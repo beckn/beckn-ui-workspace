@@ -1,4 +1,5 @@
 export enum LocalStorage {
   Product = 'productDetails',
-  Cart = 'cart'
+  Cart = 'cart',
+  STATUSPAYLOAD = 'statusPayload',
 }

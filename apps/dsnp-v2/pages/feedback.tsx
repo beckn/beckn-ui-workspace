@@ -12,6 +12,59 @@ import useResponsive from '@beckn-ui/becknified-components/src/hooks/useResponsi
 import { StatusResponseModel } from '../types/status.types'
 import axios from 'axios'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
+import { getLocalStorage } from '@utils/localstorage'
+
+
+
+//dsnp importss
+import { makeInteractionIdAndNonce } from '@utils/review'
+import { DiscoveryRootState } from '@store/discovery-slice'
+import { LocalStorage } from '@lib/types'
+
+
+const createPost = async (
+  formValues: ReviewProcessorValues,
+  href: string,
+  nonce: any,
+  attributeSetType: string,
+  interactionTicket: any,
+  accessToken: string
+) => {
+  try {
+    const body = new FormData()
+    body.append('content', formValues.message)
+    ;(formValues.images || []).forEach(upload => {
+      if (upload.originFileObj) body.append('images', upload.originFileObj)
+    })
+    body.append(
+      'tag',
+      JSON.stringify([
+        {
+          type: 'Interaction',
+          href,
+          rel: attributeSetType,
+          nonce,
+          ticket: interactionTicket
+        }
+      ])
+    )
+
+    const resp = axios.request({
+      url: `${process.env.NEXT_PUBLIC_DSNP_GATEWAY_URL}/v1/content/create`,
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: body
+    })
+    console.log('postActivityContentCreated', { resp })
+    return resp
+    //success();
+  } catch (e) {
+    throw Error(e)
+  }
+}
+
 
 const Feedback = () => {
   const { t } = useLanguage()
@@ -20,9 +73,92 @@ const Feedback = () => {
   const [feedback, setFeedback] = useState('')
   const [isLoadingForRating, setIsLoadingForRating] = useState(false)
   const statusResponse = useSelector((state: StatusRootState) => state.status.statusResponse)
+  const product = useSelector((state: DiscoveryRootState) => state.discovery.selectedProduct)
+  const encodedProduct = useSelector((state: DiscoveryRootState) => state.discovery.encodedProduct)
   const {isDesktop} = useResponsive()
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
+
+
+  //dsnp state
+
+
+  const submitReviewToDsnp = async (
+    review: string,
+    productURL: string,
+    productName: string,
+    productImage: string,
+    productDesc: string,
+    id: string
+  ) => {
+    const dsnpAuth = getLocalStorage('dsnpAuth')
+    const successUrl = `/product?productName=${productName}&productImage=${productImage}&reviewSubmitted=true`
+    const errorUrl = `/product?productName=${productName}&productImage=${productImage}&reviewSubmitted=false`
+    if (Object.keys(dsnpAuth).length !== 0) {
+      const { accessToken, dsnpId } = dsnpAuth
+      const { interactionId, nonce } = await makeInteractionIdAndNonce(dsnpId)
+      const payloadForStatusRequest = getLocalStorage(LocalStorage.STATUSPAYLOAD)
+
+      // if (localStorage) {
+      //   const stringifiedConfirmData = localStorage.getItem('confirmData')
+
+      //   if (stringifiedConfirmData) {
+      //     const parsedConfirmedData = JSON.parse(stringifiedConfirmData)
+
+      //     const confirmOrderMetaDataPerBpp = getConfirmMetaDataForBpp(parsedConfirmedData)
+
+      //     payloadForStatusRequest = getPayloadForStatusRequest(
+      //       confirmOrderMetaDataPerBpp,
+
+      //       transactionId
+      //     )
+      //   }
+      // }
+      const reqBody = {
+        // href: `${window.location.origin}/product?productName=${productName}&productImage=${productImage}&productDesc=${productDesc}&productId=${id}&becknified=true`,
+        href: `https://dsnp-stage.becknprotocol.io/product?productName=${productName}&productImage=${productImage}&productDesc=${productDesc}&becknified=true`,
+        reference: {
+          orderDetails: JSON.stringify(payloadForStatusRequest)
+        },
+        attributeSetType: 'dsnp://1#OndcProofOfPurchase',
+        interactionId
+      }
+      setIsLoadingForRating(true)
+
+      axios
+        .request({
+          url: `${process.env.NEXT_PUBLIC_DSNP_GATEWAY_URL}/v1/interactions`,
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          },
+          data: reqBody
+        })
+        .then(interactionResponse => {
+          return createPost(
+            {
+              message: review,
+              images: []
+            },
+            // `${window.location.origin}/product?productName=${productName}&productImage=${productImage}&productDesc=${productDesc}&becknified=true`,
+            `https://dsnp-stage.becknprotocol.io/product?productName=${productName}&productImage=${productImage}&productDesc=${productDesc}&becknified=true`,
+            nonce,
+            'dsnp://1#OndcProofOfPurchase',
+            interactionResponse.data.ticket,
+            accessToken
+          )
+        })
+        .then(res => {
+          router.push(successUrl)
+        })
+        .catch(err => {
+          console.log('Error', err)
+          router.push(errorUrl)
+          setIsLoadingForRating(false)
+        })
+    }
+  }
+
 
 
 
@@ -50,13 +186,14 @@ const Feedback = () => {
       }
 
       const ratingResponse = await axios.post(`${apiUrl}/rating`, ratingPayload)
-      if (ratingResponse.data.data.length > 0) {
-        router.push('/')
-      }
+      // if (ratingResponse.data.data.length > 0) {
+      //   router.push('/')
+      // }
     } catch (error) {
       console.error(error)
     }
   }
+
 
   if (!statusResponse || statusResponse.length === 0) {
     return <></>
@@ -115,7 +252,6 @@ const Feedback = () => {
     text="Thank you for your order!"
   />
         }
-
         <Text
           as={Typography}
           text={t.pleaseShareYourFeedback}
@@ -158,7 +294,21 @@ const Feedback = () => {
           children="Submit Review"
           className="checkout_btn "
           disabled={!ratingForStore}
-          handleClick={() => handleSubmitReview(statusResponse)}
+          handleClick={async () => {
+
+  const productURL = typeof window !== 'undefined' && new URL(`${window.location.origin}/product`)
+  productURL && productURL.searchParams.append('productDetails', encodedProduct)
+            await submitReviewToDsnp(
+              feedback,
+              productURL.href,
+              product.item.name,
+              product.item.images[0].url,
+              product.item.long_desc,
+              product.item.id
+            );
+            
+handleSubmitReview(statusResponse)
+          }}
         />
         <BecknButton
           children="Skip for Now"

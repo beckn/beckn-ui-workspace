@@ -6,6 +6,7 @@ export const getInitMetaDataPerBpp = (initRes: ResponseModel[]) => {
     const bppId = res.context.bpp_id
     const bpp_uri = res.context.bpp_uri
 
+
     itemsPerBpp[bppId] = {
       ...res.message.catalogs.responses[0].message.order,
       bpp_uri
@@ -20,6 +21,8 @@ export const getConfirmMetaDataForBpp = (initRes: ResponseModel[]) => {
   initRes.forEach(res => {
     const bppId = res.context.bpp_id
     const bpp_uri = res.context.bpp_uri
+
+    console.log("Dank",res.message.responses)
 
     itemsPerBpp[bppId] = {
       ...res.message.responses[0].message.order,
