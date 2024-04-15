@@ -8938,6 +8938,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"garudaa@file:./garudaa-1.0.0.tgz::locator=%40beckn-ui%2FOSC%40workspace%3Aapps%2FOSC":
+  version: 1.0.0
+  resolution: "garudaa@file:./garudaa-1.0.0.tgz::locator=%40beckn-ui%2FOSC%40workspace%3Aapps%2FOSC"
+  dependencies:
+    rrweb: ^2.0.0-alpha.1
+    rxjs: ^7.5.6
+  checksum: db3abbb9f05912ca6db4383a8b882cbe36e44277e7c673bc28b72f6432392c9f59b72c7d1948b659aa60132477819c98cd58192824033033cc46bc93fda9f9e6
+  languageName: node
+  linkType: hard
+
 "garudaa@file:./garudaa-1.0.0.tgz::locator=%40beckn-ui%2Fdsnp-v2%40workspace%3Aapps%2Fdsnp-v2":
   version: 1.0.0
   resolution: "garudaa@file:./garudaa-1.0.0.tgz::locator=%40beckn-ui%2Fdsnp-v2%40workspace%3Aapps%2Fdsnp-v2"
