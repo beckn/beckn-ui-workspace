@@ -99,7 +99,7 @@ const OrderConfirmation = () => {
           {
             text: t.myLearnings,
             handleClick: () => {
-              router.push('/myLearningOrderHistor')
+              router.push('/myLearningOrderHistory')
             },
             disabled: false,
             variant: 'outline',
