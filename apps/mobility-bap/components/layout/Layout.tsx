@@ -1,29 +1,34 @@
 import React from 'react'
-import { Provider } from 'react-redux'
+import { Provider, useSelector } from 'react-redux'
 import Head from 'next/head'
 import { ThemeProvider } from 'next-themes'
 import { useRouter } from 'next/router'
 import Header from '../header'
 import store from '../../store/index'
-import Footer from '../footer'
 import { ToastContainer } from 'react-toastify'
 import { useLanguage } from '../../hooks/useLanguage'
 import NextNProgress from 'nextjs-progressbar'
 import cs from 'classnames'
+import { IGeoLocationSearchPageRootState } from '../../lib/types/geoLocationSearchPage'
+import GeoLocationInputList from '../geoLocationInput/GeoLocationInputList'
 
 const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const { locale } = useLanguage()
   const router = useRouter()
   const isHomepage = router.pathname === '/homePage'
+  const isPaymentMode = router.pathname === '/paymentMode'
   const isSearch = router.pathname === '/search'
   const paddingStyles = 'px-5 xl:px-16'
-  const marginStyles = 'mt-[100px]'
+  const marginStyles = 'mt-[64px]'
+  const geoLocationSearchPageVisible = useSelector((state: IGeoLocationSearchPageRootState) => {
+    return state.geoLocationSearchPageUI.geoLocationSearchPageVisible
+  })
 
   return (
     <Provider store={store}>
       <ThemeProvider enableSystem={true}>
         <Head>
-          <title>Open Street Commerce</title>
+          <title>Mobility Bap</title>
         </Head>
         <div
           className={cs(
@@ -38,26 +43,29 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
         >
           <NextNProgress height={7} />
           <Header />
-          <main
-            className={cs(
-              'flex-grow',
-              {
-                [paddingStyles]: !isHomepage
-              },
-              {
-                [marginStyles]: !isHomepage && !isSearch
-              },
-              {
-                ['mt-[24px]']: isHomepage
-              },
-              {
-                ['mt-[118px]']: isSearch
-              }
-            )}
-          >
-            {children}
-          </main>
-          {/* <Footer /> */}
+          {!geoLocationSearchPageVisible ? (
+            <main
+              className={cs(
+                'flex-grow',
+                {
+                  [paddingStyles]: !isHomepage && isPaymentMode
+                },
+                {
+                  [marginStyles]: !isHomepage && !isSearch
+                },
+                {
+                  ['mt-[24px]']: isHomepage
+                },
+                {
+                  ['mt-[118px]']: isSearch
+                }
+              )}
+            >
+              {children}
+            </main>
+          ) : (
+            <GeoLocationInputList />
+          )}
         </div>
         <ToastContainer
           autoClose={2000}

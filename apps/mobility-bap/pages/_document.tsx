@@ -22,10 +22,11 @@ export default function Document() {
         />
         <link
           rel="shortcut icon"
-          href="/images/zishop.ico"
+          href="./images/taxiIcon.svg"
         />
       </Head>
       <body>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDj_jBuujsEk8mkIva0xG6_H73oJEytXEA&callback=Function.prototype&libraries=places"></script>
         <Main />
         <NextScript />
       </body>
