@@ -9,13 +9,11 @@ import ProductPrice from '../UI/ProductPrice'
 const ProductCardRenderer = (data: any) => {
   //   const [distance, setDistance] = useState(0)
   const { dataSource } = data
-  const { t } = useLanguage()
   const router = useRouter()
   const encodedProduct = window.btoa(toBinary(JSON.stringify(dataSource)))
 
   const extraInfoMapper: { [key: string]: string } = {
-    // TODO :- To add the mapping of duration
-    ['Duration']: '1 month',
+    ['Duration']: dataSource.courseDuration,
     ['Sold by']: dataSource.providerName
   }
 

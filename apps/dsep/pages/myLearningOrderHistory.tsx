@@ -59,6 +59,10 @@ const myLearningOrderHistory = () => {
           id
         } = courseOrder
         const { price } = quote
+        const { tags } = items[0]
+        const courseURLTag = tags.find(tag => tag.list[0]?.code === 'course-url')
+        const courseUrl = courseURLTag?.list[0]?.value || ''
+
         return (
           <MyLearing
             key={index}
@@ -69,9 +73,7 @@ const myLearningOrderHistory = () => {
             price={price}
             myLearingStatus={delivery_status}
             handleViewCourses={() => {
-              // TODO :- to check for the course URL in the catalogs
-              // window.location.href = courseOrder.attributes.items[0].tags.Url
-              window.location.href = 'https://www.google.com'
+              window.location.href = courseUrl
             }}
           />
         )

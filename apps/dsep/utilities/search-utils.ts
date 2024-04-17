@@ -15,9 +15,12 @@ export const getParsedSearchlist = (data: SearchResponseModel[]) => {
     message.providers.forEach(provider => {
       const providerId = provider.id
       const rating = provider.rating
-      const { locations } = provider
 
       provider?.items?.forEach(item => {
+        const { tags } = item
+        const courseDurationTag = tags.find(tag => tag.list[0]?.code === 'course-duration')
+        const courseDuration = courseDurationTag?.list[0]?.value || ''
+
         itemsarray.push({
           bppId: bppId,
           bppUri: bppUri,
@@ -27,7 +30,8 @@ export const getParsedSearchlist = (data: SearchResponseModel[]) => {
           providerName: provider.name,
           item,
           rating,
-          cityName: provider.locations?.[0].city?.name
+          cityName: provider.locations?.[0].city?.name,
+          courseDuration
         })
       })
     })

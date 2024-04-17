@@ -18,8 +18,8 @@ interface Tag {
   code: string
   name: string
   display: boolean
-  list?: Array<{
-    name: string
+  list: Array<{
+    code: string
     value: string
   }>
 }
@@ -99,7 +99,7 @@ export interface ParsedItemModel {
   item: Item
   rating: string
   cityName?: string
-  //   providerCoordinates: Coordinate
+  courseDuration?: string
 }
 
 export interface AssemblyData {
