@@ -26,13 +26,7 @@ const Search = () => {
     context: {
       domain: 'dsep:courses'
     },
-    message: {
-      criteria: {
-        dropLocation: '12.9715987,77.5945627',
-        categoryName: 'Courses',
-        searchString: searchKeyword
-      }
-    }
+    searchString: searchKeyword
   }
 
   const fetchDataForSearch = () => fetchData(`${apiUrl}/search`, 'POST', searchPayload)
