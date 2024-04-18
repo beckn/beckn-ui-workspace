@@ -6,6 +6,7 @@ import ItemDetails from '../components/detailsCard/ItemDetails'
 import { useLanguage } from '../hooks/useLanguage'
 import addShippingBtn from '../public/images/offer.svg'
 import { ICartRootState } from '../lib/types/cart'
+import { cartActions } from '../store/cart-slice'
 import { getPaymentBreakDown, handleFormSubmit } from '../utilities/checkout-utils'
 import { useRouter } from 'next/router'
 import Cookies from 'js-cookie'
@@ -275,7 +276,10 @@ const CheckoutPage = () => {
           disabled={!!!initData}
           children={t.confirm}
           className="checkout_btn "
-          handleClick={() => router.push('/orderConfirmation')}
+          handleClick={() => {
+            dispatch(cartActions.clearCart())
+            router.push('/orderConfirmation')
+          }}
         />
       </Box>
     </Box>
