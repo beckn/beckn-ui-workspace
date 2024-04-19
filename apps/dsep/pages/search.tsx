@@ -50,7 +50,6 @@ const Search = () => {
   useEffect(() => {
     if (data) {
       const parsedItems = getParsedSearchlist(data.data as SearchResponseModel[])
-      dispatch(responseDataActions.addTransactionId(data.data[0].context.transaction_id))
 
       localStorage.setItem('searchItems', JSON.stringify(parsedItems))
       setItems(parsedItems)
