@@ -5,6 +5,7 @@ import { ConfirmResponseModel } from '../types/confirm.types'
 import axios from 'axios'
 import { Loader, Typography } from '@beckn-ui/molecules'
 import { useLanguage } from '@hooks/useLanguage'
+import { v4 as uuidv4 } from 'uuid'
 import { useRouter } from 'next/router'
 
 const UpdateShippingDetails = () => {
@@ -43,18 +44,40 @@ const UpdateShippingDetails = () => {
                 domain,
                 bpp_id,
                 bpp_uri,
-                transaction_id
+                transaction_id:uuidv4()
               },
               orderId,
               updateDetails: {
-                updateTarget: 'order.billing',
+                updateTarget: 'order.fulfillments[0].stops[0]',
+                fulfillments:[
+                  {
+                    id:1,
+                    "stops": [
+                      {
+                          "location": {
+                              "address": shippingDetails.address,
+                              "city": {
+                                  "name": "Bengaluru"
+                              },
+                              "state": {
+                                  "name": "Karnataka"
+                              },
+                              "country": {
+                                  "code": "IND"
+                              },
+                              "area_code": "560025"
+                          },
+                          "contact": {
+                              "name":name,
+                              "phone":mobileNumber,
+                              'email':email
+                          }
+                      }
+                  ]
 
-                billing: {
-                  name: name,
-                  address: address,
-                  email: email,
-                  phone: mobileNumber
-                }
+                  }
+                ]
+
               }
             }
           ]
@@ -76,18 +99,40 @@ const UpdateShippingDetails = () => {
                 domain,
                 bpp_id,
                 bpp_uri,
-                transaction_id
+                transaction_id:uuidv4()
               },
               orderId,
               updateDetails: {
-                updateTarget: 'order.billing',
+                updateTarget: 'order.fulfillments[0].stops[0]',
+                fulfillments:[
+                  {
+                    id:"1",
+                    "stops": [
+                      {
+                          "location": {
+                              "address":shippingDetails.address,
+                              "city": {
+                                  "name": "Bengaluru"
+                              },
+                              "state": {
+                                  "name": "Karnataka"
+                              },
+                              "country": {
+                                  "code": "IND"
+                              },
+                              "area_code": "560025"
+                          },
+                          "contact": {
+                              "name":name,
+                              "phone":mobileNumber,
+                              'email':email
+                          }
+                      }
+                  ]
 
-                billing: {
-                  name: name,
-                  address: address,
-                  email: email,
-                  phone: mobileNumber
-                }
+                  }
+                ]
+
               }
             }
           ]
