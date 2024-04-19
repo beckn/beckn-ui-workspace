@@ -70,6 +70,7 @@ const OrderConfirmation = () => {
 
   return (
     <ConfirmationPage
+      className="kuza-order-confornation"
       schema={{
         iconSrc: orderConfirmmark,
         successOrderMessage: 'ORDER SUCCESFULL',

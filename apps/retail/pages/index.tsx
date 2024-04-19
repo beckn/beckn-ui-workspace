@@ -199,7 +199,7 @@ const HomePage = () => {
       <Box
         p={'0 20px'}
         maxWidth={{ base: '100vw', md: '30rem', lg: '40rem' }}
-        margin="4rem auto"
+        margin="calc(4rem + 90px)  auto"
         backgroundColor="white"
       >
         <Image
