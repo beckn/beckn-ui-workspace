@@ -19,7 +19,7 @@ function PaymentMode() {
   const router = useRouter()
 
   return (
-    <Box>
+    <Box mt={['20px', '20px', '0px', '0px']}>
       <Box
         height={'72vh'}
         position={'relative'}
@@ -91,7 +91,6 @@ function PaymentMode() {
           </Text>
           <CardWithCheckBox
             setChecked={setChecked}
-            img1={NetBanking}
             img2={CashOnDelivery}
             paymentMethod={t.cashOnDelivery}
             paymentMethodNet={t.netBanking}

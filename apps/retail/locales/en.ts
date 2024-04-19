@@ -132,6 +132,8 @@ const en: { [key: string]: string } = {
   cancel: 'Cancel',
   selectdelivery: 'Select delivery',
   selectdeliveryText: 'Where would you like the order to be delivered? ',
-  searchForanything: 'Search for anything'
+  searchForanything: 'Search for anything',
+  quoteRequestLoader: 'Your order is getting processed',
+  initializingOrderLoader: 'while we set things up for you'
 }
 export default en

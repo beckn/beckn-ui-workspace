@@ -24,7 +24,7 @@ const cartIconBlackList: string[] = [
   '/orderHistory',
   '/signin',
   '/mobileOtp',
-  '/checkoutPage',
+  '/checkout',
   '/paymentMode',
   '/signUp',
   '/invoiceDetails',
