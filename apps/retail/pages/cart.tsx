@@ -84,7 +84,7 @@ const Cart = () => {
           loader: { text: t.quoteRequestLoader },
           orderSummary: {
             totalAmount: {
-              price: !isEmpty(data) ? data.data[0].message.order.quote.price.value : totalAmount,
+              price: totalAmount,
               currencyType: items[0].price.currency
             },
             totalQuantity: {
