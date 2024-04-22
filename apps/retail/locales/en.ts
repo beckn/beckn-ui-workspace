@@ -134,6 +134,8 @@ const en: { [key: string]: string } = {
   selectdeliveryText: 'Where would you like the order to be delivered? ',
   searchForanything: 'Search for anything',
   quoteRequestLoader: 'Your order is getting processed',
-  initializingOrderLoader: 'while we set things up for you'
+  initializingOrderLoader: 'while we set things up for you',
+  errorZipcode: 'Zip Code is required',
+  errorZipcode2: 'Invalid Zip Code'
 }
 export default en
