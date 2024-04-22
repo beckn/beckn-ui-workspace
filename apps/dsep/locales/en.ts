@@ -435,6 +435,7 @@ const en: { [key: string]: string } = {
   jobSearchLoaderText: 'While we search for jobs',
   applicationLoaderText: 'While we confirm the application',
   scholarshipSearchLoader: 'While we search for scholarships.',
-  errorText: 'Something went wrong'
+  errorText: 'Something went wrong',
+  fetchingTrackLoaderSubtext: 'While we fetch for tracking and support details'
 }
 export default en

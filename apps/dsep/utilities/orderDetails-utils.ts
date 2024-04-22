@@ -1,5 +1,6 @@
 import { ConfirmResponseModel } from '../lib/types/confirm.types'
 import { ResponseModel } from '../lib/types/responseModel'
+import { StatusResponseModel } from '../lib/types/status.types'
 
 const generateRandomID = () => {
   var id = ''
@@ -92,4 +93,71 @@ export const getStatusPayload = (confirmData: ConfirmResponseModel) => {
   })
 
   return statusPayload
+}
+
+export const getTrackAndSupportPayload = (statusResponse: StatusResponseModel) => {
+  const { context, message } = statusResponse.data[0]
+  const { domain, bpp_id, bpp_uri, transaction_id } = context
+  const {
+    order: { id }
+  } = message
+  const trackPayload = {
+    data: [
+      {
+        context: {
+          domain,
+          bpp_id,
+          bpp_uri,
+          transaction_id
+        },
+        orderId: id
+      }
+    ]
+  }
+
+  const supportPayload = {
+    data: [
+      {
+        context: {
+          domain,
+          bpp_id,
+          bpp_uri,
+          transaction_id
+        },
+        message: {
+          order_id: id,
+          support: {
+            ref_id: id
+          }
+        }
+      }
+    ]
+  }
+
+  return {
+    trackPayload,
+    supportPayload
+  }
+}
+
+export const handleEmailCustomer = (
+  email: string,
+  setIsMenuModalOpen: React.Dispatch<React.SetStateAction<boolean>>
+) => {
+  const subject = 'Regarding Your Order'
+  const body = 'Dear Customer,\n\n'
+
+  const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+
+  window.open(mailtoLink, '_blank')
+  setIsMenuModalOpen(false)
+}
+export const handleCallCustomer = (
+  phoneNumber: string,
+  setIsMenuModalOpen: React.Dispatch<React.SetStateAction<boolean>>
+) => {
+  const telLink = `tel:${phoneNumber}`
+
+  window.open(telLink, '_blank')
+  setIsMenuModalOpen(false)
 }
