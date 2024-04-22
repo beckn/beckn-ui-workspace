@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useLanguage } from '@hooks/useLanguage'
 import AlternateLogo from '../public/images/KuzaLogo.svg'
 import { SignUpPropsModel } from '@components/signIn/SignIn.types'
@@ -20,12 +20,12 @@ const SignUp = () => {
   const breakpoint = useBreakpoint()
   const mobileBreakpoints = ['base', 'sm', 'md', 'lg']
   const currentLogo = mobileBreakpoints.includes(breakpoint) ? Logo : AlternateLogo
-  const [register, { isLoading,isError }] = useRegisterMutation()
+  const [register, { isLoading, isError }] = useRegisterMutation()
 
   const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL
 
-  useEffect(()=>{
-    if(isError){
+  useEffect(() => {
+    if (isError) {
       toast({
         render: () => (
           <CustomToast
@@ -38,7 +38,7 @@ const SignUp = () => {
         isClosable: true
       })
     }
-  },[isError])
+  }, [isError])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -101,7 +101,12 @@ const SignUp = () => {
   }
 
   return (
-    <Box mt={'30px'}>
+    <Box
+      mt={'30px'}
+      className="hideScroll"
+      maxH="calc(100vh - 90px)"
+      overflowY={'scroll'}
+    >
       <BecknAuth
         schema={{
           logo: {
@@ -115,7 +120,7 @@ const SignUp = () => {
               disabled: !isFormFilled,
               variant: 'solid',
               colorScheme: 'primary',
-              isLoading:isLoading
+              isLoading: isLoading
             },
             {
               text: t.signIn,
@@ -124,7 +129,7 @@ const SignUp = () => {
               },
               variant: 'outline',
               colorScheme: 'primary',
-              disabled:isLoading
+              disabled: isLoading
             }
           ],
           inputs: [

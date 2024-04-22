@@ -10,7 +10,7 @@ import { getSelectPayload } from '@components/cart/cart.utils'
 import { cartActions } from '@store/cart-slice'
 import { isEmpty } from '@utils/common-utils'
 import { CustomToast } from '@components/signIn/SignIn'
-import { useToast } from '@chakra-ui/react'
+import { Box, useToast } from '@chakra-ui/react'
 
 import { DOMAIN } from '@lib/config'
 
@@ -18,7 +18,7 @@ import { ICartRootState } from '@lib/types'
 import { DiscoveryRootState } from '@store/discovery-slice'
 
 const Cart = () => {
-  const [fetchQuotes, { isLoading,data,isError }] = useSelectMutation()
+  const [fetchQuotes, { isLoading, data, isError }] = useSelectMutation()
   const dispatch = useDispatch()
   const toast = useToast()
 
@@ -33,9 +33,8 @@ const Cart = () => {
     fetchQuotes(getSelectPayload(items, transactionId, DOMAIN))
   }, [totalQuantity])
 
-
-  useEffect(()=>{
-    if(isError){
+  useEffect(() => {
+    if (isError) {
       toast({
         render: () => (
           <CustomToast
@@ -48,15 +47,14 @@ const Cart = () => {
         isClosable: true
       })
     }
-  },[isError])
-
+  }, [isError])
 
   const onOrderClick = () => {
     router.push('/checkout')
   }
 
   return (
-    <div>
+    <Box mt={['20px', '20px', '0px', '0px']}>
       <BecknCart
         isLoading={isLoading}
         schema={{
@@ -69,7 +67,7 @@ const Cart = () => {
             symbol: singleItem.price.currency,
             handleIncrement: id => {
               const selectedItem = productList.find(singleItem => singleItem.item.id === id)
-              console.log("DAnk cart",singleItem,productList)
+              console.log('DAnk cart', singleItem, productList)
               if (selectedItem) {
                 dispatch(cartActions.addItemToCart({ product: selectedItem, quantity: 1 }))
               }
@@ -78,15 +76,15 @@ const Cart = () => {
               dispatch(cartActions.removeItemFromCart(id))
             }
           })),
-          loader: { text: 'Getting quotes' },
+          loader: { text: t.quoteRequestLoader },
           orderSummary: {
             totalAmount: {
               price: !isEmpty(data) ? data.data[0].message.order.quote.price.value : totalAmount,
-              currencyType:items[0].price.currency,
+              currencyType: items[0].price.currency
             },
             totalQuantity: {
-              text:totalQuantity.toString(),
-              variant: 'subTitleSemibold',
+              text: totalQuantity.toString(),
+              variant: 'subTitleSemibold'
             },
             pageCTA: {
               text: 'Proceed to checkout',
@@ -95,7 +93,7 @@ const Cart = () => {
           }
         }}
       />
-    </div>
+    </Box>
   )
 }
 

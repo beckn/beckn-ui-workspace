@@ -23,38 +23,6 @@ const CardWithCheckBox: React.FC<CardWithCheckBoxPropsModel> = props => {
     <Card className="border_radius_all">
       <CardBody padding={'15px 20px'}>
         <Flex
-          pointerEvents={'none'}
-          opacity={'0.5'}
-          className={styles.checkbox}
-          fontSize={'15px'}
-          mb={'20px'}
-          alignItems={'center'}
-          columnGap={'20px'}
-        >
-          <input
-            type="checkbox"
-            id="checkbox_Click_Collect"
-            checked={false}
-            onChange={handleChange}
-          />
-          <Image
-            src={props.img1}
-            w={'62px'}
-            h={'40px'}
-          />
-          <label htmlFor="checkbox_Click_Collect">
-            <Text
-              position={'absolute'}
-              width={'50vw'}
-              marginLeft="100px"
-              fontSize={'15px'}
-              fontWeight={400}
-            >
-              {props.paymentMethodNet}
-            </Text>
-          </label>
-        </Flex>
-        <Flex
           className={styles.checkbox}
           fontSize={'15px'}
           columnGap={'20px'}

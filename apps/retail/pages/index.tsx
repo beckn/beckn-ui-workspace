@@ -9,6 +9,11 @@ import TopSheet from '@components/topSheet/TopSheet'
 import { useLanguage } from '@hooks/useLanguage'
 import beckenFooter from '../public/images/footer.svg'
 import SearchInput from '@beckn-ui/becknified-components/src/components/search-input'
+import ImportedOrder from '@components/importedOrder/ImportedOrder'
+import { importedOrderMockdata } from '../mock/index'
+import OrderDetails from '@components/orderDetails/ImportedOrderDetails'
+import ShoppingList from '@components/shoppingList/ShoppingList'
+import SelectDeliveryModal from '@components/selectDeliveryModal/SelectDeliveryModal'
 
 const HomePage = () => {
   const [searchTerm, setSearchTerm] = useState<string>('')
@@ -17,13 +22,22 @@ const HomePage = () => {
   const currentLogo = mobileBreakpoints.includes(breakpoint) ? KuzaLogo : AlternateLogo
   const { t } = useLanguage()
 
+  const [importedOrder, setImportedOrder] = useState(false)
+  const [viewOrderDetails, setViewOrderDetails] = useState(false)
+  const [chatGtpList, setChatGtpList] = useState(false)
+  const [selectLocationModal, setSelectLocationModal] = useState(false)
+  const [shoppingListData, setShoppingListData] = useState([])
+  const [selectedValues, setSelectedValues] = useState<string[]>([])
+  const [address, setAddress] = useState('')
+  const [isLoadingForChatGptRequest, setIsLoadingForChatGptRequest] = useState(true)
+  const [importedOrderObject, setImportedOrderObject] = useState(importedOrderMockdata)
+  const chatGptApiUrl = process.env.NEXT_PUBLIC_CHAT_GPT_URL
+
   const apiKeyForGoogle = process.env.NEXT_PUBLIC_GOOGLE_API_KEY
   const [currentAddress, setCurrentAddress] = useState('')
   const [loadingForCurrentAddress, setLoadingForCurrentAddress] = useState(true)
   const [currentLocationFetchError, setFetchCurrentLocationError] = useState('')
-
   const router = useRouter()
-
   useEffect(() => {
     if (localStorage) {
       localStorage.clear()
@@ -42,8 +56,21 @@ const HomePage = () => {
     e.preventDefault()
   }
 
+  useEffect(() => {
+    if (importedOrderObject) {
+      const latLongValues = (importedOrderObject as any).message.order.item[0].tags.fulfillment_end_loc
+      const [latStr, langStr] = latLongValues.split('/')
+      const result = {
+        lat: parseFloat(latStr),
+        lang: parseFloat(langStr)
+      }
 
-    useEffect(() => {
+      handleConvert(result.lat, result.lang)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [importedOrderObject])
+
+  useEffect(() => {
     // Check if geolocation is available in the browser
     if (navigator) {
       if ('geolocation' in navigator) {
@@ -99,9 +126,72 @@ const HomePage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  const handleConvert = async (lat: number, lang: number) => {
+    try {
+      const response = await axios.get(
+        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lang}&key=${apiKeyForGoogle}`
+      )
+
+      if (response.data.results.length > 0) {
+        setAddress(response.data.results[0].formatted_address)
+      } else {
+        setAddress('No address found')
+      }
+    } catch (error) {
+      console.error('Error converting coordinates to address:', error)
+    }
+  }
+
+  const fetchData = async () => {
+    if (importedOrderObject) {
+      const {
+        message: {
+          order: { item }
+        }
+      } = importedOrderObject
+      const { tags } = item[0]
+      const promptType = (tags as any).Paris === 'Y' ? 'PARIS' : 'HIMALAYAS'
+      const payload = {
+        message: {
+          prompt_type: promptType,
+          searchQuery: (importedOrderObject as any).message.order.item[0].descriptor.name
+        }
+      }
+
+      axios
+        .post(chatGptApiUrl as string, payload)
+        .then(response => {
+          setShoppingListData(response.data.item)
+          setIsLoadingForChatGptRequest(false)
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    }
+  }
+
+  const updateStateImportedOrder = () => {
+    setImportedOrder(false)
+    setViewOrderDetails(true)
+  }
+  const backOnImportedOrder = () => {
+    setViewOrderDetails(false)
+    setImportedOrder(true)
+  }
+  const showChatGtpList = () => {
+    fetchData()
+    setViewOrderDetails(false)
+    setChatGtpList(true)
+  }
+  const selectDeliveryLocationText = () => {
+    setSelectLocationModal(true)
+    setViewOrderDetails(false)
+    setChatGtpList(false)
+  }
+
   return (
     <>
-    <TopSheet
+      <TopSheet
         currentLocationFetchError={currentLocationFetchError}
         loadingForCurrentAddress={loadingForCurrentAddress}
         currentAddress={currentAddress}
@@ -109,7 +199,7 @@ const HomePage = () => {
       <Box
         p={'0 20px'}
         maxWidth={{ base: '100vw', md: '30rem', lg: '40rem' }}
-        margin="4rem auto"
+        margin="calc(4rem + 90px)  auto"
         backgroundColor="white"
       >
         <Image
@@ -149,6 +239,40 @@ const HomePage = () => {
           />
         </Flex>
       </Box>
+
+      {importedOrder ? (
+        <ImportedOrder
+          setImportedOrder={setImportedOrder}
+          importedOrderedItem={(importedOrderObject as any).message.order.item}
+          updateStateImportedOrder={updateStateImportedOrder}
+          showChatGtpList={showChatGtpList}
+        />
+      ) : null}
+      {viewOrderDetails ? (
+        <OrderDetails
+          importedOrderObject={importedOrderObject}
+          backOnImportedOrder={backOnImportedOrder}
+        />
+      ) : null}
+
+      {chatGtpList && (
+        <ShoppingList
+          isLoadingForChatGptRequest={isLoadingForChatGptRequest}
+          shoppingListData={shoppingListData}
+          selectDeliveryLocationText={selectDeliveryLocationText}
+          setSelectedValues={setSelectedValues}
+          selectedValues={selectedValues}
+        />
+      )}
+
+      {selectLocationModal ? (
+        <SelectDeliveryModal
+          importedOrderObject={importedOrderObject}
+          backOnImportedOrder={backOnImportedOrder}
+          selectedValues={selectedValues}
+          addressOfTheEndLocation={address}
+        />
+      ) : null}
     </>
   )
 }

@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Box, Flex, Text, Stack, Checkbox,useToast } from '@chakra-ui/react'
+import { Box, Flex, Text, Stack, Checkbox, useToast } from '@chakra-ui/react'
 import { DOMAIN } from '@lib/config'
 import { useLanguage } from '../hooks/useLanguage'
 
 import { CartItemForRequest, DataPerBpp, ICartRootState, TransactionIdRootState } from '@lib/types/cart'
-import { getInitPayload,
+import {
+  getInitPayload,
   areShippingAndBillingDetailsSame,
   getPayloadForInitRequest,
   getSubTotalAndDeliveryCharges
-
 } from '@components/checkout/checkout.utils'
 import useRequest from '../hooks/useRequest'
 import { CustomToast } from '@components/signIn/SignIn'
@@ -47,7 +47,7 @@ const CheckoutPage = () => {
     pinCode: '201002'
   })
 
-  const toast = useToast()  
+  const toast = useToast()
 
   const [submittedDetails, setSubmittedDetails] = useState<ShippingFormInitialValuesType>({
     name: 'Antoine Dubois',
@@ -67,11 +67,10 @@ const CheckoutPage = () => {
     pinCode: '75001'
   })
 
-
   const router = useRouter()
   const initRequest = useRequest()
   const dispatch = useDispatch()
-  const [initialize, { isLoading,isError }] = useInitMutation()
+  const [initialize, { isLoading, isError }] = useInitMutation()
   const { t, locale } = useLanguage()
   const cartItems = useSelector((state: ICartRootState) => state.cart.items)
   const initResponse = useSelector((state: CheckoutRootState) => state.checkout.initResponse)
@@ -94,12 +93,11 @@ const CheckoutPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  useEffect(()=>{
-    if(isBillingSameRedux){
+  useEffect(() => {
+    if (isBillingSameRedux) {
       setBillingFormData(submittedDetails)
     }
-
-  },[isBillingSameRedux])
+  }, [isBillingSameRedux])
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -137,10 +135,9 @@ const CheckoutPage = () => {
 
   const formSubmitHandler = (data: any) => {
     if (data) {
-      getInitPayload(submittedDetails, billingFormData, cartItems, transactionId, DOMAIN)
-        .then(res => {
-          return initialize(res)
-        })
+      getInitPayload(submittedDetails, billingFormData, cartItems, transactionId, DOMAIN).then(res => {
+        return initialize(res)
+      })
       // TODO :_ To check this again
 
       // if (isBillingAddressSameAsShippingAddress) {
@@ -164,22 +161,21 @@ const CheckoutPage = () => {
     return !!initResponse && initResponse.length > 0
   }
 
-  const createPaymentBreakdownMap = ()=>{
+  const createPaymentBreakdownMap = () => {
     const paymentBreakdownMap = {}
-    if(isInitResultPresent()){
-        initResponse[0].message.order.quote.breakup.forEach((breakup)=>{
+    if (isInitResultPresent()) {
+      initResponse[0].message.order.quote.breakup.forEach(breakup => {
         paymentBreakdownMap[breakup.title] = {
-          value:breakup.price.value,
-          currency:breakup.price.currency
+          value: breakup.price.value,
+          currency: breakup.price.currency
         }
       })
     }
     return paymentBreakdownMap
   }
-  
 
-  useEffect(()=>{
-    if(isError){
+  useEffect(() => {
+    if (isError) {
       toast({
         render: () => (
           <CustomToast
@@ -192,10 +188,7 @@ const CheckoutPage = () => {
         isClosable: true
       })
     }
-  },[isError])
-
-
-
+  }, [isError])
 
   return (
     <>
@@ -209,8 +202,8 @@ const CheckoutPage = () => {
               description: singleItem.short_desc,
               quantity: singleItem.quantity,
               // priceWithSymbol: `${currencyMap[singleItem.price.currency]}${singleItem.totalPrice}`,
-              price:singleItem.totalPrice,
-              currency:singleItem.price.currency,
+              price: singleItem.totalPrice,
+              currency: singleItem.price.currency,
               image: singleItem.images[0].url
             }))
           },
@@ -254,20 +247,19 @@ const CheckoutPage = () => {
             }
           },
           payment: {
-            
             title: 'Payment',
             paymentDetails: {
-              hasBoxShadow:false,
+              hasBoxShadow: false,
               paymentBreakDown: createPaymentBreakdownMap(),
               totalText: 'Total',
-              totalValueWithCurrency:{
-                value:getSubTotalAndDeliveryCharges(initResponse).subTotal.toString(),
-                currency:getSubTotalAndDeliveryCharges(initResponse).currencySymbol
+              totalValueWithCurrency: {
+                value: getSubTotalAndDeliveryCharges(initResponse).subTotal.toString(),
+                currency: getSubTotalAndDeliveryCharges(initResponse).currencySymbol
               }
             }
           },
           loader: {
-            text: 'Initializing your request'
+            text: t.initializingOrderLoader
           },
           pageCTA: {
             text: 'Proceed to Checkout',

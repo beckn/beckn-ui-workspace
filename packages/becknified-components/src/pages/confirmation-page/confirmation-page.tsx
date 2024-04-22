@@ -55,7 +55,7 @@ const ConfirmationPage: React.FC<ConfirmationPageProps> = ({ schema, className }
             />
           )}
 
-          {!isMobile && trackOrderMessage && (
+          {trackOrderMessage && (
             <Typography
               style={{ fontSize: '1rem' }}
               text={trackOrderMessage}

@@ -105,3 +105,9 @@ select.chakra-select {
 .hideScroll::-webkit-scrollbar {
   display: none;
 }
+.kuza-order-confornation-confirm-page-container {
+  align-items: unset !important;
+}
+.kuza-order-confornation-confirm-page-container .kuza-order-confornation-confirm-image {
+  margin: 0 auto;
+}

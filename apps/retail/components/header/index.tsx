@@ -24,7 +24,7 @@ const cartIconBlackList: string[] = [
   '/orderHistory',
   '/signin',
   '/mobileOtp',
-  '/checkoutPage',
+  '/checkout',
   '/paymentMode',
   '/signUp',
   '/invoiceDetails',
@@ -54,7 +54,8 @@ const storeHeaderBlackList = [
   '/orderCancellation',
   '/profile',
   '/search',
-  '/checkout'
+  '/checkout',
+  '/signin'
 ]
 const headerValues: PathnameObjectType = {
   '/checkoutPage': 'Review Purchase Order',
@@ -68,7 +69,6 @@ const headerValues: PathnameObjectType = {
   '/assemblyDetails': 'Add Assembly Details',
   '/updateShippingDetails': 'Shipping Details',
   '/orderCancellation': 'Order Cancel',
-  '/feedback': '',
   '/profile': 'Profile',
   '/search': 'Search results',
   '/checkout': 'Billing & Shipping'
@@ -87,7 +87,7 @@ const headerValuesFrench: PathnameObjectType = {
 
 const topHeaderBlackList: string[] = []
 
-const bottomHeaderBlackList = ['/orderConfirmation','/']
+const bottomHeaderBlackList = ['/orderConfirmation', '/', '/feedback']
 
 const menuIconWhiteList = ['/', '/search', '/profile']
 const orderIconList = ['/orderDetails']
@@ -168,7 +168,7 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
 
       {/* Menu Modal */}
       <BottomModal
-      responsive={true}
+        responsive={true}
         title=""
         isOpen={isMenuModalOpen}
         onClose={handleMenuModalClose}
@@ -371,7 +371,7 @@ const BottomHeader = () => {
         </Box>
       </Box>
       <BottomModal
-      responsive={true}
+        responsive={true}
         title=""
         isOpen={isOrderModalOpen}
         onClose={handleOrderModalClose}
