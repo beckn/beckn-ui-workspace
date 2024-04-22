@@ -28,6 +28,7 @@ export interface ShippingSectionProps<T extends FormField[]> {
   addButtonImage?: string
   isChecked?: boolean
   onCheckChange?: () => void
+  color?: string
 }
 
 export interface ItemDetailProps {
@@ -35,9 +36,9 @@ export interface ItemDetailProps {
   description: string
   quantity: number
   // priceWithSymbol: string
-  image?: string,
-  price:number,
-  currency:CurrencyType
+  image?: string
+  price: number
+  currency: CurrencyType
 }
 
 export interface ShippingDetailsProps {

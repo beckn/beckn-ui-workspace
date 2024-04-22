@@ -60,10 +60,10 @@ const ProductCta: React.FC<ProductCtaProps> = ({
         mt="1rem"
       >
         <Box
-          onClick={handleDecrement}
+          onClick={handleIncrement}
           fontSize="24px"
         >
-          -
+          +
         </Box>
         <Box
           border={'1px solid #D9D9D9'}
@@ -74,10 +74,10 @@ const ProductCta: React.FC<ProductCtaProps> = ({
           {counter}
         </Box>
         <Box
-          onClick={handleIncrement}
+          onClick={handleDecrement}
           fontSize="24px"
         >
-          +
+          -
         </Box>
       </Flex>
       <Box width={{ base: '100%', md: '50%' }}>
