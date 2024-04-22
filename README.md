@@ -7,7 +7,7 @@ Beckn-ui-workspace is a monorepo consisting of all Beckn possible frontend use-c
 ## Installation and Usage
 
 
-1. **Use specific node version**: First install nvm on your local machine and then run the below commad to ensure accurate node version. This will automatically switch the node version.
+1. **Use specific node version**: First install nvm on your local machine and then run the below command to ensure accurate node version. This will automatically switch the node version.
 
    ```bash
    nvm use
