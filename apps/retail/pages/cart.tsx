@@ -54,7 +54,12 @@ const Cart = () => {
   }
 
   return (
-    <Box mt={['20px', '20px', '0px', '0px']}>
+    <Box
+      pt={['20px', '20px', '0px', '0px']}
+      className="hideScroll"
+      maxH="calc(100vh - 120px)"
+      overflowY={'scroll'}
+    >
       <BecknCart
         isLoading={isLoading}
         schema={{

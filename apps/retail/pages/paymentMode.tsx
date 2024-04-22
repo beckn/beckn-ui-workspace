@@ -19,9 +19,13 @@ function PaymentMode() {
   const router = useRouter()
 
   return (
-    <Box mt={['20px', '20px', '0px', '0px']}>
+    <Box
+      mt={['20px', '20px', '0px', '0px']}
+      className="hideScroll"
+      maxH="calc(100vh - 120px)"
+      overflowY={'scroll'}
+    >
       <Box
-        height={'72vh'}
         position={'relative'}
         maxWidth={{ base: '90%', md: '70%' }}
         margin="auto"

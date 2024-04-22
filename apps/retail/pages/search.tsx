@@ -120,7 +120,11 @@ const Search = () => {
   }
 
   return (
-    <>
+    <Box
+      className="hideScroll"
+      maxH="calc(100vh - 95px)"
+      overflowY={'scroll'}
+    >
       <Box display="flex">
         {!isSmallScreen && !isMediumScreen && (
           <Filter
@@ -211,7 +215,7 @@ const Search = () => {
                     name: item.name,
                     price: item.price.value,
                     rating: item.rating,
-                    shortDesc: item.short_desc || item.long_desc.replace(/<[^>]+>/g, '').slice(0,15)
+                    shortDesc: item.short_desc || item.long_desc.replace(/<[^>]+>/g, '').slice(0, 15)
                   }
                   return (
                     <ProductCard
@@ -238,7 +242,7 @@ const Search = () => {
           </Box>
         </Box>
       </Box>
-    </>
+    </Box>
   )
 }
 
