@@ -22,9 +22,7 @@ const SignIn = () => {
   const breakpoint = useBreakpoint()
   const mobileBreakpoints = ['base', 'sm', 'md', 'lg']
   const currentLogo = mobileBreakpoints.includes(breakpoint) ? Logo : AlternateLogo
-  const [login, { isLoading,isError,data,error }] = useLoginMutation()
-
-  console.log("Dank",isError,error,data)
+  const [login, { isLoading, isError, data, error }] = useLoginMutation()
 
   const toast = useToast()
 
@@ -49,8 +47,8 @@ const SignIn = () => {
     setIsFormFilled(updatedFormData.email.trim() !== '' && updatedFormData.password.trim() !== '')
   }
 
-  useEffect(()=>{
-    if(isError){
+  useEffect(() => {
+    if (isError) {
       toast({
         render: () => (
           <CustomToast
@@ -63,7 +61,7 @@ const SignIn = () => {
         isClosable: true
       })
     }
-  },[isError])
+  }, [isError])
 
   const handleSignIn = async () => {
     const signInData = {

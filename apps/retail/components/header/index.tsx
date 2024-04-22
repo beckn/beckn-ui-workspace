@@ -29,7 +29,8 @@ const cartIconBlackList: string[] = [
   '/signUp',
   '/invoiceDetails',
   '/',
-  '/cart'
+  '/cart',
+  '/profile'
 ]
 
 const backIconList = ['/', '/signin']
@@ -69,7 +70,7 @@ const headerValues: PathnameObjectType = {
   '/assemblyDetails': 'Add Assembly Details',
   '/updateShippingDetails': 'Shipping Details',
   '/orderCancellation': 'Order Cancel',
-  '/profile': 'Profile',
+  '/profile': 'My Profile',
   '/search': 'Search results',
   '/checkout': 'Billing & Shipping'
 }

@@ -17,7 +17,7 @@ export interface profilePageProp {
   flatNumber: string
   street: string
   city: string
-  pincode: string
+  zipCode: string
   state: string
   country: string
 }
