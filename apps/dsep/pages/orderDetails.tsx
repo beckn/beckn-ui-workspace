@@ -14,7 +14,7 @@ import { ConfirmResponseModel } from '../lib/types/confirm.types'
 import { StatusData, StatusResponseModel } from '../lib/types/status.types'
 import { DetailCard, ProductPrice } from '@beckn-ui/becknified-components'
 import LoaderWithMessage from '@beckn-ui/molecules/src/components/LoaderWithMessage/loader-with-message'
-import { Accordion, Typography } from '@beckn-ui/molecules'
+import { Accordion, BottomModal, Typography } from '@beckn-ui/molecules'
 
 // TODO :- to check this order details component
 
@@ -27,6 +27,7 @@ const OrderDetails = () => {
   const router = useRouter()
   const { orderId } = router.query
   const [status, setStatus] = useState('progress')
+  const [isMenuModalOpen, setIsMenuModalOpen] = useState(false)
 
   const { t } = useLanguage()
 
@@ -90,6 +91,47 @@ const OrderDetails = () => {
   const totalItemsInAnOrder = (bppStatusData: StatusData) => {
     return bppStatusData.message.order.items.length
   }
+
+  const menuItems = (trackingUrl: string) => [
+    {
+      image: '/images/trackOrder.svg',
+      text: 'Track Order',
+      onClick: () => {
+        window.open(trackingUrl, '_blank')
+      }
+    },
+
+    {
+      image: '/images/cancelOrder.svg',
+      text: (
+        <Text
+          as="span"
+          color="#E93324"
+          fontWeight="400"
+          fontSize="15px"
+        >
+          Cancel Order
+        </Text>
+      ),
+      onClick: () => {}
+    }
+  ]
+
+  // Define menu items for the call menu
+  const callMenuItem = (supportInfo: any) => [
+    {
+      image: '/images/callCustomer.svg',
+      text: 'Call Customer Service',
+      // onClick: () => handleCallCustomer(supportInfo.phone)
+      onClick: () => {}
+    },
+    {
+      image: '/images/emailCustomer.svg',
+      text: 'Email Customer Service',
+      // onClick: () => handleEmailCustomer(supportInfo.email)
+      onClick: () => {}
+    }
+  ]
 
   return (
     <Box
@@ -178,14 +220,23 @@ const OrderDetails = () => {
       ) : null}
 
       <DetailCard>
-        <Box
-          fontWeight={600}
-          fontSize={'17px'}
-          pr={'8px'}
+        <Flex
+          justifyContent={'space-between'}
+          alignItems={'center'}
           pb="10px"
         >
-          {t.orderSummary}
-        </Box>
+          <Box
+            fontWeight={600}
+            fontSize={'17px'}
+          >
+            {t.orderSummary}
+          </Box>
+          <Image
+            onClick={() => setIsMenuModalOpen(true)}
+            src="/images/threeDots.svg"
+            alt="icon-to-open-menu-modal"
+          />
+        </Flex>
         <Flex
           pt={'unset'}
           justifyContent={'space-between'}
@@ -419,6 +470,68 @@ const OrderDetails = () => {
           </Flex>
         </CardBody>
       </Accordion>
+
+      {/* order support/cancel/update modal */}
+      <BottomModal
+        title=""
+        // isOpen={uiState.isMenuModalOpen}
+        isOpen={isMenuModalOpen}
+        // onClose={handleMenuModalClose}
+        onClose={() => setIsMenuModalOpen(false)}
+      >
+        {false ? (
+          <Box
+            display={'flex'}
+            alignItems="center"
+            justifyContent={'center'}
+            height={'300px'}
+          >
+            <LoaderWithMessage
+              loadingText={t.pleaseWait}
+              loadingSubText={t.fetchingTrackLoaderSubtext}
+            />
+          </Box>
+        ) : (
+          <Stack
+            gap="20px"
+            p={'20px 0px'}
+          >
+            {menuItems('').map((menuItem, index) => (
+              <Flex
+                key={index}
+                columnGap="10px"
+                alignItems="center"
+                onClick={menuItem.onClick}
+              >
+                <Image src={menuItem.image} />
+                <Text
+                  as={Typography}
+                  text={menuItem.text}
+                  fontSize="15px"
+                  fontWeight={400}
+                />
+              </Flex>
+            ))}
+            <Divider />
+            {callMenuItem({}).map((menuItem, index) => (
+              <Flex
+                key={index}
+                columnGap="10px"
+                alignItems="center"
+                onClick={menuItem.onClick}
+              >
+                <Image src={menuItem.image} />
+                <Text
+                  as={Typography}
+                  text={menuItem.text}
+                  fontSize="15px"
+                  fontWeight={400}
+                />
+              </Flex>
+            ))}
+          </Stack>
+        )}
+      </BottomModal>
     </Box>
   )
 }

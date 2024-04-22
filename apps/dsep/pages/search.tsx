@@ -42,7 +42,7 @@ const Search = () => {
     if (localStorage) {
       const cachedSearchResults = localStorage.getItem('searchItems')
       if (cachedSearchResults) {
-        const parsedCachedResults = JSON.parse(cachedSearchResults)
+        const parsedCachedResults: ParsedItemModel[] = JSON.parse(cachedSearchResults)
         setItems(parsedCachedResults)
       }
     }
