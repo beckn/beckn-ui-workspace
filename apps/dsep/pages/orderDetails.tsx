@@ -2,11 +2,14 @@ import { Box, CardBody, Divider, Flex, Text, Image, Card, useDisclosure, Stack }
 import React, { useEffect, useState } from 'react'
 import { useLanguage } from '../hooks/useLanguage'
 import { formatTimestamp } from '../utilities/confirm-utils'
-import { getStatusPayload } from '../utilities/orderDetails-utils'
+import {
+  getStatusPayload,
+  getTrackAndSupportPayload,
+  handleCallCustomer,
+  handleEmailCustomer
+} from '../utilities/orderDetails-utils'
 import TrackIcon from '../public/images/TrackIcon.svg'
 import ViewMoreOrderModal from '../components/orderDetails/ViewMoreOrderModal'
-import { useSelector } from 'react-redux'
-import { TransactionIdRootState } from '../lib/types/cart'
 import useRequest from '../hooks/useRequest'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
@@ -15,6 +18,9 @@ import { StatusData, StatusResponseModel } from '../lib/types/status.types'
 import { DetailCard, ProductPrice } from '@beckn-ui/becknified-components'
 import LoaderWithMessage from '@beckn-ui/molecules/src/components/LoaderWithMessage/loader-with-message'
 import { Accordion, BottomModal, Typography } from '@beckn-ui/molecules'
+import axios from 'axios'
+import { SupportResponseModel } from '../lib/types/support.types'
+import { TrackingResponseModel } from '../lib/types/track.types'
 
 // TODO :- to check this order details component
 
@@ -27,6 +33,9 @@ const OrderDetails = () => {
   const router = useRouter()
   const { orderId } = router.query
   const [status, setStatus] = useState('progress')
+  const [SupportResponse, setSupportResponse] = useState<SupportResponseModel | null>(null)
+  const [trackResponse, setTrackResponse] = useState<TrackingResponseModel | null>(null)
+  const [isLoadingForTrackAndSupport, SetIsLoadingForTrackAndSupport] = useState(true)
   const [isMenuModalOpen, setIsMenuModalOpen] = useState(false)
 
   const { t } = useLanguage()
@@ -92,12 +101,12 @@ const OrderDetails = () => {
     return bppStatusData.message.order.items.length
   }
 
-  const menuItems = (trackingUrl: string) => [
+  const menuItems = (trackResponse: TrackingResponseModel) => [
     {
       image: '/images/trackOrder.svg',
       text: 'Track Order',
       onClick: () => {
-        window.open(trackingUrl, '_blank')
+        window.open(trackResponse?.data[0].message.tracking.url, '_blank')
       }
     },
 
@@ -117,21 +126,33 @@ const OrderDetails = () => {
     }
   ]
 
-  // Define menu items for the call menu
-  const callMenuItem = (supportInfo: any) => [
+  const callMenuItem = (SupportResponse: SupportResponseModel) => [
     {
       image: '/images/callCustomer.svg',
       text: 'Call Customer Service',
-      // onClick: () => handleCallCustomer(supportInfo.phone)
-      onClick: () => {}
+      onClick: () => handleCallCustomer(SupportResponse?.data[0].message.support.phone as string, setIsMenuModalOpen)
     },
     {
       image: '/images/emailCustomer.svg',
       text: 'Email Customer Service',
-      // onClick: () => handleEmailCustomer(supportInfo.email)
-      onClick: () => {}
+      onClick: () => handleEmailCustomer(SupportResponse?.data[0].message.support.email as string, setIsMenuModalOpen)
     }
   ]
+
+  const handleMenuDotsClick = async () => {
+    setIsMenuModalOpen(true)
+
+    const { supportPayload, trackPayload } = getTrackAndSupportPayload(statusResponse)
+    const [trackResponse, supportResponse] = await Promise.all([
+      axios.post(`${apiUrl}/track`, trackPayload),
+      axios.post(`${apiUrl}/support`, supportPayload)
+    ])
+    if (trackResponse && supportResponse) {
+      setSupportResponse(supportResponse.data)
+      setTrackResponse(trackResponse.data)
+      SetIsLoadingForTrackAndSupport(false)
+    }
+  }
 
   return (
     <Box
@@ -232,7 +253,7 @@ const OrderDetails = () => {
             {t.orderSummary}
           </Box>
           <Image
-            onClick={() => setIsMenuModalOpen(true)}
+            onClick={handleMenuDotsClick}
             src="/images/threeDots.svg"
             alt="icon-to-open-menu-modal"
           />
@@ -474,12 +495,10 @@ const OrderDetails = () => {
       {/* order support/cancel/update modal */}
       <BottomModal
         title=""
-        // isOpen={uiState.isMenuModalOpen}
         isOpen={isMenuModalOpen}
-        // onClose={handleMenuModalClose}
         onClose={() => setIsMenuModalOpen(false)}
       >
-        {false ? (
+        {isLoadingForTrackAndSupport ? (
           <Box
             display={'flex'}
             alignItems="center"
@@ -487,7 +506,7 @@ const OrderDetails = () => {
             height={'300px'}
           >
             <LoaderWithMessage
-              loadingText={t.pleaseWait}
+              loadingText={t.categoryLoadPrimary}
               loadingSubText={t.fetchingTrackLoaderSubtext}
             />
           </Box>
@@ -496,7 +515,7 @@ const OrderDetails = () => {
             gap="20px"
             p={'20px 0px'}
           >
-            {menuItems('').map((menuItem, index) => (
+            {menuItems(trackResponse as TrackingResponseModel).map((menuItem, index) => (
               <Flex
                 key={index}
                 columnGap="10px"
@@ -513,7 +532,7 @@ const OrderDetails = () => {
               </Flex>
             ))}
             <Divider />
-            {callMenuItem({}).map((menuItem, index) => (
+            {callMenuItem(SupportResponse as SupportResponseModel).map((menuItem, index) => (
               <Flex
                 key={index}
                 columnGap="10px"
