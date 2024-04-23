@@ -55,7 +55,7 @@ const BottomHeader = () => {
   const router = useRouter()
 
   return (
-    <header className="md:fixed left-0 right-0 mb-4 top-0 md:bg-palette-fill shadow-sm pt-4  app_header_b fixed z-[9999] bg-[#fff]">
+    <header className="md:fixed left-0 right-0 mb-4 top-0 md:bg-palette-fill shadow-sm pt-4 z-[1000] app_header_b fixed z-[99] bg-[#fff]">
       <div className="flex flex-col md:px-4">
         <div className="flex items-center justify-between md:order-2 md:mt-2 py-4  relative">
           <div className="flex gap-4 items-center"></div>
