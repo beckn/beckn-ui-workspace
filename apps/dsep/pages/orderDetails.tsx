@@ -1,10 +1,15 @@
 import { Box, CardBody, Divider, Flex, Text, Image, Card, useDisclosure, Stack } from '@chakra-ui/react'
+import { DetailCard, ProductPrice } from '@beckn-ui/becknified-components'
+import LoaderWithMessage from '@beckn-ui/molecules/src/components/LoaderWithMessage/loader-with-message'
+import { Accordion, BottomModal, Typography } from '@beckn-ui/molecules'
+import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { useLanguage } from '../hooks/useLanguage'
 import { formatTimestamp } from '../utilities/confirm-utils'
 import {
   getStatusPayload,
   getTrackAndSupportPayload,
+  getUpdatePayload,
   handleCallCustomer,
   handleEmailCustomer
 } from '../utilities/orderDetails-utils'
@@ -15,12 +20,11 @@ import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { ConfirmResponseModel } from '../lib/types/confirm.types'
 import { StatusData, StatusResponseModel } from '../lib/types/status.types'
-import { DetailCard, ProductPrice } from '@beckn-ui/becknified-components'
-import LoaderWithMessage from '@beckn-ui/molecules/src/components/LoaderWithMessage/loader-with-message'
-import { Accordion, BottomModal, Typography } from '@beckn-ui/molecules'
-import axios from 'axios'
 import { SupportResponseModel } from '../lib/types/support.types'
 import { TrackingResponseModel } from '../lib/types/track.types'
+import ShippingOrBillingDetails from '../components/detailsCard/ShippingOrBillingDetails'
+import UpdateAddressDetailForm from '../components/orderDetails/update-address-detail-form'
+import { ShippingFormData } from './checkoutPage'
 
 // TODO :- to check this order details component
 
@@ -37,6 +41,7 @@ const OrderDetails = () => {
   const [trackResponse, setTrackResponse] = useState<TrackingResponseModel | null>(null)
   const [isLoadingForTrackAndSupport, SetIsLoadingForTrackAndSupport] = useState(true)
   const [isMenuModalOpen, setIsMenuModalOpen] = useState(false)
+  const [isAddressUpdateModalOpen, setIsAddressUpdateModalOpen] = useState(false)
 
   const { t } = useLanguage()
 
@@ -92,7 +97,8 @@ const OrderDetails = () => {
       order: {
         quote: {
           price: { currency }
-        }
+        },
+        billing: { name, phone, address }
       }
     }
   } = data[0]
@@ -140,17 +146,34 @@ const OrderDetails = () => {
   ]
 
   const handleMenuDotsClick = async () => {
-    setIsMenuModalOpen(true)
+    try {
+      setIsMenuModalOpen(true)
 
-    const { supportPayload, trackPayload } = getTrackAndSupportPayload(statusResponse)
-    const [trackResponse, supportResponse] = await Promise.all([
-      axios.post(`${apiUrl}/track`, trackPayload),
-      axios.post(`${apiUrl}/support`, supportPayload)
-    ])
-    if (trackResponse && supportResponse) {
-      setSupportResponse(supportResponse.data)
-      setTrackResponse(trackResponse.data)
-      SetIsLoadingForTrackAndSupport(false)
+      const { supportPayload, trackPayload } = getTrackAndSupportPayload(statusResponse)
+      const [trackResponse, supportResponse] = await Promise.all([
+        axios.post(`${apiUrl}/track`, trackPayload),
+        axios.post(`${apiUrl}/support`, supportPayload)
+      ])
+      if (trackResponse && supportResponse) {
+        setSupportResponse(supportResponse.data)
+        setTrackResponse(trackResponse.data)
+        SetIsLoadingForTrackAndSupport(false)
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const handleUpdateFormSubmit = async (formData: ShippingFormData, statusResponse: StatusResponseModel) => {
+    try {
+      const updatePayload = getUpdatePayload(formData, statusResponse)
+      const updateResponse = await axios.post(`${apiUrl}/update`, updatePayload)
+
+      if (updateResponse) {
+        setIsAddressUpdateModalOpen(false)
+      }
+    } catch (error) {
+      console.error(error)
     }
   }
 
@@ -408,6 +431,16 @@ const OrderDetails = () => {
           </CardBody>
         </Accordion>
       ))}
+
+      {/* Billing details */}
+
+      <ShippingOrBillingDetails
+        name={name}
+        location={address}
+        number={phone}
+        handleEditClick={() => setIsAddressUpdateModalOpen(true)}
+      />
+
       <Accordion accordionHeader={t.paymentText}>
         <CardBody
           pt={'unset'}
@@ -492,7 +525,7 @@ const OrderDetails = () => {
         </CardBody>
       </Accordion>
 
-      {/* order support/cancel/update modal */}
+      {/* order support/cancel */}
       <BottomModal
         title=""
         isOpen={isMenuModalOpen}
@@ -550,6 +583,15 @@ const OrderDetails = () => {
             ))}
           </Stack>
         )}
+      </BottomModal>
+
+      {/* Address update modal */}
+      <BottomModal
+        title={t.addBillingdetailsBtnText}
+        isOpen={isAddressUpdateModalOpen}
+        onClose={() => setIsAddressUpdateModalOpen(false)}
+      >
+        <UpdateAddressDetailForm handleFormSubmit={formData => handleUpdateFormSubmit(formData, statusResponse)} />
       </BottomModal>
     </Box>
   )
