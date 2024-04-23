@@ -22,13 +22,12 @@ const ShippingSection: React.FC<ShippingSectionProps<FormField[]>> = ({
   shippingDetails,
   addButtonImage = AddShippingButtonImage,
   isChecked = true,
-  onCheckChange
+  onCheckChange,
+  color
 }) => {
   const { isOpen, onClose, onOpen } = useDisclosure()
   // const [isChecked, setIsChecked] = useState<boolean>(true)
   const { isDesktop, isTablet } = useResponsive()
-
-  console.log("Dank",isChecked)
 
   return (
     <Box>
@@ -43,7 +42,7 @@ const ShippingSection: React.FC<ShippingSectionProps<FormField[]>> = ({
         {((isBilling && !isChecked) || (!isBilling && showDetails)) && (
           <Typography
             variant="subTitleRegular"
-            color="primary.100"
+            color={color}
             text={triggerFormTitle}
             onClick={onOpen}
           />
@@ -52,7 +51,7 @@ const ShippingSection: React.FC<ShippingSectionProps<FormField[]>> = ({
       {isBilling && isChecked ? (
         <DetailsCard>
           <Checkbox
-            iconColor="primary.100"
+            iconColor="secondary.100"
             colorScheme="primary"
             pr={'12px'}
             fontSize={'17px'}
@@ -61,7 +60,7 @@ const ShippingSection: React.FC<ShippingSectionProps<FormField[]>> = ({
             defaultValue={isChecked}
             onChange={() => onCheckChange && onCheckChange()}
           >
-            Same as shipping address
+            Same as Shipping Details
           </Checkbox>
         </DetailsCard>
       ) : !showDetails ? (
@@ -71,11 +70,11 @@ const ShippingSection: React.FC<ShippingSectionProps<FormField[]>> = ({
             onClick={onOpen}
           >
             {/* <Image src={addButtonImage} /> */}
-            <PlusSquareIcon color="primary.100" />
+            <PlusSquareIcon color={color} />
             <Typography
               variant="subTitleRegular"
               text={sectionSubtitle}
-              color="primary.100"
+              color={color}
               style={{ paddingLeft: '10px' }}
             />
           </Flex>

@@ -80,7 +80,7 @@ const OrderConfirmation = () => {
 
         buttons: [
           {
-            text: 'View Details',
+            text: 'View Order Details',
             handleClick: () => {
               const orderId = confirmResponse[0].message.orderId
               const bppId = confirmResponse[0].context.bpp_id

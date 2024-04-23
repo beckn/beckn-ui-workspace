@@ -70,6 +70,7 @@ const headerValues: PathnameObjectType = {
   '/assemblyDetails': 'Add Assembly Details',
   '/updateShippingDetails': 'Shipping Details',
   '/orderCancellation': 'Order Cancel',
+  '/feedback': '',
   '/profile': 'My Profile',
   '/search': 'Search results',
   '/checkout': 'Billing & Shipping'
