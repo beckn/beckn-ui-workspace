@@ -1,6 +1,7 @@
 import { ConfirmResponseModel } from '../lib/types/confirm.types'
 import { ResponseModel } from '../lib/types/responseModel'
 import { StatusResponseModel } from '../lib/types/status.types'
+import { ShippingFormData } from '../pages/checkoutPage'
 
 const generateRandomID = () => {
   var id = ''
@@ -160,4 +161,45 @@ export const handleCallCustomer = (
 
   window.open(telLink, '_blank')
   setIsMenuModalOpen(false)
+}
+
+export const getUpdatePayload = (formData: ShippingFormData, statusResponse: StatusResponseModel) => {
+  const { address, email, mobileNumber, name, pinCode } = formData
+  const {
+    context: { transaction_id, bpp_id, bpp_uri, domain },
+    message: {
+      order: { id, fulfillments }
+    }
+  } = statusResponse.data[0]
+
+  const updatePayload = {
+    data: [
+      {
+        context: {
+          transaction_id,
+          bpp_id,
+          bpp_uri,
+          domain
+        },
+        orderId: id,
+        updateDetails: {
+          updateTarget: 'order.billing',
+          billing: {
+            name: name,
+            address: address,
+            city: {
+              name: ''
+            },
+            state: {
+              name: ''
+            },
+            email: email,
+            phone: mobileNumber
+          }
+        }
+      }
+    ]
+  }
+
+  return updatePayload
 }
