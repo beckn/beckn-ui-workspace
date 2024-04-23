@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Box, Flex, Text, Stack, Checkbox, useToast } from '@chakra-ui/react'
+import { Box, Flex, Text, Stack, Checkbox, useToast, useTheme } from '@chakra-ui/react'
 import { DOMAIN } from '@lib/config'
 import { useLanguage } from '../hooks/useLanguage'
 
@@ -46,7 +46,8 @@ const CheckoutPage = () => {
     address: '15 Rue du Soleil, Paris, France',
     pinCode: '201002'
   })
-
+  const theme = useTheme()
+  const bgColorOfSecondary = theme.colors.secondary['100']
   const toast = useToast()
 
   const [submittedDetails, setSubmittedDetails] = useState<ShippingFormInitialValuesType>({
@@ -213,6 +214,7 @@ const CheckoutPage = () => {
           },
           shipping: {
             showDetails: isInitResultPresent(),
+            color: bgColorOfSecondary,
             shippingDetails: {
               name: submittedDetails.name,
               location: submittedDetails.address,
@@ -231,6 +233,7 @@ const CheckoutPage = () => {
             sectionTitle: 'Billing',
             formTitle: 'Add Billing Details',
             isBilling: true,
+            color: bgColorOfSecondary,
             isChecked: isBillingSameRedux,
             onCheckChange: () => {
               // setIsBillingSame(!isBillingSame)
