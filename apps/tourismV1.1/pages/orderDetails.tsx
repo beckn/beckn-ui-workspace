@@ -264,7 +264,10 @@ const OrderDetails = () => {
     stops
   } = fulfillments[0]
   const {
-    location: { address: shipmentAddress }
+    location: { address: shipmentAddress },
+    contact:{
+      phone:updateShippingPhone,email:updatedShippingEmail,name:updatedShippingName
+    }
   } = stops[0]
   return (
     <Box
@@ -485,18 +488,18 @@ const OrderDetails = () => {
           {isDesktop && (
             <ShippingBlock
               title={t.shipping}
-              name={{ text: shippingName, icon: nameIcon }}
-              address={{ text: shipmentAddress, icon: locationIcon }}
-              mobile={{ text: shippingPhone, icon: CallphoneIcon }}
+              name={{text: updatedShippingName || shippingName, icon: nameIcon}}
+              address={{text:  shipmentAddress, icon: locationIcon}}
+              mobile={{text: updateShippingPhone || shippingPhone, icon: CallphoneIcon}}
             />
           )}
           {!isDesktop && (
             <Accordion accordionHeader={t.shipping}>
               <ShippingBlock
                 // title={t.shipping}
-                name={{ text: shippingName, icon: nameIcon }}
-                address={{ text: shipmentAddress, icon: locationIcon }}
-                mobile={{ text: shippingPhone, icon: CallphoneIcon }}
+                name={{text: updatedShippingName || shippingName, icon: nameIcon}}
+                address={{text:  shipmentAddress, icon: locationIcon}}
+                mobile={{text: updateShippingPhone || shippingPhone, icon: CallphoneIcon}}
               />
             </Accordion>
           )}

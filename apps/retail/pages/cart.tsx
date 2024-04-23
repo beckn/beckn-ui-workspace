@@ -54,7 +54,12 @@ const Cart = () => {
   }
 
   return (
-    <Box mt={['20px', '20px', '0px', '0px']}>
+    <Box
+      pt={['20px', '20px', '0px', '0px']}
+      className="hideScroll"
+      maxH="calc(100vh - 120px)"
+      overflowY={'scroll'}
+    >
       <BecknCart
         isLoading={isLoading}
         schema={{
@@ -79,7 +84,7 @@ const Cart = () => {
           loader: { text: t.quoteRequestLoader },
           orderSummary: {
             totalAmount: {
-              price: !isEmpty(data) ? data.data[0].message.order.quote.price.value : totalAmount,
+              price: totalAmount,
               currencyType: items[0].price.currency
             },
             totalQuantity: {

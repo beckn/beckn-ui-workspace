@@ -2,6 +2,7 @@ import { BecknAuth } from '@beckn-ui/becknified-components'
 import { Box } from '@chakra-ui/react'
 import { profilePageProp } from '@components/signIn/SignIn.types'
 import { useLanguage } from '@hooks/useLanguage'
+import { FormErrors, profileValidateForm } from '@utils/form-utils'
 import React, { useState } from 'react'
 
 const ProfilePage = () => {
@@ -13,26 +14,45 @@ const ProfilePage = () => {
     flatNumber: '',
     street: '',
     city: '',
-    pincode: '',
+    zipCode: '',
     state: '',
     country: ''
   })
-  const [formErrors, setFormErrors] = useState<profilePageProp>({
+  const [formErrors, setFormErrors] = useState<FormErrors>({
     name: '',
     mobileNumber: '',
     email: '',
-    flatNumber: '',
-    street: '',
-    city: '',
-    pincode: '',
-    state: '',
-    country: ''
+    zipCode: ''
   })
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+
+    setFormData((prevFormData: profilePageProp) => ({
+      ...prevFormData,
+      [name]: value
+    }))
+
+    const updatedFormData = {
+      ...formData,
+      [name]: value
+    }
+
+    const errors = profileValidateForm(updatedFormData) as any
+    setFormErrors(prevErrors => ({
+      ...prevErrors,
+      [name]: t[`${errors[name]}`] || ''
+    }))
+    console.log(errors)
+  }
   return (
     <Box
       margin={'0 auto'}
       mt={['-20px', '-20px', '-70px', '-70px']}
       maxW={['100%', '100%', '40rem', '40rem']}
+      className="hideScroll"
+      maxH={'calc(100vh - 80px)'}
+      overflowY="scroll"
     >
       <BecknAuth
         schema={{
@@ -50,7 +70,7 @@ const ProfilePage = () => {
               type: 'text',
               name: 'name',
               value: formData.name,
-              handleChange: () => {},
+              handleChange: handleInputChange,
               label: t.fullName,
               error: formErrors.name
             },
@@ -58,7 +78,7 @@ const ProfilePage = () => {
               type: 'number',
               name: 'mobileNumber',
               value: formData.mobileNumber,
-              handleChange: () => {},
+              handleChange: handleInputChange,
               label: t.enterMobileNumber,
               error: formErrors.mobileNumber
             },
@@ -66,57 +86,57 @@ const ProfilePage = () => {
               type: 'text',
               name: 'email',
               value: formData.email,
-              handleChange: () => {},
+              handleChange: handleInputChange,
               label: t.enterEmailID,
               error: formErrors.email
             },
             {
               type: 'text',
-              name: 'enterFlatDetails',
+              name: 'flatNumber',
               value: formData.flatNumber,
-              handleChange: () => {},
-              label: t.enterFlatDetails,
-              error: formErrors.flatNumber
+              handleChange: handleInputChange,
+              label: t.enterFlatDetails
+              // error: formErrors.flatNumber
             },
             {
               type: 'text',
-              name: 'enterStreetDetails',
+              name: 'street',
               value: formData.street,
-              handleChange: () => {},
-              label: t.enterStreetDetails,
-              error: formErrors.street
+              handleChange: handleInputChange,
+              label: t.enterStreetDetails
+              // error: formErrors.street
             },
             {
               type: 'text',
               name: 'city',
               value: formData.city,
-              handleChange: () => {},
-              label: t.enterCity,
-              error: formErrors.city
+              handleChange: handleInputChange,
+              label: t.enterCity
+              // error: formErrors.city
             },
             {
               type: 'text',
-              name: 'pincode',
-              value: formData.pincode,
-              handleChange: () => {},
+              name: 'zipCode',
+              value: formData.zipCode,
+              handleChange: handleInputChange,
               label: t.enterPincode,
-              error: formErrors.pincode
+              error: formErrors.zipCode
             },
             {
               type: 'text',
               name: 'state',
               value: formData.state,
-              handleChange: () => {},
-              label: t.enterState,
-              error: formErrors.state
+              handleChange: handleInputChange,
+              label: t.enterState
+              // error: formErrors.state
             },
             {
               type: 'text',
               name: 'country',
               value: formData.country,
-              handleChange: () => {},
-              label: t.enterCountry,
-              error: formErrors.country
+              handleChange: handleInputChange,
+              label: t.enterCountry
+              // error: formErrors.country
             }
           ]
         }}

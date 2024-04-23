@@ -1,4 +1,4 @@
-import { SignInPropsModel, SignUpPropsModel } from '../components/signIn/SignIn.types'
+import { profilePageProp, SignInPropsModel, SignUpPropsModel } from '../components/signIn/SignIn.types'
 import { ShippingFormData } from '../pages/checkout/checkout'
 
 export interface FormErrors {
@@ -99,6 +99,35 @@ export const signUpValidateForm = (formData: SignUpPropsModel): FormErrors => {
     errors.mobileNumber = 'errorNumber'
   } else if (!/^\d{10}$/.test(formData.mobileNumber)) {
     errors.mobileNumber = 'errorNumber2'
+  }
+  return errors
+}
+export const profileValidateForm = (formData: profilePageProp): FormErrors => {
+  const errors: FormErrors = {}
+
+  if (formData.name.trim() === '') {
+    errors.name = 'errorName'
+  } else if (!/^[A-Za-z\s]*$/.test(formData.name)) {
+    errors.name = 'errorName2'
+  } else if (formData.name.length < 3) {
+    errors.name = 'errorName3'
+  }
+
+  if (formData.email.trim() === '') {
+    errors.email = 'errorEmail'
+  } else if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(formData.email)) {
+    errors.email = 'errorEmail'
+  }
+
+  if (formData.mobileNumber.trim() === '') {
+    errors.mobileNumber = 'errorNumber'
+  } else if (!/^\d{10}$/.test(formData.mobileNumber)) {
+    errors.mobileNumber = 'errorNumber2'
+  }
+  if (formData.zipCode.trim() === '') {
+    errors.zipCode = 'errorZipcode'
+  } else if (!/^\d{6}$/.test(formData.zipCode)) {
+    errors.zipCode = 'errorZipcode2'
   }
   return errors
 }

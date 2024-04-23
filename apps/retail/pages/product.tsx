@@ -45,7 +45,11 @@ const Product = () => {
     return <></>
   }
   return (
-    <>
+    <Box
+      className="hideScroll"
+      maxH="calc(100vh - 100px)"
+      overflowY={'scroll'}
+    >
       <ProductDetailPage
         schema={{
           productSummary: {
@@ -81,77 +85,7 @@ const Product = () => {
           }
         }}
       />
-      {/* <Box
-        maxW={['100%', '100%', '400px', '400px']}
-        margin="0 auto"
-        // border={'1px solid #BFBFBF'}
-        p="20px 20px 10px 20px"
-        borderRadius={'4px'}
-        mb="20px"
-      >
-        <Typography
-          text={'Total'}
-          variant="subTextSemibold"
-          style={{ marginBottom: '6px' }}
-        />
-        <Flex
-          alignItems={'center'}
-          gap="2"
-          mb={'10px'}
-        >
-          <Typography
-            text={selectedProduct.item.price.currency}
-            variant="subTitleSemibold"
-            color={theme.colors.primary[100]}
-          />
-          <Typography
-            text={totalPrice}
-            variant="subTitleSemibold"
-            color={theme.colors.primary[100]}
-          />
-          
-        </Flex>
-        <Flex
-          justifyContent={'center'}
-          alignItems="center"
-          gap="4"
-          mb="20px"
-        >
-          <Box
-            onClick={increment}
-            fontSize="24px"
-          >
-            +
-          </Box>
-          <Box
-            border={'1px solid #D9D9D9'}
-            color={theme.colors.primary[100]}
-            p="2px 20px"
-            borderRadius={'4px'}
-          >
-            {counter}
-          </Box>
-          <Box
-            onClick={decrement}
-            fontSize="24px"
-          >
-            -
-          </Box>
-        </Flex>
-        <Button
-          text="Add To Cart"
-          handleClick={() => {
-            dispatch(
-              cartActions.addItemToCart({
-                product: selectedProduct,
-                quantity: counter
-              })
-            )
-            toast.success('Product added to cart')
-          }}
-        />
-      </Box> */}
-    </>
+    </Box>
   )
 }
 

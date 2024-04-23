@@ -74,7 +74,9 @@ interface LocationInfo {
 }
 
 interface Contact {
-  phone: string
+  phone: string,
+  name?:string,
+  address?:string
 }
 
 interface Stop {
