@@ -95,6 +95,7 @@ const bottomHeaderBlackList = ['/orderConfirmation', '/', '/feedback']
 
 const menuIconWhiteList = ['/', '/search', '/profile']
 const orderIconList = ['/orderDetails']
+const editIcon = ['/profile']
 const invoiceDownloadIcon = ['/invoiceDetails']
 const currentLocation = ['/']
 
@@ -360,6 +361,14 @@ const BottomHeader = () => {
               onClick={() => setOrderModalOpen(true)}
               src="/images/downloadInvoice.svg"
               alt="order icon"
+              mr={'20px'}
+            />
+          )}
+          {editIcon.includes(router.pathname) && (
+            <Image
+              cursor="pointer"
+              src="/images/editIcon.svg"
+              alt="edit icon"
               mr={'20px'}
             />
           )}
