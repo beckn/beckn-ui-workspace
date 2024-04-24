@@ -27,7 +27,8 @@ const cartIconBlackList = [
   '/myScholarship',
   '/myLearningOrderHistory',
   '/myJobsOrderHistory',
-  '/applyJobsPrefilled'
+  '/applyJobsPrefilled',
+  '/orderCancellation'
 ]
 
 const backIconList = ['/', '/orderDetails']
@@ -56,7 +57,8 @@ const storeHeaderBlackList = [
   '/myJobsOrderHistory',
   '/applyJobsPrefilled',
   '/applyScholarship',
-  '/signUp'
+  '/signUp',
+  '/orderCancellation'
 ]
 const headerValues = {
   '/checkoutPage': 'Checkout',

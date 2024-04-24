@@ -18,8 +18,8 @@ const orderCancellation = () => {
     <ConfirmationPage
       schema={{
         iconSrc: '/images/cancleHomeImg.svg',
-        content: t.orderPlaced,
-        contentMessage: t.orderSuccesfully,
+        // content: t.orderPlaced,
+        // contentMessage: t.orderSuccesfully,
         successOrderMessage: 'ORDER CANCELLED!',
         gratefulMessage: 'Your Order has been cancelled',
         orderIdMessage: `Order number is: ${statusResponse && statusResponse.length > 0 && statusResponse[0].message.order.id ? statusResponse[0].message.order.id.slice(0, 8) : ''}...`,

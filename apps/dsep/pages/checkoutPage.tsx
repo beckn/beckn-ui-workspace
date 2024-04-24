@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Box, Flex, Text, Image } from '@chakra-ui/react'
+import { Box, Flex, Text, Image, useTheme } from '@chakra-ui/react'
 import { DetailCard } from '@beckn-ui/becknified-components'
 import ItemDetails from '../components/detailsCard/ItemDetails'
 import { useLanguage } from '../hooks/useLanguage'
@@ -52,6 +52,8 @@ const CheckoutPage = () => {
 
   const scholarshipId = useSelector((state: any) => state.scholarshipCart.scholarshipId)
   const scholarshipTitle = useSelector((state: any) => state.scholarshipCart.scholarshipTitle)
+  const theme = useTheme()
+  const color = theme.colors.primary[100]
 
   const bearerToken = Cookies.get('authToken')
   const axiosConfig = {
@@ -186,6 +188,7 @@ const CheckoutPage = () => {
         </DetailCard>
       </Box>
       <ShippingSection
+        color={color}
         sectionSubtitle={t.addBillingdetailsBtnText}
         addButtonImage={addBillingButton}
         sectionTitle={t.billing}

@@ -437,6 +437,12 @@ const en: { [key: string]: string } = {
   scholarshipSearchLoader: 'While we search for scholarships.',
   errorText: 'Something went wrong',
   fetchingTrackLoaderSubtext: 'While we fetch for tracking and support details',
-  edit: 'Edit'
+  edit: 'Edit',
+  reasonSpecify: 'Please specify the reason',
+  pleaseSelectReason: 'Please select the reason for cancellation',
+  courseCancellation: 'Course Cancellation',
+  requestProcessLoaderText: 'While we process your request',
+  courseCancelled: 'Course Cancelled!',
+  courseCancelConfirmText: 'Your course has been cancelled, If you have already paid, it will get refunded soon'
 }
 export default en
