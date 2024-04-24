@@ -203,3 +203,38 @@ export const getUpdatePayload = (formData: ShippingFormData, statusResponse: Sta
 
   return updatePayload
 }
+
+export const orderCancelReason = [
+  { id: '1', reason: 'Instructor is not good' },
+  { id: '2', reason: 'Course is not as per my expectation' },
+  { id: '3', reason: 'I’ve changed my mind' },
+  { id: '4', reason: 'Other' }
+]
+
+export const getCancelPayload = (statusResponse: StatusResponseModel, cancellationId: string) => {
+  const {
+    context: { transaction_id, bpp_id, bpp_uri, domain },
+    message: {
+      order: { id }
+    }
+  } = statusResponse.data[0]
+
+  const cancelPayload = {
+    data: [
+      {
+        context: {
+          transaction_id,
+          bpp_id,
+          bpp_uri,
+          domain
+        },
+        message: {
+          order_id: id,
+          cancellation_reason_id: cancellationId
+        }
+      }
+    ]
+  }
+
+  return cancelPayload
+}

@@ -1,4 +1,17 @@
-import { Box, CardBody, Divider, Flex, Text, Image, Card, useDisclosure, Stack } from '@chakra-ui/react'
+import {
+  Box,
+  CardBody,
+  Divider,
+  Flex,
+  Text,
+  Image,
+  Card,
+  useDisclosure,
+  Stack,
+  RadioGroup,
+  Textarea,
+  Radio
+} from '@chakra-ui/react'
 import { DetailCard, ProductPrice } from '@beckn-ui/becknified-components'
 import LoaderWithMessage from '@beckn-ui/molecules/src/components/LoaderWithMessage/loader-with-message'
 import { Accordion, BottomModal, Typography } from '@beckn-ui/molecules'
@@ -7,11 +20,13 @@ import React, { useEffect, useState } from 'react'
 import { useLanguage } from '../hooks/useLanguage'
 import { formatTimestamp } from '../utilities/confirm-utils'
 import {
+  getCancelPayload,
   getStatusPayload,
   getTrackAndSupportPayload,
   getUpdatePayload,
   handleCallCustomer,
-  handleEmailCustomer
+  handleEmailCustomer,
+  orderCancelReason
 } from '../utilities/orderDetails-utils'
 import TrackIcon from '../public/images/TrackIcon.svg'
 import ViewMoreOrderModal from '../components/orderDetails/ViewMoreOrderModal'
@@ -25,6 +40,8 @@ import { TrackingResponseModel } from '../lib/types/track.types'
 import ShippingOrBillingDetails from '../components/detailsCard/ShippingOrBillingDetails'
 import UpdateAddressDetailForm from '../components/orderDetails/update-address-detail-form'
 import { ShippingFormData } from './checkoutPage'
+import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
+import CancelOrderForm from '../components/orderDetails/cancel-order-form'
 
 // TODO :- to check this order details component
 
@@ -42,6 +59,10 @@ const OrderDetails = () => {
   const [isLoadingForTrackAndSupport, SetIsLoadingForTrackAndSupport] = useState(true)
   const [isMenuModalOpen, setIsMenuModalOpen] = useState(false)
   const [isAddressUpdateModalOpen, setIsAddressUpdateModalOpen] = useState(false)
+  const [isCancelMenuModalOpen, setIsCancelMenuModalOpen] = useState(false)
+  const [isProceedDisabled, setIsProceedDisabled] = useState(true)
+  const [radioValue, setRadioValue] = useState('')
+  const [isLoadingForCancel, setIsLoadingForCancel] = useState(false)
 
   const { t } = useLanguage()
 
@@ -76,6 +97,21 @@ const OrderDetails = () => {
         <LoaderWithMessage
           loadingText={t.categoryLoadPrimary}
           loadingSubText={t.statusLoaderSubtext}
+        />
+      </Box>
+    )
+  }
+
+  if (isLoadingForCancel) {
+    return (
+      <Box
+        display={'grid'}
+        height={'calc(100vh - 300px)'}
+        alignContent={'center'}
+      >
+        <LoaderWithMessage
+          loadingText={t.categoryLoadPrimary}
+          loadingSubText={t.requestProcessLoaderText}
         />
       </Box>
     )
@@ -128,7 +164,9 @@ const OrderDetails = () => {
           Cancel Order
         </Text>
       ),
-      onClick: () => {}
+      onClick: () => {
+        setIsCancelMenuModalOpen(true)
+      }
     }
   ]
 
@@ -176,6 +214,23 @@ const OrderDetails = () => {
       console.error(error)
     }
   }
+
+  const handleCancelSubmit = async (statusResponse: StatusResponseModel, cancellationId: string) => {
+    setIsLoadingForCancel(true)
+    try {
+      const cancelPayload = getCancelPayload(statusResponse, cancellationId)
+      const cancelResponse = await axios.post(`${apiUrl}/cancel`, cancelPayload)
+      if (cancelResponse) {
+        setIsLoadingForCancel(false)
+        router.push('/orderCancellation')
+      }
+    } catch (error) {
+      setIsLoadingForCancel(false)
+      console.error(error)
+    }
+  }
+
+  const cancellationId = orderCancelReason.find(reason => reason.reason === radioValue)?.id
 
   return (
     <Box
@@ -592,6 +647,29 @@ const OrderDetails = () => {
         onClose={() => setIsAddressUpdateModalOpen(false)}
       >
         <UpdateAddressDetailForm handleFormSubmit={formData => handleUpdateFormSubmit(formData, statusResponse)} />
+      </BottomModal>
+
+      {/* order cancellation modal */}
+      <BottomModal
+        isOpen={isCancelMenuModalOpen}
+        onClose={() => setIsCancelMenuModalOpen(false)}
+        title={t.courseCancellation}
+        // modalHeader={t.orderCancellation}
+      >
+        {false ? (
+          <LoaderWithMessage
+            loadingText={t.pleaseWait}
+            loadingSubText={t.cancelLoaderSubText}
+          />
+        ) : (
+          <CancelOrderForm
+            isProceedDisabled={isProceedDisabled}
+            setIsProceedDisabled={setIsProceedDisabled}
+            radioValue={radioValue}
+            setRadioValue={setRadioValue}
+            handleCancelSubmit={() => handleCancelSubmit(statusResponse, cancellationId as string)}
+          />
+        )}
       </BottomModal>
     </Box>
   )
