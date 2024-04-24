@@ -1,7 +1,6 @@
 import React from 'react'
 import type { AppProps } from 'next/app'
 
-import Layout from '@components/layout/Layout'
 import { BecknProvider } from '@beckn-ui/molecules'
 
 import 'slick-carousel/slick/slick.css'
@@ -14,6 +13,7 @@ import { Provider } from 'react-redux'
 import store, { persistor } from '@store/index'
 import { Garuda } from 'garudaa'
 import { PersistGate } from 'redux-persist/integration/react'
+import Layout from '@components/layout/Layout'
 
 Garuda.init({
   projectId: '65c0d663cbe90cafae9185f6',
