@@ -7,6 +7,7 @@ export interface ButtonPropsModel {
   color: string
   handleOnClick?: () => void
   isDisabled: boolean
+  className?: string
 }
 
 const Button: React.FC<ButtonPropsModel> = props => {
@@ -17,7 +18,7 @@ const Button: React.FC<ButtonPropsModel> = props => {
   return (
     <>
       <ButtonComp
-        className="border_radius_all"
+        className={`${props.className} "border_radius_all"`}
         isDisabled={isDisabled}
         fontSize={'15px'}
         borderRadius="12px"
