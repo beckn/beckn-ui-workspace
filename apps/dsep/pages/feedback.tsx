@@ -36,7 +36,7 @@ const Feedback = () => {
       const ratingPayload = getFeedbackPayload(statusData, ratingForStore)
 
       const ratingResponse = await axios.post(`${apiUrl}/rating`, ratingPayload)
-      if (ratingResponse.data.data.length > 0) {
+      if (ratingResponse.status === 200) {
         router.push('/')
       }
     } catch (error) {
