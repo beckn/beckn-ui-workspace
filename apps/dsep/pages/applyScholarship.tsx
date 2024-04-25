@@ -172,6 +172,7 @@ const ApplyScholarship = () => {
       }
       setIsLoading(false)
     } catch (error: any) {
+      console.error(error)
       if (error.response && error.response.data) {
         const errorMessage = error.response.data.error.message
 

@@ -19,7 +19,7 @@ const jobSearch = () => {
     context: {
       domain: 'dsep:jobs'
     },
-    searchString: 'Developer'
+    searchString: ''
   }
 
   const fetchJobs = () => {
