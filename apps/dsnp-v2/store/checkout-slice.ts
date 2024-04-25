@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { initApi } from '@services/init'
 import { confirmApi } from '@services/confirm'
+import { selectApi } from '@services/select'
 
 export interface CheckoutRootState {
   checkout: Checkout
@@ -9,12 +10,14 @@ export interface CheckoutRootState {
 export interface Checkout {
   initResponse: any
   confirmResponse: any
+  selectResponse:any
   isBillingSame: boolean
 }
 
 const initialState: Checkout = {
   initResponse: {},
   confirmResponse: {},
+  selectResponse:{},
   isBillingSame: true
 }
 
@@ -54,6 +57,17 @@ const checkoutSlice = createSlice({
         state.confirmResponse = action.payload.data
       })
       .addMatcher(confirmApi.endpoints.confirm.matchRejected, (state, action) => {
+        console.log('rejected', action)
+      }),
+      builder
+      .addMatcher(selectApi.endpoints.select.matchPending, (state, action) => {
+        console.log('pending', action)
+      })
+      .addMatcher(selectApi.endpoints.select.matchFulfilled, (state, action) => {
+        console.log('fulfilled', action)
+        state.selectResponse = action.payload.data
+      })
+      .addMatcher(selectApi.endpoints.select.matchRejected, (state, action) => {
         console.log('rejected', action)
       })
   }

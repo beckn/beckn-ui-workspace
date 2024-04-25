@@ -7,7 +7,6 @@ import { fromBinary } from '@utils/common-utils'
 const Product = () => {
   const [product, setProduct] = useState<RetailItem | null>(null)
 
-  console.log('Dank', product)
 
   useEffect(() => {
     const { productDetails } = Router.query

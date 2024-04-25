@@ -18,7 +18,6 @@ const api = createApi({
       }),
       // Transform the response to directly return the user data
       transformResponse: (response: { data: User }) => {
-        console.log('Dank', response.data)
       },
       // Optional: Customize error handling if needed
       transformErrorResponse: (response: { status: string | number }) => response.status,
