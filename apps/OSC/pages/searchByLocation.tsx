@@ -146,20 +146,20 @@ const SearchByLocation = () => {
   }
 
   const fetchLocationByQuery = (query: string) => {
-    let url = `${process.env.NEXT_PUBLIC_NOMINATIM_URL}/search?format=jsonv2&q=${query}`
+    const url = `${process.env.NEXT_PUBLIC_NOMINATIM_URL}/search?format=jsonv2&q=${query}`
 
     fetchData(url, 'GET')
   }
 
   const fetchLocationNameByCoords = (lat: number, long: number) => {
-    let url = `${process.env.NEXT_PUBLIC_NOMINATIM_URL}/reverse?format=jsonv2&lat=${lat}&lon=${long}`
+    const url = `${process.env.NEXT_PUBLIC_NOMINATIM_URL}/reverse?format=jsonv2&lat=${lat}&lon=${long}`
 
     fetchLocation(url, 'GET')
   }
 
   const fetchStoresByLocation = (lat: number, long: number, tagValue: string, tagName: string) => {
     // static tagName and tagValue for now
-    let url = `${process.env.NEXT_PUBLIC_BECKN_API_URL}/stores?tagName=becknified&tagValue=true&latitude=${lat}&longitude=${long}&filter=${tagValuetoApiMap[tagValue]}`
+    const url = `${process.env.NEXT_PUBLIC_BECKN_API_URL}/stores?tagName=becknified&tagValue=true&latitude=${lat}&longitude=${long}&filter=${tagValuetoApiMap[tagValue]}`
 
     // Only fetch when Books are selected for now
     fetchStores(url, 'GET')
@@ -334,6 +334,7 @@ const SearchByLocation = () => {
               </div>
               <button
                 onClick={() => {
+                  // console.log("Dank",selectedStore.tags)
                   router.push('/search')
                   localStorage.setItem('optionTags', JSON.stringify(selectedStore?.tags))
                   localStorage.setItem('routerPathname', router.pathname)

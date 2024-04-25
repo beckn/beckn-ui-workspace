@@ -75,6 +75,7 @@ const CheckoutPage = () => {
   const { t, locale } = useLanguage()
   const cartItems = useSelector((state: ICartRootState) => state.cart.items)
   const initResponse = useSelector((state: CheckoutRootState) => state.checkout.initResponse)
+  const selectResponse = useSelector((state: CheckoutRootState) => state.checkout.selectResponse)
   const isBillingSameRedux = useSelector((state: CheckoutRootState) => state.checkout.isBillingSame)
   const { transactionId, productList } = useSelector((state: DiscoveryRootState) => state.discovery)
 
@@ -137,7 +138,9 @@ const CheckoutPage = () => {
 
   const formSubmitHandler = (data: any) => {
     if (data) {
-      getInitPayload(submittedDetails, billingFormData, cartItems, transactionId, DOMAIN)
+      const {id,type} = selectResponse[0].message.order.fulfillments[0]
+      console.log("Dank",id,type)
+      getInitPayload(submittedDetails, billingFormData, cartItems, transactionId, DOMAIN,{id,type})
         .then(res => {
           return initialize(res)
         })
@@ -161,7 +164,7 @@ const CheckoutPage = () => {
   }
 
   const isInitResultPresent = () => {
-    return !!initResponse && initResponse.length > 0
+    return !!initResponse && initResponse.length > 0 && initResponse[0].message
   }
 
   const createPaymentBreakdownMap = ()=>{

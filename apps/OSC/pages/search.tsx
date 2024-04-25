@@ -52,7 +52,7 @@ const Search = () => {
       stops: [{ location: '28.4594965,77.0266383' }]
     },
     ...(searchByLocationPathname
-      ? { provider: { providerId: 'meru-coffee' } }
+      ? { provider: { providerId: providerId} }
       : homePagePathname
         ? { searchString: searchKeyword }
         : { searchString: searchKeyword })

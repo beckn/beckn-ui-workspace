@@ -24,7 +24,7 @@ const HomePage = () => {
 
   useEffect(() => {
     if (localStorage) {
-      localStorage.clear()
+      // localStorage.clear()
     }
   }, [])
 
@@ -106,6 +106,7 @@ const HomePage = () => {
       />
       <Box
         maxWidth={{ base: '100vw', md: '30rem', lg: '40rem' }}
+        margin='0 auto' 
         backgroundColor="white"
       >
         <Box
