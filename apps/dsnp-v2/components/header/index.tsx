@@ -29,7 +29,8 @@ const cartIconBlackList: string[] = [
   '/signUp',
   '/invoiceDetails',
   '/',
-  '/cart'
+  '/cart',
+  '/profile'
 ]
 
 const backIconList = ['/', '/signin']
@@ -69,7 +70,7 @@ const headerValues: PathnameObjectType = {
   '/updateShippingDetails': 'Shipping Details',
   '/orderCancellation': 'Order Cancel',
   '/feedback': '',
-  '/profile': 'Profile',
+  '/profile': 'My Profile',
   '/search': 'Search results',
   '/checkout': 'Billing & Shipping'
 }
@@ -87,10 +88,11 @@ const headerValuesFrench: PathnameObjectType = {
 
 const topHeaderBlackList: string[] = []
 
-const bottomHeaderBlackList = ['/orderConfirmation','/']
+const bottomHeaderBlackList = ['/orderConfirmation', '/']
 
 const menuIconWhiteList = ['/', '/search', '/profile']
 const orderIconList = ['/orderDetails']
+const editIcon = ['/profile']
 const invoiceDownloadIcon = ['/invoiceDetails']
 const currentLocation = ['/']
 
@@ -168,7 +170,7 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
 
       {/* Menu Modal */}
       <BottomModal
-      responsive={true}
+        responsive={true}
         title=""
         isOpen={isMenuModalOpen}
         onClose={handleMenuModalClose}
@@ -359,6 +361,15 @@ const BottomHeader = () => {
               mr={'20px'}
             />
           )}
+          {editIcon.includes(router.pathname) && (
+            <Image
+              cursor="pointer"
+              // onClick={() => setOrderModalOpen(true)}
+              src="/images/editIcon.svg"
+              alt="edit icon"
+              mr={'20px'}
+            />
+          )}
           {invoiceDownloadIcon.includes(router.pathname) && (
             <Image
               cursor="pointer"
@@ -371,7 +382,7 @@ const BottomHeader = () => {
         </Box>
       </Box>
       <BottomModal
-      responsive={true}
+        responsive={true}
         title=""
         isOpen={isOrderModalOpen}
         onClose={handleOrderModalClose}
