@@ -40,8 +40,8 @@ import { TrackingResponseModel } from '../lib/types/track.types'
 import ShippingOrBillingDetails from '../components/detailsCard/ShippingOrBillingDetails'
 import UpdateAddressDetailForm from '../components/orderDetails/update-address-detail-form'
 import { ShippingFormData } from './checkoutPage'
-import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import CancelOrderForm from '../components/orderDetails/cancel-order-form'
+import RateUsCard from '../components/orderDetails/rate-us-card'
 
 // TODO :- to check this order details component
 
@@ -231,6 +231,9 @@ const OrderDetails = () => {
   }
 
   const cancellationId = orderCancelReason.find(reason => reason.reason === radioValue)?.id
+  const areAllCoursesCompleted = statusResponse.data.every(
+    res => res.message.order.fulfillments[0].state.descriptor.short_desc === 'completed'
+  )
 
   return (
     <Box
@@ -238,6 +241,14 @@ const OrderDetails = () => {
       maxH={'calc(100vh - 100px)'}
       overflowY="scroll"
     >
+      {areAllCoursesCompleted && (
+        <RateUsCard
+          header={t.courseCompleted}
+          rateText={t.rateUs}
+          subHeader={t.howTodo}
+          handleRateClick={() => router.push('/feedback')}
+        />
+      )}
       <DetailCard>
         <Flex
           alignItems={'center'}
@@ -367,125 +378,119 @@ const OrderDetails = () => {
         </Flex>
       </DetailCard>
 
-      {statusResponse?.data.map((res, index: number) => (
-        <Accordion
-          key={index}
-          accordionHeader={
-            <Box>
-              <Flex
-                mb={'15px'}
-                fontSize={'17px'}
-                alignItems={'center'}
-              >
-                <Typography
-                  style={{
-                    textOverflow: 'ellipsis',
-                    overflow: 'hidden',
-                    whiteSpace: 'nowrap'
-                  }}
-                  fontWeight={'600'}
+      {statusResponse?.data.map((res, index: number) => {
+        const orderStatus = res.message.order.fulfillments[0].state.descriptor.short_desc
+        return (
+          <Accordion
+            key={index}
+            accordionHeader={
+              <Box>
+                <Flex
+                  mb={'15px'}
                   fontSize={'17px'}
-                  text={`${t.orderId}: ${res.message.order.id}`}
-                  variant={'subTitleRegular'}
-                />
-              </Flex>
-              <Flex
-                justifyContent={'space-between'}
-                alignItems={'center'}
-              >
-                <Flex maxWidth={'57vw'}>
+                  alignItems={'center'}
+                >
                   <Typography
                     style={{
                       textOverflow: 'ellipsis',
                       overflow: 'hidden',
                       whiteSpace: 'nowrap'
                     }}
-                    text={res.message.order.items[0].name}
+                    fontWeight={'600'}
+                    fontSize={'17px'}
+                    text={`${t.orderId}: ${res.message.order.id}`}
                     variant={'subTitleRegular'}
                   />
-                  {totalItemsInAnOrder(res) > 1 && (
+                </Flex>
+                <Flex
+                  justifyContent={'space-between'}
+                  alignItems={'center'}
+                >
+                  <Flex maxWidth={'57vw'}>
                     <Typography
-                      onClick={onOpen}
                       style={{
-                        paddingLeft: '5px'
+                        textOverflow: 'ellipsis',
+                        overflow: 'hidden',
+                        whiteSpace: 'nowrap'
                       }}
-                      color="rgba(var(--color-primary))"
-                      fontSize="600"
-                      text={`+${totalItemsInAnOrder(res) - 1}`}
+                      text={res.message.order.items[0].name}
                       variant={'subTitleRegular'}
                     />
-                  )}
+                    {totalItemsInAnOrder(res) > 1 && (
+                      <Typography
+                        onClick={onOpen}
+                        style={{
+                          paddingLeft: '5px'
+                        }}
+                        color="rgba(var(--color-primary))"
+                        fontSize="600"
+                        text={`+${totalItemsInAnOrder(res) - 1}`}
+                        variant={'subTitleRegular'}
+                      />
+                    )}
+                  </Flex>
+                  <Typography
+                    fontWeight="600"
+                    text={orderStatus}
+                    color={'#FDC025'}
+                    variant={'subTitleRegular'}
+                  />
                 </Flex>
-                {status === 'progress' ? (
-                  <Typography
-                    fontWeight="600"
-                    text="In Progress"
-                    color={'#FDC025'}
-                    variant={'subTitleRegular'}
-                  />
-                ) : (
-                  <Typography
-                    fontWeight="600"
-                    text="Completed"
-                    color={'#FDC025'}
-                    variant={'subTitleRegular'}
-                  />
-                )}
-              </Flex>
-            </Box>
-          }
-        >
-          <ViewMoreOrderModal
-            isOpen={isOpen}
-            onOpen={onOpen}
-            onClose={onClose}
-            items={res.message.order.items}
-            orderId={res.message.order.id}
-          />
-          <Divider mb={'20px'} />
-          <CardBody
-            pt={'unset'}
-            fontSize={'15px'}
+              </Box>
+            }
           >
-            <Box>
-              <Flex alignItems={'center'}>
-                <Image
-                  src="/images/done.svg"
-                  alt=""
-                />
+            <ViewMoreOrderModal
+              isOpen={isOpen}
+              onOpen={onOpen}
+              onClose={onClose}
+              items={res.message.order.items}
+              orderId={res.message.order.id}
+            />
+            <Divider mb={'20px'} />
+            <CardBody
+              pt={'unset'}
+              fontSize={'15px'}
+            >
+              <Box>
+                <Flex alignItems={'center'}>
+                  <Image
+                    src="/images/done.svg"
+                    alt=""
+                  />
+                  <Typography
+                    style={{
+                      paddingLeft: '8px'
+                    }}
+                    fontWeight="600"
+                    text={t.coursesPurchased}
+                    variant={'subTitleRegular'}
+                  />
+                </Flex>
                 <Typography
                   style={{
-                    paddingLeft: '8px'
+                    paddingLeft: '28px'
                   }}
-                  fontWeight="600"
-                  text={t.coursesPurchased}
+                  text={formatTimestamp(timestamp)}
                   variant={'subTitleRegular'}
                 />
-              </Flex>
-              <Typography
-                style={{
-                  paddingLeft: '28px'
-                }}
-                text={formatTimestamp(timestamp)}
-                variant={'subTitleRegular'}
-              />
-            </Box>
-            {status === 'progress' ? (
-              <Box
-                fontSize={'15px'}
-                color={'rgba(var(--color-primary))'}
-                pt="10px"
-                pl="28px"
-                // onClick={handleViewCource}
-                // TODO :- TO check for the presence of course URL in the status response
-                onClick={() => {}}
-              >
-                {t.viewCourse}
               </Box>
-            ) : null}
-          </CardBody>
-        </Accordion>
-      ))}
+              {status === 'progress' ? (
+                <Box
+                  fontSize={'15px'}
+                  color={'rgba(var(--color-primary))'}
+                  pt="10px"
+                  pl="28px"
+                  // onClick={handleViewCource}
+                  // TODO :- TO check for the presence of course URL in the status response
+                  onClick={() => {}}
+                >
+                  {t.viewCourse}
+                </Box>
+              ) : null}
+            </CardBody>
+          </Accordion>
+        )
+      })}
 
       {/* Billing details */}
 

@@ -350,7 +350,7 @@ const en: { [key: string]: string } = {
   outForDelivery: 'Order Out for Delivery',
   orderDelivered: 'Order Delivered',
   rateStore: 'Rate the store',
-  rateDeliveryExperience: 'Rate the delivery experience',
+  rateDeliveryExperience: 'Rate the overall experience',
   addCommentsHere: 'Add your comments here',
   writeExperience: 'Write about your experience..',
   completed: 'Completed',
@@ -443,6 +443,11 @@ const en: { [key: string]: string } = {
   courseCancellation: 'Course Cancellation',
   requestProcessLoaderText: 'While we process your request',
   courseCancelled: 'Course Cancelled!',
-  courseCancelConfirmText: 'Your course has been cancelled, If you have already paid, it will get refunded soon'
+  courseCancelConfirmText: 'Your course has been cancelled, If you have already paid, it will get refunded soon',
+  courseCompleted: 'Course completed!',
+  howTodo: 'How did we do?',
+  rateUs: 'Rate Us',
+  shareFeedbackText: 'Please share your feedback with us',
+  rateOrderLoaderSubText: 'While we submit your feedback'
 }
 export default en
