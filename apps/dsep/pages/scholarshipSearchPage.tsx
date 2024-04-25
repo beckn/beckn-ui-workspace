@@ -23,7 +23,7 @@ const ScholarshipCard = () => {
         context: {
           domain: 'dsep:scholarships'
         },
-        searchString: 'scholarship for undergraduate'
+        searchString: ''
       })
       const searchData = getParsedSearchlist(scholarshipSearchResponse.data.data)
       setScholarships(searchData)
@@ -59,7 +59,7 @@ const ScholarshipCard = () => {
       position: 'top-center'
     })
   }
-
+  console.log(scholarShips)
   return (
     <Box
       className="hideScroll"
