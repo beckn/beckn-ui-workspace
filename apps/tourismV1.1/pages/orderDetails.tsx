@@ -244,6 +244,14 @@ const OrderDetails = () => {
     )
   }
 
+  const totalQuantityOfOrder = (data: any) => {
+    let count = 0
+    data.statusData[0].message.order.items.forEach((item: any) => {
+      count += item.quantity.selected.count
+    })
+    return count
+  }
+
   if (!data.confirmData?.length && !localStorage.getItem('selectedOrder')) {
     return <></>
   }
@@ -265,9 +273,7 @@ const OrderDetails = () => {
   } = fulfillments[0]
   const {
     location: { address: shipmentAddress },
-    contact:{
-      phone:updateShippingPhone,email:updatedShippingEmail,name:updatedShippingName
-    }
+    contact: { phone: updateShippingPhone, email: updatedShippingEmail, name: updatedShippingName }
   } = stops[0]
   return (
     <Box
@@ -428,15 +434,17 @@ const OrderDetails = () => {
                     >
                       {data.statusData[0]?.message?.order?.items[0]?.name}
                     </Text>
-                    <Text
-                      pl={'5px'}
-                      color={'rgba(var(--color-primary))'}
-                      fontSize={'12px'}
-                      fontWeight={'600'}
-                      onClick={onOpen}
-                    >
-                      +{data.statusData[0].message.order.items.length - 1}
-                    </Text>
+                    {totalQuantityOfOrder(data) !== 0 && (
+                      <Text
+                        pl={'5px'}
+                        color={'green'}
+                        fontSize={'12px'}
+                        fontWeight={'600'}
+                        onClick={onOpen}
+                      >
+                        +{totalQuantityOfOrder(data) - 1}
+                      </Text>
+                    )}
                   </Flex>
 
                   <Text
@@ -488,18 +496,18 @@ const OrderDetails = () => {
           {isDesktop && (
             <ShippingBlock
               title={t.shipping}
-              name={{text: updatedShippingName || shippingName, icon: nameIcon}}
-              address={{text:  shipmentAddress, icon: locationIcon}}
-              mobile={{text: updateShippingPhone || shippingPhone, icon: CallphoneIcon}}
+              name={{ text: updatedShippingName || shippingName, icon: nameIcon }}
+              address={{ text: shipmentAddress, icon: locationIcon }}
+              mobile={{ text: updateShippingPhone || shippingPhone, icon: CallphoneIcon }}
             />
           )}
           {!isDesktop && (
             <Accordion accordionHeader={t.shipping}>
               <ShippingBlock
                 // title={t.shipping}
-                name={{text: updatedShippingName || shippingName, icon: nameIcon}}
-                address={{text:  shipmentAddress, icon: locationIcon}}
-                mobile={{text: updateShippingPhone || shippingPhone, icon: CallphoneIcon}}
+                name={{ text: updatedShippingName || shippingName, icon: nameIcon }}
+                address={{ text: shipmentAddress, icon: locationIcon }}
+                mobile={{ text: updateShippingPhone || shippingPhone, icon: CallphoneIcon }}
               />
             </Accordion>
           )}

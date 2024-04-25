@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { BottomModal } from '@beckn-ui/molecules'
 
-import { useTheme, Box, Divider, Flex, HStack, Image, Text } from '@chakra-ui/react'
-import { Router, useRouter } from 'next/router'
+import { Box, Divider, Flex, HStack, Image, Text } from '@chakra-ui/react'
+import { useRouter } from 'next/router'
 import styles from './header.module.css'
 import { useSelector, useDispatch } from 'react-redux'
 import { logout } from '@store/auth-slice'
@@ -10,8 +10,6 @@ import { logout } from '@store/auth-slice'
 import { useLanguage } from '../../hooks/useLanguage'
 import Qrcode from '@components/qrCode/Qrcode'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
-import CartIconWithCount from './CartIcon'
-import TopSheet from '@components/topSheet/TopSheet'
 import { ICartRootState } from '@lib/types'
 import BottomModalScan from '@components/BottomModal/BottomModalScan'
 
@@ -56,7 +54,8 @@ const storeHeaderBlackList = [
   '/profile',
   '/search',
   '/checkout',
-  '/orderDetails'
+  '/orderDetails',
+  '/signin'
 ]
 const headerValues: PathnameObjectType = {
   '/checkoutPage': 'Review Purchase Order',
@@ -154,7 +153,6 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
                 alt="home Icon"
               />
             )}
-            {/* 
             {menuIconWhiteList.includes(router.pathname) && (
               <Image
                 cursor="pointer"
@@ -163,7 +161,7 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
                 src="/images/threeDots.svg"
                 alt="menu icon"
               />
-            )} */}
+            )}
           </Flex>
         </Box>
       </Box>
@@ -176,7 +174,7 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
         onClose={handleMenuModalClose}
       >
         <Flex flexDirection="column">
-          <Box
+          {/* <Box
             onClick={() => {
               router.push('/profile')
               setMenuModalOpen(false)
@@ -188,20 +186,7 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
               alt="User profile"
             />
             {t['profileIcon']}
-          </Box>
-          <Box
-            onClick={() => {
-              router.push('/orderHistory')
-              setMenuModalOpen(false)
-            }}
-            className={styles.top_header_modal}
-          >
-            <Image
-              src="/images/orderHistoryIcon.svg"
-              alt="Order history icon"
-            />
-            {t['orderHistoryIcon']}
-          </Box>
+          </Box> */}
           <Box
             onClick={() => {
               dispatch(logout())
@@ -214,7 +199,7 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
               src="/images/logOutIcon.svg"
               alt="Log out"
             />
-            <span style={{ color: 'red' }}>{t['logoutIcon']}</span>
+            <span style={{ color: 'red' }}>{t['logout']}</span>
           </Box>
         </Flex>
       </BottomModal>

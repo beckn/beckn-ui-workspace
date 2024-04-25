@@ -11,7 +11,7 @@ import {
   Text
 } from '@chakra-ui/react'
 import Button from '@components/button/Button'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 const activeLabelStyles = {
   transform: 'scale(1) translateY(-24px)'
@@ -57,7 +57,13 @@ export const theme = extendTheme({
 })
 
 const Filter = ({ handleApplyFilter, handleResetFilter }) => {
-  const [formData, setFormData] = useState({})
+  const getFormData = (): any => {
+    if (localStorage) {
+      const localFormData = localStorage.getItem('formData')
+      return localFormData ? JSON.parse(localFormData) : ''
+    }
+  }
+  const [formData, setFormData] = useState(getFormData())
   const [sortBy, setSortBy] = useState<string>('')
 
   const handleChange = (name: string, value: string) => {
@@ -72,6 +78,16 @@ const Filter = ({ handleApplyFilter, handleResetFilter }) => {
     setFormData({})
     handleResetFilter()
   }
+
+  useEffect(() => {
+    if (localStorage) {
+      localStorage.setItem('formData', JSON.stringify(formData))
+    }
+  }, [formData, sortBy])
+
+  console.log(formData)
+  console.log(sortBy)
+
   return (
     <>
       <ChakraProvider theme={theme}>
