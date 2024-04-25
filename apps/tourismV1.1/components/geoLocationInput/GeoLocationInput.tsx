@@ -17,7 +17,8 @@ export const GeoLocationInput = () => {
     return state.geoLocationSearchPageUI.geoAddress
   })
   const navigateToSearchResult = () => {
-    Router.push(`/search`)
+    const loc = geoLocationSearchPageSelectedAddress.split(',')[0]
+    Router.push(`/search?searchTerm=${loc}`)
   }
 
   const someFunc = () => {

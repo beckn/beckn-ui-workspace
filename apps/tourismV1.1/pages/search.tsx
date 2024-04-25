@@ -46,7 +46,7 @@ const Search = () => {
     context: {
       domain: DOMAIN
     },
-    searchString: 'Coffee',
+    searchString:searchKeyword,
     fulfillment: {
       type: 'Delivery',
       stops: [
