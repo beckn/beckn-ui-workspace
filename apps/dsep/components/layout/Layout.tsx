@@ -17,6 +17,7 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const router = useRouter()
   const isHomepage = router.pathname === '/homePage'
   const isSearch = router.pathname === '/search'
+  const isFeedbackPage = router.pathname === '/feedback'
   const paddingStyles = 'px-5 xl:px-16'
   const marginStyles = 'mt-[100px]'
 
@@ -50,7 +51,7 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
                   [paddingStyles]: !isHomepage
                 },
                 {
-                  [marginStyles]: !isHomepage && !isSearch
+                  [marginStyles]: !isHomepage && !isSearch && !isFeedbackPage
                 },
                 {
                   ['mt-[24px]']: isHomepage

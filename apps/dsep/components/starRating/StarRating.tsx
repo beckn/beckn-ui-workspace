@@ -16,7 +16,13 @@ const StarRating: React.FC<StarRatingProps> = props => {
 
   return (
     <Box mb="20px">
-      <Text pb={'5px'}>{props.ratingText}</Text>
+      <Text
+        fontWeight={400}
+        fontSize={'15px'}
+        pb={'5px'}
+      >
+        {props.ratingText}
+      </Text>
       <Box display={'flex'}>
         {[...Array(props.count || 5)].map((star, index) => {
           const ratingValue = index + 1

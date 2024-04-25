@@ -28,12 +28,13 @@ const cartIconBlackList = [
   '/myLearningOrderHistory',
   '/myJobsOrderHistory',
   '/applyJobsPrefilled',
-  '/orderCancellation'
+  '/orderCancellation',
+  '/feedback'
 ]
 
-const backIconList = ['/', '/orderDetails']
+const backIconList = ['/', '/orderDetails', '/orderCancellation', '/feedback']
 
-const homeIconBlackList = ['/orderHistory', '/', '/homePage', '/mobileOtp', '/createProfile', '/signUp']
+const homeIconBlackList = ['/orderHistory', '/', '/homePage', '/mobileOtp', '/createProfile', '/signUp', '/feedback']
 
 const storeHeaderBlackList = [
   '/checkoutPage',
@@ -58,7 +59,8 @@ const storeHeaderBlackList = [
   '/applyJobsPrefilled',
   '/applyScholarship',
   '/signUp',
-  '/orderCancellation'
+  '/orderCancellation',
+  '/feedback'
 ]
 const headerValues = {
   '/checkoutPage': 'Checkout',
@@ -97,9 +99,15 @@ const headerValuesFrench = {
   feedback: "Retour d'Information"
 }
 
-const topHeaderBlackList: string[] = []
+const topHeaderBlackList: string[] = ['/feedback']
 
-const bottomHeaderBlackList = ['/homePage', '/orderConfirmation', '/applicationSent', '/scholarshipConfirmationPage']
+const bottomHeaderBlackList = [
+  '/homePage',
+  '/orderConfirmation',
+  '/applicationSent',
+  '/scholarshipConfirmationPage',
+  '/feedback'
+]
 
 const menuIconWhiteList = ['/homePage']
 const skipWhiteList = ['/createProfile']
