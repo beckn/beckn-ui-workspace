@@ -8,7 +8,7 @@ const MobileLogin = () => {
   // }, [])
 
   return (
-    <Box padding={'0 21px'}>
+    <Box>
       <Signin />
     </Box>
   )

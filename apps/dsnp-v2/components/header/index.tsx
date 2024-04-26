@@ -55,7 +55,8 @@ const storeHeaderBlackList = [
   '/orderCancellation',
   '/profile',
   '/search',
-  '/checkout'
+  '/checkout',
+  '/signin'
 ]
 const headerValues: PathnameObjectType = {
   '/checkoutPage': 'Review Purchase Order',

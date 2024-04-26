@@ -105,3 +105,6 @@ select.chakra-select {
 .hideScroll::-webkit-scrollbar {
   display: none;
 }
+.cencel_btn_filter {
+  border: 1px solid #e93324 !important;
+}

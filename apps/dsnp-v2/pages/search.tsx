@@ -116,6 +116,8 @@ const Search = () => {
 
   const handleResetFilter = () => {
     setItems(originalItems)
+  }
+  const handleCancelFilter = () => {
     setIsFilterOpen(false)
   }
 
@@ -168,6 +170,7 @@ const Search = () => {
               <Filter
                 handleApplyFilter={handleApplyFilter}
                 handleResetFilter={handleResetFilter}
+                handleCancelFilter={handleCancelFilter}
               />
             </BottomModal>
           )}
@@ -211,7 +214,7 @@ const Search = () => {
                     name: item.name,
                     price: item.price.value,
                     rating: item.rating,
-                    shortDesc: item.short_desc || item.long_desc.replace(/<[^>]+>/g, '').slice(0,15)
+                    shortDesc: item.short_desc || item.long_desc.replace(/<[^>]+>/g, '').slice(0, 15)
                   }
                   return (
                     <ProductCard
