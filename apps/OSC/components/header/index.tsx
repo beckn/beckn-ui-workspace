@@ -29,7 +29,9 @@ const cartIconBlackList: string[] = [
   '/signUp',
   '/invoiceDetails',
   '/',
-  '/cart'
+  '/cart',
+  '/checkout',
+  '/profile'
 ]
 
 const backIconList = ['/', '/signin']
@@ -92,6 +94,7 @@ const bottomHeaderBlackList = ['/orderConfirmation', '/', '/searchByLocation']
 
 const menuIconWhiteList = ['/', '/search', '/profile']
 const orderIconList = ['/orderDetails']
+const editIcon = ['/profile']
 const invoiceDownloadIcon = ['/invoiceDetails']
 const currentLocation = ['/']
 
@@ -351,6 +354,14 @@ const BottomHeader = () => {
               />
             )}
           </div>
+          {editIcon.includes(router.pathname) && (
+            <Image
+              cursor="pointer"
+              src="/images/editIcon.svg"
+              alt="edit icon"
+              mr={'20px'}
+            />
+          )}
           {orderIconList.includes(router.pathname) && (
             <Image
               cursor="pointer"
