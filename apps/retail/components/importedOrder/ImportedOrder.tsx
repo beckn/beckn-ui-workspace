@@ -28,7 +28,6 @@ const ImportedOrder: FC<ImportedOrderProps> = ({
     setImportedOrder(false)
     showChatGtpList(true)
   }
-
   return (
     <>
       <BottomModalScan
@@ -47,7 +46,7 @@ const ImportedOrder: FC<ImportedOrderProps> = ({
               width={'100%'}
               height={'100%'}
               alt="item-image"
-              src={importedOrderedItem[0].descriptor.images[0]}
+              src={importedOrderedItem[0]?.descriptor?.images[0]?.url}
             />
           </Box>
           <Typography
@@ -55,8 +54,8 @@ const ImportedOrder: FC<ImportedOrderProps> = ({
             text={t.importedOrderDetails1}
           />
           <Typography
-            variant="subTitleRegular"
-            text={importedOrderedItem[0].descriptor.name}
+            variant="tagSemibold"
+            text={importedOrderedItem[0]?.descriptor?.name}
           />
           <Typography
             variant="subTitleRegular"

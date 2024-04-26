@@ -10,7 +10,6 @@ import { useLanguage } from '@hooks/useLanguage'
 import beckenFooter from '../public/images/footer.svg'
 import SearchInput from '@beckn-ui/becknified-components/src/components/search-input'
 import ImportedOrder from '@components/importedOrder/ImportedOrder'
-import { importedOrderMockdata } from '../mock/index'
 import OrderDetails from '@components/orderDetails/ImportedOrderDetails'
 import ShoppingList from '@components/shoppingList/ShoppingList'
 import SelectDeliveryModal from '@components/selectDeliveryModal/SelectDeliveryModal'
@@ -30,7 +29,7 @@ const HomePage = () => {
   const [selectedValues, setSelectedValues] = useState<string[]>([])
   const [address, setAddress] = useState('')
   const [isLoadingForChatGptRequest, setIsLoadingForChatGptRequest] = useState(true)
-  const [importedOrderObject, setImportedOrderObject] = useState(importedOrderMockdata)
+  const [importedOrderObject, setImportedOrderObject] = useState(null)
   const chatGptApiUrl = process.env.NEXT_PUBLIC_CHAT_GPT_URL
 
   const apiKeyForGoogle = process.env.NEXT_PUBLIC_GOOGLE_API_KEY
@@ -57,14 +56,32 @@ const HomePage = () => {
   }
 
   useEffect(() => {
+    if (localStorage) localStorage.clear()
+    let URL = window.location.href
+
+    if (URL.includes('external_url')) {
+      const urlParams = new URLSearchParams(URL)
+      const externalUrl = urlParams.get('external_url')
+      axios
+        .get(externalUrl as string)
+        .then(res => {
+          setImportedOrder(true)
+          setImportedOrderObject(res.data)
+        })
+        .catch(error => console.error(error))
+    }
+  }, [])
+
+  useEffect(() => {
     if (importedOrderObject) {
-      const latLongValues = (importedOrderObject as any).message.order.item[0].tags.fulfillment_end_loc
-      const [latStr, langStr] = latLongValues.split('/')
+      const latLongValues = importedOrderObject?.fulfillments[0]?.stops[0]?.location?.gps
+
+      console.log(latLongValues)
+      const [latStr, langStr] = latLongValues.split(',')
       const result = {
         lat: parseFloat(latStr),
         lang: parseFloat(langStr)
       }
-
       handleConvert(result.lat, result.lang)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -133,6 +150,7 @@ const HomePage = () => {
       )
 
       if (response.data.results.length > 0) {
+        console.log(response.data.results[0].formatted_address)
         setAddress(response.data.results[0].formatted_address)
       } else {
         setAddress('No address found')
@@ -144,17 +162,13 @@ const HomePage = () => {
 
   const fetchData = async () => {
     if (importedOrderObject) {
-      const {
-        message: {
-          order: { item }
-        }
-      } = importedOrderObject
-      const { tags } = item[0]
-      const promptType = (tags as any).Paris === 'Y' ? 'PARIS' : 'HIMALAYAS'
+      const { items } = importedOrderObject
+      const { tags } = items[0]
+      // const promptType = (tags as any).Paris === 'Y' ? 'PARIS' : 'HIMALAYAS'
       const payload = {
         message: {
-          prompt_type: promptType,
-          searchQuery: (importedOrderObject as any).message.order.item[0].descriptor.name
+          prompt_type: 'PARIS',
+          searchQuery: (importedOrderObject as any).items[0].descriptor.name
         }
       }
 
@@ -243,7 +257,7 @@ const HomePage = () => {
       {importedOrder ? (
         <ImportedOrder
           setImportedOrder={setImportedOrder}
-          importedOrderedItem={(importedOrderObject as any).message.order.item}
+          importedOrderedItem={(importedOrderObject as any).items}
           updateStateImportedOrder={updateStateImportedOrder}
           showChatGtpList={showChatGtpList}
         />

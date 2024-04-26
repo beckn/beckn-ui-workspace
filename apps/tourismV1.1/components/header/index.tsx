@@ -224,7 +224,6 @@ const BottomHeader = () => {
     (state: { orderObjectUrl: { orderObjectUrl: string; isFlowCityOfParis: boolean } }) =>
       state.orderObjectUrl.orderObjectUrl
   )
-  console.log(orderObjectUrl)
   const selectionPageUrl = process.env.NEXT_PUBLIC_SELECTION_PAGE_URL
   const retailAppUrl = process.env.NEXT_PUBLIC_RETAIL_APP_URL
 

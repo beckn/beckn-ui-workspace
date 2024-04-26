@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import ShippingForm from '@beckn-ui/becknified-components/src/components/checkout/shipping-form'
-import { Box, Text } from '@chakra-ui/react'
+import { Box, Text, useToast } from '@chakra-ui/react'
 import { ConfirmResponseModel } from '../types/confirm.types'
 import axios from 'axios'
 import { Loader, Typography } from '@beckn-ui/molecules'
@@ -20,7 +20,7 @@ const UpdateShippingDetails = () => {
   const [isLoadingForUpdate, setIsLoadingForUpdate] = useState(false)
   const { t } = useLanguage()
   const router = useRouter()
-
+  const toast = useToast()
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
   useEffect(() => {
@@ -44,46 +44,49 @@ const UpdateShippingDetails = () => {
                 domain,
                 bpp_id,
                 bpp_uri,
-                transaction_id:uuidv4()
+                transaction_id: uuidv4()
               },
               orderId,
               updateDetails: {
                 updateTarget: 'order.fulfillments[0].stops[0]',
-                fulfillments:[
+                fulfillments: [
                   {
-                    id:1,
-                    "stops": [
+                    id: 1,
+                    stops: [
                       {
-                          "location": {
-                              "address": shippingDetails.address,
-                              "city": {
-                                  "name": "Bengaluru"
-                              },
-                              "state": {
-                                  "name": "Karnataka"
-                              },
-                              "country": {
-                                  "code": "IND"
-                              },
-                              "area_code": "560025"
+                        location: {
+                          address: shippingDetails.address,
+                          city: {
+                            name: 'Bengaluru'
                           },
-                          "contact": {
-                              "name":name,
-                              "phone":mobileNumber,
-                              'email':email
-                          }
+                          state: {
+                            name: 'Karnataka'
+                          },
+                          country: {
+                            code: 'IND'
+                          },
+                          area_code: '560025'
+                        },
+                        contact: {
+                          name: name,
+                          phone: mobileNumber,
+                          email: email
+                        }
                       }
-                  ]
-
+                    ]
                   }
                 ]
-
               }
             }
           ]
         }
         const updateResponse = await axios.post(`${apiUrl}/update`, updateRequestPayload)
         if (updateResponse.data.data.length > 0) {
+          toast({
+            title: `Order Updated Successfully! `,
+            status: 'success',
+            isClosable: true
+          })
           router.push('/orderDetails')
         }
       } else if (localStorage.getItem('selectedOrder') && localStorage.getItem('statusResponse')) {
@@ -99,46 +102,49 @@ const UpdateShippingDetails = () => {
                 domain,
                 bpp_id,
                 bpp_uri,
-                transaction_id:uuidv4()
+                transaction_id: uuidv4()
               },
               orderId,
               updateDetails: {
                 updateTarget: 'order.fulfillments[0].stops[0]',
-                fulfillments:[
+                fulfillments: [
                   {
-                    id:"1",
-                    "stops": [
+                    id: '1',
+                    stops: [
                       {
-                          "location": {
-                              "address":shippingDetails.address,
-                              "city": {
-                                  "name": "Bengaluru"
-                              },
-                              "state": {
-                                  "name": "Karnataka"
-                              },
-                              "country": {
-                                  "code": "IND"
-                              },
-                              "area_code": "560025"
+                        location: {
+                          address: shippingDetails.address,
+                          city: {
+                            name: 'Bengaluru'
                           },
-                          "contact": {
-                              "name":name,
-                              "phone":mobileNumber,
-                              'email':email
-                          }
+                          state: {
+                            name: 'Karnataka'
+                          },
+                          country: {
+                            code: 'IND'
+                          },
+                          area_code: '560025'
+                        },
+                        contact: {
+                          name: name,
+                          phone: mobileNumber,
+                          email: email
+                        }
                       }
-                  ]
-
+                    ]
                   }
                 ]
-
               }
             }
           ]
         }
         const updateResponse = await axios.post(`${apiUrl}/update`, updateRequestPayload)
         if (updateResponse.data.data.length > 0) {
+          toast({
+            title: `Order Updated Successfully! `,
+            status: 'success',
+            isClosable: true
+          })
           router.push('/orderDetails')
         }
       }

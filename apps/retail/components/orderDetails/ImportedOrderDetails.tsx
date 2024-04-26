@@ -18,20 +18,27 @@ const OrderDetails: FC<OrderDetailsProps> = ({ backOnImportedOrder, importedOrde
     backOnImportedOrder(false)
   }
 
-  const importedtObjectOrder = importedOrderObject.message.order
-  const itemData = importedtObjectOrder.item[0]
+  const importedtObjectOrder = importedOrderObject.items[0]
+  const itemData = importedtObjectOrder
   const orderId = importedtObjectOrder.id
-  const createdAtTimeline = importedtObjectOrder.created_at
+  const createdAtTimeline = importedOrderObject.payments[0].time.timestamp
   const totalPrice = itemData.price.value
-  const noOfTravellers = itemData.quantity.count
-  const providerName = importedtObjectOrder.provider.descriptor.name
+  const noOfTravellers = itemData.quantity.selected.count
+  const providerName = importedOrderObject.provider.descriptor.name
+
+  const getFormattedDate = (timestamp: string) => {
+    const date = new Date(timestamp)
+    const options = { day: 'numeric', month: 'short', year: 'numeric', hour: 'numeric', minute: 'numeric' }
+    const formattedDate = new Intl.DateTimeFormat('en-US', options).format(date)
+    return formattedDate
+  }
 
   return (
     <>
       <BottomModalScan
         isOpen={isOpen}
         onClose={onClose}
-        modalHeader={t.orderDetails}
+        modalHeader={'Order details'}
       >
         <Box p={'0px 20px'}>
           <Box
@@ -43,7 +50,7 @@ const OrderDetails: FC<OrderDetailsProps> = ({ backOnImportedOrder, importedOrde
               width={'100%'}
               height={'100%'}
               alt="item-image"
-              src={itemData.descriptor.images[0]}
+              src={itemData.descriptor.images[0].url}
             />
           </Box>
           <Flex
@@ -79,7 +86,7 @@ const OrderDetails: FC<OrderDetailsProps> = ({ backOnImportedOrder, importedOrde
             />
             <Typography
               variant="subTitleRegular"
-              text={createdAtTimeline}
+              text={getFormattedDate(createdAtTimeline)}
             />
           </Flex>
           <Flex
