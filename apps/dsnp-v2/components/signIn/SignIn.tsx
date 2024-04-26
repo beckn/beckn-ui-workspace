@@ -6,6 +6,8 @@ import { SignInPropsModel } from './SignIn.types'
 import { FormErrors, signInValidateForm } from '@utils/form-utils'
 import { useDispatch } from 'react-redux'
 import { useLoginMutation } from '@services/Users'
+import Cookies from 'js-cookie'
+import { toast } from 'react-toastify'
 import { BecknAuth } from '@beckn-ui/becknified-components'
 
 import { FaGoogle } from 'react-icons/fa'
@@ -41,7 +43,7 @@ const SignIn = () => {
   const [providerInfo, setProviderInfo] = useState({})
 
 
-  const toast = useToast()
+  // const toast = useToast()
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -65,19 +67,19 @@ const SignIn = () => {
   }
 
   useEffect(()=>{
-    if(isError){
-      toast({
-        render: () => (
-          <CustomToast
-            title="Error!"
-            message="Unable to login"
-          />
-        ),
-        position: 'top',
-        duration: 2000,
-        isClosable: true
-      })
-    }
+    // if(isError){
+    //   toast({
+    //     render: () => (
+    //       <CustomToast
+    //         title="Error!"
+    //         message="Unable to login"
+    //       />
+    //     ),
+    //     position: 'top',
+    //     duration: 2000,
+    //     isClosable: true
+    //   })
+    // }
   },[isError])
 
   const handlePolkaLogin = async () => {
@@ -198,7 +200,8 @@ const SignIn = () => {
     }
 
     try {
-      login(signInData).unwrap()
+      await login(signInData).unwrap()
+      // Cookies.set('authToken', state.jwt)
     } catch (error) {
       console.error('An error occurred:', error)
       toast({
