@@ -396,6 +396,8 @@ const en: { [key: string]: string } = {
   errorPassword5: 'Password cannot consist of only digits',
   errorPassword6: 'Password must contain at least one digit',
   errorName2: 'Name can only contain letters and spaces',
-  errorName3: 'Name must contain at least 3 characters'
+  errorName3: 'Name must contain at least 3 characters',
+  orderOverview: 'Order Overview',
+  progressSummary: 'Progress Summary'
 }
 export default en

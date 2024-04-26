@@ -87,15 +87,20 @@ const OrderDetails = () => {
       const newData = data.statusData
         .map((status: any) => {
           const { tags } = status?.message?.order
+          console.log(
+            'my nammeme',
+            status?.message?.order?.fulfillments[0]?.state?.updated_at || status?.context?.timestamp
+          )
 
           return {
             label: statusMap[tags[tags.length - 1].list[0].value],
-            statusTime: status?.message?.order?.fulfillments[0]?.state?.updated_at
+            statusTime: status?.message?.order?.fulfillments[0]?.state?.updated_at || status?.context?.timestamp
           }
         })
         .filter((status: any) => status.label)
 
       const labelSet = new Set(orderStatusMap.map(status => status.label))
+
       setOrderStatusMap(prevState => [...prevState, ...newData.filter(status => !labelSet.has(status.label))])
     }
   }, [data.statusData])
@@ -201,10 +206,6 @@ const OrderDetails = () => {
     }
 
     fetchData()
-
-    const intervalId = setInterval(fetchData, 30000)
-
-    return () => clearInterval(intervalId)
   }, [apiUrl, data.confirmData])
 
   // Check if the order is delivered  come her
@@ -275,6 +276,13 @@ const OrderDetails = () => {
     location: { address: shipmentAddress },
     contact: { phone: updateShippingPhone, email: updatedShippingEmail, name: updatedShippingName }
   } = stops[0]
+
+  const statusData = data.statusData
+  const totalOrdersQty = statusData.length
+  const filteredOrder = statusData.filter(res => {
+    res.message?.order?.fulfillments?.[0]?.state?.descriptor?.short_desc?.toLowerCase() === 'delivered'
+  })
+
   return (
     <Box
       className="hideScroll"
@@ -338,14 +346,11 @@ const OrderDetails = () => {
       <Box
         display={{ base: 'block', lg: 'flex' }}
         justifyContent="space-between"
-        marginTop="2rem"
+        marginTop="20px"
         gap="3rem"
       >
         <Box width={{ base: '100%', lg: '80%' }}>
-          <Box
-            pb="15px"
-            pt="20px"
-          >
+          <Box marginBottom={'8px'}>
             <Typography
               variant="subTitleRegular"
               text={t.orderOverview}
@@ -354,48 +359,39 @@ const OrderDetails = () => {
           </Box>
 
           <DetailCard>
-            <Flex>
-              <Image
-                mr={'15px'}
-                height={['60px', '80px', '80px', '80px']}
-                w={['40px', '80px', '80px', '80px']}
-                src={data.statusData[0]?.message?.order?.items[0]?.images[0].url}
-                alt="product image"
+            <Flex
+              pt={'unset'}
+              justifyContent={'space-between'}
+              alignItems={'center'}
+            >
+              <Typography
+                text={t.orderPlacedAt}
+                variant={'subTitleRegular'}
               />
-              <Box w={'100%'}>
-                <Box
-                  pt={'unset'}
-                  pb={4}
-                >
-                  <Typography
-                    variant="subTitleSemibold"
-                    text={data.statusData[0]?.message?.order?.items[0]?.name}
-                  />
-                </Box>
+              <Typography
+                text={formatTimestamp(timestamp)}
+                variant={'subTitleRegular'}
+              />
+            </Flex>
 
-                <Flex
-                  pt={'unset'}
-                  justifyContent={'space-between'}
-                  alignItems={'center'}
-                >
-                  <Typography
-                    variant="subTitleRegular"
-                    text={t.placedAt}
-                  />
-                  <Typography
-                    variant="subTitleRegular"
-                    text={formatTimestamp(timestamp)}
-                  />
-                </Flex>
-              </Box>
+            <Flex
+              pt={4}
+              justifyContent={'space-between'}
+              alignItems={'center'}
+            >
+              <Typography
+                text={t.ordersFulfilled}
+                variant={'subTitleRegular'}
+              />
+              <Typography
+                text={`${filteredOrder.length} of ${totalOrdersQty}`}
+                variant={'subTitleRegular'}
+              />
             </Flex>
           </DetailCard>
 
           {/* Display progress summary */}
-          <Box
-            pb="15px"
-            pt="20px"
-          >
+          <Box marginTop={'21px'}>
             <Typography
               variant="subTitleRegular"
               text={t.progressSummary}
@@ -434,7 +430,7 @@ const OrderDetails = () => {
                     >
                       {data.statusData[0]?.message?.order?.items[0]?.name}
                     </Text>
-                    {totalQuantityOfOrder(data) !== 0 && (
+                    {totalQuantityOfOrder(data) > 1 && (
                       <Text
                         pl={'5px'}
                         color={'green'}
@@ -472,15 +468,17 @@ const OrderDetails = () => {
 
               {/* Display order status progress */}
               <Box className="order_status_progress">
-                {orderStatusMap.map((status: OrderStatusProgressProps, index: number) => (
-                  <OrderStatusProgress
-                    key={index}
-                    label={status.label}
-                    statusTime={status.statusTime && formatTimestamp(status.statusTime)}
-                    noLine={isDelivered || isCancelled}
-                    lastElement={orderStatusMap.length - 1 === index}
-                  />
-                ))}
+                {orderStatusMap.map((status: OrderStatusProgressProps, index: number) => {
+                  return (
+                    <OrderStatusProgress
+                      key={index}
+                      label={status.label}
+                      statusTime={status.statusTime && formatTimestamp(status.statusTime)}
+                      noLine={isDelivered || isCancelled}
+                      lastElement={orderStatusMap.length - 1 === index}
+                    />
+                  )
+                })}
               </Box>
             </CardBody>
           </DetailCard>
