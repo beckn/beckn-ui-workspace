@@ -72,7 +72,7 @@ const SearchBar: React.FC<SearchBarProp> = ({
 
   return (
     <>
-      <div className="max-w-[50rem] w-[90%] md:w-[90%] px-4 mx-auto mt-4 mb-3 border border-[#C9C9C9] border-solid  md:ltr:ml-4 md:rtl:mr-4 rounded-[12px]  dark:bg-slate-800 flex items-center justify-center flex-grow">
+      <div className="max-w-[50rem] w-[90%] md:w-[90%] px-4 mx-auto mt-4 mb-3 border border-[#C9C9C9] border-solid  md:ltr:ml-4 md:rtl:mr-4 rounded-[12px]  dark:bg-slate-800 flex items-center justify-center flex-grow search-location">
         <GoSearch style={{ color: 'rgb(156 163 175)' }} />
         <input
           className="px-4 py-2 md:py-3 bg-transparent outline-none w-full text-[15px]"
@@ -88,7 +88,7 @@ const SearchBar: React.FC<SearchBarProp> = ({
         )}
       </div>
       {!isEmpty(value) && locations && !isEmpty(locations) && (
-        <div className="flex flex-col overflow-scroll max-h-[100vh]  bg-white  rounded-md h-[100vh] relative z-[9995] divide-y">
+        <div className="flex flex-col overflow-scroll max-h-[100vh]  bg-white  rounded-md h-[100vh] relative z-[9995] divide-y suggestion-list">
           {locations.map((singleLocation, index) => {
             const { primaryName, secondaryName } = formatLocationName(singleLocation.display_name)
             return (

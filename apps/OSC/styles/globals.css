@@ -109,3 +109,7 @@ select.chakra-select {
 .hideScroll::-webkit-scrollbar {
   display: none;
 }
+.suggestion-list {
+  overflow-y: scroll;
+  max-height: calc(100vh - 100px);
+}
