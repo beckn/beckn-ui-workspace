@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useRouter } from 'next/router'
+import { toast } from 'react-toastify'
 import { Box, Card, CardBody, Divider, Flex, Image, Text, useDisclosure, useTheme } from '@chakra-ui/react'
 import { Accordion, Typography } from '@beckn-ui/molecules'
 import { useDispatch, useSelector } from 'react-redux'
@@ -69,6 +70,7 @@ const OrderDetails = () => {
   const orderMetaData = useSelector((state: OrdersRootState) => state.orders.selectedOrderDetails)
   const dispatch = useDispatch()
   const [currentStatusLabel, setCurrentStatusLabel] = useState('')
+  const [isError, setIsError] = useState(false)
 
   useEffect(() => {
     const storedOrderStatusMap = JSON.parse(localStorage.getItem('orderStatusMap') || '[]')
@@ -148,6 +150,9 @@ const OrderDetails = () => {
         return axios
           .post(`${apiUrl}/status`, statusPayload)
           .then(res => {
+            if (JSON.stringify(res.data) === '{}') {
+              return setIsError(true)
+            }
             const resData = res.data.data
             setData(prevState => ({
               ...prevState,
@@ -181,6 +186,9 @@ const OrderDetails = () => {
         return axios
           .post(`${apiUrl}/status`, statusPayload)
           .then(res => {
+            if (JSON.stringify(res.data) === '{}') {
+              return setIsError(true)
+            }
             const resData = res.data.data
             setData(prevState => ({
               ...prevState,
@@ -251,6 +259,12 @@ const OrderDetails = () => {
       count += item.quantity.selected.count
     })
     return count
+  }
+
+  if (isError) {
+    return toast.error('Something went wrong', {
+      position: 'top-center'
+    })
   }
 
   if (!data.confirmData?.length && !localStorage.getItem('selectedOrder')) {
