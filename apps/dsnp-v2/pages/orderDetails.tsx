@@ -22,12 +22,12 @@ import { v4 as uuidv4 } from 'uuid'
 import { useDispatch, useSelector } from 'react-redux'
 import ViewMoreOrderModal from '@components/orderDetailComponents/ViewMoreOrder'
 import { discoveryActions, DiscoveryRootState } from '@store/discovery-slice'
-import {statusActions} from '@store/status-slice'
+import { statusActions } from '@store/status-slice'
 import { DetailCard, OrderStatusProgress, OrderStatusProgressProps } from '@beckn-ui/becknified-components'
 import { StatusResponseModel, SupportModel } from '../types/status.types'
 import useResponsive from '@beckn-ui/becknified-components/src/hooks/useResponsive'
 import { toast } from 'react-toastify'
-import {isEmpty} from '@utils/common-utils'
+import { isEmpty } from '@utils/common-utils'
 import { useLanguage } from '@hooks/useLanguage'
 import { formatTimestamp, getPayloadForOrderStatus } from '@utils/confirm-utils'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
@@ -46,13 +46,12 @@ import { getPaymentBreakDown } from '@utils/checkout-utils'
 import { setLocalStorage } from '@utils/localstorage'
 import { LocalStorage } from '@lib/types'
 
-
 const statusMap = {
-  'ArrangingPayment':'Processing your order',
-  'PaymentSettled':'Ready to ship',
-  'Cancelled':"Order Cancelled!",
-  "Shipped":'Order Shipped',
-  'Delivered':"Order Delivered"
+  ArrangingPayment: 'Processing your order',
+  PaymentSettled: 'Ready to ship',
+  Cancelled: 'Order Cancelled!',
+  Shipped: 'Order Shipped',
+  Delivered: 'Order Delivered'
 }
 
 const DELIVERED = 'Delivered'
@@ -81,20 +80,18 @@ const OrderDetails = () => {
     apiCalled: false,
     allOrderDelivered: false,
     radioValue: '',
-    orderCancelled:false
+    orderCancelled: false
   })
   const router = useRouter()
   const { t } = useLanguage()
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [orderStatusMap, setOrderStatusMap] = useState<any[]>([])
-  const {isDesktop} = useResponsive()
+  const { isDesktop } = useResponsive()
   const { transactionId } = useSelector((state: DiscoveryRootState) => state.discovery)
   const orderMetaData = useSelector((state: OrdersRootState) => state.orders.selectedOrderDetails)
   const dispatch = useDispatch()
   const [currentStatusLabel, setCurrentStatusLabel] = useState('')
-
-
 
   useEffect(() => {
     const storedOrderStatusMap = JSON.parse(localStorage.getItem('orderStatusMap') || '[]')
@@ -112,17 +109,13 @@ const OrderDetails = () => {
     if (data.statusData.length > 0) {
       const newData = data.statusData
         .map((status: any) => {
-
-          const {tags} = status?.message?.order
-
+          const { tags } = status?.message?.order
 
           return {
-          label: statusMap[tags[tags.length-1].list[0].value],
-          // statusTime: status?.message?.order?.fulfillments[0]?.state?.updated_at
-          statusTime: status?.message?.order?.fulfillments[0]?.state?.updated_at || status?.context?.timestamp
-
+            label: statusMap[tags[tags.length - 1].list[0].value],
+            // statusTime: status?.message?.order?.fulfillments[0]?.state?.updated_at
+            statusTime: status?.message?.order?.fulfillments[0]?.state?.updated_at || status?.context?.timestamp
           }
-          
         })
         .filter((status: any) => status.label)
 
@@ -201,10 +194,11 @@ const OrderDetails = () => {
       image: '/images/trackOrder.svg',
       text: 'Track Order',
       onClick: () => {
-        if(trackingUrl) window.open(trackingUrl, '_blank')
-        else toast.error('Unable to get the track url', {
-          position: 'top-center'
-        })
+        if (trackingUrl) window.open(trackingUrl, '_blank')
+        else
+          toast.error('Unable to get the track url', {
+            position: 'top-center'
+          })
       }
     },
     {
@@ -265,7 +259,7 @@ const OrderDetails = () => {
             }
           ]
         }
-        setLocalStorage(LocalStorage.STATUSPAYLOAD, statusPayload);
+        setLocalStorage(LocalStorage.STATUSPAYLOAD, statusPayload)
 
         setUiState(prevState => ({
           ...prevState,
@@ -343,7 +337,7 @@ const OrderDetails = () => {
   const isDelivered = data.statusData?.[0]?.message?.order?.fulfillments?.[0]?.state?.descriptor?.code === DELIVERED
   const isCancelled = data.statusData?.[0]?.message?.order?.status === CANCELLED
 
-  console.log("Dank cancel",isCancelled)
+  console.log('Dank cancel', isCancelled)
 
   useEffect(() => {
     if (isDelivered) {
@@ -387,7 +381,7 @@ const OrderDetails = () => {
                 bpp_uri: bpp_uri,
                 transaction_id: uuidv4()
               },
-              orderId,
+              orderId
               // callbackUrl: 'https://dhp-network-bap.becknprotocol.io/track/callback'
             }
           ]
@@ -400,7 +394,7 @@ const OrderDetails = () => {
                 domain,
                 bpp_id,
                 bpp_uri,
-                transaction_id:uuidv4()
+                transaction_id: uuidv4()
               },
               message: {
                 order_id: orderId,
@@ -420,7 +414,7 @@ const OrderDetails = () => {
           axios.post(`${apiUrl}/support`, supportPayload)
         ])
 
-        if (!isEmpty(trackResponse.data) && !isEmpty(supportResponse.data) ) {
+        if (!isEmpty(trackResponse.data) && !isEmpty(supportResponse.data)) {
           setData(prevState => ({
             ...prevState,
             trackUrl: trackResponse.data.data[0].message && trackResponse.data.data[0].message.tracking.url,
@@ -482,8 +476,8 @@ const OrderDetails = () => {
           axios.post(`${apiUrl}/support`, supportPayload)
         ])
 
-        if (!isEmpty(trackResponse.data) && !isEmpty(supportResponse.data) ) {
-          console.log("Dank support",supportResponse.data)
+        if (!isEmpty(trackResponse.data) && !isEmpty(supportResponse.data)) {
+          console.log('Dank support', supportResponse.data)
           setData(prevState => ({
             ...prevState,
             trackUrl: trackResponse.data.data[0].message && trackResponse.data.data[0].message.tracking.url,
@@ -547,7 +541,7 @@ const OrderDetails = () => {
           data: [
             {
               context: {
-                transaction_id:uuidv4(),
+                transaction_id: uuidv4(),
                 bpp_id,
                 bpp_uri,
                 domain
@@ -625,13 +619,11 @@ const OrderDetails = () => {
   } = fulfillments[0]
   const {
     location: { address: shipmentAddress },
-    contact:{
-      phone:updateShippingPhone,email:updatedShippingEmail,name:updatedShippingName
-    }
+    contact: { phone: updateShippingPhone, email: updatedShippingEmail, name: updatedShippingName }
   } = stops[0]
 
   const filteredOrder = data.statusData.filter(res => {
-    const {state} = res.message.order.fulfillments[0]
+    const { state } = res.message.order.fulfillments[0]
     state && res.message.order.fulfillments[0].state.descriptor.short_desc === 'Delivered'
   })
 
@@ -640,11 +632,11 @@ const OrderDetails = () => {
       className="hideScroll"
       maxH="calc(100vh - 100px)"
       overflowY="scroll"
-      
     >
-      <Box maxW={{base:'100%',md:'50%'}} margin='0 auto'>
-
-      
+      <Box
+        maxW={{ base: '100%', md: '50%' }}
+        margin="0 auto"
+      >
         <Card
           mt="20px"
           border={`1px solid ${theme.colors.primary[100]}`}
@@ -681,9 +673,8 @@ const OrderDetails = () => {
               />
               <Text
                 onClick={() => {
-
-                dispatch(statusActions.addStatusResponse({statusResponse:data.statusData}))
-                router.push('/feedback')
+                  dispatch(statusActions.addStatusResponse({ statusResponse: data.statusData }))
+                  router.push('/feedback')
                 }}
                 pl="10px"
                 color="#0560FA"
@@ -694,403 +685,368 @@ const OrderDetails = () => {
           </CardBody>
         </Card>
       </Box>
-      <Box 
-            display={{base:'block',lg:'flex'}}
-            justifyContent='space-between'
-            marginTop='2rem'
-            gap='3rem'
-      
-      >
-
-
-
-      <Box width={{base:'100%',lg:'80%'}}>
-      
       <Box
-        pb="15px"
-        pt="20px"
+        display={{ base: 'block', lg: 'flex' }}
+        justifyContent="space-between"
+        marginTop="2rem"
+        gap="3rem"
       >
-        <Typography
-          variant="subTitleRegular"
-          text={t.orderOverview}
-          fontSize="17px"
-        />
-      </Box>
-
-     
-      <DetailCard>
-          <Flex>
-            <Image
-              mr={'15px'}
-              height={['60px', '80px', '80px', '80px']}
-              w={['40px', '80px', '80px', '80px']}
-              src={data.statusData[0]?.message?.order?.items[0]?.images[0].url}
-              alt="product image"
+        <Box width={{ base: '100%', lg: '80%' }}>
+          <Box
+            pb="15px"
+            pt="20px"
+          >
+            <Typography
+              variant="subTitleRegular"
+              text={t.orderOverview}
+              fontSize="17px"
             />
-            <Box w={'100%'}>
+          </Box>
+
+          <DetailCard>
+            <Flex>
+              <Image
+                mr={'15px'}
+                height={['60px', '80px', '80px', '80px']}
+                w={['40px', '80px', '80px', '80px']}
+                src={data.statusData[0]?.message?.order?.items[0]?.images[0].url}
+                alt="product image"
+              />
+              <Box w={'100%'}>
+                <Box
+                  pt={'unset'}
+                  pb={4}
+                >
+                  <Typography
+                    variant="subTitleSemibold"
+                    text={data.statusData[0]?.message?.order?.items[0]?.name}
+                  />
+                </Box>
+
+                <Flex
+                  pt={'unset'}
+                  justifyContent={'space-between'}
+                  alignItems={'center'}
+                >
+                  <Typography
+                    variant="subTitleRegular"
+                    text={t.placedAt}
+                  />
+                  <Typography
+                    variant="subTitleRegular"
+                    text={formatTimestamp(timestamp)}
+                  />
+                </Flex>
+              </Box>
+            </Flex>
+          </DetailCard>
+
+          {/* Display progress summary */}
+          <Box
+            pb="15px"
+            pt="20px"
+          >
+            <Typography
+              variant="subTitleRegular"
+              text={t.progressSummary}
+              fontSize="17px"
+            />
+          </Box>
+
+          {/* Display order status details */}
+          <DetailCard>
+            <CardBody p={'unset'}>
+              <>
+                <Flex
+                  justifyContent="space-between"
+                  alignItems="center"
+                >
+                  <Text
+                    as={Typography}
+                    // TODO
+                    text={`Order Id: ${orderMetaData.orderIds[0].slice(0, 5)}...`}
+                    fontSize="17px"
+                    fontWeight="600"
+                  />
+                  <Image
+                    onClick={handleOrderDotsClick}
+                    src="/images/threeDots.svg"
+                    alt="threeDots"
+                  />
+                </Flex>
+
+                <Flex
+                  justifyContent={'space-between'}
+                  alignItems={'center'}
+                >
+                  <Flex maxWidth={'57vw'}>
+                    <Text
+                      textOverflow={'ellipsis'}
+                      overflow={'hidden'}
+                      whiteSpace={'nowrap'}
+                      fontSize={'12px'}
+                      fontWeight={'400'}
+                    >
+                      {data.statusData[0]?.message?.order?.items[0]?.name}
+                    </Text>
+                    <Text
+                      pl={'5px'}
+                      color={'rgba(var(--color-primary))'}
+                      fontSize={'12px'}
+                      fontWeight={'600'}
+                      onClick={onOpen}
+                    >
+                      +{data.statusData[0].message.order.items.length - 1}
+                    </Text>
+                  </Flex>
+
+                  <Text
+                    fontSize={'15px'}
+                    fontWeight={'500'}
+                    color={data.statusData[0].message.order.status === 'CANCELLED' ? 'red' : 'green'}
+                  >
+                    {data.statusData[0].message.order.status}
+                  </Text>
+                </Flex>
+              </>
+              <Divider
+                mr={'-20px'}
+                ml="-20px"
+                width={'unset'}
+                pt="15px"
+              />
+              <ViewMoreOrderModal
+                isOpen={isOpen}
+                onOpen={onOpen}
+                onClose={onClose}
+                items={data.statusData[0].message.order.items}
+                orderId={`${orderMetaData.orderIds[0].slice(0, 5)}...`}
+              />
+
+              {/* Display order status progress */}
+              <Box className="order_status_progress">
+                {orderStatusMap.map((status: OrderStatusProgressProps, index: number) => (
+                  <OrderStatusProgress
+                    key={index}
+                    label={status.label}
+                    statusTime={status.statusTime && formatTimestamp(status.statusTime)}
+                    noLine={isDelivered || isCancelled}
+                    lastElement={orderStatusMap.length - 1 === index}
+                  />
+                ))}
+              </Box>
+            </CardBody>
+          </DetailCard>
+        </Box>
+
+        {/* shipping and billing address */}
+
+        <Box
+          display="flex"
+          flexDir={{ base: 'column', lg: 'column' }}
+          gap="1rem"
+        >
+          {isDesktop && (
+            <ShippingBlock
+              title={t.shipping}
+              name={{ text: updatedShippingName || shippingName, icon: nameIcon }}
+              address={{ text: shipmentAddress, icon: locationIcon }}
+              mobile={{ text: updateShippingPhone || shippingPhone, icon: CallphoneIcon }}
+            />
+          )}
+          {!isDesktop && (
+            <Accordion accordionHeader={t.shipping}>
+              <ShippingBlock
+                // title={t.shipping}
+                name={{ text: updatedShippingName || shippingName, icon: nameIcon }}
+                address={{ text: shipmentAddress, icon: locationIcon }}
+                mobile={{ text: updateShippingPhone || shippingPhone, icon: CallphoneIcon }}
+              />
+            </Accordion>
+          )}
+
+          {isDesktop && (
+            <ShippingBlock
+              title={t.billing}
+              name={{ text: name, icon: nameIcon }}
+              address={{ text: address, icon: locationIcon }}
+              mobile={{ text: phone, icon: CallphoneIcon }}
+            />
+          )}
+          {!isDesktop && (
+            <Accordion accordionHeader={t.billing}>
+              <ShippingBlock
+                // title={t.shipping}
+                name={{ text: name, icon: nameIcon }}
+                address={{ text: address, icon: locationIcon }}
+                mobile={{ text: phone, icon: CallphoneIcon }}
+              />
+            </Accordion>
+          )}
+
+          {isDesktop && (
+            <Box>
+              <PaymentDetails
+                title="Payment"
+                hasBoxShadow={true}
+                paymentBreakDown={getPaymentBreakDown(data.statusData).breakUpMap}
+                totalText="Total"
+                totalValueWithCurrency={getPaymentBreakDown(data.statusData).totalPricewithCurrent}
+              />
+            </Box>
+          )}
+
+          {!isDesktop && (
+            <Accordion accordionHeader={t.payment}>
               <Box
-                pt={'unset'}
-                pb={4}
+                pl={'14px'}
+                pr={'11px'}
+                pb={'11px'}
+                pt={'6px'}
               >
-                <Typography
-                  variant="subTitleSemibold"
-                  text={data.statusData[0]?.message?.order?.items[0]?.name}
+                <PaymentDetails
+                  paymentBreakDown={getPaymentBreakDown(data.statusData).breakUpMap}
+                  totalText="Total"
+                  totalValueWithCurrency={getPaymentBreakDown(data.statusData).totalPricewithCurrent}
                 />
               </Box>
+            </Accordion>
+          )}
 
-              <Flex
-                pt={'unset'}
-                justifyContent={'space-between'}
-                alignItems={'center'}
-              >
-                <Typography
-                  variant="subTitleRegular"
-                  text={t.placedAt}
-                />
-                <Typography
-                  variant="subTitleRegular"
-                  text={formatTimestamp(timestamp)}
-                />
-              </Flex>
-            </Box>
-          </Flex>
-        </DetailCard>
-
-      {/* Display progress summary */}
-      <Box
-        pb="15px"
-        pt="20px"
-      >
-        <Typography
-          variant="subTitleRegular"
-          text={t.progressSummary}
-          fontSize="17px"
-        />
-      </Box>
-
-      {/* Display order status details */}
-      <DetailCard>
-        <CardBody p={'unset'}>
-          <>
-            <Flex
-              justifyContent="space-between"
-              alignItems="center"
-            >
-              <Text
-                as={Typography}
-                // TODO
-                text={`Order Id: ${orderMetaData.orderIds[0].slice(0,5)}...`}
-                fontSize="17px"
-                fontWeight="600"
-              />
-              <Image
-                onClick={handleOrderDotsClick}
-                src="/images/threeDots.svg"
-                alt="threeDots"
-              />
-            </Flex>
-
-            <Flex
-              justifyContent={'space-between'}
-              alignItems={'center'}
-            >
-              <Flex maxWidth={'57vw'}>
-                <Text
-                  textOverflow={'ellipsis'}
-                  overflow={'hidden'}
-                  whiteSpace={'nowrap'}
-                  fontSize={'12px'}
-                  fontWeight={'400'}
-                >
-                  {data.statusData[0]?.message?.order?.items[0]?.name}
-                </Text>
-                <Text
-                  pl={'5px'}
-                  color={'rgba(var(--color-primary))'}
-                  fontSize={'12px'}
-                  fontWeight={'600'}
-                  onClick={onOpen}
-                >
-                  +{data.statusData[0].message.order.items.length - 1}
-                </Text>
-              </Flex>
-
-              <Text
-                fontSize={'15px'}
-                fontWeight={'500'}
-                color={data.statusData[0].message.order.status === 'CANCELLED' ? 'red' : 'green'}
-              >
-                {data.statusData[0].message.order.status}
-              </Text>
-            </Flex>
-          </>
-          <Divider
-            mr={'-20px'}
-            ml="-20px"
-            width={'unset'}
-            pt="15px"
-          />
-            <ViewMoreOrderModal
-            isOpen={isOpen}
-            onOpen={onOpen}
-            onClose={onClose}
-            items={data.statusData[0].message.order.items}
-            orderId={`${orderMetaData.orderIds[0].slice(0,5)}...`}
-          />
-
-          {/* Display order status progress */}
-          <Box className="order_status_progress">
-            {orderStatusMap.map((status: OrderStatusProgressProps, index: number) => (
-              <OrderStatusProgress
-                key={index}
-                label={status.label}
-                statusTime={status.statusTime && formatTimestamp(status.statusTime)}
-                noLine={isDelivered || isCancelled}
-                lastElement={orderStatusMap.length - 1 === index}
-              />
-            ))}
-          </Box>
-        </CardBody>
-      </DetailCard>
-      </Box>
-
-
-      {/* shipping and billing address */}
-
-      <Box display='flex' flexDir={{base:'column',lg:'column'}} gap='1rem'>
-        {
-          isDesktop && (
-            <ShippingBlock
-            title={t.shipping}
-            name={{text: updatedShippingName || shippingName, icon: nameIcon}}
-            address={{text:  shipmentAddress, icon: locationIcon}}
-            mobile={{text: updateShippingPhone || shippingPhone, icon: CallphoneIcon}}
-            
-            />
-
-
-          )
-
-        }
-        {
-          !isDesktop && (
-<Accordion accordionHeader={t.shipping}>
-      <ShippingBlock
-            // title={t.shipping}
-            name={{text: updatedShippingName || shippingName, icon: nameIcon}}
-            address={{text:  shipmentAddress, icon: locationIcon}}
-            mobile={{text: updateShippingPhone || shippingPhone, icon: CallphoneIcon}}
-            
-            />
-      </Accordion>
-          )
-        }
-
-{
-          isDesktop && (
-            <ShippingBlock
-            title={t.billing}
-            name={{text: name, icon: nameIcon}}
-            address={{text: address, icon: locationIcon}}
-            mobile={{text: phone, icon: CallphoneIcon}}
-            
-            />
-
-
-          )
-
-        }
-        {
-          !isDesktop && (
-<Accordion accordionHeader={t.billing}>
-      <ShippingBlock
-            // title={t.shipping}
-            name={{text: name, icon: nameIcon}}
-            address={{text: address, icon: locationIcon}}
-            mobile={{text: phone, icon: CallphoneIcon}}
-            
-            />
-      </Accordion>
-          )
-        }
-
-
-        {
-          isDesktop && (
-            <Box
+          {/* Display main bottom modal */}
+          <BottomModal
+            title=""
+            isOpen={uiState.isMenuModalOpen}
+            onClose={handleMenuModalClose}
           >
-            <PaymentDetails
-            title='Payment'
-            hasBoxShadow={true}
-          
-              paymentBreakDown={getPaymentBreakDown(data.statusData).breakUpMap}
-              totalText="Total"
-              totalValueWithCurrency={getPaymentBreakDown(data.statusData).totalPricewithCurrent}
-            />
-          </Box>
-          )
-        }
+            {uiState.isLoadingForTrackAndSupport ? (
+              <Box
+                display={'flex'}
+                alignItems="center"
+                justifyContent={'center'}
+                height={'300px'}
+              >
+                <LoaderWithMessage
+                  loadingText={t.pleaseWait}
+                  loadingSubText={t.fetchingTrackLoaderSubtext}
+                />
+              </Box>
+            ) : (
+              <Stack
+                gap="20px"
+                p={'20px 0px'}
+              >
+                {menuItems(data.trackUrl as string).map((menuItem, index) => (
+                  <Flex
+                    key={index}
+                    columnGap="10px"
+                    alignItems="center"
+                    onClick={menuItem.onClick}
+                  >
+                    <Image src={menuItem.image} />
+                    <Text
+                      as={Typography}
+                      text={menuItem.text}
+                      fontSize="15px"
+                      fontWeight={400}
+                    />
+                  </Flex>
+                ))}
+                <Divider />
+                {callMenuItem(data.supportData as SupportModel).map((menuItem, index) => (
+                  <Flex
+                    key={index}
+                    columnGap="10px"
+                    alignItems="center"
+                    onClick={menuItem.onClick}
+                  >
+                    <Image src={menuItem.image} />
+                    <Text
+                      as={Typography}
+                      text={menuItem.text}
+                      fontSize="15px"
+                      fontWeight={400}
+                    />
+                  </Flex>
+                ))}
+              </Stack>
+            )}
+          </BottomModal>
 
-        {!isDesktop && (
-<Accordion accordionHeader={t.payment}>
-        <Box
-          pl={'14px'}
-          pr={'11px'}
-          pb={'11px'}
-          pt={'6px'}
-        >
-          <PaymentDetails
-            paymentBreakDown={getPaymentBreakDown(data.statusData).breakUpMap}
-            totalText="Total"
-            totalValueWithCurrency={getPaymentBreakDown(data.statusData).totalPricewithCurrent}
-          />
+          {/* Display cancellation bottom modal */}
+          <BottomModalScan
+            isOpen={uiState.isCancelMenuModalOpen}
+            onClose={handleCancelMenuModalClose}
+            modalHeader={t.orderCancellation}
+          >
+            {uiState.isLoadingForCancel ? (
+              <LoaderWithMessage
+                loadingText={t.pleaseWait}
+                loadingSubText={t.cancelLoaderSubText}
+              />
+            ) : (
+              <>
+                <Text
+                  as={Typography}
+                  text={t.pleaseSelectReason}
+                  fontSize="15px"
+                  fontWeight={500}
+                  textAlign="center"
+                  pb="20px"
+                />
+                <RadioGroup
+                  onChange={value => {
+                    setProcessState(prevValue => ({
+                      ...prevValue,
+                      radioValue: value
+                    }))
+                    setUiState(prevValue => ({
+                      ...prevValue,
+                      isProceedDisabled: false
+                    }))
+                  }}
+                  value={processState.radioValue}
+                  pl="20px"
+                >
+                  {orderCancelReason.map(reasonObj => (
+                    <Stack
+                      pb="10px"
+                      direction="column"
+                      key={reasonObj.id}
+                    >
+                      <Radio value={reasonObj.reason}>{reasonObj.reason}</Radio>
+                    </Stack>
+                  ))}
+                </RadioGroup>
+                <Textarea
+                  w="332px"
+                  m="20px"
+                  height="124px"
+                  resize="none"
+                  placeholder="Please specify the reason"
+                  boxShadow="0px 4px 6px -1px rgba(0, 0, 0, 0.1), 0px 2px 4px -2px rgba(0, 0, 0, 0.1)"
+                />
+                <Box m="20px">
+                  <BecknButton
+                    disabled={uiState.isProceedDisabled}
+                    children="Proceed"
+                    className="checkout_btn"
+                    handleClick={() => {
+                      handleCancelButton(
+                        data.confirmData as ConfirmResponseModel[],
+                        data.statusData as StatusResponseModel[],
+                        processState.radioValue
+                      )
+                    }}
+                  />
+                </Box>
+              </>
+            )}
+          </BottomModalScan>
         </Box>
-      </Accordion>
-        )}
-      
-     
-
-      
-
-      {/* Display main bottom modal */}
-      <BottomModal
-        title=""
-        isOpen={uiState.isMenuModalOpen}
-        onClose={handleMenuModalClose}
-      >
-        {uiState.isLoadingForTrackAndSupport ? (
-          <Box
-            display={'flex'}
-            alignItems="center"
-            justifyContent={'center'}
-            height={'300px'}
-          >
-            <LoaderWithMessage
-              loadingText={t.pleaseWait}
-              loadingSubText={t.fetchingTrackLoaderSubtext}
-            />
-          </Box>
-        ) : (
-          <Stack
-            gap="20px"
-            p={'20px 0px'}
-          >
-            {menuItems(data.trackUrl as string).map((menuItem, index) => (
-              <Flex
-                key={index}
-                columnGap="10px"
-                alignItems="center"
-                onClick={menuItem.onClick}
-              >
-                <Image src={menuItem.image} />
-                <Text
-                  as={Typography}
-                  text={menuItem.text}
-                  fontSize="15px"
-                  fontWeight={400}
-                />
-              </Flex>
-            ))}
-            <Divider />
-            {callMenuItem(data.supportData as SupportModel).map((menuItem, index) => (
-              <Flex
-                key={index}
-                columnGap="10px"
-                alignItems="center"
-                onClick={menuItem.onClick}
-              >
-                <Image src={menuItem.image} />
-                <Text
-                  as={Typography}
-                  text={menuItem.text}
-                  fontSize="15px"
-                  fontWeight={400}
-                />
-              </Flex>
-            ))}
-          </Stack>
-        )}
-      </BottomModal>
-
-      {/* Display cancellation bottom modal */}
-      <BottomModalScan
-        isOpen={uiState.isCancelMenuModalOpen}
-        onClose={handleCancelMenuModalClose}
-        modalHeader={t.orderCancellation}
-      >
-        {uiState.isLoadingForCancel ? (
-          <LoaderWithMessage
-            loadingText={t.pleaseWait}
-            loadingSubText={t.cancelLoaderSubText}
-          />
-        ) : (
-          <>
-            <Text
-              as={Typography}
-              text={t.pleaseSelectReason}
-              fontSize="15px"
-              fontWeight={500}
-              textAlign="center"
-              pb="20px"
-            />
-            <RadioGroup
-              onChange={value => {
-                setProcessState(prevValue => ({
-                  ...prevValue,
-                  radioValue: value
-                }))
-                setUiState(prevValue => ({
-                  ...prevValue,
-                  isProceedDisabled: false
-                }))
-              }}
-              value={processState.radioValue}
-              pl="20px"
-            >
-              {orderCancelReason.map(reasonObj => (
-                <Stack
-                  pb="10px"
-                  direction="column"
-                  key={reasonObj.id}
-                >
-                  <Radio value={reasonObj.reason}>{reasonObj.reason}</Radio>
-                </Stack>
-              ))}
-            </RadioGroup>
-            <Textarea
-              w="332px"
-              m="20px"
-              height="124px"
-              resize="none"
-              placeholder="Please specify the reason"
-              boxShadow="0px 4px 6px -1px rgba(0, 0, 0, 0.1), 0px 2px 4px -2px rgba(0, 0, 0, 0.1)"
-            />
-            <Box m="20px">
-              <BecknButton
-                disabled={uiState.isProceedDisabled}
-                children="Proceed"
-                className="checkout_btn"
-                handleClick={() => {
-                  handleCancelButton(
-                    data.confirmData as ConfirmResponseModel[],
-                    data.statusData as StatusResponseModel[],
-                    processState.radioValue
-                  )
-                }}
-              />
-            </Box>
-          </>
-        )}
-      </BottomModalScan>
-      </Box>
-
       </Box>
     </Box>
   )
 }
-
-
-
-
 
 export default OrderDetails

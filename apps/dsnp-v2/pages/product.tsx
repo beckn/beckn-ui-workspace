@@ -24,18 +24,16 @@ const Product = () => {
   const { isMobile, isTablet, isDesktop } = useResponsive()
   const dispatch = useDispatch()
   const [counter, setCounter] = useState(1)
-  const [totalPrice, setTotalPrice] = useState("0");
+  const [totalPrice, setTotalPrice] = useState('0')
   const router = useRouter()
   const url = new URL(window.location.href)
   const reviewSubmitted = url.searchParams.get('reviewSubmitted')
   const productName = url.searchParams.get('productName')
   const productImage = url.searchParams.get('productImage')
 
-  useEffect(()=>{
-    if(!isEmpty(selectedProduct)) setTotalPrice(selectedProduct.item.price.value)
-
-  },[selectedProduct])
-
+  useEffect(() => {
+    if (!isEmpty(selectedProduct)) setTotalPrice(selectedProduct.item.price.value)
+  }, [selectedProduct])
 
   const getReviews = async () => {
     const { accessToken, dsnpId } = getLocalStorage('dsnpAuth')
@@ -72,61 +70,59 @@ const Product = () => {
     }
   }
 
-
-
-
   if (!selectedProduct) {
     return <></>
   }
   return (
-    <>
-    {!isEmpty(reviewSubmitted) ?
-          <Confirmation
+    <Box
+      className="hideScroll"
+      maxH="calc(100vh - 100px)"
+      overflowY={'scroll'}
+    >
+      {!isEmpty(reviewSubmitted) ? (
+        <Confirmation
           reviewSubmitted={reviewSubmitted === 'true' ? true : false}
           productImage={productImage as string}
           productName={productName as string}
         />
-    
-    :
-    <ProductDetailPage
-    schema={{
-      productSummary: {
-        imageSrc: selectedProduct.item.images[0].url,
-        name: selectedProduct.item.name,
-        secondaryDescription: selectedProduct.item.long_desc,
-        starRating: {
-          rating: selectedProduct.item.rating,
-          size: 20,
-          setRating: () => {},
-          starCount: 5
-        },
-        productCta: {
-          currency: selectedProduct.item.price.currency,
-          totalPrice: selectedProduct.item.price.value,
-          handleIncrement: increment,
-          handleDecrement: decrement,
-          counter: counter,
-          cta: {
-            text: 'Add To Cart',
-            color: 'black',
-            handleClick: () => {
-              dispatch(
-                cartActions.addItemToCart({
-                  product: selectedProduct,
-                  quantity: counter
-                })
-              )
-              toast.success('Product added to cart')
+      ) : (
+        <ProductDetailPage
+          schema={{
+            productSummary: {
+              imageSrc: selectedProduct.item.images[0].url,
+              name: selectedProduct.item.name,
+              secondaryDescription: selectedProduct.item.long_desc,
+              starRating: {
+                rating: selectedProduct.item.rating,
+                size: 20,
+                setRating: () => {},
+                starCount: 5
+              },
+              productCta: {
+                currency: selectedProduct.item.price.currency,
+                totalPrice: selectedProduct.item.price.value,
+                handleIncrement: increment,
+                handleDecrement: decrement,
+                counter: counter,
+                cta: {
+                  text: 'Add To Cart',
+                  color: 'black',
+                  handleClick: () => {
+                    dispatch(
+                      cartActions.addItemToCart({
+                        product: selectedProduct,
+                        quantity: counter
+                      })
+                    )
+                    toast.success('Product added to cart')
+                  }
+                }
+              }
             }
-          }
-        }
-      }
-    }}
-  />
-    
-    } 
-
-    </>
+          }}
+        />
+      )}
+    </Box>
   )
 }
 
