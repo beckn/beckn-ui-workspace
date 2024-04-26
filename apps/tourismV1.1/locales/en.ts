@@ -293,7 +293,7 @@ const en: { [key: string]: string } = {
   orderBtn: 'Order',
   localStores: 'Local stores in',
   cartLoader: 'Getting Quotes',
-  initializingOrderLoader: 'Please wait while we set things up for you',
+  initializingOrderLoader: 'while we set things up for you',
   confirmingOrderLoader: 'Please wait while we confirm your order',
   orderConfirm: 'Order Confirmed!',
   confirmOrderMessage: 'Thank you! Our delivery agent will deliver your order',

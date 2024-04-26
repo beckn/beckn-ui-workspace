@@ -204,7 +204,7 @@ const CheckoutPage = () => {
     }
   }, [isError])
 
-  if (isSelectLoading) {
+  if (isSelectLoading || isLoading) {
     return (
       <Box
         display={'grid'}
@@ -212,8 +212,8 @@ const CheckoutPage = () => {
         alignContent={'center'}
       >
         <LoaderWithMessage
-          loadingSubText=""
-          loadingText=""
+          loadingSubText={t.initializingOrderLoader}
+          loadingText={t.categoryLoadPrimary}
         />
       </Box>
     )
