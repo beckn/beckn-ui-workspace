@@ -8,15 +8,15 @@ export default function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl
   console.log('Dank', pathname, loggedin)
 
-  if (loggedin && (pathname === '/signin' || pathname === '/signUp')) {
+  // if (loggedin && (pathname === '/signin' || pathname === '/signUp')) {
     // Correctly redirect to the home page if the user is already logged in
-    return NextResponse.redirect(new URL('/', req.url))
-  }
+    // return NextResponse.redirect(new URL('/', req.url))
+  // }
 
-  if (!loggedin && (pathname !== '/signin' && pathname !== '/signUp') ) {
+  // if (!loggedin && (pathname !== '/signin' && pathname !== '/signUp') ) {
     // Redirect to the signin page if the user is not logged in
-    return NextResponse.redirect(new URL('/signin', req.url))
-  }
+    // return NextResponse.redirect(new URL('/signin', req.url))
+  // }
 
   // It's important to return a response for all paths, you might want to return `undefined` or `NextResponse.next()`
   // for other cases to let the request continue.
