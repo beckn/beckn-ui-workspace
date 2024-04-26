@@ -88,6 +88,7 @@ const OrderDetails = () => {
   const dispatch = useDispatch()
   const [currentStatusLabel, setCurrentStatusLabel] = useState('')
   const [isError, setIsError] = useState(false)
+  const [trigger, setTrigger] = useState(0)
 
   const orderObjectUrl = useSelector(
     (state: { orderObjectUrl: { orderObjectUrl: string; isFlowCityOfParis: boolean } }) =>
@@ -267,6 +268,10 @@ const OrderDetails = () => {
           ...prevState,
           isLoading: true
         }))
+        setProcessState(prevState => ({
+          ...prevState,
+          apiCalled: false
+        }))
 
         return axios
           .post(`${apiUrl}/status`, statusPayload)
@@ -303,6 +308,10 @@ const OrderDetails = () => {
           ...prevState,
           isLoading: true
         }))
+        setProcessState(prevState => ({
+          ...prevState,
+          apiCalled: false
+        }))
 
         return axios
           .post(`${apiUrl}/status`, statusPayload)
@@ -335,7 +344,7 @@ const OrderDetails = () => {
     }
 
     fetchData()
-  }, [apiUrl, data.confirmData])
+  }, [apiUrl, data.confirmData, trigger])
 
   // Check if the order is delivered  come her
   const isDelivered = data.statusData?.[0]?.message?.order?.fulfillments?.[0]?.state?.descriptor?.code === DELIVERED
@@ -709,13 +718,23 @@ const OrderDetails = () => {
         gap="3rem"
       >
         <Box width={{ base: '100%', lg: '80%' }}>
-          <Box marginBottom={'8px'}>
+          <Flex
+            alignItems={'center'}
+            justifyContent={'space-between'}
+            marginBottom={'8px'}
+          >
             <Typography
               variant="subTitleRegular"
               text={t.orderOverview}
               fontSize="17px"
             />
-          </Box>
+            <Image
+              cursor={'pointer'}
+              onClick={() => setTrigger(trigger + 1)}
+              src={'/images/refresh.svg'}
+              alt="icon-to-refresh"
+            />
+          </Flex>
 
           <DetailCard>
             <Flex
