@@ -23,6 +23,7 @@ import { ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
 import { CheckoutRootState, checkoutActions } from '@store/checkout-slice'
 import { cartActions } from '@store/cart-slice'
 import { isEmpty } from '@utils/common-utils'
+import { LoaderWithMessage } from '@beckn-ui/molecules'
 
 export type ShippingFormData = {
   name: string
@@ -191,6 +192,21 @@ const CheckoutPage = () => {
       })
     }
   }, [isError])
+
+  if (isLoading) {
+    return (
+      <Box
+        display={'grid'}
+        height={'calc(100vh - 300px)'}
+        alignContent={'center'}
+      >
+        <LoaderWithMessage
+          loadingText={t.pleaseWait}
+          loadingSubText={t.initLoaderSubText}
+        />
+      </Box>
+    )
+  }
 
   return (
     <Box

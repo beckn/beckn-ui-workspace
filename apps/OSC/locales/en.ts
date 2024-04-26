@@ -124,6 +124,8 @@ const en: { [key: string]: string } = {
   optionBooks: 'Book Stores',
   inStoreShopping: 'In-store-shopping',
   delivery: 'Delivery',
-  clickAndCollect: 'Click & Collect'
+  clickAndCollect: 'Click & Collect',
+  selectLoaderSubText: 'while we fetch the details for the selected product.',
+  initLoaderSubText: 'while we initialize the draft order.'
 }
 export default en

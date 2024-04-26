@@ -16,6 +16,7 @@ import { DOMAIN } from '@lib/config'
 
 import { ICartRootState } from '@lib/types'
 import { DiscoveryRootState } from '@store/discovery-slice'
+import LoaderWithMessage from '@components/loader/LoaderWithMessage'
 
 const Cart = () => {
   const [fetchQuotes, { isLoading, data, isError }] = useSelectMutation()
@@ -51,6 +52,21 @@ const Cart = () => {
 
   const onOrderClick = () => {
     router.push('/checkout')
+  }
+
+  if (isLoading) {
+    return (
+      <Box
+        display={'grid'}
+        height={'calc(100vh - 300px)'}
+        alignContent={'center'}
+      >
+        <LoaderWithMessage
+          loadingText={t.pleaseWait}
+          loadingSubText={t.selectLoaderSubText}
+        />
+      </Box>
+    )
   }
 
   return (
