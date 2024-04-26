@@ -115,8 +115,7 @@ const OrderDetails = () => {
 
           return {
           label: statusMap[tags[tags.length-1].list[0].value],
-          statusTime: status?.message?.order?.fulfillments[0]?.state?.updated_at
-
+          statusTime: status?.message?.order?.fulfillments[0]?.state?.updated_at || status?.context?.timestamp
           }
           
         })
@@ -858,7 +857,7 @@ router.push('/feedback')
             <ShippingBlock
             title={t.shipping}
             name={{text: updatedShippingName || shippingName, icon: nameIcon}}
-            address={{text: shipmentAddress, icon: locationIcon}}
+            address={{text:  shipmentAddress, icon: locationIcon}}
             mobile={{text: updateShippingPhone || shippingPhone, icon: CallphoneIcon}}
             
             />
