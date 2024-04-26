@@ -200,7 +200,10 @@ const OrderDetails = () => {
       image: '/images/trackOrder.svg',
       text: 'Track Order',
       onClick: () => {
-        window.open(trackingUrl, '_blank')
+        if(trackingUrl) window.open(trackingUrl, '_blank')
+        else toast.error('Unable to get the track url', {
+          position: 'top-center'
+        })
       }
     },
     {

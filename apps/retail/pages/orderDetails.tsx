@@ -15,9 +15,11 @@ import {
   Text,
   Textarea,
   useDisclosure,
-  useTheme
+  useTheme,
+  useToast
 } from '@chakra-ui/react'
 import { Accordion, BottomModal, Typography } from '@beckn-ui/molecules'
+import { toast } from 'react-toastify'
 import { v4 as uuidv4 } from 'uuid'
 import { useDispatch, useSelector } from 'react-redux'
 import ViewMoreOrderModal from '@components/orderDetailComponents/ViewMoreOrder'
@@ -90,6 +92,7 @@ const OrderDetails = () => {
   const orderMetaData = useSelector((state: OrdersRootState) => state.orders.selectedOrderDetails)
   const dispatch = useDispatch()
   const [currentStatusLabel, setCurrentStatusLabel] = useState('')
+  const [isError, setIsError] = useState(false)
 
 
 
@@ -196,7 +199,10 @@ const OrderDetails = () => {
       image: '/images/trackOrder.svg',
       text: 'Track Order',
       onClick: () => {
-        window.open(trackingUrl, '_blank')
+        if(trackingUrl) window.open(trackingUrl, '_blank')
+        else toast.error('Unable to get the track url', {
+          position: 'top-center'
+        })
       }
     },
     {
@@ -265,6 +271,9 @@ const OrderDetails = () => {
         return axios
           .post(`${apiUrl}/status`, statusPayload)
           .then(res => {
+  if (JSON.stringify(res.data) === '{}') {
+    return setIsError(true)
+  }
             const resData = res.data.data
             setData(prevState => ({
               ...prevState,
@@ -298,6 +307,9 @@ const OrderDetails = () => {
         return axios
           .post(`${apiUrl}/status`, statusPayload)
           .then(res => {
+            if (JSON.stringify(res.data) === '{}') {
+              return setIsError(true)
+            }
             const resData = res.data.data
             setData(prevState => ({
               ...prevState,
@@ -514,6 +526,12 @@ const OrderDetails = () => {
     )
   }
 
+  if (isError) {
+    return toast.error('Something went wrong', {
+      position: 'top-center'
+    })
+  }
+
   if (!data.confirmData?.length && !localStorage.getItem('selectedOrder')) {
     return <></>
   }
@@ -627,6 +645,8 @@ const OrderDetails = () => {
     const {state} = res.message.order.fulfillments[0]
     state && res.message.order.fulfillments[0].state.descriptor.short_desc === 'Delivered'
   })
+
+  console.log("Dank track",data.trackUrl)
 
   return (
     <Box
@@ -969,7 +989,7 @@ router.push('/feedback')
             gap="20px"
             p={'20px 0px'}
           >
-            {menuItems(data.trackUrl as string).map((menuItem, index) => (
+            { menuItems(data.trackUrl as string).map((menuItem, index) => (
               <Flex
                 key={index}
                 columnGap="10px"
