@@ -10,6 +10,7 @@ import { useLanguage } from '../hooks/useLanguage'
 import { useRouter } from 'next/router'
 import { getParsedSearchlist } from '../utilities/search-utils'
 import { ParsedItemModel, SearchResponseModel } from '../types/search.types'
+import { toast } from 'react-toastify'
 
 const Search = () => {
   const [items, setItems] = useState<ParsedItemModel[]>([])
@@ -58,7 +59,9 @@ const Search = () => {
   }, [data])
 
   if (error) {
-    return <></>
+    return toast.error('Something went wrong', {
+      position: 'top-center'
+    })
   }
 
   return (

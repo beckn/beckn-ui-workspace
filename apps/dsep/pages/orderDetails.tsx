@@ -29,6 +29,7 @@ import { ShippingFormData } from './checkoutPage'
 import CancelOrderForm from '../components/orderDetails/cancel-order-form'
 import RateUsCard from '../components/orderDetails/rate-us-card'
 import OrderOverview from '../components/orderDetails/order-overview'
+import { toast } from 'react-toastify'
 
 // TODO :- to check this order details component
 
@@ -102,7 +103,9 @@ const OrderDetails = () => {
   }
 
   if (!statusResponse || statusRequest.error) {
-    return <></>
+    return toast.error('Something went wrong', {
+      position: 'top-center'
+    })
   }
 
   const { data } = statusResponse

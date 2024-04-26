@@ -19,6 +19,7 @@ import { InitResponseModel } from '../lib/types/init.types'
 import LoaderWithMessage from '@beckn-ui/molecules/src/components/LoaderWithMessage/loader-with-message'
 import PaymentDetails from '@beckn-ui/becknified-components/src/components/checkout/payment-details'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
+import { toast } from 'react-toastify'
 
 export type ShippingFormData = {
   name: string
@@ -151,8 +152,9 @@ const CheckoutPage = () => {
   }
 
   if (isError) {
-    // TODO :- render toast on the error
-    return <></>
+    return toast.error('Something went wrong', {
+      position: 'top-center'
+    })
   }
 
   return (

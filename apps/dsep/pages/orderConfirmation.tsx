@@ -10,6 +10,7 @@ import orderConfirmmark from '../public/images/orderConfirmmark.svg'
 import { getPayloadForConfirmRequest, getPostOrderPayload } from '../utilities/confirm-utils'
 import { InitResponseModel } from '../lib/types/init.types'
 import { ConfirmResponseModel } from '../lib/types/confirm.types'
+import { toast } from 'react-toastify'
 
 const OrderConfirmation = () => {
   const { t } = useLanguage()
@@ -77,7 +78,9 @@ const OrderConfirmation = () => {
   }
 
   if (isError) {
-    return <></>
+    return toast.error('Something went wrong', {
+      position: 'top-center'
+    })
   }
 
   return (

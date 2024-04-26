@@ -13,6 +13,7 @@ import EmptyCart from '../components/cart/EmptyCart'
 import { Box } from '@chakra-ui/react'
 import { Item, SelectResponseModel } from '../lib/types/select.types'
 import LoaderWithMessage from '@beckn-ui/molecules/src/components/LoaderWithMessage/loader-with-message'
+import { toast } from 'react-toastify'
 
 const Cart = () => {
   const [itemsForCart, setItemsForCart] = useState<Item[] | null>(null)
@@ -84,6 +85,12 @@ const Cart = () => {
 
   if (!itemsForCart) {
     return <></>
+  }
+
+  if (quoteRequest.error) {
+    return toast.error('Something went wrong', {
+      position: 'top-center'
+    })
   }
 
   return (
