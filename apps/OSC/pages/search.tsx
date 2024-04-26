@@ -52,7 +52,7 @@ const Search = () => {
       stops: [{ location: '28.4594965,77.0266383' }]
     },
     ...(searchByLocationPathname
-      ? { provider: { providerId: providerId} }
+      ? { provider: { providerId: providerId } }
       : homePagePathname
         ? { searchString: searchKeyword }
         : { searchString: searchKeyword })
@@ -131,7 +131,11 @@ const Search = () => {
   }
 
   return (
-    <>
+    <Box
+      className="hideScroll"
+      maxH="calc(100vh - 95px)"
+      overflowY={'scroll'}
+    >
       <Box display="flex">
         {!isSmallScreen && !isMediumScreen && (
           <Filter
@@ -250,7 +254,7 @@ const Search = () => {
           </Box>
         </Box>
       </Box>
-    </>
+    </Box>
   )
 }
 

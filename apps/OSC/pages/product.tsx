@@ -45,7 +45,11 @@ const Product = () => {
     return <></>
   }
   return (
-    <>
+    <Box
+      className="hideScroll"
+      maxH="calc(100vh - 100px)"
+      overflowY={'scroll'}
+    >
       <ProductDetailPage
         schema={{
           productSummary: {
@@ -81,7 +85,7 @@ const Product = () => {
           }
         }}
       />
-    </>
+    </Box>
   )
 }
 

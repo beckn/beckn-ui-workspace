@@ -110,7 +110,7 @@ const OrderDetails = () => {
           return {
             label: statusMap[tags[tags.length - 1].list[0].value],
             // statusTime: status?.message?.order?.fulfillments[0]?.state?.updated_at
-          statusTime: status?.message?.order?.fulfillments[0]?.state?.updated_at || status?.context?.timestamp
+            statusTime: status?.message?.order?.fulfillments[0]?.state?.updated_at || status?.context?.timestamp
           }
         })
         .filter((status: any) => status.label)
@@ -190,10 +190,11 @@ const OrderDetails = () => {
       image: '/images/trackOrder.svg',
       text: 'Track Order',
       onClick: () => {
-        if(trackingUrl) window.open(trackingUrl, '_blank')
-        else toast.error('Unable to get the track url', {
-          position: 'top-center'
-        })
+        if (trackingUrl) window.open(trackingUrl, '_blank')
+        else
+          toast.error('Unable to get the track url', {
+            position: 'top-center'
+          })
       }
     },
     {
