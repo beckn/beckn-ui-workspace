@@ -786,15 +786,17 @@ const OrderDetails = () => {
                     >
                       {data.statusData[0]?.message?.order?.items[0]?.name}
                     </Text>
-                    <Text
-                      pl={'5px'}
-                      color={'rgba(var(--color-primary))'}
-                      fontSize={'12px'}
-                      fontWeight={'600'}
-                      onClick={onOpen}
-                    >
-                      +{data.statusData[0].message.order.items.length - 1}
-                    </Text>
+                    {data.statusData[0].message.order.items.length > 1 && (
+                      <Text
+                        pl={'5px'}
+                        color={'rgba(var(--color-primary))'}
+                        fontSize={'12px'}
+                        fontWeight={'600'}
+                        onClick={onOpen}
+                      >
+                        +{data.statusData[0].message.order.items.length - 1}
+                      </Text>
+                    )}
                   </Flex>
 
                   <Text
