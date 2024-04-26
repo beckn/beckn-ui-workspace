@@ -7,7 +7,7 @@ import useResponsive from '@beckn-ui/becknified-components/src/hooks/useResponsi
 
 import { useRouter } from 'next/router'
 import { DiscoveryRootState } from '@store/discovery-slice'
-import { useTheme } from '@chakra-ui/react'
+import { Box, useTheme } from '@chakra-ui/react'
 import { CustomThemeType } from '@beckn-ui/molecules'
 
 const Product = () => {
@@ -38,7 +38,11 @@ const Product = () => {
     return <></>
   }
   return (
-    <>
+    <Box
+      className="hideScroll"
+      maxH="calc(100vh - 100px)"
+      overflowY={'scroll'}
+    >
       <ProductDetailPage
         schema={{
           productSummary: {
@@ -75,7 +79,7 @@ const Product = () => {
           }
         }}
       />
-    </>
+    </Box>
   )
 }
 

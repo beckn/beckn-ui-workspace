@@ -1,6 +1,6 @@
 .main_container {
   background: url('/images/landingPage.svg');
-  height: 100vh;
+  height: calc(100vh - 24px);
   background-repeat: no-repeat;
   background-size: cover;
 }

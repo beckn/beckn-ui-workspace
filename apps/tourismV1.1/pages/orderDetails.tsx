@@ -123,7 +123,7 @@ const OrderDetails = () => {
           return {
             label: statusMap[tags[tags.length - 1].list[0].value],
             // statusTime: status?.message?.order?.fulfillments[0]?.state?.updated_at
-          statusTime: status?.message?.order?.fulfillments[0]?.state?.updated_at || status?.context?.timestamp
+            statusTime: status?.message?.order?.fulfillments[0]?.state?.updated_at || status?.context?.timestamp
           }
         })
         .filter((status: any) => status.label)

@@ -219,7 +219,11 @@ const CheckoutPage = () => {
   }
 
   return (
-    <>
+    <Box
+      className="hideScroll"
+      maxH="calc(100vh - 100px)"
+      overflowY={'scroll'}
+    >
       {/* start Item Details */}
       <Checkout
         schema={{
@@ -306,7 +310,7 @@ const CheckoutPage = () => {
         isSelectLoading={isSelectLoading}
         hasInitResult={isInitResultPresent()}
       />
-    </>
+    </Box>
   )
 }
 export default CheckoutPage
