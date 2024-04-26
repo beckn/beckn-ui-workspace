@@ -1,17 +1,4 @@
-import {
-  Box,
-  CardBody,
-  Divider,
-  Flex,
-  Text,
-  Image,
-  Card,
-  useDisclosure,
-  Stack,
-  RadioGroup,
-  Textarea,
-  Radio
-} from '@chakra-ui/react'
+import { Box, CardBody, Divider, Flex, Text, Image, Card, useDisclosure, Stack } from '@chakra-ui/react'
 import { DetailCard, ProductPrice } from '@beckn-ui/becknified-components'
 import LoaderWithMessage from '@beckn-ui/molecules/src/components/LoaderWithMessage/loader-with-message'
 import { Accordion, BottomModal, Typography } from '@beckn-ui/molecules'
@@ -29,7 +16,6 @@ import {
   orderCancelReason
 } from '../utilities/orderDetails-utils'
 import TrackIcon from '../public/images/TrackIcon.svg'
-import ViewMoreOrderModal from '../components/orderDetails/ViewMoreOrderModal'
 import useRequest from '../hooks/useRequest'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
@@ -42,18 +28,16 @@ import UpdateAddressDetailForm from '../components/orderDetails/update-address-d
 import { ShippingFormData } from './checkoutPage'
 import CancelOrderForm from '../components/orderDetails/cancel-order-form'
 import RateUsCard from '../components/orderDetails/rate-us-card'
+import OrderOverview from '../components/orderDetails/order-overview'
 
 // TODO :- to check this order details component
 
 const OrderDetails = () => {
   const [confirmData, setConfirmData] = useState<ConfirmResponseModel | null>(null)
   const [statusResponse, setStatusResponse] = useState<StatusResponseModel | null>(null)
-  const { isOpen, onOpen, onClose } = useDisclosure()
   const apiUrl = process.env.NEXT_PUBLIC_API_URL as string
   const statusRequest = useRequest()
   const router = useRouter()
-  const { orderId } = router.query
-  const [status, setStatus] = useState('progress')
   const [SupportResponse, setSupportResponse] = useState<SupportResponseModel | null>(null)
   const [trackResponse, setTrackResponse] = useState<TrackingResponseModel | null>(null)
   const [isLoadingForTrackAndSupport, SetIsLoadingForTrackAndSupport] = useState(true)
@@ -183,7 +167,7 @@ const OrderDetails = () => {
     }
   ]
 
-  const handleMenuDotsClick = async () => {
+  const handleMenuDotsClick = async (statusResponse: StatusData) => {
     try {
       setIsMenuModalOpen(true)
 
@@ -215,7 +199,7 @@ const OrderDetails = () => {
     }
   }
 
-  const handleCancelSubmit = async (statusResponse: StatusResponseModel, cancellationId: string) => {
+  const handleCancelSubmit = async (statusResponse: StatusData, cancellationId: string) => {
     setIsLoadingForCancel(true)
     try {
       const cancelPayload = getCancelPayload(statusResponse, cancellationId)
@@ -341,11 +325,6 @@ const OrderDetails = () => {
           >
             {t.orderSummary}
           </Box>
-          <Image
-            onClick={handleMenuDotsClick}
-            src="/images/threeDots.svg"
-            alt="icon-to-open-menu-modal"
-          />
         </Flex>
         <Flex
           pt={'unset'}
@@ -379,116 +358,34 @@ const OrderDetails = () => {
       </DetailCard>
 
       {statusResponse?.data.map((res, index: number) => {
-        const orderStatus = res.message.order.fulfillments[0].state.descriptor.short_desc
         return (
-          <Accordion
-            key={index}
-            accordionHeader={
-              <Box>
-                <Flex
-                  mb={'15px'}
-                  fontSize={'17px'}
-                  alignItems={'center'}
-                >
-                  <Typography
-                    style={{
-                      textOverflow: 'ellipsis',
-                      overflow: 'hidden',
-                      whiteSpace: 'nowrap'
-                    }}
-                    fontWeight={'600'}
-                    fontSize={'17px'}
-                    text={`${t.orderId}: ${res.message.order.id}`}
-                    variant={'subTitleRegular'}
-                  />
-                </Flex>
-                <Flex
-                  justifyContent={'space-between'}
-                  alignItems={'center'}
-                >
-                  <Flex maxWidth={'57vw'}>
-                    <Typography
-                      style={{
-                        textOverflow: 'ellipsis',
-                        overflow: 'hidden',
-                        whiteSpace: 'nowrap'
-                      }}
-                      text={res.message.order.items[0].name}
-                      variant={'subTitleRegular'}
-                    />
-                    {totalItemsInAnOrder(res) > 1 && (
-                      <Typography
-                        onClick={onOpen}
-                        style={{
-                          paddingLeft: '5px'
-                        }}
-                        color="rgba(var(--color-primary))"
-                        fontSize="600"
-                        text={`+${totalItemsInAnOrder(res) - 1}`}
-                        variant={'subTitleRegular'}
-                      />
-                    )}
-                  </Flex>
-                  <Typography
-                    fontWeight="600"
-                    text={orderStatus}
-                    color={'#FDC025'}
-                    variant={'subTitleRegular'}
-                  />
-                </Flex>
-              </Box>
-            }
-          >
-            <ViewMoreOrderModal
-              isOpen={isOpen}
-              onOpen={onOpen}
-              onClose={onClose}
-              items={res.message.order.items}
-              orderId={res.message.order.id}
+          <>
+            <OrderOverview
+              key={index}
+              statusResPerBpp={res}
+              handleMenuDotsClick={() => handleMenuDotsClick(res)}
             />
-            <Divider mb={'20px'} />
-            <CardBody
-              pt={'unset'}
-              fontSize={'15px'}
+            <BottomModal
+              isOpen={isCancelMenuModalOpen}
+              onClose={() => setIsCancelMenuModalOpen(false)}
+              title={t.courseCancellation}
             >
-              <Box>
-                <Flex alignItems={'center'}>
-                  <Image
-                    src="/images/done.svg"
-                    alt=""
-                  />
-                  <Typography
-                    style={{
-                      paddingLeft: '8px'
-                    }}
-                    fontWeight="600"
-                    text={t.coursesPurchased}
-                    variant={'subTitleRegular'}
-                  />
-                </Flex>
-                <Typography
-                  style={{
-                    paddingLeft: '28px'
-                  }}
-                  text={formatTimestamp(timestamp)}
-                  variant={'subTitleRegular'}
+              {isLoadingForCancel ? (
+                <LoaderWithMessage
+                  loadingText={t.pleaseWait}
+                  loadingSubText={t.cancelLoaderSubText}
                 />
-              </Box>
-              {status === 'progress' ? (
-                <Box
-                  fontSize={'15px'}
-                  color={'rgba(var(--color-primary))'}
-                  pt="10px"
-                  pl="28px"
-                  // onClick={handleViewCource}
-                  // TODO :- TO check for the presence of course URL in the status response
-                  onClick={() => {}}
-                >
-                  {t.viewCourse}
-                </Box>
-              ) : null}
-            </CardBody>
-          </Accordion>
+              ) : (
+                <CancelOrderForm
+                  isProceedDisabled={isProceedDisabled}
+                  setIsProceedDisabled={setIsProceedDisabled}
+                  radioValue={radioValue}
+                  setRadioValue={setRadioValue}
+                  handleCancelSubmit={() => handleCancelSubmit(res, cancellationId as string)}
+                />
+              )}
+            </BottomModal>
+          </>
         )
       })}
 
@@ -652,29 +549,6 @@ const OrderDetails = () => {
         onClose={() => setIsAddressUpdateModalOpen(false)}
       >
         <UpdateAddressDetailForm handleFormSubmit={formData => handleUpdateFormSubmit(formData, statusResponse)} />
-      </BottomModal>
-
-      {/* order cancellation modal */}
-      <BottomModal
-        isOpen={isCancelMenuModalOpen}
-        onClose={() => setIsCancelMenuModalOpen(false)}
-        title={t.courseCancellation}
-        // modalHeader={t.orderCancellation}
-      >
-        {false ? (
-          <LoaderWithMessage
-            loadingText={t.pleaseWait}
-            loadingSubText={t.cancelLoaderSubText}
-          />
-        ) : (
-          <CancelOrderForm
-            isProceedDisabled={isProceedDisabled}
-            setIsProceedDisabled={setIsProceedDisabled}
-            radioValue={radioValue}
-            setRadioValue={setRadioValue}
-            handleCancelSubmit={() => handleCancelSubmit(statusResponse, cancellationId as string)}
-          />
-        )}
       </BottomModal>
     </Box>
   )

@@ -1,6 +1,6 @@
 import { ConfirmResponseModel } from '../lib/types/confirm.types'
 import { ResponseModel } from '../lib/types/responseModel'
-import { StatusResponseModel } from '../lib/types/status.types'
+import { StatusData, StatusResponseModel } from '../lib/types/status.types'
 import { ShippingFormData } from '../pages/checkoutPage'
 
 const generateRandomID = () => {
@@ -96,8 +96,8 @@ export const getStatusPayload = (confirmData: ConfirmResponseModel) => {
   return statusPayload
 }
 
-export const getTrackAndSupportPayload = (statusResponse: StatusResponseModel) => {
-  const { context, message } = statusResponse.data[0]
+export const getTrackAndSupportPayload = (statusResponse: StatusData) => {
+  const { context, message } = statusResponse
   const { domain, bpp_id, bpp_uri, transaction_id } = context
   const {
     order: { id }
@@ -211,13 +211,13 @@ export const orderCancelReason = [
   { id: '4', reason: 'Other' }
 ]
 
-export const getCancelPayload = (statusResponse: StatusResponseModel, cancellationId: string) => {
+export const getCancelPayload = (statusResponse: StatusData, cancellationId: string) => {
   const {
     context: { transaction_id, bpp_id, bpp_uri, domain },
     message: {
       order: { id }
     }
-  } = statusResponse.data[0]
+  } = statusResponse
 
   const cancelPayload = {
     data: [
