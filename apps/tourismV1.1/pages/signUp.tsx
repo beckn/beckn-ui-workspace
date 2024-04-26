@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useLanguage } from '@hooks/useLanguage'
-import AlternateLogo from '../../tourismV1.1/public/images/appLogo.svg'
+import AlternateLogo from '../../tourismV1.1/public/images/tourism-logo.svg'
 import { SignUpPropsModel } from '@components/signIn/SignIn.types'
 import { FormErrors, signUpValidateForm } from '@utils/form-utils'
 import { BecknAuth } from '@beckn-ui/becknified-components'
@@ -8,7 +8,7 @@ import Router from 'next/router'
 import { Box, useBreakpoint, useToast } from '@chakra-ui/react'
 import { useRegisterMutation } from '@services/Users'
 import { CustomToast } from '@components/signIn/SignIn'
-import Logo from '../../tourismV1.1/public/images/appLogo.svg'
+import Logo from '../../tourismV1.1/public/images/tourism-logo.svg'
 
 const SignUp = () => {
   const { t } = useLanguage()
