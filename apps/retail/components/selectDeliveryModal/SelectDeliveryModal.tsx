@@ -15,11 +15,10 @@ interface SelectDeliveryModalProps {
 
 const SelectDeliveryModal: React.FC<SelectDeliveryModalProps> = props => {
   const router = useRouter()
-  const [isAddressSelected, setIsAddressSelected] = useState(false)
   const { isOpen, onOpen, onClose } = useDisclosure({ defaultIsOpen: true })
-  const { t, locale, query } = useLanguage()
+  const { t } = useLanguage()
 
-  const travelerAddress = props.importedOrderObject.message.order.billing.address.street
+  const travelerAddress = props.importedOrderObject.billing.address
 
   return (
     <BottomModalScan
