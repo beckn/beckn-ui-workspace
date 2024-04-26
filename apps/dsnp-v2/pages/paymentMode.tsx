@@ -19,9 +19,12 @@ function PaymentMode() {
   const router = useRouter()
 
   return (
-    <Box>
+    <Box
+      className="hideScroll"
+      maxH="calc(100vh - 120px)"
+      overflowY={'scroll'}
+    >
       <Box
-        height={'72vh'}
         position={'relative'}
         maxWidth={{ base: '90%', md: '70%' }}
         margin="auto"
@@ -99,8 +102,8 @@ function PaymentMode() {
         </Box>
 
         <Box
-          width={{ base: '90%', md: '70%' }}
-          style={{ margin: '4rem auto' }}
+          width={{ base: '100%', md: '70%' }}
+          style={{ marginTop: '2rem ' }}
         >
           <BecknButton
             children={t.confirmOrder}

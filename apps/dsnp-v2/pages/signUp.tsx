@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useLanguage } from '@hooks/useLanguage'
 import AlternateLogo from '../public/images/KuzaLogo.svg'
 import { SignUpPropsModel } from '@components/signIn/SignIn.types'
@@ -11,12 +11,11 @@ import { useRegisterMutation } from '@services/Users'
 import { CustomToast } from '@components/signIn/SignIn'
 import Logo from '@public/images/Logo.svg'
 
-
 //dsnp imports
 import { parentURLs } from '@lib/config'
 import { setLocalStorage } from '@utils/localstorage'
-import { signPayloadWithExtension,payloadHandle } from '@utils/signTransaction'
-import {dsnpCreate,dsnpRegister,getBlockNumber} from '@utils/auth'
+import { signPayloadWithExtension, payloadHandle } from '@utils/signTransaction'
+import { dsnpCreate, dsnpRegister, getBlockNumber } from '@utils/auth'
 import { fetchHandles, fetchChallenge, dsnpLogin } from '@components/signIn/Signin.utils'
 
 const SignUp = () => {
@@ -28,19 +27,17 @@ const SignUp = () => {
   const breakpoint = useBreakpoint()
   const mobileBreakpoints = ['base', 'sm', 'md', 'lg']
   const currentLogo = mobileBreakpoints.includes(breakpoint) ? Logo : AlternateLogo
-  const [register, { isLoading,isError }] = useRegisterMutation()
+  const [register, { isLoading, isError }] = useRegisterMutation()
 
+  //dsnp state
+  const [challenge, setChallenge] = useState('')
+  const [handles, setHandles] = useState([])
+  const [expiration, setExpiration] = useState(0)
+  const [selectedAddress, setSelectedAddress] = useState('')
+  const [providerInfo, setProviderInfo] = useState({})
 
-    //dsnp state
-    const [challenge, setChallenge] = useState('')
-    const [handles, setHandles] = useState([])
-    const [expiration, setExpiration] = useState(0)
-    const [selectedAddress, setSelectedAddress] = useState('')
-    const [providerInfo, setProviderInfo] = useState({})
-
-
-  useEffect(()=>{
-    if(isError){
+  useEffect(() => {
+    if (isError) {
       toast({
         render: () => (
           <CustomToast
@@ -53,7 +50,7 @@ const SignUp = () => {
         isClosable: true
       })
     }
-  },[isError])
+  }, [isError])
 
   const handleDsnpRegister = async () => {
     const errors = signUpValidateForm(formData)
@@ -132,10 +129,8 @@ const SignUp = () => {
           })
           throw Error('No polka address found')
         }
-        await handleSignUp();
+        await handleSignUp()
         if (!isIframe) Router.push('/')
-
-     
       } catch (error) {
         console.error('An error occurred:', error)
       }
@@ -245,7 +240,12 @@ const SignUp = () => {
   }
 
   return (
-    <Box mt={'30px'}>
+    <Box
+      mt={'30px'}
+      className="hideScroll"
+      maxH="calc(100vh - 90px)"
+      overflowY={'scroll'}
+    >
       <BecknAuth
         schema={{
           logo: {
@@ -255,14 +255,14 @@ const SignUp = () => {
           buttons: [
             {
               text: t.signUp,
-              handleClick: async ()=>{
+              handleClick: async () => {
                 await handleDsnpRegister()
                 // await handleSignUp()
               },
               disabled: !isFormFilled,
               variant: 'solid',
               colorScheme: 'primary',
-              isLoading:isLoading
+              isLoading: isLoading
             },
             {
               text: t.signIn,
@@ -271,7 +271,7 @@ const SignUp = () => {
               },
               variant: 'outline',
               colorScheme: 'primary',
-              disabled:isLoading
+              disabled: isLoading
             }
           ],
           inputs: [

@@ -102,8 +102,8 @@ function PaymentMode() {
         </Box>
 
         <Box
-          width={{ base: '90%', md: '70%' }}
-          style={{ margin: '4rem auto' }}
+          width={{ base: '100%', md: '70%' }}
+          style={{ marginTop: '2rem ' }}
         >
           <BecknButton
             children={t.confirmOrder}

@@ -122,7 +122,11 @@ const Search = () => {
   }
 
   return (
-    <>
+    <Box
+      className="hideScroll"
+      maxH="calc(100vh - 95px)"
+      overflowY={'scroll'}
+    >
       <Box display="flex">
         {!isSmallScreen && !isMediumScreen && (
           <Filter
@@ -241,7 +245,7 @@ const Search = () => {
           </Box>
         </Box>
       </Box>
-    </>
+    </Box>
   )
 }
 

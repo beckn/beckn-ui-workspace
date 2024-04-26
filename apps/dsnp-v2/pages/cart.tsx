@@ -10,7 +10,7 @@ import { getSelectPayload } from '@components/cart/cart.utils'
 import { cartActions } from '@store/cart-slice'
 import { isEmpty } from '@utils/common-utils'
 import { CustomToast } from '@components/signIn/SignIn'
-import { useToast } from '@chakra-ui/react'
+import { Box, useToast } from '@chakra-ui/react'
 
 import { DOMAIN } from '@lib/config'
 
@@ -54,7 +54,12 @@ const Cart = () => {
   }
 
   return (
-    <div>
+    <Box
+      pt={['20px', '20px', '0px', '0px']}
+      className="hideScroll"
+      maxH="calc(100vh - 120px)"
+      overflowY={'scroll'}
+    >
       <BecknCart
         isLoading={isLoading}
         schema={{
@@ -93,7 +98,7 @@ const Cart = () => {
           }
         }}
       />
-    </div>
+    </Box>
   )
 }
 
