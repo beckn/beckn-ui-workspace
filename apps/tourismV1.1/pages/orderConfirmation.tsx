@@ -7,12 +7,13 @@ import { ConfirmationPage } from '@beckn-ui/becknified-components'
 import { CheckoutRootState, checkoutActions } from '@store/checkout-slice'
 import { orderActions } from '@store/order-slice'
 import { useConfirmMutation } from '@services/confirm'
-import { getPayloadForConfirm, getPayloadForOrderHistoryPost } from '@utils/confirm-utils'
+import { getPayloadForConfirm, getPayloadForOrder, getPayloadForOrderHistoryPost } from '@utils/confirm-utils'
 import axios from 'axios'
 import { Box } from '@chakra-ui/react'
 import Cookies from 'js-cookie'
 import { ConfirmResponseModel } from '../types/confirm.types'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
+import { orderObjectUrlActions } from '@store/orderObjectUrl-slice'
 
 const OrderConfirmation = () => {
   const { t } = useLanguage()
@@ -20,6 +21,7 @@ const OrderConfirmation = () => {
   const [confirmData, setConfirmData] = useState<ConfirmResponseModel[]>([])
   const [confirm, { isLoading, data }] = useConfirmMutation()
   const dispatch = useDispatch()
+  const [orderObjectFetchURL, setOrderObjectFetchURL] = useState('')
 
   const initResponse = useSelector((state: CheckoutRootState) => state.checkout.initResponse)
   const confirmResponse = useSelector((state: CheckoutRootState) => state.checkout.confirmResponse)
@@ -46,6 +48,21 @@ const OrderConfirmation = () => {
       axios
         .post(`${strapiUrl}/orders`, ordersPayload, axiosConfig)
         .then(res => {
+          return res
+        })
+        .catch(err => console.error(err))
+    }
+  }, [confirmResponse])
+
+  useEffect(() => {
+    if (confirmResponse && confirmResponse.length > 0) {
+      const ordersPayload = getPayloadForOrder(confirmResponse)
+      axios
+        .post(`https://bap-s3integration-api-dev.becknprotocol.io/orders`, ordersPayload, axiosConfig)
+        .then(res => {
+          const qrUrl = res?.data?.qr_url
+          dispatch(orderObjectUrlActions.addOrderObjectUrl(qrUrl)) // we will set isFlowCityOfParis after getting tag
+          setOrderObjectFetchURL(qrUrl)
           return res
         })
         .catch(err => console.error(err))
