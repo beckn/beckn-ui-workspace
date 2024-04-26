@@ -132,6 +132,8 @@ const SignUp = () => {
           })
           throw Error('No polka address found')
         }
+        await handleSignUp();
+        if (!isIframe) Router.push('/')
 
      
       } catch (error) {
@@ -255,7 +257,7 @@ const SignUp = () => {
               text: t.signUp,
               handleClick: async ()=>{
                 await handleDsnpRegister()
-                await handleSignUp()
+                // await handleSignUp()
               },
               disabled: !isFormFilled,
               variant: 'solid',

@@ -87,7 +87,7 @@ const SignIn = () => {
     }
     let isIframe = false
 
-    console.log("Dank",signInData)
+
 
     try {
       if (selectedAddress && formData.email) {
@@ -145,6 +145,8 @@ const SignIn = () => {
         })
         throw Error('No polka address found')
       }
+      await handleSignIn();
+      if (!isIframe) Router.push('/')
     } catch (error) {
       console.error('An error occurred:', error)
     }
@@ -167,18 +169,17 @@ const SignIn = () => {
   useEffect(() => {
     function handleMessage(event: MessageEvent) {
       if (!parentURLs.includes(event.origin)) return
-      console.log('From Ec signed challenge', event.data)
       if (event.data.type && event.data.type === 'signTransaction') {
         const { signedChallenge } = event.data.data
         dsnpLogin(signedChallenge, handles[0]?.publicKey, challenge.challenge).then(loginData => {
           setLocalStorage('dsnpAuth', loginData)
-          Router.push('/homePage')
+          Router.push('/')
         })
       } else if (event.data.type && event.data.type === 'signCiTransaction') {
         const { handleSignature, addProviderSignature, handle, signingAccount } = event.data.data
         dsnpRegister(expiration, handle, signingAccount, addProviderSignature, handleSignature).then(createData => {
           setLocalStorage('dsnpAuth', createData)
-          Router.push('/homePage')
+          Router.push('/')
         })
       }
     }
@@ -226,7 +227,7 @@ const SignIn = () => {
             text: t.signIn,
             handleClick: async ()=>{
               await handlePolkaLogin()
-              await handleSignIn()
+              // await handleSignIn()
             },
             disabled: !isFormFilled,
             variant: 'solid',

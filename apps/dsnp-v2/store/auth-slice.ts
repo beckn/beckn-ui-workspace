@@ -35,7 +35,7 @@ const slice = createSlice({
         state.jwt = action.payload.jwt
         state.isAuthenticated = true
         Cookies.set('authToken', state.jwt)
-        Router.push('/')
+        // Router.push('/')
       })
       .addMatcher(authApi.endpoints.login.matchRejected, (state, action) => {
         console.log('rejected', action)
