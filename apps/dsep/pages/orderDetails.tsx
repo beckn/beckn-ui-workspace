@@ -48,6 +48,7 @@ const OrderDetails = () => {
   const [isProceedDisabled, setIsProceedDisabled] = useState(true)
   const [radioValue, setRadioValue] = useState('')
   const [isLoadingForCancel, setIsLoadingForCancel] = useState(false)
+  const [trigger, setTrigger] = useState(0)
 
   const { t } = useLanguage()
 
@@ -63,7 +64,7 @@ const OrderDetails = () => {
       const statusPayload = getStatusPayload(confirmData)
       statusRequest.fetchData(`${apiUrl}/status`, 'POST', statusPayload)
     }
-  }, [confirmData])
+  }, [confirmData, trigger])
 
   useEffect(() => {
     if (statusRequest.data) {
@@ -277,48 +278,6 @@ const OrderDetails = () => {
           </Link>
         </Box>
       </DetailCard>
-      {filteredOrder.length === totalOrdersQty ? (
-        <Card
-          mb={'20px'}
-          border={'1px solid rgba(94, 196, 1, 1)'}
-          className="border_radius_all"
-        >
-          <CardBody padding={'15px 20px'}>
-            <Flex
-              alignItems={'center'}
-              pb={'3px'}
-            >
-              {/* eslint-disable-next-line jsx-a11y/alt-text */}
-              <Image
-                width={'12px'}
-                height={'13px'}
-                src={TrackIcon}
-              />
-              <Text
-                pl={'8px'}
-                fontSize={'17px'}
-                fontWeight={'600'}
-              >
-                All orders delivered!
-              </Text>
-            </Flex>
-            <Flex
-              alignItems={'center'}
-              fontSize={'15px'}
-              pl={'20px'}
-            >
-              <Text>How did we do?</Text>
-              <Text
-                onClick={() => router.push('/feedback')}
-                pl={'10px'}
-                color={'rgba(var(--color-primary))'}
-              >
-                Rate Us
-              </Text>
-            </Flex>
-          </CardBody>
-        </Card>
-      ) : null}
 
       <DetailCard>
         <Flex
@@ -332,6 +291,12 @@ const OrderDetails = () => {
           >
             {t.orderSummary}
           </Box>
+          <Image
+            cursor={'pointer'}
+            onClick={() => setTrigger(trigger + 1)}
+            src={'/images/refresh.svg'}
+            alt="icon-to-refresh"
+          />
         </Flex>
         <Flex
           pt={'unset'}
