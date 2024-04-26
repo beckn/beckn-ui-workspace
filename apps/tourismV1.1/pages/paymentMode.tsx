@@ -18,10 +18,12 @@ function PaymentMode() {
   return (
     <Box>
       <Box
-        height={'72vh'}
         position={'relative'}
         maxWidth={{ base: '90%', md: '70%' }}
         margin="auto"
+        className="hideScroll"
+        maxH="calc(100vh - 120px)"
+        overflowY={'scroll'}
       >
         <Box>
           <Flex
