@@ -164,14 +164,7 @@ const geocodeFromPincode = async (pincode: any) => {
   }
 }
 
-export const getInitPayload = async (
-  deliveryAddress: any,
-  billingAddress: any,
-  cartItems: any,
-  transaction_id: string,
-  domain: string = 'retail:1.1.0',
-  selectResponse: any
-) => {
+export const getInitPayload = async (deliveryAddress: any, billingAddress: any, selectResponse: any) => {
   const cityData = await geocodeFromPincode(deliveryAddress.pinCode)
 
   let initPayload: any = {

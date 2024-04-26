@@ -149,7 +149,7 @@ const CheckoutPage = () => {
 
   const formSubmitHandler = (data: any) => {
     if (data) {
-      getInitPayload(submittedDetails, billingFormData, cartItems, transactionId, DOMAIN, selectResponse).then(res => {
+      getInitPayload(submittedDetails, billingFormData, selectResponse).then(res => {
         return initialize(res)
       })
       // TODO :_ To check this again
