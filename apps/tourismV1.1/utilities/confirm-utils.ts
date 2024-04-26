@@ -80,10 +80,31 @@ export const getPayloadForConfirm = (initResponse: InitResponseModel[]) => {
           ]
         }
       }
-    ]
+    ],
+    includeRawResponse: true
   }
 
   return payload
+}
+
+export const getPayloadForOrder = (confirmData: ConfirmResponseModel[]) => {
+  const { id, status, provider, items, fulfillments, quote, billing, payments, tags, type } =
+    confirmData[0].rawResponse.message.order
+
+  const ordersPayload = {
+    id,
+    status,
+    provider,
+    items,
+    fulfillments,
+    quote,
+    billing,
+    payments,
+    tags,
+    type
+  }
+
+  return ordersPayload
 }
 
 export const getPayloadForOrderStatus = (confirmResponse: ConfirmResponseModel[]) => {

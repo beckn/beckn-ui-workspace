@@ -220,7 +220,15 @@ const BottomHeader = () => {
   const [isInvoiceModalOpen, setInvoiceModalOpen] = useState(false)
   const cartItems = useSelector((state: ICartRootState) => state.cart.items)
   const storedHeaderText = getLocalStorage('selectCardHeaderText')
+  const orderObjectUrl = useSelector(
+    (state: { orderObjectUrl: { orderObjectUrl: string; isFlowCityOfParis: boolean } }) =>
+      state.orderObjectUrl.orderObjectUrl
+  )
+  console.log(orderObjectUrl)
+  const selectionPageUrl = process.env.NEXT_PUBLIC_SELECTION_PAGE_URL
+  const retailAppUrl = process.env.NEXT_PUBLIC_RETAIL_APP_URL
 
+  const isFlowCityOfParis = false // once implememnted tag in status we will remove this
   const handleInvoiceModalClose = () => {
     setInvoiceModalOpen(false)
   }
@@ -283,7 +291,13 @@ const BottomHeader = () => {
             justifyContent={'center'}
             p={'20px'}
           >
-            <Qrcode value={'https://odr-dev.becknprotocol.io/'} />
+            <Qrcode
+              value={
+                isFlowCityOfParis
+                  ? `${selectionPageUrl}??external_url=${orderObjectUrl}`
+                  : `${retailAppUrl}/??external_url=${orderObjectUrl}`
+              }
+            />
           </HStack>
 
           <Flex
@@ -308,7 +322,15 @@ const BottomHeader = () => {
           >
             {t.clicktheShopbuttontobuyitemsforthistrip}
           </Text>
-          <BecknButton children="Proceed" />
+          <BecknButton
+            children="Proceed"
+            handleClick={() => {
+              if (window && orderObjectUrl)
+                window.location.href = isFlowCityOfParis
+                  ? `${selectionPageUrl}??external_url=${orderObjectUrl}`
+                  : `${retailAppUrl}/??&external_url=${orderObjectUrl}`
+            }}
+          />
 
           <Flex
             pt={'20px'}

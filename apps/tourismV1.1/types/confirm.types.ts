@@ -165,6 +165,7 @@ interface Message {
 }
 
 export interface ConfirmResponseModel {
+  rawResponse: any
   context: Context
   message: Message
 }

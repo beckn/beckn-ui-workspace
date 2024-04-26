@@ -398,6 +398,11 @@ const en: { [key: string]: string } = {
   errorName2: 'Name can only contain letters and spaces',
   errorName3: 'Name must contain at least 3 characters',
   orderOverview: 'Order Overview',
-  progressSummary: 'Progress Summary'
+  progressSummary: 'Progress Summary',
+  fetchingTrackLoaderSubtext: 'While we fetch for tracking and support details',
+  cancelLoaderSubText: 'While we process your request',
+  allRequestFullfilled: 'All orders delivered!',
+  howTodo: 'How did we do?',
+  rateUs: 'Rate Us'
 }
 export default en
