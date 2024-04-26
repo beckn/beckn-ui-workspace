@@ -53,7 +53,15 @@ const jobSearch = () => {
     )
   }
 
-  return <JobSearch jobs={jobs} />
+  return (
+    <Box
+      className="hideScroll"
+      maxH={'calc(100vh - 104px)'}
+      overflowY="scroll"
+    >
+      <JobSearch jobs={jobs} />
+    </Box>
+  )
 }
 
 export default jobSearch
