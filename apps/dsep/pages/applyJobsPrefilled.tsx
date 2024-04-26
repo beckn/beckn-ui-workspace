@@ -68,104 +68,110 @@ const applyJobsPrefilled = () => {
   const { name } = items[0]
 
   return (
-    <Box>
-      <Text
-        fontSize={'15px'}
-        pb="20px"
-      >
-        {name}
-      </Text>
-      <Flex
-        alignItems={'center'}
-        fontSize="12px"
-        pb={'20px'}
-      >
-        {jobStatus === 'In Review' ? (
-          <Image
-            src="/images/inProgress.svg"
-            alt=""
-            pr="10px"
-          />
-        ) : (
-          <Image
-            src="/images/approvedIcon.svg"
-            alt=""
-            pr="10px"
-          />
-        )}
-        <Text>{jobStatus}</Text>
-      </Flex>
-      <Text
-        fontSize={'15px'}
-        pb="5px"
-      >
-        {t.contactInformation}
-      </Text>
-      <Box
-        fontSize={'12px'}
-        padding="15px 10px"
-        border={'1px solid #BFBFBF'}
-        borderRadius="12px"
-        mb={'30px'}
-      >
-        <Box pb={'8px'}>
-          <Text
-            as={'span'}
-            fontWeight="600"
-          >
-            {t.nameText}:
-          </Text>
-          <Text as={'span'}> {userName}</Text>
-        </Box>
-        <Box pb={'8px'}>
-          <Text
-            as={'span'}
-            fontWeight="600"
-          >
-            {t.mobileNo}:
-          </Text>
-          <Text as={'span'}> {phone}</Text>
-        </Box>
-        <Box>
-          <Text
-            as={'span'}
-            fontWeight="600"
-          >
-            {t.emailId}:
-          </Text>
-          <Text as={'span'}>{email}</Text>
-        </Box>
-      </Box>
-      <Text fontSize={'15px'}>{t.certificates}</Text>
-      {documents.map((document: any) => (
-        <Box
-          border={'1px solid #BFBFBF'}
-          borderRadius={'12px'}
-          padding="15px 20px"
-          mb={'10px'}
-          mt={'10px'}
-          fontSize="12px"
+    <Box
+      className="hideScroll"
+      maxH={'calc(100vh - 104px)'}
+      overflowY="scroll"
+    >
+      <Box>
+        <Text
+          fontSize={'15px'}
+          pb="20px"
         >
-          <Flex alignItems={'center'}>
-            <Image src="/images/pdfIcon.svg" />
-            <Box>
-              <Flex
-                alignItems={'center'}
-                justifyContent="space-between"
-              >
-                <Text
-                  fontWeight="600"
-                  pr={'5px'}
-                >
-                  {document?.attributes?.attachment?.data?.attributes?.name}
-                </Text>
-              </Flex>
-            </Box>
-          </Flex>
-
-          {/* <Divider pt={'15px'} mb="15px" width={'unset'} mr="-20px" ml="-20px" /> */}
+          {name}
+        </Text>
+        <Flex
+          alignItems={'center'}
+          fontSize="12px"
+          pb={'20px'}
+        >
+          {jobStatus === 'In Review' ? (
+            <Image
+              src="/images/inProgress.svg"
+              alt=""
+              pr="10px"
+            />
+          ) : (
+            <Image
+              src="/images/approvedIcon.svg"
+              alt=""
+              pr="10px"
+            />
+          )}
+          <Text>{jobStatus}</Text>
+        </Flex>
+        <Text
+          fontSize={'15px'}
+          pb="5px"
+        >
+          {t.contactInformation}
+        </Text>
+        <Box
+          fontSize={'12px'}
+          padding="15px 10px"
+          border={'1px solid #BFBFBF'}
+          borderRadius="12px"
+          mb={'30px'}
+        >
+          <Box pb={'8px'}>
+            <Text
+              as={'span'}
+              fontWeight="600"
+            >
+              {t.nameText}:
+            </Text>
+            <Text as={'span'}> {userName}</Text>
+          </Box>
+          <Box pb={'8px'}>
+            <Text
+              as={'span'}
+              fontWeight="600"
+            >
+              {t.mobileNo}:
+            </Text>
+            <Text as={'span'}> {phone}</Text>
+          </Box>
+          <Box>
+            <Text
+              as={'span'}
+              fontWeight="600"
+            >
+              {t.emailId}:
+            </Text>
+            <Text as={'span'}>{email}</Text>
+          </Box>
         </Box>
-      ))}
+        <Text fontSize={'15px'}>{t.certificates}</Text>
+        {documents.map((document: any) => (
+          <Box
+            border={'1px solid #BFBFBF'}
+            borderRadius={'12px'}
+            padding="15px 20px"
+            mb={'10px'}
+            mt={'10px'}
+            fontSize="12px"
+          >
+            <Flex alignItems={'center'}>
+              <Image src="/images/pdfIcon.svg" />
+              <Box>
+                <Flex
+                  alignItems={'center'}
+                  justifyContent="space-between"
+                >
+                  <Text
+                    fontWeight="600"
+                    pr={'5px'}
+                  >
+                    {document?.attributes?.attachment?.data?.attributes?.name}
+                  </Text>
+                </Flex>
+              </Box>
+            </Flex>
+
+            {/* <Divider pt={'15px'} mb="15px" width={'unset'} mr="-20px" ml="-20px" /> */}
+          </Box>
+        ))}
+      </Box>
     </Box>
   )
 }
