@@ -102,7 +102,11 @@ const OrderDetails = () => {
     )
   }
 
-  if (!statusResponse || statusRequest.error) {
+  if (!statusResponse) {
+    return <></>
+  }
+
+  if (statusRequest.error) {
     return toast.error('Something went wrong', {
       position: 'top-center'
     })
