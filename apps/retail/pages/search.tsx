@@ -116,7 +116,6 @@ const Search = () => {
 
   const handleResetFilter = () => {
     setItems(originalItems)
-    setIsFilterOpen(false)
   }
   const handleCancelFilter = () => {
     setIsFilterOpen(false)

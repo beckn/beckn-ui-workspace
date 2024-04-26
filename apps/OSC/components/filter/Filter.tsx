@@ -11,7 +11,7 @@ import {
   Text
 } from '@chakra-ui/react'
 import Button from '@components/button/Button'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 const activeLabelStyles = {
   transform: 'scale(1) translateY(-24px)'
@@ -51,15 +51,20 @@ export const theme = extendTheme({
   },
   colors: {
     primary: {
-      '100': '#A71B4A'
+      '100': '#F6D046'
     }
   }
 })
 
-const Filter = ({ handleApplyFilter, handleResetFilter }) => {
-  const [formData, setFormData] = useState({})
+const Filter = ({ handleApplyFilter, handleResetFilter, handleCancelFilter = () => {} }) => {
+  const getFormData = (): any => {
+    if (localStorage) {
+      const localFormData = localStorage.getItem('formData')
+      return localFormData ? JSON.parse(localFormData) : ''
+    }
+  }
+  const [formData, setFormData] = useState(getFormData())
   const [sortBy, setSortBy] = useState<string>('')
-
   const handleChange = (name: string, value: string) => {
     setSortBy(value)
     setFormData(prevData => ({
@@ -72,6 +77,12 @@ const Filter = ({ handleApplyFilter, handleResetFilter }) => {
     setFormData({})
     handleResetFilter()
   }
+  useEffect(() => {
+    if (localStorage) {
+      localStorage.setItem('formData', JSON.stringify(formData))
+    }
+  }, [formData, sortBy])
+
   return (
     <>
       <ChakraProvider theme={theme}>
@@ -90,7 +101,7 @@ const Filter = ({ handleApplyFilter, handleResetFilter }) => {
             <Text fontSize={'17px'}>All Filters</Text>
             <Text
               fontSize={'15px'}
-              color="#A71B4A"
+              color="#53A052"
               cursor={'pointer'}
               onClick={resetFilter}
             >
@@ -150,7 +161,7 @@ const Filter = ({ handleApplyFilter, handleResetFilter }) => {
           <Button
             buttonText={'Apply Filter'}
             background={'primary.100'}
-            color={'#fff'}
+            color={'#565555'}
             isDisabled={false}
             handleOnClick={() => {
               handleApplyFilter(sortBy)
@@ -158,6 +169,17 @@ const Filter = ({ handleApplyFilter, handleResetFilter }) => {
           />
         </Box>
       </ChakraProvider>
+
+      <Box display={['block', 'block', 'none', 'none']}>
+        <Button
+          className="cencel_btn_filter"
+          buttonText={'Cancel'}
+          background={'#fff'}
+          color={'#E93324'}
+          isDisabled={false}
+          handleOnClick={handleCancelFilter}
+        />
+      </Box>
     </>
   )
 }
