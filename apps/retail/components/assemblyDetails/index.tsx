@@ -89,7 +89,11 @@ export default function AssemblyDetails() {
   }
 
   return (
-    <>
+    <Box
+      className="hideScroll"
+      maxH="calc(100vh - 120px)"
+      overflowY={'scroll'}
+    >
       <ChakraProvider theme={theme}>
         <Box
           p={'20px'}
@@ -347,6 +351,6 @@ export default function AssemblyDetails() {
         text="Add Shipping Details"
         handleClick={submitAssemblyDetails}
       />
-    </>
+    </Box>
   )
 }
