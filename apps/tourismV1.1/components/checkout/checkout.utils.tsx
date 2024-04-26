@@ -1,5 +1,4 @@
 import { CartRetailItem, DataPerBpp } from '@lib/types/cart'
-import { ResponseModel } from '@lib/types/responseModel'
 import { ShippingFormData } from '.'
 import { areObjectPropertiesEqual } from '@utils/common-utils'
 import { ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
@@ -170,111 +169,95 @@ export const getInitPayload = async (
   billingAddress: any,
   cartItems: any,
   transaction_id: string,
-  domain: string = 'retail:1.1.0'
+  domain: string = 'retail:1.1.0',
+  selectResponse: any
 ) => {
   const cityData = await geocodeFromPincode(deliveryAddress.pinCode)
 
-  const bppGroups = cartItems.reduce((acc, item) => {
-    if (!acc[item.bpp_id]) {
-      acc[item.bpp_id] = []
-    }
-    acc[item.bpp_id].push(item)
-    return acc
-  }, {})
-
-  const data = Object.entries(bppGroups).map(([bpp_id, items]) => {
-    return {
-      context: {
-        transaction_id: transaction_id,
-        bpp_id: bpp_id,
-        bpp_uri: items[0].bpp_uri,
-        domain: domain
-      },
-      message: {
-        orders: transformOrdersByProvider(items)
-      }
-    }
-  })
-
-  function transformOrdersByProvider(items) {
-    const providerGroups = items.reduce((acc, item) => {
-      const providerKey = `${item.bpp_id}_${item.providerId}`
-      if (!acc[providerKey]) {
-        acc[providerKey] = []
-      }
-      acc[providerKey].push(item)
-      return acc
-    }, {})
-
-    return Object.values(providerGroups).map(group => {
-      const providerId = group[0].providerId
-      const items = group.map(item => ({
-        id: item.id,
-        quantity: {
-          selected: {
-            count: item.quantity
-          }
-        }
-      }))
-
-      const fulfillments = [
-        {
-          id: '3',
-          type: 'standard-shipping',
-          stops: [
-            {
-              location: {
-                gps: `${cityData.lat},${cityData.lng}`,
-                address: deliveryAddress.address,
-                city: {
-                  name: cityData?.city
-                },
-                state: {
-                  name: cityData?.state
-                },
-                country: {
-                  code: 'IND'
-                },
-                area_code: deliveryAddress.pinCode
-              },
-              contact: {
-                phone: deliveryAddress.mobileNumber,
-                email: deliveryAddress.email
-              }
-            }
-          ]
-        }
-      ]
-
-      return {
-        provider: {
-          id: providerId
-        },
-        items,
-        fulfillments,
-        customer: {
-          person: {
-            name: deliveryAddress.name
-          },
-          contact: {
-            phone: deliveryAddress.mobileNumber
-          }
-        },
-        billing: {
-          name: billingAddress.name,
-          phone: billingAddress.mobileNumber,
-          address: billingAddress.address,
-          email: billingAddress.email,
-          city: {
-            name: cityData?.city
-          },
-          state: {
-            name: cityData?.state
-          }
-        }
-      }
-    })
+  let initPayload: any = {
+    data: []
   }
 
-  return { data }
+  selectResponse.forEach((res: any) => {
+    const { transaction_id, bpp_id, bpp_uri, domain } = res.context
+    const { order } = res.message
+    const { items, provider, type, quote, fulfillments } = order
+    const { id, type: fulfillmentType } = fulfillments[0]
+    const { id: providerId } = provider
+
+    const context = {
+      transaction_id,
+      bpp_id,
+      bpp_uri,
+      domain
+    }
+
+    const message = {
+      orders: [
+        {
+          provider: {
+            id: providerId
+          },
+          items: items,
+          fulfillments: [
+            {
+              id: id,
+              type: fulfillmentType,
+              customer: {
+                contact: {
+                  email: deliveryAddress.email,
+                  mobileNumber: deliveryAddress.mobileNumber
+                },
+                person: {
+                  name
+                }
+              },
+              stops: [
+                {
+                  location: {
+                    gps: `${cityData.lat},${cityData.lng}`,
+                    address: deliveryAddress.address,
+                    city: {
+                      name: cityData?.city
+                    },
+                    state: {
+                      name: cityData?.state
+                    },
+                    country: {
+                      code: 'IND'
+                    },
+                    area_code: deliveryAddress.pinCode
+                  },
+                  contact: {
+                    phone: deliveryAddress.mobileNumber,
+                    email: deliveryAddress.email
+                  }
+                }
+              ]
+            }
+          ],
+          billing: {
+            name: billingAddress.name,
+            phone: billingAddress.mobileNumber,
+            address: billingAddress.address,
+            email: billingAddress.email,
+            city: {
+              name: cityData?.city
+            },
+            state: {
+              name: cityData?.state
+            }
+          }
+        }
+      ]
+    }
+
+    initPayload.data.push({
+      context: context,
+      message: message
+    })
+  })
+
+  // return { data }
+  return initPayload
 }

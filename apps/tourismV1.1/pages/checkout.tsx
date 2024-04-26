@@ -25,6 +25,7 @@ import { cartActions } from '@store/cart-slice'
 import { isEmpty } from '@utils/common-utils'
 import { getSelectPayload } from '@components/cart/cart.utils'
 import { useSelectMutation } from '@services/select'
+import LoaderWithMessage from '@components/loader/LoaderWithMessage'
 
 export type ShippingFormData = {
   name: string
@@ -75,12 +76,14 @@ const CheckoutPage = () => {
   const dispatch = useDispatch()
   const [initialize, { isLoading, isError }] = useInitMutation()
 
-  const [fetchQuotes, { isSelectLoading, data, isSelectError }] = useSelectMutation()
+  const [fetchQuotes, { isLoading: isSelectLoading, data, isError: isSelectError }] = useSelectMutation()
   const { t, locale } = useLanguage()
   const cartItems = useSelector((state: ICartRootState) => state.cart.items)
   const initResponse = useSelector((state: CheckoutRootState) => state.checkout.initResponse)
   const isBillingSameRedux = useSelector((state: CheckoutRootState) => state.checkout.isBillingSame)
   const { transactionId, productList } = useSelector((state: DiscoveryRootState) => state.discovery)
+  const selectResponse = useSelector((state: CheckoutRootState) => state.checkout.selectResponse)
+  console.log(selectResponse)
 
   const { items, totalQuantity } = useSelector((state: ICartRootState) => state.cart)
 
@@ -146,7 +149,7 @@ const CheckoutPage = () => {
 
   const formSubmitHandler = (data: any) => {
     if (data) {
-      getInitPayload(submittedDetails, billingFormData, cartItems, transactionId, DOMAIN).then(res => {
+      getInitPayload(submittedDetails, billingFormData, cartItems, transactionId, DOMAIN, selectResponse).then(res => {
         return initialize(res)
       })
       // TODO :_ To check this again
@@ -200,6 +203,21 @@ const CheckoutPage = () => {
       })
     }
   }, [isError])
+
+  if (isSelectLoading) {
+    return (
+      <Box
+        display={'grid'}
+        height={'calc(100vh - 300px)'}
+        alignContent={'center'}
+      >
+        <LoaderWithMessage
+          loadingSubText=""
+          loadingText=""
+        />
+      </Box>
+    )
+  }
 
   return (
     <>
