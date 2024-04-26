@@ -75,6 +75,7 @@ const CheckoutPage = () => {
   const { t, locale } = useLanguage()
   const cartItems = useSelector((state: ICartRootState) => state.cart.items)
   const initResponse = useSelector((state: CheckoutRootState) => state.checkout.initResponse)
+  const selectResponse = useSelector((state: CheckoutRootState) => state.checkout.selectResponse)
   const isBillingSameRedux = useSelector((state: CheckoutRootState) => state.checkout.isBillingSame)
   const { transactionId, productList } = useSelector((state: DiscoveryRootState) => state.discovery)
 
@@ -136,7 +137,8 @@ const CheckoutPage = () => {
 
   const formSubmitHandler = (data: any) => {
     if (data) {
-      getInitPayload(submittedDetails, billingFormData, cartItems, transactionId, DOMAIN).then(res => {
+      const {id,type} = selectResponse[0].message.order.fulfillments[0]
+      getInitPayload(submittedDetails, billingFormData, cartItems, transactionId, DOMAIN,{id,type}).then(res => {
         return initialize(res)
       })
       // TODO :_ To check this again

@@ -172,7 +172,8 @@ export const getInitPayload = async (
   billingAddress: any,
   cartItems: any,
   transaction_id: string,
-  domain: string = 'retail:1.1.0'
+  domain: string = 'retail:1.1.0',
+  fulfillments:{id:string,type:string} = {id:"3",type:"Standard-shipping"}
 ) => {
   const cityData = await geocodeFromPincode(deliveryAddress.pinCode)
 
@@ -193,12 +194,12 @@ export const getInitPayload = async (
         domain: domain
       },
       message: {
-        orders: transformOrdersByProvider(items)
+        orders: transformOrdersByProvider(items,fulfillments)
       }
     }
   })
 
-  function transformOrdersByProvider(items) {
+  function transformOrdersByProvider(items,fullf) {
     const providerGroups = items.reduce((acc, item) => {
       const providerKey = `${item.bpp_id}_${item.providerId}`
       if (!acc[providerKey]) {
@@ -221,8 +222,8 @@ export const getInitPayload = async (
 
       const fulfillments = [
         {
-          id: '3',
-          type: 'standard-shipping',
+          id: fullf.id,
+          type:fullf.type,
           stops: [
             {
               location: {
