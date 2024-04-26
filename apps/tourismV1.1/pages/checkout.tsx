@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Box, Flex, Text, Stack, Checkbox, useToast } from '@chakra-ui/react'
+import { Box, Flex, Text, Stack, Checkbox, useToast, useTheme } from '@chakra-ui/react'
 import { DOMAIN } from '@lib/config'
 import { useLanguage } from '../hooks/useLanguage'
 
@@ -68,7 +68,8 @@ const CheckoutPage = () => {
     address: '15 Rue du Soleil, Paris, France',
     pinCode: '75001'
   })
-
+  const theme = useTheme()
+  const bgColorOfSecondary = theme.colors.secondary['100']
   const router = useRouter()
   const initRequest = useRequest()
   const dispatch = useDispatch()
@@ -220,6 +221,7 @@ const CheckoutPage = () => {
           shipping: {
             showDetails: isInitResultPresent(),
             sectionSubtitle: 'Add Traveller Details',
+            color: bgColorOfSecondary,
             formTitle: 'Add Traveller Details',
             sectionTitle: 'Traveller Details',
             shippingDetails: {
@@ -239,6 +241,7 @@ const CheckoutPage = () => {
             sectionSubtitle: 'Add Billing Details',
             sectionTitle: 'Billing',
             formTitle: 'Add Billing Details',
+            color: bgColorOfSecondary,
             isBilling: true,
             isChecked: isBillingSameRedux,
             onCheckChange: () => {

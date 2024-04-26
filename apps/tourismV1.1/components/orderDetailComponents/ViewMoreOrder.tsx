@@ -27,7 +27,6 @@ export interface ViewMoreOrderModalProps {
 
 const ViewMoreOrderModal: React.FC<ViewMoreOrderModalProps> = props => {
   const { t } = useLanguage()
-  console.log('Dank view', props.items)
   return (
     <>
       <Modal
@@ -83,7 +82,7 @@ const ViewMoreOrderModal: React.FC<ViewMoreOrderModalProps> = props => {
                   </Box>
                   <Typography
                     fontWeight={'600'}
-                    text={`${currencyMap[item.price.currency]} ${item.price.value} `}
+                    text={`${currencyMap[item.price.currency]} ${item.price.value * item.quantity.selected.count}`}
                   />
                 </Flex>
               )

@@ -119,7 +119,6 @@ const Search = () => {
 
   const handleResetFilter = () => {
     setItems(originalItems)
-    setIsFilterOpen(false)
   }
 
   return (
