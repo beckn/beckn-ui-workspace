@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 import { Box, Flex, Image, Text, useBreakpoint } from '@chakra-ui/react'
 import axios from 'axios'
 import { useRouter } from 'next/router'
@@ -42,7 +41,6 @@ const HomePage = () => {
       localStorage.clear()
     }
   }, [])
-
   const navigateToSearchResults = () => {
     localStorage.setItem('optionTags', JSON.stringify({ name: searchTerm }))
     router.push(`/search?searchTerm=${searchTerm}`)
@@ -150,7 +148,6 @@ const HomePage = () => {
       )
 
       if (response.data.results.length > 0) {
-        console.log(response.data.results[0].formatted_address)
         setAddress(response.data.results[0].formatted_address)
       } else {
         setAddress('No address found')
@@ -162,13 +159,19 @@ const HomePage = () => {
 
   const fetchData = async () => {
     if (importedOrderObject) {
-      const { items } = importedOrderObject
-      const { tags } = items[0]
-      // const promptType = (tags as any).Paris === 'Y' ? 'PARIS' : 'HIMALAYAS'
+      const tags = importedOrderObject.items[0].tags
+      const himalayasTag = tags.find(tag => {
+        if (tag.list) {
+          return tag.list.some(item => item.descriptor.name === 'Himalayas')
+        }
+        return false
+      })
+      const promptType = himalayasTag ? 'HIMALAYAS' : 'PARIS'
+
       const payload = {
         message: {
-          prompt_type: 'PARIS',
-          searchQuery: (importedOrderObject as any).items[0].descriptor.name
+          prompt_type: promptType,
+          searchQuery: importedOrderObject.items[0].descriptor.name
         }
       }
 

@@ -227,7 +227,10 @@ const BottomHeader = () => {
   const selectionPageUrl = process.env.NEXT_PUBLIC_SELECTION_PAGE_URL
   const retailAppUrl = process.env.NEXT_PUBLIC_RETAIL_APP_URL
 
-  const isFlowCityOfParis = false // once implememnted tag in status we will remove this
+  const isFlowCityOfParis = useSelector(
+    (state: { orderObjectUrl: { orderObjectUrl: string; isFlowCityOfParis: boolean } }) =>
+      state.orderObjectUrl.isFlowCityOfParis
+  )
   const handleInvoiceModalClose = () => {
     setInvoiceModalOpen(false)
   }
@@ -260,12 +263,12 @@ const BottomHeader = () => {
           </Box>
           {getHeaderTitleForPage(storedHeaderText as string, optionTags?.logo, router.pathname, locale)}
 
-          {orderDetailsIcon.includes(router.pathname) && (
+          {orderDetailsIcon.includes(router.pathname) && orderObjectUrl && (
             <Image
               cursor="pointer"
               onClick={() => setInvoiceModalOpen(true)}
               src="/images/OrCodeModalOpen.svg"
-              alt="invoice icon"
+              alt="OrCodeModalOpen"
               mr={'20px'}
             />
           )}
