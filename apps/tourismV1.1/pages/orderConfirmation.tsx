@@ -21,8 +21,6 @@ const OrderConfirmation = () => {
   const [confirmData, setConfirmData] = useState<ConfirmResponseModel[]>([])
   const [confirm, { isLoading, data }] = useConfirmMutation()
   const dispatch = useDispatch()
-  const [orderObjectFetchURL, setOrderObjectFetchURL] = useState('')
-
   const initResponse = useSelector((state: CheckoutRootState) => state.checkout.initResponse)
   const confirmResponse = useSelector((state: CheckoutRootState) => state.checkout.confirmResponse)
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
@@ -61,8 +59,17 @@ const OrderConfirmation = () => {
         .post(`https://bap-s3integration-api-dev.becknprotocol.io/orders`, ordersPayload, axiosConfig)
         .then(res => {
           const qrUrl = res?.data?.qr_url
-          dispatch(orderObjectUrlActions.addOrderObjectUrl(qrUrl)) // we will set isFlowCityOfParis after getting tag
-          setOrderObjectFetchURL(qrUrl)
+          dispatch(orderObjectUrlActions.addOrderObjectUrl(qrUrl))
+          const tags = confirmResponse[0].message.items[0].tags
+          const tags1 = tags[0].list
+          console.log(tags1)
+          const parisTag = tags1.find(tag => tag.name === 'Paris')
+          console.log(parisTag)
+          const isCityOfParisItem = parisTag.name === 'Paris'
+          console.log(isCityOfParisItem)
+          if (isCityOfParisItem) {
+            dispatch(orderObjectUrlActions.setisFlowCityOfParis(true))
+          }
           return res
         })
         .catch(err => console.error(err))
@@ -90,7 +97,10 @@ const OrderConfirmation = () => {
         iconSrc: orderConfirmmark,
         successOrderMessage: 'Order Placed!',
         gratefulMessage: 'Thank you! Your booking will be confirm shortly',
-        orderIdMessage: confirmResponse && confirmResponse.length > 0 ? `Order number is: ${confirmResponse[0].message.orderId.slice(0, 8)}...` : '',
+        orderIdMessage:
+          confirmResponse && confirmResponse.length > 0
+            ? `Order number is: ${confirmResponse[0].message.orderId.slice(0, 8)}...`
+            : '',
         trackOrderMessage: `You can track your order in "My Order" section`,
 
         buttons: [
