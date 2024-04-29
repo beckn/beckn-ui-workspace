@@ -947,8 +947,8 @@ const OrderDetails = () => {
                   <Qrcode
                     value={
                       isFlowCityOfParis
-                        ? `${selectionPageUrl}??external_url=${orderObjectUrl}`
-                        : `${retailAppUrl}/??&external_url=${orderObjectUrl}`
+                        ? `${selectionPageUrl}?external_url=${orderObjectUrl}`
+                        : `${retailAppUrl}?external_url=${orderObjectUrl}`
                     }
                   />
                 </CardBody>

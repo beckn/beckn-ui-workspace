@@ -35,7 +35,18 @@ const slice = createSlice({
         state.jwt = action.payload.jwt
         state.isAuthenticated = true
         Cookies.set('authToken', state.jwt)
-        Router.push('/')
+        const urlQuery = Router.query
+
+        const hasNotQuery = JSON.stringify(urlQuery) === '{}'
+
+        if (hasNotQuery) {
+          Router.push('/')
+        } else {
+          Router.push({
+            pathname: '/',
+            query: { external_url: urlQuery.external_url }
+          })
+        }
       })
       .addMatcher(authApi.endpoints.login.matchRejected, (state, action) => {
         console.log('rejected', action)

@@ -60,7 +60,7 @@ const storeHeaderBlackList = [
 const headerValues: PathnameObjectType = {
   '/checkoutPage': 'Review Purchase Order',
   '/orderHistory': 'My Orders',
-  '/orderDetails': 'Billing Details',
+  '/orderDetails': 'Order Details',
   '/invoiceDetails': 'Invoice Details',
   '/signin': 'Sign In',
   '/signUp': 'Sign Up',
@@ -329,8 +329,8 @@ const BottomHeader = () => {
             handleClick={() => {
               if (window && orderObjectUrl)
                 window.location.href = isFlowCityOfParis
-                  ? `${selectionPageUrl}??external_url=${orderObjectUrl}`
-                  : `${retailAppUrl}/??&external_url=${orderObjectUrl}`
+                  ? `${selectionPageUrl}?external_url=${orderObjectUrl}`
+                  : `${retailAppUrl}/?&external_url=${orderObjectUrl}`
             }}
           />
 
