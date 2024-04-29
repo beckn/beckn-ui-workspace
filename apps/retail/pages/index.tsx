@@ -55,20 +55,21 @@ const HomePage = () => {
 
   useEffect(() => {
     if (localStorage) localStorage.clear()
-    let URL = window.location.href
 
-    if (URL.includes('external_url')) {
-      const urlParams = new URLSearchParams(URL)
-      const externalUrl = urlParams.get('external_url')
-      axios
-        .get(externalUrl as string)
-        .then(res => {
-          setImportedOrder(true)
-          setImportedOrderObject(res.data)
-        })
-        .catch(error => console.error(error))
+    if (JSON.stringify(router.query) !== '{}') {
+      const externalUrl = router.query.external_url
+
+      if (externalUrl) {
+        axios
+          .get(externalUrl as string)
+          .then(res => {
+            setImportedOrder(true)
+            setImportedOrderObject(res.data)
+          })
+          .catch(error => console.error(error))
+      }
     }
-  }, [])
+  }, [router.isReady])
 
   useEffect(() => {
     if (importedOrderObject) {
