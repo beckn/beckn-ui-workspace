@@ -26,8 +26,8 @@
 }
 
 .checkbox input[type='checkbox']:checked + label::after {
-  background-color: #0560fa;
-  border-color: #0560fa;
+  background-color: #A71B4A;
+  border-color: #A71B4A;
 }
 
 .checkbox input[type='checkbox']:checked + label:after {
