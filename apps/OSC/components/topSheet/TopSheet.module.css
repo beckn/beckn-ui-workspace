@@ -5,8 +5,9 @@
 }
 
 .searchTopSheetMargin {
-  margin-left: -20px;
-  margin-right: -20px;
+  position: fixed;
+  width: 100%;
+  left: 0;
   display: flex;
   align-items: center;
   margin-bottom: 16px;
@@ -14,4 +15,9 @@
   background-color: #ffffff;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   height: 60px;
+}
+@media screen and (min-width: 1024px) and (max-width: 1366px) {
+  .topsheet_wrapper {
+    padding: 0 20px !important;
+  }
 }
