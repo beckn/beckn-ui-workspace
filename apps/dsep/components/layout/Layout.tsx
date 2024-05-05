@@ -18,6 +18,7 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const isHomepage = router.pathname === '/homePage'
   const isSearch = router.pathname === '/search'
   const isFeedbackPage = router.pathname === '/feedback'
+  const isOrderConfirmationPage = router.pathname === '/orderConfirmation'
   const paddingStyles = 'px-5 xl:px-16'
   const marginStyles = 'mt-[100px]'
 
@@ -51,7 +52,7 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
                   [paddingStyles]: !isHomepage
                 },
                 {
-                  [marginStyles]: !isHomepage && !isSearch && !isFeedbackPage
+                  [marginStyles]: !isHomepage && !isSearch && !isFeedbackPage && !isOrderConfirmationPage
                 },
                 {
                   ['mt-[24px]']: isHomepage

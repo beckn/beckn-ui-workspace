@@ -84,33 +84,36 @@ const OrderConfirmation = () => {
   }
 
   return (
-    <ConfirmationPage
-      schema={{
-        iconSrc: orderConfirmmark,
-        successOrderMessage: t.orderPlaced,
-        gratefulMessage: t.confirmMessageSubtext,
-        buttons: [
-          {
-            text: t.viewOrderDetails,
-            handleClick: () => {
-              router.push('/orderDetails')
+    <Box mt={'72px'}>
+      <ConfirmationPage
+        schema={{
+          iconSrc: orderConfirmmark,
+          successOrderMessage: '',
+          gratefulMessage: t.orderPlaced,
+          orderIdMessage: t.confirmMessageSubtext,
+          buttons: [
+            {
+              text: t.viewOrderDetails,
+              handleClick: () => {
+                router.push('/orderDetails')
+              },
+              disabled: false,
+              variant: 'solid',
+              colorScheme: 'primary'
             },
-            disabled: false,
-            variant: 'solid',
-            colorScheme: 'primary'
-          },
-          {
-            text: t.myLearnings,
-            handleClick: () => {
-              router.push('/myLearningOrderHistory')
-            },
-            disabled: false,
-            variant: 'outline',
-            colorScheme: 'primary'
-          }
-        ]
-      }}
-    />
+            {
+              text: t.myLearnings,
+              handleClick: () => {
+                router.push('/myLearningOrderHistory')
+              },
+              disabled: false,
+              variant: 'outline',
+              colorScheme: 'primary'
+            }
+          ]
+        }}
+      />
+    </Box>
   )
 }
 
