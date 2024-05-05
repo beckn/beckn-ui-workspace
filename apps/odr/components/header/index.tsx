@@ -177,7 +177,7 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
                 onClick={() => {
                   // localStorage.clear();
                   // router.push("/");
-                  let user = localStorage.getItem('userPhone') as string
+                  const user = localStorage.getItem('userPhone') as string
                   localStorage.clear()
                   localStorage.setItem('userPhone', user)
                   router.push('/homePage')
