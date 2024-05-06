@@ -56,7 +56,7 @@ export const theme = extendTheme({
   }
 })
 
-const Filter = ({ handleApplyFilter, handleResetFilter }) => {
+const Filter = ({ handleApplyFilter, handleResetFilter, handleCancelFilter = () => {} }) => {
   const getFormData = (): any => {
     if (localStorage) {
       const localFormData = localStorage.getItem('formData')
@@ -65,7 +65,6 @@ const Filter = ({ handleApplyFilter, handleResetFilter }) => {
   }
   const [formData, setFormData] = useState(getFormData())
   const [sortBy, setSortBy] = useState<string>('')
-
   const handleChange = (name: string, value: string) => {
     setSortBy(value)
     setFormData(prevData => ({
@@ -78,15 +77,11 @@ const Filter = ({ handleApplyFilter, handleResetFilter }) => {
     setFormData({})
     handleResetFilter()
   }
-
   useEffect(() => {
     if (localStorage) {
       localStorage.setItem('formData', JSON.stringify(formData))
     }
   }, [formData, sortBy])
-
-  console.log(formData)
-  console.log(sortBy)
 
   return (
     <>
@@ -174,6 +169,17 @@ const Filter = ({ handleApplyFilter, handleResetFilter }) => {
           />
         </Box>
       </ChakraProvider>
+
+      <Box display={['block', 'block', 'none', 'none']}>
+        <Button
+          className="cencel_btn_filter"
+          buttonText={'Cancel'}
+          background={'#fff'}
+          color={'#E93324'}
+          isDisabled={false}
+          handleOnClick={handleCancelFilter}
+        />
+      </Box>
     </>
   )
 }
