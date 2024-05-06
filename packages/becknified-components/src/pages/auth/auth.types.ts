@@ -1,4 +1,4 @@
-import { InputProps, ButtonProps } from '@beckn-ui/molecules'
+import { InputProps, ButtonProps, LoaderProps } from '@beckn-ui/molecules'
 export interface AuthProps {
   schema: {
     logo?: {
@@ -8,5 +8,7 @@ export interface AuthProps {
     inputs: InputProps[]
     buttons: ButtonProps[]
     socialButtons?: ButtonProps[]
+    loader?:LoaderProps
   }
+  isLoading?:boolean
 }
