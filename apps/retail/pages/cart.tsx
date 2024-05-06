@@ -85,7 +85,7 @@ const Cart = () => {
           orderSummary: {
             totalAmount: {
               price: totalAmount,
-              currencyType: items[0].price.currency
+              currencyType: items[0]?.price.currency
             },
             totalQuantity: {
               text: totalQuantity.toString(),
