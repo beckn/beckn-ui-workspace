@@ -94,7 +94,7 @@ const bottomHeaderBlackList = ['/orderConfirmation', '/']
 const menuIconWhiteList = ['/', '/search', '/profile']
 const orderIconList = ['/orderDetails']
 const editIcon = ['/profile']
-const invoiceDownloadIcon = ['/invoiceDetails']
+const invoiceDownloadIcon = ['']
 const currentLocation = ['/']
 
 const getHeaderTitleForPage = (name: string, logo: string, pathName: string, locale: string | undefined) => {
