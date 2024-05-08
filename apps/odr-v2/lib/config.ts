@@ -1,4 +1,4 @@
-export const DOMAIN = 'retail:1.1.0'
+export const DOMAIN = 'online-dispute-resolution:0.1.0'
 
 export const currencyMap = {
   EUR: '€',

@@ -136,6 +136,10 @@ const en: { [key: string]: string } = {
   quoteRequestLoader: 'Your order is getting processed',
   initializingOrderLoader: 'while we set things up for you',
   errorZipcode: 'Zip Code is required',
-  errorZipcode2: 'Invalid Zip Code'
+  errorZipcode2: 'Invalid Zip Code',
+  homeHeading: 'LegalEase',
+  headingSpan: 'for All',
+  homeText:
+    'LegalEase allows anyone to discover lawyers, online dispute resolution (ODR) service providers, paralegals and other legal services and information in a quick and seamless manner',
 }
 export default en
