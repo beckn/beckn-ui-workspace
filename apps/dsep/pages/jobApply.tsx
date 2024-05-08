@@ -9,6 +9,7 @@ import React, { useEffect, useState } from 'react'
 import Router, { useRouter } from 'next/router'
 import JobApply from '../components/jobApply/JobApply'
 import UploadFile from '../components/uploadFile/UploadFile'
+import ApplyJobForm from '../components/applyJob/apply-job'
 import { fromBinary } from '../utilities/common-utils'
 import { useLanguage } from '../hooks/useLanguage'
 import { ParsedItemModel } from '../types/search.types'
@@ -87,83 +88,85 @@ const jobApply = () => {
     return <></>
   }
 
-  const handleButtonClick = async () => {
-    setIsLoading(true)
-    const { name, mobileNumber } = formData
+  // TODO :- check this handleButtonClick later
 
-    try {
-      let arrayOfDocumentIds: number[] = []
-      const fetchDocuments = await axios.get(`${strapiUrl}/documents?populate[0]=attachment`, axiosConfig)
+  // const handleButtonClick = async () => {
+  //   setIsLoading(true)
+  //   const { name, mobileNumber } = formData
 
-      if (fetchDocuments.data) {
-        fetchDocuments.data.data.forEach((ele: any) => arrayOfDocumentIds.push(ele.id))
-      }
+  //   try {
+  //     let arrayOfDocumentIds: number[] = []
+  //     const fetchDocuments = await axios.get(`${strapiUrl}/documents?populate[0]=attachment`, axiosConfig)
 
-      const formDataForPayload = new FormData()
+  //     if (fetchDocuments.data) {
+  //       fetchDocuments.data.data.forEach((ele: any) => arrayOfDocumentIds.push(ele.id))
+  //     }
 
-      const profileCreatePayload = {
-        name: name,
-        phone: mobileNumber,
-        documents: arrayOfDocumentIds
-      }
-      formDataForPayload.append('data', JSON.stringify(profileCreatePayload))
+  //     const formDataForPayload = new FormData()
 
-      const formSubmissionResponse = await axios.post(`${strapiUrl}/profiles`, formDataForPayload, axiosConfig)
-      if (formSubmissionResponse.data) {
-        const fetchProfilesResponse = await axios.get(
-          `${strapiUrl}/profiles?populate[0]=documents.attachment`,
-          axiosConfig
-        )
+  //     const profileCreatePayload = {
+  //       name: name,
+  //       phone: mobileNumber,
+  //       documents: arrayOfDocumentIds
+  //     }
+  //     formDataForPayload.append('data', JSON.stringify(profileCreatePayload))
 
-        if (fetchProfilesResponse.data) {
-          let docCredArray: JobCredential[] = []
+  //     const formSubmissionResponse = await axios.post(`${strapiUrl}/profiles`, formDataForPayload, axiosConfig)
+  //     if (formSubmissionResponse.data) {
+  //       const fetchProfilesResponse = await axios.get(
+  //         `${strapiUrl}/profiles?populate[0]=documents.attachment`,
+  //         axiosConfig
+  //       )
 
-          fetchProfilesResponse.data.data.attributes.documents.data.map((doc: any) => {
-            if (doc.attributes.attachment.data && doc.attributes.type) {
-              const docUrl = coreStrapiUrl + doc.attributes.attachment.data.attributes.url
-              const docType = doc.attributes.attachment.data.attributes.mime
+  //       if (fetchProfilesResponse.data) {
+  //         let docCredArray: JobCredential[] = []
 
-              docCredArray.push({
-                url: docUrl,
-                type: docType
-              })
-            }
-          })
+  //         fetchProfilesResponse.data.data.attributes.documents.data.map((doc: any) => {
+  //           if (doc.attributes.attachment.data && doc.attributes.type) {
+  //             const docUrl = coreStrapiUrl + doc.attributes.attachment.data.attributes.url
+  //             const docType = doc.attributes.attachment.data.attributes.mime
 
-          if (jobSelectResponse) {
-            const initPayload = getInitPayloadForJobs(jobSelectResponse, docCredArray, formData.name)
+  //             docCredArray.push({
+  //               url: docUrl,
+  //               type: docType
+  //             })
+  //           }
+  //         })
 
-            const jobInitResponse = await axios.post(`${dsepUrl}/init`, initPayload)
-            if (jobInitResponse.data) {
-              const confirmPayload = getConfirmPayloadForJobs(jobInitResponse.data)
-              const jobConfirmResponse = await axios.post(`${dsepUrl}/confirm`, confirmPayload)
-              const jobConfirmData: ConfirmResponseModel = jobConfirmResponse.data
-              if (jobConfirmData) {
-                const orderPayload = getPostOrderPayload(jobConfirmData)
-                const fulfillOrderRequest = await axios.post(`${strapiUrl}/orders`, orderPayload, axiosConfig)
-                if (fulfillOrderRequest.data) {
-                  setIsLoading(false)
-                  Router.push('/applicationSent')
-                }
-              }
-            }
-          }
-        }
-      }
-    } catch (error: any) {
-      if (error.response && error.response.data) {
-        const errorMessage = error.response.data.error.message
-        console.log(error.response.config.url)
-        if (error.response.config.url.includes(`${strapiUrl}/orders`)) {
-          toast.error(errorMessage, { autoClose: 5000 })
-          Router.push('/applicationSent')
-        } else {
-          toast.error(errorMessage, { autoClose: 5000 })
-          console.log(errorMessage)
-        }
-      }
-    }
-  }
+  //         if (jobSelectResponse) {
+  //           const initPayload = getInitPayloadForJobs(jobSelectResponse, docCredArray, formData.name)
+
+  //           const jobInitResponse = await axios.post(`${dsepUrl}/init`, initPayload)
+  //           if (jobInitResponse.data) {
+  //             const confirmPayload = getConfirmPayloadForJobs(jobInitResponse.data)
+  //             const jobConfirmResponse = await axios.post(`${dsepUrl}/confirm`, confirmPayload)
+  //             const jobConfirmData: ConfirmResponseModel = jobConfirmResponse.data
+  //             if (jobConfirmData) {
+  //               const orderPayload = getPostOrderPayload(jobConfirmData)
+  //               const fulfillOrderRequest = await axios.post(`${strapiUrl}/orders`, orderPayload, axiosConfig)
+  //               if (fulfillOrderRequest.data) {
+  //                 setIsLoading(false)
+  //                 Router.push('/applicationSent')
+  //               }
+  //             }
+  //           }
+  //         }
+  //       }
+  //     }
+  //   } catch (error: any) {
+  //     if (error.response && error.response.data) {
+  //       const errorMessage = error.response.data.error.message
+  //       console.log(error.response.config.url)
+  //       if (error.response.config.url.includes(`${strapiUrl}/orders`)) {
+  //         toast.error(errorMessage, { autoClose: 5000 })
+  //         Router.push('/applicationSent')
+  //       } else {
+  //         toast.error(errorMessage, { autoClose: 5000 })
+  //         console.log(errorMessage)
+  //       }
+  //     }
+  //   }
+  // }
 
   if (isLoadingInSelect) {
     return (
@@ -195,20 +198,7 @@ const jobApply = () => {
     )
   }
 
-  const areAllFieldsFilled = () => {
-    for (const key in formData) {
-      if (formData.hasOwnProperty(key)) {
-        const value = formData[key]
-
-        if (!value && value !== 0) {
-          return false
-        }
-      }
-    }
-    return true
-  }
-
-  console.log('jobSelectResponse', jobSelectResponse)
+  const xInputHtml = jobSelectResponse?.data[0].message.order.items[0].xinput.html as string
 
   return (
     <Box
@@ -217,50 +207,7 @@ const jobApply = () => {
       overflowY="scroll"
       mt={'15px'}
     >
-      <Box pb={'20px'}>
-        <JobApply
-          formData={formData}
-          setFormData={setFormData}
-        />
-        <Typography
-          style={{
-            paddingBottom: '10px'
-          }}
-          text={t.docText}
-          fontSize={'15px'}
-        />
-        <UploadFile
-          selectedFiles={selectedFiles}
-          setSelectedFiles={setSelectedFiles}
-        />
-      </Box>
-      <Flex
-        alignItems={'baseline'}
-        pb="30px"
-      >
-        <input
-          onChange={() => setIsDeclarationChecked(prevValue => !prevValue)}
-          type="checkbox"
-          style={{
-            position: 'relative',
-            top: '2px'
-          }}
-        />
-
-        <Typography
-          text={t.declarationText}
-          fontSize="12px"
-          style={{
-            paddingLeft: '10px'
-          }}
-        />
-      </Flex>
-      <Button
-        text={t.applyBtnText}
-        color={'rgba(var(--text-color))'}
-        handleClick={handleButtonClick}
-        disabled={!(areAllFieldsFilled() && isDeclarationChecked)}
-      />
+      <ApplyJobForm xInputHtml={xInputHtml} />
     </Box>
   )
 }
