@@ -25,6 +25,7 @@ const Search = () => {
   const [sortBy, setSortBy] = useState<string>('')
   const router = useRouter()
   const [searchKeyword, setSearchKeyword] = useState(router.query?.searchTerm || '')
+  const selectedCategory = router.query?.selectedItem
   const [isLoading, setIsLoading] = useState(false)
   const [isFilterOpen, setIsFilterOpen] = useState(false)
   const breakpoint = useBreakpoint()
@@ -44,18 +45,13 @@ const Search = () => {
       domain: DOMAIN
     },
     searchString: searchKeyword,
-    fulfillment: {
-      type: 'Delivery',
-      stops: [
-        {
-          location: '28.4594965,77.0266383'
-        }
-      ]
+    category: {
+      name: selectedCategory
     }
   }
 
   const fetchDataForSearch = () => {
-    if (!searchKeyword) return
+    if (!searchKeyword && !selectedCategory) return
     setIsLoading(true)
     axios
       .post(`${apiUrl}/search`, searchPayload)
@@ -73,14 +69,15 @@ const Search = () => {
   }
 
   useEffect(() => {
-    if (searchKeyword) {
+    // if (searchKeyword) {
+    if (searchKeyword || selectedCategory) {
       localStorage.removeItem('searchItems')
       localStorage.setItem('optionTags', JSON.stringify({ name: searchKeyword }))
       window.dispatchEvent(new Event('storage-optiontags'))
       fetchDataForSearch()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchKeyword])
+  }, [searchKeyword, selectedCategory])
 
   useEffect(() => {
     if (localStorage) {

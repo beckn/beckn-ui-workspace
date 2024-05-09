@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Box, Flex, Text, Stack, Checkbox, useToast, useTheme } from '@chakra-ui/react'
+import { Box, Flex, Text, Stack, Checkbox, useToast, useTheme,useBreakpoint } from '@chakra-ui/react'
 import { DOMAIN } from '@lib/config'
 import { useLanguage } from '../hooks/useLanguage'
+import { PlusSquareIcon } from '@chakra-ui/icons'
 
+import { useSelectMutation } from '@services/select'
 import { CartItemForRequest, DataPerBpp, ICartRootState, TransactionIdRootState } from '@lib/types/cart'
 import {
   getInitPayload,
@@ -15,14 +17,17 @@ import useRequest from '../hooks/useRequest'
 import { CustomToast } from '@components/signIn/SignIn'
 import { useInitMutation } from '@services/init'
 import { responseDataActions } from '../store/responseData-slice'
+import { getSelectPayload } from '@components/cart/cart.utils'
 
-import { Checkout } from '@beckn-ui/becknified-components'
+import { Checkout,ShippingSection,ShippingFormInitialValuesType,DetailCard } from '@beckn-ui/becknified-components'
+import {Loader,Button} from '@beckn-ui/molecules'
 
 import { Router, useRouter } from 'next/router'
-import { ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
 import { CheckoutRootState, checkoutActions } from '@store/checkout-slice'
 import { cartActions } from '@store/cart-slice'
 import { isEmpty } from '@utils/common-utils'
+import DyForm from '@components/x-input/DyForm'
+import AddSection from '@components/x-input/AddSection'
 
 export type ShippingFormData = {
   name: string
@@ -48,6 +53,7 @@ const CheckoutPage = () => {
   })
   const theme = useTheme()
   const bgColorOfSecondary = theme.colors.secondary['100']
+  const bgColorOfPrimary = theme.colors.primary['100']
   const toast = useToast()
 
   const [submittedDetails, setSubmittedDetails] = useState<ShippingFormInitialValuesType>({
@@ -68,6 +74,13 @@ const CheckoutPage = () => {
     pinCode: '75001'
   })
 
+  const [filledDetails, setFilledDetails] = useState({
+    complainant: false,
+    respondent: false,
+    dispute: false,
+    consent: false
+  })
+
   const router = useRouter()
   const initRequest = useRequest()
   const dispatch = useDispatch()
@@ -77,7 +90,18 @@ const CheckoutPage = () => {
   const initResponse = useSelector((state: CheckoutRootState) => state.checkout.initResponse)
   const selectResponse = useSelector((state: CheckoutRootState) => state.checkout.selectResponse)
   const isBillingSameRedux = useSelector((state: CheckoutRootState) => state.checkout.isBillingSame)
+  const { items, totalQuantity } = useSelector((state: ICartRootState) => state.cart)
+  const [fetchQuotes, { isLoading: isSelectLoading, data, isError: isSelectError }] = useSelectMutation()
   const { transactionId, productList } = useSelector((state: DiscoveryRootState) => state.discovery)
+
+  const breakpoint = useBreakpoint()
+  const mobileBreakpoints = ['base', 'sm', 'md']
+  const isLargeScreen = !mobileBreakpoints.includes(breakpoint)
+
+
+  useEffect(() => {
+    fetchQuotes(getSelectPayload(items, transactionId, DOMAIN))
+  }, [totalQuantity])
 
   useEffect(() => {
     if (localStorage) {
@@ -137,7 +161,12 @@ const CheckoutPage = () => {
 
   const formSubmitHandler = (data: any) => {
     if (data) {
-      const {id,type} = selectResponse[0].message.order.fulfillments[0]
+      let id = '1'
+      let type = 'shipping'
+      if(selectResponse[0].message.order.fulfillments){
+         id = selectResponse[0].message.order?.fulfillments[0].id
+         type = selectResponse[0].message.order?.fulfillments[0].type
+      }
       getInitPayload(submittedDetails, billingFormData, cartItems, transactionId, DOMAIN,{id,type}).then(res => {
         return initialize(res)
       })
@@ -193,94 +222,92 @@ const CheckoutPage = () => {
     }
   }, [isError])
 
+
+  const complainantDetails = {
+    sectionSubtitle: 'Add Complainant Details',
+    sectionTitle: 'Complainant',
+    formTitle: 'Add Complainant Details',
+    showDetails: isInitResultPresent(),
+    // color: bgColorOfSecondary,
+    shippingDetails: {
+      name: submittedDetails.name,
+      location: submittedDetails.address,
+      number: submittedDetails.mobileNumber,
+      title: 'Complainant Details'
+    },
+    shippingForm: {
+      onSubmit: formSubmitHandler,
+      submitButton: { text: 'Save Shipping Details' },
+      values: formData,
+      onChange: data => setSubmittedDetails(data)
+    }
+  }
+
+  const respondentDetails = {
+    sectionSubtitle: 'Add Respondent Details',
+    sectionTitle: 'Respondent',
+    formTitle: 'Add Respondent Details',
+    isBilling: true,
+    // color: bgColorOfSecondary,
+    isChecked: isBillingSameRedux,
+    onCheckChange: () => {
+      // setIsBillingSame(!isBillingSame)
+      dispatch(checkoutActions.setIsBillingSame({ isBillingSame: !isBillingSameRedux }))
+    },
+    showDetails: isInitResultPresent() && !isEmpty(submittedDetails),
+    shippingDetails: {
+      name: billingFormData.name,
+      location: billingFormData.address,
+      number: billingFormData.mobileNumber,
+      title: 'Respondent Details'
+    },
+    shippingForm: {
+      onSubmit: formSubmitHandler,
+      submitButton: { text: 'Save Billing Details' },
+      values: formData,
+      onChange: data => setBillingFormData(data)
+    }
+
+  }
+
+  if (isLoading || isSelectLoading )
+    return (
+      <Box
+        display="flex"
+        height="100vh"
+        justifyContent="center"
+        transform="translateY(-20%)"
+      >
+        <Loader  text={t.initializingOrderLoader} />
+      </Box>
+    )
+
   return (
     <Box
       className="hideScroll"
       maxH="calc(100vh - 100px)"
       overflowY={'scroll'}
     >
-      {/* start Item Details */}
-      <Checkout
-        schema={{
-          items: {
-            title: 'Items',
-            data: cartItems.map(singleItem => ({
-              title: singleItem.name,
-              description: singleItem.short_desc,
-              quantity: singleItem.quantity,
-              // priceWithSymbol: `${currencyMap[singleItem.price.currency]}${singleItem.totalPrice}`,
-              price: singleItem.totalPrice,
-              currency: singleItem.price.currency,
-              image: singleItem.images[0].url
-            }))
-          },
-          shipping: {
-            showDetails: isInitResultPresent(),
-            color: bgColorOfSecondary,
-            shippingDetails: {
-              name: submittedDetails.name,
-              location: submittedDetails.address,
-              number: submittedDetails.mobileNumber,
-              title: 'Shipping'
-            },
-            shippingForm: {
-              onSubmit: formSubmitHandler,
-              submitButton: { text: 'Save Shipping Details' },
-              values: formData,
-              onChange: data => setSubmittedDetails(data)
-            }
-          },
-          billing: {
-            sectionSubtitle: 'Add Billing Details',
-            sectionTitle: 'Billing',
-            formTitle: 'Add Billing Details',
-            isBilling: true,
-            color: bgColorOfSecondary,
-            isChecked: isBillingSameRedux,
-            onCheckChange: () => {
-              // setIsBillingSame(!isBillingSame)
-              dispatch(checkoutActions.setIsBillingSame({ isBillingSame: !isBillingSameRedux }))
-            },
-            showDetails: isInitResultPresent() && !isEmpty(submittedDetails),
-            shippingDetails: {
-              name: billingFormData.name,
-              location: billingFormData.address,
-              number: billingFormData.mobileNumber,
-              title: 'Billing'
-            },
-            shippingForm: {
-              onSubmit: formSubmitHandler,
-              submitButton: { text: 'Save Billing Details' },
-              values: formData,
-              onChange: data => setBillingFormData(data)
-            }
-          },
-          payment: {
-            title: 'Payment',
-            paymentDetails: {
-              hasBoxShadow: false,
-              paymentBreakDown: createPaymentBreakdownMap(),
-              totalText: 'Total',
-              totalValueWithCurrency: {
-                value: getSubTotalAndDeliveryCharges(initResponse).subTotal.toString(),
-                currency: getSubTotalAndDeliveryCharges(initResponse).currencySymbol
-              }
-            }
-          },
-          loader: {
-            text: t.initializingOrderLoader
-          },
-          pageCTA: {
-            text: 'Proceed to Checkout',
-            handleClick: () => {
-              dispatch(cartActions.clearCart())
-              router.push('/paymentMode')
-            }
-          }
-        }}
-        isLoading={isLoading}
-        hasInitResult={isInitResultPresent()}
-      />
+      <Box>
+        <ShippingSection {...complainantDetails} />
+        <ShippingSection {...respondentDetails} />
+        
+      {!isEmpty(selectResponse) && <AddSection htmlString={selectResponse[0].message.order.items[0].xinput.html} form_id='odrDisputeDetailsForm'   /> }      
+      {!isEmpty(initResponse) && <AddSection htmlString={initResponse[0].message.order.items[0].xinput.html} form_id='odrConsentForm' preSubmissionTitle='Consent Form' postSubmissionTitle='Consent form added'  /> }    
+        <Box
+          width={isLargeScreen ? '40%' : '100%'}
+          margin="auto"
+        >
+          <Button
+          text='Confirm'
+          handleClick={() => {
+            dispatch(cartActions.clearCart())
+            router.push('/orderConfirmation')
+          }}
+          
+          />
+        </Box>
+      </Box>
     </Box>
   )
 }

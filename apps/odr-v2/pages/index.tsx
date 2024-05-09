@@ -1,17 +1,24 @@
-import { Box, Flex, Image, Text, useBreakpoint } from '@chakra-ui/react'
+import React, { useEffect, useState, useRef } from 'react'
+import { Box, Flex, Image, Text, useBreakpoint, Icon, Divider } from '@chakra-ui/react'
+import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md'
 import axios from 'axios'
 import { useRouter } from 'next/router'
-import React, { useEffect, useState } from 'react'
+import { Typography } from '@beckn-ui/molecules'
 import KuzaLogo from '@public/images/Kuza-mini.svg'
 import AlternateLogo from '@public/images/KuzaLogo.svg'
 import TopSheet from '@components/topSheet/TopSheet'
 import { useLanguage } from '@hooks/useLanguage'
 import beckenFooter from '../public/images/footer.svg'
 import SearchInput from '@beckn-ui/becknified-components/src/components/search-input'
-import ImportedOrder from '@components/importedOrder/ImportedOrder'
-import OrderDetails from '@components/orderDetails/ImportedOrderDetails'
-import ShoppingList from '@components/shoppingList/ShoppingList'
-import SelectDeliveryModal from '@components/selectDeliveryModal/SelectDeliveryModal'
+
+const items = ['Civil Disputes', 'Financial Disputes', 'Family Disputes', 'Employment Disputes', 'Commercial Disputes']
+const disputeCategoryMapper: any = {
+  ['Civil Disputes']: 'civil-dispute',
+  ['Family Disputes']: 'family-dispute',
+  ['Employment Disputes']: 'employment-dispute',
+  ['Commercial Disputes']: 'commercial-dispute',
+  ['Financial Disputes']: 'financial-dispute'
+}
 
 const HomePage = () => {
   const [searchTerm, setSearchTerm] = useState<string>('')
@@ -19,18 +26,6 @@ const HomePage = () => {
   const mobileBreakpoints = ['base', 'sm', 'md', 'lg']
   const currentLogo = mobileBreakpoints.includes(breakpoint) ? KuzaLogo : AlternateLogo
   const { t } = useLanguage()
-
-  const [importedOrder, setImportedOrder] = useState(false)
-  const [viewOrderDetails, setViewOrderDetails] = useState(false)
-  const [chatGtpList, setChatGtpList] = useState(false)
-  const [selectLocationModal, setSelectLocationModal] = useState(false)
-  const [shoppingListData, setShoppingListData] = useState([])
-  const [selectedValues, setSelectedValues] = useState<string[]>([])
-  const [address, setAddress] = useState('')
-  const [isLoadingForChatGptRequest, setIsLoadingForChatGptRequest] = useState(true)
-  const [importedOrderObject, setImportedOrderObject] = useState(null)
-  const chatGptApiUrl = process.env.NEXT_PUBLIC_CHAT_GPT_URL
-
   const apiKeyForGoogle = process.env.NEXT_PUBLIC_GOOGLE_API_KEY
   const [currentAddress, setCurrentAddress] = useState('')
   const [loadingForCurrentAddress, setLoadingForCurrentAddress] = useState(true)
@@ -41,9 +36,16 @@ const HomePage = () => {
       localStorage.clear()
     }
   }, [])
+  // const navigateToSearchResults = () => {
+  //   localStorage.setItem('optionTags', JSON.stringify({ name: searchTerm }))
+  //   router.push(`/search?searchTerm=${searchTerm}`)
+  // }
+
   const navigateToSearchResults = () => {
     localStorage.setItem('optionTags', JSON.stringify({ name: searchTerm }))
-    router.push(`/search?searchTerm=${searchTerm}`)
+    localStorage.setItem('optionTags1', JSON.stringify({ name: selectedItem }))
+    const selectedCategory = selectedItem.trim().length ? disputeCategoryMapper[selectedItem] : ''
+    router.push(`/search?searchTerm=${searchTerm}&selectedItem=${selectedCategory}`)
   }
 
   const searchIconClickHandler = (e: any) => {
@@ -52,39 +54,6 @@ const HomePage = () => {
     }
     e.preventDefault()
   }
-
-  useEffect(() => {
-    if (localStorage) localStorage.clear()
-
-    if (JSON.stringify(router.query) !== '{}') {
-      const externalUrl = router.query.external_url
-
-      if (externalUrl) {
-        axios
-          .get(externalUrl as string)
-          .then(res => {
-            setImportedOrder(true)
-            setImportedOrderObject(res.data)
-          })
-          .catch(error => console.error(error))
-      }
-    }
-  }, [router.isReady])
-
-  useEffect(() => {
-    if (importedOrderObject) {
-      const latLongValues = importedOrderObject?.fulfillments[0]?.stops[0]?.location?.gps
-
-      console.log(latLongValues)
-      const [latStr, langStr] = latLongValues.split(',')
-      const result = {
-        lat: parseFloat(latStr),
-        lang: parseFloat(langStr)
-      }
-      handleConvert(result.lat, result.lang)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [importedOrderObject])
 
   useEffect(() => {
     // Check if geolocation is available in the browser
@@ -142,70 +111,33 @@ const HomePage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const handleConvert = async (lat: number, lang: number) => {
-    try {
-      const response = await axios.get(
-        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lang}&key=${apiKeyForGoogle}`
-      )
+  const [isOpen, setIsOpen] = useState(false)
+  const [selectedItem, setSelectedItem] = useState('')
+  const dropdownRef = useRef<any>(null)
 
-      if (response.data.results.length > 0) {
-        setAddress(response.data.results[0].formatted_address)
-      } else {
-        setAddress('No address found')
-      }
-    } catch (error) {
-      console.error('Error converting coordinates to address:', error)
+  const isButtonDisabled = !selectedItem && !searchTerm.trim()
+  const toggleDropdown = () => {
+    setIsOpen(!isOpen)
+  }
+
+  const handleItemClick = (item: string) => {
+    setSelectedItem(item)
+    setIsOpen(false)
+  }
+
+  const handleOutsideClick = (e: any) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+      setIsOpen(false)
     }
   }
 
-  const fetchData = async () => {
-    if (importedOrderObject) {
-      const tags = importedOrderObject.items[0].tags
-      const himalayasTag = tags.find(tag => {
-        if (tag.list) {
-          return tag.list.some(item => item.descriptor.name === 'Himalayas')
-        }
-        return false
-      })
-      const promptType = himalayasTag ? 'HIMALAYAS' : 'PARIS'
+  useEffect(() => {
+    document.addEventListener('mousedown', handleOutsideClick)
 
-      const payload = {
-        message: {
-          prompt_type: promptType,
-          searchQuery: importedOrderObject.items[0].descriptor.name
-        }
-      }
-
-      axios
-        .post(chatGptApiUrl as string, payload)
-        .then(response => {
-          setShoppingListData(response.data.item)
-          setIsLoadingForChatGptRequest(false)
-        })
-        .catch(error => {
-          console.log(error)
-        })
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick)
     }
-  }
-
-  const updateStateImportedOrder = () => {
-    setImportedOrder(false)
-    setViewOrderDetails(true)
-  }
-  const backOnImportedOrder = () => {
-    setViewOrderDetails(false)
-    setImportedOrder(true)
-  }
-  const showChatGtpList = () => {
-    fetchData()
-    setViewOrderDetails(false)
-    setChatGtpList(true)
-  }
-  const selectDeliveryLocationText = () => {
-    setSelectLocationModal(true)
-    setViewOrderDetails(false)
-    setChatGtpList(false)
-  }
+  }, [])
 
   return (
     <>
@@ -215,24 +147,108 @@ const HomePage = () => {
         currentAddress={currentAddress}
       />
       <Box
-        p={'0 20px'}
         maxWidth={{ base: '100vw', md: '30rem', lg: '40rem' }}
-        margin="calc(4rem + 90px)  auto"
+        margin="calc(0rem + 90px)  auto"
         backgroundColor="white"
       >
-        <Image
-          src={currentLogo}
-          alt={'Kuza One'}
-          pt="15px"
-          pb="15px"
-          m={{ base: '0', xl: '0 auto' }}
+        <Typography
+          fontSize={'40px'}
+          fontWeight="800"
+          text={t.homeHeading}
+          color="#8D353A"
+        />
+        <Text
+          fontSize={'15px'}
+          mt={'15px'}
+          fontFamily="Poppins"
+        >
+          {t.homeText}{' '}
+        </Text>
+        <Box
+          position="relative"
+          display="inline-block"
+          width={'100%'}
+          m="1.25rem 0"
+        >
+          <Typography
+            fontSize={'15px'}
+            fontWeight="600"
+            text={t.category}
+            color="#8D353A"
+          />
+          <Box
+            mt={'8px'}
+            padding="12px"
+            cursor="pointer"
+            border="1px solid #ccc"
+            borderRadius={'5px'}
+            onClick={toggleDropdown}
+            fontSize={'15px'}
+            fontWeight={400}
+            backgroundColor={'transparent'}
+            display="flex"
+            alignItems="center"
+            justifyContent={'space-between'}
+            color={'#747474'}
+          >
+            {selectedItem || 'Select Category'}
+
+            <Icon
+              as={isOpen ? MdKeyboardArrowUp : MdKeyboardArrowDown}
+              ml="2"
+              w={'20px'}
+              h={'20px'}
+            />
+          </Box>
+          {isOpen && (
+            <Box
+              display="block"
+              position="absolute"
+              backgroundColor="#fff"
+              boxShadow="0 8px 16px rgba(0, 0, 0, 0.2)"
+              zIndex="1"
+              width={'100%'}
+              borderRadius={'5px'}
+            >
+              {items.map((item, index) => (
+                <Box
+                  key={index}
+                  className="dropdown-item"
+                  cursor="pointer"
+                  onClick={() => handleItemClick(item)}
+                  p="0 15px 15px 15px"
+                  _hover={{
+                    bg: '#E9C378',
+                    fontWeight: '500'
+                  }}
+                >
+                  <Box pt="15px">
+                    {item}
+                    {items.length - 1 !== index ? (
+                      <Divider
+                        position={'relative'}
+                        top={'15px'}
+                      />
+                    ) : null}
+                  </Box>
+                </Box>
+              ))}
+            </Box>
+          )}
+        </Box>
+        <Typography
+          fontSize={'15px'}
+          fontWeight="600"
+          text={t.service}
+          color="#8D353A"
+          style={{ marginBottom: '8px' }}
         />
         <SearchInput
           onChangeHandler={(e: React.BaseSyntheticEvent) => setSearchTerm(e.target.value)}
           searchIcon={'/images/search.svg'}
           searchIconClickHandler={searchIconClickHandler}
           onEnterHandler={(e: { key: string }) => e.key === 'Enter' && navigateToSearchResults()}
-          placeHolder="Search for Products"
+          placeHolder="Mediation, arbitriation, Lawyers....."
         />
 
         <Flex
@@ -257,40 +273,6 @@ const HomePage = () => {
           />
         </Flex>
       </Box>
-
-      {importedOrder ? (
-        <ImportedOrder
-          setImportedOrder={setImportedOrder}
-          importedOrderedItem={(importedOrderObject as any).items}
-          updateStateImportedOrder={updateStateImportedOrder}
-          showChatGtpList={showChatGtpList}
-        />
-      ) : null}
-      {viewOrderDetails ? (
-        <OrderDetails
-          importedOrderObject={importedOrderObject}
-          backOnImportedOrder={backOnImportedOrder}
-        />
-      ) : null}
-
-      {chatGtpList && (
-        <ShoppingList
-          isLoadingForChatGptRequest={isLoadingForChatGptRequest}
-          shoppingListData={shoppingListData}
-          selectDeliveryLocationText={selectDeliveryLocationText}
-          setSelectedValues={setSelectedValues}
-          selectedValues={selectedValues}
-        />
-      )}
-
-      {selectLocationModal ? (
-        <SelectDeliveryModal
-          importedOrderObject={importedOrderObject}
-          backOnImportedOrder={backOnImportedOrder}
-          selectedValues={selectedValues}
-          addressOfTheEndLocation={address}
-        />
-      ) : null}
     </>
   )
 }
