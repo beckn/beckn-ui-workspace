@@ -23,6 +23,11 @@ interface Item {
   name: string
   price: Price
   tags: Tag[]
+  xinput: {
+    url: string
+    mime_type: string
+    html: string
+  }
 }
 
 interface Provider {
