@@ -135,12 +135,12 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
         padding={['0 20px', '0 20px', '0 20px', '0 10rem']}
       >
         <Box className={styles.top_header_wrapper}>
-          {/* <Box>
+          <Box>
             <Image
-              src="/images/Logo.svg"
+              src="/images/LegalEase-icon.svg"
               alt="App logo"
             />
-          </Box> */}
+          </Box>
           <Flex columnGap={['10px', '10px', '2rem', '2rem']}>
             {!homeIconBlackList.includes(router.pathname) && (
               <Image

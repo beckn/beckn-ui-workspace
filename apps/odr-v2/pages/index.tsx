@@ -1,10 +1,9 @@
-
-import React, { useEffect, useState,useRef } from 'react'
-import { Box, Flex, Image, Text, useBreakpoint,Icon,Divider } from '@chakra-ui/react'
+import React, { useEffect, useState, useRef } from 'react'
+import { Box, Flex, Image, Text, useBreakpoint, Icon, Divider } from '@chakra-ui/react'
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md'
 import axios from 'axios'
 import { useRouter } from 'next/router'
-import {Typography} from '@beckn-ui/molecules'
+import { Typography } from '@beckn-ui/molecules'
 import KuzaLogo from '@public/images/Kuza-mini.svg'
 import AlternateLogo from '@public/images/KuzaLogo.svg'
 import TopSheet from '@components/topSheet/TopSheet'
@@ -15,7 +14,6 @@ import ImportedOrder from '@components/importedOrder/ImportedOrder'
 import OrderDetails from '@components/orderDetails/ImportedOrderDetails'
 import ShoppingList from '@components/shoppingList/ShoppingList'
 import SelectDeliveryModal from '@components/selectDeliveryModal/SelectDeliveryModal'
-
 
 const items = ['Civil Disputes', 'Financial Disputes', 'Family Disputes', 'Employment Disputes', 'Commercial Disputes']
 const disputeCategoryMapper: any = {
@@ -243,31 +241,37 @@ const HomePage = () => {
         currentAddress={currentAddress}
       />
       <Box
-        p={'0 20px'}
         maxWidth={{ base: '100vw', md: '30rem', lg: '40rem' }}
-        margin="calc(1rem + 90px)  auto"
+        margin="calc(0rem + 90px)  auto"
         backgroundColor="white"
       >
-      
-          <Typography
-        fontSize={'40px'}
-        fontWeight="800"
-        text={t.homeHeading}
-      />
-      <Text
-        fontSize={'15px'}
-        mt={'15px'}
-        fontFamily="Poppins"
-      >
-        {t.homeText}{' '}
-      </Text>
-      <Box
+        <Typography
+          fontSize={'40px'}
+          fontWeight="800"
+          text={t.homeHeading}
+          color="#8D353A"
+        />
+        <Text
+          fontSize={'15px'}
+          mt={'15px'}
+          fontFamily="Poppins"
+        >
+          {t.homeText}{' '}
+        </Text>
+        <Box
           position="relative"
           display="inline-block"
           width={'100%'}
-          m='2rem 0'
+          m="1.25rem 0"
         >
+          <Typography
+            fontSize={'15px'}
+            fontWeight="600"
+            text={t.category}
+            color="#8D353A"
+          />
           <Box
+            mt={'8px'}
             padding="12px"
             cursor="pointer"
             border="1px solid #ccc"
@@ -326,6 +330,13 @@ const HomePage = () => {
             </Box>
           )}
         </Box>
+        <Typography
+          fontSize={'15px'}
+          fontWeight="600"
+          text={t.service}
+          color="#8D353A"
+          style={{ marginBottom: '8px' }}
+        />
         <SearchInput
           onChangeHandler={(e: React.BaseSyntheticEvent) => setSearchTerm(e.target.value)}
           searchIcon={'/images/search.svg'}
