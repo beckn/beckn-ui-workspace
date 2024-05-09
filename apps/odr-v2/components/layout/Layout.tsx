@@ -29,7 +29,7 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
     // <ThemeProvider enableSystem={true}>
     <div>
       <Head>
-        <title>Kuza One</title>
+        <title>ODR</title>
       </Head>
       <div className={`${styles.container} ${isHomepage ? styles.homepage : styles.minHeight}`}>
         <NextNProgress height={7} />
