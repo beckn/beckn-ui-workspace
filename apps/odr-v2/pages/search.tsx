@@ -48,14 +48,6 @@ const Search = () => {
     category: {
       name: selectedCategory
     }
-    // fulfillment: {
-    //   type: 'Delivery',
-    //   stops: [
-    //     {
-    //       location: '28.4594965,77.0266383'
-    //     }
-    //   ]
-    // }
   }
 
   const fetchDataForSearch = () => {
@@ -65,7 +57,6 @@ const Search = () => {
       .post(`${apiUrl}/search`, searchPayload)
       .then(res => {
         dispatch(discoveryActions.addTransactionId({ transactionId: res.data.data[0].context.transaction_id }))
-        console.log("Dank",res.data)
         const parsedSearchItems = parsedSearchlist(res.data.data)
         dispatch(discoveryActions.addProducts({ products: parsedSearchItems }))
         setItems(parsedSearchItems)
@@ -86,7 +77,7 @@ const Search = () => {
       fetchDataForSearch()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchKeyword,selectedCategory])
+  }, [searchKeyword, selectedCategory])
 
   useEffect(() => {
     if (localStorage) {

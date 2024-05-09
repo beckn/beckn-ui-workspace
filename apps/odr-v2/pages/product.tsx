@@ -69,8 +69,8 @@ const Product = () => {
               handleDecrement: decrement,
               counter: counter,
               cta: {
-                text: 'Add To Cart',
-                color: 'black',
+                text: 'Procced',
+                color: 'White',
                 handleClick: () => {
                   dispatch(
                     cartActions.addItemToCart({
@@ -78,7 +78,7 @@ const Product = () => {
                       quantity: counter
                     })
                   )
-                  toast.success('Product added to cart')
+                  router.push('/checkout')
                 }
               }
             }

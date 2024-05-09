@@ -10,10 +10,6 @@ import TopSheet from '@components/topSheet/TopSheet'
 import { useLanguage } from '@hooks/useLanguage'
 import beckenFooter from '../public/images/footer.svg'
 import SearchInput from '@beckn-ui/becknified-components/src/components/search-input'
-import ImportedOrder from '@components/importedOrder/ImportedOrder'
-import OrderDetails from '@components/orderDetails/ImportedOrderDetails'
-import ShoppingList from '@components/shoppingList/ShoppingList'
-import SelectDeliveryModal from '@components/selectDeliveryModal/SelectDeliveryModal'
 
 const items = ['Civil Disputes', 'Financial Disputes', 'Family Disputes', 'Employment Disputes', 'Commercial Disputes']
 const disputeCategoryMapper: any = {
@@ -30,18 +26,6 @@ const HomePage = () => {
   const mobileBreakpoints = ['base', 'sm', 'md', 'lg']
   const currentLogo = mobileBreakpoints.includes(breakpoint) ? KuzaLogo : AlternateLogo
   const { t } = useLanguage()
-
-  const [importedOrder, setImportedOrder] = useState(false)
-  const [viewOrderDetails, setViewOrderDetails] = useState(false)
-  const [chatGtpList, setChatGtpList] = useState(false)
-  const [selectLocationModal, setSelectLocationModal] = useState(false)
-  const [shoppingListData, setShoppingListData] = useState([])
-  const [selectedValues, setSelectedValues] = useState<string[]>([])
-  const [address, setAddress] = useState('')
-  const [isLoadingForChatGptRequest, setIsLoadingForChatGptRequest] = useState(true)
-  const [importedOrderObject, setImportedOrderObject] = useState(null)
-  const chatGptApiUrl = process.env.NEXT_PUBLIC_CHAT_GPT_URL
-
   const apiKeyForGoogle = process.env.NEXT_PUBLIC_GOOGLE_API_KEY
   const [currentAddress, setCurrentAddress] = useState('')
   const [loadingForCurrentAddress, setLoadingForCurrentAddress] = useState(true)
@@ -70,39 +54,6 @@ const HomePage = () => {
     }
     e.preventDefault()
   }
-
-  useEffect(() => {
-    if (localStorage) localStorage.clear()
-
-    if (JSON.stringify(router.query) !== '{}') {
-      const externalUrl = router.query.external_url
-
-      if (externalUrl) {
-        axios
-          .get(externalUrl as string)
-          .then(res => {
-            setImportedOrder(true)
-            setImportedOrderObject(res.data)
-          })
-          .catch(error => console.error(error))
-      }
-    }
-  }, [router.isReady])
-
-  useEffect(() => {
-    if (importedOrderObject) {
-      const latLongValues = importedOrderObject?.fulfillments[0]?.stops[0]?.location?.gps
-
-      console.log(latLongValues)
-      const [latStr, langStr] = latLongValues.split(',')
-      const result = {
-        lat: parseFloat(latStr),
-        lang: parseFloat(langStr)
-      }
-      handleConvert(result.lat, result.lang)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [importedOrderObject])
 
   useEffect(() => {
     // Check if geolocation is available in the browser
@@ -160,51 +111,6 @@ const HomePage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const handleConvert = async (lat: number, lang: number) => {
-    try {
-      const response = await axios.get(
-        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lang}&key=${apiKeyForGoogle}`
-      )
-
-      if (response.data.results.length > 0) {
-        setAddress(response.data.results[0].formatted_address)
-      } else {
-        setAddress('No address found')
-      }
-    } catch (error) {
-      console.error('Error converting coordinates to address:', error)
-    }
-  }
-
-  const fetchData = async () => {
-    if (importedOrderObject) {
-      const tags = importedOrderObject.items[0].tags
-      const himalayasTag = tags.find(tag => {
-        if (tag.list) {
-          return tag.list.some(item => item.descriptor.name === 'Himalayas')
-        }
-        return false
-      })
-      const promptType = himalayasTag ? 'HIMALAYAS' : 'PARIS'
-
-      const payload = {
-        message: {
-          prompt_type: promptType,
-          searchQuery: importedOrderObject.items[0].descriptor.name
-        }
-      }
-
-      axios
-        .post(chatGptApiUrl as string, payload)
-        .then(response => {
-          setShoppingListData(response.data.item)
-          setIsLoadingForChatGptRequest(false)
-        })
-        .catch(error => {
-          console.log(error)
-        })
-    }
-  }
   const [isOpen, setIsOpen] = useState(false)
   const [selectedItem, setSelectedItem] = useState('')
   const dropdownRef = useRef<any>(null)
@@ -367,40 +273,6 @@ const HomePage = () => {
           />
         </Flex>
       </Box>
-
-      {/* {importedOrder ? (
-        <ImportedOrder
-          setImportedOrder={setImportedOrder}
-          importedOrderedItem={(importedOrderObject as any).items}
-          updateStateImportedOrder={updateStateImportedOrder}
-          showChatGtpList={showChatGtpList}
-        />
-      ) : null}
-      {viewOrderDetails ? (
-        <OrderDetails
-          importedOrderObject={importedOrderObject}
-          backOnImportedOrder={backOnImportedOrder}
-        />
-      ) : null}
-
-      {chatGtpList && (
-        <ShoppingList
-          isLoadingForChatGptRequest={isLoadingForChatGptRequest}
-          shoppingListData={shoppingListData}
-          selectDeliveryLocationText={selectDeliveryLocationText}
-          setSelectedValues={setSelectedValues}
-          selectedValues={selectedValues}
-        />
-      )} */}
-
-      {/* {selectLocationModal ? (
-        <SelectDeliveryModal
-          importedOrderObject={importedOrderObject}
-          backOnImportedOrder={backOnImportedOrder}
-          selectedValues={selectedValues}
-          addressOfTheEndLocation={address}
-        />
-      ) : null} */}
     </>
   )
 }

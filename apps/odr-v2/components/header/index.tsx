@@ -347,14 +347,14 @@ const BottomHeader = () => {
             router.pathname,
             locale
           )}
-          <div className="flex gap-4">
+          {/* <div className="flex gap-4">
             {!cartIconBlackList.includes(router.pathname) && (
               <CartIconWithCount
                 itemCount={cartItems.length}
                 handleClick={() => router.push('/cart')}
               />
             )}
-          </div>
+          </div> */}
           {orderIconList.includes(router.pathname) && (
             <Image
               cursor="pointer"

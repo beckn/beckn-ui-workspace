@@ -22,7 +22,7 @@ export default function Document() {
         />
         <link
           rel="shortcut icon"
-          href="/images/HomeImg.svg"
+          href="/images/LegalEase-icon.svg"
         />
       </Head>
       <body>
