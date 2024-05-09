@@ -5,6 +5,7 @@ import { DOMAIN } from '@lib/config'
 import { useLanguage } from '../hooks/useLanguage'
 import { PlusSquareIcon } from '@chakra-ui/icons'
 
+import { useSelectMutation } from '@services/select'
 import { CartItemForRequest, DataPerBpp, ICartRootState, TransactionIdRootState } from '@lib/types/cart'
 import {
   getInitPayload,
@@ -16,6 +17,7 @@ import useRequest from '../hooks/useRequest'
 import { CustomToast } from '@components/signIn/SignIn'
 import { useInitMutation } from '@services/init'
 import { responseDataActions } from '../store/responseData-slice'
+import { getSelectPayload } from '@components/cart/cart.utils'
 
 import { Checkout,ShippingSection,ShippingFormInitialValuesType,DetailCard } from '@beckn-ui/becknified-components'
 import {Loader,Button} from '@beckn-ui/molecules'
@@ -88,11 +90,18 @@ const CheckoutPage = () => {
   const initResponse = useSelector((state: CheckoutRootState) => state.checkout.initResponse)
   const selectResponse = useSelector((state: CheckoutRootState) => state.checkout.selectResponse)
   const isBillingSameRedux = useSelector((state: CheckoutRootState) => state.checkout.isBillingSame)
+  const { items, totalQuantity } = useSelector((state: ICartRootState) => state.cart)
+  const [fetchQuotes, { isLoading: isSelectLoading, data, isError: isSelectError }] = useSelectMutation()
   const { transactionId, productList } = useSelector((state: DiscoveryRootState) => state.discovery)
 
   const breakpoint = useBreakpoint()
   const mobileBreakpoints = ['base', 'sm', 'md']
   const isLargeScreen = !mobileBreakpoints.includes(breakpoint)
+
+
+  useEffect(() => {
+    fetchQuotes(getSelectPayload(items, transactionId, DOMAIN))
+  }, [totalQuantity])
 
   useEffect(() => {
     if (localStorage) {
@@ -261,7 +270,7 @@ const CheckoutPage = () => {
 
   }
 
-  if (isLoading )
+  if (isLoading || isSelectLoading )
     return (
       <Box
         display="flex"
@@ -283,9 +292,9 @@ const CheckoutPage = () => {
         <ShippingSection {...complainantDetails} />
         <ShippingSection {...respondentDetails} />
         
-      <AddSection htmlString={selectResponse[0].message.order.items[0].xinput.html} form_id='odrDisputeDetailsForm'   />
-      <AddSection htmlString={initResponse[0].message.order.items[0].xinput.html} form_id='odrConsentForm' preSubmissionTitle='Consent Form' postSubmissionTitle='Consent form added'  />
-      <Box
+      {!isEmpty(selectResponse) && <AddSection htmlString={selectResponse[0].message.order.items[0].xinput.html} form_id='odrDisputeDetailsForm'   /> }      
+      {!isEmpty(initResponse) && <AddSection htmlString={initResponse[0].message.order.items[0].xinput.html} form_id='odrConsentForm' preSubmissionTitle='Consent Form' postSubmissionTitle='Consent form added'  /> }    
+        <Box
           width={isLargeScreen ? '40%' : '100%'}
           margin="auto"
         >
@@ -293,7 +302,7 @@ const CheckoutPage = () => {
           text='Confirm'
           handleClick={() => {
             dispatch(cartActions.clearCart())
-            router.push('/paymentMode')
+            router.push('/orderConfirmation')
           }}
           
           />
