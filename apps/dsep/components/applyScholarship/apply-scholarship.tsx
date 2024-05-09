@@ -38,9 +38,8 @@ const ApplyScholarshipForm: FC<ApplyScholarshipPropsModel> = ({ xInputHtml = '' 
       })
       .then(res => {
         if (res.status === 200 && res.data) {
+          router.push('/scholarshipConfirmationPage')
         }
-        console.log(res)
-        router.push('/scholarshipConfirmationPage')
       })
       .catch(e => console.error(e))
   }
