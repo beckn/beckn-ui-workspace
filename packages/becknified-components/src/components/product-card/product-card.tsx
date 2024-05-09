@@ -65,7 +65,7 @@ const ProductCard: React.FC<ProductCardProps> = props => {
                   height={'100%'}
                   alt={'item_image'}
                   boxShadow={'0 20px 25px rgba(0, 0, 0, 0.1),0 8px 10px rgba(0, 0, 0, 0.05)'}
-                  objectFit={'contain'}
+                  objectFit={'cover'}
                 />
               </Box>
             </Box>
@@ -144,7 +144,9 @@ const ProductCard: React.FC<ProductCardProps> = props => {
                   currencyType={currency}
                   price={parseFloat(product.price)}
                 />
-                {product.rating && (
+                {product.rating === 'null' ? (
+                  ''
+                ) : (
                   <ProductRating
                     ratingValue={product.rating}
                     ratingIcon={StarIcon}

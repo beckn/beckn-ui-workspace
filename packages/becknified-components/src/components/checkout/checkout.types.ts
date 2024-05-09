@@ -62,7 +62,7 @@ export interface PaymentDetailsProps {
 
 export interface CheckoutProps<T extends FormField[]> {
   schema: {
-    items: {
+    items?: {
       title: string
       data: ItemDetailProps[]
     }
