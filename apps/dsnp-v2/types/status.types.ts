@@ -74,9 +74,9 @@ interface LocationInfo {
 }
 
 interface Contact {
-  phone: string,
-  name?:string,
-  address?:string
+  phone: string
+  name?: string
+  address?: string
 }
 
 interface Stop {
@@ -143,9 +143,9 @@ interface Order {
   billing: Billing
   payments: Payment[]
   cancellation_terms: CancellationTerms[]
-  type: string,
-  status:string,
-  tags:any
+  type: string
+  status: string
+  tags: any
 }
 
 interface Context {

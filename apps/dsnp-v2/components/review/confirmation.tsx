@@ -3,9 +3,9 @@ import Router from 'next/router'
 import React, { useState, useEffect } from 'react'
 import { useLanguage } from '../../hooks/useLanguage'
 import { RetailItem } from '../../lib/types/products'
-import {Button} from '@beckn-ui/molecules'
+import { Button } from '@beckn-ui/molecules'
 import ImageSection from '../productDetails/ImageSection'
-import {LoaderWithMessage} from '@beckn-ui/molecules'
+import { LoaderWithMessage } from '@beckn-ui/molecules'
 
 interface ConfirmationProps {
   reviewSubmitted: boolean

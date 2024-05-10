@@ -95,7 +95,7 @@ const OrderHistory = () => {
       ) : (
         <Box mt={'23px'}>
           {orderHistoryList.map((order, idx) => {
-            console.log("Dank",order)
+            console.log('Dank', order)
             return (
               <DetailCard key={idx}>
                 <Flex

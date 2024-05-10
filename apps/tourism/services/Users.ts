@@ -17,8 +17,7 @@ const api = createApi({
         body: credentials // Sends the email and password
       }),
       // Transform the response to directly return the user data
-      transformResponse: (response: { data: User }) => {
-      },
+      transformResponse: (response: { data: User }) => {},
       // Optional: Customize error handling if needed
       transformErrorResponse: (response: { status: string | number }) => response.status,
       // Invalidate user-related data as needed, or manage cache/tags based on your app's logic

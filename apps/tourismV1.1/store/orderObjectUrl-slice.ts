@@ -1,22 +1,22 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 const initialState = {
-  orderObjectUrl: "",
-  isFlowCityOfParis: false,
-};
+  orderObjectUrl: '',
+  isFlowCityOfParis: false
+}
 
 const orderObjectUrlSlice = createSlice({
-  name: "orderObjectUrl",
+  name: 'orderObjectUrl',
   initialState,
   reducers: {
     addOrderObjectUrl(state, action: PayloadAction<string>) {
-      state.orderObjectUrl = action.payload;
+      state.orderObjectUrl = action.payload
     },
     setisFlowCityOfParis(state, action: PayloadAction<boolean>) {
-      state.isFlowCityOfParis = action.payload;
-    },
-  },
-});
+      state.isFlowCityOfParis = action.payload
+    }
+  }
+})
 
-export const orderObjectUrlActions = orderObjectUrlSlice.actions;
-export default orderObjectUrlSlice.reducer;
+export const orderObjectUrlActions = orderObjectUrlSlice.actions
+export default orderObjectUrlSlice.reducer

@@ -137,8 +137,8 @@ const CheckoutPage = () => {
 
   const formSubmitHandler = (data: any) => {
     if (data) {
-      const {id,type} = selectResponse[0].message.order.fulfillments[0]
-      getInitPayload(submittedDetails, billingFormData, cartItems, transactionId, DOMAIN,{id,type}).then(res => {
+      const { id, type } = selectResponse[0].message.order.fulfillments[0]
+      getInitPayload(submittedDetails, billingFormData, cartItems, transactionId, DOMAIN, { id, type }).then(res => {
         return initialize(res)
       })
       // TODO :_ To check this again
