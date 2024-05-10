@@ -15,7 +15,6 @@ import useRequest from '../hooks/useRequest'
 import { CustomToast } from '@components/signIn/SignIn'
 import { useInitMutation } from '@services/init'
 import { responseDataActions } from '../store/responseData-slice'
-
 import { Checkout } from '@beckn-ui/becknified-components'
 
 import { Router, useRouter } from 'next/router'
@@ -40,31 +39,31 @@ export const currencyMap = {
 
 const CheckoutPage = () => {
   const [formData, setFormData] = useState<ShippingFormInitialValuesType>({
-    name: 'Antoine Dubois',
-    mobileNumber: '0612345678',
-    email: 'antoine.dubois@gmail.com',
-    address: '15 Rue du Soleil, Paris, France',
-    pinCode: '201002'
+    name: 'santosh kumar',
+    mobileNumber: '6251423251',
+    email: 'santosh.k@gmail.com',
+    address: '151-e, janpath road, new delhi',
+    pinCode: '110001'
   })
 
   const toast = useToast()
 
   const [submittedDetails, setSubmittedDetails] = useState<ShippingFormInitialValuesType>({
-    name: 'Antoine Dubois',
-    mobileNumber: '0612345678',
-    email: 'antoine.dubois@gmail.com',
-    address: '15 Rue du Soleil, Paris, France',
-    pinCode: '201002'
+    name: 'santosh kumar',
+    mobileNumber: '6251423251',
+    email: 'santosh.k@gmail.com',
+    address: '151-e, janpath road, new delhi',
+    pinCode: '110001'
   })
 
   const [isBillingAddressSameAsShippingAddress, setIsBillingAddressSameAsShippingAddress] = useState(true)
 
   const [billingFormData, setBillingFormData] = useState<ShippingFormInitialValuesType>({
-    name: 'Antoine Dubois',
-    mobileNumber: '0612345678',
-    email: 'antoine.dubois@gmail.com',
-    address: '15 Rue du Soleil, Paris, France',
-    pinCode: '75001'
+    name: 'santosh kumar',
+    mobileNumber: '6251423251',
+    email: 'santosh.k@gmail.com',
+    address: '151-e, janpath road, new delhi',
+    pinCode: '110001'
   })
 
   const router = useRouter()
