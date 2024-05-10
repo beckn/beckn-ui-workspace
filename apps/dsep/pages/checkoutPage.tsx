@@ -84,9 +84,9 @@ const CheckoutPage = () => {
       .then(res => {
         const profileResponse = res.data
         const documents = profileResponse.data.attributes.documents.data
-
         const profileData = profileResponse.data.attributes
         const { phone, name, zip_code, address } = profileData
+
         setFormData(prevData => {
           return {
             ...prevData,
