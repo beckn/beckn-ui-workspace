@@ -100,13 +100,11 @@ export const getSubTotalAndDeliveryCharges = (initData: any) => {
 
   if (initData && initData.length > 0) {
     initData.forEach(data => {
-       subTotal = parseFloat(data.message.order.quote.price.value).toFixed(2)
+      subTotal = parseFloat(data.message.order.quote.price.value).toFixed(2)
 
       currencySymbol = data.message.order.quote.price.currency
-
     })
   }
-
 
   return { subTotal, currencySymbol }
 }
@@ -173,7 +171,7 @@ export const getInitPayload = async (
   cartItems: any,
   transaction_id: string,
   domain: string = 'retail:1.1.0',
-  fulfillments:{id:string,type:string} = {id:"3",type:"Standard-shipping"}
+  fulfillments: { id: string; type: string } = { id: '3', type: 'Standard-shipping' }
 ) => {
   const cityData = await geocodeFromPincode(deliveryAddress.pinCode)
 
@@ -194,12 +192,12 @@ export const getInitPayload = async (
         domain: domain
       },
       message: {
-        orders: transformOrdersByProvider(items,fulfillments)
+        orders: transformOrdersByProvider(items, fulfillments)
       }
     }
   })
 
-  function transformOrdersByProvider(items,fullf) {
+  function transformOrdersByProvider(items, fullf) {
     const providerGroups = items.reduce((acc, item) => {
       const providerKey = `${item.bpp_id}_${item.providerId}`
       if (!acc[providerKey]) {
@@ -223,7 +221,7 @@ export const getInitPayload = async (
       const fulfillments = [
         {
           id: fullf.id,
-          type:fullf.type,
+          type: fullf.type,
           stops: [
             {
               location: {

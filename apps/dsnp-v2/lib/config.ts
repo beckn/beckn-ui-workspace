@@ -5,7 +5,6 @@ export const currencyMap = {
   INR: '₹'
 }
 
-
 export const parentURLs = [
   'https://experience-guide-dev.becknprotocol.io',
   'https://experience-guide-staging.becknprotocol.io',

@@ -64,7 +64,7 @@ export const getPayloadForConfirm = (initResponse: InitResponseModel[]) => {
               },
               items: items,
               fulfillments: fulfillments,
-              billing: billing,
+              billing: billing
               // payments: [
               //   {
               //     id: payments[0].id,

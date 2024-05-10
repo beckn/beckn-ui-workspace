@@ -6,7 +6,7 @@ export interface Discovery {
   transactionId: string
   productList: ParsedItemModel[]
   selectedProduct: ParsedItemModel
-  encodedProduct:string
+  encodedProduct: string
 }
 
 export interface DiscoveryRootState {
@@ -17,7 +17,7 @@ const initialState: Discovery = {
   transactionId: '',
   productList: [],
   selectedProduct: {} as ParsedItemModel,
-  encodedProduct:''
+  encodedProduct: ''
 }
 
 const discoverySlice = createSlice({

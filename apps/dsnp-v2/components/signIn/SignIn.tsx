@@ -15,12 +15,11 @@ import { FaGoogle } from 'react-icons/fa'
 import Router from 'next/router'
 import { Box, useToast, Text, useBreakpoint } from '@chakra-ui/react'
 
-
 //dsnp imports
 import { parentURLs } from '@lib/config'
 import { setLocalStorage } from '@utils/localstorage'
-import { signPayloadWithExtension,payloadHandle } from '@utils/signTransaction'
-import {dsnpCreate,dsnpRegister,getBlockNumber} from '@utils/auth'
+import { signPayloadWithExtension, payloadHandle } from '@utils/signTransaction'
+import { dsnpCreate, dsnpRegister, getBlockNumber } from '@utils/auth'
 import { fetchHandles, fetchChallenge, dsnpLogin } from './Signin.utils'
 
 const SignIn = () => {
@@ -32,8 +31,7 @@ const SignIn = () => {
   const breakpoint = useBreakpoint()
   const mobileBreakpoints = ['base', 'sm', 'md', 'lg']
   const currentLogo = mobileBreakpoints.includes(breakpoint) ? Logo : AlternateLogo
-  const [login, { isLoading,isError,data,error }] = useLoginMutation()
-
+  const [login, { isLoading, isError, data, error }] = useLoginMutation()
 
   //dsnp state
   const [challenge, setChallenge] = useState('')
@@ -41,7 +39,6 @@ const SignIn = () => {
   const [expiration, setExpiration] = useState(0)
   const [selectedAddress, setSelectedAddress] = useState('')
   const [providerInfo, setProviderInfo] = useState({})
-
 
   // const toast = useToast()
 
@@ -66,7 +63,7 @@ const SignIn = () => {
     setIsFormFilled(updatedFormData.email.trim() !== '' && updatedFormData.password.trim() !== '')
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     // if(isError){
     //   toast({
     //     render: () => (
@@ -80,7 +77,7 @@ const SignIn = () => {
     //     isClosable: true
     //   })
     // }
-  },[isError])
+  }, [isError])
 
   const handlePolkaLogin = async () => {
     const signInData = {
@@ -88,8 +85,6 @@ const SignIn = () => {
       password: formData.password
     }
     let isIframe = false
-
-
 
     try {
       if (selectedAddress && formData.email) {
@@ -147,7 +142,7 @@ const SignIn = () => {
         })
         throw Error('No polka address found')
       }
-      await handleSignIn();
+      await handleSignIn()
       if (!isIframe) Router.push('/')
     } catch (error) {
       console.error('An error occurred:', error)
@@ -228,7 +223,7 @@ const SignIn = () => {
         buttons: [
           {
             text: t.signIn,
-            handleClick: async ()=>{
+            handleClick: async () => {
               await handlePolkaLogin()
               // await handleSignIn()
             },

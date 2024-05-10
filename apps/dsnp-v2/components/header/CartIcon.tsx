@@ -21,25 +21,24 @@ function CartIconWithCount({
         alt="Cart"
         boxSize="30px"
       />
-      {
-        itemCount > 0 && <Box
-        position="absolute"
-        top="-1"
-        right="-1"
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        width="20px"
-        height="20px"
-        borderRadius="full"
-        bgColor="#F6D046"
-        color="white"
-        fontSize="xs"
-      >
-        <Text>{itemCount}</Text>
-      </Box>
-      }
-      
+      {itemCount > 0 && (
+        <Box
+          position="absolute"
+          top="-1"
+          right="-1"
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          width="20px"
+          height="20px"
+          borderRadius="full"
+          bgColor="#F6D046"
+          color="white"
+          fontSize="xs"
+        >
+          <Text>{itemCount}</Text>
+        </Box>
+      )}
     </Flex>
   )
 }

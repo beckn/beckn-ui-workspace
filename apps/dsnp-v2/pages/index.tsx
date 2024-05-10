@@ -42,8 +42,7 @@ const HomePage = () => {
     e.preventDefault()
   }
 
-
-    useEffect(() => {
+  useEffect(() => {
     // Check if geolocation is available in the browser
     if (navigator) {
       if ('geolocation' in navigator) {
@@ -101,7 +100,7 @@ const HomePage = () => {
 
   return (
     <>
-    <TopSheet
+      <TopSheet
         currentLocationFetchError={currentLocationFetchError}
         loadingForCurrentAddress={loadingForCurrentAddress}
         currentAddress={currentAddress}

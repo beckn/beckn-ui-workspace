@@ -44,40 +44,38 @@ const UpdateShippingDetails = () => {
                 domain,
                 bpp_id,
                 bpp_uri,
-                transaction_id:uuidv4()
+                transaction_id: uuidv4()
               },
               orderId,
               updateDetails: {
                 updateTarget: 'order.fulfillments[0].stops[0]',
-                fulfillments:[
+                fulfillments: [
                   {
-                    id:1,
-                    "stops": [
+                    id: 1,
+                    stops: [
                       {
-                          "location": {
-                              "address": shippingDetails.address,
-                              "city": {
-                                  "name": "Bengaluru"
-                              },
-                              "state": {
-                                  "name": "Karnataka"
-                              },
-                              "country": {
-                                  "code": "IND"
-                              },
-                              "area_code": "560025"
+                        location: {
+                          address: shippingDetails.address,
+                          city: {
+                            name: 'Bengaluru'
                           },
-                          "contact": {
-                              "name":name,
-                              "phone":mobileNumber,
-                              'email':email
-                          }
+                          state: {
+                            name: 'Karnataka'
+                          },
+                          country: {
+                            code: 'IND'
+                          },
+                          area_code: '560025'
+                        },
+                        contact: {
+                          name: name,
+                          phone: mobileNumber,
+                          email: email
+                        }
                       }
-                  ]
-
+                    ]
                   }
                 ]
-
               }
             }
           ]
@@ -99,40 +97,38 @@ const UpdateShippingDetails = () => {
                 domain,
                 bpp_id,
                 bpp_uri,
-                transaction_id:uuidv4()
+                transaction_id: uuidv4()
               },
               orderId,
               updateDetails: {
                 updateTarget: 'order.fulfillments[0].stops[0]',
-                fulfillments:[
+                fulfillments: [
                   {
-                    id:"1",
-                    "stops": [
+                    id: '1',
+                    stops: [
                       {
-                          "location": {
-                              "address":shippingDetails.address,
-                              "city": {
-                                  "name": "Bengaluru"
-                              },
-                              "state": {
-                                  "name": "Karnataka"
-                              },
-                              "country": {
-                                  "code": "IND"
-                              },
-                              "area_code": "560025"
+                        location: {
+                          address: shippingDetails.address,
+                          city: {
+                            name: 'Bengaluru'
                           },
-                          "contact": {
-                              "name":name,
-                              "phone":mobileNumber,
-                              'email':email
-                          }
+                          state: {
+                            name: 'Karnataka'
+                          },
+                          country: {
+                            code: 'IND'
+                          },
+                          area_code: '560025'
+                        },
+                        contact: {
+                          name: name,
+                          phone: mobileNumber,
+                          email: email
+                        }
                       }
-                  ]
-
+                    ]
                   }
                 ]
-
               }
             }
           ]

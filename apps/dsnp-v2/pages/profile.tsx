@@ -10,7 +10,7 @@ const ProfilePage = () => {
   const { t } = useLanguage()
   const bearerToken = Cookies.get('authToken')
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
-  const [isLoading,setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false)
   const [formData, setFormData] = useState<profilePageProp>({
     name: '',
     mobileNumber: '',
@@ -29,7 +29,7 @@ const ProfilePage = () => {
     zipCode: ''
   })
 
-  useEffect(()=>{
+  useEffect(() => {
     const myHeaders = new Headers()
     myHeaders.append('Authorization', `Bearer ${bearerToken}`)
 
@@ -41,62 +41,57 @@ const ProfilePage = () => {
     setIsLoading(true)
 
     fetch(`${strapiUrl}/profiles?populate[0]=documents.attachment&populate[1]=skills`, requestOptions)
-    .then(response => response.json())
-    .then((result)=>{
-      const {name,phone} = result.data.attributes
-      setFormData({
-        ...formData,
-        name,
-        mobileNumber:phone
+      .then(response => response.json())
+      .then(result => {
+        const { name, phone } = result.data.attributes
+        setFormData({
+          ...formData,
+          name,
+          mobileNumber: phone
+        })
       })
-    }).finally(()=>{
+      .finally(() => {
+        setIsLoading(false)
+      })
+  }, [])
 
-    setIsLoading(false)
-    })
-
-  },[])
-
-
-  const updateProfile = ()=>{
+  const updateProfile = () => {
     const myHeaders = new Headers()
     myHeaders.append('Authorization', `Bearer ${bearerToken}`)
-    
+
     setIsLoading(true)
 
-    const currentFormData = new FormData();
-const data = {
-  name:formData.name,
-  phone:formData.mobileNumber,
-  address: "TX, DALLAS",
-  documents: {
-    set: [6]
-  },
-  skills: {
-    set: [1]
-  }
-};
+    const currentFormData = new FormData()
+    const data = {
+      name: formData.name,
+      phone: formData.mobileNumber,
+      address: 'TX, DALLAS',
+      documents: {
+        set: [6]
+      },
+      skills: {
+        set: [1]
+      }
+    }
 
-currentFormData.append('data', JSON.stringify(data));
+    currentFormData.append('data', JSON.stringify(data))
 
     const requestOptions: RequestInit = {
       method: 'POST',
       headers: myHeaders,
       redirect: 'follow',
-      body:currentFormData
-     }
+      body: currentFormData
+    }
 
     fetch(`${strapiUrl}/profiles`, requestOptions)
-    .then(response => response.json())
-    .then((result)=>{
-      // console.log('Dank 2',result)
-      // const {name,phone} = result.data.attributes
-      
-
-    }).finally(()=>{
-      setIsLoading(false)
-
-
-    })
+      .then(response => response.json())
+      .then(result => {
+        // console.log('Dank 2',result)
+        // const {name,phone} = result.data.attributes
+      })
+      .finally(() => {
+        setIsLoading(false)
+      })
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -129,14 +124,13 @@ currentFormData.append('data', JSON.stringify(data));
     >
       <BecknAuth
         schema={{
-          loader: { text: "Updating profile" },
+          loader: { text: 'Updating profile' },
           buttons: [
             {
               text: t.saveContinue,
               handleClick: () => {
-                console.log("Dank",formData)
+                console.log('Dank', formData)
                 updateProfile()
-
               },
               disabled: false,
               variant: 'solid',

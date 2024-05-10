@@ -8,7 +8,7 @@ export interface AuthProps {
     inputs: InputProps[]
     buttons: ButtonProps[]
     socialButtons?: ButtonProps[]
-    loader?:LoaderProps
+    loader?: LoaderProps
   }
-  isLoading?:boolean
+  isLoading?: boolean
 }

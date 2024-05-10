@@ -1,3 +1,3 @@
-import BottomModal from './BottomModal';
+import BottomModal from './BottomModal'
 
-export default BottomModal;
+export default BottomModal

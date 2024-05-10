@@ -51,127 +51,127 @@ const TopSheet: React.FC<TopSheetPropsModel> = props => {
 
   return (
     // <ChakraProvider theme={theme}>
-      <Box className={isSearchPage ? style.searchTopSheetMargin : style.top_Sheet_Wrapper}>
-        <Box>
-          <Flex
-            justifyContent={'space-between'}
-            alignItems={'center'}
-            columnGap={'10px'}
-            p={'8px'}
-          >
-            <Image src={'/images/setLocation.svg'} />
-
-            <Box>
-              <Text
-                fontSize={'12px'}
-                fontWeight={400}
-              >
-                {t.yourLocation}
-              </Text>
-              <Flex alignItems={'center'}>
-                {loadingForCurrentAddress ? (
-                  <Skeleton
-                    height={'10px'}
-                    width={'200px'}
-                  />
-                ) : (
-                  <>
-                    <Text
-                      maxWidth={'200px'}
-                      overflow={'hidden'}
-                      textOverflow={'ellipsis'}
-                      whiteSpace={'nowrap'}
-                      pr={'5px'}
-                      fontSize={'12px'}
-                      fontWeight={'500'}
-                    >
-                      {renderAddresstext}
-                    </Text>
-                    <Image
-                      onClick={onOpen}
-                      pt={'4px'}
-                      src="/images/downArrow.svg"
-                    />
-                  </>
-                )}
-              </Flex>
-            </Box>
-          </Flex>
-        </Box>
-        <Modal
-          isCentered
-          onClose={onClose}
-          isOpen={isOpen}
-          scrollBehavior="outside"
-          motionPreset="slideInBottom"
-          // trapFocus={false}
+    <Box className={isSearchPage ? style.searchTopSheetMargin : style.top_Sheet_Wrapper}>
+      <Box>
+        <Flex
+          justifyContent={'space-between'}
+          alignItems={'center'}
+          columnGap={'10px'}
+          p={'8px'}
         >
-          <ModalOverlay height="100vh" />
+          <Image src={'/images/setLocation.svg'} />
 
-          <ModalContent
-            position="fixed"
-            top="85px"
-            mb="0"
-            borderRadius="0px 0px 1.75rem 1.75rem "
-            maxW="lg"
-            border={`2px solid ${'color.primary'}`}
-            p={'16px 24px'}
-            pb={'25px'}
-          >
-            <Box
-              position={'absolute'}
-              top={'-12px'}
-              left={'67%'}
-              color={bgColorOfSearchIcon}
+          <Box>
+            <Text
+              fontSize={'12px'}
+              fontWeight={400}
             >
-              <BiSolidUpArrow />
-            </Box>
-            <Box>
-              <Text
-                fontSize={'12px'}
-                fontWeight={'700'}
-                pb={'6px'}
-              >
-                {t.devicelocationisnotenabled}
-              </Text>
-              <Text fontSize={'12px'}>{t.accessToProvideLocation}</Text>
-              <Box
-                position={'relative'}
-                mt="20px"
-              >
-                <Image
-                  position={'absolute'}
-                  bottom={'8px'}
-                  src="/images/LocationIcon2.svg"
-                  width={'24px'}
+              {t.yourLocation}
+            </Text>
+            <Flex alignItems={'center'}>
+              {loadingForCurrentAddress ? (
+                <Skeleton
+                  height={'10px'}
+                  width={'200px'}
                 />
-                <Input
-                  pl="30px"
-                  _active={{
-                    outline: 'unset'
-                  }}
-                  _focusVisible={{
-                    borderColor: 'unset'
-                  }}
-                  outline="unset"
-                  border="unset"
-                  borderRadius={'unset'}
-                  borderBottom={'2px solid black'}
-                  placeholder={t.searchforlocation}
-                  onChange={onFocusChange}
-                />
-                <Image
-                  position={'absolute'}
-                  right="0"
-                  bottom={'8px'}
-                  src="/images/SearchIcon1.svg"
-                  width={'24px'}
-                />
-              </Box>
-            </Box>
-          </ModalContent>
-        </Modal>
+              ) : (
+                <>
+                  <Text
+                    maxWidth={'200px'}
+                    overflow={'hidden'}
+                    textOverflow={'ellipsis'}
+                    whiteSpace={'nowrap'}
+                    pr={'5px'}
+                    fontSize={'12px'}
+                    fontWeight={'500'}
+                  >
+                    {renderAddresstext}
+                  </Text>
+                  <Image
+                    onClick={onOpen}
+                    pt={'4px'}
+                    src="/images/downArrow.svg"
+                  />
+                </>
+              )}
+            </Flex>
+          </Box>
+        </Flex>
       </Box>
+      <Modal
+        isCentered
+        onClose={onClose}
+        isOpen={isOpen}
+        scrollBehavior="outside"
+        motionPreset="slideInBottom"
+        // trapFocus={false}
+      >
+        <ModalOverlay height="100vh" />
+
+        <ModalContent
+          position="fixed"
+          top="85px"
+          mb="0"
+          borderRadius="0px 0px 1.75rem 1.75rem "
+          maxW="lg"
+          border={`2px solid ${'color.primary'}`}
+          p={'16px 24px'}
+          pb={'25px'}
+        >
+          <Box
+            position={'absolute'}
+            top={'-12px'}
+            left={'67%'}
+            color={bgColorOfSearchIcon}
+          >
+            <BiSolidUpArrow />
+          </Box>
+          <Box>
+            <Text
+              fontSize={'12px'}
+              fontWeight={'700'}
+              pb={'6px'}
+            >
+              {t.devicelocationisnotenabled}
+            </Text>
+            <Text fontSize={'12px'}>{t.accessToProvideLocation}</Text>
+            <Box
+              position={'relative'}
+              mt="20px"
+            >
+              <Image
+                position={'absolute'}
+                bottom={'8px'}
+                src="/images/LocationIcon2.svg"
+                width={'24px'}
+              />
+              <Input
+                pl="30px"
+                _active={{
+                  outline: 'unset'
+                }}
+                _focusVisible={{
+                  borderColor: 'unset'
+                }}
+                outline="unset"
+                border="unset"
+                borderRadius={'unset'}
+                borderBottom={'2px solid black'}
+                placeholder={t.searchforlocation}
+                onChange={onFocusChange}
+              />
+              <Image
+                position={'absolute'}
+                right="0"
+                bottom={'8px'}
+                src="/images/SearchIcon1.svg"
+                width={'24px'}
+              />
+            </Box>
+          </Box>
+        </ModalContent>
+      </Modal>
+    </Box>
     // </ChakraProvider>
   )
 }

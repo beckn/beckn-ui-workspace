@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Box, Flex, Text, Stack, Checkbox, useToast, useTheme,useBreakpoint } from '@chakra-ui/react'
+import { Box, Flex, Text, Stack, Checkbox, useToast, useTheme, useBreakpoint } from '@chakra-ui/react'
 import { DOMAIN } from '@lib/config'
 import { useLanguage } from '../hooks/useLanguage'
 import { PlusSquareIcon } from '@chakra-ui/icons'
@@ -19,8 +19,8 @@ import { useInitMutation } from '@services/init'
 import { responseDataActions } from '../store/responseData-slice'
 import { getSelectPayload } from '@components/cart/cart.utils'
 
-import { Checkout,ShippingSection,ShippingFormInitialValuesType,DetailCard } from '@beckn-ui/becknified-components'
-import {Loader,Button} from '@beckn-ui/molecules'
+import { Checkout, ShippingSection, ShippingFormInitialValuesType, DetailCard } from '@beckn-ui/becknified-components'
+import { Loader, Button } from '@beckn-ui/molecules'
 
 import { Router, useRouter } from 'next/router'
 import { CheckoutRootState, checkoutActions } from '@store/checkout-slice'
@@ -98,7 +98,6 @@ const CheckoutPage = () => {
   const mobileBreakpoints = ['base', 'sm', 'md']
   const isLargeScreen = !mobileBreakpoints.includes(breakpoint)
 
-
   useEffect(() => {
     fetchQuotes(getSelectPayload(items, transactionId, DOMAIN))
   }, [totalQuantity])
@@ -163,11 +162,11 @@ const CheckoutPage = () => {
     if (data) {
       let id = '1'
       let type = 'shipping'
-      if(selectResponse[0].message.order.fulfillments){
-         id = selectResponse[0].message.order?.fulfillments[0].id
-         type = selectResponse[0].message.order?.fulfillments[0].type
+      if (selectResponse[0].message.order.fulfillments) {
+        id = selectResponse[0].message.order?.fulfillments[0].id
+        type = selectResponse[0].message.order?.fulfillments[0].type
       }
-      getInitPayload(submittedDetails, billingFormData, cartItems, transactionId, DOMAIN,{id,type}).then(res => {
+      getInitPayload(submittedDetails, billingFormData, cartItems, transactionId, DOMAIN, { id, type }).then(res => {
         return initialize(res)
       })
       // TODO :_ To check this again
@@ -222,7 +221,6 @@ const CheckoutPage = () => {
     }
   }, [isError])
 
-
   const complainantDetails = {
     sectionSubtitle: 'Add Complainant Details',
     sectionTitle: 'Complainant',
@@ -267,10 +265,9 @@ const CheckoutPage = () => {
       values: formData,
       onChange: data => setBillingFormData(data)
     }
-
   }
 
-  if (isLoading || isSelectLoading )
+  if (isLoading || isSelectLoading)
     return (
       <Box
         display="flex"
@@ -278,7 +275,7 @@ const CheckoutPage = () => {
         justifyContent="center"
         transform="translateY(-20%)"
       >
-        <Loader  text={t.initializingOrderLoader} />
+        <Loader text={t.initializingOrderLoader} />
       </Box>
     )
 
@@ -291,20 +288,31 @@ const CheckoutPage = () => {
       <Box>
         <ShippingSection {...complainantDetails} />
         <ShippingSection {...respondentDetails} />
-        
-      {!isEmpty(selectResponse) && <AddSection htmlString={selectResponse[0].message.order.items[0].xinput.html} form_id='odrDisputeDetailsForm'   /> }      
-      {!isEmpty(initResponse) && <AddSection htmlString={initResponse[0].message.order.items[0].xinput.html} form_id='odrConsentForm' preSubmissionTitle='Consent Form' postSubmissionTitle='Consent form added'  /> }    
+
+        {!isEmpty(selectResponse) && (
+          <AddSection
+            htmlString={selectResponse[0].message.order.items[0].xinput.html}
+            form_id="odrDisputeDetailsForm"
+          />
+        )}
+        {!isEmpty(initResponse) && (
+          <AddSection
+            htmlString={initResponse[0].message.order.items[0].xinput.html}
+            form_id="odrConsentForm"
+            preSubmissionTitle="Consent Form"
+            postSubmissionTitle="Consent form added"
+          />
+        )}
         <Box
           width={isLargeScreen ? '40%' : '100%'}
           margin="auto"
         >
           <Button
-          text='Confirm'
-          handleClick={() => {
-            dispatch(cartActions.clearCart())
-            router.push('/orderConfirmation')
-          }}
-          
+            text="Confirm"
+            handleClick={() => {
+              dispatch(cartActions.clearCart())
+              router.push('/orderConfirmation')
+            }}
           />
         </Box>
       </Box>

@@ -68,7 +68,6 @@ const OrderConfirmation = () => {
     )
   }
 
-
   return (
     <ConfirmationPage
       className="kuza-order-confornation"
@@ -76,7 +75,10 @@ const OrderConfirmation = () => {
         iconSrc: orderConfirmmark,
         successOrderMessage: 'ORDER SUCCESFULL',
         gratefulMessage: 'Thank you for your order!',
-        orderIdMessage: confirmResponse && confirmResponse.length > 0 ? `Order number is: ${confirmResponse[0].message.orderId.slice(0, 8)}...` : '',
+        orderIdMessage:
+          confirmResponse && confirmResponse.length > 0
+            ? `Order number is: ${confirmResponse[0].message.orderId.slice(0, 8)}...`
+            : '',
         trackOrderMessage: `You can track your order in "My Order" section`,
 
         buttons: [

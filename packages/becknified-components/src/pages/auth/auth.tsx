@@ -2,13 +2,13 @@ import React from 'react'
 import { Box, Flex, Image } from '@chakra-ui/react'
 
 // Custom
-import { Button, Input,Loader } from '@beckn-ui/molecules'
+import { Button, Input, Loader } from '@beckn-ui/molecules'
 import Styles from './auth.module.css'
 import { AuthProps } from './auth.types'
 import AuthDivider from './authDivider'
 
-const Auth: React.FC<AuthProps> = ({ schema,isLoading }) => {
-  const { logo, inputs, buttons, socialButtons,loader } = schema
+const Auth: React.FC<AuthProps> = ({ schema, isLoading }) => {
+  const { logo, inputs, buttons, socialButtons, loader } = schema
 
   if (isLoading) {
     return (
@@ -22,7 +22,6 @@ const Auth: React.FC<AuthProps> = ({ schema,isLoading }) => {
       </Box>
     )
   }
-
 
   return (
     <Box

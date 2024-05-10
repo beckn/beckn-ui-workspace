@@ -1,17 +1,16 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import {StatusResponseModel} from '../types/status.types'
+import { StatusResponseModel } from '../types/status.types'
 
 export interface StatusRootState {
   status: Status
 }
 
 export interface Status {
-	statusResponse:StatusResponseModel[]
-	
+  statusResponse: StatusResponseModel[]
 }
 
 const initialState: Status = {
-	statusResponse:[]
+  statusResponse: []
 }
 
 const statusSlice = createSlice({
@@ -20,10 +19,8 @@ const statusSlice = createSlice({
   reducers: {
     addStatusResponse(state, action: PayloadAction<{ statusResponse: StatusResponseModel[] }>) {
       state.statusResponse = action.payload.statusResponse
-    },
-    
+    }
   }
-
 })
 
 export const statusActions = statusSlice.actions
