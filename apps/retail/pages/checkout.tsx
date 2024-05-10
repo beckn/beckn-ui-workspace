@@ -39,41 +39,73 @@ export const currencyMap = {
 }
 
 const CheckoutPage = () => {
-  const [formData, setFormData] = useState<ShippingFormInitialValuesType>({
-    name: 'Antoine Dubois',
-    mobileNumber: '0612345678',
-    email: 'antoine.dubois@gmail.com',
-    address: '15 Rue du Soleil, Paris, France',
-    pinCode: '201002'
-  })
+  const cartItems = useSelector((state: ICartRootState) => state.cart.items)
+  const tourismName = cartItems[0]?.categories[0]?.name
+
+  const [formData, setFormData] = useState<ShippingFormInitialValuesType>(
+    tourismName === 'Tourism'
+      ? {
+          name: 'lisa',
+          mobileNumber: '9811259151',
+          email: 'lisa.k@gmail.com',
+          address: '1202 b2, bengaluru urban, bengaluru, karnataka',
+          pinCode: '560078'
+        }
+      : {
+          name: 'lisa',
+          mobileNumber: '0612345678',
+          email: 'lisa.k@gmail.com',
+          address: '15 rue du soleil, paris, france',
+          pinCode: '75001'
+        }
+  )
   const theme = useTheme()
   const bgColorOfSecondary = theme.colors.secondary['100']
   const toast = useToast()
 
-  const [submittedDetails, setSubmittedDetails] = useState<ShippingFormInitialValuesType>({
-    name: 'Antoine Dubois',
-    mobileNumber: '0612345678',
-    email: 'antoine.dubois@gmail.com',
-    address: '15 Rue du Soleil, Paris, France',
-    pinCode: '201002'
-  })
+  const [submittedDetails, setSubmittedDetails] = useState<ShippingFormInitialValuesType>(
+    tourismName === 'Tourism'
+      ? {
+          name: 'lisa',
+          mobileNumber: '9811259151',
+          email: 'lisa.k@gmail.com',
+          address: '1202 b2, bengaluru urban, bengaluru, karnataka',
+          pinCode: '560078'
+        }
+      : {
+          name: 'lisa',
+          mobileNumber: '0612345678',
+          email: 'lisa.k@gmail.com',
+          address: '15 rue du soleil, paris, france',
+          pinCode: '75001'
+        }
+  )
 
   const [isBillingAddressSameAsShippingAddress, setIsBillingAddressSameAsShippingAddress] = useState(true)
 
-  const [billingFormData, setBillingFormData] = useState<ShippingFormInitialValuesType>({
-    name: 'Antoine Dubois',
-    mobileNumber: '0612345678',
-    email: 'antoine.dubois@gmail.com',
-    address: '15 Rue du Soleil, Paris, France',
-    pinCode: '75001'
-  })
+  const [billingFormData, setBillingFormData] = useState<ShippingFormInitialValuesType>(
+    tourismName === 'Tourism'
+      ? {
+          name: 'lisa',
+          mobileNumber: '9811259151',
+          email: 'lisa.k@gmail.com',
+          address: '1202 b2, bengaluru urban, bengaluru, karnataka',
+          pinCode: '560078'
+        }
+      : {
+          name: 'lisa',
+          mobileNumber: '0612345678',
+          email: 'lisa.k@gmail.com',
+          address: '15 rue du soleil, paris, france',
+          pinCode: '75001'
+        }
+  )
 
   const router = useRouter()
   const initRequest = useRequest()
   const dispatch = useDispatch()
   const [initialize, { isLoading, isError }] = useInitMutation()
   const { t, locale } = useLanguage()
-  const cartItems = useSelector((state: ICartRootState) => state.cart.items)
   const initResponse = useSelector((state: CheckoutRootState) => state.checkout.initResponse)
   const selectResponse = useSelector((state: CheckoutRootState) => state.checkout.selectResponse)
   const isBillingSameRedux = useSelector((state: CheckoutRootState) => state.checkout.isBillingSame)
