@@ -126,6 +126,9 @@ const en: { [key: string]: string } = {
   delivery: 'Delivery',
   clickAndCollect: 'Click & Collect',
   selectLoaderSubText: 'while we fetch the details for the selected product.',
-  initLoaderSubText: 'while we initialize the draft order.'
+  initLoaderSubText: 'while we initialize the draft order.',
+  emptyCardHeading: 'The Cart is Empty',
+  emptyCardSubHeading: 'Looks like you haven’t made your choice yet',
+  shop: 'Shop'
 }
 export default en
