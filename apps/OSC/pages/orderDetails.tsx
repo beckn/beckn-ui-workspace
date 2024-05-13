@@ -42,6 +42,7 @@ import ShippingBlock from '@components/orderDetailComponents/Shipping'
 import { DOMAIN } from '@lib/config'
 import PaymentDetails from '@beckn-ui/becknified-components/src/components/checkout/payment-details'
 import { getPaymentBreakDown } from '@utils/checkout-utils'
+import BottomModalScan from '../components/BottomModal/BottomModalScan'
 
 const statusMap = {
   ArrangingPayment: 'Processing your order',
@@ -621,7 +622,6 @@ const OrderDetails = () => {
     const { state } = res.message.order.fulfillments[0]
     state && res.message.order.fulfillments[0].state.descriptor.short_desc === 'Delivered'
   })
-
   return (
     <Box
       className="hideScroll"
@@ -973,6 +973,76 @@ const OrderDetails = () => {
           </BottomModal>
 
           {/* Display cancellation bottom modal */}
+
+          <BottomModalScan
+            isOpen={uiState.isCancelMenuModalOpen}
+            onClose={handleCancelMenuModalClose}
+            modalHeader={t.orderCancellation}
+          >
+            {uiState.isLoadingForCancel ? (
+              <LoaderWithMessage
+                loadingText={t.pleaseWait}
+                loadingSubText={t.cancelLoaderSubText}
+              />
+            ) : (
+              <>
+                <Text
+                  as={Typography}
+                  text={t.pleaseSelectReason}
+                  fontSize="15px"
+                  fontWeight={500}
+                  textAlign="center"
+                  pb="20px"
+                />
+                <RadioGroup
+                  onChange={value => {
+                    setProcessState(prevValue => ({
+                      ...prevValue,
+                      radioValue: value
+                    }))
+                    setUiState(prevValue => ({
+                      ...prevValue,
+                      isProceedDisabled: false
+                    }))
+                  }}
+                  value={processState.radioValue}
+                  pl="20px"
+                >
+                  {orderCancelReason.map(reasonObj => (
+                    <Stack
+                      pb="10px"
+                      direction="column"
+                      key={reasonObj.id}
+                    >
+                      <Radio value={reasonObj.reason}>{reasonObj.reason}</Radio>
+                    </Stack>
+                  ))}
+                </RadioGroup>
+                <Textarea
+                  w="332px"
+                  m="20px"
+                  height="124px"
+                  resize="none"
+                  placeholder="Please specify the reason"
+                  boxShadow="0px 4px 6px -1px rgba(0, 0, 0, 0.1), 0px 2px 4px -2px rgba(0, 0, 0, 0.1)"
+                />
+                <Box m="20px">
+                  <BecknButton
+                    disabled={uiState.isProceedDisabled}
+                    children="Proceed"
+                    className="checkout_btn"
+                    handleClick={() => {
+                      handleCancelButton(
+                        data.confirmData as ConfirmResponseModel[],
+                        data.statusData as StatusResponseModel[],
+                        processState.radioValue
+                      )
+                    }}
+                  />
+                </Box>
+              </>
+            )}
+          </BottomModalScan>
         </Box>
       </Box>
     </Box>

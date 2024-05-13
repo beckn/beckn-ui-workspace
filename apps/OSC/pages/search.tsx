@@ -129,7 +129,9 @@ const Search = () => {
   const handleResetFilter = () => {
     setItems(originalItems)
   }
-
+  const handleCancelFilter = () => {
+    setIsFilterOpen(false)
+  }
   return (
     <Box
       className="hideScroll"
@@ -141,6 +143,7 @@ const Search = () => {
           <Filter
             handleApplyFilter={handleApplyFilter}
             handleResetFilter={handleResetFilter}
+            handleCancelFilter={handleCancelFilter}
           />
         )}
         <Box
@@ -184,6 +187,7 @@ const Search = () => {
               <Filter
                 handleApplyFilter={handleApplyFilter}
                 handleResetFilter={handleResetFilter}
+                handleCancelFilter={handleCancelFilter}
               />
             </BottomModal>
           )}
@@ -197,6 +201,7 @@ const Search = () => {
               <Filter
                 handleApplyFilter={handleApplyFilter}
                 handleResetFilter={handleResetFilter}
+                handleCancelFilter={handleCancelFilter}
               />
             </Box>
           )}
