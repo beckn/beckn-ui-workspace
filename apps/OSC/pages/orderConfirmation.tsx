@@ -86,7 +86,7 @@ const OrderConfirmation = () => {
           iconSrc: orderConfirmmark,
           successOrderMessage: 'ORDER SUCCESFULL',
           gratefulMessage: 'Thank you for your order!',
-          orderIdMessage: confirmResponse && confirmResponse.length > 0 ? `Order number is: ${orderId}...` : '',
+          orderIdMessage: orderId ? `Order number is: ${orderId}...` : '',
           trackOrderMessage: `You can track your order in "My Order" section`,
 
           buttons: [
