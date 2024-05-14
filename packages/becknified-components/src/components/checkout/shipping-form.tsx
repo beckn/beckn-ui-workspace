@@ -47,7 +47,7 @@ const fieldConfig: FormField[] = [
     type: 'text',
     validate: (value: string) => {
       if (!value.trim()) return 'Zip Code is required'
-      if (!/^\d{6}$/.test(value)) return 'Invalid Zip Code'
+      if (!/^\d{5,6}$/.test(value)) return 'Invalid Zip Code'
       return undefined
     }
   }
