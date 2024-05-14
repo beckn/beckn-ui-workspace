@@ -48,17 +48,17 @@ const CheckoutPage = () => {
   const [formData, setFormData] = useState<ShippingFormInitialValuesType>(
     tourismName === 'Tourism'
       ? {
-          name: 'lisa',
+          name: 'Lisa',
           mobileNumber: '9811259151',
           email: 'lisa.k@gmail.com',
-          address: '1202 b2, bengaluru urban, bengaluru, karnataka',
+          address: '1202 B2, Bengaluru urban, Bengaluru, Karnataka',
           pinCode: '560078'
         }
       : {
-          name: 'lisa',
+          name: 'Lisa',
           mobileNumber: '0612345678',
           email: 'lisa.k@gmail.com',
-          address: '15 rue du soleil, paris, france',
+          address: '15 Rue du Soleil, Paris, France',
           pinCode: '75001'
         }
   )
@@ -68,17 +68,17 @@ const CheckoutPage = () => {
   const [submittedDetails, setSubmittedDetails] = useState<ShippingFormInitialValuesType>(
     tourismName === 'Tourism'
       ? {
-          name: 'lisa',
+          name: 'Lisa',
           mobileNumber: '9811259151',
           email: 'lisa.k@gmail.com',
-          address: '1202 b2, bengaluru urban, bengaluru, karnataka',
+          address: '1202 B2, Bengaluru urban, Bengaluru, Karnataka',
           pinCode: '560078'
         }
       : {
-          name: 'lisa',
+          name: 'Lisa',
           mobileNumber: '0612345678',
           email: 'lisa.k@gmail.com',
-          address: '15 rue du soleil, paris, france',
+          address: '15 Rue du Soleil, Paris, France',
           pinCode: '75001'
         }
   )
@@ -87,17 +87,17 @@ const CheckoutPage = () => {
   const [billingFormData, setBillingFormData] = useState<ShippingFormInitialValuesType>(
     tourismName === 'Tourism'
       ? {
-          name: 'lisa',
+          name: 'Lisa',
           mobileNumber: '9811259151',
           email: 'lisa.k@gmail.com',
-          address: '1202 b2, bengaluru urban, bengaluru, karnataka',
+          address: '1202 B2, Bengaluru urban, Bengaluru, Karnataka',
           pinCode: '560078'
         }
       : {
-          name: 'lisa',
+          name: 'Lisa',
           mobileNumber: '0612345678',
           email: 'lisa.k@gmail.com',
-          address: '15 rue du soleil, paris, france',
+          address: '15 Rue du Soleil, Paris, France',
           pinCode: '75001'
         }
   )
