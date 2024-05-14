@@ -1032,6 +1032,7 @@ const OrderDetails = () => {
                     children="Proceed"
                     className="checkout_btn"
                     handleClick={() => {
+                      dispatch(statusActions.addStatusResponse({ statusResponse: data.statusData }))
                       handleCancelButton(
                         data.confirmData as ConfirmResponseModel[],
                         data.statusData as StatusResponseModel[],
