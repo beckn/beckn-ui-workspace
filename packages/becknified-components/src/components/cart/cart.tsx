@@ -1,6 +1,6 @@
 import React from 'react'
 import cl from 'classnames'
-import { Box, Flex, Image } from '@chakra-ui/react'
+import { Box, calc, Flex, Image } from '@chakra-ui/react'
 
 // Custom
 import { CartProps } from './cart.types'
@@ -20,9 +20,9 @@ const Cart: React.FC<CartProps> = ({
     return (
       <Box
         display="flex"
-        height="100vh"
+        height="calc(100vh - 160px)"
         justifyContent="center"
-        transform="translateY(-20%)"
+        alignItems={'center'}
       >
         <Loader {...loader} />
       </Box>

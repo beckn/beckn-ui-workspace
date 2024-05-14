@@ -215,7 +215,6 @@ const HomePage = () => {
         currentAddress={currentAddress}
       />
       <Box
-        p={'0 20px'}
         maxWidth={{ base: '100vw', md: '30rem', lg: '40rem' }}
         margin="calc(4rem + 90px)  auto"
         backgroundColor="white"

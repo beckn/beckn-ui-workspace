@@ -40,10 +40,10 @@ export const currencyMap = {
 
 const CheckoutPage = () => {
   const cartItems = useSelector((state: ICartRootState) => state.cart.items)
-  const tourismName = cartItems[0]?.categories[0]?.name
-
+  const retailName = cartItems[0]?.categories[0]?.name
+  console.log(cartItems)
   const [formData, setFormData] = useState<ShippingFormInitialValuesType>(
-    tourismName === 'Tourism'
+    retailName === 'Retail'
       ? {
           name: 'lisa',
           mobileNumber: '9811259151',
@@ -64,7 +64,7 @@ const CheckoutPage = () => {
   const toast = useToast()
 
   const [submittedDetails, setSubmittedDetails] = useState<ShippingFormInitialValuesType>(
-    tourismName === 'Tourism'
+    retailName === 'Retail'
       ? {
           name: 'lisa',
           mobileNumber: '9811259151',
@@ -84,7 +84,7 @@ const CheckoutPage = () => {
   const [isBillingAddressSameAsShippingAddress, setIsBillingAddressSameAsShippingAddress] = useState(true)
 
   const [billingFormData, setBillingFormData] = useState<ShippingFormInitialValuesType>(
-    tourismName === 'Tourism'
+    retailName === 'Retail'
       ? {
           name: 'lisa',
           mobileNumber: '9811259151',
