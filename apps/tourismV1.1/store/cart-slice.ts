@@ -25,14 +25,14 @@ const cartSlice = createSlice({
 
       const existingItem = state.items.find(item => item.id === newItem.item.id)
 
-      state.totalQuantity = state.totalQuantity + action.payload.quantity
+      state.totalQuantity = action.payload.quantity
 
-      state.totalAmount =
-        state.totalAmount + action.payload.quantity * parseFloat(action.payload.product.item.price.value)
+      state.totalAmount = action.payload.quantity * parseFloat(action.payload.product.item.price.value)
+
+      state.items.pop()
 
       if (!existingItem) {
         const totalPrice = parseFloat(newItem.item.price.value) * action.payload.quantity
-
         state.items.push({
           ...newItem.item,
           quantity: action.payload.quantity,
