@@ -20,6 +20,7 @@ const OrderConfirmation = () => {
   const [confirmData, setConfirmData] = useState<ConfirmResponseModel[]>([])
   const [confirm, { isLoading, data }] = useConfirmMutation()
   const dispatch = useDispatch()
+  const [orderId, setOrderId] = useState()
 
   const initResponse = useSelector((state: CheckoutRootState) => state.checkout.initResponse)
   const confirmResponse = useSelector((state: CheckoutRootState) => state.checkout.confirmResponse)
@@ -33,6 +34,12 @@ const OrderConfirmation = () => {
       'Content-Type': 'application/json' // You can set the content type as needed
     }
   }
+
+  useEffect(() => {
+    if (confirmResponse && confirmResponse.length > 0) {
+      setOrderId(confirmResponse[0].message.orderId.slice(0, 8))
+    }
+  }, [confirmResponse])
 
   useEffect(() => {
     if (initResponse && initResponse.length > 0) {
@@ -75,10 +82,7 @@ const OrderConfirmation = () => {
         iconSrc: orderConfirmmark,
         successOrderMessage: 'ORDER SUCCESFULL',
         gratefulMessage: 'Thank you for your order!',
-        orderIdMessage:
-          confirmResponse && confirmResponse.length > 0
-            ? `Order number is: ${confirmResponse[0].message.orderId.slice(0, 8)}...`
-            : '',
+        orderIdMessage: orderId ? `Order number is: ${orderId}...` : '',
         trackOrderMessage: `You can track your order in "My Order" section`,
 
         buttons: [
