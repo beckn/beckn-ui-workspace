@@ -354,14 +354,14 @@ const BottomHeader = () => {
               />
             )}
           </div>
-          {editIcon.includes(router.pathname) && (
+          {/* {editIcon.includes(router.pathname) && (
             <Image
               cursor="pointer"
               src="/images/editIcon.svg"
               alt="edit icon"
               mr={'20px'}
             />
-          )}
+          )} */}
           {orderIconList.includes(router.pathname) && (
             <Image
               cursor="pointer"

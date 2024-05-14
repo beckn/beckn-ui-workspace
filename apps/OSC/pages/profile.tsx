@@ -3,10 +3,14 @@ import { Box } from '@chakra-ui/react'
 import { profilePageProp } from '@components/signIn/SignIn.types'
 import { useLanguage } from '@hooks/useLanguage'
 import { FormErrors, profileValidateForm } from '@utils/form-utils'
-import React, { useState } from 'react'
+import Cookies from 'js-cookie'
+import React, { useEffect, useState } from 'react'
 
 const ProfilePage = () => {
   const { t } = useLanguage()
+  const bearerToken = Cookies.get('authToken')
+  const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
+  const [isLoading, setIsLoading] = useState(false)
   const [formData, setFormData] = useState<profilePageProp>({
     name: '',
     mobileNumber: '',
@@ -45,6 +49,61 @@ const ProfilePage = () => {
     }))
     console.log(errors)
   }
+
+  useEffect(() => {
+    const myHeaders = new Headers()
+    myHeaders.append('Authorization', `Bearer ${bearerToken}`)
+
+    const requestOptions: RequestInit = {
+      method: 'GET',
+      headers: myHeaders,
+      redirect: 'follow'
+    }
+    setIsLoading(true)
+
+    fetch(`${strapiUrl}/profiles`, requestOptions)
+      .then(response => response.json())
+      .then(result => {
+        const { name, phone } = result.data.attributes
+        setFormData({
+          ...formData,
+          name,
+          mobileNumber: phone
+        })
+      })
+      .finally(() => {
+        setIsLoading(false)
+      })
+  }, [])
+
+  const updateProfile = () => {
+    const myHeaders = new Headers()
+    myHeaders.append('Authorization', `Bearer ${bearerToken}`)
+
+    setIsLoading(true)
+
+    const currentFormData = new FormData()
+    const data = {
+      name: formData.name,
+      phone: formData.mobileNumber
+    }
+
+    currentFormData.append('data', JSON.stringify(data))
+
+    const requestOptions: RequestInit = {
+      method: 'POST',
+      headers: myHeaders,
+      redirect: 'follow',
+      body: currentFormData
+    }
+
+    fetch(`${strapiUrl}/profiles`, requestOptions)
+      .then(response => response.json())
+      .finally(() => {
+        setIsLoading(false)
+      })
+  }
+
   return (
     <Box
       margin={'0 auto'}
@@ -59,7 +118,7 @@ const ProfilePage = () => {
           buttons: [
             {
               text: t.saveContinue,
-              handleClick: () => {},
+              handleClick: updateProfile,
               disabled: false,
               variant: 'solid',
               colorScheme: 'primary'
@@ -140,6 +199,7 @@ const ProfilePage = () => {
             }
           ]
         }}
+        isLoading={isLoading}
       />
     </Box>
   )
