@@ -100,14 +100,13 @@ const OrderConfirmation = () => {
 
   return (
     <Box mt="-4rem">
-    <ConfirmationPage
-      schema={{
-        iconSrc: orderConfirmmark,
-        successOrderMessage: 'Order Placed!',
-        gratefulMessage: 'Thank you! Your booking will be confirm shortly',
-        orderIdMessage: orderId ? `Order number is: ${orderId}...` : '',
-        trackOrderMessage: `You can track your order in "My Order" section`,
-    
+      <ConfirmationPage
+        schema={{
+          iconSrc: orderConfirmmark,
+          successOrderMessage: 'Order Placed!',
+          gratefulMessage: 'Thank you! Your booking will be confirm shortly',
+          orderIdMessage: orderId ? `Order number is: ${orderId}...` : '',
+          trackOrderMessage: `You can track your order in "My Order" section`,
 
           buttons: [
             {
