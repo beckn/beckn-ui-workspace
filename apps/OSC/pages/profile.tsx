@@ -5,6 +5,8 @@ import { useLanguage } from '@hooks/useLanguage'
 import { FormErrors, profileValidateForm } from '@utils/form-utils'
 import Cookies from 'js-cookie'
 import React, { useEffect, useState } from 'react'
+import { toast } from 'react-toastify'
+import Router from 'next/router'
 
 const ProfilePage = () => {
   const { t } = useLanguage()
@@ -98,7 +100,11 @@ const ProfilePage = () => {
     }
 
     fetch(`${strapiUrl}/profiles`, requestOptions)
-      .then(response => response.json())
+      .then(response => {
+        toast.success('Profile updated successfully!')
+        Router.push('/')
+        return response.json()
+      })
       .finally(() => {
         setIsLoading(false)
       })
