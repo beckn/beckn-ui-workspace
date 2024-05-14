@@ -71,7 +71,12 @@ const Search = () => {
   const currentAddress = router.query?.currentAddress
 
   return (
-    <>
+    <Box
+      marginTop={'54px'}
+      className="hideScroll"
+      maxH="calc(100vh - 84px)"
+      overflowY={'scroll'}
+    >
       <Box>
         <TopSheet currentAddress={currentAddress as string} />
         <SearchBar
@@ -116,7 +121,7 @@ const Search = () => {
           </>
         )}
       </Box>
-    </>
+    </Box>
   )
 }
 
