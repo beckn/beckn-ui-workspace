@@ -24,7 +24,8 @@ export interface CartRetailItem extends Item {
 }
 
 export interface CartItemForRequest extends CartRetailItem {
-  currency?:any
+  categories: any
+  currency?: any
   bpp_id: string
   bpp_uri: string
   providerId: string

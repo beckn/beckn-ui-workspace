@@ -61,12 +61,19 @@ export interface OrderSummaryProps {
   totalAmount: ProductPriceProps
   pageCTA: ButtonProps
 }
-
+export interface EmptyCardProps {
+  image?: string
+  heading?: string
+  subHeading?: string
+  buttonText?: string
+  buttonHanler?: (id: string) => void
+}
 export interface CartProps {
   schema: {
     cartItems: CartItemProps[]
     loader: LoaderProps
     orderSummary: OrderSummaryProps
+    emptyCard?: EmptyCardProps
   }
   className?: string
   isLoading?: boolean

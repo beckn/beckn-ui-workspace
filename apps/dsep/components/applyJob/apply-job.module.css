@@ -1,0 +1,16 @@
+.form_container input {
+  border: 1px inset light-dark(rgb(118, 118, 118), rgb(133, 133, 133));
+}
+
+.form_container textarea {
+  border: 1px inset light-dark(rgb(118, 118, 118), rgb(133, 133, 133));
+}
+
+.form_container button {
+  border-radius: 12px;
+
+  width: 100%;
+  background-color: #3aa5e1;
+  color: white;
+  height: 48px;
+}

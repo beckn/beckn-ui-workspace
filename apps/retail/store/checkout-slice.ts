@@ -10,14 +10,14 @@ export interface CheckoutRootState {
 export interface Checkout {
   initResponse: any
   confirmResponse: any
-  selectResponse:any
+  selectResponse: any
   isBillingSame: boolean
 }
 
 const initialState: Checkout = {
   initResponse: {},
   confirmResponse: {},
-  selectResponse:{},
+  selectResponse: {},
   isBillingSame: true
 }
 
@@ -31,10 +31,10 @@ const checkoutSlice = createSlice({
     setIsBillingSame(state, action: PayloadAction<{ isBillingSame: boolean }>) {
       state.isBillingSame = action.payload.isBillingSame
     },
-		clearState(state){
-			state.initResponse = {}
-			state.confirmResponse = {}
-		}
+    clearState(state) {
+      state.initResponse = {}
+      state.confirmResponse = {}
+    }
   },
   extraReducers: builder => {
     builder
@@ -60,16 +60,16 @@ const checkoutSlice = createSlice({
         console.log('rejected', action)
       }),
       builder
-      .addMatcher(selectApi.endpoints.select.matchPending, (state, action) => {
-        console.log('pending', action)
-      })
-      .addMatcher(selectApi.endpoints.select.matchFulfilled, (state, action) => {
-        console.log('fulfilled', action)
-        state.selectResponse = action.payload.data
-      })
-      .addMatcher(selectApi.endpoints.select.matchRejected, (state, action) => {
-        console.log('rejected', action)
-      })
+        .addMatcher(selectApi.endpoints.select.matchPending, (state, action) => {
+          console.log('pending', action)
+        })
+        .addMatcher(selectApi.endpoints.select.matchFulfilled, (state, action) => {
+          console.log('fulfilled', action)
+          state.selectResponse = action.payload.data
+        })
+        .addMatcher(selectApi.endpoints.select.matchRejected, (state, action) => {
+          console.log('rejected', action)
+        })
   }
 })
 

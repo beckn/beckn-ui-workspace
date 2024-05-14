@@ -5,8 +5,13 @@ import LineBlack from '../../../public/images/lineBlack.svg'
 import TrackIcon from '../../../public/images/TrackIcon.svg'
 import { OrderStatusProgressProps } from './order-status-progress.types'
 
-const OrderStatusProgress: React.FC<OrderStatusProgressProps> = ({ label, statusTime, className,noLine=false,lastElement }) => {
-
+const OrderStatusProgress: React.FC<OrderStatusProgressProps> = ({
+  label,
+  statusTime,
+  className,
+  noLine = false,
+  lastElement
+}) => {
   const showNoLine = noLine && lastElement
   return (
     <Box>
@@ -23,15 +28,14 @@ const OrderStatusProgress: React.FC<OrderStatusProgressProps> = ({ label, status
             height="18px"
             src={TrackIcon}
           />
-          {
-            !showNoLine &&           <Image
-            alt={'line-icon'}
-            src={LineBlack}
-            width="12px"
-            height="60px"
-          />
-          }
-
+          {!showNoLine && (
+            <Image
+              alt={'line-icon'}
+              src={LineBlack}
+              width="12px"
+              height="60px"
+            />
+          )}
         </Flex>
         <Box>
           <Box pl={'10px'}>

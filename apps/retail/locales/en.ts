@@ -136,6 +136,10 @@ const en: { [key: string]: string } = {
   quoteRequestLoader: 'Your order is getting processed',
   initializingOrderLoader: 'while we set things up for you',
   errorZipcode: 'Zip Code is required',
-  errorZipcode2: 'Invalid Zip Code'
+  errorZipcode2: 'Invalid Zip Code',
+  emptyCardHeading: 'The Cart is Empty',
+  emptyCardSubHeading: 'Looks like you haven’t made your choice yet',
+  shop: 'Shop',
+  orderId: 'Order id'
 }
 export default en

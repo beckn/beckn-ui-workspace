@@ -16,9 +16,9 @@ const Checkout: React.FC<CheckoutProps<FormField[]>> = ({
     return (
       <Box
         display="flex"
-        height="100vh"
+        height="calc(100vh - 160px)"
         justifyContent="center"
-        transform="translateY(-20%)"
+        alignItems={'center'}
       >
         <Loader {...loader} />
       </Box>
@@ -86,7 +86,7 @@ const Checkout: React.FC<CheckoutProps<FormField[]>> = ({
         >
           <Button
             {...restButtonProps}
-            disabled={!hasInitResult || !hasInitResult && !billing.isChecked}
+            disabled={!hasInitResult || (!hasInitResult && !billing.isChecked)}
           />
         </Box>
       </Box>

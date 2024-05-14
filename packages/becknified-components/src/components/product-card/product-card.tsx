@@ -32,7 +32,9 @@ const ProductCard: React.FC<ProductCardProps> = props => {
           borderRadius={'1rem'}
           display={'flex'}
           cursor="pointer"
-          _hover={{ transform: 'translate(2%,-2%)' }}
+          _hover={{
+            transform: ['none', 'none', 'translate(2%,-2%)']
+          }}
           transition="0.5s all"
           position={'relative'}
           boxShadow={'0 20px 25px rgba(0, 0, 0, 0.1),0 8px 10px rgba(0, 0, 0, 0.05)'}
@@ -94,6 +96,37 @@ const ProductCard: React.FC<ProductCardProps> = props => {
                   {product.name}
                 </Text>
               </Flex>
+              {product.source ? (
+                <Flex
+                  alignItems={'flex-start'}
+                  w={'100%'}
+                >
+                  <Text
+                    fontSize={'0.8rem'}
+                    mb={'0.7rem'}
+                    noOfLines={2}
+                    textOverflow="ellipsis"
+                    whiteSpace="pre-wrap"
+                    overflowWrap="break-word"
+                    fontWeight={'600'}
+                    mr="5px"
+                  >
+                    {product.source} :
+                  </Text>
+                  <Text
+                    fontSize={'0.8rem'}
+                    mb={'0.7rem'}
+                    noOfLines={2}
+                    textOverflow="ellipsis"
+                    whiteSpace="pre-wrap"
+                    overflowWrap="break-word"
+                  >
+                    {product.sourceText}
+                  </Text>
+                </Flex>
+              ) : (
+                ''
+              )}
 
               <Flex
                 justifyContent={'space-between'}
@@ -144,7 +177,7 @@ const ProductCard: React.FC<ProductCardProps> = props => {
                   currencyType={currency}
                   price={parseFloat(product.price)}
                 />
-                {product.rating && (
+                {product.rating && product.rating !== 'null' && (
                   <ProductRating
                     ratingValue={product.rating}
                     ratingIcon={StarIcon}

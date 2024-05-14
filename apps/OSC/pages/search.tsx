@@ -129,7 +129,9 @@ const Search = () => {
   const handleResetFilter = () => {
     setItems(originalItems)
   }
-
+  const handleCancelFilter = () => {
+    setIsFilterOpen(false)
+  }
   return (
     <Box
       className="hideScroll"
@@ -141,6 +143,7 @@ const Search = () => {
           <Filter
             handleApplyFilter={handleApplyFilter}
             handleResetFilter={handleResetFilter}
+            handleCancelFilter={handleCancelFilter}
           />
         )}
         <Box
@@ -184,6 +187,7 @@ const Search = () => {
               <Filter
                 handleApplyFilter={handleApplyFilter}
                 handleResetFilter={handleResetFilter}
+                handleCancelFilter={handleCancelFilter}
               />
             </BottomModal>
           )}
@@ -197,6 +201,7 @@ const Search = () => {
               <Filter
                 handleApplyFilter={handleApplyFilter}
                 handleResetFilter={handleResetFilter}
+                handleCancelFilter={handleCancelFilter}
               />
             </Box>
           )}
@@ -227,7 +232,9 @@ const Search = () => {
                     name: item.name,
                     price: item.price.value,
                     rating: item.rating,
-                    shortDesc: item.short_desc || item.long_desc.replace(/<[^>]+>/g, '').slice(0, 15)
+                    // shortDesc: item.short_desc || item.long_desc.replace(/<[^>]+>/g, '').slice(0, 15),
+                    source: 'Sold By',
+                    sourceText: items[0].providerName
                   }
                   return (
                     <ProductCard

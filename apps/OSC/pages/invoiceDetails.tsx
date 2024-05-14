@@ -96,7 +96,7 @@ const invoiceDetails = () => {
         />
       </DetailCard>
 
-      <Accordion accordionHeader={t.openInWallet}>
+      {/* <Accordion accordionHeader={t.openInWallet}>
         <HStack
           justifyContent={'center'}
           alignItems={'center'}
@@ -114,7 +114,7 @@ const invoiceDetails = () => {
         >
           <Qrcode value={'https://odr-dev.becknprotocol.io/'} />
         </HStack>
-      </Accordion>
+      </Accordion> */}
     </Box>
   )
 }

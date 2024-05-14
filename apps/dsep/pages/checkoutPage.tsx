@@ -35,7 +35,7 @@ const CheckoutPage = () => {
     mobileNumber: '9876543210',
     email: 'santosh.k@gmail.com',
     address: '151-E, Janpath Road, New Delhi',
-    pinCode: '201016'
+    pinCode: '110001'
   })
   // TODO :- check for refactoring and some issue fix in this component
   const [isLoadingForInit, setIsLoadingForInit] = useState(false)
@@ -84,9 +84,9 @@ const CheckoutPage = () => {
       .then(res => {
         const profileResponse = res.data
         const documents = profileResponse.data.attributes.documents.data
-
         const profileData = profileResponse.data.attributes
         const { phone, name, zip_code, address } = profileData
+
         setFormData(prevData => {
           return {
             ...prevData,

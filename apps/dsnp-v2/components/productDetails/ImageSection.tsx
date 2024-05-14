@@ -13,7 +13,7 @@ const ImageSection: React.FC<Props> = ({ imgArray, product }) => {
     setSelectedImg(index)
   }
 
-  console.log("Dank imgArray", imgArray)
+  console.log('Dank imgArray', imgArray)
   return (
     <div
       className="flex items-start rounded-lg w-full md:w-auto"

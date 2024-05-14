@@ -1,7 +1,7 @@
 import DetailsCard from '@beckn-ui/becknified-components/src/components/checkout/details-card'
 import React, { useEffect, useState } from 'react'
 import PaymentDetails from '@beckn-ui/becknified-components/src/components/checkout/payment-details'
-import {DetailCard} from '@beckn-ui/becknified-components'
+import { DetailCard } from '@beckn-ui/becknified-components'
 import Accordion from '@beckn-ui/molecules/src/components/accordion/Accordion'
 import Typography from '@beckn-ui/molecules/src/components/typography/typography'
 import { Box, Flex, HStack, Stack } from '@chakra-ui/react'
@@ -34,13 +34,13 @@ const invoiceDetails = () => {
         items
       }
     },
-    context:{timestamp}
+    context: { timestamp }
   } = statusData[0]
 
   const { name } = items
 
   const filteredOrder = statusData.filter(res => {
-    const {state} = res.message.order.fulfillments[0]
+    const { state } = res.message.order.fulfillments[0]
     state && res.message.order.fulfillments[0].state.descriptor.short_desc === 'Delivered'
   })
 
@@ -96,7 +96,7 @@ const invoiceDetails = () => {
         />
       </DetailCard>
 
-      <Accordion accordionHeader={t.openInWallet}>
+      {/* <Accordion accordionHeader={t.openInWallet}>
         <HStack
           justifyContent={'center'}
           alignItems={'center'}
@@ -114,7 +114,7 @@ const invoiceDetails = () => {
         >
           <Qrcode value={'https://odr-dev.becknprotocol.io/'} />
         </HStack>
-      </Accordion>
+      </Accordion> */}
     </Box>
   )
 }

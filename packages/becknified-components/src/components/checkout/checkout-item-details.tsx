@@ -38,7 +38,7 @@ const ItemDetails: React.FC<ItemDetailProps> = ({ title, quantity, description, 
               variant="subTitleRegular"
             />
             <Typography
-              text={quantity.toString()}
+              text={`X ${quantity.toString()}`}
               variant="subTextRegular"
             />
           </Flex>

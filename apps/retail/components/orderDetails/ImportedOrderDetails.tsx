@@ -22,6 +22,7 @@ const OrderDetails: FC<OrderDetailsProps> = ({ backOnImportedOrder, importedOrde
   const itemData = importedtObjectOrder
   const orderId = importedtObjectOrder.id
   const createdAtTimeline = importedOrderObject.payments[0].time.timestamp
+  console.log(importedtObjectOrder)
   const totalPrice = itemData.price.value
   const noOfTravellers = itemData.quantity.selected.count
   const providerName = importedOrderObject.provider.descriptor.name
@@ -116,7 +117,7 @@ const OrderDetails: FC<OrderDetailsProps> = ({ backOnImportedOrder, importedOrde
             />
             <Typography
               variant="subTitleRegular"
-              text={`₹${totalPrice}`}
+              text={`₹${totalPrice * noOfTravellers}`}
             />
           </Flex>
           <BecknButton

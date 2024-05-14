@@ -76,7 +76,7 @@ interface XInput {
 
 export interface Item {
   id: string
-  xinput?: XInput
+  xinput: XInput
   name: string
   short_desc?: string
   images: {

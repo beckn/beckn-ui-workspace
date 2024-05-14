@@ -95,7 +95,7 @@ const bottomHeaderBlackList = ['/orderConfirmation', '/', '/searchByLocation']
 const menuIconWhiteList = ['/', '/search', '/profile']
 const orderIconList = ['/orderDetails']
 const editIcon = ['/profile']
-const invoiceDownloadIcon = ['/invoiceDetails']
+const invoiceDownloadIcon = ['']
 const currentLocation = ['/']
 
 const getHeaderTitleForPage = (name: string, logo: string, pathName: string, locale: string | undefined) => {
@@ -354,14 +354,14 @@ const BottomHeader = () => {
               />
             )}
           </div>
-          {editIcon.includes(router.pathname) && (
+          {/* {editIcon.includes(router.pathname) && (
             <Image
               cursor="pointer"
               src="/images/editIcon.svg"
               alt="edit icon"
               mr={'20px'}
             />
-          )}
+          )} */}
           {orderIconList.includes(router.pathname) && (
             <Image
               cursor="pointer"

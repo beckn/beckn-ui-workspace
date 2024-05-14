@@ -61,6 +61,19 @@ body {
 .hideScroll::-webkit-scrollbar {
   display: none;
 }
+.hideScroll {
+  overflow: auto;
+}
+.hideScroll::-webkit-scrollbar {
+  display: none;
+}
+.hideScroll {
+  scrollbar-width: none;
+}
+.hideScroll {
+  -ms-overflow-style: none;
+}
+
 .order_status_progress {
   padding: 20px;
   padding-left: unset;
@@ -112,4 +125,7 @@ select.chakra-select {
 .suggestion-list {
   overflow-y: scroll;
   max-height: calc(100vh - 100px);
+}
+.cencel_btn_filter {
+  border: 1px solid #e93324 !important;
 }

@@ -34,21 +34,9 @@ const Cart = () => {
     fetchQuotes(getSelectPayload(items, transactionId, DOMAIN))
   }, [totalQuantity])
 
-  useEffect(() => {
-    if (isError) {
-      toast({
-        render: () => (
-          <CustomToast
-            title="Error!"
-            message="Unable to proceed with select request"
-          />
-        ),
-        position: 'top',
-        duration: 2000,
-        isClosable: true
-      })
-    }
-  }, [isError])
+  const handleShopButton = () => {
+    router.push('/')
+  }
 
   const onOrderClick = () => {
     router.push('/checkout')
@@ -68,7 +56,6 @@ const Cart = () => {
       </Box>
     )
   }
-
   return (
     <Box
       pt={['20px', '20px', '0px', '0px']}
@@ -100,8 +87,8 @@ const Cart = () => {
           loader: { text: 'Getting quotes' },
           orderSummary: {
             totalAmount: {
-              price: !isEmpty(data) ? data.data[0].message.order.quote.price.value : totalAmount,
-              currencyType: items[0].price.currency
+              price: totalAmount,
+              currencyType: items[0]?.price.currency
             },
             totalQuantity: {
               text: totalQuantity.toString(),
@@ -111,6 +98,13 @@ const Cart = () => {
               text: 'Proceed to checkout',
               handleClick: onOrderClick
             }
+          },
+          emptyCard: {
+            image: '/images/emptyCard.svg',
+            heading: t.emptyCardHeading,
+            subHeading: t.emptyCardSubHeading,
+            buttonText: t.shop,
+            buttonHanler: handleShopButton
           }
         }}
       />

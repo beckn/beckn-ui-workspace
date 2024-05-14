@@ -51,12 +51,12 @@ export const theme = extendTheme({
   },
   colors: {
     primary: {
-      '100': '#F6D046'
+      '100': '#387F9A'
     }
   }
 })
 
-const Filter = ({ handleApplyFilter, handleResetFilter }) => {
+const Filter = ({ handleApplyFilter, handleResetFilter, handleCancelFilter = () => {} }) => {
   const getFormData = (): any => {
     if (localStorage) {
       const localFormData = localStorage.getItem('formData')
@@ -65,7 +65,6 @@ const Filter = ({ handleApplyFilter, handleResetFilter }) => {
   }
   const [formData, setFormData] = useState(getFormData())
   const [sortBy, setSortBy] = useState<string>('')
-
   const handleChange = (name: string, value: string) => {
     setSortBy(value)
     setFormData(prevData => ({
@@ -78,15 +77,11 @@ const Filter = ({ handleApplyFilter, handleResetFilter }) => {
     setFormData({})
     handleResetFilter()
   }
-
   useEffect(() => {
     if (localStorage) {
       localStorage.setItem('formData', JSON.stringify(formData))
     }
   }, [formData, sortBy])
-
-  console.log(formData)
-  console.log(sortBy)
 
   return (
     <>
@@ -106,7 +101,7 @@ const Filter = ({ handleApplyFilter, handleResetFilter }) => {
             <Text fontSize={'17px'}>All Filters</Text>
             <Text
               fontSize={'15px'}
-              color="#53A052"
+              color={'primary.100'}
               cursor={'pointer'}
               onClick={resetFilter}
             >
@@ -166,7 +161,7 @@ const Filter = ({ handleApplyFilter, handleResetFilter }) => {
           <Button
             buttonText={'Apply Filter'}
             background={'primary.100'}
-            color={'#565555'}
+            color={'#FFE7E7'}
             isDisabled={false}
             handleOnClick={() => {
               handleApplyFilter(sortBy)
@@ -174,6 +169,17 @@ const Filter = ({ handleApplyFilter, handleResetFilter }) => {
           />
         </Box>
       </ChakraProvider>
+
+      <Box display={['block', 'block', 'none', 'none']}>
+        <Button
+          className="cencel_btn_filter"
+          buttonText={'Cancel'}
+          background={'#fff'}
+          color={'#E93324'}
+          isDisabled={false}
+          handleOnClick={handleCancelFilter}
+        />
+      </Box>
     </>
   )
 }

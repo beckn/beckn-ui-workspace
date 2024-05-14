@@ -8,9 +8,8 @@ import { Cart as BecknCart } from '@beckn-ui/becknified-components'
 import { useSelectMutation } from '@services/select'
 import { getSelectPayload } from '@components/cart/cart.utils'
 import { cartActions } from '@store/cart-slice'
-import { isEmpty } from '@utils/common-utils'
-import { CustomToast } from '@components/signIn/SignIn'
-import { Box, useToast } from '@chakra-ui/react'
+
+import { Box, Flex, useToast } from '@chakra-ui/react'
 
 import { DOMAIN } from '@lib/config'
 
@@ -33,21 +32,9 @@ const Cart = () => {
     fetchQuotes(getSelectPayload(items, transactionId, DOMAIN))
   }, [totalQuantity])
 
-  useEffect(() => {
-    if (isError) {
-      toast({
-        render: () => (
-          <CustomToast
-            title="Error!"
-            message="Unable to proceed with select request"
-          />
-        ),
-        position: 'top',
-        duration: 2000,
-        isClosable: true
-      })
-    }
-  }, [isError])
+  const handleShopButton = () => {
+    router.push('/')
+  }
 
   const onOrderClick = () => {
     router.push('/checkout')
@@ -85,7 +72,7 @@ const Cart = () => {
           orderSummary: {
             totalAmount: {
               price: totalAmount,
-              currencyType: items[0].price.currency
+              currencyType: items[0]?.price.currency
             },
             totalQuantity: {
               text: totalQuantity.toString(),
@@ -95,6 +82,13 @@ const Cart = () => {
               text: 'Order',
               handleClick: onOrderClick
             }
+          },
+          emptyCard: {
+            image: '/images/emptyCard.svg',
+            heading: t.emptyCardHeading,
+            subHeading: t.emptyCardSubHeading,
+            buttonText: t.shop,
+            buttonHanler: handleShopButton
           }
         }}
       />

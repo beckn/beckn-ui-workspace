@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useRouter } from 'next/router'
 import { ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
-import { Box, Flex } from '@chakra-ui/react'
+import { Box, Flex, useTheme } from '@chakra-ui/react'
 import { Typography } from '@beckn-ui/molecules'
 import DetailsCard from '@beckn-ui/becknified-components/src/components/checkout/details-card'
 import ShippingSection from '@beckn-ui/becknified-components/src/components/checkout/shipping-section'
 import PaymentDetails from '@beckn-ui/becknified-components/src/components/checkout/payment-details'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
-import { getPayloadForInitRequest, getPayloadForSelectRequest, getPaymentBreakDown } from '@utils/checkout-utils'
+import { getPayloadForInitRequest, getPaymentBreakDown } from '@utils/checkout-utils'
 
 import { useLanguage } from '../hooks/useLanguage'
 import { AssemblyData, ParsedItemModel } from '../types/search.types'
@@ -19,29 +19,30 @@ import LoaderWithMessage from '@components/loader/LoaderWithMessage'
 const CheckoutPage = () => {
   const { t } = useLanguage()
   const [selectedProduct, setSelectedProduct] = useState<ParsedItemModel | null>(null)
-  const [isLoadingForSelect, setIsLoadingForSelect] = useState(true)
+  const [selectResponse, setSelectResponse] = useState<SelectResponseModel[] | null>(null)
   const [isLoadingForInit, setIsLoadingForInit] = useState(false)
-  const [selectData, setSelectData] = useState<SelectResponseModel[]>([])
   const [initData, setInitData] = useState<InitResponseModel[]>([])
   const [showShippingDetails, setShowShippingDetails] = useState(false)
   const [showBillingDetails, setShowBillingDetails] = useState(false)
   const [error, setError] = useState('')
   const [assemblyDetails, setAssemblyDetails] = useState<AssemblyData | null>(null)
   const [detailsForm, setdetailsForm] = useState<ShippingFormInitialValuesType>({
-    name: 'Antoine Dubois',
-    mobileNumber: '0612345678',
-    email: 'antoine.dubois@gmail.com',
-    address: '15 Rue du Soleil, Paris, France',
-    pinCode: '750013'
+    name: 'santosh kumar',
+    mobileNumber: '6251423251',
+    email: 'santosh.k@gmail.com',
+    address: '151-e, janpath road, new delhi',
+    pinCode: '110001'
   })
 
   const [billingFormData, setBillingFormData] = useState<ShippingFormInitialValuesType>({
-    name: 'Antoine Dubois',
-    mobileNumber: '0612345678',
-    email: 'antoine.dubois@gmail.com',
-    address: '15 Rue du Soleil, Paris, France',
-    pinCode: '750013'
+    name: 'santosh kumar',
+    mobileNumber: '6251423251',
+    email: 'santosh.k@gmail.com',
+    address: '151-e, janpath road, new delhi',
+    pinCode: '110001'
   })
+  const theme = useTheme()
+  const color = theme.colors.primary[100]
 
   const [isBilling, setIsBilling] = useState(true)
 
@@ -49,24 +50,12 @@ const CheckoutPage = () => {
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
-  const fetchSelectData = (selectPayload: any) => {
-    axios
-      .post(`${apiUrl}/select`, selectPayload)
-      .then(res => {
-        setSelectData(res.data.data)
-        setIsLoadingForSelect(false)
-      })
-      .catch(e => {
-        setError(e.message)
-        console.error(e)
-        setIsLoadingForSelect(false)
-      })
-  }
-
   useEffect(() => {
-    if (localStorage && localStorage.getItem('selectedItem')) {
+    if (localStorage && localStorage.getItem('selectedItem') && localStorage.getItem('selectResponse')) {
       const parsedSelectedItem = JSON.parse(localStorage.getItem('selectedItem') as string)
+      const parsedSelectResponse = JSON.parse(localStorage.getItem('selectResponse') as string)
       setSelectedProduct(parsedSelectedItem)
+      setSelectResponse(parsedSelectResponse)
     }
   }, [])
 
@@ -77,18 +66,11 @@ const CheckoutPage = () => {
     }
   }, [])
 
-  useEffect(() => {
-    if (selectedProduct) {
-      const selectPayload = getPayloadForSelectRequest(selectedProduct)
-      fetchSelectData(selectPayload)
-    }
-  }, [selectedProduct])
-
-  if (!selectedProduct) {
+  if (!selectedProduct && !selectResponse) {
     return <></>
   }
 
-  if (isLoadingForSelect || isLoadingForInit) {
+  if (isLoadingForInit) {
     return (
       <Box
         display={'grid'}
@@ -127,7 +109,7 @@ const CheckoutPage = () => {
         items
       }
     }
-  } = selectData[0]
+  } = selectResponse![0]
   const { name } = items[0]
 
   return (
@@ -176,6 +158,7 @@ const CheckoutPage = () => {
           sectionSubtitle={t.addShippingDetails}
           addButtonImage="./images/addShippingBtn.svg"
           showDetails={showShippingDetails}
+          color={color}
           shippingDetails={{
             name: detailsForm.name,
             location: detailsForm.address,
@@ -186,7 +169,7 @@ const CheckoutPage = () => {
             onSubmit: async shippingData => {
               try {
                 setIsLoadingForInit(true)
-                const initPayload = await getPayloadForInitRequest(selectedProduct, shippingData, billingFormData)
+                const initPayload = await getPayloadForInitRequest(selectedProduct!, shippingData, billingFormData)
                 axios
                   .post(`${apiUrl}/init`, initPayload)
                   .then(res => {
@@ -228,6 +211,7 @@ const CheckoutPage = () => {
           formTitle="Add Billing Details"
           isBilling={isBilling}
           showDetails={showBillingDetails}
+          color={color}
           shippingDetails={{
             name: billingFormData.name,
             location: billingFormData.address,
@@ -238,7 +222,7 @@ const CheckoutPage = () => {
             onSubmit: async billingData => {
               try {
                 setIsLoadingForInit(true)
-                const initPayload = await getPayloadForInitRequest(selectedProduct, detailsForm, billingData)
+                const initPayload = await getPayloadForInitRequest(selectedProduct!, detailsForm, billingData)
                 axios
                   .post(`${apiUrl}/init`, initPayload)
                   .then(res => {

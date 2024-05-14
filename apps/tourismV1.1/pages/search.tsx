@@ -120,6 +120,9 @@ const Search = () => {
   const handleResetFilter = () => {
     setItems(originalItems)
   }
+  const handleCancelFilter = () => {
+    setIsFilterOpen(false)
+  }
 
   return (
     <Box
@@ -174,6 +177,7 @@ const Search = () => {
               <Filter
                 handleApplyFilter={handleApplyFilter}
                 handleResetFilter={handleResetFilter}
+                handleCancelFilter={handleCancelFilter}
               />
             </BottomModal>
           )}

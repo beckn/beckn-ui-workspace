@@ -4,7 +4,8 @@ export enum InputTypeEnum {
   Text = 'text',
   Password = 'password',
   Email = 'email',
-  Number = 'number'
+  Number = 'number',
+  Checkbox = 'checkbox'
 }
 
 //TODO type and variant to be changed into enum

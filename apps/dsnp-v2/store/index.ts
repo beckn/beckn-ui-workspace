@@ -24,7 +24,7 @@ import authReducer from './auth-slice'
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['cart', 'discovery', 'checkout','orders','status']
+  whitelist: ['cart', 'discovery', 'checkout', 'orders', 'status']
 }
 
 const appReducer = combineReducers({
@@ -38,7 +38,7 @@ const appReducer = combineReducers({
   checkout: checkoutReducer,
   status: statusReducer,
   discovery: DiscoveryReducer,
-  orders:OrderReducer,
+  orders: OrderReducer,
   userInfo: userInfoReducer,
   sideNavBar: sideNavBarReducer,
   megaMenu: megaMenuReducer,
@@ -53,14 +53,14 @@ const appReducer = combineReducers({
 })
 
 const rootReducer = (state, action) => {
-  console.log("Dank action",action.type)
+  console.log('Dank action', action.type)
   if (action.type === 'auth/logout') {
-    if(localStorage) localStorage.removeItem('persist:root');
-    state = undefined;
+    if (localStorage) localStorage.removeItem('persist:root')
+    state = undefined
   }
 
-  return appReducer(state, action);
-};
+  return appReducer(state, action)
+}
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
 

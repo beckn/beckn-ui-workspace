@@ -42,8 +42,7 @@ const HomePage = () => {
     e.preventDefault()
   }
 
-
-    useEffect(() => {
+  useEffect(() => {
     // Check if geolocation is available in the browser
     if (navigator) {
       if ('geolocation' in navigator) {
@@ -101,13 +100,12 @@ const HomePage = () => {
 
   return (
     <>
-    <TopSheet
+      <TopSheet
         currentLocationFetchError={currentLocationFetchError}
         loadingForCurrentAddress={loadingForCurrentAddress}
         currentAddress={currentAddress}
       />
       <Box
-        p={'0 20px'}
         maxWidth={{ base: '100vw', md: '30rem', lg: '40rem' }}
         margin="4rem auto"
         backgroundColor="white"

@@ -19,6 +19,7 @@ const OrderConfirmation = () => {
   const router = useRouter()
   const [confirmData, setConfirmData] = useState<ConfirmResponseModel[]>([])
   const [confirm, { isLoading, data }] = useConfirmMutation()
+  const [orderId, setOrderId] = useState()
   const dispatch = useDispatch()
 
   const initResponse = useSelector((state: CheckoutRootState) => state.checkout.initResponse)
@@ -40,6 +41,12 @@ const OrderConfirmation = () => {
       confirm(payLoad)
     }
   }, [])
+
+  useEffect(() => {
+    if (confirmResponse && confirmResponse.length > 0) {
+      setOrderId(confirmResponse[0].message.orderId.slice(0, 8))
+    }
+  }, [confirmResponse])
 
   useEffect(() => {
     if (confirmResponse && confirmResponse.length > 0) {
@@ -69,20 +76,13 @@ const OrderConfirmation = () => {
   }
 
   return (
-    <Box
-      className="hideScroll"
-      maxH="calc(100vh - 100px)"
-      overflowY="scroll"
-    >
+    <Box mt="-2rem">
       <ConfirmationPage
         schema={{
           iconSrc: orderConfirmmark,
           successOrderMessage: 'ORDER SUCCESFULL',
           gratefulMessage: 'Thank you for your order!',
-          orderIdMessage:
-            confirmResponse && confirmResponse.length > 0
-              ? `Order number is: ${confirmResponse[0].message.orderId.slice(0, 8)}...`
-              : '',
+          orderIdMessage: orderId ? `Order number is: ${orderId}...` : '',
           trackOrderMessage: `You can track your order in "My Order" section`,
 
           buttons: [
