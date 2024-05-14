@@ -51,7 +51,7 @@ export const theme = extendTheme({
   },
   colors: {
     primary: {
-      '100': '#F6D046'
+      '100': '#387F9A'
     }
   }
 })
@@ -101,7 +101,7 @@ const Filter = ({ handleApplyFilter, handleResetFilter, handleCancelFilter = () 
             <Text fontSize={'17px'}>All Filters</Text>
             <Text
               fontSize={'15px'}
-              color="#53A052"
+              color={'primary.100'}
               cursor={'pointer'}
               onClick={resetFilter}
             >
@@ -161,7 +161,7 @@ const Filter = ({ handleApplyFilter, handleResetFilter, handleCancelFilter = () 
           <Button
             buttonText={'Apply Filter'}
             background={'primary.100'}
-            color={'#565555'}
+            color={'#FFE7E7'}
             isDisabled={false}
             handleOnClick={() => {
               handleApplyFilter(sortBy)

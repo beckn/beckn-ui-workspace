@@ -99,6 +99,7 @@ const OrderConfirmation = () => {
   }
 
   return (
+    <Box mt="-4rem">
     <ConfirmationPage
       schema={{
         iconSrc: orderConfirmmark,
@@ -106,42 +107,44 @@ const OrderConfirmation = () => {
         gratefulMessage: 'Thank you! Your booking will be confirm shortly',
         orderIdMessage: orderId ? `Order number is: ${orderId}...` : '',
         trackOrderMessage: `You can track your order in "My Order" section`,
+    
 
-        buttons: [
-          {
-            text: 'View Details',
-            handleClick: () => {
-              const orderId = confirmResponse[0].message.orderId
-              const bppId = confirmResponse[0].context.bpp_id
-              const bppUri = confirmResponse[0].context.bpp_uri
+          buttons: [
+            {
+              text: 'View Details',
+              handleClick: () => {
+                const orderId = confirmResponse[0].message.orderId
+                const bppId = confirmResponse[0].context.bpp_id
+                const bppUri = confirmResponse[0].context.bpp_uri
 
-              dispatch(orderActions.addSelectedOrder({ orderDetails: { orderId, bppId, bppUri } }))
-              const orderObjectForStatusCall = {
-                bppId: bppId,
-                bppUri: bppUri,
-                orderId: orderId
-              }
-              localStorage.setItem('selectedOrder', JSON.stringify(orderObjectForStatusCall))
-              dispatch(checkoutActions.clearState())
-              router.push('/orderDetails')
+                dispatch(orderActions.addSelectedOrder({ orderDetails: { orderId, bppId, bppUri } }))
+                const orderObjectForStatusCall = {
+                  bppId: bppId,
+                  bppUri: bppUri,
+                  orderId: orderId
+                }
+                localStorage.setItem('selectedOrder', JSON.stringify(orderObjectForStatusCall))
+                dispatch(checkoutActions.clearState())
+                router.push('/orderDetails')
+              },
+              disabled: false,
+              variant: 'solid',
+              colorScheme: 'primary'
             },
-            disabled: false,
-            variant: 'solid',
-            colorScheme: 'primary'
-          },
-          {
-            text: 'Go Back Home',
-            handleClick: () => {
-              router.push('/')
-              dispatch(checkoutActions.clearState())
-            },
-            disabled: false,
-            variant: 'outline',
-            colorScheme: 'primary'
-          }
-        ]
-      }}
-    />
+            {
+              text: 'Go Back Home',
+              handleClick: () => {
+                router.push('/')
+                dispatch(checkoutActions.clearState())
+              },
+              disabled: false,
+              variant: 'outline',
+              colorScheme: 'primary'
+            }
+          ]
+        }}
+      />
+    </Box>
   )
 }
 
