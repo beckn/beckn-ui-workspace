@@ -10,6 +10,8 @@ export interface Product {
   rating?: string
   currencyType?: CurrencyType
   shortDesc?: string
+  source?: string
+  sourceText?: string
 }
 
 export interface ProductCardProps {

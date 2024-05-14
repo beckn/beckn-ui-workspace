@@ -76,11 +76,7 @@ const OrderConfirmation = () => {
   }
 
   return (
-    <Box
-      className="hideScroll"
-      maxH="calc(100vh - 100px)"
-      overflowY="scroll"
-    >
+    <Box mt="-2rem">
       <ConfirmationPage
         schema={{
           iconSrc: orderConfirmmark,
