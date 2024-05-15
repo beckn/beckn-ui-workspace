@@ -8,4 +8,5 @@ export interface ProductCtaProps {
   counter: number
   cta: ButtonProps
   counterTitle?: string
+  noCounter?: boolean
 }

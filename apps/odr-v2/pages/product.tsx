@@ -63,13 +63,14 @@ const Product = () => {
               starCount: 5
             },
             productCta: {
+              noCounter: true,
               currency: selectedProduct.item.price.currency,
               totalPrice: selectedProduct.item.price.value,
               handleIncrement: increment,
               handleDecrement: decrement,
               counter: counter,
               cta: {
-                text: 'Procced',
+                text: 'Proceed',
                 color: 'White',
                 handleClick: () => {
                   dispatch(
