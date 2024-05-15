@@ -75,7 +75,7 @@ const headerValues: PathnameObjectType = {
   '/feedback': '',
   '/profile': 'My Profile',
   '/search': 'Search results',
-  '/checkout': 'Billing & Shipping'
+  '/checkout': 'Additional Information'
 }
 
 const headerValuesFrench: PathnameObjectType = {
@@ -96,7 +96,7 @@ const bottomHeaderBlackList = ['/orderConfirmation', '/', '/feedback']
 const menuIconWhiteList = ['/', '/search', '/profile']
 const orderIconList = ['/orderDetails']
 const editIcon = ['/profile']
-const invoiceDownloadIcon = ['/invoiceDetails']
+const invoiceDownloadIcon = ['']
 const currentLocation = ['/']
 
 const getHeaderTitleForPage = (name: string, logo: string, pathName: string, locale: string | undefined) => {
@@ -403,7 +403,7 @@ const BottomHeader = () => {
           {t['invoiceDetails']}
         </Box>
       </BottomModal>
-      <BottomModal
+      {/* <BottomModal
         isOpen={isInvoiceModalOpen}
         onClose={handleInvoiceModalClose}
         responsive={true}
@@ -449,7 +449,7 @@ const BottomHeader = () => {
           </Text>
           <BecknButton children="Proceed" />
         </Box>
-      </BottomModal>
+      </BottomModal> */}
     </header>
   )
 }
