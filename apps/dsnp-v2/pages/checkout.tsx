@@ -208,7 +208,7 @@ const CheckoutPage = () => {
               description: singleItem.short_desc,
               quantity: singleItem.quantity,
               // priceWithSymbol: `${currencyMap[singleItem.price.currency]}${singleItem.totalPrice}`,
-              price: singleItem.totalPrice,
+              price: parseFloat(singleItem.price.value) * singleItem.quantity,
               currency: singleItem.price.currency,
               image: singleItem.images[0].url
             }))
