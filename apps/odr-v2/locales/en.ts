@@ -142,6 +142,7 @@ const en: { [key: string]: string } = {
   homeText:
     'LegalEase allows anyone to discover lawyers, online dispute resolution (ODR) service providers, paralegals and other legal services and information in a quick and seamless manner',
   category: 'Category',
-  service: 'Service'
+  service: 'Service',
+  orderId: 'Order Id'
 }
 export default en
