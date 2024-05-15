@@ -30,7 +30,10 @@ const cartIconBlackList: string[] = [
   '/invoiceDetails',
   '/',
   '/cart',
-  '/profile'
+  '/profile',
+  '/checkout',
+  '/updateShippingDetails',
+  '/orderCancellation'
 ]
 
 const backIconList = ['/', '/signin']
@@ -362,7 +365,7 @@ const BottomHeader = () => {
               mr={'20px'}
             />
           )}
-          {editIcon.includes(router.pathname) && (
+          {/* {editIcon.includes(router.pathname) && (
             <Image
               cursor="pointer"
               // onClick={() => setOrderModalOpen(true)}
@@ -370,7 +373,7 @@ const BottomHeader = () => {
               alt="edit icon"
               mr={'20px'}
             />
-          )}
+          )} */}
           {invoiceDownloadIcon.includes(router.pathname) && (
             <Image
               cursor="pointer"

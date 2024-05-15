@@ -116,6 +116,9 @@ const en: { [key: string]: string } = {
   checkReview: 'Check Review',
   errorZipcode: 'Zip Code is required',
   errorZipcode2: 'Invalid Zip Code',
-  viewOrderDetails: 'View Order Details'
+  viewOrderDetails: 'View Order Details',
+  emptyCardHeading: 'The Cart is Empty',
+  emptyCardSubHeading: 'Looks like you haven’t made your choice yet',
+  shop: 'Shop'
 }
 export default en

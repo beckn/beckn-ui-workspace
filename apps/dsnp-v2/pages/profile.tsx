@@ -1,10 +1,12 @@
 import { BecknAuth } from '@beckn-ui/becknified-components'
-import Cookies from 'js-cookie'
 import { Box } from '@chakra-ui/react'
 import { profilePageProp } from '@components/signIn/SignIn.types'
 import { useLanguage } from '@hooks/useLanguage'
 import { FormErrors, profileValidateForm } from '@utils/form-utils'
+import Cookies from 'js-cookie'
 import React, { useEffect, useState } from 'react'
+import { toast } from 'react-toastify'
+import Router from 'next/router'
 
 const ProfilePage = () => {
   const { t } = useLanguage()
@@ -29,6 +31,27 @@ const ProfilePage = () => {
     zipCode: ''
   })
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+
+    setFormData((prevFormData: profilePageProp) => ({
+      ...prevFormData,
+      [name]: value
+    }))
+
+    const updatedFormData = {
+      ...formData,
+      [name]: value
+    }
+
+    const errors = profileValidateForm(updatedFormData) as any
+    setFormErrors(prevErrors => ({
+      ...prevErrors,
+      [name]: t[`${errors[name]}`] || ''
+    }))
+    console.log(errors)
+  }
+
   useEffect(() => {
     const myHeaders = new Headers()
     myHeaders.append('Authorization', `Bearer ${bearerToken}`)
@@ -40,7 +63,7 @@ const ProfilePage = () => {
     }
     setIsLoading(true)
 
-    fetch(`${strapiUrl}/profiles?populate[0]=documents.attachment&populate[1]=skills`, requestOptions)
+    fetch(`${strapiUrl}/profiles`, requestOptions)
       .then(response => response.json())
       .then(result => {
         const { name, phone } = result.data.attributes
@@ -64,14 +87,7 @@ const ProfilePage = () => {
     const currentFormData = new FormData()
     const data = {
       name: formData.name,
-      phone: formData.mobileNumber,
-      address: 'TX, DALLAS',
-      documents: {
-        set: [6]
-      },
-      skills: {
-        set: [1]
-      }
+      phone: formData.mobileNumber
     }
 
     currentFormData.append('data', JSON.stringify(data))
@@ -84,35 +100,16 @@ const ProfilePage = () => {
     }
 
     fetch(`${strapiUrl}/profiles`, requestOptions)
-      .then(response => response.json())
-      .then(result => {
-        // console.log('Dank 2',result)
-        // const {name,phone} = result.data.attributes
+      .then(response => {
+        toast.success('Profile updated successfully!')
+        Router.push('/')
+        return response.json()
       })
       .finally(() => {
         setIsLoading(false)
       })
   }
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-
-    setFormData((prevFormData: profilePageProp) => ({
-      ...prevFormData,
-      [name]: value
-    }))
-
-    const updatedFormData = {
-      ...formData,
-      [name]: value
-    }
-
-    const errors = profileValidateForm(updatedFormData) as any
-    setFormErrors(prevErrors => ({
-      ...prevErrors,
-      [name]: t[`${errors[name]}`] || ''
-    }))
-  }
   return (
     <Box
       margin={'0 auto'}
@@ -124,14 +121,10 @@ const ProfilePage = () => {
     >
       <BecknAuth
         schema={{
-          loader: { text: 'Updating profile' },
           buttons: [
             {
               text: t.saveContinue,
-              handleClick: () => {
-                console.log('Dank', formData)
-                updateProfile()
-              },
+              handleClick: updateProfile,
               disabled: false,
               variant: 'solid',
               colorScheme: 'primary'
@@ -168,6 +161,7 @@ const ProfilePage = () => {
               value: formData.flatNumber,
               handleChange: handleInputChange,
               label: t.enterFlatDetails
+              // error: formErrors.flatNumber
             },
             {
               type: 'text',
@@ -175,6 +169,7 @@ const ProfilePage = () => {
               value: formData.street,
               handleChange: handleInputChange,
               label: t.enterStreetDetails
+              // error: formErrors.street
             },
             {
               type: 'text',
@@ -182,6 +177,7 @@ const ProfilePage = () => {
               value: formData.city,
               handleChange: handleInputChange,
               label: t.enterCity
+              // error: formErrors.city
             },
             {
               type: 'text',
@@ -197,6 +193,7 @@ const ProfilePage = () => {
               value: formData.state,
               handleChange: handleInputChange,
               label: t.enterState
+              // error: formErrors.state
             },
             {
               type: 'text',
@@ -204,6 +201,7 @@ const ProfilePage = () => {
               value: formData.country,
               handleChange: handleInputChange,
               label: t.enterCountry
+              // error: formErrors.country
             }
           ]
         }}
