@@ -20,7 +20,7 @@ import { responseDataActions } from '../store/responseData-slice'
 import { getSelectPayload } from '@components/cart/cart.utils'
 
 import { Checkout, ShippingSection, ShippingFormInitialValuesType, DetailCard } from '@beckn-ui/becknified-components'
-import { Loader, Button } from '@beckn-ui/molecules'
+import { Loader, Button, LoaderWithMessage } from '@beckn-ui/molecules'
 
 import { Router, useRouter } from 'next/router'
 import { CheckoutRootState, checkoutActions } from '@store/checkout-slice'
@@ -226,7 +226,7 @@ const CheckoutPage = () => {
     sectionTitle: 'Complainant',
     formTitle: 'Add Complainant Details',
     showDetails: isInitResultPresent(),
-    // color: bgColorOfSecondary,
+    color: bgColorOfPrimary,
     shippingDetails: {
       name: submittedDetails.name,
       location: submittedDetails.address,
@@ -246,7 +246,7 @@ const CheckoutPage = () => {
     sectionTitle: 'Respondent',
     formTitle: 'Add Respondent Details',
     isBilling: true,
-    // color: bgColorOfSecondary,
+    color: bgColorOfPrimary,
     isChecked: isBillingSameRedux,
     onCheckChange: () => {
       // setIsBillingSame(!isBillingSame)
@@ -275,7 +275,10 @@ const CheckoutPage = () => {
         justifyContent="center"
         transform="translateY(-20%)"
       >
-        <Loader text={t.initializingOrderLoader} />
+        <LoaderWithMessage
+          loadingText={t.pleaseWait}
+          loadingSubText={t.initializingOrderLoader}
+        />
       </Box>
     )
 
