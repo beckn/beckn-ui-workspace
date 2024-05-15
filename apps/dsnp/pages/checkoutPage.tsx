@@ -32,21 +32,21 @@ export type ShippingFormData = {
 
 const CheckoutPage = () => {
   const [formData, setFormData] = useState<ShippingFormData>({
-    name: 'Santosh Kumar',
-    mobileNumber: '0612345678',
+    name: 'santosh kumar',
+    mobileNumber: '6251423251',
     email: 'santosh.k@gmail.com',
-    address: '15 Rue du Soleil, Paris, France',
-    zipCode: '750012'
+    address: '151-e, janpath road, new delhi',
+    zipCode: '110001'
   })
 
   const [isBillingAddressSameAsShippingAddress, setIsBillingAddressSameAsShippingAddress] = useState(true)
 
   const [billingFormData, setBillingFormData] = useState<ShippingFormData>({
-    name: 'Santosh Kumar',
-    mobileNumber: '0612345678',
+    name: 'santosh kumar',
+    mobileNumber: '6251423251',
     email: 'santosh.k@gmail.com',
-    address: '15 Rue du Soleil, Paris, France',
-    zipCode: '750012'
+    address: '151-e, janpath road, new delhi',
+    zipCode: '110001'
   })
 
   const router = useRouter()

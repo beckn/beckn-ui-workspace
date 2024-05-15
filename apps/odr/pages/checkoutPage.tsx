@@ -37,11 +37,11 @@ export type ConsentFormData = {
 
 const CheckoutPage = () => {
   const [billingFormData, setBillingFormData] = useState<ShippingFormData>({
-    name: 'Marie Sampath',
-    mobileNumber: '9876543210',
-    email: 'marie.sampath@gmail.com',
-    address: '343, B Block, Sector 4, Rohini, Delhi',
-    pinCode: '110042'
+    name: 'santosh kumar',
+    mobileNumber: '6251423251',
+    email: 'santosh.k@gmail.com',
+    address: '151-e, janpath road, new delhi',
+    pinCode: '110001'
   })
   const [formData, setFormData] = useState<ShippingFormData>({
     name: 'Jay D',

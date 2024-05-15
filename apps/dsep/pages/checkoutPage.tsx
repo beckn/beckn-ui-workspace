@@ -39,7 +39,7 @@ const CheckoutPage = () => {
     mobileNumber: '9876543210',
     email: 'santosh.k@gmail.com',
     address: '151-E, Janpath Road, New Delhi',
-    pinCode: '201016'
+    pinCode: '110001'
   })
 
   const [isBillingAddressSameAsShippingAddress, setIsBillingAddressSameAsShippingAddress] = useState(true)

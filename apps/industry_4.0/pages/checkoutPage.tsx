@@ -28,19 +28,19 @@ const CheckoutPage = () => {
   const [error, setError] = useState('')
   const [assemblyDetails, setAssemblyDetails] = useState<AssemblyData | null>(null)
   const [detailsForm, setdetailsForm] = useState<ShippingFormInitialValuesType>({
-    name: 'Antoine Dubois',
-    mobileNumber: '0612345678',
-    email: 'antoine.dubois@gmail.com',
-    address: '15 Rue du Soleil, Paris, France',
-    pinCode: '750013'
+    name: 'santosh kumar',
+    mobileNumber: '6251423251',
+    email: 'santosh.k@gmail.com',
+    address: '151-e, janpath road, new delhi',
+    pinCode: '110001'
   })
 
   const [billingFormData, setBillingFormData] = useState<ShippingFormInitialValuesType>({
-    name: 'Antoine Dubois',
-    mobileNumber: '0612345678',
-    email: 'antoine.dubois@gmail.com',
-    address: '15 Rue du Soleil, Paris, France',
-    pinCode: '750013'
+    name: 'santosh kumar',
+    mobileNumber: '6251423251',
+    email: 'santosh.k@gmail.com',
+    address: '151-e, janpath road, new delhi',
+    pinCode: '110001'
   })
 
   const [isBilling, setIsBilling] = useState(true)
