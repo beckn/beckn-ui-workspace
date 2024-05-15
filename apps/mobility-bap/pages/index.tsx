@@ -35,6 +35,7 @@ const Homepage = () => {
   useEffect(() => {
     if (navigator) {
       if ('geolocation' in navigator) {
+        if (pickup.address !== '') return
         navigator.geolocation.getCurrentPosition(
           async position => {
             const latitude = position.coords.latitude

@@ -1,40 +1,73 @@
 import TripLocation from '@/components/searchRideForm/TripLocation'
-import { Button, Typography } from '@beckn-ui/molecules'
+import { Button, Loader, Typography } from '@beckn-ui/molecules'
 import { Image, Box, Card, CardBody, Divider, Flex, useTheme } from '@chakra-ui/react'
+import axios from 'axios'
 import { IGeoLocationSearchPageRootState } from 'lib/types/geoLocationSearchPage'
 import dynamic from 'next/dynamic'
 import Router from 'next/router'
-import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
-import { mockDataCab } from 'utilities/cabDetails'
+import React, { useCallback, useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { toast } from 'react-toastify'
+import { discoveryActions } from 'store/discovery-slice'
+import { ParsedCabDataModel, getSearchRidePayload, parsedSearchDetails } from 'utilities/cabDetails'
+
+const apiUrl = process.env.NEXT_PUBLIC_API_URL
+const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
 
 const SearchRide = () => {
+  const [isLoading, setIsLoading] = useState(false)
+  const [cabServiceProviders, setCabServiceProviders] = useState<ParsedCabDataModel[]>([])
+  const [totalCabs, setTotalCabs] = useState<number>(0)
+
   const theme = useTheme()
-  const MapWithNoSSR = dynamic(() => import('../components/Map'), {
-    ssr: false
-  })
+  const dispatch = useDispatch()
 
-  const pickupAddress = useSelector(
-    (state: IGeoLocationSearchPageRootState) => state.geoLocationSearchPageUI.pickupAddress
-  )
-  const coords = useSelector((state: IGeoLocationSearchPageRootState) => ({
-    lat: state.geoLocationSearchPageUI.geoLatLong?.lat,
-    long: state.geoLocationSearchPageUI.geoLatLong?.long
-  }))
+  const pickup = useSelector((state: IGeoLocationSearchPageRootState) => state.geoLocationSearchPageUI.pickup)
+  const dropoff = useSelector((state: IGeoLocationSearchPageRootState) => state.geoLocationSearchPageUI.dropoff)
 
-  const dropoffAddress = useSelector(
-    (state: IGeoLocationSearchPageRootState) => state.geoLocationSearchPageUI.dropoffAddress
-  )
+  const searchRide = useCallback(() => {
+    const payload = getSearchRidePayload(pickup, dropoff)
 
-  let totalCabs = 0
+    setIsLoading(true)
 
-  mockDataCab.cabCategory.forEach(cabCategory => {
-    totalCabs += cabCategory.mini.cabDetails.length
-  })
+    axios
+      .post(`${apiUrl}/search`, payload)
+      .then(async res => {
+        const { providerDetails, totalCabs } = await parsedSearchDetails(res.data.data)
+        setCabServiceProviders(providerDetails)
+        setTotalCabs(totalCabs)
+        setIsLoading(false)
+      })
+      .catch(e => {
+        toast.error('Something went wrong, please try again', {
+          position: 'top-center'
+        })
+        Router.push('/')
+      })
+      .finally(() => {
+        setIsLoading(false)
+      })
+  }, [])
+
+  useEffect(() => {
+    searchRide()
+  }, [])
+
+  if (isLoading) {
+    return (
+      <Box
+        display="flex"
+        height="100vh"
+        justifyContent="center"
+        transform="translateY(-10%)"
+      >
+        <Loader />
+      </Box>
+    )
+  }
 
   return (
     <Box>
-      <MapWithNoSSR coords={coords} />
       <Box
         zIndex={'999'}
         position="absolute"
@@ -70,8 +103,8 @@ const SearchRide = () => {
 
             <Divider mb="20px" />
             <TripLocation
-              pickupLocation={pickupAddress}
-              dropLocation={dropoffAddress}
+              pickupLocation={pickup.address}
+              dropLocation={dropoff.address}
             />
           </CardBody>
         </Card>
@@ -82,7 +115,7 @@ const SearchRide = () => {
         >
           {totalCabs} results found
         </Box>
-        {mockDataCab.cabCategory.map((cabCategory, index) => (
+        {cabServiceProviders.map((provider, index) => (
           <Box
             key={index}
             mb="20px"
@@ -94,17 +127,17 @@ const SearchRide = () => {
               mb="20px"
             >
               <Image
-                src={cabCategory.image}
-                alt={`${cabCategory.name} Cab`}
+                src={provider.image}
+                alt={`${provider.name} Cab`}
                 mr="10px"
               />
               <Box>
                 <Typography
-                  text={cabCategory.name}
+                  text={provider.name}
                   variant="subTitleSemibold"
                 />
                 <Typography
-                  text={cabCategory.rating}
+                  text={provider.rating}
                   variant="subTitleSemibold"
                 />
               </Box>
@@ -114,7 +147,7 @@ const SearchRide = () => {
               className="hideScroll"
             >
               <Flex width={'max-content'}>
-                {cabCategory.mini.cabDetails.map((cabDetail, detailIndex) => (
+                {provider.cabDetails.map((cabDetail, detailIndex) => (
                   <Card
                     key={detailIndex}
                     boxShadow=" 0px 8px 10px 0px #0000001A"
@@ -147,7 +180,18 @@ const SearchRide = () => {
                       <Button
                         text="Select"
                         variant="solid"
-                        handleClick={() => Router.push('/searchRideForm')}
+                        handleClick={() => {
+                          // dispatch(
+                          //   discoveryActions.addRide({
+                          //     rideDetails: {
+                          //       provider,
+                          //       pickup,
+                          //       dropoff
+                          //     }
+                          //   })
+                          // )
+                          Router.push('/searchRideForm')
+                        }}
                       />
                     </CardBody>
                   </Card>
