@@ -34,14 +34,18 @@ const OrderHistory = () => {
       headers: myHeaders,
       redirect: 'follow'
     }
-    fetch(`${strapiUrl}/orders?filters[category]=6`, requestOptions)
+    fetch(`${strapiUrl}/orders?filters[category]=3`, requestOptions)
       .then(response => response.json())
       .then(result => {
-        console.log('resluttt', result)
+        console.log('Dank orders', result)
         if (result.error) {
           return setError(result.error.message)
         }
-        setOrderHistoryList(result.data.reverse())
+        setOrderHistoryList(
+          result.data
+            .filter((singleItem: any) => singleItem.attributes.bpp_id === 'bpp-ps-network-strapi-dev.becknprotocol.io')
+            .reverse()
+        )
         setIsLoading(false)
       })
       .catch(error => {
