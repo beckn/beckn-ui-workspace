@@ -448,6 +448,13 @@ const en: { [key: string]: string } = {
   howTodo: 'How did we do?',
   rateUs: 'Rate Us',
   shareFeedbackText: 'Please share your feedback with us',
-  rateOrderLoaderSubText: 'While we submit your feedback'
+  rateOrderLoaderSubText: 'While we submit your feedback',
+  noJobs: 'No Jobs!',
+  noJobSubText: 'Looks like you haven’t applied for any Jobs!',
+  npCourseFound: 'No Courses found!',
+  noCourseSubText: 'Looks like you haven’t purchased any courses!',
+  searchJob: 'Search Job',
+  searchLearning: ' Search Learning'
 }
+
 export default en

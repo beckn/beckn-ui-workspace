@@ -6,6 +6,7 @@ import MyLearing from '../components/orderHistory/MyLearing'
 import { useLanguage } from '../hooks/useLanguage'
 import { OrderData } from '../lib/types/order-history.types'
 import { formatTimestamp } from '../utilities/confirm-utils'
+import EmptyCartMyLearning from './emptyCartMyLearning'
 
 const myLearningOrderHistory = () => {
   const [coursesOrders, setCoursesOrders] = useState<OrderData>([])
@@ -43,7 +44,7 @@ const myLearningOrderHistory = () => {
   }
 
   if (!coursesOrders.length) {
-    return <></>
+    return <EmptyCartMyLearning />
   }
 
   return (
@@ -62,6 +63,8 @@ const myLearningOrderHistory = () => {
         const { tags } = items[0]
         const courseURLTag = tags.find(tag => tag.list[0]?.code === 'course-url')
         const courseUrl = courseURLTag?.list[0]?.value || ''
+
+        // const courseUrl = items[0]?.tags?.Url || ''
 
         return (
           <MyLearing
