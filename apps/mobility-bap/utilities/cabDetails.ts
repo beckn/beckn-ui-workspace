@@ -46,20 +46,20 @@ interface DataItemModel {
 }
 
 export interface ParsedCabDataModel {
-  name: string
+  providerId: string
+  providerName: string
   image: string
   rating: string
+  bppId: string
+  bppUri: string
+  domain: string
+  transactionId: string
   cabDetails: {
+    id: string
     image: string
     name: string
     waitTime: string
     fare: string
-    bppId: string
-    bppUri: string
-    domain: string
-    transactionId: string
-    providerId: string
-    providerName: string
     rating: string
     cityName?: string
   }[]
@@ -130,30 +130,30 @@ export const parsedSearchDetails = (data: SearchResponseModel[]) => {
 
     message.providers.forEach((provider: any) => {
       const providerId = provider.id
-      const name = provider.name
+      const providerName = provider.name
       const image = provider.images?.[0]?.url
       const rating = provider.rating
       totalCabs += provider.items?.length
 
       const providerCabDetails: ParsedCabDataModel = {
-        name,
+        providerId,
+        providerName,
         image,
         rating,
+        bppId: bppId,
+        bppUri: bppUri,
+        domain,
+        transactionId,
         cabDetails: []
       }
 
       provider?.items?.forEach((item: any) => {
         providerCabDetails.cabDetails.push({
+          id: item.id,
           name: item.name,
           waitTime: item.wait_time,
-          fare: `${item.price.value} ${item.price.currency}`,
+          fare: `${item.price.value} ${item.price.currency || ''}`,
           image: './images/CabImg.svg',
-          bppId: bppId,
-          bppUri: bppUri,
-          domain,
-          transactionId,
-          providerId: providerId,
-          providerName: provider.name,
           rating,
           cityName: provider.locations?.[0].city?.name
         })

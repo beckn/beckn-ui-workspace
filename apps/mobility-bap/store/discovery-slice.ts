@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { GeoLocationAddresModel } from 'lib/types/geoLocationSearchPage'
 import { ParsedCabDataModel } from 'utilities/cabDetails'
 
-interface RideDetailsModel {
+export interface RideDetailsModel {
   provider: ParsedCabDataModel
   pickup: GeoLocationAddresModel
   dropoff: GeoLocationAddresModel

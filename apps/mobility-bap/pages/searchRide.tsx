@@ -53,6 +53,21 @@ const SearchRide = () => {
     searchRide()
   }, [])
 
+  const handleOnSelect = useCallback((transactionId: string, details: any) => {
+    dispatch(discoveryActions.addTransactionId({ transactionId }))
+    dispatch(
+      discoveryActions.addRide({
+        rideDetails: details
+      })
+    )
+    dispatch(
+      discoveryActions.addRide({
+        rideDetails: details
+      })
+    )
+    Router.push('/searchRideForm')
+  }, [])
+
   if (isLoading) {
     return (
       <Box
@@ -128,12 +143,12 @@ const SearchRide = () => {
             >
               <Image
                 src={provider.image}
-                alt={`${provider.name} Cab`}
+                alt={`${provider.providerName} Cab`}
                 mr="10px"
               />
               <Box>
                 <Typography
-                  text={provider.name}
+                  text={provider.providerName}
                   variant="subTitleSemibold"
                 />
                 <Typography
@@ -180,18 +195,13 @@ const SearchRide = () => {
                       <Button
                         text="Select"
                         variant="solid"
-                        handleClick={() => {
-                          // dispatch(
-                          //   discoveryActions.addRide({
-                          //     rideDetails: {
-                          //       provider,
-                          //       pickup,
-                          //       dropoff
-                          //     }
-                          //   })
-                          // )
-                          Router.push('/searchRideForm')
-                        }}
+                        handleClick={() =>
+                          handleOnSelect(provider.transactionId, {
+                            provider,
+                            pickup,
+                            dropoff
+                          })
+                        }
                       />
                     </CardBody>
                   </Card>
