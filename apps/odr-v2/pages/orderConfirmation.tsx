@@ -9,16 +9,18 @@ import { orderActions } from '@store/order-slice'
 import { useConfirmMutation } from '@services/confirm'
 import { getPayloadForConfirm, getPayloadForOrderHistoryPost } from '@utils/confirm-utils'
 import axios from 'axios'
+import { toast } from 'react-toastify'
 import { Box } from '@chakra-ui/react'
 import Cookies from 'js-cookie'
 import { ConfirmResponseModel } from '../types/confirm.types'
+import { CustomToast } from '@components/signIn/SignIn'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
 
 const OrderConfirmation = () => {
   const { t } = useLanguage()
   const router = useRouter()
   const [confirmData, setConfirmData] = useState<ConfirmResponseModel[]>([])
-  const [confirm, { isLoading, data }] = useConfirmMutation()
+  const [confirm, { isLoading, data, isError }] = useConfirmMutation()
   const dispatch = useDispatch()
 
   const initResponse = useSelector((state: CheckoutRootState) => state.checkout.initResponse)
@@ -40,6 +42,23 @@ const OrderConfirmation = () => {
       confirm(payLoad)
     }
   }, [])
+
+  useEffect(() => {
+    if (isError) {
+      router.push('/checkout')
+      toast({
+        render: () => (
+          <CustomToast
+            title="Error!"
+            message="Confirm call failed"
+          />
+        ),
+        position: 'top',
+        duration: 2000,
+        isClosable: true
+      })
+    }
+  }, [isError])
 
   useEffect(() => {
     if (confirmResponse && confirmResponse.length > 0) {
