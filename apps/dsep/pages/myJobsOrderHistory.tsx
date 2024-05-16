@@ -7,6 +7,7 @@ import MyJob from '../components/orderHistory/MyJob'
 import { useLanguage } from '../hooks/useLanguage'
 import { OrderData } from '../lib/types/order-history.types'
 import { formatTimestamp } from '../utilities/confirm-utils'
+import EmptyCartJob from './emptyCartJob'
 
 const myJobsOrderHistory = () => {
   const [jobsOrders, setJobsOrders] = useState<OrderData>([])
@@ -43,7 +44,7 @@ const myJobsOrderHistory = () => {
   }
 
   if (!jobsOrders.length) {
-    return <></>
+    return <EmptyCartJob />
   }
 
   return (
