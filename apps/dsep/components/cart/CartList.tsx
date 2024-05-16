@@ -24,55 +24,53 @@ const CartList: React.FC<CartListPropsModel> = ({ setIsLoadingForCartCountChange
   const scholarshipTitle = useSelector((state: any) => state.scholarshipCart.scholarshipTitle)
 
   return (
-    <div>
-      <div className="w-full xl:max-w-[2100px] mx-auto">
-        {cartItemsFromSelect.length
-          ? cartItemsFromSelect.map((cartItem: Item) => {
-              return (
-                <CartItem
-                  setIsLoadingForCartCountChange={setIsLoadingForCartCountChange}
-                  key={cartItem.id}
-                  product={cartItem}
-                />
-              )
-            })
-          : null}
-        <Box>
-          <Box mb={'10px'}>
-            <Typography
-              text={t.scholarship}
-              fontSize={'17px'}
-            />
-          </Box>
-          {scholarshipId ? (
-            <DetailsCard>
-              <Flex alignItems={'center'}>
-                <Image
-                  alt="shippingBtnImage"
-                  src={addShippingBtn}
-                />
-
-                <Box ml={'8px'}>
-                  <Typography
-                    variant="subTextSemibold"
-                    text={`${scholarshipId}-${scholarshipTitle}`}
-                  />
-                </Box>
-              </Flex>
-
-              <Box ml={'35px'}>
-                <Typography text={t.scholarshipApplied} />
-              </Box>
-            </DetailsCard>
-          ) : (
-            <ScholarshipAddButton
-              image={'+'}
-              text={t.checkforScholarship}
-              handleButtonClick={() => router.push('/myScholarship')}
-            />
-          )}
+    <div className="w-full xl:max-w-[2100px] mx-auto">
+      {cartItemsFromSelect.length
+        ? cartItemsFromSelect.map((cartItem: Item) => {
+            return (
+              <CartItem
+                setIsLoadingForCartCountChange={setIsLoadingForCartCountChange}
+                key={cartItem.id}
+                product={cartItem}
+              />
+            )
+          })
+        : null}
+      <Box>
+        <Box mb={'10px'}>
+          <Typography
+            text={t.scholarship}
+            fontSize={'17px'}
+          />
         </Box>
-      </div>
+        {scholarshipId ? (
+          <DetailsCard>
+            <Flex alignItems={'center'}>
+              <Image
+                alt="shippingBtnImage"
+                src={addShippingBtn}
+              />
+
+              <Box ml={'8px'}>
+                <Typography
+                  variant="subTextSemibold"
+                  text={`${scholarshipId}-${scholarshipTitle}`}
+                />
+              </Box>
+            </Flex>
+
+            <Box ml={'35px'}>
+              <Typography text={t.scholarshipApplied} />
+            </Box>
+          </DetailsCard>
+        ) : (
+          <ScholarshipAddButton
+            image={'+'}
+            text={t.checkforScholarship}
+            handleButtonClick={() => router.push('/myScholarship')}
+          />
+        )}
+      </Box>
     </div>
   )
 }
