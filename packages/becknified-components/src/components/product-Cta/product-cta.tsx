@@ -12,7 +12,8 @@ const ProductCta: React.FC<ProductCtaProps> = ({
   handleIncrement,
   counter,
   cta,
-  counterTitle
+  counterTitle,
+  noCounter
 }) => {
   const theme = useTheme()
   const { isMobile } = useResponsive()
@@ -52,34 +53,37 @@ const ProductCta: React.FC<ProductCtaProps> = ({
         />
       </Flex>
 
-      <Flex
-        justifyContent={{ base: 'center', sm: 'center', md: 'flex-start' }}
-        alignItems="center"
-        gap="4"
-        mb="1.5rem"
-        mt="1rem"
-      >
-        <Box
-          onClick={handleIncrement}
-          fontSize="24px"
+      {!noCounter && (
+        <Flex
+          justifyContent={{ base: 'center', sm: 'center', md: 'flex-start' }}
+          alignItems="center"
+          gap="4"
+          mb="1.5rem"
+          mt="1rem"
         >
-          +
-        </Box>
-        <Box
-          border={'1px solid #D9D9D9'}
-          color={theme.colors.secondary[100]}
-          p="2px 20px"
-          borderRadius={'4px'}
-        >
-          {counter}
-        </Box>
-        <Box
-          onClick={handleDecrement}
-          fontSize="24px"
-        >
-          -
-        </Box>
-      </Flex>
+          <Box
+            onClick={handleIncrement}
+            fontSize="24px"
+          >
+            +
+          </Box>
+          <Box
+            border={'1px solid #D9D9D9'}
+            color={theme.colors.secondary[100]}
+            p="2px 20px"
+            borderRadius={'4px'}
+          >
+            {counter}
+          </Box>
+          <Box
+            onClick={handleDecrement}
+            fontSize="24px"
+          >
+            -
+          </Box>
+        </Flex>
+      )}
+
       <Box width={{ base: '100%', md: '50%' }}>
         <Button {...cta} />
       </Box>

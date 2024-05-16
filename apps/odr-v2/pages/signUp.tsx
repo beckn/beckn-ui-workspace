@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useLanguage } from '@hooks/useLanguage'
-import AlternateLogo from '../public/images/KuzaLogo.svg'
+import AlternateLogo from '../public/images/Logo.svg'
 import { SignUpPropsModel } from '@components/signIn/SignIn.types'
 import { FormErrors, signUpValidateForm } from '@utils/form-utils'
 import { BecknAuth } from '@beckn-ui/becknified-components'
@@ -30,7 +30,7 @@ const SignUp = () => {
         render: () => (
           <CustomToast
             title="Error!"
-            message="Unable to login"
+            message="Email or Username are already taken"
           />
         ),
         position: 'top',

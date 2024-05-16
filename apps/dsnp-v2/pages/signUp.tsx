@@ -42,7 +42,7 @@ const SignUp = () => {
         render: () => (
           <CustomToast
             title="Error!"
-            message="Unable to login"
+            message="Email or Username are already taken"
           />
         ),
         position: 'top',

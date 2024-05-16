@@ -21,7 +21,7 @@ function PaymentMode() {
   return (
     <Box
       className="hideScroll"
-      maxH="calc(100vh - 120px)"
+      maxH="calc(100vh - 100px)"
       overflowY={'scroll'}
     >
       <Box

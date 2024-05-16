@@ -82,7 +82,7 @@ const invoiceDetails = () => {
           </Flex>
         </Box>
       </DetailCard>
-      <DetailCard>
+      {/* <DetailCard>
         <Box pb={'15px'}>
           <Typography
             variant="titleSemibold"
@@ -94,9 +94,9 @@ const invoiceDetails = () => {
           totalText="Total"
           totalValueWithCurrency={getPaymentBreakDown(statusData).totalPricewithCurrent}
         />
-      </DetailCard>
+      </DetailCard> */}
 
-      <Accordion accordionHeader={t.openInWallet}>
+      {/* <Accordion accordionHeader={t.openInWallet}>
         <HStack
           justifyContent={'center'}
           alignItems={'center'}
@@ -114,7 +114,7 @@ const invoiceDetails = () => {
         >
           <Qrcode value={'https://odr-dev.becknprotocol.io/'} />
         </HStack>
-      </Accordion>
+      </Accordion> */}
     </Box>
   )
 }

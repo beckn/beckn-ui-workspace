@@ -4,7 +4,6 @@ import orderConfirmmark from '../public/images/orderConfirmmark.svg'
 import { useSelector, useDispatch } from 'react-redux'
 import { useLanguage } from '../hooks/useLanguage'
 import { ConfirmationPage } from '@beckn-ui/becknified-components'
-import { InitResponseModel } from '../types/init.types'
 import { CheckoutRootState, checkoutActions } from '@store/checkout-slice'
 import { orderActions } from '@store/order-slice'
 import { useConfirmMutation } from '@services/confirm'
@@ -14,13 +13,13 @@ import { Box } from '@chakra-ui/react'
 import Cookies from 'js-cookie'
 import { ConfirmResponseModel } from '../types/confirm.types'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
-import { init } from 'next/dist/compiled/webpack/webpack'
 
 const OrderConfirmation = () => {
   const { t } = useLanguage()
   const router = useRouter()
   const [confirmData, setConfirmData] = useState<ConfirmResponseModel[]>([])
   const [confirm, { isLoading, data }] = useConfirmMutation()
+  const [orderId, setOrderId] = useState()
   const dispatch = useDispatch()
 
   const initResponse = useSelector((state: CheckoutRootState) => state.checkout.initResponse)
@@ -42,6 +41,12 @@ const OrderConfirmation = () => {
       confirm(payLoad)
     }
   }, [])
+
+  useEffect(() => {
+    if (confirmResponse && confirmResponse.length > 0) {
+      setOrderId(confirmResponse[0].message.orderId.slice(0, 8))
+    }
+  }, [confirmResponse])
 
   useEffect(() => {
     if (confirmResponse && confirmResponse.length > 0) {
@@ -71,55 +76,51 @@ const OrderConfirmation = () => {
   }
 
   return (
-    <ConfirmationPage
-      schema={{
-        iconSrc: orderConfirmmark,
-        content: t.orderPlaced,
-        contentMessage: t.orderSuccesfully,
-        successOrderMessage: 'ORDER SUCCESFULL',
-        gratefulMessage: 'Thank you for your order!',
-        // orderIdMessage:`Order number is: ${confirmResponse && confirmResponse.length > 0 &&confirmResponse[0].message.orderId ? confirmResponse[0].message.orderId.slice(0, 8) : ''}...`,
-        orderIdMessage:
-          confirmResponse && confirmResponse.length > 0
-            ? `Order number is: ${confirmResponse[0].message.orderId.slice(0, 8)}...`
-            : '',
-        trackOrderMessage: `You can track your order in "My Order" section`,
+    <Box mt="-2rem">
+      <ConfirmationPage
+        schema={{
+          iconSrc: orderConfirmmark,
+          successOrderMessage: 'ORDER SUCCESFULL',
+          gratefulMessage: 'Thank you for your order!',
+          orderIdMessage: orderId ? `Order number is: ${orderId}...` : '',
+          trackOrderMessage: `You can track your order in "My Order" section`,
 
-        buttons: [
-          {
-            text: t.viewOrderDetails,
-            handleClick: () => {
-              const orderId = confirmResponse[0].message.orderId
-              const bppId = confirmResponse[0].context.bpp_id
-              const bppUri = confirmResponse[0].context.bpp_uri
+          buttons: [
+            {
+              text: t.viewOrderDetails,
+              handleClick: () => {
+                const orderId = confirmResponse[0].message.orderId
+                const bppId = confirmResponse[0].context.bpp_id
+                const bppUri = confirmResponse[0].context.bpp_uri
 
-              dispatch(orderActions.addSelectedOrder({ orderDetails: { orderId, bppId, bppUri } }))
-              const orderObjectForStatusCall = {
-                bppId: bppId,
-                bppUri: bppUri,
-                orderId: orderId
-              }
-              localStorage.setItem('selectedOrder', JSON.stringify(orderObjectForStatusCall))
-              dispatch(checkoutActions.clearState())
-              router.push('/orderDetails')
+                dispatch(orderActions.addSelectedOrder({ orderDetails: { orderId, bppId, bppUri } }))
+                const orderObjectForStatusCall = {
+                  bppId: bppId,
+                  bppUri: bppUri,
+                  orderId: orderId
+                }
+                localStorage.setItem('selectedOrder', JSON.stringify(orderObjectForStatusCall))
+                dispatch(checkoutActions.clearState())
+                router.push('/orderDetails')
+              },
+              disabled: false,
+              variant: 'solid',
+              colorScheme: 'primary'
             },
-            disabled: false,
-            variant: 'solid',
-            colorScheme: 'primary'
-          },
-          {
-            text: 'Go Back Home',
-            handleClick: () => {
-              router.push('/')
-              dispatch(checkoutActions.clearState())
-            },
-            disabled: false,
-            variant: 'outline',
-            colorScheme: 'primary'
-          }
-        ]
-      }}
-    />
+            {
+              text: 'Go Back Home',
+              handleClick: () => {
+                router.push('/')
+                dispatch(checkoutActions.clearState())
+              },
+              disabled: false,
+              variant: 'outline',
+              colorScheme: 'primary'
+            }
+          ]
+        }}
+      />
+    </Box>
   )
 }
 

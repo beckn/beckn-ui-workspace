@@ -218,7 +218,9 @@ const Search = () => {
                     name: item.name,
                     price: item.price.value,
                     rating: item.rating,
-                    shortDesc: item.short_desc || item.long_desc.replace(/<[^>]+>/g, '').slice(0, 15)
+                    // shortDesc: item.name.replace(/<[^>]+>/g, '').slice(0, 50)
+                    source: 'Sold By',
+                    sourceText: items[0].providerName
                   }
                   return (
                     <ProductCard

@@ -134,7 +134,7 @@ const en: { [key: string]: string } = {
   selectdeliveryText: 'Where would you like the order to be delivered? ',
   searchForanything: 'Search for anything',
   quoteRequestLoader: 'Your order is getting processed',
-  initializingOrderLoader: 'while we set things up for you',
+  initializingOrderLoader: 'while we setup forms to understand your case in detail.',
   errorZipcode: 'Zip Code is required',
   errorZipcode2: 'Invalid Zip Code',
   homeHeading: 'LegalEase',
@@ -142,6 +142,7 @@ const en: { [key: string]: string } = {
   homeText:
     'LegalEase allows anyone to discover lawyers, online dispute resolution (ODR) service providers, paralegals and other legal services and information in a quick and seamless manner',
   category: 'Category',
-  service: 'Service'
+  service: 'Service',
+  orderId: 'Order Id'
 }
 export default en
