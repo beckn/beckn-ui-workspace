@@ -59,11 +59,15 @@ const OrderDetails = () => {
     }
   }, [])
 
-  useEffect(() => {
+  const fetchStatusData = () => {
     if (confirmData) {
       const statusPayload = getStatusPayload(confirmData)
       statusRequest.fetchData(`${apiUrl}/status`, 'POST', statusPayload)
     }
+  }
+
+  useEffect(() => {
+    fetchStatusData()
   }, [confirmData, trigger])
 
   useEffect(() => {
@@ -199,7 +203,8 @@ const OrderDetails = () => {
       const updatePayload = getUpdatePayload(formData, statusResponse)
       const updateResponse = await axios.post(`${apiUrl}/update`, updatePayload)
 
-      if (updateResponse) {
+      if (updateResponse && confirmData) {
+        fetchStatusData()
         setIsAddressUpdateModalOpen(false)
       }
     } catch (error) {
@@ -436,7 +441,7 @@ const OrderDetails = () => {
               color={'#000000'}
             />
           </Flex>
-          <Flex
+          {/* <Flex
             fontSize={'15px'}
             justifyContent={'space-between'}
             alignItems={'center'}
@@ -450,7 +455,7 @@ const OrderDetails = () => {
               text={t.naText}
               variant={'subTitleRegular'}
             />
-          </Flex>
+          </Flex> */}
         </CardBody>
       </Accordion>
 

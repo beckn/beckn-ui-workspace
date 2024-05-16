@@ -108,3 +108,6 @@ select.chakra-select {
 .cencel_btn_filter {
   border: 1px solid #e93324 !important;
 }
+.-product_card_layout_container img {
+  object-fit: contain !important;
+}
