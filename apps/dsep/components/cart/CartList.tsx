@@ -25,13 +25,13 @@ const CartList: React.FC<CartListPropsModel> = ({ setIsLoadingForCartCountChange
 
   return (
     <div className="w-full xl:max-w-[2100px] mx-auto">
-      {cartItemsFromSelect.length
-        ? cartItemsFromSelect.map((cartItem: Item) => {
+      {cartItems.length
+        ? cartItems.map((cartItem: any) => {
             return (
               <CartItem
                 setIsLoadingForCartCountChange={setIsLoadingForCartCountChange}
                 key={cartItem.id}
-                product={cartItem}
+                product={cartItem.item}
               />
             )
           })
