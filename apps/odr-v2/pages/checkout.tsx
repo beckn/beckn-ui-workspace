@@ -192,6 +192,10 @@ const CheckoutPage = () => {
     return !!initResponse && initResponse.length > 0
   }
 
+  const hasXinput = (response: any) => {
+    return !isEmpty(response[0].message.order.items[0].xinput)
+  }
+
   const createPaymentBreakdownMap = () => {
     const paymentBreakdownMap = {}
     if (isInitResultPresent()) {
@@ -235,7 +239,7 @@ const CheckoutPage = () => {
     },
     shippingForm: {
       onSubmit: formSubmitHandler,
-      submitButton: { text: 'Save Shipping Details' },
+      submitButton: { text: 'Save Complainant Details' },
       values: formData,
       onChange: data => setSubmittedDetails(data)
     }
@@ -245,6 +249,7 @@ const CheckoutPage = () => {
     sectionSubtitle: 'Add Respondent Details',
     sectionTitle: 'Respondent',
     formTitle: 'Add Respondent Details',
+    sameAsTitle: 'Same as Complainant Details',
     isBilling: true,
     color: bgColorOfPrimary,
     isChecked: isBillingSameRedux,
@@ -261,7 +266,7 @@ const CheckoutPage = () => {
     },
     shippingForm: {
       onSubmit: formSubmitHandler,
-      submitButton: { text: 'Save Billing Details' },
+      submitButton: { text: 'Save Respondent Details' },
       values: formData,
       onChange: data => setBillingFormData(data)
     }
@@ -292,13 +297,13 @@ const CheckoutPage = () => {
         <ShippingSection {...complainantDetails} />
         <ShippingSection {...respondentDetails} />
 
-        {!isEmpty(selectResponse) && (
+        {!isEmpty(selectResponse) && hasXinput(selectResponse) && (
           <AddSection
             htmlString={selectResponse[0].message.order.items[0].xinput.html}
             form_id="odrDisputeDetailsForm"
           />
         )}
-        {!isEmpty(initResponse) && (
+        {!isEmpty(initResponse) && hasXinput(initResponse) && (
           <AddSection
             htmlString={initResponse[0].message.order.items[0].xinput.html}
             form_id="odrConsentForm"

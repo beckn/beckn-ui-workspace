@@ -21,6 +21,7 @@ export interface ShippingSectionProps<T extends FormField[]> {
   shippingDetails: ShippingDetailsProps
   sectionTitle?: string
   sectionSubtitle?: string
+  sameAsTitle?: string
   triggerFormTitle?: string
   formTitle?: string
   showDetails?: boolean
