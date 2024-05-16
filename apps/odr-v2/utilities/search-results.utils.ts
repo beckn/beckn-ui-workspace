@@ -10,19 +10,16 @@ const dummyLocation = [
 export const parsedSearchlist = (data: SearchResponseModel[]) => {
   const itemsarray: ParsedItemModel[] = []
 
-  try {
-    data.forEach(entry => {
-      const context = entry.context
-      const message = entry.message
-      const domain = context.domain
-      const transactionId = context.transaction_id
-      const bppId = context.bpp_id
-      const bppUri = context.bpp_uri
+  data.forEach(entry => {
+    const context = entry.context
+    const message = entry.message
+    const domain = context.domain
+    const transactionId = context.transaction_id
+    const bppId = context.bpp_id
+    const bppUri = context.bpp_uri
 
-      console.log('Dank 1', message.providers)
-
-      message.providers.forEach(provider => {
-        console.log('Dank 3', provider)
+    message.providers.forEach(provider => {
+      try {
         const stringifiedLatLong = provider.locations ? provider.locations[0].gps : dummyLocation[0].gps
         const [stringifiedLatitude, stringifiedLongitude] = stringifiedLatLong.split(', ')
 
@@ -50,11 +47,11 @@ export const parsedSearchlist = (data: SearchResponseModel[]) => {
             providerCoordinates
           })
         })
-      })
+      } catch (err) {
+        console.log('Error', err)
+      }
     })
-  } catch (err) {
-    console.log('Dank', err)
-  }
+  })
 
   return itemsarray
 }
