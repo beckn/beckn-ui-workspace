@@ -1,6 +1,6 @@
 import { DetailCard } from '@beckn-ui/becknified-components'
 import { Typography } from '@beckn-ui/molecules'
-import { Flex, Image, useDisclosure } from '@chakra-ui/react'
+import { Box, Flex, Image, useDisclosure } from '@chakra-ui/react'
 import React, { FC } from 'react'
 import ThreeDots from '../../public/images/threeDots.svg'
 import { useLanguage } from '../../hooks/useLanguage'
@@ -57,15 +57,18 @@ const OrderOverview: FC<OrderOverviewPropsModel> = props => {
         alignItems={'center'}
       >
         <Flex>
-          <Typography
-            style={{
-              textOverflow: 'ellipsis',
-              overflow: 'hidden',
-              whiteSpace: 'nowrap'
-            }}
-            text={items[0].name}
-            variant={'subTitleRegular'}
-          />
+          <Box w={['128px', '180px', 'unset']}>
+            <Typography
+              style={{
+                textOverflow: 'ellipsis',
+
+                overflow: 'hidden',
+                whiteSpace: 'nowrap'
+              }}
+              text={items[0].name}
+              variant={'subTitleRegular'}
+            />
+          </Box>
           {totalItemsInAnOrder > 1 && (
             <Typography
               onClick={onOpen}

@@ -39,6 +39,7 @@ import { UIState, DataState, ProcessState } from '../types/order-details.types'
 import CallphoneIcon from '../public/images/CallphoneIcon.svg'
 import locationIcon from '../public/images/locationIcon.svg'
 import nameIcon from '../public/images/nameIcon.svg'
+import { PlusSquareIcon, AttachmentIcon } from '@chakra-ui/icons'
 import { OrdersRootState } from '@store/order-slice'
 import ShippingBlock from '@components/orderDetailComponents/Shipping'
 import { DOMAIN } from '@lib/config'
@@ -109,10 +110,16 @@ const OrderDetails = () => {
     if (data.statusData.length > 0) {
       const newData = data.statusData
         .map((status: any) => {
-          const { tags } = status?.message?.order
+          const { tags = [] } = status?.message?.order
+
+          if (!isEmpty(tags))
+            return {
+              label: statusMap[tags[tags.length - 1].list[0].value],
+              statusTime: status?.message?.order?.fulfillments[0]?.state?.updated_at || status?.context?.timestamp
+            }
 
           return {
-            label: statusMap[tags[tags.length - 1].list[0].value],
+            label: 'PROCESSING',
             statusTime: status?.message?.order?.fulfillments[0]?.state?.updated_at || status?.context?.timestamp
           }
         })
@@ -619,17 +626,12 @@ const OrderDetails = () => {
     quote: { breakup, price }
   } = order
   const { address, name, phone } = billing
-  const {
-    customer: {
-      contact: { phone: shippingPhone },
-      person: { name: shippingName }
-    },
-    stops
-  } = fulfillments[0]
+  const { customer: { contact: { phone: shippingPhone } = {}, person: { name: shippingName } = {} } = {}, stops } =
+    fulfillments[0]
 
   const {
-    location: { address: shipmentAddress },
-    contact: { phone: updateShippingPhone, email: updatedShippingEmail, name: updatedShippingName }
+    location: { address: shipmentAddress } = {},
+    contact: { phone: updateShippingPhone, email: updatedShippingEmail, name: updatedShippingName } = {}
   } = stops[0]
 
   console.log('Dank', stops, updateShippingPhone, updatedShippingName)
@@ -785,7 +787,7 @@ const OrderDetails = () => {
                   <Text
                     as={Typography}
                     // TODO
-                    text={`Order Id: ${orderMetaData.orderIds[0].slice(0, 5)}...`}
+                    text={`Case Id: ${orderMetaData.orderIds[0].slice(0, 5)}...`}
                     fontSize="17px"
                     fontWeight="600"
                   />
@@ -810,17 +812,6 @@ const OrderDetails = () => {
                     >
                       {data.statusData[0]?.message?.order?.items[0]?.name}
                     </Text>
-                    {totalQuantityOfOrder(data) > 1 && (
-                      <Text
-                        pl={'5px'}
-                        color={'green'}
-                        fontSize={'12px'}
-                        fontWeight={'600'}
-                        onClick={onOpen}
-                      >
-                        +{totalQuantityOfOrder(data) - 1}
-                      </Text>
-                    )}
                   </Flex>
 
                   <Text
@@ -871,14 +862,14 @@ const OrderDetails = () => {
         >
           {isDesktop && (
             <ShippingBlock
-              title={t.shipping}
+              title={t.claimantDetails}
               name={{ text: updatedShippingName || shippingName, icon: nameIcon }}
               address={{ text: shipmentAddress, icon: locationIcon }}
               mobile={{ text: updateShippingPhone || shippingPhone, icon: CallphoneIcon }}
             />
           )}
           {!isDesktop && (
-            <Accordion accordionHeader={t.shipping}>
+            <Accordion accordionHeader={t.claimantDetails}>
               <ShippingBlock
                 // title={t.shipping}
                 name={{ text: updatedShippingName || shippingName, icon: nameIcon }}
@@ -890,16 +881,15 @@ const OrderDetails = () => {
 
           {isDesktop && (
             <ShippingBlock
-              title={t.billing}
+              title={t.respondentDetails}
               name={{ text: name, icon: nameIcon }}
               address={{ text: address, icon: locationIcon }}
               mobile={{ text: phone, icon: CallphoneIcon }}
             />
           )}
           {!isDesktop && (
-            <Accordion accordionHeader={t.billing}>
+            <Accordion accordionHeader={t.respondentDetails}>
               <ShippingBlock
-                // title={t.shipping}
                 name={{ text: name, icon: nameIcon }}
                 address={{ text: address, icon: locationIcon }}
                 mobile={{ text: phone, icon: CallphoneIcon }}
@@ -907,34 +897,27 @@ const OrderDetails = () => {
             </Accordion>
           )}
 
-          {isDesktop && (
-            <Box>
-              <PaymentDetails
-                title="Payment"
-                hasBoxShadow={true}
-                paymentBreakDown={getPaymentBreakDown(data.statusData).breakUpMap}
-                totalText="Total"
-                totalValueWithCurrency={getPaymentBreakDown(data.statusData).totalPricewithCurrent}
+          <DetailCard>
+            <Flex alignItems={'center'}>
+              <AttachmentIcon />
+              <Typography
+                variant="subTitleRegular"
+                text="Dispute Details Added"
+                style={{ paddingLeft: '10px' }}
               />
-            </Box>
-          )}
+            </Flex>
+          </DetailCard>
 
-          {!isDesktop && (
-            <Accordion accordionHeader={t.payment}>
-              <Box
-                pl={'14px'}
-                pr={'11px'}
-                pb={'11px'}
-                pt={'6px'}
-              >
-                <PaymentDetails
-                  paymentBreakDown={getPaymentBreakDown(data.statusData).breakUpMap}
-                  totalText="Total"
-                  totalValueWithCurrency={getPaymentBreakDown(data.statusData).totalPricewithCurrent}
-                />
-              </Box>
-            </Accordion>
-          )}
+          <DetailCard>
+            <Flex alignItems={'center'}>
+              <AttachmentIcon />
+              <Typography
+                variant="subTitleRegular"
+                text="Consent form filled"
+                style={{ paddingLeft: '10px' }}
+              />
+            </Flex>
+          </DetailCard>
 
           {/* Display main bottom modal */}
           <BottomModal

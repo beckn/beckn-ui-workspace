@@ -17,6 +17,7 @@ const ShippingSection: React.FC<ShippingSectionProps<FormField[]>> = ({
   sectionTitle = 'Shipping',
   formTitle = 'Add Shipping Details',
   triggerFormTitle = 'change',
+  sameAsTitle = 'Same as Shipping Details',
   showDetails = false,
   isBilling = false,
   shippingDetails,
@@ -60,7 +61,7 @@ const ShippingSection: React.FC<ShippingSectionProps<FormField[]>> = ({
             defaultValue={isChecked}
             onChange={() => onCheckChange && onCheckChange()}
           >
-            Same as Shipping Details
+            {sameAsTitle}
           </Checkbox>
         </DetailsCard>
       ) : !showDetails ? (
