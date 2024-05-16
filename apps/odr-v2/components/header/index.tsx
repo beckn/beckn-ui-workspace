@@ -94,7 +94,7 @@ const topHeaderBlackList: string[] = []
 const bottomHeaderBlackList = ['/orderConfirmation', '/', '/feedback']
 
 const menuIconWhiteList = ['/', '/search', '/profile']
-const orderIconList = ['/orderDetails']
+const orderIconList = ['']
 const editIcon = ['/profile']
 const invoiceDownloadIcon = ['']
 const currentLocation = ['/']
