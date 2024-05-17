@@ -28,51 +28,49 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
         loading={null}
         persistor={persistor}
       >
-        <ThemeProvider enableSystem={true}>
-          <Head>
-            <title>Skill Seeker</title>
-          </Head>
-          <div
+        <Head>
+          <title>Skill Seeker</title>
+        </Head>
+        <div
+          className={cs(
+            'flex flex-col ',
+            {
+              ['h-[100vh]']: isHomepage
+            },
+            {
+              ['min-h-[100vh]']: !isHomepage
+            }
+          )}
+        >
+          <NextNProgress height={7} />
+          <Header />
+          <main
             className={cs(
-              'flex flex-col ',
+              'flex-grow',
               {
-                ['h-[100vh]']: isHomepage
+                [paddingStyles]: !isHomepage
               },
               {
-                ['min-h-[100vh]']: !isHomepage
+                [marginStyles]: !isHomepage && !isSearch && !isFeedbackPage && !isOrderConfirmationPage
+              },
+              {
+                ['mt-[24px]']: isHomepage
+              },
+              {
+                ['mt-[118px]']: isSearch
               }
             )}
           >
-            <NextNProgress height={7} />
-            <Header />
-            <main
-              className={cs(
-                'flex-grow',
-                {
-                  [paddingStyles]: !isHomepage
-                },
-                {
-                  [marginStyles]: !isHomepage && !isSearch && !isFeedbackPage && !isOrderConfirmationPage
-                },
-                {
-                  ['mt-[24px]']: isHomepage
-                },
-                {
-                  ['mt-[118px]']: isSearch
-                }
-              )}
-            >
-              {children}
-            </main>
-            {/* <Footer /> */}
-          </div>
-          <ToastContainer
-            autoClose={2000}
-            hideProgressBar={true}
-            rtl={locale === 'en' ? false : true}
-            position={locale === 'en' ? 'top-right' : 'top-left'}
-          />
-        </ThemeProvider>
+            {children}
+          </main>
+          {/* <Footer /> */}
+        </div>
+        <ToastContainer
+          autoClose={2000}
+          hideProgressBar={true}
+          rtl={locale === 'en' ? false : true}
+          position={locale === 'en' ? 'top-right' : 'top-left'}
+        />
       </PersistGate>
     </Provider>
   )

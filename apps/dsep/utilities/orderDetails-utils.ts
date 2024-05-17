@@ -2,12 +2,13 @@ import { ConfirmResponseModel } from '../lib/types/confirm.types'
 import { ResponseModel } from '../lib/types/responseModel'
 import { StatusData, StatusResponseModel } from '../lib/types/status.types'
 import { ShippingFormData } from '../pages/checkoutPage'
+import { v4 as uuidv4 } from 'uuid'
 
 const generateRandomID = () => {
-  var id = ''
+  let id = ''
 
-  for (var i = 0; i < 6; i++) {
-    var randomDigit = Math.floor(Math.random() * 10)
+  for (let i = 0; i < 6; i++) {
+    const randomDigit = Math.floor(Math.random() * 10)
     id += randomDigit
   }
 
@@ -27,7 +28,7 @@ export const storeOrderDetails = (orderDetails: ResponseModel[]) => {
 
   orderPerId[generateRandomID()] = orderDetails
   const existingOrders = JSON.parse(orders)
-  let updatedOrders = [...existingOrders, orderPerId]
+  const updatedOrders = [...existingOrders, orderPerId]
 
   return localStorage.setItem('orders', JSON.stringify(updatedOrders))
 }
@@ -68,7 +69,7 @@ export const generateAlphanumericID = (function () {
 })()
 
 export const getStatusPayload = (confirmData: ConfirmResponseModel) => {
-  let statusPayload: any = {
+  const statusPayload: any = {
     data: []
   }
 
@@ -77,7 +78,7 @@ export const getStatusPayload = (confirmData: ConfirmResponseModel) => {
     const { orderId } = data.message
 
     const context = {
-      transaction_id,
+      transaction_id: uuidv4(),
       bpp_id,
       bpp_uri,
       domain
@@ -109,7 +110,7 @@ export const getTrackAndSupportPayload = (statusResponse: StatusData) => {
           domain,
           bpp_id,
           bpp_uri,
-          transaction_id
+          transaction_id: uuidv4()
         },
         orderId: id
       }
@@ -123,7 +124,7 @@ export const getTrackAndSupportPayload = (statusResponse: StatusData) => {
           domain,
           bpp_id,
           bpp_uri,
-          transaction_id
+          transaction_id: uuidv4()
         },
         message: {
           order_id: id,
@@ -176,7 +177,7 @@ export const getUpdatePayload = (formData: ShippingFormData, statusResponse: Sta
     data: [
       {
         context: {
-          transaction_id,
+          transaction_id: uuidv4(),
           bpp_id,
           bpp_uri,
           domain
@@ -223,7 +224,7 @@ export const getCancelPayload = (statusResponse: StatusData, cancellationId: str
     data: [
       {
         context: {
-          transaction_id,
+          transaction_id: uuidv4(),
           bpp_id,
           bpp_uri,
           domain
