@@ -1,16 +1,18 @@
 import { BecknAuth } from '@beckn-ui/becknified-components'
-import { Box } from '@chakra-ui/react'
+import { Box, useToast } from '@chakra-ui/react'
 import { profilePageProp } from '@components/signIn/SignIn.types'
 import { useLanguage } from '@hooks/useLanguage'
 import { FormErrors, profileValidateForm } from '@utils/form-utils'
 import Cookies from 'js-cookie'
 import React, { useEffect, useState } from 'react'
-import { toast } from 'react-toastify'
+import { CustomToast } from '@components/signIn/SignIn'
 import Router from 'next/router'
+import { toast as reactToastifyToast } from 'react-toastify'
 
 const ProfilePage = () => {
   const { t } = useLanguage()
   const bearerToken = Cookies.get('authToken')
+  const toast = useToast()
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
   const [isLoading, setIsLoading] = useState(false)
   const [formData, setFormData] = useState<profilePageProp>({
@@ -49,7 +51,6 @@ const ProfilePage = () => {
       ...prevErrors,
       [name]: t[`${errors[name]}`] || ''
     }))
-    console.log(errors)
   }
 
   useEffect(() => {
@@ -79,6 +80,33 @@ const ProfilePage = () => {
   }, [])
 
   const updateProfile = () => {
+    const errors = profileValidateForm(formData) as any
+    setFormErrors(prevErrors => ({
+      ...prevErrors,
+      ...Object.keys(errors).reduce((acc, key) => {
+        acc[key] = t[`${errors[key]}`] || ''
+        return acc
+      }, {} as FormErrors)
+    }))
+
+    const hasErrors = Object.values(errors).some(error => error !== '')
+
+    if (hasErrors) {
+      console.error('Validation errors:', errors)
+      toast({
+        render: () => (
+          <CustomToast
+            title="Error!"
+            message="Please fix the errors in the form before submitting."
+          />
+        ),
+        position: 'top',
+        duration: 4000,
+        isClosable: true
+      })
+      return
+    }
+
     const myHeaders = new Headers()
     myHeaders.append('Authorization', `Bearer ${bearerToken}`)
 
@@ -101,7 +129,7 @@ const ProfilePage = () => {
 
     fetch(`${strapiUrl}/profiles`, requestOptions)
       .then(response => {
-        toast.success('Profile updated successfully!')
+        reactToastifyToast.success('Profile updated successfully!')
         Router.push('/')
         return response.json()
       })
