@@ -2,7 +2,7 @@ import React from 'react'
 import { Box, Flex, Image } from '@chakra-ui/react'
 
 // Custom
-import { Button, Input, Loader } from '@beckn-ui/molecules'
+import { Button, Input, Loader, Typography } from '@beckn-ui/molecules'
 import Styles from './auth.module.css'
 import { AuthProps } from './auth.types'
 import AuthDivider from './authDivider'
@@ -57,6 +57,17 @@ const Auth: React.FC<AuthProps> = ({ schema, isLoading }) => {
             })}
           </Box>
         </Box>
+        {schema.forgotPassword && (
+          <Box
+            width={'100%'}
+            mb="20px"
+          >
+            <Typography
+              className={Styles.typography_text}
+              {...schema.forgotPassword}
+            />
+          </Box>
+        )}
         {buttons.map(singleButton => {
           return (
             <Button
