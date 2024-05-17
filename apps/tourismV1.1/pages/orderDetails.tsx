@@ -24,7 +24,7 @@ import { DetailCard, OrderStatusProgress, OrderStatusProgressProps } from '@beck
 import useResponsive from '@beckn-ui/becknified-components/src/hooks/useResponsive'
 import { useLanguage } from '@hooks/useLanguage'
 import { formatTimestamp, getPayloadForOrderStatus } from '@utils/confirm-utils'
-
+import { v4 as uuidv4 } from 'uuid'
 import { ConfirmResponseModel } from '../types/confirm.types'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
 import { UIState, DataState, ProcessState } from '../types/order-details.types'
@@ -253,7 +253,7 @@ const OrderDetails = () => {
           data: [
             {
               context: {
-                transaction_id: transactionId,
+                transaction_id: uuidv4(),
                 bpp_id: bppId,
                 bpp_uri: bppUri,
                 domain: DOMAIN
