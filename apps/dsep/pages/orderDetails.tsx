@@ -15,6 +15,7 @@ import {
   handleEmailCustomer,
   orderCancelReason
 } from '../utilities/orderDetails-utils'
+import { getPaymentBreakDown } from '../utilities/checkout-utils'
 import TrackIcon from '../public/images/TrackIcon.svg'
 import useRequest from '../hooks/useRequest'
 import { useRouter } from 'next/router'
@@ -30,6 +31,7 @@ import CancelOrderForm from '../components/orderDetails/cancel-order-form'
 import RateUsCard from '../components/orderDetails/rate-us-card'
 import OrderOverview from '../components/orderDetails/order-overview'
 import { toast } from 'react-toastify'
+import PaymentDetails from '@beckn-ui/becknified-components/src/components/checkout/payment-details'
 
 // TODO :- to check this order details component
 
@@ -376,87 +378,28 @@ const OrderDetails = () => {
       />
 
       <Accordion accordionHeader={t.paymentText}>
-        <CardBody
-          pt={'unset'}
-          pb={'unset'}
-        >
-          <Flex
-            pb={'15px'}
-            justifyContent={'space-between'}
-            alignItems={'center'}
-          >
-            <Typography
-              text={t.subTotal}
-              variant={'subTitleRegular'}
-            />
-
-            <ProductPrice
-              price={orderSubTotal}
-              currencyType={currency}
-              color={'#000000'}
-            />
-          </Flex>
-          <Flex
-            pb={'15px'}
-            justifyContent={'space-between'}
-            alignItems={'center'}
-          >
-            <Typography
-              text={t.scholaarshipApplied}
-              variant={'subTitleRegular'}
-            />
-            <Box display={'flex'}>
-              <Typography
-                text={'-'}
-                variant={'subTitleRegular'}
-              />
-
-              <ProductPrice
-                price={orderSubTotal}
-                currencyType={currency}
-                color={'#000000'}
-              />
+        {!!statusResponse.data && (
+          <Box>
+            <Flex
+              pb={'10px'}
+              mt={'20px'}
+              justifyContent={'space-between'}
+            ></Flex>
+            {/* <DetailCard> */}
+            <Box>
+              {statusResponse.data.map((data, idx) => {
+                return (
+                  <PaymentDetails
+                    key={idx}
+                    paymentBreakDown={getPaymentBreakDown(data).breakUpMap}
+                    totalText={t.total}
+                    totalValueWithCurrency={getPaymentBreakDown(data).totalPricewithCurrent}
+                  />
+                )
+              })}
             </Box>
-          </Flex>
-          <Divider />
-        </CardBody>
-        <CardBody
-          pb={'unset'}
-          pt={'15px'}
-        >
-          <Flex
-            pb={'15px'}
-            justifyContent={'space-between'}
-            alignItems={'center'}
-            fontSize={'17px'}
-            fontWeight={'600'}
-          >
-            <Typography
-              text={t.total}
-              variant={'subTitleRegular'}
-            />
-            <ProductPrice
-              price={0.0}
-              currencyType={currency}
-              color={'#000000'}
-            />
-          </Flex>
-          {/* <Flex
-            fontSize={'15px'}
-            justifyContent={'space-between'}
-            alignItems={'center'}
-            pb={'15px'}
-          >
-            <Typography
-              text={t.paymentMethod}
-              variant={'subTitleRegular'}
-            />
-            <Typography
-              text={t.naText}
-              variant={'subTitleRegular'}
-            />
-          </Flex> */}
-        </CardBody>
+          </Box>
+        )}
       </Accordion>
 
       {/* order support/cancel */}
