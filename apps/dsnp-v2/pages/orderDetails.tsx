@@ -248,7 +248,7 @@ const OrderDetails = () => {
           data: [
             {
               context: {
-                transaction_id: transactionId,
+                transaction_id: uuidv4(),
                 bpp_id: bppId,
                 bpp_uri: bppUri,
                 domain: DOMAIN
@@ -441,7 +441,7 @@ const OrderDetails = () => {
                 domain: domain,
                 bpp_id: bppId,
                 bpp_uri: bppUri,
-                transaction_id: transaction_id
+                transaction_id: uuidv4()
               },
               orderId,
               callbackUrl: 'https://dhp-network-bap.becknprotocol.io/track/callback'
@@ -456,7 +456,7 @@ const OrderDetails = () => {
                 domain: domain,
                 bpp_id: bppId,
                 bpp_uri: bppUri,
-                transaction_id: transaction_id
+                transaction_id: uuidv4()
               },
               message: {
                 order_id: orderId,
@@ -570,7 +570,7 @@ const OrderDetails = () => {
           data: [
             {
               context: {
-                transaction_id,
+                transaction_id: uuidv4(),
                 bpp_id,
                 bpp_uri,
                 domain

@@ -45,11 +45,11 @@ export const currencyMap = {
 
 const CheckoutPage = () => {
   const [formData, setFormData] = useState<ShippingFormInitialValuesType>({
-    name: 'Antoine Dubois',
-    mobileNumber: '0612345678',
-    email: 'antoine.dubois@gmail.com',
-    address: '15 Rue du Soleil, Paris, France',
-    pinCode: '201002'
+    name: 'santosh kumar',
+    mobileNumber: '6251423251',
+    email: 'santosh.k@gmail.com',
+    address: '151-e, janpath road, new delhi',
+    pinCode: '110001'
   })
   const theme = useTheme()
   const bgColorOfSecondary = theme.colors.secondary['100']
@@ -57,21 +57,21 @@ const CheckoutPage = () => {
   const toast = useToast()
 
   const [submittedDetails, setSubmittedDetails] = useState<ShippingFormInitialValuesType>({
-    name: 'Antoine Dubois',
-    mobileNumber: '0612345678',
-    email: 'antoine.dubois@gmail.com',
-    address: '15 Rue du Soleil, Paris, France',
-    pinCode: '201002'
+    name: 'santosh kumar',
+    mobileNumber: '6251423251',
+    email: 'santosh.k@gmail.com',
+    address: '151-e, janpath road, new delhi',
+    pinCode: '110001'
   })
 
   const [isBillingAddressSameAsShippingAddress, setIsBillingAddressSameAsShippingAddress] = useState(true)
 
   const [billingFormData, setBillingFormData] = useState<ShippingFormInitialValuesType>({
-    name: 'Antoine Dubois',
-    mobileNumber: '0612345678',
-    email: 'antoine.dubois@gmail.com',
-    address: '15 Rue du Soleil, Paris, France',
-    pinCode: '75001'
+    name: 'jay d',
+    mobileNumber: '9871432309',
+    email: 'jay.d@gmail.com',
+    address: '23, east end , sector 10, pritampura, delhi',
+    pinCode: '110034'
   })
 
   const [filledDetails, setFilledDetails] = useState({
