@@ -67,11 +67,11 @@ const CheckoutPage = () => {
   const [isBillingAddressSameAsShippingAddress, setIsBillingAddressSameAsShippingAddress] = useState(true)
 
   const [billingFormData, setBillingFormData] = useState<ShippingFormInitialValuesType>({
-    name: 'santosh kumar',
-    mobileNumber: '6251423251',
-    email: 'santosh.k@gmail.com',
-    address: '151-e, janpath road, new delhi',
-    pinCode: '75001'
+    name: 'jay d',
+    mobileNumber: '9871432309',
+    email: 'jay.d@gmail.com',
+    address: '23, east end , sector 10, pritampura, delhi',
+    pinCode: '110034'
   })
 
   const [filledDetails, setFilledDetails] = useState({
