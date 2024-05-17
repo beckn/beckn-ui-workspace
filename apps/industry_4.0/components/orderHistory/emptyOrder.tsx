@@ -41,7 +41,7 @@ const EmptyOrder = () => {
 
       <BecknButton
         children="Create New Workflow"
-        handleClick={() => router.push('/homePage')}
+        handleClick={() => router.push('/')}
       />
     </Flex>
   )

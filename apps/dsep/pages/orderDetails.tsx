@@ -386,7 +386,10 @@ const OrderDetails = () => {
               justifyContent={'space-between'}
             ></Flex>
             {/* <DetailCard> */}
-            <Box>
+            <Box
+              p={'20px'}
+              pt={'unset'}
+            >
               {statusResponse.data.map((data, idx) => {
                 return (
                   <PaymentDetails
