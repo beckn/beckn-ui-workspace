@@ -142,7 +142,7 @@ export const getPayloadForOrderHistoryPost = (confirmData: ConfirmResponseModel[
       }
     },
     category: {
-      set: [11]
+      set: [4]
     }
   }
 

@@ -34,7 +34,7 @@ const OrderHistory = () => {
       headers: myHeaders,
       redirect: 'follow'
     }
-    fetch(`${strapiUrl}/orders?filters[category]=13`, requestOptions)
+    fetch(`${strapiUrl}/orders?filters[category]=7`, requestOptions)
       .then(response => response.json())
       .then(result => {
         console.log('resluttt', result)
