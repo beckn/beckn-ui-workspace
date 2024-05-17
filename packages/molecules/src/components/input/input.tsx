@@ -11,7 +11,7 @@ const Input: React.FC<InputProps> = ({
   placeholder = '',
   handleChange,
   label,
-  className,
+  className = '',
   error,
   dataTest
 }) => {
@@ -27,7 +27,7 @@ const Input: React.FC<InputProps> = ({
   }
 
   return (
-    <div className={Styles.input_container}>
+    <div className={`${Styles.input_container} ${variant === 'outline' ? Styles.outline_input_container : ''}`}>
       <ChakraInput
         data-testid="test-chakra-input"
         data-test={dataTest}
@@ -35,7 +35,7 @@ const Input: React.FC<InputProps> = ({
         onBlur={handleInputBlur}
         _focus={{ borderColor: theme.colors.primary[100], outline: 'none' }}
         _focusVisible={{ boxShadow: 'unset' }}
-        className={Styles.input}
+        className={`${Styles.input} ${variant === 'outline' ? Styles.outline_input : ''}`}
         variant={variant}
         type={type}
         placeholder={placeholder}
@@ -51,7 +51,7 @@ const Input: React.FC<InputProps> = ({
           {label}
         </label>
       )}
-      {error && <div className={Styles.error}>{error}</div>}
+      {error && <div className={`${Styles.error} ${variant === 'outline' ? Styles.outline_error : ''}`}>{error}</div>}
     </div>
   )
 }

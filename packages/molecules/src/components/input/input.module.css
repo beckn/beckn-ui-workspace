@@ -2,6 +2,9 @@
   position: relative;
   margin-bottom: 35px;
 }
+.outline_input_container {
+  margin-bottom: 20px;
+}
 .input_label {
   font-size: 14px;
   position: absolute;
@@ -22,9 +25,16 @@
   border-bottom: 1px solid #43464e;
   box-sizing: border-box;
 }
+.outline_input {
+  padding-top: 0 !important;
+  background-color: #fff !important;
+}
 .error {
   font-size: 10px;
   color: rgba(var(--color-primary));
+}
+.outline_error {
+  position: absolute;
 }
 
 /* .input:focus {
@@ -65,4 +75,8 @@
 
 .input_container:has(.error) {
   margin-bottom: 25px;
+}
+
+.outline_input_container:has(.error) {
+  margin-bottom: 20px;
 }

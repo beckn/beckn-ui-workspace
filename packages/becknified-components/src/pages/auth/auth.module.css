@@ -31,6 +31,12 @@ Button.auth_btn {
   border: 1px solid;
 }
 
+.typography_text {
+  font-size: 14px !important;
+  font-family: 'poppins';
+  font-weight: 500;
+}
+
 @media (min-width: 1280px) {
   .main_container {
     flex-direction: row;
