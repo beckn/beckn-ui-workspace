@@ -1,17 +1,30 @@
 import React from 'react'
 import { ConfirmationPageProps } from './confirmation-page.types'
 import { Image, Box, Flex, VStack } from '@chakra-ui/react'
-import { Button, Loader } from '@beckn-ui/molecules'
+import { Button, Loader, Typography } from '@beckn-ui/molecules'
+import useResponsive from '../../hooks/useResponsive'
 
 const ConfirmationPage: React.FC<ConfirmationPageProps> = ({ schema, className }) => {
-  const { iconSrc, content, contentMessage, buttons } = schema
+  const {
+    iconSrc,
+    content,
+    contentMessage,
+    buttons,
+    successOrderMessage,
+    gratefulMessage,
+    orderIdMessage,
+    trackOrderMessage
+  } = schema
+  const { isMobile } = useResponsive()
 
   return (
     <Flex
       height={'100%'}
-      flexDir={'column'}
-      alignItems={'center'}
+      mt={{ base: '2rem', md: '5rem' }}
+      flexDir={{ base: 'column', md: 'row', lg: 'row', xl: 'row', '2xl': 'row' }}
+      alignItems={{ base: 'center', md: 'flex-start' }}
       justifyContent={'center'}
+      gap={{ base: '0.5rem', md: '3rem' }}
       className={`${className}-confirm-page-container`}
     >
       <Box>
@@ -20,30 +33,65 @@ const ConfirmationPage: React.FC<ConfirmationPageProps> = ({ schema, className }
           src={iconSrc}
         />
       </Box>
+
       <Box
-        mt={'20px'}
-        fontSize={'15px'}
-        fontWeight={700}
+        m="1rem 0"
+        display="flex"
+        flexDir="column"
+        justifyContent={'center'}
+        alignItems={'center'}
+        maxW={{ base: '100%', md: '80%' }}
       >
-        {content}
-      </Box>
-      <Box mt={'10px'}>{contentMessage}</Box>
-      {buttons.length ? (
-        <VStack
-          className={`${className}-confirm-buttons-container`}
-          mt={'100px'}
-          width={'100%'}
+        <Box
+          display="flex"
+          flexDir="column"
+          gap="1rem"
         >
-          {buttons.map((button, idx) => {
-            return (
-              <Button
-                key={idx}
-                {...button}
-              />
-            )
-          })}
-        </VStack>
-      ) : null}
+          <Typography
+            text={successOrderMessage}
+            variant="subTitleSemibold"
+          />
+          <Typography
+            fontSize={{ base: '1rem', md: '2rem' }}
+            variant="subTitleSemibold"
+            text={gratefulMessage}
+          />
+          <Typography
+            style={{ fontSize: '1rem' }}
+            text={orderIdMessage}
+          />
+
+          {!isMobile && (
+            <Typography
+              style={{ fontSize: '1rem' }}
+              text={trackOrderMessage}
+            />
+          )}
+        </Box>
+
+        <Box
+          width="100%"
+          mt="4rem"
+        >
+          {buttons.length ? (
+            <Box
+              className={`${className}-confirm-buttons-container`}
+              width={'100%'}
+              display={{ base: 'block', lg: 'flex' }}
+              gap="1rem"
+            >
+              {buttons.map((button, idx) => {
+                return (
+                  <Button
+                    key={idx}
+                    {...button}
+                  />
+                )
+              })}
+            </Box>
+          ) : null}
+        </Box>
+      </Box>
     </Flex>
   )
 }

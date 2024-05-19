@@ -1,19 +1,5 @@
+import { InitResponseModel } from '../lib/types/init.types'
 import { ResponseModel } from '../lib/types/responseModel'
-
-export const getInitMetaDataPerBpp = (initRes: ResponseModel[]) => {
-  const itemsPerBpp = {}
-  initRes.forEach(res => {
-    const bppId = res.context.bpp_id
-    const bpp_uri = res.context.bpp_uri
-
-    itemsPerBpp[bppId] = {
-      ...res.message.catalogs.responses[0].message.order,
-      bpp_uri
-    }
-  })
-
-  return itemsPerBpp
-}
 
 export const getConfirmMetaDataForBpp = (initRes: ResponseModel[]) => {
   const itemsPerBpp = {}
@@ -30,67 +16,57 @@ export const getConfirmMetaDataForBpp = (initRes: ResponseModel[]) => {
   return itemsPerBpp
 }
 
-export const getPayloadForConfirmRequest = (
-  initMetaDataPerBpp: any,
-  transactionId: { transactionId: string },
-  userId: string
-) => {
-  const payload: any = {
-    confirmRequestDto: [],
-    userId: userId
+export const getPayloadForConfirmRequest = (initResponse: InitResponseModel) => {
+  let payload: any = {
+    data: []
   }
 
-  Object.keys(initMetaDataPerBpp).forEach(bppId => {
-    const confirmItem: any = {
-      context: {
-        transaction_id: transactionId.transactionId,
-        bpp_id: bppId,
-        bpp_uri: initMetaDataPerBpp[bppId].bpp_uri,
-        domain: 'retail'
-      },
+  initResponse.data.forEach(response => {
+    const { bpp_id, bpp_uri, transaction_id, domain } = response.context
+    const { order } = response.message
+    const { billing, fulfillments, items, provider, quote } = order
+    const { price } = quote
+    const { currency, value } = price
 
-      message: {
-        order: {
-          provider: {
-            id: initMetaDataPerBpp[bppId].provider.id
-          },
-          addOns: [],
-          offers: [],
-          billing: initMetaDataPerBpp[bppId].billing,
-          fulfillment: {
-            type: initMetaDataPerBpp[bppId].fulfillment.type,
-            end: {
-              location: {
-                gps: initMetaDataPerBpp[bppId].fulfillment.end.location.gps,
-                address: initMetaDataPerBpp[bppId].billing.address
-              },
-              contact: {
-                phone: initMetaDataPerBpp[bppId].billing.phone,
-                email: 'testemail1@mailinator.com'
-              }
-            },
-            customer: {
-              person: {
-                name: initMetaDataPerBpp[bppId].billing.name
-              }
-            },
-            id: initMetaDataPerBpp[bppId].fulfillment.id
-          },
-          payment: initMetaDataPerBpp[bppId].payment,
-          items: []
-        }
-      }
+    const context = {
+      transaction_id: transaction_id,
+      bpp_id: bpp_id,
+      bpp_uri: bpp_uri,
+      domain: domain
     }
 
-    initMetaDataPerBpp[bppId].items.forEach((item: any) => {
-      const itemObject = {
-        quantity: item.quantity,
-        id: item.id
-      }
-      confirmItem.message.order.items.push(itemObject)
-    })
+    const message = {
+      orders: [
+        {
+          provider: {
+            id: provider.id
+          },
+          items: items,
+          fulfillments: fulfillments,
+          billing: billing,
+          payments: [
+            {
+              collected_by: 'BPP',
+              params: {
+                amount: value,
+                currency: currency,
+                bank_account_number: '',
+                bank_code: '',
+                bank_account_name: ''
+              },
+              status: 'PAID',
+              type: 'PRE-ORDER',
+              transaction_id: transaction_id
+            }
+          ]
+        }
+      ]
+    }
 
-    payload.confirmRequestDto.push(confirmItem)
+    payload.data.push({
+      context,
+      message
+    })
   })
 
   return payload

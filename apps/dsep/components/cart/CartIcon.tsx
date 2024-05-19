@@ -1,20 +1,14 @@
 import React, { useRef } from 'react'
 import Link from 'next/link'
 import { useDispatch, useSelector } from 'react-redux'
-import { Transition } from 'react-transition-group'
 import { AiOutlineShoppingCart } from 'react-icons/ai'
 import { cartUiActions } from '../../store/cartUI-slice'
-import CartBox from './CartBox'
 import { ICartUiRootState, ICartRootState } from '../../lib/types/cart'
 import { useLanguage } from '../../hooks/useLanguage'
 
 const Basket = () => {
   const dispatch = useDispatch()
-  const { locale } = useLanguage()
-  const showCartBox = useSelector((state: ICartUiRootState) => state.cartUi.cartBoxIsVisible)
   const cartItemQuantity = useSelector((state: ICartRootState) => state.cart.totalQuantity)
-
-  const nodeRef = useRef<HTMLDivElement>(null)
 
   function onMouseHoverHandler(toggle: boolean) {
     dispatch(cartUiActions.toggleCartBox(toggle))
@@ -46,24 +40,6 @@ const Basket = () => {
           </span>
         </a>
       </Link>
-      <Transition
-        nodeRef={nodeRef}
-        in={showCartBox}
-        timeout={300}
-        mountOnEnter
-        unmountOnExit
-      >
-        {state => {
-          return (
-            <div
-              ref={nodeRef}
-              className="z-[100]"
-            >
-              <CartBox />
-            </div>
-          )
-        }}
-      </Transition>
     </div>
   )
 }

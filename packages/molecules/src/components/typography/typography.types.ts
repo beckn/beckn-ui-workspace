@@ -1,6 +1,6 @@
 import React from 'react'
 
-type TextVariant =
+export type TextVariant =
   | 'titleSemibold'
   | 'titleRegular'
   | 'subTitleSemibold'

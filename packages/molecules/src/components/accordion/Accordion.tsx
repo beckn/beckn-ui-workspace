@@ -24,7 +24,11 @@ const Accordion: React.FC<AccordionProps> = props => {
           <AccordionItem
             background={'unset'}
             border={'unset'}
-            boxShadow={'0px 8px 10px -6px rgb(0 0 0 / 10%), 0px 20px 25px -5px rgb(0 0 0 / 10%)'}
+            // boxShadow={'0px 8px 10px -6px rgb(0 0 0 / 10%), 0px 20px 25px -5px rgb(0 0 0 / 10%)'}
+            boxShadow={{
+              base: '0px 8px 10px -6px rgba(0, 0, 0, 0.1), 0px 20px 25px -5px rgba(0, 0, 0, 0.1)',
+              md: '0px 8px 10px -6px rgba(0, 0, 0, 0.1), 0px 8px 20px -5px rgba(0, 0, 0, 0.1)'
+            }}
           >
             <CardBody padding={'15px 20px'}>
               <AccordionButton

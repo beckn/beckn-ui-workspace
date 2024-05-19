@@ -7,21 +7,22 @@ import { toBinary } from '@utils/common-utils'
 import { parsedSearchlist } from '@utils/search-results.utils'
 import { ProductCard } from '@beckn-ui/becknified-components'
 import { BottomModal } from '@beckn-ui/molecules'
+import { discoveryActions } from '@store/discovery-slice'
 import { useBreakpoint } from '@chakra-ui/react'
-import ProductCardRenderer from '@components/productCard/product-card-renderer'
 import SearchBar from '../components/header/SearchBar'
 import { useLanguage } from '../hooks/useLanguage'
-import { ParsedItemModel } from '../types/search.types'
-import TopSheet from '@components/topSheet/TopSheet'
+import { ParsedItemModel } from '@lib/types/beckn/search'
+import { DOMAIN } from '@lib/config'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
 import Filter from '../components/filter/Filter'
-import FilterIcon from '../public/images/filter-icon.svg'
-import { BsFilterSquare } from 'react-icons/bs'
+import { LocalStorage } from '@lib/types'
 
 //Mock data for testing search API. Will remove after the resolution of CORS issue
 
 const Search = () => {
-  const [items, setItems] = useState([])
+  const [items, setItems] = useState<ParsedItemModel[]>([])
+  const [originalItems, setOriginalItems] = useState<ParsedItemModel[]>([])
+  const [sortBy, setSortBy] = useState<string>('')
   const router = useRouter()
   const [searchKeyword, setSearchKeyword] = useState(router.query?.searchTerm || '')
   const [isLoading, setIsLoading] = useState(false)
@@ -37,53 +38,33 @@ const Search = () => {
   const { t } = useLanguage()
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
+
   const searchPayload = {
     context: {
-      domain: 'retail'
+      domain: DOMAIN
     },
-    message: {
-      criteria: {
-        dropLocation: '12.9715987,77.5945627',
-        categoryName: 'Retail',
-        searchString: searchKeyword
-      }
+    searchString: searchKeyword,
+    fulfillment: {
+      type: 'Delivery',
+      stops: [
+        {
+          location: '28.4594965,77.0266383'
+        }
+      ]
     }
   }
 
-  const transformData = data => {
-    const allItems = data.message.catalogs.flatMap((catalog: any) => {
-      if (catalog.message && catalog.message.catalog && catalog.message.catalog['bpp/providers'].length > 0) {
-        const providers = catalog.message.catalog['bpp/providers']
-        return providers.flatMap((provider: any) => {
-          if (provider.items && provider.items.length > 0) {
-            return provider.items.map((item: RetailItem) => {
-              return {
-                bpp_id: catalog.context.bpp_id,
-                bpp_uri: catalog.context.bpp_uri,
-                ...item,
-                providerId: provider.id,
-                locations: provider.locations,
-                bppName: catalog.message.catalog['bpp/descriptor'].name
-              }
-            })
-          }
-          return []
-        })
-      }
-      return []
-    })
-
-    return allItems
-  }
-
   const fetchDataForSearch = () => {
+    if (!searchKeyword) return
     setIsLoading(true)
     axios
-      .post(`${apiUrl}/client/v2/search`, searchPayload)
+      .post(`${apiUrl}/search`, searchPayload)
       .then(res => {
-        const parsedSearchItems = transformData(res.data)
-        localStorage.setItem('searchItems', JSON.stringify(parsedSearchItems))
+        dispatch(discoveryActions.addTransactionId({ transactionId: res.data.data[0].context.transaction_id }))
+        const parsedSearchItems = parsedSearchlist(res.data.data)
+        dispatch(discoveryActions.addProducts({ products: parsedSearchItems }))
         setItems(parsedSearchItems)
+        setOriginalItems(parsedSearchItems)
         setIsLoading(false)
       })
       .catch(e => {
@@ -114,11 +95,39 @@ const Search = () => {
   const handleImageClick = () => {
     setIsFilterOpen(!isFilterOpen)
   }
+  const handleApplyFilter = (sortBy: string) => {
+    setSortBy(sortBy)
+
+    let sortedItemsCopy = [...originalItems]
+
+    if (sortBy === 'LowtoHigh') {
+      sortedItemsCopy.sort((a, b) => parseFloat(a.item.price.value) - parseFloat(b.item.price.value))
+    } else if (sortBy === 'HightoLow') {
+      sortedItemsCopy.sort((a, b) => parseFloat(b.item.price.value) - parseFloat(a.item.price.value))
+    } else if (sortBy === 'RatingLowtoHigh') {
+      sortedItemsCopy.sort((a, b) => parseFloat(a.item.rating) - parseFloat(b.item.rating))
+    } else if (sortBy === 'RatingHightoLow') {
+      sortedItemsCopy.sort((a, b) => parseFloat(b.item.rating) - parseFloat(a.item.rating))
+    }
+
+    setItems(sortedItemsCopy)
+    setIsFilterOpen(false)
+  }
+
+  const handleResetFilter = () => {
+    setItems(originalItems)
+    setIsFilterOpen(false)
+  }
 
   return (
     <>
       <Box display="flex">
-        {!isSmallScreen && !isMediumScreen && <Filter />}
+        {!isSmallScreen && !isMediumScreen && (
+          <Filter
+            handleApplyFilter={handleApplyFilter}
+            handleResetFilter={handleResetFilter}
+          />
+        )}
         <Box
           w="100%"
           ml={['unset', 'unset', 'unset', '36px']}
@@ -156,7 +165,10 @@ const Search = () => {
               isOpen={isFilterOpen}
               onClose={handleFilterClose}
             >
-              <Filter />
+              <Filter
+                handleApplyFilter={handleApplyFilter}
+                handleResetFilter={handleResetFilter}
+              />
             </BottomModal>
           )}
           {isMediumScreen && isFilterOpen && (
@@ -166,7 +178,10 @@ const Search = () => {
               backgroundColor={'#fff'}
               left="28%"
             >
-              <Filter />
+              <Filter
+                handleApplyFilter={handleApplyFilter}
+                handleResetFilter={handleResetFilter}
+              />
             </Box>
           )}
 
@@ -188,38 +203,33 @@ const Search = () => {
                 w={['100%', '100%', '51%', '100%']}
                 margin="0 auto"
               >
-                {items.map((item, idx) => {
+                {items.map((singleItem, idx) => {
+                  const { item } = singleItem
                   const product = {
                     id: item.id,
-                    images: item.descriptor.images,
-                    name: item.descriptor.name,
+                    images: item.images.map(singleImage => singleImage.url),
+                    name: item.name,
                     price: item.price.value,
-                    rating: '4'
+                    rating: item.rating,
+                    shortDesc: item.short_desc
                   }
                   return (
                     <ProductCard
                       key={idx}
                       productClickHandler={e => {
                         e.preventDefault()
-                        if (typeof window !== 'undefined') {
-                          const encodedProduct = window.btoa(toBinary(JSON.stringify(item)))
-                          localStorage.setItem(
-                            'productDetails',
-                            JSON.stringify({
-                              encodedProduct: encodedProduct,
-                              product: product
-                            })
-                          )
-
-                          router.push({
-                            pathname: '/product',
-                            query: {
-                              productDetails: encodedProduct
-                            }
-                          })
-                        }
+                        dispatch(discoveryActions.addSingleProduct({ product: singleItem }))
+                        router.push({
+                          pathname: '/product',
+                          query: {
+                            id: item.id,
+                            search: searchKeyword
+                          }
+                        })
+                        localStorage.setItem('selectCardHeaderText', product.name)
                       }}
                       product={product}
+                      currency={item.price.currency}
                     />
                   )
                 })}

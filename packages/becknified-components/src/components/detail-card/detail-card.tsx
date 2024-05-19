@@ -13,7 +13,10 @@ const DetailCard: React.FC<DetailsCardProps> = props => {
       <Card
         className={`${className} card_container`}
         mb={'20px'}
-        boxShadow={'0px 8px 10px -6px rgba(0, 0, 0, 0.1), 0px 20px 25px -5px rgba(0, 0, 0, 0.1)'}
+        boxShadow={{
+          base: '0px 8px 10px -6px rgba(0, 0, 0, 0.1), 0px 20px 25px -5px rgba(0, 0, 0, 0.1)',
+          md: '0px 8px 10px -6px rgba(0, 0, 0, 0.1), 0px 8px 20px -5px rgba(0, 0, 0, 0.1)'
+        }}
       >
         <CardBody
           className={`${className} card_body`}

@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import Router from 'next/router'
+import { SearchInput } from '@beckn-ui/becknified-components'
+import { Box, Flex, Text, Image } from '@chakra-ui/react'
 
 import ImageCard from './ImageCard'
 import { useLanguage } from '../../hooks/useLanguage'
-import { Box, Flex, Text, Input, Image } from '@chakra-ui/react'
-
 import beckenFooter from '../../public/images/beckenFooterLogo.svg'
 import couresImageWhite from '../../public/images/landing-page-icons/CoursesWhite.svg'
 import coursesImageBlack from '../../public/images/landing-page-icons/CoursesBlack.svg'
@@ -27,6 +27,13 @@ const LandingPage: React.FC = () => {
 
   const handleClick = (type: string) => {
     setActiveCard(type)
+  }
+
+  const searchIconClickHandler = (e: any) => {
+    if (searchTerm) {
+      navigateToSearchResults()
+    }
+    e.preventDefault()
   }
 
   return (
@@ -76,41 +83,16 @@ const LandingPage: React.FC = () => {
         ))}
       </Flex>
 
-      <Flex pt={'25px'}>
-        <Input
-          boxShadow="0px 0px 24px rgba(0, 0, 0, 0.10)"
-          borderRightRadius={'unset'}
-          p={'26px 15px'}
-          type="text"
+      <Box pt={'25px'}>
+        <SearchInput
           name="search_input"
-          placeholder={`Search for ${activeCard}`}
-          onChange={(e: React.BaseSyntheticEvent) => setSearchTerm(e.target.value)}
-          onKeyDown={event => event.key === 'Enter' && navigateToSearchResults()}
-          _focusVisible={{
-            borderColor: 'transparent',
-            boxShadow: 'transparent'
-          }}
+          onChangeHandler={(e: React.BaseSyntheticEvent) => setSearchTerm(e.target.value)}
+          searchIcon={'/images/searchIcon.svg'}
+          searchIconClickHandler={searchIconClickHandler}
+          onEnterHandler={(e: { key: string }) => e.key === 'Enter' && navigateToSearchResults()}
+          placeHolder={`Search for ${activeCard}`}
         />
-        <Flex
-          bg={'rgba(var(--color-primary))'}
-          borderRightRadius={'6px'}
-          boxShadow="0px 0px 24px rgba(0, 0, 0, 0.10)"
-          justifyContent={'center'}
-          alignItems="center"
-          width={'55px'}
-        >
-          <Image
-            src="/images/searchIcon.svg"
-            onClick={e => {
-              if (searchTerm) {
-                navigateToSearchResults()
-              }
-              e.preventDefault()
-            }}
-            alt={'search icon'}
-          />
-        </Flex>
-      </Flex>
+      </Box>
       <Flex
         justifyContent={'center'}
         alignItems="center"

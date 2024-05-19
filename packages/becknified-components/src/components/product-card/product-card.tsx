@@ -6,7 +6,15 @@ import ProductPrice from '../product-price'
 import ProductRating from '../product-rating'
 
 const ProductCard: React.FC<ProductCardProps> = props => {
-  const { product, productInfoDataSource, ComponentRenderer, productClickHandler, dataSource, className = '' } = props
+  const {
+    product,
+    productInfoDataSource,
+    ComponentRenderer,
+    productClickHandler,
+    dataSource,
+    className = '',
+    currency
+  } = props
 
   if (ComponentRenderer) {
     return <ComponentRenderer dataSource={dataSource} />
@@ -23,6 +31,9 @@ const ProductCard: React.FC<ProductCardProps> = props => {
           backgroundColor={'#fff'}
           borderRadius={'1rem'}
           display={'flex'}
+          cursor="pointer"
+          _hover={{ transform: 'translate(2%,-2%)' }}
+          transition="0.5s all"
           position={'relative'}
           boxShadow={'0 20px 25px rgba(0, 0, 0, 0.1),0 8px 10px rgba(0, 0, 0, 0.05)'}
         >
@@ -34,13 +45,14 @@ const ProductCard: React.FC<ProductCardProps> = props => {
             <Box
               w={'125px'}
               position="relative"
-              backgroundColor={'rgba(140, 158, 175, 0.3)'}
               borderTopLeftRadius={'1rem'}
               borderBottomLeftRadius={'1rem'}
+              overflow={'hidden'}
               display={'flex'}
               flexDirection={'column'}
               justifyContent={'space-between'}
               alignItems={'center'}
+              marginRight="0.7rem"
             >
               <Box
                 display={'flex'}
@@ -49,11 +61,11 @@ const ProductCard: React.FC<ProductCardProps> = props => {
               >
                 <Image
                   src={product.images[0]}
-                  width={'110px'}
-                  height={'133px'}
+                  width={'100%'}
+                  height={'100%'}
                   alt={'item_image'}
                   boxShadow={'0 20px 25px rgba(0, 0, 0, 0.1),0 8px 10px rgba(0, 0, 0, 0.05)'}
-                  objectFit={'contain'}
+                  objectFit={'cover'}
                 />
               </Box>
             </Box>
@@ -72,14 +84,31 @@ const ProductCard: React.FC<ProductCardProps> = props => {
               >
                 <Text
                   fontWeight={'600'}
-                  fontSize={'15px'}
-                  mb={'10px'}
+                  fontSize={'1rem'}
+                  mb={'0.7rem'}
                   noOfLines={2}
                   textOverflow="ellipsis"
                   whiteSpace="pre-wrap"
                   overflowWrap="break-word"
                 >
                   {product.name}
+                </Text>
+              </Flex>
+
+              <Flex
+                justifyContent={'space-between'}
+                alignItems={'flex-start'}
+                w={'100%'}
+              >
+                <Text
+                  fontSize={'0.8rem'}
+                  mb={'0.7rem'}
+                  noOfLines={2}
+                  textOverflow="ellipsis"
+                  whiteSpace="pre-wrap"
+                  overflowWrap="break-word"
+                >
+                  {product.shortDesc}
                 </Text>
               </Flex>
 
@@ -111,7 +140,10 @@ const ProductCard: React.FC<ProductCardProps> = props => {
                 bottom={'11px'}
                 width={'calc(100% - 30px)'}
               >
-                <ProductPrice price={parseFloat(product.price)} />
+                <ProductPrice
+                  currencyType={currency}
+                  price={parseFloat(product.price)}
+                />
                 {product.rating && (
                   <ProductRating
                     ratingValue={product.rating}

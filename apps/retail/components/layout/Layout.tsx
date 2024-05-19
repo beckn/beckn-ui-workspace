@@ -25,8 +25,8 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   })
 
   return (
-    // <Provider store={store}>
-    <ThemeProvider enableSystem={true}>
+    // <ThemeProvider enableSystem={true}>
+    <div>
       <Head>
         <title>Kuza One</title>
       </Head>
@@ -57,8 +57,8 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
         rtl={locale === 'en' ? false : true}
         position={locale === 'en' ? 'top-right' : 'top-left'}
       />
-    </ThemeProvider>
-    // </Provider>
+    </div>
+    // </ThemeProvider>
   )
 }
 

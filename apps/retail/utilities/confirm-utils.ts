@@ -65,7 +65,17 @@ export const getPayloadForConfirm = (initResponse: InitResponseModel[]) => {
               items: items,
               fulfillments: fulfillments,
               billing: billing,
-              payments: payments
+              payments: [
+                {
+                  id: payments[0].id,
+                  params: {
+                    amount: quote.price.value,
+                    currency: quote.price.currency
+                  },
+                  status: 'PAID',
+                  type: 'ON-FULFILLMENT'
+                }
+              ]
             }
           ]
         }
@@ -132,7 +142,7 @@ export const getPayloadForOrderHistoryPost = (confirmData: ConfirmResponseModel[
       }
     },
     category: {
-      set: [5]
+      set: [6]
     }
   }
 
@@ -189,7 +199,7 @@ export function formatTimestamp(timestamp: string) {
 
   const ordinalSuffix = getOrdinalSuffix(day)
 
-  const formattedDate = `${day}${ordinalSuffix} ${month} ${year}, ${hours}.${minutes}${period}`
+  const formattedDate = `${day}${ordinalSuffix} ${month} ${year}, ${hours}:${minutes}${period}`
 
   return formattedDate
 }

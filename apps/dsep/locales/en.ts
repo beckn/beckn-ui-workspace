@@ -289,7 +289,7 @@ const en: { [key: string]: string } = {
   orderBtn: 'Order',
   localStores: 'Local stores in',
   cartLoader: 'Getting Quotes',
-  initializingOrderLoader: 'Please wait while we set things up for you',
+  initializingOrderLoader: 'while we set things up for you',
   confirmingOrderLoader: "We're preparing your course",
   orderConfirm: 'Order Confirmed!',
   confirmOrderMessage: 'Thank you! Our delivery agent will deliver your order',
@@ -329,8 +329,6 @@ const en: { [key: string]: string } = {
   errorAddress: 'Address is required',
   errorZipcode: 'Zip Code is required',
   errorZipcode2: 'Invalid Zip Code',
-  confirmMessage1: 'Get ready to embark your learning ',
-  confirmMessage2: 'journey!',
   sendOtpButton: 'Send OTP',
   verifyMobile: 'Verify your Mobile Number',
   otpMessage1: 'Have sent an OTP to your mobile',
@@ -342,7 +340,7 @@ const en: { [key: string]: string } = {
   catalogLoader: 'Please Wait!',
   catalogSubLoader: 'Fetching store catalog from the network',
   coursesCatalogLoader: 'we are looking for courses related to your search',
-  quoteRequestLoader: 'Please wait! Your order is getting processed',
+  quoteRequestLoader: 'Your order is getting processed',
   estimatedDelivery: 'Estimated delivery time',
   orderId: 'Order ID',
   pending: 'Pending',
@@ -432,6 +430,8 @@ const en: { [key: string]: string } = {
   searchCourses: 'Search Courses',
   fetchingCourses: 'Fetching Courses',
   fetchingJobs: 'Fetching Jobs',
-  errorPassword: 'Invalid password'
+  errorPassword: 'Invalid password',
+  confirm: 'Confirm',
+  confirmMessageSubtext: 'Get ready to embark your learning journey!'
 }
 export default en

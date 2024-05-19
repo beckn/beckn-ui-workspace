@@ -1,16 +1,14 @@
 import React, { useState } from 'react'
-import { useLanguage } from '../hooks/useLanguage'
-import HomeImg from '../public/images/HomePageLogo.svg'
-import SkillUp from '../public/images/SkillUpLogo.svg'
-import { FormErrors, signUpValidateForm } from '../utilities/detailsForm-utils'
-import style from '../components/detailsCard/ShippingForm.module.css'
-import Styles from '../components/signIn/SignIn.module.css'
-import { Box, Flex, Image, useToast } from '@chakra-ui/react'
-
-import Button from '../components/button/Button'
 import Router from 'next/router'
-import { SignUpPropsModel } from '../components/signIn/Signin.types'
+import { useLanguage } from '../hooks/useLanguage'
+import SkillUpLogo from '../public/images/skillUpHomeLogo.svg'
+import { BecknAuth } from '@beckn-ui/becknified-components'
+import { FormErrors, signUpValidateForm } from '../utilities/detailsForm-utils'
 import Cookies from 'js-cookie'
+import { Box, useToast } from '@chakra-ui/react'
+import { SignUpPropsModel } from '../components/signIn/Signin.types'
+import CustomToast from '../components/customToast/custom-toast'
+
 const SignUp = () => {
   const { t } = useLanguage()
   const toast = useToast()
@@ -74,10 +72,14 @@ const SignUp = () => {
         } else {
           const errorData = await response.json()
           toast({
-            title: 'Error!.',
-            description: errorData.error.message,
-            status: 'error',
-            duration: 3000,
+            render: () => (
+              <CustomToast
+                title="Error!"
+                message={errorData.error.message}
+              />
+            ),
+            position: 'top',
+            duration: 2000,
             isClosable: true
           })
           console.error('Registration failed')
@@ -92,73 +94,58 @@ const SignUp = () => {
 
   return (
     <>
-      <Box
-        className={Styles.main_container}
-        mt="40px"
-      >
-        <Flex className={Styles.logo_container}>
-          <Image
-            src={HomeImg}
-            alt="Home Icon"
-            width={77}
-            height={76}
-          />
-          <Image
-            className={Styles.logo_skillup}
-            src={SkillUp}
-            alt="OpenCommerce"
-            pt="15px"
-          />
-        </Flex>
-        <Box
-          className={Styles.signin_container}
-          pt="40px"
-        >
-          <div className={style.container}>
-            <div className={style.did_floating_label_content}>
-              <input
-                className={style.did_floating_input}
-                type="text"
-                placeholder=" "
-                name="name"
-                value={formData.name}
-                onChange={handleInputChange}
-              />
-              <label className={style.did_floating_label}>{t.formName}</label>
-              {formErrors.name && <div className={style.error}>{formErrors.name}</div>}
-            </div>
-            <div className={style.did_floating_label_content}>
-              <input
-                className={style.did_floating_input}
-                type="text"
-                placeholder=" "
-                name="email"
-                value={formData.email}
-                onChange={handleInputChange}
-              />
-              <label className={style.did_floating_label}>{t.formEmail}</label>
-              {formErrors.email && <div className={style.error}>{formErrors.email}</div>}
-            </div>
-            <div className={style.did_floating_label_content}>
-              <input
-                className={style.did_floating_input}
-                type="password"
-                placeholder=" "
-                name="password"
-                value={formData.password}
-                onChange={handleInputChange}
-              />
-              <label className={style.did_floating_label}>{t.password}</label>
-              {formErrors.password && <div className={style.error}>{formErrors.password}</div>}
-            </div>
-          </div>
-        </Box>
-        <Button
-          buttonText={'Register'}
-          background={'rgba(var(--color-primary))'}
-          color={'rgba(var(--text-color))'}
-          handleOnClick={handleRegister}
-          isDisabled={!isFormFilled}
+      <Box mt={'30px'}>
+        <BecknAuth
+          schema={{
+            logo: {
+              src: SkillUpLogo,
+              alt: 'Suppliflow logo'
+            },
+            buttons: [
+              {
+                text: t.signUp,
+                handleClick: handleRegister,
+                disabled: !isFormFilled,
+                variant: 'solid',
+                colorScheme: 'primary'
+              },
+              {
+                text: t.signIn,
+                handleClick: () => {
+                  Router.push('/')
+                },
+                disabled: false,
+                variant: 'outline',
+                colorScheme: 'primary'
+              }
+            ],
+            inputs: [
+              {
+                type: 'text',
+                name: 'name',
+                value: formData.name,
+                handleChange: handleInputChange,
+                label: t.formName,
+                error: formErrors.name
+              },
+              {
+                type: 'text',
+                name: 'email',
+                value: formData.email,
+                handleChange: handleInputChange,
+                label: t.formEmail,
+                error: formErrors.email
+              },
+              {
+                type: 'password',
+                name: 'password',
+                value: formData.password,
+                handleChange: handleInputChange,
+                label: t.password,
+                error: formErrors.password
+              }
+            ]
+          }}
         />
       </Box>
     </>

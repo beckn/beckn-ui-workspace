@@ -1,8 +1,11 @@
+import { TextVariant } from '@beckn-ui/molecules'
+
 export interface ProductPriceProps {
   price: number
-  toFixed?: number
-  currencySymbol?: string
+  currencyType?: CurrencyType
   color?: string
   className?: string
-  rtl?: boolean
+  variant?: TextVariant
 }
+
+export type CurrencyType = 'GBP' | 'EUR' | 'INR' | 'USD'
