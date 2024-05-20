@@ -1,33 +1,26 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Box, Flex, Text, Stack, Checkbox, useToast, useTheme, useBreakpoint } from '@chakra-ui/react'
+import { Box, useToast, useTheme, useBreakpoint } from '@chakra-ui/react'
 import { DOMAIN } from '@lib/config'
 import { useLanguage } from '../hooks/useLanguage'
-import { PlusSquareIcon } from '@chakra-ui/icons'
 
 import { useSelectMutation } from '@services/select'
-import { CartItemForRequest, DataPerBpp, ICartRootState, TransactionIdRootState } from '@lib/types/cart'
-import {
-  getInitPayload,
-  areShippingAndBillingDetailsSame,
-  getPayloadForInitRequest,
-  getSubTotalAndDeliveryCharges
-} from '@components/checkout/checkout.utils'
+import { ICartRootState } from '@lib/types/cart'
+import { getInitPayload } from '@components/checkout/checkout.utils'
 import useRequest from '../hooks/useRequest'
 import { CustomToast } from '@components/signIn/SignIn'
 import { useInitMutation } from '@services/init'
-import { responseDataActions } from '../store/responseData-slice'
 import { getSelectPayload } from '@components/cart/cart.utils'
 
-import { Checkout, ShippingSection, ShippingFormInitialValuesType, DetailCard } from '@beckn-ui/becknified-components'
-import { Loader, Button, LoaderWithMessage } from '@beckn-ui/molecules'
+import { ShippingSection, ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
+import { Button, LoaderWithMessage } from '@beckn-ui/molecules'
 
-import { Router, useRouter } from 'next/router'
+import { useRouter } from 'next/router'
 import { CheckoutRootState, checkoutActions } from '@store/checkout-slice'
 import { cartActions } from '@store/cart-slice'
 import { isEmpty } from '@utils/common-utils'
-import DyForm from '@components/x-input/DyForm'
 import AddSection from '@components/x-input/AddSection'
+import { DiscoveryRootState } from '@store/discovery-slice'
 
 export type ShippingFormData = {
   name: string
@@ -44,28 +37,18 @@ export const currencyMap = {
 }
 
 const CheckoutPage = () => {
-  const [formData, setFormData] = useState<ShippingFormInitialValuesType>({
-    name: 'santosh kumar',
-    mobileNumber: '6251423251',
-    email: 'santosh.k@gmail.com',
-    address: '151-e, janpath road, new delhi',
-    pinCode: '110001'
-  })
   const theme = useTheme()
   const bgColorOfSecondary = theme.colors.secondary['100']
   const bgColorOfPrimary = theme.colors.primary['100']
   const toast = useToast()
 
-  const [submittedDetails, setSubmittedDetails] = useState<ShippingFormInitialValuesType>({
+  const [complainantFormData, setcomplainantFormData] = useState<ShippingFormInitialValuesType>({
     name: 'santosh kumar',
     mobileNumber: '6251423251',
     email: 'santosh.k@gmail.com',
     address: '151-e, janpath road, new delhi',
     pinCode: '110001'
   })
-
-  const [isBillingAddressSameAsShippingAddress, setIsBillingAddressSameAsShippingAddress] = useState(true)
-
   const [billingFormData, setBillingFormData] = useState<ShippingFormInitialValuesType>({
     name: 'jay d',
     mobileNumber: '9871432309',
@@ -74,12 +57,8 @@ const CheckoutPage = () => {
     pinCode: '110034'
   })
 
-  const [filledDetails, setFilledDetails] = useState({
-    complainant: false,
-    respondent: false,
-    dispute: false,
-    consent: false
-  })
+  const [disputeFormSubmitted, setDisputeFormSubmitted] = useState<boolean>(false)
+  const [consentFormSubmitted, setConsentFormSubmitted] = useState<boolean>(false)
 
   const router = useRouter()
   const initRequest = useRequest()
@@ -105,29 +84,22 @@ const CheckoutPage = () => {
   useEffect(() => {
     if (localStorage) {
       if (localStorage.getItem('userPhone')) {
-        const copiedFormData = structuredClone(formData)
+        const copiedFormData = structuredClone(complainantFormData)
         const copiedBillingFormData = structuredClone(billingFormData)
 
         copiedFormData.mobileNumber = localStorage.getItem('userPhone') as string
         copiedBillingFormData.mobileNumber = localStorage.getItem('userPhone') as string
 
-        setFormData(copiedFormData)
+        setcomplainantFormData(copiedFormData)
         setBillingFormData(copiedBillingFormData)
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
-  useEffect(() => {
-    if (isBillingSameRedux) {
-      setBillingFormData(submittedDetails)
-    }
-  }, [isBillingSameRedux])
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
       if (localStorage.getItem('shippingAdress')) {
-        setFormData(JSON.parse(localStorage.getItem('shippingAdress') as string))
+        setcomplainantFormData(JSON.parse(localStorage.getItem('shippingAdress') as string))
       }
       if (localStorage.getItem('billingAddress')) {
         setBillingFormData(JSON.parse(localStorage.getItem('billingAddress') as string))
@@ -136,11 +108,11 @@ const CheckoutPage = () => {
   }, [])
 
   useEffect(() => {
-    const shippingAddressComplete = Object.values(formData).every(value => value.length > 0)
+    const shippingAddressComplete = Object.values(complainantFormData).every(value => value.length > 0)
     if (shippingAddressComplete && typeof window !== 'undefined') {
-      localStorage.setItem('shippingAdress', JSON.stringify(formData))
+      localStorage.setItem('shippingAdress', JSON.stringify(complainantFormData))
     }
-  }, [formData])
+  }, [complainantFormData])
 
   useEffect(() => {
     const isBillingAddressComplete = Object.values(billingFormData).every(value => value.length > 0)
@@ -148,15 +120,7 @@ const CheckoutPage = () => {
     if (isBillingAddressComplete && typeof window !== 'undefined') {
       localStorage.setItem('billingAddress', JSON.stringify(billingFormData))
     }
-    setIsBillingAddressSameAsShippingAddress(
-      areShippingAndBillingDetailsSame(isBillingAddressComplete, formData, billingFormData)
-    )
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [billingFormData])
-
-  // useEffect(()=>{
-  //   setIsBillingSame(isBillingSameRedux)
-  // },[])
 
   const formSubmitHandler = (data: any) => {
     if (data) {
@@ -166,7 +130,7 @@ const CheckoutPage = () => {
         id = selectResponse[0].message.order?.fulfillments[0].id
         type = selectResponse[0].message.order?.fulfillments[0].type
       }
-      getInitPayload(submittedDetails, billingFormData, cartItems, transactionId, DOMAIN, { id, type }).then(res => {
+      getInitPayload(complainantFormData, billingFormData, cartItems, transactionId, DOMAIN, { id, type }).then(res => {
         return initialize(res)
       })
       // TODO :_ To check this again
@@ -196,19 +160,6 @@ const CheckoutPage = () => {
     return !isEmpty(response[0].message.order.items[0].xinput)
   }
 
-  const createPaymentBreakdownMap = () => {
-    const paymentBreakdownMap = {}
-    if (isInitResultPresent()) {
-      initResponse[0].message.order.quote.breakup.forEach(breakup => {
-        paymentBreakdownMap[breakup.title] = {
-          value: breakup.price.value,
-          currency: breakup.price.currency
-        }
-      })
-    }
-    return paymentBreakdownMap
-  }
-
   useEffect(() => {
     if (isError) {
       toast({
@@ -227,37 +178,32 @@ const CheckoutPage = () => {
 
   const complainantDetails = {
     sectionSubtitle: 'Add Complainant Details',
-    sectionTitle: 'Complainant',
+    sectionTitle: 'Complainant & Billing Details',
     formTitle: 'Add Complainant Details',
-    showDetails: isInitResultPresent(),
+    showDetails: isInitResultPresent() && !isEmpty(complainantFormData),
     color: bgColorOfPrimary,
     shippingDetails: {
-      name: submittedDetails.name,
-      location: submittedDetails.address,
-      number: submittedDetails.mobileNumber,
+      name: complainantFormData.name,
+      location: complainantFormData.address,
+      number: complainantFormData.mobileNumber,
       title: 'Complainant Details'
     },
     shippingForm: {
       onSubmit: formSubmitHandler,
       submitButton: { text: 'Save Complainant Details' },
-      values: formData,
-      onChange: data => setSubmittedDetails(data)
+      values: complainantFormData,
+      onChange: (data: any) => setcomplainantFormData(data)
     }
   }
 
   const respondentDetails = {
     sectionSubtitle: 'Add Respondent Details',
-    sectionTitle: 'Respondent',
+    sectionTitle: 'Respondent Details',
     formTitle: 'Add Respondent Details',
     sameAsTitle: 'Same as Complainant Details',
-    isBilling: true,
     color: bgColorOfPrimary,
-    isChecked: isBillingSameRedux,
-    onCheckChange: () => {
-      // setIsBillingSame(!isBillingSame)
-      dispatch(checkoutActions.setIsBillingSame({ isBillingSame: !isBillingSameRedux }))
-    },
-    showDetails: isInitResultPresent() && !isEmpty(submittedDetails),
+    isChecked: false,
+    showDetails: isInitResultPresent() && !isEmpty(billingFormData),
     shippingDetails: {
       name: billingFormData.name,
       location: billingFormData.address,
@@ -267,8 +213,8 @@ const CheckoutPage = () => {
     shippingForm: {
       onSubmit: formSubmitHandler,
       submitButton: { text: 'Save Respondent Details' },
-      values: formData,
-      onChange: data => setBillingFormData(data)
+      values: billingFormData,
+      onChange: (data: any) => setBillingFormData(data)
     }
   }
 
@@ -287,6 +233,23 @@ const CheckoutPage = () => {
       </Box>
     )
 
+  const hasBtnDisabledState = () => {
+    if (isEmpty(initResponse)) {
+      return !(disputeFormSubmitted || consentFormSubmitted)
+    } else {
+      return !(disputeFormSubmitted && consentFormSubmitted)
+    }
+  }
+
+  const isSectionDisabled = (response: any, initResponse: any, respondentFormSubmited: boolean) => {
+    return (
+      isEmpty(response) ||
+      !hasXinput(response) ||
+      (initResponse && (isEmpty(initResponse) || !hasXinput(initResponse))) ||
+      !respondentFormSubmited
+    )
+  }
+
   return (
     <Box
       className="hideScroll"
@@ -297,25 +260,31 @@ const CheckoutPage = () => {
         <ShippingSection {...complainantDetails} />
         <ShippingSection {...respondentDetails} />
 
-        {!isEmpty(selectResponse) && hasXinput(selectResponse) && (
-          <AddSection
-            htmlString={selectResponse[0].message.order.items[0].xinput.html}
-            form_id="odrDisputeDetailsForm"
-          />
-        )}
-        {!isEmpty(initResponse) && hasXinput(initResponse) && (
-          <AddSection
-            htmlString={initResponse[0].message.order.items[0].xinput.html}
-            form_id="odrConsentForm"
-            preSubmissionTitle="Consent Form"
-            postSubmissionTitle="Consent form added"
-          />
-        )}
+        <AddSection
+          htmlString={selectResponse?.[0]?.message.order.items?.[0]?.xinput.html}
+          disabled={isSectionDisabled(selectResponse, null, !isEmpty(selectResponse) && hasXinput(selectResponse))}
+          form_id="odrDisputeDetailsForm"
+          sectionSubTitle="Dispute Details"
+          notifySubmit={setDisputeFormSubmitted}
+          isFormSubmit={disputeFormSubmitted}
+        />
+
+        <AddSection
+          htmlString={initResponse?.[0]?.message.order.items?.[0]?.xinput.html}
+          disabled={isSectionDisabled(selectResponse, initResponse, disputeFormSubmitted)}
+          form_id="odrConsentForm"
+          sectionSubTitle="Consent"
+          preSubmissionTitle="Consent Form"
+          postSubmissionTitle="Consent form added"
+          notifySubmit={setConsentFormSubmitted}
+          isFormSubmit={consentFormSubmitted}
+        />
         <Box
           width={isLargeScreen ? '40%' : '100%'}
           margin="auto"
         >
           <Button
+            disabled={hasBtnDisabledState()}
             text="Confirm"
             handleClick={() => {
               dispatch(cartActions.clearCart())
