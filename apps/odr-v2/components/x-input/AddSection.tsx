@@ -3,34 +3,42 @@ import { Box, Flex, Text, useTheme, useDisclosure } from '@chakra-ui/react'
 import { PlusSquareIcon, AttachmentIcon } from '@chakra-ui/icons'
 import { Typography, BottomModal } from '@beckn-ui/molecules'
 import { DetailCard } from '@beckn-ui/becknified-components'
+import Styles from './AddSection.module.css'
 import DyForm from './DyForm'
 import { useLanguage } from '@hooks/useLanguage'
 
 interface AddSectionProps {
   htmlString: string
   form_id: string
+  sectionSubTitle?: string
   preSubmissionTitle?: string
   postSubmissionTitle?: string
+  isFormSubmit: boolean
+  disabled?: boolean
+  notifySubmit: (submitted: boolean) => void
 }
 
 const AddSection: React.FC<AddSectionProps> = ({
   htmlString,
   form_id,
+  sectionSubTitle,
   preSubmissionTitle = 'Add Dispute Details',
-  postSubmissionTitle = 'Dispute Details added'
+  postSubmissionTitle = 'Dispute Details added',
+  isFormSubmit = false,
+  disabled = false,
+  notifySubmit
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const t = useLanguage()
   const theme = useTheme()
   const bgColorOfPrimary = theme.colors.primary['100']
-  const [formSubmitted, setFormSubmitted] = useState<boolean>(false)
 
-  const onSubmit = submitted => {
-    setFormSubmitted(submitted)
+  const onSubmit = (submitted: boolean) => {
+    notifySubmit(submitted)
     onClose()
   }
 
-  const onError = (hasError, error) => {
+  const onError = () => {
     onClose()
   }
 
@@ -41,13 +49,13 @@ const AddSection: React.FC<AddSectionProps> = ({
         mt={'20px'}
         justifyContent={'space-between'}
       >
-        {/* <Text fontSize={'17px'}>{t.disputeDetails}</Text> */}
+        <Text fontSize={'17px'}>{sectionSubTitle}</Text>
       </Flex>
-      <DetailCard>
-        {!formSubmitted ? (
+      <DetailCard className={disabled ? Styles.disabled : Styles.enabled}>
+        {!isFormSubmit ? (
           <Flex
             alignItems={'center'}
-            onClick={onOpen}
+            onClick={() => !disabled && onOpen()}
           >
             <PlusSquareIcon color={bgColorOfPrimary} />
             <Typography
@@ -67,18 +75,19 @@ const AddSection: React.FC<AddSectionProps> = ({
             />
           </Flex>
         )}
-
-        <BottomModal
-          isOpen={isOpen}
-          onClose={onClose}
-        >
-          <DyForm
-            htmlForm={htmlString}
-            onSubmit={onSubmit}
-            onError={onError}
-            formId={form_id}
-          />
-        </BottomModal>
+        {!disabled && (
+          <BottomModal
+            isOpen={isOpen}
+            onClose={onClose}
+          >
+            <DyForm
+              htmlForm={htmlString}
+              onSubmit={onSubmit}
+              onError={onError}
+              formId={form_id}
+            />
+          </BottomModal>
+        )}
       </DetailCard>
     </Box>
   )
