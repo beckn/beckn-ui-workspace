@@ -4,6 +4,7 @@ import { settingBoxActions } from '../../../store/settingBox-slice'
 import { MdLanguage } from 'react-icons/md'
 import { useLanguage } from '../../../hooks/useLanguage'
 import LanguageItem from './LanguageItem'
+import { Box } from '@chakra-ui/react'
 
 const Language = () => {
   const { t, locale } = useLanguage()
@@ -18,7 +19,7 @@ const Language = () => {
     <div className="relative rtl:ml-2 rtl:pl-2 ltr:mr-2 ltr:pr-2">
       <div className="md:hidden">
         <h3>{t.language}</h3>
-        <div className={`ltr:ml-2 rtl:mr-2 mt-2 z-10`}>
+        <Box mt="8px">
           <LanguageItem
             language="en"
             onCloseBox={() => dispatch(settingBoxActions.closeSettingBox())}
@@ -27,11 +28,11 @@ const Language = () => {
             language="fa"
             onCloseBox={() => dispatch(settingBoxActions.closeSettingBox())}
           />
-        </div>
+        </Box>
       </div>
 
-      <div
-        className="hidden md:flex items-center cursor-pointer"
+      <Box
+        display={'none'}
         onClick={() => setOpenLang(prevState => !prevState)}
       >
         <p className="mx-[0.3rem] text-sm font-bold font-english">{locale === 'en' ? 'En' : 'Fr'}</p>
@@ -40,7 +41,7 @@ const Language = () => {
             fontSize: '1.3rem'
           }}
         />
-      </div>
+      </Box>
       {openLang ? (
         <>
           <div

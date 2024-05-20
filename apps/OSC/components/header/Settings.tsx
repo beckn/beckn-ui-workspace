@@ -22,7 +22,7 @@ const Settings = () => {
   }
 
   return (
-    <div className="relative md:hidden flex justify-between items-center z-[9999]">
+    <div className="relative  flex justify-between items-center z-[9999]">
       <div
         className="flex items-center"
         onClick={toggleShowSettingBox}

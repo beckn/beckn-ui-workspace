@@ -5,6 +5,7 @@ import { settingBoxActions } from '../../store/settingBox-slice'
 import Language from './language/Language'
 import { useLanguage } from '../../hooks/useLanguage'
 import { ISettingBoxRootState } from '../../lib/types/settingBox'
+import style from './header.module.css'
 
 // Settings is just Language selector for now
 const Settings = () => {
@@ -22,9 +23,9 @@ const Settings = () => {
   }
 
   return (
-    <div className="relative md:hidden flex justify-between items-center z-[9999]">
+    <div className={style.language_toggle_wrapper}>
       <div
-        className="flex items-center"
+        className={style.language_toggle}
         onClick={toggleShowSettingBox}
       >
         <span className="capitalize text-sm">{locale == 'en' ? 'En' : 'Fr'}</span>
@@ -41,7 +42,7 @@ const Settings = () => {
             className="fixed inset-0  bg-black/20"
             onClick={onCloseSettingBox}
           ></div>
-          <div className="absolute right-0 top-8 ltr:right-0 rtl:left-0 bg-palette-card shadow-md rounded-lg px-6 py-3 z-[9999] ">
+          <div className={style.language_modal}>
             <Language />
           </div>
         </>
