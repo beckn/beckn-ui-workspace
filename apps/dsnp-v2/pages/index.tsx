@@ -3,12 +3,13 @@ import { Box, Flex, Image, Text, useBreakpoint } from '@chakra-ui/react'
 import axios from 'axios'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
-import KuzaLogo from '@public/images/Kuza-mini.svg'
-import AlternateLogo from '@public/images/KuzaLogo.svg'
+import KuzaLogo from '@public/images/dsnp-text-img.svg'
+import AlternateLogo from '@public/images/dsnp-text-img.svg'
 import TopSheet from '@components/topSheet/TopSheet'
 import { useLanguage } from '@hooks/useLanguage'
 import beckenFooter from '../public/images/footer.svg'
 import SearchInput from '@beckn-ui/becknified-components/src/components/search-input'
+import { Typography } from '@beckn-ui/molecules'
 
 const HomePage = () => {
   const [searchTerm, setSearchTerm] = useState<string>('')
@@ -109,14 +110,26 @@ const HomePage = () => {
         maxWidth={{ base: '100vw', md: '30rem', lg: '40rem' }}
         margin="4rem auto"
         backgroundColor="white"
-        marginTop={'calc(4rem + 60px)'}
+        marginTop={'calc(0rem + 90px)'}
       >
         <Image
           src={currentLogo}
           alt={'Kuza One'}
           pt="15px"
           pb="15px"
-          m={{ base: '0', xl: '0 auto' }}
+          m={{ base: '0', xl: '0' }}
+        />
+        <Typography
+          style={{ marginTop: '-10px', marginBottom: '15px' }}
+          fontSize="27px"
+          fontWeight="800"
+          text={t.forAll}
+        />
+        <Typography
+          style={{ marginBottom: '40px' }}
+          fontSize="15px"
+          fontWeight="400"
+          text={t.subText}
         />
         <SearchInput
           onChangeHandler={(e: React.BaseSyntheticEvent) => setSearchTerm(e.target.value)}

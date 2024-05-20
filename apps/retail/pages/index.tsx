@@ -12,6 +12,7 @@ import ImportedOrder from '@components/importedOrder/ImportedOrder'
 import OrderDetails from '@components/orderDetails/ImportedOrderDetails'
 import ShoppingList from '@components/shoppingList/ShoppingList'
 import SelectDeliveryModal from '@components/selectDeliveryModal/SelectDeliveryModal'
+import { Typography } from '@beckn-ui/molecules'
 
 const HomePage = () => {
   const [searchTerm, setSearchTerm] = useState<string>('')
@@ -216,7 +217,7 @@ const HomePage = () => {
       />
       <Box
         maxWidth={{ base: '100vw', md: '30rem', lg: '40rem' }}
-        margin="calc(4rem + 90px)  auto"
+        margin="calc(0rem + 90px)  auto"
         backgroundColor="white"
       >
         <Image
@@ -225,6 +226,18 @@ const HomePage = () => {
           pt="15px"
           pb="15px"
           m={{ base: '0', xl: '0 auto' }}
+        />
+        <Typography
+          style={{ marginTop: '-15px', marginBottom: '15px' }}
+          fontSize="27px"
+          fontWeight="800"
+          text={t.forAll}
+        />
+        <Typography
+          style={{ marginBottom: '40px' }}
+          fontSize="15px"
+          fontWeight="400"
+          text={t.subText}
         />
         <SearchInput
           onChangeHandler={(e: React.BaseSyntheticEvent) => setSearchTerm(e.target.value)}

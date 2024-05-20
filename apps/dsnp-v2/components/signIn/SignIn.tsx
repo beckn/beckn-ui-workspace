@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import Logo from '../../public/images/Logo.svg'
-import AlternateLogo from '../../public/images/KuzaLogo.svg'
+import Logo from '../../public/images/SNP-Login-logo.svg'
+import AlternateLogo from '../../public/images/SNP-Login-logo.svg'
 import { useLanguage } from '@hooks/useLanguage'
 import { SignInPropsModel } from './SignIn.types'
 import { FormErrors, signInValidateForm } from '@utils/form-utils'

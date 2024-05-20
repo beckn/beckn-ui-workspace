@@ -22,7 +22,7 @@ export default function Document() {
         />
         <link
           rel="shortcut icon"
-          href="/images/headerLogo.svg"
+          href="/images/SNP-Login-logo.svg"
         />
       </Head>
       <body>
