@@ -119,6 +119,9 @@ const en: { [key: string]: string } = {
   viewOrderDetails: 'View Order Details',
   emptyCardHeading: 'The Cart is Empty',
   emptyCardSubHeading: 'Looks like you haven’t made your choice yet',
-  shop: 'Shop'
+  shop: 'Shop',
+  forAll: 'for All',
+  subText:
+    "A global marketplace to discover anything you need. Just type where you want to go and we'll take care of the rest."
 }
 export default en
