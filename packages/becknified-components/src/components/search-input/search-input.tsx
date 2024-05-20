@@ -42,6 +42,8 @@ const SearchInput: React.FC<SearchInputPropsModel> = props => {
         justifyContent={'center'}
         alignItems="center"
         width={'55px'}
+        cursor={'pointer'}
+        onClick={searchIconClickHandler}
       >
         <Image
           src={searchIcon}

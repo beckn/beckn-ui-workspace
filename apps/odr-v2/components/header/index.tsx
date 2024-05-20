@@ -62,7 +62,7 @@ const storeHeaderBlackList = [
 ]
 const headerValues: PathnameObjectType = {
   '/checkoutPage': 'Review Purchase Order',
-  '/orderHistory': 'My Orders',
+  '/orderHistory': 'My Cases',
   '/orderDetails': 'Order Details',
   '/invoiceDetails': 'Invoice Details',
   '/signin': 'Sign In',
