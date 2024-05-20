@@ -611,7 +611,7 @@ const OrderDetails = () => {
   }
 
   const ordersLength = data.statusData.length
-  const { timestamp } = data.statusData[0].context
+  const { created_at } = data.statusData[0].message.order
   const { order } = data.statusData[0].message
   const {
     billing,
@@ -755,7 +755,7 @@ const OrderDetails = () => {
                   />
                   <Typography
                     variant="subTitleRegular"
-                    text={formatTimestamp(timestamp)}
+                    text={formatTimestamp(created_at)}
                   />
                 </Flex>
               </Box>

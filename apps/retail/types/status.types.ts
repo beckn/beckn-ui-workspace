@@ -135,6 +135,7 @@ interface CancellationTerms {
 }
 
 interface Order {
+  created_at: string
   id: string
   provider: Provider
   items: Item
