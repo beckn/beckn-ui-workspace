@@ -234,19 +234,15 @@ const CheckoutPage = () => {
     )
 
   const hasBtnDisabledState = () => {
-    if (isEmpty(initResponse)) {
-      return !(disputeFormSubmitted || consentFormSubmitted)
-    } else {
-      return !(disputeFormSubmitted && consentFormSubmitted)
-    }
+    return !(disputeFormSubmitted && consentFormSubmitted)
   }
 
-  const isSectionDisabled = (response: any, initResponse: any, respondentFormSubmited: boolean) => {
+  const isSectionDisabled = (response: any, initResponse: any, prevFormSubmited: boolean) => {
     return (
       isEmpty(response) ||
       !hasXinput(response) ||
       (initResponse && (isEmpty(initResponse) || !hasXinput(initResponse))) ||
-      !respondentFormSubmited
+      !prevFormSubmited
     )
   }
 
@@ -262,7 +258,7 @@ const CheckoutPage = () => {
 
         <AddSection
           htmlString={selectResponse?.[0]?.message.order.items?.[0]?.xinput.html}
-          disabled={isSectionDisabled(selectResponse, null, !isEmpty(selectResponse) && hasXinput(selectResponse))}
+          disabled={isSectionDisabled(selectResponse, null, true)}
           form_id="odrDisputeDetailsForm"
           sectionSubTitle="Dispute Details"
           notifySubmit={setDisputeFormSubmitted}
