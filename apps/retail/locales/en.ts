@@ -1,4 +1,7 @@
 const en: { [key: string]: string } = {
+  fa: 'français - Fr',
+  en: 'English - En',
+  language: 'Language: ',
   name: 'Name',
   fullName: 'Enter Your Full Name',
   password: 'Password',
