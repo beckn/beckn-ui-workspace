@@ -77,14 +77,21 @@ const headerValues: PathnameObjectType = {
 }
 
 const headerValuesFrench: PathnameObjectType = {
-  '/checkoutPage': 'Facturation et Livraison',
-  '/orderHistory': 'Historique des Commandes',
-  '/orderDetails': 'Détails de la Commande',
-  '/': 'Se Connecter',
-  '/mobileOtp': 'Se Connecter',
+  '/checkoutPage': 'Revoir la commande',
+  '/orderHistory': 'Mes commandes',
+  '/orderDetails': 'Détails de la commande',
+  '/invoiceDetails': 'Détails de la facture',
+  '/signin': 'Se connecter',
+  '/signUp': "S'inscrire",
   '/cart': 'Panier',
-  '/paymentMode': 'Sélectionner la Méthode de Paiement',
-  '/feedback': ''
+  '/paymentMode': 'Sélectionner le mode de paiement',
+  '/assemblyDetails': 'Ajouter des détails de montage',
+  '/updateShippingDetails': "Détails d'expédition",
+  '/orderCancellation': 'Annuler la commande',
+  '/feedback': "Retour d'information",
+  '/profile': 'Profil',
+  '/search': 'Forfaits de voyage',
+  '/checkout': 'Paiement'
 }
 
 const topHeaderBlackList: string[] = []
