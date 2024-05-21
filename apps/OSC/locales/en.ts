@@ -1,5 +1,10 @@
 const en: { [key: string]: string } = {
   name: 'Name',
+  formName: 'Name',
+  formNumber: 'Mobile Number',
+  formEmail: 'Email ID',
+  formAddress: 'Complete Address',
+  formZipCode: 'Zip Code',
   fullName: 'Enter Your Full Name',
   password: 'Password',
   enterPassword: 'Enter Password',
@@ -27,8 +32,8 @@ const en: { [key: string]: string } = {
   errorName: 'Name is required',
   errorName2: 'Name can only contain letters and spaces',
   errorName3: 'Name must contain at least 3 characters',
-  errorZipcode: 'Pincode is required',
-  errorZipcode2: 'Invalid zipcode',
+  errorZipcode: 'Zip code is required',
+  errorZipcode2: 'Invalid Zip code',
   searchforService: 'search for product',
   homePara:
     "A global marketplace to discover and buy anything you need. Just type what you want to buy and we'll take care of the rest.",
@@ -191,6 +196,10 @@ const en: { [key: string]: string } = {
   fixError: 'Please fix the errors in the form before submitting.',
   profileUpdateSuccess: 'Profile updated successfully!',
   submit: 'Submit',
-  specifyReason: 'Please specify the reason'
+  specifyReason: 'Please specify the reason',
+  invalidEmail: 'Invalid email format',
+  requiredEmail: 'Email ID is required',
+  errorAddress: 'Complete Address is required',
+  change: 'Change'
 }
 export default en

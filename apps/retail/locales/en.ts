@@ -2,6 +2,11 @@ const en: { [key: string]: string } = {
   fa: 'français - Fr',
   en: 'English - En',
   language: 'Language: ',
+  formName: 'Name',
+  formNumber: 'Mobile Number',
+  formEmail: 'Email ID',
+  formAddress: 'Complete Address',
+  formZipCode: 'Zip Code',
   name: 'Name',
   fullName: 'Enter Your Full Name',
   password: 'Password',
@@ -146,6 +151,10 @@ const en: { [key: string]: string } = {
   orderId: 'Order id',
   forAll: 'for All',
   subText:
-    "A global marketplace to discover anything you need. Just type where you want to go and we'll take care of the rest."
+    "A global marketplace to discover anything you need. Just type where you want to go and we'll take care of the rest.",
+  invalidEmail: 'Invalid email format',
+  requiredEmail: 'Email ID is required',
+  errorAddress: 'Complete Address is required',
+  change: 'Change'
 }
 export default en

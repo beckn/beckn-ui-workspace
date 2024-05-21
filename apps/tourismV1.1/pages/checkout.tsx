@@ -345,6 +345,7 @@ const CheckoutPage = () => {
             }
           },
           billing: {
+            triggerFormTitle: `${t.change}`,
             sectionSubtitle: `${t.addBillingdetailsBtnText}`,
             sectionTitle: `${t.billing}`,
             formTitle: `${t.addBillingdetailsBtnText}`,
