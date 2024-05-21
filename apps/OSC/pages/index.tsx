@@ -1,9 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { Box, Flex, Image, Text, useBreakpoint } from '@chakra-ui/react'
-import axios from 'axios'
+import { Box, Flex, Image, Text } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
-import currentLogo from '@public/images/OSC_logo.svg'
 import TopSheet from '@components/topSheet/TopSheet'
 import { useLanguage } from '@hooks/useLanguage'
 import beckenFooter from '../public/images/footer.svg'
@@ -69,28 +67,27 @@ const HomePage = () => {
                   const formattedAddress = data.results[0].formatted_address
                   setCurrentAddress(formattedAddress)
                 } else {
-                  setFetchCurrentLocationError('No address found for the given coordinates.')
+                  setFetchCurrentLocationError(t.noAddressFound)
                 }
               } else {
-                setFetchCurrentLocationError('Failed to fetch address data.')
-                alert('Failed to fetch address data.')
+                setFetchCurrentLocationError(t.failedToFetch)
+                alert(t.failedToFetch)
               }
             } catch (error) {
-              setFetchCurrentLocationError('Error fetching address data: ' + (error as any).message)
-              alert('Error fetching address data: ' + (error as any).message)
+              alert(t.fetchAddressData + (error as any).message)
             } finally {
               setLoadingForCurrentAddress(false)
             }
           },
           error => {
-            setFetchCurrentLocationError('Error getting location: ' + error.message)
-            alert('Error getting location: ' + error.message)
+            setFetchCurrentLocationError(t.errorGettingLocation + error.message)
+            alert(t.errorGettingLocation + error.message)
             setLoadingForCurrentAddress(false)
           }
         )
       } else {
-        setFetchCurrentLocationError('Geolocation is not available in this browser.')
-        alert('Geolocation is not available in this browser.')
+        setFetchCurrentLocationError(t.geoLocationNotAvailable)
+        alert(t.geoLocationNotAvailable)
         setLoadingForCurrentAddress(false)
       }
     }
@@ -131,7 +128,7 @@ const HomePage = () => {
           searchIcon={'/images/search.svg'}
           searchIconClickHandler={searchIconClickHandler}
           onEnterHandler={(e: { key: string }) => e.key === 'Enter' && navigateToSearchResults()}
-          placeHolder="Search for Products"
+          placeHolder={t.searchForProduct}
         />
         <Flex
           justifyContent={'center'}

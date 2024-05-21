@@ -20,8 +20,6 @@ const SignIn = () => {
   const [isFormFilled, setIsFormFilled] = useState(false)
   const [login, { isLoading, isError, data, error }] = useLoginMutation()
 
-  console.log('Dank', isError, error, data)
-
   const toast = useToast()
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -50,8 +48,8 @@ const SignIn = () => {
       toast({
         render: () => (
           <CustomToast
-            title="Error!"
-            message="Unable to login"
+            title={t.error}
+            message={t.unableToLogin}
           />
         ),
         position: 'top',
@@ -74,8 +72,8 @@ const SignIn = () => {
       toast({
         render: () => (
           <CustomToast
-            title="Error!"
-            message="Unable to login"
+            title={t.error}
+            message={t.unableToLogin}
           />
         ),
         position: 'top',

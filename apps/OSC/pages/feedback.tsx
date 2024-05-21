@@ -153,13 +153,13 @@ const Feedback = () => {
             gap="1rem"
           >
             <BecknButton
-              children="Submit Review"
+              children={t.submitReview}
               className="checkout_btn "
               disabled={!ratingForStore}
               handleClick={() => handleSubmitReview(statusResponse)}
             />
             <BecknButton
-              children="Skip for Now"
+              children={t.skipForNow}
               variant="outline"
               className="checkout_btn"
               handleClick={() => router.push('/')}
