@@ -422,6 +422,8 @@ const en: { [key: string]: string } = {
   travellerDetails: 'Traveller Details',
   saveTravellerDetails: 'Save Traveller Details',
   initLoderText: 'Please wait while we set things up for you',
-  initLoderTextFail: 'Unable to proceed with init request'
+  initLoderTextFail: 'Unable to proceed with init request',
+  invalidEmail: 'Invalid email format',
+  requiredEmail: 'Email ID is required'
 }
 export default en

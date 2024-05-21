@@ -53,11 +53,17 @@ const fieldConfig: FormField[] = [
   }
 ]
 
-const ShippingForm: React.FC<ShippingFormProps<FormField[]>> = ({ onSubmit, submitButton, values, onChange }) => {
+const ShippingForm: React.FC<ShippingFormProps<FormField[]>> = ({
+  formFieldConfig,
+  onSubmit,
+  submitButton,
+  values,
+  onChange
+}) => {
   return (
     <div style={{ marginTop: '10px' }}>
       <Form
-        fields={fieldConfig}
+        fields={formFieldConfig ? formFieldConfig : fieldConfig}
         onSubmit={onSubmit}
         submitButton={submitButton}
         values={values}

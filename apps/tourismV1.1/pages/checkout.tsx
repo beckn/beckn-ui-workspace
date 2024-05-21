@@ -9,7 +9,8 @@ import {
   getInitPayload,
   areShippingAndBillingDetailsSame,
   getPayloadForInitRequest,
-  getSubTotalAndDeliveryCharges
+  getSubTotalAndDeliveryCharges,
+  formFieldConfig
 } from '@components/checkout/checkout.utils'
 import useRequest from '../hooks/useRequest'
 import { CustomToast } from '@components/signIn/SignIn'
@@ -26,6 +27,7 @@ import { isEmpty } from '@utils/common-utils'
 import { getSelectPayload } from '@components/cart/cart.utils'
 import { useSelectMutation } from '@services/select'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
+import { FormField } from '@beckn-ui/molecules'
 
 export type ShippingFormData = {
   name: string
@@ -116,6 +118,58 @@ const CheckoutPage = () => {
   const selectResponse = useSelector((state: CheckoutRootState) => state.checkout.selectResponse)
   console.log(cartItems)
   const { items, totalQuantity } = useSelector((state: ICartRootState) => state.cart)
+
+  //////////  For field Data ///////////
+  const formFieldConfig: FormField[] = [
+    {
+      name: 'name',
+      label: t.formName,
+      type: 'text',
+      validate: (value: string) => {
+        if (!value.trim()) return t.errorName
+        return undefined
+      }
+    },
+    {
+      name: 'mobileNumber',
+      label: t.formNumber,
+      type: 'number',
+      validate: (value: string) => {
+        if (!value.trim()) return t.errorNumber
+        if (!/^\d{10}$/.test(value)) return t.errorNumber2
+        return undefined
+      }
+    },
+    {
+      name: 'email',
+      label: t.formEmail,
+      type: 'email',
+      validate: (value: string) => {
+        if (!value.trim()) return t.requiredEmail
+        if (!/\S+@\S+\.\S+/.test(value)) return t.invalidEmail
+        return undefined
+      }
+    },
+    {
+      name: 'address',
+      label: t.formAddress,
+      type: 'text',
+      validate: (value: string) => {
+        if (!value.trim()) return t.errorAddress
+        return undefined
+      }
+    },
+    {
+      name: 'pinCode',
+      label: t.formZipCode,
+      type: 'text',
+      validate: (value: string) => {
+        if (!value.trim()) return t.errorZipcode
+        if (!/^\d{5,6}$/.test(value)) return t.errorZipcode2
+        return undefined
+      }
+    }
+  ]
 
   useEffect(() => {
     fetchQuotes(getSelectPayload(items, transactionId, DOMAIN))
@@ -283,6 +337,7 @@ const CheckoutPage = () => {
               title: `${t.travellerDetails}`
             },
             shippingForm: {
+              formFieldConfig: formFieldConfig,
               onSubmit: formSubmitHandler,
               submitButton: { text: `${t.saveTravellerDetails}` },
               values: formData,
@@ -308,6 +363,7 @@ const CheckoutPage = () => {
               title: `${t.billing}`
             },
             shippingForm: {
+              formFieldConfig: formFieldConfig,
               onSubmit: formSubmitHandler,
               submitButton: { text: `${t.saveBillingDetails}` },
               values: formData,
