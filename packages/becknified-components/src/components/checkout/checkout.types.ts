@@ -1,4 +1,11 @@
-import { FormData, FormField, ButtonProps, LoaderProps, LoaderWithMessagePropsModel } from '@beckn-ui/molecules'
+import {
+  FormData,
+  FormField,
+  ButtonProps,
+  LoaderProps,
+  LoaderWithMessagePropsModel,
+  InputType
+} from '@beckn-ui/molecules'
 import { CurrencyType } from '../types'
 
 export type ShippingFormInitialValuesType = {
@@ -10,6 +17,7 @@ export type ShippingFormInitialValuesType = {
 }
 
 export interface ShippingFormProps<T extends FormField[]> {
+  formFieldConfig?: FormField
   onSubmit: (data: FormData<T>) => void
   submitButton: ButtonProps
   values?: ShippingFormInitialValuesType
