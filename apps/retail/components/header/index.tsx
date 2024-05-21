@@ -13,6 +13,7 @@ import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import CartIconWithCount from './CartIcon'
 import TopSheet from '@components/topSheet/TopSheet'
 import { ICartRootState } from '@lib/types'
+import Settings from './Settings'
 
 type PathnameObjectType = { [key: string]: string }
 
@@ -90,7 +91,7 @@ const headerValuesFrench: PathnameObjectType = {
 }
 
 const topHeaderBlackList: string[] = []
-
+const languageIconWhiteList = ['/', '/createProfile']
 const bottomHeaderBlackList = ['/orderConfirmation', '/', '/feedback']
 
 const menuIconWhiteList = ['/', '/search', '/profile']
@@ -142,6 +143,7 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
             />
           </Box>
           <Flex columnGap={['10px', '10px', '2rem', '2rem']}>
+            {languageIconWhiteList.includes(router.pathname) && <Settings />}
             {!homeIconBlackList.includes(router.pathname) && (
               <Image
                 cursor="pointer"
