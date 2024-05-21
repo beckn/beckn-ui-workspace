@@ -131,6 +131,11 @@ const en: { [key: string]: string } = {
   initLoaderSubText: 'while we initialize the draft order.',
   emptyCardHeading: 'The Cart is Empty',
   emptyCardSubHeading: 'Looks like you haven’t made your choice yet',
-  shop: 'Shop'
+  shop: 'Shop',
+
+  // new additions
+  language: 'Language: ',
+  fa: 'français - Fr',
+  en: 'English - En'
 }
 export default en

@@ -9,6 +9,7 @@ import { logout } from '@store/auth-slice'
 
 import { useLanguage } from '../../hooks/useLanguage'
 import Qrcode from '@components/qrCode/Qrcode'
+import Settings from './Settings'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import { ICartRootState } from '@lib/types'
 import BottomModalScan from '@components/BottomModal/BottomModalScan'
@@ -95,6 +96,8 @@ const orderIconList = ['/orderDetails']
 const orderDetailsIcon = ['/orderDetails']
 const currentLocation = ['/']
 
+const languageIconWhiteList = ['/', '/createProfile']
+
 const getHeaderTitleForPage = (name: string, logo: string, pathName: string, locale: string | undefined) => {
   const values = locale === 'en' ? headerValues : headerValuesFrench
   switch (true) {
@@ -138,6 +141,7 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
             />
           </Box>
           <Flex columnGap={['10px', '10px', '2rem', '2rem']}>
+            {languageIconWhiteList.includes(router.pathname) && <Settings />}
             {!homeIconBlackList.includes(router.pathname) && (
               <Image
                 cursor="pointer"

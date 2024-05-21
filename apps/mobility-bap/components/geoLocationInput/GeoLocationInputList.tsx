@@ -12,30 +12,36 @@ import backArrow from '/public/images/Back.svg'
 import locationMarker from '../../public/images/SearchLocationMarker.svg'
 import closeIcon from '../../public/images/Frame.svg'
 import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete'
+import { GeoLocationAddresModel } from 'lib/types/geoLocationSearchPage'
 
 const GeoLocationInputList: React.FC = () => {
   const dispatch = useDispatch()
   const [address, setAddress] = useState<string>('')
-  const pickupAddress = useSelector((state: any) => state.geoLocationSearchPageUI.pickupAddress)
-  const dropoffAddress = useSelector((state: any) => state.geoLocationSearchPageUI.dropoffAddress)
+  const pickup = useSelector((state: any) => state.geoLocationSearchPageUI.pickup)
+  const dropoff = useSelector((state: any) => state.geoLocationSearchPageUI.dropoff)
 
   const handleSelect = async (data: string) => {
     const addressData = await geocodeByAddress(data)
     const latLong = await getLatLng(addressData[0])
 
-    if (pickupAddress === '') {
-      dispatch(setPickupAddress(data))
-      dispatch(setGeoLatLong({ lat: latLong.lat, long: latLong.lng }))
-    } else if (dropoffAddress === '') {
-      dispatch(setDropoffAddress(data))
-      dispatch(setGeoLatLong({ lat: latLong.lat, long: latLong.lng }))
+    const locationDetails = {
+      address: data,
+      geoLatLong: { lat: latLong.lat, long: latLong.lng }
+    }
+
+    if (pickup.address === '') {
+      dispatch(setPickupAddress(locationDetails))
+      // dispatch(setGeoLatLong({ lat: latLong.lat, long: latLong.lng }))
+    } else if (dropoff.address === '') {
+      dispatch(setDropoffAddress(locationDetails))
+      //   dispatch(setGeoLatLong({ lat: latLong.lat, long: latLong.lng }))
     }
 
     closeGeoLocationSearchPage()
   }
 
   const closeGeoLocationSearchPage = () => {
-    dispatch(toggleLocationSearchPageVisibility(false))
+    dispatch(toggleLocationSearchPageVisibility({ visible: false, addressType: '' }))
   }
 
   return (
@@ -45,7 +51,7 @@ const GeoLocationInputList: React.FC = () => {
         onChange={event => setAddress(event)}
         onSelect={data => handleSelect(data)}
       >
-        {({ getInputProps, suggestions, getSuggestionItemProps }) => (
+        {({ getInputProps, suggestions, getSuggestionItemProps }): any => (
           <Flex flexDirection="column">
             <Flex
               flexDirection="row"

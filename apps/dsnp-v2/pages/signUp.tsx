@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useLanguage } from '@hooks/useLanguage'
-import AlternateLogo from '../public/images/KuzaLogo.svg'
+import AlternateLogo from '../public/images/SNP-Login-logo.svg'
 import { SignUpPropsModel } from '@components/signIn/SignIn.types'
 import { FormErrors, signUpValidateForm } from '@utils/form-utils'
 import { BecknAuth } from '@beckn-ui/becknified-components'
@@ -9,7 +9,7 @@ import Cookies from 'js-cookie'
 import { Box, useBreakpoint, useToast, Text } from '@chakra-ui/react'
 import { useRegisterMutation } from '@services/Users'
 import { CustomToast } from '@components/signIn/SignIn'
-import Logo from '@public/images/Logo.svg'
+import Logo from '@public/images/SNP-Login-logo.svg'
 
 //dsnp imports
 import { parentURLs } from '@lib/config'
@@ -267,7 +267,7 @@ const SignUp = () => {
             {
               text: t.signIn,
               handleClick: () => {
-                Router.push('/')
+                Router.push('/signin')
               },
               variant: 'outline',
               colorScheme: 'primary',

@@ -12,6 +12,7 @@ import Qrcode from '@components/qrCode/Qrcode'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import CartIconWithCount from './CartIcon'
 import TopSheet from '@components/topSheet/TopSheet'
+import Settings from './Settings'
 import { ICartRootState } from '@lib/types'
 
 type PathnameObjectType = { [key: string]: string }
@@ -100,6 +101,8 @@ const editIcon = ['/profile']
 const invoiceDownloadIcon = ['']
 const currentLocation = ['/']
 
+const languageIconWhiteList = ['/', '/createProfile']
+
 const getHeaderTitleForPage = (name: string, logo: string, pathName: string, locale: string | undefined) => {
   const values = locale === 'en' ? headerValues : headerValuesFrench
   switch (true) {
@@ -143,6 +146,7 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
             />
           </Box>
           <Flex columnGap={['10px', '10px', '2rem', '2rem']}>
+            {languageIconWhiteList.includes(router.pathname) && <Settings />}
             {!homeIconBlackList.includes(router.pathname) && (
               <Image
                 cursor="pointer"

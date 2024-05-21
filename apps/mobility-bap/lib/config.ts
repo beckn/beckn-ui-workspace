@@ -3,3 +3,5 @@ const config = {
   dataset: 'production'
 }
 export default config
+
+export const DOMAIN = 'mobility:1.1.0'

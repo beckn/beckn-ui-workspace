@@ -140,6 +140,9 @@ const en: { [key: string]: string } = {
   emptyCardHeading: 'The Cart is Empty',
   emptyCardSubHeading: 'Looks like you haven’t made your choice yet',
   shop: 'Shop',
-  orderId: 'Order id'
+  orderId: 'Order id',
+  forAll: 'for All',
+  subText:
+    "A global marketplace to discover anything you need. Just type where you want to go and we'll take care of the rest."
 }
 export default en

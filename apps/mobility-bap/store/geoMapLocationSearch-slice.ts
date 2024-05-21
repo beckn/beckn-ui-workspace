@@ -1,11 +1,16 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { IGeoLocationSearchPage } from '../lib/types/geoLocationSearchPage'
+import { GeoLocationAddresModel, IGeoLocationSearchPage } from '../lib/types/geoLocationSearchPage'
 
 const initialState: IGeoLocationSearchPage = {
   geoLocationSearchPageVisible: false,
-  pickupAddress: '',
-  dropoffAddress: '',
-  geoLatLong: { lat: 0, long: 0 }
+  pickup: {
+    address: '',
+    geoLatLong: { lat: 0, long: 0 }
+  },
+  dropoff: {
+    address: '',
+    geoLatLong: { lat: 0, long: 0 }
+  }
 }
 
 const geoLocationSearchPage = createSlice({
@@ -14,24 +19,30 @@ const geoLocationSearchPage = createSlice({
   reducers: {
     toggleLocationSearchPageVisibility(
       state,
-      action: PayloadAction<{ visible: boolean; addressType: 'pickup' | 'dropoff' }>
+      action: PayloadAction<{ visible: boolean; addressType: 'pickup' | 'dropoff' | '' }>
     ) {
       const { visible, addressType } = action.payload
       if (addressType === 'pickup') {
-        state.pickupAddress = ''
+        state.pickup = {
+          address: '',
+          geoLatLong: { lat: 0, long: 0 }
+        }
       } else if (addressType === 'dropoff') {
-        state.dropoffAddress = ''
+        state.dropoff = {
+          address: '',
+          geoLatLong: { lat: 0, long: 0 }
+        }
       }
       state.geoLocationSearchPageVisible = visible
     },
-    setPickupAddress(state, action: PayloadAction<string>) {
-      state.pickupAddress = action.payload
+    setPickupAddress(state, action: PayloadAction<GeoLocationAddresModel>) {
+      state.pickup = action.payload
     },
-    setDropoffAddress(state, action: PayloadAction<string>) {
-      state.dropoffAddress = action.payload
+    setDropoffAddress(state, action: PayloadAction<GeoLocationAddresModel>) {
+      state.dropoff = action.payload
     },
     setGeoLatLong(state, action: PayloadAction<{ lat: number; long: number }>) {
-      state.geoLatLong = action.payload
+      // state.geoLatLong = action.payload
     }
   }
 })
