@@ -9,13 +9,14 @@ import { useRouter } from 'next/router'
 import { DiscoveryRootState } from '@store/discovery-slice'
 import { Box, useTheme } from '@chakra-ui/react'
 import { CustomThemeType } from '@beckn-ui/molecules'
+import { useLanguage } from '@hooks/useLanguage'
 
 const Product = () => {
   const selectedProduct = useSelector((state: DiscoveryRootState) => state.discovery.selectedProduct)
   const dispatch = useDispatch()
   const [counter, setCounter] = useState(1)
   const [totalPrice, setTotalPrice] = useState(selectedProduct.item.price.value)
-  console.log(selectedProduct)
+  const { t } = useLanguage()
 
   const increment = () => {
     const newCounter = counter + 1
@@ -60,10 +61,10 @@ const Product = () => {
               totalPrice: selectedProduct.item.price.value,
               handleIncrement: increment,
               handleDecrement: decrement,
-              counterTitle: 'No Of Traveller',
+              counterTitle: `${t.numberOfTraveller}`,
               counter: counter,
               cta: {
-                text: 'Book Now',
+                text: `${t.bookNow}`,
                 color: 'white',
                 handleClick: () => {
                   dispatch(

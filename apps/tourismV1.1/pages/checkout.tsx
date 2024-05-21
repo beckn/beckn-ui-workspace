@@ -224,7 +224,7 @@ const CheckoutPage = () => {
         render: () => (
           <CustomToast
             title="Error!"
-            message="Unable to proceed with init request"
+            message={t.initLoderTextFail}
           />
         ),
         position: 'top',
@@ -259,7 +259,7 @@ const CheckoutPage = () => {
       <Checkout
         schema={{
           items: {
-            title: 'Items',
+            title: `${t.item}`,
             data: cartItems.map(singleItem => ({
               title: singleItem.name,
               description: singleItem.short_desc,
@@ -272,27 +272,27 @@ const CheckoutPage = () => {
           },
           shipping: {
             showDetails: isInitResultPresent(),
-            sectionSubtitle: 'Add Traveller Details',
+            sectionSubtitle: `${t.addTravellerDetails}`,
             color: bgColorOfSecondary,
-            formTitle: 'Add Traveller Details',
-            sectionTitle: 'Traveller Details',
+            formTitle: `${t.addTravellerDetails}`,
+            sectionTitle: `${t.travellerDetails}`,
             shippingDetails: {
               name: submittedDetails.name,
               location: submittedDetails.address,
               number: submittedDetails.mobileNumber,
-              title: 'Traveller Details'
+              title: `${t.travellerDetails}`
             },
             shippingForm: {
               onSubmit: formSubmitHandler,
-              submitButton: { text: 'Save Traveller Details' },
+              submitButton: { text: `${t.saveTravellerDetails}` },
               values: formData,
               onChange: data => setSubmittedDetails(data)
             }
           },
           billing: {
-            sectionSubtitle: 'Add Billing Details',
-            sectionTitle: 'Billing',
-            formTitle: 'Add Billing Details',
+            sectionSubtitle: `${t.addBillingdetailsBtnText}`,
+            sectionTitle: `${t.billing}`,
+            formTitle: `${t.addBillingdetailsBtnText}`,
             color: bgColorOfSecondary,
             isBilling: true,
             isChecked: isBillingSameRedux,
@@ -305,17 +305,17 @@ const CheckoutPage = () => {
               name: billingFormData.name,
               location: billingFormData.address,
               number: billingFormData.mobileNumber,
-              title: 'Billing'
+              title: `${t.billing}`
             },
             shippingForm: {
               onSubmit: formSubmitHandler,
-              submitButton: { text: 'Save Billing Details' },
+              submitButton: { text: `${t.saveBillingDetails}` },
               values: formData,
               onChange: data => setBillingFormData(data)
             }
           },
           payment: {
-            title: 'Payment',
+            title: `${t.paymentText}`,
             paymentDetails: {
               hasBoxShadow: false,
               paymentBreakDown: createPaymentBreakdownMap(),
@@ -327,10 +327,10 @@ const CheckoutPage = () => {
             }
           },
           loader: {
-            text: 'Please wait while we set things up for you'
+            text: `${t.initLoderText}`
           },
           pageCTA: {
-            text: 'Checkout',
+            text: `${t.checkout}`,
             handleClick: () => {
               dispatch(cartActions.clearCart())
               router.push('/paymentMode')
