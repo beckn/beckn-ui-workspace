@@ -10,6 +10,7 @@ import { useDispatch } from 'react-redux'
 import { formatTimestamp } from '@utils/confirm-utils'
 import { useRouter } from 'next/router'
 import EmptyOrder from '@components/orderHistory/emptyOrder'
+import { useLanguage } from '@hooks/useLanguage'
 
 const orderStatusMap: Record<string, string> = {
   'In Review': 'Pending'
@@ -21,7 +22,7 @@ const OrderHistory = () => {
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
   const dispatch = useDispatch()
   const [error, setError] = useState('')
-
+  const { t } = useLanguage()
   const bearerToken = Cookies.get('authToken')
   const router = useRouter()
 
@@ -113,14 +114,14 @@ const OrderHistory = () => {
                 >
                   <Text
                     as={Typography}
-                    text={`Placed at ${formatTimestamp(order.attributes.createdAt)}`}
+                    text={`${t.placedAt} ${formatTimestamp(order.attributes.createdAt)}`}
                     fontWeight="400"
                     fontSize={'12px'}
                   />
 
                   <Text
                     as={Typography}
-                    text={`Order ID: ${order.attributes.order_id}`}
+                    text={`${t.orderId} ${order.attributes.order_id}`}
                     fontWeight="400"
                     fontSize={'12px'}
                   />

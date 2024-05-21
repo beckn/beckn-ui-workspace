@@ -11,6 +11,7 @@ import {
   Text
 } from '@chakra-ui/react'
 import Button from '@components/button/Button'
+import { useLanguage } from '@hooks/useLanguage'
 import React, { useEffect, useState } from 'react'
 
 const activeLabelStyles = {
@@ -64,6 +65,7 @@ const Filter = ({ handleApplyFilter, handleResetFilter, handleCancelFilter = () 
     }
   }
   const [formData, setFormData] = useState(getFormData())
+  const { t } = useLanguage()
   const [sortBy, setSortBy] = useState<string>('')
   const handleChange = (name: string, value: string) => {
     setSortBy(value)
@@ -98,14 +100,14 @@ const Filter = ({ handleApplyFilter, handleResetFilter, handleCancelFilter = () 
             justifyContent="space-between"
             alignItems={'center'}
           >
-            <Text fontSize={'17px'}>All Filters</Text>
+            <Text fontSize={'17px'}>{t.allFilters}</Text>
             <Text
               fontSize={'15px'}
               color={'primary.100'}
               cursor={'pointer'}
               onClick={resetFilter}
             >
-              Reset
+              {t.reset}
             </Text>
           </Flex>
           <Divider mb={'44px'} />
@@ -122,14 +124,14 @@ const Filter = ({ handleApplyFilter, handleResetFilter, handleCancelFilter = () 
                 paddingBottom={'2px'}
               >
                 <option value="">Price</option>
-                <option value="LowtoHigh">Price -- Low to High</option>
-                <option value="HightoLow">Price -- High to Low</option>
+                <option value="LowtoHigh">{t.priceLowToHigh}</option>
+                <option value="HightoLow">{t.priceHighToLow}</option>
               </Select>
               <FormLabel
                 className="dropDown_label"
                 fontSize="15px"
               >
-                Sort By Price
+                {t.sortByPrice}
               </FormLabel>
             </FormControl>
           </Box>
@@ -146,15 +148,15 @@ const Filter = ({ handleApplyFilter, handleResetFilter, handleCancelFilter = () 
                 borderBottom={'1px solid'}
                 paddingBottom={'2px'}
               >
-                <option value="">Rating</option>
-                <option value="RatingLowtoHigh">Rating -- Low to High</option>
-                <option value="RatingHightoLow">Rating -- High to Low</option>
+                <option value="">{t.rating}</option>
+                <option value="RatingLowtoHigh">{t.ratingLowToHigh}</option>
+                <option value="RatingHightoLow">{t.ratingHighToLow}</option>
               </Select>
               <FormLabel
                 className="dropDown_label"
                 fontSize="15px"
               >
-                Filter By Rating
+                {t.filterByRating}
               </FormLabel>
             </FormControl>
           </Box>
@@ -173,7 +175,7 @@ const Filter = ({ handleApplyFilter, handleResetFilter, handleCancelFilter = () 
       <Box display={['block', 'block', 'none', 'none']}>
         <Button
           className="cencel_btn_filter"
-          buttonText={'Cancel'}
+          buttonText={t.cancel}
           background={'#fff'}
           color={'#E93324'}
           isDisabled={false}

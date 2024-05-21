@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { BottomModal } from '@beckn-ui/molecules'
 
 import { useTheme, Box, Divider, Flex, HStack, Image, Text } from '@chakra-ui/react'
-import { Router, useRouter } from 'next/router'
 import styles from './header.module.css'
 import { useSelector, useDispatch } from 'react-redux'
 import { logout } from '@store/auth-slice'
@@ -11,9 +10,9 @@ import { useLanguage } from '../../hooks/useLanguage'
 import Qrcode from '@components/qrCode/Qrcode'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import CartIconWithCount from './CartIcon'
-import TopSheet from '@components/topSheet/TopSheet'
 import Settings from './Settings'
 import { ICartRootState } from '@lib/types'
+import { useRouter } from 'next/router'
 
 type PathnameObjectType = { [key: string]: string }
 
@@ -452,7 +451,7 @@ const BottomHeader = () => {
           >
             {t.clicktheShopbuttontobuyitemsforthistrip}
           </Text>
-          <BecknButton children="Proceed" />
+          <BecknButton children={t.proceed} />
         </Box>
       </BottomModal>
     </header>

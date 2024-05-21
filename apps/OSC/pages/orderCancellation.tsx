@@ -28,14 +28,14 @@ const orderCancellation = () => {
         iconSrc: '/images/cancleHomeImg.svg',
         content: t.orderPlaced,
         contentMessage: t.orderSuccesfully,
-        successOrderMessage: 'ORDER CANCELLED',
-        gratefulMessage: 'Your Order has been cancelled',
-        orderIdMessage: orderId ? `Order number is: ${orderId}...` : '',
-        trackOrderMessage: `If you have already paid, you will be refunded soon.`,
+        successOrderMessage: t.ordercancelled,
+        gratefulMessage: t.orderHasBeenCancelled,
+        orderIdMessage: orderId ? `${t.orderNumber}: ${orderId}...` : '',
+        trackOrderMessage: t.refundedSoon,
 
         buttons: [
           {
-            text: 'View Details',
+            text: t.viewDetails,
             handleClick: () => {
               router.push('/orderDetails')
             },
@@ -44,7 +44,7 @@ const orderCancellation = () => {
             colorScheme: 'primary'
           },
           {
-            text: 'Go Back Home',
+            text: t.goBackHome,
             handleClick: () => {
               router.push('/')
               dispatch(checkoutActions.clearState())

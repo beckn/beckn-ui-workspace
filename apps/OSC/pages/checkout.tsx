@@ -1,29 +1,29 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Box, Flex, Text, Stack, Checkbox, useToast, useTheme } from '@chakra-ui/react'
+import { Box, useToast, useTheme } from '@chakra-ui/react'
 import { DOMAIN } from '@lib/config'
 import { useLanguage } from '../hooks/useLanguage'
 
-import { CartItemForRequest, DataPerBpp, ICartRootState, TransactionIdRootState } from '@lib/types/cart'
+import { ICartRootState } from '@lib/types/cart'
 import {
   getInitPayload,
   areShippingAndBillingDetailsSame,
-  getPayloadForInitRequest,
   getSubTotalAndDeliveryCharges
 } from '@components/checkout/checkout.utils'
 import useRequest from '../hooks/useRequest'
 import { CustomToast } from '@components/signIn/SignIn'
 import { useInitMutation } from '@services/init'
-import { responseDataActions } from '../store/responseData-slice'
 
 import { Checkout } from '@beckn-ui/becknified-components'
 
-import { Router, useRouter } from 'next/router'
+import { useRouter } from 'next/router'
 import { ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
 import { CheckoutRootState, checkoutActions } from '@store/checkout-slice'
 import { cartActions } from '@store/cart-slice'
 import { isEmpty } from '@utils/common-utils'
 import { LoaderWithMessage } from '@beckn-ui/molecules'
+import { title } from 'process'
+import { fieldConfig } from '@utils/checkout-utils'
 
 export type ShippingFormData = {
   name: string
@@ -184,8 +184,8 @@ const CheckoutPage = () => {
       toast({
         render: () => (
           <CustomToast
-            title="Error!"
-            message="Unable to proceed with init request"
+            title={t.error}
+            message={t.enabledrequest}
           />
         ),
         position: 'top',
@@ -219,7 +219,7 @@ const CheckoutPage = () => {
       <Checkout
         schema={{
           items: {
-            title: 'Items',
+            title: t.items,
             data: cartItems.map(singleItem => ({
               title: singleItem.name,
               description: singleItem.short_desc,
@@ -231,25 +231,26 @@ const CheckoutPage = () => {
             }))
           },
           shipping: {
+            shippingFormFieldConfigue: fieldConfig,
             showDetails: isInitResultPresent(),
             color: bgColorOfSecondary,
             shippingDetails: {
               name: submittedDetails.name,
               location: submittedDetails.address,
               number: submittedDetails.mobileNumber,
-              title: 'Shipping'
+              title: t.shipping
             },
             shippingForm: {
               onSubmit: formSubmitHandler,
-              submitButton: { text: 'Save Shipping Details' },
+              submitButton: { text: t.saveShippingDetails },
               values: formData,
               onChange: data => setSubmittedDetails(data)
             }
           },
           billing: {
-            sectionSubtitle: 'Add Billing Details',
-            sectionTitle: 'Billing',
-            formTitle: 'Add Billing Details',
+            sectionSubtitle: t.addBillingDetails,
+            sectionTitle: t.billing,
+            formTitle: t.addBillingDetails,
             isBilling: true,
             color: bgColorOfSecondary,
             isChecked: isBillingSameRedux,
@@ -262,21 +263,21 @@ const CheckoutPage = () => {
               name: billingFormData.name,
               location: billingFormData.address,
               number: billingFormData.mobileNumber,
-              title: 'Billing'
+              title: t.billing
             },
             shippingForm: {
               onSubmit: formSubmitHandler,
-              submitButton: { text: 'Save Billing Details' },
+              submitButton: { text: t.saveBillingDetails },
               values: formData,
               onChange: data => setBillingFormData(data)
             }
           },
           payment: {
-            title: 'Payment',
+            title: t.payment,
             paymentDetails: {
               hasBoxShadow: false,
               paymentBreakDown: createPaymentBreakdownMap(),
-              totalText: 'Total',
+              totalText: t.total,
               totalValueWithCurrency: {
                 value: getSubTotalAndDeliveryCharges(initResponse).subTotal.toString(),
                 currency: getSubTotalAndDeliveryCharges(initResponse).currencySymbol
@@ -284,10 +285,10 @@ const CheckoutPage = () => {
             }
           },
           loader: {
-            text: 'Initializing your request'
+            text: t.initializingInit
           },
           pageCTA: {
-            text: 'Proceed to Checkout',
+            text: t.proceedTOCheckout,
             handleClick: () => {
               dispatch(cartActions.clearCart())
               router.push('/paymentMode')

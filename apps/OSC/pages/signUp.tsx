@@ -5,8 +5,7 @@ import { SignUpPropsModel } from '@components/signIn/SignIn.types'
 import { FormErrors, signUpValidateForm } from '@utils/form-utils'
 import { BecknAuth } from '@beckn-ui/becknified-components'
 import Router from 'next/router'
-import Cookies from 'js-cookie'
-import { Box, useBreakpoint, useToast, Text } from '@chakra-ui/react'
+import { Box, useBreakpoint, useToast } from '@chakra-ui/react'
 import { useRegisterMutation } from '@services/Users'
 import { CustomToast } from '@components/signIn/SignIn'
 import Logo from '@public/images/localleIconSignUp.svg'
@@ -29,8 +28,8 @@ const SignUp = () => {
       toast({
         render: () => (
           <CustomToast
-            title="Error!"
-            message="Email or Username are already taken"
+            title={t.error}
+            message={t.emailOrAddreessAlrteadyTaken}
           />
         ),
         position: 'top',
@@ -83,8 +82,8 @@ const SignUp = () => {
         toast({
           render: () => (
             <CustomToast
-              title="Error!"
-              message="Unable to register"
+              title={t.error}
+              message={t.unableToRegister}
             />
           ),
           position: 'top',

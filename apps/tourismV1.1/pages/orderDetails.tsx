@@ -626,6 +626,7 @@ const OrderDetails = () => {
   }
 
   const { created_at } = data.statusData[0].message.order
+  console.log(created_at)
   const { order } = data.statusData[0].message
   const {
     billing,
