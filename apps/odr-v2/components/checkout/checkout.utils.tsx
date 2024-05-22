@@ -166,13 +166,13 @@ const geocodeFromPincode = async (pincode: any) => {
 }
 
 export const getInitPayload = async (
-  deliveryAddress: any,
-  billingAddress: any,
+  formData: any,
   cartItems: any,
   transaction_id: string,
   domain: string = 'retail:1.1.0',
   fulfillments: { id: string; type: string } = { id: '3', type: 'Standard-shipping' }
 ) => {
+  const { deliveryAddress, billingAddress } = formData
   const cityData = await geocodeFromPincode(deliveryAddress.pinCode)
 
   const bppGroups = cartItems.reduce((acc, item) => {
@@ -225,7 +225,7 @@ export const getInitPayload = async (
           stops: [
             {
               location: {
-                gps: `${cityData.lat},${cityData.lng}`,
+                gps: `${cityData?.lat},${cityData?.lng}`,
                 address: deliveryAddress.address,
                 city: {
                   name: cityData?.city
@@ -247,6 +247,21 @@ export const getInitPayload = async (
         }
       ]
 
+      const billing = billingAddress
+        ? {
+            name: billingAddress.name || '',
+            phone: billingAddress.mobileNumber || '',
+            address: billingAddress.address || '',
+            email: billingAddress.email || '',
+            city: {
+              name: cityData?.city
+            },
+            state: {
+              name: cityData?.state
+            }
+          }
+        : undefined
+
       return {
         provider: {
           id: providerId
@@ -261,18 +276,7 @@ export const getInitPayload = async (
             phone: deliveryAddress.mobileNumber
           }
         },
-        billing: {
-          name: billingAddress.name,
-          phone: billingAddress.mobileNumber,
-          address: billingAddress.address,
-          email: billingAddress.email,
-          city: {
-            name: cityData?.city
-          },
-          state: {
-            name: cityData?.state
-          }
-        }
+        billing
       }
     })
   }

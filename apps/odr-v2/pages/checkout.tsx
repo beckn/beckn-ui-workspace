@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Box, useToast, useTheme, useBreakpoint } from '@chakra-ui/react'
 import { DOMAIN } from '@lib/config'
@@ -36,26 +36,30 @@ export const currencyMap = {
   USD: '$'
 }
 
+const DEFAULT_COMPLAINT_FORM_DATA = {
+  name: 'santosh kumar',
+  mobileNumber: '6251423251',
+  email: 'santosh.k@gmail.com',
+  address: '151-e, janpath road, new delhi',
+  pinCode: '110001'
+}
+
+const DEFAULT_BILLING_FORM_DATA = {
+  name: 'jay d',
+  mobileNumber: '9871432309',
+  email: 'jay.d@gmail.com',
+  address: '23, east end , sector 10, pritampura, delhi',
+  pinCode: '110034'
+}
+
 const CheckoutPage = () => {
   const theme = useTheme()
   const bgColorOfSecondary = theme.colors.secondary['100']
   const bgColorOfPrimary = theme.colors.primary['100']
   const toast = useToast()
 
-  const [complainantFormData, setcomplainantFormData] = useState<ShippingFormInitialValuesType>({
-    name: 'santosh kumar',
-    mobileNumber: '6251423251',
-    email: 'santosh.k@gmail.com',
-    address: '151-e, janpath road, new delhi',
-    pinCode: '110001'
-  })
-  const [billingFormData, setBillingFormData] = useState<ShippingFormInitialValuesType>({
-    name: 'jay d',
-    mobileNumber: '9871432309',
-    email: 'jay.d@gmail.com',
-    address: '23, east end , sector 10, pritampura, delhi',
-    pinCode: '110034'
-  })
+  const complainantFormData = useRef<ShippingFormInitialValuesType>()
+  const billingFormData = useRef<ShippingFormInitialValuesType>()
 
   const [disputeFormSubmitted, setDisputeFormSubmitted] = useState<boolean>(false)
   const [consentFormSubmitted, setConsentFormSubmitted] = useState<boolean>(false)
@@ -81,46 +85,31 @@ const CheckoutPage = () => {
     fetchQuotes(getSelectPayload(items, transactionId, DOMAIN))
   }, [totalQuantity])
 
-  useEffect(() => {
-    if (localStorage) {
-      if (localStorage.getItem('userPhone')) {
-        const copiedFormData = structuredClone(complainantFormData)
-        const copiedBillingFormData = structuredClone(billingFormData)
+  // useEffect(() => {
+  //   if (localStorage) {
+  //     if (localStorage.getItem('userPhone')) {
+  //       const copiedFormData = structuredClone(complainantFormData)
+  //       const copiedBillingFormData = structuredClone(billingFormData)
 
-        copiedFormData.mobileNumber = localStorage.getItem('userPhone') as string
-        copiedBillingFormData.mobileNumber = localStorage.getItem('userPhone') as string
+  //       copiedFormData.mobileNumber = localStorage.getItem('userPhone') as string
+  //       copiedBillingFormData.mobileNumber = localStorage.getItem('userPhone') as string
 
-        setcomplainantFormData(copiedFormData)
-        setBillingFormData(copiedBillingFormData)
-      }
-    }
-  }, [])
+  //       setcomplainantFormData(copiedFormData)
+  //       setBillingFormData(copiedBillingFormData)
+  //     }
+  //   }
+  // }, [])
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      if (localStorage.getItem('shippingAdress')) {
-        setcomplainantFormData(JSON.parse(localStorage.getItem('shippingAdress') as string))
+      if (localStorage.getItem('shippingAddress')) {
+        complainantFormData.current = JSON.parse(localStorage.getItem('shippingAddress') as string)
       }
       if (localStorage.getItem('billingAddress')) {
-        setBillingFormData(JSON.parse(localStorage.getItem('billingAddress') as string))
+        billingFormData.current = JSON.parse(localStorage.getItem('billingAddress') as string)
       }
     }
   }, [])
-
-  useEffect(() => {
-    const shippingAddressComplete = Object.values(complainantFormData).every(value => value.length > 0)
-    if (shippingAddressComplete && typeof window !== 'undefined') {
-      localStorage.setItem('shippingAdress', JSON.stringify(complainantFormData))
-    }
-  }, [complainantFormData])
-
-  useEffect(() => {
-    const isBillingAddressComplete = Object.values(billingFormData).every(value => value.length > 0)
-
-    if (isBillingAddressComplete && typeof window !== 'undefined') {
-      localStorage.setItem('billingAddress', JSON.stringify(billingFormData))
-    }
-  }, [billingFormData])
 
   const formSubmitHandler = (data: any) => {
     if (data) {
@@ -130,7 +119,8 @@ const CheckoutPage = () => {
         id = selectResponse[0].message.order?.fulfillments[0].id
         type = selectResponse[0].message.order?.fulfillments[0].type
       }
-      getInitPayload(complainantFormData, billingFormData, cartItems, transactionId, DOMAIN, { id, type }).then(res => {
+
+      getInitPayload(data, cartItems, transactionId, DOMAIN, { id, type }).then(res => {
         return initialize(res)
       })
       // TODO :_ To check this again
@@ -176,23 +166,38 @@ const CheckoutPage = () => {
     }
   }, [isError])
 
+  const handleComplainantFormSubmit = (data: any) => {
+    if (data) {
+      complainantFormData.current = data
+      localStorage.setItem('shippingAddress', JSON.stringify(data))
+      formSubmitHandler({ deliveryAddress: data })
+    }
+  }
+
+  const handleRespondentFormSubmit = (data: any) => {
+    if (data) {
+      billingFormData.current = data
+      localStorage.setItem('billingAddress', JSON.stringify(data))
+      formSubmitHandler({ deliveryAddress: complainantFormData.current, billingAddress: data })
+    }
+  }
+
   const complainantDetails = {
     sectionSubtitle: 'Add Complainant Details',
     sectionTitle: 'Complainant & Billing Details',
     formTitle: 'Add Complainant Details',
-    showDetails: isInitResultPresent() && !isEmpty(complainantFormData),
+    showDetails: isInitResultPresent() && !isEmpty(complainantFormData.current),
     color: bgColorOfPrimary,
     shippingDetails: {
-      name: complainantFormData.name,
-      location: complainantFormData.address,
-      number: complainantFormData.mobileNumber,
+      name: complainantFormData.current?.name || '',
+      location: complainantFormData.current?.address || '',
+      number: complainantFormData.current?.mobileNumber || '',
       title: 'Complainant Details'
     },
     shippingForm: {
-      onSubmit: formSubmitHandler,
+      onSubmit: handleComplainantFormSubmit,
       submitButton: { text: 'Save Complainant Details' },
-      values: complainantFormData,
-      onChange: (data: any) => setcomplainantFormData(data)
+      values: complainantFormData.current || DEFAULT_COMPLAINT_FORM_DATA
     }
   }
 
@@ -203,18 +208,18 @@ const CheckoutPage = () => {
     sameAsTitle: 'Same as Complainant Details',
     color: bgColorOfPrimary,
     isChecked: false,
-    showDetails: isInitResultPresent() && !isEmpty(billingFormData),
+    showDetails: isInitResultPresent() && !isEmpty(billingFormData.current),
+    isDisabled: isEmpty(complainantFormData.current),
     shippingDetails: {
-      name: billingFormData.name,
-      location: billingFormData.address,
-      number: billingFormData.mobileNumber,
+      name: billingFormData.current?.name || '',
+      location: billingFormData.current?.address || '',
+      number: billingFormData.current?.mobileNumber || '',
       title: 'Respondent Details'
     },
     shippingForm: {
-      onSubmit: formSubmitHandler,
+      onSubmit: handleRespondentFormSubmit,
       submitButton: { text: 'Save Respondent Details' },
-      values: billingFormData,
-      onChange: (data: any) => setBillingFormData(data)
+      values: billingFormData.current || DEFAULT_BILLING_FORM_DATA
     }
   }
 
@@ -234,7 +239,11 @@ const CheckoutPage = () => {
     )
 
   const hasBtnDisabledState = () => {
-    return !(disputeFormSubmitted && consentFormSubmitted)
+    return (
+      isEmpty(complainantFormData.current) ||
+      isEmpty(billingFormData.current) ||
+      !(disputeFormSubmitted && consentFormSubmitted)
+    )
   }
 
   const isSectionDisabled = (response: any, initResponse: any, prevFormSubmited: boolean) => {
@@ -259,6 +268,7 @@ const CheckoutPage = () => {
         <AddSection
           htmlString={selectResponse?.[0]?.message.order.items?.[0]?.xinput.html}
           disabled={isSectionDisabled(selectResponse, null, true)}
+          modalTitle="Add Dispute Details"
           form_id="odrDisputeDetailsForm"
           sectionSubTitle="Dispute Details"
           notifySubmit={setDisputeFormSubmitted}
@@ -268,6 +278,7 @@ const CheckoutPage = () => {
         <AddSection
           htmlString={initResponse?.[0]?.message.order.items?.[0]?.xinput.html}
           disabled={isSectionDisabled(selectResponse, initResponse, disputeFormSubmitted)}
+          modalTitle="Consent Form"
           form_id="odrConsentForm"
           sectionSubTitle="Consent"
           preSubmissionTitle="Consent Form"
