@@ -195,7 +195,7 @@ const UpdateShippingDetails = () => {
         onSubmit={() => handleSubmit(shippingDetails, confirmData)}
         values={shippingDetails}
         onChange={handleFormChange}
-        submitButton={{ text: 'Submit' }}
+        submitButton={{ text: `${t.submit}` }}
       />
     </Box>
   )

@@ -376,7 +376,7 @@ const CheckoutPage = () => {
             paymentDetails: {
               hasBoxShadow: false,
               paymentBreakDown: createPaymentBreakdownMap(),
-              totalText: 'Total',
+              totalText: `${t.total}`,
               totalValueWithCurrency: {
                 value: getSubTotalAndDeliveryCharges(initResponse).subTotal.toString(),
                 currency: getSubTotalAndDeliveryCharges(initResponse).currencySymbol
