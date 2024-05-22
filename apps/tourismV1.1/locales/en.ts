@@ -424,6 +424,7 @@ const en: { [key: string]: string } = {
   initLoderText: 'Please wait while we set things up for you',
   initLoderTextFail: 'Unable to proceed with init request',
   invalidEmail: 'Invalid email format',
-  requiredEmail: 'Email ID is required'
+  requiredEmail: 'Email ID is required',
+  change: 'Change'
 }
 export default en
