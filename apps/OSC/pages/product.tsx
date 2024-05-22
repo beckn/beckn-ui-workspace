@@ -14,6 +14,7 @@ import { useRouter } from 'next/router'
 import { DiscoveryRootState } from '@store/discovery-slice'
 import { Box, Flex, useTheme } from '@chakra-ui/react'
 import { Button, CustomThemeType, Input, Typography } from '@beckn-ui/molecules'
+import { useLanguage } from '@hooks/useLanguage'
 
 const Product = () => {
   const theme = useTheme<CustomThemeType>()
@@ -22,6 +23,7 @@ const Product = () => {
   const { isMobile, isTablet, isDesktop } = useResponsive()
   const dispatch = useDispatch()
   const [counter, setCounter] = useState(1)
+  const { t } = useLanguage()
   const [totalPrice, setTotalPrice] = useState(selectedProduct.item.price.value)
 
   const increment = () => {
@@ -69,7 +71,7 @@ const Product = () => {
               handleDecrement: decrement,
               counter: counter,
               cta: {
-                text: 'Add To Cart',
+                text: t.addToCart,
                 color: '#fff',
                 handleClick: () => {
                   dispatch(
@@ -78,7 +80,7 @@ const Product = () => {
                       quantity: counter
                     })
                   )
-                  toast.success('Product added to cart')
+                  toast.success(t.productAddedToCart)
                 }
               }
             }

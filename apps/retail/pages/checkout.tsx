@@ -23,6 +23,7 @@ import { ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
 import { CheckoutRootState, checkoutActions } from '@store/checkout-slice'
 import { cartActions } from '@store/cart-slice'
 import { isEmpty } from '@utils/common-utils'
+import { FormField } from '@beckn-ui/molecules'
 
 export type ShippingFormData = {
   name: string
@@ -110,6 +111,58 @@ const CheckoutPage = () => {
   const selectResponse = useSelector((state: CheckoutRootState) => state.checkout.selectResponse)
   const isBillingSameRedux = useSelector((state: CheckoutRootState) => state.checkout.isBillingSame)
   const { transactionId, productList } = useSelector((state: DiscoveryRootState) => state.discovery)
+
+  //////////  For field Data ///////////
+  const formFieldConfig: FormField[] = [
+    {
+      name: 'name',
+      label: t.formName,
+      type: 'text',
+      validate: (value: string) => {
+        if (!value.trim()) return t.errorName
+        return undefined
+      }
+    },
+    {
+      name: 'mobileNumber',
+      label: t.formNumber,
+      type: 'number',
+      validate: (value: string) => {
+        if (!value.trim()) return t.errorNumber
+        if (!/^\d{10}$/.test(value)) return t.errorNumber2
+        return undefined
+      }
+    },
+    {
+      name: 'email',
+      label: t.formEmail,
+      type: 'email',
+      validate: (value: string) => {
+        if (!value.trim()) return t.requiredEmail
+        if (!/\S+@\S+\.\S+/.test(value)) return t.invalidEmail
+        return undefined
+      }
+    },
+    {
+      name: 'address',
+      label: t.formAddress,
+      type: 'text',
+      validate: (value: string) => {
+        if (!value.trim()) return t.errorAddress
+        return undefined
+      }
+    },
+    {
+      name: 'pinCode',
+      label: t.formZipCode,
+      type: 'text',
+      validate: (value: string) => {
+        if (!value.trim()) return t.errorZipcode
+        if (!/^\d{5,6}$/.test(value)) return t.errorZipcode2
+        return undefined
+      }
+    }
+  ]
 
   useEffect(() => {
     if (localStorage) {
@@ -256,6 +309,7 @@ const CheckoutPage = () => {
               title: 'Shipping'
             },
             shippingForm: {
+              formFieldConfig: formFieldConfig,
               onSubmit: formSubmitHandler,
               submitButton: { text: 'Save Shipping Details' },
               values: formData,
@@ -263,6 +317,7 @@ const CheckoutPage = () => {
             }
           },
           billing: {
+            triggerFormTitle: `${t.change}`,
             sectionSubtitle: 'Add Billing Details',
             sectionTitle: 'Billing',
             formTitle: 'Add Billing Details',
@@ -281,6 +336,7 @@ const CheckoutPage = () => {
               title: 'Billing'
             },
             shippingForm: {
+              formFieldConfig: formFieldConfig,
               onSubmit: formSubmitHandler,
               submitButton: { text: 'Save Billing Details' },
               values: formData,

@@ -74,7 +74,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       if (!parentURLs.includes(event.origin)) return
       if (event.data.type && event.data.type === 'polkaAccounts') {
         const allAccounts = event.data.data
-        console.log('From EC', allAccounts)
+        console.log('Dank From EC', allAccounts)
         localStorage.setItem('polkaAddresses', JSON.stringify(allAccounts))
         // if(!localStorage.getItem('polkaAddresses')) window.location.reload()
       }

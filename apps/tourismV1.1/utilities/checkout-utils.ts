@@ -1,7 +1,6 @@
 import { ParsedItemModel } from '../types/search.types'
 import { InitResponseModel } from '../types/init.types'
 import { StatusResponseModel } from '../types/status.types'
-
 export const getPayloadForSelectRequest = (selectedProduct: ParsedItemModel) => {
   const {
     bppId,

@@ -11,7 +11,6 @@ import {
   Radio,
   RadioGroup,
   Stack,
-  StackDivider,
   Text,
   Textarea,
   useDisclosure,
@@ -21,7 +20,7 @@ import { Accordion, BottomModal, Typography } from '@beckn-ui/molecules'
 import { v4 as uuidv4 } from 'uuid'
 import { useDispatch, useSelector } from 'react-redux'
 import ViewMoreOrderModal from '@components/orderDetailComponents/ViewMoreOrder'
-import { discoveryActions, DiscoveryRootState } from '@store/discovery-slice'
+import { DiscoveryRootState } from '@store/discovery-slice'
 import { statusActions } from '@store/status-slice'
 import { DetailCard, OrderStatusProgress, OrderStatusProgressProps } from '@beckn-ui/becknified-components'
 import { StatusResponseModel, SupportModel } from '../types/status.types'
@@ -123,10 +122,10 @@ const OrderDetails = () => {
   }, [data.statusData])
 
   const orderCancelReason = [
-    { id: 1, reason: 'Merchant is taking too long' },
-    { id: 2, reason: 'Ordered by mistake' },
-    { id: 3, reason: 'I’ve changed my mind' },
-    { id: 4, reason: 'Other' }
+    { id: 1, reason: t.merchantTakingTo },
+    { id: 2, reason: t.orderMistake },
+    { id: 3, reason: t.iHaveChange },
+    { id: 4, reason: t.other }
   ]
 
   useEffect(() => {
@@ -194,7 +193,7 @@ const OrderDetails = () => {
       onClick: () => {
         if (trackingUrl) window.open(trackingUrl, '_blank')
         else
-          toast.error('Unable to get the track url', {
+          toast.error(t.unabletoTrack, {
             position: 'top-center'
           })
       }
@@ -215,7 +214,7 @@ const OrderDetails = () => {
           fontWeight="400"
           fontSize="15px"
         >
-          Cancel Order
+          {t.cancelOrder}
         </Text>
       ),
       onClick: handleCancelMenuModalOpen
@@ -226,12 +225,12 @@ const OrderDetails = () => {
   const callMenuItem = (supportInfo: SupportModel) => [
     {
       image: '/images/callCustomer.svg',
-      text: 'Call Customer Service',
+      text: t.callCustomer,
       onClick: () => handleCallCustomer(supportInfo.phone)
     },
     {
       image: '/images/emailCustomer.svg',
-      text: 'Email Customer Service',
+      text: t.emailCustomer,
       onClick: () => handleEmailCustomer(supportInfo.email)
     }
   ]
@@ -332,8 +331,6 @@ const OrderDetails = () => {
   // Check if the order is delivered  come her
   const isDelivered = data.statusData?.[0]?.message?.order?.fulfillments?.[0]?.state?.descriptor?.code === DELIVERED
   const isCancelled = data.statusData?.[0]?.message?.order?.status === CANCELLED
-
-  console.log('Dank cancel', isCancelled)
 
   useEffect(() => {
     if (isDelivered) {
@@ -473,7 +470,6 @@ const OrderDetails = () => {
         ])
 
         if (!isEmpty(trackResponse.data) && !isEmpty(supportResponse.data)) {
-          console.log('Dank support', supportResponse.data)
           setData(prevState => ({
             ...prevState,
             trackUrl: trackResponse.data.data[0].message && trackResponse.data.data[0].message.tracking.url,
@@ -886,10 +882,10 @@ const OrderDetails = () => {
           {isDesktop && (
             <Box>
               <PaymentDetails
-                title="Payment"
+                title={t.payment}
                 hasBoxShadow={true}
                 paymentBreakDown={getPaymentBreakDown(data.statusData).breakUpMap}
-                totalText="Total"
+                totalText={t.total}
                 totalValueWithCurrency={getPaymentBreakDown(data.statusData).totalPricewithCurrent}
               />
             </Box>
@@ -905,7 +901,7 @@ const OrderDetails = () => {
               >
                 <PaymentDetails
                   paymentBreakDown={getPaymentBreakDown(data.statusData).breakUpMap}
-                  totalText="Total"
+                  totalText={t.total}
                   totalValueWithCurrency={getPaymentBreakDown(data.statusData).totalPricewithCurrent}
                 />
               </Box>
@@ -1023,13 +1019,13 @@ const OrderDetails = () => {
                   m="20px"
                   height="124px"
                   resize="none"
-                  placeholder="Please specify the reason"
+                  placeholder={t.specifyReason}
                   boxShadow="0px 4px 6px -1px rgba(0, 0, 0, 0.1), 0px 2px 4px -2px rgba(0, 0, 0, 0.1)"
                 />
                 <Box m="20px">
                   <BecknButton
                     disabled={uiState.isProceedDisabled}
-                    children="Proceed"
+                    children={t.proceed}
                     className="checkout_btn"
                     handleClick={() => {
                       dispatch(statusActions.addStatusResponse({ statusResponse: data.statusData }))

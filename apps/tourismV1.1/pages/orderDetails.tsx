@@ -116,10 +116,6 @@ const OrderDetails = () => {
       const newData = data.statusData
         .map((status: any) => {
           const { tags } = status?.message?.order
-          console.log(
-            'my nammeme',
-            status?.message?.order?.fulfillments[0]?.state?.updated_at || status?.context?.timestamp
-          )
 
           return {
             label: statusMap[tags[tags.length - 1].list[0].value],
@@ -136,10 +132,10 @@ const OrderDetails = () => {
   }, [data.statusData])
 
   const orderCancelReason = [
-    { id: 1, reason: 'Merchant is taking too long' },
-    { id: 2, reason: 'Ordered by mistake' },
-    { id: 3, reason: 'I’ve changed my mind' },
-    { id: 4, reason: 'Other' }
+    { id: 1, reason: `${t.cancelOrderReason1}` },
+    { id: 2, reason: `${t.cancelOrderReason2}` },
+    { id: 3, reason: `${t.cancelOrderReason3}` },
+    { id: 4, reason: `${t.cancelOrderReason4}` }
   ]
 
   useEffect(() => {
@@ -202,14 +198,14 @@ const OrderDetails = () => {
   const menuItems = (trackingUrl: string) => [
     {
       image: '/images/trackOrder.svg',
-      text: 'Track Order',
+      text: `${t.trackOrder}`,
       onClick: () => {
         window.open(trackingUrl, '_blank')
       }
     },
     {
       image: '/images/updateOrder.svg',
-      text: 'Update Order',
+      text: `${t.updateOrder}`,
       onClick: () => {
         Router.push('/updateShippingDetails')
       }
@@ -223,7 +219,7 @@ const OrderDetails = () => {
           fontWeight="400"
           fontSize="15px"
         >
-          Cancel Order
+          {t.cancelOrder}
         </Text>
       ),
       onClick: handleCancelMenuModalOpen
@@ -234,12 +230,12 @@ const OrderDetails = () => {
   const callMenuItem = (supportInfo: SupportModel) => [
     {
       image: '/images/callCustomer.svg',
-      text: 'Call Customer Service',
+      text: `${t.callCustomerService}`,
       onClick: () => handleCallCustomer(supportInfo.phone)
     },
     {
       image: '/images/emailCustomer.svg',
-      text: 'Email Customer Service',
+      text: `${t.emailCustomerServide}`,
       onClick: () => handleEmailCustomer(supportInfo.email)
     }
   ]
@@ -537,7 +533,7 @@ const OrderDetails = () => {
   }
 
   if (isError) {
-    return toast.error('Something went wrong', {
+    return toast.error(`${t.toastErrorOrderDetails}`, {
       position: 'top-center'
     })
   }
@@ -626,6 +622,7 @@ const OrderDetails = () => {
   }
 
   const { created_at } = data.statusData[0].message.order
+  console.log(created_at)
   const { order } = data.statusData[0].message
   const {
     billing,
@@ -788,7 +785,7 @@ const OrderDetails = () => {
                   <Text
                     as={Typography}
                     // TODO
-                    text={`Order Id: ${orderMetaData.orderIds[0].slice(0, 5)}...`}
+                    text={`${t.orderId}: ${orderMetaData.orderIds[0].slice(0, 5)}...`}
                     fontSize="17px"
                     fontWeight="600"
                   />
@@ -934,7 +931,7 @@ const OrderDetails = () => {
               >
                 <PaymentDetails
                   paymentBreakDown={getPaymentBreakDown(data.statusData).breakUpMap}
-                  totalText="Total"
+                  totalText={t.totalText}
                   totalValueWithCurrency={getPaymentBreakDown(data.statusData).totalPricewithCurrent}
                 />
               </Box>
@@ -1071,13 +1068,13 @@ const OrderDetails = () => {
                 m="20px"
                 height="124px"
                 resize="none"
-                placeholder="Please specify the reason"
+                placeholder={t.specifyReason}
                 boxShadow="0px 4px 6px -1px rgba(0, 0, 0, 0.1), 0px 2px 4px -2px rgba(0, 0, 0, 0.1)"
               />
               <Box m="20px">
                 <BecknButton
                   disabled={uiState.isProceedDisabled}
-                  children="Proceed"
+                  children={t.proceedToPay}
                   className="checkout_btn"
                   handleClick={() => {
                     dispatch(statusActions.addStatusResponse({ statusResponse: data.statusData }))

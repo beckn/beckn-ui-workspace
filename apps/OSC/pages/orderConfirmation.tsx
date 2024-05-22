@@ -80,14 +80,14 @@ const OrderConfirmation = () => {
       <ConfirmationPage
         schema={{
           iconSrc: orderConfirmmark,
-          successOrderMessage: 'ORDER SUCCESFULL',
-          gratefulMessage: 'Thank you for your order!',
-          orderIdMessage: orderId ? `Order number is: ${orderId}...` : '',
-          trackOrderMessage: `You can track your order in "My Order" section`,
+          successOrderMessage: t.orderSuccessfull,
+          gratefulMessage: t.thankYouForOrder,
+          orderIdMessage: orderId ? `${t.orderNumber}: ${orderId}...` : '',
+          trackOrderMessage: t.youCanTrack,
 
           buttons: [
             {
-              text: 'View Order Details',
+              text: t.viewOrderDetails,
               handleClick: () => {
                 const orderId = confirmResponse[0].message.orderId
                 const bppId = confirmResponse[0].context.bpp_id
@@ -108,7 +108,7 @@ const OrderConfirmation = () => {
               colorScheme: 'primary'
             },
             {
-              text: 'Go Back Home',
+              text: t.goBackHome,
               handleClick: () => {
                 router.push('/')
                 dispatch(checkoutActions.clearState())

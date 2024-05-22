@@ -1,15 +1,14 @@
 import { useRouter } from 'next/router'
 
 import React from 'react'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useLanguage } from '@hooks/useLanguage'
 import { Cart as BecknCart } from '@beckn-ui/becknified-components'
 import { useSelectMutation } from '@services/select'
 import { getSelectPayload } from '@components/cart/cart.utils'
 import { cartActions } from '@store/cart-slice'
-import { isEmpty } from '@utils/common-utils'
-import { CustomToast } from '@components/signIn/SignIn'
+
 import { Box, useToast } from '@chakra-ui/react'
 
 import { DOMAIN } from '@lib/config'
@@ -21,7 +20,6 @@ import LoaderWithMessage from '@components/loader/LoaderWithMessage'
 const Cart = () => {
   const [fetchQuotes, { isLoading, data, isError }] = useSelectMutation()
   const dispatch = useDispatch()
-  const toast = useToast()
 
   const router = useRouter()
   const { t } = useLanguage()
@@ -75,7 +73,6 @@ const Cart = () => {
             symbol: singleItem.price.currency,
             handleIncrement: id => {
               const selectedItem = productList.find(singleItem => singleItem.item.id === id)
-              console.log('DAnk cart', singleItem, productList)
               if (selectedItem) {
                 dispatch(cartActions.addItemToCart({ product: selectedItem, quantity: 1 }))
               }
@@ -84,7 +81,7 @@ const Cart = () => {
               dispatch(cartActions.removeItemFromCart(id))
             }
           })),
-          loader: { text: 'Getting quotes' },
+          loader: { text: 'Getting quotes' }, // optional loader
           orderSummary: {
             totalAmount: {
               price: totalAmount,
@@ -95,7 +92,7 @@ const Cart = () => {
               variant: 'subTitleSemibold'
             },
             pageCTA: {
-              text: 'Proceed to checkout',
+              text: t.proceedTOCheckout,
               handleClick: onOrderClick
             }
           },
