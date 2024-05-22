@@ -91,7 +91,7 @@ const headerValuesFrench: PathnameObjectType = {
 }
 
 const topHeaderBlackList: string[] = []
-const languageIconWhiteList = ['/', '/createProfile']
+const languageIconWhiteList: string[] = []
 const bottomHeaderBlackList = ['/orderConfirmation', '/', '/feedback']
 
 const menuIconWhiteList = ['/', '/search', '/profile']

@@ -345,6 +345,8 @@ const fa: { [key: string]: string } = {
   rateDeliveryExperience: "Évaluer l'expérience de livraison",
   addCommentsHere: 'Ajoutez vos commentaires ici',
   writeExperience: 'Décrivez votre expérience..',
-  completed: 'Complété'
+  completed: 'Complété',
+  searchProducts: 'Rechercher des produits',
+  addShippingDetails: "Ajouter les détails d'expédition"
 }
 export default fa

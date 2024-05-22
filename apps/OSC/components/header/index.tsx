@@ -100,7 +100,7 @@ const editIcon = ['/profile']
 const invoiceDownloadIcon = ['']
 const currentLocation = ['/']
 
-const languageIconWhiteList = ['/', '/createProfile']
+const languageIconWhiteList = ['/', '/createProfile', '/signin', '/signUp']
 
 const getHeaderTitleForPage = (name: string, logo: string, pathName: string, locale: string | undefined) => {
   const values = locale === 'en' ? headerValues : headerValuesFrench
