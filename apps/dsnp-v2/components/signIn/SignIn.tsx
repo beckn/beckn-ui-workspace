@@ -153,6 +153,7 @@ const SignIn = () => {
     if (typeof window !== 'undefined') {
       setProviderInfo(JSON.parse(localStorage.getItem('provider') as string))
       const accounts = JSON.parse(localStorage.getItem('polkaAddresses') as string)
+      console.log('Dank', accounts)
       if (accounts && accounts.length > 0) {
         setSelectedAddress(accounts[0].address)
         fetchHandles(accounts[0].address).then(handles => {

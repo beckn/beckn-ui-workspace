@@ -10,5 +10,8 @@ export const parentURLs = [
   'https://experience-guide-staging.becknprotocol.io',
   'https://experience-guide.becknprotocol.io',
   'https://experience.becknprotocol.io',
-  'http://localhost:3000'
+  'http://localhost:3000',
+  'https://experience-dev.becknprotocol.io',
+  'https://experience-staging.becknprotocol.io',
+  'https://experience.becknprotocol.io'
 ]
