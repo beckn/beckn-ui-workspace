@@ -96,8 +96,8 @@ const ProfilePage = () => {
       toast({
         render: () => (
           <CustomToast
-            title="Error!"
-            message="Please fix the errors in the form before submitting."
+            title={t.error}
+            message={t.fixError}
           />
         ),
         position: 'top',
@@ -129,7 +129,7 @@ const ProfilePage = () => {
 
     fetch(`${strapiUrl}/profiles`, requestOptions)
       .then(response => {
-        reactToastifyToast.success('Profile updated successfully!')
+        reactToastifyToast.success(t.profileUpdateSuccess)
         Router.push('/')
         return response.json()
       })

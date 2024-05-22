@@ -74,7 +74,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       if (!parentURLs.includes(event.origin)) return
       if (event.data.type && event.data.type === 'polkaAccounts') {
         const allAccounts = event.data.data
-        console.log('From EC', allAccounts)
+        console.log('Dank From EC', allAccounts)
         localStorage.setItem('polkaAddresses', JSON.stringify(allAccounts))
         // if(!localStorage.getItem('polkaAddresses')) window.location.reload()
       }
@@ -91,8 +91,8 @@ function MyApp({ Component, pageProps }: AppProps) {
     <BecknProvider
       theme={{
         color: {
-          primary: '#F6D046',
-          secondary: '#53A052',
+          primary: '#F37A20',
+          secondary: '#F37A20',
           textPrimary: '#1A202C',
           textSecondary: '#6B7280'
         }

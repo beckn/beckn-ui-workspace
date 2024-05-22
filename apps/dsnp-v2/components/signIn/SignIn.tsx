@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import Logo from '../../public/images/Logo.svg'
-import AlternateLogo from '../../public/images/KuzaLogo.svg'
+import Logo from '../../public/images/SNP-Login-logo.svg'
+import AlternateLogo from '../../public/images/SNP-Login-logo.svg'
 import { useLanguage } from '@hooks/useLanguage'
 import { SignInPropsModel } from './SignIn.types'
 import { FormErrors, signInValidateForm } from '@utils/form-utils'
@@ -153,6 +153,7 @@ const SignIn = () => {
     if (typeof window !== 'undefined') {
       setProviderInfo(JSON.parse(localStorage.getItem('provider') as string))
       const accounts = JSON.parse(localStorage.getItem('polkaAddresses') as string)
+      console.log('Dank', accounts)
       if (accounts && accounts.length > 0) {
         setSelectedAddress(accounts[0].address)
         fetchHandles(accounts[0].address).then(handles => {

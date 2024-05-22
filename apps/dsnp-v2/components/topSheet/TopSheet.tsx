@@ -120,7 +120,7 @@ const TopSheet: React.FC<TopSheetPropsModel> = props => {
         >
           <Box
             position={'absolute'}
-            top={'-12px'}
+            top={'-13px'}
             left={'67%'}
             color={bgColorOfSearchIcon}
           >

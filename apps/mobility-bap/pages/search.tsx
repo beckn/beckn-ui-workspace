@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { Box } from '@chakra-ui/react'
-import SearchBar from '../components/header/SearchBar'
-import ProductList from '../components/productList/ProductList'
+// import SearchBar from '../components/header/SearchBar'
+// import ProductList from '../components/productList/ProductList'
 import useRequest from '../hooks/useRequest'
 import { responseDataActions } from '../store/responseData-slice'
 import { RetailItem } from '../lib/types/products'
 import Loader from '../components/loader/Loader'
 import { useLanguage } from '../hooks/useLanguage'
+import ProductList from '@beckn-ui/becknified-components/src/components/product-list'
 
 //Mock data for testing search API. Will remove after the resolution of CORS issue
 
@@ -134,14 +135,14 @@ const Search = () => {
         width={'100%'}
         mt={'-20px'}
       >
-        <SearchBar
+        {/* <SearchBar
           searchString={searchString}
           handleChange={(text: string) => {
             localStorage.removeItem('searchItems')
             setSearchString(text)
             fetchDataForSearch(text)
           }}
-        />
+        /> */}
       </Box>
       <div>
         {loading ? (

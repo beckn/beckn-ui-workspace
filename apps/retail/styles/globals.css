@@ -114,3 +114,6 @@ select.chakra-select {
 .cencel_btn_filter {
   border: 1px solid #e93324 !important;
 }
+.-product_summary_container button.chakra-button {
+  color: #fff !important;
+}

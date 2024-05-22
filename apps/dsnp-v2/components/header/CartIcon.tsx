@@ -32,11 +32,11 @@ function CartIconWithCount({
           width="20px"
           height="20px"
           borderRadius="full"
-          bgColor="#F6D046"
+          bgColor="#F37A20"
           color="white"
           fontSize="xs"
         >
-          <Text>{itemCount}</Text>
+          <Text color={'#fff'}>{itemCount}</Text>
         </Box>
       )}
     </Flex>

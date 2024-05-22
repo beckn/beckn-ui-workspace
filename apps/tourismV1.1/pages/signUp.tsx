@@ -119,7 +119,7 @@ const SignUp = () => {
             {
               text: t.signIn,
               handleClick: () => {
-                Router.push('/')
+                Router.push('/signin')
               },
               variant: 'outline',
               colorScheme: 'primary',

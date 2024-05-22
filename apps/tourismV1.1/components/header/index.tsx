@@ -9,6 +9,7 @@ import { logout } from '@store/auth-slice'
 
 import { useLanguage } from '../../hooks/useLanguage'
 import Qrcode from '@components/qrCode/Qrcode'
+import Settings from './Settings'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import { ICartRootState } from '@lib/types'
 import BottomModalScan from '@components/BottomModal/BottomModalScan'
@@ -76,14 +77,21 @@ const headerValues: PathnameObjectType = {
 }
 
 const headerValuesFrench: PathnameObjectType = {
-  '/checkoutPage': 'Facturation et Livraison',
-  '/orderHistory': 'Historique des Commandes',
-  '/orderDetails': 'Détails de la Commande',
-  '/': 'Se Connecter',
-  '/mobileOtp': 'Se Connecter',
+  '/checkoutPage': 'Revoir la commande',
+  '/orderHistory': 'Mes commandes',
+  '/orderDetails': 'Détails de la commande',
+  '/invoiceDetails': 'Détails de la facture',
+  '/signin': 'Se connecter',
+  '/signUp': "S'inscrire",
   '/cart': 'Panier',
-  '/paymentMode': 'Sélectionner la Méthode de Paiement',
-  '/feedback': ''
+  '/paymentMode': 'Sélectionner le mode de paiement',
+  '/assemblyDetails': 'Ajouter des détails de montage',
+  '/updateShippingDetails': "Détails d'expédition",
+  '/orderCancellation': 'Annuler la commande',
+  '/feedback': "Retour d'information",
+  '/profile': 'Profil',
+  '/search': 'Forfaits de voyage',
+  '/checkout': 'Paiement'
 }
 
 const topHeaderBlackList: string[] = []
@@ -94,6 +102,8 @@ const menuIconWhiteList = ['/', '/search', '/profile']
 const orderIconList = ['/orderDetails']
 const orderDetailsIcon = ['/orderDetails']
 const currentLocation = ['/']
+
+const languageIconWhiteList = ['/', '/createProfile']
 
 const getHeaderTitleForPage = (name: string, logo: string, pathName: string, locale: string | undefined) => {
   const values = locale === 'en' ? headerValues : headerValuesFrench
@@ -138,6 +148,7 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
             />
           </Box>
           <Flex columnGap={['10px', '10px', '2rem', '2rem']}>
+            {languageIconWhiteList.includes(router.pathname) && <Settings />}
             {!homeIconBlackList.includes(router.pathname) && (
               <Image
                 cursor="pointer"

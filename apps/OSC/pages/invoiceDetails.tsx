@@ -91,30 +91,10 @@ const invoiceDetails = () => {
         </Box>
         <PaymentDetails
           paymentBreakDown={getPaymentBreakDown(statusData).breakUpMap}
-          totalText="Total"
+          totalText={t.total}
           totalValueWithCurrency={getPaymentBreakDown(statusData).totalPricewithCurrent}
         />
       </DetailCard>
-
-      {/* <Accordion accordionHeader={t.openInWallet}>
-        <HStack
-          justifyContent={'center'}
-          alignItems={'center'}
-          pb={'20px'}
-        >
-          <Qrcode value={'https://odr-dev.becknprotocol.io/'} />
-        </HStack>
-      </Accordion>
-
-      <Accordion accordionHeader={t.viewJSON}>
-        <HStack
-          justifyContent={'center'}
-          alignItems={'center'}
-          pb={'20px'}
-        >
-          <Qrcode value={'https://odr-dev.becknprotocol.io/'} />
-        </HStack>
-      </Accordion> */}
     </Box>
   )
 }

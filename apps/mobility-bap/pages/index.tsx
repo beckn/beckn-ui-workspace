@@ -13,16 +13,12 @@ type Coords = {
 }
 
 const Homepage = () => {
-  const MapWithNoSSR = dynamic(() => import('../components/Map'), {
+  const MapWithNoSSR: any = dynamic(() => import('../components/Map'), {
     ssr: false
   })
   const dispatch = useDispatch()
-  const pickupAddress = useSelector(
-    (state: IGeoLocationSearchPageRootState) => state.geoLocationSearchPageUI.pickupAddress
-  )
-  const dropoffAddress = useSelector(
-    (state: IGeoLocationSearchPageRootState) => state.geoLocationSearchPageUI.dropoffAddress
-  )
+  const pickup = useSelector((state: IGeoLocationSearchPageRootState) => state.geoLocationSearchPageUI.pickup)
+  const dropoff = useSelector((state: IGeoLocationSearchPageRootState) => state.geoLocationSearchPageUI.dropoff)
   const router = useRouter()
 
   const [coords, setCoords] = useState<Coords>({ lat: 0, long: 0 })
@@ -39,6 +35,7 @@ const Homepage = () => {
   useEffect(() => {
     if (navigator) {
       if ('geolocation' in navigator) {
+        if (pickup.address !== '') return
         navigator.geolocation.getCurrentPosition(
           async position => {
             const latitude = position.coords.latitude
@@ -57,7 +54,12 @@ const Homepage = () => {
                 if (data.results.length > 0) {
                   const formattedAddress = data.results[0].formatted_address
                   setCurrentAddress(formattedAddress)
-                  dispatch(setPickupAddress(formattedAddress))
+                  dispatch(
+                    setPickupAddress({
+                      address: formattedAddress,
+                      geoLatLong: coordinates
+                    })
+                  )
                 } else {
                   setFetchCurrentLocationError('No address found for the given coordinates.')
                 }
@@ -82,10 +84,13 @@ const Homepage = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-  console.log(coords)
+
   return (
     <div className="overflow-hidden max-h-[85vh]">
-      <MapWithNoSSR coords={coords} />
+      <MapWithNoSSR
+        source={pickup.geoLatLong}
+        destination={dropoff.geoLatLong}
+      />
       <Card
         zIndex={'999'}
         position="absolute"
@@ -127,7 +132,7 @@ const Homepage = () => {
                 :
               </Box>
             </Flex>
-            {!currentAddress && !pickupAddress ? (
+            {!currentAddress && !pickup.address ? (
               <Box
                 fontWeight="500"
                 opacity={0.6}
@@ -141,7 +146,7 @@ const Homepage = () => {
                 overflow="hidden"
                 textOverflow={'ellipsis'}
               >
-                {pickupAddress === '' ? currentAddress : pickupAddress}
+                {pickup.address === '' ? currentAddress : pickup.address}
               </Box>
             )}
           </Flex>
@@ -171,14 +176,14 @@ const Homepage = () => {
                 :
               </Box>
             </Flex>
-            {dropoffAddress ? (
+            {dropoff.address ? (
               <Box
                 fontWeight="600"
                 whiteSpace={'nowrap'}
                 overflow="hidden"
                 textOverflow={'ellipsis'}
               >
-                {dropoffAddress}
+                {dropoff.address}
               </Box>
             ) : (
               <Box
@@ -192,7 +197,7 @@ const Homepage = () => {
           <BecknButton
             text="Search Rides"
             handleClick={() => router.push('/searchRide')}
-            disabled={dropoffAddress === '' || pickupAddress === ''}
+            disabled={dropoff.address === '' || pickup.address === ''}
           />
         </CardBody>
       </Card>

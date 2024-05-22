@@ -8,9 +8,11 @@ import backArrow from '/public/images/Back.svg'
 import locationMarker from '../../public/images/SearchLocationMarker.svg'
 import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete'
 import { IoClose } from 'react-icons/io5'
+import { useLanguage } from '@hooks/useLanguage'
 
 const GeoLocationInputList: React.FC = () => {
   const dispatch = useDispatch()
+  const { t } = useLanguage()
   const [address, setAddress] = useState<string>('')
   const handleSelect = async (data: string) => {
     const addressData = await geocodeByAddress(data)
@@ -75,7 +77,7 @@ const GeoLocationInputList: React.FC = () => {
                     _focusVisible={{ boxShadow: 'none' }}
                     borderRadius={'12px'}
                     name="search_input"
-                    placeholder="Search for Location"
+                    placeholder={t.searchforlocation}
                     className={`${Styles.search_box_input}`}
                   />
                   <IoClose

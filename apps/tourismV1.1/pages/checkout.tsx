@@ -9,7 +9,8 @@ import {
   getInitPayload,
   areShippingAndBillingDetailsSame,
   getPayloadForInitRequest,
-  getSubTotalAndDeliveryCharges
+  getSubTotalAndDeliveryCharges,
+  formFieldConfig
 } from '@components/checkout/checkout.utils'
 import useRequest from '../hooks/useRequest'
 import { CustomToast } from '@components/signIn/SignIn'
@@ -26,6 +27,7 @@ import { isEmpty } from '@utils/common-utils'
 import { getSelectPayload } from '@components/cart/cart.utils'
 import { useSelectMutation } from '@services/select'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
+import { FormField } from '@beckn-ui/molecules'
 
 export type ShippingFormData = {
   name: string
@@ -116,6 +118,58 @@ const CheckoutPage = () => {
   const selectResponse = useSelector((state: CheckoutRootState) => state.checkout.selectResponse)
   console.log(cartItems)
   const { items, totalQuantity } = useSelector((state: ICartRootState) => state.cart)
+
+  //////////  For field Data ///////////
+  const formFieldConfig: FormField[] = [
+    {
+      name: 'name',
+      label: t.formName,
+      type: 'text',
+      validate: (value: string) => {
+        if (!value.trim()) return t.errorName
+        return undefined
+      }
+    },
+    {
+      name: 'mobileNumber',
+      label: t.formNumber,
+      type: 'number',
+      validate: (value: string) => {
+        if (!value.trim()) return t.errorNumber
+        if (!/^\d{10}$/.test(value)) return t.errorNumber2
+        return undefined
+      }
+    },
+    {
+      name: 'email',
+      label: t.formEmail,
+      type: 'email',
+      validate: (value: string) => {
+        if (!value.trim()) return t.requiredEmail
+        if (!/\S+@\S+\.\S+/.test(value)) return t.invalidEmail
+        return undefined
+      }
+    },
+    {
+      name: 'address',
+      label: t.formAddress,
+      type: 'text',
+      validate: (value: string) => {
+        if (!value.trim()) return t.errorAddress
+        return undefined
+      }
+    },
+    {
+      name: 'pinCode',
+      label: t.formZipCode,
+      type: 'text',
+      validate: (value: string) => {
+        if (!value.trim()) return t.errorZipcode
+        if (!/^\d{5,6}$/.test(value)) return t.errorZipcode2
+        return undefined
+      }
+    }
+  ]
 
   useEffect(() => {
     fetchQuotes(getSelectPayload(items, transactionId, DOMAIN))
@@ -224,7 +278,7 @@ const CheckoutPage = () => {
         render: () => (
           <CustomToast
             title="Error!"
-            message="Unable to proceed with init request"
+            message={t.initLoderTextFail}
           />
         ),
         position: 'top',
@@ -259,7 +313,7 @@ const CheckoutPage = () => {
       <Checkout
         schema={{
           items: {
-            title: 'Items',
+            title: `${t.item}`,
             data: cartItems.map(singleItem => ({
               title: singleItem.name,
               description: singleItem.short_desc,
@@ -272,27 +326,29 @@ const CheckoutPage = () => {
           },
           shipping: {
             showDetails: isInitResultPresent(),
-            sectionSubtitle: 'Add Traveller Details',
+            sectionSubtitle: `${t.addTravellerDetails}`,
             color: bgColorOfSecondary,
-            formTitle: 'Add Traveller Details',
-            sectionTitle: 'Traveller Details',
+            formTitle: `${t.addTravellerDetails}`,
+            sectionTitle: `${t.travellerDetails}`,
             shippingDetails: {
               name: submittedDetails.name,
               location: submittedDetails.address,
               number: submittedDetails.mobileNumber,
-              title: 'Traveller Details'
+              title: `${t.travellerDetails}`
             },
             shippingForm: {
+              formFieldConfig: formFieldConfig,
               onSubmit: formSubmitHandler,
-              submitButton: { text: 'Save Traveller Details' },
+              submitButton: { text: `${t.saveTravellerDetails}` },
               values: formData,
               onChange: data => setSubmittedDetails(data)
             }
           },
           billing: {
-            sectionSubtitle: 'Add Billing Details',
-            sectionTitle: 'Billing',
-            formTitle: 'Add Billing Details',
+            triggerFormTitle: `${t.change}`,
+            sectionSubtitle: `${t.addBillingdetailsBtnText}`,
+            sectionTitle: `${t.billing}`,
+            formTitle: `${t.addBillingdetailsBtnText}`,
             color: bgColorOfSecondary,
             isBilling: true,
             isChecked: isBillingSameRedux,
@@ -305,21 +361,22 @@ const CheckoutPage = () => {
               name: billingFormData.name,
               location: billingFormData.address,
               number: billingFormData.mobileNumber,
-              title: 'Billing'
+              title: `${t.billing}`
             },
             shippingForm: {
+              formFieldConfig: formFieldConfig,
               onSubmit: formSubmitHandler,
-              submitButton: { text: 'Save Billing Details' },
+              submitButton: { text: `${t.saveBillingDetails}` },
               values: formData,
               onChange: data => setBillingFormData(data)
             }
           },
           payment: {
-            title: 'Payment',
+            title: `${t.paymentText}`,
             paymentDetails: {
               hasBoxShadow: false,
               paymentBreakDown: createPaymentBreakdownMap(),
-              totalText: 'Total',
+              totalText: `${t.total}`,
               totalValueWithCurrency: {
                 value: getSubTotalAndDeliveryCharges(initResponse).subTotal.toString(),
                 currency: getSubTotalAndDeliveryCharges(initResponse).currencySymbol
@@ -327,10 +384,10 @@ const CheckoutPage = () => {
             }
           },
           loader: {
-            text: 'Please wait while we set things up for you'
+            text: `${t.initLoderText}`
           },
           pageCTA: {
-            text: 'Checkout',
+            text: `${t.checkout}`,
             handleClick: () => {
               dispatch(cartActions.clearCart())
               router.push('/paymentMode')

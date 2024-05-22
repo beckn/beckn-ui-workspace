@@ -103,14 +103,14 @@ const OrderConfirmation = () => {
       <ConfirmationPage
         schema={{
           iconSrc: orderConfirmmark,
-          successOrderMessage: 'Order Placed!',
-          gratefulMessage: 'Thank you! Your booking will be confirm shortly',
-          orderIdMessage: orderId ? `Order number is: ${orderId}...` : '',
-          trackOrderMessage: `You can track your order in "My Order" section`,
+          successOrderMessage: `${t.orderPlaced}`,
+          gratefulMessage: `${t.confirmMessage}`,
+          orderIdMessage: orderId ? `${t.orderNumber} ${orderId}...` : '',
+          trackOrderMessage: `${t.trackOrderMessage}`,
 
           buttons: [
             {
-              text: 'View Details',
+              text: `${t.viewDetails}`,
               handleClick: () => {
                 const orderId = confirmResponse[0].message.orderId
                 const bppId = confirmResponse[0].context.bpp_id
@@ -131,7 +131,7 @@ const OrderConfirmation = () => {
               colorScheme: 'primary'
             },
             {
-              text: 'Go Back Home',
+              text: `${t.goBackBtn}`,
               handleClick: () => {
                 router.push('/')
                 dispatch(checkoutActions.clearState())

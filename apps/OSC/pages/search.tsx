@@ -233,7 +233,7 @@ const Search = () => {
                     price: item.price.value,
                     rating: item.rating,
                     // shortDesc: item.short_desc || item.long_desc.replace(/<[^>]+>/g, '').slice(0, 15),
-                    source: 'Sold By',
+                    source: t.soldBy,
                     sourceText: items[0].providerName
                   }
                   return (
