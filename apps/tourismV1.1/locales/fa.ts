@@ -345,6 +345,9 @@ const fa: { [key: string]: string } = {
   rateDeliveryExperience: "Évaluer l'expérience de livraison",
   addCommentsHere: 'Ajoutez vos commentaires ici',
   writeExperience: 'Décrivez votre expérience..',
-  completed: 'Complété'
+  completed: 'Complété',
+  payment: 'Paiement',
+  openinWallet: 'Ouvrir dans le portefeuille',
+  viewJSON: 'Afficher JSON'
 }
 export default fa
