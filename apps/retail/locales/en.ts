@@ -155,6 +155,22 @@ const en: { [key: string]: string } = {
   invalidEmail: 'Invalid email format',
   requiredEmail: 'Email ID is required',
   errorAddress: 'Complete Address is required',
-  change: 'Change'
+  change: 'Change',
+  searchProducts: 'Search for Products',
+  addToCart: 'Add To Cart',
+  addedToCart: 'Product added to cart',
+  order: 'Order',
+  items: 'Items',
+  saveShippingDetails: 'Save Shipping Details',
+  saveBillingDetails: 'Save Billing Details',
+  proceedToCheckout: 'Proceed to Checkout',
+  error: 'Error!',
+  unableToLogin: 'Unable to login',
+  signupErrorMessage: 'Email or Username are already taken',
+  unableToRegister: 'Unable to register',
+  unableToProceed: 'Unable to proceed with init request',
+  orderSummary: 'Order Summary',
+  totalQuantity: 'Total Quantity',
+  totalAmount: 'Total Amount'
 }
 export default en
