@@ -87,10 +87,8 @@ const ProductDetails: React.FC<Props> = ({ product }) => {
                 {product.item.rating ? `${parseFloat(product.item.rating)} Stars` : null}
               </Text>
             </Flex>
-            {/* <ProductDescription description={product.item.long_desc} /> */}
-            <ProductDescription
-              description={'This is a high rating substance that can only be used in a specific environment'}
-            />
+            <ProductDescription description={product.item.long_desc} />
+
             <Box
               marginTop={'20px'}
               padding="15px 10px"
