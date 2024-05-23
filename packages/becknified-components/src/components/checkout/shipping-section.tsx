@@ -4,7 +4,7 @@ import DetailsCard from './details-card'
 import useResponsive from '../../hooks/useResponsive'
 import ShippingForm from './shipping-form'
 import { PlusSquareIcon } from '@chakra-ui/icons'
-import { ShippingFormProps, ShippingSectionProps, ShippingFormInitialValuesType } from './checkout.types'
+import { ShippingSectionProps } from './checkout.types'
 import AddShippingButtonImage from '../../../public/images/addShippingBtn.svg'
 
 import { BottomModal, FormField, Typography, FormData, Input } from '@beckn-ui/molecules'
@@ -23,6 +23,7 @@ const ShippingSection: React.FC<ShippingSectionProps<FormField[]>> = ({
   shippingDetails,
   addButtonImage = AddShippingButtonImage,
   isChecked = true,
+  isDisabled = false,
   onCheckChange,
   color
 }) => {
@@ -65,7 +66,7 @@ const ShippingSection: React.FC<ShippingSectionProps<FormField[]>> = ({
           </Checkbox>
         </DetailsCard>
       ) : !showDetails ? (
-        <DetailsCard>
+        <DetailsCard isDisabled={isDisabled}>
           <Flex
             alignItems={'center'}
             onClick={onOpen}

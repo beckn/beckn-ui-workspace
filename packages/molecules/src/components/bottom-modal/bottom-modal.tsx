@@ -49,7 +49,7 @@ const BottomModal: React.FC<BottomModalProps> = ({ onClose, isOpen, title, child
           padding={'15px 20px'}
         >
           <Typography
-            text={title}
+            text={title!}
             variant="titleRegular"
           />
         </Flex>

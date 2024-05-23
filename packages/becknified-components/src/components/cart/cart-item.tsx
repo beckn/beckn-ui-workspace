@@ -16,7 +16,8 @@ const CartItem: React.FC<CartItemProps> = ({
   symbol,
   handleDecrement,
   handleIncrement,
-  className
+  className,
+  totalAmountText
 }) => {
   const [counter, setCounter] = useState(quantity)
 
@@ -86,7 +87,7 @@ const CartItem: React.FC<CartItemProps> = ({
             </div>
           </div>
           <div className={Styles.total_amount_container}>
-            <p>Total amount</p>
+            <p>{totalAmountText}</p>
             <ProductPrice
               price={price * counter}
               currencyType={symbol}

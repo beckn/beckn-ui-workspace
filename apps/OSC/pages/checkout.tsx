@@ -282,7 +282,7 @@ const CheckoutPage = () => {
             }))
           },
           shipping: {
-            triggerFormTitle: `${t.change}`,
+            triggerFormTitle: t.change,
             showDetails: isInitResultPresent(),
             color: bgColorOfSecondary,
             shippingDetails: {
@@ -297,16 +297,21 @@ const CheckoutPage = () => {
               submitButton: { text: t.saveShippingDetails },
               values: formData,
               onChange: data => setSubmittedDetails(data)
-            }
+            },
+            sectionSubtitle: t.addShippingDetails,
+            sectionTitle: t.shipping,
+            formTitle: t.addShippingDetails,
+            sameAsTitle: t.sameAsShipping
           },
           billing: {
-            triggerFormTitle: `${t.change}`,
+            triggerFormTitle: t.change,
             sectionSubtitle: t.addBillingDetails,
             sectionTitle: t.billing,
             formTitle: t.addBillingDetails,
             isBilling: true,
             color: bgColorOfSecondary,
             isChecked: isBillingSameRedux,
+            sameAsTitle: t.sameAsShipping,
             onCheckChange: () => {
               // setIsBillingSame(!isBillingSame)
               dispatch(checkoutActions.setIsBillingSame({ isBillingSame: !isBillingSameRedux }))

@@ -25,19 +25,7 @@ const invoiceDetails = () => {
     return <></>
   }
 
-  const {
-    message: {
-      order: {
-        quote: {
-          price: { currency, value }
-        },
-        items
-      }
-    },
-    context: { timestamp }
-  } = statusData[0]
-
-  const { name } = items
+  const { created_at } = statusData[0].message.order
 
   const filteredOrder = statusData.filter(res => {
     const { state } = res.message.order.fulfillments[0]
@@ -63,7 +51,7 @@ const invoiceDetails = () => {
           />
           <Typography
             variant="subTitleRegular"
-            text={formatTimestamp(timestamp)}
+            text={formatTimestamp(created_at)}
           />
         </Flex>
         <Box pt={4}>

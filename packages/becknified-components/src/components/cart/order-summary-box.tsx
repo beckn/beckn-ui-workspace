@@ -4,26 +4,33 @@ import { OrderSummaryProps } from './cart.types'
 import styles from './order-summary.module.css'
 import { Button, Typography } from '@beckn-ui/molecules'
 
-const OrderSummaryBox: React.FC<OrderSummaryProps> = ({ totalAmount, totalQuantity, pageCTA }) => {
+const OrderSummaryBox: React.FC<OrderSummaryProps> = ({
+  totalAmount,
+  totalQuantity,
+  pageCTA,
+  orderSummeryText,
+  totalQuantityText,
+  totalAmountText
+}) => {
   return (
     <>
       <div className={styles.orderSummaryContainer}>
         <Typography
           variant="titleRegular"
-          text="Order Summary"
+          text={orderSummeryText}
         />
         <div className={styles.orderSummaryDetails}>
           <div className={styles.orderSummaryDetailRow}>
             <Typography
               variant="subTitleRegular"
-              text="Total quantity"
+              text={totalQuantityText}
             />
             <Typography {...totalQuantity} />
           </div>
           <div className={`${styles.orderSummaryDetailRow} ${styles.orderSummaryFlexGrow}`}>
             <Typography
               variant="subTitleRegular"
-              text="Total Amount"
+              text={totalAmountText}
             />
             <ProductPrice {...totalAmount} />
           </div>

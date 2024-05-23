@@ -14,8 +14,10 @@ import { useRouter } from 'next/router'
 import { DiscoveryRootState } from '@store/discovery-slice'
 import { Box, Flex, useTheme } from '@chakra-ui/react'
 import { Button, CustomThemeType, Input, Typography } from '@beckn-ui/molecules'
+import { useLanguage } from '@hooks/useLanguage'
 
 const Product = () => {
+  const { t } = useLanguage()
   const theme = useTheme<CustomThemeType>()
   const selectedProduct = useSelector((state: DiscoveryRootState) => state.discovery.selectedProduct)
   const productList = useSelector((state: DiscoveryRootState) => state.discovery.productList)
@@ -69,7 +71,7 @@ const Product = () => {
               handleDecrement: decrement,
               counter: counter,
               cta: {
-                text: 'Add To Cart',
+                text: t.addToCart,
                 color: 'black',
                 handleClick: () => {
                   dispatch(
@@ -78,7 +80,7 @@ const Product = () => {
                       quantity: counter
                     })
                   )
-                  toast.success('Product added to cart')
+                  toast.success(t.addedToCart)
                 }
               }
             }

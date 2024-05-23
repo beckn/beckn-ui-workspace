@@ -3,7 +3,7 @@ import { useLanguage } from '../../hooks/useLanguage'
 import { SearchBarPropsModel } from '../../lib/types/search'
 import { Box, Flex, Image, Input } from '@chakra-ui/react'
 
-const SearchBar: React.FC<SearchBarPropsModel> = ({ searchString, handleChange }) => {
+const SearchBar: React.FC<SearchBarPropsModel> = ({ searchString, handleChange, selectedCategory }) => {
   const { t } = useLanguage()
   const [searchText, setSearchText] = useState(searchString)
 
@@ -14,7 +14,12 @@ const SearchBar: React.FC<SearchBarPropsModel> = ({ searchString, handleChange }
   const handleSubmit = () => {
     handleChange(searchText)
   }
-
+  const getInputValue = () => {
+    if (selectedCategory?.length && searchText?.length) {
+      return `${selectedCategory} ; ${searchText}`
+    }
+    return selectedCategory || searchText || ''
+  }
   return (
     <Box
       width="100%"
@@ -30,7 +35,7 @@ const SearchBar: React.FC<SearchBarPropsModel> = ({ searchString, handleChange }
           type="search"
           placeholder={t.search}
           onChange={inputChangeHandler}
-          value={searchText}
+          value={getInputValue()}
           onKeyDown={event => event.key === 'Enter' && handleSubmit()}
         />
         <Box
