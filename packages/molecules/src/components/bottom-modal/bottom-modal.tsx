@@ -15,7 +15,14 @@ import crossIcon from '../../../public/images/Indicator.svg'
 import { BottomModalProps } from './bottom-modal.types'
 import Typography from '../typography'
 
-const BottomModal: React.FC<BottomModalProps> = ({ onClose, isOpen, title, children, responsive = false }) => {
+const BottomModal: React.FC<BottomModalProps> = ({
+  onClose,
+  isOpen,
+  title,
+  children,
+  responsive = false,
+  responsiveBottomGap = '30'
+}) => {
   return (
     <Modal
       isCentered
@@ -27,7 +34,7 @@ const BottomModal: React.FC<BottomModalProps> = ({ onClose, isOpen, title, child
       <ModalOverlay height="100vh" />
       <ModalContent
         position="fixed"
-        bottom={{ base: '0', md: '30%' }}
+        bottom={{ base: '0', md: `${responsiveBottomGap}%` }}
         mb="0"
         borderRadius={{ base: '1.75rem 1.75rem 0 0', md: '1.75rem', lg: '1.75rem', xl: '1.75rem', '2xl': '1.75rem' }}
         maxW="sm"

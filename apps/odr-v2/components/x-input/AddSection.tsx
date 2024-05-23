@@ -16,6 +16,7 @@ interface AddSectionProps {
   disabled?: boolean
   modalTitle?: string
   notifySubmit: (submitted: boolean) => void
+  bottomGap?: string
 }
 
 const AddSection: React.FC<AddSectionProps> = ({
@@ -27,7 +28,8 @@ const AddSection: React.FC<AddSectionProps> = ({
   isFormSubmit = false,
   disabled = false,
   modalTitle,
-  notifySubmit
+  notifySubmit,
+  bottomGap = '30'
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const t = useLanguage()
@@ -81,6 +83,7 @@ const AddSection: React.FC<AddSectionProps> = ({
             title={modalTitle}
             isOpen={isOpen}
             onClose={onClose}
+            responsiveBottomGap={bottomGap}
           >
             <DyForm
               htmlForm={htmlString}
