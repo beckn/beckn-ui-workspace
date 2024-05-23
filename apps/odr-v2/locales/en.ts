@@ -74,7 +74,7 @@ const en: { [key: string]: string } = {
   viewJSON: 'View JSON',
   payment: 'Payment',
   pleaseWait: 'Please wait!',
-  searchLoaderSubText: ' While we find service providers near you',
+  searchLoaderSubText: 'We`re looking for services related to your search',
   total: 'Total',
   checkoutLoaderSubText: 'while we setup a form to understand your requirements',
   confirmLoaderSubtext: 'while we confirm your order',
