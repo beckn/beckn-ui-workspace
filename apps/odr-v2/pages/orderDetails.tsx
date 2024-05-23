@@ -749,6 +749,7 @@ const OrderDetails = () => {
                 <Flex
                   pt={'unset'}
                   justifyContent={'space-between'}
+                  columnGap={'10px'}
                   alignItems={'center'}
                 >
                   <Typography

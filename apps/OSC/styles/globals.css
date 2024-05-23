@@ -129,3 +129,9 @@ select.chakra-select {
 .cencel_btn_filter {
   border: 1px solid #e93324 !important;
 }
+.osc_profile label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 96%;
+}
