@@ -37,15 +37,10 @@ const OrderHistory = () => {
     fetch(`${strapiUrl}/orders?filters[category]=4`, requestOptions)
       .then(response => response.json())
       .then(result => {
-        console.log('Dank orders', result)
         if (result.error) {
           return setError(result.error.message)
         }
-        setOrderHistoryList(
-          result.data
-            .filter((singleItem: any) => singleItem.attributes.bpp_id === 'bpp-ps-network-strapi-dev.becknprotocol.io')
-            .reverse()
-        )
+        setOrderHistoryList(result.data.reverse())
         setIsLoading(false)
       })
       .catch(error => {
