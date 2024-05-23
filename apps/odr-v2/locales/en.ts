@@ -77,7 +77,6 @@ const en: { [key: string]: string } = {
   searchLoaderSubText: 'We`re looking for services related to your search',
   total: 'Total',
   checkoutLoaderSubText: 'while we setup a form to understand your requirements',
-  confirmLoaderSubtext: 'while we confirm your order',
   statusLoaderSubText: 'while we update the current status of your order.',
   emptyOrderHistoryText: 'This space appears quite empty!',
   noExistingWorkflowText: 'No existing workflows found; create a new workflow to proceed.',
@@ -145,6 +144,7 @@ const en: { [key: string]: string } = {
     'LegalEase allows anyone to discover lawyers, online dispute resolution (ODR) service providers, paralegals and other legal services and information in a quick and seamless manner',
   category: 'Category',
   service: 'Service',
-  orderId: 'Order Id'
+  orderId: 'Order Id',
+  confirmLoaderSubtext: 'you are being assigned a case manager'
 }
 export default en
