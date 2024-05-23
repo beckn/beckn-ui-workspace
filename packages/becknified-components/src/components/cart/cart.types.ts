@@ -50,6 +50,7 @@ export interface CartItemProps {
   handleIncrement: (id: string) => void
   handleDecrement: (id: string) => void
   className?: string
+  totalAmountText?: string
 }
 
 export interface CartListProps {
@@ -60,6 +61,9 @@ export interface OrderSummaryProps {
   totalQuantity: TypographyProps
   totalAmount: ProductPriceProps
   pageCTA: ButtonProps
+  orderSummeryText?: string
+  totalQuantityText?: string
+  totalAmountText?: string
 }
 export interface EmptyCardProps {
   image?: string

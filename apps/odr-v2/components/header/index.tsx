@@ -58,7 +58,8 @@ const storeHeaderBlackList = [
   '/profile',
   '/search',
   '/checkout',
-  '/signin'
+  '/signin',
+  '/product'
 ]
 const headerValues: PathnameObjectType = {
   '/checkoutPage': 'Review Purchase Order',
@@ -74,8 +75,9 @@ const headerValues: PathnameObjectType = {
   '/orderCancellation': 'Order Cancel',
   '/feedback': '',
   '/profile': 'My Profile',
-  '/search': 'Search results',
-  '/checkout': 'Additional Information'
+  '/search': 'Search Results',
+  '/checkout': 'Additional Information',
+  '/product': 'Service Details'
 }
 
 const headerValuesFrench: PathnameObjectType = {

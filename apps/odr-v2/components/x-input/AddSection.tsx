@@ -3,7 +3,6 @@ import { Box, Flex, Text, useTheme, useDisclosure } from '@chakra-ui/react'
 import { PlusSquareIcon, AttachmentIcon } from '@chakra-ui/icons'
 import { Typography, BottomModal } from '@beckn-ui/molecules'
 import { DetailCard } from '@beckn-ui/becknified-components'
-import Styles from './AddSection.module.css'
 import DyForm from './DyForm'
 import { useLanguage } from '@hooks/useLanguage'
 
@@ -15,6 +14,7 @@ interface AddSectionProps {
   postSubmissionTitle?: string
   isFormSubmit: boolean
   disabled?: boolean
+  modalTitle?: string
   notifySubmit: (submitted: boolean) => void
 }
 
@@ -26,6 +26,7 @@ const AddSection: React.FC<AddSectionProps> = ({
   postSubmissionTitle = 'Dispute Details added',
   isFormSubmit = false,
   disabled = false,
+  modalTitle,
   notifySubmit
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -51,7 +52,7 @@ const AddSection: React.FC<AddSectionProps> = ({
       >
         <Text fontSize={'17px'}>{sectionSubTitle}</Text>
       </Flex>
-      <DetailCard className={disabled ? Styles.disabled : Styles.enabled}>
+      <DetailCard isDisabled={disabled}>
         {!isFormSubmit ? (
           <Flex
             alignItems={'center'}
@@ -77,6 +78,7 @@ const AddSection: React.FC<AddSectionProps> = ({
         )}
         {!disabled && (
           <BottomModal
+            title={modalTitle}
             isOpen={isOpen}
             onClose={onClose}
           >

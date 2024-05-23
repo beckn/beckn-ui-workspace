@@ -46,7 +46,7 @@ const StarRating: React.FC<StarRatingProps> = props => {
             <label
               key={index}
               style={{
-                color: ratingValue <= (hover || rating) ? primaryColor : '#e4e5e9'
+                color: ratingValue <= rating ? primaryColor : '#e4e5e9' // we can add hover effect
               }}
               onMouseEnter={() => setHover(ratingValue)}
               onMouseLeave={() => setHover(null)}

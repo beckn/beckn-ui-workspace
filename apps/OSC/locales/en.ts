@@ -200,6 +200,12 @@ const en: { [key: string]: string } = {
   invalidEmail: 'Invalid email format',
   requiredEmail: 'Email ID is required',
   errorAddress: 'Complete Address is required',
-  change: 'Change'
+  change: 'Change',
+  orderSummary: 'order Summary',
+  totalQuantity: 'Total Quantity',
+  totalAmount: 'Total Amount',
+  sameAsShipping: 'Same as Shipping Details',
+  trackOrder: 'Track Order',
+  updateOrder: 'Update Order'
 }
 export default en

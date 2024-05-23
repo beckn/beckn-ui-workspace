@@ -189,7 +189,7 @@ const OrderDetails = () => {
   const menuItems = (trackingUrl: string) => [
     {
       image: '/images/trackOrder.svg',
-      text: 'Track Order',
+      text: t.trackOrder,
       onClick: () => {
         if (trackingUrl) window.open(trackingUrl, '_blank')
         else
@@ -200,7 +200,7 @@ const OrderDetails = () => {
     },
     {
       image: '/images/updateOrder.svg',
-      text: 'Update Order',
+      text: t.updateOrder,
       onClick: () => {
         Router.push('/updateShippingDetails')
       }
@@ -757,7 +757,7 @@ const OrderDetails = () => {
                   <Text
                     as={Typography}
                     // TODO
-                    text={`Order Id: ${orderMetaData.orderIds[0].slice(0, 5)}...`}
+                    text={`${t.orderId} ${orderMetaData.orderIds[0].slice(0, 5)}...`}
                     fontSize="17px"
                     fontWeight="600"
                   />

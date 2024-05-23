@@ -57,9 +57,9 @@ const Cart = () => {
             image: singleItem.images[0].url,
             price: Number(singleItem.price.value),
             symbol: singleItem.price.currency,
+            totalAmountText: t.totalAmount,
             handleIncrement: id => {
               const selectedItem = productList.find(singleItem => singleItem.item.id === id)
-              console.log('DAnk cart', singleItem, productList)
               if (selectedItem) {
                 dispatch(cartActions.addItemToCart({ product: selectedItem, quantity: 1 }))
               }
@@ -79,9 +79,12 @@ const Cart = () => {
               variant: 'subTitleSemibold'
             },
             pageCTA: {
-              text: 'Order',
+              text: t.order,
               handleClick: onOrderClick
-            }
+            },
+            orderSummeryText: t.orderSummary,
+            totalQuantityText: t.totalQuantity,
+            totalAmountText: t.totalAmount
           },
           emptyCard: {
             image: '/images/emptyCard.svg',

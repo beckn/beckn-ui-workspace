@@ -29,8 +29,8 @@ const SignUp = () => {
       toast({
         render: () => (
           <CustomToast
-            title="Error!"
-            message="Email or Username are already taken"
+            title={t.error}
+            message={t.signupErrorMessage}
           />
         ),
         position: 'top',
@@ -83,8 +83,8 @@ const SignUp = () => {
         toast({
           render: () => (
             <CustomToast
-              title="Error!"
-              message="Unable to register"
+              title={t.error}
+              message={t.unableToRegister}
             />
           ),
           position: 'top',

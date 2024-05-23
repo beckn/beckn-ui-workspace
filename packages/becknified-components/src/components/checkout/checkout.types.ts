@@ -36,6 +36,7 @@ export interface ShippingSectionProps<T extends FormField[]> {
   isBilling?: boolean
   addButtonImage?: string
   isChecked?: boolean
+  isDisabled?: boolean
   onCheckChange?: () => void
   color?: string
 }

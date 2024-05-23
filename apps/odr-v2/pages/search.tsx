@@ -141,6 +141,7 @@ const Search = () => {
           >
             <SearchBar
               searchString={searchKeyword}
+              selectedCategory={selectedCategory}
               handleChange={(text: string) => {
                 setSearchKeyword(text)
                 localStorage.removeItem('optionTags')

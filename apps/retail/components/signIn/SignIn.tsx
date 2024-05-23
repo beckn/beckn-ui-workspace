@@ -52,8 +52,8 @@ const SignIn = () => {
       toast({
         render: () => (
           <CustomToast
-            title="Error!"
-            message="Unable to login"
+            title={t.error}
+            message={t.unableToLogin}
           />
         ),
         position: 'top',
@@ -76,8 +76,8 @@ const SignIn = () => {
       toast({
         render: () => (
           <CustomToast
-            title="Error!"
-            message="Unable to login"
+            title={t.error}
+            message={t.unableToLogin}
           />
         ),
         position: 'top',
