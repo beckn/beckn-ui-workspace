@@ -33,7 +33,8 @@ const cartIconBlackList: string[] = [
   '/checkout',
   '/profile',
   '/orderCancellation',
-  '/updateShippingDetails'
+  '/updateShippingDetails',
+  '/orderCancellation'
 ]
 
 const backIconList = ['/', '/signin']
