@@ -116,7 +116,6 @@ const CheckoutPage = () => {
   const isBillingSameRedux = useSelector((state: CheckoutRootState) => state.checkout.isBillingSame)
   const { transactionId, productList } = useSelector((state: DiscoveryRootState) => state.discovery)
   const selectResponse = useSelector((state: CheckoutRootState) => state.checkout.selectResponse)
-  console.log(cartItems)
   const { items, totalQuantity } = useSelector((state: ICartRootState) => state.cart)
 
   //////////  For field Data ///////////
@@ -172,7 +171,9 @@ const CheckoutPage = () => {
   ]
 
   useEffect(() => {
-    fetchQuotes(getSelectPayload(items, transactionId, DOMAIN))
+    if (isEmpty(selectResponse)) {
+      fetchQuotes(getSelectPayload(items, transactionId, DOMAIN))
+    }
   }, [totalQuantity])
 
   useEffect(() => {

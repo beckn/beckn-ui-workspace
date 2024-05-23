@@ -285,6 +285,7 @@ const CheckoutPage = () => {
           postSubmissionTitle="Consent form added"
           notifySubmit={setConsentFormSubmitted}
           isFormSubmit={consentFormSubmitted}
+          bottomGap="10"
         />
         <Box
           width={isLargeScreen ? '40%' : '100%'}

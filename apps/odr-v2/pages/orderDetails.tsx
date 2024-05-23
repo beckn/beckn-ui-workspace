@@ -347,8 +347,6 @@ const OrderDetails = () => {
   const isDelivered = data.statusData?.[0]?.message?.order?.fulfillments?.[0]?.state?.descriptor?.code === DELIVERED
   const isCancelled = data.statusData?.[0]?.message?.order?.status === CANCELLED
 
-  console.log('Dank cancel', isCancelled)
-
   useEffect(() => {
     if (isDelivered) {
       setProcessState(prevState => ({
@@ -487,7 +485,6 @@ const OrderDetails = () => {
         ])
 
         if (!isEmpty(trackResponse.data) && !isEmpty(supportResponse.data)) {
-          console.log('Dank support', supportResponse.data)
           setData(prevState => ({
             ...prevState,
             trackUrl: trackResponse.data.data[0].message && trackResponse.data.data[0].message.tracking.url,
@@ -633,8 +630,6 @@ const OrderDetails = () => {
     location: { address: shipmentAddress } = {},
     contact: { phone: updateShippingPhone, email: updatedShippingEmail, name: updatedShippingName } = {}
   } = stops[0]
-
-  console.log('Dank', stops, updateShippingPhone, updatedShippingName)
 
   const filteredOrder = data.statusData.filter(res => {
     const { state } = res.message.order.fulfillments[0]
