@@ -2,7 +2,21 @@ import { isEmpty } from '@utils/common-utils'
 import React, { useEffect, useState } from 'react'
 import { FormDetails } from './DyForm.types'
 import { Input, Button, InputTypeEnum, Loader } from '@beckn-ui/molecules'
+import parse from 'html-react-parser'
 import { Checkbox, Box } from '@chakra-ui/react'
+
+function replaceDynamicText(template, variables) {
+  // Ensure template starts as a string
+  let result = template
+
+  // Replace each placeholder with the corresponding variable
+  Object.entries(variables).forEach(([key, value]) => {
+    const regex = new RegExp(`\\$\\$${key}\\$\\$`, 'g')
+    result = result.replace(regex, value)
+  })
+
+  return result
+}
 
 interface DyFormProps {
   htmlForm: string
@@ -21,6 +35,7 @@ const extractFormDetails = (htmlString: string) => {
   const form = doc.querySelector('form')
   const inputs = form.querySelectorAll('input')
   const buttons = form.querySelectorAll('button')
+  const staticTexts = doc.querySelectorAll('h2, p')
 
   const inputDetails = Array.from(inputs).map(input => ({
     type: input.type,
@@ -36,11 +51,17 @@ const extractFormDetails = (htmlString: string) => {
     text: button.textContent
   }))
 
+  const textBlocks = Array.from(staticTexts).map(text => ({
+    tag: text.tagName.toLowerCase(),
+    content: text.innerHTML
+  }))
+
   const formDetails = {
     action: form.querySelector('input[name="action"]').value,
     method: form.querySelector('input[name="method"]').value,
     inputs: inputDetails,
-    buttons: buttonDetails
+    buttons: buttonDetails,
+    texts: textBlocks
   }
 
   return formDetails
@@ -139,25 +160,44 @@ const DyForm: React.FC<DyFormProps> = ({ htmlForm, onSubmit, onError, formId, se
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      {formDetails.inputs
-        .filter(input => input.type !== 'hidden')
-        .map(input => (
-          <Box
-            pb="0.7rem"
-            key={input.id}
-          >
-            {renderFormFields(input)}
-          </Box>
+    <div>
+      {formDetails.texts.map((text, index) => {
+        const CustomTag = text.tag
+        // return <CustomTag key={index}>{replaceDynamicText(parse(text.content),{name:formData.name || '',companyName:"Eminds"})}</CustomTag>
+        return (
+          <CustomTag key={index}>
+            {parse(text.content, {
+              transform(reactNode, domNode, index) {
+                let updatedNode = reactNode
+                if (typeof reactNode === 'string') {
+                  updatedNode = replaceDynamicText(reactNode, { name: formData.name || '', companyName: 'Eminds' })
+                }
+                return updatedNode
+              }
+            })}
+          </CustomTag>
+        )
+      })}
+      <form onSubmit={handleSubmit}>
+        {formDetails.inputs
+          .filter(input => input.type !== 'hidden')
+          .map(input => (
+            <Box
+              pb="0.7rem"
+              key={input.id}
+            >
+              {renderFormFields(input)}
+            </Box>
+          ))}
+        {formDetails.buttons.map(button => (
+          <Button
+            key={button.text}
+            type={button.type}
+            text={button.text}
+          />
         ))}
-      {formDetails.buttons.map(button => (
-        <Button
-          key={button.text}
-          type={button.type}
-          text={button.text}
-        />
-      ))}
-    </form>
+      </form>
+    </div>
   )
 }
 

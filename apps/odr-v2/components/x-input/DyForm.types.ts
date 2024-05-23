@@ -11,9 +11,15 @@ export type FormButtonDetail = {
   text: string
 }
 
+type TextBlock = {
+  tag: string
+  content: string
+}
+
 export type FormDetails = {
   action: string
   method: string
   inputs: FormInputDetail[]
   buttons: FormButtonDetail[]
+  texts: TextBlock[]
 }
