@@ -8,16 +8,16 @@ const OrderSummaryBox: React.FC<OrderSummaryProps> = ({
   totalAmount,
   totalQuantity,
   pageCTA,
-  orderSummeryText,
-  totalQuantityText,
-  totalAmountText
+  orderSummaryText = 'Order Summary',
+  totalQuantityText = 'Total Quantity',
+  totalAmountText = 'Total Amount'
 }) => {
   return (
     <>
       <div className={styles.orderSummaryContainer}>
         <Typography
           variant="titleRegular"
-          text={orderSummeryText}
+          text={orderSummaryText}
         />
         <div className={styles.orderSummaryDetails}>
           <div className={styles.orderSummaryDetailRow}>

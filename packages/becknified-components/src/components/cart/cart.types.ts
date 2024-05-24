@@ -61,7 +61,7 @@ export interface OrderSummaryProps {
   totalQuantity: TypographyProps
   totalAmount: ProductPriceProps
   pageCTA: ButtonProps
-  orderSummeryText?: string
+  orderSummaryText?: string
   totalQuantityText?: string
   totalAmountText?: string
 }

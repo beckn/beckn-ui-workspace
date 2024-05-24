@@ -96,7 +96,7 @@ const Cart = () => {
               text: t.proceedTOCheckout,
               handleClick: onOrderClick
             },
-            orderSummeryText: t.orderSummary,
+            orderSummaryText: t.orderSummary,
             totalQuantityText: t.totalQuantity,
             totalAmountText: t.totalAmount
           },
