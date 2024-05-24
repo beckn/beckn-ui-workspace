@@ -3,6 +3,7 @@ import { IconType } from 'react-icons'
 import cs from 'classnames'
 import { useLanguage } from '../../hooks/useLanguage'
 import { toast } from 'react-toastify'
+import { Box } from '@chakra-ui/react'
 
 type OptionMeta = {
   tagValue: string
@@ -45,9 +46,12 @@ const OptionCard: React.FC<OptionCardProps> = ({
       }}
     >
       {/* <OptionIcon /> */}
-      <div
+      <Box
+        margin={'0 auto'}
+        width={'70px'}
+        mb={'6px'}
         className={cs(
-          'mb-2 min-w-[40px] min-h-[40px]  rounded-xl p-3 shadow-custom',
+          'mb-2 min-w-[40px] min-h-[40px] rounded-xl p-3 shadow-custom',
           { ['bg-palette-primary']: isSelected },
           { ['bg-white']: !isSelected }
         )}
@@ -57,7 +61,7 @@ const OptionCard: React.FC<OptionCardProps> = ({
           src={isSelected ? iconUrlLight : iconUrl}
           alt=""
         />
-      </div>
+      </Box>
       <p
         className={cs('text-xs', {
           ['text-palette-primary']: isSelected
