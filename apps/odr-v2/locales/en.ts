@@ -46,7 +46,7 @@ const en: { [key: string]: string } = {
   assembly: 'Assembly',
   shipping: 'Shipping',
   billing: 'Billing',
-  claimantDetails: 'Claimant Details',
+  claimantDetails: 'Complainant Details',
   respondentDetails: 'Respondent Details',
   addBillingDetails: 'Add Billing Details',
   addShippingDetails: 'Add Shipping Details',
