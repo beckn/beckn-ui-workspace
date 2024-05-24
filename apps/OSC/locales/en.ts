@@ -172,7 +172,7 @@ const en: { [key: string]: string } = {
   orderMistake: 'Ordered by mistake',
   iHaveChange: 'I’ve changed my mind',
   unabletoTrack: 'Unable to get the track url',
-  cancelOrder: ' Cancel Order',
+  cancelOrder: 'Cancel Order',
   callCustomer: 'Call Customer Service',
   emailCustomer: 'Email Customer Service',
   submitReview: 'Submit Review',
@@ -206,6 +206,7 @@ const en: { [key: string]: string } = {
   totalAmount: 'Total Amount',
   sameAsShipping: 'Same as Shipping Details',
   trackOrder: 'Track Order',
-  updateOrder: 'Update Order'
+  updateOrder: 'Update Order',
+  comingSoon: 'Coming Soon'
 }
 export default en

@@ -1,25 +1,28 @@
-// middleware.ts
-
 import { NextRequest, NextResponse } from 'next/server'
 
+const locals = ['fa']
+
 export default function middleware(req: NextRequest) {
-  // TypeScript will correctly understand the type of `loggedin`
   const loggedin = req.cookies.get('authToken')
-  const { pathname } = req.nextUrl
-  console.log('Dank', pathname, loggedin)
+  const { pathname, href, host } = req.nextUrl
+  console.log('Dank', pathname, host, href)
+  const urlSplitList = href.split('/')
+  const hostIndex = urlSplitList.findIndex(item => item === host)
+  let langSuffix = ''
+  if (urlSplitList[hostIndex + 1] && locals.includes(urlSplitList[hostIndex + 1])) {
+    langSuffix = urlSplitList[hostIndex + 1]
+  }
 
   if (loggedin && (pathname === '/signin' || pathname === '/signUp')) {
-    // Correctly redirect to the home page if the user is already logged in
     return NextResponse.redirect(new URL('/', req.url))
   }
 
   if (!loggedin && pathname !== '/signin' && pathname !== '/signUp') {
-    // Redirect to the signin page if the user is not logged in
-    return NextResponse.redirect(new URL('/signin', req.url))
+    const redirectUrl = langSuffix ? `/${langSuffix}/signin` : '/signin'
+    console.log('Dank', langSuffix, redirectUrl)
+    return NextResponse.redirect(new URL(redirectUrl, req.url))
   }
 
-  // It's important to return a response for all paths, you might want to return `undefined` or `NextResponse.next()`
-  // for other cases to let the request continue.
   return NextResponse.next()
 }
 
