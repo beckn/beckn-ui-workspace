@@ -454,7 +454,9 @@ const en: { [key: string]: string } = {
   npCourseFound: 'No Courses found!',
   noCourseSubText: 'Looks like you haven’t purchased any courses!',
   searchJob: 'Search Job',
-  searchLearning: ' Search Learning'
+  searchLearning: ' Search Learning',
+  ScholarshipConfirmation: 'We will evaluate your application ID :',
+  andRespond: 'and respond as soon as possible.'
 }
 
 export default en
