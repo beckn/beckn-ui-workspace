@@ -5,9 +5,10 @@ import { ApplyScholarshipPropsModel } from './apply-scholarship.types'
 import styles from './apply-scholarship.module.css'
 import axios from 'axios'
 
-const ApplyScholarshipForm: FC<ApplyScholarshipPropsModel> = ({ xInputHtml = '' }) => {
+const ApplyScholarshipForm: FC<ApplyScholarshipPropsModel> = ({ xInputHtml = '', onFormSubmit }) => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
   const router = useRouter()
+  const [id, setId] = useState('')
 
   const handleSubmit = (event: any) => {
     event.preventDefault()
@@ -41,8 +42,13 @@ const ApplyScholarshipForm: FC<ApplyScholarshipPropsModel> = ({ xInputHtml = '' 
       })
       .then(res => {
         if (res.status === 200 && res.data) {
-          router.push(`/scholarshipConfirmationPage?id=${res.data.id}`)
+          setId(res.data.id)
+          return onFormSubmit()
+          // router.push(`/scholarshipConfirmationPage?id=${res.data.id}`)
         }
+      })
+      .then(res => {
+        router.push(`/scholarshipConfirmationPage?id=${id}`)
       })
       .catch(e => console.error(e))
   }

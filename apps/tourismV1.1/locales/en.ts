@@ -446,6 +446,7 @@ const en: { [key: string]: string } = {
   refundText: 'If you have already paid, you will be refunded soon.',
   invalidEmail: 'Invalid email format',
   requiredEmail: 'Email ID is required',
-  change: 'Change'
+  change: 'Change',
+  orderCancellation: ' Order Cancellation'
 }
 export default en

@@ -9,6 +9,8 @@ export type FormInputDetail = {
 export type FormButtonDetail = {
   type: string
   text: string
+  id?: string
+  variant?: 'outline' | 'solid'
 }
 
 type TextBlock = {

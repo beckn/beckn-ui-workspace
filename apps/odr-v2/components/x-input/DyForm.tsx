@@ -3,7 +3,8 @@ import React, { useEffect, useState } from 'react'
 import { FormDetails } from './DyForm.types'
 import { Input, Button, InputTypeEnum, Loader } from '@beckn-ui/molecules'
 import parse from 'html-react-parser'
-import { Checkbox, Box } from '@chakra-ui/react'
+import { Checkbox, Box, useToast } from '@chakra-ui/react'
+import { CustomToast } from '@components/signIn/SignIn'
 
 function replaceDynamicText(template, variables) {
   // Ensure template starts as a string
@@ -23,6 +24,7 @@ interface DyFormProps {
   onSubmit: (isFormSubmitted: boolean) => void
   onError: (isError: boolean, error: any) => void
   formId: string
+  handleCancel: () => void
 }
 
 function capitalizeFirstLetter(name: string) {
@@ -33,9 +35,18 @@ const extractFormDetails = (htmlString: string) => {
   const parser = new DOMParser()
   const doc = parser.parseFromString(htmlString, 'text/html')
   const form = doc.querySelector('form')
+  const labels = form.querySelectorAll('label')
   const inputs = form.querySelectorAll('input')
   const buttons = form.querySelectorAll('button')
   const staticTexts = doc.querySelectorAll('h2, p')
+
+  const labelMap: any = {}
+  labels.forEach((label: any) => {
+    const inputId = label.htmlFor
+    if (inputId) {
+      labelMap[inputId] = label.textContent.trim()
+    }
+  })
 
   const inputDetails = Array.from(inputs).map(input => ({
     type: input.type,
@@ -43,12 +54,14 @@ const extractFormDetails = (htmlString: string) => {
     name: input.name,
     required: input.hasAttribute('required'),
     value: input.value,
-    label: capitalizeFirstLetter(input.name)
+    label: labelMap[input.id] || capitalizeFirstLetter(input.name)
   }))
 
   const buttonDetails = Array.from(buttons).map(button => ({
+    id: `btn${button.textContent}`,
     type: button.type,
-    text: button.textContent
+    text: button.textContent,
+    variant: button.textContent?.toLocaleLowerCase() === 'cancel' ? 'outline' : 'solid'
   }))
 
   const textBlocks = Array.from(staticTexts).map(text => ({
@@ -67,7 +80,8 @@ const extractFormDetails = (htmlString: string) => {
   return formDetails
 }
 
-const DyForm: React.FC<DyFormProps> = ({ htmlForm, onSubmit, onError, formId, setLoading }) => {
+const DyForm: React.FC<DyFormProps> = ({ htmlForm, onSubmit, onError, formId, setLoading, handleCancel }) => {
+  const toast = useToast()
   const [formDetails, setFormDetails] = useState<FormDetails>({})
 
   const [formData, setFormData] = useState({})
@@ -95,13 +109,32 @@ const DyForm: React.FC<DyFormProps> = ({ htmlForm, onSubmit, onError, formId, se
           message: { ...formData, form_id: formId }
         })
       })
+
+      if (!response.ok) {
+        let { error } = await response.json()
+
+        throw new Error(error)
+      }
+
       const result = await response.json()
       onSubmit(true)
       setIsLoading(false)
-      console.log('Response:', result)
     } catch (error) {
-      console.error('Error:', error)
+      console.error('Dank:', error)
       onError(true, error)
+
+      toast({
+        render: () => (
+          <CustomToast
+            title="Error!"
+            message={`${error}`}
+          />
+        ),
+        position: 'top',
+        duration: 2000,
+        isClosable: true
+      })
+
       setIsLoading(false)
     }
   }
@@ -133,8 +166,8 @@ const DyForm: React.FC<DyFormProps> = ({ htmlForm, onSubmit, onError, formId, se
         content = (
           <Checkbox
             name="input.name"
-            value={formData[input.name]}
-            onChange={handleChange}
+            // value={formData[input.name]}
+            // onChange={handleChange}
           >
             {input.label}
           </Checkbox>
@@ -170,7 +203,7 @@ const DyForm: React.FC<DyFormProps> = ({ htmlForm, onSubmit, onError, formId, se
               transform(reactNode, domNode, index) {
                 let updatedNode = reactNode
                 if (typeof reactNode === 'string') {
-                  updatedNode = replaceDynamicText(reactNode, { name: formData.name || '', companyName: 'Eminds' })
+                  updatedNode = replaceDynamicText(reactNode, { name: formData.name || '', companyName: '' })
                 }
                 return updatedNode
               }
@@ -191,9 +224,12 @@ const DyForm: React.FC<DyFormProps> = ({ htmlForm, onSubmit, onError, formId, se
           ))}
         {formDetails.buttons.map(button => (
           <Button
+            id={button.id}
             key={button.text}
             type={button.type}
             text={button.text}
+            variant={button.variant}
+            handleClick={button.text.toLowerCase() === 'cancel' ? handleCancel : undefined}
           />
         ))}
       </form>
