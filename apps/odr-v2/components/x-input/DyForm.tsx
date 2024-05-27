@@ -133,8 +133,8 @@ const DyForm: React.FC<DyFormProps> = ({ htmlForm, onSubmit, onError, formId, se
         content = (
           <Checkbox
             name="input.name"
-            value={formData[input.name]}
-            onChange={handleChange}
+            // value={formData[input.name]}
+            // onChange={handleChange}
           >
             {input.label}
           </Checkbox>
