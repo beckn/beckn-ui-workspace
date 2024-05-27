@@ -96,16 +96,16 @@ export const getPayloadForConfirm = (initResponse: InitResponseModel[]) => {
 
   let defaultCustomer = {
     person: {
-      name: 'Veronica sehgal'
+      name: 'santosh kumar'
     },
     contact: {
-      phone: '7011459003',
-      email: 'hola@gmail.com'
+      phone: '6251423251',
+      email: 'santosh.k@gmail.com'
     }
   }
 
   if (typeof window !== 'undefined') {
-    let shippingAddress = JSON.parse(localStorage.getItem('shippingAddress') as string)
+    const shippingAddress = JSON.parse(localStorage.getItem('shippingAddress') as string)
     defaultCustomer.person.name = shippingAddress.name
     defaultCustomer.contact.phone = shippingAddress.mobileNumber
     defaultCustomer.contact.email = shippingAddress.email

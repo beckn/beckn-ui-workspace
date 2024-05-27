@@ -120,7 +120,7 @@ const DyForm: React.FC<DyFormProps> = ({ htmlForm, onSubmit, onError, formId, se
       onSubmit(true)
       setIsLoading(false)
     } catch (error) {
-      console.error('Dank:', error)
+      console.error('Error:', error)
       onError(true, error)
 
       toast({
