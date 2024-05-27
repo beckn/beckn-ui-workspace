@@ -3,7 +3,8 @@ import React, { useEffect, useState } from 'react'
 import { FormDetails } from './DyForm.types'
 import { Input, Button, InputTypeEnum, Loader } from '@beckn-ui/molecules'
 import parse from 'html-react-parser'
-import { Checkbox, Box } from '@chakra-ui/react'
+import { Checkbox, Box, useToast } from '@chakra-ui/react'
+import { CustomToast } from '@components/signIn/SignIn'
 
 function replaceDynamicText(template, variables) {
   // Ensure template starts as a string
@@ -80,6 +81,7 @@ const extractFormDetails = (htmlString: string) => {
 }
 
 const DyForm: React.FC<DyFormProps> = ({ htmlForm, onSubmit, onError, formId, setLoading, handleCancel }) => {
+  const toast = useToast()
   const [formDetails, setFormDetails] = useState<FormDetails>({})
 
   const [formData, setFormData] = useState({})
@@ -107,13 +109,32 @@ const DyForm: React.FC<DyFormProps> = ({ htmlForm, onSubmit, onError, formId, se
           message: { ...formData, form_id: formId }
         })
       })
+
+      if (!response.ok) {
+        let { error } = await response.json()
+
+        throw new Error(error)
+      }
+
       const result = await response.json()
       onSubmit(true)
       setIsLoading(false)
-      console.log('Response:', result)
     } catch (error) {
-      console.error('Error:', error)
+      console.error('Dank:', error)
       onError(true, error)
+
+      toast({
+        render: () => (
+          <CustomToast
+            title="Error!"
+            message={`${error}`}
+          />
+        ),
+        position: 'top',
+        duration: 2000,
+        isClosable: true
+      })
+
       setIsLoading(false)
     }
   }
