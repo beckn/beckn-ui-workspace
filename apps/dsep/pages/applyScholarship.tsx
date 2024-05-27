@@ -40,6 +40,7 @@ const ApplyScholarship = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [appliedScholarship, setAppliedScholarship] = useState<ParsedItemModel | null>(null)
   const [scholarShipSelectResponse, setScholarShipSelectResponse] = useState<SelectResponseModel | null>(null)
+  const [scholarShipInitResponse, setScholarShipInitResponse] = useState<InitResponseModel | null>(null)
   const [isLoadingInSelect, setIsLoadingInSelect] = useState(true)
   const [formErrors, setFormErrors] = useState<FormErrors>({})
 
@@ -90,105 +91,63 @@ const ApplyScholarship = () => {
         .post(`${dsepUrl}/select`, payloadForScholarshipSelect)
         .then(res => {
           setScholarShipSelectResponse(res.data)
+          const scholarShipInitPayload = getInitPayloadForScholarship(res.data)
+          return axios.post(`${dsepUrl}/init`, scholarShipInitPayload)
+        })
+        .then(res => {
+          const scholarshipInitResponseData: InitResponseModel = res.data
+          setScholarShipInitResponse(scholarshipInitResponseData)
           setIsLoadingInSelect(false)
         })
         .catch(e => console.error(e))
     }
   }, [appliedScholarship])
 
-  // TODO :- to check handleButtonClick code later
+  const handleButtonClick = async () => {
+    setIsLoading(true)
+    const { address, email, mobileNumber, name, pinCode, scholarshipInfo } = formData
 
-  // const handleButtonClick = async () => {
-  //   const validationErrors = validateForm(formData as any)
+    const bearerToken = Cookies.get('authToken')
+    const axiosConfig = {
+      headers: {
+        Authorization: `Bearer ${bearerToken}`,
+        'Content-Type': 'application/json' // You can set the content type as needed
+      }
+    }
 
-  //   if (Object.keys(validationErrors).length > 0) {
-  //     setFormErrors(validationErrors)
-  //     return
-  //   }
-  //   setIsLoading(true)
-  //   const { address, email, mobileNumber, name, pinCode, scholarshipInfo } = formData
+    try {
+      if (scholarShipSelectResponse) {
+        if (scholarShipInitResponse) {
+          const payloadForConfirm = getConfirmPayloadForScholarship(scholarShipInitResponse)
 
-  //   const bearerToken = Cookies.get('authToken')
-  //   const axiosConfig = {
-  //     headers: {
-  //       Authorization: `Bearer ${bearerToken}`,
-  //       'Content-Type': 'application/json' // You can set the content type as needed
-  //     }
-  //   }
+          const scholarshipConfirmResponse = await axios.post(`${dsepUrl}/confirm`, payloadForConfirm)
+          const scholarshipConfirmResponseData: ConfirmResponseModel = scholarshipConfirmResponse.data
+          if (scholarshipConfirmResponseData) {
+            const ordersPayload = getPostOrderPayload(scholarshipConfirmResponseData)
+            const fulfillOrderRequest = await axios.post(`${strapiUrl}/orders`, ordersPayload, axiosConfig)
+            if (fulfillOrderRequest.data) {
+              setIsLoading(false)
+              Router.push('/scholarshipConfirmationPage')
+            }
+          }
+        }
+      }
+      setIsLoading(false)
+    } catch (error: any) {
+      console.error(error)
+      if (error.response && error.response.data) {
+        const errorMessage = error.response.data.error.message
 
-  //   try {
-  //     let arrayOfDocumentIds: number[] = []
-  //     const fetchDocuments = await axios.get(`${strapiUrl}/documents?populate[0]=attachment`, axiosConfig)
-  //     if (fetchDocuments.data) {
-  //       fetchDocuments.data.data.forEach((ele: any) => arrayOfDocumentIds.push(ele.id))
-  //     }
-  //     const formDataForPayload = new FormData()
-
-  //     const profileCreatePayload = {
-  //       name: name,
-  //       phone: mobileNumber,
-  //       documents: arrayOfDocumentIds
-  //     }
-  //     formDataForPayload.append('data', JSON.stringify(profileCreatePayload))
-  //     const formSubmissionResponse = await axios.post(`${strapiUrl}/profiles`, formDataForPayload, axiosConfig)
-
-  //     if (formSubmissionResponse.data) {
-  //       const fetchProfilesResponse = await axios.get(
-  //         `${strapiUrl}/profiles?populate[0]=documents.attachment`,
-  //         axiosConfig
-  //       )
-  //       if (fetchProfilesResponse.data) {
-  //         let docCredArray: JobCredential[] = []
-
-  //         fetchProfilesResponse.data.data.attributes.documents.data.map((doc: any) => {
-  //           if (doc.attributes.attachment.data && doc.attributes.type) {
-  //             const docUrl = coreStrapiUrl + doc.attributes.attachment.data.attributes.url
-  //             const docType = doc.attributes.attachment.data.attributes.mime
-
-  //             docCredArray.push({
-  //               url: docUrl,
-  //               type: docType
-  //             })
-  //           }
-  //         })
-
-  //         if (scholarShipSelectResponse) {
-  //           const scholarShipInitPayload = getInitPayloadForScholarship(scholarShipSelectResponse)
-  //           const scholarshipInitResponse = await axios.post(`${dsepUrl}/init`, scholarShipInitPayload)
-  //           const scholarshipInitResponseData: InitResponseModel = scholarshipInitResponse.data
-  //           if (scholarshipInitResponseData) {
-  //             const payloadForConfirm = getConfirmPayloadForScholarship(scholarshipInitResponseData)
-
-  //             const scholarshipConfirmResponse = await axios.post(`${dsepUrl}/confirm`, payloadForConfirm)
-  //             const scholarshipConfirmResponseData: ConfirmResponseModel = scholarshipConfirmResponse.data
-  //             if (scholarshipConfirmResponseData) {
-  //               const ordersPayload = getPostOrderPayload(scholarshipConfirmResponseData)
-  //               const fulfillOrderRequest = await axios.post(`${strapiUrl}/orders`, ordersPayload, axiosConfig)
-  //               if (fulfillOrderRequest.data) {
-  //                 setIsLoading(false)
-  //                 Router.push('/scholarshipConfirmationPage')
-  //               }
-  //             }
-  //           }
-  //         }
-  //       }
-  //     }
-  //     setIsLoading(false)
-  //   } catch (error: any) {
-  //     console.error(error)
-  //     if (error.response && error.response.data) {
-  //       const errorMessage = error.response.data.error.message
-
-  //       if (error.response.config.url.includes(`${strapiUrl}/orders`)) {
-  //         toast.error(errorMessage, { autoClose: 5000 })
-  //         Router.push('/scholarshipConfirmationPage')
-  //       } else {
-  //         toast.error(errorMessage, { autoClose: 5000 })
-  //       }
-  //     }
-  //     setIsLoading(false)
-  //   }
-  // }
+        if (error.response.config.url.includes(`${strapiUrl}/orders`)) {
+          toast.error(errorMessage, { autoClose: 5000 })
+          Router.push('/scholarshipConfirmationPage')
+        } else {
+          toast.error(errorMessage, { autoClose: 5000 })
+        }
+      }
+      setIsLoading(false)
+    }
+  }
 
   if (isLoadingInSelect) {
     return (
@@ -198,8 +157,8 @@ const ApplyScholarship = () => {
         alignContent={'center'}
       >
         <LoaderWithMessage
-          loadingSubText=""
-          loadingText=""
+          loadingSubText="Please wait!"
+          loadingText="Getting your scholarship form"
         />
       </Box>
     )
@@ -224,12 +183,12 @@ const ApplyScholarship = () => {
     return <></>
   }
 
-  if (!scholarShipSelectResponse) {
+  if (!scholarShipSelectResponse || !scholarShipInitResponse) {
     return <></>
   }
 
   const areFilesSelected = selectedFiles.length !== 0
-  const xInputHtml = scholarShipSelectResponse?.data[0].message.order.items[0].xinput.html as string
+  const xInputHtml = scholarShipInitResponse?.data[0].message.order.items[0].xinput.html as string
 
   return (
     <Box
@@ -237,7 +196,10 @@ const ApplyScholarship = () => {
       maxH={'calc(100vh - 100px)'}
       overflowY="scroll"
     >
-      <ApplyScholarshipForm xInputHtml={xInputHtml} />
+      <ApplyScholarshipForm
+        xInputHtml={xInputHtml}
+        onFormSubmit={handleButtonClick}
+      />
     </Box>
   )
 }

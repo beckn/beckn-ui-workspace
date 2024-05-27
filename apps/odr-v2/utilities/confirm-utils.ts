@@ -38,6 +38,53 @@ export const getOrderPlacementTimeline = (timeStamp: string) => {
   return `${localDateWithoutDay}, ${localTime}`
 }
 
+// export const getPayloadForConfirm = (initResponse: InitResponseModel[]) => {
+//   const {
+//     context,
+//     message: {
+//       order: { billing, fulfillments, items, payments, provider, quote, type }
+//     }
+//   } = initResponse[0]
+//   const { transaction_id, bpp_id, bpp_uri, domain } = context
+
+//   const payload = {
+//     data: [
+//       {
+//         context: {
+//           transaction_id: transaction_id,
+//           bpp_id: bpp_id,
+//           bpp_uri: bpp_uri,
+//           domain: domain
+//         },
+//         message: {
+//           orders: [
+//             {
+//               provider: {
+//                 id: provider.id
+//               },
+//               items: items,
+//               fulfillments: fulfillments,
+//               billing: billing
+//               // payments: [
+//               //   {
+//               //     id: payments[0].id,
+//               //     params: {
+//               //       amount: quote.price.value,
+//               //       currency: quote.price.currency
+//               //     },
+//               //     status: 'PAID',
+//               //     type: 'ON-FULFILLMENT'
+//               //   }
+//               // ]
+//             }
+//           ]
+//         }
+//       }
+//     ]
+//   }
+
+//   return payload
+// }
 export const getPayloadForConfirm = (initResponse: InitResponseModel[]) => {
   const {
     context,
@@ -46,6 +93,25 @@ export const getPayloadForConfirm = (initResponse: InitResponseModel[]) => {
     }
   } = initResponse[0]
   const { transaction_id, bpp_id, bpp_uri, domain } = context
+
+  let defaultCustomer = {
+    person: {
+      name: 'Veronica sehgal'
+    },
+    contact: {
+      phone: '7011459003',
+      email: 'hola@gmail.com'
+    }
+  }
+
+  if (typeof window !== 'undefined') {
+    let shippingAddress = JSON.parse(localStorage.getItem('shippingAddress') as string)
+    defaultCustomer.person.name = shippingAddress.name
+    defaultCustomer.contact.phone = shippingAddress.mobileNumber
+    defaultCustomer.contact.email = shippingAddress.email
+  }
+
+  const updatedFullfillments = [{ ...fulfillments[0], customer: defaultCustomer }]
 
   const payload = {
     data: [
@@ -63,7 +129,7 @@ export const getPayloadForConfirm = (initResponse: InitResponseModel[]) => {
                 id: provider.id
               },
               items: items,
-              fulfillments: fulfillments,
+              fulfillments: updatedFullfillments,
               billing: billing
               // payments: [
               //   {
