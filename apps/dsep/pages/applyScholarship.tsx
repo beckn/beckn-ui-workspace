@@ -232,9 +232,13 @@ const ApplyScholarship = () => {
   const xInputHtml = scholarShipSelectResponse?.data[0].message.order.items[0].xinput.html as string
 
   return (
-    <>
+    <Box
+      className="hideScroll"
+      maxH={'calc(100vh - 100px)'}
+      overflowY="scroll"
+    >
       <ApplyScholarshipForm xInputHtml={xInputHtml} />
-    </>
+    </Box>
   )
 }
 

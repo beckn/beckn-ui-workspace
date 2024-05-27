@@ -4,24 +4,24 @@ import { Box } from '@chakra-ui/react'
 import { LoaderWithMessage } from '@beckn-ui/molecules'
 import SearchBar from '../components/header/SearchBar'
 import ProductList from '../components/productList/ProductList'
-import useRequest from '../hooks/useRequest'
 import { responseDataActions } from '../store/responseData-slice'
 import { useLanguage } from '../hooks/useLanguage'
 import { useRouter } from 'next/router'
 import { getParsedSearchlist } from '../utilities/search-utils'
 import { ParsedItemModel, SearchResponseModel } from '../types/search.types'
 import { toast } from 'react-toastify'
+import axios from 'axios'
 
 const Search = () => {
   const [items, setItems] = useState<ParsedItemModel[]>([])
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const router = useRouter()
   const [searchKeyword, setSearchKeyword] = useState(router.query?.searchTerm || '')
   const dispatch = useDispatch()
   const { t, locale } = useLanguage()
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
-
-  const { data, loading, error, fetchData } = useRequest()
 
   const searchPayload = {
     context: {
@@ -30,12 +30,31 @@ const Search = () => {
     searchString: searchKeyword
   }
 
-  const fetchDataForSearch = () => fetchData(`${apiUrl}/search`, 'POST', searchPayload)
+  const fetchDataForSearch = async () => {
+    setLoading(true)
+    setError(null)
+    try {
+      const response = await axios.post(`${apiUrl}/search`, searchPayload)
+      const parsedItems = getParsedSearchlist(response.data.data as SearchResponseModel[])
+      localStorage.setItem('searchItems', JSON.stringify(parsedItems))
+      setItems(parsedItems)
+    } catch (err) {
+      setError('Something went wrong')
+      toast.error('Something went wrong', {
+        position: 'top-center'
+      })
+    } finally {
+      setLoading(false)
+    }
+  }
 
   useEffect(() => {
-    if (localStorage && !localStorage.getItem('searchItems')) {
-      fetchData(`${apiUrl}/search`, 'POST', searchPayload)
+    const fetchInitialData = async () => {
+      if (localStorage && !localStorage.getItem('searchItems')) {
+        await fetchDataForSearch()
+      }
     }
+    fetchInitialData()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -48,21 +67,13 @@ const Search = () => {
       }
     }
   }, [])
-  useEffect(() => {
-    if (data) {
-      const parsedItems = getParsedSearchlist(data.data as SearchResponseModel[])
 
-      localStorage.setItem('searchItems', JSON.stringify(parsedItems))
-      setItems(parsedItems)
+  useEffect(() => {
+    if (searchKeyword !== router.query?.searchTerm) {
+      fetchDataForSearch()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data])
-
-  if (error) {
-    return toast.error('Something went wrong', {
-      position: 'top-center'
-    })
-  }
+  }, [searchKeyword])
 
   return (
     <>
@@ -88,7 +99,6 @@ const Search = () => {
               })
             )
             window.dispatchEvent(new Event('storage-optiontags'))
-            fetchDataForSearch()
           }}
         />
       </Box>

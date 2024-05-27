@@ -104,10 +104,6 @@ const ProductCard: React.FC<ProductCardProps> = props => {
                   <Text
                     fontSize={'0.8rem'}
                     mb={'0.7rem'}
-                    noOfLines={2}
-                    textOverflow="ellipsis"
-                    whiteSpace="pre-wrap"
-                    overflowWrap="break-word"
                     fontWeight={'600'}
                     mr="5px"
                   >
@@ -116,6 +112,7 @@ const ProductCard: React.FC<ProductCardProps> = props => {
                   <Text
                     fontSize={'0.8rem'}
                     mb={'0.7rem'}
+                    w={['60%', '60%', 'unset']}
                     noOfLines={2}
                     textOverflow="ellipsis"
                     whiteSpace="pre-wrap"
