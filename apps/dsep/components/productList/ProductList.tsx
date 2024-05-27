@@ -5,6 +5,7 @@ import { Box } from '@chakra-ui/react'
 import { ParsedItemModel } from '../../types/search.types'
 import { ProductCard } from '@beckn-ui/becknified-components'
 import ProductCardRenderer from '../productCard/product-card-renderer'
+import { Typography } from '@beckn-ui/molecules'
 
 interface ProductListPropsModel {
   productList: ParsedItemModel[]
@@ -59,13 +60,20 @@ const ProductList: React.FC<ProductListPropsModel> = ({ productList }) => {
           selectedBtn={selectedRadioBtn}
         />
         <Box marginTop={'107px'}>
-          {sortedProductList.map((item, idx) => (
-            <ProductCard
-              key={idx}
-              ComponentRenderer={ProductCardRenderer}
-              dataSource={item}
+          {sortedProductList.length ? (
+            sortedProductList.map((item, idx) => (
+              <ProductCard
+                key={idx}
+                ComponentRenderer={ProductCardRenderer}
+                dataSource={item}
+              />
+            ))
+          ) : (
+            <Typography
+              text={t.noProduct}
+              variant="subTitleRegular"
             />
-          ))}
+          )}
         </Box>
       </Box>
     </>
