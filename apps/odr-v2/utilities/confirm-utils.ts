@@ -49,11 +49,11 @@ export const getPayloadForConfirm = (initResponse: InitResponseModel[]) => {
 
   const defaultCustomer = {
     person: {
-      name: 'Veronica sehgal'
+      name: 'santosh kumar'
     },
     contact: {
-      phone: '7011459003',
-      email: 'hola@gmail.com'
+      phone: '6251423251',
+      email: 'santosh.k@gmail.com'
     }
   }
 
