@@ -171,6 +171,7 @@ const en: { [key: string]: string } = {
   unableToProceed: 'Unable to proceed with init request',
   orderSummary: 'Order Summary',
   totalQuantity: 'Total Quantity',
-  totalAmount: 'Total Amount'
+  totalAmount: 'Total Amount',
+  errorText: 'Something went wrong'
 }
 export default en

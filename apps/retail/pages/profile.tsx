@@ -74,6 +74,20 @@ const ProfilePage = () => {
           mobileNumber: phone
         })
       })
+      .catch(err => {
+        toast({
+          render: () => (
+            <CustomToast
+              title="Error!"
+              message={t.errorText}
+            />
+          ),
+          position: 'top',
+          duration: 4000,
+          isClosable: true
+        })
+        Router.push('/')
+      })
       .finally(() => {
         setIsLoading(false)
       })
