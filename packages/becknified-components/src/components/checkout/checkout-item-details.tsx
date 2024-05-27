@@ -34,6 +34,7 @@ const ItemDetails: React.FC<ItemDetailProps> = ({ title, quantity, description, 
             alignItems={'center'}
           >
             <Typography
+              style={{ width: '90%' }}
               text={title}
               variant="subTitleRegular"
             />
