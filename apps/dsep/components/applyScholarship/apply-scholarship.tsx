@@ -22,6 +22,9 @@ const ApplyScholarshipForm: FC<ApplyScholarshipPropsModel> = ({ xInputHtml = '' 
 
     const formUrl = formData.get('action')
 
+    const fileDocuments = formData.getAll('document')
+    console.log('fileDocuments--> ', fileDocuments)
+
     axios
       .post(`${apiUrl}/x-input/submit`, {
         message: {
@@ -45,6 +48,13 @@ const ApplyScholarshipForm: FC<ApplyScholarshipPropsModel> = ({ xInputHtml = '' 
   }
 
   useEffect(() => {
+    const range = document.createRange()
+    const documentFragment = range.createContextualFragment(xInputHtml)
+    const xInputContainer = document.getElementById('x-input-container')
+    if (xInputContainer) {
+      xInputContainer.appendChild(documentFragment)
+    }
+
     const form = document.getElementById('xinputform')
     form!.addEventListener('submit', handleSubmit)
     return () => form!.removeEventListener('submit', handleSubmit)
@@ -53,8 +63,8 @@ const ApplyScholarshipForm: FC<ApplyScholarshipPropsModel> = ({ xInputHtml = '' 
   return (
     <>
       <Box
+        id="x-input-container"
         className={`hideScroll ${styles.form_container}`}
-        dangerouslySetInnerHTML={{ __html: xInputHtml }}
       ></Box>
       {/* <button className={styles.jjj}>My button</button> */}
     </>
