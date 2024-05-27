@@ -203,7 +203,9 @@ export const getPaymentBreakDown = (initData: InitResponseItem) => {
 
   const totalPricewithCurrent = {
     currency: price.currency,
-    value: price.value
+    value: breakup.reduce((total, item) => {
+      return total + parseFloat(item.price.value)
+    }, 0)
   }
 
   const breakUpMap: Record<string, any> = {}
