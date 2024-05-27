@@ -15,10 +15,12 @@ const BecknButton: React.FC<ButtonProps> = ({
   type = 'button',
   isLoading = false,
   loadingText = 'Loading',
-  color
+  color,
+  id
 }) => {
   return (
     <Button
+      id={id}
       leftIcon={leftIcon}
       width={fullWidth ? 'full' : 'initial'}
       onClick={handleClick}

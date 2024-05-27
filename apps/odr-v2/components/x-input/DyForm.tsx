@@ -23,6 +23,7 @@ interface DyFormProps {
   onSubmit: (isFormSubmitted: boolean) => void
   onError: (isError: boolean, error: any) => void
   formId: string
+  handleCancel: () => void
 }
 
 function capitalizeFirstLetter(name: string) {
@@ -33,9 +34,18 @@ const extractFormDetails = (htmlString: string) => {
   const parser = new DOMParser()
   const doc = parser.parseFromString(htmlString, 'text/html')
   const form = doc.querySelector('form')
+  const labels = form.querySelectorAll('label')
   const inputs = form.querySelectorAll('input')
   const buttons = form.querySelectorAll('button')
   const staticTexts = doc.querySelectorAll('h2, p')
+
+  const labelMap: any = {}
+  labels.forEach((label: any) => {
+    const inputId = label.htmlFor
+    if (inputId) {
+      labelMap[inputId] = label.textContent.trim()
+    }
+  })
 
   const inputDetails = Array.from(inputs).map(input => ({
     type: input.type,
@@ -43,12 +53,14 @@ const extractFormDetails = (htmlString: string) => {
     name: input.name,
     required: input.hasAttribute('required'),
     value: input.value,
-    label: capitalizeFirstLetter(input.name)
+    label: labelMap[input.id] || capitalizeFirstLetter(input.name)
   }))
 
   const buttonDetails = Array.from(buttons).map(button => ({
+    id: `btn${button.textContent}`,
     type: button.type,
-    text: button.textContent
+    text: button.textContent,
+    variant: button.textContent?.toLocaleLowerCase() === 'cancel' ? 'outline' : 'solid'
   }))
 
   const textBlocks = Array.from(staticTexts).map(text => ({
@@ -67,7 +79,7 @@ const extractFormDetails = (htmlString: string) => {
   return formDetails
 }
 
-const DyForm: React.FC<DyFormProps> = ({ htmlForm, onSubmit, onError, formId, setLoading }) => {
+const DyForm: React.FC<DyFormProps> = ({ htmlForm, onSubmit, onError, formId, setLoading, handleCancel }) => {
   const [formDetails, setFormDetails] = useState<FormDetails>({})
 
   const [formData, setFormData] = useState({})
@@ -170,7 +182,7 @@ const DyForm: React.FC<DyFormProps> = ({ htmlForm, onSubmit, onError, formId, se
               transform(reactNode, domNode, index) {
                 let updatedNode = reactNode
                 if (typeof reactNode === 'string') {
-                  updatedNode = replaceDynamicText(reactNode, { name: formData.name || '', companyName: 'Eminds' })
+                  updatedNode = replaceDynamicText(reactNode, { name: formData.name || '', companyName: '' })
                 }
                 return updatedNode
               }
@@ -191,9 +203,12 @@ const DyForm: React.FC<DyFormProps> = ({ htmlForm, onSubmit, onError, formId, se
           ))}
         {formDetails.buttons.map(button => (
           <Button
+            id={button.id}
             key={button.text}
             type={button.type}
             text={button.text}
+            variant={button.variant}
+            handleClick={button.text.toLowerCase() === 'cancel' ? handleCancel : undefined}
           />
         ))}
       </form>

@@ -90,6 +90,7 @@ const AddSection: React.FC<AddSectionProps> = ({
               onSubmit={onSubmit}
               onError={onError}
               formId={form_id}
+              handleCancel={onClose}
             />
           </BottomModal>
         )}

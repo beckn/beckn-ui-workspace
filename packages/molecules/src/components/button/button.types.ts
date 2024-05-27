@@ -17,4 +17,5 @@ export interface ButtonProps {
   isLoading?: boolean
   loadingText?: string
   color?: string
+  id?: string
 }
