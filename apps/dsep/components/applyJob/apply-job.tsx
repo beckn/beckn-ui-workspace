@@ -22,6 +22,9 @@ const ApplyJobForm: FC<ApplyJobPropsModel> = ({ xInputHtml = '' }) => {
 
     const formUrl = formData.get('action')
 
+    const fileDocuments = formData.getAll('document')
+    console.log('fileDocuments--> ', fileDocuments)
+
     axios
       .post(`${apiUrl}/x-input/submit`, {
         message: {
@@ -42,6 +45,13 @@ const ApplyJobForm: FC<ApplyJobPropsModel> = ({ xInputHtml = '' }) => {
   }
 
   useEffect(() => {
+    const range = document.createRange()
+    const documentFragment = range.createContextualFragment(xInputHtml)
+    const xInputContainer = document.getElementById('x-input-container')
+    if (xInputContainer) {
+      xInputContainer.appendChild(documentFragment)
+    }
+
     const form = document.getElementById('xinputform')
     form!.addEventListener('submit', handleSubmit)
     return () => form!.removeEventListener('submit', handleSubmit)
@@ -50,8 +60,8 @@ const ApplyJobForm: FC<ApplyJobPropsModel> = ({ xInputHtml = '' }) => {
   return (
     <>
       <Box
+        id="x-input-container"
         className={`${styles.form_container}`}
-        dangerouslySetInnerHTML={{ __html: xInputHtml }}
       ></Box>
     </>
   )
