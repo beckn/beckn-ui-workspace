@@ -5,7 +5,7 @@ import { Box } from '@chakra-ui/react'
 import { ParsedItemModel } from '../../types/search.types'
 import { ProductCard } from '@beckn-ui/becknified-components'
 import ProductCardRenderer from '../productCard/product-card-renderer'
-import { Typography } from '@beckn-ui/molecules'
+import Typography from '@beckn-ui/molecules/src/components/typography/typography'
 
 interface ProductListPropsModel {
   productList: ParsedItemModel[]
@@ -69,10 +69,15 @@ const ProductList: React.FC<ProductListPropsModel> = ({ productList }) => {
               />
             ))
           ) : (
-            <Typography
-              text={t.noProduct}
-              variant="subTitleRegular"
-            />
+            <Box
+              textAlign={'center'}
+              opacity={0.5}
+            >
+              <Typography
+                text={t.noProduct}
+                variant="subTitleRegular"
+              />
+            </Box>
           )}
         </Box>
       </Box>

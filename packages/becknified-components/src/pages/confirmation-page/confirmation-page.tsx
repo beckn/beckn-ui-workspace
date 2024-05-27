@@ -42,10 +42,10 @@ const ConfirmationPage: React.FC<ConfirmationPageProps> = ({ schema, className }
           <Typography
             text={successOrderMessage}
             variant="subTitleSemibold"
+            fontSize={{ base: '1rem', md: '2rem' }}
           />
           <Typography
             fontSize={{ base: '1rem', md: '2rem' }}
-            variant="subTitleSemibold"
             text={gratefulMessage}
           />
           {orderIdMessage && (

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { ConfirmationPage } from '@beckn-ui/becknified-components'
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/router'
 import orderConfirmmark from '../public/images/orderConfirmmark.svg'
 import { ParsedScholarshipData } from '../components/scholarship/scholarshipCard/Scholarship.types'
 import { useLanguage } from '../hooks/useLanguage'
@@ -29,7 +29,7 @@ const scholarshipConfirmationPage = () => {
       schema={{
         iconSrc: orderConfirmmark,
         successOrderMessage: t.applicationSubmitted,
-        gratefulMessage: t.jobApplicationConfirmation,
+        gratefulMessage: `${t.ScholarshipConfirmation} ${router.query.id} ${t.andRespond}`,
         buttons: [
           {
             text: t.gotoCart,
