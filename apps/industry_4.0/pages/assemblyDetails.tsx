@@ -68,7 +68,17 @@ const assemblyDetails = () => {
 
   const xInputHtml = selectData[0].message.order.items[0].xinput.html
 
-  return <AssemblyDetails xInputHtml={xInputHtml} />
+  return (
+    <Box
+      className="hideScroll"
+      maxH={'calc(100vh - 100px)'}
+      overflowY="scroll"
+      mr={'-20px'}
+      ml={'-20px'}
+    >
+      <AssemblyDetails xInputHtml={xInputHtml} />
+    </Box>
+  )
 }
 
 export default assemblyDetails
