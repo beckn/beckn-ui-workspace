@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { FormDetails } from './DyForm.types'
 import { Input, Button, InputTypeEnum, Loader } from '@beckn-ui/molecules'
 import parse from 'html-react-parser'
+import Styles from './DyForm.module.css'
 import { Checkbox, Box, useToast } from '@chakra-ui/react'
 import { CustomToast } from '@components/signIn/SignIn'
 
@@ -198,12 +199,18 @@ const DyForm: React.FC<DyFormProps> = ({ htmlForm, onSubmit, onError, formId, se
         const CustomTag = text.tag
         // return <CustomTag key={index}>{replaceDynamicText(parse(text.content),{name:formData.name || '',companyName:"Eminds"})}</CustomTag>
         return (
-          <CustomTag key={index}>
+          <CustomTag
+            key={index}
+            className={Styles[CustomTag]}
+          >
             {parse(text.content, {
               transform(reactNode, domNode, index) {
                 let updatedNode = reactNode
                 if (typeof reactNode === 'string') {
-                  updatedNode = replaceDynamicText(reactNode, { name: formData.name || '', companyName: '' })
+                  updatedNode = replaceDynamicText(reactNode, {
+                    name: formData.name || '',
+                    companyName: formData.place || ''
+                  })
                 }
                 return updatedNode
               }
