@@ -71,7 +71,7 @@ const headerValues: PathnameObjectType = {
   '/cart': 'Cart',
   '/paymentMode': 'Select Payment Method',
   '/assemblyDetails': 'Add Assembly Details',
-  '/updateShippingDetails': 'Shipping Details',
+  '/updateShippingDetails': 'Complainant Details',
   '/orderCancellation': 'Order Cancel',
   '/feedback': '',
   '/profile': 'My Profile',

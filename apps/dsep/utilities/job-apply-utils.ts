@@ -36,7 +36,7 @@ export const getSelectPayloadForJobs = (jobForApply: ParsedItemModel) => {
 
 export const getInitPayloadForJobs = (
   jobsSelectRes: SelectResponseModel,
-  credentials: JobCredential[],
+  // credentials: JobCredential[],
   name: string
 ) => {
   const { transaction_id, bpp_id, bpp_uri, domain } = jobsSelectRes.data[0].context
@@ -82,7 +82,7 @@ export const getInitPayloadForJobs = (
                       }
                     ],
                     url: 'https://www.google.com',
-                    creds: credentials,
+                    // creds: credentials,
                     skills: [
                       {
                         name: 'NodeJS'

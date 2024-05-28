@@ -54,7 +54,10 @@ const Feedback = () => {
           title: `Thank you for your rating! `,
           status: 'success',
           isClosable: true,
-          position: 'top'
+          position: 'top',
+          containerStyle: {
+            marginTop: '40px'
+          }
         })
         router.push('/')
       }
