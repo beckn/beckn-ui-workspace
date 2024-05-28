@@ -57,7 +57,7 @@ const Search = () => {
     },
     searchString: searchKeyword,
     category: {
-      categoryCode: getCategoryBasedOnLocale(locale)
+      categoryCode: searchKeyword === 'Paris' ? getCategoryBasedOnLocale(locale) : 'Tourism'
     },
     fulfillment: {
       type: 'Delivery',
