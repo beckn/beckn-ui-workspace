@@ -203,7 +203,10 @@ const DyForm: React.FC<DyFormProps> = ({ htmlForm, onSubmit, onError, formId, se
               transform(reactNode, domNode, index) {
                 let updatedNode = reactNode
                 if (typeof reactNode === 'string') {
-                  updatedNode = replaceDynamicText(reactNode, { name: formData.name || '', companyName: '' })
+                  updatedNode = replaceDynamicText(reactNode, {
+                    name: formData.name || '',
+                    companyName: formData.place || ''
+                  })
                 }
                 return updatedNode
               }

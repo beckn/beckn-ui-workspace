@@ -64,7 +64,12 @@ const BottomModal: React.FC<BottomModalProps> = ({
           <Divider />
         </Box>
 
-        <ModalBody>{children}</ModalBody>
+        <ModalBody
+          maxHeight={'calc(100vh - 10rem)'}
+          overflow={'scroll'}
+        >
+          {children}
+        </ModalBody>
       </ModalContent>
     </Modal>
   )
