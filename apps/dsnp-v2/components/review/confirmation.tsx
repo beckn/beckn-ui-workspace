@@ -20,7 +20,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({ reviewSubmitted, productIma
 
   const { t } = useLanguage()
   const handleShopbtn = (): void => {
-    Router.push(`/homePage`)
+    Router.push(`/`)
   }
 
   const handleCheckReview = () => {
@@ -37,10 +37,17 @@ const Confirmation: React.FC<ConfirmationProps> = ({ reviewSubmitted, productIma
 
   if (loader)
     return (
-      <LoaderWithMessage
-        loadingText={'Please wait!'}
-        loadingSubText={'While we confirm your review is authentic for your order'}
-      />
+      <Box
+        display="flex"
+        height="calc(100vh - 160px)"
+        justifyContent="center"
+        alignItems={'center'}
+      >
+        <LoaderWithMessage
+          loadingText={'Please wait!'}
+          loadingSubText={'While we confirm your review is authentic for your order'}
+        />
+      </Box>
     )
 
   return (
