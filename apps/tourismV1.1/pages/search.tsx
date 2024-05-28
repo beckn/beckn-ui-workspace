@@ -36,17 +36,29 @@ const Search = () => {
     setIsFilterOpen(false)
   }
   const dispatch = useDispatch()
-  const { t } = useLanguage()
+  const { t, locale } = useLanguage()
   const searchAddress = useSelector(
     (state: IGeoLocationSearchPageRootState) => state.geoLocationSearchPageUI.geoAddress
   )
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
+
+  const getCategoryBasedOnLocale = (locale: string = 'en') => {
+    switch (locale) {
+      case 'en':
+        return 'TourismEnglish'
+      case 'fa':
+        return 'TourismFrench'
+    }
+  }
 
   const searchPayload = {
     context: {
       domain: DOMAIN
     },
     searchString: searchKeyword,
+    category: {
+      categoryCode: getCategoryBasedOnLocale(locale)
+    },
     fulfillment: {
       type: 'Delivery',
       stops: [
@@ -65,6 +77,7 @@ const Search = () => {
       .then(res => {
         dispatch(discoveryActions.addTransactionId({ transactionId: res.data.data[0].context.transaction_id }))
         const parsedSearchItems = parsedSearchlist(res.data.data)
+        // const parsedSearchItems = parsedSearchlist(res.data.data).filter((singleProduct)=>whitelistedProviders.includes(singleProduct.id))
         dispatch(discoveryActions.addProducts({ products: parsedSearchItems }))
         setItems(parsedSearchItems)
         setOriginalItems(parsedSearchItems)
