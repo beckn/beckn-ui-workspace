@@ -117,3 +117,6 @@ select.chakra-select {
 .-product_summary_container button.chakra-button {
   color: #fff !important;
 }
+.-product_card_layout_container img{
+  object-fit: unset;
+}
