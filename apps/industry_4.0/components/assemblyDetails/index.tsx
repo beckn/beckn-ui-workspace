@@ -43,6 +43,8 @@ const AssemblyDetails: FC<AssemblyDetailsPropsModel> = ({ xInputHtml }) => {
       })
       .then(res => {
         if (res.status === 200 && res.data) {
+          const formDataToStore = res.data.form_data
+          localStorage.setItem('assemblyDetails', JSON.stringify(formDataToStore))
           router.push('/checkoutPage')
         }
       })

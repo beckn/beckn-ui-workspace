@@ -106,23 +106,37 @@ const OrderDetails = () => {
     }
   }, [orderStatusMap])
 
+  // useEffect(() => {
+  //   if (data.statusData.length > 0) {
+  //     const newData = data.statusData
+  //       .map((status: any) => {
+  //         const { tags = [] } = status?.message?.order
+
+  //         if (!isEmpty(tags))
+  //           return {
+  //             label: statusMap[tags[tags.length - 1].list[0].value],
+  //             statusTime: status?.message?.order?.fulfillments[0]?.state?.updated_at || status?.context?.timestamp
+  //           }
+
+  //         return {
+  //           label: 'PROCESSING',
+  //           statusTime: status?.message?.order?.fulfillments[0]?.state?.updated_at || status?.context?.timestamp
+  //         }
+  //       })
+  //       .filter((status: any) => status.label)
+
+  //     const labelSet = new Set(orderStatusMap.map(status => status.label))
+  //     setOrderStatusMap(prevState => [...prevState, ...newData.filter(status => !labelSet.has(status.label))])
+  //   }
+  // }, [data.statusData])
+
   useEffect(() => {
     if (data.statusData.length > 0) {
       const newData = data.statusData
-        .map((status: any) => {
-          const { tags = [] } = status?.message?.order
-
-          if (!isEmpty(tags))
-            return {
-              label: statusMap[tags[tags.length - 1].list[0].value],
-              statusTime: status?.message?.order?.fulfillments[0]?.state?.updated_at || status?.context?.timestamp
-            }
-
-          return {
-            label: 'PROCESSING',
-            statusTime: status?.message?.order?.fulfillments[0]?.state?.updated_at || status?.context?.timestamp
-          }
-        })
+        .map((status: any) => ({
+          label: status?.message?.order?.fulfillments[0]?.state?.descriptor?.short_desc,
+          statusTime: status?.message?.order?.fulfillments[0]?.state?.updated_at
+        }))
         .filter((status: any) => status.label)
 
       const labelSet = new Set(orderStatusMap.map(status => status.label))

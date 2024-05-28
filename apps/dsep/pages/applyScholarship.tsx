@@ -103,7 +103,7 @@ const ApplyScholarship = () => {
     }
   }, [appliedScholarship])
 
-  const handleButtonClick = async () => {
+  const handleButtonClick = async (id: string) => {
     setIsLoading(true)
     const { address, email, mobileNumber, name, pinCode, scholarshipInfo } = formData
 
@@ -127,7 +127,7 @@ const ApplyScholarship = () => {
             const fulfillOrderRequest = await axios.post(`${strapiUrl}/orders`, ordersPayload, axiosConfig)
             if (fulfillOrderRequest.data) {
               setIsLoading(false)
-              Router.push('/scholarshipConfirmationPage')
+              Router.push(`/scholarshipConfirmationPage?id=${id}`)
             }
           }
         }
@@ -140,7 +140,7 @@ const ApplyScholarship = () => {
 
         if (error.response.config.url.includes(`${strapiUrl}/orders`)) {
           toast.error(errorMessage, { autoClose: 5000 })
-          Router.push('/scholarshipConfirmationPage')
+          Router.push(`/scholarshipConfirmationPage?id=${id}`)
         } else {
           toast.error(errorMessage, { autoClose: 5000 })
         }

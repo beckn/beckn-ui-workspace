@@ -6,9 +6,10 @@ import axios from 'axios'
 
 export interface ApplyJobPropsModel {
   xInputHtml: string
+  onFormSubmit: () => void
 }
 
-const ApplyJobForm: FC<ApplyJobPropsModel> = ({ xInputHtml = '' }) => {
+const ApplyJobForm: FC<ApplyJobPropsModel> = ({ xInputHtml = '', onFormSubmit }) => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
   const router = useRouter()
 
@@ -38,7 +39,8 @@ const ApplyJobForm: FC<ApplyJobPropsModel> = ({ xInputHtml = '' }) => {
       })
       .then(res => {
         if (res.status === 200 && res.data) {
-          router.push('/applicationSent')
+          onFormSubmit()
+          // router.push('/applicationSent')
         }
       })
       .catch(e => console.error(e))
