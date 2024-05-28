@@ -1,4 +1,4 @@
 export interface ApplyScholarshipPropsModel {
   xInputHtml: string
-  onFormSubmit: () => void
+  onFormSubmit: (id: string) => void
 }

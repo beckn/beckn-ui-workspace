@@ -22,6 +22,7 @@ import {
 import { SelectResponseModel } from '../lib/types/select.types'
 import { ConfirmResponseModel } from '../lib/types/confirm.types'
 import 'react-toastify/dist/ReactToastify.css'
+import { InitResponseModel } from '../lib/types/init.types'
 
 const jobApply = () => {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([])
@@ -37,6 +38,7 @@ const jobApply = () => {
   const [isLoadingInSelect, setIsLoadingInSelect] = useState(true)
   const [isDeclarationChecked, setIsDeclarationChecked] = useState(false)
   const [jobSelectResponse, setJobSelectResponse] = useState<SelectResponseModel | null>(null)
+  const [jobInitResponse, setJobInitResponse] = useState<InitResponseModel | null>(null)
 
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
   const dsepUrl = process.env.NEXT_PUBLIC_API_URL
@@ -77,10 +79,17 @@ const jobApply = () => {
     if (jobForApply) {
       const payloadForjobSelect = getSelectPayloadForJobs(jobForApply)
 
-      axios.post(`${dsepUrl}/select`, payloadForjobSelect).then(res => {
-        setJobSelectResponse(res.data)
-        setIsLoadingInSelect(false)
-      })
+      axios
+        .post(`${dsepUrl}/select`, payloadForjobSelect)
+        .then(res => {
+          setJobSelectResponse(res.data)
+          const initPayload = getInitPayloadForJobs(res.data, formData.name)
+          return axios.post(`${dsepUrl}/init`, initPayload)
+        })
+        .then(initResult => {
+          setJobInitResponse(initResult.data)
+          setIsLoadingInSelect(false)
+        })
     }
   }, [jobForApply])
 
@@ -90,83 +99,81 @@ const jobApply = () => {
 
   // TODO :- check this handleButtonClick later
 
-  // const handleButtonClick = async () => {
-  //   setIsLoading(true)
-  //   const { name, mobileNumber } = formData
+  const handleButtonClick = async () => {
+    setIsLoading(true)
+    const { name, mobileNumber } = formData
 
-  //   try {
-  //     let arrayOfDocumentIds: number[] = []
-  //     const fetchDocuments = await axios.get(`${strapiUrl}/documents?populate[0]=attachment`, axiosConfig)
+    try {
+      // let arrayOfDocumentIds: number[] = []
+      // const fetchDocuments = await axios.get(`${strapiUrl}/documents?populate[0]=attachment`, axiosConfig)
 
-  //     if (fetchDocuments.data) {
-  //       fetchDocuments.data.data.forEach((ele: any) => arrayOfDocumentIds.push(ele.id))
-  //     }
+      // if (fetchDocuments.data) {
+      //   fetchDocuments.data.data.forEach((ele: any) => arrayOfDocumentIds.push(ele.id))
+      // }
 
-  //     const formDataForPayload = new FormData()
+      // const formDataForPayload = new FormData()
 
-  //     const profileCreatePayload = {
-  //       name: name,
-  //       phone: mobileNumber,
-  //       documents: arrayOfDocumentIds
-  //     }
-  //     formDataForPayload.append('data', JSON.stringify(profileCreatePayload))
+      // const profileCreatePayload = {
+      //   name: name,
+      //   phone: mobileNumber,
+      //   documents: arrayOfDocumentIds
+      // }
+      // formDataForPayload.append('data', JSON.stringify(profileCreatePayload))
 
-  //     const formSubmissionResponse = await axios.post(`${strapiUrl}/profiles`, formDataForPayload, axiosConfig)
-  //     if (formSubmissionResponse.data) {
-  //       const fetchProfilesResponse = await axios.get(
-  //         `${strapiUrl}/profiles?populate[0]=documents.attachment`,
-  //         axiosConfig
-  //       )
+      // const formSubmissionResponse = await axios.post(`${strapiUrl}/profiles`, formDataForPayload, axiosConfig)
+      // if (formSubmissionResponse.data) {
+      //   const fetchProfilesResponse = await axios.get(
+      //     `${strapiUrl}/profiles?populate[0]=documents.attachment`,
+      //     axiosConfig
+      //   )
 
-  //       if (fetchProfilesResponse.data) {
-  //         let docCredArray: JobCredential[] = []
+      //   if (fetchProfilesResponse.data) {
+      //     let docCredArray: JobCredential[] = []
 
-  //         fetchProfilesResponse.data.data.attributes.documents.data.map((doc: any) => {
-  //           if (doc.attributes.attachment.data && doc.attributes.type) {
-  //             const docUrl = coreStrapiUrl + doc.attributes.attachment.data.attributes.url
-  //             const docType = doc.attributes.attachment.data.attributes.mime
+      //     fetchProfilesResponse.data.data.attributes.documents.data.map((doc: any) => {
+      //       if (doc.attributes.attachment.data && doc.attributes.type) {
+      //         const docUrl = coreStrapiUrl + doc.attributes.attachment.data.attributes.url
+      //         const docType = doc.attributes.attachment.data.attributes.mime
 
-  //             docCredArray.push({
-  //               url: docUrl,
-  //               type: docType
-  //             })
-  //           }
-  //         })
+      //         docCredArray.push({
+      //           url: docUrl,
+      //           type: docType
+      //         })
+      //       }
+      //     })
 
-  //         if (jobSelectResponse) {
-  //           const initPayload = getInitPayloadForJobs(jobSelectResponse, docCredArray, formData.name)
+      //   }
+      // }
 
-  //           const jobInitResponse = await axios.post(`${dsepUrl}/init`, initPayload)
-  //           if (jobInitResponse.data) {
-  //             const confirmPayload = getConfirmPayloadForJobs(jobInitResponse.data)
-  //             const jobConfirmResponse = await axios.post(`${dsepUrl}/confirm`, confirmPayload)
-  //             const jobConfirmData: ConfirmResponseModel = jobConfirmResponse.data
-  //             if (jobConfirmData) {
-  //               const orderPayload = getPostOrderPayload(jobConfirmData)
-  //               const fulfillOrderRequest = await axios.post(`${strapiUrl}/orders`, orderPayload, axiosConfig)
-  //               if (fulfillOrderRequest.data) {
-  //                 setIsLoading(false)
-  //                 Router.push('/applicationSent')
-  //               }
-  //             }
-  //           }
-  //         }
-  //       }
-  //     }
-  //   } catch (error: any) {
-  //     if (error.response && error.response.data) {
-  //       const errorMessage = error.response.data.error.message
-  //       console.log(error.response.config.url)
-  //       if (error.response.config.url.includes(`${strapiUrl}/orders`)) {
-  //         toast.error(errorMessage, { autoClose: 5000 })
-  //         Router.push('/applicationSent')
-  //       } else {
-  //         toast.error(errorMessage, { autoClose: 5000 })
-  //         console.log(errorMessage)
-  //       }
-  //     }
-  //   }
-  // }
+      if (jobSelectResponse && jobInitResponse) {
+        if (jobInitResponse) {
+          const confirmPayload = getConfirmPayloadForJobs(jobInitResponse)
+          const jobConfirmResponse = await axios.post(`${dsepUrl}/confirm`, confirmPayload)
+          const jobConfirmData: ConfirmResponseModel = jobConfirmResponse.data
+          if (jobConfirmData) {
+            const orderPayload = getPostOrderPayload(jobConfirmData)
+            const fulfillOrderRequest = await axios.post(`${strapiUrl}/orders`, orderPayload, axiosConfig)
+            if (fulfillOrderRequest.data) {
+              setIsLoading(false)
+              Router.push('/applicationSent')
+            }
+          }
+        }
+      }
+    } catch (error: any) {
+      if (error.response && error.response.data) {
+        const errorMessage = error.response.data.error.message
+        console.log(error.response.config.url)
+        if (error.response.config.url.includes(`${strapiUrl}/orders`)) {
+          toast.error(errorMessage, { autoClose: 5000 })
+          Router.push('/applicationSent')
+        } else {
+          toast.error(errorMessage, { autoClose: 5000 })
+          console.log(errorMessage)
+        }
+      }
+    }
+  }
 
   if (isLoadingInSelect) {
     return (
@@ -198,7 +205,7 @@ const jobApply = () => {
     )
   }
 
-  const xInputHtml = jobSelectResponse?.data[0].message.order.items[0].xinput.html as string
+  const xInputHtml = jobInitResponse?.data[0].message.order.items[0].xinput.html as string
 
   return (
     <Box
@@ -207,7 +214,10 @@ const jobApply = () => {
       overflowY="scroll"
       mt={'15px'}
     >
-      <ApplyJobForm xInputHtml={xInputHtml} />
+      <ApplyJobForm
+        xInputHtml={xInputHtml}
+        onFormSubmit={handleButtonClick}
+      />
     </Box>
   )
 }
