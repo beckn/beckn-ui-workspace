@@ -88,53 +88,55 @@ const OrderConfirmation = () => {
   }
 
   return (
-    <ConfirmationPage
-      className="kuza-order-confornation"
-      schema={{
-        iconSrc: orderConfirmmark,
-        successOrderMessage: 'ORDER SUCCESFULL',
-        gratefulMessage: 'Thank you for your order!',
-        orderIdMessage:
-          confirmResponse && confirmResponse.length > 0
-            ? `Order number is: ${confirmResponse[0].message.orderId.slice(0, 8)}...`
-            : '',
-        trackOrderMessage: `You can track your order in "My Order" section`,
+    <Box mt={'-2rem'}>
+      <ConfirmationPage
+        className="kuza-order-confornation"
+        schema={{
+          iconSrc: orderConfirmmark,
+          successOrderMessage: 'ORDER SUCCESFULL',
+          gratefulMessage: 'Thank you for your order!',
+          orderIdMessage:
+            confirmResponse && confirmResponse.length > 0
+              ? `Order number is: ${confirmResponse[0].message.orderId.slice(0, 8)}...`
+              : '',
+          trackOrderMessage: `You can track your order in "My Order" section`,
 
-        buttons: [
-          {
-            text: 'View Case Details',
-            handleClick: () => {
-              const orderId = confirmResponse[0].message.orderId
-              const bppId = confirmResponse[0].context.bpp_id
-              const bppUri = confirmResponse[0].context.bpp_uri
+          buttons: [
+            {
+              text: 'View Case Details',
+              handleClick: () => {
+                const orderId = confirmResponse[0].message.orderId
+                const bppId = confirmResponse[0].context.bpp_id
+                const bppUri = confirmResponse[0].context.bpp_uri
 
-              dispatch(orderActions.addSelectedOrder({ orderDetails: { orderId, bppId, bppUri } }))
-              const orderObjectForStatusCall = {
-                bppId: bppId,
-                bppUri: bppUri,
-                orderId: orderId
-              }
-              localStorage.setItem('selectedOrder', JSON.stringify(orderObjectForStatusCall))
-              dispatch(checkoutActions.clearState())
-              router.push('/orderDetails')
+                dispatch(orderActions.addSelectedOrder({ orderDetails: { orderId, bppId, bppUri } }))
+                const orderObjectForStatusCall = {
+                  bppId: bppId,
+                  bppUri: bppUri,
+                  orderId: orderId
+                }
+                localStorage.setItem('selectedOrder', JSON.stringify(orderObjectForStatusCall))
+                dispatch(checkoutActions.clearState())
+                router.push('/orderDetails')
+              },
+              disabled: false,
+              variant: 'solid',
+              colorScheme: 'primary'
             },
-            disabled: false,
-            variant: 'solid',
-            colorScheme: 'primary'
-          },
-          {
-            text: 'Go Back Home',
-            handleClick: () => {
-              router.push('/')
-              dispatch(checkoutActions.clearState())
-            },
-            disabled: false,
-            variant: 'outline',
-            colorScheme: 'primary'
-          }
-        ]
-      }}
-    />
+            {
+              text: 'Go Back Home',
+              handleClick: () => {
+                router.push('/')
+                dispatch(checkoutActions.clearState())
+              },
+              disabled: false,
+              variant: 'outline',
+              colorScheme: 'primary'
+            }
+          ]
+        }}
+      />
+    </Box>
   )
 }
 
