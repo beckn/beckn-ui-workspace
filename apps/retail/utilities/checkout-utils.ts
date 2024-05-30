@@ -50,14 +50,14 @@ export const getPayloadForSelectRequest = (selectedProduct: ParsedItemModel) => 
   return selectPayload
 }
 
-const extractAddressComponents = (result: any) => {
+export const extractAddressComponents = (result: any) => {
   let country = null,
     state = null,
     city = null
 
   for (const component of result.address_components) {
     if (component.types.includes('country')) {
-      country = component.long_name
+      country = component.short_name
     } else if (component.types.includes('administrative_area_level_1')) {
       state = component.long_name
     } else if (component.types.includes('locality')) {
@@ -67,7 +67,7 @@ const extractAddressComponents = (result: any) => {
   return { country, state, city }
 }
 
-const geocodeFromPincode = async (pincode: any) => {
+export const geocodeFromPincode = async (pincode: any) => {
   const geocoder = new window.google.maps.Geocoder()
   try {
     const response = await geocoder.geocode({ address: pincode })
