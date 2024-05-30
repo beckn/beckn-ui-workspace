@@ -184,7 +184,7 @@ const CheckoutPage = () => {
     if (isBillingSameRedux) {
       setBillingFormData(submittedDetails)
     }
-  }, [isBillingSameRedux])
+  }, [isBillingSameRedux, submittedDetails])
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
