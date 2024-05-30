@@ -7,6 +7,7 @@ import { Loader, Typography } from '@beckn-ui/molecules'
 import { useLanguage } from '@hooks/useLanguage'
 import { v4 as uuidv4 } from 'uuid'
 import { useRouter } from 'next/router'
+import { geocodeFromPincode } from '@utils/checkout-utils'
 
 const UpdateShippingDetails = () => {
   const [shippingDetails, setShippingDetails] = useState({
@@ -36,7 +37,9 @@ const UpdateShippingDetails = () => {
       if (confirmData && confirmData.length > 0) {
         const { domain, bpp_id, bpp_uri, transaction_id } = confirmData[0].context
         const orderId = confirmData[0].message.orderId
-        const { name, address, email, mobileNumber } = formData
+        const { name, address, email, mobileNumber, pinCode } = formData
+        const { state, city, country } = await geocodeFromPincode(pinCode)
+
         const updateRequestPayload = {
           data: [
             {
@@ -51,21 +54,21 @@ const UpdateShippingDetails = () => {
                 updateTarget: 'order.fulfillments[0].stops[0]',
                 fulfillments: [
                   {
-                    id: 1,
+                    id: 11,
                     stops: [
                       {
                         location: {
                           address: shippingDetails.address,
                           city: {
-                            name: 'Bengaluru'
+                            name: city || 'Bengaluru'
                           },
                           state: {
-                            name: 'Karnataka'
+                            name: state || 'Karnataka'
                           },
                           country: {
-                            code: 'IND'
+                            code: country || 'IND'
                           },
-                          area_code: '560025'
+                          area_code: pinCode
                         },
                         contact: {
                           name: name,
@@ -94,7 +97,9 @@ const UpdateShippingDetails = () => {
         const { domain, transaction_id, bpp_id, bpp_uri } = statusResponseData[0].context
         const selectedOrderData = JSON.parse(localStorage.getItem('selectedOrder') as string)
         const { orderId } = selectedOrderData
-        const { name, address, email, mobileNumber } = formData
+        const { name, address, email, mobileNumber, pinCode } = formData
+        const { state, city, country } = await geocodeFromPincode(pinCode)
+
         const updateRequestPayload = {
           data: [
             {
@@ -109,21 +114,21 @@ const UpdateShippingDetails = () => {
                 updateTarget: 'order.fulfillments[0].stops[0]',
                 fulfillments: [
                   {
-                    id: '1',
+                    id: '11',
                     stops: [
                       {
                         location: {
                           address: shippingDetails.address,
                           city: {
-                            name: 'Bengaluru'
+                            name: city || 'Bengaluru'
                           },
                           state: {
-                            name: 'Karnataka'
+                            name: state || 'Karnataka'
                           },
                           country: {
-                            code: 'IND'
+                            code: country || 'IND'
                           },
-                          area_code: '560025'
+                          area_code: pinCode
                         },
                         contact: {
                           name: name,
