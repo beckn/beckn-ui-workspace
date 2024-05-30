@@ -35,6 +35,7 @@ const SignUp = () => {
   const [expiration, setExpiration] = useState(0)
   const [selectedAddress, setSelectedAddress] = useState('')
   const [providerInfo, setProviderInfo] = useState({})
+  const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL
 
   useEffect(() => {
     if (isError) {
@@ -211,11 +212,36 @@ const SignUp = () => {
 
     if (isFormValid) {
       try {
-        register({
-          username: formData.name,
+        const registerResponse = await register({
+          username: formData.email,
           email: formData.email,
           password: formData.password,
           mobile: formData.mobileNumber
+        })
+
+        if (registerResponse?.error) throw new Error('Could not register')
+
+        const myHeaders = new Headers()
+        myHeaders.append('Authorization', `Bearer ${registerResponse.data.jwt}`)
+
+        const currentFormData = new FormData()
+        const data = {
+          name: formData.name,
+          phone: formData.mobileNumber
+        }
+
+        currentFormData.append('data', JSON.stringify(data))
+
+        const requestOptions: RequestInit = {
+          method: 'POST',
+          headers: myHeaders,
+          redirect: 'follow',
+          body: currentFormData
+        }
+
+        fetch(`${baseUrl}/profiles`, requestOptions).then(response => {
+          Router.push('/')
+          return response.json()
         })
       } catch (error) {
         console.error('An error occurred:', error)
@@ -257,7 +283,6 @@ const SignUp = () => {
               text: t.signUp,
               handleClick: async () => {
                 await handleDsnpRegister()
-                // await handleSignUp()
               },
               disabled: !isFormFilled,
               variant: 'solid',
