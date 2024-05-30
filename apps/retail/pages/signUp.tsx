@@ -78,6 +78,37 @@ const SignUp = () => {
           password: formData.password,
           mobile: formData.mobileNumber
         })
+          .then(res => {
+            if (res?.error) throw new Error('Could not register')
+
+            const myHeaders = new Headers()
+            myHeaders.append('Authorization', `Bearer ${res.data.jwt}`)
+
+            const currentFormData = new FormData()
+            const data = {
+              name: formData.name,
+              phone: formData.mobileNumber
+            }
+
+            currentFormData.append('data', JSON.stringify(data))
+
+            const requestOptions: RequestInit = {
+              method: 'POST',
+              headers: myHeaders,
+              redirect: 'follow',
+              body: currentFormData
+            }
+
+            fetch(`${baseUrl}/profiles`, requestOptions).then(response => {
+              // reactToastifyToast.success('Profile updated successfully!')
+              Router.push('/')
+              return response.json()
+            })
+          })
+          .catch(err => {
+            console.log('called err', err)
+            throw err
+          })
       } catch (error) {
         console.error('An error occurred:', error)
         toast({
