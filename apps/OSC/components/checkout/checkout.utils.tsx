@@ -222,6 +222,14 @@ export const getInitPayload = async (
         {
           id: fullf.id,
           type: fullf.type,
+          customer: {
+            person: {
+              name: deliveryAddress.name
+            },
+            contact: {
+              phone: deliveryAddress.mobileNumber
+            }
+          },
           stops: [
             {
               location: {
@@ -253,14 +261,6 @@ export const getInitPayload = async (
         },
         items,
         fulfillments,
-        customer: {
-          person: {
-            name: deliveryAddress.name
-          },
-          contact: {
-            phone: deliveryAddress.mobileNumber
-          }
-        },
         billing: {
           name: billingAddress.name,
           phone: billingAddress.mobileNumber,
