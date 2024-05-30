@@ -71,25 +71,39 @@ const SignUp = () => {
 
     if (isFormValid) {
       try {
-        register({
-          username: formData.name,
+        const registerResponse = await register({
+          username: formData.email,
           email: formData.email,
           password: formData.password,
           mobile: formData.mobileNumber
         })
+
+        if (registerResponse?.error) throw new Error('Could not register')
+
+        const myHeaders = new Headers()
+        myHeaders.append('Authorization', `Bearer ${registerResponse.data.jwt}`)
+
+        const currentFormData = new FormData()
+        const data = {
+          name: formData.name,
+          phone: formData.mobileNumber
+        }
+
+        currentFormData.append('data', JSON.stringify(data))
+
+        const requestOptions: RequestInit = {
+          method: 'POST',
+          headers: myHeaders,
+          redirect: 'follow',
+          body: currentFormData
+        }
+
+        fetch(`${baseUrl}/profiles`, requestOptions).then(response => {
+          Router.push('/')
+          return response.json()
+        })
       } catch (error) {
         console.error('An error occurred:', error)
-        toast({
-          render: () => (
-            <CustomToast
-              title="Error!"
-              message="Unable to register"
-            />
-          ),
-          position: 'top',
-          duration: 2000,
-          isClosable: true
-        })
       }
     } else {
       setFormErrors({
