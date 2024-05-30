@@ -54,7 +54,7 @@ const UpdateShippingDetails = () => {
                 updateTarget: 'order.fulfillments[0].stops[0]',
                 fulfillments: [
                   {
-                    id: 11,
+                    id: 1,
                     stops: [
                       {
                         location: {
@@ -114,7 +114,7 @@ const UpdateShippingDetails = () => {
                 updateTarget: 'order.fulfillments[0].stops[0]',
                 fulfillments: [
                   {
-                    id: '11',
+                    id: '1',
                     stops: [
                       {
                         location: {
