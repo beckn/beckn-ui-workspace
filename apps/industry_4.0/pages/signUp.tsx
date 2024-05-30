@@ -66,9 +66,25 @@ const SignUp = () => {
         if (response.ok) {
           const data = await response.json()
           const token = data.jwt
-
+          const myHeaders = new Headers()
+          myHeaders.append('Authorization', `Bearer ${token}`)
+          const currentFormData = new FormData()
+          const dataForm = {
+            name: formData.name,
+            phone: formData.mobileNumber
+          }
+          currentFormData.append('data', JSON.stringify(dataForm))
+          const requestOptions: RequestInit = {
+            method: 'POST',
+            headers: myHeaders,
+            redirect: 'follow',
+            body: currentFormData
+          }
           Cookies.set('authToken', token)
-          Router.push('/homePage')
+          fetch(`${baseUrl}/profiles`, requestOptions).then(response => {
+            Router.push('/homePage')
+            return response.json()
+          })
         } else {
           const errorData = await response.json()
           toast({

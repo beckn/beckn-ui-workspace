@@ -184,7 +184,7 @@ export function formatTimestamp(timestamp: string) {
   const month = date.toLocaleString('default', { month: 'short' })
   const year = date.getFullYear()
   const hours = date.getHours() % 12 || 12
-  const minutes = date.getMinutes()
+  const minutes = date.getMinutes().toString().padStart(2, '0')
   const period = date.getHours() < 12 ? 'am' : 'pm'
 
   const ordinalSuffix = getOrdinalSuffix(day)
