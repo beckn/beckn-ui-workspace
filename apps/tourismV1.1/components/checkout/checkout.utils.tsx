@@ -202,7 +202,7 @@ export const getInitPayload = async (deliveryAddress: any, billingAddress: any, 
                   mobileNumber: deliveryAddress.mobileNumber
                 },
                 person: {
-                  name
+                  name: deliveryAddress.name
                 }
               },
               stops: [
