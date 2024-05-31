@@ -1,25 +1,30 @@
 import { Box, useDisclosure, Image } from '@chakra-ui/react'
-import React, { FC } from 'react'
+import React, { FC, useEffect } from 'react'
 import { useLanguage } from '../../hooks/useLanguage'
 import BottomModalScan from '@components/BottomModal/BottomModalScan'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import Typography from '@beckn-ui/molecules/src/components/typography/typography'
+import { isEmpty } from '@utils/common-utils'
 
 interface ImportedOrderProps {
   updateStateImportedOrder: () => void
   showChatGtpList: (newValue: boolean) => void
   importedOrderedItem: any
   setImportedOrder: Function
+  handleSetCategory: (value: string) => void
 }
 
 const ImportedOrder: FC<ImportedOrderProps> = ({
   updateStateImportedOrder,
   showChatGtpList,
   importedOrderedItem,
-  setImportedOrder
+  setImportedOrder,
+  handleSetCategory
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure({ defaultIsOpen: true })
   const { t, locale } = useLanguage()
+
+  console.log('Dank', importedOrderedItem)
 
   const viewDetailsOnClick = () => {
     updateStateImportedOrder()
@@ -28,6 +33,15 @@ const ImportedOrder: FC<ImportedOrderProps> = ({
     setImportedOrder(false)
     showChatGtpList(true)
   }
+
+  useEffect(() => {
+    if (!isEmpty(importedOrderedItem)) {
+      handleSetCategory(
+        importedOrderedItem[0].tags[0].list.find(singleListItem => singleListItem.descriptor.name === 'category').value
+      )
+    }
+  }, [])
+
   return (
     <>
       <BottomModalScan
