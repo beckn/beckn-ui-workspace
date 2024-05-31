@@ -36,6 +36,8 @@ const HomePage = () => {
   const [currentAddress, setCurrentAddress] = useState('')
   const [loadingForCurrentAddress, setLoadingForCurrentAddress] = useState(true)
   const [currentLocationFetchError, setFetchCurrentLocationError] = useState('')
+  const [category, setCategory] = useState('')
+
   const router = useRouter()
   useEffect(() => {
     if (localStorage) {
@@ -208,6 +210,8 @@ const HomePage = () => {
     setChatGtpList(false)
   }
 
+  console.log('Dank', category)
+
   return (
     <>
       <TopSheet
@@ -276,6 +280,7 @@ const HomePage = () => {
           importedOrderedItem={(importedOrderObject as any).items}
           updateStateImportedOrder={updateStateImportedOrder}
           showChatGtpList={showChatGtpList}
+          handleSetCategory={value => setCategory(value)}
         />
       ) : null}
       {viewOrderDetails ? (
@@ -301,6 +306,7 @@ const HomePage = () => {
           backOnImportedOrder={backOnImportedOrder}
           selectedValues={selectedValues}
           addressOfTheEndLocation={address}
+          category={category}
         />
       ) : null}
     </>

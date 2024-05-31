@@ -11,6 +11,18 @@ interface SelectDeliveryModalProps {
   importedOrderObject: any
   addressOfTheEndLocation: string
   selectedValues: string[]
+  category?: string
+}
+
+const convertTourismCategoryToRetail = (category: string) => {
+  switch (category) {
+    case 'TourismEnglish':
+      return 'RetailEnglish'
+    case 'TourismFrench':
+      return 'RetailFrench'
+    default:
+      return 'Retail'
+  }
 }
 
 const SelectDeliveryModal: React.FC<SelectDeliveryModalProps> = props => {
@@ -19,6 +31,8 @@ const SelectDeliveryModal: React.FC<SelectDeliveryModalProps> = props => {
   const { t } = useLanguage()
 
   const travelerAddress = props.importedOrderObject.billing.address
+
+  const { category = 'Tourism' } = props
 
   return (
     <BottomModalScan
@@ -72,7 +86,7 @@ const SelectDeliveryModal: React.FC<SelectDeliveryModalProps> = props => {
           children={t.searchItems}
           handleClick={() => {
             const selectedItems = props.selectedValues.join(',').replace(',', ' ')
-            router.push(`/search?searchTerm=${selectedItems}`)
+            router.push(`/search?searchTerm=${selectedItems}&category=${convertTourismCategoryToRetail(category)}`)
           }}
           disabled={false}
         />
