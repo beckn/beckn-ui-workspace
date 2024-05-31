@@ -25,6 +25,7 @@ const Search = () => {
   const [sortBy, setSortBy] = useState<string>('')
   const router = useRouter()
   const [searchKeyword, setSearchKeyword] = useState(router.query?.searchTerm || '')
+
   const [isLoading, setIsLoading] = useState(false)
   const [isFilterOpen, setIsFilterOpen] = useState(false)
   const breakpoint = useBreakpoint()
@@ -44,6 +45,9 @@ const Search = () => {
       domain: DOMAIN
     },
     searchString: searchKeyword,
+    category: {
+      categoryCode: router.query.category || 'Retail'
+    },
     fulfillment: {
       type: 'Delivery',
       stops: [
