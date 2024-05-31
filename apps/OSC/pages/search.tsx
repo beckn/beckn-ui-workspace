@@ -78,7 +78,7 @@ const Search = () => {
   useEffect(() => {
     if (searchKeyword || providerId) {
       localStorage.removeItem('searchItems')
-      localStorage.setItem('optionTags', JSON.stringify({ name: searchKeyword }))
+      localStorage.setItem('optionTags', JSON.stringify({ name: searchKeyword, providerId }))
       window.dispatchEvent(new Event('storage-optiontags'))
       fetchDataForSearch()
     }
