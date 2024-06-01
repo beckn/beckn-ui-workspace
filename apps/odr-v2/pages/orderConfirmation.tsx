@@ -15,6 +15,7 @@ import Cookies from 'js-cookie'
 import { ConfirmResponseModel } from '../types/confirm.types'
 import { CustomToast } from '@components/signIn/SignIn'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
+import { utilGenerateEllipsedText } from '@beckn-ui/molecules'
 
 const OrderConfirmation = () => {
   const { t } = useLanguage()
@@ -97,7 +98,7 @@ const OrderConfirmation = () => {
           gratefulMessage: 'Thank you for your order!',
           orderIdMessage:
             confirmResponse && confirmResponse.length > 0
-              ? `Order number is: ${confirmResponse[0].message.orderId.slice(0, 8)}...`
+              ? `Order number is: ${utilGenerateEllipsedText(confirmResponse[0].message.orderId)}`
               : '',
           trackOrderMessage: `You can track your order in "My Order" section`,
 

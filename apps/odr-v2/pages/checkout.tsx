@@ -83,7 +83,7 @@ const CheckoutPage = () => {
 
   useEffect(() => {
     fetchQuotes(getSelectPayload(items, transactionId, DOMAIN))
-  }, [totalQuantity])
+  }, [])
 
   // useEffect(() => {
   //   if (localStorage) {

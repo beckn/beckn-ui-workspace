@@ -14,6 +14,7 @@ import Cookies from 'js-cookie'
 import { ConfirmResponseModel } from '../types/confirm.types'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
 import { orderObjectUrlActions } from '@store/orderObjectUrl-slice'
+import { utilGenerateEllipsedText } from '@beckn-ui/molecules'
 
 const OrderConfirmation = () => {
   const { t } = useLanguage()
@@ -37,7 +38,7 @@ const OrderConfirmation = () => {
 
   useEffect(() => {
     if (confirmResponse && confirmResponse.length > 0) {
-      setOrderId(confirmResponse[0].message.orderId.slice(0, 8))
+      setOrderId(confirmResponse[0].message.orderId)
     }
   }, [confirmResponse])
 
@@ -105,7 +106,7 @@ const OrderConfirmation = () => {
           iconSrc: orderConfirmmark,
           successOrderMessage: `${t.orderPlaced}`,
           gratefulMessage: `${t.confirmMessage}`,
-          orderIdMessage: orderId ? `${t.orderNumber} ${orderId}...` : '',
+          orderIdMessage: orderId ? `${t.orderNumber} ${utilGenerateEllipsedText(orderId)}` : '',
           trackOrderMessage: `${t.trackOrderMessage}`,
 
           buttons: [
