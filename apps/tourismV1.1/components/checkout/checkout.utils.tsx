@@ -136,7 +136,7 @@ const extractAddressComponents = (result: any) => {
 
   for (const component of result.address_components) {
     if (component.types.includes('country')) {
-      country = component.long_name
+      country = component.short_name
     } else if (component.types.includes('administrative_area_level_1')) {
       state = component.long_name
     } else if (component.types.includes('locality')) {
@@ -167,7 +167,7 @@ const geocodeFromPincode = async (pincode: any) => {
 export const getInitPayload = async (deliveryAddress: any, billingAddress: any, selectResponse: any) => {
   const cityData = await geocodeFromPincode(deliveryAddress.pinCode)
 
-  let initPayload: any = {
+  const initPayload: any = {
     data: []
   }
 
@@ -217,7 +217,7 @@ export const getInitPayload = async (deliveryAddress: any, billingAddress: any, 
                       name: cityData?.state
                     },
                     country: {
-                      code: 'IND'
+                      code: cityData?.country
                     },
                     area_code: deliveryAddress.pinCode
                   },

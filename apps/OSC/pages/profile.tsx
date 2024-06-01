@@ -8,6 +8,7 @@ import React, { useEffect, useState } from 'react'
 import { CustomToast } from '@components/signIn/SignIn'
 import Router from 'next/router'
 import { toast as reactToastifyToast } from 'react-toastify'
+import { isEmpty } from '@utils/common-utils'
 
 const ProfilePage = () => {
   const { t } = useLanguage()
@@ -18,7 +19,6 @@ const ProfilePage = () => {
   const [formData, setFormData] = useState<profilePageProp>({
     name: '',
     mobileNumber: '',
-    email: '',
     flatNumber: '',
     street: '',
     city: '',
@@ -67,11 +67,30 @@ const ProfilePage = () => {
     fetch(`${strapiUrl}/profiles`, requestOptions)
       .then(response => response.json())
       .then(result => {
-        const { name, phone } = result.data.attributes
+        const { name, phone, address, zip_code = '' } = result.data.attributes
+        let flatNumber,
+          street,
+          city,
+          state,
+          country = ''
+        if (!isEmpty(address)) {
+          const addressList = address.split(',')
+          flatNumber = addressList[0]
+          street = addressList[1]
+          city = addressList[2]
+          state = addressList[3]
+          country = addressList[4]
+        }
         setFormData({
           ...formData,
           name,
-          mobileNumber: phone
+          mobileNumber: phone,
+          flatNumber,
+          street,
+          state,
+          city,
+          country,
+          zipCode: zip_code
         })
       })
       .finally(() => {
@@ -115,7 +134,9 @@ const ProfilePage = () => {
     const currentFormData = new FormData()
     const data = {
       name: formData.name,
-      phone: formData.mobileNumber
+      phone: formData.mobileNumber,
+      address: `${formData.flatNumber}, ${formData.street}, ${formData.city}, ${formData.state}, ${formData.country}`,
+      zip_code: formData.zipCode
     }
 
     currentFormData.append('data', JSON.stringify(data))
@@ -174,14 +195,6 @@ const ProfilePage = () => {
               handleChange: handleInputChange,
               label: t.enterMobileNumber,
               error: formErrors.mobileNumber
-            },
-            {
-              type: 'text',
-              name: 'email',
-              value: formData.email,
-              handleChange: handleInputChange,
-              label: t.enterEmailID,
-              error: formErrors.email
             },
             {
               type: 'text',

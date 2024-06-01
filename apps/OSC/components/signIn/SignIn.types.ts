@@ -13,7 +13,6 @@ export interface SignUpPropsModel {
 export interface profilePageProp {
   name: string
   mobileNumber: string
-  email: string
   flatNumber: string
   street: string
   city: string
