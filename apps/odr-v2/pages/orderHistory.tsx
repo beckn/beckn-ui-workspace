@@ -15,6 +15,10 @@ const orderStatusMap: Record<string, string> = {
   'In Review': 'Pending'
 }
 
+function capitalizeFirstLetter(string) {
+  return string ? string.charAt(0).toUpperCase() + string.slice(1) : ''
+}
+
 const OrderHistory = () => {
   const [orderHistoryList, setOrderHistoryList] = useState<orderHistoryData[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -148,7 +152,10 @@ const OrderHistory = () => {
                         src={pendingIcon}
                         paddingRight={'6px'}
                       />
-                      <Text>{orderStatusMap[order.attributes.delivery_status]}</Text>
+                      <Text>
+                        {orderStatusMap[order.attributes.delivery_status] ||
+                          capitalizeFirstLetter(order.attributes.delivery_status)}
+                      </Text>
                     </Flex>
                   </Flex>
                 </Flex>

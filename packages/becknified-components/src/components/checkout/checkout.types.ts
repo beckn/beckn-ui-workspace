@@ -12,8 +12,8 @@ export type ShippingFormInitialValuesType = {
   name: string
   mobileNumber: string
   email: string
-  address: string
-  pinCode: string
+  address?: string
+  pinCode?: string
 }
 
 export interface ShippingFormProps<T extends FormField[]> {
