@@ -38,53 +38,6 @@ export const getOrderPlacementTimeline = (timeStamp: string) => {
   return `${localDateWithoutDay}, ${localTime}`
 }
 
-// export const getPayloadForConfirm = (initResponse: InitResponseModel[]) => {
-//   const {
-//     context,
-//     message: {
-//       order: { billing, fulfillments, items, payments, provider, quote, type }
-//     }
-//   } = initResponse[0]
-//   const { transaction_id, bpp_id, bpp_uri, domain } = context
-
-//   const payload = {
-//     data: [
-//       {
-//         context: {
-//           transaction_id: transaction_id,
-//           bpp_id: bpp_id,
-//           bpp_uri: bpp_uri,
-//           domain: domain
-//         },
-//         message: {
-//           orders: [
-//             {
-//               provider: {
-//                 id: provider.id
-//               },
-//               items: items,
-//               fulfillments: fulfillments,
-//               billing: billing
-//               // payments: [
-//               //   {
-//               //     id: payments[0].id,
-//               //     params: {
-//               //       amount: quote.price.value,
-//               //       currency: quote.price.currency
-//               //     },
-//               //     status: 'PAID',
-//               //     type: 'ON-FULFILLMENT'
-//               //   }
-//               // ]
-//             }
-//           ]
-//         }
-//       }
-//     ]
-//   }
-
-//   return payload
-// }
 export const getPayloadForConfirm = (initResponse: InitResponseModel[]) => {
   const {
     context,
@@ -94,7 +47,7 @@ export const getPayloadForConfirm = (initResponse: InitResponseModel[]) => {
   } = initResponse[0]
   const { transaction_id, bpp_id, bpp_uri, domain } = context
 
-  let defaultCustomer = {
+  const defaultCustomer = {
     person: {
       name: 'Veronica sehgal'
     },
@@ -105,7 +58,7 @@ export const getPayloadForConfirm = (initResponse: InitResponseModel[]) => {
   }
 
   if (typeof window !== 'undefined') {
-    let shippingAddress = JSON.parse(localStorage.getItem('shippingAddress') as string)
+    const shippingAddress = JSON.parse(localStorage.getItem('shippingAddress') as string)
     defaultCustomer.person.name = shippingAddress.name
     defaultCustomer.contact.phone = shippingAddress.mobileNumber
     defaultCustomer.contact.email = shippingAddress.email
@@ -131,17 +84,6 @@ export const getPayloadForConfirm = (initResponse: InitResponseModel[]) => {
               items: items,
               fulfillments: updatedFullfillments,
               billing: billing
-              // payments: [
-              //   {
-              //     id: payments[0].id,
-              //     params: {
-              //       amount: quote.price.value,
-              //       currency: quote.price.currency
-              //     },
-              //     status: 'PAID',
-              //     type: 'ON-FULFILLMENT'
-              //   }
-              // ]
             }
           ]
         }
@@ -183,7 +125,8 @@ export const getPayloadForOrderHistoryPost = (confirmData: ConfirmResponseModel[
     provider: { id, name, short_desc },
     items,
     quote,
-    payments
+    payments,
+    fulfillments
   } = confirmData[0].message
 
   const ordersPayload = {
@@ -194,6 +137,7 @@ export const getPayloadForOrderHistoryPost = (confirmData: ConfirmResponseModel[
     },
     message: {
       order: {
+        state: fulfillments[0].state.descriptor.short_desc || 'in progress',
         id: orderId,
         provider: {
           id,

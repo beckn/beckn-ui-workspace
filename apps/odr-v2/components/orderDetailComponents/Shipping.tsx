@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { ReactComponentElement, ReactNode } from 'react'
 import { Typography } from '@beckn-ui/molecules'
 import { Box, Stack, StackDivider, Flex, Image } from '@chakra-ui/react'
+import { IconType } from 'react-icons/lib'
 
 export interface ShippingBlockProps {
   title?: string
@@ -11,6 +12,7 @@ export interface ShippingBlockProps {
   address: {
     icon: any
     text: string
+    iconComponent?: IconType
   }
   mobile: {
     icon: any
@@ -20,6 +22,7 @@ export interface ShippingBlockProps {
 }
 
 const ShippingBlock: React.FC<ShippingBlockProps> = ({ title, name, address, mobile, responsive }) => {
+  console.log('Dank', address.iconComponent)
   return (
     <Box>
       {title && (
@@ -57,11 +60,19 @@ const ShippingBlock: React.FC<ShippingBlockProps> = ({ title, name, address, mob
             />
           </Flex>
           <Flex alignItems={'center'}>
-            <Image
-              alt="location-icon"
-              src={address.icon}
-              pr={'12px'}
-            />
+            {address.iconComponent ? (
+              <address.iconComponent
+                fontSize="1.5rem"
+                style={{ marginRight: '0.4rem' }}
+              />
+            ) : (
+              <Image
+                alt="location-icon"
+                src={address.icon}
+                pr={'12px'}
+              />
+            )}
+
             <Typography
               variant="subTitleRegular"
               text={address.text}
