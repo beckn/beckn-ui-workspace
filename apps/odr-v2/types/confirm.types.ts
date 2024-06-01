@@ -29,7 +29,8 @@ interface Stop {
 
 interface Descriptor {
   code: string
-  name: string
+  name?: string
+  short_desc?: string
 }
 
 interface State {

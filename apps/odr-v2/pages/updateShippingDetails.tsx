@@ -3,19 +3,49 @@ import ShippingForm from '@beckn-ui/becknified-components/src/components/checkou
 import { Box, Text, useToast } from '@chakra-ui/react'
 import { ConfirmResponseModel } from '../types/confirm.types'
 import axios from 'axios'
-import { Loader, Typography } from '@beckn-ui/molecules'
+import { FormField, Loader, Typography } from '@beckn-ui/molecules'
 import { useLanguage } from '@hooks/useLanguage'
 import { v4 as uuidv4 } from 'uuid'
 import { useRouter } from 'next/router'
 import { geocodeFromPincode } from '@utils/checkout-utils'
 
+const fieldConfig: FormField[] = [
+  {
+    name: 'name',
+    label: 'Name',
+    type: 'text',
+    validate: (value: string) => {
+      if (!value.trim()) return 'Name is required'
+      return undefined
+    }
+  },
+  {
+    name: 'mobileNumber',
+    label: 'Mobile Number',
+    type: 'number',
+    validate: (value: string) => {
+      if (!value.trim()) return 'Mobile number is required'
+      if (!/^\d{10}$/.test(value)) return 'Invalid mobile number'
+      return undefined
+    }
+  },
+  {
+    name: 'email',
+    label: 'Email ID',
+    type: 'email',
+    validate: (value: string) => {
+      if (!value.trim()) return 'Email ID is required'
+      if (!/\S+@\S+\.\S+/.test(value)) return 'Invalid email format'
+      return undefined
+    }
+  }
+]
+
 const UpdateShippingDetails = () => {
   const [shippingDetails, setShippingDetails] = useState({
     name: '',
     mobileNumber: '',
-    email: '',
-    address: '',
-    pinCode: ''
+    email: ''
   })
   const [confirmData, setConfirmData] = useState<ConfirmResponseModel[] | null>(null)
   const [isLoadingForUpdate, setIsLoadingForUpdate] = useState(false)
@@ -37,68 +67,7 @@ const UpdateShippingDetails = () => {
       if (confirmData && confirmData.length > 0) {
         const { domain, bpp_id, bpp_uri, transaction_id } = confirmData[0].context
         const orderId = confirmData[0].message.orderId
-        const { name, address, email, mobileNumber, pinCode } = formData
-        const { state, city, country } = await geocodeFromPincode(pinCode)
-
-        const updateRequestPayload = {
-          data: [
-            {
-              context: {
-                domain,
-                bpp_id,
-                bpp_uri,
-                transaction_id: uuidv4()
-              },
-              orderId,
-              updateDetails: {
-                updateTarget: 'order.fulfillments[0].stops[0]',
-                fulfillments: [
-                  {
-                    id: 1,
-                    stops: [
-                      {
-                        location: {
-                          address: shippingDetails.address,
-                          city: {
-                            name: city || 'Bengaluru'
-                          },
-                          state: {
-                            name: state || 'Karnataka'
-                          },
-                          country: {
-                            code: country || 'IND'
-                          },
-                          area_code: pinCode
-                        },
-                        contact: {
-                          name: name,
-                          phone: mobileNumber,
-                          email: email
-                        }
-                      }
-                    ]
-                  }
-                ]
-              }
-            }
-          ]
-        }
-        const updateResponse = await axios.post(`${apiUrl}/update`, updateRequestPayload)
-        if (updateResponse.data.data.length > 0) {
-          toast({
-            title: `Order Updated Successfully! `,
-            status: 'success',
-            isClosable: true
-          })
-          router.push('/orderDetails')
-        }
-      } else if (localStorage.getItem('selectedOrder') && localStorage.getItem('statusResponse')) {
-        const statusResponseData = JSON.parse(localStorage.getItem('statusResponse') as string)
-        const { domain, transaction_id, bpp_id, bpp_uri } = statusResponseData[0].context
-        const selectedOrderData = JSON.parse(localStorage.getItem('selectedOrder') as string)
-        const { orderId } = selectedOrderData
-        const { name, address, email, mobileNumber, pinCode } = formData
-        const { state, city, country } = await geocodeFromPincode(pinCode)
+        const { name, email, mobileNumber } = formData
 
         const updateRequestPayload = {
           data: [
@@ -115,28 +84,62 @@ const UpdateShippingDetails = () => {
                 fulfillments: [
                   {
                     id: '1',
-                    stops: [
-                      {
-                        location: {
-                          address: shippingDetails.address,
-                          city: {
-                            name: city || 'Bengaluru'
-                          },
-                          state: {
-                            name: state || 'Karnataka'
-                          },
-                          country: {
-                            code: country || 'IND'
-                          },
-                          area_code: pinCode
-                        },
-                        contact: {
-                          name: name,
-                          phone: mobileNumber,
-                          email: email
-                        }
+                    customer: {
+                      person: {
+                        name: name
+                      },
+                      contact: {
+                        phone: mobileNumber,
+                        email: email
                       }
-                    ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+
+        const updateResponse = await axios.post(`${apiUrl}/update`, updateRequestPayload)
+        if (updateResponse.data.data.length > 0) {
+          toast({
+            title: `Order Updated Successfully! `,
+            status: 'success',
+            isClosable: true
+          })
+          router.push('/orderDetails')
+        }
+      } else if (localStorage.getItem('selectedOrder') && localStorage.getItem('statusResponse')) {
+        const statusResponseData = JSON.parse(localStorage.getItem('statusResponse') as string)
+        const { domain, transaction_id, bpp_id, bpp_uri } = statusResponseData[0].context
+        const selectedOrderData = JSON.parse(localStorage.getItem('selectedOrder') as string)
+        const { orderId } = selectedOrderData
+        const { name, email, mobileNumber } = formData
+
+        const updateRequestPayload = {
+          data: [
+            {
+              context: {
+                domain,
+                bpp_id,
+                bpp_uri,
+                transaction_id: uuidv4()
+              },
+              orderId,
+              updateDetails: {
+                updateTarget: 'order.fulfillments[0].stops[0]',
+                fulfillments: [
+                  {
+                    id: '1',
+                    customer: {
+                      person: {
+                        name: name
+                      },
+                      contact: {
+                        phone: mobileNumber,
+                        email: email
+                      }
+                    }
                   }
                 ]
               }
@@ -154,6 +157,13 @@ const UpdateShippingDetails = () => {
         }
       }
     } catch (error) {
+      setIsLoadingForUpdate(false)
+      toast({
+        title: `Error encountered while updating the order`,
+        status: 'error',
+        isClosable: true
+      })
+      router.push('/orderDetails')
       console.error('error in update', error)
     }
   }
@@ -207,6 +217,7 @@ const UpdateShippingDetails = () => {
       overflowY="scroll"
     >
       <ShippingForm
+        formFieldConfig={fieldConfig}
         onSubmit={() => handleSubmit(shippingDetails, confirmData as ConfirmResponseModel[])}
         values={shippingDetails}
         onChange={handleFormChange}

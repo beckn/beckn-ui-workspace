@@ -19,6 +19,7 @@ import {
   useToast
 } from '@chakra-ui/react'
 import { Accordion, BottomModal, Typography, utilGenerateEllipsedText } from '@beckn-ui/molecules'
+import { MdAlternateEmail } from 'react-icons/md'
 import { toast } from 'react-toastify'
 import { v4 as uuidv4 } from 'uuid'
 import { useDispatch, useSelector } from 'react-redux'
@@ -131,9 +132,10 @@ const OrderDetails = () => {
     if (data.statusData.length > 0) {
       const newData = data.statusData
         .map((status: any) => ({
-          label:
-            statusMap[status?.message?.order?.fulfillments[0]?.state?.descriptor?.code] ||
-            status?.message?.order?.fulfillments[0]?.state?.descriptor?.code,
+          label: isCancelled
+            ? status?.message?.order?.fulfillments[0]?.state?.descriptor?.code
+            : status?.message?.order?.fulfillments[0]?.state?.descriptor?.short_desc,
+
           statusTime: status?.message?.order?.fulfillments[0]?.state?.updated_at
         }))
         .filter((status: any) => status.label)
@@ -641,8 +643,13 @@ const OrderDetails = () => {
     quote: { breakup, price }
   } = order
   const { address, name, phone } = billing
-  const { customer: { contact: { phone: shippingPhone } = {}, person: { name: shippingName } = {} } = {}, stops } =
-    fulfillments[0]
+  const {
+    customer: {
+      contact: { phone: shippingPhone, email: shippingEmail } = {},
+      person: { name: shippingName } = {}
+    } = {},
+    stops
+  } = fulfillments[0]
 
   const {
     location: { address: shipmentAddress } = {},
@@ -837,7 +844,7 @@ const OrderDetails = () => {
                         : 'green'
                     }
                   >
-                    {statusMap[data.statusData[0].message.order.fulfillments?.[0]?.state?.descriptor?.code]}
+                    {data.statusData[0].message.order.fulfillments?.[0]?.state?.descriptor?.code}
                   </Text>
                 </Flex>
               </>
@@ -882,16 +889,15 @@ const OrderDetails = () => {
             <ShippingBlock
               title={t.claimantDetails}
               name={{ text: updatedShippingName || shippingName, icon: nameIcon }}
-              address={{ text: shipmentAddress, icon: locationIcon }}
+              address={{ text: shippingEmail, icon: locationIcon, iconComponent: MdAlternateEmail }}
               mobile={{ text: updateShippingPhone || shippingPhone, icon: CallphoneIcon }}
             />
           )}
           {!isDesktop && (
             <Accordion accordionHeader={t.claimantDetails}>
               <ShippingBlock
-                // title={t.shipping}
                 name={{ text: updatedShippingName || shippingName, icon: nameIcon }}
-                address={{ text: shipmentAddress, icon: locationIcon }}
+                address={{ text: shippingEmail, icon: locationIcon, iconComponent: MdAlternateEmail }}
                 mobile={{ text: updateShippingPhone || shippingPhone, icon: CallphoneIcon }}
               />
             </Accordion>

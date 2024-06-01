@@ -113,12 +113,6 @@ export const profileValidateForm = (formData: profilePageProp): FormErrors => {
     errors.name = 'errorName3'
   }
 
-  if (formData.email.trim() === '') {
-    errors.email = 'errorEmail'
-  } else if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(formData.email)) {
-    errors.email = 'errorEmail'
-  }
-
   if (formData.mobileNumber.trim() === '') {
     errors.mobileNumber = 'errorNumber'
   } else if (!/^\d{10}$/.test(formData.mobileNumber)) {
