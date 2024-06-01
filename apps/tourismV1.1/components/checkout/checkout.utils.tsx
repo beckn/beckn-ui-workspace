@@ -152,7 +152,9 @@ const geocodeFromPincode = async (pincode: any) => {
     const response = await geocoder.geocode({ address: pincode })
     console.log('Dank', response)
     if (response.results.length > 0) {
-      const { country, state, city } = extractAddressComponents(response.results[0])
+      const { country, state, city } = extractAddressComponents(
+        response.results[1] ? response.results[1] : response.results[0]
+      )
       const lat = response.results[0].geometry.location.lat()
       const lng = response.results[0].geometry.location.lng()
       return { country, state, city, lat, lng }
