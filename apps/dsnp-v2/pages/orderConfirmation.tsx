@@ -13,6 +13,7 @@ import { Box } from '@chakra-ui/react'
 import Cookies from 'js-cookie'
 import { ConfirmResponseModel } from '../types/confirm.types'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
+import { utilGenerateEllipsedText } from '@beckn-ui/molecules'
 
 const OrderConfirmation = () => {
   const { t } = useLanguage()
@@ -44,7 +45,7 @@ const OrderConfirmation = () => {
 
   useEffect(() => {
     if (confirmResponse && confirmResponse.length > 0) {
-      setOrderId(confirmResponse[0].message.orderId.slice(0, 8))
+      setOrderId(confirmResponse[0].message.orderId)
     }
   }, [confirmResponse])
 
@@ -82,7 +83,7 @@ const OrderConfirmation = () => {
           iconSrc: orderConfirmmark,
           successOrderMessage: 'ORDER SUCCESFULL',
           gratefulMessage: 'Thank you for your order!',
-          orderIdMessage: orderId ? `Order number is: ${orderId}...` : '',
+          orderIdMessage: orderId ? `Order number is: ${utilGenerateEllipsedText(orderId)}` : '',
           trackOrderMessage: `You can track your order in "My Order" section`,
 
           buttons: [

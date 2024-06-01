@@ -18,7 +18,7 @@ import {
   useTheme,
   useToast
 } from '@chakra-ui/react'
-import { Accordion, BottomModal, Typography } from '@beckn-ui/molecules'
+import { Accordion, BottomModal, Typography, utilGenerateEllipsedText } from '@beckn-ui/molecules'
 import { toast } from 'react-toastify'
 import { v4 as uuidv4 } from 'uuid'
 import { useDispatch, useSelector } from 'react-redux'
@@ -47,15 +47,12 @@ import PaymentDetails from '@beckn-ui/becknified-components/src/components/check
 import { getPaymentBreakDown } from '@utils/checkout-utils'
 
 const statusMap = {
-  ArrangingPayment: 'Processing your order',
-  PaymentSettled: 'Ready to ship',
-  Cancelled: 'Order Cancelled!',
-  Shipped: 'Order Shipped',
-  Delivered: 'Order Delivered'
+  PAYMENT_RECEIVED: 'Payment Received',
+  'USER CANCELLED': 'CASE FORFEITED'
 }
 
 const DELIVERED = 'Delivered'
-const CANCELLED = 'CANCELLED'
+const CANCELLED = 'USER CANCELLED'
 
 const OrderDetails = () => {
   const [uiState, setUiState] = useState<UIState>({
@@ -134,7 +131,9 @@ const OrderDetails = () => {
     if (data.statusData.length > 0) {
       const newData = data.statusData
         .map((status: any) => ({
-          label: status?.message?.order?.fulfillments[0]?.state?.descriptor?.short_desc,
+          label:
+            statusMap[status?.message?.order?.fulfillments[0]?.state?.descriptor?.code] ||
+            status?.message?.order?.fulfillments[0]?.state?.descriptor?.code,
           statusTime: status?.message?.order?.fulfillments[0]?.state?.updated_at
         }))
         .filter((status: any) => status.label)
@@ -359,7 +358,7 @@ const OrderDetails = () => {
 
   // Check if the order is delivered  come her
   const isDelivered = data.statusData?.[0]?.message?.order?.fulfillments?.[0]?.state?.descriptor?.code === DELIVERED
-  const isCancelled = data.statusData?.[0]?.message?.order?.status === CANCELLED
+  const isCancelled = data.statusData?.[0]?.message?.order?.fulfillments?.[0]?.state?.descriptor?.code === CANCELLED
 
   useEffect(() => {
     if (isDelivered) {
@@ -520,6 +519,10 @@ const OrderDetails = () => {
       }))
     } catch (error) {
       console.error(error)
+      setUiState(prevState => ({
+        ...prevState,
+        isLoadingForTrackAndSupport: false
+      }))
     }
   }
 
@@ -631,6 +634,7 @@ const OrderDetails = () => {
   const ordersLength = data.statusData.length
   const { timestamp } = data.statusData[0].context
   const { order } = data.statusData[0].message
+  const { created_at } = data.statusData[0].message.order
   const {
     billing,
     fulfillments,
@@ -767,7 +771,7 @@ const OrderDetails = () => {
                   />
                   <Typography
                     variant="subTitleRegular"
-                    text={formatTimestamp(timestamp)}
+                    text={formatTimestamp(created_at)}
                   />
                 </Flex>
               </Box>
@@ -797,7 +801,7 @@ const OrderDetails = () => {
                   <Text
                     as={Typography}
                     // TODO
-                    text={`Case Id: ${orderMetaData.orderIds[0].slice(0, 5)}...`}
+                    text={`Case Id: ${utilGenerateEllipsedText(orderMetaData.orderIds[0])}`}
                     fontSize="17px"
                     fontWeight="600"
                   />
@@ -827,9 +831,13 @@ const OrderDetails = () => {
                   <Text
                     fontSize={'15px'}
                     fontWeight={'500'}
-                    color={data.statusData[0].message.order.status === 'CANCELLED' ? 'red' : 'green'}
+                    color={
+                      data.statusData[0].message.order.fulfillments?.[0]?.state?.descriptor?.code === CANCELLED
+                        ? 'red'
+                        : 'green'
+                    }
                   >
-                    {data.statusData[0].message.order.status}
+                    {statusMap[data.statusData[0].message.order.fulfillments?.[0]?.state?.descriptor?.code]}
                   </Text>
                 </Flex>
               </>
