@@ -12,6 +12,7 @@ import axios from 'axios'
 import { Box } from '@chakra-ui/react'
 import Cookies from 'js-cookie'
 import { ConfirmResponseModel } from '../types/confirm.types'
+import { utilGenerateEllipsedText } from '@beckn-ui/molecules'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
 
 const OrderConfirmation = () => {
@@ -83,7 +84,7 @@ const OrderConfirmation = () => {
           iconSrc: orderConfirmmark,
           successOrderMessage: 'ORDER SUCCESFULL',
           gratefulMessage: 'Thank you for your order!',
-          orderIdMessage: orderId ? `Order number is: ${orderId}...` : '',
+          orderIdMessage: orderId ? `Order number is: ${utilGenerateEllipsedText(orderId)}` : '',
           trackOrderMessage: `You can track your order in "My Order" section`,
           buttons: [
             {
