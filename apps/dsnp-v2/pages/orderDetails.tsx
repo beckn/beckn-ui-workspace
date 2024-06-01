@@ -498,6 +498,10 @@ const OrderDetails = () => {
         isLoadingForTrackAndSupport: false
       }))
     } catch (error) {
+      setUiState(prevState => ({
+        ...prevState,
+        isLoadingForTrackAndSupport: false
+      }))
       console.error(error)
     }
   }
