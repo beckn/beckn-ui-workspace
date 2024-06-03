@@ -155,6 +155,12 @@ const UpdateShippingDetails = () => {
       }
     } catch (error) {
       console.error('error in update', error)
+      toast({
+        title: `${error}`,
+        status: 'error',
+        isClosable: true
+      })
+      setIsLoadingForUpdate(false)
     }
   }
 

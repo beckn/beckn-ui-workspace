@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import ShippingForm from '@beckn-ui/becknified-components/src/components/checkout/shipping-form'
-import { Box, Text } from '@chakra-ui/react'
+import { Box, Text, useToast } from '@chakra-ui/react'
 import { ConfirmResponseModel } from '../types/confirm.types'
 import axios from 'axios'
 import { Loader, Typography } from '@beckn-ui/molecules'
@@ -21,6 +21,7 @@ const UpdateShippingDetails = () => {
   const [isLoadingForUpdate, setIsLoadingForUpdate] = useState(false)
   const { t } = useLanguage()
   const router = useRouter()
+  const toast = useToast()
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
@@ -85,6 +86,11 @@ const UpdateShippingDetails = () => {
         }
         const updateResponse = await axios.post(`${apiUrl}/update`, updateRequestPayload)
         if (updateResponse.data.data.length > 0) {
+          toast({
+            title: `Order Updated Successfully! `,
+            status: 'success',
+            isClosable: true
+          })
           router.push('/orderDetails')
         }
       } else if (localStorage.getItem('selectedOrder') && localStorage.getItem('statusResponse')) {
@@ -140,11 +146,22 @@ const UpdateShippingDetails = () => {
         }
         const updateResponse = await axios.post(`${apiUrl}/update`, updateRequestPayload)
         if (updateResponse.data.data.length > 0) {
+          toast({
+            title: `Order Updated Successfully! `,
+            status: 'success',
+            isClosable: true
+          })
           router.push('/orderDetails')
         }
       }
     } catch (error) {
       console.error('error in update', error)
+      toast({
+        title: `${error}`,
+        status: 'error',
+        isClosable: true
+      })
+      setIsLoadingForUpdate(false)
     }
   }
 

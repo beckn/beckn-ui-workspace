@@ -649,7 +649,7 @@ const OrderDetails = () => {
   const statusData = data.statusData
   const totalOrdersQty = statusData.length
   const filteredOrder = statusData.filter(res => {
-    res.message?.order?.fulfillments?.[0]?.state?.descriptor?.code?.toLowerCase() === 'delivered'
+    return res.message?.order?.fulfillments?.[0]?.state?.descriptor?.code?.toLowerCase() === 'delivered'
   })
 
   return (

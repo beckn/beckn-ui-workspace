@@ -620,7 +620,7 @@ const OrderDetails = () => {
 
   const filteredOrder = data.statusData.filter(res => {
     const { state } = res.message.order.fulfillments[0]
-    state && res.message.order.fulfillments[0].state.descriptor.short_desc === 'Delivered'
+    return state && res.message.order.fulfillments[0].state.descriptor.code.toLowerCase() === 'delivered'
   })
   return (
     <Box
