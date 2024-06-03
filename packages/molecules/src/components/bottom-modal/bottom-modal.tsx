@@ -66,7 +66,7 @@ const BottomModal: React.FC<BottomModalProps> = ({
 
         <ModalBody
           maxHeight={'calc(100vh - 10rem)'}
-          overflow={'scroll'}
+          overflow={'auto'}
         >
           {children}
         </ModalBody>
