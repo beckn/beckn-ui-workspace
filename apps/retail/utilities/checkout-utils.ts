@@ -51,9 +51,9 @@ export const getPayloadForSelectRequest = (selectedProduct: ParsedItemModel) => 
 }
 
 export const extractAddressComponents = (result: any) => {
-  let country = null,
-    state = null,
-    city = null
+  let country = 'IN',
+    state = 'Karnataka',
+    city = 'Bengaluru'
 
   for (const component of result.address_components) {
     if (component.types.includes('country')) {
@@ -73,7 +73,9 @@ export const geocodeFromPincode = async (pincode: any) => {
     const response = await geocoder.geocode({ address: pincode })
     console.log('respnse from the map', response)
     if (response.results.length > 0) {
-      const { country, state, city } = extractAddressComponents(response.results[0])
+      const { country, state, city } = extractAddressComponents(
+        response.results[1] ? response.results[1] : response.results[0]
+      )
       return { country, state, city }
     } else {
       console.log('No results found')

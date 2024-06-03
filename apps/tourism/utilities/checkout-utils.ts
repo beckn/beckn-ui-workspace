@@ -51,9 +51,9 @@ export const getPayloadForSelectRequest = (selectedProduct: ParsedItemModel) => 
 }
 
 const extractAddressComponents = (result: any) => {
-  let country = null,
-    state = null,
-    city = null
+  let country = 'IN',
+    state = 'Karnataka',
+    city = 'Bengaluru'
 
   for (const component of result.address_components) {
     if (component.types.includes('country')) {

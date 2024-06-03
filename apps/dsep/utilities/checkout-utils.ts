@@ -10,7 +10,7 @@ const APIKEY = process.env.NEXT_PUBLIC_GOOGLE_API_KEY as string
 
 export const getSubTotalAndDeliveryCharges = (initData: (ResponseModel & ResponseModel[]) | null) => {
   let subTotal = 0
-  let totalDeliveryCharge = 0
+  const totalDeliveryCharge = 0
 
   if (initData) {
     initData.forEach(data => {
@@ -51,9 +51,9 @@ export const areShippingAndBillingDetailsSame = (
 }
 
 const extractAddressComponents = (result: any) => {
-  let country = null,
-    state = null,
-    city = null
+  let country = 'IN',
+    state = 'Karnataka',
+    city = 'Bengaluru'
 
   for (const component of result.address_components) {
     if (component.types.includes('country')) {
@@ -82,7 +82,7 @@ async function addressComponentsFromPincode(pincode: string) {
 export const getPayloadForInitRequest = async (selectResponse: SelectResponseModel, formData: ShippingFormData) => {
   const { address, email, mobileNumber, name, pinCode } = formData
   const cityData = await addressComponentsFromPincode(pinCode)
-  let initPayload: any = {
+  const initPayload: any = {
     data: []
   }
 

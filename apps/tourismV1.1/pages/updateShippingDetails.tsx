@@ -8,6 +8,7 @@ import { useLanguage } from '@hooks/useLanguage'
 import { v4 as uuidv4 } from 'uuid'
 import { useRouter } from 'next/router'
 import { geocodeFromPincode } from '@utils/checkout-utils'
+import { getLocalStorage } from '@utils/localstorage'
 
 const UpdateShippingDetails = () => {
   const [shippingDetails, setShippingDetails] = useState({
@@ -32,6 +33,19 @@ const UpdateShippingDetails = () => {
   }, [])
 
   const handleSubmit = async (formData: any, confirmData: ConfirmResponseModel[]) => {
+    const optionTags = getLocalStorage('optionTags')
+    let searchString
+    if (optionTags && optionTags.name) searchString = optionTags.name
+    const defaultAddressPayload = {
+      city: 'Bengaluru',
+      state: 'Karnataka',
+      country: 'IN'
+    }
+    if (searchString && searchString.includes('Paris')) {
+      defaultAddressPayload.city = 'Paris'
+      defaultAddressPayload.state = 'Paris'
+      defaultAddressPayload.country = 'FA'
+    }
     try {
       setIsLoadingForUpdate(true)
       if (confirmData && confirmData.length > 0) {
@@ -60,13 +74,13 @@ const UpdateShippingDetails = () => {
                         location: {
                           address: shippingDetails.address,
                           city: {
-                            name: city || 'Bengaluru'
+                            name: city || defaultAddressPayload.city
                           },
                           state: {
-                            name: state || 'Karnataka'
+                            name: state || defaultAddressPayload.state
                           },
                           country: {
-                            code: country || 'IND'
+                            code: country || defaultAddressPayload.country
                           },
                           area_code: pinCode
                         },
