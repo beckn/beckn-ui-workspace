@@ -25,7 +25,7 @@ const Search = () => {
   const [originalItems, setOriginalItems] = useState<ParsedItemModel[]>([])
   const [sortBy, setSortBy] = useState<string>('')
   const router = useRouter()
-  const [searchKeyword, setSearchKeyword] = useState(router.query?.searchTerm || '')
+  const [searchKeyword, setSearchKeyword] = useState<string>(router.query?.searchTerm || '')
   const [isLoading, setIsLoading] = useState(false)
   const [isFilterOpen, setIsFilterOpen] = useState(false)
   const breakpoint = useBreakpoint()
@@ -57,7 +57,7 @@ const Search = () => {
     },
     searchString: searchKeyword,
     category: {
-      categoryCode: searchKeyword.includes('Paris') ? getCategoryBasedOnLocale(locale) : 'Tourism'
+      categoryCode: searchKeyword.toLowerCase().includes('paris') ? getCategoryBasedOnLocale(locale) : 'Tourism'
     },
     fulfillment: {
       type: 'Delivery',
