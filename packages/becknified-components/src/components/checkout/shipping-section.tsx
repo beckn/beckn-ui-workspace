@@ -59,7 +59,6 @@ const ShippingSection: React.FC<ShippingSectionProps<FormField[]>> = ({
             fontSize={'17px'}
             checked={isChecked}
             defaultChecked={isChecked}
-            defaultValue={isChecked}
             onChange={() => onCheckChange && onCheckChange()}
           >
             {sameAsTitle}
