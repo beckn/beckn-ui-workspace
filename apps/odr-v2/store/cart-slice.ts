@@ -30,6 +30,8 @@ const cartSlice = createSlice({
       state.totalAmount =
         state.totalAmount + action.payload.quantity * parseFloat(action.payload.product.item.price.value)
 
+      state.items.pop()
+
       if (!existingItem) {
         const totalPrice = parseFloat(newItem.item.price.value) * action.payload.quantity
 
