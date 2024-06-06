@@ -17,7 +17,7 @@ export type ShippingFormInitialValuesType = {
 }
 
 export interface ShippingFormProps<T extends FormField[]> {
-  formFieldConfig?: FormField
+  formFieldConfig?: FormField[]
   onSubmit: (data: FormData<T>) => void
   submitButton: ButtonProps
   values?: ShippingFormInitialValuesType
