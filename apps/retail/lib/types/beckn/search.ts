@@ -1,3 +1,4 @@
+import { CurrencyType } from '@beckn-ui/becknified-components/src/lib/types'
 import { Coordinate } from '@utils/homePage.utils'
 
 interface Location {
@@ -11,7 +12,7 @@ interface Location {
 
 interface Price {
   value: string
-  currency: string
+  currency: CurrencyType
 }
 
 interface Tag {
@@ -37,7 +38,6 @@ interface Image {
 }
 
 export interface Item {
-  rating: number
   long_desc: string
   short_desc: string
   id: string
@@ -99,6 +99,7 @@ export interface ParsedItemModel {
   providerId: string
   providerName: string
   item: Item
+  rating?: string
   providerCoordinates: Coordinate
 }
 

@@ -44,14 +44,7 @@ import ShippingBlock from '@components/orderDetailComponents/Shipping'
 import { DOMAIN } from '@lib/config'
 import PaymentDetails from '@beckn-ui/becknified-components/src/components/checkout/payment-details'
 import { getPaymentBreakDown } from '@utils/checkout-utils'
-
-const statusMap = {
-  ArrangingPayment: 'Processing your order',
-  PaymentSettled: 'Ready to ship',
-  Cancelled: 'Order Cancelled!',
-  Shipped: 'Order Shipped',
-  Delivered: 'Order Delivered'
-}
+import { StatusKey, StatusMap, statusMap } from '@lib/types/order'
 
 const DELIVERED = 'Delivered'
 const CANCELLED = 'CANCELLED'
@@ -110,9 +103,9 @@ const OrderDetails = () => {
       const newData = data.statusData
         .map((status: any) => {
           const { tags } = status?.message?.order
-
+          const statusKey: StatusKey = tags[tags.length - 1].list[0].value
           return {
-            label: statusMap[tags[tags.length - 1].list[0].value],
+            label: statusMap[statusKey],
             statusTime: status?.message?.order?.fulfillments[0]?.state?.updated_at || status?.context?.timestamp
           }
         })
@@ -973,7 +966,7 @@ const OrderDetails = () => {
                     <Image src={menuItem.image} />
                     <Text
                       as={Typography}
-                      text={menuItem.text}
+                      text={menuItem.text as string}
                       fontSize="15px"
                       fontWeight={400}
                     />

@@ -8,7 +8,6 @@ export interface CardWithCheckBoxPropsModel {
   paymentMethod: string
   paymentMethodNet: string
   img1: string
-  img2: string
   setChecked: React.Dispatch<React.SetStateAction<boolean>>
 }
 
@@ -47,7 +46,7 @@ const CardWithCheckBox: React.FC<CardWithCheckBoxPropsModel> = props => {
           </label>
           <Box>
             <Image
-              src={props.img2}
+              src={props.img1}
               w={'62px'}
               h={'40px'}
             />

@@ -7,9 +7,11 @@ import { BecknAuth } from '@beckn-ui/becknified-components'
 import Router from 'next/router'
 import Cookies from 'js-cookie'
 import { Box, useBreakpoint, useToast, Text } from '@chakra-ui/react'
-import { useRegisterMutation } from '@services/Users'
+import { useRegisterMutation, UserResponse } from '@services/Users'
 import { CustomToast } from '@components/signIn/SignIn'
 import Logo from '@public/images/Logo.svg'
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query'
+import { SerializedError } from '@reduxjs/toolkit'
 
 const SignUp = () => {
   const { t } = useLanguage()
@@ -79,10 +81,10 @@ const SignUp = () => {
           mobile: formData.mobileNumber
         })
 
-        if (registerResponse?.error) throw new Error('Could not register')
+        if ((registerResponse as { error: FetchBaseQueryError })?.error) throw new Error('Could not register')
 
         const myHeaders = new Headers()
-        myHeaders.append('Authorization', `Bearer ${registerResponse.data.jwt}`)
+        myHeaders.append('Authorization', `Bearer ${(registerResponse as { data: UserResponse }).data.jwt}`)
 
         const currentFormData = new FormData()
         const data = {

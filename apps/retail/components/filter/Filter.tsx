@@ -11,6 +11,7 @@ import {
   Text
 } from '@chakra-ui/react'
 import Button from '@components/button/Button'
+import { FilterPropsModel } from '@lib/types/general'
 import React, { useEffect, useState } from 'react'
 
 const activeLabelStyles = {
@@ -56,18 +57,18 @@ export const theme = extendTheme({
   }
 })
 
-const Filter = ({ handleApplyFilter, handleResetFilter, handleCancelFilter = () => {} }) => {
-  const getFormData = (): any => {
+const Filter = ({ handleApplyFilter, handleResetFilter, handleCancelFilter = () => {} }: FilterPropsModel) => {
+  const getFormData = () => {
     if (localStorage) {
       const localFormData = localStorage.getItem('formData')
-      return localFormData ? JSON.parse(localFormData) : ''
+      return localFormData ? JSON.parse(localFormData) : {}
     }
   }
   const [formData, setFormData] = useState(getFormData())
   const [sortBy, setSortBy] = useState<string>('')
   const handleChange = (name: string, value: string) => {
     setSortBy(value)
-    setFormData(prevData => ({
+    setFormData((prevData: any) => ({
       ...prevData,
       [name]: value
     }))

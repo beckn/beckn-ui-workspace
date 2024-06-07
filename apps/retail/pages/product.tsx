@@ -1,34 +1,26 @@
-import Router from 'next/router'
-import React, { useEffect, useState } from 'react'
-import { ProductDetailPage, ProductPrice } from '@beckn-ui/becknified-components'
-import { RetailItem } from '@lib/products'
-import { ProductCard } from '@beckn-ui/becknified-components'
-import { LocalStorage, ICartProduct, ICart, LocalStorageCart, LocalStorageCartItem } from '@lib/types'
+import React, { useState } from 'react'
+import { ProductDetailPage } from '@beckn-ui/becknified-components'
 import { cartActions } from '@store/cart-slice'
 import { useDispatch, useSelector } from 'react-redux'
 import useResponsive from '@beckn-ui/becknified-components/src/hooks/useResponsive'
 import { toast } from 'react-toastify'
-import { setLocalStorage, getLocalStorage, addLocalStorage } from '@utils/localstorage'
-import { fromBinary } from '@utils/common-utils'
 import { useRouter } from 'next/router'
 import { DiscoveryRootState } from '@store/discovery-slice'
-import { Box, Flex, useTheme } from '@chakra-ui/react'
-import { Button, CustomThemeType, Input, Typography } from '@beckn-ui/molecules'
+import { Box, useTheme } from '@chakra-ui/react'
+import { CustomThemeType } from '@beckn-ui/molecules'
 import { useLanguage } from '@hooks/useLanguage'
+import { ParsedItemModel } from '@lib/types'
 
 const Product = () => {
   const { t } = useLanguage()
-  const theme = useTheme<CustomThemeType>()
-  const selectedProduct = useSelector((state: DiscoveryRootState) => state.discovery.selectedProduct)
-  const productList = useSelector((state: DiscoveryRootState) => state.discovery.productList)
-  const { isMobile, isTablet, isDesktop } = useResponsive()
+  const selectedProduct: ParsedItemModel = useSelector((state: DiscoveryRootState) => state.discovery.selectedProduct)
   const dispatch = useDispatch()
   const [counter, setCounter] = useState(1)
-  const [totalPrice, setTotalPrice] = useState(selectedProduct.item.price.value)
+  const [totalPrice, setTotalPrice] = useState<number>(Number(selectedProduct.item.price.value))
 
   const increment = () => {
     const newCounter = counter + 1
-    const newTotalPrice = newCounter * selectedProduct.item.price.value
+    const newTotalPrice = newCounter * Number(selectedProduct.item.price.value)
     setCounter(newCounter)
     setTotalPrice(newTotalPrice)
   }
@@ -36,12 +28,11 @@ const Product = () => {
   const decrement = () => {
     if (counter > 1) {
       const newCounter = counter - 1
-      const newTotalPrice = newCounter * selectedProduct.item.price.value
+      const newTotalPrice = newCounter * Number(selectedProduct.item.price.value)
       setCounter(newCounter)
       setTotalPrice(newTotalPrice)
     }
   }
-  const router = useRouter()
 
   if (!selectedProduct) {
     return <></>
@@ -59,7 +50,7 @@ const Product = () => {
             name: selectedProduct.item.name,
             secondaryDescription: selectedProduct.item.long_desc,
             starRating: {
-              rating: selectedProduct.item.rating,
+              rating: selectedProduct.item.rating!,
               size: 20,
               setRating: () => {},
               starCount: 5

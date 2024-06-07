@@ -35,89 +35,91 @@ const GeoLocationInputList: React.FC = () => {
         }}
         onSelect={data => handleSelect(data)}
       >
-        {({ getInputProps, suggestions, getSuggestionItemProps }) => (
-          <Flex flexDirection={'column'}>
-            <Flex
-              flexDirection={'row'}
-              marginTop="20px"
-              justifyContent={'center'}
-              alignItems={'center'}
-            >
-              <Box
-                p={3}
-                width="10"
-                style={{
-                  border: '0px solid black'
-                }}
+        {({ getInputProps, suggestions, getSuggestionItemProps }) =>
+          (
+            <Flex flexDirection={'column'}>
+              <Flex
+                flexDirection={'row'}
+                marginTop="20px"
+                justifyContent={'center'}
+                alignItems={'center'}
               >
-                <Image
-                  src={backArrow}
-                  onClick={() => {
-                    closeGeoLocationSearchPage()
+                <Box
+                  p={3}
+                  width="10"
+                  style={{
+                    border: '0px solid black'
                   }}
-                  alt="backArrow"
-                />
-              </Box>
-              <Box
-                p={2}
-                width="-moz-max-content"
-                className={Styles.search_box_container}
-              >
-                <Flex
-                  flexDirection={'row'}
-                  justifyContent={'center'}
-                  alignItems={'center'}
                 >
-                  <Input
-                    {...getInputProps()}
-                    type={'text'}
-                    _focus={{ outline: 'none' }}
-                    _focusVisible={{ boxShadow: 'none' }}
-                    borderRadius={'12px'}
-                    name="search_input"
-                    placeholder="Search for Location"
-                    className={`${Styles.search_box_input}`}
-                  />
-                  <IoClose
-                    className={Styles.close_icon}
+                  <Image
+                    src={backArrow}
                     onClick={() => {
-                      setAddress('')
+                      closeGeoLocationSearchPage()
                     }}
+                    alt="backArrow"
                   />
-                </Flex>
+                </Box>
+                <Box
+                  p={2}
+                  width="-moz-max-content"
+                  className={Styles.search_box_container}
+                >
+                  <Flex
+                    flexDirection={'row'}
+                    justifyContent={'center'}
+                    alignItems={'center'}
+                  >
+                    <Input
+                      {...getInputProps()}
+                      type={'text'}
+                      _focus={{ outline: 'none' }}
+                      _focusVisible={{ boxShadow: 'none' }}
+                      borderRadius={'12px'}
+                      name="search_input"
+                      placeholder="Search for Location"
+                      className={`${Styles.search_box_input}`}
+                    />
+                    <IoClose
+                      className={Styles.close_icon}
+                      onClick={() => {
+                        setAddress('')
+                      }}
+                    />
+                  </Flex>
+                </Box>
+              </Flex>
+              <Box className={Styles.location_listitem_container}>
+                {suggestions.length
+                  ? suggestions.map(suggestion => {
+                      return (
+                        <Flex
+                          {...getSuggestionItemProps(suggestion)}
+                          flexDirection={'row'}
+                          className={Styles.location_list_item}
+                          key={suggestion.placeId}
+                        >
+                          <Box className={Styles.location_pointer_wrapper}>
+                            <Image
+                              src={locationMarker}
+                              alt="locationMarker"
+                            />
+                          </Box>
+                          <Box className={Styles.location_listitem_content}>
+                            <Text className={Styles.location_listitem_content_main_text}>
+                              {suggestion.formattedSuggestion.mainText}
+                            </Text>
+                            <Text className={Styles.location_listitem_content_secondary_text}>
+                              {suggestion.formattedSuggestion.secondaryText}
+                            </Text>
+                          </Box>
+                        </Flex>
+                      )
+                    })
+                  : null}
               </Box>
             </Flex>
-            <Box className={Styles.location_listitem_container}>
-              {suggestions.length
-                ? suggestions.map(suggestion => {
-                    return (
-                      <Flex
-                        {...getSuggestionItemProps(suggestion)}
-                        flexDirection={'row'}
-                        className={Styles.location_list_item}
-                        key={suggestion.placeId}
-                      >
-                        <Box className={Styles.location_pointer_wrapper}>
-                          <Image
-                            src={locationMarker}
-                            alt="locationMarker"
-                          />
-                        </Box>
-                        <Box className={Styles.location_listitem_content}>
-                          <Text className={Styles.location_listitem_content_main_text}>
-                            {suggestion.formattedSuggestion.mainText}
-                          </Text>
-                          <Text className={Styles.location_listitem_content_secondary_text}>
-                            {suggestion.formattedSuggestion.secondaryText}
-                          </Text>
-                        </Box>
-                      </Flex>
-                    )
-                  })
-                : null}
-            </Box>
-          </Flex>
-        )}
+          ) as any
+        }
       </PlacesAutocomplete>
     </Box>
   )

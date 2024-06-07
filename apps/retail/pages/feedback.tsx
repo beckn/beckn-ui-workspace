@@ -118,7 +118,7 @@ const Feedback = () => {
           />
           {isDesktop && (
             <Typography
-              fontSize={{ base: '1rem', md: '2rem' }}
+              fontSize="1rem"
               variant="subTitleSemibold"
               text="Thank you for your order!"
             />

@@ -1,6 +1,9 @@
 import { ParsedItemModel } from '../types/search.types'
 import { InitResponseModel } from '../types/init.types'
 import { StatusResponseModel } from '../types/status.types'
+import { CartItemForRequest, CartRetailItem } from '@lib/types'
+import { areObjectPropertiesEqual } from './common-utils'
+import { ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
 
 export const getPayloadForSelectRequest = (selectedProduct: ParsedItemModel) => {
   const {
@@ -76,107 +79,16 @@ export const geocodeFromPincode = async (pincode: any) => {
       const { country, state, city } = extractAddressComponents(
         response.results[1] ? response.results[1] : response.results[0]
       )
-      return { country, state, city }
+      const lat = response.results[0].geometry.location.lat()
+      const lng = response.results[0].geometry.location.lng()
+      return { country, state, city, lat, lng }
     } else {
       console.log('No results found')
+      return { country: '', state: '', city: '' }
     }
   } catch (error) {
     console.error(error)
-  }
-}
-
-export const getPayloadForInitRequest = async (selectData: ParsedItemModel, shippingDetails: any, billingData: any) => {
-  try {
-    const { providerId, bppId, bppUri, domain, transactionId, item } = selectData
-    const { fulfillments } = item
-    const { name, address, email, mobileNumber, pinCode } = shippingDetails
-    const {
-      name: billingname,
-      address: billingAddress,
-      email: billingEmail,
-      mobileNumber: billingMobileNumber,
-      pinCode: billingPinCode
-    } = billingData
-
-    const cityData = await geocodeFromPincode(pinCode)
-
-    console.log('geocodeFromPincode(pinCode)', cityData)
-
-    const initPayload = {
-      data: [
-        {
-          context: {
-            transaction_id: transactionId,
-            bpp_id: bppId,
-            bpp_uri: bppUri,
-            domain: domain
-          },
-          message: {
-            orders: [
-              {
-                provider: {
-                  id: providerId
-                },
-                items: [item],
-                fulfillments: [
-                  {
-                    id: fulfillments[0].id,
-                    customer: {
-                      contact: {
-                        email,
-                        mobileNumber
-                      },
-                      person: {
-                        name
-                      }
-                    },
-                    stops: [
-                      {
-                        type: 'end',
-                        location: {
-                          gps: '1.3806217468119772, 103.74636438437074',
-                          address: address,
-                          city: {
-                            name: cityData?.city
-                          },
-                          country: {
-                            code: ''
-                          },
-                          area_code: pinCode,
-                          state: {
-                            name: cityData?.state
-                          }
-                        },
-                        contact: {
-                          phone: mobileNumber
-                        }
-                      }
-                    ]
-                  }
-                ],
-                // fulfillments: fulfillments,
-                billing: {
-                  name: billingname,
-                  address: billingAddress,
-                  state: {
-                    name: cityData?.state
-                  },
-                  city: {
-                    name: cityData?.city
-                  },
-                  email: billingEmail,
-                  phone: billingMobileNumber
-                }
-              }
-            ]
-          }
-        }
-      ]
-    }
-
-    return initPayload
-  } catch (error) {
-    console.error(error)
+    return { country: '', state: '', city: '' }
   }
 }
 
@@ -203,4 +115,155 @@ export const getPaymentBreakDown = (initData: InitResponseModel[] | StatusRespon
   })
 
   return { breakUpMap, totalPricewithCurrent }
+}
+
+export const getSubTotalAndDeliveryCharges = (initData: any) => {
+  let subTotal = 0
+  let currencySymbol
+
+  if (initData && initData.length > 0) {
+    initData.forEach(data => {
+      subTotal = parseFloat(data.message.order.quote.price.value).toFixed(2)
+
+      currencySymbol = data.message.order.quote.price.currency
+    })
+  }
+
+  return { subTotal, currencySymbol }
+}
+
+export const getTotalCartItems = (cartItems: CartRetailItem[]) => {
+  let quantity = 0
+
+  cartItems.forEach(item => {
+    quantity += item.quantity
+  })
+
+  return quantity
+}
+
+export const areShippingAndBillingDetailsSame = (
+  isBillingAddressComplete: boolean,
+  formData: ShippingFormInitialValuesType,
+  billingFormData: ShippingFormInitialValuesType
+) => {
+  if (isBillingAddressComplete) {
+    return areObjectPropertiesEqual(formData, billingFormData)
+  }
+  return !isBillingAddressComplete
+}
+
+export const getInitPayload = async (
+  deliveryAddress: ShippingFormInitialValuesType,
+  billingAddress: ShippingFormInitialValuesType,
+  cartItems: CartItemForRequest[],
+  transaction_id: string,
+  domain: string = 'retail:1.1.0',
+  fulfillments: { id: string; type: string } = { id: '3', type: 'Standard-shipping' }
+) => {
+  const cityData = await geocodeFromPincode(deliveryAddress.pinCode)
+
+  const bppGroups = cartItems.reduce((acc: { [key: string]: CartItemForRequest[] }, item) => {
+    if (!acc[item.bpp_id]) {
+      acc[item.bpp_id] = []
+    }
+    acc[item.bpp_id].push(item)
+    return acc
+  }, {})
+
+  const data = Object.entries(bppGroups).map(([bpp_id, items]) => {
+    return {
+      context: {
+        transaction_id: transaction_id,
+        bpp_id: bpp_id,
+        bpp_uri: items[0].bpp_uri,
+        domain: domain
+      },
+      message: {
+        orders: transformOrdersByProvider(items, fulfillments)
+      }
+    }
+  })
+
+  function transformOrdersByProvider(items: CartItemForRequest[], fullf: { id: string; type: string }) {
+    const providerGroups = items.reduce((acc: { [key: string]: CartItemForRequest[] }, item) => {
+      const providerKey = `${item.bpp_id}_${item.providerId}`
+      if (!acc[providerKey]) {
+        acc[providerKey] = []
+      }
+      acc[providerKey].push(item)
+      return acc
+    }, {})
+
+    return Object.values(providerGroups).map(group => {
+      const providerId = group[0].providerId
+      const items = group.map(item => ({
+        id: item.id,
+        quantity: {
+          selected: {
+            count: item.quantity
+          }
+        }
+      }))
+
+      const fulfillments = [
+        {
+          id: fullf.id,
+          type: fullf.type,
+          customer: {
+            person: {
+              name: deliveryAddress.name
+            },
+            contact: {
+              phone: deliveryAddress.mobileNumber
+            }
+          },
+          stops: [
+            {
+              location: {
+                gps: `${cityData.lat},${cityData.lng}`,
+                address: deliveryAddress.address,
+                city: {
+                  name: cityData?.city
+                },
+                state: {
+                  name: cityData?.state
+                },
+                country: {
+                  code: 'IND'
+                },
+                area_code: deliveryAddress.pinCode
+              },
+              contact: {
+                phone: deliveryAddress.mobileNumber,
+                email: deliveryAddress.email
+              }
+            }
+          ]
+        }
+      ]
+
+      return {
+        provider: {
+          id: providerId
+        },
+        items,
+        fulfillments,
+        billing: {
+          name: billingAddress.name,
+          phone: billingAddress.mobileNumber,
+          address: billingAddress.address,
+          email: billingAddress.email,
+          city: {
+            name: cityData?.city
+          },
+          state: {
+            name: cityData?.state
+          }
+        }
+      }
+    })
+  }
+
+  return { data }
 }

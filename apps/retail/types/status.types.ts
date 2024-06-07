@@ -38,6 +38,7 @@ interface Item {
   long_desc: string
   price: Price
   tags: Tag[]
+  images: Images[]
 }
 
 interface StateDescriptor {
@@ -138,7 +139,7 @@ interface Order {
   created_at: string
   id: string
   provider: Provider
-  items: Item
+  items: Item[]
   fulfillments: Fulfillment[]
   quote: Quote
   billing: Billing

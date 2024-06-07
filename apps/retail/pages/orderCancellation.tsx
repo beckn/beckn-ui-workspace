@@ -13,7 +13,7 @@ const orderCancellation = () => {
   const { t } = useLanguage()
   const router = useRouter()
   const statusResponse = useSelector((state: StatusRootState) => state.status.statusResponse)
-  const [orderId, setOrderId] = useState()
+  const [orderId, setOrderId] = useState<string>()
   const dispatch = useDispatch()
 
   useEffect(() => {

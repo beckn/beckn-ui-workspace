@@ -1,4 +1,4 @@
-import { ParsedItemModel, SearchResponseModel } from '../types/search.types'
+import { ParsedItemModel, SearchResponseModel } from '@lib/types'
 
 const dummyLocation = [
   {

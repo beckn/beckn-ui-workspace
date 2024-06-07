@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useLanguage } from '@hooks/useLanguage'
 import { Cart as BecknCart } from '@beckn-ui/becknified-components'
 import { useSelectMutation } from '@services/select'
-import { getSelectPayload } from '@components/cart/cart.utils'
 import { cartActions } from '@store/cart-slice'
 
 import { Box, Flex, useToast } from '@chakra-ui/react'
@@ -15,6 +14,8 @@ import { DOMAIN } from '@lib/config'
 
 import { ICartRootState } from '@lib/types'
 import { DiscoveryRootState } from '@store/discovery-slice'
+import { CartItemProps } from '@beckn-ui/becknified-components/src/components/cart/cart.types'
+import { getSelectPayload } from '@utils/cart-utils'
 
 const Cart = () => {
   const [fetchQuotes, { isLoading, data, isError }] = useSelectMutation()
@@ -50,24 +51,27 @@ const Cart = () => {
       <BecknCart
         isLoading={isLoading}
         schema={{
-          cartItems: items.map(singleItem => ({
-            id: singleItem.id,
-            quantity: singleItem.quantity,
-            name: singleItem.name,
-            image: singleItem.images[0].url,
-            price: Number(singleItem.price.value),
-            symbol: singleItem.price.currency,
-            totalAmountText: t.totalAmount,
-            handleIncrement: id => {
-              const selectedItem = productList.find(singleItem => singleItem.item.id === id)
-              if (selectedItem) {
-                dispatch(cartActions.addItemToCart({ product: selectedItem, quantity: 1 }))
-              }
-            },
-            handleDecrement: id => {
-              dispatch(cartActions.removeItemFromCart(id))
-            }
-          })),
+          cartItems: items.map(
+            singleItem =>
+              ({
+                id: singleItem.id,
+                quantity: singleItem.quantity,
+                name: singleItem.name,
+                image: singleItem.images[0].url,
+                price: Number(singleItem.price.value),
+                symbol: singleItem.price.currency,
+                totalAmountText: t.totalAmount,
+                handleIncrement: id => {
+                  const selectedItem = productList.find(singleItem => singleItem.item.id === id)
+                  if (selectedItem) {
+                    dispatch(cartActions.addItemToCart({ product: selectedItem, quantity: 1 }))
+                  }
+                },
+                handleDecrement: id => {
+                  dispatch(cartActions.removeItemFromCart(id))
+                }
+              }) as CartItemProps
+          ),
           loader: { text: t.quoteRequestLoader },
           orderSummary: {
             totalAmount: {
@@ -82,7 +86,7 @@ const Cart = () => {
               text: t.order,
               handleClick: onOrderClick
             },
-            orderSummeryText: t.orderSummary,
+            orderSummaryText: t.orderSummary,
             totalQuantityText: t.totalQuantity,
             totalAmountText: t.totalAmount
           },

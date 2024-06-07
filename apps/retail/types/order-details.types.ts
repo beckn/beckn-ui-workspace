@@ -21,4 +21,5 @@ export interface ProcessState {
   apiCalled: boolean
   allOrderDelivered: boolean
   radioValue: string
+  orderCancelled: boolean
 }

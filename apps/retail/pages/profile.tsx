@@ -102,7 +102,7 @@ const ProfilePage = () => {
     const errors = profileValidateForm(formData) as any
     setFormErrors(prevErrors => ({
       ...prevErrors,
-      ...Object.keys(errors).reduce((acc, key) => {
+      ...Object.keys(errors).reduce((acc: any, key) => {
         acc[key] = t[`${errors[key]}`] || ''
         return acc
       }, {} as FormErrors)

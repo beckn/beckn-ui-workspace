@@ -98,7 +98,7 @@ function PaymentMode() {
           </Text>
           <CardWithCheckBox
             setChecked={setChecked}
-            img2={CashOnDelivery}
+            img1={CashOnDelivery}
             paymentMethod={t.cashOnDelivery}
             paymentMethodNet={t.netBanking}
           />

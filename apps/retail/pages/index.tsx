@@ -13,6 +13,7 @@ import OrderDetails from '@components/orderDetails/ImportedOrderDetails'
 import ShoppingList from '@components/shoppingList/ShoppingList'
 import SelectDeliveryModal from '@components/selectDeliveryModal/SelectDeliveryModal'
 import { Typography } from '@beckn-ui/molecules'
+import { ImportedOrderModel } from '@lib/types'
 
 const HomePage = () => {
   const [searchTerm, setSearchTerm] = useState<string>('')
@@ -29,7 +30,7 @@ const HomePage = () => {
   const [selectedValues, setSelectedValues] = useState<string[]>([])
   const [address, setAddress] = useState('')
   const [isLoadingForChatGptRequest, setIsLoadingForChatGptRequest] = useState(true)
-  const [importedOrderObject, setImportedOrderObject] = useState(null)
+  const [importedOrderObject, setImportedOrderObject] = useState<ImportedOrderModel>()
   const chatGptApiUrl = process.env.NEXT_PUBLIC_CHAT_GPT_URL
 
   const apiKeyForGoogle = process.env.NEXT_PUBLIC_GOOGLE_API_KEY

@@ -9,7 +9,7 @@
  */
 
 export interface StarRatingProps {
-  rating: number
+  rating: string
   setRating: (rating: number) => void
   starCount: number
   size?: number

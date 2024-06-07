@@ -3,9 +3,8 @@ import axios from 'axios'
 import { useDispatch } from 'react-redux'
 import { Box, Flex, Image } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
-import { toBinary } from '@utils/common-utils'
 import { parsedSearchlist } from '@utils/search-results.utils'
-import { ProductCard } from '@beckn-ui/becknified-components'
+import { Product, ProductCard } from '@beckn-ui/becknified-components'
 import { BottomModal } from '@beckn-ui/molecules'
 import { discoveryActions } from '@store/discovery-slice'
 import { useBreakpoint } from '@chakra-ui/react'
@@ -15,7 +14,6 @@ import { ParsedItemModel } from '@lib/types/beckn/search'
 import { DOMAIN } from '@lib/config'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
 import Filter from '../components/filter/Filter'
-import { LocalStorage } from '@lib/types'
 
 //Mock data for testing search API. Will remove after the resolution of CORS issue
 
@@ -109,9 +107,9 @@ const Search = () => {
     } else if (sortBy === 'HightoLow') {
       sortedItemsCopy.sort((a, b) => parseFloat(b.item.price.value) - parseFloat(a.item.price.value))
     } else if (sortBy === 'RatingLowtoHigh') {
-      sortedItemsCopy.sort((a, b) => parseFloat(a.item.rating) - parseFloat(b.item.rating))
+      sortedItemsCopy.sort((a, b) => parseFloat(a.item.rating!) - parseFloat(b.item.rating!))
     } else if (sortBy === 'RatingHightoLow') {
-      sortedItemsCopy.sort((a, b) => parseFloat(b.item.rating) - parseFloat(a.item.rating))
+      sortedItemsCopy.sort((a, b) => parseFloat(b.item.rating!) - parseFloat(a.item.rating!))
     }
 
     setItems(sortedItemsCopy)
@@ -216,9 +214,9 @@ const Search = () => {
               >
                 {items.map((singleItem, idx) => {
                   const { item } = singleItem
-                  const product = {
+                  const product: Product = {
                     id: item.id,
-                    images: item.images.map(singleImage => singleImage.url),
+                    images: item.images.map(singleImage => singleImage?.url),
                     name: item.name,
                     price: item.price.value,
                     rating: item.rating,
