@@ -174,7 +174,7 @@ const HomePage = () => {
             fontSize={'15px'}
             fontWeight="600"
             text={t.category}
-            color="#8D353A"
+            color={isOpen ? '#183831' : '#8D353A'}
           />
           <Box
             mt={'8px'}

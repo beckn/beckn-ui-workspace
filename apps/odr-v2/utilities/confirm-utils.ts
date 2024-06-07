@@ -137,7 +137,7 @@ export const getPayloadForOrderHistoryPost = (confirmData: ConfirmResponseModel[
     },
     message: {
       order: {
-        state: fulfillments[0].state.descriptor.short_desc || 'in progress',
+        state: fulfillments[0]?.state?.descriptor?.short_desc || 'in progress',
         id: orderId,
         provider: {
           id,
