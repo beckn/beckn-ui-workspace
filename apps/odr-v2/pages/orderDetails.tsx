@@ -831,7 +831,7 @@ const OrderDetails = () => {
                       fontSize={'12px'}
                       fontWeight={'400'}
                     >
-                      {data.statusData[0]?.message?.order?.items[0]?.name}
+                      {data.statusData[0]?.message?.order?.provider?.short_desc}
                     </Text>
                   </Flex>
 

@@ -64,7 +64,7 @@ const storeHeaderBlackList = [
 const headerValues: PathnameObjectType = {
   '/checkoutPage': 'Review Purchase Order',
   '/orderHistory': 'My Cases',
-  '/orderDetails': 'Order Details',
+  '/orderDetails': 'Case Details',
   '/invoiceDetails': 'Invoice Details',
   '/signin': 'Sign In',
   '/signUp': 'Sign Up',
@@ -95,11 +95,21 @@ const topHeaderBlackList: string[] = []
 
 const bottomHeaderBlackList = ['/orderConfirmation', '/', '/feedback']
 
-const menuIconWhiteList = ['/', '/search', '/profile']
+const menuIconWhiteList = [
+  '/',
+  '/search',
+  '/profile',
+  '/product',
+  '/checkout',
+  '/orderConfirmation',
+  '/orderDetails',
+  '/orderHistory'
+]
 const orderIconList = ['']
 const editIcon = ['/profile']
 const invoiceDownloadIcon = ['']
 const currentLocation = ['/']
+const appLogoBlackList = ['/signin', '/signUp']
 
 const getHeaderTitleForPage = (name: string, logo: string, pathName: string, locale: string | undefined) => {
   const values = locale === 'en' ? headerValues : headerValuesFrench
@@ -138,10 +148,12 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
       >
         <Box className={styles.top_header_wrapper}>
           <Box>
-            <Image
-              src="/images/LegalEase-icon.svg"
-              alt="App logo"
-            />
+            {!appLogoBlackList.includes(router.pathname) && (
+              <Image
+                src="/images/LegalEase-icon.svg"
+                alt="App logo"
+              />
+            )}
           </Box>
           <Flex columnGap={['10px', '10px', '2rem', '2rem']}>
             {!homeIconBlackList.includes(router.pathname) && (
