@@ -68,11 +68,11 @@ const Cart: React.FC<CartProps> = ({
               >
                 <Typography
                   variant="titleSemibold"
-                  text={emptyCard.heading}
+                  text={emptyCard.heading!}
                 />
                 <Typography
                   variant="subTitleRegular"
-                  text={emptyCard.subHeading}
+                  text={emptyCard.subHeading!}
                 />
               </Box>
               <BecknButton

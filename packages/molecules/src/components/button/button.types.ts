@@ -13,7 +13,7 @@ export interface ButtonProps {
   variant?: 'outline' | 'solid'
   colorScheme?: 'primary' | 'secondary'
   type?: ButtonType
-  leftIcon?: React.FC<IconProps>
+  leftIcon?: React.ReactElement
   isLoading?: boolean
   loadingText?: string
   color?: string
