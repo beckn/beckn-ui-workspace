@@ -47,7 +47,7 @@ const ProductCta: React.FC<ProductCtaProps> = ({
       </Flex>
       <Flex justifyContent={'center'}>
         <Typography
-          text={counterTitle}
+          text={counterTitle!}
           variant="subTitleRegular"
           color={'#222A36'}
         />

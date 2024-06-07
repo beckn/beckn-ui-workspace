@@ -40,12 +40,12 @@ const Checkout: React.FC<CheckoutProps<FormField[]>> = ({
         <Box pb={'10px'}>
           <Typography
             variant="titleRegular"
-            text={items.title}
+            text={items?.title!}
           />
         </Box>
 
         <DetailsCard>
-          {items.data.map(item => {
+          {items?.data.map(item => {
             return (
               <>
                 <ItemDetails

@@ -21,7 +21,7 @@ export interface ProductCardProps {
   ComponentRenderer?: React.ComponentType<{ dataSource: any }>
   productClickHandler?: React.MouseEventHandler<HTMLDivElement>
   className?: string
-  currency?: string
+  currency?: CurrencyType
 }
 
 export interface CustomInfoComponentProps {
