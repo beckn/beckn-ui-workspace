@@ -1,4 +1,5 @@
 import { LoaderProps, TypographyProps, ButtonProps } from '@beckn-ui/molecules'
+import { MouseEventHandler } from 'react'
 import { CurrencyType, ProductPriceProps } from '../types'
 export interface RetailItem {
   extended_attributes?: any
@@ -70,7 +71,7 @@ export interface EmptyCardProps {
   heading?: string
   subHeading?: string
   buttonText?: string
-  buttonHanler?: (id: string) => void
+  buttonHanler?: MouseEventHandler<HTMLButtonElement>
 }
 export interface CartProps {
   schema: {
