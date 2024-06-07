@@ -37,7 +37,7 @@ const ProductCard: React.FC<ProductCardProps> = props => {
           }}
           transition="0.5s all"
           position={'relative'}
-          boxShadow={'0 20px 25px rgba(0, 0, 0, 0.1),0 8px 10px rgba(0, 0, 0, 0.05)'}
+          boxShadow={'0px 8px 10px 0px #0000001A'}
         >
           <Box
             display={'flex'}

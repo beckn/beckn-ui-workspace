@@ -19,7 +19,7 @@ function PaymentMode() {
     <Box>
       <Box
         position={'relative'}
-        maxWidth={{ base: '90%', md: '70%' }}
+        maxWidth={{ base: '100%', md: '70%' }}
         margin="auto"
         className="hideScroll"
         maxH="calc(100vh - 120px)"

@@ -102,7 +102,7 @@ const menuIconWhiteList = ['/', '/search', '/profile']
 const orderIconList = ['/orderDetails']
 const orderDetailsIcon = ['/orderDetails']
 const currentLocation = ['/']
-
+const appLogoBlackList = ['/signin', '/signUp']
 const languageIconWhiteList = ['/', '/createProfile', '/signin', '/signUp']
 
 const getHeaderTitleForPage = (name: string, logo: string, pathName: string, locale: string | undefined) => {
@@ -142,10 +142,12 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
       >
         <Box className={styles.top_header_wrapper}>
           <Box>
-            <Image
-              src={'/images/appLogo.svg'}
-              alt="App logo"
-            />
+            {!appLogoBlackList.includes(router.pathname) && (
+              <Image
+                src={'/images/appLogo.svg'}
+                alt="App logo"
+              />
+            )}
           </Box>
           <Flex columnGap={['10px', '10px', '2rem', '2rem']}>
             {languageIconWhiteList.includes(router.pathname) && <Settings />}
@@ -280,7 +282,6 @@ const BottomHeader = () => {
               onClick={() => setInvoiceModalOpen(true)}
               src="/images/OrCodeModalOpen.svg"
               alt="OrCodeModalOpen"
-              mr={'20px'}
             />
           )}
         </Box>
@@ -295,8 +296,13 @@ const BottomHeader = () => {
             textAlign={'center'}
             fontSize={'15px'}
           >
-            <Text>{t.scanthisQR}</Text>
-            <Text mb={'20px'}>{t.toImportthisorderanotherapp}</Text>
+            <Text fontSize={'15px'}>{t.scanthisQR}</Text>
+            <Text
+              mb={'20px'}
+              fontSize={'15px'}
+            >
+              {t.toImportthisorderanotherapp}
+            </Text>
           </Box>
 
           <HStack
