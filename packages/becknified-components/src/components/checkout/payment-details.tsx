@@ -42,8 +42,9 @@ const PaymentDetails: React.FC<PaymentDetailsProps> = props => {
               />
               <ProductPrice
                 fontStyle={{
-                  fontWeight: '600',
-                  color: '#000000'
+                  fontWeight: '400',
+                  color: '#000000',
+                  fontSize: '15px'
                 }}
                 price={value.value}
                 currencyType={value.currency}
