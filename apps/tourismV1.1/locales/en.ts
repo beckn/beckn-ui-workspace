@@ -447,6 +447,7 @@ const en: { [key: string]: string } = {
   invalidEmail: 'Invalid email format',
   requiredEmail: 'Email ID is required',
   change: 'Change',
-  orderCancellation: ' Order Cancellation'
+  orderCancellation: ' Order Cancellation',
+  profileUpdateSuccess: 'Profile updated successfully!'
 }
 export default en

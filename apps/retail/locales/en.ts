@@ -172,6 +172,7 @@ const en: { [key: string]: string } = {
   orderSummary: 'Order Summary',
   totalQuantity: 'Total Quantity',
   totalAmount: 'Total Amount',
-  errorText: 'Something went wrong'
+  errorText: 'Something went wrong',
+  profileUpdateSuccess: 'Profile updated successfully!'
 }
 export default en

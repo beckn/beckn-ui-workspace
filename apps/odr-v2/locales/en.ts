@@ -145,6 +145,7 @@ const en: { [key: string]: string } = {
   category: 'Category',
   service: 'Service',
   orderId: 'Order Id',
-  confirmLoaderSubtext: 'you are being assigned a case manager'
+  confirmLoaderSubtext: 'you are being assigned a case manager',
+  profileUpdateSuccess: 'Profile updated successfully!'
 }
 export default en
