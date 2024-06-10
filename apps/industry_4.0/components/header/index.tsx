@@ -83,7 +83,7 @@ const bottomHeaderBlackList = ['/homePage', '/search', '/orderConfirmation']
 const menuIconWhiteList = ['/homePage']
 const orderIconList = ['/orderDetails']
 const invoiceDownloadIcon = ['/invoiceDetails']
-const appLogoBlackList = ['/signin', '/signUp']
+const appLogoBlackList = ['/signin', '/', '/signUp']
 
 const getHeaderTitleForPage = (name: string, logo: string, pathName: string, locale: string | undefined) => {
   const values = locale === 'en' ? headerValues : headerValuesFrench
