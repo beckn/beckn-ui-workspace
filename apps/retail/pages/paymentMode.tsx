@@ -81,7 +81,10 @@ function PaymentMode() {
           </Flex>
           <Card>
             <CardBody padding={'15px 20px'}>
-              <Image src={phonePay} />
+              <Image
+                src={phonePay}
+                opacity={'0.5'}
+              />
             </CardBody>
           </Card>
         </Box>
