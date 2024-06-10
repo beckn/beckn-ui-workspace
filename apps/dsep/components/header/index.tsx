@@ -111,6 +111,7 @@ const bottomHeaderBlackList = [
 
 const menuIconWhiteList = ['/homePage']
 const skipWhiteList = ['/createProfile']
+const appLogoBlackList = ['/signin', '/signUp']
 
 const languageIconWhiteList = ['/homePage', '/', '/mobileOtp']
 
@@ -158,10 +159,12 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
       <div className="h-7 w-full bg-[#efefef] fixed z-[9999]">
         <div className="px-5 h-full flex items-center">
           <div>
-            <Image
-              src="/images/CommerceLogo.svg"
-              alt="App logo"
-            />
+            {!appLogoBlackList.includes(router.pathname) && (
+              <Image
+                src="/images/CommerceLogo.svg"
+                alt="App logo"
+              />
+            )}
           </div>
           <div className="ml-auto flex gap-4">
             {languageIconWhiteList.includes(router.pathname) && <Settings />}

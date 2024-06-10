@@ -99,6 +99,7 @@ const orderIconList = ['/orderDetails']
 const editIcon = ['/profile']
 const invoiceDownloadIcon = ['/']
 const currentLocation = ['/']
+const appLogoBlackList = ['/signin', '/signUp']
 
 const getHeaderTitleForPage = (name: string, logo: string, pathName: string, locale: string | undefined) => {
   const values = locale === 'en' ? headerValues : headerValuesFrench
@@ -137,10 +138,12 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
       >
         <Box className={styles.top_header_wrapper}>
           <Box>
-            <Image
-              src="/images/headerLogo.svg"
-              alt="App logo"
-            />
+            {!appLogoBlackList.includes(router.pathname) && (
+              <Image
+                src="/images/headerLogo.svg"
+                alt="App logo"
+              />
+            )}
           </Box>
           <Flex columnGap={['10px', '10px', '2rem', '2rem']}>
             {languageIconWhiteList.includes(router.pathname) && <Settings />}

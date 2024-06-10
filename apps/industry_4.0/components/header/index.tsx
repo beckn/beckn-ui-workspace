@@ -83,6 +83,7 @@ const bottomHeaderBlackList = ['/homePage', '/search', '/orderConfirmation']
 const menuIconWhiteList = ['/homePage']
 const orderIconList = ['/orderDetails']
 const invoiceDownloadIcon = ['/invoiceDetails']
+const appLogoBlackList = ['/signin', '/signUp']
 
 const getHeaderTitleForPage = (name: string, logo: string, pathName: string, locale: string | undefined) => {
   const values = locale === 'en' ? headerValues : headerValuesFrench
@@ -117,10 +118,12 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
       <Box className={styles.top_header}>
         <Box className={styles.top_header_wrapper}>
           <Box>
-            <Image
-              src="/images/Suppliflow_app_logo.svg"
-              alt="App logo"
-            />
+            {!appLogoBlackList.includes(router.pathname) && (
+              <Image
+                src="/images/Suppliflow_app_logo.svg"
+                alt="App logo"
+              />
+            )}
           </Box>
           <Flex columnGap={'10px'}>
             {!homeIconBlackList.includes(router.pathname) && (
