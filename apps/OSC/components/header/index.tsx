@@ -102,7 +102,7 @@ const topHeaderBlackList: string[] = []
 
 const bottomHeaderBlackList = ['/orderConfirmation', '/', '/searchByLocation']
 
-const menuIconWhiteList = ['/', '/search', '/profile']
+const menuIconWhiteList = ['/', '/search', '/profile', '/cart']
 const orderIconList = ['/orderDetails']
 const editIcon = ['/profile']
 const invoiceDownloadIcon = ['']
@@ -150,7 +150,7 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
           <Box>
             {!appLogoBlackList.includes(router.pathname) && (
               <Image
-                src="/images/OSC_Icon.svg"
+                src={'/images/OSC_Icon.svg'}
                 alt="App logo"
               />
             )}

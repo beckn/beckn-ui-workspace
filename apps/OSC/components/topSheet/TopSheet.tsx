@@ -132,13 +132,18 @@ const TopSheet: React.FC<TopSheetPropsModel> = props => {
           </Box>
           <Box>
             <Text
-              fontSize={'12px'}
-              fontWeight={'700'}
+              fontSize={'14px'}
+              fontWeight={'600'}
               pb={'6px'}
             >
               {t.devicelocationisnotenabled}
             </Text>
-            <Text fontSize={'12px'}>{t.accessToProvideLocation}</Text>
+            <Text
+              fontSize={'14px'}
+              fontWeight={400}
+            >
+              {t.accessToProvideLocation}
+            </Text>
             <Box
               position={'relative'}
               mt="20px"
