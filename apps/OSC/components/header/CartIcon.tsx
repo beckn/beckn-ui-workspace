@@ -17,7 +17,7 @@ function CartIconWithCount({
       onClick={handleClick}
     >
       <Image
-        src="/images/cartIcon.svg"
+        src="/images/cartNewIcon.svg"
         alt="Cart"
         boxSize="30px"
       />
