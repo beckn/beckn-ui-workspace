@@ -111,7 +111,7 @@ const bottomHeaderBlackList = [
 
 const menuIconWhiteList = ['/homePage']
 const skipWhiteList = ['/createProfile']
-const appLogoBlackList = ['/signin', '/signUp']
+const appLogoBlackList = ['/signin', '/', '/signUp']
 
 const languageIconWhiteList = ['/homePage', '/', '/mobileOtp']
 
