@@ -122,6 +122,7 @@ const en: { [key: string]: string } = {
   shop: 'Shop',
   forAll: 'for All',
   subText:
-    "A global marketplace to discover anything you need. Just type where you want to go and we'll take care of the rest."
+    "A global marketplace to discover anything you need. Just type where you want to go and we'll take care of the rest.",
+  profileUpdateSuccess: 'Profile updated successfully!'
 }
 export default en

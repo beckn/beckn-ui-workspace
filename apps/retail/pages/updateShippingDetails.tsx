@@ -88,7 +88,9 @@ const UpdateShippingDetails = () => {
           toast({
             title: `Order Updated Successfully! `,
             status: 'success',
-            isClosable: true
+            isClosable: true,
+            position: 'top',
+            containerStyle: { marginTop: '35px' }
           })
           router.push('/orderDetails')
         }
@@ -148,7 +150,9 @@ const UpdateShippingDetails = () => {
           toast({
             title: `Order Updated Successfully! `,
             status: 'success',
-            isClosable: true
+            isClosable: true,
+            position: 'top',
+            containerStyle: { marginTop: '35px' }
           })
           router.push('/orderDetails')
         }
