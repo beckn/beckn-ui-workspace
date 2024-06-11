@@ -114,7 +114,7 @@ const ProfilePage = () => {
 
     const currentFormData = new FormData()
     const data = {
-      name: formData.name,
+      name: formData.name.trim(),
       phone: formData.mobileNumber
     }
 
