@@ -208,6 +208,9 @@ const OrderDetails = () => {
       if (updateResponse && confirmData) {
         fetchStatusData()
         setIsAddressUpdateModalOpen(false)
+        toast.success('Your billing details have been successfully updated!', {
+          position: 'top-center'
+        })
       }
     } catch (error) {
       console.error(error)
