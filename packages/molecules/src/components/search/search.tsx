@@ -17,7 +17,10 @@ const Search: React.FC<SearchProps> = ({ handleOnChange, handlePressEnter, handl
         onChange={(e: React.BaseSyntheticEvent) => handleOnChange(e.target.value)}
         onKeyDown={event => event.key === 'Enter' && handlePressEnter()}
       />
-      <button className={Styles.search_button}>
+      <button
+        className={Styles.search_button}
+        role="search-button"
+      >
         <FaSearch
           onClick={e => {
             e.preventDefault()
