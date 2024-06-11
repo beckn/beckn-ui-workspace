@@ -75,11 +75,11 @@ const ProfilePage = () => {
           country = ''
         if (!isEmpty(address)) {
           const addressList = address.split(',')
-          flatNumber = addressList[0]
-          street = addressList[1]
-          city = addressList[2]
-          state = addressList[3]
-          country = addressList[4]
+          flatNumber = addressList[0].trim()
+          street = addressList[1].trim()
+          city = addressList[2].trim()
+          state = addressList[3].trim()
+          country = addressList[4].trim()
         }
         setFormData({
           ...formData,
@@ -133,7 +133,7 @@ const ProfilePage = () => {
 
     const currentFormData = new FormData()
     const data = {
-      name: formData.name,
+      name: formData.name.trim(),
       phone: formData.mobileNumber,
       address: `${formData.flatNumber}, ${formData.street}, ${formData.city}, ${formData.state}, ${formData.country}`,
       zip_code: formData.zipCode
