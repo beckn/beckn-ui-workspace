@@ -6,6 +6,7 @@ import axios from 'axios'
 import { Loader, Typography } from '@beckn-ui/molecules'
 import { useLanguage } from '@hooks/useLanguage'
 import { useRouter } from 'next/router'
+import { toast } from 'react-toastify'
 
 const UpdateShippingDetails = () => {
   const [shippingDetails, setShippingDetails] = useState({
@@ -61,6 +62,9 @@ const UpdateShippingDetails = () => {
         }
         const updateResponse = await axios.post(`${apiUrl}/update`, updateRequestPayload)
         if (updateResponse.data.data.length > 0) {
+          toast.success('Order Updated Successfully!', {
+            position: 'top-center'
+          })
           router.push('/orderDetails')
         }
       } else if (localStorage.getItem('selectedOrder') && localStorage.getItem('statusResponse')) {
@@ -94,6 +98,9 @@ const UpdateShippingDetails = () => {
         }
         const updateResponse = await axios.post(`${apiUrl}/update`, updateRequestPayload)
         if (updateResponse.data.data.length > 0) {
+          toast.success('Order Updated Successfully!', {
+            position: 'top-center'
+          })
           router.push('/orderDetails')
         }
       }
