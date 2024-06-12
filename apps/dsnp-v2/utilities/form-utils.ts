@@ -105,7 +105,7 @@ export const signUpValidateForm = (formData: SignUpPropsModel): FormErrors => {
 export const profileValidateForm = (formData: profilePageProp): FormErrors => {
   const errors: FormErrors = {}
 
-  if (formData.name.trim() === '') {
+  if (!formData.name || formData.name.trim() === '') {
     errors.name = 'errorName'
   } else if (!/^[A-Za-z\s]*$/.test(formData.name)) {
     errors.name = 'errorName2'
@@ -113,15 +113,17 @@ export const profileValidateForm = (formData: profilePageProp): FormErrors => {
     errors.name = 'errorName3'
   }
 
-  if (formData.mobileNumber.trim() === '') {
+  if (!formData.mobileNumber || formData.mobileNumber.trim() === '') {
     errors.mobileNumber = 'errorNumber'
   } else if (!/^\d{10}$/.test(formData.mobileNumber)) {
     errors.mobileNumber = 'errorNumber2'
   }
-  if (formData.zipCode.trim() === '') {
+
+  if (!formData.zipCode || formData.zipCode.trim() === '') {
     errors.zipCode = 'errorZipcode'
   } else if (!/^\d{6}$/.test(formData.zipCode)) {
     errors.zipCode = 'errorZipcode2'
   }
+
   return errors
 }
