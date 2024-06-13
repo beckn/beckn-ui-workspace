@@ -65,7 +65,7 @@ type FulfillmentInfo = {
   tracking: boolean
 }
 
-type QuoteBreakupInfo = {
+export type QuoteBreakupInfo = {
   price: {
     currency: CurrencyType
     value: string

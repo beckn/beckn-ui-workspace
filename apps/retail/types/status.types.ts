@@ -152,7 +152,7 @@ interface Order {
   cancellation_terms: CancellationTerms[]
   type: string
   status: string
-  tags: any
+  tags: Tag[]
 }
 
 interface Context {

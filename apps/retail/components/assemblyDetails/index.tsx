@@ -74,12 +74,12 @@ export default function AssemblyDetails() {
     }
   }
 
-  const handleInputChange = (e: any, fieldName: any) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, fieldName: string) => {
     const updatedFormData = { ...formData, [fieldName]: e.target.value }
     setFormData(updatedFormData)
   }
-  const handleSelectChange = (value: any, fieldName: any) => {
-    const updatedFormData = { ...formData, [fieldName]: value }
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>, fieldName: string) => {
+    const updatedFormData = { ...formData, [fieldName]: e.target.value }
     setFormData(updatedFormData)
   }
 
@@ -101,7 +101,7 @@ export default function AssemblyDetails() {
         >
           <FormControl variant="floating">
             <Select
-              onChange={e => handleSelectChange(e.target.value, 'type')}
+              onChange={e => handleSelectChange(e, 'type')}
               value={formData.type}
               // placeholder="Select option"
               border={'unset'}
@@ -141,7 +141,7 @@ export default function AssemblyDetails() {
               w={'45%'}
             >
               <Select
-                onChange={e => handleSelectChange(e.target.value, 'colour')}
+                onChange={e => handleSelectChange(e, 'colour')}
                 value={formData.colour}
                 border={'unset'}
                 borderRadius="unset"
@@ -176,7 +176,7 @@ export default function AssemblyDetails() {
               w={'45%'}
             >
               <Select
-                onChange={e => handleSelectChange(e.target.value, 'shape')}
+                onChange={e => handleSelectChange(e, 'shape')}
                 value={formData.shape}
                 border={'unset'}
                 borderRadius="unset"

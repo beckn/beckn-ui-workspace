@@ -26,7 +26,7 @@ import ViewMoreOrderModal from '@components/orderDetailComponents/ViewMoreOrder'
 import { discoveryActions, DiscoveryRootState } from '@store/discovery-slice'
 import { statusActions } from '@store/status-slice'
 import { DetailCard, OrderStatusProgress, OrderStatusProgressProps } from '@beckn-ui/becknified-components'
-import { StatusResponseModel, SupportModel } from '../types/status.types'
+import { Item, StatusResponseModel, SupportModel } from '../types/status.types'
 import useResponsive from '@beckn-ui/becknified-components/src/hooks/useResponsive'
 import { isEmpty } from '@utils/common-utils'
 import { useLanguage } from '@hooks/useLanguage'
@@ -101,15 +101,15 @@ const OrderDetails = () => {
   useEffect(() => {
     if (data.statusData.length > 0) {
       const newData = data.statusData
-        .map((status: any) => {
+        .map((status: StatusResponseModel) => {
           const { tags } = status?.message?.order
-          const statusKey: StatusKey = tags[tags.length - 1].list[0].value
+          const statusKey: string = tags[tags.length - 1].list[0].value
           return {
-            label: statusMap[statusKey],
+            label: statusMap[statusKey as StatusKey],
             statusTime: status?.message?.order?.fulfillments[0]?.state?.updated_at || status?.context?.timestamp
           }
         })
-        .filter((status: any) => status.label)
+        .filter(status => status.label)
 
       const labelSet = new Set(orderStatusMap.map(status => status.label))
       setOrderStatusMap(prevState => [...prevState, ...newData.filter(status => !labelSet.has(status.label))])
@@ -636,9 +636,9 @@ const OrderDetails = () => {
     return state && res.message.order.fulfillments[0].state.descriptor.code.toLowerCase() === 'delivered'
   })
 
-  const totalQuantityOfOrder = (data: any) => {
+  const totalQuantityOfOrder = (data: DataState) => {
     let count = 0
-    data.statusData[0].message.order.items.forEach((item: any) => {
+    data.statusData[0].message.order.items.forEach((item: Item) => {
       count += item.quantity.selected.count
     })
     return count

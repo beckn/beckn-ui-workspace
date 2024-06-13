@@ -8,9 +8,10 @@ import { useLanguage } from '@hooks/useLanguage'
 import { v4 as uuidv4 } from 'uuid'
 import { useRouter } from 'next/router'
 import { geocodeFromPincode } from '@utils/checkout-utils'
+import { ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
 
 const UpdateShippingDetails = () => {
-  const [shippingDetails, setShippingDetails] = useState({
+  const [shippingDetails, setShippingDetails] = useState<ShippingFormInitialValuesType>({
     name: '',
     mobileNumber: '',
     email: '',
@@ -18,7 +19,7 @@ const UpdateShippingDetails = () => {
     pinCode: ''
   })
   const [confirmData, setConfirmData] = useState<ConfirmResponseModel[] | null>(null)
-  const [isLoadingForUpdate, setIsLoadingForUpdate] = useState(false)
+  const [isLoadingForUpdate, setIsLoadingForUpdate] = useState<boolean>(false)
   const { t } = useLanguage()
   const router = useRouter()
   const toast = useToast()
@@ -31,14 +32,14 @@ const UpdateShippingDetails = () => {
     }
   }, [])
 
-  const handleSubmit = async (formData: any, confirmData: ConfirmResponseModel[]) => {
+  const handleSubmit = async (formData: ShippingFormInitialValuesType, confirmData: ConfirmResponseModel[]) => {
     try {
       setIsLoadingForUpdate(true)
       if (confirmData && confirmData.length > 0) {
         const { domain, bpp_id, bpp_uri, transaction_id } = confirmData[0].context
         const orderId = confirmData[0].message.orderId
         const { name, address, email, mobileNumber, pinCode } = formData
-        const { state, city, country } = await geocodeFromPincode(pinCode)
+        const { state, city, country } = await geocodeFromPincode(pinCode!)
 
         const updateRequestPayload = {
           data: [
@@ -100,7 +101,7 @@ const UpdateShippingDetails = () => {
         const selectedOrderData = JSON.parse(localStorage.getItem('selectedOrder') as string)
         const { orderId } = selectedOrderData
         const { name, address, email, mobileNumber, pinCode } = formData
-        const { state, city, country } = await geocodeFromPincode(pinCode)
+        const { state, city, country } = await geocodeFromPincode(pinCode!)
 
         const updateRequestPayload = {
           data: [
@@ -168,7 +169,7 @@ const UpdateShippingDetails = () => {
     }
   }
 
-  const handleFormChange = (changedData: any) => {
+  const handleFormChange = (changedData: ShippingFormInitialValuesType) => {
     setShippingDetails(prevDetails => ({ ...prevDetails, ...changedData }))
   }
 

@@ -5,7 +5,6 @@ import { DOMAIN } from '@lib/config'
 import { useLanguage } from '../hooks/useLanguage'
 
 import { ICartRootState } from '@lib/types/cart'
-import useRequest from '../hooks/useRequest'
 import { CustomToast } from '@components/signIn/SignIn'
 import { useInitMutation } from '@services/init'
 
@@ -16,10 +15,11 @@ import { ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
 import { CheckoutRootState, checkoutActions } from '@store/checkout-slice'
 import { cartActions } from '@store/cart-slice'
 import { isEmpty } from '@utils/common-utils'
-import { FormField } from '@beckn-ui/molecules'
+import { FormData, FormField } from '@beckn-ui/molecules'
 import { PaymentBreakDownModel } from '@lib/types/payment'
 import { DiscoveryRootState } from '@store/discovery-slice'
 import { areShippingAndBillingDetailsSame, getInitPayload, getSubTotalAndDeliveryCharges } from '@utils/checkout-utils'
+import { QuoteBreakupInfo } from '../types/init.types'
 
 export type ShippingFormData = {
   name: string
@@ -99,7 +99,6 @@ const CheckoutPage = () => {
   )
 
   const router = useRouter()
-  const initRequest = useRequest()
   const dispatch = useDispatch()
   const [initialize, { isLoading, isError }] = useInitMutation()
   const { t, locale } = useLanguage()
@@ -216,7 +215,7 @@ const CheckoutPage = () => {
   //   setIsBillingSame(isBillingSameRedux)
   // },[])
 
-  const formSubmitHandler = (data: any) => {
+  const formSubmitHandler = (data: FormData<FormField[]>) => {
     if (data) {
       const { id, type } = selectResponse[0].message.order.fulfillments[0]
       getInitPayload(submittedDetails, billingFormData, cartItems, transactionId, DOMAIN, { id, type }).then(res => {
@@ -248,7 +247,7 @@ const CheckoutPage = () => {
   const createPaymentBreakdownMap = () => {
     const paymentBreakdownMap: PaymentBreakDownModel = {}
     if (isInitResultPresent()) {
-      initResponse[0].message.order.quote.breakup.forEach((breakup: any) => {
+      initResponse[0].message.order.quote.breakup.forEach((breakup: QuoteBreakupInfo) => {
         paymentBreakdownMap[breakup.title] = {
           value: breakup.price.value,
           currency: breakup.price.currency

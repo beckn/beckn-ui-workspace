@@ -58,7 +58,7 @@ export const theme = extendTheme({
 })
 
 const Filter = ({ handleApplyFilter, handleResetFilter, handleCancelFilter = () => {} }: FilterPropsModel) => {
-  const getFormData = () => {
+  const getFormData = (): Record<string, any> | undefined => {
     if (localStorage) {
       const localFormData = localStorage.getItem('formData')
       return localFormData ? JSON.parse(localFormData) : {}
@@ -68,7 +68,7 @@ const Filter = ({ handleApplyFilter, handleResetFilter, handleCancelFilter = () 
   const [sortBy, setSortBy] = useState<string>('')
   const handleChange = (name: string, value: string) => {
     setSortBy(value)
-    setFormData((prevData: any) => ({
+    setFormData(prevData => ({
       ...prevData,
       [name]: value
     }))
@@ -114,7 +114,7 @@ const Filter = ({ handleApplyFilter, handleResetFilter, handleCancelFilter = () 
             <FormControl variant="floating">
               <Select
                 onChange={e => handleChange('searchByPrice', e.target.value)}
-                value={formData.searchByPrice || ''}
+                value={formData?.searchByPrice || ''}
                 fontSize="15px"
                 height={'30px'}
                 border={'unset'}
@@ -139,7 +139,7 @@ const Filter = ({ handleApplyFilter, handleResetFilter, handleCancelFilter = () 
             <FormControl variant="floating">
               <Select
                 onChange={e => handleChange('searchByRating', e.target.value)}
-                value={formData.searchByRating || ''}
+                value={formData?.searchByRating || ''}
                 fontSize="15px"
                 height={'30px'}
                 border={'unset'}

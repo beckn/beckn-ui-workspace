@@ -3,6 +3,8 @@ import { initApi } from '@services/init'
 import { confirmApi } from '@services/confirm'
 import { selectApi } from '@services/select'
 import { InitResponseModel } from '../types/init.types'
+import { ConfirmResponseModel } from '../types/confirm.types'
+import { SelectResponseModel } from '../types/select.types'
 
 export interface CheckoutRootState {
   checkout: Checkout
@@ -10,15 +12,15 @@ export interface CheckoutRootState {
 
 export interface Checkout {
   initResponse: InitResponseModel[]
-  confirmResponse: any
-  selectResponse: any
+  confirmResponse: ConfirmResponseModel[]
+  selectResponse: SelectResponseModel[]
   isBillingSame: boolean
 }
 
 const initialState: Checkout = {
   initResponse: [],
-  confirmResponse: {},
-  selectResponse: {},
+  confirmResponse: [],
+  selectResponse: [],
   isBillingSame: true
 }
 
@@ -26,7 +28,7 @@ const checkoutSlice = createSlice({
   name: 'checkout',
   initialState,
   reducers: {
-    addInitResponse(state, action: PayloadAction<{ initResponse: any }>) {
+    addInitResponse(state, action: PayloadAction<{ initResponse: InitResponseModel[] }>) {
       state.initResponse = action.payload.initResponse
     },
     setIsBillingSame(state, action: PayloadAction<{ isBillingSame: boolean }>) {
@@ -34,7 +36,7 @@ const checkoutSlice = createSlice({
     },
     clearState(state) {
       state.initResponse = []
-      state.confirmResponse = {}
+      state.confirmResponse = []
     }
   },
   extraReducers: builder => {

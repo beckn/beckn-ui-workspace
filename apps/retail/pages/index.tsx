@@ -13,7 +13,7 @@ import OrderDetails from '@components/orderDetails/ImportedOrderDetails'
 import ShoppingList from '@components/shoppingList/ShoppingList'
 import SelectDeliveryModal from '@components/selectDeliveryModal/SelectDeliveryModal'
 import { Typography } from '@beckn-ui/molecules'
-import { ImportedOrderModel } from '@lib/types'
+import { ImportedOrderModel, ImportedOrderShoppingList } from '@lib/types'
 
 const HomePage = () => {
   const [searchTerm, setSearchTerm] = useState<string>('')
@@ -26,7 +26,7 @@ const HomePage = () => {
   const [viewOrderDetails, setViewOrderDetails] = useState(false)
   const [chatGtpList, setChatGtpList] = useState(false)
   const [selectLocationModal, setSelectLocationModal] = useState(false)
-  const [shoppingListData, setShoppingListData] = useState([])
+  const [shoppingListData, setShoppingListData] = useState<ImportedOrderShoppingList>([])
   const [selectedValues, setSelectedValues] = useState<string[]>([])
   const [address, setAddress] = useState('')
   const [isLoadingForChatGptRequest, setIsLoadingForChatGptRequest] = useState(true)
@@ -50,7 +50,7 @@ const HomePage = () => {
     router.push(`/search?searchTerm=${searchTerm}`)
   }
 
-  const searchIconClickHandler = (e: any) => {
+  const searchIconClickHandler = (e: React.MouseEvent) => {
     if (searchTerm) {
       navigateToSearchResults()
     }
@@ -303,7 +303,7 @@ const HomePage = () => {
 
       {selectLocationModal ? (
         <SelectDeliveryModal
-          importedOrderObject={importedOrderObject}
+          importedOrderObject={importedOrderObject!}
           backOnImportedOrder={backOnImportedOrder}
           selectedValues={selectedValues}
           addressOfTheEndLocation={address}

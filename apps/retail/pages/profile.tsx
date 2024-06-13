@@ -46,10 +46,10 @@ const ProfilePage = () => {
       [name]: value
     }
 
-    const errors = profileValidateForm(updatedFormData) as any
+    const errors = profileValidateForm(updatedFormData)
     setFormErrors(prevErrors => ({
       ...prevErrors,
-      [name]: t[`${errors[name]}`] || ''
+      [name]: t[`${errors[name as keyof FormErrors]}`] || ''
     }))
   }
 
@@ -99,11 +99,11 @@ const ProfilePage = () => {
   }, [])
 
   const updateProfile = () => {
-    const errors = profileValidateForm(formData) as any
+    const errors = profileValidateForm(formData)
     setFormErrors(prevErrors => ({
       ...prevErrors,
-      ...Object.keys(errors).reduce((acc: any, key) => {
-        acc[key] = t[`${errors[key]}`] || ''
+      ...Object.keys(errors).reduce((acc, key) => {
+        acc[key as keyof FormErrors] = t[`${errors[key as keyof FormErrors]}`] || ''
         return acc
       }, {} as FormErrors)
     }))

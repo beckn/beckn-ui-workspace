@@ -5,15 +5,15 @@ import { Box, Stack, StackDivider, Flex, Image } from '@chakra-ui/react'
 export interface ShippingBlockProps {
   title?: string
   name: {
-    icon: any
+    icon: string
     text: string
   }
   address: {
-    icon: any
+    icon: string
     text: string
   }
   mobile: {
-    icon: any
+    icon: string
     text: string
   }
   responsive?: boolean

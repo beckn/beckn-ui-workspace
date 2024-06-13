@@ -53,7 +53,7 @@ export const getPayloadForSelectRequest = (selectedProduct: ParsedItemModel) => 
   return selectPayload
 }
 
-export const extractAddressComponents = (result: any) => {
+export const extractAddressComponents = (result: google.maps.GeocoderResult) => {
   let country = 'IN',
     state = 'Karnataka',
     city = 'Bengaluru'
@@ -70,7 +70,7 @@ export const extractAddressComponents = (result: any) => {
   return { country, state, city }
 }
 
-export const geocodeFromPincode = async (pincode: any) => {
+export const geocodeFromPincode = async (pincode: string) => {
   const geocoder = new window.google.maps.Geocoder()
   try {
     const response = await geocoder.geocode({ address: pincode })
@@ -161,7 +161,7 @@ export const getInitPayload = async (
   domain: string = 'retail:1.1.0',
   fulfillments: { id: string; type: string } = { id: '3', type: 'Standard-shipping' }
 ) => {
-  const cityData = await geocodeFromPincode(deliveryAddress.pinCode)
+  const cityData = await geocodeFromPincode(deliveryAddress.pinCode!)
 
   const bppGroups = cartItems.reduce((acc: { [key: string]: CartItemForRequest[] }, item) => {
     if (!acc[item.bpp_id]) {

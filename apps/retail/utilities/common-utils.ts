@@ -1,3 +1,5 @@
+import { ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
+
 export const toBinary = (objectString: string) => {
   const codeUnits = Uint16Array.from({ length: objectString.length }, (element, index) =>
     objectString.charCodeAt(index)
@@ -22,7 +24,7 @@ export const fromBinary = (binary: string) => {
   return result
 }
 
-export const areObjectPropertiesEqual = (obj1: any, obj2: any) => {
+export const areObjectPropertiesEqual = (obj1: ShippingFormInitialValuesType, obj2: ShippingFormInitialValuesType) => {
   const keys1 = Object.keys(obj1)
   const keys2 = Object.keys(obj2)
 
@@ -31,7 +33,7 @@ export const areObjectPropertiesEqual = (obj1: any, obj2: any) => {
   }
 
   for (const key of keys1) {
-    if (obj1[key] !== obj2[key]) {
+    if (obj1[key as keyof ShippingFormInitialValuesType] !== obj2[key as keyof ShippingFormInitialValuesType]) {
       return false
     }
   }
@@ -39,7 +41,7 @@ export const areObjectPropertiesEqual = (obj1: any, obj2: any) => {
   return true
 }
 
-export function isEmpty(value: any) {
+export function isEmpty(value: string | any[] | Date | Function | Record<string, any> | null | undefined): boolean {
   if (value == null) return true
 
   if (typeof value === 'string' || Array.isArray(value)) {

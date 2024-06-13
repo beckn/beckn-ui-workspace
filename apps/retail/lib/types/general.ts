@@ -145,3 +145,5 @@ export interface ImportedOrderModel {
   tags: Tag[]
   type: string
 }
+
+export type ImportedOrderShoppingList = Array<string>

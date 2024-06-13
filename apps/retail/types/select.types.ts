@@ -20,6 +20,12 @@ interface Tag {
   }>
 }
 
+type FulfillmentInfo = {
+  id: string
+  tracking: boolean
+  type: string
+}
+
 interface Item {
   id: string
   name: string
@@ -44,6 +50,7 @@ interface Order {
   quote: Quote
   provider: Provider
   items: Item[]
+  fulfillments: FulfillmentInfo[]
 }
 
 interface Context {
