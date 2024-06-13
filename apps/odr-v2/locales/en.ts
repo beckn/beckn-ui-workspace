@@ -146,6 +146,8 @@ const en: { [key: string]: string } = {
   service: 'Service',
   orderId: 'Order Id',
   confirmLoaderSubtext: 'you are being assigned a case manager',
-  profileUpdateSuccess: 'Profile updated successfully!'
+  profileUpdateSuccess: 'Profile updated successfully!',
+  error: 'Error!',
+  fixError: 'Please fix the errors in the form before submitting.'
 }
 export default en

@@ -173,6 +173,7 @@ const en: { [key: string]: string } = {
   totalQuantity: 'Total Quantity',
   totalAmount: 'Total Amount',
   errorText: 'Something went wrong',
-  profileUpdateSuccess: 'Profile updated successfully!'
+  profileUpdateSuccess: 'Profile updated successfully!',
+  fixError: 'Please fix the errors in the form before submitting.'
 }
 export default en
