@@ -38,11 +38,13 @@ const ProductPrice: React.FC<ProductPriceProps> = ({
   return (
     <div>
       <div
+        data-testid="test-product-price-container"
         className={Styles.prouct_price_layout_container}
         style={{ justifyContent }}
       >
         <div>
           <Box
+            data-testid="test-product-price"
             color={color}
             className={Styles[`${prouctPriceContainerClassNames}`]}
             style={{

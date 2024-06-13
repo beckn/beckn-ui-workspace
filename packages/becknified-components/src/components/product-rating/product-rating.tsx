@@ -6,6 +6,7 @@ export const ProductRating: React.FC<ProductRatingPropsModel> = props => {
   const { ratingIcon, ratingValue, className = '' } = props
   return (
     <Flex
+      data-testid="test-product-rating"
       className={className}
       alignItems={'center'}
     >

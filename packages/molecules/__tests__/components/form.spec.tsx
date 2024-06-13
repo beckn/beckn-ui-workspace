@@ -1,10 +1,9 @@
-// form.spec.tsx
 import React from 'react'
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
-import { ChakraProvider, extendTheme } from '@chakra-ui/react'
-import Form from '../../src/components/form/form'
+import { render, fireEvent, screen, waitFor } from '@testing-library/react'
+import { ThemeProvider, CSSReset, ChakraProvider, extendTheme } from '@chakra-ui/react'
 import { FormField, FormProps } from '../../src/components/form/form.types'
-import { InputTypeEnum } from '../../src/components/types'
+import { InputTypeEnum } from '../../src/components/input/input.types'
+import Form from '../../src/components/form'
 
 const theme = extendTheme({
   colors: {
@@ -23,115 +22,79 @@ const renderFormComponent = <T extends FormField[]>(props: FormProps<T>) => {
   )
 }
 
-const fields: FormField[] = [
+const formFields: FormField[] = [
+  {
+    name: 'name',
+    type: InputTypeEnum.Text,
+    label: 'Name',
+    className: 'name-input',
+    validate: (value: string) => (value ? undefined : 'Name is required')
+  },
   {
     name: 'email',
     type: InputTypeEnum.Email,
     label: 'Email',
-    validate: (value: any) => (!value ? 'Email is required' : undefined)
+    className: 'email-input',
+    validate: (value: string) => (value.includes('@') ? undefined : 'Email is invalid')
   }
 ]
 
-describe('Form component', () => {
-  test('renders the form fields correctly', () => {
-    renderFormComponent({
-      onSubmit: jest.fn(),
-      onFieldChange: jest.fn(),
-      fields,
-      submitButton: {
-        type: 'submit',
-        disabled: false,
-        children: 'Submit'
-      }
-    })
-    waitFor(
-      () => {
-        expect(screen.getByLabelText('Email')).toBeInTheDocument()
-      },
-      { timeout: 2000 }
-    )
+const mockOnSubmit = jest.fn()
+const mockOnChange = jest.fn()
+
+const formProps: FormProps<FormField[]> = {
+  onSubmit: mockOnSubmit,
+  onFieldChange: jest.fn(),
+  fields: formFields,
+  submitButton: { type: 'submit', children: 'Submit' },
+  values: { name: '', email: '' },
+  onChange: mockOnChange
+}
+
+describe('Form Component', () => {
+  it('renders form fields correctly', () => {
+    renderFormComponent({ ...formProps })
+
+    expect(screen.getByText('Name')).toBeInTheDocument()
+    expect(screen.getByText('Email')).toBeInTheDocument()
   })
 
-  test('displays validation error on submit', () => {
-    renderFormComponent({
-      onSubmit: jest.fn(),
-      onFieldChange: jest.fn(),
-      fields,
-      submitButton: {
-        type: 'submit',
-        disabled: false,
-        children: 'Submit'
-      }
-    })
+  it('displays validation errors for invalid inputs', async () => {
+    const renderer = renderFormComponent({ ...formProps })
 
-    waitFor(
-      () => {
-        fireEvent.click(screen.getByText('Submit'))
-        expect(screen.getByText('Email is required')).toBeInTheDocument()
-      },
-      { timeout: 2000 }
-    )
+    const nameInput = renderer.baseElement.querySelector("input[name='name']")
+    const emailInput = renderer.baseElement.querySelector("input[name='email']")
+
+    fireEvent.change(nameInput!, { target: { value: 'name_demo' } })
+    fireEvent.change(nameInput!, { target: { value: '' } })
+    fireEvent.change(emailInput!, { target: { value: 'invalid-email' } })
+
+    expect(screen.getByText('Name is required')).toBeInTheDocument()
+    expect(screen.getByText('Email is invalid')).toBeInTheDocument()
   })
 
-  test('calls onSubmit with form data when valid', () => {
-    const handleSubmit = jest.fn()
-    renderFormComponent({
-      onSubmit: handleSubmit,
-      onFieldChange: jest.fn(),
-      fields,
-      submitButton: {
-        type: 'submit',
-        disabled: false,
-        children: 'Submit'
-      },
-      values: { email: 'test@example.com' }
-    })
-    fireEvent.click(screen.getByText('Submit'))
-    expect(handleSubmit).toHaveBeenCalledWith({ email: 'test@example.com' })
+  it('calls onSubmit with valid form data', async () => {
+    const renderer = renderFormComponent({ ...formProps })
+
+    const nameInput = renderer.baseElement.querySelector("input[name='name']")
+    const emailInput = renderer.baseElement.querySelector("input[name='email']")
+
+    fireEvent.change(nameInput!, { target: { value: 'John Doe' } })
+    fireEvent.change(emailInput!, { target: { value: 'john.doe@example.com' } })
+
+    fireEvent.click(screen.getByRole('button', { name: /submit/i }))
+
+    expect(mockOnSubmit).toHaveBeenCalledWith({ name: 'John Doe', email: 'john.doe@example.com' })
   })
 
-  test('updates formData and calls onChange on field change', () => {
-    const handleChange = jest.fn()
-    renderFormComponent({
-      onSubmit: jest.fn(),
-      onFieldChange: jest.fn(),
-      fields,
-      submitButton: {
-        type: 'submit',
-        disabled: false,
-        children: 'Submit'
-      },
-      values: { email: '' },
-      onChange: handleChange
+  it('calls onChange with updated form data on input change', async () => {
+    const renderer = renderFormComponent({ ...formProps })
+
+    const nameInput = renderer.baseElement.querySelector("input[name='name']")
+    fireEvent.change(nameInput!, { target: { value: 'John Doe' } })
+
+    await waitFor(() => {
+      expect(mockOnChange).toHaveBeenCalledWith({ name: 'John Doe', email: '' })
     })
-
-    waitFor(
-      () => {
-        fireEvent.change(screen.getByLabelText('Email'), { target: { value: 'test@example.com' } })
-        expect(handleChange).toHaveBeenCalledWith({ email: 'test@example.com' })
-      },
-      { timeout: 2000 }
-    )
-  })
-
-  test('disables submit button when there are validation errors', () => {
-    renderFormComponent({
-      onSubmit: jest.fn(),
-      onFieldChange: jest.fn(),
-      fields,
-      submitButton: {
-        type: 'submit',
-        disabled: false,
-        children: 'Submit'
-      }
-    })
-
-    waitFor(
-      () => {
-        fireEvent.click(screen.getByText('Submit'))
-        expect(screen.getByRole('button', { name: /submit/i })).toBeDisabled()
-      },
-      { timeout: 2000 }
-    )
   })
 })

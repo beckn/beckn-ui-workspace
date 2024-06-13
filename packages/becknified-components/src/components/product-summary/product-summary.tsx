@@ -29,6 +29,7 @@ const ProductSummary: React.FC<ProductSummaryPropsModel> = props => {
           width={'100%'}
           mb={'20px'}
           mt={{ base: '2rem', xl: '5rem' }}
+          data-testid="test-product-summary"
           className={`${className}-product_summary_container`}
         >
           <Flex

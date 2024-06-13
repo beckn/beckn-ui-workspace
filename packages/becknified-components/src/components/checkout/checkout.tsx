@@ -45,9 +45,9 @@ const Checkout: React.FC<CheckoutProps<FormField[]>> = ({
         </Box>
 
         <DetailsCard>
-          {items?.data.map(item => {
+          {items?.data.map((item, i) => {
             return (
-              <>
+              <div key={i}>
                 <ItemDetails
                   title={item.title}
                   description={item.description}
@@ -56,7 +56,7 @@ const Checkout: React.FC<CheckoutProps<FormField[]>> = ({
                   currency={item.currency}
                   image={item.image}
                 />
-              </>
+              </div>
             )
           })}
         </DetailsCard>

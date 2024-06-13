@@ -28,7 +28,6 @@ const PaymentDetails: React.FC<PaymentDetailsProps> = props => {
         padding={{ base: '0', md: '11px 14px' }}
       >
         {Object.entries(props.paymentBreakDown).map(([property, value]) => {
-          console.log('property', property, value)
           return (
             <Flex
               justifyContent={'space-between'}

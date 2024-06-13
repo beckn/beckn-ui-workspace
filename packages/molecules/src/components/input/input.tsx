@@ -28,6 +28,7 @@ const Input: React.FC<InputProps> = ({
   return (
     <div className={Styles.input_container}>
       <ChakraInput
+        data-testid="test-chakra-input"
         onFocus={handleInputFocus}
         onBlur={handleInputBlur}
         _focus={{ borderColor: theme.colors.primary[100], outline: 'none' }}

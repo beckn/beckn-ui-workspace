@@ -1,9 +1,8 @@
-// input.spec.tsx
 import React from 'react'
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
-import { ChakraProvider, extendTheme } from '@chakra-ui/react'
-import Input from '../../src/components/input/input'
+import { render, fireEvent, screen } from '@testing-library/react'
+import { ThemeProvider, CSSReset, extendTheme, ChakraProvider } from '@chakra-ui/react'
 import { InputProps } from '../../src/components/input/input.types'
+import Input from '../../src/components/input'
 
 const theme = extendTheme({
   colors: {
@@ -22,70 +21,62 @@ const renderInputComponent = (props: InputProps) => {
   )
 }
 
-describe('Input component', () => {
-  test('renders the input with the correct placeholder', () => {
-    renderInputComponent({ placeholder: 'Enter text', handleChange: () => {}, name: '', type: 'text', value: '' })
-    expect(screen.getByPlaceholderText('Enter text')).toBeInTheDocument()
+describe('Input Component', () => {
+  const defaultProps: InputProps = {
+    type: 'text',
+    name: 'test-input',
+    value: '',
+    handleChange: jest.fn(),
+    label: 'Test Label',
+    className: 'test-class',
+    placeholder: 'Enter text',
+    error: ''
+  }
+
+  it('renders input correctly', () => {
+    renderInputComponent({ ...defaultProps })
+
+    const inputElement = screen.getByTestId('test-chakra-input')
+    expect(inputElement).toBeInTheDocument()
+    expect(inputElement).toHaveAttribute('name', 'test-input')
+    expect(inputElement).toHaveAttribute('type', 'text')
+    expect(inputElement).toHaveAttribute('placeholder', 'Enter text')
   })
 
-  test('handles focus and blur events', () => {
-    renderInputComponent({ placeholder: 'Enter text', handleChange: () => {}, name: '', type: 'text', value: '' })
-    waitFor(
-      () => {
-        const inputElement = screen.getByPlaceholderText('Enter text')
+  it('renders label correctly', () => {
+    renderInputComponent({ ...defaultProps })
 
-        fireEvent.focus(inputElement)
-        expect(inputElement).toHaveStyle(`border-color: ${theme.colors.primary[100]}`)
-
-        fireEvent.blur(inputElement)
-        expect(inputElement).not.toHaveStyle(`border-color: ${theme.colors.primary[100]}`)
-      },
-      { timeout: 2000 }
-    )
+    const labelElement = screen.getByText('Test Label')
+    expect(labelElement).toBeInTheDocument()
   })
 
-  test('displays the label correctly', () => {
-    renderInputComponent({
-      label: 'Label Text',
-      placeholder: 'Enter text',
-      handleChange: () => {},
-      name: '',
-      type: 'text',
-      value: ''
-    })
-    const inputElement = screen.getByPlaceholderText('Enter text')
-    const labelElement = screen.getByText('Label Text')
+  it('renders error message correctly', () => {
+    const errorProps: InputProps = { ...defaultProps, error: 'Test Error' }
+    renderInputComponent({ ...errorProps })
 
+    const errorElement = screen.getByText('Test Error')
+    expect(errorElement).toBeInTheDocument()
+  })
+
+  it('handles focus and blur events', () => {
+    renderInputComponent({ ...defaultProps })
+
+    const inputElement = screen.getByTestId('test-chakra-input')
     fireEvent.focus(inputElement)
+
+    const labelElement = screen.getByText('Test Label')
     expect(labelElement).toHaveStyle(`color: ${theme.colors.primary[100]}`)
 
     fireEvent.blur(inputElement)
     expect(labelElement).toHaveStyle(`color: ${theme.colors.textPrimary}`)
   })
 
-  test('displays the error message', () => {
-    renderInputComponent({
-      placeholder: 'Enter text',
-      handleChange: () => {},
-      name: '',
-      type: 'text',
-      value: '',
-      error: 'Error message'
-    })
-    expect(screen.getByText('Error message')).toBeInTheDocument()
-  })
+  it('calls handleChange on input change', () => {
+    renderInputComponent({ ...defaultProps })
 
-  test('calls handleChange on input change', () => {
-    const handleChange = jest.fn()
-    renderInputComponent({
-      placeholder: 'Enter text',
-      handleChange: handleChange,
-      name: '',
-      type: 'text',
-      value: '',
-      error: 'Error message'
-    })
-    fireEvent.change(screen.getByPlaceholderText('Enter text'), { target: { value: 'new value' } })
-    expect(handleChange).toHaveBeenCalledTimes(1)
+    const inputElement = screen.getByTestId('test-chakra-input')
+    fireEvent.change(inputElement, { target: { value: 'new value' } })
+
+    expect(defaultProps.handleChange).toHaveBeenCalledTimes(1)
   })
 })

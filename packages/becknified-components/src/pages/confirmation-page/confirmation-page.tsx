@@ -2,11 +2,9 @@ import React from 'react'
 import { ConfirmationPageProps } from './confirmation-page.types'
 import { Image, Box, Flex, VStack } from '@chakra-ui/react'
 import { Button, Loader, Typography } from '@beckn-ui/molecules'
-import useResponsive from '../../hooks/useResponsive'
 
 const ConfirmationPage: React.FC<ConfirmationPageProps> = ({ schema, className }) => {
   const { iconSrc, buttons, successOrderMessage, gratefulMessage, orderIdMessage, trackOrderMessage } = schema
-  const { isMobile } = useResponsive()
 
   return (
     <Flex

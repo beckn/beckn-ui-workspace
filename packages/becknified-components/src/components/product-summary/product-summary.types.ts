@@ -5,7 +5,7 @@ export interface ProductSummaryPropsModel {
   imageSrc: string
   name: string
   itemForRenderer?: any
-  ProductSummaryRenderer?: React.ComponentType<{ item: any }>
+  ProductSummaryRenderer?: any
   className?: string
   secondaryDescription?: string
   secondaryCTAs?: ButtonProps[]

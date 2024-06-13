@@ -1,6 +1,6 @@
 // bottom-modal.spec.tsx
 import React from 'react'
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { render, screen, fireEvent } from '@testing-library/react'
 import { ChakraProvider } from '@chakra-ui/react'
 import BottomModal from '../../src/components/bottom-modal/bottom-modal'
 import { BottomModalProps } from '../../src/components/bottom-modal/bottom-modal.types'
@@ -51,17 +51,5 @@ describe('BottomModal component', () => {
     const modal = screen.getByRole('dialog')
     expect(modal).toHaveStyle('position: fixed')
     expect(modal).toBeInTheDocument()
-  })
-
-  test('handles scroll behavior outside correctly', () => {
-    renderBottomModal(defaultProps)
-
-    waitFor(
-      () => {
-        const modal = screen.getByRole('dialog').querySelector('.chakra-modal__body')
-        expect(modal).toHaveAttribute('overflow', 'auto')
-      },
-      { timeout: 2000 }
-    )
   })
 })

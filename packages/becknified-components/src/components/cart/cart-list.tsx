@@ -14,6 +14,7 @@ const CartList: React.FC<CartListProps> = ({ cartItems }) => {
               return (
                 <CartItem
                   key={cartItem.id}
+                  className={'cart-item'}
                   {...cartItem}
                 />
               )

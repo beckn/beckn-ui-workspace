@@ -37,6 +37,7 @@ const Sort: React.FC<SortComponentProps> = ({ selectedBtn: selectedRadioBtn, onC
             className="flex items-center"
           >
             <BsFilterLeft
+              data-testid="test-filter-icon"
               style={{
                 fontSize: '1.5rem',
                 paddingRight: '5px'

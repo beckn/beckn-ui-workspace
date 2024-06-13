@@ -20,6 +20,7 @@ const SearchInput: React.FC<SearchInputPropsModel> = props => {
   return (
     <Flex>
       <Input
+        data-testid="test-search-input"
         className={`${className}-search-input`}
         boxShadow="0px 0px 24px rgba(0, 0, 0, 0.10)"
         borderRightRadius={'unset'}
@@ -47,7 +48,6 @@ const SearchInput: React.FC<SearchInputPropsModel> = props => {
       >
         <Image
           src={searchIcon}
-          onClick={searchIconClickHandler}
           alt={'search_icon'}
         />
       </Flex>

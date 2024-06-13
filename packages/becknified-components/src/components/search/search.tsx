@@ -19,6 +19,7 @@ const Search: React.FC<SearchProps> = ({ handleOnChange, handlePressEnter, handl
       />
       <button className={Styles.search_button}>
         <FaSearch
+          data-testid="test-button-search"
           onClick={e => {
             e.preventDefault()
             handleOnSearchClick()
