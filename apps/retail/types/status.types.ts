@@ -31,7 +31,7 @@ interface Tag {
   list: { name: string; value: string }[]
 }
 
-interface Item {
+export interface Item {
   id: string
   name: string
   short_desc: string
@@ -39,6 +39,11 @@ interface Item {
   price: Price
   tags: Tag[]
   images: Images[]
+  quantity: {
+    selected: {
+      count: number
+    }
+  }
 }
 
 interface StateDescriptor {

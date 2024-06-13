@@ -4,10 +4,11 @@ import { useLanguage } from '../../hooks/useLanguage'
 import BottomModalScan from '@components/BottomModal/BottomModalScan'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import Typography from '@beckn-ui/molecules/src/components/typography/typography'
+import { ImportedOrderModel } from '@lib/types/general'
 
 interface OrderDetailsProps {
   backOnImportedOrder: (newValue: boolean) => void
-  importedOrderObject: any
+  importedOrderObject: ImportedOrderModel
 }
 
 const OrderDetails: FC<OrderDetailsProps> = ({ backOnImportedOrder, importedOrderObject }) => {
@@ -29,7 +30,7 @@ const OrderDetails: FC<OrderDetailsProps> = ({ backOnImportedOrder, importedOrde
 
   const getFormattedDate = (timestamp: string) => {
     const date = new Date(timestamp)
-    const options = { day: 'numeric', month: 'short', year: 'numeric', hour: 'numeric', minute: 'numeric' }
+    const options: Object = { day: 'numeric', month: 'short', year: 'numeric', hour: 'numeric', minute: 'numeric' }
     const formattedDate = new Intl.DateTimeFormat('en-US', options).format(date)
     return formattedDate
   }
@@ -102,7 +103,7 @@ const OrderDetails: FC<OrderDetailsProps> = ({ backOnImportedOrder, importedOrde
             />
             <Typography
               variant="subTitleRegular"
-              text={noOfTravellers}
+              text={noOfTravellers.toString()}
             />
           </Flex>
           <Flex
@@ -117,7 +118,7 @@ const OrderDetails: FC<OrderDetailsProps> = ({ backOnImportedOrder, importedOrde
             />
             <Typography
               variant="subTitleRegular"
-              text={`₹${totalPrice * noOfTravellers}`}
+              text={`₹${Number(totalPrice) * noOfTravellers}`}
             />
           </Flex>
           <BecknButton

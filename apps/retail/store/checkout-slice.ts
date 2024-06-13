@@ -2,20 +2,21 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { initApi } from '@services/init'
 import { confirmApi } from '@services/confirm'
 import { selectApi } from '@services/select'
+import { InitResponseModel } from '../types/init.types'
 
 export interface CheckoutRootState {
   checkout: Checkout
 }
 
 export interface Checkout {
-  initResponse: any
+  initResponse: InitResponseModel[]
   confirmResponse: any
   selectResponse: any
   isBillingSame: boolean
 }
 
 const initialState: Checkout = {
-  initResponse: {},
+  initResponse: [],
   confirmResponse: {},
   selectResponse: {},
   isBillingSame: true
@@ -32,7 +33,7 @@ const checkoutSlice = createSlice({
       state.isBillingSame = action.payload.isBillingSame
     },
     clearState(state) {
-      state.initResponse = {}
+      state.initResponse = []
       state.confirmResponse = {}
     }
   },

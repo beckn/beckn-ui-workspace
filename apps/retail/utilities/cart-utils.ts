@@ -115,8 +115,8 @@ export const getSelectPayload = (
         const orderIndex = orders.findIndex(order => order.provider.id === item.providerId)
         const newItem: SelectItem = {
           id: item.id,
-          selected: {
-            quantity: {
+          quantity: {
+            selected: {
               count: item.quantity
             }
           }

@@ -117,8 +117,8 @@ export const getPaymentBreakDown = (initData: InitResponseModel[] | StatusRespon
   return { breakUpMap, totalPricewithCurrent }
 }
 
-export const getSubTotalAndDeliveryCharges = (initData: any) => {
-  let subTotal = 0
+export const getSubTotalAndDeliveryCharges = (initData: InitResponseModel[]) => {
+  let subTotal: number | string = 0
   let currencySymbol
 
   if (initData && initData.length > 0) {

@@ -278,7 +278,7 @@ const HomePage = () => {
       {importedOrder ? (
         <ImportedOrder
           setImportedOrder={setImportedOrder}
-          importedOrderedItem={(importedOrderObject as any).items}
+          importedOrderedItem={importedOrderObject!.items}
           updateStateImportedOrder={updateStateImportedOrder}
           showChatGtpList={showChatGtpList}
           handleSetCategory={value => setCategory(value)}
@@ -286,7 +286,7 @@ const HomePage = () => {
       ) : null}
       {viewOrderDetails ? (
         <OrderDetails
-          importedOrderObject={importedOrderObject}
+          importedOrderObject={importedOrderObject!}
           backOnImportedOrder={backOnImportedOrder}
         />
       ) : null}

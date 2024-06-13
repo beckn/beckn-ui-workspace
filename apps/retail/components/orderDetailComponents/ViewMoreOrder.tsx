@@ -16,12 +16,13 @@ import ButtonComp from '../button/Button'
 import crossIcon from '../../public/images/crossIcon.svg'
 import { useLanguage } from '../../hooks/useLanguage'
 import { currencyMap } from '@lib/config'
+import { Item } from '../../types/status.types'
 
 export interface ViewMoreOrderModalProps {
   isOpen: boolean
   onOpen: () => void
   onClose: () => void
-  items: any
+  items: Item[]
   orderId: string
 }
 
@@ -64,7 +65,7 @@ const ViewMoreOrderModal: React.FC<ViewMoreOrderModalProps> = props => {
           </Box>
 
           <ModalBody padding={'15px 20px'}>
-            {props.items.map((item: any) => {
+            {props.items.map((item: Item) => {
               return (
                 <Flex
                   key={item.id}
@@ -83,7 +84,7 @@ const ViewMoreOrderModal: React.FC<ViewMoreOrderModalProps> = props => {
                   </Box>
                   <Typography
                     fontWeight={'600'}
-                    text={`${currencyMap[item.price.currency]} ${item.price.value} `}
+                    text={`${(currencyMap as any)[item.price.currency]} ${item.price.value} `}
                   />
                 </Flex>
               )

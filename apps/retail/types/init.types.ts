@@ -105,6 +105,7 @@ type PaymentInfo = {
   }
   status: string
   type: string
+  id: string
 }
 
 type OrderInfo = {

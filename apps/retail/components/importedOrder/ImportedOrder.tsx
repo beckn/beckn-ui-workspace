@@ -5,11 +5,12 @@ import BottomModalScan from '@components/BottomModal/BottomModalScan'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import Typography from '@beckn-ui/molecules/src/components/typography/typography'
 import { isEmpty } from '@utils/common-utils'
+import { ImportedOrderItem } from '@lib/types'
 
 interface ImportedOrderProps {
   updateStateImportedOrder: () => void
   showChatGtpList: (newValue: boolean) => void
-  importedOrderedItem: any
+  importedOrderedItem: ImportedOrderItem[]
   setImportedOrder: Function
   handleSetCategory: (value: string) => void
 }
@@ -37,7 +38,8 @@ const ImportedOrder: FC<ImportedOrderProps> = ({
   useEffect(() => {
     if (!isEmpty(importedOrderedItem)) {
       handleSetCategory(
-        importedOrderedItem[0].tags[0].list.find(singleListItem => singleListItem.descriptor.name === 'category').value
+        importedOrderedItem[0].tags[0].list?.find(singleListItem => singleListItem.descriptor.name === 'category')
+          ?.value!
       )
     }
   }, [])

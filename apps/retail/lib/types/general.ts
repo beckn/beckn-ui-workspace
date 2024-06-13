@@ -26,7 +26,7 @@ interface Tag {
   value?: string
 }
 
-interface Item {
+export interface ImportedOrderItem {
   id: string
   descriptor: {
     name: string
@@ -137,7 +137,7 @@ export interface ImportedOrderModel {
     descriptor: Descriptor
     tags: Tag[]
   }
-  items: Item[]
+  items: ImportedOrderItem[]
   fulfillments: Fulfillment[]
   quote: Quote
   billing: Billing

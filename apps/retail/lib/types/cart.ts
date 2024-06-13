@@ -73,7 +73,7 @@ export type LocalStorageCart = LocalStorageCartItem[]
 
 export type SelectItem = {
   id: string
-  selected: { quantity: { count: number } }
+  quantity: { selected: { count: number } }
 }
 
 export type SelectItems = SelectItem[]
