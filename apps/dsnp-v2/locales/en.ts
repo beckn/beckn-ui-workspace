@@ -123,6 +123,8 @@ const en: { [key: string]: string } = {
   forAll: 'for All',
   subText:
     "A global marketplace to discover anything you need. Just type where you want to go and we'll take care of the rest.",
-  profileUpdateSuccess: 'Profile updated successfully!'
+  profileUpdateSuccess: 'Profile updated successfully!',
+  error: 'Error!',
+  fixError: 'Please fix the errors in the form before submitting.'
 }
 export default en
