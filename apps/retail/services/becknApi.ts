@@ -1,4 +1,6 @@
 import { createApi, fetchBaseQuery, retry } from '@reduxjs/toolkit/query/react'
+import type { BaseQueryFn, FetchArgs, FetchBaseQueryError } from '@reduxjs/toolkit/query'
+import { feedbackActions } from '@store/ui-feedback-slice'
 
 // Create our baseQuery instance
 const baseQuery = fetchBaseQuery({
@@ -6,6 +8,19 @@ const baseQuery = fetchBaseQuery({
 })
 
 const baseQueryWithRetry = retry(baseQuery, { maxRetries: 6 })
+
+const baseQueryWithErrorHandling: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> = async (
+  args,
+  api,
+  extraOptions
+) => {
+  const result = await baseQueryWithRetry(args, api, extraOptions)
+  if (result.error && result.error.status === 400) {
+    const { message } = result.error.data.error || 'Something went wrong'
+    api.dispatch(feedbackActions.setToastData({ toastData: { display: true, message, type: 'error' } }))
+  }
+  return result
+}
 
 /**
  * Create a base API to inject endpoints into elsewhere.
@@ -25,7 +40,7 @@ export const api = createApi({
   /**
    * A bare bones base query would just be `baseQuery: fetchBaseQuery({ baseUrl: '/' })`
    */
-  baseQuery: baseQueryWithRetry,
+  baseQuery: baseQueryWithErrorHandling,
   /**
    * Tag types must be defined in the original API definition
    * for any tags that would be provided by injected endpoints

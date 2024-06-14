@@ -47,21 +47,21 @@ const SignIn = () => {
     setIsFormFilled(updatedFormData.email.trim() !== '' && updatedFormData.password.trim() !== '')
   }
 
-  useEffect(() => {
-    if (isError) {
-      toast({
-        render: () => (
-          <CustomToast
-            title={t.error}
-            message={t.unableToLogin}
-          />
-        ),
-        position: 'top',
-        duration: 2000,
-        isClosable: true
-      })
-    }
-  }, [isError])
+  // useEffect(() => {
+  //   if (isError) {
+  //     toast({
+  //       render: () => (
+  //         <CustomToast
+  //           title={t.error}
+  //           message={t.unableToLogin}
+  //         />
+  //       ),
+  //       position: 'top',
+  //       duration: 2000,
+  //       isClosable: true
+  //     })
+  //   }
+  // }, [isError])
 
   const handleSignIn = async () => {
     const signInData = {

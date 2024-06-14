@@ -36,24 +36,19 @@ export const authApi = api.injectEndpoints({
         url: '/auth/local',
         method: 'POST',
         body: credentials
-      }),
-      extraOptions: {
-        backoff: () => {
-          retry.fail({ fake: 'error' })
-        }
-      }
+      })
     }),
     register: build.mutation<UserResponse, SignupRequest>({
       query: credentials => ({
         url: '/auth/local/register',
         method: 'POST',
         body: credentials
-      }),
-      extraOptions: {
-        backoff: () => {
-          retry.fail({ fake: 'error' })
-        }
-      }
+      })
+      // extraOptions: {
+      //   backoff: () => {
+      //     retry.fail({ fake: 'error' })
+      //   }
+      // }
     })
   })
 })

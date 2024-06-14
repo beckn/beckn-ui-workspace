@@ -6,6 +6,7 @@ import newestProductReducer from './newestProduct-slice'
 import SortedProductsListReducer from './sortedProductList-slice'
 import cartUiReducer from './cartUI-slice'
 import cartSliceReducer from './cart-slice'
+import feedbackReducer from './ui-feedback-slice'
 import checkoutReducer from './checkout-slice'
 import statusReducer from './status-slice'
 import userInfoReducer from './user-slice'
@@ -40,6 +41,7 @@ const appReducer = combineReducers({
   discovery: DiscoveryReducer,
   orders: OrderReducer,
   userInfo: userInfoReducer,
+  feedback: feedbackReducer,
   sideNavBar: sideNavBarReducer,
   megaMenu: megaMenuReducer,
   activeMenuItem: activeMenuItemReducer,
@@ -53,7 +55,6 @@ const appReducer = combineReducers({
 })
 
 const rootReducer = (state, action) => {
-  console.log('Dank action', action.type)
   if (action.type === 'auth/logout') {
     if (localStorage) {
       localStorage.removeItem('persist:root')
