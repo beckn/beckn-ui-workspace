@@ -1,5 +1,5 @@
-import React from 'react'
-import { Provider, useSelector } from 'react-redux'
+import React, { useEffect } from 'react'
+import { Provider, useDispatch, useSelector } from 'react-redux'
 import Head from 'next/head'
 import { ThemeProvider } from 'next-themes'
 import { useRouter } from 'next/router'
@@ -11,7 +11,8 @@ import NextNProgress from 'nextjs-progressbar'
 import styles from './Layout.module.css'
 import { IGeoLocationSearchPageRootState } from '@lib/types/geoLocationSearchPage'
 import GeoLocationInputList from '@components/geoLocationInput/GeoLocationInputList'
-import { Box, Text } from '@chakra-ui/react'
+import { Box, Text, useToast } from '@chakra-ui/react'
+import { feedbackActions, FeedbackRootState } from '@store/ui-feedback-slice'
 
 const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const { locale } = useLanguage()
@@ -25,8 +26,31 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
     return state.geoLocationSearchPageUI.geoLocationSearchPageVisible
   })
 
+  const toast = useToast()
+  const dispatch = useDispatch()
+
+  const {
+    toast: { display, message }
+  } = useSelector((state: FeedbackRootState) => state.feedback)
+
+  useEffect(() => {
+    if (display) {
+      toast({
+        render: () => (
+          <CustomToast
+            title={'Error'}
+            message={message}
+          />
+        ),
+        position: 'top',
+        duration: 2000,
+        isClosable: true
+      })
+      dispatch(feedbackActions.toggleToast({ display: false }))
+    }
+  }, [display])
+
   return (
-    // <ThemeProvider enableSystem={true}>
     <div>
       <Head>
         <title>Kuza One</title>
@@ -60,7 +84,6 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
         position={locale === 'en' ? 'top-right' : 'top-left'}
       />
     </div>
-    // </ThemeProvider>
   )
 }
 
