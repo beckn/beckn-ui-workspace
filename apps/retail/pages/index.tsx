@@ -1,5 +1,5 @@
 import { Box, Flex, Image, Text, useBreakpoint } from '@chakra-ui/react'
-import axios from 'axios'
+import axios from '@services/axios'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import KuzaLogo from '@public/images/Kuza-mini.svg'

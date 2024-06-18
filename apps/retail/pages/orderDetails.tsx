@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios'
+import axios from '@services/axios'
 import Router, { useRouter } from 'next/router'
 import {
   Box,
@@ -246,7 +246,8 @@ const OrderDetails = () => {
                 domain: DOMAIN
               },
               message: {
-                order_id: orderId
+                order_id: orderId,
+                orderId: orderId
               }
             }
           ]

@@ -10,7 +10,7 @@ import { StatusRootState } from '@store/status-slice'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import useResponsive from '@beckn-ui/becknified-components/src/hooks/useResponsive'
 import { StatusResponseModel } from '../types/status.types'
-import axios from 'axios'
+import axios from '@services/axios'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
 
 const Feedback = () => {

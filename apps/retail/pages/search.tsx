@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios'
+import axios from '@services/axios'
 import { useDispatch } from 'react-redux'
 import { Box, Flex, Image } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
