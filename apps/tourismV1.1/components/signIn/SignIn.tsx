@@ -8,6 +8,8 @@ import { useLoginMutation } from '@services/Users'
 import { BecknAuth } from '@beckn-ui/becknified-components'
 import Router from 'next/router'
 import { Box, useToast, Text, useBreakpoint } from '@chakra-ui/react'
+import { feedbackActions } from '@store/ui-feedback-slice'
+import { useDispatch } from 'react-redux'
 
 const SignIn = () => {
   const { t } = useLanguage()
@@ -21,6 +23,7 @@ const SignIn = () => {
   const [login, { isLoading, isError, data, error }] = useLoginMutation()
 
   const toast = useToast()
+  const dispatch = useDispatch()
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -43,22 +46,6 @@ const SignIn = () => {
     setIsFormFilled(updatedFormData.email.trim() !== '' && updatedFormData.password.trim() !== '')
   }
 
-  useEffect(() => {
-    if (isError) {
-      toast({
-        render: () => (
-          <CustomToast
-            title={t.toastError}
-            message={t.toastMessage}
-          />
-        ),
-        position: 'top',
-        duration: 2000,
-        isClosable: true
-      })
-    }
-  }, [isError])
-
   const handleSignIn = async () => {
     const signInData = {
       identifier: formData.email,
@@ -69,17 +56,11 @@ const SignIn = () => {
       login(signInData).unwrap()
     } catch (error) {
       console.error('An error occurred:', error)
-      toast({
-        render: () => (
-          <CustomToast
-            title={t.toastError}
-            message={t.toastMessage}
-          />
-        ),
-        position: 'top',
-        duration: 2000,
-        isClosable: true
-      })
+      dispatch(
+        feedbackActions.setToastData({
+          toastData: { message: t.toastError, display: true, type: 'error', description: t.toastMessage }
+        })
+      )
     }
   }
 
@@ -109,17 +90,6 @@ const SignIn = () => {
             disabled: isLoading
           }
         ],
-        // socialButtons: [
-        //   {
-        //     text: t.signInwithGoogle,
-        //     handleClick: handleSignIn,
-        //     disabled: false,
-        //     variant: 'outline',
-        //     colorScheme: 'primary',
-        //     leftIcon: <FaGoogle />,
-        //     className: 'social_btn'
-        //   }
-        // ],
         inputs: [
           {
             type: 'text',
@@ -144,31 +114,3 @@ const SignIn = () => {
 }
 
 export default SignIn
-
-export const CustomToast: React.FC<{ title: string; message: string }> = ({ title, message }) => (
-  <Box
-    mt="2rem"
-    p={4}
-    bg="red.500"
-    color="white"
-    borderRadius="md"
-    boxShadow="md"
-  >
-    <Text
-      fontWeight={700}
-      fontSize={'15px'}
-      color={'white'}
-      textAlign={'center'}
-    >
-      {title}
-    </Text>
-    <Text
-      fontWeight={500}
-      fontSize={'15px'}
-      color={'white'}
-      textAlign={'center'}
-    >
-      {message}
-    </Text>
-  </Box>
-)

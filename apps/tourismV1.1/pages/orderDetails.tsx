@@ -41,6 +41,7 @@ import { StatusResponseModel, SupportModel } from '../types/status.types'
 import BottomModalScan from '@components/BottomModal/BottomModalScan'
 import { isEmpty } from '@utils/common-utils'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
+import { feedbackActions } from '@store/ui-feedback-slice'
 
 const statusMap = {
   ArrangingPayment: 'Processing your order',
@@ -200,7 +201,13 @@ const OrderDetails = () => {
       image: '/images/trackOrder.svg',
       text: `${t.trackOrder}`,
       onClick: () => {
-        window.open(trackingUrl, '_blank')
+        if (trackingUrl) window.open(trackingUrl, '_blank')
+        else
+          dispatch(
+            feedbackActions.setToastData({
+              toastData: { message: 'Error!', display: true, type: 'error', description: t.unabletoTrack }
+            })
+          )
       }
     },
     {

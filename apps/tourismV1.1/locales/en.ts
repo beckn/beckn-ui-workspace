@@ -448,6 +448,11 @@ const en: { [key: string]: string } = {
   requiredEmail: 'Email ID is required',
   change: 'Change',
   orderCancellation: ' Order Cancellation',
-  profileUpdateSuccess: 'Profile updated successfully!'
+  profileUpdateSuccess: 'Profile updated successfully!',
+  signUpErrorMssg: 'Email or Username are already taken',
+  success: 'Success!',
+  orderUpdatedSuccessfully: 'Order Updated Successfully!',
+  cartToastMssg: 'Unable to proceed with select request',
+  unabletoTrack: 'Unable to get the track url'
 }
 export default en
