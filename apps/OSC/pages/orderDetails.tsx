@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios'
+import axios from '@services/axios'
 import Router, { useRouter } from 'next/router'
 import {
   Box,
@@ -31,7 +31,6 @@ import { formatTimestamp, getPayloadForOrderStatus } from '@utils/confirm-utils'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import { ConfirmResponseModel } from '../types/confirm.types'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
-import { toast } from 'react-toastify'
 import { UIState, DataState, ProcessState } from '../types/order-details.types'
 import CallphoneIcon from '../public/images/CallphoneIcon.svg'
 import locationIcon from '../public/images/locationIcon.svg'
@@ -42,6 +41,7 @@ import { DOMAIN } from '@lib/config'
 import PaymentDetails from '@beckn-ui/becknified-components/src/components/checkout/payment-details'
 import { getPaymentBreakDown } from '@utils/checkout-utils'
 import BottomModalScan from '../components/BottomModal/BottomModalScan'
+import { feedbackActions } from '@store/ui-feedback-slice'
 
 const statusMap = {
   ArrangingPayment: 'Processing your order',
@@ -193,9 +193,11 @@ const OrderDetails = () => {
       onClick: () => {
         if (trackingUrl) window.open(trackingUrl, '_blank')
         else
-          toast.error(t.unabletoTrack, {
-            position: 'top-center'
-          })
+          dispatch(
+            feedbackActions.setToastData({
+              toastData: { message: t.error, display: true, type: 'error', description: t.unabletoTrack }
+            })
+          )
       }
     },
     {

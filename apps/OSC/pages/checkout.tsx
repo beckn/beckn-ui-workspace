@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Box, useToast, useTheme } from '@chakra-ui/react'
+import { Box, useTheme } from '@chakra-ui/react'
 import { DOMAIN } from '@lib/config'
 import { useLanguage } from '../hooks/useLanguage'
 
@@ -11,7 +11,7 @@ import {
   getSubTotalAndDeliveryCharges
 } from '@components/checkout/checkout.utils'
 import useRequest from '../hooks/useRequest'
-import { CustomToast } from '@components/signIn/SignIn'
+
 import { useInitMutation } from '@services/init'
 
 import { Checkout } from '@beckn-ui/becknified-components'
@@ -22,7 +22,6 @@ import { CheckoutRootState, checkoutActions } from '@store/checkout-slice'
 import { cartActions } from '@store/cart-slice'
 import { isEmpty } from '@utils/common-utils'
 import { FormField, LoaderWithMessage } from '@beckn-ui/molecules'
-import { title } from 'process'
 
 export type ShippingFormData = {
   name: string
@@ -47,7 +46,6 @@ const CheckoutPage = () => {
     pinCode: '75001'
   })
 
-  const toast = useToast()
   const theme = useTheme()
   const bgColorOfSecondary = theme.colors.secondary['100']
 
@@ -72,8 +70,8 @@ const CheckoutPage = () => {
   const router = useRouter()
   const initRequest = useRequest()
   const dispatch = useDispatch()
-  const [initialize, { isLoading, isError }] = useInitMutation()
-  const { t, locale } = useLanguage()
+  const [initialize, { isLoading }] = useInitMutation()
+  const { t } = useLanguage()
   const cartItems = useSelector((state: ICartRootState) => state.cart.items)
   const initResponse = useSelector((state: CheckoutRootState) => state.checkout.initResponse)
   const selectResponse = useSelector((state: CheckoutRootState) => state.checkout.selectResponse)
@@ -229,22 +227,6 @@ const CheckoutPage = () => {
     }
     return paymentBreakdownMap
   }
-
-  useEffect(() => {
-    if (isError) {
-      toast({
-        render: () => (
-          <CustomToast
-            title={t.error}
-            message={t.enabledrequest}
-          />
-        ),
-        position: 'top',
-        duration: 2000,
-        isClosable: true
-      })
-    }
-  }, [isError])
 
   if (isLoading) {
     return (

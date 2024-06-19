@@ -207,6 +207,8 @@ const en: { [key: string]: string } = {
   sameAsShipping: 'Same as Shipping Details',
   trackOrder: 'Track Order',
   updateOrder: 'Update Order',
-  comingSoon: 'Coming Soon'
+  comingSoon: 'Coming Soon',
+  updatedSuccessfully: 'Order Updated Successfully!',
+  success: 'Success!'
 }
 export default en

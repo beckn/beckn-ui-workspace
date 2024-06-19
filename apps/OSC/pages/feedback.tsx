@@ -1,6 +1,6 @@
 import { Box, Text, Image, Textarea } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import StarRating from '../components/starRating/StarRating'
 import { useLanguage } from '../hooks/useLanguage'
 import feedbackImg from '../public/images/feedbackImg.svg'
@@ -10,7 +10,7 @@ import { StatusRootState } from '@store/status-slice'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import useResponsive from '@beckn-ui/becknified-components/src/hooks/useResponsive'
 import { StatusResponseModel } from '../types/status.types'
-import axios from 'axios'
+import axios from '@services/axios'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
 
 const Feedback = () => {

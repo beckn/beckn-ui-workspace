@@ -1,19 +1,21 @@
 import { BecknAuth } from '@beckn-ui/becknified-components'
-import { Box, useToast } from '@chakra-ui/react'
+import { Box } from '@chakra-ui/react'
 import { profilePageProp } from '@components/signIn/SignIn.types'
 import { useLanguage } from '@hooks/useLanguage'
 import { FormErrors, profileValidateForm } from '@utils/form-utils'
 import Cookies from 'js-cookie'
 import React, { useEffect, useState } from 'react'
-import { CustomToast } from '@components/signIn/SignIn'
+
 import Router from 'next/router'
-import { toast as reactToastifyToast } from 'react-toastify'
+
 import { isEmpty } from '@utils/common-utils'
+import { useDispatch } from 'react-redux'
+import { feedbackActions } from '@store/ui-feedback-slice'
 
 const ProfilePage = () => {
+  const dispatch = useDispatch()
   const { t } = useLanguage()
   const bearerToken = Cookies.get('authToken')
-  const toast = useToast()
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
   const [isLoading, setIsLoading] = useState(false)
   const [formData, setFormData] = useState<profilePageProp>({
@@ -108,24 +110,6 @@ const ProfilePage = () => {
       }, {} as FormErrors)
     }))
 
-    const hasErrors = Object.values(errors).some(error => error !== '')
-
-    if (hasErrors) {
-      console.error('Validation errors:', errors)
-      toast({
-        render: () => (
-          <CustomToast
-            title={t.error}
-            message={t.fixError}
-          />
-        ),
-        position: 'top',
-        duration: 4000,
-        isClosable: true
-      })
-      return
-    }
-
     const myHeaders = new Headers()
     myHeaders.append('Authorization', `Bearer ${bearerToken}`)
 
@@ -150,13 +134,23 @@ const ProfilePage = () => {
 
     fetch(`${strapiUrl}/profiles`, requestOptions)
       .then(response => {
-        reactToastifyToast.success(t.profileUpdateSuccess)
+        dispatch(
+          feedbackActions.setToastData({
+            toastData: { message: t.success, display: true, type: 'success', description: t.profileUpdateSuccess }
+          })
+        )
         Router.push('/')
         return response.json()
       })
       .finally(() => {
         setIsLoading(false)
       })
+  }
+
+  const isFormValid = (): boolean => {
+    return (
+      Object.values(formData).every(value => value !== '') && Object.values(formErrors).every(value => value === '')
+    )
   }
 
   return (
@@ -174,7 +168,7 @@ const ProfilePage = () => {
             {
               text: t.saveContinue,
               handleClick: updateProfile,
-              disabled: false,
+              disabled: !isFormValid(),
               variant: 'solid',
               colorScheme: 'primary'
             }

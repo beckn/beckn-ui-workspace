@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import currentLogo from '../../public/images/OSC_logo.svg'
 import { useLanguage } from '@hooks/useLanguage'
 import { SignInPropsModel } from './SignIn.types'
@@ -7,20 +7,18 @@ import { useDispatch } from 'react-redux'
 import { useLoginMutation } from '@services/Users'
 import { BecknAuth } from '@beckn-ui/becknified-components'
 
-import { FaGoogle } from 'react-icons/fa'
-
 import Router from 'next/router'
-import { Box, useToast, Text, useBreakpoint } from '@chakra-ui/react'
+
+import { feedbackActions } from '@store/ui-feedback-slice'
 
 const SignIn = () => {
   const { t } = useLanguage()
+  const dispatch = useDispatch()
 
   const [formData, setFormData] = useState<SignInPropsModel>({ email: '', password: '' })
   const [formErrors, setFormErrors] = useState<FormErrors>({ email: '', password: '' })
   const [isFormFilled, setIsFormFilled] = useState(false)
-  const [login, { isLoading, isError, data, error }] = useLoginMutation()
-
-  const toast = useToast()
+  const [login, { isLoading }] = useLoginMutation()
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -43,22 +41,6 @@ const SignIn = () => {
     setIsFormFilled(updatedFormData.email.trim() !== '' && updatedFormData.password.trim() !== '')
   }
 
-  useEffect(() => {
-    if (isError) {
-      toast({
-        render: () => (
-          <CustomToast
-            title={t.error}
-            message={t.unableToLogin}
-          />
-        ),
-        position: 'top',
-        duration: 2000,
-        isClosable: true
-      })
-    }
-  }, [isError])
-
   const handleSignIn = async () => {
     const signInData = {
       identifier: formData.email,
@@ -69,17 +51,12 @@ const SignIn = () => {
       login(signInData).unwrap()
     } catch (error) {
       console.error('An error occurred:', error)
-      toast({
-        render: () => (
-          <CustomToast
-            title={t.error}
-            message={t.unableToLogin}
-          />
-        ),
-        position: 'top',
-        duration: 2000,
-        isClosable: true
-      })
+
+      dispatch(
+        feedbackActions.setToastData({
+          toastData: { message: t.error, display: true, type: 'error', description: t.unableToLogin }
+        })
+      )
     }
   }
 
@@ -134,31 +111,3 @@ const SignIn = () => {
 }
 
 export default SignIn
-
-export const CustomToast: React.FC<{ title: string; message: string }> = ({ title, message }) => (
-  <Box
-    mt="2rem"
-    p={4}
-    bg="red.500"
-    color="white"
-    borderRadius="md"
-    boxShadow="md"
-  >
-    <Text
-      fontWeight={700}
-      fontSize={'15px'}
-      color={'white'}
-      textAlign={'center'}
-    >
-      {title}
-    </Text>
-    <Text
-      fontWeight={500}
-      fontSize={'15px'}
-      color={'white'}
-      textAlign={'center'}
-    >
-      {message}
-    </Text>
-  </Box>
-)

@@ -1,43 +1,27 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useLanguage } from '@hooks/useLanguage'
 import AlternateLogo from '../public/images/localleIconSignUp.svg'
 import { SignUpPropsModel } from '@components/signIn/SignIn.types'
 import { FormErrors, signUpValidateForm } from '@utils/form-utils'
 import { BecknAuth } from '@beckn-ui/becknified-components'
 import Router from 'next/router'
-import { Box, useBreakpoint, useToast } from '@chakra-ui/react'
+import { Box, useBreakpoint } from '@chakra-ui/react'
 import { useRegisterMutation } from '@services/Users'
-import { CustomToast } from '@components/signIn/SignIn'
+
 import Logo from '@public/images/localleIconSignUp.svg'
 
 const SignUp = () => {
   const { t } = useLanguage()
-  const toast = useToast()
+
   const [formData, setFormData] = useState<SignUpPropsModel>({ name: '', email: '', password: '', mobileNumber: '' })
   const [formErrors, setFormErrors] = useState<FormErrors>({ name: '', email: '', password: '', mobileNumber: '' })
   const [isFormFilled, setIsFormFilled] = useState(false)
   const breakpoint = useBreakpoint()
   const mobileBreakpoints = ['base', 'sm', 'md', 'lg']
   const currentLogo = mobileBreakpoints.includes(breakpoint) ? Logo : AlternateLogo
-  const [register, { isLoading, isError }] = useRegisterMutation()
+  const [register, { isLoading }] = useRegisterMutation()
 
   const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL
-
-  useEffect(() => {
-    if (isError) {
-      toast({
-        render: () => (
-          <CustomToast
-            title={t.error}
-            message={t.emailOrAddreessAlrteadyTaken}
-          />
-        ),
-        position: 'top',
-        duration: 2000,
-        isClosable: true
-      })
-    }
-  }, [isError])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -99,23 +83,11 @@ const SignUp = () => {
         }
 
         fetch(`${baseUrl}/profiles`, requestOptions).then(response => {
-          // reactToastifyToast.success('Profile updated successfully!')
           Router.push('/')
           return response.json()
         })
       } catch (error) {
         console.error('An error occurred:', error)
-        // toast({
-        //   render: () => (
-        //     <CustomToast
-        //       title={t.error}
-        //       message={t.unableToRegister}
-        //     />
-        //   ),
-        //   position: 'top',
-        //   duration: 2000,
-        //   isClosable: true
-        // })
       }
     } else {
       setFormErrors({

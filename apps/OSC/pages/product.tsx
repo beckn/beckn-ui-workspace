@@ -1,26 +1,18 @@
-import Router from 'next/router'
-import React, { useEffect, useState } from 'react'
-import { ProductDetailPage, ProductPrice } from '@beckn-ui/becknified-components'
-import { RetailItem } from '@lib/products'
-import { ProductCard } from '@beckn-ui/becknified-components'
-import { LocalStorage, ICartProduct, ICart, LocalStorageCart, LocalStorageCartItem } from '@lib/types'
+import React, { useState } from 'react'
+import { ProductDetailPage } from '@beckn-ui/becknified-components'
+
 import { cartActions } from '@store/cart-slice'
 import { useDispatch, useSelector } from 'react-redux'
-import useResponsive from '@beckn-ui/becknified-components/src/hooks/useResponsive'
-import { toast } from 'react-toastify'
-import { setLocalStorage, getLocalStorage, addLocalStorage } from '@utils/localstorage'
-import { fromBinary } from '@utils/common-utils'
-import { useRouter } from 'next/router'
+
 import { DiscoveryRootState } from '@store/discovery-slice'
-import { Box, Flex, useTheme } from '@chakra-ui/react'
-import { Button, CustomThemeType, Input, Typography } from '@beckn-ui/molecules'
+import { Box } from '@chakra-ui/react'
+
 import { useLanguage } from '@hooks/useLanguage'
+import { feedbackActions } from '@store/ui-feedback-slice'
 
 const Product = () => {
-  const theme = useTheme<CustomThemeType>()
   const selectedProduct = useSelector((state: DiscoveryRootState) => state.discovery.selectedProduct)
-  const productList = useSelector((state: DiscoveryRootState) => state.discovery.productList)
-  const { isMobile, isTablet, isDesktop } = useResponsive()
+
   const dispatch = useDispatch()
   const [counter, setCounter] = useState(1)
   const { t } = useLanguage()
@@ -41,7 +33,6 @@ const Product = () => {
       setTotalPrice(newTotalPrice)
     }
   }
-  const router = useRouter()
 
   if (!selectedProduct) {
     return <></>
@@ -80,7 +71,17 @@ const Product = () => {
                       quantity: counter
                     })
                   )
-                  toast.success(t.productAddedToCart)
+
+                  dispatch(
+                    feedbackActions.setToastData({
+                      toastData: {
+                        message: t.success,
+                        display: true,
+                        type: 'success',
+                        description: t.productAddedToCart
+                      }
+                    })
+                  )
                 }
               }
             }
