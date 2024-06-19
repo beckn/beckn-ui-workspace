@@ -10,6 +10,7 @@ import { Box, useTheme } from '@chakra-ui/react'
 import { CustomThemeType } from '@beckn-ui/molecules'
 import { useLanguage } from '@hooks/useLanguage'
 import { ParsedItemModel } from '@lib/types'
+import { feedbackActions } from '@store/ui-feedback-slice'
 
 const Product = () => {
   const { t } = useLanguage()
@@ -71,7 +72,11 @@ const Product = () => {
                       quantity: counter
                     })
                   )
-                  toast.success(t.addedToCart)
+                  dispatch(
+                    feedbackActions.setToastData({
+                      toastData: { message: 'Success', display: true, type: 'success', description: t.addedToCart }
+                    })
+                  )
                 }
               }
             }

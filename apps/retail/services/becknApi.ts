@@ -17,7 +17,11 @@ const baseQueryWithErrorHandling: BaseQueryFn<string | FetchArgs, unknown, Fetch
   const result = await baseQueryWithRetry(args, api, extraOptions)
   if (result.error && result.error.status === 400) {
     const { message } = result.error.data.error || 'Something went wrong'
-    api.dispatch(feedbackActions.setToastData({ toastData: { display: true, message, type: 'error' } }))
+    api.dispatch(
+      feedbackActions.setToastData({
+        toastData: { message: 'Error!', display: true, type: 'error', description: message }
+      })
+    )
   }
   return result
 }

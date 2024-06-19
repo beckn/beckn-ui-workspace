@@ -9,6 +9,8 @@ import { CustomToast } from '@components/signIn/SignIn'
 import Router from 'next/router'
 import { toast as reactToastifyToast } from 'react-toastify'
 import { isEmpty } from '@utils/common-utils'
+import { useDispatch } from 'react-redux'
+import { feedbackActions } from '@store/ui-feedback-slice'
 
 const ProfilePage = () => {
   const { t } = useLanguage()
@@ -16,6 +18,7 @@ const ProfilePage = () => {
   const toast = useToast()
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
   const [isLoading, setIsLoading] = useState(false)
+  const dispatch = useDispatch()
   const [formData, setFormData] = useState<profilePageProp>({
     name: '',
     mobileNumber: '',
@@ -110,22 +113,6 @@ const ProfilePage = () => {
 
     const hasErrors = Object.values(errors).some(error => error !== '')
 
-    if (hasErrors) {
-      console.error('Validation errors:', errors)
-      toast({
-        render: () => (
-          <CustomToast
-            title={t.error}
-            message={t.fixError}
-          />
-        ),
-        position: 'top',
-        duration: 4000,
-        isClosable: true
-      })
-      return
-    }
-
     const myHeaders = new Headers()
     myHeaders.append('Authorization', `Bearer ${bearerToken}`)
 
@@ -150,13 +137,23 @@ const ProfilePage = () => {
 
     fetch(`${strapiUrl}/profiles`, requestOptions)
       .then(response => {
-        reactToastifyToast.success(t.profileUpdateSuccess)
+        dispatch(
+          feedbackActions.setToastData({
+            toastData: { message: 'Success', display: true, type: 'success', description: t.profileUpdateSuccess }
+          })
+        )
         Router.push('/')
         return response.json()
       })
       .finally(() => {
         setIsLoading(false)
       })
+  }
+
+  const isFormFilled = (): boolean => {
+    return (
+      Object.values(formData).every(value => value !== '') && Object.values(formErrors).every(value => value === '')
+    )
   }
 
   return (
@@ -174,7 +171,7 @@ const ProfilePage = () => {
             {
               text: t.saveContinue,
               handleClick: updateProfile,
-              disabled: false,
+              disabled: !isFormFilled(),
               variant: 'solid',
               colorScheme: 'primary'
             }

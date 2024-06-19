@@ -45,6 +45,7 @@ import { DOMAIN } from '@lib/config'
 import PaymentDetails from '@beckn-ui/becknified-components/src/components/checkout/payment-details'
 import { getPaymentBreakDown } from '@utils/checkout-utils'
 import { StatusKey, StatusMap, statusMap } from '@lib/types/order'
+import { feedbackActions } from '@store/ui-feedback-slice'
 
 const DELIVERED = 'Delivered'
 const CANCELLED = 'CANCELLED'
@@ -188,9 +189,11 @@ const OrderDetails = () => {
       onClick: () => {
         if (trackingUrl) window.open(trackingUrl, '_blank')
         else
-          toast.error('Unable to get the track url', {
-            position: 'top-center'
-          })
+          dispatch(
+            feedbackActions.setToastData({
+              toastData: { message: 'Error', display: true, type: 'error', description: t.unabletoTrack }
+            })
+          )
       }
     },
     {

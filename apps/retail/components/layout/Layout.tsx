@@ -12,7 +12,8 @@ import styles from './Layout.module.css'
 import { IGeoLocationSearchPageRootState } from '@lib/types/geoLocationSearchPage'
 import GeoLocationInputList from '@components/geoLocationInput/GeoLocationInputList'
 import { Box, Text, useToast } from '@chakra-ui/react'
-import { feedbackActions, FeedbackRootState } from '@store/ui-feedback-slice'
+import { feedbackActions, FeedbackRootState, ToastType } from '@store/ui-feedback-slice'
+import { Toast } from '@beckn-ui/molecules/src/components'
 
 const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const { locale } = useLanguage()
@@ -30,21 +31,20 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const dispatch = useDispatch()
 
   const {
-    toast: { display, message }
+    toast: { display, message, type, description }
   } = useSelector((state: FeedbackRootState) => state.feedback)
 
   useEffect(() => {
     if (display) {
       toast({
-        render: () => (
-          <CustomToast
-            title={'Error'}
-            message={message}
+        render: ({ onClose }) => (
+          <Toast
+            status={type as ToastType}
+            title={message}
+            description={description}
+            onClose={onClose}
           />
-        ),
-        position: 'top',
-        duration: 2000,
-        isClosable: true
+        )
       })
       dispatch(feedbackActions.toggleToast({ display: false }))
     }

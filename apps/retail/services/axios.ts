@@ -13,7 +13,12 @@ axios.interceptors.response.use(
     // Optionally, you can also log the error or perform other actions
     store.dispatch(
       feedbackActions.setToastData({
-        toastData: { display: true, message: error.message || 'Something went wrong', type: 'error' }
+        toastData: {
+          display: true,
+          message: 'Error!' || 'Something went wrong',
+          type: 'error',
+          description: error.message
+        }
       })
     )
 

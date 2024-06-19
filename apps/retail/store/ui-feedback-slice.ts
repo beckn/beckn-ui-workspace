@@ -6,6 +6,7 @@ type Toast = {
   message: string
   display: boolean
   type?: ToastType
+  description?: string
 }
 
 export type FeedbackRootState = {
