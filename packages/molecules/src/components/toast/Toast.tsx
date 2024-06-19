@@ -37,8 +37,6 @@ const Toast: React.FC<ToastProps> = ({ status, title, description }) => {
         isClosable: true,
         render: ({ onClose }) => (
           <Box
-            display="flex"
-            alignItems="center"
             bg="#FFFFFF"
             borderLeft="8px solid"
             borderColor={color}
@@ -57,33 +55,34 @@ const Toast: React.FC<ToastProps> = ({ status, title, description }) => {
               onClick={onClose}
               data-testid="close-button"
             />
-            {icon && (
-              <Icon
-                as={icon}
-                w={6}
-                h={6}
-                color={color}
-                mr={3}
-                data-testid={`toast-icon-${status}`}
-              />
-            )}
             <Flex
-              justifyContent={'center'}
+              justifyContent={'flex-start'}
               alignItems={'center'}
-              flexDirection={'column'}
+              mb="6px"
             >
+              {icon && (
+                <Icon
+                  as={icon}
+                  w={6}
+                  h={6}
+                  color={color}
+                  mr={2}
+                  data-testid={`toast-icon-${status}`}
+                />
+              )}
               <Typography
                 variant="subTitleSemibold"
                 text={title}
               />
-              {description && (
-                <Typography
-                  variant="subTitleRegular"
-                  text={description}
-                  data-testid={`toast_description`}
-                />
-              )}
             </Flex>
+            {description && (
+              <Typography
+                variant="subTitleRegular"
+                text={description}
+                data-testid={`toast_description`}
+                style={{ marginLeft: '2rem' }}
+              />
+            )}
           </Box>
         )
       })
