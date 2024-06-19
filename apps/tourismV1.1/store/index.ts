@@ -8,6 +8,7 @@ import cartUiReducer from './cartUI-slice'
 import cartSliceReducer from './cart-slice'
 import checkoutReducer from './checkout-slice'
 import statusReducer from './status-slice'
+import feedbackReducer from './ui-feedback-slice'
 import userInfoReducer from './user-slice'
 import sideNavBarReducer from './sideNavBar-slice'
 import DiscoveryReducer from './discovery-slice'
@@ -41,6 +42,7 @@ const appReducer = combineReducers({
   discovery: DiscoveryReducer,
   orders: OrderReducer,
   userInfo: userInfoReducer,
+  feedback: feedbackReducer,
   sideNavBar: sideNavBarReducer,
   megaMenu: megaMenuReducer,
   activeMenuItem: activeMenuItemReducer,

@@ -9,6 +9,8 @@ import { v4 as uuidv4 } from 'uuid'
 import { useRouter } from 'next/router'
 import { geocodeFromPincode } from '@utils/checkout-utils'
 import { getLocalStorage } from '@utils/localstorage'
+import { feedbackActions } from '@store/ui-feedback-slice'
+import { useDispatch } from 'react-redux'
 
 const UpdateShippingDetails = () => {
   const [shippingDetails, setShippingDetails] = useState({
@@ -22,7 +24,7 @@ const UpdateShippingDetails = () => {
   const [isLoadingForUpdate, setIsLoadingForUpdate] = useState(false)
   const { t } = useLanguage()
   const router = useRouter()
-  const toast = useToast()
+  const dispatch = useDispatch()
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
@@ -100,13 +102,11 @@ const UpdateShippingDetails = () => {
         }
         const updateResponse = await axios.post(`${apiUrl}/update`, updateRequestPayload)
         if (updateResponse.data.data.length > 0) {
-          toast({
-            title: `Order Updated Successfully! `,
-            status: 'success',
-            isClosable: true,
-            position: 'top',
-            containerStyle: { marginTop: '35px' }
-          })
+          dispatch(
+            feedbackActions.setToastData({
+              toastData: { message: t.success, display: true, type: 'success', description: t.orderUpdatedSuccessfully }
+            })
+          )
           router.push('/orderDetails')
         }
       } else if (localStorage.getItem('selectedOrder') && localStorage.getItem('statusResponse')) {
@@ -162,13 +162,11 @@ const UpdateShippingDetails = () => {
         }
         const updateResponse = await axios.post(`${apiUrl}/update`, updateRequestPayload)
         if (updateResponse.data.data.length > 0) {
-          toast({
-            title: `Order Updated Successfully! `,
-            status: 'success',
-            isClosable: true,
-            position: 'top',
-            containerStyle: { marginTop: '35px' }
-          })
+          dispatch(
+            feedbackActions.setToastData({
+              toastData: { message: t.success, display: true, type: 'success', description: t.orderUpdatedSuccessfully }
+            })
+          )
           router.push('/orderDetails')
         }
       }

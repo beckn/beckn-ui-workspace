@@ -28,6 +28,7 @@ import { getSelectPayload } from '@components/cart/cart.utils'
 import { useSelectMutation } from '@services/select'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
 import { FormField } from '@beckn-ui/molecules'
+import { feedbackActions } from '@store/ui-feedback-slice'
 
 export type ShippingFormData = {
   name: string
@@ -272,22 +273,6 @@ const CheckoutPage = () => {
     }
     return paymentBreakdownMap
   }
-
-  useEffect(() => {
-    if (isError) {
-      toast({
-        render: () => (
-          <CustomToast
-            title="Error!"
-            message={t.initLoderTextFail}
-          />
-        ),
-        position: 'top',
-        duration: 2000,
-        isClosable: true
-      })
-    }
-  }, [isError])
 
   if (isSelectLoading || isLoading) {
     return (

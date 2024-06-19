@@ -8,11 +8,14 @@ import React, { useEffect, useState } from 'react'
 import { CustomToast } from '@components/signIn/SignIn'
 import Router from 'next/router'
 import { toast as reactToastifyToast } from 'react-toastify'
+import { feedbackActions } from '@store/ui-feedback-slice'
+import { useDispatch } from 'react-redux'
 
 const ProfilePage = () => {
   const { t } = useLanguage()
   const bearerToken = Cookies.get('authToken')
   const toast = useToast()
+  const dispatch = useDispatch()
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
   const [isLoading, setIsLoading] = useState(false)
   const [formData, setFormData] = useState<profilePageProp>({
@@ -93,17 +96,17 @@ const ProfilePage = () => {
 
     if (hasErrors) {
       console.error('Validation errors:', errors)
-      toast({
-        render: () => (
-          <CustomToast
-            title="Error!"
-            message="Please fix the errors in the form before submitting."
-          />
-        ),
-        position: 'top',
-        duration: 4000,
-        isClosable: true
-      })
+      dispatch(
+        feedbackActions.setToastData({
+          toastData: {
+            message: t.toastError,
+            display: true,
+            type: 'error',
+            description: 'Please fix the errors in the form before submitting.'
+          }
+        })
+      )
+
       return
     }
 
@@ -137,7 +140,11 @@ const ProfilePage = () => {
         setIsLoading(false)
       })
   }
-
+  const isFormFilled = (): boolean => {
+    return (
+      Object.values(formData).every(value => value !== '') && Object.values(formErrors).every(value => value === '')
+    )
+  }
   return (
     <Box
       margin={'0 auto'}
@@ -153,7 +160,7 @@ const ProfilePage = () => {
             {
               text: t.saveContinue,
               handleClick: updateProfile,
-              disabled: false,
+              disabled: !isFormFilled(),
               variant: 'solid',
               colorScheme: 'primary'
             }

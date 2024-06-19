@@ -7,8 +7,9 @@ import { BecknAuth } from '@beckn-ui/becknified-components'
 import Router from 'next/router'
 import { Box, useBreakpoint, useToast } from '@chakra-ui/react'
 import { useRegisterMutation } from '@services/Users'
-import { CustomToast } from '@components/signIn/SignIn'
 import Logo from '../../tourismV1.1/public/images/tourism-logo.svg'
+import { useDispatch } from 'react-redux'
+import { feedbackActions } from '@store/ui-feedback-slice'
 
 const SignUp = () => {
   const { t } = useLanguage()
@@ -22,22 +23,6 @@ const SignUp = () => {
   const [register, { isLoading, isError }] = useRegisterMutation()
 
   const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL
-
-  useEffect(() => {
-    if (isError) {
-      toast({
-        render: () => (
-          <CustomToast
-            title="Error!"
-            message="Email or Username are already taken"
-          />
-        ),
-        position: 'top',
-        duration: 2000,
-        isClosable: true
-      })
-    }
-  }, [isError])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
