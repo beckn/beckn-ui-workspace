@@ -1,7 +1,7 @@
+import axios from '@services/axios'
 import jwt from 'jsonwebtoken'
 import { IUser } from '../lib/types/user'
 import { payloadHandle, signPayloadWithExtension, payloadAddProvider } from './signTransaction'
-import axios from 'axios'
 
 export function customToU8a(obj) {
   // This is a simplistic implementation and should be tailored to your specific needs.

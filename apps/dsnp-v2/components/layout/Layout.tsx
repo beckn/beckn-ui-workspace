@@ -1,5 +1,5 @@
-import React from 'react'
-import { Provider, useSelector } from 'react-redux'
+import React, { useEffect } from 'react'
+import { Provider, useDispatch, useSelector } from 'react-redux'
 import Head from 'next/head'
 import { ThemeProvider } from 'next-themes'
 import { useRouter } from 'next/router'
@@ -11,7 +11,9 @@ import NextNProgress from 'nextjs-progressbar'
 import styles from './Layout.module.css'
 import { IGeoLocationSearchPageRootState } from '@lib/types/geoLocationSearchPage'
 import GeoLocationInputList from '@components/geoLocationInput/GeoLocationInputList'
-import { Box, Text } from '@chakra-ui/react'
+import { Box, Text, useToast } from '@chakra-ui/react'
+import { feedbackActions, FeedbackRootState, ToastType } from '@store/ui-feedback-slice'
+import { Toast } from '@beckn-ui/molecules/src/components'
 
 const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const { locale } = useLanguage()
@@ -24,6 +26,30 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const geoLocationSearchPageVisible = useSelector((state: IGeoLocationSearchPageRootState) => {
     return state.geoLocationSearchPageUI.geoLocationSearchPageVisible
   })
+  const toast = useToast()
+  const dispatch = useDispatch()
+
+  const {
+    toast: { display, message, type, description }
+  } = useSelector((state: FeedbackRootState) => state.feedback)
+  useEffect(() => {
+    if (display) {
+      toast({
+        position: 'top',
+        duration: 5000,
+        isClosable: true,
+        render: ({ onClose }) => (
+          <Toast
+            status={type as ToastType}
+            title={message}
+            description={description}
+            onClose={onClose}
+          />
+        )
+      })
+      dispatch(feedbackActions.toggleToast({ display: false }))
+    }
+  }, [display])
 
   return (
     // <ThemeProvider enableSystem={true}>

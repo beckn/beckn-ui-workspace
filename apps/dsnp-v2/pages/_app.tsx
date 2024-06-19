@@ -10,14 +10,14 @@ import 'slick-carousel/slick/slick-theme.css'
 import 'react-toastify/dist/ReactToastify.css'
 
 import '../styles/globals.css'
-import { Provider } from 'react-redux'
+import { Provider, useDispatch } from 'react-redux'
 import store, { persistor } from '@store/index'
-import axios from 'axios'
 import { useToast } from '@chakra-ui/react'
 import { parentURLs } from '@lib/config'
 // import { Garuda } from 'garudaa'
 import { PersistGate } from 'redux-persist/integration/react'
 import { CustomToast } from '@components/signIn/SignIn'
+import axios from '@services/axios'
 
 // Garuda.init({
 //   projectId: '65c0d663cbe90cafae9185f6',

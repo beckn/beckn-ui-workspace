@@ -9,9 +9,12 @@ import { CustomToast } from '@components/signIn/SignIn'
 import Router from 'next/router'
 import { toast as reactToastifyToast } from 'react-toastify'
 import { isEmpty } from '@utils/common-utils'
+import { feedbackActions } from '@store/ui-feedback-slice'
+import { useDispatch } from 'react-redux'
 
 const ProfilePage = () => {
   const { t } = useLanguage()
+  const dispatch = useDispatch()
   const bearerToken = Cookies.get('authToken')
   const toast = useToast()
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
@@ -112,22 +115,6 @@ const ProfilePage = () => {
 
     const hasErrors = Object.values(errors).some(error => error !== '')
 
-    if (hasErrors) {
-      console.error('Validation errors:', errors)
-      toast({
-        render: () => (
-          <CustomToast
-            title={t.error}
-            message={t.fixError}
-          />
-        ),
-        position: 'top',
-        duration: 4000,
-        isClosable: true
-      })
-      return
-    }
-
     const myHeaders = new Headers()
     myHeaders.append('Authorization', `Bearer ${bearerToken}`)
 
@@ -152,7 +139,11 @@ const ProfilePage = () => {
 
     fetch(`${strapiUrl}/profiles`, requestOptions)
       .then(response => {
-        reactToastifyToast.success(t.profileUpdateSuccess)
+        dispatch(
+          feedbackActions.setToastData({
+            toastData: { message: 'Success', display: true, type: 'success', description: t.profileUpdateSuccess }
+          })
+        )
         Router.push('/')
         return response.json()
       })

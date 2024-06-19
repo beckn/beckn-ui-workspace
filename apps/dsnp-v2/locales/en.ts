@@ -125,6 +125,8 @@ const en: { [key: string]: string } = {
     "A global marketplace to discover anything you need. Just type where you want to go and we'll take care of the rest.",
   profileUpdateSuccess: 'Profile updated successfully!',
   error: 'Error!',
-  fixError: 'Please fix the errors in the form before submitting.'
+  fixError: 'Please fix the errors in the form before submitting.',
+  toastMessage: 'Unable to login',
+  toastError: 'Error!'
 }
 export default en
