@@ -1,5 +1,5 @@
-import React from 'react'
-import { Provider, useSelector } from 'react-redux'
+import React, { useEffect } from 'react'
+import { Provider, useDispatch, useSelector } from 'react-redux'
 import Head from 'next/head'
 import { ThemeProvider } from 'next-themes'
 import { useRouter } from 'next/router'
@@ -11,7 +11,9 @@ import NextNProgress from 'nextjs-progressbar'
 import styles from './Layout.module.css'
 import { IGeoLocationSearchPageRootState } from '@lib/types/geoLocationSearchPage'
 import GeoLocationInputList from '@components/geoLocationInput/GeoLocationInputList'
-import { Box, Text } from '@chakra-ui/react'
+import { Box, Text, useToast } from '@chakra-ui/react'
+import { FeedbackRootState, ToastType, feedbackActions } from '@store/ui-feedback-slice'
+import { Toast } from '@beckn-ui/molecules/src/components'
 
 const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const { locale } = useLanguage()
@@ -24,6 +26,27 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const geoLocationSearchPageVisible = useSelector((state: IGeoLocationSearchPageRootState) => {
     return state.geoLocationSearchPageUI.geoLocationSearchPageVisible
   })
+  const toast = useToast()
+  const dispatch = useDispatch()
+  const {
+    toast: { display, message, type, description }
+  } = useSelector((state: FeedbackRootState) => state.feedback)
+
+  useEffect(() => {
+    if (display) {
+      toast({
+        render: ({ onClose }) => (
+          <Toast
+            status={type as ToastType}
+            title={message}
+            description={description}
+            onClose={onClose}
+          />
+        )
+      })
+      dispatch(feedbackActions.toggleToast({ display: false }))
+    }
+  }, [display])
 
   return (
     // <ThemeProvider enableSystem={true}>
@@ -63,33 +86,5 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
     // </ThemeProvider>
   )
 }
-
-export const CustomToast: React.FC<{ title: string; message: string }> = ({ title, message }) => (
-  <Box
-    mt="2rem"
-    p={4}
-    bg="red.500"
-    color="white"
-    borderRadius="md"
-    boxShadow="md"
-  >
-    <Text
-      fontWeight={700}
-      fontSize={'15px'}
-      color={'white'}
-      textAlign={'center'}
-    >
-      {title}
-    </Text>
-    <Text
-      fontWeight={500}
-      fontSize={'15px'}
-      color={'white'}
-      textAlign={'center'}
-    >
-      {message}
-    </Text>
-  </Box>
-)
 
 export default Layout

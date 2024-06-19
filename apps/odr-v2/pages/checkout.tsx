@@ -85,21 +85,6 @@ const CheckoutPage = () => {
     fetchQuotes(getSelectPayload(items, transactionId, DOMAIN))
   }, [])
 
-  // useEffect(() => {
-  //   if (localStorage) {
-  //     if (localStorage.getItem('userPhone')) {
-  //       const copiedFormData = structuredClone(complainantFormData)
-  //       const copiedBillingFormData = structuredClone(billingFormData)
-
-  //       copiedFormData.mobileNumber = localStorage.getItem('userPhone') as string
-  //       copiedBillingFormData.mobileNumber = localStorage.getItem('userPhone') as string
-
-  //       setcomplainantFormData(copiedFormData)
-  //       setBillingFormData(copiedBillingFormData)
-  //     }
-  //   }
-  // }, [])
-
   useEffect(() => {
     if (typeof window !== 'undefined') {
       if (localStorage.getItem('shippingAddress')) {
@@ -149,22 +134,6 @@ const CheckoutPage = () => {
   const hasXinput = (response: any) => {
     return !isEmpty(response[0].message.order.items[0].xinput)
   }
-
-  useEffect(() => {
-    if (isError) {
-      toast({
-        render: () => (
-          <CustomToast
-            title="Error!"
-            message="Unable to proceed with init request"
-          />
-        ),
-        position: 'top',
-        duration: 2000,
-        isClosable: true
-      })
-    }
-  }, [isError])
 
   const handleComplainantFormSubmit = (data: any) => {
     if (data) {

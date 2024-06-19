@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { Box, Flex, Image, Text, useBreakpoint, Icon, Divider } from '@chakra-ui/react'
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md'
-import axios from 'axios'
+
 import { useRouter } from 'next/router'
 import { Typography } from '@beckn-ui/molecules'
 import KuzaLogo from '@public/images/Kuza-mini.svg'

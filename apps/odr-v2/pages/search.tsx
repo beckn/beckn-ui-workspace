@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios'
+import axios from '@services/axios'
 import { useDispatch } from 'react-redux'
 import { Box, Flex, Image } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
-import { toBinary } from '@utils/common-utils'
 import { parsedSearchlist } from '@utils/search-results.utils'
 import { ProductCard } from '@beckn-ui/becknified-components'
 import { BottomModal } from '@beckn-ui/molecules'
@@ -15,7 +14,6 @@ import { ParsedItemModel } from '@lib/types/beckn/search'
 import { DOMAIN } from '@lib/config'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
 import Filter from '../components/filter/Filter'
-import { LocalStorage } from '@lib/types'
 
 //Mock data for testing search API. Will remove after the resolution of CORS issue
 

@@ -7,7 +7,8 @@ import { FormField, Loader, Typography } from '@beckn-ui/molecules'
 import { useLanguage } from '@hooks/useLanguage'
 import { v4 as uuidv4 } from 'uuid'
 import { useRouter } from 'next/router'
-import { geocodeFromPincode } from '@utils/checkout-utils'
+import { useDispatch } from 'react-redux'
+import { feedbackActions } from '@store/ui-feedback-slice'
 
 const fieldConfig: FormField[] = [
   {
@@ -52,6 +53,7 @@ const UpdateShippingDetails = () => {
   const { t } = useLanguage()
   const router = useRouter()
   const toast = useToast()
+  const dispatch = useDispatch()
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
   useEffect(() => {
@@ -102,13 +104,16 @@ const UpdateShippingDetails = () => {
 
         const updateResponse = await axios.post(`${apiUrl}/update`, updateRequestPayload)
         if (updateResponse.data.data.length > 0) {
-          toast({
-            title: `Order Updated Successfully! `,
-            status: 'success',
-            isClosable: true,
-            position: 'top',
-            containerStyle: { marginTop: '35px' }
-          })
+          dispatch(
+            feedbackActions.setToastData({
+              toastData: {
+                message: 'Success',
+                display: true,
+                type: 'success',
+                description: 'Order Updated Successfully!'
+              }
+            })
+          )
           router.push('/orderDetails')
         }
       } else if (localStorage.getItem('selectedOrder') && localStorage.getItem('statusResponse')) {
@@ -150,24 +155,32 @@ const UpdateShippingDetails = () => {
         }
         const updateResponse = await axios.post(`${apiUrl}/update`, updateRequestPayload)
         if (updateResponse.data.data.length > 0) {
-          toast({
-            title: `Order Updated Successfully! `,
-            status: 'success',
-            isClosable: true,
-            position: 'top',
-            containerStyle: { marginTop: '35px' }
-          })
+          dispatch(
+            feedbackActions.setToastData({
+              toastData: {
+                message: 'Success',
+                display: true,
+                type: 'success',
+                description: 'Order Updated Successfully!'
+              }
+            })
+          )
           router.push('/orderDetails')
         }
       }
     } catch (error) {
       setIsLoadingForUpdate(false)
-      toast({
-        title: `Error encountered while updating the order`,
-        status: 'error',
-        isClosable: true
-      })
-      router.push('/orderDetails')
+      dispatch(
+        feedbackActions.setToastData({
+          toastData: {
+            message: 'Error!',
+            display: true,
+            type: 'error',
+            description: `${error}`
+          }
+        })
+      )
+      // router.push('/orderDetails')
       console.error('error in update', error)
     }
   }

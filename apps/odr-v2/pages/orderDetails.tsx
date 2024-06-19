@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios'
+import axios from '@services/axios'
 import Router, { useRouter } from 'next/router'
 import {
   Box,
@@ -46,6 +46,7 @@ import ShippingBlock from '@components/orderDetailComponents/Shipping'
 import { DOMAIN } from '@lib/config'
 import PaymentDetails from '@beckn-ui/becknified-components/src/components/checkout/payment-details'
 import { getPaymentBreakDown } from '@utils/checkout-utils'
+import { feedbackActions } from '@store/ui-feedback-slice'
 
 const statusMap = {
   PAYMENT_RECEIVED: 'Payment Received',
@@ -217,9 +218,11 @@ const OrderDetails = () => {
       onClick: () => {
         if (trackingUrl) window.open(trackingUrl, '_blank')
         else
-          toast.error('Unable to get the track url', {
-            position: 'top-center'
-          })
+          dispatch(
+            feedbackActions.setToastData({
+              toastData: { message: 'Error', display: true, type: 'error', description: t.unabletoTrack }
+            })
+          )
       }
     },
     {

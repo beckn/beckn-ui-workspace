@@ -148,6 +148,7 @@ const en: { [key: string]: string } = {
   confirmLoaderSubtext: 'you are being assigned a case manager',
   profileUpdateSuccess: 'Profile updated successfully!',
   error: 'Error!',
-  fixError: 'Please fix the errors in the form before submitting.'
+  fixError: 'Please fix the errors in the form before submitting.',
+  unabletoTrack: 'Unable to get the track url'
 }
 export default en

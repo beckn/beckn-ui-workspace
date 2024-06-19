@@ -9,6 +9,7 @@ import cartSliceReducer from './cart-slice'
 import checkoutReducer from './checkout-slice'
 import statusReducer from './status-slice'
 import userInfoReducer from './user-slice'
+import feedbackReducer from './ui-feedback-slice'
 import sideNavBarReducer from './sideNavBar-slice'
 import DiscoveryReducer from './discovery-slice'
 import OrderReducer from './order-slice'
@@ -37,6 +38,7 @@ const appReducer = combineReducers({
   cart: cartSliceReducer,
   checkout: checkoutReducer,
   status: statusReducer,
+  feedback: feedbackReducer,
   discovery: DiscoveryReducer,
   orders: OrderReducer,
   userInfo: userInfoReducer,

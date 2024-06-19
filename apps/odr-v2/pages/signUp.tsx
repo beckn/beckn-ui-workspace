@@ -24,22 +24,6 @@ const SignUp = () => {
 
   const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL
 
-  useEffect(() => {
-    if (isError) {
-      toast({
-        render: () => (
-          <CustomToast
-            title="Error!"
-            message="Email or Username are already taken"
-          />
-        ),
-        position: 'top',
-        duration: 2000,
-        isClosable: true
-      })
-    }
-  }, [isError])
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
 
@@ -100,23 +84,11 @@ const SignUp = () => {
         }
 
         fetch(`${baseUrl}/profiles`, requestOptions).then(response => {
-          // reactToastifyToast.success('Profile updated successfully!')
           Router.push('/')
           return response.json()
         })
       } catch (error) {
         console.error('An error occurred:', error)
-        // toast({
-        //   render: () => (
-        //     <CustomToast
-        //       title={t.error}
-        //       message={t.unableToRegister}
-        //     />
-        //   ),
-        //   position: 'top',
-        //   duration: 2000,
-        //   isClosable: true
-        // })
       }
     } else {
       setFormErrors({
