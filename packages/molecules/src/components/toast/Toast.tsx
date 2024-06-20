@@ -33,14 +33,14 @@ const Toast: React.FC<ToastProps> = ({ status, title, description }) => {
     if (status && title) {
       toast({
         position: 'top',
-        duration: 5000,
+        duration: 500000,
         isClosable: true,
         render: ({ onClose }) => (
           <Box
             bg="#FFFFFF"
             borderLeft="8px solid"
             borderColor={color}
-            p={4}
+            p={3}
             mt="40px"
             boxShadow="md"
             borderRadius={'10px'}
@@ -48,31 +48,33 @@ const Toast: React.FC<ToastProps> = ({ status, title, description }) => {
             position="relative"
             data-testid="main_container"
           >
-            <CloseButton
-              position="absolute"
-              right="0px"
-              top="0px"
-              onClick={onClose}
-              data-testid="close-button"
-            />
             <Flex
-              justifyContent={'flex-start'}
+              justifyContent={'space-between'}
               alignItems={'center'}
               mb="6px"
             >
-              {icon && (
-                <Icon
-                  as={icon}
-                  w={6}
-                  h={6}
-                  color={color}
-                  mr={2}
-                  data-testid={`toast-icon-${status}`}
+              <Flex
+                justifyContent={'flex-start'}
+                alignItems={'center'}
+              >
+                {icon && (
+                  <Icon
+                    as={icon}
+                    w={6}
+                    h={6}
+                    color={color}
+                    mr={2}
+                    data-testid={`toast-icon-${status}`}
+                  />
+                )}
+                <Typography
+                  variant="subTitleSemibold"
+                  text={title}
                 />
-              )}
-              <Typography
-                variant="subTitleSemibold"
-                text={title}
+              </Flex>
+              <CloseButton
+                onClick={onClose}
+                data-testid="close-button"
               />
             </Flex>
             {description && (

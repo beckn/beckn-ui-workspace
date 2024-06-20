@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import ShippingForm from '@beckn-ui/becknified-components/src/components/checkout/shipping-form'
 import { Box, Text, useToast } from '@chakra-ui/react'
 import { ConfirmResponseModel } from '../types/confirm.types'
-import axios from 'axios'
 import { Loader, Typography } from '@beckn-ui/molecules'
 import { useLanguage } from '@hooks/useLanguage'
 import { v4 as uuidv4 } from 'uuid'
@@ -11,6 +10,7 @@ import { geocodeFromPincode } from '@utils/checkout-utils'
 import { getLocalStorage } from '@utils/localstorage'
 import { feedbackActions } from '@store/ui-feedback-slice'
 import { useDispatch } from 'react-redux'
+import axios from '@services/axios'
 
 const UpdateShippingDetails = () => {
   const [shippingDetails, setShippingDetails] = useState({
