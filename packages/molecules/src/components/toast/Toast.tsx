@@ -1,5 +1,5 @@
 import React from 'react'
-import { useToast, Box, Icon, Flex, CloseButton, ComponentWithAs, IconProps } from '@chakra-ui/react'
+import { Box, Icon, Flex, CloseButton, ComponentWithAs, IconProps } from '@chakra-ui/react'
 import { CheckCircleIcon, WarningIcon } from '@chakra-ui/icons'
 import { FaCircleXmark } from 'react-icons/fa6'
 import { ToastProps, ToastType } from './Toast-type'
@@ -25,73 +25,61 @@ const iconMap: {
   warning: { icon: WarningIcon, color: 'yellow.500' }
 }
 
-const Toast: React.FC<ToastProps> = ({ status, title, description }) => {
-  const toast = useToast()
-  console.log(status, title, description)
+const Toast: React.FC<ToastProps> = ({ status, title, description, onClose }) => {
   const { icon, color } = (iconMap as never)[status as ToastType] || {}
-  React.useEffect(() => {
-    if (status && title) {
-      toast({
-        position: 'top',
-        duration: 500000,
-        isClosable: true,
-        render: ({ onClose }) => (
-          <Box
-            bg="#FFFFFF"
-            borderLeft="8px solid"
-            borderColor={color}
-            p={3}
-            mt="40px"
-            boxShadow="md"
-            borderRadius={'10px'}
-            maxW={'100%'}
-            position="relative"
-            data-testid="main_container"
-          >
-            <Flex
-              justifyContent={'space-between'}
-              alignItems={'center'}
-              mb="6px"
-            >
-              <Flex
-                justifyContent={'flex-start'}
-                alignItems={'center'}
-              >
-                {icon && (
-                  <Icon
-                    as={icon}
-                    w={6}
-                    h={6}
-                    color={color}
-                    mr={2}
-                    data-testid={`toast-icon-${status}`}
-                  />
-                )}
-                <Typography
-                  variant="subTitleSemibold"
-                  text={title}
-                />
-              </Flex>
-              <CloseButton
-                onClick={onClose}
-                data-testid="close-button"
-              />
-            </Flex>
-            {description && (
-              <Typography
-                variant="subTitleRegular"
-                text={description}
-                data-testid={`toast_description`}
-                style={{ marginLeft: '2rem' }}
-              />
-            )}
-          </Box>
-        )
-      })
-    }
-  }, [status, title, description, toast, icon, color])
 
-  return null
+  return (
+    <Box
+      bg="#FFFFFF"
+      borderLeft="8px solid"
+      borderColor={color}
+      p={3}
+      mt="40px"
+      boxShadow="md"
+      borderRadius={'10px'}
+      maxW={'100%'}
+      position="relative"
+      data-testid="main_container"
+    >
+      <Flex
+        justifyContent={'space-between'}
+        alignItems={'center'}
+        mb="6px"
+      >
+        <Flex
+          justifyContent={'flex-start'}
+          alignItems={'center'}
+        >
+          {icon && (
+            <Icon
+              as={icon}
+              w={6}
+              h={6}
+              color={color}
+              mr={2}
+              data-testid={`toast-icon-${status}`}
+            />
+          )}
+          <Typography
+            variant="subTitleSemibold"
+            text={title}
+          />
+        </Flex>
+        <CloseButton
+          onClick={onClose}
+          data-testid="close-button"
+        />
+      </Flex>
+      {description && (
+        <Typography
+          variant="subTitleRegular"
+          text={description}
+          data-testid={`toast_description`}
+          style={{ marginLeft: '2rem' }}
+        />
+      )}
+    </Box>
+  )
 }
 
 export default Toast
