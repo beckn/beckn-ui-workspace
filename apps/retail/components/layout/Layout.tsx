@@ -37,6 +37,9 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   useEffect(() => {
     if (display) {
       toast({
+        position: 'top',
+        duration: 5000,
+        isClosable: true,
         render: ({ onClose }) => (
           <Toast
             status={type as ToastType}
