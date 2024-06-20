@@ -97,6 +97,10 @@ const en: { [key: string]: string } = {
   fetchingTrackLoaderSubtext: 'While we fetch for tracking and support details',
   updateOrderLoaderSubText: 'While we update your Order',
   rateOrderLoaderSubText: 'While we submit your feedback',
-  cancelLoaderSubText: 'While we process your request'
+  cancelLoaderSubText: 'While we process your request',
+  success: 'Success!',
+  updatedSuccessfully: 'Order Updated Successfully!',
+  error: 'Error!',
+  unabletoTrack: 'Unable to get the track url'
 }
 export default en

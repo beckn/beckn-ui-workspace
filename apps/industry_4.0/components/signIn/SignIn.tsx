@@ -7,6 +7,8 @@ import { BecknAuth } from '@beckn-ui/becknified-components'
 import Router from 'next/router'
 import { Box, useToast, Text } from '@chakra-ui/react'
 import Cookies from 'js-cookie'
+import { Toast } from '@beckn-ui/molecules/src/components'
+import { ToastType } from '@beckn-ui/molecules/src/components/toast/Toast-type'
 
 const SignIn = () => {
   const { t } = useLanguage()
@@ -63,10 +65,12 @@ const SignIn = () => {
       } else {
         const errorData = await response.json()
         toast({
-          render: () => (
-            <CustomToast
+          render: ({ onClose }) => (
+            <Toast
+              status="error"
               title="Error!"
-              message={errorData.error.message}
+              description={errorData.error.message}
+              onClose={onClose}
             />
           ),
           position: 'top',

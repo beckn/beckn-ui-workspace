@@ -7,6 +7,7 @@ import Router from 'next/router'
 import Cookies from 'js-cookie'
 import { useToast } from '@chakra-ui/react'
 import { CustomToast } from '@components/signIn/SignIn'
+import { Toast } from '@beckn-ui/molecules/src/components'
 
 const SignUp = () => {
   const { t } = useLanguage()
@@ -88,10 +89,12 @@ const SignUp = () => {
         } else {
           const errorData = await response.json()
           toast({
-            render: () => (
-              <CustomToast
+            render: ({ onClose }) => (
+              <Toast
+                status="error"
                 title="Error!"
-                message={errorData.error.message}
+                description={errorData.error.message}
+                onClose={onClose}
               />
             ),
             position: 'top',

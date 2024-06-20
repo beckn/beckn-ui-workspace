@@ -7,7 +7,7 @@ import feedbackImg from '../public/images/feedbackImg.svg'
 import { Typography } from '@beckn-ui/molecules'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import { ConfirmResponseModel } from '../types/confirm.types'
-import axios from 'axios'
+import axios from '../services/axios'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
 
 const Feedback = () => {

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios'
+import axios from '../services/axios'
 import Router, { useRouter } from 'next/router'
 import { Box, Card, CardBody, Divider, Flex, Image, Radio, RadioGroup, Stack, Text, Textarea } from '@chakra-ui/react'
 import { BottomModal, Typography } from '@beckn-ui/molecules'
@@ -12,8 +12,12 @@ import BottomModalScan from '@components/BottomModal/BottomModalScan'
 import { ConfirmResponseModel } from '../types/confirm.types'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
 import { UIState, DataState, ProcessState } from '../types/order-details.types'
+import { feedbackActions } from '@store/ui-feedback-slice'
+import { useDispatch } from 'react-redux'
 
 const OrderDetails = () => {
+  const dispatch = useDispatch()
+
   const [uiState, setUiState] = useState<UIState>({
     isProceedDisabled: true,
     isLoading: true,
@@ -137,7 +141,13 @@ const OrderDetails = () => {
       image: '/images/trackOrder.svg',
       text: 'Track Order',
       onClick: () => {
-        window.open(trackingUrl, '_blank')
+        if (trackingUrl) window.open(trackingUrl, '_blank')
+        else
+          dispatch(
+            feedbackActions.setToastData({
+              toastData: { message: t.error, display: true, type: 'error', description: t.unabletoTrack }
+            })
+          )
       }
     },
     {

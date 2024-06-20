@@ -12,6 +12,7 @@ import settingBoxReducer from './settingBox-slice'
 import favoriteReducer from './favorite-slice'
 import responseDataReducer from './responseData-slice'
 import geoMapLocationSearchReducer from './geoMapLocationSearch-slice'
+import feedbackReducer from './ui-feedback-slice'
 
 const store = configureStore({
   reducer: {
@@ -30,7 +31,8 @@ const store = configureStore({
     quoteResponse: responseDataReducer,
     customerDetails: responseDataReducer,
     initResponse: responseDataReducer,
-    geoLocationSearchPageUI: geoMapLocationSearchReducer
+    geoLocationSearchPageUI: geoMapLocationSearchReducer,
+    feedback: feedbackReducer
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({

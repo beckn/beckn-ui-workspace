@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios'
-import { useDispatch } from 'react-redux'
+import axios from '../services/axios'
 import { Box } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { parsedSearchlist } from '@utils/search-results.utils'
@@ -19,10 +18,11 @@ const Search = () => {
   const router = useRouter()
   const [searchKeyword, setSearchKeyword] = useState(router.query?.searchTerm || '')
   const [isLoading, setIsLoading] = useState(false)
-  const dispatch = useDispatch()
+
   const { t } = useLanguage()
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
+
   const searchPayload = {
     context: {
       domain: 'supply-chain-services:assembly'
@@ -91,7 +91,6 @@ const Search = () => {
               })
             )
             window.dispatchEvent(new Event('storage-optiontags'))
-            fetchDataForSearch()
           }}
         />
       </Box>

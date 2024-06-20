@@ -2,13 +2,17 @@ import React, { useEffect, useState } from 'react'
 import ShippingForm from '@beckn-ui/becknified-components/src/components/checkout/shipping-form'
 import { Box, Text } from '@chakra-ui/react'
 import { ConfirmResponseModel } from '../types/confirm.types'
-import axios from 'axios'
+import axios from '../services/axios'
 import { Loader, Typography } from '@beckn-ui/molecules'
 import { useLanguage } from '@hooks/useLanguage'
 import { useRouter } from 'next/router'
 import { toast } from 'react-toastify'
+import { feedbackActions } from '@store/ui-feedback-slice'
+import { useDispatch } from 'react-redux'
 
 const UpdateShippingDetails = () => {
+  const dispatch = useDispatch()
+
   const [shippingDetails, setShippingDetails] = useState({
     name: '',
     mobileNumber: '',
@@ -62,9 +66,16 @@ const UpdateShippingDetails = () => {
         }
         const updateResponse = await axios.post(`${apiUrl}/update`, updateRequestPayload)
         if (updateResponse.data.data.length > 0) {
-          toast.success('Order Updated Successfully!', {
-            position: 'top-center'
-          })
+          dispatch(
+            feedbackActions.setToastData({
+              toastData: {
+                message: t.success,
+                display: true,
+                type: 'success',
+                description: t.updatedSuccessfully
+              }
+            })
+          )
           router.push('/orderDetails')
         }
       } else if (localStorage.getItem('selectedOrder') && localStorage.getItem('statusResponse')) {
@@ -98,14 +109,32 @@ const UpdateShippingDetails = () => {
         }
         const updateResponse = await axios.post(`${apiUrl}/update`, updateRequestPayload)
         if (updateResponse.data.data.length > 0) {
-          toast.success('Order Updated Successfully!', {
-            position: 'top-center'
-          })
+          dispatch(
+            feedbackActions.setToastData({
+              toastData: {
+                message: t.success,
+                display: true,
+                type: 'success',
+                description: t.updatedSuccessfully
+              }
+            })
+          )
           router.push('/orderDetails')
         }
       }
     } catch (error) {
       console.error('error in update', error)
+      dispatch(
+        feedbackActions.setToastData({
+          toastData: {
+            message: t.error,
+            display: true,
+            type: 'error',
+            description: `${error}`
+          }
+        })
+      )
+      setIsLoadingForUpdate(false)
     }
   }
 

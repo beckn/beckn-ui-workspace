@@ -1,5 +1,5 @@
 import { Box } from '@chakra-ui/react'
-import axios from 'axios'
+import axios from '../../services/axios'
 import Router, { useRouter } from 'next/router'
 import React, { FC, useEffect } from 'react'
 import styles from './assembly-details.module.css'
