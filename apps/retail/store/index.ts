@@ -20,7 +20,7 @@ import { api } from '@services/api'
 import favoriteReducer from './favorite-slice'
 import responseDataReducer from './responseData-slice'
 import geoMapLocationSearchReducer from './geoMapLocationSearch-slice'
-import authReducer from './auth-slice'
+import { authReducer } from '@beckn-ui/common'
 
 const persistConfig = {
   key: 'root',
@@ -54,7 +54,7 @@ const appReducer = combineReducers({
   geoLocationSearchPageUI: geoMapLocationSearchReducer
 })
 
-const rootReducer = (state, action) => {
+const rootReducer = (state: any, action: any) => {
   if (action.type === 'auth/logout') {
     if (localStorage) {
       localStorage.removeItem('persist:root')
