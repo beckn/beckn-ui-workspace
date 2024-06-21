@@ -1,6 +1,5 @@
 import { createApi, fetchBaseQuery, retry } from '@reduxjs/toolkit/query/react'
 import type { BaseQueryFn, FetchArgs, FetchBaseQueryError } from '@reduxjs/toolkit/query'
-import { RootState } from '../store'
 import { feedbackActions } from '../store/ui-feedback-slice'
 
 // Create our baseQuery instance
@@ -8,7 +7,7 @@ const baseQuery = fetchBaseQuery({
   baseUrl: process.env.NEXT_PUBLIC_STRAPI_URL,
   prepareHeaders: (headers, { getState }) => {
     // By default, if we have a token in the store, let's use that for authenticated requests
-    const token = (getState() as RootState).auth.token
+    const token = (getState() as any).auth.jwt
     if (token) {
       headers.set('authentication', `Bearer ${token}`)
     }
@@ -25,7 +24,7 @@ const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQue
 ) => {
   const result = await baseQueryWithRetry(args, api, extraOptions)
   if (result.error && result.error.status === 400) {
-    const { message } = result.error.data?.error || 'Something went wrong'
+    const { message } = (result.error.data as any)?.error || 'Something went wrong'
     api.dispatch(
       feedbackActions.setToastData({
         toastData: { message: 'Error!', display: true, type: 'error', description: message }
