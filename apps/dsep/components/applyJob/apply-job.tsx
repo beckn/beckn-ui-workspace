@@ -1,8 +1,8 @@
 import { Box } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import React, { FC, useEffect } from 'react'
+import axios from '../../services/axios'
 import styles from './apply-job.module.css'
-import axios from 'axios'
 
 export interface ApplyJobPropsModel {
   xInputHtml: string

@@ -12,6 +12,9 @@ import '../styles/globals.css'
 
 import { Garuda } from 'garudaa'
 import { BecknProvider } from '@beckn-ui/molecules'
+import { Provider } from 'react-redux'
+import { persistor, store } from '../store'
+import { PersistGate } from 'redux-persist/integration/react'
 
 Garuda.init({
   projectId: '656dad5ed5a5a7d831fc43ac',
@@ -37,9 +40,16 @@ function MyApp({ Component, pageProps }: AppProps) {
         }
       }}
     >
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
+      <Provider store={store}>
+        <PersistGate
+          loading={null}
+          persistor={persistor}
+        >
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </PersistGate>
+      </Provider>
     </BecknProvider>
   )
 }

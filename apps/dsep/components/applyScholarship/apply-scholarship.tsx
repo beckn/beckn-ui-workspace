@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import React, { FC, useEffect, useState } from 'react'
 import { ApplyScholarshipPropsModel } from './apply-scholarship.types'
 import styles from './apply-scholarship.module.css'
-import axios from 'axios'
+import axios from '../../services/axios'
 
 const ApplyScholarshipForm: FC<ApplyScholarshipPropsModel> = ({ xInputHtml = '', onFormSubmit }) => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL

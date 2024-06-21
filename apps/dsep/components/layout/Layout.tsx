@@ -1,16 +1,19 @@
-import React from 'react'
-import { Provider } from 'react-redux'
+import React, { useEffect } from 'react'
+import { Provider, useDispatch, useSelector } from 'react-redux'
 import Head from 'next/head'
 import { ThemeProvider } from 'next-themes'
 import { useRouter } from 'next/router'
 import Header from '../header'
-import { persistor, store } from '../../store/index'
 import Footer from '../footer'
 import { ToastContainer } from 'react-toastify'
 import { useLanguage } from '../../hooks/useLanguage'
 import NextNProgress from 'nextjs-progressbar'
 import cs from 'classnames'
 import { PersistGate } from 'redux-persist/integration/react'
+import { Toast } from '@beckn-ui/molecules'
+import { ToastType } from '@beckn-ui/molecules/src/components/toast/Toast-type'
+import { useToast } from '@chakra-ui/react'
+import { feedbackActions, FeedbackRootState } from '../../store/ui-feedback-slice'
 
 const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const { locale } = useLanguage()
@@ -22,57 +25,78 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const paddingStyles = 'px-5 xl:px-16'
   const marginStyles = 'mt-[100px]'
 
+  const toast = useToast()
+  const dispatch = useDispatch()
+
+  const {
+    toast: { display, message, type, description }
+  } = useSelector((state: FeedbackRootState) => state.feedback)
+
+  useEffect(() => {
+    if (display) {
+      toast({
+        position: 'top',
+        duration: 5000,
+        isClosable: true,
+        render: ({ onClose }) => (
+          <Toast
+            status={type as ToastType}
+            title={message}
+            description={description}
+            onClose={onClose}
+          />
+        )
+      })
+      dispatch(feedbackActions.toggleToast({ display: false }))
+    }
+  }, [display])
+
   return (
-    <Provider store={store}>
-      <PersistGate
-        loading={null}
-        persistor={persistor}
+    <>
+      <Head>
+        <title>Skill Seeker</title>
+      </Head>
+      <div
+        className={cs(
+          'flex flex-col ',
+          {
+            ['h-[100vh]']: isHomepage
+          },
+          {
+            ['min-h-[100vh]']: !isHomepage
+          }
+        )}
       >
-        <Head>
-          <title>Skill Seeker</title>
-        </Head>
-        <div
+        <NextNProgress height={7} />
+        <Header />
+        <main
           className={cs(
-            'flex flex-col ',
+            'flex-grow',
             {
-              ['h-[100vh]']: isHomepage
+              [paddingStyles]: !isHomepage
             },
             {
-              ['min-h-[100vh]']: !isHomepage
+              [marginStyles]: !isHomepage && !isSearch && !isFeedbackPage && !isOrderConfirmationPage
+            },
+            {
+              ['mt-[24px]']: isHomepage
+            },
+            {
+              ['mt-[118px]']: isSearch
             }
           )}
         >
-          <NextNProgress height={7} />
-          <Header />
-          <main
-            className={cs(
-              'flex-grow',
-              {
-                [paddingStyles]: !isHomepage
-              },
-              {
-                [marginStyles]: !isHomepage && !isSearch && !isFeedbackPage && !isOrderConfirmationPage
-              },
-              {
-                ['mt-[24px]']: isHomepage
-              },
-              {
-                ['mt-[118px]']: isSearch
-              }
-            )}
-          >
-            {children}
-          </main>
-          {/* <Footer /> */}
-        </div>
-        <ToastContainer
-          autoClose={2000}
-          hideProgressBar={true}
-          rtl={locale === 'en' ? false : true}
-          position={locale === 'en' ? 'top-right' : 'top-left'}
-        />
-      </PersistGate>
-    </Provider>
+          {children}
+        </main>
+        {/* <Footer /> */}
+      </div>
+      <ToastContainer
+        autoClose={2000}
+        hideProgressBar={true}
+        rtl={locale === 'en' ? false : true}
+        position={locale === 'en' ? 'top-right' : 'top-left'}
+      />
+    </>
   )
 }
 

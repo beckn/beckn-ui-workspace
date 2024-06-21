@@ -1,9 +1,9 @@
 import React from 'react'
 import CreateProfile from '../components/createProfile/CreateProfile'
-import axios from 'axios'
 import Cookies from 'js-cookie'
 import { UserData } from '../components/createProfile/createProfile.types'
 import { useRouter } from 'next/router'
+import axios from '../services/axios'
 
 const createProfile = () => {
   const router = useRouter()

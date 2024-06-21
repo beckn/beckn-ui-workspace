@@ -1,13 +1,12 @@
 import { ProductCard } from '@beckn-ui/becknified-components'
 import LoaderWithMessage from '@beckn-ui/molecules/src/components/LoaderWithMessage/loader-with-message'
 import { Box } from '@chakra-ui/react'
-import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import scholarshipListCard from '../components/scholarship/scholarshipCard/scholarshipListCard'
 import { useLanguage } from '../hooks/useLanguage'
 import { ParsedItemModel } from '../types/search.types'
 import { getParsedSearchlist } from '../utilities/search-utils'
-import { toast } from 'react-toastify'
+import axios from '../services/axios'
 
 const ScholarshipCard = () => {
   const [isLoading, setIsLoading] = useState(true)
@@ -54,12 +53,6 @@ const ScholarshipCard = () => {
     )
   }
 
-  if (isError) {
-    return toast.error(t.errorText, {
-      position: 'top-center'
-    })
-  }
-  console.log(scholarShips)
   return (
     <Box
       className="hideScroll"

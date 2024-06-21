@@ -1,5 +1,4 @@
 import { Box } from '@chakra-ui/react'
-import axios from 'axios'
 import Cookies from 'js-cookie'
 import Router from 'next/router'
 import React, { useEffect, useState } from 'react'
@@ -25,6 +24,7 @@ import { SelectResponseModel } from '../lib/types/select.types'
 import { InitResponseModel } from '../lib/types/init.types'
 import { ConfirmResponseModel } from '../lib/types/confirm.types'
 import ApplyScholarshipForm from '../components/applyScholarship/apply-scholarship'
+import axios from '../services/axios'
 
 const ApplyScholarship = () => {
   const [formData, setFormData] = useState<ScholarshipApplyFormDataModel>({
@@ -139,10 +139,10 @@ const ApplyScholarship = () => {
         const errorMessage = error.response.data.error.message
 
         if (error.response.config.url.includes(`${strapiUrl}/orders`)) {
-          toast.error(errorMessage, { autoClose: 5000 })
+          // toast.error(errorMessage, { autoClose: 5000 })
           Router.push(`/scholarshipConfirmationPage?id=${id}`)
         } else {
-          toast.error(errorMessage, { autoClose: 5000 })
+          // toast.error(errorMessage, { autoClose: 5000 })
         }
       }
       setIsLoading(false)

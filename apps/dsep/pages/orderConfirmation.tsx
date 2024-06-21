@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import axios from 'axios'
 import Cookies from 'js-cookie'
 import { Box } from '@chakra-ui/react'
 import { ConfirmationPage } from '@beckn-ui/becknified-components'
@@ -10,7 +9,7 @@ import orderConfirmmark from '../public/images/orderConfirmmark.svg'
 import { getPayloadForConfirmRequest, getPostOrderPayload } from '../utilities/confirm-utils'
 import { InitResponseModel } from '../lib/types/init.types'
 import { ConfirmResponseModel } from '../lib/types/confirm.types'
-import { toast } from 'react-toastify'
+import axios from '../services/axios'
 
 const OrderConfirmation = () => {
   const { t } = useLanguage()
@@ -75,12 +74,6 @@ const OrderConfirmation = () => {
         />
       </Box>
     )
-  }
-
-  if (isError) {
-    return toast.error('Something went wrong', {
-      position: 'top-center'
-    })
   }
 
   return (

@@ -87,12 +87,6 @@ const Cart = () => {
     return <></>
   }
 
-  if (quoteRequest.error) {
-    return toast.error('Something went wrong', {
-      position: 'top-center'
-    })
-  }
-
   return (
     <Box
       className="hideScroll"

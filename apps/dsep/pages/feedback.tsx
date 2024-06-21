@@ -7,9 +7,9 @@ import feedbackImg from '../public/images/feedbackImg.svg'
 import { LoaderWithMessage, Typography } from '@beckn-ui/molecules'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import useResponsive from '@beckn-ui/becknified-components/src/hooks/useResponsive'
-import axios from 'axios'
 import { StatusResponseModel } from '../lib/types/status.types'
 import { getFeedbackPayload } from '../utilities/feedback-utils'
+import axios from '../services/axios'
 
 const Feedback = () => {
   const { t } = useLanguage()

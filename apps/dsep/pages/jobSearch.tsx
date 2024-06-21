@@ -1,10 +1,10 @@
 import LoaderWithMessage from '@beckn-ui/molecules/src/components/LoaderWithMessage/loader-with-message'
 import { Box } from '@chakra-ui/react'
-import axios from 'axios'
 import Cookies from 'js-cookie'
 import React, { useEffect, useState } from 'react'
 import JobSearch from '../components/jobSearch/JobSearch'
 import { useLanguage } from '../hooks/useLanguage'
+import axios from '../services/axios'
 import { ParsedItemModel, SearchResponseModel } from '../types/search.types'
 import { getParsedSearchlist } from '../utilities/search-utils'
 

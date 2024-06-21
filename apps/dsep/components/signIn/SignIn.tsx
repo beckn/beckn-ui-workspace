@@ -9,6 +9,7 @@ import { useLanguage } from '../../hooks/useLanguage'
 import { SignInPropsModel } from './Signin.types'
 import { FormErrors, signInValidateForm } from '../../utilities/detailsForm-utils'
 import CustomToast from '../customToast/custom-toast'
+import { Toast } from '@beckn-ui/molecules'
 
 const SignIn = () => {
   const { t } = useLanguage()
@@ -66,10 +67,12 @@ const SignIn = () => {
       } else {
         const errorData = await response.json()
         toast({
-          render: () => (
-            <CustomToast
+          render: ({ onClose }) => (
+            <Toast
+              status="error"
               title="Error!"
-              message={errorData.error.message}
+              description={errorData.error.message}
+              onClose={onClose}
             />
           ),
           position: 'top',
