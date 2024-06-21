@@ -1,5 +1,5 @@
+import axios from '@services/axios'
 import { useState } from 'react'
-import axios from 'axios'
 import { ResponseModel } from '../lib/types/responseModel'
 
 const useRequest = () => {

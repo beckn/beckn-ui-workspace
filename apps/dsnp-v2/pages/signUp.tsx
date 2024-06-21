@@ -17,10 +17,13 @@ import { setLocalStorage } from '@utils/localstorage'
 import { signPayloadWithExtension, payloadHandle } from '@utils/signTransaction'
 import { dsnpCreate, dsnpRegister, getBlockNumber } from '@utils/auth'
 import { fetchHandles, fetchChallenge, dsnpLogin } from '@components/signIn/Signin.utils'
+import { feedbackActions } from '@store/ui-feedback-slice'
+import { useDispatch } from 'react-redux'
 
 const SignUp = () => {
   const { t } = useLanguage()
   const toast = useToast()
+  const dispatch = useDispatch()
   const [formData, setFormData] = useState<SignUpPropsModel>({ name: '', email: '', password: '', mobileNumber: '' })
   const [formErrors, setFormErrors] = useState<FormErrors>({ name: '', email: '', password: '', mobileNumber: '' })
   const [isFormFilled, setIsFormFilled] = useState(false)
@@ -36,22 +39,6 @@ const SignUp = () => {
   const [selectedAddress, setSelectedAddress] = useState('')
   const [providerInfo, setProviderInfo] = useState({})
   const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL
-
-  useEffect(() => {
-    if (isError) {
-      toast({
-        render: () => (
-          <CustomToast
-            title="Error!"
-            message="Email or Username are already taken"
-          />
-        ),
-        position: 'top',
-        duration: 2000,
-        isClosable: true
-      })
-    }
-  }, [isError])
 
   const handleDsnpRegister = async () => {
     const errors = signUpValidateForm(formData)
@@ -117,17 +104,11 @@ const SignUp = () => {
             }
           }
         } else {
-          toast({
-            render: () => (
-              <CustomToast
-                title="Error!"
-                message="No polka address found"
-              />
-            ),
-            position: 'top',
-            duration: 2000,
-            isClosable: true
-          })
+          dispatch(
+            feedbackActions.setToastData({
+              toastData: { message: t.toastError, display: true, type: 'error', description: 'No polka address found' }
+            })
+          )
           throw Error('No polka address found')
         }
         await handleSignUp()
@@ -245,17 +226,6 @@ const SignUp = () => {
         })
       } catch (error) {
         console.error('An error occurred:', error)
-        toast({
-          render: () => (
-            <CustomToast
-              title="Error!"
-              message="Unable to register"
-            />
-          ),
-          position: 'top',
-          duration: 2000,
-          isClosable: true
-        })
       }
     } else {
       setFormErrors({

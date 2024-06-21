@@ -10,7 +10,6 @@ import { StatusRootState } from '@store/status-slice'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import useResponsive from '@beckn-ui/becknified-components/src/hooks/useResponsive'
 import { StatusResponseModel } from '../types/status.types'
-import axios from 'axios'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
 import { getLocalStorage } from '@utils/localstorage'
 
@@ -18,6 +17,7 @@ import { getLocalStorage } from '@utils/localstorage'
 import { makeInteractionIdAndNonce } from '@utils/review'
 import { DiscoveryRootState } from '@store/discovery-slice'
 import { LocalStorage } from '@lib/types'
+import axios from '@services/axios'
 
 const createPost = async (
   formValues: ReviewProcessorValues,

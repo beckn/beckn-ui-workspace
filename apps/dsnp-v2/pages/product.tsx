@@ -16,7 +16,8 @@ import { DiscoveryRootState } from '@store/discovery-slice'
 import CustomerReviews from '@components/UI/customerReviews/CustomerReviews'
 import { Box, Flex, useTheme } from '@chakra-ui/react'
 import { Button, CustomThemeType, Input, Typography } from '@beckn-ui/molecules'
-import axios from 'axios'
+import { feedbackActions } from '@store/ui-feedback-slice'
+import axios from '@services/axios'
 
 const Product = () => {
   const theme = useTheme<CustomThemeType>()
@@ -190,7 +191,16 @@ const Product = () => {
                           quantity: counter
                         })
                       )
-                      toast.success('Product added to cart')
+                      dispatch(
+                        feedbackActions.setToastData({
+                          toastData: {
+                            message: 'Success',
+                            display: true,
+                            type: 'success',
+                            description: 'Product added to cart'
+                          }
+                        })
+                      )
                     }
                   }
                 }

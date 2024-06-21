@@ -21,6 +21,7 @@ import { setLocalStorage } from '@utils/localstorage'
 import { signPayloadWithExtension, payloadHandle } from '@utils/signTransaction'
 import { dsnpCreate, dsnpRegister, getBlockNumber } from '@utils/auth'
 import { fetchHandles, fetchChallenge, dsnpLogin } from './Signin.utils'
+import { feedbackActions } from '@store/ui-feedback-slice'
 
 const SignIn = () => {
   const { t } = useLanguage()
@@ -39,7 +40,7 @@ const SignIn = () => {
   const [expiration, setExpiration] = useState(0)
   const [selectedAddress, setSelectedAddress] = useState('')
   const [providerInfo, setProviderInfo] = useState({})
-
+  const dispatch = useDispatch()
   // const toast = useToast()
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -62,22 +63,6 @@ const SignIn = () => {
     }))
     setIsFormFilled(updatedFormData.email.trim() !== '' && updatedFormData.password.trim() !== '')
   }
-
-  useEffect(() => {
-    // if(isError){
-    //   toast({
-    //     render: () => (
-    //       <CustomToast
-    //         title="Error!"
-    //         message="Unable to login"
-    //       />
-    //     ),
-    //     position: 'top',
-    //     duration: 2000,
-    //     isClosable: true
-    //   })
-    // }
-  }, [isError])
 
   const handlePolkaLogin = async () => {
     const signInData = {
@@ -137,9 +122,11 @@ const SignIn = () => {
           }
         }
       } else {
-        toast.error('No polka address found', {
-          theme: 'light'
-        })
+        dispatch(
+          feedbackActions.setToastData({
+            toastData: { message: t.toastError, display: true, type: 'error', description: 'No polka address found' }
+          })
+        )
         throw Error('No polka address found')
       }
       await handleSignIn()
@@ -200,17 +187,6 @@ const SignIn = () => {
       // Cookies.set('authToken', state.jwt)
     } catch (error) {
       console.error('An error occurred:', error)
-      toast({
-        render: () => (
-          <CustomToast
-            title="Error!"
-            message="Unable to login"
-          />
-        ),
-        position: 'top',
-        duration: 2000,
-        isClosable: true
-      })
     }
   }
 
@@ -267,31 +243,3 @@ const SignIn = () => {
 }
 
 export default SignIn
-
-export const CustomToast: React.FC<{ title: string; message: string }> = ({ title, message }) => (
-  <Box
-    mt="2rem"
-    p={4}
-    bg="red.500"
-    color="white"
-    borderRadius="md"
-    boxShadow="md"
-  >
-    <Text
-      fontWeight={700}
-      fontSize={'15px'}
-      color={'white'}
-      textAlign={'center'}
-    >
-      {title}
-    </Text>
-    <Text
-      fontWeight={500}
-      fontSize={'15px'}
-      color={'white'}
-      textAlign={'center'}
-    >
-      {message}
-    </Text>
-  </Box>
-)

@@ -176,22 +176,6 @@ const CheckoutPage = () => {
     return paymentBreakdownMap
   }
 
-  useEffect(() => {
-    if (isError) {
-      toast({
-        render: () => (
-          <CustomToast
-            title="Error!"
-            message="Unable to proceed with init request"
-          />
-        ),
-        position: 'top',
-        duration: 2000,
-        isClosable: true
-      })
-    }
-  }, [isError])
-
   return (
     <Box
       className="hideScroll"
