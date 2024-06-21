@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import axios from 'axios'
 import { ResponseModel } from '../lib/types/responseModel'
+import axios from '../services/axios'
 
 const useRequest = () => {
   const [data, setData] = useState<any>(null)

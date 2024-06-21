@@ -2,7 +2,6 @@ import { Box, Flex, Text } from '@chakra-ui/react'
 import { Button, Typography } from '@beckn-ui/molecules'
 import LoaderWithMessage from '@beckn-ui/molecules/src/components/LoaderWithMessage/loader-with-message'
 import { toast } from 'react-toastify'
-import axios from 'axios'
 import Cookies from 'js-cookie'
 import { JobApplyFormData, JobCredential } from '../components/jobApply/JobApply.types'
 import React, { useEffect, useState } from 'react'
@@ -23,6 +22,7 @@ import { SelectResponseModel } from '../lib/types/select.types'
 import { ConfirmResponseModel } from '../lib/types/confirm.types'
 import 'react-toastify/dist/ReactToastify.css'
 import { InitResponseModel } from '../lib/types/init.types'
+import axios from '../services/axios'
 
 const jobApply = () => {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([])
@@ -165,10 +165,10 @@ const jobApply = () => {
         const errorMessage = error.response.data.error.message
         console.log(error.response.config.url)
         if (error.response.config.url.includes(`${strapiUrl}/orders`)) {
-          toast.error(errorMessage, { autoClose: 5000 })
+          // toast.error(errorMessage, { autoClose: 5000 })
           Router.push('/applicationSent')
         } else {
-          toast.error(errorMessage, { autoClose: 5000 })
+          // toast.error(errorMessage, { autoClose: 5000 })
           console.log(errorMessage)
         }
       }

@@ -10,7 +10,7 @@ import { useRouter } from 'next/router'
 import { getParsedSearchlist } from '../utilities/search-utils'
 import { ParsedItemModel, SearchResponseModel } from '../types/search.types'
 import { toast } from 'react-toastify'
-import axios from 'axios'
+import axios from '../services/axios'
 
 const Search = () => {
   const [items, setItems] = useState<ParsedItemModel[]>([])
@@ -40,9 +40,6 @@ const Search = () => {
       setItems(parsedItems)
     } catch (err) {
       setError('Something went wrong')
-      toast.error('Something went wrong', {
-        position: 'top-center'
-      })
     } finally {
       setLoading(false)
     }

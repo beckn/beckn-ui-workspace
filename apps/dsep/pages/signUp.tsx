@@ -8,6 +8,7 @@ import Cookies from 'js-cookie'
 import { Box, useToast } from '@chakra-ui/react'
 import { SignUpPropsModel } from '../components/signIn/Signin.types'
 import CustomToast from '../components/customToast/custom-toast'
+import { Toast } from '@beckn-ui/molecules'
 
 const SignUp = () => {
   const { t } = useLanguage()
@@ -72,10 +73,12 @@ const SignUp = () => {
         } else {
           const errorData = await response.json()
           toast({
-            render: () => (
-              <CustomToast
+            render: ({ onClose }) => (
+              <Toast
+                status="error"
                 title="Error!"
-                message={errorData.error.message}
+                description={errorData.error.message}
+                onClose={onClose}
               />
             ),
             position: 'top',

@@ -1,10 +1,10 @@
 import { Box, Flex, Text, Image } from '@chakra-ui/react'
-import axios from 'axios'
 import Cookies from 'js-cookie'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { useLanguage } from '../hooks/useLanguage'
 import { OrderAttributes } from '../lib/types/order-history.types'
+import axios from '../services/axios'
 
 const applyJobsPrefilled = () => {
   const { t } = useLanguage()

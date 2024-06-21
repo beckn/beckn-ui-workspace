@@ -1,4 +1,3 @@
-import axios from 'axios'
 import React, { useEffect } from 'react'
 import SignIn from '../components/signIn/SignIn'
 

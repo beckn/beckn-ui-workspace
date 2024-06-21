@@ -1,4 +1,3 @@
-import axios from 'axios'
 import type { NextPage } from 'next'
 import { useDispatch } from 'react-redux'
 import { useRouter } from 'next/router'
@@ -9,6 +8,7 @@ import { userInfoActions } from '../store/user-slice'
 import { getError } from '../utilities/error'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
+import axios from '../services/axios'
 const Login: NextPage = () => {
   const dispatch = useDispatch()
   const router = useRouter()

@@ -1,8 +1,8 @@
 import { Typography } from '@beckn-ui/molecules'
 import { Box, Flex, Image, Input, Text } from '@chakra-ui/react'
-import axios from 'axios'
 import Cookies from 'js-cookie'
 import React, { useState } from 'react'
+import axios from '../../services/axios'
 import { UploadFilepropsModel } from './UploadFile.types'
 
 const UploadFile: React.FC<UploadFilepropsModel> = props => {

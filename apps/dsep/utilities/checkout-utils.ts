@@ -1,9 +1,9 @@
-import axios from 'axios'
 import { CartRetailItem } from '../lib/types/cart'
 import { InitResponseItem, InitResponseModel } from '../lib/types/init.types'
 import { ResponseModel } from '../lib/types/responseModel'
 import { SelectResponseModel } from '../lib/types/select.types'
 import { ShippingFormData } from '../pages/checkoutPage'
+import axios from '../services/axios'
 import { areObjectPropertiesEqual } from './common-utils'
 
 const APIKEY = process.env.NEXT_PUBLIC_GOOGLE_API_KEY as string

@@ -10,7 +10,6 @@ import { cartActions } from '../store/cart-slice'
 import { getPaymentBreakDown, handleFormSubmit } from '../utilities/checkout-utils'
 import { useRouter } from 'next/router'
 import Cookies from 'js-cookie'
-import axios from 'axios'
 import ShippingSection from '@beckn-ui/becknified-components/src/components/checkout/shipping-section'
 import addBillingButton from '../public/images/addShippingBtn.svg'
 import { SelectResponseModel } from '../lib/types/select.types'
@@ -19,7 +18,7 @@ import { InitResponseModel } from '../lib/types/init.types'
 import LoaderWithMessage from '@beckn-ui/molecules/src/components/LoaderWithMessage/loader-with-message'
 import PaymentDetails from '@beckn-ui/becknified-components/src/components/checkout/payment-details'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
-import { toast } from 'react-toastify'
+import axios from '../services/axios'
 
 export type ShippingFormData = {
   name: string
@@ -149,12 +148,6 @@ const CheckoutPage = () => {
         />
       </Box>
     )
-  }
-
-  if (isError) {
-    return toast.error('Something went wrong', {
-      position: 'top-center'
-    })
   }
 
   return (

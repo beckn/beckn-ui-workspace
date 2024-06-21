@@ -1,8 +1,8 @@
-import axios from 'axios'
 import { useRouter } from 'next/router'
 import Cookies from 'js-cookie'
 import React, { useEffect } from 'react'
 import LandingPage from '../components/landingPage/LandingPage'
+import axios from '../services/axios'
 
 const Homepage = () => {
   const router = useRouter()

@@ -2,7 +2,6 @@ import { Box, CardBody, Divider, Flex, Text, Image, Card, useDisclosure, Stack }
 import { DetailCard, ProductPrice } from '@beckn-ui/becknified-components'
 import LoaderWithMessage from '@beckn-ui/molecules/src/components/LoaderWithMessage/loader-with-message'
 import { Accordion, BottomModal, Typography } from '@beckn-ui/molecules'
-import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { useLanguage } from '../hooks/useLanguage'
 import { formatTimestamp } from '../utilities/confirm-utils'
@@ -32,6 +31,9 @@ import RateUsCard from '../components/orderDetails/rate-us-card'
 import OrderOverview from '../components/orderDetails/order-overview'
 import { toast } from 'react-toastify'
 import PaymentDetails from '@beckn-ui/becknified-components/src/components/checkout/payment-details'
+import axios from '../services/axios'
+import { feedbackActions } from '../store/ui-feedback-slice'
+import { useDispatch } from 'react-redux'
 
 // TODO :- to check this order details component
 
@@ -51,7 +53,7 @@ const OrderDetails = () => {
   const [radioValue, setRadioValue] = useState('')
   const [isLoadingForCancel, setIsLoadingForCancel] = useState(false)
   const [trigger, setTrigger] = useState(0)
-
+  const dispatch = useDispatch()
   const { t } = useLanguage()
 
   useEffect(() => {
@@ -113,11 +115,11 @@ const OrderDetails = () => {
     return <></>
   }
 
-  if (statusRequest.error) {
-    return toast.error('Something went wrong', {
-      position: 'top-center'
-    })
-  }
+  // if (statusRequest.error) {
+  //   return toast.error('Something went wrong', {
+  //     position: 'top-center'
+  //   })
+  // }
 
   const { data } = statusResponse
   const totalOrdersQty = data.length
@@ -146,7 +148,13 @@ const OrderDetails = () => {
       image: '/images/trackOrder.svg',
       text: 'Track Order',
       onClick: () => {
-        window.open(trackResponse?.data[0].message.tracking.url, '_blank')
+        if (!trackResponse) window.open(trackResponse?.data[0].message.tracking.url, '_blank')
+        else
+          dispatch(
+            feedbackActions.setToastData({
+              toastData: { message: 'Error', display: true, type: 'error', description: t.unabletoTrack }
+            })
+          )
       }
     },
 
@@ -208,9 +216,16 @@ const OrderDetails = () => {
       if (updateResponse && confirmData) {
         fetchStatusData()
         setIsAddressUpdateModalOpen(false)
-        toast.success('Your billing details have been successfully updated!', {
-          position: 'top-center'
-        })
+        dispatch(
+          feedbackActions.setToastData({
+            toastData: {
+              message: 'Success',
+              display: true,
+              type: 'success',
+              description: 'Your billing details have been successfully updated!'
+            }
+          })
+        )
       }
     } catch (error) {
       console.error(error)

@@ -9,6 +9,7 @@ import { useLanguage } from '../../hooks/useLanguage'
 import { useDispatch } from 'react-redux'
 import { toast } from 'react-toastify'
 import { cartActions } from '../../store/cart-slice'
+import { feedbackActions } from '../../store/ui-feedback-slice'
 
 interface Props {
   product: ParsedItemModel
@@ -33,9 +34,11 @@ const ProductDetails: React.FC<Props> = ({ product }) => {
         quantity: counter
       })
     )
-    toast.success(t.productAddedToCartMsg, {
-      theme: theme === 'dark' ? 'dark' : 'light'
-    })
+    dispatch(
+      feedbackActions.setToastData({
+        toastData: { message: 'Success', display: true, type: 'success', description: t.productAddedToCartMsg }
+      })
+    )
   }
 
   return (
