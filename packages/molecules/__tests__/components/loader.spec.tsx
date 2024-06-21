@@ -1,5 +1,5 @@
 import React from 'react'
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import { LoaderProps } from '../../src/components/types'
 import Loader from '../../src/components/loader/Loader'
 import { ChakraProvider } from '@chakra-ui/react'
@@ -16,51 +16,34 @@ const renderLoaderComponent = (props: LoaderProps) => {
   )
 }
 
-describe('Loader component', () => {
-  test('renders spinner with default settings', () => {
-    renderLoaderComponent({})
+describe('Loader Component', () => {
+  const defaultProps = {
+    className: 'test-class',
+    thickness: '4px',
+    emptyColor: 'gray.200',
+    color: theme.colors.primary['100'],
+    size: 'xl',
+    text: 'Loading...'
+  }
 
-    waitFor(
-      () => {
-        const spinnerElement = screen.findByText('loading')
-        expect(spinnerElement).toBeInTheDocument()
-      },
-      { timeout: 2000 }
-    )
+  it('renders spinner with default props', () => {
+    renderLoaderComponent({ ...defaultProps })
+
+    const spinner = screen.getByText('loading')
+    expect(spinner).toBeInTheDocument()
   })
 
-  test('renders spinner with custom color and size', () => {
-    const customColor = 'red'
-    const customSize = 'md'
+  it('renders children correctly', () => {
+    renderLoaderComponent({ ...defaultProps, text: '', children: <div>Custom Child</div> })
 
-    renderLoaderComponent({ color: customColor, size: customSize })
-
-    waitFor(
-      () => {
-        const spinnerElement = screen.findByTestId('loader')
-        expect(spinnerElement).toBeInTheDocument()
-        expect(spinnerElement).toHaveAttribute('color', customColor)
-        expect(spinnerElement).toHaveAttribute('size', customSize)
-      },
-      { timeout: 2000 }
-    )
+    const customChild = screen.getByText('Custom Child')
+    expect(customChild).toBeInTheDocument()
   })
 
-  test('renders text when provided', () => {
-    const customText = 'Loading...'
+  it('renders text correctly', () => {
+    renderLoaderComponent({ ...defaultProps })
 
-    renderLoaderComponent({ text: customText })
-
-    const textElement = screen.getByText(customText)
+    const textElement = screen.getByText('Loading...')
     expect(textElement).toBeInTheDocument()
-  })
-
-  test('renders children when provided', () => {
-    const customChildren = <div>Custom Children</div>
-
-    renderLoaderComponent({ children: customChildren })
-
-    const childrenElement = screen.getByText('Custom Children')
-    expect(childrenElement).toBeInTheDocument()
   })
 })

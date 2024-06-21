@@ -18,7 +18,7 @@ export interface ProductCardProps {
   dataSource?: any
   product?: Product
   productInfoDataSource?: Record<string, any>
-  ComponentRenderer?: React.ComponentType<{ dataSource: any }>
+  ComponentRenderer?: any
   productClickHandler?: React.MouseEventHandler<HTMLDivElement>
   className?: string
   currency?: CurrencyType

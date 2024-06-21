@@ -22,6 +22,7 @@ const ShippingDetails: React.FC<ShippingDetailsProps> = props => {
             <Flex alignItems={'center'}>
               <Image
                 src={nameIcon}
+                alt={'nameIcon'}
                 pr={'12px'}
               />
               <Typography
@@ -32,6 +33,7 @@ const ShippingDetails: React.FC<ShippingDetailsProps> = props => {
             <Flex alignItems={'center'}>
               <Image
                 src={locationIcon}
+                alt={'locationIcon'}
                 pr={'12px'}
               />
               <Typography
@@ -42,6 +44,7 @@ const ShippingDetails: React.FC<ShippingDetailsProps> = props => {
             <Flex alignItems={'center'}>
               <Image
                 src={CallphoneIcon}
+                alt={'CallphoneIcon'}
                 pr={'12px'}
               />
               <Typography

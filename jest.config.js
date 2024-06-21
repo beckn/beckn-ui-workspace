@@ -19,5 +19,11 @@ module.exports = {
   moduleNameMapper: {
     '\\.(css|less|sass|scss)$': '<rootDir>/tests/mocks/mocks.css',
     '\\.(svg)$': '<rootDir>/tests/mocks/svgTransform.js'
-  }
+  },
+  collectCoverage: true,
+  collectCoverageFrom: [
+    '<rootDir>/packages/**/src/components/**/*.{js,jsx,ts,tsx}',
+    '<rootDir>/packages/**/src/pages/**/*.{js,jsx,ts,tsx}'
+  ],
+  coverageReporters: ['clover', 'json', 'lcov', 'text']
 }

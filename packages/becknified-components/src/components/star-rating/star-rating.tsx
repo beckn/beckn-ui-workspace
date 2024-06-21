@@ -52,6 +52,7 @@ const StarRating: React.FC<StarRatingProps> = props => {
               onMouseLeave={() => setHover(null)}
             >
               <Input
+                data-testid="test-rating-radio"
                 type="radio"
                 name="rating"
                 onChange={() => setRating(ratingValue)}

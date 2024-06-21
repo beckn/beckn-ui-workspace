@@ -3296,6 +3296,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@faker-js/faker@npm:^8.4.1":
+  version: 8.4.1
+  resolution: "@faker-js/faker@npm:8.4.1"
+  checksum: d802d531f8929562715adc279cfec763c9a4bc596ec67b0ce43fd0ae61b285d2b0eec6f1f4aa852452a63721a842fe7e81926dce7bd92acca94b01e2a1f55f5a
+  languageName: node
+  linkType: hard
+
 "@floating-ui/core@npm:^1.0.0":
   version: 1.6.0
   resolution: "@floating-ui/core@npm:1.6.0"
@@ -6439,6 +6446,7 @@ __metadata:
     "@beckn-ui/prettier-config": "workspace:^"
     "@commitlint/cli": ^17.7.1
     "@commitlint/config-conventional": ^17.7.0
+    "@faker-js/faker": ^8.4.1
     "@googlemaps/js-api-loader": ^1.16.6
     "@react-google-maps/api": ^2.19.3
     "@testing-library/jest-dom": ^6.1.3

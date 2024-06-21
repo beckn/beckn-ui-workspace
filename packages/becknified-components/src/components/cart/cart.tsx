@@ -60,7 +60,10 @@ const Cart: React.FC<CartProps> = ({
                 alignItems={'center'}
                 mb={'30px'}
               >
-                <Image src={emptyCard.image} />
+                <Image
+                  src={emptyCard.image}
+                  alt="empty-card"
+                />
               </Flex>
               <Box
                 textAlign={'center'}

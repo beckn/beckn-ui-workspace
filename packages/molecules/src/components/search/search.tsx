@@ -20,13 +20,12 @@ const Search: React.FC<SearchProps> = ({ handleOnChange, handlePressEnter, handl
       <button
         className={Styles.search_button}
         role="search-button"
+        onClick={e => {
+          e.preventDefault()
+          handleOnSearchClick()
+        }}
       >
-        <FaSearch
-          onClick={e => {
-            e.preventDefault()
-            handleOnSearchClick()
-          }}
-        />
+        <FaSearch />
       </button>
     </Box>
   )
