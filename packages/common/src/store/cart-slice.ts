@@ -1,8 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { ICart } from '../lib/types/cart'
-import { RetailItem } from '../lib/types/products'
-import { CartItemForRequest, Item, ParsedItemModel } from '@lib/types'
-import { calculateDiscountPercentage } from '../utilities/calculateDiscountPercentage'
+import { ICart } from '../../lib/types/cart'
+import { CartItemForRequest, ParsedItemModel } from '../../lib/types'
 
 const initialState: ICart = {
   items: [],
