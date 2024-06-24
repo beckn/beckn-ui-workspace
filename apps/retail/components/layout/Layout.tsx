@@ -13,7 +13,7 @@ import { IGeoLocationSearchPageRootState } from '@lib/types/geoLocationSearchPag
 import GeoLocationInputList from '@components/geoLocationInput/GeoLocationInputList'
 import { Box, Text, useToast } from '@chakra-ui/react'
 import { feedbackActions, FeedbackRootState, ToastType } from '@store/ui-feedback-slice'
-import { Toast } from '@beckn-ui/molecules/src/components'
+import { Toast } from '@beckn-ui/molecules'
 
 const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const { locale } = useLanguage()
@@ -46,6 +46,7 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
             title={message}
             description={description}
             onClose={onClose}
+            dataTest="feedback-toast"
           />
         )
       })

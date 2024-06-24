@@ -4,4 +4,5 @@ export interface ToastProps {
   status: ToastType
   description?: string
   onClose: () => void
+  dataTest?: string
 }
