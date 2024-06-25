@@ -2,12 +2,15 @@ import { profilePageProp, SignInPropsModel, SignUpPropsModel } from '../componen
 import { ShippingFormData } from '../pages/checkout/checkout'
 
 export interface FormErrors {
+  city?: string
+  state?: string
   name?: string
   mobileNumber?: string
   email?: string
   address?: string
   zipCode?: string
   password?: string
+  country?: string
 }
 
 export const validateForm = (formData: ShippingFormData): FormErrors => {
@@ -122,6 +125,21 @@ export const profileValidateForm = (formData: profilePageProp): FormErrors => {
     errors.zipCode = 'errorZipcode'
   } else if (!/^\d{6}$/.test(formData.zipCode)) {
     errors.zipCode = 'errorZipcode2'
+  }
+  if (formData.country.trim() === '') {
+    errors.country = 'errorCountry'
+  } else if (!/^[A-Za-z\s]*$/.test(formData.country)) {
+    errors.country = 'errorCountry1'
+  }
+  if (formData.state.trim() === '') {
+    errors.state = 'errorState'
+  } else if (!/^[A-Za-z\s]*$/.test(formData.state)) {
+    errors.state = 'errorState1'
+  }
+  if (formData.city.trim() === '') {
+    errors.city = 'errorCity'
+  } else if (!/^[A-Za-z\s]*$/.test(formData.city)) {
+    errors.city = 'errorCity1'
   }
   return errors
 }

@@ -151,8 +151,12 @@ const ProfilePage = () => {
   }
 
   const isFormFilled = (): boolean => {
+    const { flatNumber, street, ...restFormData } = formData
+    const { flatNumber: flatNumberError, street: streetError, ...restFormErrors } = formErrors
+
     return (
-      Object.values(formData).every(value => value !== '') && Object.values(formErrors).every(value => value === '')
+      Object.values(restFormData).every(value => value !== '') &&
+      Object.values(restFormErrors).every(value => value === '')
     )
   }
 
@@ -214,8 +218,8 @@ const ProfilePage = () => {
               name: 'city',
               value: formData.city,
               handleChange: handleInputChange,
-              label: t.enterCity
-              // error: formErrors.city
+              label: t.enterCity,
+              error: formErrors.city
             },
             {
               type: 'text',
@@ -230,16 +234,16 @@ const ProfilePage = () => {
               name: 'state',
               value: formData.state,
               handleChange: handleInputChange,
-              label: t.enterState
-              // error: formErrors.state
+              label: t.enterState,
+              error: formErrors.state
             },
             {
               type: 'text',
               name: 'country',
               value: formData.country,
               handleChange: handleInputChange,
-              label: t.enterCountry
-              // error: formErrors.country
+              label: t.enterCountry,
+              error: formErrors.country
             }
           ]
         }}

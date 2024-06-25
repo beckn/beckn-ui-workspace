@@ -18,7 +18,6 @@ const SignIn = () => {
 
   const [formData, setFormData] = useState<SignInPropsModel>({ email: '', password: '' })
   const [formErrors, setFormErrors] = useState<FormErrors>({ email: '', password: '' })
-  const [isFormFilled, setIsFormFilled] = useState(false)
   const breakpoint = useBreakpoint()
   const mobileBreakpoints = ['base', 'sm', 'md', 'lg']
   const currentLogo = mobileBreakpoints.includes(breakpoint) ? Logo : AlternateLogo
@@ -44,7 +43,12 @@ const SignIn = () => {
       ...prevErrors,
       [name]: t[`${errors[name]}`] || ''
     }))
-    setIsFormFilled(updatedFormData.email.trim() !== '' && updatedFormData.password.trim() !== '')
+  }
+
+  const isFormFilled = (): boolean => {
+    return (
+      Object.values(formData).every(value => value !== '') && Object.values(formErrors).every(value => value === '')
+    )
   }
 
   const handleSignIn = async () => {
@@ -71,7 +75,7 @@ const SignIn = () => {
           {
             text: t.signIn,
             handleClick: handleSignIn,
-            disabled: !isFormFilled,
+            disabled: !isFormFilled(),
             variant: 'solid',
             colorScheme: 'primary',
             isLoading: isLoading,
@@ -114,31 +118,3 @@ const SignIn = () => {
 }
 
 export default SignIn
-
-export const CustomToast: React.FC<{ title: string; message: string }> = ({ title, message }) => (
-  <Box
-    mt="2rem"
-    p={4}
-    bg="red.500"
-    color="white"
-    borderRadius="md"
-    boxShadow="md"
-  >
-    <Text
-      fontWeight={700}
-      fontSize={'15px'}
-      color={'white'}
-      textAlign={'center'}
-    >
-      {title}
-    </Text>
-    <Text
-      fontWeight={500}
-      fontSize={'15px'}
-      color={'white'}
-      textAlign={'center'}
-    >
-      {message}
-    </Text>
-  </Box>
-)

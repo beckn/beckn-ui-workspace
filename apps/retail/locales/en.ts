@@ -175,6 +175,12 @@ const en: { [key: string]: string } = {
   errorText: 'Something went wrong',
   profileUpdateSuccess: 'Profile updated successfully!',
   fixError: 'Please fix the errors in the form before submitting.',
-  unabletoTrack: 'Unable to get the track url'
+  unabletoTrack: 'Unable to get the track url',
+  errorCountry: 'Country is Required',
+  errorState: 'State is Required',
+  errorCity: 'City is Required',
+  errorCountry1: 'Country can only contain letters and spaces',
+  errorState1: 'State can only contain letters and spaces',
+  errorCity1: 'City can only contain letters and spaces'
 }
 export default en

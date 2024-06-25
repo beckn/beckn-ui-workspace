@@ -18,7 +18,6 @@ const SignUp = () => {
   const toast = useToast()
   const [formData, setFormData] = useState<SignUpPropsModel>({ name: '', email: '', password: '', mobileNumber: '' })
   const [formErrors, setFormErrors] = useState<FormErrors>({ name: '', email: '', password: '', mobileNumber: '' })
-  const [isFormFilled, setIsFormFilled] = useState(false)
   const breakpoint = useBreakpoint()
   const mobileBreakpoints = ['base', 'sm', 'md', 'lg']
   const currentLogo = mobileBreakpoints.includes(breakpoint) ? Logo : AlternateLogo
@@ -44,12 +43,6 @@ const SignUp = () => {
       ...prevErrors,
       [name]: t[`${errors[name]}`] || ''
     }))
-    setIsFormFilled(
-      updatedFormData.name.trim() !== '' &&
-        updatedFormData.email.trim() !== '' &&
-        updatedFormData.password.trim() !== '' &&
-        updatedFormData.mobileNumber.trim() !== ''
-    )
   }
 
   const handleSignUp = async () => {
@@ -100,6 +93,12 @@ const SignUp = () => {
     }
   }
 
+  const isFormFilled = (): boolean => {
+    return (
+      Object.values(formData).every(value => value !== '') && Object.values(formErrors).every(value => value === '')
+    )
+  }
+
   return (
     <Box
       mt={'30px'}
@@ -117,7 +116,7 @@ const SignUp = () => {
             {
               text: t.signUp,
               handleClick: handleSignUp,
-              disabled: !isFormFilled,
+              disabled: !isFormFilled(),
               variant: 'solid',
               colorScheme: 'primary',
               isLoading: isLoading
