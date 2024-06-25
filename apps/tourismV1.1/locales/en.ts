@@ -453,6 +453,9 @@ const en: { [key: string]: string } = {
   success: 'Success!',
   orderUpdatedSuccessfully: 'Order Updated Successfully!',
   cartToastMssg: 'Unable to proceed with select request',
-  unabletoTrack: 'Unable to get the track url'
+  unabletoTrack: 'Unable to get the track url',
+  errorCountry: 'Country is Required',
+  errorState: 'State is Required',
+  errorCity: 'City is Required'
 }
 export default en
