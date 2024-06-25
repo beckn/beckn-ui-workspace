@@ -1,4 +1,4 @@
-import { CartItemForRequest, CartRetailItem, DataPerBpp, SelectData, SelectItem, SelectOrder } from '../lib/types/cart'
+import { CartItemForRequest, SelectData, SelectItem, SelectOrder } from '@beckn-ui/common/lib/types'
 
 export const getSelectPayload = (
   inputData: CartItemForRequest[],

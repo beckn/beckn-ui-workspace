@@ -5,11 +5,11 @@ import { useRouter } from 'next/router'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import BottomModalScan from '@components/BottomModal/BottomModalScan'
 import Typography from '@beckn-ui/molecules/src/components/typography/typography'
-import { ImportedOrderModel } from '@lib/types/general'
+import { ImportOrderModel } from '@beckn-ui/common/lib/types'
 
 interface SelectDeliveryModalProps {
   backOnImportedOrder: (newValue: boolean) => void
-  importedOrderObject: ImportedOrderModel
+  importedOrderObject: ImportOrderModel
   addressOfTheEndLocation: string
   selectedValues: string[]
   category?: string

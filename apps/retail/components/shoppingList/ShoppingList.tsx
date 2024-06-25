@@ -6,10 +6,10 @@ import LoaderWithMessage from '@components/loader/LoaderWithMessage'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import BottomModalScan from '@components/BottomModal/BottomModalScan'
 import Typography from '@beckn-ui/molecules/src/components/typography/typography'
-import { ImportedOrderShoppingList } from '@lib/types/general'
+import { ImportOrderShoppingList } from '@beckn-ui/common/lib/types'
 
 interface ShoppingListProps {
-  shoppingListData: ImportedOrderShoppingList
+  shoppingListData: ImportOrderShoppingList
   selectDeliveryLocationText: (newValue: boolean) => void
   isLoadingForChatGptRequest: boolean
   setSelectedValues: Function

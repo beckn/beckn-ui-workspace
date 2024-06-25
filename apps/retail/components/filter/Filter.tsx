@@ -1,3 +1,4 @@
+import { FilterPropsModel } from '@beckn-ui/common/lib/types'
 import {
   Image,
   Box,
@@ -11,7 +12,6 @@ import {
   Text
 } from '@chakra-ui/react'
 import Button from '@components/button/Button'
-import { FilterPropsModel } from '@lib/types/general'
 import React, { useEffect, useState } from 'react'
 
 const activeLabelStyles = {

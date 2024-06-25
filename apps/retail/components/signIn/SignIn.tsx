@@ -1,34 +1,29 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import Logo from '../../public/images/Logo.svg'
 import AlternateLogo from '../../public/images/KuzaLogo.svg'
 import { useLanguage } from '@hooks/useLanguage'
-import { SignInPropsModel } from './SignIn.types'
-import { FormErrors, signInValidateForm } from '@utils/form-utils'
-import { useDispatch } from 'react-redux'
+import { signInValidateForm } from '@utils/form-utils'
 import { useLoginMutation } from '@services/Users'
 import { BecknAuth } from '@beckn-ui/becknified-components'
-
-import { FaGoogle } from 'react-icons/fa'
-
 import Router from 'next/router'
-import { Box, useToast, Text, useBreakpoint } from '@chakra-ui/react'
+import { Box, Text, useBreakpoint } from '@chakra-ui/react'
+import { FormErrors, SignInProps } from '@beckn-ui/common/lib/types'
 
 const SignIn = () => {
   const { t } = useLanguage()
 
-  const [formData, setFormData] = useState<SignInPropsModel>({ email: '', password: '' })
+  const [formData, setFormData] = useState<SignInProps>({ email: '', password: '' })
   const [formErrors, setFormErrors] = useState<FormErrors>({ email: '', password: '' })
   const breakpoint = useBreakpoint()
-  const mobileBreakpoints = ['base', 'sm', 'md', 'lg']
-  const currentLogo = mobileBreakpoints.includes(breakpoint) ? Logo : AlternateLogo
   const [login, { isLoading, isError, data, error }] = useLoginMutation()
 
-  const toast = useToast()
+  const mobileBreakpoints = ['base', 'sm', 'md', 'lg']
+  const currentLogo = mobileBreakpoints.includes(breakpoint) ? Logo : AlternateLogo
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
 
-    setFormData((prevFormData: SignInPropsModel) => ({
+    setFormData((prevFormData: SignInProps) => ({
       ...prevFormData,
       [name]: value
     }))
@@ -38,10 +33,10 @@ const SignIn = () => {
       [name]: value
     }
 
-    const errors = signInValidateForm(updatedFormData) as any
+    const errors = signInValidateForm(updatedFormData)
     setFormErrors(prevErrors => ({
       ...prevErrors,
-      [name]: t[`${errors[name]}`] || ''
+      [name]: t[`${errors[name as keyof FormErrors]}`] || ''
     }))
   }
 

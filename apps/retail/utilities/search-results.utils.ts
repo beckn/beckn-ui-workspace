@@ -1,4 +1,4 @@
-import { ParsedItemModel, SearchResponseModel } from '@lib/types'
+import { ParsedItemModel, SearchResponseModel } from '@beckn-ui/common/lib/types'
 
 const dummyLocation = [
   {

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useLanguage } from '../../hooks/useLanguage'
-import { SearchBarPropsModel } from '../../lib/types/search'
 import { Box, Flex, Image, Input } from '@chakra-ui/react'
+import { SearchBarPropsModel } from '@beckn-ui/common/lib/types'
 
 const SearchBar: React.FC<SearchBarPropsModel> = ({ searchString, handleChange }) => {
   const { t } = useLanguage()

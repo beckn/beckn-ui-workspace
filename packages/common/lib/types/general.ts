@@ -6,7 +6,7 @@ export interface FilterPropsModel {
   handleCancelFilter?: () => void
 }
 
-export interface ImportedOrderModel {
+export interface ImportOrderModel {
   id: string
   status: string
   provider: {
@@ -23,4 +23,18 @@ export interface ImportedOrderModel {
   type: string
 }
 
-export type ImportedOrderShoppingList = Array<string>
+export type ImportOrderShoppingList = Array<string>
+
+export interface FormErrors {
+  name?: string
+  mobileNumber?: string
+  email?: string
+  address?: string
+  zipCode?: string
+  password?: string
+  flatNumber?: string
+  street?: string
+  city?: string
+  state?: string
+  country?: string
+}

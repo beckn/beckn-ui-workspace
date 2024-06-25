@@ -1,34 +1,31 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useLanguage } from '@hooks/useLanguage'
 import AlternateLogo from '../public/images/KuzaLogo.svg'
-import { SignUpPropsModel } from '@components/signIn/SignIn.types'
-import { FormErrors, signUpValidateForm } from '@utils/form-utils'
+import { signUpValidateForm } from '@utils/form-utils'
 import { BecknAuth } from '@beckn-ui/becknified-components'
 import Router from 'next/router'
-import Cookies from 'js-cookie'
-import { Box, useBreakpoint, useToast, Text } from '@chakra-ui/react'
-import { useRegisterMutation, UserResponse } from '@services/Users'
-import { CustomToast } from '@components/signIn/SignIn'
+import { Box, useBreakpoint } from '@chakra-ui/react'
+import { useRegisterMutation } from '@services/Users'
 import Logo from '@public/images/Logo.svg'
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query'
-import { SerializedError } from '@reduxjs/toolkit'
+import { FormErrors, SignInResponse, SignUpProps } from '@beckn-ui/common/lib/types'
 
 const SignUp = () => {
   const { t } = useLanguage()
-  const toast = useToast()
-  const [formData, setFormData] = useState<SignUpPropsModel>({ name: '', email: '', password: '', mobileNumber: '' })
+
+  const [formData, setFormData] = useState<SignUpProps>({ name: '', email: '', password: '', mobileNumber: '' })
   const [formErrors, setFormErrors] = useState<FormErrors>({ name: '', email: '', password: '', mobileNumber: '' })
   const breakpoint = useBreakpoint()
-  const mobileBreakpoints = ['base', 'sm', 'md', 'lg']
-  const currentLogo = mobileBreakpoints.includes(breakpoint) ? Logo : AlternateLogo
   const [register, { isLoading, isError }] = useRegisterMutation()
 
   const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL
+  const mobileBreakpoints = ['base', 'sm', 'md', 'lg']
+  const currentLogo = mobileBreakpoints.includes(breakpoint) ? Logo : AlternateLogo
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
 
-    setFormData((prevFormData: SignUpPropsModel) => ({
+    setFormData((prevFormData: SignUpProps) => ({
       ...prevFormData,
       [name]: value
     }))
@@ -38,10 +35,10 @@ const SignUp = () => {
       [name]: value
     }
 
-    const errors = signUpValidateForm(updatedFormData) as any
+    const errors = signUpValidateForm(updatedFormData)
     setFormErrors(prevErrors => ({
       ...prevErrors,
-      [name]: t[`${errors[name]}`] || ''
+      [name]: t[`${errors[name as keyof FormErrors]}`] || ''
     }))
   }
 
@@ -61,7 +58,7 @@ const SignUp = () => {
         if ((registerResponse as { error: FetchBaseQueryError })?.error) throw new Error('Could not register')
 
         const myHeaders = new Headers()
-        myHeaders.append('Authorization', `Bearer ${(registerResponse as { data: UserResponse }).data.jwt}`)
+        myHeaders.append('Authorization', `Bearer ${(registerResponse as { data: SignInResponse }).data.jwt}`)
 
         const currentFormData = new FormData()
         const data = {

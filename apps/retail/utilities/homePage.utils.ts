@@ -1,7 +1,4 @@
-export interface Coordinate {
-  latitude: number
-  longitude: number
-}
+import { Coordinate } from '@beckn-ui/common/lib/types'
 
 const toRadians = (degrees: number): number => {
   return (degrees * Math.PI) / 180

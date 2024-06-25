@@ -3,11 +3,14 @@ import React from 'react'
 import Styles from './GeoLocationInput.module.css'
 import { useDispatch } from 'react-redux'
 import { useState } from 'react'
-import { toggleLocationSearchPageVisibility, setGeoAddressAndLatLong } from '../../store/geoMapLocationSearch-slice'
 import backArrow from '/public/images/Back.svg'
 import locationMarker from '../../public/images/searchlocationmarker.svg'
 import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete'
 import { IoClose } from 'react-icons/io5'
+import {
+  setGeoAddressAndLatLong,
+  toggleLocationSearchPageVisibility
+} from '@beckn-ui/common/src/store/geoMapLocationSearch-slice'
 
 const GeoLocationInputList: React.FC = () => {
   const dispatch = useDispatch()

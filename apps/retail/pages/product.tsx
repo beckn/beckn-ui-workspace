@@ -1,16 +1,11 @@
 import React, { useState } from 'react'
 import { ProductDetailPage } from '@beckn-ui/becknified-components'
-import { cartActions } from '@store/cart-slice'
 import { useDispatch, useSelector } from 'react-redux'
-import useResponsive from '@beckn-ui/becknified-components/src/hooks/useResponsive'
-import { toast } from 'react-toastify'
-import { useRouter } from 'next/router'
-import { DiscoveryRootState } from '@store/discovery-slice'
-import { Box, useTheme } from '@chakra-ui/react'
-import { CustomThemeType } from '@beckn-ui/molecules'
+import { Box } from '@chakra-ui/react'
 import { useLanguage } from '@hooks/useLanguage'
-import { ParsedItemModel } from '@lib/types'
-import { feedbackActions } from '@store/ui-feedback-slice'
+import { DiscoveryRootState, ParsedItemModel } from '@beckn-ui/common/lib/types'
+import { cartActions } from '@beckn-ui/common/src/store/cart-slice'
+import { feedbackActions } from '@beckn-ui/common/src/store/ui-feedback-slice'
 
 const Product = () => {
   const { t } = useLanguage()
@@ -47,7 +42,7 @@ const Product = () => {
       <ProductDetailPage
         schema={{
           productSummary: {
-            imageSrc: selectedProduct.item.images[0].url,
+            imageSrc: selectedProduct.item.images?.[0].url!,
             name: selectedProduct.item.name,
             secondaryDescription: selectedProduct.item.long_desc,
             starRating: {

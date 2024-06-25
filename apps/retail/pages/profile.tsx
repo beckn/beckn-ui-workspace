@@ -1,16 +1,14 @@
 import { BecknAuth } from '@beckn-ui/becknified-components'
 import { Box, useToast } from '@chakra-ui/react'
-import { profilePageProp } from '@components/signIn/SignIn.types'
 import { useLanguage } from '@hooks/useLanguage'
-import { FormErrors, profileValidateForm } from '@utils/form-utils'
+import { profileValidateForm } from '@utils/form-utils'
 import Cookies from 'js-cookie'
 import React, { useEffect, useState } from 'react'
-import { CustomToast } from '@components/signIn/SignIn'
 import Router from 'next/router'
-import { toast as reactToastifyToast } from 'react-toastify'
 import { isEmpty } from '@utils/common-utils'
 import { useDispatch } from 'react-redux'
-import { feedbackActions } from '@store/ui-feedback-slice'
+import { FormErrors, ProfileProps } from '@beckn-ui/common/lib/types'
+import { feedbackActions } from '@beckn-ui/common/src/store/ui-feedback-slice'
 
 const ProfilePage = () => {
   const { t } = useLanguage()
@@ -19,7 +17,7 @@ const ProfilePage = () => {
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
   const [isLoading, setIsLoading] = useState(false)
   const dispatch = useDispatch()
-  const [formData, setFormData] = useState<profilePageProp>({
+  const [formData, setFormData] = useState<ProfileProps>({
     name: '',
     mobileNumber: '',
     flatNumber: '',
@@ -39,7 +37,7 @@ const ProfilePage = () => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
 
-    setFormData((prevFormData: profilePageProp) => ({
+    setFormData((prevFormData: ProfileProps) => ({
       ...prevFormData,
       [name]: value
     }))
