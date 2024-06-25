@@ -209,6 +209,12 @@ const en: { [key: string]: string } = {
   updateOrder: 'Update Order',
   comingSoon: 'Coming Soon',
   updatedSuccessfully: 'Order Updated Successfully!',
-  success: 'Success!'
+  success: 'Success!',
+  errorCountry: 'Country is Required',
+  errorState: 'State is Required',
+  errorCity: 'City is Required',
+  errorCountry1: 'Country can only contain letters and spaces',
+  errorState1: 'State can only contain letters and spaces',
+  errorCity1: 'City can only contain letters and spaces'
 }
 export default en

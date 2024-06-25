@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import currentLogo from '../../public/images/OSC_logo.svg'
 import { useLanguage } from '@hooks/useLanguage'
 import { SignInPropsModel } from './SignIn.types'
@@ -17,7 +17,6 @@ const SignIn = () => {
 
   const [formData, setFormData] = useState<SignInPropsModel>({ email: '', password: '' })
   const [formErrors, setFormErrors] = useState<FormErrors>({ email: '', password: '' })
-  const [isFormFilled, setIsFormFilled] = useState(false)
   const [login, { isLoading }] = useLoginMutation()
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,8 +37,14 @@ const SignIn = () => {
       ...prevErrors,
       [name]: t[`${errors[name]}`] || ''
     }))
-    setIsFormFilled(updatedFormData.email.trim() !== '' && updatedFormData.password.trim() !== '')
   }
+  const isFormFilled = useMemo(() => {
+    return () => {
+      return (
+        Object.values(formData).every(value => value !== '') && Object.values(formErrors).every(value => value === '')
+      )
+    }
+  }, [formData, formErrors])
 
   const handleSignIn = async () => {
     const signInData = {
@@ -71,7 +76,7 @@ const SignIn = () => {
           {
             text: t.signIn,
             handleClick: handleSignIn,
-            disabled: !isFormFilled,
+            disabled: !isFormFilled(),
             variant: 'solid',
             colorScheme: 'primary',
             isLoading: isLoading

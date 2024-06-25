@@ -407,6 +407,12 @@ const fa: { [key: string]: string } = {
   orderHasBeenCancelled: 'Votre commande a été annulée.',
   orderCancel: 'Commande annulée !',
   refundedSoon: 'Si vous avez déjà payé, vous serez bientôt remboursé.',
-  ordercancelled: 'ANNULATION DE COMMANDE !'
+  ordercancelled: 'ANNULATION DE COMMANDE !',
+  errorCountry: 'Le pays est requis',
+  errorState: "L'état est requis",
+  errorCity: 'La ville est requise',
+  errorCountry1: 'Le pays ne peut contenir que des lettres et des espaces',
+  errorState1: "L'état ne peut contenir que des lettres et des espaces",
+  errorCity1: 'La ville ne peut contenir que des lettres et des espaces'
 }
 export default fa
