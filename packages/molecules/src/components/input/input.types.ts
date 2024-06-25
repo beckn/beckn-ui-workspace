@@ -19,6 +19,7 @@ export interface InputProps {
   error?: string
   handleChange: React.ChangeEventHandler<HTMLInputElement>
   label?: string
+  dataTest?: string
 }
 export interface signInField {
   name: string

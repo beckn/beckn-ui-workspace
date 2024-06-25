@@ -12,7 +12,8 @@ const Input: React.FC<InputProps> = ({
   handleChange,
   label,
   className,
-  error
+  error,
+  dataTest
 }) => {
   const theme = useTheme()
   const [isInputFocused, setIsInputFocused] = useState(false)
@@ -29,6 +30,7 @@ const Input: React.FC<InputProps> = ({
     <div className={Styles.input_container}>
       <ChakraInput
         data-testid="test-chakra-input"
+        data-test={dataTest}
         onFocus={handleInputFocus}
         onBlur={handleInputBlur}
         _focus={{ borderColor: theme.colors.primary[100], outline: 'none' }}

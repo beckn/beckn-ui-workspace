@@ -74,7 +74,8 @@ const SignIn = () => {
             disabled: !isFormFilled,
             variant: 'solid',
             colorScheme: 'primary',
-            isLoading: isLoading
+            isLoading: isLoading,
+            dataTest: 'login-button'
           },
           {
             text: t.signUp,
@@ -83,20 +84,10 @@ const SignIn = () => {
             },
             variant: 'outline',
             colorScheme: 'primary',
-            disabled: isLoading
+            disabled: isLoading,
+            dataTest: 'register-button'
           }
         ],
-        // socialButtons: [
-        //   {
-        //     text: t.signInwithGoogle,
-        //     handleClick: handleSignIn,
-        //     disabled: false,
-        //     variant: 'outline',
-        //     colorScheme: 'primary',
-        //     leftIcon: <FaGoogle />,
-        //     className: 'social_btn'
-        //   }
-        // ],
         inputs: [
           {
             type: 'text',
@@ -104,7 +95,8 @@ const SignIn = () => {
             value: formData.email,
             handleChange: handleInputChange,
             label: t.email,
-            error: formErrors.email
+            error: formErrors.email,
+            dataTest: 'input-email'
           },
           {
             type: 'password',
@@ -112,7 +104,8 @@ const SignIn = () => {
             value: formData.password,
             handleChange: handleInputChange,
             label: t.password,
-            error: formErrors.password
+            error: formErrors.password,
+            dataTest: 'input-password'
           }
         ]
       }}

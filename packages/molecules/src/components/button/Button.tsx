@@ -16,7 +16,8 @@ const BecknButton: React.FC<ButtonProps> = ({
   isLoading = false,
   loadingText = 'Loading',
   color,
-  id
+  id,
+  dataTest
 }) => {
   return (
     <Button
@@ -32,6 +33,7 @@ const BecknButton: React.FC<ButtonProps> = ({
       loadingText={loadingText}
       isLoading={isLoading}
       color={color}
+      data-test={dataTest}
     >
       {children ? children : text}
     </Button>

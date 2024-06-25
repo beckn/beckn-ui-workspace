@@ -18,4 +18,5 @@ export interface ButtonProps {
   loadingText?: string
   color?: string
   id?: string
+  dataTest?: string
 }
