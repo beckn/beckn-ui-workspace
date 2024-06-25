@@ -15,7 +15,6 @@ const SignUp = () => {
   const toast = useToast()
   const [formData, setFormData] = useState<SignUpPropsModel>({ name: '', email: '', password: '' })
   const [formErrors, setFormErrors] = useState<FormErrors>({ name: '', email: '', password: '' })
-  const [isFormFilled, setIsFormFilled] = useState(false)
   const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,11 +35,6 @@ const SignUp = () => {
       ...prevErrors,
       [name]: errors[name] || ''
     }))
-    setIsFormFilled(
-      updatedFormData.name.trim() !== '' &&
-        updatedFormData.email.trim() !== '' &&
-        updatedFormData.password.trim() !== ''
-    )
   }
 
   const handleRegister = async () => {
@@ -95,6 +89,12 @@ const SignUp = () => {
     }
   }
 
+  const isFormFilled = (): boolean => {
+    return (
+      Object.values(formData).every(value => value !== '') && Object.values(formErrors).every(value => value === '')
+    )
+  }
+
   return (
     <>
       <Box mt={'30px'}>
@@ -108,7 +108,7 @@ const SignUp = () => {
               {
                 text: t.signUp,
                 handleClick: handleRegister,
-                disabled: !isFormFilled,
+                disabled: !isFormFilled(),
                 variant: 'solid',
                 colorScheme: 'primary'
               },

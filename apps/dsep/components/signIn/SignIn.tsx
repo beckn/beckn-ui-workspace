@@ -8,14 +8,12 @@ import SkillUpLogo from '../../public/images/skillUpHomeLogo.svg'
 import { useLanguage } from '../../hooks/useLanguage'
 import { SignInPropsModel } from './Signin.types'
 import { FormErrors, signInValidateForm } from '../../utilities/detailsForm-utils'
-import CustomToast from '../customToast/custom-toast'
 import { Toast } from '@beckn-ui/molecules'
 
 const SignIn = () => {
   const { t } = useLanguage()
   const [formData, setFormData] = useState<SignInPropsModel>({ email: '', password: '' })
   const [formErrors, setFormErrors] = useState<FormErrors>({ email: '', password: '' })
-  const [isFormFilled, setIsFormFilled] = useState(false)
   const toast = useToast()
 
   const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL
@@ -37,7 +35,6 @@ const SignIn = () => {
       ...prevErrors,
       [name]: errors[name] || ''
     }))
-    setIsFormFilled(updatedFormData.email.trim() !== '' && updatedFormData.password.trim() !== '')
   }
 
   const handleSignIn = async () => {
@@ -85,6 +82,13 @@ const SignIn = () => {
       console.error('An error occurred:', error)
     }
   }
+
+  const isFormFilled = (): boolean => {
+    return (
+      Object.values(formData).every(value => value !== '') && Object.values(formErrors).every(value => value === '')
+    )
+  }
+
   return (
     <BecknAuth
       schema={{
@@ -96,7 +100,7 @@ const SignIn = () => {
           {
             text: t.signIn,
             handleClick: handleSignIn,
-            disabled: !isFormFilled,
+            disabled: !isFormFilled(),
             variant: 'solid',
             colorScheme: 'primary'
           },
