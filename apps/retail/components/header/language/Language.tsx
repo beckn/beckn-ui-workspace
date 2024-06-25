@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { settingBoxActions } from '../../../store/settingBox-slice'
 import { MdLanguage } from 'react-icons/md'
 import { useLanguage } from '../../../hooks/useLanguage'
 import LanguageItem from './LanguageItem'
 import { Box } from '@chakra-ui/react'
+import { settingBoxActions } from '@beckn-ui/common/src/store/settingBox-slice'
 
 const Language = () => {
   const { t, locale } = useLanguage()

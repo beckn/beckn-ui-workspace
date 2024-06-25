@@ -1,17 +1,5 @@
-import { profilePageProp, SignInPropsModel, SignUpPropsModel } from '../components/signIn/SignIn.types'
-import { ShippingFormData } from '../pages/checkout/checkout'
-
-export interface FormErrors {
-  city?: string
-  state?: string
-  name?: string
-  mobileNumber?: string
-  email?: string
-  address?: string
-  zipCode?: string
-  password?: string
-  country?: string
-}
+import { FormErrors, SignInProps, SignUpProps, ProfileProps } from '@beckn-ui/common/lib/types'
+import { ShippingFormData } from '../pages/checkout'
 
 export const validateForm = (formData: ShippingFormData): FormErrors => {
   const errors: FormErrors = {}
@@ -45,7 +33,7 @@ export const validateForm = (formData: ShippingFormData): FormErrors => {
   return errors
 }
 
-export const signInValidateForm = (formData: SignInPropsModel): FormErrors => {
+export const signInValidateForm = (formData: SignInProps): FormErrors => {
   const errors: FormErrors = {}
 
   if (formData.email.trim() === '') {
@@ -69,7 +57,7 @@ export const signInValidateForm = (formData: SignInPropsModel): FormErrors => {
 
   return errors
 }
-export const signUpValidateForm = (formData: SignUpPropsModel): FormErrors => {
+export const signUpValidateForm = (formData: SignUpProps): FormErrors => {
   const errors: FormErrors = {}
 
   if (formData.name.trim() === '') {
@@ -105,7 +93,7 @@ export const signUpValidateForm = (formData: SignUpPropsModel): FormErrors => {
   }
   return errors
 }
-export const profileValidateForm = (formData: profilePageProp): FormErrors => {
+export const profileValidateForm = (formData: ProfileProps): FormErrors => {
   const errors: FormErrors = {}
 
   if (formData.name.trim() === '') {

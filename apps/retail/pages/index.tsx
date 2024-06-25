@@ -13,31 +13,31 @@ import OrderDetails from '@components/orderDetails/ImportedOrderDetails'
 import ShoppingList from '@components/shoppingList/ShoppingList'
 import SelectDeliveryModal from '@components/selectDeliveryModal/SelectDeliveryModal'
 import { Typography } from '@beckn-ui/molecules'
-import { ImportedOrderModel, ImportedOrderShoppingList } from '@lib/types'
+import { ImportOrderModel, ImportOrderShoppingList } from '@beckn-ui/common/lib/types'
 
 const HomePage = () => {
-  const [searchTerm, setSearchTerm] = useState<string>('')
   const breakpoint = useBreakpoint()
-  const mobileBreakpoints = ['base', 'sm', 'md', 'lg']
-  const currentLogo = mobileBreakpoints.includes(breakpoint) ? KuzaLogo : AlternateLogo
   const { t } = useLanguage()
 
-  const [importedOrder, setImportedOrder] = useState(false)
-  const [viewOrderDetails, setViewOrderDetails] = useState(false)
-  const [chatGtpList, setChatGtpList] = useState(false)
-  const [selectLocationModal, setSelectLocationModal] = useState(false)
-  const [shoppingListData, setShoppingListData] = useState<ImportedOrderShoppingList>([])
+  const [searchTerm, setSearchTerm] = useState<string>('')
+  const [importedOrder, setImportedOrder] = useState<boolean>(false)
+  const [viewOrderDetails, setViewOrderDetails] = useState<boolean>(false)
+  const [chatGtpList, setChatGtpList] = useState<boolean>(false)
+  const [selectLocationModal, setSelectLocationModal] = useState<boolean>(false)
+  const [shoppingListData, setShoppingListData] = useState<ImportOrderShoppingList>([])
   const [selectedValues, setSelectedValues] = useState<string[]>([])
   const [address, setAddress] = useState('')
-  const [isLoadingForChatGptRequest, setIsLoadingForChatGptRequest] = useState(true)
-  const [importedOrderObject, setImportedOrderObject] = useState<ImportedOrderModel>()
-  const chatGptApiUrl = process.env.NEXT_PUBLIC_CHAT_GPT_URL
+  const [isLoadingForChatGptRequest, setIsLoadingForChatGptRequest] = useState<boolean>(true)
+  const [importedOrderObject, setImportedOrderObject] = useState<ImportOrderModel>()
+  const [currentAddress, setCurrentAddress] = useState<string>('')
+  const [loadingForCurrentAddress, setLoadingForCurrentAddress] = useState<boolean>(true)
+  const [currentLocationFetchError, setFetchCurrentLocationError] = useState<string>('')
+  const [category, setCategory] = useState<string>('')
 
+  const chatGptApiUrl = process.env.NEXT_PUBLIC_CHAT_GPT_URL
   const apiKeyForGoogle = process.env.NEXT_PUBLIC_GOOGLE_API_KEY
-  const [currentAddress, setCurrentAddress] = useState('')
-  const [loadingForCurrentAddress, setLoadingForCurrentAddress] = useState(true)
-  const [currentLocationFetchError, setFetchCurrentLocationError] = useState('')
-  const [category, setCategory] = useState('')
+  const mobileBreakpoints = ['base', 'sm', 'md', 'lg']
+  const currentLogo = mobileBreakpoints.includes(breakpoint) ? KuzaLogo : AlternateLogo
 
   const router = useRouter()
   useEffect(() => {

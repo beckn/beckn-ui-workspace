@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import ShippingForm from '@beckn-ui/becknified-components/src/components/checkout/shipping-form'
 import { Box, Text, useToast } from '@chakra-ui/react'
-import { ConfirmResponseModel } from '../types/confirm.types'
 import axios from '@services/axios'
 import { Loader, Typography } from '@beckn-ui/molecules'
 import { useLanguage } from '@hooks/useLanguage'
@@ -10,7 +9,8 @@ import { useRouter } from 'next/router'
 import { geocodeFromPincode } from '@utils/checkout-utils'
 import { ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
 import { useDispatch } from 'react-redux'
-import { feedbackActions } from '@store/ui-feedback-slice'
+import { ConfirmResponseModel } from '@beckn-ui/common/lib/types'
+import { feedbackActions } from '@beckn-ui/common/src/store/ui-feedback-slice'
 
 const UpdateShippingDetails = () => {
   const [shippingDetails, setShippingDetails] = useState<ShippingFormInitialValuesType>({

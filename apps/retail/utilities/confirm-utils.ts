@@ -1,5 +1,4 @@
-import { ConfirmResponseModel } from '../types/confirm.types'
-import { InitResponseModel } from '../types/init.types'
+import { ConfirmResponseModel, InitResponseModel } from '@beckn-ui/common/lib/types'
 
 export const getOrderPlacementTimeline = (timeStamp: string) => {
   const localDateAndTime = new Date(timeStamp)

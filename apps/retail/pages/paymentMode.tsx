@@ -8,8 +8,6 @@ import phonePay from '../public/images/phonePayPayment.svg'
 import CashOnDelivery from '../public/images/cash.svg'
 import Visa from '../public/images/visa.svg'
 import masterCard from '../public/images/masterCard.svg'
-
-import NetBanking from '../public/images/netbanking.svg'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 
 function PaymentMode() {

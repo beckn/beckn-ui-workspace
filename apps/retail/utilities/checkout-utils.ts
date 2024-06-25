@@ -1,9 +1,12 @@
-import { ParsedItemModel } from '../types/search.types'
-import { InitResponseModel } from '../types/init.types'
-import { StatusResponseModel } from '../types/status.types'
-import { CartItemForRequest, CartRetailItem } from '@lib/types'
 import { areObjectPropertiesEqual } from './common-utils'
 import { ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
+import {
+  CartItemForRequest,
+  CartRetailItem,
+  InitResponseModel,
+  ParsedItemModel,
+  StatusResponseModel
+} from '@beckn-ui/common/lib/types'
 
 export const getPayloadForSelectRequest = (selectedProduct: ParsedItemModel) => {
   const {

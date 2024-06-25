@@ -5,7 +5,7 @@ import BottomModalScan from '@components/BottomModal/BottomModalScan'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import Typography from '@beckn-ui/molecules/src/components/typography/typography'
 import { isEmpty } from '@utils/common-utils'
-import { ImportedOrderItem } from '@lib/types'
+import { ImportedOrderItem } from '@beckn-ui/common/lib/types'
 
 interface ImportedOrderProps {
   updateStateImportedOrder: () => void

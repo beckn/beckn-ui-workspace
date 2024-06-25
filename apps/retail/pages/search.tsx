@@ -6,14 +6,14 @@ import { useRouter } from 'next/router'
 import { parsedSearchlist } from '@utils/search-results.utils'
 import { Product, ProductCard } from '@beckn-ui/becknified-components'
 import { BottomModal } from '@beckn-ui/molecules'
-import { discoveryActions } from '@store/discovery-slice'
 import { useBreakpoint } from '@chakra-ui/react'
 import SearchBar from '../components/header/SearchBar'
 import { useLanguage } from '../hooks/useLanguage'
-import { ParsedItemModel } from '@lib/types/beckn/search'
-import { DOMAIN } from '@lib/config'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
 import Filter from '../components/filter/Filter'
+import { ParsedItemModel } from '@beckn-ui/common/lib/types'
+import { discoveryActions } from '@beckn-ui/common/src/store/discovery-slice'
+import { DOMAIN } from '@beckn-ui/common'
 
 //Mock data for testing search API. Will remove after the resolution of CORS issue
 
@@ -216,7 +216,7 @@ const Search = () => {
                   const { item } = singleItem
                   const product: Product = {
                     id: item.id,
-                    images: item.images.map(singleImage => singleImage?.url),
+                    images: item.images?.map(singleImage => singleImage?.url)!,
                     name: item.name,
                     price: item.price.value,
                     rating: item.rating,

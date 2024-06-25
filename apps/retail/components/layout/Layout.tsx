@@ -9,11 +9,11 @@ import { ToastContainer } from 'react-toastify'
 import { useLanguage } from '../../hooks/useLanguage'
 import NextNProgress from 'nextjs-progressbar'
 import styles from './Layout.module.css'
-import { IGeoLocationSearchPageRootState } from '@lib/types/geoLocationSearchPage'
 import GeoLocationInputList from '@components/geoLocationInput/GeoLocationInputList'
 import { Box, Text, useToast } from '@chakra-ui/react'
-import { feedbackActions, FeedbackRootState, ToastType } from '@store/ui-feedback-slice'
-import { Toast } from '@beckn-ui/molecules'
+import { Toast } from '@beckn-ui/molecules/src/components'
+import { IGeoLocationSearchPageRootState } from '@beckn-ui/common/lib/types'
+import { feedbackActions, FeedbackRootState, ToastType } from '@beckn-ui/common/src/store/ui-feedback-slice'
 
 const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const { locale } = useLanguage()

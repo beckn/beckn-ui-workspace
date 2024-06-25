@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery, retry } from '@reduxjs/toolkit/query/react'
 import type { BaseQueryFn, FetchArgs, FetchBaseQueryError } from '@reduxjs/toolkit/query'
-import { feedbackActions } from '@store/ui-feedback-slice'
+import { feedbackActions } from '@beckn-ui/common/src/store/ui-feedback-slice'
 
 // Create our baseQuery instance
 const baseQuery = fetchBaseQuery({
@@ -16,7 +16,7 @@ const baseQueryWithErrorHandling: BaseQueryFn<string | FetchArgs, unknown, Fetch
 ) => {
   const result = await baseQueryWithRetry(args, api, extraOptions)
   if (result.error && result.error.status === 400) {
-    const { message } = result.error.data.error || 'Something went wrong'
+    const { message } = (result.error.data as any)?.error || 'Something went wrong'
     api.dispatch(
       feedbackActions.setToastData({
         toastData: { message: 'Error!', display: true, type: 'error', description: message }

@@ -1,21 +1,19 @@
 import { useRouter } from 'next/router'
 
 import React from 'react'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useLanguage } from '@hooks/useLanguage'
 import { Cart as BecknCart } from '@beckn-ui/becknified-components'
 import { useSelectMutation } from '@services/select'
-import { cartActions } from '@store/cart-slice'
 
-import { Box, Flex, useToast } from '@chakra-ui/react'
+import { Box, useToast } from '@chakra-ui/react'
 
-import { DOMAIN } from '@lib/config'
-
-import { ICartRootState } from '@lib/types'
-import { DiscoveryRootState } from '@store/discovery-slice'
 import { CartItemProps } from '@beckn-ui/becknified-components/src/components/cart/cart.types'
 import { getSelectPayload } from '@utils/cart-utils'
+import { DiscoveryRootState, ICartRootState } from '@beckn-ui/common/lib/types'
+import { cartActions } from '@beckn-ui/common/src/store/cart-slice'
+import { DOMAIN } from '@beckn-ui/common'
 
 const Cart = () => {
   const [fetchQuotes, { isLoading, data, isError }] = useSelectMutation()
@@ -57,7 +55,7 @@ const Cart = () => {
                 id: singleItem.id,
                 quantity: singleItem.quantity,
                 name: singleItem.name,
-                image: singleItem.images[0].url,
+                image: singleItem.images?.[0].url,
                 price: Number(singleItem.price.value),
                 symbol: singleItem.price.currency,
                 totalAmountText: t.totalAmount,

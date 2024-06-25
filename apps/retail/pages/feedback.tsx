@@ -1,18 +1,18 @@
 import { Box, Text, Image, Textarea, useToast } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import StarRating from '../components/starRating/StarRating'
 import { useLanguage } from '../hooks/useLanguage'
 import feedbackImg from '../public/images/feedbackImg.svg'
 import { Typography } from '@beckn-ui/molecules'
 import { useDispatch, useSelector } from 'react-redux'
-import { StatusRootState } from '@store/status-slice'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import useResponsive from '@beckn-ui/becknified-components/src/hooks/useResponsive'
-import { StatusResponseModel } from '../types/status.types'
 import axios from '@services/axios'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
-import { feedbackActions } from '@store/ui-feedback-slice'
+import { StatusRootState } from '@beckn-ui/common/src/store/status-slice'
+import { StatusResponseModel } from '@beckn-ui/common/lib/types'
+import { feedbackActions } from '@beckn-ui/common/src/store/ui-feedback-slice'
 
 const Feedback = () => {
   const { t } = useLanguage()

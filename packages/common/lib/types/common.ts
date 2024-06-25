@@ -1,3 +1,5 @@
+import { CurrencyType } from '@beckn-ui/becknified-components'
+
 // ------------------------------------------------- beckn specific -------------------------------------------------
 export interface Location {
   gps: string
@@ -18,17 +20,13 @@ export interface Person {
   name: string
 }
 
-export interface Stop {
-  location: Location
-  contact: Contact
-}
-
 export interface State {
   descriptor: Descriptor
+  updated_at: string
 }
 
 export interface Price {
-  currency: string
+  currency: CurrencyType
   value: string
 }
 
@@ -61,13 +59,6 @@ export interface PaymentParams {
   bank_account_number: string
   bank_code: string
   bank_account_name: string
-}
-
-export interface Payment {
-  collected_by: string
-  params: PaymentParams
-  status: string
-  type: string
   transaction_id: string
 }
 
@@ -93,25 +84,29 @@ export interface Context {
   timestamp: string
 }
 
+export interface QuantityDetails {
+  selected: {
+    measure: {
+      value: string
+      unit: string
+    }
+    count: number
+  }
+}
+
 export interface Item {
   id: string
   name: string
   code?: string
   price: Price
-  quantity?:
-    | {
-        selected: {
-          measure: {
-            value: string
-            unit: string
-          }
-        }
-      }
-    | number
+  quantity?: QuantityDetails | number
   tags?: Tag[]
   long_desc?: string
   short_desc?: string
-  imageUrl: string
+  images?: Image[]
+  fulfillments: Fulfillment[]
+  rating?: string
+  locations?: Location[] | Coordinate
 }
 
 export interface Tag {
@@ -132,9 +127,7 @@ export interface Provider {
   name: string
   short_desc?: string
   long_desc?: string
-  images: {
-    url: string
-  }[]
+  images: Image[]
 }
 
 export interface Fulfillment {
@@ -147,6 +140,7 @@ export interface Fulfillment {
   stops: Stop[]
   state: State
   tracking: boolean
+  tags: Tag[]
 }
 
 export interface Coordinate {
@@ -167,40 +161,6 @@ export interface Image {
   url: string
 }
 
-export interface Price {
-  currency: string
-  value: string
-}
-
-export interface Breakup {
-  title: string
-  price: Price
-}
-
-export interface Quote {
-  price: Price
-  breakup: Breakup[]
-}
-
-export interface Billing {
-  name: string
-  phone: string
-  email: string
-  address: string
-  city: {
-    name: string
-  }
-  state: {
-    name: string
-  }
-}
-
-export interface PaymentParams {
-  amount: string
-  currency: string
-  transaction_id: string
-}
-
 export interface Payment {
   id: string
   name: string
@@ -211,24 +171,12 @@ export interface Payment {
     label: string
     timestamp: string
   }
-}
-
-export interface Location {
-  gps: string
-  address: string
-  city: {
-    name: string
-  }
-  state: {
-    name: string
-  }
-  country: {
-    code: string
-  }
-  area_code: string
+  collected_by: string
+  transaction_id: string
 }
 
 export interface Contact {
+  name: string
   phone: string
   email: string
 }
@@ -236,19 +184,6 @@ export interface Contact {
 export interface Stop {
   location: Location
   contact: Contact
-}
-
-export interface Fulfillment {
-  id: string
-  type: string
-  customer: {
-    contact: Contact
-    person: {
-      name: string
-    }
-  }
-  stops: Stop[]
-  tracking: boolean
 }
 
 export interface ImportedOrderItem {

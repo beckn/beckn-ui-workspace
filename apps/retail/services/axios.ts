@@ -1,6 +1,6 @@
 import defaultAxios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios'
 import store from '@store/index'
-import { feedbackActions } from '@store/ui-feedback-slice'
+import { feedbackActions } from '@beckn-ui/common/src/store/ui-feedback-slice'
 
 const axios = defaultAxios.create()
 

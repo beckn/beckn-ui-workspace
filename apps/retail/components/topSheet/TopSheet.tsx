@@ -9,7 +9,6 @@ import {
   Image,
   Text,
   Flex,
-  ChakraProvider,
   Input,
   useTheme,
   Skeleton
@@ -17,11 +16,10 @@ import {
 import style from './TopSheet.module.css'
 import { useLanguage } from '../../hooks/useLanguage'
 import { useDispatch, useSelector } from 'react-redux'
-import { IGeoLocationSearchPageRootState } from '../../lib/types/geoLocationSearchPage'
-import { toggleLocationSearchPageVisibility } from '../../store/geoMapLocationSearch-slice'
-import { MdMyLocation } from 'react-icons/md'
 import { BiSolidUpArrow } from 'react-icons/bi'
 import { useRouter } from 'next/router'
+import { IGeoLocationSearchPageRootState } from '@beckn-ui/common/lib/types'
+import { toggleLocationSearchPageVisibility } from '@beckn-ui/common/src/store/geoMapLocationSearch-slice'
 
 interface TopSheetPropsModel {
   currentAddress: string

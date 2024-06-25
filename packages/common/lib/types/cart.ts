@@ -1,4 +1,7 @@
-import { IProductDetails, TSlug, ICartProduct, Item } from './common'
+import { CurrencyType, ProductPriceProps } from '@beckn-ui/becknified-components'
+import { ButtonProps, LoaderProps, TypographyProps } from '@beckn-ui/molecules/src/components/types'
+import { MouseEventHandler } from 'react'
+import { Coordinate, Item } from './common'
 
 export interface CartRetailItem extends Item {
   quantity: number
@@ -6,12 +9,12 @@ export interface CartRetailItem extends Item {
 }
 
 export interface CartItemForRequest extends CartRetailItem {
-  categories: any
+  categories?: any
   currency?: any
   bpp_id: string
   bpp_uri: string
   providerId: string
-  locations: any
+  locations: Coordinate
 }
 
 export interface ICartUI {
@@ -42,13 +45,6 @@ export interface DataPerBpp {
   [key: string]: CartItemForRequest[]
 }
 
-export type LocalStorageCartItem = {
-  product: ICartProduct
-  quantity: number
-}
-
-export type LocalStorageCart = LocalStorageCartItem[]
-
 export type SelectItem = {
   id: string
   quantity: { selected: { count: number } }
@@ -77,3 +73,48 @@ export type SelectSingleData = {
 }
 
 export type SelectData = SelectSingleData[]
+
+// ------ components -----------------------------
+export interface CartItemProps {
+  id: string
+  quantity: number
+  name: string
+  image: string
+  price: number
+  symbol: CurrencyType
+  handleIncrement: (id: string) => void
+  handleDecrement: (id: string) => void
+  className?: string
+  totalAmountText?: string
+}
+
+export interface CartListProps {
+  cartItems: CartItemProps[]
+}
+
+export interface OrderSummaryProps {
+  totalQuantity: TypographyProps
+  totalAmount: ProductPriceProps
+  pageCTA: ButtonProps
+  orderSummaryText?: string
+  totalQuantityText?: string
+  totalAmountText?: string
+}
+interface EmptyCardProps {
+  image?: string
+  heading?: string
+  subHeading?: string
+  buttonText?: string
+  buttonHanler?: MouseEventHandler<HTMLButtonElement>
+}
+export interface CartProps {
+  schema: {
+    cartItems: CartItemProps[]
+    loader: LoaderProps
+    orderSummary: OrderSummaryProps
+    emptyCard?: EmptyCardProps
+  }
+  className?: string
+  isLoading?: boolean
+  emptyText?: string
+}

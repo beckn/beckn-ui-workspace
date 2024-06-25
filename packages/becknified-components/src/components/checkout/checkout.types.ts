@@ -43,7 +43,7 @@ export interface ShippingSectionProps<T extends FormField[]> {
 
 export interface ItemDetailProps {
   title: string
-  description: string
+  description?: string
   quantity: number
   // priceWithSymbol: string
   image?: string

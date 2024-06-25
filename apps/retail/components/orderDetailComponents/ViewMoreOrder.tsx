@@ -15,8 +15,8 @@ import { Button, Typography } from '@beckn-ui/molecules'
 import ButtonComp from '../button/Button'
 import crossIcon from '../../public/images/crossIcon.svg'
 import { useLanguage } from '../../hooks/useLanguage'
-import { currencyMap } from '@lib/config'
-import { Item } from '../../types/status.types'
+import { Item, QuantityDetails } from '@beckn-ui/common/lib/types'
+import { currencyMap } from '@beckn-ui/common'
 
 export interface ViewMoreOrderModalProps {
   isOpen: boolean
@@ -79,7 +79,7 @@ const ViewMoreOrderModal: React.FC<ViewMoreOrderModalProps> = props => {
                       fontWeight={'600'}
                       pt={'5px'}
                     >
-                      x {item.quantity.selected.count}
+                      x {(item.quantity as QuantityDetails).selected.count}
                     </Text>
                   </Box>
                   <Typography

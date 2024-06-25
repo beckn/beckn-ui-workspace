@@ -1,25 +1,22 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Box, useToast, useTheme } from '@chakra-ui/react'
-import { DOMAIN } from '@lib/config'
 import { useLanguage } from '../hooks/useLanguage'
 
-import { ICartRootState } from '@lib/types/cart'
 import { CustomToast } from '@components/signIn/SignIn'
 import { useInitMutation } from '@services/init'
 
 import { Checkout } from '@beckn-ui/becknified-components'
+import { FormData, FormField } from '@beckn-ui/molecules'
 
 import { useRouter } from 'next/router'
 import { ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
-import { CheckoutRootState, checkoutActions } from '@store/checkout-slice'
-import { cartActions } from '@store/cart-slice'
 import { isEmpty } from '@utils/common-utils'
-import { FormData, FormField } from '@beckn-ui/molecules'
-import { PaymentBreakDownModel } from '@lib/types/payment'
-import { DiscoveryRootState } from '@store/discovery-slice'
 import { areShippingAndBillingDetailsSame, getInitPayload, getSubTotalAndDeliveryCharges } from '@utils/checkout-utils'
-import { QuoteBreakupInfo } from '../types/init.types'
+import { DiscoveryRootState, ICartRootState, PaymentBreakDownModel, QuoteBreakupInfo } from '@beckn-ui/common/lib/types'
+import { checkoutActions, CheckoutRootState } from '@beckn-ui/common/src/store/checkout-slice'
+import { cartActions } from '@beckn-ui/common/src/store/cart-slice'
+import { DOMAIN } from '@beckn-ui/common'
 
 export type ShippingFormData = {
   name: string
@@ -291,7 +288,7 @@ const CheckoutPage = () => {
               // priceWithSymbol: `${currencyMap[singleItem.price.currency]}${singleItem.totalPrice}`,
               price: singleItem.totalPrice,
               currency: singleItem.price.currency,
-              image: singleItem.images[0].url
+              image: singleItem.images?.[0].url
             }))
           },
           shipping: {

@@ -4,11 +4,11 @@ import { useLanguage } from '../../hooks/useLanguage'
 import BottomModalScan from '@components/BottomModal/BottomModalScan'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import Typography from '@beckn-ui/molecules/src/components/typography/typography'
-import { ImportedOrderModel } from '@lib/types/general'
+import { ImportOrderModel } from '@beckn-ui/common/lib/types'
 
 interface OrderDetailsProps {
   backOnImportedOrder: (newValue: boolean) => void
-  importedOrderObject: ImportedOrderModel
+  importedOrderObject: ImportOrderModel
 }
 
 const OrderDetails: FC<OrderDetailsProps> = ({ backOnImportedOrder, importedOrderObject }) => {

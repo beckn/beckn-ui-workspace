@@ -5,15 +5,16 @@ import { useTheme, Box, Divider, Flex, HStack, Image, Text } from '@chakra-ui/re
 import { Router, useRouter } from 'next/router'
 import styles from './header.module.css'
 import { useSelector, useDispatch } from 'react-redux'
-import { logout } from '@store/auth-slice'
 
 import { useLanguage } from '../../hooks/useLanguage'
 import Qrcode from '@components/qrCode/Qrcode'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import CartIconWithCount from './CartIcon'
 import TopSheet from '@components/topSheet/TopSheet'
-import { ICartRootState } from '@lib/types'
+// import { ICartRootState } from '@lib/types'
 import Settings from './Settings'
+import { logout } from '@beckn-ui/common/src/store/auth-slice'
+import { ICartRootState } from '@beckn-ui/common/lib/types'
 
 type PathnameObjectType = { [key: string]: string }
 

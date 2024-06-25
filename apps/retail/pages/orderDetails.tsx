@@ -23,29 +23,39 @@ import { toast } from 'react-toastify'
 import { v4 as uuidv4 } from 'uuid'
 import { useDispatch, useSelector } from 'react-redux'
 import ViewMoreOrderModal from '@components/orderDetailComponents/ViewMoreOrder'
-import { discoveryActions, DiscoveryRootState } from '@store/discovery-slice'
-import { statusActions } from '@store/status-slice'
+// import { statusActions } from '@store/status-slice'
 import { DetailCard, OrderStatusProgress, OrderStatusProgressProps } from '@beckn-ui/becknified-components'
-import { Item, StatusResponseModel, SupportModel } from '../types/status.types'
 import useResponsive from '@beckn-ui/becknified-components/src/hooks/useResponsive'
 import { isEmpty } from '@utils/common-utils'
 import { useLanguage } from '@hooks/useLanguage'
 import { formatTimestamp, getPayloadForOrderStatus } from '@utils/confirm-utils'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import BottomModalScan from '@components/BottomModal/BottomModalScan'
-import { ConfirmResponseModel } from '../types/confirm.types'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
-import { UIState, DataState, ProcessState } from '../types/order-details.types'
 import CallphoneIcon from '../public/images/CallphoneIcon.svg'
 import locationIcon from '../public/images/locationIcon.svg'
 import nameIcon from '../public/images/nameIcon.svg'
-import { OrdersRootState } from '@store/order-slice'
 import ShippingBlock from '@components/orderDetailComponents/Shipping'
-import { DOMAIN } from '@lib/config'
 import PaymentDetails from '@beckn-ui/becknified-components/src/components/checkout/payment-details'
 import { getPaymentBreakDown } from '@utils/checkout-utils'
-import { StatusKey, StatusMap, statusMap } from '@lib/types/order'
-import { feedbackActions } from '@store/ui-feedback-slice'
+// import { feedbackActions } from '@store/ui-feedback-slice'
+import {
+  ConfirmResponseModel,
+  DataState,
+  DiscoveryRootState,
+  Item,
+  ProcessState,
+  QuantityDetails,
+  StatusKey,
+  statusMap,
+  StatusResponseModel,
+  SupportModel,
+  UIState
+} from '@beckn-ui/common/lib/types'
+import { statusActions } from '@beckn-ui/common/src/store/status-slice'
+import { OrdersRootState } from '@beckn-ui/common/src/store/order-slice'
+import { feedbackActions } from '@beckn-ui/common/src/store/ui-feedback-slice'
+import { DOMAIN } from '@beckn-ui/common'
 
 const DELIVERED = 'Delivered'
 const CANCELLED = 'CANCELLED'
@@ -104,7 +114,7 @@ const OrderDetails = () => {
       const newData = data.statusData
         .map((status: StatusResponseModel) => {
           const { tags } = status?.message?.order
-          const statusKey: string = tags[tags.length - 1].list[0].value
+          const statusKey: string = tags?.[tags?.length - 1].list?.[0].value!
           return {
             label: statusMap[statusKey as StatusKey],
             statusTime: status?.message?.order?.fulfillments[0]?.state?.updated_at || status?.context?.timestamp
@@ -637,13 +647,13 @@ const OrderDetails = () => {
 
   const filteredOrder = data.statusData.filter(res => {
     const { state } = res.message.order.fulfillments[0]
-    return state && res.message.order.fulfillments[0].state.descriptor.code.toLowerCase() === 'delivered'
+    return state && res.message.order.fulfillments[0].state.descriptor?.code?.toLowerCase() === 'delivered'
   })
 
   const totalQuantityOfOrder = (data: DataState) => {
     let count = 0
     data.statusData[0].message.order.items.forEach((item: Item) => {
-      count += item.quantity.selected.count
+      count += (item.quantity as QuantityDetails)?.selected?.count
     })
     return count
   }
@@ -731,7 +741,7 @@ const OrderDetails = () => {
                 mr={'15px'}
                 height={['60px', '80px', '80px', '80px']}
                 w={['40px', '80px', '80px', '80px']}
-                src={data.statusData[0]?.message?.order?.items[0]?.images[0].url}
+                src={data.statusData[0]?.message?.order?.items[0]?.images?.[0].url}
                 alt="product image"
               />
               <Box w={'100%'}>
