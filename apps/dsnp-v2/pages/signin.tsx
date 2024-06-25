@@ -3,10 +3,6 @@ import React, { useEffect } from 'react'
 import Signin from '@components/signIn/SignIn'
 
 const MobileLogin = () => {
-  // useEffect(() => {
-  //   localStorage.clear()
-  // }, [])
-
   return (
     <Box>
       <Signin />

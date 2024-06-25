@@ -28,7 +28,6 @@ const SignIn = () => {
 
   const [formData, setFormData] = useState<SignInPropsModel>({ email: '', password: '' })
   const [formErrors, setFormErrors] = useState<FormErrors>({ email: '', password: '' })
-  const [isFormFilled, setIsFormFilled] = useState(false)
   const breakpoint = useBreakpoint()
   const mobileBreakpoints = ['base', 'sm', 'md', 'lg']
   const currentLogo = mobileBreakpoints.includes(breakpoint) ? Logo : AlternateLogo
@@ -61,7 +60,6 @@ const SignIn = () => {
       ...prevErrors,
       [name]: t[`${errors[name]}`] || ''
     }))
-    setIsFormFilled(updatedFormData.email.trim() !== '' && updatedFormData.password.trim() !== '')
   }
 
   const handlePolkaLogin = async () => {
@@ -136,6 +134,12 @@ const SignIn = () => {
     }
   }
 
+  const isFormFilled = (): boolean => {
+    return (
+      Object.values(formData).every(value => value !== '') && Object.values(formErrors).every(value => value === '')
+    )
+  }
+
   useEffect(() => {
     if (typeof window !== 'undefined') {
       setProviderInfo(JSON.parse(localStorage.getItem('provider') as string))
@@ -204,7 +208,7 @@ const SignIn = () => {
               await handlePolkaLogin()
               // await handleSignIn()
             },
-            disabled: !isFormFilled,
+            disabled: !isFormFilled(),
             variant: 'solid',
             colorScheme: 'primary',
             isLoading: isLoading

@@ -33,7 +33,10 @@ const ProfilePage = () => {
     name: '',
     mobileNumber: '',
     email: '',
-    zipCode: ''
+    zipCode: '',
+    city: '',
+    state: '',
+    country: ''
   })
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -55,8 +58,6 @@ const ProfilePage = () => {
       [name]: t[`${errors[name]}`] || ''
     }))
   }
-
-  console.log('Dank', formData)
 
   useEffect(() => {
     const myHeaders = new Headers()
@@ -152,6 +153,16 @@ const ProfilePage = () => {
       })
   }
 
+  const isFormFilled = (): boolean => {
+    const { flatNumber, street, ...restFormData } = formData
+    const { flatNumber: flatNumberError, street: streetError, ...restFormErrors } = formErrors
+
+    return (
+      Object.values(restFormData).every(value => value !== '') &&
+      Object.values(restFormErrors).every(value => value === '')
+    )
+  }
+
   return (
     <Box
       margin={'0 auto'}
@@ -167,7 +178,7 @@ const ProfilePage = () => {
             {
               text: t.saveContinue,
               handleClick: updateProfile,
-              disabled: false,
+              disabled: !isFormFilled(),
               variant: 'solid',
               colorScheme: 'primary'
             }
@@ -210,8 +221,8 @@ const ProfilePage = () => {
               name: 'city',
               value: formData.city,
               handleChange: handleInputChange,
-              label: t.enterCity
-              // error: formErrors.city
+              label: t.enterCity,
+              error: formErrors.city
             },
             {
               type: 'text',
@@ -226,16 +237,16 @@ const ProfilePage = () => {
               name: 'state',
               value: formData.state,
               handleChange: handleInputChange,
-              label: t.enterState
-              // error: formErrors.state
+              label: t.enterState,
+              error: formErrors.state
             },
             {
               type: 'text',
               name: 'country',
               value: formData.country,
               handleChange: handleInputChange,
-              label: t.enterCountry
-              // error: formErrors.country
+              label: t.enterCountry,
+              error: formErrors.country
             }
           ]
         }}

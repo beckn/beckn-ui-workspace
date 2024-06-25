@@ -127,6 +127,12 @@ const en: { [key: string]: string } = {
   error: 'Error!',
   fixError: 'Please fix the errors in the form before submitting.',
   toastMessage: 'Unable to login',
-  toastError: 'Error!'
+  toastError: 'Error!',
+  errorCountry: 'Country is Required',
+  errorState: 'State is Required',
+  errorCity: 'City is Required',
+  errorCountry1: 'Country can only contain letters and spaces',
+  errorState1: 'State can only contain letters and spaces',
+  errorCity1: 'City can only contain letters and spaces'
 }
 export default en

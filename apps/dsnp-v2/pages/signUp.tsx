@@ -26,7 +26,6 @@ const SignUp = () => {
   const dispatch = useDispatch()
   const [formData, setFormData] = useState<SignUpPropsModel>({ name: '', email: '', password: '', mobileNumber: '' })
   const [formErrors, setFormErrors] = useState<FormErrors>({ name: '', email: '', password: '', mobileNumber: '' })
-  const [isFormFilled, setIsFormFilled] = useState(false)
   const breakpoint = useBreakpoint()
   const mobileBreakpoints = ['base', 'sm', 'md', 'lg']
   const currentLogo = mobileBreakpoints.includes(breakpoint) ? Logo : AlternateLogo
@@ -112,7 +111,7 @@ const SignUp = () => {
           throw Error('No polka address found')
         }
         await handleSignUp()
-        if (!isIframe) Router.push('/')
+        // if (!isIframe) Router.push('/')
       } catch (error) {
         console.error('An error occurred:', error)
       }
@@ -179,11 +178,11 @@ const SignUp = () => {
       ...prevErrors,
       [name]: t[`${errors[name]}`] || ''
     }))
-    setIsFormFilled(
-      updatedFormData.name.trim() !== '' &&
-        updatedFormData.email.trim() !== '' &&
-        updatedFormData.password.trim() !== '' &&
-        updatedFormData.mobileNumber.trim() !== ''
+  }
+
+  const isFormFilled = (): boolean => {
+    return (
+      Object.values(formData).every(value => value !== '') && Object.values(formErrors).every(value => value === '')
     )
   }
 
@@ -254,7 +253,7 @@ const SignUp = () => {
               handleClick: async () => {
                 await handleDsnpRegister()
               },
-              disabled: !isFormFilled,
+              disabled: !isFormFilled(),
               variant: 'solid',
               colorScheme: 'primary',
               isLoading: isLoading
