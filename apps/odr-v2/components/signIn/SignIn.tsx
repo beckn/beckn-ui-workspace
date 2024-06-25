@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import Logo from '../../public/images/Logo.svg'
 import AlternateLogo from '../../public/images/Logo.svg'
 import { useLanguage } from '@hooks/useLanguage'
@@ -18,7 +18,6 @@ const SignIn = () => {
 
   const [formData, setFormData] = useState<SignInPropsModel>({ email: '', password: '' })
   const [formErrors, setFormErrors] = useState<FormErrors>({ email: '', password: '' })
-  const [isFormFilled, setIsFormFilled] = useState(false)
   const breakpoint = useBreakpoint()
   const mobileBreakpoints = ['base', 'sm', 'md', 'lg']
   const currentLogo = mobileBreakpoints.includes(breakpoint) ? Logo : AlternateLogo
@@ -44,9 +43,15 @@ const SignIn = () => {
       ...prevErrors,
       [name]: t[`${errors[name]}`] || ''
     }))
-    setIsFormFilled(updatedFormData.email.trim() !== '' && updatedFormData.password.trim() !== '')
   }
 
+  const isFormFilled = useMemo(() => {
+    return () => {
+      return (
+        Object.values(formData).every(value => value !== '') && Object.values(formErrors).every(value => value === '')
+      )
+    }
+  }, [formData, formErrors])
   const handleSignIn = async () => {
     const signInData = {
       identifier: formData.email,
@@ -71,7 +76,7 @@ const SignIn = () => {
           {
             text: t.signIn,
             handleClick: handleSignIn,
-            disabled: !isFormFilled,
+            disabled: !isFormFilled(),
             variant: 'solid',
             colorScheme: 'primary',
             isLoading: isLoading
@@ -121,31 +126,3 @@ const SignIn = () => {
 }
 
 export default SignIn
-
-export const CustomToast: React.FC<{ title: string; message: string }> = ({ title, message }) => (
-  <Box
-    mt="2rem"
-    p={4}
-    bg="red.500"
-    color="white"
-    borderRadius="md"
-    boxShadow="md"
-  >
-    <Text
-      fontWeight={700}
-      fontSize={'15px'}
-      color={'white'}
-      textAlign={'center'}
-    >
-      {title}
-    </Text>
-    <Text
-      fontWeight={500}
-      fontSize={'15px'}
-      color={'white'}
-      textAlign={'center'}
-    >
-      {message}
-    </Text>
-  </Box>
-)

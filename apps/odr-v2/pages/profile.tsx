@@ -4,7 +4,7 @@ import { profilePageProp } from '@components/signIn/SignIn.types'
 import { useLanguage } from '@hooks/useLanguage'
 import { FormErrors, profileValidateForm } from '@utils/form-utils'
 import Cookies from 'js-cookie'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { CustomToast } from '@components/signIn/SignIn'
 import Router from 'next/router'
 import { toast as reactToastifyToast } from 'react-toastify'
@@ -150,11 +150,15 @@ const ProfilePage = () => {
       })
   }
 
-  const isFormFilled = (): boolean => {
+  const isFormFilled = useMemo(() => {
+    const { flatNumber, street, ...restFormData } = formData
+    const { flatNumber: flatNumberError, street: streetError, ...restFormErrors } = formErrors
+
     return (
-      Object.values(formData).every(value => value !== '') && Object.values(formErrors).every(value => value === '')
+      Object.values(restFormData).every(value => value !== '') &&
+      Object.values(restFormErrors).every(value => value === '')
     )
-  }
+  }, [formData, formErrors])
   return (
     <Box
       margin={'0 auto'}
@@ -170,7 +174,7 @@ const ProfilePage = () => {
             {
               text: t.saveContinue,
               handleClick: updateProfile,
-              disabled: !isFormFilled(),
+              disabled: !isFormFilled,
               variant: 'solid',
               colorScheme: 'primary'
             }
@@ -213,8 +217,8 @@ const ProfilePage = () => {
               name: 'city',
               value: formData.city,
               handleChange: handleInputChange,
-              label: t.enterCity
-              // error: formErrors.city
+              label: t.enterCity,
+              error: formErrors.city
             },
             {
               type: 'text',
@@ -229,16 +233,16 @@ const ProfilePage = () => {
               name: 'state',
               value: formData.state,
               handleChange: handleInputChange,
-              label: t.enterState
-              // error: formErrors.state
+              label: t.enterState,
+              error: formErrors.state
             },
             {
               type: 'text',
               name: 'country',
               value: formData.country,
               handleChange: handleInputChange,
-              label: t.enterCountry
-              // error: formErrors.country
+              label: t.enterCountry,
+              error: formErrors.country
             }
           ]
         }}
