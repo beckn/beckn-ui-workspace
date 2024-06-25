@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { IGeoLocationSearchPage } from '../lib/types/geoLocationSearchPage'
+import { IGeoLocationSearchPage } from '../../lib/types'
 
 const initialState: IGeoLocationSearchPage = {
   geoLocationSearchPageVisible: false,

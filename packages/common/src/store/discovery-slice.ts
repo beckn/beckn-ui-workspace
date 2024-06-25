@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { ParsedItemModel } from '@lib/types'
+import { ParsedItemModel } from '../../lib/types'
 
 export interface Discovery {
   transactionId: string
