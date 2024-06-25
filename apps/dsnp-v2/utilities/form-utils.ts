@@ -8,6 +8,11 @@ export interface FormErrors {
   address?: string
   zipCode?: string
   password?: string
+  flatNumber?: string
+  street?: string
+  country?: string
+  state?: string
+  city?: string
 }
 
 export const validateForm = (formData: ShippingFormData): FormErrors => {
@@ -123,6 +128,21 @@ export const profileValidateForm = (formData: profilePageProp): FormErrors => {
     errors.zipCode = 'errorZipcode'
   } else if (!/^\d{6}$/.test(formData.zipCode)) {
     errors.zipCode = 'errorZipcode2'
+  }
+  if (formData.country.trim() === '') {
+    errors.country = 'errorCountry'
+  } else if (!/^[A-Za-z\s]*$/.test(formData.country)) {
+    errors.country = 'errorCountry1'
+  }
+  if (formData.state.trim() === '') {
+    errors.state = 'errorState'
+  } else if (!/^[A-Za-z\s]*$/.test(formData.state)) {
+    errors.state = 'errorState1'
+  }
+  if (formData.city.trim() === '') {
+    errors.city = 'errorCity'
+  } else if (!/^[A-Za-z\s]*$/.test(formData.city)) {
+    errors.city = 'errorCity1'
   }
 
   return errors
