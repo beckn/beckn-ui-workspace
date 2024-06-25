@@ -25,7 +25,7 @@ const ProfilePage = () => {
     flatNumber: '',
     street: '',
     city: '',
-    zipCode: '',
+    pincode: '',
     state: '',
     country: ''
   })
@@ -140,11 +140,7 @@ const ProfilePage = () => {
         setIsLoading(false)
       })
   }
-  const isFormFilled = (): boolean => {
-    return (
-      Object.values(formData).every(value => value !== '') && Object.values(formErrors).every(value => value === '')
-    )
-  }
+
   return (
     <Box
       margin={'0 auto'}
@@ -160,7 +156,7 @@ const ProfilePage = () => {
             {
               text: t.saveContinue,
               handleClick: updateProfile,
-              disabled: !isFormFilled(),
+              disabled: false,
               variant: 'solid',
               colorScheme: 'primary'
             }
@@ -217,7 +213,7 @@ const ProfilePage = () => {
             {
               type: 'text',
               name: 'zipCode',
-              value: formData.zipCode,
+              value: formData.pincode,
               handleChange: handleInputChange,
               label: t.enterPincode,
               error: formErrors.zipCode
