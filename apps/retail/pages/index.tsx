@@ -14,6 +14,7 @@ import ShoppingList from '@components/shoppingList/ShoppingList'
 import SelectDeliveryModal from '@components/selectDeliveryModal/SelectDeliveryModal'
 import { Typography } from '@beckn-ui/molecules'
 import { ImportOrderModel, ImportOrderShoppingList } from '@beckn-ui/common/lib/types'
+import { useGeolocation } from '@beckn-ui/common'
 
 const HomePage = () => {
   const breakpoint = useBreakpoint()
@@ -29,15 +30,18 @@ const HomePage = () => {
   const [address, setAddress] = useState('')
   const [isLoadingForChatGptRequest, setIsLoadingForChatGptRequest] = useState<boolean>(true)
   const [importedOrderObject, setImportedOrderObject] = useState<ImportOrderModel>()
-  const [currentAddress, setCurrentAddress] = useState<string>('')
-  const [loadingForCurrentAddress, setLoadingForCurrentAddress] = useState<boolean>(true)
-  const [currentLocationFetchError, setFetchCurrentLocationError] = useState<string>('')
   const [category, setCategory] = useState<string>('')
 
   const chatGptApiUrl = process.env.NEXT_PUBLIC_CHAT_GPT_URL
   const apiKeyForGoogle = process.env.NEXT_PUBLIC_GOOGLE_API_KEY
   const mobileBreakpoints = ['base', 'sm', 'md', 'lg']
   const currentLogo = mobileBreakpoints.includes(breakpoint) ? KuzaLogo : AlternateLogo
+
+  const {
+    currentAddress,
+    error: currentLocationFetchError,
+    loading: loadingForCurrentAddress
+  } = useGeolocation(apiKeyForGoogle as string)
 
   const router = useRouter()
   useEffect(() => {
@@ -89,62 +93,6 @@ const HomePage = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [importedOrderObject])
-
-  useEffect(() => {
-    // Check if geolocation is available in the browser
-    if (navigator) {
-      if ('geolocation' in navigator) {
-        navigator.geolocation.getCurrentPosition(
-          async position => {
-            const latitude = position.coords.latitude
-            const longitude = position.coords.longitude
-
-            const coordinates = {
-              latitude,
-              longitude
-            }
-
-            localStorage.setItem('coordinates', JSON.stringify(coordinates))
-
-            try {
-              const response = await fetch(
-                `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKeyForGoogle}`
-              )
-
-              if (response.ok) {
-                const data = await response.json()
-
-                if (data.results.length > 0) {
-                  const formattedAddress = data.results[0].formatted_address
-                  setCurrentAddress(formattedAddress)
-                } else {
-                  setFetchCurrentLocationError('No address found for the given coordinates.')
-                }
-              } else {
-                setFetchCurrentLocationError('Failed to fetch address data.')
-                alert('Failed to fetch address data.')
-              }
-            } catch (error) {
-              setFetchCurrentLocationError('Error fetching address data: ' + (error as any).message)
-              alert('Error fetching address data: ' + (error as any).message)
-            } finally {
-              setLoadingForCurrentAddress(false)
-            }
-          },
-          error => {
-            setFetchCurrentLocationError('Error getting location: ' + error.message)
-            alert('Error getting location: ' + error.message)
-            setLoadingForCurrentAddress(false)
-          }
-        )
-      } else {
-        setFetchCurrentLocationError('Geolocation is not available in this browser.')
-        alert('Geolocation is not available in this browser.')
-        setLoadingForCurrentAddress(false)
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   const handleConvert = async (lat: number, lang: number) => {
     try {
@@ -210,8 +158,6 @@ const HomePage = () => {
     setViewOrderDetails(false)
     setChatGtpList(false)
   }
-
-  console.log('Dank', category)
 
   return (
     <>
