@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { useLanguage } from '@hooks/useLanguage'
 import AlternateLogo from '../public/images/KuzaLogo.svg'
 import { signUpValidateForm } from '@utils/form-utils'
@@ -90,11 +90,11 @@ const SignUp = () => {
     }
   }
 
-  const isFormFilled = (): boolean => {
+  const isFormFilled = useMemo(() => {
     return (
       Object.values(formData).every(value => value !== '') && Object.values(formErrors).every(value => value === '')
     )
-  }
+  }, [formData, formErrors])
 
   return (
     <Box
@@ -113,7 +113,7 @@ const SignUp = () => {
             {
               text: t.signUp,
               handleClick: handleSignUp,
-              disabled: !isFormFilled(),
+              disabled: !isFormFilled,
               variant: 'solid',
               colorScheme: 'primary',
               isLoading: isLoading

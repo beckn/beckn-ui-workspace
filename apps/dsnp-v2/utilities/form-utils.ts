@@ -8,8 +8,8 @@ export interface FormErrors {
   address?: string
   zipCode?: string
   password?: string
-  flatNumber?: string
-  street?: string
+  flatNumber?: string | null
+  street?: string | null
   country?: string
   state?: string
   city?: string

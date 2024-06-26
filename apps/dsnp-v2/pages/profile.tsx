@@ -4,7 +4,7 @@ import { profilePageProp } from '@components/signIn/SignIn.types'
 import { useLanguage } from '@hooks/useLanguage'
 import { FormErrors, profileValidateForm } from '@utils/form-utils'
 import Cookies from 'js-cookie'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { CustomToast } from '@components/signIn/SignIn'
 import Router from 'next/router'
 import { toast as reactToastifyToast } from 'react-toastify'
@@ -153,7 +153,7 @@ const ProfilePage = () => {
       })
   }
 
-  const isFormFilled = (): boolean => {
+  const isFormFilled = useMemo(() => {
     const { flatNumber, street, ...restFormData } = formData
     const { flatNumber: flatNumberError, street: streetError, ...restFormErrors } = formErrors
 
@@ -161,7 +161,7 @@ const ProfilePage = () => {
       Object.values(restFormData).every(value => value !== '') &&
       Object.values(restFormErrors).every(value => value === '')
     )
-  }
+  }, [formData, formErrors])
 
   return (
     <Box
@@ -178,7 +178,7 @@ const ProfilePage = () => {
             {
               text: t.saveContinue,
               handleClick: updateProfile,
-              disabled: !isFormFilled(),
+              disabled: !isFormFilled,
               variant: 'solid',
               colorScheme: 'primary'
             }

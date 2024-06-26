@@ -3,7 +3,7 @@ import { Box, useToast } from '@chakra-ui/react'
 import { useLanguage } from '@hooks/useLanguage'
 import { profileValidateForm } from '@utils/form-utils'
 import Cookies from 'js-cookie'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import Router from 'next/router'
 import { isEmpty } from '@utils/common-utils'
 import { useDispatch } from 'react-redux'
@@ -148,7 +148,7 @@ const ProfilePage = () => {
       })
   }
 
-  const isFormFilled = (): boolean => {
+  const isFormFilled = useMemo(() => {
     const { flatNumber, street, ...restFormData } = formData
     const { flatNumber: flatNumberError, street: streetError, ...restFormErrors } = formErrors
 
@@ -156,7 +156,7 @@ const ProfilePage = () => {
       Object.values(restFormData).every(value => value !== '') &&
       Object.values(restFormErrors).every(value => value === '')
     )
-  }
+  }, [formData, formErrors])
 
   return (
     <Box
@@ -173,7 +173,7 @@ const ProfilePage = () => {
             {
               text: t.saveContinue,
               handleClick: updateProfile,
-              disabled: !isFormFilled(),
+              disabled: !isFormFilled,
               variant: 'solid',
               colorScheme: 'primary'
             }

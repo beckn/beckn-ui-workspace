@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { useLanguage } from '@hooks/useLanguage'
 import AlternateLogo from '../../tourismV1.1/public/images/tourism-logo.svg'
 import { SignUpPropsModel } from '@components/signIn/SignIn.types'
@@ -91,11 +91,11 @@ const SignUp = () => {
     }
   }
 
-  const isFormFilled = (): boolean => {
+  const isFormFilled = useMemo(() => {
     return (
       Object.values(formData).every(value => value !== '') && Object.values(formErrors).every(value => value === '')
     )
-  }
+  }, [formData, formErrors])
 
   return (
     <Box mt={'30px'}>
@@ -109,7 +109,7 @@ const SignUp = () => {
             {
               text: t.signUp,
               handleClick: handleSignUp,
-              disabled: !isFormFilled(),
+              disabled: !isFormFilled,
               variant: 'solid',
               colorScheme: 'primary',
               isLoading: isLoading

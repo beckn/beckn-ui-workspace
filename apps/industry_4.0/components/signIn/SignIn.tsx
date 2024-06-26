@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import Suppliflow_logo from '../../public/images/Suppliflow_logo.svg'
 import { useLanguage } from '@hooks/useLanguage'
 import { SignInPropsModel } from './SignIn.types'
@@ -81,11 +81,11 @@ const SignIn = () => {
       console.error('An error occurred:', error)
     }
   }
-  const isFormFilled = (): boolean => {
+  const isFormFilled = useMemo(() => {
     return (
       Object.values(formData).every(value => value !== '') && Object.values(formErrors).every(value => value === '')
     )
-  }
+  }, [formData, formErrors])
 
   return (
     <BecknAuth
@@ -98,7 +98,7 @@ const SignIn = () => {
           {
             text: t.signIn,
             handleClick: handleSignIn,
-            disabled: !isFormFilled(),
+            disabled: !isFormFilled,
             variant: 'solid',
             colorScheme: 'primary'
           },

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import Logo from '../../public/images/SNP-Login-logo.svg'
 import AlternateLogo from '../../public/images/SNP-Login-logo.svg'
 import { useLanguage } from '@hooks/useLanguage'
@@ -134,11 +134,11 @@ const SignIn = () => {
     }
   }
 
-  const isFormFilled = (): boolean => {
+  const isFormFilled = useMemo(() => {
     return (
       Object.values(formData).every(value => value !== '') && Object.values(formErrors).every(value => value === '')
     )
-  }
+  }, [formData, formErrors])
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -208,7 +208,7 @@ const SignIn = () => {
               await handlePolkaLogin()
               // await handleSignIn()
             },
-            disabled: !isFormFilled(),
+            disabled: !isFormFilled,
             variant: 'solid',
             colorScheme: 'primary',
             isLoading: isLoading

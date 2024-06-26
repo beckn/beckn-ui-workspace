@@ -11,6 +11,8 @@ export interface FormErrors {
   address?: string
   zipCode?: string
   password?: string
+  flatNumber?: string | null
+  street?: string | null
 }
 
 export const validateForm = (formData: ShippingFormData): FormErrors => {

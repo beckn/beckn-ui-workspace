@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { useLanguage } from '@hooks/useLanguage'
 import AlternateLogo from '../public/images/SNP-Login-logo.svg'
 import { SignUpPropsModel } from '@components/signIn/SignIn.types'
@@ -180,11 +180,11 @@ const SignUp = () => {
     }))
   }
 
-  const isFormFilled = (): boolean => {
+  const isFormFilled = useMemo(() => {
     return (
       Object.values(formData).every(value => value !== '') && Object.values(formErrors).every(value => value === '')
     )
-  }
+  }, [formData, formErrors])
 
   const handleSignUp = async () => {
     const errors = signUpValidateForm(formData)
@@ -253,7 +253,7 @@ const SignUp = () => {
               handleClick: async () => {
                 await handleDsnpRegister()
               },
-              disabled: !isFormFilled(),
+              disabled: !isFormFilled,
               variant: 'solid',
               colorScheme: 'primary',
               isLoading: isLoading

@@ -1,5 +1,5 @@
 // 'use client'
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import Router from 'next/router'
 import Cookies from 'js-cookie'
 import { useToast } from '@chakra-ui/react'
@@ -83,11 +83,11 @@ const SignIn = () => {
     }
   }
 
-  const isFormFilled = (): boolean => {
+  const isFormFilled = useMemo(() => {
     return (
       Object.values(formData).every(value => value !== '') && Object.values(formErrors).every(value => value === '')
     )
-  }
+  }, [formData, formErrors])
 
   return (
     <BecknAuth
@@ -100,7 +100,7 @@ const SignIn = () => {
           {
             text: t.signIn,
             handleClick: handleSignIn,
-            disabled: !isFormFilled(),
+            disabled: !isFormFilled,
             variant: 'solid',
             colorScheme: 'primary'
           },

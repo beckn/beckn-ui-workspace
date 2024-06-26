@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import Logo from '../../public/images/Logo.svg'
 import AlternateLogo from '../../public/images/KuzaLogo.svg'
 import { useLanguage } from '@hooks/useLanguage'
@@ -40,11 +40,11 @@ const SignIn = () => {
     }))
   }
 
-  const isFormFilled = (): boolean => {
+  const isFormFilled = useMemo(() => {
     return (
       Object.values(formData).every(value => value !== '') && Object.values(formErrors).every(value => value === '')
     )
-  }
+  }, [formData, formErrors])
 
   const handleSignIn = async () => {
     const signInData = {
@@ -70,7 +70,7 @@ const SignIn = () => {
           {
             text: t.signIn,
             handleClick: handleSignIn,
-            disabled: !isFormFilled(),
+            disabled: !isFormFilled,
             variant: 'solid',
             colorScheme: 'primary',
             isLoading: isLoading,
