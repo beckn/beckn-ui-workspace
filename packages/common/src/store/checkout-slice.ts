@@ -1,10 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { initApi } from '@services/init'
-import { confirmApi } from '@services/confirm'
-import { selectApi } from '@services/select'
-import { InitResponseModel } from '../types/init.types'
-import { ConfirmResponseModel } from '../types/confirm.types'
-import { SelectResponseModel } from '../types/select.types'
+import { ConfirmResponseModel, InitResponseModel, SelectResponseModel } from '../../lib/types'
+import confirmApi from '../services/confirm'
+import initApi from '../services/init'
+import selectApi from '../services/select'
 
 export interface CheckoutRootState {
   checkout: Checkout

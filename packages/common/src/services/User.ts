@@ -1,7 +1,7 @@
 import { SignInRequest, SignUpRequest, SignInResponse } from '../../lib/types'
-import { api } from './api'
+import Api from './api'
 
-export const authApi = api.injectEndpoints({
+const authApi = Api.injectEndpoints({
   endpoints: build => ({
     login: build.mutation<SignInResponse, SignInRequest>({
       query: credentials => ({
@@ -30,3 +30,5 @@ export const { useLoginMutation, useRegisterMutation } = authApi
 export const {
   endpoints: { login, register }
 } = authApi
+
+export default authApi

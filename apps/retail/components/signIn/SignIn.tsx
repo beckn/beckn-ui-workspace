@@ -3,11 +3,11 @@ import Logo from '../../public/images/Logo.svg'
 import AlternateLogo from '../../public/images/KuzaLogo.svg'
 import { useLanguage } from '@hooks/useLanguage'
 import { signInValidateForm } from '@utils/form-utils'
-import { useLoginMutation } from '@services/Users'
 import { BecknAuth } from '@beckn-ui/becknified-components'
 import Router from 'next/router'
 import { Box, Text, useBreakpoint } from '@chakra-ui/react'
 import { FormErrors, SignInProps } from '@beckn-ui/common/lib/types'
+import { useLoginMutation } from '@beckn-ui/common/src/services/User'
 
 const SignIn = () => {
   const { t } = useLanguage()

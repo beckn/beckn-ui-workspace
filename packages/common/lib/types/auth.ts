@@ -1,5 +1,5 @@
 // User related models
-interface User {
+export interface User {
   blocked: boolean
   confirmed: boolean
   createdAt: Date

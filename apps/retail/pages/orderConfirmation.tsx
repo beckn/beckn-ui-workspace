@@ -4,7 +4,6 @@ import orderConfirmmark from '../public/images/orderConfirmmark.svg'
 import { useSelector, useDispatch } from 'react-redux'
 import { useLanguage } from '../hooks/useLanguage'
 import { ConfirmationPage } from '@beckn-ui/becknified-components'
-import { useConfirmMutation } from '@services/confirm'
 import { getPayloadForConfirm, getPayloadForOrderHistoryPost } from '@utils/confirm-utils'
 import axios from '@services/axios'
 import { Box } from '@chakra-ui/react'
@@ -14,6 +13,7 @@ import LoaderWithMessage from '@components/loader/LoaderWithMessage'
 import { ConfirmResponseModel } from '@beckn-ui/common/lib/types'
 import { checkoutActions, CheckoutRootState } from '@beckn-ui/common/src/store/checkout-slice'
 import { orderActions } from '@beckn-ui/common/src/store/order-slice'
+import { useConfirmMutation } from '@beckn-ui/common/src/services/confirm'
 
 const OrderConfirmation = () => {
   const { t } = useLanguage()
@@ -21,7 +21,7 @@ const OrderConfirmation = () => {
   const [confirmData, setConfirmData] = useState<ConfirmResponseModel[]>([])
   const [confirm, { isLoading, data }] = useConfirmMutation()
   const dispatch = useDispatch()
-  const [orderId, setOrderId] = useState()
+  const [orderId, setOrderId] = useState<string>()
 
   const initResponse = useSelector((state: CheckoutRootState) => state.checkout.initResponse)
   const confirmResponse = useSelector((state: CheckoutRootState) => state.checkout.confirmResponse)
