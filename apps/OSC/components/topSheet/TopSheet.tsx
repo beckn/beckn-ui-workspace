@@ -19,7 +19,6 @@ import { useLanguage } from '../../hooks/useLanguage'
 import { useDispatch, useSelector } from 'react-redux'
 import { IGeoLocationSearchPageRootState } from '../../lib/types/geoLocationSearchPage'
 import { toggleLocationSearchPageVisibility } from '../../store/geoMapLocationSearch-slice'
-import { MdMyLocation } from 'react-icons/md'
 import { BiSolidUpArrow } from 'react-icons/bi'
 import { useRouter } from 'next/router'
 

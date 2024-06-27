@@ -2,7 +2,7 @@
 
 const nextConfig = {
   reactStrictMode: false,
-  transpilePackages: ['@beckn-ui/molecules', '@beckn-ui/becknified-components'],
+  transpilePackages: ['@beckn-ui/**'],
   i18n: {
     locales: ['en', 'fa'],
     defaultLocale: 'en',

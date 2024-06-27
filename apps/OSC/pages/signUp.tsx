@@ -6,9 +6,9 @@ import { FormErrors, signUpValidateForm } from '@utils/form-utils'
 import { BecknAuth } from '@beckn-ui/becknified-components'
 import Router from 'next/router'
 import { Box, useBreakpoint } from '@chakra-ui/react'
-import { useRegisterMutation } from '@services/Users'
 
 import Logo from '@public/images/localleIconSignUp.svg'
+import { useRegisterMutation } from '@beckn-ui/common/src/services/User'
 
 const SignUp = () => {
   const { t } = useLanguage()
