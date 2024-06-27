@@ -5,15 +5,10 @@ import { useLanguage } from '@hooks/useLanguage'
 import { SignInPropsModel } from './SignIn.types'
 import { FormErrors, signInValidateForm } from '@utils/form-utils'
 import { useDispatch } from 'react-redux'
-import { useLoginMutation } from '@services/Users'
-import Cookies from 'js-cookie'
-import { toast } from 'react-toastify'
 import { BecknAuth } from '@beckn-ui/becknified-components'
 
-import { FaGoogle } from 'react-icons/fa'
-
 import Router from 'next/router'
-import { Box, useToast, Text, useBreakpoint } from '@chakra-ui/react'
+import { useBreakpoint } from '@chakra-ui/react'
 
 //dsnp imports
 import { parentURLs } from '@lib/config'
@@ -22,6 +17,7 @@ import { signPayloadWithExtension, payloadHandle } from '@utils/signTransaction'
 import { dsnpCreate, dsnpRegister, getBlockNumber } from '@utils/auth'
 import { fetchHandles, fetchChallenge, dsnpLogin } from './Signin.utils'
 import { feedbackActions } from '@store/ui-feedback-slice'
+import { useLoginMutation } from '@beckn-ui/common/src/services/User'
 
 const SignIn = () => {
   const { t } = useLanguage()
