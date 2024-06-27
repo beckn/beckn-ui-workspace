@@ -16,12 +16,12 @@ import OrderReducer from './order-slice'
 import megaMenuReducer from './megaMenu-slice'
 import activeMenuItemReducer from './activeMenuItem-slice'
 import settingBoxReducer from './settingBox-slice'
-import { api } from '@services/api'
 import favoriteReducer from './favorite-slice'
 import responseDataReducer from './responseData-slice'
 import geoMapLocationSearchReducer from './geoMapLocationSearch-slice'
 import authReducer from './auth-slice'
 import orderObjectUrlReducer from './orderObjectUrl-slice'
+import { api } from '@beckn-ui/common'
 
 const persistConfig = {
   key: 'root',

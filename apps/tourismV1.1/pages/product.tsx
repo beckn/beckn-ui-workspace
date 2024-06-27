@@ -3,7 +3,6 @@ import { ProductDetailPage } from '@beckn-ui/becknified-components'
 
 import { cartActions } from '@store/cart-slice'
 import { useDispatch, useSelector } from 'react-redux'
-import useResponsive from '@beckn-ui/becknified-components/src/hooks/useResponsive'
 
 import { useRouter } from 'next/router'
 import { DiscoveryRootState } from '@store/discovery-slice'

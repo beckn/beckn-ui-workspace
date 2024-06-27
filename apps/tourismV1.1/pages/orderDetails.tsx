@@ -42,6 +42,7 @@ import BottomModalScan from '@components/BottomModal/BottomModalScan'
 import { isEmpty } from '@utils/common-utils'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import { feedbackActions } from '@store/ui-feedback-slice'
+import { DiscoveryRootState } from '@beckn-ui/common'
 
 const statusMap = {
   ArrangingPayment: 'Processing your order',

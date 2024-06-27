@@ -6,10 +6,8 @@ import { FormErrors, signUpValidateForm } from '@utils/form-utils'
 import { BecknAuth } from '@beckn-ui/becknified-components'
 import Router from 'next/router'
 import { Box, useBreakpoint, useToast } from '@chakra-ui/react'
-import { useRegisterMutation } from '@services/Users'
 import Logo from '../../tourismV1.1/public/images/tourism-logo.svg'
-import { useDispatch } from 'react-redux'
-import { feedbackActions } from '@store/ui-feedback-slice'
+import { useRegisterMutation } from '@beckn-ui/common/src/services/User'
 
 const SignUp = () => {
   const { t } = useLanguage()

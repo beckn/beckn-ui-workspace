@@ -1,7 +1,7 @@
+import confirmApi from '@beckn-ui/common/src/services/confirm'
+import initApi from '@beckn-ui/common/src/services/init'
+import selectApi from '@beckn-ui/common/src/services/select'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { initApi } from '@services/init'
-import { confirmApi } from '@services/confirm'
-import { selectApi } from '@services/select'
 
 export interface CheckoutRootState {
   checkout: Checkout

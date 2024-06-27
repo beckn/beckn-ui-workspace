@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import ShippingForm from '@beckn-ui/becknified-components/src/components/checkout/shipping-form'
-import { Box, Text, useToast } from '@chakra-ui/react'
+import { Box, Text } from '@chakra-ui/react'
 import { ConfirmResponseModel } from '../types/confirm.types'
 import { Loader, Typography } from '@beckn-ui/molecules'
 import { useLanguage } from '@hooks/useLanguage'
