@@ -16,7 +16,11 @@ const createAxiosInstance = (store: Store): AxiosInstance => {
             display: true,
             message: 'Error!' || 'Something went wrong',
             type: 'error',
-            description: error.message
+            description:
+              error?.response?.data?.error?.details?.errors[0].message.replace(
+                /This attribute/g,
+                error?.response?.data?.error?.details?.errors[0].path[0]
+              ) || error.message
           }
         })
       )
