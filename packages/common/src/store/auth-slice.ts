@@ -1,8 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
-import { authApi, User } from '../services/Users'
+import authApi from '../services/User'
 import Router from 'next/router'
 import Cookies from 'js-cookie'
+import { User } from '../../lib/types'
 
 const initialState = {
   user: null,

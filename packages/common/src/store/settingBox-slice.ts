@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { ISettingBox } from '../lib/types/settingBox'
+import { ISettingBox } from '../../lib/types'
 
 const initialState: ISettingBox = {
   isOpen: false

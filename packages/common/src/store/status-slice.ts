@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { StatusResponseModel } from '../types/status.types'
+import { StatusResponseModel } from '../../lib/types'
 
 export interface StatusRootState {
   status: Status

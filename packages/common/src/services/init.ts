@@ -1,11 +1,11 @@
 import { retry } from '@reduxjs/toolkit/query/react'
-import { api } from './becknApi'
+import Api from './becknApi'
 
-export const selectApi = api.injectEndpoints({
+const initApi = Api.injectEndpoints({
   endpoints: build => ({
-    select: build.mutation<any, any>({
+    init: build.mutation<any, any>({
       query: credentials => ({
-        url: '/select',
+        url: '/init',
         method: 'POST',
         body: credentials
       }),
@@ -18,8 +18,10 @@ export const selectApi = api.injectEndpoints({
   })
 })
 
-export const { useSelectMutation } = selectApi
+export const { useInitMutation } = initApi
 
 export const {
-  endpoints: { select }
-} = selectApi
+  endpoints: { init }
+} = initApi
+
+export default initApi

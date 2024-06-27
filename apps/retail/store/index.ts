@@ -1,7 +1,6 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
-import { api } from '@services/api'
 import {
   authReducer,
   cartSliceReducer,
@@ -11,7 +10,8 @@ import {
   OrderReducer,
   feedbackReducer,
   geoMapLocationSearchReducer,
-  settingBoxReducer
+  settingBoxReducer,
+  api
 } from '@beckn-ui/common'
 
 const persistConfig = {
