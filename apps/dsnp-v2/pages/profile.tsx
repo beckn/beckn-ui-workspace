@@ -11,6 +11,7 @@ import { toast as reactToastifyToast } from 'react-toastify'
 import { isEmpty } from '@utils/common-utils'
 import { feedbackActions } from '@store/ui-feedback-slice'
 import { useDispatch } from 'react-redux'
+import axios from '@services/axios'
 
 const ProfilePage = () => {
   const { t } = useLanguage()
@@ -60,19 +61,18 @@ const ProfilePage = () => {
   }
 
   useEffect(() => {
-    const myHeaders = new Headers()
-    myHeaders.append('Authorization', `Bearer ${bearerToken}`)
-
-    const requestOptions: RequestInit = {
+    const requestOptions = {
       method: 'GET',
-      headers: myHeaders,
-      redirect: 'follow'
+      headers: { Authorization: `Bearer ${bearerToken}` },
+      withCredentials: true
     }
+
     setIsLoading(true)
 
-    fetch(`${strapiUrl}/profiles`, requestOptions)
-      .then(response => response.json())
-      .then(result => {
+    axios
+      .get(`${strapiUrl}/profiles`, requestOptions)
+      .then(response => {
+        const result = response.data
         const { name, phone, address, zip_code = '' } = result.data.attributes
         let flatNumber,
           street,
@@ -116,9 +116,6 @@ const ProfilePage = () => {
 
     const hasErrors = Object.values(errors).some(error => error !== '')
 
-    const myHeaders = new Headers()
-    myHeaders.append('Authorization', `Bearer ${bearerToken}`)
-
     setIsLoading(true)
 
     const currentFormData = new FormData()
@@ -131,14 +128,15 @@ const ProfilePage = () => {
 
     currentFormData.append('data', JSON.stringify(data))
 
-    const requestOptions: RequestInit = {
+    const requestOptions = {
       method: 'POST',
-      headers: myHeaders,
-      redirect: 'follow',
-      body: currentFormData
+      headers: { Authorization: `Bearer ${bearerToken}` },
+      withCredentials: true,
+      data: currentFormData
     }
 
-    fetch(`${strapiUrl}/profiles`, requestOptions)
+    axios
+      .post(`${strapiUrl}/profiles`, currentFormData, requestOptions)
       .then(response => {
         dispatch(
           feedbackActions.setToastData({
@@ -146,7 +144,9 @@ const ProfilePage = () => {
           })
         )
         Router.push('/')
-        return response.json()
+      })
+      .catch(error => {
+        console.log(error)
       })
       .finally(() => {
         setIsLoading(false)
