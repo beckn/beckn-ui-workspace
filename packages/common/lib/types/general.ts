@@ -38,3 +38,11 @@ export interface FormErrors {
   state?: string
   country?: string
 }
+
+export type ShippingFormData = {
+  name: string
+  mobileNumber: string
+  email: string
+  address: string
+  zipCode: string
+}
