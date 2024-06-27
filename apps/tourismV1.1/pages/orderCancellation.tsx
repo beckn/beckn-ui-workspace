@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { Typography } from '@beckn-ui/molecules'
-import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
-import { Box, Flex, Image, Text } from '@chakra-ui/react'
 import { useLanguage } from '@hooks/useLanguage'
 import { useRouter } from 'next/router'
-import { CheckoutRootState, checkoutActions } from '@store/checkout-slice'
+import { checkoutActions } from '@store/checkout-slice'
 import { StatusRootState } from '@store/status-slice'
 import { useSelector, useDispatch } from 'react-redux'
 

@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { settingBoxActions } from '../../store/settingBox-slice'
 import Language from './language/Language'
 import { useLanguage } from '../../hooks/useLanguage'
-import { ISettingBoxRootState } from '../../lib/types/settingBox'
 import style from './header.module.css'
+import { ISettingBoxRootState } from '@beckn-ui/common'
 
 // Settings is just Language selector for now
 const Settings = () => {

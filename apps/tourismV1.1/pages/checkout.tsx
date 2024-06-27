@@ -4,18 +4,13 @@ import { Box, Flex, Text, Stack, Checkbox, useToast, useTheme } from '@chakra-ui
 import { DOMAIN } from '@lib/config'
 import { useLanguage } from '../hooks/useLanguage'
 
-import { CartItemForRequest, DataPerBpp, ICartRootState, TransactionIdRootState } from '@lib/types/cart'
+import { ICartRootState } from '@lib/types/cart'
 import {
   getInitPayload,
   areShippingAndBillingDetailsSame,
-  getPayloadForInitRequest,
-  getSubTotalAndDeliveryCharges,
-  formFieldConfig
+  getSubTotalAndDeliveryCharges
 } from '@components/checkout/checkout.utils'
 import useRequest from '../hooks/useRequest'
-import { CustomToast } from '@components/signIn/SignIn'
-import { useInitMutation } from '@services/init'
-import { responseDataActions } from '../store/responseData-slice'
 
 import { Checkout } from '@beckn-ui/becknified-components'
 
@@ -25,10 +20,12 @@ import { CheckoutRootState, checkoutActions } from '@store/checkout-slice'
 import { cartActions } from '@store/cart-slice'
 import { isEmpty } from '@utils/common-utils'
 import { getSelectPayload } from '@components/cart/cart.utils'
-import { useSelectMutation } from '@services/select'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
 import { FormField } from '@beckn-ui/molecules'
 import { feedbackActions } from '@store/ui-feedback-slice'
+import { useInitMutation } from '@beckn-ui/common/src/services/init'
+import { useSelectMutation } from '@beckn-ui/common/src/services/select'
+import { DiscoveryRootState } from '@beckn-ui/common'
 
 export type ShippingFormData = {
   name: string

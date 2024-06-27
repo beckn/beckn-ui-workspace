@@ -1,6 +1,5 @@
 import React from 'react'
 import { Image } from '@chakra-ui/react'
-import { urlFor } from '../../../lib/client'
 import { RetailItem } from '../../../lib/types/products'
 import Link from 'next/link'
 import ProductPrice from '../ProductPrice'
