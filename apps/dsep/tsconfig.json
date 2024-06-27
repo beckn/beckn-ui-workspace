@@ -1,7 +1,22 @@
 {
   "extends": "../../tsconfig.json",
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "compilerOptions": {
-    "jsx": "preserve"
-  }
+    "jsx": "preserve",
+    "paths": {
+      "@components/*": ["./components/*"],
+      "@hooks/*": ["./hooks/*"],
+      "@services/*": ["./services/*"],
+      "@lib/*": ["./lib/*"],
+      "@types/*": ["./types/*"],
+      "@pages/*": ["./pages/*"],
+      "@store/*": ["./store/*"],
+      "@utils/*": ["./utilities/*"],
+      "@styles/*": ["./styles/*"],
+      "@public/*": ["./public/*"],
+      "@locales/*": ["./locales/*"],
+      "@modals/*": ["./modals/*"]
+    }
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules"]
 }
