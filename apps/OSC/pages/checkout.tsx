@@ -12,8 +12,6 @@ import {
 } from '@components/checkout/checkout.utils'
 import useRequest from '../hooks/useRequest'
 
-import { useInitMutation } from '@services/init'
-
 import { Checkout } from '@beckn-ui/becknified-components'
 
 import { useRouter } from 'next/router'
@@ -22,6 +20,8 @@ import { CheckoutRootState, checkoutActions } from '@store/checkout-slice'
 import { cartActions } from '@store/cart-slice'
 import { isEmpty } from '@utils/common-utils'
 import { FormField, LoaderWithMessage } from '@beckn-ui/molecules'
+import { useInitMutation } from '@beckn-ui/common/src/services/init'
+import { DiscoveryRootState } from '@beckn-ui/common'
 
 export type ShippingFormData = {
   name: string

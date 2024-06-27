@@ -1,5 +1,4 @@
 import { CartRetailItem, DataPerBpp } from '@lib/types/cart'
-import { ResponseModel } from '@lib/types/responseModel'
 import { ShippingFormData } from '../checkout'
 import { areObjectPropertiesEqual } from '@utils/common-utils'
 import { ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
