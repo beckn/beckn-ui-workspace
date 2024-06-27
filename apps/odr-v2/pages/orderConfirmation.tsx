@@ -6,16 +6,14 @@ import { useLanguage } from '../hooks/useLanguage'
 import { ConfirmationPage } from '@beckn-ui/becknified-components'
 import { CheckoutRootState, checkoutActions } from '@store/checkout-slice'
 import { orderActions } from '@store/order-slice'
-import { useConfirmMutation } from '@services/confirm'
 import { getPayloadForConfirm, getPayloadForOrderHistoryPost } from '@utils/confirm-utils'
 import axios from '@services/axios'
-import { toast } from 'react-toastify'
 import { Box } from '@chakra-ui/react'
 import Cookies from 'js-cookie'
 import { ConfirmResponseModel } from '../types/confirm.types'
-import { CustomToast } from '@components/signIn/SignIn'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
 import { utilGenerateEllipsedText } from '@beckn-ui/molecules'
+import { useConfirmMutation } from '@beckn-ui/common/src/services/confirm'
 
 const OrderConfirmation = () => {
   const { t } = useLanguage()

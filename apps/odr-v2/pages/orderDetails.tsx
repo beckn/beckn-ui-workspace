@@ -40,12 +40,10 @@ import { UIState, DataState, ProcessState } from '../types/order-details.types'
 import CallphoneIcon from '../public/images/CallphoneIcon.svg'
 import locationIcon from '../public/images/locationIcon.svg'
 import nameIcon from '../public/images/nameIcon.svg'
-import { PlusSquareIcon, AttachmentIcon } from '@chakra-ui/icons'
+import { AttachmentIcon } from '@chakra-ui/icons'
 import { OrdersRootState } from '@store/order-slice'
 import ShippingBlock from '@components/orderDetailComponents/Shipping'
 import { DOMAIN } from '@lib/config'
-import PaymentDetails from '@beckn-ui/becknified-components/src/components/checkout/payment-details'
-import { getPaymentBreakDown } from '@utils/checkout-utils'
 import { feedbackActions } from '@store/ui-feedback-slice'
 
 const statusMap = {
@@ -645,7 +643,7 @@ const OrderDetails = () => {
     fulfillments,
     quote: { breakup, price }
   } = order
-  const { address, name, phone } = billing
+  const { address = '', name = '', phone = '' } = billing || {}
   const {
     customer: {
       contact: { phone: shippingPhone, email: shippingEmail } = {},

@@ -1,8 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
-import { authApi, User } from '@services/Users'
 import Router from 'next/router'
 import Cookies from 'js-cookie'
+import { User } from '@beckn-ui/common'
+import authApi from '@beckn-ui/common/src/services/User'
 
 const initialState = {
   user: null,
