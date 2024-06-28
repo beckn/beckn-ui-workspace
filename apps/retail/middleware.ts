@@ -12,12 +12,12 @@ export default function middleware(req: NextRequest) {
 
   const externalUrlParam = searchParams.get('external_url')
 
-  if (loggedin && (pathname === '/signin' || pathname === '/signUp')) {
+  if (loggedin && (pathname === '/signIn' || pathname === '/signUp')) {
     return NextResponse.redirect(new URL('/', req.url))
   }
 
-  if (!loggedin && pathname !== '/signin' && pathname !== '/signUp') {
-    const signInRoute = externalUrlParam ? `/signin?external_url=${externalUrlParam}` : '/signin'
+  if (!loggedin && pathname !== '/signIn' && pathname !== '/signUp') {
+    const signInRoute = externalUrlParam ? `/signIn?external_url=${externalUrlParam}` : '/signIn'
 
     return NextResponse.redirect(new URL(signInRoute, req.url))
   }

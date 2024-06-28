@@ -11,7 +11,7 @@ export interface User {
 }
 
 // Sign-In related models
-export interface SignInProps {
+export interface SignInFormProps {
   email: string
   password: string
 }
@@ -27,7 +27,7 @@ export interface SignInResponse {
 }
 
 // Sign-Up related models
-export interface SignUpProps {
+export interface SignUpFormProps {
   name: string
   email: string
   password: string
@@ -56,4 +56,32 @@ export interface ProfileProps {
   zipCode: string
   state: string
   country: string
+}
+
+// components related models
+interface LogoDetails {
+  src: string
+  alt: string
+}
+
+interface Logos {
+  mobile: LogoDetails
+  desktop: LogoDetails
+}
+
+export interface SignInComponentProps {
+  logos: Logos
+  onSignIn: () => void
+  onSignUp: () => void
+  initialFormData?: SignInFormProps
+  t: (key: string) => string
+}
+
+export interface SignUpComponentProps {
+  baseUrl: string
+  logos: Logos
+  onSignIn: () => void
+  onSignUp: () => void
+  initialFormData?: SignUpFormProps
+  t: (key: string) => string
 }

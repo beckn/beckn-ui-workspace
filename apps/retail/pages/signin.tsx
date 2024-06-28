@@ -2,7 +2,7 @@ import { Box } from '@chakra-ui/react'
 import React, { useEffect } from 'react'
 import Signin from '@components/signIn/SignIn'
 
-const MobileLogin = () => {
+const Login = () => {
   useEffect(() => {
     localStorage.clear()
   }, [])
@@ -14,4 +14,4 @@ const MobileLogin = () => {
   )
 }
 
-export default MobileLogin
+export default Login

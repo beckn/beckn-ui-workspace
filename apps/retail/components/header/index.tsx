@@ -24,7 +24,7 @@ const cartIconBlackList: string[] = [
   '/trackOrder',
   '/feedback',
   '/orderHistory',
-  '/signin',
+  '/signIn',
   '/mobileOtp',
   '/checkout',
   '/paymentMode',
@@ -37,9 +37,9 @@ const cartIconBlackList: string[] = [
   '/updateShippingDetails'
 ]
 
-const backIconList = ['/', '/signin']
+const backIconList = ['/', '/signIn']
 
-const homeIconBlackList = ['/', '/signin', '/mobileOtp', '/paymentMode', '/signUp']
+const homeIconBlackList = ['/', '/signIn', '/mobileOtp', '/paymentMode', '/signUp']
 
 const storeHeaderBlackList = [
   '/checkoutPage',
@@ -60,14 +60,14 @@ const storeHeaderBlackList = [
   '/profile',
   '/search',
   '/checkout',
-  '/signin'
+  '/signIn'
 ]
 const headerValues: PathnameObjectType = {
   '/checkoutPage': 'Review Purchase Order',
   '/orderHistory': 'My Orders',
   '/orderDetails': 'Order Details',
   '/invoiceDetails': 'Invoice Details',
-  '/signin': 'Sign In',
+  '/signIn': 'Sign In',
   '/signUp': 'Sign Up',
   '/cart': 'Cart',
   '/paymentMode': 'Select Payment Method',
@@ -100,7 +100,7 @@ const orderIconList = ['/orderDetails']
 const editIcon = ['/profile']
 const invoiceDownloadIcon = ['/']
 const currentLocation = ['/']
-const appLogoBlackList = ['/signin', '/signUp']
+const appLogoBlackList = ['/signIn', '/signUp']
 
 const getHeaderTitleForPage = (name: string, logo: string, pathName: string, locale: string | undefined) => {
   const values = locale === 'en' ? headerValues : headerValuesFrench
@@ -214,7 +214,7 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
           <Box
             onClick={() => {
               dispatch(logout())
-              router.push('/signin')
+              router.push('/signIn')
               setMenuModalOpen(false)
             }}
             className={styles.top_header_modal}
