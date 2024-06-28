@@ -9,7 +9,7 @@ import { Cart as BecknCart } from '@beckn-ui/becknified-components'
 import { Box, useToast } from '@chakra-ui/react'
 
 import { CartItemProps } from '@beckn-ui/becknified-components/src/components/cart/cart.types'
-import { getSelectPayload } from '@utils/cart-utils'
+import { getSelectPayload } from '@beckn-ui/common/src/utils'
 import { DiscoveryRootState, ICartRootState } from '@beckn-ui/common/lib/types'
 import { cartActions } from '@beckn-ui/common/src/store/cart-slice'
 import { DOMAIN } from '@beckn-ui/common'

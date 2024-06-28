@@ -9,6 +9,10 @@
       "path": "../packages/molecules"
     },
     {
+      "name": "Common",
+      "path": "../packages/common"
+    },
+    {
       "name": "Prettier",
       "path": "../packages/prettier-config"
     },

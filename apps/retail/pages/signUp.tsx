@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react'
 import { useLanguage } from '@hooks/useLanguage'
 import AlternateLogo from '../public/images/KuzaLogo.svg'
-import { signUpValidateForm } from '@utils/form-utils'
+import { signUpValidateForm } from '@beckn-ui/common/src/utils'
 import { BecknAuth } from '@beckn-ui/becknified-components'
 import Router from 'next/router'
 import { Box, useBreakpoint } from '@chakra-ui/react'
