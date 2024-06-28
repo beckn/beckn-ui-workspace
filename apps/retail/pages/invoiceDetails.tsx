@@ -4,8 +4,7 @@ import { DetailCard } from '@beckn-ui/becknified-components'
 import Typography from '@beckn-ui/molecules/src/components/typography/typography'
 import { Box, Flex } from '@chakra-ui/react'
 import { useLanguage } from '@hooks/useLanguage'
-import { getPaymentBreakDown } from '@utils/checkout-utils'
-import { formatTimestamp } from '@utils/confirm-utils'
+import { formatTimestamp, getPaymentBreakDown } from '@beckn-ui/common/src/utils'
 import { StatusResponseModel } from '@beckn-ui/common/lib/types'
 
 const invoiceDetails = () => {

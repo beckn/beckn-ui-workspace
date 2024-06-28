@@ -7,7 +7,7 @@ const dummyLocation = [
   }
 ]
 
-export const parsedSearchlist = (data: SearchResponseModel[]) => {
+export const parseSearchlist = (data: SearchResponseModel[]) => {
   const itemsarray: ParsedItemModel[] = []
   data.forEach(entry => {
     const context = entry.context

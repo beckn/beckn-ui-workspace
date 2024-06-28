@@ -4,7 +4,7 @@ import { useLanguage } from '../../hooks/useLanguage'
 import BottomModalScan from '@components/BottomModal/BottomModalScan'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import Typography from '@beckn-ui/molecules/src/components/typography/typography'
-import { isEmpty } from '@utils/common-utils'
+import { isEmpty } from '@beckn-ui/common/src/utils'
 import { ImportedOrderItem } from '@beckn-ui/common/lib/types'
 
 interface ImportedOrderProps {

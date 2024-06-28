@@ -3,7 +3,8 @@ import axios from '@services/axios'
 import { useDispatch } from 'react-redux'
 import { Box, Flex, Image } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
-import { parsedSearchlist } from '@utils/search-results.utils'
+
+import { parseSearchlist } from '@beckn-ui/common'
 import { Product, ProductCard } from '@beckn-ui/becknified-components'
 import { BottomModal } from '@beckn-ui/molecules'
 import { useBreakpoint } from '@chakra-ui/react'
@@ -63,7 +64,7 @@ const Search = () => {
       .post(`${apiUrl}/search`, searchPayload)
       .then(res => {
         dispatch(discoveryActions.addTransactionId({ transactionId: res.data.data[0].context.transaction_id }))
-        const parsedSearchItems = parsedSearchlist(res.data.data)
+        const parsedSearchItems = parseSearchlist(res.data.data)
         dispatch(discoveryActions.addProducts({ products: parsedSearchItems }))
         setItems(parsedSearchItems)
         setOriginalItems(parsedSearchItems)

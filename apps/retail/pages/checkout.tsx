@@ -1,22 +1,28 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Box, useToast, useTheme } from '@chakra-ui/react'
+import { Box, Flex, Text, Stack, Checkbox, useToast, useTheme } from '@chakra-ui/react'
+import { DOMAIN } from '@lib/config'
 import { useLanguage } from '../hooks/useLanguage'
 
+import { CartItemForRequest, DataPerBpp, ICartRootState, TransactionIdRootState } from '@lib/types/cart'
+import {
+  areShippingAndBillingDetailsSame,
+  getPayloadForInitRequest,
+  getSubTotalAndDeliveryCharges
+} from '@components/checkout/checkout.utils'
+import useRequest from '../hooks/useRequest'
 import { CustomToast } from '@components/signIn/SignIn'
+import { useInitMutation } from '@services/init'
+import { getInitPayload } from '@beckn-ui/common/src/utils'
 
 import { Checkout } from '@beckn-ui/becknified-components'
-import { FormData, FormField } from '@beckn-ui/molecules'
 
-import { useRouter } from 'next/router'
+import { Router, useRouter } from 'next/router'
 import { ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
-import { isEmpty } from '@utils/common-utils'
-import { areShippingAndBillingDetailsSame, getInitPayload, getSubTotalAndDeliveryCharges } from '@utils/checkout-utils'
-import { DiscoveryRootState, ICartRootState, PaymentBreakDownModel, QuoteBreakupInfo } from '@beckn-ui/common/lib/types'
-import { checkoutActions, CheckoutRootState } from '@beckn-ui/common/src/store/checkout-slice'
-import { cartActions } from '@beckn-ui/common/src/store/cart-slice'
-import { DOMAIN } from '@beckn-ui/common'
-import { useInitMutation } from '@beckn-ui/common/src/services/init'
+import { CheckoutRootState, checkoutActions } from '@store/checkout-slice'
+import { cartActions } from '@store/cart-slice'
+import { isEmpty } from '@beckn-ui/common/src/utils'
+import { FormField } from '@beckn-ui/molecules'
 
 export type ShippingFormData = {
   name: string
@@ -96,6 +102,7 @@ const CheckoutPage = () => {
   )
 
   const router = useRouter()
+  const initRequest = useRequest()
   const dispatch = useDispatch()
   const [initialize, { isLoading, isError }] = useInitMutation()
   const { t, locale } = useLanguage()
@@ -212,7 +219,7 @@ const CheckoutPage = () => {
   //   setIsBillingSame(isBillingSameRedux)
   // },[])
 
-  const formSubmitHandler = (data: FormData<FormField[]>) => {
+  const formSubmitHandler = (data: any) => {
     if (data) {
       const { id, type } = selectResponse[0].message.order.fulfillments[0]
       getInitPayload(submittedDetails, billingFormData, cartItems, transactionId, DOMAIN, { id, type }).then(res => {
@@ -242,9 +249,9 @@ const CheckoutPage = () => {
   }
 
   const createPaymentBreakdownMap = () => {
-    const paymentBreakdownMap: PaymentBreakDownModel = {}
+    const paymentBreakdownMap = {}
     if (isInitResultPresent()) {
-      initResponse[0].message.order.quote.breakup.forEach((breakup: QuoteBreakupInfo) => {
+      initResponse[0].message.order.quote.breakup.forEach(breakup => {
         paymentBreakdownMap[breakup.title] = {
           value: breakup.price.value,
           currency: breakup.price.currency
@@ -288,7 +295,7 @@ const CheckoutPage = () => {
               // priceWithSymbol: `${currencyMap[singleItem.price.currency]}${singleItem.totalPrice}`,
               price: singleItem.totalPrice,
               currency: singleItem.price.currency,
-              image: singleItem.images?.[0].url
+              image: singleItem.images[0].url
             }))
           },
           shipping: {
@@ -297,7 +304,7 @@ const CheckoutPage = () => {
             color: bgColorOfSecondary,
             shippingDetails: {
               name: submittedDetails.name,
-              location: submittedDetails.address!,
+              location: submittedDetails.address,
               number: submittedDetails.mobileNumber,
               title: t.shipping
             },
@@ -327,7 +334,7 @@ const CheckoutPage = () => {
             showDetails: isInitResultPresent() && !isEmpty(submittedDetails),
             shippingDetails: {
               name: billingFormData.name,
-              location: billingFormData.address!,
+              location: billingFormData.address,
               number: billingFormData.mobileNumber,
               title: t.billing
             },
@@ -347,7 +354,7 @@ const CheckoutPage = () => {
               totalText: t.total,
               totalValueWithCurrency: {
                 value: getSubTotalAndDeliveryCharges(initResponse).subTotal.toString(),
-                currency: getSubTotalAndDeliveryCharges(initResponse).currencySymbol!
+                currency: getSubTotalAndDeliveryCharges(initResponse).currencySymbol
               }
             }
           },

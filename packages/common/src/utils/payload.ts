@@ -85,54 +85,6 @@ export const getSelectPayload = (
   return { data: resultData }
 }
 
-export const getPayloadForSelectRequest = (selectedProduct: ParsedItemModel) => {
-  const {
-    bppId,
-    bppUri,
-    transactionId,
-    domain,
-    providerId,
-    item: { id, fulfillments, tags }
-  } = selectedProduct
-
-  const selectPayload = {
-    data: [
-      {
-        context: {
-          transaction_id: transactionId,
-          bpp_id: bppId,
-          bpp_uri: bppUri,
-          domain: domain
-        },
-        message: {
-          orders: [
-            {
-              provider: {
-                id: providerId
-              },
-              items: [
-                {
-                  id
-                }
-              ],
-              fulfillments,
-              tags: [
-                {
-                  descriptor: {
-                    name: 'select-1'
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      }
-    ]
-  }
-
-  return selectPayload
-}
-
 export const getInitPayload = async (
   deliveryAddress: ShippingFormInitialValuesType,
   billingAddress: ShippingFormInitialValuesType,
