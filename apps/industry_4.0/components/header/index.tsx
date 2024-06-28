@@ -9,6 +9,8 @@ import { useLanguage } from '../../hooks/useLanguage'
 import Qrcode from '@components/qrCode/Qrcode'
 import BottomModalScan from '@components/BottomModal/BottomModalScan'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
+import { useDispatch } from 'react-redux'
+import { logout } from '@beckn-ui/common/src/store/auth-slice'
 
 type PathnameObjectType = { [key: string]: string }
 
@@ -31,38 +33,40 @@ const cartIconBlackList: string[] = [
 
 const backIconList = ['/']
 
-const homeIconBlackList = ['/', '/homePage', '/mobileOtp', '/paymentMode', '/signUp']
+const homeIconBlackList = ['/', '/homePage', '/mobileOtp', '/paymentMode', '/signUp', '/signin']
 
 const storeHeaderBlackList = [
   '/checkoutPage',
   '/orderHistory',
   '/orderDetails',
   '/cart',
-  '/homePage',
+  '/',
   '/orderConfirmation',
   'feedback',
-  '/',
+  '/signin',
   '/signUp',
   '/mobileOtp',
   '/paymentMode',
   '/invoiceDetails',
   '/assemblyDetails',
   '/updateShippingDetails',
-  '/orderCancellation'
+  '/orderCancellation',
+  '/profile'
 ]
 const headerValues: PathnameObjectType = {
   '/checkoutPage': 'Review Purchase Order',
   '/orderHistory': 'Order History',
   '/orderDetails': 'Order Details',
   '/invoiceDetails': 'Invoice Details',
-  '/': 'Sign In',
+  '/signin': 'Sign In',
   '/signUp': 'Sign Up',
   '/cart': 'Cart',
   '/paymentMode': 'Select Payment Method',
   '/assemblyDetails': 'Add Assembly Details',
   '/updateShippingDetails': 'Shipping Details',
   '/orderCancellation': 'Order Cancel',
-  '/feedback': ''
+  '/feedback': '',
+  '/profile': 'My Profile'
 }
 
 const headerValuesFrench: PathnameObjectType = {
@@ -78,12 +82,12 @@ const headerValuesFrench: PathnameObjectType = {
 
 const topHeaderBlackList: string[] = []
 
-const bottomHeaderBlackList = ['/homePage', '/search', '/orderConfirmation']
+const bottomHeaderBlackList = ['/homePage', '/', '/search', '/orderConfirmation']
 
-const menuIconWhiteList = ['/homePage']
+const menuIconWhiteList = ['/']
 const orderIconList = ['/orderDetails']
 const invoiceDownloadIcon = ['/invoiceDetails']
-const appLogoBlackList = ['/signin', '/', '/signUp']
+const appLogoBlackList = ['/signin', '/signUp']
 
 const getHeaderTitleForPage = (name: string, logo: string, pathName: string, locale: string | undefined) => {
   const values = locale === 'en' ? headerValues : headerValuesFrench
@@ -108,6 +112,7 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
 
   const { t, locale } = useLanguage()
   const router = useRouter()
+  const dispatch = useDispatch()
 
   const handleMenuModalClose = () => {
     setMenuModalOpen(false)
@@ -134,7 +139,7 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
                   const user = localStorage.getItem('userPhone') as string
                   localStorage.clear()
                   localStorage.setItem('userPhone', user)
-                  router.push(`/homePage`)
+                  router.push(`/`)
                 }}
                 src="/images/Home_icon.svg"
                 alt="home Icon"
@@ -161,6 +166,19 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
       >
         <Box
           onClick={() => {
+            router.push('/profile')
+            setMenuModalOpen(false)
+          }}
+          className={styles.top_header_modal}
+        >
+          <Image
+            src="/images/userProfile.svg"
+            alt="User profile"
+          />
+          {t['profileIcon']}
+        </Box>
+        <Box
+          onClick={() => {
             router.push('/orderHistory')
             setMenuModalOpen(false)
           }}
@@ -171,6 +189,20 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
             alt="Order history icon"
           />
           {t['orderHistory']}
+        </Box>
+        <Box
+          onClick={() => {
+            dispatch(logout())
+            router.push('/signin')
+            setMenuModalOpen(false)
+          }}
+          className={styles.top_header_modal}
+        >
+          <Image
+            src="/images/logOutIcon.svg"
+            alt="Log out"
+          />
+          <span style={{ color: 'red' }}>{t['logoutIcon']}</span>
         </Box>
       </BottomModal>
     </>

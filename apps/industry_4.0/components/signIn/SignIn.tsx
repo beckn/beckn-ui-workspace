@@ -8,7 +8,6 @@ import Router from 'next/router'
 import { Box, useToast, Text } from '@chakra-ui/react'
 import Cookies from 'js-cookie'
 import { Toast } from '@beckn-ui/molecules/src/components'
-import { ToastType } from '@beckn-ui/molecules/src/components/toast/Toast-type'
 
 const SignIn = () => {
   const { t } = useLanguage()
@@ -57,9 +56,8 @@ const SignIn = () => {
       if (response.ok) {
         const data = await response.json()
         const token = data.jwt
-
         Cookies.set('authToken', token)
-        Router.push('/homePage')
+        Router.push('/')
       } else {
         const errorData = await response.json()
         toast({

@@ -284,7 +284,7 @@ const CheckoutPage = () => {
           children="Cancel Order"
           variant="outline"
           className="checkout_btn"
-          handleClick={() => router.push('/homePage')}
+          handleClick={() => router.push('/')}
         />
       </Box>
     </Box>

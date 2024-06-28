@@ -16,7 +16,7 @@ import { useToast } from '@chakra-ui/react'
 const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const { locale } = useLanguage()
   const router = useRouter()
-  const isHomepage = router.pathname === '/homePage'
+  const isHomepage = router.pathname === '/'
   const isSearch = router.pathname === '/search'
   const isSignUp = router.pathname === '/signUp'
   const isSearchPage = router.pathname === '/search'

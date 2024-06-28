@@ -101,6 +101,16 @@ const en: { [key: string]: string } = {
   success: 'Success!',
   updatedSuccessfully: 'Order Updated Successfully!',
   error: 'Error!',
-  unabletoTrack: 'Unable to get the track url'
+  unabletoTrack: 'Unable to get the track url',
+  profileIcon: 'My Profile',
+  logoutIcon: 'Logout',
+  enterFlatDetails: 'Enter Flat, House no, Building , etc',
+  enterStreetDetails: 'Enter Area , Street , Sector, Village',
+  enterCity: 'Enter City /Town',
+  enterPincode: 'Enter Pincode',
+  enterState: 'Enter State / Province',
+  enterCountry: 'Enter Country',
+  saveContinue: 'Save & Continue',
+  profileUpdateSuccess: 'Profile updated successfully!'
 }
 export default en
