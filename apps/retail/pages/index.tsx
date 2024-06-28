@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import KuzaLogo from '@public/images/Kuza-mini.svg'
 import AlternateLogo from '@public/images/KuzaLogo.svg'
-import TopSheet from '@components/topSheet/TopSheet'
+// import TopSheet from '@components/topSheet/TopSheet'
 import { useLanguage } from '@hooks/useLanguage'
 import beckenFooter from '../public/images/footer.svg'
 import SearchInput from '@beckn-ui/becknified-components/src/components/search-input'
@@ -14,7 +14,7 @@ import ShoppingList from '@components/shoppingList/ShoppingList'
 import SelectDeliveryModal from '@components/selectDeliveryModal/SelectDeliveryModal'
 import { Typography } from '@beckn-ui/molecules'
 import { ImportOrderModel, ImportOrderShoppingList } from '@beckn-ui/common/lib/types'
-import { useGeolocation } from '@beckn-ui/common'
+import { TopSheet, useGeolocation } from '@beckn-ui/common'
 
 const HomePage = () => {
   const breakpoint = useBreakpoint()
@@ -165,6 +165,7 @@ const HomePage = () => {
         currentLocationFetchError={currentLocationFetchError}
         loadingForCurrentAddress={loadingForCurrentAddress}
         currentAddress={currentAddress}
+        t={key => t[key]}
       />
       <Box
         maxWidth={{ base: '100vw', md: '30rem', lg: '40rem' }}
