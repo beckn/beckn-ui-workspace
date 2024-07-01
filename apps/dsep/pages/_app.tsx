@@ -10,10 +10,11 @@ import { ChakraProvider } from '@chakra-ui/react'
 
 import '../styles/globals.css'
 
+import store from '../store/index'
 import { Garuda } from 'garudaa'
 import { BecknProvider } from '@beckn-ui/molecules'
 import { Provider } from 'react-redux'
-import { persistor, store } from '../store'
+import { persistor } from '../store'
 import { PersistGate } from 'redux-persist/integration/react'
 
 Garuda.init({

@@ -31,7 +31,9 @@ const Cart = () => {
 
   useEffect(() => {
     if (localStorage && !localStorage.getItem('quoteResponse')) {
-      quoteRequest.fetchData(`${apiUrl}/select`, 'POST', payLoadForQuoteRequest)
+      if (cartItems.length > 0) {
+        quoteRequest.fetchData(`${apiUrl}/select`, 'POST', payLoadForQuoteRequest)
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])

@@ -26,9 +26,11 @@ const Cart = () => {
   const { items, totalQuantity } = useSelector((state: ICartRootState) => state.cart)
   const totalAmount = useSelector((state: ICartRootState) => state.cart.totalAmount)
   const { transactionId, productList } = useSelector((state: DiscoveryRootState) => state.discovery)
-
+  console.log(items)
   useEffect(() => {
-    fetchQuotes(getSelectPayload(items, transactionId, DOMAIN))
+    if (items.length > 0) {
+      fetchQuotes(getSelectPayload(items, transactionId, DOMAIN))
+    }
   }, [totalQuantity])
 
   const handleShopButton = () => {
