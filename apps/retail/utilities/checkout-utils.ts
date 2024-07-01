@@ -91,7 +91,7 @@ export const geocodeFromPincode = async (pincode: string) => {
     }
   } catch (error) {
     console.error(error)
-    return { country: '', state: '', city: '' }
+    throw new Error('Invalid Pincode')
   }
 }
 
