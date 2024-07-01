@@ -12,7 +12,7 @@ import { CartItemProps } from '@beckn-ui/becknified-components/src/components/ca
 import { getSelectPayload } from '@beckn-ui/common/src/utils'
 import { DiscoveryRootState, ICartRootState } from '@beckn-ui/common/lib/types'
 import { cartActions } from '@beckn-ui/common/src/store/cart-slice'
-import { DOMAIN } from '@beckn-ui/common'
+import { DOMAIN } from '@lib/config'
 import { useSelectMutation } from '@beckn-ui/common/src/services/select'
 
 const Cart = () => {

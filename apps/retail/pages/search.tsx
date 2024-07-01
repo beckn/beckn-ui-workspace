@@ -14,7 +14,7 @@ import LoaderWithMessage from '@components/loader/LoaderWithMessage'
 import Filter from '../components/filter/Filter'
 import { ParsedItemModel } from '@beckn-ui/common/lib/types'
 import { discoveryActions } from '@beckn-ui/common/src/store/discovery-slice'
-import { DOMAIN } from '@beckn-ui/common'
+import { DOMAIN } from '@lib/config'
 
 //Mock data for testing search API. Will remove after the resolution of CORS issue
 

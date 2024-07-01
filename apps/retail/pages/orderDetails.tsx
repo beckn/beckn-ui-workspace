@@ -55,7 +55,7 @@ import {
 import { statusActions } from '@beckn-ui/common/src/store/status-slice'
 import { OrdersRootState } from '@beckn-ui/common/src/store/order-slice'
 import { feedbackActions } from '@beckn-ui/common/src/store/ui-feedback-slice'
-import { DOMAIN } from '@beckn-ui/common'
+import { DOMAIN } from '@lib/config'
 
 const DELIVERED = 'Delivered'
 const CANCELLED = 'CANCELLED'
