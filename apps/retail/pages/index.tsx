@@ -1,8 +1,6 @@
 import axios from '@services/axios'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
-import kuzaMobLogo from '@public/images/Kuza-mini.svg'
-import kuzaDeskLogo from '@public/images/KuzaLogo.svg'
 import { useLanguage } from '@hooks/useLanguage'
 import beckenFooter from '../public/images/footer.svg'
 import ImportedOrder from '@components/importedOrder/ImportedOrder'
@@ -163,13 +161,11 @@ const HomePage = () => {
       />
 
       <HomePageContent
-        logos={{
-          mobile: { src: kuzaMobLogo, alt: 'Kuza logo' },
-          desktop: { src: kuzaDeskLogo, alt: 'Kuza logo' }
-        }}
-        textContentProps={{
+        blockOrder={['header', 'description', 'searchInput']}
+        headerProps={{
+          name: 'Kuza One',
           title: t.forAll,
-          subTitle: t.subText
+          description: t.subText
         }}
         searchProps={{
           searchPlaceholder: t.searchPlaceholder,

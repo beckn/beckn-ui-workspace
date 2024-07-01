@@ -1,12 +1,28 @@
-import { Box } from '@chakra-ui/react'
 import React from 'react'
-import SignUp from '@components/signUp/SignUp'
+import Router from 'next/router'
+import kuzaMobLogo from '@public/images/Logo.svg'
+import kuzaDeskLogo from '@public/images/KuzaLogo.svg'
+import { useLanguage } from '@hooks/useLanguage'
+import { SignUpPage } from '@beckn-ui/common'
 
 const Register = () => {
+  const { t } = useLanguage()
+
+  const handleSignIn = () => {
+    Router.push('/signIn')
+  }
+
   return (
-    <Box>
-      <SignUp />
-    </Box>
+    <SignUpPage
+      baseUrl={process.env.NEXT_PUBLIC_STRAPI_URL!}
+      logos={{
+        mobile: { src: kuzaMobLogo, alt: 'Kuza logo' },
+        desktop: { src: kuzaDeskLogo, alt: 'Kuza logo' }
+      }}
+      onSignIn={handleSignIn}
+      onSignUp={() => {}}
+      t={key => t[key]}
+    />
   )
 }
 
