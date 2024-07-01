@@ -1,23 +1,15 @@
-import { Box, Flex, Image, Text, useBreakpoint } from '@chakra-ui/react'
 import axios from '@services/axios'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
-import KuzaLogo from '@public/images/Kuza-mini.svg'
-import AlternateLogo from '@public/images/KuzaLogo.svg'
-import TopSheet from '@components/topSheet/TopSheet'
 import { useLanguage } from '@hooks/useLanguage'
 import beckenFooter from '../public/images/footer.svg'
-import SearchInput from '@beckn-ui/becknified-components/src/components/search-input'
 import ImportedOrder from '@components/importedOrder/ImportedOrder'
 import OrderDetails from '@components/orderDetails/ImportedOrderDetails'
 import ShoppingList from '@components/shoppingList/ShoppingList'
 import SelectDeliveryModal from '@components/selectDeliveryModal/SelectDeliveryModal'
-import { Typography } from '@beckn-ui/molecules'
-import { ImportOrderModel, ImportOrderShoppingList } from '@beckn-ui/common/lib/types'
-import { useGeolocation } from '@beckn-ui/common'
+import { HomePageContent, ImportOrderModel, ImportOrderShoppingList, TopSheet, useGeolocation } from '@beckn-ui/common'
 
 const HomePage = () => {
-  const breakpoint = useBreakpoint()
   const { t } = useLanguage()
 
   const [searchTerm, setSearchTerm] = useState<string>('')
@@ -34,8 +26,6 @@ const HomePage = () => {
 
   const chatGptApiUrl = process.env.NEXT_PUBLIC_CHAT_GPT_URL
   const apiKeyForGoogle = process.env.NEXT_PUBLIC_GOOGLE_API_KEY
-  const mobileBreakpoints = ['base', 'sm', 'md', 'lg']
-  const currentLogo = mobileBreakpoints.includes(breakpoint) ? KuzaLogo : AlternateLogo
 
   const {
     currentAddress,
@@ -44,11 +34,13 @@ const HomePage = () => {
   } = useGeolocation(apiKeyForGoogle as string)
 
   const router = useRouter()
+
   useEffect(() => {
     if (localStorage) {
       localStorage.clear()
     }
   }, [])
+
   const navigateToSearchResults = () => {
     localStorage.setItem('optionTags', JSON.stringify({ name: searchTerm }))
     router.push(`/search?searchTerm=${searchTerm}`)
@@ -165,61 +157,27 @@ const HomePage = () => {
         currentLocationFetchError={currentLocationFetchError}
         loadingForCurrentAddress={loadingForCurrentAddress}
         currentAddress={currentAddress}
+        t={key => t[key]}
       />
-      <Box
-        maxWidth={{ base: '100vw', md: '30rem', lg: '40rem' }}
-        margin="calc(0rem + 90px)  auto"
-        backgroundColor="white"
-      >
-        <Image
-          src={currentLogo}
-          alt={'Kuza One'}
-          pt="15px"
-          pb="15px"
-          m={{ base: '0', xl: '0 auto' }}
-        />
-        <Typography
-          style={{ marginTop: '-15px', marginBottom: '15px' }}
-          fontSize="27px"
-          fontWeight="800"
-          text={t.forAll}
-        />
-        <Typography
-          style={{ marginBottom: '40px' }}
-          fontSize="15px"
-          fontWeight="400"
-          text={t.subText}
-        />
-        <SearchInput
-          onChangeHandler={(e: React.BaseSyntheticEvent) => setSearchTerm(e.target.value)}
-          searchIcon={'/images/search.svg'}
-          searchIconClickHandler={searchIconClickHandler}
-          onEnterHandler={(e: { key: string }) => e.key === 'Enter' && navigateToSearchResults()}
-          placeHolder={t.searchProducts}
-        />
 
-        <Flex
-          justifyContent={'center'}
-          alignItems="center"
-          width=" calc(100% - 40px)"
-          position={'fixed'}
-          bottom="15px"
-        >
-          <Text
-            pr={'8px'}
-            fontSize="12px"
-            color={'#000000'}
-          >
-            {t.footerText}
-          </Text>
-          <Image
-            src={beckenFooter}
-            alt="footerLogo"
-            width={39}
-            height={13}
-          />
-        </Flex>
-      </Box>
+      <HomePageContent
+        blockOrder={['header', 'description', 'searchInput']}
+        headerProps={{
+          name: 'Kuza One',
+          title: t.forAll,
+          description: t.subText
+        }}
+        searchProps={{
+          searchPlaceholder: t.searchPlaceholder,
+          setSearchTerm: setSearchTerm,
+          onSearchIconClick: searchIconClickHandler,
+          onSearchInputEnterPress: navigateToSearchResults
+        }}
+        footerProps={{
+          poweredByText: t.footerText,
+          poweredByLogoSrc: beckenFooter
+        }}
+      />
 
       {importedOrder ? (
         <ImportedOrder

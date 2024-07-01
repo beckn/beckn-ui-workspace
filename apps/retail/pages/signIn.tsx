@@ -1,29 +1,32 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Router from 'next/router'
 import kuzaMobLogo from '@public/images/Logo.svg'
 import kuzaDeskLogo from '@public/images/KuzaLogo.svg'
 import { useLanguage } from '@hooks/useLanguage'
-import { SignUpPage } from '@beckn-ui/common'
+import { SignInPage } from '@beckn-ui/common'
 
-const Register = () => {
+const Login = () => {
   const { t } = useLanguage()
 
-  const handleSignIn = () => {
-    Router.push('/signIn')
+  useEffect(() => {
+    localStorage.clear()
+  }, [])
+
+  const handleSignUp = () => {
+    Router.push('/signUp')
   }
 
   return (
-    <SignUpPage
-      baseUrl={process.env.NEXT_PUBLIC_STRAPI_URL!}
+    <SignInPage
       logos={{
         mobile: { src: kuzaMobLogo, alt: 'Kuza logo' },
         desktop: { src: kuzaDeskLogo, alt: 'Kuza logo' }
       }}
-      onSignIn={handleSignIn}
-      onSignUp={() => {}}
+      onSignIn={() => {}}
+      onSignUp={handleSignUp}
       t={key => t[key]}
     />
   )
 }
 
-export default Register
+export default Login
