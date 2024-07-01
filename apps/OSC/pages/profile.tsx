@@ -116,7 +116,7 @@ const ProfilePage = () => {
     const data = {
       name: formData.name.trim(),
       phone: formData.mobileNumber,
-      address: `${formData.flatNumber}, ${formData.street}, ${formData.city}, ${formData.state}, ${formData.country}`,
+      address: `${formData?.flatNumber}, ${formData?.street}, ${formData.city}, ${formData.state}, ${formData.country}`,
       zip_code: formData.zipCode
     }
 

@@ -8,6 +8,11 @@ export interface FormErrors {
   address?: string
   zipCode?: string
   password?: string
+  flatNumber?: string | null
+  street?: string | null
+  country?: string
+  state?: string
+  city?: string
 }
 
 export const validateForm = (formData: ShippingFormData): FormErrors => {
@@ -99,6 +104,45 @@ export const signUpValidateForm = (formData: SignUpPropsModel): FormErrors => {
     errors.mobileNumber = 'errorNumber'
   } else if (!/^\d{10}$/.test(formData.mobileNumber)) {
     errors.mobileNumber = 'errorNumber2'
+  }
+  return errors
+}
+
+export const profileValidateForm = (formData: ProfileProps): FormErrors => {
+  const errors: FormErrors = {}
+
+  if (formData.name.trim() === '') {
+    errors.name = 'errorName'
+  } else if (!/^[A-Za-z\s]*$/.test(formData.name)) {
+    errors.name = 'errorName2'
+  } else if (formData.name.length < 3) {
+    errors.name = 'errorName3'
+  }
+
+  if (formData.mobileNumber.trim() === '') {
+    errors.mobileNumber = 'errorNumber'
+  } else if (!/^\d{10}$/.test(formData.mobileNumber)) {
+    errors.mobileNumber = 'errorNumber2'
+  }
+  if (formData.zipCode.trim() === '') {
+    errors.zipCode = 'errorZipcode'
+  } else if (!/^\d{6}$/.test(formData.zipCode)) {
+    errors.zipCode = 'errorZipcode2'
+  }
+  if (formData.country.trim() === '') {
+    errors.country = 'errorCountry'
+  } else if (!/^[A-Za-z\s]*$/.test(formData.country)) {
+    errors.country = 'errorCountry1'
+  }
+  if (formData.state.trim() === '') {
+    errors.state = 'errorState'
+  } else if (!/^[A-Za-z\s]*$/.test(formData.state)) {
+    errors.state = 'errorState1'
+  }
+  if (formData.city.trim() === '') {
+    errors.city = 'errorCity'
+  } else if (!/^[A-Za-z\s]*$/.test(formData.city)) {
+    errors.city = 'errorCity1'
   }
   return errors
 }

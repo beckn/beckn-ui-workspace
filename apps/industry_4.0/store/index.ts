@@ -13,6 +13,7 @@ import favoriteReducer from './favorite-slice'
 import responseDataReducer from './responseData-slice'
 import geoMapLocationSearchReducer from './geoMapLocationSearch-slice'
 import feedbackReducer from './ui-feedback-slice'
+import authReducer from '@beckn-ui/common/src/store/auth-slice'
 
 const store = configureStore({
   reducer: {
@@ -24,6 +25,7 @@ const store = configureStore({
     userInfo: userInfoReducer,
     sideNavBar: sideNavBarReducer,
     megaMenu: megaMenuReducer,
+    auth: authReducer,
     activeMenuItem: activeMenuItemReducer,
     settingBox: settingBoxReducer,
     favorite: favoriteReducer,

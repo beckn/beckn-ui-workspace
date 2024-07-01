@@ -52,7 +52,7 @@ const Feedback = () => {
 
       const ratingResponse = await axios.post(`${apiUrl}/rating`, ratingPayload)
       if (ratingResponse.data.data.length > 0) {
-        router.push('/homePage')
+        router.push('/')
       }
     } catch (error) {
       console.error(error)
@@ -143,7 +143,7 @@ const Feedback = () => {
           children="Skip for Now"
           variant="outline"
           className="checkout_btn"
-          handleClick={() => router.push('/homePage')}
+          handleClick={() => router.push('/')}
         />
       </Box>
     </Box>

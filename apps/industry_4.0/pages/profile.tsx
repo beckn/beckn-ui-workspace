@@ -1,26 +1,23 @@
 import { BecknAuth } from '@beckn-ui/becknified-components'
 import { Box, useToast } from '@chakra-ui/react'
-import { profilePageProp } from '@components/signIn/SignIn.types'
 import { useLanguage } from '@hooks/useLanguage'
-import { FormErrors, profileValidateForm } from '@utils/form-utils'
+import { profileValidateForm } from '@utils/form-utils'
 import Cookies from 'js-cookie'
 import React, { useEffect, useMemo, useState } from 'react'
-import { CustomToast } from '@components/signIn/SignIn'
 import Router from 'next/router'
-import { toast as reactToastifyToast } from 'react-toastify'
 import { isEmpty } from '@utils/common-utils'
 import { useDispatch } from 'react-redux'
-import { feedbackActions } from '@store/ui-feedback-slice'
-import axios from '@services/axios'
+import { FormErrors, ProfileProps } from '@beckn-ui/common/lib/types'
+import { feedbackActions } from '@beckn-ui/common/src/store/ui-feedback-slice'
 
 const ProfilePage = () => {
   const { t } = useLanguage()
   const bearerToken = Cookies.get('authToken')
   const toast = useToast()
-  const dispatch = useDispatch()
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
   const [isLoading, setIsLoading] = useState(false)
-  const [formData, setFormData] = useState<profilePageProp>({
+  const dispatch = useDispatch()
+  const [formData, setFormData] = useState<ProfileProps>({
     name: '',
     mobileNumber: '',
     flatNumber: '',
@@ -40,7 +37,7 @@ const ProfilePage = () => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
 
-    setFormData((prevFormData: profilePageProp) => ({
+    setFormData((prevFormData: ProfileProps) => ({
       ...prevFormData,
       [name]: value
     }))
@@ -50,26 +47,27 @@ const ProfilePage = () => {
       [name]: value
     }
 
-    const errors = profileValidateForm(updatedFormData) as any
+    const errors = profileValidateForm(updatedFormData)
     setFormErrors(prevErrors => ({
       ...prevErrors,
-      [name]: t[`${errors[name]}`] || ''
+      [name]: t[`${errors[name as keyof FormErrors]}`] || ''
     }))
   }
 
   useEffect(() => {
-    const requestOptions = {
-      method: 'GET',
-      headers: { Authorization: `Bearer ${bearerToken}` },
-      withCredentials: true
-    }
+    const myHeaders = new Headers()
+    myHeaders.append('Authorization', `Bearer ${bearerToken}`)
 
+    const requestOptions: RequestInit = {
+      method: 'GET',
+      headers: myHeaders,
+      redirect: 'follow'
+    }
     setIsLoading(true)
 
-    axios
-      .get(`${strapiUrl}/profiles`, requestOptions)
-      .then(response => {
-        const result = response.data
+    fetch(`${strapiUrl}/profiles`, requestOptions)
+      .then(response => response.json())
+      .then(result => {
         const { name, phone, address, zip_code = '' } = result.data.attributes
         let flatNumber,
           street,
@@ -102,14 +100,19 @@ const ProfilePage = () => {
   }, [])
 
   const updateProfile = () => {
-    const errors = profileValidateForm(formData) as any
+    const errors = profileValidateForm(formData)
     setFormErrors(prevErrors => ({
       ...prevErrors,
       ...Object.keys(errors).reduce((acc, key) => {
-        acc[key] = t[`${errors[key]}`] || ''
+        acc[key as keyof FormErrors] = t[`${errors[key as keyof FormErrors]}`] || ''
         return acc
       }, {} as FormErrors)
     }))
+
+    const hasErrors = Object.values(errors).some(error => error !== '')
+
+    const myHeaders = new Headers()
+    myHeaders.append('Authorization', `Bearer ${bearerToken}`)
 
     setIsLoading(true)
 
@@ -123,15 +126,14 @@ const ProfilePage = () => {
 
     currentFormData.append('data', JSON.stringify(data))
 
-    const requestOptions = {
+    const requestOptions: RequestInit = {
       method: 'POST',
-      headers: { Authorization: `Bearer ${bearerToken}` },
-      withCredentials: true,
-      data: currentFormData
+      headers: myHeaders,
+      redirect: 'follow',
+      body: currentFormData
     }
 
-    axios
-      .post(`${strapiUrl}/profiles`, currentFormData, requestOptions)
+    fetch(`${strapiUrl}/profiles`, requestOptions)
       .then(response => {
         dispatch(
           feedbackActions.setToastData({
@@ -139,9 +141,7 @@ const ProfilePage = () => {
           })
         )
         Router.push('/')
-      })
-      .catch(error => {
-        console.log(error)
+        return response.json()
       })
       .finally(() => {
         setIsLoading(false)
@@ -157,6 +157,7 @@ const ProfilePage = () => {
       Object.values(restFormErrors).every(value => value === '')
     )
   }, [formData, formErrors])
+
   return (
     <Box
       margin={'0 auto'}

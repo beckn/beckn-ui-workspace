@@ -76,7 +76,7 @@ const SignUp = () => {
           }
           Cookies.set('authToken', token)
           fetch(`${baseUrl}/profiles`, requestOptions).then(response => {
-            Router.push('/homePage')
+            Router.push('/')
             return response.json()
           })
         } else {
