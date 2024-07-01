@@ -4,6 +4,7 @@ import { HomePageContentProps } from '../../../lib/types/components'
 import { SearchInput } from '@beckn-ui/becknified-components'
 import { Typography } from '@beckn-ui/molecules'
 import { RiArrowRightSLine } from 'react-icons/ri'
+import PoweredBy from '../poweredBy'
 
 const HomePageContent: React.FC<HomePageContentProps> = ({
   blockOrder = [],
@@ -16,7 +17,7 @@ const HomePageContent: React.FC<HomePageContentProps> = ({
   const { name, title, description } = headerProps || {}
   const { searchPlaceholder, setSearchTerm, onSearchIconClick, onSearchInputEnterPress } = searchProps
   const { label, onSearchByLocationClick } = searchByLocation || {}
-  const { footerText, footerLogoSrc } = footerProps
+  const { poweredByText, poweredByLogoSrc } = footerProps
 
   const theme = useTheme()
   const breakpoint = useBreakpoint()
@@ -102,26 +103,10 @@ const HomePageContent: React.FC<HomePageContentProps> = ({
       backgroundColor="white"
     >
       {blockOrder.map(block => renderBlock(block))}
-      <Flex
-        justifyContent="center"
-        alignItems="center"
-        width="calc(100% - 40px)"
-        position="fixed"
-        bottom="15px"
-      >
-        <Typography
-          style={{ paddingRight: '8px' }}
-          fontSize="12px"
-          color="#000000"
-          text={footerText}
-        />
-        <Image
-          src={footerLogoSrc}
-          alt="Footer Logo"
-          width={39}
-          height={13}
-        />
-      </Flex>
+      <PoweredBy
+        logoSrc={poweredByLogoSrc}
+        poweredByText={poweredByText}
+      />
     </Box>
   )
 }

@@ -174,8 +174,8 @@ const HomePage = () => {
           onSearchInputEnterPress: navigateToSearchResults
         }}
         footerProps={{
-          footerText: t.footerText,
-          footerLogoSrc: beckenFooter
+          poweredByText: t.footerText,
+          poweredByLogoSrc: beckenFooter
         }}
       />
 

@@ -29,7 +29,14 @@ export interface HomePageContentProps {
     onSearchByLocationClick: (e: React.MouseEvent) => void
   }
   footerProps: {
-    footerLogoSrc: string
-    footerText: string
+    poweredByLogoSrc: string
+    poweredByText: string
   }
+}
+
+// powered by component props
+export interface PoweredByProps {
+  logoSrc: string
+  altText?: string
+  poweredByText: string
 }
