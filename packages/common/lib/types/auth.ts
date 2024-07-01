@@ -59,12 +59,12 @@ export interface ProfileProps {
 }
 
 // components related models
-interface LogoDetails {
+export interface LogoDetails {
   src: string
   alt: string
 }
 
-interface Logos {
+export interface Logos {
   mobile: LogoDetails
   desktop: LogoDetails
 }
