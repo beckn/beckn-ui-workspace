@@ -31,7 +31,7 @@ const cartIconBlackList: string[] = [
   '/invoiceDetails'
 ]
 
-const backIconList = ['/']
+const backIconList = ['/', '/signin']
 
 const homeIconBlackList = ['/', '/homePage', '/mobileOtp', '/paymentMode', '/signUp', '/signin']
 
