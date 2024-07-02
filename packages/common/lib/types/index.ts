@@ -9,7 +9,6 @@ export * from './geoLocationSearchPage'
 export * from './order'
 export * from './payment'
 export * from './products'
-export * from './search'
 export * from './settingBox'
 
 export * from './beckn'
