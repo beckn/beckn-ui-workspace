@@ -2,12 +2,17 @@ import { Product } from '@beckn-ui/becknified-components'
 import { Logos } from './auth'
 import { ParsedItemModel } from './beckn'
 
+// translate language props
+export interface TranslationProps {
+  t: (key: string) => string
+  locale?: string
+}
+
 // top-sheet component props
-export interface TopSheetComponentProps {
+export interface TopSheetComponentProps extends TranslationProps {
   currentAddress: string
   loadingForCurrentAddress?: boolean
   currentLocationFetchError?: string
-  t: (key: string) => string
   searchPlaceholder?: string
 }
 
@@ -51,7 +56,7 @@ export interface SearchAndDiscoverProps {
     setSearchKeyword: (value: string) => void
     fetchDataOnSearch: () => void
   }
-  filterProps: {
+  filterProps?: {
     isFilterOpen: boolean
     handleFilterOpen: () => void
     handleFilterClose: () => void
@@ -72,4 +77,16 @@ export interface SearchBarProps {
   searchString: string | string[] | undefined
   handleChange: Function
   placeholder?: string
+}
+
+export interface QrCodeProps {
+  value: string
+}
+
+export interface HeaderProps extends TranslationProps {
+  handleMenuClick?: () => void
+}
+
+export interface SubHeaderProps extends TranslationProps {
+  showCartIcon?: boolean
 }

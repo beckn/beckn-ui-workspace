@@ -128,6 +128,7 @@ const Filter = ({ handleApplyFilter, handleResetFilter, handleCancelFilter = () 
                 borderRadius="unset"
                 borderBottom={'1px solid'}
                 paddingBottom={'2px'}
+                _focusVisible={{ zIndex: 1, borderColor: '#3182ce' }}
               >
                 <option value="">Price</option>
                 <option value="LowtoHigh">Price -- Low to High</option>
@@ -154,6 +155,7 @@ const Filter = ({ handleApplyFilter, handleResetFilter, handleCancelFilter = () 
                 borderBottom={'1px solid'}
                 paddingBottom={'2px'}
                 boxShadow={'none'}
+                _focusVisible={{ zIndex: 1, borderColor: '#3182ce' }}
               >
                 <option value="">Rating</option>
                 <option value="RatingLowtoHigh">Rating -- Low to High</option>

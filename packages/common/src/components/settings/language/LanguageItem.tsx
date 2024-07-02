@@ -2,14 +2,15 @@ import { Box } from '@chakra-ui/react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
-import { useLanguage } from '../../../hooks/useLanguage'
+import { TranslationProps } from '../../../../lib/types/components'
 
-interface Props {
+interface Props extends TranslationProps {
   language: string
   onCloseBox: (isLangOpen: boolean) => void
 }
-const LanguageItem: React.FC<Props> = ({ language, onCloseBox }) => {
-  const { t, locale } = useLanguage()
+
+const LanguageItem: React.FC<Props> = props => {
+  const { t, locale, language, onCloseBox } = props
   const router = useRouter()
   const [lang, setLang] = useState(locale)
 
@@ -45,7 +46,7 @@ const LanguageItem: React.FC<Props> = ({ language, onCloseBox }) => {
               htmlFor={language}
               style={{ padding: '0 12px', fontWeight: `${locale === language && 'bold'}` }}
             >
-              {t[`${language}`]}
+              {t('language')}
             </label>
           </div>
         </a>

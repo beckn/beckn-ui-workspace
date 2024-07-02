@@ -1,16 +1,17 @@
 import React from 'react'
-import { AiOutlineSetting, AiOutlineDown } from 'react-icons/ai'
+import { AiOutlineDown } from 'react-icons/ai'
 import { useDispatch, useSelector } from 'react-redux'
 import Language from './language/Language'
-import { useLanguage } from '../../hooks/useLanguage'
-import style from './header.module.css'
+import Styles from './settings.module.css'
 import { ISettingBoxRootState } from '@beckn-ui/common/lib/types'
 import { settingBoxActions } from '@beckn-ui/common/src/store/settingBox-slice'
+import { TranslationProps } from '../../../lib/types/components'
 
 // Settings is just Language selector for now
-const Settings = () => {
+const Settings = (props: TranslationProps) => {
+  const { t, locale } = props
+
   const dispatch = useDispatch()
-  const { t, locale } = useLanguage()
 
   const isSettingBoxOpen = useSelector((state: ISettingBoxRootState) => state.settingBox.isOpen)
 
@@ -23,9 +24,9 @@ const Settings = () => {
   }
 
   return (
-    <div className={style.language_toggle_wrapper}>
+    <div className={Styles.language_toggle_wrapper}>
       <div
-        className={style.language_toggle}
+        className={Styles.language_toggle}
         onClick={toggleShowSettingBox}
       >
         <span className="capitalize text-sm">{locale == 'en' ? 'En' : 'Fr'}</span>
@@ -42,8 +43,8 @@ const Settings = () => {
             className="fixed inset-0  bg-black/20"
             onClick={onCloseSettingBox}
           ></div>
-          <div className={style.language_modal}>
-            <Language />
+          <div className={Styles.language_modal}>
+            <Language t={t} />
           </div>
         </>
       ) : null}

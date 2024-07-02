@@ -18,12 +18,13 @@ const SearchBar: React.FC<SearchBarProps> = ({ searchString, handleChange, place
       width="100%"
       margin="20px auto"
     >
-      <Flex>
+      <Flex position={'relative'}>
         <Input
           p={'20px'}
           bg="transparent"
           borderRadius={'12px'}
           _focus={{ outline: 'none' }}
+          _focusVisible={{ zIndex: 1, borderColor: '#3182ce', boxShadow: '0 0 0 0 #3182ce' }}
           w="full"
           type="search"
           placeholder={placeholder}
@@ -32,9 +33,9 @@ const SearchBar: React.FC<SearchBarProps> = ({ searchString, handleChange, place
           onKeyDown={event => event.key === 'Enter' && handleSubmit()}
         />
         <Box
-          position={'relative'}
-          right={'30px'}
-          top={'13px'}
+          position={'absolute'}
+          right={'12px'}
+          top={'12px'}
           onClick={handleSubmit}
         >
           <Image src={'/images/searchInput.svg'} />

@@ -16,7 +16,7 @@ const SearchAndDiscover: React.FC<SearchAndDiscoverProps> = ({
   catalogProps
 }) => {
   const { searchKeyword, setSearchKeyword, fetchDataOnSearch } = searchProps
-  const { isFilterOpen, handleApplyFilter, handleResetFilter, handleFilterOpen, handleFilterClose } = filterProps
+  const { isFilterOpen, handleApplyFilter, handleResetFilter, handleFilterOpen, handleFilterClose } = filterProps || {}
   const { viewDetailsClickHandler } = catalogProps
 
   const breakpoint = useBreakpoint()
@@ -61,10 +61,10 @@ const SearchAndDiscover: React.FC<SearchAndDiscoverProps> = ({
       overflowY="scroll"
     >
       <Box display="flex">
-        {!isSmallScreen && !isMediumScreen && (
+        {filterProps && !isSmallScreen && !isMediumScreen && (
           <Filter
-            handleApplyFilter={handleApplyFilter}
-            handleResetFilter={handleResetFilter}
+            handleApplyFilter={handleApplyFilter!}
+            handleResetFilter={handleResetFilter!}
             handleCancelFilter={handleFilterClose}
           />
         )}
@@ -86,28 +86,29 @@ const SearchAndDiscover: React.FC<SearchAndDiscoverProps> = ({
                 fetchDataOnSearch()
               }}
             />
-            {(isSmallScreen || isMediumScreen) && (
+            {filterProps && (isSmallScreen || isMediumScreen) && (
               <Box
                 onClick={handleFilterOpen}
                 cursor="pointer"
+                marginLeft={'1rem'}
               >
                 <CustomFilterIconComponent />
               </Box>
             )}
           </Box>
-          {isSmallScreen && (
+          {filterProps && isSmallScreen && (
             <BottomModal
-              isOpen={isFilterOpen}
-              onClose={handleFilterClose}
+              isOpen={isFilterOpen!}
+              onClose={handleFilterClose!}
             >
               <Filter
-                handleApplyFilter={handleApplyFilter}
-                handleResetFilter={handleResetFilter}
+                handleApplyFilter={handleApplyFilter!}
+                handleResetFilter={handleResetFilter!}
                 handleCancelFilter={handleFilterClose}
               />
             </BottomModal>
           )}
-          {isMediumScreen && isFilterOpen && (
+          {filterProps && isMediumScreen && isFilterOpen && (
             <Box
               position="absolute"
               zIndex="9"
@@ -115,8 +116,8 @@ const SearchAndDiscover: React.FC<SearchAndDiscoverProps> = ({
               left="28%"
             >
               <Filter
-                handleApplyFilter={handleApplyFilter}
-                handleResetFilter={handleResetFilter}
+                handleApplyFilter={handleApplyFilter!}
+                handleResetFilter={handleResetFilter!}
               />
             </Box>
           )}

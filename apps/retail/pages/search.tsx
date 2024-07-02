@@ -119,7 +119,7 @@ const Search = () => {
         search: searchKeyword
       }
     })
-    localStorage.setItem('selectCardHeaderText', product.name)
+    localStorage.setItem('selectCardHeaderText', JSON.stringify(product.name))
   }
 
   return (

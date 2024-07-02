@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { MdLanguage } from 'react-icons/md'
-import { useLanguage } from '../../../hooks/useLanguage'
 import LanguageItem from './LanguageItem'
 import { Box } from '@chakra-ui/react'
 import { settingBoxActions } from '@beckn-ui/common/src/store/settingBox-slice'
+import { TranslationProps } from '../../../../lib/types/components'
 
-const Language = () => {
-  const { t, locale } = useLanguage()
+const Language = (props: TranslationProps) => {
+  const { t, locale } = props
+
   const dispatch = useDispatch()
   const [openLang, setOpenLang] = useState(false)
 
@@ -18,13 +19,15 @@ const Language = () => {
   return (
     <div className="relative rtl:ml-2 rtl:pl-2 ltr:mr-2 ltr:pr-2">
       <div className="md:hidden">
-        <h3>{t.language}</h3>
+        <h3>{t('language')}</h3>
         <Box mt="8px">
           <LanguageItem
+            t={t}
             language="en"
             onCloseBox={() => dispatch(settingBoxActions.closeSettingBox())}
           />
           <LanguageItem
+            t={t}
             language="fa"
             onCloseBox={() => dispatch(settingBoxActions.closeSettingBox())}
           />
@@ -50,10 +53,12 @@ const Language = () => {
           ></div>
           <div className={`absolute top-6 ltr:right-0 rtl:left-0 bg-palette-card py-3 px-6 shadow-md rounded-md z-10`}>
             <LanguageItem
+              t={t}
               language="fa"
               onCloseBox={onCloseLangBox}
             />
             <LanguageItem
+              t={t}
               language="en"
               onCloseBox={onCloseLangBox}
             />
