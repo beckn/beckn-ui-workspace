@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { Box, Image, Flex, useBreakpoint, useTheme } from '@chakra-ui/react'
+import { Box, Flex, useBreakpoint, useTheme } from '@chakra-ui/react'
 import { HomePageContentProps } from '../../../lib/types/components'
 import { SearchInput } from '@beckn-ui/becknified-components'
 import { Typography } from '@beckn-ui/molecules'
@@ -22,7 +22,7 @@ const HomePageContent: React.FC<HomePageContentProps> = ({
   const theme = useTheme()
   const breakpoint = useBreakpoint()
 
-  const bgColor = theme.colors.primary['100']
+  const primaryColor = theme.colors.primary['100']
 
   // Determine current logo based on breakpoint
   const currentLogo = useMemo(() => {
@@ -40,7 +40,7 @@ const HomePageContent: React.FC<HomePageContentProps> = ({
               pb={'12px'}
               fontSize={'40px'}
               fontWeight={'800'}
-              color={bgColor}
+              color={primaryColor}
               lineHeight={'110%'}
             >
               {name}

@@ -42,8 +42,10 @@ const HomePage = () => {
   }, [])
 
   const navigateToSearchResults = () => {
-    localStorage.setItem('optionTags', JSON.stringify({ name: searchTerm }))
-    router.push(`/search?searchTerm=${searchTerm}`)
+    if (searchTerm) {
+      localStorage.setItem('optionTags', JSON.stringify({ name: searchTerm }))
+      router.push(`/search?searchTerm=${searchTerm}`)
+    }
   }
 
   const searchIconClickHandler = (e: React.MouseEvent) => {
