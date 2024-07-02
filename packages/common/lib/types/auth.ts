@@ -49,9 +49,9 @@ export interface SignUpResponse {
 // Profile related models
 export interface ProfileProps {
   name: string
-  mobileNumber: string | null
+  mobileNumber: string
   flatNumber: string | null
-  street: string
+  street: string | null
   city: string
   zipCode: string
   state: string
