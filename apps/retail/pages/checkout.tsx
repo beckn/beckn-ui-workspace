@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Box, useToast, useTheme } from '@chakra-ui/react'
 import { DOMAIN } from '@lib/config'
 import { useLanguage } from '../hooks/useLanguage'
-import { CustomToast } from '@components/signIn/SignIn'
 import {
   areShippingAndBillingDetailsSame,
   getInitPayload,
@@ -248,22 +247,6 @@ const CheckoutPage = () => {
     }
     return paymentBreakdownMap
   }
-
-  useEffect(() => {
-    if (isError) {
-      toast({
-        render: () => (
-          <CustomToast
-            title={t.error}
-            message={t.unableToProceed}
-          />
-        ),
-        position: 'top',
-        duration: 2000,
-        isClosable: true
-      })
-    }
-  }, [isError])
 
   return (
     <Box
