@@ -80,6 +80,7 @@ export const geocodeFromPincode = async (pincode: any) => {
     }
   } catch (error) {
     console.error(error)
+    throw new Error('Invalid Pincode')
   }
 }
 

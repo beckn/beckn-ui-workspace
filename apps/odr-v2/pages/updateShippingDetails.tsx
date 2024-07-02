@@ -17,6 +17,7 @@ const fieldConfig: FormField[] = [
     type: 'text',
     validate: (value: string) => {
       if (!value.trim()) return 'Name is required'
+      if (!/^[A-Za-z\s]*$/.test(value)) return 'Name can only contain letters and spaces'
       return undefined
     }
   },

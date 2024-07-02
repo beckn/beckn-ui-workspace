@@ -169,17 +169,17 @@ const UpdateShippingDetails = () => {
       }
     } catch (error) {
       console.error('error in update', error)
-
       dispatch(
         feedbackActions.setToastData({
           toastData: {
             message: t.error,
             display: true,
             type: 'error',
-            description: `${error}`
+            description: t.invalidPincode
           }
         })
       )
+    } finally {
       setIsLoadingForUpdate(false)
     }
   }

@@ -413,6 +413,7 @@ const fa: { [key: string]: string } = {
   errorCity: 'La ville est requise',
   errorCountry1: 'Le pays ne peut contenir que des lettres et des espaces',
   errorState1: "L'état ne peut contenir que des lettres et des espaces",
-  errorCity1: 'La ville ne peut contenir que des lettres et des espaces'
+  errorCity1: 'La ville ne peut contenir que des lettres et des espaces',
+  invalidPincode: 'Code postal invalide'
 }
 export default fa
