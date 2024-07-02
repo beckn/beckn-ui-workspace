@@ -1,10 +1,8 @@
 import React, { useState } from 'react'
-import { useLanguage } from '../../hooks/useLanguage'
 import { Box, Flex, Image, Input } from '@chakra-ui/react'
-import { SearchBarPropsModel } from '@beckn-ui/common/lib/types'
+import { SearchBarProps } from '../../../lib/types/components'
 
-const SearchBar: React.FC<SearchBarPropsModel> = ({ searchString, handleChange }) => {
-  const { t } = useLanguage()
+const SearchBar: React.FC<SearchBarProps> = ({ searchString, handleChange, placeholder = 'Search' }) => {
   const [searchText, setSearchText] = useState(searchString)
 
   const inputChangeHandler = (event: React.BaseSyntheticEvent) => {
@@ -28,7 +26,7 @@ const SearchBar: React.FC<SearchBarPropsModel> = ({ searchString, handleChange }
           _focus={{ outline: 'none' }}
           w="full"
           type="search"
-          placeholder={t.search}
+          placeholder={placeholder}
           onChange={inputChangeHandler}
           value={searchText}
           onKeyDown={event => event.key === 'Enter' && handleSubmit()}
