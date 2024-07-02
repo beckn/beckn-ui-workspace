@@ -9,6 +9,7 @@ import settingsIcon from '../../../public/images/threeDots.svg'
 import { appLogoBlackList, homeIconBlackList, languageIconWhiteList, menuIconWhiteList } from './constants'
 import { HeaderProps } from '../../../lib/types/components'
 import Settings from '../settings/settings'
+import { getLocalStorage, setLocalStorage } from '../../utils'
 
 const Header: React.FC<HeaderProps> = ({ t }) => {
   const [isMenuModalOpen, setMenuModalOpen] = useState(false)
@@ -43,9 +44,9 @@ const Header: React.FC<HeaderProps> = ({ t }) => {
                 w={'20px'}
                 h={'20px'}
                 onClick={() => {
-                  const user = localStorage.getItem('userPhone') as string
+                  const user = getLocalStorage('userPhone') as string
                   localStorage.clear()
-                  localStorage.setItem('userPhone', user)
+                  setLocalStorage('userPhone', user)
                   router.push(`/`)
                 }}
                 src="/images/Home_icon.svg"

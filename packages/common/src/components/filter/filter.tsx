@@ -12,6 +12,7 @@ import {
   useTheme
 } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
+import { getLocalStorage, setLocalStorage } from '../../utils'
 import Button from '../button/button'
 
 const activeLabelStyles = {
@@ -67,7 +68,7 @@ const Filter = ({ handleApplyFilter, handleResetFilter, handleCancelFilter = () 
 
   const getFormData = (): Record<string, any> | undefined => {
     if (localStorage) {
-      const localFormData = localStorage.getItem('formData')
+      const localFormData = getLocalStorage('formData')
       return localFormData ? JSON.parse(localFormData) : {}
     }
   }
@@ -87,7 +88,7 @@ const Filter = ({ handleApplyFilter, handleResetFilter, handleCancelFilter = () 
   }
   useEffect(() => {
     if (localStorage) {
-      localStorage.setItem('formData', JSON.stringify(formData))
+      setLocalStorage('formData', formData)
     }
   }, [formData, sortBy])
 

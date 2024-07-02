@@ -9,7 +9,6 @@ const createAxiosInstance = (store: Store): AxiosInstance => {
   axios.interceptors.response.use(
     (response: AxiosResponse) => response,
     (error: AxiosError) => {
-      console.log(error)
       // Check if the error response exists and dispatch an action to the Redux store
       store.dispatch(
         feedbackActions.setToastData({

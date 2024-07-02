@@ -7,6 +7,7 @@ import Filter from '../filter/filter'
 import SearchBar from '../searchBar/searchBar'
 import { SearchAndDiscoverProps } from '../../../lib/types/components'
 import CustomFilterIconComponent from '../cutomFilterIcon/customFilterIcon'
+import { setLocalStorage } from '../../utils'
 
 const SearchAndDiscover: React.FC<SearchAndDiscoverProps> = ({
   items,
@@ -81,7 +82,7 @@ const SearchAndDiscover: React.FC<SearchAndDiscoverProps> = ({
               handleChange={(text: string) => {
                 setSearchKeyword(text)
                 localStorage.removeItem('optionTags')
-                localStorage.setItem('optionTags', JSON.stringify({ name: text }))
+                setLocalStorage('optionTags', { name: text })
                 window.dispatchEvent(new Event('storage-optiontags'))
                 fetchDataOnSearch()
               }}
