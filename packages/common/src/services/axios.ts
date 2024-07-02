@@ -9,6 +9,7 @@ const createAxiosInstance = (store: Store): AxiosInstance => {
   axios.interceptors.response.use(
     (response: AxiosResponse) => response,
     (error: AxiosError) => {
+      console.log(error)
       // Check if the error response exists and dispatch an action to the Redux store
       store.dispatch(
         feedbackActions.setToastData({
@@ -17,10 +18,12 @@ const createAxiosInstance = (store: Store): AxiosInstance => {
             message: 'Error!' || 'Something went wrong',
             type: 'error',
             description:
-              error?.response?.data?.error?.details?.errors[0].message.replace(
+              error?.response?.data?.error?.details?.errors?.[0].message.replace(
                 /This attribute/g,
-                error?.response?.data?.error?.details?.errors[0].path[0]
-              ) || error.message
+                error?.response?.data?.error?.details?.errors?.[0].path[0]
+              ) ||
+              error?.response?.data?.error?.message ||
+              error.message
           }
         })
       )
