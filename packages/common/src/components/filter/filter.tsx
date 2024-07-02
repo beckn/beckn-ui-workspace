@@ -1,6 +1,5 @@
 import { FilterPropsModel } from '@beckn-ui/common/lib/types'
 import {
-  Image,
   Box,
   ChakraProvider,
   Divider,
@@ -9,55 +8,63 @@ import {
   FormControl,
   FormLabel,
   Select,
-  Text
+  Text,
+  useTheme
 } from '@chakra-ui/react'
-import Button from '@components/button/Button'
 import React, { useEffect, useState } from 'react'
+import Button from '../button/button'
 
 const activeLabelStyles = {
   transform: 'scale(1) translateY(-24px)'
 }
 
-export const theme = extendTheme({
-  components: {
-    Form: {
-      variants: {
-        floating: {
-          container: {
-            _focusWithin: {
-              label: {
-                ...activeLabelStyles
-              }
-            },
-            'input:not(:placeholder-shown) + label, .chakra-select__wrapper + label, textarea:not(:placeholder-shown) ~ label':
-              {
-                ...activeLabelStyles
+const Filter = ({ handleApplyFilter, handleResetFilter, handleCancelFilter = () => {} }: FilterPropsModel) => {
+  const theme = useTheme()
+  const customTheme = extendTheme({
+    components: {
+      Form: {
+        variants: {
+          floating: {
+            container: {
+              _focusWithin: {
+                label: {
+                  ...activeLabelStyles
+                }
               },
-            label: {
-              top: 0,
-              left: 0,
-              zIndex: 2,
-              position: 'absolute',
-              backgroundColor: 'white',
-              pointerEvents: 'none',
-              mx: 3,
-              px: 1,
-              my: 2,
-              transformOrigin: 'left top'
+              'input:not(:placeholder-shown) + label, .chakra-select__wrapper + label, textarea:not(:placeholder-shown) ~ label':
+                {
+                  ...activeLabelStyles
+                },
+              label: {
+                top: 0,
+                left: 0,
+                zIndex: 2,
+                position: 'absolute',
+                backgroundColor: 'white',
+                pointerEvents: 'none',
+                mx: 3,
+                px: 1,
+                my: 2,
+                transformOrigin: 'left top'
+              }
             }
           }
         }
       }
+    },
+    colors: {
+      primary: {
+        100: theme.colors.primary['100']
+      },
+      secondary: {
+        100: theme.colors.secondary['100']
+      }
     }
-  },
-  colors: {
-    primary: {
-      '100': '#F6D046'
-    }
-  }
-})
+  })
 
-const Filter = ({ handleApplyFilter, handleResetFilter, handleCancelFilter = () => {} }: FilterPropsModel) => {
+  const primaryColor = customTheme.colors.primary['100']
+  const secondaryColor = customTheme.colors.secondary['100']
+
   const getFormData = (): Record<string, any> | undefined => {
     if (localStorage) {
       const localFormData = localStorage.getItem('formData')
@@ -86,7 +93,7 @@ const Filter = ({ handleApplyFilter, handleResetFilter, handleCancelFilter = () 
 
   return (
     <>
-      <ChakraProvider theme={theme}>
+      <ChakraProvider theme={customTheme}>
         <Box
           height={['100%', '320px']}
           w={['100%', '350px']}
@@ -102,7 +109,7 @@ const Filter = ({ handleApplyFilter, handleResetFilter, handleCancelFilter = () 
             <Text fontSize={'17px'}>All Filters</Text>
             <Text
               fontSize={'15px'}
-              color="#53A052"
+              color={secondaryColor}
               cursor={'pointer'}
               onClick={resetFilter}
             >
@@ -146,6 +153,7 @@ const Filter = ({ handleApplyFilter, handleResetFilter, handleCancelFilter = () 
                 borderRadius="unset"
                 borderBottom={'1px solid'}
                 paddingBottom={'2px'}
+                boxShadow={'none'}
               >
                 <option value="">Rating</option>
                 <option value="RatingLowtoHigh">Rating -- Low to High</option>
@@ -161,8 +169,9 @@ const Filter = ({ handleApplyFilter, handleResetFilter, handleCancelFilter = () 
           </Box>
           <Button
             buttonText={'Apply Filter'}
-            background={'primary.100'}
-            color={'#565555'}
+            background={primaryColor}
+            className={'filter-btn'}
+            color={'#fff'}
             isDisabled={false}
             handleOnClick={() => {
               handleApplyFilter(sortBy)
@@ -170,13 +179,12 @@ const Filter = ({ handleApplyFilter, handleResetFilter, handleCancelFilter = () 
           />
         </Box>
       </ChakraProvider>
-
       <Box display={['block', 'block', 'none', 'none']}>
         <Button
           className="cencel_btn_filter"
           buttonText={'Cancel'}
           background={'#fff'}
-          color={'#E93324'}
+          color={'#e93324'}
           isDisabled={false}
           handleOnClick={handleCancelFilter}
         />

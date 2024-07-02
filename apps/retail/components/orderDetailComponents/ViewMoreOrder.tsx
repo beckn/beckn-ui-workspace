@@ -12,7 +12,6 @@ import {
 } from '@chakra-ui/react'
 import React from 'react'
 import { Button, Typography } from '@beckn-ui/molecules'
-import ButtonComp from '../button/Button'
 import crossIcon from '../../public/images/crossIcon.svg'
 import { useLanguage } from '../../hooks/useLanguage'
 import { Item, QuantityDetails } from '@beckn-ui/common/lib/types'
