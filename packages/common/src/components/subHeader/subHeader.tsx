@@ -2,18 +2,9 @@ import React, { useState } from 'react'
 import { Box, Divider, Flex, HStack, Image, Text } from '@chakra-ui/react'
 import { BottomModal } from '@beckn-ui/molecules'
 import Styles from './subHeader.module.css'
-import {
-  backIconList,
-  cartIconBlackList,
-  headerBlackList,
-  headerFrenchNames,
-  headerNames,
-  invoiceDownloadIcon,
-  orderIconList
-} from './constants'
 import { useRouter } from 'next/router'
 import backIcon from '../../../public/images/Back.svg'
-import { SubHeaderProps } from '../../../lib/types/components'
+import { SubHeaderConstants, SubHeaderProps } from '../../../lib/types/components'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import CartIconWithCount from '../cartIconWithCount/cartIconWithCount'
 import Qrcode from '../qrCode/Qrcode'
@@ -21,10 +12,19 @@ import { useSelector } from 'react-redux'
 import { ICartRootState } from '../../../lib/types'
 import { getLocalStorage } from '../../utils'
 
-const getHeaderTitleForPage = (name: string, pathName: string, locale: string | undefined) => {
-  const values = locale === 'en' ? headerNames : headerFrenchNames
+const getHeaderTitleForPage = (
+  name: string,
+  pathName: string,
+  locale: string | undefined,
+  headerConstants: SubHeaderConstants
+) => {
+  const {
+    headerNames: { defaultNames, frenchNames },
+    blackList: { headerList }
+  } = headerConstants
+  const values = locale === 'en' ? defaultNames : frenchNames
   switch (true) {
-    case headerBlackList.includes(pathName):
+    case headerList.includes(pathName):
       return <Text className={Styles.header_title_text}>{values[pathName]}</Text>
     default:
       return (
@@ -36,7 +36,10 @@ const getHeaderTitleForPage = (name: string, pathName: string, locale: string | 
 }
 
 const SubHeader = (props: SubHeaderProps) => {
-  const { locale, t, showCartIcon = true } = props
+  const { locale, t, showCartIcon = true, headerConstants } = props
+  const {
+    blackList: { backIconList, orderIconList, cartIconList, invoiceDownloadIconList }
+  } = headerConstants
 
   const [isOrderModalOpen, setOrderModalOpen] = useState(false)
   const [isInvoiceModalOpen, setInvoiceModalOpen] = useState(false)
@@ -72,10 +75,10 @@ const SubHeader = (props: SubHeaderProps) => {
               </Box>
             )}
           </Box>
-          {getHeaderTitleForPage(storedHeaderText, router.pathname, locale)}
+          {getHeaderTitleForPage(storedHeaderText, router.pathname, locale, headerConstants)}
           {showCartIcon && (
             <div className="flex gap-4">
-              {!cartIconBlackList.includes(router.pathname) && (
+              {!cartIconList.includes(router.pathname) && (
                 <CartIconWithCount
                   itemCount={cartItems.length}
                   handleClick={() => router.push('/cart')}
@@ -92,7 +95,7 @@ const SubHeader = (props: SubHeaderProps) => {
               mr={'20px'}
             />
           )}
-          {invoiceDownloadIcon.includes(router.pathname) && (
+          {invoiceDownloadIconList.includes(router.pathname) && (
             <Image
               cursor="pointer"
               onClick={() => setInvoiceModalOpen(true)}

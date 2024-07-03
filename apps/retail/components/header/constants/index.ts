@@ -1,8 +1,16 @@
 type PathnameObjectType = Record<string, string>
 
-export const backIconList = ['/', '/signIn']
+// -------------------------------- Top Header constants --------------------------------
+const appLogoBlackList = ['/signIn', '/signUp']
+const homeIconBlackList = ['/', '/signIn', '/mobileOtp', '/paymentMode', '/signUp']
+const menuIconWhiteList = ['/', '/search', '/profile']
+const topHeaderBlackList: string[] = []
+const languageIconWhiteList: string[] = []
 
-export const headerNames: PathnameObjectType = {
+// -------------------------------- Sub Header constants --------------------------------
+const backIconList = ['/', '/signIn']
+
+const headerNames: PathnameObjectType = {
   '/checkoutPage': 'Review Purchase Order',
   '/orderHistory': 'My Orders',
   '/orderDetails': 'Order Details',
@@ -20,7 +28,7 @@ export const headerNames: PathnameObjectType = {
   '/checkout': 'Billing & Shipping'
 }
 
-export const headerFrenchNames: PathnameObjectType = {
+const headerFrenchNames: PathnameObjectType = {
   '/checkoutPage': 'Facturation et Livraison',
   '/orderHistory': 'Historique des Commandes',
   '/orderDetails': 'Détails de la Commande',
@@ -31,7 +39,7 @@ export const headerFrenchNames: PathnameObjectType = {
   '/feedback': ''
 }
 
-export const headerBlackList = [
+const headerBlackList = [
   '/checkoutPage',
   '/orderHistory',
   '/orderDetails',
@@ -53,7 +61,7 @@ export const headerBlackList = [
   '/signIn'
 ]
 
-export const cartIconBlackList: string[] = [
+const cartIconBlackList: string[] = [
   '/orderConfirmation',
   '/orderDetails',
   '/trackOrder',
@@ -72,5 +80,26 @@ export const cartIconBlackList: string[] = [
   '/updateShippingDetails'
 ]
 
-export const orderIconList = ['/orderDetails']
-export const invoiceDownloadIcon = ['/']
+const bottomHeaderBlackList = ['/orderConfirmation', '/', '/feedback']
+const orderIconList = ['/orderDetails']
+const invoiceDownloadIcon = ['/']
+
+export default {
+  TopHeader: {
+    appLogoBlackList,
+    homeIconBlackList,
+    menuIconWhiteList,
+    topHeaderBlackList,
+    languageIconWhiteList
+  },
+  SubHeader: {
+    backIconList,
+    headerNames,
+    headerFrenchNames,
+    headerBlackList,
+    cartIconBlackList,
+    bottomHeaderBlackList,
+    orderIconList,
+    invoiceDownloadIcon
+  }
+}

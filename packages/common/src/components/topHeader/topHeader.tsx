@@ -6,12 +6,15 @@ import { BottomModal } from '@beckn-ui/molecules'
 import Styles from './topHeader.module.css'
 import { logout } from '@beckn-ui/common/src/store/auth-slice'
 import settingsIcon from '../../../public/images/threeDots.svg'
-import { appLogoBlackList, homeIconBlackList, languageIconWhiteList, menuIconWhiteList } from './constants'
 import { HeaderProps } from '../../../lib/types/components'
 import Settings from '../settings/settings'
 import { getLocalStorage, setLocalStorage } from '../../utils'
 
-const Header: React.FC<HeaderProps> = ({ t }) => {
+const Header: React.FC<HeaderProps> = ({ t, headerConstants }) => {
+  const {
+    blackList: { appLogoBlackList, homeIconBlackList, languageIconWhiteList, menuIconWhiteList }
+  } = headerConstants
+
   const [isMenuModalOpen, setMenuModalOpen] = useState(false)
   const dispatch = useDispatch()
 

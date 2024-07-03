@@ -73,20 +73,49 @@ export interface SearchAndDiscoverProps {
   }
 }
 
+// SearchBar components props
 export interface SearchBarProps {
   searchString: string | string[] | undefined
   handleChange: Function
   placeholder?: string
 }
 
+// QRCode components props
 export interface QrCodeProps {
   value: string
 }
 
+// Header components props
+export interface HeaderConstants {
+  blackList: {
+    appLogoBlackList: string[]
+    homeIconBlackList: string[]
+    languageIconWhiteList: string[]
+    menuIconWhiteList: string[]
+  }
+}
+
 export interface HeaderProps extends TranslationProps {
   handleMenuClick?: () => void
+  headerConstants: HeaderConstants
+}
+
+// SubHeader components props
+export interface SubHeaderConstants {
+  headerNames: {
+    defaultNames: Record<string, string>
+    frenchNames: Record<string, string>
+  }
+  blackList: {
+    headerList: string[]
+    backIconList: string[]
+    orderIconList: string[]
+    cartIconList: string[]
+    invoiceDownloadIconList: string[]
+  }
 }
 
 export interface SubHeaderProps extends TranslationProps {
   showCartIcon?: boolean
+  headerConstants: SubHeaderConstants
 }
