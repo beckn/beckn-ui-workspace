@@ -119,3 +119,21 @@ export interface SubHeaderProps extends TranslationProps {
   showCartIcon?: boolean
   headerConstants: SubHeaderConstants
 }
+
+// Payment method selections props
+export interface PaymentMethodSelectionProps extends TranslationProps {
+  handleOrderConfirmation: () => void
+}
+
+export interface PaymentMethod {
+  paymentMethod?: string
+  paymentMethodNet?: string
+  img: string
+  category: 'Credit & Debit Cards' | 'UPI' | 'Other'
+}
+
+export interface PaymentDetailsCardProps extends TranslationProps {
+  paymentMethods: PaymentMethod[]
+  checkedState: string
+  handleChange: (id: string) => void
+}
