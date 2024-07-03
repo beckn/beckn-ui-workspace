@@ -1,10 +1,10 @@
 import React, { useMemo } from 'react'
 import { Box, Flex, useBreakpoint, useTheme } from '@chakra-ui/react'
-import { HomePageContentProps } from '../../../lib/types/components'
 import { SearchInput } from '@beckn-ui/becknified-components'
 import { Typography } from '@beckn-ui/molecules'
 import { RiArrowRightSLine } from 'react-icons/ri'
 import PoweredBy from '../poweredBy'
+import { HomePageContentProps } from './homePageContent.types'
 
 const HomePageContent: React.FC<HomePageContentProps> = ({
   blockOrder = [],

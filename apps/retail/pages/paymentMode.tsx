@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import { useLanguage } from '../hooks/useLanguage'
 import { PaymentMethodSelection } from '@beckn-ui/common'
 
-function PaymentMode() {
+const PaymentMode = () => {
   const { t } = useLanguage()
   const router = useRouter()
 

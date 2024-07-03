@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Box, Flex, Image, Input } from '@chakra-ui/react'
-import { SearchBarProps } from '../../../lib/types/components'
+import { SearchBarProps } from './searchBar.types'
 
 const SearchBar: React.FC<SearchBarProps> = ({ searchString, handleChange, placeholder = 'Search' }) => {
   const [searchText, setSearchText] = useState(searchString)

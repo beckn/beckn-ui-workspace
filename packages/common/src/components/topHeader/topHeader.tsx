@@ -6,9 +6,9 @@ import { BottomModal } from '@beckn-ui/molecules'
 import Styles from './topHeader.module.css'
 import { logout } from '@beckn-ui/common/src/store/auth-slice'
 import settingsIcon from '../../../public/images/threeDots.svg'
-import { HeaderProps } from '../../../lib/types/components'
-import Settings from '../settings/settings'
+import Settings from '../settings'
 import { getLocalStorage, setLocalStorage } from '../../utils'
+import { HeaderProps } from './topHeader.types'
 
 const Header: React.FC<HeaderProps> = ({ t, headerConstants }) => {
   const {

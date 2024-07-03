@@ -2,7 +2,7 @@ import { Box } from '@chakra-ui/react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
-import { TranslationProps } from '../../../../lib/types/components'
+import { TranslationProps } from '../settings.types'
 
 interface Props extends TranslationProps {
   language: string

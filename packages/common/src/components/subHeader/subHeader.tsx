@@ -4,13 +4,13 @@ import { BottomModal } from '@beckn-ui/molecules'
 import Styles from './subHeader.module.css'
 import { useRouter } from 'next/router'
 import backIcon from '../../../public/images/Back.svg'
-import { SubHeaderConstants, SubHeaderProps } from '../../../lib/types/components'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import CartIconWithCount from '../cartIconWithCount/cartIconWithCount'
-import Qrcode from '../qrCode/Qrcode'
+import Qrcode from '../qrCode'
 import { useSelector } from 'react-redux'
 import { ICartRootState } from '../../../lib/types'
 import { getLocalStorage } from '../../utils'
+import { SubHeaderConstants, SubHeaderProps } from './subHeader.types'
 
 const getHeaderTitleForPage = (
   name: string,

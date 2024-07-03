@@ -2,7 +2,7 @@ import { QRCodeCanvas } from 'qrcode.react'
 import React from 'react'
 import { Box } from '@chakra-ui/react'
 import Style from './QrCode.module.css'
-import { QrCodeProps } from '../../../lib/types/components'
+import { QrCodeProps } from './QrCode.types'
 
 const Qrcode = ({ value }: QrCodeProps) => {
   return (

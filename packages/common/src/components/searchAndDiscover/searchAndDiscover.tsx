@@ -3,11 +3,11 @@ import { Box, Flex } from '@chakra-ui/react'
 import { Product, ProductCard } from '@beckn-ui/becknified-components'
 import { BottomModal, LoaderWithMessage } from '@beckn-ui/molecules'
 import { useBreakpoint } from '@chakra-ui/react'
-import Filter from '../filter/filter'
-import SearchBar from '../searchBar/searchBar'
-import { SearchAndDiscoverProps } from '../../../lib/types/components'
-import CustomFilterIconComponent from '../cutomFilterIcon/customFilterIcon'
+import Filter from '../filter'
+import SearchBar from '../searchBar'
+import CustomFilterIconComponent from '../cutomFilterIcon'
 import { setLocalStorage } from '../../utils'
+import { SearchAndDiscoverProps } from './searchAndDiscover.types'
 
 const SearchAndDiscover: React.FC<SearchAndDiscoverProps> = ({
   items,

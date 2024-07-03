@@ -1,8 +1,8 @@
 import { Typography } from '@beckn-ui/molecules'
 import { Card, CardBody, Flex, Image, Text } from '@chakra-ui/react'
 import React from 'react'
-import { PaymentDetailsCardProps, PaymentMethod } from '../../../lib/types/components'
 import Styles from './PaymentDetailsCard.module.css'
+import { PaymentDetailsCardProps, PaymentMethod } from './PaymentDetailsCard.types'
 
 const PaymentDetailsCard: React.FC<PaymentDetailsCardProps> = ({ t, paymentMethods, checkedState, handleChange }) => {
   const groupedPaymentMethods = paymentMethods.reduce(
@@ -22,6 +22,7 @@ const PaymentDetailsCard: React.FC<PaymentDetailsCardProps> = ({ t, paymentMetho
         <React.Fragment key={category}>
           <Flex
             justifyContent={'space-between'}
+            mt={'10px'}
             mb={'10px'}
           >
             <Typography

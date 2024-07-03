@@ -5,7 +5,7 @@ import Language from './language/Language'
 import Styles from './settings.module.css'
 import { ISettingBoxRootState } from '@beckn-ui/common/lib/types'
 import { settingBoxActions } from '@beckn-ui/common/src/store/settingBox-slice'
-import { TranslationProps } from '../../../lib/types/components'
+import { TranslationProps } from './settings.types'
 
 // Settings is just Language selector for now
 const Settings = (props: TranslationProps) => {

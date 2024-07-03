@@ -5,8 +5,8 @@ import CashOnDelivery from '../../../public/images/cash.svg'
 import Visa from '../../../public/images/visa.svg'
 import masterCard from '../../../public/images/masterCard.svg'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
-import { PaymentMethodSelectionProps } from '../../../lib/types/components'
-import PaymentDetailsCard from '../card/PaymentDetailsCard'
+import PaymentDetailsCard from '../paymentDetailsCard'
+import { PaymentMethodSelectionProps } from './paymentMethodSelection.types'
 
 const PaymentMethodSelection = (props: PaymentMethodSelectionProps) => {
   const { t, handleOrderConfirmation } = props

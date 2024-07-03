@@ -1,4 +1,3 @@
-import { FilterPropsModel } from '@beckn-ui/common/lib/types'
 import {
   Box,
   ChakraProvider,
@@ -14,6 +13,7 @@ import {
 import React, { useEffect, useState } from 'react'
 import { getLocalStorage, setLocalStorage } from '../../utils'
 import Button from '../button/button'
+import { FilterPropsModel } from './filter.types'
 
 const activeLabelStyles = {
   transform: 'scale(1) translateY(-24px)'

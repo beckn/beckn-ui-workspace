@@ -4,7 +4,7 @@ import { MdLanguage } from 'react-icons/md'
 import LanguageItem from './LanguageItem'
 import { Box } from '@chakra-ui/react'
 import { settingBoxActions } from '@beckn-ui/common/src/store/settingBox-slice'
-import { TranslationProps } from '../../../../lib/types/components'
+import { TranslationProps } from '../settings.types'
 
 const Language = (props: TranslationProps) => {
   const { t, locale } = props
