@@ -168,7 +168,19 @@ const UpdateShippingDetails = () => {
         }
       }
     } catch (error) {
+      dispatch(
+        feedbackActions.setToastData({
+          toastData: {
+            message: 'Error!',
+            display: true,
+            type: 'error',
+            description: 'Invalid Pincode'
+          }
+        })
+      )
       console.error('error in update', error)
+    } finally {
+      setIsLoadingForUpdate(false)
     }
   }
 

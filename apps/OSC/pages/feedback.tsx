@@ -5,17 +5,19 @@ import StarRating from '../components/starRating/StarRating'
 import { useLanguage } from '../hooks/useLanguage'
 import feedbackImg from '../public/images/feedbackImg.svg'
 import { Typography } from '@beckn-ui/molecules'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { StatusRootState } from '@store/status-slice'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import useResponsive from '@beckn-ui/becknified-components/src/hooks/useResponsive'
 import { StatusResponseModel } from '../types/status.types'
 import axios from '@services/axios'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
+import { feedbackActions } from '@beckn-ui/common/src/store/ui-feedback-slice'
 
 const Feedback = () => {
   const { t } = useLanguage()
   const router = useRouter()
+  const dispatch = useDispatch()
   const [ratingForStore, setRatingForStore] = useState(0)
   const [feedback, setFeedback] = useState('')
   const [isLoadingForRating, setIsLoadingForRating] = useState(false)
@@ -49,6 +51,16 @@ const Feedback = () => {
 
       const ratingResponse = await axios.post(`${apiUrl}/rating`, ratingPayload)
       if (ratingResponse.data.data.length > 0) {
+        dispatch(
+          feedbackActions.setToastData({
+            toastData: {
+              message: 'Success',
+              display: true,
+              type: 'success',
+              description: 'Thank you for your rating! '
+            }
+          })
+        )
         router.push('/')
       }
     } catch (error) {
