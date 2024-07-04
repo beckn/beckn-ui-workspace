@@ -18,7 +18,7 @@ import { BiSolidUpArrow } from 'react-icons/bi'
 import { useRouter } from 'next/router'
 import { IGeoLocationSearchPageRootState } from '@beckn-ui/common/lib/types'
 import { toggleLocationSearchPageVisibility } from '@beckn-ui/common/src/store/geoMapLocationSearch-slice'
-import { TopSheetComponentProps } from '../../../lib/types/components'
+import { TopSheetComponentProps } from './topSheet.types'
 
 const TopSheet: React.FC<TopSheetComponentProps> = ({
   currentAddress,

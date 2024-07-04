@@ -1,11 +1,5 @@
 import { Descriptor, Tag, ImportedOrderItem, Fulfillment, Quote, Billing, Payment } from './common'
 
-export interface FilterPropsModel {
-  handleApplyFilter: (sortBy: string) => void
-  handleResetFilter: () => void
-  handleCancelFilter?: () => void
-}
-
 export interface ImportOrderModel {
   id: string
   status: string

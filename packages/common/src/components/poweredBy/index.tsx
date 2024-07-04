@@ -1,7 +1,7 @@
 import React from 'react'
 import { Image, Flex } from '@chakra-ui/react'
 import { Typography } from '@beckn-ui/molecules'
-import { PoweredByProps } from '../../../lib/types/components'
+import { PoweredByProps } from './poweredBy.types'
 
 const PoweredBy: React.FC<PoweredByProps> = ({ logoSrc, altText = 'logo', poweredByText }) => {
   return (
