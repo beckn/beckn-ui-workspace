@@ -36,17 +36,9 @@ export const currencyMap = {
 }
 
 const CheckoutPage = () => {
-  const [formData, setFormData] = useState<ShippingFormInitialValuesType>({
-    name: 'santosh kumar',
-    mobileNumber: '6251423251',
-    email: 'santosh.k@gmail.com',
-    address: '151-e, janpath road, new delhi',
-    pinCode: '110001'
-  })
-
   const toast = useToast()
 
-  const [submittedDetails, setSubmittedDetails] = useState<ShippingFormInitialValuesType>({
+  const [shippingFormData, setShippingFormData] = useState<ShippingFormInitialValuesType>({
     name: 'santosh kumar',
     mobileNumber: '6251423251',
     email: 'santosh.k@gmail.com',
@@ -78,13 +70,13 @@ const CheckoutPage = () => {
   useEffect(() => {
     if (localStorage) {
       if (localStorage.getItem('userPhone')) {
-        const copiedFormData = structuredClone(formData)
+        const copiedFormData = structuredClone(shippingFormData)
         const copiedBillingFormData = structuredClone(billingFormData)
 
         copiedFormData.mobileNumber = localStorage.getItem('userPhone') as string
         copiedBillingFormData.mobileNumber = localStorage.getItem('userPhone') as string
 
-        setFormData(copiedFormData)
+        setShippingFormData(copiedFormData)
         setBillingFormData(copiedBillingFormData)
       }
     }
@@ -93,14 +85,16 @@ const CheckoutPage = () => {
 
   useEffect(() => {
     if (isBillingSameRedux) {
-      setBillingFormData(submittedDetails)
+      setBillingFormData(shippingFormData)
+    } else {
+      setBillingFormData(billingFormData)
     }
-  }, [isBillingSameRedux, submittedDetails])
+  }, [isBillingSameRedux, shippingFormData])
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
       if (localStorage.getItem('shippingAdress')) {
-        setFormData(JSON.parse(localStorage.getItem('shippingAdress') as string))
+        setShippingFormData(JSON.parse(localStorage.getItem('shippingAdress') as string))
       }
       if (localStorage.getItem('billingAddress')) {
         setBillingFormData(JSON.parse(localStorage.getItem('billingAddress') as string))
@@ -109,11 +103,11 @@ const CheckoutPage = () => {
   }, [])
 
   useEffect(() => {
-    const shippingAddressComplete = Object.values(formData).every(value => value.length > 0)
+    const shippingAddressComplete = Object.values(shippingFormData).every(value => value.length > 0)
     if (shippingAddressComplete && typeof window !== 'undefined') {
-      localStorage.setItem('shippingAdress', JSON.stringify(formData))
+      localStorage.setItem('shippingAdress', JSON.stringify(shippingFormData))
     }
-  }, [formData])
+  }, [shippingFormData])
 
   useEffect(() => {
     const isBillingAddressComplete = Object.values(billingFormData).every(value => value.length > 0)
@@ -122,7 +116,7 @@ const CheckoutPage = () => {
       localStorage.setItem('billingAddress', JSON.stringify(billingFormData))
     }
     setIsBillingAddressSameAsShippingAddress(
-      areShippingAndBillingDetailsSame(isBillingAddressComplete, formData, billingFormData)
+      areShippingAndBillingDetailsSame(isBillingAddressComplete, shippingFormData, billingFormData)
     )
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [billingFormData])
@@ -135,7 +129,7 @@ const CheckoutPage = () => {
     if (data) {
       const { id, type } = selectResponse[0].message.order.fulfillments[0]
       console.log('Dank', id, type)
-      getInitPayload(submittedDetails, billingFormData, cartItems, transactionId, DOMAIN, { id, type }).then(res => {
+      getInitPayload(shippingFormData, billingFormData, cartItems, transactionId, DOMAIN, { id, type }).then(res => {
         return initialize(res)
       })
       // TODO :_ To check this again
@@ -198,16 +192,16 @@ const CheckoutPage = () => {
           shipping: {
             showDetails: isInitResultPresent(),
             shippingDetails: {
-              name: submittedDetails.name,
-              location: submittedDetails.address,
-              number: submittedDetails.mobileNumber,
+              name: shippingFormData.name,
+              location: shippingFormData.address,
+              number: shippingFormData.mobileNumber,
               title: 'Shipping'
             },
             shippingForm: {
               onSubmit: formSubmitHandler,
               submitButton: { text: 'Save Shipping Details' },
-              values: formData,
-              onChange: data => setSubmittedDetails(data)
+              values: shippingFormData,
+              onChange: data => setShippingFormData(data)
             }
           },
           billing: {
@@ -220,7 +214,7 @@ const CheckoutPage = () => {
               // setIsBillingSame(!isBillingSame)
               dispatch(checkoutActions.setIsBillingSame({ isBillingSame: !isBillingSameRedux }))
             },
-            showDetails: isInitResultPresent() && !isEmpty(submittedDetails),
+            showDetails: isInitResultPresent() && !isEmpty(shippingFormData),
             shippingDetails: {
               name: billingFormData.name,
               location: billingFormData.address,
@@ -230,7 +224,7 @@ const CheckoutPage = () => {
             shippingForm: {
               onSubmit: formSubmitHandler,
               submitButton: { text: 'Save Billing Details' },
-              values: formData,
+              values: billingFormData,
               onChange: data => setBillingFormData(data)
             }
           },
