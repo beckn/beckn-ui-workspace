@@ -266,7 +266,7 @@ const OrderDetails = () => {
                 justifyContent={'space-between'}
                 alignItems={'center'}
               >
-                <Flex maxWidth={'57vw'}>
+                <Flex maxWidth={'40vw'}>
                   <Text
                     textOverflow={'ellipsis'}
                     overflow={'hidden'}
