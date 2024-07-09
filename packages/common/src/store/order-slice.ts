@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-type SelectedOrderDetailsType = {
+export type SelectedOrderDetailsType = {
   orderIds: string[]
   bppIds: string[]
   bppUris: string[]
