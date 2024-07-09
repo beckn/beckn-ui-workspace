@@ -14,12 +14,18 @@ import { Provider } from 'react-redux'
 import store, { persistor } from '@store/index'
 import { Garuda } from 'garudaa'
 import { PersistGate } from 'redux-persist/integration/react'
+import { FallbackUI } from '@beckn-ui/common'
+import { useLanguage } from '@hooks/useLanguage'
+import Router, { useRouter } from 'next/router'
+import ErrorBoundary from '@beckn-ui/common/src/components/errorBoundary'
 
 Garuda.init({
   projectId: '65c0d663cbe90cafae9185f6',
   host: 'https://garuda-api.becknprotocol.io'
 })
 function MyApp({ Component, pageProps }: AppProps) {
+  const { t } = useLanguage()
+  const router = useRouter()
   return (
     <BecknProvider
       theme={{
@@ -36,9 +42,21 @@ function MyApp({ Component, pageProps }: AppProps) {
           loading={null}
           persistor={persistor}
         >
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
+          <ErrorBoundary
+            fallback={() => (
+              <FallbackUI
+                handleBackToHomeClick={() => {
+                  router.push('/')
+                }}
+                handleContactSupport={() => {}}
+                t={key => t[key]}
+              />
+            )}
+          >
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </ErrorBoundary>
         </PersistGate>
       </Provider>
     </BecknProvider>

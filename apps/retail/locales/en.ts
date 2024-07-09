@@ -181,6 +181,10 @@ const en: { [key: string]: string } = {
   errorCity: 'City is Required',
   errorCountry1: 'Country can only contain letters and spaces',
   errorState1: 'State can only contain letters and spaces',
-  errorCity1: 'City can only contain letters and spaces'
+  errorCity1: 'City can only contain letters and spaces',
+  badRequest: 'Bad Request',
+  errorDescription: 'Server cannot process your request due to invalid syntax.',
+  backtoHomepage: 'Back to Homepage',
+  contactSupport: 'Contact support'
 }
 export default en

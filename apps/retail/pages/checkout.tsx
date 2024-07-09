@@ -29,24 +29,7 @@ export type ShippingFormData = {
 const CheckoutPage = () => {
   const cartItems = useSelector((state: ICartRootState) => state.cart.items)
   const retailName = cartItems[0]?.categories[0]?.name
-  console.log(cartItems)
-  // const [formData, setFormData] = useState<ShippingFormInitialValuesType>(
-  //   retailName === 'Retail'
-  //     ? {
-  //         name: 'Lisa',
-  //         mobileNumber: '9811259151',
-  //         email: 'lisa.k@gmail.com',
-  //         address: '1202 b2, Bengaluru urban, Bengaluru, Karnataka',
-  //         pinCode: '560078'
-  //       }
-  //     : {
-  //         name: 'Lisa',
-  //         mobileNumber: '0612345678',
-  //         email: 'lisa.k@gmail.com',
-  //         address: '15 Rue Du Soleil, Paris, France',
-  //         pinCode: '75001'
-  //       }
-  // )
+
   const theme = useTheme()
   const bgColorOfSecondary = theme.colors.secondary['100']
   const toast = useToast()
