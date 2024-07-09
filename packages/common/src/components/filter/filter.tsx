@@ -69,7 +69,7 @@ const Filter = ({ handleApplyFilter, handleResetFilter, handleCancelFilter = () 
   const getFormData = (): Record<string, any> | undefined => {
     if (localStorage) {
       const localFormData = getLocalStorage('formData')
-      return localFormData ? JSON.parse(localFormData) : {}
+      return localFormData
     }
   }
   const [formData, setFormData] = useState(getFormData())
@@ -96,7 +96,7 @@ const Filter = ({ handleApplyFilter, handleResetFilter, handleCancelFilter = () 
     <>
       <ChakraProvider theme={customTheme}>
         <Box
-          height={['100%', '320px']}
+          height={['100%', '100%', '320px']}
           w={['100%', '350px']}
           p={['unset', '20px']}
           boxShadow={['unset', '0px 8px 10px 0px #0000001A']}
@@ -180,18 +180,18 @@ const Filter = ({ handleApplyFilter, handleResetFilter, handleCancelFilter = () 
               handleApplyFilter(sortBy)
             }}
           />
+          <Box display={['block', 'block', 'none', 'none']}>
+            <Button
+              className="cencel_btn_filter"
+              buttonText={'Cancel'}
+              background={'#fff'}
+              color={'#e93324'}
+              isDisabled={false}
+              handleOnClick={handleCancelFilter}
+            />
+          </Box>
         </Box>
       </ChakraProvider>
-      <Box display={['block', 'block', 'none', 'none']}>
-        <Button
-          className="cencel_btn_filter"
-          buttonText={'Cancel'}
-          background={'#fff'}
-          color={'#e93324'}
-          isDisabled={false}
-          handleOnClick={handleCancelFilter}
-        />
-      </Box>
     </>
   )
 }
