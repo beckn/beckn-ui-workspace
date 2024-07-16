@@ -76,7 +76,7 @@ const HomePage = () => {
   useEffect(() => {
     if (importedOrderObject) {
       const latLongValues = importedOrderObject?.fulfillments[0]?.stops[0]?.location?.gps
-
+      // console.log(latLongValues)
       const [latStr, langStr] = latLongValues.split(',')
       const result = {
         lat: parseFloat(latStr),
