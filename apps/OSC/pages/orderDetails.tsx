@@ -20,28 +20,33 @@ import { Accordion, BottomModal, Typography } from '@beckn-ui/molecules'
 import { v4 as uuidv4 } from 'uuid'
 import { useDispatch, useSelector } from 'react-redux'
 import ViewMoreOrderModal from '@components/orderDetailComponents/ViewMoreOrder'
-import { DiscoveryRootState } from '@store/discovery-slice'
-import { statusActions } from '@store/status-slice'
 import { DetailCard, OrderStatusProgress, OrderStatusProgressProps } from '@beckn-ui/becknified-components'
-import { StatusResponseModel, SupportModel } from '../types/status.types'
 import useResponsive from '@beckn-ui/becknified-components/src/hooks/useResponsive'
-import { isEmpty } from '@utils/common-utils'
+import { isEmpty } from '@beckn-ui/common/src/utils'
 import { useLanguage } from '@hooks/useLanguage'
-import { formatTimestamp, getPayloadForOrderStatus } from '@utils/confirm-utils'
+import { getPayloadForOrderStatus, formatTimestamp } from '@beckn-ui/common/src/utils'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
-import { ConfirmResponseModel } from '../types/confirm.types'
+import {
+  ConfirmResponseModel,
+  UIState,
+  DataState,
+  ProcessState,
+  StatusResponseModel,
+  SupportModel,
+  DiscoveryRootState
+} from '@beckn-ui/common/lib/types'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
-import { UIState, DataState, ProcessState } from '../types/order-details.types'
 import CallphoneIcon from '../public/images/CallphoneIcon.svg'
 import locationIcon from '../public/images/locationIcon.svg'
 import nameIcon from '../public/images/nameIcon.svg'
-import { OrdersRootState } from '@store/order-slice'
+import { statusActions } from '@beckn-ui/common/src/store/status-slice'
+import { OrdersRootState } from '@beckn-ui/common/src/store/order-slice'
+import { feedbackActions } from '@beckn-ui/common/src/store/ui-feedback-slice'
 import ShippingBlock from '@components/orderDetailComponents/Shipping'
 import { DOMAIN } from '@lib/config'
 import PaymentDetails from '@beckn-ui/becknified-components/src/components/checkout/payment-details'
 import { getPaymentBreakDown } from '@utils/checkout-utils'
 import BottomModalScan from '../components/BottomModal/BottomModalScan'
-import { feedbackActions } from '@store/ui-feedback-slice'
 
 const statusMap = {
   ArrangingPayment: 'Processing your order',
@@ -105,7 +110,7 @@ const OrderDetails = () => {
   useEffect(() => {
     if (data.statusData.length > 0) {
       const newData = data.statusData
-        .map((status: any) => {
+        .map((status: StatusResponseModel) => {
           const { tags } = status?.message?.order
 
           return {

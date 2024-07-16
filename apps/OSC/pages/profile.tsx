@@ -1,16 +1,15 @@
 import { BecknAuth } from '@beckn-ui/becknified-components'
 import { Box } from '@chakra-ui/react'
-import { profilePageProp } from '@components/signIn/SignIn.types'
 import { useLanguage } from '@hooks/useLanguage'
-import { FormErrors, profileValidateForm } from '@utils/form-utils'
+import { profileValidateForm } from '@beckn-ui/common/src/utils'
 import Cookies from 'js-cookie'
 import React, { useEffect, useMemo, useState } from 'react'
-
 import Router from 'next/router'
-
-import { isEmpty } from '@utils/common-utils'
+import { isEmpty } from '@beckn-ui/common/src/utils'
 import { useDispatch } from 'react-redux'
-import { feedbackActions } from '@store/ui-feedback-slice'
+import { FormErrors, ProfileProps } from '@beckn-ui/common/lib/types'
+
+import { feedbackActions } from '@beckn-ui/common/src/store/ui-feedback-slice'
 import axios from '@services/axios'
 
 const ProfilePage = () => {
@@ -19,7 +18,7 @@ const ProfilePage = () => {
   const bearerToken = Cookies.get('authToken')
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
   const [isLoading, setIsLoading] = useState(false)
-  const [formData, setFormData] = useState<profilePageProp>({
+  const [formData, setFormData] = useState<ProfileProps>({
     name: '',
     mobileNumber: '',
     flatNumber: '',
@@ -39,7 +38,7 @@ const ProfilePage = () => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
 
-    setFormData((prevFormData: profilePageProp) => ({
+    setFormData((prevFormData: ProfileProps) => ({
       ...prevFormData,
       [name]: value
     }))

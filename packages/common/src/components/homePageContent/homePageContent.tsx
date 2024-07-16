@@ -23,6 +23,7 @@ const HomePageContent: React.FC<HomePageContentProps> = ({
   const breakpoint = useBreakpoint()
 
   const primaryColor = theme.colors.primary['100']
+  const secondaryColor = theme.colors.secondary['100']
 
   // Determine current logo based on breakpoint
   const currentLogo = useMemo(() => {
@@ -40,7 +41,7 @@ const HomePageContent: React.FC<HomePageContentProps> = ({
               pb={'12px'}
               fontSize={'40px'}
               fontWeight={'800'}
-              color={primaryColor}
+              color={secondaryColor}
               lineHeight={'110%'}
             >
               {name}

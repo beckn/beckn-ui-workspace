@@ -4,24 +4,24 @@ import { Box, useTheme } from '@chakra-ui/react'
 import { DOMAIN } from '@lib/config'
 import { useLanguage } from '../hooks/useLanguage'
 
-import { ICartRootState } from '@lib/types/cart'
 import {
-  getInitPayload,
   areShippingAndBillingDetailsSame,
+  getInitPayload,
   getSubTotalAndDeliveryCharges
-} from '@components/checkout/checkout.utils'
+} from '@beckn-ui/common/src/utils'
 import useRequest from '../hooks/useRequest'
+import { DiscoveryRootState, ICartRootState, PaymentBreakDownModel } from '@beckn-ui/common'
 
 import { Checkout } from '@beckn-ui/becknified-components'
 
 import { useRouter } from 'next/router'
 import { ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
-import { CheckoutRootState, checkoutActions } from '@store/checkout-slice'
-import { cartActions } from '@store/cart-slice'
-import { isEmpty } from '@utils/common-utils'
+import { checkoutActions, CheckoutRootState } from '@beckn-ui/common/src/store/checkout-slice'
+import { cartActions } from '@beckn-ui/common/src/store/cart-slice'
+import { isEmpty } from '@beckn-ui/common/src/utils'
 import { FormField, LoaderWithMessage } from '@beckn-ui/molecules'
 import { useInitMutation } from '@beckn-ui/common/src/services/init'
-import { DiscoveryRootState } from '@beckn-ui/common'
+// import { DiscoveryRootState } from '@beckn-ui/common'
 
 export type ShippingFormData = {
   name: string
@@ -208,7 +208,7 @@ const CheckoutPage = () => {
   }
 
   const createPaymentBreakdownMap = () => {
-    const paymentBreakdownMap = {}
+    const paymentBreakdownMap: PaymentBreakDownModel = {}
     if (isInitResultPresent()) {
       initResponse[0].message.order.quote.breakup.forEach(breakup => {
         paymentBreakdownMap[breakup.title] = {
@@ -252,7 +252,7 @@ const CheckoutPage = () => {
               // priceWithSymbol: `${currencyMap[singleItem.price.currency]}${singleItem.totalPrice}`,
               price: parseFloat(singleItem.price.value) * singleItem.quantity,
               currency: singleItem.price.currency,
-              image: singleItem.images[0].url
+              image: singleItem.images?.[0].url
             }))
           },
           shipping: {
@@ -261,7 +261,7 @@ const CheckoutPage = () => {
             color: bgColorOfSecondary,
             shippingDetails: {
               name: shippingFormData.name,
-              location: shippingFormData.address,
+              location: shippingFormData.address!,
               number: shippingFormData.mobileNumber,
               title: t.shipping
             },
@@ -293,7 +293,7 @@ const CheckoutPage = () => {
             showDetails: isInitResultPresent() && !isEmpty(shippingFormData),
             shippingDetails: {
               name: billingFormData.name,
-              location: billingFormData.address,
+              location: billingFormData.address!,
               number: billingFormData.mobileNumber,
               title: t.billing
             },
@@ -313,7 +313,7 @@ const CheckoutPage = () => {
               totalText: t.total,
               totalValueWithCurrency: {
                 value: getSubTotalAndDeliveryCharges(initResponse).subTotal.toString(),
-                currency: getSubTotalAndDeliveryCharges(initResponse).currencySymbol
+                currency: getSubTotalAndDeliveryCharges(initResponse).currencySymbol!
               }
             }
           },

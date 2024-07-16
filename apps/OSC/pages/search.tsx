@@ -3,19 +3,17 @@ import axios from '@services/axios'
 import { useDispatch } from 'react-redux'
 import { Box, Flex, Image } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
-import { toBinary } from '@utils/common-utils'
-import { parsedSearchlist } from '@utils/search-results.utils'
+import { parseSearchlist } from '@beckn-ui/common'
 import { ProductCard } from '@beckn-ui/becknified-components'
 import { BottomModal } from '@beckn-ui/molecules'
-import { discoveryActions } from '@store/discovery-slice'
+import { discoveryActions } from '@beckn-ui/common/src/store/discovery-slice'
 import { useBreakpoint } from '@chakra-ui/react'
 import SearchBar from '../components/header/SearchBar'
 import { useLanguage } from '../hooks/useLanguage'
-import { ParsedItemModel } from '@lib/types/beckn/search'
+import { ParsedItemModel } from '@beckn-ui/common'
 import { DOMAIN } from '@lib/config'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
 import Filter from '../components/filter/Filter'
-import { LocalStorage } from '@lib/types'
 
 //Mock data for testing search API. Will remove after the resolution of CORS issue
 
@@ -65,7 +63,7 @@ const Search = () => {
       .post(`${apiUrl}/search`, searchPayload)
       .then(res => {
         dispatch(discoveryActions.addTransactionId({ transactionId: res.data.data[0].context.transaction_id }))
-        const parsedSearchItems = parsedSearchlist(res.data.data)
+        const parsedSearchItems = parseSearchlist(res.data.data)
         dispatch(discoveryActions.addProducts({ products: parsedSearchItems }))
         setItems(parsedSearchItems)
         setOriginalItems(parsedSearchItems)
