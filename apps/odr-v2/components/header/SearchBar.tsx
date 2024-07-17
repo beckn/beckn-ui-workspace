@@ -1,25 +1,26 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useLanguage } from '../../hooks/useLanguage'
 import { SearchBarPropsModel } from '../../lib/types/search'
 import { Box, Flex, Image, Input } from '@chakra-ui/react'
 
 const SearchBar: React.FC<SearchBarPropsModel> = ({ searchString, handleChange, selectedCategory }) => {
   const { t } = useLanguage()
-  const [searchText, setSearchText] = useState(searchString)
+  const [inputValue, setInputValue] = useState('')
+
+  useEffect(() => {
+    setInputValue(selectedCategory ? `${selectedCategory} ; ${searchString}` : searchString)
+  }, [searchString, selectedCategory])
 
   const inputChangeHandler = (event: React.BaseSyntheticEvent) => {
-    setSearchText(event.target.value)
+    setInputValue(event.target.value)
   }
 
   const handleSubmit = () => {
-    handleChange(searchText)
+    const [newCategory, ...newSearchTextParts] = inputValue.split(' ; ')
+    const newSearchText = newSearchTextParts.join(' ; ')
+    handleChange(!newCategory ? `${newCategory} ; ${newSearchText}` : newSearchText)
   }
-  const getInputValue = () => {
-    if (selectedCategory?.length && searchText?.length) {
-      return `${selectedCategory} ; ${searchText}`
-    }
-    return selectedCategory || searchText || ''
-  }
+
   return (
     <Box
       width="100%"
@@ -35,7 +36,7 @@ const SearchBar: React.FC<SearchBarPropsModel> = ({ searchString, handleChange, 
           type="search"
           placeholder={t.search}
           onChange={inputChangeHandler}
-          value={getInputValue()}
+          value={inputValue}
           onKeyDown={event => event.key === 'Enter' && handleSubmit()}
         />
         <Box
