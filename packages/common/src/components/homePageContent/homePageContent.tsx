@@ -43,6 +43,7 @@ const HomePageContent: React.FC<HomePageContentProps> = ({
               fontWeight={'800'}
               color={secondaryColor}
               lineHeight={'110%'}
+              data-test="header"
             >
               {name}
             </Box>
@@ -61,6 +62,7 @@ const HomePageContent: React.FC<HomePageContentProps> = ({
             style={{ marginBottom: '40px' }}
             fontSize="15px"
             fontWeight="400"
+            dataTest="description"
             text={description!}
           />
         )

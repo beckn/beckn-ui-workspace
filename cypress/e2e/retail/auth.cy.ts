@@ -1,3 +1,4 @@
+// @ts-ignore
 describe('Check Auth flow', () => {
   //data-ids for fetching dom
   const emailInputDataId = 'input-email'
@@ -48,7 +49,7 @@ describe('Check Auth flow', () => {
       cy.getByData(emailInputDataId).type(validEmail)
       cy.getByData(passwordInputDataId).type(invalidPassword)
       cy.getByData('login-button').click()
-      cy.getByData('feedback-toast').should('contain', 'Error') // Adjust based on actual error message
+      cy.getByData('feedback-toast').should('contain', 'Error!')
     })
 
     it('should navigate to sign-up page when Sign Up button is clicked', () => {
@@ -57,10 +58,7 @@ describe('Check Auth flow', () => {
     })
 
     it('should redirect to homePage and have token in cookie on successful login', () => {
-      cy.getByData(emailInputDataId).type(validEmail)
-      cy.getByData(passwordInputDataId).type(validPassword)
-      cy.getByData('login-button').click()
-      cy.wait(1000)
+      cy.login(baseUrl, validEmail, validPassword)
       cy.url().should('eq', homePageUrl)
       cy.getCookie('authToken').should('exist')
     })

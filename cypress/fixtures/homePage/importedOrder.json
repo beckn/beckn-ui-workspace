@@ -1,0 +1,67 @@
+{
+  "items": [
+    {
+      "id": "item-1",
+      "descriptor": { "name": "Test Item", "images": [{ "url": "dummy/img.png" }] },
+      "tags": [
+        {
+          "list": [
+            {
+              "descriptor": { "name": "category", "value": "Test Category" }
+            }
+          ]
+        }
+      ],
+      "price": {
+        "value": "100.00"
+      },
+      "quantity": {
+        "selected": {
+          "count": 1
+        }
+      }
+    },
+    {
+      "id": "item-2",
+      "descriptor": { "name": "Himalayas", "images": [{ "url": "dummy/img.png" }] },
+      "tags": [
+        {
+          "list": [
+            {
+              "descriptor": { "name": "category", "value": "Himalayas" }
+            }
+          ]
+        }
+      ],
+      "price": {
+        "value": "200.00"
+      },
+      "quantity": {
+        "selected": {
+          "count": 2
+        }
+      }
+    }
+  ],
+  "fulfillments": [
+    {
+      "stops": [
+        {
+          "location": { "gps": "28.4594965,77.0266383" }
+        }
+      ]
+    }
+  ],
+  "payments": [
+    {
+      "time": {
+        "timestamp": "2024-07-16T12:00:00Z"
+      }
+    }
+  ],
+  "provider": {
+    "descriptor": {
+      "name": "Provider Name"
+    }
+  }
+}

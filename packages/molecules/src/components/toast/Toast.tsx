@@ -25,7 +25,7 @@ const iconMap: {
   warning: { icon: WarningIcon, color: 'yellow.500' }
 }
 
-const Toast: React.FC<ToastProps> = ({ status, title, description, onClose }) => {
+const Toast: React.FC<ToastProps> = ({ status, title, description, onClose, dataTest }) => {
   const { icon, color } = (iconMap as never)[status as ToastType] || {}
 
   return (
@@ -40,6 +40,7 @@ const Toast: React.FC<ToastProps> = ({ status, title, description, onClose }) =>
       maxW={'100%'}
       position="relative"
       data-testid="main_container"
+      data-test={dataTest}
     >
       <Flex
         justifyContent={'space-between'}

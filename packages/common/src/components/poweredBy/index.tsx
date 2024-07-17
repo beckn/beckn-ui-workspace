@@ -11,6 +11,7 @@ const PoweredBy: React.FC<PoweredByProps> = ({ logoSrc, altText = 'logo', powere
       width="calc(100% - 40px)"
       position="fixed"
       bottom="15px"
+      data-test="footer"
     >
       <Typography
         style={{ paddingRight: '8px' }}

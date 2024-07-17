@@ -1,0 +1,9 @@
+{
+  "ok": true,
+  "status": 200,
+  "results": [
+    {
+      "formatted_address": "Test Address, Test City, Test Country"
+    }
+  ]
+}

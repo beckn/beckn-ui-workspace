@@ -124,6 +124,7 @@ const OrderDetails: FC<OrderDetailsProps> = ({ backOnImportedOrder, importedOrde
           <BecknButton
             children={t.goBack}
             disabled={false}
+            dataTest="go-back"
             handleClick={handleBackOnImportedOrder}
           />
         </Box>
