@@ -83,6 +83,7 @@ const TopSheet: React.FC<TopSheetComponentProps> = ({
                     pr="5px"
                     fontSize="12px"
                     fontWeight="500"
+                    data-test="address"
                   >
                     {renderAddressText}
                   </Text>

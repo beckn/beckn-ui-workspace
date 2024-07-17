@@ -104,7 +104,10 @@ const ShoppingList: React.FC<ShoppingListProps> = ({
             >
               {shoppingListData.map((item, indx) => {
                 return (
-                  <div key={indx}>
+                  <div
+                    key={indx}
+                    data-test="shopping-list-item"
+                  >
                     {indx <= index && (
                       <Checkbox
                         display={'flex'}

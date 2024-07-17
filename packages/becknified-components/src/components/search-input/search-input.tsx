@@ -21,6 +21,7 @@ const SearchInput: React.FC<SearchInputPropsModel> = props => {
     <Flex>
       <Input
         data-testid="test-search-input"
+        data-test={'search-input'}
         className={`${className}-search-input`}
         boxShadow="0px 0px 24px rgba(0, 0, 0, 0.10)"
         borderRightRadius={'unset'}
@@ -45,6 +46,8 @@ const SearchInput: React.FC<SearchInputPropsModel> = props => {
         width={'55px'}
         cursor={'pointer'}
         onClick={searchIconClickHandler}
+        data-testid="test-search-button"
+        data-test={'search-button'}
       >
         <Image
           src={searchIcon}

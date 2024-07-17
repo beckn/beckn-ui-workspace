@@ -21,4 +21,5 @@ export interface TypographyProps {
   className?: string
   style?: React.CSSProperties
   onClick?: (event: React.MouseEvent<HTMLElement>) => void
+  dataTest?: string
 }

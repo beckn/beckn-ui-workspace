@@ -30,6 +30,7 @@ const Loader: React.ForwardRefRenderFunction<HTMLDivElement, LoaderProps> = (pro
         emptyColor={emptyColor}
         color={color}
         size={size}
+        data-test="loading-indicator"
         label={'loading'}
       />
 

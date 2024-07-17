@@ -25,8 +25,6 @@ const ImportedOrder: FC<ImportedOrderProps> = ({
   const { isOpen, onOpen, onClose } = useDisclosure({ defaultIsOpen: true })
   const { t, locale } = useLanguage()
 
-  console.log('Dank', importedOrderedItem)
-
   const viewDetailsOnClick = () => {
     updateStateImportedOrder()
   }
@@ -51,7 +49,10 @@ const ImportedOrder: FC<ImportedOrderProps> = ({
         onClose={onClose}
         modalHeader={t.importedOrder}
       >
-        <Box p={'0px 20px'}>
+        <Box
+          p={'0px 20px'}
+          data-test="imported-order"
+        >
           <Box
             position={'relative'}
             width={'335px'}
@@ -62,19 +63,23 @@ const ImportedOrder: FC<ImportedOrderProps> = ({
               width={'100%'}
               height={'100%'}
               alt="item-image"
+              data-test="item-image"
               src={importedOrderedItem[0]?.descriptor?.images[0]?.url}
             />
           </Box>
           <Typography
             variant="subTitleRegular"
+            dataTest="item-details"
             text={t.importedOrderDetails1}
           />
           <Typography
             variant="tagSemibold"
+            dataTest="item-name"
             text={importedOrderedItem[0]?.descriptor?.name}
           />
           <Typography
             variant="subTitleRegular"
+            dataTest="item-sub-details"
             text={t.importedOrderDetails2}
           />
           <Box
@@ -84,6 +89,7 @@ const ImportedOrder: FC<ImportedOrderProps> = ({
             color={'#f6d046'}
             textAlign={'center'}
             marginBottom={'20px'}
+            data-test="imported-order-view-details"
             onClick={viewDetailsOnClick}
           >
             {t.viewOrderDetails}
@@ -92,6 +98,7 @@ const ImportedOrder: FC<ImportedOrderProps> = ({
           <BecknButton
             children={t.yesShowmethelist}
             disabled={false}
+            dataTest="view-chat-gpt-list"
             handleClick={handleShowList}
           />
           <BecknButton
