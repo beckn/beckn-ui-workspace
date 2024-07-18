@@ -185,6 +185,7 @@ const en: { [key: string]: string } = {
   badRequest: 'Bad Request',
   errorDescription: 'Server cannot process your request due to invalid syntax.',
   backtoHomepage: 'Back to Homepage',
-  contactSupport: 'Contact support'
+  contactSupport: 'Contact support',
+  noProduct: 'There are no products in this category yet! New products will be added soon.'
 }
 export default en
