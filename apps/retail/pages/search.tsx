@@ -145,6 +145,7 @@ const Search = () => {
       catalogProps={{
         viewDetailsClickHandler: handleViewDetailsClickHandler
       }}
+      noProduct={key => t.noProduct}
     />
   )
 }
