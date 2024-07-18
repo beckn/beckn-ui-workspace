@@ -14,7 +14,8 @@ const SearchAndDiscover: React.FC<SearchAndDiscoverProps> = ({
   searchProps,
   filterProps,
   loaderProps,
-  catalogProps
+  catalogProps,
+  noProduct
 }) => {
   const { searchKeyword, setSearchKeyword, fetchDataOnSearch } = searchProps
   const { isFilterOpen, handleApplyFilter, handleResetFilter, handleFilterOpen, handleFilterClose } = filterProps || {}
@@ -132,13 +133,25 @@ const SearchAndDiscover: React.FC<SearchAndDiscoverProps> = ({
                 <LoaderWithMessage {...loaderProps} />
               </Box>
             ) : (
-              <Flex
-                flexWrap="wrap"
-                w={['100%', '100%', '51%', '100%']}
-                margin="0 auto"
-              >
-                {renderCatalog()}
-              </Flex>
+              <>
+                {items.length ? (
+                  <Flex
+                    flexWrap="wrap"
+                    w={['100%', '100%', '51%', '100%']}
+                    margin="0 auto"
+                  >
+                    {renderCatalog()}
+                  </Flex>
+                ) : (
+                  <Box
+                    pt={8}
+                    opacity={0.5}
+                    textAlign="center"
+                  >
+                    {noProduct('No Product')}
+                  </Box>
+                )}
+              </>
             )}
           </Box>
         </Box>
