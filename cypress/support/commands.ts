@@ -36,11 +36,17 @@
 //   }
 // }
 // @ts-ignore
-declare namespace Cypress {
-  interface Chainable {
-    getByData(dataTestAttribute: string): Chainable<JQuery<HTMLElement>>
-    login(baseUrl: string, email: string, password: string): Chainable<void>
-    setGeolocation(aliasName: string): Chainable<void>
+import { RouteHandler } from 'cypress/types/net-stubbing'
+
+declare global {
+  namespace Cypress {
+    interface Chainable<Subject = any> {
+      getByData(dataTestAttribute: string): Chainable<JQuery<HTMLElement>>
+      login(baseUrl: string, email: string, password: string): Chainable<void>
+      setGeolocation(aliasName: string): Chainable<void>
+      performSearch(searchTerm: string, response: RouteHandler): Chainable<void>
+      mockReduxState(type: string, data: Record<string, any>): Chainable<void>
+    }
   }
 }
 
@@ -85,5 +91,20 @@ Cypress.Commands.add('setGeolocation', aliasName => {
     cy.intercept('GET', '**/maps.googleapis.com/maps/api/geocode/json*', {
       fixture: 'homePage/address.json'
     }).as(aliasName as string)
+  })
+})
+
+Cypress.Commands.add('performSearch', (searchTerm, response) => {
+  const searchInputId = 'search-input'
+
+  cy.intercept('POST', '**/bap-gcl-dev.becknprotocol.io/search', response).as('searchResults')
+
+  cy.getByData(searchInputId).clear().type(`${searchTerm}{enter}`)
+  cy.wait('@searchResults')
+})
+
+Cypress.Commands.add('mockReduxState', (type, data) => {
+  cy.window().then(win => {
+    ;(win as any).store.dispatch({ type: type, payload: data })
   })
 })

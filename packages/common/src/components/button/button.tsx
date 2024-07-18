@@ -8,6 +8,7 @@ export interface ButtonPropsModel {
   handleOnClick?: () => void
   isDisabled: boolean
   className?: string
+  dataTest?: string
 }
 
 const Button: React.FC<ButtonPropsModel> = props => {
@@ -29,6 +30,7 @@ const Button: React.FC<ButtonPropsModel> = props => {
         border={!isDisabled ? bgColorOfSearchIcon : 'rgba(var(--disabled-btn-color))'}
         marginBottom={'12px'}
         __css={{ '&:active': {} }}
+        data-test={props.dataTest}
         onClick={props.handleOnClick}
       >
         {props.buttonText}

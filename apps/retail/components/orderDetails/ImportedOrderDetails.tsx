@@ -5,6 +5,7 @@ import BottomModalScan from '@components/BottomModal/BottomModalScan'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import Typography from '@beckn-ui/molecules/src/components/typography/typography'
 import { ImportOrderModel } from '@beckn-ui/common/lib/types'
+import { GeneralTestIds } from '@shared/dataTestIds'
 
 interface OrderDetailsProps {
   backOnImportedOrder: (newValue: boolean) => void
@@ -124,7 +125,7 @@ const OrderDetails: FC<OrderDetailsProps> = ({ backOnImportedOrder, importedOrde
           <BecknButton
             children={t.goBack}
             disabled={false}
-            dataTest="go-back"
+            dataTest={GeneralTestIds.goBack}
             handleClick={handleBackOnImportedOrder}
           />
         </Box>

@@ -14,6 +14,7 @@ import React, { useEffect, useState } from 'react'
 import { getLocalStorage, setLocalStorage } from '../../utils'
 import Button from '../button/button'
 import { FilterPropsModel } from './filter.types'
+import { SearchPageTestIds } from '@shared/dataTestIds'
 
 const activeLabelStyles = {
   transform: 'scale(1) translateY(-24px)'
@@ -101,6 +102,7 @@ const Filter = ({ handleApplyFilter, handleResetFilter, handleCancelFilter = () 
           p={['unset', '20px']}
           boxShadow={['unset', '0px 8px 10px 0px #0000001A']}
           margin={['unset', '0 auto', '0 auto', '20px 0 0 0']}
+          data-test={SearchPageTestIds.filterContainer}
         >
           <Flex
             pb={'2px'}
@@ -112,6 +114,7 @@ const Filter = ({ handleApplyFilter, handleResetFilter, handleCancelFilter = () 
               fontSize={'15px'}
               color={secondaryColor}
               cursor={'pointer'}
+              data-test={SearchPageTestIds.resetBtn}
               onClick={resetFilter}
             >
               Reset
@@ -121,6 +124,7 @@ const Filter = ({ handleApplyFilter, handleResetFilter, handleCancelFilter = () 
           <Box pb={'44px'}>
             <FormControl variant="floating">
               <Select
+                data-test={SearchPageTestIds.sortByPrice}
                 onChange={e => handleChange('searchByPrice', e.target.value)}
                 value={formData?.searchByPrice || ''}
                 fontSize="15px"
@@ -147,6 +151,7 @@ const Filter = ({ handleApplyFilter, handleResetFilter, handleCancelFilter = () 
           <Box pb={'44px'}>
             <FormControl variant="floating">
               <Select
+                data-test={SearchPageTestIds.filterByRating}
                 onChange={e => handleChange('searchByRating', e.target.value)}
                 value={formData?.searchByRating || ''}
                 fontSize="15px"
@@ -176,6 +181,7 @@ const Filter = ({ handleApplyFilter, handleResetFilter, handleCancelFilter = () 
             className={'filter-btn'}
             color={'#fff'}
             isDisabled={false}
+            dataTest={'apply-filter'}
             handleOnClick={() => {
               handleApplyFilter(sortBy)
             }}
@@ -187,6 +193,7 @@ const Filter = ({ handleApplyFilter, handleResetFilter, handleCancelFilter = () 
               background={'#fff'}
               color={'#e93324'}
               isDisabled={false}
+              dataTest={'cancel-filter'}
               handleOnClick={handleCancelFilter}
             />
           </Box>
