@@ -6,6 +6,7 @@ import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import Typography from '@beckn-ui/molecules/src/components/typography/typography'
 import { isEmpty } from '@beckn-ui/common/src/utils'
 import { ImportedOrderItem } from '@beckn-ui/common/lib/types'
+import { HomePageTestIds } from '@shared/dataTestIds'
 
 interface ImportedOrderProps {
   updateStateImportedOrder: () => void
@@ -51,7 +52,7 @@ const ImportedOrder: FC<ImportedOrderProps> = ({
       >
         <Box
           p={'0px 20px'}
-          data-test="imported-order"
+          data-test={HomePageTestIds.container}
         >
           <Box
             position={'relative'}
@@ -63,23 +64,23 @@ const ImportedOrder: FC<ImportedOrderProps> = ({
               width={'100%'}
               height={'100%'}
               alt="item-image"
-              data-test="item-image"
+              data-test={HomePageTestIds.itemImage}
               src={importedOrderedItem[0]?.descriptor?.images[0]?.url}
             />
           </Box>
           <Typography
             variant="subTitleRegular"
-            dataTest="item-details"
+            dataTest={HomePageTestIds.itemDetails}
             text={t.importedOrderDetails1}
           />
           <Typography
             variant="tagSemibold"
-            dataTest="item-name"
+            dataTest={HomePageTestIds.itemTitle}
             text={importedOrderedItem[0]?.descriptor?.name}
           />
           <Typography
             variant="subTitleRegular"
-            dataTest="item-sub-details"
+            dataTest={HomePageTestIds.itemSubTitle}
             text={t.importedOrderDetails2}
           />
           <Box
@@ -89,7 +90,7 @@ const ImportedOrder: FC<ImportedOrderProps> = ({
             color={'#f6d046'}
             textAlign={'center'}
             marginBottom={'20px'}
-            data-test="imported-order-view-details"
+            data-test={HomePageTestIds.viewDetailsButton}
             onClick={viewDetailsOnClick}
           >
             {t.viewOrderDetails}
@@ -98,7 +99,7 @@ const ImportedOrder: FC<ImportedOrderProps> = ({
           <BecknButton
             children={t.yesShowmethelist}
             disabled={false}
-            dataTest="view-chat-gpt-list"
+            dataTest={HomePageTestIds.viewChatGPTList}
             handleClick={handleShowList}
           />
           <BecknButton

@@ -1,0 +1,100 @@
+{
+  "data": [
+    {
+      "context": {
+        "domain": "retail",
+        "transaction_id": "12345",
+        "bpp_id": "bpp123",
+        "bpp_uri": "https://bpp.example.com"
+      },
+      "message": {
+        "providers": [
+          {
+            "id": "provider1",
+            "name": "Provider One",
+            "rating": "4.5",
+            "locations": [
+              {
+                "gps": "12.9715987,77.594566"
+              }
+            ],
+            "items": [
+              {
+                "id": "item1",
+                "long_desc": "Protect you from sun rays and wind Polarised- Polarising lens: reduces reflections from bright surfaces Sun Protection- Category 3 lens - 100% UV filter: perfect for sunny weather.",
+                "name": "sunglass One",
+                "price": {
+                  "value": "100.00",
+                  "currency": "INR"
+                },
+                "images": [
+                  {
+                    "url": "http://bpp-unified-vendure1-prod.becknprotocol.io/assets/preview/69/250__preview.jpeg"
+                  }
+                ],
+                "rating": "4.5"
+              },
+              {
+                "id": "item2",
+                "long_desc": "Protect you from sun rays and wind Polarised- Polarising lens: reduces reflections from bright surfaces Sun Protection- Category 3 lens - 100% UV filter: perfect for sunny weather.",
+                "name": "sunglass Two",
+                "price": {
+                  "value": "200.00",
+                  "currency": "INR"
+                },
+                "images": [
+                  {
+                    "url": "http://bpp-unified-vendure1-prod.becknprotocol.io/assets/preview/69/250__preview.jpeg"
+                  }
+                ],
+                "rating": "4.0"
+              }
+            ]
+          },
+          {
+            "id": "provider2",
+            "name": "Provider Two",
+            "rating": "4.0",
+            "locations": [
+              {
+                "gps": "28.704060,77.102493"
+              }
+            ],
+            "items": [
+              {
+                "id": "item3",
+                "long_desc": "Protect you from sun rays and wind Polarised- Polarising lens: reduces reflections from bright surfaces Sun Protection- Category 3 lens - 100% UV filter: perfect for sunny weather.",
+                "name": "sunglass Three",
+                "price": {
+                  "value": "300.00",
+                  "currency": "INR"
+                },
+                "images": [
+                  {
+                    "url": "http://bpp-unified-vendure1-prod.becknprotocol.io/assets/preview/69/250__preview.jpeg"
+                  }
+                ],
+                "rating": "4.2"
+              },
+              {
+                "id": "item4",
+                "long_desc": "Protect you from sun rays and wind Polarised- Polarising lens: reduces reflections from bright surfaces Sun Protection- Category 3 lens - 100% UV filter: perfect for sunny weather.",
+                "name": "sunglass Four",
+                "price": {
+                  "value": "400.00",
+                  "currency": "INR"
+                },
+                "images": [
+                  {
+                    "url": "http://bpp-unified-vendure1-prod.becknprotocol.io/assets/preview/69/250__preview.jpeg"
+                  }
+                ],
+                "rating": "4.8"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

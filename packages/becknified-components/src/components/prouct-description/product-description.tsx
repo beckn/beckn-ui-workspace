@@ -4,13 +4,14 @@ import { Box } from '@chakra-ui/react'
 import useResponsive from '../../hooks/useResponsive'
 
 const ProductDescription: React.FC<ProductDescriptionPropModel> = props => {
-  const { description, className = '' } = props
+  const { description, className = '', dataTest } = props
   const { isMobile, isTablet } = useResponsive()
   const isSmallScreen = isMobile || isTablet
 
   return (
     <Box className={`${className}-product-description-container`}>
       <Box
+        data-test={dataTest}
         dangerouslySetInnerHTML={{
           __html: description
         }}

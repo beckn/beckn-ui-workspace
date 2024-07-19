@@ -1,6 +1,7 @@
 import React from 'react'
 import { MouseEventHandler } from 'react'
 import { Box, Flex, Text, Image } from '@chakra-ui/react'
+import { GeneralTestIds } from '@shared/dataTestIds'
 
 function CartIconWithCount({
   itemCount = 2,
@@ -14,6 +15,7 @@ function CartIconWithCount({
       position="relative"
       justify="center"
       align="center"
+      data-test={GeneralTestIds.cartButton}
       onClick={handleClick}
     >
       <Image

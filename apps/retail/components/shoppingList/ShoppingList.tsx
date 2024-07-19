@@ -7,6 +7,7 @@ import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import BottomModalScan from '@components/BottomModal/BottomModalScan'
 import Typography from '@beckn-ui/molecules/src/components/typography/typography'
 import { ImportOrderShoppingList } from '@beckn-ui/common/lib/types'
+import { HomePageTestIds } from '@shared/dataTestIds'
 
 interface ShoppingListProps {
   shoppingListData: ImportOrderShoppingList
@@ -106,7 +107,7 @@ const ShoppingList: React.FC<ShoppingListProps> = ({
                 return (
                   <div
                     key={indx}
-                    data-test="shopping-list-item"
+                    data-test={HomePageTestIds.shoppingListItem}
                   >
                     {indx <= index && (
                       <Checkbox

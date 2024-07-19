@@ -14,4 +14,5 @@ export interface StarRatingProps {
   starCount: number
   size?: number
   ratingText?: string
+  dataTest?: string
 }
