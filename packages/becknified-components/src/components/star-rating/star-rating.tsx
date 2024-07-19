@@ -24,7 +24,7 @@ import { StarRatingProps } from './star-rating.types'
  */
 
 const StarRating: React.FC<StarRatingProps> = props => {
-  const { rating = 0, ratingText = '', setRating, size = 20, starCount = 5 } = props
+  const { rating = 0, ratingText = '', setRating, size = 20, starCount = 5, dataTest } = props
   const [hover, setHover] = useState<number | null>(null)
   const theme = useTheme()
 
@@ -55,6 +55,7 @@ const StarRating: React.FC<StarRatingProps> = props => {
                 data-testid="test-rating-radio"
                 type="radio"
                 name="rating"
+                data-test={dataTest}
                 onChange={() => setRating(ratingValue)}
                 value={ratingValue}
                 style={{

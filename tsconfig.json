@@ -14,7 +14,7 @@
     "isolatedModules": true,
     "incremental": true,
     "paths": {
-      "@shared/*": ["./shared/*"],
+      "@shared/*": ["./shared/*"]
     },
     "types": ["node", "jest", "@testing-library/jest-dom"]
   },

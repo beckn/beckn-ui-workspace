@@ -36,6 +36,7 @@
 //   }
 // }
 // @ts-ignore
+import { SearchPageTestIds } from '../../shared/dataTestIds'
 import { RouteHandler } from 'cypress/types/net-stubbing'
 
 declare global {
@@ -46,6 +47,7 @@ declare global {
       setGeolocation(aliasName: string): Chainable<void>
       performSearch(searchTerm: string, response: RouteHandler): Chainable<void>
       mockReduxState(type: string, data: Record<string, any>): Chainable<void>
+      selectProduct(index: number): Chainable<void>
     }
   }
 }
@@ -101,6 +103,10 @@ Cypress.Commands.add('performSearch', (searchTerm, response) => {
 
   cy.getByData(searchInputId).clear().type(`${searchTerm}{enter}`)
   cy.wait('@searchResults')
+})
+
+Cypress.Commands.add('selectProduct', index => {
+  cy.getByData(SearchPageTestIds.products).eq(index).click()
 })
 
 Cypress.Commands.add('mockReduxState', (type, data) => {

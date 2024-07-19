@@ -2,6 +2,7 @@ import { Flex, useTheme } from '@chakra-ui/react'
 import React from 'react'
 import { CurrencyType, ProductPriceProps } from './ProductPrice.types'
 import { Typography } from '@beckn-ui/molecules'
+import { ProductPageTestIds } from '@shared/dataTestIds'
 
 const formatCurrency = (price: number, currencyType: CurrencyType) => {
   const currencyOptions = {
@@ -46,6 +47,7 @@ const ProductPrice: React.FC<ProductPriceProps> = props => {
     >
       <Typography
         variant={variant}
+        dataTest={ProductPageTestIds.itemPrice}
         text={formatCurrency(price, currencyType)}
         color={color || textColor}
         style={fontStyle}
