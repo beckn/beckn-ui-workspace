@@ -36,7 +36,7 @@
 //   }
 // }
 // @ts-ignore
-import { SearchPageTestIds } from '../../shared/dataTestIds'
+import { SearchPageTestIds, AuthPageTestIds } from '../../shared/dataTestIds'
 import { RouteHandler } from 'cypress/types/net-stubbing'
 
 declare global {
@@ -48,6 +48,7 @@ declare global {
       performSearch(searchTerm: string, response: RouteHandler): Chainable<void>
       mockReduxState(type: string, data: Record<string, any>): Chainable<void>
       selectProduct(index: number): Chainable<void>
+      performSelect(response: RouteHandler, button: string): Chainable<void>
     }
   }
 }
@@ -113,4 +114,10 @@ Cypress.Commands.add('mockReduxState', (type, data) => {
   cy.window().then(win => {
     ;(win as any).store.dispatch({ type: type, payload: data })
   })
+})
+
+Cypress.Commands.add('performSelect', (response, button) => {
+  cy.intercept('POST', '**/bap-gcl-dev.becknprotocol.io/select', response).as('selectResponse')
+  cy.getByData(button).click()
+  cy.wait('@selectResponse')
 })

@@ -41,7 +41,23 @@ const AuthPageTestIds = {
   inputEmail: 'input-email',
   inputPassword: 'input-password',
   loginButton: 'login-button',
-  registerButton: 'register-button'
+  registerButton: 'register-button',
+  cartEmptyImage: 'empty-card-image',
+  cartEmptyheading: 'empty-card-heading',
+  cartEmptySubHeading: 'empty-card-subheading',
+  cartEmptyButton: 'empty-card-button',
+  productAddToCart: 'productAddtoCart',
+  cartListImage: 'cart-card-image',
+  cartListName: 'cart-item-name',
+  productPrice: 'product-price',
+  orderSummaryText: 'order-summary',
+  totalQuantityText: 'total-qunatity-text',
+  totalAmountText: 'total-amount-text',
+  cartOrderButton: 'cart-order-button',
+  cartDecrementButton: 'decrement-button',
+  cartIncrementButton: 'increment-button',
+  cartTrashButton: 'trash-button',
+  cartInput: 'cart-input'
 }
 
 const HomePageTestIds = {
