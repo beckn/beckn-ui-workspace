@@ -1,6 +1,6 @@
 import { Urls, UserCredentials, GeneralTestIds, AuthPageTestIds } from '../../../shared/dataTestIds'
 
-// boc testing
+// boc testing level 2
 
 describe('Check Auth flow', () => {
   context('Signin flow', () => {
