@@ -12,9 +12,9 @@ import styles from './Layout.module.css'
 import { IGeoLocationSearchPageRootState } from '@lib/types/geoLocationSearchPage'
 import GeoLocationInputList from '@components/geoLocationInput/GeoLocationInputList'
 import { Box, Text, useToast } from '@chakra-ui/react'
-import { FeedbackRootState, feedbackActions } from '@store/ui-feedback-slice'
 import { Toast } from '@beckn-ui/molecules'
 import { ToastType } from '@beckn-ui/molecules/src/components/toast/Toast-type'
+import { feedbackActions, FeedbackRootState } from '@beckn-ui/common'
 
 const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const { locale } = useLanguage()

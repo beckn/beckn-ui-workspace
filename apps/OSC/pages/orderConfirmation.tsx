@@ -4,15 +4,19 @@ import orderConfirmmark from '../public/images/orderConfirmmark.svg'
 import { useSelector, useDispatch } from 'react-redux'
 import { useLanguage } from '../hooks/useLanguage'
 import { ConfirmationPage } from '@beckn-ui/becknified-components'
-import { checkoutActions, CheckoutRootState } from '@beckn-ui/common/src/store/checkout-slice'
-import { orderActions } from '@store/order-slice'
-import { getPayloadForConfirm, getPayloadForOrderHistoryPost } from '@beckn-ui/common/src/utils'
 import axios from '@services/axios'
 import { Box } from '@chakra-ui/react'
 import Cookies from 'js-cookie'
 import { ConfirmResponseModel } from '@beckn-ui/common/lib/types'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
 import { useConfirmMutation } from '@beckn-ui/common/src/services/confirm'
+import {
+  checkoutActions,
+  CheckoutRootState,
+  getPayloadForConfirm,
+  getPayloadForOrderHistoryPost,
+  orderActions
+} from '@beckn-ui/common'
 
 const OrderConfirmation = () => {
   const { t } = useLanguage()

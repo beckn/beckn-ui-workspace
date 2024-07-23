@@ -22,9 +22,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import ViewMoreOrderModal from '@components/orderDetailComponents/ViewMoreOrder'
 import { DetailCard, OrderStatusProgress, OrderStatusProgressProps } from '@beckn-ui/becknified-components'
 import useResponsive from '@beckn-ui/becknified-components/src/hooks/useResponsive'
-import { isEmpty } from '@beckn-ui/common/src/utils'
 import { useLanguage } from '@hooks/useLanguage'
-import { getPayloadForOrderStatus, formatTimestamp } from '@beckn-ui/common/src/utils'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import {
   ConfirmResponseModel,
@@ -39,14 +37,19 @@ import LoaderWithMessage from '@components/loader/LoaderWithMessage'
 import CallphoneIcon from '../public/images/CallphoneIcon.svg'
 import locationIcon from '../public/images/locationIcon.svg'
 import nameIcon from '../public/images/nameIcon.svg'
-import { statusActions } from '@beckn-ui/common/src/store/status-slice'
-import { OrdersRootState } from '@beckn-ui/common/src/store/order-slice'
-import { feedbackActions } from '@beckn-ui/common/src/store/ui-feedback-slice'
 import ShippingBlock from '@components/orderDetailComponents/Shipping'
 import { DOMAIN } from '@lib/config'
 import PaymentDetails from '@beckn-ui/becknified-components/src/components/checkout/payment-details'
-import { getPaymentBreakDown } from '@utils/checkout-utils'
 import BottomModalScan from '../components/BottomModal/BottomModalScan'
+import {
+  feedbackActions,
+  formatTimestamp,
+  getPayloadForOrderStatus,
+  getPaymentBreakDown,
+  isEmpty,
+  OrdersRootState,
+  statusActions
+} from '@beckn-ui/common'
 
 const statusMap = {
   ArrangingPayment: 'Processing your order',

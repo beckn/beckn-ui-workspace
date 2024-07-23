@@ -1,11 +1,9 @@
 import React, { useState } from 'react'
 import { ProductDetailPage } from '@beckn-ui/becknified-components'
-import { cartActions } from '@beckn-ui/common/src/store/cart-slice'
 import { useDispatch, useSelector } from 'react-redux'
-import { DiscoveryRootState, ParsedItemModel } from '@beckn-ui/common/lib/types'
 import { Box } from '@chakra-ui/react'
 import { useLanguage } from '@hooks/useLanguage'
-import { feedbackActions } from '@beckn-ui/common/src/store/ui-feedback-slice'
+import { cartActions, DiscoveryRootState, feedbackActions, ParsedItemModel } from '@beckn-ui/common'
 
 const Product = () => {
   const selectedProduct: ParsedItemModel = useSelector((state: DiscoveryRootState) => state.discovery.selectedProduct)

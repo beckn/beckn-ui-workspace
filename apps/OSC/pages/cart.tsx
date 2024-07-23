@@ -5,14 +5,12 @@ import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useLanguage } from '@hooks/useLanguage'
 import { Cart as BecknCart } from '@beckn-ui/becknified-components'
-import { getSelectPayload } from '@beckn-ui/common/src/utils'
-import { cartActions } from '@store/cart-slice'
 
 import { Box } from '@chakra-ui/react'
 
 import { DOMAIN } from '@lib/config'
 
-import { ICartRootState, DiscoveryRootState } from '@beckn-ui/common'
+import { ICartRootState, DiscoveryRootState, getSelectPayload, cartActions } from '@beckn-ui/common'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
 import { useSelectMutation } from '@beckn-ui/common/src/services/select'
 

@@ -6,13 +6,12 @@ import { useLanguage } from '../hooks/useLanguage'
 import feedbackImg from '../public/images/feedbackImg.svg'
 import { Typography } from '@beckn-ui/molecules'
 import { useDispatch, useSelector } from 'react-redux'
-import { StatusRootState } from '@beckn-ui/common/src/store/status-slice'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import useResponsive from '@beckn-ui/becknified-components/src/hooks/useResponsive'
 import { StatusResponseModel } from '@beckn-ui/common/lib/types'
 import axios from '@services/axios'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
-import { feedbackActions } from '@beckn-ui/common/src/store/ui-feedback-slice'
+import { feedbackActions, StatusRootState } from '@beckn-ui/common'
 
 const Feedback = () => {
   const { t } = useLanguage()
