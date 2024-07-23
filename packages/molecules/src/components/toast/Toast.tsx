@@ -69,6 +69,7 @@ const Toast: React.FC<ToastProps> = ({ status, title, description, onClose, data
         <CloseButton
           onClick={onClose}
           data-testid="close-button"
+          data-test="close"
         />
       </Flex>
       {description && (

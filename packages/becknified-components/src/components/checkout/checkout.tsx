@@ -6,6 +6,7 @@ import ItemDetails from './checkout-item-details'
 import ShippingSection from './shipping-section'
 import { CheckoutProps, ShippingFormInitialValuesType } from './checkout.types'
 import PaymentDetails from './payment-details'
+import { CheckoutPageTestIds } from '@shared/dataTestIds'
 
 const Checkout: React.FC<CheckoutProps<FormField[]>> = ({
   schema: { items, loader, shipping, billing, payment, pageCTA },
@@ -47,7 +48,10 @@ const Checkout: React.FC<CheckoutProps<FormField[]>> = ({
         <DetailsCard>
           {items?.data.map((item, i) => {
             return (
-              <div key={i}>
+              <div
+                key={i}
+                data-test={CheckoutPageTestIds.itemDetails}
+              >
                 <ItemDetails
                   title={item.title}
                   description={item.description}
@@ -62,13 +66,19 @@ const Checkout: React.FC<CheckoutProps<FormField[]>> = ({
         </DetailsCard>
 
         {/* Shipping section */}
-        <ShippingSection {...shipping} />
+        <ShippingSection
+          {...shipping}
+          dataTest={CheckoutPageTestIds.shippingDetails}
+        />
 
         {/* Billing Section */}
-        <ShippingSection {...billing} />
+        <ShippingSection
+          {...billing}
+          dataTest={CheckoutPageTestIds.billingDetails}
+        />
 
         {hasInitResult && (
-          <>
+          <Box data-test={CheckoutPageTestIds.paymentDetails}>
             <Box pb={'10px'}>
               <Typography
                 variant="titleRegular"
@@ -78,7 +88,7 @@ const Checkout: React.FC<CheckoutProps<FormField[]>> = ({
             <DetailsCard>
               <PaymentDetails {...payment.paymentDetails} />
             </DetailsCard>
-          </>
+          </Box>
         )}
         <Box
           width={isLargeScreen ? '40%' : '100%'}
@@ -86,6 +96,7 @@ const Checkout: React.FC<CheckoutProps<FormField[]>> = ({
         >
           <Button
             {...restButtonProps}
+            dataTest={CheckoutPageTestIds.proceedToCheckout}
             disabled={!hasInitResult || (!hasInitResult && !billing.isChecked)}
           />
         </Box>

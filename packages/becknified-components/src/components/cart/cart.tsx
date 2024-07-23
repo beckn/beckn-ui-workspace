@@ -1,7 +1,7 @@
 import React from 'react'
 import cl from 'classnames'
 import { Box, calc, Flex, Image } from '@chakra-ui/react'
-import { AuthPageTestIds } from '@shared/dataTestIds'
+import { CartPageTestIds } from '@shared/dataTestIds'
 
 // Custom
 import { CartProps } from './cart.types'
@@ -66,7 +66,7 @@ const Cart: React.FC<CartProps> = ({
                 <Image
                   src={emptyCard.image}
                   alt="empty-card"
-                  data-test={AuthPageTestIds.cartEmptyImage}
+                  data-test={CartPageTestIds.cartEmptyImage}
                 />
               </Flex>
               <Box
@@ -75,17 +75,17 @@ const Cart: React.FC<CartProps> = ({
               >
                 <Typography
                   variant="titleSemibold"
-                  dataTest={AuthPageTestIds.cartEmptyheading}
+                  dataTest={CartPageTestIds.cartEmptyheading}
                   text={emptyCard.heading!}
                 />
                 <Typography
                   variant="subTitleRegular"
-                  dataTest={AuthPageTestIds.cartEmptySubHeading}
+                  dataTest={CartPageTestIds.cartEmptySubHeading}
                   text={emptyCard.subHeading!}
                 />
               </Box>
               <BecknButton
-                dataTest={AuthPageTestIds.cartEmptyButton}
+                dataTest={CartPageTestIds.cartEmptyButton}
                 children={emptyCard.buttonText}
                 handleClick={emptyCard.buttonHanler}
               />

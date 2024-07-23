@@ -4,6 +4,7 @@ import { Typography } from '@beckn-ui/molecules'
 import { ItemDetailProps } from './checkout.types'
 import { useBreakpoint } from '@chakra-ui/react'
 import ProductPrice from '../product-price'
+import { CheckoutPageTestIds } from '@shared/dataTestIds'
 
 const ItemDetails: React.FC<ItemDetailProps> = ({ title, quantity, description, image, price, currency }) => {
   const breakpoint = useBreakpoint()
@@ -35,11 +36,13 @@ const ItemDetails: React.FC<ItemDetailProps> = ({ title, quantity, description, 
           >
             <Typography
               style={{ width: '90%' }}
+              dataTest={CheckoutPageTestIds.itemTitle}
               text={title}
               variant="subTitleRegular"
             />
             <Typography
               text={`X ${quantity.toString()}`}
+              dataTest={CheckoutPageTestIds.itemQuantity}
               variant="subTextRegular"
             />
           </Flex>
@@ -48,7 +51,8 @@ const ItemDetails: React.FC<ItemDetailProps> = ({ title, quantity, description, 
             alignItems={'center'}
           >
             <Typography
-              text={description}
+              text={description!}
+              dataTest={CheckoutPageTestIds.itemDescription}
               variant="subTextRegular"
             />
             <ProductPrice

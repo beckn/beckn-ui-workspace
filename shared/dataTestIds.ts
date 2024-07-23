@@ -4,7 +4,8 @@ const Urls = {
   homePageUrl: 'http://localhost:3002/',
   searchPageUrl: 'http://localhost:3002/search',
   cartPageUrl: '/cart',
-  productPageUrl: '/product'
+  productPageUrl: '/product',
+  checkoutPageUrl: '/checkout'
 }
 
 const UserCredentials = {
@@ -25,7 +26,8 @@ const ItemTestIds = {
   itemImage: 'item-image',
   itemRating: 'item-rating',
   itemDescription: 'item-description',
-  itemPrice: 'item-price'
+  itemPrice: 'item-price',
+  itemQuantity: 'item-quantity'
 }
 
 const GeneralTestIds = {
@@ -41,23 +43,7 @@ const AuthPageTestIds = {
   inputEmail: 'input-email',
   inputPassword: 'input-password',
   loginButton: 'login-button',
-  registerButton: 'register-button',
-  cartEmptyImage: 'empty-card-image',
-  cartEmptyheading: 'empty-card-heading',
-  cartEmptySubHeading: 'empty-card-subheading',
-  cartEmptyButton: 'empty-card-button',
-  productAddToCart: 'productAddtoCart',
-  cartListImage: 'cart-card-image',
-  cartListName: 'cart-item-name',
-  productPrice: 'product-price',
-  orderSummaryText: 'order-summary',
-  totalQuantityText: 'total-qunatity-text',
-  totalAmountText: 'total-amount-text',
-  cartOrderButton: 'cart-order-button',
-  cartDecrementButton: 'decrement-button',
-  cartIncrementButton: 'increment-button',
-  cartTrashButton: 'trash-button',
-  cartInput: 'cart-input'
+  registerButton: 'register-button'
 }
 
 const HomePageTestIds = {
@@ -97,6 +83,46 @@ const ProductPageTestIds = {
   decrementCounter: 'decrement-counter'
 }
 
+const CartPageTestIds = {
+  cartEmptyImage: 'empty-card-image',
+  cartEmptyheading: 'empty-card-heading',
+  cartEmptySubHeading: 'empty-card-subheading',
+  cartEmptyButton: 'empty-card-button',
+  productAddToCart: 'productAddtoCart',
+  cartListImage: 'cart-card-image',
+  cartListName: 'cart-item-name',
+  productPrice: 'product-price',
+  orderSummaryText: 'order-summary',
+  totalQuantityText: 'total-qunatity-text',
+  totalAmountText: 'total-amount-text',
+  cartOrderButton: 'cart-order-button',
+  cartDecrementButton: 'decrement-button',
+  cartIncrementButton: 'increment-button',
+  cartTrashButton: 'trash-button',
+  cartInput: 'cart-input'
+}
+
+const CheckoutPageTestIds = {
+  ...ItemTestIds,
+  itemDetails: 'item-details',
+  form: 'form',
+  openForm: 'open-form',
+  name: 'name',
+  mobileNumber: 'mobileNumber',
+  email: 'email',
+  address: 'address',
+  pinCode: 'pinCode',
+  shippingDetails: 'shippingDetails',
+  billingDetails: 'billingDetails',
+  paymentDetails: 'paymentDetails',
+  checkbox: 'checkbox',
+  changeFormDetails: 'changeFormDetails',
+  basePrice: 'base-price',
+  taxes: 'taxes',
+  totalPayment: 'totalPayment',
+  proceedToCheckout: 'proceed-to-checkout'
+}
+
 export {
   Urls,
   UserCredentials,
@@ -104,5 +130,7 @@ export {
   AuthPageTestIds,
   HomePageTestIds,
   SearchPageTestIds,
-  ProductPageTestIds
+  ProductPageTestIds,
+  CartPageTestIds,
+  CheckoutPageTestIds
 }

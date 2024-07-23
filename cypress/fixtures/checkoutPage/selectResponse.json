@@ -1,0 +1,127 @@
+{
+  "data": [
+    {
+      "context": {
+        "domain": "retail:1.1.0",
+        "action": "on_select",
+        "version": "1.1.0",
+        "bpp_id": "bpp123",
+        "bpp_uri": "https://bpp.example.com",
+        "country": "IND",
+        "city": "std:080",
+        "location": {
+          "country": {
+            "name": "India",
+            "code": "IND"
+          },
+          "city": {
+            "name": "Bangalore",
+            "code": "std:080"
+          }
+        },
+        "bap_id": "bap-ps-network-staging.becknprotocol.io",
+        "bap_uri": "https://bap-ps-network-staging.becknprotocol.io",
+        "transaction_id": "12345",
+        "message_id": "9120e1fe-2fec-44c1-8bd2-d75c7bd99d56",
+        "ttl": "PT10M",
+        "timestamp": "2024-07-22T13:12:07.181Z"
+      },
+      "message": {
+        "order": {
+          "type": "DEFAULT",
+          "quote": {
+            "price": {
+              "currency": "INR",
+              "value": "2160.00"
+            },
+            "breakup": [
+              {
+                "title": "base-price",
+                "price": {
+                  "currency": "INR",
+                  "value": "1800.00"
+                }
+              },
+              {
+                "title": "taxes",
+                "price": {
+                  "currency": "INR",
+                  "value": "360.00"
+                }
+              }
+            ]
+          },
+          "provider": {
+            "id": "provider1",
+            "name": "Provider One",
+            "short_desc": "",
+            "long_desc": ""
+          },
+          "items": [
+            {
+              "id": "item1",
+              "name": "sunglass One",
+              "long_desc": "Protect you from sun rays and wind Polarised- Polarising lens: reduces reflections from bright surfaces Sun Protection- Category 3 lens - 100% UV filter: perfect for sunny weather.",
+              "images": [
+                {
+                  "url": "http://bpp-unified-vendure1-prod.becknprotocol.io/assets/preview/69/250__preview.jpeg"
+                }
+              ],
+              "price": {
+                "listed_value": "100.00",
+                "currency": "INR",
+                "value": "100.00"
+              },
+              "quantity": {
+                "selected": {
+                  "count": 1
+                }
+              }
+            },
+            {
+              "id": "item2",
+              "name": "sunglass Two",
+              "long_desc": "Protect you from sun rays and wind Polarised- Polarising lens: reduces reflections from bright surfaces Sun Protection- Category 3 lens - 100% UV filter: perfect for sunny weather.",
+              "images": [
+                {
+                  "url": "http://bpp-unified-vendure1-prod.becknprotocol.io/assets/preview/69/250__preview.jpeg"
+                }
+              ],
+              "price": {
+                "listed_value": "200.00",
+                "currency": "INR",
+                "value": "200.00"
+              },
+              "quantity": {
+                "selected": {
+                  "count": 1
+                }
+              }
+            }
+          ],
+          "fulfillments": [
+            {
+              "id": "9",
+              "type": "standard",
+              "tracking": false
+            }
+          ],
+          "tags": [
+            {
+              "code": "ShippingMethodDetails",
+              "name": "Shipping method details",
+              "display": true,
+              "list": [
+                {
+                  "code": "standard",
+                  "name": "Standard",
+                  "value": "standard"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

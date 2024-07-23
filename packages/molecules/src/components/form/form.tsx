@@ -87,6 +87,7 @@ const Form = <T extends FormField[]>({
         content = (
           <Input
             name={field.name}
+            dataTest={field.name}
             value={formData[field.name as keyof FormData<T>]}
             type={field.type}
             handleChange={handleChange(field.name)}
@@ -104,7 +105,10 @@ const Form = <T extends FormField[]>({
 
   return (
     <Box>
-      <form onSubmit={handleSubmit}>
+      <form
+        onSubmit={handleSubmit}
+        data-test="form"
+      >
         {fields.map(field => (
           <FormControl
             key={field.name}
@@ -118,6 +122,7 @@ const Form = <T extends FormField[]>({
         <Button
           {...restButtonProps}
           type="submit"
+          dataTest={'submit'}
           disabled={Object.keys(formErrors).length !== 0}
         />
       </form>

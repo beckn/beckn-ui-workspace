@@ -39,6 +39,7 @@ export interface ShippingSectionProps<T extends FormField[]> {
   isDisabled?: boolean
   onCheckChange?: () => void
   color?: string
+  dataTest?: string
 }
 
 export interface ItemDetailProps {

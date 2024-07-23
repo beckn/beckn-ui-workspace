@@ -27,6 +27,13 @@
                   "value": "100.00",
                   "currency": "INR"
                 },
+                "categories": [
+                  {
+                    "id": "224",
+                    "name": "Retail",
+                    "code": "retail"
+                  }
+                ],
                 "images": [
                   {
                     "url": "http://bpp-unified-vendure1-prod.becknprotocol.io/assets/preview/69/250__preview.jpeg"
@@ -42,6 +49,13 @@
                   "value": "200.00",
                   "currency": "INR"
                 },
+                "categories": [
+                  {
+                    "id": "224",
+                    "name": "Retail",
+                    "code": "retail"
+                  }
+                ],
                 "images": [
                   {
                     "url": "http://bpp-unified-vendure1-prod.becknprotocol.io/assets/preview/69/250__preview.jpeg"
@@ -69,6 +83,13 @@
                   "value": "300.00",
                   "currency": "INR"
                 },
+                "categories": [
+                  {
+                    "id": "224",
+                    "name": "Retail",
+                    "code": "retail"
+                  }
+                ],
                 "images": [
                   {
                     "url": "http://bpp-unified-vendure1-prod.becknprotocol.io/assets/preview/69/250__preview.jpeg"
@@ -84,6 +105,13 @@
                   "value": "400.00",
                   "currency": "INR"
                 },
+                "categories": [
+                  {
+                    "id": "224",
+                    "name": "Retail",
+                    "code": "retail"
+                  }
+                ],
                 "images": [
                   {
                     "url": "http://bpp-unified-vendure1-prod.becknprotocol.io/assets/preview/69/250__preview.jpeg"

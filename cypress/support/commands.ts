@@ -48,7 +48,8 @@ declare global {
       performSearch(searchTerm: string, response: RouteHandler): Chainable<void>
       mockReduxState(type: string, data: Record<string, any>): Chainable<void>
       selectProduct(index: number): Chainable<void>
-      performSelect(response: RouteHandler, button: string): Chainable<void>
+      performSelect(response: RouteHandler, button?: string): Chainable<void>
+      performInit(response: RouteHandler): Chainable<void>
     }
   }
 }
@@ -110,6 +111,11 @@ Cypress.Commands.add('selectProduct', index => {
   cy.getByData(SearchPageTestIds.products).eq(index).click()
 })
 
+Cypress.Commands.add('performInit', response => {
+  cy.intercept('POST', '**/bap-gcl-dev.becknprotocol.io/init', response).as('initRes')
+  cy.wait('@initRes')
+})
+
 Cypress.Commands.add('mockReduxState', (type, data) => {
   cy.window().then(win => {
     ;(win as any).store.dispatch({ type: type, payload: data })
@@ -118,6 +124,6 @@ Cypress.Commands.add('mockReduxState', (type, data) => {
 
 Cypress.Commands.add('performSelect', (response, button) => {
   cy.intercept('POST', '**/bap-gcl-dev.becknprotocol.io/select', response).as('selectResponse')
-  cy.getByData(button).click()
+  if (button) cy.getByData(button).click()
   cy.wait('@selectResponse')
 })
