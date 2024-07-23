@@ -8,7 +8,7 @@ import SearchBar from '../searchBar'
 import CustomFilterIconComponent from '../cutomFilterIcon'
 import { setLocalStorage } from '../../utils'
 import { SearchAndDiscoverProps } from './searchAndDiscover.types'
-import { GeneralTestIds, SearchPageTestIds } from '@shared/dataTestIds'
+import { testIds } from '@shared/dataTestIds'
 
 const SearchAndDiscover: React.FC<SearchAndDiscoverProps> = ({
   items,
@@ -93,7 +93,7 @@ const SearchAndDiscover: React.FC<SearchAndDiscoverProps> = ({
               <Box
                 onClick={handleFilterOpen}
                 cursor="pointer"
-                data-test={SearchPageTestIds.filterButton}
+                data-test={testIds.searchpage_filterButton}
                 marginLeft={'1rem'}
               >
                 <CustomFilterIconComponent />
@@ -149,7 +149,7 @@ const SearchAndDiscover: React.FC<SearchAndDiscoverProps> = ({
                     pt={8}
                     opacity={0.5}
                     textAlign="center"
-                    data-test={GeneralTestIds.noDataAvailable}
+                    data-test={testIds.noDataAvailable}
                   >
                     {noProduct('No Product')}
                   </Box>

@@ -3,7 +3,7 @@ import ProductPrice from '../product-price'
 import { OrderSummaryProps } from './cart.types'
 import styles from './order-summary.module.css'
 import { Button, Typography } from '@beckn-ui/molecules'
-import { CartPageTestIds } from '@shared/dataTestIds'
+import { testIds } from '@shared/dataTestIds'
 
 const OrderSummaryBox: React.FC<OrderSummaryProps> = ({
   totalAmount,
@@ -19,14 +19,14 @@ const OrderSummaryBox: React.FC<OrderSummaryProps> = ({
         <Typography
           variant="titleRegular"
           text={orderSummaryText}
-          dataTest={CartPageTestIds.orderSummaryText}
+          dataTest={testIds.cartpage_orderSummaryText}
         />
         <div className={styles.orderSummaryDetails}>
           <div className={styles.orderSummaryDetailRow}>
             <Typography
               variant="subTitleRegular"
               text={totalQuantityText}
-              dataTest={CartPageTestIds.totalQuantityText}
+              dataTest={testIds.cartpage_totalQuantityText}
             />
             <Typography {...totalQuantity} />
           </div>
@@ -34,14 +34,14 @@ const OrderSummaryBox: React.FC<OrderSummaryProps> = ({
             <Typography
               variant="subTitleRegular"
               text={totalAmountText}
-              dataTest={CartPageTestIds.totalAmountText}
+              dataTest={testIds.cartpage_totalAmountText}
             />
             <ProductPrice {...totalAmount} />
           </div>
         </div>
         <Button
           {...pageCTA}
-          dataTest={CartPageTestIds.cartOrderButton}
+          dataTest={testIds.cartpage_cartOrderButton}
         />
       </div>
     </>

@@ -6,7 +6,7 @@ import ItemDetails from './checkout-item-details'
 import ShippingSection from './shipping-section'
 import { CheckoutProps, ShippingFormInitialValuesType } from './checkout.types'
 import PaymentDetails from './payment-details'
-import { CheckoutPageTestIds } from '@shared/dataTestIds'
+import { testIds } from '@shared/dataTestIds'
 
 const Checkout: React.FC<CheckoutProps<FormField[]>> = ({
   schema: { items, loader, shipping, billing, payment, pageCTA },
@@ -50,7 +50,7 @@ const Checkout: React.FC<CheckoutProps<FormField[]>> = ({
             return (
               <div
                 key={i}
-                data-test={CheckoutPageTestIds.itemDetails}
+                data-test={testIds.item_details}
               >
                 <ItemDetails
                   title={item.title}
@@ -68,17 +68,17 @@ const Checkout: React.FC<CheckoutProps<FormField[]>> = ({
         {/* Shipping section */}
         <ShippingSection
           {...shipping}
-          dataTest={CheckoutPageTestIds.shippingDetails}
+          dataTest={testIds.checkoutpage_shippingDetails}
         />
 
         {/* Billing Section */}
         <ShippingSection
           {...billing}
-          dataTest={CheckoutPageTestIds.billingDetails}
+          dataTest={testIds.checkoutpage_billingDetails}
         />
 
         {hasInitResult && (
-          <Box data-test={CheckoutPageTestIds.paymentDetails}>
+          <Box data-test={testIds.checkoutpage_paymentDetails}>
             <Box pb={'10px'}>
               <Typography
                 variant="titleRegular"
@@ -96,7 +96,7 @@ const Checkout: React.FC<CheckoutProps<FormField[]>> = ({
         >
           <Button
             {...restButtonProps}
-            dataTest={CheckoutPageTestIds.proceedToCheckout}
+            dataTest={testIds.checkoutpage_proceedToCheckout}
             disabled={!hasInitResult || (!hasInitResult && !billing.isChecked)}
           />
         </Box>

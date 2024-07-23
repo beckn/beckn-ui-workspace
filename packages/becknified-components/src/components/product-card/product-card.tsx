@@ -4,7 +4,7 @@ import StarIcon from '../../../public/images/Star.svg'
 import { ProductCardProps } from './product-card.types'
 import ProductPrice from '../product-price'
 import ProductRating from '../product-rating'
-import { SearchPageTestIds } from '@shared/dataTestIds'
+import { testIds } from '@shared/dataTestIds'
 
 const ProductCard: React.FC<ProductCardProps> = props => {
   const {
@@ -39,7 +39,7 @@ const ProductCard: React.FC<ProductCardProps> = props => {
           transition="0.5s all"
           position={'relative'}
           boxShadow={'0px 8px 10px 0px #0000001A'}
-          data-test={SearchPageTestIds.products}
+          data-test={testIds.searchpage_products}
         >
           <Box
             display={'flex'}

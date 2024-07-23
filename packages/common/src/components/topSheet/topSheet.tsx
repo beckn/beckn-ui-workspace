@@ -19,7 +19,7 @@ import { useRouter } from 'next/router'
 import { IGeoLocationSearchPageRootState } from '@beckn-ui/common/lib/types'
 import { toggleLocationSearchPageVisibility } from '@beckn-ui/common/src/store/geoMapLocationSearch-slice'
 import { TopSheetComponentProps } from './topSheet.types'
-import { GeneralTestIds } from '@shared/dataTestIds'
+import { testIds } from '@shared/dataTestIds'
 
 const TopSheet: React.FC<TopSheetComponentProps> = ({
   currentAddress,
@@ -84,7 +84,7 @@ const TopSheet: React.FC<TopSheetComponentProps> = ({
                     pr="5px"
                     fontSize="12px"
                     fontWeight="500"
-                    data-test={GeneralTestIds.location}
+                    data-test={testIds.location}
                   >
                     {renderAddressText}
                   </Text>

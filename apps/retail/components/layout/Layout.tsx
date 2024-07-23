@@ -14,7 +14,7 @@ import { Box, Text, useToast } from '@chakra-ui/react'
 import { Toast } from '@beckn-ui/molecules/src/components'
 import { IGeoLocationSearchPageRootState } from '@beckn-ui/common/lib/types'
 import { feedbackActions, FeedbackRootState, ToastType } from '@beckn-ui/common/src/store/ui-feedback-slice'
-import { GeneralTestIds } from '@shared/dataTestIds'
+import { testIds } from '@shared/dataTestIds'
 
 const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const { locale } = useLanguage()
@@ -47,7 +47,7 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
             title={message}
             description={description}
             onClose={onClose}
-            dataTest={GeneralTestIds.feedback}
+            dataTest={testIds.feedback}
           />
         )
       })

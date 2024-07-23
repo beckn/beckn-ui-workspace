@@ -36,7 +36,7 @@
 //   }
 // }
 // @ts-ignore
-import { SearchPageTestIds, AuthPageTestIds } from '../../shared/dataTestIds'
+import { testIds } from '../../shared/dataTestIds'
 import { RouteHandler } from 'cypress/types/net-stubbing'
 
 declare global {
@@ -54,6 +54,8 @@ declare global {
   }
 }
 
+const GCL_URL = 'https://bap-gcl-dev.becknprotocol.io'
+
 Cypress.Commands.add('getByData', selector => {
   return cy.get(`[data-test=${selector}]`)
 })
@@ -65,9 +67,9 @@ Cypress.on('uncaught:exception', (err, runnable) => {
 })
 
 Cypress.Commands.add('login', (baseUrl, email, password) => {
-  const emailInputDataId = 'input-email'
-  const passwordInputDataId = 'input-password'
-  const homePageUrl = 'http://localhost:3002/'
+  const emailInputDataId = testIds.auth_inputEmail
+  const passwordInputDataId = testIds.auth_inputPassword
+  const homePageUrl = testIds.url_home
 
   cy.session(
     [email, password],
@@ -75,7 +77,7 @@ Cypress.Commands.add('login', (baseUrl, email, password) => {
       cy.visit(baseUrl)
       cy.getByData(emailInputDataId).type(email)
       cy.getByData(passwordInputDataId).type(password)
-      cy.getByData('login-button').click()
+      cy.getByData(testIds.auth_loginButton).click()
       cy.wait(1000)
     },
     {
@@ -101,18 +103,18 @@ Cypress.Commands.add('setGeolocation', aliasName => {
 Cypress.Commands.add('performSearch', (searchTerm, response) => {
   const searchInputId = 'search-input'
 
-  cy.intercept('POST', '**/bap-gcl-dev.becknprotocol.io/search', response).as('searchResults')
+  cy.intercept('POST', `${GCL_URL}/search`, response).as('searchResults')
 
   cy.getByData(searchInputId).clear().type(`${searchTerm}{enter}`)
   cy.wait('@searchResults')
 })
 
 Cypress.Commands.add('selectProduct', index => {
-  cy.getByData(SearchPageTestIds.products).eq(index).click()
+  cy.getByData(testIds.searchpage_products).eq(index).click()
 })
 
 Cypress.Commands.add('performInit', response => {
-  cy.intercept('POST', '**/bap-gcl-dev.becknprotocol.io/init', response).as('initRes')
+  cy.intercept('POST', `${GCL_URL}/init`, response).as('initRes')
   cy.wait('@initRes')
 })
 
@@ -123,7 +125,7 @@ Cypress.Commands.add('mockReduxState', (type, data) => {
 })
 
 Cypress.Commands.add('performSelect', (response, button) => {
-  cy.intercept('POST', '**/bap-gcl-dev.becknprotocol.io/select', response).as('selectResponse')
+  cy.intercept('POST', `${GCL_URL}/select`, response).as('selectResponse')
   if (button) cy.getByData(button).click()
   cy.wait('@selectResponse')
 })

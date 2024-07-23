@@ -5,7 +5,7 @@ import { Typography } from '@beckn-ui/molecules'
 import { RiArrowRightSLine } from 'react-icons/ri'
 import PoweredBy from '../poweredBy'
 import { HomePageContentProps } from './homePageContent.types'
-import { HomePageTestIds } from '@shared/dataTestIds'
+import { testIds } from '@shared/dataTestIds'
 
 const HomePageContent: React.FC<HomePageContentProps> = ({
   blockOrder = [],
@@ -44,7 +44,7 @@ const HomePageContent: React.FC<HomePageContentProps> = ({
               fontWeight={'800'}
               color={secondaryColor}
               lineHeight={'110%'}
-              data-test={HomePageTestIds.appTitle}
+              data-test={testIds.homepage_appTitle}
             >
               {name}
             </Box>
@@ -63,7 +63,7 @@ const HomePageContent: React.FC<HomePageContentProps> = ({
             style={{ marginBottom: '40px' }}
             fontSize="15px"
             fontWeight="400"
-            dataTest={HomePageTestIds.appDescription}
+            dataTest={testIds.homepage_appDescription}
             text={description!}
           />
         )

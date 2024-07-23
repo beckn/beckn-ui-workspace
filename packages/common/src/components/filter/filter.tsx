@@ -14,7 +14,7 @@ import React, { useEffect, useState } from 'react'
 import { getLocalStorage, setLocalStorage } from '../../utils'
 import Button from '../button/button'
 import { FilterPropsModel } from './filter.types'
-import { SearchPageTestIds } from '@shared/dataTestIds'
+import { testIds } from '@shared/dataTestIds'
 
 const activeLabelStyles = {
   transform: 'scale(1) translateY(-24px)'
@@ -102,7 +102,7 @@ const Filter = ({ handleApplyFilter, handleResetFilter, handleCancelFilter = () 
           p={['unset', '20px']}
           boxShadow={['unset', '0px 8px 10px 0px #0000001A']}
           margin={['unset', '0 auto', '0 auto', '20px 0 0 0']}
-          data-test={SearchPageTestIds.filterContainer}
+          data-test={testIds.searchpage_filterContainer}
         >
           <Flex
             pb={'2px'}
@@ -114,7 +114,7 @@ const Filter = ({ handleApplyFilter, handleResetFilter, handleCancelFilter = () 
               fontSize={'15px'}
               color={secondaryColor}
               cursor={'pointer'}
-              data-test={SearchPageTestIds.resetBtn}
+              data-test={testIds.searchpage_resetBtn}
               onClick={resetFilter}
             >
               Reset
@@ -124,7 +124,7 @@ const Filter = ({ handleApplyFilter, handleResetFilter, handleCancelFilter = () 
           <Box pb={'44px'}>
             <FormControl variant="floating">
               <Select
-                data-test={SearchPageTestIds.sortByPrice}
+                data-test={testIds.searchpage_sortByPrice}
                 onChange={e => handleChange('searchByPrice', e.target.value)}
                 value={formData?.searchByPrice || ''}
                 fontSize="15px"
@@ -151,7 +151,7 @@ const Filter = ({ handleApplyFilter, handleResetFilter, handleCancelFilter = () 
           <Box pb={'44px'}>
             <FormControl variant="floating">
               <Select
-                data-test={SearchPageTestIds.filterByRating}
+                data-test={testIds.searchpage_filterByRating}
                 onChange={e => handleChange('searchByRating', e.target.value)}
                 value={formData?.searchByRating || ''}
                 fontSize="15px"

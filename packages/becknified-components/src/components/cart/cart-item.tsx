@@ -6,7 +6,7 @@ import ProductPrice from '../product-price'
 // Custom modules
 import Styles from './cart-item.module.css'
 import { CartItemProps } from './cart.types'
-import { CartPageTestIds } from '@shared/dataTestIds'
+import { testIds } from '@shared/dataTestIds'
 
 const CartItem: React.FC<CartItemProps> = ({
   id,
@@ -51,12 +51,12 @@ const CartItem: React.FC<CartItemProps> = ({
                 src={image}
                 alt={name}
                 className="object-contain"
-                data-test={CartPageTestIds.cartListImage}
+                data-test={testIds.cartpage_itemImage}
               />
             </div>
             <div
               className={Styles.product_name}
-              data-test={CartPageTestIds.cartListName}
+              data-test={testIds.cartpage_itemName}
             >
               {name}
             </div>
@@ -68,7 +68,7 @@ const CartItem: React.FC<CartItemProps> = ({
               <div
                 className={Styles.plus_icon_container}
                 data-testid="test-increment"
-                data-test={CartPageTestIds.cartIncrementButton}
+                data-test={testIds.cartpage_incrementButton}
                 onClick={() => increment()}
               >
                 <HiOutlinePlusSm className={Styles.plus_icon} />
@@ -81,13 +81,13 @@ const CartItem: React.FC<CartItemProps> = ({
                 value={counter}
                 onChange={onInputNumberChangeHandler}
                 disabled
-                data-test={CartPageTestIds.cartInput}
+                data-test={testIds.cartpage_input}
               />
               {counter === 1 ? (
                 <div
                   className={Styles.delete_icon_container}
                   data-testid="test-delete"
-                  data-test={CartPageTestIds.cartTrashButton}
+                  data-test={testIds.cartpage_trashButton}
                   onClick={() => decrement()}
                 >
                   <HiOutlineTrash className={Styles.delete_icon} />
@@ -97,7 +97,7 @@ const CartItem: React.FC<CartItemProps> = ({
                   onClick={() => decrement()}
                   data-testid="test-decrement"
                   className={Styles.minus_icon_container}
-                  data-test={CartPageTestIds.cartDecrementButton}
+                  data-test={testIds.cartpage_decrementButton}
                 >
                   <HiMinusSm className={Styles.minus_icon} />
                 </div>
@@ -106,7 +106,7 @@ const CartItem: React.FC<CartItemProps> = ({
           </div>
           <div
             className={Styles.total_amount_container}
-            data-Test={CartPageTestIds.productPrice}
+            data-Test={testIds.cartpage_productPrice}
           >
             <p>{totalAmountText}</p>
             <ProductPrice

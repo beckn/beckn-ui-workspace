@@ -1,136 +1,99 @@
-const Urls = {
-  baseUrl: 'http://localhost:3002',
-  signupPageUrl: 'http://localhost:3002/signUp',
-  homePageUrl: 'http://localhost:3002/',
-  searchPageUrl: 'http://localhost:3002/search',
-  cartPageUrl: '/cart',
-  productPageUrl: '/product',
-  checkoutPageUrl: '/checkout'
-}
-
-const UserCredentials = {
-  validEmail: 'ankit@gmail.com',
-  validPassword: 'Enterthevoid@123',
-  invalidPassword: 'Enterthevoid@1234'
-}
-
-const SearchInputTestIds = {
-  searchInput: 'search-input',
-  searchButton: 'search-button'
-}
-
-const ItemTestIds = {
-  itemTitle: 'item-title',
-  itemSubTitle: 'item-sub-title',
-  itemDetails: 'item-details',
-  itemImage: 'item-image',
-  itemRating: 'item-rating',
-  itemDescription: 'item-description',
-  itemPrice: 'item-price',
-  itemQuantity: 'item-quantity'
-}
-
-const GeneralTestIds = {
+const testIds = {
+  // general
   goBack: 'go-back',
   feedback: 'feedback-toast',
   loadingIndicator: 'loading-indicator',
   noDataAvailable: 'no-data-available',
   cartButton: 'cart-button',
-  location: 'location'
-}
-
-const AuthPageTestIds = {
-  inputEmail: 'input-email',
-  inputPassword: 'input-password',
-  loginButton: 'login-button',
-  registerButton: 'register-button'
-}
-
-const HomePageTestIds = {
-  ...SearchInputTestIds,
-  ...ItemTestIds,
-  appTitle: 'app-title',
-  appSubtitle: 'app-subtitle',
-  appDescription: 'app-description',
-  appLogo: 'app-logo',
-  footer: 'footer',
+  location: 'location',
+  searchInput: 'search-input',
+  searchButton: 'search-button',
+  // items
+  item_title: 'item-title',
+  item_subTitle: 'item-sub-title',
+  item_details: 'item-details',
+  item_image: 'item-image',
+  item_rating: 'item-rating',
+  item_description: 'item-description',
+  item_price: 'item-price',
+  item_quantity: 'item-quantity',
+  // urls
+  url_base: 'http://localhost:3002',
+  url_signup: 'http://localhost:3002/signUp',
+  url_home: 'http://localhost:3002/',
+  url_search: 'http://localhost:3002/search',
+  url_cart: '/cart',
+  url_product: '/product',
+  url_checkout: '/checkout',
+  // user credentials
+  user_validEmail: 'ankit@gmail.com',
+  user_validPassword: 'Enterthevoid@123',
+  user_invalidPassword: 'Enterthevoid@1234',
+  // auth page
+  auth_inputEmail: 'input-email',
+  auth_inputPassword: 'input-password',
+  auth_loginButton: 'login-button',
+  auth_registerButton: 'register-button',
+  // home page
+  homepage_appTitle: 'app-title',
+  homepage_appSubtitle: 'app-subtitle',
+  homepage_appDescription: 'app-description',
+  homepage_appLogo: 'app-logo',
+  homepage_footer: 'footer',
   // imported order
-  container: 'imported-orders',
-  viewDetailsButton: 'view-details-button',
-  shoppingListItem: 'shopping-list-item',
-  viewChatGPTList: 'view-chat-gpt-list'
+  homepage_importOrderContainer: 'imported-orders',
+  homepage_viewDetailsButton: 'view-details-button',
+  homepage_shoppingListItem: 'shopping-list-item',
+  homepage_viewChatGPTList: 'view-chat-gpt-list',
+  // search page
+  searchpage_products: 'products',
+  searchpage_filterContainer: 'filter-container',
+  searchpage_filterButton: 'filter-button',
+  searchpage_resetBtn: 'reset-button',
+  searchpage_sortByPrice: 'sort-by-price',
+  searchpage_filterByRating: 'filter-by-rating',
+  searchpage_applyFilter: 'apply-filter',
+  searchpage_cancelFilter: 'cancel-filter',
+  // product page
+  productpage_addTocartButton: 'add-to-cart-button',
+  productpage_incrementCounter: 'increment-counter',
+  productpage_counterValue: 'counter-value',
+  productpage_decrementCounter: 'decrement-counter',
+  // cart page
+  cartpage_emptyImage: 'empty-card-image',
+  cartpage_emptyheading: 'empty-card-heading',
+  cartpage_emptySubHeading: 'empty-card-subheading',
+  cartpage_emptyButton: 'empty-card-button',
+  cartpage_productAddToCart: 'productAddtoCart',
+  cartpage_itemImage: 'cart-card-image',
+  cartpage_itemName: 'cart-item-name',
+  cartpage_productPrice: 'product-price',
+  cartpage_orderSummaryText: 'order-summary',
+  cartpage_totalQuantityText: 'total-qunatity-text',
+  cartpage_totalAmountText: 'total-amount-text',
+  cartpage_cartOrderButton: 'cart-order-button',
+  cartpage_decrementButton: 'decrement-button',
+  cartpage_incrementButton: 'increment-button',
+  cartpage_trashButton: 'trash-button',
+  cartpage_input: 'cart-input',
+  // checkout page
+  checkoutpage_itemDetails: 'item-details',
+  checkoutpage_form: 'form',
+  checkoutpage_openForm: 'open-form',
+  checkoutpage_name: 'name',
+  checkoutpage_mobileNumber: 'mobileNumber',
+  checkoutpage_email: 'email',
+  checkoutpage_address: 'address',
+  checkoutpage_pinCode: 'pinCode',
+  checkoutpage_shippingDetails: 'shippingDetails',
+  checkoutpage_billingDetails: 'billingDetails',
+  checkoutpage_paymentDetails: 'paymentDetails',
+  checkoutpage_checkbox: 'checkbox',
+  checkoutpage_changeFormDetails: 'changeFormDetails',
+  checkoutpage_basePrice: 'base-price',
+  checkoutpage_taxes: 'taxes',
+  checkoutpage_totalPayment: 'totalPayment',
+  checkoutpage_proceedToCheckout: 'proceed-to-checkout'
 }
 
-const SearchPageTestIds = {
-  ...SearchInputTestIds,
-  ...ItemTestIds,
-  products: 'products',
-  // filter
-  filterContainer: 'filter-container',
-  filterButton: 'filter-button',
-  resetBtn: 'reset-button',
-  sortByPrice: 'sort-by-price',
-  filterByRating: 'filter-by-rating',
-  applyFilter: 'apply-filter',
-  cancelFilter: 'cancel-filter'
-}
-
-const ProductPageTestIds = {
-  ...ItemTestIds,
-  addTocartButton: 'add-to-cart-button',
-  incrementCounter: 'increment-counter',
-  counterValue: 'counter-value',
-  decrementCounter: 'decrement-counter'
-}
-
-const CartPageTestIds = {
-  cartEmptyImage: 'empty-card-image',
-  cartEmptyheading: 'empty-card-heading',
-  cartEmptySubHeading: 'empty-card-subheading',
-  cartEmptyButton: 'empty-card-button',
-  productAddToCart: 'productAddtoCart',
-  cartListImage: 'cart-card-image',
-  cartListName: 'cart-item-name',
-  productPrice: 'product-price',
-  orderSummaryText: 'order-summary',
-  totalQuantityText: 'total-qunatity-text',
-  totalAmountText: 'total-amount-text',
-  cartOrderButton: 'cart-order-button',
-  cartDecrementButton: 'decrement-button',
-  cartIncrementButton: 'increment-button',
-  cartTrashButton: 'trash-button',
-  cartInput: 'cart-input'
-}
-
-const CheckoutPageTestIds = {
-  ...ItemTestIds,
-  itemDetails: 'item-details',
-  form: 'form',
-  openForm: 'open-form',
-  name: 'name',
-  mobileNumber: 'mobileNumber',
-  email: 'email',
-  address: 'address',
-  pinCode: 'pinCode',
-  shippingDetails: 'shippingDetails',
-  billingDetails: 'billingDetails',
-  paymentDetails: 'paymentDetails',
-  checkbox: 'checkbox',
-  changeFormDetails: 'changeFormDetails',
-  basePrice: 'base-price',
-  taxes: 'taxes',
-  totalPayment: 'totalPayment',
-  proceedToCheckout: 'proceed-to-checkout'
-}
-
-export {
-  Urls,
-  UserCredentials,
-  GeneralTestIds,
-  AuthPageTestIds,
-  HomePageTestIds,
-  SearchPageTestIds,
-  ProductPageTestIds,
-  CartPageTestIds,
-  CheckoutPageTestIds
-}
+export { testIds }

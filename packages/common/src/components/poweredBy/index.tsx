@@ -2,7 +2,7 @@ import React from 'react'
 import { Image, Flex } from '@chakra-ui/react'
 import { Typography } from '@beckn-ui/molecules'
 import { PoweredByProps } from './poweredBy.types'
-import { HomePageTestIds } from '@shared/dataTestIds'
+import { testIds } from '@shared/dataTestIds'
 
 const PoweredBy: React.FC<PoweredByProps> = ({ logoSrc, altText = 'logo', poweredByText }) => {
   return (
@@ -12,7 +12,7 @@ const PoweredBy: React.FC<PoweredByProps> = ({ logoSrc, altText = 'logo', powere
       width="calc(100% - 40px)"
       position="fixed"
       bottom="15px"
-      data-test={HomePageTestIds.footer}
+      data-test={testIds.homepage_footer}
     >
       <Typography
         style={{ paddingRight: '8px' }}

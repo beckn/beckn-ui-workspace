@@ -1,7 +1,7 @@
 import React from 'react'
 import { Spinner, Text, Box, useTheme } from '@chakra-ui/react'
 import { LoaderProps } from './loader.types'
-import { GeneralTestIds } from '@shared/dataTestIds'
+import { testIds } from '@shared/dataTestIds'
 
 const Loader: React.ForwardRefRenderFunction<HTMLDivElement, LoaderProps> = (props, ref) => {
   const theme = useTheme()
@@ -31,7 +31,7 @@ const Loader: React.ForwardRefRenderFunction<HTMLDivElement, LoaderProps> = (pro
         emptyColor={emptyColor}
         color={color}
         size={size}
-        data-test={GeneralTestIds.loadingIndicator}
+        data-test={testIds.loadingIndicator}
         label={'loading'}
       />
 

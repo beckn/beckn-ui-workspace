@@ -4,7 +4,7 @@ import { Typography, Button } from '@beckn-ui/molecules'
 import { ProductCtaProps } from './product-cta.types'
 import useResponsive from '../../hooks/useResponsive'
 import ProductPrice from '../product-price'
-import { ProductPageTestIds } from '@shared/dataTestIds'
+import { testIds } from '@shared/dataTestIds'
 
 const ProductCta: React.FC<ProductCtaProps> = ({
   currency,
@@ -63,7 +63,7 @@ const ProductCta: React.FC<ProductCtaProps> = ({
           mt="1rem"
         >
           <Box
-            data-test={ProductPageTestIds.incrementCounter}
+            data-test={testIds.productpage_incrementCounter}
             onClick={handleIncrement}
             fontSize="24px"
           >
@@ -74,12 +74,12 @@ const ProductCta: React.FC<ProductCtaProps> = ({
             color={theme.colors.secondary[100]}
             p="2px 20px"
             borderRadius={'4px'}
-            data-test={ProductPageTestIds.counterValue}
+            data-test={testIds.productpage_counterValue}
           >
             {counter}
           </Box>
           <Box
-            data-test={ProductPageTestIds.decrementCounter}
+            data-test={testIds.productpage_decrementCounter}
             onClick={handleDecrement}
             fontSize="24px"
           >
@@ -91,7 +91,7 @@ const ProductCta: React.FC<ProductCtaProps> = ({
       <Box width={{ base: '100%', md: '50%' }}>
         <Button
           {...cta}
-          dataTest={ProductPageTestIds.addTocartButton}
+          dataTest={testIds.productpage_addTocartButton}
         />
       </Box>
     </Box>

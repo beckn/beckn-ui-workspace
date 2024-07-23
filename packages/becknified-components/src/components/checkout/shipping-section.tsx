@@ -10,7 +10,7 @@ import AddShippingButtonImage from '../../../public/images/addShippingBtn.svg'
 import { BottomModal, FormField, Typography, FormData, Input } from '@beckn-ui/molecules'
 
 import ShippingDetails from './shipping-details'
-import { CheckoutPageTestIds } from '@shared/dataTestIds'
+import { testIds } from '@shared/dataTestIds'
 
 const ShippingSection: React.FC<ShippingSectionProps<FormField[]>> = ({
   shippingForm,
@@ -47,7 +47,7 @@ const ShippingSection: React.FC<ShippingSectionProps<FormField[]>> = ({
           <Typography
             variant="subTitleRegular"
             color={color}
-            dataTest={CheckoutPageTestIds.changeFormDetails}
+            dataTest={testIds.checkoutpage_changeFormDetails}
             text={triggerFormTitle}
             onClick={onOpen}
           />
@@ -60,7 +60,7 @@ const ShippingSection: React.FC<ShippingSectionProps<FormField[]>> = ({
             colorScheme="primary"
             pr={'12px'}
             fontSize={'17px'}
-            data-test={CheckoutPageTestIds.checkbox}
+            data-test={testIds.checkoutpage_checkbox}
             checked={isChecked}
             defaultChecked={isChecked}
             onChange={() => onCheckChange && onCheckChange()}
@@ -72,7 +72,7 @@ const ShippingSection: React.FC<ShippingSectionProps<FormField[]>> = ({
         <DetailsCard isDisabled={isDisabled}>
           <Flex
             alignItems={'center'}
-            data-test={CheckoutPageTestIds.openForm}
+            data-test={testIds.checkoutpage_openForm}
             onClick={onOpen}
           >
             {/* <Image src={addButtonImage} /> */}
