@@ -4,12 +4,11 @@ import { Loader, Typography } from '@beckn-ui/molecules'
 import { Box, Text, Flex, Image } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import pendingIcon from '../public/images/pendingStatus.svg'
-import { orderActions } from '@beckn-ui/common/src/store/order-slice'
 import { useDispatch } from 'react-redux'
-import { formatTimestamp } from '@beckn-ui/common/src/utils'
 import { useRouter } from 'next/router'
 import EmptyOrder from '@components/orderHistory/emptyOrder'
 import { useLanguage } from '@hooks/useLanguage'
+import { formatTimestamp, orderActions, orderHistoryData } from '@beckn-ui/common'
 
 const orderStatusMap: Record<string, string> = {
   'In Review': 'Pending'

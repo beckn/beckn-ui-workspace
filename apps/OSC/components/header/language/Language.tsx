@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { settingBoxActions } from '../../../store/settingBox-slice'
 import { MdLanguage } from 'react-icons/md'
 import { useLanguage } from '../../../hooks/useLanguage'
 import LanguageItem from './LanguageItem'
+import { settingBoxActions } from '@beckn-ui/common'
 
 const Language = () => {
   const { t, locale } = useLanguage()

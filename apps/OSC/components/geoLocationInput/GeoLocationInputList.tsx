@@ -2,11 +2,11 @@ import { Box, Flex, Image, Text } from '@chakra-ui/react'
 import Styles from './GeoLocationInput.module.css'
 import { useDispatch } from 'react-redux'
 import { useState } from 'react'
-import { toggleLocationSearchPageVisibility, setGeoAddressAndLatLong } from '../../store/geoMapLocationSearch-slice'
 import backArrow from '/public/images/Back.svg'
 import searchMagnifyIcon from '../../public/images/search_magnify_icon.svg'
 import locationMarker from '../../public/images/searchlocationmarker.svg'
 import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete'
+import { setGeoAddressAndLatLong, toggleLocationSearchPageVisibility } from '@beckn-ui/common'
 
 const GeoLocationInputList: React.FC = () => {
   const dispatch = useDispatch()

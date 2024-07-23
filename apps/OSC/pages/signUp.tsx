@@ -2,12 +2,12 @@ import React, { useMemo, useState } from 'react'
 import { useLanguage } from '@hooks/useLanguage'
 import AlternateLogo from '../public/images/localleIconSignUp.svg'
 import { SignUpPropsModel } from '@components/signIn/SignIn.types'
-import { FormErrors, signUpValidateForm } from '@utils/form-utils'
 import { BecknAuth } from '@beckn-ui/becknified-components'
 import Router from 'next/router'
 import { Box, useBreakpoint } from '@chakra-ui/react'
 import Logo from '@public/images/localleIconSignUp.svg'
 import { useRegisterMutation } from '@beckn-ui/common/src/services/User'
+import { FormErrors, signUpValidateForm } from '@beckn-ui/common'
 
 const SignUp = () => {
   const { t } = useLanguage()

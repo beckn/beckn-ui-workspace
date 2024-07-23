@@ -4,21 +4,24 @@ import { Box, useTheme } from '@chakra-ui/react'
 import { DOMAIN } from '@lib/config'
 import { useLanguage } from '../hooks/useLanguage'
 
+import useRequest from '../hooks/useRequest'
 import {
   areShippingAndBillingDetailsSame,
+  cartActions,
+  checkoutActions,
+  CheckoutRootState,
+  DiscoveryRootState,
   getInitPayload,
-  getSubTotalAndDeliveryCharges
-} from '@beckn-ui/common/src/utils'
-import useRequest from '../hooks/useRequest'
-import { DiscoveryRootState, ICartRootState, PaymentBreakDownModel } from '@beckn-ui/common'
+  getSubTotalAndDeliveryCharges,
+  ICartRootState,
+  isEmpty,
+  PaymentBreakDownModel
+} from '@beckn-ui/common'
 
 import { Checkout } from '@beckn-ui/becknified-components'
 
 import { useRouter } from 'next/router'
 import { ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
-import { checkoutActions, CheckoutRootState } from '@beckn-ui/common/src/store/checkout-slice'
-import { cartActions } from '@beckn-ui/common/src/store/cart-slice'
-import { isEmpty } from '@beckn-ui/common/src/utils'
 import { FormField, LoaderWithMessage } from '@beckn-ui/molecules'
 import { useInitMutation } from '@beckn-ui/common/src/services/init'
 // import { DiscoveryRootState } from '@beckn-ui/common'

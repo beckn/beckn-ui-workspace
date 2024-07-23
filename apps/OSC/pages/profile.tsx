@@ -1,16 +1,12 @@
 import { BecknAuth } from '@beckn-ui/becknified-components'
 import { Box } from '@chakra-ui/react'
 import { useLanguage } from '@hooks/useLanguage'
-import { profileValidateForm } from '@beckn-ui/common/src/utils'
 import Cookies from 'js-cookie'
 import React, { useEffect, useMemo, useState } from 'react'
 import Router from 'next/router'
-import { isEmpty } from '@beckn-ui/common/src/utils'
 import { useDispatch } from 'react-redux'
-import { FormErrors, ProfileProps } from '@beckn-ui/common/lib/types'
-
-import { feedbackActions } from '@beckn-ui/common/src/store/ui-feedback-slice'
 import axios from '@services/axios'
+import { feedbackActions, FormErrors, isEmpty, ProfileProps, profileValidateForm } from '@beckn-ui/common'
 
 const ProfilePage = () => {
   const dispatch = useDispatch()
