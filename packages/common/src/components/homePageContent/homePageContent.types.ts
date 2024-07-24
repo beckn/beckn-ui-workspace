@@ -5,7 +5,7 @@ export interface HomePageContentProps {
   logos?: Logos
   headerProps?: {
     name: string
-    title: string
+    title?: string
     description: string
   }
   searchProps: {

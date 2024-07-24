@@ -45,16 +45,18 @@ const HomePageContent: React.FC<HomePageContentProps> = ({
               color={secondaryColor}
               lineHeight={'110%'}
               data-test={testIds.homepage_appTitle}
+              style={{ marginBottom: title ? '0px' : '15px' }}
             >
               {name}
             </Box>
-
-            <Typography
-              style={{ marginTop: '-15px', marginBottom: '15px' }}
-              fontSize="27px"
-              fontWeight="800"
-              text={title!}
-            />
+            {title && (
+              <Typography
+                style={{ marginTop: '-15px', marginBottom: '15px' }}
+                fontSize="27px"
+                fontWeight="800"
+                text={title!}
+              />
+            )}
           </>
         )
       case 'description':
