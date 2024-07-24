@@ -22,7 +22,7 @@ const cartIconBlackList: string[] = [
   '/trackOrder',
   '/feedback',
   '/orderHistory',
-  '/signin',
+  '/signIn',
   '/mobileOtp',
   '/checkoutPage',
   '/paymentMode',
@@ -37,9 +37,9 @@ const cartIconBlackList: string[] = [
   '/orderCancellation'
 ]
 
-const backIconList = ['/', '/signin']
+const backIconList = ['/', '/signIn']
 
-const homeIconBlackList = ['/', '/signin', '/mobileOtp', '/paymentMode', '/signUp']
+const homeIconBlackList = ['/', '/signIn', '/mobileOtp', '/paymentMode', '/signUp']
 
 const storeHeaderBlackList = [
   '/checkoutPage',
@@ -60,14 +60,14 @@ const storeHeaderBlackList = [
   '/profile',
   '/search',
   '/checkout',
-  '/signin'
+  '/signIn'
 ]
 const headerValues: PathnameObjectType = {
   '/checkoutPage': 'Review Purchase Order',
   '/orderHistory': 'My Orders',
   '/orderDetails': 'Order Details',
   '/invoiceDetails': 'Invoice Details',
-  '/signin': 'Sign In',
+  '/signIn': 'Sign In',
   '/signUp': 'Sign Up',
   '/cart': 'Cart',
   '/paymentMode': 'Select Payment Method',
@@ -85,7 +85,7 @@ const headerValuesFrench: PathnameObjectType = {
   '/orderHistory': 'Mes commandes',
   '/orderDetails': 'Détails de la commande',
   '/invoiceDetails': 'Détails de la facture',
-  '/signin': 'Se connecter',
+  '/signIn': 'Se connecter',
   '/signUp': "S'inscrire",
   '/cart': 'Panier',
   '/paymentMode': 'Sélectionner le mode de paiement',
@@ -107,9 +107,9 @@ const orderIconList = ['/orderDetails']
 const editIcon = ['/profile']
 const invoiceDownloadIcon = ['']
 const currentLocation = ['/']
-const appLogoBlackList = ['/signin', '/signUp']
+const appLogoBlackList = ['/signIn', '/signUp']
 
-const languageIconWhiteList = ['/', '/createProfile', '/signin', '/signUp']
+const languageIconWhiteList = ['/', '/createProfile', '/signIn', '/signUp']
 
 const getHeaderTitleForPage = (name: string, logo: string, pathName: string, locale: string | undefined) => {
   const values = locale === 'en' ? headerValues : headerValuesFrench
@@ -223,7 +223,7 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
           <Box
             onClick={() => {
               dispatch(logout())
-              router.push('/signin')
+              router.push('/signIn')
               setMenuModalOpen(false)
             }}
             className={styles.top_header_modal}
@@ -269,64 +269,7 @@ const BottomHeader = () => {
     setOptionTags(JSON.parse(localStorage.getItem('optionTags') as string))
   }, [])
 
-  // const apiKeyForGoogle = process.env.NEXT_PUBLIC_GOOGLE_API_KEY
   const router = useRouter()
-
-  // useEffect(() => {
-  //   // Check if geolocation is available in the browser
-  //   if (navigator) {
-  //     if ('geolocation' in navigator) {
-  //       navigator.geolocation.getCurrentPosition(
-  //         async position => {
-  //           const latitude = position.coords.latitude
-  //           const longitude = position.coords.longitude
-
-  //           const coordinates = {
-  //             latitude,
-  //             longitude
-  //           }
-
-  //           localStorage.setItem('coordinates', JSON.stringify(coordinates))
-
-  //           try {
-  //             const response = await fetch(
-  //               `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKeyForGoogle}`
-  //             )
-
-  //             if (response.ok) {
-  //               const data = await response.json()
-
-  //               if (data.results.length > 0) {
-  //                 const formattedAddress = data.results[0].formatted_address
-  //                 setCurrentAddress(formattedAddress)
-  //               } else {
-  //                 setFetchCurrentLocationError('No address found for the given coordinates.')
-  //               }
-  //             } else {
-  //               setFetchCurrentLocationError('Failed to fetch address data.')
-  //               alert('Failed to fetch address data.')
-  //             }
-  //           } catch (error) {
-  //             setFetchCurrentLocationError('Error fetching address data: ' + (error as any).message)
-  //             alert('Error fetching address data: ' + (error as any).message)
-  //           } finally {
-  //             setLoadingForCurrentAddress(false)
-  //           }
-  //         },
-  //         error => {
-  //           setFetchCurrentLocationError('Error getting location: ' + error.message)
-  //           alert('Error getting location: ' + error.message)
-  //           setLoadingForCurrentAddress(false)
-  //         }
-  //       )
-  //     } else {
-  //       setFetchCurrentLocationError('Geolocation is not available in this browser.')
-  //       alert('Geolocation is not available in this browser.')
-  //       setLoadingForCurrentAddress(false)
-  //     }
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [])
 
   return (
     <header className={styles.bottom_header}>
