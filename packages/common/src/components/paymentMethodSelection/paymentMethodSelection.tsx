@@ -7,6 +7,7 @@ import masterCard from '../../../public/images/masterCard.svg'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import PaymentDetailsCard from '../paymentDetailsCard'
 import { PaymentMethodSelectionProps } from './paymentMethodSelection.types'
+import { testIds } from '@shared/dataTestIds'
 
 const PaymentMethodSelection = (props: PaymentMethodSelectionProps) => {
   const { t, handleOrderConfirmation } = props
@@ -38,25 +39,29 @@ const PaymentMethodSelection = (props: PaymentMethodSelectionProps) => {
                 category: 'Credit & Debit Cards',
                 img: Visa,
                 paymentMethod: t('cardNumber'),
-                paymentMethodNet: t('cardNumber')
+                paymentMethodNet: t('cardNumber'),
+                dataTest: testIds.paymentpage_visa
               },
               {
                 category: 'Credit & Debit Cards',
                 img: masterCard,
                 paymentMethod: t('cardNumber'),
-                paymentMethodNet: t('cardNumber')
+                paymentMethodNet: t('cardNumber'),
+                dataTest: testIds.paymentpage_masterCard
               },
               {
                 category: 'UPI',
                 img: phonePay,
                 paymentMethod: t('phonePay') || 'PhonePe UPI',
-                paymentMethodNet: t('phonePay') || 'PhonePe UPI'
+                paymentMethodNet: t('phonePay') || 'PhonePe UPI',
+                dataTest: testIds.paymentpage_phonePay
               },
               {
                 category: 'Other',
                 img: CashOnDelivery,
                 paymentMethod: t('cashOnDelivery'),
-                paymentMethodNet: t('netBanking')
+                paymentMethodNet: t('netBanking'),
+                dataTest: testIds.paymentpage_CashOnDelivery
               }
             ]}
           />
@@ -67,6 +72,7 @@ const PaymentMethodSelection = (props: PaymentMethodSelectionProps) => {
           style={{ marginTop: '2rem ' }}
         >
           <BecknButton
+            dataTest={testIds.paymentpage_confirmButton}
             children={t('confirmOrder')}
             handleClick={handleOrderConfirmation}
             disabled={!checkedState}

@@ -25,6 +25,10 @@ const testIds = {
   url_cart: '/cart',
   url_product: '/product',
   url_checkout: '/checkout',
+  url_payment: '/paymentMode',
+  url_orderDetails: '/orderDetails',
+  url_orderConfirmation: '/orderConfirmation',
+
   // user credentials
   user_validEmail: 'ankit@gmail.com',
   user_validPassword: 'Enterthevoid@123',
@@ -93,7 +97,25 @@ const testIds = {
   checkoutpage_basePrice: 'base-price',
   checkoutpage_taxes: 'taxes',
   checkoutpage_totalPayment: 'totalPayment',
-  checkoutpage_proceedToCheckout: 'proceed-to-checkout'
+  checkoutpage_proceedToCheckout: 'proceed-to-checkout',
+  //payment page
+  paymentpage_radioButton: 'radio-button',
+  paymentpage_confirmButton: 'confirm-button',
+  paymentpage_creditcardAndDebitCard: 'Credit & Debit Cards',
+  paymentpage_addText: 'add',
+  paymentpage_image: 'mode-of-payemnt-image',
+  paymentpage_visa: 'visa',
+  paymentpage_masterCard: 'masterCard',
+  paymentpage_phonePay: 'phonePay',
+  paymentpage_CashOnDelivery: 'CashOnDelivery',
+  //orderConfirmation page
+  confirmPageImage: 'confrimPage-image',
+  orderConfirmation_successOrderMessage: 'suceess-OrderMessage',
+  orderConfirmation_gratefulMessage: 'grateful-message',
+  orderConfirmation_orderIdMessage: 'order-message',
+  orderConfirmation_trackOrderMessage: 'track-order',
+  orderConfirmation_viewOrderButton: 'viewOrderDetails-button',
+  orderConfirmation_goBackToHome: 'goBackToHome-button'
 }
 
 export { testIds }

@@ -3,6 +3,7 @@ import { Card, CardBody, Flex, Image, Text } from '@chakra-ui/react'
 import React from 'react'
 import Styles from './PaymentDetailsCard.module.css'
 import { PaymentDetailsCardProps, PaymentMethod } from './PaymentDetailsCard.types'
+import { testIds } from '@shared/dataTestIds'
 
 const PaymentDetailsCard: React.FC<PaymentDetailsCardProps> = ({ t, paymentMethods, checkedState, handleChange }) => {
   const groupedPaymentMethods = paymentMethods.reduce(
@@ -29,6 +30,7 @@ const PaymentDetailsCard: React.FC<PaymentDetailsCardProps> = ({ t, paymentMetho
               fontSize={'17px'}
               fontWeight={'400'}
               text={category}
+              dataTest={testIds.paymentpage_creditcardAndDebitCard}
             />
             {category !== 'Other' && (
               <Typography
@@ -62,6 +64,7 @@ const PaymentDetailsCard: React.FC<PaymentDetailsCardProps> = ({ t, paymentMetho
                       checked={checkedState === id}
                       onChange={() => handleChange(id)}
                       className={Styles.radioButton}
+                      data-test={testIds.paymentpage_radioButton}
                     />
                     <label
                       htmlFor={`radio_${id}`}
@@ -72,11 +75,13 @@ const PaymentDetailsCard: React.FC<PaymentDetailsCardProps> = ({ t, paymentMetho
                           src={method.img}
                           w={'62px'}
                           h={'40px'}
+                          data-test={testIds.paymentpage_image}
                         />
                         <Text
                           fontSize={'15px'}
                           fontWeight={400}
                           ml={'6px'}
+                          data-test={method.dataTest}
                         >
                           {method.paymentMethod}
                         </Text>

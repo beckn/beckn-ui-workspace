@@ -5,6 +5,7 @@ export interface PaymentMethod {
   paymentMethodNet?: string
   img: string
   category: 'Credit & Debit Cards' | 'UPI' | 'Other'
+  dataTest?: string
 }
 
 export interface PaymentDetailsCardProps extends TranslationProps {

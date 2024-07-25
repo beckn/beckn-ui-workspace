@@ -14,6 +14,7 @@ import { checkoutActions, CheckoutRootState } from '@beckn-ui/common/src/store/c
 import { orderActions } from '@beckn-ui/common/src/store/order-slice'
 import { getPayloadForConfirm, getPayloadForOrderHistoryPost } from '@beckn-ui/common/src/utils'
 import { useConfirmMutation } from '@beckn-ui/common/src/services/confirm'
+import { testIds } from '@shared/dataTestIds'
 
 const OrderConfirmation = () => {
   const { t } = useLanguage()
@@ -106,7 +107,8 @@ const OrderConfirmation = () => {
               },
               disabled: false,
               variant: 'solid',
-              colorScheme: 'primary'
+              colorScheme: 'primary',
+              dataTest: testIds.orderConfirmation_viewOrderButton
             },
             {
               text: 'Go Back Home',
@@ -116,7 +118,8 @@ const OrderConfirmation = () => {
               },
               disabled: false,
               variant: 'outline',
-              colorScheme: 'primary'
+              colorScheme: 'primary',
+              dataTest: testIds.orderConfirmation_goBackToHome
             }
           ]
         }}
