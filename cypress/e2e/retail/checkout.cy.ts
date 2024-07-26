@@ -150,13 +150,13 @@ describe('Checkout Page', () => {
 
   it('should display the payment breakup details', () => {
     cy.getByData(testIds.checkoutpage_paymentDetails).within(() => {
-      cy.getByData(testIds.checkoutpage_basePrice).should('contain.text', 'base-price')
+      cy.getByData(testIds.payment_basePrice).should('contain.text', 'base-price')
       cy.getByData(testIds.item_price).eq(0).should('contain.text', '₹200.00')
 
-      cy.getByData(testIds.checkoutpage_taxes).should('contain.text', 'taxes')
+      cy.getByData(testIds.payment_taxes).should('contain.text', 'taxes')
       cy.getByData(testIds.item_price).eq(1).should('contain.text', '₹360.00')
 
-      cy.getByData(testIds.checkoutpage_totalPayment).should('contain.text', 'Total')
+      cy.getByData(testIds.payment_totalPayment).should('contain.text', 'Total')
       cy.getByData(testIds.item_price).eq(2).should('contain.text', '₹2,160.00')
     })
   })

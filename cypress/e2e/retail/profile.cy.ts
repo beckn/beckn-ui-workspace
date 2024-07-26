@@ -10,7 +10,8 @@ describe('Profile Page Tests', () => {
     cy.wait('@getAddress')
     cy.getByData(testIds.threeDots).click()
     cy.getByData(testIds.profile_text_click).click()
-    cy.performProfile({ fixture: 'profile/profileResponse.json' })
+    cy.performProfile({ fixture: 'profile/profileResponse.json' }, 'profileResponse')
+    cy.wait('@profileResponse')
   })
   it('should render profile page with profile API call', () => {
     cy.getByData(testIds.profile_inputName).should('have.value', 'ankit Brahm Bhatt')

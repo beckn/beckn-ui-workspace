@@ -21,7 +21,8 @@ const BottomModal: React.FC<BottomModalProps> = ({
   title,
   children,
   responsive = false,
-  responsiveBottomGap = '30'
+  responsiveBottomGap = '30',
+  dataTest
 }) => {
   return (
     <Modal
@@ -38,6 +39,7 @@ const BottomModal: React.FC<BottomModalProps> = ({
         mb="0"
         borderRadius={{ base: '1.75rem 1.75rem 0 0', md: '1.75rem', lg: '1.75rem', xl: '1.75rem', '2xl': '1.75rem' }}
         maxW="sm"
+        data-test={dataTest}
       >
         <ModalCloseButton
           height={'unset'}

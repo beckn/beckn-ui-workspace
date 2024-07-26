@@ -1,11 +1,11 @@
-import { shippingDetails, billingDetails } from './userDetails'
+import { shippingDetails, billingDetails } from '../checkoutPage/userDetails'
 
-export const initResponse = {
+export const statusResponse = {
   data: [
     {
       context: {
         domain: 'retail:1.1.0',
-        action: 'on_init',
+        action: 'on_status',
         version: '1.1.0',
         bpp_id: 'bpp123',
         bpp_uri: 'https://bpp.example.com',
@@ -23,17 +23,19 @@ export const initResponse = {
         },
         bap_id: 'bap-ps-network-staging.example.io',
         bap_uri: 'https://bap-ps-network-staging.example.io',
-        transaction_id: '12345',
-        message_id: '0fc27d49-74ad-4c21-8401-d6d89cb6c0a9',
+        transaction_id: '30c447ac-74fc-4bc6-80a3-30ee857e47a2',
+        message_id: 'ec8832e1-b2c3-4afa-8a0d-ccaa385f8f62',
         ttl: 'PT10M',
-        timestamp: '2024-07-22T13:30:41.240Z'
+        timestamp: '2024-07-24T08:20:55.778Z'
       },
       message: {
         order: {
-          type: 'DEFAULT',
+          Id: 'avh_654_yuy123',
+          status: 'ACTIVE',
+          created_at: new Date().toISOString(),
           provider: {
-            id: 'provider1',
-            name: 'Provider One',
+            id: 'instakart',
+            name: 'InstaKart',
             short_desc: '',
             long_desc: ''
           },
@@ -83,20 +85,11 @@ export const initResponse = {
           ],
           fulfillments: [
             {
-              id: '9',
+              id: '11',
               type: 'standard',
-              customer: {
-                person: {
-                  name: shippingDetails.name
-                },
-                contact: {
-                  phone: shippingDetails.mobileNumber
-                }
-              },
               stops: [
                 {
                   location: {
-                    gps: '12.898773,77.5764094',
                     address: shippingDetails.address,
                     city: {
                       name: 'Bengaluru'
@@ -105,9 +98,12 @@ export const initResponse = {
                       name: 'Karnataka'
                     },
                     country: {
-                      code: 'IND'
+                      code: 'IN'
                     },
                     area_code: shippingDetails.pinCode
+                  },
+                  person: {
+                    name: shippingDetails.name
                   },
                   contact: {
                     phone: shippingDetails.mobileNumber,
@@ -115,6 +111,15 @@ export const initResponse = {
                   }
                 }
               ],
+              customer: {
+                person: {
+                  name: shippingDetails.name
+                },
+                contact: {
+                  phone: shippingDetails.mobileNumber,
+                  email: shippingDetails.email
+                }
+              },
               tracking: false
             }
           ],
@@ -161,16 +166,19 @@ export const initResponse = {
           },
           payments: [
             {
-              id: '8',
-              name: 'Standard',
-              status: 'NOT-PAID',
               type: 'PRE-FULFILLMENT',
               params: {
                 amount: '2160.00',
-                currency: 'INR'
+                currency: 'INR',
+                transaction_id: '12345'
+              },
+              time: {
+                label: 'Transaction timestamp',
+                timestamp: '2024-07-24T08:20:55.758Z'
               }
             }
           ],
+          type: 'DEFAULT',
           tags: [
             {
               code: 'ShippingMethodDetails',
@@ -181,6 +189,18 @@ export const initResponse = {
                   code: 'standard',
                   name: 'Standard',
                   value: 'standard'
+                }
+              ]
+            },
+            {
+              code: 'AdditionalStatus',
+              name: 'Additional status',
+              display: true,
+              list: [
+                {
+                  code: 'detailedOrderStatus',
+                  name: 'Detailed Order Status',
+                  value: 'ArrangingPayment'
                 }
               ]
             }

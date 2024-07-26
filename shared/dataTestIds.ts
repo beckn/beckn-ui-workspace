@@ -9,7 +9,9 @@ const testIds = {
   searchInput: 'search-input',
   searchButton: 'search-button',
   threeDots: 'three-dots',
+  close: 'close',
   // items
+  item_list: 'item-list',
   item_title: 'item-title',
   item_subTitle: 'item-sub-title',
   item_details: 'item-details',
@@ -18,6 +20,10 @@ const testIds = {
   item_description: 'item-description',
   item_price: 'item-price',
   item_quantity: 'item-quantity',
+  // payment
+  payment_basePrice: 'base-price',
+  payment_taxes: 'taxes',
+  payment_totalPayment: 'totalPayment',
   // urls
   url_base: 'http://localhost:3002',
   url_signup: 'http://localhost:3002/signUp',
@@ -29,7 +35,7 @@ const testIds = {
   url_payment: '/paymentMode',
   url_orderDetails: '/orderDetails',
   url_orderConfirmation: '/orderConfirmation',
-
+  url_updateShippingDetails: '/updateShippingDetails',
   // user credentials
   user_validEmail: 'ankit@gmail.com',
   user_validPassword: 'Enterthevoid@123',
@@ -128,7 +134,33 @@ const testIds = {
   profile_state: 'input-state',
   profile_country: 'input-country',
   profile_text_click: 'profile-text',
-  profile_form: 'profile-form'
+  profile_form: 'profile-form',
+  // order details page
+  orderDetailspage_orderOverview: 'orderOverview',
+  orderDetailspage_progressSummary: 'progressSummary',
+  orderDetailspage_shippingDetails: 'shippingDetails',
+  orderDetailspage_billingDetails: 'billingDetails',
+  orderDetailspage_paymentDetails: 'paymentDetails',
+  orderDetailspage_productName: 'productName',
+  orderDetailspage_productPlacedAt: 'productPlacedAt',
+  orderDetailspage_orderId: 'orderId',
+  orderDetailspage_orderStatus: 'status',
+  orderDetailspage_orderStatusMap: 'statusMap',
+  orderDetailspage_orderStateName: 'statusName',
+  orderDetailspage_orderStateTime: 'statusTime',
+  orderDetailspage_orderSummaryItemName: 'itemName',
+  orderDetailspage_otherOptions: 'otherOptions',
+  orderDetailspage_orderSummaryTotalItems: 'totalItems',
+  orderDetailspage_viewMoreOrders: 'viewMoreOrders',
+  orderDetailspage_menus: 'menus',
+  orderDetailspage_cancelOrder: 'orderCancel',
+  orderDetailspage_name: 'name',
+  orderDetailspage_address: 'address',
+  orderDetailspage_mobileNumber: 'mobileNumber',
+  orderDetailspage_menuItem: 'menuItem',
+  orderDetailspage_menuItemName: 'menuItemName',
+  orderDetailspage_callServiceItem: 'callServiceItem',
+  orderDetailspage_callServiceItemName: 'callServiceItemName'
 }
 
 export { testIds }

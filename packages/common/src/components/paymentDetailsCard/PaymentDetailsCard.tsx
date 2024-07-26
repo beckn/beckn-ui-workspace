@@ -80,6 +80,7 @@ const PaymentDetailsCard: React.FC<PaymentDetailsCardProps> = ({ t, paymentMetho
                         <Text
                           fontSize={'15px'}
                           fontWeight={400}
+                          data-test={method.dataTest}
                           ml={'6px'}
                           data-test={method.dataTest}
                         >

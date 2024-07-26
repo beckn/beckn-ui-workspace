@@ -69,6 +69,7 @@ export interface PaymentDetailsProps {
   title?: string
   hasBoxShadow?: boolean
   totalValueWithCurrency: TotalAmountWithCurreny
+  dataTest?: string
 }
 
 export interface CheckoutProps<T extends FormField[]> {

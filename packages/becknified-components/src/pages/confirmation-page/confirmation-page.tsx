@@ -83,6 +83,7 @@ const ConfirmationPage: React.FC<ConfirmationPageProps> = ({ schema, className }
                   <Button
                     dataTest={button.dataTest}
                     key={idx}
+                    dataTest={button.dataTest}
                     {...button}
                   />
                 )

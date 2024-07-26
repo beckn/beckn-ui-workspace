@@ -1,6 +1,7 @@
 import React from 'react'
 import { Typography } from '@beckn-ui/molecules'
 import { Box, Stack, StackDivider, Flex, Image } from '@chakra-ui/react'
+import { testIds } from '@shared/dataTestIds'
 
 export interface ShippingBlockProps {
   title?: string
@@ -17,11 +18,12 @@ export interface ShippingBlockProps {
     text: string
   }
   responsive?: boolean
+  dataTest?: string
 }
 
-const ShippingBlock: React.FC<ShippingBlockProps> = ({ title, name, address, mobile, responsive }) => {
+const ShippingBlock: React.FC<ShippingBlockProps> = ({ title, name, address, mobile, responsive, dataTest }) => {
   return (
-    <Box>
+    <Box data-test={dataTest}>
       {title && (
         <Box marginBottom="1rem">
           <Typography
@@ -53,6 +55,7 @@ const ShippingBlock: React.FC<ShippingBlockProps> = ({ title, name, address, mob
             />
             <Typography
               variant="subTitleRegular"
+              dataTest={testIds.orderDetailspage_name}
               text={name.text}
             />
           </Flex>
@@ -64,6 +67,7 @@ const ShippingBlock: React.FC<ShippingBlockProps> = ({ title, name, address, mob
             />
             <Typography
               variant="subTitleRegular"
+              dataTest={testIds.orderDetailspage_address}
               text={address.text}
             />
           </Flex>
@@ -75,6 +79,7 @@ const ShippingBlock: React.FC<ShippingBlockProps> = ({ title, name, address, mob
             />
             <Typography
               variant="subTitleRegular"
+              dataTest={testIds.orderDetailspage_mobileNumber}
               text={mobile.text}
             />
           </Flex>

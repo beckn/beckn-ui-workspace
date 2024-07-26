@@ -19,8 +19,8 @@
             "code": "std:080"
           }
         },
-        "bap_id": "bap-ps-network-staging.becknprotocol.io",
-        "bap_uri": "https://bap-ps-network-staging.becknprotocol.io",
+        "bap_id": "bap-ps-network-staging.example.io",
+        "bap_uri": "https://bap-ps-network-staging.example.io",
         "transaction_id": "12345",
         "message_id": "9120e1fe-2fec-44c1-8bd2-d75c7bd99d56",
         "ttl": "PT10M",
@@ -64,7 +64,7 @@
               "long_desc": "Protect you from sun rays and wind Polarised- Polarising lens: reduces reflections from bright surfaces Sun Protection- Category 3 lens - 100% UV filter: perfect for sunny weather.",
               "images": [
                 {
-                  "url": "http://bpp-unified-vendure1-prod.becknprotocol.io/assets/preview/69/250__preview.jpeg"
+                  "url": "http://bpp-unified-vendure1-prod.example.io/assets/preview/69/250__preview.jpeg"
                 }
               ],
               "price": {
@@ -84,7 +84,7 @@
               "long_desc": "Protect you from sun rays and wind Polarised- Polarising lens: reduces reflections from bright surfaces Sun Protection- Category 3 lens - 100% UV filter: perfect for sunny weather.",
               "images": [
                 {
-                  "url": "http://bpp-unified-vendure1-prod.becknprotocol.io/assets/preview/69/250__preview.jpeg"
+                  "url": "http://bpp-unified-vendure1-prod.example.io/assets/preview/69/250__preview.jpeg"
                 }
               ],
               "price": {

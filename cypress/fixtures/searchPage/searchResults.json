@@ -92,7 +92,7 @@
                 ],
                 "images": [
                   {
-                    "url": "http://bpp-unified-vendure1-prod.becknprotocol.io/assets/preview/69/250__preview.jpeg"
+                    "url": "http://bpp-unified-vendure1-prod.example.io/assets/preview/69/250__preview.jpeg"
                   }
                 ],
                 "rating": "4.2"
@@ -114,7 +114,7 @@
                 ],
                 "images": [
                   {
-                    "url": "http://bpp-unified-vendure1-prod.becknprotocol.io/assets/preview/69/250__preview.jpeg"
+                    "url": "http://bpp-unified-vendure1-prod.example.io/assets/preview/69/250__preview.jpeg"
                   }
                 ],
                 "rating": "4.8"

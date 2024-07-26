@@ -16,6 +16,7 @@ import crossIcon from '../../public/images/crossIcon.svg'
 import { useLanguage } from '../../hooks/useLanguage'
 import { Item, QuantityDetails } from '@beckn-ui/common/lib/types'
 import { currencyMap } from '@lib/config'
+import { testIds } from '@shared/dataTestIds'
 
 export interface ViewMoreOrderModalProps {
   isOpen: boolean
@@ -23,6 +24,7 @@ export interface ViewMoreOrderModalProps {
   onClose: () => void
   items: Item[]
   orderId: string
+  dataTest?: string
 }
 
 const ViewMoreOrderModal: React.FC<ViewMoreOrderModalProps> = props => {
@@ -44,6 +46,7 @@ const ViewMoreOrderModal: React.FC<ViewMoreOrderModalProps> = props => {
           mb="0"
           borderRadius="0.75rem 0.75rem 0px 0px"
           maxW="lg"
+          data-test={props.dataTest}
         >
           <Flex
             justifyContent={'space-between'}
@@ -51,7 +54,7 @@ const ViewMoreOrderModal: React.FC<ViewMoreOrderModalProps> = props => {
             padding={'15px 20px'}
             fontSize={'17px'}
           >
-            <Text>
+            <Text data-test={testIds.orderDetailspage_orderId}>
               {t.orderId}: {props.orderId}
             </Text>
             <ModalCloseButton position={'unset'}>
@@ -72,17 +75,19 @@ const ViewMoreOrderModal: React.FC<ViewMoreOrderModalProps> = props => {
                   justifyContent={'space-between'}
                 >
                   <Box>
-                    <Text>{item.name}</Text>
+                    <Text data-test={testIds.item_title}>{item.name}</Text>
                     <Text
                       fontSize={'12px'}
                       fontWeight={'600'}
                       pt={'5px'}
+                      data-test={testIds.item_quantity}
                     >
                       x {(item.quantity as QuantityDetails).selected.count}
                     </Text>
                   </Box>
                   <Typography
                     fontWeight={'600'}
+                    dataTest={testIds.item_price}
                     text={`${(currencyMap as any)[item.price.currency]} ${item.price.value} `}
                   />
                 </Flex>
@@ -91,6 +96,7 @@ const ViewMoreOrderModal: React.FC<ViewMoreOrderModalProps> = props => {
 
             <Button
               text="Close"
+              dataTest={testIds.close}
               handleClick={props.onClose}
             />
           </ModalBody>

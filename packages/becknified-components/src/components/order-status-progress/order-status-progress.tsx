@@ -4,6 +4,7 @@ import { Typography } from '@beckn-ui/molecules'
 import LineBlack from '../../../public/images/lineBlack.svg'
 import TrackIcon from '../../../public/images/TrackIcon.svg'
 import { OrderStatusProgressProps } from './order-status-progress.types'
+import { testIds } from '@shared/dataTestIds'
 
 const OrderStatusProgress: React.FC<OrderStatusProgressProps> = ({
   label,
@@ -49,6 +50,7 @@ const OrderStatusProgress: React.FC<OrderStatusProgressProps> = ({
               }}
               className={`${className}_order_state_text`}
               text={label}
+              dataTest={testIds.orderDetailspage_orderStateName}
               fontSize={'15px'}
               fontWeight={'500'}
             />
@@ -58,6 +60,7 @@ const OrderStatusProgress: React.FC<OrderStatusProgressProps> = ({
             <Typography
               className={`${className}_order_state_time`}
               fontSize="10px"
+              dataTest={testIds.orderDetailspage_orderStateTime}
               text={statusTime}
             />
           </Box>

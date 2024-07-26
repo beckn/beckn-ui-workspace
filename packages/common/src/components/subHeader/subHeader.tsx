@@ -11,6 +11,7 @@ import { useSelector } from 'react-redux'
 import { ICartRootState } from '../../../lib/types'
 import { getLocalStorage } from '../../utils'
 import { SubHeaderConstants, SubHeaderProps } from './subHeader.types'
+import { testIds } from '@shared/dataTestIds'
 
 const getHeaderTitleForPage = (
   name: string,
@@ -70,6 +71,7 @@ const SubHeader = (props: SubHeaderProps) => {
               >
                 <Image
                   src={backIcon}
+                  data-test={testIds.goBack}
                   alt="Back icon"
                 />
               </Box>

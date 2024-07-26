@@ -7,7 +7,10 @@ import { testIds } from '@shared/dataTestIds'
 
 const PaymentDetails: React.FC<PaymentDetailsProps> = props => {
   return (
-    <Box width="100%">
+    <Box
+      width="100%"
+      data-test={props.dataTest}
+    >
       {props.title && (
         <Box marginBottom="1rem">
           <Typography
@@ -63,7 +66,7 @@ const PaymentDetails: React.FC<PaymentDetailsProps> = props => {
           <Typography
             variant="titleSemibold"
             text={props.totalText}
-            dataTest={testIds.checkoutpage_totalPayment}
+            dataTest={testIds.payment_totalPayment}
             fontSize={'15px'}
           />
           <div className="flex">

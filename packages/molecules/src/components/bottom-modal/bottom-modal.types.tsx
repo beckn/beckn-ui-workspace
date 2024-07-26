@@ -7,4 +7,5 @@ export interface BottomModalProps {
   children: ReactNode
   responsive?: boolean
   responsiveBottomGap?: string
+  dataTest?: string
 }

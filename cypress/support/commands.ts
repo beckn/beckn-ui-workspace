@@ -38,6 +38,7 @@
 // @ts-ignore
 import { testIds } from '../../shared/dataTestIds'
 import { RouteHandler } from 'cypress/types/net-stubbing'
+import { shippingDetails } from '../fixtures/checkoutPage/userDetails'
 
 declare global {
   namespace Cypress {
@@ -48,16 +49,22 @@ declare global {
       performSearch(searchTerm: string, response: RouteHandler): Chainable<void>
       mockReduxState(type: string, data: Record<string, any>): Chainable<void>
       selectProduct(index: number): Chainable<void>
+      selectMultiProduct(index: number[]): Chainable<void>
       performSelect(response: RouteHandler, button?: string): Chainable<void>
       performInit(response: RouteHandler): Chainable<void>
-      performConfirm(response: RouteHandler): Chainable<void>
-      performProfile(response: RouteHandler): Chainable<void>
+      fillAndSaveShippingDetails(): Chainable<void>
+      performConfirm(response: RouteHandler, aliasName: string): Chainable<void>
+      performOrders(response: RouteHandler, aliasName: string): Chainable<void>
+      performStatus(response: RouteHandler, aliasName: string): Chainable<void>
+      performTrack(response: RouteHandler, aliasName: string): Chainable<void>
+      performSupport(response: RouteHandler, aliasName: string): Chainable<void>
+      performProfile(response: RouteHandler, aliasName: string): Chainable<void>
     }
   }
 }
 
-const GCL_URL = 'https://bap-gcl-prod.becknprotocol.io'
-const BAP_URL = 'https://bap-backend-prod.becknprotocol.io/api'
+const GCL_URL = 'https://bap-gcl-**.becknprotocol.io'
+const STRAPI_URL = 'https://bap-backend-**.becknprotocol.io/api'
 
 Cypress.Commands.add('getByData', selector => {
   return cy.get(`[data-test=${selector}]`)
@@ -116,6 +123,14 @@ Cypress.Commands.add('selectProduct', index => {
   cy.getByData(testIds.searchpage_products).eq(index).click()
 })
 
+Cypress.Commands.add('selectMultiProduct', indexes => {
+  indexes.forEach(index => {
+    cy.getByData(testIds.searchpage_products).eq(index).click()
+    cy.getByData(testIds.productpage_addTocartButton).click()
+    cy.getByData(testIds.goBack).click()
+  })
+})
+
 Cypress.Commands.add('performInit', response => {
   cy.intercept('POST', `${GCL_URL}/init`, response).as('initRes')
   cy.wait('@initRes')
@@ -132,11 +147,41 @@ Cypress.Commands.add('performSelect', (response, button) => {
   if (button) cy.getByData(button).click()
   cy.wait('@selectResponse')
 })
-Cypress.Commands.add('performConfirm', response => {
-  cy.intercept('POST', `${GCL_URL}/confirm`, response).as('confirmResponse')
-  cy.wait('@confirmResponse')
+
+Cypress.Commands.add('fillAndSaveShippingDetails', () => {
+  cy.getByData(testIds.checkoutpage_shippingDetails)
+    .getByData(testIds.checkoutpage_openForm)
+    .click()
+    .getByData(testIds.checkoutpage_form)
+    .within(() => {
+      cy.getByData(testIds.checkoutpage_name).clear().type(shippingDetails.name)
+      cy.getByData(testIds.checkoutpage_mobileNumber).clear().type(shippingDetails.mobileNumber)
+      cy.getByData(testIds.checkoutpage_email).clear().type(shippingDetails.email)
+      cy.getByData(testIds.checkoutpage_address).clear().type(shippingDetails.address)
+      cy.getByData(testIds.checkoutpage_pinCode).clear().type(shippingDetails.pinCode)
+      cy.getByData('submit').click()
+    })
 })
-Cypress.Commands.add('performProfile', response => {
-  cy.intercept('GET', `${BAP_URL}/profiles`, response).as('profileResponse')
-  cy.wait('@profileResponse')
+
+Cypress.Commands.add('performConfirm', (response, aliasName) => {
+  cy.intercept('POST', `${GCL_URL}/confirm`, response).as(aliasName)
+})
+
+Cypress.Commands.add('performOrders', (response, aliasName) => {
+  cy.intercept('POST', `${STRAPI_URL}/orders`, response).as(aliasName)
+})
+
+Cypress.Commands.add('performStatus', (response, aliasName) => {
+  cy.intercept('POST', `${GCL_URL}/status`, response).as(aliasName)
+})
+
+Cypress.Commands.add('performTrack', (response, aliasName) => {
+  cy.intercept('POST', `${GCL_URL}/track`, response).as(aliasName)
+})
+
+Cypress.Commands.add('performSupport', (response, aliasName) => {
+  cy.intercept('POST', `${GCL_URL}/support`, response).as(aliasName)
+})
+Cypress.Commands.add('performProfile', (response, aliasName) => {
+  cy.intercept('GET', `${STRAPI_URL}/profiles`, response).as(aliasName)
 })

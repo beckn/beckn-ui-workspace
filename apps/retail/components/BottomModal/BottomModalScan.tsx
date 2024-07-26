@@ -7,9 +7,10 @@ interface ModalProps {
   children: React.ReactNode
   partialClose?: boolean
   modalHeader?: string
+  dataTest?: string
 }
 
-const BottomModal: React.FC<ModalProps> = ({ isOpen, onClose, children, modalHeader }) => {
+const BottomModal: React.FC<ModalProps> = ({ isOpen, onClose, children, modalHeader, dataTest }) => {
   return (
     <>
       <Modal
@@ -18,6 +19,7 @@ const BottomModal: React.FC<ModalProps> = ({ isOpen, onClose, children, modalHea
         isOpen={isOpen}
         scrollBehavior="outside"
         motionPreset="slideInBottom"
+        data-test={dataTest}
       >
         <ModalOverlay height="100vh" />
         <ModalContent

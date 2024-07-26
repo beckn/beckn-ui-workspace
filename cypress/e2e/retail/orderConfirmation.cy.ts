@@ -1,5 +1,7 @@
 import { testIds } from '../../../shared/dataTestIds'
 import { initResponse } from '../../fixtures/checkoutPage/initResponse'
+import { confirmResponse } from '../../fixtures/orderConfirmation/confirmResponse'
+import { orderResponse } from '../../fixtures/orderConfirmation/orderResponse'
 describe('Order Confirmation Page', () => {
   const searchTerm = 'sunglass'
 
@@ -26,8 +28,10 @@ describe('Order Confirmation Page', () => {
       cy.getByData(testIds.paymentpage_radioButton).eq(3).check().should('be.checked')
       cy.getByData(testIds.paymentpage_confirmButton).click()
       cy.url().should('include', '/orderConfirmation')
-      cy.intercept('POST', '/confirm', { fixture: 'confirmPage/confirmRespons.json' }).as('confirmCall')
-      cy.wait('@confirmCall')
+      cy.performConfirm(confirmResponse, 'confirmResponse')
+      cy.wait('@confirmResponse')
+      cy.performOrders(orderResponse, 'orderResponse')
+      cy.wait('@orderResponse')
     })
 
     it('should display order confirmation details after API call', () => {
@@ -40,7 +44,7 @@ describe('Order Confirmation Page', () => {
       )
     })
     it('should render the correct order ID', () => {
-      const orderId = '8e2410a7'
+      const orderId = 'avh_6'
       cy.getByData(testIds.orderConfirmation_orderIdMessage).should('contain.text', `Order number is: ${orderId}`)
     })
     it('should have a button to view order details and navigate to order details page when clicked', () => {
@@ -72,7 +76,8 @@ describe('Order Confirmation Page', () => {
       cy.getByData(testIds.paymentpage_radioButton).eq(3).check().should('be.checked')
       cy.getByData(testIds.paymentpage_confirmButton).click()
       cy.url().should('include', '/orderConfirmation')
-      cy.intercept('POST', '/confirm', { fixture: 'confirmPage/confirmRespons.json' }).as('confirmCall')
+      cy.performConfirm(confirmResponse, 'confirmResponse')
+      cy.wait('@confirmResponse')
     })
     it('should render homepage when click on go back to home', () => {
       cy.getByData(testIds.orderConfirmation_goBackToHome).click()
