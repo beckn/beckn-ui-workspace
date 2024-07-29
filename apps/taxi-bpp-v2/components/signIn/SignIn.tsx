@@ -63,7 +63,7 @@ const SignIn = () => {
 
         Cookies.set('authToken', token)
         Cookies.set('userEmail', email)
-        Router.push('/homePage')
+        Router.push('/')
       } else {
         const errorData = await response.json()
         toast({
@@ -137,12 +137,7 @@ const SignIn = () => {
                   error: formErrors.password,
                   variant: 'outline'
                 }
-              ],
-              forgotPassword: {
-                text: t.forgotPassword,
-                color: '#ABD4FA',
-                fontWeight: '500'
-              }
+              ]
             }}
           />
         </Box>
