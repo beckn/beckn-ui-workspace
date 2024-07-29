@@ -26,11 +26,23 @@ const getHeaderTitleForPage = (
   const values = locale === 'en' ? defaultNames : frenchNames
   switch (true) {
     case headerList.includes(pathName):
-      return <Text className={Styles.header_title_text}>{values[pathName]}</Text>
+      return (
+        <Text
+          className={Styles.header_title_text}
+          data-test={testIds.pageName}
+        >
+          {values[pathName]}
+        </Text>
+      )
     default:
       return (
         <Box className={Styles.header_title}>
-          <Text className={Styles.header_title_text}>{name}</Text>
+          <Text
+            className={Styles.header_title_text}
+            data-test={testIds.pageName}
+          >
+            {name}
+          </Text>
         </Box>
       )
   }
@@ -92,6 +104,7 @@ const SubHeader = (props: SubHeaderProps) => {
             <Image
               cursor="pointer"
               onClick={() => setOrderModalOpen(true)}
+              data-test={testIds.downloadInvoiceIcon}
               src="/images/downloadInvoice.svg"
               alt="order icon"
               mr={'20px'}
@@ -112,6 +125,7 @@ const SubHeader = (props: SubHeaderProps) => {
         responsive={true}
         title=""
         isOpen={isOrderModalOpen}
+        dataTest={testIds.invoiceModal}
         onClose={handleOrderModalClose}
       >
         <Box
@@ -120,6 +134,7 @@ const SubHeader = (props: SubHeaderProps) => {
             setOrderModalOpen(false)
           }}
           className={Styles.top_header_modal}
+          data-test={testIds.invoice}
         >
           <Image
             src="/images/invoiceDetails.svg"

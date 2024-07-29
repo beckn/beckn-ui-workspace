@@ -16,7 +16,8 @@ describe('Checkout Page', () => {
     cy.selectProduct(0)
     cy.getByData(testIds.productpage_addTocartButton).click()
     cy.getByData(testIds.cartButton).click()
-    cy.performSelect({ fixture: 'checkoutPage/selectResponse.json' })
+    cy.performSelect({ fixture: 'checkoutPage/selectResponse.json' }, 'selectResponse')
+    cy.wait('@selectResponse')
     cy.getByData(testIds.cartpage_cartOrderButton).click()
     cy.getByData(testIds.feedback).getByData('close').click()
   })
@@ -76,7 +77,8 @@ describe('Checkout Page', () => {
         cy.getByData('submit').click()
       })
 
-    cy.performInit(initResponse)
+    cy.performInit(initResponse, 'initResponse')
+    cy.wait('@initResponse')
   })
 
   it('should handle the "same as shipping" checkbox for billing form data', () => {
@@ -141,7 +143,8 @@ describe('Checkout Page', () => {
         cy.getByData(testIds.checkoutpage_pinCode).clear().type(billingDetails.pinCode)
         cy.getByData('submit').click()
       })
-    cy.performInit(initResponse)
+    cy.performInit(initResponse, 'initResponse')
+    cy.wait('@initResponse')
   })
 
   it('should display the payment section', () => {

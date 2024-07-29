@@ -6,6 +6,7 @@ import { Box, Flex } from '@chakra-ui/react'
 import { useLanguage } from '@hooks/useLanguage'
 import { formatTimestamp, getPaymentBreakDown } from '@beckn-ui/common/src/utils'
 import { StatusResponseModel } from '@beckn-ui/common/lib/types'
+import { testIds } from '@shared/dataTestIds'
 
 const invoiceDetails = () => {
   const [statusData, setStatusData] = useState<StatusResponseModel[]>([])
@@ -47,6 +48,7 @@ const invoiceDetails = () => {
           />
           <Typography
             variant="subTitleRegular"
+            dataTest={testIds.orderDetailspage_productPlacedAt}
             text={formatTimestamp(created_at)}
           />
         </Flex>
@@ -61,6 +63,7 @@ const invoiceDetails = () => {
             />
             <Typography
               variant="subTitleRegular"
+              dataTest={testIds.orderDetailspage_invoice_orderFullfilled}
               text={`${filteredOrder.length} of ${statusData.length}`}
             />
           </Flex>
@@ -76,6 +79,7 @@ const invoiceDetails = () => {
         <PaymentDetails
           paymentBreakDown={getPaymentBreakDown(statusData).breakUpMap}
           totalText="Total"
+          dataTest={testIds.orderDetailspage_paymentDetails}
           totalValueWithCurrency={getPaymentBreakDown(statusData).totalPricewithCurrent}
         />
       </DetailCard>

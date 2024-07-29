@@ -4,6 +4,7 @@ import { billingDetails, shippingDetails } from '../../fixtures/checkoutPage/use
 import { confirmResponse } from '../../fixtures/orderConfirmation/confirmResponse'
 import { orderResponse } from '../../fixtures/orderConfirmation/orderResponse'
 import { statusResponse } from '../../fixtures/orderDetails/statusResponse'
+import { updatedShippingDetailsResponse } from '../../fixtures/orderDetails/updateShippingDetails'
 
 describe('Order Details Page', () => {
   const searchTerm = 'sunglass'
@@ -18,11 +19,13 @@ describe('Order Details Page', () => {
     })
     cy.selectMultiProduct([0, 1])
     cy.getByData(testIds.cartButton).click()
-    cy.performSelect({ fixture: 'checkoutPage/selectResponse.json' })
+    cy.performSelect({ fixture: 'checkoutPage/selectResponse.json' }, 'selectResponse')
+    cy.wait('@selectResponse')
     cy.getByData(testIds.cartpage_cartOrderButton).click()
     // cy.getByData(testIds.feedback).getByData('close').click()
     cy.fillAndSaveShippingDetails()
-    cy.performInit(initResponse)
+    cy.performInit(initResponse, 'initResponse')
+    cy.wait('@initResponse')
     cy.getByData(testIds.checkoutpage_proceedToCheckout).click()
     cy.getByData(testIds.paymentpage_CashOnDelivery).click()
     cy.getByData(testIds.paymentpage_confirmButton).click()
@@ -154,6 +157,87 @@ describe('Order Details Page', () => {
         cy.getByData(testIds.orderDetailspage_menuItemName).eq(1).should('contain.text', 'Update Order')
         cy.getByData(testIds.orderDetailspage_menuItemName).eq(1).click()
         cy.url().should('include', testIds.url_updateShippingDetails)
+      })
+    })
+
+    it('should validate update shipping form fields', () => {
+      cy.getByData(testIds.orderDetailspage_updateShippingDetails)
+        .getByData(testIds.checkoutpage_form)
+        .within(() => {
+          cy.getByData(testIds.checkoutpage_name).type('000').clear().blur()
+          cy.contains('Name is required').should('be.visible')
+
+          cy.getByData(testIds.checkoutpage_mobileNumber).type('12345').blur()
+          cy.contains('Invalid mobile number').should('be.visible')
+
+          cy.getByData(testIds.checkoutpage_email).type('invalid-email').blur()
+          cy.contains('Invalid email format').should('be.visible')
+
+          cy.getByData(testIds.checkoutpage_address).type('addr').clear().blur()
+          cy.contains('Address is required').should('be.visible')
+
+          cy.getByData(testIds.checkoutpage_pinCode).type('123').blur()
+          cy.contains('Invalid Zip Code').should('be.visible')
+
+          cy.getByData('submit').should('be.disabled')
+        })
+    })
+
+    it('should render success feedback modal when fill and save the update shipping form data', () => {
+      cy.performUpdateOrder(updatedShippingDetailsResponse, 'updateOrder')
+      cy.getByData(testIds.checkoutpage_form).should('be.visible')
+
+      cy.getByData(testIds.orderDetailspage_updateShippingDetails)
+        .getByData(testIds.checkoutpage_form)
+        .within(() => {
+          cy.getByData(testIds.checkoutpage_name).clear().type(shippingDetails.name)
+          cy.getByData(testIds.checkoutpage_mobileNumber).clear().type(shippingDetails.mobileNumber)
+          cy.getByData(testIds.checkoutpage_email).clear().type(shippingDetails.email)
+          cy.getByData(testIds.checkoutpage_address).clear().type(shippingDetails.address)
+          cy.getByData(testIds.checkoutpage_pinCode).clear().type(shippingDetails.pinCode)
+          cy.getByData('submit').click()
+          cy.wait('@updateOrder')
+          cy.url().should('include', testIds.url_orderDetails)
+          cy.performStatus(statusResponse, 'statusResponse')
+          cy.wait('@statusResponse')
+        })
+    })
+  })
+
+  context('Should handle Invoice related tests', () => {
+    it('should render the invoice modal on click of invoice icon', () => {
+      cy.getByData(testIds.downloadInvoiceIcon).should('be.visible')
+      cy.getByData(testIds.downloadInvoiceIcon).click()
+      cy.getByData(testIds.invoiceModal).should('be.visible')
+      cy.getByData(testIds.invoice).should('contain.text', 'Invoice Details')
+    })
+
+    it('should navigate to the invoice page on selection of Invoice Details option', () => {
+      cy.getByData(testIds.invoice).should('contain.text', 'Invoice Details')
+      cy.getByData(testIds.invoice).click()
+      cy.url().should('include', testIds.url_invoice)
+    })
+
+    it('should render the invoice page', () => {
+      cy.getByData(testIds.pageName).should('contain.text', 'Invoice Details')
+    })
+
+    it('should render the Placed At & Order fullfilled status', () => {
+      cy.getByData(testIds.orderDetailspage_productPlacedAt).should('be.visible')
+      cy.getByData(testIds.orderDetailspage_invoice_orderFullfilled).should('be.visible')
+      cy.getByData(testIds.orderDetailspage_invoice_orderFullfilled).should('contain.text', '0 of 1')
+    })
+
+    it('should render the payment breakup details', () => {
+      cy.getByData(testIds.orderDetailspage_paymentDetails).within(() => {
+        cy.getByData(testIds.payment_basePrice).should('contain.text', 'base-price')
+        cy.getByData(testIds.item_price).eq(0).should('contain.text', '₹200.00')
+
+        cy.getByData(testIds.payment_taxes).should('contain.text', 'taxes')
+        cy.getByData(testIds.item_price).eq(1).should('contain.text', '₹360.00')
+
+        cy.getByData(testIds.payment_totalPayment).should('contain.text', 'Total')
+        cy.getByData(testIds.item_price).eq(2).should('contain.text', '₹2,160.00')
       })
     })
   })

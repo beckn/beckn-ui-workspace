@@ -10,6 +10,10 @@ const testIds = {
   searchButton: 'search-button',
   threeDots: 'three-dots',
   close: 'close',
+  pageName: 'pageName',
+  invoiceModal: 'invoiceModal',
+  downloadInvoiceIcon: 'downloadInvoiceIcon',
+  invoice: 'invoice',
   // items
   item_list: 'item-list',
   item_title: 'item-title',
@@ -36,6 +40,7 @@ const testIds = {
   url_orderDetails: '/orderDetails',
   url_orderConfirmation: '/orderConfirmation',
   url_updateShippingDetails: '/updateShippingDetails',
+  url_invoice: '/invoiceDetails',
   // user credentials
   user_validEmail: 'ankit@gmail.com',
   user_validPassword: 'Enterthevoid@123',
@@ -160,7 +165,9 @@ const testIds = {
   orderDetailspage_menuItem: 'menuItem',
   orderDetailspage_menuItemName: 'menuItemName',
   orderDetailspage_callServiceItem: 'callServiceItem',
-  orderDetailspage_callServiceItemName: 'callServiceItemName'
+  orderDetailspage_callServiceItemName: 'callServiceItemName',
+  orderDetailspage_updateShippingDetails: 'updateShippingDetails',
+  orderDetailspage_invoice_orderFullfilled: 'invoice_orderFullfilled'
 }
 
 export { testIds }

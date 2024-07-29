@@ -79,7 +79,8 @@ describe('Search Page Tests', () => {
         const expectedQuantity = initialQuantity + 1
         const expectedTotalPrice = (itemPrice * expectedQuantity).toFixed(2)
 
-        cy.performSelect({ fixture: 'cart/selectResult.json' }, testIds.cartpage_incrementButton)
+        cy.performSelect({ fixture: 'cart/selectResult.json' }, 'selectResponse', testIds.cartpage_incrementButton)
+        cy.wait('@selectResponse')
         cy.getByData(testIds.cartpage_input)
           .invoke('val')
           .then(val => {
@@ -91,7 +92,8 @@ describe('Search Page Tests', () => {
     })
 
     it('decrements the counter and updates the total amount correctly', () => {
-      cy.performSelect({ fixture: 'cart/selectResult.json' }, testIds.cartpage_incrementButton)
+      cy.performSelect({ fixture: 'cart/selectResult.json' }, 'selectResponse', testIds.cartpage_incrementButton)
+      cy.wait('@selectResponse')
       cy.fixture('cart/selectResult.json').then(data => {
         const item = data.data[0].message.order.items[0]
         const initialQuantity = item.quantity.selected.count

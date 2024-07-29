@@ -50,8 +50,8 @@ declare global {
       mockReduxState(type: string, data: Record<string, any>): Chainable<void>
       selectProduct(index: number): Chainable<void>
       selectMultiProduct(index: number[]): Chainable<void>
-      performSelect(response: RouteHandler, button?: string): Chainable<void>
-      performInit(response: RouteHandler): Chainable<void>
+      performSelect(response: RouteHandler, aliasName: string, button?: string): Chainable<void>
+      performInit(response: RouteHandler, aliasName: string): Chainable<void>
       fillAndSaveShippingDetails(): Chainable<void>
       performConfirm(response: RouteHandler, aliasName: string): Chainable<void>
       performOrders(response: RouteHandler, aliasName: string): Chainable<void>
@@ -59,6 +59,7 @@ declare global {
       performTrack(response: RouteHandler, aliasName: string): Chainable<void>
       performSupport(response: RouteHandler, aliasName: string): Chainable<void>
       performProfile(response: RouteHandler, aliasName: string): Chainable<void>
+      performUpdateOrder(response: RouteHandler, aliasName: string): Chainable<void>
     }
   }
 }
@@ -131,9 +132,8 @@ Cypress.Commands.add('selectMultiProduct', indexes => {
   })
 })
 
-Cypress.Commands.add('performInit', response => {
-  cy.intercept('POST', `${GCL_URL}/init`, response).as('initRes')
-  cy.wait('@initRes')
+Cypress.Commands.add('performInit', (response, aliasName) => {
+  cy.intercept('POST', `${GCL_URL}/init`, response).as(aliasName)
 })
 
 Cypress.Commands.add('mockReduxState', (type, data) => {
@@ -142,10 +142,9 @@ Cypress.Commands.add('mockReduxState', (type, data) => {
   })
 })
 
-Cypress.Commands.add('performSelect', (response, button) => {
-  cy.intercept('POST', `${GCL_URL}/select`, response).as('selectResponse')
+Cypress.Commands.add('performSelect', (response, aliasName, button) => {
+  cy.intercept('POST', `${GCL_URL}/select`, response).as(aliasName)
   if (button) cy.getByData(button).click()
-  cy.wait('@selectResponse')
 })
 
 Cypress.Commands.add('fillAndSaveShippingDetails', () => {
@@ -184,4 +183,8 @@ Cypress.Commands.add('performSupport', (response, aliasName) => {
 })
 Cypress.Commands.add('performProfile', (response, aliasName) => {
   cy.intercept('GET', `${STRAPI_URL}/profiles`, response).as(aliasName)
+})
+
+Cypress.Commands.add('performUpdateOrder', (response, aliasName) => {
+  cy.intercept('POST', `${GCL_URL}/update`, response).as(aliasName)
 })

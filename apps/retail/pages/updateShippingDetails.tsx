@@ -11,6 +11,7 @@ import { useDispatch } from 'react-redux'
 import { ConfirmResponseModel } from '@beckn-ui/common/lib/types'
 import { feedbackActions } from '@beckn-ui/common/src/store/ui-feedback-slice'
 import { geocodeFromPincode } from '@beckn-ui/common'
+import { testIds } from '@shared/dataTestIds'
 
 const UpdateShippingDetails = () => {
   const [shippingDetails, setShippingDetails] = useState<ShippingFormInitialValuesType>({
@@ -38,6 +39,7 @@ const UpdateShippingDetails = () => {
 
   const handleSubmit = async (formData: ShippingFormInitialValuesType, confirmData: ConfirmResponseModel[]) => {
     try {
+      console.log(formData, confirmData)
       setIsLoadingForUpdate(true)
       if (confirmData && confirmData.length > 0) {
         const { domain, bpp_id, bpp_uri, transaction_id } = confirmData[0].context
@@ -154,6 +156,7 @@ const UpdateShippingDetails = () => {
           ]
         }
         const updateResponse = await axios.post(`${apiUrl}/update`, updateRequestPayload)
+        console.log(updateResponse)
         if (updateResponse.data.data.length > 0) {
           dispatch(
             feedbackActions.setToastData({
@@ -232,6 +235,7 @@ const UpdateShippingDetails = () => {
       className="hideScroll"
       maxH={'calc(100vh - 100px)'}
       overflowY="scroll"
+      data-test={testIds.orderDetailspage_updateShippingDetails}
     >
       <ShippingForm
         onSubmit={() => handleSubmit(shippingDetails, confirmData as ConfirmResponseModel[])}
