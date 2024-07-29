@@ -1,5 +1,6 @@
 import React from 'react'
 import { Box, Flex, Image } from '@chakra-ui/react'
+import { testIds } from '@shared/dataTestIds'
 
 // Custom
 import { Button, Input, Loader } from '@beckn-ui/molecules'
@@ -41,7 +42,10 @@ const Auth: React.FC<AuthProps> = ({ schema, isLoading }) => {
           </Flex>
         </Box>
       )}
-      <Box width={'100%'}>
+      <Box
+        width={'100%'}
+        data-test={testIds.profile_form}
+      >
         <Box
           className={Styles.signin_container}
           pt="40px"
@@ -50,6 +54,7 @@ const Auth: React.FC<AuthProps> = ({ schema, isLoading }) => {
             {inputs.map((singleInput, index) => {
               return (
                 <Input
+                  dataTest={singleInput.dataTest}
                   key={index}
                   {...singleInput}
                 />
@@ -60,6 +65,7 @@ const Auth: React.FC<AuthProps> = ({ schema, isLoading }) => {
         {buttons.map(singleButton => {
           return (
             <Button
+              dataTest={singleButton.dataTest}
               className={Styles.auth_btn}
               key={singleButton.text}
               {...singleButton}

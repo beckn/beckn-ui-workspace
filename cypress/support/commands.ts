@@ -51,11 +51,13 @@ declare global {
       performSelect(response: RouteHandler, button?: string): Chainable<void>
       performInit(response: RouteHandler): Chainable<void>
       performConfirm(response: RouteHandler): Chainable<void>
+      performProfile(response: RouteHandler): Chainable<void>
     }
   }
 }
 
 const GCL_URL = 'https://bap-gcl-prod.becknprotocol.io'
+const BAP_URL = 'https://bap-backend-prod.becknprotocol.io/api'
 
 Cypress.Commands.add('getByData', selector => {
   return cy.get(`[data-test=${selector}]`)
@@ -133,4 +135,8 @@ Cypress.Commands.add('performSelect', (response, button) => {
 Cypress.Commands.add('performConfirm', response => {
   cy.intercept('POST', `${GCL_URL}/confirm`, response).as('confirmResponse')
   cy.wait('@confirmResponse')
+})
+Cypress.Commands.add('performProfile', response => {
+  cy.intercept('GET', `${BAP_URL}/profiles`, response).as('profileResponse')
+  cy.wait('@profileResponse')
 })

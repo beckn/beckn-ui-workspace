@@ -8,6 +8,7 @@ const testIds = {
   location: 'location',
   searchInput: 'search-input',
   searchButton: 'search-button',
+  threeDots: 'three-dots',
   // items
   item_title: 'item-title',
   item_subTitle: 'item-sub-title',
@@ -115,7 +116,19 @@ const testIds = {
   orderConfirmation_orderIdMessage: 'order-message',
   orderConfirmation_trackOrderMessage: 'track-order',
   orderConfirmation_viewOrderButton: 'viewOrderDetails-button',
-  orderConfirmation_goBackToHome: 'goBackToHome-button'
+  orderConfirmation_goBackToHome: 'goBackToHome-button',
+  // profile page
+  profile_saveandContinue: 'save-and-continue-button',
+  profile_inputName: 'input-name',
+  profile_inputMobileNumber: 'input-mobileNumber',
+  profile_flatNumber: 'input-flatNumber',
+  profile_street: 'input-street',
+  profile_city: 'input-city',
+  profile_zipCode: 'input-zipcode',
+  profile_state: 'input-state',
+  profile_country: 'input-country',
+  profile_text_click: 'profile-text',
+  profile_form: 'profile-form'
 }
 
 export { testIds }

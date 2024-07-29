@@ -9,6 +9,7 @@ import settingsIcon from '../../../public/images/threeDots.svg'
 import Settings from '../settings'
 import { getLocalStorage, setLocalStorage } from '../../utils'
 import { HeaderProps } from './topHeader.types'
+import { testIds } from '@shared/dataTestIds'
 
 const Header: React.FC<HeaderProps> = ({ t, headerConstants }) => {
   const {
@@ -64,6 +65,7 @@ const Header: React.FC<HeaderProps> = ({ t, headerConstants }) => {
                 className="block"
                 src={settingsIcon}
                 alt="menu icon"
+                data-test={testIds.threeDots}
               />
             )}
           </Flex>
@@ -79,6 +81,7 @@ const Header: React.FC<HeaderProps> = ({ t, headerConstants }) => {
       >
         <Flex flexDirection="column">
           <Box
+            data-test={testIds.profile_text_click}
             onClick={() => {
               router.push('/profile')
               setMenuModalOpen(false)
