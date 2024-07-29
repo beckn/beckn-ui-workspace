@@ -9,7 +9,7 @@ import { testIds } from '@shared/dataTestIds'
 const OrderStatusProgress: React.FC<OrderStatusProgressProps> = ({
   label,
   statusTime,
-  className,
+  className = '',
   noLine = false,
   lastElement
 }) => {

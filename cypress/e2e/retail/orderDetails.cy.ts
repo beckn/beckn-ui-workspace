@@ -34,8 +34,8 @@ describe('Order Details Page', () => {
     cy.performOrders(orderResponse, 'ordersResponse')
     cy.wait('@ordersResponse')
     cy.getByData(testIds.orderConfirmation_viewOrderButton).click()
-    cy.performStatus(statusResponse, 'statusResponse')
-    cy.wait('@statusResponse')
+    cy.performStatus(statusResponse('ACTIVE', 'ArrangingPayment'), 'processStatusResponse')
+    cy.wait('@processStatusResponse')
   })
 
   context('Should render all the different components of Order Details', () => {
@@ -113,7 +113,7 @@ describe('Order Details Page', () => {
   })
 
   context('When order status is initiated with PROCESSING', () => {
-    it('should render the order status in progress summary', () => {
+    it('should render "ACTIVE" order status in progress summary', () => {
       cy.getByData(testIds.orderDetailspage_orderStatus).should('contain.text', 'ACTIVE')
     })
 
@@ -123,6 +123,69 @@ describe('Order Details Page', () => {
 
         cy.getByData(testIds.orderDetailspage_orderStateName).eq(0).should('contain.text', 'Processing your order')
         cy.getByData(testIds.orderDetailspage_orderStateTime).eq(0).should('be.visible')
+      })
+    })
+  })
+
+  context('When order status is updated to READY TO SHIP', () => {
+    before(() => {
+      cy.reload()
+      cy.performStatus(statusResponse('ACTIVE', 'PaymentSettled'), 'readyToShipStatusResponse')
+      cy.wait('@readyToShipStatusResponse')
+    })
+
+    it('should render "ACTIVE" order status in progress summary', () => {
+      cy.getByData(testIds.orderDetailspage_orderStatus).should('contain.text', 'ACTIVE')
+    })
+
+    it('should render the READY TO SHIP in order status map', () => {
+      cy.getByData(testIds.orderDetailspage_orderStatusMap).within(() => {
+        cy.getByData(testIds.orderDetailspage_orderStateName).should('have.length', 2)
+
+        cy.getByData(testIds.orderDetailspage_orderStateName).eq(1).should('contain.text', 'Ready to ship')
+        cy.getByData(testIds.orderDetailspage_orderStateTime).eq(1).should('exist')
+      })
+    })
+  })
+
+  context('When order status is updated to ORDER SHIPPED', () => {
+    before(() => {
+      cy.reload()
+      cy.performStatus(statusResponse('ACTIVE', 'Shipped'), 'shippedStatusResponse')
+      cy.wait('@shippedStatusResponse')
+    })
+
+    it('should render "ACTIVE" order status in progress summary', () => {
+      cy.getByData(testIds.orderDetailspage_orderStatus).should('contain.text', 'ACTIVE')
+    })
+
+    it('should render the ORDER SHIPPED in order status map', () => {
+      cy.getByData(testIds.orderDetailspage_orderStatusMap).within(() => {
+        cy.getByData(testIds.orderDetailspage_orderStateName).should('have.length', 3)
+
+        cy.getByData(testIds.orderDetailspage_orderStateName).eq(2).should('contain.text', 'Order Shipped')
+        cy.getByData(testIds.orderDetailspage_orderStateTime).eq(2).should('exist')
+      })
+    })
+  })
+
+  context('When order status is updated to ORDER DELIVERED', () => {
+    before(() => {
+      cy.reload()
+      cy.performStatus(statusResponse('COMPLETE', 'Delivered'), 'deliveredStatusResponse')
+      cy.wait('@deliveredStatusResponse')
+    })
+
+    it('should render "COMPLETE" order status in progress summary', () => {
+      cy.getByData(testIds.orderDetailspage_orderStatus).should('contain.text', 'COMPLETE')
+    })
+
+    it('should render the ORDER DELIVERED in order status map', () => {
+      cy.getByData(testIds.orderDetailspage_orderStatusMap).within(() => {
+        cy.getByData(testIds.orderDetailspage_orderStateName).should('have.length', 4)
+
+        cy.getByData(testIds.orderDetailspage_orderStateName).eq(3).should('contain.text', 'Order Delivered')
+        cy.getByData(testIds.orderDetailspage_orderStateTime).eq(3).should('exist')
       })
     })
   })
@@ -198,7 +261,7 @@ describe('Order Details Page', () => {
           cy.getByData('submit').click()
           cy.wait('@updateOrder')
           cy.url().should('include', testIds.url_orderDetails)
-          cy.performStatus(statusResponse, 'statusResponse')
+          cy.performStatus(statusResponse('COMPLETE', 'Delivered'), 'statusResponse')
           cy.wait('@statusResponse')
         })
     })

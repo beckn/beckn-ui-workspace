@@ -60,6 +60,7 @@ declare global {
       performSupport(response: RouteHandler, aliasName: string): Chainable<void>
       performProfile(response: RouteHandler, aliasName: string): Chainable<void>
       performUpdateOrder(response: RouteHandler, aliasName: string): Chainable<void>
+      clearStatusMock(aliasName: string): Chainable<void>
     }
   }
 }
@@ -134,12 +135,6 @@ Cypress.Commands.add('selectMultiProduct', indexes => {
 
 Cypress.Commands.add('performInit', (response, aliasName) => {
   cy.intercept('POST', `${GCL_URL}/init`, response).as(aliasName)
-})
-
-Cypress.Commands.add('mockReduxState', (type, data) => {
-  cy.window().then(win => {
-    ;(win as any).store.dispatch({ type: type, payload: data })
-  })
 })
 
 Cypress.Commands.add('performSelect', (response, aliasName, button) => {
