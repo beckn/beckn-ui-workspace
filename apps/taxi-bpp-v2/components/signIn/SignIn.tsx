@@ -1,28 +1,24 @@
-// 'use client'
-import React, { useState } from 'react'
-import Router from 'next/router'
-import Cookies from 'js-cookie'
-import { Box, Flex, useToast } from '@chakra-ui/react'
+import React, { useState, useMemo } from 'react'
 import { BecknAuth } from '@beckn-ui/becknified-components'
-import { useLanguage } from '../../hooks/useLanguage'
-import { SignInPropsModel } from './Signin.types'
-import Styles from './SignIn.module.css'
-import { FormErrors, signInValidateForm } from '../../utilities/detailsForm-utils'
-import CustomToast from '../customToast/custom-toast'
-import { Typography } from '@beckn-ui/molecules'
+import { FormErrors, SignInFormProps } from '@beckn-ui/common/lib/types'
+import { useLoginMutation } from '@beckn-ui/common/src/services/User'
+import { signInValidateForm } from '@beckn-ui/common'
+import TaxiBapLogo from '@public/images/taxi-bap-logo.svg'
+import { useLanguage } from '@hooks/useLanguage'
+import { Box } from '@chakra-ui/react'
+import Router from 'next/router'
 
-const SignIn = () => {
-  const { t } = useLanguage()
-  const [formData, setFormData] = useState<SignInPropsModel>({ email: '', password: '' })
+const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
+  const [formData, setFormData] = useState<SignInFormProps>(initialFormData)
   const [formErrors, setFormErrors] = useState<FormErrors>({ email: '', password: '' })
-  const [isFormFilled, setIsFormFilled] = useState(false)
-  const toast = useToast()
+  const [login, { isLoading }] = useLoginMutation()
+  const { t } = useLanguage()
 
-  const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL
+  // Handle input change and validation
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
 
-    setFormData((prevFormData: SignInPropsModel) => ({
+    setFormData(prevFormData => ({
       ...prevFormData,
       [name]: value
     }))
@@ -32,14 +28,21 @@ const SignIn = () => {
       [name]: value
     }
 
-    const errors = signInValidateForm(updatedFormData) as any
+    const errors = signInValidateForm(updatedFormData)
     setFormErrors(prevErrors => ({
       ...prevErrors,
-      [name]: errors[name] || ''
+      [name]: t[`${errors[name as keyof FormErrors]}`] || ''
     }))
-    setIsFormFilled(updatedFormData.email.trim() !== '' && updatedFormData.password.trim() !== '')
   }
 
+  // Check if form is filled
+  const isFormFilled = useMemo(() => {
+    return (
+      Object.values(formData).every(value => value !== '') && Object.values(formErrors).every(value => value === '')
+    )
+  }, [formData, formErrors])
+
+  // Handle sign-in action
   const handleSignIn = async () => {
     const signInData = {
       identifier: formData.email,
@@ -47,120 +50,67 @@ const SignIn = () => {
     }
 
     try {
-      const response = await fetch(`${baseUrl}/auth/local`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(signInData)
-      })
-
-      if (response.ok) {
-        const data = await response.json()
-
-        const token = data.jwt
-        const email = data.user.email
-
-        Cookies.set('authToken', token)
-        Cookies.set('userEmail', email)
-        Router.push('/')
-      } else {
-        const errorData = await response.json()
-        toast({
-          render: () => (
-            <CustomToast
-              title="Error!"
-              message={errorData.error.message}
-            />
-          ),
-          position: 'top',
-          duration: 2000,
-          isClosable: true
-        })
-        console.error('Registration failed')
-      }
+      await login(signInData).unwrap()
+      Router.push('/')
     } catch (error) {
       console.error('An error occurred:', error)
+      // Handle error state or display error message
     }
   }
+
   return (
-    <Flex
-      height="100vh"
-      alignItems="center"
-      justifyContent="center"
+    <Box
       backgroundImage={"url('/images/ellipse.png')"}
       backgroundSize="cover"
       backgroundPosition={'center'}
       backgroundRepeat="no-repeat"
+      color={'#fff'}
+      padding="20px"
+      mt={'80px'}
+      h="calc(100vh - 80px)"
     >
-      <Box
-        width="100vw"
-        p="10%"
-      >
-        <Typography
-          text={t.loginHeaderText}
-          fontSize={'24px'}
-          fontFamily="poppins"
-          fontWeight="600"
-          color="#fff"
+      <Box>
+        <BecknAuth
+          schema={{
+            logo: {
+              src: TaxiBapLogo,
+              alt: 'taxi bap logo'
+            },
+            buttons: [
+              {
+                text: t.signIn,
+                handleClick: handleSignIn,
+                disabled: !isFormFilled,
+                variant: 'solid',
+                colorScheme: 'primary',
+                isLoading: isLoading,
+                dataTest: 'login-button'
+              }
+            ],
+            inputs: [
+              {
+                type: 'text',
+                name: 'email',
+                label: t.email,
+                value: formData.email,
+                handleChange: handleInputChange,
+                error: formErrors.email,
+                dataTest: 'input-email'
+              },
+              {
+                type: 'password',
+                name: 'password',
+                label: t.password,
+                value: formData.password,
+                handleChange: handleInputChange,
+                error: formErrors.password,
+                dataTest: 'input-password'
+              }
+            ]
+          }}
         />
-        <Box className={Styles.signin_container}>
-          <BecknAuth
-            schema={{
-              buttons: [
-                {
-                  text: t.signIn,
-                  handleClick: handleSignIn,
-                  disabled: !isFormFilled,
-                  variant: 'solid',
-                  colorScheme: 'primary'
-                }
-              ],
-              inputs: [
-                {
-                  type: 'text',
-                  name: 'email',
-                  placeholder: t.emailPlaceholder,
-                  value: formData.email,
-                  handleChange: handleInputChange,
-                  label: t.email,
-                  error: formErrors.email,
-                  variant: 'outline'
-                },
-                {
-                  type: 'password',
-                  name: 'password',
-                  placeholder: t.passwordPlaceholder,
-                  value: formData.password,
-                  handleChange: handleInputChange,
-                  label: t.password,
-                  error: formErrors.password,
-                  variant: 'outline'
-                }
-              ]
-            }}
-          />
-        </Box>
-        <Flex
-          width={'42%'}
-          mb="20px"
-          fontFamily="poppins"
-          fontWeight={'500'}
-          fontSize={'14px'}
-          justifyContent="space-between"
-          color={'#fff'}
-        >
-          {'New User?'}
-          <Typography
-            text={t.signUpText}
-            color={'#ABD4FA'}
-            fontFamily="poppins"
-            fontWeight={'500'}
-            fontSize={'14px'}
-          />
-        </Flex>
       </Box>
-    </Flex>
+    </Box>
   )
 }
 
