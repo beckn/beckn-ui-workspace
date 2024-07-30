@@ -44,7 +44,10 @@ const Settings = (props: TranslationProps) => {
             onClick={onCloseSettingBox}
           ></div>
           <div className={Styles.language_modal}>
-            <Language t={t} />
+            <Language
+              t={t}
+              locale={locale}
+            />
           </div>
         </>
       ) : null}
