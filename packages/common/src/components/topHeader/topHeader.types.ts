@@ -12,5 +12,5 @@ interface HeaderConstants {
 export interface HeaderProps extends TranslationProps {
   handleMenuClick?: () => void
   headerConstants: HeaderConstants
-  appLogo: string
+  appLogo?: string
 }

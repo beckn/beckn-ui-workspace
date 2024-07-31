@@ -46,7 +46,7 @@ const LanguageItem: React.FC<Props> = props => {
               htmlFor={language}
               style={{ padding: '0 12px', fontWeight: `${locale === language && 'bold'}` }}
             >
-              {t('language')}
+              {t(language)}
             </label>
           </div>
         </a>

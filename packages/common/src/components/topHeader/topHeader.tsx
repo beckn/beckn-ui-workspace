@@ -11,7 +11,7 @@ import { getLocalStorage, setLocalStorage } from '../../utils'
 import { HeaderProps } from './topHeader.types'
 import { testIds } from '@shared/dataTestIds'
 
-const Header: React.FC<HeaderProps> = ({ t, headerConstants, appLogo }) => {
+const Header: React.FC<HeaderProps> = ({ t, headerConstants, appLogo, locale }) => {
   const {
     blackList: { appLogoBlackList, homeIconBlackList, languageIconWhiteList, menuIconWhiteList }
   } = headerConstants
@@ -41,7 +41,12 @@ const Header: React.FC<HeaderProps> = ({ t, headerConstants, appLogo }) => {
             )}
           </Box>
           <Flex columnGap={['10px', '10px', '2rem', '2rem']}>
-            {languageIconWhiteList.includes(router.pathname) && <Settings t={t} />}
+            {languageIconWhiteList.includes(router.pathname) && (
+              <Settings
+                t={t}
+                locale={locale}
+              />
+            )}
             {!homeIconBlackList.includes(router.pathname) && (
               <Image
                 cursor="pointer"

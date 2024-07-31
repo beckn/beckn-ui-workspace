@@ -23,10 +23,12 @@ const Language = (props: TranslationProps) => {
         <Box mt="8px">
           <LanguageItem
             t={t}
+            locale={locale}
             language="en"
             onCloseBox={() => dispatch(settingBoxActions.closeSettingBox())}
           />
           <LanguageItem
+            locale={locale}
             t={t}
             language="fa"
             onCloseBox={() => dispatch(settingBoxActions.closeSettingBox())}

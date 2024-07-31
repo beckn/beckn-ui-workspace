@@ -1,427 +1,67 @@
-import React, { useEffect, useState } from 'react'
-import { BottomModal } from '@beckn-ui/molecules'
-
-import { useTheme, Box, Divider, Flex, HStack, Image, Text } from '@chakra-ui/react'
-import styles from './header.module.css'
-import { useSelector, useDispatch } from 'react-redux'
-import { logout } from '@store/auth-slice'
-
-import { useLanguage } from '../../hooks/useLanguage'
-import Qrcode from '@components/qrCode/Qrcode'
-import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
-import CartIconWithCount from './CartIcon'
-import Settings from './Settings'
-import { ICartRootState } from '@lib/types'
+import React from 'react'
+import { Box } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
-
-type PathnameObjectType = { [key: string]: string }
-
-const cartIconBlackList: string[] = [
-  '/orderConfirmation',
-  '/orderDetails',
-  '/trackOrder',
-  '/feedback',
-  '/orderHistory',
-  '/signIn',
-  '/mobileOtp',
-  '/checkoutPage',
-  '/paymentMode',
-  '/signUp',
-  '/invoiceDetails',
-  '/',
-  '/cart',
-  '/checkout',
-  '/profile',
-  '/orderCancellation',
-  '/updateShippingDetails',
-  '/orderCancellation'
-]
-
-const backIconList = ['/', '/signIn']
-
-const homeIconBlackList = ['/', '/signIn', '/mobileOtp', '/paymentMode', '/signUp']
-
-const storeHeaderBlackList = [
-  '/checkoutPage',
-  '/orderHistory',
-  '/orderDetails',
-  '/cart',
-  '/',
-  '/orderConfirmation',
-  'feedback',
-  '/',
-  '/signUp',
-  '/mobileOtp',
-  '/paymentMode',
-  '/invoiceDetails',
-  '/assemblyDetails',
-  '/updateShippingDetails',
-  '/orderCancellation',
-  '/profile',
-  '/search',
-  '/checkout',
-  '/signIn'
-]
-const headerValues: PathnameObjectType = {
-  '/checkoutPage': 'Review Purchase Order',
-  '/orderHistory': 'My Orders',
-  '/orderDetails': 'Order Details',
-  '/invoiceDetails': 'Invoice Details',
-  '/signIn': 'Sign In',
-  '/signUp': 'Sign Up',
-  '/cart': 'Cart',
-  '/paymentMode': 'Select Payment Method',
-  '/assemblyDetails': 'Add Assembly Details',
-  '/updateShippingDetails': 'Shipping Details',
-  '/orderCancellation': 'Order Cancel',
-  '/feedback': '',
-  '/profile': 'Profile',
-  '/search': 'Search results',
-  '/checkout': 'Billing & Shipping'
-}
-
-const headerValuesFrench: PathnameObjectType = {
-  '/checkoutPage': 'Revoir le bon de commande',
-  '/orderHistory': 'Mes commandes',
-  '/orderDetails': 'Détails de la commande',
-  '/invoiceDetails': 'Détails de la facture',
-  '/signIn': 'Se connecter',
-  '/signUp': "S'inscrire",
-  '/cart': 'Panier',
-  '/paymentMode': 'Sélectionner le mode de paiement',
-  '/assemblyDetails': "Ajouter les détails d'assemblage",
-  '/updateShippingDetails': 'Mettre à jour les informations de livraison',
-  '/orderCancellation': 'Annulation de commande',
-  '/feedback': '', // Leave empty as instructed
-  '/profile': 'Profil',
-  '/search': 'Résultats de recherche',
-  '/checkout': 'Facturation et livraison'
-}
-
-const topHeaderBlackList: string[] = []
-
-const bottomHeaderBlackList = ['/orderConfirmation', '/', '/searchByLocation']
-
-const menuIconWhiteList = ['/', '/search', '/profile', '/cart']
-const orderIconList = ['/orderDetails']
-const editIcon = ['/profile']
-const invoiceDownloadIcon = ['']
-const currentLocation = ['/']
-const appLogoBlackList = ['/signIn', '/signUp']
-
-const languageIconWhiteList = ['/', '/createProfile', '/signIn', '/signUp']
-
-const getHeaderTitleForPage = (name: string, logo: string, pathName: string, locale: string | undefined) => {
-  const values = locale === 'en' ? headerValues : headerValuesFrench
-  switch (true) {
-    case storeHeaderBlackList.includes(pathName):
-      return <Text className={styles.header_title_text}>{values[pathName]}</Text>
-    default:
-      return (
-        <Box className={styles.header_title}>
-          <Text className={styles.header_title_text}>{name}</Text>
-        </Box>
-      )
-  }
-}
-
-export interface TopHeaderProps {
-  handleMenuClick?: () => void
-}
-
-const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
-  const [isMenuModalOpen, setMenuModalOpen] = useState(false)
-  const dispatch = useDispatch()
-
-  const { t, locale } = useLanguage()
-  const router = useRouter()
-
-  const handleMenuModalClose = () => {
-    setMenuModalOpen(false)
-  }
-
-  return (
-    <>
-      <Box
-        className={styles.top_header}
-        padding={['0 20px', '0 20px', '0 20px', '0 10rem']}
-      >
-        <Box className={styles.top_header_wrapper}>
-          <Box>
-            {!appLogoBlackList.includes(router.pathname) && (
-              <Image
-                src={'/images/OSC_Icon.svg'}
-                alt="App logo"
-              />
-            )}
-          </Box>
-          <Flex columnGap={['10px', '10px', '2rem', '2rem']}>
-            {languageIconWhiteList.includes(router.pathname) && <Settings />}
-            {!homeIconBlackList.includes(router.pathname) && (
-              <Image
-                cursor="pointer"
-                w={'20px'}
-                h={'20px'}
-                onClick={() => {
-                  const user = localStorage.getItem('userPhone') as string
-                  localStorage.clear()
-                  localStorage.setItem('userPhone', user)
-                  router.push(`/`)
-                }}
-                src="/images/Home_icon.svg"
-                alt="home Icon"
-              />
-            )}
-
-            {menuIconWhiteList.includes(router.pathname) && (
-              <Image
-                cursor="pointer"
-                onClick={() => setMenuModalOpen(true)}
-                className="block"
-                src="/images/threeDots.svg"
-                alt="menu icon"
-              />
-            )}
-          </Flex>
-        </Box>
-      </Box>
-
-      {/* Menu Modal */}
-      <BottomModal
-        responsive={true}
-        title=""
-        isOpen={isMenuModalOpen}
-        onClose={handleMenuModalClose}
-      >
-        <Flex flexDirection="column">
-          <Box
-            onClick={() => {
-              router.push('/profile')
-              setMenuModalOpen(false)
-            }}
-            className={styles.top_header_modal}
-          >
-            <Image
-              src="/images/userProfile.svg"
-              alt="User profile"
-            />
-            {t['profileIcon']}
-          </Box>
-          <Box
-            onClick={() => {
-              router.push('/orderHistory')
-              setMenuModalOpen(false)
-            }}
-            className={styles.top_header_modal}
-          >
-            <Image
-              src="/images/orderHistoryIcon.svg"
-              alt="Order history icon"
-            />
-            {t['orderHistoryIcon']}
-          </Box>
-          <Box
-            onClick={() => {
-              dispatch(logout())
-              router.push('/signIn')
-              setMenuModalOpen(false)
-            }}
-            className={styles.top_header_modal}
-          >
-            <Image
-              src="/images/logOutIcon.svg"
-              alt="Log out"
-            />
-            <span style={{ color: 'red' }}>{t['logoutIcon']}</span>
-          </Box>
-        </Flex>
-      </BottomModal>
-    </>
-  )
-}
-const getLocalStorage = (item: string) => {
-  if (typeof window !== 'undefined' && window.localStorage) {
-    return localStorage.getItem(item)
-  } else {
-    return ''
-  }
-}
-
-const BottomHeader = () => {
-  const [optionTags, setOptionTags] = useState<any>()
-  const { t, locale } = useLanguage()
-  const [isOrderModalOpen, setOrderModalOpen] = useState(false)
-  const [isInvoiceModalOpen, setInvoiceModalOpen] = useState(false)
-  const cartItems = useSelector((state: ICartRootState) => state.cart.items)
-  const theme = useTheme()
-  const storedHeaderText = getLocalStorage('selectCardHeaderText')
-
-  const [currentAddress, setCurrentAddress] = useState('')
-  const [loadingForCurrentAddress, setLoadingForCurrentAddress] = useState(true)
-  const [currentLocationFetchError, setFetchCurrentLocationError] = useState('')
-  const handleInvoiceModalClose = () => {
-    setInvoiceModalOpen(false)
-  }
-  const handleOrderModalClose = () => {
-    setOrderModalOpen(false)
-  }
-  useEffect(() => {
-    setOptionTags(JSON.parse(localStorage.getItem('optionTags') as string))
-  }, [])
-
-  const router = useRouter()
-
-  return (
-    <header className={styles.bottom_header}>
-      <Box className={styles.bottom_header_wrapper}>
-        <Box
-          className={styles.bottom_header_innr}
-          padding={['0 20px', '0 20px', '0 20px', '0 10rem']}
-        >
-          <Box className={styles.bottom_header_backIcon}>
-            {!backIconList.includes(router.pathname) && (
-              <Box
-                onClick={() => router.back()}
-                cursor="pointer"
-              >
-                <Image
-                  src="/images/Back.svg"
-                  alt="Back icon"
-                />
-              </Box>
-            )}
-            {/* {currentLocation.includes(router.pathname) && (
-              <TopSheet
-                currentLocationFetchError={currentLocationFetchError}
-                loadingForCurrentAddress={loadingForCurrentAddress}
-                currentAddress={currentAddress}
-              />
-            )} */}
-          </Box>
-          {getHeaderTitleForPage(
-            // optionTags?.name,
-            storedHeaderText as string,
-            optionTags?.logo,
-            router.pathname,
-            locale
-          )}
-          <div className="flex gap-4">
-            {!cartIconBlackList.includes(router.pathname) && (
-              <CartIconWithCount
-                itemCount={cartItems.length}
-                handleClick={() => router.push('/cart')}
-              />
-            )}
-          </div>
-          {/* {editIcon.includes(router.pathname) && (
-            <Image
-              cursor="pointer"
-              src="/images/editIcon.svg"
-              alt="edit icon"
-              mr={'20px'}
-            />
-          )} */}
-          {orderIconList.includes(router.pathname) && (
-            <Image
-              cursor="pointer"
-              onClick={() => setOrderModalOpen(true)}
-              src="/images/downloadInvoice.svg"
-              alt="order icon"
-              mr={'20px'}
-            />
-          )}
-          {invoiceDownloadIcon.includes(router.pathname) && (
-            <Image
-              cursor="pointer"
-              onClick={() => setInvoiceModalOpen(true)}
-              src="/images/downloadInvoice.svg"
-              alt="invoice icon"
-              mr={'20px'}
-            />
-          )}
-        </Box>
-      </Box>
-      <BottomModal
-        responsive={true}
-        title=""
-        isOpen={isOrderModalOpen}
-        onClose={handleOrderModalClose}
-      >
-        <Box
-          onClick={() => {
-            router.push('/invoiceDetails')
-            setOrderModalOpen(false)
-          }}
-          className={styles.top_header_modal}
-        >
-          <Image
-            src="/images/invoiceDetails.svg"
-            alt="invoice Details icon"
-          />
-          {t['invoiceDetails']}
-        </Box>
-      </BottomModal>
-      <BottomModal
-        isOpen={isInvoiceModalOpen}
-        onClose={handleInvoiceModalClose}
-        responsive={true}
-      >
-        <Box p={'0px 24px'}>
-          <Box
-            textAlign={'center'}
-            fontSize={'15px'}
-          >
-            <Text>{t.scanthisQR}</Text>
-            <Text mb={'20px'}>{t.toImportthisorderanotherapp}</Text>
-          </Box>
-
-          <HStack
-            alignItems={'center'}
-            justifyContent={'center'}
-            p={'20px'}
-          >
-            <Qrcode value={'https://odr-dev.becknprotocol.io/'} />
-          </HStack>
-
-          <Flex
-            align="center"
-            pt={'20px'}
-            w={'70%'}
-            margin={'0 auto'}
-          >
-            <Divider />
-            <Text
-              padding="2"
-              fontSize={'12px'}
-            >
-              {t.or}
-            </Text>
-            <Divider />
-          </Flex>
-          <Text
-            pb={'20px'}
-            fontSize={'12px'}
-            textAlign={'center'}
-          >
-            {t.clicktheShopbuttontobuyitemsforthistrip}
-          </Text>
-          <BecknButton children={t.proceed} />
-        </Box>
-      </BottomModal>
-    </header>
-  )
-}
+import { useLanguage } from '@hooks/useLanguage'
+import { TopHeader, SubHeader } from '@beckn-ui/common'
+import Constants from './constants'
 
 const Header = () => {
+  const {
+    TopHeader: { appLogoBlackList, homeIconBlackList, languageIconWhiteList, menuIconWhiteList, topHeaderBlackList },
+    SubHeader: {
+      backIconList,
+      bottomHeaderBlackList,
+      cartIconBlackList,
+      headerBlackList,
+      headerFrenchNames,
+      headerNames,
+      invoiceDownloadIcon,
+      orderIconList
+    }
+  } = Constants
+
   const router = useRouter()
+  const { t, locale } = useLanguage()
 
   const renderTopHeader = !topHeaderBlackList.includes(router.pathname)
   const renderBottomHeader = !bottomHeaderBlackList.includes(router.pathname)
 
   return (
     <Box>
-      {renderTopHeader && <TopHeader />}
-      {renderBottomHeader && <BottomHeader />}
+      {renderTopHeader && (
+        <TopHeader
+          appLogo="/images/OSC_Icon.svg"
+          t={key => t[key]}
+          locale={locale!}
+          headerConstants={{
+            blackList: {
+              appLogoBlackList,
+              homeIconBlackList,
+              languageIconWhiteList,
+              menuIconWhiteList
+            }
+          }}
+        />
+      )}
+      {renderBottomHeader && (
+        <SubHeader
+          locale={locale!}
+          t={key => t[key]}
+          headerConstants={{
+            headerNames: {
+              defaultNames: headerNames,
+              frenchNames: headerFrenchNames
+            },
+            blackList: {
+              headerList: headerBlackList,
+              backIconList: backIconList,
+              orderIconList: orderIconList,
+              cartIconList: cartIconBlackList,
+              invoiceDownloadIconList: invoiceDownloadIcon
+            }
+          }}
+        />
+      )}
     </Box>
   )
 }

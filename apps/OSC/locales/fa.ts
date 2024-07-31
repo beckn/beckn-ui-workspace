@@ -414,6 +414,9 @@ const fa: { [key: string]: string } = {
   errorCountry1: 'Le pays ne peut contenir que des lettres et des espaces',
   errorState1: "L'état ne peut contenir que des lettres et des espaces",
   errorCity1: 'La ville ne peut contenir que des lettres et des espaces',
-  invalidPincode: 'Code postal invalide'
+  invalidPincode: 'Code postal invalide',
+  accessToProvideLocation: "Veuillez fournir la permission d'accéder à des services meilleurs et sans tracas",
+  searchforlocation: 'Rechercher un emplacement',
+  devicelocationisnotenabled: "Le service de localisation de l'appareil n'est pas activé"
 }
 export default fa
