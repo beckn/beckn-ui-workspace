@@ -3,67 +3,129 @@ import dynamic from 'next/dynamic'
 import { useSelector } from 'react-redux'
 import { IGeoLocationSearchPageRootState, TopSheet, useGeolocation } from '@beckn-ui/common'
 import { useLanguage } from '@hooks/useLanguage'
-import { BottomModal } from '@beckn-ui/molecules'
+import { BottomModal, ButtonProps } from '@beckn-ui/molecules'
 import RideSummaryHeader from '@components/ride-summary/rideSummaryHeader'
 import RideSummary from '@components/ride-summary/rideSummary'
+import OfflineModal from '@components/BottomModal'
+import { ModalDetails, ModalTypes, RideDetailsModel } from '@lib/types/mapScreen'
 
 const Homepage = () => {
-  const MapWithNoSSR = dynamic(() => import('../components/Map'), { ssr: false })
+  const MapWithNoSSR: any = dynamic(() => import('../components/Map'), { ssr: false })
 
   const [onlineStatus, setOnlineStatus] = useState<boolean>(false)
+  const [currentModal, setCurrentModal] = useState<ModalDetails>()
+
   const { t } = useLanguage()
   const apiKeyForGoogle = process.env.NEXT_PUBLIC_GOOGLE_API_KEY
 
-  const [rideStatuses, setRideStatus] = useState([
-    {
-      id: 'pick-up',
-      title: 'Going for Pick-up',
-      subTitle: 'You have reached Pickup location',
-      time: '5 min away',
-      distance: '5 Kms',
-      source: 'Raja Dinkar Kelkar Museum',
-      destination: '',
-      buttonText: 'Start Ride',
-      buttonDisabled: false
-    },
-    {
-      id: 'ride-started',
-      title: 'Ride Started',
-      subTitle: 'Heading to destination',
-      time: 'Estimated time: 15 min',
-      distance: '10 Kms',
-      source: 'Raja Dinkar Kelkar Museum',
-      destination: 'Destination',
-      buttonText: 'ride-started',
-      buttonDisabled: false
-    },
-    {
-      id: 'completed',
-      title: 'Ride Completed',
-      subTitle: 'You have reached the destination',
-      time: 'Completed',
-      distance: '0 Kms',
-      source: 'Raja Dinkar Kelkar Museum',
-      destination: 'Destination',
-      buttonText: 'Completed',
-      buttonDisabled: false
-    },
-    {
-      id: 'end',
-      title: 'End of Ride',
-      subTitle: 'The ride has ended',
-      time: 'End',
-      distance: '0 Kms',
-      source: 'Raja Dinkar Kelkar Museum',
-      destination: 'Destination',
-      buttonText: 'End',
-      buttonDisabled: true
-    }
-    // Additional ride statuses can be added here
-  ])
+  const handleModalSubmit = () => {}
 
-  const [currentStatusIndex, setCurrentStatusIndex] = useState(0)
-  const [currentModalId, setCurrentModalId] = useState<string | null>(null)
+  const updateCurrentModal = (modalType: ModalTypes, data?: RideDetailsModel) => {
+    let modalDetails
+
+    const defaultBtnState: ButtonProps = {
+      handleClick: handleModalSubmit,
+      disabled: false,
+      variant: 'solid',
+      colorScheme: 'primary'
+    }
+
+    if (modalType === 'REQ_NEW_RIDE') {
+      modalDetails = {
+        id: 'REQ_NEW_RIDE',
+        title: 'New Ride Request',
+        subTitle: '',
+        rideDetails: {
+          time: '5 min away',
+          distance: '5 Kms',
+          source: 'Raja Dinkar Kelkar Museum',
+          destination: 'Destination'
+        },
+        buttons: [
+          {
+            ...defaultBtnState,
+            text: 'Accept'
+          },
+          {
+            ...defaultBtnState,
+            text: 'Decline',
+            variant: 'outline',
+            color: 'red'
+          }
+        ]
+      }
+    } else if (modalType === 'PICK_UP') {
+      modalDetails = {
+        id: 'PICK_UP',
+        title: 'Going for Pick-up',
+        subTitle: 'You have reached Pickup location',
+        rideDetails: { time: '5 min away', distance: '5 Kms', source: 'Raja Dinkar Kelkar Museum', destination: '' },
+        buttons: [
+          {
+            ...defaultBtnState,
+            text: 'Start Ride'
+          }
+        ]
+      }
+    } else if (modalType === 'RIDE_STARTED') {
+      modalDetails = {
+        id: 'RIDE_STARTED',
+        title: 'Ride Started',
+        subTitle: 'Heading to destination',
+        rideDetails: {
+          time: 'Estimated time: 15 min',
+          distance: '10 Kms',
+          source: 'Raja Dinkar Kelkar Museum',
+          destination: 'Destination'
+        },
+        buttons: [
+          {
+            ...defaultBtnState,
+            text: 'ride-started',
+            colorScheme: 'red'
+          }
+        ]
+      }
+    } else if (modalType === 'COMPLETED') {
+      modalDetails = {
+        id: 'COMPLETED',
+        title: 'Ride Completed',
+        subTitle: 'You have reached the destination',
+        rideDetails: {
+          time: 'Completed',
+          distance: '0 Kms',
+          source: 'Raja Dinkar Kelkar Museum',
+          destination: 'Destination'
+        },
+        buttons: [
+          {
+            ...defaultBtnState,
+            text: 'Completed'
+          }
+        ]
+      }
+    } else if (modalType === 'END') {
+      modalDetails = {
+        id: 'END',
+        title: 'End of Ride',
+        subTitle: 'The ride has ended',
+        rideDetails: {
+          time: 'End',
+          distance: '0 Kms',
+          source: 'Raja Dinkar Kelkar Museum',
+          destination: 'Destination'
+        },
+        buttons: [
+          {
+            ...defaultBtnState,
+            text: 'End'
+          }
+        ]
+      }
+    }
+
+    setCurrentModal(modalDetails as ModalDetails)
+  }
 
   const geoLocationSearchPageSelectedLatLong = useSelector(
     (state: IGeoLocationSearchPageRootState) => state.geoLocationSearchPageUI.geoLatLong
@@ -85,10 +147,6 @@ const Homepage = () => {
     }
   }, [])
 
-  useEffect(() => {
-    setCurrentModalId(rideStatuses[currentStatusIndex].id)
-  }, [currentStatusIndex, rideStatuses])
-
   const handleOnEnableLocation = () => {
     setEnableLocation?.(true)
   }
@@ -105,12 +163,39 @@ const Homepage = () => {
     )
   }, [coordinates, selectLatLong])
 
-  const handleClick = () => {
-    setCurrentStatusIndex(prevIndex => Math.min(prevIndex + 1, rideStatuses.length - 1))
-  }
+  const renderModals = useCallback(() => {
+    return (
+      <>
+        <OfflineModal isOpen={!onlineStatus} />
+        {onlineStatus && currentModal && Object.keys(currentModal).length > 0 && (
+          <BottomModal
+            onClose={() => {}}
+            isOpen={true}
+            title={
+              currentModal.id === 'REQ_NEW_RIDE' ? (
+                currentModal.title
+              ) : (
+                <RideSummaryHeader
+                  driverImg="/images/car.svg"
+                  title={currentModal.title}
+                  subTitle={currentModal.subTitle}
+                />
+              )
+            }
+          >
+            <RideSummary
+              time={currentModal.rideDetails.time}
+              distance={currentModal.rideDetails.distance}
+              source={currentModal.rideDetails.source}
+              destination={currentModal.rideDetails.destination}
+              buttons={currentModal.buttons}
+            />
+          </BottomModal>
+        )}
+      </>
+    )
+  }, [currentModal, onlineStatus])
 
-  const currentStatus = rideStatuses[currentStatusIndex]
-  console.log(currentStatus)
   return (
     <>
       <TopSheet
@@ -126,36 +211,13 @@ const Homepage = () => {
           const newStatus = !onlineStatus
           setOnlineStatus(newStatus)
           localStorage.setItem('onlineStatus', JSON.stringify(newStatus))
+          if (onlineStatus) {
+            updateCurrentModal('COMPLETED')
+          }
         }}
       />
       {renderMap()}
-      <BottomModal
-        onClose={() => {}}
-        isOpen={true}
-        title={
-          <RideSummaryHeader
-            driverImg="/images/car.svg"
-            title={currentStatus.title}
-            subTitle={currentStatus.subTitle}
-          />
-        }
-      >
-        <RideSummary
-          time={currentStatus.time}
-          distance={currentStatus.distance}
-          source={currentStatus.source}
-          destination={currentStatus.destination}
-          buttons={[
-            {
-              text: currentStatus.buttonText,
-              handleClick,
-              disabled: currentStatus.buttonDisabled,
-              variant: 'solid',
-              colorScheme: 'primary'
-            }
-          ]}
-        />
-      </BottomModal>
+      {renderModals()}
     </>
   )
 }

@@ -8,4 +8,5 @@ export interface BottomModalProps {
   responsive?: boolean
   responsiveBottomGap?: string
   dataTest?: string
+  overlay?: boolean
 }

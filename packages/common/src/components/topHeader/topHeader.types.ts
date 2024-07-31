@@ -9,8 +9,17 @@ interface HeaderConstants {
   }
 }
 
+interface MenuItems {
+  id: string
+  label: string
+  icon: string
+  href: string
+  color?: string
+}
+
 export interface HeaderProps extends TranslationProps {
   handleMenuClick?: () => void
   headerConstants: HeaderConstants
   appLogo?: string
+  menuItems?: MenuItems[]
 }

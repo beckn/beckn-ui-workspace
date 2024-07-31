@@ -2,7 +2,11 @@
 import { useLoadScript, GoogleMap, MarkerF } from '@react-google-maps/api'
 import { useMemo } from 'react'
 
-const Map = ({ coordinates }) => {
+interface MapProps {
+  coordinates: { latitude: number; longitude: number }
+}
+
+const Map = ({ coordinates }: MapProps) => {
   const { latitude, longitude } = coordinates || {}
   const libraries = useMemo(() => ['places'], [])
   const mapCenter = useMemo(() => ({ lat: latitude, lng: longitude }), [coordinates])
@@ -16,7 +20,7 @@ const Map = ({ coordinates }) => {
     []
   )
   const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY,
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY!,
     libraries: libraries as any
   })
 
@@ -32,9 +36,6 @@ const Map = ({ coordinates }) => {
     <>
       <GoogleMap
         options={mapOptions}
-        zoomControl={true}
-        scrollWheelZoom={true}
-        zoomAnimation={true}
         zoom={16}
         center={mapCenter}
         mapTypeId={google.maps.MapTypeId.ROADMAP}
