@@ -272,3 +272,8 @@ select:-webkit-autofill:focus {
 .hideScroll::-webkit-scrollbar {
   display: none;
 }
+.chakra-portal .chakra-modal__content-container,
+.chakra-portal .chakra-modal__overlay {
+  z-index: unset !important;
+  background: unset !important;
+}
