@@ -57,10 +57,17 @@ const BottomModal: React.FC<BottomModalProps> = ({
           alignItems={'center'}
           padding={'15px 20px'}
         >
-          <Typography
+          {/* <Typography
             text={title!}
             variant="titleRegular"
-          />
+          /> */}
+          <Box
+            fontSize={'17px'}
+            fontWeight="400"
+            w={'100%'}
+          >
+            {title!}
+          </Box>
         </Flex>
         <Box>
           <Divider />

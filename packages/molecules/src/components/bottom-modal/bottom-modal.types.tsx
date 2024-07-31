@@ -1,9 +1,9 @@
-import { ReactNode } from 'react'
+import { ReactElement, ReactNode } from 'react'
 
 export interface BottomModalProps {
   onClose: () => void
   isOpen: boolean
-  title?: string
+  title?: string | ReactElement
   children: ReactNode
   responsive?: boolean
   responsiveBottomGap?: string
