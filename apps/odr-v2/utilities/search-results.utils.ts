@@ -9,7 +9,6 @@ const dummyLocation = [
 
 export const parsedSearchlist = (data: SearchResponseModel[]) => {
   const itemsarray: ParsedItemModel[] = []
-
   data.forEach(entry => {
     const context = entry.context
     const message = entry.message
@@ -17,23 +16,18 @@ export const parsedSearchlist = (data: SearchResponseModel[]) => {
     const transactionId = context.transaction_id
     const bppId = context.bpp_id
     const bppUri = context.bpp_uri
-
     message.providers.forEach(provider => {
       try {
         const stringifiedLatLong = provider.locations ? provider.locations[0].gps : dummyLocation[0].gps
         const [stringifiedLatitude, stringifiedLongitude] = stringifiedLatLong.split(', ')
-
         const latitude = parseFloat(stringifiedLatitude)
         const longitude = parseFloat(stringifiedLongitude)
-
         const providerCoordinates = {
           latitude,
           longitude
         }
-
         const providerId = provider.id
         // const rating = provider.rating
-
         provider.items.forEach(item => {
           itemsarray.push({
             id: providerId,

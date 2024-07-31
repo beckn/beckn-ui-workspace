@@ -12,7 +12,7 @@ import styles from './Layout.module.css'
 import { IGeoLocationSearchPageRootState } from '@lib/types/geoLocationSearchPage'
 import GeoLocationInputList from '@components/geoLocationInput/GeoLocationInputList'
 import { Box, Text, useToast } from '@chakra-ui/react'
-import { FeedbackRootState, ToastType, feedbackActions } from '@store/ui-feedback-slice'
+import { feedbackActions, ToastType, FeedbackRootState } from '@beckn-ui/common/src/store'
 import { Toast } from '@beckn-ui/molecules/src/components'
 
 const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {

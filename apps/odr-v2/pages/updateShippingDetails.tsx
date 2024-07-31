@@ -8,7 +8,7 @@ import { useLanguage } from '@hooks/useLanguage'
 import { v4 as uuidv4 } from 'uuid'
 import { useRouter } from 'next/router'
 import { useDispatch } from 'react-redux'
-import { feedbackActions } from '@store/ui-feedback-slice'
+import { feedbackActions } from '@beckn-ui/common/src/store'
 
 const fieldConfig: FormField[] = [
   {
