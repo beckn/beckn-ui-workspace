@@ -1,11 +1,11 @@
 // @ts-nocheck
 import { useLoadScript, GoogleMap, MarkerF } from '@react-google-maps/api'
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 
-const Map = ({ coords }) => {
-  const { lat, long } = coords
+const Map = ({ coordinates }) => {
+  const { latitude, longitude } = coordinates || {}
   const libraries = useMemo(() => ['places'], [])
-  const mapCenter = useMemo(() => ({ lat: lat, lng: long }), [])
+  const mapCenter = useMemo(() => ({ lat: latitude, lng: longitude }), [coordinates])
 
   const mapOptions = useMemo<google.maps.MapOptions>(
     () => ({
@@ -15,28 +15,36 @@ const Map = ({ coords }) => {
     }),
     []
   )
-  const { isLoaded } = useLoadScript({
+  const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY,
     libraries: libraries as any
   })
+
+  if (loadError) {
+    return <div>Error loading maps</div>
+  }
+
+  if (!isLoaded) {
+    return <div>Loading...</div>
+  }
 
   return (
     <>
       <GoogleMap
         options={mapOptions}
-        zoomControl={false}
+        zoomControl={true}
         scrollWheelZoom={true}
         zoomAnimation={true}
-        zoom={14}
+        zoom={16}
         center={mapCenter}
         mapTypeId={google.maps.MapTypeId.ROADMAP}
-        mapContainerStyle={{ maxHeight: '100vh', height: '90vh' }}
+        mapContainerStyle={{ maxHeight: '100vh', height: '100vh' }}
       >
         <MarkerF
           position={mapCenter}
-          icon={{
-            url: './images/ripple.svg'
-          }}
+          // icon={{
+          //   url: './images/ripple.svg'
+          // }}
         />
       </GoogleMap>
     </>
