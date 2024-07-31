@@ -5,6 +5,7 @@ import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import orderHistoreyPageIcon from '../../public/images/orderHistoryPageIcon.svg'
 import { useLanguage } from '@hooks/useLanguage'
 import { useRouter } from 'next/router'
+import { testIds } from '@shared/dataTestIds'
 
 const EmptyOrder = () => {
   const { t } = useLanguage()
@@ -21,7 +22,10 @@ const EmptyOrder = () => {
         mb={'20px'}
         gap={'6px'}
       >
-        <Image src={orderHistoreyPageIcon} />
+        <Image
+          src={orderHistoreyPageIcon}
+          data-test={testIds.empty_order_image}
+        />
 
         <Text
           as={Typography}
@@ -29,6 +33,7 @@ const EmptyOrder = () => {
           fontWeight="600"
           fontSize={'15px'}
           align={'center'}
+          dataTest={testIds.emptyOrderHistoryText}
         />
         <Text
           as={Typography}
@@ -36,10 +41,12 @@ const EmptyOrder = () => {
           fontWeight="400"
           fontSize={'15px'}
           align={'center'}
+          dataTest={testIds.noExistingWorkflowText}
         />
       </Flex>
 
       <BecknButton
+        dataTest={testIds.emptyOrder_button}
         children="Create New Workflow"
         handleClick={() => router.push('/')}
       />

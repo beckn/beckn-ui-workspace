@@ -122,7 +122,12 @@ export const statusResponse = (orderStatus: 'ACTIVE' | 'COMPLETE', trackingStatu
                     email: shippingDetails.email
                   }
                 },
-                tracking: false
+                tracking: false,
+                state: {
+                  descriptor: {
+                    code: trackingStatus
+                  }
+                }
               }
             ],
             quote: {

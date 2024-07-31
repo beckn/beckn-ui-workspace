@@ -10,6 +10,7 @@ import { useRouter } from 'next/router'
 import EmptyOrder from '@components/orderHistory/emptyOrder'
 import { orderHistoryData } from '@beckn-ui/common/lib/types'
 import { orderActions } from '@beckn-ui/common/src/store/order-slice'
+import { testIds } from '@shared/dataTestIds'
 
 const orderStatusMap: Record<string, string> = {
   'In Review': 'Pending'
@@ -41,6 +42,7 @@ const OrderHistory = () => {
         if (result.error) {
           return setError(result.error.message)
         }
+        console.log(result.data.reverse())
         setOrderHistoryList(result.data.reverse())
         setIsLoading(false)
       })
@@ -96,6 +98,7 @@ const OrderHistory = () => {
             return (
               <DetailCard key={idx}>
                 <Flex
+                  data-test={testIds.order_history_main_container}
                   onClick={() => {
                     const orderObjectForStatusCall = {
                       bppId: order.attributes.bpp_id,
@@ -114,6 +117,7 @@ const OrderHistory = () => {
                     text={`Placed at ${formatTimestamp(order.attributes.createdAt)}`}
                     fontWeight="400"
                     fontSize={'12px'}
+                    dataTest={testIds.orderHistory_createdAt}
                   />
 
                   <Text
@@ -121,6 +125,7 @@ const OrderHistory = () => {
                     text={`Order ID: ${order.attributes.order_id}`}
                     fontWeight="400"
                     fontSize={'12px'}
+                    dataTest={testIds.orderHistory_order_id}
                   />
 
                   <Text
@@ -128,6 +133,7 @@ const OrderHistory = () => {
                     text={`${order.attributes.quote.price.currency} ${order.attributes.quote.price.value}`}
                     fontWeight="600"
                     fontSize={'12px'}
+                    dataTest={testIds.orderHistory_Price}
                   />
 
                   <Flex
@@ -146,6 +152,7 @@ const OrderHistory = () => {
                       <Image
                         src={pendingIcon}
                         paddingRight={'6px'}
+                        data-test={testIds.orderHistory_pendingIcon}
                       />
                       <Text>{orderStatusMap[order.attributes.delivery_status]}</Text>
                     </Flex>

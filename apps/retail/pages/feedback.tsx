@@ -13,6 +13,7 @@ import LoaderWithMessage from '@components/loader/LoaderWithMessage'
 import { StatusRootState } from '@beckn-ui/common/src/store/status-slice'
 import { StatusResponseModel } from '@beckn-ui/common/lib/types'
 import { feedbackActions } from '@beckn-ui/common/src/store/ui-feedback-slice'
+import { testIds } from '@shared/dataTestIds'
 
 const Feedback = () => {
   const { t } = useLanguage()
@@ -51,6 +52,7 @@ const Feedback = () => {
       }
 
       const ratingResponse = await axios.post(`${apiUrl}/rating`, ratingPayload)
+      console.log(ratingResponse)
       if (ratingResponse.data.data.length > 0) {
         dispatch(
           feedbackActions.setToastData({
@@ -102,6 +104,7 @@ const Feedback = () => {
         <Image
           src={feedbackImg}
           margin={'0 auto'}
+          data-test={testIds.feedback_image}
         />
       </Box>
       <Box>
@@ -118,6 +121,7 @@ const Feedback = () => {
             text={t.orderDeliveredOnTime}
             fontSize={'15px'}
             fontWeight={600}
+            dataTest={testIds.feedbackPage_orderDeliveredOnTime}
           />
           {isDesktop && (
             <Typography
@@ -132,6 +136,7 @@ const Feedback = () => {
             text={t.pleaseShareYourFeedback}
             fontSize={'12px'}
             fontWeight={400}
+            dataTest={testIds.feedbackPage_pleaseShareYourFeedback}
           />
         </Box>
 
@@ -150,6 +155,7 @@ const Feedback = () => {
             fontSize={'15px'}
             fontWeight={400}
             mb={'10px'}
+            dataTest={testIds.feedbackPage_addCommentsHere}
           />
           <Textarea
             value={feedback}
@@ -158,6 +164,7 @@ const Feedback = () => {
             resize={'none'}
             mb={'20px'}
             placeholder={t.writeExperience}
+            data-test={testIds.feedback_textarea}
             boxShadow={'0px 4px 6px -1px rgba(0, 0, 0, 0.1), 0px 2px 4px -2px rgba(0, 0, 0, 0.1)'}
           />
           <Box
@@ -167,12 +174,14 @@ const Feedback = () => {
           >
             <BecknButton
               children="Submit Review"
+              dataTest={testIds.feedback_submitReview}
               className="checkout_btn "
               disabled={!ratingForStore}
               handleClick={() => handleSubmitReview(statusResponse)}
             />
             <BecknButton
               children="Skip for Now"
+              dataTest={testIds.feedback_skip_forNow}
               variant="outline"
               className="checkout_btn"
               handleClick={() => router.push('/')}

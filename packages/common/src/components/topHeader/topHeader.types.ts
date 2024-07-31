@@ -15,6 +15,7 @@ interface MenuItems {
   icon: string
   href: string
   color?: string
+  dataTest?: string
 }
 
 export interface HeaderProps extends TranslationProps {
