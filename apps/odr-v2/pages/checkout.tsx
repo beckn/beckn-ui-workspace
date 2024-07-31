@@ -13,11 +13,9 @@ import { ShippingSection, ShippingFormInitialValuesType } from '@beckn-ui/beckni
 import { Button, LoaderWithMessage } from '@beckn-ui/molecules'
 
 import { useRouter } from 'next/router'
-import { CheckoutRootState, checkoutActions } from '@store/checkout-slice'
-import { cartActions } from '@store/cart-slice'
+import { CheckoutRootState, DiscoveryRootState, cartActions } from '@beckn-ui/common/src/store'
 import { isEmpty } from '@utils/common-utils'
 import AddSection from '@components/x-input/AddSection'
-import { DiscoveryRootState } from '@store/discovery-slice'
 import { useInitMutation } from '@beckn-ui/common/src/services/init'
 import { useSelectMutation } from '@beckn-ui/common/src/services/select'
 
@@ -107,22 +105,6 @@ const CheckoutPage = () => {
       getInitPayload(data, cartItems, transactionId, DOMAIN, { id, type }).then(res => {
         return initialize(res)
       })
-      // TODO :_ To check this again
-
-      // if (isBillingAddressSameAsShippingAddress) {
-      //   const copiedFormData = structuredClone(data);
-      //   setBillingFormData(copiedFormData);
-      // }
-
-      // const cartItemsPerBppPerProvider: DataPerBpp = getCartItemsPerBpp(cartItems as CartItemForRequest[])
-
-      // const payLoadForInitRequest = getPayloadForInitRequest(
-      //   cartItemsPerBppPerProvider,
-      //   transactionId,
-      //   data,
-      //   billingFormData
-      // )
-      // initRequest.fetchData(`${apiUrl}/client/v2/initialize_order`, 'POST', payLoadForInitRequest)
     }
   }
 

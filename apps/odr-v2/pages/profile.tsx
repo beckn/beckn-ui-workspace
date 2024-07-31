@@ -10,7 +10,7 @@ import Router from 'next/router'
 import { toast as reactToastifyToast } from 'react-toastify'
 import { isEmpty } from '@utils/common-utils'
 import { useDispatch } from 'react-redux'
-import { feedbackActions } from '@store/ui-feedback-slice'
+import { feedbackActions } from '@beckn-ui/common/src/store'
 import axios from '@services/axios'
 
 const ProfilePage = () => {
