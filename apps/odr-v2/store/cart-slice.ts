@@ -2,7 +2,6 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { ICart } from '../lib/types/cart'
 import { RetailItem } from '../lib/types/products'
 import { Item, ParsedItemModel } from '@lib/types'
-import { calculateDiscountPercentage } from '../utilities/calculateDiscountPercentage'
 
 const initialState: ICart = {
   items: [],
