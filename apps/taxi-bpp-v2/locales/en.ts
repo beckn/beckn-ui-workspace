@@ -18,6 +18,16 @@ const en: { [key: string]: string } = {
   signIn: 'Sign In',
   signUp: 'Sign Up',
   signUpText: 'SignUp',
-  loginHeaderText: 'Welcome to the Taxi Hub App'
+  loginHeaderText: 'Welcome to the Taxi Hub App',
+  yourLocation: 'Select location',
+  devicelocationisnotenabled: '  Device location is not enabled',
+  accessToProvideLocation: '  Please provide the permission to access better & hassle free services',
+  enableLocation: '  Enable Location',
+  or: ' Or',
+  searchforlocation: 'Search For Location',
+  search: 'Search',
+  orderHistoryIcon: 'My Rides',
+  profileIcon: 'My Profile',
+  logoutIcon: 'Logout'
 }
 export default en

@@ -22,7 +22,7 @@ export default function Document() {
         />
         <link
           rel="shortcut icon"
-          href="./images/taxiIcon.svg"
+          href="./images/taxi_hub.svg"
         />
       </Head>
       <body>

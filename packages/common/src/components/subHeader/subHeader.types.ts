@@ -8,9 +8,9 @@ export interface SubHeaderConstants {
   blackList: {
     headerList: string[]
     backIconList: string[]
-    orderIconList: string[]
-    cartIconList: string[]
-    invoiceDownloadIconList: string[]
+    orderIconList?: string[]
+    cartIconList?: string[]
+    invoiceDownloadIconList?: string[]
   }
 }
 

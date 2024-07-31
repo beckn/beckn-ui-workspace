@@ -10,7 +10,8 @@ import {
   Flex,
   Input,
   useTheme,
-  Skeleton
+  Skeleton,
+  Switch
 } from '@chakra-ui/react'
 import Styles from './topSheet.module.css'
 import { useDispatch, useSelector } from 'react-redux'
@@ -20,13 +21,19 @@ import { IGeoLocationSearchPageRootState } from '@beckn-ui/common/lib/types'
 import { toggleLocationSearchPageVisibility } from '@beckn-ui/common/src/store/geoMapLocationSearch-slice'
 import { TopSheetComponentProps } from './topSheet.types'
 import { testIds } from '@shared/dataTestIds'
+import { Button, Typography } from '@beckn-ui/molecules'
 
 const TopSheet: React.FC<TopSheetComponentProps> = ({
   currentAddress,
   currentLocationFetchError,
   loadingForCurrentAddress,
   t,
-  searchPlaceholder = t('searchforlocation')
+  searchPlaceholder = t('searchforlocation'),
+  enableLocation = false,
+  handleOnEnableLocation,
+  onlineOfflineSwitch = false,
+  onlineStatus,
+  handleOnSwitch
 }) => {
   const theme = useTheme()
   const router = useRouter()
@@ -46,7 +53,7 @@ const TopSheet: React.FC<TopSheetComponentProps> = ({
   }
 
   const renderAddressText = currentLocationFetchError || geoLocationSearchPageSelectedAddress || currentAddress || ''
-
+  console.log(onlineStatus)
   return (
     <Box className={isSearchPage ? Styles.searchTopSheetMargin : ''}>
       <Box
@@ -57,7 +64,6 @@ const TopSheet: React.FC<TopSheetComponentProps> = ({
           justifyContent="space-between"
           alignItems="center"
           columnGap="10px"
-          p="8px"
           pl="unset"
         >
           <Image src={'/images/setLocation.svg'} />
@@ -98,6 +104,14 @@ const TopSheet: React.FC<TopSheetComponentProps> = ({
             </Flex>
           </Box>
         </Flex>
+        {onlineOfflineSwitch && (
+          <Switch
+            size="lg"
+            isChecked={onlineStatus}
+            colorScheme={'green'}
+            onChange={handleOnSwitch}
+          />
+        )}
       </Box>
       <Modal
         isCentered
@@ -163,6 +177,25 @@ const TopSheet: React.FC<TopSheetComponentProps> = ({
                 width="24px"
               />
             </Box>
+            {enableLocation && (
+              <Flex
+                alignItems={'center'}
+                justifyContent={'center'}
+                flexDirection={'column'}
+              >
+                <Typography
+                  text={t('or')}
+                  style={{ margin: '5% 0 5% 0' }}
+                />
+                <Button
+                  leftIcon={<Image src="/images/enable_location.svg" />}
+                  text={t('enableLocation')}
+                  color={'#1A202C'}
+                  handleClick={handleOnEnableLocation}
+                  colorScheme={'primary'}
+                />
+              </Flex>
+            )}
           </Box>
         </ModalContent>
       </Modal>

@@ -13,3 +13,4 @@ export { default as ProgressSummary } from './orderDetails/subComponents/progres
 export { default as OrderOverView } from './orderDetails/subComponents/orderOverView'
 export { default as OrderSummary } from './orderDetails/subComponents/orderSummary'
 export { default as AllOrderDeliveredBatch } from './orderDetails/subComponents/allOrderDeliveredBatch'
+export { default as GeoLocationInputList } from './geoLocationInput/GeoLocationInputList'

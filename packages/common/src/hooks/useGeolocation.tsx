@@ -10,6 +10,7 @@ interface GeolocationData {
   currentAddress: string
   error: string
   loading: boolean
+  setEnableLocation?: (value: boolean) => void
 }
 
 export interface OptionalModel {
@@ -37,6 +38,7 @@ const useGeolocation = (apiKey: string, optional?: OptionalModel): GeolocationDa
   const [currentAddress, setCurrentAddress] = useState<string>('')
   const [error, setError] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(true)
+  const [enableLocation, setEnableLocation] = useState<boolean>(false)
 
   useEffect(() => {
     if (navigator) {
@@ -82,9 +84,9 @@ const useGeolocation = (apiKey: string, optional?: OptionalModel): GeolocationDa
         setLoading(false)
       }
     }
-  }, [optional])
+  }, [optional, enableLocation])
 
-  return { coordinates, currentAddress, error, loading }
+  return { coordinates, currentAddress, error, loading, setEnableLocation }
 }
 
 export default useGeolocation

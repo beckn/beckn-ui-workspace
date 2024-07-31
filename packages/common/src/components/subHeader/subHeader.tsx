@@ -58,7 +58,7 @@ const SubHeader = (props: SubHeaderProps) => {
   const [isInvoiceModalOpen, setInvoiceModalOpen] = useState(false)
 
   const router = useRouter()
-  const cartItems = useSelector((state: ICartRootState) => state.cart.items)
+  const cartItems = useSelector((state: ICartRootState) => state?.cart?.items)
   const storedHeaderText = getLocalStorage('selectCardHeaderText')
 
   const handleInvoiceModalClose = () => {
@@ -92,7 +92,7 @@ const SubHeader = (props: SubHeaderProps) => {
           {getHeaderTitleForPage(storedHeaderText, router.pathname, locale, headerConstants)}
           {showCartIcon && (
             <div className="flex gap-4">
-              {!cartIconList.includes(router.pathname) && (
+              {!cartIconList?.includes(router.pathname) && (
                 <CartIconWithCount
                   itemCount={cartItems.length}
                   handleClick={() => router.push('/cart')}
@@ -100,7 +100,7 @@ const SubHeader = (props: SubHeaderProps) => {
               )}
             </div>
           )}
-          {orderIconList.includes(router.pathname) && (
+          {orderIconList?.includes(router.pathname) && (
             <Image
               cursor="pointer"
               onClick={() => setOrderModalOpen(true)}
@@ -110,7 +110,7 @@ const SubHeader = (props: SubHeaderProps) => {
               mr={'20px'}
             />
           )}
-          {invoiceDownloadIconList.includes(router.pathname) && (
+          {invoiceDownloadIconList?.includes(router.pathname) && (
             <Image
               cursor="pointer"
               onClick={() => setInvoiceModalOpen(true)}

@@ -11,7 +11,7 @@ import { getLocalStorage, setLocalStorage } from '../../utils'
 import { HeaderProps } from './topHeader.types'
 import { testIds } from '@shared/dataTestIds'
 
-const Header: React.FC<HeaderProps> = ({ t, headerConstants }) => {
+const Header: React.FC<HeaderProps> = ({ t, headerConstants, appLogo }) => {
   const {
     blackList: { appLogoBlackList, homeIconBlackList, languageIconWhiteList, menuIconWhiteList }
   } = headerConstants
@@ -35,7 +35,7 @@ const Header: React.FC<HeaderProps> = ({ t, headerConstants }) => {
           <Box>
             {!appLogoBlackList.includes(router.pathname) && (
               <Image
-                src="/images/headerLogo.svg"
+                src={appLogo}
                 alt="App logo"
               />
             )}

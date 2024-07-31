@@ -1,56 +1,52 @@
 import React from 'react'
-import { Provider, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import Head from 'next/head'
-import { ThemeProvider } from 'next-themes'
 import { useRouter } from 'next/router'
 import Header from '../header'
-import store from '../../store/index'
 import { ToastContainer } from 'react-toastify'
 import { useLanguage } from '../../hooks/useLanguage'
+import styles from './Layout.module.css'
 import NextNProgress from 'nextjs-progressbar'
-import cs from 'classnames'
-import { IGeoLocationSearchPageRootState } from '../../lib/types/geoLocationSearchPage'
-import GeoLocationInputList from '../geoLocationInput/GeoLocationInputList'
+import { IGeoLocationSearchPageRootState } from '@beckn-ui/common/lib/types'
+import { Box } from '@chakra-ui/react'
+import { GeoLocationInputList } from '@beckn-ui/common'
 
 const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const { locale } = useLanguage()
   const router = useRouter()
-  const isHomepage = router.pathname === '/homePage'
-  const isPaymentMode = router.pathname === '/paymentMode'
-  const isSearch = router.pathname === '/search'
-  const paddingStyles = 'px-5 xl:px-16'
-  const marginStyles = 'mt-[64px]'
-  const geoLocationSearchPageVisible = false
+  const isHome = router.pathname === '/'
+  const geoLocationSearchPageVisible = useSelector((state: IGeoLocationSearchPageRootState) => {
+    return state.geoLocationSearchPageUI.geoLocationSearchPageVisible
+  })
 
   return (
-    <Provider store={store}>
-      <ThemeProvider enableSystem={true}>
-        <Head>
-          <title>Taxi Bpp</title>
-        </Head>
-        <div
-          className={cs(
-            'flex flex-col ',
-            {
-              ['h-[100vh]']: isHomepage
-            },
-            {
-              ['min-h-[100vh]']: !isHomepage
-            }
-          )}
-        >
-          <NextNProgress height={7} />
-          {/* <Header /> */}
-          {!geoLocationSearchPageVisible ? <main>{children}</main> : <GeoLocationInputList />}
-        </div>
-        <ToastContainer
-          autoClose={2000}
-          hideProgressBar={true}
-          rtl={locale === 'en' ? false : true}
-          position={locale === 'en' ? 'top-right' : 'top-left'}
-        />
-      </ThemeProvider>
-    </Provider>
+    <div>
+      <Head>
+        <title>Taxi Hub</title>
+      </Head>
+      <div className={`${styles.container} ${styles.minHeight}`}>
+        <NextNProgress height={7} />
+        <Header />
+        {!geoLocationSearchPageVisible ? (
+          <Box
+            maxW={['unset', 'unset', 'unset', '70rem']}
+            w="100%"
+            margin="0 auto"
+            className={`${styles.main} ${isHome ? styles.homepageMargin : ''}`}
+          >
+            {children}
+          </Box>
+        ) : (
+          <GeoLocationInputList />
+        )}
+      </div>
+      <ToastContainer
+        autoClose={2000}
+        hideProgressBar={true}
+        rtl={locale === 'en' ? false : true}
+        position={locale === 'en' ? 'top-right' : 'top-left'}
+      />
+    </div>
   )
 }
 
