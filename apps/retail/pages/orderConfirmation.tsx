@@ -15,6 +15,7 @@ import { orderActions } from '@beckn-ui/common/src/store/order-slice'
 import { getPayloadForConfirm, getPayloadForOrderHistoryPost } from '@beckn-ui/common/src/utils'
 import { useConfirmMutation } from '@beckn-ui/common/src/services/confirm'
 import { testIds } from '@shared/dataTestIds'
+import { ORDER_CATEGORY_ID } from '../lib/config'
 
 const OrderConfirmation = () => {
   const { t } = useLanguage()
@@ -52,8 +53,7 @@ const OrderConfirmation = () => {
 
   useEffect(() => {
     if (confirmResponse && confirmResponse.length > 0) {
-      const categoryId = 6
-      const ordersPayload = getPayloadForOrderHistoryPost(confirmResponse, categoryId)
+      const ordersPayload = getPayloadForOrderHistoryPost(confirmResponse, ORDER_CATEGORY_ID)
       axios
         .post(`${strapiUrl}/orders`, ordersPayload, axiosConfig)
         .then(res => {
