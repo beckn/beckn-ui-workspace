@@ -48,17 +48,17 @@ const OrderConfirmation = () => {
       confirm(payLoad)
     }
   }, [])
-  useEffect(() => {
-    if (confirmResponse && confirmResponse.length > 0) {
-      const ordersPayload = getPayloadForOrderHistoryPost(confirmResponse)
-      axios
-        .post(`${strapiUrl}/orders`, ordersPayload, axiosConfig)
-        .then(res => {
-          return res
-        })
-        .catch(err => console.error(err))
-    }
-  }, [confirmResponse])
+  // useEffect(() => {
+  //   if (confirmResponse && confirmResponse.length > 0) {
+  //     const ordersPayload = getPayloadForOrderHistoryPost(confirmResponse)
+  //     axios
+  //       .post(`${strapiUrl}/orders`, ordersPayload, axiosConfig)
+  //       .then(res => {
+  //         return res
+  //       })
+  //       .catch(err => console.error(err))
+  //   }
+  // }, [confirmResponse])
 
   useEffect(() => {
     if (confirmResponse && confirmResponse.length > 0) {
