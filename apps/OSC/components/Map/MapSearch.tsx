@@ -5,7 +5,7 @@ import { isEmpty } from 'lodash'
 import { Image } from '@chakra-ui/react'
 import { useLanguage } from '../../hooks/useLanguage'
 import useDebounce from '../../hooks/useDebounce'
-
+import { Location } from '../../lib/types/search'
 interface LocalNameFormat {
   primaryName: string
   secondaryName: string
@@ -28,7 +28,7 @@ function formatLocationName(name: string): LocalNameFormat {
 
 export interface SearchBarProp {
   setQuery: React.Dispatch<React.SetStateAction<string>>
-  locations: any[]
+  locations: Location[]
   query: string
   handleLocationClick: (lat: number, long: number) => void
   fetchResults: (query: string) => void
@@ -44,7 +44,6 @@ const SearchBar: React.FC<SearchBarProp> = ({
   setShowSuggestions
 }) => {
   const { t } = useLanguage()
-
   //TODO Pseudo loading for now. Need to figure out to do this using map load events
   const [loading, setLoading] = useState<boolean>(false)
 
@@ -54,7 +53,6 @@ const SearchBar: React.FC<SearchBarProp> = ({
 
   useEffect(() => {
     setShowSuggestions(!isEmpty(value) && locations && !isEmpty(locations))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locations, value])
 
   useEffect(() => {
@@ -67,7 +65,6 @@ const SearchBar: React.FC<SearchBarProp> = ({
   useEffect(() => {
     // setQuery(debouncedValue);
     fetchResults(debouncedValue)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedValue])
 
   return (
@@ -89,7 +86,7 @@ const SearchBar: React.FC<SearchBarProp> = ({
       </div>
       {!isEmpty(value) && locations && !isEmpty(locations) && (
         <div className="flex flex-col overflow-scroll max-h-[100vh]  bg-white  rounded-md h-[100vh] relative z-[9995] divide-y suggestion-list">
-          {locations.map((singleLocation, index) => {
+          {locations.map(singleLocation => {
             const { primaryName, secondaryName } = formatLocationName(singleLocation.display_name)
             return (
               <div
