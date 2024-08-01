@@ -13,7 +13,6 @@ import {
 } from '@chakra-ui/react'
 import crossIcon from '../../../public/images/Indicator.svg'
 import { BottomModalProps } from './bottom-modal.types'
-import Typography from '../typography'
 
 const BottomModal: React.FC<BottomModalProps> = ({
   onClose,
@@ -23,7 +22,8 @@ const BottomModal: React.FC<BottomModalProps> = ({
   responsive = false,
   responsiveBottomGap = '30',
   dataTest,
-  overlay = true
+  overlay = true,
+  divider = 'SOLID'
 }) => {
   return (
     <Modal
@@ -58,10 +58,6 @@ const BottomModal: React.FC<BottomModalProps> = ({
           alignItems={'center'}
           padding={'15px 20px'}
         >
-          {/* <Typography
-            text={title!}
-            variant="titleRegular"
-          /> */}
           <Box
             fontSize={'17px'}
             fontWeight="400"
@@ -70,8 +66,18 @@ const BottomModal: React.FC<BottomModalProps> = ({
             {title!}
           </Box>
         </Flex>
+
         <Box>
-          <Divider />
+          {divider === 'SOLID' && <Divider />}
+          {divider === 'DASHED' && (
+            <Divider
+              borderBottomWidth="0px"
+              padding={'4px'}
+              backgroundImage="linear-gradient(to right, #00000033 0 50%, transparent 50% 100%)"
+              backgroundRepeat={'repeat no-repeat'}
+              backgroundSize="6% 1px"
+            />
+          )}
         </Box>
 
         <ModalBody

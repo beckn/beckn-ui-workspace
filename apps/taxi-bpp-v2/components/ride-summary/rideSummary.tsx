@@ -1,10 +1,19 @@
 import { Button, Typography } from '@beckn-ui/molecules'
-import { Box, Flex, Image } from '@chakra-ui/react'
+import { Box, Divider, Flex, Image } from '@chakra-ui/react'
 import React from 'react'
 import { RideSummaryProps } from './rideSummaryType'
 import Styles from '@beckn-ui/becknified-components/src/pages/auth/auth.module.css'
 
-const RideSummary: React.FC<RideSummaryProps> = ({ time, distance, source, destination, buttons }) => {
+const RideSummary: React.FC<RideSummaryProps> = ({
+  time,
+  date,
+  handleNavigate,
+  distance,
+  source,
+  destination,
+  buttons,
+  fare
+}) => {
   return (
     <Box mt="10px">
       <Flex
@@ -19,6 +28,7 @@ const RideSummary: React.FC<RideSummaryProps> = ({ time, distance, source, desti
           <Typography
             style={{ paddingRight: '15px' }}
             text={time}
+            color="#676767"
           />
           <Box
             w="6px"
@@ -27,20 +37,32 @@ const RideSummary: React.FC<RideSummaryProps> = ({ time, distance, source, desti
             bg="#DBDBDB"
             mr="10px"
           ></Box>
-          <Typography text={distance} />
-        </Flex>
-        <Flex
-          bg={'#ABD4FA'}
-          p="2px 6px"
-          borderRadius={'6px'}
-        >
-          <Image
-            src="/images/near_me.svg"
-            alt="near_me"
-            mr="5px"
+          <Typography
+            text={distance}
+            color="#676767"
           />
-          <Typography text="Navigate" />
         </Flex>
+        {handleNavigate && (
+          <Flex
+            bg={'#ABD4FA'}
+            p="2px 6px"
+            borderRadius={'6px'}
+            onClick={handleNavigate}
+          >
+            <Image
+              src="/images/near_me.svg"
+              alt="near_me"
+              mr="5px"
+            />
+            <Typography text="Navigate" />
+          </Flex>
+        )}
+        {date && (
+          <Typography
+            text={date}
+            color="#676767"
+          />
+        )}
       </Flex>
       <Flex
         mb={destination ? '16px' : '30px'}
@@ -55,7 +77,7 @@ const RideSummary: React.FC<RideSummaryProps> = ({ time, distance, source, desti
       </Flex>
       {destination && (
         <Flex
-          mb={'30px'}
+          mb={fare ? '16px' : '30px'}
           alignItems="center"
         >
           <Image
@@ -66,10 +88,38 @@ const RideSummary: React.FC<RideSummaryProps> = ({ time, distance, source, desti
           <Typography text={destination} />
         </Flex>
       )}
+      {fare && (
+        <Box
+          color={'#676767'}
+          mb="20px"
+        >
+          <Divider
+            borderBottomWidth="0px"
+            padding={'4px'}
+            backgroundImage="linear-gradient(to right, #00000033 0 50%, transparent 50% 100%)"
+            backgroundRepeat={'repeat no-repeat'}
+            backgroundSize="6% 1px"
+            ml="-20px"
+            mr="-20px"
+            w={'unset'}
+          />
+          <Typography
+            color="#676767"
+            text={fare.text}
+            style={{ marginTop: '12px' }}
+          />
+          <Typography
+            text={fare.cost}
+            fontSize="24px"
+            color="#34C759"
+            fontWeight="600"
+          />
+        </Box>
+      )}
       {buttons.map(singleButton => {
         return (
           <Button
-            className={Styles.auth_btn}
+            className={`${Styles.auth_btn} ${singleButton.className}`}
             key={singleButton.text}
             {...singleButton}
           />

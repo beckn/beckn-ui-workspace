@@ -9,4 +9,5 @@ export interface BottomModalProps {
   responsiveBottomGap?: string
   dataTest?: string
   overlay?: boolean
+  divider?: 'DASHED' | 'SOLID'
 }

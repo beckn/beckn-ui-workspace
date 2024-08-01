@@ -12,20 +12,28 @@ const RideSummaryHeader: React.FC<RideSummaryHeaderProps> = ({ driverImg, title,
           alignItems="center"
           w={'100%'}
         >
-          <Image
-            src="/images/car.svg"
-            alt="car"
-          />
-          <Box textAlign={'start'}>
+          <Flex
+            justifyContent={'space-between'}
+            alignItems="center"
+          >
+            <Image
+              src="/images/car.svg"
+              alt="car"
+            />
             <Box
-              fontSize="17px"
-              fontWeight="500"
-              mb="8px"
+              alignItems={'left'}
+              ml="22px"
             >
-              {title}
+              <Box
+                fontSize="17px"
+                fontWeight="500"
+                mb="8px"
+              >
+                {title}
+              </Box>
+              <Box fontSize="12px">{subTitle}</Box>
             </Box>
-            <Box fontSize="12px">{subTitle}</Box>
-          </Box>
+          </Flex>
           <Image
             h={'44px'}
             w="44px"

@@ -1,5 +1,5 @@
 import { IconProps } from '@chakra-ui/icons'
-import { MouseEventHandler, ReactNode } from 'react'
+import React, { MouseEventHandler, ReactNode } from 'react'
 
 type ButtonType = 'submit' | 'reset' | 'button'
 

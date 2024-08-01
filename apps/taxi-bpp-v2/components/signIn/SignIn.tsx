@@ -68,6 +68,7 @@ const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
       padding="20px"
       mt={'80px'}
       h="calc(100vh - 80px)"
+      className="taxi-bpp-login"
     >
       <Box>
         <BecknAuth
