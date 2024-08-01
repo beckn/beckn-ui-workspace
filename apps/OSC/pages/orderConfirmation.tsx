@@ -54,7 +54,8 @@ const OrderConfirmation = () => {
 
   useEffect(() => {
     if (confirmResponse && confirmResponse.length > 0) {
-      const ordersPayload = getPayloadForOrderHistoryPost(confirmResponse)
+      const categoryId = 8
+      const ordersPayload = getPayloadForOrderHistoryPost(confirmResponse, categoryId)
       axios
         .post(`${strapiUrl}/orders`, ordersPayload, axiosConfig)
         .then(res => {
