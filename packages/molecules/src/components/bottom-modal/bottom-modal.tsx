@@ -22,7 +22,8 @@ const BottomModal: React.FC<BottomModalProps> = ({
   children,
   responsive = false,
   responsiveBottomGap = '30',
-  dataTest
+  dataTest,
+  overlay = true
 }) => {
   return (
     <Modal
@@ -32,7 +33,7 @@ const BottomModal: React.FC<BottomModalProps> = ({
       scrollBehavior="outside"
       motionPreset="slideInBottom"
     >
-      <ModalOverlay height="100vh" />
+      {overlay && <ModalOverlay height="100vh" />}
       <ModalContent
         position="fixed"
         bottom={{ base: '0', md: `${responsiveBottomGap}%` }}

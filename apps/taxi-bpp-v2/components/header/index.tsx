@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import BottomModal from '../BottomModal'
-import { Box, Image, Text } from '@chakra-ui/react'
+import React from 'react'
+import { Box } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 
 import { useLanguage } from '@hooks/useLanguage'
@@ -33,6 +32,27 @@ const Header = () => {
               menuIconWhiteList
             }
           }}
+          menuItems={[
+            {
+              id: 'profile',
+              label: t.profileIcon,
+              href: '/profile',
+              icon: '/images/userProfile.svg'
+            },
+            {
+              id: 'history',
+              label: t.rideHistoryIcon,
+              href: '/rideHistory',
+              icon: '/images/orderHistoryIcon.svg'
+            },
+            {
+              id: 'logout',
+              label: t.logoutIcon,
+              href: '/signIn',
+              icon: '/images/logOutIcon.svg',
+              color: 'red'
+            }
+          ]}
         />
       )}
       {renderBottomHeader && (

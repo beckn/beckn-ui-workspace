@@ -276,4 +276,5 @@ select:-webkit-autofill:focus {
 .chakra-portal .chakra-modal__overlay {
   z-index: unset !important;
   background: unset !important;
+  height: 0px !important;
 }

@@ -45,6 +45,18 @@ const en: { [key: string]: string } = {
   errorPassword4: 'Password must contain at least one special character',
   errorPassword5: 'Password cannot consist of only digits',
   errorPassword6: 'Password must contain at least one digit',
-  errorEmail: 'Invalid Email'
+  errorEmail: 'Invalid Email',
+  yourLocation: 'Select location',
+  devicelocationisnotenabled: '  Device location is not enabled',
+  accessToProvideLocation: '  Please provide the permission to access better & hassle free services',
+  enableLocation: '  Enable Location',
+  or: ' Or',
+  searchforlocation: 'Search For Location',
+  search: 'Search',
+  rideHistoryIcon: 'My Rides',
+  profileIcon: 'My Profile',
+  logoutIcon: 'Logout',
+  offlineTitle: 'You’re Offline',
+  offlineDescription: 'You’re currently offline. Go online to recieve trip requests.'
 }
 export default en

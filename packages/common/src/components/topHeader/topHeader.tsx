@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { Box, Flex, Image } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
-import { BottomModal } from '@beckn-ui/molecules'
+import { BottomModal, Typography } from '@beckn-ui/molecules'
 import Styles from './topHeader.module.css'
 import { logout } from '@beckn-ui/common/src/store/auth-slice'
 import settingsIcon from '../../../public/images/threeDots.svg'
@@ -11,7 +11,33 @@ import { getLocalStorage, setLocalStorage } from '../../utils'
 import { HeaderProps } from './topHeader.types'
 import { testIds } from '@shared/dataTestIds'
 
-const Header: React.FC<HeaderProps> = ({ t, headerConstants, appLogo, locale }) => {
+const Header: React.FC<HeaderProps> = ({
+  t,
+  headerConstants,
+  appLogo,
+  locale,
+  menuItems = [
+    {
+      id: 'profile',
+      label: t('profileIcon'),
+      href: '/profile',
+      icon: '/images/userProfile.svg'
+    },
+    {
+      id: 'history',
+      label: t('orderHistoryIcon'),
+      href: '/orderHistory',
+      icon: '/images/orderHistoryIcon.svg'
+    },
+    {
+      id: 'logout',
+      label: t('logoutIcon'),
+      href: '/signIn',
+      icon: '/images/logOutIcon.svg',
+      color: 'red'
+    }
+  ]
+}) => {
   const {
     blackList: { appLogoBlackList, homeIconBlackList, languageIconWhiteList, menuIconWhiteList }
   } = headerConstants
@@ -85,47 +111,29 @@ const Header: React.FC<HeaderProps> = ({ t, headerConstants, appLogo, locale }) 
         onClose={handleMenuModalClose}
       >
         <Flex flexDirection="column">
-          <Box
-            data-test={testIds.profile_text_click}
-            onClick={() => {
-              router.push('/profile')
-              setMenuModalOpen(false)
-            }}
-            className={Styles.top_header_modal}
-          >
-            <Image
-              src="/images/userProfile.svg"
-              alt="User profile"
-            />
-            {t('profileIcon')}
-          </Box>
-          <Box
-            onClick={() => {
-              router.push('/orderHistory')
-              setMenuModalOpen(false)
-            }}
-            className={Styles.top_header_modal}
-          >
-            <Image
-              src="/images/orderHistoryIcon.svg"
-              alt="Order history icon"
-            />
-            {t('orderHistoryIcon')}
-          </Box>
-          <Box
-            onClick={() => {
-              dispatch(logout())
-              router.push('/signIn')
-              setMenuModalOpen(false)
-            }}
-            className={Styles.top_header_modal}
-          >
-            <Image
-              src="/images/logOutIcon.svg"
-              alt="Log out"
-            />
-            <span style={{ color: 'red' }}>{t('logoutIcon')}</span>
-          </Box>
+          {menuItems.map(menuItem => (
+            <Box
+              data-test={menuItem.id}
+              onClick={() => {
+                if (menuItem.id === 'logout') {
+                  dispatch(logout())
+                }
+                router.push(menuItem.href)
+                setMenuModalOpen(false)
+              }}
+              className={Styles.top_header_modal}
+            >
+              <Image
+                src={menuItem.icon}
+                alt="User profile"
+              />
+              <Typography
+                fontSize="16px"
+                text={menuItem.label}
+                color={menuItem?.color!}
+              />
+            </Box>
+          ))}
         </Flex>
       </BottomModal>
     </>
