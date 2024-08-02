@@ -29,8 +29,6 @@ const TopSheet: React.FC<TopSheetComponentProps> = ({
   loadingForCurrentAddress,
   t,
   searchPlaceholder = t('searchforlocation'),
-  enableLocation = false,
-  handleOnEnableLocation,
   onlineOfflineSwitch = false,
   onlineStatus,
   handleOnSwitch
@@ -177,25 +175,6 @@ const TopSheet: React.FC<TopSheetComponentProps> = ({
                 width="24px"
               />
             </Box>
-            {enableLocation && (
-              <Flex
-                alignItems={'center'}
-                justifyContent={'center'}
-                flexDirection={'column'}
-              >
-                <Typography
-                  text={t('or')}
-                  style={{ margin: '5% 0 5% 0' }}
-                />
-                <Button
-                  leftIcon={<Image src="/images/enable_location.svg" />}
-                  text={t('enableLocation')}
-                  color={'#1A202C'}
-                  handleClick={handleOnEnableLocation}
-                  colorScheme={'primary'}
-                />
-              </Flex>
-            )}
           </Box>
         </ModalContent>
       </Modal>

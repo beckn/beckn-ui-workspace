@@ -22,8 +22,8 @@ const BottomModal: React.FC<BottomModalProps> = ({
   responsive = false,
   responsiveBottomGap = '30',
   dataTest,
-  overlay = true,
-  divider = 'SOLID'
+  divider = 'SOLID',
+  backgroundAccessControl = false
 }) => {
   return (
     <Modal
@@ -33,7 +33,11 @@ const BottomModal: React.FC<BottomModalProps> = ({
       scrollBehavior="outside"
       motionPreset="slideInBottom"
     >
-      {overlay && <ModalOverlay height="100vh" />}
+      <ModalOverlay
+        z-index={backgroundAccessControl ? 'unset' : undefined}
+        background={backgroundAccessControl ? 'unset' : undefined}
+        height={backgroundAccessControl ? '0px' : '100vh'}
+      />
       <ModalContent
         position="fixed"
         bottom={{ base: '0', md: `${responsiveBottomGap}%` }}
@@ -41,6 +45,10 @@ const BottomModal: React.FC<BottomModalProps> = ({
         borderRadius={{ base: '1.75rem 1.75rem 0 0', md: '1.75rem', lg: '1.75rem', xl: '1.75rem', '2xl': '1.75rem' }}
         maxW="sm"
         data-test={dataTest}
+        containerProps={{
+          zIndex: backgroundAccessControl ? 'unset' : undefined,
+          height: backgroundAccessControl ? '0px !important' : undefined
+        }}
       >
         <ModalCloseButton
           height={'unset'}
@@ -53,32 +61,36 @@ const BottomModal: React.FC<BottomModalProps> = ({
             alt="Close Icon"
           />
         </ModalCloseButton>
-        <Flex
-          justifyContent={'space-between'}
-          alignItems={'center'}
-          padding={'15px 20px'}
-        >
-          <Box
-            fontSize={'17px'}
-            fontWeight="400"
-            w={'100%'}
-          >
-            {title!}
-          </Box>
-        </Flex>
+        {title && (
+          <>
+            <Flex
+              justifyContent={'space-between'}
+              alignItems={'center'}
+              padding={'15px 20px'}
+            >
+              <Box
+                fontSize={'17px'}
+                fontWeight="400"
+                w={'100%'}
+              >
+                {title!}
+              </Box>
+            </Flex>
 
-        <Box>
-          {divider === 'SOLID' && <Divider />}
-          {divider === 'DASHED' && (
-            <Divider
-              borderBottomWidth="0px"
-              padding={'4px'}
-              backgroundImage="linear-gradient(to right, #00000033 0 50%, transparent 50% 100%)"
-              backgroundRepeat={'repeat no-repeat'}
-              backgroundSize="6% 1px"
-            />
-          )}
-        </Box>
+            <Box>
+              {divider === 'SOLID' && <Divider />}
+              {divider === 'DASHED' && (
+                <Divider
+                  borderBottomWidth="0px"
+                  padding={'4px'}
+                  backgroundImage="linear-gradient(to right, #00000033 0 50%, transparent 50% 100%)"
+                  backgroundRepeat={'repeat no-repeat'}
+                  backgroundSize="6% 1px"
+                />
+              )}
+            </Box>
+          </>
+        )}
 
         <ModalBody
           maxHeight={'calc(100vh - 10rem)'}

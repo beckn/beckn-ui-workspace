@@ -1,3 +1,4 @@
+import { Coordinate } from '@beckn-ui/common'
 import { ButtonProps } from '@beckn-ui/molecules'
 
 export interface RideSummaryHeaderProps {
@@ -8,7 +9,6 @@ export interface RideSummaryHeaderProps {
 export interface RideSummaryProps {
   time: string
   date?: string
-  handleNavigate?: React.MouseEventHandler<HTMLDivElement>
   distance: string
   source: string
   destination?: string
@@ -17,4 +17,5 @@ export interface RideSummaryProps {
     text: string
     cost: string
   }
+  handleNavigate?: (data: Coordinate) => void
 }
