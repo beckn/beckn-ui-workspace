@@ -7,12 +7,12 @@ import { discoveryActions, parseSearchlist } from '@beckn-ui/common'
 import { ProductCard } from '@beckn-ui/becknified-components'
 import { BottomModal } from '@beckn-ui/molecules'
 import { useBreakpoint } from '@chakra-ui/react'
-import SearchBar from '../components/header/SearchBar'
 import { useLanguage } from '../hooks/useLanguage'
 import { ParsedItemModel } from '@beckn-ui/common'
 import { DOMAIN } from '@lib/config'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
 import Filter from '../components/filter/Filter'
+import SearchBar from '@beckn-ui/common/src/components/searchBar'
 
 //Mock data for testing search API. Will remove after the resolution of CORS issue
 

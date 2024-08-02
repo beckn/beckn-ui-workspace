@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState, useCallback } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import { Transition } from 'react-transition-group'
 import dynamic from 'next/dynamic'
 import BottomModal from '../components/BottomModal'
@@ -9,6 +9,7 @@ import useRequest from '../hooks/useRequest'
 import cs from 'classnames'
 import { Box, Image } from '@chakra-ui/react'
 import { useLanguage } from '../hooks/useLanguage'
+import { Location, SelectedStore } from '../lib/types/search'
 
 const tagValuetoApiMap = {
   Books: 'books',
@@ -51,7 +52,7 @@ const transitionStyles = {
   exited: { height: '3.8rem' }
 }
 
-const getProperImages = (selectedStore: any) => {
+const getProperImages = (selectedStore: SelectedStore): string => {
   if (selectedStore && selectedStore.tags) {
     if (selectedStore.tags.image) return selectedStore.tags.image
     else return selectedStore.tags.images
@@ -124,10 +125,6 @@ const SearchByLocation = () => {
     setIsOptionModalOpen(prevState => !prevState)
   }
 
-  const handleModalClose = () => {
-    setIsOptionModalOpen(false)
-  }
-
   const handleOptionDetailOpen = () => {
     setIsOptionDetailOpen(prevState => !prevState)
   }
@@ -135,10 +132,6 @@ const SearchByLocation = () => {
   const handleOptionDetailClose = () => {
     setIsOptionDetailOpen(false)
     setSelectedStore(null)
-  }
-
-  const handleMenuModalClose = () => {
-    setIsMenuModalOpen(false)
   }
 
   const handleLocationClick = (lat: number, long: number) => {
@@ -198,7 +191,6 @@ const SearchByLocation = () => {
 
   //resetting option state and stores when location changes
   useEffect(() => {
-    // setOption(initialOption);
     setStores([])
   }, [coords])
   return (
@@ -209,7 +201,7 @@ const SearchByLocation = () => {
     >
       <MapSearch
         setQuery={setQuery}
-        locations={searchedLocationData as any}
+        locations={searchedLocationData as Location[]}
         query={query}
         handleLocationClick={handleLocationClick}
         fetchResults={fetchLocationByQuery}
@@ -234,56 +226,58 @@ const SearchByLocation = () => {
               in={isMenuModalOpen}
               timeout={duration}
             >
-              {state => (
-                <div
-                  ref={nodeRef}
-                  style={{
-                    ...defaultStyle,
-                    ...transitionStyles[state]
-                  }}
-                  className={cs(
-                    'w-full   px-4 pb-4 pt-2 mx-auto bg-[#F3F4F5]  rounded-t-[1rem] shadow-lg sm:rounded-lg sm:overflow-hidden'
-                  )}
-                >
-                  <div onClick={() => setIsMenuModalOpen(prev => !prev)}>
-                    <Image
-                      src="/images/Indicator.svg"
-                      className="mx-auto mb-3"
-                      alt="swipe indicator"
-                    />
-                    <h3 className="text-[17px]/[20px]">{t.explorePlaces}</h3>
-                  </div>
+              {state =>
+                (
                   <div
+                    ref={nodeRef}
+                    style={{
+                      ...defaultStyle,
+                      ...transitionStyles[state]
+                    }}
                     className={cs(
-                      'justify-between  py-5',
-                      { ['flex']: isMenuModalOpen },
-                      { ['hidden']: !isMenuModalOpen }
+                      'w-full   px-4 pb-4 pt-2 mx-auto bg-[#F3F4F5]  rounded-t-[1rem] shadow-lg sm:rounded-lg sm:overflow-hidden'
                     )}
                   >
-                    {optionData.map((currentOption, index) => {
-                      const isSelected = option ? option.tagValue === currentOption.tagValue : false
-                      const optionMeta = {
-                        tagName: currentOption.tagName,
-                        tagValue: currentOption.tagValue,
-                        title: currentOption.title
-                      }
-                      const optionIcons = {
-                        iconUrl: currentOption.iconUrl,
-                        iconUrlLight: currentOption.iconUrl_light
-                      }
-                      return (
-                        <OptionCard
-                          key={index}
-                          isSelected={isSelected}
-                          setOption={setOption}
-                          optionMeta={optionMeta}
-                          optionIcons={optionIcons}
-                        />
-                      )
-                    })}
+                    <div onClick={() => setIsMenuModalOpen(prev => !prev)}>
+                      <Image
+                        src="/images/Indicator.svg"
+                        className="mx-auto mb-3"
+                        alt="swipe indicator"
+                      />
+                      <h3 className="text-[17px]/[20px]">{t.explorePlaces}</h3>
+                    </div>
+                    <div
+                      className={cs(
+                        'justify-between  py-5',
+                        { ['flex']: isMenuModalOpen },
+                        { ['hidden']: !isMenuModalOpen }
+                      )}
+                    >
+                      {optionData.map((currentOption, index) => {
+                        const isSelected = option ? option.tagValue === currentOption.tagValue : false
+                        const optionMeta = {
+                          tagName: currentOption.tagName,
+                          tagValue: currentOption.tagValue,
+                          title: currentOption.title
+                        }
+                        const optionIcons = {
+                          iconUrl: currentOption.iconUrl,
+                          iconUrlLight: currentOption.iconUrl_light
+                        }
+                        return (
+                          <OptionCard
+                            key={index}
+                            isSelected={isSelected}
+                            setOption={setOption}
+                            optionMeta={optionMeta}
+                            optionIcons={optionIcons}
+                          />
+                        )
+                      })}
+                    </div>
                   </div>
-                </div>
-              )}
+                ) as never
+              }
             </Transition>
           </div>
 
