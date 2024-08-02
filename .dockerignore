@@ -1,0 +1,45 @@
+# Ignore node_modules to avoid copying them
+**/node_modules
+cypress
+# Ignore any log files
+*.log
+
+# Ignore environment variables
+.env
+
+# Ignore Docker-related files
+Dockerfile
+.dockerignore
+
+# Ignore test directories
+test
+tests
+__tests__
+__mocks__
+
+# Ignore documentation
+docs
+*.md
+
+# Ignore build output directories
+dist
+build
+public
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore IDE and editor configuration files
+.vscode
+.idea
+*.iml
+
+# Ignore yarn cache and lock files that aren't needed
+.yarn/*
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+yarn-error.log
+**/Jenkinsfile
