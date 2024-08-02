@@ -40,6 +40,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ searchString, handleChange, place
           top={'12px'}
           data-test={testIds.searchButton}
           onClick={handleSubmit}
+          cursor={'pointer'}
         >
           <Image src={'/images/searchInput.svg'} />
         </Box>

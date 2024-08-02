@@ -116,8 +116,9 @@ const Header: React.FC<HeaderProps> = ({
         <Flex flexDirection="column">
           {menuItems.map((menuItem, index) => (
             <Box
+              cursor={'pointer'}
+              data-test={menuItem.id}
               key={index}
-              data-test={menuItem.dataTest}
               onClick={() => {
                 if (menuItem.id === 'logout') {
                   dispatch(logout())

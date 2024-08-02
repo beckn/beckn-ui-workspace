@@ -96,6 +96,7 @@ const TopSheet: React.FC<TopSheetComponentProps> = ({
                   </Text>
                   <Image
                     onClick={onOpen}
+                    cursor={'pointer'}
                     pt="4px"
                     src="/images/downArrow.svg"
                   />

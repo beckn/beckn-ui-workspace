@@ -56,6 +56,7 @@ const PaymentDetailsCard: React.FC<PaymentDetailsCardProps> = ({ t, paymentMetho
                     columnGap={'13px'}
                     position={'relative'}
                     pt={'15px'}
+                    cursor={'pointer'}
                   >
                     <input
                       type="checkbox"
@@ -70,7 +71,10 @@ const PaymentDetailsCard: React.FC<PaymentDetailsCardProps> = ({ t, paymentMetho
                       htmlFor={`radio_${id}`}
                       className={Styles.label}
                     >
-                      <Flex alignItems={'center'}>
+                      <Flex
+                        alignItems={'center'}
+                        cursor={'pointer'}
+                      >
                         <Image
                           src={method.img}
                           w={'62px'}
