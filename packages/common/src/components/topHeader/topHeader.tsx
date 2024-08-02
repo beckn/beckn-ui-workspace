@@ -19,18 +19,21 @@ const Header: React.FC<HeaderProps> = ({
   menuItems = [
     {
       id: 'profile',
+      dataTest: testIds.profile_text_click,
       label: t('profileIcon'),
       href: '/profile',
       icon: '/images/userProfile.svg'
     },
     {
       id: 'history',
+      dataTest: testIds.orderHistory_text_click,
       label: t('orderHistoryIcon'),
       href: '/orderHistory',
       icon: '/images/orderHistoryIcon.svg'
     },
     {
       id: 'logout',
+      dataTest: testIds.Logout_text_click,
       label: t('logoutIcon'),
       href: '/signIn',
       icon: '/images/logOutIcon.svg',
@@ -111,9 +114,10 @@ const Header: React.FC<HeaderProps> = ({
         onClose={handleMenuModalClose}
       >
         <Flex flexDirection="column">
-          {menuItems.map(menuItem => (
+          {menuItems.map((menuItem, index) => (
             <Box
-              data-test={menuItem.id}
+              key={index}
+              data-test={menuItem.dataTest}
               onClick={() => {
                 if (menuItem.id === 'logout') {
                   dispatch(logout())

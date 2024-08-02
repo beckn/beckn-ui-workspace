@@ -61,6 +61,8 @@ declare global {
       performProfile(response: RouteHandler, aliasName: string): Chainable<void>
       performUpdateOrder(response: RouteHandler, aliasName: string): Chainable<void>
       clearStatusMock(aliasName: string): Chainable<void>
+      performOrderHisrory(response: RouteHandler, aliasName: string): Chainable<void>
+      performRating(response: RouteHandler, aliasName: string): Chainable<void>
     }
   }
 }
@@ -182,4 +184,10 @@ Cypress.Commands.add('performProfile', (response, aliasName) => {
 
 Cypress.Commands.add('performUpdateOrder', (response, aliasName) => {
   cy.intercept('POST', `${GCL_URL}/update`, response).as(aliasName)
+})
+Cypress.Commands.add('performOrderHisrory', (response, aliasName) => {
+  cy.intercept('GET', `${STRAPI_URL}/orders?filters[category]=6`, response).as(aliasName)
+})
+Cypress.Commands.add('performRating', (response, aliasName) => {
+  cy.intercept('POST', `${GCL_URL}/rating`, response).as(aliasName)
 })

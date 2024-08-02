@@ -41,10 +41,14 @@ const testIds = {
   url_orderConfirmation: '/orderConfirmation',
   url_updateShippingDetails: '/updateShippingDetails',
   url_invoice: '/invoiceDetails',
+  url_orderHistory: '/orderHistory',
+  url_feedback: '/feedback',
   // user credentials
   user_validEmail: 'ankit@gmail.com',
   user_validPassword: 'Enterthevoid@123',
   user_invalidPassword: 'Enterthevoid@1234',
+  user_firstTimeLoginvalidEmail: 'pallavi@gmail.com',
+  user_firstTimeLoginvalidPassword: 'Pallavi@123',
   // auth page
   auth_inputEmail: 'input-email',
   auth_inputPassword: 'input-password',
@@ -167,7 +171,31 @@ const testIds = {
   orderDetailspage_callServiceItem: 'callServiceItem',
   orderDetailspage_callServiceItemName: 'callServiceItemName',
   orderDetailspage_updateShippingDetails: 'updateShippingDetails',
-  orderDetailspage_invoice_orderFullfilled: 'invoice_orderFullfilled'
+  orderDetailspage_invoice_orderFullfilled: 'invoice_orderFullfilled',
+  orderDetails_rateUs_mainContainer: 'feedbackPage-rateUs',
+  order_feedback_container: 'order-feedback-container',
+  //orderHistory page
+  orderHistory_text_click: 'order-history-text',
+  orderHistory_createdAt: 'order-History-createdAt',
+  orderHistory_order_id: 'orderHistory-order-id',
+  orderHistory_Price: 'orderHistory-Price',
+  orderHistory_pendingIcon: 'orderHistory-pendingIcon',
+  order_history_main_container: 'order-history-main-container',
+  empty_order_image: 'empty-order-image',
+  emptyOrderHistoryText: 'empty-OrderHistory-Text',
+  noExistingWorkflowText: 'no-Existing-Work-flow-Text',
+  emptyOrder_button: 'emptyOrder-button',
+  //feedback page
+  feedbackPage_orderDeliveredOnTime: 'feedbackPage-orderDelivered-OnTime',
+  feedbackPage_pleaseShareYourFeedback: 'feedbackPage-pleaseShareYourFeedback',
+  feedbackPage_addCommentsHere: 'feedbackPage-addCommentsHere',
+  feedback_textarea: 'feedback-textarea',
+  feedback_submitReview: 'feedback-submitReview',
+  feedback_skip_forNow: 'feedback-skip-forNow',
+  feedback_starRating: 'feedback-starRating',
+  feedback_image: 'feedback-image',
+  //logout
+  Logout_text_click: 'Logout-text-click'
 }
 
 export { testIds }

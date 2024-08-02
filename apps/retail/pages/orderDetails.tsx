@@ -664,6 +664,7 @@ const OrderDetails = () => {
       <Box
         maxW={{ base: '100%', md: '50%' }}
         margin="0 auto"
+        data-test={testIds.order_feedback_container}
       >
         {processState.allOrderDelivered && (
           <Card
@@ -709,6 +710,7 @@ const OrderDetails = () => {
                   color="#0560FA"
                   as={Typography}
                   text={t.rateUs}
+                  dataTest={testIds.orderDetails_rateUs_mainContainer}
                 />
               </Flex>
             </CardBody>
