@@ -22,7 +22,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       theme={{
         color: {
           primary: '#B1D6F7',
-          secondary: '#B1D6F7',
+          secondary: '#D22323',
           textPrimary: '#1A202C',
           textSecondary: '#37474F'
         }

@@ -13,6 +13,7 @@ const OfflineModal: React.FC<OfflineModalProps> = ({ isOpen }) => {
       isOpen={isOpen}
       onClose={() => {}}
       overlay={false}
+      divider="DASHED"
     >
       <Box
         display={'flex'}

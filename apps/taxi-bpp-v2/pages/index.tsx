@@ -44,13 +44,14 @@ const Homepage = () => {
         buttons: [
           {
             ...defaultBtnState,
-            text: 'Accept'
+            text: 'Accept',
+            className: 'taxi-bpp-btn-text'
           },
           {
             ...defaultBtnState,
             text: 'Decline',
             variant: 'outline',
-            color: 'red'
+            color: '#D22323'
           }
         ]
       }
@@ -59,58 +60,69 @@ const Homepage = () => {
         id: 'PICK_UP',
         title: 'Going for Pick-up',
         subTitle: 'You have reached Pickup location',
-        rideDetails: { time: '5 min away', distance: '5 Kms', source: 'Raja Dinkar Kelkar Museum', destination: '' },
+        rideDetails: {
+          time: '5 min away',
+          distance: '5 Kms',
+          handleNavigate: () => {},
+          source: 'Raja Dinkar Kelkar Museum',
+          destination: ''
+        },
         buttons: [
           {
             ...defaultBtnState,
-            text: 'Start Ride'
+            text: 'Reached Pick-up Location',
+            className: 'taxi-bpp-btn-text'
           }
         ]
       }
     } else if (modalType === 'RIDE_STARTED') {
       modalDetails = {
         id: 'RIDE_STARTED',
-        title: 'Ride Started',
-        subTitle: 'Heading to destination',
+        title: 'Reached Pick-up Location',
+        subTitle: 'you have reached Pickup location',
         rideDetails: {
           time: 'Estimated time: 15 min',
           distance: '10 Kms',
+          handleNavigate: () => {},
           source: 'Raja Dinkar Kelkar Museum',
           destination: 'Destination'
         },
         buttons: [
           {
             ...defaultBtnState,
-            text: 'ride-started',
-            colorScheme: 'red'
+            text: 'Start Ride',
+            className: 'taxi-bpp-btn-text'
           }
         ]
       }
     } else if (modalType === 'COMPLETED') {
       modalDetails = {
         id: 'COMPLETED',
-        title: 'Ride Completed',
+        title: 'Ride has Started',
         subTitle: 'You have reached the destination',
         rideDetails: {
           time: 'Completed',
           distance: '0 Kms',
+          handleNavigate: () => {},
           source: 'Raja Dinkar Kelkar Museum',
           destination: 'Destination'
         },
         buttons: [
           {
             ...defaultBtnState,
-            text: 'Completed'
+            text: 'End Ride',
+            colorScheme: 'secondary'
           }
         ]
       }
     } else if (modalType === 'END') {
       modalDetails = {
         id: 'END',
-        title: 'End of Ride',
+        title: 'Ride has Completed',
         subTitle: 'The ride has ended',
         rideDetails: {
-          time: 'End',
+          time: '30 min',
+          date: 'Wednesday, 26/05/2024',
           distance: '0 Kms',
           source: 'Raja Dinkar Kelkar Museum',
           destination: 'Destination'
@@ -118,9 +130,14 @@ const Homepage = () => {
         buttons: [
           {
             ...defaultBtnState,
-            text: 'End'
+            text: 'Look for New Ride Request',
+            className: 'taxi-bpp-btn-text'
           }
-        ]
+        ],
+        fare: {
+          text: 'Collect the fare from the customer',
+          cost: '200'
+        }
       }
     }
 
@@ -171,6 +188,7 @@ const Homepage = () => {
           <BottomModal
             onClose={() => {}}
             isOpen={true}
+            divider="DASHED"
             title={
               currentModal.id === 'REQ_NEW_RIDE' ? (
                 currentModal.title
@@ -185,10 +203,13 @@ const Homepage = () => {
           >
             <RideSummary
               time={currentModal.rideDetails.time}
+              date={currentModal.rideDetails.date}
+              handleNavigate={currentModal.rideDetails.handleNavigate}
               distance={currentModal.rideDetails.distance}
               source={currentModal.rideDetails.source}
               destination={currentModal.rideDetails.destination}
               buttons={currentModal.buttons}
+              fare={currentModal.fare}
             />
           </BottomModal>
         )}
@@ -212,7 +233,7 @@ const Homepage = () => {
           setOnlineStatus(newStatus)
           localStorage.setItem('onlineStatus', JSON.stringify(newStatus))
           if (onlineStatus) {
-            updateCurrentModal('COMPLETED')
+            updateCurrentModal('END')
           }
         }}
       />

@@ -7,8 +7,14 @@ export interface RideSummaryHeaderProps {
 }
 export interface RideSummaryProps {
   time: string
+  date?: string
+  handleNavigate?: React.MouseEventHandler<HTMLDivElement>
   distance: string
   source: string
   destination?: string
   buttons: ButtonProps[]
+  fare?: {
+    text: string
+    cost: string
+  }
 }
