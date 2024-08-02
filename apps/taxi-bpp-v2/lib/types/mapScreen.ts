@@ -1,12 +1,13 @@
+import { Coordinate } from '@beckn-ui/common'
 import { ButtonProps } from '@beckn-ui/molecules'
 
 export interface RideDetailsModel {
-  time: string
+  time?: string
   date?: string
-  handleNavigate: React.MouseEventHandler<HTMLDivElement>
-  distance: string
+  handleNavigate?: (data: Coordinate) => void
+  distance?: string
   source: string
-  destination: string
+  destination?: string
 }
 
 export interface ModalDetails {
@@ -21,4 +22,4 @@ export interface ModalDetails {
   }
 }
 
-export type ModalTypes = 'REQ_NEW_RIDE' | 'PICK_UP' | 'RIDE_STARTED' | 'COMPLETED' | 'END'
+export type ModalTypes = 'REQ_NEW_RIDE' | 'PICK_UP' | 'REACHED_PICK_UP' | 'START_RIDE' | 'COMPLETED'

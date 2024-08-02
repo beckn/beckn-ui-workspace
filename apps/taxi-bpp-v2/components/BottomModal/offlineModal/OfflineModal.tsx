@@ -12,8 +12,8 @@ const OfflineModal: React.FC<OfflineModalProps> = ({ isOpen }) => {
     <BottomModal
       isOpen={isOpen}
       onClose={() => {}}
-      overlay={false}
       divider="DASHED"
+      backgroundAccessControl={true}
     >
       <Box
         display={'flex'}

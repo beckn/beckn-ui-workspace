@@ -7,15 +7,15 @@ import Styles from '@beckn-ui/becknified-components/src/pages/auth/auth.module.c
 const RideSummary: React.FC<RideSummaryProps> = ({
   time,
   date,
-  handleNavigate,
   distance,
   source,
   destination,
   buttons,
+  handleNavigate,
   fare
 }) => {
   return (
-    <Box mt="10px">
+    <Box>
       <Flex
         mb={'16px'}
         justifyContent={'space-between'}
@@ -47,7 +47,12 @@ const RideSummary: React.FC<RideSummaryProps> = ({
             bg={'#ABD4FA'}
             p="2px 6px"
             borderRadius={'6px'}
-            onClick={handleNavigate}
+            onClick={() =>
+              handleNavigate?.({
+                latitude: 18.6606495,
+                longitude: 73.73215850000001
+              })
+            }
           >
             <Image
               src="/images/near_me.svg"

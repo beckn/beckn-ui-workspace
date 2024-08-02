@@ -5,8 +5,6 @@ export interface TopSheetComponentProps extends TranslationProps {
   loadingForCurrentAddress?: boolean
   currentLocationFetchError?: string
   searchPlaceholder?: string
-  enableLocation?: boolean
-  handleOnEnableLocation?: () => void
   onlineOfflineSwitch?: boolean
   onlineStatus?: boolean
   handleOnSwitch?: () => void
