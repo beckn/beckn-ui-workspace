@@ -272,7 +272,8 @@ export const getPayloadForOrderStatus = (confirmResponse: ConfirmResponseModel[]
   return payLoad
 }
 
-export const getPayloadForOrderHistoryPost = (confirmData: ConfirmResponseModel[]) => {
+export const getPayloadForOrderHistoryPost = (confirmData: ConfirmResponseModel[], categoryId: number) => {
+  console.log(categoryId)
   const { bpp_id, bpp_uri, transaction_id } = confirmData[0].context
   const {
     orderId,
@@ -304,7 +305,7 @@ export const getPayloadForOrderHistoryPost = (confirmData: ConfirmResponseModel[
       }
     },
     category: {
-      set: [6]
+      set: [categoryId]
     }
   }
 

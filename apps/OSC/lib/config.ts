@@ -4,3 +4,4 @@ export const currencyMap = {
   EUR: '€',
   INR: '₹'
 }
+export const ORDER_CATEGORY_ID = 8

@@ -5,3 +5,4 @@ export const currencyMap = {
   INR: '₹',
   USD: '$'
 }
+export const ORDER_CATEGORY_ID = 6

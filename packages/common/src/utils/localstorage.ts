@@ -22,12 +22,25 @@ export const addLocalStorage = (key: string, value: any) => {
   }
 }
 
-// Getter function to retrieve data from localStorage
-export const getLocalStorage = (key: string) => {
+export const getLocalStorage = <T>(key: string): T | null => {
   if (typeof window !== 'undefined') {
-    // Only try to get the localStorage item if window is defined
-    const item = window.localStorage.getItem(key)
-    return item ? JSON.parse(item) : null // Convert string back to original data type
+    try {
+      const item = window.localStorage.getItem(key)
+      console.log('Stored item:', item)
+
+      if (item) {
+        try {
+          return JSON.parse(item)
+        } catch (parseError) {
+          console.error('Error parsing JSON from localStorage:', parseError)
+          return null
+        }
+      }
+      return null
+    } catch (error) {
+      console.error('Error accessing localStorage:', error)
+      return null
+    }
   }
-  return null // Return null if window is not defined
+  return null
 }
