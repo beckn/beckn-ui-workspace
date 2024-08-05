@@ -1,4 +1,7 @@
 const testIds = {
+  // application wise base url
+  url_base: 'http://localhost:3000',
+  url_base_retail: 'http://localhost:3002',
   // general
   goBack: 'go-back',
   feedback: 'feedback-toast',
@@ -29,10 +32,9 @@ const testIds = {
   payment_taxes: 'taxes',
   payment_totalPayment: 'totalPayment',
   // urls
-  url_base: 'http://localhost:3002',
-  url_signup: 'http://localhost:3002/signUp',
-  url_home: 'http://localhost:3002/',
-  url_search: 'http://localhost:3002/search',
+  url_signup: '/signUp',
+  url_home: '/',
+  url_search: '/search',
   url_cart: '/cart',
   url_product: '/product',
   url_checkout: '/checkout',
