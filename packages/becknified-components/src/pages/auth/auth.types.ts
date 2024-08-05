@@ -11,4 +11,5 @@ export interface AuthProps {
     loader?: LoaderProps
   }
   isLoading?: boolean
+  dataTestForm?: string
 }

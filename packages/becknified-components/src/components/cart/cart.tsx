@@ -1,15 +1,13 @@
 import React from 'react'
 import cl from 'classnames'
 import { Box, calc, Flex, Image } from '@chakra-ui/react'
-import { testIds } from '@shared/dataTestIds'
 
 // Custom
 import { CartProps } from './cart.types'
 import CartList from './cart-list'
 import Styles from './cart.module.css'
-import { Loader, Typography } from '@beckn-ui/molecules'
+import { Loader, Typography, Button as BecknButton } from '@beckn-ui/molecules'
 import OrderSummaryBox from './order-summary-box'
-import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 
 const Cart: React.FC<CartProps> = ({
   schema: { loader, cartItems, orderSummary, emptyCard }, // Destructure props
@@ -66,7 +64,7 @@ const Cart: React.FC<CartProps> = ({
                 <Image
                   src={emptyCard.image}
                   alt="empty-card"
-                  data-test={testIds.cartpage_emptyImage}
+                  data-test={emptyCard.dataTestImage}
                 />
               </Flex>
               <Box
@@ -75,18 +73,18 @@ const Cart: React.FC<CartProps> = ({
               >
                 <Typography
                   variant="titleSemibold"
-                  dataTest={testIds.cartpage_emptyheading}
+                  dataTest={emptyCard.dataTestHeading}
                   text={emptyCard.heading!}
                 />
                 <Typography
                   variant="subTitleRegular"
-                  dataTest={testIds.cartpage_emptySubHeading}
+                  dataTest={emptyCard.dataTestSubHeading}
                   text={emptyCard.subHeading!}
                 />
               </Box>
               <BecknButton
-                dataTest={testIds.cartpage_emptyButton}
-                children={emptyCard.buttonText}
+                dataTest={emptyCard.dataTestCta}
+                text={emptyCard.buttonText}
                 handleClick={emptyCard.buttonHanler}
               />
             </Flex>

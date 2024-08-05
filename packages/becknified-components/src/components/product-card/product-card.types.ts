@@ -22,6 +22,7 @@ export interface ProductCardProps {
   productClickHandler?: React.MouseEventHandler<HTMLDivElement>
   className?: string
   currency?: CurrencyType
+  dataTest?: string
 }
 
 export interface CustomInfoComponentProps {

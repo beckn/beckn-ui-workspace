@@ -166,6 +166,7 @@ const ProfilePage = () => {
       overflowY="scroll"
     >
       <BecknAuth
+        dataTestForm={testIds.profile_form}
         schema={{
           buttons: [
             {

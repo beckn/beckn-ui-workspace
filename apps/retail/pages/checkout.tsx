@@ -17,6 +17,7 @@ import { checkoutActions, CheckoutRootState } from '@beckn-ui/common/src/store/c
 import { useInitMutation } from '@beckn-ui/common/src/services/init'
 import { DiscoveryRootState, ICartRootState, PaymentBreakDownModel } from '@beckn-ui/common'
 import { cartActions } from '@beckn-ui/common/src/store/cart-slice'
+import { testIds } from '@shared/dataTestIds'
 
 export type ShippingFormData = {
   name: string
@@ -255,10 +256,12 @@ const CheckoutPage = () => {
             },
             sectionTitle: t.shipping,
             formTitle: t.addShippingDetails,
-            sectionSubtitle: t.addShippingDetails
+            sectionSubtitle: t.addShippingDetails,
+            dataTest: testIds.checkoutpage_shippingDetails
           },
           billing: {
             triggerFormTitle: t.change,
+            dataTest: testIds.checkoutpage_billingDetails,
             sectionSubtitle: t.addBillingDetails,
             sectionTitle: t.billing,
             formTitle: t.addBillingDetails,
@@ -301,6 +304,7 @@ const CheckoutPage = () => {
           },
           pageCTA: {
             text: t.proceedToCheckout,
+            dataTest: testIds.checkoutpage_proceedToCheckout,
             handleClick: () => {
               dispatch(cartActions.clearCart())
               router.push('/paymentMode')

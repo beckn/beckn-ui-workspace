@@ -40,16 +40,21 @@ export interface ShippingSectionProps<T extends FormField[]> {
   onCheckChange?: () => void
   color?: string
   dataTest?: string
+  dataTestChangeFormText?: string
+  dataTestCheckbox?: string
+  dataTestOpenForm?: string
 }
 
 export interface ItemDetailProps {
   title: string
   description?: string
   quantity: number
-  // priceWithSymbol: string
   image?: string
   price: number
   currency: CurrencyType
+  dataTestTitle?: string
+  dataTestQuantity?: string
+  dataTestDescription?: string
 }
 
 export interface ShippingDetailsProps {
@@ -70,6 +75,7 @@ export interface PaymentDetailsProps {
   hasBoxShadow?: boolean
   totalValueWithCurrency: TotalAmountWithCurreny
   dataTest?: string
+  dataTestTotalPayment?: string
 }
 
 export interface CheckoutProps<T extends FormField[]> {
@@ -89,4 +95,6 @@ export interface CheckoutProps<T extends FormField[]> {
   }
   isLoading?: boolean
   hasInitResult?: boolean
+  dataTestItemDetails?: string
+  dataTestPaymentDetails?: string
 }

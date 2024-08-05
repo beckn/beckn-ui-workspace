@@ -1,6 +1,5 @@
 import React from 'react'
 import { Box, Flex, Image } from '@chakra-ui/react'
-import { testIds } from '@shared/dataTestIds'
 
 // Custom
 import { Button, Input, Loader } from '@beckn-ui/molecules'
@@ -8,7 +7,7 @@ import Styles from './auth.module.css'
 import { AuthProps } from './auth.types'
 import AuthDivider from './authDivider'
 
-const Auth: React.FC<AuthProps> = ({ schema, isLoading }) => {
+const Auth: React.FC<AuthProps> = ({ schema, isLoading, dataTestForm }) => {
   const { logo, inputs, buttons, socialButtons, loader } = schema
 
   if (isLoading) {
@@ -44,7 +43,7 @@ const Auth: React.FC<AuthProps> = ({ schema, isLoading }) => {
       )}
       <Box
         width={'100%'}
-        data-test={testIds.profile_form}
+        data-test={dataTestForm}
       >
         <Box
           className={Styles.signin_container}

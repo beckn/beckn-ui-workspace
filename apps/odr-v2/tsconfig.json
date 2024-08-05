@@ -14,7 +14,8 @@
       "@styles/*": ["./styles/*"],
       "@public/*": ["./public/*"],
       "@locales/*": ["./locales/*"],
-      "@modals/*": ["./modals/*"]
+      "@modals/*": ["./modals/*"],
+      "@shared/*": ["../../shared/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

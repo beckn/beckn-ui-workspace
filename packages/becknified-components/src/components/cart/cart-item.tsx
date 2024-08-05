@@ -6,7 +6,7 @@ import ProductPrice from '../product-price'
 // Custom modules
 import Styles from './cart-item.module.css'
 import { CartItemProps } from './cart.types'
-import { testIds } from '@shared/dataTestIds'
+import { testIds } from '../../../../../shared/dataTestIds'
 
 const CartItem: React.FC<CartItemProps> = ({
   id,
