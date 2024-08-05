@@ -810,6 +810,7 @@ const OrderDetails = () => {
                     src="/images/threeDots.svg"
                     data-test={testIds.orderDetailspage_otherOptions}
                     alt="threeDots"
+                    cursor={'pointer'}
                   />
                 </Flex>
 
@@ -996,6 +997,7 @@ const OrderDetails = () => {
                     columnGap="10px"
                     alignItems="center"
                     onClick={menuItem.onClick}
+                    cursor={'pointer'}
                     data-test={testIds.orderDetailspage_menuItem}
                   >
                     <Image src={menuItem.image} />
@@ -1015,6 +1017,7 @@ const OrderDetails = () => {
                     columnGap="10px"
                     alignItems="center"
                     onClick={menuItem.onClick}
+                    cursor={'pointer'}
                     data-test={testIds.orderDetailspage_callServiceItem}
                   >
                     <Image src={menuItem.image} />

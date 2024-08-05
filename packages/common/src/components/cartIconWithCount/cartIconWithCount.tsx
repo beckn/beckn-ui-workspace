@@ -17,6 +17,7 @@ function CartIconWithCount({
       align="center"
       data-test={testIds.cartButton}
       onClick={handleClick}
+      cursor={'pointer'}
     >
       <Image
         src="/images/cartIcon.svg"

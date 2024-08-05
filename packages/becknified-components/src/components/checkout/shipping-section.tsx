@@ -50,6 +50,7 @@ const ShippingSection: React.FC<ShippingSectionProps<FormField[]>> = ({
             dataTest={testIds.checkoutpage_changeFormDetails}
             text={triggerFormTitle}
             onClick={onOpen}
+            style={{ cursor: 'pointer' }}
           />
         )}
       </Flex>
