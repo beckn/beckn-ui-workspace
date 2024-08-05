@@ -1,7 +1,8 @@
 import { Logos } from '../../../lib/types'
 
+export type BlockName = 'header' | 'description' | 'selectInput' | 'searchInput' | 'searchByLocation'
 export interface HomePageContentProps {
-  blockOrder?: string[]
+  blockOrder?: BlockName[]
   logos?: Logos
   headerProps?: {
     name: string
@@ -10,9 +11,17 @@ export interface HomePageContentProps {
   }
   searchProps: {
     searchPlaceholder: string
+    label?: string
     setSearchTerm: (value: string) => void
     onSearchIconClick: (e: React.MouseEvent) => void
     onSearchInputEnterPress: () => void
+  }
+  selectInputProps?: {
+    items: string[]
+    selectedItem: string
+    isOpen: boolean
+    toggleDropdown: () => void
+    handleItemClick: (item: string) => void
   }
   searchByLocation?: {
     label: string

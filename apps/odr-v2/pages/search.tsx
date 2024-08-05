@@ -6,10 +6,11 @@ import { useRouter } from 'next/router'
 import { ProductCard } from '@beckn-ui/becknified-components'
 import { BottomModal } from '@beckn-ui/molecules'
 import { discoveryActions } from '@beckn-ui/common/src/store'
+import { parseSearchlist } from '@beckn-ui/common'
 import { useBreakpoint } from '@chakra-ui/react'
 import SearchBar from '../components/header/SearchBar'
 import { useLanguage } from '../hooks/useLanguage'
-import { ParsedItemModel } from '@lib/types/beckn/search'
+import { ParsedItemModel } from '@beckn-ui/common/lib/types'
 import { DOMAIN } from '@lib/config'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
 import Filter from '../components/filter/Filter'
@@ -54,7 +55,7 @@ const Search = () => {
       .post(`${apiUrl}/search`, searchPayload)
       .then(res => {
         dispatch(discoveryActions.addTransactionId({ transactionId: res.data.data[0].context.transaction_id }))
-        const parsedSearchItems = parsedSearchlist(res.data.data)
+        const parsedSearchItems = parseSearchlist(res.data.data)
         dispatch(discoveryActions.addProducts({ products: parsedSearchItems }))
         setItems(parsedSearchItems)
         setOriginalItems(parsedSearchItems)
