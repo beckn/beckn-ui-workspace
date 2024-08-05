@@ -255,7 +255,7 @@ const Homepage = () => {
                   currentModal.title
                 ) : (
                   <RideSummaryHeader
-                    driverImg="/images/car.svg"
+                    driverImg="/images/blankImg.svg"
                     title={currentModal.title}
                     subTitle={currentModal.subTitle}
                   />

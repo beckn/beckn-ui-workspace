@@ -1277,7 +1277,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@beckn-ui/taxi-bpp-v2@workspace:apps/taxi-bpp-v2":
+"@beckn-ui/taxi-bpp-v2@workspace:^, @beckn-ui/taxi-bpp-v2@workspace:apps/taxi-bpp-v2":
   version: 0.0.0-use.local
   resolution: "@beckn-ui/taxi-bpp-v2@workspace:apps/taxi-bpp-v2"
   dependencies:
@@ -4965,6 +4965,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/google.maps@npm:^3.55.12":
+  version: 3.55.12
+  resolution: "@types/google.maps@npm:3.55.12"
+  checksum: 416e7ff4b2a82baba7a1ab1c2c8a2ab3959015483dc4b825c85649f72ce80bc5a079660e4f7bb001a35e13e34111a766ccf120d5f95e3f841218a1e34403a34c
+  languageName: node
+  linkType: hard
+
 "@types/googlemaps@npm:^3.43.3":
   version: 3.43.3
   resolution: "@types/googlemaps@npm:3.43.3"
@@ -6383,6 +6390,7 @@ __metadata:
   resolution: "beckn-ui-workspace@workspace:."
   dependencies:
     "@beckn-ui/prettier-config": "workspace:^"
+    "@beckn-ui/taxi-bpp-v2": "workspace:^"
     "@commitlint/cli": ^17.7.1
     "@commitlint/config-conventional": ^17.7.0
     "@faker-js/faker": ^8.4.1
@@ -6391,6 +6399,7 @@ __metadata:
     "@testing-library/jest-dom": ^6.1.3
     "@testing-library/react": ^14.0.0
     "@types/google-maps": ^3.2.6
+    "@types/google.maps": ^3.55.12
     "@types/googlemaps": ^3.43.3
     "@types/jest": ^29.5.4
     "@types/mongoose": ^5.11.97
