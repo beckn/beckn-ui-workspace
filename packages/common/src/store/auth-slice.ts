@@ -71,4 +71,9 @@ const slice = createSlice({
 })
 
 export const { logout, setCredentials } = slice.actions
+export const {
+  name: authReducerName,
+  getInitialState: authReducerIntialState,
+  caseReducers: authSliceCaseReducer
+} = slice
 export default slice.reducer

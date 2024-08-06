@@ -1,6 +1,5 @@
-import { PickUpDropOffModel } from '@beckn-ui/common'
+import { PickUpDropOffModel, SearchResponseModel } from '@beckn-ui/common'
 import { DOMAIN } from '@lib/config'
-import { SearchResponseModel } from '@lib/types/search'
 
 interface CabDetails {
   name: string

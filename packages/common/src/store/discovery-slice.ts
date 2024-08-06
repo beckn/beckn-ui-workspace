@@ -1,15 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { ParsedItemModel } from '../../lib/types'
-
-export interface Discovery {
-  transactionId: string
-  productList: ParsedItemModel[]
-  selectedProduct: ParsedItemModel
-}
-
-export interface DiscoveryRootState {
-  discovery: Discovery
-}
+import { Discovery, ParsedItemModel } from '../../lib/types'
 
 const initialState: Discovery = {
   transactionId: '',

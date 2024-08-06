@@ -1,17 +1,17 @@
 import React, { useState, useMemo } from 'react'
 import { BecknAuth } from '@beckn-ui/becknified-components'
 import { FormErrors, SignInFormProps } from '@beckn-ui/common/lib/types'
-import { useLoginMutation } from '@beckn-ui/common/src/services/User'
 import { signInValidateForm } from '@beckn-ui/common'
 import TaxiBapLogo from '@public/images/taxi-bap-logo.svg'
 import { useLanguage } from '@hooks/useLanguage'
 import { Box } from '@chakra-ui/react'
 import Router from 'next/router'
+import { useDriverLoginMutation } from '@services/user'
 
 const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
   const [formData, setFormData] = useState<SignInFormProps>(initialFormData)
   const [formErrors, setFormErrors] = useState<FormErrors>({ email: '', password: '' })
-  const [login, { isLoading }] = useLoginMutation()
+  const [driverLogin, { isLoading }] = useDriverLoginMutation()
   const { t } = useLanguage()
 
   // Handle input change and validation
@@ -45,12 +45,12 @@ const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
   // Handle sign-in action
   const handleSignIn = async () => {
     const signInData = {
-      identifier: formData.email,
+      email: formData.email,
       password: formData.password
     }
 
     try {
-      await login(signInData).unwrap()
+      await driverLogin(signInData).unwrap()
       Router.push('/')
     } catch (error) {
       console.error('An error occurred:', error)
