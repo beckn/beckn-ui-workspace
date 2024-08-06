@@ -3,16 +3,16 @@ import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { AppHeader } from '../components/appHeader/AppHeader'
 import { useLanguage } from '../hooks/useLanguage'
-import trackOrderMap from '../public/images/trackOrderMap.svg'
-import orderConfirmed from '../public/images/orderConfirmed.svg'
-import deliveryAgentBlack from '../public/images/deliveryAgentBlack.svg'
-import deliveryAgentRed from '../public/images/deliveryAgentRed.svg'
-import ofdRed from '../public/images/ofdRed.svg'
-import ofdBlack from '../public/images/ofdBlack.svg'
-import orderDeliveredRed from '../public/images/orderDeliveredRed.svg'
-import orderDeliveredBlack from '../public/images/orderDeliveredBlack.svg'
-import lineRed from '../public/images/lineRed.svg'
-import lineBlack from '../public/images/lineBlack.svg'
+// import trackOrderMap from '../public/images/trackOrderMap.svg'
+// import orderConfirmed from '../public/images/orderConfirmed.svg'
+// import deliveryAgentBlack from '../public/images/deliveryAgentBlack.svg'
+// import deliveryAgentRed from '../public/images/deliveryAgentRed.svg'
+// import ofdRed from '../public/images/ofdRed.svg'
+// import ofdBlack from '../public/images/ofdBlack.svg'
+// import orderDeliveredRed from '../public/images/orderDeliveredRed.svg'
+// import orderDeliveredBlack from '../public/images/orderDeliveredBlack.svg'
+// import lineRed from '../public/images/lineRed.svg'
+// import lineBlack from '../public/images/lineBlack.svg'
 
 const TrackOrder = () => {
   const [activeSteps, setActiveSteps] = useState([true, false, false, false])
@@ -41,24 +41,25 @@ const TrackOrder = () => {
   }
 
   const getStepImage = (stepIndex: number) => {
-    switch (stepIndex) {
-      case 0:
-        return orderConfirmed
-      case 1:
-        return activeSteps[1] ? deliveryAgentRed : deliveryAgentBlack
-      case 2:
-        return activeSteps[2] ? ofdRed : ofdBlack
-      case 3:
-        return activeSteps[3] ? orderDeliveredRed : orderDeliveredBlack
-      case 4:
-        return router.push('/feedback')
-      default:
-        return null
-    }
+    return null
+    // switch (stepIndex) {
+    //   case 0:
+    //     return orderConfirmed
+    //   case 1:
+    //     return activeSteps[1] ? deliveryAgentRed : deliveryAgentBlack
+    //   case 2:
+    //     return activeSteps[2] ? ofdRed : ofdBlack
+    //   case 3:
+    //     return activeSteps[3] ? orderDeliveredRed : orderDeliveredBlack
+    //   case 4:
+    //     return router.push('/feedback')
+    //   default:
+    //     return null
+    // }
   }
 
   const getStepLineImage = (stepIndex: number) => {
-    return activeSteps[stepIndex] ? lineRed : lineBlack
+    return null // activeSteps[stepIndex] ? lineRed : lineBlack
   }
 
   useEffect(() => {
@@ -74,10 +75,10 @@ const TrackOrder = () => {
       {/* <AppHeader appHeaderText={t.trackOrder} /> */}
       <Stack marginBottom={'50px'}>
         {/* eslint-disable-next-line jsx-a11y/alt-text */}
-        <Image
+        {/* <Image
           src={trackOrderMap}
           margin={'0 auto'}
-        />
+        /> */}
       </Stack>
       <Stack>
         <Text>
@@ -106,11 +107,11 @@ const TrackOrder = () => {
           >
             <Flex alignItems={'center'}>
               {/* eslint-disable-next-line jsx-a11y/alt-text */}
-              <Image
+              {/* <Image
                 width={'12px'}
                 height={'13px'}
                 src={getStepImage(0)}
-              />
+              /> */}
               <Text
                 color={getStepColor(0)}
                 paddingLeft={'7px'}
@@ -128,11 +129,11 @@ const TrackOrder = () => {
           </Flex>
           <Flex paddingTop={'12px'}>
             {/* eslint-disable-next-line jsx-a11y/alt-text */}
-            <Image
+            {/* <Image
               src={getStepLineImage(0)}
               width={'12px'}
               height={'40px'}
-            />
+            /> */}
             <Text
               paddingLeft={'7px'}
               fontSize={'10px'}
@@ -148,11 +149,11 @@ const TrackOrder = () => {
           >
             <Flex alignItems={'center'}>
               {/* eslint-disable-next-line jsx-a11y/alt-text */}
-              <Image
+              {/* <Image
                 width={'12px'}
                 height={'13px'}
                 src={getStepImage(1)}
-              />
+              /> */}
               <Text
                 paddingLeft={'7px'}
                 fontSize={'12px'}
@@ -170,11 +171,11 @@ const TrackOrder = () => {
           </Flex>
           <Flex paddingTop={'12px'}>
             {/* eslint-disable-next-line jsx-a11y/alt-text */}
-            <Image
+            {/* <Image
               src={getStepLineImage(1)}
               width={'12px'}
               height={'40px'}
-            />
+            /> */}
             <Text
               paddingLeft={'7px'}
               fontSize={'10px'}
@@ -190,7 +191,7 @@ const TrackOrder = () => {
           >
             <Flex alignItems={'center'}>
               {/* eslint-disable-next-line jsx-a11y/alt-text */}
-              <Image src={getStepImage(2)} />
+              {/* <Image src={getStepImage(2)} /> */}
               <Text
                 paddingLeft={'7px'}
                 fontSize={'12px'}
@@ -208,11 +209,11 @@ const TrackOrder = () => {
           </Flex>
           <Flex paddingTop={'12px'}>
             {/* eslint-disable-next-line jsx-a11y/alt-text */}
-            <Image
+            {/* <Image
               src={getStepLineImage(2)}
               width={'12px'}
               height={'40px'}
-            />
+            /> */}
             <Text
               paddingLeft={'7px'}
               fontSize={'10px'}
@@ -228,11 +229,11 @@ const TrackOrder = () => {
           >
             <Flex alignItems={'center'}>
               {/* eslint-disable-next-line jsx-a11y/alt-text */}
-              <Image
+              {/* <Image
                 width={'12px'}
                 height={'13px'}
                 src={getStepImage(3)}
-              />
+              /> */}
               <Text
                 paddingLeft={'7px'}
                 fontSize={'12px'}

@@ -1,9 +1,9 @@
-import BottomDrawer from '@/components/bottomDrawer/BottomDrawer'
-import CheckBoxInput from '@/components/cancel-flow/CheckBoxInput'
-import HeaderContent from '@/components/cancel-flow/HeaderContent'
+import BottomDrawer from '@components/bottomDrawer/BottomDrawer'
+import CheckBoxInput from '@components/cancel-flow/CheckBoxInput'
+import HeaderContent from '@components/cancel-flow/HeaderContent'
 import { Button, Typography } from '@beckn-ui/molecules'
 import { Box } from '@chakra-ui/react'
-import { useLanguage } from 'hooks/useLanguage'
+import { useLanguage } from '@hooks/useLanguage'
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 const cancelRidePage = () => {
@@ -16,7 +16,7 @@ const cancelRidePage = () => {
   const router = useRouter()
   const { t } = useLanguage()
   const [checkedReasons, setCheckedReasons] = useState<{ [key: number | string]: boolean }>(
-    cancellationReasons.reduce((acc, { id }) => {
+    cancellationReasons.reduce((acc: any, { id }) => {
       acc[id] = false
       return acc
     }, {})

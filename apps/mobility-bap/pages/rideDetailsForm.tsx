@@ -1,6 +1,6 @@
-import RideDetails from '@/components/ride-details/RideDetails'
+import RideDetails from '@components/ride-details/RideDetails'
 import React from 'react'
-import { mockData } from 'utilities/cabDetails'
+import { mockData } from '@utils/cabDetails'
 
 const rideDetailsForm = () => {
   const {

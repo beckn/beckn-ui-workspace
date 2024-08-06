@@ -1,7 +1,7 @@
 import React from 'react'
 import { useRouter } from 'next/router'
-import { mockData } from 'utilities/cabDetails'
-import RideDetailsCard from '@/components/ride-details/RideDetailsCard'
+import { mockData } from '@utils/cabDetails'
+import RideDetailsCard from '@components/ride-details/RideDetailsCard'
 
 const driverDetails = () => {
   const router = useRouter()

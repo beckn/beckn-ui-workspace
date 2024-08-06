@@ -1,10 +1,10 @@
 import React from 'react'
 import { Box } from '@chakra-ui/react'
 import { Button, Typography } from '@beckn-ui/molecules'
-import { useLanguage } from 'hooks/useLanguage'
-import { SupportModel } from '@/components/cancel-flow/CancelFlow'
-import BottomDrawer from '@/components/bottomDrawer/BottomDrawer'
-import HeaderContent from '@/components/cancel-flow/HeaderContent'
+import { useLanguage } from '@hooks/useLanguage'
+import { SupportModel } from '@components/cancel-flow/CancelFlow'
+import BottomDrawer from '@components/bottomDrawer/BottomDrawer'
+import HeaderContent from '@components/cancel-flow/HeaderContent'
 const contactSupportPage = () => {
   const { t } = useLanguage()
   const supportInfo: SupportModel = {

@@ -1,13 +1,12 @@
-import SearchRideForm from '@/components/searchRideForm/SearchRideForm'
-import { getSelectPayload } from '@/components/searchRideForm/SearchRideForm.utils'
-import { DOMAIN } from 'lib/config'
-import { IGeoLocationSearchPageRootState } from 'lib/types/geoLocationSearchPage'
+import SearchRideForm from '@components/searchRideForm/SearchRideForm'
+import { getSelectPayload } from '@components/searchRideForm/SearchRideForm.utils'
+import { DOMAIN } from '@lib/config'
 import dynamic from 'next/dynamic'
 import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux'
-import { useSelectMutation } from 'services/select'
-import { DiscoveryRootState } from 'store/discovery-slice'
-import { mockData, ParsedCabDataModel } from 'utilities/cabDetails'
+import { DiscoveryRootState } from '@store/discovery-slice'
+import { mockData, ParsedCabDataModel } from '@utils/cabDetails'
+import { useSelectMutation } from '@beckn-ui/common/src/services/select'
 
 const MapWithNoSSR: any = dynamic(() => import('../components/Map'), {
   ssr: false
