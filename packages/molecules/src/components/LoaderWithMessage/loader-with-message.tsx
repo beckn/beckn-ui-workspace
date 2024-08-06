@@ -4,9 +4,9 @@ import React from 'react'
 import { LoaderWithMessagePropsModel } from './loader-with-message.types'
 
 const LoaderWithMessage: React.FC<LoaderWithMessagePropsModel> = props => {
-  const { loadingText = '', loadingSubText = '' } = props
+  const { loadingText = '', loadingSubText = '', dataTest } = props
   return (
-    <Loader>
+    <Loader dataTest={dataTest}>
       <Box
         mt={'13px'}
         display={'flex'}

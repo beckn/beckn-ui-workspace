@@ -9,6 +9,7 @@ import { ParsedItemModel } from '@beckn-ui/common/lib/types'
 import { discoveryActions } from '@beckn-ui/common/src/store/discovery-slice'
 import { DOMAIN } from '@lib/config'
 import { Product } from '@beckn-ui/becknified-components'
+import { testIds } from '@shared/dataTestIds'
 
 const Search = () => {
   const [items, setItems] = useState<ParsedItemModel[]>([])
@@ -140,7 +141,8 @@ const Search = () => {
       loaderProps={{
         isLoading,
         loadingText: t.loadingText,
-        loadingSubText: t.loadingSubText
+        loadingSubText: t.loadingSubText,
+        dataTest: testIds.loadingIndicator
       }}
       catalogProps={{
         viewDetailsClickHandler: handleViewDetailsClickHandler

@@ -19,6 +19,7 @@ export interface SearchAndDiscoverProps {
     isLoading: boolean
     loadingSubText: string
     loadingText: string
+    dataTest?: string
   }
   catalogProps: {
     viewDetailsClickHandler: (item: ParsedItemModel, product: Product) => void

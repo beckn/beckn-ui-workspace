@@ -117,7 +117,7 @@ const Header: React.FC<HeaderProps> = ({
           {menuItems.map((menuItem, index) => (
             <Box
               cursor={'pointer'}
-              data-test={menuItem.id}
+              data-test={menuItem.dataTest}
               key={index}
               onClick={() => {
                 if (menuItem.id === 'logout') {

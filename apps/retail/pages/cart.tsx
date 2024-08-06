@@ -14,6 +14,7 @@ import { DiscoveryRootState, ICartRootState } from '@beckn-ui/common/lib/types'
 import { cartActions } from '@beckn-ui/common/src/store/cart-slice'
 import { DOMAIN } from '@lib/config'
 import { useSelectMutation } from '@beckn-ui/common/src/services/select'
+import { testIds } from '@shared/dataTestIds'
 
 const Cart = () => {
   const [fetchQuotes, { isLoading, data, isError }] = useSelectMutation()
@@ -72,7 +73,7 @@ const Cart = () => {
                 }
               }) as CartItemProps
           ),
-          loader: { text: t.quoteRequestLoader },
+          loader: { text: t.quoteRequestLoader, dataTest: testIds.loadingIndicator },
           orderSummary: {
             totalAmount: {
               price: totalAmount,
@@ -88,14 +89,21 @@ const Cart = () => {
             },
             orderSummaryText: t.orderSummary,
             totalQuantityText: t.totalQuantity,
-            totalAmountText: t.totalAmount
+            totalAmountText: t.totalAmount,
+            dataTestTotalQuantity: testIds.cartpage_totalQuantityText,
+            dataTestTotalAmount: testIds.cartpage_totalAmountText,
+            dataTestCta: testIds.cartpage_cartOrderButton
           },
           emptyCard: {
             image: '/images/emptyCard.svg',
             heading: t.emptyCardHeading,
             subHeading: t.emptyCardSubHeading,
             buttonText: t.shop,
-            buttonHanler: handleShopButton
+            buttonHanler: handleShopButton,
+            dataTestImage: testIds.cartpage_emptyImage,
+            dataTestHeading: testIds.cartpage_emptyheading,
+            dataTestSubHeading: testIds.cartpage_emptySubHeading,
+            dataTestCta: testIds.cartpage_emptyButton
           }
         }}
       />
