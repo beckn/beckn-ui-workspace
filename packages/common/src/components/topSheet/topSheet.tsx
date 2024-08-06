@@ -47,7 +47,7 @@ const TopSheet: React.FC<TopSheetComponentProps> = ({
   const bgColorOfSearchIcon = theme.colors.primary['100']
 
   const onFocusChange = () => {
-    dispatch(toggleLocationSearchPageVisibility(true))
+    dispatch(toggleLocationSearchPageVisibility({ visible: true, addressType: '' }))
   }
 
   const renderAddressText = currentLocationFetchError || geoLocationSearchPageSelectedAddress || currentAddress || ''
