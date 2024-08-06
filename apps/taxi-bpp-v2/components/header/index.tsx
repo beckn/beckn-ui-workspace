@@ -42,7 +42,7 @@ const Header = () => {
             {
               id: 'history',
               label: t.rideHistoryIcon,
-              href: '/rideHistory',
+              href: '/myRides',
               icon: '/images/orderHistoryIcon.svg'
             },
             {

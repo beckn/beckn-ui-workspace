@@ -1,7 +1,7 @@
 import { Button, Typography } from '@beckn-ui/molecules'
 import { Box, Divider, Flex, Image } from '@chakra-ui/react'
 import React from 'react'
-import { RideSummaryProps } from './rideSummaryType'
+import { RideSummaryProps } from '../../lib/types/rideDetails'
 import Styles from '@beckn-ui/becknified-components/src/pages/auth/auth.module.css'
 
 const RideSummary: React.FC<RideSummaryProps> = ({

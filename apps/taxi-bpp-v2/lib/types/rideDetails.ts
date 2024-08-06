@@ -19,3 +19,12 @@ export interface RideSummaryProps {
   }
   handleNavigate?: (data: Coordinate) => void
 }
+
+export interface RideDetailsProps {
+  img: string
+  riderName: string
+  date: string
+  time: string
+  fare: string
+  status: string
+}
