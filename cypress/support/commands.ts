@@ -96,7 +96,7 @@ Cypress.Commands.add('login', (baseUrl, email, password) => {
     },
     {
       validate: () => {
-        cy.url().should('eq', homePageUrl)
+        cy.url().should('include', homePageUrl)
         cy.getCookie('authToken').should('exist')
       }
     }

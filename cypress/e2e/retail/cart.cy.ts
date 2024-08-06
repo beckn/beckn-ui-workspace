@@ -1,7 +1,7 @@
 import { testIds } from '../../../shared/dataTestIds'
 describe('Search Page Tests', () => {
   before(() => {
-    cy.login(testIds.url_base, testIds.user_validEmail, testIds.user_validPassword)
+    cy.login(testIds.url_base_retail, testIds.user_validEmail, testIds.user_validPassword)
   })
   context('When there are no items in cart', () => {
     const searchTerm = 'sunglass'

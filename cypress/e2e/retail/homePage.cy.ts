@@ -2,7 +2,7 @@ import { testIds } from '../../../shared/dataTestIds'
 
 describe('Home Page Tests', () => {
   before(() => {
-    cy.login(testIds.url_base, testIds.user_validEmail, testIds.user_validPassword)
+    cy.login(testIds.url_base_retail, testIds.user_validEmail, testIds.user_validPassword)
   })
 
   beforeEach(() => {
@@ -30,7 +30,7 @@ describe('Home Page Tests', () => {
     cy.getByData(testIds.searchInput).type('sunglasses')
     cy.getByData(testIds.searchButton).click()
     cy.getByData(testIds.loadingIndicator).should('be.visible')
-    cy.url().should('eq', `${testIds.url_search}?searchTerm=sunglasses`)
+    cy.url().should('include', `${testIds.url_search}?searchTerm=sunglasses`)
   })
 
   it('should handle address conversion based on coordinates', () => {

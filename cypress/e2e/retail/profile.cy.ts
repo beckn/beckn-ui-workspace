@@ -3,7 +3,7 @@ import { profileDetails } from '../../fixtures/profile/profileDetails'
 
 describe('Profile Page Tests', () => {
   before(() => {
-    cy.login(testIds.url_base, testIds.user_validEmail, testIds.user_validPassword)
+    cy.login(testIds.url_base_retail, testIds.user_validEmail, testIds.user_validPassword)
 
     cy.visit(testIds.url_home)
     cy.setGeolocation('getAddress')

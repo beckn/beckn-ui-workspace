@@ -4,7 +4,7 @@ describe('Payment Page', () => {
   const searchTerm = 'sunglass'
 
   before(() => {
-    cy.login(testIds.url_base, testIds.user_validEmail, testIds.user_validPassword)
+    cy.login(testIds.url_base_retail, testIds.user_validEmail, testIds.user_validPassword)
     cy.visit(testIds.url_home)
     cy.setGeolocation('getAddress')
     cy.wait('@getAddress')
