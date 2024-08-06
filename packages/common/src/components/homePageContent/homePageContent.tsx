@@ -1,22 +1,30 @@
 import React, { useMemo } from 'react'
-import { Box, Flex, useBreakpoint, useTheme } from '@chakra-ui/react'
+import { Box, Divider, Flex, Icon, useBreakpoint, useTheme } from '@chakra-ui/react'
 import { SearchInput } from '@beckn-ui/becknified-components'
 import { Typography } from '@beckn-ui/molecules'
 import { RiArrowRightSLine } from 'react-icons/ri'
 import PoweredBy from '../poweredBy'
 import { HomePageContentProps } from './homePageContent.types'
 import { testIds } from '@shared/dataTestIds'
+import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md'
 
 const HomePageContent: React.FC<HomePageContentProps> = ({
   blockOrder = [],
   logos,
   headerProps,
+  selectInputProps,
   searchProps,
   searchByLocation,
   footerProps
 }) => {
   const { name, title, description } = headerProps || {}
-  const { searchPlaceholder, setSearchTerm, onSearchIconClick, onSearchInputEnterPress } = searchProps
+  const {
+    searchPlaceholder,
+    setSearchTerm,
+    onSearchIconClick,
+    onSearchInputEnterPress,
+    label: searchInputLabel
+  } = searchProps
   const { label, onSearchByLocationClick } = searchByLocation || {}
   const { poweredByText, poweredByLogoSrc } = footerProps
 
@@ -71,13 +79,98 @@ const HomePageContent: React.FC<HomePageContentProps> = ({
         )
       case 'searchInput':
         return (
-          <SearchInput
-            onChangeHandler={(e: React.BaseSyntheticEvent) => setSearchTerm(e.target.value)}
-            searchIcon={'/images/search.svg'}
-            searchIconClickHandler={onSearchIconClick}
-            onEnterHandler={(e: { key: string }) => e.key === 'Enter' && onSearchInputEnterPress()}
-            placeHolder={searchPlaceholder}
-          />
+          <>
+            {searchInputLabel && (
+              <Typography
+                text={searchInputLabel!}
+                color={primaryColor}
+                fontSize="15px"
+                fontWeight="600"
+              />
+            )}
+            <SearchInput
+              onChangeHandler={(e: React.BaseSyntheticEvent) => setSearchTerm(e.target.value)}
+              searchIcon={'/images/search.svg'}
+              searchIconClickHandler={onSearchIconClick}
+              onEnterHandler={(e: { key: string }) => e.key === 'Enter' && onSearchInputEnterPress()}
+              placeHolder={searchPlaceholder}
+            />
+          </>
+        )
+      case 'selectInput':
+        return (
+          <Box
+            position="relative"
+            display="inline-block"
+            width={'100%'}
+            m="1.25rem 0"
+          >
+            <Typography
+              fontSize={'15px'}
+              fontWeight="600"
+              text="Category"
+              color={'#8D353A'}
+            />
+            <Box
+              mt={'8px'}
+              padding="12px"
+              cursor="pointer"
+              border="1px solid #ccc"
+              borderRadius={'5px'}
+              onClick={selectInputProps?.toggleDropdown}
+              fontSize={'15px'}
+              fontWeight={400}
+              backgroundColor={'transparent'}
+              display="flex"
+              alignItems="center"
+              justifyContent={'space-between'}
+              color={'#747474'}
+            >
+              {selectInputProps?.selectedItem || 'Select Category'}
+
+              <Icon
+                as={selectInputProps?.isOpen ? MdKeyboardArrowUp : MdKeyboardArrowDown}
+                ml="2"
+                w={'20px'}
+                h={'20px'}
+              />
+            </Box>
+            {selectInputProps?.isOpen && (
+              <Box
+                display="block"
+                position="absolute"
+                backgroundColor="#fff"
+                boxShadow="0 8px 16px rgba(0, 0, 0, 0.2)"
+                zIndex="1"
+                width={'100%'}
+                borderRadius={'5px'}
+              >
+                {selectInputProps?.items.map((item, index) => (
+                  <Box
+                    key={index}
+                    className="dropdown-item"
+                    cursor="pointer"
+                    onClick={() => selectInputProps?.handleItemClick(item)}
+                    p="0 15px 15px 15px"
+                    _hover={{
+                      bg: '#E9C378',
+                      fontWeight: '500'
+                    }}
+                  >
+                    <Box pt="15px">
+                      {item}
+                      {selectInputProps?.items.length - 1 !== index ? (
+                        <Divider
+                          position={'relative'}
+                          top={'15px'}
+                        />
+                      ) : null}
+                    </Box>
+                  </Box>
+                ))}
+              </Box>
+            )}
+          </Box>
         )
       case 'searchByLocation':
         return (
