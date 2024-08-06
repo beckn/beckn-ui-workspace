@@ -1,9 +1,18 @@
+import { Coordinate } from './common'
+
+export interface PickUpDropOffModel {
+  address: string
+  geoLocation: Coordinate
+}
+
+export type GeoLocationType = '' | 'pick-up' | 'drop-off'
 export interface IGeoLocationSearchPage {
   geoLocationSearchPageVisible: boolean
+  currentGeoLocationType: GeoLocationType
   geoAddress: string
   geoLatLong: string
-  pickupAddress?: string
-  dropoffAddress?: string
+  destinationGeoAddress: string
+  destinationGeoLatLong: string
 }
 
 export interface IGeoLocationSearchPageRootState {

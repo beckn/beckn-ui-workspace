@@ -1,7 +1,7 @@
 import { Box, Flex, Image, Input, Text } from '@chakra-ui/react'
 import React from 'react'
 import Styles from './GeoLocationInput.module.css'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useState } from 'react'
 import backArrow from '@public/images/Back.svg'
 import locationMarker from '@public/images/SearchLocationMarker.svg'
@@ -27,7 +27,7 @@ const GeoLocationInputList: React.FC = () => {
     closeGeoLocationSearchPage()
   }
   const closeGeoLocationSearchPage = () => {
-    dispatch(toggleLocationSearchPageVisibility(false))
+    dispatch(toggleLocationSearchPageVisibility({ visible: false, addressType: '' }))
   }
   return (
     <Box className={Styles.main_container2}>

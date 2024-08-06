@@ -1,6 +1,6 @@
+import { GeoLocationAddresModel } from '@lib/types/geoLocationSearchPage'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { GeoLocationAddresModel } from 'lib/types/geoLocationSearchPage'
-import { ParsedCabDataModel } from 'utilities/cabDetails'
+import { ParsedCabDataModel } from '@utils/cabDetails'
 
 export interface RideDetailsModel {
   provider: ParsedCabDataModel

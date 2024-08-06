@@ -1,6 +1,6 @@
-import { DOMAIN } from 'lib/config'
-import { GeoLocationAddresModel } from 'lib/types/geoLocationSearchPage'
-import { SearchResponseModel } from 'lib/types/search'
+import { PickUpDropOffModel } from '@beckn-ui/common'
+import { DOMAIN } from '@lib/config'
+import { SearchResponseModel } from '@lib/types/search'
 
 interface CabDetails {
   name: string
@@ -166,7 +166,7 @@ export const parsedSearchDetails = (data: SearchResponseModel[]) => {
   return { providerDetails: itemsarray, totalCabs }
 }
 
-export const getSearchRidePayload = (start: GeoLocationAddresModel, end: GeoLocationAddresModel) => {
+export const getSearchRidePayload = (start: PickUpDropOffModel, end: PickUpDropOffModel) => {
   return {
     context: {
       domain: DOMAIN
