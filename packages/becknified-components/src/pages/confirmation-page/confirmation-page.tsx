@@ -2,9 +2,16 @@ import React from 'react'
 import { ConfirmationPageProps } from './confirmation-page.types'
 import { Image, Box, Flex, VStack } from '@chakra-ui/react'
 import { Button, Loader, Typography } from '@beckn-ui/molecules'
-import { testIds } from '@shared/dataTestIds'
 
-const ConfirmationPage: React.FC<ConfirmationPageProps> = ({ schema, className }) => {
+const ConfirmationPage: React.FC<ConfirmationPageProps> = ({
+  schema,
+  className,
+  dataTestSuccess = 'suceess-OrderMessage',
+  dataTestGrateful = 'grateful-message',
+  dataTestOrderId = 'order-message',
+  dataTestTrackOrder = 'track-order',
+  dataTestConfirmImage = 'confrimPage-image'
+}) => {
   const { iconSrc, buttons, successOrderMessage, gratefulMessage, orderIdMessage, trackOrderMessage } = schema
 
   return (
@@ -21,7 +28,7 @@ const ConfirmationPage: React.FC<ConfirmationPageProps> = ({ schema, className }
         <Image
           className={`${className}-confirm-image`}
           src={iconSrc}
-          data-test={testIds.confirmPageImage}
+          data-test={dataTestConfirmImage}
         />
       </Box>
 
@@ -43,18 +50,18 @@ const ConfirmationPage: React.FC<ConfirmationPageProps> = ({ schema, className }
             text={successOrderMessage}
             variant="subTitleSemibold"
             fontSize="1rem"
-            dataTest={testIds.orderConfirmation_successOrderMessage}
+            dataTest={dataTestSuccess}
           />
           <Typography
             fontSize="1rem"
             text={gratefulMessage}
-            dataTest={testIds.orderConfirmation_gratefulMessage}
+            dataTest={dataTestGrateful}
           />
           {orderIdMessage && (
             <Typography
               style={{ fontSize: '1rem' }}
               text={orderIdMessage}
-              dataTest={testIds.orderConfirmation_orderIdMessage}
+              dataTest={dataTestOrderId}
             />
           )}
 
@@ -62,7 +69,7 @@ const ConfirmationPage: React.FC<ConfirmationPageProps> = ({ schema, className }
             <Typography
               style={{ fontSize: '1rem' }}
               text={trackOrderMessage}
-              dataTest={testIds.orderConfirmation_trackOrderMessage}
+              dataTest={dataTestTrackOrder}
             />
           )}
         </Box>
@@ -81,9 +88,7 @@ const ConfirmationPage: React.FC<ConfirmationPageProps> = ({ schema, className }
               {buttons.map((button, idx) => {
                 return (
                   <Button
-                    dataTest={button.dataTest}
                     key={idx}
-                    dataTest={button.dataTest}
                     {...button}
                   />
                 )

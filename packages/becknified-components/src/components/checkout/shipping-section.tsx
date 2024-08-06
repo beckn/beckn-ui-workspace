@@ -10,7 +10,6 @@ import AddShippingButtonImage from '../../../public/images/addShippingBtn.svg'
 import { BottomModal, FormField, Typography, FormData, Input } from '@beckn-ui/molecules'
 
 import ShippingDetails from './shipping-details'
-import { testIds } from '@shared/dataTestIds'
 
 const ShippingSection: React.FC<ShippingSectionProps<FormField[]>> = ({
   shippingForm,
@@ -27,7 +26,10 @@ const ShippingSection: React.FC<ShippingSectionProps<FormField[]>> = ({
   isDisabled = false,
   onCheckChange,
   color,
-  dataTest
+  dataTest,
+  dataTestChangeFormText = 'changeFormDetails',
+  dataTestCheckbox = 'checkbox',
+  dataTestOpenForm = 'open-form'
 }) => {
   const { isOpen, onClose, onOpen } = useDisclosure()
   // const [isChecked, setIsChecked] = useState<boolean>(true)
@@ -47,7 +49,7 @@ const ShippingSection: React.FC<ShippingSectionProps<FormField[]>> = ({
           <Typography
             variant="subTitleRegular"
             color={color}
-            dataTest={testIds.checkoutpage_changeFormDetails}
+            dataTest={dataTestChangeFormText}
             text={triggerFormTitle}
             onClick={onOpen}
             style={{ cursor: 'pointer' }}
@@ -61,7 +63,7 @@ const ShippingSection: React.FC<ShippingSectionProps<FormField[]>> = ({
             colorScheme="primary"
             pr={'12px'}
             fontSize={'17px'}
-            data-test={testIds.checkoutpage_checkbox}
+            data-test={dataTestCheckbox}
             checked={isChecked}
             defaultChecked={isChecked}
             onChange={() => onCheckChange && onCheckChange()}
@@ -73,7 +75,7 @@ const ShippingSection: React.FC<ShippingSectionProps<FormField[]>> = ({
         <DetailsCard isDisabled={isDisabled}>
           <Flex
             alignItems={'center'}
-            data-test={testIds.checkoutpage_openForm}
+            data-test={dataTestOpenForm}
             onClick={onOpen}
           >
             {/* <Image src={addButtonImage} /> */}

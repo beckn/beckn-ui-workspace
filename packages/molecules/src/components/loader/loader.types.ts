@@ -8,4 +8,5 @@ export interface LoaderProps {
   size?: string
   children?: ReactNode
   text?: string
+  dataTest?: string
 }

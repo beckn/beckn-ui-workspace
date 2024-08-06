@@ -4,7 +4,6 @@ import { Typography, Button } from '@beckn-ui/molecules'
 import { ProductCtaProps } from './product-cta.types'
 import useResponsive from '../../hooks/useResponsive'
 import ProductPrice from '../product-price'
-import { testIds } from '@shared/dataTestIds'
 
 const ProductCta: React.FC<ProductCtaProps> = ({
   currency,
@@ -14,7 +13,10 @@ const ProductCta: React.FC<ProductCtaProps> = ({
   counter,
   cta,
   counterTitle,
-  noCounter
+  noCounter,
+  dataTestCounterValue = 'counter-value',
+  dataTestDecrementCounter = 'decrement-counter',
+  dataTestIncrementCounter = 'increment-counter'
 }) => {
   const theme = useTheme()
   const { isMobile } = useResponsive()
@@ -63,7 +65,7 @@ const ProductCta: React.FC<ProductCtaProps> = ({
           mt="1rem"
         >
           <Box
-            data-test={testIds.productpage_incrementCounter}
+            data-test={dataTestIncrementCounter}
             onClick={handleIncrement}
             fontSize="24px"
           >
@@ -74,12 +76,12 @@ const ProductCta: React.FC<ProductCtaProps> = ({
             color={theme.colors.secondary[100]}
             p="2px 20px"
             borderRadius={'4px'}
-            data-test={testIds.productpage_counterValue}
+            data-test={dataTestCounterValue}
           >
             {counter}
           </Box>
           <Box
-            data-test={testIds.productpage_decrementCounter}
+            data-test={dataTestDecrementCounter}
             onClick={handleDecrement}
             fontSize="24px"
           >
@@ -89,10 +91,7 @@ const ProductCta: React.FC<ProductCtaProps> = ({
       )}
 
       <Box width={{ base: '100%', md: '50%' }}>
-        <Button
-          {...cta}
-          dataTest={testIds.productpage_addTocartButton}
-        />
+        <Button {...cta} />
       </Box>
     </Box>
   )

@@ -26,6 +26,10 @@ export interface OrderSummaryProps {
   orderSummaryText?: string
   totalQuantityText?: string
   totalAmountText?: string
+  dataTestText?: string
+  dataTestTotalQuantity?: string
+  dataTestTotalAmount?: string
+  dataTestCta?: string
 }
 interface EmptyCardProps {
   image?: string
@@ -33,6 +37,10 @@ interface EmptyCardProps {
   subHeading?: string
   buttonText?: string
   buttonHanler?: MouseEventHandler<HTMLButtonElement>
+  dataTestImage?: string
+  dataTestHeading?: string
+  dataTestSubHeading?: string
+  dataTestCta?: string
 }
 export interface CartProps {
   schema: {

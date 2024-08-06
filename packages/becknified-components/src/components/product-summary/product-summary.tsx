@@ -5,7 +5,6 @@ import React from 'react'
 import { ProductSummaryPropsModel } from './product-summary.types'
 import ProductDescription from '../prouct-description'
 import ProductCTA from '../product-Cta'
-import { testIds } from '@shared/dataTestIds'
 
 const ProductSummary: React.FC<ProductSummaryPropsModel> = props => {
   const {
@@ -17,7 +16,9 @@ const ProductSummary: React.FC<ProductSummaryPropsModel> = props => {
     secondaryCTAs,
     secondaryDescription,
     starRating,
-    productCta
+    productCta,
+    dataTestTitle = 'item-title',
+    dataTestDescription = 'item-description'
   } = props
 
   return (
@@ -57,24 +58,19 @@ const ProductSummary: React.FC<ProductSummaryPropsModel> = props => {
             >
               <Box>
                 <Typography
-                  dataTest={testIds.item_title}
+                  dataTest={dataTestTitle}
                   className={`${className}-product_summary_name`}
                   text={name}
                   fontSize={'20px'}
                   fontWeight={'500'}
                 />
               </Box>
-              {starRating && (
-                <StarRating
-                  {...starRating}
-                  dataTest={testIds.item_rating}
-                />
-              )}
+              {starRating && <StarRating {...starRating} />}
               {secondaryDescription && (
                 <Box minHeight="10rem">
                   <ProductDescription
                     description={secondaryDescription as string}
-                    dataTest={testIds.item_description}
+                    dataTest={dataTestDescription}
                   />
                 </Box>
               )}

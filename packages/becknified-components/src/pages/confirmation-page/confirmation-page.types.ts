@@ -10,4 +10,9 @@ export interface ConfirmationPageProps {
     trackOrderMessage?: string
   }
   className?: string
+  dataTestConfirmImage?: string
+  dataTestSuccess?: string
+  dataTestGrateful?: string
+  dataTestOrderId?: string
+  dataTestTrackOrder?: string
 }

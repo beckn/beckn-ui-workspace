@@ -6,6 +6,7 @@ import { useLanguage } from '@hooks/useLanguage'
 import { DiscoveryRootState, ParsedItemModel } from '@beckn-ui/common/lib/types'
 import { cartActions } from '@beckn-ui/common/src/store/cart-slice'
 import { feedbackActions } from '@beckn-ui/common/src/store/ui-feedback-slice'
+import { testIds } from '@shared/dataTestIds'
 
 const Product = () => {
   const { t } = useLanguage()
@@ -45,11 +46,14 @@ const Product = () => {
             imageSrc: selectedProduct.item.images?.[0].url!,
             name: selectedProduct.item.name,
             secondaryDescription: selectedProduct.item.long_desc,
+            dataTestTitle: testIds.item_title,
+            dataTestDescription: testIds.item_description,
             starRating: {
               rating: selectedProduct.item.rating!,
               size: 20,
               setRating: () => {},
-              starCount: 5
+              starCount: 5,
+              dataTest: testIds.item_rating
             },
             productCta: {
               currency: selectedProduct.item.price.currency,
@@ -58,6 +62,7 @@ const Product = () => {
               handleDecrement: decrement,
               counter: counter,
               cta: {
+                dataTest: testIds.productpage_addTocartButton,
                 text: t.addToCart,
                 color: 'black',
                 handleClick: () => {

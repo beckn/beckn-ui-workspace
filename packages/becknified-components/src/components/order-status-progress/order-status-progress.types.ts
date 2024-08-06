@@ -4,4 +4,6 @@ export interface OrderStatusProgressProps {
   className?: string
   noLine?: boolean
   lastElement?: boolean
+  dataTestStateName?: string
+  dataTestStateTime?: string
 }

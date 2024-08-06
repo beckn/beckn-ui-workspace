@@ -11,4 +11,6 @@ export interface ProductSummaryPropsModel {
   secondaryCTAs?: ButtonProps[]
   starRating?: StarRatingProps
   productCta?: ProductCtaProps
+  dataTestTitle?: string
+  dataTestDescription?: string
 }
