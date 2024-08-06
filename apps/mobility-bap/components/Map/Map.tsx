@@ -1,36 +1,32 @@
-// @ts-nocheck
-import { useLoadScript, GoogleMap, Marker, DirectionsRenderer } from '@react-google-maps/api'
+import { Coordinate } from '@beckn-ui/common'
+import { useLoadScript, GoogleMap, DirectionsRenderer, MarkerF } from '@react-google-maps/api'
+import { formatCoords } from '@utils/geoLocation-utils'
 import { useMemo, useState, useEffect, useCallback } from 'react'
 
-interface Coordinate {
-  lat: number
-  long: number
-}
-
 interface MapProps {
-  source: Coordinate
+  origin: Coordinate
   destination: Coordinate
 }
 
-const formatCoords = (coord: Coordinate) => {
-  return { lat: coord.lat, lng: coord.long }
-}
-
 const Map: React.FC<MapProps> = (props: MapProps) => {
-  const { source, destination } = props
-  const [directions, setDirections] = useState(null)
+  const { origin, destination } = props
+
+  const [directions, setDirections] = useState<google.maps.DirectionsResult | null>(null)
+
+  const libraries = useMemo(() => ['places'], [])
+  const mapCenter = useMemo(() => formatCoords(origin), [origin])
 
   const isValidCoords = (coords: Coordinate) => {
     return (
       coords &&
-      typeof coords.lat === 'number' &&
-      typeof coords.long === 'number' &&
-      coords.lat !== 0 &&
-      coords.long !== 0
+      typeof coords.latitude === 'number' &&
+      typeof coords.longitude === 'number' &&
+      coords.latitude !== 0 &&
+      coords.longitude !== 0
     )
   }
 
-  const calculateRoute = useCallback((start, end) => {
+  const calculateRoute = useCallback((start: google.maps.LatLng, end: google.maps.LatLng) => {
     const directionsService = new google.maps.DirectionsService()
     directionsService.route(
       {
@@ -47,16 +43,13 @@ const Map: React.FC<MapProps> = (props: MapProps) => {
   }, [])
 
   useEffect(() => {
-    if (!(isValidCoords(source) && isValidCoords(destination))) return
+    if (!(isValidCoords(origin) && isValidCoords(destination))) return
 
-    const start = new google.maps.LatLng(source.lat, source.long)
-    const end = new google.maps.LatLng(destination.lat, destination.long)
+    const start = new google.maps.LatLng(origin.latitude, origin.longitude)
+    const end = new google.maps.LatLng(destination.latitude, destination.longitude)
 
     calculateRoute(start, end)
-  }, [source, destination])
-
-  const libraries = useMemo(() => ['places'], [])
-  const mapCenter = useMemo(() => (source ? formatCoords(source) : null), [source])
+  }, [origin, destination])
 
   const mapOptions = useMemo<google.maps.MapOptions>(
     () => ({
@@ -70,7 +63,7 @@ const Map: React.FC<MapProps> = (props: MapProps) => {
   )
 
   const { isLoaded } = useLoadScript({
-    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY,
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY!,
     libraries: libraries as any
   })
 
@@ -78,14 +71,14 @@ const Map: React.FC<MapProps> = (props: MapProps) => {
     <>
       <GoogleMap
         options={mapOptions}
-        scrollWheelZoom={true}
-        zoomAnimation={true}
-        center={mapCenter}
-        mapContainerStyle={{ maxHeight: '100vh', height: '90vh' }}
+        zoom={16}
+        center={mapCenter!}
+        mapTypeId={google.maps.MapTypeId.ROADMAP}
+        mapContainerStyle={{ maxHeight: '100vh', height: '100vh' }}
       >
         {directions && <DirectionsRenderer directions={directions} />}
-        {!directions && source && <Marker position={formatCoords(source)} />}
-        {!directions && destination && <Marker position={formatCoords(destination)} />}
+        {!directions && origin && <MarkerF position={formatCoords(origin)} />}
+        {!directions && destination && <MarkerF position={formatCoords(destination)} />}
       </GoogleMap>
     </>
   )

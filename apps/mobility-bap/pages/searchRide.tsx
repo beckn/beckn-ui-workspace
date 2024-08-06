@@ -1,15 +1,16 @@
-import TripLocation from '@/components/searchRideForm/TripLocation'
+import TripLocation from '@components/searchRideForm/TripLocation'
 import { Button, Loader, Typography } from '@beckn-ui/molecules'
 import { Image, Box, Card, CardBody, Divider, Flex, useTheme } from '@chakra-ui/react'
 import axios from 'axios'
-import { IGeoLocationSearchPageRootState } from 'lib/types/geoLocationSearchPage'
 import dynamic from 'next/dynamic'
 import Router from 'next/router'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
-import { discoveryActions } from 'store/discovery-slice'
-import { ParsedCabDataModel, getSearchRidePayload, parsedSearchDetails } from 'utilities/cabDetails'
+import { discoveryActions } from '@store/discovery-slice'
+import { ParsedCabDataModel, getSearchRidePayload, parsedSearchDetails } from '@utils/cabDetails'
+import { feedbackActions, IGeoLocationSearchPageRootState } from '@beckn-ui/common'
+import { formatGeoLocationDetails } from '@utils/geoLocation-utils'
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL
 const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
@@ -22,8 +23,15 @@ const SearchRide = () => {
   const theme = useTheme()
   const dispatch = useDispatch()
 
-  const pickup = useSelector((state: IGeoLocationSearchPageRootState) => state.geoLocationSearchPageUI.pickup)
-  const dropoff = useSelector((state: IGeoLocationSearchPageRootState) => state.geoLocationSearchPageUI.dropoff)
+  const {
+    geoAddress: originGeoAddress,
+    geoLatLong: originGeoLatLong,
+    destinationGeoAddress,
+    destinationGeoLatLong
+  } = useSelector((state: IGeoLocationSearchPageRootState) => state.geoLocationSearchPageUI)
+
+  const pickup = formatGeoLocationDetails(originGeoAddress, originGeoLatLong)
+  const dropoff = formatGeoLocationDetails(destinationGeoAddress, destinationGeoLatLong)
 
   const searchRide = useCallback(() => {
     const payload = getSearchRidePayload(pickup, dropoff)
@@ -39,9 +47,16 @@ const SearchRide = () => {
         setIsLoading(false)
       })
       .catch(e => {
-        toast.error('Something went wrong, please try again', {
-          position: 'top-center'
-        })
+        dispatch(
+          feedbackActions.setToastData({
+            toastData: {
+              message: 'Error',
+              display: true,
+              type: 'error',
+              description: 'Something went wrong, please try again'
+            }
+          })
+        )
         Router.push('/')
       })
       .finally(() => {
@@ -142,7 +157,7 @@ const SearchRide = () => {
               mb="20px"
             >
               <Image
-                src={provider.image}
+                src={'./images/olaCab.svg'} // provider.image ||
                 alt={`${provider.providerName} Cab`}
                 mr="10px"
               />

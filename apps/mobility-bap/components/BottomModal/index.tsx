@@ -1,3 +1,3 @@
-import BottomModal from './BottomModal'
+import PickUpDropOffModal from './PickUpDropOffModal'
 
-export default BottomModal
+export default PickUpDropOffModal

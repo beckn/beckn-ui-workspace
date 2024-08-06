@@ -7,8 +7,16 @@ import { ChakraProvider } from '@chakra-ui/react'
 import '../styles/globals.css'
 import { BecknProvider } from '@beckn-ui/molecules'
 import { Provider } from 'react-redux'
-import store from 'store'
+import store, { persistor } from '@store/index'
+import ErrorBoundary from '@beckn-ui/common/src/components/errorBoundary'
+import { useLanguage } from '@hooks/useLanguage'
+import { useRouter } from 'next/router'
+import { FallbackUI } from '@beckn-ui/common'
+import { PersistGate } from 'redux-persist/integration/react'
+
 function MyApp({ Component, pageProps }: AppProps) {
+  const { t } = useLanguage()
+  const router = useRouter()
   return (
     <BecknProvider
       theme={{
@@ -21,9 +29,26 @@ function MyApp({ Component, pageProps }: AppProps) {
       }}
     >
       <Provider store={store}>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
+        <PersistGate
+          loading={null}
+          persistor={persistor}
+        >
+          <ErrorBoundary
+            fallback={() => (
+              <FallbackUI
+                handleBackToHomeClick={() => {
+                  router.push('/')
+                }}
+                handleContactSupport={() => {}}
+                t={key => t[key]}
+              />
+            )}
+          >
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </ErrorBoundary>
+        </PersistGate>
       </Provider>
     </BecknProvider>
   )
