@@ -6,7 +6,7 @@ import TaxiBapLogo from '@public/images/taxi-bap-logo.svg'
 import { useLanguage } from '@hooks/useLanguage'
 import { Box } from '@chakra-ui/react'
 import Router from 'next/router'
-import { useDriverLoginMutation } from '@services/user'
+import { useDriverLoginMutation } from '@services/UserService'
 
 const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
   const [formData, setFormData] = useState<SignInFormProps>(initialFormData)

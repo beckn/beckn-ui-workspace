@@ -175,11 +175,11 @@ export const getSearchRidePayload = (start: PickUpDropOffModel, end: PickUpDropO
       stops: [
         {
           type: 'start',
-          location: '24.4845376,86.694578' // `${start.geoLatLong.lat},${start.geoLatLong.long}`
+          location: '19.9908869,73.6386689' // `${start.geoLatLong.lat},${start.geoLatLong.long}`
         },
         {
           type: 'end',
-          location: '24.4845376,86.694578' // `${end.geoLatLong.lat},${end.geoLatLong.long}`
+          location: '19.9908869,73.6386689' // `${end.geoLatLong.lat},${end.geoLatLong.long}`
         }
       ]
     }

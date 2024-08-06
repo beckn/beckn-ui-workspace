@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { authReducerName, authReducerIntialState, authSliceCaseReducer } from '@beckn-ui/common'
-import extendedAuthApi from '@services/user'
+import extendedAuthApi from '@services/UserService'
 import Cookies from 'js-cookie'
 import Router from 'next/router'
 
