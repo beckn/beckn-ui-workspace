@@ -33,7 +33,7 @@ const testIds = {
   payment_totalPayment: 'totalPayment',
   // urls
   url_signup: '/signUp',
-  url_home: '/',
+  url_home: 'http://localhost:3002/',
   url_search: '/search',
   url_cart: '/cart',
   url_product: '/product',
