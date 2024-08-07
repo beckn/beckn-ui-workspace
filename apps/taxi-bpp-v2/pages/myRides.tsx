@@ -44,6 +44,9 @@ const MyRides = () => {
     <Box
       mt="110px"
       padding="0 20px"
+      maxH={'calc(100vh - 110px)'}
+      overflowY="scroll"
+      className="hideScroll"
     >
       <Tabs
         variant="soft-rounded"

@@ -291,3 +291,6 @@ select:-webkit-autofill:focus {
 .taxi-bpp-btn-text {
   color: #1f2122 !important;
 }
+.hideScroll::-webkit-scrollbar {
+  display: none;
+}
