@@ -3,7 +3,11 @@ import { Accordion, Typography } from '@beckn-ui/molecules'
 import { CardBody, Flex } from '@chakra-ui/react'
 import { AccordionDetailCardProps } from './accordion-detail-card.types'
 
-const AccordionDetailCard: React.FC<AccordionDetailCardProps> = ({ schema: { accordion, dataSource }, children }) => {
+const AccordionDetailCard: React.FC<AccordionDetailCardProps> = props => {
+  const {
+    schema: { accordion, dataSource },
+    children
+  } = props
   const renderChildrenOrDataSource = () => {
     if (children) {
       return children
@@ -44,4 +48,4 @@ const AccordionDetailCard: React.FC<AccordionDetailCardProps> = ({ schema: { acc
   )
 }
 
-export default React.memo(AccordionDetailCard)
+export default AccordionDetailCard
