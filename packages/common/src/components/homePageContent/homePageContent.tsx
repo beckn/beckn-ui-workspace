@@ -104,6 +104,7 @@ const HomePageContent: React.FC<HomePageContentProps> = ({
             display="inline-block"
             width={'100%'}
             m="1.25rem 0"
+            data-test={testIds.select_input}
           >
             <Typography
               fontSize={'15px'}
@@ -149,6 +150,7 @@ const HomePageContent: React.FC<HomePageContentProps> = ({
                   <Box
                     key={index}
                     className="dropdown-item"
+                    data-test={testIds.dropdown_item}
                     cursor="pointer"
                     onClick={() => selectInputProps?.handleItemClick(item)}
                     p="0 15px 15px 15px"
@@ -157,7 +159,10 @@ const HomePageContent: React.FC<HomePageContentProps> = ({
                       fontWeight: '500'
                     }}
                   >
-                    <Box pt="15px">
+                    <Box
+                      pt="15px"
+                      data-test={testIds.dropdown_item_list}
+                    >
                       {item}
                       {selectInputProps?.items.length - 1 !== index ? (
                         <Divider

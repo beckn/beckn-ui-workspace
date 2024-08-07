@@ -9,6 +9,7 @@ import { parseSearchlist, SearchAndDiscover } from '@beckn-ui/common'
 import { ParsedItemModel } from '@beckn-ui/common/lib/types'
 import { DOMAIN } from '@lib/config'
 import { Product } from '@beckn-ui/becknified-components'
+import { testIds } from '@shared/dataTestIds'
 
 //Mock data for testing search API. Will remove after the resolution of CORS issue
 
@@ -18,7 +19,7 @@ const Search = () => {
   const [sortBy, setSortBy] = useState<string>('')
   const router = useRouter()
   const [searchKeyword, setSearchKeyword] = useState(router.query?.searchTerm || '')
-  const selectedCategory = router.query?.selectedItem
+  const selectedInput = router.query?.selectedItem
   const [isLoading, setIsLoading] = useState(false)
   const [isFilterOpen, setIsFilterOpen] = useState(false)
 
@@ -36,12 +37,12 @@ const Search = () => {
     },
     searchString: searchKeyword,
     category: {
-      name: selectedCategory
+      name: selectedInput
     }
   }
 
   const fetchDataForSearch = () => {
-    if (!searchKeyword && !selectedCategory) return
+    if (!searchKeyword && !selectedInput) return
     setIsLoading(true)
     axios
       .post(`${apiUrl}/search`, searchPayload)
@@ -60,14 +61,14 @@ const Search = () => {
 
   useEffect(() => {
     // if (searchKeyword) {
-    if (searchKeyword || selectedCategory) {
+    if (searchKeyword || selectedInput) {
       localStorage.removeItem('searchItems')
       localStorage.setItem('optionTags', JSON.stringify({ name: searchKeyword }))
       window.dispatchEvent(new Event('storage-optiontags'))
       fetchDataForSearch()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchKeyword, selectedCategory])
+  }, [searchKeyword, selectedInput])
 
   useEffect(() => {
     if (localStorage) {
@@ -123,7 +124,7 @@ const Search = () => {
       items={items}
       searchProps={{
         searchKeyword: searchKeyword as string,
-        selectedCategory: selectedCategory as string,
+        selectedInput: selectedInput as string,
         setSearchKeyword,
         fetchDataOnSearch: fetchDataForSearch
       }}
@@ -137,7 +138,8 @@ const Search = () => {
       loaderProps={{
         isLoading,
         loadingText: t.loadingText,
-        loadingSubText: t.loadingSubText
+        loadingSubText: t.loadingSubText,
+        dataTest: testIds.loadingIndicator
       }}
       catalogProps={{
         viewDetailsClickHandler: handleViewDetailsClickHandler
