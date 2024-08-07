@@ -1,11 +1,12 @@
-import { SignInResponse, user } from '@beckn-ui/common'
+import Api from './api'
+import { SignInResponse } from '@beckn-ui/common'
 
 interface SignInRequest {
   email: string
   password: string
 }
 
-const extendedAuthApi = user.injectEndpoints({
+const extendedAuthApi = Api.injectEndpoints({
   endpoints: build => ({
     driverLogin: build.mutation<SignInResponse, SignInRequest>({
       query: credentials => ({

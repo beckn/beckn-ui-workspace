@@ -1,13 +1,29 @@
-import { createSlice } from '@reduxjs/toolkit'
-import { authReducerName, authReducerIntialState, authSliceCaseReducer } from '@beckn-ui/common'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { User } from '@beckn-ui/common'
 import extendedAuthApi from '@services/UserService'
 import Cookies from 'js-cookie'
 import Router from 'next/router'
 
+const initialState = {
+  user: null,
+  jwt: null,
+  isAuthenticated: false
+} as { user: null | User; jwt: string | null; isAuthenticated: boolean }
+
 const slice = createSlice({
-  name: authReducerName,
-  initialState: authReducerIntialState(),
-  reducers: authSliceCaseReducer,
+  name: 'auth',
+  initialState,
+  reducers: {
+    logout: () => {
+      Cookies.remove('authToken')
+      Router.push('/signIn')
+      return initialState
+    },
+    setCredentials: (state, { payload: { user, jwt } }: PayloadAction<{ user: User; jwt: string }>) => {
+      state.user = user
+      state.jwt = jwt
+    }
+  },
   extraReducers: builder => {
     builder
       .addMatcher(extendedAuthApi.endpoints.driverLogin.matchPending, (state, action) => {

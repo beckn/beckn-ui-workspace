@@ -51,7 +51,7 @@ const TopSheet: React.FC<TopSheetComponentProps> = ({
   }
 
   const renderAddressText = currentLocationFetchError || geoLocationSearchPageSelectedAddress || currentAddress || ''
-  console.log(onlineStatus)
+
   return (
     <Box className={isSearchPage ? Styles.searchTopSheetMargin : ''}>
       <Box

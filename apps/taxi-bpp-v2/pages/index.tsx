@@ -1,7 +1,13 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
-import { useSelector } from 'react-redux'
-import { Coordinate, IGeoLocationSearchPageRootState, TopSheet, useGeolocation } from '@beckn-ui/common'
+import { useDispatch, useSelector } from 'react-redux'
+import {
+  Coordinate,
+  feedbackActions,
+  IGeoLocationSearchPageRootState,
+  TopSheet,
+  useGeolocation
+} from '@beckn-ui/common'
 import { useLanguage } from '@hooks/useLanguage'
 import { BottomModal, ButtonProps } from '@beckn-ui/molecules'
 import RideSummaryHeader from '@components/ride-summary/rideSummaryHeader'
@@ -9,17 +15,53 @@ import RideSummary from '@components/ride-summary/rideSummary'
 import OfflineModal from '@components/BottomModal'
 import { ModalDetails, ModalTypes, RideDetailsModel } from '@lib/types/mapScreen'
 import { Box } from '@chakra-ui/react'
+import { useToggleAvailabilityMutation } from '@services/RiderService'
+import { goOffline, goOnline, RiderRootState, updateLocation } from '@store/rider-slice'
+import { formatGeoLocationDetails } from '@utils/geoLocation-utils'
 
 const Homepage = () => {
   const MapWithNoSSR: any = dynamic(() => import('../components/Map'), { ssr: false })
 
-  const [onlineStatus, setOnlineStatus] = useState<boolean>(false)
   const [currentModal, setCurrentModal] = useState<ModalDetails>()
-  const [currentLocation, setCurrentLocation] = useState<Coordinate>()
   const [destination, setDestination] = useState<Coordinate>()
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const { t } = useLanguage()
+  const dispatch = useDispatch()
+  const [toggleAvailability] = useToggleAvailabilityMutation()
+  const { isOnline, currentLocation } = useSelector((state: RiderRootState) => state.rider)
   const apiKeyForGoogle = process.env.NEXT_PUBLIC_GOOGLE_API_KEY
+
+  const handleAvailability = useCallback(async (availability: boolean, geoLatLong: Coordinate) => {
+    try {
+      const requestBody = {
+        available: availability,
+        location: { lat: geoLatLong?.latitude.toString(), long: geoLatLong?.longitude.toString() }
+      }
+
+      const response: any = await toggleAvailability(requestBody)
+
+      const result = response.data
+      if (result && availability) {
+        dispatch(goOnline(result.toggleAvailabiltiyResponse.is_available))
+        dispatch(updateLocation(formatGeoLocationDetails(result.updateLocationResponse.gps)))
+      } else {
+        dispatch(goOffline(result.is_available))
+      }
+    } catch (error) {
+      console.error('error while toggle-availability--> ', error)
+      dispatch(
+        feedbackActions.setToastData({
+          toastData: {
+            message: 'Error',
+            display: true,
+            type: 'error',
+            description: 'Something went wrong, please try again'
+          }
+        })
+      )
+    }
+  }, [])
 
   useEffect(() => {
     // polling for new ride API call
@@ -209,20 +251,17 @@ const Homepage = () => {
   } = useGeolocation(apiKeyForGoogle as string)
 
   useEffect(() => {
-    const status = localStorage.getItem('onlineStatus')
-    if (status !== null) {
-      setOnlineStatus(JSON.parse(status))
-    }
-  }, [])
-
-  useEffect(() => {
     const selectLatLong = geoLocationSearchPageSelectedLatLong.split(',')
-
-    const currentCoords =
+    let currentCoords: Coordinate | undefined =
       selectLatLong.length === 2
         ? { latitude: Number(selectLatLong[0]), longitude: Number(selectLatLong[1]) }
-        : coordinates
-    setCurrentLocation(currentCoords!)
+        : coordinates!
+
+    if (currentLocation?.latitude && currentLocation?.longitude) {
+      currentCoords = currentLocation
+    }
+
+    dispatch(updateLocation(currentCoords!))
   }, [coordinates, geoLocationSearchPageSelectedLatLong])
 
   const renderMap = useCallback(() => {
@@ -239,8 +278,8 @@ const Homepage = () => {
   const renderModals = useCallback(() => {
     return (
       <>
-        <OfflineModal isOpen={!onlineStatus} />
-        {onlineStatus &&
+        <OfflineModal isOpen={!isOnline} />
+        {isOnline &&
           currentModal &&
           Object.keys(currentModal).length > 0 &&
           currentModal.rideDetails &&
@@ -276,7 +315,7 @@ const Homepage = () => {
           )}
       </>
     )
-  }, [currentModal, onlineStatus])
+  }, [currentModal, isOnline])
 
   return (
     <>
@@ -286,19 +325,19 @@ const Homepage = () => {
         currentAddress={currentAddress}
         t={key => t[key]}
         onlineOfflineSwitch={true}
-        onlineStatus={onlineStatus}
+        onlineStatus={isOnline ?? false}
         handleOnSwitch={() => {
-          const newStatus = !onlineStatus
-          setOnlineStatus(newStatus)
-          localStorage.setItem('onlineStatus', JSON.stringify(newStatus))
-          if (onlineStatus) {
-            updateCurrentModal('REQ_NEW_RIDE')
-          }
+          const newStatus = !isOnline
+          handleAvailability(newStatus, currentLocation!)
         }}
       />
 
-      {renderMap()}
-      {renderModals()}
+      {currentLocation?.latitude && currentLocation?.longitude && (
+        <>
+          {renderMap()}
+          {renderModals()}
+        </>
+      )}
     </>
   )
 }
