@@ -155,6 +155,7 @@ const en: { [key: string]: string } = {
   errorCity: 'City is Required',
   errorCountry1: 'Country can only contain letters and spaces',
   errorState1: 'State can only contain letters and spaces',
-  errorCity1: 'City can only contain letters and spaces'
+  errorCity1: 'City can only contain letters and spaces',
+  noProduct: 'There are no products in this category yet! New products will be added soon.'
 }
 export default en

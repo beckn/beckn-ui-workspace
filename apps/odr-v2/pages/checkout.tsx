@@ -18,6 +18,7 @@ import { isEmpty } from '@utils/common-utils'
 import AddSection from '@components/x-input/AddSection'
 import { useInitMutation } from '@beckn-ui/common/src/services/init'
 import { useSelectMutation } from '@beckn-ui/common/src/services/select'
+import { testIds } from '@shared/dataTestIds'
 
 export type ShippingFormData = {
   name: string
@@ -184,6 +185,7 @@ const CheckoutPage = () => {
         <LoaderWithMessage
           loadingText={t.pleaseWait}
           loadingSubText={t.initializingOrderLoader}
+          dataTest={testIds.loadingIndicator}
         />
       </Box>
     )
