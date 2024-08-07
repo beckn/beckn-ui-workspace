@@ -135,6 +135,7 @@ const SubHeader = (props: SubHeaderProps) => {
           }}
           className={Styles.top_header_modal}
           data-test={testIds.invoice}
+          cursor={'pointer'}
         >
           <Image
             src="/images/invoiceDetails.svg"

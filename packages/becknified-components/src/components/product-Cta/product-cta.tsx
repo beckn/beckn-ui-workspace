@@ -68,6 +68,7 @@ const ProductCta: React.FC<ProductCtaProps> = ({
             data-test={dataTestIncrementCounter}
             onClick={handleIncrement}
             fontSize="24px"
+            cursor={'pointer'}
           >
             +
           </Box>
@@ -84,6 +85,7 @@ const ProductCta: React.FC<ProductCtaProps> = ({
             data-test={dataTestDecrementCounter}
             onClick={handleDecrement}
             fontSize="24px"
+            cursor={'pointer'}
           >
             -
           </Box>

@@ -77,6 +77,7 @@ const ShippingSection: React.FC<ShippingSectionProps<FormField[]>> = ({
             alignItems={'center'}
             data-test={dataTestOpenForm}
             onClick={onOpen}
+            cursor={'pointer'}
           >
             {/* <Image src={addButtonImage} /> */}
             <PlusSquareIcon color={color} />
