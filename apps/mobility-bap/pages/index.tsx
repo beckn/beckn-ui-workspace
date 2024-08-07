@@ -1,16 +1,17 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useRouter } from 'next/router'
 import { IGeoLocationSearchPageRootState, PickUpDropOffModel, useGeolocation } from '@beckn-ui/common'
 import PickUpDropOffModal from '@components/BottomModal'
+import { setPickUpLocation, setDropOffLocation } from '@store/user-slice'
+import { UserGeoLocationRootState } from '@lib/types/user'
 
 const Homepage = () => {
   const MapWithNoSSR: any = dynamic(() => import('../components/Map'), { ssr: false })
 
-  const [currentLocation, setCurrentLocation] = useState<PickUpDropOffModel>()
-  const [destinationLocation, setDestinationLocation] = useState<PickUpDropOffModel>()
-
+  // const [currentLocation, setCurrentLocation] = useState<PickUpDropOffModel>()
+  // const [destinationLocation, setDestinationLocation] = useState<PickUpDropOffModel>()
   const {
     geoAddress: originGeoAddress,
     geoLatLong: originGeoLatLong,
@@ -18,6 +19,9 @@ const Homepage = () => {
     destinationGeoLatLong
   } = useSelector((state: IGeoLocationSearchPageRootState) => state.geoLocationSearchPageUI)
   const router = useRouter()
+  const dispatch = useDispatch()
+
+  const { pickup, dropoff } = useSelector((state: UserGeoLocationRootState) => state.userInfo)
 
   const apiKeyForGoogle = process.env.NEXT_PUBLIC_GOOGLE_API_KEY
 
@@ -32,14 +36,14 @@ const Homepage = () => {
         geoLocation: { latitude: Number(latLong[0]), longitude: Number(latLong[1]) }
       }
 
-      setCurrentLocation(locationDetails)
+      dispatch(setPickUpLocation(locationDetails))
     } else if (currentAddress && coordinates?.latitude && coordinates?.longitude) {
       const locationDetails = {
         address: currentAddress,
         geoLocation: coordinates
       }
 
-      setCurrentLocation(locationDetails)
+      dispatch(setPickUpLocation(locationDetails))
     }
   }, [currentAddress, coordinates, originGeoAddress, originGeoLatLong])
 
@@ -52,18 +56,18 @@ const Homepage = () => {
         geoLocation: { latitude: Number(latLong[0]), longitude: Number(latLong[1]) }
       }
 
-      setDestinationLocation(locationDetails)
+      dispatch(setDropOffLocation(locationDetails))
     }
   }, [destinationGeoAddress, destinationGeoLatLong])
 
   const renderMap = useCallback(() => {
     return (
       <MapWithNoSSR
-        origin={currentLocation?.geoLocation!}
-        destination={destinationLocation?.geoLocation!}
+        origin={pickup?.geoLocation!}
+        destination={dropoff?.geoLocation!}
       />
     )
-  }, [currentLocation, destinationLocation])
+  }, [pickup, dropoff])
 
   return (
     <div className="overflow-hidden max-h-[85vh]">
@@ -72,8 +76,8 @@ const Homepage = () => {
       <PickUpDropOffModal
         isOpen={true}
         onClose={() => {}}
-        pickup={currentLocation!}
-        dropoff={destinationLocation!}
+        pickup={pickup!}
+        dropoff={dropoff!}
         handleClickOnSearchRides={() => {
           router.push('/searchRide')
         }}

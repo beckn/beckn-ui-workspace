@@ -9,7 +9,7 @@ import { api, feedbackReducer, geoMapLocationSearchReducer } from '@beckn-ui/com
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['selectRide', 'discovery']
+  whitelist: ['userInfo', 'selectRide', 'discovery']
 }
 
 const appReducer = combineReducers({

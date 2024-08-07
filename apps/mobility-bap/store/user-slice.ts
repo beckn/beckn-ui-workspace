@@ -1,23 +1,30 @@
-import { IUser, IUserInfo } from '@lib/types/user'
+import { PickUpDropOffModel } from '@beckn-ui/common'
+import { UserGeoLocation, UserGeoLocationRootState } from '@lib/types/user'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import Cookies from 'js-cookie'
 
-const initialState: IUserInfo = {
-  userInformation: Cookies.get('userInfo') ? JSON.parse(Cookies.get('userInfo')!) : null
+export const initialState: UserGeoLocation = {
+  pickup: {
+    address: '',
+    geoLocation: { latitude: 0, longitude: 0 }
+  },
+  dropoff: {
+    address: '',
+    geoLocation: { latitude: 0, longitude: 0 }
+  }
 }
 
 const userInfoSlice = createSlice({
   name: 'userInfo',
   initialState,
   reducers: {
-    userLogin(state, action: PayloadAction<IUser>) {
-      state.userInformation = action.payload
+    setPickUpLocation(state, action: PayloadAction<PickUpDropOffModel>) {
+      state.pickup = action.payload
     },
-    userLogout(state) {
-      state.userInformation = null
+    setDropOffLocation(state, action: PayloadAction<PickUpDropOffModel>) {
+      state.dropoff = action.payload
     }
   }
 })
-export const userInfoActions = userInfoSlice.actions
 
+export const { setPickUpLocation, setDropOffLocation } = userInfoSlice.actions
 export default userInfoSlice.reducer

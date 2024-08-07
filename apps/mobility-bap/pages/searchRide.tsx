@@ -11,6 +11,8 @@ import { discoveryActions } from '@store/discovery-slice'
 import { ParsedCabDataModel, getSearchRidePayload, parsedSearchDetails } from '@utils/cabDetails'
 import { feedbackActions, IGeoLocationSearchPageRootState } from '@beckn-ui/common'
 import { formatGeoLocationDetails } from '@utils/geoLocation-utils'
+import { UserGeoLocationRootState } from '@lib/types/user'
+import { useLanguage } from '@hooks/useLanguage'
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL
 const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
@@ -22,18 +24,12 @@ const SearchRide = () => {
 
   const theme = useTheme()
   const dispatch = useDispatch()
+  const { t } = useLanguage()
 
-  const {
-    geoAddress: originGeoAddress,
-    geoLatLong: originGeoLatLong,
-    destinationGeoAddress,
-    destinationGeoLatLong
-  } = useSelector((state: IGeoLocationSearchPageRootState) => state.geoLocationSearchPageUI)
-
-  const pickup = formatGeoLocationDetails(originGeoAddress, originGeoLatLong)
-  const dropoff = formatGeoLocationDetails(destinationGeoAddress, destinationGeoLatLong)
+  const { pickup, dropoff } = useSelector((state: UserGeoLocationRootState) => state.userInfo)
 
   const searchRide = useCallback(() => {
+    console.log(pickup, dropoff)
     const payload = getSearchRidePayload(pickup, dropoff)
 
     setIsLoading(true)
@@ -70,11 +66,6 @@ const SearchRide = () => {
 
   const handleOnSelect = useCallback((transactionId: string, details: any) => {
     dispatch(discoveryActions.addTransactionId({ transactionId }))
-    dispatch(
-      discoveryActions.addRide({
-        rideDetails: details
-      })
-    )
     dispatch(
       discoveryActions.addRide({
         rideDetails: details
@@ -133,8 +124,8 @@ const SearchRide = () => {
 
             <Divider mb="20px" />
             <TripLocation
-              pickupLocation={pickup.address}
-              dropLocation={dropoff.address}
+              pickupLocation={pickup}
+              dropLocation={dropoff}
             />
           </CardBody>
         </Card>
@@ -202,7 +193,7 @@ const SearchRide = () => {
                           fontSize="11px"
                         />
                         <Typography
-                          text={cabDetail.fare}
+                          text={`${t.currencySymbol}${cabDetail.fare}`}
                           fontSize="15px"
                           color={theme.colors.primary[100]}
                         />

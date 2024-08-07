@@ -1,8 +1,15 @@
 import React from 'react'
 import { Box, Divider, Flex, Image } from '@chakra-ui/react'
 import { Typography } from '@beckn-ui/molecules'
+import { PickUpDropOffModel } from '@beckn-ui/common'
 
-const TripLocation = ({ pickupLocation, dropLocation }: { pickupLocation: string; dropLocation: string }) => {
+const TripLocation = ({
+  pickupLocation,
+  dropLocation
+}: {
+  pickupLocation: PickUpDropOffModel
+  dropLocation: PickUpDropOffModel
+}) => {
   return (
     <>
       <Flex
@@ -31,7 +38,7 @@ const TripLocation = ({ pickupLocation, dropLocation }: { pickupLocation: string
           </Box>
         </Flex>
         <Typography
-          text={pickupLocation}
+          text={pickupLocation.address}
           fontWeight="500"
           fontSize="15px"
           style={{ overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}
@@ -67,7 +74,7 @@ const TripLocation = ({ pickupLocation, dropLocation }: { pickupLocation: string
           </Box>
         </Flex>
         <Typography
-          text={dropLocation}
+          text={dropLocation.address}
           fontWeight="500"
           fontSize="15px"
           style={{ overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}
