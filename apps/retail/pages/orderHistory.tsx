@@ -93,7 +93,10 @@ const OrderHistory = () => {
       {!orderHistoryList.length ? (
         <EmptyOrder />
       ) : (
-        <Box mt={'23px'}>
+        <Box
+          mt={'23px'}
+          cursor={'pointer'}
+        >
           {orderHistoryList.map((order, idx) => {
             return (
               <DetailCard key={idx}>

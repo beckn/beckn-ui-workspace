@@ -3,12 +3,7 @@ import { Box, Flex, Image, Input } from '@chakra-ui/react'
 import { SearchBarProps } from './searchBar.types'
 import { testIds } from '@shared/dataTestIds'
 
-const SearchBar: React.FC<SearchBarProps> = ({
-  searchString,
-  handleChange,
-  placeholder = 'Search',
-  selectedCategory
-}) => {
+const SearchBar: React.FC<SearchBarProps> = ({ searchString, handleChange, placeholder = 'Search', selectedInput }) => {
   const [searchText, setSearchText] = useState(searchString)
   const [inputValue, setInputValue] = useState('')
 
@@ -16,8 +11,8 @@ const SearchBar: React.FC<SearchBarProps> = ({
     setSearchText(event.target.value)
   }
   useEffect(() => {
-    setInputValue(selectedCategory ? `${selectedCategory} ; ${searchText}` : searchText)
-  }, [searchText, selectedCategory])
+    setInputValue(selectedInput ? `${selectedInput} ; ${searchText}` : searchText)
+  }, [searchText, selectedInput])
 
   const handleSubmit = () => {
     handleChange(searchText)

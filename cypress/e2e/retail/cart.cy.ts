@@ -6,7 +6,7 @@ describe('Search Page Tests', () => {
   context('When there are no items in cart', () => {
     const searchTerm = 'sunglass'
     beforeEach(() => {
-      cy.visit(testIds.url_home)
+      cy.visit(`${testIds.url_base_retail}${testIds.url_home}`)
       cy.setGeolocation('getAddress')
       cy.wait('@getAddress')
       cy.performSearch(searchTerm, {
@@ -29,7 +29,7 @@ describe('Search Page Tests', () => {
   context('should render When there are Items in Cart', () => {
     const searchTerm = 'sunglass'
     beforeEach(() => {
-      cy.visit(testIds.url_home)
+      cy.visit(`${testIds.url_base_retail}${testIds.url_home}`)
       cy.setGeolocation('getAddress')
       cy.wait('@getAddress')
       cy.performSearch(searchTerm, {

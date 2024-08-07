@@ -33,7 +33,7 @@ const testIds = {
   payment_totalPayment: 'totalPayment',
   // urls
   url_signup: '/signUp',
-  url_home: 'http://localhost:3002/',
+  url_home: '/',
   url_search: '/search',
   url_cart: '/cart',
   url_product: '/product',
@@ -197,7 +197,12 @@ const testIds = {
   feedback_starRating: 'feedback-starRating',
   feedback_image: 'feedback-image',
   //logout
-  Logout_text_click: 'Logout-text-click'
+  Logout_text_click: 'Logout-text-click',
+
+  //ODR App
+  select_input: 'select-input',
+  dropdown_item: 'dropdown-item',
+  dropdown_item_list: 'dropdown-item-list'
 }
 
 export { testIds }
