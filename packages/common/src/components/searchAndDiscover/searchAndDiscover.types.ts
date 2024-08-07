@@ -5,6 +5,7 @@ export interface SearchAndDiscoverProps {
   items: ParsedItemModel[]
   searchProps: {
     searchKeyword: string
+    selectedCategory?: string
     setSearchKeyword: (value: string) => void
     fetchDataOnSearch: () => void
   }

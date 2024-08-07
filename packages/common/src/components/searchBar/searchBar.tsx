@@ -1,14 +1,23 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Box, Flex, Image, Input } from '@chakra-ui/react'
 import { SearchBarProps } from './searchBar.types'
 import { testIds } from '@shared/dataTestIds'
 
-const SearchBar: React.FC<SearchBarProps> = ({ searchString, handleChange, placeholder = 'Search' }) => {
+const SearchBar: React.FC<SearchBarProps> = ({
+  searchString,
+  handleChange,
+  placeholder = 'Search',
+  selectedCategory
+}) => {
   const [searchText, setSearchText] = useState(searchString)
+  const [inputValue, setInputValue] = useState('')
 
   const inputChangeHandler = (event: React.BaseSyntheticEvent) => {
     setSearchText(event.target.value)
   }
+  useEffect(() => {
+    setInputValue(selectedCategory ? `${selectedCategory} ; ${searchText}` : searchText)
+  }, [searchText, selectedCategory])
 
   const handleSubmit = () => {
     handleChange(searchText)
@@ -31,7 +40,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ searchString, handleChange, place
           placeholder={placeholder}
           onChange={inputChangeHandler}
           data-test={testIds.searchInput}
-          value={searchText}
+          value={inputValue}
           onKeyDown={event => event.key === 'Enter' && handleSubmit()}
         />
         <Box
