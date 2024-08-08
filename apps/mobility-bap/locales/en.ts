@@ -15,6 +15,11 @@ const en: { [key: string]: string } = {
     'You can reach out to one of our customer support executives for any help, queries or feedback to ABC Mart',
   cardNumber: '**** **** **** 1234',
   cashOnDelivery: 'Cash',
-  confirmOrder: 'Continue'
+  confirmOrder: 'Continue',
+  orderDeliveredOnTime: 'Ride completed!',
+  pleaseShareYourFeedback: 'Please share your feedback with us',
+  rateDeliveryExperience: 'Rate the overall experience',
+  addCommentsHere: 'Add your comments here',
+  writeExperience: 'Write about your experience..'
 }
 export default en

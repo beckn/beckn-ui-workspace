@@ -13,7 +13,7 @@ const PaymentMode = () => {
   const router = useRouter()
 
   return (
-    <Box mt="80px">
+    <Box mt="90px">
       <PaymentMethodSelection
         t={key => t[key]}
         paymentMethods={[
