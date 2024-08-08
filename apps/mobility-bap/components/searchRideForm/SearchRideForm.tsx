@@ -4,15 +4,48 @@ import { Box, Divider, Flex, Image, useTheme } from '@chakra-ui/react'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import TripLocation from './TripLocation'
 import { Input, Typography } from '@beckn-ui/molecules'
-import { useLanguage } from 'hooks/useLanguage'
+import { useLanguage } from '@hooks/useLanguage'
 import CustomDropdown from './CustomDropdown'
 import BottomDrawer from '../bottomDrawer/BottomDrawer'
-import { validateSearchRideForm } from 'utilities/detailsForm-utils'
+import { validateSearchRideForm } from '@utils/detailsForm-utils'
 import { SearchRideFormProps } from './SearchRideForm.types'
-const SearchRideForm: React.FC<SearchRideFormProps> = ({ cabDetails, location, optionsList }) => {
-  const { t } = useLanguage()
-  const router = useRouter()
-  const theme = useTheme()
+import { useInitMutation } from '@beckn-ui/common/src/services/init'
+import { useDispatch, useSelector } from 'react-redux'
+import { SelectRideRootState } from '@store/selectRide-slice'
+import { getInitPayload } from '@utils/payload'
+import { OptionsList } from '@utils/cabDetails'
+import { DiscoveryRootState } from '@store/discovery-slice'
+import { DOMAIN } from '@lib/config'
+import { feedbackActions } from '@beckn-ui/common'
+
+const optionsList: OptionsList = {
+  rideTimeOptionsList: [
+    {
+      label: 'Ride Now',
+      value: 'ridenow',
+      tag: 'rideTimeOptions'
+    },
+    {
+      label: 'Ride Later',
+      value: 'ridelater',
+      tag: 'rideTimeOptions'
+    }
+  ],
+  riderOptionsList: [
+    {
+      label: 'Myself',
+      value: 'myself',
+      tag: 'riderOptions'
+    },
+    {
+      label: 'Others',
+      value: 'others',
+      tag: 'riderOptions'
+    }
+  ]
+}
+
+const SearchRideForm: React.FC<SearchRideFormProps> = () => {
   const { rideTimeOptionsList, riderOptionsList } = optionsList
   const [formData, setFormData] = useState({
     name: '',
@@ -24,6 +57,22 @@ const SearchRideForm: React.FC<SearchRideFormProps> = ({ cabDetails, location, o
     riderOptions: 'myself'
   })
   const [isFormFilled, setIsFormFilled] = useState(false)
+
+  const { t } = useLanguage()
+  const dispatch = useDispatch()
+  const router = useRouter()
+  const theme = useTheme()
+  const { transactionId, selectedRide } = useSelector((state: DiscoveryRootState) => state.discovery)
+  const [initialize] = useInitMutation()
+
+  const {
+    provider: { cabDetails },
+    pickup,
+    dropoff
+  } = selectedRide
+
+  // const selectResponse = useSelector((state: SelectRideRootState) => state.selectRide.selectResponse)
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setFormData(prevFormData => ({
@@ -47,7 +96,34 @@ const SearchRideForm: React.FC<SearchRideFormProps> = ({ cabDetails, location, o
       [tag]: newValue
     }))
   }
-  console.log(location)
+
+  const formSubmitHandler = () => {
+    try {
+      // const { id, type } = selectResponse[0].message.order.fulfillments[0]
+      const contactDetails = {
+        name: formData.name,
+        phone: formData.mobileNumber,
+        email: formData.name + '@example.com'
+      }
+      getInitPayload(contactDetails, selectedRide, transactionId, DOMAIN).then(res => {
+        return initialize(res)
+      })
+    } catch (error) {
+      console.log('error while init--> ', error)
+      dispatch(
+        feedbackActions.setToastData({
+          toastData: {
+            message: 'Error',
+            display: true,
+            type: 'error',
+            description: 'Something went wrong, please try again'
+          }
+        })
+      )
+      router.back()
+    }
+  }
+
   return (
     <BottomDrawer>
       <Flex
@@ -67,12 +143,12 @@ const SearchRideForm: React.FC<SearchRideFormProps> = ({ cabDetails, location, o
             justifyContent={'center'}
           >
             <Typography
-              text={cabDetails.name}
+              text={cabDetails[0].name}
               fontSize="15px"
               fontWeight="500"
             />
             <Typography
-              text={cabDetails.waitTime}
+              text={cabDetails[0].waitTime}
               fontSize="9px"
               fontWeight="400"
               color="#8A8D8E"
@@ -80,7 +156,7 @@ const SearchRideForm: React.FC<SearchRideFormProps> = ({ cabDetails, location, o
           </Flex>
         </Flex>
         <Typography
-          text={cabDetails.fare}
+          text={`${t.currencySymbol}${cabDetails[0].fare}`}
           fontSize="15px"
           fontWeight="700"
           color={theme.colors.primary[100]}
@@ -104,8 +180,8 @@ const SearchRideForm: React.FC<SearchRideFormProps> = ({ cabDetails, location, o
         mt={'20px'}
       >
         <TripLocation
-          pickupLocation={location.pickup}
-          dropLocation={location.dropOff}
+          pickupLocation={pickup}
+          dropLocation={dropoff}
         />
       </Box>
       <CustomDropdown
@@ -135,6 +211,7 @@ const SearchRideForm: React.FC<SearchRideFormProps> = ({ cabDetails, location, o
         text="Confirm & Proceed"
         disabled={!isFormFilled}
         handleClick={() => {
+          formSubmitHandler()
           router.push('/paymentMode')
         }}
       />

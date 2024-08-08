@@ -1,11 +1,11 @@
-import { GeoLocationAddresModel } from '@lib/types/geoLocationSearchPage'
+import { PickUpDropOffModel } from '@beckn-ui/common'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { ParsedCabDataModel } from '@utils/cabDetails'
 
 export interface RideDetailsModel {
   provider: ParsedCabDataModel
-  pickup: GeoLocationAddresModel
-  dropoff: GeoLocationAddresModel
+  pickup: PickUpDropOffModel
+  dropoff: PickUpDropOffModel
 }
 
 export interface Discovery {
@@ -34,8 +34,8 @@ const discoverySlice = createSlice({
       action: PayloadAction<{
         rideDetails: {
           provider: ParsedCabDataModel
-          pickup: GeoLocationAddresModel
-          dropoff: GeoLocationAddresModel
+          pickup: PickUpDropOffModel
+          dropoff: PickUpDropOffModel
         }
       }>
     ) {

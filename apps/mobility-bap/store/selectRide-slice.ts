@@ -1,22 +1,23 @@
+import { ConfirmResponseModel, InitResponseModel, SelectResponseModel } from '@beckn-ui/common'
 import confirmApi from '@beckn-ui/common/src/services/confirm'
 import initApi from '@beckn-ui/common/src/services/init'
 import selectApi from '@beckn-ui/common/src/services/select'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 export interface SelectRideRootState {
-  SelectRide: SelectRide
+  selectRide: SelectRide
 }
 
 export interface SelectRide {
-  initResponse: any
-  confirmResponse: any
-  selectResponse: any
+  initResponse: InitResponseModel[]
+  confirmResponse: ConfirmResponseModel[]
+  selectResponse: SelectResponseModel[]
 }
 
 const initialState: SelectRide = {
-  initResponse: {},
-  confirmResponse: {},
-  selectResponse: {}
+  initResponse: [],
+  confirmResponse: [],
+  selectResponse: []
 }
 
 const selectRideSlice = createSlice({
@@ -27,8 +28,8 @@ const selectRideSlice = createSlice({
       state.initResponse = action.payload.initResponse
     },
     clearState(state) {
-      state.initResponse = {}
-      state.confirmResponse = {}
+      state.initResponse = []
+      state.confirmResponse = []
     }
   },
   extraReducers: builder => {

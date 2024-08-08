@@ -1,86 +1,44 @@
-import React, { useState } from 'react'
-import { Box, Flex, Text, Image, Card, CardBody, useTheme } from '@chakra-ui/react'
+import React from 'react'
 import { useRouter } from 'next/router'
-import CardWithCheckBox from '../components/card/Card'
 import { useLanguage } from '../hooks/useLanguage'
-import creditCardImg from '../public/images/creditCardImg.svg'
-import { Button } from '@beckn-ui/molecules'
+import { PaymentMethodSelection } from '@beckn-ui/common'
+import CashOnDelivery from '@public/images/cash.svg'
+import Visa from '@public/images/visa.svg'
+import masterCard from '@public/images/masterCard.svg'
+import { testIds } from '@shared/dataTestIds'
 
-function PaymentMode() {
-  const theme = useTheme()
-  const [checked, setChecked] = useState(false)
+const PaymentMode = () => {
   const { t } = useLanguage()
   const router = useRouter()
 
   return (
-    <>
-      <Box position={'relative'}>
-        <Box
-          p={'8px 20px'}
-          mt="4px"
-          ml="-20px"
-          fontSize={'15px'}
-          textAlign="center"
-          mr="-20px"
-          boxShadow="0px 4px 60px 0px #0000001A"
-        >
-          Select Payment Method
-        </Box>
-        <Box mt={'30px'}>
-          <Flex
-            justifyContent={'space-between'}
-            alignItems={'center'}
-            fontSize={'17px'}
-            fontWeight={400}
-            mb={'16px'}
-          >
-            <Text
-              className="text-ellipsis"
-              fontSize={'17px'}
-            >
-              {t.cards}
-            </Text>
-            <Text
-              color={theme.colors.primary['100']}
-              fontSize={'17px'}
-              fontWeight={400}
-            >
-              {t.addCard}
-            </Text>
-          </Flex>
-          <Card
-            className="border_radius_all"
-            mb={'20px'}
-          >
-            <CardBody padding={'15px 20px'}>
-              <Image src={creditCardImg} />
-            </CardBody>
-          </Card>
-        </Box>
-        <Text
-          marginBottom={'8px'}
-          fontSize={'17px'}
-        >
-          Other
-        </Text>
-        <CardWithCheckBox
-          setChecked={setChecked}
-          paymentMethod={t.cashOnDelivery}
-        />
-      </Box>
-      <Box
-        position={'absolute'}
-        bottom={'10px'}
-        width={'90%'}
-      >
-        <Button
-          text="Continue"
-          variant="solid"
-          disabled={!checked}
-          handleClick={() => router.push('/driverDetails')}
-        />
-      </Box>
-    </>
+    <PaymentMethodSelection
+      t={key => t[key]}
+      paymentMethods={[
+        {
+          category: 'Credit & Debit Cards',
+          img: Visa,
+          paymentMethod: t.cardNumber,
+          paymentMethodNet: t.cardNumber,
+          dataTest: testIds.paymentpage_visa
+        },
+        {
+          category: 'Credit & Debit Cards',
+          img: masterCard,
+          paymentMethod: t.cardNumber,
+          paymentMethodNet: t.cardNumber,
+          dataTest: testIds.paymentpage_masterCard
+        },
+        {
+          category: 'Other',
+          img: CashOnDelivery,
+          paymentMethod: t.cashOnDelivery,
+          paymentMethodNet: t.netBanking,
+          dataTest: testIds.paymentpage_CashOnDelivery
+        }
+      ]}
+      handleOrderConfirmation={() => router.push('/driverDetails')}
+    />
   )
 }
 

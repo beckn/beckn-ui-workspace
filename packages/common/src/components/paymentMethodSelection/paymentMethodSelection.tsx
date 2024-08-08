@@ -10,7 +10,40 @@ import { PaymentMethodSelectionProps } from './paymentMethodSelection.types'
 import { testIds } from '@shared/dataTestIds'
 
 const PaymentMethodSelection = (props: PaymentMethodSelectionProps) => {
-  const { t, handleOrderConfirmation } = props
+  const {
+    t,
+    handleOrderConfirmation,
+    paymentMethods = [
+      {
+        category: 'Credit & Debit Cards',
+        img: Visa,
+        paymentMethod: t('cardNumber'),
+        paymentMethodNet: t('cardNumber'),
+        dataTest: testIds.paymentpage_visa
+      },
+      {
+        category: 'Credit & Debit Cards',
+        img: masterCard,
+        paymentMethod: t('cardNumber'),
+        paymentMethodNet: t('cardNumber'),
+        dataTest: testIds.paymentpage_masterCard
+      },
+      {
+        category: 'UPI',
+        img: phonePay,
+        paymentMethod: t('phonePay') || 'PhonePe UPI',
+        paymentMethodNet: t('phonePay') || 'PhonePe UPI',
+        dataTest: testIds.paymentpage_phonePay
+      },
+      {
+        category: 'Other',
+        img: CashOnDelivery,
+        paymentMethod: t('cashOnDelivery'),
+        paymentMethodNet: t('netBanking'),
+        dataTest: testIds.paymentpage_CashOnDelivery
+      }
+    ]
+  } = props
   const [checkedState, setCheckedState] = useState<string | null>(null)
 
   const handleChange = (id: string) => {
@@ -34,36 +67,7 @@ const PaymentMethodSelection = (props: PaymentMethodSelectionProps) => {
             t={t}
             checkedState={checkedState!}
             handleChange={handleChange}
-            paymentMethods={[
-              {
-                category: 'Credit & Debit Cards',
-                img: Visa,
-                paymentMethod: t('cardNumber'),
-                paymentMethodNet: t('cardNumber'),
-                dataTest: testIds.paymentpage_visa
-              },
-              {
-                category: 'Credit & Debit Cards',
-                img: masterCard,
-                paymentMethod: t('cardNumber'),
-                paymentMethodNet: t('cardNumber'),
-                dataTest: testIds.paymentpage_masterCard
-              },
-              {
-                category: 'UPI',
-                img: phonePay,
-                paymentMethod: t('phonePay') || 'PhonePe UPI',
-                paymentMethodNet: t('phonePay') || 'PhonePe UPI',
-                dataTest: testIds.paymentpage_phonePay
-              },
-              {
-                category: 'Other',
-                img: CashOnDelivery,
-                paymentMethod: t('cashOnDelivery'),
-                paymentMethodNet: t('netBanking'),
-                dataTest: testIds.paymentpage_CashOnDelivery
-              }
-            ]}
+            paymentMethods={paymentMethods}
           />
         </Box>
 

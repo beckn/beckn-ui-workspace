@@ -10,7 +10,10 @@ const en: { [key: string]: string } = {
   cancelBookingText: 'Cancel Booking Reason',
   cards: 'Credit & Debit cards',
   addCard: 'Add ',
+  currencySymbol: '₹',
   contactSupprtText:
-    'You can reach out to one of our customer support executives for any help, queries or feedback to ABC Mart'
+    'You can reach out to one of our customer support executives for any help, queries or feedback to ABC Mart',
+  cardNumber: '**** **** **** 1234',
+  cashOnDelivery: 'Cash'
 }
 export default en

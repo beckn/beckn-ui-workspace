@@ -17,7 +17,7 @@ const headerFrenchNames: PathnameObjectType = {
 
 const headerBlackList = ['/rideHistory', '/', '/paymentMode', '/profile']
 
-const bottomHeaderBlackList = ['/', '/searchRide']
+const bottomHeaderBlackList = ['/', '/searchRide', '/searchRideForm', '/paymentMode']
 
 export default {
   SubHeader: {

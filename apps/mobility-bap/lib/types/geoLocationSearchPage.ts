@@ -1,15 +1,10 @@
-export interface GeoLocationAddresModel {
-  address: string
-  geoLatLong: {
-    lat: number
-    long: number
-  }
-}
+import { PickUpDropOffModel } from '@beckn-ui/common'
+
 export interface IGeoLocationSearchPage {
   geoLocationSearchPageVisible: boolean
   // geoAddre??ss: string
-  pickup: GeoLocationAddresModel
-  dropoff: GeoLocationAddresModel
+  pickup: PickUpDropOffModel
+  dropoff: PickUpDropOffModel
 }
 
 export interface IGeoLocationSearchPageRootState {

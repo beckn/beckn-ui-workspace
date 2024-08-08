@@ -1,10 +1,14 @@
 import { PickUpDropOffModel, SearchResponseModel } from '@beckn-ui/common'
 import { DOMAIN } from '@lib/config'
 
-interface CabDetails {
+export interface CabDetails {
+  id: string
+  image: string
   name: string
   waitTime: string
   fare: string
+  rating: string
+  cityName?: string
 }
 
 interface ChaufferDetails {
@@ -28,7 +32,7 @@ interface Options {
   tag: string
 }
 
-interface OptionsList {
+export interface OptionsList {
   rideTimeOptionsList: Options[]
   riderOptionsList: Options[]
 }
@@ -41,7 +45,6 @@ interface DataItemModel {
   }
   chaufferDetails: ChaufferDetails
   location: Location
-  optionsList: OptionsList
 }
 
 export interface ParsedCabDataModel {
@@ -53,68 +56,34 @@ export interface ParsedCabDataModel {
   bppUri: string
   domain: string
   transactionId: string
-  cabDetails: {
-    id: string
-    image: string
-    name: string
-    waitTime: string
-    fare: string
-    rating: string
-    cityName?: string
-  }[]
+  cabDetails: CabDetails[]
 }
 
 interface MockDataModel {
   data: DataItemModel[]
 }
 
-export const mockData: MockDataModel = {
-  data: [
-    {
-      cabCategory: {
-        mini: {
-          cabDetails: { name: 'Ola Mini', waitTime: '5 mins away', fare: '₹80' }
-        }
-      },
-      chaufferDetails: {
-        name: 'Manjunath Reddy',
-        registrationNumber: 'KA05 AF 6226',
-        carModel: 'Toyota Etios',
-        color: 'Silver',
-        otp: '6363',
-        rating: '4',
-        contact: '9811223344'
-      },
-      location: { pickup: 'Katraj', dropOff: 'Phoenix Mall' },
-      optionsList: {
-        rideTimeOptionsList: [
-          {
-            label: 'Ride Now',
-            value: 'ridenow',
-            tag: 'rideTimeOptions'
-          },
-          {
-            label: 'Ride Later',
-            value: 'ridelater',
-            tag: 'rideTimeOptions'
-          }
-        ],
-        riderOptionsList: [
-          {
-            label: 'Myself',
-            value: 'myself',
-            tag: 'riderOptions'
-          },
-          {
-            label: 'Others',
-            value: 'others',
-            tag: 'riderOptions'
-          }
-        ]
-      }
-    }
-  ]
-}
+// export const mockData: MockDataModel = {
+//   data: [
+//     {
+//       cabCategory: {
+//         mini: {
+//           cabDetails: { name: 'Ola Mini', waitTime: '5 mins away', fare: '₹80' }
+//         }
+//       },
+//       chaufferDetails: {
+//         name: 'Manjunath Reddy',
+//         registrationNumber: 'KA05 AF 6226',
+//         carModel: 'Toyota Etios',
+//         color: 'Silver',
+//         otp: '6363',
+//         rating: '4',
+//         contact: '9811223344'
+//       },
+//       location: { pickup: 'Katraj', dropOff: 'Phoenix Mall' }
+//     }
+//   ]
+// }
 
 export const parsedSearchDetails = (data: SearchResponseModel[]) => {
   const itemsarray: ParsedCabDataModel[] = []
@@ -175,11 +144,11 @@ export const getSearchRidePayload = (start: PickUpDropOffModel, end: PickUpDropO
       stops: [
         {
           type: 'start',
-          location: '19.9908869,73.6386689' // `${start.geoLatLong.lat},${start.geoLatLong.long}`
+          location: '18.6098356, 73.7495074' // `${start.geoLatLong.lat},${start.geoLatLong.long}`
         },
         {
           type: 'end',
-          location: '19.9908869,73.6386689' // `${end.geoLatLong.lat},${end.geoLatLong.long}`
+          location: '18.6098356, 73.7495074' // `${end.geoLatLong.lat},${end.geoLatLong.long}`
         }
       ]
     }

@@ -86,7 +86,6 @@ const PaymentDetailsCard: React.FC<PaymentDetailsCardProps> = ({ t, paymentMetho
                           fontWeight={400}
                           data-test={method.dataTest}
                           ml={'6px'}
-                          data-test={method.dataTest}
                         >
                           {method.paymentMethod}
                         </Text>
