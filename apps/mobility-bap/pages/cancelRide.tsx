@@ -12,8 +12,7 @@ const cancelRide = () => {
     <Flex
       flexDirection={'column'}
       alignItems="center"
-      mt={'110px'}
-      p="0 20px"
+      mt={'30px'}
     >
       <Image
         src="/images/orderConfirm.svg"
@@ -38,14 +37,16 @@ const cancelRide = () => {
         text={'refunded soon'}
         fontSize="15px"
       />
-      <Box
-        mt={'80px'}
-        w="100%"
-      >
+      <Box mt={'60px'}>
         <Button
           text="Go Back Home"
           handleClick={() => router.push('/')}
           variant="solid"
+        />
+        <Button
+          text="Book Another Ride"
+          handleClick={() => router.push('/')}
+          variant="outline"
         />
       </Box>
     </Flex>
