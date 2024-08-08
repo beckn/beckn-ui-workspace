@@ -4,7 +4,7 @@ import { useLanguage } from '../hooks/useLanguage'
 import { Image, Flex, Box } from '@chakra-ui/react'
 import { Button, Typography } from '@beckn-ui/molecules'
 
-const cancelRide = () => {
+const cancelRidePage = () => {
   const { t } = useLanguage()
   const router = useRouter()
 
@@ -12,7 +12,8 @@ const cancelRide = () => {
     <Flex
       flexDirection={'column'}
       alignItems="center"
-      mt={'30px'}
+      mt={'110px'}
+      p="0 20px"
     >
       <Image
         src="/images/orderConfirm.svg"
@@ -37,20 +38,18 @@ const cancelRide = () => {
         text={'refunded soon'}
         fontSize="15px"
       />
-      <Box mt={'60px'}>
+      <Box
+        mt={'80px'}
+        w="100%"
+      >
         <Button
           text="Go Back Home"
           handleClick={() => router.push('/')}
           variant="solid"
-        />
-        <Button
-          text="Book Another Ride"
-          handleClick={() => router.push('/')}
-          variant="outline"
         />
       </Box>
     </Flex>
   )
 }
 
-export default cancelRide
+export default cancelRidePage

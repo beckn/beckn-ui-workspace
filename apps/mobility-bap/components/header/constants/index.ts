@@ -1,7 +1,7 @@
 type PathnameObjectType = Record<string, string>
 
 // -------------------------------- Sub Header constants --------------------------------
-const backIconList = ['/']
+const backIconList = ['/', '/cancelRide']
 
 const headerNames: PathnameObjectType = {
   '/rideHistory': 'My Rides',
@@ -17,10 +17,7 @@ const headerFrenchNames: PathnameObjectType = {
 
 const headerBlackList = ['/rideHistory', '/', '/paymentMode', '/profile']
 
-
-
-const bottomHeaderBlackList = ['/', '/searchRide', '/searchRideForm', '/paymentMode','/cancelRide']
-
+const bottomHeaderBlackList = ['/', '/searchRide', '/searchRideForm', '/paymentMode', '/cancelRide']
 
 export default {
   SubHeader: {

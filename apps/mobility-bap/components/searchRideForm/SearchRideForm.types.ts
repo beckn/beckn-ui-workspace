@@ -4,7 +4,9 @@ type Options = {
   tag: string
 }
 
-export interface SearchRideFormProps {}
+export interface SearchRideFormProps {
+  onClick: () => void
+}
 
 export interface CustomDropDownProps {
   items: {

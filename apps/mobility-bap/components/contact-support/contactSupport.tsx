@@ -5,7 +5,7 @@ import { useLanguage } from '@hooks/useLanguage'
 import { SupportModel } from '@components/cancel-flow/CancelFlow'
 import BottomDrawer from '@components/bottomDrawer/BottomDrawer'
 import HeaderContent from '@components/cancel-flow/HeaderContent'
-const contactSupportPage = () => {
+const contactSupport = () => {
   const { t } = useLanguage()
   const supportInfo: SupportModel = {
     phone: '98111111',
@@ -53,4 +53,4 @@ const contactSupportPage = () => {
     </BottomDrawer>
   )
 }
-export default contactSupportPage
+export default contactSupport
