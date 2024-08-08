@@ -3,12 +3,12 @@ import { Divider, Flex, Image, useTheme } from '@chakra-ui/react'
 import { Typography } from '@beckn-ui/molecules'
 import { Button } from '@beckn-ui/molecules'
 import { useRouter } from 'next/router'
-import { useLanguage } from 'hooks/useLanguage'
 import { RideDetailsProps } from './RideDetails.types'
 import BottomDrawer from '../bottomDrawer/BottomDrawer'
 import TripLocation from '../searchRideForm/TripLocation'
 import CabDetails from './CabDetails'
 import DriverDetails from './DriverDetails'
+import { useLanguage } from '@hooks/useLanguage'
 
 const RideDetails: React.FC<RideDetailsProps> = ({
   name,
@@ -18,7 +18,9 @@ const RideDetails: React.FC<RideDetailsProps> = ({
   rating,
   fare,
   pickUp,
-  dropOff
+  dropOff,
+  cancelRide,
+  contactSupport
 }) => {
   const theme = useTheme()
   const router = useRouter()
@@ -130,11 +132,11 @@ const RideDetails: React.FC<RideDetailsProps> = ({
             alt="contact-support"
           />
         }
-        handleClick={() => router.push('/contactSupport')}
+        handleClick={contactSupport}
       />
       <Button
         text={t.cancelRide}
-        handleClick={() => router.push('/cancelRidePage')}
+        handleClick={cancelRide}
         variant="outline"
       />
     </BottomDrawer>

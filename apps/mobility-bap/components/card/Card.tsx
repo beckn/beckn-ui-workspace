@@ -31,21 +31,22 @@ const CardWithCheckBox: React.FC<CardWithCheckBoxPropsModel> = props => {
             onChange={handleChange}
           />
           <label htmlFor="checkbox">
-            <Image
-              src={'/images/cash.svg'}
-              w={'62px'}
-              h={'40px'}
-              ml={'30px'}
-              position="fixed"
-            />
             <Text
               position={'absolute'}
               width={'50vw'}
-              marginLeft="100px"
+              marginLeft="32px"
               fontSize={'15px'}
               fontWeight={400}
             >
-              {'Cash'}
+              <Flex alignItems={'center'}>
+                <Image
+                  src={'/images/cash.svg'}
+                  w={'62px'}
+                  h={'40px'}
+                  mr={'12px'}
+                />
+                {'Cash'}
+              </Flex>
             </Text>
           </label>
         </Flex>

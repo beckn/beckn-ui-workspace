@@ -6,7 +6,7 @@ import { Box } from '@chakra-ui/react'
 import { useLanguage } from '@hooks/useLanguage'
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
-const cancelRidePage = () => {
+const CancelRide = () => {
   const cancellationReasons: { id: string | number; reason: string }[] = [
     { id: 1, reason: 'Plan Changed' },
     { id: 2, reason: 'Booked by mistake' },
@@ -58,4 +58,4 @@ const cancelRidePage = () => {
     </BottomDrawer>
   )
 }
-export default cancelRidePage
+export default CancelRide
