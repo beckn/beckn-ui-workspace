@@ -1,0 +1,128 @@
+{
+  "data": [
+    {
+      "context": {
+        "domain": "retail",
+        "transaction_id": "12345",
+        "bpp_id": "bpp123",
+        "bpp_uri": "https://bpp.example.com"
+      },
+      "message": {
+        "providers": [
+          {
+            "id": "provider1",
+            "name": "Provider One",
+            "rating": "4.5",
+            "locations": [
+              {
+                "gps": "12.9715987,77.594566"
+              }
+            ],
+            "items": [
+              {
+                "id": "item1",
+                "long_desc": "At HarmonyArbitrators, our mediation services are designed to guide you through civil, family, employment, commercial, and financial disputes with skill and compassion. Our experienced mediators foster open communication, facilitating collaborative solutions that prioritize fairness and client satisfaction.",
+                "name": "Mediation Services One",
+                "price": {
+                  "value": "100.00",
+                  "currency": "INR"
+                },
+                "categories": [
+                  {
+                    "id": "224",
+                    "name": "Retail",
+                    "code": "retail"
+                  }
+                ],
+                "images": [
+                  {
+                    "url": "https://odr-catalogue.becknprotocol.io/odr-catalogue/ODR-catalogue/Mediation.jpeg"
+                  }
+                ],
+                "rating": "4.5"
+              },
+              {
+                "id": "item2",
+                "long_desc": "At HarmonyArbitrators, our mediation services are designed to guide you through civil, family, employment, commercial, and financial disputes with skill and compassion. Our experienced mediators foster open communication, facilitating collaborative solutions that prioritize fairness and client satisfaction.",
+                "name": "Mediation Services Two",
+                "price": {
+                  "value": "200.00",
+                  "currency": "INR"
+                },
+                "categories": [
+                  {
+                    "id": "224",
+                    "name": "Retail",
+                    "code": "retail"
+                  }
+                ],
+                "images": [
+                  {
+                    "url": "https://odr-catalogue.becknprotocol.io/odr-catalogue/ODR-catalogue/Mediation.jpeg"
+                  }
+                ],
+                "rating": "4.0"
+              }
+            ]
+          },
+          {
+            "id": "provider2",
+            "name": "Provider Two",
+            "rating": "4.0",
+            "locations": [
+              {
+                "gps": "28.704060,77.102493"
+              }
+            ],
+            "items": [
+              {
+                "id": "item3",
+                "long_desc": "At HarmonyArbitrators, our mediation services are designed to guide you through civil, family, employment, commercial, and financial disputes with skill and compassion. Our experienced mediators foster open communication, facilitating collaborative solutions that prioritize fairness and client satisfaction.",
+                "name": "Mediation Services Three",
+                "price": {
+                  "value": "300.00",
+                  "currency": "INR"
+                },
+                "categories": [
+                  {
+                    "id": "224",
+                    "name": "Retail",
+                    "code": "retail"
+                  }
+                ],
+                "images": [
+                  {
+                    "url": "https://odr-catalogue.becknprotocol.io/odr-catalogue/ODR-catalogue/Mediation.jpeg"
+                  }
+                ],
+                "rating": "4.2"
+              },
+              {
+                "id": "item4",
+                "long_desc": "At HarmonyArbitrators, our mediation services are designed to guide you through civil, family, employment, commercial, and financial disputes with skill and compassion. Our experienced mediators foster open communication, facilitating collaborative solutions that prioritize fairness and client satisfaction.",
+                "name": "Mediation Services Four",
+                "price": {
+                  "value": "400.00",
+                  "currency": "INR"
+                },
+                "categories": [
+                  {
+                    "id": "224",
+                    "name": "Retail",
+                    "code": "retail"
+                  }
+                ],
+                "images": [
+                  {
+                    "url": "https://odr-catalogue.becknprotocol.io/odr-catalogue/ODR-catalogue/Mediation.jpeg"
+                  }
+                ],
+                "rating": "4.8"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

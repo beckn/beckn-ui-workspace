@@ -13,6 +13,7 @@ import { useRouter } from 'next/router'
 import { DiscoveryRootState, cartActions } from '@beckn-ui/common/src/store'
 import { Box, Flex, useTheme } from '@chakra-ui/react'
 import { Button, CustomThemeType, Input, Typography } from '@beckn-ui/molecules'
+import { testIds } from '@shared/dataTestIds'
 
 const Product = () => {
   const theme = useTheme<CustomThemeType>()
@@ -69,6 +70,7 @@ const Product = () => {
               handleDecrement: decrement,
               counter: counter,
               cta: {
+                dataTest: testIds.productpage_addTocartButton,
                 text: 'Proceed',
                 color: 'White',
                 handleClick: () => {
