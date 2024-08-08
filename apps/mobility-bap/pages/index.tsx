@@ -6,7 +6,6 @@ import { IGeoLocationSearchPageRootState, PickUpDropOffModel, useGeolocation } f
 import PickUpDropOffModal from '@components/BottomModal'
 import { setPickUpLocation, setDropOffLocation } from '@store/user-slice'
 import { UserGeoLocationRootState } from '@lib/types/user'
-import ModalContent from '@components/modalContent/modalContent'
 
 const Homepage = () => {
   const MapWithNoSSR: any = dynamic(() => import('../components/Map'), { ssr: false })
@@ -74,7 +73,7 @@ const Homepage = () => {
     <div className="overflow-hidden max-h-[85vh]">
       {renderMap()}
 
-      {/* <PickUpDropOffModal
+      <PickUpDropOffModal
         isOpen={true}
         onClose={() => {}}
         pickup={pickup!}
@@ -82,8 +81,7 @@ const Homepage = () => {
         handleClickOnSearchRides={() => {
           router.push('/searchRide')
         }}
-      /> */}
-      <ModalContent />
+      />
     </div>
   )
 }

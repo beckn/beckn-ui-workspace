@@ -4,22 +4,7 @@ type Options = {
   tag: string
 }
 
-export interface SearchRideFormProps {
-  cabDetails: {
-    name: string
-    waitTime: string
-    fare: string
-  }
-  location: {
-    pickup: string
-    dropOff: string
-  }
-  optionsList: {
-    rideTimeOptionsList: Options[]
-    riderOptionsList: Options[]
-  }
-  onClick: () => void
-}
+export interface SearchRideFormProps {}
 
 export interface CustomDropDownProps {
   items: {

@@ -31,6 +31,4 @@ export interface RideDetailsProps {
   fare: string | number
   pickUp: string
   dropOff: string
-  cancelRide: () => void
-  contactSupport: () => void
 }
