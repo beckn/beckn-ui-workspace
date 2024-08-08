@@ -11,7 +11,6 @@ const BottomDrawer: React.FC<CancelBookingProps> = ({ children }) => {
       <Card
         zIndex={'999'}
         position="absolute"
-        left={0}
         bottom={'0'}
         w="100%"
         borderRadius={'16px'}
