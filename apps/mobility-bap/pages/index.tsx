@@ -1,25 +1,21 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import dynamic from 'next/dynamic'
 import { useDispatch, useSelector } from 'react-redux'
-import { useRouter } from 'next/router'
-import { IGeoLocationSearchPageRootState, PickUpDropOffModel, useGeolocation } from '@beckn-ui/common'
-import PickUpDropOffModal from '@components/BottomModal'
+import { IGeoLocationSearchPageRootState, useGeolocation } from '@beckn-ui/common'
 import { setPickUpLocation, setDropOffLocation } from '@store/user-slice'
 import { UserGeoLocationRootState } from '@lib/types/user'
-import ModalContent from '@components/modalContent/modalContent'
+import BottomModalRendered from '@components/bottomModalRendered/bottomModalRendered'
 
 const Homepage = () => {
   const MapWithNoSSR: any = dynamic(() => import('../components/Map'), { ssr: false })
 
-  // const [currentLocation, setCurrentLocation] = useState<PickUpDropOffModel>()
-  // const [destinationLocation, setDestinationLocation] = useState<PickUpDropOffModel>()
   const {
     geoAddress: originGeoAddress,
     geoLatLong: originGeoLatLong,
     destinationGeoAddress,
     destinationGeoLatLong
   } = useSelector((state: IGeoLocationSearchPageRootState) => state.geoLocationSearchPageUI)
-  const router = useRouter()
+
   const dispatch = useDispatch()
 
   const { pickup, dropoff } = useSelector((state: UserGeoLocationRootState) => state.userInfo)
@@ -74,16 +70,7 @@ const Homepage = () => {
     <div className="overflow-hidden max-h-[85vh]">
       {renderMap()}
 
-      {/* <PickUpDropOffModal
-        isOpen={true}
-        onClose={() => {}}
-        pickup={pickup!}
-        dropoff={dropoff!}
-        handleClickOnSearchRides={() => {
-          router.push('/searchRide')
-        }}
-      /> */}
-      <ModalContent />
+      <BottomModalRendered />
     </div>
   )
 }
