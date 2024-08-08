@@ -202,7 +202,13 @@ const testIds = {
   //ODR App
   select_input: 'select-input',
   dropdown_item: 'dropdown-item',
-  dropdown_item_list: 'dropdown-item-list'
+  dropdown_item_list: 'dropdown-item-list',
+  checkoutpage_respondent_Details: 'checkoutpage-respondent-Details',
+  checkoutpage_complaints_Details: 'checkoutpage-complaints-Details',
+  checkoutpage_dispute_Details: 'checkoutpage-dispute-Details',
+  checkoutpage_consent_Details: 'checkoutpage-consent-Details',
+  xinput_form_open: 'xinput_form_open',
+  xinput_form: 'xinput-form'
 }
 
 export { testIds }

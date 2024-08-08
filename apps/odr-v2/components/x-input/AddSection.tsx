@@ -17,6 +17,7 @@ interface AddSectionProps {
   modalTitle?: string
   notifySubmit: (submitted: boolean) => void
   bottomGap?: string
+  dataTest: string
 }
 
 const AddSection: React.FC<AddSectionProps> = ({
@@ -29,7 +30,8 @@ const AddSection: React.FC<AddSectionProps> = ({
   disabled = false,
   modalTitle,
   notifySubmit,
-  bottomGap = '30'
+  bottomGap = '30',
+  dataTest
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const t = useLanguage()
@@ -59,6 +61,7 @@ const AddSection: React.FC<AddSectionProps> = ({
           <Flex
             alignItems={'center'}
             onClick={() => !disabled && onOpen()}
+            data-test={dataTest}
           >
             <PlusSquareIcon color={bgColorOfPrimary} />
             <Typography

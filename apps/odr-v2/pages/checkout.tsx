@@ -139,6 +139,7 @@ const CheckoutPage = () => {
     formTitle: 'Add Complainant Details',
     showDetails: isInitResultPresent() && !isEmpty(complainantFormData.current),
     color: bgColorOfPrimary,
+    dataTest: testIds.checkoutpage_complaints_Details,
     shippingDetails: {
       name: complainantFormData.current?.name || '',
       location: complainantFormData.current?.address || '',
@@ -161,6 +162,7 @@ const CheckoutPage = () => {
     isChecked: false,
     showDetails: isInitResultPresent() && !isEmpty(billingFormData.current),
     isDisabled: isEmpty(complainantFormData.current),
+    dataTest: testIds.checkoutpage_respondent_Details,
     shippingDetails: {
       name: billingFormData.current?.name || '',
       location: billingFormData.current?.address || '',
@@ -225,6 +227,7 @@ const CheckoutPage = () => {
           sectionSubTitle="Dispute Details"
           notifySubmit={setDisputeFormSubmitted}
           isFormSubmit={disputeFormSubmitted}
+          dataTest={testIds.checkoutpage_dispute_Details}
         />
 
         <AddSection
@@ -238,6 +241,7 @@ const CheckoutPage = () => {
           notifySubmit={setConsentFormSubmitted}
           isFormSubmit={consentFormSubmitted}
           bottomGap="10"
+          dataTest={testIds.checkoutpage_consent_Details}
         />
         <Box
           width={isLargeScreen ? '40%' : '100%'}
@@ -245,6 +249,7 @@ const CheckoutPage = () => {
         >
           <Button
             disabled={hasBtnDisabledState()}
+            dataTest={testIds.checkoutpage_proceedToCheckout}
             text="Confirm"
             handleClick={() => {
               dispatch(cartActions.clearCart())

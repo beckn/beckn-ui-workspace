@@ -13,6 +13,7 @@ import { ConfirmResponseModel } from '../types/confirm.types'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
 import { utilGenerateEllipsedText } from '@beckn-ui/molecules'
 import { useConfirmMutation } from '@beckn-ui/common/src/services/confirm'
+import { testIds } from '@shared/dataTestIds'
 
 const OrderConfirmation = () => {
   const { t } = useLanguage()
@@ -102,7 +103,8 @@ const OrderConfirmation = () => {
               },
               disabled: false,
               variant: 'solid',
-              colorScheme: 'primary'
+              colorScheme: 'primary',
+              dataTest: testIds.orderConfirmation_viewOrderButton
             },
             {
               text: 'Go Back Home',
@@ -112,7 +114,8 @@ const OrderConfirmation = () => {
               },
               disabled: false,
               variant: 'outline',
-              colorScheme: 'primary'
+              colorScheme: 'primary',
+              dataTest: testIds.orderConfirmation_goBackToHome
             }
           ]
         }}
