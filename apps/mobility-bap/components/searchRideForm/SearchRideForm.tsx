@@ -75,21 +75,24 @@ const SearchRideForm: React.FC<SearchRideFormProps> = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
-    setFormData(prevFormData => ({
-      ...prevFormData,
-      [name]: value
-    }))
-    const updatedFormData = {
-      ...formData,
-      [name]: value
-    }
-    const errors = validateSearchRideForm(updatedFormData) as any
-    setFormErrors(prevErrors => ({
-      ...prevErrors,
-      [name]: t[`${errors[name]}`] || ''
-    }))
-    setIsFormFilled(updatedFormData.name.trim() !== '' && updatedFormData.mobileNumber.trim() !== '')
+
+    setFormData(prevFormData => {
+      const updatedFormData = {
+        ...prevFormData,
+        [name]: value
+      }
+
+      const errors = validateSearchRideForm(updatedFormData) as any
+      setFormErrors(prevErrors => ({
+        ...prevErrors,
+        [name]: t[`${errors[name]}`] || ''
+      }))
+      setIsFormFilled(updatedFormData.name.trim() !== '' && updatedFormData.mobileNumber.trim() !== '')
+
+      return updatedFormData
+    })
   }
+
   const handleDropdownChange = (newValue: string, tag: string) => {
     setDropDownOptions(prev => ({
       ...prev,
@@ -218,4 +221,5 @@ const SearchRideForm: React.FC<SearchRideFormProps> = () => {
     </BottomDrawer>
   )
 }
+
 export default SearchRideForm
