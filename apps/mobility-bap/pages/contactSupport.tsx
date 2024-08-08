@@ -5,7 +5,7 @@ import { useLanguage } from '@hooks/useLanguage'
 import { SupportModel } from '@components/cancel-flow/CancelFlow'
 import BottomDrawer from '@components/bottomDrawer/BottomDrawer'
 import HeaderContent from '@components/cancel-flow/HeaderContent'
-const ContactSupport = () => {
+const contactSupportPage = () => {
   const { t } = useLanguage()
   const supportInfo: SupportModel = {
     phone: '98111111',
@@ -32,27 +32,25 @@ const ContactSupport = () => {
     }
   ]
   return (
-    <>
-      <BottomDrawer>
-        <HeaderContent text="Contact Support" />
+    <BottomDrawer>
+      <HeaderContent text="Contact Support" />
+      <Box mt={'20px'}>
+        <Typography
+          text={t.contactSupprtText}
+          fontWeight="400"
+          fontSize="12px"
+        />
         <Box mt={'20px'}>
-          <Typography
-            text={t.contactSupprtText}
-            fontWeight="400"
-            fontSize="12px"
-          />
-          <Box mt={'20px'}>
-            {callMenuItem(supportInfo).map((menuItem, index) => (
-              <Button
-                key={index}
-                text={menuItem.text}
-                handleClick={menuItem.onClick}
-              />
-            ))}
-          </Box>
+          {callMenuItem(supportInfo).map((menuItem, index) => (
+            <Button
+              key={index}
+              text={menuItem.text}
+              handleClick={menuItem.onClick}
+            />
+          ))}
         </Box>
-      </BottomDrawer>
-    </>
+      </Box>
+    </BottomDrawer>
   )
 }
-export default ContactSupport
+export default contactSupportPage

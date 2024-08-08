@@ -65,7 +65,7 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
         <Header />
         {!geoLocationSearchPageVisible ? (
           <Box
-            maxW={isHome ? ['unset', 'unset', 'unset', 'unset'] : ['unset', 'unset', 'unset', '70rem']}
+            maxW={['unset', 'unset', 'unset', '70rem']}
             w="100%"
             margin="0 auto"
             className={`${styles.main} ${isHome ? styles.homepageMargin : ''}`}
