@@ -4,6 +4,7 @@ import storage from 'redux-persist/lib/storage'
 import userInfoReducer from './user-slice'
 import DiscoveryReducer from './discovery-slice'
 import SelectRideReducer from './selectRide-slice'
+import cabServiceReducer from './cabService-slice'
 import { api, feedbackReducer, geoMapLocationSearchReducer } from '@beckn-ui/common'
 
 const persistConfig = {
@@ -18,7 +19,8 @@ const appReducer = combineReducers({
   geoLocationSearchPageUI: geoMapLocationSearchReducer,
   discovery: DiscoveryReducer,
   selectRide: SelectRideReducer,
-  feedback: feedbackReducer
+  feedback: feedbackReducer,
+  cabService: cabServiceReducer
 })
 
 const rootReducer = (state: any, action: any) => {

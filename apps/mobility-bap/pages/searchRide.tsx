@@ -1,68 +1,21 @@
 import TripLocation from '@components/searchRideForm/TripLocation'
-import { Button, Loader, Typography } from '@beckn-ui/molecules'
+import { Button, Typography } from '@beckn-ui/molecules'
 import { Image, Box, Card, CardBody, Divider, Flex, useTheme } from '@chakra-ui/react'
-import axios from 'axios'
-import dynamic from 'next/dynamic'
 import Router from 'next/router'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { toast } from 'react-toastify'
 import { discoveryActions } from '@store/discovery-slice'
-import { ParsedCabDataModel, getSearchRidePayload, parsedSearchDetails } from '@utils/cabDetails'
-import { feedbackActions, IGeoLocationSearchPageRootState } from '@beckn-ui/common'
-import { formatGeoLocationDetails } from '@utils/geoLocation-utils'
 import { UserGeoLocationRootState } from '@lib/types/user'
 import { useLanguage } from '@hooks/useLanguage'
-
-const apiUrl = process.env.NEXT_PUBLIC_API_URL
-const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
+import { CabServiceDetailsRootState } from '@lib/types/cabService'
 
 const SearchRide = () => {
-  const [isLoading, setIsLoading] = useState(false)
-  const [cabServiceProviders, setCabServiceProviders] = useState<ParsedCabDataModel[]>([])
-  const [totalCabs, setTotalCabs] = useState<number>(0)
-
   const theme = useTheme()
   const dispatch = useDispatch()
   const { t } = useLanguage()
 
   const { pickup, dropoff } = useSelector((state: UserGeoLocationRootState) => state.userInfo)
-
-  const searchRide = useCallback(() => {
-    console.log(pickup, dropoff)
-    const payload = getSearchRidePayload(pickup, dropoff)
-
-    setIsLoading(true)
-
-    axios
-      .post(`${apiUrl}/search`, payload)
-      .then(async res => {
-        const { providerDetails, totalCabs } = await parsedSearchDetails(res.data.data)
-        setCabServiceProviders(providerDetails)
-        setTotalCabs(totalCabs)
-        setIsLoading(false)
-      })
-      .catch(e => {
-        dispatch(
-          feedbackActions.setToastData({
-            toastData: {
-              message: 'Error',
-              display: true,
-              type: 'error',
-              description: 'Something went wrong, please try again'
-            }
-          })
-        )
-        Router.push('/')
-      })
-      .finally(() => {
-        setIsLoading(false)
-      })
-  }, [])
-
-  useEffect(() => {
-    searchRide()
-  }, [])
+  const { cabServiceProviders, totalCabs } = useSelector((state: CabServiceDetailsRootState) => state.cabService)
 
   const handleOnSelect = useCallback((transactionId: string, details: any) => {
     dispatch(discoveryActions.addTransactionId({ transactionId }))
@@ -71,21 +24,25 @@ const SearchRide = () => {
         rideDetails: details
       })
     )
-    Router.push('/searchRideForm')
+
+    Router.push({
+      pathname: '/',
+      query: { fromSearchRide: true }
+    })
   }, [])
 
-  if (isLoading) {
-    return (
-      <Box
-        display="flex"
-        height="100vh"
-        justifyContent="center"
-        transform="translateY(-10%)"
-      >
-        <Loader />
-      </Box>
-    )
-  }
+  // if (isLoading) {
+  //   return (
+  //     <Box
+  //       display="flex"
+  //       height="100vh"
+  //       justifyContent="center"
+  //       transform="translateY(-10%)"
+  //     >
+  //       <Loader />
+  //     </Box>
+  //   )
+  // }
 
   return (
     <Box>
