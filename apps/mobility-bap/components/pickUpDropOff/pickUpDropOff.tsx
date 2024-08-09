@@ -29,7 +29,12 @@ const PickUpDropOff: React.FC<PickUpDropOffProps> = ({ pickup, dropoff, handleCl
       >
         Where Would You Like To Go?
       </Box>
-      <Divider mb="20px" />
+      <Divider
+        mb="20px"
+        mr="-20px"
+        ml="-20px"
+        width={'unset'}
+      />
       <Flex
         fontSize={'15px'}
         fontWeight="500"

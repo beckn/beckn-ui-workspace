@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { IGeoLocationSearchPageRootState, useGeolocation } from '@beckn-ui/common'
 import { setPickUpLocation, setDropOffLocation } from '@store/user-slice'
 import { UserGeoLocationRootState } from '@lib/types/user'
-import BottomModalRendered from '@components/bottomModalRendered/bottomModalRendered'
+import BottomModalRenderer from '@components/bottomModalRenderer/bottomModalRenderer'
 
 const Homepage = () => {
   const MapWithNoSSR: any = dynamic(() => import('../components/Map'), { ssr: false })
@@ -70,7 +70,7 @@ const Homepage = () => {
     <div className="overflow-hidden max-h-[90vh]">
       {renderMap()}
 
-      <BottomModalRendered />
+      <BottomModalRenderer />
     </div>
   )
 }

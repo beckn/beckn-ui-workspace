@@ -23,10 +23,10 @@ type PageOrModalType =
   | 'CONTACT_SOPPORT'
   | 'CANCEL_RIDE'
 
-const BottomModalRendered = () => {
+const BottomModalRenderer = () => {
+  const router = useRouter()
   const [drawerState, setDrawerState] = useState<PageOrModalType>('PICK_UP_DROP_OFF')
 
-  const router = useRouter()
   const dispatch = useDispatch()
   const { cancelTokenSource } = useSelector((state: CabServiceDetailsRootState) => state.cabService)
 
@@ -114,4 +114,4 @@ const BottomModalRendered = () => {
   return <BottomDrawer>{renderDrawerContent()}</BottomDrawer>
 }
 
-export default BottomModalRendered
+export default BottomModalRenderer
