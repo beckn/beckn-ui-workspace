@@ -1,14 +1,29 @@
-
-  <svg width="35" height="25" viewBox="0 0 25 22" xmlns="http://www.w3.org/2000/svg" style="position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);">
+<svg width="35" height="60" viewBox="0 0 25 25" xmlns="http://www.w3.org/2000/svg" style="position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);">
     <!-- Outer Circle (Static White Circle) -->
     <circle cx="12.5" cy="12.5" r="10" fill="white" />
     
     <!-- Outer Pulsating Circle (Ring) -->
     <circle cx="12.5" cy="12.5" r="7.5" fill="none" stroke="#1052ff" stroke-width="3" stroke-opacity="0.3">
+      <animate
+        attributeName="r"
+        from="7.5"
+        to="12"
+        dur="1.5s"
+        repeatCount="indefinite"
+        keyTimes="0;0.5;1"
+        values="7.5;12;7.5"
+      />
+      <animate
+        attributeName="stroke-opacity"
+        from="0.3"
+        to="0"
+        dur="1.5s"
+        repeatCount="indefinite"
+        keyTimes="0;0.5;1"
+        values="0.3;0;0.3"
+      />
     </circle>
     
-    <!-- Inner Pulsating Circle (Dot) -->
-    <circle cx="12.5" cy="12.5" r="4" fill="#1052ff">
-      <animateTransform attributeName="transform" type="scale" values="0.1;0;0.1;0" keyTimes="0;0.5;1" dur="1.25s" repeatCount="indefinite" />
-    </circle>
-  </svg>
+    <!-- Inner Fixed Circle (Dot) -->
+    <circle cx="12.5" cy="12.5" r="4" fill="#1052ff" />
+</svg>

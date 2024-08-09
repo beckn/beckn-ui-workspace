@@ -1,13 +1,11 @@
 import { Coordinate } from '@beckn-ui/common'
 import { ButtonProps } from '@beckn-ui/molecules'
+import { CurrentRideRequest } from './rideDetails'
 
-export interface RideDetailsModel {
-  time?: string
-  date?: string
+export interface RideDetailsModel extends CurrentRideRequest {
   handleNavigate?: (data: Coordinate) => void
-  distance?: string
-  source: string
-  destination?: string
+  sourceGeoLocation?: Coordinate
+  destinationGeoLocation?: Coordinate
 }
 
 export interface ModalDetails {
@@ -22,4 +20,4 @@ export interface ModalDetails {
   }
 }
 
-export type ModalTypes = 'REQ_NEW_RIDE' | 'PICK_UP' | 'REACHED_PICK_UP' | 'START_RIDE' | 'COMPLETED'
+export type ModalTypes = 'REQ_NEW_RIDE' | 'GOING_FOR_PICK_UP' | 'REACHED_PICK_UP' | 'START_RIDE' | 'COMPLETED'

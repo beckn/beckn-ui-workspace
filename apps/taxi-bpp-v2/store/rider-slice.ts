@@ -1,9 +1,9 @@
-import { Coordinate } from '@beckn-ui/common'
+import { Coordinate, PickUpDropOffModel } from '@beckn-ui/common'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 export interface RiderState {
   isOnline: boolean
-  currentLocation: Coordinate | null
+  currentLocation: PickUpDropOffModel
 }
 
 export interface RiderRootState {
@@ -12,7 +12,10 @@ export interface RiderRootState {
 
 const initialState: RiderState = {
   isOnline: false,
-  currentLocation: null
+  currentLocation: {
+    address: '',
+    geoLocation: { latitude: 0, longitude: 0 }
+  }
 }
 
 const riderSlice = createSlice({
@@ -25,7 +28,7 @@ const riderSlice = createSlice({
     goOffline: state => {
       state.isOnline = false
     },
-    updateLocation: (state, action: PayloadAction<Coordinate>) => {
+    updateLocation: (state, action: PayloadAction<PickUpDropOffModel>) => {
       state.currentLocation = action.payload
     }
   }

@@ -3,6 +3,7 @@ import { Box, Divider, Flex, Image } from '@chakra-ui/react'
 import React from 'react'
 import { RideSummaryProps } from '../../lib/types/rideDetails'
 import Styles from '@beckn-ui/becknified-components/src/pages/auth/auth.module.css'
+import { RIDE_STATUS_CODE } from '@utils/ride-utils'
 
 const RideSummary: React.FC<RideSummaryProps> = ({
   time,
@@ -12,7 +13,10 @@ const RideSummary: React.FC<RideSummaryProps> = ({
   destination,
   buttons,
   handleNavigate,
-  fare
+  fare,
+  driverStatus,
+  sourceGps,
+  destinationGps
 }) => {
   return (
     <Box>
@@ -27,7 +31,7 @@ const RideSummary: React.FC<RideSummaryProps> = ({
         >
           <Typography
             style={{ paddingRight: '15px' }}
-            text={time}
+            text={time!}
             color="#676767"
           />
           <Box
@@ -38,7 +42,7 @@ const RideSummary: React.FC<RideSummaryProps> = ({
             mr="10px"
           ></Box>
           <Typography
-            text={distance}
+            text={distance!}
             color="#676767"
           />
         </Flex>
@@ -47,12 +51,19 @@ const RideSummary: React.FC<RideSummaryProps> = ({
             bg={'#ABD4FA'}
             p="2px 6px"
             borderRadius={'6px'}
-            onClick={() =>
-              handleNavigate?.({
-                latitude: 18.6606495,
-                longitude: 73.73215850000001
-              })
-            }
+            onClick={() => {
+              console.log(driverStatus)
+              if (driverStatus === RIDE_STATUS_CODE.RIDE_ACCEPTED) {
+                handleNavigate?.(sourceGps!)
+              }
+              if (
+                driverStatus === RIDE_STATUS_CODE.CAB_REACHED_PICKUP_LOCATION ||
+                driverStatus === RIDE_STATUS_CODE.RIDE_STARTED ||
+                driverStatus === RIDE_STATUS_CODE.RIDE_COMPLETED
+              ) {
+                handleNavigate?.(destinationGps!)
+              }
+            }}
           >
             <Image
               src="/images/near_me.svg"
