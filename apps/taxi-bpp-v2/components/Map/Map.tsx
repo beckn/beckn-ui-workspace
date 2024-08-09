@@ -1,5 +1,6 @@
 import { Coordinate } from '@beckn-ui/common'
 import { useLoadScript, GoogleMap, MarkerF, DirectionsRenderer } from '@react-google-maps/api'
+import { formatCoords } from '@utils/geoLocation-utils'
 import React, { useRef } from 'react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
@@ -10,7 +11,6 @@ interface MapProps {
 
 const Map = (props: MapProps) => {
   const { origin, destination } = props
-  const { latitude, longitude } = origin || {}
 
   const [directions, setDirections] = useState<google.maps.DirectionsResult | null>(null)
   const [carPosition, setCarPosition] = useState<google.maps.LatLngLiteral | null>(null)
@@ -22,7 +22,7 @@ const Map = (props: MapProps) => {
   const index = useRef<number>(0)
 
   const libraries = useMemo(() => ['places'], [])
-  const mapCenter = useMemo(() => ({ lat: latitude, lng: longitude }), [origin])
+  const mapCenter = useMemo(() => formatCoords(origin), [origin])
 
   const mapOptions = useMemo<google.maps.MapOptions>(
     () => ({
@@ -87,7 +87,7 @@ const Map = (props: MapProps) => {
         }
       }
 
-      const carInterval = setInterval(moveCar, 500)
+      const carInterval = setInterval(moveCar, 100)
       return () => clearInterval(carInterval)
     }
   }, [routePoints, userInteracted])
@@ -99,6 +99,7 @@ const Map = (props: MapProps) => {
     map.addListener('idle', () => setUserInteracted(false))
   }
 
+  const anchorPoint = new window.google.maps.Point(20, 32)
   return (
     <>
       {isLoaded ? (
@@ -113,7 +114,9 @@ const Map = (props: MapProps) => {
           <MarkerF
             position={focusOnCar ? focusOnCar : mapCenter}
             icon={{
-              url: './images/ripple.svg' //https://img.icons8.com/fluency/48/map-pin.png
+              url: './images/ripple.svg',
+              scaledSize: new window.google.maps.Size(40, 40),
+              anchor: anchorPoint
             }}
           />
           {directions && (
