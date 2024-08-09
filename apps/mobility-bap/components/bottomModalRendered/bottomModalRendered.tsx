@@ -6,10 +6,11 @@ import PickUpDropOffContainer from '@components/pickUpDropOff/pickUpDropOffConta
 import RideDetailsCardContainer from '@components/ride-details/rideDetailsCardContainer'
 import RideDetailsContainer from '@components/ride-details/rideDetailsContainer'
 import SearchRideFormContainer from '@components/searchRideForm/searchRideFormContainer'
-import { setCabResultFound } from '@store/cabService-slice'
+import { CabServiceDetailsRootState } from '@lib/types/cabService'
+import { clearCancelTokenSource, setCabResultFound } from '@store/cabService-slice'
 import { useRouter } from 'next/router'
 import React, { useState, useEffect } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 type PageOrModalType =
   | 'PICK_UP_DROP_OFF'
@@ -23,10 +24,11 @@ type PageOrModalType =
   | 'CANCEL_RIDE'
 
 const BottomModalRendered = () => {
-  const router = useRouter()
   const [drawerState, setDrawerState] = useState<PageOrModalType>('PICK_UP_DROP_OFF')
 
+  const router = useRouter()
   const dispatch = useDispatch()
+  const { cancelTokenSource } = useSelector((state: CabServiceDetailsRootState) => state.cabService)
 
   useEffect(() => {
     if (router.query.reset) {
@@ -53,11 +55,12 @@ const BottomModalRendered = () => {
   }
 
   const handleClickOnCancelSearch = () => {
-    router.push({
-      pathname: '/',
-      query: { reset: true }
-    })
-    dispatch(setCabResultFound(false))
+    if (cancelTokenSource) {
+      cancelTokenSource.cancel('Cab search request canceled.')
+      dispatch(clearCancelTokenSource())
+      setDrawerState('PICK_UP_DROP_OFF')
+      dispatch(setCabResultFound(false))
+    }
   }
 
   const renderDrawerContent = () => {

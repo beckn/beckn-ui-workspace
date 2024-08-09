@@ -67,7 +67,7 @@ const Homepage = () => {
   }, [pickup, dropoff])
 
   return (
-    <div className="overflow-hidden max-h-[85vh]">
+    <div className="overflow-hidden max-h-[90vh]">
       {renderMap()}
 
       <BottomModalRendered />

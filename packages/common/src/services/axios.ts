@@ -1,9 +1,14 @@
-import defaultAxios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios'
+import defaultAxios, { AxiosError, AxiosInstance, AxiosResponse, CancelTokenSource } from 'axios'
 import { Store } from 'redux'
 import { feedbackActions } from '../store/ui-feedback-slice'
 
-const createAxiosInstance = (store: Store): AxiosInstance => {
-  const axios = defaultAxios.create()
+interface CustomAxiosInstance extends AxiosInstance {
+  createCancelToken: () => CancelTokenSource
+  isCancel: (value: any) => boolean
+}
+
+const createAxiosInstance = (store: Store): CustomAxiosInstance => {
+  const axios = defaultAxios.create() as CustomAxiosInstance
 
   // Add a response interceptor
   axios.interceptors.response.use(
@@ -31,6 +36,13 @@ const createAxiosInstance = (store: Store): AxiosInstance => {
       return Promise.reject(error)
     }
   )
+
+  // Add method to create a cancel token
+  axios.createCancelToken = () => {
+    return defaultAxios.CancelToken.source()
+  }
+
+  axios.isCancel = defaultAxios.isCancel
 
   return axios
 }
