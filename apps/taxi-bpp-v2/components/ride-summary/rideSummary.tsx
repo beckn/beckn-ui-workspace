@@ -56,11 +56,11 @@ const RideSummary: React.FC<RideSummaryProps> = ({
               if (driverStatus === RIDE_STATUS_CODE.RIDE_ACCEPTED) {
                 handleNavigate?.(sourceGps!)
               }
-              if (
-                driverStatus === RIDE_STATUS_CODE.CAB_REACHED_PICKUP_LOCATION ||
-                driverStatus === RIDE_STATUS_CODE.RIDE_STARTED ||
-                driverStatus === RIDE_STATUS_CODE.RIDE_COMPLETED
-              ) {
+              if (driverStatus === RIDE_STATUS_CODE.CAB_REACHED_PICKUP_LOCATION) {
+                handleNavigate?.(destinationGps!, false)
+              }
+              console.log(driverStatus, destinationGps)
+              if (driverStatus === RIDE_STATUS_CODE.RIDE_STARTED || driverStatus === RIDE_STATUS_CODE.RIDE_COMPLETED) {
                 handleNavigate?.(destinationGps!)
               }
             }}

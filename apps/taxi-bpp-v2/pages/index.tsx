@@ -1,10 +1,11 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   Coordinate,
   feedbackActions,
   IGeoLocationSearchPageRootState,
+  setGeoAddressAndLatLong,
   TopSheet,
   useGeolocation
 } from '@beckn-ui/common'
@@ -19,6 +20,7 @@ import {
   useGetNewRideRequestMutation,
   useGetRideSummaryMutation,
   useToggleAvailabilityMutation,
+  useUpdateDriverLocationMutation,
   useUpdateRideStatusMutation
 } from '@services/RiderService'
 import { goOffline, goOnline, RiderRootState, updateLocation } from '@store/rider-slice'
@@ -32,8 +34,9 @@ const Homepage = () => {
   const [currentModal, setCurrentModal] = useState<ModalDetails>()
   const [destination, setDestination] = useState<Coordinate>()
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [rideRequestList, setRideRequestList] = useState<RideDetailsModel[]>([])
-  const [currentRideReqIndex, setCurrentRideReqIndex] = useState<number>(0)
+  const [startNav, setStartNav] = useState<boolean>(false)
+  const rideRequestList = useRef<RideDetailsModel[]>([])
+  const currentRideReqIndex = useRef<number>(0)
 
   const { t } = useLanguage()
   const dispatch = useDispatch()
@@ -41,6 +44,7 @@ const Homepage = () => {
   const [getNewRideRequest] = useGetNewRideRequestMutation()
   const [updateRideStatus] = useUpdateRideStatusMutation()
   const [getRideSummary] = useGetRideSummaryMutation()
+  const [updateDriverLocation] = useUpdateDriverLocationMutation()
   const { isOnline, currentLocation } = useSelector((state: RiderRootState) => state.rider)
   const { currentAcceptedRideRequest, driverStatus } = useSelector((state: RideStatusRootState) => state.rideStatus)
   const apiKeyForGoogle = process.env.NEXT_PUBLIC_GOOGLE_API_KEY
@@ -86,14 +90,14 @@ const Homepage = () => {
       const response: any = await getNewRideRequest({})
       const newRides: any[] = response?.data?.data?.validOrders
       console.log('called')
-      if (newRides.length > 0) {
+      if (newRides?.length > 0) {
         const result = await parsedNewRideDetails(response?.data?.data?.validOrders)
         console.log('new ride req list--> ', result)
-        setRideRequestList(result)
+        rideRequestList.current = result
+        showNextRideRequest(result)
       }
     } else {
-      setCurrentRideReqIndex(0)
-      setRideRequestList([])
+      rideRequestList.current = []
     }
   }, [isOnline])
 
@@ -101,34 +105,33 @@ const Homepage = () => {
     getAllRideRequests()
   }, [isOnline])
 
-  useEffect(() => {
-    if (isOnline) {
-      console.log(rideRequestList[0], currentRideReqIndex)
-      const newRide = rideRequestList[currentRideReqIndex]
-      console.log(newRide)
-      if (newRide) {
-        updateCurrentModal('REQ_NEW_RIDE', newRide)
-      } else {
-        setCurrentModal(undefined)
-      }
+  const showNextRideRequest = (rideRequests: RideDetailsModel[]) => {
+    if (rideRequests.length > 0) {
+      updateCurrentModal('REQ_NEW_RIDE', rideRequests[0])
+    } else {
+      setCurrentModal(undefined)
     }
-  }, [rideRequestList, isOnline])
+    rideRequestList.current = rideRequests
+  }
 
-  const handleNavigate = (data: Coordinate) => {
+  const handleNavigate = (data: Coordinate, startNav: boolean = true) => {
     console.log('source--> ', currentLocation)
     console.log('destination--> ', data)
     setDestination(data)
+    setStartNav(startNav)
   }
 
   const handleAccept = async (data: RideDetailsModel) => {
-    console.log('Accepted:', rideRequestList[currentRideReqIndex])
-    dispatch(setNewRideRequest(rideRequestList[currentRideReqIndex]))
+    console.log('Accepted:', data)
+    dispatch(setNewRideRequest(data))
     await updateRideStatus({
       order_id: data.orderId,
       order_status: RIDE_STATUS_CODE.RIDE_ACCEPTED
     })
     dispatch(updateDriverStatus(RIDE_STATUS_CODE.RIDE_ACCEPTED))
-    handleModalSubmit('REQ_NEW_RIDE', rideRequestList[currentRideReqIndex])
+    handleModalSubmit('REQ_NEW_RIDE', data)
+    rideRequestList.current = []
+    currentRideReqIndex.current = 0
   }
 
   const handleDecline = async (data: RideDetailsModel) => {
@@ -137,8 +140,10 @@ const Homepage = () => {
       order_status: RIDE_STATUS_CODE.RIDE_DECLINED
     })
     dispatch(updateDriverStatus(RIDE_STATUS_CODE.RIDE_DECLINED))
-    setCurrentRideReqIndex(prevIndex => prevIndex + 1)
-    setCurrentModal(undefined)
+    console.log(rideRequestList.current)
+    const results = rideRequestList.current.slice(1)
+    console.log(results)
+    showNextRideRequest(results)
   }
 
   const updateCurrentModal = (modalType: ModalTypes, data: RideDetailsModel) => {
@@ -190,7 +195,18 @@ const Homepage = () => {
                 order_status: RIDE_STATUS_CODE.CAB_REACHED_PICKUP_LOCATION
               })
               dispatch(updateDriverStatus(RIDE_STATUS_CODE.CAB_REACHED_PICKUP_LOCATION))
-              dispatch(updateLocation({ address: data.source, geoLocation: data.sourceGeoLocation! }))
+              await updateDriverLocation({
+                location: {
+                  lat: data.sourceGeoLocation?.latitude.toString()!,
+                  long: data.sourceGeoLocation?.longitude.toString()!
+                }
+              })
+              dispatch(
+                setGeoAddressAndLatLong({
+                  geoAddress: data.source,
+                  geoLatLong: `${data.sourceGeoLocation?.latitude}, ${data.sourceGeoLocation?.longitude}`
+                })
+              )
               handleModalSubmit('GOING_FOR_PICK_UP', data)
             }
           }
@@ -213,6 +229,7 @@ const Homepage = () => {
                 order_status: RIDE_STATUS_CODE.RIDE_STARTED
               })
               dispatch(updateDriverStatus(RIDE_STATUS_CODE.RIDE_STARTED))
+              handleNavigate?.(data.destinationGeoLocation!)
               handleModalSubmit('REACHED_PICK_UP', data)
             }
           }
@@ -239,6 +256,18 @@ const Homepage = () => {
                 order_id: data.orderId
               })
               console.log(endRideData)
+              await updateDriverLocation({
+                location: {
+                  lat: data.destinationGeoLocation?.latitude.toString()!,
+                  long: data.destinationGeoLocation?.longitude.toString()!
+                }
+              })
+              dispatch(
+                setGeoAddressAndLatLong({
+                  geoAddress: data.destination,
+                  geoLatLong: `${data.destinationGeoLocation?.latitude}, ${data.destinationGeoLocation?.longitude}`
+                })
+              )
               handleModalSubmit('START_RIDE', data)
             }
           }
@@ -347,12 +376,13 @@ const Homepage = () => {
     return (
       <Box mt={'60px'}>
         <MapWithNoSSR
+          startNav={startNav}
           origin={currentLocation.geoLocation}
           destination={destination}
         />
       </Box>
     )
-  }, [currentLocation, destination])
+  }, [currentLocation, destination, startNav])
 
   const renderModals = useCallback(() => {
     return (

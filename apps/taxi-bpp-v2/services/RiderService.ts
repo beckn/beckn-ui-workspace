@@ -30,7 +30,7 @@ const riderApi = Api.injectEndpoints({
         body: payload
       })
     }),
-    updateLocation: build.mutation<RiderResponse, RiderRequest>({
+    updateDriverLocation: build.mutation<RiderResponse, RiderRequest>({
       query: payload => ({
         url: '/driver-app/update-location',
         method: 'POST',
@@ -57,6 +57,13 @@ const riderApi = Api.injectEndpoints({
         method: 'POST',
         body: payload
       })
+    }),
+    getMyProfile: build.mutation<any, any>({
+      query: payload => ({
+        url: '/driver-app/me',
+        method: 'POST',
+        body: payload
+      })
     })
   })
 })
@@ -64,13 +71,21 @@ const riderApi = Api.injectEndpoints({
 export const {
   useToggleAvailabilityMutation,
   useGetNewRideRequestMutation,
-  useUpdateLocationMutation,
+  useUpdateDriverLocationMutation,
   useUpdateRideStatusMutation,
-  useGetRideSummaryMutation
+  useGetRideSummaryMutation,
+  useGetMyProfileMutation
 } = riderApi
 
 export const {
-  endpoints: { toggleAvailability, getNewRideRequest, updateLocation, updateRideStatus, getRideSummary }
+  endpoints: {
+    toggleAvailability,
+    getNewRideRequest,
+    updateDriverLocation,
+    updateRideStatus,
+    getRideSummary,
+    getMyProfile
+  }
 } = riderApi
 
 export default riderApi

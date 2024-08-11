@@ -23,7 +23,7 @@ export interface RideSummaryProps extends CurrentRideRequest {
     text: string
     cost: string
   }
-  handleNavigate?: (data: Coordinate) => void
+  handleNavigate?: (data: Coordinate, showRoute?: boolean) => void
   sourceGps?: Coordinate
   destinationGps?: Coordinate
 }

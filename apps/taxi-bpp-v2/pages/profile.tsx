@@ -1,29 +1,59 @@
-import React from 'react'
-import { Box, Divider, Flex, Image, Text } from '@chakra-ui/react'
+import React, { useEffect, useState } from 'react'
+import { Box, Divider, Flex, Image } from '@chakra-ui/react'
 import { DetailCard } from '@beckn-ui/becknified-components'
 import { Typography } from '@beckn-ui/molecules'
-
-const profiles = [
-  {
-    profileTitle: 'Personal Details',
-    details: [
-      { label: 'Raj Kumar', img: '/images/Profile.svg' },
-      { label: 'rajkumar@example.com', img: '/images/mail.svg' },
-      { label: '+91-9876543210', img: '/images/Call.svg' }
-    ]
-  },
-  {
-    profileTitle: 'Vehicle Details',
-    details: [
-      { label: 'MH12TB4032', img: '/images/local_taxi.svg' },
-      { label: 'Maruti Suzuki Swift', img: '/images/manufacturing.svg' },
-      { label: '2020', img: '/images/directions_car.svg' },
-      { label: 'Sedan', img: '/images/oil_barrel.svg' }
-    ]
-  }
-]
+import { useGetMyProfileMutation } from '@services/RiderService'
+import { UserDetailsModel, VehicleDetailsModel } from '@lib/types/profile'
 
 const ProfilePage = () => {
+  const [personalDetails, setPersonalDetails] = useState<UserDetailsModel>()
+  const [vehicleDetails, setVehicleDetails] = useState<VehicleDetailsModel>()
+
+  const [getMyProfile] = useGetMyProfileMutation()
+
+  const getMyProfileDetails = async () => {
+    const data: any = await getMyProfile({})
+    if (data && data?.data) {
+      const { user_details, vehicle_details } = data.data
+      setPersonalDetails({
+        name: user_details.name,
+        email: user_details.email,
+        phoneNumber: user_details.phone_number,
+        username: user_details.username
+      })
+      setVehicleDetails({
+        registrationNo: vehicle_details.registration_no,
+        vehicleMake: vehicle_details.vehicle_make,
+        vehicleModel: vehicle_details.vehicle_model,
+        powerSource: vehicle_details.power_source
+      })
+    }
+  }
+
+  useEffect(() => {
+    getMyProfileDetails()
+  }, [])
+
+  const profiles = [
+    {
+      profileTitle: 'Personal Details',
+      details: [
+        { label: personalDetails?.name, img: '/images/Profile.svg' },
+        { label: personalDetails?.email, img: '/images/mail.svg' },
+        { label: personalDetails?.phoneNumber, img: '/images/Call.svg' }
+      ]
+    },
+    {
+      profileTitle: 'Vehicle Details',
+      details: [
+        { label: vehicleDetails?.registrationNo, img: '/images/local_taxi.svg' },
+        { label: vehicleDetails?.vehicleMake, img: '/images/manufacturing.svg' },
+        { label: vehicleDetails?.vehicleModel, img: '/images/directions_car.svg' },
+        { label: vehicleDetails?.powerSource, img: '/images/oil_barrel.svg' }
+      ]
+    }
+  ]
+
   return (
     <Box
       mt="110px"
@@ -54,7 +84,7 @@ const ProfilePage = () => {
                 />
                 <Typography
                   variant="subTitleRegular"
-                  text={detail.label}
+                  text={detail.label!}
                 />
               </Flex>
               {idx < profile.details.length - 1 && <Divider />}

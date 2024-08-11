@@ -5,12 +5,13 @@ import React, { useRef } from 'react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 interface MapProps {
+  startNav: boolean
   origin: Coordinate
   destination?: Coordinate
 }
 
 const Map = (props: MapProps) => {
-  const { origin, destination } = props
+  const { origin, destination, startNav } = props
 
   const [directions, setDirections] = useState<google.maps.DirectionsResult | null>(null)
   const [carPosition, setCarPosition] = useState<google.maps.LatLngLiteral | null>(null)
@@ -72,7 +73,7 @@ const Map = (props: MapProps) => {
   }, [fetchDirections])
 
   useEffect(() => {
-    if (routePoints.length > 0) {
+    if (startNav && routePoints.length > 0) {
       // let index = 0
 
       const moveCar = () => {
@@ -90,7 +91,7 @@ const Map = (props: MapProps) => {
       const carInterval = setInterval(moveCar, 100)
       return () => clearInterval(carInterval)
     }
-  }, [routePoints, userInteracted])
+  }, [routePoints, userInteracted, startNav])
 
   const handleMapLoad = (map: google.maps.Map) => {
     setMap(map)
