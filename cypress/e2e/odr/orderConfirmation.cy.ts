@@ -17,67 +17,26 @@ describe('Order Confirmation Page', () => {
       })
       cy.selectProduct(0)
       cy.getByData(testIds.productpage_addTocartButton).click()
-      cy.getByData(testIds.loadingIndicator).should('be.visible')
       cy.performSelect({ fixture: 'ODR/checkoutPage/selectResponse.json' }, 'selectResponse')
       cy.wait('@selectResponse')
-      //on checkout page filled compliant details form
-      cy.getByData(testIds.checkoutpage_complaints_Details).getByData(testIds.checkoutpage_openForm).eq(0).click()
-      cy.getByData(testIds.checkoutpage_form).should('be.visible')
-      cy.getByData(testIds.checkoutpage_complaints_Details)
-        .getByData(testIds.checkoutpage_form)
-        .within(() => {
-          cy.getByData(testIds.checkoutpage_name).clear().type(complaintsDetails.name)
-          cy.getByData(testIds.checkoutpage_mobileNumber).clear().type(complaintsDetails.mobileNumber)
-          cy.getByData(testIds.checkoutpage_email).clear().type(complaintsDetails.email)
-          cy.getByData(testIds.checkoutpage_address).clear().type(complaintsDetails.address)
-          cy.getByData(testIds.checkoutpage_pinCode).clear().type(complaintsDetails.pinCode)
-          cy.getByData('submit').click()
-        })
 
+      //on checkout page filled compliant details form
+      cy.fillComplaintDetails(complaintsDetails)
       cy.performInit(initResponse, 'initResponse')
       cy.wait('@initResponse')
 
-      //on checkout page filled respondent details form
-      cy.getByData(testIds.checkoutpage_respondent_Details).getByData(testIds.checkoutpage_openForm).eq(0).click()
-      cy.getByData(testIds.checkoutpage_form).should('be.visible')
-      cy.getByData(testIds.checkoutpage_respondent_Details)
-        .getByData(testIds.checkoutpage_form)
-        .within(() => {
-          cy.getByData(testIds.checkoutpage_name).clear().type(respondentDetails.name)
-          cy.getByData(testIds.checkoutpage_mobileNumber).clear().type(respondentDetails.mobileNumber)
-          cy.getByData(testIds.checkoutpage_email).clear().type(respondentDetails.email)
-          cy.getByData(testIds.checkoutpage_address).clear().type(respondentDetails.address)
-          cy.getByData(testIds.checkoutpage_pinCode).clear().type(respondentDetails.pinCode)
-          cy.getByData('submit').click()
-        })
-
+      //on checkout page filled compliant details form
+      cy.fillRespondentDetails(respondentDetails)
       cy.performInit(initResponse, 'initResponse')
       cy.wait('@initResponse')
 
       //on checkout page filled dispute details form
-      cy.getByData(testIds.checkoutpage_dispute_Details).click()
-      cy.getByData(testIds.xinput_form_open).should('be.visible')
-      cy.getByData(testIds.xinput_form).within(() => {
-        cy.getByData('details').type('krushna')
-        cy.getByData('"claimValue"').type('1234')
-        cy.getByData('btnSave').click()
-      })
-      cy.intercept('POST', 'https://bpp-unified-strapi-dev.becknprotocol.io/beckn-bpp-adapter/x-input/submit', {
-        fixture: 'ODR/checkoutPage/disputeSubmitFormResponse.json'
-      }).as('disputeFormResponse')
+      cy.fillDisputeDetails()
+      cy.performXinputSubmit({ fixture: 'ODR/checkoutPage/disputeSubmitFormResponse.json' }, 'disputeFormResponse')
 
       //on checkout page filled consent details form
-      cy.getByData(testIds.checkoutpage_consent_Details).click()
-      cy.getByData(testIds.xinput_form_open).should('be.visible')
-
-      cy.getByData(testIds.xinput_form).within(() => {
-        cy.getByData('name').type('krushna')
-        cy.getByData('"place"').type('pune')
-        cy.getByData('btnConfirm').click()
-      })
-      cy.intercept('POST', 'https://bpp-unified-strapi-dev.becknprotocol.io/beckn-bpp-adapter/x-input/submit', {
-        fixture: 'ODR/checkoutPage/consentFormResponse.json'
-      }).as('consentFormResponse')
+      cy.fillConsentDetails()
+      cy.performXinputSubmit({ fixture: 'ODR/checkoutPage/consentFormResponse.json' }, 'consentFormResponse')
 
       //on checkout page all form filled and click on proceed button
       cy.getByData(testIds.checkoutpage_proceedToCheckout).click()
@@ -122,63 +81,22 @@ describe('Order Confirmation Page', () => {
       cy.performSelect({ fixture: 'ODR/checkoutPage/selectResponse.json' }, 'selectResponse')
       cy.wait('@selectResponse')
       //on checkout page filled compliant details form
-      cy.getByData(testIds.checkoutpage_complaints_Details).getByData(testIds.checkoutpage_openForm).eq(0).click()
-      cy.getByData(testIds.checkoutpage_form).should('be.visible')
-      cy.getByData(testIds.checkoutpage_complaints_Details)
-        .getByData(testIds.checkoutpage_form)
-        .within(() => {
-          cy.getByData(testIds.checkoutpage_name).clear().type(complaintsDetails.name)
-          cy.getByData(testIds.checkoutpage_mobileNumber).clear().type(complaintsDetails.mobileNumber)
-          cy.getByData(testIds.checkoutpage_email).clear().type(complaintsDetails.email)
-          cy.getByData(testIds.checkoutpage_address).clear().type(complaintsDetails.address)
-          cy.getByData(testIds.checkoutpage_pinCode).clear().type(complaintsDetails.pinCode)
-          cy.getByData('submit').click()
-        })
-
+      cy.fillComplaintDetails(complaintsDetails)
       cy.performInit(initResponse, 'initResponse')
       cy.wait('@initResponse')
 
       //on checkout page filled respondent details form
-      cy.getByData(testIds.checkoutpage_respondent_Details).getByData(testIds.checkoutpage_openForm).eq(0).click()
-      cy.getByData(testIds.checkoutpage_form).should('be.visible')
-      cy.getByData(testIds.checkoutpage_respondent_Details)
-        .getByData(testIds.checkoutpage_form)
-        .within(() => {
-          cy.getByData(testIds.checkoutpage_name).clear().type(respondentDetails.name)
-          cy.getByData(testIds.checkoutpage_mobileNumber).clear().type(respondentDetails.mobileNumber)
-          cy.getByData(testIds.checkoutpage_email).clear().type(respondentDetails.email)
-          cy.getByData(testIds.checkoutpage_address).clear().type(respondentDetails.address)
-          cy.getByData(testIds.checkoutpage_pinCode).clear().type(respondentDetails.pinCode)
-          cy.getByData('submit').click()
-        })
-
+      cy.fillRespondentDetails(respondentDetails)
       cy.performInit(initResponse, 'initResponse')
       cy.wait('@initResponse')
 
       //on checkout page filled dispute details form
-      cy.getByData(testIds.checkoutpage_dispute_Details).click()
-      cy.getByData(testIds.xinput_form_open).should('be.visible')
-      cy.getByData(testIds.xinput_form).within(() => {
-        cy.getByData('details').type('krushna')
-        cy.getByData('"claimValue"').type('1234')
-        cy.getByData('btnSave').click()
-      })
-      cy.intercept('POST', 'https://bpp-unified-strapi-dev.becknprotocol.io/beckn-bpp-adapter/x-input/submit', {
-        fixture: 'ODR/checkoutPage/disputeSubmitFormResponse.json'
-      }).as('disputeFormResponse')
+      cy.fillDisputeDetails()
+      cy.performXinputSubmit({ fixture: 'ODR/checkoutPage/disputeSubmitFormResponse.json' }, 'disputeFormResponse')
 
       //on checkout page filled consent details form
-      cy.getByData(testIds.checkoutpage_consent_Details).click()
-      cy.getByData(testIds.xinput_form_open).should('be.visible')
-
-      cy.getByData(testIds.xinput_form).within(() => {
-        cy.getByData('name').type('krushna')
-        cy.getByData('"place"').type('pune')
-        cy.getByData('btnConfirm').click()
-      })
-      cy.intercept('POST', 'https://bpp-unified-strapi-dev.becknprotocol.io/beckn-bpp-adapter/x-input/submit', {
-        fixture: 'ODR/checkoutPage/consentFormResponse.json'
-      }).as('consentFormResponse')
+      cy.fillConsentDetails()
+      cy.performXinputSubmit({ fixture: 'ODR/checkoutPage/consentFormResponse.json' }, 'consentFormResponse')
 
       //on checkout page all form filled and click on proceed button
       cy.getByData(testIds.checkoutpage_proceedToCheckout).click()
