@@ -19,3 +19,12 @@ coverage
 # Documentation here: https://yarnpkg.com/features/zero-installs
 # !.yarn/cache
 .pnp.*
+
+# Cypress artifacts
+cypress/screenshots/
+cypress/videos/
+# Cypress cache (optional, typically stored in user's home directory)
+.cypress_cache/
+# Cypress reports and logs
+cypress/reports/
+cypress/logs/
