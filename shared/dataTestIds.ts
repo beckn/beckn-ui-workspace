@@ -1,7 +1,7 @@
 const testIds = {
   // application wise base url
-  url_base: 'http://localhost:3000',
-  url_base_retail: 'http://localhost:3002',
+  url_base: process.env.CYPRESS_BASE_URL || 'http://localhost:3000',
+  url_base_retail: process.env.CYPRESS_BASE_URL || 'http://localhost:3002',
   // general
   goBack: 'go-back',
   feedback: 'feedback-toast',
