@@ -5,7 +5,7 @@ describe('Payment Page', () => {
 
   before(() => {
     cy.login(testIds.url_base_retail, testIds.user_validEmail, testIds.user_validPassword)
-    cy.visit(testIds.url_home)
+    cy.visit(`${testIds.url_base_retail}${testIds.url_home}`)
     cy.setGeolocation('getAddress')
     cy.wait('@getAddress')
     cy.performSearch(searchTerm, {

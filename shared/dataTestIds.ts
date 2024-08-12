@@ -51,6 +51,8 @@ const testIds = {
   user_invalidPassword: 'Enterthevoid@1234',
   user_firstTimeLoginvalidEmail: 'pallavi@gmail.com',
   user_firstTimeLoginvalidPassword: 'Pallavi@123',
+  user_login: 'krushnaTest@test.com',
+  user_password: 'Krushna@123',
   // auth page
   auth_inputEmail: 'input-email',
   auth_inputPassword: 'input-password',
@@ -208,7 +210,8 @@ const testIds = {
   checkoutpage_dispute_Details: 'checkoutpage-dispute-Details',
   checkoutpage_consent_Details: 'checkoutpage-consent-Details',
   xinput_form_open: 'xinput_form_open',
-  xinput_form: 'xinput-form'
+  xinput_form: 'xinput-form',
+  rateUsBox: 'rateUs-Box'
 }
 
 export { testIds }

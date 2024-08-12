@@ -57,7 +57,7 @@ describe('Order Confirmation Page', () => {
 
   context('should render Homepage when user click on go back to home button', () => {
     before(() => {
-      cy.login(testIds.url_base_retail, testIds.user_validEmail, testIds.user_validPassword)
+      cy.login(testIds.url_base_retail, testIds.user_login, testIds.user_password)
       cy.visit(`${testIds.url_base_retail}${testIds.url_home}`)
       cy.setGeolocation('getAddress')
       cy.wait('@getAddress')

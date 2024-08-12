@@ -6,7 +6,7 @@ describe('Home Page Tests', () => {
   })
 
   beforeEach(() => {
-    cy.visit(testIds.url_home)
+    cy.visit(`${testIds.url_base_retail}${testIds.url_home}`)
     cy.setGeolocation('getAddress')
     cy.wait('@getAddress')
   })

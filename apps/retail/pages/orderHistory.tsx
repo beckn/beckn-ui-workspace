@@ -25,11 +25,10 @@ const OrderHistory = () => {
 
   const bearerToken = Cookies.get('authToken')
   const router = useRouter()
-
+  console.log(bearerToken)
   useEffect(() => {
     const myHeaders = new Headers()
     myHeaders.append('Authorization', `Bearer ${bearerToken}`)
-
     const requestOptions: RequestInit = {
       method: 'GET',
       headers: myHeaders,

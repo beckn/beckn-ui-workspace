@@ -42,13 +42,14 @@ import nameIcon from '../public/images/nameIcon.svg'
 import { AttachmentIcon } from '@chakra-ui/icons'
 import ShippingBlock from '@components/orderDetailComponents/Shipping'
 import { DOMAIN } from '@lib/config'
+import { testIds } from '@shared/dataTestIds'
 
 const statusMap = {
   PAYMENT_RECEIVED: 'Payment Received',
   'USER CANCELLED': 'CASE FORFEITED'
 }
 
-const DELIVERED = 'Delivered'
+const DELIVERED = 'CLOSED'
 const CANCELLED = 'USER CANCELLED'
 
 const OrderDetails = () => {
@@ -682,6 +683,7 @@ const OrderDetails = () => {
             border={`1px solid ${theme.colors.primary[100]}`}
             className="border_radius_all"
             boxShadow={'0px 8px 10px -6px rgb(0 0 0 / 10%), 0px 20px 25px -5px rgb(0 0 0 / 10%)'}
+            data-test={testIds.rateUsBox}
           >
             <CardBody padding="15px 20px">
               <Flex
@@ -720,6 +722,7 @@ const OrderDetails = () => {
                   color="#0560FA"
                   as={Typography}
                   text={t.rateUs}
+                  dataTest={testIds.orderDetails_rateUs_mainContainer}
                 />
               </Flex>
             </CardBody>
@@ -739,6 +742,7 @@ const OrderDetails = () => {
           >
             <Typography
               variant="subTitleRegular"
+              dataTest={testIds.orderDetailspage_orderOverview}
               text={t.orderOverview}
               fontSize="17px"
             />
@@ -760,6 +764,7 @@ const OrderDetails = () => {
                 >
                   <Typography
                     variant="subTitleSemibold"
+                    dataTest={testIds.orderDetailspage_productName}
                     text={data.statusData[0]?.message?.order?.items[0]?.name}
                   />
                 </Box>
@@ -772,6 +777,7 @@ const OrderDetails = () => {
                 >
                   <Typography
                     variant="subTitleRegular"
+                    dataTest={testIds.orderDetailspage_productPlacedAt}
                     text={t.placedAt}
                   />
                   <Typography
@@ -790,6 +796,7 @@ const OrderDetails = () => {
           >
             <Typography
               variant="subTitleRegular"
+              dataTest={testIds.orderDetailspage_progressSummary}
               text={t.progressSummary}
               fontSize="17px"
             />
@@ -809,11 +816,13 @@ const OrderDetails = () => {
                     text={`Case Id: ${utilGenerateEllipsedText(orderMetaData.orderIds[0])}`}
                     fontSize="17px"
                     fontWeight="600"
+                    dataTest={testIds.orderDetailspage_orderId}
                   />
                   <Image
                     onClick={handleOrderDotsClick}
                     src="/images/threeDots.svg"
                     alt="threeDots"
+                    data-test={testIds.orderDetailspage_otherOptions}
                   />
                 </Flex>
 
@@ -828,6 +837,7 @@ const OrderDetails = () => {
                       whiteSpace={'nowrap'}
                       fontSize={'12px'}
                       fontWeight={'400'}
+                      data-test={testIds.orderDetailspage_orderSummaryItemName}
                     >
                       {data.statusData[0]?.message?.order?.provider?.short_desc}
                     </Text>
@@ -836,6 +846,7 @@ const OrderDetails = () => {
                   <Text
                     fontSize={'15px'}
                     fontWeight={'500'}
+                    data-test={testIds.orderDetailspage_orderStatus}
                     color={
                       data.statusData[0].message.order.fulfillments?.[0]?.state?.descriptor?.code === CANCELLED
                         ? 'red'
@@ -861,7 +872,10 @@ const OrderDetails = () => {
               />
 
               {/* Display order status progress */}
-              <Box className="order_status_progress">
+              <Box
+                className="order_status_progress"
+                data-test={testIds.orderDetailspage_orderStatusMap}
+              >
                 {orderStatusMap.map((status: OrderStatusProgressProps, index: number) => (
                   <OrderStatusProgress
                     key={index}
@@ -889,6 +903,7 @@ const OrderDetails = () => {
               name={{ text: updatedShippingName || shippingName, icon: nameIcon }}
               address={{ text: shippingEmail, icon: locationIcon, iconComponent: MdAlternateEmail }}
               mobile={{ text: updateShippingPhone || shippingPhone, icon: CallphoneIcon }}
+              dataTest={testIds.orderDetailspage_shippingDetails}
             />
           )}
           {!isDesktop && (
@@ -897,6 +912,7 @@ const OrderDetails = () => {
                 name={{ text: updatedShippingName || shippingName, icon: nameIcon }}
                 address={{ text: shippingEmail, icon: locationIcon, iconComponent: MdAlternateEmail }}
                 mobile={{ text: updateShippingPhone || shippingPhone, icon: CallphoneIcon }}
+                dataTest={testIds.orderDetailspage_shippingDetails}
               />
             </Accordion>
           )}
@@ -907,6 +923,7 @@ const OrderDetails = () => {
               name={{ text: name, icon: nameIcon }}
               address={{ text: address, icon: locationIcon }}
               mobile={{ text: phone, icon: CallphoneIcon }}
+              dataTest={testIds.orderDetailspage_billingDetails}
             />
           )}
           {!isDesktop && (
@@ -915,6 +932,7 @@ const OrderDetails = () => {
                 name={{ text: name, icon: nameIcon }}
                 address={{ text: address, icon: locationIcon }}
                 mobile={{ text: phone, icon: CallphoneIcon }}
+                dataTest={testIds.orderDetailspage_billingDetails}
               />
             </Accordion>
           )}
@@ -945,6 +963,7 @@ const OrderDetails = () => {
           <BottomModal
             title=""
             isOpen={uiState.isMenuModalOpen}
+            dataTest={testIds.orderDetailspage_menus}
             onClose={handleMenuModalClose}
           >
             {uiState.isLoadingForTrackAndSupport ? (
@@ -970,6 +989,7 @@ const OrderDetails = () => {
                     columnGap="10px"
                     alignItems="center"
                     onClick={menuItem.onClick}
+                    data-test={testIds.orderDetailspage_menuItem}
                   >
                     <Image src={menuItem.image} />
                     <Text
@@ -977,6 +997,7 @@ const OrderDetails = () => {
                       text={menuItem.text}
                       fontSize="15px"
                       fontWeight={400}
+                      dataTest={testIds.orderDetailspage_menuItemName}
                     />
                   </Flex>
                 ))}
@@ -987,11 +1008,13 @@ const OrderDetails = () => {
                     columnGap="10px"
                     alignItems="center"
                     onClick={menuItem.onClick}
+                    data-test={testIds.orderDetailspage_callServiceItem}
                   >
                     <Image src={menuItem.image} />
                     <Text
                       as={Typography}
                       text={menuItem.text}
+                      dataTest={testIds.orderDetailspage_callServiceItemName}
                       fontSize="15px"
                       fontWeight={400}
                     />
@@ -1006,6 +1029,7 @@ const OrderDetails = () => {
             isOpen={uiState.isCancelMenuModalOpen}
             onClose={handleCancelMenuModalClose}
             modalHeader={t.orderCancellation}
+            dataTest={testIds.orderDetailspage_cancelOrder}
           >
             {uiState.isLoadingForCancel ? (
               <LoaderWithMessage

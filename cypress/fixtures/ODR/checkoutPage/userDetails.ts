@@ -1,6 +1,6 @@
 export const complaintsDetails = {
-  name: 'santosh kumar',
-  mobileNumber: '6251423251',
+  name: 'Santosh Kumar',
+  mobileNumber: '9811259151',
   email: 'santosh.k@gmail.com',
   address: '151-e, janpath road, new delhi',
   pinCode: '110001'

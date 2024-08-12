@@ -9,6 +9,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { useRouter } from 'next/router'
 import { useDispatch } from 'react-redux'
 import { feedbackActions } from '@beckn-ui/common/src/store'
+import { testIds } from '@shared/dataTestIds'
 
 const fieldConfig: FormField[] = [
   {
@@ -233,6 +234,7 @@ const UpdateShippingDetails = () => {
       className="hideScroll"
       maxH={'calc(100vh - 100px)'}
       overflowY="scroll"
+      data-test={testIds.orderDetailspage_updateShippingDetails}
     >
       <ShippingForm
         formFieldConfig={fieldConfig}

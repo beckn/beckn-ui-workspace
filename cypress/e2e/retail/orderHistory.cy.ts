@@ -7,7 +7,7 @@ describe('OrderHistory Page Tests', () => {
     before(() => {
       cy.login(testIds.url_base_retail, testIds.user_firstTimeLoginvalidEmail, testIds.user_firstTimeLoginvalidPassword)
 
-      cy.visit(testIds.url_home)
+      cy.visit(`${testIds.url_base_retail}${testIds.url_home}`)
       cy.setGeolocation('getAddress')
       cy.wait('@getAddress')
       cy.getByData(testIds.threeDots).click()
@@ -33,12 +33,14 @@ describe('OrderHistory Page Tests', () => {
     before(() => {
       cy.login(testIds.url_base_retail, testIds.user_validEmail, testIds.user_validPassword)
 
-      cy.visit(testIds.url_home)
+      cy.visit(`${testIds.url_base_retail}${testIds.url_home}`)
       cy.setGeolocation('getAddress')
       cy.wait('@getAddress')
       cy.getByData(testIds.threeDots).click()
       cy.getByData(testIds.orderHistory_text_click).click()
-      cy.performOrderHisrory({ fixture: 'orderHistory/orderResponse.json' }, 'orderResponse')
+      cy.intercept('GET', '**/orders?filters[category]=6', { fixture: 'orderHistory/orderResponse.json' }).as(
+        'orderResponse'
+      )
     })
 
     it('Should render Order History Page', () => {
