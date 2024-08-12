@@ -6,6 +6,7 @@ import parse from 'html-react-parser'
 import Styles from './DyForm.module.css'
 import { Checkbox, Box, useToast } from '@chakra-ui/react'
 import { CustomToast } from '@components/signIn/SignIn'
+import { testIds } from '@shared/dataTestIds'
 
 function replaceDynamicText(template, variables) {
   // Ensure template starts as a string
@@ -160,6 +161,7 @@ const DyForm: React.FC<DyFormProps> = ({ htmlForm, onSubmit, onError, formId, se
             type={input.type}
             handleChange={handleChange}
             label={input.label}
+            dataTest={input.id}
           />
         )
         break
@@ -194,7 +196,7 @@ const DyForm: React.FC<DyFormProps> = ({ htmlForm, onSubmit, onError, formId, se
   }
 
   return (
-    <div>
+    <div data-test={testIds.xinput_form_open}>
       {formDetails.texts.map((text, index) => {
         const CustomTag = text.tag
         // return <CustomTag key={index}>{replaceDynamicText(parse(text.content),{name:formData.name || '',companyName:"Eminds"})}</CustomTag>
@@ -218,7 +220,10 @@ const DyForm: React.FC<DyFormProps> = ({ htmlForm, onSubmit, onError, formId, se
           </CustomTag>
         )
       })}
-      <form onSubmit={handleSubmit}>
+      <form
+        onSubmit={handleSubmit}
+        data-test={testIds.xinput_form}
+      >
         {formDetails.inputs
           .filter(input => input.type !== 'hidden')
           .map(input => (
@@ -236,6 +241,7 @@ const DyForm: React.FC<DyFormProps> = ({ htmlForm, onSubmit, onError, formId, se
             type={button.type}
             text={button.text}
             variant={button.variant}
+            dataTest={button.id}
             handleClick={button.text.toLowerCase() === 'cancel' ? handleCancel : undefined}
           />
         ))}

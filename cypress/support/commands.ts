@@ -40,6 +40,13 @@ import { testIds } from '../../shared/dataTestIds'
 import { RouteHandler } from 'cypress/types/net-stubbing'
 import { shippingDetails } from '../fixtures/checkoutPage/userDetails'
 
+interface formDetails {
+  name: string
+  mobileNumber: string
+  email: string
+  address: string
+  pinCode: string
+}
 declare global {
   namespace Cypress {
     interface Chainable<Subject = any> {
@@ -63,12 +70,18 @@ declare global {
       clearStatusMock(aliasName: string): Chainable<void>
       performOrderHisrory(response: RouteHandler, aliasName: string): Chainable<void>
       performRating(response: RouteHandler, aliasName: string): Chainable<void>
+      performXinputSubmit(response: RouteHandler, aliasName: string): Chainable<void>
+      fillComplaintDetails(formDetails: formDetails): Chainable<void>
+      fillRespondentDetails(formDetails: formDetails): Chainable<void>
+      fillDisputeDetails(): Chainable<void>
+      fillConsentDetails(): Chainable<void>
     }
   }
 }
 
 const GCL_URL = 'https://bap-gcl-**.becknprotocol.io'
 const STRAPI_URL = 'https://bap-backend-**.becknprotocol.io/api'
+const XINPUT_SUBMIT = 'https://bpp-unified-strapi-dev.becknprotocol.io/beckn-bpp-adapter/x-input'
 
 Cypress.Commands.add('getByData', selector => {
   return cy.get(`[data-test=${selector}]`)
@@ -190,4 +203,53 @@ Cypress.Commands.add('performOrderHisrory', (response, aliasName) => {
 })
 Cypress.Commands.add('performRating', (response, aliasName) => {
   cy.intercept('POST', `${GCL_URL}/rating`, response).as(aliasName)
+})
+Cypress.Commands.add('performXinputSubmit', (response, aliasName) => {
+  cy.intercept('POST', `${XINPUT_SUBMIT}/submit`, response).as(aliasName)
+})
+
+Cypress.Commands.add('fillComplaintDetails', complaintDetails => {
+  cy.getByData(testIds.checkoutpage_complaints_Details).getByData(testIds.checkoutpage_openForm).eq(0).click()
+  cy.getByData(testIds.checkoutpage_complaints_Details)
+    .getByData(testIds.checkoutpage_form)
+    .within(() => {
+      cy.getByData(testIds.checkoutpage_name).clear().type(complaintDetails.name)
+      cy.getByData(testIds.checkoutpage_mobileNumber).clear().type(complaintDetails.mobileNumber)
+      cy.getByData(testIds.checkoutpage_email).clear().type(complaintDetails.email)
+      cy.getByData(testIds.checkoutpage_address).clear().type(complaintDetails.address)
+      cy.getByData(testIds.checkoutpage_pinCode).clear().type(complaintDetails.pinCode)
+      cy.getByData('submit').click()
+    })
+})
+
+Cypress.Commands.add('fillRespondentDetails', respondentDetails => {
+  cy.getByData(testIds.checkoutpage_respondent_Details).getByData(testIds.checkoutpage_openForm).eq(0).click()
+  cy.getByData(testIds.checkoutpage_respondent_Details)
+    .getByData(testIds.checkoutpage_form)
+    .within(() => {
+      cy.getByData(testIds.checkoutpage_name).clear().type(respondentDetails.name)
+      cy.getByData(testIds.checkoutpage_mobileNumber).clear().type(respondentDetails.mobileNumber)
+      cy.getByData(testIds.checkoutpage_email).clear().type(respondentDetails.email)
+      cy.getByData(testIds.checkoutpage_address).clear().type(respondentDetails.address)
+      cy.getByData(testIds.checkoutpage_pinCode).clear().type(respondentDetails.pinCode)
+      cy.getByData('submit').click()
+    })
+})
+
+Cypress.Commands.add('fillDisputeDetails', () => {
+  cy.getByData(testIds.checkoutpage_dispute_Details).click()
+  cy.getByData(testIds.xinput_form).within(() => {
+    cy.getByData('details').type('krushna')
+    cy.getByData('"claimValue"').type('1234')
+    cy.getByData('btnSave').click()
+  })
+})
+
+Cypress.Commands.add('fillConsentDetails', () => {
+  cy.getByData(testIds.checkoutpage_consent_Details).click()
+  cy.getByData(testIds.xinput_form).within(() => {
+    cy.getByData('name').type('krushna')
+    cy.getByData('"place"').type('pune')
+    cy.getByData('btnConfirm').click()
+  })
 })
