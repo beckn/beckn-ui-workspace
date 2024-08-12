@@ -46,6 +46,7 @@
     "build:odr-v2": "yarn workspace @beckn-ui/odr-v2 build",
     "start:odr-v2": "yarn workspace @beckn-ui/odr-v2 start",
     "cy:open": "cypress open",
+    "cy:run": "cypress run",
     "dev:taxi-bpp-v2": "yarn workspace @beckn-ui/taxi-bpp-v2 dev",
     "build:taxi-bpp-v2": "yarn workspace @beckn-ui/taxi-bpp-v2 build",
     "start:taxi-bpp-v2": "yarn workspace @beckn-ui/taxi-bpp-v2 start",
