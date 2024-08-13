@@ -129,6 +129,7 @@ Cypress.Commands.add('setGeolocation', aliasName => {
       success({ coords: { latitude: 28.4594965, longitude: 77.0266383 } })
     })
   })
+  cy.wait(500)
 })
 
 Cypress.Commands.add('performSearch', (searchTerm, response) => {

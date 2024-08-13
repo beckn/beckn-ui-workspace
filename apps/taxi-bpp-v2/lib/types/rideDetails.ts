@@ -37,3 +37,13 @@ export interface RideDetailsProps {
   fare: string
   status: string
 }
+
+export interface RideHistoryProps {
+  orderId: string
+  img: string
+  riderName: string
+  date: string
+  time: string
+  fare: string
+  status: string
+}

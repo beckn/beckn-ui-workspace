@@ -1,44 +1,53 @@
-import { DetailCard } from '@beckn-ui/becknified-components'
 import { Box, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import RideDetails from '@components/rideDetails/rideDetails'
+import { useGetMyRideMutation } from '@services/RiderService'
+import { RideHistoryProps } from '@lib/types/rideDetails'
+import { RideData } from '@lib/types/ride'
 
-const rides = [
-  {
-    id: 1,
-    img: '/images/carImage.svg',
-    riderName: 'Shaniwar Wada',
-    date: '15 Jul',
-    time: '6:45pm',
-    fare: '₹249.00',
-    status: 'Completed'
-  },
-  {
-    id: 2,
-    img: '/images/carImage.svg',
-    riderName: 'Pune Station',
-    date: '16 Jul',
-    time: '7:00pm',
-    fare: '₹300.00',
-    status: 'On-going'
-  },
-  {
-    id: 3,
-    img: '/images/carImage.svg',
-    riderName: 'Sinhagad Fort',
-    date: '17 Jul',
-    time: '5:00pm',
-    fare: '₹500.00',
-    status: 'Completed'
-  }
-  // Add more rides as needed
-]
+const statusMapping: Record<string, string> = {
+  All: 'All',
+  'On-going': 'RIDE_ACCEPTED',
+  Completed: 'RIDE_COMPLETED'
+}
 
 const MyRides = () => {
-  const [currentTab, setCurrentTab] = useState('All')
+  const [currentTab, setCurrentTab] = useState<string>('All')
   const tabList = ['All', 'On-going', 'Completed']
+  const [ridesData, setRidesData] = useState<RideData[]>([])
+  const [getMyRide] = useGetMyRideMutation()
 
-  const filteredRides = currentTab === 'All' ? rides : rides.filter(ride => ride.status === currentTab)
+  useEffect(() => {
+    const fetchRides = async () => {
+      try {
+        const response = await getMyRide({}).unwrap()
+        setRidesData(response.data.my_rides)
+      } catch (error) {
+        console.error('Failed to fetch rides:', error)
+      }
+    }
+
+    fetchRides()
+  }, [getMyRide])
+
+  console.log(ridesData)
+
+  const myRidesHistory: RideHistoryProps[] = ridesData?.map((ride: any) => {
+    console.log(ride.order_id.id)
+    return {
+      orderId: ride.order_id.id,
+      img: '/images/carImage.svg',
+      riderName: `${ride.customer_id.first_name} ${ride.customer_id.last_name || ''}`.trim(),
+      date: new Date(ride.createdAt).toLocaleDateString(),
+      time: new Date(ride.createdAt).toLocaleTimeString(),
+      fare: `₹${ride.fulfilment_id.service.service_fee || 0}`,
+      status: ride.state_value
+    }
+  })
+
+  const currentStatus = statusMapping[currentTab] || 'All'
+  const filteredRides =
+    currentStatus === 'All' ? myRidesHistory : myRidesHistory.filter(ride => ride.status === currentStatus)
 
   return (
     <Box
@@ -75,6 +84,7 @@ const MyRides = () => {
             >
               {filteredRides.map(ride => (
                 <RideDetails
+                  key={ride.orderId}
                   img={ride.img}
                   riderName={ride.riderName}
                   date={ride.date}

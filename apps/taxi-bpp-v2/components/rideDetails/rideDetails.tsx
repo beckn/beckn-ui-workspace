@@ -56,7 +56,7 @@ const RideDetails: React.FC<RideDetailsProps> = ({ img, riderName, date, time, f
               text={status}
               fontSize="12px"
               fontWeight="500"
-              color={status === 'Completed' ? '#5EC401' : '#E9C058'}
+              color={status === 'RIDE_COMPLETED' ? '#5EC401' : '#E9C058'}
             />
           </Flex>
         </Box>
