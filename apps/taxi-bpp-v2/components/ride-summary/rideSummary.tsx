@@ -31,7 +31,7 @@ const RideSummary: React.FC<RideSummaryProps> = ({
         >
           <Typography
             style={{ paddingRight: '15px' }}
-            text={`${time!} min away`}
+            text={`${time!} min ${driverStatus === RIDE_STATUS_CODE.RIDE_COMPLETED ? '' : 'away'}`}
             color="#676767"
           />
           <Box

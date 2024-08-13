@@ -11,6 +11,13 @@ export enum RIDE_STATUS_CODE {
   RIDE_DECLINED = 'RIDE_DECLINED'
 }
 
+export const rideStatusMap = {
+  RIDE_ACCEPTED: 'On-going',
+  CAB_REACHED_PICKUP_LOCATION: 'On-going',
+  RIDE_STARTED: 'On-going',
+  RIDE_COMPLETED: 'Completed'
+}
+
 export const addressFromGps = async (lat: number, long: number) => {
   const latLong = new window.google.maps.LatLng(lat, long)
   const geocoder = new window.google.maps.Geocoder()

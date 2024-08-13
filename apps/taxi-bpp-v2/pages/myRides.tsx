@@ -2,14 +2,9 @@ import { Box, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react'
 import React, { useState, useEffect } from 'react'
 import RideDetails from '@components/rideDetails/rideDetails'
 import { useGetMyRideMutation } from '@services/RiderService'
-import { RideHistoryProps } from '@lib/types/rideDetails'
+import { RideDetailsProps } from '@lib/types/rideDetails'
 import { RideData } from '@lib/types/ride'
-
-const statusMapping: Record<string, string> = {
-  All: 'All',
-  'On-going': 'RIDE_ACCEPTED',
-  Completed: 'RIDE_COMPLETED'
-}
+import { rideStatusMap } from '@utils/ride-utils'
 
 const MyRides = () => {
   const [currentTab, setCurrentTab] = useState<string>('All')
@@ -30,24 +25,20 @@ const MyRides = () => {
     fetchRides()
   }, [getMyRide])
 
-  console.log(ridesData)
-
-  const myRidesHistory: RideHistoryProps[] = ridesData?.map((ride: any) => {
-    console.log(ride.order_id.id)
+  const myRidesHistory: RideDetailsProps[] = ridesData?.map((ride: any) => {
     return {
       orderId: ride.order_id.id,
       img: '/images/carImage.svg',
       riderName: `${ride.customer_id.first_name} ${ride.customer_id.last_name || ''}`.trim(),
-      date: new Date(ride.createdAt).toLocaleDateString(),
-      time: new Date(ride.createdAt).toLocaleTimeString(),
+      date: new Date(ride.updatedAt).toLocaleDateString(),
+      time: new Date(ride.updatedAt).toLocaleTimeString(),
       fare: `₹${ride.fulfilment_id.service.service_fee || 0}`,
-      status: ride.state_value
+      status: (rideStatusMap as any)[ride.state_value] || ''
     }
   })
 
-  const currentStatus = statusMapping[currentTab] || 'All'
   const filteredRides =
-    currentStatus === 'All' ? myRidesHistory : myRidesHistory.filter(ride => ride.status === currentStatus)
+    currentTab === 'All' ? myRidesHistory : myRidesHistory.filter(ride => ride.status === currentTab)
 
   return (
     <Box
@@ -84,13 +75,8 @@ const MyRides = () => {
             >
               {filteredRides.map(ride => (
                 <RideDetails
+                  {...ride}
                   key={ride.orderId}
-                  img={ride.img}
-                  riderName={ride.riderName}
-                  date={ride.date}
-                  time={ride.time}
-                  fare={ride.fare}
-                  status={ride.status}
                 />
               ))}
             </TabPanel>

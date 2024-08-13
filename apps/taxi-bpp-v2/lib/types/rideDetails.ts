@@ -30,20 +30,11 @@ export interface RideSummaryProps extends CurrentRideRequest {
 }
 
 export interface RideDetailsProps {
-  img: string
-  riderName: string
-  date: string
-  time: string
-  fare: string
-  status: string
-}
-
-export interface RideHistoryProps {
   orderId: string
   img: string
   riderName: string
   date: string
   time: string
   fare: string
-  status: string
+  status: RIDE_STATUS_CODE
 }
