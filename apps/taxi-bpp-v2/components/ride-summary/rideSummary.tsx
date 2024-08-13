@@ -31,7 +31,7 @@ const RideSummary: React.FC<RideSummaryProps> = ({
         >
           <Typography
             style={{ paddingRight: '15px' }}
-            text={time!}
+            text={`${time!} min away`}
             color="#676767"
           />
           <Box
@@ -42,7 +42,7 @@ const RideSummary: React.FC<RideSummaryProps> = ({
             mr="10px"
           ></Box>
           <Typography
-            text={distance!}
+            text={`${distance!} Kms`}
             color="#676767"
           />
         </Flex>
@@ -124,12 +124,19 @@ const RideSummary: React.FC<RideSummaryProps> = ({
             text={fare.text}
             style={{ marginTop: '12px' }}
           />
-          <Typography
-            text={fare.cost}
-            fontSize="24px"
-            color="#34C759"
-            fontWeight="600"
-          />
+          <Flex alignItems={'center'}>
+            <Image
+              src="/images/rupees.svg"
+              alt="rupee"
+              mr={'8px'}
+            />
+            <Typography
+              text={fare.cost}
+              fontSize="24px"
+              color="#34C759"
+              fontWeight="600"
+            />
+          </Flex>
         </Box>
       )}
       {buttons.map(singleButton => {
