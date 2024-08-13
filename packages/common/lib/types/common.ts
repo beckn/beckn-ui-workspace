@@ -251,3 +251,21 @@ export interface ICartProduct {
   quantity: number
   totalPrice: number
 }
+
+export interface Agent {
+  contact: {
+    phone: string
+    email: string
+  }
+  person: {
+    id: string
+    name: string
+  }
+  id: string
+}
+
+export interface Vehicle {
+  make: string
+  model: string
+  registration: string
+}

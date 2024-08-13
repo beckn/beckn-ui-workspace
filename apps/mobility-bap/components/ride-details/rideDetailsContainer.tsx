@@ -1,11 +1,17 @@
 import { GeoLocationType, toggleLocationSearchPageVisibility } from '@beckn-ui/common'
 import { LoaderWithMessage } from '@beckn-ui/molecules'
-import { Box } from '@chakra-ui/react'
 import DropOffChangeAlertModal from '@components/dropOffChangeAlertModal/dropOffChangeAlertModal'
 import { useLanguage } from '@hooks/useLanguage'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import RideDetails from './RideDetails'
+import RideDetailsCard from './RideDetailsCard'
+import { useSelector } from 'react-redux'
+import { UserGeoLocationRootState } from '@lib/types/user'
+import { RideDetailsProps } from '@lib/types/cabService'
+import { SelectRideRootState } from '@store/selectRide-slice'
+import Loader from '@components/loader/Loader'
+import { Box } from '@chakra-ui/react'
 
 interface RideDetailsContainerProps {
   handleCancelRide: () => void
@@ -16,8 +22,35 @@ const RideDetailsContainer: React.FC<RideDetailsContainerProps> = ({ handleCance
   const [openAlert, setOpenAlert] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
+  const { pickup, dropoff } = useSelector((state: UserGeoLocationRootState) => state.userInfo)
+  const [rideDetails, setRideDetails] = useState<RideDetailsProps>({
+    name: '',
+    carModel: '',
+    contact: '',
+    rating: '',
+    registrationNumber: ''
+  })
+  const confirmResponse = useSelector((state: SelectRideRootState) => state.selectRide?.confirmResponse)
+
   const dispatch = useDispatch()
   const { t } = useLanguage()
+
+  useEffect(() => {
+    if (confirmResponse.length) {
+      setIsLoading(true)
+      const { message } = confirmResponse[0] || {}
+      const { agent, vehicle, rating } = message?.fulfillments?.find(fulfillment => fulfillment.agent)!
+      setRideDetails({
+        name: agent.person.name,
+        registrationNumber: vehicle.registration,
+        carModel: `${vehicle.make} ${vehicle.model}`,
+        rating: rating,
+        contact: agent.contact.phone,
+        price: message.quote?.price?.value
+      })
+      setIsLoading(false)
+    }
+  }, [confirmResponse])
 
   const handleAlertSubmit = (addressType: GeoLocationType) => {
     dispatch(toggleLocationSearchPageVisibility({ visible: true, addressType }))
@@ -40,15 +73,16 @@ const RideDetailsContainer: React.FC<RideDetailsContainerProps> = ({ handleCance
       ) : (
         <>
           <RideDetails
-            name={'John Doe'}
-            registrationNumber={'XYZ 1234'}
-            carModel={'Toyota Camry'}
+            name={rideDetails?.name}
+            registrationNumber={rideDetails?.registrationNumber}
+            carModel={rideDetails.carModel}
+            rating={rideDetails.rating}
+            contact={rideDetails.contact}
+            fare={rideDetails.price!}
+            pickUp={pickup}
+            dropOff={dropoff}
             color={'Black'}
-            rating={'4.8'}
-            fare={'₹80'}
-            pickUp={'Katraj'}
-            dropOff={'Phoenix Mall'}
-            otp={'123456'}
+            otp={''}
             cancelRide={handleCancelRide}
             contactSupport={handleContactSupport}
             handleEditDropoff={() => setOpenAlert(true)}

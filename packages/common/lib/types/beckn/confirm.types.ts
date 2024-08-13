@@ -1,17 +1,16 @@
 import {
-  Location,
   Contact,
   Person,
   Stop,
   State,
-  Price,
-  QuoteBreakup,
   Quote,
   Billing,
   Payment,
   Context,
   Item,
-  Provider
+  Provider,
+  Agent,
+  Vehicle
 } from '../common'
 
 interface Fulfillment {
@@ -24,6 +23,10 @@ interface Fulfillment {
   stops: Stop[]
   state: State
   tracking: boolean
+  agent: Agent
+  vehicle: Vehicle
+  rateable: boolean
+  rating: string
 }
 
 interface CancellationTerm {

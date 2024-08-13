@@ -7,7 +7,7 @@ import { CabDetailsProps } from './RideDetails.types'
 
 const CabDetails: React.FC<CabDetailsProps> = ({ registrationNumber, carModel, color, otp }) => {
   const theme = useTheme()
-  const carDetails = `${carModel}, ${color}`
+  const carDetails = color ? `${carModel}, ${color}` : carModel
   return (
     <Flex
       direction="row"

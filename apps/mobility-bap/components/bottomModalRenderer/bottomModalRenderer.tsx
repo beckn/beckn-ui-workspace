@@ -110,7 +110,7 @@ const BottomModalRenderer = () => {
       case 'CONTACT_SOPPORT':
         return <ContactSupport />
       case 'CANCEL_RIDE':
-        return <CancelRide />
+        return <CancelRide handleOnClose={() => setDrawerState('RIDER_DETAILS')} />
       default:
         return <></>
     }

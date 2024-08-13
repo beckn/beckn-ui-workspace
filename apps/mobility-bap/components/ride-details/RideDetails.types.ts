@@ -1,23 +1,27 @@
+import { PickUpDropOffModel } from '@beckn-ui/common'
+
 export interface CabDetailsProps {
   registrationNumber: string
   carModel: string
-  color: string
-  otp: string
+  color?: string
+  otp?: string
 }
 
 export interface DriverDetailsProps {
   driverImage: string
   name: string
   rating: string
+  contact: string
 }
 
 export interface RideDetailsCardProps {
   registrationNumber: string
   carModel: string
-  color: string
-  otp: string
+  color?: string
+  otp?: string
   name: string
   rating: string
+  contact: string
   onClick: () => void
 }
 
@@ -29,8 +33,9 @@ export interface RideDetailsProps {
   name: string
   rating: string
   fare: string | number
-  pickUp: string
-  dropOff: string
+  contact: string
+  pickUp: PickUpDropOffModel
+  dropOff: PickUpDropOffModel
   cancelRide: () => void
   contactSupport: () => void
   handleEditDropoff: () => void

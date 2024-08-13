@@ -1,7 +1,7 @@
 import { RideDetailsModel } from '@store/discovery-slice'
 import { SelectData, SelectItem, SelectOrder, SelectSingleData } from '@lib/types/beckn/select'
 import { InitItem, InitOrder, InitSingleData } from '@lib/types/beckn/init'
-import { Contact } from '@beckn-ui/common'
+import { Contact, InitResponseModel, ConfirmResponseModel } from '@beckn-ui/common'
 
 export const getSelectPayload = (
   inputData: RideDetailsModel,
@@ -133,4 +133,61 @@ export const getInitPayload = async (
   })
 
   return { data: resultData }
+}
+
+export const getConfirmPayload = (initResponse: InitResponseModel) => {
+  const { context, message } = initResponse
+  const {
+    order: { items, provider, fulfillments, billing }
+  } = message
+
+  const resultData: InitSingleData[] = []
+  const orders: InitOrder[] = []
+  const userDetails = {
+    name: billing.name,
+    phone: billing.phone,
+    email: billing.email
+  }
+
+  orders.push({
+    items: items as any,
+    provider: {
+      id: provider.id
+    },
+    fulfillments: fulfillments as any,
+    customer: {
+      person: {
+        name: billing.name
+      },
+      contact: userDetails
+    },
+    billing: userDetails
+  })
+
+  resultData.push({
+    context,
+    message: { orders }
+  })
+
+  return { data: resultData }
+}
+
+export const getCancelPayload = (
+  confirmResponse: ConfirmResponseModel,
+  cancel_reason: { id: string | number; reason: string }
+) => {
+  const { context, message } = confirmResponse
+  const order_id = confirmResponse?.message?.orderId
+  return {
+    data: {
+      context,
+      message: {
+        order_id,
+        cancellation_reason_id: cancel_reason.id + '',
+        descriptor: {
+          short_desc: cancel_reason.reason
+        }
+      }
+    }
+  }
 }

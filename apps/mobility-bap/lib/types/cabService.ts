@@ -11,3 +11,12 @@ export interface CabServiceDetails {
 export interface CabServiceDetailsRootState {
   cabService: CabServiceDetails
 }
+
+export interface RideDetailsProps {
+  name: string
+  registrationNumber: string
+  carModel: string
+  rating: string
+  contact: string
+  price?: string
+}

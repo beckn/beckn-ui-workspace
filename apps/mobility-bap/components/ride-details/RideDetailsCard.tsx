@@ -9,10 +9,9 @@ import BottomDrawer from '../bottomDrawer/BottomDrawer'
 
 const RideDetailsCard: React.FC<RideDetailsCardProps> = ({
   name,
+  contact,
   registrationNumber,
   carModel,
-  color,
-  otp,
   rating,
   onClick
 }) => {
@@ -22,8 +21,6 @@ const RideDetailsCard: React.FC<RideDetailsCardProps> = ({
         <CabDetails
           registrationNumber={registrationNumber}
           carModel={carModel}
-          color={color}
-          otp={otp}
         />
         <Divider
           mb="20px"
@@ -36,6 +33,7 @@ const RideDetailsCard: React.FC<RideDetailsCardProps> = ({
         <DriverDetails
           name={name}
           rating={rating}
+          contact={contact}
           driverImage={'./images/driverImage.svg'}
         />
       </BottomDrawer>

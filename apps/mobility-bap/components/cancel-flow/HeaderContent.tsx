@@ -4,7 +4,7 @@ import { Typography } from '@beckn-ui/molecules'
 import { CloseIcon } from '@chakra-ui/icons'
 import { useRouter } from 'next/router'
 
-const HeaderContent = ({ text }: { text: string }) => {
+const HeaderContent = ({ text, onClose }: { text: string; onClose?: () => void }) => {
   const router = useRouter()
   return (
     <>
@@ -20,7 +20,13 @@ const HeaderContent = ({ text }: { text: string }) => {
         />
         <CloseIcon
           as="button"
-          onClick={() => router.back()}
+          onClick={() => {
+            if (onClose) {
+              onClose()
+            } else {
+              router.back()
+            }
+          }}
         />
       </Flex>
       <Divider

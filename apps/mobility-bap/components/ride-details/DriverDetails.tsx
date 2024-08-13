@@ -1,12 +1,17 @@
 import React from 'react'
 
-import { Flex, Image, Box } from '@chakra-ui/react'
+import { Flex, Image, Box, Button } from '@chakra-ui/react'
+// import { Button } from '@beckn-ui/molecules'
 import { StarIcon } from '@chakra-ui/icons'
 
 import { Typography } from '@beckn-ui/molecules'
 import { DriverDetailsProps } from './RideDetails.types'
 
-const DriverDetails: React.FC<DriverDetailsProps> = ({ name, rating, driverImage }) => {
+const DriverDetails: React.FC<DriverDetailsProps> = ({ name, rating, contact, driverImage }) => {
+  const handleCallClick = () => {
+    const telLink = `tel:${contact}`
+    window.open(telLink, '_blank')
+  }
   return (
     <Flex
       direction={'row'}
@@ -50,11 +55,16 @@ const DriverDetails: React.FC<DriverDetailsProps> = ({ name, rating, driverImage
           </Flex>
         </Flex>
       </Box>
-      <Image
-        src="./images/callIcon.svg"
-        alt="contact-image"
-        h={'50px'}
-        w={'50px'}
+      <Button
+        leftIcon={
+          <Image
+            src="./images/callIcon.svg"
+            alt="contact-image"
+            h={'50px'}
+            w={'50px'}
+          />
+        }
+        handleClick={handleCallClick}
       />
     </Flex>
   )
