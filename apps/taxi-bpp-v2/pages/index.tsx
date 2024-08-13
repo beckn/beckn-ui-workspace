@@ -30,6 +30,8 @@ import { parsedNewRideDetails, RIDE_STATUS_CODE } from '@utils/ride-utils'
 
 const Homepage = () => {
   const MapWithNoSSR: any = dynamic(() => import('../components/Map'), { ssr: false })
+  // const modalRef = useRef<HTMLDivElement>(null)
+  // const [modalHeight, setModalHeight] = useState<number>(0)
 
   const [currentModal, setCurrentModal] = useState<ModalDetails>()
   const [destination, setDestination] = useState<Coordinate>()
@@ -372,9 +374,19 @@ const Homepage = () => {
     }
   }, [currentAddress, coordinates, originGeoAddress, originGeoLatLong])
 
+  // useEffect(() => {
+  //   if (modalRef.current) {
+  //     setModalHeight(modalRef.current.offsetHeight)
+  //   }
+  // }, [currentModal, updateCurrentModal])
+
   const renderMap = useCallback(() => {
+    // const mapHeight = `calc(100vh - ${modalHeight}px)`
     return (
-      <Box mt={'60px'}>
+      <Box
+        mt={'60px'}
+        // height={mapHeight}
+      >
         <MapWithNoSSR
           startNav={startNav}
           origin={currentLocation.geoLocation}
@@ -394,6 +406,7 @@ const Homepage = () => {
           currentModal.rideDetails &&
           Object.keys(currentModal.rideDetails).length > 0 && (
             <BottomModal
+              // ref={modalRef}
               backgroundAccessControl={true}
               onClose={() => {}}
               isOpen={true}
