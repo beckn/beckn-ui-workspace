@@ -10,6 +10,7 @@ export interface CurrentRideRequest {
   time?: string
   date?: string
   driverStatus?: RIDE_STATUS_CODE
+  cost?: string
 }
 
 export interface RideSummaryHeaderProps {

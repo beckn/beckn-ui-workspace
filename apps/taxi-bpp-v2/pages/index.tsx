@@ -27,6 +27,7 @@ import { goOffline, goOnline, RiderRootState, updateLocation } from '@store/ride
 import { formatGeoLocationDetails } from '@utils/geoLocation-utils'
 import { RideStatusRootState, setNewRideRequest, updateDriverStatus } from '@store/rideStatus-slice'
 import { parsedNewRideDetails, RIDE_STATUS_CODE } from '@utils/ride-utils'
+import { parseRideSummaryData, RideSummaryModalProp } from '@utils/rideSummary-utils'
 
 const Homepage = () => {
   const MapWithNoSSR: any = dynamic(() => import('../components/Map'), { ssr: false })
@@ -257,7 +258,8 @@ const Homepage = () => {
               const endRideData = await getRideSummary({
                 order_id: data.orderId
               })
-              console.log(endRideData)
+              const parsedData = parseRideSummaryData(endRideData)
+
               await updateDriverLocation({
                 location: {
                   lat: data.destinationGeoLocation?.latitude.toString()!,
@@ -270,7 +272,7 @@ const Homepage = () => {
                   geoLatLong: `${data.destinationGeoLocation?.latitude}, ${data.destinationGeoLocation?.longitude}`
                 })
               )
-              handleModalSubmit('START_RIDE', data)
+              handleModalSubmit('START_RIDE', parsedData)
             }
           }
         ]
@@ -291,7 +293,7 @@ const Homepage = () => {
         ],
         fare: {
           text: 'Collect the fare from the customer',
-          cost: '200'
+          cost: data?.cost
         }
       }
     }

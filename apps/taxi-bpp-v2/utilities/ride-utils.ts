@@ -60,8 +60,8 @@ export const parsedNewRideDetails = async (orderList: ValidOrder[]): Promise<any
           sourceGeoLocation: pickupLocation.geoLocation,
           destinationGeoLocation: dropoffLocation.geoLocation,
           destination: dropoffLocation.address,
-          distance: `5 kms`,
-          time: '5 min away',
+          distance: '5',
+          time: '5',
           driverStatus: state_value
         }
       })
