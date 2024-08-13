@@ -75,6 +75,10 @@ declare global {
       fillRespondentDetails(formDetails: formDetails): Chainable<void>
       fillDisputeDetails(): Chainable<void>
       fillConsentDetails(): Chainable<void>
+
+      //Created by omkar
+      loginDynamic(email: string, password: string): Chainable<void>
+      performSearchDynamic(searchTerm: string): Chainable<void>
     }
   }
 }
@@ -150,6 +154,12 @@ Cypress.Commands.add('selectMultiProduct', indexes => {
 
 Cypress.Commands.add('performInit', (response, aliasName) => {
   cy.intercept('POST', `${GCL_URL}/init`, response).as(aliasName)
+})
+
+Cypress.Commands.add('mockReduxState', (type, data) => {
+  cy.window().then(win => {
+    ;(win as any).store.dispatch({ type: type, payload: data })
+  })
 })
 
 Cypress.Commands.add('performSelect', (response, aliasName, button) => {
@@ -252,4 +262,22 @@ Cypress.Commands.add('fillConsentDetails', () => {
     cy.getByData('"place"').type('pune')
     cy.getByData('btnConfirm').click()
   })
+// Created by Omkar
+Cypress.Commands.add('loginDynamic', (email, password) => {
+  const emailInputDataId = testIds.auth_inputEmail
+  const passwordInputDataId = testIds.auth_inputPassword
+  const homePageUrl = testIds.deployed_url_home
+
+  cy.getByData(emailInputDataId).type(email)
+  cy.getByData(passwordInputDataId).type(password)
+  cy.getByData(testIds.auth_loginButton).click()
+  cy.wait(1000)
+})
+
+Cypress.Commands.add('performSearchDynamic', searchTerm => {
+  const searchInputId = 'search-input'
+  const searchButton = 'test-search-button'
+  cy.getByData(searchInputId).clear().type(searchTerm)
+  cy.getByData(testIds.searchButton).click()
+  cy.wait(16000)
 })

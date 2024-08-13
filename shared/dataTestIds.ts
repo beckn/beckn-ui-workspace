@@ -31,6 +31,13 @@ const testIds = {
   payment_basePrice: 'base-price',
   payment_taxes: 'taxes',
   payment_totalPayment: 'totalPayment',
+
+  // Deployed urls
+  deployed_url_base: 'https://retail-dev.becknprotocol.io/',
+  deployed_url_signup: 'https://retail-dev.becknprotocol.io/signUp',
+  deployed_url_home: 'https://retail-dev.becknprotocol.io/',
+  deployed_url_search: 'https://retail-dev.becknprotocol.io/search',
+
   // urls
   url_signup: '/signUp',
   url_home: '/',
