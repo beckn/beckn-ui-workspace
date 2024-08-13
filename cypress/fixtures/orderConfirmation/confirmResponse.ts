@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from 'uuid'
 import { shippingDetails, billingDetails } from '../checkoutPage/userDetails'
 
 export const confirmResponse = {
@@ -29,7 +30,7 @@ export const confirmResponse = {
         timestamp: '2024-07-22T13:30:41.240Z'
       },
       message: {
-        orderId: 'avh_654_yuy123',
+        orderId: uuidv4().toString(),
         provider: {
           id: 'provider1',
           name: 'Provider One',

@@ -118,12 +118,12 @@ Cypress.Commands.add('login', (baseUrl, email, password) => {
 
 Cypress.Commands.add('setGeolocation', aliasName => {
   cy.window().then(win => {
-    cy.stub(win.navigator.geolocation, 'getCurrentPosition').callsFake(success => {
-      success({ coords: { latitude: 28.4594965, longitude: 77.0266383 } })
-    })
     cy.intercept('GET', '**/maps.googleapis.com/maps/api/geocode/json*', {
       fixture: 'homePage/address.json'
     }).as(aliasName as string)
+    cy.stub(win.navigator.geolocation, 'getCurrentPosition').callsFake(success => {
+      success({ coords: { latitude: 28.4594965, longitude: 77.0266383 } })
+    })
   })
 })
 

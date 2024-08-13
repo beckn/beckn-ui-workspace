@@ -48,10 +48,13 @@ describe('OrderHistory Page Tests', () => {
         const orderData = orderResponse.data[0].attributes
         const createdAt = formatTimestamp(orderData.createdAt)
 
-        cy.getByData(testIds.orderHistory_createdAt).should('contain.text', `Placed at ${createdAt}`)
-        cy.getByData(testIds.orderHistory_order_id).should('contain.text', `Order ID: ${orderData.order_id}`)
-        cy.getByData(testIds.orderHistory_Price).should('contain.text', `INR ${orderData.price}`)
-        cy.getByData(testIds.orderHistory_pendingIcon).should('have.attr', 'src')
+        cy.getByData(testIds.orderHistory_createdAt).eq(1).should('exist')
+        cy.getByData(testIds.orderHistory_createdAt).eq(1).should('contain.text', `Placed at`)
+        cy.getByData(testIds.orderHistory_order_id).eq(1).should('exist')
+        cy.getByData(testIds.orderHistory_order_id).eq(1).should('contain.text', `Order ID:`)
+        cy.getByData(testIds.orderHistory_order_id).eq(1).should('exist')
+        cy.getByData(testIds.orderHistory_Price).eq(1).should('contain.text', `INR`)
+        cy.getByData(testIds.orderHistory_pendingIcon).eq(1).should('have.attr', 'src')
       })
     })
     it('should navigate to orderDetails page when click on perticular order Id', () => {

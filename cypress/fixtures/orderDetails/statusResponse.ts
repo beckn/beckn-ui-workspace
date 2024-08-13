@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from 'uuid'
 import { shippingDetails, billingDetails } from '../checkoutPage/userDetails'
 import { StatusKey } from '@beckn-ui/common'
 
@@ -32,7 +33,7 @@ export const statusResponse = (orderStatus: 'ACTIVE' | 'COMPLETE', trackingStatu
         },
         message: {
           order: {
-            Id: 'avh_654_yuy123',
+            Id: uuidv4().toString(),
             status: orderStatus,
             created_at: new Date().toISOString(),
             provider: {

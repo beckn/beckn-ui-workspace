@@ -1,10 +1,11 @@
+import { v4 as uuidv4 } from 'uuid'
 import { shippingDetails, billingDetails } from '../checkoutPage/userDetails'
 
 export const orderResponse = {
   data: {
     id: 1574,
     attributes: {
-      order_Id: 'avh_654_yuy123',
+      order_Id: uuidv4().toString(),
       bpp_id: 'bpp123',
       bpp_uri: 'https://bpp.example.com',
       currency: 'INR',

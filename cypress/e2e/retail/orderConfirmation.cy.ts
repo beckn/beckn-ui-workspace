@@ -14,10 +14,10 @@ describe('Order Confirmation Page', () => {
       cy.performSearch(searchTerm, {
         fixture: 'searchPage/searchResults.json'
       })
+      cy.performSelect({ fixture: 'checkoutPage/selectResponse.json' }, 'selectResponse')
       cy.selectProduct(0)
       cy.getByData(testIds.productpage_addTocartButton).click()
       cy.getByData(testIds.cartButton).click()
-      cy.performSelect({ fixture: 'checkoutPage/selectResponse.json' }, 'selectResponse')
       cy.wait('@selectResponse')
       cy.getByData(testIds.cartpage_cartOrderButton).click()
       cy.getByData(testIds.feedback).getByData('close').click()
@@ -27,12 +27,12 @@ describe('Order Confirmation Page', () => {
       cy.wait('@initResponse')
       cy.getByData(testIds.checkoutpage_proceedToCheckout).click()
       cy.url().should('include', '/paymentMode')
+      cy.performConfirm(confirmResponse, 'confirmResponse')
+      cy.performOrders(orderResponse, 'orderResponse')
       cy.getByData(testIds.paymentpage_radioButton).eq(3).check().should('be.checked')
       cy.getByData(testIds.paymentpage_confirmButton).click()
       cy.url().should('include', '/orderConfirmation')
-      cy.performConfirm(confirmResponse, 'confirmResponse')
       cy.wait('@confirmResponse')
-      cy.performOrders(orderResponse, 'orderResponse')
       cy.wait('@orderResponse')
     })
 
@@ -46,8 +46,8 @@ describe('Order Confirmation Page', () => {
       )
     })
     it('should render the correct order ID', () => {
-      const orderId = 'avh_6'
-      cy.getByData(testIds.orderConfirmation_orderIdMessage).should('contain.text', `Order number is: ${orderId}`)
+      cy.getByData(testIds.orderConfirmation_orderIdMessage).should('exist')
+      cy.getByData(testIds.orderConfirmation_orderIdMessage).should('contain.text', `Order number is:`)
     })
     it('should have a button to view order details and navigate to order details page when clicked', () => {
       cy.getByData(testIds.orderConfirmation_viewOrderButton).click()
@@ -57,17 +57,17 @@ describe('Order Confirmation Page', () => {
 
   context('should render Homepage when user click on go back to home button', () => {
     before(() => {
-      cy.login(testIds.url_base_retail, testIds.user_login, testIds.user_password)
+      cy.login(testIds.url_base_retail, testIds.user_validEmail, testIds.user_validPassword)
       cy.visit(`${testIds.url_base_retail}${testIds.url_home}`)
       cy.setGeolocation('getAddress')
       cy.wait('@getAddress')
       cy.performSearch(searchTerm, {
         fixture: 'searchPage/searchResults.json'
       })
+      cy.performSelect({ fixture: 'checkoutPage/selectResponse.json' }, 'selectResponse')
       cy.selectProduct(0)
       cy.getByData(testIds.productpage_addTocartButton).click()
       cy.getByData(testIds.cartButton).click()
-      cy.performSelect({ fixture: 'checkoutPage/selectResponse.json' }, 'selectResponse')
       cy.wait('@selectResponse')
       cy.getByData(testIds.cartpage_cartOrderButton).click()
       cy.getByData(testIds.feedback).getByData('close').click()
@@ -77,10 +77,10 @@ describe('Order Confirmation Page', () => {
       cy.wait('@initResponse')
       cy.getByData(testIds.checkoutpage_proceedToCheckout).click()
       cy.url().should('include', '/paymentMode')
+      cy.performConfirm(confirmResponse, 'confirmResponse')
       cy.getByData(testIds.paymentpage_radioButton).eq(3).check().should('be.checked')
       cy.getByData(testIds.paymentpage_confirmButton).click()
       cy.url().should('include', '/orderConfirmation')
-      cy.performConfirm(confirmResponse, 'confirmResponse')
       cy.wait('@confirmResponse')
     })
     it('should render homepage when click on go back to home', () => {

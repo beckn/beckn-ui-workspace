@@ -13,10 +13,10 @@ describe('Checkout Page', () => {
     cy.performSearch(searchTerm, {
       fixture: 'searchPage/searchResults.json'
     })
+    cy.performSelect({ fixture: 'checkoutPage/selectResponse.json' }, 'selectResponse')
     cy.selectProduct(0)
     cy.getByData(testIds.productpage_addTocartButton).click()
     cy.getByData(testIds.cartButton).click()
-    cy.performSelect({ fixture: 'checkoutPage/selectResponse.json' }, 'selectResponse')
     cy.wait('@selectResponse')
     cy.getByData(testIds.cartpage_cartOrderButton).click()
     cy.getByData(testIds.feedback).getByData('close').click()

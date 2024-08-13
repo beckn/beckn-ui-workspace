@@ -8,9 +8,9 @@ describe('Profile Page Tests', () => {
     cy.visit(`${testIds.url_base_retail}${testIds.url_home}`)
     cy.setGeolocation('getAddress')
     cy.wait('@getAddress')
+    cy.performProfile({ fixture: 'profile/profileResponse.json' }, 'profileResponse')
     cy.getByData(testIds.threeDots).click()
     cy.getByData(testIds.profile_text_click).click()
-    cy.performProfile({ fixture: 'profile/profileResponse.json' }, 'profileResponse')
     cy.wait('@profileResponse')
   })
   it('should render profile page with profile API call', () => {
