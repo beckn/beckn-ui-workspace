@@ -262,6 +262,7 @@ Cypress.Commands.add('fillConsentDetails', () => {
     cy.getByData('"place"').type('pune')
     cy.getByData('btnConfirm').click()
   })
+})
 // Created by Omkar
 Cypress.Commands.add('loginDynamic', (email, password) => {
   const emailInputDataId = testIds.auth_inputEmail
