@@ -12,7 +12,7 @@ describe('OrderHistory Page Tests', () => {
       cy.wait('@getAddress')
       cy.getByData(testIds.threeDots).click()
       cy.getByData(testIds.orderHistory_text_click).click()
-      cy.intercept('GET', 'https://bap-backend-prod.becknprotocol.io/api/orders?filters[category]=4', {
+      cy.intercept('GET', '**/orders?filters[category]=4', {
         fixture: 'ODR/orderHistory/emptyOrderResponse.json'
       }).as('getEmptyOrders')
     })
@@ -38,7 +38,7 @@ describe('OrderHistory Page Tests', () => {
       cy.wait('@getAddress')
       cy.getByData(testIds.threeDots).click()
       cy.getByData(testIds.orderHistory_text_click).click()
-      cy.intercept('GET', 'https://bap-backend-prod.becknprotocol.io/api/orders?filters[category]=4', {
+      cy.intercept('GET', '**/orders?filters[category]=4', {
         fixture: 'ODR/orderHistory/orderResponse.json'
       }).as('orderResponse')
     })
