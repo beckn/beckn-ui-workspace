@@ -1,4 +1,5 @@
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
+import AlertModal from '@components/alertModal/alertModal'
 import BottomDrawer from '@components/bottomDrawer/BottomDrawer'
 import CancelRide from '@components/cancel-ride/cancelRidePage'
 import ContactSupport from '@components/contact-support/contactSupport'
@@ -7,6 +8,8 @@ import RideDetailsCardContainer from '@components/ride-details/rideDetailsCardCo
 import RideDetailsContainer from '@components/ride-details/rideDetailsContainer'
 import SearchRideFormContainer from '@components/searchRideForm/searchRideFormContainer'
 import { CabServiceDetailsRootState } from '@lib/types/cabService'
+import { UserGeoLocationRootState } from '@lib/types/user'
+import axios from '@services/axios'
 import { clearCancelTokenSource, setCabResultFound } from '@store/cabService-slice'
 import { useRouter } from 'next/router'
 import React, { useState, useEffect } from 'react'
@@ -22,6 +25,7 @@ type PageOrModalType =
   | 'RIDER_DETAILS'
   | 'CONTACT_SOPPORT'
   | 'CANCEL_RIDE'
+  | 'TRAFFIC_ALERT_MODAL'
 
 const BottomModalRenderer = () => {
   const router = useRouter()
@@ -75,7 +79,7 @@ const BottomModalRenderer = () => {
                 setDrawerState('SEARCH_RIDE')
               }
             }}
-            handleSearchInProgress={() => setDrawerState('SEARCH_IN_PROGRESS')}
+            handleOnSearch={() => setDrawerState('SEARCH_IN_PROGRESS')}
           />
         )
       case 'SEARCH_IN_PROGRESS':

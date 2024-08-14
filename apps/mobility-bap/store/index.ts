@@ -5,6 +5,7 @@ import userInfoReducer from './user-slice'
 import DiscoveryReducer from './discovery-slice'
 import SelectRideReducer from './selectRide-slice'
 import cabServiceReducer from './cabService-slice'
+import policyReducer from './policy-slice'
 import { api, feedbackReducer, geoMapLocationSearchReducer } from '@beckn-ui/common'
 
 const persistConfig = {
@@ -20,7 +21,8 @@ const appReducer = combineReducers({
   discovery: DiscoveryReducer,
   selectRide: SelectRideReducer,
   feedback: feedbackReducer,
-  cabService: cabServiceReducer
+  cabService: cabServiceReducer,
+  policy: policyReducer
 })
 
 const rootReducer = (state: any, action: any) => {
