@@ -65,11 +65,7 @@ const SearchRideForm: React.FC<SearchRideFormProps> = () => {
   const { transactionId, selectedRide } = useSelector((state: DiscoveryRootState) => state.discovery)
   const [initialize] = useInitMutation()
 
-  const {
-    provider: { cabDetails },
-    pickup,
-    dropoff
-  } = selectedRide
+  const { provider, pickup, dropoff } = selectedRide
 
   // const selectResponse = useSelector((state: SelectRideRootState) => state.selectRide.selectResponse)
 
@@ -143,12 +139,12 @@ const SearchRideForm: React.FC<SearchRideFormProps> = () => {
             justifyContent={'center'}
           >
             <Typography
-              text={cabDetails[0].name}
+              text={provider?.cabDetails?.[0]?.name}
               fontSize="15px"
               fontWeight="500"
             />
             <Typography
-              text={cabDetails[0].waitTime}
+              text={provider?.cabDetails?.[0]?.waitTime}
               fontSize="9px"
               fontWeight="400"
               color="#8A8D8E"
@@ -156,7 +152,7 @@ const SearchRideForm: React.FC<SearchRideFormProps> = () => {
           </Flex>
         </Flex>
         <Typography
-          text={`${t.currencySymbol}${cabDetails[0].fare}`}
+          text={`${t.currencySymbol}${provider?.cabDetails?.[0]?.fare}`}
           fontSize="15px"
           fontWeight="700"
           color={theme.colors.primary[100]}

@@ -20,6 +20,8 @@ const en: { [key: string]: string } = {
   pleaseShareYourFeedback: 'Please share your feedback with us',
   rateDeliveryExperience: 'Rate the overall experience',
   addCommentsHere: 'Add your comments here',
-  writeExperience: 'Write about your experience..'
+  writeExperience: 'Write about your experience..',
+  pleaseWait: 'Please wait!',
+  fetchingTrackLoaderSubtext: 'While we fetch for support details'
 }
 export default en

@@ -38,7 +38,7 @@ const TripLocation = ({
           </Box>
         </Flex>
         <Typography
-          text={pickupLocation.address}
+          text={pickupLocation?.address}
           fontWeight="500"
           fontSize="15px"
           style={{ overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}
@@ -74,7 +74,7 @@ const TripLocation = ({
           </Box>
         </Flex>
         <Typography
-          text={dropLocation.address}
+          text={dropLocation?.address}
           fontWeight="500"
           fontSize="15px"
           style={{ overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}
