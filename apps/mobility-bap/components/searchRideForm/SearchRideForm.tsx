@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { Box, Divider, Flex, Image, useTheme } from '@chakra-ui/react'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
@@ -11,12 +11,12 @@ import { validateSearchRideForm } from '@utils/detailsForm-utils'
 import { SearchRideFormProps } from './SearchRideForm.types'
 import { useInitMutation } from '@beckn-ui/common/src/services/init'
 import { useDispatch, useSelector } from 'react-redux'
-import { SelectRideRootState } from '@store/selectRide-slice'
-import { getInitPayload } from '@utils/payload'
+import { getInitPayload, getSelectPayload } from '@utils/payload'
 import { OptionsList } from '@utils/cabDetails'
 import { DiscoveryRootState } from '@store/discovery-slice'
 import { DOMAIN } from '@lib/config'
 import { feedbackActions } from '@beckn-ui/common'
+import { useSelectMutation } from '@beckn-ui/common/src/services/select'
 
 const optionsList: OptionsList = {
   rideTimeOptionsList: [
@@ -64,10 +64,17 @@ const SearchRideForm: React.FC<SearchRideFormProps> = () => {
   const theme = useTheme()
   const { transactionId, selectedRide } = useSelector((state: DiscoveryRootState) => state.discovery)
   const [initialize] = useInitMutation()
+  const [fetchQuotes] = useSelectMutation()
 
   const { provider, pickup, dropoff } = selectedRide
 
   // const selectResponse = useSelector((state: SelectRideRootState) => state.selectRide.selectResponse)
+
+  useEffect(() => {
+    if (Object.keys(selectedRide).length > 0) {
+      fetchQuotes(getSelectPayload(selectedRide, transactionId, DOMAIN))
+    }
+  }, [selectedRide])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
