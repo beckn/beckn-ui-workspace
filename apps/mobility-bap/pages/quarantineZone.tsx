@@ -24,26 +24,19 @@ interface PolicyDetailsModel {
 
 const QuarantineZone = () => {
   const [policyDetails, setPolicyDetails] = useState<PolicyDetailsModel>({
-    description: 'BLR Airport traffic hence diversion.',
-    type: 'Geofence',
-    name: 'BLR Airport traffic',
-    domain: 'mobility',
-    country: 'India',
-    city: 'Banglore',
-    startDate: '2020-01-01T00:00:00.000+00:00',
-    endDate: '2025-12-31T00:00:00.000+00:00',
-    applicableTo: ['BAP', 'BPP'],
-    owner: 'BLR traffic police',
-    polygon: [
-      '13.224368101102783,77.69723945770129',
-      '13.200303188252956,77.75457435760363',
-      '13.163699923041616,77.73019844207629',
-      '13.139796208051319,77.62376838836535',
-      '13.217683641151229,77.62222343597277',
-      '13.227877369222877,77.64831596526965'
-    ],
-    status: 'applied',
-    policyDocuments: 'https://google.com'
+    description: '',
+    type: '',
+    name: '',
+    domain: '',
+    country: '',
+    city: '',
+    startDate: '',
+    endDate: '',
+    applicableTo: [],
+    owner: '',
+    polygon: [],
+    status: '',
+    policyDocuments: ''
   })
 
   const router = useRouter()
@@ -52,7 +45,7 @@ const QuarantineZone = () => {
   const getPolicyDetails = () => {
     try {
       axios
-        .post(`https://api.mobility-bap-policy-demo.becknprotocol.io/v1/policy/${router.query.policyId}`)
+        .get(`https://api.mobility-bap-policy-demo.becknprotocol.io/v1/policy/${router.query.policyId}`)
         .then(res => {
           setPolicyDetails(res.data)
         })
