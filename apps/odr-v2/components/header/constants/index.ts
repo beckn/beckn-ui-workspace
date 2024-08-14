@@ -11,21 +11,17 @@ const languageIconWhiteList: string[] = []
 const backIconList = ['/', '/signin']
 
 const headerNames: PathnameObjectType = {
-  '/checkoutPage': 'Review Purchase Order',
-  '/orderHistory': 'My Orders',
-  '/orderDetails': 'Order Details',
-  '/invoiceDetails': 'Invoice Details',
+  '/checkout': 'Additional Information',
+  '/orderHistory': 'My Cases',
+  '/orderDetails': 'Case Details',
   '/signin': 'Sign In',
   '/signUp': 'Sign Up',
-  '/cart': 'Cart',
-  '/paymentMode': 'Select Payment Method',
-  '/assemblyDetails': 'Add Assembly Details',
   '/updateShippingDetails': 'Shipping Details',
   '/orderCancellation': 'Order Cancel',
   '/feedback': '',
   '/profile': 'My Profile',
   '/search': 'Search results',
-  '/checkout': 'Billing & Shipping'
+  '/product': 'Service Details'
 }
 
 const headerFrenchNames: PathnameObjectType = {

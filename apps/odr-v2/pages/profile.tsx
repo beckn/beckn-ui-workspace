@@ -12,6 +12,7 @@ import { isEmpty } from '@utils/common-utils'
 import { useDispatch } from 'react-redux'
 import { feedbackActions } from '@beckn-ui/common/src/store'
 import axios from '@services/axios'
+import { testIds } from '@shared/dataTestIds'
 
 const ProfilePage = () => {
   const { t } = useLanguage()
@@ -167,6 +168,7 @@ const ProfilePage = () => {
       overflowY="scroll"
     >
       <BecknAuth
+        dataTestForm={testIds.profile_form}
         schema={{
           buttons: [
             {
@@ -174,7 +176,8 @@ const ProfilePage = () => {
               handleClick: updateProfile,
               disabled: !isFormFilled,
               variant: 'solid',
-              colorScheme: 'primary'
+              colorScheme: 'primary',
+              dataTest: testIds.profile_saveandContinue
             }
           ],
           inputs: [
@@ -184,7 +187,8 @@ const ProfilePage = () => {
               value: formData.name,
               handleChange: handleInputChange,
               label: t.fullName,
-              error: formErrors.name
+              error: formErrors.name,
+              dataTest: testIds.profile_inputName
             },
             {
               type: 'number',
@@ -192,14 +196,16 @@ const ProfilePage = () => {
               value: formData.mobileNumber,
               handleChange: handleInputChange,
               label: t.enterMobileNumber,
-              error: formErrors.mobileNumber
+              error: formErrors.mobileNumber,
+              dataTest: testIds.profile_inputMobileNumber
             },
             {
               type: 'text',
               name: 'flatNumber',
               value: formData.flatNumber,
               handleChange: handleInputChange,
-              label: t.enterFlatDetails
+              label: t.enterFlatDetails,
+              dataTest: testIds.profile_flatNumber
               // error: formErrors.flatNumber
             },
             {
@@ -207,7 +213,8 @@ const ProfilePage = () => {
               name: 'street',
               value: formData.street,
               handleChange: handleInputChange,
-              label: t.enterStreetDetails
+              label: t.enterStreetDetails,
+              dataTest: testIds.profile_street
               // error: formErrors.street
             },
             {
@@ -216,7 +223,8 @@ const ProfilePage = () => {
               value: formData.city,
               handleChange: handleInputChange,
               label: t.enterCity,
-              error: formErrors.city
+              error: formErrors.city,
+              dataTest: testIds.profile_city
             },
             {
               type: 'text',
@@ -224,7 +232,8 @@ const ProfilePage = () => {
               value: formData.zipCode,
               handleChange: handleInputChange,
               label: t.enterPincode,
-              error: formErrors.zipCode
+              error: formErrors.zipCode,
+              dataTest: testIds.profile_zipCode
             },
             {
               type: 'text',
@@ -232,7 +241,8 @@ const ProfilePage = () => {
               value: formData.state,
               handleChange: handleInputChange,
               label: t.enterState,
-              error: formErrors.state
+              error: formErrors.state,
+              dataTest: testIds.profile_state
             },
             {
               type: 'text',
@@ -240,7 +250,8 @@ const ProfilePage = () => {
               value: formData.country,
               handleChange: handleInputChange,
               label: t.enterCountry,
-              error: formErrors.country
+              error: formErrors.country,
+              dataTest: testIds.profile_country
             }
           ]
         }}

@@ -56,8 +56,8 @@ const testIds = {
   user_validEmail: 'ankit@gmail.com',
   user_validPassword: 'Enterthevoid@123',
   user_invalidPassword: 'Enterthevoid@1234',
-  user_firstTimeLoginvalidEmail: 'pallavi@gmail.com',
-  user_firstTimeLoginvalidPassword: 'Pallavi@123',
+  user_firstTimeLoginvalidEmail: 'aniket@gmail.com',
+  user_firstTimeLoginvalidPassword: 'Aniket@123',
   user_login: 'krushnaTest@test.com',
   user_password: 'Krushna@123',
   // auth page
