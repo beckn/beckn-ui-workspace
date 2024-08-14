@@ -20,7 +20,8 @@ const RideDetails: React.FC<RideDetailsProps> = ({
   pickUp,
   dropOff,
   cancelRide,
-  contactSupport
+  contactSupport,
+  handleEditDropoff
 }) => {
   const theme = useTheme()
   const router = useRouter()
@@ -60,7 +61,7 @@ const RideDetails: React.FC<RideDetailsProps> = ({
             color="#37474F"
           />
           <Typography
-            text={fare}
+            text={fare.toString()}
             fontSize="14px"
             fontWeight="700"
           />
@@ -113,8 +114,9 @@ const RideDetails: React.FC<RideDetailsProps> = ({
         borderBottomWidth={'2px'}
       />
       <TripLocation
-        pickupLocation={pickUp}
-        dropLocation={dropOff}
+        pickupLocation={{ address: pickUp, geoLocation: { latitude: 0, longitude: 0 } }}
+        dropLocation={{ address: dropOff, geoLocation: { latitude: 0, longitude: 0 } }}
+        handleEditDropoff={handleEditDropoff}
       />
       <Divider
         mb="30px"

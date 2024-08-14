@@ -33,4 +33,5 @@ export interface RideDetailsProps {
   dropOff: string
   cancelRide: () => void
   contactSupport: () => void
+  handleEditDropoff: () => void
 }
