@@ -9,7 +9,8 @@ const homeIconBlackList = [
   '/feedback',
   '/searchRide',
   '/quarantineZone',
-  '/geofence'
+  '/geofence',
+  '/policies'
 ]
 const menuIconWhiteList = ['']
 const topHeaderBlackList = ['/feedback']
@@ -23,7 +24,8 @@ const headerNames: PathnameObjectType = {
   '/paymentMode': 'Select Payment Method',
   '/profile': 'Profile',
   '/quarantineZone': 'Quarantine Zone',
-  '/geofence': 'Geofence'
+  '/geofence': 'Geofence',
+  '/policies': 'Policies'
 }
 
 const headerFrenchNames: PathnameObjectType = {
@@ -32,7 +34,7 @@ const headerFrenchNames: PathnameObjectType = {
   '/paymentMode': 'Sélectionner la Méthode de Paiement'
 }
 
-const headerBlackList = ['/rideHistory', '/', '/paymentMode', '/profile', '/quarantineZone', '/geofence']
+const headerBlackList = ['/rideHistory', '/', '/paymentMode', '/profile', '/quarantineZone', '/geofence', '/policies']
 
 const bottomHeaderBlackList = ['/', '/searchRide', '/searchRideForm', '/cancelRide', '/feedback']
 
