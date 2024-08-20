@@ -1,17 +1,22 @@
-import { GeoLocationType, toggleLocationSearchPageVisibility } from '@beckn-ui/common'
+import { feedbackActions, GeoLocationType, toggleLocationSearchPageVisibility } from '@beckn-ui/common'
 import { LoaderWithMessage } from '@beckn-ui/molecules'
 import DropOffChangeAlertModal from '@components/dropOffChangeAlertModal/dropOffChangeAlertModal'
 import { useLanguage } from '@hooks/useLanguage'
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import RideDetails from './RideDetails'
-import RideDetailsCard from './RideDetailsCard'
 import { useSelector } from 'react-redux'
 import { UserGeoLocationRootState } from '@lib/types/user'
 import { RideDetailsProps } from '@lib/types/cabService'
 import { SelectRideRootState } from '@store/selectRide-slice'
-import Loader from '@components/loader/Loader'
 import { Box } from '@chakra-ui/react'
+import { DOMAIN } from '@lib/config'
+import axios from '@services/axios'
+import { v4 as uuidv4 } from 'uuid'
+import { formatGeoLocationDetails } from '@utils/geoLocation-utils'
+import { setDriverCurrentLocation } from '@store/cabService-slice'
+
+const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
 interface RideDetailsContainerProps {
   handleCancelRide: () => void
@@ -23,13 +28,7 @@ const RideDetailsContainer: React.FC<RideDetailsContainerProps> = ({ handleCance
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const { pickup, dropoff } = useSelector((state: UserGeoLocationRootState) => state.userInfo)
-  const [rideDetails, setRideDetails] = useState<RideDetailsProps>({
-    name: '',
-    carModel: '',
-    contact: '',
-    rating: '',
-    registrationNumber: ''
-  })
+  const [rideDetails, setRideDetails] = useState<RideDetailsProps | null>(null)
   const confirmResponse = useSelector((state: SelectRideRootState) => state.selectRide?.confirmResponse)
 
   const dispatch = useDispatch()
@@ -56,6 +55,61 @@ const RideDetailsContainer: React.FC<RideDetailsContainerProps> = ({ handleCance
     dispatch(toggleLocationSearchPageVisibility({ visible: true, addressType }))
   }
 
+  const getRideStatus = () => {
+    const selectedOrderData = JSON.parse(localStorage.getItem('selectedOrder') as string)
+    if (selectedOrderData) {
+      const { bppId, bppUri, orderId } = selectedOrderData
+      const payload = {
+        data: [
+          {
+            context: {
+              transaction_id: uuidv4(),
+              bpp_id: bppId,
+              bpp_uri: bppUri,
+              domain: DOMAIN
+            },
+            message: {
+              order_id: orderId,
+              orderId: orderId
+            }
+          }
+        ]
+      }
+
+      axios
+        .post(`${apiUrl}/status`, payload)
+        .then(async res => {
+          const { stops, state } = res.data.data[0].message.order.fulfillments[0]
+          stops.forEach((element: any) => {
+            if (element.type === 'start') {
+              const locationDetails = formatGeoLocationDetails('', element.location.gps)
+              dispatch(setDriverCurrentLocation(locationDetails.geoLocation))
+            }
+          })
+        })
+        .catch(e => {
+          console.error(e)
+          dispatch(
+            feedbackActions.setToastData({
+              toastData: {
+                message: 'Error',
+                display: true,
+                type: 'error',
+                description: 'Something went wrong, please try again'
+              }
+            })
+          )
+        })
+    }
+  }
+
+  useEffect(() => {
+    getRideStatus()
+    const intervalId = setInterval(getRideStatus, 5000)
+
+    return () => clearInterval(intervalId)
+  }, [])
+
   return (
     <>
       {isLoading ? (
@@ -72,21 +126,23 @@ const RideDetailsContainer: React.FC<RideDetailsContainerProps> = ({ handleCance
         </Box>
       ) : (
         <>
-          <RideDetails
-            name={rideDetails?.name}
-            registrationNumber={rideDetails?.registrationNumber}
-            carModel={rideDetails.carModel}
-            rating={rideDetails.rating}
-            contact={rideDetails.contact}
-            fare={rideDetails.price!}
-            pickUp={pickup}
-            dropOff={dropoff}
-            color={'Black'}
-            otp={''}
-            cancelRide={handleCancelRide}
-            contactSupport={handleContactSupport}
-            handleEditDropoff={() => setOpenAlert(true)}
-          />
+          {rideDetails && (
+            <RideDetails
+              name={rideDetails?.name}
+              registrationNumber={rideDetails?.registrationNumber}
+              carModel={rideDetails?.carModel}
+              rating={rideDetails?.rating}
+              contact={rideDetails?.contact}
+              fare={rideDetails?.price!}
+              pickUp={pickup}
+              dropOff={dropoff}
+              color={'Black'}
+              otp={''}
+              cancelRide={handleCancelRide}
+              contactSupport={handleContactSupport}
+              handleEditDropoff={() => setOpenAlert(true)}
+            />
+          )}
           {openAlert && (
             <DropOffChangeAlertModal
               isOpen={true}

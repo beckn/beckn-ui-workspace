@@ -1,5 +1,6 @@
 import { Coordinate } from '@beckn-ui/common'
 import { CabServiceDetailsRootState } from '@lib/types/cabService'
+import { UserGeoLocationRootState } from '@lib/types/user'
 import { useLoadScript, GoogleMap, DirectionsRenderer, MarkerF } from '@react-google-maps/api'
 import { formatCoords } from '@utils/geoLocation-utils'
 import { useMemo, useState, useEffect, useCallback } from 'react'
@@ -14,7 +15,10 @@ const Map: React.FC<MapProps> = (props: MapProps) => {
   const { origin, destination } = props
 
   const [directions, setDirections] = useState<google.maps.DirectionsResult | null>(null)
-  const { rideSearchInProgress } = useSelector((state: CabServiceDetailsRootState) => state.cabService)
+
+  const { rideSearchInProgress, driverCurrentLocation } = useSelector(
+    (state: CabServiceDetailsRootState) => state.cabService
+  )
 
   const libraries = useMemo(() => ['places'], [])
   const mapCenter = useMemo(() => formatCoords(origin), [origin])
@@ -75,18 +79,20 @@ const Map: React.FC<MapProps> = (props: MapProps) => {
       <GoogleMap
         options={mapOptions}
         zoom={16}
-        center={formatCoords(origin)}
+        center={driverCurrentLocation ? formatCoords(driverCurrentLocation) : formatCoords(origin)}
         mapTypeId={google.maps.MapTypeId.ROADMAP}
         mapContainerStyle={{ maxHeight: '100vh', height: '100vh' }}
       >
-        <MarkerF
-          position={formatCoords(origin)}
-          icon={{
-            url: './images/marker.svg',
-            scaledSize: new window.google.maps.Size(100, 100),
-            anchor: anchorPoint
-          }}
-        />
+        {!rideSearchInProgress && (
+          <MarkerF
+            position={driverCurrentLocation ? formatCoords(driverCurrentLocation) : formatCoords(origin)}
+            icon={{
+              url: './images/marker.svg',
+              scaledSize: new window.google.maps.Size(100, 100),
+              anchor: anchorPoint
+            }}
+          />
+        )}
         {rideSearchInProgress && (
           <MarkerF
             position={formatCoords(origin)}
@@ -113,7 +119,7 @@ const Map: React.FC<MapProps> = (props: MapProps) => {
                 }}
               />
             )}
-            {directions && origin && (
+            {/* {directions && origin && (
               <MarkerF
                 position={formatCoords(origin)}
                 icon={{
@@ -122,7 +128,7 @@ const Map: React.FC<MapProps> = (props: MapProps) => {
                   anchor: anchorPoint
                 }}
               />
-            )}
+            )} */}
             {directions && destination && (
               <MarkerF
                 position={formatCoords(destination)}

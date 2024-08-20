@@ -17,6 +17,7 @@ const RideDetails: React.FC<RideDetailsProps> = ({
   color,
   rating,
   fare,
+  contact,
   pickUp,
   dropOff,
   cancelRide,
@@ -47,6 +48,7 @@ const RideDetails: React.FC<RideDetailsProps> = ({
         name={name}
         rating={rating}
         driverImage={'./images/driverImage.svg'}
+        contact={contact}
       />
       <Flex
         justifyContent={'space-between'}
@@ -114,8 +116,8 @@ const RideDetails: React.FC<RideDetailsProps> = ({
         borderBottomWidth={'2px'}
       />
       <TripLocation
-        pickupLocation={{ address: pickUp, geoLocation: { latitude: 0, longitude: 0 } }}
-        dropLocation={{ address: dropOff, geoLocation: { latitude: 0, longitude: 0 } }}
+        pickupLocation={{ address: pickUp.address, geoLocation: { latitude: 0, longitude: 0 } }}
+        dropLocation={{ address: dropOff.address, geoLocation: { latitude: 0, longitude: 0 } }}
         handleEditDropoff={handleEditDropoff}
       />
       <Divider

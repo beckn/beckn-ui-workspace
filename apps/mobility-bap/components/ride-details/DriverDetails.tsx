@@ -55,16 +55,13 @@ const DriverDetails: React.FC<DriverDetailsProps> = ({ name, rating, contact, dr
           </Flex>
         </Flex>
       </Box>
-      <Button
-        leftIcon={
-          <Image
-            src="./images/callIcon.svg"
-            alt="contact-image"
-            h={'50px'}
-            w={'50px'}
-          />
-        }
-        handleClick={handleCallClick}
+
+      <Image
+        src="./images/callIcon.svg"
+        alt="contact-image"
+        h={'50px'}
+        w={'50px'}
+        onClick={handleCallClick}
       />
     </Flex>
   )

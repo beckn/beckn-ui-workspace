@@ -1,3 +1,4 @@
+import { Coordinate } from '@beckn-ui/common'
 import { CabServiceDetails } from '@lib/types/cabService'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { CabDetails, ParsedCabDataModel } from '@utils/cabDetails'
@@ -7,7 +8,8 @@ export const initialState: CabServiceDetails = {
   cancelTokenSource: null,
   rideSearchInProgress: false,
   cabServiceProviders: [],
-  totalCabs: 0
+  totalCabs: 0,
+  driverCurrentLocation: { latitude: 0, longitude: 0 }
 }
 
 const cabServiceSlice = createSlice({
@@ -28,10 +30,19 @@ const cabServiceSlice = createSlice({
     },
     clearCancelTokenSource(state) {
       state.cancelTokenSource = null
+    },
+    setDriverCurrentLocation(state, action: PayloadAction<Coordinate>) {
+      state.driverCurrentLocation = action.payload
     }
   }
 })
 
-export const { setCabServiceProviders, setTotalCabs, setCabResultFound, clearCancelTokenSource, setCancelTokenSource } =
-  cabServiceSlice.actions
+export const {
+  setCabServiceProviders,
+  setTotalCabs,
+  setCabResultFound,
+  clearCancelTokenSource,
+  setCancelTokenSource,
+  setDriverCurrentLocation
+} = cabServiceSlice.actions
 export default cabServiceSlice.reducer

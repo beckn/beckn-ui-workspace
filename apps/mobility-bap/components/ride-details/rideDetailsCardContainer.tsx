@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { Box } from '@chakra-ui/react'
 import { useConfirmMutation } from '@beckn-ui/common/src/services/confirm'
-import Loader from '@components/loader/Loader'
 import { useLanguage } from '../../hooks/useLanguage'
 import RideDetailsCard from './RideDetailsCard'
 import { useSelector } from 'react-redux'
 import { SelectRideRootState } from '@store/selectRide-slice'
 import { getConfirmPayload } from '@utils/payload'
 import { RideDetailsProps } from '@lib/types/cabService'
+import { LoaderWithMessage } from '@beckn-ui/molecules'
 
 interface RideDetailsCardContainerProps {
   handleOnClick: () => void
@@ -44,13 +44,14 @@ const RideDetailsCardContainer: React.FC<RideDetailsCardContainerProps> = ({ han
   if (isLoading || !confirmResponse || !rideDetails) {
     return (
       <Box
-        display={'grid'}
-        height={'calc(100vh - 300px)'}
-        alignContent={'center'}
+        display={'flex'}
+        alignItems="center"
+        justifyContent={'center'}
+        height={'300px'}
       >
-        <Loader
+        <LoaderWithMessage
           loadingText={t.pleaseWait}
-          subLoadingText={t.confirmLoaderSubtext}
+          loadingSubText={t.confirmLoaderSubtext}
         />
       </Box>
     )

@@ -1,5 +1,4 @@
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
-import AlertModal from '@components/alertModal/alertModal'
 import BottomDrawer from '@components/bottomDrawer/BottomDrawer'
 import CancelRide from '@components/cancel-ride/cancelRidePage'
 import ContactSupport from '@components/contact-support/contactSupport'
@@ -8,11 +7,10 @@ import RideDetailsCardContainer from '@components/ride-details/rideDetailsCardCo
 import RideDetailsContainer from '@components/ride-details/rideDetailsContainer'
 import SearchRideFormContainer from '@components/searchRideForm/searchRideFormContainer'
 import { CabServiceDetailsRootState } from '@lib/types/cabService'
-import { UserGeoLocationRootState } from '@lib/types/user'
-import axios from '@services/axios'
 import { clearCancelTokenSource, setCabResultFound } from '@store/cabService-slice'
+import { SelectRideRootState } from '@store/selectRide-slice'
 import { useRouter } from 'next/router'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 type PageOrModalType =
@@ -33,6 +31,7 @@ const BottomModalRenderer = () => {
 
   const dispatch = useDispatch()
   const { cancelTokenSource } = useSelector((state: CabServiceDetailsRootState) => state.cabService)
+  const confirmResponse = useSelector((state: SelectRideRootState) => state.selectRide?.confirmResponse)
 
   useEffect(() => {
     if (router.query.reset) {
@@ -67,6 +66,19 @@ const BottomModalRenderer = () => {
     }
   }
 
+  const handleOnRideStart = useCallback(() => {
+    console.log('confirmResponse--> ', confirmResponse)
+    if (confirmResponse.length > 0) {
+      const orderId = confirmResponse[0].message.orderId
+      const bppId = confirmResponse[0].context.bpp_id
+      const bppUri = confirmResponse[0].context.bpp_uri
+
+      const orderObjectForStatusCall = { bppId: bppId, bppUri: bppUri, orderId: orderId }
+      localStorage.setItem('selectedOrder', JSON.stringify(orderObjectForStatusCall))
+      setDrawerState('RIDER_DETAILS')
+    }
+  }, [confirmResponse])
+
   const renderDrawerContent = () => {
     switch (drawerState) {
       case 'PICK_UP_DROP_OFF':
@@ -99,7 +111,7 @@ const BottomModalRenderer = () => {
         handlePayment()
         return null
       case 'DRIVER_DETAILS':
-        return <RideDetailsCardContainer handleOnClick={() => setDrawerState('RIDER_DETAILS')} />
+        return <RideDetailsCardContainer handleOnClick={handleOnRideStart} />
       case 'RIDER_DETAILS':
         return (
           <RideDetailsContainer
