@@ -71,7 +71,7 @@ const Policies = () => {
                 mr={4}
               />
             </Flex>
-            <Box>
+            <Box width={'13rem'}>
               <Text fontWeight="bold">{summary.name}</Text>
               <Flex
                 justifyContent="space-between"
@@ -86,7 +86,7 @@ const Policies = () => {
               <Badge
                 ml="auto"
                 variant={'solid'}
-                colorScheme={summary.status.toLowerCase() === 'active' ? 'green' : 'orange'}
+                colorScheme={summary.status.toLowerCase() === 'applied' ? 'green' : 'orange'}
                 height={'fit-content'}
                 textTransform={'capitalize'}
               >
