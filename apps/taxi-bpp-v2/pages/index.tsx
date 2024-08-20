@@ -28,6 +28,7 @@ import { formatGeoLocationDetails } from '@utils/geoLocation-utils'
 import { RideStatusRootState, setNewRideRequest, updateDriverStatus } from '@store/rideStatus-slice'
 import { parsedNewRideDetails, RIDE_STATUS_CODE } from '@utils/ride-utils'
 import { parseRideSummaryData, RideSummaryModalProp } from '@utils/rideSummary-utils'
+import _ from 'lodash'
 
 const Homepage = () => {
   const MapWithNoSSR: any = dynamic(() => import('../components/Map'), { ssr: false })
@@ -89,23 +90,28 @@ const Homepage = () => {
   }, [])
 
   const getAllRideRequests = useCallback(async () => {
-    if (isOnline) {
+    if (
+      isOnline &&
+      [RIDE_STATUS_CODE.AWAITING_DRIVER_APPROVAL, RIDE_STATUS_CODE.RIDE_DECLINED].includes(driverStatus)
+    ) {
       const response: any = await getNewRideRequest({})
       const newRides: any[] = response?.data?.data?.validOrders
-      console.log('called')
       if (newRides?.length > 0) {
         const result = await parsedNewRideDetails(response?.data?.data?.validOrders)
         console.log('new ride req list--> ', result)
-        rideRequestList.current = result
+        rideRequestList.current = _.uniqBy([...rideRequestList.current, ...result], 'orderId')
         showNextRideRequest(result)
       }
     } else {
       rideRequestList.current = []
     }
-  }, [isOnline])
+  }, [isOnline, driverStatus])
 
   useEffect(() => {
     getAllRideRequests()
+    const intervalId = setInterval(getAllRideRequests, 15000)
+
+    return () => clearInterval(intervalId)
   }, [isOnline])
 
   const showNextRideRequest = (rideRequests: RideDetailsModel[]) => {
@@ -118,8 +124,6 @@ const Homepage = () => {
   }
 
   const handleNavigate = (data: Coordinate, startNav: boolean = true) => {
-    console.log('source--> ', currentLocation)
-    console.log('destination--> ', data)
     setDestination(data)
     setStartNav(startNav)
   }
@@ -288,7 +292,10 @@ const Homepage = () => {
             ...defaultBtnState,
             text: 'Look for New Ride Request',
             className: 'taxi-bpp-btn-text',
-            handleClick: () => handleModalSubmit('COMPLETED', data)
+            handleClick: () => {
+              handleModalSubmit('COMPLETED', data)
+              dispatch(updateDriverStatus(RIDE_STATUS_CODE.AWAITING_DRIVER_APPROVAL))
+            }
           }
         ],
         fare: {
