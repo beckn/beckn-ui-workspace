@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { FaFileAlt } from 'react-icons/fa'
 import axios from '@services/axios'
+import { formatDate } from '@utils/general'
 
 interface PolicySummaryModel {
   id: string
@@ -76,15 +77,16 @@ const Policies = () => {
                 justifyContent="space-between"
                 mb={2}
               >
-                <Text fontSize={'10px'}>{`Start Date: ${summary.startDate}`}</Text>
-                <Text fontSize={'10px'}>{`End Date: ${summary.endDate}`}</Text>
+                <Text fontSize={'10px'}>{`Start Date: ${formatDate(summary.startDate)}`}</Text>
+                <Text fontSize={'10px'}>{`End Date: ${formatDate(summary.endDate)}`}</Text>
               </Flex>
               <Text fontSize={'10px'}>{`Type: ${summary.type}`}</Text>
             </Box>
             {summary.status.toLowerCase() !== 'inactive' && (
               <Badge
                 ml="auto"
-                colorScheme={summary.status.toLowerCase() === 'active' ? 'green' : theme.colors.primary['100']}
+                variant={'solid'}
+                colorScheme={summary.status.toLowerCase() === 'active' ? 'green' : 'orange'}
                 height={'fit-content'}
                 textTransform={'capitalize'}
               >
