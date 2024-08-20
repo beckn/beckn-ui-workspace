@@ -23,10 +23,10 @@ interface Fulfillment {
   stops: Stop[]
   state: State
   tracking: boolean
-  agent: Agent
-  vehicle: Vehicle
-  rateable: boolean
-  rating: string
+  agent?: Agent
+  vehicle?: Vehicle
+  rateable?: boolean
+  rating?: string
 }
 
 interface CancellationTerm {

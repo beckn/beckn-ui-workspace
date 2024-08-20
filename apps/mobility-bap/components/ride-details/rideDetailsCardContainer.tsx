@@ -32,11 +32,11 @@ const RideDetailsCardContainer: React.FC<RideDetailsCardContainerProps> = ({ han
       const { message } = confirmResponse[0] || {}
       const { agent, vehicle, rating } = message?.fulfillments?.find(fulfillment => fulfillment.agent)!
       setRideDetails({
-        name: agent.person.name,
-        registrationNumber: vehicle.registration,
-        carModel: `${vehicle.make} ${vehicle.model}`,
-        rating: rating,
-        contact: agent.contact.phone
+        name: agent?.person.name!,
+        registrationNumber: vehicle?.registration!,
+        carModel: `${vehicle?.make!} ${vehicle?.model!}`,
+        rating: rating!,
+        contact: agent?.contact.phone!
       })
     }
   }, [confirmResponse])
