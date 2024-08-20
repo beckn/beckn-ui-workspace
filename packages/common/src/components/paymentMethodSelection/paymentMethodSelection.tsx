@@ -19,6 +19,7 @@ const PaymentMethodSelection = (props: PaymentMethodSelectionProps) => {
         img: Visa,
         paymentMethod: t('cardNumber'),
         paymentMethodNet: t('cardNumber'),
+        disabled: true,
         dataTest: testIds.paymentpage_visa
       },
       {
@@ -26,6 +27,7 @@ const PaymentMethodSelection = (props: PaymentMethodSelectionProps) => {
         img: masterCard,
         paymentMethod: t('cardNumber'),
         paymentMethodNet: t('cardNumber'),
+        disabled: true,
         dataTest: testIds.paymentpage_masterCard
       },
       {
@@ -33,6 +35,7 @@ const PaymentMethodSelection = (props: PaymentMethodSelectionProps) => {
         img: phonePay,
         paymentMethod: t('phonePay') || 'PhonePe UPI',
         paymentMethodNet: t('phonePay') || 'PhonePe UPI',
+        disabled: true,
         dataTest: testIds.paymentpage_phonePay
       },
       {
@@ -40,6 +43,7 @@ const PaymentMethodSelection = (props: PaymentMethodSelectionProps) => {
         img: CashOnDelivery,
         paymentMethod: t('cashOnDelivery'),
         paymentMethodNet: t('netBanking'),
+        disabled: false,
         dataTest: testIds.paymentpage_CashOnDelivery
       }
     ]

@@ -135,6 +135,7 @@ const testIds = {
   paymentpage_masterCard: 'masterCard',
   paymentpage_phonePay: 'phonePay',
   paymentpage_CashOnDelivery: 'CashOnDelivery',
+  paymentpage_NetBanking: 'paymentpage-NetBanking',
   //orderConfirmation page
   confirmPageImage: 'confrimPage-image',
   orderConfirmation_successOrderMessage: 'suceess-OrderMessage',

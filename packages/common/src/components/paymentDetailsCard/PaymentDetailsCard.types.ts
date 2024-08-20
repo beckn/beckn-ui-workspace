@@ -5,6 +5,7 @@ export interface PaymentMethod {
   paymentMethodNet?: string
   img: string
   category: 'Credit & Debit Cards' | 'UPI' | 'Other'
+  disabled?: boolean
   dataTest?: string
 }
 
