@@ -2,6 +2,7 @@ import { useLanguage } from '@hooks/useLanguage'
 import { Box, Flex, Image } from '@chakra-ui/react'
 import { BottomModal, Typography } from '@beckn-ui/molecules'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
+import alertIcon from '@public/images/alert_icon.svg'
 
 interface AlertModalProps {
   isOpen: boolean
@@ -22,7 +23,24 @@ const AlertModal: React.FC<AlertModalProps> = ({
   return (
     <BottomModal
       isOpen={isOpen}
-      title={'Alert'}
+      title={
+        <Flex
+          width={'18%'}
+          justifyContent={'space-between'}
+        >
+          <Typography
+            text={'Alert'}
+            fontWeight="700"
+            fontSize="16px"
+          />
+          <Image
+            src={alertIcon}
+            alt="alert_icon"
+            height={'14px'}
+            alignSelf={'center'}
+          />
+        </Flex>
+      }
       onClose={handleOnClose}
     >
       <Box

@@ -10,7 +10,7 @@ const TripLocation = ({
 }: {
   pickupLocation: PickUpDropOffModel
   dropLocation: PickUpDropOffModel
-  handleEditDropoff: () => void
+  handleEditDropoff?: () => void
 }) => {
   const theme = useTheme()
   return (
@@ -84,15 +84,17 @@ const TripLocation = ({
             style={{ overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis', maxWidth: '12rem' }}
           />
         </Flex>
-        <Box>
-          <Typography
-            text="Edit"
-            fontWeight="500"
-            fontSize="15px"
-            color={theme.colors.primary['100']}
-            onClick={handleEditDropoff}
-          />
-        </Box>
+        {handleEditDropoff && (
+          <Box>
+            <Typography
+              text="Edit"
+              fontWeight="500"
+              fontSize="15px"
+              color={theme.colors.primary['100']}
+              onClick={handleEditDropoff}
+            />
+          </Box>
+        )}
       </Flex>
     </>
   )

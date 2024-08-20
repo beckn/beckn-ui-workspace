@@ -92,6 +92,7 @@ const BottomModalRenderer = () => {
         )
       case 'SEARCH_RIDE':
         handleSearchRide()
+        return null
       case 'RIDE_FORM':
         return <SearchRideFormContainer handleOnClick={() => setDrawerState('PAYMENT')} />
       case 'PAYMENT':
