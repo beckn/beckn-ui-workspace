@@ -13,80 +13,82 @@ import { StatusRootState } from '@beckn-ui/common/src/store/status-slice'
 import { StatusResponseModel } from '@beckn-ui/common/lib/types'
 import { feedbackActions } from '@beckn-ui/common/src/store/ui-feedback-slice'
 import { testIds } from '@shared/dataTestIds'
+import { SelectRideRootState } from '@store/selectRide-slice'
 
 const Feedback = () => {
   const { t } = useLanguage()
   const router = useRouter()
   const [ratingForStore, setRatingForStore] = useState(0)
   const [feedback, setFeedback] = useState('')
-  // const [isLoadingForRating, setIsLoadingForRating] = useState(false)
+  const [isLoadingForRating, setIsLoadingForRating] = useState(false)
   // const statusResponse = useSelector((state: StatusRootState) => state.status.statusResponse)
+  const selectResponse = useSelector((state: SelectRideRootState) => state.selectRide.selectResponse)
   const { isDesktop } = useResponsive()
 
-  // const dispatch = useDispatch()
+  const dispatch = useDispatch()
 
-  // const apiUrl = process.env.NEXT_PUBLIC_API_URL
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
-  const handleSubmitReview = async (statusData: StatusResponseModel[]) => {
-    //   try {
-    //     setIsLoadingForRating(true)
-    //     const { domain, bpp_id, bpp_uri, transaction_id } = statusData[0].context
-    //     const orderId = statusData[0].message.order.id
-    //     const ratingPayload = {
-    //       data: [
-    //         {
-    //           context: {
-    //             transaction_id,
-    //             bpp_id,
-    //             bpp_uri,
-    //             domain
-    //           },
-    //           message: {
-    //             id: orderId,
-    //             rating_category: 'Order',
-    //             value: ratingForStore
-    //           }
-    //         }
-    //       ]
-    //     }
-    //     const ratingResponse = await axios.post(`${apiUrl}/rating`, ratingPayload)
-    //     console.log(ratingResponse)
-    //     if (ratingResponse.data.data.length > 0) {
-    //       dispatch(
-    //         feedbackActions.setToastData({
-    //           toastData: {
-    //             message: 'Success',
-    //             display: true,
-    //             type: 'success',
-    //             description: 'Thank you for your rating! '
-    //           }
-    //         })
-    //       )
-    //       router.push('/')
-    //     }
-    //   } catch (error) {
-    //     console.error(error)
-    //   }
+  const handleSubmitReview = async () => {
+    try {
+      setIsLoadingForRating(true)
+      const { domain, bpp_id, bpp_uri, transaction_id } = selectResponse[0].context
+      const orderId = selectResponse[0].message.order.provider.id
+      const ratingPayload = {
+        data: [
+          {
+            context: {
+              transaction_id,
+              bpp_id,
+              bpp_uri,
+              domain
+            },
+            message: {
+              id: orderId,
+              rating_category: 'Order',
+              value: ratingForStore
+            }
+          }
+        ]
+      }
+      const ratingResponse = await axios.post(`${apiUrl}/rating`, ratingPayload)
+      console.log(ratingResponse)
+      if (ratingResponse.data.data.length > 0) {
+        dispatch(
+          feedbackActions.setToastData({
+            toastData: {
+              message: 'Success',
+              display: true,
+              type: 'success',
+              description: 'Thank you for your rating! '
+            }
+          })
+        )
+        router.push('/')
+      }
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   // if (!statusResponse || statusResponse.length === 0) {
   //   return <></>
   // }
 
-  // if (isLoadingForRating) {
-  //   return (
-  //     <Box
-  //       display={'grid'}
-  //       height={'calc(100vh - 300px)'}
-  //       alignContent={'center'}
-  //     >
-  //       <LoaderWithMessage
-  //         loadingText={t.pleaseWait}
-  //         loadingSubText={t.rateOrderLoaderSubText}
-  //       />
-  //     </Box>
-  //   )
-  // }
+  if (isLoadingForRating) {
+    return (
+      <Box
+        display={'grid'}
+        height={'calc(100vh - 300px)'}
+        alignContent={'center'}
+      >
+        <LoaderWithMessage
+          loadingText={t.pleaseWait}
+          loadingSubText={t.rateOrderLoaderSubText}
+        />
+      </Box>
+    )
+  }
 
   return (
     <Box
@@ -174,10 +176,7 @@ const Feedback = () => {
               dataTest={testIds.feedback_submitReview}
               className="checkout_btn "
               disabled={!ratingForStore}
-              handleClick={
-                () => {}
-                // handleSubmitReview(statusResponse)
-              }
+              handleClick={() => handleSubmitReview()}
             />
             <BecknButton
               children="Skip for Now"
