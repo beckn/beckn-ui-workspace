@@ -79,13 +79,13 @@ const Map: React.FC<MapProps> = (props: MapProps) => {
       <GoogleMap
         options={mapOptions}
         zoom={16}
-        center={driverCurrentLocation ? formatCoords(driverCurrentLocation) : formatCoords(origin)}
+        center={driverCurrentLocation.latitude !== 0 ? formatCoords(driverCurrentLocation) : formatCoords(origin)}
         mapTypeId={google.maps.MapTypeId.ROADMAP}
         mapContainerStyle={{ maxHeight: '100vh', height: '100vh' }}
       >
         {!rideSearchInProgress && (
           <MarkerF
-            position={driverCurrentLocation ? formatCoords(driverCurrentLocation) : formatCoords(origin)}
+            position={driverCurrentLocation.latitude !== 0 ? formatCoords(driverCurrentLocation) : formatCoords(origin)}
             icon={{
               url: './images/marker.svg',
               scaledSize: new window.google.maps.Size(100, 100),
