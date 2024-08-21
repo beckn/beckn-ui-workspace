@@ -15,6 +15,9 @@ import axios from '@services/axios'
 import { v4 as uuidv4 } from 'uuid'
 import { formatGeoLocationDetails } from '@utils/geoLocation-utils'
 import { setDriverCurrentLocation } from '@store/cabService-slice'
+import { RIDE_STATUS_CODE } from '@utils/general'
+import { useRouter } from 'next/router'
+import { setDropOffLocation, setPickUpLocation } from '@store/user-slice'
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
@@ -26,6 +29,7 @@ interface RideDetailsContainerProps {
 const RideDetailsContainer: React.FC<RideDetailsContainerProps> = ({ handleCancelRide, handleContactSupport }) => {
   const [openAlert, setOpenAlert] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [rideStartedAlert, setRideStartedAlert] = useState<boolean>(false)
 
   const { pickup, dropoff } = useSelector((state: UserGeoLocationRootState) => state.userInfo)
   const [rideDetails, setRideDetails] = useState<RideDetailsProps | null>(null)
@@ -33,6 +37,7 @@ const RideDetailsContainer: React.FC<RideDetailsContainerProps> = ({ handleCance
 
   const dispatch = useDispatch()
   const { t } = useLanguage()
+  const router = useRouter()
 
   useEffect(() => {
     if (confirmResponse.length) {
@@ -80,12 +85,31 @@ const RideDetailsContainer: React.FC<RideDetailsContainerProps> = ({ handleCance
         .post(`${apiUrl}/status`, payload)
         .then(async res => {
           const { stops, state } = res.data.data[0].message.order.fulfillments[0]
-          stops.forEach((element: any) => {
-            if (element.type === 'start') {
-              const locationDetails = formatGeoLocationDetails('', element.location.gps)
-              dispatch(setDriverCurrentLocation(locationDetails.geoLocation))
-            }
-          })
+          if (state?.descriptor?.short_desc === RIDE_STATUS_CODE.RIDE_STARTED) {
+            setRideStartedAlert(true)
+            dispatch(
+              feedbackActions.setToastData({
+                toastData: {
+                  message: 'Info',
+                  display: true,
+                  type: 'info',
+                  description: 'Ride Started.'
+                }
+              })
+            )
+          }
+          if (state?.descriptor?.short_desc === RIDE_STATUS_CODE.RIDE_COMPLETED) {
+            dispatch(setDriverCurrentLocation(dropoff.geoLocation))
+            dispatch(setPickUpLocation({ address: '', geoLocation: { latitude: 0, longitude: 0 } }))
+            dispatch(setDropOffLocation({ address: '', geoLocation: { latitude: 0, longitude: 0 } }))
+            router.push('/feedback')
+          }
+          // stops.forEach((element: any) => {
+          //   if (element.type === 'start') {
+          //     const locationDetails = formatGeoLocationDetails('', element.location.gps)
+          //     dispatch(setDriverCurrentLocation(locationDetails.geoLocation))
+          //   }
+          // })
         })
         .catch(e => {
           console.error(e)
@@ -112,6 +136,7 @@ const RideDetailsContainer: React.FC<RideDetailsContainerProps> = ({ handleCance
 
   return (
     <>
+      {/* {rideStartedAlert && <Box>{'Ride Started'}</Box>} */}
       {isLoading ? (
         <Box
           display={'flex'}

@@ -106,13 +106,13 @@ export const getInitPayload = async (
           {
             type: 'start',
             location: {
-              gps: `${pickup.geoLocation.latitude},${pickup.geoLocation.longitude}`
+              gps: `${pickup.geoLocation.latitude}, ${pickup.geoLocation.longitude}`
             }
           },
           {
             type: 'end',
             location: {
-              gps: `${dropoff.geoLocation.latitude},${dropoff.geoLocation.longitude}`
+              gps: `${dropoff.geoLocation.latitude}, ${dropoff.geoLocation.longitude}`
             }
           }
         ]
@@ -136,10 +136,15 @@ export const getInitPayload = async (
 }
 
 export const getConfirmPayload = (initResponse: InitResponseModel) => {
-  const { context, message } = initResponse
+  const { context: initContext, message } = initResponse
   const {
     order: { items, provider, fulfillments, billing }
   } = message
+
+  const context = {
+    ...initContext,
+    action: 'confirm'
+  }
 
   const resultData: InitSingleData[] = []
   const orders: InitOrder[] = []
@@ -165,7 +170,9 @@ export const getConfirmPayload = (initResponse: InitResponseModel) => {
   })
 
   resultData.push({
-    context,
+    context: {
+      ...context
+    },
     message: { orders }
   })
 

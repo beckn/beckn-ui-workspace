@@ -5,6 +5,7 @@ import { IGeoLocationSearchPageRootState, useGeolocation } from '@beckn-ui/commo
 import { setPickUpLocation, setDropOffLocation } from '@store/user-slice'
 import { UserGeoLocationRootState } from '@lib/types/user'
 import BottomModalRenderer from '@components/bottomModalRenderer/bottomModalRenderer'
+import { useRouter } from 'next/router'
 
 const Homepage = () => {
   const MapWithNoSSR: any = dynamic(() => import('../components/Map'), { ssr: false })
@@ -17,12 +18,20 @@ const Homepage = () => {
   } = useSelector((state: IGeoLocationSearchPageRootState) => state.geoLocationSearchPageUI)
 
   const dispatch = useDispatch()
+  const router = useRouter()
 
   const { pickup, dropoff } = useSelector((state: UserGeoLocationRootState) => state.userInfo)
 
   const apiKeyForGoogle = process.env.NEXT_PUBLIC_GOOGLE_API_KEY
 
   const { currentAddress, coordinates } = useGeolocation(apiKeyForGoogle as string)
+
+  useEffect(() => {
+    const experienceType = router.query?.experienceType
+    if (experienceType) {
+      localStorage.setItem('experienceType', experienceType.toString())
+    }
+  }, [])
 
   useEffect(() => {
     if (originGeoAddress && originGeoLatLong) {
