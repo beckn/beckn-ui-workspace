@@ -45,7 +45,7 @@ const PaymentDetailsCard: React.FC<PaymentDetailsCardProps> = ({ t, paymentMetho
             <CardBody padding={'0 20px 15px 20px'}>
               {methods.map((method, index) => {
                 const id = `${category}_${index}`
-                const isDisabled = category !== 'Other'
+                const isDisabled = method.disabled
                 return (
                   <Flex
                     key={id}
