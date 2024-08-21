@@ -1,8 +1,13 @@
-import { feedbackActions, GeoLocationType, toggleLocationSearchPageVisibility } from '@beckn-ui/common'
+import {
+  GeoLocationType,
+  PickUpDropOffModel,
+  feedbackActions,
+  toggleLocationSearchPageVisibility
+} from '@beckn-ui/common'
 import { LoaderWithMessage } from '@beckn-ui/molecules'
 import DropOffChangeAlertModal from '@components/dropOffChangeAlertModal/dropOffChangeAlertModal'
 import { useLanguage } from '@hooks/useLanguage'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import RideDetails from './RideDetails'
 import { useSelector } from 'react-redux'
@@ -55,6 +60,68 @@ const RideDetailsContainer: React.FC<RideDetailsContainerProps> = ({ handleCance
       setIsLoading(false)
     }
   }, [confirmResponse])
+
+  // useEffect( () => {
+  //     handleUpdate()
+  //   }, [dropoff]);
+
+  const handleUpdate = async () => {
+    setIsLoading(true)
+    if (confirmResponse && confirmResponse.length > 0) {
+      const { domain, bpp_id, bpp_uri, transaction_id } = confirmResponse[0].context
+      const orderId = confirmResponse[0].message.orderId
+      const dropOffGps = `${dropoff.geoLocation.latitude},${dropoff.geoLocation.longitude}`
+      const pickUpGps = `${pickup.geoLocation.latitude},${pickup.geoLocation.longitude}`
+      console.log('Dropoff coordinates: ', dropOffGps)
+      const updateRequestPayload = {
+        data: [
+          {
+            context: {
+              domain,
+              bpp_id,
+              bpp_uri,
+              transaction_id
+            },
+            orderId,
+            updateDetails: {
+              updateTarget: 'order.fulfillments[0].stops[1]',
+              fulfillments: [
+                {
+                  stops: [
+                    {
+                      location: {
+                        gps: pickUpGps
+                      }
+                    },
+                    {
+                      location: {
+                        gps: dropOffGps
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+      console.log('Update req payload: ', updateRequestPayload)
+      const updateResponse = await axios.post(`${apiUrl}/update`, updateRequestPayload)
+      if (updateResponse.data.data.length > 0) {
+        dispatch(
+          feedbackActions.setToastData({
+            toastData: {
+              message: t.success,
+              display: true,
+              type: 'success',
+              description: t.destinationUpdatedSuccessfully
+            }
+          })
+        )
+        setIsLoading(false)
+      }
+    }
+  }
 
   const handleAlertSubmit = (addressType: GeoLocationType) => {
     dispatch(toggleLocationSearchPageVisibility({ visible: true, addressType }))

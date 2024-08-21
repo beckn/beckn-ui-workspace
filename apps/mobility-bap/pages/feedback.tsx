@@ -22,7 +22,7 @@ const Feedback = () => {
   const [feedback, setFeedback] = useState('')
   const [isLoadingForRating, setIsLoadingForRating] = useState(false)
   // const statusResponse = useSelector((state: StatusRootState) => state.status.statusResponse)
-  const selectResponse = useSelector((state: SelectRideRootState) => state.selectRide.selectResponse)
+  const confirmResponse = useSelector((state: SelectRideRootState) => state.selectRide.confirmResponse)
   const { isDesktop } = useResponsive()
 
   const dispatch = useDispatch()
@@ -32,8 +32,8 @@ const Feedback = () => {
   const handleSubmitReview = async () => {
     try {
       setIsLoadingForRating(true)
-      const { domain, bpp_id, bpp_uri, transaction_id } = selectResponse[0].context
-      const orderId = selectResponse[0].message.order.provider.id
+      const { domain, bpp_id, bpp_uri, transaction_id } = confirmResponse[0].context
+      const orderId = confirmResponse[0].message.orderId
       const ratingPayload = {
         data: [
           {
