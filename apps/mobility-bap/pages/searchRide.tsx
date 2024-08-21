@@ -8,6 +8,7 @@ import { discoveryActions } from '@store/discovery-slice'
 import { UserGeoLocationRootState } from '@lib/types/user'
 import { useLanguage } from '@hooks/useLanguage'
 import { CabServiceDetailsRootState } from '@lib/types/cabService'
+import { StarIcon } from '@chakra-ui/icons'
 
 const SearchRide = () => {
   const theme = useTheme()
@@ -114,10 +115,22 @@ const SearchRide = () => {
                   text={provider.providerName}
                   variant="subTitleSemibold"
                 />
-                <Typography
-                  text={provider.rating}
-                  variant="subTitleSemibold"
-                />
+                <Flex
+                  alignItems={'center'}
+                  gap={'4px'}
+                  mt={'5px'}
+                >
+                  <Typography
+                    text={provider.rating}
+                    variant="subTitleSemibold"
+                  />
+                  <StarIcon
+                    color={'#FADB14'}
+                    w={'12px'}
+                    h={'12px'}
+                    mb={'2px'}
+                  />
+                </Flex>
               </Box>
             </Flex>
             <Box

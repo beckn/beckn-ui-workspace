@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Menu, MenuButton, MenuItem, MenuList, useTheme } from '@chakra-ui/react'
+import { Box, Button, Flex, Menu, MenuButton, MenuItem, MenuList, useTheme } from '@chakra-ui/react'
 import { ChevronDownIcon } from '@chakra-ui/icons'
 
 import { CustomDropDownProps } from './SearchRideForm.types'
@@ -22,17 +22,18 @@ const CustomDropdown: React.FC<CustomDropDownProps> = ({ items, value, onChange 
         fontSize={'12px'}
         fontWeight={500}
         iconSpacing={'200px'}
+        pointerEvents={'none'}
         as={Button}
-        rightIcon={
-          <ChevronDownIcon
-            w={'30px'}
-            h={'20px'}
-          />
-        }
+        // rightIcon={
+        //   <ChevronDownIcon
+        //     w={'30px'}
+        //     h={'20px'}
+        //   />
+        // }
       >
-        {items.find(item => item.value === value)?.label}
+        <Flex ml="10px">{items.find(item => item.value === value)?.label}</Flex>
       </MenuButton>
-      <MenuList position={'absolute'}>
+      {/* <MenuList position={'absolute'}>
         {items.map(item => {
           return (
             <MenuItem
@@ -43,7 +44,7 @@ const CustomDropdown: React.FC<CustomDropDownProps> = ({ items, value, onChange 
             </MenuItem>
           )
         })}
-      </MenuList>
+      </MenuList> */}
     </Menu>
   )
 }

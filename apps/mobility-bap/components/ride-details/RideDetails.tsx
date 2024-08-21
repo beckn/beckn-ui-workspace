@@ -63,7 +63,7 @@ const RideDetails: React.FC<RideDetailsProps> = ({
             color="#37474F"
           />
           <Typography
-            text={fare.toString()}
+            text={`${t.currencySymbol}${fare.toString()}`}
             fontSize="14px"
             fontWeight="700"
           />
@@ -98,12 +98,12 @@ const RideDetails: React.FC<RideDetailsProps> = ({
                 fontSize="12px"
               />
             </Flex>
-            <Typography
+            {/* <Typography
               text={'Change'}
               fontWeight="700"
               fontSize="12px"
               color={theme.colors.primary['100']}
-            />
+            /> */}
           </Flex>
         </Flex>
       </Flex>

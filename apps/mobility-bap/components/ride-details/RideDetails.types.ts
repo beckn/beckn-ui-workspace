@@ -22,7 +22,6 @@ export interface RideDetailsCardProps {
   name: string
   rating: string
   contact: string
-  onClick: () => void
 }
 
 export interface RideDetailsProps {

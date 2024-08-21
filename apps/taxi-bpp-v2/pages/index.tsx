@@ -5,6 +5,7 @@ import {
   Coordinate,
   feedbackActions,
   IGeoLocationSearchPageRootState,
+  PickUpDropOffModel,
   setGeoAddressAndLatLong,
   TopSheet,
   useGeolocation
@@ -109,10 +110,10 @@ const Homepage = () => {
 
   useEffect(() => {
     getAllRideRequests()
-    const intervalId = setInterval(getAllRideRequests, 15000)
+    const intervalId = setInterval(getAllRideRequests, 10000)
 
     return () => clearInterval(intervalId)
-  }, [isOnline])
+  }, [isOnline, driverStatus])
 
   const showNextRideRequest = (rideRequests: RideDetailsModel[]) => {
     if (rideRequests.length > 0) {
@@ -263,6 +264,8 @@ const Homepage = () => {
                 order_id: data.orderId
               })
               const parsedData = parseRideSummaryData(endRideData)
+              if (!parsedData.source) parsedData.source = data.source
+              if (!parsedData.destination) parsedData.destination = data.destination
 
               await updateDriverLocation({
                 location: {
@@ -364,22 +367,28 @@ const Homepage = () => {
   } = useGeolocation(apiKeyForGoogle as string)
 
   useEffect(() => {
+    let locationDetails: PickUpDropOffModel | null = null
     if (originGeoAddress && originGeoLatLong) {
       const latLong = originGeoLatLong.split(',')
 
-      const locationDetails = {
+      locationDetails = {
         address: originGeoAddress,
         geoLocation: { latitude: Number(latLong[0]), longitude: Number(latLong[1]) }
       }
-
-      dispatch(updateLocation(locationDetails))
     } else if (currentAddress && coordinates?.latitude && coordinates?.longitude) {
-      const locationDetails = {
+      locationDetails = {
         address: currentAddress,
         geoLocation: coordinates
       }
-
+    }
+    if (locationDetails) {
       dispatch(updateLocation(locationDetails))
+      updateDriverLocation({
+        location: {
+          lat: locationDetails.geoLocation.latitude.toString()!,
+          long: locationDetails.geoLocation.longitude.toString()!
+        }
+      })
     }
   }, [currentAddress, coordinates, originGeoAddress, originGeoLatLong])
 

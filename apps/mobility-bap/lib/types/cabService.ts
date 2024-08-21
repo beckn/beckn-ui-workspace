@@ -1,4 +1,4 @@
-import { Coordinate } from '@beckn-ui/common'
+import { Coordinate, PickUpDropOffModel } from '@beckn-ui/common'
 import { ParsedCabDataModel } from '@utils/cabDetails'
 import { CancelTokenSource } from 'axios'
 
@@ -7,7 +7,6 @@ export interface CabServiceDetails {
   rideSearchInProgress: boolean
   cabServiceProviders: ParsedCabDataModel[]
   totalCabs: number
-  driverCurrentLocation: Coordinate
 }
 
 export interface CabServiceDetailsRootState {

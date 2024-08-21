@@ -35,10 +35,29 @@ const geoLocationSearchPage = createSlice({
         state.destinationGeoAddress = action.payload.geoAddress
         state.destinationGeoLatLong = action.payload.geoLatLong
       }
+    },
+    setSource(
+      state,
+      action: PayloadAction<{
+        geoAddress: string
+        geoLatLong: string
+      }>
+    ) {
+      state.geoAddress = action.payload.geoAddress
+      state.geoLatLong = action.payload.geoLatLong
+    },
+    clearSource(state) {
+      state.geoAddress = ''
+      state.geoLatLong = ''
+    },
+    clearDestination(state) {
+      state.destinationGeoAddress = ''
+      state.destinationGeoLatLong = ''
     }
   }
 })
 
-export const { toggleLocationSearchPageVisibility, setGeoAddressAndLatLong } = geoLocationSearchPage.actions
+export const { toggleLocationSearchPageVisibility, setGeoAddressAndLatLong, setSource, clearSource, clearDestination } =
+  geoLocationSearchPage.actions
 
 export default geoLocationSearchPage.reducer

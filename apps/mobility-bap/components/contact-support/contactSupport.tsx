@@ -13,7 +13,11 @@ import { isEmpty } from '@beckn-ui/common'
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
-const contactSupport = () => {
+interface ContactSupportProps {
+  handleOnClose: () => void
+}
+
+const contactSupport = ({ handleOnClose }: ContactSupportProps) => {
   const [contactDetails, setContactDetails] = useState<SupportModel | null>()
   const [isLoading, setIsLoading] = useState<boolean>(true)
 
@@ -90,7 +94,10 @@ const contactSupport = () => {
   ]
   return (
     <BottomDrawer>
-      <HeaderContent text="Contact Support" />
+      <HeaderContent
+        text="Contact Support"
+        onClose={handleOnClose}
+      />
       {!contactDetails && isLoading ? (
         <Box
           display={'flex'}

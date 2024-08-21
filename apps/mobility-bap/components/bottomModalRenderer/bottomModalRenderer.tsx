@@ -20,9 +20,6 @@ type PageOrModalType =
   | 'RIDE_FORM'
   | 'PAYMENT'
   | 'DRIVER_DETAILS'
-  | 'RIDER_DETAILS'
-  | 'CONTACT_SOPPORT'
-  | 'CANCEL_RIDE'
   | 'TRAFFIC_ALERT_MODAL'
 
 const BottomModalRenderer = () => {
@@ -66,19 +63,6 @@ const BottomModalRenderer = () => {
     }
   }
 
-  const handleOnRideStart = useCallback(() => {
-    console.log('confirmResponse--> ', confirmResponse)
-    if (confirmResponse.length > 0) {
-      const orderId = confirmResponse[0].message.orderId
-      const bppId = confirmResponse[0].context.bpp_id
-      const bppUri = confirmResponse[0].context.bpp_uri
-
-      const orderObjectForStatusCall = { bppId: bppId, bppUri: bppUri, orderId: orderId }
-      localStorage.setItem('selectedOrder', JSON.stringify(orderObjectForStatusCall))
-      setDrawerState('RIDER_DETAILS')
-    }
-  }, [confirmResponse])
-
   const renderDrawerContent = () => {
     switch (drawerState) {
       case 'PICK_UP_DROP_OFF':
@@ -111,18 +95,7 @@ const BottomModalRenderer = () => {
         handlePayment()
         return null
       case 'DRIVER_DETAILS':
-        return <RideDetailsCardContainer handleOnClick={handleOnRideStart} />
-      case 'RIDER_DETAILS':
-        return (
-          <RideDetailsContainer
-            handleCancelRide={() => setDrawerState('CANCEL_RIDE')}
-            handleContactSupport={() => setDrawerState('CONTACT_SOPPORT')}
-          />
-        )
-      case 'CONTACT_SOPPORT':
-        return <ContactSupport />
-      case 'CANCEL_RIDE':
-        return <CancelRide handleOnClose={() => setDrawerState('RIDER_DETAILS')} />
+        return <RideDetailsCardContainer handleOnDecline={() => setDrawerState('PICK_UP_DROP_OFF')} />
       default:
         return <></>
     }

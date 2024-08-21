@@ -23,6 +23,11 @@ const en: { [key: string]: string } = {
   writeExperience: 'Write about your experience..',
   pleaseWait: 'Please wait!',
   fetchingTrackLoaderSubtext: 'While we fetch for support details',
-  destinationUpdatedSuccessfully: 'Destination updated successfully'
+  destinationUpdatedSuccessfully: 'Destination updated successfully',
+  errorName: 'Name is required',
+  errorName2: 'Name can only contain letters and spaces',
+  errorName3: 'Name must contain at least 3 characters',
+  errorNumber: 'Mobile Number is required',
+  errorNumber2: 'Invalid Mobile Number'
 }
 export default en

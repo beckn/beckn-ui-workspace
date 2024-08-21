@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/router'
 import { Box, Divider, Flex, Image, useTheme } from '@chakra-ui/react'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
@@ -56,7 +56,6 @@ const SearchRideForm: React.FC<SearchRideFormProps> = () => {
     rideTimeOptions: 'ridenow',
     riderOptions: 'myself'
   })
-  const [isFormFilled, setIsFormFilled] = useState(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const { t } = useLanguage()
@@ -92,7 +91,6 @@ const SearchRideForm: React.FC<SearchRideFormProps> = () => {
       ...prevErrors,
       [name]: t[`${errors[name]}`] || ''
     }))
-    setIsFormFilled(updatedFormData.name.trim() !== '' && updatedFormData.mobileNumber.trim() !== '')
   }
   const handleDropdownChange = (newValue: string, tag: string) => {
     setDropDownOptions(prev => ({
@@ -130,6 +128,16 @@ const SearchRideForm: React.FC<SearchRideFormProps> = () => {
       setIsLoading(false)
     }
   }
+
+  const isFormFilled = useMemo(() => {
+    const { ...restFormData } = formData
+    const { ...restFormErrors } = formErrors
+
+    return (
+      Object.values(restFormData).every(value => value !== '') &&
+      Object.values(restFormErrors).every(value => value === '')
+    )
+  }, [formData, formErrors])
 
   return (
     <>

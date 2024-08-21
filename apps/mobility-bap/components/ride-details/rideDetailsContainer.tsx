@@ -1,13 +1,8 @@
-import {
-  GeoLocationType,
-  PickUpDropOffModel,
-  feedbackActions,
-  toggleLocationSearchPageVisibility
-} from '@beckn-ui/common'
+import { GeoLocationType, feedbackActions, toggleLocationSearchPageVisibility } from '@beckn-ui/common'
 import { LoaderWithMessage } from '@beckn-ui/molecules'
 import DropOffChangeAlertModal from '@components/dropOffChangeAlertModal/dropOffChangeAlertModal'
 import { useLanguage } from '@hooks/useLanguage'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import RideDetails from './RideDetails'
 import { useSelector } from 'react-redux'
@@ -15,14 +10,8 @@ import { UserGeoLocationRootState } from '@lib/types/user'
 import { RideDetailsProps } from '@lib/types/cabService'
 import { SelectRideRootState } from '@store/selectRide-slice'
 import { Box } from '@chakra-ui/react'
-import { DOMAIN } from '@lib/config'
 import axios from '@services/axios'
-import { v4 as uuidv4 } from 'uuid'
-import { formatGeoLocationDetails } from '@utils/geoLocation-utils'
-import { setDriverCurrentLocation } from '@store/cabService-slice'
-import { RIDE_STATUS_CODE } from '@utils/general'
 import { useRouter } from 'next/router'
-import { setDropOffLocation, setPickUpLocation } from '@store/user-slice'
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
@@ -126,80 +115,6 @@ const RideDetailsContainer: React.FC<RideDetailsContainerProps> = ({ handleCance
   const handleAlertSubmit = (addressType: GeoLocationType) => {
     dispatch(toggleLocationSearchPageVisibility({ visible: true, addressType }))
   }
-
-  const getRideStatus = () => {
-    const selectedOrderData = JSON.parse(localStorage.getItem('selectedOrder') as string)
-    if (selectedOrderData) {
-      const { bppId, bppUri, orderId } = selectedOrderData
-      const payload = {
-        data: [
-          {
-            context: {
-              transaction_id: uuidv4(),
-              bpp_id: bppId,
-              bpp_uri: bppUri,
-              domain: DOMAIN
-            },
-            message: {
-              order_id: orderId,
-              orderId: orderId
-            }
-          }
-        ]
-      }
-
-      axios
-        .post(`${apiUrl}/status`, payload)
-        .then(async res => {
-          const { stops, state } = res.data.data[0].message.order.fulfillments[0]
-          if (state?.descriptor?.short_desc === RIDE_STATUS_CODE.RIDE_STARTED) {
-            setRideStartedAlert(true)
-            dispatch(
-              feedbackActions.setToastData({
-                toastData: {
-                  message: 'Info',
-                  display: true,
-                  type: 'info',
-                  description: 'Ride Started.'
-                }
-              })
-            )
-          }
-          if (state?.descriptor?.short_desc === RIDE_STATUS_CODE.RIDE_COMPLETED) {
-            dispatch(setDriverCurrentLocation(dropoff.geoLocation))
-            dispatch(setPickUpLocation({ address: '', geoLocation: { latitude: 0, longitude: 0 } }))
-            dispatch(setDropOffLocation({ address: '', geoLocation: { latitude: 0, longitude: 0 } }))
-            router.push('/feedback')
-          }
-          // stops.forEach((element: any) => {
-          //   if (element.type === 'start') {
-          //     const locationDetails = formatGeoLocationDetails('', element.location.gps)
-          //     dispatch(setDriverCurrentLocation(locationDetails.geoLocation))
-          //   }
-          // })
-        })
-        .catch(e => {
-          console.error(e)
-          dispatch(
-            feedbackActions.setToastData({
-              toastData: {
-                message: 'Error',
-                display: true,
-                type: 'error',
-                description: 'Something went wrong, please try again'
-              }
-            })
-          )
-        })
-    }
-  }
-
-  useEffect(() => {
-    getRideStatus()
-    const intervalId = setInterval(getRideStatus, 5000)
-
-    return () => clearInterval(intervalId)
-  }, [])
 
   return (
     <>

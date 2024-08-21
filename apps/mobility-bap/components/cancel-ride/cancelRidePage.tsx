@@ -71,6 +71,7 @@ const CancelRide = ({ handleOnClose }: { handleOnClose: () => void }) => {
       <Box mt={'10px'}>
         <Button
           text={t.cancelRide}
+          disabled={!selectedReason?.id}
           handleClick={onCancel}
         />
       </Box>
