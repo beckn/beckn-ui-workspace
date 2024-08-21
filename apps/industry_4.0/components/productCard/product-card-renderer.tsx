@@ -126,6 +126,7 @@ const ProductCardRenderer = (data: any) => {
             fontSize={'15px'}
             fontWeight={600}
             color={'#0560FA'}
+            cursor={'pointer'}
           >
             {t.viewDetails}
           </Text>

@@ -34,6 +34,7 @@ const ShippingSection: React.FC<ShippingSectionProps<FormField[]>> = ({
   const { isOpen, onClose, onOpen } = useDisclosure()
   // const [isChecked, setIsChecked] = useState<boolean>(true)
   const { isDesktop, isTablet } = useResponsive()
+  console.log(isChecked)
 
   return (
     <Box data-test={dataTest}>

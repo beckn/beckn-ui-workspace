@@ -88,6 +88,7 @@ const TopSheet: React.FC<TopSheetPropsModel> = props => {
                       {renderAddresstext}
                     </Text>
                     <Image
+                      cursor={'pointer'}
                       onClick={onOpen}
                       pt={'4px'}
                       src="/images/downArrow.svg"
