@@ -108,7 +108,7 @@ const SearchRideForm: React.FC<SearchRideFormProps> = () => {
       const contactDetails = {
         name: formData.name,
         phone: formData.mobileNumber,
-        email: formData.name?.replace(' ', '')?.toLowerCase() + '@example.com'
+        email: formData.name.replace(/\s+/g, '') + '@example.com'
       }
       await getInitPayload(contactDetails, selectedRide, transactionId, DOMAIN).then(res => {
         return initialize(res)
