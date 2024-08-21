@@ -22,6 +22,7 @@ const en: { [key: string]: string } = {
   addCommentsHere: 'Add your comments here',
   writeExperience: 'Write about your experience..',
   pleaseWait: 'Please wait!',
-  fetchingTrackLoaderSubtext: 'While we fetch for support details'
+  fetchingTrackLoaderSubtext: 'While we fetch for support details',
+  destinationUpdatedSuccessfully: 'Destination updated successfully'
 }
 export default en

@@ -118,7 +118,7 @@ const RideDetails: React.FC<RideDetailsProps> = ({
       <TripLocation
         pickupLocation={{ address: pickUp.address, geoLocation: { latitude: 0, longitude: 0 } }}
         dropLocation={{ address: dropOff.address, geoLocation: { latitude: 0, longitude: 0 } }}
-        handleEditDropoff={handleEditDropoff}
+        //handleEditDropoff={handleEditDropoff}
       />
       <Divider
         mb="30px"
