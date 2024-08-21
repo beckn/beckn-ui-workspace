@@ -133,6 +133,7 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
           <Flex columnGap={'10px'}>
             {!homeIconBlackList.includes(router.pathname) && (
               <Image
+                cursor="pointer"
                 w={'20px'}
                 h={'20px'}
                 onClick={() => {
@@ -148,6 +149,7 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
 
             {menuIconWhiteList.includes(router.pathname) && (
               <Image
+                cursor="pointer"
                 onClick={() => setMenuModalOpen(true)}
                 className="block"
                 src="/images/threeDots.svg"
@@ -170,6 +172,7 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
             setMenuModalOpen(false)
           }}
           className={styles.top_header_modal}
+          cursor="pointer"
         >
           <Image
             src="/images/userProfile.svg"
@@ -183,6 +186,7 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
             setMenuModalOpen(false)
           }}
           className={styles.top_header_modal}
+          cursor="pointer"
         >
           <Image
             src="/images/orderHistory.svg"
@@ -197,6 +201,7 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
             setMenuModalOpen(false)
           }}
           className={styles.top_header_modal}
+          cursor="pointer"
         >
           <Image
             src="/images/logOutIcon.svg"
@@ -232,7 +237,10 @@ const BottomHeader = () => {
         <Box className={styles.bottom_header_innr}>
           <Box className={styles.bottom_header_backIcon}>
             {!backIconList.includes(router.pathname) && (
-              <Box onClick={() => router.back()}>
+              <Box
+                onClick={() => router.back()}
+                cursor="pointer"
+              >
                 <Image
                   src="/images/Back.svg"
                   alt="Back icon"
@@ -243,6 +251,7 @@ const BottomHeader = () => {
           {getHeaderTitleForPage(optionTags?.name, optionTags?.logo, router.pathname, locale)}
           {orderIconList.includes(router.pathname) && (
             <Image
+              cursor="pointer"
               onClick={() => setOrderModalOpen(true)}
               src="/images/orderDetailsIcon.svg"
               alt="order icon"
@@ -251,6 +260,7 @@ const BottomHeader = () => {
           )}
           {invoiceDownloadIcon.includes(router.pathname) && (
             <Image
+              cursor="pointer"
               onClick={() => setInvoiceModalOpen(true)}
               src="/images/downloadInvoice.svg"
               alt="invoice icon"
@@ -270,6 +280,7 @@ const BottomHeader = () => {
             setOrderModalOpen(false)
           }}
           className={styles.top_header_modal}
+          cursor="pointer"
         >
           <Image
             src="/images/invoiceDetails.svg"

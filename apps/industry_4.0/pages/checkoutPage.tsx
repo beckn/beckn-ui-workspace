@@ -45,6 +45,7 @@ const CheckoutPage = () => {
   const color = theme.colors.primary[100]
 
   const [isBilling, setIsBilling] = useState(true)
+  const [isChecked, setIsChecked] = useState(true)
 
   const router = useRouter()
 
@@ -161,7 +162,7 @@ const CheckoutPage = () => {
           color={color}
           shippingDetails={{
             name: detailsForm.name,
-            location: detailsForm.address,
+            location: detailsForm.address!,
             number: detailsForm.mobileNumber,
             title: t.shipping
           }}
@@ -209,12 +210,16 @@ const CheckoutPage = () => {
           addButtonImage="./images/addShippingBtn.svg"
           sectionTitle="Billing"
           formTitle="Add Billing Details"
-          isBilling={isBilling}
           showDetails={showBillingDetails}
+          isBilling={isBilling}
+          isChecked={isChecked}
+          onCheckChange={() => {
+            setIsChecked(false)
+          }}
           color={color}
           shippingDetails={{
             name: billingFormData.name,
-            location: billingFormData.address,
+            location: billingFormData.address!,
             number: billingFormData.mobileNumber,
             title: t.billing
           }}
@@ -240,6 +245,7 @@ const CheckoutPage = () => {
                     setIsLoadingForInit(false)
                     setShowBillingDetails(true)
                     setIsBilling(false)
+                    setIsChecked(true)
                   })
                   .catch(e => {
                     setError(e.message)
@@ -251,7 +257,7 @@ const CheckoutPage = () => {
               }
             },
             submitButton: { text: 'Save Billing Details' },
-            values: detailsForm,
+            values: billingFormData,
             onChange: data => () => {
               return
             }

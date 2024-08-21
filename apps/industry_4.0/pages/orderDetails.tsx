@@ -611,6 +611,7 @@ const OrderDetails = () => {
                 fontWeight="600"
               />
               <Image
+                cursor={'pointer'}
                 onClick={handleOrderDotsClick}
                 src="/images/threeDots.svg"
                 alt="threeDots"
@@ -688,6 +689,7 @@ const OrderDetails = () => {
           >
             {menuItems(data.trackUrl as string).map((menuItem, index) => (
               <Flex
+                cursor={'pointer'}
                 key={index}
                 columnGap="10px"
                 alignItems="center"
