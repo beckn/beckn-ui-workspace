@@ -92,7 +92,7 @@ const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
               {
                 type: 'text',
                 name: 'email',
-                label: t.email,
+                label: t.enterEmailID,
                 value: formData.email,
                 handleChange: handleInputChange,
                 error: formErrors.email,
@@ -101,7 +101,7 @@ const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
               {
                 type: 'password',
                 name: 'password',
-                label: t.password,
+                label: t.enterPassword,
                 value: formData.password,
                 handleChange: handleInputChange,
                 error: formErrors.password,

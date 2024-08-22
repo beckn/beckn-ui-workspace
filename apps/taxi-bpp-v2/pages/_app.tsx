@@ -21,7 +21,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     <BecknProvider
       theme={{
         color: {
-          primary: '#B1D6F7',
+          primary: '#ABD4FA',
           secondary: '#D22323',
           textPrimary: '#1A202C',
           textSecondary: '#37474F'

@@ -78,8 +78,10 @@ const QuarantineZone = () => {
             }
           })
           .then(res => {
+            console.log('policy applied--> ', res)
             if (res.data.status === 'applied') {
               setIsApplied(true)
+              setOpenAlert(true)
             }
           })
       } catch (err) {
