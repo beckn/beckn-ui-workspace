@@ -17,7 +17,7 @@ import { DiscoveryRootState } from '@store/discovery-slice'
 import { DOMAIN } from '@lib/config'
 import { feedbackActions } from '@beckn-ui/common'
 import { useSelectMutation } from '@beckn-ui/common/src/services/select'
-import { getCurrencyValue } from '@utils/general'
+import { getCurrencyValue, getDistance } from '@utils/general'
 import { UserGeoLocationRootState } from '@lib/types/user'
 
 const optionsList: OptionsList = {
@@ -142,6 +142,11 @@ const SearchRideForm: React.FC<SearchRideFormProps> = () => {
     )
   }, [formData, formErrors])
 
+  const getTotalFare = (fare: string) => {
+    const distance = getDistance(pickup, dropoff)
+    return (Number(fare) * distance).toFixed(2)
+  }
+
   return (
     <>
       {isLoading ? (
@@ -188,7 +193,7 @@ const SearchRideForm: React.FC<SearchRideFormProps> = () => {
               </Flex>
             </Flex>
             <Typography
-              text={`${getCurrencyValue(experienceType)}${provider?.cabDetails?.[0]?.fare}`}
+              text={`${getCurrencyValue(experienceType)}${getTotalFare(provider?.cabDetails?.[0]?.fare)}`}
               fontSize="15px"
               fontWeight="700"
               color={theme.colors.primary[100]}

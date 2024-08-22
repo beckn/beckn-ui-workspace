@@ -1,3 +1,4 @@
+import { PickUpDropOffModel } from '@beckn-ui/common'
 import { currencyMap, defaultSourceLocation } from '@lib/config'
 
 const getError = (err: any) =>
@@ -55,4 +56,26 @@ export const getCurrencyValue = (experienceType: string) => {
   }
 
   return currencyMap.INR
+}
+
+export const getDistance = (sourceCoordinates: PickUpDropOffModel, destinationCoordinates: PickUpDropOffModel) => {
+  const sourceLat = (parseFloat(sourceCoordinates.geoLocation.latitude.toString()) * Math.PI) / 180
+  const sourceLong = (parseFloat(sourceCoordinates.geoLocation.longitude.toString()) * Math.PI) / 180
+  const destinatonLat = (parseFloat(destinationCoordinates.geoLocation.latitude.toString()) * Math.PI) / 180
+  const destinationLong = (parseFloat(destinationCoordinates.geoLocation.longitude.toString()) * Math.PI) / 180
+
+  let deltaLong = destinationLong - sourceLong
+  let deltaLat = destinatonLat - sourceLat
+  let a =
+    Math.pow(Math.sin(deltaLat / 2), 2) +
+    Math.cos(sourceLat) * Math.cos(destinatonLat) * Math.pow(Math.sin(deltaLong / 2), 2)
+
+  let c = 2 * Math.asin(Math.sqrt(a))
+
+  // Radius of earth in kilometers. Use 3956
+  // for miles
+  let r = 6371
+
+  // calculate the result
+  return c * r
 }

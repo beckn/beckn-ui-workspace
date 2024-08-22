@@ -1,3 +1,5 @@
+import { RideDetailsModel } from '@lib/types/mapScreen'
+
 export interface RideSummaryModalProp {
   orderId: string
   distance: string
@@ -8,12 +10,12 @@ export interface RideSummaryModalProp {
   cost: string
 }
 
-export const parseRideSummaryData = (data: any): RideSummaryModalProp => {
+export const parseRideSummaryData = (data: any, rideDetails: RideDetailsModel): RideSummaryModalProp => {
   const rideSummaryResponse = data?.data?.data
   return {
     orderId: rideSummaryResponse.order_id.id,
-    distance: rideSummaryResponse.total_distance_in_km,
-    time: formatTime(rideSummaryResponse.updatedAt),
+    distance: rideDetails.distance!,
+    time: rideDetails.time!,
     date: formatDate(rideSummaryResponse.updatedAt),
     source: rideSummaryResponse.stops[0].address,
     destination: rideSummaryResponse.stops[1].address,

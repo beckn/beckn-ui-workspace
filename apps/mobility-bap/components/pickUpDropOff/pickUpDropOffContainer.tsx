@@ -72,6 +72,18 @@ const PickUpDropOffContainer = (props: PickUpDropOffContainerProps) => {
         dispatch(setTotalCabs(totalCabs))
         dispatch(setCabResultFound(false))
         handleOnClick()
+        if (totalCabs === 0) {
+          dispatch(
+            feedbackActions.setToastData({
+              toastData: {
+                message: 'Info',
+                display: true,
+                type: 'success',
+                description: 'No ride available.'
+              }
+            })
+          )
+        }
       })
       .catch(e => {
         if (axios.isCancel(e)) {

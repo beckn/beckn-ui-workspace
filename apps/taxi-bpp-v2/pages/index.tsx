@@ -263,7 +263,7 @@ const Homepage = () => {
               const endRideData = await getRideSummary({
                 order_id: data.orderId
               })
-              const parsedData = parseRideSummaryData(endRideData)
+              const parsedData = parseRideSummaryData(endRideData, data)
               if (!parsedData.source) parsedData.source = data.source
               if (!parsedData.destination) parsedData.destination = data.destination
 

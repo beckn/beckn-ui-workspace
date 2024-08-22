@@ -9,7 +9,7 @@ import { UserGeoLocationRootState } from '@lib/types/user'
 import { useLanguage } from '@hooks/useLanguage'
 import { CabServiceDetailsRootState } from '@lib/types/cabService'
 import { StarIcon } from '@chakra-ui/icons'
-import { getCurrencyValue } from '@utils/general'
+import { getCurrencyValue, getDistance } from '@utils/general'
 
 const SearchRide = () => {
   const theme = useTheme()
@@ -45,6 +45,11 @@ const SearchRide = () => {
   //     </Box>
   //   )
   // }
+
+  const getTotalFare = (fare: string) => {
+    const distance = getDistance(pickup, dropoff)
+    return (Number(fare) * distance).toFixed(2)
+  }
 
   return (
     <Box>
@@ -164,7 +169,7 @@ const SearchRide = () => {
                           fontSize="11px"
                         />
                         <Typography
-                          text={`${getCurrencyValue(experienceType)}${cabDetail.fare}`}
+                          text={`${getCurrencyValue(experienceType)}${getTotalFare(cabDetail.fare)}`}
                           fontSize="15px"
                           color={theme.colors.primary[100]}
                         />

@@ -47,6 +47,34 @@ const getGeoLocation = (list: Stop[], type: 'start' | 'end') => {
     })[0]
 }
 
+function estimateTravelTime(distance: number, speed: number) {
+  const timeInSeconds = (distance * 1000) / speed
+  const timeInMinutes = timeInSeconds / 60
+  return parseInt(timeInMinutes.toString())
+}
+
+export const getDistance = (sourceCoordinates: PickUpDropOffModel, destinationCoordinates: PickUpDropOffModel) => {
+  const sourceLat = (parseFloat(sourceCoordinates.geoLocation.latitude.toString()) * Math.PI) / 180
+  const sourceLong = (parseFloat(sourceCoordinates.geoLocation.longitude.toString()) * Math.PI) / 180
+  const destinatonLat = (parseFloat(destinationCoordinates.geoLocation.latitude.toString()) * Math.PI) / 180
+  const destinationLong = (parseFloat(destinationCoordinates.geoLocation.longitude.toString()) * Math.PI) / 180
+
+  let deltaLong = destinationLong - sourceLong
+  let deltaLat = destinatonLat - sourceLat
+  let a =
+    Math.pow(Math.sin(deltaLat / 2), 2) +
+    Math.cos(sourceLat) * Math.cos(destinatonLat) * Math.pow(Math.sin(deltaLong / 2), 2)
+
+  let c = 2 * Math.asin(Math.sqrt(a))
+
+  // Radius of earth in kilometers. Use 3956
+  // for miles
+  let r = 6371
+
+  // calculate the result
+  return c * r
+}
+
 export const parsedNewRideDetails = async (orderList: ValidOrder[]): Promise<any[]> => {
   try {
     const results = await Promise.all(
@@ -61,14 +89,15 @@ export const parsedNewRideDetails = async (orderList: ValidOrder[]): Promise<any
         const pickupLocation: PickUpDropOffModel = await getGeoLocation(stops, 'start')
         const dropoffLocation: PickUpDropOffModel = await getGeoLocation(stops, 'end')
 
+        const distance = getDistance(pickupLocation, dropoffLocation).toFixed(2)
         return {
           orderId: id,
           source: pickupLocation.address,
           sourceGeoLocation: pickupLocation.geoLocation,
           destinationGeoLocation: dropoffLocation.geoLocation,
           destination: dropoffLocation.address,
-          distance: '5',
-          time: '5',
+          distance,
+          time: estimateTravelTime(Number(distance), 60),
           driverStatus: state_value
         }
       })

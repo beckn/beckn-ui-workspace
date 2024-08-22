@@ -32,7 +32,7 @@ const MyRides = () => {
       riderName: `${ride.customer_id.first_name} ${ride.customer_id.last_name || ''}`.trim(),
       date: new Date(ride.updatedAt).toLocaleDateString(),
       time: new Date(ride.updatedAt).toLocaleTimeString(),
-      fare: `₹${ride.fulfilment_id.service.service_fee || 0}`,
+      fare: `₹${ride.order_id.total_amount || 0}`,
       status: (rideStatusMap as any)[ride.state_value] || ''
     }
   })

@@ -101,6 +101,29 @@ const RideDetailsCardContainer: React.FC<RideDetailsCardContainerProps> = ({ han
 
             setIsLoading(false)
             setModalType('RideSummary')
+            dispatch(
+              feedbackActions.setToastData({
+                toastData: {
+                  message: 'Info',
+                  display: true,
+                  type: 'success',
+                  description: 'Ride Accepted.'
+                }
+              })
+            )
+          }
+
+          if (state?.descriptor?.short_desc === RIDE_STATUS_CODE.CAB_REACHED_PICKUP_LOCATION) {
+            dispatch(
+              feedbackActions.setToastData({
+                toastData: {
+                  message: 'Info',
+                  display: true,
+                  type: 'success',
+                  description: 'Driver reached PickUp location.'
+                }
+              })
+            )
           }
 
           if (state?.descriptor?.short_desc === RIDE_STATUS_CODE.RIDE_STARTED && alertCount.current === 0) {
@@ -127,7 +150,7 @@ const RideDetailsCardContainer: React.FC<RideDetailsCardContainerProps> = ({ han
                   message: 'Info',
                   display: true,
                   type: 'error',
-                  description: 'Driver Decline the Ride.'
+                  description: 'Driver Declined the Ride.'
                 }
               })
             )
