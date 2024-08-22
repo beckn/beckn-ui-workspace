@@ -17,6 +17,8 @@ import { DiscoveryRootState } from '@store/discovery-slice'
 import { DOMAIN } from '@lib/config'
 import { feedbackActions } from '@beckn-ui/common'
 import { useSelectMutation } from '@beckn-ui/common/src/services/select'
+import { getCurrencyValue } from '@utils/general'
+import { UserGeoLocationRootState } from '@lib/types/user'
 
 const optionsList: OptionsList = {
   rideTimeOptionsList: [
@@ -63,6 +65,7 @@ const SearchRideForm: React.FC<SearchRideFormProps> = () => {
   const router = useRouter()
   const theme = useTheme()
   const { transactionId, selectedRide } = useSelector((state: DiscoveryRootState) => state.discovery)
+  const { experienceType } = useSelector((state: UserGeoLocationRootState) => state.userInfo)
   const [initialize] = useInitMutation()
   const [fetchQuotes] = useSelectMutation()
 
@@ -185,7 +188,7 @@ const SearchRideForm: React.FC<SearchRideFormProps> = () => {
               </Flex>
             </Flex>
             <Typography
-              text={`${t.currencySymbol}${provider?.cabDetails?.[0]?.fare}`}
+              text={`${getCurrencyValue(experienceType)}${provider?.cabDetails?.[0]?.fare}`}
               fontSize="15px"
               fontWeight="700"
               color={theme.colors.primary[100]}

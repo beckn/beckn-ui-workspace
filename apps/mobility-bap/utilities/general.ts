@@ -1,3 +1,5 @@
+import { currencyMap, defaultSourceLocation } from '@lib/config'
+
 const getError = (err: any) =>
   err.response && err.response.data && err.response.data.message ? err.response.data.message : err.message
 
@@ -25,4 +27,32 @@ export const groupDataBy = (data: any[], groupBy: string) => {
   }, {})
 
   return groupedData
+}
+
+export const getExperienceTypeGelocation = (experienceType: string) => {
+  if (experienceType === 'smartCity') {
+    return defaultSourceLocation.smartCity
+  }
+  if (experienceType === 'gambia') {
+    return defaultSourceLocation.gambia
+  }
+  if (experienceType === 'paris') {
+    return defaultSourceLocation.paris
+  }
+
+  return null
+}
+
+export const getCurrencyValue = (experienceType: string) => {
+  if (experienceType === 'smartCity') {
+    return currencyMap.INR
+  }
+  if (experienceType === 'gambia') {
+    return currencyMap.GMD
+  }
+  if (experienceType === 'paris') {
+    return currencyMap.EUR
+  }
+
+  return currencyMap.INR
 }

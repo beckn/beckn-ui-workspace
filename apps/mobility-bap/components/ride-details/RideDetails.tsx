@@ -9,6 +9,9 @@ import TripLocation from '../searchRideForm/TripLocation'
 import CabDetails from './CabDetails'
 import DriverDetails from './DriverDetails'
 import { useLanguage } from '@hooks/useLanguage'
+import { getCurrencyValue } from '@utils/general'
+import { UserGeoLocationRootState } from '@lib/types/user'
+import { useSelector } from 'react-redux'
 
 const RideDetails: React.FC<RideDetailsProps> = ({
   name,
@@ -27,6 +30,8 @@ const RideDetails: React.FC<RideDetailsProps> = ({
   const theme = useTheme()
   const router = useRouter()
   const { t } = useLanguage()
+
+  const { experienceType } = useSelector((state: UserGeoLocationRootState) => state.userInfo)
 
   return (
     <BottomDrawer>
@@ -63,7 +68,7 @@ const RideDetails: React.FC<RideDetailsProps> = ({
             color="#37474F"
           />
           <Typography
-            text={`${t.currencySymbol}${fare.toString()}`}
+            text={`${getCurrencyValue(experienceType)}${fare.toString()}`}
             fontSize="14px"
             fontWeight="700"
           />

@@ -9,13 +9,14 @@ import { UserGeoLocationRootState } from '@lib/types/user'
 import { useLanguage } from '@hooks/useLanguage'
 import { CabServiceDetailsRootState } from '@lib/types/cabService'
 import { StarIcon } from '@chakra-ui/icons'
+import { getCurrencyValue } from '@utils/general'
 
 const SearchRide = () => {
   const theme = useTheme()
   const dispatch = useDispatch()
   const { t } = useLanguage()
 
-  const { pickup, dropoff } = useSelector((state: UserGeoLocationRootState) => state.userInfo)
+  const { pickup, dropoff, experienceType } = useSelector((state: UserGeoLocationRootState) => state.userInfo)
   const { cabServiceProviders, totalCabs } = useSelector((state: CabServiceDetailsRootState) => state.cabService)
 
   const handleOnSelect = useCallback((transactionId: string, details: any) => {
@@ -163,7 +164,7 @@ const SearchRide = () => {
                           fontSize="11px"
                         />
                         <Typography
-                          text={`${t.currencySymbol}${cabDetail.fare}`}
+                          text={`${getCurrencyValue(experienceType)}${cabDetail.fare}`}
                           fontSize="15px"
                           color={theme.colors.primary[100]}
                         />

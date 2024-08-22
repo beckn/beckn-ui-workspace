@@ -1,11 +1,12 @@
 import React, { useCallback, useEffect } from 'react'
 import dynamic from 'next/dynamic'
 import { useDispatch, useSelector } from 'react-redux'
-import { IGeoLocationSearchPageRootState, useGeolocation } from '@beckn-ui/common'
-import { setPickUpLocation, setDropOffLocation } from '@store/user-slice'
+import { IGeoLocationSearchPageRootState, PickUpDropOffModel, useGeolocation } from '@beckn-ui/common'
+import { setPickUpLocation, setDropOffLocation, setExperienceType } from '@store/user-slice'
 import { UserGeoLocationRootState } from '@lib/types/user'
 import BottomModalRenderer from '@components/bottomModalRenderer/bottomModalRenderer'
 import { useRouter } from 'next/router'
+import { getExperienceTypeGelocation } from '@utils/general'
 
 const Homepage = () => {
   const MapWithNoSSR: any = dynamic(() => import('../components/Map'), { ssr: false })
@@ -26,12 +27,22 @@ const Homepage = () => {
 
   const { currentAddress, coordinates } = useGeolocation(apiKeyForGoogle as string)
 
-  useEffect(() => {
+  const getExperienceTypeFlow = () => {
     const experienceType = router.query?.experienceType
+    const external_url = router.query?.external_url
+    console.log('experienceType--> ', experienceType)
+    console.log('external_url--> ', external_url)
+    let flowType: PickUpDropOffModel | null = null
     if (experienceType) {
-      localStorage.setItem('experienceType', experienceType.toString())
+      setExperienceType(experienceType.toString())
+      flowType = getExperienceTypeGelocation(experienceType.toString())
     }
-  }, [])
+    if (external_url) {
+      setExperienceType(external_url.toString())
+      flowType = getExperienceTypeGelocation(external_url.toString())
+    }
+    return flowType
+  }
 
   useEffect(() => {
     if (originGeoAddress && originGeoLatLong) {
@@ -44,12 +55,17 @@ const Homepage = () => {
 
       dispatch(setPickUpLocation(locationDetails))
     } else if (currentAddress && coordinates?.latitude && coordinates?.longitude) {
-      const locationDetails = {
-        address: currentAddress,
-        geoLocation: coordinates
-      }
+      const experienceType = getExperienceTypeFlow()
+      if (experienceType) {
+        dispatch(setPickUpLocation(experienceType))
+      } else {
+        const locationDetails = {
+          address: currentAddress,
+          geoLocation: coordinates
+        }
 
-      dispatch(setPickUpLocation(locationDetails))
+        dispatch(setPickUpLocation(locationDetails))
+      }
     }
   }, [currentAddress, coordinates, originGeoAddress, originGeoLatLong])
 
