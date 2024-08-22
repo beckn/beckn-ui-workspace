@@ -6,7 +6,6 @@ import { toBinary } from '@utils/common-utils'
 import { parsedSearchlist } from '@utils/search-results.utils'
 import { ProductCard } from '@beckn-ui/becknified-components'
 import { BottomModal } from '@beckn-ui/molecules'
-import { discoveryActions } from '@store/discovery-slice'
 import { useBreakpoint } from '@chakra-ui/react'
 import SearchBar from '../components/header/SearchBar'
 import { useLanguage } from '../hooks/useLanguage'
@@ -17,6 +16,7 @@ import Filter from '../components/filter/Filter'
 import { LocalStorage } from '@lib/types'
 import { IGeoLocationSearchPageRootState } from '@lib/types/geoLocationSearchPage'
 import axios from '@services/axios'
+import { discoveryActions } from '@beckn-ui/common'
 
 //Mock data for testing search API. Will remove after the resolution of CORS issue
 

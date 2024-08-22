@@ -7,8 +7,8 @@ import Cookies from 'js-cookie'
 import React, { useEffect, useState } from 'react'
 import Router from 'next/router'
 import { toast as reactToastifyToast } from 'react-toastify'
-import { feedbackActions } from '@store/ui-feedback-slice'
 import { useDispatch } from 'react-redux'
+import { feedbackActions } from '@beckn-ui/common'
 
 const ProfilePage = () => {
   const { t } = useLanguage()

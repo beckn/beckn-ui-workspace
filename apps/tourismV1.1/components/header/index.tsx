@@ -5,7 +5,6 @@ import { Box, Divider, Flex, HStack, Image, Text } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import styles from './header.module.css'
 import { useSelector, useDispatch } from 'react-redux'
-import { logout } from '@store/auth-slice'
 
 import { useLanguage } from '../../hooks/useLanguage'
 import Qrcode from '@components/qrCode/Qrcode'
@@ -13,6 +12,7 @@ import Settings from './Settings'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import { ICartRootState } from '@lib/types'
 import BottomModalScan from '@components/BottomModal/BottomModalScan'
+import { logout } from '@beckn-ui/common'
 
 type PathnameObjectType = { [key: string]: string }
 

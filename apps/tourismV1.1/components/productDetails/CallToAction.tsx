@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react'
 import { HiOutlinePlusSm, HiMinusSm } from 'react-icons/hi'
 import { useLanguage } from '../../hooks/useLanguage'
 import { useDispatch } from 'react-redux'
-import { cartActions } from '../../store/cart-slice'
 import { RetailItem } from '../../lib/types/products'
 import ProductPrice from '../UI/ProductPrice'
 import { Box, Flex, Text, Input } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import Typography from '@beckn-ui/molecules/src/components/typography/typography'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
+import { cartActions } from '@beckn-ui/common'
 
 interface Props {
   product: RetailItem

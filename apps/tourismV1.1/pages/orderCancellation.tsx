@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { useLanguage } from '@hooks/useLanguage'
 import { useRouter } from 'next/router'
-import { checkoutActions } from '@store/checkout-slice'
-import { StatusRootState } from '@store/status-slice'
 import { useSelector, useDispatch } from 'react-redux'
 
 import { ConfirmationPage } from '@beckn-ui/becknified-components'
+import { checkoutActions, StatusRootState } from '@beckn-ui/common'
 
 const orderCancellation = () => {
   const { t } = useLanguage()

@@ -1,11 +1,10 @@
 import React from 'react'
 import { AiOutlineSetting, AiOutlineDown } from 'react-icons/ai'
 import { useDispatch, useSelector } from 'react-redux'
-import { settingBoxActions } from '../../store/settingBox-slice'
 import Language from './language/Language'
 import { useLanguage } from '../../hooks/useLanguage'
 import style from './header.module.css'
-import { ISettingBoxRootState } from '@beckn-ui/common'
+import { ISettingBoxRootState, settingBoxActions } from '@beckn-ui/common'
 
 // Settings is just Language selector for now
 const Settings = () => {
