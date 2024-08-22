@@ -18,6 +18,7 @@ import {
   orderActions
 } from '@beckn-ui/common'
 import { ORDER_CATEGORY_ID } from '../lib/config'
+import { testIds } from '@shared/dataTestIds'
 
 const OrderConfirmation = () => {
   const { t } = useLanguage()
@@ -110,7 +111,8 @@ const OrderConfirmation = () => {
               },
               disabled: false,
               variant: 'solid',
-              colorScheme: 'primary'
+              colorScheme: 'primary',
+              dataTest: testIds.orderConfirmation_viewOrderButton
             },
             {
               text: t.goBackHome,
@@ -120,7 +122,8 @@ const OrderConfirmation = () => {
               },
               disabled: false,
               variant: 'outline',
-              colorScheme: 'primary'
+              colorScheme: 'primary',
+              dataTest: testIds.orderConfirmation_goBackToHome
             }
           ]
         }}

@@ -219,7 +219,11 @@ const testIds = {
   checkoutpage_consent_Details: 'checkoutpage-consent-Details',
   xinput_form_open: 'xinput_form_open',
   xinput_form: 'xinput-form',
-  rateUsBox: 'rateUs-Box'
+  rateUsBox: 'rateUs-Box',
+
+  //OSC
+  url_search_StoreBy_Location: '/searchByLocation',
+  search_By_Location_Text: 'search-By-Location-Text'
 }
 
 export { testIds }

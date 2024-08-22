@@ -13,6 +13,7 @@ import { DOMAIN } from '@lib/config'
 import { ICartRootState, DiscoveryRootState, getSelectPayload, cartActions } from '@beckn-ui/common'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
 import { useSelectMutation } from '@beckn-ui/common/src/services/select'
+import { testIds } from '@shared/dataTestIds'
 
 const Cart = () => {
   const [fetchQuotes, { isLoading, data, isError }] = useSelectMutation()
@@ -39,20 +40,6 @@ const Cart = () => {
     router.push('/checkout')
   }
 
-  if (isLoading) {
-    return (
-      <Box
-        display={'grid'}
-        height={'calc(100vh - 300px)'}
-        alignContent={'center'}
-      >
-        <LoaderWithMessage
-          loadingText={t.pleaseWait}
-          loadingSubText={t.selectLoaderSubText}
-        />
-      </Box>
-    )
-  }
   return (
     <Box
       pt={['20px', '20px', '0px', '0px']}
@@ -81,7 +68,7 @@ const Cart = () => {
               dispatch(cartActions.removeItemFromCart(id))
             }
           })),
-          loader: { text: 'Getting quotes' }, // optional loader
+          loader: { text: t.quoteRequestLoader, dataTest: testIds.loadingIndicator },
           orderSummary: {
             totalAmount: {
               price: totalAmount,
@@ -97,14 +84,21 @@ const Cart = () => {
             },
             orderSummaryText: t.orderSummary,
             totalQuantityText: t.totalQuantity,
-            totalAmountText: t.totalAmount
+            totalAmountText: t.totalAmount,
+            dataTestTotalQuantity: testIds.cartpage_totalQuantityText,
+            dataTestTotalAmount: testIds.cartpage_totalAmountText,
+            dataTestCta: testIds.cartpage_cartOrderButton
           },
           emptyCard: {
             image: '/images/emptyCard.svg',
             heading: t.emptyCardHeading,
             subHeading: t.emptyCardSubHeading,
             buttonText: t.shop,
-            buttonHanler: handleShopButton
+            buttonHanler: handleShopButton,
+            dataTestImage: testIds.cartpage_emptyImage,
+            dataTestHeading: testIds.cartpage_emptyheading,
+            dataTestSubHeading: testIds.cartpage_emptySubHeading,
+            dataTestCta: testIds.cartpage_emptyButton
           }
         }}
       />

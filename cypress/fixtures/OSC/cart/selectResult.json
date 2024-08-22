@@ -1,0 +1,107 @@
+{
+  "data": [
+    {
+      "context": {
+        "domain": "retail:1.1.0",
+        "action": "on_select",
+        "version": "1.1.0",
+        "bpp_id": "bpp-ps-network-vendure1-prod.example.io",
+        "bpp_uri": "https://bpp-ps-network-vendure1-prod.example.io",
+        "country": "IND",
+        "city": "std:080",
+        "location": {
+          "country": {
+            "name": "India",
+            "code": "IND"
+          },
+          "city": {
+            "name": "Bangalore",
+            "code": "std:080"
+          }
+        },
+        "bap_id": "bap-ps-network-prod.example.io",
+        "bap_uri": "https://bap-ps-network-prod.example.io",
+        "transaction_id": "c7f78e96-07f0-45ff-a1f7-be3fcdb5c226",
+        "message_id": "7674ddff-817a-448a-982e-8c13596a02a2",
+        "ttl": "PT10M",
+        "timestamp": "2024-07-22T05:20:30.394Z"
+      },
+      "message": {
+        "order": {
+          "type": "DEFAULT",
+          "quote": {
+            "price": {
+              "currency": "INR",
+              "value": "2160.00"
+            },
+            "breakup": [
+              {
+                "title": "base-price",
+                "price": {
+                  "currency": "INR",
+                  "value": "100.00"
+                }
+              },
+              {
+                "title": "taxes",
+                "price": {
+                  "currency": "INR",
+                  "value": "360.00"
+                }
+              }
+            ]
+          },
+          "provider": {
+            "id": "instakart",
+            "name": "Insta Kart",
+            "short_desc": "",
+            "long_desc": ""
+          },
+          "items": [
+            {
+              "id": "258",
+              "name": "Chocolate Cake",
+              "long_desc": "Careful preparation based on eggs, butter, sugar and enhanced by the exoticism of Guayaquil chocolate. <div>\r\n    <p>Main Ingredients: eggs, butter, sugar, Guayaquil chocolate</p>\r\n    <p>Allergens: Contains dairy</p>\r\n    <p>Size: Serves 1</p>\r\n</div>",
+              "images": [
+                {
+                  "url": "http://bpp-unified-vendure-staging.becknprotocol.io/assets/source/e8/377.jpeg"
+                }
+              ],
+              "price": {
+                "listed_value": "100.00",
+                "currency": "INR",
+                "value": "100.00"
+              },
+              "quantity": {
+                "selected": {
+                  "count": 1
+                }
+              }
+            }
+          ],
+          "fulfillments": [
+            {
+              "id": "9",
+              "type": "standard",
+              "tracking": false
+            }
+          ],
+          "tags": [
+            {
+              "code": "ShippingMethodDetails",
+              "name": "Shipping method details",
+              "display": true,
+              "list": [
+                {
+                  "code": "standard",
+                  "name": "Standard",
+                  "value": "standard"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -216,6 +216,8 @@ const en: { [key: string]: string } = {
   errorCountry1: 'Country can only contain letters and spaces',
   errorState1: 'State can only contain letters and spaces',
   errorCity1: 'City can only contain letters and spaces',
-  invalidPincode: 'Invalid Pincode'
+  invalidPincode: 'Invalid Pincode',
+  noProduct: 'There are no products in this category yet! New products will be added soon.',
+  quoteRequestLoader: 'Your order is getting processed'
 }
 export default en
