@@ -186,6 +186,7 @@ const HomePageContent: React.FC<HomePageContentProps> = ({
             cursor={'pointer'}
             onClick={onSearchByLocationClick}
             mt="40px"
+            data-test={testIds.search_By_Location_Text}
           >
             <Typography text={label!} />
 

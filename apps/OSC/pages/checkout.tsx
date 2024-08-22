@@ -24,6 +24,7 @@ import { useRouter } from 'next/router'
 import { ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
 import { FormField, LoaderWithMessage } from '@beckn-ui/molecules'
 import { useInitMutation } from '@beckn-ui/common/src/services/init'
+import { testIds } from '@shared/dataTestIds'
 // import { DiscoveryRootState } from '@beckn-ui/common'
 
 export type ShippingFormData = {
@@ -278,10 +279,12 @@ const CheckoutPage = () => {
             sectionSubtitle: t.addShippingDetails,
             sectionTitle: t.shipping,
             formTitle: t.addShippingDetails,
-            sameAsTitle: t.sameAsShipping
+            sameAsTitle: t.sameAsShipping,
+            dataTest: testIds.checkoutpage_shippingDetails
           },
           billing: {
             triggerFormTitle: t.change,
+            dataTest: testIds.checkoutpage_billingDetails,
             sectionSubtitle: t.addBillingDetails,
             sectionTitle: t.billing,
             formTitle: t.addBillingDetails,
@@ -325,6 +328,7 @@ const CheckoutPage = () => {
           },
           pageCTA: {
             text: t.proceedTOCheckout,
+            dataTest: testIds.checkoutpage_proceedToCheckout,
             handleClick: () => {
               dispatch(cartActions.clearCart())
               router.push('/paymentMode')

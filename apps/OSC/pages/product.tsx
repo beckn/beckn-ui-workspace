@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Box } from '@chakra-ui/react'
 import { useLanguage } from '@hooks/useLanguage'
 import { cartActions, DiscoveryRootState, feedbackActions, ParsedItemModel } from '@beckn-ui/common'
+import { testIds } from '@shared/dataTestIds'
 
 const Product = () => {
   const selectedProduct: ParsedItemModel = useSelector((state: DiscoveryRootState) => state.discovery.selectedProduct)
@@ -48,7 +49,8 @@ const Product = () => {
               rating: selectedProduct.item.rating!,
               size: 20,
               setRating: () => {},
-              starCount: 5
+              starCount: 5,
+              dataTest: testIds.item_rating
             },
             productCta: {
               currency: selectedProduct.item.price.currency,
@@ -57,6 +59,7 @@ const Product = () => {
               handleDecrement: decrement,
               counter: counter,
               cta: {
+                dataTest: testIds.productpage_addTocartButton,
                 text: t.addToCart,
                 color: '#fff',
                 handleClick: () => {

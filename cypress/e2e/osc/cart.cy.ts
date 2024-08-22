@@ -1,16 +1,16 @@
 import { testIds } from '../../../shared/dataTestIds'
 describe('Cart Page Tests', () => {
   before(() => {
-    cy.login(testIds.url_base_retail, testIds.user_validEmail, testIds.user_validPassword)
+    cy.login(testIds.url_base, testIds.user_validEmail, testIds.user_validPassword)
   })
   context('When there are no items in cart', () => {
-    const searchTerm = 'sunglass'
+    const searchTerm = 'cake'
     beforeEach(() => {
-      cy.visit(`${testIds.url_base_retail}${testIds.url_home}`)
+      cy.visit(`${testIds.url_base}${testIds.url_home}`)
       cy.setGeolocation('getAddress')
       cy.wait('@getAddress')
       cy.performSearch(searchTerm, {
-        fixture: 'searchPage/searchResults.json'
+        fixture: 'OSC/searchPage/searchResults.json'
       })
       cy.getByData(testIds.cartButton).click()
     })
@@ -27,18 +27,18 @@ describe('Cart Page Tests', () => {
     })
   })
   context('should render When there are Items in Cart', () => {
-    const searchTerm = 'sunglass'
+    const searchTerm = 'cake'
     beforeEach(() => {
-      cy.visit(`${testIds.url_base_retail}${testIds.url_home}`)
+      cy.visit(`${testIds.url_base}${testIds.url_home}`)
       cy.setGeolocation('getAddress')
       cy.wait('@getAddress')
       cy.performSearch(searchTerm, {
-        fixture: 'searchPage/searchResults.json'
+        fixture: 'OSC/searchPage/searchResults.json'
       })
       cy.getByData(testIds.searchpage_products).first().click()
       cy.url().should('include', testIds.url_product)
       cy.getByData(testIds.productpage_addTocartButton).click()
-      cy.intercept('POST', '/select', { fixture: 'cart/selectResult.json' }).as('selectCall')
+      cy.intercept('POST', '/select', { fixture: 'OSC/cart/selectResult.json' }).as('selectCall')
       cy.getByData(testIds.cartButton).click()
       cy.wait('@selectCall')
     })
@@ -54,7 +54,7 @@ describe('Cart Page Tests', () => {
       cy.url().should('include', testIds.url_cart)
     })
     it('should render and display cart page Order Summary ', () => {
-      cy.getByData(testIds.cartpage_orderSummaryText).should('contain.text', 'Order Summary')
+      cy.getByData(testIds.cartpage_orderSummaryText).should('contain.text', 'order Summary')
       cy.getByData(testIds.cartpage_totalQuantityText).should('contain.text', 'Total Quantity')
       cy.getByData(testIds.cartpage_totalAmountText).should('contain.text', 'Total Amount')
     })
@@ -71,7 +71,7 @@ describe('Cart Page Tests', () => {
       cy.getByData(testIds.cartpage_emptyButton).should('contain.text', 'Shop')
     })
     it('increments the counter and updates the total amount when the increment button is clicked', () => {
-      cy.fixture('cart/selectResult.json').then(data => {
+      cy.fixture('OSC/cart/selectResult.json').then(data => {
         const item = data.data[0].message.order.items[0]
         const initialQuantity = item.quantity.selected.count
         const itemPrice = parseFloat(item.price.value)
@@ -79,7 +79,7 @@ describe('Cart Page Tests', () => {
         const expectedQuantity = initialQuantity + 1
         const expectedTotalPrice = (itemPrice * expectedQuantity).toFixed(2)
 
-        cy.performSelect({ fixture: 'cart/selectResult.json' }, 'selectResponse', testIds.cartpage_incrementButton)
+        cy.performSelect({ fixture: 'OSC/cart/selectResult.json' }, 'selectResponse', testIds.cartpage_incrementButton)
         cy.wait('@selectResponse')
         cy.getByData(testIds.cartpage_input)
           .invoke('val')
@@ -92,9 +92,9 @@ describe('Cart Page Tests', () => {
     })
 
     it('decrements the counter and updates the total amount correctly', () => {
-      cy.performSelect({ fixture: 'cart/selectResult.json' }, 'selectResponse', testIds.cartpage_incrementButton)
+      cy.performSelect({ fixture: 'OSC/cart/selectResult.json' }, 'selectResponse', testIds.cartpage_incrementButton)
       cy.wait('@selectResponse')
-      cy.fixture('cart/selectResult.json').then(data => {
+      cy.fixture('OSC/cart/selectResult.json').then(data => {
         const item = data.data[0].message.order.items[0]
         const initialQuantity = item.quantity.selected.count
         const itemPrice = parseFloat(item.price.value)
@@ -113,7 +113,7 @@ describe('Cart Page Tests', () => {
     })
 
     it('Should conatin order Button and click on it render it on checkout page', () => {
-      cy.getByData(testIds.cartpage_cartOrderButton).should('contain.text', 'Order')
+      cy.getByData(testIds.cartpage_cartOrderButton).should('contain.text', 'Proceed to checkout')
       cy.getByData(testIds.cartpage_cartOrderButton).click()
     })
   })
