@@ -3,12 +3,12 @@ import React from 'react'
 import Styles from './GeoLocationInput.module.css'
 import { useDispatch } from 'react-redux'
 import { useState } from 'react'
-import { toggleLocationSearchPageVisibility, setGeoAddressAndLatLong } from '../../store/geoMapLocationSearch-slice'
 import backArrow from '/public/images/Back.svg'
 import locationMarker from '../../public/images/SearchLocationMarker.svg'
 import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete'
 import { IoClose } from 'react-icons/io5'
 import { useLanguage } from '@hooks/useLanguage'
+import { setGeoAddressAndLatLong, toggleLocationSearchPageVisibility } from '@beckn-ui/common'
 
 const GeoLocationInputList: React.FC = () => {
   const dispatch = useDispatch()
@@ -26,7 +26,7 @@ const GeoLocationInputList: React.FC = () => {
     closeGeoLocationSearchPage()
   }
   const closeGeoLocationSearchPage = () => {
-    dispatch(toggleLocationSearchPageVisibility(false))
+    dispatch(toggleLocationSearchPageVisibility({ visible: false, addressType: '' }))
   }
   return (
     <Box className={Styles.main_container2}>

@@ -1,14 +1,13 @@
 import React, { useState } from 'react'
 import { ProductDetailPage } from '@beckn-ui/becknified-components'
 
-import { cartActions } from '@store/cart-slice'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { useRouter } from 'next/router'
-import { DiscoveryRootState } from '@store/discovery-slice'
 import { Box, useTheme } from '@chakra-ui/react'
 import { CustomThemeType } from '@beckn-ui/molecules'
 import { useLanguage } from '@hooks/useLanguage'
+import { cartActions, DiscoveryRootState } from '@beckn-ui/common'
 
 const Product = () => {
   const selectedProduct = useSelector((state: DiscoveryRootState) => state.discovery.selectedProduct)

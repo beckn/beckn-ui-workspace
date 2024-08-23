@@ -4,11 +4,11 @@ import { GrLocation } from 'react-icons/gr'
 import Styles from './GeoLocationInput.module.css'
 import { Flex } from '@chakra-ui/react'
 import { useDispatch, useSelector } from 'react-redux'
-import { toggleLocationSearchPageVisibility } from '../../store/geoMapLocationSearch-slice'
 
 import { IGeoLocationSearchPageRootState } from '../../lib/types/geoLocationSearchPage'
 import { useLanguage } from '../../hooks/useLanguage'
 import Router from 'next/router'
+import { toggleLocationSearchPageVisibility } from '@beckn-ui/common'
 
 export const GeoLocationInput = () => {
   const dispatch = useDispatch()
@@ -22,7 +22,7 @@ export const GeoLocationInput = () => {
   }
 
   const someFunc = () => {
-    dispatch(toggleLocationSearchPageVisibility(true))
+    dispatch(toggleLocationSearchPageVisibility({ visible: true, addressType: '' }))
   }
   const { t } = useLanguage()
   return (
