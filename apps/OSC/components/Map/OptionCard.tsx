@@ -4,6 +4,7 @@ import cs from 'classnames'
 import { useLanguage } from '../../hooks/useLanguage'
 import { toast } from 'react-toastify'
 import { Box } from '@chakra-ui/react'
+import { testIds } from '@shared/dataTestIds'
 
 type OptionMeta = {
   tagValue: string
@@ -32,6 +33,7 @@ const OptionCard: React.FC<OptionCardProps> = ({
   const { t } = useLanguage()
   return (
     <div
+      data-test={testIds.option_card}
       className="text-center"
       onClick={e => {
         if (tagValue !== 'Books' && tagValue !== 'restaurant' && tagValue !== 'Shopping') {

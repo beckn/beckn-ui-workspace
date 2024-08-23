@@ -67,6 +67,7 @@ const getStaticTags = (tag: string) => {
 import MapSearch from '../components/Map/MapSearch'
 import { isEmpty } from 'lodash'
 import { getUserLocation } from '../utilities/common-utils'
+import { testIds } from '@shared/dataTestIds'
 
 const SearchByLocation = () => {
   const MapWithNoSSR = dynamic(() => import('../components/Map'), {
@@ -209,7 +210,10 @@ const SearchByLocation = () => {
       />
       {!showSuggestions && (
         <>
-          <div className="overflow-hidden max-h-[85vh]">
+          <div
+            className="overflow-hidden max-h-[85vh]"
+            data-test={testIds.map_container}
+          >
             <MapWithNoSSR
               stores={stores}
               coords={coords}
@@ -327,6 +331,7 @@ const SearchByLocation = () => {
                 })}
               </div>
               <button
+                data-test={testIds.searchBy_Location_shop_button}
                 onClick={() => {
                   // console.log("Dank",selectedStore.tags)
                   router.push('/search')

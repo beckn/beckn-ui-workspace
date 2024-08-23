@@ -5,6 +5,7 @@ import Typography from '@beckn-ui/molecules/src/components/typography/typography
 import { Box, Flex } from '@chakra-ui/react'
 import { useLanguage } from '@hooks/useLanguage'
 import { formatTimestamp, getPaymentBreakDown, StatusResponseModel } from '@beckn-ui/common'
+import { testIds } from '@shared/dataTestIds'
 
 const invoiceDetails = () => {
   const [statusData, setStatusData] = useState<StatusResponseModel[]>([])
@@ -46,6 +47,7 @@ const invoiceDetails = () => {
           />
           <Typography
             variant="subTitleRegular"
+            dataTest={testIds.orderDetailspage_productPlacedAt}
             text={formatTimestamp(created_at)}
           />
         </Flex>
@@ -60,6 +62,7 @@ const invoiceDetails = () => {
             />
             <Typography
               variant="subTitleRegular"
+              dataTest={testIds.orderDetailspage_invoice_orderFullfilled}
               text={`${filteredOrder.length} of ${statusData.length}`}
             />
           </Flex>
@@ -75,6 +78,7 @@ const invoiceDetails = () => {
         <PaymentDetails
           paymentBreakDown={getPaymentBreakDown(statusData).breakUpMap}
           totalText={t.total}
+          dataTest={testIds.orderDetailspage_paymentDetails}
           totalValueWithCurrency={getPaymentBreakDown(statusData).totalPricewithCurrent}
         />
       </DetailCard>

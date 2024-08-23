@@ -58,6 +58,8 @@ const testIds = {
   user_invalidPassword: 'Enterthevoid@1234',
   user_firstTimeLoginvalidEmail: 'aniket@gmail.com',
   user_firstTimeLoginvalidPassword: 'Aniket@123',
+  user_firstTimeLoginvalidEmailOSC: 'aniket123@gmail.com',
+  user_firstTimeLoginvalidPasswordOSC: 'Aniket@123',
   user_login: 'krushnaTest@test.com',
   user_password: 'Krushna@123',
   // auth page
@@ -223,7 +225,15 @@ const testIds = {
 
   //OSC
   url_search_StoreBy_Location: '/searchByLocation',
-  search_By_Location_Text: 'search-By-Location-Text'
+  search_By_Location_Text: 'search-By-Location-Text',
+  map_search_input_container: 'map-search-input-container',
+  map_search_input: 'map-search-input',
+  locationList: 'location-List',
+  location_List_item: 'location-List-item',
+  map_container: 'map-container',
+  option_card: 'option-card',
+  store_Location_image: 'store-Location-image',
+  searchBy_Location_shop_button: 'searchBy-Location-shop-button'
 }
 
 export { testIds }
