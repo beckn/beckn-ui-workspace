@@ -16,8 +16,10 @@ const SearchRide = () => {
   const dispatch = useDispatch()
   const { t } = useLanguage()
 
-  const { pickup, dropoff, experienceType } = useSelector((state: UserGeoLocationRootState) => state.userInfo)
+  const { pickup, dropoff } = useSelector((state: UserGeoLocationRootState) => state.userInfo)
   const { cabServiceProviders, totalCabs } = useSelector((state: CabServiceDetailsRootState) => state.cabService)
+
+  const experienceType = JSON.parse(localStorage.getItem('experienceType')!)
 
   const handleOnSelect = useCallback((transactionId: string, details: any) => {
     dispatch(discoveryActions.addTransactionId({ transactionId }))

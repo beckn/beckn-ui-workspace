@@ -24,17 +24,17 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL
 type ModalType = 'Cancel' | 'ContactSupport' | 'RideSummary' | 'RideDetails'
 
 interface RideDetailsCardContainerProps {
-  handleOnDecline: () => void
+  handleStatusOperation: (status: RIDE_STATUS_CODE) => void
 }
 
-const RideDetailsCardContainer: React.FC<RideDetailsCardContainerProps> = ({ handleOnDecline }) => {
+const RideDetailsCardContainer: React.FC<RideDetailsCardContainerProps> = ({ handleStatusOperation }) => {
   const [rideStartedAlert, setRideStartedAlert] = useState<boolean>(false)
   const [rideDetails, setRideDetails] = useState<RideDetailsProps | null>(null)
   const [isLoading, setIsLoading] = useState<boolean>(true)
-  const [currentRideStatus, setCurrentRideStatus] = useState<RIDE_STATUS_CODE>()
   const [modalType, setModalType] = useState<ModalType>()
 
   const alertCount = useRef<number>(0)
+  const currentRideStatus = useRef<RIDE_STATUS_CODE>()
   const selectedOrderData = useRef<any>()
 
   const { t } = useLanguage()
@@ -88,7 +88,11 @@ const RideDetailsCardContainer: React.FC<RideDetailsCardContainerProps> = ({ han
         .post(`${apiUrl}/status`, payload)
         .then(async res => {
           const { stops, state } = res.data.data[0].message.order.fulfillments[0]
-          if (state?.descriptor?.short_desc === RIDE_STATUS_CODE.RIDE_ACCEPTED && confirmResponse.length > 0) {
+          if (
+            state?.descriptor?.short_desc !== currentRideStatus.current &&
+            state?.descriptor?.short_desc === RIDE_STATUS_CODE.RIDE_ACCEPTED &&
+            confirmResponse.length > 0
+          ) {
             const { message } = confirmResponse[0] || {}
             const { agent, vehicle, rating } = message?.fulfillments?.find(fulfillment => fulfillment.agent)!
             setRideDetails({
@@ -113,7 +117,10 @@ const RideDetailsCardContainer: React.FC<RideDetailsCardContainerProps> = ({ han
             )
           }
 
-          if (state?.descriptor?.short_desc === RIDE_STATUS_CODE.CAB_REACHED_PICKUP_LOCATION) {
+          if (
+            state?.descriptor?.short_desc !== currentRideStatus.current &&
+            state?.descriptor?.short_desc === RIDE_STATUS_CODE.CAB_REACHED_PICKUP_LOCATION
+          ) {
             dispatch(
               feedbackActions.setToastData({
                 toastData: {
@@ -126,7 +133,11 @@ const RideDetailsCardContainer: React.FC<RideDetailsCardContainerProps> = ({ han
             )
           }
 
-          if (state?.descriptor?.short_desc === RIDE_STATUS_CODE.RIDE_STARTED && alertCount.current === 0) {
+          if (
+            state?.descriptor?.short_desc !== currentRideStatus.current &&
+            state?.descriptor?.short_desc === RIDE_STATUS_CODE.RIDE_STARTED &&
+            alertCount.current === 0
+          ) {
             setRideStartedAlert(true)
             dispatch(
               feedbackActions.setToastData({
@@ -142,7 +153,10 @@ const RideDetailsCardContainer: React.FC<RideDetailsCardContainerProps> = ({ han
             setModalType('RideDetails')
           }
 
-          if (state?.descriptor?.short_desc === RIDE_STATUS_CODE.RIDE_DECLINED) {
+          if (
+            state?.descriptor?.short_desc !== currentRideStatus.current &&
+            state?.descriptor?.short_desc === RIDE_STATUS_CODE.RIDE_DECLINED
+          ) {
             setRideStartedAlert(true)
             dispatch(
               feedbackActions.setToastData({
@@ -154,9 +168,13 @@ const RideDetailsCardContainer: React.FC<RideDetailsCardContainerProps> = ({ han
                 }
               })
             )
-            handleOnDecline()
+            handleStatusOperation(RIDE_STATUS_CODE.RIDE_DECLINED)
           }
-          if (state?.descriptor?.short_desc === RIDE_STATUS_CODE.RIDE_COMPLETED) {
+          if (
+            state?.descriptor?.short_desc !== currentRideStatus.current &&
+            state?.descriptor?.short_desc === RIDE_STATUS_CODE.RIDE_COMPLETED
+          ) {
+            handleStatusOperation(RIDE_STATUS_CODE.RIDE_COMPLETED)
             const currentLocation = { address: dropoff.address, geoLocation: dropoff.geoLocation }
             dispatch(setPickUpLocation(currentLocation))
             dispatch(setDropOffLocation({ address: '', geoLocation: { latitude: 0, longitude: 0 } }))
@@ -169,7 +187,7 @@ const RideDetailsCardContainer: React.FC<RideDetailsCardContainerProps> = ({ han
             dispatch(clearDestination())
             router.push('/feedback')
           }
-          setCurrentRideStatus(state?.descriptor?.short_desc)
+          currentRideStatus.current = state?.descriptor?.short_desc
         })
         .catch(e => {
           console.error(e)

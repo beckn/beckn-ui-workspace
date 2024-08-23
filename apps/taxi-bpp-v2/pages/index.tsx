@@ -212,6 +212,7 @@ const Homepage = () => {
               dispatch(
                 setGeoAddressAndLatLong({
                   geoAddress: data.source,
+                  country: localStorage.getItem('country')!,
                   geoLatLong: `${data.sourceGeoLocation?.latitude}, ${data.sourceGeoLocation?.longitude}`
                 })
               )
@@ -276,6 +277,7 @@ const Homepage = () => {
               dispatch(
                 setGeoAddressAndLatLong({
                   geoAddress: data.destination,
+                  country: localStorage.getItem('country')!,
                   geoLatLong: `${data.destinationGeoLocation?.latitude}, ${data.destinationGeoLocation?.longitude}`
                 })
               )
@@ -355,15 +357,18 @@ const Homepage = () => {
     [currentAcceptedRideRequest]
   )
 
-  const { geoAddress: originGeoAddress, geoLatLong: originGeoLatLong } = useSelector(
-    (state: IGeoLocationSearchPageRootState) => state.geoLocationSearchPageUI
-  )
+  const {
+    geoAddress: originGeoAddress,
+    geoLatLong: originGeoLatLong,
+    country: originCountry
+  } = useSelector((state: IGeoLocationSearchPageRootState) => state.geoLocationSearchPageUI)
 
   const {
     currentAddress,
     coordinates,
     error: currentLocationFetchError,
-    loading: loadingForCurrentAddress
+    loading: loadingForCurrentAddress,
+    country
   } = useGeolocation(apiKeyForGoogle as string)
 
   useEffect(() => {
@@ -375,11 +380,15 @@ const Homepage = () => {
         address: originGeoAddress,
         geoLocation: { latitude: Number(latLong[0]), longitude: Number(latLong[1]) }
       }
+      console.log('originCountry', originCountry)
+      localStorage.setItem('country', originCountry)
     } else if (currentAddress && coordinates?.latitude && coordinates?.longitude) {
       locationDetails = {
         address: currentAddress,
         geoLocation: coordinates
       }
+      console.log('country', country)
+      localStorage.setItem('country', country)
     }
     if (locationDetails) {
       dispatch(updateLocation(locationDetails))
@@ -390,7 +399,7 @@ const Homepage = () => {
         }
       })
     }
-  }, [currentAddress, coordinates, originGeoAddress, originGeoLatLong])
+  }, [currentAddress, coordinates, originGeoAddress, originGeoLatLong, country, originCountry])
 
   // useEffect(() => {
   //   if (modalRef.current) {
@@ -437,6 +446,7 @@ const Homepage = () => {
                     driverImg="/images/blankImg.svg"
                     title={currentModal.title}
                     subTitle={currentModal.subTitle}
+                    customerContact={currentModal.rideDetails?.customerDetails?.contact!}
                   />
                 )
               }
@@ -453,6 +463,7 @@ const Homepage = () => {
                 destinationGps={currentModal.rideDetails.destinationGeoLocation}
                 buttons={currentModal.buttons}
                 fare={currentModal?.fare}
+                customerDetails={currentModal.rideDetails?.customerDetails!}
                 handleNavigate={currentModal.rideDetails?.handleNavigate}
               />
             </BottomModal>

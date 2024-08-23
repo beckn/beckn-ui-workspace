@@ -9,11 +9,13 @@ import SearchRideFormContainer from '@components/searchRideForm/searchRideFormCo
 import { CabServiceDetailsRootState } from '@lib/types/cabService'
 import { clearCancelTokenSource, setCabResultFound } from '@store/cabService-slice'
 import { SelectRideRootState } from '@store/selectRide-slice'
+import { RIDE_STATUS_CODE } from '@utils/general'
 import { useRouter } from 'next/router'
 import React, { useState, useEffect, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 type PageOrModalType =
+  | ''
   | 'PICK_UP_DROP_OFF'
   | 'SEARCH_IN_PROGRESS'
   | 'SEARCH_RIDE'
@@ -95,7 +97,17 @@ const BottomModalRenderer = () => {
         handlePayment()
         return null
       case 'DRIVER_DETAILS':
-        return <RideDetailsCardContainer handleOnDecline={() => setDrawerState('PICK_UP_DROP_OFF')} />
+        return (
+          <RideDetailsCardContainer
+            handleStatusOperation={status => {
+              if (status === RIDE_STATUS_CODE.RIDE_DECLINED) {
+                setDrawerState('PICK_UP_DROP_OFF')
+              } else if (status === RIDE_STATUS_CODE.RIDE_COMPLETED) {
+                setDrawerState('')
+              }
+            }}
+          />
+        )
       default:
         return <></>
     }

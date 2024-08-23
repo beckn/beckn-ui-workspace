@@ -7,7 +7,8 @@ const initialState: IGeoLocationSearchPage = {
   geoAddress: '',
   geoLatLong: '',
   destinationGeoAddress: '',
-  destinationGeoLatLong: ''
+  destinationGeoLatLong: '',
+  country: ''
 }
 const geoLocationSearchPage = createSlice({
   name: 'geoLocationSearchPageUI',
@@ -26,14 +27,17 @@ const geoLocationSearchPage = createSlice({
       action: PayloadAction<{
         geoAddress: string
         geoLatLong: string
+        country?: string
       }>
     ) {
       if (state.currentGeoLocationType === 'pick-up' || state.currentGeoLocationType === '') {
         state.geoAddress = action.payload.geoAddress
         state.geoLatLong = action.payload.geoLatLong
+        state.country = action.payload.country || ''
       } else if (state.currentGeoLocationType === 'drop-off') {
         state.destinationGeoAddress = action.payload.geoAddress
         state.destinationGeoLatLong = action.payload.geoLatLong
+        state.country = action.payload.country || ''
       }
     },
     setSource(

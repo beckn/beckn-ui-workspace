@@ -1,4 +1,6 @@
+import { currencyMap } from '@lib/config'
 import { RideDetailsModel } from '@lib/types/mapScreen'
+import { CustomerDetails } from '@lib/types/ride'
 
 export interface RideSummaryModalProp {
   orderId: string
@@ -8,6 +10,7 @@ export interface RideSummaryModalProp {
   source: string
   destination: string
   cost: string
+  customerDetails: CustomerDetails
 }
 
 export const parseRideSummaryData = (data: any, rideDetails: RideDetailsModel): RideSummaryModalProp => {
@@ -19,7 +22,8 @@ export const parseRideSummaryData = (data: any, rideDetails: RideDetailsModel): 
     date: formatDate(rideSummaryResponse.updatedAt),
     source: rideSummaryResponse.stops[0].address,
     destination: rideSummaryResponse.stops[1].address,
-    cost: rideSummaryResponse.total_price_in_rs
+    cost: rideSummaryResponse.total_price_in_rs,
+    customerDetails: rideDetails.customerDetails
   }
 }
 
@@ -38,4 +42,19 @@ function formatDate(dateTime: string): string {
   const year = date.getFullYear()
 
   return `${dayName}, ${day}/${month}/${year}`
+}
+
+export const getCurrencyValue = (experienceType: string) => {
+  const countries = experienceType.split(' ').map(name => name.toLowerCase())
+  if (countries.includes('india')) {
+    return currencyMap.INR
+  }
+  if (countries.includes('gambia')) {
+    return currencyMap.GMD
+  }
+  if (countries.includes('paris')) {
+    return currencyMap.EUR
+  }
+
+  return currencyMap.INR
 }

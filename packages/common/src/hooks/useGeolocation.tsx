@@ -10,6 +10,7 @@ interface GeolocationData {
   currentAddress: string
   error: string
   loading: boolean
+  country: string
 }
 
 export interface OptionalModel {
@@ -37,6 +38,7 @@ const useGeolocation = (apiKey: string, optional?: OptionalModel): GeolocationDa
   const [currentAddress, setCurrentAddress] = useState<string>('')
   const [error, setError] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(true)
+  const [country, setCountry] = useState<string>('')
 
   useEffect(() => {
     if (navigator) {
@@ -57,6 +59,11 @@ const useGeolocation = (apiKey: string, optional?: OptionalModel): GeolocationDa
                 const data = await response.json()
 
                 if (data.results.length > 0) {
+                  for (const component of data.results[0].address_components) {
+                    if (component.types.includes('country')) {
+                      setCountry(component.long_name)
+                    }
+                  }
                   const formattedAddress = data.results[0].formatted_address
                   setCurrentAddress(formattedAddress)
                 } else {
@@ -84,7 +91,7 @@ const useGeolocation = (apiKey: string, optional?: OptionalModel): GeolocationDa
     }
   }, [optional])
 
-  return { coordinates, currentAddress, error, loading }
+  return { coordinates, currentAddress, error, loading, country }
 }
 
 export default useGeolocation

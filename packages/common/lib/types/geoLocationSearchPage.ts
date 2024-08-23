@@ -13,6 +13,7 @@ export interface IGeoLocationSearchPage {
   geoLatLong: string
   destinationGeoAddress: string
   destinationGeoLatLong: string
+  country: string
 }
 
 export interface IGeoLocationSearchPageRootState {

@@ -1,5 +1,6 @@
-const config = {
-  projectId: '3c4n15ly',
-  dataset: 'production'
+export const currencyMap = {
+  EUR: '€',
+  INR: '₹',
+  USD: '$',
+  GMD: 'D'
 }
-export default config

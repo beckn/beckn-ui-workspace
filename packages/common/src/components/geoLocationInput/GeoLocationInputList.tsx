@@ -17,10 +17,17 @@ const GeoLocationInputList: React.FC = () => {
   const [address, setAddress] = useState<string>('')
   const handleSelect = async (data: string) => {
     const addressData = await geocodeByAddress(data)
+    const addressComponents = addressData[0].address_components
+
+    // Find the country from the address components
+    const countryComponent = addressComponents.find(component => component.types.includes('country'))
+    const country = countryComponent?.long_name || ''
+
     const latLong = await getLatLng(addressData[0])
     dispatch(
       setGeoAddressAndLatLong({
         geoAddress: data,
+        country: country,
         geoLatLong: `${latLong.lat},${latLong.lng}`
       })
     )
@@ -29,6 +36,7 @@ const GeoLocationInputList: React.FC = () => {
   const closeGeoLocationSearchPage = () => {
     dispatch(toggleLocationSearchPageVisibility({ visible: false, addressType: '' }))
   }
+
   return (
     <Box className={Styles.main_container2}>
       <PlacesAutocomplete
@@ -36,7 +44,9 @@ const GeoLocationInputList: React.FC = () => {
         onChange={event => {
           return setAddress(event)
         }}
-        onSelect={data => handleSelect(data)}
+        onSelect={data => {
+          handleSelect(data)
+        }}
       >
         {({ getInputProps, suggestions, getSuggestionItemProps }) =>
           (
@@ -77,6 +87,7 @@ const GeoLocationInputList: React.FC = () => {
                       type={'text'}
                       _focus={{ outline: 'none' }}
                       _focusVisible={{ boxShadow: 'none' }}
+                      autoFocus={true}
                       borderRadius={'12px'}
                       name="search_input"
                       placeholder="Search for Location"

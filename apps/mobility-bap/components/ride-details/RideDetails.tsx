@@ -31,12 +31,14 @@ const RideDetails: React.FC<RideDetailsProps> = ({
   const router = useRouter()
   const { t } = useLanguage()
 
-  const { pickup, dropoff, experienceType } = useSelector((state: UserGeoLocationRootState) => state.userInfo)
+  const { pickup, dropoff } = useSelector((state: UserGeoLocationRootState) => state.userInfo)
 
   const getTotalFare = (fare: string) => {
     const distance = getDistance(pickup, dropoff)
     return (Number(fare) * distance).toFixed(2)
   }
+
+  const experienceType = JSON.parse(localStorage.getItem('experienceType')!)
 
   return (
     <BottomDrawer>

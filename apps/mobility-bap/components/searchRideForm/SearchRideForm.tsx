@@ -65,7 +65,7 @@ const SearchRideForm: React.FC<SearchRideFormProps> = () => {
   const router = useRouter()
   const theme = useTheme()
   const { transactionId, selectedRide } = useSelector((state: DiscoveryRootState) => state.discovery)
-  const { experienceType } = useSelector((state: UserGeoLocationRootState) => state.userInfo)
+  const experienceType = JSON.parse(localStorage.getItem('experienceType')!)
   const [initialize] = useInitMutation()
   const [fetchQuotes] = useSelectMutation()
 
