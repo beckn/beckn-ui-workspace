@@ -1,5 +1,13 @@
 import { PickUpDropOffModel } from '@beckn-ui/common'
 
+export interface CustomerDetails {
+  id: string
+  first_name: string
+  last_name: string
+  email: string
+  contact: string
+}
+
 export interface NewRideResponse {
   message: string
   data: RideData
@@ -18,6 +26,7 @@ export interface ValidOrder {
   state_value: string
   order_id: Order
   stops: Stop[]
+  customer_id: CustomerDetails
 }
 
 export interface Order {

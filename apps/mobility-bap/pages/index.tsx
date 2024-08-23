@@ -2,7 +2,7 @@ import React, { useCallback, useEffect } from 'react'
 import dynamic from 'next/dynamic'
 import { useDispatch, useSelector } from 'react-redux'
 import { IGeoLocationSearchPageRootState, PickUpDropOffModel, useGeolocation } from '@beckn-ui/common'
-import { setPickUpLocation, setDropOffLocation, setExperienceType } from '@store/user-slice'
+import { setPickUpLocation, setDropOffLocation } from '@store/user-slice'
 import { UserGeoLocationRootState } from '@lib/types/user'
 import BottomModalRenderer from '@components/bottomModalRenderer/bottomModalRenderer'
 import { useRouter } from 'next/router'
@@ -28,21 +28,26 @@ const Homepage = () => {
   const { currentAddress, coordinates } = useGeolocation(apiKeyForGoogle as string)
 
   const getExperienceTypeFlow = () => {
-    const experienceType = router.query?.experienceType
-    const external_url = router.query?.external_url
+    const queryParam = JSON.parse(localStorage.getItem('experienceType')!)
+    const experienceType = router.query?.experienceType || queryParam
+    const external_url = router.query?.external_url || queryParam
     console.log('experienceType--> ', experienceType)
     console.log('external_url--> ', external_url)
     let flowType: PickUpDropOffModel | null = null
     if (experienceType) {
-      setExperienceType(experienceType.toString())
+      localStorage.setItem('experienceType', JSON.stringify(experienceType))
       flowType = getExperienceTypeGelocation(experienceType.toString())
-    }
-    if (external_url) {
-      setExperienceType(external_url.toString())
+    } else if (external_url) {
+      localStorage.setItem('experienceType', JSON.stringify(external_url))
       flowType = getExperienceTypeGelocation(external_url.toString())
     }
     return flowType
   }
+
+  useEffect(() => {
+    // clear dropoff info initially
+    dispatch(setDropOffLocation({ address: '', geoLocation: { latitude: 0, longitude: 0 } }))
+  }, [])
 
   useEffect(() => {
     if (originGeoAddress && originGeoLatLong) {

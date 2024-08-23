@@ -4,6 +4,7 @@ import React from 'react'
 import { RideSummaryProps } from '../../lib/types/rideDetails'
 import Styles from '@beckn-ui/becknified-components/src/pages/auth/auth.module.css'
 import { RIDE_STATUS_CODE } from '@utils/ride-utils'
+import { getCurrencyValue } from '@utils/rideSummary-utils'
 
 const RideSummary: React.FC<RideSummaryProps> = ({
   time,
@@ -18,6 +19,8 @@ const RideSummary: React.FC<RideSummaryProps> = ({
   sourceGps,
   destinationGps
 }) => {
+  const country = localStorage.getItem('country')!
+
   return (
     <Box>
       <Flex
@@ -125,13 +128,8 @@ const RideSummary: React.FC<RideSummaryProps> = ({
             style={{ marginTop: '12px' }}
           />
           <Flex alignItems={'center'}>
-            <Image
-              src="/images/rupees.svg"
-              alt="rupee"
-              mr={'8px'}
-            />
             <Typography
-              text={fare.cost}
+              text={`${getCurrencyValue(country)}${fare.cost}`}
               fontSize="24px"
               color="#34C759"
               fontWeight="600"

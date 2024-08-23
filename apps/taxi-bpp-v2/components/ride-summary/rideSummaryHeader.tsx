@@ -3,7 +3,11 @@ import { Box, Flex, Image } from '@chakra-ui/react'
 import React from 'react'
 import { RideSummaryHeaderProps } from '../../lib/types/rideDetails'
 
-const RideSummaryHeader: React.FC<RideSummaryHeaderProps> = ({ driverImg, title, subTitle }) => {
+const RideSummaryHeader: React.FC<RideSummaryHeaderProps> = ({ driverImg, title, subTitle, customerContact }) => {
+  const handleCallClick = () => {
+    const telLink = `tel:${customerContact}`
+    window.open(telLink, '_blank')
+  }
   return (
     <>
       {driverImg ? (
@@ -37,6 +41,7 @@ const RideSummaryHeader: React.FC<RideSummaryHeaderProps> = ({ driverImg, title,
           <Box
             position={'relative'}
             cursor="pointer"
+            onClick={handleCallClick}
           >
             <Image
               h={'44px'}

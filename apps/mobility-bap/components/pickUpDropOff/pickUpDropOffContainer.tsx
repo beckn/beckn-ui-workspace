@@ -67,22 +67,25 @@ const PickUpDropOffContainer = (props: PickUpDropOffContainerProps) => {
     axios
       .post(`${apiUrl}/search`, payload, { cancelToken: cancelTokenSource.token })
       .then(async res => {
-        const { providerDetails, totalCabs } = await parsedSearchDetails(res.data.data)
-        dispatch(setCabServiceProviders(providerDetails))
-        dispatch(setTotalCabs(totalCabs))
-        dispatch(setCabResultFound(false))
-        handleOnClick()
-        if (totalCabs === 0) {
+        if (res.data?.data) {
+          const { providerDetails, totalCabs } = await parsedSearchDetails(res.data.data)
+          dispatch(setCabServiceProviders(providerDetails))
+          dispatch(setTotalCabs(totalCabs))
+          dispatch(setCabResultFound(false))
+          handleOnClick()
+        } else {
           dispatch(
             feedbackActions.setToastData({
               toastData: {
                 message: 'Info',
                 display: true,
                 type: 'success',
-                description: 'No ride available.'
+                description: 'No ride available, please try again!'
               }
             })
           )
+          router.push('/')
+          handleOnClick(true)
         }
       })
       .catch(e => {
