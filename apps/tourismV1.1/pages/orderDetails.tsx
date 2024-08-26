@@ -22,7 +22,6 @@ import ViewMoreOrderModal from '@components/orderDetailComponents/ViewMoreOrder'
 import { DetailCard, OrderStatusProgress, OrderStatusProgressProps } from '@beckn-ui/becknified-components'
 import useResponsive from '@beckn-ui/becknified-components/src/hooks/useResponsive'
 import { useLanguage } from '@hooks/useLanguage'
-import { formatTimestamp, getPayloadForOrderStatus } from '@utils/confirm-utils'
 import { v4 as uuidv4 } from 'uuid'
 import { ConfirmResponseModel } from '../types/confirm.types'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
@@ -33,13 +32,20 @@ import nameIcon from '../public/images/nameIcon.svg'
 import ShippingBlock from '@components/orderDetailComponents/Shipping'
 import { DOMAIN } from '@lib/config'
 import PaymentDetails from '@beckn-ui/becknified-components/src/components/checkout/payment-details'
-import { getPaymentBreakDown } from '@utils/checkout-utils'
 import Qrcode from '@components/qrCode/Qrcode'
 import { StatusResponseModel, SupportModel } from '../types/status.types'
 import BottomModalScan from '@components/BottomModal/BottomModalScan'
-import { isEmpty } from '@utils/common-utils'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
-import { DiscoveryRootState, feedbackActions, OrdersRootState, statusActions } from '@beckn-ui/common'
+import {
+  DiscoveryRootState,
+  feedbackActions,
+  formatTimestamp,
+  getPayloadForOrderStatus,
+  getPaymentBreakDown,
+  isEmpty,
+  OrdersRootState,
+  statusActions
+} from '@beckn-ui/common'
 
 const statusMap = {
   ArrangingPayment: 'Processing your order',

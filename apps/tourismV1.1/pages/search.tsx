@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Box, Flex, Image } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
-import { toBinary } from '@utils/common-utils'
-import { parsedSearchlist } from '@utils/search-results.utils'
 import { ProductCard } from '@beckn-ui/becknified-components'
 import { BottomModal } from '@beckn-ui/molecules'
 import { useBreakpoint } from '@chakra-ui/react'
@@ -17,6 +15,7 @@ import { IGeoLocationSearchPageRootState } from '@lib/types/geoLocationSearchPag
 import axios from '@services/axios'
 import { discoveryActions } from '@beckn-ui/common'
 import SearchBar from '@beckn-ui/common/src/components/searchBar'
+import { parsedSearchlist } from '@utils/search-results.utils'
 
 //Mock data for testing search API. Will remove after the resolution of CORS issue
 
