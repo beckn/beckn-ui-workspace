@@ -11,10 +11,13 @@ export interface SubHeaderConstants {
     orderIconList?: string[]
     cartIconList?: string[]
     invoiceDownloadIconList?: string[]
+    qrCodeScanerList?: string[]
   }
 }
 
 export interface SubHeaderProps extends TranslationProps {
   showCartIcon?: boolean
   headerConstants: SubHeaderConstants
+  qrScanerValue?: string | any
+  handleClick?: () => void
 }

@@ -7,7 +7,6 @@ import { parsedSearchlist } from '@utils/search-results.utils'
 import { ProductCard } from '@beckn-ui/becknified-components'
 import { BottomModal } from '@beckn-ui/molecules'
 import { useBreakpoint } from '@chakra-ui/react'
-import SearchBar from '../components/header/SearchBar'
 import { useLanguage } from '../hooks/useLanguage'
 import { ParsedItemModel } from '@lib/types/beckn/search'
 import { DOMAIN } from '@lib/config'
@@ -17,6 +16,7 @@ import { LocalStorage } from '@lib/types'
 import { IGeoLocationSearchPageRootState } from '@lib/types/geoLocationSearchPage'
 import axios from '@services/axios'
 import { discoveryActions } from '@beckn-ui/common'
+import SearchBar from '@beckn-ui/common/src/components/searchBar'
 
 //Mock data for testing search API. Will remove after the resolution of CORS issue
 
@@ -175,6 +175,7 @@ const Search = () => {
             />
             {(isSmallScreen || isMediumScreen) && (
               <Image
+                pl={'20px'}
                 onClick={handleImageClick}
                 cursor={'pointer'}
                 src={'/images/filter-btn.svg'}
@@ -251,7 +252,7 @@ const Search = () => {
                             search: searchKeyword
                           }
                         })
-                        localStorage.setItem('selectCardHeaderText', product.name)
+                        localStorage.setItem('selectCardHeaderText', JSON.stringify(product.name))
                       }}
                       product={product}
                       currency={item.price.currency}

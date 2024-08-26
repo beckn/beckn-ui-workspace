@@ -10,7 +10,7 @@ import Qrcode from '../qrCode'
 import { useSelector } from 'react-redux'
 import { ICartRootState } from '../../../lib/types'
 import { getLocalStorage } from '../../utils'
-import { SubHeaderConstants, SubHeaderProps } from './subHeader.types'
+import { SubHeaderConstants, SubHeaderProps, SubHeaderQrScanerProps } from './subHeader.types'
 import { testIds } from '@shared/dataTestIds'
 
 const getHeaderTitleForPage = (
@@ -51,7 +51,7 @@ const getHeaderTitleForPage = (
 const SubHeader = (props: SubHeaderProps) => {
   const { locale, t, showCartIcon = true, headerConstants } = props
   const {
-    blackList: { backIconList, orderIconList, cartIconList, invoiceDownloadIconList }
+    blackList: { backIconList, orderIconList, cartIconList, invoiceDownloadIconList, qrCodeScanerList }
   } = headerConstants
 
   const [isOrderModalOpen, setOrderModalOpen] = useState(false)
@@ -119,6 +119,15 @@ const SubHeader = (props: SubHeaderProps) => {
               mr={'20px'}
             />
           )}
+          {qrCodeScanerList?.includes(router.pathname) && (
+            <Image
+              cursor="pointer"
+              onClick={() => setInvoiceModalOpen(true)}
+              src="/images/OrCodeModalOpen.svg"
+              alt="invoice icon"
+              mr={'20px'}
+            />
+          )}
         </Box>
       </Box>
       <BottomModal
@@ -148,9 +157,11 @@ const SubHeader = (props: SubHeaderProps) => {
         isOpen={isInvoiceModalOpen}
         onClose={handleInvoiceModalClose}
         responsive={true}
+        title={'Scan QR'}
       >
         <Box p={'0px 24px'}>
           <Box
+            mt="20px"
             textAlign={'center'}
             fontSize={'15px'}
           >
@@ -163,7 +174,7 @@ const SubHeader = (props: SubHeaderProps) => {
             justifyContent={'center'}
             p={'20px'}
           >
-            <Qrcode value={'https://odr-dev.becknprotocol.io/'} />
+            <Qrcode value={props.qrScanerValue} />
           </HStack>
 
           <Flex
@@ -188,7 +199,10 @@ const SubHeader = (props: SubHeaderProps) => {
           >
             {t('clicktheShopbuttontobuyitemsforthistrip')}
           </Text>
-          <BecknButton children="Proceed" />
+          <BecknButton
+            handleClick={props.handleClick}
+            children="Proceed"
+          />
         </Box>
       </BottomModal>
     </header>
