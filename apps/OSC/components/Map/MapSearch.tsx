@@ -6,6 +6,7 @@ import { Image } from '@chakra-ui/react'
 import { useLanguage } from '../../hooks/useLanguage'
 import useDebounce from '../../hooks/useDebounce'
 import { Location } from '../../lib/types/search'
+import { testIds } from '@shared/dataTestIds'
 interface LocalNameFormat {
   primaryName: string
   secondaryName: string
@@ -69,13 +70,17 @@ const SearchBar: React.FC<SearchBarProp> = ({
 
   return (
     <>
-      <div className="max-w-[50rem] w-[90%] md:w-[90%] px-4 mx-auto mt-4 mb-3 border border-[#C9C9C9] border-solid  md:ltr:ml-4 md:rtl:mr-4 rounded-[12px]  dark:bg-slate-800 flex items-center justify-center flex-grow search-location">
+      <div
+        data-test={testIds.map_search_input_container}
+        className="max-w-[50rem] w-[90%] md:w-[90%] px-4 mx-auto mt-4 mb-3 border border-[#C9C9C9] border-solid  md:ltr:ml-4 md:rtl:mr-4 rounded-[12px]  dark:bg-slate-800 flex items-center justify-center flex-grow search-location"
+      >
         <GoSearch style={{ color: 'rgb(156 163 175)' }} />
         <input
           className="px-4 py-2 md:py-3 bg-transparent outline-none w-full text-[15px]"
           type="search"
           placeholder={`${t.search}`}
           onChange={e => setValue(e.target.value)}
+          data-test={testIds.map_search_input}
         />
         {loading && (
           <Spinner
@@ -85,13 +90,17 @@ const SearchBar: React.FC<SearchBarProp> = ({
         )}
       </div>
       {!isEmpty(value) && locations && !isEmpty(locations) && (
-        <div className="flex flex-col overflow-scroll max-h-[100vh]  bg-white  rounded-md h-[100vh] relative z-[9995] divide-y suggestion-list">
+        <div
+          data-test={testIds.locationList}
+          className="flex flex-col overflow-scroll max-h-[100vh]  bg-white  rounded-md h-[100vh] relative z-[9995] divide-y suggestion-list"
+        >
           {locations.map(singleLocation => {
             const { primaryName, secondaryName } = formatLocationName(singleLocation.display_name)
             return (
               <div
                 key={singleLocation.place_id}
                 className="text-ellipsis  flex items-start gap-3 my-1 p-2 "
+                data-test={testIds.location_List_item}
                 onClick={() => {
                   handleLocationClick(singleLocation.lat, singleLocation.lon)
                   setQuery(primaryName)

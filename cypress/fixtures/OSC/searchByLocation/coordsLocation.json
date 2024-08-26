@@ -1,0 +1,27 @@
+{
+  "place_id": 213558768,
+  "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+  "osm_type": "way",
+  "osm_id": 24588389,
+  "lat": "28.459482408976164",
+  "lon": "77.02665063372447",
+  "category": "highway",
+  "type": "tertiary",
+  "place_rank": 26,
+  "importance": 0.05339354314488438,
+  "addresstype": "road",
+  "name": "Sadar Bazar Main Road",
+  "display_name": "Sadar Bazar Main Road, Sadar Bazar, Sector 11A, Gurgaon, Gurugram, Haryana, 122001, India",
+  "address": {
+    "road": "Sadar Bazar Main Road",
+    "neighbourhood": "Sadar Bazar",
+    "suburb": "Sector 11A",
+    "city": "Gurgaon",
+    "state": "Haryana",
+    "ISO3166-2-lvl4": "IN-HR",
+    "postcode": "122001",
+    "country": "India",
+    "country_code": "in"
+  },
+  "boundingbox": ["28.4594166", "28.4624792", "77.0265760", "77.0315550"]
+}

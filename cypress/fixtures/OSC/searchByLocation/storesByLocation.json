@@ -1,0 +1,83 @@
+[
+  {
+    "type": "node",
+    "id": 2206746829,
+    "lat": 48.8730171,
+    "lon": 2.4047378,
+    "tags": {
+      "amenity": "cafe",
+      "becknified": "true",
+      "image": "https://tinyurl.com/26rkp7v9,https://tinyurl.com/29jz27uu,https://tinyurl.com/2p9ehfdu,https://tinyurl.com/yz557n2f,https://tinyurl.com/2p9879va",
+      "logo": "https://tinyurl.com/yae6pvh9",
+      "name": "Chéri-Chérie",
+      "name:fr": "Chéri-Chérie",
+      "providerId": "./retail.kirana/ind.blr/33@retail-bpp-infra1.becknprotocol.io.provider",
+      "shop": "bakery"
+    }
+  },
+  {
+    "type": "node",
+    "id": 7462119769,
+    "lat": 48.8675526,
+    "lon": 2.3966014,
+    "tags": {
+      "addr:city": "Paris",
+      "addr:housenumber": "236",
+      "addr:postcode": "75020",
+      "addr:street": "Rue des Pyrénées",
+      "amenity": "bar",
+      "becknified": "true",
+      "check_date": "2024-08-10",
+      "contact:city": "Paris 20eme Arrondissement",
+      "contact:housenumber": "236",
+      "contact:phone": "+33 1 83 96 40 79",
+      "contact:postcode": "75020",
+      "contact:street": "Rue Des Pyrénées",
+      "image": "https://tinyurl.com/2y4p4hcw,https://tinyurl.com/3yh7z9kb,https://tinyurl.com/59pbewkk,https://tinyurl.com/fywzfsu7,https://tinyurl.com/2rh8pja6",
+      "logo": "https://tinyurl.com/4xxya52m",
+      "name": "Aux Ours",
+      "outdoor_seating": "yes",
+      "providerId": "./retail.kirana/ind.blr/33@retail-bpp-infra1.becknprotocol.io.provider",
+      "shop": "bakery"
+    }
+  },
+  {
+    "type": "node",
+    "id": 8442637117,
+    "lat": 48.8702617,
+    "lon": 2.3977728,
+    "tags": {
+      "addr:housenumber": "150",
+      "addr:postcode": "75020",
+      "addr:street": "Rue de Ménilmontant",
+      "becknified": "true",
+      "check_date": "2022-11-12",
+      "image": "https://tinyurl.com/yc74zbej,https://tinyurl.com/399debcv,https://tinyurl.com/483j2pfb,https://tinyurl.com/yck9rtup,https://tinyurl.com/3uwcw3z3",
+      "logo": "https://tinyurl.com/35bdz23u",
+      "name": "Benoît Castel",
+      "opening_hours": "We-Fr 07:30-20:00; Sa 08:00-20:00; Su 08:00-18:00",
+      "payment:mastercard": "yes",
+      "payment:visa": "yes",
+      "phone": "+33 1 46 36 13 82",
+      "providerId": "./retail.kirana/ind.blr/171@retail-bpp-infra2.becknprotocol.io.provider",
+      "shop": "bakery"
+    }
+  },
+  {
+    "type": "node",
+    "id": 11030027212,
+    "lat": 48.8705411,
+    "lon": 2.3977769,
+    "tags": {
+      "addr:city": "Paris",
+      "addr:street": "33 Rue du Surmelin, 75020 Paris, France",
+      "amenity": "restaurant",
+      "becknified": "true",
+      "image": "https://tinyurl.com/5n8hytjy,https://tinyurl.com/22px9yvn,https://tinyurl.com/4mmwupsa,https://tinyurl.com/2s3tncap,https://tinyurl.com/2bkec3b7",
+      "logo": "https://tinyurl.com/4eppm9xx",
+      "name": "Brunchy Café Paris",
+      "providerId": "./retail.kirana/ind.blr/170@retail-bpp-infra2.becknprotocol.io.provider",
+      "shop": "bakery"
+    }
+  }
+]

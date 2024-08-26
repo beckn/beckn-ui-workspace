@@ -9,6 +9,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { useRouter } from 'next/router'
 import { useDispatch } from 'react-redux'
 import { feedbackActions, geocodeFromPincode } from '@beckn-ui/common'
+import { testIds } from '@shared/dataTestIds'
 
 const UpdateShippingDetails = () => {
   const dispatch = useDispatch()
@@ -230,6 +231,7 @@ const UpdateShippingDetails = () => {
       className="hideScroll"
       maxH={'calc(100vh - 100px)'}
       overflowY="scroll"
+      data-test={testIds.orderDetailspage_updateShippingDetails}
     >
       <ShippingForm
         onSubmit={() => handleSubmit(shippingDetails, confirmData)}

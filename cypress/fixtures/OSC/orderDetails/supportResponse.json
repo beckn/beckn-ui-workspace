@@ -1,0 +1,39 @@
+{
+  "data": [
+    {
+      "context": {
+        "domain": "retail:1.1.0",
+        "action": "on_support",
+        "version": "1.1.0",
+        "bpp_id": "bpp123",
+        "bpp_uri": "https://bpp.example.com",
+        "country": "IND",
+        "city": "std:080",
+        "location": {
+          "country": {
+            "name": "India",
+            "code": "IND"
+          },
+          "city": {
+            "name": "Bangalore",
+            "code": "std:080"
+          }
+        },
+        "bap_id": "bap-ps-network-staging.example.io",
+        "bap_uri": "https://bap-ps-network-staging.example.io",
+        "transaction_id": "1eb584ce-aebb-4168-ae0a-c9d1c35f1844",
+        "message_id": "347992a6-3fe7-4541-809d-b9241cb2591c",
+        "ttl": "PT10M",
+        "timestamp": "2024-07-26T05:32:34.300Z"
+      },
+      "message": {
+        "support": {
+          "ref_id": "888889-0000",
+          "phone": "+919123456789",
+          "email": "support@example.io",
+          "url": "https://www.example.io"
+        }
+      }
+    }
+  ]
+}

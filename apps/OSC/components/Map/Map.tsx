@@ -9,6 +9,7 @@ import CenterMarker from './CenterMarker.svg'
 import L from 'leaflet'
 import { isEmpty } from 'lodash'
 import { getUserLocation } from '../../utilities/common-utils'
+import { testIds } from '@shared/dataTestIds'
 
 interface MapProps {
   coords: { lat: number; long: number }
@@ -81,7 +82,7 @@ const Map: React.FC<MapProps> = ({
     <MapContainer
       style={{ maxHeight: '100vh', height: '90vh' }}
       center={[lat, long]}
-      zoom={16}
+      zoom={13}
       zoomControl={false}
       scrollWheelZoom={true}
       zoomAnimation={true}
@@ -112,6 +113,7 @@ const Map: React.FC<MapProps> = ({
           return (
             <Marker
               icon={IconToUse}
+              data-test={testIds.store_Location_image}
               key={item.lon}
               position={[item.lat, item.lon]}
               eventHandlers={{
@@ -125,6 +127,7 @@ const Map: React.FC<MapProps> = ({
         })}
       <Marker
         icon={customCenterMarker}
+        data-test={testIds.store_Location_image}
         position={[lat, long]}
       ></Marker>
       <ZoomControl position="topright" />
