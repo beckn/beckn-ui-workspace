@@ -119,6 +119,7 @@ const ProductCardRenderer = (data: any) => {
           onClick={() => {
             localStorage.setItem('selectedItem', JSON.stringify(dataSource))
             router.push(`/product?productDetails=${encodedProduct}`)
+            localStorage.setItem('selectCardHeaderText', JSON.stringify(dataSource.item.name))
           }}
           mt={'30px'}
         >

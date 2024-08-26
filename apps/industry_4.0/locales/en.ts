@@ -61,6 +61,7 @@ const en: { [key: string]: string } = {
   cashOnDelivery: 'Cash on Delivery',
   netBanking: ' Net Banking',
   orderHistory: 'Order History',
+  orderHistoryIcon: 'Order History',
   invoiceDetails: 'Invoice Details',
   cardNumber: '**** **** **** 1234',
   procced: 'Proceed',
