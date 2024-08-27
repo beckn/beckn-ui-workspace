@@ -4,8 +4,7 @@ import { ProductDetailPage } from '@beckn-ui/becknified-components'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { useRouter } from 'next/router'
-import { Box, useTheme } from '@chakra-ui/react'
-import { CustomThemeType } from '@beckn-ui/molecules'
+import { Box } from '@chakra-ui/react'
 import { useLanguage } from '@hooks/useLanguage'
 import { cartActions, DiscoveryRootState } from '@beckn-ui/common'
 
