@@ -91,7 +91,7 @@ export const getPayloadForInitRequest = async (selectResponse: SelectResponseMod
     const { order } = res.message
     const { items, provider, type, quote } = order
     const { id: providerId } = provider
-
+    console.log(items)
     const context = {
       transaction_id,
       bpp_id,
@@ -107,9 +107,8 @@ export const getPayloadForInitRequest = async (selectResponse: SelectResponseMod
           },
           items: items,
           fulfillments: [
-            //   TODO :- we have to map this with real data that ( fulfillment shoould come in select which is not coming)
             {
-              id: '',
+              id: items[0]?.fulfillments[0]?.id,
               customer: {
                 contact: {
                   email,
