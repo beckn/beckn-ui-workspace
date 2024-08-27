@@ -97,12 +97,9 @@ const Homepage = () => {
     ) {
       const response: any = await getNewRideRequest({})
       const newRides: any[] = response?.data?.data?.validOrders
-      if (newRides?.length > 0) {
-        const result = await parsedNewRideDetails(response?.data?.data?.validOrders)
-        console.log('new ride req list--> ', result)
-        rideRequestList.current = _.uniqBy([...rideRequestList.current, ...result], 'orderId')
-        showNextRideRequest(result)
-      }
+      const result = await parsedNewRideDetails(response?.data?.data?.validOrders)
+      rideRequestList.current = result
+      showNextRideRequest(rideRequestList.current)
     } else {
       rideRequestList.current = []
     }
@@ -110,7 +107,7 @@ const Homepage = () => {
 
   useEffect(() => {
     getAllRideRequests()
-    const intervalId = setInterval(getAllRideRequests, 10000)
+    const intervalId = setInterval(getAllRideRequests, 5000)
 
     return () => clearInterval(intervalId)
   }, [isOnline, driverStatus])
