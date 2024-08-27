@@ -44,7 +44,7 @@ const getGeoLocation = (list: Stop[], type: 'start' | 'end') => {
   return list
     .filter(element => element.type === type)
     .map(async element => {
-      const latLong = element.gps.split(',')
+      const latLong = element?.gps?.split(',')
       return {
         address: element.address || (await addressFromGps(Number(latLong[0]), Number(latLong[1]))),
         geoLocation: { latitude: Number(latLong[0]), longitude: Number(latLong[1]) }

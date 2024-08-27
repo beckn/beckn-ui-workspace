@@ -7,6 +7,7 @@ import { UserGeoLocationRootState } from '@lib/types/user'
 import BottomModalRenderer from '@components/bottomModalRenderer/bottomModalRenderer'
 import { useRouter } from 'next/router'
 import { getExperienceTypeGelocation } from '@utils/general'
+import axios from '@services/axios'
 
 const Homepage = () => {
   const MapWithNoSSR: any = dynamic(() => import('../components/Map'), { ssr: false })
@@ -27,10 +28,11 @@ const Homepage = () => {
 
   const { currentAddress, coordinates } = useGeolocation(apiKeyForGoogle as string)
 
-  const getExperienceTypeFlow = () => {
-    const queryParam = JSON.parse(localStorage.getItem('experienceType')!)
-    const experienceType = router.query?.experienceType || queryParam
-    const external_url = router.query?.external_url || queryParam
+  const getExperienceTypeFlow = async () => {
+    const parsedExperienceType = JSON.parse(localStorage.getItem('experienceType')!)
+    const parsedImportedOrderObject = JSON.parse(localStorage.getItem('importedOrderObject')!)
+    const experienceType = router.query?.experienceType || parsedExperienceType
+    const external_url = router.query?.external_url || parsedImportedOrderObject
     console.log('experienceType--> ', experienceType)
     console.log('external_url--> ', external_url)
     let flowType: PickUpDropOffModel | null = null
@@ -38,8 +40,15 @@ const Homepage = () => {
       localStorage.setItem('experienceType', JSON.stringify(experienceType))
       flowType = getExperienceTypeGelocation(experienceType.toString())
     } else if (external_url) {
-      localStorage.setItem('experienceType', JSON.stringify(external_url))
-      flowType = getExperienceTypeGelocation(external_url.toString())
+      const res = await axios.get(external_url)
+
+      const response = res.data
+      response?.items?.[0].tags?.[0].list.forEach((ele: any) => {
+        if (ele?.descriptor?.code === 'paris' && ele?.value === 'Y') {
+          flowType = getExperienceTypeGelocation('paris')
+        }
+      })
+      localStorage.setItem('importedOrderObject', JSON.stringify(external_url))
     }
     return flowType
   }
@@ -49,7 +58,7 @@ const Homepage = () => {
     dispatch(setDropOffLocation({ address: '', geoLocation: { latitude: 0, longitude: 0 } }))
   }, [])
 
-  useEffect(() => {
+  const enableCurrentLocation = useCallback(async () => {
     if (originGeoAddress && originGeoLatLong) {
       const latLong = originGeoLatLong.split(',')
 
@@ -60,7 +69,8 @@ const Homepage = () => {
 
       dispatch(setPickUpLocation(locationDetails))
     } else if (currentAddress && coordinates?.latitude && coordinates?.longitude) {
-      const experienceType = getExperienceTypeFlow()
+      const experienceType = await getExperienceTypeFlow()
+      console.log(experienceType)
       if (experienceType) {
         dispatch(setPickUpLocation(experienceType))
       } else {
@@ -72,6 +82,10 @@ const Homepage = () => {
         dispatch(setPickUpLocation(locationDetails))
       }
     }
+  }, [currentAddress, coordinates, originGeoAddress, originGeoLatLong])
+
+  useEffect(() => {
+    enableCurrentLocation()
   }, [currentAddress, coordinates, originGeoAddress, originGeoLatLong])
 
   useEffect(() => {

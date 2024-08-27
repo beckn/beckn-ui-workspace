@@ -1,8 +1,7 @@
-import { Coordinate } from '@beckn-ui/common'
+import React, { useRef, useEffect, useMemo, useState, useCallback } from 'react'
 import { useLoadScript, GoogleMap, MarkerF, DirectionsRenderer } from '@react-google-maps/api'
+import { Coordinate } from '@beckn-ui/common'
 import { formatCoords } from '@utils/geoLocation-utils'
-import React, { useRef } from 'react'
-import { useCallback, useEffect, useMemo, useState } from 'react'
 
 interface MapProps {
   startNav: boolean
@@ -21,6 +20,7 @@ const Map = (props: MapProps) => {
   const [map, setMap] = useState<google.maps.Map | null>(null)
 
   const index = useRef<number>(0)
+  const interactionTimeout = useRef<NodeJS.Timeout | null>(null)
 
   const libraries = useMemo(() => ['places'], [])
   const mapCenter = useMemo(() => formatCoords(origin), [origin])
@@ -34,7 +34,8 @@ const Map = (props: MapProps) => {
     }),
     []
   )
-  const { isLoaded, loadError } = useLoadScript({
+
+  const { isLoaded } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY!,
     libraries: libraries as any
   })
@@ -66,7 +67,7 @@ const Map = (props: MapProps) => {
         }
       }
     )
-  }, [destination, mapCenter])
+  }, [destination, mapCenter, map])
 
   useEffect(() => {
     fetchDirections()
@@ -74,13 +75,13 @@ const Map = (props: MapProps) => {
 
   useEffect(() => {
     if (startNav && routePoints.length > 0) {
-      // let index = 0
-
       const moveCar = () => {
         if (index.current < routePoints.length) {
-          setCarPosition(routePoints[index.current])
+          const nextPosition = routePoints[index.current]
+          setCarPosition(nextPosition)
+
           if (!userInteracted) {
-            setFocusOnCar(routePoints[index.current])
+            setFocusOnCar(nextPosition)
           }
           index.current++
         } else {
@@ -95,25 +96,38 @@ const Map = (props: MapProps) => {
 
   const handleMapLoad = (map: google.maps.Map) => {
     setMap(map)
-    map.addListener('dragstart', () => setUserInteracted(true))
-    map.addListener('zoom_changed', () => setUserInteracted(true))
-    map.addListener('idle', () => setUserInteracted(false))
+
+    const handleUserInteraction = () => {
+      setUserInteracted(true)
+
+      if (interactionTimeout.current) {
+        clearTimeout(interactionTimeout.current)
+      }
+
+      interactionTimeout.current = setTimeout(() => {
+        setUserInteracted(false)
+      }, 5000)
+    }
+
+    map.addListener('dragstart', handleUserInteraction)
+    map.addListener('zoom_changed', handleUserInteraction)
   }
 
   const anchorPoint = new window.google.maps.Point(20, 32)
+
   return (
     <>
       {isLoaded ? (
         <GoogleMap
           options={mapOptions}
           zoom={16}
-          center={mapCenter}
+          center={focusOnCar || mapCenter}
           mapTypeId={google.maps.MapTypeId.ROADMAP}
           mapContainerStyle={{ maxHeight: '100vh', height: '100vh' }}
           onLoad={handleMapLoad}
         >
           <MarkerF
-            position={focusOnCar ? focusOnCar : mapCenter}
+            position={carPosition || mapCenter}
             icon={{
               url: './images/ripple.svg',
               scaledSize: new window.google.maps.Size(40, 40),
@@ -142,15 +156,6 @@ const Map = (props: MapProps) => {
                   }}
                 />
               )}
-              {/* {carPosition && (
-                <MarkerF
-                  position={carPosition}
-                  // icon={{
-                  //   url: '/images/map_car.svg',
-                  //   scaledSize: new google.maps.Size(50, 50)
-                  // }}
-                />
-              )} */}
             </>
           )}
         </GoogleMap>

@@ -73,9 +73,7 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
             {children}
           </Box>
         ) : (
-          <Box>
-            <GeoLocationInputList />
-          </Box>
+          <GeoLocationInputList />
         )}
       </div>
       <ToastContainer

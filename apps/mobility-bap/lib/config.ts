@@ -23,7 +23,7 @@ export const defaultSourceLocation: {
     geoLocation: { latitude: 13.439226893152561, longitude: -16.68207924411194 }
   },
   paris: {
-    address: '',
-    geoLocation: { latitude: 0, longitude: 0 }
+    address: 'Paris Charles de Gaulle Airport (CDG), Roissy-en-France, France',
+    geoLocation: { latitude: 49.01496639027072, longitude: 2.5510665484333335 }
   }
 }
