@@ -32,7 +32,6 @@ const PickUpDropOffContainer = (props: PickUpDropOffContainerProps) => {
   const { rideSearchInProgress } = useSelector((state: CabServiceDetailsRootState) => state.cabService)
 
   const voilationCheck = () => {
-    setOpenAlert(true)
     try {
       axios
         .post('https://api.mobility-bap-policy-demo.becknprotocol.io/v1/policy/checkViolation/location', {
