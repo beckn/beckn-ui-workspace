@@ -112,6 +112,7 @@ const en: { [key: string]: string } = {
   enterState: 'Enter State / Province',
   enterCountry: 'Enter Country',
   saveContinue: 'Save & Continue',
-  profileUpdateSuccess: 'Profile updated successfully!'
+  profileUpdateSuccess: 'Profile updated successfully!',
+  noProduct: 'There are no products in this category yet! New products will be added soon.'
 }
 export default en

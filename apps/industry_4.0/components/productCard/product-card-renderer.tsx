@@ -5,6 +5,7 @@ import { calculateDistance, Coordinate } from '@utils/homePage.utils'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import StarIcon from '../../public/images/Star.svg'
+import { testIds } from '@shared/dataTestIds'
 
 const ProductCardRenderer = (data: any) => {
   const [distance, setDistance] = useState(0)
@@ -43,6 +44,7 @@ const ProductCardRenderer = (data: any) => {
             alt={dataSource.item.name}
             borderTopLeftRadius={'10px'}
             borderBottomLeftRadius={'10px'}
+            data-test={testIds.search_page_product_image}
           />
         </Box>
       </Box>
@@ -66,6 +68,7 @@ const ProductCardRenderer = (data: any) => {
             textOverflow="ellipsis"
             whiteSpace="pre-wrap"
             overflowWrap="break-word"
+            data-test={testIds.search_page_product_name}
           >
             {dataSource.item.name}
           </Text>
@@ -79,13 +82,19 @@ const ProductCardRenderer = (data: any) => {
             flexDir={'column'}
             gap={'5px'}
           >
-            <Text pl="3px">{dataSource.providerName}</Text>
+            <Text
+              pl="3px"
+              data-test={testIds.search_page_product_providerName}
+            >
+              {dataSource.providerName}
+            </Text>
             <Text
               pl="3px"
               textOverflow={'ellipsis'}
               overflow={'hidden'}
               noOfLines={2}
               w={'100%'}
+              data-test={testIds.search_page_product_short_desc}
             >
               {dataSource.item.short_desc}
             </Text>
@@ -110,6 +119,7 @@ const ProductCardRenderer = (data: any) => {
             <Text
               fontSize="12px"
               pl="5px"
+              data-test={testIds.search_page_product_rating}
             >
               {dataSource.rating}
             </Text>
@@ -121,6 +131,7 @@ const ProductCardRenderer = (data: any) => {
             router.push(`/product?productDetails=${encodedProduct}`)
             localStorage.setItem('selectCardHeaderText', JSON.stringify(dataSource.item.name))
           }}
+          data-test={testIds.search_page_product_OnClick}
           mt={'30px'}
         >
           <Text

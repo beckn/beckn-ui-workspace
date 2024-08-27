@@ -10,6 +10,7 @@ import { useLanguage } from '../hooks/useLanguage'
 import { ParsedItemModel } from '../types/search.types'
 import TopSheet from '@components/topSheet/TopSheet'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
+import { testIds } from '@shared/dataTestIds'
 
 //Mock data for testing search API. Will remove after the resolution of CORS issue
 
@@ -100,6 +101,7 @@ const Search = () => {
             display={'grid'}
             height={'calc(100vh - 300px)'}
             alignContent={'center'}
+            data-test={testIds.loadingIndicator}
           >
             <LoaderWithMessage
               loadingText={t.pleaseWait}
@@ -108,15 +110,26 @@ const Search = () => {
           </Box>
         ) : (
           <>
-            {items.map((item, idx) => {
-              return (
-                <ProductCard
-                  key={idx}
-                  ComponentRenderer={ProductCardRenderer}
-                  dataSource={item}
-                />
-              )
-            })}
+            {items.length > 0 ? (
+              items.map((item, idx) => {
+                return (
+                  <ProductCard
+                    key={idx}
+                    ComponentRenderer={ProductCardRenderer}
+                    dataSource={item}
+                  />
+                )
+              })
+            ) : (
+              <Box
+                pt={8}
+                opacity={0.5}
+                textAlign="center"
+                data-test={testIds.noDataAvailable}
+              >
+                {t.noProduct}
+              </Box>
+            )}
           </>
         )}
       </Box>
