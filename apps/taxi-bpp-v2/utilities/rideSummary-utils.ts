@@ -52,7 +52,7 @@ export const getCurrencyValue = (experienceType: string) => {
   if (countries.includes('gambia')) {
     return currencyMap.GMD
   }
-  if (countries.includes('paris')) {
+  if (countries.includes('france')) {
     return currencyMap.EUR
   }
 
