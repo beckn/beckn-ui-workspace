@@ -73,7 +73,7 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
             {children}
           </Box>
         ) : (
-          <Box mt="4.4vh">
+          <Box>
             <GeoLocationInputList />
           </Box>
         )}

@@ -67,7 +67,7 @@
   background: #fff;
   height: calc(100vh - 0px);
   background-repeat: no-repeat;
-  margin-top: 3.5vh;
+  padding-top: 3.5vh;
   padding-left: 5px;
   background-size: cover;
 }
