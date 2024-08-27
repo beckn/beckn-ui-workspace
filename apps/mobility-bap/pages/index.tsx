@@ -45,6 +45,7 @@ const Homepage = () => {
       const response = res.data
       response?.items?.[0].tags?.[0].list.forEach((ele: any) => {
         if (ele?.descriptor?.code === 'paris' && ele?.value === 'Y') {
+          localStorage.setItem('experienceType', JSON.stringify('paris'))
           flowType = getExperienceTypeGelocation('paris')
         }
       })
