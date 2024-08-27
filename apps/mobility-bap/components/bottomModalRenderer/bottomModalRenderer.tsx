@@ -11,7 +11,7 @@ import { clearCancelTokenSource, setCabResultFound } from '@store/cabService-sli
 import { SelectRideRootState } from '@store/selectRide-slice'
 import { RIDE_STATUS_CODE } from '@utils/general'
 import { useRouter } from 'next/router'
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 type PageOrModalType =

@@ -107,7 +107,7 @@ const Map = (props: MapProps) => {
         <GoogleMap
           options={mapOptions}
           zoom={16}
-          center={focusOnCar ? focusOnCar : mapCenter}
+          center={mapCenter}
           mapTypeId={google.maps.MapTypeId.ROADMAP}
           mapContainerStyle={{ maxHeight: '100vh', height: '100vh' }}
           onLoad={handleMapLoad}

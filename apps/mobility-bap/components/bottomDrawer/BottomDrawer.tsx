@@ -1,13 +1,12 @@
 import React, { ReactNode, useState } from 'react'
-import { Card, CardBody, Image } from '@chakra-ui/react'
+import { Box, Card, CardBody, Image } from '@chakra-ui/react'
 import crossIcon from '@public/images/Indicator.svg'
 
 interface CancelBookingProps {
   children: ReactNode
-  minimizationRequired?: boolean
 }
 
-const BottomDrawer: React.FC<CancelBookingProps> = ({ children, minimizationRequired = false }) => {
+const BottomDrawer: React.FC<CancelBookingProps> = ({ children }) => {
   const [isMinimized, setIsMinimized] = useState<boolean>(false)
 
   // Toggle the minimized state
@@ -28,17 +27,21 @@ const BottomDrawer: React.FC<CancelBookingProps> = ({ children, minimizationRequ
         borderBottomRightRadius="unset"
         boxShadow="0px -4px 16px 0px #0000001F"
         pos={'fixed'}
-        className={`${isMinimized ? 'h-[20vh]' : undefined}`}
+        className={`${isMinimized ? 'h-[10vh]' : undefined}`}
       >
-        {minimizationRequired && (
+        <Box
+          alignSelf={'center'}
+          height="1rem"
+          onClick={handleHeaderClick}
+        >
           <Image
             src={crossIcon}
             alt="Close Icon"
             width={'4rem'}
             alignSelf={'center'}
-            onClick={handleHeaderClick}
           />
-        )}
+        </Box>
+
         <CardBody padding={'10px 20px 5px 20px'}>{children}</CardBody>
       </Card>
     </div>
