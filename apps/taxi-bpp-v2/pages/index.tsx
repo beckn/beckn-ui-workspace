@@ -30,6 +30,7 @@ import { RideStatusRootState, setNewRideRequest, updateDriverStatus } from '@sto
 import { parsedNewRideDetails, RIDE_STATUS_CODE } from '@utils/ride-utils'
 import { parseRideSummaryData, RideSummaryModalProp } from '@utils/rideSummary-utils'
 import _ from 'lodash'
+import BottomDrawer from '@components/bottomDrawer/BottomDrawer'
 
 const Homepage = () => {
   const MapWithNoSSR: any = dynamic(() => import('../components/Map'), { ssr: false })
@@ -97,7 +98,7 @@ const Homepage = () => {
     ) {
       const response: any = await getNewRideRequest({})
       const newRides: any[] = response?.data?.data?.validOrders
-      const result = await parsedNewRideDetails(response?.data?.data?.validOrders)
+      const result = await parsedNewRideDetails(newRides)
       rideRequestList.current = result
       showNextRideRequest(rideRequestList.current)
     } else {
@@ -429,12 +430,7 @@ const Homepage = () => {
           Object.keys(currentModal).length > 0 &&
           currentModal.rideDetails &&
           Object.keys(currentModal.rideDetails).length > 0 && (
-            <BottomModal
-              // ref={modalRef}
-              backgroundAccessControl={true}
-              onClose={() => {}}
-              isOpen={true}
-              divider="DASHED"
+            <BottomDrawer
               title={
                 currentModal.id === 'REQ_NEW_RIDE' ? (
                   currentModal.title
@@ -463,7 +459,7 @@ const Homepage = () => {
                 customerDetails={currentModal.rideDetails?.customerDetails!}
                 handleNavigate={currentModal.rideDetails?.handleNavigate}
               />
-            </BottomModal>
+            </BottomDrawer>
           )}
       </>
     )

@@ -19,6 +19,7 @@ import { feedbackActions } from '@beckn-ui/common'
 import { useSelectMutation } from '@beckn-ui/common/src/services/select'
 import { getCurrencyValue, getDistance } from '@utils/general'
 import { UserGeoLocationRootState } from '@lib/types/user'
+import { SelectRideRootState } from '@store/selectRide-slice'
 
 const optionsList: OptionsList = {
   rideTimeOptionsList: [
@@ -65,13 +66,12 @@ const SearchRideForm: React.FC<SearchRideFormProps> = () => {
   const router = useRouter()
   const theme = useTheme()
   const { transactionId, selectedRide } = useSelector((state: DiscoveryRootState) => state.discovery)
+  const selectResponse = useSelector((state: SelectRideRootState) => state.selectRide.selectResponse)
   const experienceType = JSON.parse(localStorage.getItem('experienceType')!)
   const [initialize] = useInitMutation()
   const [fetchQuotes] = useSelectMutation()
 
   const { provider, pickup, dropoff } = selectedRide
-
-  // const selectResponse = useSelector((state: SelectRideRootState) => state.selectRide.selectResponse)
 
   useEffect(() => {
     if (Object.keys(selectedRide).length > 0) {
@@ -104,6 +104,7 @@ const SearchRideForm: React.FC<SearchRideFormProps> = () => {
 
   const formSubmitHandler = async () => {
     try {
+      if (!selectResponse) return
       setIsLoading(true)
       // const { id, type } = selectResponse[0].message.order.fulfillments[0]
       const contactDetails = {
