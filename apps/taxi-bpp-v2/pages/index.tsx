@@ -66,9 +66,7 @@ const Homepage = () => {
         location: { lat: geoLatLong?.latitude.toString(), long: geoLatLong?.longitude.toString() }
       }
 
-      const response: any = await toggleAvailability(requestBody)
-
-      const result = response.data
+      const result: any = await toggleAvailability(requestBody).unwrap()
       if (result && availability) {
         dispatch(goOnline(result.toggleAvailabiltiyResponse.is_available))
         dispatch(
@@ -127,28 +125,54 @@ const Homepage = () => {
   }
 
   const handleAccept = async (data: RideDetailsModel) => {
-    console.log('Accepted:', data)
-    dispatch(setNewRideRequest(data))
-    await updateRideStatus({
-      order_id: data.orderId,
-      order_status: RIDE_STATUS_CODE.RIDE_ACCEPTED
-    })
-    dispatch(updateDriverStatus(RIDE_STATUS_CODE.RIDE_ACCEPTED))
-    handleModalSubmit('REQ_NEW_RIDE', data)
-    rideRequestList.current = []
-    currentRideReqIndex.current = 0
+    try {
+      console.log('Accepted:', data)
+      dispatch(setNewRideRequest(data))
+      await updateRideStatus({
+        order_id: data.orderId,
+        order_status: RIDE_STATUS_CODE.RIDE_ACCEPTED
+      }).unwrap()
+      dispatch(updateDriverStatus(RIDE_STATUS_CODE.RIDE_ACCEPTED))
+      handleModalSubmit('REQ_NEW_RIDE', data)
+      rideRequestList.current = []
+      currentRideReqIndex.current = 0
+    } catch (err) {
+      console.error('Error while accepting ride--> ', err)
+      dispatch(
+        feedbackActions.setToastData({
+          toastData: {
+            message: 'Error',
+            display: true,
+            type: 'error',
+            description: 'Something went wrong, please try again'
+          }
+        })
+      )
+    }
   }
 
   const handleDecline = async (data: RideDetailsModel) => {
-    await updateRideStatus({
-      order_id: data.orderId,
-      order_status: RIDE_STATUS_CODE.RIDE_DECLINED
-    })
-    dispatch(updateDriverStatus(RIDE_STATUS_CODE.RIDE_DECLINED))
-    console.log(rideRequestList.current)
-    const results = rideRequestList.current.slice(1)
-    console.log(results)
-    showNextRideRequest(results)
+    try {
+      await updateRideStatus({
+        order_id: data.orderId,
+        order_status: RIDE_STATUS_CODE.RIDE_DECLINED
+      }).unwrap()
+      dispatch(updateDriverStatus(RIDE_STATUS_CODE.RIDE_DECLINED))
+      const results = rideRequestList.current.slice(1)
+      showNextRideRequest(results)
+    } catch (err) {
+      console.error('Error while accepting ride--> ', err)
+      dispatch(
+        feedbackActions.setToastData({
+          toastData: {
+            message: 'Error',
+            display: true,
+            type: 'error',
+            description: 'Something went wrong, please try again'
+          }
+        })
+      )
+    }
   }
 
   const updateCurrentModal = (modalType: ModalTypes, data: RideDetailsModel) => {
@@ -195,25 +219,39 @@ const Homepage = () => {
             text: 'Reached Pick-up Location',
             className: 'taxi-bpp-btn-text',
             handleClick: async () => {
-              await updateRideStatus({
-                order_id: data.orderId,
-                order_status: RIDE_STATUS_CODE.CAB_REACHED_PICKUP_LOCATION
-              })
-              dispatch(updateDriverStatus(RIDE_STATUS_CODE.CAB_REACHED_PICKUP_LOCATION))
-              await updateDriverLocation({
-                location: {
-                  lat: data.sourceGeoLocation?.latitude.toString()!,
-                  long: data.sourceGeoLocation?.longitude.toString()!
-                }
-              })
-              dispatch(
-                setGeoAddressAndLatLong({
-                  geoAddress: data.source,
-                  country: localStorage.getItem('country')!,
-                  geoLatLong: `${data.sourceGeoLocation?.latitude}, ${data.sourceGeoLocation?.longitude}`
-                })
-              )
-              handleModalSubmit('GOING_FOR_PICK_UP', data)
+              try {
+                await updateRideStatus({
+                  order_id: data.orderId,
+                  order_status: RIDE_STATUS_CODE.CAB_REACHED_PICKUP_LOCATION
+                }).unwrap()
+                dispatch(updateDriverStatus(RIDE_STATUS_CODE.CAB_REACHED_PICKUP_LOCATION))
+                await updateDriverLocation({
+                  location: {
+                    lat: data.sourceGeoLocation?.latitude.toString()!,
+                    long: data.sourceGeoLocation?.longitude.toString()!
+                  }
+                }).unwrap()
+                dispatch(
+                  setGeoAddressAndLatLong({
+                    geoAddress: data.source,
+                    country: localStorage.getItem('country')!,
+                    geoLatLong: `${data.sourceGeoLocation?.latitude}, ${data.sourceGeoLocation?.longitude}`
+                  })
+                )
+                handleModalSubmit('GOING_FOR_PICK_UP', data)
+              } catch (err) {
+                console.error('Error while accepting ride--> ', err)
+                dispatch(
+                  feedbackActions.setToastData({
+                    toastData: {
+                      message: 'Error',
+                      display: true,
+                      type: 'error',
+                      description: 'Something went wrong, please try again'
+                    }
+                  })
+                )
+              }
             }
           }
         ]
@@ -230,13 +268,27 @@ const Homepage = () => {
             text: 'Start Ride',
             className: 'taxi-bpp-btn-text',
             handleClick: async () => {
-              await updateRideStatus({
-                order_id: data.orderId,
-                order_status: RIDE_STATUS_CODE.RIDE_STARTED
-              })
-              dispatch(updateDriverStatus(RIDE_STATUS_CODE.RIDE_STARTED))
-              handleNavigate?.(data.destinationGeoLocation!)
-              handleModalSubmit('REACHED_PICK_UP', data)
+              try {
+                await updateRideStatus({
+                  order_id: data.orderId,
+                  order_status: RIDE_STATUS_CODE.RIDE_STARTED
+                }).unwrap()
+                dispatch(updateDriverStatus(RIDE_STATUS_CODE.RIDE_STARTED))
+                handleNavigate?.(data.destinationGeoLocation!)
+                handleModalSubmit('REACHED_PICK_UP', data)
+              } catch (err) {
+                console.error('Error while accepting ride--> ', err)
+                dispatch(
+                  feedbackActions.setToastData({
+                    toastData: {
+                      message: 'Error',
+                      display: true,
+                      type: 'error',
+                      description: 'Something went wrong, please try again'
+                    }
+                  })
+                )
+              }
             }
           }
         ]
@@ -253,32 +305,47 @@ const Homepage = () => {
             text: 'End Ride',
             colorScheme: 'secondary',
             handleClick: async () => {
-              await updateRideStatus({
-                order_id: data.orderId,
-                order_status: RIDE_STATUS_CODE.RIDE_COMPLETED
-              })
-              dispatch(updateDriverStatus(RIDE_STATUS_CODE.RIDE_COMPLETED))
-              const endRideData = await getRideSummary({
-                order_id: data.orderId
-              })
-              const parsedData = parseRideSummaryData(endRideData, data)
-              if (!parsedData.source) parsedData.source = data.source
-              if (!parsedData.destination) parsedData.destination = data.destination
+              try {
+                await updateRideStatus({
+                  order_id: data.orderId,
+                  order_status: RIDE_STATUS_CODE.RIDE_COMPLETED
+                }).unwrap()
+                dispatch(updateDriverStatus(RIDE_STATUS_CODE.RIDE_COMPLETED))
+                const endRideData = await getRideSummary({
+                  order_id: data.orderId
+                }).unwrap()
+                console.log(endRideData.data)
+                const parsedData = parseRideSummaryData(endRideData, data)
+                if (!parsedData.source) parsedData.source = data.source
+                if (!parsedData.destination) parsedData.destination = data.destination
 
-              await updateDriverLocation({
-                location: {
-                  lat: data.destinationGeoLocation?.latitude.toString()!,
-                  long: data.destinationGeoLocation?.longitude.toString()!
-                }
-              })
-              dispatch(
-                setGeoAddressAndLatLong({
-                  geoAddress: data.destination,
-                  country: localStorage.getItem('country')!,
-                  geoLatLong: `${data.destinationGeoLocation?.latitude}, ${data.destinationGeoLocation?.longitude}`
-                })
-              )
-              handleModalSubmit('START_RIDE', parsedData)
+                await updateDriverLocation({
+                  location: {
+                    lat: data.destinationGeoLocation?.latitude.toString()!,
+                    long: data.destinationGeoLocation?.longitude.toString()!
+                  }
+                }).unwrap()
+                dispatch(
+                  setGeoAddressAndLatLong({
+                    geoAddress: data.destination,
+                    country: localStorage.getItem('country')!,
+                    geoLatLong: `${data.destinationGeoLocation?.latitude}, ${data.destinationGeoLocation?.longitude}`
+                  })
+                )
+                handleModalSubmit('START_RIDE', parsedData)
+              } catch (err) {
+                console.error('Error while accepting ride--> ', err)
+                dispatch(
+                  feedbackActions.setToastData({
+                    toastData: {
+                      message: 'Error',
+                      display: true,
+                      type: 'error',
+                      description: 'Something went wrong, please try again'
+                    }
+                  })
+                )
+              }
             }
           }
         ]

@@ -14,7 +14,7 @@ export interface RideSummaryModalProp {
 }
 
 export const parseRideSummaryData = (data: any, rideDetails: RideDetailsModel): RideSummaryModalProp => {
-  const rideSummaryResponse = data?.data?.data
+  const rideSummaryResponse = data.data
   return {
     orderId: rideSummaryResponse.order_id.id,
     distance: rideDetails.distance!,
