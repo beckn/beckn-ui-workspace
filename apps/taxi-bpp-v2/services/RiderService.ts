@@ -71,6 +71,12 @@ const riderApi = Api.injectEndpoints({
         method: 'POST',
         body: payload
       })
+    }),
+    getRideStatus: build.mutation<any, any>({
+      query: payload => ({
+        url: `/driver-app/ride/status/${payload.orderId}`,
+        method: 'GET'
+      })
     })
   })
 })
@@ -82,7 +88,8 @@ export const {
   useUpdateRideStatusMutation,
   useGetRideSummaryMutation,
   useGetMyProfileMutation,
-  useGetMyRideMutation
+  useGetMyRideMutation,
+  useGetRideStatusMutation
 } = riderApi
 
 export const {
@@ -93,7 +100,8 @@ export const {
     updateRideStatus,
     getRideSummary,
     getMyProfile,
-    getMyRide
+    getMyRide,
+    getRideStatus
   }
 } = riderApi
 

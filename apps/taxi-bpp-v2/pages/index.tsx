@@ -22,7 +22,8 @@ import {
   useGetRideSummaryMutation,
   useToggleAvailabilityMutation,
   useUpdateDriverLocationMutation,
-  useUpdateRideStatusMutation
+  useUpdateRideStatusMutation,
+  useGetRideStatusMutation
 } from '@services/RiderService'
 import { goOffline, goOnline, RiderRootState, updateLocation } from '@store/rider-slice'
 import { formatGeoLocationDetails } from '@utils/geoLocation-utils'
@@ -31,11 +32,10 @@ import { parsedNewRideDetails, RIDE_STATUS_CODE } from '@utils/ride-utils'
 import { parseRideSummaryData, RideSummaryModalProp } from '@utils/rideSummary-utils'
 import _ from 'lodash'
 import BottomDrawer from '@components/bottomDrawer/BottomDrawer'
+import useSocket from '@hooks/useSocket'
 
 const Homepage = () => {
   const MapWithNoSSR: any = dynamic(() => import('../components/Map'), { ssr: false })
-  // const modalRef = useRef<HTMLDivElement>(null)
-  // const [modalHeight, setModalHeight] = useState<number>(0)
 
   const [currentModal, setCurrentModal] = useState<ModalDetails>()
   const [destination, setDestination] = useState<Coordinate>()
@@ -51,9 +51,13 @@ const Homepage = () => {
   const [updateRideStatus] = useUpdateRideStatusMutation()
   const [getRideSummary] = useGetRideSummaryMutation()
   const [updateDriverLocation] = useUpdateDriverLocationMutation()
+  const [getRideStatus] = useGetRideStatusMutation()
   const { isOnline, currentLocation } = useSelector((state: RiderRootState) => state.rider)
   const { currentAcceptedRideRequest, driverStatus } = useSelector((state: RideStatusRootState) => state.rideStatus)
   const apiKeyForGoogle = process.env.NEXT_PUBLIC_GOOGLE_API_KEY
+  const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
+
+  const socket = useSocket(strapiUrl!)
 
   const handleAvailability = useCallback(async (availability: boolean, geoLatLong: Coordinate) => {
     try {
@@ -91,27 +95,22 @@ const Homepage = () => {
     }
   }, [])
 
-  const getAllRideRequests = useCallback(async () => {
-    if (
-      isOnline &&
-      [RIDE_STATUS_CODE.AWAITING_DRIVER_APPROVAL, RIDE_STATUS_CODE.RIDE_DECLINED].includes(driverStatus)
-    ) {
-      const response: any = await getNewRideRequest({})
-      const newRides: any[] = response?.data?.data?.validOrders
-      const result = await parsedNewRideDetails(newRides)
-      rideRequestList.current = result
-      showNextRideRequest(rideRequestList.current)
-    } else {
-      rideRequestList.current = []
-    }
-  }, [isOnline, driverStatus])
-
-  useEffect(() => {
-    getAllRideRequests()
-    const intervalId = setInterval(getAllRideRequests, 5000)
-
-    return () => clearInterval(intervalId)
-  }, [isOnline, driverStatus])
+  const newRideRequests = useCallback(
+    async (response: any) => {
+      if (
+        isOnline &&
+        [RIDE_STATUS_CODE.AWAITING_DRIVER_APPROVAL, RIDE_STATUS_CODE.RIDE_DECLINED].includes(driverStatus)
+      ) {
+        const newRides: any[] = response?.validOrders
+        const result = await parsedNewRideDetails(newRides)
+        rideRequestList.current = result
+        showNextRideRequest(rideRequestList.current)
+      } else {
+        rideRequestList.current = []
+      }
+    },
+    [isOnline, driverStatus]
+  )
 
   const showNextRideRequest = (rideRequests: RideDetailsModel[]) => {
     if (rideRequests.length > 0) {
@@ -399,19 +398,52 @@ const Homepage = () => {
     }
   }, [currentAddress, coordinates, originGeoAddress, originGeoLatLong, country, originCountry])
 
-  // useEffect(() => {
-  //   if (modalRef.current) {
-  //     setModalHeight(modalRef.current.offsetHeight)
-  //   }
-  // }, [currentModal, updateCurrentModal])
+  const updatedRideStatus = async (response: any) => {
+    const orderId = currentModal?.rideDetails.orderId
+    if (
+      orderId &&
+      [RIDE_STATUS_CODE.RIDE_ACCEPTED, RIDE_STATUS_CODE.CAB_REACHED_PICKUP_LOCATION].includes(driverStatus)
+    ) {
+      const currentStatus = response.state_code
+      if (currentStatus === 'USER CANCELLED') {
+        setCurrentModal(undefined)
+        dispatch(updateDriverStatus(RIDE_STATUS_CODE.AWAITING_DRIVER_APPROVAL))
+        dispatch(
+          feedbackActions.setToastData({
+            toastData: {
+              message: 'Ride Cancelled',
+              display: true,
+              type: 'warning',
+              description: 'The user has cancelled the ride. You may wait for a new request.'
+            }
+          })
+        )
+      }
+    }
+  }
+  useEffect(() => {
+    if (socket) {
+      const handleShowRides = (data: any) => {
+        newRideRequests(data)
+      }
+
+      const handleRideStatus = (data: any) => {
+        updatedRideStatus(data)
+      }
+
+      socket.on('show-rides', handleShowRides)
+      socket.on('ride-status', handleRideStatus)
+
+      return () => {
+        socket.off('show-rides', handleShowRides)
+        socket.off('ride-status', handleRideStatus)
+      }
+    }
+  }, [socket, newRideRequests, updatedRideStatus])
 
   const renderMap = useCallback(() => {
-    // const mapHeight = `calc(100vh - ${modalHeight}px)`
     return (
-      <Box
-        mt={'60px'}
-        // height={mapHeight}
-      >
+      <Box mt={'60px'}>
         <MapWithNoSSR
           startNav={startNav}
           origin={currentLocation.geoLocation}
