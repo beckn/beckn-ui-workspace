@@ -1,6 +1,7 @@
 import React from 'react'
 import { Flex, Input, Image, useTheme } from '@chakra-ui/react'
 import { SearchInputPropsModel } from './search-input.types'
+import { testIds } from '@shared/dataTestIds'
 
 const SearchInput: React.FC<SearchInputPropsModel> = props => {
   const theme = useTheme()
@@ -18,10 +19,10 @@ const SearchInput: React.FC<SearchInputPropsModel> = props => {
   const bgColorOfSearchIcon = theme.colors.primary['100']
 
   return (
-    <Flex>
+    <Flex data-test={testIds.search_bar_main_container}>
       <Input
         data-testid="test-search-input"
-        data-test={'search-input'}
+        data-test={testIds.search_input}
         className={`${className}-search-input`}
         boxShadow="0px 0px 24px rgba(0, 0, 0, 0.10)"
         borderRightRadius={'unset'}
@@ -47,7 +48,7 @@ const SearchInput: React.FC<SearchInputPropsModel> = props => {
         cursor={'pointer'}
         onClick={searchIconClickHandler}
         data-testid="test-search-button"
-        data-test={'search-button'}
+        data-test={testIds.search_button}
       >
         <Image
           src={searchIcon}

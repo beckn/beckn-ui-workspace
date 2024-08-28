@@ -233,7 +233,22 @@ const testIds = {
   map_container: 'map-container',
   option_card: 'option-card',
   store_Location_image: 'store-Location-image',
-  searchBy_Location_shop_button: 'searchBy-Location-shop-button'
+  searchBy_Location_shop_button: 'searchBy-Location-shop-button',
+
+  // Industry4.0
+  search_bar_main_container: 'search-bar-main-container',
+  homepage_image: 'homepage-image',
+  homepge_text: 'homepge-text',
+  search_input: 'search-input',
+  search_button: 'search-button',
+  searchPage_container: 'searchPage-container',
+  search_page_product_image: 'search-page-product-image',
+  search_page_product_name: 'search-page-product-name',
+  search_page_product_providerName: 'search-page-product-providerName',
+  search_page_product_short_desc: 'search-page-product-short-desc',
+  search_page_product_rating: 'search-page-product-rating',
+  search_page_product_OnClick: 'search-page-product-OnClick',
+  searchPage_input: 'searchPage_input'
 }
 
 export { testIds }

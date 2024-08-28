@@ -12,6 +12,7 @@ import GeoLocationInputList from '@components/geoLocationInput/GeoLocationInputL
 import { FeedbackRootState, feedbackActions, ToastType } from '@store/ui-feedback-slice'
 import { Toast } from '@beckn-ui/molecules/src/components'
 import { useToast } from '@chakra-ui/react'
+import { testIds } from '@shared/dataTestIds'
 
 const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const { locale } = useLanguage()
@@ -42,6 +43,7 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
             title={message}
             description={description}
             onClose={onClose}
+            dataTest={testIds.feedback}
           />
         )
       })

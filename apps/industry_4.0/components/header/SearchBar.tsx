@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useLanguage } from '../../hooks/useLanguage'
 import { SearchBarPropsModel } from '../../lib/types/search'
 import { Box, Flex, Image, Input } from '@chakra-ui/react'
+import { testIds } from '@shared/dataTestIds'
 
 const SearchBar: React.FC<SearchBarPropsModel> = ({ searchString, handleChange }) => {
   const { t } = useLanguage()
@@ -20,7 +21,7 @@ const SearchBar: React.FC<SearchBarPropsModel> = ({ searchString, handleChange }
       width="100%"
       margin="20px auto"
     >
-      <Flex>
+      <Flex data-test={testIds.searchPage_container}>
         <Input
           p={'20px'}
           bg="transparent"
@@ -32,6 +33,7 @@ const SearchBar: React.FC<SearchBarPropsModel> = ({ searchString, handleChange }
           onChange={inputChangeHandler}
           value={searchText}
           onKeyDown={event => event.key === 'Enter' && handleSubmit()}
+          data-test={testIds.searchPage_input}
         />
         <Box
           position={'relative'}

@@ -1,0 +1,400 @@
+{
+  "data": [
+    {
+      "context": {
+        "domain": "supply-chain-services:assembly",
+        "action": "on_search",
+        "version": "1.1.0",
+        "bpp_id": "bpp-ps-network-strapi-dev.example.io",
+        "bpp_uri": "http://bpp-ps-network-strapi-dev.exmple.io",
+        "country": "IND",
+        "city": "std:080",
+        "location": {
+          "country": {
+            "name": "India",
+            "code": "IND"
+          },
+          "city": {
+            "name": "Bangalore",
+            "code": "std:080"
+          }
+        },
+        "bap_id": "bap-ps-network-dev.exmple.io",
+        "bap_uri": "https://bap-ps-network-dev.example.io",
+        "transaction_id": "980867ec-c47c-48b8-afc8-051f20da438f",
+        "message_id": "d07b2603-7063-49c8-91a5-50281ef5b818",
+        "ttl": "PT10M",
+        "timestamp": "2024-08-27T09:59:06.129Z"
+      },
+      "message": {
+        "name": "BPP",
+        "providers": [
+          {
+            "id": "41",
+            "name": "Makerspace - S",
+            "rating": "4.7",
+            "short_desc": "Makerspace",
+            "long_desc": "Makerspace, Hof",
+            "locations": [
+              {
+                "id": "13",
+                "gps": "50.311674, 11.90335",
+                "address": "154/9, Bannerghatta Rd, opposite IIM-B, Sahyadri Layout, Panduranga Nagar, Bengaluru, Karnataka 560076",
+                "city": {
+                  "name": "Bangalore F"
+                },
+                "country": {
+                  "name": "India"
+                },
+                "state": {
+                  "name": "Karnataka"
+                },
+                "area_code": "560076"
+              },
+              {
+                "id": "59",
+                "gps": "20.7021695,76.9843246",
+                "address": "Mahesh nagar, Akola",
+                "city": {
+                  "name": "Akola"
+                },
+                "country": {
+                  "name": "India"
+                },
+                "state": {
+                  "name": "Maharashtra"
+                }
+              }
+            ],
+            "items": [
+              {
+                "id": "61",
+                "short_desc": "This is an intermittent assembly type.",
+                "long_desc": "<div>Intermittent Assembly Product - Enhanced Efficiency, Unmatched Performance!</h1><p>Welcome to the future of assembly technology! Revolutionize your workflow with unparalleled efficiency and precision.</p><p>Key Features:</p><ul><li>Precise Intermittent Assembly Technology.</li><li>Advanced automation for time and resource savings.</li><li>Durable materials for longevity and reliability.</li><li>Customizable settings for various assembly requirements.</li></ul><p>Invest in the future of assembly technology. Elevate your production capabilities today!</div>",
+                "name": "Intermittent assembly type",
+                "price": {
+                  "value": "300",
+                  "currency": "EUR"
+                },
+                "categories": [
+                  {
+                    "id": "65",
+                    "name": "Assembly",
+                    "code": "assembly"
+                  }
+                ],
+                "locations": [
+                  {
+                    "id": "59",
+                    "city": "Akola",
+                    "state": "Maharashtra",
+                    "country": "India"
+                  }
+                ],
+                "fulfillments": [
+                  {
+                    "id": "3",
+                    "type": "HOME-DELIVERY",
+                    "tracking": false,
+                    "tags": [
+                      {
+                        "display": true,
+                        "list": [
+                          {
+                            "code": "product-info",
+                            "value": "Product Information"
+                          }
+                        ]
+                      },
+                      {
+                        "display": true,
+                        "list": [
+                          {
+                            "code": "assembly-info",
+                            "value": "Assembly Information"
+                          }
+                        ]
+                      },
+                      {
+                        "display": true,
+                        "list": [
+                          {
+                            "code": "scale-info",
+                            "value": "Scale Information"
+                          }
+                        ]
+                      },
+                      {
+                        "display": true,
+                        "list": [
+                          {
+                            "code": "printer-info",
+                            "value": "Printer Information\""
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "images": [
+                  {
+                    "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJQbANiJKOddLqjBqk3Y-bws-pUxisbxvhrw&usqp=CAU"
+                  }
+                ],
+                "rating": "4.5",
+                "rateable": true,
+                "tags": [
+                  {
+                    "display": true,
+                    "list": [
+                      {
+                        "code": "product-info",
+                        "value": "Product Information"
+                      }
+                    ]
+                  },
+                  {
+                    "display": true,
+                    "list": [
+                      {
+                        "code": "assembly-info",
+                        "value": "Assembly Information"
+                      }
+                    ]
+                  },
+                  {
+                    "display": true,
+                    "list": [
+                      {
+                        "code": "scale-info",
+                        "value": "Scale Information"
+                      }
+                    ]
+                  },
+                  {
+                    "display": true,
+                    "list": [
+                      {
+                        "code": "printer-info",
+                        "value": "Printer Information\""
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "images": [
+              {
+                "url": "https://makerspace/assembly/makerspace_logo.png"
+              }
+            ]
+          },
+          {
+            "id": "61",
+            "name": "RioSH Technologies Pvt Ltd",
+            "rating": "4.8",
+            "short_desc": "Leading electronic manufacturing Services company (EMS) in Bangalore",
+            "long_desc": "We develop Assembly solutions focused on achieving best machine footprint on a customer shop floor, uncompromised ergonomics for man and machine coordinated operations and ease of maintenance.\n\nWe offer turnkey solutions, from initial concept development and line development, to complete factory installation and after-sales service.\n\nType of Solutions\n\nStand Alone Assembly Stations\nCell Type Assembly Lines\nLinear Conveyorised Assembly Lines\nAGV Based Assembly Lines\nRGV Based Assembly Line",
+            "locations": [
+              {
+                "id": "21",
+                "gps": "12.888133196507118, 77.64777036338864",
+                "address": "#243, 3rd cross, Celebrity Layout, Doddathogur, Electronic City Phase 1, Bengaluru, Karnataka - 560100.",
+                "city": {
+                  "name": "Bangalore"
+                },
+                "country": {
+                  "name": "India"
+                },
+                "state": {
+                  "name": "Karnataka"
+                },
+                "area_code": "560100"
+              },
+              {
+                "id": "2",
+                "gps": "44.6616,111.1001",
+                "address": "Max pvt lmtd",
+                "city": {
+                  "name": "Delhi"
+                },
+                "country": {
+                  "name": "India"
+                },
+                "state": {
+                  "name": "Delhi"
+                },
+                "area_code": "110000"
+              }
+            ],
+            "items": [
+              {
+                "id": "85",
+                "short_desc": "This is an intermittent assembly type.",
+                "long_desc": "<div>Intermittent Assembly Product - Enhanced Efficiency, Unmatched Performance!</h1><p>Welcome to the future of assembly technology! Revolutionize your workflow with unparalleled efficiency and precision.</p><p>Key Features:</p><ul><li>Precise Intermittent Assembly Technology.</li><li>Advanced automation for time and resource savings.</li><li>Durable materials for longevity and reliability.</li><li>Customizable settings for various assembly requirements.</li></ul><p>Invest in the future of assembly technology. Elevate your production capabilities today!</div>",
+                "name": "Intermittent assembly type by Riosh",
+                "price": {
+                  "value": "250",
+                  "currency": "EUR"
+                },
+                "categories": [
+                  {
+                    "id": "65",
+                    "name": "Assembly",
+                    "code": "assembly"
+                  }
+                ],
+                "locations": [
+                  {
+                    "id": "2",
+                    "city": "Delhi",
+                    "state": "Delhi",
+                    "country": "India"
+                  }
+                ],
+                "fulfillments": [
+                  {
+                    "id": "3",
+                    "type": "HOME-DELIVERY",
+                    "tracking": false,
+                    "tags": [
+                      {
+                        "display": true,
+                        "list": [
+                          {
+                            "code": "product-info",
+                            "value": "Product Information"
+                          }
+                        ]
+                      },
+                      {
+                        "display": true,
+                        "list": [
+                          {
+                            "code": "assembly-info",
+                            "value": "Assembly Information"
+                          }
+                        ]
+                      },
+                      {
+                        "display": true,
+                        "list": [
+                          {
+                            "code": "scale-info",
+                            "value": "Scale Information"
+                          }
+                        ]
+                      },
+                      {
+                        "display": true,
+                        "list": [
+                          {
+                            "code": "printer-info",
+                            "value": "Printer Information\""
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "id": "3",
+                    "type": "HOME-DELIVERY",
+                    "tracking": false,
+                    "tags": [
+                      {
+                        "display": true,
+                        "list": [
+                          {
+                            "code": "product-info",
+                            "value": "Product Information"
+                          }
+                        ]
+                      },
+                      {
+                        "display": true,
+                        "list": [
+                          {
+                            "code": "assembly-info",
+                            "value": "Assembly Information"
+                          }
+                        ]
+                      },
+                      {
+                        "display": true,
+                        "list": [
+                          {
+                            "code": "scale-info",
+                            "value": "Scale Information"
+                          }
+                        ]
+                      },
+                      {
+                        "display": true,
+                        "list": [
+                          {
+                            "code": "printer-info",
+                            "value": "Printer Information\""
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "images": [
+                  {
+                    "url": "https://www.xng.co.in/wp-content/uploads/2021/05/assembly-solutions-ct-1.jpg"
+                  }
+                ],
+                "rating": "4.8",
+                "rateable": true,
+                "tags": [
+                  {
+                    "display": true,
+                    "list": [
+                      {
+                        "code": "product-info",
+                        "value": "Product Information"
+                      }
+                    ]
+                  },
+                  {
+                    "display": true,
+                    "list": [
+                      {
+                        "code": "assembly-info",
+                        "value": "Assembly Information"
+                      }
+                    ]
+                  },
+                  {
+                    "display": true,
+                    "list": [
+                      {
+                        "code": "scale-info",
+                        "value": "Scale Information"
+                      }
+                    ]
+                  },
+                  {
+                    "display": true,
+                    "list": [
+                      {
+                        "code": "printer-info",
+                        "value": "Printer Information\""
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "images": [
+              {
+                "url": "https://makerspace/assembly/makerspace_logo.png"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

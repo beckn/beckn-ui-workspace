@@ -7,6 +7,7 @@ import TopSheet from '../components/topSheet/TopSheet'
 import { useLanguage } from '../hooks/useLanguage'
 import beckenFooter from '../public/images/footer.svg'
 import SearchInput from '@beckn-ui/becknified-components/src/components/search-input'
+import { testIds } from '@shared/dataTestIds'
 
 const HomePage = () => {
   const [searchTerm, setSearchTerm] = useState<string>('')
@@ -111,9 +112,17 @@ const HomePage = () => {
           justifyContent={'center'}
           alignItems={'center'}
         >
-          <Image src={'/images/EmptyInbox.svg'} />
+          <Image
+            src={'/images/EmptyInbox.svg'}
+            data-test={testIds.homepage_image}
+          />
         </Flex>
-        <Text align={'center'}>{t.homePara}</Text>
+        <Text
+          align={'center'}
+          data-test={testIds.homepge_text}
+        >
+          {t.homePara}
+        </Text>
         <Flex
           justifyContent={'center'}
           alignItems="center"
