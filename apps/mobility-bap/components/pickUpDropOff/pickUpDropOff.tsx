@@ -2,7 +2,7 @@ import React from 'react'
 import { Box, Divider, Flex, Image } from '@chakra-ui/react'
 import { useLanguage } from '../../hooks/useLanguage'
 import { GeoLocationType, PickUpDropOffModel, toggleLocationSearchPageVisibility } from '@beckn-ui/common'
-import { BottomModal } from '@beckn-ui/molecules'
+import { BottomModal, Typography } from '@beckn-ui/molecules'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import { useDispatch } from 'react-redux'
 
@@ -46,10 +46,15 @@ const PickUpDropOff: React.FC<PickUpDropOffProps> = ({ pickup, dropoff, handleCl
           alt=""
         />
         <Flex
-          ml={'20px'}
+          ml={'10px'}
           mr="5px"
+          alignItems={'center'}
         >
-          Pickup
+          <Typography
+            text="Pickup"
+            fontSize="15px"
+            fontWeight="400"
+          />
           <Box
             as="span"
             ml="5px"
@@ -65,14 +70,19 @@ const PickUpDropOff: React.FC<PickUpDropOffProps> = ({ pickup, dropoff, handleCl
             Enter Pickup
           </Box>
         ) : (
-          <Box
-            fontWeight="600"
-            whiteSpace={'nowrap'}
-            overflow="hidden"
-            textOverflow={'ellipsis'}
-          >
-            {pickup?.address}
-          </Box>
+          <Typography
+            text={pickup?.address}
+            fontWeight="500"
+            fontSize="15px"
+            style={{
+              display: '-webkit-box',
+              WebkitBoxOrient: 'vertical',
+              WebkitLineClamp: '2',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'normal'
+            }}
+          />
         )}
       </Flex>
       <Divider
@@ -90,10 +100,15 @@ const PickUpDropOff: React.FC<PickUpDropOffProps> = ({ pickup, dropoff, handleCl
           alt=""
         />
         <Flex
-          ml={'20px'}
+          ml={'10px'}
           mr="5px"
+          alignItems={'center'}
         >
-          Dropoff{' '}
+          <Typography
+            text="Dropoff"
+            fontSize="15px"
+            fontWeight="400"
+          />
           <Box
             as="span"
             ml="5px"
@@ -102,14 +117,19 @@ const PickUpDropOff: React.FC<PickUpDropOffProps> = ({ pickup, dropoff, handleCl
           </Box>
         </Flex>
         {dropoff?.address ? (
-          <Box
-            fontWeight="600"
-            whiteSpace={'nowrap'}
-            overflow="hidden"
-            textOverflow={'ellipsis'}
-          >
-            {dropoff.address}
-          </Box>
+          <Typography
+            text={dropoff?.address}
+            fontWeight="500"
+            fontSize="15px"
+            style={{
+              display: '-webkit-box',
+              WebkitBoxOrient: 'vertical',
+              WebkitLineClamp: '2',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'normal'
+            }}
+          />
         ) : (
           <Box
             fontWeight="500"

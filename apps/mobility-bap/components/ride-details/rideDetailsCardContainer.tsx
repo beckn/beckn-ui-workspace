@@ -52,13 +52,12 @@ const RideDetailsCardContainer: React.FC<RideDetailsCardContainerProps> = ({ han
     }
   }, [confirmResponse])
 
-  const handleStateChange = (status: RIDE_STATUS_CODE, message: string, type: 'success' | 'error') => {
+  const handleStateChange = (message: string, type: 'success' | 'error') => {
     dispatch(
       feedbackActions.setToastData({
         toastData: { message: 'Info', display: true, type, description: message }
       })
     )
-    currentRideStatus.current = status
   }
 
   const getRideStatus = () => {
@@ -88,43 +87,44 @@ const RideDetailsCardContainer: React.FC<RideDetailsCardContainerProps> = ({ han
         const { stops, state } = res.data.data[0].message.order.fulfillments[0]
         const currentStatus = state?.descriptor?.short_desc
 
-        if (currentStatus !== currentRideStatus.current) {
+        if (confirmResponse.length > 0 && currentStatus !== currentRideStatus.current) {
+          console.log(currentStatus, currentRideStatus)
+          const { message } = confirmResponse[0]
+          const { agent, vehicle, rating } = message?.fulfillments?.find(fulfillment => fulfillment.agent)!
+          setRideDetails({
+            name: agent?.person.name!,
+            registrationNumber: vehicle?.registration!,
+            carModel: `${vehicle?.make!} ${vehicle?.model!}`,
+            rating: rating!,
+            contact: agent?.contact.phone!
+          })
+          currentRideStatus.current = currentStatus
+
           switch (currentStatus) {
             case RIDE_STATUS_CODE.RIDE_ACCEPTED:
             case RIDE_STATUS_CODE.CAB_REACHED_PICKUP_LOCATION:
-              if (confirmResponse.length > 0) {
-                const { message } = confirmResponse[0]
-                const { agent, vehicle, rating } = message?.fulfillments?.find(fulfillment => fulfillment.agent)!
-                setRideDetails({
-                  name: agent?.person.name!,
-                  registrationNumber: vehicle?.registration!,
-                  carModel: `${vehicle?.make!} ${vehicle?.model!}`,
-                  rating: rating!,
-                  contact: agent?.contact.phone!
-                })
-                setIsLoading(false)
-                setModalType({ type: 'RideSummary' })
-                handleStateChange(
-                  currentStatus,
-                  currentStatus === RIDE_STATUS_CODE.RIDE_ACCEPTED
-                    ? 'Ride Accepted.'
-                    : 'Driver reached PickUp location.',
-                  'success'
-                )
-              }
+              setIsLoading(false)
+              setModalType({ type: 'RideSummary' })
+              handleStateChange(
+                currentStatus === RIDE_STATUS_CODE.RIDE_ACCEPTED ? 'Ride Accepted.' : 'Driver reached PickUp location.',
+                'success'
+              )
               break
 
             case RIDE_STATUS_CODE.RIDE_STARTED:
-              handleStateChange(currentStatus, 'Ride Started.', 'success')
+              setIsLoading(false)
+              handleStateChange('Ride Started.', 'success')
               setModalType({ type: 'RideDetails' })
               break
 
             case RIDE_STATUS_CODE.RIDE_DECLINED:
-              handleStateChange(currentStatus, 'Driver Declined the Ride.', 'error')
+              setIsLoading(false)
+              handleStateChange('Driver Declined the Ride.', 'error')
               handleStatusOperation(RIDE_STATUS_CODE.RIDE_DECLINED)
               break
 
             case RIDE_STATUS_CODE.RIDE_COMPLETED:
+              setIsLoading(false)
               handleStatusOperation(RIDE_STATUS_CODE.RIDE_COMPLETED)
               const currentLocation = { address: dropoff.address, geoLocation: dropoff.geoLocation }
               dispatch(setPickUpLocation(currentLocation))

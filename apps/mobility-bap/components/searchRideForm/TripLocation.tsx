@@ -25,8 +25,9 @@ const TripLocation = ({
           alt=""
         />
         <Flex
-          ml={'20px'}
+          ml={'10px'}
           mr="5px"
+          alignItems={'center'}
         >
           <Typography
             text="Pickup"
@@ -44,7 +45,14 @@ const TripLocation = ({
           text={pickupLocation?.address}
           fontWeight="500"
           fontSize="15px"
-          style={{ overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis', maxWidth: '12rem' }}
+          style={{
+            display: '-webkit-box',
+            WebkitBoxOrient: 'vertical',
+            WebkitLineClamp: '2',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'normal'
+          }}
         />
       </Flex>
       <Divider
@@ -62,8 +70,9 @@ const TripLocation = ({
             alt=""
           />
           <Flex
-            ml={'20px'}
+            ml={'10px'}
             mr="5px"
+            alignItems={'center'}
           >
             <Typography
               text="Dropoff"
@@ -81,7 +90,14 @@ const TripLocation = ({
             text={dropLocation?.address}
             fontWeight="500"
             fontSize="15px"
-            style={{ overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis', maxWidth: '12rem' }}
+            style={{
+              display: '-webkit-box',
+              WebkitBoxOrient: 'vertical',
+              WebkitLineClamp: '2',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'normal'
+            }}
           />
         </Flex>
         {handleEditDropoff && (
