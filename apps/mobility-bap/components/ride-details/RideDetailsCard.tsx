@@ -1,13 +1,25 @@
 import React from 'react'
-import { Divider } from '@chakra-ui/react'
+import { Divider, Image } from '@chakra-ui/react'
 
 import DriverDetails from './DriverDetails'
 import CabDetails from './CabDetails'
 
 import { RideDetailsCardProps } from './RideDetails.types'
 import BottomDrawer from '../bottomDrawer/BottomDrawer'
+import { Button } from '@beckn-ui/molecules'
+import { useLanguage } from '@hooks/useLanguage'
 
-const RideDetailsCard: React.FC<RideDetailsCardProps> = ({ name, contact, registrationNumber, carModel, rating }) => {
+const RideDetailsCard: React.FC<RideDetailsCardProps> = ({
+  name,
+  contact,
+  registrationNumber,
+  carModel,
+  rating,
+  cancelRide,
+  contactSupport
+}) => {
+  const { t } = useLanguage()
+
   return (
     <BottomDrawer>
       <CabDetails
@@ -27,6 +39,21 @@ const RideDetailsCard: React.FC<RideDetailsCardProps> = ({ name, contact, regist
         rating={rating}
         contact={contact}
         driverImage={'./images/driverImage.svg'}
+      />
+      <Button
+        text="Contact Support"
+        leftIcon={
+          <Image
+            src="./images/contactSupport.svg"
+            alt="contact-support"
+          />
+        }
+        handleClick={contactSupport}
+      />
+      <Button
+        text={t.cancelRide}
+        handleClick={cancelRide}
+        variant="outline"
       />
     </BottomDrawer>
   )

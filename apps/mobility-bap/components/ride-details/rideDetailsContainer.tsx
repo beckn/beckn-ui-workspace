@@ -16,11 +16,11 @@ import { useRouter } from 'next/router'
 const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
 interface RideDetailsContainerProps {
-  handleCancelRide: () => void
+  // handleCancelRide: () => void
   handleContactSupport: () => void
 }
 
-const RideDetailsContainer: React.FC<RideDetailsContainerProps> = ({ handleCancelRide, handleContactSupport }) => {
+const RideDetailsContainer: React.FC<RideDetailsContainerProps> = ({ handleContactSupport }) => {
   const [openAlert, setOpenAlert] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [rideStartedAlert, setRideStartedAlert] = useState<boolean>(false)
@@ -145,7 +145,6 @@ const RideDetailsContainer: React.FC<RideDetailsContainerProps> = ({ handleCance
               dropOff={dropoff}
               color={'Black'}
               otp={''}
-              cancelRide={handleCancelRide}
               contactSupport={handleContactSupport}
               handleEditDropoff={() => setOpenAlert(true)}
             />

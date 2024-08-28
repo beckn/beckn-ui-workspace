@@ -22,6 +22,8 @@ export interface RideDetailsCardProps {
   name: string
   rating: string
   contact: string
+  cancelRide: () => void
+  contactSupport: () => void
 }
 
 export interface RideDetailsProps {
@@ -35,7 +37,6 @@ export interface RideDetailsProps {
   contact: string
   pickUp: PickUpDropOffModel
   dropOff: PickUpDropOffModel
-  cancelRide: () => void
   contactSupport: () => void
   handleEditDropoff: () => void
 }

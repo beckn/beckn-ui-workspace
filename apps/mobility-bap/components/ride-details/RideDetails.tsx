@@ -23,7 +23,6 @@ const RideDetails: React.FC<RideDetailsProps> = ({
   contact,
   pickUp,
   dropOff,
-  cancelRide,
   contactSupport,
   handleEditDropoff
 }) => {
@@ -150,11 +149,11 @@ const RideDetails: React.FC<RideDetailsProps> = ({
         }
         handleClick={contactSupport}
       />
-      <Button
+      {/* <Button
         text={t.cancelRide}
         handleClick={cancelRide}
         variant="outline"
-      />
+      /> */}
     </BottomDrawer>
   )
 }
