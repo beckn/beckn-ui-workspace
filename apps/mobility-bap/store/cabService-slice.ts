@@ -1,8 +1,6 @@
-import { Coordinate, PickUpDropOffModel } from '@beckn-ui/common'
 import { CabServiceDetails } from '@lib/types/cabService'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { CabDetails, ParsedCabDataModel } from '@utils/cabDetails'
-import { CancelTokenSource } from 'axios'
 
 export const initialState: CabServiceDetails = {
   cancelTokenSource: null,
@@ -24,7 +22,7 @@ const cabServiceSlice = createSlice({
     setTotalCabs(state, action: PayloadAction<number>) {
       state.totalCabs = action.payload
     },
-    setCancelTokenSource(state, action: PayloadAction<CancelTokenSource>) {
+    setCancelTokenSource(state, action: PayloadAction<any>) {
       state.cancelTokenSource = action.payload
     },
     clearCancelTokenSource(state) {

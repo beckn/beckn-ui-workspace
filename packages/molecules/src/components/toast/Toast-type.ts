@@ -1,4 +1,4 @@
-export type ToastType = 'error' | 'success' | 'info'
+export type ToastType = 'error' | 'success' | 'info' | 'warning'
 export interface ToastProps {
   title: string
   status: ToastType
