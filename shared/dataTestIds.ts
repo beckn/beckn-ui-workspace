@@ -248,7 +248,30 @@ const testIds = {
   search_page_product_short_desc: 'search-page-product-short-desc',
   search_page_product_rating: 'search-page-product-rating',
   search_page_product_OnClick: 'search-page-product-OnClick',
-  searchPage_input: 'searchPage_input'
+  searchPage_input: 'searchPage_input',
+  product_page_long_desc: 'product-page-long-desc',
+  product_page_book_button: 'product-page-book-button',
+  product_page_short_desc: 'product-page-short-desc',
+  product_page_Image: 'product-page-Image',
+  url_assembly: '/assemblyDetails',
+  url_checkoutPage: '/checkoutPage',
+  typeLabel: '#typeLabel',
+  type: '#type',
+  colorLabel: '#colorLabel',
+  colour: '#colour',
+  shapeLabel: '#shapeLabel',
+  shape: '#shape',
+  length: '#length',
+  width: '#width',
+  quantity: '#quantity',
+  weight: '#weight',
+  increaseQuantity: '#increaseQuantity',
+  decreaseQuantity: '#decreaseQuantity',
+  item_name: 'item-name',
+  checkoutpage_cancelOrder_button: 'checkoutpage-cancelOrder-button',
+  industry_payment_basePrice: 'Base Price',
+  industry_payment_shippingCost: 'Shipping Cost',
+  industry_payment_taxes: 'tax'
 }
 
 export { testIds }

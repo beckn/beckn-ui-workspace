@@ -7,6 +7,7 @@ import axios from '../services/axios'
 import React, { useEffect, useState } from 'react'
 import { ParsedItemModel } from '../types/search.types'
 import { SelectResponseModel } from '../types/select.types'
+import { testIds } from '@shared/dataTestIds'
 
 const assemblyDetails = () => {
   const [selectData, setSelectData] = useState<SelectResponseModel[]>([])
@@ -57,6 +58,7 @@ const assemblyDetails = () => {
         display={'grid'}
         height={'calc(100vh - 300px)'}
         alignContent={'center'}
+        data-test={testIds.loadingIndicator}
       >
         <LoaderWithMessage
           loadingText={t.pleaseWait}

@@ -15,6 +15,7 @@ import { AssemblyData, ParsedItemModel } from '../types/search.types'
 import { SelectResponseModel } from '../types/select.types'
 import { InitResponseModel } from '../types/init.types'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
+import { testIds } from '@shared/dataTestIds'
 
 const CheckoutPage = () => {
   const { t } = useLanguage()
@@ -77,6 +78,7 @@ const CheckoutPage = () => {
         display={'grid'}
         height={'calc(100vh - 300px)'}
         alignContent={'center'}
+        data-test={testIds.loadingIndicator}
       >
         <LoaderWithMessage
           loadingText={t.pleaseWait}
@@ -136,26 +138,31 @@ const CheckoutPage = () => {
             <Typography
               variant="subTitleSemibold"
               text={t.assembly}
+              dataTest={testIds.item_title}
             />
             <Typography
               variant="subTitleRegular"
               text={`${currency} ${value}`}
+              dataTest={testIds.item_price}
             />
           </Flex>
           <Box pb={'4px'}>
             <Typography
               variant="subTitleRegular"
               text={name}
+              dataTest={testIds.item_name}
             />
           </Box>
           <Box pb={'4px'}>
             <Typography
               variant="subTitleRegular"
               text={`Qty: ${assemblyDetails?.quantity}`}
+              dataTest={testIds.item_quantity}
             />
           </Box>
         </DetailsCard>
         <ShippingSection
+          dataTest={testIds.checkoutpage_shippingDetails}
           sectionSubtitle={t.addShippingDetails}
           addButtonImage="./images/addShippingBtn.svg"
           showDetails={showShippingDetails}
@@ -206,6 +213,7 @@ const CheckoutPage = () => {
           }}
         />
         <ShippingSection
+          dataTest={testIds.checkoutpage_billingDetails}
           sectionSubtitle={t.addBillingDetails}
           addButtonImage="./images/addShippingBtn.svg"
           sectionTitle="Billing"
@@ -272,6 +280,7 @@ const CheckoutPage = () => {
               />
             </Box>
             <PaymentDetails
+              dataTest={testIds.checkoutpage_paymentDetails}
               paymentBreakDown={getPaymentBreakDown(initData).breakUpMap}
               totalText={t.total}
               totalValueWithCurrency={getPaymentBreakDown(initData).totalPricewithCurrent}
@@ -282,11 +291,13 @@ const CheckoutPage = () => {
       <Box m={'20px 0px'}>
         <BecknButton
           disabled={!initData.length}
+          dataTest={testIds.checkoutpage_proceedToCheckout}
           children="Proceed to Payment"
           className="checkout_btn "
           handleClick={() => router.push('/paymentMode')}
         />
         <BecknButton
+          dataTest={testIds.checkoutpage_cancelOrder}
           children="Cancel Order"
           variant="outline"
           className="checkout_btn"

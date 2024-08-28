@@ -6,6 +6,7 @@ import { Button } from '@beckn-ui/molecules'
 import { useRouter } from 'next/router'
 import { useLanguage } from '@hooks/useLanguage'
 import { ParsedItemModel } from '../../types/search.types'
+import { testIds } from '@shared/dataTestIds'
 
 interface Props {
   product: ParsedItemModel
@@ -44,6 +45,7 @@ const ProductDetails: React.FC<Props> = ({ product }) => {
             <Text
               fontSize={'15px'}
               fontWeight={400}
+              data-test={testIds.product_page_short_desc}
             >
               {product.item.short_desc}
             </Text>
@@ -65,8 +67,12 @@ const ProductDetails: React.FC<Props> = ({ product }) => {
                 {product.rating ? `${parseFloat(product.rating)} stars` : null}
               </Text>
             </Flex>
-            <ProductDescription description={product.item.long_desc} />
+            <ProductDescription
+              description={product.item.long_desc}
+              dataTest={testIds.product_page_long_desc}
+            />
             <Box
+              dataTest={testIds.product_page_book_button}
               as={Button}
               marginTop={5}
               text={t.book}

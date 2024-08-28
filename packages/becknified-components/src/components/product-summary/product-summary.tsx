@@ -5,6 +5,7 @@ import React from 'react'
 import { ProductSummaryPropsModel } from './product-summary.types'
 import ProductDescription from '../prouct-description'
 import ProductCTA from '../product-Cta'
+import { testIds } from '@shared/dataTestIds'
 
 const ProductSummary: React.FC<ProductSummaryPropsModel> = props => {
   const {
@@ -42,6 +43,7 @@ const ProductSummary: React.FC<ProductSummaryPropsModel> = props => {
           >
             <Box className={`${className}-product_summary_image_container`}>
               <Image
+                data-test={testIds.product_page_Image}
                 src={imageSrc}
                 width={{ base: '21.8rem', md: '25rem', lg: '25rem', xl: '25rem', '2xl': '25rem' }}
                 height={200}
