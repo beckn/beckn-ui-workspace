@@ -132,7 +132,7 @@ const PickUpDropOffContainer = (props: PickUpDropOffContainerProps) => {
       {openAlert && (
         <AlertModal
           isOpen={true}
-          name={'violationPolicyData.name'}
+          name={violationPolicyData.name}
           handleOnClose={() => {
             setOpenAlert(false)
             setViolationPolicyData({ policyId: '', name: '' })
