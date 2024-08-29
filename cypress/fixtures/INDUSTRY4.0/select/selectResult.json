@@ -1,0 +1,185 @@
+{
+  "data": [
+    {
+      "context": {
+        "domain": "supply-chain-services:assembly",
+        "action": "on_select",
+        "version": "1.1.0",
+        "bpp_id": "bpp-ps-network-strapi-dev.becknprotocol.io",
+        "bpp_uri": "http://bpp-ps-network-strapi-dev.becknprotocol.io",
+        "country": "IND",
+        "city": "std:080",
+        "location": {
+          "country": {
+            "name": "India",
+            "code": "IND"
+          },
+          "city": {
+            "name": "Bangalore",
+            "code": "std:080"
+          }
+        },
+        "bap_id": "bap-ps-network-dev.becknprotocol.io",
+        "bap_uri": "https://bap-ps-network-dev.becknprotocol.io",
+        "transaction_id": "2ba51163-8698-4d0c-85f3-6a02a0fcd6bf",
+        "message_id": "f108263a-c73e-4d77-8ac9-871df871b73d",
+        "ttl": "PT10M",
+        "timestamp": "2024-08-28T06:33:59.832Z"
+      },
+      "message": {
+        "order": {
+          "type": "DEFAULT",
+          "quote": {
+            "price": {
+              "value": "300",
+              "currency": "EUR"
+            },
+            "breakup": [
+              {
+                "title": "Base Price",
+                "price": {
+                  "currency": "EUR",
+                  "value": "200"
+                },
+                "item": {
+                  "id": "61"
+                }
+              },
+              {
+                "title": "Shipping Cost",
+                "price": {
+                  "currency": "EUR",
+                  "value": "50"
+                },
+                "item": {
+                  "id": "61"
+                }
+              },
+              {
+                "title": "Tax",
+                "price": {
+                  "currency": "EUR",
+                  "value": "50"
+                },
+                "item": {
+                  "id": "61"
+                }
+              }
+            ]
+          },
+          "provider": {
+            "id": "41",
+            "name": "Makerspace - S",
+            "short_desc": "Makerspace",
+            "long_desc": "Makerspace, Hof",
+            "rating": "4.7",
+            "images": {
+              "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJQbANiJKOddLqjBqk3Y-bws-pUxisbxvhrw&usqp=CAU",
+              "size_type": "sm"
+            },
+            "fulfillments": [
+              {
+                "id": "3",
+                "type": "HOME-DELIVERY",
+                "rating": "5",
+                "tracking": false
+              }
+            ]
+          },
+          "items": [
+            {
+              "id": "61",
+              "xinput": {
+                "url": "https://bpp-unified-strapi-dev.becknprotocol.io/beckn-bpp-adapter/x-input/form?form_id=industryAssemblyDetailsForm",
+                "mime_type": "text/html",
+                "html": "<!DOCTYPE html><html lang=\"en\"><head>\n    <title>Industry 4.0 Add Assembly Details Form</title>\n    <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css\">\n    <style>\n        body {\n            font-family: Arial, sans-serif;\n            background-color: #fbfcff;\n            display: flex;\n            justify-content: center;\n            align-items: center;\n            margin: 0;\n        }\n\n        form {\n            background: #fff;\n            max-width: 400px;\n            padding: 20px;\n            width: 100%;\n            height: 100%\n        }\n\n        h1 {\n            font-size: 24px;\n            margin-bottom: 20px;\n            text-align: center;\n        }\n\n        label {\n            margin-bottom: 5px;\n        }\n\n        select,\n        input[type=\"number\"] {\n            width: 100%;\n            padding: 8px 0;\n            margin-bottom: 20px;\n            border: 1px solid #ccc;\n            box-sizing: border-box;\n            border: 0;\n            outline: 0;\n            border-bottom: 1px solid #ccc;\n            font-size: 16px;\n        }\n\n        select:focus,\n        input[type=\"number\"]:focus {\n            border-bottom: 1px solid #3AA5E1;\n        }\n\n        .quantity-controls {\n            display: flex;\n            align-items: center;\n        }\n\n        .quantity-controls button {\n            background-color: #3aa5e1;\n            color: white;\n            border: none;\n            border-radius: 4px;\n            padding: 10px;\n            cursor: pointer;\n            margin-bottom: 6%;\n        }\n\n        .quantity-controls input {\n            flex: 1;\n            text-align: center;\n        }\n\n        button[type=\"submit\"] {\n            background-color: #3aa5e1;\n            color: white;\n            padding: 10px;\n            border: none;\n            border-radius: 4px;\n            cursor: pointer;\n            width: 100%;\n        }\n\n        button[type=\"submit\"]:hover {\n            background-color: #3490d6;\n        }\n    </style>\n</head>\n<body>\n    <form id=\"xinputform\">\n        <h1>Add Assembly Details</h1>\n \n            <label for=\"type\" id=\"typeLabel\">Type</label>\n            <select id=\"type\" name=\"type\" onfocus=\"changeLabelColor('typeLabel', '#3AA5E1')\" onblur=\"changeLabelColor('typeLabel', 'black')\">\n                <option value=\"Plastic Box\">Plastic Box</option>\n                <option value=\"Wooden Box\">Wooden Box</option>\n            </select>\n   \n            <label for=\"colour\" id=\"colorLabel\">Colour</label>\n            <select id=\"colour\" name=\"colour\" onfocus=\"changeLabelColor('colorLabel', '#3AA5E1')\" onblur=\"changeLabelColor('colorLabel', 'black')\">\n                <option value=\"Blue\">Blue</option>\n                <option value=\"Red\">Red</option>\n                <option value=\"Green\">Green</option>\n            </select>\n   \n            <label for=\"shape\" id=\"shapeLabel\">Shape</label>\n            <select id=\"shape\" name=\"shape\" onfocus=\"changeLabelColor('shapeLabel', '#3AA5E1')\" onblur=\"changeLabelColor('shapeLabel', 'black')\">\n                <option value=\"Circle\">Circle</option>\n                <option value=\"Square\">Square</option>\n            </select>\n  \n            <label for=\"length\" id=\"lengthLabel\">Length (in mm)</label>\n            <input type=\"number\" id=\"length\" name=\"length\" step=\"0.01\" onfocus=\"changeLabelColor('lengthLabel', '#3AA5E1')\" onblur=\"changeLabelColor('lengthLabel', 'black')\">\n        \n            <label for=\"width\" id=\"widthLabel\">Width (in mm)</label>\n            <input type=\"number\" id=\"width\" name=\"width\" step=\"0.01\" onfocus=\"changeLabelColor('widthLabel', '#3AA5E1')\" onblur=\"changeLabelColor('widthLabel', 'black')\">\n\n\n            <label for=\"quantity\" id=\"quantityLabel\">Quantity</label>\n            <div class=\"quantity-controls\">\n                <button type=\"button\" id=\"decreaseQuantity\">-</button>\n                <input type=\"number\" id=\"quantity\" name=\"quantity\" value=\"1\" min=\"0\" onfocus=\"changeLabelColor('quantityLabel', '#3AA5E1')\" onblur=\"changeLabelColor('quantityLabel', 'black')\">\n                <button type=\"button\" id=\"increaseQuantity\">+</button>\n            </div>\n\n            <label for=\"weight\" id=\"weightLabel\">Weight (in kg)</label>\n            <input type=\"number\" id=\"weight\" name=\"weight\" step=\"0.01\" onfocus=\"changeLabelColor('weightLabel', '#3AA5E1')\" onblur=\"changeLabelColor('weightLabel', 'black')\">\n\n       \n            <button type=\"submit\">Add Shipping Details</button>\n\n    <input type=\"hidden\" value=\"https://bpp-unified-strapi-dev.becknprotocol.io/beckn-bpp-adapter/x-input/submit\" id=\"action\" name=\"action\"><input type=\"hidden\" value=\"POST\" id=\"method\" name=\"method\"></form>\n\n<script>\n            document.getElementById('decreaseQuantity').addEventListener('click', function() {\n            var quantityInput = document.getElementById('quantity');\n            var currentValue = parseInt(quantityInput.value);\n            if (currentValue > 0) {\n                quantityInput.value = currentValue - 1;\n            }\n        });\n\n        document.getElementById('increaseQuantity').addEventListener('click', function() {\n            var quantityInput = document.getElementById('quantity');\n            var currentValue = parseInt(quantityInput.value);\n            quantityInput.value = currentValue + 1;\n        });\n        \n  function changeLabelColor(labelId, color) {\n        const label = document.getElementById(labelId);\n\n        label.style.color = color;\n    }\n</script>\n</body></html>"
+              },
+              "name": "Intermittent assembly type",
+              "short_desc": "This is an intermittent assembly type.",
+              "long_desc": "<div>Intermittent Assembly Product - Enhanced Efficiency, Unmatched Performance!</h1><p>Welcome to the future of assembly technology! Revolutionize your workflow with unparalleled efficiency and precision.</p><p>Key Features:</p><ul><li>Precise Intermittent Assembly Technology.</li><li>Advanced automation for time and resource savings.</li><li>Durable materials for longevity and reliability.</li><li>Customizable settings for various assembly requirements.</li></ul><p>Invest in the future of assembly technology. Elevate your production capabilities today!</div>",
+              "images": [
+                {
+                  "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJQbANiJKOddLqjBqk3Y-bws-pUxisbxvhrw&usqp=CAU",
+                  "size_type": "sm"
+                }
+              ],
+              "price": {
+                "value": "300",
+                "currency": "EUR"
+              },
+              "rating": "4.5",
+              "rateable": true,
+              "quantity": {
+                "available": {
+                  "measure": {
+                    "value": "0",
+                    "unit": "kWh"
+                  }
+                }
+              },
+              "categories": [
+                {
+                  "id": "65",
+                  "name": "Assembly"
+                }
+              ],
+              "locations": [
+                {
+                  "id": "59",
+                  "city": "Akola",
+                  "state": "Maharashtra",
+                  "country": "India"
+                }
+              ],
+              "tags": [
+                {
+                  "display": true,
+                  "list": [
+                    {
+                      "code": "product-info",
+                      "value": "Product Information"
+                    }
+                  ]
+                },
+                {
+                  "display": true,
+                  "list": [
+                    {
+                      "code": "assembly-info",
+                      "value": "Assembly Information"
+                    }
+                  ]
+                },
+                {
+                  "display": true,
+                  "list": [
+                    {
+                      "code": "scale-info",
+                      "value": "Scale Information"
+                    }
+                  ]
+                },
+                {
+                  "display": true,
+                  "list": [
+                    {
+                      "code": "printer-info",
+                      "value": "Printer Information\""
+                    }
+                  ]
+                }
+              ],
+              "fulfillments": [
+                {
+                  "id": "3",
+                  "type": "HOME-DELIVERY",
+                  "rating": "5"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

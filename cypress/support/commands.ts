@@ -75,7 +75,7 @@ declare global {
       fillRespondentDetails(formDetails: formDetails): Chainable<void>
       fillDisputeDetails(): Chainable<void>
       fillConsentDetails(): Chainable<void>
-
+      performXinput_Submit(response: RouteHandler, aliasName: string): Chainable<void>
       //Created by omkar
       loginDynamic(email: string, password: string): Chainable<void>
       performSearchDynamic(searchTerm: string): Chainable<void>
@@ -217,6 +217,9 @@ Cypress.Commands.add('performRating', (response, aliasName) => {
 })
 Cypress.Commands.add('performXinputSubmit', (response, aliasName) => {
   cy.intercept('POST', `${XINPUT_SUBMIT}/submit`, response).as(aliasName)
+})
+Cypress.Commands.add('performXinput_Submit', (response, aliasName) => {
+  cy.intercept('POST', `${GCL_URL}/x-input/submit`, response).as(aliasName)
 })
 
 Cypress.Commands.add('fillComplaintDetails', complaintDetails => {

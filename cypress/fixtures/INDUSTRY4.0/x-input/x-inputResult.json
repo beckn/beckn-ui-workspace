@@ -1,0 +1,18 @@
+{
+  "id": 1483,
+  "form_data": {
+    "type": "Plastic Box",
+    "shape": "Circle",
+    "width": 10,
+    "colour": "Blue",
+    "length": 10,
+    "weight": 10,
+    "form_id": "industryAssemblyDetailsForm",
+    "quantity": 2
+  },
+  "createdAt": "2024-08-28T07:55:27.635Z",
+  "updatedAt": "2024-08-28T07:55:27.635Z",
+  "publishedAt": "2024-08-28T07:55:27.633Z",
+  "form_id": "industryAssemblyDetailsForm",
+  "transaction_id": null
+}
