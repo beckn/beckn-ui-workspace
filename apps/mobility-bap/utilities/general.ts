@@ -44,18 +44,20 @@ export const getExperienceTypeGelocation = (experienceType: string) => {
   return null
 }
 
-export const getCurrencyValue = (experienceType: string) => {
-  if (experienceType === 'smartCity') {
-    return currencyMap.INR
+export const getCurrencyWithFare = (experienceType: string, fare: string) => {
+  if (!experienceType) return
+  const countries = experienceType?.split(' ').map(name => name.toLowerCase())
+  if (countries.includes('india')) {
+    return `${currencyMap.INR}${fare}`
   }
-  if (experienceType === 'gambia') {
-    return currencyMap.GMD
+  if (countries.includes('gambia')) {
+    return `${currencyMap.GMD}${fare}`
   }
-  if (experienceType === 'paris') {
-    return currencyMap.EUR
+  if (countries.includes('france')) {
+    return `${fare}${currencyMap.EUR}`
   }
 
-  return currencyMap.INR
+  return `${currencyMap.INR}${fare}`
 }
 
 export const getDistance = (sourceCoordinates: PickUpDropOffModel, destinationCoordinates: PickUpDropOffModel) => {

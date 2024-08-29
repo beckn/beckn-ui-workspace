@@ -17,7 +17,7 @@ import { DiscoveryRootState } from '@store/discovery-slice'
 import { DOMAIN } from '@lib/config'
 import { feedbackActions } from '@beckn-ui/common'
 import { useSelectMutation } from '@beckn-ui/common/src/services/select'
-import { getCurrencyValue, getDistance } from '@utils/general'
+import { getCurrencyWithFare, getDistance } from '@utils/general'
 import { UserGeoLocationRootState } from '@lib/types/user'
 import { SelectRideRootState } from '@store/selectRide-slice'
 
@@ -67,10 +67,8 @@ const SearchRideForm: React.FC<SearchRideFormProps> = () => {
   const theme = useTheme()
   const { transactionId, selectedRide } = useSelector((state: DiscoveryRootState) => state.discovery)
   const selectResponse = useSelector((state: SelectRideRootState) => state.selectRide.selectResponse)
-  const experienceType = JSON.parse(localStorage.getItem('experienceType')!)
   const [initialize] = useInitMutation()
   const [fetchQuotes] = useSelectMutation()
-
   const { provider, pickup, dropoff } = selectedRide
 
   useEffect(() => {
@@ -194,7 +192,7 @@ const SearchRideForm: React.FC<SearchRideFormProps> = () => {
               </Flex>
             </Flex>
             <Typography
-              text={`${getCurrencyValue(experienceType)}${getTotalFare(provider?.cabDetails?.[0]?.fare)}`}
+              text={`${getCurrencyWithFare(pickup.country!, getTotalFare(provider?.cabDetails?.[0]?.fare))}`}
               fontSize="15px"
               fontWeight="700"
               color={theme.colors.primary[100]}

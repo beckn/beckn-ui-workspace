@@ -5,7 +5,7 @@ import { useGetMyRideMutation } from '@services/RiderService'
 import { RideDetailsProps } from '@lib/types/rideDetails'
 import { RideData } from '@lib/types/ride'
 import { rideStatusMap } from '@utils/ride-utils'
-import { getCurrencyValue } from '@utils/rideSummary-utils'
+import { getCurrencyWithFare } from '@utils/rideSummary-utils'
 
 const MyRides = () => {
   const country = localStorage.getItem('country')!
@@ -34,7 +34,7 @@ const MyRides = () => {
       riderName: `${ride.customer_id.first_name} ${ride.customer_id.last_name || ''}`.trim(),
       date: new Date(ride.updatedAt).toLocaleDateString(),
       time: new Date(ride.updatedAt).toLocaleTimeString(),
-      fare: `${getCurrencyValue(country)}${ride.order_id.total_amount || 0}`,
+      fare: `${getCurrencyWithFare(country, ride.order_id.total_amount)}`,
       status: (rideStatusMap as any)[ride.state_value] || ''
     }
   })

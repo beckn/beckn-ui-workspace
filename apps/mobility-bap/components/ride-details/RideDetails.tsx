@@ -9,7 +9,7 @@ import TripLocation from '../searchRideForm/TripLocation'
 import CabDetails from './CabDetails'
 import DriverDetails from './DriverDetails'
 import { useLanguage } from '@hooks/useLanguage'
-import { getCurrencyValue, getDistance } from '@utils/general'
+import { getCurrencyWithFare, getDistance } from '@utils/general'
 import { UserGeoLocationRootState } from '@lib/types/user'
 import { useSelector } from 'react-redux'
 
@@ -36,8 +36,6 @@ const RideDetails: React.FC<RideDetailsProps> = ({
     const distance = getDistance(pickup, dropoff)
     return (Number(fare) * distance).toFixed(2)
   }
-
-  const experienceType = JSON.parse(localStorage.getItem('experienceType')!)
 
   return (
     <BottomDrawer>
@@ -74,7 +72,7 @@ const RideDetails: React.FC<RideDetailsProps> = ({
             color="#37474F"
           />
           <Typography
-            text={`${getCurrencyValue(experienceType)}${getTotalFare(fare.toString())}`}
+            text={`${getCurrencyWithFare(pickup.country!, getTotalFare(fare.toString()))}`}
             fontSize="14px"
             fontWeight="700"
           />

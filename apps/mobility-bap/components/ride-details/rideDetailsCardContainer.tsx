@@ -126,12 +126,17 @@ const RideDetailsCardContainer: React.FC<RideDetailsCardContainerProps> = ({ han
             case RIDE_STATUS_CODE.RIDE_COMPLETED:
               setIsLoading(false)
               handleStatusOperation(RIDE_STATUS_CODE.RIDE_COMPLETED)
-              const currentLocation = { address: dropoff.address, geoLocation: dropoff.geoLocation }
+              const currentLocation = {
+                address: dropoff.address,
+                country: dropoff.country,
+                geoLocation: dropoff.geoLocation
+              }
               dispatch(setPickUpLocation(currentLocation))
-              dispatch(setDropOffLocation({ address: '', geoLocation: { latitude: 0, longitude: 0 } }))
+              dispatch(setDropOffLocation({ address: '', country: '', geoLocation: { latitude: 0, longitude: 0 } }))
               dispatch(
                 setSource({
                   geoAddress: currentLocation.address,
+                  country: currentLocation.country!,
                   geoLatLong: `${currentLocation.geoLocation.latitude},${currentLocation.geoLocation.longitude}`
                 })
               )

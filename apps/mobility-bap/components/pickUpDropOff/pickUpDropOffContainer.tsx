@@ -84,7 +84,6 @@ const PickUpDropOffContainer = (props: PickUpDropOffContainerProps) => {
               }
             })
           )
-          router.push('/')
           handleOnClick(true)
         }
       })
@@ -102,7 +101,6 @@ const PickUpDropOffContainer = (props: PickUpDropOffContainerProps) => {
               }
             })
           )
-          router.push('/')
           handleOnClick(true)
         }
       })
@@ -134,7 +132,7 @@ const PickUpDropOffContainer = (props: PickUpDropOffContainerProps) => {
       {openAlert && (
         <AlertModal
           isOpen={true}
-          name={violationPolicyData.name}
+          name={'violationPolicyData.name'}
           handleOnClose={() => {
             setOpenAlert(false)
             setViolationPolicyData({ policyId: '', name: '' })

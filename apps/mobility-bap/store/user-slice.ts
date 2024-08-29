@@ -5,10 +5,12 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 export const initialState: UserGeoLocation = {
   pickup: {
     address: '',
+    country: '',
     geoLocation: { latitude: 0, longitude: 0 }
   },
   dropoff: {
     address: '',
+    country: '',
     geoLocation: { latitude: 0, longitude: 0 }
   }
 }

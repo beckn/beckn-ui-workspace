@@ -1,7 +1,12 @@
 import React, { useCallback, useEffect } from 'react'
 import dynamic from 'next/dynamic'
 import { useDispatch, useSelector } from 'react-redux'
-import { IGeoLocationSearchPageRootState, PickUpDropOffModel, useGeolocation } from '@beckn-ui/common'
+import {
+  IGeoLocationSearchPageRootState,
+  PickUpDropOffModel,
+  setGeoAddressAndLatLong,
+  useGeolocation
+} from '@beckn-ui/common'
 import { setPickUpLocation, setDropOffLocation } from '@store/user-slice'
 import { UserGeoLocationRootState } from '@lib/types/user'
 import BottomModalRenderer from '@components/bottomModalRenderer/bottomModalRenderer'
@@ -16,7 +21,9 @@ const Homepage = () => {
     geoAddress: originGeoAddress,
     geoLatLong: originGeoLatLong,
     destinationGeoAddress,
-    destinationGeoLatLong
+    destinationGeoLatLong,
+    country: originCountry,
+    destinationCountry
   } = useSelector((state: IGeoLocationSearchPageRootState) => state.geoLocationSearchPageUI)
 
   const dispatch = useDispatch()
@@ -26,7 +33,7 @@ const Homepage = () => {
 
   const apiKeyForGoogle = process.env.NEXT_PUBLIC_GOOGLE_API_KEY
 
-  const { currentAddress, coordinates } = useGeolocation(apiKeyForGoogle as string)
+  const { currentAddress, coordinates, country } = useGeolocation(apiKeyForGoogle as string)
 
   const getExperienceTypeFlow = async (): Promise<PickUpDropOffModel | null> => {
     const { experienceType: queryExperienceType, external_url: queryExternalUrl } = router.query
@@ -61,7 +68,8 @@ const Homepage = () => {
 
     if (external_url) {
       try {
-        const { data } = await axios.get(external_url)
+        const url = decodeURIComponent(external_url)
+        const { data } = await axios.get(url)
         const parisTag = data?.items?.[0]?.tags?.[0]?.list.find(
           (ele: any) => ele?.descriptor?.code === 'paris' && ele?.value === 'Y'
         )
@@ -79,7 +87,8 @@ const Homepage = () => {
 
   useEffect(() => {
     // clear dropoff info initially
-    dispatch(setDropOffLocation({ address: '', geoLocation: { latitude: 0, longitude: 0 } }))
+    dispatch(setPickUpLocation({ address: '', country: '', geoLocation: { latitude: 0, longitude: 0 } }))
+    dispatch(setDropOffLocation({ address: '', country: '', geoLocation: { latitude: 0, longitude: 0 } }))
   }, [])
 
   const enableCurrentLocation = useCallback(async () => {
@@ -90,29 +99,52 @@ const Homepage = () => {
 
       const locationDetails = {
         address: originGeoAddress,
+        country: originCountry,
         geoLocation: { latitude: Number(latLong[0]), longitude: Number(latLong[1]) }
       }
 
       dispatch(setPickUpLocation(locationDetails))
+      dispatch(
+        setGeoAddressAndLatLong({
+          geoAddress: locationDetails.address,
+          country: locationDetails.country,
+          geoLatLong: `${locationDetails.geoLocation.latitude},${locationDetails.geoLocation.longitude}`
+        })
+      )
     } else if (
       experienceTypeGeoLocation?.address &&
       experienceTypeGeoLocation?.geoLocation.latitude &&
       experienceTypeGeoLocation?.geoLocation.longitude
     ) {
       dispatch(setPickUpLocation(experienceTypeGeoLocation))
+      dispatch(
+        setGeoAddressAndLatLong({
+          geoAddress: experienceTypeGeoLocation.address,
+          country: experienceTypeGeoLocation.country,
+          geoLatLong: `${experienceTypeGeoLocation.geoLocation.latitude},${experienceTypeGeoLocation.geoLocation.longitude}`
+        })
+      )
     } else if (currentAddress && coordinates?.latitude && coordinates?.longitude) {
       const locationDetails = {
         address: currentAddress,
+        country,
         geoLocation: coordinates
       }
 
       dispatch(setPickUpLocation(locationDetails))
+      dispatch(
+        setGeoAddressAndLatLong({
+          geoAddress: locationDetails.address,
+          country: locationDetails.country,
+          geoLatLong: `${locationDetails.geoLocation.latitude},${locationDetails.geoLocation.longitude}`
+        })
+      )
     }
-  }, [router.query, currentAddress, coordinates, originGeoAddress, originGeoLatLong])
+  }, [currentAddress, coordinates, originGeoAddress, originGeoLatLong, originCountry, country])
 
   useEffect(() => {
     enableCurrentLocation()
-  }, [router.query, currentAddress, coordinates, originGeoAddress, originGeoLatLong])
+  }, [currentAddress, coordinates, originGeoAddress, originGeoLatLong, originCountry, country])
 
   useEffect(() => {
     if (destinationGeoAddress && destinationGeoLatLong) {
@@ -120,6 +152,7 @@ const Homepage = () => {
 
       const locationDetails = {
         address: destinationGeoAddress,
+        country: destinationCountry,
         geoLocation: { latitude: Number(latLong[0]), longitude: Number(latLong[1]) }
       }
 

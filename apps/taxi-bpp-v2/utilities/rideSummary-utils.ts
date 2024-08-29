@@ -44,17 +44,18 @@ function formatDate(dateTime: string): string {
   return `${dayName}, ${day}/${month}/${year}`
 }
 
-export const getCurrencyValue = (experienceType: string) => {
-  const countries = experienceType.split(' ').map(name => name.toLowerCase())
+export const getCurrencyWithFare = (experienceType: string, fare: string) => {
+  if (!experienceType) return
+  const countries = experienceType?.split(' ').map(name => name.toLowerCase())
   if (countries.includes('india')) {
-    return currencyMap.INR
+    return `${currencyMap.INR}${fare}`
   }
   if (countries.includes('gambia')) {
-    return currencyMap.GMD
+    return `${currencyMap.GMD}${fare}`
   }
   if (countries.includes('france')) {
-    return currencyMap.EUR
+    return `${fare}${currencyMap.EUR}`
   }
 
-  return currencyMap.INR
+  return `${currencyMap.INR}${fare}`
 }

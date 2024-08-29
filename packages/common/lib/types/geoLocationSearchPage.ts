@@ -2,6 +2,7 @@ import { Coordinate } from './common'
 
 export interface PickUpDropOffModel {
   address: string
+  country?: string
   geoLocation: Coordinate
 }
 
@@ -14,6 +15,7 @@ export interface IGeoLocationSearchPage {
   destinationGeoAddress: string
   destinationGeoLatLong: string
   country: string
+  destinationCountry: string
 }
 
 export interface IGeoLocationSearchPageRootState {

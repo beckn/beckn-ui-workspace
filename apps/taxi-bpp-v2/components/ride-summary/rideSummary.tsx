@@ -4,7 +4,7 @@ import React from 'react'
 import { RideSummaryProps } from '../../lib/types/rideDetails'
 import Styles from '@beckn-ui/becknified-components/src/pages/auth/auth.module.css'
 import { RIDE_STATUS_CODE } from '@utils/ride-utils'
-import { getCurrencyValue } from '@utils/rideSummary-utils'
+import { getCurrencyWithFare } from '@utils/rideSummary-utils'
 
 const RideSummary: React.FC<RideSummaryProps> = ({
   time,
@@ -129,7 +129,7 @@ const RideSummary: React.FC<RideSummaryProps> = ({
           />
           <Flex alignItems={'center'}>
             <Typography
-              text={`${getCurrencyValue(country)}${fare.cost}`}
+              text={`${getCurrencyWithFare(country, fare.cost)}`}
               fontSize="24px"
               color="#34C759"
               fontWeight="600"
