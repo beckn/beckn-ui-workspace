@@ -1,17 +1,32 @@
-import { Box } from '@chakra-ui/react'
 import React, { useEffect } from 'react'
-import Signin from '@components/signIn/SignIn'
+import Router from 'next/router'
+import tourismMobLogo from '@public/images/tourism-logo.svg'
+import tourismDeskLogo from '@public/images/tourism-logo.svg'
+import { useLanguage } from '@hooks/useLanguage'
+import { SignInPage } from '@beckn-ui/common'
 
-const MobileLogin = () => {
+const Login = () => {
+  const { t } = useLanguage()
+
   useEffect(() => {
     localStorage.clear()
   }, [])
 
+  const handleSignUp = () => {
+    Router.push('/signUp')
+  }
+
   return (
-    <Box>
-      <Signin />
-    </Box>
+    <SignInPage
+      logos={{
+        mobile: { src: tourismMobLogo, alt: 'Tourism logo' },
+        desktop: { src: tourismDeskLogo, alt: 'Tourism logo' }
+      }}
+      onSignIn={() => {}}
+      onSignUp={handleSignUp}
+      t={key => t[key]}
+    />
   )
 }
 
-export default MobileLogin
+export default Login
