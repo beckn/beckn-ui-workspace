@@ -75,6 +75,7 @@ declare global {
       fillRespondentDetails(formDetails: formDetails): Chainable<void>
       fillDisputeDetails(): Chainable<void>
       fillConsentDetails(): Chainable<void>
+      fillAssemblyDetails(): Chainable<void>
       performXinput_Submit(response: RouteHandler, aliasName: string): Chainable<void>
       //Created by omkar
       loginDynamic(email: string, password: string): Chainable<void>
@@ -285,4 +286,19 @@ Cypress.Commands.add('performSearchDynamic', searchTerm => {
   cy.getByData(searchInputId).clear().type(searchTerm)
   cy.getByData(testIds.searchButton).click()
   cy.wait(16000)
+})
+
+Cypress.Commands.add('fillAssemblyDetails', () => {
+  cy.get(testIds.type).select('Plastic Box')
+  cy.get(testIds.type).should('have.value', 'Plastic Box')
+  cy.get(testIds.colour).select('Blue')
+  cy.get(testIds.colour).should('have.value', 'Blue')
+  cy.get(testIds.shape).select('Circle')
+  cy.get(testIds.shape).should('have.value', 'Circle')
+  cy.get(testIds.length).type('10')
+  cy.get(testIds.width).type('100')
+  cy.get(testIds.weight).type('10')
+  cy.get(testIds.increaseQuantity).click()
+  cy.get(testIds.quantity).should('have.value', '2')
+  cy.get('button[type="submit"]').click()
 })

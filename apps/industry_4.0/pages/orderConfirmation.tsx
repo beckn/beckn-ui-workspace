@@ -10,6 +10,7 @@ import { Box } from '@chakra-ui/react'
 import Cookies from 'js-cookie'
 import { ConfirmResponseModel } from '../types/confirm.types'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
+import { testIds } from '@shared/dataTestIds'
 
 const OrderConfirmation = () => {
   const { t } = useLanguage()
@@ -90,7 +91,8 @@ const OrderConfirmation = () => {
             },
             disabled: false,
             variant: 'solid',
-            colorScheme: 'primary'
+            colorScheme: 'primary',
+            dataTest: testIds.orderConfirmation_viewOrderButton
           },
           {
             text: 'Go Back Home',
@@ -99,7 +101,8 @@ const OrderConfirmation = () => {
             },
             disabled: false,
             variant: 'outline',
-            colorScheme: 'primary'
+            colorScheme: 'primary',
+            dataTest: testIds.orderConfirmation_goBackToHome
           }
         ]
       }}
