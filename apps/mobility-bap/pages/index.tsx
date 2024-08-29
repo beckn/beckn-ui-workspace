@@ -51,9 +51,6 @@ const Homepage = () => {
     const experienceType = queryExperienceType || storedExperienceType
     const external_url = queryExternalUrl || storedExternalUrl
 
-    console.log('experienceType--> ', experienceType)
-    console.log('external_url--> ', external_url)
-
     if (!experienceType && !external_url) {
       return null
     }
@@ -86,6 +83,8 @@ const Homepage = () => {
   }, [])
 
   const enableCurrentLocation = useCallback(async () => {
+    const experienceTypeGeoLocation = await getExperienceTypeFlow()
+
     if (originGeoAddress && originGeoLatLong) {
       const latLong = originGeoLatLong.split(',')
 
@@ -95,19 +94,19 @@ const Homepage = () => {
       }
 
       dispatch(setPickUpLocation(locationDetails))
+    } else if (
+      experienceTypeGeoLocation?.address &&
+      experienceTypeGeoLocation?.geoLocation.latitude &&
+      experienceTypeGeoLocation?.geoLocation.longitude
+    ) {
+      dispatch(setPickUpLocation(experienceTypeGeoLocation))
     } else if (currentAddress && coordinates?.latitude && coordinates?.longitude) {
-      const experienceType = await getExperienceTypeFlow()
-      console.log(experienceType)
-      if (experienceType) {
-        dispatch(setPickUpLocation(experienceType))
-      } else {
-        const locationDetails = {
-          address: currentAddress,
-          geoLocation: coordinates
-        }
-
-        dispatch(setPickUpLocation(locationDetails))
+      const locationDetails = {
+        address: currentAddress,
+        geoLocation: coordinates
       }
+
+      dispatch(setPickUpLocation(locationDetails))
     }
   }, [router.query, currentAddress, coordinates, originGeoAddress, originGeoLatLong])
 
