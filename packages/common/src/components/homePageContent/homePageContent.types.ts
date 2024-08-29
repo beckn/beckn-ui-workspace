@@ -1,6 +1,12 @@
 import { Logos } from '../../../lib/types'
 
-export type BlockName = 'header' | 'description' | 'selectInput' | 'searchInput' | 'searchByLocation'
+export type BlockName =
+  | 'header'
+  | 'description'
+  | 'selectInput'
+  | 'searchInput'
+  | 'searchByLocation'
+  | 'geoLocationInput'
 export interface HomePageContentProps {
   blockOrder?: BlockName[]
   logos?: Logos
@@ -9,7 +15,7 @@ export interface HomePageContentProps {
     title?: string
     description: string
   }
-  searchProps: {
+  searchProps?: {
     searchPlaceholder: string
     label?: string
     setSearchTerm: (value: string) => void
@@ -26,6 +32,11 @@ export interface HomePageContentProps {
   searchByLocation?: {
     label: string
     onSearchByLocationClick: (e: React.MouseEvent) => void
+  }
+  geoLocationInput?: {
+    placeholder: string
+    geoLocationSearchPageSelectedAddress: string
+    navigateToSearchResult: () => void
   }
   footerProps: {
     poweredByLogoSrc: string

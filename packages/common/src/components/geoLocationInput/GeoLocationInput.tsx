@@ -2,29 +2,29 @@ import React from 'react'
 import { FaSearch } from 'react-icons/fa'
 import { GrLocation } from 'react-icons/gr'
 import Styles from './GeoLocationInput.module.css'
-import { Flex } from '@chakra-ui/react'
+import { Flex, useTheme } from '@chakra-ui/react'
 import { useDispatch, useSelector } from 'react-redux'
+import { IGeoLocationSearchPageRootState, toggleLocationSearchPageVisibility } from '@beckn-ui/common'
 
-import { IGeoLocationSearchPageRootState } from '../../lib/types/geoLocationSearchPage'
-import { useLanguage } from '../../hooks/useLanguage'
-import Router from 'next/router'
-import { toggleLocationSearchPageVisibility } from '@beckn-ui/common'
+export interface GeoLocationInputProps {
+  placeholder: string
+  geoLocationSearchPageSelectedAddress: string
+  navigateToSearchResult: () => void
+}
 
-export const GeoLocationInput = () => {
+export const GeoLocationInput: React.FC<GeoLocationInputProps> = ({
+  placeholder,
+  geoLocationSearchPageSelectedAddress,
+  navigateToSearchResult
+}) => {
   const dispatch = useDispatch()
+  const theme = useTheme()
 
-  const geoLocationSearchPageSelectedAddress = useSelector((state: IGeoLocationSearchPageRootState) => {
-    return state.geoLocationSearchPageUI.geoAddress
-  })
-  const navigateToSearchResult = () => {
-    const loc = geoLocationSearchPageSelectedAddress.split(',')[0]
-    Router.push(`/search?searchTerm=${loc}`)
-  }
-
-  const someFunc = () => {
+  const closeGeoLocationSearchPage = () => {
     dispatch(toggleLocationSearchPageVisibility({ visible: true, addressType: '' }))
   }
-  const { t } = useLanguage()
+  const primaryColor = theme.colors.primary['100']
+
   return (
     <>
       <Flex className={Styles.flex_container}>
@@ -41,15 +41,16 @@ export const GeoLocationInput = () => {
           <input
             className={Styles.input_box}
             name="search_input"
-            placeholder={t.searchForTravelLocation}
+            placeholder={placeholder}
             type="text"
             value={geoLocationSearchPageSelectedAddress}
             onFocus={() => {
-              someFunc()
+              closeGeoLocationSearchPage()
             }}
             readOnly
           />
           <button
+            style={{ backgroundColor: `${primaryColor}` }}
             className={Styles.search_button}
             onClick={() => {
               navigateToSearchResult()

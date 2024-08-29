@@ -111,3 +111,20 @@ select.chakra-select {
 .-product_card_layout_container img {
   object-fit: contain !important;
 }
+.main_container {
+  position: relative;
+  background: url('/images/landingPage.svg');
+  height: calc(100vh - 24px);
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding-left: 27px;
+  padding-top: 99px;
+  padding-right: 27px;
+}
+.main_container > div {
+  background-color: unset !important;
+  margin: unset !important;
+}
+.main_container p {
+  color: #fff;
+}
