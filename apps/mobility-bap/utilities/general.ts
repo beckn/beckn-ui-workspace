@@ -48,16 +48,16 @@ export const getCurrencyWithFare = (experienceType: string, fare: string) => {
   if (!experienceType) return
   const countries = experienceType?.split(' ').map(name => name.toLowerCase())
   if (countries.includes('india')) {
-    return `${currencyMap.INR}${fare}`
+    return `${currencyMap.INR}${fare || 0}`
   }
   if (countries.includes('gambia')) {
-    return `${currencyMap.GMD}${fare}`
+    return `${currencyMap.GMD}${fare || 0}`
   }
   if (countries.includes('france')) {
-    return `${fare}${currencyMap.EUR}`
+    return `${fare || 0}${currencyMap.EUR}`
   }
 
-  return `${currencyMap.INR}${fare}`
+  return `${currencyMap.INR}${fare || 0}`
 }
 
 export const getDistance = (sourceCoordinates: PickUpDropOffModel, destinationCoordinates: PickUpDropOffModel) => {
