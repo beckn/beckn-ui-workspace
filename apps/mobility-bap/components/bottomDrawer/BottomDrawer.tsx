@@ -35,6 +35,7 @@ const BottomDrawer: React.FC<CancelBookingProps> = ({ children }) => {
           alignSelf={'center'}
           height="1rem"
           onClick={handleHeaderClick}
+          cursor="pointer"
         >
           <Image
             src={crossIcon}

@@ -71,6 +71,7 @@ const SearchRide = () => {
               alignItems={'center'}
             >
               <Image
+                cursor={'pointer'}
                 src="./images/backIcon.svg"
                 alt=""
                 onClick={() => Router.back()}
