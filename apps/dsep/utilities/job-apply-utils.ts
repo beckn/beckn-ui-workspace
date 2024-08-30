@@ -67,9 +67,8 @@ export const getInitPayloadForJobs = (
               }
             ],
             fulfillments: [
-              // TODO :- To add dynamic fulfilllment here if we get that from select response of job and also there are lot of gaps here
               {
-                id: '',
+                id: items[0]?.fulfillments[0]?.id,
                 customer: {
                   person: {
                     name: name,
