@@ -13,12 +13,12 @@ export default function middleware(req: NextRequest) {
     langSuffix = urlSplitList[hostIndex + 1]
   }
 
-  if (loggedin && (pathname === '/signin' || pathname === '/signUp')) {
+  if (loggedin && (pathname === '/signIn' || pathname === '/signUp')) {
     return NextResponse.redirect(new URL('/', req.url))
   }
 
-  if (!loggedin && pathname !== '/signin' && pathname !== '/signUp') {
-    const redirectUrl = langSuffix ? `/${langSuffix}/signin` : '/signin'
+  if (!loggedin && pathname !== '/signIn' && pathname !== '/signUp') {
+    const redirectUrl = langSuffix ? `/${langSuffix}/signIn` : '/signIn'
     console.log('Dank', langSuffix, redirectUrl)
     return NextResponse.redirect(new URL(redirectUrl, req.url))
   }
