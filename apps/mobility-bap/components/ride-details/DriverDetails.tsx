@@ -57,6 +57,7 @@ const DriverDetails: React.FC<DriverDetailsProps> = ({ name, rating, contact, dr
       </Box>
 
       <Image
+        cursor={'pointer'}
         src="./images/callIcon.svg"
         alt="contact-image"
         h={'50px'}
