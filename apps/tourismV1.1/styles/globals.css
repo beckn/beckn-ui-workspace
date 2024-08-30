@@ -124,6 +124,7 @@ select.chakra-select {
 .main_container > div {
   background-color: unset !important;
   margin: unset !important;
+  max-width: 100%;
 }
 .main_container p {
   color: #fff;
