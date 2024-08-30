@@ -21,6 +21,7 @@ const TripLocation = ({
         mb={'12px'}
       >
         <Image
+          maxW={'unset'}
           src="./images/locationIcon.svg"
           alt=""
         />
@@ -66,6 +67,7 @@ const TripLocation = ({
           mb={'12px'}
         >
           <Image
+            maxW={'unset'}
             src="./images/locationIcon.svg"
             alt=""
           />
