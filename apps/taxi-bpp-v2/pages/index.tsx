@@ -25,34 +25,33 @@ import {
   useUpdateRideStatusMutation,
   useGetRideStatusMutation
 } from '@services/RiderService'
-import { goOffline, goOnline, RiderRootState, updateLocation } from '@store/rider-slice'
+import { goOffline, goOnline, RiderRootState, setCurrentRideRequest, updateLocation } from '@store/rider-slice'
 import { formatGeoLocationDetails } from '@utils/geoLocation-utils'
 import { RideStatusRootState, setNewRideRequest, updateDriverStatus } from '@store/rideStatus-slice'
 import { parsedNewRideDetails, RIDE_STATUS_CODE } from '@utils/ride-utils'
-import { parseRideSummaryData, RideSummaryModalProp } from '@utils/rideSummary-utils'
+import { parseRideSummaryData } from '@utils/rideSummary-utils'
 import _ from 'lodash'
 import BottomDrawer from '@components/bottomDrawer/BottomDrawer'
 import useSocket from '@hooks/useSocket'
+import { AuthRootState } from '@store/auth-slice'
 
 const Homepage = () => {
   const MapWithNoSSR: any = dynamic(() => import('../components/Map'), { ssr: false })
 
-  const [currentModal, setCurrentModal] = useState<ModalDetails>()
+  // const [current_Modal, setCurrentM_odal] = useState<ModalDetails>()
   const [destination, setDestination] = useState<Coordinate>()
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [startNav, setStartNav] = useState<boolean>(false)
   const rideRequestList = useRef<RideDetailsModel[]>([])
-  const currentRideReqIndex = useRef<number>(0)
 
   const { t } = useLanguage()
   const dispatch = useDispatch()
   const [toggleAvailability] = useToggleAvailabilityMutation()
-  const [getNewRideRequest] = useGetNewRideRequestMutation()
   const [updateRideStatus] = useUpdateRideStatusMutation()
   const [getRideSummary] = useGetRideSummaryMutation()
   const [updateDriverLocation] = useUpdateDriverLocationMutation()
-  const [getRideStatus] = useGetRideStatusMutation()
-  const { isOnline, currentLocation } = useSelector((state: RiderRootState) => state.rider)
+  const { user } = useSelector((state: AuthRootState) => state.auth)
+  const { isOnline, currentLocation, currentRideRequest } = useSelector((state: RiderRootState) => state.rider)
   const { currentAcceptedRideRequest, driverStatus } = useSelector((state: RideStatusRootState) => state.rideStatus)
   const apiKeyForGoogle = process.env.NEXT_PUBLIC_GOOGLE_API_KEY
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
@@ -114,7 +113,7 @@ const Homepage = () => {
     if (rideRequests.length > 0) {
       updateCurrentModal('REQ_NEW_RIDE', rideRequests[0])
     } else {
-      setCurrentModal(undefined)
+      dispatch(setCurrentRideRequest(undefined))
     }
     rideRequestList.current = rideRequests
   }
@@ -135,7 +134,6 @@ const Homepage = () => {
       dispatch(updateDriverStatus(RIDE_STATUS_CODE.RIDE_ACCEPTED))
       handleModalSubmit('REQ_NEW_RIDE', data)
       rideRequestList.current = []
-      currentRideReqIndex.current = 0
     } catch (err) {
       console.error('Error while accepting ride--> ', err)
       dispatch(
@@ -175,180 +173,226 @@ const Homepage = () => {
     }
   }
 
-  const updateCurrentModal = (modalType: ModalTypes, data: RideDetailsModel) => {
-    // below code is to render the ride related modals
-    let modalDetails
+  const handleReachedPickupLocation = async (data: RideDetailsModel) => {
+    try {
+      await updateRideStatus({
+        order_id: data.orderId,
+        order_status: RIDE_STATUS_CODE.CAB_REACHED_PICKUP_LOCATION
+      }).unwrap()
+      dispatch(updateDriverStatus(RIDE_STATUS_CODE.CAB_REACHED_PICKUP_LOCATION))
+      await updateDriverLocation({
+        location: {
+          lat: data.sourceGeoLocation?.latitude.toString()!,
+          long: data.sourceGeoLocation?.longitude.toString()!
+        }
+      }).unwrap()
+      dispatch(
+        setGeoAddressAndLatLong({
+          geoAddress: data.source,
+          country: localStorage.getItem('country')!,
+          geoLatLong: `${data.sourceGeoLocation?.latitude}, ${data.sourceGeoLocation?.longitude}`
+        })
+      )
+      handleModalSubmit('GOING_FOR_PICK_UP', data)
+    } catch (err) {
+      console.error('Error while accepting ride--> ', err)
+      dispatch(
+        feedbackActions.setToastData({
+          toastData: {
+            message: 'Error',
+            display: true,
+            type: 'error',
+            description: 'Something went wrong, please try again'
+          }
+        })
+      )
+    }
+  }
 
+  const handleStartRide = async (data: RideDetailsModel) => {
+    try {
+      await updateRideStatus({
+        order_id: data.orderId,
+        order_status: RIDE_STATUS_CODE.RIDE_STARTED
+      }).unwrap()
+      dispatch(updateDriverStatus(RIDE_STATUS_CODE.RIDE_STARTED))
+      handleNavigate?.(data.destinationGeoLocation!)
+      handleModalSubmit('REACHED_PICK_UP', data)
+    } catch (err) {
+      console.error('Error while accepting ride--> ', err)
+      dispatch(
+        feedbackActions.setToastData({
+          toastData: {
+            message: 'Error',
+            display: true,
+            type: 'error',
+            description: 'Something went wrong, please try again'
+          }
+        })
+      )
+    }
+  }
+
+  const handleEndRide = async (data: RideDetailsModel) => {
+    try {
+      await updateRideStatus({
+        order_id: data.orderId,
+        order_status: RIDE_STATUS_CODE.RIDE_COMPLETED
+      }).unwrap()
+      dispatch(updateDriverStatus(RIDE_STATUS_CODE.RIDE_COMPLETED))
+      const endRideData = await getRideSummary({
+        order_id: data.orderId
+      }).unwrap()
+      console.log(endRideData.data)
+      const parsedData = parseRideSummaryData(endRideData, data)
+      if (!parsedData.source) parsedData.source = data.source
+      if (!parsedData.destination) parsedData.destination = data.destination
+
+      await updateDriverLocation({
+        location: {
+          lat: data.destinationGeoLocation?.latitude.toString()!,
+          long: data.destinationGeoLocation?.longitude.toString()!
+        }
+      }).unwrap()
+      dispatch(
+        setGeoAddressAndLatLong({
+          geoAddress: data.destination,
+          country: localStorage.getItem('country')!,
+          geoLatLong: `${data.destinationGeoLocation?.latitude}, ${data.destinationGeoLocation?.longitude}`
+        })
+      )
+      handleModalSubmit('START_RIDE', parsedData)
+    } catch (err) {
+      console.error('Error while accepting ride--> ', err)
+      dispatch(
+        feedbackActions.setToastData({
+          toastData: {
+            message: 'Error',
+            display: true,
+            type: 'error',
+            description: 'Something went wrong, please try again'
+          }
+        })
+      )
+    }
+  }
+
+  const handleLookForNewRide = (data: RideDetailsModel) => {
+    handleModalSubmit('COMPLETED', data)
+    dispatch(updateDriverStatus(RIDE_STATUS_CODE.AWAITING_DRIVER_APPROVAL))
+  }
+
+  const getModalButtons = (
+    actionType: ModalTypes,
+    data: RideDetailsModel
+  ): { submitBtns: ButtonProps[]; navigateBtn?: (data: Coordinate, startNav?: boolean) => void } => {
     const defaultBtnState: ButtonProps = {
       disabled: false,
       variant: 'solid',
       colorScheme: 'primary'
     }
+    switch (actionType) {
+      case 'REQ_NEW_RIDE':
+        return {
+          submitBtns: [
+            {
+              ...defaultBtnState,
+              text: 'Accept',
+              className: 'taxi-bpp-btn-text',
+              handleClick: () => handleAccept(data)
+            },
+            {
+              ...defaultBtnState,
+              text: 'Decline',
+              variant: 'outline',
+              color: '#D22323',
+              handleClick: () => handleDecline(data)
+            }
+          ]
+        }
+      case 'GOING_FOR_PICK_UP':
+        return {
+          navigateBtn: handleNavigate,
+          submitBtns: [
+            {
+              ...defaultBtnState,
+              text: 'Reached Pick-up Location',
+              className: 'taxi-bpp-btn-text',
+              handleClick: () => handleReachedPickupLocation(data)
+            }
+          ]
+        }
+      case 'REACHED_PICK_UP':
+        return {
+          navigateBtn: handleNavigate,
+          submitBtns: [
+            {
+              ...defaultBtnState,
+              text: 'Start Ride',
+              className: 'taxi-bpp-btn-text',
+              handleClick: () => handleStartRide(data)
+            }
+          ]
+        }
+      case 'START_RIDE':
+        return {
+          navigateBtn: handleNavigate,
+          submitBtns: [
+            {
+              ...defaultBtnState,
+              text: 'End Ride',
+              colorScheme: 'secondary',
+              handleClick: () => handleEndRide(data)
+            }
+          ]
+        }
+      case 'COMPLETED':
+        return {
+          submitBtns: [
+            {
+              ...defaultBtnState,
+              text: 'Look for New Ride Request',
+              className: 'taxi-bpp-btn-text',
+              handleClick: () => handleLookForNewRide(data)
+            }
+          ]
+        }
+      default:
+        return { navigateBtn: () => {}, submitBtns: [] }
+    }
+  }
+
+  const updateCurrentModal = (modalType: ModalTypes, data: RideDetailsModel) => {
+    // below code is to render the ride related modals
+    let modalDetails
 
     if (modalType === 'REQ_NEW_RIDE') {
       modalDetails = {
         id: 'REQ_NEW_RIDE',
         title: 'New Ride Request',
         subTitle: '',
-        rideDetails: data,
-        buttons: [
-          {
-            ...defaultBtnState,
-            text: 'Accept',
-            className: 'taxi-bpp-btn-text',
-            handleClick: () => handleAccept(data)
-          },
-          {
-            ...defaultBtnState,
-            text: 'Decline',
-            variant: 'outline',
-            color: '#D22323',
-            handleClick: () => handleDecline(data)
-          }
-        ]
+        rideDetails: data
       }
     } else if (modalType === 'GOING_FOR_PICK_UP') {
       modalDetails = {
         id: 'GOING_FOR_PICK_UP',
         title: 'Going for Pick-up',
         subTitle: 'you have reached Pickup location',
-        rideDetails: data,
-        buttons: [
-          {
-            ...defaultBtnState,
-            text: 'Reached Pick-up Location',
-            className: 'taxi-bpp-btn-text',
-            handleClick: async () => {
-              try {
-                await updateRideStatus({
-                  order_id: data.orderId,
-                  order_status: RIDE_STATUS_CODE.CAB_REACHED_PICKUP_LOCATION
-                }).unwrap()
-                dispatch(updateDriverStatus(RIDE_STATUS_CODE.CAB_REACHED_PICKUP_LOCATION))
-                await updateDriverLocation({
-                  location: {
-                    lat: data.sourceGeoLocation?.latitude.toString()!,
-                    long: data.sourceGeoLocation?.longitude.toString()!
-                  }
-                }).unwrap()
-                dispatch(
-                  setGeoAddressAndLatLong({
-                    geoAddress: data.source,
-                    country: localStorage.getItem('country')!,
-                    geoLatLong: `${data.sourceGeoLocation?.latitude}, ${data.sourceGeoLocation?.longitude}`
-                  })
-                )
-                handleModalSubmit('GOING_FOR_PICK_UP', data)
-              } catch (err) {
-                console.error('Error while accepting ride--> ', err)
-                dispatch(
-                  feedbackActions.setToastData({
-                    toastData: {
-                      message: 'Error',
-                      display: true,
-                      type: 'error',
-                      description: 'Something went wrong, please try again'
-                    }
-                  })
-                )
-              }
-            }
-          }
-        ]
+        rideDetails: data
       }
     } else if (modalType === 'REACHED_PICK_UP') {
       modalDetails = {
         id: 'REACHED_PICK_UP',
         title: 'Reached Pick-up Location',
         subTitle: 'you have reached Pickup location',
-        rideDetails: data,
-        buttons: [
-          {
-            ...defaultBtnState,
-            text: 'Start Ride',
-            className: 'taxi-bpp-btn-text',
-            handleClick: async () => {
-              try {
-                await updateRideStatus({
-                  order_id: data.orderId,
-                  order_status: RIDE_STATUS_CODE.RIDE_STARTED
-                }).unwrap()
-                dispatch(updateDriverStatus(RIDE_STATUS_CODE.RIDE_STARTED))
-                handleNavigate?.(data.destinationGeoLocation!)
-                handleModalSubmit('REACHED_PICK_UP', data)
-              } catch (err) {
-                console.error('Error while accepting ride--> ', err)
-                dispatch(
-                  feedbackActions.setToastData({
-                    toastData: {
-                      message: 'Error',
-                      display: true,
-                      type: 'error',
-                      description: 'Something went wrong, please try again'
-                    }
-                  })
-                )
-              }
-            }
-          }
-        ]
+        rideDetails: data
       }
     } else if (modalType === 'START_RIDE') {
       modalDetails = {
         id: 'START_RIDE',
         title: 'Ride has Started',
         subTitle: 'you are on the way to drop location',
-        rideDetails: data,
-        buttons: [
-          {
-            ...defaultBtnState,
-            text: 'End Ride',
-            colorScheme: 'secondary',
-            handleClick: async () => {
-              try {
-                await updateRideStatus({
-                  order_id: data.orderId,
-                  order_status: RIDE_STATUS_CODE.RIDE_COMPLETED
-                }).unwrap()
-                dispatch(updateDriverStatus(RIDE_STATUS_CODE.RIDE_COMPLETED))
-                const endRideData = await getRideSummary({
-                  order_id: data.orderId
-                }).unwrap()
-                console.log(endRideData.data)
-                const parsedData = parseRideSummaryData(endRideData, data)
-                if (!parsedData.source) parsedData.source = data.source
-                if (!parsedData.destination) parsedData.destination = data.destination
-
-                await updateDriverLocation({
-                  location: {
-                    lat: data.destinationGeoLocation?.latitude.toString()!,
-                    long: data.destinationGeoLocation?.longitude.toString()!
-                  }
-                }).unwrap()
-                dispatch(
-                  setGeoAddressAndLatLong({
-                    geoAddress: data.destination,
-                    country: localStorage.getItem('country')!,
-                    geoLatLong: `${data.destinationGeoLocation?.latitude}, ${data.destinationGeoLocation?.longitude}`
-                  })
-                )
-                handleModalSubmit('START_RIDE', parsedData)
-              } catch (err) {
-                console.error('Error while accepting ride--> ', err)
-                dispatch(
-                  feedbackActions.setToastData({
-                    toastData: {
-                      message: 'Error',
-                      display: true,
-                      type: 'error',
-                      description: 'Something went wrong, please try again'
-                    }
-                  })
-                )
-              }
-            }
-          }
-        ]
+        rideDetails: data
       }
     } else if (modalType === 'COMPLETED') {
       modalDetails = {
@@ -356,17 +400,6 @@ const Homepage = () => {
         title: 'Ride has Completed',
         subTitle: 'you have arrived at Dropoff location',
         rideDetails: data,
-        buttons: [
-          {
-            ...defaultBtnState,
-            text: 'Look for New Ride Request',
-            className: 'taxi-bpp-btn-text',
-            handleClick: () => {
-              handleModalSubmit('COMPLETED', data)
-              dispatch(updateDriverStatus(RIDE_STATUS_CODE.AWAITING_DRIVER_APPROVAL))
-            }
-          }
-        ],
         fare: {
           text: 'Collect the fare from the customer',
           cost: data?.cost
@@ -374,7 +407,7 @@ const Homepage = () => {
       }
     }
 
-    setCurrentModal(modalDetails as ModalDetails)
+    dispatch(setCurrentRideRequest(modalDetails as ModalDetails))
   }
 
   const handleModalSubmit = useCallback(
@@ -382,36 +415,25 @@ const Homepage = () => {
       switch (currentModalType) {
         case 'REQ_NEW_RIDE':
           console.log('Accepted')
-          updateCurrentModal('GOING_FOR_PICK_UP', {
-            ...data,
-            handleNavigate: handleNavigate
-          })
+          updateCurrentModal('GOING_FOR_PICK_UP', data)
           break
         case 'GOING_FOR_PICK_UP':
           console.log('pick up')
           setDestination(undefined)
-          updateCurrentModal('REACHED_PICK_UP', {
-            ...data,
-            handleNavigate: handleNavigate
-          })
+          updateCurrentModal('REACHED_PICK_UP', data)
           break
         case 'REACHED_PICK_UP':
           console.log('reached pick up')
-          updateCurrentModal('START_RIDE', {
-            ...data,
-            handleNavigate: handleNavigate
-          })
+          updateCurrentModal('START_RIDE', data)
           break
         case 'START_RIDE':
           console.log('Start ride')
           setDestination(undefined)
-          updateCurrentModal('COMPLETED', {
-            ...data
-          })
+          updateCurrentModal('COMPLETED', data)
           break
         case 'COMPLETED':
           console.log('completed')
-          setCurrentModal(undefined)
+          dispatch(setCurrentRideRequest(undefined))
           break
 
         default:
@@ -466,14 +488,24 @@ const Homepage = () => {
   }, [currentAddress, coordinates, originGeoAddress, originGeoLatLong, country, originCountry])
 
   const updatedRideStatus = async (response: any) => {
-    const orderId = currentModal?.rideDetails.orderId
+    const orderId = currentRideRequest?.rideDetails.orderId
     if (
-      orderId &&
-      [RIDE_STATUS_CODE.RIDE_ACCEPTED, RIDE_STATUS_CODE.CAB_REACHED_PICKUP_LOCATION].includes(driverStatus)
+      orderId === response.order_id.id &&
+      [
+        RIDE_STATUS_CODE.AWAITING_DRIVER_APPROVAL,
+        RIDE_STATUS_CODE.RIDE_ACCEPTED,
+        RIDE_STATUS_CODE.CAB_REACHED_PICKUP_LOCATION
+      ].includes(driverStatus)
     ) {
-      const currentStatus = response.state_code
-      if (currentStatus === 'USER CANCELLED') {
-        setCurrentModal(undefined)
+      const acceptedByAgentId = response.fulfilment_id.service.agent_id.id
+      const canceledStatusCode = response.state_code
+      const currentStatus = response.state_value
+      if (user?.agent?.id !== acceptedByAgentId && currentStatus === RIDE_STATUS_CODE.RIDE_ACCEPTED) {
+        rideRequestList.current = []
+        dispatch(setCurrentRideRequest(undefined))
+      }
+      if (canceledStatusCode === 'USER CANCELLED') {
+        dispatch(setCurrentRideRequest(undefined))
         dispatch(updateDriverStatus(RIDE_STATUS_CODE.AWAITING_DRIVER_APPROVAL))
         dispatch(
           feedbackActions.setToastData({
@@ -525,44 +557,44 @@ const Homepage = () => {
       <>
         <OfflineModal isOpen={!isOnline} />
         {isOnline &&
-          currentModal &&
-          Object.keys(currentModal).length > 0 &&
-          currentModal.rideDetails &&
-          Object.keys(currentModal.rideDetails).length > 0 && (
+          currentRideRequest &&
+          Object.keys(currentRideRequest).length > 0 &&
+          currentRideRequest.rideDetails &&
+          Object.keys(currentRideRequest.rideDetails).length > 0 && (
             <BottomDrawer
               title={
-                currentModal.id === 'REQ_NEW_RIDE' ? (
-                  currentModal.title
+                currentRideRequest.id === 'REQ_NEW_RIDE' ? (
+                  currentRideRequest.title
                 ) : (
                   <RideSummaryHeader
                     driverImg="/images/blankImg.svg"
-                    title={currentModal.title}
-                    subTitle={currentModal.subTitle}
-                    customerContact={currentModal.rideDetails?.customerDetails?.contact!}
+                    title={currentRideRequest.title}
+                    subTitle={currentRideRequest.subTitle}
+                    customerContact={currentRideRequest.rideDetails?.customerDetails?.contact!}
                   />
                 )
               }
             >
               <RideSummary
                 driverStatus={driverStatus}
-                orderId={currentModal.rideDetails.orderId}
-                time={currentModal.rideDetails?.time!}
-                date={currentModal.rideDetails?.date}
-                distance={currentModal.rideDetails?.distance!}
-                source={currentModal.rideDetails.source}
-                sourceGps={currentModal.rideDetails.sourceGeoLocation}
-                destination={currentModal.rideDetails?.destination}
-                destinationGps={currentModal.rideDetails.destinationGeoLocation}
-                buttons={currentModal.buttons}
-                fare={currentModal?.fare}
-                customerDetails={currentModal.rideDetails?.customerDetails!}
-                handleNavigate={currentModal.rideDetails?.handleNavigate}
+                orderId={currentRideRequest.rideDetails.orderId}
+                time={currentRideRequest.rideDetails?.time!}
+                date={currentRideRequest.rideDetails?.date}
+                distance={currentRideRequest.rideDetails?.distance!}
+                source={currentRideRequest.rideDetails.source}
+                sourceGps={currentRideRequest.rideDetails.sourceGeoLocation}
+                destination={currentRideRequest.rideDetails?.destination}
+                destinationGps={currentRideRequest.rideDetails.destinationGeoLocation}
+                buttons={getModalButtons(currentRideRequest.id, currentRideRequest.rideDetails).submitBtns}
+                fare={currentRideRequest?.fare}
+                customerDetails={currentRideRequest.rideDetails?.customerDetails!}
+                handleNavigate={getModalButtons(currentRideRequest.id, currentRideRequest.rideDetails)?.navigateBtn}
               />
             </BottomDrawer>
           )}
       </>
     )
-  }, [currentModal, isOnline, driverStatus])
+  }, [currentRideRequest, isOnline, driverStatus])
 
   return (
     <>

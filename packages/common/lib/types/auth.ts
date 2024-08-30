@@ -8,6 +8,11 @@ export interface User {
   provider: string
   updatedAt: Date
   username: string
+  agent?: {
+    id: string
+    first_name: string
+    last_name: string
+  }
 }
 
 // Sign-In related models

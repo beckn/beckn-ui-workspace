@@ -17,7 +17,8 @@ const initialState: RideStatusState = {
     destination: '',
     distance: '',
     time: '',
-    date: ''
+    date: '',
+    customerDetails: { contact: '', email: '', first_name: '', last_name: '', id: '' }
   },
   driverStatus: RIDE_STATUS_CODE.AWAITING_DRIVER_APPROVAL
 }
@@ -39,7 +40,8 @@ const rideStatusSlice = createSlice({
         destination: '',
         distance: '',
         time: '',
-        date: ''
+        date: '',
+        customerDetails: { contact: '', email: '', first_name: '', last_name: '', id: '' }
       }
       state.driverStatus = RIDE_STATUS_CODE.AWAITING_DRIVER_APPROVAL
     }
