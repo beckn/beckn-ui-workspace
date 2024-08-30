@@ -1,9 +1,11 @@
 import { Coordinate, PickUpDropOffModel } from '@beckn-ui/common'
+import { ModalDetails } from '@lib/types/mapScreen'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 export interface RiderState {
   isOnline: boolean
   currentLocation: PickUpDropOffModel
+  currentRideRequest: ModalDetails | undefined
 }
 
 export interface RiderRootState {
@@ -15,7 +17,8 @@ const initialState: RiderState = {
   currentLocation: {
     address: '',
     geoLocation: { latitude: 0, longitude: 0 }
-  }
+  },
+  currentRideRequest: undefined
 }
 
 const riderSlice = createSlice({
@@ -30,9 +33,12 @@ const riderSlice = createSlice({
     },
     updateLocation: (state, action: PayloadAction<PickUpDropOffModel>) => {
       state.currentLocation = action.payload
+    },
+    setCurrentRideRequest: (state, action: PayloadAction<ModalDetails | undefined>) => {
+      state.currentRideRequest = action.payload
     }
   }
 })
 
-export const { goOnline, goOffline, updateLocation } = riderSlice.actions
+export const { goOnline, goOffline, updateLocation, setCurrentRideRequest } = riderSlice.actions
 export default riderSlice.reducer

@@ -4,11 +4,21 @@ import extendedAuthApi from '@services/UserService'
 import Cookies from 'js-cookie'
 import Router from 'next/router'
 
-const initialState = {
+interface AuthState {
+  user: null | User
+  jwt: string | null
+  isAuthenticated: boolean
+}
+
+export interface AuthRootState {
+  auth: AuthState
+}
+
+const initialState: AuthState = {
   user: null,
   jwt: null,
   isAuthenticated: false
-} as { user: null | User; jwt: string | null; isAuthenticated: boolean }
+}
 
 const slice = createSlice({
   name: 'auth',
