@@ -32,11 +32,13 @@ const BottomDrawer: React.FC<CancelBookingProps> = ({ children, title }) => {
         maxH={`${isMinimized ? '10vh' : '85vh'}`}
       >
         <Box
+          cursor={'pointer'}
           alignSelf={'center'}
           height="1rem"
           onClickCapture={handleHeaderClick}
         >
           <Image
+            cursor={'pointer'}
             src={crossIcon}
             alt="Close Icon"
             width={'4rem'}
