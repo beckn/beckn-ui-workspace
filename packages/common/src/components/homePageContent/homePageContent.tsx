@@ -7,6 +7,7 @@ import PoweredBy from '../poweredBy'
 import { HomePageContentProps } from './homePageContent.types'
 import { testIds } from '@shared/dataTestIds'
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md'
+import { GeoLocationInput } from '../geoLocationInput/GeoLocationInput'
 
 const HomePageContent: React.FC<HomePageContentProps> = ({
   blockOrder = [],
@@ -15,6 +16,7 @@ const HomePageContent: React.FC<HomePageContentProps> = ({
   selectInputProps,
   searchProps,
   searchByLocation,
+  geoLocationInput,
   footerProps
 }) => {
   const { name, title, description } = headerProps || {}
@@ -24,9 +26,10 @@ const HomePageContent: React.FC<HomePageContentProps> = ({
     onSearchIconClick,
     onSearchInputEnterPress,
     label: searchInputLabel
-  } = searchProps
+  } = searchProps || {}
   const { label, onSearchByLocationClick } = searchByLocation || {}
   const { poweredByText, poweredByLogoSrc } = footerProps
+  const { placeholder, geoLocationSearchPageSelectedAddress, navigateToSearchResult } = geoLocationInput || {}
 
   const theme = useTheme()
   const breakpoint = useBreakpoint()
@@ -89,10 +92,10 @@ const HomePageContent: React.FC<HomePageContentProps> = ({
               />
             )}
             <SearchInput
-              onChangeHandler={(e: React.BaseSyntheticEvent) => setSearchTerm(e.target.value)}
+              onChangeHandler={(e: React.BaseSyntheticEvent) => setSearchTerm?.(e.target.value)}
               searchIcon={'/images/search.svg'}
               searchIconClickHandler={onSearchIconClick}
-              onEnterHandler={(e: { key: string }) => e.key === 'Enter' && onSearchInputEnterPress()}
+              onEnterHandler={(e: { key: string }) => e.key === 'Enter' && onSearchInputEnterPress?.()}
               placeHolder={searchPlaceholder}
             />
           </>
@@ -195,6 +198,16 @@ const HomePageContent: React.FC<HomePageContentProps> = ({
               color={'#A71B4A'}
             />
           </Flex>
+        )
+      case 'geoLocationInput':
+        return (
+          <>
+            <GeoLocationInput
+              placeholder={placeholder || 'Search For Location'}
+              geoLocationSearchPageSelectedAddress={geoLocationSearchPageSelectedAddress!}
+              navigateToSearchResult={() => navigateToSearchResult?.()}
+            />
+          </>
         )
       default:
         return <></>

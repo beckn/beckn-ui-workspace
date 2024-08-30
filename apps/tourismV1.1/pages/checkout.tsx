@@ -4,7 +4,6 @@ import { Box, Flex, Text, Stack, Checkbox, useToast, useTheme } from '@chakra-ui
 import { DOMAIN } from '@lib/config'
 import { useLanguage } from '../hooks/useLanguage'
 
-import { ICartRootState } from '@lib/types/cart'
 import {
   getInitPayload,
   areShippingAndBillingDetailsSame,
@@ -26,6 +25,7 @@ import {
   CheckoutRootState,
   DiscoveryRootState,
   getSelectPayload,
+  ICartRootState,
   isEmpty
 } from '@beckn-ui/common'
 

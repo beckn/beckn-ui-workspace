@@ -51,7 +51,6 @@
 }
 
 .search_button {
-  background-color: rgba(var(--color-primary));
   color: #fff;
   border: none;
   padding: 18px 21px;
