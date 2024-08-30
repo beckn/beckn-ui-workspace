@@ -118,7 +118,10 @@ const GeoLocationInputList: React.FC = () => {
                               alt="locationMarker"
                             />
                           </Box>
-                          <Box className={Styles.location_listitem_content}>
+                          <Box
+                            className={Styles.location_listitem_content}
+                            cursor="pointer"
+                          >
                             <Text className={Styles.location_listitem_content_main_text}>
                               {suggestion.formattedSuggestion.mainText}
                             </Text>

@@ -51,6 +51,7 @@ const RideSummary: React.FC<RideSummaryProps> = ({
         </Flex>
         {handleNavigate && (
           <Flex
+            cursor={'pointer'}
             bg={'#ABD4FA'}
             p="2px 6px"
             borderRadius={'6px'}
