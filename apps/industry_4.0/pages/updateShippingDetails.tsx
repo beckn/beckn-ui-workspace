@@ -9,6 +9,7 @@ import { useRouter } from 'next/router'
 import { toast } from 'react-toastify'
 import { feedbackActions } from '@store/ui-feedback-slice'
 import { useDispatch } from 'react-redux'
+import { testIds } from '@shared/dataTestIds'
 
 const UpdateShippingDetails = () => {
   const dispatch = useDispatch()
@@ -185,6 +186,7 @@ const UpdateShippingDetails = () => {
       className="hideScroll"
       maxH={'calc(100vh - 100px)'}
       overflowY="scroll"
+      data-test={testIds.orderDetailspage_updateShippingDetails}
     >
       <ShippingForm
         onSubmit={() => handleSubmit(shippingDetails, confirmData)}

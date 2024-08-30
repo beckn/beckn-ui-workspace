@@ -9,6 +9,7 @@ import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import { ConfirmResponseModel } from '../types/confirm.types'
 import axios from '../services/axios'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
+import { testIds } from '@shared/dataTestIds'
 
 const Feedback = () => {
   const { t } = useLanguage()
@@ -94,18 +95,21 @@ const Feedback = () => {
           text={t.orderDeliveredOnTime}
           fontSize={'15px'}
           fontWeight={600}
+          dataTest={testIds.feedbackPage_orderDeliveredOnTime}
         />
         <Text
           as={Typography}
           text={t.pleaseShareYourFeedback}
           fontSize={'12px'}
           fontWeight={400}
+          dataTest={testIds.feedbackPage_pleaseShareYourFeedback}
         />
       </Box>
       <Box mb={'10px'}>
         <Image
           src={feedbackImg}
           margin={'0 auto'}
+          data-test={testIds.feedback_image}
         />
       </Box>
       <Box>
@@ -123,6 +127,7 @@ const Feedback = () => {
           fontSize={'15px'}
           fontWeight={400}
           mb={'10px'}
+          dataTest={testIds.feedbackPage_addCommentsHere}
         />
         <Textarea
           value={feedback}
@@ -131,11 +136,13 @@ const Feedback = () => {
           resize={'none'}
           mb={'20px'}
           placeholder={t.writeExperience}
+          data-test={testIds.feedback_textarea}
           boxShadow={'0px 4px 6px -1px rgba(0, 0, 0, 0.1), 0px 2px 4px -2px rgba(0, 0, 0, 0.1)'}
         />
         <BecknButton
           children="Submit Review"
           className="checkout_btn "
+          dataTest={testIds.feedback_submitReview}
           disabled={!ratingForStore}
           handleClick={() => handleSubmitReview(confirmData)}
         />

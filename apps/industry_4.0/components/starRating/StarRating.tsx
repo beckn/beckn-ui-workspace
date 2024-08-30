@@ -1,4 +1,5 @@
 import { Box, Text } from '@chakra-ui/react'
+import { testIds } from '@shared/dataTestIds'
 import React, { useState } from 'react'
 import { FaStar } from 'react-icons/fa'
 
@@ -34,6 +35,7 @@ const StarRating: React.FC<StarRatingProps> = props => {
               }}
               onMouseEnter={() => setHover(ratingValue)}
               onMouseLeave={() => setHover(null)}
+              data-test={`${testIds.feedback_starRating}-${ratingValue}`}
             >
               <input
                 type="radio"

@@ -271,7 +271,13 @@ const testIds = {
   checkoutpage_cancelOrder_button: 'checkoutpage-cancelOrder-button',
   industry_payment_basePrice: 'Base Price',
   industry_payment_shippingCost: 'Shipping Cost',
-  industry_payment_taxes: 'tax'
+  industry_payment_taxes: 'tax',
+  orderDetails_progress_summary: 'orderDetails-progress-summary',
+  orderDetails_assembly_text: 'orderDetails-assembly-text',
+  orderDetailspage_rtlAssembly_line: 'orderDetailspage-rtlAssembly-line',
+  invoiceDetaislPage_orderOverview: 'invoiceDetaislPage-orderOverview',
+  invoiceDetaislPage_assembly_text: 'invoiceDetaislPage-assembly-text',
+  invoiceDetaislPage_price: 'invoiceDetaislPage-price'
 }
 
 export { testIds }
