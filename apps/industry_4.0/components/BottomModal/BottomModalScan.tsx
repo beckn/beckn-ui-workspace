@@ -7,6 +7,7 @@ interface ModalProps {
   children: React.ReactNode
   partialClose?: boolean
   modalHeader?: string
+  dataTest: string
 }
 
 const BottomModal: React.FC<ModalProps> = ({ isOpen, onClose, children, modalHeader }) => {

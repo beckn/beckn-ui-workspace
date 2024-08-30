@@ -8,6 +8,7 @@ import Qrcode from '@components/qrCode/Qrcode'
 import { useLanguage } from '@hooks/useLanguage'
 import { getPaymentBreakDown } from '@utils/checkout-utils'
 import { StatusResponseModel } from '../types/status.types'
+import { testIds } from '@shared/dataTestIds'
 
 const invoiceDetails = () => {
   const [statusData, setStatusData] = useState<StatusResponseModel[]>([])
@@ -48,6 +49,7 @@ const invoiceDetails = () => {
           <Typography
             variant="titleSemibold"
             text={t.orderOverview}
+            dataTest={testIds.invoiceDetaislPage_orderOverview}
           />
         </Box>
         <Flex
@@ -58,9 +60,11 @@ const invoiceDetails = () => {
           <Typography
             variant="subTitleSemibold"
             text={t.assembly}
+            dataTest={testIds.invoiceDetaislPage_assembly_text}
           />
           <Typography
             variant="subTitleRegular"
+            dataTest={testIds.invoiceDetaislPage_price}
             text={`${currency} ${value}`}
           />
         </Flex>
@@ -79,6 +83,7 @@ const invoiceDetails = () => {
           />
         </Box>
         <PaymentDetails
+          dataTest={testIds.orderDetailspage_paymentDetails}
           paymentBreakDown={getPaymentBreakDown(statusData).breakUpMap}
           totalText="Total"
           totalValueWithCurrency={getPaymentBreakDown(statusData).totalPricewithCurrent}

@@ -1,0 +1,45 @@
+{
+  "data": [
+    {
+      "context": {
+        "domain": "supply-chain-services:assembly",
+        "action": "on_track",
+        "version": "1.1.0",
+        "bpp_id": "bpp-ps-network-strapi-dev.becknprotocol.io",
+        "bpp_uri": "http://bpp-ps-network-strapi-dev.becknprotocol.io",
+        "country": "IND",
+        "city": "std:080",
+        "location": {
+          "country": {
+            "name": "India",
+            "code": "IND"
+          },
+          "city": {
+            "name": "Bangalore",
+            "code": "std:080"
+          }
+        },
+        "bap_id": "bap-ps-network-dev.becknprotocol.io",
+        "bap_uri": "https://bap-ps-network-dev.becknprotocol.io",
+        "transaction_id": "84a898e0-ef80-45f8-9032-f479111b674c",
+        "message_id": "d6436230-65c2-4e40-a5a3-3a25ff594b6b",
+        "ttl": "PT10M",
+        "timestamp": "2024-08-30T09:18:37.576Z"
+      },
+      "message": {
+        "tracking": {
+          "url": "https://bpp-unified-strapi-dev.becknprotocol.io/beckn-bpp-adapter/tracking/1686",
+          "status": "active",
+          "id": "1386",
+          "location": {
+            "id": "2015",
+            "descriptor": {
+              "name": "151-e, janpath road, new delhi"
+            },
+            "gps": "1.3806217468119772, 103.74636438437074"
+          }
+        }
+      }
+    }
+  ]
+}
