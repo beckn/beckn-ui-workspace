@@ -103,7 +103,7 @@ const SearchRide = () => {
         </Box>
         <Box
           className="hideScroll"
-          maxH={'calc(100vh - 370px)'}
+          maxH={'calc(100vh - 305px)'}
           overflowY="scroll"
         >
           {cabServiceProviders.map((provider, index) => (
