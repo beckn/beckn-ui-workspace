@@ -107,6 +107,9 @@ const SearchRide = () => {
             mb="20px"
             mt="20px"
             p="0 20px"
+            className="hideScroll"
+            maxH={'calc(100vh - 370px)'}
+            overflowY="scroll"
           >
             <Flex
               alignItems={'center'}
