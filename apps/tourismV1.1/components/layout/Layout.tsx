@@ -16,6 +16,7 @@ import {
   IGeoLocationSearchPageRootState,
   ToastType
 } from '@beckn-ui/common'
+import { testIds } from '@shared/dataTestIds'
 
 const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const { locale } = useLanguage()
@@ -46,6 +47,7 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
             title={message}
             description={description}
             onClose={onClose}
+            dataTest={testIds.feedback}
           />
         )
       })

@@ -2,6 +2,8 @@ const testIds = {
   // application wise base url
   url_base: process.env.CYPRESS_BASE_URL || 'http://localhost:3000',
   url_base_retail: process.env.CYPRESS_BASE_URL || 'http://localhost:3002',
+  url_base_tourism: process.env.CYPRESS_BASE_URL || 'http://localhost:3001',
+
   // general
   goBack: 'go-back',
   feedback: 'feedback-toast',
@@ -277,7 +279,14 @@ const testIds = {
   orderDetailspage_rtlAssembly_line: 'orderDetailspage-rtlAssembly-line',
   invoiceDetaislPage_orderOverview: 'invoiceDetaislPage-orderOverview',
   invoiceDetaislPage_assembly_text: 'invoiceDetaislPage-assembly-text',
-  invoiceDetaislPage_price: 'invoiceDetaislPage-price'
+  invoiceDetaislPage_price: 'invoiceDetaislPage-price',
+
+  // Tourism
+  searchInput_container: 'searchInput-container',
+  homepage_searchInput: 'homepage-searchInput',
+  homepage_search_button: 'homepage-search-button',
+  loaction_list: 'loaction-list',
+  location_list_item: 'location-list-item'
 }
 
 export { testIds }

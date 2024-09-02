@@ -11,6 +11,7 @@ import {
   setGeoAddressAndLatLong,
   toggleLocationSearchPageVisibility
 } from '@beckn-ui/common/src/store/geoMapLocationSearch-slice'
+import { testIds } from '@shared/dataTestIds'
 
 const GeoLocationInputList: React.FC = () => {
   const dispatch = useDispatch()
@@ -92,6 +93,7 @@ const GeoLocationInputList: React.FC = () => {
                       name="search_input"
                       placeholder="Search for Location"
                       className={`${Styles.search_box_input}`}
+                      data-test={testIds.loaction_list}
                     />
                     <IoClose
                       className={Styles.close_icon}
@@ -107,6 +109,7 @@ const GeoLocationInputList: React.FC = () => {
                   ? suggestions.map(suggestion => {
                       return (
                         <Flex
+                          data-test={testIds.location_list_item}
                           {...getSuggestionItemProps(suggestion)}
                           flexDirection={'row'}
                           className={Styles.location_list_item}
