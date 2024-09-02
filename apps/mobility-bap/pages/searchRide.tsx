@@ -101,101 +101,104 @@ const SearchRide = () => {
         >
           {totalCabs} results found
         </Box>
-        {cabServiceProviders.map((provider, index) => (
-          <Box
-            key={index}
-            mb="20px"
-            mt="20px"
-            p="0 20px"
-            className="hideScroll"
-            maxH={'calc(100vh - 370px)'}
-            overflowY="scroll"
-          >
-            <Flex
-              alignItems={'center'}
+        <Box
+          className="hideScroll"
+          maxH={'calc(100vh - 370px)'}
+          overflowY="scroll"
+        >
+          {cabServiceProviders.map((provider, index) => (
+            <Box
+              key={index}
               mb="20px"
+              mt="20px"
+              p="0 20px"
             >
-              <Image
-                src={'./images/olaCab.svg'} // provider.image ||
-                alt={`${provider.providerName} Cab`}
-                mr="10px"
-              />
-              <Box>
-                <Typography
-                  text={provider.providerName}
-                  variant="subTitleSemibold"
+              <Flex
+                alignItems={'center'}
+                mb="20px"
+              >
+                <Image
+                  src={'./images/olaCab.svg'} // provider.image ||
+                  alt={`${provider.providerName} Cab`}
+                  mr="10px"
                 />
-                <Flex
-                  alignItems={'center'}
-                  gap={'4px'}
-                  mt={'5px'}
-                >
+                <Box>
                   <Typography
-                    text={provider.rating}
+                    text={provider.providerName}
                     variant="subTitleSemibold"
                   />
-                  <StarIcon
-                    color={'#FADB14'}
-                    w={'12px'}
-                    h={'12px'}
-                    mb={'2px'}
-                  />
+                  <Flex
+                    alignItems={'center'}
+                    gap={'4px'}
+                    mt={'5px'}
+                  >
+                    <Typography
+                      text={provider.rating}
+                      variant="subTitleSemibold"
+                    />
+                    <StarIcon
+                      color={'#FADB14'}
+                      w={'12px'}
+                      h={'12px'}
+                      mb={'2px'}
+                    />
+                  </Flex>
+                </Box>
+              </Flex>
+              <Box
+                overflowX={'scroll'}
+                className="hideScroll"
+              >
+                <Flex width={'max-content'}>
+                  {provider.cabDetails.map((cabDetail, detailIndex) => (
+                    <Card
+                      key={detailIndex}
+                      boxShadow=" 0px 8px 10px 0px #0000001A"
+                      m="10px"
+                      ml="unset"
+                      width={'164px'}
+                      height="206px"
+                    >
+                      <CardBody p={'10px'}>
+                        <Box mb="10px">
+                          <Image
+                            src={cabDetail.image}
+                            alt=""
+                            margin={'0 auto'}
+                          />
+                          <Typography
+                            text={cabDetail.name}
+                            fontWeight="500"
+                          />
+                          <Typography
+                            text={cabDetail.waitTime}
+                            fontSize="11px"
+                          />
+                          <Typography
+                            text={`${getCurrencyWithFare(pickup.country!, getTotalFare(cabDetail.fare))}`}
+                            fontSize="15px"
+                            color={theme.colors.primary[100]}
+                          />
+                        </Box>
+                        <Button
+                          text="Select"
+                          variant="solid"
+                          handleClick={() =>
+                            handleOnSelect(provider.transactionId, {
+                              provider,
+                              pickup,
+                              dropoff
+                            })
+                          }
+                        />
+                      </CardBody>
+                    </Card>
+                  ))}
                 </Flex>
               </Box>
-            </Flex>
-            <Box
-              overflowX={'scroll'}
-              className="hideScroll"
-            >
-              <Flex width={'max-content'}>
-                {provider.cabDetails.map((cabDetail, detailIndex) => (
-                  <Card
-                    key={detailIndex}
-                    boxShadow=" 0px 8px 10px 0px #0000001A"
-                    m="10px"
-                    ml="unset"
-                    width={'164px'}
-                    height="206px"
-                  >
-                    <CardBody p={'10px'}>
-                      <Box mb="10px">
-                        <Image
-                          src={cabDetail.image}
-                          alt=""
-                          margin={'0 auto'}
-                        />
-                        <Typography
-                          text={cabDetail.name}
-                          fontWeight="500"
-                        />
-                        <Typography
-                          text={cabDetail.waitTime}
-                          fontSize="11px"
-                        />
-                        <Typography
-                          text={`${getCurrencyWithFare(pickup.country!, getTotalFare(cabDetail.fare))}`}
-                          fontSize="15px"
-                          color={theme.colors.primary[100]}
-                        />
-                      </Box>
-                      <Button
-                        text="Select"
-                        variant="solid"
-                        handleClick={() =>
-                          handleOnSelect(provider.transactionId, {
-                            provider,
-                            pickup,
-                            dropoff
-                          })
-                        }
-                      />
-                    </CardBody>
-                  </Card>
-                ))}
-              </Flex>
             </Box>
-          </Box>
-        ))}
+          ))}
+        </Box>
       </Box>
     </Box>
   )
