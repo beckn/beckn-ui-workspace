@@ -5,14 +5,13 @@ import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useLanguage } from '@hooks/useLanguage'
 import { Cart as BecknCart } from '@beckn-ui/becknified-components'
-import { getSelectPayload } from '@components/cart/cart.utils'
 import { isEmpty } from '@utils/common-utils'
 import { Box, useToast } from '@chakra-ui/react'
 
 import { DOMAIN } from '@lib/config'
 
 import { useSelectMutation } from '@beckn-ui/common/src/services/select'
-import { cartActions, DiscoveryRootState, ICartRootState } from '@beckn-ui/common'
+import { cartActions, DiscoveryRootState, getSelectPayload, ICartRootState } from '@beckn-ui/common'
 
 const Cart = () => {
   const [fetchQuotes, { isLoading, data, isError }] = useSelectMutation()
@@ -47,7 +46,7 @@ const Cart = () => {
             id: singleItem.id,
             quantity: singleItem.quantity,
             name: singleItem.name,
-            image: singleItem.images[0].url,
+            image: singleItem.images?.[0].url!,
             price: Number(singleItem.price.value),
             symbol: singleItem.price.currency,
             handleIncrement: id => {

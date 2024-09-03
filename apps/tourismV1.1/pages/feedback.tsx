@@ -8,11 +8,10 @@ import { Typography } from '@beckn-ui/molecules'
 import { useDispatch, useSelector } from 'react-redux'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import useResponsive from '@beckn-ui/becknified-components/src/hooks/useResponsive'
-import { StatusResponseModel } from '../types/status.types'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
 import axios from '@services/axios'
 import { feedbackActions } from '@beckn-ui/common/src/store/ui-feedback-slice'
-import { StatusRootState } from '@beckn-ui/common'
+import { StatusResponseModel, StatusRootState } from '@beckn-ui/common'
 
 const Feedback = () => {
   const { t } = useLanguage()

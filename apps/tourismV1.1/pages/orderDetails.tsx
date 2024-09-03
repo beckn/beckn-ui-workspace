@@ -23,9 +23,7 @@ import { DetailCard, OrderStatusProgress, OrderStatusProgressProps } from '@beck
 import useResponsive from '@beckn-ui/becknified-components/src/hooks/useResponsive'
 import { useLanguage } from '@hooks/useLanguage'
 import { v4 as uuidv4 } from 'uuid'
-import { ConfirmResponseModel } from '../types/confirm.types'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
-import { UIState, DataState, ProcessState } from '../types/order-details.types'
 import CallphoneIcon from '../public/images/CallphoneIcon.svg'
 import locationIcon from '../public/images/locationIcon.svg'
 import nameIcon from '../public/images/nameIcon.svg'
@@ -33,10 +31,11 @@ import ShippingBlock from '@components/orderDetailComponents/Shipping'
 import { DOMAIN } from '@lib/config'
 import PaymentDetails from '@beckn-ui/becknified-components/src/components/checkout/payment-details'
 import Qrcode from '@components/qrCode/Qrcode'
-import { StatusResponseModel, SupportModel } from '../types/status.types'
 import BottomModalScan from '@components/BottomModal/BottomModalScan'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import {
+  ConfirmResponseModel,
+  DataState,
   DiscoveryRootState,
   feedbackActions,
   formatTimestamp,
@@ -44,7 +43,11 @@ import {
   getPaymentBreakDown,
   isEmpty,
   OrdersRootState,
-  statusActions
+  ProcessState,
+  statusActions,
+  StatusResponseModel,
+  SupportModel,
+  UIState
 } from '@beckn-ui/common'
 
 const statusMap = {
@@ -80,7 +83,8 @@ const OrderDetails = () => {
   const [processState, setProcessState] = useState<ProcessState>({
     apiCalled: false,
     allOrderDelivered: false,
-    radioValue: ''
+    radioValue: '',
+    orderCancelled: false
   })
   const router = useRouter()
   const { t } = useLanguage()

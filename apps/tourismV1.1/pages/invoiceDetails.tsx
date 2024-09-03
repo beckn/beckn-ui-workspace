@@ -6,9 +6,8 @@ import Typography from '@beckn-ui/molecules/src/components/typography/typography
 import { Box, Flex, HStack } from '@chakra-ui/react'
 import Qrcode from '@components/qrCode/Qrcode'
 import { useLanguage } from '@hooks/useLanguage'
-import { StatusResponseModel } from '../types/status.types'
 import { formatTimestamp } from '@utils/confirm-utils'
-import { getPaymentBreakDown } from '@beckn-ui/common'
+import { getPaymentBreakDown, StatusResponseModel } from '@beckn-ui/common'
 
 const invoiceDetails = () => {
   const [statusData, setStatusData] = useState<StatusResponseModel[]>([])

@@ -4,11 +4,7 @@ import { Box, useToast, useTheme } from '@chakra-ui/react'
 import { DOMAIN } from '@lib/config'
 import { useLanguage } from '../hooks/useLanguage'
 
-import {
-  getInitPayload,
-  areShippingAndBillingDetailsSame,
-  getSubTotalAndDeliveryCharges
-} from '@components/checkout/checkout.utils'
+import { getInitPayload } from '@components/checkout/checkout.utils'
 import useRequest from '../hooks/useRequest'
 
 import { Checkout } from '@beckn-ui/becknified-components'
@@ -20,11 +16,13 @@ import { FormField } from '@beckn-ui/molecules'
 import { useInitMutation } from '@beckn-ui/common/src/services/init'
 import { useSelectMutation } from '@beckn-ui/common/src/services/select'
 import {
+  areShippingAndBillingDetailsSame,
   cartActions,
   checkoutActions,
   CheckoutRootState,
   DiscoveryRootState,
   getSelectPayload,
+  getSubTotalAndDeliveryCharges,
   ICartRootState,
   isEmpty,
   PaymentBreakDownModel
