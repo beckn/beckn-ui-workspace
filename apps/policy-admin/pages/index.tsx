@@ -2,8 +2,10 @@ import React, { useMemo, useState } from 'react'
 import { useLanguage } from '@hooks/useLanguage'
 import { Flex } from '@chakra-ui/react'
 import StatusCards from '@components/statusCards/statusCards'
-import DataTabs from '@components/dataTable/dataTable'
-import TabNavPanel, { ItemDetails } from '@components/tabPanel/tabPanel'
+import TabNavPanel from '@components/tabPanel/tabPanel'
+import { ItemDetails } from '@lib/types/table'
+
+const tabList = ['All', 'Active', 'Inactive', 'Published']
 
 const data = [
   {
@@ -159,7 +161,10 @@ const Homepage = () => {
           inactive={getStatusWiseCount.inactive}
           published={getStatusWiseCount.published}
         />
-        <TabNavPanel items={items} />
+        <TabNavPanel
+          tabList={tabList}
+          items={items}
+        />
       </Flex>
     </>
   )

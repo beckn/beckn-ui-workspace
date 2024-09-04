@@ -1,26 +1,13 @@
 import { Typography } from '@beckn-ui/molecules'
-import { Flex, Image, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react'
+import { Flex, Image, Tab, TabList, TabPanel, TabPanels, Tabs, Box } from '@chakra-ui/react'
 import DataTable from '@components/dataTable/dataTable'
 import React, { useState, useMemo } from 'react'
 import addIcon from '@public/images/plus_icon.svg'
 import { useRouter } from 'next/router'
+import { TabNavPanelProps } from '@lib/types/table'
 
-export interface ItemDetails {
-  title: string
-  description: string
-  status: string
-  startDate: string
-  endDate: string
-}
-
-export interface DataTableProps {
-  items: ItemDetails[]
-}
-
-const tabList = ['All', 'Active', 'Inactive', 'Published']
-
-const TabNavPanel = (props: DataTableProps) => {
-  const { items } = props
+const TabNavPanel = (props: TabNavPanelProps) => {
+  const { tabList, items } = props
   const [currentTab, setCurrentTab] = useState<string>('All')
 
   const router = useRouter()
@@ -37,7 +24,7 @@ const TabNavPanel = (props: DataTableProps) => {
         flexDirection={'row'}
         justifyContent="space-between"
       >
-        <TabList>
+        <TabList borderBottom={'0px'}>
           {tabList.map((status, index) => (
             <Tab
               key={index}

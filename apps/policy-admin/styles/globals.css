@@ -280,3 +280,9 @@ select:-webkit-autofill:focus {
 .react-datepicker-wrapper {
   width: 100% !important;
 }
+input:focus {
+  outline: none;
+}
+.pac-container.pac-logo {
+  z-index: 9999;
+}
