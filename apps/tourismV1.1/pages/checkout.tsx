@@ -27,6 +27,7 @@ import {
   isEmpty,
   PaymentBreakDownModel
 } from '@beckn-ui/common'
+import { testIds } from '@shared/dataTestIds'
 
 export type ShippingFormData = {
   name: string
@@ -260,6 +261,7 @@ const CheckoutPage = () => {
         display={'grid'}
         height={'calc(100vh - 300px)'}
         alignContent={'center'}
+        data-test={testIds.loadingIndicator}
       >
         <LoaderWithMessage
           loadingSubText={t.initializingOrderLoader}
@@ -296,6 +298,7 @@ const CheckoutPage = () => {
             color: bgColorOfSecondary,
             formTitle: `${t.addTravellerDetails}`,
             sectionTitle: `${t.travellerDetails}`,
+            dataTest: testIds.checkoutpage_shippingDetails,
             shippingDetails: {
               name: shippingFormData.name,
               location: shippingFormData.address!,
@@ -312,6 +315,7 @@ const CheckoutPage = () => {
           },
           billing: {
             triggerFormTitle: `${t.change}`,
+            dataTest: testIds.checkoutpage_billingDetails,
             sectionSubtitle: `${t.addBillingdetailsBtnText}`,
             sectionTitle: `${t.billing}`,
             formTitle: `${t.addBillingdetailsBtnText}`,
@@ -354,6 +358,7 @@ const CheckoutPage = () => {
           },
           pageCTA: {
             text: `${t.checkout}`,
+            dataTest: testIds.checkoutpage_proceedToCheckout,
             handleClick: () => {
               dispatch(cartActions.clearCart())
               router.push('/paymentMode')

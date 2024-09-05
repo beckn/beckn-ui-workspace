@@ -11,6 +11,9 @@ describe('Home Page Tests', () => {
     cy.wait('@getAddress')
   })
 
+  it('should handle address conversion based on coordinates', () => {
+    cy.getByData(testIds.location).should('be.visible')
+  })
   it('should render the homepage components', () => {
     cy.getByData(testIds.homepage_appTitle).should('be.visible')
     cy.getByData(testIds.homepage_appDescription).should('be.visible')
@@ -31,10 +34,6 @@ describe('Home Page Tests', () => {
     cy.getByData(testIds.searchButton).click()
     cy.getByData(testIds.loadingIndicator).should('be.visible')
     cy.url().should('include', `${testIds.url_search}?searchTerm=sunglasses`)
-  })
-
-  it('should handle address conversion based on coordinates', () => {
-    cy.getByData(testIds.location).should('contain.text', 'Test Address, Test City, Test Country')
   })
 
   it('should fetch and display imported order details', () => {

@@ -78,6 +78,7 @@ const en: { [key: string]: string } = {
   cosmetic: 'Cosmetic',
   home: 'Furniture and kitchen',
   stationery: 'Books, Stationery and Art',
+  searchLoaderSubText: ' While we find service providers near you',
   noProduct: 'There are no products in this category yet! New products will be added soon.',
   digitalBT: 'Have the best Experiences',
   digitalBD:

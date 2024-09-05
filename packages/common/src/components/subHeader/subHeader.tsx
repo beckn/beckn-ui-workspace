@@ -126,6 +126,7 @@ const SubHeader = (props: SubHeaderProps) => {
               src="/images/OrCodeModalOpen.svg"
               alt="invoice icon"
               mr={'20px'}
+              data-test={testIds.orderDetails_tourism_QR_external_link}
             />
           )}
         </Box>
@@ -200,6 +201,7 @@ const SubHeader = (props: SubHeaderProps) => {
             {t('clicktheShopbuttontobuyitemsforthistrip')}
           </Text>
           <BecknButton
+            dataTest={testIds.orderDetails_tourism_QR_procedd_button}
             handleClick={props.handleClick}
             children="Proceed"
           />

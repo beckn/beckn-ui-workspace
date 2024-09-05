@@ -62,6 +62,7 @@ declare global {
       fillAndSaveShippingDetails(): Chainable<void>
       performConfirm(response: RouteHandler, aliasName: string): Chainable<void>
       performOrders(response: RouteHandler, aliasName: string): Chainable<void>
+      performTourismOrders(response: RouteHandler, aliasName: string): Chainable<void>
       performStatus(response: RouteHandler, aliasName: string): Chainable<void>
       performTrack(response: RouteHandler, aliasName: string): Chainable<void>
       performSupport(response: RouteHandler, aliasName: string): Chainable<void>
@@ -87,6 +88,7 @@ declare global {
 const GCL_URL = 'https://bap-gcl-**.becknprotocol.io'
 const STRAPI_URL = 'https://bap-backend-**.becknprotocol.io/api'
 const XINPUT_SUBMIT = 'https://bpp-unified-strapi-dev.becknprotocol.io/beckn-bpp-adapter/x-input'
+const S3Integration_URL = 'https://bap-s3integration-api-dev.becknprotocol.io'
 
 Cypress.Commands.add('getByData', selector => {
   return cy.get(`[data-test=${selector}]`)
@@ -190,6 +192,10 @@ Cypress.Commands.add('performConfirm', (response, aliasName) => {
 
 Cypress.Commands.add('performOrders', (response, aliasName) => {
   cy.intercept('POST', `${STRAPI_URL}/orders`, response).as(aliasName)
+})
+
+Cypress.Commands.add('performTourismOrders', (response, aliasName) => {
+  cy.intercept('POST', `${S3Integration_URL}/orders`, response).as(aliasName)
 })
 
 Cypress.Commands.add('performStatus', (response, aliasName) => {

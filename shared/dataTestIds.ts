@@ -58,8 +58,8 @@ const testIds = {
   user_validEmail: 'ankit@gmail.com',
   user_validPassword: 'Enterthevoid@123',
   user_invalidPassword: 'Enterthevoid@1234',
-  user_firstTimeLoginvalidEmail: 'aniket@gmail.com',
-  user_firstTimeLoginvalidPassword: 'Aniket@123',
+  user_firstTimeLoginvalidEmail: 'pallavi@gmail.com',
+  user_firstTimeLoginvalidPassword: 'Pallavi@123',
   user_firstTimeLoginvalidEmailOSC: 'aniket123@gmail.com',
   user_firstTimeLoginvalidPasswordOSC: 'Aniket@123',
   user_login: 'krushnaTest@test.com',
@@ -286,7 +286,11 @@ const testIds = {
   homepage_searchInput: 'homepage-searchInput',
   homepage_search_button: 'homepage-search-button',
   loaction_list: 'loaction-list',
-  location_list_item: 'location-list-item'
+  location_list_item: 'location-list-item',
+  orderDetailspage_order_fulfilled: 'orderDetailspage-order-fulfilled',
+  orderDetails_tourism_QR_external_link: 'orderDetails-tourism-QR-external-link',
+  orderDetails_tourism_QR_procedd_button: 'orderDetails-tourism-QR-procedd-button',
+  orderDetails_QR_accordian: 'orderDetails-QR-accordian'
 }
 
 export { testIds }

@@ -23,6 +23,7 @@ export interface ViewMoreOrderModalProps {
   onClose: () => void
   items: any
   orderId: string
+  dataTest: string
 }
 
 const ViewMoreOrderModal: React.FC<ViewMoreOrderModalProps> = props => {

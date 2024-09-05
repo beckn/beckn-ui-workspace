@@ -49,6 +49,7 @@ import {
   SupportModel,
   UIState
 } from '@beckn-ui/common'
+import { testIds } from '@shared/dataTestIds'
 
 const statusMap = {
   ArrangingPayment: 'Processing your order',
@@ -676,6 +677,7 @@ const OrderDetails = () => {
       <Box
         maxW={{ base: '100%', md: '50%' }}
         margin="0 auto"
+        data-test={testIds.order_feedback_container}
       >
         {processState.allOrderDelivered && (
           <Card
@@ -721,6 +723,7 @@ const OrderDetails = () => {
                   color="#53A052"
                   as={Typography}
                   text={t.rateUs}
+                  dataTest={testIds.orderDetails_rateUs_mainContainer}
                 />
               </Flex>
             </CardBody>
@@ -741,6 +744,7 @@ const OrderDetails = () => {
           >
             <Typography
               variant="subTitleRegular"
+              dataTest={testIds.orderDetailspage_orderOverview}
               text={t.orderOverview}
               fontSize="17px"
             />
@@ -763,6 +767,7 @@ const OrderDetails = () => {
                 variant={'subTitleRegular'}
               />
               <Typography
+                dataTest={testIds.orderDetailspage_productPlacedAt}
                 text={formatTimestamp(created_at)}
                 variant={'subTitleRegular'}
               />
@@ -778,6 +783,7 @@ const OrderDetails = () => {
                 variant={'subTitleRegular'}
               />
               <Typography
+                dataTest={testIds.orderDetailspage_order_fulfilled}
                 text={`${filteredOrder.length} of ${totalOrdersQty}`}
                 variant={'subTitleRegular'}
               />
@@ -788,6 +794,7 @@ const OrderDetails = () => {
           <Box marginTop={'21px'}>
             <Typography
               variant="subTitleRegular"
+              dataTest={testIds.orderDetailspage_progressSummary}
               text={t.progressSummary}
               fontSize="17px"
             />
@@ -805,12 +812,14 @@ const OrderDetails = () => {
                     as={Typography}
                     // TODO
                     text={`${t.orderId}: ${orderMetaData.orderIds[0].slice(0, 5)}...`}
+                    dataTest={testIds.orderDetailspage_orderId}
                     fontSize="17px"
                     fontWeight="600"
                   />
                   <Image
                     onClick={handleOrderDotsClick}
                     src="/images/threeDots.svg"
+                    data-test={testIds.orderDetailspage_otherOptions}
                     alt="threeDots"
                   />
                 </Flex>
@@ -826,6 +835,7 @@ const OrderDetails = () => {
                       whiteSpace={'nowrap'}
                       fontSize={'12px'}
                       fontWeight={'400'}
+                      data-test={testIds.orderDetailspage_orderSummaryItemName}
                     >
                       {data.statusData[0]?.message?.order?.items[0]?.name}
                     </Text>
@@ -835,6 +845,7 @@ const OrderDetails = () => {
                         color={'green'}
                         fontSize={'12px'}
                         fontWeight={'600'}
+                        data-test={testIds.orderDetailspage_orderSummaryTotalItems}
                         onClick={onOpen}
                       >
                         +{totalQuantityOfOrder(data) - 1}
@@ -845,6 +856,7 @@ const OrderDetails = () => {
                   <Text
                     fontSize={'15px'}
                     fontWeight={'500'}
+                    data-test={testIds.orderDetailspage_orderStatus}
                     color={data.statusData[0].message.order.status === 'CANCELLED' ? 'red' : 'green'}
                   >
                     {data.statusData[0].message.order.status}
@@ -863,10 +875,14 @@ const OrderDetails = () => {
                 onClose={onClose}
                 items={data.statusData[0].message.order.items}
                 orderId={`${orderMetaData.orderIds[0].slice(0, 5)}...`}
+                dataTest={testIds.orderDetailspage_viewMoreOrders}
               />
 
               {/* Display order status progress */}
-              <Box className="order_status_progress">
+              <Box
+                className="order_status_progress"
+                data-test={testIds.orderDetailspage_orderStatusMap}
+              >
                 {orderStatusMap.map((status: OrderStatusProgressProps, index: number) => {
                   return (
                     <OrderStatusProgress
@@ -896,6 +912,7 @@ const OrderDetails = () => {
               name={{ text: updatedShippingName || shippingName, icon: nameIcon }}
               address={{ text: shipmentAddress, icon: locationIcon }}
               mobile={{ text: updateShippingPhone || shippingPhone, icon: CallphoneIcon }}
+              dataTest={testIds.orderDetailspage_shippingDetails}
             />
           )}
           {!isDesktop && (
@@ -905,6 +922,7 @@ const OrderDetails = () => {
                 name={{ text: updatedShippingName || shippingName, icon: nameIcon }}
                 address={{ text: shipmentAddress, icon: locationIcon }}
                 mobile={{ text: updateShippingPhone || shippingPhone, icon: CallphoneIcon }}
+                dataTest={testIds.orderDetailspage_shippingDetails}
               />
             </Accordion>
           )}
@@ -915,6 +933,7 @@ const OrderDetails = () => {
               name={{ text: name, icon: nameIcon }}
               address={{ text: address, icon: locationIcon }}
               mobile={{ text: phone, icon: CallphoneIcon }}
+              dataTest={testIds.orderDetailspage_billingDetails}
             />
           )}
           {!isDesktop && (
@@ -924,6 +943,7 @@ const OrderDetails = () => {
                 name={{ text: name, icon: nameIcon }}
                 address={{ text: address, icon: locationIcon }}
                 mobile={{ text: phone, icon: CallphoneIcon }}
+                dataTest={testIds.orderDetailspage_billingDetails}
               />
             </Accordion>
           )}
@@ -936,6 +956,7 @@ const OrderDetails = () => {
                 paymentBreakDown={getPaymentBreakDown(data.statusData).breakUpMap}
                 totalText="Total"
                 totalValueWithCurrency={getPaymentBreakDown(data.statusData).totalPricewithCurrent}
+                dataTest={testIds.orderDetailspage_paymentDetails}
               />
             </Box>
           )}
@@ -952,12 +973,13 @@ const OrderDetails = () => {
                   paymentBreakDown={getPaymentBreakDown(data.statusData).breakUpMap}
                   totalText={t.totalText}
                   totalValueWithCurrency={getPaymentBreakDown(data.statusData).totalPricewithCurrent}
+                  dataTest={testIds.orderDetailspage_paymentDetails}
                 />
               </Box>
             </Accordion>
           )}
           {orderObjectUrl && (
-            <Box>
+            <Box data-test={testIds.orderDetails_QR_accordian}>
               <Accordion accordionHeader={t.openinWallet}>
                 <CardBody pt="unset">
                   <Qrcode
@@ -981,6 +1003,7 @@ const OrderDetails = () => {
         <BottomModal
           title=""
           isOpen={uiState.isMenuModalOpen}
+          dataTest={testIds.orderDetailspage_menus}
           onClose={handleMenuModalClose}
         >
           {uiState.isLoadingForTrackAndSupport ? (
@@ -1006,11 +1029,13 @@ const OrderDetails = () => {
                   columnGap="10px"
                   alignItems="center"
                   onClick={menuItem.onClick}
+                  data-test={testIds.orderDetailspage_menuItem}
                 >
                   <Image src={menuItem.image} />
                   <Text
                     as={Typography}
                     text={menuItem.text}
+                    dataTest={testIds.orderDetailspage_menuItemName}
                     fontSize="15px"
                     fontWeight={400}
                   />
@@ -1023,11 +1048,13 @@ const OrderDetails = () => {
                   columnGap="10px"
                   alignItems="center"
                   onClick={menuItem.onClick}
+                  data-test={testIds.orderDetailspage_callServiceItem}
                 >
                   <Image src={menuItem.image} />
                   <Text
                     as={Typography}
                     text={menuItem.text}
+                    dataTest={testIds.orderDetailspage_callServiceItemName}
                     fontSize="15px"
                     fontWeight={400}
                   />
@@ -1042,6 +1069,7 @@ const OrderDetails = () => {
           isOpen={uiState.isCancelMenuModalOpen}
           onClose={handleCancelMenuModalClose}
           modalHeader={t.orderCancellation}
+          dataTest={testIds.orderDetailspage_cancelOrder}
         >
           {uiState.isLoadingForCancel ? (
             <LoaderWithMessage

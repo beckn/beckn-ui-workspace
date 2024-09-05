@@ -13,6 +13,7 @@ import axios from '@services/axios'
 import { useConfirmMutation } from '@beckn-ui/common/src/services/confirm'
 import { checkoutActions, CheckoutRootState, orderActions } from '@beckn-ui/common'
 import { getPayloadForConfirm, getPayloadForOrder } from '@utils/confirm-utils'
+import { testIds } from '@shared/dataTestIds'
 
 const OrderConfirmation = () => {
   const { t } = useLanguage()
@@ -113,7 +114,8 @@ const OrderConfirmation = () => {
               },
               disabled: false,
               variant: 'solid',
-              colorScheme: 'primary'
+              colorScheme: 'primary',
+              dataTest: testIds.orderConfirmation_viewOrderButton
             },
             {
               text: `${t.goBackBtn}`,
@@ -123,7 +125,8 @@ const OrderConfirmation = () => {
               },
               disabled: false,
               variant: 'outline',
-              colorScheme: 'primary'
+              colorScheme: 'primary',
+              dataTest: testIds.orderConfirmation_goBackToHome
             }
           ]
         }}

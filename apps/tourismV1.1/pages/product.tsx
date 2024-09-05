@@ -6,6 +6,7 @@ import { useLanguage } from '@hooks/useLanguage'
 import { DiscoveryRootState, ParsedItemModel } from '@beckn-ui/common/lib/types'
 import { useRouter } from 'next/router'
 import { cartActions } from '@store/cart-slice'
+import { testIds } from '@shared/dataTestIds'
 
 const Product = () => {
   const router = useRouter()
@@ -46,11 +47,14 @@ const Product = () => {
             imageSrc: selectedProduct.item.images?.[0].url!,
             name: selectedProduct.item.name,
             secondaryDescription: selectedProduct.item.long_desc,
+            dataTestTitle: testIds.item_title,
+            dataTestDescription: testIds.item_description,
             starRating: {
               rating: selectedProduct.item.rating!,
               size: 20,
               setRating: () => {},
-              starCount: 5
+              starCount: 5,
+              dataTest: testIds.item_rating
             },
             productCta: {
               currency: selectedProduct.item.price.currency,
@@ -60,6 +64,7 @@ const Product = () => {
               counterTitle: `${t.numberOfTraveller}`,
               counter: counter,
               cta: {
+                dataTest: testIds.productpage_addTocartButton,
                 text: `${t.bookNow}`,
                 color: 'white',
                 handleClick: () => {
