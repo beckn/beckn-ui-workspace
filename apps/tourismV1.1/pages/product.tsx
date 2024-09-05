@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Box } from '@chakra-ui/react'
 import { useLanguage } from '@hooks/useLanguage'
 import { DiscoveryRootState, ParsedItemModel } from '@beckn-ui/common/lib/types'
-import { cartActions } from '@beckn-ui/common/src/store/cart-slice'
 import { useRouter } from 'next/router'
+import { cartActions } from '@store/cart-slice'
 
 const Product = () => {
   const router = useRouter()
