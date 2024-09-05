@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import ShippingForm from '@beckn-ui/becknified-components/src/components/checkout/shipping-form'
 import { Box, Text } from '@chakra-ui/react'
-import { ConfirmResponseModel } from '../types/confirm.types'
 import { Loader, Typography } from '@beckn-ui/molecules'
 import { useLanguage } from '@hooks/useLanguage'
 import { v4 as uuidv4 } from 'uuid'
 import { useRouter } from 'next/router'
 import { useDispatch } from 'react-redux'
 import axios from '@services/axios'
-import { feedbackActions, geocodeFromPincode, getLocalStorage } from '@beckn-ui/common'
+import { ConfirmResponseModel, feedbackActions, geocodeFromPincode, getLocalStorage } from '@beckn-ui/common'
 
 const UpdateShippingDetails = () => {
   const [shippingDetails, setShippingDetails] = useState({
@@ -234,7 +233,7 @@ const UpdateShippingDetails = () => {
       overflowY="scroll"
     >
       <ShippingForm
-        onSubmit={() => handleSubmit(shippingDetails, confirmData)}
+        onSubmit={() => handleSubmit(shippingDetails, confirmData!)}
         values={shippingDetails}
         onChange={handleFormChange}
         submitButton={{ text: `${t.submit}` }}

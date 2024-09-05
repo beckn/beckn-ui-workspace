@@ -1,7 +1,6 @@
-import { CartRetailItem, DataPerBpp } from '@lib/types/cart'
-import { ShippingFormData } from '.'
 import { areObjectPropertiesEqual } from '@utils/common-utils'
 import { ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
+import { DataPerBpp, ShippingFormData } from '@beckn-ui/common'
 
 export const getPayloadForInitRequest = (
   cartItemsPerBppPerProvider: DataPerBpp,
