@@ -46,18 +46,19 @@ const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
 
   // Handle sign-in action
   const handleSignIn = async () => {
-    const signInData = {
-      email: formData.email,
-      password: formData.password
-    }
+    router.push('/')
+    // const signInData = {
+    //   email: formData.email,
+    //   password: formData.password
+    // }
 
-    try {
-      await driverLogin(signInData).unwrap()
-      Router.push('/')
-    } catch (error) {
-      console.error('An error occurred:', error)
-      // Handle error state or display error message
-    }
+    // try {
+    //   await driverLogin(signInData).unwrap()
+    //   Router.push('/')
+    // } catch (error) {
+    //   console.error('An error occurred:', error)
+    //   // Handle error state or display error message
+    // }
   }
 
   return (
@@ -76,15 +77,15 @@ const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
             colorScheme: 'primary',
             isLoading: isLoading,
             dataTest: 'login-button'
-          },
-          {
-            text: t.signUp,
-            handleClick: () => router.push('/signUp'),
-            variant: 'outline',
-            colorScheme: 'primary',
-            disabled: isLoading,
-            dataTest: 'register-button'
           }
+          // {
+          //   text: t.signUp,
+          //   handleClick: () => router.push('/signUp'),
+          //   variant: 'outline',
+          //   colorScheme: 'primary',
+          //   disabled: isLoading,
+          //   dataTest: 'register-button'
+          // }
         ],
         inputs: [
           {

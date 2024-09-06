@@ -9,25 +9,24 @@ import {
   Select,
   Textarea,
   HStack,
-  VStack,
   Switch,
   Divider,
-  Code
+  Code,
+  Image
 } from '@chakra-ui/react'
 import CustomDatePicker from '@components/customDatePicker'
 import { Typography } from '@beckn-ui/molecules'
-import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
-
-const rulesData = {
-  // Your JSON data here
-  content:
-    '{"action":"policy","domain":"mobility","location":{"country":"IND","city":"080"},"version":"1.0.0","message":{"policy":{"id":1,"owner":{"descriptor":{"name":""},"email":"support@moh.gov.in","contact":{}}}}'
-}
+import { useRouter } from 'next/router'
+import addIcon from '@public/images/plus_icon.svg'
+import { cities, countries, infoCategories, mockedRulesData } from '@lib/constants'
+import CustomButton from '@components/Button/CustomButton'
 
 function AddInformationMetadata() {
   const [startDate, setStartDate] = useState(new Date())
   const [endDate, setEndDate] = useState(new Date())
   const [isChecked, setIsChecked] = useState<boolean>(true)
+
+  const router = useRouter()
 
   const handleOnSwitch = () => {
     setIsChecked(!isChecked)
@@ -38,6 +37,9 @@ function AddInformationMetadata() {
       maxH={'calc(100vh - 110px)'}
       overflowY="auto"
       overflowX="hidden"
+      display={'flex'}
+      flexDir="column"
+      gap="2rem"
     >
       <Box
         p={4}
@@ -57,13 +59,17 @@ function AddInformationMetadata() {
             display={'flex'}
             flexDir={'row'}
             justifyContent="space-between"
-            width={'7%'}
+            width={'9%'}
           >
             <Typography
               text="Activate"
+              style={{
+                alignSelf: 'center'
+              }}
               fontSize={'14px !important'}
             />
             <Switch
+              size={'lg'}
               isChecked={isChecked}
               colorScheme={'green'}
               onChange={handleOnSwitch}
@@ -74,8 +80,11 @@ function AddInformationMetadata() {
         <Divider />
         <Box height={'1rem'} />
 
-        <HStack spacing={3}>
-          <FormControl>
+        <HStack
+          spacing={3}
+          gap="4rem"
+        >
+          <FormControl mb="1rem">
             <FormLabel>Title</FormLabel>
             <Input
               type="text"
@@ -83,16 +92,21 @@ function AddInformationMetadata() {
             />
           </FormControl>
 
-          <FormControl>
+          <FormControl mb="1rem">
             <FormLabel>Information Category</FormLabel>
             <Select placeholder="Select Information Category">
-              <option value="option1">Geofence</option>
-              <option value="option2">Privacy</option>
-              <option value="option2">Alcohol</option>
+              {infoCategories.map((category, index) => (
+                <option
+                  key={index}
+                  value={category.value.toLowerCase()}
+                >
+                  {category.name}
+                </option>
+              ))}
             </Select>
           </FormControl>
 
-          <FormControl>
+          <FormControl mb="1rem">
             <FormLabel>Information Source Owner</FormLabel>
             <Input
               type="text"
@@ -101,42 +115,44 @@ function AddInformationMetadata() {
           </FormControl>
         </HStack>
 
-        <Box height={'2rem'} />
-
-        <FormControl>
+        <FormControl mb="1rem">
           <FormLabel>Description</FormLabel>
           <Textarea placeholder="Add Description" />
         </FormControl>
 
-        <Box height={'2rem'} />
-
-        <HStack spacing={4}>
-          <FormControl>
+        <HStack
+          spacing={4}
+          gap="4rem"
+        >
+          <FormControl mb="1rem">
             <FormLabel>Country</FormLabel>
             <Select placeholder="Select Country">
-              <option value="india">India</option>
-              <option value="usa">USA</option>
-              <option value="usa">Egypt</option>
+              {countries.map((country, index) => (
+                <option
+                  key={index}
+                  value={country.value.toLowerCase()}
+                >
+                  {country.name}
+                </option>
+              ))}
             </Select>
           </FormControl>
 
-          <FormControl>
+          <FormControl mb="1rem">
             <FormLabel>City</FormLabel>
             <Select placeholder="Select City">
-              <option value="bangalore">Bangalore</option>
-              <option value="delhi">Delhi</option>
-              <option value="mumbai">Mumbai</option>
-              <option value="chennai">Chennai</option>
-              <option value="hyderabad">Hyderabad</option>
-              <option value="pune">Pune</option>
-              <option value="ahmedabad">Ahmedabad</option>
-              <option value="vishakhapatnam">Vishakhapatnam</option>
-              <option value="jaipur">Jaipur</option>
-              <option value="noida">Noida</option>
+              {cities.map((city, index) => (
+                <option
+                  key={index}
+                  value={city.value.toLowerCase()}
+                >
+                  {city.name}
+                </option>
+              ))}
             </Select>
           </FormControl>
 
-          <FormControl>
+          <FormControl mb="1rem">
             <FormLabel>From</FormLabel>
             <CustomDatePicker
               selected={startDate}
@@ -146,7 +162,7 @@ function AddInformationMetadata() {
             />
           </FormControl>
 
-          <FormControl>
+          <FormControl mb="1rem">
             <FormLabel>To</FormLabel>
             <CustomDatePicker
               selected={endDate}
@@ -157,9 +173,10 @@ function AddInformationMetadata() {
           </FormControl>
         </HStack>
 
-        <Box height={'2rem'} />
-
-        <HStack spacing={4}>
+        <HStack
+          spacing={4}
+          gap="4rem"
+        >
           <FormControl>
             <FormLabel>Sources</FormLabel>
             <Input
@@ -172,7 +189,7 @@ function AddInformationMetadata() {
             <FormLabel>Applicable To</FormLabel>
             <Select
               placeholder="Select"
-              width={'49%'}
+              width={'45.2%'}
             >
               <option value="bangalore">BAP</option>
               <option value="new york">BPP</option>
@@ -180,7 +197,45 @@ function AddInformationMetadata() {
           </FormControl>
         </HStack>
       </Box>
-      <Box height={'2rem'} />
+
+      <Box
+        p={4}
+        border="1px solid #72767e"
+      >
+        <FormControl>
+          <FormLabel>Geofence</FormLabel>
+          <Box
+            width="fit-content"
+            border={'1px dotted #004e92 !important'}
+            padding="1rem 2rem"
+            borderRadius={'md'}
+            cursor="pointer"
+            onClick={() => {
+              router.push('/createGeofence')
+            }}
+          >
+            <Flex
+              flexDirection={'row'}
+              alignItems="center"
+              mr="1rem"
+              cursor="pointer"
+            >
+              <Image
+                src={addIcon}
+                alt="add_icon"
+                width={'1rem'}
+                height={'1rem'}
+              />
+              <Typography
+                text="Draw geofence on a map"
+                fontSize="14px"
+                color="#013b76"
+              />
+            </Flex>
+          </Box>
+        </FormControl>
+      </Box>
+
       <Box
         p={4}
         border="1px solid #72767e"
@@ -205,21 +260,25 @@ function AddInformationMetadata() {
               overflowX="hidden"
               lineHeight={'normal'}
             >
-              {JSON.stringify(rulesData, null, 2)}
+              {JSON.stringify(mockedRulesData, undefined, 4)}
             </Code>
           </Box>
         </FormControl>
       </Box>
-      <Box height={'2rem'} />
-      <Flex width={'25rem'}>
-        <BecknButton
-          text="Go Back"
+
+      <Flex width={'31rem'}>
+        <CustomButton
           variant="outline"
+          text="Go back"
+          onClick={() => router.push('/')}
+          mr="1rem"
         />
-        <BecknButton
+        <CustomButton
+          variant="solid"
+          bgGradient="linear(180deg, #000428 0%, #004e92 100%) !important"
           text="Save"
-          // bgGradient={'linear(180deg, #000428 0%, #004e92 100%) !important'}
-          // bgClip="text"
+          _hover={{ opacity: 0.9 }}
+          onClick={() => {}}
         />
       </Flex>
     </Box>

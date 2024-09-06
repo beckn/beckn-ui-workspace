@@ -1,20 +1,16 @@
 import React, { useState } from 'react'
 import { Table, Thead, Tbody, Tr, Th, Td, IconButton, Box, Flex, Badge } from '@chakra-ui/react'
 import { TriangleUpIcon, TriangleDownIcon } from '@chakra-ui/icons'
-import { DataTableProps } from '@components/tabPanel/tabPanel'
 import { Typography } from '@beckn-ui/molecules'
 import { formatDate } from '@utils/general'
-
-// const data = [
-//   { title: 'Disruption of Traffic - BTM Layout', description: '', status: 'applied', startDate: '24/03/2023', endDate: '24/03/2023' },
-//   { title: 'Traffic Advisory - Whitefield', description: '', status: 'inactive', startDate: '28/03/2023', endDate: '28/03/2023' },
-//   { title: 'Heavy Traffic Zone - Koramangala', description: '', status: 'applied', startDate: '22/03/2023', endDate: '22/03/2023' },
-//   // ... Add more data as needed
-// ];
+import { useRouter } from 'next/router'
+import { DataTableProps } from '@lib/types/table'
 
 const DataTable = (props: DataTableProps) => {
   const { items } = props
   const [sortConfig, setSortConfig] = useState<any>(null)
+
+  const router = useRouter()
 
   const sortedData = React.useMemo(() => {
     let sortableData = [...items]
@@ -159,7 +155,14 @@ const DataTable = (props: DataTableProps) => {
         </Thead>
         <Tbody>
           {sortedData.map((item, index) => (
-            <Tr key={index}>
+            <Tr
+              key={index}
+              cursor="pointer"
+              _hover={{ backgroundColor: 'rgba(0, 0, 0, 0.04)' }}
+              onClick={() => {
+                router.push('/policyDetails')
+              }}
+            >
               <Td borderBottom={'1px dotted #004e92!important'}>
                 <Typography
                   text={item.title}
@@ -187,41 +190,21 @@ const DataTable = (props: DataTableProps) => {
                 />
               </Td>
               <Td borderBottom={'1px dotted #004e92!important'}>
-                {item.status === 'active' && (
-                  <Badge
-                    variant="subtle"
-                    colorScheme={'green'}
-                    textTransform="lowercase"
-                  >
-                    <Typography text={item.status} />
-                  </Badge>
-                )}
-                {item.status === 'inactive' && (
-                  <Badge
-                    variant="subtle"
-                    colorScheme={'red'}
-                    textTransform="lowercase"
-                  >
-                    <Typography text={item.status} />
-                  </Badge>
-                )}
-                {item.status === 'published' && (
-                  <Badge
-                    variant="subtle"
-                    textTransform="lowercase"
-                  >
-                    <Typography text={item.status} />
-                  </Badge>
-                )}
-                {item.status === 'new' && (
-                  <Badge
-                    variant="subtle"
-                    colorScheme={'purple'}
-                    textTransform="lowercase"
-                  >
-                    <Typography text={item.status} />
-                  </Badge>
-                )}
+                <Badge
+                  variant="subtle"
+                  textTransform="lowercase"
+                  colorScheme={
+                    item.status === 'active'
+                      ? 'green'
+                      : item.status === 'inactive'
+                        ? 'red'
+                        : item.status === 'new'
+                          ? 'purple'
+                          : 'blue'
+                  }
+                >
+                  <Typography text={item.status} />
+                </Badge>
               </Td>
               <Td borderBottom={'1px dotted #004e92!important'}>
                 <Typography
