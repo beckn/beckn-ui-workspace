@@ -21,6 +21,8 @@ import {
 import { Typography } from '@beckn-ui/molecules'
 import { useRouter } from 'next/router'
 import CustomButton from '@components/Button/CustomButton'
+import { policyStatusOptions } from '@lib/constants'
+import { PolicyStatusType } from '@lib/types/metaData'
 
 const ViewInformation = () => {
   const item = {
@@ -30,10 +32,23 @@ const ViewInformation = () => {
     category: '',
     sourceOwner: '',
     description: '',
-    country: ''
+    country: '',
+    status: 'Publish'
   }
 
+  const [policyStatus, setPolicyStatus] = useState(item.status.toUpperCase())
+
   const router = useRouter()
+
+  const getStatusDrodpwnItems = (statusDetails: string) => {
+    if (statusDetails === PolicyStatusType.PUBLISH) {
+      return policyStatusOptions.filter(status => status.value !== PolicyStatusType.ACTIVE)
+    }
+    if (statusDetails == PolicyStatusType.INACTIVE) {
+      return policyStatusOptions.filter(status => status.value !== PolicyStatusType.PUBLISH)
+    }
+    return policyStatusOptions
+  }
 
   return (
     <Box
@@ -90,9 +105,17 @@ const ViewInformation = () => {
             <Select
               placeholder="Select"
               width={'45.2%'}
+              value={policyStatus}
+              onChange={event => setPolicyStatus(event.target.value || policyStatus)}
             >
-              <option value="published">Published</option>
-              <option value="inactive">Inactive</option>
+              {getStatusDrodpwnItems(policyStatus).map((statusType, index) => (
+                <option
+                  key={index}
+                  value={statusType.value}
+                >
+                  {statusType.label}
+                </option>
+              ))}
             </Select>
           </FormControl>
         </HStack>
@@ -173,7 +196,27 @@ const ViewInformation = () => {
           <FormLabel>Geofence</FormLabel>
           <Link
             color="#5c5cff"
-            onClick={() => router.push('/viewGeofence')}
+            onClick={() =>
+              router.push({
+                pathname: '/viewGeofence',
+                query: {
+                  coords: JSON.stringify([
+                    {
+                      lat: 12.90218055284065,
+                      lng: 77.56138163654384
+                    },
+                    {
+                      lat: 12.905861728332741,
+                      lng: 77.6109917744833
+                    },
+                    {
+                      lat: 12.898415658229917,
+                      lng: 77.61227923481044
+                    }
+                  ])
+                }
+              })
+            }
             fontSize={'14px'}
           >
             {'Click to view'}

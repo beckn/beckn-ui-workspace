@@ -15,7 +15,7 @@ const optionMenu = [{ id: 'home', label: 'Home' }]
 const CustomDrawer = (props: CustomDrawer) => {
   const { isOpen, children, handleDrawerToggle } = props
   const [selected, setSelected] = useState<string>('0')
-  console.log(isOpen)
+
   return (
     <>
       {isOpen && (
