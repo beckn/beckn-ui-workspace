@@ -9,8 +9,9 @@ import { checkoutActions, StatusRootState } from '@beckn-ui/common'
 const orderCancellation = () => {
   const { t } = useLanguage()
   const router = useRouter()
-  const [orderId, setOrderId] = useState()
   const statusResponse = useSelector((state: StatusRootState) => state.status.statusResponse)
+  const [orderId, setOrderId] = useState<string>()
+  const dispatch = useDispatch()
 
   useEffect(() => {
     if (statusResponse && statusResponse.length > 0 && statusResponse[0].message.order.id) {
@@ -18,13 +19,12 @@ const orderCancellation = () => {
     }
   }, [statusResponse])
 
-  const dispatch = useDispatch()
   return (
     <ConfirmationPage
       schema={{
         iconSrc: '/images/cancleHomeImg.svg',
-        content: t.orderPlaced,
-        contentMessage: t.orderSuccesfully,
+        // content: t.orderPlaced,
+        // contentMessage: t.orderSuccesfully,
         successOrderMessage: `${t.orderCancelled}`,
         gratefulMessage: `${t.cancelText}`,
         orderIdMessage: orderId ? `${t.orderNumber} ${orderId}...` : '',

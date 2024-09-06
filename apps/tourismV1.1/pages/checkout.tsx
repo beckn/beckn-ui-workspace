@@ -4,7 +4,7 @@ import { Box, useToast, useTheme } from '@chakra-ui/react'
 import { DOMAIN } from '@lib/config'
 import { useLanguage } from '../hooks/useLanguage'
 
-import { getInitPayload } from '@components/checkout/checkout.utils'
+// import { getInitPayload } from '@components/checkout/checkout.utils'
 import useRequest from '../hooks/useRequest'
 
 import { Checkout } from '@beckn-ui/becknified-components'
@@ -21,6 +21,7 @@ import {
   checkoutActions,
   CheckoutRootState,
   DiscoveryRootState,
+  getInitPayload,
   getSelectPayload,
   getSubTotalAndDeliveryCharges,
   ICartRootState,
@@ -216,7 +217,8 @@ const CheckoutPage = () => {
 
   const formSubmitHandler = (data: any) => {
     if (data) {
-      getInitPayload(shippingFormData, billingFormData, selectResponse).then(res => {
+      const { id, type } = selectResponse[0].message.order.fulfillments[0]
+      getInitPayload(shippingFormData, billingFormData, cartItems, transactionId, DOMAIN, { id, type }).then(res => {
         return initialize(res)
       })
       // TODO :_ To check this again
