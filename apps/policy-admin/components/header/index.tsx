@@ -30,7 +30,6 @@ interface HeaderProps {
 const Header = (props: HeaderProps) => {
   const { handleDrawerToggle } = props
   const { headerNames, headerBlackList } = Constants
-  const { isOpen, onClose, onOpen } = useDisclosure()
 
   const router = useRouter()
   const dispatch = useDispatch()
@@ -59,7 +58,7 @@ const Header = (props: HeaderProps) => {
                 className={Styles.header_title_text}
                 data-test={testIds.pageName}
                 fontWeight="600"
-                fontSize={{ base: '16px !important', md: '18px !important' }}
+                fontSize={'18px !important'}
               />
             </Box>
           </Box>

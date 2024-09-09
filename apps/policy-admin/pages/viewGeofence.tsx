@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Typography } from '@beckn-ui/molecules'
-import { Box, Button, Flex } from '@chakra-ui/react'
+import { Box, Flex } from '@chakra-ui/react'
 import CustomButton from '@components/Button/CustomButton'
 import DynamicGeofenceMap from '@components/DynamicGeofenceMap'
 import { useRouter } from 'next/router'
@@ -34,14 +33,15 @@ const ViewGeofenceDetails = () => {
         />
       </Box>
       <Flex
-        width={'100%'}
+        width={{ base: '100%', md: '100%' }}
+        display={{ base: 'block', md: 'flex' }}
         justifyContent="center"
       >
         <CustomButton
           variant="outline"
           text="Go back"
           onClick={() => router.push('/policyDetails')}
-          mr="1rem"
+          w={{ base: '100%', md: '15rem' }}
         />
       </Flex>
     </>

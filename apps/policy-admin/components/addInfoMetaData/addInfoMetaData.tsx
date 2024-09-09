@@ -117,6 +117,7 @@ function AddInformationMetadata() {
           }
         })
       )
+      dispatch(clearPolicyMetaData())
       router.push('/')
     } catch (error) {
       console.error('An error occurred while create policy:', error)
@@ -413,7 +414,7 @@ function AddInformationMetadata() {
             router.push('/')
           }}
           mr="1rem"
-          w={{ base: '100%', md: 'unset' }}
+          w={{ base: '100%', md: '100%' }}
         />
         <CustomButton
           variant="solid"
@@ -421,7 +422,7 @@ function AddInformationMetadata() {
           text="Save"
           _hover={{ opacity: 0.9 }}
           onClick={handleSavePolicy}
-          w={{ base: '100%', md: 'unset' }}
+          w={{ base: '100%', md: '100%' }}
         />
       </Flex>
     </Box>

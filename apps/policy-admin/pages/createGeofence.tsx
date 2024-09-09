@@ -82,7 +82,7 @@ const CreateGeofence = () => {
           text="Go back"
           onClick={() => router.push('/createPolicy')}
           mr="1rem"
-          w={{ base: '100%', md: 'unset' }}
+          w={{ base: '100%', md: '100%' }}
         />
         <CustomButton
           variant="solid"
@@ -90,7 +90,7 @@ const CreateGeofence = () => {
           text="Save"
           _hover={{ opacity: 0.9 }}
           onClick={handleSaveCoordinates}
-          w={{ base: '100%', md: 'unset' }}
+          w={{ base: '100%', md: '100%' }}
         />
       </Flex>
     </Box>

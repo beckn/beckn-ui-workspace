@@ -10,7 +10,8 @@ const headerNames: PathnameObjectType = {
   '/signIn': 'Sign In',
   '/signUp': 'Sign Up',
   '/createPolicy': 'New Information',
-  '/policyDetails': 'Information Details'
+  '/policyDetails': 'Information Details',
+  '/createGeofence': 'Draw Geofencing'
 }
 
 const headerFrenchNames: PathnameObjectType = {}

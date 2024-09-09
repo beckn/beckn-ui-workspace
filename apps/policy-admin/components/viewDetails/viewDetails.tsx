@@ -289,7 +289,7 @@ const ViewInformation = () => {
           text="Go back"
           onClick={() => router.push('/')}
           mr="1rem"
-          w={{ base: '100%', md: 'unset' }}
+          w={{ base: '100%', md: '100%' }}
         />
         <CustomButton
           variant="solid"
@@ -297,7 +297,7 @@ const ViewInformation = () => {
           text="Update"
           _hover={{ opacity: 0.9 }}
           onClick={() => {}}
-          w={{ base: '100%', md: 'unset' }}
+          w={{ base: '100%', md: '100%' }}
         />
       </Flex>
     </Box>
