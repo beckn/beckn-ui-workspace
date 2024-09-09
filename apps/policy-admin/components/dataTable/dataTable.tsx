@@ -49,9 +49,10 @@ const DataTable = (props: DataTableProps) => {
 
   return (
     <Box
-      maxH={'calc(100vh - 360px)'}
-      overflowY="auto"
-      overflowX="hidden"
+      maxH={{ base: 'calc(100vh - 278px)', md: 'calc(100vh - 360px)' }}
+      overflowY="scroll"
+      overflowX="scroll"
+      className="hideScroll"
     >
       <Table variant="simple">
         <Thead

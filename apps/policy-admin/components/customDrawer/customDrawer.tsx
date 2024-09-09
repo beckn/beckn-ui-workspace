@@ -1,5 +1,5 @@
 import { Typography } from '@beckn-ui/molecules'
-import { Box, Divider, Image } from '@chakra-ui/react'
+import { Box, Divider, Image, useMediaQuery } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import Styles from './CustomDrawer.module.css'
 import hamburgerIcon from '@public/images/hamburger.svg'
@@ -17,11 +17,13 @@ const CustomDrawer = (props: CustomDrawer) => {
   const { isOpen, children, handleDrawerToggle } = props
   const [selected, setSelected] = useState<string>('0')
 
+  const [isLargerThan1525] = useMediaQuery('(min-width: 1525px)')
+
   const router = useRouter()
 
   return (
     <>
-      {isOpen && (
+      {(isOpen || isLargerThan1525) && (
         <>
           <Box className={Styles.drawer_overlay}>
             <Typography
@@ -85,7 +87,7 @@ const CustomDrawer = (props: CustomDrawer) => {
         </>
       )}
 
-      <Box className={`${Styles.drawer} ${isOpen ? Styles.open : Styles.close}`}>{children}</Box>
+      <Box className={`${Styles.drawer} ${isOpen || isLargerThan1525 ? Styles.open : Styles.close}`}>{children}</Box>
     </>
   )
 }

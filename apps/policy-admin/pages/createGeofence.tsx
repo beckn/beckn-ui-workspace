@@ -32,7 +32,12 @@ const CreateGeofence = () => {
   }
 
   return (
-    <>
+    <Box
+      maxH={'calc(100vh - 110px)'}
+      overflowY="auto"
+      overflowX="hidden"
+      className="hideScroll"
+    >
       <Flex
         justifyContent={'space-between'}
         mb="2rem"
@@ -57,12 +62,16 @@ const CreateGeofence = () => {
           updateCoordinates={updateCoordinates}
         />
       </Box>
-      <Flex width={'31rem'}>
+      <Flex
+        width={{ base: '100%', md: '31rem' }}
+        display={{ base: 'block', md: 'flex' }}
+      >
         <CustomButton
           variant="outline"
           text="Go back"
           onClick={() => router.push('/createPolicy')}
           mr="1rem"
+          w={{ base: '100%', md: 'unset' }}
         />
         <CustomButton
           variant="solid"
@@ -70,9 +79,10 @@ const CreateGeofence = () => {
           text="Save"
           _hover={{ opacity: 0.9 }}
           onClick={handleSaveCoordinates}
+          w={{ base: '100%', md: 'unset' }}
         />
       </Flex>
-    </>
+    </Box>
   )
 }
 

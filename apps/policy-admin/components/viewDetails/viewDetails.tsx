@@ -58,6 +58,7 @@ const ViewInformation = () => {
       display={'flex'}
       flexDir="column"
       gap="2rem"
+      className="hideScroll"
     >
       <Box
         p={4}
@@ -73,10 +74,11 @@ const ViewInformation = () => {
         <Box height={'1rem'} />
 
         <HStack
+          display={{ base: 'block', md: 'flex' }}
           spacing={3}
           mb="1rem"
         >
-          <FormControl>
+          <FormControl mb={{ base: '10px', md: 'unset' }}>
             <FormLabel>Title</FormLabel>
             <Typography
               fontSize="14px"
@@ -84,7 +86,7 @@ const ViewInformation = () => {
             />
           </FormControl>
 
-          <FormControl>
+          <FormControl mb={{ base: '10px', md: 'unset' }}>
             <FormLabel>Information Category</FormLabel>
             <Typography
               fontSize="14px"
@@ -92,7 +94,7 @@ const ViewInformation = () => {
             />
           </FormControl>
 
-          <FormControl>
+          <FormControl mb={{ base: '16px', md: 'unset' }}>
             <FormLabel>Information Source Owner</FormLabel>
             <Typography
               fontSize="14px"
@@ -100,7 +102,11 @@ const ViewInformation = () => {
             />
           </FormControl>
 
-          <FormControl>
+          <FormControl
+            mb={{ base: '10px', md: 'unset' }}
+            display={{ base: 'flex', md: 'block' }}
+            alignItems={{ base: 'center', md: 'unset' }}
+          >
             <FormLabel>Status</FormLabel>
             <Select
               placeholder="Select"
@@ -136,44 +142,54 @@ const ViewInformation = () => {
         </FormControl>
 
         <HStack
+          display={{ base: 'block', md: 'flex' }}
           spacing={4}
           mb="1rem"
         >
-          <FormControl>
-            <FormLabel>Country</FormLabel>
-            <Typography
-              fontSize="14px"
-              text="country"
-            />
-          </FormControl>
+          <Flex
+            w="100%"
+            mb={{ base: '16px', md: 'unset' }}
+          >
+            <FormControl mb={{ base: '10px', md: 'unset' }}>
+              <FormLabel>Country</FormLabel>
+              <Typography
+                fontSize="14px"
+                text="country"
+              />
+            </FormControl>
 
-          <FormControl>
-            <FormLabel>City</FormLabel>
-            <Typography
-              fontSize="14px"
-              text="city"
-            />
-          </FormControl>
+            <FormControl mb={{ base: '10px', md: 'unset' }}>
+              <FormLabel>City</FormLabel>
+              <Typography
+                fontSize="14px"
+                text="city"
+              />
+            </FormControl>
+          </Flex>
+          <Flex w="100%">
+            <FormControl mb={{ base: '10px', md: 'unset' }}>
+              <FormLabel>From</FormLabel>
+              <Typography
+                fontSize="14px"
+                text={item.startDate}
+              />
+            </FormControl>
 
-          <FormControl>
-            <FormLabel>From</FormLabel>
-            <Typography
-              fontSize="14px"
-              text={item.startDate}
-            />
-          </FormControl>
-
-          <FormControl>
-            <FormLabel>To</FormLabel>
-            <Typography
-              fontSize="14px"
-              text={item.endDate}
-            />
-          </FormControl>
+            <FormControl mb={{ base: '10px', md: 'unset' }}>
+              <FormLabel>To</FormLabel>
+              <Typography
+                fontSize="14px"
+                text={item.endDate}
+              />
+            </FormControl>
+          </Flex>
         </HStack>
 
-        <HStack spacing={4}>
-          <FormControl>
+        <HStack
+          spacing={4}
+          display={{ base: 'block', md: 'flex' }}
+        >
+          <FormControl mb={{ base: '10px', md: 'unset' }}>
             <FormLabel>Sources</FormLabel>
             <Link
               color="#5c5cff"
@@ -185,7 +201,7 @@ const ViewInformation = () => {
             </Link>
           </FormControl>
 
-          <FormControl>
+          <FormControl mb={{ base: '10px', md: 'unset' }}>
             <FormLabel>Applicable To</FormLabel>
             <Typography
               fontSize="14px"
@@ -239,11 +255,14 @@ const ViewInformation = () => {
           <FormLabel>Rules</FormLabel>
           <Box
             sx={{
-              height: { base: '40px', md: '20rem' },
               border: '1px solid',
               borderColor: 'inherit',
               borderRadius: 'md'
             }}
+            minH={'40px'}
+            maxH="20rem"
+            overflow={'auto'}
+            className="hideScroll"
           >
             <Code
               height={'100%'}
@@ -261,12 +280,16 @@ const ViewInformation = () => {
         </FormControl>
       </Box>
 
-      <Flex width={'31rem'}>
+      <Flex
+        width={{ base: '100%', md: '31rem' }}
+        display={{ base: 'block', md: 'flex' }}
+      >
         <CustomButton
           variant="outline"
           text="Go back"
           onClick={() => router.push('/')}
           mr="1rem"
+          w={{ base: '100%', md: 'unset' }}
         />
         <CustomButton
           variant="solid"
@@ -274,6 +297,7 @@ const ViewInformation = () => {
           text="Update"
           _hover={{ opacity: 0.9 }}
           onClick={() => {}}
+          w={{ base: '100%', md: 'unset' }}
         />
       </Flex>
     </Box>

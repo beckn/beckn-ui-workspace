@@ -28,10 +28,13 @@ const TabNavPanel = (props: TabNavPanelProps) => {
           {tabList.map((status, index) => (
             <Tab
               key={index}
-              m="0px 0px 24px"
-              fontSize={tabList[index] === currentTab ? '15px' : '14px'}
+              m="0px 0px 30px"
+              fontSize={{
+                base: tabList[index] === currentTab ? '15px' : '14px',
+                md: tabList[index] === currentTab ? '15px' : '14px'
+              }}
               fontWeight="600"
-              p={'10px 24px'}
+              p={{ base: '6px 12px', md: '10px 24px' }}
               color={tabList[index] === currentTab ? '#000000' : 'rgba(0, 0, 0, 0.6)'}
             >
               {status}
@@ -39,9 +42,12 @@ const TabNavPanel = (props: TabNavPanelProps) => {
           ))}
         </TabList>
         <Flex
+          position={{ base: 'absolute', md: 'relative' }}
+          mt={{ base: '38px', md: 'unset' }}
+          right="0"
           flexDirection={'row'}
           alignItems="center"
-          mr="1rem"
+          mr={{ base: 'unset', md: '1rem' }}
           cursor="pointer"
           onClick={() => {
             router.push('/createPolicy')
@@ -50,12 +56,12 @@ const TabNavPanel = (props: TabNavPanelProps) => {
           <Image
             src={addIcon}
             alt="add_icon"
-            width={'1.5rem'}
-            height={'1.5rem'}
+            width={{ base: '1rem', md: '1.5rem' }}
+            height={{ base: '1rem', md: '1.5rem' }}
           />
           <Typography
             text="Create New"
-            fontSize="14px"
+            fontSize={'14px'}
             color="#013b76"
           />
         </Flex>

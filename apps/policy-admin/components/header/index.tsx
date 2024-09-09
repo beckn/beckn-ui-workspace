@@ -59,7 +59,7 @@ const Header = (props: HeaderProps) => {
                 className={Styles.header_title_text}
                 data-test={testIds.pageName}
                 fontWeight="600"
-                fontSize={'18px !important'}
+                fontSize={{ base: '16px !important', md: '18px !important' }}
               />
             </Box>
           </Box>

@@ -141,6 +141,7 @@ function AddInformationMetadata() {
       display={'flex'}
       flexDir="column"
       gap="2rem"
+      className="hideScroll"
     >
       <Box
         p={4}
@@ -148,7 +149,7 @@ function AddInformationMetadata() {
       >
         <Flex
           width={'auto'}
-          justifyContent="space-between"
+          justifyContent={'space-between'}
           alignItems="center"
         >
           <Typography
@@ -157,10 +158,12 @@ function AddInformationMetadata() {
             fontSize={'18px !important'}
           />
           <Box
-            display={'flex'}
+            display={{ base: 'block', md: 'flex' }}
             flexDir={'row'}
-            justifyContent="space-between"
-            width={'9%'}
+            textAlign="center"
+            justifyContent="space-evenly"
+            width={{ base: 'unset', md: '15%' }}
+            ml={{ base: '20px', md: 'unset' }}
           >
             <Typography
               text="Activate"
@@ -170,7 +173,8 @@ function AddInformationMetadata() {
               fontSize={'14px !important'}
             />
             <Switch
-              size={'lg'}
+              ml="8px"
+              size={{ base: 'md', md: 'lg' }}
               isChecked={isActivate}
               colorScheme={'green'}
               onChange={handleOnSwitch}
@@ -182,6 +186,7 @@ function AddInformationMetadata() {
         <Box height={'1rem'} />
 
         <HStack
+          display={{ base: 'block', md: 'flex' }}
           spacing={3}
           gap="4rem"
         >
@@ -234,6 +239,7 @@ function AddInformationMetadata() {
         </FormControl>
 
         <HStack
+          display={{ base: 'block', md: 'flex' }}
           spacing={4}
           gap="4rem"
         >
@@ -295,10 +301,11 @@ function AddInformationMetadata() {
         </HStack>
 
         <HStack
+          display={{ base: 'block', md: 'flex' }}
           spacing={4}
           gap="4rem"
         >
-          <FormControl>
+          <FormControl mb="1rem">
             <FormLabel>Sources</FormLabel>
             <Input
               type="text"
@@ -369,11 +376,14 @@ function AddInformationMetadata() {
           <FormLabel>Rules</FormLabel>
           <Box
             sx={{
-              height: { base: '40px', md: '20rem' },
               border: '1px solid',
               borderColor: 'inherit',
               borderRadius: 'md'
             }}
+            minH={'40px'}
+            maxH="20rem"
+            overflow={'auto'}
+            className="hideScroll"
           >
             <Code
               height={'100%'}
@@ -391,7 +401,10 @@ function AddInformationMetadata() {
         </FormControl>
       </Box>
 
-      <Flex width={'31rem'}>
+      <Flex
+        width={{ base: '100%', md: '31rem' }}
+        display={{ base: 'block', md: 'flex' }}
+      >
         <CustomButton
           variant="outline"
           text="Go back"
@@ -400,6 +413,7 @@ function AddInformationMetadata() {
             router.push('/')
           }}
           mr="1rem"
+          w={{ base: '100%', md: 'unset' }}
         />
         <CustomButton
           variant="solid"
@@ -407,6 +421,7 @@ function AddInformationMetadata() {
           text="Save"
           _hover={{ opacity: 0.9 }}
           onClick={handleSavePolicy}
+          w={{ base: '100%', md: 'unset' }}
         />
       </Flex>
     </Box>

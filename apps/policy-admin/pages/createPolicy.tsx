@@ -1,5 +1,4 @@
 import AddInformationMetadata from '@components/addInfoMetaData/addInfoMetaData'
-import React, { useMemo, useState } from 'react'
 
 const CreatePolicy = () => {
   return (
