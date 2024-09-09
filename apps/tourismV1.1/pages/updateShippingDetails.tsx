@@ -9,6 +9,7 @@ import { useDispatch } from 'react-redux'
 import axios from '@services/axios'
 import { ConfirmResponseModel, feedbackActions, geocodeFromPincode, getLocalStorage } from '@beckn-ui/common'
 import { testIds } from '@shared/dataTestIds'
+import { ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
 
 const UpdateShippingDetails = () => {
   const [shippingDetails, setShippingDetails] = useState({
@@ -18,6 +19,7 @@ const UpdateShippingDetails = () => {
     address: '',
     pinCode: ''
   })
+
   const [confirmData, setConfirmData] = useState<ConfirmResponseModel[] | null>(null)
   const [isLoadingForUpdate, setIsLoadingForUpdate] = useState(false)
   const { t } = useLanguage()
@@ -33,10 +35,10 @@ const UpdateShippingDetails = () => {
     }
   }, [])
 
-  const handleSubmit = async (formData: any, confirmData: ConfirmResponseModel[]) => {
+  const handleSubmit = async (formData: ShippingFormInitialValuesType, confirmData: ConfirmResponseModel[]) => {
     const optionTags = getLocalStorage('optionTags')
     let searchString
-    if (optionTags && optionTags.name) searchString = optionTags.name
+    if (optionTags && optionTags?.name) searchString = optionTags?.name
     const defaultAddressPayload = {
       city: 'Bengaluru',
       state: 'Karnataka',
@@ -53,7 +55,7 @@ const UpdateShippingDetails = () => {
         const { domain, bpp_id, bpp_uri, transaction_id } = confirmData[0].context
         const orderId = confirmData[0].message.orderId
         const { name, address, email, mobileNumber, pinCode } = formData
-        const { state, city, country } = await geocodeFromPincode(pinCode)
+        const { state, city, country } = await geocodeFromPincode(pinCode!)
 
         const updateRequestPayload = {
           data: [
