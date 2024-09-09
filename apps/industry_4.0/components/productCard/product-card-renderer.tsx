@@ -16,10 +16,12 @@ const ProductCardRenderer = (data: any) => {
 
   useEffect(() => {
     const stringifiedCoords = localStorage.getItem('coordinates') as string
-    const parsedThing: Coordinate = JSON.parse(stringifiedCoords)
+    if (stringifiedCoords) {
+      const parsedThing: Coordinate = JSON.parse(stringifiedCoords)
 
-    const distance = calculateDistance(parsedThing, dataSource.providerCoordinates)
-    setDistance(Math.floor(distance))
+      const distance = calculateDistance(parsedThing, dataSource.providerCoordinates)
+      setDistance(Math.floor(distance))
+    }
   }, [])
 
   //   TODO :- have to fix CSS as well as remove mock data and add dynamic data
@@ -107,12 +109,14 @@ const ProductCardRenderer = (data: any) => {
           position="absolute"
           width="calc(100% - 30px)"
         >
-          <Flex columnGap={'5px'}>
-            <Image src={'images/meter.svg'} />
-            <Text>
-              {distance} {distance > 1 ? 'km' : 'm'}
-            </Text>
-          </Flex>
+          {distance !== 0 && (
+            <Flex columnGap={'5px'}>
+              <Image src={'images/meter.svg'} />
+              <Text>
+                {distance} {distance > 1 ? 'km' : 'm'}
+              </Text>
+            </Flex>
+          )}
 
           <Flex alignItems="center">
             <Image src={StarIcon} />
