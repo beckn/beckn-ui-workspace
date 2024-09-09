@@ -5,7 +5,7 @@ import DynamicGeofenceMap from '@components/DynamicGeofenceMap'
 import { GeoCoordinate } from '@lib/types/geofence'
 import { PolicyRootState, updatePolygon } from '@store/policy.slice'
 import { useRouter } from 'next/router'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 const CreateGeofence = () => {
@@ -14,6 +14,17 @@ const CreateGeofence = () => {
 
   const router = useRouter()
   const dispatch = useDispatch()
+  const { polygon } = useSelector((state: PolicyRootState) => state.policy)
+
+  useEffect(() => {
+    if (polygon.length > 0) {
+      const geofenceCoords = polygon.map(coord => {
+        const latLong = coord.split(',')
+        return { lat: Number(latLong[0].trim()), lng: Number(latLong[1].trim()) }
+      })
+      setPolygonPath(geofenceCoords)
+    }
+  }, [polygon])
 
   const handleClearPolygon = () => {
     setPolygonPath([])
