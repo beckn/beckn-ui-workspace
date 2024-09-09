@@ -36,10 +36,10 @@ const slice = createSlice({
   },
   extraReducers: builder => {
     builder
-      .addMatcher(extendedAuthApi.endpoints.driverLogin.matchPending, (state, action) => {
+      .addMatcher(extendedAuthApi.endpoints.policyLogin.matchPending, (state, action) => {
         console.log('pending', action)
       })
-      .addMatcher(extendedAuthApi.endpoints.driverLogin.matchFulfilled, (state, action) => {
+      .addMatcher(extendedAuthApi.endpoints.policyLogin.matchFulfilled, (state, action) => {
         console.log('fulfilled', action)
         state.user = action.payload.user
         state.jwt = action.payload.jwt
@@ -58,7 +58,7 @@ const slice = createSlice({
           })
         }
       })
-      .addMatcher(extendedAuthApi.endpoints.driverLogin.matchRejected, (state, action) => {
+      .addMatcher(extendedAuthApi.endpoints.policyLogin.matchRejected, (state, action) => {
         console.log('rejected', action)
       })
   }

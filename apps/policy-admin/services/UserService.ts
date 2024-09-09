@@ -8,9 +8,9 @@ interface SignInRequest {
 
 const extendedAuthApi = Api.injectEndpoints({
   endpoints: build => ({
-    driverLogin: build.mutation<SignInResponse, SignInRequest>({
+    policyLogin: build.mutation<SignInResponse, SignInRequest>({
       query: credentials => ({
-        url: '/driver-app/login',
+        url: '/auth',
         method: 'POST',
         body: credentials
       })
@@ -18,10 +18,10 @@ const extendedAuthApi = Api.injectEndpoints({
   })
 })
 
-export const { useDriverLoginMutation } = extendedAuthApi
+export const { usePolicyLoginMutation } = extendedAuthApi
 
 export const {
-  endpoints: { driverLogin }
+  endpoints: { policyLogin }
 } = extendedAuthApi
 
 export default extendedAuthApi
