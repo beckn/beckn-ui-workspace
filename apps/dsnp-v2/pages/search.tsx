@@ -1,67 +1,57 @@
 import React, { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
-import { Box, Flex, Image } from '@chakra-ui/react'
-import { useRouter } from 'next/router'
-import { toBinary } from '@utils/common-utils'
-import { parsedSearchlist } from '@utils/search-results.utils'
-import { ProductCard } from '@beckn-ui/becknified-components'
-import { BottomModal } from '@beckn-ui/molecules'
-import { discoveryActions } from '@store/discovery-slice'
-import { useBreakpoint } from '@chakra-ui/react'
-import SearchBar from '../components/header/SearchBar'
-import { useLanguage } from '../hooks/useLanguage'
-import { ParsedItemModel } from '@lib/types/beckn/search'
-import { DOMAIN } from '@lib/config'
-import LoaderWithMessage from '@components/loader/LoaderWithMessage'
-import Filter from '../components/filter/Filter'
-import { LocalStorage } from '@lib/types'
 import axios from '@services/axios'
+import { useDispatch } from 'react-redux'
+import { useRouter } from 'next/router'
 
-//Mock data for testing search API. Will remove after the resolution of CORS issue
+import { parseSearchlist, SearchAndDiscover } from '@beckn-ui/common'
+import { useLanguage } from '@hooks/useLanguage'
+import { ParsedItemModel } from '@beckn-ui/common/lib/types'
+import { discoveryActions } from '@beckn-ui/common/src/store/discovery-slice'
+import { DOMAIN } from '@lib/config'
+import { Product } from '@beckn-ui/becknified-components'
+import { testIds } from '@shared/dataTestIds'
 
 const Search = () => {
   const [items, setItems] = useState<ParsedItemModel[]>([])
   const [originalItems, setOriginalItems] = useState<ParsedItemModel[]>([])
-  const [sortBy, setSortBy] = useState<string>('')
   const router = useRouter()
-  const [searchKeyword, setSearchKeyword] = useState(router.query?.searchTerm || '')
+  const [searchKeyword, setSearchKeyword] = useState<string>((router.query?.searchTerm as string) || '')
+
   const [isLoading, setIsLoading] = useState(false)
   const [isFilterOpen, setIsFilterOpen] = useState(false)
-  const breakpoint = useBreakpoint()
-  const mobileBreakpoints = ['base', 'sm']
-  const isMediumScreen = breakpoint === 'md'
-  const isSmallScreen = mobileBreakpoints.includes(breakpoint)
-  const handleFilterClose = () => {
-    setIsFilterOpen(false)
-  }
+
   const dispatch = useDispatch()
   const { t } = useLanguage()
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
-  const searchPayload = {
-    context: {
-      domain: DOMAIN
-    },
-    searchString: searchKeyword,
-    fulfillment: {
-      type: 'Delivery',
-      stops: [
-        {
-          location: '28.4594965,77.0266383'
-        }
-      ]
-    }
-  }
-
   const fetchDataForSearch = () => {
     if (!searchKeyword) return
     setIsLoading(true)
+
+    const searchPayload = {
+      context: {
+        domain: DOMAIN
+      },
+      searchString: searchKeyword,
+      category: {
+        categoryCode: router.query.category || 'Retail'
+      },
+      fulfillment: {
+        type: 'Delivery',
+        stops: [
+          {
+            location: '28.4594965,77.0266383'
+          }
+        ]
+      }
+    }
+
     axios
       .post(`${apiUrl}/search`, searchPayload)
       .then(res => {
         dispatch(discoveryActions.addTransactionId({ transactionId: res.data.data[0].context.transaction_id }))
-        const parsedSearchItems = parsedSearchlist(res.data.data)
+        const parsedSearchItems = parseSearchlist(res.data.data)
         dispatch(discoveryActions.addProducts({ products: parsedSearchItems }))
         setItems(parsedSearchItems)
         setOriginalItems(parsedSearchItems)
@@ -79,7 +69,6 @@ const Search = () => {
       window.dispatchEvent(new Event('storage-optiontags'))
       fetchDataForSearch()
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchKeyword])
 
   useEffect(() => {
@@ -92,12 +81,19 @@ const Search = () => {
     }
   }, [])
 
-  const handleImageClick = () => {
+  const handleFilterOpen = () => {
     setIsFilterOpen(!isFilterOpen)
   }
-  const handleApplyFilter = (sortBy: string) => {
-    setSortBy(sortBy)
 
+  const handleFilterClose = () => {
+    setIsFilterOpen(false)
+  }
+
+  const handleResetFilter = () => {
+    setItems(originalItems)
+  }
+
+  const handleApplyFilter = (sortBy: string) => {
     const sortedItemsCopy = [...originalItems]
 
     if (sortBy === 'LowtoHigh') {
@@ -105,149 +101,54 @@ const Search = () => {
     } else if (sortBy === 'HightoLow') {
       sortedItemsCopy.sort((a, b) => parseFloat(b.item.price.value) - parseFloat(a.item.price.value))
     } else if (sortBy === 'RatingLowtoHigh') {
-      sortedItemsCopy.sort((a, b) => parseFloat(a.item.rating) - parseFloat(b.item.rating))
+      sortedItemsCopy.sort((a, b) => parseFloat(a.item.rating!) - parseFloat(b.item.rating!))
     } else if (sortBy === 'RatingHightoLow') {
-      sortedItemsCopy.sort((a, b) => parseFloat(b.item.rating) - parseFloat(a.item.rating))
+      sortedItemsCopy.sort((a, b) => parseFloat(b.item.rating!) - parseFloat(a.item.rating!))
     }
 
     setItems(sortedItemsCopy)
     setIsFilterOpen(false)
   }
 
-  const handleResetFilter = () => {
-    setItems(originalItems)
-  }
-  const handleCancelFilter = () => {
-    setIsFilterOpen(false)
+  const handleViewDetailsClickHandler = (selectedItem: ParsedItemModel, product: Product) => {
+    const { item } = selectedItem
+    dispatch(discoveryActions.addSingleProduct({ product: selectedItem }))
+    router.push({
+      pathname: '/product',
+      query: {
+        id: item.id,
+        search: searchKeyword
+      }
+    })
+    localStorage.setItem('selectCardHeaderText', JSON.stringify(product.name))
   }
 
   return (
-    <Box
-      className="hideScroll"
-      maxH="calc(100vh - 95px)"
-      overflowY={'scroll'}
-    >
-      <Box display="flex">
-        {!isSmallScreen && !isMediumScreen && (
-          <Filter
-            handleApplyFilter={handleApplyFilter}
-            handleResetFilter={handleResetFilter}
-          />
-        )}
-        <Box
-          w="100%"
-          ml={['unset', 'unset', 'unset', '36px']}
-        >
-          <Box
-            display="flex"
-            alignItems="center"
-          >
-            <SearchBar
-              searchString={searchKeyword}
-              handleChange={(text: string) => {
-                setSearchKeyword(text)
-                localStorage.removeItem('optionTags')
-                localStorage.setItem(
-                  'optionTags',
-                  JSON.stringify({
-                    name: text
-                  })
-                )
-                window.dispatchEvent(new Event('storage-optiontags'))
-                fetchDataForSearch()
-              }}
-            />
-            {(isSmallScreen || isMediumScreen) && (
-              <Image
-                onClick={handleImageClick}
-                cursor={'pointer'}
-                src="./images/filter-btn.svg"
-                alt=""
-              />
-            )}
-          </Box>
-          {isSmallScreen && (
-            <BottomModal
-              isOpen={isFilterOpen}
-              onClose={handleFilterClose}
-            >
-              <Filter
-                handleApplyFilter={handleApplyFilter}
-                handleResetFilter={handleResetFilter}
-                handleCancelFilter={handleCancelFilter}
-              />
-            </BottomModal>
-          )}
-          {isMediumScreen && isFilterOpen && (
-            <Box
-              position={'absolute'}
-              zIndex="9"
-              backgroundColor={'#fff'}
-              left="28%"
-            >
-              <Filter
-                handleApplyFilter={handleApplyFilter}
-                handleResetFilter={handleResetFilter}
-              />
-            </Box>
-          )}
-
-          <Box>
-            {isLoading ? (
-              <Box
-                display={'grid'}
-                height={'calc(100vh - 300px)'}
-                alignContent={'center'}
-              >
-                <LoaderWithMessage
-                  loadingText={t.pleaseWait}
-                  loadingSubText={t.searchLoaderSubText}
-                />
-              </Box>
-            ) : (
-              <Flex
-                flexWrap={'wrap'}
-                w={['100%', '100%', '51%', '100%']}
-                margin="0 auto"
-              >
-                {items.map((singleItem, idx) => {
-                  const { item } = singleItem
-                  const product = {
-                    id: item.id,
-                    images: item.images.map(singleImage => singleImage.url),
-                    name: item.name,
-                    price: item.price.value,
-                    rating: item.rating,
-                    // shortDesc: item.name.replace(/<[^>]+>/g, '').slice(0, 50)
-                    source: 'Sold By',
-                    sourceText: items[0].providerName
-                  }
-                  return (
-                    <ProductCard
-                      key={idx}
-                      productClickHandler={e => {
-                        e.preventDefault()
-                        dispatch(discoveryActions.addSingleProduct({ product: singleItem }))
-                        router.push({
-                          pathname: '/product',
-                          query: {
-                            id: item.id,
-                            search: searchKeyword
-                          }
-                        })
-                        localStorage.setItem('selectCardHeaderText', product.name)
-                      }}
-                      product={product}
-                      currency={item.price.currency}
-                    />
-                  )
-                })}
-              </Flex>
-            )}
-          </Box>
-        </Box>
-      </Box>
-    </Box>
+    <SearchAndDiscover
+      items={items}
+      searchProps={{
+        searchKeyword: searchKeyword as string,
+        setSearchKeyword,
+        fetchDataOnSearch: fetchDataForSearch
+      }}
+      filterProps={{
+        isFilterOpen: isFilterOpen,
+        handleFilterOpen,
+        handleFilterClose,
+        handleResetFilter,
+        handleApplyFilter
+      }}
+      loaderProps={{
+        isLoading,
+        loadingText: t.pleaseWait,
+        loadingSubText: t.searchLoaderSubText,
+        dataTest: testIds.loadingIndicator
+      }}
+      catalogProps={{
+        viewDetailsClickHandler: handleViewDetailsClickHandler
+      }}
+      noProduct={key => t.noProduct}
+    />
   )
 }
 
