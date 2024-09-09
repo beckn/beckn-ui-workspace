@@ -106,6 +106,13 @@ const ViewInformation = () => {
               placeholder="Select"
               width={'45.2%'}
               value={policyStatus}
+              color={
+                policyStatus === PolicyStatusType.ACTIVE
+                  ? 'green'
+                  : policyStatus === PolicyStatusType.INACTIVE
+                    ? 'red'
+                    : 'blue'
+              }
               onChange={event => setPolicyStatus(event.target.value || policyStatus)}
             >
               {getStatusDrodpwnItems(policyStatus).map((statusType, index) => (

@@ -3,6 +3,7 @@ import { Box, Divider, Image } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import Styles from './CustomDrawer.module.css'
 import hamburgerIcon from '@public/images/hamburger.svg'
+import { useRouter } from 'next/router'
 
 interface CustomDrawer {
   isOpen: boolean
@@ -15,6 +16,8 @@ const optionMenu = [{ id: 'home', label: 'Home' }]
 const CustomDrawer = (props: CustomDrawer) => {
   const { isOpen, children, handleDrawerToggle } = props
   const [selected, setSelected] = useState<string>('0')
+
+  const router = useRouter()
 
   return (
     <>
@@ -59,6 +62,7 @@ const CustomDrawer = (props: CustomDrawer) => {
                   onClick={() => {
                     console.log('called onClick', option.id)
                     setSelected(option.id)
+                    router.push('/')
                   }}
                 >
                   <Typography
