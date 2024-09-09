@@ -3,16 +3,18 @@ import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, 
 import storage from 'redux-persist/lib/storage'
 import authReducer from './auth-slice'
 import api from '@services/api'
+import policyReducer from './policy.slice'
 
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['auth', 'rider', 'ridestatus']
+  whitelist: ['auth', 'policy']
 }
 
 const appReducer = combineReducers({
   auth: authReducer,
-  [api.reducerPath]: api.reducer
+  [api.reducerPath]: api.reducer,
+  policy: policyReducer
 })
 
 const rootReducer = (state: any, action: any) => {

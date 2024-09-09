@@ -47,7 +47,7 @@ const defaultCenter = {
 }
 
 const DynamicGeofenceMap = (props: DynamicGeofenceMapProps) => {
-  const { polygonPath, updateCoordinates, handleMapClick } = props
+  const { enableSearch = true, editable = true, polygonPath, updateCoordinates } = props
   const [autocomplete, setAutocomplete] = React.useState(null)
   const [libraries] = useState(['places', 'drawing'])
 
@@ -60,23 +60,11 @@ const DynamicGeofenceMap = (props: DynamicGeofenceMapProps) => {
   }
 
   const [focusedMapPosition, setFocusedMapPosition] = useState(cityLatLng)
-  // const policyFormDataAndActions = usePolicyForm();
 
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY!,
     libraries: libraries as any
   })
-
-  useEffect(() => {
-    // const coordinatesData = policyFormDataAndActions.polygon;
-    // const CordinateResult = coordinatesData.map((location) => {
-    //   const [lat, lng] = location.split(",");
-    //   return { lat: parseFloat(lat), lng: parseFloat(lng) };
-    // });
-    // if (policyFormDataAndActions.polygon.length !== 0) {
-    //   setCoordinates(CordinateResult);
-    // }
-  }, [])
 
   const onAutoCompleteLoad = (autocomplete: any) => [setAutocomplete(autocomplete)]
 
@@ -117,27 +105,29 @@ const DynamicGeofenceMap = (props: DynamicGeofenceMapProps) => {
             fullscreenControl: false
           }}
         >
-          <MarkerF position={focusedMapPosition} />
+          {editable && <MarkerF position={focusedMapPosition} />}
 
-          <DrawingManager
-            onPolygonComplete={onPolygonComplete}
-            drawingMode={google.maps.drawing.OverlayType.POLYGON}
-            options={{
-              drawingControl: false,
-              drawingControlOptions: {
-                drawingModes: [google.maps.drawing.OverlayType.POLYGON]
-              },
-              polygonOptions: {
-                fillColor: 'red',
-                fillOpacity: 0.2,
-                strokeColor: 'red',
-                strokeOpacity: 0.5,
-                strokeWeight: 2,
-                editable: true,
-                draggable: false
-              }
-            }}
-          />
+          {editable && (
+            <DrawingManager
+              onPolygonComplete={onPolygonComplete}
+              drawingMode={google.maps.drawing.OverlayType.POLYGON}
+              options={{
+                drawingControl: false,
+                drawingControlOptions: {
+                  drawingModes: [google.maps.drawing.OverlayType.POLYGON]
+                },
+                polygonOptions: {
+                  fillColor: 'red',
+                  fillOpacity: 0.2,
+                  strokeColor: 'red',
+                  strokeOpacity: 0.5,
+                  strokeWeight: 2,
+                  editable: editable,
+                  draggable: false
+                }
+              }}
+            />
+          )}
 
           {polygonPath?.length > 0 && (
             <Polygon
@@ -147,23 +137,24 @@ const DynamicGeofenceMap = (props: DynamicGeofenceMapProps) => {
                 fillColor: '#01326A',
                 strokeOpacity: 0.8,
                 fillOpacity: 0.35,
-                strokeWeight: 2,
-                editable: true
+                strokeWeight: 2
               }}
-              editable={true}
+              editable={editable}
             />
           )}
 
-          <Autocomplete
-            onLoad={onAutoCompleteLoad}
-            onPlaceChanged={onPlaceChanged}
-          >
-            <Input
-              type="text"
-              placeholder="Enter a location"
-              style={autoCompleteInputStyle}
-            />
-          </Autocomplete>
+          {enableSearch && (
+            <Autocomplete
+              onLoad={onAutoCompleteLoad}
+              onPlaceChanged={onPlaceChanged}
+            >
+              <Input
+                type="text"
+                placeholder="Enter a location"
+                style={autoCompleteInputStyle}
+              />
+            </Autocomplete>
+          )}
         </GoogleMap>
       )}
     </>

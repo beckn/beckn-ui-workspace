@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import {
   Box,
   Button,
@@ -18,18 +18,119 @@ import CustomDatePicker from '@components/customDatePicker'
 import { Typography } from '@beckn-ui/molecules'
 import { useRouter } from 'next/router'
 import addIcon from '@public/images/plus_icon.svg'
-import { cities, countries, infoCategories, mockedRulesData } from '@lib/constants'
+import { applicableToOptions, cities, countries, infoCategories } from '@lib/constants'
 import CustomButton from '@components/Button/CustomButton'
+import { useDispatch, useSelector } from 'react-redux'
+import {
+  clearPolicyMetaData,
+  PolicyRootState,
+  updateApplicableTo,
+  updateCity,
+  updateCountry,
+  updateDescription,
+  updateEndDate,
+  updatePolicyActivationStatus,
+  updatepolicyDocuments,
+  updatePolicyName,
+  updatePolicyOwner,
+  updatePolicyType,
+  updateRules,
+  updateStartDate
+} from '@store/policy.slice'
+import MultiSelectDropdown from '@components/CheckBoxSelect/checkBoxSelect'
+import { PolicyType, RulesTemplate } from '@lib/types/metaData'
+import { useCreatePolicyMutation } from '@services/PolicyService'
+import { feedbackActions } from '@beckn-ui/common'
 
 function AddInformationMetadata() {
-  const [startDate, setStartDate] = useState(new Date())
-  const [endDate, setEndDate] = useState(new Date())
-  const [isChecked, setIsChecked] = useState<boolean>(true)
-
   const router = useRouter()
+  const dispatch = useDispatch()
+  const {
+    policyName,
+    policyType,
+    policyOwner,
+    description,
+    country,
+    city,
+    startDate,
+    endDate,
+    policyDocuments,
+    applicableTo,
+    rules,
+    polygon,
+    isActivate
+  } = useSelector((state: PolicyRootState) => state.policy)
+
+  const [createPolicy] = useCreatePolicyMutation()
 
   const handleOnSwitch = () => {
-    setIsChecked(!isChecked)
+    dispatch(updatePolicyActivationStatus(!isActivate))
+  }
+
+  const getRulesJson = useCallback(() => {
+    const rules: RulesTemplate = {
+      policy: {
+        type: policyType,
+        owner: { descriptor: { name: policyOwner, contact: { email: 'support@moh.gov.in' } } },
+        descriptor: { name: policyName, short_desc: description },
+        coverage: [
+          {
+            spatial: [{ country, city }],
+            temporal: [{ range: { start: startDate, end: endDate } }],
+            subscribers: applicableTo.map(to => {
+              return { type: to }
+            })
+          }
+        ],
+        geofences: [{ polygon }],
+        domain: 'mobility',
+        media: [{ mimetype: '', url: policyDocuments }],
+        status: (isActivate ? 'ACTIVE' : 'INACTIVE').toLowerCase()
+      }
+    }
+    return rules
+  }, [
+    policyName,
+    policyType,
+    policyOwner,
+    description,
+    country,
+    city,
+    startDate,
+    endDate,
+    policyDocuments,
+    applicableTo,
+    polygon,
+    isActivate
+  ])
+
+  const handleSavePolicy = async () => {
+    try {
+      await createPolicy(getRulesJson()).unwrap()
+      dispatch(
+        feedbackActions.setToastData({
+          toastData: {
+            message: 'Success',
+            display: true,
+            type: 'success',
+            description: 'Policy saved successfully!'
+          }
+        })
+      )
+      router.push('/')
+    } catch (error) {
+      console.error('An error occurred while create policy:', error)
+      dispatch(
+        feedbackActions.setToastData({
+          toastData: {
+            message: 'Error',
+            display: true,
+            type: 'error',
+            description: 'Something went wrong, please try again'
+          }
+        })
+      )
+    }
   }
 
   return (
@@ -70,7 +171,7 @@ function AddInformationMetadata() {
             />
             <Switch
               size={'lg'}
-              isChecked={isChecked}
+              isChecked={isActivate}
               colorScheme={'green'}
               onChange={handleOnSwitch}
             />
@@ -89,18 +190,24 @@ function AddInformationMetadata() {
             <Input
               type="text"
               placeholder="Enter Title"
+              value={policyName}
+              onChange={event => dispatch(updatePolicyName(event.target.value))}
             />
           </FormControl>
 
           <FormControl mb="1rem">
             <FormLabel>Information Category</FormLabel>
-            <Select placeholder="Select Information Category">
+            <Select
+              placeholder="Select Information Category"
+              value={policyType}
+              onChange={event => dispatch(updatePolicyType(event.target.value || ''))}
+            >
               {infoCategories.map((category, index) => (
                 <option
                   key={index}
-                  value={category.value.toLowerCase()}
+                  value={category.value}
                 >
-                  {category.name}
+                  {category.label}
                 </option>
               ))}
             </Select>
@@ -111,13 +218,19 @@ function AddInformationMetadata() {
             <Input
               type="text"
               placeholder="Enter Information Source Owner Name"
+              value={policyOwner}
+              onChange={event => dispatch(updatePolicyOwner(event.target.value))}
             />
           </FormControl>
         </HStack>
 
         <FormControl mb="1rem">
           <FormLabel>Description</FormLabel>
-          <Textarea placeholder="Add Description" />
+          <Textarea
+            placeholder="Add Description"
+            value={description}
+            onChange={event => dispatch(updateDescription(event.target.value))}
+          />
         </FormControl>
 
         <HStack
@@ -126,13 +239,17 @@ function AddInformationMetadata() {
         >
           <FormControl mb="1rem">
             <FormLabel>Country</FormLabel>
-            <Select placeholder="Select Country">
+            <Select
+              placeholder="Select Country"
+              value={country}
+              onChange={event => dispatch(updateCountry(event.target.value || ''))}
+            >
               {countries.map((country, index) => (
                 <option
                   key={index}
-                  value={country.value.toLowerCase()}
+                  value={country.value}
                 >
-                  {country.name}
+                  {country.label}
                 </option>
               ))}
             </Select>
@@ -140,13 +257,17 @@ function AddInformationMetadata() {
 
           <FormControl mb="1rem">
             <FormLabel>City</FormLabel>
-            <Select placeholder="Select City">
+            <Select
+              placeholder="Select City"
+              value={city}
+              onChange={event => dispatch(updateCity(event.target.value || ''))}
+            >
               {cities.map((city, index) => (
                 <option
                   key={index}
-                  value={city.value.toLowerCase()}
+                  value={city.value}
                 >
-                  {city.name}
+                  {city.label}
                 </option>
               ))}
             </Select>
@@ -155,9 +276,9 @@ function AddInformationMetadata() {
           <FormControl mb="1rem">
             <FormLabel>From</FormLabel>
             <CustomDatePicker
-              selected={startDate}
+              selected={new Date(startDate)}
               placeholderText="Select 'from' date"
-              onChange={date => setStartDate(date!)}
+              onChange={date => dispatch(updateStartDate(date?.toISOString()))}
               dateFormat="dd-MM-yyyy"
             />
           </FormControl>
@@ -165,9 +286,9 @@ function AddInformationMetadata() {
           <FormControl mb="1rem">
             <FormLabel>To</FormLabel>
             <CustomDatePicker
-              selected={endDate}
+              selected={new Date(endDate)}
               placeholderText="Select 'to' date"
-              onChange={date => setEndDate(date!)}
+              onChange={date => dispatch(updateEndDate(date?.toISOString()))}
               dateFormat="dd-MM-yyyy"
             />
           </FormControl>
@@ -182,59 +303,63 @@ function AddInformationMetadata() {
             <Input
               type="text"
               placeholder="Add Source URL"
+              value={policyDocuments}
+              onChange={event => dispatch(updatepolicyDocuments(event.target.value))}
             />
           </FormControl>
 
           <FormControl>
             <FormLabel>Applicable To</FormLabel>
-            <Select
-              placeholder="Select"
-              width={'45.2%'}
-            >
-              <option value="bangalore">BAP</option>
-              <option value="new york">BPP</option>
-            </Select>
+            <MultiSelectDropdown
+              options={applicableToOptions}
+              selectedOptions={applicableTo}
+              setSelectedOptions={data => {
+                dispatch(updateApplicableTo(data))
+              }}
+            />
           </FormControl>
         </HStack>
       </Box>
 
-      <Box
-        p={4}
-        border="1px solid #72767e"
-      >
-        <FormControl>
-          <FormLabel>Geofence</FormLabel>
-          <Box
-            width="fit-content"
-            border={'1px dotted #004e92 !important'}
-            padding="1rem 2rem"
-            borderRadius={'md'}
-            cursor="pointer"
-            onClick={() => {
-              router.push('/createGeofence')
-            }}
-          >
-            <Flex
-              flexDirection={'row'}
-              alignItems="center"
-              mr="1rem"
+      {policyType === PolicyType.GEOFENCE && (
+        <Box
+          p={4}
+          border="1px solid #72767e"
+        >
+          <FormControl>
+            <FormLabel>Geofence</FormLabel>
+            <Box
+              width="fit-content"
+              border={'1px dotted #004e92 !important'}
+              padding="1rem 2rem"
+              borderRadius={'md'}
               cursor="pointer"
+              onClick={() => {
+                router.push('/createGeofence')
+              }}
             >
-              <Image
-                src={addIcon}
-                alt="add_icon"
-                width={'1rem'}
-                height={'1rem'}
-              />
-              <Typography
-                text="Draw geofence on a map"
-                fontSize="14px"
-                color="#013b76"
-              />
-            </Flex>
-          </Box>
-        </FormControl>
-      </Box>
+              <Flex
+                flexDirection={'row'}
+                alignItems="center"
+                mr="1rem"
+                cursor="pointer"
+              >
+                <Image
+                  src={addIcon}
+                  alt="add_icon"
+                  width={'1rem'}
+                  height={'1rem'}
+                />
+                <Typography
+                  text="Draw geofence on a map"
+                  fontSize="14px"
+                  color="#013b76"
+                />
+              </Flex>
+            </Box>
+          </FormControl>
+        </Box>
+      )}
 
       <Box
         p={4}
@@ -260,7 +385,7 @@ function AddInformationMetadata() {
               overflowX="hidden"
               lineHeight={'normal'}
             >
-              {JSON.stringify(mockedRulesData, undefined, 4)}
+              {applicableTo.length > 0 && JSON.stringify(getRulesJson(), undefined, 4)}
             </Code>
           </Box>
         </FormControl>
@@ -270,7 +395,10 @@ function AddInformationMetadata() {
         <CustomButton
           variant="outline"
           text="Go back"
-          onClick={() => router.push('/')}
+          onClick={() => {
+            dispatch(clearPolicyMetaData())
+            router.push('/')
+          }}
           mr="1rem"
         />
         <CustomButton
@@ -278,7 +406,7 @@ function AddInformationMetadata() {
           bgGradient="linear(180deg, #000428 0%, #004e92 100%) !important"
           text="Save"
           _hover={{ opacity: 0.9 }}
-          onClick={() => {}}
+          onClick={handleSavePolicy}
         />
       </Flex>
     </Box>

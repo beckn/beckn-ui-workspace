@@ -4,7 +4,8 @@ export interface GeoCoordinate {
 }
 
 export interface DynamicGeofenceMapProps {
+  enableSearch?: boolean
+  editable?: boolean
   polygonPath: GeoCoordinate[]
   updateCoordinates: (points: GeoCoordinate[]) => void
-  handleMapClick: (event: google.maps.MapMouseEvent) => void
 }

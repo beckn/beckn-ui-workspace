@@ -69,8 +69,8 @@ const Header = (props: HeaderProps) => {
           >
             <Avatar
               size="sm"
-              name="Satya"
-              src="https://bit.ly/tioluwani-kolawole"
+              backgroundColor={'#bdbdbd'}
+              name={user?.username}
             />
 
             <Typography

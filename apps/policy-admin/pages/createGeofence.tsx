@@ -3,39 +3,34 @@ import { Box, Button, Flex } from '@chakra-ui/react'
 import CustomButton from '@components/Button/CustomButton'
 import DynamicGeofenceMap from '@components/DynamicGeofenceMap'
 import { GeoCoordinate } from '@lib/types/geofence'
+import { PolicyRootState, updatePolygon } from '@store/policy.slice'
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 
 const CreateGeofence = () => {
   const [polygonPath, setPolygonPath] = useState<GeoCoordinate[]>([])
   const [coordinatesForForm, setCoordinatesForForm] = useState<string[]>([])
 
   const router = useRouter()
+  const dispatch = useDispatch()
 
-  const handleMapClick = (event: google.maps.MapMouseEvent) => {
-    if (event.latLng) {
-      const lat = event.latLng?.lat()!
-      const lng = event.latLng?.lng()!
-      const newPoint: GeoCoordinate = { lat, lng }
-      setPolygonPath(prev => [...prev, newPoint])
-      setCoordinatesForForm(prev => [...prev, `${lat},${lng}`])
-    }
-  }
-  console.log(polygonPath, coordinatesForForm)
   const handleClearPolygon = () => {
     setPolygonPath([])
     setCoordinatesForForm([])
-    // policyFormDataAndActions.updatePolygon([]);
+    dispatch(updatePolygon([]))
   }
 
   const handleSaveCoordinates = () => {
-    // policyFormDataAndActions.updatePolygon(coordinatesForForm);
+    dispatch(updatePolygon(coordinatesForForm))
     router.push('/createPolicy')
   }
+
   const updateCoordinates = (path: GeoCoordinate[]) => {
     setPolygonPath(path)
-    setCoordinatesForForm(path.map(point => `${point.lat},${point.lng}`))
+    setCoordinatesForForm(path.map(point => `${point.lat}, ${point.lng}`))
   }
+
   return (
     <>
       <Flex
@@ -60,7 +55,6 @@ const CreateGeofence = () => {
         <DynamicGeofenceMap
           polygonPath={polygonPath}
           updateCoordinates={updateCoordinates}
-          handleMapClick={handleMapClick}
         />
       </Box>
       <Flex width={'31rem'}>
