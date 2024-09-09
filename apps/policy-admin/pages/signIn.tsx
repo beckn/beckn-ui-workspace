@@ -5,13 +5,13 @@ import { signInValidateForm } from '@beckn-ui/common'
 import { useLanguage } from '@hooks/useLanguage'
 import { Box } from '@chakra-ui/react'
 import Router, { useRouter } from 'next/router'
-import { useDriverLoginMutation } from '@services/UserService'
+import { usePolicyLoginMutation } from '@services/UserService'
 import PortalIcon from '@public/images/online-taxi-booking.svg'
 
 const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
   const [formData, setFormData] = useState<SignInFormProps>(initialFormData)
   const [formErrors, setFormErrors] = useState<FormErrors>({ email: '', password: '' })
-  const [driverLogin, { isLoading }] = useDriverLoginMutation()
+  const [policyLogin, { isLoading }] = usePolicyLoginMutation()
 
   const { t } = useLanguage()
   const router = useRouter()
@@ -46,19 +46,18 @@ const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
 
   // Handle sign-in action
   const handleSignIn = async () => {
-    router.push('/')
-    // const signInData = {
-    //   email: formData.email,
-    //   password: formData.password
-    // }
+    const signInData = {
+      email: formData.email,
+      password: formData.password
+    }
 
-    // try {
-    //   await driverLogin(signInData).unwrap()
-    //   Router.push('/')
-    // } catch (error) {
-    //   console.error('An error occurred:', error)
-    //   // Handle error state or display error message
-    // }
+    try {
+      await policyLogin(signInData).unwrap()
+      router.push('/')
+    } catch (error) {
+      console.error('An error occurred:', error)
+      // Handle error state or display error message
+    }
   }
 
   return (
