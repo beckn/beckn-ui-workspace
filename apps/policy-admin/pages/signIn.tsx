@@ -61,53 +61,55 @@ const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
   }
 
   return (
-    <BecknAuth
-      schema={{
-        logo: {
-          src: PortalIcon,
-          alt: 'netwrk portal logo'
-        },
-        buttons: [
-          {
-            text: t.signIn,
-            handleClick: handleSignIn,
-            disabled: !isFormFilled,
-            variant: 'solid',
-            colorScheme: 'primary',
-            isLoading: isLoading,
-            dataTest: 'login-button'
-          }
-          // {
-          //   text: t.signUp,
-          //   handleClick: () => router.push('/signUp'),
-          //   variant: 'outline',
-          //   colorScheme: 'primary',
-          //   disabled: isLoading,
-          //   dataTest: 'register-button'
-          // }
-        ],
-        inputs: [
-          {
-            type: 'text',
-            name: 'email',
-            label: t.enterEmailID,
-            value: formData.email,
-            handleChange: handleInputChange,
-            error: formErrors.email,
-            dataTest: 'input-email'
+    <Box mt="-80px">
+      <BecknAuth
+        schema={{
+          logo: {
+            src: PortalIcon,
+            alt: 'netwrk portal logo'
           },
-          {
-            type: 'password',
-            name: 'password',
-            label: t.enterPassword,
-            value: formData.password,
-            handleChange: handleInputChange,
-            error: formErrors.password,
-            dataTest: 'input-password'
-          }
-        ]
-      }}
-    />
+          buttons: [
+            {
+              text: t.signIn,
+              handleClick: handleSignIn,
+              disabled: !isFormFilled,
+              variant: 'solid',
+              colorScheme: 'primary',
+              isLoading: isLoading,
+              dataTest: 'login-button'
+            }
+            // {
+            //   text: t.signUp,
+            //   handleClick: () => router.push('/signUp'),
+            //   variant: 'outline',
+            //   colorScheme: 'primary',
+            //   disabled: isLoading,
+            //   dataTest: 'register-button'
+            // }
+          ],
+          inputs: [
+            {
+              type: 'text',
+              name: 'email',
+              label: t.enterEmailID,
+              value: formData.email,
+              handleChange: handleInputChange,
+              error: formErrors.email,
+              dataTest: 'input-email'
+            },
+            {
+              type: 'password',
+              name: 'password',
+              label: t.enterPassword,
+              value: formData.password,
+              handleChange: handleInputChange,
+              error: formErrors.password,
+              dataTest: 'input-password'
+            }
+          ]
+        }}
+      />
+    </Box>
   )
 }
 

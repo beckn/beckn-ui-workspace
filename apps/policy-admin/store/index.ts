@@ -4,6 +4,7 @@ import storage from 'redux-persist/lib/storage'
 import authReducer from './auth-slice'
 import api from '@services/api'
 import policyReducer from './policy.slice'
+import { feedbackReducer } from '@beckn-ui/common'
 
 const persistConfig = {
   key: 'root',
@@ -14,6 +15,7 @@ const persistConfig = {
 const appReducer = combineReducers({
   auth: authReducer,
   [api.reducerPath]: api.reducer,
+  feedback: feedbackReducer,
   policy: policyReducer
 })
 

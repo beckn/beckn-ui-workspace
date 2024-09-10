@@ -155,86 +155,98 @@ const DataTable = (props: DataTableProps) => {
           </Tr>
         </Thead>
         <Tbody>
-          {sortedData.map((item, index) => (
-            <Tr
-              key={index}
-              cursor="pointer"
-              _hover={{ backgroundColor: 'rgba(0, 0, 0, 0.04)' }}
-              onClick={() => {
-                router.push('/policyDetails')
-              }}
-            >
-              <Td borderBottom={'1px dotted #004e92!important'}>
+          {sortedData.length > 0 ? (
+            sortedData.map((item, index) => (
+              <Tr
+                key={index}
+                cursor="pointer"
+                _hover={{ backgroundColor: 'rgba(0, 0, 0, 0.04)' }}
+                onClick={() => {
+                  router.push('/policyDetails')
+                }}
+              >
+                <Td borderBottom={'1px dotted #004e92!important'}>
+                  <Typography
+                    text={item.title}
+                    style={{
+                      display: '-webkit-box',
+                      WebkitBoxOrient: 'vertical',
+                      WebkitLineClamp: '2',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'normal'
+                    }}
+                  />
+                </Td>
+                <Td borderBottom={'1px dotted #004e92!important'}>
+                  <Typography
+                    text={item.description}
+                    style={{
+                      display: '-webkit-box',
+                      WebkitBoxOrient: 'vertical',
+                      WebkitLineClamp: '2',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'normal'
+                    }}
+                  />
+                </Td>
+                <Td borderBottom={'1px dotted #004e92!important'}>
+                  <Badge
+                    variant="subtle"
+                    textTransform="lowercase"
+                    colorScheme={
+                      item.status === 'active'
+                        ? 'green'
+                        : item.status === 'inactive'
+                          ? 'red'
+                          : item.status === 'new'
+                            ? 'purple'
+                            : 'blue'
+                    }
+                  >
+                    <Typography text={item.status} />
+                  </Badge>
+                </Td>
+                <Td borderBottom={'1px dotted #004e92!important'}>
+                  <Typography
+                    text={formatDate(item.startDate)}
+                    style={{
+                      display: '-webkit-box',
+                      WebkitBoxOrient: 'vertical',
+                      WebkitLineClamp: '2',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'normal'
+                    }}
+                  />
+                </Td>
+                <Td borderBottom={'1px dotted #004e92!important'}>
+                  <Typography
+                    text={formatDate(item.endDate)}
+                    style={{
+                      display: '-webkit-box',
+                      WebkitBoxOrient: 'vertical',
+                      WebkitLineClamp: '2',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'normal'
+                    }}
+                  />
+                </Td>
+              </Tr>
+            ))
+          ) : (
+            <Tr>
+              <Td colSpan={5}>
                 <Typography
-                  text={item.title}
-                  style={{
-                    display: '-webkit-box',
-                    WebkitBoxOrient: 'vertical',
-                    WebkitLineClamp: '2',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'normal'
-                  }}
-                />
-              </Td>
-              <Td borderBottom={'1px dotted #004e92!important'}>
-                <Typography
-                  text={item.description}
-                  style={{
-                    display: '-webkit-box',
-                    WebkitBoxOrient: 'vertical',
-                    WebkitLineClamp: '2',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'normal'
-                  }}
-                />
-              </Td>
-              <Td borderBottom={'1px dotted #004e92!important'}>
-                <Badge
-                  variant="subtle"
-                  textTransform="lowercase"
-                  colorScheme={
-                    item.status === 'active'
-                      ? 'green'
-                      : item.status === 'inactive'
-                        ? 'red'
-                        : item.status === 'new'
-                          ? 'purple'
-                          : 'blue'
-                  }
-                >
-                  <Typography text={item.status} />
-                </Badge>
-              </Td>
-              <Td borderBottom={'1px dotted #004e92!important'}>
-                <Typography
-                  text={formatDate(item.startDate)}
-                  style={{
-                    display: '-webkit-box',
-                    WebkitBoxOrient: 'vertical',
-                    WebkitLineClamp: '2',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'normal'
-                  }}
-                />
-              </Td>
-              <Td borderBottom={'1px dotted #004e92!important'}>
-                <Typography
-                  text={formatDate(item.endDate)}
-                  style={{
-                    display: '-webkit-box',
-                    WebkitBoxOrient: 'vertical',
-                    WebkitLineClamp: '2',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'normal'
-                  }}
+                  text="No rows"
+                  fontWeight="600"
+                  style={{ textAlign: 'center' }}
                 />
               </Td>
             </Tr>
-          ))}
+          )}
         </Tbody>
       </Table>
     </Box>

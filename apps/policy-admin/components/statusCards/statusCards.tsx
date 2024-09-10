@@ -1,11 +1,6 @@
 import React from 'react'
 import { Box, Grid, Text } from '@chakra-ui/react'
-
-interface StatusCardRootProps {
-  active: number
-  inactive: number
-  published: number
-}
+import { StatusCardRootProps } from '@pages/index'
 
 interface StatusCardProps {
   count: number
