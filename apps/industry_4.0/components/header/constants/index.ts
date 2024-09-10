@@ -26,6 +26,8 @@ const headerNames: PathnameObjectType = {
   '/profile': 'My Profile'
 }
 
+const headerFrenchNames = {}
+
 const headerBlackList = [
   '/checkoutPage',
   '/orderHistory',
@@ -84,6 +86,7 @@ export default {
     backIconList,
     headerNames,
     headerBlackList,
+    headerFrenchNames,
     cartIconBlackList,
     bottomHeaderBlackList,
     orderIconList,

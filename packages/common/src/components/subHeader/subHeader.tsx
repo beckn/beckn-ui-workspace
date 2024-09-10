@@ -10,7 +10,7 @@ import Qrcode from '../qrCode'
 import { useSelector } from 'react-redux'
 import { ICartRootState } from '../../../lib/types'
 import { getLocalStorage } from '../../utils'
-import { SubHeaderConstants, SubHeaderProps, SubHeaderQrScanerProps } from './subHeader.types'
+import { SubHeaderConstants, SubHeaderProps } from './subHeader.types'
 import { testIds } from '@shared/dataTestIds'
 
 const getHeaderTitleForPage = (
@@ -59,7 +59,7 @@ const SubHeader = (props: SubHeaderProps) => {
 
   const router = useRouter()
   const cartItems = useSelector((state: ICartRootState) => state?.cart?.items)
-  const storedHeaderText = getLocalStorage('selectCardHeaderText')
+  const storedHeaderText: any = getLocalStorage('selectCardHeaderText')
 
   const handleInvoiceModalClose = () => {
     setInvoiceModalOpen(false)

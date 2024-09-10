@@ -1,7 +1,7 @@
 import { Typography } from '@beckn-ui/molecules'
 import { Box, Divider, Image, useMediaQuery } from '@chakra-ui/react'
 import React, { useState } from 'react'
-import Styles from './CustomDrawer.module.css'
+import Styles from './customDrawer.module.css'
 import hamburgerIcon from '@public/images/hamburger.svg'
 import { useRouter } from 'next/router'
 
