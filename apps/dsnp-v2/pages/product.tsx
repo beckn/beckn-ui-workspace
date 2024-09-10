@@ -8,6 +8,7 @@ import CustomerReviews from '@components/UI/customerReviews/CustomerReviews'
 import { Box } from '@chakra-ui/react'
 import axios from '@services/axios'
 import { cartActions, DiscoveryRootState, feedbackActions, ParsedItemModel } from '@beckn-ui/common'
+import { SingleFeed } from '../types/singleFeed.types'
 
 const Product = () => {
   const selectedProduct: ParsedItemModel = useSelector((state: DiscoveryRootState) => state.discovery.selectedProduct)
@@ -17,12 +18,12 @@ const Product = () => {
   const [totalPrice, setTotalPrice] = useState<number>(Number(selectedProduct.item.price.value))
   const url = new URL(window.location.href)
   const reviewSubmitted = url.searchParams.get('reviewSubmitted')
-  const [feed, setFeed] = useState([])
+  const [feed, setFeed] = useState<SingleFeed[]>([])
   const productName = url.searchParams.get('productName')
   const productImage = url.searchParams.get('productImage')
 
   useEffect(() => {
-    if (!isEmpty(selectedProduct)) setTotalPrice(selectedProduct.item.price.value)
+    if (!isEmpty(selectedProduct)) setTotalPrice(Number(selectedProduct.item.price.value))
   }, [selectedProduct])
 
   const getReviews = async () => {
@@ -39,14 +40,14 @@ const Product = () => {
         return response.data.posts
       } catch (err) {
         console.log('Error', err)
-        throw Error(err)
+        throw err
       }
     }
   }
   useEffect(() => {
     getReviews().then(res => {
       setFeed(
-        res.filter(singleFeed => {
+        res.filter((singleFeed: SingleFeed) => {
           const content = JSON.parse(singleFeed.content)
           if (content.tag && content.tag.length > 0) {
             const url = new URL(content.tag[0].href)
@@ -69,11 +70,11 @@ const Product = () => {
           })
         )
       )
-      getDsnpProfiles(ids).then(profiles => setDsnpUserMap(profiles))
+      getDsnpProfiles(ids).then(profiles => setDsnpUserMap(profiles ?? new Map()))
     }
   }, [feed])
 
-  const getDsnpProfiles = async ids => {
+  const getDsnpProfiles = async (ids: string[]) => {
     const { accessToken, dsnpId } = getLocalStorage('dsnpAuth')
     const idMap = new Map(ids.map(id => [id, '']))
 
@@ -96,7 +97,7 @@ const Product = () => {
         return idMap
       } catch (err) {
         console.log('Error', err)
-        throw Error(err)
+        throw err
       }
     }
   }
