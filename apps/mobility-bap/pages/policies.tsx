@@ -67,7 +67,7 @@ const Policies = () => {
       <Flex
         p={[5, 4, 0, 4]}
         alignItems="center"
-        width={'56%'}
+        width={{ base: '56%', md: '36%' }}
       >
         <Typography
           text="Filter:"
@@ -101,10 +101,11 @@ const Policies = () => {
               borderColor="gray.200"
               borderRadius="md"
               boxShadow="md"
-              maxW="sm"
+              maxW="100%"
               bg="white"
               p={[2, 4, 6]}
               mb={'1rem'}
+              cursor="pointer"
               onClick={() => handleOpenViolatedPolicy(summary.id)}
             >
               <Flex
