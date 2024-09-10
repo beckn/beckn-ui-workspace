@@ -69,7 +69,7 @@ const SearchRideForm: React.FC<SearchRideFormProps> = () => {
   const selectResponse = useSelector((state: SelectRideRootState) => state.selectRide.selectResponse)
   const [initialize] = useInitMutation()
   const [fetchQuotes] = useSelectMutation()
-  const { provider, pickup, dropoff } = selectedRide
+  const { cabDetail, pickup, dropoff } = selectedRide
 
   useEffect(() => {
     if (Object.keys(selectedRide).length > 0) {
@@ -145,7 +145,7 @@ const SearchRideForm: React.FC<SearchRideFormProps> = () => {
     const distance = getDistance(pickup, dropoff)
     return (Number(fare) * distance).toFixed(2)
   }
-
+  console.log(cabDetail)
   return (
     <>
       {isLoading ? (
@@ -179,12 +179,12 @@ const SearchRideForm: React.FC<SearchRideFormProps> = () => {
                 justifyContent={'center'}
               >
                 <Typography
-                  text={provider?.cabDetails?.[0]?.name}
+                  text={cabDetail?.name}
                   fontSize="15px"
                   fontWeight="500"
                 />
                 <Typography
-                  text={provider?.cabDetails?.[0]?.waitTime}
+                  text={cabDetail?.waitTime}
                   fontSize="9px"
                   fontWeight="400"
                   color="#8A8D8E"
@@ -192,7 +192,7 @@ const SearchRideForm: React.FC<SearchRideFormProps> = () => {
               </Flex>
             </Flex>
             <Typography
-              text={`${getCurrencyWithFare(pickup.country!, getTotalFare(provider?.cabDetails?.[0]?.fare))}`}
+              text={`${getCurrencyWithFare(pickup.country!, getTotalFare(cabDetail?.fare))}`}
               fontSize="15px"
               fontWeight="700"
               color={theme.colors.primary[100]}

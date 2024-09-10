@@ -1,9 +1,10 @@
 import { PickUpDropOffModel } from '@beckn-ui/common'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { ParsedCabDataModel } from '@utils/cabDetails'
+import { CabDetails, ParsedCabDataModel } from '@utils/cabDetails'
 
 export interface RideDetailsModel {
   provider: ParsedCabDataModel
+  cabDetail: CabDetails
   pickup: PickUpDropOffModel
   dropoff: PickUpDropOffModel
 }
@@ -34,6 +35,7 @@ const discoverySlice = createSlice({
       action: PayloadAction<{
         rideDetails: {
           provider: ParsedCabDataModel
+          cabDetail: CabDetails
           pickup: PickUpDropOffModel
           dropoff: PickUpDropOffModel
         }

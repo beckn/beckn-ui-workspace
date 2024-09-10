@@ -14,7 +14,8 @@ export const getSelectPayload = (
   const pickup = inputData.pickup
   const dropoff = inputData.dropoff
 
-  const item = inputData.provider
+  const provider = inputData.provider
+  const item = inputData.cabDetail
 
   const resultData: SelectSingleData[] = []
 
@@ -28,13 +29,13 @@ export const getSelectPayload = (
   const orders: SelectOrder[] = []
 
   const selectedItem: SelectItem = {
-    id: item.cabDetails[0].id
+    id: item.id
   }
 
   orders.push({
     items: [selectedItem],
     provider: {
-      id: item.providerId
+      id: provider.providerId
     },
     fulfillments: [
       {
@@ -77,7 +78,8 @@ export const getInitPayload = async (
   const pickup = itemData.pickup
   const dropoff = itemData.dropoff
 
-  const item = itemData.provider
+  const provider = itemData.provider
+  const item = itemData.cabDetail
 
   const resultData: InitSingleData[] = []
 
@@ -91,13 +93,13 @@ export const getInitPayload = async (
   const orders: InitOrder[] = []
 
   const selectedItem: InitItem = {
-    id: item.cabDetails[0].id
+    id: item.id
   }
 
   orders.push({
     items: [selectedItem],
     provider: {
-      id: item.providerId
+      id: provider.providerId
     },
     fulfillments: [
       {

@@ -186,6 +186,7 @@ const SearchRide = () => {
                           handleClick={() =>
                             handleOnSelect(provider.transactionId, {
                               provider,
+                              cabDetail,
                               pickup,
                               dropoff
                             })

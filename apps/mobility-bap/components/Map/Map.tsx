@@ -74,50 +74,51 @@ const Map: React.FC<MapProps> = (props: MapProps) => {
   const anchorPoint = new window.google.maps.Point(41, 75)
   return (
     <>
-      <GoogleMap
-        options={mapOptions}
-        zoom={16}
-        center={formatCoords(origin)}
-        mapTypeId={google.maps.MapTypeId.ROADMAP}
-        mapContainerStyle={{ maxHeight: '100vh', height: '100vh' }}
-      >
-        {!rideSearchInProgress && (
-          <MarkerF
-            position={formatCoords(origin)}
-            icon={{
-              url: './images/marker.svg',
-              scaledSize: new window.google.maps.Size(100, 100),
-              anchor: anchorPoint
-            }}
-          />
-        )}
-        {rideSearchInProgress && (
-          <MarkerF
-            position={formatCoords(origin)}
-            icon={{
-              url: './images/ripple.svg',
-              scaledSize: new window.google.maps.Size(100, 100),
-              anchor: anchorPoint
-            }}
-          />
-        )}
-        {!rideSearchInProgress && (
-          <>
-            {directions && (
-              <DirectionsRenderer
-                directions={directions}
-                options={{
-                  suppressMarkers: true,
-                  polylineOptions: {
-                    strokeColor: '#088ed8',
-                    strokeOpacity: 1,
-                    strokeWeight: 8,
-                    geodesic: true
-                  }
-                }}
-              />
-            )}
-            {/* {directions && origin && (
+      {isLoaded && (
+        <GoogleMap
+          options={mapOptions}
+          zoom={16}
+          center={formatCoords(origin)}
+          mapTypeId={google.maps.MapTypeId.ROADMAP}
+          mapContainerStyle={{ maxHeight: '100vh', height: '100vh' }}
+        >
+          {!rideSearchInProgress && (
+            <MarkerF
+              position={formatCoords(origin)}
+              icon={{
+                url: './images/marker.svg',
+                scaledSize: new window.google.maps.Size(100, 100),
+                anchor: anchorPoint
+              }}
+            />
+          )}
+          {rideSearchInProgress && (
+            <MarkerF
+              position={formatCoords(origin)}
+              icon={{
+                url: './images/ripple.svg',
+                scaledSize: new window.google.maps.Size(100, 100),
+                anchor: anchorPoint
+              }}
+            />
+          )}
+          {!rideSearchInProgress && (
+            <>
+              {directions && (
+                <DirectionsRenderer
+                  directions={directions}
+                  options={{
+                    suppressMarkers: true,
+                    polylineOptions: {
+                      strokeColor: '#088ed8',
+                      strokeOpacity: 1,
+                      strokeWeight: 8,
+                      geodesic: true
+                    }
+                  }}
+                />
+              )}
+              {/* {directions && origin && (
               <MarkerF
                 position={formatCoords(origin)}
                 icon={{
@@ -127,17 +128,18 @@ const Map: React.FC<MapProps> = (props: MapProps) => {
                 }}
               />
             )} */}
-            {directions && destination && (
-              <MarkerF
-                position={formatCoords(destination)}
-                icon={{
-                  url: 'https://img.icons8.com/fluency/48/map-pin.png'
-                }}
-              />
-            )}
-          </>
-        )}
-      </GoogleMap>
+              {directions && destination && (
+                <MarkerF
+                  position={formatCoords(destination)}
+                  icon={{
+                    url: 'https://img.icons8.com/fluency/48/map-pin.png'
+                  }}
+                />
+              )}
+            </>
+          )}
+        </GoogleMap>
+      )}
     </>
   )
 }
