@@ -6,14 +6,13 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useLanguage } from '@hooks/useLanguage'
 import { Cart as BecknCart } from '@beckn-ui/becknified-components'
 import { getSelectPayload } from '@components/cart/cart.utils'
-import { cartActions } from '@store/cart-slice'
 import { Box, useToast } from '@chakra-ui/react'
 
 import { DOMAIN } from '@lib/config'
 
 import { ICartRootState } from '@lib/types'
-import { DiscoveryRootState } from '@store/discovery-slice'
 import { useSelectMutation } from '@beckn-ui/common/src/services/select'
+import { cartActions, DiscoveryRootState } from '@beckn-ui/common'
 
 const Cart = () => {
   const [fetchQuotes, { isLoading, data, isError }] = useSelectMutation()

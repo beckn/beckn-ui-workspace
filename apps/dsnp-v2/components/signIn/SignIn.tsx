@@ -16,8 +16,8 @@ import { setLocalStorage } from '@utils/localstorage'
 import { signPayloadWithExtension, payloadHandle } from '@utils/signTransaction'
 import { dsnpCreate, dsnpRegister, getBlockNumber } from '@utils/auth'
 import { fetchHandles, fetchChallenge, dsnpLogin } from './Signin.utils'
-import { feedbackActions } from '@store/ui-feedback-slice'
 import { useLoginMutation } from '@beckn-ui/common/src/services/User'
+import { feedbackActions } from '@beckn-ui/common'
 
 const SignIn = () => {
   const { t } = useLanguage()
