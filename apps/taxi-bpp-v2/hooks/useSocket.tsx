@@ -1,6 +1,6 @@
 // Example: `hooks/useSocket.ts`
 import { useEffect, useRef } from 'react'
-import io, { Socket } from 'socket.io-client'
+import io, { ManagerOptions, Socket, SocketOptions } from 'socket.io-client'
 
 interface UseSocketOptions {
   transports?: string[]
@@ -8,7 +8,7 @@ interface UseSocketOptions {
   [key: string]: any
 }
 
-const useSocket = (url: string, options?: UseSocketOptions): Socket | undefined => {
+const useSocket = (url: string, options?: Partial<ManagerOptions & SocketOptions> | undefined): Socket | undefined => {
   const socketRef = useRef<Socket | undefined>(undefined)
 
   useEffect(() => {
@@ -19,7 +19,7 @@ const useSocket = (url: string, options?: UseSocketOptions): Socket | undefined 
         socketRef.current.disconnect()
       }
     }
-  }, [url, options])
+  }, [])
 
   return socketRef.current
 }

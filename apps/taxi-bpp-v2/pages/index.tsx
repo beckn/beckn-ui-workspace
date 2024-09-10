@@ -56,7 +56,13 @@ const Homepage = () => {
   const apiKeyForGoogle = process.env.NEXT_PUBLIC_GOOGLE_API_KEY
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
 
-  const socket = useSocket(strapiUrl!)
+  const socket = useSocket(strapiUrl!, {
+    query: {
+      agentId: user?.agent?.id
+    },
+    reconnection: true,
+    transports: ['websocket']
+  })
 
   const handleAvailability = useCallback(async (availability: boolean, geoLatLong: Coordinate) => {
     try {
@@ -521,6 +527,7 @@ const Homepage = () => {
     }
   }
   useEffect(() => {
+    console.log(socket)
     if (socket) {
       const handleShowRides = (data: any) => {
         newRideRequests(data)
