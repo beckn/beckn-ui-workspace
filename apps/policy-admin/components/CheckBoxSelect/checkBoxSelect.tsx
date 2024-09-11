@@ -7,12 +7,13 @@ export interface MultiSelectDropdownProps {
     label: string
     value: string
   }[]
+  isInvalid?: boolean
   selectedOptions: string[]
   setSelectedOptions: (value: string[]) => void
 }
 
 const MultiSelectDropdown = (props: MultiSelectDropdownProps) => {
-  const { options, selectedOptions, setSelectedOptions } = props
+  const { options, selectedOptions, setSelectedOptions, isInvalid } = props
 
   // Handle checkbox change
   const handleChange = useCallback(
@@ -45,8 +46,8 @@ const MultiSelectDropdown = (props: MultiSelectDropdownProps) => {
           padding="0 8px 0 0"
           borderWidth="1px"
           borderRadius="md"
-          border="1px solid"
-          borderColor="inherit"
+          border={`${isInvalid ? '2px' : '1px'} solid`}
+          borderColor={isInvalid ? 'red' : 'inherit'}
           background="#fff"
           _hover={{ backgroundColor: 'trasparent' }}
           _active={{ backgroundColor: 'trasparent' }}
