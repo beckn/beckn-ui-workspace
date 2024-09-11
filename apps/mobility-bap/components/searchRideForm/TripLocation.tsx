@@ -19,6 +19,7 @@ const TripLocation = ({
         fontSize={'15px'}
         fontWeight="500"
         mb={'12px'}
+        alignItems="center"
       >
         <Image
           height={'18px'}
@@ -67,6 +68,7 @@ const TripLocation = ({
           fontSize={'15px'}
           fontWeight="500"
           mb={'12px'}
+          alignItems="center"
         >
           <Image
             height={'18px'}
