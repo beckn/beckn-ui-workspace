@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Table, Thead, Tbody, Tr, Th, Td, IconButton, Box, Flex, Badge } from '@chakra-ui/react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
+import { Table, Thead, Tbody, Tr, Th, Td, IconButton, Box, Flex, Badge, Button, Text } from '@chakra-ui/react'
 import { TriangleUpIcon, TriangleDownIcon } from '@chakra-ui/icons'
 import { Typography } from '@beckn-ui/molecules'
 import { formatDate } from '@utils/general'
@@ -7,12 +7,29 @@ import { useRouter } from 'next/router'
 import { DataTableProps } from '@lib/types/table'
 
 const DataTable = (props: DataTableProps) => {
-  const { items } = props
+  const { items, meta, fetchData, currentTab } = props
   const [sortConfig, setSortConfig] = useState<any>(null)
+  const [currentPage, setCurrentPage] = useState(meta.start / meta.limit + 1)
+  const [totalPages, setTotalPages] = useState(Math.ceil(meta.total / meta.limit) || 1)
 
   const router = useRouter()
 
-  const sortedData = React.useMemo(() => {
+  useEffect(() => {
+    setTotalPages(Math.ceil(meta.total / meta.limit) || 1)
+  }, [meta])
+
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [currentTab])
+
+  const handlePageChange = (newPage: number) => {
+    if (newPage >= 1 && newPage <= totalPages) {
+      setCurrentPage(newPage)
+      fetchData(newPage)
+    }
+  }
+
+  const sortedData = useMemo(() => {
     let sortableData = [...items]
     if (sortConfig !== null) {
       sortableData.sort((a: any, b: any) => {
@@ -76,7 +93,7 @@ const DataTable = (props: DataTableProps) => {
                   size="s"
                   aria-label="title"
                   icon={getIcon('title')!}
-                  onClick={() => requestSort('title')}
+                  onClick={() => requestSort('name')}
                 />
               </Box>
             </Th>
@@ -167,7 +184,7 @@ const DataTable = (props: DataTableProps) => {
               >
                 <Td borderBottom={'1px dotted #004e92!important'}>
                   <Typography
-                    text={item.title}
+                    text={item.name}
                     style={{
                       display: '-webkit-box',
                       WebkitBoxOrient: 'vertical',
@@ -249,6 +266,28 @@ const DataTable = (props: DataTableProps) => {
           )}
         </Tbody>
       </Table>
+      {/* Pagination controls */}
+      <Flex
+        justifyContent="space-between"
+        mt={4}
+        alignItems="center"
+      >
+        <Button
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+        >
+          Previous
+        </Button>
+        <Box>
+          Page {currentPage} of {totalPages}
+        </Box>
+        <Button
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+        >
+          Next
+        </Button>
+      </Flex>
     </Box>
   )
 }

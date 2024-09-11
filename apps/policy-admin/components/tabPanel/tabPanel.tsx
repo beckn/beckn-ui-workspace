@@ -7,13 +7,12 @@ import { useRouter } from 'next/router'
 import { TabNavPanelProps } from '@lib/types/table'
 
 const TabNavPanel = (props: TabNavPanelProps) => {
-  const { tabList, items } = props
-  const [currentTab, setCurrentTab] = useState<string>('All')
+  const { tabList, items, currentTab, setCurrentTab, meta, fetchData } = props
 
   const router = useRouter()
-  const filteredItems = useMemo(() => {
-    return currentTab === 'All' ? items : items.filter(item => item.status.toLowerCase() === currentTab.toLowerCase())
-  }, [items, currentTab])
+  // const filteredItems = useMemo(() => {
+  //   return currentTab === 'All' ? items : items.filter(item => item.status.toLowerCase() === currentTab.toLowerCase())
+  // }, [items, currentTab])
 
   return (
     <Tabs
@@ -72,7 +71,12 @@ const TabNavPanel = (props: TabNavPanelProps) => {
             key={index}
             padding={'unset'}
           >
-            <DataTable items={filteredItems} />
+            <DataTable
+              items={items}
+              meta={meta}
+              currentTab={currentTab}
+              fetchData={fetchData}
+            />
           </TabPanel>
         ))}
       </TabPanels>
