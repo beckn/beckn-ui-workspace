@@ -6,10 +6,9 @@ import React, { useEffect, useState } from 'react'
 import pendingIcon from '../public/images/pendingStatus.svg'
 import { orderHistoryData } from '../types/order-history.types'
 import { useDispatch } from 'react-redux'
-import { formatTimestamp } from '@utils/confirm-utils'
 import { useRouter } from 'next/router'
 import EmptyOrder from '@components/orderHistory/emptyOrder'
-import { orderActions } from '@beckn-ui/common'
+import { formatTimestamp, orderActions } from '@beckn-ui/common'
 
 const orderStatusMap: Record<string, string> = {
   'In Review': 'Pending'

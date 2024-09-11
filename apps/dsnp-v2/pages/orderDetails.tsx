@@ -25,9 +25,7 @@ import { DetailCard, OrderStatusProgress, OrderStatusProgressProps } from '@beck
 import { StatusResponseModel, SupportModel } from '../types/status.types'
 import useResponsive from '@beckn-ui/becknified-components/src/hooks/useResponsive'
 import { toast } from 'react-toastify'
-import { isEmpty } from '@utils/common-utils'
 import { useLanguage } from '@hooks/useLanguage'
-import { formatTimestamp, getPayloadForOrderStatus } from '@utils/confirm-utils'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import BottomModalScan from '@components/BottomModal/BottomModalScan'
 import { ConfirmResponseModel } from '../types/confirm.types'
@@ -39,10 +37,18 @@ import nameIcon from '../public/images/nameIcon.svg'
 import ShippingBlock from '@components/orderDetailComponents/Shipping'
 import { DOMAIN } from '@lib/config'
 import PaymentDetails from '@beckn-ui/becknified-components/src/components/checkout/payment-details'
-import { getPaymentBreakDown } from '@utils/checkout-utils'
-import { setLocalStorage } from '@utils/localstorage'
 import { LocalStorage } from '@lib/types'
-import { DiscoveryRootState, feedbackActions, OrdersRootState, statusActions } from '@beckn-ui/common'
+import {
+  DiscoveryRootState,
+  feedbackActions,
+  formatTimestamp,
+  getPayloadForOrderStatus,
+  getPaymentBreakDown,
+  isEmpty,
+  OrdersRootState,
+  setLocalStorage,
+  statusActions
+} from '@beckn-ui/common'
 
 const statusMap = {
   ArrangingPayment: 'Processing your order',

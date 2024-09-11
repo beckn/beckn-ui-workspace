@@ -16,7 +16,6 @@ import { useToast } from '@chakra-ui/react'
 import { parentURLs } from '@lib/config'
 // import { Garuda } from 'garudaa'
 import { PersistGate } from 'redux-persist/integration/react'
-// import { CustomToast } from '@components/signIn/SignIn'
 import axios from '@services/axios'
 
 // Garuda.init({

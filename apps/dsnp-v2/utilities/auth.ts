@@ -1,33 +1,6 @@
 import axios from '@services/axios'
 import jwt from 'jsonwebtoken'
-import { IUser } from '../lib/types/user'
 import { payloadHandle, signPayloadWithExtension, payloadAddProvider } from './signTransaction'
-
-export function customToU8a(obj) {
-  // This is a simplistic implementation and should be tailored to your specific needs.
-  const keys = Object.keys(obj)
-  const buffer = new ArrayBuffer(keys.length * 2) // Example: 2 bytes per value
-  const view = new Uint8Array(buffer)
-
-  let offset = 0
-  keys.forEach(key => {
-    const value = obj[key]
-
-    // This example assumes each value is a number and fits in 2 bytes.
-    // Adjust this logic based on how you need to serialize your data.
-    view[offset] = value & 0xff
-    view[offset + 1] = (value >> 8) & 0xff
-    offset += 2
-  })
-
-  return view
-}
-
-export const signToken = (user: IUser) => {
-  return jwt.sign(user, process.env.JWT_SECRET as string, {
-    expiresIn: '30d'
-  })
-}
 
 export const getBlockNumber = async (url: string): Promise<number> => {
   try {

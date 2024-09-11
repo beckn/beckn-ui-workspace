@@ -2,7 +2,6 @@ import React, { useState, useEffect, useMemo } from 'react'
 import { useLanguage } from '@hooks/useLanguage'
 import AlternateLogo from '../public/images/SNP-Login-logo.svg'
 import { SignUpPropsModel } from '@components/signIn/SignIn.types'
-import { FormErrors, signUpValidateForm } from '@utils/form-utils'
 import { BecknAuth } from '@beckn-ui/becknified-components'
 import Router from 'next/router'
 import { Box, useBreakpoint, useToast, Text } from '@chakra-ui/react'
@@ -10,13 +9,12 @@ import Logo from '@public/images/SNP-Login-logo.svg'
 
 //dsnp imports
 import { parentURLs } from '@lib/config'
-import { setLocalStorage } from '@utils/localstorage'
-import { signPayloadWithExtension, payloadHandle } from '@utils/signTransaction'
-import { dsnpCreate, dsnpRegister, getBlockNumber } from '@utils/auth'
 import { fetchHandles, fetchChallenge, dsnpLogin } from '@components/signIn/Signin.utils'
 import { useDispatch } from 'react-redux'
 import { useRegisterMutation } from '@beckn-ui/common/src/services/User'
-import { feedbackActions } from '@beckn-ui/common'
+import { feedbackActions, FormErrors, setLocalStorage, signUpValidateForm } from '@beckn-ui/common'
+import { payloadHandle, signPayloadWithExtension } from '@utils/signTransaction'
+import { dsnpCreate, dsnpRegister, getBlockNumber } from '@utils/auth'
 
 const SignUp = () => {
   const { t } = useLanguage()

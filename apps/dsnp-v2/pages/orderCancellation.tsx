@@ -1,6 +1,3 @@
-import { Typography } from '@beckn-ui/molecules'
-import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
-import { Box, Flex, Image, Text } from '@chakra-ui/react'
 import { useLanguage } from '@hooks/useLanguage'
 import { useRouter } from 'next/router'
 import { useSelector, useDispatch } from 'react-redux'

@@ -2,12 +2,17 @@ import React, { useEffect, useState } from 'react'
 import { ProductDetailPage } from '@beckn-ui/becknified-components'
 import Confirmation from '@components/review/confirmation'
 import { useDispatch, useSelector } from 'react-redux'
-import { getLocalStorage } from '@utils/localstorage'
-import { isEmpty } from '@utils/common-utils'
 import CustomerReviews from '@components/UI/customerReviews/CustomerReviews'
 import { Box } from '@chakra-ui/react'
 import axios from '@services/axios'
-import { cartActions, DiscoveryRootState, feedbackActions, ParsedItemModel } from '@beckn-ui/common'
+import {
+  cartActions,
+  DiscoveryRootState,
+  feedbackActions,
+  getLocalStorage,
+  isEmpty,
+  ParsedItemModel
+} from '@beckn-ui/common'
 import { SingleFeed } from '../types/singleFeed.types'
 
 const Product = () => {

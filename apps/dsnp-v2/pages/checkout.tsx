@@ -5,19 +5,22 @@ import { DOMAIN } from '@lib/config'
 import { useLanguage } from '../hooks/useLanguage'
 
 import { ICartRootState } from '@lib/types/cart'
-import {
-  areShippingAndBillingDetailsSame,
-  getInitPayload,
-  getSubTotalAndDeliveryCharges
-} from '@beckn-ui/common/src/utils'
 import useRequest from '../hooks/useRequest'
 import { Checkout } from '@beckn-ui/becknified-components'
 
 import { useRouter } from 'next/router'
 import { ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
-import { isEmpty } from '@utils/common-utils'
 import { useInitMutation } from '@beckn-ui/common/src/services/init'
-import { cartActions, checkoutActions, CheckoutRootState, DiscoveryRootState } from '@beckn-ui/common'
+import {
+  areShippingAndBillingDetailsSame,
+  cartActions,
+  checkoutActions,
+  CheckoutRootState,
+  DiscoveryRootState,
+  getInitPayload,
+  getSubTotalAndDeliveryCharges,
+  isEmpty
+} from '@beckn-ui/common'
 
 export type ShippingFormData = {
   name: string
