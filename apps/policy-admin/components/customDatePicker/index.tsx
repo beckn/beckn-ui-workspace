@@ -3,7 +3,12 @@ import DatePicker, { DatePickerProps } from 'react-datepicker'
 import { Box } from '@chakra-ui/react'
 import 'react-datepicker/dist/react-datepicker.css'
 
-const CustomDatePicker = (props: DatePickerProps) => {
+interface CustomDatePickerProps {
+  isInvalid: boolean
+}
+
+const CustomDatePicker = (props: Partial<CustomDatePickerProps | DatePickerProps>) => {
+  const { isInvalid = false, ...rest } = props
   return (
     <Box
       as={DatePicker}
@@ -35,8 +40,8 @@ const CustomDatePicker = (props: DatePickerProps) => {
         '--input-padding': 'var(--chakra-space-4)',
         '--input-border-radius': 'var(--chakra-radii-md)',
         '--input-height': 'var(--chakra-sizes-10)',
-        border: '1px solid',
-        borderColor: 'inherit'
+        border: `${isInvalid ? '2px' : '1px'} solid`,
+        borderColor: isInvalid ? 'red' : 'inherit'
       }}
     />
   )

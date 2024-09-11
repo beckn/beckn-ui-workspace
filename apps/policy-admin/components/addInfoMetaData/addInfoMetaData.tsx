@@ -12,7 +12,8 @@ import {
   Switch,
   Divider,
   Code,
-  Image
+  Image,
+  FormErrorMessage
 } from '@chakra-ui/react'
 import CustomDatePicker from '@components/customDatePicker'
 import { Typography } from '@beckn-ui/molecules'
@@ -43,6 +44,19 @@ import { useCreatePolicyMutation } from '@services/PolicyService'
 import { feedbackActions } from '@beckn-ui/common'
 
 function AddInformationMetadata() {
+  const [errors, setErrors] = useState({
+    policyName: '',
+    policyType: '',
+    policyOwner: '',
+    description: '',
+    country: '',
+    city: '',
+    startDate: '',
+    endDate: '',
+    policyDocuments: '',
+    applicableTo: ''
+  })
+
   const router = useRouter()
   const dispatch = useDispatch()
   const {
@@ -65,6 +79,76 @@ function AddInformationMetadata() {
 
   const handleOnSwitch = () => {
     dispatch(updatePolicyActivationStatus(!isActivate))
+  }
+
+  // Validation logic
+  const validateForm = () => {
+    let valid = true
+    const newErrors = {
+      policyName: '',
+      policyType: '',
+      policyOwner: '',
+      description: '',
+      country: '',
+      city: '',
+      startDate: '',
+      endDate: '',
+      policyDocuments: '',
+      applicableTo: ''
+    }
+
+    if (!policyName) {
+      newErrors.policyName = 'Title is required'
+      valid = false
+    }
+
+    if (!policyType) {
+      newErrors.policyType = 'Information category is required'
+      valid = false
+    }
+
+    if (!policyOwner) {
+      newErrors.policyOwner = 'Owner name is required'
+      valid = false
+    }
+
+    if (!description) {
+      newErrors.description = 'Description is required'
+      valid = false
+    }
+
+    if (!country) {
+      newErrors.country = 'Country is required'
+      valid = false
+    }
+
+    if (!city) {
+      newErrors.city = 'City is required'
+      valid = false
+    }
+
+    if (!startDate) {
+      newErrors.startDate = 'Start date is required'
+      valid = false
+    }
+
+    if (!endDate) {
+      newErrors.endDate = 'End date is required'
+      valid = false
+    }
+
+    if (!policyDocuments) {
+      newErrors.policyDocuments = 'Source url is required'
+      valid = false
+    }
+
+    if (applicableTo.length === 0) {
+      newErrors.applicableTo = 'Applicable To is required'
+      valid = false
+    }
+
+    setErrors(newErrors)
+    return valid
   }
 
   const getRulesJson = useCallback(() => {
@@ -105,6 +189,9 @@ function AddInformationMetadata() {
   ])
 
   const handleSavePolicy = async () => {
+    if (!validateForm()) {
+      return
+    }
     try {
       await createPolicy(getRulesJson()).unwrap()
       dispatch(
@@ -191,7 +278,10 @@ function AddInformationMetadata() {
           spacing={3}
           gap="4rem"
         >
-          <FormControl mb="1rem">
+          <FormControl
+            mb="1rem"
+            isInvalid={!!errors.policyName}
+          >
             <FormLabel>Title</FormLabel>
             <Input
               type="text"
@@ -199,9 +289,20 @@ function AddInformationMetadata() {
               value={policyName}
               onChange={event => dispatch(updatePolicyName(event.target.value))}
             />
+            {errors.policyName && (
+              <FormErrorMessage
+                position={'absolute'}
+                mt="0px"
+              >
+                {errors.policyName}
+              </FormErrorMessage>
+            )}
           </FormControl>
 
-          <FormControl mb="1rem">
+          <FormControl
+            mb="1rem"
+            isInvalid={!!errors.policyType}
+          >
             <FormLabel>Information Category</FormLabel>
             <Select
               placeholder="Select Information Category"
@@ -217,9 +318,20 @@ function AddInformationMetadata() {
                 </option>
               ))}
             </Select>
+            {errors.policyType && (
+              <FormErrorMessage
+                position={'absolute'}
+                mt="0px"
+              >
+                {errors.policyType}
+              </FormErrorMessage>
+            )}
           </FormControl>
 
-          <FormControl mb="1rem">
+          <FormControl
+            mb="1rem"
+            isInvalid={!!errors.policyOwner}
+          >
             <FormLabel>Information Source Owner</FormLabel>
             <Input
               type="text"
@@ -227,16 +339,35 @@ function AddInformationMetadata() {
               value={policyOwner}
               onChange={event => dispatch(updatePolicyOwner(event.target.value))}
             />
+            {errors.policyOwner && (
+              <FormErrorMessage
+                position={'absolute'}
+                mt="0px"
+              >
+                {errors.policyOwner}
+              </FormErrorMessage>
+            )}
           </FormControl>
         </HStack>
 
-        <FormControl mb="1rem">
+        <FormControl
+          mb="1rem"
+          isInvalid={!!errors.description}
+        >
           <FormLabel>Description</FormLabel>
           <Textarea
             placeholder="Add Description"
             value={description}
             onChange={event => dispatch(updateDescription(event.target.value))}
           />
+          {errors.description && (
+            <FormErrorMessage
+              position={'absolute'}
+              mt="0px"
+            >
+              {errors.description}
+            </FormErrorMessage>
+          )}
         </FormControl>
 
         <HStack
@@ -244,7 +375,10 @@ function AddInformationMetadata() {
           spacing={4}
           gap="4rem"
         >
-          <FormControl mb="1rem">
+          <FormControl
+            mb="1rem"
+            isInvalid={!!errors.country}
+          >
             <FormLabel>Country</FormLabel>
             <Select
               placeholder="Select Country"
@@ -260,9 +394,20 @@ function AddInformationMetadata() {
                 </option>
               ))}
             </Select>
+            {errors.country && (
+              <FormErrorMessage
+                position={'absolute'}
+                mt="0px"
+              >
+                {errors.country}
+              </FormErrorMessage>
+            )}
           </FormControl>
 
-          <FormControl mb="1rem">
+          <FormControl
+            mb="1rem"
+            isInvalid={!!errors.city}
+          >
             <FormLabel>City</FormLabel>
             <Select
               placeholder="Select City"
@@ -278,26 +423,58 @@ function AddInformationMetadata() {
                 </option>
               ))}
             </Select>
+            {errors.city && (
+              <FormErrorMessage
+                position={'absolute'}
+                mt="0px"
+              >
+                {errors.city}
+              </FormErrorMessage>
+            )}
           </FormControl>
 
-          <FormControl mb="1rem">
+          <FormControl
+            mb="1rem"
+            isInvalid={!!errors.startDate}
+          >
             <FormLabel>From</FormLabel>
             <CustomDatePicker
-              selected={new Date(startDate)}
+              selected={startDate ? new Date(startDate) : null}
               placeholderText="Select 'from' date"
-              onChange={date => dispatch(updateStartDate(date?.toISOString()))}
+              onChange={(date: any) => dispatch(updateStartDate(date?.toISOString()))}
               dateFormat="dd-MM-yyyy"
+              isInvalid={!!errors.startDate}
             />
+            {errors.startDate && (
+              <FormErrorMessage
+                position={'absolute'}
+                mt="0px"
+              >
+                {errors.startDate}
+              </FormErrorMessage>
+            )}
           </FormControl>
 
-          <FormControl mb="1rem">
+          <FormControl
+            mb="1rem"
+            isInvalid={!!errors.endDate}
+          >
             <FormLabel>To</FormLabel>
             <CustomDatePicker
-              selected={new Date(endDate)}
+              selected={endDate ? new Date(endDate) : null}
               placeholderText="Select 'to' date"
-              onChange={date => dispatch(updateEndDate(date?.toISOString()))}
+              onChange={(date: any) => dispatch(updateEndDate(date?.toISOString()))}
               dateFormat="dd-MM-yyyy"
+              isInvalid={!!errors.startDate}
             />
+            {errors.endDate && (
+              <FormErrorMessage
+                position={'absolute'}
+                mt="0px"
+              >
+                {errors.endDate}
+              </FormErrorMessage>
+            )}
           </FormControl>
         </HStack>
 
@@ -306,7 +483,10 @@ function AddInformationMetadata() {
           spacing={4}
           gap="4rem"
         >
-          <FormControl mb="1rem">
+          <FormControl
+            mb="1rem"
+            isInvalid={!!errors.policyDocuments}
+          >
             <FormLabel>Sources</FormLabel>
             <Input
               type="text"
@@ -314,17 +494,37 @@ function AddInformationMetadata() {
               value={policyDocuments}
               onChange={event => dispatch(updatepolicyDocuments(event.target.value))}
             />
+            {errors.policyDocuments && (
+              <FormErrorMessage
+                position={'absolute'}
+                mt="0px"
+              >
+                {errors.policyDocuments}
+              </FormErrorMessage>
+            )}
           </FormControl>
 
-          <FormControl>
+          <FormControl
+            mb="1rem"
+            isInvalid={!!errors.applicableTo}
+          >
             <FormLabel>Applicable To</FormLabel>
             <MultiSelectDropdown
               options={applicableToOptions}
               selectedOptions={applicableTo}
+              isInvalid={!!errors.applicableTo}
               setSelectedOptions={data => {
                 dispatch(updateApplicableTo(data))
               }}
             />
+            {errors.applicableTo && (
+              <FormErrorMessage
+                position={'absolute'}
+                mt="0px"
+              >
+                {errors.applicableTo}
+              </FormErrorMessage>
+            )}
           </FormControl>
         </HStack>
       </Box>
