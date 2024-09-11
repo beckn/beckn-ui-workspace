@@ -6,10 +6,10 @@ import { useLanguage } from '../hooks/useLanguage'
 
 import { ICartRootState } from '@lib/types/cart'
 import {
-  getInitPayload,
   areShippingAndBillingDetailsSame,
+  getInitPayload,
   getSubTotalAndDeliveryCharges
-} from '@components/checkout/checkout.utils'
+} from '@beckn-ui/common/src/utils'
 import useRequest from '../hooks/useRequest'
 import { Checkout } from '@beckn-ui/becknified-components'
 

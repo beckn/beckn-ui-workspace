@@ -16,3 +16,5 @@ export const parentURLs = [
   'https://experience.becknprotocol.io',
   'https://experience-prod.becknprotocol.io'
 ]
+
+export const ORDER_CATEGORY_ID = 7
