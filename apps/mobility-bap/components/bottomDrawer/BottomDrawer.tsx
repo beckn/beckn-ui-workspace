@@ -27,9 +27,10 @@ const BottomDrawer: React.FC<CancelBookingProps> = ({ children }) => {
         borderBottomRightRadius="unset"
         boxShadow="0px -4px 16px 0px #0000001F"
         pos={'fixed'}
-        className={`transition-all ease-in-out duration-500 ${
+        className={`hideScroll transition-all ease-in-out duration-500 ${
           isMinimized ? 'max-h-[10vh] overflow-hidden' : 'max-h-[85vh]'
         }`}
+        maxH={'calc(100vh - 86px)'}
       >
         <Box
           alignSelf={'center'}
