@@ -3,11 +3,10 @@ import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import { Box, Flex, Image, Text } from '@chakra-ui/react'
 import { useLanguage } from '@hooks/useLanguage'
 import { useRouter } from 'next/router'
-import { CheckoutRootState, checkoutActions } from '@store/checkout-slice'
-import { StatusRootState } from '@store/status-slice'
 import { useSelector, useDispatch } from 'react-redux'
 import { ConfirmationPage } from '@beckn-ui/becknified-components'
 import React from 'react'
+import { checkoutActions, StatusRootState } from '@beckn-ui/common'
 
 const orderCancellation = () => {
   const { t } = useLanguage()

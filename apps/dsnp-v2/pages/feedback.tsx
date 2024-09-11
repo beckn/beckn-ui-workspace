@@ -6,7 +6,6 @@ import { useLanguage } from '../hooks/useLanguage'
 import feedbackImg from '../public/images/feedbackImg.svg'
 import { Typography } from '@beckn-ui/molecules'
 import { useSelector } from 'react-redux'
-import { StatusRootState } from '@store/status-slice'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import useResponsive from '@beckn-ui/becknified-components/src/hooks/useResponsive'
 import { StatusResponseModel } from '../types/status.types'
@@ -15,9 +14,9 @@ import { getLocalStorage } from '@utils/localstorage'
 
 //dsnp importss
 import { makeInteractionIdAndNonce } from '@utils/review'
-import { DiscoveryRootState } from '@store/discovery-slice'
 import { LocalStorage } from '@lib/types'
 import axios from '@services/axios'
+import { DiscoveryRootState, StatusRootState } from '@beckn-ui/common'
 
 const createPost = async (
   formValues: ReviewProcessorValues,

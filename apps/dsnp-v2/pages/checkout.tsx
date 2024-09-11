@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Box, Flex, Text, Stack, Checkbox, useToast } from '@chakra-ui/react'
+import { Box, useToast } from '@chakra-ui/react'
 import { DOMAIN } from '@lib/config'
 import { useLanguage } from '../hooks/useLanguage'
 
@@ -15,11 +15,9 @@ import { Checkout } from '@beckn-ui/becknified-components'
 
 import { useRouter } from 'next/router'
 import { ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
-import { CheckoutRootState, checkoutActions } from '@store/checkout-slice'
-import { cartActions } from '@store/cart-slice'
 import { isEmpty } from '@utils/common-utils'
 import { useInitMutation } from '@beckn-ui/common/src/services/init'
-import { DiscoveryRootState } from '@beckn-ui/common'
+import { cartActions, checkoutActions, CheckoutRootState, DiscoveryRootState } from '@beckn-ui/common'
 
 export type ShippingFormData = {
   name: string
