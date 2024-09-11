@@ -5,19 +5,16 @@ import { Input, Button, InputTypeEnum, Loader } from '@beckn-ui/molecules'
 import parse from 'html-react-parser'
 import Styles from './DyForm.module.css'
 import { Checkbox, Box, useToast } from '@chakra-ui/react'
-import { CustomToast } from '@components/signIn/SignIn'
 import { testIds } from '@shared/dataTestIds'
+import { useSelector } from 'react-redux'
+import { FeedbackRootState, ToastType } from '@beckn-ui/common'
 
 function replaceDynamicText(template, variables) {
-  // Ensure template starts as a string
   let result = template
-
-  // Replace each placeholder with the corresponding variable
   Object.entries(variables).forEach(([key, value]) => {
     const regex = new RegExp(`\\$\\$${key}\\$\\$`, 'g')
     result = result.replace(regex, value)
   })
-
   return result
 }
 
@@ -85,10 +82,12 @@ const extractFormDetails = (htmlString: string) => {
 const DyForm: React.FC<DyFormProps> = ({ htmlForm, onSubmit, onError, formId, setLoading, handleCancel }) => {
   const toast = useToast()
   const [formDetails, setFormDetails] = useState<FormDetails>({})
-
-  const [formData, setFormData] = useState({})
-
+  const [formData, setFormData] = useState<{ [key: string]: any }>({})
   const [isLoading, setIsLoading] = useState(false)
+  const [isFormValid, setIsFormValid] = useState(false)
+  const {
+    toast: { display, message, type, description }
+  } = useSelector((state: FeedbackRootState) => state.feedback)
 
   const handleChange = e => {
     const { name, value } = e.target
@@ -97,6 +96,13 @@ const DyForm: React.FC<DyFormProps> = ({ htmlForm, onSubmit, onError, formId, se
       [name]: value
     }))
   }
+
+  useEffect(() => {
+    const areAllFieldsFilled = formDetails.inputs?.every(input => {
+      return !input.required || (input.required && formData[input.name])
+    })
+    setIsFormValid(areAllFieldsFilled)
+  }, [formData, formDetails.inputs])
 
   const handleSubmit = async e => {
     e.preventDefault()
@@ -114,7 +120,6 @@ const DyForm: React.FC<DyFormProps> = ({ htmlForm, onSubmit, onError, formId, se
 
       if (!response.ok) {
         let { error } = await response.json()
-
         throw new Error(error)
       }
 
@@ -126,15 +131,18 @@ const DyForm: React.FC<DyFormProps> = ({ htmlForm, onSubmit, onError, formId, se
       onError(true, error)
 
       toast({
-        render: () => (
-          <CustomToast
-            title="Error!"
-            message={`${error}`}
-          />
-        ),
         position: 'top',
-        duration: 2000,
-        isClosable: true
+        duration: 5000,
+        isClosable: true,
+        render: ({ onClose }) => (
+          <Toast
+            status={type as ToastType}
+            title={'Error!'}
+            description={`${error}`}
+            onClose={onClose}
+            dataTest={testIds.feedback}
+          />
+        )
       })
 
       setIsLoading(false)
@@ -186,7 +194,6 @@ const DyForm: React.FC<DyFormProps> = ({ htmlForm, onSubmit, onError, formId, se
     return (
       <Box
         display="flex"
-        // height="100vh"
         justifyContent="center"
         transform="translateY(-20%)"
       >
@@ -199,7 +206,6 @@ const DyForm: React.FC<DyFormProps> = ({ htmlForm, onSubmit, onError, formId, se
     <div data-test={testIds.xinput_form_open}>
       {formDetails.texts.map((text, index) => {
         const CustomTag = text.tag
-        // return <CustomTag key={index}>{replaceDynamicText(parse(text.content),{name:formData.name || '',companyName:"Eminds"})}</CustomTag>
         return (
           <CustomTag
             key={index}
@@ -243,6 +249,7 @@ const DyForm: React.FC<DyFormProps> = ({ htmlForm, onSubmit, onError, formId, se
             variant={button.variant}
             dataTest={button.id}
             handleClick={button.text.toLowerCase() === 'cancel' ? handleCancel : undefined}
+            disabled={button.type === 'submit' && !isFormValid}
           />
         ))}
       </form>

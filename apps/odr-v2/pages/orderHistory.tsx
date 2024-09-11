@@ -4,10 +4,10 @@ import { Loader, Typography } from '@beckn-ui/molecules'
 import { Box, Text, Flex, Image } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import pendingIcon from '../public/images/pendingStatus.svg'
-import { orderHistoryData } from '../types/order-history.types'
+import { orderHistoryData } from '@beckn-ui/common/lib/types'
 import { orderActions } from '@beckn-ui/common/src/store'
 import { useDispatch } from 'react-redux'
-import { formatTimestamp } from '@utils/confirm-utils'
+import { formatTimestamp } from '@beckn-ui/common/src/utils'
 import { useRouter } from 'next/router'
 import EmptyOrder from '@components/orderHistory/emptyOrder'
 import { testIds } from '@shared/dataTestIds'
@@ -99,6 +99,7 @@ const OrderHistory = () => {
       ) : (
         <Box mt={'23px'}>
           {orderHistoryList.map((order, idx) => {
+            console.log(order)
             return (
               <DetailCard key={idx}>
                 <Flex

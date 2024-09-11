@@ -4,21 +4,18 @@ import { Box, useToast, useTheme, useBreakpoint } from '@chakra-ui/react'
 import { DOMAIN } from '@lib/config'
 import { useLanguage } from '../hooks/useLanguage'
 
-import { ICartRootState } from '@lib/types/cart'
 import { getInitPayload } from '@components/checkout/checkout.utils'
 import useRequest from '../hooks/useRequest'
-import { getSelectPayload } from '@components/cart/cart.utils'
-
 import { ShippingSection, ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
 import { Button, LoaderWithMessage } from '@beckn-ui/molecules'
 
 import { useRouter } from 'next/router'
-import { CheckoutRootState, DiscoveryRootState, cartActions } from '@beckn-ui/common/src/store'
-import { isEmpty } from '@utils/common-utils'
+import { CheckoutRootState, cartActions } from '@beckn-ui/common/src/store'
 import AddSection from '@components/x-input/AddSection'
 import { useInitMutation } from '@beckn-ui/common/src/services/init'
 import { useSelectMutation } from '@beckn-ui/common/src/services/select'
 import { testIds } from '@shared/dataTestIds'
+import { DiscoveryRootState, getSelectPayload, ICartRootState, isEmpty } from '@beckn-ui/common'
 
 export type ShippingFormData = {
   name: string
