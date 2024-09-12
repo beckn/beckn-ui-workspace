@@ -22,15 +22,15 @@ import { v4 as uuidv4 } from 'uuid'
 import { useDispatch, useSelector } from 'react-redux'
 import ViewMoreOrderModal from '@components/orderDetailComponents/ViewMoreOrder'
 import { DetailCard, OrderStatusProgress, OrderStatusProgressProps } from '@beckn-ui/becknified-components'
-import { StatusResponseModel, SupportModel } from '../types/status.types'
+
 import useResponsive from '@beckn-ui/becknified-components/src/hooks/useResponsive'
-import { toast } from 'react-toastify'
+
 import { useLanguage } from '@hooks/useLanguage'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import BottomModalScan from '@components/BottomModal/BottomModalScan'
-import { ConfirmResponseModel } from '../types/confirm.types'
+
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
-import { UIState, DataState, ProcessState } from '../types/order-details.types'
+
 import CallphoneIcon from '../public/images/CallphoneIcon.svg'
 import locationIcon from '../public/images/locationIcon.svg'
 import nameIcon from '../public/images/nameIcon.svg'
@@ -39,15 +39,17 @@ import { DOMAIN } from '@lib/config'
 import PaymentDetails from '@beckn-ui/becknified-components/src/components/checkout/payment-details'
 import { LocalStorage } from '@lib/types'
 import {
+  ConfirmResponseModel,
+  DataState,
   DiscoveryRootState,
   feedbackActions,
-  formatTimestamp,
-  getPayloadForOrderStatus,
-  getPaymentBreakDown,
   isEmpty,
   OrdersRootState,
-  setLocalStorage,
-  statusActions
+  ProcessState,
+  statusActions,
+  StatusResponseModel,
+  SupportModel,
+  UIState
 } from '@beckn-ui/common'
 
 const statusMap = {

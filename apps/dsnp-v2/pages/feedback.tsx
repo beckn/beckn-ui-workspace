@@ -8,7 +8,7 @@ import { Typography } from '@beckn-ui/molecules'
 import { useSelector } from 'react-redux'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import useResponsive from '@beckn-ui/becknified-components/src/hooks/useResponsive'
-import { StatusResponseModel } from '../types/status.types'
+
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
 
 //dsnp importss
