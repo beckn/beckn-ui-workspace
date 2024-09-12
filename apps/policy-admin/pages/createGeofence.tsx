@@ -26,6 +26,14 @@ const CreateGeofence = () => {
     }
   }, [polygon])
 
+  useEffect(() => {
+    console.log(router.query)
+    if (router.query.coords) {
+      const coords = JSON.parse(router.query.coords as string)
+      setPolygonPath(coords)
+    }
+  }, [])
+
   const handleClearPolygon = () => {
     setPolygonPath([])
     setCoordinatesForForm([])

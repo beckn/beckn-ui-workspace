@@ -13,7 +13,8 @@ import {
   Divider,
   Code,
   Image,
-  FormErrorMessage
+  FormErrorMessage,
+  Link
 } from '@chakra-ui/react'
 import CustomDatePicker from '@components/customDatePicker'
 import { Typography } from '@beckn-ui/molecules'
@@ -536,35 +537,45 @@ function AddInformationMetadata() {
         >
           <FormControl>
             <FormLabel>Geofence</FormLabel>
-            <Box
-              width="fit-content"
-              border={'1px dotted #004e92 !important'}
-              padding="1rem 2rem"
-              borderRadius={'md'}
-              cursor="pointer"
-              onClick={() => {
-                router.push('/createGeofence')
-              }}
-            >
-              <Flex
-                flexDirection={'row'}
-                alignItems="center"
-                mr="1rem"
+            {polygon.length === 0 ? (
+              <Box
+                width="fit-content"
+                border={'1px dotted #004e92 !important'}
+                padding="1rem 2rem"
+                borderRadius={'md'}
                 cursor="pointer"
+                onClick={() => {
+                  router.push('/createGeofence')
+                }}
               >
-                <Image
-                  src={addIcon}
-                  alt="add_icon"
-                  width={'1rem'}
-                  height={'1rem'}
-                />
-                <Typography
-                  text="Draw geofence on a map"
-                  fontSize="14px"
-                  color="#013b76"
-                />
-              </Flex>
-            </Box>
+                <Flex
+                  flexDirection={'row'}
+                  alignItems="center"
+                  mr="1rem"
+                  cursor="pointer"
+                >
+                  <Image
+                    src={addIcon}
+                    alt="add_icon"
+                    width={'1rem'}
+                    height={'1rem'}
+                  />
+                  <Typography
+                    text="Draw geofence on a map"
+                    fontSize="14px"
+                    color="#013b76"
+                  />
+                </Flex>
+              </Box>
+            ) : (
+              <Link
+                color="#5c5cff"
+                onClick={() => router.push('/createGeofence')}
+                fontSize={'14px'}
+              >
+                {'View Geofence'}
+              </Link>
+            )}
           </FormControl>
         </Box>
       )}

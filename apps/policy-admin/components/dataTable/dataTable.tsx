@@ -5,6 +5,7 @@ import { Typography } from '@beckn-ui/molecules'
 import { formatDate } from '@utils/general'
 import { useRouter } from 'next/router'
 import { DataTableProps } from '@lib/types/table'
+import Pagination from '@components/pagination/pagination'
 
 const DataTable = (props: DataTableProps) => {
   const { items, meta, fetchData, currentTab } = props
@@ -65,230 +66,215 @@ const DataTable = (props: DataTableProps) => {
   }
 
   return (
-    <Box
-      maxH={{ base: 'calc(100vh - 278px)', md: 'calc(100vh - 360px)' }}
-      overflowY="scroll"
-      overflowX="scroll"
-      className="hideScroll"
-    >
-      <Table variant="simple">
-        <Thead
-          position="sticky"
-          top={0}
-          bg="white"
-          zIndex={1}
-        >
-          <Tr background={'linear-gradient(90.16deg,rgba(0, 78, 146, 0.1) 1.48%,rgba(0, 4, 40, 0.1) 100%)'}>
-            <Th>
-              <Box
-                display="flex"
-                alignItems="center"
-                width={'300px'}
-              >
-                Title
-                <IconButton
-                  ml={2}
-                  mb={0}
-                  fontSize="65%"
-                  size="s"
-                  aria-label="title"
-                  icon={getIcon('title')!}
-                  onClick={() => requestSort('name')}
-                />
-              </Box>
-            </Th>
-            <Th>
-              <Box
-                display="flex"
-                alignItems="center"
-                width={'300px'}
-              >
-                Description
-                <IconButton
-                  ml={2}
-                  mb={0}
-                  fontSize="65%"
-                  size="s"
-                  aria-label="descption"
-                  icon={getIcon('description')!}
-                  onClick={() => requestSort('description')}
-                />
-              </Box>
-            </Th>
-            <Th>
-              <Box
-                display="flex"
-                alignItems="center"
-                width={'200px'}
-              >
-                Status
-                <IconButton
-                  ml={2}
-                  mb={0}
-                  fontSize="65%"
-                  size="s"
-                  aria-label="status"
-                  icon={getIcon('status')!}
-                  onClick={() => requestSort('status')}
-                />
-              </Box>
-            </Th>
-            <Th>
-              <Box
-                display="flex"
-                alignItems="center"
-                width={'200px'}
-              >
-                Start Date
-                <IconButton
-                  ml={2}
-                  mb={0}
-                  fontSize="65%"
-                  size="s"
-                  aria-label="startDate"
-                  icon={getIcon('startDate')!}
-                  onClick={() => requestSort('startDate')}
-                />
-              </Box>
-            </Th>
-            <Th>
-              <Box
-                display="flex"
-                alignItems="center"
-                width={'200px'}
-              >
-                End Date
-                <IconButton
-                  ml={2}
-                  mb={0}
-                  fontSize="65%"
-                  size="s"
-                  aria-label="endDate"
-                  icon={getIcon('endDate')!}
-                  onClick={() => requestSort('endDate')}
-                />
-              </Box>
-            </Th>
-          </Tr>
-        </Thead>
-        <Tbody>
-          {sortedData.length > 0 ? (
-            sortedData.map((item, index) => (
-              <Tr
-                key={index}
-                cursor="pointer"
-                _hover={{ backgroundColor: 'rgba(0, 0, 0, 0.04)' }}
-                onClick={() => {
-                  router.push('/policyDetails')
-                }}
-              >
-                <Td borderBottom={'1px dotted #004e92!important'}>
-                  <Typography
-                    text={item.name}
-                    style={{
-                      display: '-webkit-box',
-                      WebkitBoxOrient: 'vertical',
-                      WebkitLineClamp: '2',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      whiteSpace: 'normal'
-                    }}
+    <>
+      <Box
+        maxH={{ base: 'calc(100vh - 278px)', md: 'calc(100vh - 430px)' }}
+        overflowY="scroll"
+        overflowX="scroll"
+        className="hideScroll"
+      >
+        <Table variant="simple">
+          <Thead
+            position="sticky"
+            top={0}
+            bg="white"
+            zIndex={1}
+          >
+            <Tr background={'linear-gradient(90.16deg,rgba(0, 78, 146, 0.1) 1.48%,rgba(0, 4, 40, 0.1) 100%)'}>
+              <Th>
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  width={'300px'}
+                >
+                  Title
+                  <IconButton
+                    ml={2}
+                    mb={0}
+                    fontSize="65%"
+                    size="s"
+                    aria-label="title"
+                    icon={getIcon('title')!}
+                    onClick={() => requestSort('name')}
                   />
-                </Td>
-                <Td borderBottom={'1px dotted #004e92!important'}>
-                  <Typography
-                    text={item.description}
-                    style={{
-                      display: '-webkit-box',
-                      WebkitBoxOrient: 'vertical',
-                      WebkitLineClamp: '2',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      whiteSpace: 'normal'
-                    }}
+                </Box>
+              </Th>
+              <Th>
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  width={'300px'}
+                >
+                  Description
+                  <IconButton
+                    ml={2}
+                    mb={0}
+                    fontSize="65%"
+                    size="s"
+                    aria-label="descption"
+                    icon={getIcon('description')!}
+                    onClick={() => requestSort('description')}
                   />
-                </Td>
-                <Td borderBottom={'1px dotted #004e92!important'}>
-                  <Badge
-                    variant="subtle"
-                    textTransform="lowercase"
-                    colorScheme={
-                      item.status === 'active'
-                        ? 'green'
-                        : item.status === 'inactive'
-                          ? 'red'
-                          : item.status === 'new'
-                            ? 'purple'
-                            : 'blue'
-                    }
-                  >
-                    <Typography text={item.status} />
-                  </Badge>
-                </Td>
-                <Td borderBottom={'1px dotted #004e92!important'}>
-                  <Typography
-                    text={formatDate(item.startDate)}
-                    style={{
-                      display: '-webkit-box',
-                      WebkitBoxOrient: 'vertical',
-                      WebkitLineClamp: '2',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      whiteSpace: 'normal'
-                    }}
+                </Box>
+              </Th>
+              <Th>
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  width={'200px'}
+                >
+                  Status
+                  <IconButton
+                    ml={2}
+                    mb={0}
+                    fontSize="65%"
+                    size="s"
+                    aria-label="status"
+                    icon={getIcon('status')!}
+                    onClick={() => requestSort('status')}
                   />
-                </Td>
-                <Td borderBottom={'1px dotted #004e92!important'}>
+                </Box>
+              </Th>
+              <Th>
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  width={'200px'}
+                >
+                  Start Date
+                  <IconButton
+                    ml={2}
+                    mb={0}
+                    fontSize="65%"
+                    size="s"
+                    aria-label="startDate"
+                    icon={getIcon('startDate')!}
+                    onClick={() => requestSort('startDate')}
+                  />
+                </Box>
+              </Th>
+              <Th>
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  width={'200px'}
+                >
+                  End Date
+                  <IconButton
+                    ml={2}
+                    mb={0}
+                    fontSize="65%"
+                    size="s"
+                    aria-label="endDate"
+                    icon={getIcon('endDate')!}
+                    onClick={() => requestSort('endDate')}
+                  />
+                </Box>
+              </Th>
+            </Tr>
+          </Thead>
+          <Tbody>
+            {sortedData.length > 0 ? (
+              sortedData.map((item, index) => (
+                <Tr
+                  key={index}
+                  cursor="pointer"
+                  _hover={{ backgroundColor: 'rgba(0, 0, 0, 0.04)' }}
+                  onClick={() => {
+                    router.push('/policyDetails')
+                  }}
+                >
+                  <Td borderBottom={'1px dotted #004e92!important'}>
+                    <Typography
+                      text={item.name}
+                      style={{
+                        display: '-webkit-box',
+                        WebkitBoxOrient: 'vertical',
+                        WebkitLineClamp: '2',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'normal'
+                      }}
+                    />
+                  </Td>
+                  <Td borderBottom={'1px dotted #004e92!important'}>
+                    <Typography
+                      text={item.description}
+                      style={{
+                        display: '-webkit-box',
+                        WebkitBoxOrient: 'vertical',
+                        WebkitLineClamp: '2',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'normal'
+                      }}
+                    />
+                  </Td>
+                  <Td borderBottom={'1px dotted #004e92!important'}>
+                    <Badge
+                      variant="subtle"
+                      textTransform="lowercase"
+                      colorScheme={
+                        item.status === 'active'
+                          ? 'green'
+                          : item.status === 'inactive'
+                            ? 'red'
+                            : item.status === 'new'
+                              ? 'purple'
+                              : 'blue'
+                      }
+                    >
+                      <Typography text={item.status} />
+                    </Badge>
+                  </Td>
+                  <Td borderBottom={'1px dotted #004e92!important'}>
+                    <Typography
+                      text={formatDate(item.startDate)}
+                      style={{
+                        display: '-webkit-box',
+                        WebkitBoxOrient: 'vertical',
+                        WebkitLineClamp: '2',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'normal'
+                      }}
+                    />
+                  </Td>
+                  <Td borderBottom={'1px dotted #004e92!important'}>
+                    <Typography
+                      text={formatDate(item.endDate)}
+                      style={{
+                        display: '-webkit-box',
+                        WebkitBoxOrient: 'vertical',
+                        WebkitLineClamp: '2',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'normal'
+                      }}
+                    />
+                  </Td>
+                </Tr>
+              ))
+            ) : (
+              <Tr>
+                <Td colSpan={5}>
                   <Typography
-                    text={formatDate(item.endDate)}
-                    style={{
-                      display: '-webkit-box',
-                      WebkitBoxOrient: 'vertical',
-                      WebkitLineClamp: '2',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      whiteSpace: 'normal'
-                    }}
+                    text="No rows"
+                    fontWeight="600"
+                    style={{ textAlign: 'center' }}
                   />
                 </Td>
               </Tr>
-            ))
-          ) : (
-            <Tr>
-              <Td colSpan={5}>
-                <Typography
-                  text="No rows"
-                  fontWeight="600"
-                  style={{ textAlign: 'center' }}
-                />
-              </Td>
-            </Tr>
-          )}
-        </Tbody>
-      </Table>
-      {/* Pagination controls */}
-      <Flex
-        justifyContent="space-between"
-        mt={4}
-        alignItems="center"
-      >
-        <Button
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-        >
-          Previous
-        </Button>
-        <Box>
-          Page {currentPage} of {totalPages}
-        </Box>
-        <Button
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === totalPages}
-        >
-          Next
-        </Button>
-      </Flex>
-    </Box>
+            )}
+          </Tbody>
+        </Table>
+      </Box>
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        handlePageChange={handlePageChange}
+      />
+    </>
   )
 }
 
