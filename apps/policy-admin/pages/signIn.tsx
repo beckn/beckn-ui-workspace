@@ -3,20 +3,42 @@ import { BecknAuth } from '@beckn-ui/becknified-components'
 import { FormErrors, SignInFormProps } from '@beckn-ui/common/lib/types'
 import { signInValidateForm } from '@beckn-ui/common'
 import { useLanguage } from '@hooks/useLanguage'
-import { Box } from '@chakra-ui/react'
-import Router, { useRouter } from 'next/router'
+import {
+  Box,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  Input,
+  useDisclosure,
+  FormLabel,
+  FormControl,
+  Text
+} from '@chakra-ui/react'
+import { useRouter } from 'next/router'
 import { usePolicyLoginMutation } from '@services/UserService'
 import PortalIcon from '@public/images/online-taxi-booking.svg'
+import BecknButton from '@beckn-ui/molecules/src/components/button'
 
 const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
   const [formData, setFormData] = useState<SignInFormProps>(initialFormData)
   const [formErrors, setFormErrors] = useState<FormErrors>({ email: '', password: '' })
   const [policyLogin, { isLoading }] = usePolicyLoginMutation()
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const [forgotPasswordEmail, setForgotPasswordEmail] = useState('')
+  const [forgotPasswordEmailError, setForgotPasswordEmailError] = useState('')
 
   const { t } = useLanguage()
   const router = useRouter()
 
-  // Handle input change and validation
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    return emailRegex.test(email)
+  }
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
 
@@ -35,6 +57,16 @@ const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
       ...prevErrors,
       [name]: t[`${errors[name as keyof FormErrors]}`] || ''
     }))
+  }
+
+  const handleForgotPasswordEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const email = e.target.value
+    setForgotPasswordEmail(email)
+    if (email && !validateEmail(email)) {
+      setForgotPasswordEmailError('Please enter a valid email address')
+    } else {
+      setForgotPasswordEmailError('')
+    }
   }
 
   // Check if form is filled
@@ -60,8 +92,19 @@ const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
     }
   }
 
+  const handleForgotPasswordClick = () => {
+    onOpen()
+  }
+  const handleResendLink = () => {
+    // Todo: implement send link logic here
+    console.log('krushna')
+  }
+
   return (
-    <Box mt="-80px">
+    <Box
+      mt="-80px"
+      className="sign-in-container"
+    >
       <BecknAuth
         schema={{
           logo: {
@@ -77,15 +120,16 @@ const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
               colorScheme: 'primary',
               isLoading: isLoading,
               dataTest: 'login-button'
+            },
+            {
+              text: 'Forgot password?',
+              handleClick: handleForgotPasswordClick,
+              variant: 'outline',
+              colorScheme: 'primary',
+              disabled: isLoading,
+              dataTest: 'forgot-button',
+              className: 'forgot_password'
             }
-            // {
-            //   text: t.signUp,
-            //   handleClick: () => router.push('/signUp'),
-            //   variant: 'outline',
-            //   colorScheme: 'primary',
-            //   disabled: isLoading,
-            //   dataTest: 'register-button'
-            // }
           ],
           inputs: [
             {
@@ -109,6 +153,53 @@ const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
           ]
         }}
       />
+
+      <Modal
+        isOpen={isOpen}
+        onClose={onClose}
+      >
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Forgot Password?</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Text>No worries, we'll send you reset instructions. Enter your email:</Text>
+            <FormControl
+              mt={4}
+              isInvalid={!!forgotPasswordEmailError}
+            >
+              <FormLabel htmlFor="email">Email</FormLabel>
+              <Input
+                id="email"
+                placeholder="Enter your email"
+                value={forgotPasswordEmail}
+                onChange={handleForgotPasswordEmailChange}
+              />
+              {forgotPasswordEmailError && (
+                <Text
+                  color="red.500"
+                  fontSize="sm"
+                  mt={1}
+                >
+                  {forgotPasswordEmailError}
+                </Text>
+              )}
+            </FormControl>
+          </ModalBody>
+          <ModalFooter>
+            <BecknButton
+              children={'Send Reset Link'}
+              handleClick={handleResendLink}
+              variant="solid"
+            />
+            <BecknButton
+              children={'Cancel'}
+              handleClick={onClose}
+              variant="primary"
+            />
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Box>
   )
 }

@@ -286,3 +286,11 @@ input:focus {
 .pac-container.pac-logo {
   z-index: 9999;
 }
+.sign-in-container .forgot_password {
+  border-radius: unset;
+  border: unset;
+  text-align: left;
+  padding-left: unset;
+  width: unset;
+  font-size: 14px;
+}
