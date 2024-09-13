@@ -1,9 +1,9 @@
 type PathnameObjectType = Record<string, string>
 
 // -------------------------------- Sub Header constants --------------------------------
-const backIconList = ['/signIn', '/signUp']
+const backIconList = ['/signIn', '/signUp', '/resetPassword']
 
-const headerBlackList = ['/signUp', '/signIn']
+const headerBlackList = ['/signUp', '/signIn', '/resetPassword']
 
 const headerNames: PathnameObjectType = {
   '/': 'Summary',

@@ -57,6 +57,18 @@ const en: { [key: string]: string } = {
   profileIcon: 'My Profile',
   logoutIcon: 'Logout',
   offlineTitle: 'You’re Offline',
-  offlineDescription: 'You’re currently offline. Go online to recieve trip requests.'
+  offlineDescription: 'You’re currently offline. Go online to recieve trip requests.',
+  noWorreis: `No worries, we'll send you reset instructions.`,
+  enterYourMail: 'Enter your email',
+  Send: 'Send',
+  Cancel: 'Cancel',
+  passwordMustBe: 'Password must be at least 8 characters long and include @ and a number',
+  passwordDoNotMatch: 'Passwords do not match',
+  passwordSucessfully: 'Password reset successfully',
+  Success: 'Success',
+  ResetPassword: 'Reset Password',
+  newPassword: 'New Password',
+  confirmPassword: 'Confirm Password',
+  pleaseCheckYourMail: 'Please check your email for the password reset link.'
 }
 export default en
