@@ -1,12 +1,17 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Box } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { useLanguage } from '@hooks/useLanguage'
 import { TopHeader, SubHeader } from '@beckn-ui/common'
 import Constants from './constants'
 import { useSelector } from 'react-redux'
+import Cookies from 'js-cookie'
 
 const Header = () => {
+  const [tourismType, setTourismType] = useState<string | null>(null)
+  const { t, locale } = useLanguage()
+  const router = useRouter()
+
   const orderObjectUrl = useSelector(
     (state: { orderObjectUrl: { orderObjectUrl: string; isFlowCityOfParis: boolean } }) =>
       state.orderObjectUrl.orderObjectUrl
@@ -34,11 +39,19 @@ const Header = () => {
     }
   } = Constants
 
-  const router = useRouter()
-  const { t, locale } = useLanguage()
-
   const renderTopHeader = !topHeaderBlackList.includes(router.pathname)
   const renderBottomHeader = !bottomHeaderBlackList.includes(router.pathname)
+
+  useEffect(() => {
+    const queryTourismType = router.query.tourismType as string | undefined
+    if (queryTourismType) {
+      setTourismType(queryTourismType)
+      localStorage.setItem('tourismType', queryTourismType)
+      Cookies.set('tourismType', queryTourismType)
+    } else {
+      setTourismType(localStorage.getItem('tourismType') || null)
+    }
+  }, [router.query.tourismType])
 
   return (
     <Box>
@@ -51,7 +64,7 @@ const Header = () => {
             blackList: {
               appLogoBlackList,
               homeIconBlackList,
-              languageIconWhiteList,
+              languageIconWhiteList: !tourismType ? languageIconWhiteList : [],
               menuIconWhiteList
             }
           }}
@@ -59,7 +72,7 @@ const Header = () => {
             {
               id: 'logout',
               label: t.logout,
-              href: '/signIn',
+              href: `/signIn${tourismType ? `?tourismType=${tourismType}` : ''}`,
               icon: '/images/logOutIcon.svg',
               color: 'red'
             }

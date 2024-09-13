@@ -5,6 +5,7 @@ const locals = ['fa']
 export default function middleware(req: NextRequest) {
   const loggedin = req.cookies.get('authToken')
   const { pathname, href, host } = req.nextUrl
+  const tourismType = req.cookies.get('tourismType')?.value || ''
   console.log('Dank', pathname, host, href)
   const urlSplitList = href.split('/')
   const hostIndex = urlSplitList.findIndex(item => item === host)
@@ -14,7 +15,13 @@ export default function middleware(req: NextRequest) {
   }
 
   if (loggedin && (pathname === '/signIn' || pathname === '/signUp')) {
-    return NextResponse.redirect(new URL('/', req.url))
+    const redirectUrl = tourismType ? `/?tourismType=${tourismType}` : '/'
+    return NextResponse.redirect(new URL(redirectUrl, req.url))
+  }
+
+  if (!loggedin && pathname !== '/signIn' && pathname !== '/signUp') {
+    const redirectUrl = `/signIn${tourismType ? `?tourismType=${tourismType}` : ''}`
+    return NextResponse.redirect(new URL(redirectUrl, req.url))
   }
 
   if (!loggedin && pathname !== '/signIn' && pathname !== '/signUp') {

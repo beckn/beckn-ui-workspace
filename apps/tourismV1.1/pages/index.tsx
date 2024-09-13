@@ -5,6 +5,7 @@ import { HomePageContent, IGeoLocationSearchPageRootState } from '@beckn-ui/comm
 import { Box } from '@chakra-ui/react'
 import { useSelector } from 'react-redux'
 import Router from 'next/router'
+import Cookies from 'js-cookie'
 
 const HomePage = () => {
   const { t } = useLanguage()
@@ -16,6 +17,14 @@ const HomePage = () => {
   const navigateToSearchResult = () => {
     const loc = geoLocationSearchPageSelectedAddress.split(',')[0]
     Router.push(`/search?searchTerm=${loc}`)
+  }
+
+  const queryTourismType = Router.query.tourismType as string
+  if (queryTourismType) {
+    localStorage.setItem('tourismType', queryTourismType)
+  } else {
+    localStorage.removeItem('tourismType')
+    Cookies.remove('tourismType')
   }
 
   return (

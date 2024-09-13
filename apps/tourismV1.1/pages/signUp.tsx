@@ -4,12 +4,14 @@ import tourismMobLogo from '@public/images/tourism-logo.svg'
 import tourismDeskLogo from '@public/images/tourism-logo.svg'
 import { useLanguage } from '@hooks/useLanguage'
 import { SignUpPage } from '@beckn-ui/common'
+import Cookies from 'js-cookie'
 
 const Register = () => {
   const { t } = useLanguage()
+  const tourismType = Cookies.get('tourismType')
 
   const handleSignIn = () => {
-    Router.push('/signIn')
+    Router.push(`/signIn${tourismType ? `?tourismType=${tourismType}` : ''}`)
   }
 
   return (
