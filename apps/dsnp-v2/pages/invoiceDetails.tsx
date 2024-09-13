@@ -4,9 +4,8 @@ import { DetailCard } from '@beckn-ui/becknified-components'
 import Typography from '@beckn-ui/molecules/src/components/typography/typography'
 import { Box, Flex } from '@chakra-ui/react'
 import { useLanguage } from '@hooks/useLanguage'
-import { getPaymentBreakDown } from '@utils/checkout-utils'
 import { StatusResponseModel } from '../types/status.types'
-import { formatTimestamp } from '@utils/confirm-utils'
+import { formatTimestamp, getPaymentBreakDown } from '@beckn-ui/common'
 
 const invoiceDetails = () => {
   const [statusData, setStatusData] = useState<StatusResponseModel[]>([])

@@ -6,10 +6,9 @@ import { Loader, Typography } from '@beckn-ui/molecules'
 import { useLanguage } from '@hooks/useLanguage'
 import { v4 as uuidv4 } from 'uuid'
 import { useRouter } from 'next/router'
-import { geocodeFromPincode } from '@utils/checkout-utils'
 import { useDispatch } from 'react-redux'
 import axios from '@services/axios'
-import { feedbackActions } from '@beckn-ui/common'
+import { feedbackActions, geocodeFromPincode } from '@beckn-ui/common'
 
 const UpdateShippingDetails = () => {
   const [shippingDetails, setShippingDetails] = useState({

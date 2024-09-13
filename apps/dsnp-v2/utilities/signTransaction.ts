@@ -1,29 +1,3 @@
-// import { web3FromAddress } from "@polkadot/extension-dapp";
-// import { U8aLike } from "@polkadot/util/types";
-
-// const createRegistry = async ()=>{
-//   const {TypeRegistry} = await import("@polkadot/types");
-// return Registry = new TypeRegistry();
-// }
-
-// let Registry = createRegistry();
-// Registry.register({
-//   AddProvider: {
-//     authorizedMsaId: "u64",
-//     schemaIds: "Vec<u16>",
-//     expiration: "u32",
-//   },
-// });
-
-// const Registry = new TypeRegistry();
-// Registry.register({
-//   AddProvider: {
-//     authorizedMsaId: "u64",
-//     schemaIds: "Vec<u16>",
-//     expiration: "u32",
-//   },
-// });
-
 export async function signPayloadWithExtension(address: string, payload: any) {
   const { web3FromAddress } = await import('@polkadot/extension-dapp')
   const { isFunction, u8aWrapBytes, u8aToHex } = await import('@polkadot/util')

@@ -3,7 +3,6 @@ import Logo from '../../public/images/SNP-Login-logo.svg'
 import AlternateLogo from '../../public/images/SNP-Login-logo.svg'
 import { useLanguage } from '@hooks/useLanguage'
 import { SignInPropsModel } from './SignIn.types'
-import { FormErrors, signInValidateForm } from '@utils/form-utils'
 import { useDispatch } from 'react-redux'
 import { BecknAuth } from '@beckn-ui/becknified-components'
 
@@ -12,12 +11,11 @@ import { useBreakpoint } from '@chakra-ui/react'
 
 //dsnp imports
 import { parentURLs } from '@lib/config'
-import { setLocalStorage } from '@utils/localstorage'
 import { signPayloadWithExtension, payloadHandle } from '@utils/signTransaction'
 import { dsnpCreate, dsnpRegister, getBlockNumber } from '@utils/auth'
 import { fetchHandles, fetchChallenge, dsnpLogin } from './Signin.utils'
 import { useLoginMutation } from '@beckn-ui/common/src/services/User'
-import { feedbackActions } from '@beckn-ui/common'
+import { feedbackActions, FormErrors, setLocalStorage, signInValidateForm } from '@beckn-ui/common'
 
 const SignIn = () => {
   const { t } = useLanguage()

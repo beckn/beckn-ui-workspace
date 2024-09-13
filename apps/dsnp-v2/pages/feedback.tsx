@@ -10,13 +10,12 @@ import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import useResponsive from '@beckn-ui/becknified-components/src/hooks/useResponsive'
 import { StatusResponseModel } from '../types/status.types'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
-import { getLocalStorage } from '@utils/localstorage'
 
 //dsnp importss
-import { makeInteractionIdAndNonce } from '@utils/review'
 import { LocalStorage } from '@lib/types'
 import axios from '@services/axios'
-import { DiscoveryRootState, StatusRootState } from '@beckn-ui/common'
+import { DiscoveryRootState, getLocalStorage, StatusRootState } from '@beckn-ui/common'
+import { makeInteractionIdAndNonce } from '@utils/review'
 
 const createPost = async (
   formValues: ReviewProcessorValues,
