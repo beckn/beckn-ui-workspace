@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Box, useToast } from '@chakra-ui/react'
+import { Box } from '@chakra-ui/react'
 import { DOMAIN } from '@lib/config'
-import { useLanguage } from '../hooks/useLanguage'
-
-import { ICartRootState } from '@lib/types/cart'
-import useRequest from '../hooks/useRequest'
 import { Checkout } from '@beckn-ui/becknified-components'
 
 import { useRouter } from 'next/router'
@@ -19,6 +15,7 @@ import {
   DiscoveryRootState,
   getInitPayload,
   getSubTotalAndDeliveryCharges,
+  ICartRootState,
   isEmpty
 } from '@beckn-ui/common'
 
@@ -37,8 +34,6 @@ export const currencyMap = {
 }
 
 const CheckoutPage = () => {
-  const toast = useToast()
-
   const [shippingFormData, setShippingFormData] = useState<ShippingFormInitialValuesType>({
     name: 'santosh kumar',
     mobileNumber: '6251423251',
@@ -58,15 +53,13 @@ const CheckoutPage = () => {
   })
 
   const router = useRouter()
-  const initRequest = useRequest()
   const dispatch = useDispatch()
   const [initialize, { isLoading, isError }] = useInitMutation()
-  const { t, locale } = useLanguage()
   const cartItems = useSelector((state: ICartRootState) => state.cart.items)
   const initResponse = useSelector((state: CheckoutRootState) => state.checkout.initResponse)
   const selectResponse = useSelector((state: CheckoutRootState) => state.checkout.selectResponse)
   const isBillingSameRedux = useSelector((state: CheckoutRootState) => state.checkout.isBillingSame)
-  const { transactionId, productList } = useSelector((state: DiscoveryRootState) => state.discovery)
+  const { transactionId } = useSelector((state: DiscoveryRootState) => state.discovery)
 
   useEffect(() => {
     if (localStorage) {
@@ -152,12 +145,12 @@ const CheckoutPage = () => {
     }
   }
 
-  const isInitResultPresent = () => {
-    return !!initResponse && initResponse.length > 0 && initResponse[0].message
+  const isInitResultPresent = (): boolean => {
+    return !!initResponse && initResponse.length > 0 && !!initResponse[0].message
   }
 
   const createPaymentBreakdownMap = () => {
-    const paymentBreakdownMap = {}
+    const paymentBreakdownMap: Record<string, { value: string; currency: string }> = {}
     if (isInitResultPresent()) {
       initResponse[0].message.order.quote.breakup.forEach(breakup => {
         paymentBreakdownMap[breakup.title] = {
@@ -187,14 +180,14 @@ const CheckoutPage = () => {
               // priceWithSymbol: `${currencyMap[singleItem.price.currency]}${singleItem.totalPrice}`,
               price: parseFloat(singleItem.price.value) * singleItem.quantity,
               currency: singleItem.price.currency,
-              image: singleItem.images[0].url
+              image: singleItem.images?.[0].url
             }))
           },
           shipping: {
             showDetails: isInitResultPresent(),
             shippingDetails: {
               name: shippingFormData.name,
-              location: shippingFormData.address,
+              location: shippingFormData.address!,
               number: shippingFormData.mobileNumber,
               title: 'Shipping'
             },
@@ -218,7 +211,7 @@ const CheckoutPage = () => {
             showDetails: isInitResultPresent() && !isEmpty(shippingFormData),
             shippingDetails: {
               name: billingFormData.name,
-              location: billingFormData.address,
+              location: billingFormData.address!,
               number: billingFormData.mobileNumber,
               title: 'Billing'
             },
@@ -237,7 +230,7 @@ const CheckoutPage = () => {
               totalText: 'Total',
               totalValueWithCurrency: {
                 value: getSubTotalAndDeliveryCharges(initResponse).subTotal.toString(),
-                currency: getSubTotalAndDeliveryCharges(initResponse).currencySymbol
+                currency: getSubTotalAndDeliveryCharges(initResponse).currencySymbol!
               }
             }
           },
