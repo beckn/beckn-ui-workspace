@@ -24,7 +24,9 @@ const Login = () => {
         mobile: { src: tourismMobLogo, alt: 'Tourism logo' },
         desktop: { src: tourismDeskLogo, alt: 'Tourism logo' }
       }}
-      onSignIn={() => {}}
+      onSignIn={() => {
+        Router.push(`/${tourismType ? `?tourismType=${tourismType}` : ''}`)
+      }}
       onSignUp={handleSignUp}
       t={key => t[key]}
     />

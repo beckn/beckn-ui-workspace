@@ -21,9 +21,8 @@ const HomePage = () => {
 
   const queryTourismType = Router.query.tourismType as string
   if (queryTourismType) {
-    localStorage.setItem('tourismType', queryTourismType)
+    Cookies.set('tourismType', queryTourismType)
   } else {
-    localStorage.removeItem('tourismType')
     Cookies.remove('tourismType')
   }
 

@@ -46,10 +46,10 @@ const Header = () => {
     const queryTourismType = router.query.tourismType as string | undefined
     if (queryTourismType) {
       setTourismType(queryTourismType)
-      localStorage.setItem('tourismType', queryTourismType)
+      // localStorage.setItem('tourismType', queryTourismType)
       Cookies.set('tourismType', queryTourismType)
     } else {
-      setTourismType(localStorage.getItem('tourismType') || null)
+      setTourismType(Cookies.get('tourismType')!)
     }
   }, [router.query.tourismType])
 
