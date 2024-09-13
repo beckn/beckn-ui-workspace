@@ -1,20 +1,17 @@
 import React, { useEffect } from 'react'
-import { Provider, useDispatch, useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import Head from 'next/head'
-import { ThemeProvider } from 'next-themes'
 import { useRouter } from 'next/router'
 import Header from '../header'
-import store from '../../store/index'
 import { ToastContainer } from 'react-toastify'
 import { useLanguage } from '../../hooks/useLanguage'
 import NextNProgress from 'nextjs-progressbar'
 import styles from './Layout.module.css'
-import { IGeoLocationSearchPageRootState } from '@lib/types/geoLocationSearchPage'
-import GeoLocationInputList from '@components/geoLocationInput/GeoLocationInputList'
 import { Box, Text, useToast } from '@chakra-ui/react'
 import { feedbackActions, ToastType, FeedbackRootState } from '@beckn-ui/common/src/store'
 import { Toast } from '@beckn-ui/molecules/src/components'
 import { testIds } from '@shared/dataTestIds'
+import { GeoLocationInputList, IGeoLocationSearchPageRootState } from '@beckn-ui/common'
 
 const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const { locale } = useLanguage()
