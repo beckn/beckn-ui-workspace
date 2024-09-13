@@ -219,7 +219,8 @@ function AddInformationMetadata() {
           geofences: [{ polygon }],
           domain: 'mobility',
           media: [{ mimetype: '', url: policyDocuments }],
-          status: (isActivate ? 'ACTIVE' : 'INACTIVE').toLowerCase()
+          status: (isActivate ? 'ACTIVE' : 'INACTIVE').toLowerCase(),
+          rules: getRulesJson()
         }
       }
 
