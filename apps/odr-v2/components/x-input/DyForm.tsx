@@ -1,7 +1,7 @@
 import { isEmpty } from '@utils/common-utils'
 import React, { useEffect, useState } from 'react'
 import { FormDetails } from './DyForm.types'
-import { Input, Button, InputTypeEnum, Loader } from '@beckn-ui/molecules'
+import { Input, Button, InputTypeEnum, Loader, Toast } from '@beckn-ui/molecules'
 import parse from 'html-react-parser'
 import Styles from './DyForm.module.css'
 import { Checkbox, Box, useToast } from '@chakra-ui/react'
@@ -98,10 +98,8 @@ const DyForm: React.FC<DyFormProps> = ({ htmlForm, onSubmit, onError, formId, se
   }
 
   useEffect(() => {
-    const areAllFieldsFilled = formDetails.inputs?.every(input => {
-      return !input.required || (input.required && formData[input.name])
-    })
-    setIsFormValid(areAllFieldsFilled)
+    const isAnyFieldFilled = formDetails.inputs?.some(input => formData[input.name])
+    setIsFormValid(isAnyFieldFilled)
   }, [formData, formDetails.inputs])
 
   const handleSubmit = async e => {

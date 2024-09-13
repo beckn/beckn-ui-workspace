@@ -137,8 +137,8 @@ const Search = () => {
       }}
       loaderProps={{
         isLoading,
-        loadingText: t.loadingText,
-        loadingSubText: t.loadingSubText,
+        loadingText: t.pleaseWait,
+        loadingSubText: t.searchLoaderSubText,
         dataTest: testIds.loadingIndicator
       }}
       catalogProps={{

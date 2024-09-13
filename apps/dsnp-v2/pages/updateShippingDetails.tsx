@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import ShippingForm from '@beckn-ui/becknified-components/src/components/checkout/shipping-form'
-import { Box, Text, useToast } from '@chakra-ui/react'
-import { ConfirmResponseModel } from '../types/confirm.types'
+import { Box, Text } from '@chakra-ui/react'
 import { Loader, Typography } from '@beckn-ui/molecules'
 import { useLanguage } from '@hooks/useLanguage'
 import { v4 as uuidv4 } from 'uuid'
 import { useRouter } from 'next/router'
 import { useDispatch } from 'react-redux'
 import axios from '@services/axios'
-import { feedbackActions, geocodeFromPincode } from '@beckn-ui/common'
+import { ConfirmResponseModel, feedbackActions, geocodeFromPincode } from '@beckn-ui/common'
+import { ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
 
 const UpdateShippingDetails = () => {
   const [shippingDetails, setShippingDetails] = useState({
@@ -22,7 +22,6 @@ const UpdateShippingDetails = () => {
   const [isLoadingForUpdate, setIsLoadingForUpdate] = useState(false)
   const { t } = useLanguage()
   const router = useRouter()
-  const toast = useToast()
   const dispatch = useDispatch()
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
@@ -34,14 +33,14 @@ const UpdateShippingDetails = () => {
     }
   }, [])
 
-  const handleSubmit = async (formData: any, confirmData: ConfirmResponseModel[]) => {
+  const handleSubmit = async (formData: ShippingFormInitialValuesType, confirmData: ConfirmResponseModel[]) => {
     try {
       setIsLoadingForUpdate(true)
       if (confirmData && confirmData.length > 0) {
         const { domain, bpp_id, bpp_uri, transaction_id } = confirmData[0].context
         const orderId = confirmData[0].message.orderId
         const { name, address, email, mobileNumber, pinCode } = formData
-        const { state, city, country } = await geocodeFromPincode(pinCode)
+        const { state, city, country } = await geocodeFromPincode(pinCode!)
 
         const updateRequestPayload = {
           data: [
@@ -106,7 +105,7 @@ const UpdateShippingDetails = () => {
         const selectedOrderData = JSON.parse(localStorage.getItem('selectedOrder') as string)
         const { orderId } = selectedOrderData
         const { name, address, email, mobileNumber, pinCode } = formData
-        const { state, city, country } = await geocodeFromPincode(pinCode)
+        const { state, city, country } = await geocodeFromPincode(pinCode!)
 
         const updateRequestPayload = {
           data: [
@@ -183,7 +182,7 @@ const UpdateShippingDetails = () => {
     }
   }
 
-  const handleFormChange = (changedData: any) => {
+  const handleFormChange = (changedData: ShippingFormInitialValuesType) => {
     setShippingDetails(prevDetails => ({ ...prevDetails, ...changedData }))
   }
 
@@ -232,7 +231,7 @@ const UpdateShippingDetails = () => {
       overflowY="scroll"
     >
       <ShippingForm
-        onSubmit={() => handleSubmit(shippingDetails, confirmData)}
+        onSubmit={() => handleSubmit(shippingDetails, confirmData as ConfirmResponseModel[])}
         values={shippingDetails}
         onChange={handleFormChange}
         submitButton={{ text: 'Submit' }}
