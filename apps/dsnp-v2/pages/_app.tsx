@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import type { AppProps } from 'next/app'
 
-import Layout from '@components/layout/Layout'
+import Layout, { CustomToast } from '@components/layout/Layout'
 import { BecknProvider } from '@beckn-ui/molecules'
 
 import 'slick-carousel/slick/slick.css'
@@ -16,7 +16,7 @@ import { useToast } from '@chakra-ui/react'
 import { parentURLs } from '@lib/config'
 // import { Garuda } from 'garudaa'
 import { PersistGate } from 'redux-persist/integration/react'
-import { CustomToast } from '@components/signIn/SignIn'
+// import { CustomToast } from '@components/signIn/SignIn'
 import axios from '@services/axios'
 
 // Garuda.init({
