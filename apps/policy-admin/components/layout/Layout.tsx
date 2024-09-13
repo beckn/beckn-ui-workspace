@@ -6,7 +6,7 @@ import { ToastContainer } from 'react-toastify'
 import { useLanguage } from '../../hooks/useLanguage'
 import styles from './Layout.module.css'
 import NextNProgress from 'nextjs-progressbar'
-import { Box, useDisclosure, useToast } from '@chakra-ui/react'
+import { Box, useToast } from '@chakra-ui/react'
 import { useDispatch, useSelector } from 'react-redux'
 import { feedbackActions, FeedbackRootState, ToastType } from '@beckn-ui/common'
 import { Toast } from '@beckn-ui/molecules'
@@ -21,6 +21,7 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const signIn = router.pathname === '/signIn'
   const isSignUp = router.pathname === '/signUp'
   const isSearch = router.pathname === '/search'
+  const isResetPassword = router.pathname === '/resetPassword'
 
   const toast = useToast()
   const dispatch = useDispatch()
@@ -76,7 +77,7 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
       <Head>
         <title>Network Policy</title>
       </Head>
-      {!signIn && !isSignUp ? (
+      {!signIn && !isSignUp && !isResetPassword ? (
         <CustomDrawer
           isOpen={isOpen}
           handleDrawerToggle={() => setIsOpen(!isOpen)}

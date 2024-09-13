@@ -1,37 +1,21 @@
 import React, { useState, useMemo } from 'react'
 import { BecknAuth } from '@beckn-ui/becknified-components'
 import { FormErrors, SignInFormProps } from '@beckn-ui/common/lib/types'
-import { FeedbackRootState, ToastType, signInValidateForm } from '@beckn-ui/common'
+import { FeedbackRootState, signInValidateForm } from '@beckn-ui/common'
 import { useLanguage } from '@hooks/useLanguage'
-import {
-  Box,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  Input,
-  useDisclosure,
-  FormLabel,
-  FormControl,
-  Text,
-  useToast
-} from '@chakra-ui/react'
+import { Box, Input, FormControl, Text, useToast } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { usePolicyLoginMutation, useResetLinkMutation } from '@services/UserService'
 import PortalIcon from '@public/images/online-taxi-booking.svg'
 import BecknButton from '@beckn-ui/molecules/src/components/button'
-import axios from '@services/axios'
 import { useSelector } from 'react-redux'
 import { Toast } from '@beckn-ui/molecules'
+import { BottomModal } from '@beckn-ui/molecules'
 
 const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
   const [formData, setFormData] = useState<SignInFormProps>(initialFormData)
   const [formErrors, setFormErrors] = useState<FormErrors>({ email: '', password: '' })
   const [policyLogin, { isLoading }] = usePolicyLoginMutation()
-  const { isOpen, onOpen, onClose } = useDisclosure()
   const [forgotPasswordEmail, setForgotPasswordEmail] = useState('')
   const [forgotPasswordEmailError, setForgotPasswordEmailError] = useState('')
   const [resetLink, { isLoading: isResetLinkLoading }] = useResetLinkMutation()
@@ -39,6 +23,8 @@ const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
   const {
     toast: { display, message, type, description }
   } = useSelector((state: FeedbackRootState) => state.feedback)
+  const [isMenuModalOpen, setIsMenuModalOpen] = useState(false)
+
   const { t } = useLanguage()
   const router = useRouter()
 
@@ -100,17 +86,19 @@ const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
     }
   }
 
-  const handleForgotPasswordClick = () => {
-    onOpen()
+  const handleMenuModalOpen = () => {
+    setIsMenuModalOpen(true)
+  }
+
+  const handleMenuModalClose = () => {
+    setIsMenuModalOpen(false)
   }
   const handleResendLink = async () => {
-    // Todo: implement send link logic here
-
     try {
       const response = await resetLink({
         email: forgotPasswordEmail
       }).unwrap()
-      onClose()
+      handleMenuModalClose()
       toast({
         position: 'top',
         duration: 5000,
@@ -118,8 +106,8 @@ const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
         render: ({ onClose }) => (
           <Toast
             status="success"
-            title="Success"
-            description="Please check your email for the password reset link."
+            title={t.Success}
+            description={t.pleaseCheckYourMail}
             onClose={onClose}
           />
         )
@@ -152,7 +140,7 @@ const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
             },
             {
               text: 'Forgot password?',
-              handleClick: handleForgotPasswordClick,
+              handleClick: handleMenuModalOpen,
               variant: 'outline',
               colorScheme: 'primary',
               disabled: isLoading,
@@ -183,54 +171,47 @@ const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
         }}
       />
 
-      <Modal
-        isOpen={isOpen}
-        onClose={onClose}
+      <BottomModal
+        title={t.forgotPassword}
+        isOpen={isMenuModalOpen}
+        onClose={handleMenuModalClose}
       >
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Forgot Password?</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <Text>No worries, we'll send you reset instructions. Enter your email:</Text>
-            <FormControl
-              mt={4}
-              isInvalid={!!forgotPasswordEmailError}
+        <Text>{t.noWorreis}</Text>
+        <FormControl
+          mt={4}
+          isInvalid={!!forgotPasswordEmailError}
+        >
+          <Input
+            id="email"
+            placeholder={t.enterYourMail}
+            value={forgotPasswordEmail}
+            onChange={handleForgotPasswordEmailChange}
+          />
+          {forgotPasswordEmailError && (
+            <Text
+              color="red.500"
+              fontSize="sm"
+              mt={1}
             >
-              <FormLabel htmlFor="email">Email</FormLabel>
-              <Input
-                id="email"
-                placeholder="Enter your email"
-                value={forgotPasswordEmail}
-                onChange={handleForgotPasswordEmailChange}
-              />
-              {forgotPasswordEmailError && (
-                <Text
-                  color="red.500"
-                  fontSize="sm"
-                  mt={1}
-                >
-                  {forgotPasswordEmailError}
-                </Text>
-              )}
-            </FormControl>
-          </ModalBody>
-          <ModalFooter>
-            <BecknButton
-              children={'Send Reset Link'}
-              handleClick={handleResendLink}
-              variant="solid"
-              isLoading={isResetLinkLoading}
-              loadingText="Sending..."
-            />
-            <BecknButton
-              children={'Cancel'}
-              handleClick={onClose}
-              variant="primary"
-            />
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+              {forgotPasswordEmailError}
+            </Text>
+          )}
+        </FormControl>
+        <Box mt={4}>
+          <BecknButton
+            children={t.Send}
+            handleClick={handleResendLink}
+            variant="solid"
+            isLoading={isResetLinkLoading}
+            loadingText="Sending..."
+          />
+          <BecknButton
+            children={t.Cancel}
+            handleClick={handleMenuModalClose}
+            variant="outline"
+          />
+        </Box>
+      </BottomModal>
     </Box>
   )
 }
