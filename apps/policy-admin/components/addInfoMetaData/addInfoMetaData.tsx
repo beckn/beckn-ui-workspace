@@ -55,7 +55,8 @@ function AddInformationMetadata() {
     startDate: '',
     endDate: '',
     policyDocuments: '',
-    applicableTo: ''
+    applicableTo: '',
+    geofence: ''
   })
 
   const router = useRouter()
@@ -95,7 +96,8 @@ function AddInformationMetadata() {
       startDate: '',
       endDate: '',
       policyDocuments: '',
-      applicableTo: ''
+      applicableTo: '',
+      geofence: ''
     }
 
     if (!policyName) {
@@ -145,6 +147,11 @@ function AddInformationMetadata() {
 
     if (applicableTo.length === 0) {
       newErrors.applicableTo = 'Applicable To is required'
+      valid = false
+    }
+
+    if (policyType === PolicyType.GEOFENCE && polygon.length === 0) {
+      newErrors.geofence = 'Geofence is required'
       valid = false
     }
 
@@ -515,7 +522,7 @@ function AddInformationMetadata() {
           gap="4rem"
         >
           <FormControl
-            mb="1rem"
+            mb="0.5rem"
             isInvalid={!!errors.policyDocuments}
           >
             <FormLabel>Sources</FormLabel>
@@ -536,7 +543,7 @@ function AddInformationMetadata() {
           </FormControl>
 
           <FormControl
-            mb="1rem"
+            mb="0.5rem"
             isInvalid={!!errors.applicableTo}
           >
             <FormLabel>Applicable To</FormLabel>
@@ -565,7 +572,10 @@ function AddInformationMetadata() {
           p={4}
           border="1px solid #72767e"
         >
-          <FormControl>
+          <FormControl
+            mb="0.5rem"
+            isInvalid={!!errors.geofence}
+          >
             <FormLabel>Geofence</FormLabel>
             {polygon.length === 0 ? (
               <Box
@@ -606,6 +616,14 @@ function AddInformationMetadata() {
                 {'View Geofence'}
               </Link>
             )}
+            {errors.geofence && (
+              <FormErrorMessage
+                position={'absolute'}
+                mt="0px"
+              >
+                {errors.geofence}
+              </FormErrorMessage>
+            )}
           </FormControl>
         </Box>
       )}
@@ -614,7 +632,7 @@ function AddInformationMetadata() {
         p={4}
         border="1px solid #72767e"
       >
-        <FormControl>
+        <FormControl mb="0.5rem">
           <FormLabel>Rules</FormLabel>
           <Box
             sx={{
@@ -636,6 +654,7 @@ function AddInformationMetadata() {
               overflowY="auto"
               overflowX="hidden"
               lineHeight={'normal'}
+              outline="none"
             >
               {applicableTo.length > 0 && JSON.stringify(getRulesJson(), undefined, 4)}
             </Code>

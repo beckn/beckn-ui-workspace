@@ -14,7 +14,7 @@ const CreateGeofence = () => {
 
   const router = useRouter()
   const dispatch = useDispatch()
-  const { polygon } = useSelector((state: PolicyRootState) => state.policy)
+  const { polygon, city } = useSelector((state: PolicyRootState) => state.policy)
 
   useEffect(() => {
     if (polygon.length > 0) {
@@ -77,6 +77,7 @@ const CreateGeofence = () => {
         h="650px"
       >
         <DynamicGeofenceMap
+          city={city}
           polygonPath={polygonPath}
           updateCoordinates={updateCoordinates}
         />

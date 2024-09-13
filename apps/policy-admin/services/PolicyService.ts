@@ -33,15 +33,29 @@ const policyApi = Api.injectEndpoints({
           method: 'GET'
         }
       }
+    }),
+    updatePolicy: build.mutation<any, any>({
+      query: payload => {
+        return {
+          url: '/policy',
+          method: 'PATCH',
+          body: payload
+        }
+      }
     })
   })
 })
 
-export const { useCreatePolicyMutation, useDashboardMutation, useGetAllPoliciesMutation, useGetPolicyDetailsMutation } =
-  policyApi
+export const {
+  useCreatePolicyMutation,
+  useDashboardMutation,
+  useGetAllPoliciesMutation,
+  useGetPolicyDetailsMutation,
+  useUpdatePolicyMutation
+} = policyApi
 
 export const {
-  endpoints: { createPolicy, dashboard, getAllPolicies, getPolicyDetails }
+  endpoints: { createPolicy, dashboard, getAllPolicies, getPolicyDetails, updatePolicy }
 } = policyApi
 
 export default policyApi

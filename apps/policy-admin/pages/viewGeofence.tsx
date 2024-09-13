@@ -3,6 +3,8 @@ import { Box, Flex } from '@chakra-ui/react'
 import CustomButton from '@components/Button/CustomButton'
 import DynamicGeofenceMap from '@components/DynamicGeofenceMap'
 import { useRouter } from 'next/router'
+import { useSelector } from 'react-redux'
+import { PolicyRootState } from '@store/policy.slice'
 
 const ViewGeofenceDetails = () => {
   const [polygonPath, setPolygonPath] = useState([])
@@ -28,6 +30,7 @@ const ViewGeofenceDetails = () => {
         <DynamicGeofenceMap
           enableSearch={false}
           editable={false}
+          city={router.query.city as string}
           polygonPath={polygonPath}
           updateCoordinates={() => {}}
         />
@@ -40,7 +43,7 @@ const ViewGeofenceDetails = () => {
         <CustomButton
           variant="outline"
           text="Go back"
-          onClick={() => router.push('/policyDetails')}
+          onClick={() => router.back()}
           w={{ base: '100%', md: '15rem' }}
         />
       </Flex>

@@ -52,12 +52,13 @@ const DynamicGeofenceMap = (props: DynamicGeofenceMapProps) => {
   const [libraries] = useState(['places', 'drawing'])
 
   const router = useRouter()
-
-  const city = router.query.city || 'Bangalore'
-  const cityLatLng = cityCoordinates[city as string] || {
-    lat: 12.903561,
-    lng: 77.5939631
-  }
+  console.log(props.city)
+  const city = props.city || 'bangalore'
+  const cityLatLng = cityCoordinates[city as string] ||
+    polygonPath[0] || {
+      lat: 12.903561,
+      lng: 77.5939631
+    }
 
   const [focusedMapPosition, setFocusedMapPosition] = useState(cityLatLng)
 

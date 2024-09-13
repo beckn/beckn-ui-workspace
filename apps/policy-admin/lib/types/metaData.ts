@@ -12,7 +12,7 @@ export enum ApplicableToType {
 export enum PolicyStatusType {
   ACTIVE = 'ACTIVE',
   INACTIVE = 'INACTIVE',
-  PUBLISH = 'PUBLISH'
+  PUBLISHED = 'PUBLISHED'
 }
 
 export interface RulesTemplate {

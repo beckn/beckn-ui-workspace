@@ -23,8 +23,10 @@ import { useRouter } from 'next/router'
 import CustomButton from '@components/Button/CustomButton'
 import { policyStatusOptions } from '@lib/constants'
 import { PolicyStatusType } from '@lib/types/metaData'
-import { useGetPolicyDetailsMutation } from '@services/PolicyService'
+import { useGetPolicyDetailsMutation, useUpdatePolicyMutation } from '@services/PolicyService'
 import { formatDate } from '@utils/general'
+import { feedbackActions } from '@beckn-ui/common'
+import { useDispatch } from 'react-redux'
 
 const ViewInformation = () => {
   const [item, setItem] = useState({
@@ -46,11 +48,12 @@ const ViewInformation = () => {
 
   const [policyStatus, setPolicyStatus] = useState(item.status.toUpperCase())
   const [getPolicyDetails] = useGetPolicyDetailsMutation()
+  const [updatePolicy] = useUpdatePolicyMutation()
 
   const router = useRouter()
-  const { policyId } = router.query // Get the policyId from the URL query params
+  const dispatch = useDispatch()
+  const { policyId } = router.query
 
-  // API call to get policy by ID
   useEffect(() => {
     const getPolicyById = async (id: any) => {
       try {
@@ -88,9 +91,19 @@ const ViewInformation = () => {
           city,
           source
         })
-        setPolicyStatus(policy.status.toUpperCase()) // Update policy status in state
+        setPolicyStatus(policy.status.toUpperCase())
       } catch (error) {
         console.error('Error fetching policy:', error)
+        dispatch(
+          feedbackActions.setToastData({
+            toastData: {
+              message: 'Error',
+              display: true,
+              type: 'error',
+              description: 'Something went wrong, please try again'
+            }
+          })
+        )
       } finally {
         setIsLoading(false)
       }
@@ -102,11 +115,11 @@ const ViewInformation = () => {
   }, [policyId])
 
   const getStatusDrodpwnItems = (statusDetails: any) => {
-    if (statusDetails === PolicyStatusType.PUBLISH) {
+    if (statusDetails === PolicyStatusType.PUBLISHED) {
       return policyStatusOptions.filter(status => status.value !== PolicyStatusType.ACTIVE)
     }
     if (statusDetails == PolicyStatusType.INACTIVE) {
-      return policyStatusOptions.filter(status => status.value !== PolicyStatusType.PUBLISH)
+      return policyStatusOptions.filter(status => status.value !== PolicyStatusType.PUBLISHED)
     }
     return policyStatusOptions
   }
@@ -118,6 +131,40 @@ const ViewInformation = () => {
         lng: Number(latLong[1])
       }
     })
+  }
+
+  const handleOnUpdate = async () => {
+    try {
+      const payload = {
+        policyId: policyId,
+        status: policyStatus.toLowerCase()
+      }
+
+      await updatePolicy(payload).unwrap()
+      dispatch(
+        feedbackActions.setToastData({
+          toastData: {
+            message: 'Success',
+            display: true,
+            type: 'success',
+            description: 'Policy updated successfully!'
+          }
+        })
+      )
+      router.push('/')
+    } catch (error) {
+      console.error('Error updating policy:', error)
+      dispatch(
+        feedbackActions.setToastData({
+          toastData: {
+            message: 'Error',
+            display: true,
+            type: 'error',
+            description: 'Something went wrong, please try again'
+          }
+        })
+      )
+    }
   }
 
   return (
@@ -293,6 +340,7 @@ const ViewInformation = () => {
               router.push({
                 pathname: '/viewGeofence',
                 query: {
+                  city: item.city,
                   coords: JSON.stringify(getGeoFenceCoords(item.geofence))
                 }
               })
@@ -325,13 +373,15 @@ const ViewInformation = () => {
               height={'100%'}
               background="transparent"
               contentEditable={true}
+              borderColor="transparent"
               whiteSpace="pre-wrap"
               width="100%"
               overflowY="auto"
               overflowX="hidden"
               lineHeight={'normal'}
+              outline="none"
             >
-              {JSON.stringify(item.rules)}
+              {item.rules ? JSON.stringify(item.rules) : ''}
             </Code>
           </Box>
         </FormControl>
@@ -353,7 +403,7 @@ const ViewInformation = () => {
           bgGradient="linear(180deg, #000428 0%, #004e92 100%) !important"
           text="Update"
           _hover={{ opacity: 0.9 }}
-          onClick={() => {}}
+          onClick={handleOnUpdate}
           w={{ base: '100%', md: '100%' }}
         />
       </Flex>

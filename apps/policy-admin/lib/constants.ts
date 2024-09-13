@@ -32,5 +32,5 @@ export const applicableToOptions = [
 export const policyStatusOptions = [
   { value: PolicyStatusType.ACTIVE, label: 'Active' },
   { value: PolicyStatusType.INACTIVE, label: 'Inactive' },
-  { value: PolicyStatusType.PUBLISH, label: 'Publish' }
+  { value: PolicyStatusType.PUBLISHED, label: 'Publish' }
 ]
