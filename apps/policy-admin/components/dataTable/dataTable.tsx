@@ -181,7 +181,10 @@ const DataTable = (props: DataTableProps) => {
                   cursor="pointer"
                   _hover={{ backgroundColor: 'rgba(0, 0, 0, 0.04)' }}
                   onClick={() => {
-                    router.push('/policyDetails')
+                    router.push({
+                      pathname: `/policyDetails`,
+                      query: { policyId: item.id }
+                    })
                   }}
                 >
                   <Td borderBottom={'1px dotted #004e92!important'}>

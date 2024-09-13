@@ -1,18 +1,23 @@
 import { FeedbackRootState, ToastType } from '@beckn-ui/common'
 import BecknButton from '@beckn-ui/molecules/src/components/button'
 import { Box, Heading, Input, useToast, VStack, Text } from '@chakra-ui/react'
+import { useResetPasswordMutation } from '@services/UserService'
+import { Router, useRouter } from 'next/router'
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
+import { Toast } from '@beckn-ui/molecules'
 
 const ResetPassword = () => {
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [error, setError] = useState('')
+  const [resetPassword, { isLoading: isResetPasswordLoading }] = useResetPasswordMutation()
   const toast = useToast()
   const {
     toast: { display, message, type, description }
   } = useSelector((state: FeedbackRootState) => state.feedback)
-
+  const router = useRouter()
+  const { code } = router.query
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value)
   }
@@ -25,27 +30,37 @@ const ResetPassword = () => {
     return pass.length >= 8 && /[@]/.test(pass) && /\d/.test(pass)
   }
 
-  const handleResetPassword = () => {
+  const handleResetPassword = async () => {
     if (!isPasswordStrong(password)) {
       setError('Password must be at least 8 characters long and include @ and a number')
     } else if (password !== confirmPassword) {
       setError('Passwords do not match')
     } else {
       // TODO: Implement password reset logic here
-      setError('')
-      toast({
-        position: 'top',
-        duration: 5000,
-        isClosable: true,
-        render: ({ onClose }) => (
-          <Toast
-            status={type as ToastType}
-            title={'Success'}
-            description={'Password reset successfully'}
-            onClose={onClose}
-          />
-        )
-      })
+      try {
+        const response = await resetPassword({
+          password,
+          passwordConfirmation: confirmPassword,
+          code
+        }).unwrap()
+        setError('')
+        router.push('/')
+        toast({
+          position: 'top',
+          duration: 5000,
+          isClosable: true,
+          render: ({ onClose }) => (
+            <Toast
+              status="success"
+              title={'Success'}
+              description={'Password reset successfully'}
+              onClose={onClose}
+            />
+          )
+        })
+      } catch (error) {
+        console.error(error)
+      }
     }
   }
 
@@ -100,6 +115,8 @@ const ResetPassword = () => {
             children={'Reset Password'}
             handleClick={handleResetPassword}
             variant="solid"
+            isLoading={isResetPasswordLoading}
+            loadingText="Resetting..."
           />
         </VStack>
       </Box>

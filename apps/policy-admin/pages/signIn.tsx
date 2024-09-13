@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react'
 import { BecknAuth } from '@beckn-ui/becknified-components'
 import { FormErrors, SignInFormProps } from '@beckn-ui/common/lib/types'
-import { signInValidateForm } from '@beckn-ui/common'
+import { FeedbackRootState, ToastType, signInValidateForm } from '@beckn-ui/common'
 import { useLanguage } from '@hooks/useLanguage'
 import {
   Box,
@@ -16,12 +16,16 @@ import {
   useDisclosure,
   FormLabel,
   FormControl,
-  Text
+  Text,
+  useToast
 } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
-import { usePolicyLoginMutation } from '@services/UserService'
+import { usePolicyLoginMutation, useResetLinkMutation } from '@services/UserService'
 import PortalIcon from '@public/images/online-taxi-booking.svg'
 import BecknButton from '@beckn-ui/molecules/src/components/button'
+import axios from '@services/axios'
+import { useSelector } from 'react-redux'
+import { Toast } from '@beckn-ui/molecules'
 
 const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
   const [formData, setFormData] = useState<SignInFormProps>(initialFormData)
@@ -30,7 +34,11 @@ const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [forgotPasswordEmail, setForgotPasswordEmail] = useState('')
   const [forgotPasswordEmailError, setForgotPasswordEmailError] = useState('')
-
+  const [resetLink, { isLoading: isResetLinkLoading }] = useResetLinkMutation()
+  const toast = useToast()
+  const {
+    toast: { display, message, type, description }
+  } = useSelector((state: FeedbackRootState) => state.feedback)
   const { t } = useLanguage()
   const router = useRouter()
 
@@ -95,9 +103,30 @@ const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
   const handleForgotPasswordClick = () => {
     onOpen()
   }
-  const handleResendLink = () => {
+  const handleResendLink = async () => {
     // Todo: implement send link logic here
-    console.log('krushna')
+
+    try {
+      const response = await resetLink({
+        email: forgotPasswordEmail
+      }).unwrap()
+      onClose()
+      toast({
+        position: 'top',
+        duration: 5000,
+        isClosable: true,
+        render: ({ onClose }) => (
+          <Toast
+            status="success"
+            title="Success"
+            description="Please check your email for the password reset link."
+            onClose={onClose}
+          />
+        )
+      })
+    } catch (error: any) {
+      console.log('Error: ', error)
+    }
   }
 
   return (
@@ -191,6 +220,8 @@ const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
               children={'Send Reset Link'}
               handleClick={handleResendLink}
               variant="solid"
+              isLoading={isResetLinkLoading}
+              loadingText="Sending..."
             />
             <BecknButton
               children={'Cancel'}
