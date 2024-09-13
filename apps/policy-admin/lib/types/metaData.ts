@@ -16,43 +16,55 @@ export enum PolicyStatusType {
 }
 
 export interface RulesTemplate {
-  policy: {
-    status: string
-    domain: 'mobility'
-    owner: {
-      descriptor: {
-        name: string
-        contact: {
-          email: string
+  context: {
+    action: string
+    domain: string
+    location: {
+      country: string
+      city: string
+    }
+    version: string
+  }
+  message: {
+    policy: {
+      id: string
+      status: string
+      domain: string
+      owner: {
+        descriptor: {
+          name: string
+          contact: {
+            email: string
+          }
         }
       }
+      descriptor: {
+        name: string
+        short_desc: string
+        media: {
+          mimetype: string
+          url: string
+        }[]
+      }
+      type: string
+      coverage: {
+        spatial: {
+          country: string
+          city: string
+        }[]
+        temporal: {
+          range: {
+            start: string
+            end: string
+          }
+        }[]
+        subscribers: {
+          type: string
+        }[]
+      }[]
+      geofences: {
+        polygon: string[]
+      }[]
     }
-    descriptor: {
-      name: string
-      short_desc: string
-    }
-    media: {
-      mimetype: string
-      url: string
-    }[]
-    type: string
-    coverage: {
-      spatial: {
-        country: string
-        city: string
-      }[]
-      temporal: {
-        range: {
-          start: string
-          end: string
-        }
-      }[]
-      subscribers: {
-        type: string
-      }[]
-    }[]
-    geofences: {
-      polygon: any[] // If you have a specific type for polygons, you can replace `any[]`
-    }[]
   }
 }

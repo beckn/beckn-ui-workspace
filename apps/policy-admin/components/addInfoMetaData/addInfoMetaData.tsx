@@ -154,23 +154,31 @@ function AddInformationMetadata() {
 
   const getRulesJson = useCallback(() => {
     const rules: RulesTemplate = {
-      policy: {
-        type: policyType,
-        owner: { descriptor: { name: policyOwner, contact: { email: 'support@moh.gov.in' } } },
-        descriptor: { name: policyName, short_desc: description },
-        coverage: [
-          {
-            spatial: [{ country, city }],
-            temporal: [{ range: { start: startDate, end: endDate } }],
-            subscribers: applicableTo.map(to => {
-              return { type: to }
-            })
-          }
-        ],
-        geofences: [{ polygon }],
+      context: {
+        action: 'policy',
         domain: 'mobility',
-        media: [{ mimetype: '', url: policyDocuments }],
-        status: (isActivate ? 'ACTIVE' : 'INACTIVE').toLowerCase()
+        location: { country, city },
+        version: '1.0.0'
+      },
+      message: {
+        policy: {
+          id: '',
+          type: policyType,
+          owner: { descriptor: { name: policyOwner, contact: { email: 'support@moh.gov.in' } } },
+          descriptor: { name: policyName, short_desc: description, media: [{ mimetype: '', url: policyDocuments }] },
+          coverage: [
+            {
+              spatial: [{ country, city }],
+              temporal: [{ range: { start: startDate, end: endDate } }],
+              subscribers: applicableTo.map(to => {
+                return { type: to }
+              })
+            }
+          ],
+          geofences: [{ polygon }],
+          domain: 'mobility',
+          status: (isActivate ? 'ACTIVE' : 'INACTIVE').toLowerCase()
+        }
       }
     }
     return rules
@@ -194,7 +202,28 @@ function AddInformationMetadata() {
       return
     }
     try {
-      await createPolicy(getRulesJson()).unwrap()
+      const payload = {
+        policy: {
+          type: policyType,
+          owner: { descriptor: { name: policyOwner, contact: { email: 'support@moh.gov.in' } } },
+          descriptor: { name: policyName, short_desc: description },
+          coverage: [
+            {
+              spatial: [{ country, city }],
+              temporal: [{ range: { start: startDate, end: endDate } }],
+              subscribers: applicableTo.map(to => {
+                return { type: to }
+              })
+            }
+          ],
+          geofences: [{ polygon }],
+          domain: 'mobility',
+          media: [{ mimetype: '', url: policyDocuments }],
+          status: (isActivate ? 'ACTIVE' : 'INACTIVE').toLowerCase()
+        }
+      }
+
+      await createPolicy(payload).unwrap()
       dispatch(
         feedbackActions.setToastData({
           toastData: {
