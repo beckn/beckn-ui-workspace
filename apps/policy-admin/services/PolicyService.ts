@@ -17,6 +17,14 @@ const policyApi = Api.injectEndpoints({
         method: 'GET'
       })
     }),
+    getPolicyDetails: build.mutation<any, any>({
+      query: payload => {
+        return {
+          url: `/policy/${payload.policyId}`,
+          method: 'GET'
+        }
+      }
+    }),
     getAllPolicies: build.mutation<any, any>({
       query: payload => {
         const queryParams = new URLSearchParams(payload).toString()
@@ -29,10 +37,11 @@ const policyApi = Api.injectEndpoints({
   })
 })
 
-export const { useCreatePolicyMutation, useDashboardMutation, useGetAllPoliciesMutation } = policyApi
+export const { useCreatePolicyMutation, useDashboardMutation, useGetAllPoliciesMutation, useGetPolicyDetailsMutation } =
+  policyApi
 
 export const {
-  endpoints: { createPolicy, dashboard, getAllPolicies }
+  endpoints: { createPolicy, dashboard, getAllPolicies, getPolicyDetails }
 } = policyApi
 
 export default policyApi

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Box,
   Button,
@@ -23,9 +23,11 @@ import { useRouter } from 'next/router'
 import CustomButton from '@components/Button/CustomButton'
 import { policyStatusOptions } from '@lib/constants'
 import { PolicyStatusType } from '@lib/types/metaData'
+import { useGetPolicyDetailsMutation } from '@services/PolicyService'
+import { formatDate } from '@utils/general'
 
 const ViewInformation = () => {
-  const item = {
+  const [item, setItem] = useState({
     startDate: '',
     endDate: '',
     title: '',
@@ -33,14 +35,73 @@ const ViewInformation = () => {
     sourceOwner: '',
     description: '',
     country: '',
-    status: 'Publish'
-  }
+    status: '',
+    geofence: [],
+    rules: null,
+    applicable: '',
+    city: '',
+    source: ''
+  })
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const [policyStatus, setPolicyStatus] = useState(item.status.toUpperCase())
+  const [getPolicyDetails] = useGetPolicyDetailsMutation()
 
   const router = useRouter()
+  const { policyId } = router.query // Get the policyId from the URL query params
 
-  const getStatusDrodpwnItems = (statusDetails: string) => {
+  // API call to get policy by ID
+  useEffect(() => {
+    const getPolicyById = async (id: any) => {
+      try {
+        setIsLoading(true)
+        const response = await getPolicyDetails({ policyId: id }).unwrap()
+        const policy = response.policy
+
+        const country = policy.coverage[0]['spatial'][0].country
+        const city = policy.coverage[0]['spatial'][0].city
+        const startDate = policy.coverage[0]['temporal'][0]['range']['start']
+        const endDate = policy.coverage[0]['temporal'][0]['range']['end']
+        const title = policy?.name
+        const category = policy?.type
+        const sourceOwner = policy?.owner
+        const description = policy?.descriptor
+        const status = policy?.status
+        const geofence = policy?.geofences[0]['polygon']
+        const rules = policy?.rules
+        const applicable = policy?.coverage[0]['subscribers']
+          ?.map((item: { type: any }) => item.type.toUpperCase())
+          .join(', ')
+        const source = policy?.media?.url
+        setItem({
+          startDate,
+          endDate,
+          title,
+          category,
+          sourceOwner,
+          description,
+          country,
+          status,
+          geofence,
+          rules,
+          applicable,
+          city,
+          source
+        })
+        setPolicyStatus(policy.status.toUpperCase()) // Update policy status in state
+      } catch (error) {
+        console.error('Error fetching policy:', error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    if (policyId) {
+      getPolicyById(policyId)
+    }
+  }, [policyId])
+
+  const getStatusDrodpwnItems = (statusDetails: any) => {
     if (statusDetails === PolicyStatusType.PUBLISH) {
       return policyStatusOptions.filter(status => status.value !== PolicyStatusType.ACTIVE)
     }
@@ -48,6 +109,15 @@ const ViewInformation = () => {
       return policyStatusOptions.filter(status => status.value !== PolicyStatusType.PUBLISH)
     }
     return policyStatusOptions
+  }
+  const getGeoFenceCoords = (coords: string[]) => {
+    return coords.map(item => {
+      const latLong = item.split(', ')
+      return {
+        lat: Number(latLong[0]),
+        lng: Number(latLong[1])
+      }
+    })
   }
 
   return (
@@ -82,7 +152,7 @@ const ViewInformation = () => {
             <FormLabel>Title</FormLabel>
             <Typography
               fontSize="14px"
-              text="BLR Airport traffic"
+              text={item.title}
             />
           </FormControl>
 
@@ -90,7 +160,7 @@ const ViewInformation = () => {
             <FormLabel>Information Category</FormLabel>
             <Typography
               fontSize="14px"
-              text="Geofence"
+              text={item.category}
             />
           </FormControl>
 
@@ -98,7 +168,7 @@ const ViewInformation = () => {
             <FormLabel>Information Source Owner</FormLabel>
             <Typography
               fontSize="14px"
-              text="BLR traffic police"
+              text={item.sourceOwner}
             />
           </FormControl>
 
@@ -137,7 +207,7 @@ const ViewInformation = () => {
           <FormLabel>Description</FormLabel>
           <Typography
             fontSize="14px"
-            text="Add Description"
+            text={item.description}
           />
         </FormControl>
 
@@ -154,7 +224,7 @@ const ViewInformation = () => {
               <FormLabel>Country</FormLabel>
               <Typography
                 fontSize="14px"
-                text="country"
+                text={item.country}
               />
             </FormControl>
 
@@ -162,7 +232,7 @@ const ViewInformation = () => {
               <FormLabel>City</FormLabel>
               <Typography
                 fontSize="14px"
-                text="city"
+                text={item.city}
               />
             </FormControl>
           </Flex>
@@ -171,7 +241,7 @@ const ViewInformation = () => {
               <FormLabel>From</FormLabel>
               <Typography
                 fontSize="14px"
-                text={item.startDate}
+                text={formatDate(item.startDate)}
               />
             </FormControl>
 
@@ -179,7 +249,7 @@ const ViewInformation = () => {
               <FormLabel>To</FormLabel>
               <Typography
                 fontSize="14px"
-                text={item.endDate}
+                text={formatDate(item.endDate)}
               />
             </FormControl>
           </Flex>
@@ -194,10 +264,10 @@ const ViewInformation = () => {
             <Link
               color="#5c5cff"
               target={'_blank'}
-              href="https://www.google.com"
+              href={item.source}
               fontSize={'14px'}
             >
-              {'https://www.google.com'}
+              {item.source}
             </Link>
           </FormControl>
 
@@ -205,7 +275,7 @@ const ViewInformation = () => {
             <FormLabel>Applicable To</FormLabel>
             <Typography
               fontSize="14px"
-              text=""
+              text={item.applicable}
             />
           </FormControl>
         </HStack>
@@ -223,20 +293,7 @@ const ViewInformation = () => {
               router.push({
                 pathname: '/viewGeofence',
                 query: {
-                  coords: JSON.stringify([
-                    {
-                      lat: 12.90218055284065,
-                      lng: 77.56138163654384
-                    },
-                    {
-                      lat: 12.905861728332741,
-                      lng: 77.6109917744833
-                    },
-                    {
-                      lat: 12.898415658229917,
-                      lng: 77.61227923481044
-                    }
-                  ])
+                  coords: JSON.stringify(getGeoFenceCoords(item.geofence))
                 }
               })
             }
@@ -274,7 +331,7 @@ const ViewInformation = () => {
               overflowX="hidden"
               lineHeight={'normal'}
             >
-              {''}
+              {JSON.stringify(item.rules)}
             </Code>
           </Box>
         </FormControl>

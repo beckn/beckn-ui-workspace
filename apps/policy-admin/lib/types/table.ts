@@ -1,6 +1,8 @@
 import { MetaData } from '@pages/index'
 
 export interface ItemDetails {
+  id: string | number | boolean | readonly string[] | readonly number[] | readonly boolean[] | null | undefined
+  policyId: string | number | boolean | readonly string[] | readonly number[] | readonly boolean[] | null | undefined
   name: string
   description: string
   status: string

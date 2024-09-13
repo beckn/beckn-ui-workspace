@@ -11,6 +11,10 @@ export default function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL('/', req.url))
   }
 
+  if (!loggedin && pathname === '/resetPassword') {
+    return NextResponse.next()
+  }
+
   if (!loggedin && pathname !== '/signIn' && pathname !== '/signUp') {
     const signInRoute = '/signIn'
 
