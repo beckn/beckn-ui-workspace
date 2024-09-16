@@ -7,6 +7,6 @@ export interface DynamicGeofenceMapProps {
   enableSearch?: boolean
   editable?: boolean
   polygonPath: GeoCoordinate[]
-  city: string
+  focusedPosition?: GeoCoordinate
   updateCoordinates: (points: GeoCoordinate[]) => void
 }

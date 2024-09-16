@@ -1,3 +1,5 @@
+import { GeoCoordinate } from '@lib/types/geofence'
+
 export const GeoLocations = [
   {
     country: {
@@ -84,4 +86,26 @@ export const cityCoordinates: Record<string, { lat: number; lng: number }> = {
   minya: { lat: 28.1099, lng: 30.7503 },
   ismailia: { lat: 30.6043, lng: 32.2723 },
   sohag: { lat: 26.556, lng: 31.6948 }
+}
+
+export const calculateCenterOfPolygon = (coordinates: GeoCoordinate[]) => {
+  const totalPoints = coordinates.length
+
+  // Summing all latitudes and longitudes
+  const sum = coordinates.reduce(
+    (acc, point) => {
+      acc.lat += point.lat
+      acc.lng += point.lng
+      return acc
+    },
+    { lat: 0, lng: 0 }
+  )
+
+  // Calculate the average latitude and longitude
+  const center = {
+    lat: sum.lat / totalPoints,
+    lng: sum.lng / totalPoints
+  }
+
+  return center.lat ? center : null
 }

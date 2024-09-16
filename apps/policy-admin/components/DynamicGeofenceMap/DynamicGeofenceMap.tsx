@@ -47,20 +47,24 @@ const defaultCenter = {
 }
 
 const DynamicGeofenceMap = (props: DynamicGeofenceMapProps) => {
-  const { enableSearch = true, editable = true, polygonPath, updateCoordinates } = props
+  const { enableSearch = true, editable = true, polygonPath, updateCoordinates, focusedPosition } = props
   const [autocomplete, setAutocomplete] = React.useState(null)
   const [libraries] = useState(['places', 'drawing'])
 
   const router = useRouter()
-  console.log(props.city)
-  const city = props.city || 'bangalore'
-  const cityLatLng = cityCoordinates[city as string] ||
-    polygonPath[0] || {
-      lat: 12.903561,
-      lng: 77.5939631
-    }
+
+  const city = 'bangalore'
+  const cityLatLng = cityCoordinates[city as string] || {
+    lat: 12.903561,
+    lng: 77.5939631
+  }
 
   const [focusedMapPosition, setFocusedMapPosition] = useState(cityLatLng)
+
+  useEffect(() => {
+    console.log(focusedPosition)
+    if (focusedPosition) setFocusedMapPosition(focusedPosition)
+  }, [focusedPosition])
 
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY!,
@@ -98,7 +102,7 @@ const DynamicGeofenceMap = (props: DynamicGeofenceMapProps) => {
         <GoogleMap
           mapContainerStyle={mapContainerStyle}
           center={focusedMapPosition || defaultCenter}
-          zoom={14}
+          zoom={12}
           options={{
             zoomControl: false,
             streetViewControl: false,

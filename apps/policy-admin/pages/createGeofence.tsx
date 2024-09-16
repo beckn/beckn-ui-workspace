@@ -4,6 +4,7 @@ import CustomButton from '@components/Button/CustomButton'
 import DynamicGeofenceMap from '@components/DynamicGeofenceMap'
 import { GeoCoordinate } from '@lib/types/geofence'
 import { PolicyRootState, updatePolygon } from '@store/policy.slice'
+import { calculateCenterOfPolygon } from '@utils/geoLocation'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -49,7 +50,7 @@ const CreateGeofence = () => {
     setPolygonPath(path)
     setCoordinatesForForm(path.map(point => `${point.lat}, ${point.lng}`))
   }
-
+  console.log(polygonPath)
   return (
     <Box
       maxH={'calc(100vh - 110px)'}
@@ -77,7 +78,7 @@ const CreateGeofence = () => {
         h="650px"
       >
         <DynamicGeofenceMap
-          city={city}
+          focusedPosition={calculateCenterOfPolygon(polygonPath)!}
           polygonPath={polygonPath}
           updateCoordinates={updateCoordinates}
         />

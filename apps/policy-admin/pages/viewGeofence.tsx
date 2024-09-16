@@ -5,6 +5,7 @@ import DynamicGeofenceMap from '@components/DynamicGeofenceMap'
 import { useRouter } from 'next/router'
 import { useSelector } from 'react-redux'
 import { PolicyRootState } from '@store/policy.slice'
+import { calculateCenterOfPolygon } from '@utils/geoLocation'
 
 const ViewGeofenceDetails = () => {
   const [polygonPath, setPolygonPath] = useState([])
@@ -30,7 +31,7 @@ const ViewGeofenceDetails = () => {
         <DynamicGeofenceMap
           enableSearch={false}
           editable={false}
-          city={router.query.city as string}
+          focusedPosition={calculateCenterOfPolygon(polygonPath)!}
           polygonPath={polygonPath}
           updateCoordinates={() => {}}
         />
