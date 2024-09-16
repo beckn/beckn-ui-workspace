@@ -547,6 +547,25 @@ const Homepage = () => {
     }
   }, [socket, newRideRequests, updatedRideStatus])
 
+  const returnToCurrentLocation = useCallback(
+    async (coords: any) => {
+      await updateDriverLocation({
+        location: {
+          lat: coords.latitude.toString()!,
+          long: coords.longitude.toString()!
+        }
+      }).unwrap()
+      dispatch(
+        setGeoAddressAndLatLong({
+          geoAddress: coords.address,
+          country: localStorage.getItem('country')!,
+          geoLatLong: `${coords.latitude}, ${coords.longitude}`
+        })
+      )
+    },
+    [currentLocation, dispatch]
+  )
+
   const renderMap = useCallback(() => {
     return (
       <Box mt={'60px'}>
@@ -554,6 +573,7 @@ const Homepage = () => {
           startNav={startNav}
           origin={currentLocation.geoLocation}
           destination={destination}
+          setCurrentOrigin={returnToCurrentLocation}
         />
       </Box>
     )

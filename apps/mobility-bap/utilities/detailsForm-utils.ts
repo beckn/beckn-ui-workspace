@@ -8,7 +8,7 @@ export const validateSearchRideForm = (formData: { name: string; mobileNumber: s
 
   if (formData.name.trim() === '') {
     errors.name = 'errorName'
-  } else if (!/^[A-Za-z\s]*$/.test(formData.name)) {
+  } else if (!/^[A-Za-zÆæÀ-ÖØ-öø-ÿ0-9\s'’\-]+$/.test(formData.name)) {
     errors.name = 'errorName2'
   } else if (formData.name.length < 3) {
     errors.name = 'errorName3'
