@@ -4,9 +4,21 @@ const locals = ['fa']
 
 export default function middleware(req: NextRequest) {
   const loggedin = req.cookies.get('authToken')
-  const { pathname, href, host } = req.nextUrl
-  const tourismType = req.cookies.get('tourismType')?.value || ''
-  console.log('Dank', pathname, host, href)
+  const { pathname, href, host, searchParams } = req.nextUrl
+  const response = NextResponse.next()
+
+  const queryTourismType = searchParams.get('tourismType')
+  const tourismType = queryTourismType
+
+  if (queryTourismType) {
+    response.cookies.set('tourismType', queryTourismType)
+  } else if (!queryTourismType) {
+    response.cookies.delete('tourismType')
+  }
+
+  console.log('Dank', pathname, host, href, tourismType)
+
+  // Handle language suffix logic
   const urlSplitList = href.split('/')
   const hostIndex = urlSplitList.findIndex(item => item === host)
   let langSuffix = ''
@@ -14,6 +26,7 @@ export default function middleware(req: NextRequest) {
     langSuffix = urlSplitList[hostIndex + 1]
   }
 
+  // Redirection logic
   if (loggedin && (pathname === '/signIn' || pathname === '/signUp')) {
     const redirectUrl = tourismType ? `/?tourismType=${tourismType}` : '/'
     return NextResponse.redirect(new URL(redirectUrl, req.url))
@@ -30,7 +43,7 @@ export default function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL(redirectUrl, req.url))
   }
 
-  return NextResponse.next()
+  return response
 }
 
 export const config = {

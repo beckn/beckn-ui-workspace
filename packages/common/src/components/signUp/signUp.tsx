@@ -89,9 +89,9 @@ const SignUp: React.FC<SignUpComponentProps> = ({
 
         fetch(`${baseUrl}/profiles`, requestOptions).then(response => {
           Router.push('/')
+          onSignUp()
           return response.json()
         })
-        onSignUp()
       } catch (error) {
         console.error('An error occurred:', error)
       }

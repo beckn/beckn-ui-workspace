@@ -8,6 +8,7 @@ import Cookies from 'js-cookie'
 
 const Register = () => {
   const { t } = useLanguage()
+
   const tourismType = Cookies.get('tourismType')
 
   const handleSignIn = () => {
@@ -22,7 +23,9 @@ const Register = () => {
         desktop: { src: tourismDeskLogo, alt: 'Tourism logo' }
       }}
       onSignIn={handleSignIn}
-      onSignUp={() => {}}
+      onSignUp={() => {
+        Router.push(`/${tourismType ? `?tourismType=${tourismType}` : ''}`)
+      }}
       t={key => t[key]}
     />
   )
