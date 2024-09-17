@@ -14,6 +14,7 @@ const testIds = {
   searchInput: 'search-input',
   searchButton: 'search-button',
   threeDots: 'three-dots',
+  home_icon: 'home-icon',
   close: 'close',
   pageName: 'pageName',
   invoiceModal: 'invoiceModal',
