@@ -547,30 +547,28 @@ const Homepage = () => {
     }
   }, [socket, newRideRequests, updatedRideStatus])
 
-  const returnToCurrentLocation = useCallback(
-    async (coords: any) => {
-      await updateDriverLocation({
-        location: {
-          lat: coords.latitude.toString()!,
-          long: coords.longitude.toString()!
-        }
-      }).unwrap()
-      dispatch(
-        setGeoAddressAndLatLong({
-          geoAddress: coords.address,
-          country: localStorage.getItem('country')!,
-          geoLatLong: `${coords.latitude}, ${coords.longitude}`
-        })
-      )
-    },
-    [currentLocation, dispatch]
-  )
+  const returnToCurrentLocation = useCallback(async (coords: any) => {
+    await updateDriverLocation({
+      location: {
+        lat: coords.latitude.toString()!,
+        long: coords.longitude.toString()!
+      }
+    }).unwrap()
+    dispatch(
+      setGeoAddressAndLatLong({
+        geoAddress: coords.address,
+        country: localStorage.getItem('country')!,
+        geoLatLong: `${coords.latitude}, ${coords.longitude}`
+      })
+    )
+  }, [])
 
   const renderMap = useCallback(() => {
     return (
       <Box mt={'60px'}>
         <MapWithNoSSR
           startNav={startNav}
+          enableMyLocation={driverStatus === RIDE_STATUS_CODE.AWAITING_DRIVER_APPROVAL}
           origin={currentLocation.geoLocation}
           destination={destination}
           setCurrentOrigin={returnToCurrentLocation}

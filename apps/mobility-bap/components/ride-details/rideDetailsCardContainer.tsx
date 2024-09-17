@@ -115,6 +115,7 @@ const RideDetailsCardContainer: React.FC<RideDetailsCardContainerProps> = ({ han
               setIsLoading(false)
               handleStateChange('Ride Started.', 'success')
               setModalType({ type: 'RideDetails' })
+              handleStatusOperation(RIDE_STATUS_CODE.RIDE_STARTED)
               break
 
             case RIDE_STATUS_CODE.RIDE_DECLINED:

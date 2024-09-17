@@ -14,6 +14,11 @@ import { useRouter } from 'next/router'
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
+interface BottomModalRendererProps {
+  startNavigation: () => void
+  showMyLocationIcon: (show: boolean) => void
+}
+
 type PageOrModalType =
   | ''
   | 'PICK_UP_DROP_OFF'
@@ -24,13 +29,22 @@ type PageOrModalType =
   | 'DRIVER_DETAILS'
   | 'TRAFFIC_ALERT_MODAL'
 
-const BottomModalRenderer = () => {
+const BottomModalRenderer = (props: BottomModalRendererProps) => {
+  const { startNavigation, showMyLocationIcon } = props
   const router = useRouter()
   const [drawerState, setDrawerState] = useState<PageOrModalType>('PICK_UP_DROP_OFF')
 
   const dispatch = useDispatch()
   const { cancelTokenSource } = useSelector((state: CabServiceDetailsRootState) => state.cabService)
   const confirmResponse = useSelector((state: SelectRideRootState) => state.selectRide?.confirmResponse)
+
+  useEffect(() => {
+    if (drawerState === 'PICK_UP_DROP_OFF') {
+      showMyLocationIcon(true)
+    } else {
+      showMyLocationIcon(false)
+    }
+  }, [drawerState])
 
   useEffect(() => {
     if (router.query.reset) {
@@ -104,6 +118,8 @@ const BottomModalRenderer = () => {
                 setDrawerState('PICK_UP_DROP_OFF')
               } else if (status === RIDE_STATUS_CODE.RIDE_COMPLETED) {
                 setDrawerState('')
+              } else if (status === RIDE_STATUS_CODE.RIDE_STARTED) {
+                startNavigation()
               }
             }}
           />

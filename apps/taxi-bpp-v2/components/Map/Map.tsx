@@ -6,13 +6,14 @@ import MyLocation from '@public/images/my_location.svg'
 
 interface MapProps {
   startNav: boolean
+  enableMyLocation: boolean
   origin: Coordinate
   destination?: Coordinate
   setCurrentOrigin: (location: any | null) => void
 }
 
 const Map = (props: MapProps) => {
-  const { origin, setCurrentOrigin, destination, startNav } = props
+  const { origin, setCurrentOrigin, destination, startNav, enableMyLocation } = props
 
   const [directions, setDirections] = useState<google.maps.DirectionsResult | null>(null)
   const [carPosition, setCarPosition] = useState<google.maps.LatLngLiteral | null>(null)
@@ -114,47 +115,49 @@ const Map = (props: MapProps) => {
     map.addListener('dragstart', handleUserInteraction)
     map.addListener('zoom_changed', handleUserInteraction)
 
-    const locationButton = document.createElement('img')
-    locationButton.src = MyLocation
-    locationButton.classList.add('custom-location-button')
-    locationButton.style.background = '#ffffff'
-    locationButton.style.border = '2px solid #1A202C'
-    locationButton.style.borderRadius = '22px'
-    locationButton.style.margin = '10px'
-    locationButton.style.cursor = 'pointer'
+    if (enableMyLocation) {
+      const locationButton = document.createElement('img')
+      locationButton.src = MyLocation
+      locationButton.classList.add('custom-location-button')
+      locationButton.style.background = '#ffffff'
+      locationButton.style.border = '2px solid #1A202C'
+      locationButton.style.borderRadius = '22px'
+      locationButton.style.margin = '10px'
+      locationButton.style.cursor = 'pointer'
 
-    locationButton.addEventListener('click', () => {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          position => {
-            const userLocation = {
-              latitude: position.coords.latitude,
-              longitude: position.coords.longitude
-            }
-
-            const geocoder = new window.google.maps.Geocoder()
-            geocoder.geocode(
-              { location: { lat: userLocation.latitude, lng: userLocation.longitude } },
-              (results, status) => {
-                if (status === 'OK' && results?.[0]) {
-                  map.panTo({ lat: userLocation.latitude, lng: userLocation.longitude })
-                  setCurrentOrigin({ ...userLocation, address: results[0].formatted_address })
-                  map.setZoom(16)
-                } else {
-                  console.error('Geocoder failed due to: ' + status)
-                }
+      locationButton.addEventListener('click', () => {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            position => {
+              const userLocation = {
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude
               }
-            )
-          },
-          () => alert('Failed to get your location!')
-        )
-      } else {
-        alert('Geolocation is not supported by your browser!')
-      }
-    })
 
-    // Add the button to the map controls
-    map.controls[window.google.maps.ControlPosition.RIGHT_TOP].push(locationButton)
+              const geocoder = new window.google.maps.Geocoder()
+              geocoder.geocode(
+                { location: { lat: userLocation.latitude, lng: userLocation.longitude } },
+                (results, status) => {
+                  if (status === 'OK' && results?.[0]) {
+                    map.panTo({ lat: userLocation.latitude, lng: userLocation.longitude })
+                    setCurrentOrigin({ ...userLocation, address: results[0].formatted_address })
+                    map.setZoom(16)
+                  } else {
+                    console.error('Geocoder failed due to: ' + status)
+                  }
+                }
+              )
+            },
+            () => alert('Failed to get your location!')
+          )
+        } else {
+          alert('Geolocation is not supported by your browser!')
+        }
+      })
+
+      // Add the button to the map controls
+      map.controls[window.google.maps.ControlPosition.RIGHT_TOP].push(locationButton)
+    }
   }
 
   const anchorPoint = new window.google.maps.Point(20, 32)

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { useDispatch, useSelector } from 'react-redux'
 import {
@@ -16,6 +16,9 @@ import axios from '@services/axios'
 
 const Homepage = () => {
   const MapWithNoSSR: any = dynamic(() => import('../components/Map'), { ssr: false })
+
+  const [startNavigation, setStartNavigation] = useState<boolean>(false)
+  const [showMyLocation, setShowMyLocation] = useState<boolean>(true)
 
   const {
     geoAddress: originGeoAddress,
@@ -160,20 +163,46 @@ const Homepage = () => {
     }
   }, [destinationGeoAddress, destinationGeoLatLong])
 
+  const returnToCurrentLocation = useCallback(
+    async (coords: any) => {
+      const locationDetails = {
+        address: coords.address,
+        country,
+        geoLocation: { latitude: coords.latitude, longitude: coords.longitude }
+      }
+
+      dispatch(setPickUpLocation(locationDetails))
+      dispatch(
+        setGeoAddressAndLatLong({
+          geoAddress: locationDetails.address,
+          country: locationDetails.country,
+          geoLatLong: `${locationDetails.geoLocation.latitude},${locationDetails.geoLocation.longitude}`
+        })
+      )
+    },
+    [country]
+  )
+  console.log(showMyLocation)
   const renderMap = useCallback(() => {
     return (
       <MapWithNoSSR
         origin={pickup?.geoLocation!}
         destination={dropoff?.geoLocation!}
+        startNav={startNavigation}
+        enableMyLocation={showMyLocation}
+        setCurrentOrigin={returnToCurrentLocation}
       />
     )
-  }, [pickup, dropoff])
+  }, [pickup, dropoff, startNavigation, showMyLocation])
 
   return (
     <div className="overflow-hidden max-h-[90vh]">
       {renderMap()}
 
-      <BottomModalRenderer />
+      <BottomModalRenderer
+        startNavigation={() => setStartNavigation(true)}
+        showMyLocationIcon={show => setShowMyLocation(show)}
+      />
     </div>
   )
 }
