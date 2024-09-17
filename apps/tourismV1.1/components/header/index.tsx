@@ -8,7 +8,6 @@ import { useSelector } from 'react-redux'
 import Cookies from 'js-cookie'
 
 const Header = () => {
-  const [tourismType, setTourismType] = useState<string | null>(null)
   const { t, locale } = useLanguage()
   const router = useRouter()
 
@@ -42,17 +41,6 @@ const Header = () => {
   const renderTopHeader = !topHeaderBlackList.includes(router.pathname)
   const renderBottomHeader = !bottomHeaderBlackList.includes(router.pathname)
 
-  useEffect(() => {
-    const queryTourismType = router.query.tourismType as string | undefined
-    if (queryTourismType) {
-      setTourismType(queryTourismType)
-      // localStorage.setItem('tourismType', queryTourismType)
-      Cookies.set('tourismType', queryTourismType)
-    } else {
-      setTourismType(Cookies.get('tourismType')!)
-    }
-  }, [router.query.tourismType])
-
   return (
     <Box>
       {renderTopHeader && (
@@ -64,7 +52,7 @@ const Header = () => {
             blackList: {
               appLogoBlackList,
               homeIconBlackList,
-              languageIconWhiteList: !tourismType ? languageIconWhiteList : [],
+              languageIconWhiteList: !Cookies.get('tourismType') ? languageIconWhiteList : [],
               menuIconWhiteList
             }
           }}
@@ -72,7 +60,7 @@ const Header = () => {
             {
               id: 'logout',
               label: t.logout,
-              href: `/signIn${tourismType ? `?tourismType=${tourismType}` : ''}`,
+              href: `/signIn${Cookies.get('tourismType') ? `?tourismType=${Cookies.get('tourismType')}` : ''}`,
               icon: '/images/logOutIcon.svg',
               color: 'red'
             }

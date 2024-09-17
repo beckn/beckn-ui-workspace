@@ -1,3 +1,4 @@
+import Cookies from 'js-cookie'
 import { NextRequest, NextResponse } from 'next/server'
 
 const locals = ['fa']
@@ -6,15 +7,14 @@ export default function middleware(req: NextRequest) {
   const loggedin = req.cookies.get('authToken')
   const { pathname, href, host, searchParams } = req.nextUrl
   const response = NextResponse.next()
-
+  // const tourismType = req.cookies.get('tourismType')?.value || ''
   const queryTourismType = searchParams.get('tourismType')
   const tourismType = queryTourismType
 
-  if (queryTourismType) {
+  if (queryTourismType && !response.cookies.get('tourismType')) {
     response.cookies.set('tourismType', queryTourismType)
-  } else if (!queryTourismType) {
-    response.cookies.delete('tourismType')
   }
+  console.log(queryTourismType, !response.cookies.get('tourismType'))
 
   console.log('Dank', pathname, host, href, tourismType)
 

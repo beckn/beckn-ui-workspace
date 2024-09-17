@@ -19,13 +19,6 @@ const HomePage = () => {
     Router.push(`/search?searchTerm=${loc}`)
   }
 
-  const queryTourismType = Router.query.tourismType as string
-  if (queryTourismType) {
-    Cookies.set('tourismType', queryTourismType)
-  } else {
-    Cookies.remove('tourismType')
-  }
-
   return (
     <Box className={'main_container'}>
       <HomePageContent
