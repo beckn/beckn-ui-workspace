@@ -67,7 +67,8 @@ const cartIconBlackList: string[] = [
   '/signin',
   '/invoiceDetails',
   '/assemblyDetails',
-  '/updateShippingDetails'
+  '/updateShippingDetails',
+  '/profile'
 ]
 
 const bottomHeaderBlackList = ['/orderConfirmation', '/', '/feedback']

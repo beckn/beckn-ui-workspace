@@ -89,6 +89,7 @@ const Header: React.FC<HeaderProps> = ({
                 }}
                 src="/images/Home_icon.svg"
                 alt="home Icon"
+                data-test={testIds.home_icon}
               />
             )}
 
