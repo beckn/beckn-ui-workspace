@@ -23,6 +23,7 @@ const ResetPassword = () => {
   const router = useRouter()
   const { code } = router.query
   const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value)
@@ -33,7 +34,7 @@ const ResetPassword = () => {
   }
 
   const isPasswordStrong = (pass: string): boolean => {
-    return pass.length >= 8 && /[@]/.test(pass) && /\d/.test(pass)
+    return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(pass)
   }
 
   const handleResetPassword = async () => {
@@ -71,6 +72,7 @@ const ResetPassword = () => {
   }
 
   const togglePasswordVisibility = () => setShowPassword(!showPassword)
+  const toggleConfirmPasswordVisibility = () => setShowConfirmPassword(!showConfirmPassword)
 
   return (
     <Box
@@ -117,12 +119,25 @@ const ResetPassword = () => {
               />
             </InputRightElement>
           </InputGroup>
-          <Input
-            type="password"
-            placeholder={t.confirmPassword}
-            value={confirmPassword}
-            onChange={handleConfirmPasswordChange}
-          />
+          <InputGroup>
+            <Input
+              type={showConfirmPassword ? 'text' : 'password'}
+              placeholder={t.confirmPassword}
+              value={confirmPassword}
+              onChange={handleConfirmPasswordChange}
+            />
+            <InputRightElement>
+              <IconButton
+                aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
+                icon={showConfirmPassword ? <ViewOffIcon /> : <ViewIcon />}
+                onClick={toggleConfirmPasswordVisibility}
+                variant="ghost"
+                size="sm"
+                top={'5px'}
+                _hover={'none'}
+              />
+            </InputRightElement>
+          </InputGroup>
           {error && (
             <Text
               color="red"

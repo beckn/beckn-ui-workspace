@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import { InputProps } from './input.types'
-import { Input as ChakraInput, useTheme } from '@chakra-ui/react'
+import { Input as ChakraInput, IconButton, useTheme } from '@chakra-ui/react'
 import Styles from './input.module.css'
+import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
 
 const Input: React.FC<InputProps> = ({
   variant = 'flushed',
@@ -17,7 +18,12 @@ const Input: React.FC<InputProps> = ({
 }) => {
   const theme = useTheme()
   const [isInputFocused, setIsInputFocused] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
 
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword)
+  }
+  const isPassword = type === 'password'
   const handleInputFocus = () => {
     setIsInputFocused(true)
   }
@@ -37,12 +43,27 @@ const Input: React.FC<InputProps> = ({
         _focusVisible={{ boxShadow: 'unset' }}
         className={Styles.input}
         variant={variant}
-        type={type}
+        type={showPassword ? 'text' : type}
         placeholder={placeholder}
         name={name}
         value={value}
         onChange={handleChange}
       />
+      {isPassword && (
+        <IconButton
+          aria-label={showPassword ? 'Hide password' : 'Show password'}
+          icon={showPassword ? <ViewOffIcon /> : <ViewIcon />}
+          onClick={togglePasswordVisibility}
+          variant="ghost"
+          position="absolute"
+          right="10px"
+          top="50%"
+          transform="translateY(-50%)"
+          size="sm"
+          _hover="none"
+        />
+      )}
+
       {label && (
         <label
           style={{ color: isInputFocused ? theme.colors.primary[100] : theme.colors.textPrimary }}

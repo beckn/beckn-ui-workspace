@@ -62,7 +62,7 @@ const en: { [key: string]: string } = {
   enterYourMail: 'Enter your email',
   Send: 'Send',
   Cancel: 'Cancel',
-  passwordMustBe: 'Password must be at least 8 characters long and include @ and a number',
+  passwordMustBe: 'Password must be 8 characters long with atleast 1 special character and 1 capital character',
   passwordDoNotMatch: 'Passwords do not match',
   passwordSucessfully: 'Password reset successfully',
   Success: 'Success',
