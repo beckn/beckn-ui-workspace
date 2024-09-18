@@ -109,3 +109,13 @@ export const calculateCenterOfPolygon = (coordinates: GeoCoordinate[]) => {
 
   return center.lat ? center : null
 }
+
+export const getGeoFenceCoords = (coords: string[]) => {
+  return coords.map(item => {
+    const latLong = item.split(', ')
+    return {
+      lat: Number(latLong[0]),
+      lng: Number(latLong[1])
+    }
+  })
+}

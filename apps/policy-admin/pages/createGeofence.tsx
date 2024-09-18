@@ -11,11 +11,11 @@ import { useDispatch, useSelector } from 'react-redux'
 
 const CreateGeofence = () => {
   const [polygonPath, setPolygonPath] = useState<GeoCoordinate[]>([])
-  const [coordinatesForForm, setCoordinatesForForm] = useState<string[]>([])
 
   const router = useRouter()
   const dispatch = useDispatch()
   const { polygon, city } = useSelector((state: PolicyRootState) => state.policy)
+  const [coordinatesForForm, setCoordinatesForForm] = useState<string[]>(polygon || [])
 
   useEffect(() => {
     if (polygon.length > 0) {
@@ -38,7 +38,6 @@ const CreateGeofence = () => {
   const handleClearPolygon = () => {
     setPolygonPath([])
     setCoordinatesForForm([])
-    dispatch(updatePolygon([]))
   }
 
   const handleSaveCoordinates = () => {
@@ -90,7 +89,7 @@ const CreateGeofence = () => {
         <CustomButton
           variant="outline"
           text="Go back"
-          onClick={() => router.push('/createPolicy')}
+          onClick={() => router.back()}
           mr="1rem"
           w={{ base: '100%', md: '100%' }}
         />

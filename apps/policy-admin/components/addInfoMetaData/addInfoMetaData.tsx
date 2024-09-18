@@ -1,12 +1,10 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import {
   Box,
-  Button,
   Flex,
   FormControl,
   FormLabel,
   Input,
-  Select,
   Textarea,
   HStack,
   Switch,
@@ -40,9 +38,11 @@ import {
   updateStartDate
 } from '@store/policy.slice'
 import MultiSelectDropdown from '@components/CheckBoxSelect/checkBoxSelect'
-import { PolicyType, RulesTemplate } from '@lib/types/metaData'
+import { PolicyStatusType, PolicyType, RulesTemplate } from '@lib/types/metaData'
 import { useCreatePolicyMutation } from '@services/PolicyService'
 import { feedbackActions } from '@beckn-ui/common'
+import { validateDateRange } from '@utils/general'
+import { GenericDropdown } from '@components/GenericDropdown/GenericDropdown'
 
 function AddInformationMetadata() {
   const [errors, setErrors] = useState({
@@ -105,6 +105,14 @@ function AddInformationMetadata() {
       valid = false
     }
 
+    if (policyName) {
+      const policyNameValid = policyName.match(/^[a-zA-Z0-9\s\.,'-]{10,100}$/)
+      if (!policyNameValid) {
+        newErrors.policyName = 'The title must be between 10 and 100 characters long.'
+        valid = false
+      }
+    }
+
     if (!policyType) {
       newErrors.policyType = 'Information category is required'
       valid = false
@@ -118,6 +126,14 @@ function AddInformationMetadata() {
     if (!description) {
       newErrors.description = 'Description is required'
       valid = false
+    }
+
+    if (description) {
+      const descriptionValid = description.match(/^[a-zA-Z0-9\s\.,'-]{20,2000}$/)
+      if (!descriptionValid) {
+        newErrors.description = 'The description must be between 20 and 500 characters long.'
+        valid = false
+      }
     }
 
     if (!country) {
@@ -140,9 +156,26 @@ function AddInformationMetadata() {
       valid = false
     }
 
+    if (startDate && endDate) {
+      const isValid = validateDateRange(startDate, endDate)
+      if (!isValid) {
+        newErrors.startDate = 'Start date should be before end date'
+        newErrors.endDate = 'End date should be after start date'
+        valid = false
+      }
+    }
+
     if (!policyDocuments) {
       newErrors.policyDocuments = 'Source url is required'
       valid = false
+    }
+
+    if (policyDocuments) {
+      const isValid = policyDocuments.match(/^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/\S*)?$/)
+      if (!isValid) {
+        newErrors.policyDocuments = `Please enter a valid URL, starting with 'http://' or 'https://'.`
+        valid = false
+      }
     }
 
     if (applicableTo.length === 0) {
@@ -160,7 +193,7 @@ function AddInformationMetadata() {
   }
 
   const getRulesJson = useCallback(() => {
-    const rules: RulesTemplate = {
+    let rules: RulesTemplate = {
       context: {
         action: 'policy',
         domain: 'mobility',
@@ -182,11 +215,13 @@ function AddInformationMetadata() {
               })
             }
           ],
-          geofences: [{ polygon }],
           domain: 'mobility',
-          status: (isActivate ? 'ACTIVE' : 'INACTIVE').toLowerCase()
+          status: isActivate ? 'ACTIVE' : 'INACTIVE'
         }
       }
+    }
+    if (policyType === PolicyType.GEOFENCE) {
+      rules.message.policy.geofences = [{ polygon }]
     }
     return rules
   }, [
@@ -209,7 +244,7 @@ function AddInformationMetadata() {
       return
     }
     try {
-      const payload = {
+      const payload: any = {
         policy: {
           type: policyType,
           owner: { descriptor: { name: policyOwner, contact: { email: 'support@moh.gov.in' } } },
@@ -223,12 +258,14 @@ function AddInformationMetadata() {
               })
             }
           ],
-          geofences: [{ polygon }],
           domain: 'mobility',
           media: [{ mimetype: '', url: policyDocuments }],
-          status: (isActivate ? 'ACTIVE' : 'INACTIVE').toLowerCase(),
+          status: isActivate ? PolicyStatusType.ACTIVE : PolicyStatusType.INACTIVE,
           rules: getRulesJson()
         }
+      }
+      if (policyType === PolicyType.GEOFENCE) {
+        payload.policy.geofences = [{ polygon }]
       }
 
       await createPolicy(payload).unwrap()
@@ -342,20 +379,14 @@ function AddInformationMetadata() {
             isInvalid={!!errors.policyType}
           >
             <FormLabel>Information Category</FormLabel>
-            <Select
+            <GenericDropdown
+              options={infoCategories}
               placeholder="Select Information Category"
-              value={policyType}
-              onChange={event => dispatch(updatePolicyType(event.target.value || ''))}
-            >
-              {infoCategories.map((category, index) => (
-                <option
-                  key={index}
-                  value={category.value}
-                >
-                  {category.label}
-                </option>
-              ))}
-            </Select>
+              selectedValue={policyType}
+              setSelectedValue={value => {
+                dispatch(updatePolicyType(value || ''))
+              }}
+            />
             {errors.policyType && (
               <FormErrorMessage
                 position={'absolute'}
@@ -418,20 +449,14 @@ function AddInformationMetadata() {
             isInvalid={!!errors.country}
           >
             <FormLabel>Country</FormLabel>
-            <Select
+            <GenericDropdown
+              options={countries}
               placeholder="Select Country"
-              value={country}
-              onChange={event => dispatch(updateCountry(event.target.value || ''))}
-            >
-              {countries.map((country, index) => (
-                <option
-                  key={index}
-                  value={country.value}
-                >
-                  {country.label}
-                </option>
-              ))}
-            </Select>
+              selectedValue={country}
+              setSelectedValue={value => {
+                dispatch(updateCountry(value || ''))
+              }}
+            />
             {errors.country && (
               <FormErrorMessage
                 position={'absolute'}
@@ -447,20 +472,14 @@ function AddInformationMetadata() {
             isInvalid={!!errors.city}
           >
             <FormLabel>City</FormLabel>
-            <Select
+            <GenericDropdown
+              options={cities}
               placeholder="Select City"
-              value={city}
-              onChange={event => dispatch(updateCity(event.target.value || ''))}
-            >
-              {cities.map((city, index) => (
-                <option
-                  key={index}
-                  value={city.value}
-                >
-                  {city.label}
-                </option>
-              ))}
-            </Select>
+              selectedValue={city}
+              setSelectedValue={value => {
+                dispatch(updateCity(value || ''))
+              }}
+            />
             {errors.city && (
               <FormErrorMessage
                 position={'absolute'}
@@ -503,7 +522,7 @@ function AddInformationMetadata() {
               placeholderText="Select 'to' date"
               onChange={(date: any) => dispatch(updateEndDate(date?.toISOString()))}
               dateFormat="dd-MM-yyyy"
-              isInvalid={!!errors.startDate}
+              isInvalid={!!errors.endDate}
             />
             {errors.endDate && (
               <FormErrorMessage

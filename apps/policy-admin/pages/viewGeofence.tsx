@@ -3,8 +3,6 @@ import { Box, Flex } from '@chakra-ui/react'
 import CustomButton from '@components/Button/CustomButton'
 import DynamicGeofenceMap from '@components/DynamicGeofenceMap'
 import { useRouter } from 'next/router'
-import { useSelector } from 'react-redux'
-import { PolicyRootState } from '@store/policy.slice'
 import { calculateCenterOfPolygon } from '@utils/geoLocation'
 
 const ViewGeofenceDetails = () => {
