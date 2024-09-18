@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "postbuild": "next-sitemap",
-    "export": "next export"
+    "export": "next export",
+    "cy:open": "cypress open",
+    "cy:run": "cypress run"
   },
   "prettier": "@beckn-ui/prettier-config",
   "dependencies": {

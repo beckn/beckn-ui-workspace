@@ -30,6 +30,8 @@
     "dev:retail": "yarn workspace @beckn-ui/retail dev",
     "build:retail": "yarn workspace @beckn-ui/retail build",
     "start:retail": "yarn workspace @beckn-ui/retail start",
+    "e2e-run:retail": "yarn workspace @beckn-ui/retail cy:run",
+    "e2e-open:retail": "yarn workspace @beckn-ui/retail cy:open",
     "dev:mobility-bap": "yarn workspace @beckn-ui/mobility-bap dev",
     "build:mobility-bap": "yarn workspace @beckn-ui/mobility-bap build",
     "start:mobility-bap": "yarn workspace @beckn-ui/mobility-bap start",
