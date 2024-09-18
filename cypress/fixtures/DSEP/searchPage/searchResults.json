@@ -1,0 +1,383 @@
+{
+  "data": [
+    {
+      "context": {
+        "domain": "dsep:courses",
+        "action": "on_search",
+        "version": "1.1.0",
+        "bpp_id": "bpp-ps-network-strapi1-prod.becknprotocol.io",
+        "bpp_uri": "https://bpp-ps-network-strapi1-prod.becknprotocol.io",
+        "country": "IND",
+        "city": "std:080",
+        "location": {
+          "country": {
+            "name": "India",
+            "code": "IND"
+          },
+          "city": {
+            "name": "Bangalore",
+            "code": "std:080"
+          }
+        },
+        "bap_id": "bap-ps-network-prod.becknprotocol.io",
+        "bap_uri": "https://bap-ps-network-prod.becknprotocol.io",
+        "transaction_id": "b139c97a-0e08-4793-8c4c-bb8c034eab4a",
+        "message_id": "192cbb11-43b6-4d05-9131-b17d9552676a",
+        "ttl": "PT10M",
+        "timestamp": "2024-09-17T16:38:31.703Z"
+      },
+      "message": {
+        "name": "BPP",
+        "providers": [
+          {
+            "id": "1",
+            "name": "Edureka",
+            "rating": "4.8",
+            "short_desc": "Online course provider",
+            "long_desc": "Online course provider",
+            "locations": [
+              {
+                "id": "1",
+                "address": "Course provider, 3 rd floor",
+                "city": {
+                  "name": "jaipur"
+                },
+                "country": {
+                  "name": "India"
+                },
+                "state": {
+                  "name": "rajasthan"
+                },
+                "area_code": "302012"
+              },
+              {
+                "id": "6",
+                "address": "Sparsh Hospital - Infantry Road",
+                "city": {
+                  "name": "Bengaluru"
+                },
+                "country": {
+                  "name": "India"
+                },
+                "state": {
+                  "name": "Karnataka"
+                },
+                "area_code": "560001"
+              }
+            ],
+            "items": [
+              {
+                "id": "1",
+                "short_desc": "java springboot book One",
+                "long_desc": "java springboot book One",
+                "name": "java springboot book One",
+                "price": {
+                  "value": "2000",
+                  "currency": "INR"
+                },
+                "categories": [
+                  {
+                    "id": "1",
+                    "name": "IT"
+                  }
+                ],
+                "locations": [
+                  {
+                    "id": "6",
+                    "city": "Bengaluru",
+                    "state": "Karnataka",
+                    "country": "India"
+                  }
+                ],
+                "fulfillments": [
+                  {
+                    "id": "8",
+                    "type": "RECORDED COURSE",
+                    "tracking": false,
+                    "tags": [
+                      {
+                        "display": true,
+                        "list": [
+                          {
+                            "code": "springboot",
+                            "value": "springboot"
+                          }
+                        ]
+                      },
+                      {
+                        "display": true,
+                        "list": [
+                          {
+                            "code": "course-duration",
+                            "value": "30 days"
+                          }
+                        ]
+                      },
+                      {
+                        "display": true,
+                        "list": [
+                          {
+                            "code": "course-url",
+                            "value": "https://www.edureka.co/spring-certification-course"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "images": [
+                  {
+                    "url": "https://miro.medium.com/v2/resize:fit:1200/0*CnvREDstX45u4ruk.png"
+                  }
+                ],
+                "rating": "4.3",
+                "rateable": true,
+                "tags": [
+                  {
+                    "display": true,
+                    "list": [
+                      {
+                        "code": "springboot",
+                        "value": "springboot"
+                      }
+                    ]
+                  },
+                  {
+                    "display": true,
+                    "list": [
+                      {
+                        "code": "course-duration",
+                        "value": "30 days"
+                      }
+                    ]
+                  },
+                  {
+                    "display": true,
+                    "list": [
+                      {
+                        "code": "course-url",
+                        "value": "https://www.edureka.co/spring-certification-course"
+                      }
+                    ]
+                  }
+                ],
+                "quantity": {
+                  "available": {
+                    "count": 100
+                  }
+                }
+              },
+              {
+                "id": "2",
+                "short_desc": "java springboot book Two",
+                "long_desc": "java springboot book Two",
+                "name": "java springboot book Two",
+                "price": {
+                  "value": "1000",
+                  "currency": "INR"
+                },
+                "categories": [
+                  {
+                    "id": "1",
+                    "name": "IT"
+                  }
+                ],
+                "locations": [
+                  {
+                    "id": "6",
+                    "city": "Bengaluru",
+                    "state": "Karnataka",
+                    "country": "India"
+                  }
+                ],
+                "fulfillments": [
+                  {
+                    "id": "8",
+                    "type": "RECORDED COURSE",
+                    "tracking": false,
+                    "tags": [
+                      {
+                        "display": true,
+                        "list": [
+                          {
+                            "code": "springboot",
+                            "value": "springboot"
+                          }
+                        ]
+                      },
+                      {
+                        "display": true,
+                        "list": [
+                          {
+                            "code": "course-duration",
+                            "value": "30 days"
+                          }
+                        ]
+                      },
+                      {
+                        "display": true,
+                        "list": [
+                          {
+                            "code": "course-url",
+                            "value": "https://www.edureka.co/spring-certification-course"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "images": [
+                  {
+                    "url": "https://miro.medium.com/v2/resize:fit:1200/0*CnvREDstX45u4ruk.png"
+                  }
+                ],
+                "rating": "4.0",
+                "rateable": true,
+                "tags": [
+                  {
+                    "display": true,
+                    "list": [
+                      {
+                        "code": "springboot",
+                        "value": "springboot"
+                      }
+                    ]
+                  },
+                  {
+                    "display": true,
+                    "list": [
+                      {
+                        "code": "course-duration",
+                        "value": "30 days"
+                      }
+                    ]
+                  },
+                  {
+                    "display": true,
+                    "list": [
+                      {
+                        "code": "course-url",
+                        "value": "https://www.edureka.co/spring-certification-course"
+                      }
+                    ]
+                  }
+                ],
+                "quantity": {
+                  "available": {
+                    "count": 100
+                  }
+                }
+              },
+              {
+                "id": "2",
+                "short_desc": "java springboot book Three",
+                "long_desc": "java springboot book Three",
+                "name": "java springboot book Three",
+                "price": {
+                  "value": "500",
+                  "currency": "INR"
+                },
+                "categories": [
+                  {
+                    "id": "1",
+                    "name": "IT"
+                  }
+                ],
+                "locations": [
+                  {
+                    "id": "6",
+                    "city": "Bengaluru",
+                    "state": "Karnataka",
+                    "country": "India"
+                  }
+                ],
+                "fulfillments": [
+                  {
+                    "id": "8",
+                    "type": "RECORDED COURSE",
+                    "tracking": false,
+                    "tags": [
+                      {
+                        "display": true,
+                        "list": [
+                          {
+                            "code": "springboot",
+                            "value": "springboot"
+                          }
+                        ]
+                      },
+                      {
+                        "display": true,
+                        "list": [
+                          {
+                            "code": "course-duration",
+                            "value": "30 days"
+                          }
+                        ]
+                      },
+                      {
+                        "display": true,
+                        "list": [
+                          {
+                            "code": "course-url",
+                            "value": "https://www.edureka.co/spring-certification-course"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "images": [
+                  {
+                    "url": "https://miro.medium.com/v2/resize:fit:1200/0*CnvREDstX45u4ruk.png"
+                  }
+                ],
+                "rating": "4.8",
+                "rateable": true,
+                "tags": [
+                  {
+                    "display": true,
+                    "list": [
+                      {
+                        "code": "springboot",
+                        "value": "springboot"
+                      }
+                    ]
+                  },
+                  {
+                    "display": true,
+                    "list": [
+                      {
+                        "code": "course-duration",
+                        "value": "30 days"
+                      }
+                    ]
+                  },
+                  {
+                    "display": true,
+                    "list": [
+                      {
+                        "code": "course-url",
+                        "value": "https://www.edureka.co/spring-certification-course"
+                      }
+                    ]
+                  }
+                ],
+                "quantity": {
+                  "available": {
+                    "count": 100
+                  }
+                }
+              }
+            ],
+            "images": [
+              {
+                "url": "https://makerspace/assembly/makerspace_logo.png"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

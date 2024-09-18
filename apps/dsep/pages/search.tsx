@@ -11,6 +11,7 @@ import { getParsedSearchlist } from '../utilities/search-utils'
 import { ParsedItemModel, SearchResponseModel } from '../types/search.types'
 import { toast } from 'react-toastify'
 import axios from '../services/axios'
+import { testIds } from '@shared/dataTestIds'
 
 const Search = () => {
   const [items, setItems] = useState<ParsedItemModel[]>([])
@@ -105,6 +106,7 @@ const Search = () => {
           display={'grid'}
           height={'calc(100vh - 300px)'}
           alignContent={'center'}
+          data-test={testIds.loadingIndicator}
         >
           <LoaderWithMessage
             loadingText={t.catalogLoader}

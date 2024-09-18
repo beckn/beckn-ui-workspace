@@ -104,6 +104,7 @@ const testIds = {
   cartpage_itemImage: 'cart-card-image',
   cartpage_itemName: 'cart-item-name',
   cartpage_productPrice: 'product-price',
+  cartSubTotal_Text: 'cartSub-Total-Text',
   cartpage_orderSummaryText: 'order-summary',
   cartpage_totalQuantityText: 'total-qunatity-text',
   cartpage_totalAmountText: 'total-amount-text',

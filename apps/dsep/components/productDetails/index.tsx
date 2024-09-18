@@ -53,7 +53,8 @@ const ProductDetails: React.FC<Props> = ({ product }) => {
               rating: product.item.rating,
               size: 20,
               setRating: () => {},
-              starCount: 5
+              starCount: 5,
+              dataTest: testIds.item_rating
             },
             productCta: {
               noCounter: true,

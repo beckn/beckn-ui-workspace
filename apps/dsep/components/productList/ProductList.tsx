@@ -6,6 +6,7 @@ import { ParsedItemModel } from '../../types/search.types'
 import { ProductCard } from '@beckn-ui/becknified-components'
 import ProductCardRenderer from '../productCard/product-card-renderer'
 import Typography from '@beckn-ui/molecules/src/components/typography/typography'
+import { testIds } from '@shared/dataTestIds'
 
 interface ProductListPropsModel {
   productList: ParsedItemModel[]
@@ -76,6 +77,7 @@ const ProductList: React.FC<ProductListPropsModel> = ({ productList }) => {
               <Typography
                 text={t.noProduct}
                 variant="subTitleRegular"
+                dataTest={testIds.noDataAvailable}
               />
             </Box>
           )}

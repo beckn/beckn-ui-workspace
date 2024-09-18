@@ -1,19 +1,17 @@
 import React, { useEffect } from 'react'
-import { Provider, useDispatch, useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import Head from 'next/head'
-import { ThemeProvider } from 'next-themes'
 import { useRouter } from 'next/router'
 import Header from '../header'
-import Footer from '../footer'
 import { ToastContainer } from 'react-toastify'
 import { useLanguage } from '../../hooks/useLanguage'
 import NextNProgress from 'nextjs-progressbar'
 import cs from 'classnames'
-import { PersistGate } from 'redux-persist/integration/react'
 import { Toast } from '@beckn-ui/molecules'
 import { ToastType } from '@beckn-ui/molecules/src/components/toast/Toast-type'
 import { useToast } from '@chakra-ui/react'
 import { feedbackActions, FeedbackRootState } from '../../store/ui-feedback-slice'
+import { testIds } from '@shared/dataTestIds'
 
 const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const { locale } = useLanguage()
@@ -44,6 +42,7 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
             title={message}
             description={description}
             onClose={onClose}
+            dataTest={testIds.feedback}
           />
         )
       })
