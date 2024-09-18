@@ -106,21 +106,21 @@ const RideDetailsCardContainer: React.FC<RideDetailsCardContainerProps> = ({ han
               setIsLoading(false)
               setModalType({ type: 'RideSummary' })
               handleStateChange(
-                currentStatus === RIDE_STATUS_CODE.RIDE_ACCEPTED ? 'Ride Accepted.' : 'Driver reached PickUp location.',
+                currentStatus === RIDE_STATUS_CODE.RIDE_ACCEPTED ? t.rideAccept : t.reachedPickup,
                 'success'
               )
               break
 
             case RIDE_STATUS_CODE.RIDE_STARTED:
               setIsLoading(false)
-              handleStateChange('Ride Started.', 'success')
+              handleStateChange(t.rideStarted, 'success')
               setModalType({ type: 'RideDetails' })
               handleStatusOperation(RIDE_STATUS_CODE.RIDE_STARTED)
               break
 
             case RIDE_STATUS_CODE.RIDE_DECLINED:
               setIsLoading(false)
-              handleStateChange('Driver Declined the Ride.', 'error')
+              handleStateChange(t.rideDiclined, 'error')
               handleStatusOperation(RIDE_STATUS_CODE.RIDE_DECLINED)
               break
 
@@ -183,7 +183,7 @@ const RideDetailsCardContainer: React.FC<RideDetailsCardContainerProps> = ({ han
         >
           <LoaderWithMessage
             loadingText={t.pleaseWait}
-            loadingSubText={t.confirmLoaderSubtext}
+            loadingSubText={t.awaitingDriverApproval}
           />
         </Box>
       ) : (

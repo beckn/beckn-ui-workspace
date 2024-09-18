@@ -28,6 +28,12 @@ const en: { [key: string]: string } = {
   errorName2: 'Name can only contain letters and spaces',
   errorName3: 'Name must contain at least 3 characters',
   errorNumber: 'Mobile Number is required',
-  errorNumber2: 'Invalid Mobile Number'
+  errorNumber2: 'Invalid Mobile Number',
+  awaitingDriverApproval: 'for a driver to accept your ride request.',
+  rideAccept: 'Your ride has been accepted. The driver is on the way to the pickup location.',
+  reachedPickup: 'The driver has arrived at the pickup location. Please meet your driver.',
+  rideStarted: 'Your ride has started. Sit back and enjoy the journey!',
+  rideCompleted: 'Your ride is complete. Thank you for riding with us!',
+  rideDiclined: 'The driver has declined your ride request. Please try again.'
 }
 export default en
