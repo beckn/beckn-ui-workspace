@@ -120,7 +120,7 @@ const Map = (props: MapProps) => {
       locationButton.src = MyLocation
       locationButton.classList.add('custom-location-button')
       locationButton.style.background = '#ffffff'
-      locationButton.style.border = '2px solid #1A202C'
+      locationButton.style.border = '2px solid #EFEFEF'
       locationButton.style.borderRadius = '22px'
       locationButton.style.margin = '10px'
       locationButton.style.cursor = 'pointer'
