@@ -2571,6 +2571,10 @@ __metadata:
     jsonwebtoken: ^8.5.1
     leaflet: ^1.9.4
     lodash-webpack-plugin: ^0.11.6
+    mocha: ^10.7.3
+    mochawesome: ^7.1.3
+    mochawesome-merge: ^4.3.0
+    mochawesome-report-generator: ^6.2.0
     next: ^13.4.19
     next-connect: ^0.12.2
     next-sanity-image: ^3.2.1
@@ -2601,6 +2605,7 @@ __metadata:
     tailwindcss: ^3.1.4
     typescript: 4.6.4
     url-loader: ^4.1.1
+    wait-on: ^8.0.1
   languageName: unknown
   linkType: soft
 
@@ -7030,15 +7035,15 @@ __metadata:
     jest-environment-jsdom: ^29.6.4
     lint-staged: ^14.0.1
     mocha: ^10.7.3
-    mochawesome: ^7.1.3
-    mochawesome-merge: ^4.3.0
-    mochawesome-report-generator: ^6.2.0
+    mochawesome: "link:./null"
+    mochawesome-merge: "link:./null"
+    mochawesome-report-generator: "link:./null"
     mongodb: ^6.2.0
     mongoose: ^8.0.0
     prettier: ^3.0.3
     ts-jest: ^29.1.1
     uuid: ^9.0.1
-    wait-on: ^8.0.1
+    wait-on: "link:./null"
   languageName: unknown
   linkType: soft
 
@@ -13558,6 +13563,12 @@ __metadata:
   languageName: node
   linkType: hard
 
+"mochawesome-merge@link:./null::locator=beckn-ui-workspace%40workspace%3A.":
+  version: 0.0.0-use.local
+  resolution: "mochawesome-merge@link:./null::locator=beckn-ui-workspace%40workspace%3A."
+  languageName: node
+  linkType: soft
+
 "mochawesome-merge@npm:^4.3.0":
   version: 4.3.0
   resolution: "mochawesome-merge@npm:4.3.0"
@@ -13570,6 +13581,12 @@ __metadata:
   checksum: 796321f8b8b15bc223ced10d3fc38f2a689fd12abc2d5745f5ffabfba54a0bbf8edf16596507f751966b21fdbe9d5b3fdeb5662dcf865771466b54ba6b61e849
   languageName: node
   linkType: hard
+
+"mochawesome-report-generator@link:./null::locator=beckn-ui-workspace%40workspace%3A.":
+  version: 0.0.0-use.local
+  resolution: "mochawesome-report-generator@link:./null::locator=beckn-ui-workspace%40workspace%3A."
+  languageName: node
+  linkType: soft
 
 "mochawesome-report-generator@npm:^6.2.0":
   version: 6.2.0
@@ -13592,6 +13609,12 @@ __metadata:
   checksum: bbfafc781a5b5aa39a012e0bed7d50ac929f72a46dee640223e4398b5f2121bd552a58f1dd481c0133678650a2e4730a9f97b8a5f26f2956b66b5c0057eb9391
   languageName: node
   linkType: hard
+
+"mochawesome@link:./null::locator=beckn-ui-workspace%40workspace%3A.":
+  version: 0.0.0-use.local
+  resolution: "mochawesome@link:./null::locator=beckn-ui-workspace%40workspace%3A."
+  languageName: node
+  linkType: soft
 
 "mochawesome@npm:^7.1.3":
   version: 7.1.3
@@ -18622,6 +18645,12 @@ __metadata:
   checksum: eba070e78deb408ae8defa4d36b429f084b2b47a4741c4a9be3f27a0a3d1845e277e3072b04391a138f7e43776842627d1334e448ff13ff90ad9fb1214ee7091
   languageName: node
   linkType: hard
+
+"wait-on@link:./null::locator=beckn-ui-workspace%40workspace%3A.":
+  version: 0.0.0-use.local
+  resolution: "wait-on@link:./null::locator=beckn-ui-workspace%40workspace%3A."
+  languageName: node
+  linkType: soft
 
 "wait-on@npm:^8.0.1":
   version: 8.0.1

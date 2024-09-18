@@ -132,13 +132,13 @@
     "@types/mongoose": "^5.11.97",
     "eslint-config-next": "latest",
     "mocha": "^10.7.3",
-    "mochawesome": "^7.1.3",
-    "mochawesome-merge": "^4.3.0",
-    "mochawesome-report-generator": "^6.2.0",
+    "mochawesome": "link:./null",
+    "mochawesome-merge": "link:./null",
+    "mochawesome-report-generator": "link:./null",
     "mongodb": "^6.2.0",
     "mongoose": "^8.0.0",
     "uuid": "^9.0.1",
-    "wait-on": "^8.0.1"
+    "wait-on": "link:./null"
   },
   "devDependencies": {
     "@beckn-ui/prettier-config": "workspace:^",
