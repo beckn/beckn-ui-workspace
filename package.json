@@ -131,9 +131,14 @@
     "@types/googlemaps": "^3.43.3",
     "@types/mongoose": "^5.11.97",
     "eslint-config-next": "latest",
+    "mocha": "^10.7.3",
+    "mochawesome": "^7.1.3",
+    "mochawesome-merge": "^4.3.0",
+    "mochawesome-report-generator": "^6.2.0",
     "mongodb": "^6.2.0",
     "mongoose": "^8.0.0",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "wait-on": "^8.0.1"
   },
   "devDependencies": {
     "@beckn-ui/prettier-config": "workspace:^",
