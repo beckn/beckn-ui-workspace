@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Table, Thead, Tbody, Tr, Th, Td, IconButton, Box, Flex, Badge, Button, Text } from '@chakra-ui/react'
 import { TriangleUpIcon, TriangleDownIcon } from '@chakra-ui/icons'
 import { Typography } from '@beckn-ui/molecules'
@@ -23,35 +23,23 @@ const DataTable = (props: DataTableProps) => {
     setCurrentPage(1)
   }, [currentTab])
 
-  const handlePageChange = (newPage: number) => {
-    if (newPage >= 1 && newPage <= totalPages) {
-      setCurrentPage(newPage)
-      fetchData(newPage)
-    }
-  }
-
-  const sortedData = useMemo(() => {
-    let sortableData = [...items]
-    if (sortConfig !== null) {
-      sortableData.sort((a: any, b: any) => {
-        if (a[sortConfig.key] < b[sortConfig.key]) {
-          return sortConfig.direction === 'ascending' ? -1 : 1
-        }
-        if (a[sortConfig.key] > b[sortConfig.key]) {
-          return sortConfig.direction === 'ascending' ? 1 : -1
-        }
-        return 0
-      })
-    }
-    return sortableData
-  }, [sortConfig, items])
+  const handlePageChange = useCallback(
+    (newPage: number) => {
+      if (newPage >= 1 && newPage <= totalPages) {
+        setCurrentPage(newPage)
+        fetchData(newPage, sortConfig)
+      }
+    },
+    [sortConfig, totalPages]
+  )
 
   const requestSort = (key: string) => {
-    let direction = 'ascending'
-    if (sortConfig && sortConfig.key === key && sortConfig.direction === 'ascending') {
-      direction = 'descending'
+    let order = 'asc'
+    if (sortConfig && sortConfig.key === key && sortConfig.order === 'asc') {
+      order = 'desc'
     }
-    setSortConfig({ key, direction })
+    setSortConfig({ key, order })
+    fetchData(currentPage, { key: key === 'description' ? 'short_description' : key, order })
   }
 
   const getIcon = (key: string) => {
@@ -62,7 +50,7 @@ const DataTable = (props: DataTableProps) => {
         </Flex>
       )
     }
-    return sortConfig.direction === 'ascending' ? <TriangleUpIcon /> : <TriangleDownIcon />
+    return sortConfig.order === 'asc' ? <TriangleUpIcon /> : <TriangleDownIcon />
   }
 
   return (
@@ -85,7 +73,7 @@ const DataTable = (props: DataTableProps) => {
                 <Box
                   display="flex"
                   alignItems="center"
-                  width={'300px'}
+                  width={'200px'}
                 >
                   Title
                   <IconButton
@@ -94,7 +82,7 @@ const DataTable = (props: DataTableProps) => {
                     fontSize="65%"
                     size="s"
                     aria-label="title"
-                    icon={getIcon('title')!}
+                    icon={getIcon('name')!}
                     onClick={() => requestSort('name')}
                   />
                 </Box>
@@ -121,7 +109,7 @@ const DataTable = (props: DataTableProps) => {
                 <Box
                   display="flex"
                   alignItems="center"
-                  width={'200px'}
+                  width={'100px'}
                 >
                   Status
                   <IconButton
@@ -139,7 +127,7 @@ const DataTable = (props: DataTableProps) => {
                 <Box
                   display="flex"
                   alignItems="center"
-                  width={'200px'}
+                  width={'100px'}
                 >
                   Start Date
                   <IconButton
@@ -148,8 +136,8 @@ const DataTable = (props: DataTableProps) => {
                     fontSize="65%"
                     size="s"
                     aria-label="startDate"
-                    icon={getIcon('startDate')!}
-                    onClick={() => requestSort('startDate')}
+                    // icon={getIcon('startDate')!}
+                    // onClick={() => requestSort('startDate')}
                   />
                 </Box>
               </Th>
@@ -157,7 +145,7 @@ const DataTable = (props: DataTableProps) => {
                 <Box
                   display="flex"
                   alignItems="center"
-                  width={'200px'}
+                  width={'100px'}
                 >
                   End Date
                   <IconButton
@@ -166,16 +154,16 @@ const DataTable = (props: DataTableProps) => {
                     fontSize="65%"
                     size="s"
                     aria-label="endDate"
-                    icon={getIcon('endDate')!}
-                    onClick={() => requestSort('endDate')}
+                    // icon={getIcon('endDate')!}
+                    // onClick={() => requestSort('endDate')}
                   />
                 </Box>
               </Th>
             </Tr>
           </Thead>
           <Tbody>
-            {sortedData.length > 0 ? (
-              sortedData.map((item, index) => (
+            {items.length > 0 ? (
+              items.map((item, index) => (
                 <Tr
                   key={index}
                   cursor="pointer"
@@ -196,7 +184,8 @@ const DataTable = (props: DataTableProps) => {
                         WebkitLineClamp: '2',
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
-                        whiteSpace: 'normal'
+                        whiteSpace: 'normal',
+                        width: '200px'
                       }}
                     />
                   </Td>
@@ -209,7 +198,8 @@ const DataTable = (props: DataTableProps) => {
                         WebkitLineClamp: '2',
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
-                        whiteSpace: 'normal'
+                        whiteSpace: 'normal',
+                        width: '300px'
                       }}
                     />
                   </Td>
@@ -239,7 +229,8 @@ const DataTable = (props: DataTableProps) => {
                         WebkitLineClamp: '2',
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
-                        whiteSpace: 'normal'
+                        whiteSpace: 'normal',
+                        width: '100px'
                       }}
                     />
                   </Td>
@@ -252,7 +243,8 @@ const DataTable = (props: DataTableProps) => {
                         WebkitLineClamp: '2',
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
-                        whiteSpace: 'normal'
+                        whiteSpace: 'normal',
+                        width: '100px'
                       }}
                     />
                   </Td>

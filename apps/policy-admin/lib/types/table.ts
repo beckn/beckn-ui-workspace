@@ -16,12 +16,12 @@ export interface TabNavPanelProps {
   meta: MetaData
   tabList: string[]
   items: ItemDetails[]
-  fetchData: (pageNumber: number) => void
+  fetchData: (pageNumber: number, sortBy: any) => void
 }
 
 export interface DataTableProps {
   items: ItemDetails[]
   meta: MetaData
   currentTab: string
-  fetchData: (pageNumber: number) => void
+  fetchData: (pageNumber: number, sortBy?: any) => void
 }
