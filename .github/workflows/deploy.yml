@@ -27,7 +27,7 @@ jobs:
       - name: Set output if taxi-bpp-v2 has changed
         id: set_output
         run: |
-          echo "::set-output name=taxi_bpp_v2_changed::$GITHUB_ENV"
+          echo "::set-output name=taxi_bpp_v2_changed::$(echo ${{ env.taxi_bpp_v2_changed }})"
 
     outputs:
       taxi_bpp_v2_changed: ${{ steps.set_output.outputs.taxi_bpp_v2_changed }}
