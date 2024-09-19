@@ -23,11 +23,18 @@ jobs:
           else
             echo "No changes in taxi-bpp-v2"
             echo "taxi_bpp_v2_changed=false" >> $GITHUB_ENV
-          fi
+
+      - name: Set output if taxi-bpp-v2 has changed
+        id: set_output
+        run: |
+          echo "::set-output name=taxi_bpp_v2_changed::$GITHUB_ENV"
+
+    outputs:
+      taxi_bpp_v2_changed: ${{ steps.set_output.outputs.taxi_bpp_v2_changed }}
 
   deploy-taxi-bpp-v2:
     needs: check-taxi-bpp-v2-changes
-    if: env.taxi_bpp_v2_changed == 'true' && github.ref == 'refs/heads/develop-1.1.0'
+    if: needs.check-taxi-bpp-v2-changes.outputs.taxi_bpp_v2_changed == 'true' && github.ref == 'refs/heads/develop-1.1.0'
     runs-on: ubuntu-latest
     steps:
       - name: Deploy taxi-bpp-v2 to AWS Amplify
