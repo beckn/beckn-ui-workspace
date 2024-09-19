@@ -249,7 +249,7 @@ const Homepage = () => {
       const endRideData = await getRideSummary({
         order_id: data.orderId
       }).unwrap()
-      console.log(endRideData.data)
+
       const parsedData = parseRideSummaryData(endRideData, data)
       if (!parsedData.source) parsedData.source = data.source
       if (!parsedData.destination) parsedData.destination = data.destination
@@ -527,7 +527,6 @@ const Homepage = () => {
     }
   }
   useEffect(() => {
-    console.log(socket)
     if (socket) {
       const handleShowRides = (data: any) => {
         newRideRequests(data)
