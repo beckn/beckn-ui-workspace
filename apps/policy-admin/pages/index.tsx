@@ -53,12 +53,13 @@ const Homepage = () => {
   const [getAllPolicies] = useGetAllPoliciesMutation()
 
   const getDashboardData = useCallback(
-    async (pageNumber: number = 1) => {
+    async (pageNumber: number = 1, sortBy?: any) => {
       try {
         let getPoliciesPayload: Record<string, number | string> = {
           start: (pageNumber - 1) * 10,
           limit: 10
         }
+        if (sortBy) getPoliciesPayload.sortBy = JSON.stringify(sortBy)
 
         if (['Active', 'Inactive', 'Published'].includes(currentTab)) {
           getPoliciesPayload.status = currentTab.toLowerCase()
