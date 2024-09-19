@@ -1,0 +1,35 @@
+name: Deploy to AWS Amplify
+
+on:
+  push:
+    branches:
+      - develop-1.1.0  
+
+jobs:
+  check-taxi-bpp-v2-changes:
+    if: github.ref == 'refs/heads/develop-1.1.0'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Check for changes in taxi-bpp-v2
+        id: check_taxi_bpp_v2
+        run: |
+          git fetch origin
+          if git diff --name-only origin/develop-1.1.0 HEAD | grep '^apps/taxi-bpp-v2/'; then
+            echo "Changes detected in taxi-bpp-v2"
+            echo "taxi_bpp_v2_changed=true" >> $GITHUB_ENV
+          else
+            echo "No changes in taxi-bpp-v2"
+            echo "taxi_bpp_v2_changed=false" >> $GITHUB_ENV
+          fi
+
+  deploy-taxi-bpp-v2:
+    needs: check-taxi-bpp-v2-changes
+    if: env.taxi_bpp_v2_changed == 'true' && github.ref == 'refs/heads/develop-1.1.0'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy taxi-bpp-v2 to AWS Amplify
+        run: |
+          curl -X POST -d {} "https://webhooks.amplify.ap-south-1.amazonaws.com/prod/webhooks?id=ec00fdf7-9c72-4da0-8ee1-59aeabbe1b4f&token=HKS7KIARWzLIQSGGboGwJoLq34JQjBGPHtkJlCX1na4&operation=startbuild" -H "Content-Type:application/json"
