@@ -35,12 +35,9 @@ jobs:
   deploy-taxi-bpp-v2:
     needs: check-taxi-bpp-v2-changes
     runs-on: ubuntu-latest
+    if: needs.check-taxi-bpp-v2-changes.outputs.taxi_bpp_v2_changed == 'true'  # Conditional execution
     steps:
       - name: Deploy taxi-bpp-v2 to AWS Amplify
         run: |
-          if [ "${{ needs.check-taxi-bpp-v2-changes.outputs.taxi_bpp_v2_changed }}" == "true" ]; then
-            echo "Changes detected, triggering AWS Amplify build for taxi-bpp-v2..."
-            curl -X POST -d {} "https://webhooks.amplify.ap-south-1.amazonaws.com/prod/webhooks?id=YOUR_WEBHOOK_ID&token=YOUR_WEBHOOK_TOKEN&operation=startbuild" -H "Content-Type:application/json"
-          else
-            echo "No changes in taxi-bpp-v2, skipping AWS Amplify build."
-          fi
+          echo "Changes detected, triggering AWS Amplify build for taxi-bpp-v2..."
+          curl -X POST -d {} "https://webhooks.amplify.ap-south-1.amazonaws.com/prod/webhooks?id=YOUR_WEBHOOK_ID&token=YOUR_WEBHOOK_TOKEN&operation=startbuild" -H "Content-Type:application/json"
