@@ -1,32 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import {
-  Box,
-  Button,
-  Flex,
-  FormControl,
-  FormLabel,
-  Input,
-  Select,
-  Table,
-  Thead,
-  Tr,
-  Th,
-  Tbody,
-  Td,
-  HStack,
-  Divider,
-  Code,
-  Link
-} from '@chakra-ui/react'
+import { Box, Flex, FormControl, FormLabel, HStack, Divider, Code, Link } from '@chakra-ui/react'
 import { Typography } from '@beckn-ui/molecules'
 import { useRouter } from 'next/router'
 import CustomButton from '@components/Button/CustomButton'
 import { policyStatusOptions } from '@lib/constants'
-import { PolicyStatusType } from '@lib/types/metaData'
+import { PolicyStatusType, PolicyType } from '@lib/types/metaData'
 import { useGetPolicyDetailsMutation, useUpdatePolicyMutation } from '@services/PolicyService'
 import { formatDate } from '@utils/general'
 import { feedbackActions } from '@beckn-ui/common'
 import { useDispatch } from 'react-redux'
+import { getGeoFenceCoords } from '@utils/geoLocation'
+import { GenericDropdown } from '@components/GenericDropdown/GenericDropdown'
 
 const ViewInformation = () => {
   const [item, setItem] = useState({
@@ -46,7 +30,7 @@ const ViewInformation = () => {
   })
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
-  const [policyStatus, setPolicyStatus] = useState(item.status.toUpperCase())
+  const [policyStatus, setPolicyStatus] = useState(item.status)
   const [getPolicyDetails] = useGetPolicyDetailsMutation()
   const [updatePolicy] = useUpdatePolicyMutation()
 
@@ -70,12 +54,10 @@ const ViewInformation = () => {
         const sourceOwner = policy?.owner
         const description = policy?.descriptor
         const status = policy?.status
-        const geofence = policy?.geofences[0]['polygon']
+        const geofence = policy?.geofences?.[0]['polygon'] || []
         const rules = policy?.rules
-        const applicable = policy?.coverage[0]['subscribers']
-          ?.map((item: { type: any }) => item.type.toUpperCase())
-          .join(', ')
-        const source = policy?.media?.url
+        const applicable = policy?.coverage[0]['subscribers']?.map((item: { type: any }) => item.type).join(', ')
+        const source = policy?.media?.url || policy?.rules?.message?.policy?.descriptor?.media?.[0]?.url
         setItem({
           startDate,
           endDate,
@@ -91,7 +73,7 @@ const ViewInformation = () => {
           city,
           source
         })
-        setPolicyStatus(policy.status.toUpperCase())
+        setPolicyStatus(policy.status)
       } catch (error) {
         console.error('Error fetching policy:', error)
         dispatch(
@@ -123,21 +105,12 @@ const ViewInformation = () => {
     }
     return policyStatusOptions
   }
-  const getGeoFenceCoords = (coords: string[]) => {
-    return coords.map(item => {
-      const latLong = item.split(', ')
-      return {
-        lat: Number(latLong[0]),
-        lng: Number(latLong[1])
-      }
-    })
-  }
 
   const handleOnUpdate = async () => {
     try {
       const payload = {
         policyId: policyId,
-        status: policyStatus.toLowerCase()
+        status: policyStatus
       }
 
       await updatePolicy(payload).unwrap()
@@ -225,28 +198,23 @@ const ViewInformation = () => {
             alignItems={{ base: 'center', md: 'unset' }}
           >
             <FormLabel>Status</FormLabel>
-            <Select
-              placeholder="Select"
-              width={'45.2%'}
-              value={policyStatus}
-              color={
-                policyStatus === PolicyStatusType.ACTIVE
-                  ? 'green'
-                  : policyStatus === PolicyStatusType.INACTIVE
-                    ? 'red'
-                    : 'blue'
-              }
-              onChange={event => setPolicyStatus(event.target.value || policyStatus)}
-            >
-              {getStatusDrodpwnItems(policyStatus).map((statusType, index) => (
-                <option
-                  key={index}
-                  value={statusType.value}
-                >
-                  {statusType.label}
-                </option>
-              ))}
-            </Select>
+            <GenericDropdown
+              options={getStatusDrodpwnItems(policyStatus)}
+              selectedValue={policyStatus}
+              setSelectedValue={value => {
+                setPolicyStatus(value || policyStatus)
+              }}
+              withColors={true}
+              buttonStyles={{
+                width: '8rem',
+                color:
+                  policyStatus === PolicyStatusType.ACTIVE
+                    ? 'green'
+                    : policyStatus === PolicyStatusType.INACTIVE
+                      ? 'red'
+                      : 'blue'
+              }}
+            />
           </FormControl>
         </HStack>
 
@@ -288,7 +256,7 @@ const ViewInformation = () => {
               <FormLabel>From</FormLabel>
               <Typography
                 fontSize="14px"
-                text={formatDate(item.startDate)}
+                text={item.startDate ? formatDate(item.startDate) : ''}
               />
             </FormControl>
 
@@ -296,7 +264,7 @@ const ViewInformation = () => {
               <FormLabel>To</FormLabel>
               <Typography
                 fontSize="14px"
-                text={formatDate(item.endDate)}
+                text={item.endDate ? formatDate(item.endDate) : ''}
               />
             </FormControl>
           </Flex>
@@ -328,29 +296,31 @@ const ViewInformation = () => {
         </HStack>
       </Box>
 
-      <Box
-        p={4}
-        border="1px solid #72767e"
-      >
-        <FormControl>
-          <FormLabel>Geofence</FormLabel>
-          <Link
-            color="#5c5cff"
-            onClick={() =>
-              router.push({
-                pathname: '/viewGeofence',
-                query: {
-                  city: item.city,
-                  coords: JSON.stringify(getGeoFenceCoords(item.geofence))
-                }
-              })
-            }
-            fontSize={'14px'}
-          >
-            {'Click to view'}
-          </Link>
-        </FormControl>
-      </Box>
+      {item.category === PolicyType.GEOFENCE && (
+        <Box
+          p={4}
+          border="1px solid #72767e"
+        >
+          <FormControl>
+            <FormLabel>Geofence</FormLabel>
+            <Link
+              color="#5c5cff"
+              onClick={() =>
+                router.push({
+                  pathname: '/viewGeofence',
+                  query: {
+                    city: item.city,
+                    coords: JSON.stringify(getGeoFenceCoords(item.geofence))
+                  }
+                })
+              }
+              fontSize={'14px'}
+            >
+              {'Click to view'}
+            </Link>
+          </FormControl>
+        </Box>
+      )}
 
       <Box
         p={4}

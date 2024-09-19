@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Box, Checkbox, Input, Menu, MenuButton, MenuList, MenuItem, Button } from '@chakra-ui/react'
 import { ChevronDownIcon } from '@chakra-ui/icons'
 
@@ -14,6 +14,15 @@ export interface MultiSelectDropdownProps {
 
 const MultiSelectDropdown = (props: MultiSelectDropdownProps) => {
   const { options, selectedOptions, setSelectedOptions, isInvalid } = props
+
+  const menuButtonRef = useRef<HTMLButtonElement>(null)
+  const [menuWidth, setMenuWidth] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (menuButtonRef.current) {
+      setMenuWidth(`${menuButtonRef.current.offsetWidth}px`)
+    }
+  }, [menuButtonRef.current])
 
   // Handle checkbox change
   const handleChange = useCallback(
@@ -51,6 +60,7 @@ const MultiSelectDropdown = (props: MultiSelectDropdownProps) => {
           background="#fff"
           _hover={{ backgroundColor: 'trasparent' }}
           _active={{ backgroundColor: 'trasparent' }}
+          ref={menuButtonRef}
         >
           <Input
             placeholder="Select"
@@ -62,7 +72,7 @@ const MultiSelectDropdown = (props: MultiSelectDropdownProps) => {
         </MenuButton>
 
         {/* Dropdown list with checkboxes */}
-        <MenuList>
+        <MenuList minWidth={menuWidth || 'auto'}>
           {options.map((option, index) => (
             <MenuItem key={index}>
               <Checkbox

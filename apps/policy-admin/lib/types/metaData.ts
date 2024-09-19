@@ -10,9 +10,9 @@ export enum ApplicableToType {
 }
 
 export enum PolicyStatusType {
-  ACTIVE = 'ACTIVE',
-  INACTIVE = 'INACTIVE',
-  PUBLISHED = 'PUBLISHED'
+  ACTIVE = 'active',
+  INACTIVE = 'inactive',
+  PUBLISHED = 'published'
 }
 
 export interface RulesTemplate {
@@ -62,7 +62,7 @@ export interface RulesTemplate {
           type: string
         }[]
       }[]
-      geofences: {
+      geofences?: {
         polygon: string[]
       }[]
     }

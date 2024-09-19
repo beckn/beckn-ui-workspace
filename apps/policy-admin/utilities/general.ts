@@ -22,3 +22,22 @@ export const checkTokenExpiry = (token: any) => {
   }
   return false
 }
+
+export const validateDateRange = (startDate: string | Date, endDate: string | Date): boolean => {
+  const start = new Date(startDate)
+  const end = new Date(endDate)
+
+  // Check if both dates are valid
+  if (isNaN(start.getTime()) || isNaN(end.getTime())) {
+    console.error('Invalid start or end date')
+    return false
+  }
+
+  // Ensure that the start date is before the end date
+  if (start > end) {
+    console.error('Start date cannot be after end date')
+    return false
+  }
+
+  return true
+}
