@@ -1,6 +1,6 @@
 import { Box, Text, Image, Textarea, useToast } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import StarRating from '../components/starRating/StarRating'
 import { useLanguage } from '../hooks/useLanguage'
 import feedbackImg from '../public/images/feedbackImg.svg'
@@ -22,7 +22,7 @@ const Feedback = () => {
   const [isLoadingForRating, setIsLoadingForRating] = useState(false)
   const statusResponse = useSelector((state: StatusRootState) => state.status.statusResponse)
   const { isDesktop } = useResponsive()
-  const toast = useToast()
+
   const dispatch = useDispatch()
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
