@@ -16,6 +16,10 @@ const Search = () => {
   const [originalItems, setOriginalItems] = useState<ParsedItemModel[]>([])
   const router = useRouter()
   const [searchKeyword, setSearchKeyword] = useState<string>((router.query?.searchTerm as string) || '')
+  const searchByLocationPathname = typeof window !== 'undefined' ? localStorage.getItem('routerPathname') : null
+  const homePagePathname = typeof window !== 'undefined' ? localStorage.getItem('homePagePathname') : null
+  const [providerId, setProviderId] = useState('')
+  const [tagValue, setTagValue] = useState('')
 
   const [isLoading, setIsLoading] = useState(false)
   const [isFilterOpen, setIsFilterOpen] = useState(false)
@@ -25,28 +29,24 @@ const Search = () => {
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
+  const searchPayload = {
+    context: {
+      domain: DOMAIN
+    },
+    fulfillment: {
+      type: 'Delivery',
+      stops: [{ location: '28.4594965,77.0266383' }]
+    },
+    ...(searchByLocationPathname
+      ? { provider: { providerId: providerId } }
+      : homePagePathname
+        ? { searchString: searchKeyword }
+        : { searchString: searchKeyword })
+  }
+
   const fetchDataForSearch = () => {
-    if (!searchKeyword) return
+    if (!searchKeyword && !providerId) return
     setIsLoading(true)
-
-    const searchPayload = {
-      context: {
-        domain: DOMAIN
-      },
-      searchString: searchKeyword,
-      category: {
-        categoryCode: router.query.category || 'Retail'
-      },
-      fulfillment: {
-        type: 'Delivery',
-        stops: [
-          {
-            location: '28.4594965,77.0266383'
-          }
-        ]
-      }
-    }
-
     axios
       .post(`${apiUrl}/search`, searchPayload)
       .then(res => {
@@ -63,13 +63,13 @@ const Search = () => {
   }
 
   useEffect(() => {
-    if (searchKeyword) {
+    if (searchKeyword || providerId) {
       localStorage.removeItem('searchItems')
-      localStorage.setItem('optionTags', JSON.stringify({ name: searchKeyword }))
+      localStorage.setItem('optionTags', JSON.stringify({ name: searchKeyword, providerId }))
       window.dispatchEvent(new Event('storage-optiontags'))
       fetchDataForSearch()
     }
-  }, [searchKeyword])
+  }, [searchKeyword, providerId])
 
   useEffect(() => {
     if (localStorage) {
@@ -77,6 +77,15 @@ const Search = () => {
       if (cachedSearchResults) {
         const parsedCachedResults = JSON.parse(cachedSearchResults)
         setItems(parsedCachedResults)
+      }
+      const stringifiedOptiontags = localStorage.getItem('optionTags')
+      const stringifiedSelectedOption = localStorage.getItem('selectedOption')
+      if (stringifiedOptiontags) {
+        const providerId = JSON.parse(stringifiedOptiontags).providerId
+        setProviderId(providerId)
+      }
+      if (stringifiedSelectedOption) {
+        setTagValue(JSON.parse(stringifiedSelectedOption).tagValue)
       }
     }
   }, [])
