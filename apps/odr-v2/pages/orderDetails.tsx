@@ -564,7 +564,6 @@ const OrderDetails = () => {
         isLoadingForCancel: true
       }))
 
-      // console.log(confirmData)
       if (confirmData && confirmData.length > 0) {
         const { transaction_id, bpp_id, bpp_uri, domain } = confirmData[0].context
         const orderId = confirmData[0].message.orderId

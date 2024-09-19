@@ -1,9 +1,7 @@
 import Router from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { ProductDetailPage, ProductPrice } from '@beckn-ui/becknified-components'
-import { RetailItem } from '@lib/products'
-import { ProductCard } from '@beckn-ui/becknified-components'
-import { LocalStorage, ICartProduct, ICart, LocalStorageCart, LocalStorageCartItem } from '@lib/types'
+
 import { useDispatch, useSelector } from 'react-redux'
 import useResponsive from '@beckn-ui/becknified-components/src/hooks/useResponsive'
 import { toast } from 'react-toastify'

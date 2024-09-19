@@ -99,7 +99,6 @@ const OrderHistory = () => {
       ) : (
         <Box mt={'23px'}>
           {orderHistoryList.map((order, idx) => {
-            console.log(order)
             return (
               <DetailCard key={idx}>
                 <Flex
