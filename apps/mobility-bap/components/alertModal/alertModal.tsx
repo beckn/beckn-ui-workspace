@@ -65,7 +65,7 @@ const AlertModal: React.FC<AlertModalProps> = ({
           <Typography
             text={name}
             onClick={handleOpenPolicy}
-            style={{ marginBottom: '10px', color: '#0000FF' }}
+            style={{ marginBottom: '10px', color: '#0000FF', cursor: 'pointer' }}
           />
         </Flex>
       </Box>
