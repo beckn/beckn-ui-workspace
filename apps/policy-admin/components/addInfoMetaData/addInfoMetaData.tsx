@@ -42,7 +42,7 @@ import { PolicyStatusType, PolicyType, RulesTemplate } from '@lib/types/metaData
 import { useCreatePolicyMutation } from '@services/PolicyService'
 import { feedbackActions } from '@beckn-ui/common'
 import { validateDateRange } from '@utils/general'
-import { GenericDropdown } from '@components/GenericDropdown/GenericDropdown'
+import { GenericDropdown } from '@components/statusDropdown/GenericDropdown'
 
 function AddInformationMetadata() {
   const [errors, setErrors] = useState({
@@ -106,7 +106,7 @@ function AddInformationMetadata() {
     }
 
     if (policyName) {
-      const policyNameValid = policyName.match(/^[a-zA-Z0-9\s\.,'-]{10,100}$/)
+      const policyNameValid = policyName.match(/^.{10,100}$/)
       if (!policyNameValid) {
         newErrors.policyName = 'The title must be between 10 and 100 characters long.'
         valid = false
@@ -129,7 +129,7 @@ function AddInformationMetadata() {
     }
 
     if (description) {
-      const descriptionValid = description.match(/^[a-zA-Z0-9\s\.,'-]{20,2000}$/)
+      const descriptionValid = description.match(/^.{20,2000}$/)
       if (!descriptionValid) {
         newErrors.description = 'The description must be between 20 and 500 characters long.'
         valid = false
