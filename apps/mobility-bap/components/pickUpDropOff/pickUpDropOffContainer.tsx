@@ -31,22 +31,32 @@ const PickUpDropOffContainer = (props: PickUpDropOffContainerProps) => {
   const { pickup, dropoff } = useSelector((state: UserGeoLocationRootState) => state.userInfo)
   const { rideSearchInProgress } = useSelector((state: CabServiceDetailsRootState) => state.cabService)
 
+  const checkViolation = (policyCheckResults: any) => {
+    return policyCheckResults.find((policy: any) => {
+      return policy.violation && policy.violatedPolicies && policy.violatedPolicies.length > 0
+    })
+  }
+
   const voilationCheck = () => {
     try {
       axios
-        .post('https://api.mobility-bap-policy-demo.becknprotocol.io/v1/policy/checkViolation/location', {
-          locations: [`${dropoff.geoLocation.latitude},${dropoff.geoLocation.longitude}`]
+        .post(`${process.env.NEXT_PUBLIC_POLICY_VIOLATION}/bap/policy/checkViolation`, {
+          locations: [`${dropoff.geoLocation.latitude},${dropoff.geoLocation.longitude}`],
+          bap_id: 'mit-ps-bap.becknprotocol.io'
         })
         .then(res => {
-          if (res.data.policyCheckResult[0].violation === false) {
-            handleSearchRide()
-          } else if (res.data.policyCheckResult[0].violation === true) {
+          const policyCheckResults = res.data.policyCheckResult
+          const violatedPolicy = checkViolation(policyCheckResults)
+
+          if (violatedPolicy && violatedPolicy?.violation) {
             const data = {
-              name: res.data.policyCheckResult[0].violatedPolicies[0].name,
-              policyId: res.data.policyCheckResult[0].violatedPolicies[0].id
+              name: violatedPolicy.violatedPolicies[0].name,
+              policyId: violatedPolicy.violatedPolicies[0].id
             }
             setViolationPolicyData(data)
             setOpenAlert(true)
+          } else {
+            handleSearchRide()
           }
         })
     } catch (err) {

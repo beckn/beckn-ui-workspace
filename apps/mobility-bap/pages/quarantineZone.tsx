@@ -1,6 +1,7 @@
 import { BottomModal, Typography } from '@beckn-ui/molecules'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import { Box, Flex, Grid, GridItem, Link, Text } from '@chakra-ui/react'
+import { policyStatusMap } from '@lib/constant'
 import axios from '@services/axios'
 import { policyActions } from '@store/policy-slice'
 import { formatDate } from '@utils/general'
@@ -48,11 +49,27 @@ const QuarantineZone = () => {
 
   const getPolicyDetails = () => {
     try {
-      axios
-        .get(`https://api.mobility-bap-policy-demo.becknprotocol.io/v1/policy/${router.query.policyId}`)
-        .then(res => {
-          setPolicyDetails(res.data)
-        })
+      axios.get(`${process.env.NEXT_PUBLIC_POLICY_VIOLATION}/bap/policies/${router.query.policyId}`).then(res => {
+        if (res.data && res.data.data.length > 0) {
+          const attributes = res.data.data[0].attributes
+          const policyData = {
+            description: attributes.short_description,
+            type: attributes.type,
+            name: attributes.name,
+            domain: attributes.domain,
+            country: attributes.coverage[0].spatial[0].country,
+            city: attributes.coverage[0].spatial[0].city,
+            startDate: attributes.coverage[0].temporal[0].range.start,
+            endDate: attributes.coverage[0].temporal[0].range.end,
+            applicableTo: attributes?.coverage[0]['subscribers']?.map((item: { type: any }) => item.type).join(', '),
+            owner: attributes?.rules?.message?.policy?.owner?.descriptor.name,
+            polygon: attributes?.geofences?.[0]['polygon'] || [],
+            status: policyStatusMap[attributes?.pp_actions?.data?.[0]?.attributes?.action || attributes.status],
+            policyDocuments: attributes?.mediaUrl || attributes?.rules?.message?.policy?.descriptor?.media?.[0]?.url
+          }
+          setPolicyDetails(policyData)
+        }
+      })
     } catch (err) {
       console.error(err)
     }
@@ -60,7 +77,7 @@ const QuarantineZone = () => {
 
   useEffect(() => {
     getPolicyDetails()
-  }, [])
+  }, [router.query])
 
   const handleGeofenceClick = () => {
     dispatch(policyActions.setPolygonGeolocation(policyDetails.polygon))
@@ -71,15 +88,13 @@ const QuarantineZone = () => {
     if (policy.status === 'new') {
       try {
         axios
-          .put(`https://api.mobility-bap-policy-demo.becknprotocol.io/v1/policy`, {
-            policy: {
-              id: router.query.policyId,
-              status: 'applied'
-            }
+          .put(`${process.env.NEXT_PUBLIC_POLICY_VIOLATION}/bap/policy/${router.query.policyId}`, {
+            action: 'accept',
+            bap_id: 'mit-ps-bap.becknprotocol.io',
+            bap_uri: 'https://mit-ps-bap.becknprotocol.io'
           })
           .then(res => {
-            console.log('policy applied--> ', res)
-            if (res.data.status === 'applied') {
+            if (res.data.data?.[0]?.attributes.pp_actions.data?.attributes?.action === 'accept') {
               setIsApplied(true)
               setOpenAlert(true)
             }
@@ -160,27 +175,29 @@ const QuarantineZone = () => {
           </Box>
           <Box mt={4}>
             <Text fontWeight="bold">Applicable To</Text>
-            <Text>{policyDetails.applicableTo.join(', ')}</Text>
+            <Text>{policyDetails.applicableTo}</Text>
           </Box>
-          <Box
-            mt={4}
-            lineHeight={'18px'}
-          >
-            <Text fontWeight="bold">Geofence</Text>
-            <Link
-              color="blue.500"
-              onClick={handleGeofenceClick}
-              cursor="pointer"
-              fontSize={'12px'}
+          {policyDetails.type.toLowerCase() === 'geofence' && (
+            <Box
+              mt={4}
+              lineHeight={'18px'}
             >
-              Click to view
-            </Link>
-          </Box>
+              <Text fontWeight="bold">Geofence</Text>
+              <Link
+                color="blue.500"
+                onClick={handleGeofenceClick}
+                cursor="pointer"
+                fontSize={'12px'}
+              >
+                Click to view
+              </Link>
+            </Box>
+          )}
         </Box>
         <Box w="100%">
           <BecknButton
             text="Apply"
-            disabled={policyDetails.status === 'applied'}
+            disabled={isApplied || policyDetails.status === 'applied'}
             handleClick={() => handleOnApply(policyDetails)}
             variant="solid"
           />

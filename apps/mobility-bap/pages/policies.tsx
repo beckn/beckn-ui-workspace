@@ -5,6 +5,7 @@ import { FaFileAlt } from 'react-icons/fa'
 import axios from '@services/axios'
 import { formatDate, groupDataBy } from '@utils/general'
 import { Typography } from '@beckn-ui/molecules'
+import { policyStatusMap } from '@lib/constant'
 
 interface PolicySummaryModel {
   id: string
@@ -13,6 +14,14 @@ interface PolicySummaryModel {
   startDate: string
   endDate: string
   status: string
+  pp_actions: {
+    data: {
+      id: string
+      attributes: {
+        action: string
+      }
+    }[]
+  }
 }
 
 type FilterType = '' | 'new' | 'applied' | 'disputed' | 'inactive'
@@ -25,8 +34,8 @@ const Policies = () => {
 
   const getPolicies = () => {
     try {
-      axios.get(`https://api.mobility-bap-policy-demo.becknprotocol.io/v1/policy`).then(res => {
-        const computedData = groupDataBy(res.data, 'status')
+      axios.get(`${process.env.NEXT_PUBLIC_POLICY_VIOLATION}/bap/policies`).then(res => {
+        const computedData = groupDataBy(res.data.data, 'status')
         setPolicyList(computedData)
       })
     } catch (err) {
@@ -89,6 +98,7 @@ const Policies = () => {
           <option value="new">New</option>
           <option value="applied">Applied</option>
           <option value="disputed">Disputed</option>
+          <option value="active">Active</option>
           <option value="inactive">Inactive</option>
         </Select>
       </Flex>

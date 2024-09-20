@@ -182,7 +182,7 @@ const Homepage = () => {
     },
     [country]
   )
-  console.log(showMyLocation)
+
   const renderMap = useCallback(() => {
     return (
       <MapWithNoSSR

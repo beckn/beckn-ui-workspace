@@ -1,5 +1,6 @@
 import { PickUpDropOffModel } from '@beckn-ui/common'
 import { currencyMap, defaultSourceLocation } from '@lib/config'
+import { policyStatusMap } from '@lib/constant'
 
 const getError = (err: any) =>
   err.response && err.response.data && err.response.data.message ? err.response.data.message : err.message
@@ -19,11 +20,29 @@ export enum RIDE_STATUS_CODE {
 
 export const groupDataBy = (data: any[], groupBy: string) => {
   const groupedData = data.reduce((acc, ele) => {
-    const status = ele[groupBy].toLowerCase()
+    const attributes = ele.attributes
+    const pp_actionsAttributes = attributes?.pp_actions?.data?.[0]?.attributes?.action || undefined
+    const status = policyStatusMap[pp_actionsAttributes || attributes[groupBy]].toLowerCase()
     if (!acc[status]) {
       acc[status] = []
     }
-    acc[status].push(ele)
+
+    acc[status].push({
+      id: attributes.policyId,
+      description: attributes.short_description,
+      type: attributes.type,
+      name: attributes.name,
+      domain: attributes.domain,
+      country: attributes.coverage[0].spatial[0].country,
+      city: attributes.coverage[0].spatial[0].city,
+      startDate: attributes.coverage[0].temporal[0].range.start,
+      endDate: attributes.coverage[0].temporal[0].range.end,
+      applicableTo: attributes?.coverage[0]['subscribers']?.map((item: { type: any }) => item.type).join(', '),
+      owner: attributes?.rules?.message?.policy?.owner?.descriptor.name,
+      polygon: attributes?.geofences?.[0]['polygon'] || [],
+      status: policyStatusMap[attributes?.pp_actions?.data?.[0]?.attributes?.action || attributes.status],
+      policyDocuments: attributes?.mediaUrl || attributes?.rules?.message?.policy?.descriptor?.media?.[0]?.url
+    })
     return acc
   }, {})
 

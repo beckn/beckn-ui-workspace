@@ -10,7 +10,7 @@ import { formatDate } from '@utils/general'
 import { feedbackActions } from '@beckn-ui/common'
 import { useDispatch } from 'react-redux'
 import { getGeoFenceCoords } from '@utils/geoLocation'
-import { GenericDropdown } from '@components/GenericDropdown/GenericDropdown'
+import { GenericDropdown } from '@components/statusDropdown/GenericDropdown'
 
 const ViewInformation = () => {
   const [item, setItem] = useState({
@@ -342,7 +342,7 @@ const ViewInformation = () => {
             <Code
               height={'100%'}
               background="transparent"
-              contentEditable={true}
+              contentEditable={false}
               borderColor="transparent"
               whiteSpace="pre-wrap"
               width="100%"
@@ -351,7 +351,7 @@ const ViewInformation = () => {
               lineHeight={'normal'}
               outline="none"
             >
-              {item.rules ? JSON.stringify(item.rules) : ''}
+              {item.rules ? JSON.stringify(item.rules, undefined, 4) : ''}
             </Code>
           </Box>
         </FormControl>
