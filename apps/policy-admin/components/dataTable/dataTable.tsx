@@ -39,7 +39,7 @@ const DataTable = (props: DataTableProps) => {
       order = 'desc'
     }
     setSortConfig({ key, order })
-    fetchData(currentPage, { key: key === 'description' ? 'short_description' : key, order })
+    fetchData(currentPage, { key, order })
   }
 
   const getIcon = (key: string) => {

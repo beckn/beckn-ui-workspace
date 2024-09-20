@@ -59,7 +59,13 @@ const Homepage = () => {
           start: (pageNumber - 1) * 10,
           limit: 10
         }
-        if (sortBy) getPoliciesPayload.sortBy = JSON.stringify(sortBy)
+        if (sortBy) {
+          const config = {
+            ...sortBy,
+            key: sortBy.key === 'description' ? 'short_description' : sortBy.key
+          }
+          getPoliciesPayload.sortBy = JSON.stringify(config)
+        }
 
         if (['Active', 'Inactive', 'Published'].includes(currentTab)) {
           getPoliciesPayload.status = currentTab.toLowerCase()
