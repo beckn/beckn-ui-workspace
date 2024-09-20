@@ -11,7 +11,7 @@ const StatusCard = (props: StatusCardProps) => {
   const { count, label } = props
   return (
     <Box
-      width="calc(100vw / 4)"
+      // width="calc(100vw / 4)"
       borderWidth="1px"
       borderRadius="10px !important"
       border={'1px solid #004e9280'}

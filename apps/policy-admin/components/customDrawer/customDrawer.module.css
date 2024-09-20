@@ -81,6 +81,7 @@
 }
 
 /* Media Query for Screen Width < 1525px */
+
 @media (max-width: 1525px) {
   .drawer {
     width: 100% !important;
@@ -88,14 +89,33 @@
   }
 
   .drawer.open {
-    transform: translateX(0) !important;
+    transform: translateX(260px) !important;
   }
 
   .drawer_overlay {
-    width: calc(100vw - 81vw) !important;
+    /* width: calc(100vw - 81vw) !important; */
   }
 
   .sideNavIcon {
     display: block !important;
+  }
+  .container_drawer {
+    width: calc(100% - 260px);
+  }
+}
+@media screen and (min-width: 320px) and (max-width: 767px) {
+  .drawer.open {
+    transform: translateX(0) !important;
+  }
+  .container_drawer {
+    width: unset;
+  }
+}
+@media screen and (min-width: 320px) and (max-width: 767px) {
+  .drawer_overlay {
+    min-width: 140px;
+  }
+  .drawer_overlay p {
+    font-size: 14px !important;
   }
 }

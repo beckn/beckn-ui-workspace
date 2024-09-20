@@ -21,7 +21,7 @@
   padding: 15px 0px;
 }
 .header {
-  position: fixed;
+  /* position: fixed; */
   left: 0;
   right: 0;
   padding-left: 10px;

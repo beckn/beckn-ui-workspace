@@ -87,7 +87,9 @@ const CustomDrawer = (props: CustomDrawer) => {
         </>
       )}
 
-      <Box className={`${Styles.drawer} ${isOpen || isLargerThan1525 ? Styles.open : Styles.close}`}>{children}</Box>
+      <Box className={`${Styles.drawer} ${isOpen || isLargerThan1525 ? Styles.open : Styles.close}`}>
+        <Box className={`${isOpen && `${Styles.container_drawer} header-section-handle`}`}>{children}</Box>
+      </Box>
     </>
   )
 }

@@ -321,6 +321,7 @@ function AddInformationMetadata() {
             fontSize={'18px !important'}
           />
           <Box
+            className="switch-btn"
             display={{ base: 'block', md: 'flex' }}
             flexDir={'row'}
             textAlign="center"
@@ -349,6 +350,7 @@ function AddInformationMetadata() {
         <Box height={'1rem'} />
 
         <HStack
+          className="detail-section"
           display={{ base: 'block', md: 'flex' }}
           spacing={3}
           gap="4rem"
@@ -440,6 +442,7 @@ function AddInformationMetadata() {
         </FormControl>
 
         <HStack
+          className="country-row"
           display={{ base: 'block', md: 'flex' }}
           spacing={4}
           gap="4rem"
@@ -682,6 +685,7 @@ function AddInformationMetadata() {
       </Box>
 
       <Flex
+        className="custom-btn"
         width={{ base: '100%', md: '31rem' }}
         display={{ base: 'block', md: 'flex' }}
       >
