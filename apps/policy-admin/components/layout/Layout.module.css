@@ -23,7 +23,7 @@
 }
 
 .main.withMargin {
-  margin-top: 100px;
+  margin-top: 10px;
 }
 .main.withMarginSignUp {
   margin-top: 60px;
@@ -40,3 +40,13 @@
 .main.isHome {
   margin-top: 30px;
 }
+/* @media screen and (min-width: 1024px) and (max-width: 1525px) {
+  .container {
+    width: calc(100% - 260px);
+  }
+}
+@media screen and (min-width: 320px) and (max-width: 1023px) {
+  .container {
+    width: unset;
+  }
+} */

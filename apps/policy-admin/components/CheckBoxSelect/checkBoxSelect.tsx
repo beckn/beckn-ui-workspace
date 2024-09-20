@@ -38,7 +38,10 @@ const MultiSelectDropdown = (props: MultiSelectDropdownProps) => {
   )
 
   return (
-    <Box width="45.2%">
+    <Box
+      width="45.2%"
+      className="applicableto-btn"
+    >
       <Menu closeOnSelect={false}>
         {/* Input field styled as a button */}
         <MenuButton

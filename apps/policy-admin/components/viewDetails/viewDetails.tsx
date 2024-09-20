@@ -164,6 +164,7 @@ const ViewInformation = () => {
         <Box height={'1rem'} />
 
         <HStack
+          className="view-details"
           display={{ base: 'block', md: 'flex' }}
           spacing={3}
           mb="1rem"

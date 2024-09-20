@@ -294,3 +294,39 @@ input:focus {
   width: unset;
   font-size: 14px;
 }
+.header-section-handle .humbergerImg > img {
+  display: none !important;
+}
+@media (max-width: 1200px) {
+  .country-row {
+    gap: 2rem !important;
+  }
+}
+@media (max-width: 1366px) {
+  .react-datepicker-popper {
+    left: -40px !important;
+  }
+}
+
+@media (max-width: 1200px) {
+  .header-section-handle .detail-section,
+  .header-section-handle .country-row,
+  .header-section-handle .view-details {
+    display: block;
+  }
+  .header-section-handle .switch-btn,
+  .header-section-handle .applicableto-btn,
+  .header-section-handle .custom-btn {
+    width: unset;
+  }
+}
+@media screen and (min-width: 1024px) and (max-width: 1366px) {
+  .header-section-handle .detail-section,
+  .header-section-handle .country-row,
+  .header-section-handle .view-details {
+    display: flex;
+  }
+  .header-section-handle .custom-btn {
+    width: 31rem;
+  }
+}

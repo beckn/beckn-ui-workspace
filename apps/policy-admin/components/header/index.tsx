@@ -42,7 +42,7 @@ const Header = (props: HeaderProps) => {
       {!headerBlackList.includes(router.pathname) && (
         <>
           <Box
-            className={Styles.header_innr}
+            className={`${Styles.header_innr} humbergerImg`}
             padding={'0 0 0 1rem'}
           >
             <Image
