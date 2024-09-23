@@ -86,17 +86,16 @@ const RideDetailsCardContainer: React.FC<RideDetailsCardContainerProps> = ({ han
       .then(async res => {
         const { stops, state } = res.data.data[0].message.order.fulfillments[0]
         const currentStatus = state?.descriptor?.short_desc
-
+        console.log(res.data.data[0].message.order.fulfillments)
         if (confirmResponse.length > 0 && currentStatus !== currentRideStatus.current) {
+          const { agent, vehicle, rating } = res.data.data[0].message.order.fulfillments[0]
           console.log(currentStatus, currentRideStatus)
-          const { message } = confirmResponse[0]
-          const { agent, vehicle, rating } = message?.fulfillments?.find(fulfillment => fulfillment.agent)!
           setRideDetails({
-            name: agent?.person.name!,
+            name: agent?.person?.name!,
             registrationNumber: vehicle?.registration!,
             carModel: `${vehicle?.make!} ${vehicle?.model!}`,
             rating: rating!,
-            contact: agent?.contact.phone!
+            contact: agent?.contact?.phone!
           })
           currentRideStatus.current = currentStatus
 
