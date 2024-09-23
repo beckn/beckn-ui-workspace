@@ -16,6 +16,7 @@ interface MenuItems {
   href: string
   color?: string
   dataTest?: string
+  handleOnClick?: () => void
 }
 
 export interface HeaderProps extends TranslationProps {

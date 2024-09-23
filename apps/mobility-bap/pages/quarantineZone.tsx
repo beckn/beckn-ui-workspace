@@ -113,7 +113,9 @@ const QuarantineZone = () => {
       <Flex
         flexDirection={'column'}
         justifyContent={'space-between'}
-        height={'calc(100vh - 100px)'}
+        height={'calc(100vh - 90px)'}
+        overflowY="scroll"
+        className="hideScroll"
       >
         <Box>
           <Grid
@@ -197,12 +199,13 @@ const QuarantineZone = () => {
         <Box w="100%">
           <BecknButton
             text="Apply"
-            disabled={isApplied || policyDetails.status === 'applied'}
+            disabled={isApplied || ['applied', 'active', 'inactive'].includes(policyDetails.status)}
             handleClick={() => handleOnApply(policyDetails)}
             variant="solid"
           />
           <BecknButton
             text="Dispute"
+            disabled={['active', 'inactive'].includes(policyDetails.status)}
             handleClick={() => setOpenAlert(true)}
             variant="outline"
           />

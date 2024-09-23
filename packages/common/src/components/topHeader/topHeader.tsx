@@ -122,6 +122,7 @@ const Header: React.FC<HeaderProps> = ({
               key={index}
               onClick={() => {
                 if (menuItem.id === 'logout') {
+                  menuItem?.handleOnClick?.()
                   dispatch(logout())
                 }
                 router.push(menuItem.href)
