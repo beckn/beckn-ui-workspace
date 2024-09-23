@@ -60,8 +60,8 @@ const Homepage = () => {
     query: {
       agentId: user?.agent?.id
     },
-    reconnection: true,
-    transports: ['websocket']
+    reconnection: true
+    // transports: ['websocket']
   })
 
   const handleAvailability = useCallback(async (availability: boolean, geoLatLong: Coordinate) => {
