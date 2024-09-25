@@ -39,5 +39,4 @@ jobs:
       - name: Trigger taxi-bpp-v2 deployment if changes are detected
         if: env.taxi_bpp_changed == 'true'
         run: |
-          curl -X POST -d '{}' "https://webhooks.amplify.ap-south-1.amazonaws.com/prod/webhooks?id=ec00fdf7-9c72-4da0-8ee1-59aeabbe1b4f&token=HKS7KIARWzLIQSGGboGwJoLq34JQjBGPHtkJlCX1na4&operation=startbuild" \
-          -H "Content-Type: application/json"
+          curl -X POST -d '{}' ${{ secrets.TAXI_AMPLIFY_WEBHOOK_URL }} -H "Content-Type: application/json"
