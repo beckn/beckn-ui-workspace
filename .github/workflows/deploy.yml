@@ -39,4 +39,4 @@ jobs:
       - name: Trigger taxi-bpp-v2 deployment if changes are detected
         if: env.taxi_bpp_changed == 'true'
         run: |
-          curl -X POST -d {} -H "Content-Type:application/json" ${{ secrets.TAXI_AMPLIFY_WEBHOOK_URL }} 
+          curl -X POST -d {} "${{ secrets.TAXI_AMPLIFY_WEBHOOK_URL }}" -H "Content-Type:application/json"
