@@ -29,10 +29,10 @@ jobs:
       - name: Check for taxi-bpp-v2 changes
         id: check_taxi_bpp_changes
         run: |
-          if git diff  HEAD -- apps/taxi-bpp-v2/; then
-            echo "No changes in taxi-bpp-v2. Skipping webhook trigger."
-            echo "taxi_bpp_changed=false" >> $GITHUB_ENV
-          else
+          if git diff --name-only HEAD~1 HEAD | grep '^apps/taxi-bpp-v2/'; then
             echo "Changes in taxi-bpp-v2 detected."
             curl -X POST -d '{}' "https://webhooks.amplify.ap-south-1.amazonaws.com/prod/webhooks?id=ec00fdf7-9c72-4da0-8ee1-59aeabbe1b4f&token=HKS7KIARWzLIQSGGboGwJoLq34JQjBGPHtkJlCX1na4&operation=startbuild" -H "Content-Type: application/json"
+          else
+            echo "No changes in taxi-bpp-v2. Skipping webhook trigger."
+            echo "taxi-bpp-v2_app_changed=false" >> $GITHUB_ENV
           fi
