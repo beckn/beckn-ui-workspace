@@ -39,4 +39,148 @@ jobs:
       - name: Trigger taxi-bpp-v2 deployment if changes are detected
         if: env.taxi_bpp_changed == 'true'
         run: |
-          curl -X POST -d {} "${{ secrets.TAXI_AMPLIFY_WEBHOOK_URL }}" -H "Content-Type:application/json"
+          curl -X POST -d {} "${{ secrets.TAXI_BPP_DEVELOP_AMPLIFY_WEBHOOK_URL }}" -H "Content-Type:application/json"
+
+#  retail 
+
+      - name: Check for retail changes
+        id: check_retail_changes
+        run: |
+          if git diff --name-only HEAD~1 HEAD | grep '^apps/retail/'; then
+            echo "Changes in retail detected."
+            echo "retail_changed=true" >> $GITHUB_ENV
+          else
+            echo "No changes in retail. Skipping webhook trigger."
+            echo "retail_changed=false" >> $GITHUB_ENV
+          fi
+
+      - name: Trigger retail deployment if changes are detected
+        if: env.retail_changed == 'true'
+        run: |
+          curl -X POST -d {} "${{ secrets.RETAIL_DEVELOP_AMPLIFY_WEBHOOK_URL }}" -H "Content-Type:application/json"
+
+#  mobility-bap
+
+      - name: Check for mobility-bap changes
+        id: check_mobility_bap_changes
+        run: |
+          if git diff --name-only HEAD~1 HEAD | grep '^apps/mobility-bap/'; then
+            echo "Changes in mobility-bap detected."
+            echo "mobility_bap_changed=true" >> $GITHUB_ENV
+          else
+            echo "No changes in mobility-bap. Skipping webhook trigger."
+            echo "mobility_bap_changed=false" >> $GITHUB_ENV
+          fi
+
+      - name: Trigger mobility-bap deployment if changes are detected
+        if: env.mobility_bap_changed == 'true'
+        run: |
+          curl -X POST -d {} "${{ secrets.MOBILITY_BAP_DEVELOP_AMPLIFY_WEBHOOK_URL }}" -H "Content-Type:application/json"
+
+# policy-admin
+
+      - name: Check for policy admin changes
+        id: check_policy_admin_changes
+        run: |
+          if git diff --name-only HEAD~1 HEAD | grep '^apps/policy_admin/'; then
+            echo "Changes in policy admin detected."
+            echo "policy_admin_changed=true" >> $GITHUB_ENV
+          else
+            echo "No changes in policy admin. Skipping webhook trigger."
+            echo "policy_admin_changed=false" >> $GITHUB_ENV
+          fi
+
+      - name: Trigger policy admin deployment if changes are detected
+        if: env.policy_admin_changed == 'true'
+        run: |
+          curl -X POST -d {} "${{ secrets.POLICY_ADMIN_DEVELOP_AMPLIFY_WEBHOOK_URL }}" -H "Content-Type:application/json"
+
+# tourismv1.1
+
+      - name: Check for tourismV1.1 changes
+        id: check_tourism_v1_1_changes
+        run: |
+          if git diff --name-only HEAD~1 HEAD | grep '^apps/tourismV1.1/'; then
+            echo "Changes in tourismV1.1 detected."
+            echo "tourism_v1_1_changed=true" >> $GITHUB_ENV
+          else
+            echo "No changes in tourismV1.1. Skipping webhook trigger."
+            echo "tourism_v1_1_changed=false" >> $GITHUB_ENV
+          fi
+
+      - name: Trigger tourismV1.1 deployment if changes are detected
+        if: env.tourism_v1_1_changed == 'true'
+        run: |
+          curl -X POST -d {} "${{ secrets.TOURISM_V1_1_DEVELOP_AMPLIFY_WEBHOOK_URL }}" -H "Content-Type:application/json"
+
+# dsep 
+
+      - name: Check for dsep changes
+        id: check_dsep_changes
+        run: |
+          if git diff --name-only HEAD~1 HEAD | grep '^apps/dsep/'; then
+            echo "Changes in dsep detected."
+            echo "dsep_changed=true" >> $GITHUB_ENV
+          else
+            echo "No changes in dsep. Skipping webhook trigger."
+            echo "dsep_changed=false" >> $GITHUB_ENV
+          fi
+
+      - name: Trigger dsep deployment if changes are detected
+        if: env.dsep_changed == 'true'
+        run: |
+          curl -X POST -d {} "${{ secrets.DSEP_DEVELOP_AMPLIFY_WEBHOOK_URL }}" -H "Content-Type:application/json"
+
+# industry-4.0
+
+      - name: Check for industry_4.0 changes
+        id: check_industry_4_0_changes
+        run: |
+          if git diff --name-only HEAD~1 HEAD | grep '^apps/industry_4.0/'; then
+            echo "Changes in industry_4.0 detected."
+            echo "industry_4_0_changed=true" >> $GITHUB_ENV
+          else
+            echo "No changes in industry_4.0. Skipping webhook trigger."
+            echo "industry_4_0_changed=false" >> $GITHUB_ENV
+          fi
+
+      - name: Trigger industry_4.0 deployment if changes are detected
+        if: env.industry_4_0_changed == 'true'
+        run: |
+          curl -X POST -d {} "${{ secrets.INDUSTRY_4_0_DEVELOP_AMPLIFY_WEBHOOK_URL }}" -H "Content-Type:application/json"
+
+# odr-v2
+
+      - name: Check for odr-v2 changes
+        id: check_odr_v2_changes
+        run: |
+          if git diff --name-only HEAD~1 HEAD | grep '^apps/odr-v2/'; then
+            echo "Changes in odr-v2 detected."
+            echo "odr_v2_changed=true" >> $GITHUB_ENV
+          else
+            echo "No changes in odr-v2. Skipping webhook trigger."
+            echo "odr_v2_changed=false" >> $GITHUB_ENV
+          fi
+
+      - name: Trigger odr-v2 deployment if changes are detected
+        if: env.odr_v2_changed == 'true'
+        run: |
+          curl -X POST -d {} "${{ secrets.ODR_V2_DEVELOP_AMPLIFY_WEBHOOK_URL }}" -H "Content-Type:application/json"
+
+# dsnp-v2
+
+      - name: Check for dsnp-v2 changes
+        id: check_dsnp_v2_changes
+        run: |
+          if git diff --name-only HEAD~1 HEAD | grep '^apps/dsnp-v2/'; then
+            echo "Changes in dsnp-v2 detected."
+            echo "dsnp_v2_changed=true" >> $GITHUB_ENV
+          else
+            echo "No changes in dsnp-v2. Skipping webhook trigger."
+            echo "dsnp_v2_changed=false" >> $GITHUB_ENV
+          fi
+
+      - name: Trigger dsnp-v2 deployment if changes are detected
+        if: env.dsnp_v2_changed == 'true'
+        run: |
+          curl -X POST -d {} "${{ secrets.DSNP_V2_DEVELOP_AMPLIFY_WEBHOOK_URL }}" -H "Content-Type:application/json"
