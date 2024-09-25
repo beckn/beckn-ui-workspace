@@ -23,16 +23,13 @@ jobs:
         uses: actions/checkout@v2
         with: 
           fetch-depth: 2
-          
-      - name: Fetch all changes
-        run: git fetch --all
-
+      
 #  taxi-bpp  https://driverapp-dev.becknprotocol.io
 
       - name: Check for taxi-bpp-v2 changes
         id: check_taxi_bpp_changes
         run: |
-          if git diff --quiet HEAD^ HEAD -- apps/taxi-bpp-v2/; then
+          if git diff  HEAD -- apps/taxi-bpp-v2/; then
             echo "No changes in taxi-bpp-v2. Skipping webhook trigger."
             echo "taxi_bpp_changed=false" >> $GITHUB_ENV
           else
@@ -44,7 +41,7 @@ jobs:
       - name: Check for retail changes
         id: check_retail_app_changes
         run: |
-          if git diff --quiet HEAD^ HEAD -- apps/retail/; then
+          if git diff  HEAD -- apps/retail/; then
             echo "No changes in retail. Skipping webhook trigger."
             echo "retail_app_changed=false" >> $GITHUB_ENV
           else
@@ -56,7 +53,7 @@ jobs:
       - name: Check for mobility-bap changes
         id: check_mobility_bap_app_changes
         run: |
-          if git diff --quiet HEAD^ HEAD -- apps/mobility-bap/; then
+          if git diff  HEAD -- apps/mobility-bap/; then
             echo "No changes in mobility-bap. Skipping webhook trigger."
             echo "mobility_bap_app_changed=false" >> $GITHUB_ENV
           else
@@ -69,7 +66,7 @@ jobs:
       - name: Check for policy-admin changes
         id: check_policy_admin_changes
         run: |
-          if git diff --quiet HEAD^ HEAD -- apps/policy-admin/; then
+          if git diff  HEAD -- apps/policy-admin/; then
             echo "No changes in policy-admin. Skipping webhook trigger."
             echo "policy_admin_changed=false" >> $GITHUB_ENV
           else
@@ -81,7 +78,7 @@ jobs:
       - name: Check for tourismV1.1 changes
         id: check_tourism_app_changes
         run: |
-          if git diff --quiet HEAD^ HEAD -- apps/tourismV1.1/; then
+          if git diff  HEAD -- apps/tourismV1.1/; then
             echo "No changes in tourismV1.1. Skipping webhook trigger."
             echo "tourism_app_changed=false" >> $GITHUB_ENV
           else
@@ -93,7 +90,7 @@ jobs:
       - name: Check for OSC changes
         id: check_osc_app_changes
         run: |
-          if git diff --quiet HEAD^ HEAD -- apps/OSC/; then
+          if git diff  HEAD -- apps/OSC/; then
             echo "No changes in OSC. Skipping webhook trigger."
             echo "osc_app_changed=false" >> $GITHUB_ENV
           else
@@ -106,7 +103,7 @@ jobs:
       - name: Check for dsep changes
         id: check_dsep_app_changes
         run: |
-          if git diff --quiet HEAD^ HEAD -- apps/dsep/; then
+          if git diff  HEAD -- apps/dsep/; then
             echo "No changes in dsep. Skipping webhook trigger."
             echo "dsep_app_changed=false" >> $GITHUB_ENV
           else
@@ -118,7 +115,7 @@ jobs:
       - name: Check for industry_4.0 changes
         id: check_industry_4_0_app_changes
         run: |
-          if git diff --quiet HEAD^ HEAD -- apps/industry_4.0/; then
+          if git diff  HEAD -- apps/industry_4.0/; then
             echo "No changes in industry_4.0. Skipping webhook trigger."
             echo "industry_4_0_app_changed=false" >> $GITHUB_ENV
           else
@@ -131,7 +128,7 @@ jobs:
       - name: Check for odr-v2 changes
         id: check_odr_v2_app_changes
         run: |
-          if git diff --quiet HEAD^ HEAD -- apps/odr-v2/; then
+          if git diff  HEAD -- apps/odr-v2/; then
             echo "No changes in odr-v2. Skipping webhook trigger."
             echo "odr_v2_app_changed=false" >> $GITHUB_ENV
           else
@@ -144,7 +141,7 @@ jobs:
       - name: Check for dsnp-v2 changes
         id: check_dsnp_v2_app_changes
         run: |
-          if git diff --quiet HEAD^ HEAD -- apps/dsnp-v2/; then
+          if git diff  HEAD -- apps/dsnp-v2/; then
             echo "No changes in dsnp-v2. Skipping webhook trigger."
             echo "dsnp_v2_app_changed=false" >> $GITHUB_ENV
           else
