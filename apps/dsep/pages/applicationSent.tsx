@@ -27,7 +27,7 @@ const applicationSent = () => {
           {
             text: t.goBackBtn,
             handleClick: () => {
-              router.push('/homePage')
+              router.push('/')
             },
             disabled: false,
             variant: 'outline',

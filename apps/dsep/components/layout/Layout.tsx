@@ -18,7 +18,7 @@ import { feedbackActions, FeedbackRootState } from '../../store/ui-feedback-slic
 const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const { locale } = useLanguage()
   const router = useRouter()
-  const isHomepage = router.pathname === '/homePage'
+  const isHomepage = router.pathname === '/'
   const isSearch = router.pathname === '/search'
   const isFeedbackPage = router.pathname === '/feedback'
   const isOrderConfirmationPage = router.pathname === '/orderConfirmation'

@@ -94,6 +94,8 @@ const QuarantineZone = () => {
     <Box
       mt="90px"
       p={[2, 4, 6]}
+      maxH={'calc(100vh - 120px)'}
+      overflowY="scroll"
     >
       <Flex
         flexDirection={'column'}

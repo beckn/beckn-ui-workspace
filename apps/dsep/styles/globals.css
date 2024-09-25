@@ -284,3 +284,6 @@ select:-webkit-autofill:focus {
 .job-search-bar > div {
   width: 100% !important;
 }
+.cart-count {
+  background-color: #3aa5e1 !important;
+}

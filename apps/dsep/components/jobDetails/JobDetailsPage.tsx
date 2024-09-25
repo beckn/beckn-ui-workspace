@@ -46,7 +46,7 @@ const JobDetailsPage: React.FC<JobDetailsPagePropsModel> = props => {
         color={'rgba(var(--text-color))'}
         isDisabled={false}
         handleOnClick={() => {
-          localStorage.setItem('jobRoles', JSON.stringify({ name: jobDetails.item.name }))
+          localStorage.setItem('selectCardHeaderText', JSON.stringify(jobDetails.item.name))
           Router.push(`/jobApply?jobDetails=${encodedJobDetails}`)
         }}
       />

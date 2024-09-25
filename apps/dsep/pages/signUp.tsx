@@ -7,7 +7,6 @@ import { FormErrors, signUpValidateForm } from '../utilities/detailsForm-utils'
 import Cookies from 'js-cookie'
 import { Box, useToast } from '@chakra-ui/react'
 import { SignUpPropsModel } from '../components/signIn/Signin.types'
-import CustomToast from '../components/customToast/custom-toast'
 import { Toast } from '@beckn-ui/molecules'
 
 const SignUp = () => {
@@ -63,7 +62,7 @@ const SignUp = () => {
           const token = data.jwt
 
           Cookies.set('authToken', token)
-          Router.push('/homePage')
+          Router.push('/signin')
         } else {
           const errorData = await response.json()
           toast({
@@ -155,3 +154,35 @@ const SignUp = () => {
   )
 }
 export default SignUp
+// import React from 'react'
+// import Router from 'next/router'
+// import SkillUpMobLogo from '@public/images/skillUpHomeLogo.svg'
+// import SkillUpDeskLogo from '@public/images/skillUpHomeLogo.svg'
+// import { useLanguage } from '@hooks/useLanguage'
+// import { SignUpPage } from '@beckn-ui/common'
+// import { Box } from '@chakra-ui/react'
+
+// const Register = () => {
+//   const { t } = useLanguage()
+
+//   const handleSignIn = () => {
+//     Router.push('/signIn')
+//   }
+
+//   return (
+//     <Box mt="-30px">
+//       <SignUpPage
+//         baseUrl={process.env.NEXT_PUBLIC_STRAPI_URL!}
+//         logos={{
+//           mobile: { src: SkillUpMobLogo, alt: 'Kuza logo' },
+//           desktop: { src: SkillUpDeskLogo, alt: 'Kuza logo' }
+//         }}
+//         onSignIn={handleSignIn}
+//         onSignUp={() => {}}
+//         t={key => t[key]}
+//       />
+//     </Box>
+//   )
+// }
+
+// export default Register
