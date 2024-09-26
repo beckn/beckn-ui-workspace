@@ -9,6 +9,7 @@ export interface ProductPriceProps {
   fontStyle?: React.CSSProperties
   colorScheme?: 'primary' | 'secondary'
   dataTestItemPrice?: string
+  rateLabel?: string
 }
 
 export type CurrencyType = 'GBP' | 'EUR' | 'INR' | 'USD'

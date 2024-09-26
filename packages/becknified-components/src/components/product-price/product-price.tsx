@@ -3,7 +3,7 @@ import React from 'react'
 import { CurrencyType, ProductPriceProps } from './ProductPrice.types'
 import { Typography } from '@beckn-ui/molecules'
 
-const formatCurrency = (price: number, currencyType: CurrencyType) => {
+const formatCurrency = (price: number, currencyType: CurrencyType, rateLabel: string = '') => {
   const currencyOptions = {
     GBP: { locale: 'en-GB', currency: 'GBP' },
     EUR: { locale: 'de-DE', currency: 'EUR' },
@@ -13,10 +13,10 @@ const formatCurrency = (price: number, currencyType: CurrencyType) => {
 
   const { locale, currency } = currencyOptions[currencyType]
 
-  return new Intl.NumberFormat(locale, {
+  return `${new Intl.NumberFormat(locale, {
     style: 'currency',
     currency: currency
-  }).format(price)
+  }).format(price)} ${rateLabel}`
 }
 
 const ProductPrice: React.FC<ProductPriceProps> = props => {
@@ -29,7 +29,8 @@ const ProductPrice: React.FC<ProductPriceProps> = props => {
     className = '',
     variant = 'subTextSemibold',
     fontStyle,
-    colorScheme = 'secondary'
+    colorScheme = 'secondary',
+    rateLabel
   } = props
 
   const textColor = colorScheme === 'primary' ? theme.colors.primary[100] : theme.colors.secondary[100]
@@ -47,7 +48,7 @@ const ProductPrice: React.FC<ProductPriceProps> = props => {
       <Typography
         variant={variant}
         dataTest={props.dataTestItemPrice || 'item-price'}
-        text={formatCurrency(price, currencyType)}
+        text={formatCurrency(price, currencyType, rateLabel)}
         color={color || textColor}
         style={fontStyle}
       />

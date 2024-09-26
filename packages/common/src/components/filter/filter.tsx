@@ -20,7 +20,12 @@ const activeLabelStyles = {
   transform: 'scale(1) translateY(-24px)'
 }
 
-const Filter = ({ handleApplyFilter, handleResetFilter, handleCancelFilter = () => {} }: FilterPropsModel) => {
+const Filter = ({
+  handleApplyFilter,
+  handleResetFilter,
+  handleCancelFilter = () => {},
+  sortByRating = true
+}: FilterPropsModel) => {
   const theme = useTheme()
   const customTheme = extendTheme({
     components: {
@@ -149,34 +154,36 @@ const Filter = ({ handleApplyFilter, handleResetFilter, handleCancelFilter = () 
             </FormControl>
           </Box>
 
-          <Box pb={'44px'}>
-            <FormControl variant="floating">
-              <Select
-                data-test={testIds.searchpage_filterByRating}
-                onChange={e => handleChange('searchByRating', e.target.value)}
-                value={formData?.searchByRating || ''}
-                fontSize="15px"
-                height={'30px'}
-                border={'unset'}
-                borderRadius="unset"
-                borderBottom={'1px solid'}
-                paddingBottom={'2px'}
-                boxShadow={'none'}
-                cursor="pointer"
-                _focusVisible={{ zIndex: 1, borderColor: '#3182ce' }}
-              >
-                <option value="">Rating</option>
-                <option value="RatingLowtoHigh">Rating -- Low to High</option>
-                <option value="RatingHightoLow">Rating -- High to Low</option>
-              </Select>
-              <FormLabel
-                className="dropDown_label"
-                fontSize="15px"
-              >
-                Filter By Rating
-              </FormLabel>
-            </FormControl>
-          </Box>
+          {sortByRating && (
+            <Box pb={'44px'}>
+              <FormControl variant="floating">
+                <Select
+                  data-test={testIds.searchpage_filterByRating}
+                  onChange={e => handleChange('searchByRating', e.target.value)}
+                  value={formData?.searchByRating || ''}
+                  fontSize="15px"
+                  height={'30px'}
+                  border={'unset'}
+                  borderRadius="unset"
+                  borderBottom={'1px solid'}
+                  paddingBottom={'2px'}
+                  boxShadow={'none'}
+                  cursor="pointer"
+                  _focusVisible={{ zIndex: 1, borderColor: '#3182ce' }}
+                >
+                  <option value="">Rating</option>
+                  <option value="RatingLowtoHigh">Rating -- Low to High</option>
+                  <option value="RatingHightoLow">Rating -- High to Low</option>
+                </Select>
+                <FormLabel
+                  className="dropDown_label"
+                  fontSize="15px"
+                >
+                  Filter By Rating
+                </FormLabel>
+              </FormControl>
+            </Box>
+          )}
           <Button
             buttonText={'Apply Filter'}
             background={primaryColor}

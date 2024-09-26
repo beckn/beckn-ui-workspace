@@ -28,6 +28,7 @@ export interface State {
 export interface Price {
   currency: CurrencyType
   value: string
+  rateLabel?: string
 }
 
 export interface QuoteBreakup {
@@ -92,6 +93,9 @@ export interface QuantityDetails {
     }
     count: number
   }
+  available: {
+    count: number
+  }
 }
 
 export interface Item {
@@ -107,6 +111,7 @@ export interface Item {
   fulfillments: Fulfillment[]
   rating?: string
   locations?: Location[] | Coordinate
+  productInfo?: Record<string, any>
 }
 
 export interface Tag {

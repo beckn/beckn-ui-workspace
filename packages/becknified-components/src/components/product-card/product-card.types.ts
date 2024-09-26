@@ -6,12 +6,14 @@ export interface Product {
   images: string[]
   name: string
   price: string
+  rateLabel?: string
   id: string
   rating?: string
   currencyType?: CurrencyType
   shortDesc?: string
   source?: string
   sourceText?: string
+  productInfo?: Record<string, any>
 }
 
 export interface ProductCardProps {

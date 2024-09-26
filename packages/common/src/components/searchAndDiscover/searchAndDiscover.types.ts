@@ -12,6 +12,7 @@ export interface SearchAndDiscoverProps {
   }
   filterProps?: {
     isFilterOpen: boolean
+    sortByRating?: boolean
     handleFilterOpen: () => void
     handleFilterClose: () => void
     handleResetFilter: () => void

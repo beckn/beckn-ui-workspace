@@ -64,7 +64,7 @@ const ProductCard: React.FC<ProductCardProps> = props => {
                 height={'100%'}
               >
                 <Image
-                  src={product.images[0]}
+                  src={product.images?.[0]}
                   width={'100%'}
                   height={'100%'}
                   alt={'item_image'}
@@ -81,23 +81,25 @@ const ProductCard: React.FC<ProductCardProps> = props => {
               display={'flex'}
               flexDir={'column'}
             >
-              <Flex
-                justifyContent={'space-between'}
-                alignItems={'flex-start'}
-                w={'100%'}
-              >
-                <Text
-                  fontWeight={'600'}
-                  fontSize={'1rem'}
-                  mb={'0.7rem'}
-                  noOfLines={2}
-                  textOverflow="ellipsis"
-                  whiteSpace="pre-wrap"
-                  overflowWrap="break-word"
+              {product.name && (
+                <Flex
+                  justifyContent={'space-between'}
+                  alignItems={'flex-start'}
+                  w={'100%'}
                 >
-                  {product.name}
-                </Text>
-              </Flex>
+                  <Text
+                    fontWeight={'600'}
+                    fontSize={'1rem'}
+                    mb={'0.7rem'}
+                    noOfLines={2}
+                    textOverflow="ellipsis"
+                    whiteSpace="pre-wrap"
+                    overflowWrap="break-word"
+                  >
+                    {product.name}
+                  </Text>
+                </Flex>
+              )}
               {product.source ? (
                 <Flex
                   alignItems={'flex-start'}
@@ -105,7 +107,7 @@ const ProductCard: React.FC<ProductCardProps> = props => {
                 >
                   <Text
                     fontSize={'0.8rem'}
-                    mb={'0.7rem'}
+                    mb={'0.4rem'}
                     fontWeight={'600'}
                     mr="5px"
                   >
@@ -113,7 +115,7 @@ const ProductCard: React.FC<ProductCardProps> = props => {
                   </Text>
                   <Text
                     fontSize={'0.8rem'}
-                    mb={'0.7rem'}
+                    mb={'0.4rem'}
                     w={['60%', '60%', 'unset']}
                     noOfLines={2}
                     textOverflow="ellipsis"
@@ -145,7 +147,7 @@ const ProductCard: React.FC<ProductCardProps> = props => {
               >
                 <Text
                   fontSize={'0.8rem'}
-                  mb={'0.7rem'}
+                  mb={'0.4rem'}
                   noOfLines={2}
                   textOverflow="ellipsis"
                   whiteSpace="pre-wrap"
@@ -186,6 +188,7 @@ const ProductCard: React.FC<ProductCardProps> = props => {
                 <ProductPrice
                   currencyType={currency}
                   price={parseFloat(product.price)}
+                  rateLabel={product.rateLabel}
                 />
                 {product.rating && product.rating !== 'null' && (
                   <ProductRating

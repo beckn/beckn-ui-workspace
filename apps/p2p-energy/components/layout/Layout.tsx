@@ -26,29 +26,29 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const toast = useToast()
   const dispatch = useDispatch()
 
-  // const {
-  //   toast: { display, message, type, description }
-  // } = useSelector((state: FeedbackRootState) => state.feedback)
+  const {
+    toast: { display, message, type, description }
+  } = useSelector((state: FeedbackRootState) => state.feedback)
 
-  // useEffect(() => {
-  //   if (display) {
-  //     toast({
-  //       position: 'top',
-  //       duration: 5000,
-  //       isClosable: true,
-  //       render: ({ onClose }) => (
-  //         <Toast
-  //           status={type as ToastType}
-  //           title={message}
-  //           description={description}
-  //           onClose={onClose}
-  //           dataTest={testIds.feedback}
-  //         />
-  //       )
-  //     })
-  //     dispatch(feedbackActions.toggleToast({ display: false }))
-  //   }
-  // }, [display])
+  useEffect(() => {
+    if (display) {
+      toast({
+        position: 'top',
+        duration: 5000,
+        isClosable: true,
+        render: ({ onClose }) => (
+          <Toast
+            status={type as ToastType}
+            title={message}
+            description={description}
+            onClose={onClose}
+            dataTest={testIds.feedback}
+          />
+        )
+      })
+      dispatch(feedbackActions.toggleToast({ display: false }))
+    }
+  }, [display])
 
   return (
     <div>

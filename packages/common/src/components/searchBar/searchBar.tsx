@@ -4,8 +4,8 @@ import { SearchBarProps } from './searchBar.types'
 import { testIds } from '@shared/dataTestIds'
 
 const SearchBar: React.FC<SearchBarProps> = ({ searchString, handleChange, placeholder = 'Search', selectedInput }) => {
-  const [searchText, setSearchText] = useState(searchString)
-  const [inputValue, setInputValue] = useState('')
+  const [searchText, setSearchText] = useState<string | string[] | undefined>(searchString)
+  const [inputValue, setInputValue] = useState<string | string[] | undefined>('')
 
   const inputChangeHandler = (event: React.BaseSyntheticEvent) => {
     setSearchText(event.target.value)

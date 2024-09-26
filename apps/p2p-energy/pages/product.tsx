@@ -12,25 +12,25 @@ import { Button, Typography } from '@beckn-ui/molecules'
 const Product = () => {
   const { t } = useLanguage()
   const selectedProduct: ParsedItemModel = useSelector((state: DiscoveryRootState) => state.discovery.selectedProduct)
-  const dispatch = useDispatch()
-  const [counter, setCounter] = useState(1)
-  const [totalPrice, setTotalPrice] = useState<number>(Number(selectedProduct.item.price.value))
+  // const dispatch = useDispatch()
+  // const [counter, setCounter] = useState(1)
+  // const [totalPrice, setTotalPrice] = useState<number>(Number(selectedProduct.item.price.value))
 
-  const increment = () => {
-    const newCounter = counter + 1
-    const newTotalPrice = newCounter * Number(selectedProduct.item.price.value)
-    setCounter(newCounter)
-    setTotalPrice(newTotalPrice)
-  }
+  // const increment = () => {
+  //   const newCounter = counter + 1
+  //   const newTotalPrice = newCounter * Number(selectedProduct.item.price.value)
+  //   setCounter(newCounter)
+  //   setTotalPrice(newTotalPrice)
+  // }
 
-  const decrement = () => {
-    if (counter > 1) {
-      const newCounter = counter - 1
-      const newTotalPrice = newCounter * Number(selectedProduct.item.price.value)
-      setCounter(newCounter)
-      setTotalPrice(newTotalPrice)
-    }
-  }
+  // const decrement = () => {
+  //   if (counter > 1) {
+  //     const newCounter = counter - 1
+  //     const newTotalPrice = newCounter * Number(selectedProduct.item.price.value)
+  //     setCounter(newCounter)
+  //     setTotalPrice(newTotalPrice)
+  //   }
+  // }
 
   if (!selectedProduct) {
     return <></>
@@ -76,6 +76,7 @@ const Product = () => {
           }}
           currencyType={selectedProduct.item.price.currency}
           price={parseFloat(selectedProduct.item.price.value)}
+          rateLabel={selectedProduct.item.price.rateLabel}
         />
       </Flex>
       {/* <Button

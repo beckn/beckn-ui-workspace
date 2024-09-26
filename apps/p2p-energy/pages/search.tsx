@@ -3,13 +3,14 @@ import axios from '@services/axios'
 import { useDispatch } from 'react-redux'
 import { useRouter } from 'next/router'
 
-import { parseSearchlist, SearchAndDiscover } from '@beckn-ui/common'
+import { SearchAndDiscover } from '@beckn-ui/common'
 import { useLanguage } from '@hooks/useLanguage'
 import { ParsedItemModel } from '@beckn-ui/common/lib/types'
 import { discoveryActions } from '@beckn-ui/common/src/store/discovery-slice'
 import { DOMAIN } from '@lib/config'
 import { Product } from '@beckn-ui/becknified-components'
 import { testIds } from '@shared/dataTestIds'
+import { parseSearchlist } from '../utils/search-utils'
 
 const Search = () => {
   const [items, setItems] = useState<ParsedItemModel[]>([])
@@ -120,6 +121,7 @@ const Search = () => {
   }
 
   const handleViewDetailsClickHandler = (selectedItem: ParsedItemModel, product: Product) => {
+    console.log(selectedItem, product)
     const { item } = selectedItem
     dispatch(discoveryActions.addSingleProduct({ product: selectedItem }))
     router.push({
@@ -143,6 +145,7 @@ const Search = () => {
       }}
       filterProps={{
         isFilterOpen: isFilterOpen,
+        sortByRating: false,
         handleFilterOpen,
         handleFilterClose,
         handleResetFilter,

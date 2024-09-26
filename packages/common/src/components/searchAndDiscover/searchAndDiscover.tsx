@@ -19,7 +19,8 @@ const SearchAndDiscover: React.FC<SearchAndDiscoverProps> = ({
   noProduct
 }) => {
   const { searchKeyword, setSearchKeyword, fetchDataOnSearch, selectedInput, placeholder } = searchProps
-  const { isFilterOpen, handleApplyFilter, handleResetFilter, handleFilterOpen, handleFilterClose } = filterProps || {}
+  const { isFilterOpen, sortByRating, handleApplyFilter, handleResetFilter, handleFilterOpen, handleFilterClose } =
+    filterProps || {}
   const { viewDetailsClickHandler } = catalogProps
 
   const breakpoint = useBreakpoint()
@@ -35,10 +36,13 @@ const SearchAndDiscover: React.FC<SearchAndDiscoverProps> = ({
         id: item.id,
         images: item.images?.map(image => image?.url)!,
         name: item.name,
+        shortDesc: item.short_desc,
         price: item.price.value,
+        rateLabel: item.price?.rateLabel,
         rating: item.rating,
         source: 'Sold By',
-        sourceText: items[0].providerName
+        sourceText: items[0].providerName,
+        productInfo: item.productInfo
       }
 
       const handleProductClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -52,6 +56,7 @@ const SearchAndDiscover: React.FC<SearchAndDiscoverProps> = ({
           productClickHandler={handleProductClick}
           product={product}
           currency={item.price.currency}
+          productInfoDataSource={product.productInfo}
         />
       )
     })
@@ -66,6 +71,7 @@ const SearchAndDiscover: React.FC<SearchAndDiscoverProps> = ({
       <Box display="flex">
         {filterProps && !isSmallScreen && !isMediumScreen && (
           <Filter
+            sortByRating={sortByRating}
             handleApplyFilter={handleApplyFilter!}
             handleResetFilter={handleResetFilter!}
             handleCancelFilter={handleFilterClose}
@@ -108,6 +114,7 @@ const SearchAndDiscover: React.FC<SearchAndDiscoverProps> = ({
               onClose={handleFilterClose!}
             >
               <Filter
+                sortByRating={sortByRating}
                 handleApplyFilter={handleApplyFilter!}
                 handleResetFilter={handleResetFilter!}
                 handleCancelFilter={handleFilterClose}
@@ -122,6 +129,7 @@ const SearchAndDiscover: React.FC<SearchAndDiscoverProps> = ({
               left="28%"
             >
               <Filter
+                sortByRating={sortByRating}
                 handleApplyFilter={handleApplyFilter!}
                 handleResetFilter={handleResetFilter!}
               />
