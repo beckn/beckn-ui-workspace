@@ -4,10 +4,11 @@ import { SearchInput } from '@beckn-ui/becknified-components'
 import { Typography } from '@beckn-ui/molecules'
 import { RiArrowRightSLine } from 'react-icons/ri'
 import PoweredBy from '../poweredBy'
-import { HomePageContentProps } from './homePageContent.types'
+import { CardType, HomePageContentProps } from './homePageContent.types'
 import { testIds } from '@shared/dataTestIds'
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md'
 import { GeoLocationInput } from '../geoLocationInput/GeoLocationInput'
+import ImageCard from '../ImageCard/ImageCard'
 
 const HomePageContent: React.FC<HomePageContentProps> = ({
   blockOrder = [],
@@ -28,6 +29,11 @@ const HomePageContent: React.FC<HomePageContentProps> = ({
     onSearchInputEnterPress,
     label: searchInputLabel
   } = searchProps || {}
+  const { imageCardList, handleClick, activeCard } = CardSelector || {
+    cardTypes: [],
+    handleClick: () => {},
+    activeCard: ''
+  }
   const { label, onSearchByLocationClick } = searchByLocation || {}
   const { poweredByText, poweredByLogoSrc } = footerProps
   const { placeholder, geoLocationSearchPageSelectedAddress, navigateToSearchResult } = geoLocationInput || {}
@@ -214,7 +220,27 @@ const HomePageContent: React.FC<HomePageContentProps> = ({
           </Box>
         )
       case 'cardType':
-        return <Box>{CardSelector}</Box>
+        return (
+          <Flex
+            justifyContent="space-between"
+            alignItems="center"
+            pt="20px"
+            mb="20px"
+            key={index}
+            wrap={'wrap'}
+            gap={'15px'}
+          >
+            {imageCardList?.map(({ type, image, text }: CardType) => (
+              <ImageCard
+                key={type}
+                image={activeCard === type ? image.white : image.black}
+                text={text}
+                onClick={() => handleClick(type)}
+                isActive={activeCard === type}
+              />
+            ))}
+          </Flex>
+        )
       default:
         return <></>
     }

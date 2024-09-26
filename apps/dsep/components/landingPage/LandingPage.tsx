@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import Router from 'next/router'
-import { Box, Flex } from '@chakra-ui/react'
+import { Box } from '@chakra-ui/react'
 
 import { useLanguage } from '../../hooks/useLanguage'
 import beckenFooter from '../../public/images/beckenFooterLogo.svg'
@@ -11,14 +11,22 @@ import jobsImageWhite from '../../public/images/landing-page-icons/jobsWhite.svg
 import scholarshipImageBlack from '../../public/images/landing-page-icons/scholarshipBlack.svg'
 import scholarshipImageWhite from '../../public/images/landing-page-icons/scholarshipWhite.svg'
 import { HomePageContent } from '@beckn-ui/common'
-import ImageCard from './ImageCard'
 
 const LandingPage: React.FC = () => {
   const { t } = useLanguage()
   const [searchTerm, setSearchTerm] = useState('')
   const [activeCard, setActiveCard] = useState<string | null>('course')
 
-  const cardTypes = ['course', 'scholarship', 'jobs']
+  const cardTypes = [
+    { id: 1, type: 'course', images: { black: coursesImageBlack, white: couresImageWhite }, text: t.courseImgText },
+    {
+      id: 2,
+      type: 'scholarship',
+      images: { black: scholarshipImageBlack, white: scholarshipImageWhite },
+      text: t.scholarshipImgText
+    },
+    { id: 3, type: 'jobs', images: { black: jobsImageBlack, white: jobsImageWhite }, text: t.jobsImgText }
+  ]
 
   const navigateToSearchResults = () => {
     localStorage.setItem('optionTags', JSON.stringify({ name: searchTerm }))
@@ -34,34 +42,6 @@ const LandingPage: React.FC = () => {
       navigateToSearchResults()
     }
     e.preventDefault()
-  }
-
-  const CardSelector = () => {
-    return (
-      <>
-        {cardTypes.map(type => (
-          <ImageCard
-            key={type}
-            image={
-              activeCard === type
-                ? type === 'course'
-                  ? couresImageWhite
-                  : type === 'scholarship'
-                    ? scholarshipImageWhite
-                    : jobsImageWhite
-                : type === 'course'
-                  ? coursesImageBlack
-                  : type === 'scholarship'
-                    ? scholarshipImageBlack
-                    : jobsImageBlack
-            }
-            text={type === 'course' ? t.courseImgText : type === 'scholarship' ? t.scholarshipImgText : t.jobsImgText}
-            onClick={() => handleClick(type)}
-            isActive={activeCard === type}
-          />
-        ))}
-      </>
-    )
   }
 
   return (
@@ -82,16 +62,15 @@ const LandingPage: React.FC = () => {
           onSearchIconClick: searchIconClickHandler,
           onSearchInputEnterPress: navigateToSearchResults
         }}
-        CardSelector={
-          <Flex
-            justifyContent={'space-between'}
-            alignItems="center"
-            pt={'25px'}
-            mb={'20px'}
-          >
-            <CardSelector />
-          </Flex>
-        }
+        CardSelector={{
+          imageCardList: cardTypes.map(card => ({
+            ...card,
+            type: card.type as 'course' | 'scholarship' | 'jobs',
+            image: card.images
+          })),
+          handleClick,
+          activeCard: activeCard || ''
+        }}
         footerProps={{
           poweredByText: t.footerText,
           poweredByLogoSrc: beckenFooter

@@ -1,5 +1,14 @@
 import { Logos } from '../../../lib/types'
 
+export interface CardType {
+  id: number
+  type: 'course' | 'scholarship' | 'jobs'
+  image: {
+    white: string
+    black: string
+  }
+  text: string
+}
 export type BlockName =
   | 'header'
   | 'description'
@@ -23,7 +32,11 @@ export interface HomePageContentProps {
     onSearchIconClick: (e: React.MouseEvent) => void
     onSearchInputEnterPress: () => void
   }
-  CardSelector?: React.ReactNode | null
+  CardSelector?: {
+    imageCardList: CardType[]
+    handleClick: (type: string) => void
+    activeCard: string
+  }
   selectInputProps?: {
     items: string[]
     selectedItem: string
