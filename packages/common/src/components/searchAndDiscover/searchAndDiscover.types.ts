@@ -6,6 +6,7 @@ export interface SearchAndDiscoverProps {
   searchProps: {
     searchKeyword: string
     selectedInput?: string
+    placeholder?: string
     setSearchKeyword: (value: string) => void
     fetchDataOnSearch: () => void
   }

@@ -10,7 +10,7 @@ import { formatDate } from '@utils/general'
 import { feedbackActions } from '@beckn-ui/common'
 import { useDispatch } from 'react-redux'
 import { getGeoFenceCoords } from '@utils/geoLocation'
-import { GenericDropdown } from '@components/statusDropdown/GenericDropdown'
+import { GenericDropdown } from '@components/GenericDropdown/GenericDropdown'
 
 const ViewInformation = () => {
   const [item, setItem] = useState({

@@ -39,7 +39,8 @@ const Header: React.FC<HeaderProps> = ({
       icon: '/images/logOutIcon.svg',
       color: 'red'
     }
-  ]
+  ],
+  settingsMenu = true
 }) => {
   const {
     blackList: { appLogoBlackList, homeIconBlackList, languageIconWhiteList, menuIconWhiteList }
@@ -93,7 +94,7 @@ const Header: React.FC<HeaderProps> = ({
               />
             )}
 
-            {menuIconWhiteList.includes(router.pathname) && (
+            {settingsMenu && menuIconWhiteList.includes(router.pathname) && (
               <Image
                 cursor="pointer"
                 onClick={() => setMenuModalOpen(true)}

@@ -43,11 +43,11 @@ const HomePageContent: React.FC<HomePageContentProps> = ({
     return mobileBreakpoints.includes(breakpoint) ? logos?.mobile : logos?.desktop
   }, [breakpoint, logos])
 
-  const renderBlock = (block: string) => {
+  const renderBlock = (block: string, index: number) => {
     switch (block) {
       case 'header':
         return (
-          <>
+          <Box key={index}>
             <Box
               pt={'12px'}
               pb={'12px'}
@@ -68,11 +68,12 @@ const HomePageContent: React.FC<HomePageContentProps> = ({
                 text={title!}
               />
             )}
-          </>
+          </Box>
         )
       case 'description':
         return (
           <Typography
+            key={index}
             style={{ marginBottom: '40px' }}
             fontSize="15px"
             fontWeight="400"
@@ -82,7 +83,7 @@ const HomePageContent: React.FC<HomePageContentProps> = ({
         )
       case 'searchInput':
         return (
-          <>
+          <Box key={index}>
             {searchInputLabel && (
               <Typography
                 text={searchInputLabel!}
@@ -98,11 +99,12 @@ const HomePageContent: React.FC<HomePageContentProps> = ({
               onEnterHandler={(e: { key: string }) => e.key === 'Enter' && onSearchInputEnterPress?.()}
               placeHolder={searchPlaceholder}
             />
-          </>
+          </Box>
         )
       case 'selectInput':
         return (
           <Box
+            key={index}
             position="relative"
             display="inline-block"
             width={'100%'}
@@ -183,6 +185,7 @@ const HomePageContent: React.FC<HomePageContentProps> = ({
       case 'searchByLocation':
         return (
           <Flex
+            key={index}
             justifyContent={'center'}
             alignItems={'center'}
             columnGap={'5px'}
@@ -201,13 +204,13 @@ const HomePageContent: React.FC<HomePageContentProps> = ({
         )
       case 'geoLocationInput':
         return (
-          <>
+          <Box key={index}>
             <GeoLocationInput
               placeholder={placeholder || 'Search For Location'}
               geoLocationSearchPageSelectedAddress={geoLocationSearchPageSelectedAddress!}
               navigateToSearchResult={() => navigateToSearchResult?.()}
             />
-          </>
+          </Box>
         )
       default:
         return <></>
@@ -220,7 +223,7 @@ const HomePageContent: React.FC<HomePageContentProps> = ({
       margin="calc(0rem + 90px) auto"
       backgroundColor="white"
     >
-      {blockOrder.map(block => renderBlock(block))}
+      {blockOrder.map((block, index) => renderBlock(block, index))}
       <PoweredBy
         logoSrc={poweredByLogoSrc}
         poweredByText={poweredByText}

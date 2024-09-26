@@ -94,7 +94,7 @@ const SubHeader = (props: SubHeaderProps) => {
             <div className="flex gap-4">
               {!cartIconList?.includes(router.pathname) && (
                 <CartIconWithCount
-                  itemCount={cartItems.length}
+                  itemCount={cartItems?.length}
                   handleClick={() => router.push('/cart')}
                 />
               )}

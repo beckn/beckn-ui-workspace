@@ -18,7 +18,7 @@ const SearchAndDiscover: React.FC<SearchAndDiscoverProps> = ({
   catalogProps,
   noProduct
 }) => {
-  const { searchKeyword, setSearchKeyword, fetchDataOnSearch, selectedInput } = searchProps
+  const { searchKeyword, setSearchKeyword, fetchDataOnSearch, selectedInput, placeholder } = searchProps
   const { isFilterOpen, handleApplyFilter, handleResetFilter, handleFilterOpen, handleFilterClose } = filterProps || {}
   const { viewDetailsClickHandler } = catalogProps
 
@@ -82,6 +82,7 @@ const SearchAndDiscover: React.FC<SearchAndDiscoverProps> = ({
             <SearchBar
               searchString={searchKeyword}
               selectedInput={selectedInput}
+              placeholder={placeholder}
               handleChange={(text: string) => {
                 setSearchKeyword(text)
                 localStorage.removeItem('optionTags')

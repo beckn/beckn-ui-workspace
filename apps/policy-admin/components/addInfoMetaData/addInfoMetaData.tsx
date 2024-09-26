@@ -42,7 +42,7 @@ import { PolicyStatusType, PolicyType, RulesTemplate } from '@lib/types/metaData
 import { useCreatePolicyMutation } from '@services/PolicyService'
 import { feedbackActions } from '@beckn-ui/common'
 import { validateDateRange } from '@utils/general'
-import { GenericDropdown } from '@components/statusDropdown/GenericDropdown'
+import { GenericDropdown } from '@components/GenericDropdown/GenericDropdown'
 
 function AddInformationMetadata() {
   const [errors, setErrors] = useState({
