@@ -32,7 +32,7 @@ const createProfile = () => {
       const createProfileResponse = await axios.post(`${strapiUrl}/profiles`, formDataForPayload, axiosConfig)
 
       if (createProfileResponse.status === 200) {
-        router.push('/homePage')
+        router.push('/')
       }
     } catch (error) {
       console.error(error)

@@ -22,6 +22,7 @@ const ProductCardRenderer = (data: any) => {
     <Flex
       onClick={() => {
         localStorage.setItem('selectedItem', JSON.stringify(dataSource))
+        localStorage.setItem('selectCardHeaderText', JSON.stringify(dataSource.item.name))
         router.push(`/product?productDetails=${encodedProduct}`)
       }}
       minH={'168px'}

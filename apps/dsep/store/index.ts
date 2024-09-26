@@ -1,5 +1,5 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
-import { persistStore, persistReducer } from 'redux-persist'
+import { persistStore, persistReducer, FLUSH, PAUSE, PERSIST, PURGE, REGISTER, REHYDRATE } from 'redux-persist'
 import specialOfferProductsReducer from './specialOfferProducts-slice'
 import newestProductReducer from './newestProduct-slice'
 import SortedProductsListReducer from './sortedProductList-slice'
@@ -13,14 +13,17 @@ import settingBoxReducer from './settingBox-slice'
 import scholarshipCartReducer from './scholarshipCart-slice'
 import favoriteReducer from './favorite-slice'
 import responseDataReducer from './responseData-slice'
-import storage from './storage'
+import storage from 'redux-persist/lib/storage'
+import { api, authReducer } from '@beckn-ui/common'
 
 const persistConfig = {
   key: 'root',
   storage
 }
 
-const rootReducer = combineReducers({
+const appReducer = combineReducers({
+  auth: authReducer,
+  [api.reducerPath]: api.reducer,
   specialOfferProductsList: specialOfferProductsReducer,
   newestProductsList: newestProductReducer,
   sortedProductsList: SortedProductsListReducer,
@@ -39,14 +42,28 @@ const rootReducer = combineReducers({
   scholarshipCart: scholarshipCartReducer
 })
 
+const rootReducer = (state: any, action: any) => {
+  if (action.type === 'auth/logout') {
+    if (localStorage) {
+      localStorage.removeItem('persist:root')
+      localStorage.clear()
+    }
+    state = undefined
+  }
+
+  return appReducer(state, action)
+}
+
 const persistedReducer = persistReducer(persistConfig, rootReducer)
 
 const store = configureStore({
   reducer: persistedReducer,
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
-      serializableCheck: false
-    })
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
+      }
+    }).concat(api.middleware)
 })
 
 export const persistor = persistStore(store)

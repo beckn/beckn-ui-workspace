@@ -26,6 +26,7 @@ function CartIconWithCount({
       />
       {itemCount > 0 && (
         <Box
+          className="cart-count"
           position="absolute"
           top="-1"
           right="-1"

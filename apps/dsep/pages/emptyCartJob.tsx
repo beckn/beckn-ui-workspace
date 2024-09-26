@@ -10,7 +10,7 @@ import Router from 'next/router'
 const EmptyCartJob: React.FC = () => {
   const { t } = useLanguage()
   const handleGoBack = (): void => {
-    Router.push('/homePage')
+    Router.push('/')
   }
 
   return (

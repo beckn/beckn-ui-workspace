@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import { GoogleMap, Polygon, useLoadScript } from '@react-google-maps/api'
-import { useTheme } from '@chakra-ui/react'
+import { Box, useTheme } from '@chakra-ui/react'
 
 const mapOptions = {
   disableDefaultUI: true,
@@ -41,24 +41,29 @@ const QuarantineZoneMap = (props: QuarantineZoneMapProps) => {
   }
 
   return (
-    <GoogleMap
-      options={mapOptions}
-      zoom={12}
-      center={getPolygonCenter()}
-      mapTypeId={google.maps.MapTypeId.ROADMAP}
-      mapContainerStyle={{ maxHeight: '100vh', height: '100vh' }}
+    <Box
+      maxH={'calc(100vh - 120px)'}
+      overflowY="scroll"
     >
-      <Polygon
-        paths={polygonPath}
-        options={{
-          fillColor: theme.colors.primary['100'],
-          fillOpacity: 0.3,
-          strokeColor: 'black',
-          strokeOpacity: 1,
-          strokeWeight: 2
-        }}
-      />
-    </GoogleMap>
+      <GoogleMap
+        options={mapOptions}
+        zoom={12}
+        center={getPolygonCenter()}
+        mapTypeId={google.maps.MapTypeId.ROADMAP}
+        mapContainerStyle={{ maxHeight: '100vh', height: '100vh' }}
+      >
+        <Polygon
+          paths={polygonPath}
+          options={{
+            fillColor: theme.colors.primary['100'],
+            fillOpacity: 0.3,
+            strokeColor: 'black',
+            strokeOpacity: 1,
+            strokeWeight: 2
+          }}
+        />
+      </GoogleMap>
+    </Box>
   )
 }
 

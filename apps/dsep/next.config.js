@@ -3,7 +3,7 @@
 const nextConfig = {
   reactStrictMode: false,
   transpilePackages: ['@beckn-ui/**'],
-  trailingSlash: true,
+  // trailingSlash: true,
   i18n: {
     locales: ['en', 'fa'],
     defaultLocale: 'en',
