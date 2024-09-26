@@ -17,7 +17,8 @@ const HomePageContent: React.FC<HomePageContentProps> = ({
   searchProps,
   searchByLocation,
   geoLocationInput,
-  footerProps
+  footerProps,
+  CardSelector
 }) => {
   const { name, title, description } = headerProps || {}
   const {
@@ -212,6 +213,8 @@ const HomePageContent: React.FC<HomePageContentProps> = ({
             />
           </Box>
         )
+      case 'cardType':
+        return <Box>{CardSelector}</Box>
       default:
         return <></>
     }
