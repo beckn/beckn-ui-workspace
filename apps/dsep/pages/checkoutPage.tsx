@@ -125,7 +125,7 @@ const CheckoutPage = () => {
   }, [])
 
   useEffect(() => {
-    const shippingAddressComplete = Object.values(formData).every(value => value.length > 0)
+    const shippingAddressComplete = Object.values(formData).every(value => value?.length > 0)
     if (shippingAddressComplete && typeof window !== 'undefined') {
       localStorage.setItem('shippingAdress', JSON.stringify(formData))
     }

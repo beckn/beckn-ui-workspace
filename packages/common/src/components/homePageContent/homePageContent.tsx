@@ -228,7 +228,7 @@ const HomePageContent: React.FC<HomePageContentProps> = ({
             mb="20px"
             key={index}
             wrap={'wrap'}
-            gap={'15px'}
+            rowGap={'15px'}
           >
             {imageCardList?.map(({ type, image, text }: CardType) => (
               <ImageCard
