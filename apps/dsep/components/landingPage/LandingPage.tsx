@@ -1,9 +1,7 @@
 import React, { useState } from 'react'
 import Router from 'next/router'
-import { SearchInput } from '@beckn-ui/becknified-components'
-import { Box, Flex, Text, Image } from '@chakra-ui/react'
+import { Box, Flex } from '@chakra-ui/react'
 
-import ImageCard from './ImageCard'
 import { useLanguage } from '../../hooks/useLanguage'
 import beckenFooter from '../../public/images/beckenFooterLogo.svg'
 import couresImageWhite from '../../public/images/landing-page-icons/CoursesWhite.svg'
@@ -12,6 +10,8 @@ import jobsImageBlack from '../../public/images/landing-page-icons/jobsBlack.svg
 import jobsImageWhite from '../../public/images/landing-page-icons/jobsWhite.svg'
 import scholarshipImageBlack from '../../public/images/landing-page-icons/scholarshipBlack.svg'
 import scholarshipImageWhite from '../../public/images/landing-page-icons/scholarshipWhite.svg'
+import { HomePageContent } from '@beckn-ui/common'
+import ImageCard from './ImageCard'
 
 const LandingPage: React.FC = () => {
   const { t } = useLanguage()
@@ -36,30 +36,9 @@ const LandingPage: React.FC = () => {
     e.preventDefault()
   }
 
-  return (
-    <Box p={'20px'}>
-      <Text
-        fontSize={'40px'}
-        fontWeight="800"
-        color={'rgba(var(--color-primary))'}
-        pt="30px"
-        lineHeight={'40px'}
-      >
-        {t.homeHeading}
-      </Text>
-      <Text
-        fontSize={'27px'}
-        fontWeight="800"
-        pb={'15px'}
-      >
-        {t.headingSpan}
-      </Text>
-      <Text fontSize={'15px'}>{t.homeText}</Text>
-      <Flex
-        justifyContent={'space-between'}
-        alignItems="center"
-        pt={'25px'}
-      >
+  const CardSelector = () => {
+    return (
+      <>
         {cardTypes.map(type => (
           <ImageCard
             key={type}
@@ -81,38 +60,43 @@ const LandingPage: React.FC = () => {
             isActive={activeCard === type}
           />
         ))}
-      </Flex>
+      </>
+    )
+  }
 
-      <Box pt={'25px'}>
-        <SearchInput
-          name="search_input"
-          onChangeHandler={(e: React.BaseSyntheticEvent) => setSearchTerm(e.target.value)}
-          searchIcon={'/images/searchIcon.svg'}
-          searchIconClickHandler={searchIconClickHandler}
-          onEnterHandler={(e: { key: string }) => e.key === 'Enter' && navigateToSearchResults()}
-          placeHolder={`Search for ${activeCard}`}
-        />
-      </Box>
-      <Flex
-        justifyContent={'center'}
-        alignItems="center"
-        width=" calc(100% - 40px)"
-        position={'fixed'}
-        bottom="15px"
-      >
-        <Text
-          pr={'8px'}
-          fontSize="10px"
-        >
-          {t.footerText}
-        </Text>
-        <Image
-          src={beckenFooter}
-          alt="footerLogo"
-          width={39}
-          height={13}
-        />
-      </Flex>
+  return (
+    <Box
+      p={'20px'}
+      mt={'-50px'}
+    >
+      <HomePageContent
+        blockOrder={['header', 'description', 'cardType', 'searchInput']}
+        headerProps={{
+          name: t.homeHeading,
+          title: t.headingSpan,
+          description: t.homeText
+        }}
+        searchProps={{
+          searchPlaceholder: `Search for ${activeCard}`,
+          setSearchTerm: setSearchTerm,
+          onSearchIconClick: searchIconClickHandler,
+          onSearchInputEnterPress: navigateToSearchResults
+        }}
+        CardSelector={
+          <Flex
+            justifyContent={'space-between'}
+            alignItems="center"
+            pt={'25px'}
+            mb={'20px'}
+          >
+            <CardSelector />
+          </Flex>
+        }
+        footerProps={{
+          poweredByText: t.footerText,
+          poweredByLogoSrc: beckenFooter
+        }}
+      />
     </Box>
   )
 }

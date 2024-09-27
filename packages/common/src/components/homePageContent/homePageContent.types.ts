@@ -7,6 +7,7 @@ export type BlockName =
   | 'searchInput'
   | 'searchByLocation'
   | 'geoLocationInput'
+  | 'cardType'
 export interface HomePageContentProps {
   blockOrder?: BlockName[]
   logos?: Logos
@@ -22,6 +23,7 @@ export interface HomePageContentProps {
     onSearchIconClick: (e: React.MouseEvent) => void
     onSearchInputEnterPress: () => void
   }
+  CardSelector?: React.ReactNode | null
   selectInputProps?: {
     items: string[]
     selectedItem: string

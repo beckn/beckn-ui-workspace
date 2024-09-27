@@ -37,7 +37,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       theme={{
         color: {
           primary: '#3AA5E1',
-          secondary: '#84B3F9'
+          secondary: '#3AA5E1'
         }
       }}
     >
