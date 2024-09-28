@@ -87,7 +87,7 @@ export const getSelectPayload = (
 
 export const getInitPayload = async (
   deliveryAddress: ShippingFormInitialValuesType,
-  billingAddress: ShippingFormInitialValuesType,
+  billingAddress: ShippingFormInitialValuesType | Record<string, any>,
   cartItems: CartItemForRequest[],
   transaction_id: string,
   domain: string = 'retail:1.1.0',
@@ -175,24 +175,28 @@ export const getInitPayload = async (
         }
       ]
 
+      const billingDetails = billingAddress
+        ? {
+            name: billingAddress.name,
+            phone: billingAddress.mobileNumber,
+            address: billingAddress.address,
+            email: billingAddress.email,
+            city: {
+              name: cityData?.city
+            },
+            state: {
+              name: cityData?.state
+            }
+          }
+        : null
+
       return {
         provider: {
           id: providerId
         },
         items,
         fulfillments,
-        billing: {
-          name: billingAddress.name,
-          phone: billingAddress.mobileNumber,
-          address: billingAddress.address,
-          email: billingAddress.email,
-          city: {
-            name: cityData?.city
-          },
-          state: {
-            name: cityData?.state
-          }
-        }
+        billing: billingDetails
       }
     })
   }

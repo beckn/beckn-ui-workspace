@@ -70,7 +70,7 @@ const Checkout: React.FC<CheckoutProps<FormField[]>> = ({
         <ShippingSection {...shipping} />
 
         {/* Billing Section */}
-        <ShippingSection {...billing} />
+        {billing && Object.keys(billing).length > 0 && <ShippingSection {...billing} />}
 
         {hasInitResult && (
           <Box data-test={dataTestPaymentDetails}>
@@ -91,7 +91,7 @@ const Checkout: React.FC<CheckoutProps<FormField[]>> = ({
         >
           <Button
             {...restButtonProps}
-            disabled={!hasInitResult || (!hasInitResult && !billing.isChecked)}
+            disabled={!hasInitResult || (!hasInitResult && !billing?.isChecked)}
           />
         </Box>
       </Box>

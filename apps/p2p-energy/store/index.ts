@@ -8,7 +8,8 @@ import {
   statusReducer,
   DiscoveryReducer,
   OrderReducer,
-  feedbackReducer
+  feedbackReducer,
+  cartSliceReducer
 } from '@beckn-ui/common'
 
 const persistConfig = {
@@ -20,6 +21,7 @@ const persistConfig = {
 const appReducer = combineReducers({
   auth: authReducer,
   [api.reducerPath]: api.reducer,
+  cart: cartSliceReducer,
   checkout: checkoutReducer,
   status: statusReducer,
   discovery: DiscoveryReducer,
