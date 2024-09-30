@@ -3,6 +3,7 @@ import { useLanguage } from '../../hooks/useLanguage'
 import { BsFilterLeft, BsArrowDown } from 'react-icons/bs'
 import { radioBtnValue } from '../../mock/sortRadioInput'
 import { Box } from '@chakra-ui/react'
+import { testIds } from '@shared/dataTestIds'
 
 interface Props {
   selectedBtn: string
@@ -21,6 +22,7 @@ const Sort: React.FC<Props> = ({ selectedBtn: selectedRadioBtn, onChangeSelected
       padding={'20px 0 0 0'}
       width={'100%'}
       ml={'-20px'}
+      data-test={testIds.searchpage_filterContainer}
     >
       <div
         className="my-4 pb-2 flex flex-wrap border-b-2 border-slate-300"
@@ -74,6 +76,7 @@ const Sort: React.FC<Props> = ({ selectedBtn: selectedRadioBtn, onChangeSelected
                       ? 'text-palette-primary font-bold'
                       : 'text-palette-mute/80 hover:text-palette-base transition-all'
                   }`}
+                  data-test={radioInput}
                 >
                   {t[radioInput]}
                 </label>
@@ -81,6 +84,7 @@ const Sort: React.FC<Props> = ({ selectedBtn: selectedRadioBtn, onChangeSelected
                   type="radio"
                   className="hidden"
                   id={radioInput}
+                  data-test={radioInput}
                   value={selectedRadioBtn}
                   name="sortProduct"
                   checked={isRadioSelected(radioInput)}

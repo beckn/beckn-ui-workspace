@@ -5,6 +5,7 @@ import { useLanguage } from '../../hooks/useLanguage'
 import StarIcon from '../../public/images/Star.svg'
 import { toBinary } from '../../utilities/common-utils'
 import ProductPrice from '../UI/ProductPrice'
+import { testIds } from '@shared/dataTestIds'
 
 const ProductCardRenderer = (data: any) => {
   //   const [distance, setDistance] = useState(0)
@@ -33,6 +34,7 @@ const ProductCardRenderer = (data: any) => {
       rounded="xl"
       bg="#fff"
       position="relative"
+      data-test={testIds.searchpage_products}
     >
       <Box w="125px">
         <Box>

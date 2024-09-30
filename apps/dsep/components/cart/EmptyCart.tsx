@@ -6,6 +6,7 @@ import Styles from './EmptyCart.module.css'
 import { useLanguage } from '../../hooks/useLanguage'
 import Button from '../button/Button'
 import Router from 'next/router'
+import { testIds } from '@shared/dataTestIds'
 
 const EmptyCart: React.FC = () => {
   const { t } = useLanguage()
@@ -21,6 +22,7 @@ const EmptyCart: React.FC = () => {
         justifyContent={'center'}
       >
         <Image
+          data-test={testIds.cartpage_emptyImage}
           src={CartEmpty}
           width={'306px'}
           height={'245px'}
@@ -30,12 +32,19 @@ const EmptyCart: React.FC = () => {
       <Text
         className={Styles.cartHeadingText}
         fontWeight={600}
+        data-test={testIds.cartpage_emptyheading}
       >
         {t.noCourse}
       </Text>
-      <Text className={Styles.cartSpanText}>{t.noCouseSubText}</Text>
+      <Text
+        className={Styles.cartSpanText}
+        data-test={testIds.cartpage_emptySubHeading}
+      >
+        {t.noCouseSubText}
+      </Text>
       <Box mt={'40%'}>
         <Button
+          dataTest={testIds.cartpage_emptyButton}
           buttonText={t.searchCourses}
           background={'rgba(var(--color-primary))'}
           color={'rgba(var(--text-color))'}

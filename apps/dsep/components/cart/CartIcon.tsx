@@ -5,6 +5,7 @@ import { AiOutlineShoppingCart } from 'react-icons/ai'
 import { cartUiActions } from '../../store/cartUI-slice'
 import { ICartUiRootState, ICartRootState } from '../../lib/types/cart'
 import { useLanguage } from '../../hooks/useLanguage'
+import { testIds } from '@shared/dataTestIds'
 
 const Basket = () => {
   const dispatch = useDispatch()
@@ -19,6 +20,7 @@ const Basket = () => {
       className="relative"
       onMouseOver={() => onMouseHoverHandler(true)}
       onMouseOut={() => onMouseHoverHandler(false)}
+      data-test={testIds.cartButton}
     >
       <Link
         legacyBehavior

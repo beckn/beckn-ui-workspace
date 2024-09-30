@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { GoSearch } from 'react-icons/go'
 import { useLanguage } from '../../hooks/useLanguage'
 import { SearchBarPropsModel } from '../../lib/types/search'
+import { testIds } from '@shared/dataTestIds'
 
 const SearchBar: React.FC<SearchBarPropsModel> = ({ searchString, handleChange, className }) => {
   const { t } = useLanguage()
@@ -30,6 +31,7 @@ const SearchBar: React.FC<SearchBarPropsModel> = ({ searchString, handleChange, 
         placeholder={`${t.search}`}
         onChange={inputChangeHandler}
         value={searchText}
+        data-test={testIds.searchInput}
         onKeyDown={event => event.key === 'Enter' && handleSubmit()}
       />
     </div>

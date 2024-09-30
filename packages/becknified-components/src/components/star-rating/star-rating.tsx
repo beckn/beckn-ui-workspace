@@ -39,7 +39,10 @@ const StarRating: React.FC<StarRatingProps> = props => {
         text={ratingText}
       />
 
-      <Box display={'flex'}>
+      <Box
+        display={'flex'}
+        data-test={'rating-container'}
+      >
         {[...Array(starCount)].map((star, index) => {
           const ratingValue = index + 1
           return (

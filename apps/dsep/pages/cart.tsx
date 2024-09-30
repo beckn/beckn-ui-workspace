@@ -14,6 +14,7 @@ import { Box } from '@chakra-ui/react'
 import { Item, SelectResponseModel } from '../lib/types/select.types'
 import LoaderWithMessage from '@beckn-ui/molecules/src/components/LoaderWithMessage/loader-with-message'
 import { toast } from 'react-toastify'
+import { testIds } from '@shared/dataTestIds'
 
 const Cart = () => {
   const [itemsForCart, setItemsForCart] = useState<Item[] | null>(null)
@@ -73,6 +74,7 @@ const Cart = () => {
         display={'grid'}
         height={'calc(100vh - 300px)'}
         alignContent={'center'}
+        data-test={testIds.loadingIndicator}
       >
         <LoaderWithMessage
           loadingText={t.categoryLoadPrimary}

@@ -8,6 +8,7 @@ import { Divider } from '@chakra-ui/react'
 import { Router } from 'next/router'
 import EmptyCart from './EmptyCart'
 import { Item } from '../../lib/types/select.types'
+import { testIds } from '@shared/dataTestIds'
 
 interface OrderSummaryBoxPropsModel {
   onOrderClick: () => void
@@ -27,6 +28,7 @@ const OrderSummaryBox: React.FC<OrderSummaryBoxPropsModel> = props => {
         style={{
           fontSize: '17px'
         }}
+        data-test={testIds.cartpage_orderSummaryText}
       >
         {t.orderSummary}
       </h3>
@@ -44,7 +46,12 @@ const OrderSummaryBox: React.FC<OrderSummaryBoxPropsModel> = props => {
           }}
         >
           <div className=" my-1 flex items-center justify-between md:my-4">
-            <p className="text-md sm:text-base md:text-palette-base tracking-wide">{t.subtotalText}</p>
+            <p
+              className="text-md sm:text-base md:text-palette-base tracking-wide"
+              data-test={testIds.cartSubTotal_Text}
+            >
+              {t.subtotalText}
+            </p>
             <ProductPrice
               price={totalAmount}
               customStyleObject={{
@@ -61,7 +68,12 @@ const OrderSummaryBox: React.FC<OrderSummaryBoxPropsModel> = props => {
           ) : null}
           <Divider my={'10px'} />
           <div className=" my-1 flex flex-wrap items-baseline justify-between flex-grow md:my-4">
-            <p className="text-md sm:text-base md:text-palette-base tracking-wide font-extrabold">{t.totalText}</p>
+            <p
+              className="text-md sm:text-base md:text-palette-base tracking-wide font-extrabold"
+              data-test={testIds.cartpage_totalAmountText}
+            >
+              {t.totalText}
+            </p>
             <ProductPrice
               isLargeSize
               price={totalAmount}
@@ -70,6 +82,7 @@ const OrderSummaryBox: React.FC<OrderSummaryBoxPropsModel> = props => {
         </div>
       </div>
       <Button
+        dataTest={testIds.cartpage_cartOrderButton}
         buttonText={t.checkout}
         background={'rgba(var(--color-primary))'}
         color={'rgba(var(--text-color))'}

@@ -7,6 +7,7 @@ export interface ButtonPropsModel {
   color: string
   handleOnClick?: () => void
   isDisabled: boolean
+  dataTest: string
 }
 
 const Button: React.FC<ButtonPropsModel> = props => {
@@ -26,6 +27,7 @@ const Button: React.FC<ButtonPropsModel> = props => {
         marginBottom={'12px'}
         __css={{ '&:active': {} }}
         onClick={props.handleOnClick}
+        data-test={props.dataTest}
       >
         {props.buttonText}
       </ButtonComp>

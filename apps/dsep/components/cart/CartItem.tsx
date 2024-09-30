@@ -13,6 +13,7 @@ import { getPayloadForSelectRequest } from '../../utilities/cart-utils'
 import { ParsedItemModel } from '../../types/search.types'
 import { Item } from '../../lib/types/select.types'
 import { ProductPrice } from '@beckn-ui/becknified-components'
+import { testIds } from '@shared/dataTestIds'
 
 interface Props {
   product: Item
@@ -80,6 +81,7 @@ const CartItem: React.FC<Props> = ({ product, setIsLoadingForCartCountChange }) 
               }}
             >
               <Image
+                data-test={testIds.cartpage_itemImage}
                 src={product.images[0].url}
                 alt={'product-name'}
                 className="object-contain"
@@ -87,6 +89,7 @@ const CartItem: React.FC<Props> = ({ product, setIsLoadingForCartCountChange }) 
             </div>
             {counter === 1 ? (
               <div
+                data-test={testIds.cartpage_trashButton}
                 onClick={() => decrement(product.id)}
                 className="p-1"
                 style={{
@@ -111,6 +114,7 @@ const CartItem: React.FC<Props> = ({ product, setIsLoadingForCartCountChange }) 
                   top: '0',
                   right: '0'
                 }}
+                data-test={testIds.cartpage_trashButton}
               >
                 <HiMinusSm
                   style={{
@@ -121,6 +125,7 @@ const CartItem: React.FC<Props> = ({ product, setIsLoadingForCartCountChange }) 
             )}
 
             <div
+              data-test={testIds.cartpage_itemName}
               className="flex-grow text-sm font-normal mb-2 sm:mb-0 mx-2 w-full text-center pt-1"
               style={{
                 direction: 'ltr',
@@ -144,6 +149,7 @@ const CartItem: React.FC<Props> = ({ product, setIsLoadingForCartCountChange }) 
               style={{
                 marginRight: '10px'
               }}
+              data-test={testIds.cartpage_totalAmountText}
             >
               {t.totalAmount}
             </p>
