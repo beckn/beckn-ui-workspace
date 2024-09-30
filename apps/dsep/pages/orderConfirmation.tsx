@@ -51,7 +51,7 @@ const OrderConfirmation = () => {
       const axiosConfig = {
         headers: {
           Authorization: `Bearer ${bearerToken}`,
-          'Content-Type': 'application/json' // You can set the content type as needed
+          'Content-Type': 'application/json'
         }
       }
       axios

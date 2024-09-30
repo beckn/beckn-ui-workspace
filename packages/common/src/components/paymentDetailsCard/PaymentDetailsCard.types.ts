@@ -3,7 +3,7 @@ import { TranslationProps } from '../settings/settings.types'
 export interface PaymentMethod {
   paymentMethod?: string
   paymentMethodNet?: string
-  img: string
+  img?: string
   category: 'Credit & Debit Cards' | 'UPI' | 'Other'
   disabled?: boolean
   dataTest?: string

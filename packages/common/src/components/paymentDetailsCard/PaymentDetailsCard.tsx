@@ -75,12 +75,14 @@ const PaymentDetailsCard: React.FC<PaymentDetailsCardProps> = ({ t, paymentMetho
                         alignItems={'center'}
                         cursor={'pointer'}
                       >
-                        <Image
-                          src={method.img}
-                          w={'62px'}
-                          h={'40px'}
-                          data-test={testIds.paymentpage_image}
-                        />
+                        {method.img && (
+                          <Image
+                            src={method.img}
+                            w={'62px'}
+                            h={'40px'}
+                            data-test={testIds.paymentpage_image}
+                          />
+                        )}
                         <Text
                           fontSize={'15px'}
                           fontWeight={400}

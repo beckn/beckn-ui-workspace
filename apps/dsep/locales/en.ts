@@ -457,7 +457,8 @@ const en: { [key: string]: string } = {
   searchLearning: ' Search Learning',
   ScholarshipConfirmation: 'We will evaluate your application ID :',
   andRespond: 'and respond as soon as possible.',
-  unabletoTrack: 'Unable to get the track url'
+  unabletoTrack: 'Unable to get the track url',
+  cardNumber: '**** **** **** 1234'
 }
 
 export default en
