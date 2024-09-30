@@ -3,11 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Box, useToast, useTheme } from '@chakra-ui/react'
 import { DOMAIN } from '@lib/config'
 import { useLanguage } from '../hooks/useLanguage'
-import {
-  areShippingAndBillingDetailsSame,
-  getInitPayload,
-  getSubTotalAndDeliveryCharges
-} from '@beckn-ui/common/src/utils'
+import { areShippingAndBillingDetailsSame, getSubTotalAndDeliveryCharges } from '@beckn-ui/common/src/utils'
 import { Checkout } from '@beckn-ui/becknified-components'
 import { useRouter } from 'next/router'
 import { ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
@@ -18,6 +14,7 @@ import { useInitMutation } from '@beckn-ui/common/src/services/init'
 import { DiscoveryRootState, ICartRootState, PaymentBreakDownModel } from '@beckn-ui/common'
 import { cartActions } from '@beckn-ui/common/src/store/cart-slice'
 import { testIds } from '@shared/dataTestIds'
+import { getInitPayload } from '../utils/payload'
 
 export type ShippingFormData = {
   name: string
@@ -28,7 +25,7 @@ export type ShippingFormData = {
 }
 
 const CheckoutPage = () => {
-  const cartItems = useSelector((state: ICartRootState) => state.cart.items)
+  const { items: cartItems, totalAmount, totalQuantity } = useSelector((state: ICartRootState) => state.cart)
 
   const theme = useTheme()
   const bgColorOfSecondary = theme.colors.secondary['100']
@@ -38,8 +35,8 @@ const CheckoutPage = () => {
     name: 'Anand',
     mobileNumber: '9886098860',
     email: 'nobody@nomail.com',
-    address: 'B005 aspire heights, Jurong East, SGP',
-    pinCode: '680230'
+    address: 'SGR Dental College Rd, Kasavanahalli Village, Marathahalli, Bengaluru, Karnataka',
+    pinCode: '560037'
   })
 
   const router = useRouter()
@@ -150,22 +147,29 @@ const CheckoutPage = () => {
     const paymentBreakdownMap: PaymentBreakDownModel = {}
     let totalPayment: number = 0
     if (isInitResultPresent()) {
-      initResponse[0].message.order.quote.breakup.forEach(breakup => {
-        let price = breakup.price.value
-        const totalAmount = cartItems?.[0]?.totalPrice
-        if (breakup.title === 'base-price') {
-          price = (totalAmount - totalAmount * (12 / 100)).toString()
+      const perUnitCost = parseFloat(initResponse[0].message.order.quote.price.value)
+      const units = cartItems?.[0]?.quantity
+      // Calculate the base cost
+      const baseCost = perUnitCost * units
+      initResponse[0].message.order.quote.breakup.forEach(breakupItem => {
+        let price = parseFloat(breakupItem.price.value)
+        console.log(breakupItem)
+        if (breakupItem.title === 'P2P Energy Cost') {
+          price = baseCost
+        } else if (['CGST', 'SGST'].some(ele => breakupItem.title.startsWith(ele))) {
+          price = baseCost * 0.05
+        } else if (['Wheeling'].some(ele => breakupItem.title.startsWith(ele))) {
+          price = units * 0.5
         }
-        if (breakup.title === 'taxes') {
-          price = (totalAmount * (12 / 100)).toString()
+
+        paymentBreakdownMap[breakupItem.title] = {
+          value: price.toString(),
+          currency: breakupItem.price.currency
         }
-        paymentBreakdownMap[breakup.title] = {
-          value: price,
-          currency: breakup.price.currency
-        }
-        totalPayment = Number(totalPayment) + Number(price)
+        totalPayment += price
       })
     }
+
     return { paymentBreakdownMap, totalPayment }
   }
 
@@ -183,9 +187,9 @@ const CheckoutPage = () => {
             data: cartItems.map(singleItem => ({
               title: singleItem.name,
               description: singleItem.short_desc,
-              quantity: singleItem.quantity,
+              quantity: totalQuantity,
               // priceWithSymbol: `${currencyMap[singleItem.price.currency]}${singleItem.totalPrice}`,
-              price: singleItem.totalPrice,
+              price: totalAmount,
               currency: singleItem.price.currency,
               image: singleItem.images?.[0].url
             }))
@@ -231,8 +235,8 @@ const CheckoutPage = () => {
             text: t.proceedToCheckout,
             dataTest: testIds.checkoutpage_proceedToCheckout,
             handleClick: () => {
-              dispatch(cartActions.clearCart())
               router.push('/paymentMode')
+              // dispatch(cartActions.clearCart())
             }
           }
         }}

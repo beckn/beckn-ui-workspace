@@ -9,12 +9,13 @@ import { Cart as BecknCart } from '@beckn-ui/becknified-components'
 import { Box, useToast } from '@chakra-ui/react'
 
 import { CartItemProps } from '@beckn-ui/becknified-components/src/components/cart/cart.types'
-import { getSelectPayload } from '@beckn-ui/common/src/utils'
 import { DiscoveryRootState, ICartRootState } from '@beckn-ui/common/lib/types'
 import { cartActions } from '@beckn-ui/common/src/store/cart-slice'
 import { DOMAIN } from '@lib/config'
 import { useSelectMutation } from '@beckn-ui/common/src/services/select'
 import { testIds } from '@shared/dataTestIds'
+import { getSelectPayload } from '../utils/payload'
+import { feedbackActions } from '@beckn-ui/common'
 
 const Cart = () => {
   const [fetchQuotes, { isLoading, data, isError }] = useSelectMutation()
@@ -30,7 +31,16 @@ const Cart = () => {
 
   useEffect(() => {
     if (items.length > 0) {
-      fetchQuotes(getSelectPayload(items, transactionId, DOMAIN))
+      try {
+        fetchQuotes(getSelectPayload(items, transactionId, DOMAIN))
+      } catch (error) {
+        dispatch(
+          feedbackActions.setToastData({
+            toastData: { message: 'Error', display: true, type: 'error', description: t.errorText }
+          })
+        )
+        router.back()
+      }
     }
   }, [totalQuantity])
 

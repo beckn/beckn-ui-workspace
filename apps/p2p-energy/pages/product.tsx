@@ -15,7 +15,7 @@ const Product = () => {
   const selectedProduct: ParsedItemModel = useSelector((state: DiscoveryRootState) => state.discovery.selectedProduct)
   const dispatch = useDispatch()
   const router = useRouter()
-  const [counter, setCounter] = useState(1000)
+  const [counter, setCounter] = useState(1)
   // const [totalPrice, setTotalPrice] = useState<number>(Number(selectedProduct.item.price.value))
 
   // const increment = () => {

@@ -9,13 +9,13 @@ import { Box } from '@chakra-ui/react'
 import Cookies from 'js-cookie'
 import { utilGenerateEllipsedText } from '@beckn-ui/molecules'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
-import { ConfirmResponseModel } from '@beckn-ui/common/lib/types'
+import { ConfirmResponseModel, ICartRootState } from '@beckn-ui/common/lib/types'
 import { checkoutActions, CheckoutRootState } from '@beckn-ui/common/src/store/checkout-slice'
 import { orderActions } from '@beckn-ui/common/src/store/order-slice'
-import { getPayloadForConfirm, getPayloadForOrderHistoryPost } from '@beckn-ui/common/src/utils'
 import { useConfirmMutation } from '@beckn-ui/common/src/services/confirm'
 import { testIds } from '@shared/dataTestIds'
 import { ORDER_CATEGORY_ID } from '../lib/config'
+import { getPayloadForConfirm } from '../utils/payload'
 
 const OrderConfirmation = () => {
   const { t } = useLanguage()
@@ -25,6 +25,7 @@ const OrderConfirmation = () => {
   const dispatch = useDispatch()
   const [orderId, setOrderId] = useState<string>()
 
+  const { totalQuantity } = useSelector((state: ICartRootState) => state.cart)
   const initResponse = useSelector((state: CheckoutRootState) => state.checkout.initResponse)
   const confirmResponse = useSelector((state: CheckoutRootState) => state.checkout.confirmResponse)
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
@@ -46,7 +47,7 @@ const OrderConfirmation = () => {
 
   useEffect(() => {
     if (initResponse && initResponse.length > 0) {
-      const payLoad = getPayloadForConfirm(initResponse)
+      const payLoad = getPayloadForConfirm(initResponse, totalQuantity)
       confirm(payLoad)
     }
   }, [])

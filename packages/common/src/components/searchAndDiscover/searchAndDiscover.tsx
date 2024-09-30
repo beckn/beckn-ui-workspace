@@ -31,7 +31,7 @@ const SearchAndDiscover: React.FC<SearchAndDiscoverProps> = ({
 
   const renderCatalog = () => {
     return items.map((catalogItem, idx) => {
-      const { item } = catalogItem
+      const { item, providerName } = catalogItem
       const product: Product = {
         id: item.id,
         images: item.images?.map(image => image?.url)!,
@@ -41,7 +41,7 @@ const SearchAndDiscover: React.FC<SearchAndDiscoverProps> = ({
         rateLabel: item.price?.rateLabel,
         rating: item.rating,
         source: 'Sold By',
-        sourceText: items[0].providerName,
+        sourceText: providerName,
         productInfo: item.productInfo
       }
 
