@@ -15,10 +15,39 @@ import { getLocalStorage, setLocalStorage } from '../../utils'
 import Button from '../button/button'
 import { FilterPropsModel } from './filter.types'
 import { testIds } from '@shared/dataTestIds'
+import { GenericDropdown } from '../GenericDropdown/GenericDropdown'
 
 const activeLabelStyles = {
-  transform: 'scale(1) translateY(-24px)'
+  // transform: 'scale(1) translateY(-24px)'
 }
+const filterPriceOption = [
+  {
+    value: '',
+    label: 'Price'
+  },
+  {
+    value: 'LowtoHigh',
+    label: 'Price -- Low to High'
+  },
+  {
+    value: 'HightoLow',
+    label: 'Price -- High to Low'
+  }
+]
+const filterRatingOption = [
+  {
+    value: '',
+    label: 'Rating'
+  },
+  {
+    value: 'RatingLowtoHigh',
+    label: 'Rating -- Low to High'
+  },
+  {
+    value: 'RatingHightoLow',
+    label: 'Rating -- High to Low'
+  }
+]
 
 const Filter = ({
   handleApplyFilter,
@@ -45,13 +74,13 @@ const Filter = ({
               label: {
                 top: 0,
                 left: 0,
-                zIndex: 2,
-                position: 'absolute',
-                backgroundColor: 'white',
+                // zIndex: 2,
+                position: 'relative',
+                // backgroundColor: 'white',
                 pointerEvents: 'none',
                 mx: 3,
                 px: 1,
-                my: 2,
+                // my: 2,
                 transformOrigin: 'left top'
               }
             }
@@ -126,9 +155,9 @@ const Filter = ({
             </Text>
           </Flex>
           <Divider mb={'44px'} />
-          <Box pb={'44px'}>
+          <Box pb={'24px'}>
             <FormControl variant="floating">
-              <Select
+              {/* <Select
                 data-test={testIds.searchpage_sortByPrice}
                 onChange={e => handleChange('searchByPrice', e.target.value)}
                 value={formData?.searchByPrice || ''}
@@ -144,20 +173,29 @@ const Filter = ({
                 <option value="">Price</option>
                 <option value="LowtoHigh">Price -- Low to High</option>
                 <option value="HightoLow">Price -- High to Low</option>
-              </Select>
+              </Select> */}
               <FormLabel
                 className="dropDown_label"
                 fontSize="15px"
               >
                 Sort By Price
               </FormLabel>
+              <GenericDropdown
+                options={filterPriceOption}
+                placeholder="Select Information Category"
+                selectedValue={formData?.searchByPrice || ''}
+                setSelectedValue={value => {
+                  // dispatch(updatePolicyType(value || ''))
+                  handleChange('searchByPrice', value)
+                }}
+              />
             </FormControl>
           </Box>
 
           {sortByRating && (
-            <Box pb={'44px'}>
+            <Box pb={'26px'}>
               <FormControl variant="floating">
-                <Select
+                {/* <Select
                   data-test={testIds.searchpage_filterByRating}
                   onChange={e => handleChange('searchByRating', e.target.value)}
                   value={formData?.searchByRating || ''}
@@ -174,13 +212,22 @@ const Filter = ({
                   <option value="">Rating</option>
                   <option value="RatingLowtoHigh">Rating -- Low to High</option>
                   <option value="RatingHightoLow">Rating -- High to Low</option>
-                </Select>
+                </Select> */}
                 <FormLabel
                   className="dropDown_label"
                   fontSize="15px"
                 >
                   Filter By Rating
                 </FormLabel>
+                <GenericDropdown
+                  options={filterRatingOption}
+                  placeholder="Select Information Category"
+                  selectedValue={formData?.searchByRating || ''}
+                  setSelectedValue={value => {
+                    // dispatch(updatePolicyType(value || ''))
+                    handleChange('searchByRating', value)
+                  }}
+                />
               </FormControl>
             </Box>
           )}

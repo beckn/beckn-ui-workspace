@@ -9,7 +9,8 @@ const PoweredBy: React.FC<PoweredByProps> = ({ logoSrc, altText = 'logo', powere
     <Flex
       justifyContent="center"
       alignItems="center"
-      width="calc(100% - 40px)"
+      width="100%"
+      left={0}
       position="fixed"
       bottom="15px"
       data-test={testIds.homepage_footer}

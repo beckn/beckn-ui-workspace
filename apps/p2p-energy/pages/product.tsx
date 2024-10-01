@@ -35,7 +35,7 @@ const Product = () => {
   // }
 
   const handleOnInput = (e: any) => {
-    setCounter(Number(e.target.value))
+    if (e.target.value.match(/^[1-9]\d*$/)) setCounter(Number(e.target.value))
   }
 
   if (!selectedProduct) {
@@ -102,6 +102,7 @@ const Product = () => {
           name="quantity-input"
           onChange={handleOnInput}
           type="number"
+          // min={'1'}
           value={counter.toString()}
           _focusVisible={{
             borderColor: 'inherit',
