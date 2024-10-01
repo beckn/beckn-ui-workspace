@@ -18,7 +18,14 @@ const SearchAndDiscover: React.FC<SearchAndDiscoverProps> = ({
   catalogProps,
   noProduct
 }) => {
-  const { searchKeyword, setSearchKeyword, fetchDataOnSearch, selectedInput, placeholder } = searchProps
+  const {
+    searchKeyword,
+    setSearchKeyword,
+    fetchDataOnSearch,
+    selectedInput,
+    placeholder,
+    showSearchField = true
+  } = searchProps
   const { isFilterOpen, sortByRating, handleApplyFilter, handleResetFilter, handleFilterOpen, handleFilterClose } =
     filterProps || {}
   const { viewDetailsClickHandler } = catalogProps
@@ -85,18 +92,20 @@ const SearchAndDiscover: React.FC<SearchAndDiscoverProps> = ({
             display="flex"
             alignItems="center"
           >
-            <SearchBar
-              searchString={searchKeyword}
-              selectedInput={selectedInput}
-              placeholder={placeholder}
-              handleChange={(text: string) => {
-                setSearchKeyword(text)
-                localStorage.removeItem('optionTags')
-                setLocalStorage('optionTags', { name: text })
-                window.dispatchEvent(new Event('storage-optiontags'))
-                fetchDataOnSearch()
-              }}
-            />
+            {showSearchField && (
+              <SearchBar
+                searchString={searchKeyword}
+                selectedInput={selectedInput}
+                placeholder={placeholder}
+                handleChange={(text: string) => {
+                  setSearchKeyword(text)
+                  localStorage.removeItem('optionTags')
+                  setLocalStorage('optionTags', { name: text })
+                  window.dispatchEvent(new Event('storage-optiontags'))
+                  fetchDataOnSearch()
+                }}
+              />
+            )}
             {filterProps && (isSmallScreen || isMediumScreen) && (
               <Box
                 onClick={handleFilterOpen}

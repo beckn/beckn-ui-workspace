@@ -7,5 +7,6 @@ export interface TopSheetComponentProps extends TranslationProps {
   searchPlaceholder?: string
   onlineOfflineSwitch?: boolean
   onlineStatus?: boolean
+  homePagePath?: string
   handleOnSwitch?: () => void
 }

@@ -86,7 +86,7 @@ export const getSelectPayload = (
 }
 
 export const getInitPayload = async (
-  deliveryAddress: ShippingFormInitialValuesType,
+  deliveryAddress: any,
   billingAddress: ShippingFormInitialValuesType | Record<string, any>,
   cartItems: CartItemForRequest[],
   transaction_id: string,

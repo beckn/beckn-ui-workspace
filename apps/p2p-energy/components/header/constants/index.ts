@@ -1,14 +1,14 @@
 type PathnameObjectType = Record<string, string>
 
 // -------------------------------- Top Header constants --------------------------------
-const appLogoBlackList: string[] = []
-const homeIconBlackList = ['/', '/paymentMode']
-const menuIconWhiteList = ['/', '/search']
-const topHeaderBlackList: string[] = []
+const appLogoBlackList: string[] = ['/']
+const homeIconBlackList = ['/', '/homePage', '/paymentMode']
+const menuIconWhiteList = ['/', '/homePage', '/search']
+const topHeaderBlackList: string[] = ['/']
 const languageIconWhiteList: string[] = []
 
 // -------------------------------- Sub Header constants --------------------------------
-const backIconList = ['/']
+const backIconList = ['/', '/homePage']
 
 const headerNames: PathnameObjectType = {
   '/checkoutPage': 'Review Purchase Order',
@@ -38,6 +38,7 @@ const headerBlackList = [
   '/orderConfirmation',
   'feedback',
   '/',
+  '/homePage',
   '/paymentMode',
   '/invoiceDetails',
   '/orderCancellation',
@@ -53,12 +54,13 @@ const cartIconBlackList: string[] = [
   '/paymentMode',
   '/invoiceDetails',
   '/',
+  '/homePage',
   '/orderCancellation'
 ]
 
-const bottomHeaderBlackList = ['/orderConfirmation', '/', '/feedback']
+const bottomHeaderBlackList = ['/orderConfirmation', '/', '/homePage', '/feedback']
 const orderIconList = ['/orderDetails']
-const invoiceDownloadIcon = ['/']
+const invoiceDownloadIcon = ['/', '/homePage']
 
 export default {
   TopHeader: {

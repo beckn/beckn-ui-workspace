@@ -7,6 +7,7 @@ export interface SearchAndDiscoverProps {
     searchKeyword: string
     selectedInput?: string
     placeholder?: string
+    showSearchField?: boolean
     setSearchKeyword: (value: string) => void
     fetchDataOnSearch: () => void
   }

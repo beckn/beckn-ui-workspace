@@ -66,7 +66,7 @@ const en: { [key: string]: string } = {
   other: 'Other',
   confirmOrder: 'Confirm Order',
   phonePay: 'PhonePe UPI',
-  cashOnDelivery: 'Cash on Delivery',
+  cashOnDelivery: 'Adjust with Monthly Billing',
   netBanking: ' Net Banking',
   orderHistory: 'Order History',
   invoiceDetails: 'Invoice Details',

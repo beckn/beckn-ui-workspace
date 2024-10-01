@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import axios from '@services/axios'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useRouter } from 'next/router'
 
 import { SearchAndDiscover } from '@beckn-ui/common'
 import { useLanguage } from '@hooks/useLanguage'
-import { ParsedItemModel } from '@beckn-ui/common/lib/types'
+import { IGeoLocationSearchPageRootState, ParsedItemModel } from '@beckn-ui/common/lib/types'
 import { discoveryActions } from '@beckn-ui/common/src/store/discovery-slice'
 import { DOMAIN } from '@lib/config'
 import { Product } from '@beckn-ui/becknified-components'
 import { testIds } from '@shared/dataTestIds'
 import { parseSearchlist } from '../utils/search-utils'
+import { Box } from '@chakra-ui/react'
 
 const Search = () => {
   const [items, setItems] = useState<ParsedItemModel[]>([])
@@ -24,6 +25,10 @@ const Search = () => {
   const dispatch = useDispatch()
   const { t } = useLanguage()
 
+  const { geoAddress: originGeoAddress, geoLatLong: originGeoLatLong } = useSelector(
+    (state: IGeoLocationSearchPageRootState) => state.geoLocationSearchPageUI
+  )
+
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
   const fetchDataForSearch = () => {
@@ -34,6 +39,7 @@ const Search = () => {
       context: {
         domain: DOMAIN
       },
+      location: originGeoLatLong ? originGeoLatLong : `${router.query?.lat},${router.query?.long}`,
       quantity: {
         available: {
           measure: {
@@ -135,33 +141,36 @@ const Search = () => {
   }
 
   return (
-    <SearchAndDiscover
-      items={items}
-      searchProps={{
-        searchKeyword: searchKeyword as string,
-        placeholder: 'Search by energy units (kWh)',
-        setSearchKeyword,
-        fetchDataOnSearch: fetchDataForSearch
-      }}
-      filterProps={{
-        isFilterOpen: isFilterOpen,
-        sortByRating: false,
-        handleFilterOpen,
-        handleFilterClose,
-        handleResetFilter,
-        handleApplyFilter
-      }}
-      loaderProps={{
-        isLoading,
-        loadingText: t.pleaseWait,
-        loadingSubText: t.searchLoaderSubText,
-        dataTest: testIds.loadingIndicator
-      }}
-      catalogProps={{
-        viewDetailsClickHandler: handleViewDetailsClickHandler
-      }}
-      noProduct={key => t.noProduct}
-    />
+    <Box mt={'1rem'}>
+      <SearchAndDiscover
+        items={items}
+        searchProps={{
+          searchKeyword: searchKeyword as string,
+          placeholder: 'Search by energy units (kWh)',
+          setSearchKeyword,
+          fetchDataOnSearch: fetchDataForSearch,
+          showSearchField: false
+        }}
+        // filterProps={{
+        //   isFilterOpen: isFilterOpen,
+        //   sortByRating: false,
+        //   handleFilterOpen,
+        //   handleFilterClose,
+        //   handleResetFilter,
+        //   handleApplyFilter
+        // }}
+        loaderProps={{
+          isLoading,
+          loadingText: t.pleaseWait,
+          loadingSubText: t.searchLoaderSubText,
+          dataTest: testIds.loadingIndicator
+        }}
+        catalogProps={{
+          viewDetailsClickHandler: handleViewDetailsClickHandler
+        }}
+        noProduct={key => t.noProduct}
+      />
+    </Box>
   )
 }
 

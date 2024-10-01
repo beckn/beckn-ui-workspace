@@ -4,7 +4,6 @@ import { Box, useToast, useTheme } from '@chakra-ui/react'
 import { DOMAIN } from '@lib/config'
 import { useLanguage } from '../hooks/useLanguage'
 import { areShippingAndBillingDetailsSame, getSubTotalAndDeliveryCharges } from '@beckn-ui/common/src/utils'
-import { Checkout } from '@beckn-ui/becknified-components'
 import { useRouter } from 'next/router'
 import { ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
 import { isEmpty } from '@beckn-ui/common/src/utils'
@@ -15,6 +14,7 @@ import { DiscoveryRootState, ICartRootState, PaymentBreakDownModel } from '@beck
 import { cartActions } from '@beckn-ui/common/src/store/cart-slice'
 import { testIds } from '@shared/dataTestIds'
 import { getInitPayload } from '../utils/payload'
+import Checkout from '@components/checkout'
 
 export type ShippingFormData = {
   name: string
@@ -31,12 +31,13 @@ const CheckoutPage = () => {
   const bgColorOfSecondary = theme.colors.secondary['100']
   const toast = useToast()
 
-  const [shippingFormData, setShippingFormData] = useState<ShippingFormInitialValuesType>({
+  const [shippingFormData, setShippingFormData] = useState<ShippingFormInitialValuesType | Record<string, string>>({
     name: 'Anand',
     mobileNumber: '9886098860',
-    email: 'nobody@nomail.com',
-    address: 'SGR Dental College Rd, Kasavanahalli Village, Marathahalli, Bengaluru, Karnataka',
-    pinCode: '560037'
+    email: 'anand@gmail.com',
+    address: 'Flat 208, A Block, Janakpuri West, New Delhi',
+    pinCode: '110018',
+    meterNumber: 'MT451667'
   })
 
   const router = useRouter()
@@ -60,25 +61,30 @@ const CheckoutPage = () => {
       }
     },
     {
-      name: 'mobileNumber',
-      label: t.formNumber,
-      type: 'number',
-      validate: (value: string) => {
-        if (!value.trim()) return t.errorNumber
-        if (!/^\d{10}$/.test(value)) return t.errorNumber2
-        return undefined
-      }
+      name: 'meterNumber',
+      label: 'Meter Number',
+      type: 'text'
     },
-    {
-      name: 'email',
-      label: t.formEmail,
-      type: 'email',
-      validate: (value: string) => {
-        if (!value.trim()) return t.requiredEmail
-        if (!/\S+@\S+\.\S+/.test(value)) return t.invalidEmail
-        return undefined
-      }
-    },
+    // {
+    //   name: 'mobileNumber',
+    //   label: t.formNumber,
+    //   type: 'number',
+    //   validate: (value: string) => {
+    //     if (!value.trim()) return t.errorNumber
+    //     if (!/^\d{10}$/.test(value)) return t.errorNumber2
+    //     return undefined
+    //   }
+    // },
+    // {
+    //   name: 'email',
+    //   label: t.formEmail,
+    //   type: 'email',
+    //   validate: (value: string) => {
+    //     if (!value.trim()) return t.requiredEmail
+    //     if (!/\S+@\S+\.\S+/.test(value)) return t.invalidEmail
+    //     return undefined
+    //   }
+    // },
     {
       name: 'address',
       label: t.formAddress,
@@ -201,7 +207,7 @@ const CheckoutPage = () => {
             shippingDetails: {
               name: shippingFormData.name,
               location: shippingFormData.address!,
-              number: shippingFormData.mobileNumber,
+              meterNumber: (shippingFormData as any).meterNumber,
               title: t.billing
             },
             shippingForm: {

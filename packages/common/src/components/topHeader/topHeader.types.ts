@@ -25,4 +25,5 @@ export interface HeaderProps extends TranslationProps {
   appLogo?: string
   menuItems?: MenuItems[]
   settingsMenu?: boolean
+  homePagePath?: string
 }

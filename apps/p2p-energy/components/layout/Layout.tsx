@@ -13,15 +13,19 @@ import { Box, Text, useToast } from '@chakra-ui/react'
 import { Toast } from '@beckn-ui/molecules/src/components'
 import { feedbackActions, FeedbackRootState, ToastType } from '@beckn-ui/common/src/store/ui-feedback-slice'
 import { testIds } from '@shared/dataTestIds'
+import { GeoLocationInputList, IGeoLocationSearchPageRootState } from '@beckn-ui/common'
 
 const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const { locale } = useLanguage()
   const router = useRouter()
-  const isHomepage = router.pathname === '/homePage'
-  const isHome = router.pathname === '/'
+  const isHomepage = router.pathname === '/homepage'
+  const isHome = router.pathname === '/' || router.pathname === '/homePage'
   const isSearch = router.pathname === '/search'
   const isSignUp = router.pathname === '/signUp'
   const isSearchPage = router.pathname === '/search'
+  const geoLocationSearchPageVisible = useSelector((state: IGeoLocationSearchPageRootState) => {
+    return state.geoLocationSearchPageUI.geoLocationSearchPageVisible
+  })
 
   const toast = useToast()
   const dispatch = useDispatch()
@@ -53,25 +57,29 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   return (
     <div>
       <Head>
-        <title>Beckn Grid Connect</title>
+        <title>Open Spark</title>
       </Head>
       <div className={`${styles.container} ${isHomepage ? styles.homepage : styles.minHeight}`}>
         <NextNProgress height={7} />
         <Header />
-        <Box
-          maxW={['unset', 'unset', 'unset', '70rem']}
-          w="100%"
-          margin="0 auto"
-          className={`${styles.main} ${!isHomepage ? styles.withPadding : ''} ${
-            !isHomepage && !isSearch ? styles.withMargin : ''
-          } ${isHomepage ? styles.homepageMargin : isSearch ? styles.searchMargin : ''} 
+        {!geoLocationSearchPageVisible ? (
+          <Box
+            maxW={['unset', 'unset', 'unset', '70rem']}
+            w="100%"
+            margin="0 auto"
+            className={`${styles.main} ${!isHomepage ? styles.withPadding : ''} ${
+              !isHomepage && !isSearch ? styles.withMargin : ''
+            } ${isHomepage ? styles.homepageMargin : isSearch ? styles.searchMargin : ''} 
                ${isSignUp ? styles.withMarginSignUp : ''} 
               ${isSearchPage ? styles.searchPageMargin : ''}
               ${isHome ? styles.homepageMargin : ''}
               `}
-        >
-          {children}
-        </Box>
+          >
+            {children}
+          </Box>
+        ) : (
+          <GeoLocationInputList></GeoLocationInputList>
+        )}
       </div>
       <ToastContainer
         autoClose={2000}

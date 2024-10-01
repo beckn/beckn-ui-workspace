@@ -40,7 +40,8 @@ const Header: React.FC<HeaderProps> = ({
       color: 'red'
     }
   ],
-  settingsMenu = true
+  settingsMenu = true,
+  homePagePath = '/'
 }) => {
   const {
     blackList: { appLogoBlackList, homeIconBlackList, languageIconWhiteList, menuIconWhiteList }
@@ -86,7 +87,7 @@ const Header: React.FC<HeaderProps> = ({
                   const user = getLocalStorage('userPhone') as string
                   localStorage.clear()
                   setLocalStorage('userPhone', user)
-                  router.push(`/`)
+                  router.push(homePagePath)
                 }}
                 src="/images/Home_icon.svg"
                 alt="home Icon"

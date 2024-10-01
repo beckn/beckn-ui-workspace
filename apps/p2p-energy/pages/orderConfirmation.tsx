@@ -81,7 +81,7 @@ const OrderConfirmation = () => {
             {
               text: 'Go Back Home',
               handleClick: () => {
-                router.push('/')
+                router.push('/homePage')
                 dispatch(cartActions.clearCart())
                 dispatch(checkoutActions.clearState())
               },

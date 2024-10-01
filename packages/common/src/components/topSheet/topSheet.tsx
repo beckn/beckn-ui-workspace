@@ -31,14 +31,15 @@ const TopSheet: React.FC<TopSheetComponentProps> = ({
   searchPlaceholder = t('searchforlocation'),
   onlineOfflineSwitch = false,
   onlineStatus,
-  handleOnSwitch
+  handleOnSwitch,
+  homePagePath = '/'
 }) => {
   const theme = useTheme()
   const router = useRouter()
   const { isOpen, onOpen, onClose } = useDisclosure()
   const dispatch = useDispatch()
 
-  const isSearchPage = router.pathname === '/'
+  const isSearchPage = router.pathname === homePagePath
 
   const geoLocationSearchPageSelectedAddress = useSelector(
     (state: IGeoLocationSearchPageRootState) => state.geoLocationSearchPageUI.geoAddress

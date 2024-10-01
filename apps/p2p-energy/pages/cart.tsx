@@ -45,7 +45,7 @@ const Cart = () => {
   }, [totalQuantity])
 
   const handleShopButton = () => {
-    router.push('/')
+    router.push('/homePage')
   }
 
   const onOrderClick = () => {

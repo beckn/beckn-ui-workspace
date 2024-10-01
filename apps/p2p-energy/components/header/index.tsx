@@ -41,6 +41,7 @@ const Header = () => {
             }
           }}
           settingsMenu={false}
+          homePagePath="/homePage"
         />
       )}
       {renderBottomHeader && (

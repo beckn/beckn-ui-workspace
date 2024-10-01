@@ -9,7 +9,8 @@ import {
   DiscoveryReducer,
   OrderReducer,
   feedbackReducer,
-  cartSliceReducer
+  cartSliceReducer,
+  geoMapLocationSearchReducer
 } from '@beckn-ui/common'
 
 const persistConfig = {
@@ -26,7 +27,8 @@ const appReducer = combineReducers({
   status: statusReducer,
   discovery: DiscoveryReducer,
   orders: OrderReducer,
-  feedback: feedbackReducer
+  feedback: feedbackReducer,
+  geoLocationSearchPageUI: geoMapLocationSearchReducer
 })
 
 const rootReducer = (state: any, action: any) => {
