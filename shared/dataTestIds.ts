@@ -1,6 +1,6 @@
 const testIds = {
   // application wise base url
-  url_base: process.env.CYPRESS_BASE_URL || 'http://localhost:3000',
+  url_base: process.env.CYPRESS_BASE_URL || 'http://localhost:3010',
   url_base_retail: process.env.CYPRESS_BASE_URL || 'http://localhost:3002',
   url_base_tourism: process.env.CYPRESS_BASE_URL || 'http://localhost:3001',
 
@@ -131,6 +131,7 @@ const testIds = {
   checkoutpage_taxes: 'taxes',
   checkoutpage_totalPayment: 'totalPayment',
   checkoutpage_proceedToCheckout: 'proceed-to-checkout',
+  item_provider: 'item-provider',
   //payment page
   paymentpage_radioButton: 'radio-button',
   paymentpage_confirmButton: 'confirm-button',
@@ -292,7 +293,14 @@ const testIds = {
   orderDetailspage_order_fulfilled: 'orderDetailspage-order-fulfilled',
   orderDetails_tourism_QR_external_link: 'orderDetails-tourism-QR-external-link',
   orderDetails_tourism_QR_procedd_button: 'orderDetails-tourism-QR-procedd-button',
-  orderDetails_QR_accordian: 'orderDetails-QR-accordian'
+  orderDetails_QR_accordian: 'orderDetails-QR-accordian',
+
+  // DSEP
+  dsep_payment_basePrice: 'Course Fee',
+  dsep_course_discount: 'Course Discount',
+  dsep_payment_totalPayment: 'totalPayment',
+  myScholarship_button: 'myScholarship-button',
+  orderConfirmation_myLearning: 'orderConfirmation-myLearning'
 }
 
 export { testIds }

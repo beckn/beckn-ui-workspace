@@ -1,0 +1,157 @@
+{
+  "data": [
+    {
+      "context": {
+        "domain": "dsep:courses",
+        "action": "on_select",
+        "version": "1.1.0",
+        "bpp_id": "bpp-ps-network-strapi1-prod.becknprotocol.io",
+        "bpp_uri": "https://bpp-ps-network-strapi1-prod.becknprotocol.io",
+        "country": "IND",
+        "city": "std:080",
+        "location": {
+          "country": {
+            "name": "India",
+            "code": "IND"
+          },
+          "city": {
+            "name": "Bangalore",
+            "code": "std:080"
+          }
+        },
+        "bap_id": "bap-ps-network-prod.becknprotocol.io",
+        "bap_uri": "https://bap-ps-network-prod.becknprotocol.io",
+        "transaction_id": "dd3d7bbc-fd7e-4baa-851f-ab3d7efba90b",
+        "message_id": "089bbfc8-bd48-4d6c-8f1c-3637365a7c5e",
+        "ttl": "PT10M",
+        "timestamp": "2024-09-27T10:57:18.909Z"
+      },
+      "message": {
+        "order": {
+          "type": "DEFAULT",
+          "quote": {
+            "price": {
+              "value": "2000",
+              "currency": "INR"
+            },
+            "breakup": [
+              {
+                "title": "Course Fee",
+                "price": {
+                  "currency": "INR",
+                  "value": "2000"
+                }
+              },
+              {
+                "title": "Course Discount",
+                "price": {
+                  "currency": "INR",
+                  "value": "-1000"
+                }
+              }
+            ]
+          },
+          "provider": {
+            "id": "1",
+            "name": "Edureka",
+            "short_desc": "Online course provider",
+            "long_desc": "Online course provider",
+            "rating": "4.8",
+            "images": {
+              "url": "https://miro.medium.com/v2/resize:fit:1200/0*CnvREDstX45u4ruk.png",
+              "size_type": "sm"
+            },
+            "fulfillments": [
+              {
+                "id": "8",
+                "type": "RECORDED COURSE",
+                "rating": "4.5",
+                "rateable": true,
+                "tracking": false
+              }
+            ]
+          },
+          "items": [
+            {
+              "id": "1",
+              "name": "java springboot book One",
+              "short_desc": "java springboot book One",
+              "long_desc": "java springboot book One",
+              "images": [
+                {
+                  "url": "https://miro.medium.com/v2/resize:fit:1200/0*CnvREDstX45u4ruk.png",
+                  "size_type": "sm"
+                }
+              ],
+              "price": {
+                "value": "2000",
+                "currency": "INR"
+              },
+              "rating": "4.3",
+              "rateable": true,
+              "quantity": {
+                "available": {
+                  "count": 100,
+                  "measure": {
+                    "value": "100",
+                    "unit": "kWh"
+                  }
+                }
+              },
+              "categories": [
+                {
+                  "id": "1",
+                  "name": "IT"
+                }
+              ],
+              "locations": [
+                {
+                  "id": "6",
+                  "city": "Bengaluru",
+                  "state": "Karnataka",
+                  "country": "India"
+                }
+              ],
+              "tags": [
+                {
+                  "display": true,
+                  "list": [
+                    {
+                      "code": "springboot",
+                      "value": "springboot"
+                    }
+                  ]
+                },
+                {
+                  "display": true,
+                  "list": [
+                    {
+                      "code": "course-duration",
+                      "value": "30 days"
+                    }
+                  ]
+                },
+                {
+                  "display": true,
+                  "list": [
+                    {
+                      "code": "course-url",
+                      "value": "https://www.edureka.co/spring-certification-course"
+                    }
+                  ]
+                }
+              ],
+              "fulfillments": [
+                {
+                  "id": "8",
+                  "type": "RECORDED COURSE",
+                  "rating": "4.5"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -5,6 +5,7 @@ interface ScholarshipAddButtonProps {
   image?: string
   text: string
   handleButtonClick: () => void
+  dataTest: string
 }
 
 const ScholarshipAddButton: React.FC<ScholarshipAddButtonProps> = props => {
@@ -19,6 +20,7 @@ const ScholarshipAddButton: React.FC<ScholarshipAddButtonProps> = props => {
           padding={'15px 20px'}
           onClick={props.handleButtonClick}
           cursor="pointer"
+          data-test={props.dataTest}
         >
           <Flex alignItems={'center'}>
             {/* <Image src={props.image} /> */}

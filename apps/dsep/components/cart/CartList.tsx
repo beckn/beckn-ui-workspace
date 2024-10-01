@@ -10,6 +10,7 @@ import ScholarshipAddButton from '../scholarship/scholarshipAddButton/Scholarshi
 import { useRouter } from 'next/router'
 import { useLanguage } from '../../hooks/useLanguage'
 import { Typography } from '@beckn-ui/molecules'
+import { testIds } from '@shared/dataTestIds'
 
 interface CartListPropsModel {
   setIsLoadingForCartCountChange: Function
@@ -67,6 +68,7 @@ const CartList: React.FC<CartListPropsModel> = ({ setIsLoadingForCartCountChange
           <ScholarshipAddButton
             image={'+'}
             text={t.checkforScholarship}
+            dataTest={testIds.myScholarship_button}
             handleButtonClick={() => router.push('/myScholarship')}
           />
         )}
