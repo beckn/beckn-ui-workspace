@@ -1,3 +1,4 @@
+import React from 'react'
 import { Logos } from '../../../lib/types'
 
 export interface CardType {
@@ -17,6 +18,7 @@ export type BlockName =
   | 'searchByLocation'
   | 'geoLocationInput'
   | 'cardType'
+  | 'customComponent'
 export interface HomePageContentProps {
   blockOrder?: BlockName[]
   logos?: Logos
@@ -53,6 +55,7 @@ export interface HomePageContentProps {
     geoLocationSearchPageSelectedAddress: string
     navigateToSearchResult: () => void
   }
+  customComponent?: React.ReactElement<any, any> | null
   footerProps: {
     poweredByLogoSrc: string
     poweredByText: string

@@ -18,7 +18,7 @@ const headerNames: PathnameObjectType = {
   '/orderCancellation': 'Order Cancel',
   '/feedback': '',
   '/search': 'Search results',
-  '/checkout': 'Billing & Shipping'
+  '/checkout': 'Billing'
 }
 
 const headerFrenchNames: PathnameObjectType = {

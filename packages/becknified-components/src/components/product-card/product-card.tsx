@@ -182,7 +182,7 @@ const ProductCard: React.FC<ProductCardProps> = props => {
                 justifyContent={'space-between'}
                 alignItems={'center'}
                 position={'absolute'}
-                bottom={'11px'}
+                bottom={'6px'}
                 width={'calc(100% - 30px)'}
               >
                 <ProductPrice

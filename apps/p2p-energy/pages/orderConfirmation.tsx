@@ -16,6 +16,7 @@ import { useConfirmMutation } from '@beckn-ui/common/src/services/confirm'
 import { testIds } from '@shared/dataTestIds'
 import { ORDER_CATEGORY_ID } from '../lib/config'
 import { getPayloadForConfirm } from '../utils/payload'
+import { cartActions } from '@beckn-ui/common'
 
 const OrderConfirmation = () => {
   const { t } = useLanguage()
@@ -81,6 +82,7 @@ const OrderConfirmation = () => {
               text: 'Go Back Home',
               handleClick: () => {
                 router.push('/')
+                dispatch(cartActions.clearCart())
                 dispatch(checkoutActions.clearState())
               },
               disabled: false,

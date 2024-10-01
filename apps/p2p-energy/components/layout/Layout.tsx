@@ -53,7 +53,7 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   return (
     <div>
       <Head>
-        <title>P2P Energy</title>
+        <title>Beckn Grid Connect</title>
       </Head>
       <div className={`${styles.container} ${isHomepage ? styles.homepage : styles.minHeight}`}>
         <NextNProgress height={7} />

@@ -19,7 +19,8 @@ const HomePageContent: React.FC<HomePageContentProps> = ({
   searchByLocation,
   geoLocationInput,
   footerProps,
-  CardSelector
+  CardSelector,
+  customComponent
 }) => {
   const { name, title, description } = headerProps || {}
   const {
@@ -241,6 +242,8 @@ const HomePageContent: React.FC<HomePageContentProps> = ({
             ))}
           </Flex>
         )
+      case 'customComponent':
+        return <>{customComponent}</>
       default:
         return <></>
     }

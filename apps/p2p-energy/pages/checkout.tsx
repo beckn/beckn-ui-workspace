@@ -132,7 +132,7 @@ const CheckoutPage = () => {
     if (data) {
       const { id, type } =
         selectResponse[0].message.order.fulfillments?.[0] ||
-        (selectResponse[0].message.order.provider as any)?.fulfillments[0]
+        (selectResponse[0].message.order.provider as any)?.fulfillments?.[0]
       getInitPayload(shippingFormData, {}, cartItems, transactionId, DOMAIN, { id, type }).then(res => {
         return initialize(res)
       })
@@ -202,18 +202,18 @@ const CheckoutPage = () => {
               name: shippingFormData.name,
               location: shippingFormData.address!,
               number: shippingFormData.mobileNumber,
-              title: t.shipping
+              title: t.billing
             },
             shippingForm: {
               formFieldConfig: formFieldConfig,
               onSubmit: formSubmitHandler,
-              submitButton: { text: t.saveShippingDetails },
+              submitButton: { text: t.saveBillingDetails },
               values: shippingFormData,
               onChange: data => setShippingFormData(data)
             },
-            sectionTitle: t.shipping,
-            formTitle: t.addShippingDetails,
-            sectionSubtitle: t.addShippingDetails,
+            sectionTitle: t.billing,
+            formTitle: t.addBillingDetails,
+            sectionSubtitle: t.addBillingDetails,
             dataTest: testIds.checkoutpage_shippingDetails
           },
           payment: {

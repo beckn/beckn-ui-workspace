@@ -35,7 +35,7 @@ const Product = () => {
   // }
 
   const handleOnInput = (e: any) => {
-    if (e.target.value.match(/^[1-9]\d*$/)) setCounter(Number(e.target.value))
+    if (e.target.value === '' || e.target.value.match(/^[0-9]\d*$/)) setCounter(Number(e.target.value))
   }
 
   if (!selectedProduct) {
@@ -114,7 +114,9 @@ const Product = () => {
         dataTest={testIds.productpage_addTocartButton}
         text={t.order}
         color={'#ffffff'}
+        disabled={counter === 0}
         handleClick={() => {
+          dispatch(cartActions.clearCart())
           dispatch(
             cartActions.addItemToCart({
               product: selectedProduct,
@@ -122,11 +124,6 @@ const Product = () => {
             })
           )
           router.push('/cart')
-          // dispatch(
-          //   feedbackActions.setToastData({
-          //     toastData: { message: 'Success', display: true, type: 'success', description: t.addedToCart }
-          //   })
-          // )
         }}
       />
     </Box>
