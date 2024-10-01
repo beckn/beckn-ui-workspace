@@ -12,3 +12,11 @@ export interface VehicleDetailsModel {
   vehicleModel: string
   powerSource: string
 }
+
+export interface ProviderDetailsModel {
+  id: string
+  name: string
+  short_desc: string
+  long_desc: string
+  rating: string
+}

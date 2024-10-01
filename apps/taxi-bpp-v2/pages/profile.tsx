@@ -3,18 +3,19 @@ import { Box, Divider, Flex, Image } from '@chakra-ui/react'
 import { DetailCard } from '@beckn-ui/becknified-components'
 import { Typography } from '@beckn-ui/molecules'
 import { useGetMyProfileMutation } from '@services/RiderService'
-import { UserDetailsModel, VehicleDetailsModel } from '@lib/types/profile'
+import { UserDetailsModel, VehicleDetailsModel, ProviderDetailsModel } from '@lib/types/profile'
 
 const ProfilePage = () => {
   const [personalDetails, setPersonalDetails] = useState<UserDetailsModel>()
   const [vehicleDetails, setVehicleDetails] = useState<VehicleDetailsModel>()
+  const [providerDetails, setProviderDetails] = useState<ProviderDetailsModel>()
 
   const [getMyProfile] = useGetMyProfileMutation()
 
   const getMyProfileDetails = async () => {
     const data: any = await getMyProfile({})
     if (data && data?.data) {
-      const { user_details, vehicle_details } = data.data
+      const { user_details, vehicle_details, provider_details } = data.data
       setPersonalDetails({
         name: user_details.name,
         email: user_details.email,
@@ -26,6 +27,13 @@ const ProfilePage = () => {
         vehicleMake: vehicle_details.vehicle_make,
         vehicleModel: vehicle_details.vehicle_model,
         powerSource: vehicle_details.power_source
+      })
+      setProviderDetails({
+        id: provider_details.id,
+        name: provider_details.name,
+        short_desc: provider_details.short_desc,
+        long_desc: provider_details.long_desc,
+        rating: provider_details.rating
       })
     }
   }
@@ -50,6 +58,14 @@ const ProfilePage = () => {
         { label: vehicleDetails?.vehicleMake, img: '/images/manufacturing.svg' },
         { label: vehicleDetails?.vehicleModel, img: '/images/directions_car.svg' },
         { label: vehicleDetails?.powerSource, img: '/images/oil_barrel.svg' }
+      ]
+    },
+    {
+      profileTitle: 'Provider Details',
+      details: [
+        { label: providerDetails?.name, img: '/images/local_taxi.svg' },
+        { label: providerDetails?.short_desc, img: '/images/description.svg' },
+        { label: providerDetails?.rating, img: '/images/Star.svg' }
       ]
     }
   ]
