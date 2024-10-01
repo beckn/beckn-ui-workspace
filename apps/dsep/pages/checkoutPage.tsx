@@ -19,6 +19,7 @@ import LoaderWithMessage from '@beckn-ui/molecules/src/components/LoaderWithMess
 import PaymentDetails from '@beckn-ui/becknified-components/src/components/checkout/payment-details'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import axios from '../services/axios'
+import { testIds } from '@shared/dataTestIds'
 
 export type ShippingFormData = {
   name: string
@@ -183,6 +184,7 @@ const CheckoutPage = () => {
         </DetailCard>
       </Box>
       <ShippingSection
+        dataTest={testIds.checkoutpage_shippingDetails}
         color={color}
         sectionSubtitle={t.addBillingdetailsBtnText}
         addButtonImage={addBillingButton}
@@ -252,6 +254,7 @@ const CheckoutPage = () => {
             pb={'10px'}
             mt={'20px'}
             justifyContent={'space-between'}
+            data-test={testIds.checkoutpage_paymentDetails}
           >
             <Text fontSize={'17px'}>{t.paymentText}</Text>
           </Flex>
@@ -271,6 +274,7 @@ const CheckoutPage = () => {
       )}
       <Box m={'20px 0px'}>
         <BecknButton
+          dataTest={testIds.checkoutpage_proceedToCheckout}
           disabled={!!!initData}
           children={t.confirm}
           className="checkout_btn "

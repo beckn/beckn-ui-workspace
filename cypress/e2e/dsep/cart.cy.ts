@@ -64,4 +64,25 @@ describe('Cart Page Tests', () => {
       cy.getByData(testIds.cartpage_cartOrderButton).click()
     })
   })
+
+  context('should Click on Check for Scholarship', () => {
+    const searchTerm = 'Java'
+    beforeEach(() => {
+      cy.visit(`${testIds.url_base}${testIds.url_home}`)
+      cy.performSearch(searchTerm, {
+        fixture: 'DSEP/searchPage/searchResults.json'
+      })
+      cy.getByData(testIds.searchpage_products).first().click()
+      cy.url().should('include', testIds.url_product)
+      cy.getByData(testIds.productpage_addTocartButton).click()
+      cy.intercept('POST', '/select', { fixture: 'DSEP/cart/selectResult.json' }).as('selectCall')
+      cy.getByData(testIds.cartButton).click()
+      cy.wait('@selectCall')
+    })
+
+    it('Should Click on Check for Scholarship and Navigate to myScholarship page', () => {
+      cy.getByData(testIds.myScholarship_button).click()
+      cy.url().should('include', '/myScholarship')
+    })
+  })
 })

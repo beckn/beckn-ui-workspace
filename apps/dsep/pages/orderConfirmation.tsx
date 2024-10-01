@@ -10,6 +10,7 @@ import { getPayloadForConfirmRequest, getPostOrderPayload } from '../utilities/c
 import { InitResponseModel } from '../lib/types/init.types'
 import { ConfirmResponseModel } from '../lib/types/confirm.types'
 import axios from '../services/axios'
+import { testIds } from '@shared/dataTestIds'
 
 const OrderConfirmation = () => {
   const { t } = useLanguage()
@@ -92,7 +93,8 @@ const OrderConfirmation = () => {
               },
               disabled: false,
               variant: 'solid',
-              colorScheme: 'primary'
+              colorScheme: 'primary',
+              dataTest: testIds.orderConfirmation_viewOrderButton
             },
             {
               text: t.myLearnings,
@@ -101,7 +103,8 @@ const OrderConfirmation = () => {
               },
               disabled: false,
               variant: 'outline',
-              colorScheme: 'primary'
+              colorScheme: 'primary',
+              dataTest: testIds.orderConfirmation_myLearning
             }
           ]
         }}

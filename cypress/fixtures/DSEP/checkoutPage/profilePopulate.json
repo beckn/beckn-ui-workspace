@@ -1,0 +1,18 @@
+{
+  "data": {
+    "id": 109,
+    "attributes": {
+      "name": "ankit Brahm Bhatt",
+      "address": ", , Bengaluru, Karnataka, India",
+      "createdAt": "2024-07-29T10:30:37.844Z",
+      "updatedAt": "2024-09-16T09:48:46.059Z",
+      "publishedAt": "2024-07-29T10:30:37.839Z",
+      "phone": "3030909080",
+      "zip_code": "415222",
+      "documents": {
+        "data": []
+      }
+    }
+  },
+  "meta": {}
+}
