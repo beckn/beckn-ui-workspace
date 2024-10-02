@@ -18,8 +18,8 @@ import { GeoLocationInputList, IGeoLocationSearchPageRootState } from '@beckn-ui
 const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const { locale } = useLanguage()
   const router = useRouter()
-  const isHomepage = router.pathname === '/homepage'
-  const isHome = router.pathname === '/' || router.pathname === '/homePage'
+  const isHomepage = router.pathname === '/'
+  const isHome = router.pathname === '/homePage'
   const isSearch = router.pathname === '/search'
   const isSignUp = router.pathname === '/signUp'
   const isSearchPage = router.pathname === '/search'
@@ -64,12 +64,12 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
         <Header />
         {!geoLocationSearchPageVisible ? (
           <Box
-            maxW={['unset', 'unset', 'unset', '70rem']}
+            maxW={['unset', 'unset', 'unset', isHomepage ? 'unset' : '70rem']}
             w="100%"
             margin="0 auto"
             className={`${styles.main} ${!isHomepage ? styles.withPadding : ''} ${
               !isHomepage && !isSearch ? styles.withMargin : ''
-            } ${isHomepage ? styles.homepageMargin : isSearch ? styles.searchMargin : ''} 
+            } ${isHome ? styles.homepageMargin : isSearch ? styles.searchMargin : ''} 
                ${isSignUp ? styles.withMarginSignUp : ''} 
               ${isSearchPage ? styles.searchPageMargin : ''}
               ${isHome ? styles.homepageMargin : ''}

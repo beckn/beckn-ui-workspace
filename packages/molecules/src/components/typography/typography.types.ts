@@ -1,3 +1,4 @@
+import { SystemStyleObject } from '@chakra-ui/react'
 import React from 'react'
 
 export type TextVariant =
@@ -22,4 +23,5 @@ export interface TypographyProps {
   style?: React.CSSProperties
   onClick?: (event: React.MouseEvent<HTMLElement>) => void
   dataTest?: string
+  sx?: SystemStyleObject | undefined
 }
