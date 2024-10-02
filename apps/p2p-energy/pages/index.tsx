@@ -9,7 +9,7 @@ import chatIcon from '@public/images/chat_icon.svg'
 import whatsappIcon from '@public/images/whatsapp.svg'
 import becknGeminiIcon from '@public/images/beckn_gemini.svg'
 import becknOnixIcon from '@public/images/beckn_onix.svg'
-import becknGridIcon from '@public/images/beckn_grid.svg'
+import becknGridIcon from '@public/images/uei-logo.D.svg'
 
 const LandingPage = () => {
   const { t } = useLanguage()
@@ -30,7 +30,7 @@ const LandingPage = () => {
   return (
     <>
       <Box
-        backgroundColor={'#000000'}
+        backgroundColor={'#212121'}
         width={'100vw'}
         height={'100vh'}
         display={'flex'}
@@ -38,6 +38,7 @@ const LandingPage = () => {
         gap={'0.5rem'}
       >
         <Box
+          className="text-wrapper-innr"
           display={'flex'}
           flexDirection={'column'}
           padding="2rem 1rem 1rem 1rem"
@@ -47,6 +48,7 @@ const LandingPage = () => {
           left={{ base: 'calc(100vw - 100%)', md: 'calc(100vw - 80%)' }}
         >
           <Typography
+            className="responsive"
             color="#C7C7C7"
             fontFamily="Noto Serif"
             fontWeight="300"
@@ -59,9 +61,10 @@ const LandingPage = () => {
               width: { base: '16rem', md: '100%' },
               fontSize: { base: '24px', md: '34px' }
             }}
-            text="Worried about high electricity bills?"
+            text="Want to contribute to a cleaner greener future?"
           />
-          <Typography
+          {/* <Typography
+            className="responsive"
             color="#C7C7C7"
             fontFamily="Noto Serif"
             fontWeight="300"
@@ -75,20 +78,22 @@ const LandingPage = () => {
               fontSize: { base: '24px', md: '34px' }
             }}
             text="Got surplus energy to sell?"
-          />
+          /> */}
           <Typography
+            className="responsive"
             color="#fff"
             fontFamily="Noto Serif"
             fontWeight="600"
             fontStyle="italic"
             sx={{
               lineHeight: { base: '26px', md: '26px' },
-              width: { base: '8rem', md: '100%' },
+              width: { base: '9rem', md: '100%' },
               fontSize: { base: '24px', md: '34px' }
             }}
-            text="Save more, Earn more"
+            text="Become a green warrior"
           />
           <Typography
+            className="responsive"
             color="#C7C7C7"
             fontFamily="Noto Serif"
             fontWeight="300"
@@ -103,9 +108,9 @@ const LandingPage = () => {
             src={becknGridIcon}
             alt="beckn_grid_icon"
             width={'12.8rem'}
-            height={'3rem'}
           />
           <Typography
+            className="responsive last-text"
             color="#C7C7C7"
             fontWeight="300"
             sx={{
@@ -129,7 +134,7 @@ const LandingPage = () => {
             width={{ base: '11.4rem', md: '19.4rem' }}
             height={{ base: '10rem', md: '17rem' }}
             top={{ base: '5rem', md: '2rem' }}
-            left={{ base: '11rem', md: '30rem' }}
+            right={{ base: '0', md: '0' }}
             position="absolute"
             backgroundImage="/images/graph.svg"
             backgroundSize="cover"
