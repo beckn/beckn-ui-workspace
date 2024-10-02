@@ -6,7 +6,7 @@ import { Typography } from '@beckn-ui/molecules'
 import Footer from '@components/footer'
 import ClickableCard from '@components/ClickableCard'
 import chatIcon from '@public/images/chat_icon.svg'
-import whatsappIcon from '@public/images/whatsapp.svg'
+import energyIcon from '@public/images/energy-icon.svg'
 import becknGeminiIcon from '@public/images/beckn_gemini.svg'
 import becknOnixIcon from '@public/images/beckn_onix.svg'
 import becknGridIcon from '@public/images/uei-logo.D.svg'
@@ -176,9 +176,9 @@ const LandingPage = () => {
             />
 
             <ClickableCard
-              headerIcon={whatsappIcon}
+              headerIcon={energyIcon}
               title="Open Spark"
-              description="Open Spark is an Energy Trading App that allows you to purchase locally produced energy trading app"
+              description="Open Spark is an energy Trading App that allows you to purchase locally produced energy"
               backgroundColor="#D9E5F8"
               footerIcon={becknOnixIcon}
               handleOnClick={e => handleOnCardClick(e, 'beckn-grid-connect')}
