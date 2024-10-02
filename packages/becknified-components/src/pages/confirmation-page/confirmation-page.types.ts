@@ -8,6 +8,7 @@ export interface ConfirmationPageProps {
     gratefulMessage: string
     orderIdMessage?: string
     trackOrderMessage?: string
+    orderSummaryMessage?: string
   }
   className?: string
   dataTestConfirmImage?: string

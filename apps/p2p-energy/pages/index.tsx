@@ -21,7 +21,7 @@ const LandingPage = () => {
       window.location.replace(uniqueUrl)
     }
     if (navigateTo === 'beckn-bot') {
-      const url = 'https://wa.me/916364334426'
+      const url = 'https://wa.me/916364334426?text=Hi'
       window.open(url, '_blank', 'noopener,noreferrer')
     }
     e.preventDefault()

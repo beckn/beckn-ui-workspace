@@ -12,7 +12,15 @@ const ConfirmationPage: React.FC<ConfirmationPageProps> = ({
   dataTestTrackOrder = 'track-order',
   dataTestConfirmImage = 'confrimPage-image'
 }) => {
-  const { iconSrc, buttons, successOrderMessage, gratefulMessage, orderIdMessage, trackOrderMessage } = schema
+  const {
+    iconSrc,
+    buttons,
+    successOrderMessage,
+    gratefulMessage,
+    orderIdMessage,
+    orderSummaryMessage,
+    trackOrderMessage
+  } = schema
 
   return (
     <Flex
@@ -61,6 +69,13 @@ const ConfirmationPage: React.FC<ConfirmationPageProps> = ({
             <Typography
               style={{ fontSize: '1rem' }}
               text={orderIdMessage}
+              dataTest={dataTestOrderId}
+            />
+          )}
+          {orderSummaryMessage && (
+            <Typography
+              style={{ fontSize: '1rem' }}
+              text={orderSummaryMessage}
               dataTest={dataTestOrderId}
             />
           )}

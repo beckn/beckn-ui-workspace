@@ -74,9 +74,10 @@ const OrderConfirmation = () => {
         className="kuza-order-confornation"
         schema={{
           iconSrc: orderConfirmmark,
-          successOrderMessage: 'ORDER SUCCESFULL',
+          successOrderMessage: 'ORDER SUCCESSFULL',
           gratefulMessage: 'Thank you for your order!',
           orderIdMessage: orderId ? `Order number is: ${utilGenerateEllipsedText(orderId)}` : '',
+          orderSummaryMessage: `Your order is confirmed and the actual energy transfer will happen tomorrow from 10:00 AM`,
           buttons: [
             {
               text: 'Go Back Home',
