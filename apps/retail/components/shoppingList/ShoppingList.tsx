@@ -113,6 +113,7 @@ const ShoppingList: React.FC<ShoppingListProps> = ({
                       <Checkbox
                         display={'flex'}
                         alignItems={'center'}
+                        data-test={'chat_gpt_list'}
                         pb={'10px'}
                         checked={selectedValues.includes(item)}
                         onChange={() => handleCheckboxChange(item)}
@@ -144,6 +145,7 @@ const ShoppingList: React.FC<ShoppingListProps> = ({
             </Flex>
             <BecknButton
               children={t.selectDeliveryLocation}
+              dataTest={'chat_gpt_button'}
               handleClick={selectDeliveryLocation}
               disabled={false}
             />
