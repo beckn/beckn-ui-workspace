@@ -54,6 +54,7 @@ const SelectDeliveryModal: React.FC<SelectDeliveryModalProps> = props => {
           defaultValue="2"
           pt={'20px'}
           pb={'20px'}
+          data-test={'chat-Gpt-List-Radio-Button'}
         >
           <Stack spacing={4}>
             <Radio
@@ -90,6 +91,7 @@ const SelectDeliveryModal: React.FC<SelectDeliveryModalProps> = props => {
             router.push(`/search?searchTerm=${selectedItems}&category=${convertTourismCategoryToRetail(category)}`)
           }}
           disabled={false}
+          dataTest={'chat_gpt_address_button'}
         />
         <Box
           textAlign={'center'}
