@@ -10,10 +10,20 @@ interface ClickableCardProps {
   backgroundColor?: string
   footerIcon?: string
   handleOnClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
+  className?: string
 }
 
 const ClickableCard = (props: ClickableCardProps) => {
-  const { headerIcon, title, description, isNew = false, backgroundColor = '#fff', handleOnClick, footerIcon } = props
+  const {
+    headerIcon,
+    title,
+    description,
+    isNew = false,
+    backgroundColor = '#fff',
+    handleOnClick,
+    footerIcon,
+    className
+  } = props
 
   return (
     <>
@@ -26,6 +36,7 @@ const ClickableCard = (props: ClickableCardProps) => {
         _hover={{
           border: '1px solid #212121'
         }}
+        className={className}
       >
         <Flex gap={'0.4rem'}>
           <Image

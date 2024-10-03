@@ -166,6 +166,7 @@ const LandingPage = () => {
             gap={'1rem'}
           >
             <ClickableCard
+              className="lisa-section"
               headerIcon={chatIcon}
               title="Talk to Lisa"
               description="Lisa is an AI agent that helps prosumers and consumers execute peer-to-peer energy trades"
