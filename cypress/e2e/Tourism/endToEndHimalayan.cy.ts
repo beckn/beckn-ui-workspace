@@ -312,7 +312,7 @@ describe('end to end testing', () => {
       cy.getByData(testIds.auth_loginButton).should('not.be.disabled').click()
       cy.getByData(testIds.homepage_viewChatGPTList).click()
       cy.wait(12000)
-      cy.getByData('chat_gpt_list').eq(0).click()
+      cy.getByData(testIds.chat_gpt_list).eq(0).click()
       cy.getByData('chat_gpt_button').click()
       cy.getByData('chat-Gpt-List-Radio-Button').eq(1).click()
       cy.getByData('chat_gpt_address_button').click()
@@ -503,8 +503,7 @@ describe('end to end testing', () => {
       cy.getByData(testIds.home_icon).click()
       cy.wait(100)
       cy.getByData(testIds.threeDots).click()
-      //Test id not available
-      cy.get('[data-test="Logout-text-click"] > .chakra-text').click()
+      cy.getByData(testIds.Logout_text_click).click()
     })
   })
 })

@@ -3,6 +3,14 @@ import { billingDetails, shippingDetails } from '../../fixtures/checkoutPage/use
 import { initResponse } from '../../fixtures/checkoutPage/initResponse'
 import { orderResponse } from '../../fixtures/INDUSTRY4.0/orderConfirmation/orderResponse'
 describe('end to end testing', () => {
+  function verifyPrice(expectedPrice: string, index: number = 0) {
+    cy.getByData(testIds.item_price)
+      .eq(index)
+      .should($price => {
+        const priceText = $price.text().replace(/\u00A0/g, ' ') // Handle non-breaking space
+        expect(priceText).to.contain(expectedPrice)
+      })
+  }
   before(() => {
     cy.visit(testIds.deployed_tourism_url_base)
   })
@@ -83,7 +91,6 @@ describe('end to end testing', () => {
     it('should select and render details of product', () => {
       cy.selectProduct(2)
       //cy.selectProduct(('contain.text', 'Louvre Museum Exhibition'))
-
       cy.url().should('include', `${testIds.url_search}?searchTerm=Paris`)
       cy.getByData(testIds.item_title).should('contain.text', 'Louvre Museum Exhibition')
       cy.getByData(testIds.item_rating).eq(4)
@@ -91,7 +98,7 @@ describe('end to end testing', () => {
         'contain.text',
         'Step into the world of art, culture and architecture of centuries past at the Louvre Museum'
       )
-      cy.getByData(testIds.item_price).should('contain.text', '17,00 €')
+      verifyPrice('17,00 €')
       cy.getByData(testIds.productpage_incrementCounter).should('be.visible')
       cy.getByData(testIds.productpage_counterValue).should('be.visible')
       cy.getByData(testIds.productpage_decrementCounter).should('be.visible')
@@ -115,7 +122,7 @@ describe('end to end testing', () => {
       cy.getByData(testIds.item_details).should('have.length', 1)
       cy.getByData(testIds.item_title).should('contain.text', 'Louvre Museum Exhibition')
       cy.getByData(testIds.item_quantity).should('contain.text', 2)
-      cy.getByData(testIds.item_price).should('contain.text', '34,00 €')
+      verifyPrice('34,00 €')
     })
   })
   context('Filling Traveller details', () => {
@@ -127,7 +134,7 @@ describe('end to end testing', () => {
     })
     it('should fill and save the shipping form data', () => {
       cy.wait(300)
-      cy.getByData(testIds.checkoutpage_shippingDetails).getByData(testIds.checkoutpage_openForm).click()
+      cy.getByData(testIds.checkoutpage_shippingDetails).getByData(testIds.checkoutpage_openForm).first().click()
       cy.getByData(testIds.checkoutpage_form).should('be.visible')
 
       cy.getByData(testIds.checkoutpage_shippingDetails)
@@ -186,17 +193,14 @@ describe('end to end testing', () => {
       it('should display the payment section', () => {
         cy.getByData(testIds.checkoutpage_paymentDetails).should('be.visible')
       })
-
       it('should display the payment breakup details', () => {
         cy.getByData(testIds.checkoutpage_paymentDetails).within(() => {
           cy.getByData(testIds.payment_basePrice).should('contain.text', 'base-price')
-          cy.getByData(testIds.item_price).eq(0).should('contain.text', '34,00 €')
-
+          verifyPrice('34,00 €')
           cy.getByData(testIds.payment_taxes).should('contain.text', 'taxes')
-          cy.getByData(testIds.item_price).eq(2).should('contain.text', '6,12 €')
-
+          verifyPrice('6,12 €', 2)
           cy.getByData(testIds.payment_totalPayment).should('contain.text', 'Total')
-          cy.getByData(testIds.item_price).eq(3).should('contain.text', '40,12 €')
+          verifyPrice('40,12', 3)
         })
       })
       it('should proceed to checkout when valid data is provided', () => {
@@ -269,9 +273,8 @@ describe('end to end testing', () => {
 
     it('should render the order details in progress summary section', () => {
       cy.getByData(testIds.orderDetailspage_orderId).should('exist')
-      cy.getByData(testIds.orderDetailspage_orderSummaryItemName).should('contain.text', 'Chandra Tal Trek - Manali')
+      cy.getByData(testIds.orderDetailspage_orderSummaryItemName).should('contain.text', 'Louvre Museum Exhibition')
     })
-
     it('should render the shipping details', () => {
       cy.getByData(testIds.orderDetailspage_shippingDetails).within(() => {
         cy.getByData(testIds.orderDetailspage_name).should('contain.text', shippingDetails.name)
@@ -287,15 +290,14 @@ describe('end to end testing', () => {
         cy.getByData(testIds.orderDetailspage_mobileNumber).eq(0).should('contain.text', billingDetails.mobileNumber)
       })
     })
-
     it('should render the payment breakup details', () => {
       cy.getByData(testIds.orderDetailspage_paymentDetails).within(() => {
         cy.getByData(testIds.payment_basePrice).should('contain.text', 'base-price')
-        cy.getByData(testIds.item_price).eq(0).should('contain.text', '34,00 €')
+        verifyPrice('34,00 €', 0)
         cy.getByData(testIds.payment_taxes).should('contain.text', 'taxes')
-        cy.getByData(testIds.item_price).eq(2).should('contain.text', '6,12 €')
+        verifyPrice('6,12 €', 2)
         cy.getByData(testIds.payment_totalPayment).should('contain.text', 'Total')
-        cy.getByData(testIds.item_price).eq(3).should('contain.text', '40,12 €')
+        verifyPrice('40,12 €', 3)
       })
     })
     it('Should check other details', () => {

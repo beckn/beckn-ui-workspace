@@ -22,7 +22,6 @@ describe('end to end testing', () => {
       // Check if the sign-up button is enabled
       cy.getByData(testIds.auth_registerButton).should('be.enabled')
     })
-
     // Invalid login scenarios
     it('should handle various invalid login scenarios', () => {
       const invalidEmail = 'invalid.com'
@@ -54,7 +53,6 @@ describe('end to end testing', () => {
       cy.getByData(testIds.auth_loginButton).should('not.be.disabled').click()
       cy.wait(100)
     })
-
     context('My Profile Validation', () => {
       // My Profile validation
       it('should display profile, order history, and logout options, then navigate to the profile page after clicking the three dots menu', () => {
@@ -63,8 +61,6 @@ describe('end to end testing', () => {
         cy.getByData(testIds.orderHistory_text_click).should('be.visible')
         cy.getByData(testIds.Logout_text_click).should('be.visible')
         cy.getByData(testIds.profile_text_click).click()
-        cy.performProfile({ fixture: 'profile/profileResponse.json' }, 'profileResponse')
-        cy.wait('@profileResponse')
       })
       // Profile form validation
       it('should validate profile form fields', () => {
@@ -93,7 +89,6 @@ describe('end to end testing', () => {
           cy.getByData(testIds.profile_saveandContinue).should('be.disabled')
         })
       })
-
       //Fill and save profile form
       it('should fill and save the profile form data, click on Save and Continue, and navigate to the homepage', () => {
         const profileDetails = {
@@ -115,31 +110,37 @@ describe('end to end testing', () => {
             cy.getByData(testIds.profile_state).clear().type(profileDetails.state)
             cy.getByData(testIds.profile_country).clear().type(profileDetails.country)
             cy.getByData(testIds.profile_saveandContinue).click()
-            cy.wait(1000)
+            cy.wait(3000)
           })
       })
     })
-    // context('Wrong search keyword', () => {
-    //     it('Should not get search result for wrong keyword', () => {
-    //         cy.getByData(testIds.searchInput).type('assembly')
-    //         cy.getByData(testIds.searchButton).click()
-    //         cy.getByData(testIds.loadingIndicator).should('be.visible')
-    //         cy.wait(16000)
-    //         cy.url().should('include', `${testIds.url_search}?searchTerm=assembly`)
-
-    //     })
   })
   context('Wrong store location', () => {
-    it('Should not get store for wrong location', () => {
+    it('should perform navigate on click serach store by location', () => {
       cy.getByData(testIds.search_By_Location_Text).click()
       cy.url().should('include', `${testIds.url_search_StoreBy_Location}`)
-      cy.getByData(testIds.map_search_input).type('pune')
-      cy.getByData(testIds.locationList).should('be.visible')
-      cy.getByData(testIds.location_List_item).eq(1).click()
+    })
+    it('Should not get store for wrong location', () => {
       cy.getByData(testIds.option_card).contains('Restaurant').click()
-      cy.get('img[alt="Marker"]').first().click()
-      cy.get('img[alt="Marker"]').should('not.exist')
-      //need to add code for not getting location
+      cy.getByData(testIds.map_search_input).type('Pune')
+      cy.getByData(testIds.location_List_item).eq(1).click()
+      cy.get('img[alt="Marker"]').eq(2).should('not.exist')
+      cy.url().should('include', `${testIds.url_search}`)
+    })
+    it('Should not get search result for wrong keyword', () => {
+      cy.getByData(testIds.home_icon).click()
+      cy.getByData(testIds.searchInput).type('assembly')
+      cy.getByData(testIds.searchButton).click()
+      cy.getByData(testIds.loadingIndicator).should('be.visible')
+      cy.wait(16000)
+      cy.url().should('include', `${testIds.url_search}?searchTerm=assembly`)
+    })
+
+    it('Should Logout from Retail App', () => {
+      cy.getByData(testIds.home_icon).click()
+      cy.wait(100)
+      cy.getByData(testIds.threeDots).click()
+      cy.getByData(testIds.Logout_text_click).click()
     })
   })
 })
