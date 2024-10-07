@@ -6,6 +6,8 @@ import { formatCoords } from '@utils/geoLocation-utils'
 import { useMemo, useState, useEffect, useCallback, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import MyLocation from '@public/images/my_location.svg'
+import { testIds } from '@shared/dataTestIds'
+import { Box } from '@chakra-ui/react'
 
 interface MapProps {
   startNav: boolean
@@ -203,7 +205,7 @@ const Map: React.FC<MapProps> = (props: MapProps) => {
 
   const anchorPoint = new window.google.maps.Point(41, 75)
   return (
-    <>
+    <Box data-test={testIds.mobility_map}>
       {isLoaded && (
         <GoogleMap
           options={mapOptions}
@@ -271,7 +273,7 @@ const Map: React.FC<MapProps> = (props: MapProps) => {
           )}
         </GoogleMap>
       )}
-    </>
+    </Box>
   )
 }
 

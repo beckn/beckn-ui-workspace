@@ -9,6 +9,8 @@ import { feedbackActions } from '@beckn-ui/common'
 import { useRouter } from 'next/router'
 import { CabServiceDetailsRootState } from '@lib/types/cabService'
 import AlertModal from '@components/alertModal/alertModal'
+import { testIds } from '@shared/dataTestIds'
+import { Box } from '@chakra-ui/react'
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
@@ -133,7 +135,7 @@ const PickUpDropOffContainer = (props: PickUpDropOffContainerProps) => {
   }
 
   return (
-    <>
+    <Box data-test={testIds.mobility_pickup_dropoff}>
       <PickUpDropOff
         pickup={pickup!}
         dropoff={dropoff!}
@@ -151,7 +153,7 @@ const PickUpDropOffContainer = (props: PickUpDropOffContainerProps) => {
           handleAlertSubmit={handleAlertSubmit}
         />
       )}
-    </>
+    </Box>
   )
 }
 

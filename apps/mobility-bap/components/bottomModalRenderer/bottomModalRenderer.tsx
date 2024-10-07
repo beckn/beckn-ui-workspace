@@ -7,6 +7,7 @@ import RideDetailsCardContainer from '@components/ride-details/rideDetailsCardCo
 import RideDetailsContainer from '@components/ride-details/rideDetailsContainer'
 import SearchRideFormContainer from '@components/searchRideForm/searchRideFormContainer'
 import { CabServiceDetailsRootState } from '@lib/types/cabService'
+import { testIds } from '@shared/dataTestIds'
 import { clearCancelTokenSource, setCabResultFound } from '@store/cabService-slice'
 import { SelectRideRootState } from '@store/selectRide-slice'
 import { RIDE_STATUS_CODE } from '@utils/general'
@@ -129,7 +130,7 @@ const BottomModalRenderer = (props: BottomModalRendererProps) => {
     }
   }
 
-  return <BottomDrawer>{renderDrawerContent()}</BottomDrawer>
+  return <BottomDrawer data-test={testIds.mobility_info_content_container}>{renderDrawerContent()}</BottomDrawer>
 }
 
 export default BottomModalRenderer

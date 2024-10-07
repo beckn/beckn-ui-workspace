@@ -5,6 +5,7 @@ import { GeoLocationType, PickUpDropOffModel, toggleLocationSearchPageVisibility
 import { BottomModal, Typography } from '@beckn-ui/molecules'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import { useDispatch } from 'react-redux'
+import { testIds } from '@shared/dataTestIds'
 
 interface PickUpDropOffProps {
   pickup: PickUpDropOffModel
@@ -39,6 +40,7 @@ const PickUpDropOff: React.FC<PickUpDropOffProps> = ({ pickup, dropoff, handleCl
         fontSize={'15px'}
         fontWeight="500"
         alignItems={'center'}
+        data-test={testIds.mobility_on_focus_pickup}
         onClick={() => onFocusChange('pick-up')}
       >
         <Image
@@ -54,6 +56,7 @@ const PickUpDropOff: React.FC<PickUpDropOffProps> = ({ pickup, dropoff, handleCl
             text="Pickup"
             fontSize="15px"
             fontWeight="400"
+            dataTest={testIds.mobility_pickup_label}
           />
           <Box
             as="span"
@@ -66,6 +69,7 @@ const PickUpDropOff: React.FC<PickUpDropOffProps> = ({ pickup, dropoff, handleCl
           <Box
             fontWeight="500"
             opacity={0.6}
+            data-test={testIds.mobility_pickup_address}
           >
             Enter Pickup
           </Box>
@@ -74,6 +78,7 @@ const PickUpDropOff: React.FC<PickUpDropOffProps> = ({ pickup, dropoff, handleCl
             text={pickup?.address}
             fontWeight="500"
             fontSize="15px"
+            dataTest={testIds.mobility_pickup_address}
             style={{
               display: '-webkit-box',
               WebkitBoxOrient: 'vertical',
@@ -93,6 +98,7 @@ const PickUpDropOff: React.FC<PickUpDropOffProps> = ({ pickup, dropoff, handleCl
         fontSize={'15px'}
         fontWeight="500"
         mb="40px"
+        data-test={testIds.mobility_on_focus_dropoff}
         onClick={() => onFocusChange('drop-off')}
       >
         <Image
@@ -108,6 +114,7 @@ const PickUpDropOff: React.FC<PickUpDropOffProps> = ({ pickup, dropoff, handleCl
             text="Dropoff"
             fontSize="15px"
             fontWeight="400"
+            dataTest={testIds.mobility_dropoff_label}
           />
           <Box
             as="span"
@@ -121,6 +128,7 @@ const PickUpDropOff: React.FC<PickUpDropOffProps> = ({ pickup, dropoff, handleCl
             text={dropoff?.address}
             fontWeight="500"
             fontSize="15px"
+            dataTest={testIds.mobility_dropoff_address}
             style={{
               display: '-webkit-box',
               WebkitBoxOrient: 'vertical',
@@ -134,6 +142,7 @@ const PickUpDropOff: React.FC<PickUpDropOffProps> = ({ pickup, dropoff, handleCl
           <Box
             fontWeight="500"
             opacity={0.6}
+            data-test={testIds.mobility_dropoff_address}
           >
             Enter Destination
           </Box>
@@ -141,6 +150,7 @@ const PickUpDropOff: React.FC<PickUpDropOffProps> = ({ pickup, dropoff, handleCl
       </Flex>
       <BecknButton
         text="Search Rides"
+        dataTest={testIds.mobility_search_btn}
         handleClick={handleClickOnSearchRides}
         disabled={dropoff?.address === '' || pickup?.address === ''}
       />

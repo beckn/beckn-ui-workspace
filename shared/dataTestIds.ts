@@ -313,7 +313,21 @@ const testIds = {
   orderDetailspage_orderId_container: 'orderDetailspage-orderId-container',
   orderDetailspage_paymentDetails_container: 'orderDetailspage-paymentDetails-container',
   accordion_click: 'accordion-click',
-  edit_button_Text: 'edit-button-Text'
+  edit_button_Text: 'edit-button-Text',
+
+  // mobility-bap
+  mobility_map_container: 'map-container',
+  mobility_map: 'map',
+  mobility_info_content_container: 'info-content-container',
+  mobility_pickup_dropoff: 'pickup-dropoff',
+  mobility_alert_modal: 'alert-modal',
+  mobility_pickup_label: 'pickup-label',
+  mobility_dropoff_label: 'dropoff-label',
+  mobility_pickup_address: 'pickup-address',
+  mobility_dropoff_address: 'dropoff-address',
+  mobility_on_focus_pickup: 'on-focus-pickup',
+  mobility_on_focus_dropoff: 'on-focus-dropoff',
+  mobility_search_btn: 'search-btn'
 }
 
 export { testIds }

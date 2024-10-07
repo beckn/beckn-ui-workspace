@@ -3,6 +3,7 @@ import { Box, Flex, Image } from '@chakra-ui/react'
 import { BottomModal, Typography } from '@beckn-ui/molecules'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import alertIcon from '@public/images/alert_icon.svg'
+import { testIds } from '@shared/dataTestIds'
 
 interface AlertModalProps {
   isOpen: boolean
@@ -22,6 +23,7 @@ const AlertModal: React.FC<AlertModalProps> = ({
   const { t } = useLanguage()
   return (
     <BottomModal
+      dataTest={testIds.mobility_alert_modal}
       isOpen={isOpen}
       title={
         <Flex

@@ -13,6 +13,7 @@ import BottomModalRenderer from '@components/bottomModalRenderer/bottomModalRend
 import { useRouter } from 'next/router'
 import { getExperienceTypeGelocation } from '@utils/general'
 import axios from '@services/axios'
+import { testIds } from '@shared/dataTestIds'
 
 const Homepage = () => {
   const MapWithNoSSR: any = dynamic(() => import('../components/Map'), { ssr: false })
@@ -196,7 +197,10 @@ const Homepage = () => {
   }, [pickup, dropoff, startNavigation, showMyLocation])
 
   return (
-    <div className="overflow-hidden max-h-[90vh]">
+    <div
+      className="overflow-hidden max-h-[90vh]"
+      data-test={testIds.mobility_map_container}
+    >
       {renderMap()}
 
       <BottomModalRenderer
