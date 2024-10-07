@@ -1,4 +1,6 @@
 import ShippingForm from '@beckn-ui/becknified-components/src/components/checkout/shipping-form'
+import { Box } from '@chakra-ui/react'
+import { testIds } from '@shared/dataTestIds'
 import React, { FC, useState } from 'react'
 
 interface UpdateAddressDetailFormPropsModel {
@@ -20,13 +22,15 @@ const UpdateAddressDetailForm: FC<UpdateAddressDetailFormPropsModel> = props => 
   }
 
   return (
-    <ShippingForm
-      onSubmit={handleFormSubmit}
-      values={shippingDetails}
-      onChange={handleFormChange}
-      //   TODO :- I have to add loader in this button when address is updating
-      submitButton={{ text: 'Update' }}
-    />
+    <Box data-test={testIds.orderDetailspage_updateShippingDetails}>
+      <ShippingForm
+        onSubmit={handleFormSubmit}
+        values={shippingDetails}
+        onChange={handleFormChange}
+        //   TODO :- I have to add loader in this button when address is updating
+        submitButton={{ text: 'Update' }}
+      />
+    </Box>
   )
 }
 

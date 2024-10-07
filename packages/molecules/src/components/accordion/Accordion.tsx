@@ -10,11 +10,15 @@ import {
   CardBody
 } from '@chakra-ui/react'
 import { AccordionProps } from './accordion.types'
+import { testIds } from '@shared/dataTestIds'
 
 const Accordion: React.FC<AccordionProps> = props => {
   const { accordionHeader, children, onToggle, className = '' } = props
   return (
-    <Box pb={'20px'}>
+    <Box
+      pb={'20px'}
+      data-test={props.dataTest}
+    >
       <Card>
         <AccordionComp
           onChange={onToggle}
@@ -51,6 +55,7 @@ const Accordion: React.FC<AccordionProps> = props => {
                   position={'absolute'}
                   top="0"
                   right={'0'}
+                  data-test={testIds.accordion_click}
                 />
               </AccordionButton>
             </CardBody>

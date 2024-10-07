@@ -6,6 +6,7 @@ import ThreeDots from '../../public/images/threeDots.svg'
 import { useLanguage } from '../../hooks/useLanguage'
 import { StatusData } from '../../lib/types/status.types'
 import ViewMoreOrderModal from './ViewMoreOrderModal'
+import { testIds } from '@shared/dataTestIds'
 
 interface OrderOverviewPropsModel {
   statusResPerBpp: StatusData
@@ -34,6 +35,7 @@ const OrderOverview: FC<OrderOverviewPropsModel> = props => {
         fontSize={'17px'}
         alignItems={'center'}
         justifyContent={'space-between'}
+        data-test={testIds.orderDetailspage_orderId_container}
       >
         <Typography
           style={{
@@ -45,11 +47,13 @@ const OrderOverview: FC<OrderOverviewPropsModel> = props => {
           fontSize={'17px'}
           text={`${t.orderId}: ${id}`}
           variant={'subTitleRegular'}
+          dataTest={testIds.orderDetailspage_orderId}
         />
         <Image
           onClick={handleMenuDotsClick}
           src={ThreeDots}
           alt="icon-to-open-menu-modal"
+          data-test={testIds.orderDetailspage_otherOptions}
         />
       </Flex>
       <Flex
@@ -66,6 +70,7 @@ const OrderOverview: FC<OrderOverviewPropsModel> = props => {
                 whiteSpace: 'nowrap'
               }}
               text={items[0].name}
+              dataTest={testIds.orderDetailspage_orderSummaryItemName}
               variant={'subTitleRegular'}
             />
           </Box>
@@ -79,6 +84,7 @@ const OrderOverview: FC<OrderOverviewPropsModel> = props => {
               fontWeight="600"
               text={`+${totalItemsInAnOrder - 1}`}
               variant={'subTitleRegular'}
+              dataTest={testIds.orderDetailspage_orderSummaryTotalItems}
             />
           )}
         </Flex>
@@ -86,6 +92,7 @@ const OrderOverview: FC<OrderOverviewPropsModel> = props => {
           fontWeight="600"
           text={short_desc}
           color={'#FDC025'}
+          dataTest={testIds.orderDetailspage_orderStatus}
           variant={'subTitleRegular'}
         />
       </Flex>
@@ -95,6 +102,7 @@ const OrderOverview: FC<OrderOverviewPropsModel> = props => {
         onClose={onClose}
         items={items}
         orderId={id}
+        dataTest={testIds.orderDetailspage_viewMoreOrders}
       />
     </DetailCard>
   )

@@ -16,6 +16,7 @@ import crossIcon from '../../public/images/crossIcon.svg'
 import { useLanguage } from '../../hooks/useLanguage'
 import Router from 'next/router'
 import { StatusItem } from '../../lib/types/status.types'
+import { testIds } from '@shared/dataTestIds'
 
 export interface ViewMoreOrderModalProps {
   isOpen: boolean
@@ -23,6 +24,7 @@ export interface ViewMoreOrderModalProps {
   onClose: () => void
   items: StatusItem[]
   orderId: string
+  dataTest?: string
 }
 
 const ViewMoreOrderModal: React.FC<ViewMoreOrderModalProps> = props => {
@@ -43,6 +45,7 @@ const ViewMoreOrderModal: React.FC<ViewMoreOrderModalProps> = props => {
           mb="0"
           borderRadius="0.75rem 0.75rem 0px 0px"
           maxW="lg"
+          data-test={props.dataTest}
         >
           <Flex
             justifyContent={'space-between'}
@@ -50,7 +53,7 @@ const ViewMoreOrderModal: React.FC<ViewMoreOrderModalProps> = props => {
             padding={'15px 20px'}
             fontSize={'17px'}
           >
-            <Text>
+            <Text data-test={testIds.orderDetailspage_orderId}>
               {t.orderId}: {props.orderId}
             </Text>
             <ModalCloseButton position={'unset'}>

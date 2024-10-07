@@ -34,6 +34,7 @@ import PaymentDetails from '@beckn-ui/becknified-components/src/components/check
 import axios from '../services/axios'
 import { feedbackActions } from '../store/ui-feedback-slice'
 import { useDispatch } from 'react-redux'
+import { testIds } from '@shared/dataTestIds'
 
 // TODO :- to check this order details component
 
@@ -270,6 +271,7 @@ const OrderDetails = () => {
         <Flex
           alignItems={'center'}
           pb={'8px'}
+          data-test={testIds.job_main_container}
         >
           <Image
             src="/images/jobSearch.svg"
@@ -280,6 +282,7 @@ const OrderDetails = () => {
             style={{
               paddingLeft: '8px'
             }}
+            dataTest={testIds.job_main_container_text}
             text={t.lookingtojobs}
             variant="titleSemibold"
           />
@@ -287,6 +290,7 @@ const OrderDetails = () => {
         <Box pl={'28px'}>
           <Typography
             fontSize={'15px'}
+            dataTest={testIds.job_main_container_job_change_text}
             text={t.jobChangeInfo}
             variant="subTextRegular"
           />
@@ -296,6 +300,7 @@ const OrderDetails = () => {
                 cursor: 'pointer'
               }}
               text={t.searchForJob}
+              dataTest={testIds.job_main_container_job_search_link}
               color="rgba(var(--color-primary))"
               variant="subTextRegular"
               fontSize="15px"
@@ -313,6 +318,7 @@ const OrderDetails = () => {
           <Box
             fontWeight={600}
             fontSize={'17px'}
+            data-test={testIds.orderDetailspage_orderSummary}
           >
             {t.orderSummary}
           </Box>
@@ -331,10 +337,12 @@ const OrderDetails = () => {
           <Typography
             text={t.bookedIn}
             variant={'subTitleRegular'}
+            dataTest={testIds.orderDetails_bookenIn_text}
           />
           <Typography
             text={formatTimestamp(timestamp)}
             variant={'subTitleRegular'}
+            dataTest={testIds.orderDetails_timestamp}
           />
         </Flex>
 
@@ -346,10 +354,12 @@ const OrderDetails = () => {
           <Typography
             text={t.ordersFulfilled}
             variant={'subTitleRegular'}
+            dataTest={testIds.orderDetails_ordersFulfilled_text}
           />
           <Typography
             text={`${filteredOrder.length} of ${totalOrdersQty}`}
             variant={'subTitleRegular'}
+            dataTest={testIds.orderDetails_ordersFulfilled_length}
           />
         </Flex>
       </DetailCard>
@@ -366,6 +376,7 @@ const OrderDetails = () => {
               isOpen={isCancelMenuModalOpen}
               onClose={() => setIsCancelMenuModalOpen(false)}
               title={t.courseCancellation}
+              dataTest={testIds.orderDetailspage_cancelOrder}
             >
               {isLoadingForCancel ? (
                 <LoaderWithMessage
@@ -393,9 +404,13 @@ const OrderDetails = () => {
         location={address}
         number={phone}
         handleEditClick={() => setIsAddressUpdateModalOpen(true)}
+        dataTest={testIds.orderDetailspage_billingDetails}
       />
 
-      <Accordion accordionHeader={t.paymentText}>
+      <Accordion
+        accordionHeader={t.paymentText}
+        dataTest={testIds.orderDetailspage_paymentDetails_container}
+      >
         {!!statusResponse.data && (
           <Box>
             <Flex
@@ -415,6 +430,7 @@ const OrderDetails = () => {
                     paymentBreakDown={getPaymentBreakDown(data).breakUpMap}
                     totalText={t.total}
                     totalValueWithCurrency={getPaymentBreakDown(data).totalPricewithCurrent}
+                    dataTest={testIds.orderDetailspage_paymentDetails}
                   />
                 )
               })}
@@ -427,6 +443,7 @@ const OrderDetails = () => {
       <BottomModal
         title=""
         isOpen={isMenuModalOpen}
+        dataTest={testIds.orderDetailspage_menus}
         onClose={() => setIsMenuModalOpen(false)}
       >
         {isLoadingForTrackAndSupport ? (
@@ -452,11 +469,13 @@ const OrderDetails = () => {
                 columnGap="10px"
                 alignItems="center"
                 onClick={menuItem.onClick}
+                data-test={testIds.orderDetailspage_menuItem}
               >
                 <Image src={menuItem.image} />
                 <Text
                   as={Typography}
-                  text={menuItem.text}
+                  text={menuItem.text as string}
+                  dataTest={testIds.orderDetailspage_menuItemName}
                   fontSize="15px"
                   fontWeight={400}
                 />
@@ -469,11 +488,13 @@ const OrderDetails = () => {
                 columnGap="10px"
                 alignItems="center"
                 onClick={menuItem.onClick}
+                data-test={testIds.orderDetailspage_callServiceItem}
               >
                 <Image src={menuItem.image} />
                 <Text
                   as={Typography}
                   text={menuItem.text}
+                  dataTest={testIds.orderDetailspage_callServiceItemName}
                   fontSize="15px"
                   fontWeight={400}
                 />

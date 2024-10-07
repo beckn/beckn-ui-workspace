@@ -1,6 +1,6 @@
 const testIds = {
   // application wise base url
-  url_base: process.env.CYPRESS_BASE_URL || 'http://localhost:3010',
+  url_base: process.env.CYPRESS_BASE_URL || 'http://localhost:3000',
   url_base_retail: process.env.CYPRESS_BASE_URL || 'http://localhost:3002',
   url_base_tourism: process.env.CYPRESS_BASE_URL || 'http://localhost:3001',
 
@@ -300,7 +300,20 @@ const testIds = {
   dsep_course_discount: 'Course Discount',
   dsep_payment_totalPayment: 'totalPayment',
   myScholarship_button: 'myScholarship-button',
-  orderConfirmation_myLearning: 'orderConfirmation-myLearning'
+  orderConfirmation_myLearning: 'orderConfirmation-myLearning',
+  job_main_container: 'job-main-container',
+  job_main_container_text: 'job-main-container-text',
+  job_main_container_job_change_text: 'job-main-container-job-change-text',
+  job_main_container_job_search_link: 'job-main-container-job-search-link',
+  orderDetailspage_orderSummary: 'orderDetailspage-orderSummary',
+  orderDetails_bookenIn_text: 'orderDetails-bookenIn-text',
+  orderDetails_timestamp: 'orderDetails-timestamp',
+  orderDetails_ordersFulfilled_text: 'orderDetails-ordersFulfilled-text',
+  orderDetails_ordersFulfilled_length: 'orderDetails-ordersFulfilled-length',
+  orderDetailspage_orderId_container: 'orderDetailspage-orderId-container',
+  orderDetailspage_paymentDetails_container: 'orderDetailspage-paymentDetails-container',
+  accordion_click: 'accordion-click',
+  edit_button_Text: 'edit-button-Text'
 }
 
 export { testIds }

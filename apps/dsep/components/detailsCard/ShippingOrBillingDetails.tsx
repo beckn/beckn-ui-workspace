@@ -7,12 +7,14 @@ import Accordion from '../accordion/Accordion'
 import { DetailCard } from '@beckn-ui/becknified-components'
 import { useLanguage } from '../../hooks/useLanguage'
 import { Typography } from '@beckn-ui/molecules'
+import { testIds } from '@shared/dataTestIds'
 
 export interface ShippingOrBillingDetailsProps {
   name: string
   location: string
   number: number | string
   handleEditClick: () => void
+  dataTest?: string
 }
 
 const ShippingOrBillingDetails: React.FC<ShippingOrBillingDetailsProps> = props => {
@@ -26,6 +28,7 @@ const ShippingOrBillingDetails: React.FC<ShippingOrBillingDetailsProps> = props 
         justifyContent={'space-between'}
         alignItems={'center'}
         pb="10px"
+        data-test={props.dataTest}
       >
         <Box
           fontWeight={600}
@@ -36,6 +39,7 @@ const ShippingOrBillingDetails: React.FC<ShippingOrBillingDetailsProps> = props 
         <Box
           cursor={'pointer'}
           onClick={props.handleEditClick}
+          data-test={testIds.edit_button_Text}
         >
           <Typography
             color={color}
@@ -55,7 +59,12 @@ const ShippingOrBillingDetails: React.FC<ShippingOrBillingDetailsProps> = props 
               src={nameIcon}
               pr={'12px'}
             />
-            <Text fontSize={'15px'}>{props.name}</Text>
+            <Text
+              fontSize={'15px'}
+              data-test={testIds.orderDetailspage_name}
+            >
+              {props.name}
+            </Text>
           </Flex>
           <Flex alignItems={'center'}>
             <Image
@@ -63,7 +72,12 @@ const ShippingOrBillingDetails: React.FC<ShippingOrBillingDetailsProps> = props 
               src={locationIcon}
               pr={'12px'}
             />
-            <Text fontSize={'15px'}>{props.location}</Text>
+            <Text
+              fontSize={'15px'}
+              data-test={testIds.orderDetailspage_address}
+            >
+              {props.location}
+            </Text>
           </Flex>
           <Flex alignItems={'center'}>
             <Image
@@ -71,7 +85,12 @@ const ShippingOrBillingDetails: React.FC<ShippingOrBillingDetailsProps> = props 
               src={CallphoneIcon}
               pr={'12px'}
             />
-            <Text fontSize={'15px'}>{props.number}</Text>
+            <Text
+              fontSize={'15px'}
+              data-test={testIds.orderDetailspage_mobileNumber}
+            >
+              {props.number}
+            </Text>
           </Flex>
         </Stack>
       </Box>

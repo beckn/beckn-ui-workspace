@@ -55,6 +55,7 @@ const BottomModal: React.FC<BottomModalProps> = ({
           pt={'5px'}
           margin={'0 auto'}
           position={'unset'}
+          data-test={'close_button'}
         >
           <Image
             src={crossIcon}

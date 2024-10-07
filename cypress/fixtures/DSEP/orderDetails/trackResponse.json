@@ -1,0 +1,45 @@
+{
+  "data": [
+    {
+      "context": {
+        "domain": "dsep:courses",
+        "action": "on_track",
+        "version": "1.1.0",
+        "bpp_id": "bpp-ps-network-strapi1-prod.becknprotocol.io",
+        "bpp_uri": "https://bpp-ps-network-strapi1-prod.becknprotocol.io",
+        "country": "IND",
+        "city": "std:080",
+        "location": {
+          "country": {
+            "name": "India",
+            "code": "IND"
+          },
+          "city": {
+            "name": "Bangalore",
+            "code": "std:080"
+          }
+        },
+        "bap_id": "bap-ps-network-prod.becknprotocol.io",
+        "bap_uri": "https://bap-ps-network-prod.becknprotocol.io",
+        "transaction_id": "9e4199e7-e780-43c8-acd5-3d8767c2fe0e",
+        "message_id": "c20fd5ad-52ad-4463-89a5-04ec56945096",
+        "ttl": "PT10M",
+        "timestamp": "2024-10-03T04:23:31.133Z"
+      },
+      "message": {
+        "tracking": {
+          "url": "https://bpp-unified-strapi1-prod.becknprotocol.io/beckn-bpp-adapter/tracking/2009",
+          "status": "active",
+          "id": "1709",
+          "location": {
+            "id": "2623",
+            "descriptor": {
+              "name": "151-E, Janpath Road, New Delhi"
+            },
+            "gps": "1.3806217468119772, 103.74636438437074"
+          }
+        }
+      }
+    }
+  ]
+}

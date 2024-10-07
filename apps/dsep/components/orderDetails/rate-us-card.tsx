@@ -1,6 +1,7 @@
 import { DetailCard } from '@beckn-ui/becknified-components'
 import { Typography } from '@beckn-ui/molecules'
 import { Flex, Image, Text, useTheme } from '@chakra-ui/react'
+import { testIds } from '@shared/dataTestIds'
 import React, { FC } from 'react'
 
 interface RateUsCardPropsModel {
@@ -43,6 +44,7 @@ const RateUsCard: FC<RateUsCardPropsModel> = ({ header, subHeader, rateText, han
           text={subHeader}
         />
         <Text
+          dataTest={testIds.orderDetails_rateUs_mainContainer}
           onClick={handleRateClick}
           pl="10px"
           color={color}

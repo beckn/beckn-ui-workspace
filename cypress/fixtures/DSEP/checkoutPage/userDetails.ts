@@ -1,15 +1,15 @@
 export const shippingDetails = {
-  name: 'John Doe',
-  mobileNumber: '1234567890',
-  email: 'john.doe@example.com',
-  address: '123 Elm Street, Bengaluru, Karnataka',
-  pinCode: '560008'
+  name: 'Santosh Kumar Singh ji',
+  mobileNumber: '8658326383',
+  email: 'santosh.k@gmail.com',
+  address: '151-E, Janpath Road, New Delhi',
+  pinCode: '110001'
 }
 
 export const billingDetails = {
-  name: 'Jane Doe',
-  mobileNumber: '0987654321',
-  email: 'jane.doe@example.com',
-  address: '456 Oak Street, Bengaluru, Karnataka',
-  pinCode: '560009'
+  name: 'Santosh Kumar',
+  mobileNumber: '9876543210',
+  email: 'santosh.k@gmail.com',
+  address: '151-E, Janpath Road, New Delhi',
+  pinCode: '110001'
 }
