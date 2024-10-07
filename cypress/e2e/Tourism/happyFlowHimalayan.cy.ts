@@ -109,11 +109,10 @@ describe('Happy flow of Himalayan', () => {
       cy.getByData(testIds.auth_loginButton).should('not.be.disabled').click()
       cy.getByData(testIds.homepage_viewChatGPTList).click()
       cy.wait(12000)
-      //Test id not available,
-      cy.get(':nth-child(1) > .chakra-checkbox > .chakra-checkbox__control').click()
-      cy.get('.chakra-button').click()
-      cy.get('.chakra-radio__label > span').click()
-      cy.get('.chakra-button').click()
+      cy.getByData(testIds.chat_gpt_list).eq(0).click()
+      cy.getByData(testIds.chat_gpt_button).click()
+      cy.getByData(testIds.chat_Gpt_List_Radio_Button).click()
+      cy.getByData(testIds.chat_gpt_address_button).click()
       cy.wait(17000)
     })
     it('Should select and add product to cart', () => {
@@ -157,8 +156,7 @@ describe('Happy flow of Himalayan', () => {
       cy.getByData(testIds.home_icon).click()
       cy.wait(100)
       cy.getByData(testIds.threeDots).click()
-      //Test id not available
-      cy.get('[data-test="Logout-text-click"] > .chakra-text').click()
+      cy.getByData(testIds.Logout_text_click).click()
     })
   })
 })

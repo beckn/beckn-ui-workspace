@@ -330,6 +330,14 @@ const testIds = {
   orderDetails_tourism_QR_procedd_button: 'orderDetails-tourism-QR-procedd-button',
   orderDetails_QR_accordian: 'orderDetails-QR-accordian',
 
+  //ChatGPT
+  chat_Gpt_List: 'chat-Gpt-List',
+  chat_Gpt_List_Button: 'chat-Gpt-List-Button',
+  chat_Gpt_List_Radio_Button: 'chat-Gpt-List-Radio-Button',
+  chat_gpt_address_button: 'chat_gpt_address_button',
+  chat_gpt_list: 'chat_gpt_list',
+  chat_gpt_button: 'chat_gpt_button',
+
   // DSEP
   dsep_payment_basePrice: 'Course Fee',
   dsep_course_discount: 'Course Discount',

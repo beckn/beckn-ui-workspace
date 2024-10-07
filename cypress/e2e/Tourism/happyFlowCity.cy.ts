@@ -3,6 +3,14 @@ import { billingDetails, shippingDetails } from '../../fixtures/checkoutPage/use
 import { initResponse } from '../../fixtures/checkoutPage/initResponse'
 import { orderResponse } from '../../fixtures/INDUSTRY4.0/orderConfirmation/orderResponse'
 describe('Happy flow of Himalayan', () => {
+  function verifyPrice(expectedPrice: string, index: number = 0) {
+    cy.getByData(testIds.item_price)
+      .eq(index)
+      .should($price => {
+        const priceText = $price.text().replace(/\u00A0/g, ' ') // Handle non-breaking space
+        expect(priceText).to.contain(expectedPrice)
+      })
+  }
   before(() => {
     cy.visit(testIds.deployed_tourism_url_base)
   })
@@ -32,7 +40,7 @@ describe('Happy flow of Himalayan', () => {
       cy.getByData(testIds.searchpage_filterByRating).should('contain.text', 'Rating')
     })
     it('should select and add Billing & Shipping details', () => {
-      cy.selectProduct(0)
+      cy.selectProduct(2)
       cy.url().should('include', `${testIds.url_search}?searchTerm=Paris`)
       cy.getByData(testIds.productpage_addTocartButton).click()
       cy.getByData(testIds.checkoutpage_shippingDetails).getByData(testIds.checkoutpage_openForm).first().click()
@@ -42,11 +50,11 @@ describe('Happy flow of Himalayan', () => {
     it('should display the payment breakup details', () => {
       cy.getByData(testIds.checkoutpage_paymentDetails).within(() => {
         cy.getByData(testIds.payment_basePrice).should('contain.text', 'base-price')
-        cy.getByData(testIds.item_price).eq(0).should('contain.text', '34,00 €')
+        verifyPrice('17,00 €', 0)
         cy.getByData(testIds.payment_taxes).should('contain.text', 'taxes')
-        cy.getByData(testIds.item_price).eq(2).should('contain.text', '6,12 €')
+        verifyPrice('3,06 €', 2)
         cy.getByData(testIds.payment_totalPayment).should('contain.text', 'Total')
-        cy.getByData(testIds.item_price).eq(3).should('contain.text', '40,12 €')
+        verifyPrice('20,06', 3)
       })
     })
     it('should proceed to checkout when valid data is provided', () => {
@@ -70,11 +78,11 @@ describe('Happy flow of Himalayan', () => {
     it('should render the payment breakup details', () => {
       cy.getByData(testIds.orderDetailspage_paymentDetails).within(() => {
         cy.getByData(testIds.payment_basePrice).should('contain.text', 'base-price')
-        cy.getByData(testIds.item_price).eq(0).should('contain.text', '34,00 €')
+        verifyPrice('17,00 €', 0)
         cy.getByData(testIds.payment_taxes).should('contain.text', 'taxes')
-        cy.getByData(testIds.item_price).eq(2).should('contain.text', '6,12 €')
+        verifyPrice('3,06 €', 2)
         cy.getByData(testIds.payment_totalPayment).should('contain.text', 'Total')
-        cy.getByData(testIds.item_price).eq(3).should('contain.text', '40,12 €')
+        verifyPrice('20,06', 3)
       })
     })
     it('should render all the option in Other options modal', () => {
