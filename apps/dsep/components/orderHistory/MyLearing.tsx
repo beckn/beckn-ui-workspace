@@ -3,6 +3,7 @@ import { CurrencyType, DetailCard, ProductPrice } from '@beckn-ui/becknified-com
 import { Typography } from '@beckn-ui/molecules'
 import { Box, Divider, Flex, Image } from '@chakra-ui/react'
 import { useLanguage } from '../../hooks/useLanguage'
+import { testIds } from '@shared/dataTestIds'
 
 interface Price {
   currency: CurrencyType
@@ -24,6 +25,7 @@ const MyLearing: React.FC<MyLearningProps> = props => {
   return (
     <DetailCard>
       <Typography
+        dataTest={testIds.myLearning_headingText}
         text={props.heading}
         fontWeight={'600'}
         style={{
@@ -31,12 +33,14 @@ const MyLearing: React.FC<MyLearningProps> = props => {
         }}
       />
       <Typography
+        dataTest={testIds.myLearning_createdAt}
         text={props.time}
         style={{
           paddingBottom: '5px'
         }}
       />
       <Typography
+        dataTest={testIds.myLearning_order_id}
         text={`ID: ${props.id}`}
         style={{
           paddingRight: '10px'
@@ -77,6 +81,7 @@ const MyLearing: React.FC<MyLearningProps> = props => {
         width="unset"
       />
       <Box
+        data-test={testIds.view_course_btn}
         textAlign={'center'}
         padding="10px 10px 0"
         fontSize={'15px'}

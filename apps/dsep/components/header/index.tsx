@@ -5,6 +5,7 @@ import { useRouter } from 'next/router'
 import { useLanguage } from '@hooks/useLanguage'
 import { TopHeader, SubHeader } from '@beckn-ui/common'
 import Constants from './constants'
+import { testIds } from '@shared/dataTestIds'
 
 const Header = () => {
   const {
@@ -46,7 +47,8 @@ const Header = () => {
               id: 'myLearing',
               label: 'My Learning',
               href: '/myLearningOrderHistory',
-              icon: '/images/myLearningIcon.svg'
+              icon: '/images/myLearningIcon.svg',
+              dataTest: testIds.myLearning_text_click
             },
             {
               id: 'scholarship',

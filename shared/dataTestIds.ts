@@ -327,7 +327,12 @@ const testIds = {
   mobility_dropoff_address: 'dropoff-address',
   mobility_on_focus_pickup: 'on-focus-pickup',
   mobility_on_focus_dropoff: 'on-focus-dropoff',
-  mobility_search_btn: 'search-btn'
+  mobility_search_btn: 'search-btn',
+  myLearning_text_click: 'myLearning-text-click',
+  myLearning_createdAt: 'myLearning-createdAt',
+  myLearning_headingText: 'myLearning-headingText',
+  myLearning_order_id: 'myLearning-order-id',
+  view_course_btn: 'view-course-btn'
 }
 
 export { testIds }
