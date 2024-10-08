@@ -332,7 +332,16 @@ const testIds = {
   myLearning_createdAt: 'myLearning-createdAt',
   myLearning_headingText: 'myLearning-headingText',
   myLearning_order_id: 'myLearning-order-id',
-  view_course_btn: 'view-course-btn'
+  view_course_btn: 'view-course-btn',
+  job_detail_link: 'job-detail-link',
+  job_name: 'job-name-text',
+  job_providerName: 'job-provider-name-text',
+  job_cityName: 'job-city-name-',
+  jobBy_providername: 'job-by-provider-name',
+  job_details_name: 'job-details-name',
+  job_details_provider_name: 'job-details-provider-name',
+  job_details_description: 'job-details-description',
+  job_details_apply: 'job-details-apply'
 }
 
 export { testIds }

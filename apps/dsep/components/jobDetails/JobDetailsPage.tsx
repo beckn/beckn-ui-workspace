@@ -5,6 +5,7 @@ import Button from '../button/Button'
 import Router from 'next/router'
 import { JobDetailsPagePropsModel } from './JobDetails.types'
 import { Typography } from '@beckn-ui/molecules'
+import { testIds } from '@shared/dataTestIds'
 
 const JobDetailsPage: React.FC<JobDetailsPagePropsModel> = props => {
   const { t } = useLanguage()
@@ -21,17 +22,20 @@ const JobDetailsPage: React.FC<JobDetailsPagePropsModel> = props => {
         gap={'10px'}
       >
         <Typography
+          dataTest={testIds.job_details_name}
           text={name}
           fontSize={'17px'}
           fontWeight={'600'}
         />
         <Typography
+          dataTest={testIds.job_details_provider_name}
           text={providerName}
           fontSize={'15px'}
         />
       </Flex>
 
       <Box
+        data-test={testIds.job_details_description}
         padding="5px 10px"
         maxHeight="calc(100vh - 254px)"
         overflow="auto"
@@ -41,6 +45,7 @@ const JobDetailsPage: React.FC<JobDetailsPagePropsModel> = props => {
         {jobDetails.item.long_desc}
       </Box>
       <Button
+        dataTest={testIds.job_details_apply}
         buttonText={t.applyNow}
         background={'rgba(var(--color-primary))'}
         color={'rgba(var(--text-color))'}

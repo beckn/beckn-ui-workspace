@@ -1,0 +1,500 @@
+{
+  "data": [
+    {
+      "context": {
+        "domain": "dsep:jobs",
+        "action": "on_search",
+        "version": "1.1.0",
+        "bpp_id": "bpp-ps-network-strapi1-prod.becknprotocol.io",
+        "bpp_uri": "https://bpp-ps-network-strapi1-prod.becknprotocol.io",
+        "country": "IND",
+        "city": "std:080",
+        "location": {
+          "country": {
+            "name": "India",
+            "code": "IND"
+          },
+          "city": {
+            "name": "Bangalore",
+            "code": "std:080"
+          }
+        },
+        "bap_id": "bap-ps-network-prod.becknprotocol.io",
+        "bap_uri": "https://bap-ps-network-prod.becknprotocol.io",
+        "transaction_id": "d821d78a-4513-4252-95dc-f7fd871fecc4",
+        "message_id": "9eb8e446-52e0-476f-b77f-f5dfdf9ea55d",
+        "ttl": "PT10M",
+        "timestamp": "2024-10-07T08:51:00.048Z"
+      },
+      "message": {
+        "name": "BPP",
+        "providers": [
+          {
+            "id": "12",
+            "name": "PWC",
+            "short_desc": "PriceWaterCoopers",
+            "locations": [
+              {
+                "id": "2",
+                "gps": "44.6616,111.1001",
+                "address": "Max pvt lmtd",
+                "city": {
+                  "name": "Delhi"
+                },
+                "country": {
+                  "name": "India"
+                },
+                "state": {
+                  "name": "Delhi"
+                },
+                "area_code": "110000"
+              },
+              {
+                "id": "10",
+                "address": "No. 43/2, New Airport Road NH 7, Outer Ring Rd, Sahakar Nagar, Bengaluru, Karnataka 560092",
+                "city": {
+                  "name": "Bengaluru. "
+                },
+                "country": {
+                  "name": "India"
+                },
+                "state": {
+                  "name": "Karnataka"
+                },
+                "area_code": "560092"
+              }
+            ],
+            "items": [
+              {
+                "id": "16",
+                "short_desc": "We are looking for candidates at analyst, associate consultant and consultant roles.  Btech/BCA, holding 0-1 years of Post Qualification experience.",
+                "long_desc": "Job Description:\n\nStrong knowledge of .NET web framework and Front-end frameworks like Angular or react.\nProficient in ASP.NET MVC, .NET CORE , with a good knowledge of their ecosystems\nFamiliarity with the Mono framework\nStrong understanding of object-oriented programming\nSkill for writing reusable libraries\nFamiliar with various design and architectural patterns\nKnowledge of concurrency patterns\nFamiliarity with Microsoft SQL Server and popular web application frameworks\nKnack for writing clean, readable, and easily maintainable code\nUnderstanding of fundamental design principles for building a scalable application\nExperience creating database schemas that represent and support business processes\nExperience implementing automated testing platforms and unit tests\nProficient understanding of code versioning tools\nKnowledge on Azure DevOps is plus.\n\nRole: Risk Advisory Data Analyst\nIndustry Type: Accounting / Auditing\nDepartment: Finance\nEmployment Type: Full Time, Permanent\nEducation: B.Tech/B.E. in Production/Industrial, BCA in Computers, Any Postgraduate\nExperience Required: 0-1 years\nLocation: Bangalore",
+                "name": "Data Analyst",
+                "price": {
+                  "value": "1000",
+                  "currency": "INR"
+                },
+                "categories": [
+                  {
+                    "id": "13",
+                    "name": "Data Analytics Jobs"
+                  }
+                ],
+                "locations": [
+                  {
+                    "id": "10",
+                    "city": "Bengaluru. ",
+                    "state": "Karnataka",
+                    "country": "India"
+                  }
+                ],
+                "fulfillments": [
+                  {
+                    "id": "10",
+                    "type": "job-type",
+                    "tracking": false,
+                    "tags": [
+                      {
+                        "display": true,
+                        "list": [null]
+                      },
+                      {
+                        "display": true,
+                        "list": [null]
+                      },
+                      {
+                        "display": true,
+                        "list": [null]
+                      },
+                      {
+                        "display": true,
+                        "list": [null]
+                      },
+                      {
+                        "display": true,
+                        "list": [null]
+                      },
+                      {
+                        "display": true,
+                        "list": [null]
+                      },
+                      {
+                        "display": true,
+                        "list": [null]
+                      },
+                      {
+                        "display": true,
+                        "list": [null]
+                      },
+                      {
+                        "display": true,
+                        "list": [null]
+                      }
+                    ]
+                  },
+                  {
+                    "id": "10",
+                    "type": "job-type",
+                    "tracking": false,
+                    "tags": [
+                      {
+                        "display": true,
+                        "list": [null]
+                      },
+                      {
+                        "display": true,
+                        "list": [null]
+                      },
+                      {
+                        "display": true,
+                        "list": [null]
+                      },
+                      {
+                        "display": true,
+                        "list": [null]
+                      },
+                      {
+                        "display": true,
+                        "list": [null]
+                      },
+                      {
+                        "display": true,
+                        "list": [null]
+                      },
+                      {
+                        "display": true,
+                        "list": [null]
+                      },
+                      {
+                        "display": true,
+                        "list": [null]
+                      },
+                      {
+                        "display": true,
+                        "list": [null]
+                      }
+                    ]
+                  }
+                ],
+                "rating": "null",
+                "rateable": true,
+                "tags": [
+                  {
+                    "display": true,
+                    "list": [null]
+                  },
+                  {
+                    "display": true,
+                    "list": [null]
+                  },
+                  {
+                    "display": true,
+                    "list": [null]
+                  },
+                  {
+                    "display": true,
+                    "list": [null]
+                  },
+                  {
+                    "display": true,
+                    "list": [null]
+                  },
+                  {
+                    "display": true,
+                    "list": [null]
+                  },
+                  {
+                    "display": true,
+                    "list": [null]
+                  },
+                  {
+                    "display": true,
+                    "list": [null]
+                  },
+                  {
+                    "display": true,
+                    "list": [null]
+                  }
+                ]
+              },
+              {
+                "id": "17",
+                "short_desc": "Preparing data driven strategies to meet company KPIs",
+                "long_desc": "You will be part of the team which partners with the business leaders to provide data driven strategies to grow business KPIs like acquisition, customer engagement & retention, campaign optimization, personalized offering, etc.\nLeverage all the traditional and alternate data sources like credit bureau, digital data, partner data, social media and banking data to develop impactful strategies to drive business goals for marketing/product/customer/collections\nAnalyse large amounts of data and build solutions based on insights captured from data\nInnovate with a focus on developing newer and better approaches using big data & machine learning solution\nDevelop portfolio MIS and track the portfolio performance and recommend course of action\nAlign closely with the client's business teams to deliver on the business goals through strong analytics driven strategies.\n",
+                "name": "Data Analyst - Analytics- Senior Analyst",
+                "price": {
+                  "value": "0",
+                  "currency": "INR"
+                },
+                "categories": [
+                  {
+                    "id": "13",
+                    "name": "Data Analytics Jobs"
+                  }
+                ],
+                "locations": [
+                  {
+                    "id": "2",
+                    "city": "Delhi",
+                    "state": "Delhi",
+                    "country": "India"
+                  }
+                ],
+                "fulfillments": [
+                  {
+                    "id": "10",
+                    "type": "job-type",
+                    "tracking": false,
+                    "tags": [
+                      {
+                        "display": true,
+                        "list": [
+                          {
+                            "code": "job-code",
+                            "value": "job-code"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "id": "10",
+                    "type": "job-type",
+                    "tracking": false,
+                    "tags": [
+                      {
+                        "display": true,
+                        "list": [
+                          {
+                            "code": "job-code",
+                            "value": "job-code"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "images": [
+                  {
+                    "url": "https://www.blucognition.com/wp-content/uploads/2023/05/bluCognition_logo_tagline_landscape.png"
+                  }
+                ],
+                "rating": "null",
+                "rateable": true,
+                "tags": [
+                  {
+                    "display": true,
+                    "list": [
+                      {
+                        "code": "job-code",
+                        "value": "job-code"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "images": [
+              {
+                "url": "https://makerspace/assembly/makerspace_logo.png"
+              }
+            ]
+          },
+          {
+            "id": "13",
+            "name": "Accenture",
+            "locations": [
+              {
+                "id": "4",
+                "gps": "18.5401344, 73.8295808",
+                "address": "Building B-1, Magarpatta City (SEZ, Mundhwa Rd, Magarpatta, Hadapsar, ",
+                "city": {
+                  "name": "Pune"
+                },
+                "country": {
+                  "name": "India"
+                },
+                "state": {
+                  "name": "Maharashtra"
+                },
+                "area_code": "411013"
+              },
+              {
+                "id": "21",
+                "gps": "12.888133196507118, 77.64777036338864",
+                "address": "#243, 3rd cross, Celebrity Layout, Doddathogur, Electronic City Phase 1, Bengaluru, Karnataka - 560100.",
+                "city": {
+                  "name": "Bangalore"
+                },
+                "country": {
+                  "name": "India"
+                },
+                "state": {
+                  "name": "Karnataka"
+                },
+                "area_code": "560100"
+              }
+            ],
+            "items": [
+              {
+                "id": "6",
+                "long_desc": "\"Job Description:\n\nYou will be part of the team which partners with the business leaders to provide data driven strategies to grow business KPIs like acquisition, customer engagement & retention, campaign optimization, personalized offering, etc.\nLeverage all the traditional and alternate data sources like credit bureau, digital data, partner data, social media and banking data to develop impactful strategies to drive business goals for marketing/product/customer/collections\nAnalyse large amounts of data and build solutions based on insights captured from data\nInnovate with a focus on developing newer and better approaches using big data & machine learning solution\nDevelop portfolio MIS and track the portfolio performance and recommend course of action\nAlign closely with the client's business teams to deliver on the business goals through strong analytics driven strategies.\n\nRole: Analytics - Senior Analyst\nIndustry Type: IT Services & Consulting\nDepartment: Data Science & Analytics\nEmployment Type: Full Time, Permanent\nEducation: Masters or Bachelor's in Computer Science, Mathematics, Statistics or Engineering\nExperience Required: 3-6 years\nLocation: Chennai\"\n",
+                "name": "Analytics - Senior Analys",
+                "price": {
+                  "value": "0"
+                },
+                "categories": [
+                  {
+                    "id": "16",
+                    "name": "Analytics"
+                  }
+                ],
+                "locations": [
+                  {
+                    "id": "21",
+                    "city": "Bangalore",
+                    "state": "Karnataka",
+                    "country": "India"
+                  }
+                ],
+                "fulfillments": [
+                  {
+                    "id": "10",
+                    "type": "job-type",
+                    "tracking": false,
+                    "tags": [
+                      {
+                        "display": true,
+                        "list": [
+                          {
+                            "code": "job-code",
+                            "value": "job-code"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "id": "10",
+                    "type": "job-type",
+                    "tracking": false,
+                    "tags": [
+                      {
+                        "display": true,
+                        "list": [
+                          {
+                            "code": "job-code",
+                            "value": "job-code"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "images": [
+                  {
+                    "url": "https://www.shutterstock.com/image-photo/analyst-working-business-analytics-data-600nw-1857484450.jpg"
+                  }
+                ],
+                "rating": "null",
+                "rateable": true,
+                "tags": [
+                  {
+                    "display": true,
+                    "list": [
+                      {
+                        "code": "job-code",
+                        "value": "job-code"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "images": [
+              {
+                "url": "https://makerspace/assembly/makerspace_logo.png"
+              }
+            ]
+          },
+          {
+            "id": "48",
+            "name": "TechMahindra",
+            "short_desc": "Tech Mahindra: Driving digital transformation with innovative solutions and cutting-edge technologies.",
+            "long_desc": "\nTech Mahindra is a leading global provider of digital transformation, consulting, and business re-engineering solutions. Leveraging cutting-edge technologies like AI, cloud, and IoT, Tech Mahindra empowers businesses to navigate the digital landscape with agility and innovation. With a focus on delivering personalized customer experiences and driving operational excellence, Tech Mahindra enables organizations across industries to thrive in the digital era.",
+            "locations": [
+              {
+                "id": "4",
+                "gps": "18.5401344, 73.8295808",
+                "address": "Building B-1, Magarpatta City (SEZ, Mundhwa Rd, Magarpatta, Hadapsar, ",
+                "city": {
+                  "name": "Pune"
+                },
+                "country": {
+                  "name": "India"
+                },
+                "state": {
+                  "name": "Maharashtra"
+                },
+                "area_code": "411013"
+              },
+              {
+                "id": "17",
+                "gps": "18.5046393,73.7446707",
+                "address": "1st Floor, Shreyas Eterna, Shri Krishna Nagar, Sagar Co-Operative Housing Society, Bavdhan, Pune, Maharashtra 411021",
+                "city": {
+                  "name": "Pune"
+                },
+                "country": {
+                  "name": "India"
+                },
+                "state": {
+                  "name": "Maharashtra"
+                },
+                "area_code": "411021"
+              }
+            ],
+            "items": [
+              {
+                "id": "69",
+                "short_desc": "We are looking for candidates who is a professional responsible for working on both front-end and back-end development processes.",
+                "long_desc": "One of the top skills for a full stack developer is knowledge about different frameworks. Full stack developers should be aware of the different frameworks required to back up the front end of an application. The top frameworks that full stack developers should know about include Angular, React, and Vue. js.",
+                "name": "FullStack Developer",
+                "price": {
+                  "value": "0"
+                },
+                "locations": [
+                  {
+                    "id": "17",
+                    "city": "Pune",
+                    "state": "Maharashtra",
+                    "country": "India"
+                  }
+                ],
+                "fulfillments": [
+                  {
+                    "id": "10",
+                    "type": "job-type",
+                    "tracking": false
+                  }
+                ],
+                "images": [
+                  {
+                    "url": "https://d2ms8rpfqc4h24.cloudfront.net/Guide_to_Full_Stack_Development_000eb0b2d0.jpg"
+                  }
+                ],
+                "rating": "null",
+                "rateable": true
+              }
+            ],
+            "images": [
+              {
+                "url": "https://makerspace/assembly/makerspace_logo.png"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

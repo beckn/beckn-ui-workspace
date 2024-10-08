@@ -1,5 +1,6 @@
 import { Typography } from '@beckn-ui/molecules'
 import { Flex, Text, Card, CardBody } from '@chakra-ui/react'
+import { testIds } from '@shared/dataTestIds'
 import Link from 'next/link'
 import React from 'react'
 import { useLanguage } from '../../hooks/useLanguage'
@@ -19,6 +20,7 @@ const JobCardRenderer = (props: any) => {
         pathname: '/jobDetails',
         query: { jobDetails: encodedjob }
       }}
+      data-test={testIds.job_detail_link}
     >
       <Card
         className="border_radius_all"
@@ -37,13 +39,21 @@ const JobCardRenderer = (props: any) => {
             <Typography
               fontWeight={'600'}
               text={name}
+              dataTest={testIds.job_name}
             />
-            <Typography text={providerName} />
-            <Typography text={cityName as string} />
+            <Typography
+              text={providerName}
+              dataTest={testIds.job_providerName}
+            />
+            <Typography
+              text={cityName as string}
+              dataTest={testIds.job_cityName}
+            />
 
             <Typography
               fontWeight="600"
               text={`${t.jobsBy} ${providerName}`}
+              dataTest={testIds.jobBy_providername}
             />
           </Flex>
         </CardBody>
