@@ -1,0 +1,16 @@
+{
+  "ok": true,
+  "status": 200,
+  "results": [
+    {
+      "address_components": [
+        {
+          "long_name": "India",
+          "short_name": "IN",
+          "types": ["country", "political"]
+        }
+      ],
+      "formatted_address": "Decathlon Sports Wakad, Tathawade Road, Tathawade, Pimpri-Chinchwad, Maharashtra, India"
+    }
+  ]
+}

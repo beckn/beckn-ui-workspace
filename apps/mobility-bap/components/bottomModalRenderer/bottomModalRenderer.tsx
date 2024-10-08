@@ -99,6 +99,7 @@ const BottomModalRenderer = (props: BottomModalRendererProps) => {
         return (
           <BecknButton
             text="Cancel Search"
+            dataTest={testIds.mobility_cancel_search}
             variant="outline"
             handleClick={handleClickOnCancelSearch}
           />

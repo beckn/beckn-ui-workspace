@@ -341,7 +341,8 @@ const testIds = {
   job_details_name: 'job-details-name',
   job_details_provider_name: 'job-details-provider-name',
   job_details_description: 'job-details-description',
-  job_details_apply: 'job-details-apply'
+  job_details_apply: 'job-details-apply',
+  mobility_cancel_search: 'cancel-search'
 }
 
 export { testIds }

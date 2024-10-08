@@ -52,7 +52,7 @@ declare global {
     interface Chainable<Subject = any> {
       getByData(dataTestAttribute: string): Chainable<JQuery<HTMLElement>>
       login(baseUrl: string, email: string, password: string): Chainable<void>
-      setGeolocation(aliasName: string): Chainable<void>
+      setGeolocation(aliasName: string, location: { latitude: number; longitude: number }, data?: any): Chainable<void>
       performSearch(searchTerm: string, response: RouteHandler): Chainable<void>
       mockReduxState(type: string, data: Record<string, any>): Chainable<void>
       selectProduct(index: number): Chainable<void>
@@ -78,6 +78,7 @@ declare global {
       fillConsentDetails(): Chainable<void>
       fillAssemblyDetails(): Chainable<void>
       performXinput_Submit(response: RouteHandler, aliasName: string): Chainable<void>
+      performCheckViolation(response: RouteHandler, aliasName: string): Chainable<void>
       //Created by omkar
       loginDynamic(email: string, password: string): Chainable<void>
       performSearchDynamic(searchTerm: string): Chainable<void>
@@ -89,6 +90,7 @@ const GCL_URL = 'https://bap-gcl-**.becknprotocol.io'
 const STRAPI_URL = 'https://bap-backend-**.becknprotocol.io/api'
 const XINPUT_SUBMIT = 'https://bpp-unified-strapi-dev.becknprotocol.io/beckn-bpp-adapter/x-input'
 const S3Integration_URL = 'https://bap-s3integration-api-dev.becknprotocol.io'
+const CHECK_VIOLATION_URL = 'https://bpp-unified-strapi-dev.becknprotocol.io/policy-violation/bap'
 
 Cypress.Commands.add('getByData', selector => {
   return cy.get(`[data-test=${selector}]`)
@@ -123,17 +125,20 @@ Cypress.Commands.add('login', (baseUrl, email, password) => {
   )
 })
 
-Cypress.Commands.add('setGeolocation', aliasName => {
-  cy.window().then(win => {
-    cy.intercept('GET', '**/maps.googleapis.com/maps/api/geocode/json*', {
-      fixture: 'homePage/address.json'
-    }).as(aliasName as string)
-    cy.stub(win.navigator.geolocation, 'getCurrentPosition').callsFake(success => {
-      success({ coords: { latitude: 28.4594965, longitude: 77.0266383 } })
+Cypress.Commands.add(
+  'setGeolocation',
+  (aliasName, location = { latitude: 28.4594965, longitude: 77.0266383 }, data = 'homePage/address.json') => {
+    cy.window().then(win => {
+      cy.intercept('GET', '**/maps.googleapis.com/maps/api/geocode/json*', {
+        fixture: data
+      }).as(aliasName as string)
+      cy.stub(win.navigator.geolocation, 'getCurrentPosition').callsFake(success => {
+        success({ coords: location })
+      })
     })
-  })
-  cy.wait(500)
-})
+    cy.wait(500)
+  }
+)
 
 Cypress.Commands.add('performSearch', (searchTerm, response) => {
   const searchInputId = 'search-input'
@@ -227,6 +232,10 @@ Cypress.Commands.add('performXinputSubmit', (response, aliasName) => {
 })
 Cypress.Commands.add('performXinput_Submit', (response, aliasName) => {
   cy.intercept('POST', `${GCL_URL}/x-input/submit`, response).as(aliasName)
+})
+
+Cypress.Commands.add('performCheckViolation', (response, aliasName) => {
+  cy.intercept('POST', `${CHECK_VIOLATION_URL}/policy/checkViolation`, response).as(aliasName)
 })
 
 Cypress.Commands.add('fillComplaintDetails', complaintDetails => {
