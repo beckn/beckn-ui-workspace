@@ -106,7 +106,8 @@ function AddInformationMetadata() {
     }
 
     if (policyName) {
-      const policyNameValid = policyName.match(/^(.|\n){20,2000}$/)
+      const value = policyName.replace(/\s/g, '')
+      const policyNameValid = value.match(/^(.|\n){10,100}$/)
       if (!policyNameValid) {
         newErrors.policyName = 'The title must be between 10 and 100 characters long.'
         valid = false
@@ -129,7 +130,8 @@ function AddInformationMetadata() {
     }
 
     if (description) {
-      const descriptionValid = description.match(/^(.|\n){20,2000}$/)
+      const value = description.replace(/\s/g, '')
+      const descriptionValid = value.match(/^(.|\n){20,500}$/)
       if (!descriptionValid) {
         newErrors.description = 'The description must be between 20 and 500 characters long.'
         valid = false
