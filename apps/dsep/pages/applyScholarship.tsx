@@ -25,6 +25,7 @@ import { InitResponseModel } from '../lib/types/init.types'
 import { ConfirmResponseModel } from '../lib/types/confirm.types'
 import ApplyScholarshipForm from '../components/applyScholarship/apply-scholarship'
 import axios from '../services/axios'
+import { testIds } from '@shared/dataTestIds'
 
 const ApplyScholarship = () => {
   const [formData, setFormData] = useState<ScholarshipApplyFormDataModel>({
@@ -159,6 +160,7 @@ const ApplyScholarship = () => {
         <LoaderWithMessage
           loadingSubText="Please wait!"
           loadingText="Getting your scholarship form"
+          dataTest={testIds.loadingIndicator}
         />
       </Box>
     )
@@ -174,6 +176,7 @@ const ApplyScholarship = () => {
         <LoaderWithMessage
           loadingSubText={t.applicationLoaderText}
           loadingText={t.categoryLoadPrimary}
+          dataTest={testIds.loadingIndicator}
         />
       </Box>
     )

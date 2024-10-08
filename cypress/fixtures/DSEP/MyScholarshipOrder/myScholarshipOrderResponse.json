@@ -1,0 +1,773 @@
+{
+  "data": [
+    {
+      "id": 1341,
+      "attributes": {
+        "order_id": "797",
+        "bpp_id": "bpp-ps-network-strapi-dev.becknprotocol.io",
+        "bpp_uri": "http://bpp-ps-network-strapi-dev.becknprotocol.io",
+        "currency": null,
+        "delivery_status": null,
+        "descriptor": {
+          "name": "MS Ramaiah University of Applied Sciences",
+          "short_desc": "MS Ramaiah University of Applied Sciences"
+        },
+        "price": null,
+        "billing": null,
+        "fulfillments": [
+          {
+            "id": "12",
+            "type": "scholarship",
+            "rating": "4",
+            "rateable": true,
+            "tracking": false
+          },
+          {
+            "id": "12",
+            "type": "scholarship",
+            "rating": "4",
+            "rateable": true,
+            "tracking": false
+          }
+        ],
+        "created_date": null,
+        "last_updated_date": null,
+        "quote": null,
+        "transaction_id": "42cba94b-c87b-44ee-8c86-f40faffb3dbc",
+        "message_id": "298c386f-f551-4b1c-9c60-94b3d5bdd366",
+        "payments": null,
+        "items": [
+          {
+            "id": "7",
+            "name": "MS Ramaiah Memorial Scholarship",
+            "tags": [
+              {
+                "list": [
+                  {
+                    "code": "scholarship-code",
+                    "value": "MS Ramaiah Memorial Scholarship"
+                  }
+                ],
+                "display": true
+              },
+              {
+                "list": [
+                  {
+                    "code": "university-name",
+                    "value": "MS Ramaiah Memorial"
+                  }
+                ],
+                "display": true
+              }
+            ],
+            "price": {
+              "value": "310",
+              "currency": "INR"
+            },
+            "rating": "null",
+            "quantity": {
+              "available": {
+                "measure": {
+                  "unit": "kWh",
+                  "value": "0"
+                }
+              }
+            },
+            "rateable": true,
+            "long_desc": "\"Scholarship Details:\nScholarship amount: Rs. 50,000 scholarship overall\n\nEligibility criteria: CAT/XAT Scores grater than or equal to 80% percentile, and MAT Scores greater than or equal to 90% percentile + throughout 1st division in 10th, 12th and UG\"",
+            "short_desc": "The Ramaiah University of Applied Sciences rewards excellence with scholarships. Students can choose to apply for a Merit Scholarship (that is, either a Scholarship of Distinction or a Scholarship of Excellence) or an Admission Test Scholarship"
+          }
+        ],
+        "createdAt": "2024-05-28T05:51:01.971Z",
+        "updatedAt": "2024-05-28T05:51:01.971Z",
+        "publishedAt": "2024-05-28T05:51:01.964Z",
+        "domain": "dsep:scholarships"
+      }
+    },
+    {
+      "id": 1342,
+      "attributes": {
+        "order_id": "798",
+        "bpp_id": "bpp-ps-network-strapi-dev.becknprotocol.io",
+        "bpp_uri": "http://bpp-ps-network-strapi-dev.becknprotocol.io",
+        "currency": null,
+        "delivery_status": null,
+        "descriptor": {
+          "name": "MS Ramaiah University of Applied Sciences",
+          "short_desc": "MS Ramaiah University of Applied Sciences"
+        },
+        "price": null,
+        "billing": null,
+        "fulfillments": [
+          {
+            "id": "12",
+            "type": "scholarship",
+            "rating": "4",
+            "rateable": true,
+            "tracking": false
+          },
+          {
+            "id": "12",
+            "type": "scholarship",
+            "rating": "4",
+            "rateable": true,
+            "tracking": false
+          }
+        ],
+        "created_date": null,
+        "last_updated_date": null,
+        "quote": null,
+        "transaction_id": "42cba94b-c87b-44ee-8c86-f40faffb3dbc",
+        "message_id": "d210cb5d-9053-4ef8-9c9f-8a572b2a0531",
+        "payments": null,
+        "items": [
+          {
+            "id": "7",
+            "name": "MS Ramaiah Memorial Scholarship",
+            "tags": [
+              {
+                "list": [
+                  {
+                    "code": "scholarship-code",
+                    "value": "MS Ramaiah Memorial Scholarship"
+                  }
+                ],
+                "display": true
+              },
+              {
+                "list": [
+                  {
+                    "code": "university-name",
+                    "value": "MS Ramaiah Memorial"
+                  }
+                ],
+                "display": true
+              }
+            ],
+            "price": {
+              "value": "310",
+              "currency": "INR"
+            },
+            "rating": "null",
+            "quantity": {
+              "available": {
+                "measure": {
+                  "unit": "kWh",
+                  "value": "0"
+                }
+              }
+            },
+            "rateable": true,
+            "long_desc": "\"Scholarship Details:\nScholarship amount: Rs. 50,000 scholarship overall\n\nEligibility criteria: CAT/XAT Scores grater than or equal to 80% percentile, and MAT Scores greater than or equal to 90% percentile + throughout 1st division in 10th, 12th and UG\"",
+            "short_desc": "The Ramaiah University of Applied Sciences rewards excellence with scholarships. Students can choose to apply for a Merit Scholarship (that is, either a Scholarship of Distinction or a Scholarship of Excellence) or an Admission Test Scholarship"
+          }
+        ],
+        "createdAt": "2024-05-28T05:56:27.401Z",
+        "updatedAt": "2024-05-28T05:56:27.401Z",
+        "publishedAt": "2024-05-28T05:56:27.394Z",
+        "domain": "dsep:scholarships"
+      }
+    },
+    {
+      "id": 1343,
+      "attributes": {
+        "order_id": "799",
+        "bpp_id": "bpp-ps-network-strapi-dev.becknprotocol.io",
+        "bpp_uri": "http://bpp-ps-network-strapi-dev.becknprotocol.io",
+        "currency": null,
+        "delivery_status": null,
+        "descriptor": {
+          "name": "MS Ramaiah University of Applied Sciences",
+          "short_desc": "MS Ramaiah University of Applied Sciences"
+        },
+        "price": null,
+        "billing": null,
+        "fulfillments": [
+          {
+            "id": "12",
+            "type": "scholarship",
+            "rating": "4",
+            "rateable": true,
+            "tracking": false
+          },
+          {
+            "id": "12",
+            "type": "scholarship",
+            "rating": "4",
+            "rateable": true,
+            "tracking": false
+          }
+        ],
+        "created_date": null,
+        "last_updated_date": null,
+        "quote": null,
+        "transaction_id": "42cba94b-c87b-44ee-8c86-f40faffb3dbc",
+        "message_id": "607de4e0-0572-4b78-aa54-3fb38e4937a9",
+        "payments": null,
+        "items": [
+          {
+            "id": "7",
+            "name": "MS Ramaiah Memorial Scholarship",
+            "tags": [
+              {
+                "list": [
+                  {
+                    "code": "scholarship-code",
+                    "value": "MS Ramaiah Memorial Scholarship"
+                  }
+                ],
+                "display": true
+              },
+              {
+                "list": [
+                  {
+                    "code": "university-name",
+                    "value": "MS Ramaiah Memorial"
+                  }
+                ],
+                "display": true
+              }
+            ],
+            "price": {
+              "value": "310",
+              "currency": "INR"
+            },
+            "rating": "null",
+            "quantity": {
+              "available": {
+                "measure": {
+                  "unit": "kWh",
+                  "value": "0"
+                }
+              }
+            },
+            "rateable": true,
+            "long_desc": "\"Scholarship Details:\nScholarship amount: Rs. 50,000 scholarship overall\n\nEligibility criteria: CAT/XAT Scores grater than or equal to 80% percentile, and MAT Scores greater than or equal to 90% percentile + throughout 1st division in 10th, 12th and UG\"",
+            "short_desc": "The Ramaiah University of Applied Sciences rewards excellence with scholarships. Students can choose to apply for a Merit Scholarship (that is, either a Scholarship of Distinction or a Scholarship of Excellence) or an Admission Test Scholarship"
+          }
+        ],
+        "createdAt": "2024-05-28T06:05:52.245Z",
+        "updatedAt": "2024-05-28T06:05:52.245Z",
+        "publishedAt": "2024-05-28T06:05:52.238Z",
+        "domain": "dsep:scholarships"
+      }
+    },
+    {
+      "id": 1344,
+      "attributes": {
+        "order_id": "800",
+        "bpp_id": "bpp-ps-network-strapi-dev.becknprotocol.io",
+        "bpp_uri": "http://bpp-ps-network-strapi-dev.becknprotocol.io",
+        "currency": null,
+        "delivery_status": null,
+        "descriptor": {
+          "name": "MS Ramaiah University of Applied Sciences",
+          "short_desc": "MS Ramaiah University of Applied Sciences"
+        },
+        "price": null,
+        "billing": null,
+        "fulfillments": [
+          {
+            "id": "12",
+            "type": "scholarship",
+            "rating": "4",
+            "rateable": true,
+            "tracking": false
+          },
+          {
+            "id": "12",
+            "type": "scholarship",
+            "rating": "4",
+            "rateable": true,
+            "tracking": false
+          }
+        ],
+        "created_date": null,
+        "last_updated_date": null,
+        "quote": null,
+        "transaction_id": "42cba94b-c87b-44ee-8c86-f40faffb3dbc",
+        "message_id": "e09d60f1-44cd-49d4-9205-72fb2a1c9326",
+        "payments": null,
+        "items": [
+          {
+            "id": "7",
+            "name": "MS Ramaiah Memorial Scholarship",
+            "tags": [
+              {
+                "list": [
+                  {
+                    "code": "scholarship-code",
+                    "value": "MS Ramaiah Memorial Scholarship"
+                  }
+                ],
+                "display": true
+              },
+              {
+                "list": [
+                  {
+                    "code": "university-name",
+                    "value": "MS Ramaiah Memorial"
+                  }
+                ],
+                "display": true
+              }
+            ],
+            "price": {
+              "value": "310",
+              "currency": "INR"
+            },
+            "rating": "null",
+            "quantity": {
+              "available": {
+                "measure": {
+                  "unit": "kWh",
+                  "value": "0"
+                }
+              }
+            },
+            "rateable": true,
+            "long_desc": "\"Scholarship Details:\nScholarship amount: Rs. 50,000 scholarship overall\n\nEligibility criteria: CAT/XAT Scores grater than or equal to 80% percentile, and MAT Scores greater than or equal to 90% percentile + throughout 1st division in 10th, 12th and UG\"",
+            "short_desc": "The Ramaiah University of Applied Sciences rewards excellence with scholarships. Students can choose to apply for a Merit Scholarship (that is, either a Scholarship of Distinction or a Scholarship of Excellence) or an Admission Test Scholarship"
+          }
+        ],
+        "createdAt": "2024-05-28T06:07:52.391Z",
+        "updatedAt": "2024-05-28T06:07:52.391Z",
+        "publishedAt": "2024-05-28T06:07:52.386Z",
+        "domain": "dsep:scholarships"
+      }
+    },
+    {
+      "id": 1345,
+      "attributes": {
+        "order_id": "801",
+        "bpp_id": "bpp-ps-network-strapi-dev.becknprotocol.io",
+        "bpp_uri": "http://bpp-ps-network-strapi-dev.becknprotocol.io",
+        "currency": null,
+        "delivery_status": null,
+        "descriptor": {
+          "name": "MS Ramaiah University of Applied Sciences",
+          "short_desc": "MS Ramaiah University of Applied Sciences"
+        },
+        "price": null,
+        "billing": null,
+        "fulfillments": [
+          {
+            "id": "12",
+            "type": "scholarship",
+            "rating": "4",
+            "rateable": true,
+            "tracking": false
+          },
+          {
+            "id": "12",
+            "type": "scholarship",
+            "rating": "4",
+            "rateable": true,
+            "tracking": false
+          }
+        ],
+        "created_date": null,
+        "last_updated_date": null,
+        "quote": null,
+        "transaction_id": "42cba94b-c87b-44ee-8c86-f40faffb3dbc",
+        "message_id": "34f22866-554c-4e61-9ee4-c800260e27ba",
+        "payments": null,
+        "items": [
+          {
+            "id": "7",
+            "name": "MS Ramaiah Memorial Scholarship",
+            "tags": [
+              {
+                "list": [
+                  {
+                    "code": "scholarship-code",
+                    "value": "MS Ramaiah Memorial Scholarship"
+                  }
+                ],
+                "display": true
+              },
+              {
+                "list": [
+                  {
+                    "code": "university-name",
+                    "value": "MS Ramaiah Memorial"
+                  }
+                ],
+                "display": true
+              }
+            ],
+            "price": {
+              "value": "310",
+              "currency": "INR"
+            },
+            "rating": "null",
+            "quantity": {
+              "available": {
+                "measure": {
+                  "unit": "kWh",
+                  "value": "0"
+                }
+              }
+            },
+            "rateable": true,
+            "long_desc": "\"Scholarship Details:\nScholarship amount: Rs. 50,000 scholarship overall\n\nEligibility criteria: CAT/XAT Scores grater than or equal to 80% percentile, and MAT Scores greater than or equal to 90% percentile + throughout 1st division in 10th, 12th and UG\"",
+            "short_desc": "The Ramaiah University of Applied Sciences rewards excellence with scholarships. Students can choose to apply for a Merit Scholarship (that is, either a Scholarship of Distinction or a Scholarship of Excellence) or an Admission Test Scholarship"
+          }
+        ],
+        "createdAt": "2024-05-28T06:13:23.817Z",
+        "updatedAt": "2024-05-28T06:13:23.817Z",
+        "publishedAt": "2024-05-28T06:13:23.810Z",
+        "domain": "dsep:scholarships"
+      }
+    },
+    {
+      "id": 1346,
+      "attributes": {
+        "order_id": "802",
+        "bpp_id": "bpp-ps-network-strapi-dev.becknprotocol.io",
+        "bpp_uri": "http://bpp-ps-network-strapi-dev.becknprotocol.io",
+        "currency": null,
+        "delivery_status": null,
+        "descriptor": {
+          "name": "MS Ramaiah University of Applied Sciences",
+          "short_desc": "MS Ramaiah University of Applied Sciences"
+        },
+        "price": null,
+        "billing": null,
+        "fulfillments": [
+          {
+            "id": "12",
+            "type": "scholarship",
+            "rating": "4",
+            "rateable": true,
+            "tracking": false
+          },
+          {
+            "id": "12",
+            "type": "scholarship",
+            "rating": "4",
+            "rateable": true,
+            "tracking": false
+          }
+        ],
+        "created_date": null,
+        "last_updated_date": null,
+        "quote": null,
+        "transaction_id": "42cba94b-c87b-44ee-8c86-f40faffb3dbc",
+        "message_id": "a0cfd17d-0409-4bb3-bb10-c099626036c5",
+        "payments": null,
+        "items": [
+          {
+            "id": "7",
+            "name": "MS Ramaiah Memorial Scholarship",
+            "tags": [
+              {
+                "list": [
+                  {
+                    "code": "scholarship-code",
+                    "value": "MS Ramaiah Memorial Scholarship"
+                  }
+                ],
+                "display": true
+              },
+              {
+                "list": [
+                  {
+                    "code": "university-name",
+                    "value": "MS Ramaiah Memorial"
+                  }
+                ],
+                "display": true
+              }
+            ],
+            "price": {
+              "value": "310",
+              "currency": "INR"
+            },
+            "rating": "null",
+            "quantity": {
+              "available": {
+                "measure": {
+                  "unit": "kWh",
+                  "value": "0"
+                }
+              }
+            },
+            "rateable": true,
+            "long_desc": "\"Scholarship Details:\nScholarship amount: Rs. 50,000 scholarship overall\n\nEligibility criteria: CAT/XAT Scores grater than or equal to 80% percentile, and MAT Scores greater than or equal to 90% percentile + throughout 1st division in 10th, 12th and UG\"",
+            "short_desc": "The Ramaiah University of Applied Sciences rewards excellence with scholarships. Students can choose to apply for a Merit Scholarship (that is, either a Scholarship of Distinction or a Scholarship of Excellence) or an Admission Test Scholarship"
+          }
+        ],
+        "createdAt": "2024-05-28T06:17:07.025Z",
+        "updatedAt": "2024-05-28T06:17:07.025Z",
+        "publishedAt": "2024-05-28T06:17:07.018Z",
+        "domain": "dsep:scholarships"
+      }
+    },
+    {
+      "id": 1347,
+      "attributes": {
+        "order_id": "803",
+        "bpp_id": "bpp-ps-network-strapi-dev.becknprotocol.io",
+        "bpp_uri": "http://bpp-ps-network-strapi-dev.becknprotocol.io",
+        "currency": null,
+        "delivery_status": null,
+        "descriptor": {
+          "name": "MS Ramaiah University of Applied Sciences",
+          "short_desc": "MS Ramaiah University of Applied Sciences"
+        },
+        "price": null,
+        "billing": null,
+        "fulfillments": [
+          {
+            "id": "12",
+            "type": "scholarship",
+            "rating": "4",
+            "rateable": true,
+            "tracking": false
+          },
+          {
+            "id": "12",
+            "type": "scholarship",
+            "rating": "4",
+            "rateable": true,
+            "tracking": false
+          }
+        ],
+        "created_date": null,
+        "last_updated_date": null,
+        "quote": null,
+        "transaction_id": "42cba94b-c87b-44ee-8c86-f40faffb3dbc",
+        "message_id": "025b9722-d79c-4bf9-b2d4-ec3999610d9f",
+        "payments": null,
+        "items": [
+          {
+            "id": "7",
+            "name": "MS Ramaiah Memorial Scholarship",
+            "tags": [
+              {
+                "list": [
+                  {
+                    "code": "scholarship-code",
+                    "value": "MS Ramaiah Memorial Scholarship"
+                  }
+                ],
+                "display": true
+              },
+              {
+                "list": [
+                  {
+                    "code": "university-name",
+                    "value": "MS Ramaiah Memorial"
+                  }
+                ],
+                "display": true
+              }
+            ],
+            "price": {
+              "value": "310",
+              "currency": "INR"
+            },
+            "rating": "null",
+            "quantity": {
+              "available": {
+                "measure": {
+                  "unit": "kWh",
+                  "value": "0"
+                }
+              }
+            },
+            "rateable": true,
+            "long_desc": "\"Scholarship Details:\nScholarship amount: Rs. 50,000 scholarship overall\n\nEligibility criteria: CAT/XAT Scores grater than or equal to 80% percentile, and MAT Scores greater than or equal to 90% percentile + throughout 1st division in 10th, 12th and UG\"",
+            "short_desc": "The Ramaiah University of Applied Sciences rewards excellence with scholarships. Students can choose to apply for a Merit Scholarship (that is, either a Scholarship of Distinction or a Scholarship of Excellence) or an Admission Test Scholarship"
+          }
+        ],
+        "createdAt": "2024-05-28T06:20:26.112Z",
+        "updatedAt": "2024-05-28T06:20:26.112Z",
+        "publishedAt": "2024-05-28T06:20:26.106Z",
+        "domain": "dsep:scholarships"
+      }
+    },
+    {
+      "id": 1348,
+      "attributes": {
+        "order_id": "806",
+        "bpp_id": "bpp-ps-network-strapi-dev.becknprotocol.io",
+        "bpp_uri": "http://bpp-ps-network-strapi-dev.becknprotocol.io",
+        "currency": null,
+        "delivery_status": null,
+        "descriptor": {
+          "name": "MS Ramaiah University of Applied Sciences",
+          "short_desc": "MS Ramaiah University of Applied Sciences"
+        },
+        "price": null,
+        "billing": null,
+        "fulfillments": [
+          {
+            "id": "12",
+            "type": "scholarship",
+            "rating": "4",
+            "rateable": true,
+            "tracking": false
+          },
+          {
+            "id": "12",
+            "type": "scholarship",
+            "rating": "4",
+            "rateable": true,
+            "tracking": false
+          }
+        ],
+        "created_date": null,
+        "last_updated_date": null,
+        "quote": null,
+        "transaction_id": "42cba94b-c87b-44ee-8c86-f40faffb3dbc",
+        "message_id": "cdf90b8e-dd0b-4df1-81b4-3c6d0ee602d7",
+        "payments": null,
+        "items": [
+          {
+            "id": "7",
+            "name": "MS Ramaiah Memorial Scholarship",
+            "tags": [
+              {
+                "list": [
+                  {
+                    "code": "scholarship-code",
+                    "value": "MS Ramaiah Memorial Scholarship"
+                  }
+                ],
+                "display": true
+              },
+              {
+                "list": [
+                  {
+                    "code": "university-name",
+                    "value": "MS Ramaiah Memorial"
+                  }
+                ],
+                "display": true
+              }
+            ],
+            "price": {
+              "value": "310",
+              "currency": "INR"
+            },
+            "rating": "null",
+            "quantity": {
+              "available": {
+                "measure": {
+                  "unit": "kWh",
+                  "value": "0"
+                }
+              }
+            },
+            "rateable": true,
+            "long_desc": "\"Scholarship Details:\nScholarship amount: Rs. 50,000 scholarship overall\n\nEligibility criteria: CAT/XAT Scores grater than or equal to 80% percentile, and MAT Scores greater than or equal to 90% percentile + throughout 1st division in 10th, 12th and UG\"",
+            "short_desc": "The Ramaiah University of Applied Sciences rewards excellence with scholarships. Students can choose to apply for a Merit Scholarship (that is, either a Scholarship of Distinction or a Scholarship of Excellence) or an Admission Test Scholarship"
+          }
+        ],
+        "createdAt": "2024-05-28T06:27:00.159Z",
+        "updatedAt": "2024-05-28T06:27:00.159Z",
+        "publishedAt": "2024-05-28T06:27:00.152Z",
+        "domain": "dsep:scholarships"
+      }
+    },
+    {
+      "id": 1349,
+      "attributes": {
+        "order_id": "808",
+        "bpp_id": "bpp-ps-network-strapi-dev.becknprotocol.io",
+        "bpp_uri": "http://bpp-ps-network-strapi-dev.becknprotocol.io",
+        "currency": null,
+        "delivery_status": null,
+        "descriptor": {
+          "name": "Sitaram Jindal Foundation"
+        },
+        "price": null,
+        "billing": null,
+        "fulfillments": [
+          {
+            "id": "13",
+            "type": "scholarship",
+            "rating": "4.5",
+            "rateable": true,
+            "tracking": false
+          },
+          {
+            "id": "13",
+            "type": "scholarship",
+            "rating": "4.5",
+            "rateable": true,
+            "tracking": false
+          }
+        ],
+        "created_date": null,
+        "last_updated_date": null,
+        "quote": null,
+        "transaction_id": "0351d236-5826-4c4a-ae41-2e386aabc9dd",
+        "message_id": "b07ee8de-1fbf-4f09-bfb6-d85a68a50167",
+        "payments": null,
+        "items": [
+          {
+            "id": "12",
+            "name": "Sitaram Jindal Foundation Scholarship",
+            "tags": [
+              {
+                "list": [
+                  {
+                    "code": "scholarship",
+                    "value": "scholarship"
+                  }
+                ],
+                "display": true
+              },
+              {
+                "list": [
+                  {
+                    "code": "scholarship-code",
+                    "value": "SITARAM SCHOLARSHIP"
+                  }
+                ],
+                "display": true
+              }
+            ],
+            "price": {
+              "value": "0",
+              "currency": "INR"
+            },
+            "rating": "null",
+            "quantity": {
+              "available": {
+                "measure": {
+                  "unit": "kWh",
+                  "value": "0"
+                }
+              }
+            },
+            "rateable": true,
+            "long_desc": "\"Scholarship Details:\nPostgraduation level students Rs.1800 per month for girls and Rs. 1500 per month for boys\n\nEligibility Criteria: The applicant ought to be enrolled in a master’s program.\nIn the most recent qualifying exam, male applicants needed to obtain a minimum score of 65%, and female applicants needed a minimum score of 60%.\nFor the Sitaram Jindal foundation scholarship, Karnataka students must receive at least 70% for boys and 65% for girls.\"",
+            "categories": [
+              {
+                "id": "5",
+                "name": "Master Degree"
+              }
+            ],
+            "short_desc": "Sitaram Jindal Foundation Scholarship is one of the renowned scholarships among students offered by Sitaram Jindal Foundation"
+          }
+        ],
+        "createdAt": "2024-05-28T06:36:24.940Z",
+        "updatedAt": "2024-05-28T06:36:24.940Z",
+        "publishedAt": "2024-05-28T06:36:24.933Z",
+        "domain": "dsep:scholarships"
+      }
+    }
+  ],
+  "meta": {
+    "pagination": {
+      "page": 1,
+      "pageSize": 25,
+      "pageCount": 1,
+      "total": 22
+    }
+  }
+}

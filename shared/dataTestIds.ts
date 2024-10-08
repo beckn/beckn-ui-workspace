@@ -314,20 +314,6 @@ const testIds = {
   orderDetailspage_paymentDetails_container: 'orderDetailspage-paymentDetails-container',
   accordion_click: 'accordion-click',
   edit_button_Text: 'edit-button-Text',
-
-  // mobility-bap
-  mobility_map_container: 'map-container',
-  mobility_map: 'map',
-  mobility_info_content_container: 'info-content-container',
-  mobility_pickup_dropoff: 'pickup-dropoff',
-  mobility_alert_modal: 'alert-modal',
-  mobility_pickup_label: 'pickup-label',
-  mobility_dropoff_label: 'dropoff-label',
-  mobility_pickup_address: 'pickup-address',
-  mobility_dropoff_address: 'dropoff-address',
-  mobility_on_focus_pickup: 'on-focus-pickup',
-  mobility_on_focus_dropoff: 'on-focus-dropoff',
-  mobility_search_btn: 'search-btn',
   myLearning_text_click: 'myLearning-text-click',
   myLearning_createdAt: 'myLearning-createdAt',
   myLearning_headingText: 'myLearning-headingText',
@@ -342,7 +328,33 @@ const testIds = {
   job_details_provider_name: 'job-details-provider-name',
   job_details_description: 'job-details-description',
   job_details_apply: 'job-details-apply',
-  mobility_cancel_search: 'cancel-search'
+  scholarshipCardHeading: 'scholarshipCardHeading',
+  scholarshipCardID: 'scholarshipCardID',
+  scholarshipCardTime: 'scholarshipCardTime',
+  scholarshipCardButton: 'scholarshipCardButton',
+  myScholarship_text: 'myScholarship-text',
+  search_card_link: 'search-card-link',
+  search_card_Name: 'search-card-Name',
+  search_Card_long_desc: 'search-Card-long-desc',
+  search_card_providerName: 'search-card-providerName',
+  scholarship_details_item_name: 'scholarship-details-item-name',
+  scholarship_details_provider_name: 'scholarship-details-provider-name',
+  scholarship_details_long_desc: 'scholarship-details-long-desc',
+  scholarship_details_Button: 'scholarship-details-Button',
+
+  // mobility-bap
+  mobility_map_container: 'map-container',
+  mobility_map: 'map',
+  mobility_info_content_container: 'info-content-container',
+  mobility_pickup_dropoff: 'pickup-dropoff',
+  mobility_alert_modal: 'alert-modal',
+  mobility_pickup_label: 'pickup-label',
+  mobility_dropoff_label: 'dropoff-label',
+  mobility_pickup_address: 'pickup-address',
+  mobility_dropoff_address: 'dropoff-address',
+  mobility_on_focus_pickup: 'on-focus-pickup',
+  mobility_on_focus_dropoff: 'on-focus-dropoff',
+  mobility_search_btn: 'search-btn'
 }
 
 export { testIds }

@@ -1,0 +1,718 @@
+{
+  "data": [
+    {
+      "context": {
+        "domain": "dsep:scholarships",
+        "action": "on_search",
+        "version": "1.1.0",
+        "bpp_id": "bpp-ps-network-strapi-dev.becknprotocol.io",
+        "bpp_uri": "http://bpp-ps-network-strapi-dev.becknprotocol.io",
+        "country": "IND",
+        "city": "std:080",
+        "location": {
+          "country": {
+            "name": "India",
+            "code": "IND"
+          },
+          "city": {
+            "name": "Bangalore",
+            "code": "std:080"
+          }
+        },
+        "bap_id": "bap-ps-network-dev.becknprotocol.io",
+        "bap_uri": "https://bap-ps-network-dev.becknprotocol.io",
+        "transaction_id": "16b470ec-bbaf-49e3-8910-baaa53b179d0",
+        "message_id": "247e1455-ec3c-4f4e-9b2c-62f5b3260bad",
+        "ttl": "PT10M",
+        "timestamp": "2024-10-08T05:12:14.372Z"
+      },
+      "message": {
+        "name": "BPP",
+        "providers": [
+          {
+            "id": "5",
+            "name": "MS Ramaiah University of Applied Sciences",
+            "short_desc": "MS Ramaiah University of Applied Sciences",
+            "long_desc": "MS Ramaiah University of Applied Sciences",
+            "locations": [
+              {
+                "id": "2",
+                "gps": "44.6616,111.1001",
+                "address": "Max pvt lmtd",
+                "city": {
+                  "name": "Delhi"
+                },
+                "country": {
+                  "name": "India"
+                },
+                "state": {
+                  "name": "Delhi"
+                },
+                "area_code": "110000"
+              },
+              {
+                "id": "13",
+                "gps": "50.311674, 11.90335",
+                "address": "154/9, Bannerghatta Rd, opposite IIM-B, Sahyadri Layout, Panduranga Nagar, Bengaluru, Karnataka 560076",
+                "city": {
+                  "name": "Bangalore F"
+                },
+                "country": {
+                  "name": "India"
+                },
+                "state": {
+                  "name": "Karnataka"
+                },
+                "area_code": "560076"
+              }
+            ],
+            "items": [
+              {
+                "id": "7",
+                "short_desc": "The Ramaiah University of Applied Sciences rewards excellence with scholarships. Students can choose to apply for a Merit Scholarship (that is, either a Scholarship of Distinction or a Scholarship of Excellence) or an Admission Test Scholarship",
+                "long_desc": "\"Scholarship Details:\nScholarship amount: Rs. 50,000 scholarship overall\n\nEligibility criteria: CAT/XAT Scores grater than or equal to 80% percentile, and MAT Scores greater than or equal to 90% percentile + throughout 1st division in 10th, 12th and UG\"",
+                "name": "MS Ramaiah Memorial Scholarship",
+                "price": {
+                  "value": "310",
+                  "currency": "INR"
+                },
+                "locations": [
+                  {
+                    "id": "13",
+                    "city": "Bangalore F",
+                    "state": "Karnataka",
+                    "country": "India"
+                  }
+                ],
+                "fulfillments": [
+                  {
+                    "id": "12",
+                    "type": "scholarship",
+                    "tracking": false,
+                    "tags": [
+                      {
+                        "display": true,
+                        "list": [
+                          {
+                            "code": "scholarship-code",
+                            "value": "MS Ramaiah Memorial Scholarship"
+                          }
+                        ]
+                      },
+                      {
+                        "display": true,
+                        "list": [
+                          {
+                            "code": "university-name",
+                            "value": "MS Ramaiah Memorial"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "rating": "null",
+                "rateable": true,
+                "tags": [
+                  {
+                    "display": true,
+                    "list": [
+                      {
+                        "code": "scholarship-code",
+                        "value": "MS Ramaiah Memorial Scholarship"
+                      }
+                    ]
+                  },
+                  {
+                    "display": true,
+                    "list": [
+                      {
+                        "code": "university-name",
+                        "value": "MS Ramaiah Memorial"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "images": [
+              {
+                "url": "https://makerspace/assembly/makerspace_logo.png"
+              }
+            ]
+          },
+          {
+            "id": "10",
+            "name": "Sitaram Jindal Foundation",
+            "locations": [
+              {
+                "id": "2",
+                "gps": "44.6616,111.1001",
+                "address": "Max pvt lmtd",
+                "city": {
+                  "name": "Delhi"
+                },
+                "country": {
+                  "name": "India"
+                },
+                "state": {
+                  "name": "Delhi"
+                },
+                "area_code": "110000"
+              },
+              {
+                "id": "5",
+                "gps": "13.0827, 80.2707",
+                "address": "Old Mahabalipuram road, Rajiv gandhi salai,Sholinganallur",
+                "city": {
+                  "name": "Chennai"
+                },
+                "country": {
+                  "name": "India"
+                },
+                "state": {
+                  "name": "Tamil Nadu"
+                },
+                "area_code": "600016"
+              }
+            ],
+            "items": [
+              {
+                "id": "12",
+                "short_desc": "Sitaram Jindal Foundation Scholarship is one of the renowned scholarships among students offered by Sitaram Jindal Foundation",
+                "long_desc": "\"Scholarship Details:\nPostgraduation level students Rs.1800 per month for girls and Rs. 1500 per month for boys\n\nEligibility Criteria: The applicant ought to be enrolled in a master’s program.\nIn the most recent qualifying exam, male applicants needed to obtain a minimum score of 65%, and female applicants needed a minimum score of 60%.\nFor the Sitaram Jindal foundation scholarship, Karnataka students must receive at least 70% for boys and 65% for girls.\"",
+                "name": "Sitaram Jindal Foundation Scholarship",
+                "price": {
+                  "value": "0",
+                  "currency": "INR"
+                },
+                "categories": [
+                  {
+                    "id": "5",
+                    "name": "Master Degree"
+                  }
+                ],
+                "locations": [
+                  {
+                    "id": "5",
+                    "city": "Chennai",
+                    "state": "Tamil Nadu",
+                    "country": "India"
+                  }
+                ],
+                "fulfillments": [
+                  {
+                    "id": "13",
+                    "type": "scholarship",
+                    "tracking": false,
+                    "tags": [
+                      {
+                        "display": true,
+                        "list": [
+                          {
+                            "code": "scholarship",
+                            "value": "scholarship"
+                          }
+                        ]
+                      },
+                      {
+                        "display": true,
+                        "list": [
+                          {
+                            "code": "scholarship-code",
+                            "value": "SITARAM SCHOLARSHIP"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "rating": "null",
+                "rateable": true,
+                "tags": [
+                  {
+                    "display": true,
+                    "list": [
+                      {
+                        "code": "scholarship",
+                        "value": "scholarship"
+                      }
+                    ]
+                  },
+                  {
+                    "display": true,
+                    "list": [
+                      {
+                        "code": "scholarship-code",
+                        "value": "SITARAM SCHOLARSHIP"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "images": [
+              {
+                "url": "https://makerspace/assembly/makerspace_logo.png"
+              }
+            ]
+          },
+          {
+            "id": "20",
+            "name": "GLA University Admission Scholarship",
+            "short_desc": "The GLA university grants the GLA university scholarship to the academically brilliant students studying in M.Tech courses",
+            "long_desc": "Scholarship Details: The candidates who qualify for the M.Tech scholarship will be awarded INR 1,33,000 (GATE qualified candidates) and INR 1,05,000 (Non-GATE and GLAET qualified candidates)\n\nEligibility Criteria: The candidate must enroll in B.Tech/ B.Pharma/ M.Tech/ M.Pharma/ Ph.D. courses in GLA university. Additionally, the applicants must have cleared the entrance examinations of JEE Mains/ GATE/ GLAET with the required marks.",
+            "locations": [
+              {
+                "id": "9",
+                "gps": "18.5401344, 77.5945370",
+                "address": "17km Stone, NH-19,\nMathura-Delhi Road\nP.O. Chaumuhan,\nMathura-281 406 (U.P.) India",
+                "city": {
+                  "name": "Mathura"
+                },
+                "country": {
+                  "name": "India"
+                },
+                "state": {
+                  "name": "UP"
+                },
+                "area_code": "281406"
+              },
+              {
+                "id": "2",
+                "gps": "44.6616,111.1001",
+                "address": "Max pvt lmtd",
+                "city": {
+                  "name": "Delhi"
+                },
+                "country": {
+                  "name": "India"
+                },
+                "state": {
+                  "name": "Delhi"
+                },
+                "area_code": "110000"
+              }
+            ],
+            "items": [
+              {
+                "id": "26",
+                "short_desc": "The GLA university grants the GLA university scholarship to the academically brilliant students studying in M.Tech courses",
+                "long_desc": "Scholarship Details: The candidates who qualify for the M.Tech scholarship will be awarded INR 1,33,000 (GATE qualified candidates) and INR 1,05,000 (Non-GATE and GLAET qualified candidates)\n\nEligibility Criteria: The candidate must enroll in B.Tech/ B.Pharma/ M.Tech/ M.Pharma/ Ph.D. courses in GLA university. Additionally, the applicants must have cleared the entrance examinations of JEE Mains/ GATE/ GLAET with the required marks.",
+                "name": "GLA University Admission Scholarship",
+                "price": {
+                  "value": "0"
+                },
+                "categories": [
+                  {
+                    "id": "26",
+                    "name": "GLA University"
+                  }
+                ],
+                "locations": [
+                  {
+                    "id": "2",
+                    "city": "Delhi",
+                    "state": "Delhi",
+                    "country": "India"
+                  }
+                ],
+                "fulfillments": [
+                  {
+                    "id": "11",
+                    "type": "scholarship",
+                    "tracking": false,
+                    "tags": [
+                      {
+                        "display": true,
+                        "list": [
+                          {
+                            "code": "scholarship",
+                            "value": "scholarship"
+                          }
+                        ]
+                      },
+                      {
+                        "display": true,
+                        "list": [
+                          {
+                            "code": "scholarship-code",
+                            "value": "RAMAIAH SCHOLARSHIP"
+                          }
+                        ]
+                      },
+                      {
+                        "display": true,
+                        "list": [
+                          {
+                            "code": "scholarship-code",
+                            "value": "ENTRANCE SCHOLARSHIP"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "images": [
+                  {
+                    "url": "https://www.gla.ac.in/images/gla-university-logo.png"
+                  }
+                ],
+                "rating": "null",
+                "rateable": true,
+                "tags": [
+                  {
+                    "display": true,
+                    "list": [
+                      {
+                        "code": "scholarship",
+                        "value": "scholarship"
+                      }
+                    ]
+                  },
+                  {
+                    "display": true,
+                    "list": [
+                      {
+                        "code": "scholarship-code",
+                        "value": "RAMAIAH SCHOLARSHIP"
+                      }
+                    ]
+                  },
+                  {
+                    "display": true,
+                    "list": [
+                      {
+                        "code": "scholarship-code",
+                        "value": "ENTRANCE SCHOLARSHIP"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "images": [
+              {
+                "url": "https://makerspace/assembly/makerspace_logo.png"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "context": {
+        "domain": "dsep:scholarships",
+        "action": "on_search",
+        "version": "1.1.0",
+        "bpp_id": "sandbox-bpp-network.becknprotocol.io",
+        "bpp_uri": "https://sandbox-bpp-network.becknprotocol.io",
+        "country": "IND",
+        "city": "std:080",
+        "location": {
+          "city": {
+            "name": "Bangalore",
+            "code": "std:080"
+          },
+          "country": {
+            "name": "India",
+            "code": "IND"
+          }
+        },
+        "bap_id": "bap-ps-network-dev.becknprotocol.io",
+        "bap_uri": "https://bap-ps-network-dev.becknprotocol.io",
+        "transaction_id": "16b470ec-bbaf-49e3-8910-baaa53b179d0",
+        "message_id": "247e1455-ec3c-4f4e-9b2c-62f5b3260bad",
+        "ttl": "PT10M",
+        "timestamp": "2024-10-08T05:12:16.823Z"
+      },
+      "message": {
+        "name": "Protean DSEP Scholarships and Grants BPP Platform",
+        "providers": [
+          {
+            "id": "BX213573733",
+            "name": "XYZ Education Foundation",
+            "short_desc": "Short Description about the Foundation",
+            "locations": [
+              {
+                "id": "L1",
+                "city": {
+                  "name": "Pune",
+                  "code": "std:020"
+                },
+                "state": {
+                  "name": "Maharastra",
+                  "code": "MH"
+                }
+              },
+              {
+                "id": "L2",
+                "city": {
+                  "name": "Thane",
+                  "code": "std:022"
+                },
+                "state": {
+                  "name": "Maharastra",
+                  "code": "MH"
+                }
+              },
+              {
+                "id": "L3",
+                "city": {
+                  "name": "Lucknow",
+                  "code": "std:0522"
+                },
+                "state": {
+                  "name": "Uttar Pradesh",
+                  "code": "UP"
+                }
+              }
+            ],
+            "items": [
+              {
+                "id": "SCM_63587501",
+                "long_desc": "XYZ Education Scholarship for Undergraduate Students",
+                "name": "XYZ Education Scholarship for Undergraduate Students",
+                "price": {
+                  "value": "Upto RS.1000 per year",
+                  "currency": "INR"
+                },
+                "categories": [
+                  {
+                    "id": "DSEP_CAT_1",
+                    "name": "Under Graduate",
+                    "code": "ug"
+                  }
+                ],
+                "locations": [
+                  {
+                    "id": "L1",
+                    "city": "Pune",
+                    "state": "Maharastra"
+                  },
+                  {
+                    "id": "L2",
+                    "city": "Thane",
+                    "state": "Maharastra"
+                  }
+                ],
+                "fulfillments": [
+                  {
+                    "id": "DSEP_FUL_63587501",
+                    "type": "SCHOLARSHIP",
+                    "tracking": false,
+                    "contact": {
+                      "phone": "9876543210",
+                      "email": "maryg@xyz.com"
+                    },
+                    "tags": [
+                      {
+                        "code": "soc-elg",
+                        "name": "Social Eligibility",
+                        "display": true,
+                        "list": [
+                          {
+                            "value": "SC"
+                          },
+                          {
+                            "value": "ST"
+                          },
+                          {
+                            "value": "OBC"
+                          }
+                        ]
+                      },
+                      {
+                        "code": "gen-elg",
+                        "name": "Gender Eligibility",
+                        "display": true,
+                        "list": [
+                          {
+                            "value": "Female"
+                          },
+                          {
+                            "value": "Transgender"
+                          }
+                        ]
+                      },
+                      {
+                        "code": "fin-elg",
+                        "name": "Financial Eligibility",
+                        "display": true,
+                        "list": [
+                          {
+                            "value": "Max Family Income - Rs.500000.00"
+                          }
+                        ]
+                      },
+                      {
+                        "code": "acad-elg",
+                        "name": "Academic Eligibility",
+                        "display": true,
+                        "list": [
+                          {
+                            "code": "class",
+                            "name": "Class",
+                            "value": "12th"
+                          },
+                          {
+                            "code": "percentage",
+                            "name": "Percentage",
+                            "value": ">= 50"
+                          }
+                        ]
+                      },
+                      {
+                        "code": "docs-reqd",
+                        "name": "Documents Required",
+                        "display": true,
+                        "list": [
+                          {
+                            "value": "10th Marksheet"
+                          },
+                          {
+                            "value": "Aadhar Card of the Student"
+                          },
+                          {
+                            "value": "Aadhar Card of the Parent"
+                          },
+                          {
+                            "value": "Pan Card of the Parent"
+                          }
+                        ]
+                      },
+                      {
+                        "code": "add-info",
+                        "name": "Additional Information",
+                        "display": true,
+                        "list": [
+                          {
+                            "code": "faq-url",
+                            "name": "Frequently Asked Questions's URL",
+                            "value": "https://www.xyz-scholarship.com/faq"
+                          },
+                          {
+                            "code": "tnc-url",
+                            "name": "Terms and Conditions's URL",
+                            "value": "https://www.xyz-scholarship.com/tnc"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "rateable": false,
+                "tags": [
+                  {
+                    "code": "soc-elg",
+                    "name": "Social Eligibility",
+                    "display": true,
+                    "list": [
+                      {
+                        "value": "SC"
+                      },
+                      {
+                        "value": "ST"
+                      },
+                      {
+                        "value": "OBC"
+                      }
+                    ]
+                  },
+                  {
+                    "code": "gen-elg",
+                    "name": "Gender Eligibility",
+                    "display": true,
+                    "list": [
+                      {
+                        "value": "Female"
+                      },
+                      {
+                        "value": "Transgender"
+                      }
+                    ]
+                  },
+                  {
+                    "code": "fin-elg",
+                    "name": "Financial Eligibility",
+                    "display": true,
+                    "list": [
+                      {
+                        "value": "Max Family Income - Rs.500000.00"
+                      }
+                    ]
+                  },
+                  {
+                    "code": "acad-elg",
+                    "name": "Academic Eligibility",
+                    "display": true,
+                    "list": [
+                      {
+                        "code": "class",
+                        "name": "Class",
+                        "value": "12th"
+                      },
+                      {
+                        "code": "percentage",
+                        "name": "Percentage",
+                        "value": ">= 50"
+                      }
+                    ]
+                  },
+                  {
+                    "code": "docs-reqd",
+                    "name": "Documents Required",
+                    "display": true,
+                    "list": [
+                      {
+                        "value": "10th Marksheet"
+                      },
+                      {
+                        "value": "Aadhar Card of the Student"
+                      },
+                      {
+                        "value": "Aadhar Card of the Parent"
+                      },
+                      {
+                        "value": "Pan Card of the Parent"
+                      }
+                    ]
+                  },
+                  {
+                    "code": "add-info",
+                    "name": "Additional Information",
+                    "display": true,
+                    "list": [
+                      {
+                        "code": "faq-url",
+                        "name": "Frequently Asked Questions's URL",
+                        "value": "https://www.xyz-scholarship.com/faq"
+                      },
+                      {
+                        "code": "tnc-url",
+                        "name": "Terms and Conditions's URL",
+                        "value": "https://www.xyz-scholarship.com/tnc"
+                      }
+                    ]
+                  }
+                ],
+                "time": {
+                  "label": "Start  & End date of the Application",
+                  "range": {
+                    "start": "2022-09-01T00:00:00.000Z",
+                    "end": "2022-10-31T00:00:00.000Z"
+                  }
+                }
+              }
+            ],
+            "images": [
+              {
+                "url": "http://www.someurl.com"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

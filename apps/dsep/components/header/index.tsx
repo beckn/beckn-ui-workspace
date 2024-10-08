@@ -54,7 +54,8 @@ const Header = () => {
               id: 'scholarship',
               label: 'My Scholarship',
               href: '/myScholarship',
-              icon: '/images/myScholarshipIcon.svg'
+              icon: '/images/myScholarshipIcon.svg',
+              dataTest: testIds.myScholarship_text
             },
             {
               id: 'jobs',

@@ -4,6 +4,7 @@ import Router from 'next/router'
 import React from 'react'
 import { useLanguage } from '../../../hooks/useLanguage'
 import { ParsedItemModel } from '../../../types/search.types'
+import { testIds } from '@shared/dataTestIds'
 
 interface Props {
   scholarship: ParsedItemModel
@@ -22,10 +23,12 @@ const ScholarshipDetails: React.FC<Props> = ({ scholarship }) => {
           text={scholarship.item.name}
           fontSize={'17px'}
           fontWeight={'600'}
+          dataTest={testIds.scholarship_details_item_name}
         />
         <Typography
           text={`by ${scholarship.providerName}`}
           fontSize={'15px'}
+          dataTest={testIds.scholarship_details_provider_name}
         />
       </Flex>
       <Box
@@ -36,10 +39,12 @@ const ScholarshipDetails: React.FC<Props> = ({ scholarship }) => {
           maxHeight: 'calc(100vh - 254px)',
           overflow: 'auto'
         }}
+        data-test={testIds.scholarship_details_long_desc}
       >
         {scholarship.item.long_desc}
       </Box>
       <Button
+        dataTest={testIds.scholarship_details_Button}
         text={t.applyNow}
         color={'rgba(var(--text-color))'}
         disabled={false}

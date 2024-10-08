@@ -4,6 +4,7 @@ import { Box, Flex } from '@chakra-ui/react'
 import { useRouter } from 'next/navigation'
 import React from 'react'
 import { ParsedItemModel } from '../../../types/search.types'
+import { testIds } from '@shared/dataTestIds'
 
 const scholarshipListCard = (props: any) => {
   const router = useRouter()
@@ -19,6 +20,7 @@ const scholarshipListCard = (props: any) => {
         localStorage.setItem('selectedScholarship', JSON.stringify(dataSource))
         router.push('/scholarshipDetailsPage')
       }}
+      data-test={testIds.search_card_link}
     >
       <DetailCard>
         <Flex
@@ -26,14 +28,19 @@ const scholarshipListCard = (props: any) => {
           gap={'10px'}
         >
           <Typography
+            dataTest={testIds.search_card_Name}
             text={name}
             fontWeight={'600'}
           />
-          <Typography text={long_desc} />
+          <Typography
+            text={long_desc}
+            dataTest={testIds.search_Card_long_desc}
+          />
 
           <Typography
             text={`By: ${providerName}`}
             fontWeight={'600'}
+            dataTest={testIds.search_card_providerName}
           />
         </Flex>
       </DetailCard>

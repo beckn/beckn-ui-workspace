@@ -3,6 +3,7 @@ import { Typography } from '@beckn-ui/molecules'
 import { Box, Divider, Flex, Image } from '@chakra-ui/react'
 import React, { FC } from 'react'
 import { useLanguage } from '../../../hooks/useLanguage'
+import { testIds } from '@shared/dataTestIds'
 
 interface ScholarshipCardProps {
   heading: string
@@ -24,8 +25,12 @@ const ScholarshipCard: FC<ScholarshipCardProps> = props => {
         <Typography
           text={props.heading}
           fontWeight={'600'}
+          dataTest={testIds.scholarshipCardHeading}
         />
-        <Typography text={props.time} />
+        <Typography
+          text={props.time}
+          dataTest={testIds.scholarshipCardTime}
+        />
       </Flex>
 
       <Flex
@@ -37,6 +42,7 @@ const ScholarshipCard: FC<ScholarshipCardProps> = props => {
           style={{
             paddingRight: '10px'
           }}
+          dataTest={testIds.scholarshipCardID}
         />
 
         <Flex alignItems={'center'}>

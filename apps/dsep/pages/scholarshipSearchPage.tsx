@@ -7,6 +7,7 @@ import { useLanguage } from '../hooks/useLanguage'
 import { ParsedItemModel } from '../types/search.types'
 import { getParsedSearchlist } from '../utilities/search-utils'
 import axios from '../services/axios'
+import { testIds } from '@shared/dataTestIds'
 
 const ScholarshipCard = () => {
   const [isLoading, setIsLoading] = useState(true)
@@ -48,6 +49,7 @@ const ScholarshipCard = () => {
         <LoaderWithMessage
           loadingSubText={t.scholarshipSearchLoader}
           loadingText={t.categoryLoadPrimary}
+          dataTest={testIds.loadingIndicator}
         />
       </Box>
     )

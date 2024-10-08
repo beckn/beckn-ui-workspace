@@ -11,6 +11,7 @@ import ScholarshipCard from '../components/scholarship/scholarshipCard/Scholarsh
 import { useLanguage } from '../hooks/useLanguage'
 import { scholarshipCartActions } from '../store/scholarshipCart-slice'
 import { formatTimestamp } from '../utilities/confirm-utils'
+import { testIds } from '@shared/dataTestIds'
 
 const myScholarship = () => {
   const { t } = useLanguage()
@@ -110,6 +111,7 @@ const myScholarship = () => {
       })}
 
       <Button
+        dataTest={testIds.scholarshipCardButton}
         text={t.searchMoreScholarships}
         color={'rgba(var(--text-color))'}
         disabled={false}
