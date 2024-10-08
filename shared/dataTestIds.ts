@@ -354,7 +354,8 @@ const testIds = {
   mobility_dropoff_address: 'dropoff-address',
   mobility_on_focus_pickup: 'on-focus-pickup',
   mobility_on_focus_dropoff: 'on-focus-dropoff',
-  mobility_search_btn: 'search-btn'
+  mobility_search_btn: 'search-btn',
+  mobility_cancel_search: 'cancel-search'
 }
 
 export { testIds }
