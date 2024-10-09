@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import React from 'react'
 import orderConfirmmark from '../public/images/orderConfirmmark.svg'
 import { useLanguage } from '../hooks/useLanguage'
+import { testIds } from '@shared/dataTestIds'
 
 const applicationSent = () => {
   const { t } = useLanguage()
@@ -22,7 +23,8 @@ const applicationSent = () => {
             },
             disabled: false,
             variant: 'solid',
-            colorScheme: 'primary'
+            colorScheme: 'primary',
+            dataTest: testIds.jobSubmitted_viewNewJob
           },
           {
             text: t.goBackBtn,
@@ -31,7 +33,8 @@ const applicationSent = () => {
             },
             disabled: false,
             variant: 'outline',
-            colorScheme: 'primary'
+            colorScheme: 'primary',
+            dataTest: testIds.jobSubmitted_viewToHomePage
           }
         ]
       }}

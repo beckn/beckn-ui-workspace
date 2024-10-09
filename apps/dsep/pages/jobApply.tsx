@@ -23,6 +23,7 @@ import { ConfirmResponseModel } from '../lib/types/confirm.types'
 import 'react-toastify/dist/ReactToastify.css'
 import { InitResponseModel } from '../lib/types/init.types'
 import axios from '../services/axios'
+import { testIds } from '@shared/dataTestIds'
 
 const jobApply = () => {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([])
@@ -185,6 +186,7 @@ const jobApply = () => {
         <LoaderWithMessage
           loadingSubText=""
           loadingText=""
+          dataTest={testIds.loadingIndicator}
         />
       </Box>
     )
@@ -200,6 +202,7 @@ const jobApply = () => {
         <LoaderWithMessage
           loadingSubText={t.applicationLoaderText}
           loadingText={t.categoryLoadPrimary}
+          dataTest={testIds.loadingIndicator}
         />
       </Box>
     )

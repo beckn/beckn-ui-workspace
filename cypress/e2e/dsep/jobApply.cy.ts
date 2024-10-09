@@ -3,8 +3,9 @@ import { initResponse } from '../../fixtures/DSEP/checkoutPage/initResponse'
 import { confirmResponse } from '../../fixtures/DSEP/orderConfirmation/confirmResponse'
 import { orderResponse } from '../../fixtures/DSEP/orderConfirmation/orderResponse'
 import { statusResponse } from '../../fixtures/DSEP/orderDetails/statusResponse'
+import 'cypress-file-upload'
 
-describe.only('job Details Page', () => {
+describe.only('job Apply Page', () => {
   const searchTerm = 'Java'
 
   before(() => {
@@ -37,29 +38,44 @@ describe.only('job Details Page', () => {
     cy.getByData(testIds.orderConfirmation_viewOrderButton).click()
     cy.wait('@processStatusResponse')
     cy.getByData(testIds.job_main_container_job_search_link).click()
-    cy.url().should('include', '/jobSearch')
-    cy.intercept('POST', '**/search', {
+    cy.intercept('POST', 'https://bap-gcl-prod.becknprotocol.io/search', {
       fixture: 'DSEP/jobSearchResponse/jobSearchResponse.json'
     }).as('jobSearchResponse')
-    cy.wait('@jobSearchResponse')
+    cy.url().should('include', '/jobSearch')
     cy.getByData('job-detail-link').eq(1).click()
     cy.url().should('include', '/jobDetails?jobDetails')
-  })
-  it('Should render job details page', () => {
-    cy.getByData(testIds.job_details_name).should('be.visible')
-    cy.getByData(testIds.job_details_provider_name).should('be.visible')
-    cy.getByData(testIds.job_details_description).should('be.visible')
-  })
-  it('Should render job details page by all elements', () => {
-    cy.getByData(testIds.job_details_name).should('contain.text', 'Data Analyst - Analytics- Senior Analyst')
-    cy.getByData(testIds.job_details_provider_name).should('contain.text', 'PWC')
-    cy.getByData(testIds.job_details_description).should(
-      'contain.text',
-      'You will be part of the team which partners with the business leaders to provide data driven strategies to grow business KPIs like acquisition, customer engagement & retention, campaign optimization, personalized offering, etc.'
-    )
-  })
-  it('Should navigate to job details page', () => {
     cy.getByData(testIds.job_details_apply).click()
+    cy.intercept('GET', '**/api/profiles?populate[0]=documents.attachment', {
+      fixture: 'DSEP/jobApply/profilePopulate.json'
+    }).as('profilePopulate')
+    cy.intercept('POST', '**/select', {
+      fixture: 'DSEP/jobApply/selectResponse.json'
+    }).as('selectResponse')
+    cy.intercept('POST', '**/init', {
+      fixture: 'DSEP/jobApply/initResponse.json'
+    }).as('initResponse')
     cy.url().should('include', '/jobApply?jobDetails')
+
+    cy.getByData(testIds.loadingIndicator).should('be.visible')
+  })
+  it('Should render job apply page', () => {
+    cy.get('#xinputform').should('be.visible')
+    cy.get('#nameLabel').should('be.visible')
+    cy.get('#mobileLabel').should('be.visible')
+    cy.get('#emailLabel').should('be.visible')
+  })
+
+  it('Should show error messages for invalid data fields', () => {
+    cy.get('#name').clear().type('1')
+    cy.get('#mobile').clear().type('w')
+    cy.get('#email').clear().type('2')
+    cy.get('#nameError').should('contain', 'Please enter a valid name.')
+    cy.get('#mobileError').should('contain', 'Please enter a valid 10-digit mobile number.')
+    cy.get('#emailError').should('contain', 'Please enter a valid email address.')
+    cy.get('#submitButton').should('be.disabled')
+  })
+  it('Should render job apply page With valid data', () => {
+    cy.fillDSEPJobApply()
+    cy.url().should('include', '/applicationSent')
   })
 })
