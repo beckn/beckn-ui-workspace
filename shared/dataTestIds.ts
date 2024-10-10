@@ -20,6 +20,7 @@ const testIds = {
   invoiceModal: 'invoiceModal',
   downloadInvoiceIcon: 'downloadInvoiceIcon',
   invoice: 'invoice',
+  bottomDrawer: 'bottom-drawer',
   // items
   item_list: 'item-list',
   item_title: 'item-title',
@@ -357,7 +358,21 @@ const testIds = {
   mobility_on_focus_pickup: 'on-focus-pickup',
   mobility_on_focus_dropoff: 'on-focus-dropoff',
   mobility_search_btn: 'search-btn',
-  mobility_cancel_search: 'cancel-search'
+  mobility_cancel_search: 'cancel-search',
+  mobility_searchpage_container: 'search-page-container',
+  mobility_total_cabs: 'total-cabs',
+  mobility_catalog_container: 'catalog-container',
+  mobility_catalog_item: 'catalog-item',
+  mobility_provider_details: 'provider-details',
+  mobility_provider_name: 'provider-name',
+  mobility_provider_address: 'provider-address',
+  mobility_provider_rating: 'provider-rating',
+  mobility_provider_item: 'provider-item',
+  mobility_provider_item_name: 'provider-item-name',
+  mobility_provider_item_rating: 'provider-item-rating',
+  mobility_provider_item_fare: 'provider-item-fare',
+  mobility_provider_item_select_button: 'provider-item-select-button',
+  mobility_search_ride_details_form: 'search-ride-details-form'
 }
 
 export { testIds }
