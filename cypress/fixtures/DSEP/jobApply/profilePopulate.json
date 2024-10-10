@@ -1,0 +1,15 @@
+{
+  "data": {
+    "id": 65,
+    "attributes": {
+      "name": "Antoine Dubois",
+      "address": ", dd, delhi, delhi, India",
+      "createdAt": "2024-06-10T10:00:36.000Z",
+      "updatedAt": "2024-06-26T13:05:43.483Z",
+      "publishedAt": "2024-06-10T10:00:35.994Z",
+      "phone": "7991139788",
+      "zip_code": "201009"
+    }
+  },
+  "meta": {}
+}

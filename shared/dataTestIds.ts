@@ -341,6 +341,8 @@ const testIds = {
   scholarship_details_provider_name: 'scholarship-details-provider-name',
   scholarship_details_long_desc: 'scholarship-details-long-desc',
   scholarship_details_Button: 'scholarship-details-Button',
+  jobSubmitted_viewNewJob: 'job-submitted-view-new-job',
+  jobSubmitted_viewToHomePage: 'job-submitted-view-to-home-page',
 
   // mobility-bap
   mobility_map_container: 'map-container',

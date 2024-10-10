@@ -1,0 +1,174 @@
+{
+  "data": [
+    {
+      "context": {
+        "domain": "dsep:jobs",
+        "action": "on_init",
+        "version": "1.1.0",
+        "bpp_id": "bpp-ps-network-strapi1-prod.becknprotocol.io",
+        "bpp_uri": "https://bpp-ps-network-strapi1-prod.becknprotocol.io",
+        "country": "IND",
+        "city": "std:080",
+        "location": {
+          "country": {
+            "name": "India",
+            "code": "IND"
+          },
+          "city": {
+            "name": "Bangalore",
+            "code": "std:080"
+          }
+        },
+        "bap_id": "bap-ps-network-prod.becknprotocol.io",
+        "bap_uri": "https://bap-ps-network-prod.becknprotocol.io",
+        "transaction_id": "86420742-920a-4ee3-ae17-1618b4eab59c",
+        "message_id": "d214edaf-cf1a-4590-979b-0ddbe81dbf9c",
+        "ttl": "PT10M",
+        "timestamp": "2024-10-09T07:05:25.556Z"
+      },
+      "message": {
+        "order": {
+          "type": "DEFAULT",
+          "provider": {
+            "id": "12",
+            "name": "PWC",
+            "short_desc": "PriceWaterCoopers",
+            "fulfillments": [
+              {
+                "id": "10",
+                "tracking": false
+              },
+              {
+                "id": "10",
+                "type": "job-type",
+                "rating": "4",
+                "rateable": true,
+                "tracking": false
+              },
+              {
+                "id": "10",
+                "type": "job-type",
+                "rating": "4",
+                "rateable": true,
+                "tracking": false
+              }
+            ]
+          },
+          "items": [
+            {
+              "id": "16",
+              "name": "Data Analyst",
+              "short_desc": "We are looking for candidates at analyst, associate consultant and consultant roles.  Btech/BCA, holding 0-1 years of Post Qualification experience.",
+              "long_desc": "Job Description:\n\nStrong knowledge of .NET web framework and Front-end frameworks like Angular or react.\nProficient in ASP.NET MVC, .NET CORE , with a good knowledge of their ecosystems\nFamiliarity with the Mono framework\nStrong understanding of object-oriented programming\nSkill for writing reusable libraries\nFamiliar with various design and architectural patterns\nKnowledge of concurrency patterns\nFamiliarity with Microsoft SQL Server and popular web application frameworks\nKnack for writing clean, readable, and easily maintainable code\nUnderstanding of fundamental design principles for building a scalable application\nExperience creating database schemas that represent and support business processes\nExperience implementing automated testing platforms and unit tests\nProficient understanding of code versioning tools\nKnowledge on Azure DevOps is plus.\n\nRole: Risk Advisory Data Analyst\nIndustry Type: Accounting / Auditing\nDepartment: Finance\nEmployment Type: Full Time, Permanent\nEducation: B.Tech/B.E. in Production/Industrial, BCA in Computers, Any Postgraduate\nExperience Required: 0-1 years\nLocation: Bangalore",
+              "price": {
+                "value": "1000",
+                "currency": "INR"
+              },
+              "rating": "null",
+              "rateable": true,
+              "quantity": {
+                "available": {
+                  "measure": {
+                    "value": "0",
+                    "unit": "kWh"
+                  }
+                }
+              },
+              "categories": [
+                {
+                  "id": "13",
+                  "name": "Data Analytics Jobs"
+                }
+              ],
+              "locations": [
+                {
+                  "id": "10",
+                  "city": "Bengaluru. ",
+                  "state": "Karnataka",
+                  "country": "India"
+                }
+              ],
+              "tags": [
+                {
+                  "display": true,
+                  "list": [null]
+                },
+                {
+                  "display": true,
+                  "list": [null]
+                },
+                {
+                  "display": true,
+                  "list": [null]
+                },
+                {
+                  "display": true,
+                  "list": [null]
+                },
+                {
+                  "display": true,
+                  "list": [null]
+                },
+                {
+                  "display": true,
+                  "list": [null]
+                },
+                {
+                  "display": true,
+                  "list": [null]
+                },
+                {
+                  "display": true,
+                  "list": [null]
+                },
+                {
+                  "display": true,
+                  "list": [null]
+                }
+              ],
+              "xinput": {
+                "url": "https://bpp-unified-strapi1-prod.becknprotocol.io/beckn-bpp-adapter/x-input/form?form_id=dsepJobsApplyForm",
+                "mime_type": "text/html",
+                "html": "<html><head>\n    <title>Apply Job Prefilled</title>\n    <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css\">\n    <style>\n        body {\n            font-family: Arial, sans-serif;\n            background-color: #fbfcff;\n            display: flex;\n            justify-content: center;\n            align-items: center;\n            margin: 0;\n        }\n        form {\n            background: #fff;\n            max-width: 400px;\n            padding: 20px;\n            width: 100%;\n            height: calc(100vh - 8rem);\n            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);\n            border-radius: 8px;\n            display: flex;\n            flex-direction: column;\n            justify-content: space-between;\n        }\n        h1 {\n            font-size: 24px;\n            margin-bottom: 20px;\n            text-align: center;\n        }\n        label {\n            margin-bottom: 5px;\n        }\n        input[type=\"text\"],\n        input[type=\"tel\"],\n        input[type=\"email\"],\n        input[type=\"file\"] {\n            width: 100%;\n            margin-bottom: 20px;\n            border: 0;\n            outline: 0;\n            border-bottom: 1px solid #ccc;\n            font-size: 16px;\n        }\n        input:focus {\n            border-color: #3AA5E1;\n            outline: none;\n        }\n        .file-container {\n            display: flex;\n            align-items: center;\n            justify-content: space-between;\n            background: #f9f9f9;\n            border: 1px solid #ccc;\n            padding: 10px;\n            border-radius: 4px;\n            margin-bottom: 20px;\n        }\n        .file-container span {\n            margin-left: 10px;\n        }\n        .file-container button {\n            background: none;\n            border: none;\n            cursor: pointer;\n            color: #3AA5E1;\n        }\n        .file-container button:focus {\n            outline: none;\n        }\n        input[type=\"checkbox\"] {\n            margin-right: 10px;\n            margin-bottom: auto;\n        }\n        button[type=\"submit\"] {\n            background-color: #3AA5E1;\n            color: white;\n            padding: 10px;\n            border: none;\n            border-radius: 4px;\n            cursor: pointer;\n            width: 100%;\n            font-size: 16px;\n        }\n        .upload-button {\n            display: flex;\n            align-items: center;\n            justify-content: center;\n            padding: 10px;\n            border: 1px dashed #000;\n            border-radius: 4px;\n            background-color: #f0f0f0;\n            color: #000;\n            cursor: pointer;\n            font-size: 16px;\n            height: 2.5rem;\n        }\n        .upload-button input {\n            display: none;\n            margin-bottom: 0;\n        }\n        .file-container button {\n            background: none !Important;\n            border: none;\n            cursor: pointer;\n            width: 30px;\n        }\n        .error {\n            color: red;\n            font-size: 14px;\n            margin-top: -15px;\n            margin-bottom: 10px;\n        }\n        .disabled {\n            background-color: #ccc;\n            cursor: not-allowed;\n        }\n    </style>\n<script>\n    function changeLabelColor(labelId, color) {\n        const label = document.getElementById(labelId);\n        label.style.color = color;\n    }\n    function handleFileSelect(event) {\n        const fileList = document.getElementById('file-list');\n        const files = event.target.files;\n        // Clear the file list container\n        fileList.innerHTML = '';\n        for (let i = 0; i < files.length; i++) {\n            const file = files[i];\n            const fileContainer = document.createElement('div');\n            fileContainer.className = 'file-container';\n            fileContainer.innerHTML = `\n                <span style=\"display: flex; align-items: center;\">\n                    <i style=\"font-size:24px\" class=\"fa\">&#xf1c1;</i>\n                    <span style=\"white-space: nowrap; overflow: hidden; width: 12rem; text-overflow: ellipsis;\">${file.name}</span>\n                </span>\n                <button type=\"button\" onclick=\"removeFile(${i})\"><i class=\"fa fa-trash\" style=\"color:black;\"></i></button>\n            `;\n            fileList.appendChild(fileContainer);\n        }\n    }\n    function removeFile(index) {\n        const fileInput = document.getElementById('document');\n        const dataTransfer = new DataTransfer();\n        const files = fileInput.files;\n        for (let i = 0; i < files.length; i++) {\n            if (i !== index) {\n                dataTransfer.items.add(files[i]);\n            }\n        }\n        fileInput.files = dataTransfer.files;\n        handleFileSelect({ target: fileInput });\n    }\n    function chooseFile() {\n        document.getElementById('document').click()\n    }\n    \n    function validateName() {\n            const name = document.getElementById('name').value;\n            if (name !== '' && !/^[a-zA-Z\\s]+$/.test(name)) {\n                document.getElementById('nameError').textContent = 'Please enter a valid name.';\n                return false;\n            } else {\n                document.getElementById('nameError').textContent = '';\n                return true;\n            }\n        }\n\n        function validateMobile() {\n            const mobile = document.getElementById('mobile').value;\n            if (mobile !== '' && !/^\\d{10}$/.test(mobile)) {\n                document.getElementById('mobileError').textContent = 'Please enter a valid 10-digit mobile number.';\n                return false;\n            } else {\n                document.getElementById('mobileError').textContent = '';\n                return true;\n            }\n        }\n\n        function validateEmail() {\n            const email = document.getElementById('email').value;\n            const emailPattern = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;\n            if (email !== '' && !emailPattern.test(email)) {\n                document.getElementById('emailError').textContent = 'Please enter a valid email address.';\n                return false;\n            } else {\n                document.getElementById('emailError').textContent = '';\n                return true;\n            }\n        }\n        \n        function validateForm() {\n            const isNameValid = validateName();\n            const isMobileValid = validateMobile();\n            const isEmailValid = validateEmail();\n            return isNameValid && isMobileValid && isEmailValid;\n        }\n        \n        function updateSubmitButton() {\n            const submitButton = document.getElementById('submitButton');\n            if (validateForm()) {\n                submitButton.disabled = false;\n                submitButton.classList.remove('disabled');\n            } else {\n                submitButton.disabled = true;\n                submitButton.classList.add('disabled');\n            }\n        }\n</script></head>\n\n<body>\n    <form id=\"xinputform\">\n        <div>\n            <label for=\"name\" id=\"nameLabel\">Name</label>\n            <input type=\"text\" id=\"name\" name=\"name\" required=\"\" onfocus=\"changeLabelColor('nameLabel', '#3AA5E1')\" onblur=\"changeLabelColor('nameLabel', 'black')\" oninput=\"updateSubmitButton()\">\n              <div id=\"nameError\" class=\"error\"></div>\n              \n            <label for=\"mobile\" id=\"mobileLabel\">Mobile Number</label>\n            <input type=\"tel\" id=\"mobile\" name=\"mobile\" minlength=\"10\" maxlength=\"10\" required=\"\" onfocus=\"changeLabelColor('mobileLabel', '#3AA5E1')\" onblur=\"changeLabelColor('mobileLabel', 'black')\" oninput=\"updateSubmitButton()\">\n                <div id=\"mobileError\" class=\"error\"></div>\n                \n            <label for=\"email\" id=\"emailLabel\">Email ID</label>\n            <input type=\"email\" id=\"email\" name=\"email\" required=\"\" onfocus=\"changeLabelColor('emailLabel', '#3AA5E1')\" onblur=\"changeLabelColor('emailLabel', 'black')\" oninput=\"updateSubmitButton()\">\n              <div id=\"emailError\" class=\"error\"></div>\n            <label>Documents</label>\n            <div id=\"file-list\">\n            </div>\n            <label class=\"upload-button\">\n                <i class=\"fa fa-cloud-upload\" style=\"font-size: 22px; margin-right: 10px;\"></i> Upload Documents\n                <input type=\"file\" id=\"document\" name=\"document\" multiple=\"\" accept=\".pdf\" onchange=\"handleFileSelect(event)\">\n            </label>\n            <div style=\"display: flex; margin-top: 3rem;\">\n                <input type=\"checkbox\" id=\"declaration\" name=\"declaration\" required=\"\">\n                <label for=\"declaration\">I hereby declare that the details mentioned above are correct.</label>\n            </div>\n        </div>\n        <button type=\"submit\" id=\"submitButton\" class=\"disabled\" disabled=\"\">Apply Now</button>\n    <input type=\"hidden\" value=\"https://bpp-unified-strapi1-prod.becknprotocol.io/beckn-bpp-adapter/x-input/submit\" id=\"action\" name=\"action\"><input type=\"hidden\" value=\"POST\" id=\"method\" name=\"method\"></form>\n\n</body></html>"
+              },
+              "fulfillments": [
+                {
+                  "id": "10"
+                },
+                {
+                  "id": "10",
+                  "type": "job-type",
+                  "rating": "4"
+                },
+                {
+                  "id": "10",
+                  "type": "job-type",
+                  "rating": "4"
+                }
+              ]
+            }
+          ],
+          "fulfillments": [
+            {
+              "id": "10",
+              "tracking": false
+            },
+            {
+              "id": "10",
+              "type": "job-type",
+              "rating": "4",
+              "rateable": true,
+              "tracking": false
+            }
+          ],
+          "quote": {
+            "price": {
+              "value": "1000",
+              "currency": "INR"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

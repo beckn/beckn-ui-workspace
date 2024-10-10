@@ -1,0 +1,174 @@
+{
+  "data": [
+    {
+      "context": {
+        "domain": "dsep:jobs",
+        "action": "on_select",
+        "version": "1.1.0",
+        "bpp_id": "bpp-ps-network-strapi1-prod.becknprotocol.io",
+        "bpp_uri": "https://bpp-ps-network-strapi1-prod.becknprotocol.io",
+        "country": "IND",
+        "city": "std:080",
+        "location": {
+          "country": {
+            "name": "India",
+            "code": "IND"
+          },
+          "city": {
+            "name": "Bangalore",
+            "code": "std:080"
+          }
+        },
+        "bap_id": "bap-ps-network-prod.becknprotocol.io",
+        "bap_uri": "https://bap-ps-network-prod.becknprotocol.io",
+        "transaction_id": "c7045805-17d9-4cf2-b622-f2df49240d18",
+        "message_id": "c15953a0-0ab5-4c87-9def-0b0766099b3b",
+        "ttl": "PT10M",
+        "timestamp": "2024-10-09T06:38:47.490Z"
+      },
+      "message": {
+        "order": {
+          "type": "DEFAULT",
+          "quote": {
+            "price": {
+              "value": "1000",
+              "currency": "INR"
+            }
+          },
+          "provider": {
+            "id": "12",
+            "name": "PWC",
+            "short_desc": "PriceWaterCoopers",
+            "fulfillments": [
+              {
+                "id": "6",
+                "type": "REMOTE JOB",
+                "rating": "4.5",
+                "tags": [
+                  {
+                    "display": true,
+                    "descriptor": {
+                      "description": "DSEP"
+                    },
+                    "list": [
+                      {
+                        "descriptor": {
+                          "description": "AWS"
+                        },
+                        "value": "course-name",
+                        "display": true
+                      }
+                    ]
+                  },
+                  {
+                    "display": true,
+                    "descriptor": {
+                      "description": "DSEP"
+                    },
+                    "list": [
+                      {
+                        "descriptor": {
+                          "description": "Agile"
+                        },
+                        "display": true
+                      }
+                    ]
+                  }
+                ],
+                "tracking": false
+              },
+              {
+                "id": "10",
+                "type": "job-type",
+                "rating": "4",
+                "rateable": true,
+                "tracking": false
+              }
+            ]
+          },
+          "items": [
+            {
+              "id": "16",
+              "name": "Data Analyst",
+              "short_desc": "We are looking for candidates at analyst, associate consultant and consultant roles.  Btech/BCA, holding 0-1 years of Post Qualification experience.",
+              "long_desc": "Job Description:\n\nStrong knowledge of .NET web framework and Front-end frameworks like Angular or react.\nProficient in ASP.NET MVC, .NET CORE , with a good knowledge of their ecosystems\nFamiliarity with the Mono framework\nStrong understanding of object-oriented programming\nSkill for writing reusable libraries\nFamiliar with various design and architectural patterns\nKnowledge of concurrency patterns\nFamiliarity with Microsoft SQL Server and popular web application frameworks\nKnack for writing clean, readable, and easily maintainable code\nUnderstanding of fundamental design principles for building a scalable application\nExperience creating database schemas that represent and support business processes\nExperience implementing automated testing platforms and unit tests\nProficient understanding of code versioning tools\nKnowledge on Azure DevOps is plus.\n\nRole: Risk Advisory Data Analyst\nIndustry Type: Accounting / Auditing\nDepartment: Finance\nEmployment Type: Full Time, Permanent\nEducation: B.Tech/B.E. in Production/Industrial, BCA in Computers, Any Postgraduate\nExperience Required: 0-1 years\nLocation: Bangalore",
+              "price": {
+                "value": "1000",
+                "currency": "INR"
+              },
+              "rating": "null",
+              "rateable": true,
+              "quantity": {
+                "available": {
+                  "measure": {
+                    "value": "0",
+                    "unit": "kWh"
+                  }
+                }
+              },
+              "categories": [
+                {
+                  "id": "13",
+                  "name": "Data Analytics Jobs"
+                }
+              ],
+              "locations": [
+                {
+                  "id": "10",
+                  "city": "Bengaluru. ",
+                  "state": "Karnataka",
+                  "country": "India"
+                }
+              ],
+              "tags": [
+                {
+                  "display": true,
+                  "list": [null]
+                },
+                {
+                  "display": true,
+                  "list": [null]
+                },
+                {
+                  "display": true,
+                  "list": [null]
+                },
+                {
+                  "display": true,
+                  "list": [null]
+                },
+                {
+                  "display": true,
+                  "list": [null]
+                },
+                {
+                  "display": true,
+                  "list": [null]
+                },
+                {
+                  "display": true,
+                  "list": [null]
+                },
+                {
+                  "display": true,
+                  "list": [null]
+                },
+                {
+                  "display": true,
+                  "list": [null]
+                }
+              ],
+              "fulfillments": [
+                {
+                  "id": "10",
+                  "type": "job-type",
+                  "rating": "4"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
