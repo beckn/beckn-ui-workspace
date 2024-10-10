@@ -52,8 +52,9 @@ declare global {
     interface Chainable<Subject = any> {
       getByData(dataTestAttribute: string): Chainable<JQuery<HTMLElement>>
       login(baseUrl: string, email: string, password: string): Chainable<void>
-      setGeolocation(aliasName: string, location: { latitude: number; longitude: number }, data?: any): Chainable<void>
+      setGeolocation(aliasName: string, location?: { latitude: number; longitude: number }, data?: any): Chainable<void>
       performSearch(searchTerm: string, response: RouteHandler): Chainable<void>
+      performSearchWithoutSearchTerm(response: RouteHandler, aliasName: string): Chainable<void>
       mockReduxState(type: string, data: Record<string, any>): Chainable<void>
       selectProduct(index: number): Chainable<void>
       selectMultiProduct(index: number[]): Chainable<void>
@@ -147,6 +148,10 @@ Cypress.Commands.add('performSearch', (searchTerm, response) => {
 
   cy.getByData(searchInputId).clear().type(`${searchTerm}{enter}`)
   cy.wait('@searchResults')
+})
+
+Cypress.Commands.add('performSearchWithoutSearchTerm', (response, aliasName) => {
+  cy.intercept('POST', `${GCL_URL}/search`, response).as(aliasName)
 })
 
 Cypress.Commands.add('selectProduct', index => {

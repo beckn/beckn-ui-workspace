@@ -20,6 +20,7 @@ import { useSelectMutation } from '@beckn-ui/common/src/services/select'
 import { getCurrencyWithFare, getDistance } from '@utils/general'
 import { UserGeoLocationRootState } from '@lib/types/user'
 import { SelectRideRootState } from '@store/selectRide-slice'
+import { testIds } from '@shared/dataTestIds'
 
 const optionsList: OptionsList = {
   rideTimeOptionsList: [
@@ -161,7 +162,7 @@ const SearchRideForm: React.FC<SearchRideFormProps> = () => {
           />
         </Box>
       ) : (
-        <BottomDrawer>
+        <BottomDrawer dataTest={testIds.mobility_search_ride_details_form}>
           <Flex
             dir="row"
             alignItems="center"

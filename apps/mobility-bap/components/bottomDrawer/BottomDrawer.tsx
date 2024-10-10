@@ -4,9 +4,10 @@ import crossIcon from '@public/images/Indicator.svg'
 
 interface CancelBookingProps {
   children: ReactNode
+  dataTest?: string
 }
 
-const BottomDrawer: React.FC<CancelBookingProps> = ({ children }) => {
+const BottomDrawer: React.FC<CancelBookingProps> = ({ children, dataTest }) => {
   const [isMinimized, setIsMinimized] = useState<boolean>(false)
 
   // Toggle the minimized state
@@ -32,6 +33,7 @@ const BottomDrawer: React.FC<CancelBookingProps> = ({ children }) => {
         }`}
         // maxH={'calc(100vh - 86px)'}
         maxH={`${isMinimized ? '10vh' : '85vh'}`}
+        data-test={dataTest}
       >
         <Box
           alignSelf={'center'}

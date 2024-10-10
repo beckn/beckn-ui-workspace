@@ -1,0 +1,78 @@
+{
+  "data": [
+    {
+      "context": {
+        "domain": "mobility:1.1.0",
+        "action": "on_search",
+        "version": "1.1.0",
+        "bpp_id": "bpp-ps-network-strapi1-prod.example.io",
+        "bpp_uri": "https://bpp-ps-network-strapi1-prod.example.io",
+        "country": "IND",
+        "city": "std:080",
+        "location": {
+          "country": {
+            "name": "India",
+            "code": "IND"
+          },
+          "city": {
+            "name": "Bangalore",
+            "code": "std:080"
+          }
+        },
+        "bap_id": "bap-ps-network-prod.example.io",
+        "bap_uri": "https://bap-ps-network-prod.example.io",
+        "transaction_id": "6a7dfcbd-5b8f-4fbe-b8ee-08e487ee9891",
+        "message_id": "b82af95a-1fe1-41f5-a996-a685ea6d0884",
+        "ttl": "PT10M",
+        "timestamp": "2024-10-09T08:58:58.386Z"
+      },
+      "message": {
+        "name": "BPP",
+        "providers": [
+          {
+            "id": "629",
+            "name": "XYZ Cab Services",
+            "rating": "4.3",
+            "short_desc": "XYZ Cab: Your reliable ride-sharing solution, offering efficient transportation with a focus on safety and convenience.",
+            "long_desc": "Welcome to XYZ Cab, your premier choice for hassle-free transportation! With our fleet of modern vehicles and professional drivers, we ensure prompt and comfortable rides to your destination. Enjoy convenient booking, competitive prices, and reliable service every time you ride with us.",
+            "items": [
+              {
+                "id": "86",
+                "short_desc": "XYZ Mini Cab Service: Your pocket-sized ride to convenience, reliability, and comfort.",
+                "long_desc": "Experience the essence of urban travel with XYZ Mini Cab Service, featuring a fleet of reliable Indian-made mini cars perfect for city commutes. From the nimble Maruti Suzuki Alto to the fuel-efficient Tata Tiago, our lineup includes the practical Mahindra KUV100 and the stylish Hyundai Santro. Enjoy hassle-free rides, prompt pickups, and comfortable journeys tailored to your convenience, ensuring every trip is a smooth and delightful experience.",
+                "name": "XYZ Mini",
+                "price": {
+                  "value": "14"
+                },
+                "fulfillments": [
+                  {
+                    "id": "18",
+                    "type": "Mini On-Location Cab Pickup",
+                    "tracking": false,
+                    "agent": {
+                      "person": {
+                        "id": "3",
+                        "name": "Ramesh Kumar"
+                      }
+                    },
+                    "vehicle": {
+                      "make": "Maruti Suzuki",
+                      "model": "Swift Dzire"
+                    }
+                  }
+                ],
+                "rating": "null",
+                "rateable": true
+              }
+            ],
+            "images": [
+              {
+                "url": "https://makerspace/assembly/makerspace_logo.png"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
