@@ -1,6 +1,6 @@
 const testIds = {
   // application wise base url
-  url_base: process.env.CYPRESS_BASE_URL || 'http://localhost:3000',
+  url_base: process.env.CYPRESS_BASE_URL || 'http://localhost:3014',
   url_base_retail: process.env.CYPRESS_BASE_URL || 'http://localhost:3002',
   url_base_tourism: process.env.CYPRESS_BASE_URL || 'http://localhost:3001',
 
@@ -344,6 +344,11 @@ const testIds = {
   scholarship_details_Button: 'scholarship-details-Button',
   jobSubmitted_viewNewJob: 'job-submitted-view-new-job',
   jobSubmitted_viewToHomePage: 'job-submitted-view-to-home-page',
+  scholarshipConfirmation_cart: 'scholarshipConfirmation-cart',
+  noScholarship: 'noScholarship',
+  noScholarshipText1: 'noScholarshipText1',
+  noScholarshipText2: 'noScholarshipText2',
+  emptyScholarshipButton: 'emptyScholarshipButton',
 
   // mobility-bap
   mobility_map_container: 'map-container',
