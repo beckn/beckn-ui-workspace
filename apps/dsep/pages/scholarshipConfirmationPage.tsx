@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 import orderConfirmmark from '../public/images/orderConfirmmark.svg'
 import { ParsedScholarshipData } from '../components/scholarship/scholarshipCard/Scholarship.types'
 import { useLanguage } from '../hooks/useLanguage'
+import { testIds } from '@shared/dataTestIds'
 
 const scholarshipConfirmationPage = () => {
   const { t } = useLanguage()
@@ -38,7 +39,8 @@ const scholarshipConfirmationPage = () => {
             },
             disabled: false,
             variant: 'solid',
-            colorScheme: 'primary'
+            colorScheme: 'primary',
+            dataTest: testIds.scholarshipConfirmation_cart
           }
         ]
       }}

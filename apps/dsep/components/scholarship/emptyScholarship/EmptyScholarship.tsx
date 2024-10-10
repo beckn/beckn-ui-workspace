@@ -5,6 +5,7 @@ import React from 'react'
 import { Button, Typography } from '@beckn-ui/molecules'
 import CartEmpty from '../../../public/images/cartEmptyIcon.svg'
 import { useLanguage } from '../../../hooks/useLanguage'
+import { testIds } from '@shared/dataTestIds'
 
 const EmptyScholarship: React.FC = () => {
   const { t } = useLanguage()
@@ -25,6 +26,7 @@ const EmptyScholarship: React.FC = () => {
       >
         <Image
           src={CartEmpty}
+          data-test={testIds.cartpage_emptyImage}
           width={'306px'}
           height={'245px'}
           alt="empty cart logo"
@@ -37,6 +39,7 @@ const EmptyScholarship: React.FC = () => {
       >
         <Typography
           fontSize="15px"
+          dataTest={testIds.noScholarship}
           fontWeight="600"
           text={t.noScholarship}
           style={{
@@ -50,6 +53,7 @@ const EmptyScholarship: React.FC = () => {
             lineHeight: '25px'
           }}
           text={t.noScholarshipText1}
+          dataTest={testIds.noScholarshipText1}
         />
         <Typography
           fontSize="12px"
@@ -58,10 +62,12 @@ const EmptyScholarship: React.FC = () => {
             lineHeight: '25px'
           }}
           text={t.noScholarshipText2}
+          dataTest={testIds.noScholarshipText2}
         />
       </Flex>
 
       <Button
+        dataTest={testIds.emptyScholarshipButton}
         text={t.searchScholarships}
         color={'rgba(var(--text-color))'}
         disabled={false}

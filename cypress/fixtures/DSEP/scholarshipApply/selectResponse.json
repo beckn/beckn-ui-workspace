@@ -1,0 +1,114 @@
+{
+  "data": [
+    {
+      "context": {
+        "domain": "dsep:scholarships",
+        "action": "on_select",
+        "version": "1.1.0",
+        "bpp_id": "bpp-ps-network-strapi-dev.becknprotocol.io",
+        "bpp_uri": "http://bpp-ps-network-strapi-dev.becknprotocol.io",
+        "country": "IND",
+        "city": "std:080",
+        "location": {
+          "country": {
+            "name": "India",
+            "code": "IND"
+          },
+          "city": {
+            "name": "Bangalore",
+            "code": "std:080"
+          }
+        },
+        "bap_id": "bap-ps-network-dev.becknprotocol.io",
+        "bap_uri": "https://bap-ps-network-dev.becknprotocol.io",
+        "transaction_id": "db5949a5-68b4-45d1-af68-ee397d14cc02",
+        "message_id": "bb8fbc8c-841c-401c-b5ae-069be7ad9fbf",
+        "ttl": "PT10M",
+        "timestamp": "2024-10-09T06:50:57.579Z"
+      },
+      "message": {
+        "order": {
+          "type": "DEFAULT",
+          "quote": {
+            "price": {
+              "value": "310",
+              "currency": "INR"
+            }
+          },
+          "provider": {
+            "id": "5",
+            "name": "MS Ramaiah University of Applied Sciences",
+            "short_desc": "MS Ramaiah University of Applied Sciences",
+            "long_desc": "MS Ramaiah University of Applied Sciences",
+            "fulfillments": [
+              {
+                "id": "12",
+                "type": "scholarship",
+                "rating": "4",
+                "rateable": true,
+                "tracking": false
+              }
+            ]
+          },
+          "items": [
+            {
+              "id": "7",
+              "name": "MS Ramaiah Memorial Scholarship",
+              "short_desc": "The Ramaiah University of Applied Sciences rewards excellence with scholarships. Students can choose to apply for a Merit Scholarship (that is, either a Scholarship of Distinction or a Scholarship of Excellence) or an Admission Test Scholarship",
+              "long_desc": "\"Scholarship Details:\nScholarship amount: Rs. 50,000 scholarship overall\n\nEligibility criteria: CAT/XAT Scores grater than or equal to 80% percentile, and MAT Scores greater than or equal to 90% percentile + throughout 1st division in 10th, 12th and UG\"",
+              "price": {
+                "value": "310",
+                "currency": "INR"
+              },
+              "rating": "null",
+              "rateable": true,
+              "quantity": {
+                "available": {
+                  "measure": {
+                    "value": "0",
+                    "unit": "kWh"
+                  }
+                }
+              },
+              "locations": [
+                {
+                  "id": "13",
+                  "city": "Bangalore F",
+                  "state": "Karnataka",
+                  "country": "India"
+                }
+              ],
+              "tags": [
+                {
+                  "display": true,
+                  "list": [
+                    {
+                      "code": "scholarship-code",
+                      "value": "MS Ramaiah Memorial Scholarship"
+                    }
+                  ]
+                },
+                {
+                  "display": true,
+                  "list": [
+                    {
+                      "code": "university-name",
+                      "value": "MS Ramaiah Memorial"
+                    }
+                  ]
+                }
+              ],
+              "fulfillments": [
+                {
+                  "id": "12",
+                  "type": "scholarship",
+                  "rating": "4"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

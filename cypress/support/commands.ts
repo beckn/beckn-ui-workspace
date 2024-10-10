@@ -78,6 +78,7 @@ declare global {
       fillConsentDetails(): Chainable<void>
       fillAssemblyDetails(): Chainable<void>
       fillDSEPJobApply(): Chainable<void>
+      fillDSEP_x_inputScholarshipApplyForm(): Chainable<void>
       performXinput_Submit(response: RouteHandler, aliasName: string): Chainable<void>
       performCheckViolation(response: RouteHandler, aliasName: string): Chainable<void>
       //Created by omkar
@@ -325,5 +326,15 @@ Cypress.Commands.add('fillDSEPJobApply', () => {
   const fileName = '/DSEP/jobApply/jobApply.pdf'
   cy.get('.upload-button').attachFile(fileName)
   cy.get('#declaration').check().should('be.checked')
+})
+Cypress.Commands.add('fillDSEP_x_inputScholarshipApplyForm', () => {
+  cy.get('#name').clear().type('santosh kumar')
+  cy.get('#mobile').clear().type('6251423251')
+  cy.get('#reason').clear().type('i Love this course')
+  cy.get('#email').clear().type('santosh.k@gmail.com')
+  cy.get('#address').clear().type('Pune')
+  cy.get('#zipcode').clear().type('412115')
+  const fileName = '/DSEP/scholarshipApply/applyScholarship.pdf'
+  cy.get('#document').attachFile(fileName)
   cy.get('#submitButton').click()
 })
