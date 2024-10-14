@@ -1,6 +1,6 @@
 const testIds = {
   // application wise base url
-  url_base: process.env.CYPRESS_BASE_URL || 'http://localhost:3014',
+  url_base: process.env.CYPRESS_BASE_URL || 'http://localhost:3000',
   url_base_retail: process.env.CYPRESS_BASE_URL || 'http://localhost:3002',
   url_base_tourism: process.env.CYPRESS_BASE_URL || 'http://localhost:3001',
 
@@ -377,7 +377,13 @@ const testIds = {
   mobility_provider_item_rating: 'provider-item-rating',
   mobility_provider_item_fare: 'provider-item-fare',
   mobility_provider_item_select_button: 'provider-item-select-button',
-  mobility_search_ride_details_form: 'search-ride-details-form'
+  mobility_search_ride_details_form: 'search-ride-details-form',
+  mobility_ride_name: 'ride-name',
+  mobility_ride_wait_time: 'ride-wait-time',
+  mobility_ride_fare: 'ride-fare',
+  mobility_rider_name: 'rider-name',
+  mobility_rider_mobileNo: 'rider-mobileNo',
+  mobility_rider_confirm_button: 'rider-confirm-button'
 }
 
 export { testIds }

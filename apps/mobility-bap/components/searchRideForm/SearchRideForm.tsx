@@ -183,12 +183,14 @@ const SearchRideForm: React.FC<SearchRideFormProps> = () => {
                   text={cabDetail?.name}
                   fontSize="15px"
                   fontWeight="500"
+                  dataTest={testIds.mobility_ride_name}
                 />
                 <Typography
                   text={cabDetail?.waitTime}
                   fontSize="9px"
                   fontWeight="400"
                   color="#8A8D8E"
+                  dataTest={testIds.mobility_ride_wait_time}
                 />
               </Flex>
             </Flex>
@@ -197,6 +199,7 @@ const SearchRideForm: React.FC<SearchRideFormProps> = () => {
               fontSize="15px"
               fontWeight="700"
               color={theme.colors.primary[100]}
+              dataTest={testIds.mobility_ride_fare}
             />
           </Flex>
           <Divider
@@ -234,6 +237,7 @@ const SearchRideForm: React.FC<SearchRideFormProps> = () => {
               label="Name"
               error={formErrors.name}
               handleChange={handleInputChange}
+              dataTest={testIds.mobility_rider_name}
             />
             <Input
               type="text"
@@ -242,12 +246,14 @@ const SearchRideForm: React.FC<SearchRideFormProps> = () => {
               label="Mobile Number"
               error={formErrors.mobileNumber}
               handleChange={handleInputChange}
+              dataTest={testIds.mobility_rider_mobileNo}
             />
           </Box>
           <BecknButton
             text="Confirm & Proceed"
             disabled={!isFormFilled}
             handleClick={formSubmitHandler}
+            dataTest={testIds.mobility_rider_confirm_button}
           />
         </BottomDrawer>
       )}
