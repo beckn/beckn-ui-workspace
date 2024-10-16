@@ -2,10 +2,11 @@ import { ApplicableToType, RulesTemplate, PolicyType, PolicyStatusType } from '.
 
 export const countries = [
   { value: 'india', label: 'India' },
-  { value: 'usa', label: 'USA' },
+  { value: 'gambia', label: 'Gambia' },
   { value: 'egypt', label: 'Egypt' }
 ]
-export const cities = [
+
+export const indianCities = [
   { value: 'bangalore', label: 'Bangalore' },
   { value: 'delhi', label: 'Delhi' },
   { value: 'mumbai', label: 'Mumbai' },
@@ -17,6 +18,34 @@ export const cities = [
   { value: 'jaipur', label: 'Jaipur' },
   { value: 'noida', label: 'Noida' }
 ]
+
+export const gambiaCities = [
+  { value: 'Banjul', label: 'Banjul' },
+  { value: 'Central River', label: 'Central River' },
+  { value: 'Lower River', label: 'Lower River' },
+  { value: 'North Bank', label: 'North Bank' },
+  { value: 'Upper River', label: 'Upper River' },
+  { value: 'Western', label: 'Western' }
+]
+
+export const egyptCities = [
+  { value: 'Cairo', label: 'Cairo' },
+  { value: 'Alexandria', label: 'Alexandria' },
+  { value: 'Giza', label: 'Giza' },
+  { value: 'Minya', label: 'Minya' },
+  { value: 'Suez', label: 'Suez' },
+  { value: 'Damietta', label: 'Damietta' },
+  { value: 'Ismailia', label: 'Ismailia' },
+  { value: 'Shubra el-Kheima', label: 'Shubra el-Kheima' },
+  { value: 'Aswan', label: 'Aswan' },
+  { value: 'Luxor', label: 'Luxor' }
+]
+
+export const citiesByCountry = {
+  india: indianCities,
+  gambia: gambiaCities,
+  egypt: egyptCities
+}
 
 export const infoCategories = [
   { value: PolicyType.GEOFENCE, label: 'Geofence' },
