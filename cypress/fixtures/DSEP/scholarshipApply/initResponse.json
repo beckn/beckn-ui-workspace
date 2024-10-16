@@ -1,0 +1,140 @@
+{
+  "data": [
+    {
+      "context": {
+        "domain": "dsep:scholarships",
+        "action": "on_init",
+        "version": "1.1.0",
+        "bpp_id": "bpp-ps-network-strapi-dev.becknprotocol.io",
+        "bpp_uri": "http://bpp-ps-network-strapi-dev.becknprotocol.io",
+        "country": "IND",
+        "city": "std:080",
+        "location": {
+          "country": {
+            "name": "India",
+            "code": "IND"
+          },
+          "city": {
+            "name": "Bangalore",
+            "code": "std:080"
+          }
+        },
+        "bap_id": "bap-ps-network-dev.becknprotocol.io",
+        "bap_uri": "https://bap-ps-network-dev.becknprotocol.io",
+        "transaction_id": "db5949a5-68b4-45d1-af68-ee397d14cc02",
+        "message_id": "0771049e-f824-4129-a0fc-e1a4537f7d5f",
+        "ttl": "PT10M",
+        "timestamp": "2024-10-09T06:51:03.819Z"
+      },
+      "message": {
+        "order": {
+          "type": "DEFAULT",
+          "provider": {
+            "id": "5",
+            "name": "MS Ramaiah University of Applied Sciences",
+            "short_desc": "MS Ramaiah University of Applied Sciences",
+            "long_desc": "MS Ramaiah University of Applied Sciences",
+            "fulfillments": [
+              {
+                "id": "12",
+                "type": "scholarship",
+                "rating": "4",
+                "rateable": true,
+                "tracking": false
+              },
+              {
+                "id": "12",
+                "type": "scholarship",
+                "rating": "4",
+                "rateable": true,
+                "tracking": false
+              }
+            ]
+          },
+          "items": [
+            {
+              "id": "7",
+              "name": "MS Ramaiah Memorial Scholarship",
+              "short_desc": "The Ramaiah University of Applied Sciences rewards excellence with scholarships. Students can choose to apply for a Merit Scholarship (that is, either a Scholarship of Distinction or a Scholarship of Excellence) or an Admission Test Scholarship",
+              "long_desc": "\"Scholarship Details:\nScholarship amount: Rs. 50,000 scholarship overall\n\nEligibility criteria: CAT/XAT Scores grater than or equal to 80% percentile, and MAT Scores greater than or equal to 90% percentile + throughout 1st division in 10th, 12th and UG\"",
+              "price": {
+                "value": "310",
+                "currency": "INR"
+              },
+              "rating": "null",
+              "rateable": true,
+              "quantity": {
+                "available": {
+                  "measure": {
+                    "value": "0",
+                    "unit": "kWh"
+                  }
+                }
+              },
+              "locations": [
+                {
+                  "id": "13",
+                  "city": "Bangalore F",
+                  "state": "Karnataka",
+                  "country": "India"
+                }
+              ],
+              "tags": [
+                {
+                  "display": true,
+                  "list": [
+                    {
+                      "code": "scholarship-code",
+                      "value": "MS Ramaiah Memorial Scholarship"
+                    }
+                  ]
+                },
+                {
+                  "display": true,
+                  "list": [
+                    {
+                      "code": "university-name",
+                      "value": "MS Ramaiah Memorial"
+                    }
+                  ]
+                }
+              ],
+              "xinput": {
+                "url": "https://bpp-unified-strapi-dev.becknprotocol.io/beckn-bpp-adapter/x-input/form?form_id=dsepScholarshipDetailsForm",
+                "mime_type": "text/html",
+                "html": "<html><head>\n    <title>XInput Form</title>\n    <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css\">\n    <style>\n        body {\n            font-family: Arial, sans-serif;\n            background-color: #fbfcff;\n            display: flex;\n            justify-content: center;\n            align-items: center;\n            margin: 0;\n        }\n        form {\n            background: #fff;\n            max-width: 400px;\n            padding: 10px;\n            width: 100%;\n            height: 100%\n        }\n        h1 {\n            font-size: 24px;\n            margin-bottom: 20px;\n            text-align: center;\n        }\n        label {\n            margin-bottom: 5px;\n        }\n        input[type=\"text\"],\n        input[type=\"tel\"],\n        input[type=\"email\"],\n        input[type=\"number\"],\n        textarea {\n            width: 100%;\n            margin-bottom: 20px;\n            border: 0;\n            outline: 0;\n            border-bottom: 1px solid #ccc;\n            font-size: 16px;\n        }\n        input:focus,\n        textarea:focus {\n            border-bottom: 1px solid #3AA5E1;\n        }\n        input[type=\"file\"] {\n            margin-bottom: 20px;\n            border: 0;\n        }\n        button {\n            background-color: #3aa5e1 !important;\n            color: white;\n            padding: 10px;\n            border: none;\n            border-radius: 4px;\n            cursor: pointer;\n            width: 100%;\n        }\n        .file-container {\n            display: flex;\n            align-items: center;\n            justify-content: space-between;\n            background: #f9f9f9;\n            border: 1px solid #ccc;\n            padding: 10px;\n            border-radius: 4px;\n            margin-bottom: 20px;\n        }\n        .file-container span {\n            margin-left: 10px;\n        }\n        .file-container button {\n            background: none !Important;\n            border: none;\n            cursor: pointer;\n            width: 30px;\n        }\n        .error {\n            color: red;\n            font-size: 14px;\n            margin-top: -15px;\n            margin-bottom: 10px;\n        }\n        .disabled {\n            background-color: #ccc;\n            cursor: not-allowed;\n        }\n    </style>\n<script>\n    function changeLabelColor(labelId, color) {\n        const label = document.getElementById(labelId);\n        label.style.color = color;\n    }\n    function handleFileSelect(event) {\n        const fileList = document.getElementById('file-list');\n        const files = event.target.files;\n        // Clear the file list container\n        fileList.innerHTML = '';\n        for (let i = 0; i < files.length; i++) {\n            const file = files[i];\n            const fileContainer = document.createElement('div');\n            fileContainer.className = 'file-container';\n            fileContainer.innerHTML = `\n                    <span style=\"display: flex; align-items: center;\">\n                        <i style=\"font-size:24px\" class=\"fa\">&#xf1c1;</i>\n                        <span style=\"white-space: nowrap; overflow: hidden; width: 12rem; text-overflow: ellipsis;\">${file.name}</span>\n                    </span>\n                    <button type=\"button\" onclick=\"removeFile(${i})\"><i class=\"fa fa-trash\" style=\"color:black;\"></i></button>\n                `;\n            fileList.appendChild(fileContainer);\n        }\n    }\n    function removeFile(index) {\n        const fileInput = document.getElementById('document');\n        const dataTransfer = new DataTransfer();\n        const files = fileInput.files;\n        for (let i = 0; i < files.length; i++) {\n            if (i !== index) {\n                dataTransfer.items.add(files[i]);\n            }\n        }\n        fileInput.files = dataTransfer.files;\n        handleFileSelect({ target: fileInput });\n    }\n    \n    function validateName() {\n            const name = document.getElementById('name').value;\n            if (name !== '' && !/^[a-zA-Z\\s]+$/.test(name)) {\n                document.getElementById('nameError').textContent = 'Please enter a valid name.';\n                return false;\n            } else {\n                document.getElementById('nameError').textContent = '';\n                return true;\n            }\n        }\n\n        function validateMobile() {\n            const mobile = document.getElementById('mobile').value;\n            if (mobile !== '' && !/^\\d{10}$/.test(mobile)) {\n                document.getElementById('mobileError').textContent = 'Please enter a valid 10-digit mobile number.';\n                return false;\n            } else {\n                document.getElementById('mobileError').textContent = '';\n                return true;\n            }\n        }\n\n        function validateEmail() {\n            const email = document.getElementById('email').value;\n            const emailPattern = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;\n            if (email !== '' && !emailPattern.test(email)) {\n                document.getElementById('emailError').textContent = 'Please enter a valid email address.';\n                return false;\n            } else {\n                document.getElementById('emailError').textContent = '';\n                return true;\n            }\n        }\n\n        function validateZipcode() {\n            const zipcode = document.getElementById('zipcode').value;\n            if (zipcode !== '' && !/^\\d{5,6}$/.test(zipcode)) {\n                document.getElementById('zipcodeError').textContent = 'Please enter a valid zip code.';\n                return false;\n            } else {\n                document.getElementById('zipcodeError').textContent = '';\n                return true;\n            }\n        }\n\n        function validateForm() {\n            const isNameValid = validateName();\n            const isMobileValid = validateMobile();\n            const isEmailValid = validateEmail();\n            const isZipcodeValid = validateZipcode();\n            return isNameValid && isMobileValid && isEmailValid && isZipcodeValid;\n        }\n\n        function updateSubmitButton() {\n            const submitButton = document.getElementById('submitButton');\n            if (validateForm()) {\n                submitButton.disabled = false;\n                submitButton.classList.remove('disabled');\n            } else {\n                submitButton.disabled = true;\n                submitButton.classList.add('disabled');\n            }\n        }\n</script></head>\n\n<body>\n    <form id=\"xinputform\">\n        <label for=\"name\" id=\"nameLabel\">Name</label>\n        <input type=\"text\" id=\"name\" name=\"name\" required=\"\" onfocus=\"changeLabelColor('nameLabel', '#3AA5E1')\" onblur=\"changeLabelColor('nameLabel', 'black')\" oninput=\"updateSubmitButton()\">\n                    <div id=\"nameError\" class=\"error\"></div>\n\n        <label for=\"mobile\" id=\"mobileLabel\">Mobile Number</label>\n        <input type=\"tel\" id=\"mobile\" name=\"mobile\" minlength=\"10\" maxlength=\"10\" required=\"\" onfocus=\"changeLabelColor('mobileLabel', '#3AA5E1')\" onblur=\"changeLabelColor('mobileLabel', 'black')\" oninput=\"updateSubmitButton()\">\n            <div id=\"mobileError\" class=\"error\"></div>\n            \n        <label for=\"reason\" id=\"reasonLabel\">Tell us why you need this scholarship</label>\n        <textarea id=\"reason\" name=\"reason\" required=\"\" onfocus=\"changeLabelColor('reasonLabel', '#3AA5E1')\" onblur=\"changeLabelColor('reasonLabel', 'black')\" oninput=\"updateSubmitButton()\"></textarea>\n                    <div id=\"reasonError\" class=\"error\"></div>\n            \n        <label for=\"email\" id=\"emailLabel\">Email ID</label>\n        <input type=\"email\" id=\"email\" name=\"email\" required=\"\" onfocus=\"changeLabelColor('emailLabel', '#3AA5E1')\" onblur=\"changeLabelColor('emailLabel', 'black')\" oninput=\"updateSubmitButton()\">\n          <div id=\"emailError\" class=\"error\"></div>\n          \n        <label for=\"address\" id=\"addressLabel\">Address</label>\n        <input type=\"text\" id=\"address\" name=\"address\" required=\"\" onfocus=\"changeLabelColor('addressLabel', '#3AA5E1')\" onblur=\"changeLabelColor('addressLabel', 'black')\" oninput=\"updateSubmitButton()\">\n          <div id=\"addressError\" class=\"error\"></div>\n\n        <label for=\"zipcode\" id=\"zipcodeLabel\">Zip Code</label>\n        <input type=\"number\" id=\"zipcode\" name=\"zipcode\" required=\"\" onfocus=\"changeLabelColor('zipcodeLabel', '#3AA5E1')\" onblur=\"changeLabelColor('zipcodeLabel', 'black')\" oninput=\"updateSubmitButton()\">\n          <div id=\"zipcodeError\" class=\"error\"></div>\n          \n        <label for=\"document\">Documents</label>\n        <div id=\"file-list\">\n        </div>\n        <input type=\"file\" id=\"document\" name=\"document\" multiple=\"\" accept=\".pdf\" onchange=\"handleFileSelect(event)\">\n        <button type=\"submit\" id=\"submitButton\" class=\"disabled\" disabled=\"\">Submit</button>\n    <input type=\"hidden\" value=\"https://bpp-unified-strapi-dev.becknprotocol.io/beckn-bpp-adapter/x-input/submit\" id=\"action\" name=\"action\"><input type=\"hidden\" value=\"post\" id=\"method\" name=\"method\"></form>\n\n</body></html>"
+              },
+              "fulfillments": [
+                {
+                  "id": "12",
+                  "type": "scholarship",
+                  "rating": "4"
+                },
+                {
+                  "id": "12",
+                  "type": "scholarship",
+                  "rating": "4"
+                }
+              ]
+            }
+          ],
+          "fulfillments": [
+            {
+              "id": "12",
+              "type": "scholarship",
+              "rating": "4",
+              "rateable": true,
+              "tracking": false
+            }
+          ],
+          "quote": {
+            "price": {
+              "value": "310",
+              "currency": "INR"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

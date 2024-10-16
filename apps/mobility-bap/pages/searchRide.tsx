@@ -10,6 +10,7 @@ import { useLanguage } from '@hooks/useLanguage'
 import { CabServiceDetailsRootState } from '@lib/types/cabService'
 import { StarIcon } from '@chakra-ui/icons'
 import { getCurrencyWithFare, getDistance } from '@utils/general'
+import { testIds } from '@shared/dataTestIds'
 
 const SearchRide = () => {
   const theme = useTheme()
@@ -59,6 +60,7 @@ const SearchRide = () => {
         top={'68px'}
         w="100%"
         background={'#fff'}
+        data-test={testIds.mobility_searchpage_container}
       >
         <Card
           borderRadius={'unset'}
@@ -98,6 +100,7 @@ const SearchRide = () => {
           mt="20px"
           fontSize={'12px'}
           p="0 20px"
+          data-test={testIds.mobility_total_cabs}
         >
           {totalCabs} results found
         </Box>
@@ -105,6 +108,7 @@ const SearchRide = () => {
           className="hideScroll"
           maxH={'calc(100vh - 305px)'}
           overflowY="scroll"
+          data-test={testIds.mobility_catalog_container}
         >
           {cabServiceProviders.map((provider, index) => (
             <Box
@@ -112,10 +116,12 @@ const SearchRide = () => {
               mb="20px"
               mt="20px"
               p="0 20px"
+              data-test={testIds.mobility_catalog_item}
             >
               <Flex
                 alignItems={'center'}
                 mb="20px"
+                data-test={testIds.mobility_provider_details}
               >
                 <Image
                   src={'./images/olaCab.svg'} // provider.image ||
@@ -126,6 +132,7 @@ const SearchRide = () => {
                   <Typography
                     text={provider.providerName}
                     variant="subTitleSemibold"
+                    dataTest={testIds.mobility_provider_name}
                   />
                   <Flex
                     alignItems={'center'}
@@ -135,6 +142,7 @@ const SearchRide = () => {
                     <Typography
                       text={provider.rating}
                       variant="subTitleSemibold"
+                      dataTest={testIds.mobility_provider_rating}
                     />
                     <StarIcon
                       color={'#FADB14'}
@@ -158,6 +166,7 @@ const SearchRide = () => {
                       ml="unset"
                       width={'164px'}
                       height="206px"
+                      data-test={testIds.mobility_provider_item}
                     >
                       <CardBody p={'10px'}>
                         <Box mb="10px">
@@ -169,6 +178,7 @@ const SearchRide = () => {
                           <Typography
                             text={cabDetail.name}
                             fontWeight="500"
+                            dataTest={testIds.mobility_provider_item_name}
                           />
                           <Typography
                             text={cabDetail.waitTime}
@@ -178,11 +188,13 @@ const SearchRide = () => {
                             text={`${getCurrencyWithFare(pickup.country!, getTotalFare(cabDetail.fare))}`}
                             fontSize="15px"
                             color={theme.colors.primary[100]}
+                            dataTest={testIds.mobility_provider_item_fare}
                           />
                         </Box>
                         <Button
                           text="Select"
                           variant="solid"
+                          dataTest={testIds.mobility_provider_item_select_button}
                           handleClick={() =>
                             handleOnSelect(provider.transactionId, {
                               provider,

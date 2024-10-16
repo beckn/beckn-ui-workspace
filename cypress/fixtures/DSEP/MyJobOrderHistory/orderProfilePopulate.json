@@ -1,0 +1,121 @@
+{
+  "data": {
+    "id": 1956,
+    "attributes": {
+      "order_id": "1950",
+      "bpp_id": "bpp-ps-network-strapi1-prod.becknprotocol.io",
+      "bpp_uri": "https://bpp-ps-network-strapi1-prod.becknprotocol.io",
+      "currency": null,
+      "delivery_status": null,
+      "descriptor": {
+        "name": "PWC",
+        "short_desc": "PriceWaterCoopers"
+      },
+      "price": null,
+      "billing": null,
+      "fulfillments": [
+        {
+          "id": "10",
+          "state": {
+            "descriptor": {
+              "code": "APPLICATION_SUBMITTED",
+              "short_desc": "APPLICATION SUBMITTED"
+            },
+            "updated_at": "2024-09-25T04:35:31.101Z"
+          },
+          "tracking": false
+        },
+        {
+          "id": "10",
+          "type": "job-type",
+          "state": {
+            "descriptor": {
+              "code": "APPLICATION_SUBMITTED",
+              "short_desc": "APPLICATION SUBMITTED"
+            },
+            "updated_at": "2024-09-25T04:35:31.101Z"
+          },
+          "rating": "4",
+          "rateable": true,
+          "tracking": false
+        }
+      ],
+      "created_date": null,
+      "last_updated_date": null,
+      "quote": null,
+      "transaction_id": "63784246-71f2-43e6-bd6d-02ce312eeeaf",
+      "message_id": "43e46113-af5f-4e72-8063-b5137fe246ac",
+      "payments": null,
+      "items": [
+        {
+          "id": "17",
+          "name": "Data Analyst - Analytics- Senior Analyst",
+          "tags": [
+            {
+              "list": [
+                {
+                  "code": "job-code",
+                  "value": "job-code"
+                }
+              ],
+              "display": true
+            }
+          ],
+          "price": {
+            "value": "0",
+            "currency": "INR"
+          },
+          "images": [
+            {
+              "url": "https://www.blucognition.com/wp-content/uploads/2023/05/bluCognition_logo_tagline_landscape.png",
+              "size_type": "sm"
+            }
+          ],
+          "rating": "null",
+          "quantity": {
+            "available": {
+              "measure": {
+                "unit": "kWh",
+                "value": "0"
+              }
+            }
+          },
+          "rateable": true,
+          "locations": [
+            {
+              "id": "2",
+              "city": "Delhi",
+              "state": "Delhi",
+              "country": "India"
+            }
+          ],
+          "long_desc": "You will be part of the team which partners with the business leaders to provide data driven strategies to grow business KPIs like acquisition, customer engagement & retention, campaign optimization, personalized offering, etc.\nLeverage all the traditional and alternate data sources like credit bureau, digital data, partner data, social media and banking data to develop impactful strategies to drive business goals for marketing/product/customer/collections\nAnalyse large amounts of data and build solutions based on insights captured from data\nInnovate with a focus on developing newer and better approaches using big data & machine learning solution\nDevelop portfolio MIS and track the portfolio performance and recommend course of action\nAlign closely with the client's business teams to deliver on the business goals through strong analytics driven strategies.\n",
+          "categories": [
+            {
+              "id": "13",
+              "name": "Data Analytics Jobs"
+            }
+          ],
+          "short_desc": "Preparing data driven strategies to meet company KPIs",
+          "fulfillments": [
+            {
+              "id": "10",
+              "type": "job-type",
+              "rating": "4"
+            },
+            {
+              "id": "10",
+              "type": "job-type",
+              "rating": "4"
+            }
+          ]
+        }
+      ],
+      "createdAt": "2024-09-25T04:35:31.903Z",
+      "updatedAt": "2024-09-25T04:35:31.903Z",
+      "publishedAt": "2024-09-25T04:35:31.896Z",
+      "domain": "dsep:jobs"
+    }
+  },
+  "meta": {}
+}

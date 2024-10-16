@@ -1,8 +1,8 @@
 const testIds = {
   // application wise base url
-  url_base: process.env.CYPRESS_BASE_URL || 'http://localhost:3000',
+  url_base: process.env.CYPRESS_BASE_URL || 'http://localhost:3001',
   url_base_retail: process.env.CYPRESS_BASE_URL || 'http://localhost:3002',
-  url_base_tourism: process.env.CYPRESS_BASE_URL || 'http://localhost:3001',
+  // url_base_tourism: process.env.CYPRESS_BASE_URL || 'http://localhost:3001',
 
   // general
   goBack: 'go-back',
@@ -20,6 +20,7 @@ const testIds = {
   invoiceModal: 'invoiceModal',
   downloadInvoiceIcon: 'downloadInvoiceIcon',
   invoice: 'invoice',
+  bottomDrawer: 'bottom-drawer',
   // items
   item_list: 'item-list',
   item_title: 'item-title',
@@ -64,6 +65,7 @@ const testIds = {
   user_firstTimeLoginvalidEmailOSC: 'aniket123@gmail.com',
   user_firstTimeLoginvalidPasswordOSC: 'Aniket@123',
   user_login: 'krushnaTest@test.com',
+  dsep_user_login: 'krushna.gaikwad@eminds.ai',
   user_password: 'Krushna@123',
   // auth page
   auth_inputEmail: 'input-email',
@@ -341,6 +343,34 @@ const testIds = {
   scholarship_details_provider_name: 'scholarship-details-provider-name',
   scholarship_details_long_desc: 'scholarship-details-long-desc',
   scholarship_details_Button: 'scholarship-details-Button',
+  jobSubmitted_viewNewJob: 'job-submitted-view-new-job',
+  jobSubmitted_viewToHomePage: 'job-submitted-view-to-home-page',
+  scholarshipConfirmation_cart: 'scholarshipConfirmation-cart',
+  noScholarship: 'noScholarship',
+  noScholarshipText1: 'noScholarshipText1',
+  noScholarshipText2: 'noScholarshipText2',
+  emptyScholarshipButton: 'emptyScholarshipButton',
+  myJob_text: 'myJob_text',
+  Logout_text: 'Logout_text',
+  noJobs: 'noJobs',
+  noJobSubText: 'noJobSubText',
+  searchJobButton: 'searchJobButton',
+  jobCardHeading: 'jobCardHeading',
+  jobCardTime: 'jobCardTime',
+  image_container_forJob_action: 'image-container-forJob-action',
+  jobCardStatus: 'jobCardStatus',
+  jobOrder_history_card: 'jobOrder-history-card',
+  applyJobPrefilled_Name: 'applyJobPrefilled_Name',
+  applyJobPrefilled_Status_container: 'applyJobPrefilled-Status-container',
+  applyJobPrefilled_Status: 'applyJobPrefilled-Status',
+  applyJobPrefilled_Contact: 'applyJobPrefilled-Contact',
+  applyJobPrefilled_UserName: 'applyJobPrefilled-UserName',
+  applyJobPrefilled_UserPhone: 'applyJobPrefilled-UserPhone',
+  applyJobPrefilled_UserEmail: 'applyJobPrefilled-UserEmail',
+  applyJobPrefilled_document_container: 'applyJobPrefilled-document-container',
+  applyJobPrefilled_certificates: 'applyJobPrefilled-certificates',
+  applyJobPrefilled_document_name: 'applyJobPrefilled-document-name',
+  applyJobPrefilled_document_image: 'applyJobPrefilled-document-image',
 
   // mobility-bap
   mobility_map_container: 'map-container',
@@ -355,7 +385,27 @@ const testIds = {
   mobility_on_focus_pickup: 'on-focus-pickup',
   mobility_on_focus_dropoff: 'on-focus-dropoff',
   mobility_search_btn: 'search-btn',
-  mobility_cancel_search: 'cancel-search'
+  mobility_cancel_search: 'cancel-search',
+  mobility_searchpage_container: 'search-page-container',
+  mobility_total_cabs: 'total-cabs',
+  mobility_catalog_container: 'catalog-container',
+  mobility_catalog_item: 'catalog-item',
+  mobility_provider_details: 'provider-details',
+  mobility_provider_name: 'provider-name',
+  mobility_provider_address: 'provider-address',
+  mobility_provider_rating: 'provider-rating',
+  mobility_provider_item: 'provider-item',
+  mobility_provider_item_name: 'provider-item-name',
+  mobility_provider_item_rating: 'provider-item-rating',
+  mobility_provider_item_fare: 'provider-item-fare',
+  mobility_provider_item_select_button: 'provider-item-select-button',
+  mobility_search_ride_details_form: 'search-ride-details-form',
+  mobility_ride_name: 'ride-name',
+  mobility_ride_wait_time: 'ride-wait-time',
+  mobility_ride_fare: 'ride-fare',
+  mobility_rider_name: 'rider-name',
+  mobility_rider_mobileNo: 'rider-mobileNo',
+  mobility_rider_confirm_button: 'rider-confirm-button'
 }
 
 export { testIds }

@@ -52,8 +52,9 @@ declare global {
     interface Chainable<Subject = any> {
       getByData(dataTestAttribute: string): Chainable<JQuery<HTMLElement>>
       login(baseUrl: string, email: string, password: string): Chainable<void>
-      setGeolocation(aliasName: string, location: { latitude: number; longitude: number }, data?: any): Chainable<void>
+      setGeolocation(aliasName: string, location?: { latitude: number; longitude: number }, data?: any): Chainable<void>
       performSearch(searchTerm: string, response: RouteHandler): Chainable<void>
+      performSearchWithoutSearchTerm(response: RouteHandler, aliasName: string): Chainable<void>
       mockReduxState(type: string, data: Record<string, any>): Chainable<void>
       selectProduct(index: number): Chainable<void>
       selectMultiProduct(index: number[]): Chainable<void>
@@ -77,6 +78,8 @@ declare global {
       fillDisputeDetails(): Chainable<void>
       fillConsentDetails(): Chainable<void>
       fillAssemblyDetails(): Chainable<void>
+      fillDSEPJobApply(): Chainable<void>
+      fillDSEP_x_inputScholarshipApplyForm(): Chainable<void>
       performXinput_Submit(response: RouteHandler, aliasName: string): Chainable<void>
       performCheckViolation(response: RouteHandler, aliasName: string): Chainable<void>
       //Created by omkar
@@ -147,6 +150,10 @@ Cypress.Commands.add('performSearch', (searchTerm, response) => {
 
   cy.getByData(searchInputId).clear().type(`${searchTerm}{enter}`)
   cy.wait('@searchResults')
+})
+
+Cypress.Commands.add('performSearchWithoutSearchTerm', (response, aliasName) => {
+  cy.intercept('POST', `${GCL_URL}/search`, response).as(aliasName)
 })
 
 Cypress.Commands.add('selectProduct', index => {
@@ -316,4 +323,23 @@ Cypress.Commands.add('fillAssemblyDetails', () => {
   cy.get(testIds.increaseQuantity).click()
   cy.get(testIds.quantity).should('have.value', '2')
   cy.get('button[type="submit"]').click()
+})
+Cypress.Commands.add('fillDSEPJobApply', () => {
+  cy.get('#name').clear().type('santosh kumar')
+  cy.get('#mobile').clear().type('6251423251')
+  cy.get('#email').clear().type('santosh.k@gmail.com')
+  const fileName = '/DSEP/jobApply/jobApply.pdf'
+  cy.get('.upload-button').attachFile(fileName)
+  cy.get('#declaration').check().should('be.checked')
+})
+Cypress.Commands.add('fillDSEP_x_inputScholarshipApplyForm', () => {
+  cy.get('#name').clear().type('santosh kumar')
+  cy.get('#mobile').clear().type('6251423251')
+  cy.get('#reason').clear().type('i Love this course')
+  cy.get('#email').clear().type('santosh.k@gmail.com')
+  cy.get('#address').clear().type('Pune')
+  cy.get('#zipcode').clear().type('412115')
+  const fileName = '/DSEP/scholarshipApply/applyScholarship.pdf'
+  cy.get('#document').attachFile(fileName)
+  cy.get('#submitButton').click()
 })

@@ -1,34 +1,21 @@
 import { createApi, fetchBaseQuery, retry } from '@reduxjs/toolkit/query/react'
 import type { BaseQueryFn, FetchArgs, FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { feedbackActions } from '@beckn-ui/common'
-import { checkTokenExpiry } from '@utils/general'
-import Cookies from 'js-cookie'
 
-const baseQueryWithTokenCheck = async (args: any, api: any, extraOptions: any) => {
-  const token = Cookies.get('authToken')
-
-  if (token && checkTokenExpiry(token)) {
-    // Handle token expiration (e.g., redirect to login or refresh token)
-    return { error: { status: 401, data: { error: { message: 'Token expired, please log in again!' } } } }
-  }
-
-  // Create our baseQuery instance
-  const baseQuery = fetchBaseQuery({
-    baseUrl: process.env.NEXT_PUBLIC_STRAPI_URL,
-    prepareHeaders: (headers, { getState }) => {
-      // By default, if we have a token in the store, let's use that for authenticated requests
-      const token = (getState() as any).auth.jwt
-      if (token) {
-        headers.set('Authorization', `Bearer ${token}`)
-      }
-      return headers
+// Create our baseQuery instance
+const baseQuery = fetchBaseQuery({
+  baseUrl: process.env.NEXT_PUBLIC_STRAPI_URL,
+  prepareHeaders: (headers, { getState }) => {
+    // By default, if we have a token in the store, let's use that for authenticated requests
+    const token = (getState() as any).auth.jwt
+    if (token) {
+      headers.set('Authorization', `Bearer ${token}`)
     }
-  })
+    return headers
+  }
+})
 
-  return baseQuery(args, api, extraOptions)
-}
-
-const baseQueryWithRetry = retry(baseQueryWithTokenCheck, { maxRetries: 0 })
+const baseQueryWithRetry = retry(baseQuery, { maxRetries: 0 })
 
 const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> = async (
   args,
@@ -43,15 +30,6 @@ const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQue
         toastData: { message: 'Error!', display: true, type: 'error', description: message }
       })
     )
-  }
-  if (result.error && result.error.status === 401) {
-    const { message } = (result.error.data as any)?.error || 'Something went wrong'
-    const userConfirmed = window.confirm(message)
-    if (userConfirmed) {
-      localStorage.clear()
-      Cookies.remove('authToken')
-      window.location.href = '/'
-    }
   }
   return result
 }

@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import {
   Box,
   Flex,
@@ -18,7 +18,7 @@ import CustomDatePicker from '@components/customDatePicker'
 import { Typography } from '@beckn-ui/molecules'
 import { useRouter } from 'next/router'
 import addIcon from '@public/images/plus_icon.svg'
-import { applicableToOptions, cities, countries, infoCategories } from '@lib/constants'
+import { applicableToOptions, citiesByCountry, countries, infoCategories } from '@lib/constants'
 import CustomButton from '@components/Button/CustomButton'
 import { useDispatch, useSelector } from 'react-redux'
 import {
@@ -78,6 +78,10 @@ function AddInformationMetadata() {
   } = useSelector((state: PolicyRootState) => state.policy)
 
   const [createPolicy] = useCreatePolicyMutation()
+
+  const fetchCities = (country: string) => {
+    return (citiesByCountry as any)[country]
+  }
 
   const handleOnSwitch = () => {
     dispatch(updatePolicyActivationStatus(!isActivate))
@@ -460,6 +464,7 @@ function AddInformationMetadata() {
               selectedValue={country}
               setSelectedValue={value => {
                 dispatch(updateCountry(value || ''))
+                dispatch(updateCity(''))
               }}
             />
             {errors.country && (
@@ -478,7 +483,7 @@ function AddInformationMetadata() {
           >
             <FormLabel>City</FormLabel>
             <GenericDropdown
-              options={cities}
+              options={fetchCities(country)}
               placeholder="Select City"
               selectedValue={city}
               setSelectedValue={value => {

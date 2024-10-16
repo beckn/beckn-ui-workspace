@@ -1,0 +1,146 @@
+{
+  "data": [
+    {
+      "context": {
+        "domain": "mobility:1.1.0",
+        "action": "on_select",
+        "version": "1.1.0",
+        "bpp_id": "bpp-ps-network-strapi2-staging.example.io",
+        "bpp_uri": "http://bpp-ps-network-strapi2-staging.example.io",
+        "country": "IND",
+        "city": "std:080",
+        "location": {
+          "country": {
+            "name": "India",
+            "code": "IND"
+          },
+          "city": {
+            "name": "Bangalore",
+            "code": "std:080"
+          }
+        },
+        "bap_id": "bap-ps-network-staging.example.io",
+        "bap_uri": "https://bap-ps-network-staging.example.io",
+        "transaction_id": "21d13c3a-6bae-461f-a823-99aaef8cf16e",
+        "message_id": "0c355127-9d2c-43c9-a859-8864df1cc217",
+        "ttl": "PT10M",
+        "timestamp": "2024-10-10T08:51:08.686Z"
+      },
+      "message": {
+        "order": {
+          "type": "DEFAULT",
+          "quote": {
+            "price": {
+              "value": "14"
+            },
+            "breakup": [
+              {
+                "title": "Base Price",
+                "price": {
+                  "currency": "INR",
+                  "value": "100"
+                },
+                "item": {
+                  "id": "86"
+                }
+              },
+              {
+                "title": "TAX",
+                "price": {
+                  "currency": "INR",
+                  "value": "50"
+                },
+                "item": {
+                  "id": "86"
+                }
+              }
+            ]
+          },
+          "provider": {
+            "id": "629",
+            "name": "Beckn Cabs",
+            "short_desc": "Backn Cab: Your reliable ride-sharing solution, offering efficient transportation with a focus on safety and convenience.",
+            "long_desc": "Welcome to Backn Cab, your premier choice for hassle-free transportation! With our fleet of modern vehicles and professional drivers, we ensure prompt and comfortable rides to your destination. Enjoy convenient booking, competitive prices, and reliable service every time you ride with us.",
+            "rating": "4.3",
+            "fulfillments": [
+              {
+                "id": "18",
+                "type": "Mini On-Location Cab Pickup",
+                "rating": "4.0",
+                "rateable": true,
+                "agent": {
+                  "person": {
+                    "id": "3",
+                    "name": "Ramesh Kumar"
+                  },
+                  "contact": {
+                    "phone": "+911231231230"
+                  }
+                },
+                "vehicle": {
+                  "make": "Maruti Suzuki",
+                  "model": "Swift Dzire",
+                  "registration": "KA 05 CD 5678"
+                },
+                "tracking": false
+              },
+              {
+                "id": "19",
+                "type": "Mini On-Location Cab Pickup",
+                "rating": "4.5",
+                "agent": {
+                  "person": {
+                    "id": "4",
+                    "name": "Suresh Kumar"
+                  },
+                  "contact": {
+                    "phone": "+911231231231"
+                  }
+                },
+                "vehicle": {
+                  "make": "Maruti Suzuki",
+                  "model": "WagonR",
+                  "registration": "KA 05 CD 5777"
+                },
+                "tracking": false
+              }
+            ]
+          },
+          "items": [
+            {
+              "id": "86",
+              "name": "Backn Cab Mini",
+              "short_desc": "Beckn Mini Cab Service: Your pocket-sized ride to convenience, reliability, and comfort.",
+              "long_desc": "Experience the essence of urban travel with XYZ Mini Cab Service, featuring a fleet of reliable Indian-made mini cars perfect for city commutes. From the nimble Maruti Suzuki Alto to the fuel-efficient Tata Tiago, our lineup includes the practical Mahindra KUV100 and the stylish Hyundai Santro. Enjoy hassle-free rides, prompt pickups, and comfortable journeys tailored to your convenience, ensuring every trip is a smooth and delightful experience.",
+              "price": {
+                "value": "14"
+              },
+              "rating": "null",
+              "rateable": true,
+              "quantity": {
+                "available": {
+                  "measure": {
+                    "value": "0",
+                    "unit": "kWh"
+                  }
+                }
+              },
+              "fulfillments": [
+                {
+                  "id": "18",
+                  "type": "Mini On-Location Cab Pickup",
+                  "rating": "4.0"
+                },
+                {
+                  "id": "19",
+                  "type": "Mini On-Location Cab Pickup",
+                  "rating": "4.5"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
