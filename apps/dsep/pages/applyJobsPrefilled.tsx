@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react'
 import { useLanguage } from '../hooks/useLanguage'
 import { OrderAttributes } from '../lib/types/order-history.types'
 import axios from '../services/axios'
+import { testIds } from '@shared/dataTestIds'
 
 const applyJobsPrefilled = () => {
   const { t } = useLanguage()
@@ -77,6 +78,7 @@ const applyJobsPrefilled = () => {
         <Text
           fontSize={'15px'}
           pb="20px"
+          data-test={testIds.applyJobPrefilled_Name}
         >
           {name}
         </Text>
@@ -84,6 +86,7 @@ const applyJobsPrefilled = () => {
           alignItems={'center'}
           fontSize="12px"
           pb={'20px'}
+          data-test={testIds.applyJobPrefilled_Status_container}
         >
           {jobStatus === 'In Review' ? (
             <Image
@@ -98,11 +101,12 @@ const applyJobsPrefilled = () => {
               pr="10px"
             />
           )}
-          <Text>{jobStatus}</Text>
+          <Text data-test={testIds.applyJobPrefilled_Status}>{jobStatus}</Text>
         </Flex>
         <Text
           fontSize={'15px'}
           pb="5px"
+          data-test={testIds.applyJobPrefilled_Contact}
         >
           {t.contactInformation}
         </Text>
@@ -120,7 +124,12 @@ const applyJobsPrefilled = () => {
             >
               {t.nameText}:
             </Text>
-            <Text as={'span'}> {userName}</Text>
+            <Text
+              as={'span'}
+              data-test={testIds.applyJobPrefilled_UserName}
+            >
+              {userName}
+            </Text>
           </Box>
           <Box pb={'8px'}>
             <Text
@@ -129,20 +138,32 @@ const applyJobsPrefilled = () => {
             >
               {t.mobileNo}:
             </Text>
-            <Text as={'span'}> {phone}</Text>
+            <Text
+              as={'span'}
+              data-test={testIds.applyJobPrefilled_UserPhone}
+            >
+              {' '}
+              {phone}
+            </Text>
           </Box>
           <Box>
             <Text
               as={'span'}
               fontWeight="600"
+              data-test={testIds.applyJobPrefilled_UserEmail}
             >
               {t.emailId}:
             </Text>
             <Text as={'span'}>{email}</Text>
           </Box>
         </Box>
-        <Text fontSize={'15px'}>{t.certificates}</Text>
-        {documents.map((document: any) => (
+        <Text
+          fontSize={'15px'}
+          data-test={testIds.applyJobPrefilled_certificates}
+        >
+          {t.certificates}
+        </Text>
+        {documents.map((document: any, index) => (
           <Box
             border={'1px solid #BFBFBF'}
             borderRadius={'12px'}
@@ -150,9 +171,16 @@ const applyJobsPrefilled = () => {
             mb={'10px'}
             mt={'10px'}
             fontSize="12px"
+            key={index}
           >
-            <Flex alignItems={'center'}>
-              <Image src="/images/pdfIcon.svg" />
+            <Flex
+              alignItems={'center'}
+              data-test={testIds.applyJobPrefilled_document_container}
+            >
+              <Image
+                src="/images/pdfIcon.svg"
+                data-test={testIds.applyJobPrefilled_document_image}
+              />
               <Box>
                 <Flex
                   alignItems={'center'}
@@ -161,6 +189,7 @@ const applyJobsPrefilled = () => {
                   <Text
                     fontWeight="600"
                     pr={'5px'}
+                    data-test={testIds.applyJobPrefilled_document_name}
                   >
                     {document?.attributes?.attachment?.data?.attributes?.name}
                   </Text>

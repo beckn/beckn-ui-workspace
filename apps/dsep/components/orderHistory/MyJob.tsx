@@ -3,6 +3,7 @@ import { Typography } from '@beckn-ui/molecules'
 import { Box, Flex, Image } from '@chakra-ui/react'
 import React from 'react'
 import { useLanguage } from '../../hooks/useLanguage'
+import { testIds } from '@shared/dataTestIds'
 
 interface MyJobsProps {
   heading: string
@@ -14,7 +15,10 @@ interface MyJobsProps {
 const MyJob: React.FC<MyJobsProps> = props => {
   const { t } = useLanguage()
   return (
-    <Box onClick={props.handleJobsStatus}>
+    <Box
+      onClick={props.handleJobsStatus}
+      data-test={testIds.jobOrder_history_card}
+    >
       <DetailCard>
         <Typography
           text={props.heading}
@@ -22,6 +26,7 @@ const MyJob: React.FC<MyJobsProps> = props => {
           style={{
             paddingBottom: '5px'
           }}
+          dataTest={testIds.jobCardHeading}
         />
         <Flex
           alignItems={'center'}
@@ -33,8 +38,12 @@ const MyJob: React.FC<MyJobsProps> = props => {
               paddingBottom: '5px'
             }}
             text={`${t.appliedOn} ${props.time}`}
+            dataTest={testIds.jobCardTime}
           />
-          <Flex alignItems={'center'}>
+          <Flex
+            alignItems={'center'}
+            data-test={testIds.image_container_forJob_action}
+          >
             {props.myJobsStatus === 'In Review' ? (
               <Image
                 src="/images/inProgress.svg"
@@ -48,7 +57,10 @@ const MyJob: React.FC<MyJobsProps> = props => {
                 pr="10px"
               />
             )}
-            <Typography text={props.myJobsStatus} />
+            <Typography
+              text={props.myJobsStatus}
+              dataTest={testIds.jobCardStatus}
+            />
           </Flex>
         </Flex>
       </DetailCard>

@@ -61,14 +61,16 @@ const Header = () => {
               id: 'jobs',
               label: 'My Jobs',
               href: '/myJobsOrderHistory',
-              icon: '/images/myJobIcon.svg'
+              icon: '/images/myJobIcon.svg',
+              dataTest: testIds.myJob_text
             },
             {
               id: 'logout',
               label: 'Logout',
               href: '/signin',
               icon: '/images/logOutIcon.svg',
-              color: 'red'
+              color: 'red',
+              dataTest: testIds.Logout_text
             }
           ]}
         />

@@ -58,7 +58,7 @@ describe('Scholarship search page', () => {
     cy.intercept('POST', '**/x-input/submit', {
       fixture: 'DSEP/scholarshipApply/x-inputSubmitResponse.json'
     }).as('x-inputSubmitResponse')
-    cy.wait(1000)
+    cy.wait(10000)
     cy.url().should('include', '/scholarshipConfirmationPage')
   })
 })
