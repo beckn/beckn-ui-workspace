@@ -11,6 +11,7 @@ import BecknButton from '@beckn-ui/molecules/src/components/button'
 import { useSelector } from 'react-redux'
 import { Toast } from '@beckn-ui/molecules'
 import { BottomModal } from '@beckn-ui/molecules'
+import { testIds } from '@shared/dataTestIds'
 
 const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
   const [formData, setFormData] = useState<SignInFormProps>(initialFormData)
@@ -105,6 +106,7 @@ const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
         isClosable: true,
         render: ({ onClose }) => (
           <Toast
+            dataTest={testIds.feedback}
             status="success"
             title={t.Success}
             description={t.pleaseCheckYourMail}
@@ -175,13 +177,15 @@ const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
         title={t.forgotPassword}
         isOpen={isMenuModalOpen}
         onClose={handleMenuModalClose}
+        dataTest="forgot-password"
       >
-        <Text>{t.noWorreis}</Text>
+        <Text data-test="no-worries-text">{t.noWorreis}</Text>
         <FormControl
           mt={4}
           isInvalid={!!forgotPasswordEmailError}
         >
           <Input
+            data-test="enter-email"
             id="email"
             placeholder={t.enterYourMail}
             value={forgotPasswordEmail}
@@ -189,6 +193,7 @@ const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
           />
           {forgotPasswordEmailError && (
             <Text
+              data-test="forgot-password-email-error"
               color="red.500"
               fontSize="sm"
               mt={1}
@@ -204,11 +209,13 @@ const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
             variant="solid"
             isLoading={isResetLinkLoading}
             loadingText="Sending..."
+            dataTest="send-link"
           />
           <BecknButton
             children={t.Cancel}
             handleClick={handleMenuModalClose}
             variant="outline"
+            dataTest="cancle"
           />
         </Box>
       </BottomModal>
