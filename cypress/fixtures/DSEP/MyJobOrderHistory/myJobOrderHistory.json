@@ -1,0 +1,1272 @@
+{
+  "data": [
+    {
+      "id": 2082,
+      "attributes": {
+        "order_id": "2056",
+        "bpp_id": "bpp-ps-network-strapi1-prod.becknprotocol.io",
+        "bpp_uri": "https://bpp-ps-network-strapi1-prod.becknprotocol.io",
+        "currency": null,
+        "delivery_status": null,
+        "descriptor": {
+          "name": "PWC",
+          "short_desc": "PriceWaterCoopers"
+        },
+        "price": null,
+        "billing": null,
+        "fulfillments": [
+          {
+            "id": "10",
+            "state": {
+              "descriptor": {
+                "code": "APPLICATION_SUBMITTED",
+                "short_desc": "APPLICATION SUBMITTED"
+              },
+              "updated_at": "2024-10-09T08:49:08.415Z"
+            },
+            "tracking": false
+          },
+          {
+            "id": "10",
+            "type": "job-type",
+            "state": {
+              "descriptor": {
+                "code": "APPLICATION_SUBMITTED",
+                "short_desc": "APPLICATION SUBMITTED"
+              },
+              "updated_at": "2024-10-09T08:49:08.415Z"
+            },
+            "rating": "4",
+            "rateable": true,
+            "tracking": false
+          }
+        ],
+        "created_date": null,
+        "last_updated_date": null,
+        "quote": null,
+        "transaction_id": "86420742-920a-4ee3-ae17-1618b4eab59c",
+        "message_id": "47578c79-1fd4-4504-80a7-bfe00ce13205",
+        "payments": null,
+        "items": [
+          {
+            "id": "16",
+            "code": "DA",
+            "name": "Data Analyst",
+            "tags": [
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              }
+            ],
+            "price": {
+              "value": "1000",
+              "currency": "INR"
+            },
+            "rating": "null",
+            "quantity": {
+              "available": {
+                "measure": {
+                  "unit": "kWh",
+                  "value": "0"
+                }
+              }
+            },
+            "rateable": true,
+            "locations": [
+              {
+                "id": "10",
+                "city": "Bengaluru. ",
+                "state": "Karnataka",
+                "country": "India"
+              }
+            ],
+            "long_desc": "Job Description:\n\nStrong knowledge of .NET web framework and Front-end frameworks like Angular or react.\nProficient in ASP.NET MVC, .NET CORE , with a good knowledge of their ecosystems\nFamiliarity with the Mono framework\nStrong understanding of object-oriented programming\nSkill for writing reusable libraries\nFamiliar with various design and architectural patterns\nKnowledge of concurrency patterns\nFamiliarity with Microsoft SQL Server and popular web application frameworks\nKnack for writing clean, readable, and easily maintainable code\nUnderstanding of fundamental design principles for building a scalable application\nExperience creating database schemas that represent and support business processes\nExperience implementing automated testing platforms and unit tests\nProficient understanding of code versioning tools\nKnowledge on Azure DevOps is plus.\n\nRole: Risk Advisory Data Analyst\nIndustry Type: Accounting / Auditing\nDepartment: Finance\nEmployment Type: Full Time, Permanent\nEducation: B.Tech/B.E. in Production/Industrial, BCA in Computers, Any Postgraduate\nExperience Required: 0-1 years\nLocation: Bangalore",
+            "categories": [
+              {
+                "id": "13",
+                "name": "Data Analytics Jobs"
+              }
+            ],
+            "short_desc": "We are looking for candidates at analyst, associate consultant and consultant roles.  Btech/BCA, holding 0-1 years of Post Qualification experience.",
+            "fulfillments": [
+              {
+                "id": "10",
+                "type": "job-type",
+                "rating": "4"
+              },
+              {
+                "id": "10",
+                "type": "job-type",
+                "rating": "4"
+              }
+            ]
+          }
+        ],
+        "createdAt": "2024-10-09T08:49:09.022Z",
+        "updatedAt": "2024-10-09T08:49:09.022Z",
+        "publishedAt": "2024-10-09T08:49:09.015Z",
+        "domain": "dsep:jobs"
+      }
+    },
+    {
+      "id": 2083,
+      "attributes": {
+        "order_id": "2057",
+        "bpp_id": "bpp-ps-network-strapi1-prod.becknprotocol.io",
+        "bpp_uri": "https://bpp-ps-network-strapi1-prod.becknprotocol.io",
+        "currency": null,
+        "delivery_status": null,
+        "descriptor": {
+          "name": "PWC",
+          "short_desc": "PriceWaterCoopers"
+        },
+        "price": null,
+        "billing": null,
+        "fulfillments": [
+          {
+            "id": "10",
+            "state": {
+              "descriptor": {
+                "code": "APPLICATION_SUBMITTED",
+                "short_desc": "APPLICATION SUBMITTED"
+              },
+              "updated_at": "2024-10-09T08:50:15.844Z"
+            },
+            "tracking": false
+          },
+          {
+            "id": "10",
+            "type": "job-type",
+            "state": {
+              "descriptor": {
+                "code": "APPLICATION_SUBMITTED",
+                "short_desc": "APPLICATION SUBMITTED"
+              },
+              "updated_at": "2024-10-09T08:50:15.844Z"
+            },
+            "rating": "4",
+            "rateable": true,
+            "tracking": false
+          }
+        ],
+        "created_date": null,
+        "last_updated_date": null,
+        "quote": null,
+        "transaction_id": "86420742-920a-4ee3-ae17-1618b4eab59c",
+        "message_id": "adbdb382-ade3-4d6f-baf6-54f101d4daca",
+        "payments": null,
+        "items": [
+          {
+            "id": "16",
+            "code": "DA",
+            "name": "Data Analyst",
+            "tags": [
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              }
+            ],
+            "price": {
+              "value": "1000",
+              "currency": "INR"
+            },
+            "rating": "null",
+            "quantity": {
+              "available": {
+                "measure": {
+                  "unit": "kWh",
+                  "value": "0"
+                }
+              }
+            },
+            "rateable": true,
+            "locations": [
+              {
+                "id": "10",
+                "city": "Bengaluru. ",
+                "state": "Karnataka",
+                "country": "India"
+              }
+            ],
+            "long_desc": "Job Description:\n\nStrong knowledge of .NET web framework and Front-end frameworks like Angular or react.\nProficient in ASP.NET MVC, .NET CORE , with a good knowledge of their ecosystems\nFamiliarity with the Mono framework\nStrong understanding of object-oriented programming\nSkill for writing reusable libraries\nFamiliar with various design and architectural patterns\nKnowledge of concurrency patterns\nFamiliarity with Microsoft SQL Server and popular web application frameworks\nKnack for writing clean, readable, and easily maintainable code\nUnderstanding of fundamental design principles for building a scalable application\nExperience creating database schemas that represent and support business processes\nExperience implementing automated testing platforms and unit tests\nProficient understanding of code versioning tools\nKnowledge on Azure DevOps is plus.\n\nRole: Risk Advisory Data Analyst\nIndustry Type: Accounting / Auditing\nDepartment: Finance\nEmployment Type: Full Time, Permanent\nEducation: B.Tech/B.E. in Production/Industrial, BCA in Computers, Any Postgraduate\nExperience Required: 0-1 years\nLocation: Bangalore",
+            "categories": [
+              {
+                "id": "13",
+                "name": "Data Analytics Jobs"
+              }
+            ],
+            "short_desc": "We are looking for candidates at analyst, associate consultant and consultant roles.  Btech/BCA, holding 0-1 years of Post Qualification experience.",
+            "fulfillments": [
+              {
+                "id": "10",
+                "type": "job-type",
+                "rating": "4"
+              },
+              {
+                "id": "10",
+                "type": "job-type",
+                "rating": "4"
+              }
+            ]
+          }
+        ],
+        "createdAt": "2024-10-09T08:50:16.430Z",
+        "updatedAt": "2024-10-09T08:50:16.430Z",
+        "publishedAt": "2024-10-09T08:50:16.422Z",
+        "domain": "dsep:jobs"
+      }
+    },
+    {
+      "id": 2086,
+      "attributes": {
+        "order_id": "2058",
+        "bpp_id": "bpp-ps-network-strapi1-prod.becknprotocol.io",
+        "bpp_uri": "https://bpp-ps-network-strapi1-prod.becknprotocol.io",
+        "currency": null,
+        "delivery_status": null,
+        "descriptor": {
+          "name": "PWC",
+          "short_desc": "PriceWaterCoopers"
+        },
+        "price": null,
+        "billing": null,
+        "fulfillments": [
+          {
+            "id": "10",
+            "state": {
+              "descriptor": {
+                "code": "APPLICATION_SUBMITTED",
+                "short_desc": "APPLICATION SUBMITTED"
+              },
+              "updated_at": "2024-10-09T08:57:31.307Z"
+            },
+            "tracking": false
+          },
+          {
+            "id": "10",
+            "type": "job-type",
+            "state": {
+              "descriptor": {
+                "code": "APPLICATION_SUBMITTED",
+                "short_desc": "APPLICATION SUBMITTED"
+              },
+              "updated_at": "2024-10-09T08:57:31.307Z"
+            },
+            "rating": "4",
+            "rateable": true,
+            "tracking": false
+          }
+        ],
+        "created_date": null,
+        "last_updated_date": null,
+        "quote": null,
+        "transaction_id": "86420742-920a-4ee3-ae17-1618b4eab59c",
+        "message_id": "0d977d36-fb3f-4aa5-9ca1-9211106039fe",
+        "payments": null,
+        "items": [
+          {
+            "id": "16",
+            "code": "DA",
+            "name": "Data Analyst",
+            "tags": [
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              }
+            ],
+            "price": {
+              "value": "1000",
+              "currency": "INR"
+            },
+            "rating": "null",
+            "quantity": {
+              "available": {
+                "measure": {
+                  "unit": "kWh",
+                  "value": "0"
+                }
+              }
+            },
+            "rateable": true,
+            "locations": [
+              {
+                "id": "10",
+                "city": "Bengaluru. ",
+                "state": "Karnataka",
+                "country": "India"
+              }
+            ],
+            "long_desc": "Job Description:\n\nStrong knowledge of .NET web framework and Front-end frameworks like Angular or react.\nProficient in ASP.NET MVC, .NET CORE , with a good knowledge of their ecosystems\nFamiliarity with the Mono framework\nStrong understanding of object-oriented programming\nSkill for writing reusable libraries\nFamiliar with various design and architectural patterns\nKnowledge of concurrency patterns\nFamiliarity with Microsoft SQL Server and popular web application frameworks\nKnack for writing clean, readable, and easily maintainable code\nUnderstanding of fundamental design principles for building a scalable application\nExperience creating database schemas that represent and support business processes\nExperience implementing automated testing platforms and unit tests\nProficient understanding of code versioning tools\nKnowledge on Azure DevOps is plus.\n\nRole: Risk Advisory Data Analyst\nIndustry Type: Accounting / Auditing\nDepartment: Finance\nEmployment Type: Full Time, Permanent\nEducation: B.Tech/B.E. in Production/Industrial, BCA in Computers, Any Postgraduate\nExperience Required: 0-1 years\nLocation: Bangalore",
+            "categories": [
+              {
+                "id": "13",
+                "name": "Data Analytics Jobs"
+              }
+            ],
+            "short_desc": "We are looking for candidates at analyst, associate consultant and consultant roles.  Btech/BCA, holding 0-1 years of Post Qualification experience.",
+            "fulfillments": [
+              {
+                "id": "10",
+                "type": "job-type",
+                "rating": "4"
+              },
+              {
+                "id": "10",
+                "type": "job-type",
+                "rating": "4"
+              }
+            ]
+          }
+        ],
+        "createdAt": "2024-10-09T08:57:31.864Z",
+        "updatedAt": "2024-10-09T08:57:31.864Z",
+        "publishedAt": "2024-10-09T08:57:31.857Z",
+        "domain": "dsep:jobs"
+      }
+    },
+    {
+      "id": 2089,
+      "attributes": {
+        "order_id": "2059",
+        "bpp_id": "bpp-ps-network-strapi1-prod.becknprotocol.io",
+        "bpp_uri": "https://bpp-ps-network-strapi1-prod.becknprotocol.io",
+        "currency": null,
+        "delivery_status": null,
+        "descriptor": {
+          "name": "PWC",
+          "short_desc": "PriceWaterCoopers"
+        },
+        "price": null,
+        "billing": null,
+        "fulfillments": [
+          {
+            "id": "10",
+            "state": {
+              "descriptor": {
+                "code": "APPLICATION_SUBMITTED",
+                "short_desc": "APPLICATION SUBMITTED"
+              },
+              "updated_at": "2024-10-09T09:04:08.384Z"
+            },
+            "tracking": false
+          },
+          {
+            "id": "10",
+            "type": "job-type",
+            "state": {
+              "descriptor": {
+                "code": "APPLICATION_SUBMITTED",
+                "short_desc": "APPLICATION SUBMITTED"
+              },
+              "updated_at": "2024-10-09T09:04:08.384Z"
+            },
+            "rating": "4",
+            "rateable": true,
+            "tracking": false
+          }
+        ],
+        "created_date": null,
+        "last_updated_date": null,
+        "quote": null,
+        "transaction_id": "86420742-920a-4ee3-ae17-1618b4eab59c",
+        "message_id": "44d9482f-7325-4c3c-b81b-66b96dca3b62",
+        "payments": null,
+        "items": [
+          {
+            "id": "16",
+            "code": "DA",
+            "name": "Data Analyst",
+            "tags": [
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              }
+            ],
+            "price": {
+              "value": "1000",
+              "currency": "INR"
+            },
+            "rating": "null",
+            "quantity": {
+              "available": {
+                "measure": {
+                  "unit": "kWh",
+                  "value": "0"
+                }
+              }
+            },
+            "rateable": true,
+            "locations": [
+              {
+                "id": "10",
+                "city": "Bengaluru. ",
+                "state": "Karnataka",
+                "country": "India"
+              }
+            ],
+            "long_desc": "Job Description:\n\nStrong knowledge of .NET web framework and Front-end frameworks like Angular or react.\nProficient in ASP.NET MVC, .NET CORE , with a good knowledge of their ecosystems\nFamiliarity with the Mono framework\nStrong understanding of object-oriented programming\nSkill for writing reusable libraries\nFamiliar with various design and architectural patterns\nKnowledge of concurrency patterns\nFamiliarity with Microsoft SQL Server and popular web application frameworks\nKnack for writing clean, readable, and easily maintainable code\nUnderstanding of fundamental design principles for building a scalable application\nExperience creating database schemas that represent and support business processes\nExperience implementing automated testing platforms and unit tests\nProficient understanding of code versioning tools\nKnowledge on Azure DevOps is plus.\n\nRole: Risk Advisory Data Analyst\nIndustry Type: Accounting / Auditing\nDepartment: Finance\nEmployment Type: Full Time, Permanent\nEducation: B.Tech/B.E. in Production/Industrial, BCA in Computers, Any Postgraduate\nExperience Required: 0-1 years\nLocation: Bangalore",
+            "categories": [
+              {
+                "id": "13",
+                "name": "Data Analytics Jobs"
+              }
+            ],
+            "short_desc": "We are looking for candidates at analyst, associate consultant and consultant roles.  Btech/BCA, holding 0-1 years of Post Qualification experience.",
+            "fulfillments": [
+              {
+                "id": "10",
+                "type": "job-type",
+                "rating": "4"
+              },
+              {
+                "id": "10",
+                "type": "job-type",
+                "rating": "4"
+              }
+            ]
+          }
+        ],
+        "createdAt": "2024-10-09T09:04:09.057Z",
+        "updatedAt": "2024-10-09T09:04:09.057Z",
+        "publishedAt": "2024-10-09T09:04:09.051Z",
+        "domain": "dsep:jobs"
+      }
+    },
+    {
+      "id": 2090,
+      "attributes": {
+        "order_id": "2060",
+        "bpp_id": "bpp-ps-network-strapi1-prod.becknprotocol.io",
+        "bpp_uri": "https://bpp-ps-network-strapi1-prod.becknprotocol.io",
+        "currency": null,
+        "delivery_status": null,
+        "descriptor": {
+          "name": "PWC",
+          "short_desc": "PriceWaterCoopers"
+        },
+        "price": null,
+        "billing": null,
+        "fulfillments": [
+          {
+            "id": "10",
+            "state": {
+              "descriptor": {
+                "code": "APPLICATION_SUBMITTED",
+                "short_desc": "APPLICATION SUBMITTED"
+              },
+              "updated_at": "2024-10-09T09:07:51.859Z"
+            },
+            "tracking": false
+          },
+          {
+            "id": "10",
+            "type": "job-type",
+            "state": {
+              "descriptor": {
+                "code": "APPLICATION_SUBMITTED",
+                "short_desc": "APPLICATION SUBMITTED"
+              },
+              "updated_at": "2024-10-09T09:07:51.859Z"
+            },
+            "rating": "4",
+            "rateable": true,
+            "tracking": false
+          }
+        ],
+        "created_date": null,
+        "last_updated_date": null,
+        "quote": null,
+        "transaction_id": "86420742-920a-4ee3-ae17-1618b4eab59c",
+        "message_id": "dd215ca6-ef43-4395-a3de-6865e0bf0dc9",
+        "payments": null,
+        "items": [
+          {
+            "id": "16",
+            "code": "DA",
+            "name": "Data Analyst",
+            "tags": [
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              }
+            ],
+            "price": {
+              "value": "1000",
+              "currency": "INR"
+            },
+            "rating": "null",
+            "quantity": {
+              "available": {
+                "measure": {
+                  "unit": "kWh",
+                  "value": "0"
+                }
+              }
+            },
+            "rateable": true,
+            "locations": [
+              {
+                "id": "10",
+                "city": "Bengaluru. ",
+                "state": "Karnataka",
+                "country": "India"
+              }
+            ],
+            "long_desc": "Job Description:\n\nStrong knowledge of .NET web framework and Front-end frameworks like Angular or react.\nProficient in ASP.NET MVC, .NET CORE , with a good knowledge of their ecosystems\nFamiliarity with the Mono framework\nStrong understanding of object-oriented programming\nSkill for writing reusable libraries\nFamiliar with various design and architectural patterns\nKnowledge of concurrency patterns\nFamiliarity with Microsoft SQL Server and popular web application frameworks\nKnack for writing clean, readable, and easily maintainable code\nUnderstanding of fundamental design principles for building a scalable application\nExperience creating database schemas that represent and support business processes\nExperience implementing automated testing platforms and unit tests\nProficient understanding of code versioning tools\nKnowledge on Azure DevOps is plus.\n\nRole: Risk Advisory Data Analyst\nIndustry Type: Accounting / Auditing\nDepartment: Finance\nEmployment Type: Full Time, Permanent\nEducation: B.Tech/B.E. in Production/Industrial, BCA in Computers, Any Postgraduate\nExperience Required: 0-1 years\nLocation: Bangalore",
+            "categories": [
+              {
+                "id": "13",
+                "name": "Data Analytics Jobs"
+              }
+            ],
+            "short_desc": "We are looking for candidates at analyst, associate consultant and consultant roles.  Btech/BCA, holding 0-1 years of Post Qualification experience.",
+            "fulfillments": [
+              {
+                "id": "10",
+                "type": "job-type",
+                "rating": "4"
+              },
+              {
+                "id": "10",
+                "type": "job-type",
+                "rating": "4"
+              }
+            ]
+          }
+        ],
+        "createdAt": "2024-10-09T09:07:52.323Z",
+        "updatedAt": "2024-10-09T09:07:52.323Z",
+        "publishedAt": "2024-10-09T09:07:52.316Z",
+        "domain": "dsep:jobs"
+      }
+    },
+    {
+      "id": 2091,
+      "attributes": {
+        "order_id": "2061",
+        "bpp_id": "bpp-ps-network-strapi1-prod.becknprotocol.io",
+        "bpp_uri": "https://bpp-ps-network-strapi1-prod.becknprotocol.io",
+        "currency": null,
+        "delivery_status": null,
+        "descriptor": {
+          "name": "PWC",
+          "short_desc": "PriceWaterCoopers"
+        },
+        "price": null,
+        "billing": null,
+        "fulfillments": [
+          {
+            "id": "10",
+            "state": {
+              "descriptor": {
+                "code": "APPLICATION_SUBMITTED",
+                "short_desc": "APPLICATION SUBMITTED"
+              },
+              "updated_at": "2024-10-09T09:08:30.407Z"
+            },
+            "tracking": false
+          },
+          {
+            "id": "10",
+            "type": "job-type",
+            "state": {
+              "descriptor": {
+                "code": "APPLICATION_SUBMITTED",
+                "short_desc": "APPLICATION SUBMITTED"
+              },
+              "updated_at": "2024-10-09T09:08:30.407Z"
+            },
+            "rating": "4",
+            "rateable": true,
+            "tracking": false
+          }
+        ],
+        "created_date": null,
+        "last_updated_date": null,
+        "quote": null,
+        "transaction_id": "86420742-920a-4ee3-ae17-1618b4eab59c",
+        "message_id": "82a2dd3e-e39d-40f8-ab1e-de7f1a71f86f",
+        "payments": null,
+        "items": [
+          {
+            "id": "16",
+            "code": "DA",
+            "name": "Data Analyst",
+            "tags": [
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              }
+            ],
+            "price": {
+              "value": "1000",
+              "currency": "INR"
+            },
+            "rating": "null",
+            "quantity": {
+              "available": {
+                "measure": {
+                  "unit": "kWh",
+                  "value": "0"
+                }
+              }
+            },
+            "rateable": true,
+            "locations": [
+              {
+                "id": "10",
+                "city": "Bengaluru. ",
+                "state": "Karnataka",
+                "country": "India"
+              }
+            ],
+            "long_desc": "Job Description:\n\nStrong knowledge of .NET web framework and Front-end frameworks like Angular or react.\nProficient in ASP.NET MVC, .NET CORE , with a good knowledge of their ecosystems\nFamiliarity with the Mono framework\nStrong understanding of object-oriented programming\nSkill for writing reusable libraries\nFamiliar with various design and architectural patterns\nKnowledge of concurrency patterns\nFamiliarity with Microsoft SQL Server and popular web application frameworks\nKnack for writing clean, readable, and easily maintainable code\nUnderstanding of fundamental design principles for building a scalable application\nExperience creating database schemas that represent and support business processes\nExperience implementing automated testing platforms and unit tests\nProficient understanding of code versioning tools\nKnowledge on Azure DevOps is plus.\n\nRole: Risk Advisory Data Analyst\nIndustry Type: Accounting / Auditing\nDepartment: Finance\nEmployment Type: Full Time, Permanent\nEducation: B.Tech/B.E. in Production/Industrial, BCA in Computers, Any Postgraduate\nExperience Required: 0-1 years\nLocation: Bangalore",
+            "categories": [
+              {
+                "id": "13",
+                "name": "Data Analytics Jobs"
+              }
+            ],
+            "short_desc": "We are looking for candidates at analyst, associate consultant and consultant roles.  Btech/BCA, holding 0-1 years of Post Qualification experience.",
+            "fulfillments": [
+              {
+                "id": "10",
+                "type": "job-type",
+                "rating": "4"
+              },
+              {
+                "id": "10",
+                "type": "job-type",
+                "rating": "4"
+              }
+            ]
+          }
+        ],
+        "createdAt": "2024-10-09T09:08:30.882Z",
+        "updatedAt": "2024-10-09T09:08:30.882Z",
+        "publishedAt": "2024-10-09T09:08:30.875Z",
+        "domain": "dsep:jobs"
+      }
+    },
+    {
+      "id": 2092,
+      "attributes": {
+        "order_id": "2062",
+        "bpp_id": "bpp-ps-network-strapi1-prod.becknprotocol.io",
+        "bpp_uri": "https://bpp-ps-network-strapi1-prod.becknprotocol.io",
+        "currency": null,
+        "delivery_status": null,
+        "descriptor": {
+          "name": "PWC",
+          "short_desc": "PriceWaterCoopers"
+        },
+        "price": null,
+        "billing": null,
+        "fulfillments": [
+          {
+            "id": "10",
+            "state": {
+              "descriptor": {
+                "code": "APPLICATION_SUBMITTED",
+                "short_desc": "APPLICATION SUBMITTED"
+              },
+              "updated_at": "2024-10-09T09:09:19.188Z"
+            },
+            "tracking": false
+          },
+          {
+            "id": "10",
+            "type": "job-type",
+            "state": {
+              "descriptor": {
+                "code": "APPLICATION_SUBMITTED",
+                "short_desc": "APPLICATION SUBMITTED"
+              },
+              "updated_at": "2024-10-09T09:09:19.188Z"
+            },
+            "rating": "4",
+            "rateable": true,
+            "tracking": false
+          }
+        ],
+        "created_date": null,
+        "last_updated_date": null,
+        "quote": null,
+        "transaction_id": "86420742-920a-4ee3-ae17-1618b4eab59c",
+        "message_id": "159e9dae-8522-4cdf-88b5-77afb4d2b6c1",
+        "payments": null,
+        "items": [
+          {
+            "id": "16",
+            "code": "DA",
+            "name": "Data Analyst",
+            "tags": [
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              }
+            ],
+            "price": {
+              "value": "1000",
+              "currency": "INR"
+            },
+            "rating": "null",
+            "quantity": {
+              "available": {
+                "measure": {
+                  "unit": "kWh",
+                  "value": "0"
+                }
+              }
+            },
+            "rateable": true,
+            "locations": [
+              {
+                "id": "10",
+                "city": "Bengaluru. ",
+                "state": "Karnataka",
+                "country": "India"
+              }
+            ],
+            "long_desc": "Job Description:\n\nStrong knowledge of .NET web framework and Front-end frameworks like Angular or react.\nProficient in ASP.NET MVC, .NET CORE , with a good knowledge of their ecosystems\nFamiliarity with the Mono framework\nStrong understanding of object-oriented programming\nSkill for writing reusable libraries\nFamiliar with various design and architectural patterns\nKnowledge of concurrency patterns\nFamiliarity with Microsoft SQL Server and popular web application frameworks\nKnack for writing clean, readable, and easily maintainable code\nUnderstanding of fundamental design principles for building a scalable application\nExperience creating database schemas that represent and support business processes\nExperience implementing automated testing platforms and unit tests\nProficient understanding of code versioning tools\nKnowledge on Azure DevOps is plus.\n\nRole: Risk Advisory Data Analyst\nIndustry Type: Accounting / Auditing\nDepartment: Finance\nEmployment Type: Full Time, Permanent\nEducation: B.Tech/B.E. in Production/Industrial, BCA in Computers, Any Postgraduate\nExperience Required: 0-1 years\nLocation: Bangalore",
+            "categories": [
+              {
+                "id": "13",
+                "name": "Data Analytics Jobs"
+              }
+            ],
+            "short_desc": "We are looking for candidates at analyst, associate consultant and consultant roles.  Btech/BCA, holding 0-1 years of Post Qualification experience.",
+            "fulfillments": [
+              {
+                "id": "10",
+                "type": "job-type",
+                "rating": "4"
+              },
+              {
+                "id": "10",
+                "type": "job-type",
+                "rating": "4"
+              }
+            ]
+          }
+        ],
+        "createdAt": "2024-10-09T09:09:19.713Z",
+        "updatedAt": "2024-10-09T09:09:19.713Z",
+        "publishedAt": "2024-10-09T09:09:19.707Z",
+        "domain": "dsep:jobs"
+      }
+    },
+    {
+      "id": 2093,
+      "attributes": {
+        "order_id": "2063",
+        "bpp_id": "bpp-ps-network-strapi1-prod.becknprotocol.io",
+        "bpp_uri": "https://bpp-ps-network-strapi1-prod.becknprotocol.io",
+        "currency": null,
+        "delivery_status": null,
+        "descriptor": {
+          "name": "PWC",
+          "short_desc": "PriceWaterCoopers"
+        },
+        "price": null,
+        "billing": null,
+        "fulfillments": [
+          {
+            "id": "10",
+            "state": {
+              "descriptor": {
+                "code": "APPLICATION_SUBMITTED",
+                "short_desc": "APPLICATION SUBMITTED"
+              },
+              "updated_at": "2024-10-09T09:11:10.975Z"
+            },
+            "tracking": false
+          },
+          {
+            "id": "10",
+            "type": "job-type",
+            "state": {
+              "descriptor": {
+                "code": "APPLICATION_SUBMITTED",
+                "short_desc": "APPLICATION SUBMITTED"
+              },
+              "updated_at": "2024-10-09T09:11:10.975Z"
+            },
+            "rating": "4",
+            "rateable": true,
+            "tracking": false
+          }
+        ],
+        "created_date": null,
+        "last_updated_date": null,
+        "quote": null,
+        "transaction_id": "86420742-920a-4ee3-ae17-1618b4eab59c",
+        "message_id": "57dbfdf9-fd77-464f-b6e9-ecfa093c93a0",
+        "payments": null,
+        "items": [
+          {
+            "id": "16",
+            "code": "DA",
+            "name": "Data Analyst",
+            "tags": [
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              }
+            ],
+            "price": {
+              "value": "1000",
+              "currency": "INR"
+            },
+            "rating": "null",
+            "quantity": {
+              "available": {
+                "measure": {
+                  "unit": "kWh",
+                  "value": "0"
+                }
+              }
+            },
+            "rateable": true,
+            "locations": [
+              {
+                "id": "10",
+                "city": "Bengaluru. ",
+                "state": "Karnataka",
+                "country": "India"
+              }
+            ],
+            "long_desc": "Job Description:\n\nStrong knowledge of .NET web framework and Front-end frameworks like Angular or react.\nProficient in ASP.NET MVC, .NET CORE , with a good knowledge of their ecosystems\nFamiliarity with the Mono framework\nStrong understanding of object-oriented programming\nSkill for writing reusable libraries\nFamiliar with various design and architectural patterns\nKnowledge of concurrency patterns\nFamiliarity with Microsoft SQL Server and popular web application frameworks\nKnack for writing clean, readable, and easily maintainable code\nUnderstanding of fundamental design principles for building a scalable application\nExperience creating database schemas that represent and support business processes\nExperience implementing automated testing platforms and unit tests\nProficient understanding of code versioning tools\nKnowledge on Azure DevOps is plus.\n\nRole: Risk Advisory Data Analyst\nIndustry Type: Accounting / Auditing\nDepartment: Finance\nEmployment Type: Full Time, Permanent\nEducation: B.Tech/B.E. in Production/Industrial, BCA in Computers, Any Postgraduate\nExperience Required: 0-1 years\nLocation: Bangalore",
+            "categories": [
+              {
+                "id": "13",
+                "name": "Data Analytics Jobs"
+              }
+            ],
+            "short_desc": "We are looking for candidates at analyst, associate consultant and consultant roles.  Btech/BCA, holding 0-1 years of Post Qualification experience.",
+            "fulfillments": [
+              {
+                "id": "10",
+                "type": "job-type",
+                "rating": "4"
+              },
+              {
+                "id": "10",
+                "type": "job-type",
+                "rating": "4"
+              }
+            ]
+          }
+        ],
+        "createdAt": "2024-10-09T09:11:11.414Z",
+        "updatedAt": "2024-10-09T09:11:11.414Z",
+        "publishedAt": "2024-10-09T09:11:11.407Z",
+        "domain": "dsep:jobs"
+      }
+    },
+    {
+      "id": 2118,
+      "attributes": {
+        "order_id": "2066",
+        "bpp_id": "bpp-ps-network-strapi1-prod.becknprotocol.io",
+        "bpp_uri": "https://bpp-ps-network-strapi1-prod.becknprotocol.io",
+        "currency": null,
+        "delivery_status": null,
+        "descriptor": {
+          "name": "PWC",
+          "short_desc": "PriceWaterCoopers"
+        },
+        "price": null,
+        "billing": null,
+        "fulfillments": [
+          {
+            "id": "10",
+            "state": {
+              "descriptor": {
+                "code": "APPLICATION_SUBMITTED",
+                "short_desc": "APPLICATION SUBMITTED"
+              },
+              "updated_at": "2024-10-09T10:33:35.192Z"
+            },
+            "tracking": false
+          },
+          {
+            "id": "10",
+            "type": "job-type",
+            "state": {
+              "descriptor": {
+                "code": "APPLICATION_SUBMITTED",
+                "short_desc": "APPLICATION SUBMITTED"
+              },
+              "updated_at": "2024-10-09T10:33:35.192Z"
+            },
+            "rating": "4",
+            "rateable": true,
+            "tracking": false
+          }
+        ],
+        "created_date": null,
+        "last_updated_date": null,
+        "quote": null,
+        "transaction_id": "86420742-920a-4ee3-ae17-1618b4eab59c",
+        "message_id": "2c08e322-cd55-4147-9353-3f44c50004f0",
+        "payments": null,
+        "items": [
+          {
+            "id": "16",
+            "code": "DA",
+            "name": "Data Analyst",
+            "tags": [
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              },
+              {
+                "list": [null],
+                "display": true
+              }
+            ],
+            "price": {
+              "value": "1000",
+              "currency": "INR"
+            },
+            "rating": "null",
+            "quantity": {
+              "available": {
+                "measure": {
+                  "unit": "kWh",
+                  "value": "0"
+                }
+              }
+            },
+            "rateable": true,
+            "locations": [
+              {
+                "id": "10",
+                "city": "Bengaluru. ",
+                "state": "Karnataka",
+                "country": "India"
+              }
+            ],
+            "long_desc": "Job Description:\n\nStrong knowledge of .NET web framework and Front-end frameworks like Angular or react.\nProficient in ASP.NET MVC, .NET CORE , with a good knowledge of their ecosystems\nFamiliarity with the Mono framework\nStrong understanding of object-oriented programming\nSkill for writing reusable libraries\nFamiliar with various design and architectural patterns\nKnowledge of concurrency patterns\nFamiliarity with Microsoft SQL Server and popular web application frameworks\nKnack for writing clean, readable, and easily maintainable code\nUnderstanding of fundamental design principles for building a scalable application\nExperience creating database schemas that represent and support business processes\nExperience implementing automated testing platforms and unit tests\nProficient understanding of code versioning tools\nKnowledge on Azure DevOps is plus.\n\nRole: Risk Advisory Data Analyst\nIndustry Type: Accounting / Auditing\nDepartment: Finance\nEmployment Type: Full Time, Permanent\nEducation: B.Tech/B.E. in Production/Industrial, BCA in Computers, Any Postgraduate\nExperience Required: 0-1 years\nLocation: Bangalore",
+            "categories": [
+              {
+                "id": "13",
+                "name": "Data Analytics Jobs"
+              }
+            ],
+            "short_desc": "We are looking for candidates at analyst, associate consultant and consultant roles.  Btech/BCA, holding 0-1 years of Post Qualification experience.",
+            "fulfillments": [
+              {
+                "id": "10",
+                "type": "job-type",
+                "rating": "4"
+              },
+              {
+                "id": "10",
+                "type": "job-type",
+                "rating": "4"
+              }
+            ]
+          }
+        ],
+        "createdAt": "2024-10-09T10:33:35.903Z",
+        "updatedAt": "2024-10-09T10:33:35.903Z",
+        "publishedAt": "2024-10-09T10:33:35.895Z",
+        "domain": "dsep:jobs"
+      }
+    }
+  ],
+  "meta": {
+    "pagination": {
+      "page": 1,
+      "pageSize": 25,
+      "pageCount": 1,
+      "total": 9
+    }
+  }
+}
