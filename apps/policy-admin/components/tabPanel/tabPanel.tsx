@@ -36,6 +36,7 @@ const TabNavPanel = (props: TabNavPanelProps) => {
               fontWeight="600"
               p={{ base: '6px 12px', md: '10px 24px' }}
               color={tabList[index] === currentTab ? '#000000' : 'rgba(0, 0, 0, 0.6)'}
+              data-test={`tablist_name${status}`}
             >
               {status}
             </Tab>
