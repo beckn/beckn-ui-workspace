@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Box, Checkbox, Input, Menu, MenuButton, MenuList, MenuItem, Button } from '@chakra-ui/react'
 import { ChevronDownIcon } from '@chakra-ui/icons'
+import { testIds } from '@shared/dataTestIds'
 
 export interface MultiSelectDropdownProps {
   options: {
@@ -64,6 +65,7 @@ const MultiSelectDropdown = (props: MultiSelectDropdownProps) => {
           _hover={{ backgroundColor: 'trasparent' }}
           _active={{ backgroundColor: 'trasparent' }}
           ref={menuButtonRef}
+          data-test={testIds.policy_applicable_to_select}
         >
           <Input
             placeholder="Select"
@@ -77,7 +79,10 @@ const MultiSelectDropdown = (props: MultiSelectDropdownProps) => {
         {/* Dropdown list with checkboxes */}
         <MenuList minWidth={menuWidth || 'auto'}>
           {options.map((option, index) => (
-            <MenuItem key={index}>
+            <MenuItem
+              key={index}
+              data-test="policy-applicable-list"
+            >
               <Checkbox
                 value={option.value}
                 isChecked={selectedOptions.includes(option.value)}
