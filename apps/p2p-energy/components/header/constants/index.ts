@@ -1,14 +1,14 @@
 type PathnameObjectType = Record<string, string>
 
 // -------------------------------- Top Header constants --------------------------------
-const appLogoBlackList: string[] = ['/']
-const homeIconBlackList = ['/', '/homePage', '/paymentMode']
+const appLogoBlackList: string[] = ['/', '/signIn']
+const homeIconBlackList = ['/', '/signIn', '/homePage', '/paymentMode']
 const menuIconWhiteList = ['/', '/homePage', '/search']
 const topHeaderBlackList: string[] = ['/']
 const languageIconWhiteList: string[] = []
 
 // -------------------------------- Sub Header constants --------------------------------
-const backIconList = ['/', '/homePage']
+const backIconList = ['/', '/homePage', '/signIn']
 
 const headerNames: PathnameObjectType = {
   '/checkoutPage': 'Review Purchase Order',
@@ -18,7 +18,9 @@ const headerNames: PathnameObjectType = {
   '/orderCancellation': 'Order Cancel',
   '/feedback': '',
   '/search': 'Search results',
-  '/checkout': 'Billing'
+  '/checkout': 'Billing',
+  '/signIn': 'Sign In',
+  '/orderHistory': 'My Orders'
 }
 
 const headerFrenchNames: PathnameObjectType = {
@@ -36,6 +38,7 @@ const headerBlackList = [
   '/checkoutPage',
   '/',
   '/orderConfirmation',
+  '/orderHistory',
   'feedback',
   '/',
   '/homePage',
@@ -43,7 +46,8 @@ const headerBlackList = [
   '/invoiceDetails',
   '/orderCancellation',
   '/search',
-  '/checkout'
+  '/checkout',
+  '/signIn'
 ]
 
 const cartIconBlackList: string[] = [
@@ -55,7 +59,9 @@ const cartIconBlackList: string[] = [
   '/invoiceDetails',
   '/',
   '/homePage',
-  '/orderCancellation'
+  '/orderCancellation',
+  '/signIn',
+  '/orderHistory'
 ]
 
 const bottomHeaderBlackList = ['/orderConfirmation', '/', '/homePage', '/feedback']

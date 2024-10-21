@@ -4,13 +4,15 @@ import { BecknAuth } from '@beckn-ui/becknified-components'
 import { FormErrors, SignInComponentProps, SignInFormProps } from '@beckn-ui/common/lib/types'
 import { useLoginMutation } from '@beckn-ui/common/src/services/User'
 import { signInValidateForm } from '../../utils/form-utils'
+import { ButtonProps } from '@beckn-ui/molecules'
 
 const SignIn: React.FC<SignInComponentProps> = ({
   logos,
   onSignIn,
   onSignUp,
   initialFormData = { email: '', password: '' },
-  t
+  t,
+  enableSignUp = true
 }) => {
   const [formData, setFormData] = useState<SignInFormProps>(initialFormData)
   const [formErrors, setFormErrors] = useState<FormErrors>({ email: '', password: '' })
@@ -67,6 +69,29 @@ const SignIn: React.FC<SignInComponentProps> = ({
     }
   }
 
+  const buttons: ButtonProps[] = [
+    {
+      text: t('signIn'),
+      handleClick: handleSignIn,
+      disabled: !isFormFilled,
+      variant: 'solid',
+      colorScheme: 'primary',
+      isLoading: isLoading,
+      dataTest: 'login-button'
+    }
+  ]
+
+  if (enableSignUp) {
+    buttons.push({
+      text: t('signUp'),
+      handleClick: onSignUp,
+      variant: 'outline',
+      colorScheme: 'primary',
+      disabled: isLoading,
+      dataTest: 'register-button'
+    })
+  }
+
   return (
     <BecknAuth
       schema={{
@@ -74,25 +99,7 @@ const SignIn: React.FC<SignInComponentProps> = ({
           src: currentLogo.src,
           alt: currentLogo.alt
         },
-        buttons: [
-          {
-            text: t('signIn'),
-            handleClick: handleSignIn,
-            disabled: !isFormFilled,
-            variant: 'solid',
-            colorScheme: 'primary',
-            isLoading: isLoading,
-            dataTest: 'login-button'
-          },
-          {
-            text: t('signUp'),
-            handleClick: onSignUp,
-            variant: 'outline',
-            colorScheme: 'primary',
-            disabled: isLoading,
-            dataTest: 'register-button'
-          }
-        ],
+        buttons: buttons,
         inputs: [
           {
             type: 'text',
