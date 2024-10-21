@@ -19,6 +19,7 @@ interface DropdownProps<T> {
   buttonStyles?: any
   withColors?: boolean
   maxHeight?: string
+  dataTest?: string
 }
 
 export const GenericDropdown = <T extends string | number>({
@@ -30,7 +31,8 @@ export const GenericDropdown = <T extends string | number>({
   placeholder = 'Select an option',
   buttonStyles,
   withColors = false,
-  maxHeight = '200px'
+  maxHeight = '200px',
+  dataTest
 }: DropdownProps<T>) => {
   const menuButtonRef = useRef<HTMLButtonElement>(null)
   const [menuWidth, setMenuWidth] = useState<string | null>(null)
@@ -73,6 +75,7 @@ export const GenericDropdown = <T extends string | number>({
         }}
         name={name}
         ref={menuButtonRef}
+        data-test={dataTest}
       >
         {getSelectedLabel()}
       </MenuButton>
@@ -80,12 +83,14 @@ export const GenericDropdown = <T extends string | number>({
         minWidth={menuWidth || 'auto'}
         maxHeight={maxHeight} // Add max height
         overflowY="auto"
+        data-test={`${dataTest}-menu-list`}
       >
         {options?.map((option: OptionModel, index) => (
           <MenuItem
             key={index}
             onClick={() => handleChange(option)}
             style={withColors && option.color ? { color: option.color } : {}}
+            data-test={`menu-item-${index}`}
             fontSize={'14px'}
           >
             {option.label}

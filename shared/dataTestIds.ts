@@ -463,6 +463,11 @@ const testIds = {
   data_table_status: 'data-table-status',
   data_table_startDate: 'data-table-startDate',
   data_table_endDate: 'data-table-endDate',
+  status_data: 'status-data',
+  table_item_name: 'table-ite-name',
+  table_item_description: 'table-item-description',
+  table_item_startDate: 'table-item-startDate',
+  table_item_endDate: 'table-item-endDate',
   // taxi_Bpp
   taxi_BPP_switch_toggle_button: 'taxi-BPP-switch-toggle-button',
   taxi_BPP_offlineMode_image: 'taxi-BPP-offlineMode-image',

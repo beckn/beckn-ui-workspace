@@ -187,6 +187,7 @@ const DataTable = (props: DataTableProps) => {
                   <Td borderBottom={'1px dotted #004e92!important'}>
                     <Typography
                       text={item.name}
+                      dataTest={testIds.table_item_name}
                       style={{
                         display: '-webkit-box',
                         WebkitBoxOrient: 'vertical',
@@ -201,6 +202,7 @@ const DataTable = (props: DataTableProps) => {
                   <Td borderBottom={'1px dotted #004e92!important'}>
                     <Typography
                       text={item.description}
+                      dataTest={testIds.table_item_description}
                       style={{
                         display: '-webkit-box',
                         WebkitBoxOrient: 'vertical',
@@ -226,12 +228,16 @@ const DataTable = (props: DataTableProps) => {
                               : 'blue'
                       }
                     >
-                      <Typography text={item.status} />
+                      <Typography
+                        text={item.status}
+                        dataTest={testIds.status_data}
+                      />
                     </Badge>
                   </Td>
                   <Td borderBottom={'1px dotted #004e92!important'}>
                     <Typography
                       text={formatDate(item.startDate)}
+                      dataTest={testIds.table_item_startDate}
                       style={{
                         display: '-webkit-box',
                         WebkitBoxOrient: 'vertical',
@@ -246,6 +252,7 @@ const DataTable = (props: DataTableProps) => {
                   <Td borderBottom={'1px dotted #004e92!important'}>
                     <Typography
                       text={formatDate(item.endDate)}
+                      dataTest={testIds.table_item_endDate}
                       style={{
                         display: '-webkit-box',
                         WebkitBoxOrient: 'vertical',

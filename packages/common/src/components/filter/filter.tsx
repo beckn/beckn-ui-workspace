@@ -189,6 +189,7 @@ const Filter = ({
                   handleChange('searchByPrice', value.value)
                 }}
                 name="searchByPrice"
+                dataTest={testIds.searchpage_sortByPrice}
               />
             </FormControl>
           </Box>
@@ -232,6 +233,7 @@ const Filter = ({
                     fontSize: '16px'
                   }}
                   name="searchByRating"
+                  dataTest={testIds.searchpage_filterByRating}
                 />
               </FormControl>
             </Box>

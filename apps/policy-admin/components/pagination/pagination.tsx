@@ -71,6 +71,7 @@ const Pagination = ({ currentPage, totalPages, handlePageChange }: PaginationPro
             backgroundColor={'#ffffff'}
             borderLeft={pageNumber === currentPage ? `1px solid #e6e8ee` : ''}
             borderRight={pageNumber === currentPage ? `1px solid #e6e8ee` : ''}
+            data-test={'pagination-number'}
           >
             {pageNumber}
           </Button>
