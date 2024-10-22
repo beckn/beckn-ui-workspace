@@ -34,6 +34,7 @@ import _ from 'lodash'
 import BottomDrawer from '@components/bottomDrawer/BottomDrawer'
 import useSocket from '@hooks/useSocket'
 import { AuthRootState } from '@store/auth-slice'
+import { testIds } from '@shared/dataTestIds'
 
 const Homepage = () => {
   const MapWithNoSSR: any = dynamic(() => import('../components/Map'), { ssr: false })
@@ -305,14 +306,16 @@ const Homepage = () => {
               ...defaultBtnState,
               text: 'Accept',
               className: 'taxi-bpp-btn-text',
-              handleClick: () => handleAccept(data)
+              handleClick: () => handleAccept(data),
+              dataTest: testIds.taxi_BPP_accept_button
             },
             {
               ...defaultBtnState,
               text: 'Decline',
               variant: 'outline',
               color: '#D22323',
-              handleClick: () => handleDecline(data)
+              handleClick: () => handleDecline(data),
+              dataTest: testIds.taxi_BPP_decline_button
             }
           ]
         }
@@ -324,7 +327,8 @@ const Homepage = () => {
               ...defaultBtnState,
               text: 'Reached Pick-up Location',
               className: 'taxi-bpp-btn-text',
-              handleClick: () => handleReachedPickupLocation(data)
+              handleClick: () => handleReachedPickupLocation(data),
+              dataTest: testIds.taxi_BPP_Reached_Pick_up_Location_button
             }
           ]
         }
@@ -336,7 +340,8 @@ const Homepage = () => {
               ...defaultBtnState,
               text: 'Start Ride',
               className: 'taxi-bpp-btn-text',
-              handleClick: () => handleStartRide(data)
+              handleClick: () => handleStartRide(data),
+              dataTest: testIds.taxi_BPP_Start_ride_button
             }
           ]
         }
@@ -348,7 +353,8 @@ const Homepage = () => {
               ...defaultBtnState,
               text: 'End Ride',
               colorScheme: 'secondary',
-              handleClick: () => handleEndRide(data)
+              handleClick: () => handleEndRide(data),
+              dataTest: testIds.taxi_BPP_end_ride_button
             }
           ]
         }
@@ -359,7 +365,8 @@ const Homepage = () => {
               ...defaultBtnState,
               text: 'Look for New Ride Request',
               className: 'taxi-bpp-btn-text',
-              handleClick: () => handleLookForNewRide(data)
+              handleClick: () => handleLookForNewRide(data),
+              dataTest: testIds.taxi_BPP_Look_for_New_Ride_Request_button
             }
           ]
         }
@@ -384,18 +391,21 @@ const Homepage = () => {
         id: 'GOING_FOR_PICK_UP',
         title: 'Going for Pick-up',
         subTitle: 'you have reached Pickup location',
+        dataTest: 'GOING_FOR_PICK_UP',
         rideDetails: data
       }
     } else if (modalType === 'REACHED_PICK_UP') {
       modalDetails = {
         id: 'REACHED_PICK_UP',
         title: 'Reached Pick-up Location',
+        dataTest: 'REACHED_PICK_UP',
         subTitle: 'you have reached Pickup location',
         rideDetails: data
       }
     } else if (modalType === 'START_RIDE') {
       modalDetails = {
         id: 'START_RIDE',
+        dataTest: 'START_RIDE',
         title: 'Ride has Started',
         subTitle: 'you are on the way to drop location',
         rideDetails: data
@@ -404,6 +414,7 @@ const Homepage = () => {
       modalDetails = {
         id: 'COMPLETED',
         title: 'Ride has Completed',
+        dataTest: 'COMPLETED',
         subTitle: 'you have arrived at Dropoff location',
         rideDetails: data,
         fare: {
@@ -595,6 +606,7 @@ const Homepage = () => {
                     title={currentRideRequest.title}
                     subTitle={currentRideRequest.subTitle}
                     customerContact={currentRideRequest.rideDetails?.customerDetails?.contact!}
+                    dataTest={currentRideRequest.dataTest}
                   />
                 )
               }

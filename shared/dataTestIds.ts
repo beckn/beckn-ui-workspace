@@ -456,7 +456,33 @@ const testIds = {
   draw_geofence_text: 'draw-geofence-text',
   clear_geofence_text: 'clear-geofence',
   save_geofence_btn: 'save-geofence-btn',
-  cancel_geofence_btn: 'cancel-geofence-btn'
+  cancel_geofence_btn: 'cancel-geofence-btn',
+  // taxi_Bpp
+  taxi_BPP_switch_toggle_button: 'taxi-BPP-switch-toggle-button',
+  taxi_BPP_offlineMode_image: 'taxi-BPP-offlineMode-image',
+  taxi_BPP_offlineMode_offlineTitle: 'taxi-BPP-offlineMode-offlineTitle',
+  taxi_BPP_offlineMode_offlineDescription: 'taxi-BPP-offlineMode-offlineDescription',
+  taxi_BPP_profile: 'taxi-BPP-profile',
+  taxi_BPP_rideHistory: 'taxi-BPP-rideHistory',
+  taxi_BPP_accept_button: 'taxi-BPP-accept-button',
+  taxi_BPP_decline_button: 'taxi-BPP-decline-button',
+  taxi_BPP_Reached_Pick_up_Location_button: 'taxi-BPP-Reached-Pick-up-Location-button',
+  taxi_BPP_Start_ride_button: 'taxi-BPP-Start-ride-button',
+  taxi_BPP_end_ride_button: 'taxi-BPP-end-ride-button',
+  taxi_BPP_Look_for_New_Ride_Request_button: 'taxi-BPP-Look-for-New-Ride-Request-button',
+  taxi_BPP_pickup_location_text: 'taxi-BPP-pickup-location-text',
+  taxi_BPP_drop_location_text: 'taxi-BPP-drop-location-text',
+  taxi_BPP_km_away_text: 'taxi-BPP-km-away-text',
+  taxi_BPP_km_distance_text: 'taxi-BPP-km-distance-text',
+  taxi_BPP_fare_text: 'taxi-BPP-fare-text',
+  taxi_BPP_cost_text: 'taxi-BPP-cost-text',
+  taxi_BPP_my_rides_Tabs: 'taxi-BPP-my-rides-Tabs',
+  taxi_BPP_my_rides_tablist_name: 'taxi-BPP-my-rides-tablist-name',
+  taxi_BPP_myRides_carImage: 'taxi-BPP-myRides-carImage',
+  taxi_BPP_myRides_riderName: 'taxi_BPP-myRides-riderName',
+  taxi_BPP_myRides_date: 'taxi_BPP-myRides-date',
+  taxi_BPP_myRides_time: 'taxi-BPP-myRides-time',
+  taxi_BPP_myRides_status: 'taxi-BPP-myRides-status'
 }
 
 export { testIds }

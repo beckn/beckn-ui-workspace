@@ -5,6 +5,7 @@ import { RideSummaryProps } from '../../lib/types/rideDetails'
 import Styles from '@beckn-ui/becknified-components/src/pages/auth/auth.module.css'
 import { RIDE_STATUS_CODE } from '@utils/ride-utils'
 import { getCurrencyWithFare } from '@utils/rideSummary-utils'
+import { testIds } from '@shared/dataTestIds'
 
 const RideSummary: React.FC<RideSummaryProps> = ({
   time,
@@ -36,6 +37,7 @@ const RideSummary: React.FC<RideSummaryProps> = ({
             style={{ paddingRight: '15px' }}
             text={`${time!} min ${driverStatus === RIDE_STATUS_CODE.RIDE_COMPLETED ? '' : 'away'}`}
             color="#676767"
+            dataTest={testIds.taxi_BPP_km_away_text}
           />
           <Box
             w="6px"
@@ -47,6 +49,7 @@ const RideSummary: React.FC<RideSummaryProps> = ({
           <Typography
             text={`${distance!} Kms`}
             color="#676767"
+            dataTest={testIds.taxi_BPP_km_distance_text}
           />
         </Flex>
         {handleNavigate && (
@@ -93,7 +96,10 @@ const RideSummary: React.FC<RideSummaryProps> = ({
           alt="pickUpIcon"
           mr="10px"
         />
-        <Typography text={source} />
+        <Typography
+          text={source}
+          dataTest={testIds.taxi_BPP_pickup_location_text}
+        />
       </Flex>
       {destination && (
         <Flex
@@ -105,7 +111,10 @@ const RideSummary: React.FC<RideSummaryProps> = ({
             alt="destinationIcon"
             mr="10px"
           />
-          <Typography text={destination} />
+          <Typography
+            text={destination}
+            dataTest={testIds.taxi_BPP_drop_location_text}
+          />
         </Flex>
       )}
       {fare && (
@@ -126,10 +135,12 @@ const RideSummary: React.FC<RideSummaryProps> = ({
           <Typography
             color="#676767"
             text={fare.text}
+            dataTest={testIds.taxi_BPP_fare_text}
             style={{ marginTop: '12px' }}
           />
           <Flex alignItems={'center'}>
             <Typography
+              dataTest={testIds.taxi_BPP_cost_text}
               text={`${getCurrencyWithFare(country, fare.cost)}`}
               fontSize="24px"
               color="#34C759"

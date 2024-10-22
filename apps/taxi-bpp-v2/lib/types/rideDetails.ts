@@ -20,6 +20,7 @@ export interface RideSummaryHeaderProps {
   title?: string
   subTitle?: string
   customerContact?: string
+  dataTest: string
 }
 export interface RideSummaryProps extends CurrentRideRequest {
   buttons: ButtonProps[]

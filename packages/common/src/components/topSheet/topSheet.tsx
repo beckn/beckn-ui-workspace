@@ -110,6 +110,7 @@ const TopSheet: React.FC<TopSheetComponentProps> = ({
             isChecked={onlineStatus}
             colorScheme={'green'}
             onChange={handleOnSwitch}
+            data-test={testIds.taxi_BPP_switch_toggle_button}
           />
         )}
       </Box>
