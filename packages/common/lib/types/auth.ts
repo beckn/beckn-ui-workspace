@@ -80,6 +80,7 @@ export interface SignInComponentProps {
   onSignUp: () => void
   initialFormData?: SignInFormProps
   t: (key: string) => string
+  enableSignUp?: boolean
 }
 
 export interface SignUpComponentProps {

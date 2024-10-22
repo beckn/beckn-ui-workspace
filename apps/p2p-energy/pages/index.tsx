@@ -16,7 +16,7 @@ const LandingPage = () => {
 
   const handleOnCardClick = (e: React.MouseEvent, navigateTo: 'beckn-bot' | 'beckn-grid-connect') => {
     if (navigateTo === 'beckn-grid-connect') {
-      const url = '/homePage'
+      const url = '/signIn'
       const uniqueUrl = `${url}?_=${new Date().getTime()}`
       window.location.replace(uniqueUrl)
     }
