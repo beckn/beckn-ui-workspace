@@ -1,4 +1,4 @@
-export type InputType = 'text' | 'password' | 'email' | 'number'
+export type InputType = 'text' | 'password' | 'email' | 'number' | 'select'
 
 export enum InputTypeEnum {
   Text = 'text',
@@ -20,6 +20,7 @@ export interface InputProps {
   handleChange: React.ChangeEventHandler<HTMLInputElement>
   label?: string
   dataTest?: string
+  options?: { label: string; value: string }[]
 }
 export interface signInField {
   name: string
