@@ -10,9 +10,11 @@ interface OptionModel {
 }
 
 interface DropdownProps<T> {
+  key?: string | number
+  name: string
   options: OptionModel[]
   selectedValue: T
-  setSelectedValue: (value: T) => void
+  handleChange: (value: OptionModel) => void
   placeholder?: string
   buttonStyles?: any
   withColors?: boolean
@@ -20,9 +22,11 @@ interface DropdownProps<T> {
 }
 
 export const GenericDropdown = <T extends string | number>({
+  key,
+  name,
   options,
   selectedValue,
-  setSelectedValue,
+  handleChange,
   placeholder = 'Select an option',
   buttonStyles,
   withColors = false,
@@ -37,17 +41,13 @@ export const GenericDropdown = <T extends string | number>({
     }
   }, [menuButtonRef.current])
 
-  const handleSelect = (value: T) => {
-    setSelectedValue(value)
-  }
-
   const getSelectedLabel = () => {
-    const selectedOption = options.find(option => option.value === selectedValue)
+    const selectedOption = options?.find(option => option.value === selectedValue)
     return selectedOption ? selectedOption.label : _.startCase(placeholder)
   }
 
   return (
-    <Menu>
+    <Menu key={key}>
       <MenuButton
         as={Button}
         rightIcon={
@@ -59,7 +59,7 @@ export const GenericDropdown = <T extends string | number>({
         sx={{
           width: '100%',
           borderBottom: '1px solid #e2e8f0',
-          fontSize: '16px',
+          fontSize: '14px',
           borderRadius: 'unset',
           padding: '0 16px',
           paddingLeft: 'unset',
@@ -71,6 +71,7 @@ export const GenericDropdown = <T extends string | number>({
           textAlign: 'left',
           ...buttonStyles
         }}
+        name={name}
         ref={menuButtonRef}
       >
         {getSelectedLabel()}
@@ -80,10 +81,10 @@ export const GenericDropdown = <T extends string | number>({
         maxHeight={maxHeight} // Add max height
         overflowY="auto"
       >
-        {options.map((option: OptionModel, index) => (
+        {options?.map((option: OptionModel, index) => (
           <MenuItem
             key={index}
-            onClick={() => handleSelect(option.value as T)}
+            onClick={() => handleChange(option)}
             style={withColors && option.color ? { color: option.color } : {}}
             fontSize={'14px'}
           >

@@ -2,7 +2,7 @@ import React from 'react'
 import { Box, Flex, Image } from '@chakra-ui/react'
 
 // Custom
-import { Button, Input, Loader } from '@beckn-ui/molecules'
+import { Button, GenericDropdown, Input, Loader } from '@beckn-ui/molecules'
 import Styles from './auth.module.css'
 import { AuthProps } from './auth.types'
 import AuthDivider from './authDivider'
@@ -51,6 +51,18 @@ const Auth: React.FC<AuthProps> = ({ schema, isLoading, dataTestForm }) => {
         >
           <Box mt="10px">
             {inputs.map((singleInput, index) => {
+              if (singleInput.type === 'select') {
+                return (
+                  <GenericDropdown
+                    key={index}
+                    name={singleInput.name}
+                    options={singleInput.options!}
+                    placeholder={singleInput.label}
+                    selectedValue={singleInput?.value || ''}
+                    handleChange={singleInput.handleChange as any}
+                  />
+                )
+              }
               return (
                 <Input
                   dataTest={singleInput.dataTest}

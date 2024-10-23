@@ -15,7 +15,7 @@ import { getLocalStorage, setLocalStorage } from '../../utils'
 import Button from '../button/button'
 import { FilterPropsModel } from './filter.types'
 import { testIds } from '@shared/dataTestIds'
-import { GenericDropdown } from '../GenericDropdown/GenericDropdown'
+import { GenericDropdown } from '@beckn-ui/molecules'
 
 const activeLabelStyles = {
   // transform: 'scale(1) translateY(-24px)'
@@ -103,7 +103,7 @@ const Filter = ({
 
   const getFormData = (): Record<string, any> | undefined => {
     if (localStorage) {
-      const localFormData = getLocalStorage('formData')
+      const localFormData: any = getLocalStorage('formData')
       return localFormData
     }
   }
@@ -184,10 +184,11 @@ const Filter = ({
                 options={filterPriceOption}
                 placeholder="Select Information Category"
                 selectedValue={formData?.searchByPrice || ''}
-                setSelectedValue={value => {
+                handleChange={value => {
                   // dispatch(updatePolicyType(value || ''))
-                  handleChange('searchByPrice', value)
+                  handleChange('searchByPrice', value.value)
                 }}
+                name="searchByPrice"
               />
             </FormControl>
           </Box>
@@ -223,10 +224,14 @@ const Filter = ({
                   options={filterRatingOption}
                   placeholder="Select Information Category"
                   selectedValue={formData?.searchByRating || ''}
-                  setSelectedValue={value => {
+                  handleChange={value => {
                     // dispatch(updatePolicyType(value || ''))
-                    handleChange('searchByRating', value)
+                    handleChange('searchByRating', value.value)
                   }}
+                  buttonStyles={{
+                    fontSize: '16px'
+                  }}
+                  name="searchByRating"
                 />
               </FormControl>
             </Box>
