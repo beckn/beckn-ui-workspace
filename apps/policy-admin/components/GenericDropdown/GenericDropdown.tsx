@@ -2,6 +2,7 @@ import { Menu, MenuButton, MenuList, MenuItem, Button } from '@chakra-ui/react'
 import { ChevronDownIcon } from '@chakra-ui/icons'
 import React, { useEffect, useRef, useState } from 'react'
 import _ from 'lodash'
+import { testIds } from '@shared/dataTestIds'
 
 interface OptionModel {
   value: string
@@ -17,6 +18,7 @@ interface DropdownProps<T> {
   buttonStyles?: any
   withColors?: boolean
   maxHeight?: string
+  dataTest?: string
 }
 
 export const GenericDropdown = <T extends string | number>({
@@ -26,7 +28,8 @@ export const GenericDropdown = <T extends string | number>({
   placeholder = 'Select an option',
   buttonStyles,
   withColors = false,
-  maxHeight = '200px'
+  maxHeight = '200px',
+  dataTest
 }: DropdownProps<T>) => {
   const menuButtonRef = useRef<HTMLButtonElement>(null)
   const [menuWidth, setMenuWidth] = useState<string | null>(null)
@@ -71,6 +74,7 @@ export const GenericDropdown = <T extends string | number>({
           ...buttonStyles
         }}
         ref={menuButtonRef}
+        data-test={dataTest}
       >
         {getSelectedLabel()}
       </MenuButton>
@@ -85,6 +89,7 @@ export const GenericDropdown = <T extends string | number>({
             onClick={() => handleSelect(option.value as T)}
             style={withColors && option.color ? { color: option.color } : {}}
             fontSize={'14px'}
+            data-test={'menu-list'}
           >
             {option.label}
           </MenuItem>

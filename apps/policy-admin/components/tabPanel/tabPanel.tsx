@@ -5,6 +5,7 @@ import React, { useState, useMemo } from 'react'
 import addIcon from '@public/images/plus_icon.svg'
 import { useRouter } from 'next/router'
 import { TabNavPanelProps } from '@lib/types/table'
+import { testIds } from '@shared/dataTestIds'
 
 const TabNavPanel = (props: TabNavPanelProps) => {
   const { tabList, items, currentTab, setCurrentTab, meta, fetchData } = props
@@ -62,6 +63,7 @@ const TabNavPanel = (props: TabNavPanelProps) => {
             text="Create New"
             fontSize={'14px'}
             color="#013b76"
+            dataTest={testIds.create_new_policy}
           />
         </Flex>
       </Flex>

@@ -3,6 +3,7 @@ import { Box, Button, Flex } from '@chakra-ui/react'
 import CustomButton from '@components/Button/CustomButton'
 import DynamicGeofenceMap from '@components/DynamicGeofenceMap'
 import { GeoCoordinate } from '@lib/types/geofence'
+import { testIds } from '@shared/dataTestIds'
 import { PolicyRootState, updatePolygon } from '@store/policy.slice'
 import { calculateCenterOfPolygon } from '@utils/geoLocation'
 import { useRouter } from 'next/router'
@@ -56,18 +57,23 @@ const CreateGeofence = () => {
       overflowY="auto"
       overflowX="hidden"
       className="hideScroll"
+      data-test="drow-polygon"
     >
       <Flex
         justifyContent={'space-between'}
         mb="2rem"
       >
-        <Typography text="* Please draw a polygon to create a Geofence" />
+        <Typography
+          dataTest={testIds.draw_geofence_text}
+          text="* Please draw a polygon to create a Geofence"
+        />
         <Typography
           text="Clear Geofence"
           color="#013067"
           fontWeight="400"
           style={{ cursor: 'pointer' }}
           onClick={handleClearPolygon}
+          dataTest={testIds.clear_geofence_text}
         />
       </Flex>
       <Box
@@ -92,6 +98,7 @@ const CreateGeofence = () => {
           onClick={() => router.back()}
           mr="1rem"
           w={{ base: '100%', md: '100%' }}
+          data-test={testIds.cancel_geofence_btn}
         />
         <CustomButton
           variant="solid"
@@ -100,6 +107,7 @@ const CreateGeofence = () => {
           _hover={{ opacity: 0.9 }}
           onClick={handleSaveCoordinates}
           w={{ base: '100%', md: '100%' }}
+          data-test={testIds.save_geofence_btn}
         />
       </Flex>
     </Box>

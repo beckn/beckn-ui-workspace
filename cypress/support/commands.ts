@@ -85,6 +85,7 @@ declare global {
       //Created by omkar
       loginDynamic(email: string, password: string): Chainable<void>
       performSearchDynamic(searchTerm: string): Chainable<void>
+      updatePolygon(aliasName: string): Chainable<void>
     }
   }
 }
@@ -343,3 +344,10 @@ Cypress.Commands.add('fillDSEP_x_inputScholarshipApplyForm', () => {
   cy.get('#document').attachFile(fileName)
   cy.get('#submitButton').click()
 })
+
+// Cypress.Commands.add('updatePolygon', coordinates => {
+//   cy.window().its('store').invoke('dispatch', {
+//     type: 'policy/updatePolygon',
+//     payload: coordinates
+//   })
+// })

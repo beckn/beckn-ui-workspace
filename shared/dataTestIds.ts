@@ -1,8 +1,8 @@
 const testIds = {
   // application wise base url
-  url_base: process.env.CYPRESS_BASE_URL || 'http://localhost:3001',
+  url_base: process.env.CYPRESS_BASE_URL || 'http://localhost:3000',
   url_base_retail: process.env.CYPRESS_BASE_URL || 'http://localhost:3002',
-  // url_base_tourism: process.env.CYPRESS_BASE_URL || 'http://localhost:3001',
+  url_base_tourism: process.env.CYPRESS_BASE_URL || 'http://localhost:3001',
 
   // general
   goBack: 'go-back',
@@ -405,7 +405,58 @@ const testIds = {
   mobility_ride_fare: 'ride-fare',
   mobility_rider_name: 'rider-name',
   mobility_rider_mobileNo: 'rider-mobileNo',
-  mobility_rider_confirm_button: 'rider-confirm-button'
+  mobility_rider_confirm_button: 'rider-confirm-button',
+
+  // Policy Admin Data Test
+
+  create_new_policy: 'create-new-policy',
+  add_info_metadata: 'add-info-metaDeta',
+  switch_btn: 'switch-button',
+  switch_btn_text: 'switch-btn-active-text',
+  policy_title: 'policy-title',
+  policy_title_input: 'policy-title-input',
+  title_error: 'policy-title-error',
+  policy_info_category: 'policy-info-category',
+  policy_info_category_dropdown: 'policy-info-category-dropdown',
+  policy_info_category_error: 'policy-info-category-error',
+  info_source_owner: 'info-source-owner',
+  info_source_owner_input: 'info-source-owner-input',
+  info_source_owner_input_error: 'info-source-owner-input-error',
+  policy_description: 'policy-description',
+  policy_description_textArea: 'policy-description-textArea',
+  policy_description_textArea_error: 'policy-description-textArea-error',
+  country: 'country',
+  country_dropdown: 'country-dropdown',
+  country_error: 'country-error-mssg',
+  city: 'city',
+  city_dropdown: 'city-dropdown',
+  city_error: 'city-error-mssg',
+  policy_from_date: 'from',
+  date_pick_from: 'date-pick-from',
+  policy_from_date_error: 'from-date-error',
+  policy_to_date: 'to',
+  date_pick_to: 'date-pick-to',
+  policy_to_date_error: 'to-date-error',
+  policy_source: 'source',
+  policy_source_input: 'source-input',
+  policy_source_error: 'source-error-mssg',
+  policy_applicable_to: 'applicable-to',
+  policy_applicable_to_select: 'applicable-to-select',
+  policy_applicable_to_error: 'applicable-to-error-mssg',
+  geofence: 'geofence',
+  create_geofence: 'create-geofence',
+  geofence_icon: 'geofence-icon',
+  geofence_text: 'geofence-text',
+  view_geofence: 'view-geofence',
+  geofence_error: 'geofence-error-mssg',
+  policy_rules: 'policy-rule',
+  policy_rules_code: 'policy-rule-code',
+  go_back_home: 'go-back',
+  save_policy: 'save',
+  draw_geofence_text: 'draw-geofence-text',
+  clear_geofence_text: 'clear-geofence',
+  save_geofence_btn: 'save-geofence-btn',
+  cancel_geofence_btn: 'cancel-geofence-btn'
 }
 
 export { testIds }
