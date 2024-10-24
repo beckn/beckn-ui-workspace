@@ -6,7 +6,7 @@ import { Button, GenericDropdown, Input, Loader, Typography } from '@beckn-ui/mo
 import Styles from './auth.module.css'
 import { AuthProps } from './auth.types'
 import AuthDivider from './authDivider'
-import greenTick from '@public/images/green-tick.svg'
+import greenTick from '../../../public/images/green-tick.svg'
 
 const Auth: React.FC<AuthProps> = ({ schema, isLoading, dataTestForm }) => {
   const { logo, inputs, buttons, socialButtons, loader, chooseAuthType, handleAccountType } = schema
