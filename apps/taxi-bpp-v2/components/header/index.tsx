@@ -8,6 +8,7 @@ import Constants from './constants'
 import { useSelector } from 'react-redux'
 import { RiderRootState } from '@store/rider-slice'
 import { useToggleAvailabilityMutation } from '@services/RiderService'
+import { testIds } from '@shared/dataTestIds'
 
 const Header = () => {
   const {
@@ -42,13 +43,15 @@ const Header = () => {
               id: 'profile',
               label: t.profileIcon,
               href: '/profile',
-              icon: '/images/userProfile.svg'
+              icon: '/images/userProfile.svg',
+              dataTest: testIds.taxi_BPP_profile
             },
             {
               id: 'history',
               label: t.rideHistoryIcon,
               href: '/myRides',
-              icon: '/images/orderHistoryIcon.svg'
+              icon: '/images/orderHistoryIcon.svg',
+              dataTest: testIds.taxi_BPP_rideHistory
             },
             {
               id: 'logout',
@@ -56,6 +59,7 @@ const Header = () => {
               href: '/signIn',
               icon: '/images/logOutIcon.svg',
               color: 'red',
+              dataTest: testIds.Logout_text,
               handleOnClick: async () => {
                 try {
                   const requestBody = {

@@ -1,6 +1,8 @@
 import { useLanguage } from '../../../hooks/useLanguage'
 import { Box, Flex, Image } from '@chakra-ui/react'
 import { BottomModal, Typography } from '@beckn-ui/molecules'
+import React from 'react'
+import { testIds } from '@shared/dataTestIds'
 
 interface OfflineModalProps {
   isOpen: boolean
@@ -24,6 +26,7 @@ const OfflineModal: React.FC<OfflineModalProps> = ({ isOpen }) => {
         <Image
           src={'./images/offline.svg'}
           alt={'offline icon'}
+          data-test={testIds.taxi_BPP_offlineMode_image}
         />
         <Flex
           flexDirection={'column'}
@@ -33,8 +36,12 @@ const OfflineModal: React.FC<OfflineModalProps> = ({ isOpen }) => {
             text={t.offlineTitle}
             fontWeight="500"
             fontSize={'20px'}
+            data-test={testIds.taxi_BPP_offlineMode_offlineTitle}
           />
-          <Typography text={t.offlineDescription} />
+          <Typography
+            text={t.offlineDescription}
+            data-test={testIds.taxi_BPP_offlineMode_offlineDescription}
+          />
         </Flex>
       </Box>
     </BottomModal>
