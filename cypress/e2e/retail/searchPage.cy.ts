@@ -68,22 +68,26 @@ describe('Search Page Tests', () => {
     })
 
     it('should handle sort by price option in filter', () => {
-      cy.getByData(testIds.searchpage_sortByPrice).select(2)
+      cy.getByData(testIds.searchpage_sortByPrice).click()
+      cy.getByData(`${testIds.searchpage_sortByPrice}-menu-list`).should('be.visible')
+      cy.getByData(`${testIds.searchpage_sortByPrice}-menu-list`).within(() => {
+        cy.getByData('menu-item-2').click()
+      })
       cy.getByData(testIds.searchpage_applyFilter).click()
       cy.getByData(testIds.searchpage_products).eq(0).should('contain.text', 'sunglass Four')
     })
 
     it('should handle filter by rating option in filter', () => {
-      cy.getByData(testIds.searchpage_filterByRating).select(1)
+      cy.getByData(testIds.searchpage_filterByRating).click()
+      cy.getByData(`${testIds.searchpage_filterByRating}-menu-list`).should('be.visible')
+      cy.getByData(`${testIds.searchpage_filterByRating}-menu-list`).within(() => {
+        cy.getByData('menu-item-1').click()
+      })
       cy.getByData(testIds.searchpage_applyFilter).click()
       cy.getByData(testIds.searchpage_products).eq(0).should('contain.text', 'sunglass Two')
     })
 
     it('should handle reset applied filter', () => {
-      cy.getByData(testIds.searchpage_sortByPrice).select(2)
-      cy.getByData(testIds.searchpage_filterByRating).select(2)
-      cy.getByData(testIds.searchpage_applyFilter).click()
-      cy.getByData(testIds.searchpage_products).eq(0).should('contain.text', 'sunglass Four')
       cy.getByData(testIds.searchpage_resetBtn).click()
       cy.getByData(testIds.searchpage_products).eq(0).should('contain.text', 'sunglass One')
     })

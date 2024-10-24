@@ -6,6 +6,7 @@ import { formatDate } from '@utils/general'
 import { useRouter } from 'next/router'
 import { DataTableProps } from '@lib/types/table'
 import Pagination from '@components/pagination/pagination'
+import { testIds } from '@shared/dataTestIds'
 
 const DataTable = (props: DataTableProps) => {
   const { items, meta, fetchData, currentTab } = props
@@ -61,7 +62,10 @@ const DataTable = (props: DataTableProps) => {
         overflowX="scroll"
         className="hideScroll"
       >
-        <Table variant="simple">
+        <Table
+          variant="simple"
+          data-test={testIds.data_table_container}
+        >
           <Thead
             position="sticky"
             top={0}
@@ -74,6 +78,7 @@ const DataTable = (props: DataTableProps) => {
                   display="flex"
                   alignItems="center"
                   width={'200px'}
+                  data-test={testIds.data_table_title}
                 >
                   Title
                   <IconButton
@@ -92,6 +97,7 @@ const DataTable = (props: DataTableProps) => {
                   display="flex"
                   alignItems="center"
                   width={'300px'}
+                  data-test={testIds.data_table_description}
                 >
                   Description
                   <IconButton
@@ -110,6 +116,7 @@ const DataTable = (props: DataTableProps) => {
                   display="flex"
                   alignItems="center"
                   width={'100px'}
+                  data-test={testIds.data_table_status}
                 >
                   Status
                   <IconButton
@@ -128,6 +135,7 @@ const DataTable = (props: DataTableProps) => {
                   display="flex"
                   alignItems="center"
                   width={'100px'}
+                  data-test={testIds.data_table_startDate}
                 >
                   Start Date
                   <IconButton
@@ -146,6 +154,7 @@ const DataTable = (props: DataTableProps) => {
                   display="flex"
                   alignItems="center"
                   width={'100px'}
+                  data-test={testIds.data_table_endDate}
                 >
                   End Date
                   <IconButton
@@ -178,6 +187,7 @@ const DataTable = (props: DataTableProps) => {
                   <Td borderBottom={'1px dotted #004e92!important'}>
                     <Typography
                       text={item.name}
+                      dataTest={testIds.table_item_name}
                       style={{
                         display: '-webkit-box',
                         WebkitBoxOrient: 'vertical',
@@ -192,6 +202,7 @@ const DataTable = (props: DataTableProps) => {
                   <Td borderBottom={'1px dotted #004e92!important'}>
                     <Typography
                       text={item.description}
+                      dataTest={testIds.table_item_description}
                       style={{
                         display: '-webkit-box',
                         WebkitBoxOrient: 'vertical',
@@ -217,12 +228,16 @@ const DataTable = (props: DataTableProps) => {
                               : 'blue'
                       }
                     >
-                      <Typography text={item.status} />
+                      <Typography
+                        text={item.status}
+                        dataTest={testIds.status_data}
+                      />
                     </Badge>
                   </Td>
                   <Td borderBottom={'1px dotted #004e92!important'}>
                     <Typography
                       text={formatDate(item.startDate)}
+                      dataTest={testIds.table_item_startDate}
                       style={{
                         display: '-webkit-box',
                         WebkitBoxOrient: 'vertical',
@@ -237,6 +252,7 @@ const DataTable = (props: DataTableProps) => {
                   <Td borderBottom={'1px dotted #004e92!important'}>
                     <Typography
                       text={formatDate(item.endDate)}
+                      dataTest={testIds.table_item_endDate}
                       style={{
                         display: '-webkit-box',
                         WebkitBoxOrient: 'vertical',
