@@ -8,6 +8,7 @@ import { useBapTradeRegisterMutation, useBppTradeRegisterMutation } from '@servi
 import energyIcon from '@public/images/energy-icon.svg'
 import { useLanguage } from '@hooks/useLanguage'
 import { CustomFormErrorProps, signUpValidateForm } from '@utils/form-utils'
+import { accountType } from '@utils/auth'
 
 interface RegisterFormProps extends SignUpFormProps {
   utilityCompany: string
@@ -140,6 +141,8 @@ const SignUp = () => {
     Router.push('/signIn')
   }
 
+  const handleChooseAuthType = (id: string) => {}
+
   return (
     <Box
       mt={'30px'}
@@ -153,6 +156,8 @@ const SignUp = () => {
             src: energyIcon,
             alt: 'energy-logo'
           },
+          chooseAuthType: accountType,
+          handleAccountType: handleChooseAuthType,
           buttons: [
             {
               text: t.signUp,

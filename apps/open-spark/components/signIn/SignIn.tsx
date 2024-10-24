@@ -7,6 +7,7 @@ import { useLanguage } from '@hooks/useLanguage'
 import { Box } from '@chakra-ui/react'
 import Router from 'next/router'
 import { useBapTradeLoginMutation, useBppTradeLoginMutation } from '@services/UserService'
+import { accountType } from '@utils/auth'
 
 const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
   const [formData, setFormData] = useState<SignInFormProps>(initialFormData)
@@ -63,6 +64,8 @@ const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
     Router.push('/signUp')
   }
 
+  const handleChooseAuthType = (id: string) => {}
+
   return (
     <Box>
       <BecknAuth
@@ -71,6 +74,8 @@ const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
             src: energyIcon,
             alt: 'energy-logo'
           },
+          chooseAuthType: accountType,
+          handleAccountType: handleChooseAuthType,
           buttons: [
             {
               text: t.signIn,
