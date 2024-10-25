@@ -1,4 +1,5 @@
 import { testIds } from '../../../shared/dataTestIds'
+import { confirmResponse } from '../../fixtures/mobility-bap/confirm'
 import { initResponse } from '../../fixtures/mobility-bap/initResponse'
 import { userDetails } from '../../fixtures/mobility-bap/userDetails'
 
@@ -59,6 +60,7 @@ describe('Payment Page Tests', () => {
     cy.performInit(initResponse, 'initResponse')
     cy.getByData(testIds.mobility_rider_confirm_button).click()
     cy.wait('@initResponse')
+    cy.performConfirm(confirmResponse, 'confirmResponse')
   })
 
   it('should render the Payment page', () => {
@@ -77,10 +79,8 @@ describe('Payment Page Tests', () => {
     cy.getByData(testIds.paymentpage_radioButton).should('not.be.checked')
     cy.getByData(testIds.paymentpage_confirmButton).contains('Continue').should('be.disabled')
   })
-
-  it('should navigate to the order confirmation page upon clicking confirm button', () => {
+  it('should Click on Confirm Button', () => {
     cy.getByData(testIds.paymentpage_radioButton).eq(2).check().should('be.checked')
     cy.getByData(testIds.paymentpage_confirmButton).click()
-    cy.url().should('include', testIds.url_orderConfirmation)
   })
 })

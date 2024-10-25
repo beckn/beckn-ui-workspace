@@ -19,11 +19,13 @@ const CabDetails: React.FC<CabDetailsProps> = ({ registrationNumber, carModel, c
       <Flex direction={'column'}>
         <Typography
           text={registrationNumber}
+          dataTest={'registrationNumber'}
           fontSize="14px"
           fontWeight="700"
         />
         <Typography
           text={carDetails}
+          dataTest={'carDetails'}
           fontSize="11px"
           fontWeight="400"
           color="#37474F"

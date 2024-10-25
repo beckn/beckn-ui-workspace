@@ -42,6 +42,7 @@ const RideDetailsCard: React.FC<RideDetailsCardProps> = ({
       />
       <Button
         text="Contact Support"
+        dataTest={'Contact_Support'}
         leftIcon={
           <Image
             src="./images/contactSupport.svg"
@@ -52,6 +53,7 @@ const RideDetailsCard: React.FC<RideDetailsCardProps> = ({
       />
       <Button
         text={t.cancelRide}
+        dataTest={'cancelRide'}
         handleClick={cancelRide}
         variant="outline"
       />

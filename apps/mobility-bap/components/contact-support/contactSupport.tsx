@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux'
 import { v4 as uuidv4 } from 'uuid'
 import { SelectRideRootState } from '@store/selectRide-slice'
 import { isEmpty } from '@beckn-ui/common'
+import { testIds } from '@shared/dataTestIds'
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
@@ -85,11 +86,13 @@ const contactSupport = ({ handleOnClose }: ContactSupportProps) => {
   const callMenuItem = (supportInfo: SupportModel) => [
     {
       text: 'Call Us',
-      onClick: () => handleCallCustomer(supportInfo.phone)
+      onClick: () => handleCallCustomer(supportInfo.phone),
+      dataTest: 'call_us'
     },
     {
       text: 'Email Us',
-      onClick: () => handleEmailCustomer(supportInfo.email)
+      onClick: () => handleEmailCustomer(supportInfo.email),
+      dataTest: 'email_us'
     }
   ]
   return (
@@ -97,6 +100,7 @@ const contactSupport = ({ handleOnClose }: ContactSupportProps) => {
       <HeaderContent
         text="Contact Support"
         onClose={handleOnClose}
+        dataTest={'Contact_Support'}
       />
       {!contactDetails && isLoading ? (
         <Box
@@ -104,6 +108,7 @@ const contactSupport = ({ handleOnClose }: ContactSupportProps) => {
           alignItems="center"
           justifyContent={'center'}
           height={'300px'}
+          data-test={testIds.loadingIndicator}
         >
           <LoaderWithMessage
             loadingText={t.pleaseWait}
@@ -116,6 +121,7 @@ const contactSupport = ({ handleOnClose }: ContactSupportProps) => {
             text={t.contactSupprtText}
             fontWeight="400"
             fontSize="12px"
+            dataTest={'contactSupprtText'}
           />
           <Box mt={'20px'}>
             {callMenuItem(contactDetails!).map((menuItem, index) => (
@@ -123,6 +129,7 @@ const contactSupport = ({ handleOnClose }: ContactSupportProps) => {
                 key={index}
                 text={menuItem.text}
                 handleClick={menuItem.onClick}
+                dataTest={menuItem.dataTest}
               />
             ))}
           </Box>
