@@ -40,7 +40,8 @@ describe('Happy flow of Himalayan', () => {
       cy.getByData(testIds.searchpage_filterByRating).should('contain.text', 'Rating')
     })
     it('should select and add Billing & Shipping details', () => {
-      cy.selectProduct(2)
+      cy.getByData(testIds.searchpage_products).filter(':contains("Louvre Museum Exhibition")').click()
+      //should select 'Louvre Museum Exhibition'
       cy.url().should('include', `${testIds.url_search}?searchTerm=Paris`)
       cy.getByData(testIds.productpage_addTocartButton).click()
       cy.getByData(testIds.checkoutpage_shippingDetails).getByData(testIds.checkoutpage_openForm).first().click()

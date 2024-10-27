@@ -54,7 +54,7 @@ const testIds = {
   deployed_industry_url_signup: 'https://supplyflow-prod.becknprotocol.io/signUp',
   deployed_industry_url_home: 'https://supplyflow-dev.becknprotocol.io/',
   deployed_industry_url_search: 'https://supplyflow-dev.becknprotocol.io/search',
-  //Himalayan Deployed urls
+  //Tourism Deployed urls
   deployed_tourism_url_base: 'https://tourism-dev.becknprotocol.io',
   deployed_tourism_url_signup: 'https://tourism-dev.becknprotocol.io/signUp',
   deployed_tourism_url_home: 'https://tourism-dev.becknprotocol.io/',

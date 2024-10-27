@@ -71,7 +71,8 @@ describe('Happy flow of OSC', () => {
       cy.getByData(testIds.searchpage_products).should('have.length.greaterThan', 0)
     })
     it('should navigate to product details on item click', () => {
-      cy.getByData(testIds.searchpage_products).eq(9).click() //cheesecake
+      cy.getByData(testIds.searchpage_products).filter(':contains("Cheesecake")').click()
+      //select cheesecake as product
       cy.url().should('include', testIds.url_product)
       cy.getByData(testIds.productpage_addTocartButton).click()
       cy.wait(4000)

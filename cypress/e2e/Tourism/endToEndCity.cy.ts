@@ -89,8 +89,8 @@ describe('end to end testing', () => {
   })
   context('Select and add product', () => {
     it('should select and render details of product', () => {
-      cy.selectProduct(2)
-      //cy.selectProduct(('contain.text', 'Louvre Museum Exhibition'))
+      cy.getByData(testIds.searchpage_products).filter(':contains("Louvre Museum Exhibition")').click()
+      //should select 'Louvre Museum Exhibition'
       cy.url().should('include', `${testIds.url_search}?searchTerm=Paris`)
       cy.getByData(testIds.item_title).should('contain.text', 'Louvre Museum Exhibition')
       cy.getByData(testIds.item_rating).eq(4)

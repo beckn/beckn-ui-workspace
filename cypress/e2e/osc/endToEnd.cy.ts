@@ -157,7 +157,8 @@ describe('End to End Flow', () => {
       cy.getByData(testIds.searchpage_products).eq(0).should('contain.text', 'Brunch sucré')
     })
     it('should navigate to product details on item click', () => {
-      cy.getByData(testIds.searchpage_products).eq(9).click()
+      cy.getByData(testIds.searchpage_products).filter(':contains("Cheesecake")').click()
+      //select cheesecake as product
     })
   })
   context('Should render the product details page', () => {
@@ -214,6 +215,7 @@ describe('End to End Flow', () => {
     it('Should conatin order Button and click on it render it on checkout page', () => {
       cy.getByData(testIds.cartpage_cartOrderButton).should('contain.text', 'Proceed to checkout')
       cy.getByData(testIds.cartpage_cartOrderButton).click()
+      cy.wait(2000)
     })
   })
   context('Should render and validate Billing & Shipping Details', () => {
