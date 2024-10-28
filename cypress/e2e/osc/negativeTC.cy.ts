@@ -1,7 +1,4 @@
 import { testIds } from '../../../shared/dataTestIds'
-import { billingDetails, shippingDetails } from '../../fixtures/checkoutPage/userDetails'
-import { initResponse } from '../../fixtures/checkoutPage/initResponse'
-// import { HomeIcon } from '../../../apps/taxi-bpp/src/lib/icons/home-icon';
 describe('end to end testing', () => {
   before(() => {
     cy.visit(testIds.deployed_osc_url_base)

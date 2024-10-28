@@ -39,7 +39,7 @@ const testIds = {
   payment_taxes: 'taxes',
   payment_totalPayment: 'totalPayment',
 
-  // Deployed urls
+  // Retail Deployed urls
   deployed_url_base: 'https://retail-dev.becknprotocol.io',
   deployed_url_signup: 'https://retail-dev.becknprotocol.io/signUp',
   deployed_url_home: 'https://retail-dev.becknprotocol.io/',
@@ -64,6 +64,11 @@ const testIds = {
   deployed_dsep_url_signup: 'https://unified-dsep-dev.becknprotocol.io/signUp',
   deployed_dsep_url_home: 'https://unified-dsep-dev.becknprotocol.io/',
   deployed_dsep_url_search: 'https://unified-dsep-dev.becknprotocol.io/search',
+  //ODR Deployed urls
+  deployed_odr_url_base: 'https://onlinedisputeresolution-staging.becknprotocol.io',
+  deployed_odr_url_signup: 'https://onlinedisputeresolution-staging.becknprotocol.io/signUp',
+  deployed_odr_url_home: 'https://onlinedisputeresolution-staging.becknprotocol.io',
+  deployed_odr_url_search: 'https://onlinedisputeresolution-staging.becknprotocol.io/search',
 
   // Deployed urls
   deployed_dsep_url_base: 'unified-dsep-staging.becknprotocol.io/',

@@ -1,7 +1,5 @@
 import { testIds } from '../../../shared/dataTestIds'
 import { billingDetails, shippingDetails } from '../../fixtures/checkoutPage/userDetails'
-import { initResponse } from '../../fixtures/checkoutPage/initResponse'
-import { orderResponse } from '../../fixtures/INDUSTRY4.0/orderConfirmation/orderResponse'
 describe('End to End Flow', () => {
   function verifyPrice(expectedPrice: string, index: number = 0) {
     cy.getByData(testIds.item_price)
