@@ -36,11 +36,11 @@ const OfflineModal: React.FC<OfflineModalProps> = ({ isOpen }) => {
             text={t.offlineTitle}
             fontWeight="500"
             fontSize={'20px'}
-            data-test={testIds.taxi_BPP_offlineMode_offlineTitle}
+            dataTest={testIds.taxi_BPP_offlineMode_offlineTitle}
           />
           <Typography
             text={t.offlineDescription}
-            data-test={testIds.taxi_BPP_offlineMode_offlineDescription}
+            dataTest={testIds.taxi_BPP_offlineMode_offlineDescription}
           />
         </Flex>
       </Box>
