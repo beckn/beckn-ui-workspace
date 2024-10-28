@@ -42,6 +42,12 @@ const testIds = {
   deployed_url_home: 'https://retail-dev.becknprotocol.io/',
   deployed_url_search: 'https://retail-dev.becknprotocol.io/search',
 
+  // Deployed urls
+  deployed_dsep_url_base: 'unified-dsep-staging.becknprotocol.io/',
+  deployed_dsep_url_signup: 'unified-dsep-staging.becknprotocol.io/signUp',
+  deployed_dsep_url_home: 'unified-dsep-staging.becknprotocol.io/',
+  deployed_dsep_url_search: 'unified-dsep-staging.becknprotocol.io/search',
+
   // urls
   url_signup: '/signUp',
   url_home: '/',
