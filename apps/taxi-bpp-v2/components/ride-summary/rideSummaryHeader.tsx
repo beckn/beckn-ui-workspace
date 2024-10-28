@@ -29,6 +29,7 @@ const RideSummaryHeader: React.FC<RideSummaryHeaderProps> = ({
             <Image
               src="/images/car.svg"
               alt="car"
+              data-test="ride-summary-header-img"
             />
             <Box
               alignItems={'left'}
@@ -42,13 +43,19 @@ const RideSummaryHeader: React.FC<RideSummaryHeaderProps> = ({
               >
                 {title}
               </Box>
-              <Box fontSize="12px">{subTitle}</Box>
+              <Box
+                fontSize="12px"
+                data-test="header-sub-title"
+              >
+                {subTitle}
+              </Box>
             </Box>
           </Flex>
           <Box
             position={'relative'}
             cursor="pointer"
             onClick={handleCallClick}
+            data-test="driver-call-click"
           >
             <Image
               h={'44px'}
@@ -56,6 +63,7 @@ const RideSummaryHeader: React.FC<RideSummaryHeaderProps> = ({
               borderRadius={'50%'}
               src={driverImg ? driverImg : '/images/blankImg.svg'}
               alt=""
+              data-test="driver-img"
             />
             <Image
               position={'absolute'}
@@ -63,6 +71,7 @@ const RideSummaryHeader: React.FC<RideSummaryHeaderProps> = ({
               right={'0'}
               src={'/images/phoneIcon.svg'}
               alt=""
+              data-test="driver-call-img"
             />
           </Box>
         </Flex>

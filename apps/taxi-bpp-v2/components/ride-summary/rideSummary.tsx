@@ -76,8 +76,12 @@ const RideSummary: React.FC<RideSummaryProps> = ({
               src="/images/near_me.svg"
               alt="near_me"
               mr="5px"
+              data-test={testIds.navigate_img}
             />
-            <Typography text="Navigate" />
+            <Typography
+              text="Navigate"
+              dataTest={testIds.driver_navigate}
+            />
           </Flex>
         )}
         {date && (
@@ -95,6 +99,7 @@ const RideSummary: React.FC<RideSummaryProps> = ({
           src="/images/pickUpIcon.svg"
           alt="pickUpIcon"
           mr="10px"
+          data-test="source-icon"
         />
         <Typography
           text={source}
@@ -110,6 +115,7 @@ const RideSummary: React.FC<RideSummaryProps> = ({
             src="/images/destinationIcon.svg"
             alt="destinationIcon"
             mr="10px"
+            data-test="destination-icon"
           />
           <Typography
             text={destination}

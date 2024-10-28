@@ -498,7 +498,9 @@ const testIds = {
   current_location: 'current-location',
   yourLocation: 'your-location',
   skeleton: 'skeleton-loader',
-  downArrow: 'down-arrow'
+  downArrow: 'down-arrow',
+  driver_navigate: 'navigate',
+  navigate_img: 'navigate-img'
 }
 
 export { testIds }
