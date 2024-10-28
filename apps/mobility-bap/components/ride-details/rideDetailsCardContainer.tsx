@@ -17,6 +17,7 @@ import { useRouter } from 'next/router'
 import RideDetailsContainer from './rideDetailsContainer'
 import CancelRide from '@components/cancel-ride/cancelRidePage'
 import ContactSupport from '@components/contact-support/contactSupport'
+import { testIds } from '@shared/dataTestIds'
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
@@ -183,6 +184,7 @@ const RideDetailsCardContainer: React.FC<RideDetailsCardContainerProps> = ({ han
           <LoaderWithMessage
             loadingText={t.pleaseWait}
             loadingSubText={t.confirmLoaderSubtext}
+            dataTest={testIds.loadingIndicator}
           />
         </Box>
       ) : (

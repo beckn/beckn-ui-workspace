@@ -4,7 +4,7 @@ import { Typography } from '@beckn-ui/molecules'
 import { CloseIcon } from '@chakra-ui/icons'
 import { useRouter } from 'next/router'
 
-const HeaderContent = ({ text, onClose }: { text: string; onClose?: () => void }) => {
+const HeaderContent = ({ text, onClose, dataTest }: { text: string; onClose?: () => void; dataTest: string }) => {
   const router = useRouter()
   return (
     <>
@@ -17,6 +17,7 @@ const HeaderContent = ({ text, onClose }: { text: string; onClose?: () => void }
           text={text}
           fontWeight="700"
           fontSize="14px"
+          dataTest={dataTest}
         />
         <CloseIcon
           as="button"
