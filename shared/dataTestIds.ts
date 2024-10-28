@@ -74,6 +74,12 @@ const testIds = {
   deployed_mob_url_base: 'https://mobility-dev.becknprotocol.io/',
   //policy portal
   deployed_policy_url_base: 'https://policyadmin-dev.becknprotocol.io/',
+  // ODR Deployed urls
+  deployed_odr_url_base: 'https://onlinedisputeresolution-staging.becknprotocol.io//',
+  deployed_odr_url_signup: 'https://onlinedisputeresolution-staging.becknprotocol.io//signUp',
+  deployed_odr_url_home: 'https://onlinedisputeresolution-staging.becknprotocol.io//',
+  deployed_odr_url_search: 'https://onlinedisputeresolution-staging.becknprotocol.io//search',
+
   // urls
   url_signup: '/signUp',
   url_home: '/',
