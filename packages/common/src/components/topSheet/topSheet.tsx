@@ -65,11 +65,15 @@ const TopSheet: React.FC<TopSheetComponentProps> = ({
           columnGap="10px"
           pl="unset"
         >
-          <Image src={'/images/setLocation.svg'} />
+          <Image
+            src={'/images/setLocation.svg'}
+            data-test={testIds.locationIcon}
+          />
           <Box>
             <Text
               fontSize="12px"
               fontWeight={400}
+              data-test={testIds.yourLocation}
             >
               {t('yourLocation')}
             </Text>
@@ -78,6 +82,7 @@ const TopSheet: React.FC<TopSheetComponentProps> = ({
                 <Skeleton
                   height="10px"
                   width="200px"
+                  data-test={testIds.skeleton}
                 />
               ) : (
                 <>
@@ -98,6 +103,7 @@ const TopSheet: React.FC<TopSheetComponentProps> = ({
                     cursor={'pointer'}
                     pt="4px"
                     src="/images/downArrow.svg"
+                    data-test={testIds.downArrow}
                   />
                 </>
               )}

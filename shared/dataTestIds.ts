@@ -493,7 +493,12 @@ const testIds = {
   taxi_BPP_myRides_riderName: 'taxi_BPP-myRides-riderName',
   taxi_BPP_myRides_date: 'taxi_BPP-myRides-date',
   taxi_BPP_myRides_time: 'taxi-BPP-myRides-time',
-  taxi_BPP_myRides_status: 'taxi-BPP-myRides-status'
+  taxi_BPP_myRides_status: 'taxi-BPP-myRides-status',
+  locationIcon: 'location-icon',
+  current_location: 'current-location',
+  yourLocation: 'your-location',
+  skeleton: 'skeleton-loader',
+  downArrow: 'down-arrow'
 }
 
 export { testIds }

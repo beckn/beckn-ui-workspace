@@ -1,0 +1,22 @@
+{
+  "id": "REQ_NEW_RIDE",
+  "title": "New Ride Request",
+  "subTitle": "",
+  "rideDetails": {
+    "orderId": 2130,
+    "source": "FW2M+WV8, Pandhari Nagar, Handewadi, Pune, Maharashtra 412308, India",
+    "sourceGeoLocation": {
+      "latitude": 18.4520848,
+      "longitude": 73.9339347
+    },
+    "destinationGeoLocation": {
+      "latitude": 18.5214945,
+      "longitude": 73.93047109999999
+    },
+    "destination": "P1002, MARVEL DIVA, P1002, Kirtane Baugh, Phase 1, Hadapsar, Pune, Maharashtra 411028, India",
+    "distance": 9.88,
+    "time": "30",
+    "driverStatus": "AWAITING_DRIVER_APPROVAL",
+    "contact": "9999999999"
+  }
+}

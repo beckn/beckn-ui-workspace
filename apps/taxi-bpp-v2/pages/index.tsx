@@ -56,7 +56,7 @@ const Homepage = () => {
   const { currentAcceptedRideRequest, driverStatus } = useSelector((state: RideStatusRootState) => state.rideStatus)
   const apiKeyForGoogle = process.env.NEXT_PUBLIC_GOOGLE_API_KEY
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
-
+  console.log(currentRideRequest)
   const socket = useSocket(strapiUrl!, {
     query: {
       agentId: user?.agent?.id
@@ -288,7 +288,8 @@ const Homepage = () => {
     handleModalSubmit('COMPLETED', data)
     dispatch(updateDriverStatus(RIDE_STATUS_CODE.AWAITING_DRIVER_APPROVAL))
   }
-
+  // console.log(RIDE_STATUS_CODE.AWAITING_DRIVER_APPROVAL)
+  localStorage.setItem('actionType', RIDE_STATUS_CODE.AWAITING_DRIVER_APPROVAL)
   const getModalButtons = (
     actionType: ModalTypes,
     data: RideDetailsModel
