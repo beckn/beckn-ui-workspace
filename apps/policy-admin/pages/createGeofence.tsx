@@ -50,7 +50,6 @@ const CreateGeofence = () => {
     setPolygonPath(path)
     setCoordinatesForForm(path.map(point => `${point.lat}, ${point.lng}`))
   }
-  console.log(polygonPath)
   return (
     <Box
       maxH={'calc(100vh - 110px)'}
