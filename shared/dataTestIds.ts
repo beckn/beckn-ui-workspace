@@ -506,7 +506,20 @@ const testIds = {
   skeleton: 'skeleton-loader',
   downArrow: 'down-arrow',
   driver_navigate: 'navigate',
-  navigate_img: 'navigate-img'
+  navigate_img: 'navigate-img',
+  taxi_BPP_Personal_Details: 'Personal-Details',
+  taxi_BPP_Vehicle_Details: 'Vehicle-Details',
+  taxi_BPP_Provider_Details: 'Provider-Details',
+  taxi_BPP_personal_name: 'personal-name',
+  taxi_BPP_personal_email: 'personal-email',
+  taxi_BPP_personal_phone: 'personal-phone',
+  taxi_BPP_vehicle_registration: 'vehicle-registration',
+  taxi_BPP_vehicle_make: 'vehicle-make',
+  taxi_BPP_vehicle_model: 'vehicle-model',
+  taxi_BPP_vehicle_power_source: 'power-source',
+  taxi_BPP_provider_name: 'provider-name',
+  taxi_BPP_provider_short_desc: 'provider-short-desc',
+  taxi_BPP_provider_rating: 'provider-rating'
 }
 
 export { testIds }

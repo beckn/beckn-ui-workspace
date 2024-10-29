@@ -66,7 +66,7 @@ const MyRides = () => {
               fontWeight="400"
               p={'10px 24px'}
               color="#000000"
-              data-test={testIds.taxi_BPP_my_rides_tablist_name}
+              data-test={`testIds.taxi_BPP_my_rides_tablist_name_${status}`}
             >
               {status}
             </Tab>
