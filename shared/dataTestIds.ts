@@ -21,6 +21,10 @@ const testIds = {
   downloadInvoiceIcon: 'downloadInvoiceIcon',
   invoice: 'invoice',
   bottomDrawer: 'bottom-drawer',
+  device_location_sub_title: 'device-location-sub-title',
+  device_location_img: 'device-location-img',
+  device_location_input: 'device-location-input',
+  device_location_search_icon: 'device-location-search-icon',
   // items
   item_list: 'item-list',
   item_title: 'item-title',

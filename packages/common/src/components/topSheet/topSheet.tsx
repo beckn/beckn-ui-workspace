@@ -151,10 +151,16 @@ const TopSheet: React.FC<TopSheetComponentProps> = ({
               fontSize="12px"
               fontWeight="700"
               pb="6px"
+              data-test="device-location"
             >
               {t('devicelocationisnotenabled')}
             </Text>
-            <Text fontSize="12px">{t('accessToProvideLocation')}</Text>
+            <Text
+              fontSize="12px"
+              data-test={testIds.device_location_sub_title}
+            >
+              {t('accessToProvideLocation')}
+            </Text>
             <Box
               position="relative"
               mt="20px"
@@ -164,6 +170,7 @@ const TopSheet: React.FC<TopSheetComponentProps> = ({
                 bottom="8px"
                 src="/images/LocationIcon2.svg"
                 width="24px"
+                data-test={testIds.device_location_img}
               />
               <Input
                 pl="30px"
@@ -175,6 +182,7 @@ const TopSheet: React.FC<TopSheetComponentProps> = ({
                 borderBottom="2px solid black"
                 placeholder={searchPlaceholder}
                 onChange={onFocusChange}
+                data-test={testIds.device_location_input}
               />
               <Image
                 position="absolute"
@@ -182,6 +190,7 @@ const TopSheet: React.FC<TopSheetComponentProps> = ({
                 bottom="8px"
                 src="/images/SearchIcon1.svg"
                 width="24px"
+                data-test={testIds.device_location_search_icon}
               />
             </Box>
           </Box>
