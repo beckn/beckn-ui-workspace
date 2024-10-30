@@ -4,6 +4,7 @@ import { DetailCard } from '@beckn-ui/becknified-components'
 import { Typography } from '@beckn-ui/molecules'
 import { useGetMyProfileMutation } from '@services/RiderService'
 import { UserDetailsModel, VehicleDetailsModel, ProviderDetailsModel } from '@lib/types/profile'
+import { testIds } from '@shared/dataTestIds'
 
 const ProfilePage = () => {
   const [personalDetails, setPersonalDetails] = useState<UserDetailsModel>()
@@ -45,30 +46,50 @@ const ProfilePage = () => {
   const profiles = [
     {
       profileTitle: 'Personal Details',
-      data_test: 'Personal_Details',
+      data_test: testIds.taxi_BPP_Personal_Details,
       details: [
-        { label: personalDetails?.name, img: '/images/Profile.svg', data_test: 'personal_name' },
-        { label: personalDetails?.email, img: '/images/mail.svg', data_test: 'personal_email' },
-        { label: personalDetails?.phoneNumber, img: '/images/Call.svg', data_test: 'personal_phone' }
+        { label: personalDetails?.name, img: '/images/Profile.svg', data_test: testIds.taxi_BPP_personal_name },
+        { label: personalDetails?.email, img: '/images/mail.svg', data_test: testIds.taxi_BPP_personal_email },
+        { label: personalDetails?.phoneNumber, img: '/images/Call.svg', data_test: testIds.taxi_BPP_personal_phone }
       ]
     },
     {
       profileTitle: 'Vehicle Details',
-      data_test: 'Vehicle_Details',
+      data_test: testIds.taxi_BPP_Vehicle_Details,
       details: [
-        { label: vehicleDetails?.registrationNo, img: '/images/local_taxi.svg', data_test: 'vehicle_registration' },
-        { label: vehicleDetails?.vehicleMake, img: '/images/manufacturing.svg', data_test: 'vehicle_make' },
-        { label: vehicleDetails?.vehicleModel, img: '/images/directions_car.svg', data_test: 'vehicle_model' },
-        { label: vehicleDetails?.powerSource, img: '/images/oil_barrel.svg', data_test: 'vehicle_power_source' }
+        {
+          label: vehicleDetails?.registrationNo,
+          img: '/images/local_taxi.svg',
+          data_test: testIds.taxi_BPP_vehicle_registration
+        },
+        {
+          label: vehicleDetails?.vehicleMake,
+          img: '/images/manufacturing.svg',
+          data_test: testIds.taxi_BPP_vehicle_make
+        },
+        {
+          label: vehicleDetails?.vehicleModel,
+          img: '/images/directions_car.svg',
+          data_test: testIds.taxi_BPP_vehicle_model
+        },
+        {
+          label: vehicleDetails?.powerSource,
+          img: '/images/oil_barrel.svg',
+          data_test: testIds.taxi_BPP_vehicle_power_source
+        }
       ]
     },
     {
       profileTitle: 'Provider Details',
-      data_test: 'Provider_Details',
+      data_test: testIds.taxi_BPP_Provider_Details,
       details: [
-        { label: providerDetails?.name, img: '/images/local_taxi.svg', data_test: 'provider_name' },
-        { label: providerDetails?.short_desc, img: '/images/description.svg', data_test: 'provider_short_desc' },
-        { label: providerDetails?.rating, img: '/images/Star.svg', data_test: 'provider_rating' }
+        { label: providerDetails?.name, img: '/images/local_taxi.svg', data_test: testIds.taxi_BPP_provider_name },
+        {
+          label: providerDetails?.short_desc,
+          img: '/images/description.svg',
+          data_test: testIds.taxi_BPP_provider_short_desc
+        },
+        { label: providerDetails?.rating, img: '/images/Star.svg', data_test: testIds.taxi_BPP_provider_rating }
       ]
     }
   ]
