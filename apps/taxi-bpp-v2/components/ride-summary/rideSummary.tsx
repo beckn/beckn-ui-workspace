@@ -88,6 +88,7 @@ const RideSummary: React.FC<RideSummaryProps> = ({
           <Typography
             text={date}
             color="#676767"
+            dataTest={testIds.taxi_bpp_complete_ride_date}
           />
         )}
       </Flex>
