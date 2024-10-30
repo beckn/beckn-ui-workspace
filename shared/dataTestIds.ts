@@ -523,7 +523,8 @@ const testIds = {
   taxi_BPP_vehicle_power_source: 'power-source',
   taxi_BPP_provider_name: 'provider-name',
   taxi_BPP_provider_short_desc: 'provider-short-desc',
-  taxi_BPP_provider_rating: 'provider-rating'
+  taxi_BPP_provider_rating: 'provider-rating',
+  taxi_bpp_complete_ride_date: 'taxi-bpp-complete-ride-date'
 }
 
 export { testIds }
