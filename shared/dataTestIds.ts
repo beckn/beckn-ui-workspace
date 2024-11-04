@@ -524,7 +524,13 @@ const testIds = {
   taxi_BPP_provider_name: 'provider-name',
   taxi_BPP_provider_short_desc: 'provider-short-desc',
   taxi_BPP_provider_rating: 'provider-rating',
-  taxi_bpp_complete_ride_date: 'taxi-bpp-complete-ride-date'
+  taxi_bpp_complete_ride_date: 'taxi-bpp-complete-ride-date',
+
+  //P2P Energy App
+  P2P_hompage_button: 'P2P-hompage-button',
+  P2P_productpage_price_text: 'P2P-productpage-price-text',
+  P2P_productpage_energyUnit_text: 'P2P-productpage-energyUnit-text',
+  P2P_productpage_input: 'P2P-productpage-input'
 }
 
 export { testIds }

@@ -6,6 +6,7 @@ import { HomePageContent, TopSheet, useGeolocation } from '@beckn-ui/common'
 import ClickableImage from '@components/ClickableImage'
 import { Box, Flex } from '@chakra-ui/react'
 import { Button } from '@beckn-ui/molecules'
+import { testIds } from '@shared/dataTestIds'
 
 const HomePage = () => {
   const { t } = useLanguage()
@@ -70,6 +71,7 @@ const HomePage = () => {
             <Button
               text="Prosumers Near Me"
               handleClick={searchIconClickHandler}
+              dataTest={testIds.P2P_hompage_button}
             />
             {/* <Flex
               justifyContent={'center'}

@@ -74,6 +74,7 @@ const Product = () => {
           text="Price:"
           fontSize="16px"
           fontWeight="500"
+          dataTest={testIds.P2P_productpage_price_text}
         />
         <ProductPrice
           fontStyle={{
@@ -97,6 +98,7 @@ const Product = () => {
           style={{
             textWrap: 'nowrap'
           }}
+          dataTest={testIds.P2P_productpage_energyUnit_text}
         />
         <Input
           name="quantity-input"
@@ -108,6 +110,7 @@ const Product = () => {
             borderColor: 'inherit',
             boxShadow: 'transparent'
           }}
+          data-test={testIds.P2P_productpage_input}
         />
       </Flex>
       <Button
