@@ -1,0 +1,38 @@
+{
+  "data": [
+    {
+      "context": {
+        "domain": "mobility:1.1.0",
+        "action": "on_rating",
+        "version": "1.1.0",
+        "bpp_id": "bpp-ps-network-strapi1-prod.becknprotocol.io",
+        "bpp_uri": "https://bpp-ps-network-strapi1-prod.becknprotocol.io",
+        "country": "IND",
+        "city": "std:080",
+        "location": {
+          "country": {
+            "name": "India",
+            "code": "IND"
+          },
+          "city": {
+            "name": "Bangalore",
+            "code": "std:080"
+          }
+        },
+        "bap_id": "bap-ps-network-prod.becknprotocol.io",
+        "bap_uri": "https://bap-ps-network-prod.becknprotocol.io",
+        "transaction_id": "422e8a92-1c59-4425-8ed8-f671f9089177",
+        "message_id": "634c8a8a-5f6d-4e5d-a7c8-807b119c1866",
+        "ttl": "PT10M",
+        "timestamp": "2024-10-29T09:54:27.501Z"
+      },
+      "message": {
+        "xinput": {
+          "form": {
+            "mime_type": "text/html"
+          }
+        }
+      }
+    }
+  ]
+}
