@@ -29,12 +29,14 @@ const Footer: React.FC<PoweredByProps> = ({ logoSrc, altText = 'logo', prefixTex
           fontWeight="400"
           color="#212121"
           text={prefixText}
+          dataTest={testIds.footer_prefix_text}
         />
         <Image
           src={logoSrc}
           alt={altText}
           width={39}
           height={13}
+          data-test={testIds.footer_image}
         />
         <Typography
           style={{ paddingLeft: '4px' }}
@@ -42,6 +44,7 @@ const Footer: React.FC<PoweredByProps> = ({ logoSrc, altText = 'logo', prefixTex
           fontWeight="400"
           color="#212121"
           text={postfixText}
+          dataTest={testIds.footer_postfix_text}
         />
       </Flex>
       <Flex
@@ -55,6 +58,7 @@ const Footer: React.FC<PoweredByProps> = ({ logoSrc, altText = 'logo', prefixTex
           fontWeight="400"
           color="#212121"
           text="CC-BY-NC-SA 4.0"
+          dataTest={testIds.footer_bottomfix_text}
         />
       </Flex>
     </>
