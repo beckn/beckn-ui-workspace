@@ -416,6 +416,23 @@ const testIds = {
   mobility_rider_name: 'rider-name',
   mobility_rider_mobileNo: 'rider-mobileNo',
   mobility_rider_confirm_button: 'rider-confirm-button',
+  mobility_car_registrationNumber: 'registrationNumber',
+  mobility_car_details: 'carDetails',
+  mobility_driverImage: 'mobility-driverImage',
+  mobility_driverName: 'mobility-driverName',
+  mobility_driverRating: 'mobility-driverRating',
+  mobility_drivercallIcon: 'mobility-drivercallIcon',
+  mobility_totalFare: 'mobility-totalFare',
+  mobility_Payment_text: 'mobility-Payment-text',
+  mobility_Payment_image: 'mobility-Payment-image',
+  mobility_cashText: 'mobility-cashText',
+  mobility_cashText_Contact_Support: 'mobility-cashText-Contact-Support',
+  Mobility_cancle_ride_image: 'Mobility-cancle-ride-image',
+  Mobility_cancle_ride_Cancelled_text: 'Mobility-cancle-ride-Cancelled-text',
+  Mobility_Your_Ride_has_been_cancelled_text: 'Mobility-Your-Ride-has-been-cancelled-text',
+  Mobility_paid_already_text: 'Mobility-paid-already-text',
+  Mobility_refunded_soon_text: 'Mobility-refunded-soon-text',
+  Mobility_Go_Back_Home: 'Mobility-Go-Back-Home',
 
   // Policy Admin Data Test
 

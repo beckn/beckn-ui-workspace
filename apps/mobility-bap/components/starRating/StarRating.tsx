@@ -1,4 +1,5 @@
 import { Box, Text } from '@chakra-ui/react'
+import { testIds } from '@shared/dataTestIds'
 import React, { useState } from 'react'
 import { FaStar } from 'react-icons/fa'
 
@@ -16,7 +17,12 @@ const StarRating: React.FC<StarRatingProps> = props => {
 
   return (
     <Box mb="20px">
-      <Text pb={'5px'}>{props.ratingText}</Text>
+      <Text
+        pb={'5px'}
+        data-test={'Rate_Overall_experience'}
+      >
+        {props.ratingText}
+      </Text>
       <Box display={'flex'}>
         {[...Array(props.count || 5)].map((star, index) => {
           const ratingValue = index + 1
@@ -28,6 +34,7 @@ const StarRating: React.FC<StarRatingProps> = props => {
               }}
               onMouseEnter={() => setHover(ratingValue)}
               onMouseLeave={() => setHover(null)}
+              data-test={`${testIds.feedback_starRating}-${ratingValue}`}
             >
               <input
                 type="radio"
