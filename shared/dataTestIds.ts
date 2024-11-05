@@ -52,7 +52,7 @@ const testIds = {
   deployed_dsep_url_search: 'unified-dsep-staging.becknprotocol.io/search',
 
   //mobility url
-  deployed_mob_url_base: 'https://mobility-staging.becknprotocol.io/',
+  deployed_mob_url_base: 'https://mobility-dev.becknprotocol.io/',
   //policy portal
   deployed_policy_url_base: 'https://policyadmin-dev.becknprotocol.io/',
   // urls

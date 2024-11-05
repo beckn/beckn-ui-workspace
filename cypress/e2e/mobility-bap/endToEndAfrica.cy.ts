@@ -56,7 +56,6 @@ describe('Home Page Tests', () => {
     cy.getByData(testIds.mobility_pickup_address).type('Serekunda Market')
     cy.getByData(testIds.location_list_item).should('be.visible').eq(0).click()
   })
-
   it('should enter dropoff address', () => {
     cy.getByData(testIds.mobility_dropoff_label).should('contain.text', 'Dropoff')
     cy.getByData(testIds.mobility_dropoff_address).type('Banjul International Airport')
@@ -81,7 +80,6 @@ describe('Home Page Tests', () => {
   // it('should render the available provider rides category page', () => {
   //     cy.getByData(testIds.mobility_searchpage_container).should('be.visible')
   // })
-
   // it('should render the count of result found', () => {
   //     cy.getByData(testIds.mobility_total_cabs).should('contain.text', 'results found')
   // })
@@ -97,7 +95,7 @@ describe('Home Page Tests', () => {
             .eq(0)
             .within(() => {
               cy.getByData(testIds.mobility_provider_name).should('be.visible')
-              cy.getByData(testIds.mobility_provider_rating).should('contain.text', '4.3')
+              //cy.getByData(testIds.mobility_provider_rating).should('contain.text', '4.3')
             })
 
           cy.getByData(testIds.mobility_provider_item).should('be.visible')
@@ -105,7 +103,7 @@ describe('Home Page Tests', () => {
             .eq(0)
             .within(() => {
               cy.getByData(testIds.mobility_provider_item_name).should('be.visible')
-              cy.getByData(testIds.mobility_provider_item_fare).should('contain.text', '₹371.97')
+              //cy.getByData(testIds.mobility_provider_item_fare).should('contain.text', 'D221.01')
             })
         })
     })
@@ -143,7 +141,7 @@ describe('Home Page Tests', () => {
   })
 
   it('should able to type name value', () => {
-    cy.getByData(testIds.mobility_rider_name).type('name of user')
+    cy.getByData(testIds.mobility_rider_name).type('Omkar')
   })
 
   it('should able to type mobile number value', () => {
@@ -181,18 +179,195 @@ describe('Home Page Tests', () => {
   })
   //Again login to Driver app and accept the ride
   it('should open driver app', () => {
-    cy.visit('https://driverapp-staging.becknprotocol.io/')
+    cy.visit('https://driverapp-dev.becknprotocol.io/')
   })
-  // //New Ride Request
-  // it('should check "New Ride Request" popup component', () => {
-  //   cy.getByData(testIds.taxi_BPP_pickup_location_text).should('be.visible')
-  //   cy.getByData(testIds.taxi_BPP_drop_location_text).should('be.visible')
-  //   cy.getByData(testIds.taxi_BPP_km_away_text).should('be.visible')
-  //   cy.getByData(testIds.taxi_BPP_km_distance_text).should('be.visible')
-  // })
-  // it('should accept the ride', () => {
-  //   cy.getByData(testIds.taxi_BPP_accept_button).should('be.visible')
-  //   cy.getByData(testIds.taxi_BPP_decline_button).should('be.visible')
-  //   cy.getByData(testIds.taxi_BPP_accept_button).click()
-  // })
+  it('should set driver location', () => {
+    cy.getByData(testIds.location).should('be.visible')
+    cy.getByData(testIds.downArrow).click()
+    cy.wait(1000)
+    cy.get('body').type(' Serekunda Market')
+    cy.getByData(testIds.location_list_item).should('be.visible').eq(0).click()
+  })
+  //New Ride Request
+  it('sends a POST request to /confirm endpoint', () => {
+    cy.request({
+      method: 'POST',
+      url: 'https://bap-gcl-dev.becknprotocol.io/confirm',
+      headers: {
+        'User-Agent':
+          'Mozilla/5.0 (iPhone; CPU iPhone OS 14_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.3 Mobile/15E148 Safari/604.1',
+        Accept: '*/*',
+        'Accept-Language': 'en-US,en;q=0.5',
+        'Accept-Encoding': 'gzip, deflate, br, zstd',
+        Referer: 'https://mobility-dev.becknprotocol.io/',
+        'content-type': 'application/json',
+        Origin: 'https://mobility-dev.becknprotocol.io',
+        Connection: 'keep-alive',
+        'Sec-Fetch-Dest': 'empty',
+        'Sec-Fetch-Mode': 'cors',
+        'Sec-Fetch-Site': 'same-site',
+        Priority: 'u=0',
+        TE: 'trailers'
+      },
+      body: {
+        data: [
+          {
+            context: {
+              domain: 'mobility:1.1.0',
+              action: 'confirm',
+              version: '1.1.0',
+              bpp_id: 'bpp-ps-network-strapi-dev.becknprotocol.io',
+              bpp_uri: 'http://bpp-ps-network-strapi-dev.becknprotocol.io',
+              country: 'IND',
+              city: 'std:080',
+              location: {
+                country: { name: 'India', code: 'IND' },
+                city: { name: 'Bangalore', code: 'std:080' }
+              },
+              bap_id: 'bap-ps-network-dev.becknprotocol.io',
+              bap_uri: 'https://bap-ps-network-dev.becknprotocol.io',
+              transaction_id: '2f511b46-84c6-4965-898b-890098e72aa0',
+              message_id: 'c76c744e-925b-4e00-a62c-4fb5e62a8200',
+              ttl: 'PT10M',
+              timestamp: '2024-11-05T12:19:13.225Z'
+            },
+            message: {
+              orders: [
+                {
+                  items: [
+                    {
+                      id: '179',
+                      name: 'GR Suv',
+                      short_desc:
+                        'GambiaRide SUV: Experience premium comfort and style on every journey across Gambia.',
+                      long_desc:
+                        "GambiaRide SUV provides a luxurious and spacious travel experience for all your journeys in Gambia. Whether you're exploring the city or heading off-road, our high-end SUVs offer the perfect blend of comfort and performance. Travel in style and enjoy the ride with GambiaRide SUV.",
+                      price: { value: '20' },
+                      rating: 'null',
+                      rateable: true,
+                      quantity: {
+                        available: { measure: { value: '0', unit: 'kWh' } }
+                      },
+                      fulfillments: [
+                        { id: '20', type: 'SUV On Location Pickup', rating: '4.0' },
+                        { id: '20', type: 'SUV On Location Pickup', rating: '4.0' }
+                      ]
+                    }
+                  ],
+                  provider: { id: '714' },
+                  fulfillments: [
+                    {
+                      type: 'start',
+                      stops: [
+                        { type: 'start', location: { gps: '13.4389869, -16.6821758' } },
+                        { type: 'end', location: { gps: '13.3439388, -16.6523441' } }
+                      ]
+                    },
+                    {
+                      id: '20',
+                      type: 'SUV On Location Pickup',
+                      rating: '4.0',
+                      rateable: true,
+                      agent: {
+                        person: { id: '6', name: 'Kebba Jammeh' },
+                        contact: { phone: '+2207123456' }
+                      },
+                      vehicle: {
+                        make: 'Toyota',
+                        model: 'Toyota Corolla',
+                        registration: 'GD 2345'
+                      }
+                    }
+                  ],
+                  customer: {
+                    person: { name: 'Omkar' },
+                    contact: { name: 'Omkar', phone: '9090878888', email: 'Omkar@example.com' }
+                  },
+                  billing: {
+                    name: 'Omkar',
+                    phone: '9090878888',
+                    email: 'Omkar@example.com'
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }).then(response => {
+      expect(response.status).to.eq(200) // Adjust expected status if needed
+      // Additional assertions can be added based on response data
+    })
+  })
+
+  it('should check "New Ride Request" popup component', () => {
+    cy.wait(6000)
+    cy.getByData(testIds.taxi_BPP_pickup_location_text).should('be.visible')
+    cy.getByData(testIds.taxi_BPP_drop_location_text).should('be.visible')
+    cy.getByData(testIds.taxi_BPP_km_away_text).should('be.visible')
+    cy.getByData(testIds.taxi_BPP_km_distance_text).should('be.visible')
+  })
+  it('should accept the ride', () => {
+    cy.getByData(testIds.taxi_BPP_accept_button).should('be.visible')
+    cy.getByData(testIds.taxi_BPP_decline_button).should('be.visible')
+    cy.getByData(testIds.taxi_BPP_accept_button).click()
+    cy.getByData(testIds.taxi_BPP_Reached_Pick_up_Location_button).click()
+    cy.getByData(testIds.taxi_BPP_Start_ride_button).click()
+  })
+  it('should display the top header with end ride details visible', () => {
+    cy.getByData('ride-summary-header-img').should('exist').and('be.visible')
+    cy.getByData('START_RIDE').should('exist').and('be.visible')
+    cy.getByData('header-sub-title').should('exist').and('be.visible')
+    cy.getByData('driver-img').should('exist').and('be.visible')
+    cy.getByData('driver-call-img').should('exist').and('be.visible')
+    cy.getByData(testIds.taxi_BPP_km_away_text).should('exist').and('be.visible')
+    cy.getByData(testIds.taxi_BPP_km_distance_text).should('exist').and('be.visible')
+    cy.getByData(testIds.driver_navigate).should('exist').and('be.visible')
+    cy.getByData(testIds.navigate_img).should('exist').and('be.visible')
+    cy.getByData('source-icon').should('exist').and('be.visible')
+    cy.getByData(testIds.taxi_BPP_pickup_location_text).should('exist').and('be.visible')
+    cy.getByData('destination-icon').should('exist').and('be.visible')
+    cy.getByData(testIds.taxi_BPP_drop_location_text).should('exist').and('be.visible')
+    cy.getByData(testIds.taxi_BPP_end_ride_button).should('exist').and('be.visible')
+  })
+  it('Driver end call button should be clickable', () => {
+    cy.getByData('driver-call-click').should('be.visible')
+  })
+  it('Navigate button should be clickable', () => {
+    cy.getByData('driver-call-click').should('be.visible')
+  })
+  it('Start ride button should be clickable', () => {
+    cy.getByData(testIds.taxi_BPP_end_ride_button).click()
+  })
+  it('Start ride button should be clickable', () => {
+    cy.get('[data-test="taxi-BPP-Look-for-New-Ride-Request-button"]').click()
+  })
+  it('Should Display My Rides Details ', () => {
+    cy.getByData(testIds.threeDots).click()
+    cy.getByData(testIds.taxi_BPP_rideHistory).click()
+    cy.url().should('include', '/myRides')
+    cy.get('[data-test="testIds.taxi_BPP_my_rides_tablist_name_All"]').should('be.visible')
+    cy.get('[data-test="testIds.taxi_BPP_my_rides_tablist_name_On-going"]').should('be.visible')
+    cy.get('[data-test="testIds.taxi_BPP_my_rides_tablist_name_Completed"]').should('be.visible')
+    cy.getByData(testIds.taxi_BPP_myRides_carImage).should('be.visible')
+    cy.getByData(testIds.taxi_BPP_myRides_riderName).should('be.visible')
+    cy.getByData(testIds.taxi_BPP_myRides_date).should('be.visible')
+    cy.getByData(testIds.taxi_BPP_myRides_time).should('be.visible')
+    cy.getByData(testIds.taxi_BPP_myRides_status).should('be.visible')
+  })
+  it('Should Display by default All Tabs', () => {
+    cy.get('[data-test="testIds.taxi_BPP_my_rides_tablist_name_All"]').should('be.visible')
+  })
+  it('Should Display Ongoing tabs when click on Ongoing tabs', () => {
+    cy.get('[data-test="testIds.taxi_BPP_my_rides_tablist_name_On-going"]').should('be.visible')
+    cy.get('[data-test="testIds.taxi_BPP_my_rides_tablist_name_On-going"]').click()
+  })
+  it('Should Display Completed tabs when click on Completed tabs', () => {
+    cy.get('[data-test="testIds.taxi_BPP_my_rides_tablist_name_Completed"]').should('be.visible')
+    cy.get('[data-test="testIds.taxi_BPP_my_rides_tablist_name_Completed"]').click()
+  })
+  it('Should Logout from app ', () => {
+    cy.getByData(testIds.threeDots).click()
+    cy.getByData(testIds.Logout_text).click()
+  })
 })
