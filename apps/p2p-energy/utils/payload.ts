@@ -13,7 +13,7 @@ import { ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
 export const getSelectPayload = (
   inputData: CartItemForRequest[],
   transactionId: string,
-  domain = 'uei:p2p-trading'
+  domain = 'uei:p2p_trading'
 ): { data: SelectData } => {
   const transaction_id = transactionId
 

@@ -1,4 +1,4 @@
-export const DOMAIN = 'uei:p2p-trading'
+export const DOMAIN = 'uei:p2p_trading'
 
 export const currencyMap = {
   EUR: '€',
