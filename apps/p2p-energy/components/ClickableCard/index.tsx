@@ -1,6 +1,7 @@
 import React from 'react'
 import { Badge, Card, Flex, Image } from '@chakra-ui/react'
 import { Typography } from '@beckn-ui/molecules'
+import { testIds } from '@shared/dataTestIds'
 
 interface ClickableCardProps {
   headerIcon: string
@@ -11,6 +12,7 @@ interface ClickableCardProps {
   footerIcon?: string
   handleOnClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
   className?: string
+  dataTest?: string
 }
 
 const ClickableCard = (props: ClickableCardProps) => {
@@ -22,7 +24,8 @@ const ClickableCard = (props: ClickableCardProps) => {
     backgroundColor = '#fff',
     handleOnClick,
     footerIcon,
-    className
+    className,
+    dataTest
   } = props
 
   return (
@@ -37,6 +40,7 @@ const ClickableCard = (props: ClickableCardProps) => {
           border: '1px solid #212121'
         }}
         className={className}
+        data-test={dataTest}
       >
         <Flex gap={'0.4rem'}>
           <Image
@@ -44,6 +48,7 @@ const ClickableCard = (props: ClickableCardProps) => {
             alt="chat_icon"
             width={'24px'}
             height={'24px'}
+            data-test={testIds.clickable_card_img}
           />
           <Typography
             text={title}
@@ -52,6 +57,7 @@ const ClickableCard = (props: ClickableCardProps) => {
             style={{
               alignContent: 'center'
             }}
+            dataTest={testIds.clickable_card_title}
           />
           {isNew && (
             <Badge
@@ -62,6 +68,7 @@ const ClickableCard = (props: ClickableCardProps) => {
               borderRadius={'72px'}
               alignContent="center"
               marginLeft={'0.4rem'}
+              data-test={testIds.clickable_card_badge}
             >
               New
             </Badge>
@@ -73,6 +80,7 @@ const ClickableCard = (props: ClickableCardProps) => {
           style={{
             padding: '1rem 0'
           }}
+          dataTest={testIds.clickable_card_description}
         />
         <Flex>
           <Typography
@@ -81,12 +89,14 @@ const ClickableCard = (props: ClickableCardProps) => {
             fontWeight="400"
             color="#212121"
             text={'Powered By'}
+            dataTest={testIds.clickable_card_powered_by}
           />
           <Image
             src={footerIcon}
             alt={'card_footer'}
             width={'60px'}
             height={'16px'}
+            data-test={testIds.clickable_card_image}
           />
         </Flex>
       </Card>

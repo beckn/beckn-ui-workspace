@@ -546,11 +546,26 @@ const testIds = {
   taxi_BPP_provider_rating: 'provider-rating',
   taxi_bpp_complete_ride_date: 'taxi-bpp-complete-ride-date',
 
-  //P2P Energy App
-  P2P_hompage_button: 'P2P-hompage-button',
-  P2P_productpage_price_text: 'P2P-productpage-price-text',
-  P2P_productpage_energyUnit_text: 'P2P-productpage-energyUnit-text',
-  P2P_productpage_input: 'P2P-productpage-input'
+  // p2p energy
+
+  p2p_energy_heading_text: 'p2p-energy-heading-text',
+  p2p_energy_heading_text_1: 'p2p-energy-heading-text_1',
+  p2p_energy_heading_text_2: 'p2p-energy-heading-text_2',
+  p2p_energy_landing_page_logo: 'p2p-energy-landing-page-logo',
+  p2p_energy_landing_page_logo_subTitle: 'p2p-energy-landing-page-logo-subTitle',
+  p2p_modal_text: 'p2p-modal-text',
+  clickable_card_lisa: 'clickable-card-lisa',
+  clickable_card_open_spark: 'clickable-card-open-spark',
+  clickable_card_img: 'clickable-card-img',
+  clickable_card_title: 'clickable-card-title',
+  clickable_card_badge: 'clickable-card-badge',
+  clickable_card_description: 'clickable-card-description',
+  clickable_card_powered_by: 'clickable-card-powered-by',
+  clickable_card_image: 'clickable-card-image',
+  footer_prefix_text: 'footer-prefix-text',
+  footer_image: 'footer-image',
+  footer_postfix_text: 'footer-postfix-text',
+  footer_bottomfix_text: 'footer-bottomfix-text'
 }
 
 export { testIds }

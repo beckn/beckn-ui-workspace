@@ -10,6 +10,7 @@ import energyIcon from '@public/images/flash.svg'
 import becknGeminiIcon from '@public/images/beckn_gemini.svg'
 import becknOnixIcon from '@public/images/beckn_onix.svg'
 import becknGridIcon from '@public/images/uei-logo.D.svg'
+import { testIds } from '@shared/dataTestIds'
 
 const LandingPage = () => {
   const { t } = useLanguage()
@@ -56,6 +57,7 @@ const LandingPage = () => {
             //   lineHeight: '26px',
             //   width: '16rem'
             // }}
+            dataTest={testIds.p2p_energy_heading_text}
             sx={{
               lineHeight: { base: '26px', md: '26px' },
               width: { base: '16rem', md: '100%' },
@@ -85,6 +87,7 @@ const LandingPage = () => {
             fontFamily="Noto Serif"
             fontWeight="600"
             fontStyle="italic"
+            dataTest={testIds.p2p_energy_heading_text_1}
             sx={{
               lineHeight: { base: '26px', md: '26px' },
               width: { base: '9rem', md: '100%' },
@@ -97,6 +100,7 @@ const LandingPage = () => {
             color="#C7C7C7"
             fontFamily="Noto Serif"
             fontWeight="300"
+            dataTest={testIds.p2p_energy_heading_text_2}
             sx={{
               lineHeight: { base: '26px', md: '26px' },
               width: { base: '8rem', md: '100%' },
@@ -108,11 +112,13 @@ const LandingPage = () => {
             src={becknGridIcon}
             alt="beckn_grid_icon"
             width={'12.8rem'}
+            data-test={testIds.p2p_energy_landing_page_logo}
           />
           <Typography
             className="responsive last-text"
             color="#C7C7C7"
             fontWeight="300"
+            data-test={testIds.p2p_energy_landing_page_logo_subTitle}
             sx={{
               lineHeight: { base: '16px', md: '16px' },
               width: { base: '16rem', md: '100%' },
@@ -160,6 +166,7 @@ const LandingPage = () => {
               lineHeight: '19.98px',
               marginBottom: '2rem'
             }}
+            dataTest={testIds.p2p_modal_text}
           />
           <Flex
             flexDirection={'column'}
@@ -174,6 +181,7 @@ const LandingPage = () => {
               isNew={true}
               footerIcon={becknGeminiIcon}
               handleOnClick={e => handleOnCardClick(e, 'beckn-bot')}
+              dataTest={testIds.clickable_card_lisa}
             />
 
             <ClickableCard
@@ -183,6 +191,7 @@ const LandingPage = () => {
               backgroundColor="#D9E5F8"
               footerIcon={becknOnixIcon}
               handleOnClick={e => handleOnCardClick(e, 'beckn-grid-connect')}
+              dataTest={testIds.clickable_card_open_spark}
             />
           </Flex>
           <Footer
