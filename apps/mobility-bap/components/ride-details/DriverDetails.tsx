@@ -29,12 +29,14 @@ const DriverDetails: React.FC<DriverDetailsProps> = ({ name, rating, contact, dr
           alt="driver-image"
           h={'50px'}
           w={'50px'}
+          data-test={'driverImage'}
         />
         <Flex direction={'column'}>
           <Typography
             text={name}
             fontSize="14px"
             fontWeight="700"
+            dataTest={'driverName'}
           />
           <Flex
             alignItems={'center'}
@@ -43,6 +45,7 @@ const DriverDetails: React.FC<DriverDetailsProps> = ({ name, rating, contact, dr
           >
             <Typography
               text={rating}
+              dataTest={'driverRating'}
               fontSize="14px"
               fontWeight="700"
             />
@@ -63,6 +66,7 @@ const DriverDetails: React.FC<DriverDetailsProps> = ({ name, rating, contact, dr
         h={'50px'}
         w={'50px'}
         onClick={handleCallClick}
+        data-test={'drivercallIcon'}
       />
     </Flex>
   )

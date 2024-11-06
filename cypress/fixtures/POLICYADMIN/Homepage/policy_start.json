@@ -1,0 +1,99 @@
+{
+  "policies": [
+    {
+      "id": "faffe586-5c64-4dff-a75f-cf595567b8d6",
+      "status": "active",
+      "name": "test test test",
+      "description": "asdasdasdasdasdasdasdsadsadasdasdsadasdasd",
+      "startDate": "2024-10-14T10:42:49.000Z",
+      "endDate": "2024-10-14T10:42:49.000Z",
+      "updatedAt": "2024-10-15T10:25:09.407Z"
+    },
+    {
+      "id": "72b90e27-ea73-40f4-bb0d-0f71237494b8",
+      "status": "published",
+      "name": "Top of Top",
+      "description": "Top of Top desc Top of Top desc Top of Top desc Top of Top desc Top of Top desc Top of Top desc Top of Top desc Top of Top desc Top of Top desc Top of Top desc Top of Top desc Top of Top desc Top of Top desc Top of Top desc Top of Top desc ",
+      "startDate": "2024-09-19T09:51:43.168Z",
+      "endDate": "2024-09-25T09:51:43.000Z",
+      "updatedAt": "2024-10-15T10:24:21.679Z"
+    },
+    {
+      "id": "db22d81d-9065-4da5-942b-f7c73f0f03a7",
+      "status": "published",
+      "name": "Title of PP",
+      "description": "Description ",
+      "startDate": "2024-09-19T06:45:13.000Z",
+      "endDate": "2024-09-08T06:45:13.000Z",
+      "updatedAt": "2024-10-15T10:24:02.299Z"
+    },
+    {
+      "id": "0f106b66-321b-40eb-9770-8a412574f679",
+      "status": "active",
+      "name": "Policy oct for flyover",
+      "description": "\nTitle\n011024 policy\nInformation Category\nInformation Source Owner",
+      "startDate": "2024-09-13T12:17:48.722Z",
+      "endDate": "2024-10-03T12:17:48.000Z",
+      "updatedAt": "2024-10-15T10:17:23.482Z"
+    },
+    {
+      "id": "1bda1976-7e73-495b-9132-361e33506b51",
+      "status": "published",
+      "name": "Heavy Traffic Due to Metro Work",
+      "description": "Heavy Traffic Due to Metro WorkHeavy Traffic Due to Metro WorkHeavy Traffic Due to Metro WorkHeavy Traffic Due to Metro WorkHeavy Traffic Due to Metro WorkHeavy Traffic Due to Metro WorkHeavy Traffic Due to Metro WorkHeavy Traffic Due to Metro WorkHeavy Traffic Due to Metro WorkHeavy Traffic Due to Metro WorkHeavy Traffic Due to Metro WorkHeavy Traffic Due to Metro WorkHeavy Traffic Due to Metro Work",
+      "startDate": "2024-09-19T12:21:10.298Z",
+      "endDate": "2025-02-06T12:21:10.000Z",
+      "updatedAt": "2024-09-23T11:29:54.323Z"
+    },
+    {
+      "id": "55e65b3a-cb4c-44de-bbd7-7864a5240c04",
+      "status": "active",
+      "name": "flyover construction ",
+      "description": "Information Source Owner\nInformation Source Owner\nInformation Source Owner\nInformation Source Owner\n",
+      "startDate": "2024-09-18T12:25:26.000Z",
+      "endDate": "2024-09-26T12:25:26.000Z",
+      "updatedAt": "2024-09-19T12:30:22.189Z"
+    },
+    {
+      "id": "f3a47996-7400-4000-bd8d-3f004c6d73f7",
+      "status": "active",
+      "name": "test345678",
+      "description": "test3123456787654321",
+      "startDate": "2024-09-19T12:21:10.298Z",
+      "endDate": "2024-09-19T12:21:10.298Z",
+      "updatedAt": "2024-09-19T12:27:21.338Z"
+    },
+    {
+      "id": "376eb1ba-5370-4fe4-9959-40eefce44e3a",
+      "status": "active",
+      "name": "flyover construction ",
+      "description": "DescriptionDescriptionDescriptionDescriptionDescriptionDescription",
+      "startDate": "2024-09-19T12:22:33.000Z",
+      "endDate": "2024-09-26T12:22:33.000Z",
+      "updatedAt": "2024-09-19T12:26:12.293Z"
+    },
+    {
+      "id": "508b4134-1067-47e6-b64c-977fc3e4ee8e",
+      "status": "active",
+      "name": "Updated New Top",
+      "description": "Updated New Top decsc Updated New Top decscUpdated New Top decscUpdated New Top decscUpdated New Top decscUpdated New Top decscUpdated New Top decscUpdated New Top decscUpdated New Top decscUpdated New Top decscUpdated New Top decsc",
+      "startDate": "2024-09-19T09:51:43.168Z",
+      "endDate": "2024-09-20T09:51:43.000Z",
+      "updatedAt": "2024-09-19T10:10:48.575Z"
+    },
+    {
+      "id": "b5cbac31-83ad-4a38-a392-5c27a241086d",
+      "status": "active",
+      "name": "Quarantine Policy",
+      "description": "Latest quarantine zones as mentioned in Circular 334-A-2022-03-21 published by ministry of Health",
+      "startDate": "2022-03-09",
+      "endDate": "2022-03-20",
+      "updatedAt": "2024-09-19T06:34:53.539Z"
+    }
+  ],
+  "meta": {
+    "start": 0,
+    "limit": 10,
+    "total": 97
+  }
+}

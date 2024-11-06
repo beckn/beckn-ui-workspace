@@ -85,6 +85,8 @@ declare global {
       //Created by omkar
       loginDynamic(email: string, password: string): Chainable<void>
       performSearchDynamic(searchTerm: string): Chainable<void>
+      updatePolygon(aliasName: string): Chainable<void>
+      setRideRequestState(aliasName: string): Chainable<void>
     }
   }
 }
@@ -342,4 +344,23 @@ Cypress.Commands.add('fillDSEP_x_inputScholarshipApplyForm', () => {
   const fileName = '/DSEP/scholarshipApply/applyScholarship.pdf'
   cy.get('#document').attachFile(fileName)
   cy.get('#submitButton').click()
+})
+
+Cypress.Commands.add('setRideRequestState', rideRequestData => {
+  cy.window().then(win => {
+    const { store } = win
+    console.log(store)
+    store.dispatch({ type: 'rider/setCurrentRideRequest', payload: rideRequestData })
+  })
+})
+Cypress.Commands.add('updatePolygon', coordinates => {
+  cy.window().then(win => {
+    const { store } = win
+    console.log('abbbbbbbbbb', store)
+    if (!store || !store.dispatch) {
+      throw new Error('Redux store or dispatch method not found on window.')
+    }
+    console.log('Dispatching coordinates:', coordinates)
+    store.dispatch({ type: 'policy/updatePolygon', payload: coordinates })
+  })
 })

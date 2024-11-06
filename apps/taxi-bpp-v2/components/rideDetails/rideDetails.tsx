@@ -2,6 +2,7 @@ import { DetailCard } from '@beckn-ui/becknified-components'
 import { Typography } from '@beckn-ui/molecules'
 import { Box, Flex, Image, theme } from '@chakra-ui/react'
 import { RideDetailsProps } from '@lib/types/rideDetails'
+import { testIds } from '@shared/dataTestIds'
 import React from 'react'
 
 const RideDetails: React.FC<RideDetailsProps> = ({ img, riderName, date, time, fare, status }) => {
@@ -17,6 +18,7 @@ const RideDetails: React.FC<RideDetailsProps> = ({ img, riderName, date, time, f
           <Image
             src={img ? img : '/images/carImage.svg'}
             alt={''}
+            data-test={testIds.taxi_BPP_myRides_carImage}
           />
         </Box>
         <Box w="calc(100% - 80px)">
@@ -24,6 +26,7 @@ const RideDetails: React.FC<RideDetailsProps> = ({ img, riderName, date, time, f
             text={riderName}
             fontSize="15px"
             fontWeight="500"
+            dataTest={testIds.taxi_BPP_myRides_riderName}
           />
           <Flex
             mb="10px"
@@ -35,10 +38,12 @@ const RideDetails: React.FC<RideDetailsProps> = ({ img, riderName, date, time, f
             <Typography
               text={date}
               style={{ paddingRight: '10px' }}
+              dataTest={testIds.taxi_BPP_myRides_date}
             />
             |
             <Typography
               text={time}
+              dataTest={testIds.taxi_BPP_myRides_time}
               style={{ paddingLeft: '10px' }}
             />
           </Flex>
@@ -54,6 +59,7 @@ const RideDetails: React.FC<RideDetailsProps> = ({ img, riderName, date, time, f
             />
             <Typography
               text={status}
+              dataTest={testIds.taxi_BPP_myRides_status}
               fontSize="12px"
               fontWeight="500"
               color={status.toLowerCase() === 'completed' ? '#5EC401' : '#E9C058'}

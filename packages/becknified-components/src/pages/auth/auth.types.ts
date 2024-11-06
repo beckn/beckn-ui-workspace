@@ -5,6 +5,13 @@ export interface AuthProps {
       src: string
       alt: string
     }
+    chooseAuthType?: {
+      id: string
+      src: string
+      alt: string
+      label?: string
+    }[]
+    handleAccountType?: (type: string) => void
     inputs: InputProps[]
     buttons: ButtonProps[]
     socialButtons?: ButtonProps[]

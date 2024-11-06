@@ -5,10 +5,11 @@ import { StatusCardRootProps } from '@pages/index'
 interface StatusCardProps {
   count: number
   label: string
+  dataTest: string
 }
 
 const StatusCard = (props: StatusCardProps) => {
-  const { count, label } = props
+  const { count, label, dataTest } = props
   return (
     <Box
       // width="calc(100vw / 4)"
@@ -28,6 +29,7 @@ const StatusCard = (props: StatusCardProps) => {
         fontWeight="bold"
         bgGradient={'linear(180deg, #000428 0%, #004e92 100%) !important'}
         bgClip="text"
+        data-test={dataTest}
       >
         {count}
       </Box>
@@ -35,6 +37,7 @@ const StatusCard = (props: StatusCardProps) => {
         color={'#3e4059'}
         fontWeight="400"
         fontSize={{ base: '12px', md: '0.875rem' }}
+        data-test={label}
       >
         {label}
       </Text>
@@ -53,14 +56,17 @@ const StatusCards = (props: StatusCardRootProps) => {
       <StatusCard
         count={active}
         label="Active"
+        dataTest={'active'}
       />
       <StatusCard
         count={inactive}
         label="Inactive"
+        dataTest={'Inactive'}
       />
       <StatusCard
         count={published}
         label="Published"
+        dataTest={'Published'}
       />
     </Grid>
   )

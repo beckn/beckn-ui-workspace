@@ -6,6 +6,7 @@ import { HomePageContent, TopSheet, useGeolocation } from '@beckn-ui/common'
 import ClickableImage from '@components/ClickableImage'
 import { Box, Flex } from '@chakra-ui/react'
 import { Button } from '@beckn-ui/molecules'
+import { testIds } from '@shared/dataTestIds'
 
 const HomePage = () => {
   const { t } = useLanguage()
@@ -31,7 +32,9 @@ const HomePage = () => {
   const navigateToSearchResults = () => {
     if (searchTerm) {
       localStorage.setItem('optionTags', JSON.stringify({ name: searchTerm }))
-      router.push(`/search?searchTerm=${searchTerm}&lat=${coordinates?.latitude}&long=${coordinates?.longitude}`)
+      router.push(
+        `/search?searchTerm=${searchTerm}&lat=${coordinates?.latitude || '28.6296836'}&long=${coordinates?.longitude || '77.0777892'}`
+      )
     }
   }
 
@@ -70,6 +73,7 @@ const HomePage = () => {
             <Button
               text="Prosumers Near Me"
               handleClick={searchIconClickHandler}
+              dataTest={testIds.P2P_hompage_button}
             />
             {/* <Flex
               justifyContent={'center'}

@@ -5,6 +5,7 @@ import React, { useState, useMemo } from 'react'
 import addIcon from '@public/images/plus_icon.svg'
 import { useRouter } from 'next/router'
 import { TabNavPanelProps } from '@lib/types/table'
+import { testIds } from '@shared/dataTestIds'
 
 const TabNavPanel = (props: TabNavPanelProps) => {
   const { tabList, items, currentTab, setCurrentTab, meta, fetchData } = props
@@ -35,6 +36,7 @@ const TabNavPanel = (props: TabNavPanelProps) => {
               fontWeight="600"
               p={{ base: '6px 12px', md: '10px 24px' }}
               color={tabList[index] === currentTab ? '#000000' : 'rgba(0, 0, 0, 0.6)'}
+              data-test={`tablist_name${status}`}
             >
               {status}
             </Tab>
@@ -62,6 +64,7 @@ const TabNavPanel = (props: TabNavPanelProps) => {
             text="Create New"
             fontSize={'14px'}
             color="#013b76"
+            dataTest={testIds.create_new_policy}
           />
         </Flex>
       </Flex>

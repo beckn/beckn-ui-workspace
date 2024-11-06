@@ -11,11 +11,11 @@ import { SelectRideRootState } from '@store/selectRide-slice'
 import axios from '@services/axios'
 import { getCancelPayload } from '@utils/payload'
 
-const cancellationReasons: { id: string | number; reason: string }[] = [
-  { id: 1, reason: 'Plan Changed' },
-  { id: 2, reason: 'Booked by mistake' },
-  { id: 3, reason: 'Unable to contact Driver' },
-  { id: 4, reason: 'Driver denied duty' }
+const cancellationReasons: { id: string | number; reason: string; dataTest: string }[] = [
+  { id: 1, reason: 'Plan Changed', dataTest: 'Plan Changed' },
+  { id: 2, reason: 'Booked by mistake', dataTest: 'Booked by mistake' },
+  { id: 3, reason: 'Unable to contact Driver', dataTest: 'Unable to contact Driver' },
+  { id: 4, reason: 'Driver denied duty', dataTest: 'Driver denied duty' }
 ]
 const CancelRide = ({ handleOnClose }: { handleOnClose: () => void }) => {
   const router = useRouter()
@@ -51,12 +51,14 @@ const CancelRide = ({ handleOnClose }: { handleOnClose: () => void }) => {
       <HeaderContent
         text={t.cancelBookingText}
         onClose={handleOnClose}
+        dataTest={'cancelBookingText'}
       />
       <Box mb={'10px'}>
         <Typography
           text={t.cancelReason}
           fontWeight="400"
           fontSize="12px"
+          dataTest={'cancelReason'}
         />
       </Box>
       {cancellationReasons.map(({ id, reason }) => (
@@ -71,6 +73,7 @@ const CancelRide = ({ handleOnClose }: { handleOnClose: () => void }) => {
       <Box mt={'10px'}>
         <Button
           text={t.cancelRide}
+          dataTest={'cancelRide'}
           disabled={!selectedReason?.id}
           handleClick={onCancel}
         />

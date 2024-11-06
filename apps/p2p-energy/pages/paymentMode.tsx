@@ -6,6 +6,7 @@ import phonePay from '@public/images/phonePayPayment.svg'
 import BillIcon from '@public/images/bill.svg'
 import Visa from '@public/images/visa.svg'
 import masterCard from '@public/images/masterCard.svg'
+import { testIds } from '@shared/dataTestIds'
 
 const PaymentMode = () => {
   const { t } = useLanguage()
@@ -21,28 +22,32 @@ const PaymentMode = () => {
           img: Visa,
           paymentMethod: t.cardNumber,
           paymentMethodNet: t.cardNumber,
-          disabled: true
+          disabled: true,
+          dataTest: testIds.paymentpage_visa
         },
         {
           category: 'Credit & Debit Cards',
           img: masterCard,
           paymentMethod: t.cardNumber,
           paymentMethodNet: t.cardNumber,
-          disabled: true
+          disabled: true,
+          dataTest: testIds.paymentpage_masterCard
         },
         {
           category: 'UPI',
           img: phonePay,
           paymentMethod: t.phonePay || 'PhonePe UPI',
           paymentMethodNet: t.phonePay || 'PhonePe UPI',
-          disabled: true
+          disabled: true,
+          dataTest: testIds.paymentpage_phonePay
         },
         {
           category: 'Other',
           img: BillIcon,
           paymentMethod: t.cashOnDelivery,
           paymentMethodNet: t.netBanking,
-          disabled: false
+          disabled: false,
+          dataTest: testIds.paymentpage_NetBanking
         }
       ]}
     />

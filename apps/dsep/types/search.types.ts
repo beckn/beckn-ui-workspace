@@ -35,7 +35,6 @@ interface Image {
   url: string
   size_type: string
 }
-
 interface Item {
   long_desc: string
   short_desc: string

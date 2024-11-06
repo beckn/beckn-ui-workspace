@@ -1,0 +1,28 @@
+{
+  "toggleAvailabiltiyResponse": {
+    "id": 4,
+    "day_of_week": "Suresh Driver Availability",
+    "start_time": null,
+    "end_time": null,
+    "is_available": true,
+    "unavailability_reason": null,
+    "createdAt": "2024-05-15T07:39:47.366Z",
+    "updatedAt": "2024-10-24T08:48:21.057Z",
+    "publishedAt": "2024-05-15T07:39:48.455Z"
+  },
+  "updateLocationResponse": {
+    "id": 55,
+    "address": "Suresh Cab Driver GPS Location",
+    "city": "Suresh Cab Driver GPS Location",
+    "state": null,
+    "country": null,
+    "zip": null,
+    "createdAt": "2024-05-15T07:39:08.851Z",
+    "updatedAt": "2024-10-24T08:48:21.073Z",
+    "publishedAt": "2024-05-15T07:39:11.633Z",
+    "latitude": null,
+    "longitude": null,
+    "map_url": null,
+    "gps": "28.6094734, 77.4570594"
+  }
+}

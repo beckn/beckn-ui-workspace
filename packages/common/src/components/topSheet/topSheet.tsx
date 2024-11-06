@@ -65,11 +65,15 @@ const TopSheet: React.FC<TopSheetComponentProps> = ({
           columnGap="10px"
           pl="unset"
         >
-          <Image src={'/images/setLocation.svg'} />
+          <Image
+            src={'/images/setLocation.svg'}
+            data-test={testIds.locationIcon}
+          />
           <Box>
             <Text
               fontSize="12px"
               fontWeight={400}
+              data-test={testIds.yourLocation}
             >
               {t('yourLocation')}
             </Text>
@@ -78,6 +82,7 @@ const TopSheet: React.FC<TopSheetComponentProps> = ({
                 <Skeleton
                   height="10px"
                   width="200px"
+                  data-test={testIds.skeleton}
                 />
               ) : (
                 <>
@@ -98,6 +103,7 @@ const TopSheet: React.FC<TopSheetComponentProps> = ({
                     cursor={'pointer'}
                     pt="4px"
                     src="/images/downArrow.svg"
+                    data-test={testIds.downArrow}
                   />
                 </>
               )}
@@ -110,6 +116,7 @@ const TopSheet: React.FC<TopSheetComponentProps> = ({
             isChecked={onlineStatus}
             colorScheme={'green'}
             onChange={handleOnSwitch}
+            data-test={testIds.taxi_BPP_switch_toggle_button}
           />
         )}
       </Box>
@@ -144,10 +151,16 @@ const TopSheet: React.FC<TopSheetComponentProps> = ({
               fontSize="12px"
               fontWeight="700"
               pb="6px"
+              data-test="device-location"
             >
               {t('devicelocationisnotenabled')}
             </Text>
-            <Text fontSize="12px">{t('accessToProvideLocation')}</Text>
+            <Text
+              fontSize="12px"
+              data-test={testIds.device_location_sub_title}
+            >
+              {t('accessToProvideLocation')}
+            </Text>
             <Box
               position="relative"
               mt="20px"
@@ -157,6 +170,7 @@ const TopSheet: React.FC<TopSheetComponentProps> = ({
                 bottom="8px"
                 src="/images/LocationIcon2.svg"
                 width="24px"
+                data-test={testIds.device_location_img}
               />
               <Input
                 pl="30px"
@@ -168,6 +182,7 @@ const TopSheet: React.FC<TopSheetComponentProps> = ({
                 borderBottom="2px solid black"
                 placeholder={searchPlaceholder}
                 onChange={onFocusChange}
+                data-test={testIds.device_location_input}
               />
               <Image
                 position="absolute"
@@ -175,6 +190,7 @@ const TopSheet: React.FC<TopSheetComponentProps> = ({
                 bottom="8px"
                 src="/images/SearchIcon1.svg"
                 width="24px"
+                data-test={testIds.device_location_search_icon}
               />
             </Box>
           </Box>
