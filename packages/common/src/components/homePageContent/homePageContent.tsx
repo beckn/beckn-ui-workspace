@@ -9,6 +9,7 @@ import { testIds } from '@shared/dataTestIds'
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md'
 import { GeoLocationInput } from '../geoLocationInput/GeoLocationInput'
 import ImageCard from '../ImageCard/ImageCard'
+import { Image } from '@chakra-ui/react'
 
 const HomePageContent: React.FC<HomePageContentProps> = ({
   blockOrder = [],
@@ -22,7 +23,7 @@ const HomePageContent: React.FC<HomePageContentProps> = ({
   CardSelector,
   customComponent
 }) => {
-  const { name, title, description } = headerProps || {}
+  const { name, title, description, logoSrc, altText } = headerProps || {}
   const {
     searchPlaceholder,
     setSearchTerm,
@@ -88,6 +89,18 @@ const HomePageContent: React.FC<HomePageContentProps> = ({
             dataTest={testIds.homepage_appDescription}
             text={description!}
           />
+        )
+      case 'appLogo':
+        return (
+          <Flex
+            justifyContent={'center'}
+            mb={'20px'}
+          >
+            <Image
+              src={logoSrc}
+              alt={altText}
+            />
+          </Flex>
         )
       case 'searchInput':
         return (
