@@ -9,12 +9,12 @@ import { ToastContainer } from 'react-toastify'
 import { useLanguage } from '../../hooks/useLanguage'
 import NextNProgress from 'nextjs-progressbar'
 import styles from './Layout.module.css'
-import GeoLocationInputList from '@components/geoLocationInput/GeoLocationInputList'
 import { Box, Text, useToast } from '@chakra-ui/react'
 import { Toast } from '@beckn-ui/molecules/src/components'
 import { IGeoLocationSearchPageRootState } from '@beckn-ui/common/lib/types'
 import { feedbackActions, FeedbackRootState, ToastType } from '@beckn-ui/common/src/store/ui-feedback-slice'
 import { testIds } from '@shared/dataTestIds'
+import { GeoLocationInputList } from '@beckn-ui/common'
 
 const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const { locale } = useLanguage()
@@ -58,7 +58,7 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   return (
     <div>
       <Head>
-        <title>Kuza One</title>
+        <title>Dragon Foods</title>
       </Head>
       <div className={`${styles.container} ${isHomepage ? styles.homepage : styles.minHeight}`}>
         <NextNProgress height={7} />

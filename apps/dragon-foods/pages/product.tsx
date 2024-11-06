@@ -1,39 +1,26 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { ProductDetailPage } from '@beckn-ui/becknified-components'
 import { useDispatch, useSelector } from 'react-redux'
-import { Box } from '@chakra-ui/react'
+import { Box, Flex } from '@chakra-ui/react'
 import { useLanguage } from '@hooks/useLanguage'
 import { DiscoveryRootState, ParsedItemModel } from '@beckn-ui/common/lib/types'
 import { cartActions } from '@beckn-ui/common/src/store/cart-slice'
 import { feedbackActions } from '@beckn-ui/common/src/store/ui-feedback-slice'
 import { testIds } from '@shared/dataTestIds'
+import { OptionsGroup } from '@beckn-ui/common'
+import { Button } from '@beckn-ui/molecules'
+import { mockData1, mockData2 } from '../mock/mockOptionGroupData'
+
+const terms = [{ label: 'Accept <span style="color:#00B088;">Terms and Conditions</span>', value: 'terms' }]
 
 const Product = () => {
   const { t } = useLanguage()
   const selectedProduct: ParsedItemModel = useSelector((state: DiscoveryRootState) => state.discovery.selectedProduct)
   const dispatch = useDispatch()
-  const [counter, setCounter] = useState(1)
-  const [totalPrice, setTotalPrice] = useState<number>(Number(selectedProduct.item.price.value))
 
-  const increment = () => {
-    const newCounter = counter + 1
-    const newTotalPrice = newCounter * Number(selectedProduct.item.price.value)
-    setCounter(newCounter)
-    setTotalPrice(newTotalPrice)
-  }
-
-  const decrement = () => {
-    if (counter > 1) {
-      const newCounter = counter - 1
-      const newTotalPrice = newCounter * Number(selectedProduct.item.price.value)
-      setCounter(newCounter)
-      setTotalPrice(newTotalPrice)
-    }
-  }
-
-  if (!selectedProduct) {
-    return <></>
-  }
+  // if (!selectedProduct) {
+  //   return <></>
+  // }
   return (
     <Box
       className="hideScroll"
@@ -54,37 +41,85 @@ const Product = () => {
               setRating: () => {},
               starCount: 5,
               dataTest: testIds.item_rating
-            },
-            productCta: {
-              currency: selectedProduct.item.price.currency,
-              totalPrice: selectedProduct.item.price.value,
-              handleIncrement: increment,
-              handleDecrement: decrement,
-              counter: counter,
-              cta: {
-                dataTest: testIds.productpage_addTocartButton,
-                text: t.addToCart,
-                color: 'black',
-                handleClick: () => {
-                  dispatch(
-                    cartActions.addItemToCart({
-                      product: selectedProduct,
-                      quantity: counter
-                    })
-                  )
-                  dispatch(
-                    feedbackActions.setToastData({
-                      toastData: { message: 'Success', display: true, type: 'success', description: t.addedToCart }
-                    })
-                  )
-                }
-              }
             }
           }
         }}
       />
+      <Box
+        border={'1px solid #BFBFBF'}
+        borderRadius="12px"
+        p="16px"
+        mb="20px"
+      >
+        {Object.entries(mockData1).map(([key, section]) => (
+          <Box mb="30px">
+            <OptionsGroup
+              types={section.type}
+              dataPoints={section.options}
+              heading={section.heading}
+              handleCheckboxChange={() => {}}
+            />
+          </Box>
+        ))}
+      </Box>
+      <Box
+        border={'1px solid #BFBFBF'}
+        borderRadius="12px"
+        p="16px"
+        mb="20px"
+      >
+        {Object.entries(mockData2).map(([key, section]) => (
+          <Box mb="30px">
+            <OptionsGroup
+              types={section.type}
+              dataPoints={section.options}
+              heading={section.heading}
+              handleCheckboxChange={() => {}}
+            />
+          </Box>
+        ))}
+      </Box>
+      <Box
+        border={'1px solid #BFBFBF'}
+        borderRadius="12px"
+        p="16px"
+        mb="20px"
+      >
+        <OptionsGroup
+          types={'checkbox'}
+          dataPoints={terms}
+          handleCheckboxChange={() => {}}
+        />
+      </Box>
+      <Flex
+        alignItems={'center'}
+        border={'1px solid #BFBFBF'}
+        borderRadius="12px"
+        p="16px 16px 6px 16px"
+      >
+        <Box
+          w="307px"
+          mr="20px"
+        >
+          <Button text="proceed" />
+        </Box>
+        ** Contains non-personal data only
+      </Flex>
     </Box>
   )
 }
 
 export default Product
+// handleClick: () => {
+//   dispatch(
+//     cartActions.addItemToCart({
+//       product: selectedProduct,
+//       quantity: counter
+//     })
+//   )
+//   dispatch(
+//     feedbackActions.setToastData({
+//       toastData: { message: 'Success', display: true, type: 'success', description: t.addedToCart }
+//     })
+//   )
+// }

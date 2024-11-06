@@ -90,8 +90,15 @@ select.chakra-select {
 }
 .css-1ydjfm6[aria-checked='true'],
 .css-1ydjfm6[data-checked] {
-  background: #0560fa !important;
-  border-color: #0560fa !important;
+  background: #00b088 !important;
+  border-color: #00b088 !important;
+}
+
+.chakra-radio__control[aria-checked='true']::before,
+.chakra-radio__control[data-checked]::before {
+  width: 80% !important;
+  height: 80% !important;
+  background: #00b088 !important;
 }
 .chakra-button.social_btn {
   color: #717070;
@@ -117,6 +124,6 @@ select.chakra-select {
 .-product_summary_container button.chakra-button {
   color: #fff !important;
 }
-.-product_card_layout_container img{
+.-product_card_layout_container img {
   object-fit: unset;
 }
