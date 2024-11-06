@@ -12,6 +12,7 @@ export interface CardType {
 }
 export type BlockName =
   | 'header'
+  | 'appLogo'
   | 'description'
   | 'selectInput'
   | 'searchInput'
@@ -26,6 +27,8 @@ export interface HomePageContentProps {
     name: string
     title?: string
     description: string
+    logoSrc?: string
+    altText?: string
   }
   searchProps?: {
     searchPlaceholder: string
