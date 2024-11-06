@@ -3,7 +3,6 @@ const testIds = {
   url_base: process.env.CYPRESS_BASE_URL || 'http://localhost:3000',
   url_base_retail: process.env.CYPRESS_BASE_URL || 'http://localhost:3002',
   url_base_tourism: process.env.CYPRESS_BASE_URL || 'http://localhost:3001',
-
   // general
   goBack: 'go-back',
   feedback: 'feedback-toast',
@@ -52,6 +51,10 @@ const testIds = {
   deployed_dsep_url_home: 'unified-dsep-staging.becknprotocol.io/',
   deployed_dsep_url_search: 'unified-dsep-staging.becknprotocol.io/search',
 
+  //mobility url
+  deployed_mob_url_base: 'https://mobility-dev.becknprotocol.io/',
+  //policy portal
+  deployed_policy_url_base: 'https://policyadmin-dev.becknprotocol.io/',
   // urls
   url_signup: '/signUp',
   url_home: '/',
