@@ -1,16 +1,17 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { Box, Checkbox, Text, SimpleGrid, Radio, RadioGroup } from '@chakra-ui/react'
 
-interface DataPoint {
+export interface DataPoint {
   label: string
   value: string
 }
 
 interface OptionsGroupProps {
-  types: 'checkbox' | 'radio'
+  types: 'checkbox' | 'radio' | string
   heading?: string
   dataPoints: DataPoint[]
-  handleCheckboxChange: (value: string) => void
+  handleSelectionChange: (selectedValues: DataPoint[]) => void
+  multiSelect?: boolean
   colorScheme?: string
 }
 
@@ -18,29 +19,38 @@ const OptionsGroup: React.FC<OptionsGroupProps> = ({
   types,
   heading,
   dataPoints,
-  handleCheckboxChange,
+  handleSelectionChange,
+  multiSelect = false,
   colorScheme
 }) => {
-  const [selectedCheckboxes, setSelectedCheckboxes] = useState<Record<string, boolean>>({})
-  const [selectedRadio, setSelectedRadio] = useState<string>('')
-
-  const onCheckboxChange = (value: string) => {
-    setSelectedCheckboxes(prevSelected => ({
-      ...prevSelected,
-      [value]: !prevSelected[value]
-    }))
-    handleCheckboxChange(value)
-  }
-
-  const onRadioChange = (value: string) => {
-    setSelectedRadio(value)
-    handleCheckboxChange(value)
-  }
+  const [selectedValues, setSelectedValues] = useState<DataPoint[]>([])
 
   const gridCol = useMemo(() => {
     const avgLabelLength = dataPoints.reduce((acc, point) => acc + point.label.length, 0) / dataPoints.length
     return avgLabelLength > 8 ? [2, 2, 3] : [3, 3, 4, 6]
   }, [dataPoints])
+
+  useEffect(() => {
+    handleSelectionChange(selectedValues)
+  }, [selectedValues, handleSelectionChange])
+
+  const onCheckboxChange = (dataPoint: DataPoint) => {
+    setSelectedValues(prevSelected => {
+      const isSelected = prevSelected.find(item => item.value === dataPoint.value)
+      if (isSelected) {
+        return prevSelected.filter(item => item.value !== dataPoint.value)
+      } else {
+        return [...prevSelected, dataPoint]
+      }
+    })
+  }
+
+  const onRadioChange = (value: string) => {
+    const selectedDataPoint = dataPoints.find(dp => dp.value === value)
+    if (selectedDataPoint) {
+      setSelectedValues([selectedDataPoint])
+    }
+  }
 
   return (
     <Box>
@@ -53,6 +63,7 @@ const OptionsGroup: React.FC<OptionsGroupProps> = ({
           {heading}
         </Text>
       )}
+
       {types === 'checkbox' && (
         <SimpleGrid
           columns={gridCol}
@@ -61,14 +72,14 @@ const OptionsGroup: React.FC<OptionsGroupProps> = ({
           {dataPoints.map(point => (
             <Checkbox
               key={point.value}
-              isChecked={selectedCheckboxes[point.value] || false}
-              onChange={() => onCheckboxChange(point.value)}
+              isChecked={selectedValues.some(selected => selected.value === point.value)}
+              onChange={() => onCheckboxChange(point)}
               colorScheme={colorScheme}
             >
               <Text
                 fontSize={['12px', '16px']}
                 dangerouslySetInnerHTML={{ __html: point.label }}
-              ></Text>
+              />
             </Checkbox>
           ))}
         </SimpleGrid>
@@ -77,7 +88,7 @@ const OptionsGroup: React.FC<OptionsGroupProps> = ({
       {types === 'radio' && (
         <RadioGroup
           onChange={onRadioChange}
-          value={selectedRadio}
+          value={selectedValues[0]?.value || ''}
         >
           <SimpleGrid
             columns={gridCol}
@@ -87,9 +98,12 @@ const OptionsGroup: React.FC<OptionsGroupProps> = ({
               <Radio
                 key={point.value}
                 value={point.value}
-                colorScheme={colorScheme}
+                colorScheme={'#fff'}
               >
-                <Text fontSize={['12px', '16px']}>{point.label}</Text>
+                <Text
+                  fontSize={['12px', '16px']}
+                  dangerouslySetInnerHTML={{ __html: point.label }}
+                />
               </Radio>
             ))}
           </SimpleGrid>
