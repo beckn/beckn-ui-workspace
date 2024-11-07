@@ -84,33 +84,11 @@ const OrderConfirmation = () => {
         className="kuza-order-confornation"
         schema={{
           iconSrc: orderConfirmmark,
-          successOrderMessage: 'ORDER SUCCESFULL',
-          gratefulMessage: 'Thank you for your order!',
-          orderIdMessage: orderId ? `Order number is: ${utilGenerateEllipsedText(orderId)}` : '',
-          trackOrderMessage: `You can track your order in "My Order" section`,
+          successOrderMessage: 'Request Confirmed!',
+          gratefulMessage: 'The dataset will be shared via the chosen mode',
+          orderIdMessage: '',
+          trackOrderMessage: `<email ID: ${'name@email.com'}>`,
           buttons: [
-            {
-              text: 'View Order Details',
-              handleClick: () => {
-                const orderId = confirmResponse[0].message.orderId
-                const bppId = confirmResponse[0].context.bpp_id
-                const bppUri = confirmResponse[0].context.bpp_uri
-
-                dispatch(orderActions.addSelectedOrder({ orderDetails: { orderId, bppId, bppUri } }))
-                const orderObjectForStatusCall = {
-                  bppId: bppId,
-                  bppUri: bppUri,
-                  orderId: orderId
-                }
-                localStorage.setItem('selectedOrder', JSON.stringify(orderObjectForStatusCall))
-                dispatch(checkoutActions.clearState())
-                router.push('/orderDetails')
-              },
-              disabled: false,
-              variant: 'solid',
-              colorScheme: 'primary',
-              dataTest: testIds.orderConfirmation_viewOrderButton
-            },
             {
               text: 'Go Back Home',
               handleClick: () => {
@@ -118,7 +96,7 @@ const OrderConfirmation = () => {
                 dispatch(checkoutActions.clearState())
               },
               disabled: false,
-              variant: 'outline',
+              variant: 'solid',
               colorScheme: 'primary',
               dataTest: testIds.orderConfirmation_goBackToHome
             }

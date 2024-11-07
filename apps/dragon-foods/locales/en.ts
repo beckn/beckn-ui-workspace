@@ -147,7 +147,7 @@ const en: { [key: string]: string } = {
   errorZipcode2: 'Invalid Zip Code',
   emptyCardHeading: 'The Cart is Empty',
   emptyCardSubHeading: 'Looks like you haven’t made your choice yet',
-  shop: 'Shop',
+  shop: 'Add Request',
   orderId: 'Order id',
   forAll: 'for All',
   subText:
