@@ -11,6 +11,7 @@ import { OptionsGroup } from '@beckn-ui/common'
 import { Button } from '@beckn-ui/molecules'
 import { mockData1, mockData2 } from '../mock/mockOptionGroupData'
 import { DataPoint } from '@beckn-ui/common/src/components/OptionsGroup'
+import { useRouter } from 'next/router'
 
 const terms = [
   {
@@ -41,6 +42,7 @@ const Product = () => {
 
   console.log(selectedItems)
 
+  const router = useRouter()
   // if (!selectedProduct) {
   //   return <></>
   // }
@@ -133,7 +135,17 @@ const Product = () => {
           w="307px"
           mr="20px"
         >
-          <Button text="Proceed" />
+          <Button
+            text="proceed"
+            handleClick={() => {
+              dispatch(
+                cartActions.addItemToCart({
+                  product: selectedProduct,
+                  quantity: 0
+                })
+              )
+            }}
+          />
         </Box>
         ** Contains non-personal data only
       </Flex>
