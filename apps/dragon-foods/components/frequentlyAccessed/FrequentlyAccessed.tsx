@@ -1,100 +1,145 @@
 import React from 'react'
-import { Box, CardBody, Flex, Icon, Image, Stack } from '@chakra-ui/react'
+import { Box, CardBody, Flex, Icon, Image, Stack, Card } from '@chakra-ui/react'
 import DetailsCard from '@beckn-ui/becknified-components/src/components/checkout/details-card'
 import { Typography } from '@beckn-ui/molecules'
-import { StarIcon } from '@chakra-ui/icons'
+import { StarIcon, TimeIcon } from '@chakra-ui/icons'
 
 type FrequentlyAccessedProps = {
   frequentlyAccessedData: Array<{
     id: string
-    images: string[]
-    name: string
-    shortDesc: string
-    price: { value: number }
-    rating: string
-    sourceText: string
-    yearsOfOperation: number
+    providerName: string
+    item: {
+      id: string
+      name: string
+      long_desc: string
+      price: { value: string; currency: string }
+      images: { url: string }[]
+      rating: string
+    }
+    providerCoordinates: {
+      latitude: number
+      longitude: number | null
+    }
   }>
+  onCardClick: (item: any) => void
 }
 
-const FrequentlyAccessed: React.FC<FrequentlyAccessedProps> = ({ frequentlyAccessedData }) => {
+const FrequentlyAccessed: React.FC<FrequentlyAccessedProps> = ({ frequentlyAccessedData, onCardClick }) => {
+  // const uniqueAccessedData = [...new Map(frequentlyAccessedData.map(item => [item.item.id, item])).values()].slice(0, 3)
+  const uniqueAccessedData = Array.from(
+    Object.values(
+      frequentlyAccessedData.reduce(
+        (acc, item) => {
+          acc[item.item.id] = item
+          return acc
+        },
+        {} as Record<string, (typeof frequentlyAccessedData)[0]>
+      )
+    )
+  ).slice(0, 3)
   return (
-    <Box mt={'40px'}>
+    <Box mt="80px">
       <Typography
         fontSize="17px"
-        fontWeight={'400'}
+        fontWeight="400"
         text="Frequently Accessed"
         sx={{ mb: '20px' }}
       />
 
-      <Flex
-        columnGap={3}
-        justifyContent={'center'}
-        flexWrap={{ base: 'wrap', md: 'nowrap', lg: 'nowrap' }}
-      >
-        {frequentlyAccessedData.map(
-          (
-            item: {
-              yearsOfOperation: any
-              id: string
-              images: string[]
-              name: string
-              shortDesc: string
-              price: { value: number }
-              rating: string
-              sourceText: string
-            },
-            index: React.Key | null | undefined
-          ) => (
-            <DetailsCard key={index}>
-              <CardBody padding={'unset'}>
+      {uniqueAccessedData.length > 0 ? (
+        <Flex
+          columnGap={3}
+          justifyContent="center"
+          alignItems={'center'}
+          // flexWrap={{ base: 'wrap', md: 'unset', lg: 'unset' }}
+        >
+          {uniqueAccessedData.map((item, index) => (
+            <Card
+              key={index}
+              mb={'20px'}
+              boxShadow={'0px 8px 10px -6px rgba(0, 0, 0, 0.1), 0px 20px 25px -5px rgba(0, 0, 0, 0.1)'}
+              borderRadius={'12px'}
+              opacity={'unset'}
+              cursor={'pointer'}
+              w={{ lg: '200px' }}
+              padding={'20px'}
+              onClick={() => onCardClick(item)}
+            >
+              <CardBody padding="unset">
                 <Stack>
                   <Image
-                    src={item.images[0]}
-                    alt={item.name}
+                    src={item.item.images[0].url}
+                    alt={item.item.name}
                     objectFit="contain"
                   />
                   <Typography
-                    fontSize="15px"
-                    fontWeight={'600'}
-                    text={item.shortDesc}
+                    fontSize="12px"
+                    fontWeight="600"
+                    text={item.item.name}
                   />
-
                   <Typography
                     fontSize="12px"
-                    fontWeight={'400'}
-                    text={`Source: ${item.sourceText}`}
+                    fontWeight="400"
+                    text={`Provided By: ${item.providerName}`}
                   />
                   <Flex
                     align="center"
                     justify="space-between"
+                    flexWrap={{ base: 'wrap' }}
+                    rowGap={{ base: '5px' }}
                   >
                     <Typography
                       fontSize="12px"
-                      fontWeight={'400'}
-                      text={`${item.yearsOfOperation} years in operation`}
+                      fontWeight="400"
+                      text={`Price: ${item.item.price.value} ${item.item.price.currency}`}
                     />
                     <Flex
                       align="center"
-                      gap={'4px'}
+                      gap="4px"
                     >
                       <Icon
                         as={StarIcon}
                         color="yellow.400"
                       />
                       <Typography
-                        fontSize="12px"
-                        fontWeight={'400'}
-                        text={item.rating}
+                        fontSize="10px"
+                        fontWeight="400"
+                        text={item.item.rating}
                       />
                     </Flex>
                   </Flex>
                 </Stack>
               </CardBody>
-            </DetailsCard>
-          )
-        )}
-      </Flex>
+            </Card>
+          ))}
+        </Flex>
+      ) : (
+        <DetailsCard>
+          <Flex
+            justify={'center'}
+            mb={'10px'}
+            mt={'20px'}
+          >
+            <Icon
+              as={TimeIcon}
+              boxSize={10}
+              color="green.400"
+              justifyContent={'center'}
+            />
+          </Flex>
+          <Typography
+            fontSize="18px"
+            fontWeight="600"
+            text="No Frequently Accessed Items Yet"
+            sx={{ textAlign: 'center' }}
+          />
+          <Typography
+            fontSize="14px"
+            fontWeight="400"
+            text="As you use Dragon Foods more, your frequently accessed items will appear here for quick access."
+          />
+        </DetailsCard>
+      )}
     </Box>
   )
 }

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import axios from '@services/axios'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useRouter } from 'next/router'
 
 import { parseSearchlist, SearchAndDiscover } from '@beckn-ui/common'
@@ -10,6 +10,7 @@ import { discoveryActions } from '@beckn-ui/common/src/store/discovery-slice'
 import { DOMAIN } from '@lib/config'
 import { Product } from '@beckn-ui/becknified-components'
 import { testIds } from '@shared/dataTestIds'
+import { RootState } from '@store/index'
 
 const Search = () => {
   const [items, setItems] = useState<ParsedItemModel[]>([])
@@ -19,7 +20,7 @@ const Search = () => {
 
   const [isLoading, setIsLoading] = useState(false)
   const [isFilterOpen, setIsFilterOpen] = useState(false)
-
+  const userId = useSelector((state: RootState) => state.auth?.user?.id)
   const dispatch = useDispatch()
   const { t } = useLanguage()
 
@@ -112,6 +113,22 @@ const Search = () => {
 
   const handleViewDetailsClickHandler = (selectedItem: ParsedItemModel, product: Product) => {
     const { item } = selectedItem
+    const existingData = JSON.parse(localStorage.getItem('recentlyViewed') || '{}')
+    const userData = existingData[userId]?.recentlyViewed?.products || []
+    const filteredProducts = userData.filter((product: any) => product.id !== item.id)
+    const updatedProducts = [{ ...selectedItem }, ...filteredProducts]
+
+    const updatedData = {
+      ...existingData,
+      [userId]: {
+        recentlyViewed: {
+          products: updatedProducts
+        }
+      }
+    }
+
+    localStorage.setItem('recentlyViewed', JSON.stringify(updatedData))
+
     dispatch(discoveryActions.addSingleProduct({ product: selectedItem }))
     router.push({
       pathname: '/product',
