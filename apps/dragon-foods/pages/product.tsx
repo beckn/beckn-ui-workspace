@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback, useState } from 'react'
 import { ProductDetailPage } from '@beckn-ui/becknified-components'
 import { useDispatch, useSelector } from 'react-redux'
 import { Box, Flex } from '@chakra-ui/react'
@@ -10,13 +10,36 @@ import { testIds } from '@shared/dataTestIds'
 import { OptionsGroup } from '@beckn-ui/common'
 import { Button } from '@beckn-ui/molecules'
 import { mockData1, mockData2 } from '../mock/mockOptionGroupData'
+import { DataPoint } from '@beckn-ui/common/src/components/OptionsGroup'
 
-const terms = [{ label: 'Accept <span style="color:#00B088;">Terms and Conditions</span>', value: 'terms' }]
+const terms = [
+  {
+    label:
+      '<span style="font-weight:500">Accept <a style="color:#00B088; text-decoration: underline">Terms and Conditions</a></span>',
+    value: 'terms'
+  }
+]
 
 const Product = () => {
   const { t } = useLanguage()
   const selectedProduct: ParsedItemModel = useSelector((state: DiscoveryRootState) => state.discovery.selectedProduct)
   const dispatch = useDispatch()
+  const [selectedItems, setSelectedItems] = useState<Record<string, DataPoint[]>>({})
+
+  const handleSelectionChange = useCallback((sectionKey: string, selectedValues: DataPoint[]) => {
+    setSelectedItems(prevItems => {
+      // Check if there is any difference before updating the state
+      if (JSON.stringify(prevItems[sectionKey]) === JSON.stringify(selectedValues)) {
+        return prevItems // No change, so return previous state
+      }
+      return {
+        ...prevItems,
+        [sectionKey]: selectedValues
+      }
+    })
+  }, [])
+
+  console.log(selectedItems)
 
   // if (!selectedProduct) {
   //   return <></>
@@ -52,16 +75,21 @@ const Product = () => {
         mb="20px"
       >
         {Object.entries(mockData1).map(([key, section]) => (
-          <Box mb="30px">
+          <Box
+            key={key}
+            mb="30px"
+          >
             <OptionsGroup
               types={section.type}
               dataPoints={section.options}
               heading={section.heading}
-              handleCheckboxChange={() => {}}
+              handleSelectionChange={selectedValues => handleSelectionChange(key, selectedValues)}
+              multiSelect={section.type === 'checkbox'}
             />
           </Box>
         ))}
       </Box>
+
       <Box
         border={'1px solid #BFBFBF'}
         borderRadius="12px"
@@ -69,12 +97,16 @@ const Product = () => {
         mb="20px"
       >
         {Object.entries(mockData2).map(([key, section]) => (
-          <Box mb="30px">
+          <Box
+            key={key}
+            mb="30px"
+          >
             <OptionsGroup
               types={section.type}
               dataPoints={section.options}
               heading={section.heading}
-              handleCheckboxChange={() => {}}
+              handleSelectionChange={selectedValues => handleSelectionChange(key, selectedValues)}
+              multiSelect={section.type === 'checkbox'}
             />
           </Box>
         ))}
@@ -88,7 +120,7 @@ const Product = () => {
         <OptionsGroup
           types={'checkbox'}
           dataPoints={terms}
-          handleCheckboxChange={() => {}}
+          handleSelectionChange={() => {}}
         />
       </Box>
       <Flex
@@ -101,7 +133,7 @@ const Product = () => {
           w="307px"
           mr="20px"
         >
-          <Button text="proceed" />
+          <Button text="Proceed" />
         </Box>
         ** Contains non-personal data only
       </Flex>
