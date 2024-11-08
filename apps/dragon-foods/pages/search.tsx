@@ -117,7 +117,7 @@ const Search = () => {
     const existingData = JSON.parse(localStorage.getItem('recentlyViewed') || '{}')
     const userData = existingData[user?.id!]?.recentlyViewed?.products || []
     const filteredProducts = userData.filter((product: any) => product.item.id !== item.id)
-    const updatedProducts = [{ ...selectedItem }, ...filteredProducts].slice(0, 2)
+    const updatedProducts = [{ ...selectedItem }, ...filteredProducts].slice(0, 3)
 
     const updatedData = {
       ...existingData,

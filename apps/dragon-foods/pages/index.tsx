@@ -49,13 +49,6 @@ const HomePage = () => {
 
     localStorage.setItem('selectCardHeaderText', JSON.stringify(product.name))
   }
-
-  // useEffect(() => {
-  //   if (localStorage) {
-  //     localStorage.clear()
-  //   }
-  // }, [])
-
   const navigateToSearchResults = () => {
     if (searchTerm) {
       localStorage.setItem('optionTags', JSON.stringify({ name: searchTerm }))
