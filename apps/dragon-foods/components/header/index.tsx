@@ -33,6 +33,7 @@ const Header = () => {
         <TopHeader
           appLogo="/images/headerLogo.svg"
           t={key => t[key]}
+          clearLocalStorageOnHomeIcon={false}
           headerConstants={{
             blackList: {
               appLogoBlackList,

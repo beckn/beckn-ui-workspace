@@ -20,7 +20,7 @@ const Search = () => {
 
   const [isLoading, setIsLoading] = useState(false)
   const [isFilterOpen, setIsFilterOpen] = useState(false)
-  const userId = useSelector((state: RootState) => state.auth?.user?.id)
+  const { user } = useSelector((state: RootState) => state.auth)
   const dispatch = useDispatch()
   const { t } = useLanguage()
 
@@ -112,15 +112,16 @@ const Search = () => {
   }
 
   const handleViewDetailsClickHandler = (selectedItem: ParsedItemModel, product: Product) => {
+    console.log(user)
     const { item } = selectedItem
     const existingData = JSON.parse(localStorage.getItem('recentlyViewed') || '{}')
-    const userData = existingData[userId]?.recentlyViewed?.products || []
-    const filteredProducts = userData.filter((product: any) => product.id !== item.id)
-    const updatedProducts = [{ ...selectedItem }, ...filteredProducts]
+    const userData = existingData[user?.id!]?.recentlyViewed?.products || []
+    const filteredProducts = userData.filter((product: any) => product.item.id !== item.id)
+    const updatedProducts = [{ ...selectedItem }, ...filteredProducts].slice(0, 2)
 
     const updatedData = {
       ...existingData,
-      [userId]: {
+      [user?.id!]: {
         recentlyViewed: {
           products: updatedProducts
         }

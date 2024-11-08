@@ -19,7 +19,7 @@ const HomePage = () => {
     error: currentLocationFetchError,
     loading: loadingForCurrentAddress
   } = useGeolocation(apiKeyForGoogle as string)
-  const userId = useSelector((state: RootState) => state.auth?.user?.id)
+  const { user } = useSelector((state: RootState) => state.auth)
 
   const router = useRouter()
 
@@ -27,7 +27,7 @@ const HomePage = () => {
 
   useEffect(() => {
     const storedData = JSON.parse(localStorage.getItem('recentlyViewed') || '{}')
-    const userData = storedData[userId]?.recentlyViewed?.products || []
+    const userData = storedData[user?.id!]?.recentlyViewed?.products || []
     setFrequentlyAccessedData(userData)
   }, [])
 

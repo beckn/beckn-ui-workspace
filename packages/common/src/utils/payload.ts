@@ -233,10 +233,10 @@ export const getPayloadForConfirm = (initResponse: InitResponseModel[]) => {
               billing: billing,
               payments: [
                 {
-                  id: payments[0].id,
+                  id: payments?.[0]?.id,
                   params: {
-                    amount: quote.price.value,
-                    currency: quote.price.currency
+                    amount: quote?.price?.value,
+                    currency: quote?.price?.currency
                   },
                   status: 'PAID',
                   type: 'ON-FULFILLMENT'
