@@ -1,6 +1,5 @@
 import React from 'react'
 import { Box, CardBody, Flex, Icon, Image, Stack, Card } from '@chakra-ui/react'
-import DetailsCard from '@beckn-ui/becknified-components/src/components/checkout/details-card'
 import { Typography } from '@beckn-ui/molecules'
 import { StarIcon, TimeIcon } from '@chakra-ui/icons'
 
@@ -25,18 +24,6 @@ type FrequentlyAccessedProps = {
 }
 
 const FrequentlyAccessed: React.FC<FrequentlyAccessedProps> = ({ frequentlyAccessedData, onCardClick }) => {
-  // const uniqueAccessedData = [...new Map(frequentlyAccessedData.map(item => [item.item.id, item])).values()].slice(0, 3)
-  const uniqueAccessedData = Array.from(
-    Object.values(
-      frequentlyAccessedData.reduce(
-        (acc, item) => {
-          acc[item.item.id] = item
-          return acc
-        },
-        {} as Record<string, (typeof frequentlyAccessedData)[0]>
-      )
-    )
-  ).slice(0, 3)
   return (
     <Box mt="80px">
       <Typography
@@ -46,14 +33,14 @@ const FrequentlyAccessed: React.FC<FrequentlyAccessedProps> = ({ frequentlyAcces
         sx={{ mb: '20px' }}
       />
 
-      {uniqueAccessedData.length > 0 ? (
+      {frequentlyAccessedData.length > 0 ? (
         <Flex
           columnGap={3}
           justifyContent="center"
           alignItems={'center'}
           // flexWrap={{ base: 'wrap', md: 'unset', lg: 'unset' }}
         >
-          {uniqueAccessedData.map((item, index) => (
+          {frequentlyAccessedData.map((item, index) => (
             <Card
               key={index}
               mb={'20px'}
@@ -114,7 +101,7 @@ const FrequentlyAccessed: React.FC<FrequentlyAccessedProps> = ({ frequentlyAcces
           ))}
         </Flex>
       ) : (
-        <DetailsCard>
+        <>
           <Flex
             justify={'center'}
             mb={'10px'}
@@ -128,17 +115,12 @@ const FrequentlyAccessed: React.FC<FrequentlyAccessedProps> = ({ frequentlyAcces
             />
           </Flex>
           <Typography
-            fontSize="18px"
-            fontWeight="600"
-            text="No Frequently Accessed Items Yet"
-            sx={{ textAlign: 'center' }}
-          />
-          <Typography
             fontSize="14px"
             fontWeight="400"
-            text="As you use Dragon Foods more, your frequently accessed items will appear here for quick access."
+            text="No Items Yet"
+            sx={{ textAlign: 'center' }}
           />
-        </DetailsCard>
+        </>
       )}
     </Box>
   )

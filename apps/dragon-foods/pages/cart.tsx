@@ -14,6 +14,7 @@ import { useSelectMutation } from '@beckn-ui/common/src/services/select'
 import { testIds } from '@shared/dataTestIds'
 import Cart from '@components/cart'
 import { CartItemProps } from '@components/cart/cart.types'
+import { cartActions } from '@beckn-ui/common'
 
 const RequestOverview = () => {
   const [fetchQuotes, { isLoading, data, isError }] = useSelectMutation()
@@ -71,6 +72,7 @@ const RequestOverview = () => {
             text: 'Send Request',
             handleOnClick: () => {
               router.push('/orderConfirmation')
+              dispatch(cartActions.clearCart())
             }
           }
         }}

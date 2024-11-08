@@ -16,6 +16,7 @@ const Header: React.FC<HeaderProps> = ({
   headerConstants,
   appLogo,
   locale,
+  clearLocalStorageOnHomeIcon = true,
   menuItems = [
     {
       id: 'profile',
@@ -85,7 +86,9 @@ const Header: React.FC<HeaderProps> = ({
                 h={'20px'}
                 onClick={() => {
                   const user = getLocalStorage('userPhone') as string
-                  localStorage.clear()
+                  if (clearLocalStorageOnHomeIcon) {
+                    localStorage.clear()
+                  }
                   setLocalStorage('userPhone', user)
                   router.push(homePagePath)
                 }}
