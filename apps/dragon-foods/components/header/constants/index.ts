@@ -3,7 +3,7 @@ type PathnameObjectType = Record<string, string>
 // -------------------------------- Top Header constants --------------------------------
 const appLogoBlackList = ['/signIn', '/signUp']
 const homeIconBlackList = ['/', '/signIn', '/mobileOtp', '/paymentMode', '/signUp']
-const menuIconWhiteList = ['/', '/search', '/profile']
+const menuIconWhiteList = ['/', '/search', '/profile', '/orderConfirmation']
 const topHeaderBlackList: string[] = []
 const languageIconWhiteList: string[] = []
 
@@ -12,7 +12,7 @@ const backIconList = ['/', '/signIn']
 
 const headerNames: PathnameObjectType = {
   '/checkoutPage': 'Review Purchase Order',
-  '/orderHistory': 'My Orders',
+  '/orderHistory': 'Request History',
   '/orderDetails': 'Order Details',
   '/invoiceDetails': 'Invoice Details',
   '/signIn': 'Sign In',

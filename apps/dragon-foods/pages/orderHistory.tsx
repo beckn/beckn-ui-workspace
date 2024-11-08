@@ -3,18 +3,28 @@ import { DetailCard } from '@beckn-ui/becknified-components'
 import { Loader, Typography } from '@beckn-ui/molecules'
 import { Box, Text, Flex, Image } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
-import pendingIcon from '../public/images/pendingStatus.svg'
 import { useDispatch } from 'react-redux'
 import { formatTimestamp } from '@beckn-ui/common/src/utils'
 import { useRouter } from 'next/router'
 import EmptyOrder from '@components/orderHistory/emptyOrder'
 import { orderHistoryData } from '@beckn-ui/common/lib/types'
-import { orderActions } from '@beckn-ui/common/src/store/order-slice'
 import { testIds } from '@shared/dataTestIds'
 
-const orderStatusMap: Record<string, string> = {
-  'In Review': 'Pending'
-}
+const floodDataList = [
+  {
+    title: 'High resolution probabilistic flood prediction data',
+    provider: 'Provided by Sky Analytics',
+    description: '2 year historical data set covering temporal, spatial, and metric coverage for floods Bhutan.',
+    placedAt: 'Placed at 21st Jun 2021, 3.30 pm'
+  },
+  {
+    title: 'Medium resolution integrated model flood prediction data',
+    provider: 'Provided by Climatic',
+    description:
+      'Founded in 2019, Climatic is a climate disaster modelling company based out of Dhaka, offering high resolution services for flood modelling.',
+    placedAt: 'Placed at 21st Jun 2021, 3.30 pm'
+  }
+]
 
 const OrderHistory = () => {
   const [orderHistoryList, setOrderHistoryList] = useState<orderHistoryData[]>([])
@@ -96,69 +106,42 @@ const OrderHistory = () => {
           mt={'23px'}
           cursor={'pointer'}
         >
-          {orderHistoryList.map((order, idx) => {
+          {floodDataList.map((order, idx) => {
             return (
               <DetailCard key={idx}>
                 <Flex
                   data-test={testIds.order_history_main_container}
-                  onClick={() => {
-                    const orderObjectForStatusCall = {
-                      bppId: order.attributes.bpp_id,
-                      bppUri: order.attributes.bpp_uri,
-                      orderId: order.attributes.order_id
-                    }
-                    localStorage.setItem('selectedOrder', JSON.stringify(orderObjectForStatusCall))
-                    dispatch(orderActions.addSelectedOrder({ orderDetails: orderObjectForStatusCall }))
-                    router.push('/orderDetails')
-                  }}
                   gap={'5px'}
                   flexDirection={'column'}
                 >
                   <Text
                     as={Typography}
-                    text={`Placed at ${formatTimestamp(order.attributes.createdAt)}`}
+                    text={order.title}
+                    fontWeight="600"
+                    fontSize={'15px'}
+                    dataTest={'order_history_title'}
+                  />
+                  <Text
+                    as={Typography}
+                    text={order.provider}
+                    fontWeight="400"
+                    fontSize={'12px'}
+                    dataTest={'order_history_provider'}
+                  />
+                  <Text
+                    as={Typography}
+                    text={order.description}
+                    fontWeight="400"
+                    fontSize={'12px'}
+                    dataTest={'order_history_description'}
+                  />
+                  <Text
+                    as={Typography}
+                    text={order.placedAt}
                     fontWeight="400"
                     fontSize={'12px'}
                     dataTest={testIds.orderHistory_createdAt}
                   />
-
-                  <Text
-                    as={Typography}
-                    text={`Order ID: ${order.attributes.order_id}`}
-                    fontWeight="400"
-                    fontSize={'12px'}
-                    dataTest={testIds.orderHistory_order_id}
-                  />
-
-                  <Text
-                    as={Typography}
-                    text={`${order.attributes.quote.price.currency} ${order.attributes.quote.price.value}`}
-                    fontWeight="600"
-                    fontSize={'12px'}
-                    dataTest={testIds.orderHistory_Price}
-                  />
-
-                  <Flex
-                    fontSize={'10px'}
-                    justifyContent={'space-between'}
-                    alignItems={'center'}
-                  >
-                    <Text
-                      as={Typography}
-                      text={'1 Item'}
-                      fontWeight="400"
-                      fontSize={'12px'}
-                    />
-
-                    <Flex>
-                      <Image
-                        src={pendingIcon}
-                        paddingRight={'6px'}
-                        data-test={testIds.orderHistory_pendingIcon}
-                      />
-                      <Text>{orderStatusMap[order.attributes.delivery_status]}</Text>
-                    </Flex>
-                  </Flex>
                 </Flex>
               </DetailCard>
             )
