@@ -48,7 +48,7 @@ const FrequentlyAccessed: React.FC<FrequentlyAccessedProps> = ({ frequentlyAcces
               borderRadius={'12px'}
               opacity={'unset'}
               cursor={'pointer'}
-              w={{ lg: '200px' }}
+              w={{ base: '170px', md: '170px', lg: '200px' }}
               padding={'20px'}
               onClick={() => onCardClick(item)}
             >
@@ -63,6 +63,12 @@ const FrequentlyAccessed: React.FC<FrequentlyAccessedProps> = ({ frequentlyAcces
                     fontSize="12px"
                     fontWeight="600"
                     text={item.item.name}
+                    sx={{
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap',
+                      maxWidth: '100%'
+                    }}
                   />
                   <Typography
                     fontSize="12px"

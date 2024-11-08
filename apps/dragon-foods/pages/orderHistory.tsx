@@ -1,9 +1,8 @@
 import Cookies from 'js-cookie'
 import { DetailCard } from '@beckn-ui/becknified-components'
 import { Loader, Typography } from '@beckn-ui/molecules'
-import { Box, Text, Flex, Image } from '@chakra-ui/react'
+import { Box, Text, Flex } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
 import { formatTimestamp } from '@beckn-ui/common/src/utils'
 import { useRouter } from 'next/router'
 import EmptyOrder from '@components/orderHistory/emptyOrder'
@@ -30,7 +29,6 @@ const OrderHistory = () => {
   const [orderHistoryList, setOrderHistoryList] = useState<orderHistoryData[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
-  const dispatch = useDispatch()
   const [error, setError] = useState('')
 
   const bearerToken = Cookies.get('authToken')
