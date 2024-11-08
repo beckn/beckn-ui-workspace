@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 import { useLanguage } from '@hooks/useLanguage'
 import { TopHeader, SubHeader } from '@beckn-ui/common'
 import Constants from './constants'
+import { testIds } from '@shared/dataTestIds'
 
 const Header = () => {
   const {
@@ -40,6 +41,23 @@ const Header = () => {
               menuIconWhiteList
             }
           }}
+          menuItems={[
+            {
+              id: 'history',
+              dataTest: testIds.orderHistory_text_click,
+              label: 'Request History',
+              href: '/orderHistory',
+              icon: '/images/orderHistoryIcon.svg'
+            },
+            {
+              id: 'logout',
+              dataTest: testIds.Logout_text_click,
+              label: 'Logout',
+              href: '/signIn',
+              icon: '/images/logOutIcon.svg',
+              color: 'red'
+            }
+          ]}
         />
       )}
       {renderBottomHeader && (
