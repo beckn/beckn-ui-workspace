@@ -69,6 +69,10 @@ const en: { [key: string]: string } = {
   ResetPassword: 'Reset Password',
   newPassword: 'New Password',
   confirmPassword: 'Confirm Password',
-  pleaseCheckYourMail: 'Please check your email for the password reset link.'
+  pleaseCheckYourMail: 'Please check your email for the password reset link.',
+  badRequest: 'Bad Request',
+  errorDescription: 'Server cannot process your request due to invalid syntax.',
+  backtoHomepage: 'Back to Homepage',
+  contactSupport: 'Contact support'
 }
 export default en
