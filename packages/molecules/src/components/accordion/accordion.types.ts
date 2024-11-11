@@ -5,5 +5,5 @@ export interface AccordionProps {
   accordionHeader?: string | ReactElement
   onToggle?: (expandedIndex: number | number[]) => void
   className?: string
-  dataTest: string
+  dataTest?: string
 }
