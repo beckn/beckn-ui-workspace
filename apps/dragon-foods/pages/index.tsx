@@ -7,6 +7,7 @@ import dragonMobLogo from '@public/images/dragonFoodLogo.svg'
 import FrequentlyAccessed from '../components/frequentlyAccessed/FrequentlyAccessed'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@store/index'
+import { Box } from '@chakra-ui/react'
 
 const HomePage = () => {
   const { t } = useLanguage()
@@ -64,7 +65,11 @@ const HomePage = () => {
   }
 
   return (
-    <>
+    <Box
+      className="hideScroll"
+      maxH="calc(100vh - 24px)"
+      overflowY={'scroll'}
+    >
       <TopSheet
         currentLocationFetchError={currentLocationFetchError}
         loadingForCurrentAddress={loadingForCurrentAddress}
@@ -100,7 +105,7 @@ const HomePage = () => {
           </>
         }
       />
-    </>
+    </Box>
   )
 }
 
