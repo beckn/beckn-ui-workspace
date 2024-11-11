@@ -6,6 +6,7 @@ import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import BottomModalScan from '@components/BottomModal/BottomModalScan'
 import Typography from '@beckn-ui/molecules/src/components/typography/typography'
 import { ImportOrderModel } from '@beckn-ui/common/lib/types'
+import { testIds } from '@shared/dataTestIds'
 
 interface SelectDeliveryModalProps {
   backOnImportedOrder: (newValue: boolean) => void
@@ -54,6 +55,7 @@ const SelectDeliveryModal: React.FC<SelectDeliveryModalProps> = props => {
           defaultValue="2"
           pt={'20px'}
           pb={'20px'}
+          data-test={testIds.chat_Gpt_List_Radio_Button}
         >
           <Stack spacing={4}>
             <Radio
@@ -90,6 +92,7 @@ const SelectDeliveryModal: React.FC<SelectDeliveryModalProps> = props => {
             router.push(`/search?searchTerm=${selectedItems}&category=${convertTourismCategoryToRetail(category)}`)
           }}
           disabled={false}
+          data-test={testIds.chat_gpt_address_button}
         />
         <Box
           textAlign={'center'}
