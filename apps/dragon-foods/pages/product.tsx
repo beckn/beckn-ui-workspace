@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react'
 import { ProductDetailPage } from '@beckn-ui/becknified-components'
 import { useDispatch, useSelector } from 'react-redux'
-import { Box, Flex } from '@chakra-ui/react'
+import { Box, Flex, Text } from '@chakra-ui/react'
 import { useLanguage } from '@hooks/useLanguage'
 import { DiscoveryRootState, ParsedItemModel } from '@beckn-ui/common/lib/types'
 import { cartActions } from '@beckn-ui/common/src/store/cart-slice'
@@ -130,6 +130,7 @@ const Product = () => {
         border={'1px solid #BFBFBF'}
         borderRadius="12px"
         p="16px 16px 6px 16px"
+        display={['block', 'flex']}
       >
         <Box
           w="307px"
