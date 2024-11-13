@@ -15,6 +15,7 @@ on:
       - 'apps/odr-v2/**'
       - 'apps/dsnp-v2/**'
       - 'apps/OSC/**'
+      - 'apps/dragon-foods/**'
 
 jobs:
   build:
@@ -203,3 +204,23 @@ jobs:
         if: env.osc_changed == 'true'
         run: |
           curl -X POST -d {} "${{ secrets.OSC_DEVELOP_AMPLIFY_WEBHOOK_URL }}" -H "Content-Type:application/json"
+
+
+#  dragon-foods
+
+      - name: Check for dragon-foods changes
+        id: check_dragon-foods_changes
+        run: |
+          if git diff --name-only HEAD~1 HEAD | grep '^apps/dragon-foods/'; then
+            echo "Changes in dragon-foods detected."
+            echo "dragon-foods_changed=true" >> $GITHUB_ENV
+          else
+            echo "No changes in dragon-foods. Skipping webhook trigger."
+            echo "dragon-foods_changed=false" >> $GITHUB_ENV
+          fi
+
+      - name: Trigger dragon-foods deployment if changes are detected
+        if: env.dragon-foods_changed == 'true'
+        run: |
+          curl -X POST -d {} "${{ secrets.DRAGON_FOODS_DEVELOP_AMPLIFY_WEBHOOK_URL }}" -H "Content-Type:application/json"
+          
