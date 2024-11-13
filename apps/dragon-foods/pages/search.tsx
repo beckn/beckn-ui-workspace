@@ -3,7 +3,7 @@ import axios from '@services/axios'
 import { useDispatch, useSelector } from 'react-redux'
 import { useRouter } from 'next/router'
 
-import { parseSearchlist, SearchAndDiscover } from '@beckn-ui/common'
+import { SearchAndDiscover } from '@beckn-ui/common'
 import { useLanguage } from '@hooks/useLanguage'
 import { ParsedItemModel } from '@beckn-ui/common/lib/types'
 import { discoveryActions } from '@beckn-ui/common/src/store/discovery-slice'
@@ -11,6 +11,7 @@ import { DOMAIN } from '@lib/config'
 import { Product } from '@beckn-ui/becknified-components'
 import { testIds } from '@shared/dataTestIds'
 import { RootState } from '@store/index'
+import { parseSearchlist } from '../utils/search-utils'
 
 const Search = () => {
   const [items, setItems] = useState<ParsedItemModel[]>([])
@@ -35,17 +36,7 @@ const Search = () => {
         domain: DOMAIN
       },
       searchString: searchKeyword,
-      category: {
-        categoryCode: router.query.category || 'Retail'
-      },
-      fulfillment: {
-        type: 'Delivery',
-        stops: [
-          {
-            location: '28.4594965,77.0266383'
-          }
-        ]
-      }
+      location: '28.4594965,77.0266383'
     }
 
     axios
@@ -143,6 +134,7 @@ const Search = () => {
 
   return (
     <SearchAndDiscover
+      t={key => t[key]}
       items={items}
       searchProps={{
         searchKeyword: searchKeyword as string,

@@ -28,6 +28,6 @@ export interface SearchAndDiscoverProps {
   catalogProps: {
     viewDetailsClickHandler: (item: ParsedItemModel, product: Product) => void
   }
-
+  t?: (key: string) => string
   noProduct: (key: string) => string
 }

@@ -158,7 +158,7 @@ const en: { [key: string]: string } = {
   change: 'Change',
   searchProducts: 'Search for Products',
   addToCart: 'Add To Cart',
-  addedToCart: 'Product added to cart',
+  addedToCart: 'Request added',
   order: 'Order',
   items: 'Items',
   saveShippingDetails: 'Save Shipping Details',
@@ -186,6 +186,7 @@ const en: { [key: string]: string } = {
   errorDescription: 'Server cannot process your request due to invalid syntax.',
   backtoHomepage: 'Back to Homepage',
   contactSupport: 'Contact support',
-  noProduct: 'There are no products in this category yet! New products will be added soon.'
+  noProduct: 'There are no products in this category yet! New products will be added soon.',
+  itemSourceText: 'Provided by'
 }
 export default en

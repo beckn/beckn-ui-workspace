@@ -12,6 +12,7 @@ import { Button } from '@beckn-ui/molecules'
 import { mockData1, mockData2 } from '../mock/mockOptionGroupData'
 import { DataPoint } from '@beckn-ui/common/src/components/OptionsGroup'
 import { useRouter } from 'next/router'
+import { convertProductTagsIntoFormat } from '../utils/product-utils'
 
 const terms = [
   {
@@ -43,9 +44,10 @@ const Product = () => {
   console.log(selectedItems)
 
   const router = useRouter()
-  // if (!selectedProduct) {
-  //   return <></>
-  // }
+
+  if (!selectedProduct) {
+    return <></>
+  }
   return (
     <Box
       className="hideScroll"
@@ -76,7 +78,7 @@ const Product = () => {
         p="16px"
         mb="20px"
       >
-        {Object.entries(mockData1).map(([key, section]) => (
+        {Object.entries(convertProductTagsIntoFormat(selectedProduct.item.tags!, 0)).map(([key, section]) => (
           <Box
             key={key}
             mb="30px"
@@ -98,7 +100,7 @@ const Product = () => {
         p="16px"
         mb="20px"
       >
-        {Object.entries(mockData2).map(([key, section]) => (
+        {Object.entries(convertProductTagsIntoFormat(selectedProduct.item.tags!, 1)).map(([key, section]) => (
           <Box
             key={key}
             mb="30px"
@@ -145,6 +147,11 @@ const Product = () => {
                   quantity: 0
                 })
               )
+              dispatch(
+                feedbackActions.setToastData({
+                  toastData: { message: 'Success', display: true, type: 'success', description: t.addedToCart }
+                })
+              )
             }}
           />
         </Box>
@@ -155,16 +162,3 @@ const Product = () => {
 }
 
 export default Product
-// handleClick: () => {
-//   dispatch(
-//     cartActions.addItemToCart({
-//       product: selectedProduct,
-//       quantity: counter
-//     })
-//   )
-//   dispatch(
-//     feedbackActions.setToastData({
-//       toastData: { message: 'Success', display: true, type: 'success', description: t.addedToCart }
-//     })
-//   )
-// }

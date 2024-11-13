@@ -110,6 +110,7 @@ const ProductCard: React.FC<ProductCardProps> = props => {
                     mb={'0.4rem'}
                     fontWeight={'600'}
                     mr="5px"
+                    flex={'none'}
                   >
                     {product.source} :
                   </Text>
