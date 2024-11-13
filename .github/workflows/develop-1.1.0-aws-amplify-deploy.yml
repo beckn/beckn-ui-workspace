@@ -224,8 +224,9 @@ jobs:
         if: env.dragon-foods_changed == 'true'
         run: |
           curl -X POST -d {} "${{ secrets.DRAGON_FOODS_DEVELOP_AMPLIFY_WEBHOOK_URL }}" -H "Content-Type:application/json"
-          
-# harmoni-aids
+
+
+#   harmoni-aids
 
       - name: Check for harmoni-aids changes
         id: check_harmoni-aids_changes
@@ -239,6 +240,6 @@ jobs:
           fi
 
       - name: Trigger harmoni-aids deployment if changes are detected
-        if: env.harmoni-aids == 'true'
+        if: env.harmoni-aids_changed == 'true'
         run: |
           curl -X POST -d {} "${{ secrets.HARMONI_AIDS_DEVELOP_AMPLIFY_WEBHOOK_URL }}" -H "Content-Type:application/json"
