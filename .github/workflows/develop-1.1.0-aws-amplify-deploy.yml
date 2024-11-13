@@ -17,6 +17,7 @@ on:
       - 'apps/OSC/**'
       - 'apps/dragon-foods/**'
       - 'apps/harmoni-aids/**'
+      - 'apps/sky-analytics/**'
 
 jobs:
   build:
@@ -243,3 +244,22 @@ jobs:
         if: env.harmoni-aids_changed == 'true'
         run: |
           curl -X POST -d {} "${{ secrets.HARMONI_AIDS_DEVELOP_AMPLIFY_WEBHOOK_URL }}" -H "Content-Type:application/json"
+
+
+#   sky-analytics
+
+      - name: Check for sky-analytics changes
+        id: check_sky-analytics_changes
+        run: |
+          if git diff --name-only HEAD~1 HEAD | grep '^apps/sky-analytics/'; then
+            echo "Changes in sky-analytics detected."
+            echo "sky-analytics_changed=true" >> $GITHUB_ENV
+          else
+            echo "No changes in sky-analytics. Skipping webhook trigger."
+            echo "sky-analytics_changed=false" >> $GITHUB_ENV
+          fi
+
+      - name: Trigger sky-analytics deployment if changes are detected
+        if: env.sky-analytics_changed == 'true'
+        run: |
+          curl -X POST -d {} "${{ secrets.SKY_ANALYTICS_DEVELOP_AMPLIFY_WEBHOOK_URL }}" -H "Content-Type:application/json"
