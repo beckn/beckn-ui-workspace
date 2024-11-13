@@ -206,7 +206,7 @@ export const getInitPayload = async (
   return { data }
 }
 
-export const getPayloadForConfirm = (initResponse: InitResponseModel[], quantity: number) => {
+export const getPayloadForConfirm = (initResponse: InitResponseModel[]) => {
   const {
     context,
     message: {
@@ -232,12 +232,7 @@ export const getPayloadForConfirm = (initResponse: InitResponseModel[], quantity
               },
               items: [
                 {
-                  ...(items as any)[0],
-                  quantity: {
-                    selected: {
-                      count: quantity
-                    }
-                  }
+                  ...(items as any)[0]
                 }
               ],
               fulfillments: fulfillments,

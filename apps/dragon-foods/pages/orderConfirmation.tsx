@@ -11,10 +11,12 @@ import LoaderWithMessage from '@components/loader/LoaderWithMessage'
 import { ConfirmResponseModel } from '@beckn-ui/common/lib/types'
 import { checkoutActions, CheckoutRootState } from '@beckn-ui/common/src/store/checkout-slice'
 import { orderActions } from '@beckn-ui/common/src/store/order-slice'
-import { getPayloadForConfirm, getPayloadForOrderHistoryPost } from '@beckn-ui/common/src/utils'
+import { getPayloadForOrderHistoryPost } from '@beckn-ui/common/src/utils'
 import { useConfirmMutation } from '@beckn-ui/common/src/services/confirm'
 import { testIds } from '@shared/dataTestIds'
 import { ORDER_CATEGORY_ID } from '../lib/config'
+import { getPayloadForConfirm } from '../utils/payload'
+import { cartActions } from '@beckn-ui/common'
 
 const OrderConfirmation = () => {
   const { t } = useLanguage()
@@ -47,6 +49,7 @@ const OrderConfirmation = () => {
     if (initResponse && initResponse.length > 0) {
       const payLoad = getPayloadForConfirm(initResponse)
       confirm(payLoad)
+      dispatch(cartActions.clearCart())
     }
   }, [])
 

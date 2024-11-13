@@ -41,10 +41,7 @@ const RequestOverview = () => {
         pinCode: '110018',
         meterNumber: 'MT451667'
       }
-      const { id, type } =
-        selectResponse[0].message.order.fulfillments?.[0] ||
-        (selectResponse[0].message.order.provider as any)?.fulfillments?.[0]
-      getInitPayload(shippingFormData, {}, items, transactionId, DOMAIN, { id, type }).then(res => {
+      getInitPayload(shippingFormData, {}, items, transactionId, DOMAIN).then(res => {
         return initialize(res)
       })
     }
@@ -95,7 +92,6 @@ const RequestOverview = () => {
             text: 'Send Request',
             handleOnClick: () => {
               router.push('/orderConfirmation')
-              dispatch(cartActions.clearCart())
             }
           }
         }}
