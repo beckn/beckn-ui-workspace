@@ -7,18 +7,20 @@ import { useLanguage } from '@hooks/useLanguage'
 
 import { Box, useToast } from '@chakra-ui/react'
 
-import { getSelectPayload } from '@beckn-ui/common/src/utils'
 import { DiscoveryRootState, ICartRootState } from '@beckn-ui/common/lib/types'
 import { DOMAIN } from '@lib/config'
 import { useSelectMutation } from '@beckn-ui/common/src/services/select'
 import { testIds } from '@shared/dataTestIds'
 import Cart from '@components/cart'
 import { CartItemProps } from '@components/cart/cart.types'
-import { cartActions } from '@beckn-ui/common'
+import { cartActions, CheckoutRootState } from '@beckn-ui/common'
+import { getInitPayload, getSelectPayload } from '../utils/payload'
+import { useInitMutation } from '@beckn-ui/common/src/services/init'
 
 const RequestOverview = () => {
-  const [fetchQuotes, { isLoading, data, isError }] = useSelectMutation()
+  const [fetchQuotes, { isLoading: selectIsLoading, data, isError }] = useSelectMutation()
   const dispatch = useDispatch()
+  const [initialize, { isLoading: initIsLocading }] = useInitMutation()
   const toast = useToast()
 
   const router = useRouter()
@@ -26,11 +28,31 @@ const RequestOverview = () => {
 
   const { items, totalQuantity } = useSelector((state: ICartRootState) => state.cart)
   const totalAmount = useSelector((state: ICartRootState) => state.cart.totalAmount)
-  const { transactionId, productList } = useSelector((state: DiscoveryRootState) => state.discovery)
+  const { transactionId, selectedProduct } = useSelector((state: DiscoveryRootState) => state.discovery)
+  const selectResponse = useSelector((state: CheckoutRootState) => state.checkout.selectResponse)
+
+  const performInit = async () => {
+    if (selectResponse && selectResponse.length > 0) {
+      const shippingFormData = {
+        name: 'Anand',
+        mobileNumber: '9886098860',
+        email: 'anand@gmail.com',
+        address: 'Flat 208, A Block, Janakpuri West, New Delhi',
+        pinCode: '110018',
+        meterNumber: 'MT451667'
+      }
+      const { id, type } =
+        selectResponse[0].message.order.fulfillments?.[0] ||
+        (selectResponse[0].message.order.provider as any)?.fulfillments?.[0]
+      getInitPayload(shippingFormData, {}, items, transactionId, DOMAIN, { id, type }).then(res => {
+        return initialize(res)
+      })
+    }
+  }
 
   useEffect(() => {
     if (items.length > 0) {
-      fetchQuotes(getSelectPayload(items, transactionId, DOMAIN))
+      Promise.all([fetchQuotes(getSelectPayload(items, transactionId, DOMAIN)), performInit()])
     }
   }, [totalQuantity])
 
@@ -46,14 +68,15 @@ const RequestOverview = () => {
       overflowY={'scroll'}
     >
       <Cart
-        isLoading={isLoading}
+        isLoading={selectIsLoading || initIsLocading}
         schema={{
           cartItems: items.map(
             singleItem =>
               ({
                 id: singleItem.id,
                 shortDesc: singleItem.short_desc,
-                sourceText: singleItem.long_desc
+                sourceText: singleItem.long_desc,
+                providerName: selectedProduct.providerName
               }) as CartItemProps
           ),
           loader: { text: t.quoteRequestLoader, dataTest: testIds.loadingIndicator },

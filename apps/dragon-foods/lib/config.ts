@@ -1,4 +1,4 @@
-export const DOMAIN = 'supply-chain-services:assembly'
+export const DOMAIN = 'climate'
 
 export const currencyMap = {
   EUR: '€',
