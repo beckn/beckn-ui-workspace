@@ -14,6 +14,7 @@ export interface CartItemForRequest extends CartRetailItem {
   bpp_id: string
   bpp_uri: string
   providerId: string
+  providerName?: string
   locations: Coordinate
 }
 
@@ -48,6 +49,7 @@ export interface DataPerBpp {
 export type SelectItem = {
   id: string
   quantity: { selected: { count: number } }
+  tags?: any
 }
 
 export type SelectItems = SelectItem[]

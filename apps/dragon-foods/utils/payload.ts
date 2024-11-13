@@ -13,7 +13,7 @@ import { ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
 export const getSelectPayload = (
   inputData: CartItemForRequest[],
   transactionId: string,
-  domain = 'uei:p2p_trading'
+  domain = 'supply-chain-services:assembly'
 ): { data: SelectData } => {
   const transaction_id = transactionId
 
@@ -55,7 +55,8 @@ export const getSelectPayload = (
             selected: {
               count: item.quantity
             }
-          }
+          },
+          tags: item.tags
         }
 
         if (orderIndex > -1) {
@@ -135,7 +136,8 @@ export const getInitPayload = async (
           selected: {
             count: item.quantity
           }
-        }
+        },
+        tags: item.tags
       }))
 
       const fulfillments = [
