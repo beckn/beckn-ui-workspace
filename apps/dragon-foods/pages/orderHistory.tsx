@@ -42,7 +42,7 @@ const OrderHistory = () => {
       headers: myHeaders,
       redirect: 'follow'
     }
-    fetch(`${strapiUrl}/orders?filters[category]=6`, requestOptions)
+    fetch(`${strapiUrl}/orders?filters[category]=9`, requestOptions)
       .then(response => response.json())
       .then(result => {
         console.log('resluttt', result)
@@ -104,7 +104,7 @@ const OrderHistory = () => {
           mt={'23px'}
           cursor={'pointer'}
         >
-          {floodDataList.map((order, idx) => {
+          {orderHistoryList.map((order, idx) => {
             return (
               <DetailCard key={idx}>
                 <Flex
@@ -114,28 +114,28 @@ const OrderHistory = () => {
                 >
                   <Text
                     as={Typography}
-                    text={order.title}
+                    text={order.attributes.items[0].name}
                     fontWeight="600"
                     fontSize={'15px'}
                     dataTest={'order_history_title'}
                   />
                   <Text
                     as={Typography}
-                    text={order.provider}
+                    text={order.attributes.descriptor.name}
                     fontWeight="400"
                     fontSize={'12px'}
                     dataTest={'order_history_provider'}
                   />
                   <Text
                     as={Typography}
-                    text={order.description}
+                    text={order.attributes.descriptor.short_desc}
                     fontWeight="400"
                     fontSize={'12px'}
                     dataTest={'order_history_description'}
                   />
                   <Text
                     as={Typography}
-                    text={order.placedAt}
+                    text={`Placed at ${formatTimestamp(order.attributes.createdAt)}`}
                     fontWeight="400"
                     fontSize={'12px'}
                     dataTest={testIds.orderHistory_createdAt}
