@@ -13,7 +13,7 @@ import { ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
 export const getSelectPayload = (
   inputData: CartItemForRequest[],
   transactionId: string,
-  domain = 'supply-chain-services:assembly'
+  domain = 'climate'
 ): { data: SelectData } => {
   const transaction_id = transactionId
 
@@ -91,7 +91,7 @@ export const getInitPayload = async (
   billingAddress: ShippingFormInitialValuesType | Record<string, any>,
   cartItems: CartItemForRequest[],
   transaction_id: string,
-  domain: string = 'retail:1.1.0',
+  domain: string = 'climate',
   fulfillments: { id: string; type: string } = { id: '3', type: 'Standard-shipping' }
 ) => {
   const cityData = await geocodeFromPincode(deliveryAddress.pinCode!)
