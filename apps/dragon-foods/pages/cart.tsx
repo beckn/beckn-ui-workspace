@@ -73,7 +73,7 @@ const RequestOverview = () => {
                 id: singleItem.id,
                 shortDesc: singleItem.short_desc,
                 sourceText: singleItem.long_desc,
-                providerName: selectedProduct.providerName
+                providerName: singleItem.providerName
               }) as CartItemProps
           ),
           loader: { text: t.quoteRequestLoader, dataTest: testIds.loadingIndicator },
