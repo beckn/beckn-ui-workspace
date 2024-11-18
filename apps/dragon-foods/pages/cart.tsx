@@ -5,7 +5,7 @@ import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useLanguage } from '@hooks/useLanguage'
 
-import { Box, useToast } from '@chakra-ui/react'
+import { Box } from '@chakra-ui/react'
 
 import { DiscoveryRootState, ICartRootState } from '@beckn-ui/common/lib/types'
 import { DOMAIN } from '@lib/config'
@@ -13,43 +13,31 @@ import { useSelectMutation } from '@beckn-ui/common/src/services/select'
 import { testIds } from '@shared/dataTestIds'
 import Cart from '@components/cart'
 import { CartItemProps } from '@components/cart/cart.types'
-import { cartActions, CheckoutRootState } from '@beckn-ui/common'
-import { getInitPayload, getSelectPayload } from '../utils/payload'
-import { useInitMutation } from '@beckn-ui/common/src/services/init'
+import { feedbackActions } from '@beckn-ui/common'
+import { getSelectPayload } from '../utils/payload'
 
 const RequestOverview = () => {
-  const [fetchQuotes, { isLoading: selectIsLoading, data, isError }] = useSelectMutation()
+  const [fetchQuotes, { isLoading, data, isError }] = useSelectMutation()
   const dispatch = useDispatch()
-  const [initialize, { isLoading: initIsLocading }] = useInitMutation()
-  const toast = useToast()
 
   const router = useRouter()
   const { t } = useLanguage()
 
   const { items, totalQuantity } = useSelector((state: ICartRootState) => state.cart)
-  const totalAmount = useSelector((state: ICartRootState) => state.cart.totalAmount)
   const { transactionId, selectedProduct } = useSelector((state: DiscoveryRootState) => state.discovery)
-  const selectResponse = useSelector((state: CheckoutRootState) => state.checkout.selectResponse)
-
-  const performInit = async () => {
-    if (selectResponse && selectResponse.length > 0) {
-      const shippingFormData = {
-        name: 'Anand',
-        mobileNumber: '9886098860',
-        email: 'anand@gmail.com',
-        address: 'Flat 208, A Block, Janakpuri West, New Delhi',
-        pinCode: '110018',
-        meterNumber: 'MT451667'
-      }
-      getInitPayload(shippingFormData, {}, items, transactionId, DOMAIN).then(res => {
-        return initialize(res)
-      })
-    }
-  }
 
   useEffect(() => {
     if (items.length > 0) {
-      Promise.all([fetchQuotes(getSelectPayload(items, transactionId, DOMAIN)), performInit()])
+      try {
+        fetchQuotes(getSelectPayload(items, transactionId, DOMAIN))
+      } catch (error) {
+        dispatch(
+          feedbackActions.setToastData({
+            toastData: { message: 'Error', display: true, type: 'error', description: t.errorText }
+          })
+        )
+        router.back()
+      }
     }
   }, [totalQuantity])
 
@@ -65,7 +53,7 @@ const RequestOverview = () => {
       overflowY={'scroll'}
     >
       <Cart
-        isLoading={selectIsLoading || initIsLocading}
+        isLoading={isLoading}
         schema={{
           cartItems: items.map(
             singleItem =>
@@ -91,7 +79,7 @@ const RequestOverview = () => {
           actionButton: {
             text: 'Send Request',
             handleOnClick: () => {
-              router.push('/orderConfirmation')
+              router.push('/checkout')
             }
           }
         }}
