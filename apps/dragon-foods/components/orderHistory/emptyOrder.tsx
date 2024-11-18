@@ -47,7 +47,7 @@ const EmptyOrder = () => {
 
       <BecknButton
         dataTest={testIds.emptyOrder_button}
-        children={t.createNewWorkflow}
+        children="Create New Workflow"
         handleClick={() => router.push('/')}
       />
     </Flex>
