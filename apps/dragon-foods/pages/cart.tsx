@@ -59,7 +59,7 @@ const RequestOverview = () => {
             singleItem =>
               ({
                 id: singleItem.id,
-                shortDesc: singleItem.short_desc,
+                shortDesc: singleItem.name,
                 sourceText: singleItem.long_desc,
                 providerName: singleItem.providerName
               }) as CartItemProps
