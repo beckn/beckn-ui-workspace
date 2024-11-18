@@ -4,6 +4,7 @@ export interface AuthProps {
     logo?: {
       src: string
       alt: string
+      description?: string
     }
     chooseAuthType?: {
       id: string

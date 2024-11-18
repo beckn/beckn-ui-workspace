@@ -1,4 +1,4 @@
-export const DOMAIN = 'climate'
+export const DOMAIN = 'dragon_foods'
 
 export const currencyMap = {
   EUR: '€',
