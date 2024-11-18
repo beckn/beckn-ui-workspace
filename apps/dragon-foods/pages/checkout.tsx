@@ -137,13 +137,18 @@ const CheckoutPage = () => {
   const createPaymentBreakdownMap = () => {
     const paymentBreakdownMap: PaymentBreakDownModel = {}
     if (isInitResultPresent()) {
-      initResponse[0].message.order.quote.price.value
+      initResponse.forEach(initRes => {
+        initRes.message.order.quote?.breakup?.forEach(breakup => {
+          paymentBreakdownMap[breakup.title] = {
+            value: breakup.price.value,
+            currency: breakup.price.currency
+          }
+        })
+      })
     }
     return paymentBreakdownMap
   }
-  // cartItems.map(singleItem => {
-  //   console.log(singleItem)
-  // })
+
   return (
     <Box
       className="hideScroll"
@@ -160,7 +165,7 @@ const CheckoutPage = () => {
               description: singleItem.providerName,
               quantity: 1,
               // priceWithSymbol: `${currencyMap[singleItem.price.currency]}${singleItem.totalPrice}`,
-              price: singleItem.totalPrice,
+              price: Number(singleItem.price.value),
               currency: singleItem.price.currency,
               image: singleItem.images?.[0].url
             }))
