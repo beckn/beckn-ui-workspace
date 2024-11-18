@@ -72,7 +72,8 @@ const SignIn: React.FC<SignInComponentProps> = ({
       schema={{
         logo: {
           src: currentLogo.src,
-          alt: currentLogo.alt
+          alt: currentLogo.alt,
+          description: currentLogo?.description || ''
         },
         buttons: [
           {

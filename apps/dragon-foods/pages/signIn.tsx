@@ -19,8 +19,16 @@ const Login = () => {
   return (
     <SignInPage
       logos={{
-        mobile: { src: dragonMobLogo, alt: 'dragon foods logo' },
-        desktop: { src: dragonDeskLogo, alt: 'dragon foods logo' }
+        mobile: {
+          src: dragonMobLogo,
+          alt: 'dragon foods logo',
+          description: t.applicationDescription
+        },
+        desktop: {
+          src: dragonDeskLogo,
+          alt: 'dragon foods logo',
+          description: t.applicationDescription
+        }
       }}
       onSignIn={() => {}}
       onSignUp={handleSignUp}
