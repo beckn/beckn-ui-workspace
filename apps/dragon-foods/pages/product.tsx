@@ -28,6 +28,7 @@ const Product = () => {
   const dispatch = useDispatch()
   const router = useRouter()
   const [selectedItems, setSelectedItems] = useState<Record<string, DataPoint[]>>({})
+  const [isAccepted, setIsAccepted] = useState<boolean>(false)
 
   const handleSelectionChange = useCallback((sectionKey: string, selectedValues: DataPoint[]) => {
     setSelectedItems(prevItems => {
@@ -55,6 +56,10 @@ const Product = () => {
         toastData: { message: 'Success', display: true, type: 'success', description: t.addedToCart }
       })
     )
+  }
+
+  const checkIsDisabled = () => {
+    return Object.values(selectedItems).flatMap(data => data).length > 0 && isAccepted
   }
 
   if (!selectedProduct) {
@@ -136,7 +141,9 @@ const Product = () => {
         <OptionsGroup
           types={'checkbox'}
           dataPoints={terms}
-          handleSelectionChange={() => {}}
+          handleSelectionChange={value => {
+            setIsAccepted(value.length > 0)
+          }}
         />
       </Box>
       <Flex
@@ -152,6 +159,7 @@ const Product = () => {
         >
           <Button
             text="proceed"
+            disabled={!checkIsDisabled()}
             handleClick={handleOnProceed}
           />
         </Box>

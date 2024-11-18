@@ -17,6 +17,7 @@ import { testIds } from '@shared/dataTestIds'
 import { ORDER_CATEGORY_ID } from '../lib/config'
 import { getPayloadForConfirm } from '../utils/payload'
 import { cartActions } from '@beckn-ui/common'
+import { RootState } from '@store/index'
 
 const OrderConfirmation = () => {
   const { t } = useLanguage()
@@ -26,6 +27,7 @@ const OrderConfirmation = () => {
   const dispatch = useDispatch()
   const [orderId, setOrderId] = useState<string>()
 
+  const { user } = useSelector((state: RootState) => state.auth)
   const initResponse = useSelector((state: CheckoutRootState) => state.checkout.initResponse)
   const confirmResponse = useSelector((state: CheckoutRootState) => state.checkout.confirmResponse)
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
@@ -89,7 +91,7 @@ const OrderConfirmation = () => {
           successOrderMessage: 'Request Confirmed!',
           gratefulMessage: 'The dataset will be shared via the chosen mode',
           orderIdMessage: '',
-          trackOrderMessage: `<email ID: ${'name@email.com'}>`,
+          trackOrderMessage: user?.email ? `<email ID: ${user?.email}>` : '',
           buttons: [
             {
               text: 'Go Back Home',
