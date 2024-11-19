@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useLanguage } from '@hooks/useLanguage'
 import beckenFooter from '../public/images/footer.svg'
 import { discoveryActions, HomePageContent, ParsedItemModel, TopSheet, useGeolocation } from '@beckn-ui/common'
-import dragonMobLogo from '@public/images/dragonFoodLogo.svg'
+import esiLogo from '@public/images/esi_logo.svg'
 import FrequentlyAccessed from '../components/frequentlyAccessed/FrequentlyAccessed'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@store/index'
@@ -83,8 +83,8 @@ const HomePage = () => {
           name: '',
           title: '',
           description: '',
-          logoSrc: dragonMobLogo,
-          altText: 'Dragon Logo'
+          logoSrc: esiLogo,
+          altText: 'ESI Logo'
         }}
         searchProps={{
           searchPlaceholder: t.searchPlaceholder,
