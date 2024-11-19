@@ -7,7 +7,7 @@ import React from 'react'
 import Styles from './cart-item.module.css'
 import { CartItemProps } from './cart.types'
 
-const CartItem: React.FC<CartItemProps> = ({ id, shortDesc, sourceText, className }) => {
+const CartItem: React.FC<CartItemProps> = ({ id, shortDesc, providerName, sourceText, className }) => {
   return (
     <div
       className={className}
@@ -21,13 +21,13 @@ const CartItem: React.FC<CartItemProps> = ({ id, shortDesc, sourceText, classNam
                 <Typography
                   fontSize="15px"
                   fontWeight={'600'}
-                  text={'shortDesc iwdbiou diuwqbd iuwqbd '}
+                  text={shortDesc}
                 />
 
                 <Typography
                   fontSize="12px"
                   fontWeight={'400'}
-                  text={`Provided by ${'climate'}`}
+                  text={`Provided by ${providerName}`}
                 />
               </Stack>
             </CardBody>

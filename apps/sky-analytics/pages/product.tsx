@@ -9,9 +9,9 @@ import { feedbackActions } from '@beckn-ui/common/src/store/ui-feedback-slice'
 import { testIds } from '@shared/dataTestIds'
 import { OptionsGroup } from '@beckn-ui/common'
 import { Button } from '@beckn-ui/molecules'
-import { mockData1, mockData2 } from '../mock/mockOptionGroupData'
 import { DataPoint } from '@beckn-ui/common/src/components/OptionsGroup'
 import { useRouter } from 'next/router'
+import { convertProductTagsIntoFormat, getSelectedProductDetails } from '../utils/product-utils'
 
 const terms = [
   {
@@ -25,13 +25,14 @@ const Product = () => {
   const { t } = useLanguage()
   const selectedProduct: ParsedItemModel = useSelector((state: DiscoveryRootState) => state.discovery.selectedProduct)
   const dispatch = useDispatch()
+  const router = useRouter()
   const [selectedItems, setSelectedItems] = useState<Record<string, DataPoint[]>>({})
+  const [isAccepted, setIsAccepted] = useState<boolean>(false)
 
   const handleSelectionChange = useCallback((sectionKey: string, selectedValues: DataPoint[]) => {
     setSelectedItems(prevItems => {
-      // Check if there is any difference before updating the state
       if (JSON.stringify(prevItems[sectionKey]) === JSON.stringify(selectedValues)) {
-        return prevItems // No change, so return previous state
+        return prevItems
       }
       return {
         ...prevItems,
@@ -40,12 +41,29 @@ const Product = () => {
     })
   }, [])
 
-  console.log(selectedItems)
+  const handleOnProceed = () => {
+    let dataObjectsArray: any = getSelectedProductDetails(selectedItems)
+    console.log(dataObjectsArray, selectedProduct)
+    dispatch(
+      cartActions.addItemToCart({
+        product: { ...selectedProduct, item: { ...selectedProduct.item, tags: dataObjectsArray } },
+        quantity: 0
+      })
+    )
+    dispatch(
+      feedbackActions.setToastData({
+        toastData: { message: 'Success', display: true, type: 'success', description: t.addedToCart }
+      })
+    )
+  }
 
-  const router = useRouter()
-  // if (!selectedProduct) {
-  //   return <></>
-  // }
+  const checkIsDisabled = () => {
+    return Object.values(selectedItems).flatMap(data => data).length > 0 && isAccepted
+  }
+
+  if (!selectedProduct) {
+    return <></>
+  }
   return (
     <Box
       className="hideScroll"
@@ -55,7 +73,7 @@ const Product = () => {
       <ProductDetailPage
         schema={{
           productSummary: {
-            imageSrc: selectedProduct.item.images?.[0].url!,
+            imageSrc: selectedProduct.item?.images?.[0].url!,
             name: selectedProduct.item.name,
             secondaryDescription: selectedProduct.item.long_desc,
             dataTestTitle: testIds.item_title,
@@ -76,7 +94,7 @@ const Product = () => {
         p="16px"
         mb="20px"
       >
-        {Object.entries(mockData1).map(([key, section]) => (
+        {Object.entries(convertProductTagsIntoFormat(selectedProduct.item.tags!, 0)).map(([key, section]) => (
           <Box
             key={key}
             mb="30px"
@@ -98,7 +116,7 @@ const Product = () => {
         p="16px"
         mb="20px"
       >
-        {Object.entries(mockData2).map(([key, section]) => (
+        {Object.entries(convertProductTagsIntoFormat(selectedProduct.item.tags!, 1)).map(([key, section]) => (
           <Box
             key={key}
             mb="30px"
@@ -122,7 +140,9 @@ const Product = () => {
         <OptionsGroup
           types={'checkbox'}
           dataPoints={terms}
-          handleSelectionChange={() => {}}
+          handleSelectionChange={value => {
+            setIsAccepted(value.length > 0)
+          }}
         />
       </Box>
       <Flex
@@ -138,14 +158,8 @@ const Product = () => {
         >
           <Button
             text="proceed"
-            handleClick={() => {
-              dispatch(
-                cartActions.addItemToCart({
-                  product: selectedProduct,
-                  quantity: 0
-                })
-              )
-            }}
+            disabled={!checkIsDisabled()}
+            handleClick={handleOnProceed}
           />
         </Box>
         ** Contains non-personal data only
@@ -155,16 +169,3 @@ const Product = () => {
 }
 
 export default Product
-// handleClick: () => {
-//   dispatch(
-//     cartActions.addItemToCart({
-//       product: selectedProduct,
-//       quantity: counter
-//     })
-//   )
-//   dispatch(
-//     feedbackActions.setToastData({
-//       toastData: { message: 'Success', display: true, type: 'success', description: t.addedToCart }
-//     })
-//   )
-// }

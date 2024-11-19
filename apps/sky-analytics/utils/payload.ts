@@ -5,15 +5,15 @@ import {
   SelectOrder,
   ParsedItemModel,
   ConfirmResponseModel,
-  InitResponseModel
-} from '../../lib/types'
+  InitResponseModel,
+  geocodeFromPincode
+} from '@beckn-ui/common'
 import { ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
-import { geocodeFromPincode } from './checkout-utils'
 
 export const getSelectPayload = (
   inputData: CartItemForRequest[],
   transactionId: string,
-  domain = 'retail'
+  domain = 'skyanalytics_flow'
 ): { data: SelectData } => {
   const transaction_id = transactionId
 
@@ -55,7 +55,8 @@ export const getSelectPayload = (
             selected: {
               count: item.quantity
             }
-          }
+          },
+          tags: item.tags
         }
 
         if (orderIndex > -1) {
@@ -86,11 +87,11 @@ export const getSelectPayload = (
 }
 
 export const getInitPayload = async (
-  deliveryAddress: ShippingFormInitialValuesType,
+  deliveryAddress: any,
   billingAddress: ShippingFormInitialValuesType | Record<string, any>,
   cartItems: CartItemForRequest[],
   transaction_id: string,
-  domain: string = 'retail:1.1.0',
+  domain: string = 'skyanalytics_flow',
   fulfillments: { id: string; type: string } = { id: '3', type: 'Standard-shipping' }
 ) => {
   const cityData = await geocodeFromPincode(deliveryAddress.pinCode!)
@@ -135,7 +136,8 @@ export const getInitPayload = async (
           selected: {
             count: item.quantity
           }
-        }
+        },
+        tags: item.tags
       }))
 
       const fulfillments = [
@@ -228,7 +230,11 @@ export const getPayloadForConfirm = (initResponse: InitResponseModel[]) => {
               provider: {
                 id: provider.id
               },
-              items: items,
+              items: [
+                {
+                  ...(items as any)[0]
+                }
+              ],
               fulfillments: fulfillments,
               billing: billing,
               payments: [
@@ -304,7 +310,7 @@ export const getPayloadForOrderHistoryPost = (confirmData: ConfirmResponseModel[
           }
         },
         items,
-        quote: { price: { value: Number(quote.price.value) || 0 } },
+        quote,
         payments
       }
     },

@@ -5,32 +5,39 @@ import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useLanguage } from '@hooks/useLanguage'
 
-import { Box, useToast } from '@chakra-ui/react'
+import { Box } from '@chakra-ui/react'
 
-import { getSelectPayload } from '@beckn-ui/common/src/utils'
 import { DiscoveryRootState, ICartRootState } from '@beckn-ui/common/lib/types'
 import { DOMAIN } from '@lib/config'
 import { useSelectMutation } from '@beckn-ui/common/src/services/select'
 import { testIds } from '@shared/dataTestIds'
 import Cart from '@components/cart'
 import { CartItemProps } from '@components/cart/cart.types'
-import { cartActions } from '@beckn-ui/common'
+import { feedbackActions } from '@beckn-ui/common'
+import { getSelectPayload } from '../utils/payload'
 
 const RequestOverview = () => {
   const [fetchQuotes, { isLoading, data, isError }] = useSelectMutation()
   const dispatch = useDispatch()
-  const toast = useToast()
 
   const router = useRouter()
   const { t } = useLanguage()
 
   const { items, totalQuantity } = useSelector((state: ICartRootState) => state.cart)
-  const totalAmount = useSelector((state: ICartRootState) => state.cart.totalAmount)
-  const { transactionId, productList } = useSelector((state: DiscoveryRootState) => state.discovery)
+  const { transactionId, selectedProduct } = useSelector((state: DiscoveryRootState) => state.discovery)
 
   useEffect(() => {
     if (items.length > 0) {
-      fetchQuotes(getSelectPayload(items, transactionId, DOMAIN))
+      try {
+        fetchQuotes(getSelectPayload(items, transactionId, DOMAIN))
+      } catch (error) {
+        dispatch(
+          feedbackActions.setToastData({
+            toastData: { message: 'Error', display: true, type: 'error', description: t.errorText }
+          })
+        )
+        router.back()
+      }
     }
   }, [totalQuantity])
 
@@ -52,8 +59,9 @@ const RequestOverview = () => {
             singleItem =>
               ({
                 id: singleItem.id,
-                shortDesc: singleItem.short_desc,
-                sourceText: singleItem.long_desc
+                shortDesc: singleItem.name,
+                sourceText: singleItem.long_desc,
+                providerName: singleItem.providerName
               }) as CartItemProps
           ),
           loader: { text: t.quoteRequestLoader, dataTest: testIds.loadingIndicator },
@@ -71,8 +79,7 @@ const RequestOverview = () => {
           actionButton: {
             text: 'Send Request',
             handleOnClick: () => {
-              router.push('/orderConfirmation')
-              dispatch(cartActions.clearCart())
+              router.push('/checkout')
             }
           }
         }}

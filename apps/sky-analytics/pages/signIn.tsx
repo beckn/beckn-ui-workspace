@@ -19,8 +19,8 @@ const Login = () => {
   return (
     <SignInPage
       logos={{
-        mobile: { src: skyAnalyticsMobLogo, alt: 'sky analytics logo' },
-        desktop: { src: skyAnalyticsDeskLogo, alt: 'sky analytics logo' }
+        mobile: { src: skyAnalyticsMobLogo, alt: 'sky analytics logo', description: t.applicationDescription },
+        desktop: { src: skyAnalyticsDeskLogo, alt: 'sky analytics logo', description: t.applicationDescription }
       }}
       onSignIn={() => {}}
       onSignUp={handleSignUp}

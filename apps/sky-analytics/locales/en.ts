@@ -186,6 +186,8 @@ const en: { [key: string]: string } = {
   errorDescription: 'Server cannot process your request due to invalid syntax.',
   backtoHomepage: 'Back to Homepage',
   contactSupport: 'Contact support',
-  noProduct: 'There are no products in this category yet! New products will be added soon.'
+  noProduct: 'There are no products in this category yet! New products will be added soon.',
+  applicationDescription: 'Platform for Climate Resilience Data Highways',
+  createNewWorkflow: 'Back to Home'
 }
 export default en
