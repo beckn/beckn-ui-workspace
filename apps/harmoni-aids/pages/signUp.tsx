@@ -15,8 +15,8 @@ const Register = () => {
     <SignUpPage
       baseUrl={process.env.NEXT_PUBLIC_STRAPI_URL!}
       logos={{
-        mobile: { src: harmoniaidsLogo, alt: 'harmoni aids logo' },
-        desktop: { src: harmoniaidsLogo, alt: 'harmoni aids logo' }
+        mobile: { src: harmoniaidsLogo, alt: 'harmoni aids logo', description: t.applicationDescription },
+        desktop: { src: harmoniaidsLogo, alt: 'harmoni aids logo', description: t.applicationDescription }
       }}
       onSignIn={handleSignIn}
       onSignUp={() => {}}
