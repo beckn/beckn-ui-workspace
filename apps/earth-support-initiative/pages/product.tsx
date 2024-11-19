@@ -129,7 +129,6 @@ const Product = () => {
               heading={section.heading}
               handleSelectionChange={selectedValues => handleSelectionChange(key, selectedValues)}
               multiSelect={section.type === 'checkbox'}
-              colorScheme={theme.colors.primary[100]}
             />
           </Box>
         ))}
