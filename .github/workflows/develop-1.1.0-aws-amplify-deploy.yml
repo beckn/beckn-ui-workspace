@@ -19,6 +19,9 @@ on:
       - 'apps/harmoni-aids/**'
       - 'apps/sky-analytics/**'
       - 'apps/state-forest-department/**'
+      - 'apps/envirogrowth/**'
+      - 'apps/earth-support-initiative/**'
+     
 
 jobs:
   build:
@@ -283,3 +286,42 @@ jobs:
         if: env.state-forest-department_changed == 'true'
         run: |
           curl -X POST -d {} "${{ secrets.STATE_FOREST_DEPARTMENT_DEVELOP_AMPLIFY_WEBHOOK_URL }}" -H "Content-Type:application/json"
+
+
+
+#   envirogrowth
+
+      - name: Check for envirogrowth changes
+        id: check_envirogrowth_changes
+        run: |
+          if git diff --name-only HEAD~1 HEAD | grep '^apps/envirogrowth/'; then
+            echo "Changes in envirogrowth detected."
+            echo "envirogrowth_changed=true" >> $GITHUB_ENV
+          else
+            echo "No changes in envirogrowth. Skipping webhook trigger."
+            echo "envirogrowth=false" >> $GITHUB_ENV
+          fi
+
+      - name: Trigger envirogrowth deployment if changes are detected
+        if: env.envirogrowth_changed == 'true'
+        run: |
+          curl -X POST -d {} "${{ secrets.ENVIROGROWTH_DEVELOP_AMPLIFY_WEBHOOK_URL }}" -H "Content-Type:application/json"
+
+
+ #   earth-support-initiative
+
+      - name: Check for earth-support-initiative changes
+        id: check_earth-support-initiative_changes
+        run: |
+          if git diff --name-only HEAD~1 HEAD | grep '^apps/earth-support-initiative/'; then
+            echo "Changes in earth-support-initiative detected."
+            echo "earth-support-initiative_changed=true" >> $GITHUB_ENV
+          else
+            echo "No changes in earth-support-initiative. Skipping webhook trigger."
+            echo "earth-support-initiative=false" >> $GITHUB_ENV
+          fi
+
+      - name: Trigger earth-support-initiative deployment if changes are detected
+        if: env.earth-support-initiative_changed == 'true'
+        run: |
+          curl -X POST -d {} "${{ secrets.EARTH_SUPPORT_INITIATIVE_DEVELOP_AMPLIFY_WEBHOOK_URL }}" -H "Content-Type:application/json"         
