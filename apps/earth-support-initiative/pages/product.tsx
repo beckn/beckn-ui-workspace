@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react'
 import { ProductDetailPage } from '@beckn-ui/becknified-components'
 import { useDispatch, useSelector } from 'react-redux'
-import { Box, Flex, Text } from '@chakra-ui/react'
+import { Box, Flex, Text, theme, useTheme } from '@chakra-ui/react'
 import { useLanguage } from '@hooks/useLanguage'
 import { DiscoveryRootState, ParsedItemModel } from '@beckn-ui/common/lib/types'
 import { cartActions } from '@beckn-ui/common/src/store/cart-slice'
@@ -29,6 +29,7 @@ const Product = () => {
   const router = useRouter()
   const [selectedItems, setSelectedItems] = useState<Record<string, DataPoint[]>>({})
   const [isAccepted, setIsAccepted] = useState<boolean>(false)
+  const theme = useTheme()
 
   const handleSelectionChange = useCallback((sectionKey: string, selectedValues: DataPoint[]) => {
     setSelectedItems(prevItems => {
@@ -128,6 +129,7 @@ const Product = () => {
               heading={section.heading}
               handleSelectionChange={selectedValues => handleSelectionChange(key, selectedValues)}
               multiSelect={section.type === 'checkbox'}
+              colorScheme={theme.colors.primary[100]}
             />
           </Box>
         ))}

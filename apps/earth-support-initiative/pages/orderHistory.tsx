@@ -8,6 +8,7 @@ import EmptyOrder from '@components/orderHistory/emptyOrder'
 import { orderHistoryData } from '@beckn-ui/common/lib/types'
 import { testIds } from '@shared/dataTestIds'
 import { OrderStatusProgress } from '@beckn-ui/becknified-components'
+import { ORDER_CATEGORY_ID } from '@lib/config'
 
 const mockData = [
   {
@@ -41,7 +42,7 @@ const OrderHistory = () => {
       headers: myHeaders,
       redirect: 'follow'
     }
-    fetch(`${strapiUrl}/orders?filters[category]=9`, requestOptions)
+    fetch(`${strapiUrl}/orders?filters[category]=${ORDER_CATEGORY_ID}`, requestOptions)
       .then(response => response.json())
       .then(result => {
         console.log('resluttt', result)
