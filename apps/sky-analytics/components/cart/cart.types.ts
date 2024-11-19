@@ -5,6 +5,7 @@ export interface CartItemProps {
   id: string
   shortDesc: string
   sourceText: string
+  providerName?: string
   className?: string
 }
 

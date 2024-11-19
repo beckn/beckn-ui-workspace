@@ -16,8 +16,8 @@ const Register = () => {
     <SignUpPage
       baseUrl={process.env.NEXT_PUBLIC_STRAPI_URL!}
       logos={{
-        mobile: { src: skyAnalyticsMobLogo, alt: 'sky analytics logo' },
-        desktop: { src: skyAnalyticsDeskLogo, alt: 'sky analytics logo' }
+        mobile: { src: skyAnalyticsMobLogo, alt: 'sky analytics logo', description: t.applicationDescription },
+        desktop: { src: skyAnalyticsDeskLogo, alt: 'sky analytics logo', description: t.applicationDescription }
       }}
       onSignIn={handleSignIn}
       onSignUp={() => {}}

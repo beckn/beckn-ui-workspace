@@ -3,7 +3,6 @@ import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, 
 import storage from 'redux-persist/lib/storage'
 import {
   authReducer,
-  cartSliceReducer,
   checkoutReducer,
   statusReducer,
   DiscoveryReducer,
@@ -13,6 +12,7 @@ import {
   settingBoxReducer,
   api
 } from '@beckn-ui/common'
+import cartSliceReducer from './cart-slice'
 
 const persistConfig = {
   key: 'root',

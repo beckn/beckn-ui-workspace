@@ -11,10 +11,13 @@ import LoaderWithMessage from '@components/loader/LoaderWithMessage'
 import { ConfirmResponseModel } from '@beckn-ui/common/lib/types'
 import { checkoutActions, CheckoutRootState } from '@beckn-ui/common/src/store/checkout-slice'
 import { orderActions } from '@beckn-ui/common/src/store/order-slice'
-import { getPayloadForConfirm, getPayloadForOrderHistoryPost } from '@beckn-ui/common/src/utils'
+import { getPayloadForOrderHistoryPost } from '@beckn-ui/common/src/utils'
 import { useConfirmMutation } from '@beckn-ui/common/src/services/confirm'
 import { testIds } from '@shared/dataTestIds'
 import { ORDER_CATEGORY_ID } from '../lib/config'
+import { getPayloadForConfirm } from '../utils/payload'
+import { cartActions } from '@beckn-ui/common'
+import { RootState } from '@store/index'
 
 const OrderConfirmation = () => {
   const { t } = useLanguage()
@@ -24,6 +27,7 @@ const OrderConfirmation = () => {
   const dispatch = useDispatch()
   const [orderId, setOrderId] = useState<string>()
 
+  const { user } = useSelector((state: RootState) => state.auth)
   const initResponse = useSelector((state: CheckoutRootState) => state.checkout.initResponse)
   const confirmResponse = useSelector((state: CheckoutRootState) => state.checkout.confirmResponse)
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
@@ -36,7 +40,6 @@ const OrderConfirmation = () => {
       'Content-Type': 'application/json' // You can set the content type as needed
     }
   }
-
   useEffect(() => {
     if (confirmResponse && confirmResponse.length > 0) {
       setOrderId(confirmResponse[0].message.orderId.slice(0, 8))
@@ -47,6 +50,7 @@ const OrderConfirmation = () => {
     if (initResponse && initResponse.length > 0) {
       const payLoad = getPayloadForConfirm(initResponse)
       confirm(payLoad)
+      dispatch(cartActions.clearCart())
     }
   }, [])
 
@@ -86,7 +90,7 @@ const OrderConfirmation = () => {
           successOrderMessage: 'Request Confirmed!',
           gratefulMessage: 'The dataset will be shared via the chosen mode',
           orderIdMessage: '',
-          trackOrderMessage: `<email ID: ${'name@email.com'}>`,
+          trackOrderMessage: user?.email ? `<email ID: ${user?.email}>` : '',
           buttons: [
             {
               text: 'Go Back Home',

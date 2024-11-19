@@ -1,27 +1,26 @@
 import Cookies from 'js-cookie'
-import { DetailCard } from '@beckn-ui/becknified-components'
-import { Loader, Typography } from '@beckn-ui/molecules'
-import { Box, Text, Flex } from '@chakra-ui/react'
+import { Accordion, Loader, Typography } from '@beckn-ui/molecules'
+import { Box, Text, Flex, Divider, Stack } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import { formatTimestamp } from '@beckn-ui/common/src/utils'
 import { useRouter } from 'next/router'
 import EmptyOrder from '@components/orderHistory/emptyOrder'
 import { orderHistoryData } from '@beckn-ui/common/lib/types'
 import { testIds } from '@shared/dataTestIds'
+import { OrderStatusProgress } from '@beckn-ui/becknified-components'
 
-const floodDataList = [
+const mockData = [
   {
-    title: 'High resolution probabilistic flood prediction data',
-    provider: 'Provided by Sky Analytics',
-    description: '2 year historical data set covering temporal, spatial, and metric coverage for floods Bhutan.',
-    placedAt: 'Placed at 21st Jun 2021, 3.30 pm'
+    label: 'Data Requested',
+    statusTime: '21st Jun 2021, 12:11pm',
+    noLine: false,
+    lastElement: false
   },
   {
-    title: 'Medium resolution integrated model flood prediction data',
-    provider: 'Provided by Climatic',
-    description:
-      'Founded in 2019, Climatic is a climate disaster modelling company based out of Dhaka, offering high resolution services for flood modelling.',
-    placedAt: 'Placed at 21st Jun 2021, 3.30 pm'
+    label: 'Request Status',
+    statusTime: '21st Jun 2021, 12:11pm',
+    noLine: true,
+    lastElement: true
   }
 ]
 
@@ -30,10 +29,10 @@ const OrderHistory = () => {
   const [isLoading, setIsLoading] = useState(true)
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
   const [error, setError] = useState('')
+  const [completed, setCompleted] = useState(true)
 
   const bearerToken = Cookies.get('authToken')
   const router = useRouter()
-  console.log(bearerToken)
   useEffect(() => {
     const myHeaders = new Headers()
     myHeaders.append('Authorization', `Bearer ${bearerToken}`)
@@ -42,7 +41,7 @@ const OrderHistory = () => {
       headers: myHeaders,
       redirect: 'follow'
     }
-    fetch(`${strapiUrl}/orders?filters[category]=6`, requestOptions)
+    fetch(`${strapiUrl}/orders?filters[category]=10`, requestOptions)
       .then(response => response.json())
       .then(result => {
         console.log('resluttt', result)
@@ -89,6 +88,60 @@ const OrderHistory = () => {
     )
   }
 
+  const accordionHeader = (order: any) => {
+    return (
+      <>
+        <Flex
+          justifyContent={'space-between'}
+          p={'10px 10px'}
+        >
+          <Typography
+            text={order.attributes.items[0].name}
+            fontWeight="600"
+            fontSize={'15px'}
+          />
+          <Text
+            as={Typography}
+            text={completed ? 'Completed' : 'Pending'} // will correct this as per status
+            fontWeight="600"
+            fontSize={'15px'}
+            padding={'0px 10px'}
+            textAlign={'end'}
+            color={completed ? '#5EC401' : '#BD942B'} // will correct this as per status
+            dataTest={'order_history_Status'}
+          />
+        </Flex>
+        <Flex
+          data-test={testIds.order_history_main_container}
+          flexDirection={'column'}
+          padding={'0px 10px'}
+        >
+          <Text
+            as={Typography}
+            text={`Provide by ${order.attributes.descriptor.name}`}
+            fontWeight="400"
+            fontSize={'12px'}
+            dataTest={'order_history_provider'}
+          />
+          <Text
+            as={Typography}
+            text={order.attributes.descriptor.short_desc}
+            fontWeight="400"
+            fontSize={'12px'}
+            dataTest={'order_history_description'}
+          />
+          <Text
+            as={Typography}
+            text={`Placed at ${formatTimestamp(order.attributes.createdAt)}`}
+            fontWeight="400"
+            fontSize={'12px'}
+            dataTest={testIds.orderHistory_createdAt}
+          />
+        </Flex>
+      </>
+    )
+  }
+
   return (
     <Box
       className="hideScroll"
@@ -104,44 +157,32 @@ const OrderHistory = () => {
           mt={'23px'}
           cursor={'pointer'}
         >
-          {floodDataList.map((order, idx) => {
+          {orderHistoryList.map((order, idx) => {
             return (
-              <DetailCard key={idx}>
+              <Accordion
+                accordionHeader={accordionHeader(order)}
+                key={idx}
+              >
                 <Flex
                   data-test={testIds.order_history_main_container}
                   gap={'5px'}
                   flexDirection={'column'}
+                  padding={'10px 20px'}
                 >
-                  <Text
-                    as={Typography}
-                    text={order.title}
-                    fontWeight="600"
-                    fontSize={'15px'}
-                    dataTest={'order_history_title'}
-                  />
-                  <Text
-                    as={Typography}
-                    text={order.provider}
-                    fontWeight="400"
-                    fontSize={'12px'}
-                    dataTest={'order_history_provider'}
-                  />
-                  <Text
-                    as={Typography}
-                    text={order.description}
-                    fontWeight="400"
-                    fontSize={'12px'}
-                    dataTest={'order_history_description'}
-                  />
-                  <Text
-                    as={Typography}
-                    text={order.placedAt}
-                    fontWeight="400"
-                    fontSize={'12px'}
-                    dataTest={testIds.orderHistory_createdAt}
-                  />
+                  <Divider />
+                  <Stack p={'10px 0px'}>
+                    {mockData.map((data, index) => (
+                      <OrderStatusProgress // as per status call
+                        key={index}
+                        label={data.label}
+                        statusTime={data.statusTime}
+                        noLine={data.noLine}
+                        lastElement={data.lastElement}
+                      />
+                    ))}
+                  </Stack>
                 </Flex>
-              </DetailCard>
+              </Accordion>
             )
           })}
         </Box>

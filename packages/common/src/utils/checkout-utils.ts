@@ -72,7 +72,8 @@ export const getSubTotalAndDeliveryCharges = (initData: InitResponseModel[]) => 
 
   if (initData && initData.length > 0) {
     initData.forEach(data => {
-      subTotal = subTotal + Number(parseFloat(data.message.order.quote.price.value).toFixed(2))
+      subTotal =
+        subTotal + Number(parseFloat((Number(data.message.order.quote.price.value) || 0).toString()).toFixed(2))
 
       currencySymbol = data.message.order.quote.price.currency
     })
