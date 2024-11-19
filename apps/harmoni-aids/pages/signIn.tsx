@@ -18,8 +18,8 @@ const Login = () => {
   return (
     <SignInPage
       logos={{
-        mobile: { src: harmoniaidsLogo, alt: 'harmoni aids logo' },
-        desktop: { src: harmoniaidsLogo, alt: 'harmoni aids logo' }
+        mobile: { src: harmoniaidsLogo, alt: 'harmoni aids logo', description: t.applicationDescription },
+        desktop: { src: harmoniaidsLogo, alt: 'harmoni aids logo', description: t.applicationDescription }
       }}
       onSignIn={() => {}}
       onSignUp={handleSignUp}
