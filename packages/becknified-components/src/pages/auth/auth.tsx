@@ -43,6 +43,7 @@ const Auth: React.FC<AuthProps> = ({ schema, isLoading, dataTestForm }) => {
             />
             {logo?.description && (
               <Typography
+                dataTest={'logo-description'}
                 text={logo?.description!}
                 style={{
                   fontSize: '17px',

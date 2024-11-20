@@ -1,7 +1,7 @@
 import React from 'react'
 import Router from 'next/router'
-import dragonMobLogo from '@public/images/dragonFoodLogo.svg'
-import dragonDeskLogo from '@public/images/dragonFoodLogo.svg'
+import envirogrowthMobLogo from '@public/images/envirogrowth-logo.svg'
+import nvirogrowDeskLogo from '@public/images/envirogrowth-logo.svg'
 import { useLanguage } from '@hooks/useLanguage'
 import { SignUpPage } from '@beckn-ui/common'
 
@@ -16,8 +16,16 @@ const Register = () => {
     <SignUpPage
       baseUrl={process.env.NEXT_PUBLIC_STRAPI_URL!}
       logos={{
-        mobile: { src: dragonMobLogo, alt: 'dragon foods logo', description: t.applicationDescription },
-        desktop: { src: dragonDeskLogo, alt: 'dragon foods logo', description: t.applicationDescription }
+        mobile: {
+          src: envirogrowthMobLogo,
+          alt: 'envirogrowth logo',
+          description: t.applicationDescription
+        },
+        desktop: {
+          src: nvirogrowDeskLogo,
+          alt: 'envirogrowth logo',
+          description: t.applicationDescription
+        }
       }}
       onSignIn={handleSignIn}
       onSignUp={() => {}}

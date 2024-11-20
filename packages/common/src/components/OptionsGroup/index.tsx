@@ -59,6 +59,7 @@ const OptionsGroup: React.FC<OptionsGroupProps> = ({
           fontWeight="600"
           mb={4}
           fontSize={['12px', '16px']}
+          data-test="product-details-checkbox-section-title"
         >
           {heading}
         </Text>
@@ -75,10 +76,12 @@ const OptionsGroup: React.FC<OptionsGroupProps> = ({
               isChecked={selectedValues.some(selected => selected.value === point.value)}
               onChange={() => onCheckboxChange(point)}
               colorScheme={colorScheme}
+              data-test="product-checkbox"
             >
               <Text
                 fontSize={['12px', '16px']}
                 dangerouslySetInnerHTML={{ __html: point.label }}
+                data-test="product-checkbox-text"
               />
             </Checkbox>
           ))}
@@ -99,10 +102,12 @@ const OptionsGroup: React.FC<OptionsGroupProps> = ({
                 key={point.value}
                 value={point.value}
                 colorScheme={'#fff'}
+                data-test="product-radio"
               >
                 <Text
                   fontSize={['12px', '16px']}
                   dangerouslySetInnerHTML={{ __html: point.label }}
+                  data-test="product-radio-text"
                 />
               </Radio>
             ))}
