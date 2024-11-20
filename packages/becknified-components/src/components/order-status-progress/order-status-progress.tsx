@@ -11,8 +11,10 @@ const OrderStatusProgress: React.FC<OrderStatusProgressProps> = ({
   className = '',
   noLine = false,
   lastElement,
+  statusDescription,
   dataTestStateName = 'statusName',
-  dataTestStateTime = 'statusTime'
+  dataTestStateTime = 'statusTime',
+  dataTestStateDescription = 'statusDescription'
 }) => {
   const showNoLine = noLine && lastElement
   return (
@@ -56,6 +58,17 @@ const OrderStatusProgress: React.FC<OrderStatusProgressProps> = ({
               fontWeight={'500'}
             />
           </Box>
+
+          {statusDescription && (
+            <Box pl={'10px'}>
+              <Typography
+                className={`${className}_order_state_label`}
+                fontSize="10px"
+                dataTest={dataTestStateDescription}
+                text={statusDescription}
+              />
+            </Box>
+          )}
 
           <Box pl={'10px'}>
             <Typography
