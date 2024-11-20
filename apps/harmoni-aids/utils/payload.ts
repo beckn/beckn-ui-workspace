@@ -91,7 +91,7 @@ export const getInitPayload = async (
   billingAddress: ShippingFormInitialValuesType | Record<string, any>,
   cartItems: CartItemForRequest[],
   transaction_id: string,
-  domain: string = 'harmoniaid',
+  domain: string = 'dragon_foods',
   fulfillments: { id: string; type: string } = { id: '3', type: 'Standard-shipping' }
 ) => {
   const cityData = await geocodeFromPincode(deliveryAddress.pinCode!)
@@ -207,53 +207,51 @@ export const getInitPayload = async (
 }
 
 export const getPayloadForConfirm = (initResponse: InitResponseModel[]) => {
-  const {
-    context,
-    message: {
-      order: { billing, fulfillments, items, payments, provider, quote, type }
-    }
-  } = initResponse[0]
-  const { transaction_id, bpp_id, bpp_uri, domain } = context
+  let payload: any = { data: [] }
 
-  const payload = {
-    data: [
-      {
-        context: {
-          transaction_id: transaction_id,
-          bpp_id: bpp_id,
-          bpp_uri: bpp_uri,
-          domain: domain
-        },
-        message: {
-          orders: [
-            {
-              provider: {
-                id: provider.id
-              },
-              items: [
-                {
-                  ...(items as any)[0]
-                }
-              ],
-              fulfillments: fulfillments,
-              billing: billing,
-              payments: [
-                {
-                  id: payments?.[0]?.id,
-                  params: {
-                    amount: quote?.price?.value,
-                    currency: quote?.price?.currency
-                  },
-                  status: 'PAID',
-                  type: 'ON-FULFILLMENT'
-                }
-              ]
-            }
-          ]
-        }
+  initResponse.forEach((response: InitResponseModel) => {
+    const {
+      context,
+      message: {
+        order: { billing, fulfillments, items, payments, provider, quote, type }
       }
-    ]
-  }
+    } = response
+    const { transaction_id, bpp_id, bpp_uri, domain } = context
+
+    const data = {
+      context: {
+        transaction_id: transaction_id,
+        bpp_id: bpp_id,
+        bpp_uri: bpp_uri,
+        domain: domain
+      },
+      message: {
+        orders: [
+          {
+            provider: {
+              id: provider.id
+            },
+            items,
+            fulfillments: fulfillments,
+            billing: billing,
+            payments: [
+              {
+                id: payments?.[0]?.id,
+                params: {
+                  amount: quote?.price?.value,
+                  currency: quote?.price?.currency
+                },
+                status: 'PAID',
+                type: 'ON-FULFILLMENT'
+              }
+            ]
+          }
+        ]
+      }
+    }
+
+    payload.data.push(data)
+  })
 
   return payload
 }
@@ -283,41 +281,46 @@ export const getPayloadForOrderStatus = (confirmResponse: ConfirmResponseModel[]
 }
 
 export const getPayloadForOrderHistoryPost = (confirmData: ConfirmResponseModel[], categoryId: number) => {
-  console.log(categoryId)
-  const { bpp_id, bpp_uri, transaction_id } = confirmData[0].context
-  const {
-    orderId,
-    provider: { id, name, short_desc },
-    items,
-    quote,
-    payments
-  } = confirmData[0].message
+  let ordersPayload: any = []
 
-  const ordersPayload = {
-    context: {
-      bpp_id,
-      bpp_uri,
-      transaction_id
-    },
-    message: {
-      order: {
-        id: orderId,
-        provider: {
-          id,
-          descriptor: {
-            name,
-            short_desc
-          }
-        },
-        items,
-        quote,
-        payments
+  confirmData.forEach((response: ConfirmResponseModel) => {
+    const { bpp_id, bpp_uri, transaction_id } = response.context
+    const {
+      orderId,
+      provider: { id, name, short_desc },
+      items,
+      quote,
+      payments
+    } = response.message
+
+    const data = {
+      context: {
+        bpp_id,
+        bpp_uri,
+        transaction_id
+      },
+      message: {
+        order: {
+          id: orderId,
+          provider: {
+            id,
+            descriptor: {
+              name,
+              short_desc
+            }
+          },
+          items,
+          quote,
+          payments
+        }
+      },
+      category: {
+        set: [categoryId]
       }
-    },
-    category: {
-      set: [categoryId]
     }
-  }
+
+    ordersPayload.push(data)
+  })
 
   return ordersPayload
 }

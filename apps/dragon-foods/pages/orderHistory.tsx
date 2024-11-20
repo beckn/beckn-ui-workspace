@@ -9,7 +9,7 @@ import { testIds } from '@shared/dataTestIds'
 import { OrderStatusProgress } from '@beckn-ui/becknified-components'
 import axios from '@services/axios'
 import { v4 as uuidv4 } from 'uuid'
-import { DOMAIN } from '@lib/config'
+import { DOMAIN, ORDER_CATEGORY_ID } from '@lib/config'
 import { StatusKey, statusMap } from '@lib/types/order'
 import { useLanguage } from '@hooks/useLanguage'
 
@@ -32,7 +32,7 @@ const OrderHistory = () => {
       headers: myHeaders,
       redirect: 'follow'
     }
-    fetch(`${strapiUrl}/orders?filters[category]=9`, requestOptions)
+    fetch(`${strapiUrl}/orders?filters[category]=${ORDER_CATEGORY_ID}`, requestOptions)
       .then(response => response.json())
       .then(result => {
         console.log('resluttt', result)

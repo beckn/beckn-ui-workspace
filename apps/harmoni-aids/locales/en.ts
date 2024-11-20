@@ -187,6 +187,7 @@ const en: { [key: string]: string } = {
   backtoHomepage: 'Back to Homepage',
   contactSupport: 'Contact support',
   noProduct: 'There are no products in this category yet! New products will be added soon.',
-  applicationDescription: 'Platform for Climate Resilient Data Highways'
+  applicationDescription: 'Platform for Climate Resilient Data Highways',
+  sharedViaChosenMode: 'Shared via chosen transfer mode'
 }
 export default en
