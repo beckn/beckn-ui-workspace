@@ -41,7 +41,7 @@ export const parseSearchlist = (data: SearchResponseModel[]) => {
             item: {
               ...item,
               short_desc: provider.short_desc,
-              images: provider.images,
+              images: item.images,
               rating: provider.rating
             },
             providerCoordinates
