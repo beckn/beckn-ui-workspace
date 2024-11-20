@@ -17,7 +17,7 @@ import { convertProductTagsIntoFormat, getSelectedProductDetails } from '../util
 const terms = [
   {
     label:
-      '<span style="font-weight:500">Accept <a style="color:#00B088; text-decoration: underline">Terms and Conditions</a></span>',
+      '<span style="font-weight:500">Accept <a style="color:#8A7012; text-decoration: underline">Terms and Conditions</a></span>',
     value: 'terms'
   }
 ]

@@ -598,7 +598,19 @@ const testIds = {
   footer_prefix_text: 'footer-prefix-text',
   footer_image: 'footer-image',
   footer_postfix_text: 'footer-postfix-text',
-  footer_bottomfix_text: 'footer-bottomfix-text'
+  footer_bottomfix_text: 'footer-bottomfix-text',
+
+  //////////////   Envirogrowth data test ////////////////
+
+  frequently_accessed: 'Frequently Accessed',
+  frequently_accessed_card_img: 'Frequently Accessed',
+  frequently_accessed_card_name: 'Frequently Accessed',
+  frequently_accessed_card_provider: 'Frequently Accessed',
+  frequently_accessed_star_icon: 'Frequently Accessed',
+  frequently_accessed_rating: 'Frequently Accessed',
+  request_overview: 'Request Overview',
+  envirogrowth_shortDesc: 'short-description',
+  envirogrowth_provider: 'short-provider'
 }
 
 export { testIds }

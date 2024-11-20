@@ -90,15 +90,15 @@ select.chakra-select {
 }
 .css-1ydjfm6[aria-checked='true'],
 .css-1ydjfm6[data-checked] {
-  background: #00b088 !important;
-  border-color: #00b088 !important;
+  background: #8a7012 !important;
+  border-color: #8a7012 !important;
 }
 
 .chakra-radio__control[aria-checked='true']::before,
 .chakra-radio__control[data-checked]::before {
   width: 80% !important;
   height: 80% !important;
-  background: #00b088 !important;
+  background: #8a7012 !important;
 }
 .chakra-button.social_btn {
   color: #717070;
@@ -128,8 +128,15 @@ select.chakra-select {
   object-fit: unset;
 }
 .cart-count {
-  background-color: #00b088 !important;
+  background-color: #8a7012 !important;
+}
+.cart-count p {
+  color: #fff !important;
 }
 .chakra-image[alt='App logo'] {
   width: 80%;
+}
+.frequently-access-icon svg {
+  fill: #8a7012;
+  color: #8a7012;
 }

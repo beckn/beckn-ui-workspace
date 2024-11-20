@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import Router from 'next/router'
-import dragonMobLogo from '@public/images/dragonFoodLogo.svg'
-import dragonDeskLogo from '@public/images/dragonFoodLogo.svg'
+import envirogrowthMobLogo from '@public/images/envirogrowth-logo.svg'
+import nvirogrowDeskLogo from '@public/images/envirogrowth-logo.svg'
 import { useLanguage } from '@hooks/useLanguage'
 import { SignInPage } from '@beckn-ui/common'
 
@@ -20,13 +20,13 @@ const Login = () => {
     <SignInPage
       logos={{
         mobile: {
-          src: dragonMobLogo,
-          alt: 'dragon foods logo',
+          src: envirogrowthMobLogo,
+          alt: 'envirogrowth logo',
           description: t.applicationDescription
         },
         desktop: {
-          src: dragonDeskLogo,
-          alt: 'dragon foods logo',
+          src: nvirogrowDeskLogo,
+          alt: 'envirogrowth logo',
           description: t.applicationDescription
         }
       }}

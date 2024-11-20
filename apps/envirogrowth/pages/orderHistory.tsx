@@ -8,6 +8,7 @@ import EmptyOrder from '@components/orderHistory/emptyOrder'
 import { orderHistoryData } from '@beckn-ui/common/lib/types'
 import { testIds } from '@shared/dataTestIds'
 import { OrderStatusProgress } from '@beckn-ui/becknified-components'
+import { ORDER_CATEGORY_ID } from '@lib/config'
 
 const mockData = [
   {
@@ -41,7 +42,7 @@ const OrderHistory = () => {
       headers: myHeaders,
       redirect: 'follow'
     }
-    fetch(`${strapiUrl}/orders?filters[category]=9`, requestOptions)
+    fetch(`${strapiUrl}/orders?filters[category]=${ORDER_CATEGORY_ID}`, requestOptions)
       .then(response => response.json())
       .then(result => {
         console.log('resluttt', result)
@@ -81,6 +82,7 @@ const OrderHistory = () => {
           fontWeight={500}
           fontSize={'15px'}
           textAlign={'center'}
+          data-test="error"
         >
           {error}
         </Text>
@@ -99,15 +101,16 @@ const OrderHistory = () => {
             text={order.attributes.items[0].name}
             fontWeight="600"
             fontSize={'15px'}
+            dataTest="order-name"
           />
           <Text
             as={Typography}
-            text={completed ? 'Completed' : 'Pending'} // will correct this as per status
+            text={completed ? 'Completed' : 'Pending'}
             fontWeight="600"
             fontSize={'15px'}
             padding={'0px 10px'}
             textAlign={'end'}
-            color={completed ? '#5EC401' : '#BD942B'} // will correct this as per status
+            color={completed ? '#5EC401' : '#BD942B'}
             dataTest={'order_history_Status'}
           />
         </Flex>
@@ -172,7 +175,7 @@ const OrderHistory = () => {
                   <Divider />
                   <Stack p={'10px 0px'}>
                     {mockData.map((data, index) => (
-                      <OrderStatusProgress // as per status call
+                      <OrderStatusProgress
                         key={index}
                         label={data.label}
                         statusTime={data.statusTime}
