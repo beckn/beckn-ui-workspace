@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, CardBody, Flex, Icon, Image, Stack, Card } from '@chakra-ui/react'
+import { Box, CardBody, Flex, Icon, Image, Stack, Card, useTheme } from '@chakra-ui/react'
 import { Typography } from '@beckn-ui/molecules'
 import { StarIcon, TimeIcon } from '@chakra-ui/icons'
 import { CurrencyType, ProductPrice } from '@beckn-ui/becknified-components'
@@ -25,6 +25,7 @@ type FrequentlyAccessedProps = {
 }
 
 const FrequentlyAccessed: React.FC<FrequentlyAccessedProps> = ({ frequentlyAccessedData, onCardClick }) => {
+  const theme = useTheme()
   return (
     <Box mt="80px">
       <Typography
@@ -116,7 +117,7 @@ const FrequentlyAccessed: React.FC<FrequentlyAccessedProps> = ({ frequentlyAcces
             <Icon
               as={TimeIcon}
               boxSize={10}
-              color="green.400"
+              color={theme.colors.primary[100]}
               justifyContent={'center'}
             />
           </Flex>
