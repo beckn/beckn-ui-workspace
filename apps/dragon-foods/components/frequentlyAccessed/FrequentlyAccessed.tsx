@@ -57,7 +57,7 @@ const FrequentlyAccessed: React.FC<FrequentlyAccessedProps> = ({ frequentlyAcces
               <CardBody padding="unset">
                 <Stack>
                   <Image
-                    src={item.item.images[0].url}
+                    src={item.item?.images?.[0]?.url}
                     alt={item.item.name}
                     objectFit="contain"
                   />
