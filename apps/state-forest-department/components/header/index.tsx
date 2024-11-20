@@ -31,7 +31,7 @@ const Header = () => {
     <Box>
       {renderTopHeader && (
         <TopHeader
-          appLogo="/images/headerLogo.svg"
+          appLogo="/images/StateForestDepartment.svg"
           t={key => t[key]}
           clearLocalStorageOnHomeIcon={false}
           headerConstants={{

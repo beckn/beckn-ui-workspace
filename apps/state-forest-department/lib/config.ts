@@ -1,8 +1,8 @@
-export const DOMAIN = 'dragon_foods'
+export const DOMAIN = 'state_forest_department'
 
 export const currencyMap = {
   EUR: '€',
   INR: '₹',
   USD: '$'
 }
-export const ORDER_CATEGORY_ID = 9
+export const ORDER_CATEGORY_ID = 14
