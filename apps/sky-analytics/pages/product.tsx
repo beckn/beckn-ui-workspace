@@ -55,6 +55,7 @@ const Product = () => {
         toastData: { message: 'Success', display: true, type: 'success', description: t.addedToCart }
       })
     )
+    router.push('/cart')
   }
 
   const checkIsDisabled = () => {

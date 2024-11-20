@@ -3,36 +3,27 @@ import { Accordion, Loader, Typography } from '@beckn-ui/molecules'
 import { Box, Text, Flex, Divider, Stack } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import { formatTimestamp } from '@beckn-ui/common/src/utils'
-import { useRouter } from 'next/router'
 import EmptyOrder from '@components/orderHistory/emptyOrder'
-import { orderHistoryData } from '@beckn-ui/common/lib/types'
+import { orderHistoryData, StatusResponseModel, UIState } from '@beckn-ui/common/lib/types'
 import { testIds } from '@shared/dataTestIds'
 import { OrderStatusProgress } from '@beckn-ui/becknified-components'
-
-const mockData = [
-  {
-    label: 'Data Requested',
-    statusTime: '21st Jun 2021, 12:11pm',
-    noLine: false,
-    lastElement: false
-  },
-  {
-    label: 'Request Status',
-    statusTime: '21st Jun 2021, 12:11pm',
-    noLine: true,
-    lastElement: true
-  }
-]
+import axios from '@services/axios'
+import { v4 as uuidv4 } from 'uuid'
+import { DOMAIN, ORDER_CATEGORY_ID } from '@lib/config'
+import { StatusKey, statusMap } from '@lib/types/order'
+import { useLanguage } from '@hooks/useLanguage'
 
 const OrderHistory = () => {
   const [orderHistoryList, setOrderHistoryList] = useState<orderHistoryData[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
   const [error, setError] = useState('')
-  const [completed, setCompleted] = useState(true)
+  const [orderStatusMap, setOrderStatusMap] = useState<Record<any, any>[]>()
 
   const bearerToken = Cookies.get('authToken')
-  const router = useRouter()
+  const { t } = useLanguage()
+
   useEffect(() => {
     const myHeaders = new Headers()
     myHeaders.append('Authorization', `Bearer ${bearerToken}`)
@@ -41,7 +32,7 @@ const OrderHistory = () => {
       headers: myHeaders,
       redirect: 'follow'
     }
-    fetch(`${strapiUrl}/orders?filters[category]=10`, requestOptions)
+    fetch(`${strapiUrl}/orders?filters[category]=${ORDER_CATEGORY_ID}`, requestOptions)
       .then(response => response.json())
       .then(result => {
         console.log('resluttt', result)
@@ -57,6 +48,82 @@ const OrderHistory = () => {
       })
       .finally(() => setIsLoading(false))
   }, [])
+
+  const getOrderStatus = (order: orderHistoryData) => {
+    if (order) {
+      const bppId = order.attributes.bpp_id
+      const bppUri = order.attributes.bpp_uri
+
+      const statusPayload = {
+        data: [
+          {
+            context: {
+              transaction_id: uuidv4(),
+              bpp_id: bppId,
+              bpp_uri: bppUri,
+              domain: DOMAIN
+            },
+            message: {
+              order_id: order.attributes.order_id.toString(),
+              orderId: order.attributes.order_id.toString()
+            }
+          }
+        ]
+      }
+
+      axios
+        .post(`${apiUrl}/status`, statusPayload)
+        .then(res => {
+          const resData: StatusResponseModel[] = res.data.data
+
+          if (resData.length > 0) {
+            const newData: any[] = []
+
+            resData.forEach((status: StatusResponseModel) => {
+              const statusKey = status?.message?.order?.fulfillments[0]?.state?.descriptor.code! as StatusKey
+
+              if (resData.length === 1 && statusKey === 'REQUEST_SHARED') {
+                newData.push({
+                  label: statusMap['DATA_REQUESTED'],
+                  statusTime: status?.context?.timestamp
+                })
+              }
+
+              newData.push({
+                label: statusMap[statusKey as StatusKey],
+                statusTime: status?.message?.order?.fulfillments[0]?.state?.updated_at || status?.context?.timestamp,
+                statusDescription: statusKey === 'REQUEST_SHARED' ? t.sharedViaChosenMode : '',
+                noLine: statusKey === 'REQUEST_SHARED',
+                lastElement: statusKey === 'REQUEST_SHARED'
+              })
+            })
+
+            setOrderStatusMap((prevState: any) => {
+              const updatedMap = { ...prevState }
+              newData.forEach(statusData => {
+                if (!updatedMap[order.attributes.order_id]) {
+                  updatedMap[order.attributes.order_id] = { fulfillments: [] }
+                }
+                const labelSet = new Set(updatedMap[order.attributes.order_id].fulfillments.map((s: any) => s.label))
+
+                if (!labelSet.has(statusData.label)) {
+                  updatedMap[order.attributes.order_id].fulfillments.push(statusData)
+                }
+                updatedMap[order.attributes.order_id].status =
+                  resData?.[0]?.message?.order?.fulfillments[0]?.state?.descriptor.code! === 'REQUEST_SHARED'
+                    ? 'Completed'
+                    : 'Pending'
+              })
+
+              return updatedMap
+            })
+          }
+        })
+        .catch(err => {
+          console.error('Error fetching order status:', err)
+        })
+    }
+  }
 
   if (isLoading) {
     return (
@@ -99,16 +166,15 @@ const OrderHistory = () => {
             text={order.attributes.items[0].name}
             fontWeight="600"
             fontSize={'15px'}
-            dataTest="order_history_item_name"
           />
           <Text
             as={Typography}
-            text={completed ? 'Completed' : 'Pending'} // will correct this as per status
+            text={orderStatusMap?.[order.attributes.order_id]?.status} // will correct this as per status
             fontWeight="600"
             fontSize={'15px'}
             padding={'0px 10px'}
             textAlign={'end'}
-            color={completed ? '#5EC401' : '#BD942B'} // will correct this as per status
+            color={orderStatusMap?.[order.attributes.order_id]?.status === 'Pending' ? '#BD942B' : '#5EC401'} // will correct this as per status
             dataTest={'order_history_Status'}
           />
         </Flex>
@@ -163,6 +229,11 @@ const OrderHistory = () => {
               <Accordion
                 accordionHeader={accordionHeader(order)}
                 key={idx}
+                onToggle={item => {
+                  if (Array.isArray(item) && item.length) {
+                    getOrderStatus(order)
+                  }
+                }}
               >
                 <Flex
                   data-test={testIds.order_history_main_container}
@@ -171,17 +242,30 @@ const OrderHistory = () => {
                   padding={'10px 20px'}
                 >
                   <Divider />
-                  <Stack p={'10px 0px'}>
-                    {mockData.map((data, index) => (
-                      <OrderStatusProgress // as per status call
-                        key={index}
-                        label={data.label}
-                        statusTime={data.statusTime}
-                        noLine={data.noLine}
-                        lastElement={data.lastElement}
-                      />
-                    ))}
-                  </Stack>
+                  {!orderStatusMap?.[(order.attributes as any).order_id] ? (
+                    <Box
+                      display={'grid'}
+                      alignContent={'center'}
+                    >
+                      <Loader size="md" />
+                    </Box>
+                  ) : (
+                    <Stack p={'10px 0px'}>
+                      {orderStatusMap &&
+                        orderStatusMap?.[(order.attributes as any).order_id]?.fulfillments?.map(
+                          (data: any, index: number) => (
+                            <OrderStatusProgress // as per status call
+                              key={index}
+                              label={data.label}
+                              statusTime={formatTimestamp(data.statusTime)}
+                              noLine={data.noLine}
+                              lastElement={data.lastElement}
+                              statusDescription={data.statusDescription}
+                            />
+                          )
+                        )}
+                    </Stack>
+                  )}
                 </Flex>
               </Accordion>
             )

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import orderConfirmmark from '../public/images/orderConfirmmark.svg'
 import { useSelector, useDispatch } from 'react-redux'
@@ -11,19 +11,18 @@ import LoaderWithMessage from '@components/loader/LoaderWithMessage'
 import { ConfirmResponseModel } from '@beckn-ui/common/lib/types'
 import { checkoutActions, CheckoutRootState } from '@beckn-ui/common/src/store/checkout-slice'
 import { orderActions } from '@beckn-ui/common/src/store/order-slice'
-import { getPayloadForOrderHistoryPost } from '@beckn-ui/common/src/utils'
 import { useConfirmMutation } from '@beckn-ui/common/src/services/confirm'
 import { testIds } from '@shared/dataTestIds'
 import { ORDER_CATEGORY_ID } from '../lib/config'
-import { getPayloadForConfirm } from '../utils/payload'
-import { cartActions } from '@beckn-ui/common'
+import { getPayloadForConfirm, getPayloadForOrderHistoryPost } from '../utils/payload'
+import { cartActions, feedbackActions } from '@beckn-ui/common'
 import { RootState } from '@store/index'
 
 const OrderConfirmation = () => {
   const { t } = useLanguage()
   const router = useRouter()
   const [confirmData, setConfirmData] = useState<ConfirmResponseModel[]>([])
-  const [confirm, { isLoading, data }] = useConfirmMutation()
+  const [confirm, { isLoading, error, isSuccess }] = useConfirmMutation()
   const dispatch = useDispatch()
   const [orderId, setOrderId] = useState<string>()
 
@@ -50,20 +49,41 @@ const OrderConfirmation = () => {
   useEffect(() => {
     if (initResponse && initResponse.length > 0) {
       const payLoad = getPayloadForConfirm(initResponse)
-      confirm(payLoad)
-      dispatch(cartActions.clearCart())
+      confirm(payLoad).then(data => {
+        if (error) {
+          console.error(error)
+          dispatch(
+            feedbackActions.setToastData({
+              toastData: { message: 'Error', display: true, type: 'error', description: t.errorText }
+            })
+          )
+          router.back()
+          dispatch(cartActions.clearCart())
+        }
+      })
     }
-  }, [])
+  }, [initResponse])
 
   useEffect(() => {
     if (confirmResponse && confirmResponse.length > 0) {
       const ordersPayload = getPayloadForOrderHistoryPost(confirmResponse, ORDER_CATEGORY_ID)
-      axios
-        .post(`${strapiUrl}/orders`, ordersPayload, axiosConfig)
-        .then(res => {
-          return res
-        })
-        .catch(err => console.error(err))
+      console.log(ordersPayload)
+      ordersPayload.forEach((payload: any) => {
+        axios
+          .post(`${strapiUrl}/orders`, payload, axiosConfig)
+          .then(res => {
+            return res
+          })
+          .catch(err => {
+            console.error(err)
+            dispatch(
+              feedbackActions.setToastData({
+                toastData: { message: 'Error', display: true, type: 'error', description: t.errorText }
+              })
+            )
+            router.back()
+          })
+      })
     }
   }, [confirmResponse])
 
