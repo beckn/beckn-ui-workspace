@@ -140,3 +140,9 @@ select.chakra-select {
   fill: #8a7012;
   color: #8a7012;
 }
+.envirogrowth-product-product_summary_image_container {
+  border: 1px solid #bfbfbf;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+}

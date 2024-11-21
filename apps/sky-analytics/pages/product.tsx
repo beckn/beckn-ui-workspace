@@ -8,7 +8,7 @@ import { cartActions } from '@beckn-ui/common/src/store/cart-slice'
 import { feedbackActions } from '@beckn-ui/common/src/store/ui-feedback-slice'
 import { testIds } from '@shared/dataTestIds'
 import { OptionsGroup } from '@beckn-ui/common'
-import { Button } from '@beckn-ui/molecules'
+import { Button, Typography } from '@beckn-ui/molecules'
 import { DataPoint } from '@beckn-ui/common/src/components/OptionsGroup'
 import { useRouter } from 'next/router'
 import { convertProductTagsIntoFormat, getSelectedProductDetails } from '../utils/product-utils'
@@ -76,9 +76,11 @@ const Product = () => {
           productSummary: {
             imageSrc: selectedProduct.item?.images?.[0].url!,
             name: selectedProduct.item.name,
+            providerName: selectedProduct.providerName,
             secondaryDescription: selectedProduct.item.long_desc,
             dataTestTitle: testIds.item_title,
             dataTestDescription: testIds.item_description,
+            className: 'sky-analytics-product',
             starRating: {
               rating: selectedProduct.item.rating!,
               size: 20,
@@ -89,6 +91,22 @@ const Product = () => {
           }
         }}
       />
+      <Box
+        border={'1px solid #BFBFBF'}
+        borderRadius="12px"
+        p="16px"
+        mb="20px"
+      >
+        <Typography
+          text={`About ${selectedProduct.providerName}`}
+          fontWeight={'800'}
+        />
+        <Typography text={selectedProduct.item.short_desc!} />
+        <Typography
+          text={selectedProduct.item.productInfo! as string}
+          style={{ marginTop: '1rem' }}
+        />
+      </Box>
       <Box
         border={'1px solid #BFBFBF'}
         borderRadius="12px"
