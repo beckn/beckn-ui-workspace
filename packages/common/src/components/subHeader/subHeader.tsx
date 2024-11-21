@@ -36,7 +36,10 @@ const getHeaderTitleForPage = (
       )
     default:
       return (
-        <Box className={Styles.header_title}>
+        <Box
+          className={Styles.header_title}
+          w={['60%', '60%', 'unset']}
+        >
           <Text
             className={Styles.header_title_text}
             data-test={testIds.pageName}
