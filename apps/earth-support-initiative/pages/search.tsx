@@ -155,6 +155,7 @@ const Search = () => {
         dataTest: testIds.loadingIndicator
       }}
       catalogProps={{
+        renderMode: 'full',
         viewDetailsClickHandler: handleViewDetailsClickHandler
       }}
       noProduct={key => t.noProduct}
