@@ -1,7 +1,7 @@
 import React, { useCallback, useRef, useState } from 'react'
 import { ProductDetailPage } from '@beckn-ui/becknified-components'
 import { useDispatch, useSelector } from 'react-redux'
-import { Box, Flex, Text } from '@chakra-ui/react'
+import { Box, Flex, Link, Text, useTheme } from '@chakra-ui/react'
 import { useLanguage } from '@hooks/useLanguage'
 import { DiscoveryRootState, ParsedItemModel } from '@beckn-ui/common/lib/types'
 import { cartActions } from '@beckn-ui/common/src/store/cart-slice'
@@ -26,6 +26,7 @@ const Product = () => {
   const selectedProduct: ParsedItemModel = useSelector((state: DiscoveryRootState) => state.discovery.selectedProduct)
   const dispatch = useDispatch()
   const router = useRouter()
+  const theme = useTheme()
   const [selectedItems, setSelectedItems] = useState<Record<string, DataPoint[]>>({})
   const [isAccepted, setIsAccepted] = useState<boolean>(false)
 
@@ -160,7 +161,7 @@ const Product = () => {
           </Box>
         ))}
       </Box>
-      <Box
+      <Flex
         border={'1px solid #BFBFBF'}
         borderRadius="12px"
         p="16px"
@@ -172,8 +173,18 @@ const Product = () => {
           handleSelectionChange={value => {
             setIsAccepted(value.length > 0)
           }}
+          sx={{ width: ['4.4rem', '5.4rem'] }}
         />
-      </Box>
+        <Link
+          color={theme.colors.primary[100]}
+          fontSize={['12px', '16px']}
+          textDecoration="underline"
+          href="https://www.google.com"
+          target="_blank"
+        >
+          Terms and Conditions
+        </Link>
+      </Flex>
       <Flex
         alignItems={'center'}
         border={'1px solid #BFBFBF'}

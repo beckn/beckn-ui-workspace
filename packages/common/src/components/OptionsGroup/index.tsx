@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react'
-import { Box, Checkbox, Text, SimpleGrid, Radio, RadioGroup } from '@chakra-ui/react'
+import { Box, Checkbox, Text, SimpleGrid, Radio, RadioGroup, SystemStyleObject } from '@chakra-ui/react'
 
 export interface DataPoint {
   label: string
@@ -13,6 +13,7 @@ interface OptionsGroupProps {
   handleSelectionChange: (selectedValues: DataPoint[]) => void
   multiSelect?: boolean
   colorScheme?: string
+  sx?: SystemStyleObject
 }
 
 const OptionsGroup: React.FC<OptionsGroupProps> = ({
@@ -21,7 +22,8 @@ const OptionsGroup: React.FC<OptionsGroupProps> = ({
   dataPoints,
   handleSelectionChange,
   multiSelect = false,
-  colorScheme
+  colorScheme,
+  sx
 }) => {
   const [selectedValues, setSelectedValues] = useState<DataPoint[]>([])
 
@@ -53,7 +55,10 @@ const OptionsGroup: React.FC<OptionsGroupProps> = ({
   }
 
   return (
-    <Box>
+    <Box
+      sx={sx}
+      key={Math.random().toFixed(1)}
+    >
       {heading && (
         <Text
           fontWeight="600"
