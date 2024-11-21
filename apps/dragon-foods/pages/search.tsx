@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import axios from '@services/axios'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useRouter } from 'next/router'
 
-import { parseSearchlist, SearchAndDiscover } from '@beckn-ui/common'
+import { SearchAndDiscover } from '@beckn-ui/common'
 import { useLanguage } from '@hooks/useLanguage'
 import { ParsedItemModel } from '@beckn-ui/common/lib/types'
 import { discoveryActions } from '@beckn-ui/common/src/store/discovery-slice'
 import { DOMAIN } from '@lib/config'
 import { Product } from '@beckn-ui/becknified-components'
 import { testIds } from '@shared/dataTestIds'
+import { RootState } from '@store/index'
+import { parseSearchlist } from '../utils/search-utils'
 
 const Search = () => {
   const [items, setItems] = useState<ParsedItemModel[]>([])
@@ -19,7 +21,7 @@ const Search = () => {
 
   const [isLoading, setIsLoading] = useState(false)
   const [isFilterOpen, setIsFilterOpen] = useState(false)
-
+  const { user } = useSelector((state: RootState) => state.auth)
   const dispatch = useDispatch()
   const { t } = useLanguage()
 
@@ -34,17 +36,7 @@ const Search = () => {
         domain: DOMAIN
       },
       searchString: searchKeyword,
-      category: {
-        categoryCode: router.query.category || 'Retail'
-      },
-      fulfillment: {
-        type: 'Delivery',
-        stops: [
-          {
-            location: '28.4594965,77.0266383'
-          }
-        ]
-      }
+      location: '28.4594965,77.0266383'
     }
 
     axios
@@ -111,7 +103,24 @@ const Search = () => {
   }
 
   const handleViewDetailsClickHandler = (selectedItem: ParsedItemModel, product: Product) => {
+    console.log(user)
     const { item } = selectedItem
+    const existingData = JSON.parse(localStorage.getItem('recentlyViewed') || '{}')
+    const userData = existingData[user?.id!]?.recentlyViewed?.products || []
+    const filteredProducts = userData.filter((product: any) => product.item.id !== item.id)
+    const updatedProducts = [{ ...selectedItem }, ...filteredProducts].slice(0, 3)
+
+    const updatedData = {
+      ...existingData,
+      [user?.id!]: {
+        recentlyViewed: {
+          products: updatedProducts
+        }
+      }
+    }
+
+    localStorage.setItem('recentlyViewed', JSON.stringify(updatedData))
+
     dispatch(discoveryActions.addSingleProduct({ product: selectedItem }))
     router.push({
       pathname: '/product',
@@ -125,6 +134,7 @@ const Search = () => {
 
   return (
     <SearchAndDiscover
+      t={key => t[key]}
       items={items}
       searchProps={{
         searchKeyword: searchKeyword as string,
@@ -145,6 +155,7 @@ const Search = () => {
         dataTest: testIds.loadingIndicator
       }}
       catalogProps={{
+        renderMode: 'full',
         viewDetailsClickHandler: handleViewDetailsClickHandler
       }}
       noProduct={key => t.noProduct}

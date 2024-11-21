@@ -1,31 +1,29 @@
 import Cookies from 'js-cookie'
-import { DetailCard } from '@beckn-ui/becknified-components'
-import { Loader, Typography } from '@beckn-ui/molecules'
-import { Box, Text, Flex, Image } from '@chakra-ui/react'
+import { Accordion, Loader, Typography } from '@beckn-ui/molecules'
+import { Box, Text, Flex, Divider, Stack } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
-import pendingIcon from '../public/images/pendingStatus.svg'
-import { useDispatch } from 'react-redux'
 import { formatTimestamp } from '@beckn-ui/common/src/utils'
-import { useRouter } from 'next/router'
 import EmptyOrder from '@components/orderHistory/emptyOrder'
-import { orderHistoryData } from '@beckn-ui/common/lib/types'
-import { orderActions } from '@beckn-ui/common/src/store/order-slice'
+import { orderHistoryData, StatusResponseModel, UIState } from '@beckn-ui/common/lib/types'
 import { testIds } from '@shared/dataTestIds'
-
-const orderStatusMap: Record<string, string> = {
-  'In Review': 'Pending'
-}
+import { OrderStatusProgress } from '@beckn-ui/becknified-components'
+import axios from '@services/axios'
+import { v4 as uuidv4 } from 'uuid'
+import { DOMAIN, ORDER_CATEGORY_ID } from '@lib/config'
+import { StatusKey, statusMap } from '@lib/types/order'
+import { useLanguage } from '@hooks/useLanguage'
 
 const OrderHistory = () => {
   const [orderHistoryList, setOrderHistoryList] = useState<orderHistoryData[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
-  const dispatch = useDispatch()
   const [error, setError] = useState('')
+  const [orderStatusMap, setOrderStatusMap] = useState<Record<any, any>[]>()
 
   const bearerToken = Cookies.get('authToken')
-  const router = useRouter()
-  console.log(bearerToken)
+  const { t } = useLanguage()
+
   useEffect(() => {
     const myHeaders = new Headers()
     myHeaders.append('Authorization', `Bearer ${bearerToken}`)
@@ -34,7 +32,7 @@ const OrderHistory = () => {
       headers: myHeaders,
       redirect: 'follow'
     }
-    fetch(`${strapiUrl}/orders?filters[category]=6`, requestOptions)
+    fetch(`${strapiUrl}/orders?filters[category]=${ORDER_CATEGORY_ID}`, requestOptions)
       .then(response => response.json())
       .then(result => {
         console.log('resluttt', result)
@@ -50,6 +48,82 @@ const OrderHistory = () => {
       })
       .finally(() => setIsLoading(false))
   }, [])
+
+  const getOrderStatus = (order: orderHistoryData) => {
+    if (order) {
+      const bppId = order.attributes.bpp_id
+      const bppUri = order.attributes.bpp_uri
+
+      const statusPayload = {
+        data: [
+          {
+            context: {
+              transaction_id: uuidv4(),
+              bpp_id: bppId,
+              bpp_uri: bppUri,
+              domain: DOMAIN
+            },
+            message: {
+              order_id: order.attributes.order_id.toString(),
+              orderId: order.attributes.order_id.toString()
+            }
+          }
+        ]
+      }
+
+      axios
+        .post(`${apiUrl}/status`, statusPayload)
+        .then(res => {
+          const resData: StatusResponseModel[] = res.data.data
+
+          if (resData.length > 0) {
+            const newData: any[] = []
+
+            resData.forEach((status: StatusResponseModel) => {
+              const statusKey = status?.message?.order?.fulfillments[0]?.state?.descriptor.code! as StatusKey
+
+              if (resData.length === 1 && statusKey === 'REQUEST_SHARED') {
+                newData.push({
+                  label: statusMap['DATA_REQUESTED'],
+                  statusTime: status?.context?.timestamp
+                })
+              }
+
+              newData.push({
+                label: statusMap[statusKey as StatusKey],
+                statusTime: status?.message?.order?.fulfillments[0]?.state?.updated_at || status?.context?.timestamp,
+                statusDescription: statusKey === 'REQUEST_SHARED' ? t.sharedViaChosenMode : '',
+                noLine: statusKey === 'REQUEST_SHARED',
+                lastElement: statusKey === 'REQUEST_SHARED'
+              })
+            })
+
+            setOrderStatusMap((prevState: any) => {
+              const updatedMap = { ...prevState }
+              newData.forEach(statusData => {
+                if (!updatedMap[order.attributes.order_id]) {
+                  updatedMap[order.attributes.order_id] = { fulfillments: [] }
+                }
+                const labelSet = new Set(updatedMap[order.attributes.order_id].fulfillments.map((s: any) => s.label))
+
+                if (!labelSet.has(statusData.label)) {
+                  updatedMap[order.attributes.order_id].fulfillments.push(statusData)
+                }
+                updatedMap[order.attributes.order_id].status =
+                  resData?.[0]?.message?.order?.fulfillments[0]?.state?.descriptor.code! === 'REQUEST_SHARED'
+                    ? 'Completed'
+                    : 'Pending'
+              })
+
+              return updatedMap
+            })
+          }
+        })
+        .catch(err => {
+          console.error('Error fetching order status:', err)
+        })
+    }
+  }
 
   if (isLoading) {
     return (
@@ -81,6 +155,61 @@ const OrderHistory = () => {
     )
   }
 
+  const accordionHeader = (order: any) => {
+    return (
+      <>
+        <Flex
+          justifyContent={'space-between'}
+          p={'10px 10px'}
+        >
+          <Typography
+            text={order.attributes.items[0].name}
+            fontWeight="600"
+            fontSize={'15px'}
+            dataTest="order_history_item_name"
+          />
+          <Text
+            as={Typography}
+            text={orderStatusMap?.[order.attributes.order_id]?.status} // will correct this as per status
+            fontWeight="600"
+            fontSize={'15px'}
+            padding={'0px 10px'}
+            textAlign={'end'}
+            color={orderStatusMap?.[order.attributes.order_id]?.status === 'Pending' ? '#BD942B' : '#5EC401'} // will correct this as per status
+            dataTest={'order_history_Status'}
+          />
+        </Flex>
+        <Flex
+          data-test={testIds.order_history_main_container}
+          flexDirection={'column'}
+          padding={'0px 10px'}
+        >
+          <Text
+            as={Typography}
+            text={`Provide by ${order.attributes.descriptor.name}`}
+            fontWeight="400"
+            fontSize={'12px'}
+            dataTest={'order_history_provider'}
+          />
+          <Text
+            as={Typography}
+            text={order.attributes.descriptor.short_desc}
+            fontWeight="400"
+            fontSize={'12px'}
+            dataTest={'order_history_description'}
+          />
+          <Text
+            as={Typography}
+            text={`Placed at ${formatTimestamp(order.attributes.createdAt)}`}
+            fontWeight="400"
+            fontSize={'12px'}
+            dataTest={testIds.orderHistory_createdAt}
+          />
+        </Flex>
+      </>
+    )
+  }
+
   return (
     <Box
       className="hideScroll"
@@ -98,69 +227,48 @@ const OrderHistory = () => {
         >
           {orderHistoryList.map((order, idx) => {
             return (
-              <DetailCard key={idx}>
+              <Accordion
+                accordionHeader={accordionHeader(order)}
+                key={idx}
+                onToggle={item => {
+                  if (Array.isArray(item) && item.length) {
+                    getOrderStatus(order)
+                  }
+                }}
+              >
                 <Flex
                   data-test={testIds.order_history_main_container}
-                  onClick={() => {
-                    const orderObjectForStatusCall = {
-                      bppId: order.attributes.bpp_id,
-                      bppUri: order.attributes.bpp_uri,
-                      orderId: order.attributes.order_id
-                    }
-                    localStorage.setItem('selectedOrder', JSON.stringify(orderObjectForStatusCall))
-                    dispatch(orderActions.addSelectedOrder({ orderDetails: orderObjectForStatusCall }))
-                    router.push('/orderDetails')
-                  }}
                   gap={'5px'}
                   flexDirection={'column'}
+                  padding={'10px 20px'}
                 >
-                  <Text
-                    as={Typography}
-                    text={`Placed at ${formatTimestamp(order.attributes.createdAt)}`}
-                    fontWeight="400"
-                    fontSize={'12px'}
-                    dataTest={testIds.orderHistory_createdAt}
-                  />
-
-                  <Text
-                    as={Typography}
-                    text={`Order ID: ${order.attributes.order_id}`}
-                    fontWeight="400"
-                    fontSize={'12px'}
-                    dataTest={testIds.orderHistory_order_id}
-                  />
-
-                  <Text
-                    as={Typography}
-                    text={`${order.attributes.quote.price.currency} ${order.attributes.quote.price.value}`}
-                    fontWeight="600"
-                    fontSize={'12px'}
-                    dataTest={testIds.orderHistory_Price}
-                  />
-
-                  <Flex
-                    fontSize={'10px'}
-                    justifyContent={'space-between'}
-                    alignItems={'center'}
-                  >
-                    <Text
-                      as={Typography}
-                      text={'1 Item'}
-                      fontWeight="400"
-                      fontSize={'12px'}
-                    />
-
-                    <Flex>
-                      <Image
-                        src={pendingIcon}
-                        paddingRight={'6px'}
-                        data-test={testIds.orderHistory_pendingIcon}
-                      />
-                      <Text>{orderStatusMap[order.attributes.delivery_status]}</Text>
-                    </Flex>
-                  </Flex>
+                  <Divider />
+                  {!orderStatusMap?.[(order.attributes as any).order_id] ? (
+                    <Box
+                      display={'grid'}
+                      alignContent={'center'}
+                    >
+                      <Loader size="md" />
+                    </Box>
+                  ) : (
+                    <Stack p={'10px 0px'}>
+                      {orderStatusMap &&
+                        orderStatusMap?.[(order.attributes as any).order_id]?.fulfillments?.map(
+                          (data: any, index: number) => (
+                            <OrderStatusProgress // as per status call
+                              key={index}
+                              label={data.label}
+                              statusTime={formatTimestamp(data.statusTime)}
+                              noLine={data.noLine}
+                              lastElement={data.lastElement}
+                              statusDescription={data.statusDescription}
+                            />
+                          )
+                        )}
+                    </Stack>
+                  )}
                 </Flex>
-              </DetailCard>
+              </Accordion>
             )
           })}
         </Box>

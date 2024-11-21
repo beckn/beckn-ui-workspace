@@ -16,8 +16,8 @@ const Register = () => {
     <SignUpPage
       baseUrl={process.env.NEXT_PUBLIC_STRAPI_URL!}
       logos={{
-        mobile: { src: dragonMobLogo, alt: 'dragon foods logo' },
-        desktop: { src: dragonDeskLogo, alt: 'dragon foods logo' }
+        mobile: { src: dragonMobLogo, alt: 'dragon foods logo', description: t.applicationDescription },
+        desktop: { src: dragonDeskLogo, alt: 'dragon foods logo', description: t.applicationDescription }
       }}
       onSignIn={handleSignIn}
       onSignUp={() => {}}

@@ -121,7 +121,8 @@ const SignUp: React.FC<SignUpComponentProps> = ({
         schema={{
           logo: {
             src: currentLogo.src,
-            alt: currentLogo.alt //'Suppliflow logo'
+            alt: currentLogo.alt, //'Suppliflow logo'
+            description: currentLogo?.description || ''
           },
           buttons: [
             {

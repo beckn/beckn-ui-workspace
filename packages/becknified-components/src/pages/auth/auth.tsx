@@ -41,6 +41,20 @@ const Auth: React.FC<AuthProps> = ({ schema, isLoading, dataTestForm }) => {
               alt={logo.alt}
               pt="15px"
             />
+            {logo?.description && (
+              <Typography
+                dataTest={'logo-description'}
+                text={logo?.description!}
+                style={{
+                  fontSize: '17px',
+                  fontFamily: 'poppins',
+                  color: '#564C4D',
+                  fontWeight: '800',
+                  alignSelf: 'center',
+                  textAlign: 'center'
+                }}
+              />
+            )}
           </Flex>
         </Box>
       )}

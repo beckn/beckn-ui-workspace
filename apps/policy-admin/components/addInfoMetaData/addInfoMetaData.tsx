@@ -367,7 +367,7 @@ function AddInformationMetadata() {
           gap="4rem"
         >
           <FormControl
-            mb="1rem"
+            mb="1.8rem"
             isInvalid={!!errors.policyName}
           >
             <FormLabel data-test={testIds.policy_title}>Title</FormLabel>
@@ -390,7 +390,7 @@ function AddInformationMetadata() {
           </FormControl>
 
           <FormControl
-            mb="1rem"
+            mb="1.8rem"
             isInvalid={!!errors.policyType}
           >
             <FormLabel data-test={testIds.policy_info_category}>Information Category</FormLabel>
@@ -415,7 +415,7 @@ function AddInformationMetadata() {
           </FormControl>
 
           <FormControl
-            mb="1rem"
+            mb="1.8rem"
             isInvalid={!!errors.policyOwner}
           >
             <FormLabel data-test={testIds.info_source_owner}>Information Source Owner</FormLabel>
@@ -439,7 +439,7 @@ function AddInformationMetadata() {
         </HStack>
 
         <FormControl
-          mb="1rem"
+          mb="1.8rem"
           isInvalid={!!errors.description}
         >
           <FormLabel data-test={testIds.policy_description}>Description</FormLabel>
@@ -467,7 +467,7 @@ function AddInformationMetadata() {
           gap="4rem"
         >
           <FormControl
-            mb="1rem"
+            mb="1.8rem"
             isInvalid={!!errors.country}
           >
             <FormLabel data-test={testIds.country}>Country</FormLabel>
@@ -493,7 +493,7 @@ function AddInformationMetadata() {
           </FormControl>
 
           <FormControl
-            mb="1rem"
+            mb="1.8rem"
             isInvalid={!!errors.city}
           >
             <FormLabel data-test={testIds.city}>City</FormLabel>
@@ -518,7 +518,7 @@ function AddInformationMetadata() {
           </FormControl>
 
           <FormControl
-            mb="1rem"
+            mb="1.8rem"
             isInvalid={!!errors.startDate}
             data-test={testIds.date_pick_from}
           >
@@ -542,7 +542,7 @@ function AddInformationMetadata() {
           </FormControl>
 
           <FormControl
-            mb="1rem"
+            mb="1.8rem"
             isInvalid={!!errors.endDate}
             data-test={testIds.date_pick_to}
           >

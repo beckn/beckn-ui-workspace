@@ -67,6 +67,7 @@ export interface ProfileProps {
 export interface LogoDetails {
   src: string
   alt: string
+  description?: string
 }
 
 export interface Logos {

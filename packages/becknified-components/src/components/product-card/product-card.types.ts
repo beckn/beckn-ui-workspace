@@ -2,6 +2,7 @@
 
 import { CurrencyType } from '../types'
 
+export type CatelogRenderMode = 'full' | 'short'
 export interface Product {
   images: string[]
   name: string
@@ -13,18 +14,19 @@ export interface Product {
   shortDesc?: string
   source?: string
   sourceText?: string
-  productInfo?: Record<string, any>
+  productInfo?: Record<string, any> | string
 }
 
 export interface ProductCardProps {
   dataSource?: any
   product?: Product
-  productInfoDataSource?: Record<string, any>
+  productInfoDataSource?: Record<string, any> | string
   ComponentRenderer?: any
   productClickHandler?: React.MouseEventHandler<HTMLDivElement>
   className?: string
   currency?: CurrencyType
   dataTest?: string
+  renderMode?: CatelogRenderMode
 }
 
 export interface CustomInfoComponentProps {

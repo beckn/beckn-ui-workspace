@@ -16,7 +16,8 @@ const SearchAndDiscover: React.FC<SearchAndDiscoverProps> = ({
   filterProps,
   loaderProps,
   catalogProps,
-  noProduct
+  noProduct,
+  t
 }) => {
   const {
     searchKeyword,
@@ -28,7 +29,7 @@ const SearchAndDiscover: React.FC<SearchAndDiscoverProps> = ({
   } = searchProps
   const { isFilterOpen, sortByRating, handleApplyFilter, handleResetFilter, handleFilterOpen, handleFilterClose } =
     filterProps || {}
-  const { viewDetailsClickHandler } = catalogProps
+  const { viewDetailsClickHandler, renderMode } = catalogProps
 
   const breakpoint = useBreakpoint()
 
@@ -47,7 +48,7 @@ const SearchAndDiscover: React.FC<SearchAndDiscoverProps> = ({
         price: item.price.value,
         rateLabel: item.price?.rateLabel,
         rating: item.rating,
-        source: 'Sold By',
+        source: t?.('itemSourceText') || 'Sold By',
         sourceText: providerName,
         productInfo: item.productInfo
       }
@@ -64,6 +65,7 @@ const SearchAndDiscover: React.FC<SearchAndDiscoverProps> = ({
           product={product}
           currency={item.price.currency}
           productInfoDataSource={product.productInfo}
+          renderMode={renderMode}
         />
       )
     })

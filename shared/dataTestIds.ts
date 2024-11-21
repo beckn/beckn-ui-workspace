@@ -39,11 +39,36 @@ const testIds = {
   payment_taxes: 'taxes',
   payment_totalPayment: 'totalPayment',
 
-  // Deployed urls
-  deployed_url_base: 'https://retail-dev.becknprotocol.io/',
+  // Retail Deployed urls
+  deployed_url_base: 'https://retail-dev.becknprotocol.io',
   deployed_url_signup: 'https://retail-dev.becknprotocol.io/signUp',
   deployed_url_home: 'https://retail-dev.becknprotocol.io/',
   deployed_url_search: 'https://retail-dev.becknprotocol.io/search',
+  // OSC Deployed urls
+  deployed_osc_url_base: 'https://retail-osc-dev.becknprotocol.io',
+  deployed_osc_url_signup: 'https://osm-dev.becknprotocol.io/signUp',
+  deployed_osc_url_home: 'https://osm-dev.becknprotocol.io/',
+  deployed_osc_url_search: 'https://osm-dev.becknprotocol.io/search',
+  // Industry4.0 Deployed urls
+  deployed_industry_url_base: 'https://supplyflow-prod.becknprotocol.io/signin',
+  deployed_industry_url_signup: 'https://supplyflow-prod.becknprotocol.io/signUp',
+  deployed_industry_url_home: 'https://supplyflow-dev.becknprotocol.io/',
+  deployed_industry_url_search: 'https://supplyflow-dev.becknprotocol.io/search',
+  //Tourism Deployed urls
+  deployed_tourism_url_base: 'https://tourism-dev.becknprotocol.io',
+  deployed_tourism_url_signup: 'https://tourism-dev.becknprotocol.io/signUp',
+  deployed_tourism_url_home: 'https://tourism-dev.becknprotocol.io/',
+  deployed_tourism_url_search: 'https://tourism-dev.becknprotocol.io/search',
+  //Dsep Deployed urls
+  deployed_dsep_url_base: 'https://unified-dsep-dev.becknprotocol.io/',
+  deployed_dsep_url_signup: 'https://unified-dsep-dev.becknprotocol.io/signUp',
+  deployed_dsep_url_home: 'https://unified-dsep-dev.becknprotocol.io/',
+  deployed_dsep_url_search: 'https://unified-dsep-dev.becknprotocol.io/search',
+  //ODR Deployed urls
+  deployed_odr_url_base: 'https://onlinedisputeresolution-staging.becknprotocol.io',
+  deployed_odr_url_signup: 'https://onlinedisputeresolution-staging.becknprotocol.io/signUp',
+  deployed_odr_url_home: 'https://onlinedisputeresolution-staging.becknprotocol.io',
+  deployed_odr_url_search: 'https://onlinedisputeresolution-staging.becknprotocol.io/search',
 
   // Deployed urls
   deployed_dsep_url_base: 'unified-dsep-staging.becknprotocol.io/',
@@ -310,6 +335,14 @@ const testIds = {
   orderDetails_tourism_QR_procedd_button: 'orderDetails-tourism-QR-procedd-button',
   orderDetails_QR_accordian: 'orderDetails-QR-accordian',
 
+  //ChatGPT
+  chat_Gpt_List: 'chat-Gpt-List',
+  chat_Gpt_List_Button: 'chat-Gpt-List-Button',
+  chat_Gpt_List_Radio_Button: 'chat-Gpt-List-Radio-Button',
+  chat_gpt_address_button: 'chat_gpt_address_button',
+  chat_gpt_list: 'chat_gpt_list',
+  chat_gpt_button: 'chat_gpt_button',
+
   // DSEP
   dsep_payment_basePrice: 'Course Fee',
   dsep_course_discount: 'Course Discount',
@@ -565,7 +598,19 @@ const testIds = {
   footer_prefix_text: 'footer-prefix-text',
   footer_image: 'footer-image',
   footer_postfix_text: 'footer-postfix-text',
-  footer_bottomfix_text: 'footer-bottomfix-text'
+  footer_bottomfix_text: 'footer-bottomfix-text',
+
+  //////////////   Envirogrowth data test ////////////////
+
+  frequently_accessed: 'Frequently Accessed',
+  frequently_accessed_card_img: 'Frequently Accessed',
+  frequently_accessed_card_name: 'Frequently Accessed',
+  frequently_accessed_card_provider: 'Frequently Accessed',
+  frequently_accessed_star_icon: 'Frequently Accessed',
+  frequently_accessed_rating: 'Frequently Accessed',
+  request_overview: 'Request Overview',
+  envirogrowth_shortDesc: 'short-description',
+  envirogrowth_provider: 'short-provider'
 }
 
 export { testIds }
