@@ -14,7 +14,8 @@ const ProductCard: React.FC<ProductCardProps> = props => {
     dataSource,
     className = '',
     currency,
-    dataTest = 'products'
+    dataTest = 'products',
+    renderMode = 'short'
   } = props
 
   if (ComponentRenderer) {
@@ -27,7 +28,7 @@ const ProductCard: React.FC<ProductCardProps> = props => {
           className={`${className}-product_card_layout_container`}
           onClick={productClickHandler}
           minH={'168px'}
-          width={['100%', '100%', '100%', 'calc(50% - 16px)']}
+          width={['100%', '100%', '100%', `${renderMode === 'short' ? 'calc(50% - 16px)' : '100%'}`]}
           m={['0 0 16px 0', '0 0 16px 0', '8px', '8px']}
           backgroundColor={'#fff'}
           borderRadius={'1rem'}
@@ -56,7 +57,7 @@ const ProductCard: React.FC<ProductCardProps> = props => {
               flexDirection={'column'}
               justifyContent={'space-between'}
               alignItems={'center'}
-              marginRight="0.7rem"
+              margin="0.7rem"
             >
               <Box
                 display={'flex'}
@@ -76,7 +77,7 @@ const ProductCard: React.FC<ProductCardProps> = props => {
             <Box
               p={'15px'}
               pt={'11px'}
-              w={'66%'}
+              minW={'66%'}
               position={'relative'}
               display={'flex'}
               flexDir={'column'}
@@ -158,8 +159,26 @@ const ProductCard: React.FC<ProductCardProps> = props => {
                 </Text>
               </Flex>
 
+              {productInfoDataSource && typeof productInfoDataSource === 'string' && (
+                <Flex
+                  fontSize="12px"
+                  alignItems="center"
+                  mb="8px"
+                >
+                  <Text
+                    pl="3px"
+                    noOfLines={1}
+                    textOverflow="ellipsis"
+                    whiteSpace="pre-wrap"
+                    overflowWrap="break-word"
+                  >
+                    {productInfoDataSource as string}
+                  </Text>
+                </Flex>
+              )}
               {productInfoDataSource &&
-                Object.entries(productInfoDataSource).map(([key, value]) => (
+                typeof productInfoDataSource === 'object' &&
+                Object.entries(productInfoDataSource as Record<string, any>).map(([key, value]) => (
                   <Flex
                     fontSize="12px"
                     alignItems="center"
