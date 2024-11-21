@@ -14,6 +14,7 @@ type FrequentlyAccessedProps = {
       price: { value: string; currency: string }
       images: { url: string }[]
       rating: string
+      productInfo: string
     }
     providerCoordinates: {
       latitude: number
@@ -75,6 +76,10 @@ const FrequentlyAccessed: React.FC<FrequentlyAccessedProps> = ({ frequentlyAcces
                     fontSize="12px"
                     fontWeight="400"
                     text={`Provided By: ${item.providerName}`}
+                  />
+                  <Typography
+                    text={item.item.productInfo as string}
+                    fontSize="12px"
                   />
                   <Flex
                     align="center"

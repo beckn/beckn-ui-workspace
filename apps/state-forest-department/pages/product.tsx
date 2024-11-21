@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import { ProductDetailPage } from '@beckn-ui/becknified-components'
 import { useDispatch, useSelector } from 'react-redux'
 import { Box, Flex, Text } from '@chakra-ui/react'
@@ -30,6 +30,9 @@ const Product = () => {
   const [selectedItems, setSelectedItems] = useState<Record<string, DataPoint[]>>({})
   const [isAccepted, setIsAccepted] = useState<boolean>(false)
 
+  const tagSectionOne = useRef(convertProductTagsIntoFormat(selectedProduct.item.tags!, 0))
+  const tagSectionTwo = useRef(convertProductTagsIntoFormat(selectedProduct.item.tags!, 1))
+
   const handleSelectionChange = useCallback((sectionKey: string, selectedValues: DataPoint[]) => {
     setSelectedItems(prevItems => {
       if (JSON.stringify(prevItems[sectionKey]) === JSON.stringify(selectedValues)) {
@@ -44,7 +47,6 @@ const Product = () => {
 
   const handleOnProceed = () => {
     let dataObjectsArray: any = getSelectedProductDetails(selectedItems)
-    console.log(dataObjectsArray, selectedProduct)
     dispatch(
       cartActions.addItemToCart({
         product: { ...selectedProduct, item: { ...selectedProduct.item, tags: dataObjectsArray } },
@@ -60,7 +62,15 @@ const Product = () => {
   }
 
   const checkIsDisabled = () => {
-    return Object.values(selectedItems).flatMap(data => data).length > 0 && isAccepted
+    const tags = { ...tagSectionOne.current, ...tagSectionTwo.current }
+    const isValid = Object.entries(selectedItems)
+      .map(([key, values]) => {
+        if (tags[key].type === 'radio' && values.length === 1) return true
+        return tags[key].options.length === values.length
+      })
+      .every(option => option === true)
+
+    return isValid && isAccepted
   }
 
   if (!selectedProduct) {
@@ -115,7 +125,7 @@ const Product = () => {
         p="16px"
         mb="20px"
       >
-        {Object.entries(convertProductTagsIntoFormat(selectedProduct.item.tags!, 0)).map(([key, section]) => (
+        {Object.entries(tagSectionOne.current).map(([key, section]) => (
           <Box
             key={key}
             mb="30px"
@@ -137,7 +147,7 @@ const Product = () => {
         p="16px"
         mb="20px"
       >
-        {Object.entries(convertProductTagsIntoFormat(selectedProduct.item.tags!, 1)).map(([key, section]) => (
+        {Object.entries(tagSectionTwo.current).map(([key, section]) => (
           <Box
             key={key}
             mb="30px"
