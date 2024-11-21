@@ -145,3 +145,9 @@ select.chakra-select {
     width: 300px;
   }
 }
+.sky-analytics-product-product_summary_image_container {
+  border: 1px solid #bfbfbf;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
