@@ -4,6 +4,7 @@ import { StarRatingProps, ProductPriceProps, ProductCtaProps } from '@beckn-ui/b
 export interface ProductSummaryPropsModel {
   imageSrc: string
   name: string
+  providerName?: string
   itemForRenderer?: any
   ProductSummaryRenderer?: any
   className?: string

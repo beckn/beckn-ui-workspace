@@ -9,10 +9,7 @@ const ProductDetailPage: React.FC<ProductDetailsPagePropsModel> = props => {
     schema: { buttons, productDescription, productSummary }
   } = props
   return (
-    <Box
-      maxWidth={{ md: '70%' }}
-      margin="0 auto"
-    >
+    <Box margin="0 auto">
       <ProductSummary {...productSummary} />
       {productDescription && <ProductDescription {...productDescription} />}
       <Box mt={'20px'}>
