@@ -111,7 +111,7 @@ export interface Item {
   fulfillments: Fulfillment[]
   rating?: string
   locations?: Location[] | Coordinate
-  productInfo?: Record<string, any>
+  productInfo?: Record<string, any> | string
 }
 
 export interface Tag {
