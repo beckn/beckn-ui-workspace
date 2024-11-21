@@ -77,7 +77,7 @@ const ProductCard: React.FC<ProductCardProps> = props => {
             <Box
               p={'15px'}
               pt={'11px'}
-              minW={'66%'}
+              w={'100%'}
               position={'relative'}
               display={'flex'}
               flexDir={'column'}
