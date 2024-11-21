@@ -15,6 +15,12 @@ on:
       - 'apps/odr-v2/**'
       - 'apps/dsnp-v2/**'
       - 'apps/OSC/**'
+      - 'apps/dragon-foods/**'
+      - 'apps/harmoni-aids/**'
+      - 'apps/sky-analytics/**'
+      - 'apps/state-forest-department/**'
+      - 'apps/envirogrowth/**'
+      - 'apps/earth-support-initiative/**'
 
 jobs:
   build:
@@ -203,3 +209,118 @@ jobs:
         if: env.osc_changed == 'true'
         run: |
           curl -X POST -d {} "${{ secrets.OSC_STAGING_AMPLIFY_WEBHOOK_URL }}" -H "Content-Type:application/json"
+
+
+#  dragon-foods
+
+      - name: Check for dragon-foods changes
+        id: check_dragon-foods_changes
+        run: |
+          if git diff --name-only HEAD~1 HEAD | grep '^apps/dragon-foods/'; then
+            echo "Changes in dragon-foods detected."
+            echo "dragon-foods_changed=true" >> $GITHUB_ENV
+          else
+            echo "No changes in dragon-foods. Skipping webhook trigger."
+            echo "dragon-foods_changed=false" >> $GITHUB_ENV
+          fi
+
+      - name: Trigger dragon-foods deployment if changes are detected
+        if: env.dragon-foods_changed == 'true'
+        run: |
+          curl -X POST -d {} "${{ secrets.DRAGON_FOODS_STAGING_AMPLIFY_WEBHOOK_URL }}" -H "Content-Type:application/json"
+
+
+#   harmoni-aids
+
+      - name: Check for harmoni-aids changes
+        id: check_harmoni-aids_changes
+        run: |
+          if git diff --name-only HEAD~1 HEAD | grep '^apps/harmoni-aids/'; then
+            echo "Changes in harmoni-aids detected."
+            echo "harmoni-aids_changed=true" >> $GITHUB_ENV
+          else
+            echo "No changes in harmoni-aids. Skipping webhook trigger."
+            echo "harmoni-aids_changed=false" >> $GITHUB_ENV
+          fi
+
+      - name: Trigger harmoni-aids deployment if changes are detected
+        if: env.harmoni-aids_changed == 'true'
+        run: |
+          curl -X POST -d {} "${{ secrets.HARMONI_AIDS_STAGING_AMPLIFY_WEBHOOK_URL }}" -H "Content-Type:application/json"
+
+
+#   sky-analytics
+
+      - name: Check for sky-analytics changes
+        id: check_sky-analytics_changes
+        run: |
+          if git diff --name-only HEAD~1 HEAD | grep '^apps/sky-analytics/'; then
+            echo "Changes in sky-analytics detected."
+            echo "sky-analytics_changed=true" >> $GITHUB_ENV
+          else
+            echo "No changes in sky-analytics. Skipping webhook trigger."
+            echo "sky-analytics_changed=false" >> $GITHUB_ENV
+          fi
+
+      - name: Trigger sky-analytics deployment if changes are detected
+        if: env.sky-analytics_changed == 'true'
+        run: |
+          curl -X POST -d {} "${{ secrets.SKY_ANALYTICS_STAGING_AMPLIFY_WEBHOOK_URL }}" -H "Content-Type:application/json"
+
+
+#   state-forest-department
+
+      - name: Check for state-forest-department changes
+        id: check_state-forest-department_changes
+        run: |
+          if git diff --name-only HEAD~1 HEAD | grep '^apps/state-forest-department/'; then
+            echo "Changes in state-forest-department detected."
+            echo "state-forest-department_changed=true" >> $GITHUB_ENV
+          else
+            echo "No changes in state-forest-department. Skipping webhook trigger."
+            echo "state-forest-department=false" >> $GITHUB_ENV
+          fi
+
+      - name: Trigger state-forest-department deployment if changes are detected
+        if: env.state-forest-department_changed == 'true'
+        run: |
+          curl -X POST -d {} "${{ secrets.STATE_FOREST_DEPARTMENT_STAGING_AMPLIFY_WEBHOOK_URL }}" -H "Content-Type:application/json"
+
+
+
+#   envirogrowth
+
+      - name: Check for envirogrowth changes
+        id: check_envirogrowth_changes
+        run: |
+          if git diff --name-only HEAD~1 HEAD | grep '^apps/envirogrowth/'; then
+            echo "Changes in envirogrowth detected."
+            echo "envirogrowth_changed=true" >> $GITHUB_ENV
+          else
+            echo "No changes in envirogrowth. Skipping webhook trigger."
+            echo "envirogrowth=false" >> $GITHUB_ENV
+          fi
+
+      - name: Trigger envirogrowth deployment if changes are detected
+        if: env.envirogrowth_changed == 'true'
+        run: |
+          curl -X POST -d {} "${{ secrets.ENVIROGROWTH_STAGING_AMPLIFY_WEBHOOK_URL }}" -H "Content-Type:application/json"
+
+
+ #   earth-support-initiative
+
+      - name: Check for earth-support-initiative changes
+        id: check_earth-support-initiative_changes
+        run: |
+          if git diff --name-only HEAD~1 HEAD | grep '^apps/earth-support-initiative/'; then
+            echo "Changes in earth-support-initiative detected."
+            echo "earth-support-initiative_changed=true" >> $GITHUB_ENV
+          else
+            echo "No changes in earth-support-initiative. Skipping webhook trigger."
+            echo "earth-support-initiative=false" >> $GITHUB_ENV
+          fi
+
+      - name: Trigger earth-support-initiative deployment if changes are detected
+        if: env.earth-support-initiative_changed == 'true'
+        run: |
+          curl -X POST -d {} "${{ secrets.EARTH_SUPPORT_INITIATIVE_STAGING_AMPLIFY_WEBHOOK_URL }}" -H "Content-Type:application/json"
