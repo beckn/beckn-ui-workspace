@@ -111,7 +111,7 @@ const OrderConfirmation = () => {
           successOrderMessage: 'Request Confirmed!',
           gratefulMessage: 'The dataset will be shared via the chosen mode',
           orderIdMessage: '',
-          trackOrderMessage: user?.email ? `<email ID: ${user?.email}>` : '',
+          trackOrderMessage: user?.email ? `email ID: ${user?.email}` : '',
           buttons: [
             {
               text: 'Go Back Home',
