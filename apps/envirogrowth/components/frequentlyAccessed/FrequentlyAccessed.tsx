@@ -3,7 +3,6 @@ import { Box, CardBody, Flex, Icon, Image, Stack, Card, useTheme } from '@chakra
 import { Typography } from '@beckn-ui/molecules'
 import { StarIcon, TimeIcon } from '@chakra-ui/icons'
 import { CurrencyType, ProductPrice } from '@beckn-ui/becknified-components'
-import { testIds } from '@shared/dataTestIds'
 
 type FrequentlyAccessedProps = {
   frequentlyAccessedData: Array<{
@@ -35,7 +34,6 @@ const FrequentlyAccessed: React.FC<FrequentlyAccessedProps> = ({ frequentlyAcces
         fontWeight="400"
         text="Frequently Accessed"
         sx={{ mb: '20px' }}
-        dataTest={testIds.frequently_accessed}
       />
 
       {frequentlyAccessedData.length > 0 ? (
@@ -63,13 +61,11 @@ const FrequentlyAccessed: React.FC<FrequentlyAccessedProps> = ({ frequentlyAcces
                     src={item.item?.images?.[0]?.url}
                     alt={item.item.name}
                     objectFit="contain"
-                    data-test={testIds.frequently_accessed_card_img}
                   />
                   <Typography
                     fontSize="12px"
                     fontWeight="600"
                     text={item.item.name}
-                    dataTest={testIds.frequently_accessed_card_name}
                     sx={{
                       overflow: 'hidden',
                       textOverflow: 'ellipsis',
@@ -80,7 +76,6 @@ const FrequentlyAccessed: React.FC<FrequentlyAccessedProps> = ({ frequentlyAcces
                   <Typography
                     fontSize="12px"
                     fontWeight="400"
-                    dataTest={testIds.frequently_accessed_card_provider}
                     text={`Provided By: ${item.providerName}`}
                   />
                   <Typography
@@ -104,13 +99,11 @@ const FrequentlyAccessed: React.FC<FrequentlyAccessedProps> = ({ frequentlyAcces
                       <Icon
                         as={StarIcon}
                         color="yellow.400"
-                        data-test={testIds.frequently_accessed_star_icon}
                       />
                       <Typography
                         fontSize="10px"
                         fontWeight="400"
                         text={item.item.rating}
-                        dataTest={testIds.frequently_accessed_rating}
                       />
                     </Flex>
                   </Flex>
@@ -125,7 +118,6 @@ const FrequentlyAccessed: React.FC<FrequentlyAccessedProps> = ({ frequentlyAcces
             justify={'center'}
             mb={'10px'}
             mt={'20px'}
-            className="frequently-access-icon"
           >
             <Icon
               as={TimeIcon}
