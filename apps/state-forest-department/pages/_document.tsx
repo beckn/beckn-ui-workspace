@@ -5,7 +5,7 @@ export default function Document() {
       <Head>
         <meta
           name="description"
-          content="Dragon Foods"
+          content="State Forest Department"
         />
         <link
           rel="preconnect"
@@ -22,7 +22,7 @@ export default function Document() {
         />
         <link
           rel="shortcut icon"
-          href="/images/headerLogo.svg"
+          href="/images/StateForestDepartment.svg"
         />
       </Head>
       <body>

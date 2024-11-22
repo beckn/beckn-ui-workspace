@@ -31,7 +31,7 @@ const ItemDetails: React.FC<ItemDetailProps> = ({
           <Box mr="1rem">
             <Image
               src={image}
-              alt={title}
+              alt={title.length > 15 ? `${title.substring(0, 15)}...` : title}
               width="4rem"
               height="4rem"
             />
