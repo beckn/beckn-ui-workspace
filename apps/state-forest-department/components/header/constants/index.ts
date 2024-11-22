@@ -74,7 +74,6 @@ const cartIconBlackList: string[] = [
   '/signUp',
   '/invoiceDetails',
   '/',
-  '/cart',
   '/profile',
   '/orderCancellation',
   '/updateShippingDetails'
