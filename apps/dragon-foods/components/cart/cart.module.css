@@ -15,6 +15,6 @@
   margin: 0 auto;
 
   @media (min-width: 768px) {
-    max-width: 60%;
+    max-width: 75%;
   }
 }

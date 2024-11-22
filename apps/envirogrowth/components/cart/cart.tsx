@@ -83,6 +83,7 @@ const Cart: React.FC<CartProps> = ({
                 variant="subTitleRegular"
                 text="Request Overview"
                 dataTest={testIds.request_overview}
+                sx={{ paddingBottom: '20px' }}
               />
               <CartList cartItems={cartItems} />
             </Box>

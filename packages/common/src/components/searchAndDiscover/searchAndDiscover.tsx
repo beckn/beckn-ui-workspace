@@ -9,7 +9,7 @@ import CustomFilterIconComponent from '../cutomFilterIcon'
 import { setLocalStorage } from '../../utils'
 import { SearchAndDiscoverProps } from './searchAndDiscover.types'
 import { testIds } from '@shared/dataTestIds'
-
+import Styles from './searchAndDiscover.module.css'
 const SearchAndDiscover: React.FC<SearchAndDiscoverProps> = ({
   items,
   searchProps,
@@ -73,7 +73,7 @@ const SearchAndDiscover: React.FC<SearchAndDiscoverProps> = ({
 
   return (
     <Box
-      className="hideScroll"
+      className={Styles.hideScroll}
       maxH="calc(100vh - 95px)"
       overflowY="scroll"
     >
