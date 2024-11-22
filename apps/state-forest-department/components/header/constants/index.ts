@@ -25,7 +25,7 @@ const headerNames: PathnameObjectType = {
   '/feedback': '',
   '/profile': 'My Profile',
   '/search': 'Search results',
-  '/checkout': 'Billing & Shipping'
+  '/checkout': 'Billing'
 }
 
 const headerFrenchNames: PathnameObjectType = {
@@ -74,7 +74,6 @@ const cartIconBlackList: string[] = [
   '/signUp',
   '/invoiceDetails',
   '/',
-  '/cart',
   '/profile',
   '/orderCancellation',
   '/updateShippingDetails'

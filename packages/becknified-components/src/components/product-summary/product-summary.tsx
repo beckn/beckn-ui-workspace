@@ -11,6 +11,7 @@ const ProductSummary: React.FC<ProductSummaryPropsModel> = props => {
   const {
     imageSrc,
     name,
+    providerName,
     itemForRenderer,
     ProductSummaryRenderer,
     className = '',
@@ -66,6 +67,24 @@ const ProductSummary: React.FC<ProductSummaryPropsModel> = props => {
                   fontSize={'20px'}
                   fontWeight={'500'}
                 />
+                {providerName && (
+                  <Flex marginTop={'1rem'}>
+                    <Typography
+                      dataTest={dataTestTitle}
+                      className={`${className}-product_summary_provider_name`}
+                      text={'Provided by'}
+                      fontSize={'15px'}
+                      fontWeight={'500'}
+                      style={{ marginRight: '0.3rem' }}
+                    />
+                    <Typography
+                      dataTest={dataTestTitle}
+                      className={`${className}-product_summary_provider_name`}
+                      text={providerName}
+                      fontSize={'15px'}
+                    />
+                  </Flex>
+                )}
               </Box>
               {starRating && <StarRating {...starRating} />}
               {secondaryDescription && (

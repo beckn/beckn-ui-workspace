@@ -2,6 +2,7 @@ import React from 'react'
 import { Box, CardBody, Flex, Icon, Image, Stack, Card, useTheme } from '@chakra-ui/react'
 import { Typography } from '@beckn-ui/molecules'
 import { StarIcon, TimeIcon } from '@chakra-ui/icons'
+import { CurrencyType, ProductPrice } from '@beckn-ui/becknified-components'
 
 type FrequentlyAccessedProps = {
   frequentlyAccessedData: Array<{
@@ -14,6 +15,7 @@ type FrequentlyAccessedProps = {
       price: { value: string; currency: string }
       images: { url: string }[]
       rating: string
+      productInfo: string
     }
     providerCoordinates: {
       latitude: number
@@ -76,16 +78,19 @@ const FrequentlyAccessed: React.FC<FrequentlyAccessedProps> = ({ frequentlyAcces
                     fontWeight="400"
                     text={`Provided By: ${item.providerName}`}
                   />
+                  <Typography
+                    text={item.item.productInfo as string}
+                    fontSize="12px"
+                  />
                   <Flex
                     align="center"
                     justify="space-between"
                     flexWrap={{ base: 'wrap' }}
                     rowGap={{ base: '5px' }}
                   >
-                    <Typography
-                      fontSize="12px"
-                      fontWeight="400"
-                      text={`Price: ${item.item.price.value} ${item.item.price.currency}`}
+                    <ProductPrice
+                      currencyType={item.item.price.currency as CurrencyType}
+                      price={parseFloat(item.item.price.value)}
                     />
                     <Flex
                       align="center"

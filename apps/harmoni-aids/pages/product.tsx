@@ -1,14 +1,14 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import { ProductDetailPage } from '@beckn-ui/becknified-components'
 import { useDispatch, useSelector } from 'react-redux'
-import { Box, Flex, Text } from '@chakra-ui/react'
+import { Box, Flex, Link, Text, useTheme } from '@chakra-ui/react'
 import { useLanguage } from '@hooks/useLanguage'
 import { DiscoveryRootState, ParsedItemModel } from '@beckn-ui/common/lib/types'
 import { cartActions } from '@beckn-ui/common/src/store/cart-slice'
 import { feedbackActions } from '@beckn-ui/common/src/store/ui-feedback-slice'
 import { testIds } from '@shared/dataTestIds'
 import { OptionsGroup } from '@beckn-ui/common'
-import { Button } from '@beckn-ui/molecules'
+import { Button, Typography } from '@beckn-ui/molecules'
 import { mockData1, mockData2 } from '../mock/mockOptionGroupData'
 import { DataPoint } from '@beckn-ui/common/src/components/OptionsGroup'
 import { useRouter } from 'next/router'
@@ -27,8 +27,12 @@ const Product = () => {
   const selectedProduct: ParsedItemModel = useSelector((state: DiscoveryRootState) => state.discovery.selectedProduct)
   const dispatch = useDispatch()
   const router = useRouter()
+  const theme = useTheme()
   const [selectedItems, setSelectedItems] = useState<Record<string, DataPoint[]>>({})
   const [isAccepted, setIsAccepted] = useState<boolean>(false)
+
+  const tagSectionOne = useRef(convertProductTagsIntoFormat(selectedProduct.item.tags!, 0))
+  const tagSectionTwo = useRef(convertProductTagsIntoFormat(selectedProduct.item.tags!, 1))
 
   const handleSelectionChange = useCallback((sectionKey: string, selectedValues: DataPoint[]) => {
     setSelectedItems(prevItems => {
@@ -44,7 +48,6 @@ const Product = () => {
 
   const handleOnProceed = () => {
     let dataObjectsArray: any = getSelectedProductDetails(selectedItems)
-    console.log(dataObjectsArray, selectedProduct)
     dispatch(
       cartActions.addItemToCart({
         product: { ...selectedProduct, item: { ...selectedProduct.item, tags: dataObjectsArray } },
@@ -60,7 +63,13 @@ const Product = () => {
   }
 
   const checkIsDisabled = () => {
-    return Object.values(selectedItems).flatMap(data => data).length > 0 && isAccepted
+    const isValid = Object.entries(selectedItems)
+      .map(([key, values]) => {
+        return values.length >= 1
+      })
+      .every(option => option === true)
+
+    return isValid && isAccepted
   }
 
   if (!selectedProduct) {
@@ -77,9 +86,11 @@ const Product = () => {
           productSummary: {
             imageSrc: selectedProduct.item?.images?.[0].url!,
             name: selectedProduct.item.name,
+            providerName: selectedProduct.providerName,
             secondaryDescription: selectedProduct.item.long_desc,
             dataTestTitle: testIds.item_title,
             dataTestDescription: testIds.item_description,
+            className: 'harmoni-aids-product',
             starRating: {
               rating: selectedProduct.item.rating!,
               size: 20,
@@ -96,7 +107,24 @@ const Product = () => {
         p="16px"
         mb="20px"
       >
-        {Object.entries(convertProductTagsIntoFormat(selectedProduct.item.tags!, 0)).map(([key, section]) => (
+        <Typography
+          text={`About ${selectedProduct.providerName}`}
+          fontWeight={'800'}
+        />
+        <Typography text={selectedProduct.item.short_desc!} />
+        <Typography
+          text={selectedProduct.item.productInfo! as string}
+          style={{ marginTop: '1rem' }}
+        />
+      </Box>
+
+      <Box
+        border={'1px solid #BFBFBF'}
+        borderRadius="12px"
+        p="16px"
+        mb="20px"
+      >
+        {Object.entries(tagSectionOne.current).map(([key, section]) => (
           <Box
             key={key}
             mb="30px"
@@ -118,7 +146,7 @@ const Product = () => {
         p="16px"
         mb="20px"
       >
-        {Object.entries(convertProductTagsIntoFormat(selectedProduct.item.tags!, 1)).map(([key, section]) => (
+        {Object.entries(tagSectionTwo.current).map(([key, section]) => (
           <Box
             key={key}
             mb="30px"
@@ -133,7 +161,7 @@ const Product = () => {
           </Box>
         ))}
       </Box>
-      <Box
+      <Flex
         border={'1px solid #BFBFBF'}
         borderRadius="12px"
         p="16px"
@@ -145,8 +173,18 @@ const Product = () => {
           handleSelectionChange={value => {
             setIsAccepted(value.length > 0)
           }}
+          sx={{ width: ['4.4rem', '5.4rem'] }}
         />
-      </Box>
+        <Link
+          color={theme.colors.primary[100]}
+          fontSize={['12px', '16px']}
+          textDecoration="underline"
+          href="https://www.google.com"
+          target="_blank"
+        >
+          Terms and Conditions
+        </Link>
+      </Flex>
       <Flex
         alignItems={'center'}
         border={'1px solid #BFBFBF'}
