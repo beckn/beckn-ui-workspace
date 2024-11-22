@@ -63,11 +63,9 @@ const Product = () => {
   }
 
   const checkIsDisabled = () => {
-    const tags = { ...tagSectionOne.current, ...tagSectionTwo.current }
     const isValid = Object.entries(selectedItems)
       .map(([key, values]) => {
-        if (tags[key].type === 'radio' && values.length === 1) return true
-        return tags[key].options.length === values.length
+        return values.length >= 1
       })
       .every(option => option === true)
 
