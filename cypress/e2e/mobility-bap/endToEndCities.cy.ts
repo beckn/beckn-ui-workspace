@@ -1,7 +1,6 @@
 import { testIds } from '../../../shared/dataTestIds'
 
 describe('Home Page Tests', () => {
-  before(() => {})
   it('should open driver app', () => {
     cy.visit('https://driverapp-dev.becknprotocol.io/')
     //cy.go('back');
@@ -28,7 +27,6 @@ describe('Home Page Tests', () => {
     cy.get('body').type(' conrad hotel, bengaluru')
     cy.getByData(testIds.location_list_item).should('be.visible').eq(0).click()
   })
-  //-------------------------------
   it('should visit to BAP', () => {
     cy.visit(testIds.deployed_mob_url_base)
   })
@@ -70,19 +68,6 @@ describe('Home Page Tests', () => {
     cy.getByData(testIds.mobility_cancel_search).should('contain.text', 'Cancel Search')
     cy.wait(17000)
   })
-  // For empty results
-  // it('should re-render the pickup-dropoff page', () => {
-  //     cy.getByData(testIds.mobility_pickup_dropoff).should('be.visible')
-  // })
-  // it('should render the toast when no result found', () => {
-  //     cy.getByData(testIds.feedback).should('contain.text', 'No ride available, please try again!')
-  // })
-  // it('should render the available provider rides category page', () => {
-  //     cy.getByData(testIds.mobility_searchpage_container).should('be.visible')
-  // })
-  // it('should render the count of result found', () => {
-  //     cy.getByData(testIds.mobility_total_cabs).should('contain.text', 'results found')
-  // })
   it('should render the provider wise catalogue', () => {
     cy.getByData(testIds.mobility_catalog_container).should('be.visible')
     cy.getByData(testIds.mobility_catalog_container).within(() => {
@@ -112,12 +97,10 @@ describe('Home Page Tests', () => {
     cy.getByData(testIds.mobility_provider_item_select_button).first().click()
     cy.getByData(testIds.mobility_search_ride_details_form).should('be.visible')
   })
-
   it('should render the cab details like name and fare', () => {
     cy.getByData(testIds.mobility_ride_name).should('be.visible')
     cy.getByData(testIds.mobility_ride_fare).should('be.visible')
   })
-
   it('should render the ride details like pickup dropoff address', () => {
     cy.getByData(testIds.mobility_pickup_label).should('contain.text', 'Pickup')
     cy.getByData(testIds.mobility_pickup_address).should(
@@ -134,27 +117,21 @@ describe('Home Page Tests', () => {
     cy.getByData(testIds.mobility_rider_name).should('be.empty', '')
     cy.getByData(testIds.mobility_rider_mobileNo).should('be.empty', '')
   })
-
   it('confirm button text shoudl be `Confirm & Proceed`', () => {
     cy.getByData(testIds.mobility_rider_confirm_button).should('have.text', 'Confirm & Proceed')
   })
-
   it('Confirm & proceed button should be disbaled if name and phone number is empty', () => {
     cy.getByData(testIds.mobility_rider_confirm_button).should('be.disabled')
   })
-
   it('should able to type name value', () => {
     cy.getByData(testIds.mobility_rider_name).type('Omkar')
   })
-
   it('should able to type mobile number value', () => {
     cy.getByData(testIds.mobility_rider_mobileNo).type('9090878888')
   })
-
   it('Confirm & proceed button should be not be disbaled if name and phone number is not empty', () => {
     cy.getByData(testIds.mobility_rider_confirm_button).should('not.be.disabled')
   })
-
   it('when click on Confirm & proceed button should navigate to payment page', () => {
     cy.getByData(testIds.mobility_rider_confirm_button).click()
     cy.getByData(testIds.pageName).should('have.text', 'Select Payment Method')
