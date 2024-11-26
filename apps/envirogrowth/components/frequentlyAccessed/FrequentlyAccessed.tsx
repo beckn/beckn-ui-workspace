@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, CardBody, Flex, Icon, Image, Stack, Card, useTheme } from '@chakra-ui/react'
+import { Box, CardBody, Flex, Icon, Image, Stack, Card, useTheme, Text } from '@chakra-ui/react'
 import { Typography } from '@beckn-ui/molecules'
 import { StarIcon, TimeIcon } from '@chakra-ui/icons'
 import { CurrencyType, ProductPrice } from '@beckn-ui/becknified-components'
@@ -52,7 +52,7 @@ const FrequentlyAccessed: React.FC<FrequentlyAccessedProps> = ({ frequentlyAcces
               opacity={'unset'}
               cursor={'pointer'}
               w={{ base: '170px', md: '170px', lg: '200px' }}
-              h={{ base: '300px', md: '300px', lg: '350px' }}
+              h={{ base: '400px', md: '400px', lg: '350px' }}
               padding={'20px'}
               onClick={() => onCardClick(item)}
             >
@@ -73,26 +73,28 @@ const FrequentlyAccessed: React.FC<FrequentlyAccessedProps> = ({ frequentlyAcces
                       objectFit="contain"
                     />
                   </Box>
-                  <Typography
-                    fontSize="12px"
-                    fontWeight="600"
-                    text={item.item.name}
-                    sx={{
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      whiteSpace: 'nowrap',
-                      maxWidth: '100%'
-                    }}
-                  />
-                  <Typography
-                    fontSize="12px"
-                    fontWeight="400"
-                    text={`Provided By: ${item.providerName}`}
-                  />
-                  <Typography
-                    text={item.item.productInfo as string}
-                    fontSize="12px"
-                  />
+                  <Text
+                    fontSize={{ base: '10px', md: '12px', lg: '12px' }}
+                    fontWeight={600}
+                    overflow={'hidden'}
+                    textOverflow={'ellipsis'}
+                    whiteSpace={'nowrap'}
+                    maxWidth={'100%'}
+                  >
+                    {item.item.name}
+                  </Text>
+                  <Text
+                    fontSize={{ base: '10px', md: '12px', lg: '12px' }}
+                    fontWeight={400}
+                  >
+                    {`Provided By: ${item.providerName}`}
+                  </Text>
+                  <Text
+                    fontSize={{ base: '10px', md: '12px', lg: '12px' }}
+                    fontWeight={400}
+                  >
+                    {item.item.productInfo as string}
+                  </Text>
                 </Stack>
               </CardBody>
               <Flex
