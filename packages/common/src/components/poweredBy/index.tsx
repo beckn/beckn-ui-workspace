@@ -12,7 +12,9 @@ const PoweredBy: React.FC<PoweredByProps> = ({ logoSrc, altText = 'logo', powere
       width="100%"
       left={0}
       position="fixed"
-      bottom="15px"
+      bottom="0px"
+      padding={'10px'}
+      bg={'white'}
       data-test={testIds.homepage_footer}
     >
       <Typography
