@@ -81,7 +81,7 @@ const Cart: React.FC<CartProps> = ({
               <Typography
                 variant="subTitleRegular"
                 text="Request Overview"
-                sx={{ paddingBottom: '20px' }}
+                sx={{ paddingTop: '20px' }}
               />
               <CartList cartItems={cartItems} />
             </Box>
