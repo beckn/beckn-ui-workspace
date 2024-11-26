@@ -77,7 +77,7 @@ const RequestOverview = () => {
             dataTestCta: testIds.cartpage_emptyButton
           },
           actionButton: {
-            text: 'Send Request',
+            text: 'Proceed',
             handleOnClick: () => {
               router.push('/checkout')
             }
