@@ -52,7 +52,7 @@ const FrequentlyAccessed: React.FC<FrequentlyAccessedProps> = ({ frequentlyAcces
               opacity={'unset'}
               cursor={'pointer'}
               w={{ base: '170px', md: '170px', lg: '200px' }}
-              h={{ base: '400px', md: '400px', lg: '350px' }}
+              h={{ base: '330px', md: '400px', lg: '350px' }}
               padding={'20px'}
               onClick={() => onCardClick(item)}
             >
