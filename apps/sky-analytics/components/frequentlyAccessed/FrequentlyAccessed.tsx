@@ -52,16 +52,27 @@ const FrequentlyAccessed: React.FC<FrequentlyAccessedProps> = ({ frequentlyAcces
               opacity={'unset'}
               cursor={'pointer'}
               w={{ base: '170px', md: '170px', lg: '200px' }}
+              h={{ base: '300px', md: '300px', lg: '350px' }}
               padding={'20px'}
               onClick={() => onCardClick(item)}
             >
               <CardBody padding="unset">
-                <Stack>
-                  <Image
-                    src={item.item?.images?.[0]?.url}
-                    alt={item.item.name}
-                    objectFit="contain"
-                  />
+                <Stack
+                  spacing={3}
+                  height="100%"
+                >
+                  <Box
+                    height="120px"
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                  >
+                    <Image
+                      src={item.item?.images?.[0]?.url}
+                      alt={item.item.name}
+                      objectFit="contain"
+                    />
+                  </Box>
                   <Typography
                     fontSize="12px"
                     fontWeight="600"
@@ -82,33 +93,34 @@ const FrequentlyAccessed: React.FC<FrequentlyAccessedProps> = ({ frequentlyAcces
                     text={item.item.productInfo as string}
                     fontSize="12px"
                   />
-                  <Flex
-                    align="center"
-                    justify="space-between"
-                    flexWrap={{ base: 'wrap' }}
-                    rowGap={{ base: '5px' }}
-                  >
-                    <ProductPrice
-                      currencyType={item.item.price.currency as CurrencyType}
-                      price={parseFloat(item.item.price.value)}
-                    />
-                    <Flex
-                      align="center"
-                      gap="4px"
-                    >
-                      <Icon
-                        as={StarIcon}
-                        color="yellow.400"
-                      />
-                      <Typography
-                        fontSize="10px"
-                        fontWeight="400"
-                        text={item.item.rating}
-                      />
-                    </Flex>
-                  </Flex>
                 </Stack>
               </CardBody>
+              <Flex
+                align="center"
+                justify="space-between"
+                flexWrap={{ base: 'wrap' }}
+                rowGap={{ base: '5px' }}
+                mt={4}
+              >
+                <ProductPrice
+                  currencyType={item.item.price.currency as CurrencyType}
+                  price={parseFloat(item.item.price.value)}
+                />
+                <Flex
+                  align="center"
+                  gap="4px"
+                >
+                  <Icon
+                    as={StarIcon}
+                    color="yellow.400"
+                  />
+                  <Typography
+                    fontSize="10px"
+                    fontWeight="400"
+                    text={item.item.rating}
+                  />
+                </Flex>
+              </Flex>
             </Card>
           ))}
         </Flex>
