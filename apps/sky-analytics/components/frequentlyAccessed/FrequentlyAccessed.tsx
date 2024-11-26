@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, CardBody, Flex, Icon, Image, Stack, Card, useTheme } from '@chakra-ui/react'
+import { Box, CardBody, Flex, Icon, Image, Stack, Card, useTheme, Text } from '@chakra-ui/react'
 import { Typography } from '@beckn-ui/molecules'
 import { StarIcon, TimeIcon } from '@chakra-ui/icons'
 import { CurrencyType, ProductPrice } from '@beckn-ui/becknified-components'
@@ -52,63 +52,77 @@ const FrequentlyAccessed: React.FC<FrequentlyAccessedProps> = ({ frequentlyAcces
               opacity={'unset'}
               cursor={'pointer'}
               w={{ base: '170px', md: '170px', lg: '200px' }}
+              h={{ base: '400px', md: '400px', lg: '350px' }}
               padding={'20px'}
               onClick={() => onCardClick(item)}
             >
               <CardBody padding="unset">
-                <Stack>
-                  <Image
-                    src={item.item?.images?.[0]?.url}
-                    alt={item.item.name}
-                    objectFit="contain"
-                  />
-                  <Typography
-                    fontSize="12px"
-                    fontWeight="600"
-                    text={item.item.name}
-                    sx={{
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      whiteSpace: 'nowrap',
-                      maxWidth: '100%'
-                    }}
-                  />
-                  <Typography
-                    fontSize="12px"
-                    fontWeight="400"
-                    text={`Provided By: ${item.providerName}`}
-                  />
-                  <Typography
-                    text={item.item.productInfo as string}
-                    fontSize="12px"
-                  />
-                  <Flex
-                    align="center"
-                    justify="space-between"
-                    flexWrap={{ base: 'wrap' }}
-                    rowGap={{ base: '5px' }}
+                <Stack
+                  spacing={3}
+                  height="100%"
+                >
+                  <Box
+                    height="120px"
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
                   >
-                    <ProductPrice
-                      currencyType={item.item.price.currency as CurrencyType}
-                      price={parseFloat(item.item.price.value)}
+                    <Image
+                      src={item.item?.images?.[0]?.url}
+                      alt={item.item.name}
+                      objectFit="contain"
                     />
-                    <Flex
-                      align="center"
-                      gap="4px"
-                    >
-                      <Icon
-                        as={StarIcon}
-                        color="yellow.400"
-                      />
-                      <Typography
-                        fontSize="10px"
-                        fontWeight="400"
-                        text={item.item.rating}
-                      />
-                    </Flex>
-                  </Flex>
+                  </Box>
+                  <Text
+                    fontSize={{ base: '10px', md: '12px', lg: '12px' }}
+                    fontWeight={600}
+                    overflow={'hidden'}
+                    textOverflow={'ellipsis'}
+                    whiteSpace={'nowrap'}
+                    maxWidth={'100%'}
+                  >
+                    {item.item.name}
+                  </Text>
+                  <Text
+                    fontSize={{ base: '10px', md: '12px', lg: '12px' }}
+                    fontWeight={400}
+                  >
+                    {`Provided By: ${item.providerName}`}
+                  </Text>
+                  <Text
+                    fontSize={{ base: '10px', md: '12px', lg: '12px' }}
+                    fontWeight={400}
+                  >
+                    {item.item.productInfo as string}
+                  </Text>
                 </Stack>
               </CardBody>
+              <Flex
+                align="center"
+                justify="space-between"
+                flexWrap={{ base: 'wrap' }}
+                rowGap={{ base: '5px' }}
+                mt={4}
+              >
+                <ProductPrice
+                  currencyType={item.item.price.currency as CurrencyType}
+                  price={parseFloat(item.item.price.value)}
+                />
+                <Flex
+                  align="center"
+                  gap="4px"
+                >
+                  <Icon
+                    as={StarIcon}
+                    color="yellow.400"
+                  />
+                  <Typography
+                    fontSize="10px"
+                    fontWeight="400"
+                    text={item.item.rating}
+                  />
+                </Flex>
+              </Flex>
             </Card>
           ))}
         </Flex>
