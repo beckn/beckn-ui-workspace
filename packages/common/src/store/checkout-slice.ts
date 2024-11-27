@@ -13,13 +13,15 @@ export interface Checkout {
   confirmResponse: ConfirmResponseModel[]
   selectResponse: SelectResponseModel[]
   isBillingSame: boolean
+  totalBillingItems: number
 }
 
 const initialState: Checkout = {
   initResponse: [],
   confirmResponse: [],
   selectResponse: [],
-  isBillingSame: true
+  isBillingSame: true,
+  totalBillingItems: 0
 }
 
 const checkoutSlice = createSlice({
@@ -35,6 +37,10 @@ const checkoutSlice = createSlice({
     clearState(state) {
       state.initResponse = []
       state.confirmResponse = []
+      state.totalBillingItems = 0
+    },
+    setTotalBillingItems(state, action: PayloadAction<{ totalBillingItems: number }>) {
+      state.totalBillingItems = action.payload.totalBillingItems
     }
   },
   extraReducers: builder => {
