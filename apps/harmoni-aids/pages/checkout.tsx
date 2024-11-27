@@ -26,6 +26,7 @@ export type ShippingFormData = {
 
 const CheckoutPage = () => {
   const cartItems = useSelector((state: ICartRootState) => state.cart.items)
+  const totalBillingItems = useSelector((state: CheckoutRootState) => state.checkout.totalBillingItems)
   const theme = useTheme()
   const bgColorOfSecondary = theme.colors.secondary['100']
 
@@ -112,6 +113,9 @@ const CheckoutPage = () => {
       if (localStorage.getItem('shippingAdress')) {
         setShippingFormData(JSON.parse(localStorage.getItem('shippingAdress') as string))
       }
+      if (totalBillingItems > 0 && totalBillingItems !== cartItems.length) {
+        initReq()
+      }
     }
   }, [])
 
@@ -122,11 +126,16 @@ const CheckoutPage = () => {
     }
   }, [shippingFormData])
 
+  const initReq = () => {
+    getInitPayload(shippingFormData, {}, cartItems, transactionId, DOMAIN).then(res => {
+      dispatch(checkoutActions.setTotalBillingItems({ totalBillingItems: cartItems.length }))
+      return initialize(res)
+    })
+  }
+
   const formSubmitHandler = (data: any) => {
     if (data) {
-      getInitPayload(shippingFormData, {}, cartItems, transactionId, DOMAIN).then(res => {
-        return initialize(res)
-      })
+      initReq()
     }
   }
 
