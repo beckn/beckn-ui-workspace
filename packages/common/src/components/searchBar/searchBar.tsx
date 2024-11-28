@@ -45,6 +45,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ searchString, handleChange, place
           data-test={testIds.searchButton}
           onClick={handleSubmit}
           cursor={'pointer'}
+          zIndex={9999}
         >
           <Image src={'/images/searchInput.svg'} />
         </Box>
