@@ -2,12 +2,11 @@ import React, { useState, useMemo } from 'react'
 import { BecknAuth } from '@beckn-ui/becknified-components'
 import { FormErrors, SignInFormProps } from '@beckn-ui/common/lib/types'
 import { signInValidateForm } from '@beckn-ui/common'
-import energyIcon from '@public/images/energy-icon.svg'
+import openSpark from '@public/images/openSparkLogo.svg'
 import { useLanguage } from '@hooks/useLanguage'
 import { Box } from '@chakra-ui/react'
 import Router from 'next/router'
 import { useBapTradeLoginMutation, useBppTradeLoginMutation } from '@services/UserService'
-import { accountType } from '@utils/auth'
 
 const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
   const [formData, setFormData] = useState<SignInFormProps>(initialFormData)
@@ -16,7 +15,6 @@ const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
   const [bppLogin, { isLoading: bppLoading }] = useBppTradeLoginMutation()
   const { t } = useLanguage()
 
-  // Handle input change and validation
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
 
@@ -37,14 +35,12 @@ const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
     }))
   }
 
-  // Check if form is filled
   const isFormFilled = useMemo(() => {
     return (
       Object.values(formData).every(value => value !== '') && Object.values(formErrors).every(value => value === '')
     )
   }, [formData, formErrors])
 
-  // Handle sign-in action
   const handleSignIn = async () => {
     const signInData = {
       email: formData.email,
@@ -56,7 +52,6 @@ const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
       Router.push('/')
     } catch (error) {
       console.error('An error occurred:', error)
-      // Handle error state or display error message
     }
   }
 
@@ -64,18 +59,18 @@ const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
     Router.push('/signUp')
   }
 
-  const handleChooseAuthType = (id: string) => {}
+  const handleProducer = () => {
+    Router.push('/producerLogin')
+  }
 
   return (
     <Box>
       <BecknAuth
         schema={{
           logo: {
-            src: energyIcon,
-            alt: 'energy-logo'
+            src: openSpark,
+            alt: 'openSpark-logo'
           },
-          chooseAuthType: accountType,
-          handleAccountType: handleChooseAuthType,
           buttons: [
             {
               text: t.signIn,
@@ -113,6 +108,15 @@ const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
               handleChange: handleInputChange,
               error: formErrors.password,
               dataTest: 'input-password'
+            }
+          ],
+          socialButtons: [
+            {
+              text: 'Sign In as Producer',
+              handleClick: handleProducer,
+              variant: 'outline',
+              colorScheme: 'primary',
+              dataTest: 'producer-button'
             }
           ]
         }}

@@ -7,7 +7,10 @@ const AuthDivider = () => {
       align="center"
       p={'20px 0 30px'}
     >
-      <Divider />
+      <Divider
+        borderColor="#A7A7A7"
+        width="100%"
+      />
       <Text
         ml={'20px'}
         mr="20px"
@@ -16,7 +19,10 @@ const AuthDivider = () => {
       >
         Or
       </Text>
-      <Divider />
+      <Divider
+        borderColor="#A7A7A7"
+        width="100%"
+      />
     </Flex>
   )
 }
