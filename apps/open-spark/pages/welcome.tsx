@@ -1,11 +1,22 @@
 import BecknButton from '@beckn-ui/molecules/src/components/button'
 import { Box, Flex, Image, Text } from '@chakra-ui/react'
+import { setRole } from '@store/auth-slice'
+import Cookies from 'js-cookie'
 import { useRouter } from 'next/router'
 import React from 'react'
+import { useDispatch } from 'react-redux'
 import welcomeLogo from '../public/images/welcome.svg'
 
 const welcome = () => {
   const router = useRouter()
+  const dispatch = useDispatch()
+
+  const handleClick = (role: 'consumer' | 'producer') => {
+    router.push(`/signIn`)
+    dispatch(setRole({ role }))
+    Cookies.set('roleSelected', 'yes')
+  }
+
   return (
     <Box>
       <Flex
@@ -39,13 +50,13 @@ const welcome = () => {
         <BecknButton
           dataTest={'consumer_button'}
           children="I am a Consumer"
-          handleClick={() => router.push('/consumer')}
+          handleClick={() => handleClick('consumer')}
           variant="solid"
         />
         <BecknButton
           dataTest={'producer_button'}
           children="I am a Producer"
-          handleClick={() => router.push('/producer')}
+          handleClick={() => handleClick('producer')}
           variant="outline"
         />
       </Flex>
