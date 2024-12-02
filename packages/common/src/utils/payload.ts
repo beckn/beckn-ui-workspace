@@ -153,13 +153,13 @@ export const getInitPayload = async (
           stops: [
             {
               location: {
-                gps: `${cityData.lat},${cityData.lng}`,
+                gps: `${cityData.lat || '12.970005'},${cityData.lng || '77.572559'}`,
                 address: deliveryAddress.address,
                 city: {
-                  name: cityData?.city
+                  name: cityData?.city || 'Bengaluru'
                 },
                 state: {
-                  name: cityData?.state
+                  name: cityData?.state || 'Karnataka'
                 },
                 country: {
                   code: 'IND'
@@ -182,10 +182,10 @@ export const getInitPayload = async (
             address: billingAddress.address,
             email: billingAddress.email,
             city: {
-              name: cityData?.city
+              name: cityData?.city || 'Bengaluru'
             },
             state: {
-              name: cityData?.state
+              name: cityData?.state || 'Karnataka'
             }
           }
         : null
