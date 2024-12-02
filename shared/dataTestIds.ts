@@ -599,6 +599,7 @@ const testIds = {
   footer_image: 'footer-image',
   footer_postfix_text: 'footer-postfix-text',
   footer_bottomfix_text: 'footer-bottomfix-text',
+  P2P_hompage_button: 'p2p-homePage-btn',
 
   //////////////   Envirogrowth data test ////////////////
 
