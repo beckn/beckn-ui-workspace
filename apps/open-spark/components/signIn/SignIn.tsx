@@ -7,13 +7,18 @@ import { useLanguage } from '@hooks/useLanguage'
 import { Box } from '@chakra-ui/react'
 import Router from 'next/router'
 import { useBapTradeLoginMutation, useBppTradeLoginMutation } from '@services/UserService'
+import { useDispatch, useSelector } from 'react-redux'
+import { AuthRootState, setRole } from '@store/auth-slice'
 
 const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
   const [formData, setFormData] = useState<SignInFormProps>(initialFormData)
   const [formErrors, setFormErrors] = useState<FormErrors>({ email: '', password: '' })
+
+  const { role } = useSelector((state: AuthRootState) => state.auth)
   const [bapLogin, { isLoading: bapLoading }] = useBapTradeLoginMutation()
   const [bppLogin, { isLoading: bppLoading }] = useBppTradeLoginMutation()
   const { t } = useLanguage()
+  const dispatch = useDispatch()
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -59,8 +64,8 @@ const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
     Router.push('/signUp')
   }
 
-  const handleProducer = () => {
-    Router.push('/producerLogin')
+  const handleOnRoleChange = (roleType: 'producer' | 'consumer') => {
+    dispatch(setRole({ role: roleType }))
   }
 
   return (
@@ -112,8 +117,8 @@ const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
           ],
           socialButtons: [
             {
-              text: 'Sign In as Producer',
-              handleClick: handleProducer,
+              text: role === 'consumer' ? 'Sign In as Producer' : 'Sign In as Consumer',
+              handleClick: () => handleOnRoleChange(role === 'consumer' ? 'producer' : 'consumer'),
               variant: 'outline',
               colorScheme: 'primary',
               dataTest: 'producer-button'

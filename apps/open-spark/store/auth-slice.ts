@@ -8,6 +8,7 @@ interface AuthState {
   user: null | User
   jwt: string | null
   isAuthenticated: boolean
+  role: string | null
 }
 
 export interface AuthRootState {
@@ -17,7 +18,8 @@ export interface AuthRootState {
 const initialState: AuthState = {
   user: null,
   jwt: null,
-  isAuthenticated: false
+  isAuthenticated: false,
+  role: null
 }
 
 const slice = createSlice({
@@ -32,6 +34,9 @@ const slice = createSlice({
     setCredentials: (state, { payload: { user, jwt } }: PayloadAction<{ user: User; jwt: string }>) => {
       state.user = user
       state.jwt = jwt
+    },
+    setRole: (state, action: PayloadAction<{ role: string }>) => {
+      state.role = action.payload.role
     }
   },
   extraReducers: builder => {
@@ -64,5 +69,5 @@ const slice = createSlice({
   }
 })
 
-export const { logout, setCredentials } = slice.actions
+export const { logout, setCredentials, setRole } = slice.actions
 export default slice.reducer

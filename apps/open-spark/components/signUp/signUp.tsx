@@ -9,6 +9,8 @@ import openSpark from '@public/images/openSparkLogo.svg'
 import { useLanguage } from '@hooks/useLanguage'
 import { CustomFormErrorProps, signUpValidateForm } from '@utils/form-utils'
 import { accountType } from '@utils/auth'
+import { AuthRootState } from '@store/auth-slice'
+import { useSelector } from 'react-redux'
 
 interface RegisterFormProps extends SignUpFormProps {
   utilityCompany: string
@@ -35,6 +37,7 @@ const SignUp = () => {
   })
 
   const breakpoint = useBreakpoint()
+  const { role } = useSelector((state: AuthRootState) => state.auth)
   const [bapTradeRegister, { isLoading: bapLoading }] = useBapTradeRegisterMutation()
   const [bppTradeRegister, { isLoading: bppLoading }] = useBppTradeRegisterMutation()
   const { t } = useLanguage()
