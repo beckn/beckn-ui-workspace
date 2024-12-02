@@ -14,28 +14,28 @@ const extendedAuthApi = Api.injectEndpoints({
   endpoints: build => ({
     bapTradeLogin: build.mutation<SignInResponse, SignInRequest>({
       query: credentials => ({
-        url: '/bap/login',
+        url: '/beckn-trade-bap/login',
         method: 'POST',
         body: credentials
       })
     }),
     bppTradeLogin: build.mutation<SignInResponse, SignInRequest>({
       query: credentials => ({
-        url: '/bpp/login',
+        url: '/beckn-trade-bpp/login',
         method: 'POST',
         body: credentials
       })
     }),
     bapTradeRegister: build.mutation<SignInResponse, RegisterRequest>({
       query: credentials => ({
-        url: '/bap/register',
+        url: '/beckn-trade-bap/signup',
         method: 'POST',
         body: credentials
       })
     }),
     bppTradeRegister: build.mutation<SignInResponse, RegisterRequest>({
       query: credentials => ({
-        url: '/bpp/register',
+        url: '/beckn-trade-bpp/signup',
         method: 'POST',
         body: credentials
       })

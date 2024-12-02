@@ -9,14 +9,15 @@ import Router from 'next/router'
 import { useBapTradeLoginMutation, useBppTradeLoginMutation } from '@services/UserService'
 import { useDispatch, useSelector } from 'react-redux'
 import { AuthRootState, setRole } from '@store/auth-slice'
+import { ROLE } from '@lib/config'
 
 const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
   const [formData, setFormData] = useState<SignInFormProps>(initialFormData)
   const [formErrors, setFormErrors] = useState<FormErrors>({ email: '', password: '' })
 
   const { role } = useSelector((state: AuthRootState) => state.auth)
-  const [bapLogin, { isLoading: bapLoading }] = useBapTradeLoginMutation()
-  const [bppLogin, { isLoading: bppLoading }] = useBppTradeLoginMutation()
+  const [bapTradeLogin, { isLoading: bapLoading }] = useBapTradeLoginMutation()
+  const [bppTradeLogin, { isLoading: bppLoading }] = useBppTradeLoginMutation()
   const { t } = useLanguage()
   const dispatch = useDispatch()
 
@@ -53,7 +54,8 @@ const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
     }
 
     try {
-      await bapLogin(signInData).unwrap()
+      if (role === ROLE.CONSUMER) await bapTradeLogin(signInData).unwrap()
+      if (role === ROLE.PRODUCER) await bppTradeLogin(signInData).unwrap()
       Router.push('/')
     } catch (error) {
       console.error('An error occurred:', error)
@@ -64,7 +66,7 @@ const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
     Router.push('/signUp')
   }
 
-  const handleOnRoleChange = (roleType: 'producer' | 'consumer') => {
+  const handleOnRoleChange = (roleType: ROLE) => {
     dispatch(setRole({ role: roleType }))
   }
 
@@ -117,8 +119,8 @@ const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
           ],
           socialButtons: [
             {
-              text: role === 'consumer' ? 'Sign In as Producer' : 'Sign In as Consumer',
-              handleClick: () => handleOnRoleChange(role === 'consumer' ? 'producer' : 'consumer'),
+              text: role === ROLE.CONSUMER ? 'Sign In as Producer' : 'Sign In as Consumer',
+              handleClick: () => handleOnRoleChange(role === ROLE.CONSUMER ? ROLE.PRODUCER : ROLE.CONSUMER),
               variant: 'outline',
               colorScheme: 'primary',
               dataTest: 'producer-button'

@@ -4,3 +4,8 @@ export const currencyMap = {
   USD: '$',
   GMD: 'D'
 }
+
+export enum ROLE {
+  'CONSUMER' = 'CONSUMER',
+  'PRODUCER' = 'PRODUCER'
+}

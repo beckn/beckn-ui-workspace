@@ -7,7 +7,7 @@ export default function middleware(req: NextRequest) {
   const role = req.cookies.get('roleSelected')
   const { pathname } = req.nextUrl
 
-  if (role && loggedin && (pathname === '/signIn' || pathname === '/signUp')) {
+  if (role && loggedin && (pathname === '/signIn' || pathname === '/signUp' || pathname === '/welcome')) {
     return NextResponse.redirect(new URL('/', req.url))
   }
 
