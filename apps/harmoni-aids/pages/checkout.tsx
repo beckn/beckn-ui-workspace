@@ -31,11 +31,11 @@ const CheckoutPage = () => {
   const bgColorOfSecondary = theme.colors.secondary['100']
 
   const [shippingFormData, setShippingFormData] = useState<ShippingFormInitialValuesType>({
-    name: 'Anand',
-    mobileNumber: '9886098860',
-    email: 'anand@gmail.com',
-    address: 'Flat 208, A Block, Janakpuri West, New Delhi',
-    pinCode: '110018',
+    name: 'lisa',
+    mobileNumber: '9811259151',
+    email: 'lisa.k@gmail.com',
+    address: '1202 b2, Bengaluru urban, Bengaluru, Karnataka',
+    pinCode: '560078',
     meterNumber: 'MT451667'
   })
   console.log(cartItems)
