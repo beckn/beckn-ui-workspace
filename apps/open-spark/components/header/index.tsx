@@ -27,7 +27,7 @@ const Header = () => {
     <Box>
       {renderTopHeader && (
         <TopHeader
-          appLogo={'/images/taxi_hub.svg'}
+          appLogo={'/images/OpenSparkTopLogo.svg'}
           t={key => t[key]}
           headerConstants={{
             blackList: {

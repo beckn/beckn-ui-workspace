@@ -1,17 +1,18 @@
 import React, { useMemo, useState } from 'react'
 import { BecknAuth } from '@beckn-ui/becknified-components'
-import { Box, useBreakpoint } from '@chakra-ui/react'
+import { Box, useBreakpoint, theme } from '@chakra-ui/react'
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import Router from 'next/router'
 import { FormErrors, SignInResponse, SignUpFormProps } from '@beckn-ui/common/lib/types'
 import { useBapTradeRegisterMutation, useBppTradeRegisterMutation } from '@services/UserService'
-import energyIcon from '@public/images/energy-icon.svg'
+import openSpark from '@public/images/openSparkLogo.svg'
 import { useLanguage } from '@hooks/useLanguage'
 import { CustomFormErrorProps, signUpValidateForm } from '@utils/form-utils'
 import { accountType } from '@utils/auth'
 
 interface RegisterFormProps extends SignUpFormProps {
   utilityCompany: string
+  address: string
 }
 
 const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL
@@ -20,6 +21,7 @@ const SignUp = () => {
   const [formData, setFormData] = useState<RegisterFormProps>({
     email: '',
     password: '',
+    address: '',
     mobileNumber: '',
     name: '',
     utilityCompany: ''
@@ -36,6 +38,7 @@ const SignUp = () => {
   const [bapTradeRegister, { isLoading: bapLoading }] = useBapTradeRegisterMutation()
   const [bppTradeRegister, { isLoading: bppLoading }] = useBppTradeRegisterMutation()
   const { t } = useLanguage()
+  const [termsAccepted, setTermsAccepted] = useState(false)
 
   // Handle input change and validation
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -141,8 +144,6 @@ const SignUp = () => {
     Router.push('/signIn')
   }
 
-  const handleChooseAuthType = (id: string) => {}
-
   return (
     <Box
       mt={'30px'}
@@ -153,16 +154,14 @@ const SignUp = () => {
       <BecknAuth
         schema={{
           logo: {
-            src: energyIcon,
-            alt: 'energy-logo'
+            src: openSpark,
+            alt: 'openSpark-logo'
           },
-          chooseAuthType: accountType,
-          handleAccountType: handleChooseAuthType,
           buttons: [
             {
               text: t.signUp,
               handleClick: handleSignUp,
-              disabled: !isFormFilled,
+              disabled: !isFormFilled || !termsAccepted,
               variant: 'solid',
               colorScheme: 'primary',
               isLoading: bapLoading || bppLoading
@@ -193,12 +192,11 @@ const SignUp = () => {
               error: formErrors.email
             },
             {
-              type: 'password',
-              name: 'password',
-              value: formData.password,
+              type: 'text',
+              name: 'address',
+              value: formData.address,
               handleChange: handleInputChange,
-              label: t.enterPassword,
-              error: formErrors.password
+              label: t.enterAddrees
             },
             {
               type: 'number',
@@ -220,8 +218,27 @@ const SignUp = () => {
               handleChange: handleSelectChange,
               label: t.selectUtilityCompany,
               error: formErrors.utilityCompany
+            },
+            {
+              type: 'password',
+              name: 'password',
+              value: formData.password,
+              handleChange: handleInputChange,
+              label: t.enterPassword,
+              error: formErrors.password
             }
-          ]
+          ],
+          showTermsCheckbox: true,
+          termsCheckboxProps: {
+            isChecked: termsAccepted,
+            color: '#4498E8',
+            onChange: e => setTermsAccepted(e.target.checked),
+            termsText: {
+              serviceName: 'Open Spark',
+              termsLink: '/terms',
+              privacyLink: '/privacy'
+            }
+          }
         }}
       />
     </Box>

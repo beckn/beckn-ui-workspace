@@ -196,6 +196,7 @@ const Product = () => {
         >
           <Button
             text="proceed"
+            dataTest={testIds.Proceed_to_product}
             disabled={!checkIsDisabled()}
             handleClick={handleOnProceed}
           />
