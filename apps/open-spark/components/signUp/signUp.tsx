@@ -11,6 +11,7 @@ import { CustomFormErrorProps, signUpValidateForm } from '@utils/form-utils'
 import { accountType } from '@utils/auth'
 import { AuthRootState } from '@store/auth-slice'
 import { useSelector } from 'react-redux'
+import { ROLE } from '@lib/config'
 
 interface RegisterFormProps extends SignUpFormProps {
   utilityCompany: string
@@ -90,18 +91,22 @@ const SignUp = () => {
   const handleSignUp = async () => {
     const errors = signUpValidateForm(formData)
     const isFormValid = Object.values(errors).every(error => error === '')
+    const signUpData = {
+      username: formData.email,
+      email: formData.email,
+      password: formData.password,
+      mobile: formData.mobileNumber,
+      utilityCompany: formData.utilityCompany
+    }
 
     if (isFormValid) {
       try {
-        const registerResponse = await bapTradeRegister({
-          username: formData.email,
-          email: formData.email,
-          password: formData.password,
-          mobile: formData.mobileNumber,
-          utilityCompany: formData.utilityCompany
-        })
+        let registerResponse = null
+        if (role === ROLE.CONSUMER) registerResponse = await bapTradeRegister(signUpData)
+        if (role === ROLE.PRODUCER) registerResponse = await bppTradeRegister(signUpData)
 
-        if ((registerResponse as { error: FetchBaseQueryError })?.error) throw new Error('Could not register')
+        if (!registerResponse || (registerResponse as { error: FetchBaseQueryError })?.error)
+          throw new Error('Could not register')
 
         const myHeaders = new Headers()
         myHeaders.append('Authorization', `Bearer ${(registerResponse as { data: SignInResponse }).data.jwt}`)
@@ -210,18 +215,26 @@ const SignUp = () => {
               error: formErrors.mobileNumber
             },
             {
-              type: 'select',
+              type: 'text',
               name: 'utilityCompany',
-              options: [
-                { value: 'Utility Company 1', label: 'Utility Company 1' },
-                { value: 'Utility Company 2', label: 'Utility Company 2' },
-                { value: 'Utility Company 3', label: 'Utility Company 3' }
-              ],
               value: formData.utilityCompany,
-              handleChange: handleSelectChange,
+              handleChange: handleInputChange,
               label: t.selectUtilityCompany,
               error: formErrors.utilityCompany
             },
+            // {
+            //   type: 'select',
+            //   name: 'utilityCompany',
+            //   options: [
+            //     { value: 'Utility Company 1', label: 'Utility Company 1' },
+            //     { value: 'Utility Company 2', label: 'Utility Company 2' },
+            //     { value: 'Utility Company 3', label: 'Utility Company 3' }
+            //   ],
+            //   value: formData.utilityCompany,
+            //   handleChange: handleSelectChange,
+            //   label: t.selectUtilityCompany,
+            //   error: formErrors.utilityCompany
+            // },
             {
               type: 'password',
               name: 'password',

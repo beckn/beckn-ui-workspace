@@ -3,12 +3,13 @@ import { User } from '@beckn-ui/common'
 import extendedAuthApi from '@services/UserService'
 import Cookies from 'js-cookie'
 import Router from 'next/router'
+import { ROLE } from '@lib/config'
 
 interface AuthState {
   user: null | User
   jwt: string | null
   isAuthenticated: boolean
-  role: string | null
+  role: ROLE | null
 }
 
 export interface AuthRootState {
@@ -35,7 +36,7 @@ const slice = createSlice({
       state.user = user
       state.jwt = jwt
     },
-    setRole: (state, action: PayloadAction<{ role: string }>) => {
+    setRole: (state, action: PayloadAction<{ role: ROLE }>) => {
       state.role = action.payload.role
     }
   },
@@ -64,6 +65,31 @@ const slice = createSlice({
         }
       })
       .addMatcher(extendedAuthApi.endpoints.bapTradeLogin.matchRejected, (state, action) => {
+        console.log('rejected', action)
+      })
+      .addMatcher(extendedAuthApi.endpoints.bppTradeLogin.matchPending, (state, action) => {
+        console.log('pending', action)
+      })
+      .addMatcher(extendedAuthApi.endpoints.bppTradeLogin.matchFulfilled, (state, action) => {
+        console.log('fulfilled', action)
+        state.user = action.payload.user
+        state.jwt = action.payload.jwt
+        state.isAuthenticated = true
+        Cookies.set('authToken', state.jwt)
+        const urlQuery = Router.query
+
+        const hasNotQuery = JSON.stringify(urlQuery) === '{}'
+
+        if (hasNotQuery) {
+          Router.push('/')
+        } else {
+          Router.push({
+            pathname: '/',
+            query: { external_url: urlQuery.external_url }
+          })
+        }
+      })
+      .addMatcher(extendedAuthApi.endpoints.bppTradeLogin.matchRejected, (state, action) => {
         console.log('rejected', action)
       })
   }
