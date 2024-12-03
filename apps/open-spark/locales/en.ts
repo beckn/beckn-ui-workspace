@@ -24,12 +24,10 @@ const en: { [key: string]: string } = {
   en: 'English - En',
   language: 'Language: ',
   formName: 'Name',
-  formNumber: 'Mobile Number',
-  formEmail: 'Email ID',
-  formAddress: 'Complete Address',
-  formZipCode: 'Zip Code',
+  formAddress: 'Address',
+  formCustomerId: 'Customer Id',
   name: 'Name',
-  fullName: 'Enter Your Full Name / Company Name',
+  fullName: 'Full Name / Company Name',
   password: 'Password',
   enterPassword: 'Enter Password',
   email: 'Email',
@@ -61,6 +59,7 @@ const en: { [key: string]: string } = {
   offlineTitle: 'You’re Offline',
   offlineDescription: 'You’re currently offline. Go online to recieve trip requests.',
   selectUtilityCompany: 'Select Utility Company',
-  errorUtilityCompany: 'Utility Company Required'
+  errorUtilityCompany: 'Utility Company Required',
+  logout: 'Logout'
 }
 export default en

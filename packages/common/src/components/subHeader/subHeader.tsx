@@ -52,9 +52,9 @@ const getHeaderTitleForPage = (
 }
 
 const SubHeader = (props: SubHeaderProps) => {
-  const { locale, t, showCartIcon = true, headerConstants } = props
+  const { locale, t, showCartIcon = true, headerConstants, handleClickOnEdit } = props
   const {
-    blackList: { backIconList, orderIconList, cartIconList, invoiceDownloadIconList, qrCodeScanerList }
+    blackList: { backIconList, orderIconList, cartIconList, invoiceDownloadIconList, qrCodeScanerList, editIconList }
   } = headerConstants
 
   const [isOrderModalOpen, setOrderModalOpen] = useState(false)
@@ -130,6 +130,14 @@ const SubHeader = (props: SubHeaderProps) => {
               alt="invoice icon"
               mr={'20px'}
               data-test={testIds.orderDetails_tourism_QR_external_link}
+            />
+          )}
+          {editIconList?.includes(router.pathname) && (
+            <Image
+              cursor="pointer"
+              onClick={handleClickOnEdit}
+              src="/images/edit_icon.svg"
+              alt="edit icon"
             />
           )}
         </Box>

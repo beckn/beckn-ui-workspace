@@ -31,4 +31,5 @@ export interface AuthProps {
   }
   isLoading?: boolean
   dataTestForm?: string
+  customComponent?: React.ReactElement<any, any> | null
 }

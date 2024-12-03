@@ -203,6 +203,8 @@ const testIds = {
   profile_country: 'input-country',
   profile_text_click: 'profile-text',
   profile_form: 'profile-form',
+  profile_address: 'profile-address',
+  profile_customerId: 'profile-customerId',
   // order details page
   orderDetailspage_orderOverview: 'orderOverview',
   orderDetailspage_progressSummary: 'progressSummary',

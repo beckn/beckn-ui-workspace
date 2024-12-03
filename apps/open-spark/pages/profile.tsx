@@ -1,16 +1,23 @@
 import { BecknAuth } from '@beckn-ui/becknified-components'
-import { Box, useToast } from '@chakra-ui/react'
+import { Box, Divider, Flex, Image, useToast } from '@chakra-ui/react'
 import { useLanguage } from '@hooks/useLanguage'
 import { profileValidateForm } from '@beckn-ui/common/src/utils'
 import Cookies from 'js-cookie'
 import React, { useEffect, useMemo, useState } from 'react'
 import Router from 'next/router'
 import { isEmpty } from '@beckn-ui/common/src/utils'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { FormErrors, ProfileProps } from '@beckn-ui/common/lib/types'
 import { feedbackActions } from '@beckn-ui/common/src/store/ui-feedback-slice'
 import axios from '@services/axios'
 import { testIds } from '@shared/dataTestIds'
+import credIcon from '@public/images/cred_icon.svg'
+import tradeIcon from '@public/images/trade_icon.svg'
+import derIcon from '@public/images/der_icon.svg'
+import logoutIcon from '@public/images/logOutIcon.svg'
+import NavigationItem from '@components/navigationItem'
+import fa from '@locales/fa'
+import { setProfileEditable, UserRootState } from '@store/user-slice'
 
 const ProfilePage = () => {
   const dispatch = useDispatch()
@@ -20,20 +27,22 @@ const ProfilePage = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [formData, setFormData] = useState<ProfileProps>({
     name: '',
-    mobileNumber: '',
-    flatNumber: '',
-    street: '',
-    city: '',
-    zipCode: '',
-    state: '',
-    country: ''
+    customerId: '',
+    address: ''
   })
   const [formErrors, setFormErrors] = useState<FormErrors>({
     name: '',
-    mobileNumber: '',
-    email: '',
-    zipCode: ''
+    customerId: '',
+    address: ''
   })
+
+  const { profileEditable } = useSelector((state: UserRootState) => state.user)
+
+  useEffect(() => {
+    return () => {
+      dispatch(setProfileEditable({ profileEditable: false }))
+    }
+  }, [])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -168,16 +177,7 @@ const ProfilePage = () => {
       <BecknAuth
         dataTestForm={testIds.profile_form}
         schema={{
-          buttons: [
-            {
-              text: t.saveContinue,
-              handleClick: updateProfile,
-              disabled: !isFormFilled,
-              variant: 'solid',
-              colorScheme: 'primary',
-              dataTest: testIds.profile_saveandContinue
-            }
-          ],
+          buttons: [],
           inputs: [
             {
               type: 'text',
@@ -186,75 +186,55 @@ const ProfilePage = () => {
               handleChange: handleInputChange,
               label: t.fullName,
               error: formErrors.name,
-              dataTest: testIds.profile_inputName
-            },
-            {
-              type: 'number',
-              name: 'mobileNumber',
-              value: formData.mobileNumber,
-              handleChange: handleInputChange,
-              label: t.enterMobileNumber,
-              error: formErrors.mobileNumber,
-              dataTest: testIds.profile_inputMobileNumber
+              dataTest: testIds.profile_inputName,
+              disabled: !profileEditable
             },
             {
               type: 'text',
-              name: 'flatNumber',
-              value: formData.flatNumber!,
+              name: 'customerId',
+              value: formData.customerId!,
               handleChange: handleInputChange,
-              label: t.enterFlatDetails,
-              dataTest: testIds.profile_flatNumber
-
-              // error: formErrors.flatNumber
+              label: t.formCustomerId,
+              error: formErrors.customerId,
+              dataTest: testIds.profile_customerId,
+              disabled: !profileEditable
             },
             {
               type: 'text',
-              name: 'street',
-              value: formData.street!,
+              name: 'address',
+              value: formData.address!,
               handleChange: handleInputChange,
-              label: t.enterStreetDetails,
-              dataTest: testIds.profile_street
-              // error: formErrors.street
-            },
-            {
-              type: 'text',
-              name: 'city',
-              value: formData.city,
-              handleChange: handleInputChange,
-              label: t.enterCity,
-              error: formErrors.city,
-              dataTest: testIds.profile_city
-            },
-            {
-              type: 'text',
-              name: 'zipCode',
-              value: formData.zipCode,
-              handleChange: handleInputChange,
-              label: t.enterPincode,
-              error: formErrors.zipCode,
-              dataTest: testIds.profile_zipCode
-            },
-            {
-              type: 'text',
-              name: 'state',
-              value: formData.state,
-              handleChange: handleInputChange,
-              label: t.enterState,
-              error: formErrors.state,
-              dataTest: testIds.profile_state
-            },
-            {
-              type: 'text',
-              name: 'country',
-              value: formData.country,
-              handleChange: handleInputChange,
-              label: t.enterCountry,
-              error: formErrors.country,
-              dataTest: testIds.profile_country
+              label: t.formAddress,
+              error: formErrors.address,
+              dataTest: testIds.profile_address,
+              disabled: !profileEditable
             }
           ]
         }}
         isLoading={isLoading}
+        customComponent={
+          <Box marginTop={'-1.8rem'}>
+            <NavigationItem
+              icon={credIcon}
+              label={'My Credentials'}
+            />
+            <NavigationItem
+              icon={tradeIcon}
+              label={'My Trades'}
+            />
+            <NavigationItem
+              icon={derIcon}
+              label={'My DERs'}
+            />
+            <NavigationItem
+              icon={logoutIcon}
+              label={t.logout}
+              arrow={false}
+              divider={false}
+              color="red"
+            />
+          </Box>
+        }
       />
     </Box>
   )
