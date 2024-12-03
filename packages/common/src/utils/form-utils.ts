@@ -104,29 +104,29 @@ export const profileValidateForm = (formData: ProfileProps): FormErrors => {
     errors.name = 'errorName3'
   }
 
-  if (formData.mobileNumber.trim() === '') {
+  if (formData?.mobileNumber?.trim() === '') {
     errors.mobileNumber = 'errorNumber'
-  } else if (!/^\d{10}$/.test(formData.mobileNumber)) {
+  } else if (!/^\d{10}$/.test(formData.mobileNumber!)) {
     errors.mobileNumber = 'errorNumber2'
   }
-  if (formData.zipCode.trim() === '') {
+  if (formData?.zipCode?.trim() === '') {
     errors.zipCode = 'errorZipcode'
-  } else if (!/^\d{6}$/.test(formData.zipCode)) {
+  } else if (!/^\d{6}$/.test(formData.zipCode!)) {
     errors.zipCode = 'errorZipcode2'
   }
-  if (formData.country.trim() === '') {
+  if (formData?.country?.trim() === '') {
     errors.country = 'errorCountry'
-  } else if (!/^[A-Za-z\s]*$/.test(formData.country)) {
+  } else if (!/^[A-Za-z\s]*$/.test(formData.country!)) {
     errors.country = 'errorCountry1'
   }
-  if (formData.state.trim() === '') {
+  if (formData?.state?.trim() === '') {
     errors.state = 'errorState'
-  } else if (!/^[A-Za-z\s]*$/.test(formData.state)) {
+  } else if (!/^[A-Za-z\s]*$/.test(formData.state!)) {
     errors.state = 'errorState1'
   }
-  if (formData.city.trim() === '') {
+  if (formData?.city?.trim() === '') {
     errors.city = 'errorCity'
-  } else if (!/^[A-Za-z\s]*$/.test(formData.city)) {
+  } else if (!/^[A-Za-z\s]*$/.test(formData.city!)) {
     errors.city = 'errorCity1'
   }
   return errors

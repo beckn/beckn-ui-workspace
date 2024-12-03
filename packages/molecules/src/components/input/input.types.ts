@@ -20,6 +20,7 @@ export interface InputProps {
   handleChange: React.ChangeEventHandler<HTMLInputElement>
   label?: string
   dataTest?: string
+  disabled?: boolean
   options?: { label: string; value: string }[]
 }
 export interface signInField {

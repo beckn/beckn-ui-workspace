@@ -14,6 +14,7 @@ const Input: React.FC<InputProps> = ({
   label,
   className,
   error,
+  disabled,
   dataTest
 }) => {
   const theme = useTheme()
@@ -48,6 +49,7 @@ const Input: React.FC<InputProps> = ({
         name={name}
         value={value}
         onChange={handleChange}
+        disabled={disabled}
       />
       {isPassword && (
         <IconButton

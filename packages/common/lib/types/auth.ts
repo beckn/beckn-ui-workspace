@@ -54,13 +54,15 @@ export interface SignUpResponse {
 // Profile related models
 export interface ProfileProps {
   name: string
-  mobileNumber: string
-  flatNumber: string | null
-  street: string | null
-  city: string
-  zipCode: string
-  state: string
-  country: string
+  mobileNumber?: string
+  flatNumber?: string | null
+  street?: string | null
+  city?: string
+  zipCode?: string
+  state?: string
+  country?: string
+  customerId?: string
+  address?: ''
 }
 
 // components related models

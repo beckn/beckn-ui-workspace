@@ -6,7 +6,7 @@ import { AuthProps } from './auth.types'
 import AuthDivider from './authDivider'
 import greenTick from '../../../public/images/green-tick.svg'
 
-const Auth: React.FC<AuthProps> = ({ schema, isLoading, dataTestForm }) => {
+const Auth: React.FC<AuthProps> = ({ schema, isLoading, dataTestForm, customComponent }) => {
   const {
     logo,
     inputs,
@@ -142,6 +142,7 @@ const Auth: React.FC<AuthProps> = ({ schema, isLoading, dataTestForm }) => {
               })}
             </Box>
           </Box>
+          {<>{customComponent}</>}
           {showTermsCheckbox && termsCheckboxProps && (
             <Flex
               mb="20px"
