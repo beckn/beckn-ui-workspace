@@ -122,6 +122,7 @@ const TopSheet: React.FC<TopSheetComponentProps> = ({
         )}
         {profileSection && (
           <Image
+            cursor={'pointer'}
             src={profileSection.src}
             alt={'right-img'}
             onClick={profileSection.handleClick}
