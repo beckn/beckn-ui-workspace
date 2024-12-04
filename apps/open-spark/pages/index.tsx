@@ -21,15 +21,16 @@ import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import { format } from 'date-fns'
 import { RootState } from '@store/index'
 import { useDispatch, useSelector } from 'react-redux'
+import { ROLE } from '@lib/config'
 
 const totalEnergyMockData = [
-  { label: 'Previous Month', value: '10 (KWh)' },
-  { label: 'Current Month', value: '250 (KWh)' },
-  { label: 'Average (per day)', value: '08 (KWh)' }
+  { name: 'previousMonth', label: 'Previous Month', value: '10 (KWh)', disabled: true },
+  { name: 'currentMonth', label: 'Current Month', value: '250 (KWh)', disabled: true },
+  { name: 'average', label: 'Average (per day)', value: '08 (KWh)', disabled: true }
 ]
 const currentTradeMockData = [
-  { label: 'Energy to Buy', value: '210 (KWh)' },
-  { label: 'Price Fixed', value: '08 ₹/units' }
+  { name: 'energyToBuy', label: 'Energy to Buy', value: '210 (KWh)', disabled: true },
+  { name: 'priceFixed', label: 'Price Fixed', value: '08 ₹/units', disabled: true }
 ]
 const currentStatusmockData = [
   {
@@ -96,7 +97,7 @@ const Homepage = () => {
       />
       <Box
         maxWidth={{ base: '100vw', md: '30rem', lg: '40rem' }}
-        margin="calc(0rem + 90px)  auto"
+        margin="calc(0rem + 68px) auto auto auto"
         backgroundColor="white"
       >
         <Typography
@@ -109,12 +110,14 @@ const Homepage = () => {
         />
         <Flex columnGap={'20px'}>
           <Input
+            name="energy"
             value={'250 (KWh)'}
             type={'text'}
             handleChange={() => {
               console.log('Energy units changed')
             }}
             label={'Energy Units'}
+            disabled={true}
           />
           <CustomeDateInput
             startDate={startDate}
@@ -123,9 +126,9 @@ const Homepage = () => {
           />
         </Flex>
         <Box>
-          <TotalEnergyUnits mockData={totalEnergyMockData} />
+          <TotalEnergyUnits data={totalEnergyMockData} />
         </Box>
-        <Box mb={'15px'}>
+        <Box>
           <Flex
             justifyContent={'space-between'}
             alignItems={'center'}
@@ -139,9 +142,9 @@ const Homepage = () => {
               />
               <QuestionOutlineIcon />
             </HStack>
-            {emptyState ? <></> : <LiaPenSolid onClick={() => router.push('/buyingPrefference')} />}
+            {emptyState ? <></> : <LiaPenSolid />}
           </Flex>
-          {emptyState ? <EmptyCurrentTrade /> : <CurrentTrade mockData={currentTradeMockData} />}
+          {emptyState ? <EmptyCurrentTrade /> : <CurrentTrade data={currentTradeMockData} />}
         </Box>
         <Box>
           <Typography
@@ -202,7 +205,10 @@ const Homepage = () => {
             </Box>
           </DetailCard>
         </Box>
-        <BecknButton children="Buy" />
+        <BecknButton
+          children={role === ROLE.CONSUMER ? 'Buy' : 'Sell'}
+          handleClick={() => router.push(role === ROLE.PRODUCER ? '/sellingPreference' : '/buyingPreference')}
+        />
       </Box>
       <SelectDate
         isOpen={isModalOpen}

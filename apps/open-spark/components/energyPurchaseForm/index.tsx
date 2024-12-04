@@ -15,7 +15,12 @@ import React, { useState } from 'react'
 import { FaMinus, FaPlus } from 'react-icons/fa6'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 
-export default function EnergyPurchaseForm() {
+interface EnergyPurchaseFormProps {
+  preferenceType: string
+}
+
+export default function EnergyPurchaseForm(props: EnergyPurchaseFormProps) {
+  const { preferenceType } = props
   const [energyUnits, setEnergyUnits] = useState(0)
   const [pricePerUnit, setPricePerUnit] = useState(0)
   const [preferences, setPreferences] = useState({
@@ -52,7 +57,7 @@ export default function EnergyPurchaseForm() {
               fontSize="15"
               fontWeight="600"
             >
-              Energy to Buy
+              Energy to {preferenceType}
             </FormLabel>
             <QuestionOutlineIcon />
           </HStack>
@@ -89,7 +94,7 @@ export default function EnergyPurchaseForm() {
               fontSize="15"
               fontWeight="600"
             >
-              Set a Price per unit to buy
+              Set a Price per unit to {preferenceType}
             </FormLabel>
             <QuestionOutlineIcon />
           </HStack>
@@ -124,7 +129,7 @@ export default function EnergyPurchaseForm() {
             fontWeight="500"
             mb={4}
           >
-            Select a preference to buy
+            Select a preference to {preferenceType}
           </FormLabel>
           <SimpleGrid
             columns={2}

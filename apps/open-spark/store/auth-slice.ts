@@ -29,7 +29,8 @@ const slice = createSlice({
   reducers: {
     logout: () => {
       Cookies.remove('authToken')
-      Router.push('/signIn')
+      Cookies.remove('roleSelected')
+      Router.push('/welcome')
       return initialState
     },
     setCredentials: (state, { payload: { user, jwt } }: PayloadAction<{ user: User; jwt: string }>) => {
