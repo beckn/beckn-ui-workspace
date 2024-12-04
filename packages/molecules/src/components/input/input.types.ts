@@ -22,6 +22,8 @@ export interface InputProps {
   dataTest?: string
   disabled?: boolean
   options?: { label: string; value: string }[]
+  readOnly?: boolean
+  rightElement?: () => React.ReactElement<any, any> | null
 }
 export interface signInField {
   name: string

@@ -3,7 +3,7 @@ type PathnameObjectType = Record<string, string>
 // -------------------------------- Top Header constants --------------------------------
 const appLogoBlackList = ['/signIn', '/signUp', '/welcome']
 const homeIconBlackList = ['/', '/signIn', '/', '/myRides', '/profile', '/signUp', '/welcome', '/myDers']
-const menuIconWhiteList = ['/', '/profile', '/myRides', '/buyingPrefference', '/myDers']
+const menuIconWhiteList = ['/', '/profile', '/myRides', '/buyingPreference', '/sellingPreference', '/myDers']
 const topHeaderBlackList: string[] = ['/welcome']
 const languageIconWhiteList: string[] = []
 
@@ -17,7 +17,8 @@ const headerNames: PathnameObjectType = {
   '/profile': 'Profile',
   '/myCredentials': 'My Credentials',
   '/myTrades': 'My Trades',
-  '/buyingPrefference': 'Buying Preferences',
+  '/buyingPreference': 'Buying Preferences',
+  '/sellingPreference': 'Selling Preferences',
   '/myDers': 'My DERs'
 }
 
@@ -35,7 +36,8 @@ const headerBlackList = [
   '/welcome',
   '/myCredentials',
   '/myTrades',
-  '/buyingPrefference',
+  '/buyingPreference',
+  '/sellingPreference',
   '/myDers'
 ]
 
