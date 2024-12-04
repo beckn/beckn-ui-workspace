@@ -288,3 +288,11 @@ select:-webkit-autofill:focus {
 .hideScroll::-webkit-scrollbar {
   display: none;
 }
+.input_input__F_m4r:not(:placeholder-shown) ~ .input_input_label__hv2in {
+  font-size: 12px;
+  font-weight: 500;
+}
+.css-vhc7ah {
+  padding-inline-start: unset !important;
+  padding-inline-end: unset !important;
+}
