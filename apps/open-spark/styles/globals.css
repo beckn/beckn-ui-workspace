@@ -272,12 +272,6 @@ select:-webkit-autofill:focus {
 .hideScroll::-webkit-scrollbar {
   display: none;
 }
-#ride-modal .chakra-portal .chakra-modal__content-container,
-#ride-modal .chakra-portal .chakra-modal__overlay {
-  z-index: unset !important;
-  background: unset !important;
-  height: 0px !important;
-}
 .taxi-bpp-login button {
   color: #1f2122;
   border-color: transparent !important;

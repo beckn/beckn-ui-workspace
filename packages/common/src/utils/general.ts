@@ -1,5 +1,6 @@
 import { ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
 import { Coordinate } from '../../lib/types'
+import { format } from 'date-fns'
 
 export const toBinary = (objectString: string) => {
   const codeUnits = Uint16Array.from({ length: objectString.length }, (element, index) =>
@@ -81,4 +82,18 @@ export const calculateDistance = (coord1: Coordinate, coord2: Coordinate): numbe
   const distance = R * c
 
   return distance
+}
+
+export function formatDate(date: string | number | Date, formatType: string): string {
+  try {
+    const parsedDate = new Date(date)
+    if (isNaN(parsedDate.getTime())) {
+      throw new Error('Invalid date')
+    }
+
+    return format(parsedDate, formatType)
+  } catch (error) {
+    console.error('Error formatting date:', error)
+    return 'Invalid date'
+  }
 }

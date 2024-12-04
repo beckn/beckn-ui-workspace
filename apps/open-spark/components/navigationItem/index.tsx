@@ -10,15 +10,18 @@ interface NavigationItemProps {
   arrow?: boolean
   divider?: boolean
   color?: string
+  handleClick?: () => void
 }
 
 const NavigationItem = (props: NavigationItemProps) => {
-  const { key, icon, label, divider = true, arrow = true, color } = props
+  const { key, icon, label, divider = true, arrow = true, color, handleClick } = props
   return (
     <>
       <Flex
         justifyContent="space-between"
         padding={'1.5rem 0'}
+        cursor="pointer"
+        onClick={handleClick}
       >
         <Flex gap={'1rem'}>
           <Image

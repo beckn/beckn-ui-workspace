@@ -1,14 +1,12 @@
 import { BecknAuth } from '@beckn-ui/becknified-components'
-import { Box, Divider, Flex, Image, useToast } from '@chakra-ui/react'
+import { Box } from '@chakra-ui/react'
 import { useLanguage } from '@hooks/useLanguage'
 import { profileValidateForm } from '@beckn-ui/common/src/utils'
 import Cookies from 'js-cookie'
 import React, { useEffect, useMemo, useState } from 'react'
-import Router from 'next/router'
 import { isEmpty } from '@beckn-ui/common/src/utils'
 import { useDispatch, useSelector } from 'react-redux'
 import { FormErrors, ProfileProps } from '@beckn-ui/common/lib/types'
-import { feedbackActions } from '@beckn-ui/common/src/store/ui-feedback-slice'
 import axios from '@services/axios'
 import { testIds } from '@shared/dataTestIds'
 import credIcon from '@public/images/cred_icon.svg'
@@ -16,12 +14,16 @@ import tradeIcon from '@public/images/trade_icon.svg'
 import derIcon from '@public/images/der_icon.svg'
 import logoutIcon from '@public/images/logOutIcon.svg'
 import NavigationItem from '@components/navigationItem'
-import fa from '@locales/fa'
 import { setProfileEditable, UserRootState } from '@store/user-slice'
+import { logout } from '@beckn-ui/common'
+import { ROUTE_TYPE } from '@lib/config'
+import { AuthRootState } from '@store/auth-slice'
+import { useRouter } from 'next/router'
 
 const ProfilePage = () => {
   const dispatch = useDispatch()
   const { t } = useLanguage()
+  const router = useRouter()
   const bearerToken = Cookies.get('authToken')
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
   const [isLoading, setIsLoading] = useState(false)
@@ -37,6 +39,7 @@ const ProfilePage = () => {
   })
 
   const { profileEditable } = useSelector((state: UserRootState) => state.user)
+  const { role } = useSelector((state: AuthRootState) => state.auth)
 
   useEffect(() => {
     return () => {
@@ -74,7 +77,7 @@ const ProfilePage = () => {
     setIsLoading(true)
 
     axios
-      .get(`${strapiUrl}/profiles`, requestOptions)
+      .get(`${strapiUrl}${ROUTE_TYPE[role!]}/profile`, requestOptions)
       .then(response => {
         const result = response.data
         const { name, phone, address, zip_code = '' } = result.data.attributes
@@ -108,52 +111,52 @@ const ProfilePage = () => {
       })
   }, [])
 
-  const updateProfile = () => {
-    const errors = profileValidateForm(formData) as any
-    setFormErrors(prevErrors => ({
-      ...prevErrors,
-      ...Object.keys(errors).reduce((acc: any, key) => {
-        acc[key] = t[`${errors[key]}`] || ''
-        return acc
-      }, {} as FormErrors)
-    }))
+  // const updateProfile = () => {
+  //   const errors = profileValidateForm(formData) as any
+  //   setFormErrors(prevErrors => ({
+  //     ...prevErrors,
+  //     ...Object.keys(errors).reduce((acc: any, key) => {
+  //       acc[key] = t[`${errors[key]}`] || ''
+  //       return acc
+  //     }, {} as FormErrors)
+  //   }))
 
-    setIsLoading(true)
+  //   setIsLoading(true)
 
-    const currentFormData = new FormData()
-    const data = {
-      name: formData.name.trim(),
-      phone: formData.mobileNumber,
-      address: `${formData.flatNumber || ''}, ${formData.street || ''}, ${formData.city}, ${formData.state}, ${formData.country}`,
-      zip_code: formData.zipCode
-    }
+  //   const currentFormData = new FormData()
+  //   const data = {
+  //     name: formData.name.trim(),
+  //     phone: formData.mobileNumber,
+  //     address: `${formData.flatNumber || ''}, ${formData.street || ''}, ${formData.city}, ${formData.state}, ${formData.country}`,
+  //     zip_code: formData.zipCode
+  //   }
 
-    currentFormData.append('data', JSON.stringify(data))
+  //   currentFormData.append('data', JSON.stringify(data))
 
-    const requestOptions = {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${bearerToken}` },
-      withCredentials: true,
-      data: currentFormData
-    }
+  //   const requestOptions = {
+  //     method: 'POST',
+  //     headers: { Authorization: `Bearer ${bearerToken}` },
+  //     withCredentials: true,
+  //     data: currentFormData
+  //   }
 
-    axios
-      .post(`${strapiUrl}/profiles`, currentFormData, requestOptions)
-      .then(response => {
-        dispatch(
-          feedbackActions.setToastData({
-            toastData: { message: t.success, display: true, type: 'success', description: t.profileUpdateSuccess }
-          })
-        )
-        Router.push('/')
-      })
-      .catch(error => {
-        console.log(error)
-      })
-      .finally(() => {
-        setIsLoading(false)
-      })
-  }
+  //   axios
+  //     .post(`${strapiUrl}/profiles`, currentFormData, requestOptions)
+  //     .then(response => {
+  //       dispatch(
+  //         feedbackActions.setToastData({
+  //           toastData: { message: t.success, display: true, type: 'success', description: t.profileUpdateSuccess }
+  //         })
+  //       )
+  //       Router.push('/')
+  //     })
+  //     .catch(error => {
+  //       console.log(error)
+  //     })
+  //     .finally(() => {
+  //       setIsLoading(false)
+  //     })
+  // }
 
   const isFormFilled = useMemo(() => {
     const { flatNumber, street, ...restFormData } = formData
@@ -217,14 +220,17 @@ const ProfilePage = () => {
             <NavigationItem
               icon={credIcon}
               label={'My Credentials'}
+              handleClick={() => router.push('/myCredentials')}
             />
             <NavigationItem
               icon={tradeIcon}
               label={'My Trades'}
+              handleClick={() => router.push('/myTrades')}
             />
             <NavigationItem
               icon={derIcon}
               label={'My DERs'}
+              handleClick={() => {}}
             />
             <NavigationItem
               icon={logoutIcon}
@@ -232,6 +238,9 @@ const ProfilePage = () => {
               arrow={false}
               divider={false}
               color="red"
+              handleClick={() => {
+                dispatch(logout())
+              }}
             />
           </Box>
         }

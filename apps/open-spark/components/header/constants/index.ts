@@ -2,8 +2,8 @@ type PathnameObjectType = Record<string, string>
 
 // -------------------------------- Top Header constants --------------------------------
 const appLogoBlackList = ['/signIn', '/signUp', '/welcome']
-const homeIconBlackList = ['/', '/signIn', '/', '/myRides', '/signUp', '/welcome']
-const menuIconWhiteList = ['/', '/profile', '/myRides']
+const homeIconBlackList = ['/', '/signIn', '/', '/signUp', '/welcome']
+const menuIconWhiteList = ['/', '/profile']
 const topHeaderBlackList: string[] = ['/welcome']
 const languageIconWhiteList: string[] = []
 
@@ -11,20 +11,29 @@ const languageIconWhiteList: string[] = []
 const backIconList = ['/', '/signIn']
 
 const headerNames: PathnameObjectType = {
-  '/myRides': 'My Rides',
   '/signIn': 'Sign In',
   '/signUp': 'Sign Up',
   '/paymentMode': 'Select Payment Method',
-  '/profile': 'Profile'
+  '/profile': 'Profile',
+  '/myCredentials': 'My Credentials',
+  '/myTrades': 'My Trades'
 }
 
 const headerFrenchNames: PathnameObjectType = {
-  '/rideHistory': 'Historique des Commandes',
   '/': 'Se Connecter',
   '/paymentMode': 'Sélectionner la Méthode de Paiement'
 }
 
-const headerBlackList = ['/myRides', '/', '/paymentMode', '/profile', '/signIn', '/signUp', '/welcome']
+const headerBlackList = [
+  '/',
+  '/paymentMode',
+  '/profile',
+  '/signIn',
+  '/signUp',
+  '/welcome',
+  '/myCredentials',
+  '/myTrades'
+]
 
 const bottomHeaderBlackList = ['/orderConfirmation', '/', '/feedback', '/welcome']
 const orderIconList = ['/orderDetails']

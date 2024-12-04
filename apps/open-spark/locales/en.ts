@@ -5,7 +5,6 @@ const en: { [key: string]: string } = {
   cashText: 'Cash',
   pickUpText: 'Pick Up',
   dropOffText: 'Drop Off',
-  cancelRide: 'Cancel Ride',
   cancelReason: 'Please select a reason for cancellation',
   cancelBookingText: 'Cancel Booking Reason',
   cards: 'Credit & Debit cards',
@@ -53,13 +52,13 @@ const en: { [key: string]: string } = {
   or: ' Or',
   searchforlocation: 'Search For Location',
   search: 'Search',
-  rideHistoryIcon: 'My Rides',
   profileIcon: 'My Profile',
   logoutIcon: 'Logout',
   offlineTitle: 'You’re Offline',
   offlineDescription: 'You’re currently offline. Go online to recieve trip requests.',
   selectUtilityCompany: 'Select Utility Company',
   errorUtilityCompany: 'Utility Company Required',
-  logout: 'Logout'
+  logout: 'Logout',
+  upload: 'Upload'
 }
 export default en
