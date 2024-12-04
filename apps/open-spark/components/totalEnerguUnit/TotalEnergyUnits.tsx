@@ -1,18 +1,22 @@
+import React from 'react'
 import { Input, Typography } from '@beckn-ui/molecules'
 import { Box, Flex } from '@chakra-ui/react'
-import React from 'react'
-import Styles from './totalEnergyUnits.module.css'
 
-interface TotalEnergyUnitsProps {
-  data: { name: string; label: string; value: string; disabled: boolean }[]
+export interface DashboardData {
+  previous_month: number
+  current_month: number
+  average: number
 }
 
-const TotalEnergyUnits = (props: TotalEnergyUnitsProps) => {
-  const { data } = props
+interface TotalEnergyUnitsProps {
+  dashboardTotalEnergyUnitsData: DashboardData
+}
+
+const TotalEnergyUnits: React.FC<TotalEnergyUnitsProps> = ({ dashboardTotalEnergyUnitsData }) => {
   return (
     <Box>
       <Typography
-        text={'Total Energy Units'}
+        text="Total Energy Units"
         fontSize="15px"
         fontWeight="600"
         sx={{
@@ -22,19 +26,18 @@ const TotalEnergyUnits = (props: TotalEnergyUnitsProps) => {
       <Flex
         justifyContent="space-between"
         alignItems="center"
-        columnGap={'2px'}
+        columnGap="2px"
       >
-        {data.map((item, index) => (
+        {Object.entries(dashboardTotalEnergyUnitsData).map(([key, value], index) => (
           <Input
-            name={item.name}
-            value={item.value}
+            value={value}
             key={index}
             type="text"
             handleChange={() => {
-              console.log(`${item.label} changed`)
+              console.log(`${key} changed`)
             }}
-            label={`${item.label}`}
-            disabled={item.disabled}
+            disabled={true}
+            label={key.replace('_', ' ').replace(/^\w/, c => c.toUpperCase())}
           />
         ))}
       </Flex>
