@@ -1,9 +1,8 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { TopSheet, useGeolocation } from '@beckn-ui/common'
 import { useLanguage } from '@hooks/useLanguage'
-import _ from 'lodash'
 import { AuthRootState } from '@store/auth-slice'
 import { useRouter } from 'next/router'
 import profileIcon from '@public/images/user_profile.svg'
@@ -11,7 +10,7 @@ import { Input, Typography } from '@beckn-ui/molecules'
 import { Box, Flex, HStack, Tag, TagLabel, TagCloseButton, Divider } from '@chakra-ui/react'
 import CustomeDateInput from '@components/dateRangePicker/CustomeDateInput'
 import SelectDate from '@components/dateRangePicker/SelectDate'
-import TotalEnergyUnits from '@components/totalEnerguUnit/TotalEnergyUnits'
+import TotalEnergyUnits, { DashboardData } from '@components/totalEnerguUnit/TotalEnergyUnits'
 import { QuestionOutlineIcon } from '@chakra-ui/icons'
 import { LiaPenSolid } from 'react-icons/lia'
 import EmptyCurrentTrade from '@components/currentTrade/EmptyCurrentTrade'
@@ -22,12 +21,7 @@ import { format } from 'date-fns'
 import { RootState } from '@store/index'
 import { useDispatch, useSelector } from 'react-redux'
 import { ROLE } from '@lib/config'
-
-const totalEnergyMockData = [
-  { name: 'previousMonth', label: 'Previous Month', value: '10 (KWh)', disabled: true },
-  { name: 'currentMonth', label: 'Current Month', value: '250 (KWh)', disabled: true },
-  { name: 'average', label: 'Average (per day)', value: '08 (KWh)', disabled: true }
-]
+import { useBapTradeDashboardQuery, useBppTradeDashboardQuery } from '@services/DashboardService'
 const currentTradeMockData = [
   { name: 'energyToBuy', label: 'Energy to Buy', value: '210 (KWh)', disabled: true },
   { name: 'priceFixed', label: 'Price Fixed', value: '08 ₹/units', disabled: true }
@@ -66,9 +60,19 @@ const Homepage = () => {
   const [startDate, setStartDate] = useState<string>(today)
   const [endDate, setEndDate] = useState<string>(today)
   const [emptyState, setEmptyState] = useState(false)
-
+  const [dashboardTotalEnergyUnitsData, setDashboardTotalEnergyUnitsData] = useState<DashboardData>({
+    previous_month: 0,
+    current_month: 0,
+    average: 0
+  })
+  const { data: bapDashboardData } = useBapTradeDashboardQuery(undefined, {
+    skip: role !== ROLE.CONSUMER
+  })
+  const { data: bppDashboardData } = useBppTradeDashboardQuery(undefined, {
+    skip: role !== ROLE.PRODUCER
+  })
   const [preferencesTags, setPreferencesTags] = useState(['Solar', 'Biomass', 'Wind Power'])
-  const totalEnergyText = role === 'PRODUCER' ? 'Produced' : 'Consumption'
+  const totalEnergyText = role === ROLE.PRODUCER ? 'Produced' : 'Consumption'
 
   const handleRemoveTag = (tagToRemove: string) => {
     setPreferencesTags(prevTags => prevTags.filter(tag => tag !== tagToRemove))
@@ -82,6 +86,14 @@ const Homepage = () => {
     setEndDate(end)
     handleModalClose()
   }
+
+  useEffect(() => {
+    if (role === ROLE.CONSUMER && bapDashboardData?.data?.consumption) {
+      setDashboardTotalEnergyUnitsData(bapDashboardData.data.consumption)
+    } else if (role === ROLE.PRODUCER && bppDashboardData?.data?.production) {
+      setDashboardTotalEnergyUnitsData(bppDashboardData.data.production)
+    }
+  }, [role, bapDashboardData, bppDashboardData])
 
   return (
     <>
@@ -126,13 +138,13 @@ const Homepage = () => {
           />
         </Flex>
         <Box>
-          <TotalEnergyUnits data={totalEnergyMockData} />
+          <TotalEnergyUnits dashboardTotalEnergyUnitsData={dashboardTotalEnergyUnitsData} />
         </Box>
         <Box>
           <Flex
             justifyContent={'space-between'}
             alignItems={'center'}
-            mb={'10px'}
+            mb={'15px'}
           >
             <HStack>
               <Typography
@@ -146,7 +158,7 @@ const Homepage = () => {
           </Flex>
           {emptyState ? <EmptyCurrentTrade /> : <CurrentTrade data={currentTradeMockData} />}
         </Box>
-        <Box>
+        <Box mt={'15px'}>
           <Typography
             text="Preferences"
             fontSize="15"

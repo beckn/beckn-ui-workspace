@@ -230,7 +230,7 @@ const ProfilePage = () => {
             <NavigationItem
               icon={derIcon}
               label={'My DERs'}
-              handleClick={() => {}}
+              handleClick={() => router.push('/myDers')}
             />
             <NavigationItem
               icon={logoutIcon}
