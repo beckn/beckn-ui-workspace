@@ -33,7 +33,7 @@ describe('Search Page Tests', () => {
       cy.intercept('POST', '**/search', {
         fixture: 'P2P/searchResponse.json'
       }).as('searchResponse')
-      cy.wait(10000)
+      cy.wait(1000)
       cy.url().should('include', `${testIds.url_search}?searchTerm`)
     })
 

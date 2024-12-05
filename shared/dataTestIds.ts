@@ -602,6 +602,9 @@ const testIds = {
   footer_postfix_text: 'footer-postfix-text',
   footer_bottomfix_text: 'footer-bottomfix-text',
   P2P_hompage_button: 'p2p-homePage-btn',
+  P2P_productpage_price_text: 'P2P-productpage-price-text',
+  P2P_productpage_energyUnit_text: 'P2P-productpage-energyUnit-text',
+  P2P_productpage_input: 'P2P-productpage-input',
 
   //////////////   Envirogrowth data test ////////////////
 
