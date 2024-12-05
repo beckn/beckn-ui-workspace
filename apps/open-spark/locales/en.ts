@@ -59,6 +59,7 @@ const en: { [key: string]: string } = {
   selectUtilityCompany: 'Select Utility Company',
   errorUtilityCompany: 'Utility Company Required',
   logout: 'Logout',
-  upload: 'Upload'
+  upload: 'Upload',
+  errorText: 'Something went wrong'
 }
 export default en
