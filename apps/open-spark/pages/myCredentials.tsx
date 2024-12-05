@@ -1,15 +1,19 @@
-import { Box, Flex, Image, Input } from '@chakra-ui/react'
+import { Box, Flex, HStack, Icon, Image, Input, VStack } from '@chakra-ui/react'
 import React, { useEffect, useRef, useState } from 'react'
-import pdfIcon from '@public/images/PDF.svg'
 import jsonIcon from '@public/images/json_icon.svg'
-import deleteIcon from '@public/images/delete_icon.svg'
-import uploadIcon from '@public/images/upload_icon.svg'
+import uploadIcon from '@public/images/upload_file_icon.svg'
 import { Typography } from '@beckn-ui/molecules'
-import { formatDate } from '@beckn-ui/common'
+import { feedbackActions, formatDate } from '@beckn-ui/common'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import { AuthRootState } from '@store/auth-slice'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useLanguage } from '@hooks/useLanguage'
+import axios from '@services/axios'
+import { ROUTE_TYPE } from '@lib/config'
+import Cookies from 'js-cookie'
+import DragAndDropUpload from '@components/dragAndDropUpload'
+import { FiPlusCircle } from 'react-icons/fi'
+import RenderDocuments from '@components/documentsRenderer'
 
 interface DocumentProps {
   icon: string
@@ -18,104 +22,97 @@ interface DocumentProps {
   date: Date
 }
 
-const docMap: DocumentProps[] = [
-  {
-    icon: jsonIcon,
-    title: 'Id Proof',
-    file: '',
-    date: new Date()
-  },
-  {
-    icon: jsonIcon,
-    title: 'Address Proof',
-    file: '',
-    date: new Date()
-  }
-]
-
 const MyCredentials = () => {
-  const [credFiles, setCredFiles] = useState<DocumentProps[] | null>(docMap)
+  const [credFiles, setCredFiles] = useState<DocumentProps[] | null>(null)
   const [selectedFile, setSelectedFile] = useState<DocumentProps[] | null>(null)
-  //   const [previewUrl, setPreviewUrl] = useState<string | null>(null)
-  const fileInputRef = useRef<HTMLInputElement | null>(null)
+  const [allFilesProcessed, setAllFilesProcessed] = useState<boolean>(false)
+
+  const dispatch = useDispatch()
   const { t } = useLanguage()
+  const bearerToken = Cookies.get('authToken')
 
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
 
   const { role } = useSelector((state: AuthRootState) => state.auth)
 
-  const getCredentials = () => {}
+  const getCredentials = async () => {
+    const requestOptions = {
+      method: 'GET',
+      headers: { Authorization: `Bearer ${bearerToken}` },
+      withCredentials: true
+    }
+
+    const response = await axios.get(`${strapiUrl}${ROUTE_TYPE[role!]}/cred`, requestOptions)
+    if (response.status === 200) {
+      setCredFiles(response.data)
+    }
+  }
 
   useEffect(() => {
     getCredentials()
   }, [])
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files.length > 0) {
-      const file = event.target.files[0]
-      console.log('Selected file:', file)
-      const data = { title: file?.name!, icon: pdfIcon, date: new Date(), file: file }
-      setSelectedFile(prevState => (prevState ? [...prevState, data] : [data]))
-
-      // Generate preview URL for images
-      //   const preview = URL.createObjectURL(file)
-      //   setPreviewUrl(preview)
+  const handleFileChange = (files: File[]) => {
+    if (files.length > 0) {
+      const docs = files.map(file => {
+        console.log('Selected file:', file)
+        return { title: file?.name!, icon: uploadIcon, date: new Date(), file: file }
+      })
+      setSelectedFile(prevState => (prevState ? [...prevState, ...docs] : docs))
     }
   }
 
-  const handleOnDelete = (index: number, type: 'cred' | 'upload') => {
+  const deleteCredById = (data: any) => {
+    const requestOptions = {
+      method: 'DELETE',
+      headers: { Authorization: `Bearer ${bearerToken}` },
+      withCredentials: true
+    }
+
+    // axios
+    //  .delete(`${strapiUrl}${ROUTE_TYPE[role!]}/delete-cred/${selectedFile?.[0].file._id}`, requestOptions)
+    //  .then(response => {
+    //     console.log('Deleted successfully:', response.data)
+    //     setSelectedFile(null)
+    //     getCredentials()
+    //   })
+    //  .catch(error => {
+    //     console.error('Error deleting:', error)
+    //   })
+  }
+
+  const handleOnDelete = (index: number, document: DocumentProps, type: 'cred' | 'upload') => {
     if (type === 'cred') {
-      setCredFiles(prevState => prevState!.filter((_, i) => i !== index))
+      // setCredFiles(prevState => prevState!.filter((_, i) => i !== index))
+      deleteCredById(document)
     }
     if (type === 'upload') {
       setSelectedFile(prevState => prevState!.filter((_, i) => i !== index))
     }
   }
 
-  const handleOnSave = () => {}
-
-  const renderCredentialDocuments = (list: DocumentProps[], type: 'cred' | 'upload') => {
-    return list.map((document, index) => {
-      return (
-        <Flex
-          border={'1px solid #BFBFBF'}
-          borderRadius="1rem"
-          padding="1rem"
-          justifyContent={'space-between'}
-          key={index}
-          height="78px"
-          marginTop={'0.8rem'}
-        >
-          <Flex>
-            <Image
-              src={document.icon}
-              alt="doc_type"
-            />
-            <Flex
-              flexDirection={'column'}
-              alignSelf={'center'}
-              marginLeft="1rem"
-            >
-              <Typography
-                text={document.title}
-                fontWeight="600"
-              />
-              <Typography text={formatDate(document.date, "dd MMM yyyy 'at' hh:mm a")} />
-            </Flex>
-          </Flex>
-          <Image
-            src={deleteIcon}
-            alt="delete"
-            alignSelf={'center'}
-            width={'16px'}
-            height={'16px'}
-            cursor="pointer"
-            onClick={() => handleOnDelete(index, type)}
-          />
-        </Flex>
-      )
+  const handleOnUpload = () => {
+    const formData = new FormData()
+    selectedFile?.forEach((data, index) => {
+      formData.append(`credential`, data.file)
     })
+
+    axios
+      .post(`${strapiUrl}${ROUTE_TYPE[role!]}/upload-cred`, formData, {
+        headers: {
+          Authorization: `Bearer ${bearerToken}`
+        }
+      })
+      .then(response => {
+        console.log('Uploaded successfully:', response.data)
+        setSelectedFile(null)
+        getCredentials()
+      })
+      .catch(error => {
+        console.error('Error uploading:', error)
+      })
   }
+
   return (
     <Box
       margin={'0 auto'}
@@ -140,67 +137,70 @@ const MyCredentials = () => {
                   marginTop: '1rem'
                 }}
               />
-              {renderCredentialDocuments(credFiles || [], 'cred')}
+              <RenderDocuments
+                list={credFiles || []}
+                type="cred"
+                handleOnDelete={handleOnDelete}
+              />
             </>
           )}
           <Typography
-            text="Documents"
+            text="Upload a file"
             fontWeight="600"
             fontSize="16px"
             style={{
               marginTop: '1rem'
             }}
           />
-          {renderCredentialDocuments(selectedFile || [], 'upload')}
-          <Input
-            type="file"
-            ref={fileInputRef}
-            onChange={handleFileChange}
-            display="none"
-          />
-          <Flex
-            border={'1px dashed #000000'}
-            borderRadius="1rem"
-            padding="1rem"
-            justifyContent={'center'}
-            height="78px"
-            marginTop={'0.8rem'}
-            cursor="pointer"
-            onClick={() => {
-              if (fileInputRef.current) {
-                fileInputRef.current.click()
-              }
+          <Typography text="Upload credential documents" />
+          <DragAndDropUpload
+            multiple={true}
+            dragAndDrop={true}
+            setFiles={handleFileChange}
+            fileSelectionElement={(fileInputRef: any) => {
+              return (
+                <VStack>
+                  <Icon
+                    as={FiPlusCircle}
+                    boxSize={6}
+                    color="gray.500"
+                  />
+                  <Typography text={'Drop your file here'} />
+                  <HStack gap={1}>
+                    <Typography
+                      color="#4498E8"
+                      fontSize="8px"
+                      onClick={() => {
+                        if (fileInputRef.current) {
+                          fileInputRef.current.click()
+                        }
+                      }}
+                      sx={{ cursor: 'pointer', _hover: { textDecoration: 'underline' } }}
+                      text="Browse file"
+                    />{' '}
+                    <Typography
+                      fontSize="8px"
+                      text={'from your computer'}
+                    />
+                  </HStack>
+                </VStack>
+              )
             }}
-          >
-            <Flex alignItems={'center'}>
-              <Image
-                src={uploadIcon}
-                alt="upload"
-              />
-
-              <Typography
-                text={'Upload Documents'}
-                sx={{
-                  marginLeft: '0.5rem'
-                }}
-              />
-            </Flex>
-          </Flex>
-        </Box>
-        {/* {previewUrl && (
-          <Image
-            src={previewUrl}
-            alt="Preview"
-            width="200px"
-            height={'200px'}
-            alignSelf="center"
           />
-        )} */}
-
+          <RenderDocuments
+            list={selectedFile || []}
+            type="upload"
+            handleOnDelete={handleOnDelete}
+            onAllComplete={status => {
+              setAllFilesProcessed(status)
+            }}
+          />
+        </Box>
         <BecknButton
           text={t.upload}
+          disabled={!allFilesProcessed}
           sx={{ marginTop: '2rem' }}
-          handleClick={handleOnSave}
+          handleClick={handleOnUpload}
         />
       </Flex>
     </Box>

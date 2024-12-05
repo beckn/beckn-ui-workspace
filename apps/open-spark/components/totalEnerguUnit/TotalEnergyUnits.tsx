@@ -30,6 +30,7 @@ const TotalEnergyUnits: React.FC<TotalEnergyUnitsProps> = ({ dashboardTotalEnerg
       >
         {Object.entries(dashboardTotalEnergyUnitsData).map(([key, value], index) => (
           <Input
+            name={key}
             value={value}
             key={index}
             type="text"
