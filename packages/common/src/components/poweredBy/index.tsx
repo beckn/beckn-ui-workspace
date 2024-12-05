@@ -14,7 +14,7 @@ const PoweredBy: React.FC<PoweredByProps> = ({ logoSrc, altText = 'logo', powere
       position="fixed"
       bottom="0px"
       padding={'10px'}
-      bg={'white'}
+      bg={'transparent'}
       data-test={testIds.homepage_footer}
     >
       <Typography
