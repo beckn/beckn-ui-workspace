@@ -13,7 +13,7 @@ import { AccordionProps } from './accordion.types'
 import { testIds } from '@shared/dataTestIds'
 
 const Accordion: React.FC<AccordionProps> = props => {
-  const { accordionHeader, children, onToggle, className = '' } = props
+  const { accordionHeader, children, onToggle, className = '', isDisabled = false, defaultIndex } = props
   return (
     <Box
       pb={'20px'}
@@ -24,8 +24,10 @@ const Accordion: React.FC<AccordionProps> = props => {
           onChange={onToggle}
           allowMultiple
           className={`${className}-accordion-container`}
+          defaultIndex={defaultIndex}
         >
           <AccordionItem
+            isDisabled={isDisabled}
             background={'unset'}
             border={'unset'}
             // boxShadow={'0px 8px 10px -6px rgb(0 0 0 / 10%), 0px 20px 25px -5px rgb(0 0 0 / 10%)'}
@@ -52,6 +54,7 @@ const Accordion: React.FC<AccordionProps> = props => {
                   {accordionHeader}
                 </Box>
                 <AccordionIcon
+                  className={`${className}-accordion-icon`}
                   position={'absolute'}
                   top="0"
                   right={'0'}

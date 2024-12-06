@@ -41,7 +41,7 @@ const RenderDocuments = (props: RenderDocumentsProps) => {
               }
               return newProgress
             })
-          }, 500)
+          }, 200)
         }
       })
     }
