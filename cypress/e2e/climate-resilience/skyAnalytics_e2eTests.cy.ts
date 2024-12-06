@@ -1,5 +1,6 @@
 import { testIds } from '../../../shared/dataTestIds'
 describe('End to End test cases for Dragon Food app', () => {
+  const deployed_url = 'https://skyanalytics-dev.becknprotocol.io/signIn'
   const invalidEmail = 'sanket.com'
   const invalidPassword = 'password'
   const unregisteredEmail = 'unregistered@example.com'
@@ -23,8 +24,7 @@ describe('End to End test cases for Dragon Food app', () => {
   const billing_address = '560078'
 
   before(() => {
-    //cy.visit(testIds.deployed_url_base)
-    cy.visit('https://skyanalytics-dev.becknprotocol.io/signIn')
+    cy.visit(deployed_url)
   })
   context('Sign In Page', () => {
     it('should display the sign-in form elements and handle form submission states', () => {
