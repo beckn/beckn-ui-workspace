@@ -4,11 +4,11 @@ describe('p2p energy product details Page Tests', () => {
   before(() => {
     cy.visit(testIds.url_base)
     cy.getByData(testIds.clickable_card_open_spark).click()
-    cy.getByData(testIds.P2P_hompage_button).click()
     cy.intercept('POST', '**/search', {
       fixture: 'P2P/searchResponse.json'
     }).as('searchResponse')
     cy.wait(1000)
+    cy.getByData(testIds.P2P_hompage_button).click()
     cy.url().should('include', `${testIds.url_search}?searchTerm`)
     cy.getByData(testIds.searchpage_products).first().click()
   })

@@ -9,10 +9,10 @@ describe('Search Page Tests', () => {
     beforeEach(() => {
       cy.visit(testIds.url_base)
       cy.getByData(testIds.clickable_card_open_spark).click()
-      cy.getByData(testIds.P2P_hompage_button).click()
       cy.intercept('POST', '**/search', {
         fixture: 'P2P/emptySearchResults.json'
       }).as('emptySearchResults')
+      cy.getByData(testIds.P2P_hompage_button).click()
       cy.url().should('include', `${testIds.url_search}?searchTerm`)
     })
 
