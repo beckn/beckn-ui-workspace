@@ -1,9 +1,9 @@
-import { Input } from '@beckn-ui/molecules'
-import { Flex } from '@chakra-ui/react'
+import { Input, Typography } from '@beckn-ui/molecules'
+import { Box, Flex } from '@chakra-ui/react'
 import React from 'react'
 
 interface CurrentTradeProps {
-  data: { name: string; label: string; value: string; disabled: boolean }[]
+  data: { name: string; label: string; value: string; disabled: boolean; symbol: string }[]
 }
 
 const CurrentTrade = (props: CurrentTradeProps) => {
@@ -25,6 +25,17 @@ const CurrentTrade = (props: CurrentTradeProps) => {
           }}
           label={`${item.label}`}
           disabled={item.disabled}
+          rightElement={() => {
+            return (
+              <Box
+                cursor="pointer"
+                height="36px"
+                mt={'8px'}
+              >
+                <Typography text={item.symbol} />
+              </Box>
+            )
+          }}
         />
       ))}
     </Flex>

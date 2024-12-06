@@ -23,8 +23,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { ROLE } from '@lib/config'
 import { useBapTradeDashboardQuery, useBppTradeDashboardQuery } from '@services/DashboardService'
 const currentTradeMockData = [
-  { name: 'energyToBuy', label: 'Energy to Buy', value: '210 (KWh)', disabled: true },
-  { name: 'priceFixed', label: 'Price Fixed', value: '08 ₹/units', disabled: true }
+  { name: 'energyToBuy', label: 'Energy to Buy', value: '210', disabled: true, symbol: '(KWh)' },
+  { name: 'priceFixed', label: 'Price Fixed', value: '08', disabled: true, symbol: '₹/units' }
 ]
 const currentStatusmockData = [
   {
@@ -158,7 +158,7 @@ const Homepage = () => {
           </Flex>
           {emptyState ? <EmptyCurrentTrade /> : <CurrentTrade data={currentTradeMockData} />}
         </Box>
-        <Box mt={'15px'}>
+        <Box>
           <Typography
             text="Preferences"
             fontSize="15"

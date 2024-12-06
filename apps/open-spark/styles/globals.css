@@ -296,3 +296,9 @@ select:-webkit-autofill:focus {
   padding-inline-start: unset !important;
   padding-inline-end: unset !important;
 }
+.trade-status-accordion-button:disabled {
+  opacity: 1 !important;
+}
+.trade-status-accordion-icon {
+  display: none !important;
+}

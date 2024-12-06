@@ -19,7 +19,8 @@ const headerNames: PathnameObjectType = {
   '/myTrades': 'My Trades',
   '/buyingPreference': 'Buying Preferences',
   '/sellingPreference': 'Selling Preferences',
-  '/myDers': 'My DERs'
+  '/myDers': 'My DERs',
+  '/tradeDetails': 'No. of Units Sold'
 }
 
 const headerFrenchNames: PathnameObjectType = {
@@ -38,7 +39,8 @@ const headerBlackList = [
   '/myTrades',
   '/buyingPreference',
   '/sellingPreference',
-  '/myDers'
+  '/myDers',
+  '/tradeDetails'
 ]
 
 const bottomHeaderBlackList = ['/orderConfirmation', '/', '/feedback', '/welcome']
