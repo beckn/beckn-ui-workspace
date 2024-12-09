@@ -161,7 +161,7 @@ const Homepage = () => {
         <Box>
           <Typography
             text="Preferences"
-            fontSize="15"
+            fontSize="14px"
             fontWeight="600"
             sx={{ marginBottom: '10px' }}
           />
@@ -175,7 +175,7 @@ const Homepage = () => {
                 borderRadius="md"
                 variant="outline"
                 colorScheme="gray"
-                padding={'8px'}
+                padding={'4px 8px'}
               >
                 <TagLabel>{tag}</TagLabel>
                 <TagCloseButton onClick={() => handleRemoveTag(tag)} />
@@ -193,7 +193,7 @@ const Homepage = () => {
               >
                 <Typography
                   text="Current Status"
-                  fontSize="15px"
+                  fontSize="14px"
                   fontWeight="600"
                 />
                 <Typography

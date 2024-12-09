@@ -12,8 +12,9 @@ import { RootState } from '@store/index'
 import Cookies from 'js-cookie'
 
 interface Device {
+  id: number
   name: string
-  paired: boolean
+  paired?: boolean
 }
 
 interface DeviceListProps {
@@ -30,7 +31,6 @@ export default function DeviceList({ initialDevices, onDeviceChange, fetchPaired
   const [selectedDeviceIndex, setSelectedDeviceIndex] = useState<number | null>(null)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [isDeleteLoading, setIsDeleteLoading] = useState<boolean>(false)
-
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
   const { role } = useSelector((state: RootState) => state.auth)
   const bearerToken = Cookies.get('authToken')
@@ -38,28 +38,25 @@ export default function DeviceList({ initialDevices, onDeviceChange, fetchPaired
   const handleAddDevice = async (category: string, uploadedFiles: File[]) => {
     setIsLoading(true)
     try {
-      const type = role === ROLE.PRODUCER ? 'PRODUCER' : 'CONSUMER'
+      const type = role === ROLE.PRODUCER ? 'prosumer' : 'consumer'
       const formData = new FormData()
 
       formData.append('type', type)
       formData.append('category', category)
-      uploadedFiles.forEach(file => formData.append('proofs', file))
-
-      const response = await axios.post(`${strapiUrl}${ROUTE_TYPE[role!]}/der`, formData, {
-        headers: { Authorization: `Bearer ${bearerToken}` },
-        withCredentials: true
+      uploadedFiles.forEach(file => {
+        formData.append('proof', file)
       })
 
-      if (role === ROLE.PRODUCER) {
-        setDevices(response.data.production)
-        setIsLoading(false)
-      } else if (role === ROLE.CONSUMER) {
-        setDevices(response.data.consumption)
-        setIsLoading(false)
+      const response = await axios.post(`${strapiUrl}${ROUTE_TYPE[role!]}/der`, formData, {
+        headers: {
+          Authorization: `Bearer ${bearerToken}`
+        },
+        withCredentials: true
+      })
+      if (response.status === 200 || response.status === 204) {
+        fetchPairedData()
+        setIsModalOpen(false)
       }
-
-      fetchPairedData()
-      setIsModalOpen(false)
     } catch (error) {
       console.error('Error adding device:', error.message)
     } finally {
@@ -82,31 +79,20 @@ export default function DeviceList({ initialDevices, onDeviceChange, fetchPaired
   }
 
   const handleRemoveDevice = async (index: number) => {
-    setIsDeleteLoading(true)
-    const deviceToRemove = devices[index]
-
     try {
-      const response = await axios.delete(`${strapiUrl}${ROUTE_TYPE[role!]}/der`, {
-        params: { id: deviceToRemove.id },
+      const response = await axios.delete(`${strapiUrl}${ROUTE_TYPE[role!]}/der/${index}`, {
         headers: { Authorization: `Bearer ${bearerToken}` },
         withCredentials: true
       })
 
       if (response.status === 200 || response.status === 204) {
-        if (role === ROLE.PRODUCER) {
-          setDevices(response.data.production)
-          setIsDeleteLoading(false)
-        } else if (role === ROLE.CONSUMER) {
-          setDevices(response.data.consumption)
-          setIsDeleteLoading(false)
-        }
+        fetchPairedData()
       } else {
         console.error('Failed to delete the device:', response.data)
       }
-    } catch (error) {
-      console.error('Error deleting device:', error.message)
+    } catch (error: any) {
+      console.error('Error deleting device:', error?.message)
     } finally {
-      // setIsDeleteLoading(false)
       handleDeleteModalClose()
     }
   }
@@ -119,8 +105,9 @@ export default function DeviceList({ initialDevices, onDeviceChange, fetchPaired
   }
 
   useEffect(() => {
-    onDeviceChange(devices)
-  }, [devices, onDeviceChange])
+    setDevices(initialDevices)
+    onDeviceChange(initialDevices)
+  }, [initialDevices, onDeviceChange])
 
   return (
     <Container>
@@ -168,9 +155,9 @@ export default function DeviceList({ initialDevices, onDeviceChange, fetchPaired
                 _hover={{ bg: 'gray.50' }}
                 boxShadow="rgba(0, 0, 0, 0.35) 0px 5px 15px"
               >
-                <Typography text={device.name} />
+                <Typography text={device?.name} />
                 <CiCircleMinus
-                  onClick={() => handleDeleteModalOpen(index)}
+                  onClick={() => handleDeleteModalOpen(device?.id)}
                   style={{ cursor: 'pointer' }}
                   size={24}
                   opacity="0.5"

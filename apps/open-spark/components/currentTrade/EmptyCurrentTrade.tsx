@@ -1,10 +1,14 @@
 import { Typography } from '@beckn-ui/molecules'
-import BecknButton from '@beckn-ui/molecules/src/components/button'
 import { Box, Flex, Image } from '@chakra-ui/react'
+import { ROLE } from '@lib/config'
+import { RootState } from '@store/index'
 import React from 'react'
-import { Type } from 'react-toastify/dist/utils'
+import { useSelector } from 'react-redux'
 
 const EmptyCurrentTrade = () => {
+  const { role } = useSelector((state: RootState) => state.auth)
+  const emptyCurrentText = role === ROLE.CONSUMER ? '"Buy"' : '"Sell"'
+  const sellText = role === ROLE.PRODUCER ? 'sell' : 'purchase'
   return (
     <Flex
       flexDir={'column'}
@@ -21,10 +25,10 @@ const EmptyCurrentTrade = () => {
         sx={{ textAlign: 'center' }}
       />
       <Typography
-        text="Click on “Buy” to purchase energy"
         fontSize="15px"
         fontWeight="400"
         sx={{ textAlign: 'center' }}
+        text={`Click on ${emptyCurrentText} to ${sellText} energy`}
       />
     </Flex>
   )
