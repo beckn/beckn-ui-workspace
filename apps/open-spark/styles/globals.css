@@ -272,19 +272,6 @@ select:-webkit-autofill:focus {
 .hideScroll::-webkit-scrollbar {
   display: none;
 }
-.taxi-bpp-login button {
-  color: #1f2122;
-  border-color: transparent !important;
-}
-.taxi-bpp-login .chakra-input:-webkit-autofill {
-  -webkit-text-fill-color: #fff;
-  -webkit-box-shadow: 0 0 0px 1000px transparent inset;
-  transition: background-color 5000s ease-in-out 0s;
-}
-
-.taxi-bpp-btn-text {
-  color: #1f2122 !important;
-}
 .hideScroll::-webkit-scrollbar {
   display: none;
 }

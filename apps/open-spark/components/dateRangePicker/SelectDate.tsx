@@ -44,8 +44,9 @@ const SelectDate: React.FC<SelectDateProps> = ({ isOpen, onClose, onDateSelect, 
   const [currentMonth, setCurrentMonth] = useState<Date>(new Date())
   const [startDate, setStartDate] = useState<Date | null>(parse(initialStartDate, 'dd/MM/yy', new Date()))
   const [endDate, setEndDate] = useState<Date | null>(parse(initialEndDate, 'dd/MM/yy', new Date()))
+  const [selectedOptionIndex, setSelectedOptionIndex] = useState<number>()
 
-  const handleQuickSelect = (option: string) => {
+  const handleQuickSelect = (option: string, index: number) => {
     const today = new Date()
     let newStartDate: Date
     let newEndDate: Date
@@ -92,6 +93,7 @@ const SelectDate: React.FC<SelectDateProps> = ({ isOpen, onClose, onDateSelect, 
 
     setStartDate(newStartDate)
     setEndDate(newEndDate)
+    setSelectedOptionIndex(index)
   }
 
   const handleDateClick = (day: Date) => {
@@ -120,12 +122,18 @@ const SelectDate: React.FC<SelectDateProps> = ({ isOpen, onClose, onDateSelect, 
 
     const daysOfWeek = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su']
 
+    const firstDayOfMonth = startOfMonth(currentMonth)
+
+    let emptyCellsBefore = firstDayOfMonth.getDay() - 1
+    if (emptyCellsBefore < 0) emptyCellsBefore = 6
+
     return (
       <Box>
         <Flex
           justify="space-between"
           align="center"
-          mb={4}
+          // mb={4}
+          padding="0 3rem"
         >
           <ChevronLeftIcon
             boxSize={6}
@@ -135,7 +143,6 @@ const SelectDate: React.FC<SelectDateProps> = ({ isOpen, onClose, onDateSelect, 
           <Text
             fontSize={'16px'}
             fontWeight="600"
-            mb={'10px'}
           >
             {format(currentMonth, 'MMMM yyyy')}
           </Text>
@@ -145,42 +152,92 @@ const SelectDate: React.FC<SelectDateProps> = ({ isOpen, onClose, onDateSelect, 
             onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}
           />
         </Flex>
+        <Flex
+          justify="space-between"
+          m={4}
+        >
+          <Box
+            p={2}
+            borderRadius="md"
+            border="1px solid"
+            borderColor="gray.200"
+            width="45%"
+            textAlign={'center'}
+          >
+            {startDate ? format(startDate, 'MMM d, yyyy') : 'Start Date'}
+          </Box>
+          <Text alignSelf="center">-</Text>
+          <Box
+            p={2}
+            borderRadius="md"
+            border="1px solid"
+            borderColor="gray.200"
+            width="45%"
+            textAlign={'center'}
+          >
+            {endDate ? format(endDate, 'MMM d, yyyy') : 'End Date'}
+          </Box>
+        </Flex>
         <Grid
           templateColumns="repeat(7, 1fr)"
           gap={1}
+          columnGap={'unset'}
         >
           {daysOfWeek.map(day => (
             <GridItem
               key={day}
               textAlign="center"
               fontWeight="semibold"
+              width={'100%'}
+              height={'2.4rem'}
+              borderRadius={'50%'}
+              alignContent={'center'}
+              justifySelf={'center'}
             >
               {day}
             </GridItem>
           ))}
-          {daysInMonth.map((day, index) => (
+          {Array.from({ length: emptyCellsBefore }).map((_, index) => (
             <GridItem
-              key={index}
-              textAlign="center"
-              py={2}
-              bg={
-                (startDate && isSameDay(day, startDate)) || (endDate && isSameDay(day, endDate))
-                  ? 'blue.500'
-                  : isInRange(day)
-                    ? 'blue.100'
-                    : 'transparent'
-              }
-              color={
-                (startDate && isSameDay(day, startDate)) || (endDate && isSameDay(day, endDate)) ? 'white' : 'inherit'
-              }
-              borderRadius="md"
-              cursor="pointer"
-              _hover={{ bg: 'blue.100' }}
-              onClick={() => handleDateClick(day)}
-            >
-              {format(day, 'd')}
-            </GridItem>
+              key={`empty-${index}`}
+              width={'100%'}
+              height={'2.4rem'}
+              borderRadius={'50%'}
+              alignContent={'center'}
+              justifySelf={'center'}
+            />
           ))}
+          {daysInMonth.map((day, index) => {
+            return (
+              <GridItem
+                key={index}
+                textAlign="center"
+                py={2}
+                bg={
+                  (startDate && isSameDay(day, startDate)) || (endDate && isSameDay(day, endDate))
+                    ? 'blue.500'
+                    : isInRange(day)
+                      ? 'blue.100'
+                      : 'transparent'
+                }
+                color={
+                  (startDate && isSameDay(day, startDate)) || (endDate && isSameDay(day, endDate)) ? 'white' : 'inherit'
+                }
+                cursor="pointer"
+                _hover={{
+                  bg: (startDate && isSameDay(day, startDate)) || (endDate && isSameDay(day, endDate)) ? '' : 'blue.100'
+                }}
+                onClick={() => handleDateClick(day)}
+                width={'100%'}
+                height={'2.4rem'}
+                borderRadius={`${startDate && isSameDay(day, startDate) ? '50% 0 0 50%' : endDate && isSameDay(day, endDate) ? '0 50% 50% 0' : '0 0 0 0'}`}
+                alignContent={'center'}
+                justifySelf={'center'}
+              >
+                {format(day, 'd')}
+              </GridItem>
+            )
+          })}
         </Grid>
       </Box>
     )
@@ -201,51 +258,26 @@ const SelectDate: React.FC<SelectDateProps> = ({ isOpen, onClose, onDateSelect, 
     >
       {!isCustomRange ? (
         <VStack align="stretch">
-          {customDateOptions.map(option => (
+          {customDateOptions.map((option, index) => (
             <Text
               key={option}
               justifyContent="flex-start"
               fontWeight={500}
               fontSize={'15px'}
-              paddingLeft={'40px'}
-              onClick={() => handleQuickSelect(option)}
-              _hover={{ bg: 'gray.100' }}
-              m={'5px'}
+              padding={'8px 44px'}
+              onClick={() => handleQuickSelect(option, index)}
+              _hover={{ bg: '#f4f6f8' }}
+              bg={selectedOptionIndex === index ? '#f4f6f8' : 'transparent'}
+              color={'#344054'}
             >
               {option}
             </Text>
           ))}
         </VStack>
       ) : (
-        <Box>
-          <Flex
-            justify="space-between"
-            m={4}
-          >
-            <Box
-              p={2}
-              borderRadius="md"
-              border="1px solid"
-              borderColor="gray.200"
-              width="45%"
-            >
-              {startDate ? format(startDate, 'MMM d, yyyy') : 'Start Date'}
-            </Box>
-            <Text alignSelf="center">-</Text>
-            <Box
-              p={2}
-              borderRadius="md"
-              border="1px solid"
-              borderColor="gray.200"
-              width="45%"
-            >
-              {endDate ? format(endDate, 'MMM d, yyyy') : 'End Date'}
-            </Box>
-          </Flex>
-          {renderCalendar()}
-        </Box>
+        <Box padding={{ base: '0px 20px 0px 20px', lg: '0px 60px 0px 60px' }}>{renderCalendar()}</Box>
       )}
-      <Box padding={'20px 20px 0px 20px'}>
+      <Box padding={{ base: '20px 20px 0px 20px', lg: '0px 60px 0px 60px' }}>
         {isCustomRange && (
           <BecknButton
             children="Back"

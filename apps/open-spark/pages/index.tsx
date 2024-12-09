@@ -120,7 +120,11 @@ const Homepage = () => {
             marginBottom: '10px'
           }}
         />
-        <Flex columnGap={'20px'}>
+        <Flex
+          columnGap={'20px'}
+          justifyContent="space-between"
+          alignItems="center"
+        >
           <Input
             name="energy"
             value={'250 (KWh)'}
