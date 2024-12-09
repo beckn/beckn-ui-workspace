@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import BottomModalScan from '@beckn-ui/common/src/components/BottomModal/BottomModalScan'
-import { Input, Typography } from '@beckn-ui/molecules'
+import { Input, LoaderWithMessage, Typography } from '@beckn-ui/molecules'
 import BecknButton from '@beckn-ui/molecules/src/components/button'
 import { Box, Flex, Image } from '@chakra-ui/react'
 import uploadIcon from '@public/images/upload_icon.svg'
@@ -55,7 +55,15 @@ const AddNewDerModal = (props: AddNewDerModalProps) => {
     }
     const files = uploadedFiles.map(doc => doc.file)
     onSubmit(category, files)
+      .then(() => {
+        setCategory('')
+        setUploadedFiles([])
+      })
+      .catch(err => {
+        console.error('Error adding device:', err.message)
+      })
   }
+
   const handleOnDelete = (index: number, document: DocumentProps, type: 'cred' | 'upload') => {
     if (type === 'cred') {
       setUploadedFiles(prevState => prevState!.filter((_, i) => i !== index))
@@ -63,12 +71,24 @@ const AddNewDerModal = (props: AddNewDerModalProps) => {
   }
 
   return (
-    <Box>
-      <BottomModalScan
-        isOpen={isOpen}
-        onClose={onClose}
-        modalHeader="Add New DER"
-      >
+    <BottomModalScan
+      isOpen={isOpen}
+      onClose={onClose}
+      modalHeader="Add New DER"
+      isLoading={isLoading}
+    >
+      {isLoading ? (
+        <Box
+          display="grid"
+          height="100%"
+          alignContent="center"
+        >
+          <LoaderWithMessage
+            loadingText="Please Wait"
+            loadingSubText="While We are adding DERS"
+          />
+        </Box>
+      ) : (
         <Flex
           padding="0 20px"
           flexDir="column"
@@ -91,14 +111,13 @@ const AddNewDerModal = (props: AddNewDerModalProps) => {
               setAllFilesProcessed(status)
             }}
           />
-
           <DragAndDropUpload
             multiple={true}
             setFiles={handleFileChange}
             fileSelectionElement={(fileInputRef: any) => {
               return (
                 <Flex
-                  alignItems={'center'}
+                  alignItems="center"
                   cursor="pointer"
                   onClick={() => {
                     if (fileInputRef.current) {
@@ -110,9 +129,8 @@ const AddNewDerModal = (props: AddNewDerModalProps) => {
                     src={uploadIcon}
                     alt="upload"
                   />
-
                   <Typography
-                    text={'Upload Documents'}
+                    text="Upload Documents"
                     sx={{
                       marginLeft: '0.5rem'
                     }}
@@ -122,15 +140,15 @@ const AddNewDerModal = (props: AddNewDerModalProps) => {
             }}
           />
           <BecknButton
-            children={'Add DER'}
+            children="Add DER"
             handleClick={handleAddDevice}
             disabled={!category.trim() || uploadedFiles.length === 0}
             sx={{ marginTop: '20px' }}
             isLoading={isLoading}
           />
         </Flex>
-      </BottomModalScan>
-    </Box>
+      )}
+    </BottomModalScan>
   )
 }
 

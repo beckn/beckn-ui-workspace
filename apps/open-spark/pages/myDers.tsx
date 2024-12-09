@@ -11,16 +11,11 @@ const MyDers = () => {
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
   const { role } = useSelector((state: RootState) => state.auth)
   const bearerToken = Cookies.get('authToken')
-  const [devices, setDevices] = useState([
-    { name: 'Wifi', paired: true },
-    { name: 'Orient electric Fan', paired: true },
-    { name: 'Sony TV', paired: true },
-    { name: 'OLA S1 Air Electric Scooter', paired: true },
-    { name: 'Philips LED Light', paired: true },
-    { name: 'Solar Panel', paired: true }
-  ])
+  const [devices, setDevices] = useState<{ id: number; name: string; paired?: boolean }[]>([])
 
-  const handleDeviceChange = (updatedDevices: React.SetStateAction<{ name: string; paired: boolean }[]>) => {
+  const handleDeviceChange = (
+    updatedDevices: React.SetStateAction<{ id: number; name: string; paired?: boolean }[]>
+  ) => {
     setDevices(updatedDevices)
   }
 
@@ -31,14 +26,13 @@ const MyDers = () => {
         withCredentials: true
       })
 
-      const result = response.data.data
-      console.log(result)
-
-      if (role === ROLE.PRODUCER) {
-        setDevices(result.production)
-      } else if (role === ROLE.CONSUMER) {
-        setDevices(result.consumption)
-      }
+      const result = response.data
+      const mappedDevices = result.map((item: { category: string; id: number }) => ({
+        name: item.category,
+        paired: true,
+        id: item.id
+      }))
+      setDevices(mappedDevices)
     } catch (error) {
       console.error('Error fetching dashboard data:', error)
     }
@@ -49,7 +43,6 @@ const MyDers = () => {
       fetchPairedData()
     }
   }, [role, bearerToken, strapiUrl])
-
   return (
     <Box
       maxWidth={{ base: '100vw', md: '30rem', lg: '40rem' }}

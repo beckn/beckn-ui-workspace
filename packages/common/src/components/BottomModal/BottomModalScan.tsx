@@ -7,15 +7,20 @@ interface ModalProps {
   children: React.ReactNode
   partialClose?: boolean
   modalHeader?: string
+  isLoading?: boolean
 }
 
-const BottomModal: React.FC<ModalProps> = ({ isOpen, onClose, children, modalHeader }) => {
+const BottomModal: React.FC<ModalProps> = ({ isOpen, onClose, children, modalHeader, isLoading }) => {
   return (
     <>
       <Modal
         isCentered
-        onClose={onClose}
         isOpen={isOpen}
+        onClose={() => {
+          if (!isLoading) {
+            onClose()
+          }
+        }}
         scrollBehavior="outside"
         motionPreset="slideInBottom"
       >
@@ -41,7 +46,11 @@ const BottomModal: React.FC<ModalProps> = ({ isOpen, onClose, children, modalHea
             >
               {modalHeader}
             </ModalHeader>
-            <Box onClick={onClose}>
+            <Box
+              onClick={!isLoading ? onClose : undefined}
+              cursor={isLoading ? 'not-allowed' : 'pointer'}
+              opacity={isLoading ? 0.5 : 1}
+            >
               <Image src="/images/crossIcon.svg" />
             </Box>
           </Flex>
