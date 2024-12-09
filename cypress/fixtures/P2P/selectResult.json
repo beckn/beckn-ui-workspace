@@ -1,0 +1,141 @@
+{
+  "data": [
+    {
+      "context": {
+        "domain": "uei:p2p_trading",
+        "action": "on_select",
+        "version": "1.1.0",
+        "bpp_id": "bpp-ps-network-strapi-dev.becknprotocol.io",
+        "bpp_uri": "http://bpp-ps-network-strapi-dev.becknprotocol.io",
+        "country": "IND",
+        "city": "std:080",
+        "location": {
+          "country": {
+            "name": "India",
+            "code": "IND"
+          },
+          "city": {
+            "name": "Bangalore",
+            "code": "std:080"
+          }
+        },
+        "bap_id": "bap-ps-network-dev.becknprotocol.io",
+        "bap_uri": "https://bap-ps-network-dev.becknprotocol.io",
+        "transaction_id": "9801be1d-52b5-492a-b8dd-2afdba1ae7f5",
+        "message_id": "b750655f-0006-43ef-8e63-703d7c60fff2",
+        "ttl": "PT10M",
+        "timestamp": "2024-12-05T07:30:19.569Z"
+      },
+      "message": {
+        "order": {
+          "quote": {
+            "price": {
+              "value": "13"
+            },
+            "breakup": [
+              {
+                "title": "CGST",
+                "price": {
+                  "currency": "INR",
+                  "value": "5"
+                }
+              },
+              {
+                "title": "SGST",
+                "price": {
+                  "currency": "INR",
+                  "value": "5"
+                }
+              },
+              {
+                "title": "Convenience charges",
+                "price": {
+                  "currency": "INR",
+                  "value": "1"
+                }
+              },
+              {
+                "title": "Wheeling charges @ 0.5/unit",
+                "price": {
+                  "currency": "INR",
+                  "value": "1"
+                }
+              },
+              {
+                "title": "P2P Energy Cost",
+                "price": {
+                  "currency": "INR"
+                }
+              }
+            ]
+          },
+          "provider": {
+            "id": "798",
+            "name": "Leela Energy Corp",
+            "short_desc": "Leela Energy Company",
+            "long_desc": "Big Leela Energy Company",
+            "images": {
+              "url": "https://file.aiquickdraw.com/imgcompressed/img/compressed_56a2f2ed06b49ceb7f8580c4bed33b52.webp",
+              "size_type": "sm"
+            },
+            "fulfillments": [
+              {
+                "id": "27",
+                "type": "END",
+                "rateable": true
+              },
+              {
+                "id": "26",
+                "type": "START",
+                "rateable": true
+              }
+            ]
+          },
+          "items": [
+            {
+              "id": "322",
+              "name": "Energy",
+              "short_desc": "Excess power from my rooftop system to sell",
+              "images": [
+                {
+                  "url": "https://file.aiquickdraw.com/imgcompressed/img/compressed_56a2f2ed06b49ceb7f8580c4bed33b52.webp",
+                  "size_type": "sm"
+                }
+              ],
+              "price": {
+                "value": "13"
+              },
+              "rating": "null",
+              "rateable": true,
+              "quantity": {
+                "available": {
+                  "count": 120,
+                  "measure": {
+                    "value": "120",
+                    "unit": "kWh"
+                  }
+                }
+              },
+              "categories": [
+                {
+                  "id": "100",
+                  "name": "SOLAR ENERGY"
+                }
+              ],
+              "fulfillments": [
+                {
+                  "id": "27",
+                  "type": "END"
+                },
+                {
+                  "id": "26",
+                  "type": "START"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

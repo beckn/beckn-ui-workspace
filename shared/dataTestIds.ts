@@ -1,6 +1,6 @@
 const testIds = {
   // application wise base url
-  url_base: process.env.CYPRESS_BASE_URL || 'http://localhost:3010',
+  url_base: process.env.CYPRESS_BASE_URL || 'http://localhost:3000',
   url_base_retail: process.env.CYPRESS_BASE_URL || 'http://localhost:3002',
   url_base_tourism: process.env.CYPRESS_BASE_URL || 'http://localhost:3001',
   // general
