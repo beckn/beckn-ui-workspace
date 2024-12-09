@@ -183,43 +183,47 @@ const Homepage = () => {
             ))}
           </Flex>
         </Box>
-        <Box mt={'10px'}>
-          <DetailCard>
-            <Flex
-              justifyContent={'space-between'}
-              alignItems={'center'}
-              mb={'20px'}
-            >
-              <Typography
-                text="Current Status"
-                fontSize="15px"
-                fontWeight="600"
-              />
-              <Typography
-                text="Pending"
-                fontSize="12px"
-                fontWeight="600"
-                color="#BD942B" // '#5EC401' will change as per status
-              />
-            </Flex>
-            <Divider />
-            <Box mt={'10px'}>
-              {currentStatusmockData.map((data, index) => (
-                <OrderStatusProgress
-                  key={index}
-                  label={data.label}
-                  statusTime={data.statusTime}
-                  noLine={data.noLine}
-                  lastElement={data.lastElement}
-                  statusDescription={data.statusDescription}
+        {role !== ROLE.PRODUCER && (
+          <Box mt={'10px'}>
+            <DetailCard>
+              <Flex
+                justifyContent={'space-between'}
+                alignItems={'center'}
+                mb={'20px'}
+              >
+                <Typography
+                  text="Current Status"
+                  fontSize="15px"
+                  fontWeight="600"
                 />
-              ))}
-            </Box>
-          </DetailCard>
-        </Box>
+                <Typography
+                  text="Pending"
+                  fontSize="12px"
+                  fontWeight="600"
+                  color="#BD942B" // '#5EC401' will change as per status
+                />
+              </Flex>
+              <Divider />
+              <Box mt={'10px'}>
+                {currentStatusmockData.map((data, index) => (
+                  <OrderStatusProgress
+                    key={index}
+                    label={data.label}
+                    statusTime={data.statusTime}
+                    noLine={data.noLine}
+                    lastElement={data.lastElement}
+                    statusDescription={data.statusDescription}
+                  />
+                ))}
+              </Box>
+            </DetailCard>
+          </Box>
+        )}
+
         <BecknButton
           children={role === ROLE.CONSUMER ? 'Buy' : 'Sell'}
           handleClick={() => router.push(role === ROLE.PRODUCER ? '/sellingPreference' : '/buyingPreference')}
+          sx={{ marginTop: '30px' }}
         />
       </Box>
       <SelectDate

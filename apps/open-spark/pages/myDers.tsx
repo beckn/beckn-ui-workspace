@@ -1,8 +1,16 @@
 import { Box } from '@chakra-ui/react'
 import DeviceList from '@components/deviceList/DeviceList'
-import React, { useState } from 'react'
+import { ROLE, ROUTE_TYPE } from '@lib/config'
+import { RootState } from '@store/index'
+import axios from 'axios'
+import Cookies from 'js-cookie'
+import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 
 const MyDers = () => {
+  const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
+  const { role } = useSelector((state: RootState) => state.auth)
+  const bearerToken = Cookies.get('authToken')
   const [devices, setDevices] = useState([
     { name: 'Wifi', paired: true },
     { name: 'Orient electric Fan', paired: true },
@@ -12,15 +20,35 @@ const MyDers = () => {
     { name: 'Solar Panel', paired: true }
   ])
 
-  const [nearbyDevices, setNearbyDevices] = useState([{ name: 'Light', paired: false }])
-
-  const handleDeviceChange = (
-    updatedDevices: React.SetStateAction<{ name: string; paired: boolean }[]>,
-    updatedNearbyDevices: React.SetStateAction<{ name: string; paired: boolean }[]>
-  ) => {
+  const handleDeviceChange = (updatedDevices: React.SetStateAction<{ name: string; paired: boolean }[]>) => {
     setDevices(updatedDevices)
-    setNearbyDevices(updatedNearbyDevices)
   }
+
+  const fetchPairedData = async () => {
+    try {
+      const response = await axios.get(`${strapiUrl}${ROUTE_TYPE[role!]}/der`, {
+        headers: { Authorization: `Bearer ${bearerToken}` },
+        withCredentials: true
+      })
+
+      const result = response.data.data
+      console.log(result)
+
+      if (role === ROLE.PRODUCER) {
+        setDevices(result.production)
+      } else if (role === ROLE.CONSUMER) {
+        setDevices(result.consumption)
+      }
+    } catch (error) {
+      console.error('Error fetching dashboard data:', error)
+    }
+  }
+
+  useEffect(() => {
+    if (role && bearerToken && strapiUrl) {
+      fetchPairedData()
+    }
+  }, [role, bearerToken, strapiUrl])
 
   return (
     <Box
@@ -29,8 +57,8 @@ const MyDers = () => {
     >
       <DeviceList
         initialDevices={devices}
-        initialNearbyDevices={nearbyDevices}
         onDeviceChange={handleDeviceChange}
+        fetchPairedData={fetchPairedData}
       />
     </Box>
   )

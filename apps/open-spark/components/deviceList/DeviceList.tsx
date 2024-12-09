@@ -1,11 +1,15 @@
-'use client'
-
 import React, { useState, useEffect } from 'react'
 import { Box, VStack, IconButton, Container, Flex } from '@chakra-ui/react'
 import { BiPlusCircle } from 'react-icons/bi'
-import { CiCirclePlus, CiCircleMinus } from 'react-icons/ci'
-import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
+import { CiCircleMinus } from 'react-icons/ci'
 import { Typography } from '@beckn-ui/molecules'
+import AddNewDerModal from './AddNewDerModal'
+import DeleteDErModal from './DeleteDErModal'
+import axios from 'axios'
+import { ROLE, ROUTE_TYPE } from '@lib/config'
+import { useSelector } from 'react-redux'
+import { RootState } from '@store/index'
+import Cookies from 'js-cookie'
 
 interface Device {
   name: string
@@ -15,29 +19,108 @@ interface Device {
 interface DeviceListProps {
   initialDevices: Device[]
   initialNearbyDevices: Device[]
-  onDeviceChange: (devices: Device[], nearbyDevices: Device[]) => void
+  onDeviceChange: (devices: Device[]) => void
+  fetchPairedData: () => void
 }
 
-export default function DeviceList({ initialDevices, initialNearbyDevices, onDeviceChange }: DeviceListProps) {
+export default function DeviceList({ initialDevices, onDeviceChange, fetchPairedData }: DeviceListProps) {
   const [devices, setDevices] = useState<Device[]>(initialDevices)
-  const [nearbyDevices, setNearbyDevices] = useState<Device[]>(initialNearbyDevices)
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false)
+  const [selectedDeviceIndex, setSelectedDeviceIndex] = useState<number | null>(null)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isDeleteLoading, setIsDeleteLoading] = useState<boolean>(false)
+
+  const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
+  const { role } = useSelector((state: RootState) => state.auth)
+  const bearerToken = Cookies.get('authToken')
+
+  const handleAddDevice = async (category: string, uploadedFiles: File[]) => {
+    setIsLoading(true)
+    try {
+      const type = role === ROLE.PRODUCER ? 'PRODUCER' : 'CONSUMER'
+      const formData = new FormData()
+
+      formData.append('type', type)
+      formData.append('category', category)
+      uploadedFiles.forEach(file => formData.append('proofs', file))
+
+      const response = await axios.post(`${strapiUrl}${ROUTE_TYPE[role!]}/der`, formData, {
+        headers: { Authorization: `Bearer ${bearerToken}` },
+        withCredentials: true
+      })
+
+      if (role === ROLE.PRODUCER) {
+        setDevices(response.data.production)
+        setIsLoading(false)
+      } else if (role === ROLE.CONSUMER) {
+        setDevices(response.data.consumption)
+        setIsLoading(false)
+      }
+
+      fetchPairedData()
+      setIsModalOpen(false)
+    } catch (error) {
+      console.error('Error adding device:', error.message)
+    } finally {
+      setIsLoading(false)
+      handleModalClose()
+    }
+  }
+
+  const handleModalOpen = () => setIsModalOpen(true)
+  const handleModalClose = () => setIsModalOpen(false)
+
+  const handleDeleteModalOpen = (index: number) => {
+    setSelectedDeviceIndex(index)
+    setIsDeleteModalOpen(true)
+  }
+
+  const handleDeleteModalClose = () => {
+    setSelectedDeviceIndex(null)
+    setIsDeleteModalOpen(false)
+  }
+
+  const handleRemoveDevice = async (index: number) => {
+    setIsDeleteLoading(true)
+    const deviceToRemove = devices[index]
+
+    try {
+      const response = await axios.delete(`${strapiUrl}${ROUTE_TYPE[role!]}/der`, {
+        params: { id: deviceToRemove.id },
+        headers: { Authorization: `Bearer ${bearerToken}` },
+        withCredentials: true
+      })
+
+      if (response.status === 200 || response.status === 204) {
+        if (role === ROLE.PRODUCER) {
+          setDevices(response.data.production)
+          setIsDeleteLoading(false)
+        } else if (role === ROLE.CONSUMER) {
+          setDevices(response.data.consumption)
+          setIsDeleteLoading(false)
+        }
+      } else {
+        console.error('Failed to delete the device:', response.data)
+      }
+    } catch (error) {
+      console.error('Error deleting device:', error.message)
+    } finally {
+      // setIsDeleteLoading(false)
+      handleDeleteModalClose()
+    }
+  }
+
+  const handleConfirmDeleteDevice = () => {
+    if (selectedDeviceIndex !== null) {
+      handleRemoveDevice(selectedDeviceIndex)
+      handleDeleteModalClose()
+    }
+  }
 
   useEffect(() => {
-    onDeviceChange(devices, nearbyDevices)
-  }, [devices, nearbyDevices, onDeviceChange])
-
-  const handleRemoveDevice = (index: number) => {
-    const newDevices = devices.filter((_, i) => i !== index)
-    setDevices(newDevices)
-  }
-
-  const handleAddDevice = (index: number) => {
-    const addedDevice = nearbyDevices[index]
-    const newNearbyDevices = nearbyDevices.filter((_, i) => i !== index)
-    const newDevices = [...devices, { ...addedDevice, paired: true }]
-    setNearbyDevices(newNearbyDevices)
-    setDevices(newDevices)
-  }
+    onDeviceChange(devices)
+  }, [devices, onDeviceChange])
 
   return (
     <Container>
@@ -47,25 +130,26 @@ export default function DeviceList({ initialDevices, initialNearbyDevices, onDev
           spacing={4}
         >
           <Flex
-            justifyContent={'space-between'}
+            justifyContent="space-between"
             alignItems="center"
           >
             <Typography
               text="Pair Device"
-              fontWeight={'600'}
-              fontSize={'15px'}
+              fontWeight="600"
+              fontSize="15px"
             />
             <IconButton
               aria-label="Add device"
               icon={<BiPlusCircle size={20} />}
               variant="ghost"
+              onClick={handleModalOpen}
             />
           </Flex>
 
           <Typography
             text="Paired"
-            fontWeight={'600'}
-            fontSize={'12px'}
+            fontWeight="600"
+            fontSize="12px"
           />
 
           <VStack
@@ -82,58 +166,33 @@ export default function DeviceList({ initialDevices, initialNearbyDevices, onDev
                 alignItems="center"
                 cursor="pointer"
                 _hover={{ bg: 'gray.50' }}
-                boxShadow={'rgba(0, 0, 0, 0.35) 0px 5px 15px'}
+                boxShadow="rgba(0, 0, 0, 0.35) 0px 5px 15px"
               >
                 <Typography text={device.name} />
                 <CiCircleMinus
-                  onClick={() => handleRemoveDevice(index)}
+                  onClick={() => handleDeleteModalOpen(index)}
                   style={{ cursor: 'pointer' }}
                   size={24}
-                  opacity={'0.5'}
+                  opacity="0.5"
                 />
               </Flex>
             ))}
           </VStack>
-          {nearbyDevices.length > 0 ? (
-            <>
-              <Typography
-                text="Nearby Devices"
-                fontWeight={'600'}
-                fontSize={'12px'}
-              />
-              <VStack
-                spacing={2}
-                align="stretch"
-                mb={'50px'}
-              >
-                {nearbyDevices.map((device, index) => (
-                  <Flex
-                    key={index}
-                    p={3}
-                    borderWidth="1px"
-                    borderRadius="12px"
-                    justify="space-between"
-                    alignItems="center"
-                    cursor="pointer"
-                    _hover={{ bg: 'gray.50' }}
-                    boxShadow={'rgba(0, 0, 0, 0.35) 0px 5px 15px'}
-                  >
-                    <Typography text={device.name} />
-                    <CiCirclePlus
-                      onClick={() => handleAddDevice(index)}
-                      style={{ cursor: 'pointer' }}
-                      size={24}
-                      opacity={0.5}
-                    />
-                  </Flex>
-                ))}
-              </VStack>
-            </>
-          ) : null}
-
-          <BecknButton children="Save" />
         </VStack>
       </Box>
+
+      <AddNewDerModal
+        isOpen={isModalOpen}
+        onClose={handleModalClose}
+        onSubmit={handleAddDevice}
+        isLoading={isLoading}
+      />
+      <DeleteDErModal
+        isOpen={isDeleteModalOpen}
+        onClose={handleDeleteModalClose}
+        handleConfirmDeleteDevice={handleConfirmDeleteDevice}
+        isLoading={isDeleteLoading}
+      />
     </Container>
   )
 }
