@@ -1,6 +1,6 @@
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { BecknAuth } from '@beckn-ui/becknified-components'
-import { Box, useBreakpoint, theme } from '@chakra-ui/react'
+import { Box, useBreakpoint } from '@chakra-ui/react'
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import Router from 'next/router'
 import { FormErrors, SignInResponse, SignUpFormProps } from '@beckn-ui/common/lib/types'
@@ -8,10 +8,10 @@ import { useBapTradeRegisterMutation, useBppTradeRegisterMutation } from '@servi
 import openSpark from '@public/images/openSparkLogo.svg'
 import { useLanguage } from '@hooks/useLanguage'
 import { CustomFormErrorProps, signUpValidateForm } from '@utils/form-utils'
-import { accountType } from '@utils/auth'
 import { AuthRootState } from '@store/auth-slice'
 import { useSelector } from 'react-redux'
-import { ROLE } from '@lib/config'
+import { ROLE, ROUTE_TYPE } from '@lib/config'
+import axios from '@services/axios'
 
 interface RegisterFormProps extends SignUpFormProps {
   utilityCompany: string
@@ -21,6 +21,8 @@ interface RegisterFormProps extends SignUpFormProps {
 const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL
 
 const SignUp = () => {
+  const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
+
   const [formData, setFormData] = useState<RegisterFormProps>({
     email: '',
     password: '',
@@ -36,6 +38,7 @@ const SignUp = () => {
     mobileNumber: '',
     utilityCompany: ''
   })
+  const [utilities, setUtilities] = useState<any[]>([])
 
   const breakpoint = useBreakpoint()
   const { role } = useSelector((state: AuthRootState) => state.auth)
@@ -43,6 +46,28 @@ const SignUp = () => {
   const [bppTradeRegister, { isLoading: bppLoading }] = useBppTradeRegisterMutation()
   const { t } = useLanguage()
   const [termsAccepted, setTermsAccepted] = useState(false)
+
+  useEffect(() => {
+    axios
+      .get(`${strapiUrl}${ROUTE_TYPE.CONSUMER}/get-utilities`)
+      .then(response => {
+        const result = response.data
+        const companies = result.map((company: any) => {
+          return {
+            label: company.name,
+            value: company.name
+          }
+        })
+      })
+      .catch(error => {
+        console.error('Error fetching utilities:', error)
+      })
+    setUtilities([
+      { value: 'Maharashtra State Power Corp. Ltd', label: 'Maharashtra State Power Corp. Ltd' },
+      { value: 'Reliance Power', label: 'Reliance Power' },
+      { value: 'MSEB', label: 'MSEB' }
+    ])
+  }, [])
 
   // Handle input change and validation
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -151,7 +176,7 @@ const SignUp = () => {
   const handleSignIn = () => {
     Router.push('/signIn')
   }
-
+  console.log(utilities)
   return (
     <Box
       mt={'30px'}
@@ -214,27 +239,23 @@ const SignUp = () => {
               label: t.enterMobileNumber,
               error: formErrors.mobileNumber
             },
-            {
-              type: 'text',
-              name: 'utilityCompany',
-              value: formData.utilityCompany,
-              handleChange: handleInputChange,
-              label: t.selectUtilityCompany,
-              error: formErrors.utilityCompany
-            },
             // {
-            //   type: 'select',
+            //   type: 'text',
             //   name: 'utilityCompany',
-            //   options: [
-            //     { value: 'Utility Company 1', label: 'Utility Company 1' },
-            //     { value: 'Utility Company 2', label: 'Utility Company 2' },
-            //     { value: 'Utility Company 3', label: 'Utility Company 3' }
-            //   ],
             //   value: formData.utilityCompany,
-            //   handleChange: handleSelectChange,
+            //   handleChange: handleInputChange,
             //   label: t.selectUtilityCompany,
             //   error: formErrors.utilityCompany
             // },
+            {
+              type: 'select',
+              name: 'utilityCompany',
+              options: utilities,
+              value: formData.utilityCompany,
+              handleChange: handleSelectChange,
+              label: t.selectUtilityCompany,
+              error: formErrors.utilityCompany
+            },
             {
               type: 'password',
               name: 'password',

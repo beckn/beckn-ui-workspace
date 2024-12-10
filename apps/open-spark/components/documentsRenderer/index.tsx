@@ -1,4 +1,4 @@
-import { Flex, Image, Progress } from '@chakra-ui/react'
+import { Box, Flex, Image, Progress } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import { formatDate } from '@beckn-ui/common'
 import { Typography } from '@beckn-ui/molecules'
@@ -9,8 +9,9 @@ import { formatFileSize } from '@utils/general'
 export interface DocumentProps {
   icon: string
   title: string
-  file: any
   date: Date
+  file?: any
+  data?: any
 }
 
 interface RenderDocumentsProps {
@@ -51,8 +52,6 @@ const RenderDocuments = (props: RenderDocumentsProps) => {
   }, [list, progressList])
 
   useEffect(() => {
-    console.log(progressList)
-    // Check if all progress values are 100
     const completed = list.every((_, index) => progressList[index] === 100)
     onAllComplete?.(completed)
   }, [progressList, list, onAllComplete])
@@ -119,27 +118,33 @@ const RenderDocuments = (props: RenderDocumentsProps) => {
                 />
               )}
             </Flex>
-            {type === 'cred' && handleOnDelete && (
-              <Image
-                src={deleteIcon}
-                alt="delete"
-                alignSelf={'center'}
-                width={'16px'}
-                height={'16px'}
-                cursor="pointer"
-                onClick={() => handleOnDelete(index, document, type)}
-              />
-            )}
-            {type === 'upload' && progress === 100 && (
-              <Image
-                src={tickIcon}
-                alt="tick"
-                alignSelf={'center'}
-                width={'16px'}
-                height={'16px'}
-                cursor="pointer"
-              />
-            )}
+            <Flex
+              flexDir={'column'}
+              justifyContent="space-between"
+              gap="1rem"
+            >
+              {handleOnDelete && (
+                <Image
+                  src={deleteIcon}
+                  alt="delete"
+                  alignSelf={'center'}
+                  width={'16px'}
+                  height={'16px'}
+                  cursor="pointer"
+                  onClick={() => handleOnDelete(index, document, type)}
+                />
+              )}
+              {type === 'upload' && progress === 100 && (
+                <Image
+                  src={tickIcon}
+                  alt="tick"
+                  alignSelf={'center'}
+                  width={'16px'}
+                  height={'16px'}
+                  cursor="pointer"
+                />
+              )}
+            </Flex>
           </Flex>
         )
       })}
