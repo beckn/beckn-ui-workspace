@@ -193,11 +193,9 @@ describe('End to End test cases for State Forest Department app', () => {
       cy.getByData(testIds.product_radio_text).eq(3).should('contain.text', 'Rest API').click()
 
       cy.getByData(testIds.product_checkbox).eq(16).should('contain.text', 'Accept').click()
-      cy.get('.chakra-button').click()
-      //cy.getByData(testIds.Proceed_to_product).click()
+      cy.getByData(testIds.Proceed_to_product).click()
       cy.wait(3000)
-      cy.get('.chakra-button').click()
-      //cy.getByData(testIds.Proceed).click()
+      cy.getByData(testIds.Proceed).click()
     })
   })
   context('Billing Details', () => {

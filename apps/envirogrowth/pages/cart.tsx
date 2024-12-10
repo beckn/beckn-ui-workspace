@@ -78,6 +78,7 @@ const RequestOverview = () => {
           },
           actionButton: {
             text: 'Proceed',
+            dataTest: testIds.Proceed,
             handleOnClick: () => {
               router.push('/checkout')
             }

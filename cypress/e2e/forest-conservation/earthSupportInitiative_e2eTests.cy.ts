@@ -183,11 +183,10 @@ describe('End to End test cases for Earth Support Initiative app', () => {
       cy.getByData(testIds.product_radio_text).eq(6).should('contain.text', '1 year').click()
 
       cy.getByData(testIds.product_checkbox).eq(7).should('contain.text', 'Accept').click()
-      cy.get('.chakra-button').click()
-      //cy.getByData(testIds.Proceed_to_product).click()
+
+      cy.getByData(testIds.Proceed_to_product).click()
       cy.wait(3000)
-      cy.get('.chakra-button').click()
-      //cy.getByData(testIds.Proceed).click()
+      cy.getByData(testIds.Proceed).click()
     })
   })
   context('Billing Details', () => {
