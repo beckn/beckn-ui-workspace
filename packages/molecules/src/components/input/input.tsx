@@ -17,7 +17,8 @@ const Input: React.FC<InputProps> = ({
   disabled,
   dataTest,
   readOnly = false,
-  rightElement
+  rightElement,
+  customInputBlurHandler
 }) => {
   const theme = useTheme()
   const [isInputFocused, setIsInputFocused] = useState(false)
@@ -41,7 +42,10 @@ const Input: React.FC<InputProps> = ({
         data-testid="test-chakra-input"
         data-test={dataTest}
         onFocus={handleInputFocus}
-        onBlur={handleInputBlur}
+        onBlur={event => {
+          handleInputBlur()
+          customInputBlurHandler?.(event)
+        }}
         _focus={{ borderColor: theme.colors.primary[100], outline: 'none' }}
         _focusVisible={{ boxShadow: 'unset' }}
         className={Styles.input}

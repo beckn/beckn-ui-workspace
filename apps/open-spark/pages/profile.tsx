@@ -3,7 +3,7 @@ import { Box } from '@chakra-ui/react'
 import { useLanguage } from '@hooks/useLanguage'
 import { profileValidateForm } from '@beckn-ui/common/src/utils'
 import Cookies from 'js-cookie'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { isEmpty } from '@beckn-ui/common/src/utils'
 import { useDispatch, useSelector } from 'react-redux'
 import { FormErrors, ProfileProps } from '@beckn-ui/common/lib/types'
@@ -15,7 +15,7 @@ import derIcon from '@public/images/der_icon.svg'
 import logoutIcon from '@public/images/logOutIcon.svg'
 import NavigationItem from '@components/navigationItem'
 import { setProfileEditable, UserRootState } from '@store/user-slice'
-import { logout } from '@beckn-ui/common'
+import { feedbackActions, logout } from '@beckn-ui/common'
 import { ROUTE_TYPE } from '@lib/config'
 import { AuthRootState } from '@store/auth-slice'
 import { useRouter } from 'next/router'
@@ -77,33 +77,15 @@ const ProfilePage = () => {
     setIsLoading(true)
 
     axios
-      .get(`${strapiUrl}${ROUTE_TYPE[role!]}/profile`, requestOptions)
+      .get(`${strapiUrl}${ROUTE_TYPE[role!]}/user-profile`, requestOptions)
       .then(response => {
         const result = response.data
-        const { name, phone, address, zip_code = '' } = result.data.attributes
-        let flatNumber,
-          street,
-          city,
-          state,
-          country = ''
-        if (!isEmpty(address)) {
-          const addressList = address.split(',')
-          flatNumber = addressList[0].trim()
-          street = addressList[1].trim()
-          city = addressList[2].trim()
-          state = addressList[3].trim()
-          country = addressList[4].trim()
-        }
+        const { fullname, address, customer_id } = result
         setFormData({
           ...formData,
-          name,
-          mobileNumber: phone,
-          flatNumber,
-          street,
-          state,
-          city,
-          country,
-          zipCode: zip_code
+          name: fullname,
+          address,
+          customerId: customer_id
         })
       })
       .finally(() => {
@@ -111,52 +93,44 @@ const ProfilePage = () => {
       })
   }, [])
 
-  // const updateProfile = () => {
-  //   const errors = profileValidateForm(formData) as any
-  //   setFormErrors(prevErrors => ({
-  //     ...prevErrors,
-  //     ...Object.keys(errors).reduce((acc: any, key) => {
-  //       acc[key] = t[`${errors[key]}`] || ''
-  //       return acc
-  //     }, {} as FormErrors)
-  //   }))
+  const updateProfile = () => {
+    if (formData.name === '' || formData.address === '') {
+      return
+    }
+    const errors = profileValidateForm(formData) as any
+    setFormErrors(prevErrors => ({
+      ...prevErrors,
+      ...Object.keys(errors).reduce((acc: any, key) => {
+        acc[key] = t[`${errors[key]}`] || ''
+        return acc
+      }, {} as FormErrors)
+    }))
 
-  //   setIsLoading(true)
+    const data = {
+      fullname: formData.name.trim(),
+      address: formData.address
+    }
 
-  //   const currentFormData = new FormData()
-  //   const data = {
-  //     name: formData.name.trim(),
-  //     phone: formData.mobileNumber,
-  //     address: `${formData.flatNumber || ''}, ${formData.street || ''}, ${formData.city}, ${formData.state}, ${formData.country}`,
-  //     zip_code: formData.zipCode
-  //   }
-
-  //   currentFormData.append('data', JSON.stringify(data))
-
-  //   const requestOptions = {
-  //     method: 'POST',
-  //     headers: { Authorization: `Bearer ${bearerToken}` },
-  //     withCredentials: true,
-  //     data: currentFormData
-  //   }
-
-  //   axios
-  //     .post(`${strapiUrl}/profiles`, currentFormData, requestOptions)
-  //     .then(response => {
-  //       dispatch(
-  //         feedbackActions.setToastData({
-  //           toastData: { message: t.success, display: true, type: 'success', description: t.profileUpdateSuccess }
-  //         })
-  //       )
-  //       Router.push('/')
-  //     })
-  //     .catch(error => {
-  //       console.log(error)
-  //     })
-  //     .finally(() => {
-  //       setIsLoading(false)
-  //     })
-  // }
+    axios
+      .put(`${strapiUrl}${ROUTE_TYPE[role!]}/user-profile`, data, {
+        headers: { Authorization: `Bearer ${bearerToken}` }
+      })
+      .then(response => {
+        // dispatch(
+        //   feedbackActions.setToastData({
+        //     toastData: { message: t.success, display: true, type: 'success', description: t.profileUpdateSuccess }
+        //   })
+        // )
+      })
+      .catch(error => {
+        console.log(error)
+        dispatch(
+          feedbackActions.setToastData({
+            toastData: { message: 'Error!', display: true, type: 'error', description: 'Unable to update' }
+          })
+        )
+      })
+  }
 
   const isFormFilled = useMemo(() => {
     const { flatNumber, street, ...restFormData } = formData
@@ -190,7 +164,8 @@ const ProfilePage = () => {
               label: t.fullName,
               error: formErrors.name,
               dataTest: testIds.profile_inputName,
-              disabled: !profileEditable
+              disabled: !profileEditable,
+              customInputBlurHandler: updateProfile
             },
             {
               type: 'text',
@@ -200,7 +175,7 @@ const ProfilePage = () => {
               label: t.formCustomerId,
               error: formErrors.customerId,
               dataTest: testIds.profile_customerId,
-              disabled: !profileEditable
+              disabled: true
             },
             {
               type: 'text',
@@ -210,7 +185,8 @@ const ProfilePage = () => {
               label: t.formAddress,
               error: formErrors.address,
               dataTest: testIds.profile_address,
-              disabled: !profileEditable
+              disabled: !profileEditable,
+              customInputBlurHandler: updateProfile
             }
           ]
         }}

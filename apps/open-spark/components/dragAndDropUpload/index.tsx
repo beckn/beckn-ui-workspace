@@ -68,6 +68,7 @@ const DragAndDropUpload = (props: DragAndDropUploadProps) => {
       <Input
         type="file"
         multiple={multiple}
+        accept=".json"
         style={{
           opacity: 0,
           width: '100%',

@@ -5,8 +5,8 @@ import { useRouter } from 'next/router'
 import { useLanguage } from '@hooks/useLanguage'
 import { TopHeader, SubHeader } from '@beckn-ui/common'
 import Constants from './constants'
-import { setProfileEditable } from '@store/user-slice'
-import { useDispatch } from 'react-redux'
+import { setProfileEditable, UserRootState } from '@store/user-slice'
+import { useDispatch, useSelector } from 'react-redux'
 
 const Header = () => {
   const {
@@ -17,6 +17,7 @@ const Header = () => {
   const router = useRouter()
   const { t, locale } = useLanguage()
   const dispatch = useDispatch()
+  const { profileEditable } = useSelector((state: UserRootState) => state.user)
 
   const renderTopHeader = !topHeaderBlackList.includes(router.pathname)
   const renderBottomHeader = !bottomHeaderBlackList.includes(router.pathname)

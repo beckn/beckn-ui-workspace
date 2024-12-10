@@ -18,14 +18,16 @@ import RenderDocuments from '@components/documentsRenderer'
 interface DocumentProps {
   icon: string
   title: string
-  file: any
   date: Date
+  file?: any
+  data?: any
 }
 
 const MyCredentials = () => {
-  const [credFiles, setCredFiles] = useState<DocumentProps[] | null>(null)
-  const [selectedFile, setSelectedFile] = useState<DocumentProps[] | null>(null)
+  const [credFiles, setCredFiles] = useState<DocumentProps[]>([])
+  const [selectedFile, setSelectedFile] = useState<DocumentProps[]>([])
   const [allFilesProcessed, setAllFilesProcessed] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const dispatch = useDispatch()
   const { t } = useLanguage()
@@ -44,7 +46,18 @@ const MyCredentials = () => {
 
     const response = await axios.get(`${strapiUrl}${ROUTE_TYPE[role!]}/cred`, requestOptions)
     if (response.status === 200) {
-      setCredFiles(response.data)
+      const result = response.data
+      console.log(result)
+      const credData = result.map((data: any) => {
+        const { credential } = data
+        return {
+          title: data.type,
+          icon: jsonIcon,
+          date: credential.issuanceDate,
+          data: credential
+        }
+      })
+      setCredFiles(credData)
     }
   }
 
@@ -92,6 +105,7 @@ const MyCredentials = () => {
   }
 
   const handleOnUpload = () => {
+    setIsLoading(true)
     const formData = new FormData()
     selectedFile?.forEach((data, index) => {
       formData.append(`credential`, data.file)
@@ -105,11 +119,14 @@ const MyCredentials = () => {
       })
       .then(response => {
         console.log('Uploaded successfully:', response.data)
-        setSelectedFile(null)
+        setSelectedFile([])
         getCredentials()
       })
       .catch(error => {
         console.error('Error uploading:', error)
+      })
+      .finally(() => {
+        setIsLoading(false)
       })
   }
 
@@ -198,9 +215,10 @@ const MyCredentials = () => {
         </Box>
         <BecknButton
           text={t.upload}
-          disabled={!allFilesProcessed}
+          disabled={selectedFile?.length === 0 || !allFilesProcessed}
           sx={{ marginTop: '2rem' }}
           handleClick={handleOnUpload}
+          isLoading={isLoading}
         />
       </Flex>
     </Box>
