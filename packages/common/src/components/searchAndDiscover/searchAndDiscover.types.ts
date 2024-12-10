@@ -1,4 +1,4 @@
-import { Product } from '@beckn-ui/becknified-components'
+import { CatelogRenderMode, Product } from '@beckn-ui/becknified-components'
 import { ParsedItemModel } from '../../../lib/types'
 
 export interface SearchAndDiscoverProps {
@@ -26,8 +26,9 @@ export interface SearchAndDiscoverProps {
     dataTest?: string
   }
   catalogProps: {
+    renderMode?: CatelogRenderMode
     viewDetailsClickHandler: (item: ParsedItemModel, product: Product) => void
   }
-
+  t?: (key: string) => string
   noProduct: (key: string) => string
 }

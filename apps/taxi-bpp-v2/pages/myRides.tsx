@@ -6,6 +6,7 @@ import { RideDetailsProps } from '@lib/types/rideDetails'
 import { RideData } from '@lib/types/ride'
 import { rideStatusMap } from '@utils/ride-utils'
 import { getCurrencyWithFare } from '@utils/rideSummary-utils'
+import { testIds } from '@shared/dataTestIds'
 
 const MyRides = () => {
   const country = localStorage.getItem('country')!
@@ -54,6 +55,7 @@ const MyRides = () => {
         variant="soft-rounded"
         colorScheme="primary"
         onChange={index => setCurrentTab(tabList[index])}
+        data-test={testIds.taxi_BPP_my_rides_Tabs}
       >
         <TabList>
           {tabList.map((status, index) => (
@@ -64,6 +66,7 @@ const MyRides = () => {
               fontWeight="400"
               p={'10px 24px'}
               color="#000000"
+              data-test={`testIds.taxi_BPP_my_rides_tablist_name_${status}`}
             >
               {status}
             </Tab>

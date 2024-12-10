@@ -10,6 +10,7 @@ export interface ModalDetails {
   id: ModalTypes
   title: string
   subTitle: string
+  dataTest: string
   rideDetails: RideDetailsModel
   fare?: {
     text: string

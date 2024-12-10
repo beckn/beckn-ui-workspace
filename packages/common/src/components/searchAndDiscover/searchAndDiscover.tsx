@@ -9,14 +9,15 @@ import CustomFilterIconComponent from '../cutomFilterIcon'
 import { setLocalStorage } from '../../utils'
 import { SearchAndDiscoverProps } from './searchAndDiscover.types'
 import { testIds } from '@shared/dataTestIds'
-
+import Styles from './searchAndDiscover.module.css'
 const SearchAndDiscover: React.FC<SearchAndDiscoverProps> = ({
   items,
   searchProps,
   filterProps,
   loaderProps,
   catalogProps,
-  noProduct
+  noProduct,
+  t
 }) => {
   const {
     searchKeyword,
@@ -28,7 +29,7 @@ const SearchAndDiscover: React.FC<SearchAndDiscoverProps> = ({
   } = searchProps
   const { isFilterOpen, sortByRating, handleApplyFilter, handleResetFilter, handleFilterOpen, handleFilterClose } =
     filterProps || {}
-  const { viewDetailsClickHandler } = catalogProps
+  const { viewDetailsClickHandler, renderMode } = catalogProps
 
   const breakpoint = useBreakpoint()
 
@@ -47,7 +48,7 @@ const SearchAndDiscover: React.FC<SearchAndDiscoverProps> = ({
         price: item.price.value,
         rateLabel: item.price?.rateLabel,
         rating: item.rating,
-        source: 'Sold By',
+        source: t?.('itemSourceText') || 'Sold By',
         sourceText: providerName,
         productInfo: item.productInfo
       }
@@ -64,6 +65,7 @@ const SearchAndDiscover: React.FC<SearchAndDiscoverProps> = ({
           product={product}
           currency={item.price.currency}
           productInfoDataSource={product.productInfo}
+          renderMode={renderMode}
         />
       )
     })
@@ -71,7 +73,7 @@ const SearchAndDiscover: React.FC<SearchAndDiscoverProps> = ({
 
   return (
     <Box
-      className="hideScroll"
+      className={Styles.hideScroll}
       maxH="calc(100vh - 95px)"
       overflowY="scroll"
     >

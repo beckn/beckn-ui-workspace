@@ -13,7 +13,7 @@ import { ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
 export const getSelectPayload = (
   inputData: CartItemForRequest[],
   transactionId: string,
-  domain = 'uei:p2p-trading'
+  domain = 'uei:p2p_trading'
 ): { data: SelectData } => {
   const transaction_id = transactionId
 
@@ -242,10 +242,10 @@ export const getPayloadForConfirm = (initResponse: InitResponseModel[], quantity
               billing: billing,
               payments: [
                 {
-                  id: payments[0].id,
+                  id: payments?.[0]?.id,
                   params: {
-                    amount: quote.price.value,
-                    currency: quote.price.currency
+                    amount: quote?.price?.value,
+                    currency: quote?.price?.currency
                   },
                   status: 'PAID',
                   type: 'ON-FULFILLMENT'

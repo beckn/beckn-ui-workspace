@@ -1,0 +1,1843 @@
+{
+  "message": "Rides Fetched",
+  "data": {
+    "my_rides": [
+      {
+        "createdAt": "2024-10-25T16:54:52.779Z",
+        "id": 1817,
+        "updatedAt": "2024-10-25T18:44:06.201Z",
+        "publishedAt": "2024-10-25T16:54:52.739Z",
+        "state_code": "RIDE_STATUS",
+        "state_value": "RIDE_ACCEPTED",
+        "customer_id": {
+          "id": 309,
+          "first_name": "nitish",
+          "last_name": null,
+          "email": "nitish@example.com",
+          "createdAt": "2024-10-24T07:15:16.310Z",
+          "updatedAt": "2024-10-24T07:15:16.310Z",
+          "publishedAt": "2024-10-24T07:15:16.284Z",
+          "contact": "9999999999"
+        },
+        "fulfilment_id": {
+          "id": 21,
+          "type": "SUV On-Location Cab Pickup",
+          "rateable": true,
+          "rating": "4.0",
+          "createdAt": "2024-09-04T07:40:35.721Z",
+          "updatedAt": "2024-09-04T07:59:59.744Z",
+          "publishedAt": "2024-09-04T07:40:38.672Z",
+          "service": {
+            "id": 6,
+            "time_slot_per_client_in_min": null,
+            "service_fee": null,
+            "followup_service_fee": null,
+            "createdAt": "2024-09-04T07:34:28.020Z",
+            "updatedAt": "2024-09-04T07:34:53.915Z",
+            "publishedAt": "2024-09-04T07:34:53.910Z"
+          }
+        },
+        "order_id": {
+          "id": 2132,
+          "createdAt": "2024-10-25T16:54:52.747Z",
+          "updatedAt": "2024-10-25T16:54:52.747Z",
+          "publishedAt": "2024-10-25T16:54:52.739Z",
+          "status": "ACTIVE",
+          "currency": null,
+          "tax_amount": null,
+          "total_amount": null,
+          "billing_email": null,
+          "payment_method": null,
+          "payment_method_title": null,
+          "transaction_id": null,
+          "ip_address": null,
+          "user_agent": null,
+          "customer_note": null,
+          "amount_without_tax": null,
+          "domain": "mobility:1.1.0",
+          "order_transaction_id": "72728ea1-9d79-4dc6-94f5-d9a040680ad0",
+          "bap_id": "bap-ps-network-prod.example.io",
+          "bap_uri": "https://bap-ps-network-prod.example.io",
+          "items": [
+            {
+              "id": 184,
+              "name": "XYZ SUV",
+              "short_desc": "XYZCabs SUV: Premium rides, spacious comfort. Travel in style with our top-tier SUV service.",
+              "code": "XYZSUV",
+              "long_desc": "XYZCabs SUV offers a luxurious and comfortable ride experience tailored for those who appreciate extra space and style. Whether you're heading to an important meeting, picking up clients, or simply enjoying a night out, our fleet of well-maintained SUVs provides the perfect blend of elegance and practicality. With XYZCabs SUV, you'll travel in comfort, knowing you're in the hands of professional drivers who prioritize your safety and satisfaction. Experience the difference of premium cab service with XYZCabs SUV, where every ride is a first-class journey.",
+              "createdAt": "2024-09-04T08:01:13.690Z",
+              "updatedAt": "2024-09-08T11:20:15.152Z",
+              "publishedAt": "2024-09-04T08:01:15.698Z",
+              "max_quantity": null,
+              "min_quantity": null,
+              "provider": {
+                "id": 629,
+                "provider_name": "XYZ Cab Services",
+                "createdAt": "2024-05-15T07:26:01.654Z",
+                "updatedAt": "2024-08-16T14:53:27.575Z",
+                "publishedAt": "2024-05-15T07:26:09.700Z",
+                "short_desc": "XYZ Cab: Your reliable ride-sharing solution, offering efficient transportation with a focus on safety and convenience.",
+                "long_desc": "Welcome to XYZ Cab, your premier choice for hassle-free transportation! With our fleet of modern vehicles and professional drivers, we ensure prompt and comfortable rides to your destination. Enjoy convenient booking, competitive prices, and reliable service every time you ride with us.",
+                "provider_id": null,
+                "provider_uri": null,
+                "provider_rating": "4.3",
+                "domain_id": {
+                  "id": 20,
+                  "DomainName": "mobility:1.1.0",
+                  "createdAt": "2024-05-15T07:19:06.297Z",
+                  "updatedAt": "2024-05-15T07:19:07.295Z",
+                  "publishedAt": "2024-05-15T07:19:07.292Z"
+                }
+              },
+              "item_fulfillment_ids": [
+                {
+                  "id": 121,
+                  "createdAt": "2024-09-04T07:42:46.991Z",
+                  "updatedAt": "2024-09-04T07:42:49.428Z",
+                  "publishedAt": "2024-09-04T07:42:49.425Z",
+                  "timestamp": null,
+                  "item_id": 184,
+                  "fulfilment_id": {
+                    "id": 21,
+                    "type": "SUV On-Location Cab Pickup",
+                    "rateable": true,
+                    "rating": "4.0",
+                    "createdAt": "2024-09-04T07:40:35.721Z",
+                    "updatedAt": "2024-09-04T07:59:59.744Z",
+                    "publishedAt": "2024-09-04T07:40:38.672Z",
+                    "service": {
+                      "id": 6,
+                      "time_slot_per_client_in_min": null,
+                      "service_fee": null,
+                      "followup_service_fee": null,
+                      "createdAt": "2024-09-04T07:34:28.020Z",
+                      "updatedAt": "2024-09-04T07:34:53.915Z",
+                      "publishedAt": "2024-09-04T07:34:53.910Z"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "stops": [
+          {
+            "id": 2849,
+            "gps": "18.4520867, 73.9339315",
+            "createdAt": "2024-10-25T16:54:52.764Z",
+            "updatedAt": "2024-10-25T16:54:52.764Z",
+            "publishedAt": "2024-10-25T16:54:52.739Z",
+            "city_name": "",
+            "state_code": "",
+            "city_code": "",
+            "country_name": "",
+            "country_code": "",
+            "state_name": "",
+            "area_code": "",
+            "address": "",
+            "type": "start"
+          },
+          {
+            "id": 2850,
+            "gps": "18.5214945, 73.93047109999999",
+            "createdAt": "2024-10-25T16:54:52.768Z",
+            "updatedAt": "2024-10-25T16:54:52.768Z",
+            "publishedAt": "2024-10-25T16:54:52.739Z",
+            "city_name": "",
+            "state_code": "",
+            "city_code": "",
+            "country_name": "",
+            "country_code": "",
+            "state_name": "",
+            "area_code": "",
+            "address": "",
+            "type": "end"
+          }
+        ]
+      },
+      {
+        "createdAt": "2024-10-25T15:51:32.713Z",
+        "id": 1815,
+        "updatedAt": "2024-10-26T10:39:40.619Z",
+        "publishedAt": "2024-10-25T15:51:32.663Z",
+        "state_code": "RIDE_STATUS",
+        "state_value": "RIDE_ACCEPTED",
+        "customer_id": {
+          "id": 195,
+          "first_name": "krushna",
+          "last_name": null,
+          "email": "krushna@example.com",
+          "createdAt": "2024-08-20T13:34:32.198Z",
+          "updatedAt": "2024-08-20T13:34:32.198Z",
+          "publishedAt": "2024-08-20T13:34:32.175Z",
+          "contact": "9999999999"
+        },
+        "fulfilment_id": {
+          "id": 21,
+          "type": "SUV On-Location Cab Pickup",
+          "rateable": true,
+          "rating": "4.0",
+          "createdAt": "2024-09-04T07:40:35.721Z",
+          "updatedAt": "2024-09-04T07:59:59.744Z",
+          "publishedAt": "2024-09-04T07:40:38.672Z",
+          "service": {
+            "id": 6,
+            "time_slot_per_client_in_min": null,
+            "service_fee": null,
+            "followup_service_fee": null,
+            "createdAt": "2024-09-04T07:34:28.020Z",
+            "updatedAt": "2024-09-04T07:34:53.915Z",
+            "publishedAt": "2024-09-04T07:34:53.910Z"
+          }
+        },
+        "order_id": {
+          "id": 2130,
+          "createdAt": "2024-10-25T15:51:32.673Z",
+          "updatedAt": "2024-10-25T15:51:32.673Z",
+          "publishedAt": "2024-10-25T15:51:32.663Z",
+          "status": "ACTIVE",
+          "currency": null,
+          "tax_amount": null,
+          "total_amount": null,
+          "billing_email": null,
+          "payment_method": null,
+          "payment_method_title": null,
+          "transaction_id": null,
+          "ip_address": null,
+          "user_agent": null,
+          "customer_note": null,
+          "amount_without_tax": null,
+          "domain": "mobility:1.1.0",
+          "order_transaction_id": "64f7e416-e402-4822-95a8-4a50691b3a7d",
+          "bap_id": "bap-ps-network-prod.example.io",
+          "bap_uri": "https://bap-ps-network-prod.example.io",
+          "items": [
+            {
+              "id": 184,
+              "name": "XYZ SUV",
+              "short_desc": "XYZCabs SUV: Premium rides, spacious comfort. Travel in style with our top-tier SUV service.",
+              "code": "XYZSUV",
+              "long_desc": "XYZCabs SUV offers a luxurious and comfortable ride experience tailored for those who appreciate extra space and style. Whether you're heading to an important meeting, picking up clients, or simply enjoying a night out, our fleet of well-maintained SUVs provides the perfect blend of elegance and practicality. With XYZCabs SUV, you'll travel in comfort, knowing you're in the hands of professional drivers who prioritize your safety and satisfaction. Experience the difference of premium cab service with XYZCabs SUV, where every ride is a first-class journey.",
+              "createdAt": "2024-09-04T08:01:13.690Z",
+              "updatedAt": "2024-09-08T11:20:15.152Z",
+              "publishedAt": "2024-09-04T08:01:15.698Z",
+              "max_quantity": null,
+              "min_quantity": null,
+              "provider": {
+                "id": 629,
+                "provider_name": "XYZ Cab Services",
+                "createdAt": "2024-05-15T07:26:01.654Z",
+                "updatedAt": "2024-08-16T14:53:27.575Z",
+                "publishedAt": "2024-05-15T07:26:09.700Z",
+                "short_desc": "XYZ Cab: Your reliable ride-sharing solution, offering efficient transportation with a focus on safety and convenience.",
+                "long_desc": "Welcome to XYZ Cab, your premier choice for hassle-free transportation! With our fleet of modern vehicles and professional drivers, we ensure prompt and comfortable rides to your destination. Enjoy convenient booking, competitive prices, and reliable service every time you ride with us.",
+                "provider_id": null,
+                "provider_uri": null,
+                "provider_rating": "4.3",
+                "domain_id": {
+                  "id": 20,
+                  "DomainName": "mobility:1.1.0",
+                  "createdAt": "2024-05-15T07:19:06.297Z",
+                  "updatedAt": "2024-05-15T07:19:07.295Z",
+                  "publishedAt": "2024-05-15T07:19:07.292Z"
+                }
+              },
+              "item_fulfillment_ids": [
+                {
+                  "id": 121,
+                  "createdAt": "2024-09-04T07:42:46.991Z",
+                  "updatedAt": "2024-09-04T07:42:49.428Z",
+                  "publishedAt": "2024-09-04T07:42:49.425Z",
+                  "timestamp": null,
+                  "item_id": 184,
+                  "fulfilment_id": {
+                    "id": 21,
+                    "type": "SUV On-Location Cab Pickup",
+                    "rateable": true,
+                    "rating": "4.0",
+                    "createdAt": "2024-09-04T07:40:35.721Z",
+                    "updatedAt": "2024-09-04T07:59:59.744Z",
+                    "publishedAt": "2024-09-04T07:40:38.672Z",
+                    "service": {
+                      "id": 6,
+                      "time_slot_per_client_in_min": null,
+                      "service_fee": null,
+                      "followup_service_fee": null,
+                      "createdAt": "2024-09-04T07:34:28.020Z",
+                      "updatedAt": "2024-09-04T07:34:53.915Z",
+                      "publishedAt": "2024-09-04T07:34:53.910Z"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "stops": [
+          {
+            "id": 2845,
+            "gps": "18.4520848, 73.9339347",
+            "createdAt": "2024-10-25T15:51:32.694Z",
+            "updatedAt": "2024-10-25T15:51:32.694Z",
+            "publishedAt": "2024-10-25T15:51:32.663Z",
+            "city_name": "",
+            "state_code": "",
+            "city_code": "",
+            "country_name": "",
+            "country_code": "",
+            "state_name": "",
+            "area_code": "",
+            "address": "",
+            "type": "start"
+          },
+          {
+            "id": 2846,
+            "gps": "18.5214945, 73.93047109999999",
+            "createdAt": "2024-10-25T15:51:32.701Z",
+            "updatedAt": "2024-10-25T15:51:32.701Z",
+            "publishedAt": "2024-10-25T15:51:32.663Z",
+            "city_name": "",
+            "state_code": "",
+            "city_code": "",
+            "country_name": "",
+            "country_code": "",
+            "state_name": "",
+            "area_code": "",
+            "address": "",
+            "type": "end"
+          }
+        ]
+      },
+      {
+        "createdAt": "2024-10-24T09:42:36.522Z",
+        "id": 1801,
+        "updatedAt": "2024-10-24T09:42:49.952Z",
+        "publishedAt": "2024-10-24T09:42:36.487Z",
+        "state_code": "RIDE_STATUS",
+        "state_value": "RIDE_ACCEPTED",
+        "customer_id": {
+          "id": 195,
+          "first_name": "krushna",
+          "last_name": null,
+          "email": "krushna@example.com",
+          "createdAt": "2024-08-20T13:34:32.198Z",
+          "updatedAt": "2024-08-20T13:34:32.198Z",
+          "publishedAt": "2024-08-20T13:34:32.175Z",
+          "contact": "9999999999"
+        },
+        "fulfilment_id": {
+          "id": 21,
+          "type": "SUV On-Location Cab Pickup",
+          "rateable": true,
+          "rating": "4.0",
+          "createdAt": "2024-09-04T07:40:35.721Z",
+          "updatedAt": "2024-09-04T07:59:59.744Z",
+          "publishedAt": "2024-09-04T07:40:38.672Z",
+          "service": {
+            "id": 6,
+            "time_slot_per_client_in_min": null,
+            "service_fee": null,
+            "followup_service_fee": null,
+            "createdAt": "2024-09-04T07:34:28.020Z",
+            "updatedAt": "2024-09-04T07:34:53.915Z",
+            "publishedAt": "2024-09-04T07:34:53.910Z"
+          }
+        },
+        "order_id": {
+          "id": 2116,
+          "createdAt": "2024-10-24T09:42:36.492Z",
+          "updatedAt": "2024-10-24T09:42:36.492Z",
+          "publishedAt": "2024-10-24T09:42:36.487Z",
+          "status": "ACTIVE",
+          "currency": null,
+          "tax_amount": null,
+          "total_amount": null,
+          "billing_email": null,
+          "payment_method": null,
+          "payment_method_title": null,
+          "transaction_id": null,
+          "ip_address": null,
+          "user_agent": null,
+          "customer_note": null,
+          "amount_without_tax": null,
+          "domain": "mobility:1.1.0",
+          "order_transaction_id": "e51ec4f1-7e68-413a-aed3-5b769572c383",
+          "bap_id": "bap-ps-network-prod.example.io",
+          "bap_uri": "https://bap-ps-network-prod.example.io",
+          "items": [
+            {
+              "id": 184,
+              "name": "XYZ SUV",
+              "short_desc": "XYZCabs SUV: Premium rides, spacious comfort. Travel in style with our top-tier SUV service.",
+              "code": "XYZSUV",
+              "long_desc": "XYZCabs SUV offers a luxurious and comfortable ride experience tailored for those who appreciate extra space and style. Whether you're heading to an important meeting, picking up clients, or simply enjoying a night out, our fleet of well-maintained SUVs provides the perfect blend of elegance and practicality. With XYZCabs SUV, you'll travel in comfort, knowing you're in the hands of professional drivers who prioritize your safety and satisfaction. Experience the difference of premium cab service with XYZCabs SUV, where every ride is a first-class journey.",
+              "createdAt": "2024-09-04T08:01:13.690Z",
+              "updatedAt": "2024-09-08T11:20:15.152Z",
+              "publishedAt": "2024-09-04T08:01:15.698Z",
+              "max_quantity": null,
+              "min_quantity": null,
+              "provider": {
+                "id": 629,
+                "provider_name": "XYZ Cab Services",
+                "createdAt": "2024-05-15T07:26:01.654Z",
+                "updatedAt": "2024-08-16T14:53:27.575Z",
+                "publishedAt": "2024-05-15T07:26:09.700Z",
+                "short_desc": "XYZ Cab: Your reliable ride-sharing solution, offering efficient transportation with a focus on safety and convenience.",
+                "long_desc": "Welcome to XYZ Cab, your premier choice for hassle-free transportation! With our fleet of modern vehicles and professional drivers, we ensure prompt and comfortable rides to your destination. Enjoy convenient booking, competitive prices, and reliable service every time you ride with us.",
+                "provider_id": null,
+                "provider_uri": null,
+                "provider_rating": "4.3",
+                "domain_id": {
+                  "id": 20,
+                  "DomainName": "mobility:1.1.0",
+                  "createdAt": "2024-05-15T07:19:06.297Z",
+                  "updatedAt": "2024-05-15T07:19:07.295Z",
+                  "publishedAt": "2024-05-15T07:19:07.292Z"
+                }
+              },
+              "item_fulfillment_ids": [
+                {
+                  "id": 121,
+                  "createdAt": "2024-09-04T07:42:46.991Z",
+                  "updatedAt": "2024-09-04T07:42:49.428Z",
+                  "publishedAt": "2024-09-04T07:42:49.425Z",
+                  "timestamp": null,
+                  "item_id": 184,
+                  "fulfilment_id": {
+                    "id": 21,
+                    "type": "SUV On-Location Cab Pickup",
+                    "rateable": true,
+                    "rating": "4.0",
+                    "createdAt": "2024-09-04T07:40:35.721Z",
+                    "updatedAt": "2024-09-04T07:59:59.744Z",
+                    "publishedAt": "2024-09-04T07:40:38.672Z",
+                    "service": {
+                      "id": 6,
+                      "time_slot_per_client_in_min": null,
+                      "service_fee": null,
+                      "followup_service_fee": null,
+                      "createdAt": "2024-09-04T07:34:28.020Z",
+                      "updatedAt": "2024-09-04T07:34:53.915Z",
+                      "publishedAt": "2024-09-04T07:34:53.910Z"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "stops": [
+          {
+            "id": 2817,
+            "gps": "12.9752736, 77.6205002",
+            "createdAt": "2024-10-24T09:42:36.506Z",
+            "updatedAt": "2024-10-24T09:42:36.506Z",
+            "publishedAt": "2024-10-24T09:42:36.487Z",
+            "city_name": "",
+            "state_code": "",
+            "city_code": "",
+            "country_name": "",
+            "country_code": "",
+            "state_name": "",
+            "area_code": "",
+            "address": "",
+            "type": "start"
+          },
+          {
+            "id": 2818,
+            "gps": "13.198909, 77.7068926",
+            "createdAt": "2024-10-24T09:42:36.512Z",
+            "updatedAt": "2024-10-24T09:42:36.512Z",
+            "publishedAt": "2024-10-24T09:42:36.487Z",
+            "city_name": "",
+            "state_code": "",
+            "city_code": "",
+            "country_name": "",
+            "country_code": "",
+            "state_name": "",
+            "area_code": "",
+            "address": "",
+            "type": "end"
+          }
+        ]
+      },
+      {
+        "createdAt": "2024-10-24T08:40:08.157Z",
+        "id": 1788,
+        "updatedAt": "2024-10-24T08:40:12.446Z",
+        "publishedAt": "2024-10-24T08:40:08.106Z",
+        "state_code": "RIDE_STATUS",
+        "state_value": "RIDE_ACCEPTED",
+        "customer_id": {
+          "id": 310,
+          "first_name": "sonam",
+          "last_name": null,
+          "email": "sonam@example.com",
+          "createdAt": "2024-10-24T08:40:08.137Z",
+          "updatedAt": "2024-10-24T08:40:08.137Z",
+          "publishedAt": "2024-10-24T08:40:08.106Z",
+          "contact": "2342434445"
+        },
+        "fulfilment_id": {
+          "id": 21,
+          "type": "SUV On-Location Cab Pickup",
+          "rateable": true,
+          "rating": "4.0",
+          "createdAt": "2024-09-04T07:40:35.721Z",
+          "updatedAt": "2024-09-04T07:59:59.744Z",
+          "publishedAt": "2024-09-04T07:40:38.672Z",
+          "service": {
+            "id": 6,
+            "time_slot_per_client_in_min": null,
+            "service_fee": null,
+            "followup_service_fee": null,
+            "createdAt": "2024-09-04T07:34:28.020Z",
+            "updatedAt": "2024-09-04T07:34:53.915Z",
+            "publishedAt": "2024-09-04T07:34:53.910Z"
+          }
+        },
+        "order_id": {
+          "id": 2103,
+          "createdAt": "2024-10-24T08:40:08.117Z",
+          "updatedAt": "2024-10-24T08:40:08.117Z",
+          "publishedAt": "2024-10-24T08:40:08.106Z",
+          "status": "ACTIVE",
+          "currency": null,
+          "tax_amount": null,
+          "total_amount": null,
+          "billing_email": null,
+          "payment_method": null,
+          "payment_method_title": null,
+          "transaction_id": null,
+          "ip_address": null,
+          "user_agent": null,
+          "customer_note": null,
+          "amount_without_tax": null,
+          "domain": "mobility:1.1.0",
+          "order_transaction_id": "3f256a8d-10ba-42b4-b7db-797c386d1683",
+          "bap_id": "bap-ps-network-prod.example.io",
+          "bap_uri": "https://bap-ps-network-prod.example.io",
+          "items": [
+            {
+              "id": 184,
+              "name": "XYZ SUV",
+              "short_desc": "XYZCabs SUV: Premium rides, spacious comfort. Travel in style with our top-tier SUV service.",
+              "code": "XYZSUV",
+              "long_desc": "XYZCabs SUV offers a luxurious and comfortable ride experience tailored for those who appreciate extra space and style. Whether you're heading to an important meeting, picking up clients, or simply enjoying a night out, our fleet of well-maintained SUVs provides the perfect blend of elegance and practicality. With XYZCabs SUV, you'll travel in comfort, knowing you're in the hands of professional drivers who prioritize your safety and satisfaction. Experience the difference of premium cab service with XYZCabs SUV, where every ride is a first-class journey.",
+              "createdAt": "2024-09-04T08:01:13.690Z",
+              "updatedAt": "2024-09-08T11:20:15.152Z",
+              "publishedAt": "2024-09-04T08:01:15.698Z",
+              "max_quantity": null,
+              "min_quantity": null,
+              "provider": {
+                "id": 629,
+                "provider_name": "XYZ Cab Services",
+                "createdAt": "2024-05-15T07:26:01.654Z",
+                "updatedAt": "2024-08-16T14:53:27.575Z",
+                "publishedAt": "2024-05-15T07:26:09.700Z",
+                "short_desc": "XYZ Cab: Your reliable ride-sharing solution, offering efficient transportation with a focus on safety and convenience.",
+                "long_desc": "Welcome to XYZ Cab, your premier choice for hassle-free transportation! With our fleet of modern vehicles and professional drivers, we ensure prompt and comfortable rides to your destination. Enjoy convenient booking, competitive prices, and reliable service every time you ride with us.",
+                "provider_id": null,
+                "provider_uri": null,
+                "provider_rating": "4.3",
+                "domain_id": {
+                  "id": 20,
+                  "DomainName": "mobility:1.1.0",
+                  "createdAt": "2024-05-15T07:19:06.297Z",
+                  "updatedAt": "2024-05-15T07:19:07.295Z",
+                  "publishedAt": "2024-05-15T07:19:07.292Z"
+                }
+              },
+              "item_fulfillment_ids": [
+                {
+                  "id": 121,
+                  "createdAt": "2024-09-04T07:42:46.991Z",
+                  "updatedAt": "2024-09-04T07:42:49.428Z",
+                  "publishedAt": "2024-09-04T07:42:49.425Z",
+                  "timestamp": null,
+                  "item_id": 184,
+                  "fulfilment_id": {
+                    "id": 21,
+                    "type": "SUV On-Location Cab Pickup",
+                    "rateable": true,
+                    "rating": "4.0",
+                    "createdAt": "2024-09-04T07:40:35.721Z",
+                    "updatedAt": "2024-09-04T07:59:59.744Z",
+                    "publishedAt": "2024-09-04T07:40:38.672Z",
+                    "service": {
+                      "id": 6,
+                      "time_slot_per_client_in_min": null,
+                      "service_fee": null,
+                      "followup_service_fee": null,
+                      "createdAt": "2024-09-04T07:34:28.020Z",
+                      "updatedAt": "2024-09-04T07:34:53.915Z",
+                      "publishedAt": "2024-09-04T07:34:53.910Z"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "stops": [
+          {
+            "id": 2791,
+            "gps": "12.9752736, 77.6205002",
+            "createdAt": "2024-10-24T08:40:08.142Z",
+            "updatedAt": "2024-10-24T08:40:08.142Z",
+            "publishedAt": "2024-10-24T08:40:08.106Z",
+            "city_name": "",
+            "state_code": "",
+            "city_code": "",
+            "country_name": "",
+            "country_code": "",
+            "state_name": "",
+            "area_code": "",
+            "address": "",
+            "type": "start"
+          },
+          {
+            "id": 2792,
+            "gps": "13.198909, 77.7068926",
+            "createdAt": "2024-10-24T08:40:08.146Z",
+            "updatedAt": "2024-10-24T08:40:08.146Z",
+            "publishedAt": "2024-10-24T08:40:08.106Z",
+            "city_name": "",
+            "state_code": "",
+            "city_code": "",
+            "country_name": "",
+            "country_code": "",
+            "state_name": "",
+            "area_code": "",
+            "address": "",
+            "type": "end"
+          }
+        ]
+      },
+      {
+        "createdAt": "2024-10-24T08:08:13.013Z",
+        "id": 1787,
+        "updatedAt": "2024-10-24T08:09:38.394Z",
+        "publishedAt": "2024-10-24T08:08:12.896Z",
+        "state_code": "RIDE_STATUS",
+        "state_value": "RIDE_COMPLETED",
+        "customer_id": {
+          "id": 195,
+          "first_name": "krushna",
+          "last_name": null,
+          "email": "krushna@example.com",
+          "createdAt": "2024-08-20T13:34:32.198Z",
+          "updatedAt": "2024-08-20T13:34:32.198Z",
+          "publishedAt": "2024-08-20T13:34:32.175Z",
+          "contact": "9999999999"
+        },
+        "fulfilment_id": {
+          "id": 21,
+          "type": "SUV On-Location Cab Pickup",
+          "rateable": true,
+          "rating": "4.0",
+          "createdAt": "2024-09-04T07:40:35.721Z",
+          "updatedAt": "2024-09-04T07:59:59.744Z",
+          "publishedAt": "2024-09-04T07:40:38.672Z",
+          "service": {
+            "id": 6,
+            "time_slot_per_client_in_min": null,
+            "service_fee": null,
+            "followup_service_fee": null,
+            "createdAt": "2024-09-04T07:34:28.020Z",
+            "updatedAt": "2024-09-04T07:34:53.915Z",
+            "publishedAt": "2024-09-04T07:34:53.910Z"
+          }
+        },
+        "order_id": {
+          "id": 2102,
+          "createdAt": "2024-10-24T08:08:12.911Z",
+          "updatedAt": "2024-10-24T08:09:38.510Z",
+          "publishedAt": "2024-10-24T08:08:12.896Z",
+          "status": "ACTIVE",
+          "currency": "Rs",
+          "tax_amount": null,
+          "total_amount": 531.38,
+          "billing_email": null,
+          "payment_method": null,
+          "payment_method_title": null,
+          "transaction_id": null,
+          "ip_address": null,
+          "user_agent": null,
+          "customer_note": null,
+          "amount_without_tax": null,
+          "domain": "mobility:1.1.0",
+          "order_transaction_id": "d29df0f3-bb82-4283-b6a6-c3da8845173d",
+          "bap_id": "bap-ps-network-prod.becknprotocol.io",
+          "bap_uri": "https://bap-ps-network-prod.becknprotocol.io",
+          "items": [
+            {
+              "id": 184,
+              "name": "XYZ SUV",
+              "short_desc": "XYZCabs SUV: Premium rides, spacious comfort. Travel in style with our top-tier SUV service.",
+              "code": "XYZSUV",
+              "long_desc": "XYZCabs SUV offers a luxurious and comfortable ride experience tailored for those who appreciate extra space and style. Whether you're heading to an important meeting, picking up clients, or simply enjoying a night out, our fleet of well-maintained SUVs provides the perfect blend of elegance and practicality. With XYZCabs SUV, you'll travel in comfort, knowing you're in the hands of professional drivers who prioritize your safety and satisfaction. Experience the difference of premium cab service with XYZCabs SUV, where every ride is a first-class journey.",
+              "createdAt": "2024-09-04T08:01:13.690Z",
+              "updatedAt": "2024-09-08T11:20:15.152Z",
+              "publishedAt": "2024-09-04T08:01:15.698Z",
+              "max_quantity": null,
+              "min_quantity": null,
+              "provider": {
+                "id": 629,
+                "provider_name": "XYZ Cab Services",
+                "createdAt": "2024-05-15T07:26:01.654Z",
+                "updatedAt": "2024-08-16T14:53:27.575Z",
+                "publishedAt": "2024-05-15T07:26:09.700Z",
+                "short_desc": "XYZ Cab: Your reliable ride-sharing solution, offering efficient transportation with a focus on safety and convenience.",
+                "long_desc": "Welcome to XYZ Cab, your premier choice for hassle-free transportation! With our fleet of modern vehicles and professional drivers, we ensure prompt and comfortable rides to your destination. Enjoy convenient booking, competitive prices, and reliable service every time you ride with us.",
+                "provider_id": null,
+                "provider_uri": null,
+                "provider_rating": "4.3",
+                "domain_id": {
+                  "id": 20,
+                  "DomainName": "mobility:1.1.0",
+                  "createdAt": "2024-05-15T07:19:06.297Z",
+                  "updatedAt": "2024-05-15T07:19:07.295Z",
+                  "publishedAt": "2024-05-15T07:19:07.292Z"
+                }
+              },
+              "item_fulfillment_ids": [
+                {
+                  "id": 121,
+                  "createdAt": "2024-09-04T07:42:46.991Z",
+                  "updatedAt": "2024-09-04T07:42:49.428Z",
+                  "publishedAt": "2024-09-04T07:42:49.425Z",
+                  "timestamp": null,
+                  "item_id": 184,
+                  "fulfilment_id": {
+                    "id": 21,
+                    "type": "SUV On-Location Cab Pickup",
+                    "rateable": true,
+                    "rating": "4.0",
+                    "createdAt": "2024-09-04T07:40:35.721Z",
+                    "updatedAt": "2024-09-04T07:59:59.744Z",
+                    "publishedAt": "2024-09-04T07:40:38.672Z",
+                    "service": {
+                      "id": 6,
+                      "time_slot_per_client_in_min": null,
+                      "service_fee": null,
+                      "followup_service_fee": null,
+                      "createdAt": "2024-09-04T07:34:28.020Z",
+                      "updatedAt": "2024-09-04T07:34:53.915Z",
+                      "publishedAt": "2024-09-04T07:34:53.910Z"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "stops": [
+          {
+            "id": 2789,
+            "gps": "12.9752736, 77.6205002",
+            "createdAt": "2024-10-24T08:08:12.963Z",
+            "updatedAt": "2024-10-24T08:08:12.963Z",
+            "publishedAt": "2024-10-24T08:08:12.896Z",
+            "city_name": "",
+            "state_code": "",
+            "city_code": "",
+            "country_name": "",
+            "country_code": "",
+            "state_name": "",
+            "area_code": "",
+            "address": "",
+            "type": "start"
+          },
+          {
+            "id": 2790,
+            "gps": "13.198909, 77.7068926",
+            "createdAt": "2024-10-24T08:08:12.970Z",
+            "updatedAt": "2024-10-24T08:08:12.970Z",
+            "publishedAt": "2024-10-24T08:08:12.896Z",
+            "city_name": "",
+            "state_code": "",
+            "city_code": "",
+            "country_name": "",
+            "country_code": "",
+            "state_name": "",
+            "area_code": "",
+            "address": "",
+            "type": "end"
+          }
+        ]
+      },
+      {
+        "createdAt": "2024-10-24T06:24:12.753Z",
+        "id": 1777,
+        "updatedAt": "2024-10-24T07:14:14.116Z",
+        "publishedAt": "2024-10-24T06:24:12.714Z",
+        "state_code": "USER CANCELLED",
+        "state_value": "Plan Changed",
+        "customer_id": {
+          "id": 195,
+          "first_name": "krushna",
+          "last_name": null,
+          "email": "krushna@example.com",
+          "createdAt": "2024-08-20T13:34:32.198Z",
+          "updatedAt": "2024-08-20T13:34:32.198Z",
+          "publishedAt": "2024-08-20T13:34:32.175Z",
+          "contact": "9999999999"
+        },
+        "fulfilment_id": {
+          "id": 21,
+          "type": "SUV On-Location Cab Pickup",
+          "rateable": true,
+          "rating": "4.0",
+          "createdAt": "2024-09-04T07:40:35.721Z",
+          "updatedAt": "2024-09-04T07:59:59.744Z",
+          "publishedAt": "2024-09-04T07:40:38.672Z",
+          "service": {
+            "id": 6,
+            "time_slot_per_client_in_min": null,
+            "service_fee": null,
+            "followup_service_fee": null,
+            "createdAt": "2024-09-04T07:34:28.020Z",
+            "updatedAt": "2024-09-04T07:34:53.915Z",
+            "publishedAt": "2024-09-04T07:34:53.910Z"
+          }
+        },
+        "order_id": {
+          "id": 2092,
+          "createdAt": "2024-10-24T06:24:12.723Z",
+          "updatedAt": "2024-10-24T06:24:12.723Z",
+          "publishedAt": "2024-10-24T06:24:12.714Z",
+          "status": "ACTIVE",
+          "currency": null,
+          "tax_amount": null,
+          "total_amount": null,
+          "billing_email": null,
+          "payment_method": null,
+          "payment_method_title": null,
+          "transaction_id": null,
+          "ip_address": null,
+          "user_agent": null,
+          "customer_note": null,
+          "amount_without_tax": null,
+          "domain": "mobility:1.1.0",
+          "order_transaction_id": "511cfcc2-4863-49d5-b77e-f9357a75d893",
+          "bap_id": "bap-ps-network-prod.becknprotocol.io",
+          "bap_uri": "https://bap-ps-network-prod.becknprotocol.io",
+          "items": [
+            {
+              "id": 184,
+              "name": "XYZ SUV",
+              "short_desc": "XYZCabs SUV: Premium rides, spacious comfort. Travel in style with our top-tier SUV service.",
+              "code": "XYZSUV",
+              "long_desc": "XYZCabs SUV offers a luxurious and comfortable ride experience tailored for those who appreciate extra space and style. Whether you're heading to an important meeting, picking up clients, or simply enjoying a night out, our fleet of well-maintained SUVs provides the perfect blend of elegance and practicality. With XYZCabs SUV, you'll travel in comfort, knowing you're in the hands of professional drivers who prioritize your safety and satisfaction. Experience the difference of premium cab service with XYZCabs SUV, where every ride is a first-class journey.",
+              "createdAt": "2024-09-04T08:01:13.690Z",
+              "updatedAt": "2024-09-08T11:20:15.152Z",
+              "publishedAt": "2024-09-04T08:01:15.698Z",
+              "max_quantity": null,
+              "min_quantity": null,
+              "provider": {
+                "id": 629,
+                "provider_name": "XYZ Cab Services",
+                "createdAt": "2024-05-15T07:26:01.654Z",
+                "updatedAt": "2024-08-16T14:53:27.575Z",
+                "publishedAt": "2024-05-15T07:26:09.700Z",
+                "short_desc": "XYZ Cab: Your reliable ride-sharing solution, offering efficient transportation with a focus on safety and convenience.",
+                "long_desc": "Welcome to XYZ Cab, your premier choice for hassle-free transportation! With our fleet of modern vehicles and professional drivers, we ensure prompt and comfortable rides to your destination. Enjoy convenient booking, competitive prices, and reliable service every time you ride with us.",
+                "provider_id": null,
+                "provider_uri": null,
+                "provider_rating": "4.3",
+                "domain_id": {
+                  "id": 20,
+                  "DomainName": "mobility:1.1.0",
+                  "createdAt": "2024-05-15T07:19:06.297Z",
+                  "updatedAt": "2024-05-15T07:19:07.295Z",
+                  "publishedAt": "2024-05-15T07:19:07.292Z"
+                }
+              },
+              "item_fulfillment_ids": [
+                {
+                  "id": 121,
+                  "createdAt": "2024-09-04T07:42:46.991Z",
+                  "updatedAt": "2024-09-04T07:42:49.428Z",
+                  "publishedAt": "2024-09-04T07:42:49.425Z",
+                  "timestamp": null,
+                  "item_id": 184,
+                  "fulfilment_id": {
+                    "id": 21,
+                    "type": "SUV On-Location Cab Pickup",
+                    "rateable": true,
+                    "rating": "4.0",
+                    "createdAt": "2024-09-04T07:40:35.721Z",
+                    "updatedAt": "2024-09-04T07:59:59.744Z",
+                    "publishedAt": "2024-09-04T07:40:38.672Z",
+                    "service": {
+                      "id": 6,
+                      "time_slot_per_client_in_min": null,
+                      "service_fee": null,
+                      "followup_service_fee": null,
+                      "createdAt": "2024-09-04T07:34:28.020Z",
+                      "updatedAt": "2024-09-04T07:34:53.915Z",
+                      "publishedAt": "2024-09-04T07:34:53.910Z"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "stops": [
+          {
+            "id": 2769,
+            "gps": "12.9752736, 77.6205002",
+            "createdAt": "2024-10-24T06:24:12.739Z",
+            "updatedAt": "2024-10-24T06:24:12.739Z",
+            "publishedAt": "2024-10-24T06:24:12.714Z",
+            "city_name": "",
+            "state_code": "",
+            "city_code": "",
+            "country_name": "",
+            "country_code": "",
+            "state_name": "",
+            "area_code": "",
+            "address": "",
+            "type": "start"
+          },
+          {
+            "id": 2770,
+            "gps": "13.198909, 77.7068926",
+            "createdAt": "2024-10-24T06:24:12.744Z",
+            "updatedAt": "2024-10-24T06:24:12.744Z",
+            "publishedAt": "2024-10-24T06:24:12.714Z",
+            "city_name": "",
+            "state_code": "",
+            "city_code": "",
+            "country_name": "",
+            "country_code": "",
+            "state_name": "",
+            "area_code": "",
+            "address": "",
+            "type": "end"
+          }
+        ]
+      },
+      {
+        "createdAt": "2024-10-24T06:10:21.229Z",
+        "id": 1775,
+        "updatedAt": "2024-10-24T06:15:58.890Z",
+        "publishedAt": "2024-10-24T06:10:21.187Z",
+        "state_code": "RIDE_STATUS",
+        "state_value": "RIDE_COMPLETED",
+        "customer_id": {
+          "id": 308,
+          "first_name": "Kundan",
+          "last_name": "singh",
+          "email": "KundansinghkumarSing@example.com",
+          "createdAt": "2024-10-24T06:10:21.210Z",
+          "updatedAt": "2024-10-24T06:10:21.210Z",
+          "publishedAt": "2024-10-24T06:10:21.187Z",
+          "contact": "2342434445"
+        },
+        "fulfilment_id": {
+          "id": 21,
+          "type": "SUV On-Location Cab Pickup",
+          "rateable": true,
+          "rating": "4.0",
+          "createdAt": "2024-09-04T07:40:35.721Z",
+          "updatedAt": "2024-09-04T07:59:59.744Z",
+          "publishedAt": "2024-09-04T07:40:38.672Z",
+          "service": {
+            "id": 6,
+            "time_slot_per_client_in_min": null,
+            "service_fee": null,
+            "followup_service_fee": null,
+            "createdAt": "2024-09-04T07:34:28.020Z",
+            "updatedAt": "2024-09-04T07:34:53.915Z",
+            "publishedAt": "2024-09-04T07:34:53.910Z"
+          }
+        },
+        "order_id": {
+          "id": 2090,
+          "createdAt": "2024-10-24T06:10:21.194Z",
+          "updatedAt": "2024-10-24T06:15:58.972Z",
+          "publishedAt": "2024-10-24T06:10:21.187Z",
+          "status": "ACTIVE",
+          "currency": "Rs",
+          "tax_amount": null,
+          "total_amount": 531.38,
+          "billing_email": null,
+          "payment_method": null,
+          "payment_method_title": null,
+          "transaction_id": null,
+          "ip_address": null,
+          "user_agent": null,
+          "customer_note": null,
+          "amount_without_tax": null,
+          "domain": "mobility:1.1.0",
+          "order_transaction_id": "81ffd6ee-3593-4d7c-a8c9-dec454ae4f4f",
+          "bap_id": "bap-ps-network-prod.example.io",
+          "bap_uri": "https://bap-ps-network-prod.example.io",
+          "items": [
+            {
+              "id": 184,
+              "name": "XYZ SUV",
+              "short_desc": "XYZCabs SUV: Premium rides, spacious comfort. Travel in style with our top-tier SUV service.",
+              "code": "XYZSUV",
+              "long_desc": "XYZCabs SUV offers a luxurious and comfortable ride experience tailored for those who appreciate extra space and style. Whether you're heading to an important meeting, picking up clients, or simply enjoying a night out, our fleet of well-maintained SUVs provides the perfect blend of elegance and practicality. With XYZCabs SUV, you'll travel in comfort, knowing you're in the hands of professional drivers who prioritize your safety and satisfaction. Experience the difference of premium cab service with XYZCabs SUV, where every ride is a first-class journey.",
+              "createdAt": "2024-09-04T08:01:13.690Z",
+              "updatedAt": "2024-09-08T11:20:15.152Z",
+              "publishedAt": "2024-09-04T08:01:15.698Z",
+              "max_quantity": null,
+              "min_quantity": null,
+              "provider": {
+                "id": 629,
+                "provider_name": "XYZ Cab Services",
+                "createdAt": "2024-05-15T07:26:01.654Z",
+                "updatedAt": "2024-08-16T14:53:27.575Z",
+                "publishedAt": "2024-05-15T07:26:09.700Z",
+                "short_desc": "XYZ Cab: Your reliable ride-sharing solution, offering efficient transportation with a focus on safety and convenience.",
+                "long_desc": "Welcome to XYZ Cab, your premier choice for hassle-free transportation! With our fleet of modern vehicles and professional drivers, we ensure prompt and comfortable rides to your destination. Enjoy convenient booking, competitive prices, and reliable service every time you ride with us.",
+                "provider_id": null,
+                "provider_uri": null,
+                "provider_rating": "4.3",
+                "domain_id": {
+                  "id": 20,
+                  "DomainName": "mobility:1.1.0",
+                  "createdAt": "2024-05-15T07:19:06.297Z",
+                  "updatedAt": "2024-05-15T07:19:07.295Z",
+                  "publishedAt": "2024-05-15T07:19:07.292Z"
+                }
+              },
+              "item_fulfillment_ids": [
+                {
+                  "id": 121,
+                  "createdAt": "2024-09-04T07:42:46.991Z",
+                  "updatedAt": "2024-09-04T07:42:49.428Z",
+                  "publishedAt": "2024-09-04T07:42:49.425Z",
+                  "timestamp": null,
+                  "item_id": 184,
+                  "fulfilment_id": {
+                    "id": 21,
+                    "type": "SUV On-Location Cab Pickup",
+                    "rateable": true,
+                    "rating": "4.0",
+                    "createdAt": "2024-09-04T07:40:35.721Z",
+                    "updatedAt": "2024-09-04T07:59:59.744Z",
+                    "publishedAt": "2024-09-04T07:40:38.672Z",
+                    "service": {
+                      "id": 6,
+                      "time_slot_per_client_in_min": null,
+                      "service_fee": null,
+                      "followup_service_fee": null,
+                      "createdAt": "2024-09-04T07:34:28.020Z",
+                      "updatedAt": "2024-09-04T07:34:53.915Z",
+                      "publishedAt": "2024-09-04T07:34:53.910Z"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "stops": [
+          {
+            "id": 2765,
+            "gps": "12.9752736, 77.6205002",
+            "createdAt": "2024-10-24T06:10:21.215Z",
+            "updatedAt": "2024-10-24T06:10:21.215Z",
+            "publishedAt": "2024-10-24T06:10:21.187Z",
+            "city_name": "",
+            "state_code": "",
+            "city_code": "",
+            "country_name": "",
+            "country_code": "",
+            "state_name": "",
+            "area_code": "",
+            "address": "",
+            "type": "start"
+          },
+          {
+            "id": 2766,
+            "gps": "13.198909, 77.7068926",
+            "createdAt": "2024-10-24T06:10:21.219Z",
+            "updatedAt": "2024-10-24T06:10:21.219Z",
+            "publishedAt": "2024-10-24T06:10:21.187Z",
+            "city_name": "",
+            "state_code": "",
+            "city_code": "",
+            "country_name": "",
+            "country_code": "",
+            "state_name": "",
+            "area_code": "",
+            "address": "",
+            "type": "end"
+          }
+        ]
+      },
+      {
+        "createdAt": "2024-10-22T06:51:20.852Z",
+        "id": 1774,
+        "updatedAt": "2024-10-22T07:25:54.104Z",
+        "publishedAt": "2024-10-22T06:51:20.810Z",
+        "state_code": "RIDE_STATUS",
+        "state_value": "RIDE_COMPLETED",
+        "customer_id": {
+          "id": 204,
+          "first_name": "name",
+          "last_name": null,
+          "email": "name@example.com",
+          "createdAt": "2024-08-21T11:39:41.317Z",
+          "updatedAt": "2024-08-21T11:39:41.317Z",
+          "publishedAt": "2024-08-21T11:39:41.293Z",
+          "contact": "name"
+        },
+        "fulfilment_id": {
+          "id": 21,
+          "type": "SUV On-Location Cab Pickup",
+          "rateable": true,
+          "rating": "4.0",
+          "createdAt": "2024-09-04T07:40:35.721Z",
+          "updatedAt": "2024-09-04T07:59:59.744Z",
+          "publishedAt": "2024-09-04T07:40:38.672Z",
+          "service": {
+            "id": 6,
+            "time_slot_per_client_in_min": null,
+            "service_fee": null,
+            "followup_service_fee": null,
+            "createdAt": "2024-09-04T07:34:28.020Z",
+            "updatedAt": "2024-09-04T07:34:53.915Z",
+            "publishedAt": "2024-09-04T07:34:53.910Z"
+          }
+        },
+        "order_id": {
+          "id": 2089,
+          "createdAt": "2024-10-22T06:51:20.818Z",
+          "updatedAt": "2024-10-22T07:25:54.205Z",
+          "publishedAt": "2024-10-22T06:51:20.810Z",
+          "status": "ACTIVE",
+          "currency": "Rs",
+          "tax_amount": null,
+          "total_amount": 530.88,
+          "billing_email": null,
+          "payment_method": null,
+          "payment_method_title": null,
+          "transaction_id": null,
+          "ip_address": null,
+          "user_agent": null,
+          "customer_note": null,
+          "amount_without_tax": null,
+          "domain": "mobility:1.1.0",
+          "order_transaction_id": "cb976b9a-fbe9-4d7e-b4ea-0607556e4581",
+          "bap_id": "bap-ps-network-prod.example.io",
+          "bap_uri": "https://bap-ps-network-prod.example.io",
+          "items": [
+            {
+              "id": 184,
+              "name": "XYZ SUV",
+              "short_desc": "XYZCabs SUV: Premium rides, spacious comfort. Travel in style with our top-tier SUV service.",
+              "code": "XYZSUV",
+              "long_desc": "XYZCabs SUV offers a luxurious and comfortable ride experience tailored for those who appreciate extra space and style. Whether you're heading to an important meeting, picking up clients, or simply enjoying a night out, our fleet of well-maintained SUVs provides the perfect blend of elegance and practicality. With XYZCabs SUV, you'll travel in comfort, knowing you're in the hands of professional drivers who prioritize your safety and satisfaction. Experience the difference of premium cab service with XYZCabs SUV, where every ride is a first-class journey.",
+              "createdAt": "2024-09-04T08:01:13.690Z",
+              "updatedAt": "2024-09-08T11:20:15.152Z",
+              "publishedAt": "2024-09-04T08:01:15.698Z",
+              "max_quantity": null,
+              "min_quantity": null,
+              "provider": {
+                "id": 629,
+                "provider_name": "XYZ Cab Services",
+                "createdAt": "2024-05-15T07:26:01.654Z",
+                "updatedAt": "2024-08-16T14:53:27.575Z",
+                "publishedAt": "2024-05-15T07:26:09.700Z",
+                "short_desc": "XYZ Cab: Your reliable ride-sharing solution, offering efficient transportation with a focus on safety and convenience.",
+                "long_desc": "Welcome to XYZ Cab, your premier choice for hassle-free transportation! With our fleet of modern vehicles and professional drivers, we ensure prompt and comfortable rides to your destination. Enjoy convenient booking, competitive prices, and reliable service every time you ride with us.",
+                "provider_id": null,
+                "provider_uri": null,
+                "provider_rating": "4.3",
+                "domain_id": {
+                  "id": 20,
+                  "DomainName": "mobility:1.1.0",
+                  "createdAt": "2024-05-15T07:19:06.297Z",
+                  "updatedAt": "2024-05-15T07:19:07.295Z",
+                  "publishedAt": "2024-05-15T07:19:07.292Z"
+                }
+              },
+              "item_fulfillment_ids": [
+                {
+                  "id": 121,
+                  "createdAt": "2024-09-04T07:42:46.991Z",
+                  "updatedAt": "2024-09-04T07:42:49.428Z",
+                  "publishedAt": "2024-09-04T07:42:49.425Z",
+                  "timestamp": null,
+                  "item_id": 184,
+                  "fulfilment_id": {
+                    "id": 21,
+                    "type": "SUV On-Location Cab Pickup",
+                    "rateable": true,
+                    "rating": "4.0",
+                    "createdAt": "2024-09-04T07:40:35.721Z",
+                    "updatedAt": "2024-09-04T07:59:59.744Z",
+                    "publishedAt": "2024-09-04T07:40:38.672Z",
+                    "service": {
+                      "id": 6,
+                      "time_slot_per_client_in_min": null,
+                      "service_fee": null,
+                      "followup_service_fee": null,
+                      "createdAt": "2024-09-04T07:34:28.020Z",
+                      "updatedAt": "2024-09-04T07:34:53.915Z",
+                      "publishedAt": "2024-09-04T07:34:53.910Z"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "stops": [
+          {
+            "id": 2763,
+            "gps": "12.975534959637004, 77.62044655217746",
+            "createdAt": "2024-10-22T06:51:20.836Z",
+            "updatedAt": "2024-10-22T06:51:20.836Z",
+            "publishedAt": "2024-10-22T06:51:20.810Z",
+            "city_name": "",
+            "state_code": "",
+            "city_code": "",
+            "country_name": "",
+            "country_code": "",
+            "state_name": "",
+            "area_code": "",
+            "address": "",
+            "type": "start"
+          },
+          {
+            "id": 2764,
+            "gps": "13.198909, 77.7068926",
+            "createdAt": "2024-10-22T06:51:20.842Z",
+            "updatedAt": "2024-10-22T06:51:20.842Z",
+            "publishedAt": "2024-10-22T06:51:20.810Z",
+            "city_name": "",
+            "state_code": "",
+            "city_code": "",
+            "country_name": "",
+            "country_code": "",
+            "state_name": "",
+            "area_code": "",
+            "address": "",
+            "type": "end"
+          }
+        ]
+      },
+      {
+        "createdAt": "2024-10-22T05:59:55.012Z",
+        "id": 1769,
+        "updatedAt": "2024-10-22T06:49:49.474Z",
+        "publishedAt": "2024-10-22T05:59:54.971Z",
+        "state_code": "RIDE_STATUS",
+        "state_value": "RIDE_COMPLETED",
+        "customer_id": {
+          "id": 229,
+          "first_name": "test",
+          "last_name": null,
+          "email": "test@example.com",
+          "createdAt": "2024-08-29T10:46:02.377Z",
+          "updatedAt": "2024-08-29T10:46:02.377Z",
+          "publishedAt": "2024-08-29T10:46:02.351Z",
+          "contact": "4569856969"
+        },
+        "fulfilment_id": {
+          "id": 21,
+          "type": "SUV On-Location Cab Pickup",
+          "rateable": true,
+          "rating": "4.0",
+          "createdAt": "2024-09-04T07:40:35.721Z",
+          "updatedAt": "2024-09-04T07:59:59.744Z",
+          "publishedAt": "2024-09-04T07:40:38.672Z",
+          "service": {
+            "id": 6,
+            "time_slot_per_client_in_min": null,
+            "service_fee": null,
+            "followup_service_fee": null,
+            "createdAt": "2024-09-04T07:34:28.020Z",
+            "updatedAt": "2024-09-04T07:34:53.915Z",
+            "publishedAt": "2024-09-04T07:34:53.910Z"
+          }
+        },
+        "order_id": {
+          "id": 2084,
+          "createdAt": "2024-10-22T05:59:54.979Z",
+          "updatedAt": "2024-10-22T06:49:49.673Z",
+          "publishedAt": "2024-10-22T05:59:54.971Z",
+          "status": "ACTIVE",
+          "currency": "Rs",
+          "tax_amount": null,
+          "total_amount": 530.88,
+          "billing_email": null,
+          "payment_method": null,
+          "payment_method_title": null,
+          "transaction_id": null,
+          "ip_address": null,
+          "user_agent": null,
+          "customer_note": null,
+          "amount_without_tax": null,
+          "domain": "mobility:1.1.0",
+          "order_transaction_id": "ce9e36ad-f897-4de8-9ff0-9a73838b02e2",
+          "bap_id": "bap-ps-network-prod.example.io",
+          "bap_uri": "https://bap-ps-network-prod.example.io",
+          "items": [
+            {
+              "id": 184,
+              "name": "XYZ SUV",
+              "short_desc": "XYZCabs SUV: Premium rides, spacious comfort. Travel in style with our top-tier SUV service.",
+              "code": "XYZSUV",
+              "long_desc": "XYZCabs SUV offers a luxurious and comfortable ride experience tailored for those who appreciate extra space and style. Whether you're heading to an important meeting, picking up clients, or simply enjoying a night out, our fleet of well-maintained SUVs provides the perfect blend of elegance and practicality. With XYZCabs SUV, you'll travel in comfort, knowing you're in the hands of professional drivers who prioritize your safety and satisfaction. Experience the difference of premium cab service with XYZCabs SUV, where every ride is a first-class journey.",
+              "createdAt": "2024-09-04T08:01:13.690Z",
+              "updatedAt": "2024-09-08T11:20:15.152Z",
+              "publishedAt": "2024-09-04T08:01:15.698Z",
+              "max_quantity": null,
+              "min_quantity": null,
+              "provider": {
+                "id": 629,
+                "provider_name": "XYZ Cab Services",
+                "createdAt": "2024-05-15T07:26:01.654Z",
+                "updatedAt": "2024-08-16T14:53:27.575Z",
+                "publishedAt": "2024-05-15T07:26:09.700Z",
+                "short_desc": "XYZ Cab: Your reliable ride-sharing solution, offering efficient transportation with a focus on safety and convenience.",
+                "long_desc": "Welcome to XYZ Cab, your premier choice for hassle-free transportation! With our fleet of modern vehicles and professional drivers, we ensure prompt and comfortable rides to your destination. Enjoy convenient booking, competitive prices, and reliable service every time you ride with us.",
+                "provider_id": null,
+                "provider_uri": null,
+                "provider_rating": "4.3",
+                "domain_id": {
+                  "id": 20,
+                  "DomainName": "mobility:1.1.0",
+                  "createdAt": "2024-05-15T07:19:06.297Z",
+                  "updatedAt": "2024-05-15T07:19:07.295Z",
+                  "publishedAt": "2024-05-15T07:19:07.292Z"
+                }
+              },
+              "item_fulfillment_ids": [
+                {
+                  "id": 121,
+                  "createdAt": "2024-09-04T07:42:46.991Z",
+                  "updatedAt": "2024-09-04T07:42:49.428Z",
+                  "publishedAt": "2024-09-04T07:42:49.425Z",
+                  "timestamp": null,
+                  "item_id": 184,
+                  "fulfilment_id": {
+                    "id": 21,
+                    "type": "SUV On-Location Cab Pickup",
+                    "rateable": true,
+                    "rating": "4.0",
+                    "createdAt": "2024-09-04T07:40:35.721Z",
+                    "updatedAt": "2024-09-04T07:59:59.744Z",
+                    "publishedAt": "2024-09-04T07:40:38.672Z",
+                    "service": {
+                      "id": 6,
+                      "time_slot_per_client_in_min": null,
+                      "service_fee": null,
+                      "followup_service_fee": null,
+                      "createdAt": "2024-09-04T07:34:28.020Z",
+                      "updatedAt": "2024-09-04T07:34:53.915Z",
+                      "publishedAt": "2024-09-04T07:34:53.910Z"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "stops": [
+          {
+            "id": 2753,
+            "gps": "12.975534959637004, 77.62044655217746",
+            "createdAt": "2024-10-22T05:59:54.997Z",
+            "updatedAt": "2024-10-22T05:59:54.997Z",
+            "publishedAt": "2024-10-22T05:59:54.971Z",
+            "city_name": "",
+            "state_code": "",
+            "city_code": "",
+            "country_name": "",
+            "country_code": "",
+            "state_name": "",
+            "area_code": "",
+            "address": "",
+            "type": "start"
+          },
+          {
+            "id": 2754,
+            "gps": "13.198909, 77.7068926",
+            "createdAt": "2024-10-22T05:59:55.003Z",
+            "updatedAt": "2024-10-22T05:59:55.003Z",
+            "publishedAt": "2024-10-22T05:59:54.971Z",
+            "city_name": "",
+            "state_code": "",
+            "city_code": "",
+            "country_name": "",
+            "country_code": "",
+            "state_name": "",
+            "area_code": "",
+            "address": "",
+            "type": "end"
+          }
+        ]
+      },
+      {
+        "createdAt": "2024-09-12T06:14:33.331Z",
+        "id": 1528,
+        "updatedAt": "2024-09-12T06:15:08.531Z",
+        "publishedAt": "2024-09-12T06:14:33.284Z",
+        "state_code": "RIDE_STATUS",
+        "state_value": "RIDE_COMPLETED",
+        "customer_id": {
+          "id": 217,
+          "first_name": "gambia",
+          "last_name": null,
+          "email": "gambia@example.com",
+          "createdAt": "2024-08-23T10:20:55.699Z",
+          "updatedAt": "2024-08-23T10:20:55.699Z",
+          "publishedAt": "2024-08-23T10:20:55.665Z",
+          "contact": "8275827585"
+        },
+        "fulfilment_id": {
+          "id": 21,
+          "type": "SUV On-Location Cab Pickup",
+          "rateable": true,
+          "rating": "4.0",
+          "createdAt": "2024-09-04T07:40:35.721Z",
+          "updatedAt": "2024-09-04T07:59:59.744Z",
+          "publishedAt": "2024-09-04T07:40:38.672Z",
+          "service": {
+            "id": 6,
+            "time_slot_per_client_in_min": null,
+            "service_fee": null,
+            "followup_service_fee": null,
+            "createdAt": "2024-09-04T07:34:28.020Z",
+            "updatedAt": "2024-09-04T07:34:53.915Z",
+            "publishedAt": "2024-09-04T07:34:53.910Z"
+          }
+        },
+        "order_id": {
+          "id": 1843,
+          "createdAt": "2024-09-12T06:14:33.295Z",
+          "updatedAt": "2024-09-12T06:15:08.645Z",
+          "publishedAt": "2024-09-12T06:14:33.284Z",
+          "status": "ACTIVE",
+          "currency": "Rs",
+          "tax_amount": null,
+          "total_amount": 233.36,
+          "billing_email": null,
+          "payment_method": null,
+          "payment_method_title": null,
+          "transaction_id": null,
+          "ip_address": null,
+          "user_agent": null,
+          "customer_note": null,
+          "amount_without_tax": null,
+          "domain": "mobility:1.1.0",
+          "order_transaction_id": "7c5ccf3c-cdaf-4807-8e45-a6b3961516b7",
+          "bap_id": "bap-ps-network-prod.becknprotocol.io",
+          "bap_uri": "https://bap-ps-network-prod.becknprotocol.io",
+          "items": [
+            {
+              "id": 184,
+              "name": "XYZ SUV",
+              "short_desc": "XYZCabs SUV: Premium rides, spacious comfort. Travel in style with our top-tier SUV service.",
+              "code": "XYZSUV",
+              "long_desc": "XYZCabs SUV offers a luxurious and comfortable ride experience tailored for those who appreciate extra space and style. Whether you're heading to an important meeting, picking up clients, or simply enjoying a night out, our fleet of well-maintained SUVs provides the perfect blend of elegance and practicality. With XYZCabs SUV, you'll travel in comfort, knowing you're in the hands of professional drivers who prioritize your safety and satisfaction. Experience the difference of premium cab service with XYZCabs SUV, where every ride is a first-class journey.",
+              "createdAt": "2024-09-04T08:01:13.690Z",
+              "updatedAt": "2024-09-08T11:20:15.152Z",
+              "publishedAt": "2024-09-04T08:01:15.698Z",
+              "max_quantity": null,
+              "min_quantity": null,
+              "provider": {
+                "id": 629,
+                "provider_name": "XYZ Cab Services",
+                "createdAt": "2024-05-15T07:26:01.654Z",
+                "updatedAt": "2024-08-16T14:53:27.575Z",
+                "publishedAt": "2024-05-15T07:26:09.700Z",
+                "short_desc": "XYZ Cab: Your reliable ride-sharing solution, offering efficient transportation with a focus on safety and convenience.",
+                "long_desc": "Welcome to XYZ Cab, your premier choice for hassle-free transportation! With our fleet of modern vehicles and professional drivers, we ensure prompt and comfortable rides to your destination. Enjoy convenient booking, competitive prices, and reliable service every time you ride with us.",
+                "provider_id": null,
+                "provider_uri": null,
+                "provider_rating": "4.3",
+                "domain_id": {
+                  "id": 20,
+                  "DomainName": "mobility:1.1.0",
+                  "createdAt": "2024-05-15T07:19:06.297Z",
+                  "updatedAt": "2024-05-15T07:19:07.295Z",
+                  "publishedAt": "2024-05-15T07:19:07.292Z"
+                }
+              },
+              "item_fulfillment_ids": [
+                {
+                  "id": 121,
+                  "createdAt": "2024-09-04T07:42:46.991Z",
+                  "updatedAt": "2024-09-04T07:42:49.428Z",
+                  "publishedAt": "2024-09-04T07:42:49.425Z",
+                  "timestamp": null,
+                  "item_id": 184,
+                  "fulfilment_id": {
+                    "id": 21,
+                    "type": "SUV On-Location Cab Pickup",
+                    "rateable": true,
+                    "rating": "4.0",
+                    "createdAt": "2024-09-04T07:40:35.721Z",
+                    "updatedAt": "2024-09-04T07:59:59.744Z",
+                    "publishedAt": "2024-09-04T07:40:38.672Z",
+                    "service": {
+                      "id": 6,
+                      "time_slot_per_client_in_min": null,
+                      "service_fee": null,
+                      "followup_service_fee": null,
+                      "createdAt": "2024-09-04T07:34:28.020Z",
+                      "updatedAt": "2024-09-04T07:34:53.915Z",
+                      "publishedAt": "2024-09-04T07:34:53.910Z"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "stops": [
+          {
+            "id": 2325,
+            "gps": "13.439226893152561, -16.68207924411194",
+            "createdAt": "2024-09-12T06:14:33.315Z",
+            "updatedAt": "2024-09-12T06:14:33.315Z",
+            "publishedAt": "2024-09-12T06:14:33.284Z",
+            "city_name": "",
+            "state_code": "",
+            "city_code": "",
+            "country_name": "",
+            "country_code": "",
+            "state_name": "",
+            "area_code": "",
+            "address": "",
+            "type": "start"
+          },
+          {
+            "id": 2326,
+            "gps": "13.454375, -16.5753186",
+            "createdAt": "2024-09-12T06:14:33.320Z",
+            "updatedAt": "2024-09-12T06:14:33.320Z",
+            "publishedAt": "2024-09-12T06:14:33.284Z",
+            "city_name": "",
+            "state_code": "",
+            "city_code": "",
+            "country_name": "",
+            "country_code": "",
+            "state_name": "",
+            "area_code": "",
+            "address": "",
+            "type": "end"
+          }
+        ]
+      },
+      {
+        "createdAt": "2024-09-12T05:46:06.519Z",
+        "id": 1523,
+        "updatedAt": "2024-09-12T05:49:20.668Z",
+        "publishedAt": "2024-09-12T05:46:06.480Z",
+        "state_code": "RIDE_STATUS",
+        "state_value": "RIDE_COMPLETED",
+        "customer_id": {
+          "id": 208,
+          "first_name": "sanket",
+          "last_name": "kadu",
+          "email": "sanketkadu@example.com",
+          "createdAt": "2024-08-22T13:32:33.083Z",
+          "updatedAt": "2024-08-22T13:32:33.083Z",
+          "publishedAt": "2024-08-22T13:32:33.063Z",
+          "contact": "8275827585"
+        },
+        "fulfilment_id": {
+          "id": 21,
+          "type": "SUV On-Location Cab Pickup",
+          "rateable": true,
+          "rating": "4.0",
+          "createdAt": "2024-09-04T07:40:35.721Z",
+          "updatedAt": "2024-09-04T07:59:59.744Z",
+          "publishedAt": "2024-09-04T07:40:38.672Z",
+          "service": {
+            "id": 6,
+            "time_slot_per_client_in_min": null,
+            "service_fee": null,
+            "followup_service_fee": null,
+            "createdAt": "2024-09-04T07:34:28.020Z",
+            "updatedAt": "2024-09-04T07:34:53.915Z",
+            "publishedAt": "2024-09-04T07:34:53.910Z"
+          }
+        },
+        "order_id": {
+          "id": 1838,
+          "createdAt": "2024-09-12T05:46:06.487Z",
+          "updatedAt": "2024-09-12T05:49:20.851Z",
+          "publishedAt": "2024-09-12T05:46:06.480Z",
+          "status": "ACTIVE",
+          "currency": "Rs",
+          "tax_amount": null,
+          "total_amount": 530.88,
+          "billing_email": null,
+          "payment_method": null,
+          "payment_method_title": null,
+          "transaction_id": null,
+          "ip_address": null,
+          "user_agent": null,
+          "customer_note": null,
+          "amount_without_tax": null,
+          "domain": "mobility:1.1.0",
+          "order_transaction_id": "dc02d7a8-5c02-439d-8325-29f754609a8b",
+          "bap_id": "bap-ps-network-prod.example.io",
+          "bap_uri": "https://bap-ps-network-prod.example.io",
+          "items": [
+            {
+              "id": 184,
+              "name": "XYZ SUV",
+              "short_desc": "XYZCabs SUV: Premium rides, spacious comfort. Travel in style with our top-tier SUV service.",
+              "code": "XYZSUV",
+              "long_desc": "XYZCabs SUV offers a luxurious and comfortable ride experience tailored for those who appreciate extra space and style. Whether you're heading to an important meeting, picking up clients, or simply enjoying a night out, our fleet of well-maintained SUVs provides the perfect blend of elegance and practicality. With XYZCabs SUV, you'll travel in comfort, knowing you're in the hands of professional drivers who prioritize your safety and satisfaction. Experience the difference of premium cab service with XYZCabs SUV, where every ride is a first-class journey.",
+              "createdAt": "2024-09-04T08:01:13.690Z",
+              "updatedAt": "2024-09-08T11:20:15.152Z",
+              "publishedAt": "2024-09-04T08:01:15.698Z",
+              "max_quantity": null,
+              "min_quantity": null,
+              "provider": {
+                "id": 629,
+                "provider_name": "XYZ Cab Services",
+                "createdAt": "2024-05-15T07:26:01.654Z",
+                "updatedAt": "2024-08-16T14:53:27.575Z",
+                "publishedAt": "2024-05-15T07:26:09.700Z",
+                "short_desc": "XYZ Cab: Your reliable ride-sharing solution, offering efficient transportation with a focus on safety and convenience.",
+                "long_desc": "Welcome to XYZ Cab, your premier choice for hassle-free transportation! With our fleet of modern vehicles and professional drivers, we ensure prompt and comfortable rides to your destination. Enjoy convenient booking, competitive prices, and reliable service every time you ride with us.",
+                "provider_id": null,
+                "provider_uri": null,
+                "provider_rating": "4.3",
+                "domain_id": {
+                  "id": 20,
+                  "DomainName": "mobility:1.1.0",
+                  "createdAt": "2024-05-15T07:19:06.297Z",
+                  "updatedAt": "2024-05-15T07:19:07.295Z",
+                  "publishedAt": "2024-05-15T07:19:07.292Z"
+                }
+              },
+              "item_fulfillment_ids": [
+                {
+                  "id": 121,
+                  "createdAt": "2024-09-04T07:42:46.991Z",
+                  "updatedAt": "2024-09-04T07:42:49.428Z",
+                  "publishedAt": "2024-09-04T07:42:49.425Z",
+                  "timestamp": null,
+                  "item_id": 184,
+                  "fulfilment_id": {
+                    "id": 21,
+                    "type": "SUV On-Location Cab Pickup",
+                    "rateable": true,
+                    "rating": "4.0",
+                    "createdAt": "2024-09-04T07:40:35.721Z",
+                    "updatedAt": "2024-09-04T07:59:59.744Z",
+                    "publishedAt": "2024-09-04T07:40:38.672Z",
+                    "service": {
+                      "id": 6,
+                      "time_slot_per_client_in_min": null,
+                      "service_fee": null,
+                      "followup_service_fee": null,
+                      "createdAt": "2024-09-04T07:34:28.020Z",
+                      "updatedAt": "2024-09-04T07:34:53.915Z",
+                      "publishedAt": "2024-09-04T07:34:53.910Z"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "stops": [
+          {
+            "id": 2315,
+            "gps": "12.975534959637004, 77.62044655217746",
+            "createdAt": "2024-09-12T05:46:06.505Z",
+            "updatedAt": "2024-09-12T05:46:06.505Z",
+            "publishedAt": "2024-09-12T05:46:06.480Z",
+            "city_name": "",
+            "state_code": "",
+            "city_code": "",
+            "country_name": "",
+            "country_code": "",
+            "state_name": "",
+            "area_code": "",
+            "address": "",
+            "type": "start"
+          },
+          {
+            "id": 2316,
+            "gps": "13.198909, 77.7068926",
+            "createdAt": "2024-09-12T05:46:06.509Z",
+            "updatedAt": "2024-09-12T05:46:06.509Z",
+            "publishedAt": "2024-09-12T05:46:06.480Z",
+            "city_name": "",
+            "state_code": "",
+            "city_code": "",
+            "country_name": "",
+            "country_code": "",
+            "state_name": "",
+            "area_code": "",
+            "address": "",
+            "type": "end"
+          }
+        ]
+      },
+      {
+        "createdAt": "2024-09-12T04:45:28.432Z",
+        "id": 1521,
+        "updatedAt": "2024-09-12T04:46:02.004Z",
+        "publishedAt": "2024-09-12T04:45:28.392Z",
+        "state_code": "RIDE_STATUS",
+        "state_value": "RIDE_COMPLETED",
+        "customer_id": {
+          "id": 205,
+          "first_name": "omkar",
+          "last_name": null,
+          "email": "omkar@example.com",
+          "createdAt": "2024-08-21T11:55:55.499Z",
+          "updatedAt": "2024-08-21T11:55:55.499Z",
+          "publishedAt": "2024-08-21T11:55:55.481Z",
+          "contact": "123"
+        },
+        "fulfilment_id": {
+          "id": 21,
+          "type": "SUV On-Location Cab Pickup",
+          "rateable": true,
+          "rating": "4.0",
+          "createdAt": "2024-09-04T07:40:35.721Z",
+          "updatedAt": "2024-09-04T07:59:59.744Z",
+          "publishedAt": "2024-09-04T07:40:38.672Z",
+          "service": {
+            "id": 6,
+            "time_slot_per_client_in_min": null,
+            "service_fee": null,
+            "followup_service_fee": null,
+            "createdAt": "2024-09-04T07:34:28.020Z",
+            "updatedAt": "2024-09-04T07:34:53.915Z",
+            "publishedAt": "2024-09-04T07:34:53.910Z"
+          }
+        },
+        "order_id": {
+          "id": 1836,
+          "createdAt": "2024-09-12T04:45:28.400Z",
+          "updatedAt": "2024-09-12T04:46:02.197Z",
+          "publishedAt": "2024-09-12T04:45:28.392Z",
+          "status": "ACTIVE",
+          "currency": "Rs",
+          "tax_amount": null,
+          "total_amount": 531.38,
+          "billing_email": null,
+          "payment_method": null,
+          "payment_method_title": null,
+          "transaction_id": null,
+          "ip_address": null,
+          "user_agent": null,
+          "customer_note": null,
+          "amount_without_tax": null,
+          "domain": "mobility:1.1.0",
+          "order_transaction_id": "5aec51f8-200c-431f-870a-a8c7ea31f6b2",
+          "bap_id": "bap-ps-network-prod.example.io",
+          "bap_uri": "https://bap-ps-network-prod.example.io",
+          "items": [
+            {
+              "id": 184,
+              "name": "XYZ SUV",
+              "short_desc": "XYZCabs SUV: Premium rides, spacious comfort. Travel in style with our top-tier SUV service.",
+              "code": "XYZSUV",
+              "long_desc": "XYZCabs SUV offers a luxurious and comfortable ride experience tailored for those who appreciate extra space and style. Whether you're heading to an important meeting, picking up clients, or simply enjoying a night out, our fleet of well-maintained SUVs provides the perfect blend of elegance and practicality. With XYZCabs SUV, you'll travel in comfort, knowing you're in the hands of professional drivers who prioritize your safety and satisfaction. Experience the difference of premium cab service with XYZCabs SUV, where every ride is a first-class journey.",
+              "createdAt": "2024-09-04T08:01:13.690Z",
+              "updatedAt": "2024-09-08T11:20:15.152Z",
+              "publishedAt": "2024-09-04T08:01:15.698Z",
+              "max_quantity": null,
+              "min_quantity": null,
+              "provider": {
+                "id": 629,
+                "provider_name": "XYZ Cab Services",
+                "createdAt": "2024-05-15T07:26:01.654Z",
+                "updatedAt": "2024-08-16T14:53:27.575Z",
+                "publishedAt": "2024-05-15T07:26:09.700Z",
+                "short_desc": "XYZ Cab: Your reliable ride-sharing solution, offering efficient transportation with a focus on safety and convenience.",
+                "long_desc": "Welcome to XYZ Cab, your premier choice for hassle-free transportation! With our fleet of modern vehicles and professional drivers, we ensure prompt and comfortable rides to your destination. Enjoy convenient booking, competitive prices, and reliable service every time you ride with us.",
+                "provider_id": null,
+                "provider_uri": null,
+                "provider_rating": "4.3",
+                "domain_id": {
+                  "id": 20,
+                  "DomainName": "mobility:1.1.0",
+                  "createdAt": "2024-05-15T07:19:06.297Z",
+                  "updatedAt": "2024-05-15T07:19:07.295Z",
+                  "publishedAt": "2024-05-15T07:19:07.292Z"
+                }
+              },
+              "item_fulfillment_ids": [
+                {
+                  "id": 121,
+                  "createdAt": "2024-09-04T07:42:46.991Z",
+                  "updatedAt": "2024-09-04T07:42:49.428Z",
+                  "publishedAt": "2024-09-04T07:42:49.425Z",
+                  "timestamp": null,
+                  "item_id": 184,
+                  "fulfilment_id": {
+                    "id": 21,
+                    "type": "SUV On-Location Cab Pickup",
+                    "rateable": true,
+                    "rating": "4.0",
+                    "createdAt": "2024-09-04T07:40:35.721Z",
+                    "updatedAt": "2024-09-04T07:59:59.744Z",
+                    "publishedAt": "2024-09-04T07:40:38.672Z",
+                    "service": {
+                      "id": 6,
+                      "time_slot_per_client_in_min": null,
+                      "service_fee": null,
+                      "followup_service_fee": null,
+                      "createdAt": "2024-09-04T07:34:28.020Z",
+                      "updatedAt": "2024-09-04T07:34:53.915Z",
+                      "publishedAt": "2024-09-04T07:34:53.910Z"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "stops": [
+          {
+            "id": 2311,
+            "gps": "12.9752736, 77.6205002",
+            "createdAt": "2024-09-12T04:45:28.416Z",
+            "updatedAt": "2024-09-12T04:45:28.416Z",
+            "publishedAt": "2024-09-12T04:45:28.392Z",
+            "city_name": "",
+            "state_code": "",
+            "city_code": "",
+            "country_name": "",
+            "country_code": "",
+            "state_name": "",
+            "area_code": "",
+            "address": "",
+            "type": "start"
+          },
+          {
+            "id": 2312,
+            "gps": "13.198909, 77.7068926",
+            "createdAt": "2024-09-12T04:45:28.421Z",
+            "updatedAt": "2024-09-12T04:45:28.421Z",
+            "publishedAt": "2024-09-12T04:45:28.392Z",
+            "city_name": "",
+            "state_code": "",
+            "city_code": "",
+            "country_name": "",
+            "country_code": "",
+            "state_name": "",
+            "area_code": "",
+            "address": "",
+            "type": "end"
+          }
+        ]
+      }
+    ]
+  }
+}

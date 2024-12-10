@@ -43,13 +43,17 @@ import {
   DataState,
   DiscoveryRootState,
   feedbackActions,
+  getPayloadForOrderStatus,
   isEmpty,
   OrdersRootState,
   ProcessState,
+  setLocalStorage,
   statusActions,
   StatusResponseModel,
   SupportModel,
-  UIState
+  UIState,
+  formatTimestamp,
+  getPaymentBreakDown
 } from '@beckn-ui/common'
 
 const statusMap = {
@@ -721,7 +725,7 @@ const OrderDetails = () => {
                 mr={'15px'}
                 height={['60px', '80px', '80px', '80px']}
                 w={['40px', '80px', '80px', '80px']}
-                src={data.statusData[0]?.message?.order?.items[0]?.images[0].url}
+                src={data?.statusData?.[0]?.message?.order?.items[0]?.images?.[0].url}
                 alt="product image"
               />
               <Box w={'100%'}>
@@ -958,7 +962,7 @@ const OrderDetails = () => {
                     <Image src={menuItem.image} />
                     <Text
                       as={Typography}
-                      text={menuItem.text}
+                      text={menuItem.text as string}
                       fontSize="15px"
                       fontWeight={400}
                     />

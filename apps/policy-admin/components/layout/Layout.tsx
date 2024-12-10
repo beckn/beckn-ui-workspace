@@ -12,6 +12,9 @@ import { feedbackActions, FeedbackRootState, ToastType } from '@beckn-ui/common'
 import { Toast } from '@beckn-ui/molecules'
 import { testIds } from '@shared/dataTestIds'
 import CustomDrawer from '@components/customDrawer/customDrawer'
+import Cookies from 'js-cookie'
+import { checkTokenExpiry } from '@utils/general'
+import { logout } from '@store/auth-slice'
 
 const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const [isOpen, setIsOpen] = useState<boolean>(true)
@@ -29,6 +32,28 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const {
     toast: { display, message, type, description }
   } = useSelector((state: FeedbackRootState) => state.feedback)
+
+  useEffect(() => {
+    if (!['/signIn', '/resetPassword'].includes(router.pathname)) {
+      const token = Cookies.get('authToken')
+      let message = ''
+
+      try {
+        const isExpired: any = checkTokenExpiry(token)
+        if (isExpired) message = 'Token expired, please log in again!'
+      } catch (error) {
+        console.error('Token decoding error:', error)
+        message = 'Token decode failed, please log in again!'
+      } finally {
+        if (message) {
+          alert(message)
+          // if (userConfirmed) {
+          dispatch(logout())
+          // }
+        }
+      }
+    }
+  }, [router])
 
   useEffect(() => {
     if (display) {

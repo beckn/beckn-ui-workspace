@@ -37,10 +37,11 @@ describe.only('job Details Page', () => {
     cy.getByData(testIds.orderConfirmation_viewOrderButton).click()
     cy.wait('@processStatusResponse')
     cy.getByData(testIds.job_main_container_job_search_link).click()
-    cy.intercept('POST', 'https://bap-gcl-prod.becknprotocol.io/search', {
+    cy.url().should('include', '/jobSearch')
+    cy.intercept('POST', '**/search', {
       fixture: 'DSEP/jobSearchResponse/jobSearchResponse.json'
     }).as('jobSearchResponse')
-    cy.url().should('include', '/jobSearch')
+    cy.wait('@jobSearchResponse')
     cy.getByData('job-detail-link').eq(1).click()
     cy.url().should('include', '/jobDetails?jobDetails')
   })

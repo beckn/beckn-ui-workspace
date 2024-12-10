@@ -1,0 +1,9 @@
+.hideScroll {
+  overflow-y: scroll; /* or auto, as per your requirements */
+  scrollbar-width: none; /* Hides scrollbar in Firefox */
+  -ms-overflow-style: none; /* Hides scrollbar in IE/Edge */
+}
+
+.hideScroll::-webkit-scrollbar {
+  display: none; /* Hides scrollbar in Chrome, Safari, and Opera */
+}

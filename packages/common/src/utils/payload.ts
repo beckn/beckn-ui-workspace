@@ -153,13 +153,13 @@ export const getInitPayload = async (
           stops: [
             {
               location: {
-                gps: `${cityData.lat},${cityData.lng}`,
+                gps: `${cityData.lat || '12.970005'},${cityData.lng || '77.572559'}`,
                 address: deliveryAddress.address,
                 city: {
-                  name: cityData?.city
+                  name: cityData?.city || 'Bengaluru'
                 },
                 state: {
-                  name: cityData?.state
+                  name: cityData?.state || 'Karnataka'
                 },
                 country: {
                   code: 'IND'
@@ -182,10 +182,10 @@ export const getInitPayload = async (
             address: billingAddress.address,
             email: billingAddress.email,
             city: {
-              name: cityData?.city
+              name: cityData?.city || 'Bengaluru'
             },
             state: {
-              name: cityData?.state
+              name: cityData?.state || 'Karnataka'
             }
           }
         : null
@@ -233,10 +233,10 @@ export const getPayloadForConfirm = (initResponse: InitResponseModel[]) => {
               billing: billing,
               payments: [
                 {
-                  id: payments[0].id,
+                  id: payments?.[0]?.id,
                   params: {
-                    amount: quote.price.value,
-                    currency: quote.price.currency
+                    amount: quote?.price?.value,
+                    currency: quote?.price?.currency
                   },
                   status: 'PAID',
                   type: 'ON-FULFILLMENT'
@@ -304,7 +304,7 @@ export const getPayloadForOrderHistoryPost = (confirmData: ConfirmResponseModel[
           }
         },
         items,
-        quote,
+        quote: { price: { value: Number(quote.price.value) || 0 } },
         payments
       }
     },

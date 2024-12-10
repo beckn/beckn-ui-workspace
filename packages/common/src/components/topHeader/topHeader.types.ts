@@ -26,4 +26,5 @@ export interface HeaderProps extends TranslationProps {
   menuItems?: MenuItems[]
   settingsMenu?: boolean
   homePagePath?: string
+  clearLocalStorageOnHomeIcon?: boolean
 }

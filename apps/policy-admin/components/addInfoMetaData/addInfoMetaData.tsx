@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import {
   Box,
   Flex,
@@ -18,7 +18,7 @@ import CustomDatePicker from '@components/customDatePicker'
 import { Typography } from '@beckn-ui/molecules'
 import { useRouter } from 'next/router'
 import addIcon from '@public/images/plus_icon.svg'
-import { applicableToOptions, cities, countries, infoCategories } from '@lib/constants'
+import { applicableToOptions, citiesByCountry, countries, infoCategories } from '@lib/constants'
 import CustomButton from '@components/Button/CustomButton'
 import { useDispatch, useSelector } from 'react-redux'
 import {
@@ -43,6 +43,7 @@ import { useCreatePolicyMutation } from '@services/PolicyService'
 import { feedbackActions } from '@beckn-ui/common'
 import { validateDateRange } from '@utils/general'
 import { GenericDropdown } from '@components/GenericDropdown/GenericDropdown'
+import { testIds } from '@shared/dataTestIds'
 
 function AddInformationMetadata() {
   const [errors, setErrors] = useState({
@@ -78,6 +79,10 @@ function AddInformationMetadata() {
   } = useSelector((state: PolicyRootState) => state.policy)
 
   const [createPolicy] = useCreatePolicyMutation()
+
+  const fetchCities = (country: string) => {
+    return (citiesByCountry as any)[country]
+  }
 
   const handleOnSwitch = () => {
     dispatch(updatePolicyActivationStatus(!isActivate))
@@ -307,6 +312,7 @@ function AddInformationMetadata() {
       flexDir="column"
       gap="2rem"
       className="hideScroll"
+      data-test="addInfoMeataData-container"
     >
       <Box
         p={4}
@@ -321,6 +327,7 @@ function AddInformationMetadata() {
             text="Add Information Metadata"
             fontWeight="600"
             fontSize={'18px !important'}
+            dataTest={testIds.add_info_metadata}
           />
           <Box
             className="switch-btn"
@@ -337,6 +344,7 @@ function AddInformationMetadata() {
                 alignSelf: 'center'
               }}
               fontSize={'14px !important'}
+              dataTest={testIds.switch_btn_text}
             />
             <Switch
               ml="8px"
@@ -344,6 +352,7 @@ function AddInformationMetadata() {
               isChecked={isActivate}
               colorScheme={'green'}
               onChange={handleOnSwitch}
+              data-test={testIds.switch_btn}
             />
           </Box>
         </Flex>
@@ -358,20 +367,22 @@ function AddInformationMetadata() {
           gap="4rem"
         >
           <FormControl
-            mb="1rem"
+            mb="1.8rem"
             isInvalid={!!errors.policyName}
           >
-            <FormLabel>Title</FormLabel>
+            <FormLabel data-test={testIds.policy_title}>Title</FormLabel>
             <Input
               type="text"
               placeholder="Enter Title"
               value={policyName}
               onChange={event => dispatch(updatePolicyName(event.target.value))}
+              data-test={testIds.policy_title_input}
             />
             {errors.policyName && (
               <FormErrorMessage
                 position={'absolute'}
                 mt="0px"
+                data-test={testIds.title_error}
               >
                 {errors.policyName}
               </FormErrorMessage>
@@ -379,11 +390,12 @@ function AddInformationMetadata() {
           </FormControl>
 
           <FormControl
-            mb="1rem"
+            mb="1.8rem"
             isInvalid={!!errors.policyType}
           >
-            <FormLabel>Information Category</FormLabel>
+            <FormLabel data-test={testIds.policy_info_category}>Information Category</FormLabel>
             <GenericDropdown
+              dataTest={testIds.policy_info_category_dropdown}
               options={infoCategories}
               placeholder="Select Information Category"
               selectedValue={policyType}
@@ -395,6 +407,7 @@ function AddInformationMetadata() {
               <FormErrorMessage
                 position={'absolute'}
                 mt="0px"
+                data-test={testIds.policy_info_category_error}
               >
                 {errors.policyType}
               </FormErrorMessage>
@@ -402,20 +415,22 @@ function AddInformationMetadata() {
           </FormControl>
 
           <FormControl
-            mb="1rem"
+            mb="1.8rem"
             isInvalid={!!errors.policyOwner}
           >
-            <FormLabel>Information Source Owner</FormLabel>
+            <FormLabel data-test={testIds.info_source_owner}>Information Source Owner</FormLabel>
             <Input
               type="text"
               placeholder="Enter Information Source Owner Name"
               value={policyOwner}
               onChange={event => dispatch(updatePolicyOwner(event.target.value))}
+              data-test={testIds.info_source_owner_input}
             />
             {errors.policyOwner && (
               <FormErrorMessage
                 position={'absolute'}
                 mt="0px"
+                data-test={testIds.info_source_owner_input_error}
               >
                 {errors.policyOwner}
               </FormErrorMessage>
@@ -424,19 +439,21 @@ function AddInformationMetadata() {
         </HStack>
 
         <FormControl
-          mb="1rem"
+          mb="1.8rem"
           isInvalid={!!errors.description}
         >
-          <FormLabel>Description</FormLabel>
+          <FormLabel data-test={testIds.policy_description}>Description</FormLabel>
           <Textarea
             placeholder="Add Description"
             value={description}
             onChange={event => dispatch(updateDescription(event.target.value))}
+            data-test={testIds.policy_description_textArea}
           />
           {errors.description && (
             <FormErrorMessage
               position={'absolute'}
               mt="0px"
+              data-test={testIds.policy_description_textArea_error}
             >
               {errors.description}
             </FormErrorMessage>
@@ -450,22 +467,25 @@ function AddInformationMetadata() {
           gap="4rem"
         >
           <FormControl
-            mb="1rem"
+            mb="1.8rem"
             isInvalid={!!errors.country}
           >
-            <FormLabel>Country</FormLabel>
+            <FormLabel data-test={testIds.country}>Country</FormLabel>
             <GenericDropdown
+              dataTest={testIds.country_dropdown}
               options={countries}
               placeholder="Select Country"
               selectedValue={country}
               setSelectedValue={value => {
                 dispatch(updateCountry(value || ''))
+                dispatch(updateCity(''))
               }}
             />
             {errors.country && (
               <FormErrorMessage
                 position={'absolute'}
                 mt="0px"
+                data-test={testIds.country_error}
               >
                 {errors.country}
               </FormErrorMessage>
@@ -473,12 +493,13 @@ function AddInformationMetadata() {
           </FormControl>
 
           <FormControl
-            mb="1rem"
+            mb="1.8rem"
             isInvalid={!!errors.city}
           >
-            <FormLabel>City</FormLabel>
+            <FormLabel data-test={testIds.city}>City</FormLabel>
             <GenericDropdown
-              options={cities}
+              dataTest={testIds.city_dropdown}
+              options={fetchCities(country)}
               placeholder="Select City"
               selectedValue={city}
               setSelectedValue={value => {
@@ -489,6 +510,7 @@ function AddInformationMetadata() {
               <FormErrorMessage
                 position={'absolute'}
                 mt="0px"
+                data-test={testIds.city_error}
               >
                 {errors.city}
               </FormErrorMessage>
@@ -496,10 +518,11 @@ function AddInformationMetadata() {
           </FormControl>
 
           <FormControl
-            mb="1rem"
+            mb="1.8rem"
             isInvalid={!!errors.startDate}
+            data-test={testIds.date_pick_from}
           >
-            <FormLabel>From</FormLabel>
+            <FormLabel data-test={testIds.policy_from_date}>From</FormLabel>
             <CustomDatePicker
               selected={startDate ? new Date(startDate) : null}
               placeholderText="Select 'from' date"
@@ -511,6 +534,7 @@ function AddInformationMetadata() {
               <FormErrorMessage
                 position={'absolute'}
                 mt="0px"
+                data-test={testIds.policy_from_date_error}
               >
                 {errors.startDate}
               </FormErrorMessage>
@@ -518,10 +542,11 @@ function AddInformationMetadata() {
           </FormControl>
 
           <FormControl
-            mb="1rem"
+            mb="1.8rem"
             isInvalid={!!errors.endDate}
+            data-test={testIds.date_pick_to}
           >
-            <FormLabel>To</FormLabel>
+            <FormLabel data-test={testIds.policy_to_date}>To</FormLabel>
             <CustomDatePicker
               selected={endDate ? new Date(endDate) : null}
               placeholderText="Select 'to' date"
@@ -533,6 +558,7 @@ function AddInformationMetadata() {
               <FormErrorMessage
                 position={'absolute'}
                 mt="0px"
+                data-test={testIds.policy_to_date_error}
               >
                 {errors.endDate}
               </FormErrorMessage>
@@ -549,8 +575,9 @@ function AddInformationMetadata() {
             mb="0.5rem"
             isInvalid={!!errors.policyDocuments}
           >
-            <FormLabel>Sources</FormLabel>
+            <FormLabel data-test={testIds.policy_source}>Sources</FormLabel>
             <Input
+              data-test={testIds.policy_source_input}
               type="text"
               placeholder="Add Source URL"
               value={policyDocuments}
@@ -560,6 +587,7 @@ function AddInformationMetadata() {
               <FormErrorMessage
                 position={'absolute'}
                 mt="0px"
+                data-test={testIds.policy_source_error}
               >
                 {errors.policyDocuments}
               </FormErrorMessage>
@@ -570,7 +598,7 @@ function AddInformationMetadata() {
             mb="0.5rem"
             isInvalid={!!errors.applicableTo}
           >
-            <FormLabel>Applicable To</FormLabel>
+            <FormLabel data-test={testIds.policy_applicable_to}>Applicable To</FormLabel>
             <MultiSelectDropdown
               options={applicableToOptions}
               selectedOptions={applicableTo}
@@ -583,6 +611,7 @@ function AddInformationMetadata() {
               <FormErrorMessage
                 position={'absolute'}
                 mt="0px"
+                data-test={testIds.policy_applicable_to_error}
               >
                 {errors.applicableTo}
               </FormErrorMessage>
@@ -600,7 +629,7 @@ function AddInformationMetadata() {
             mb="0.5rem"
             isInvalid={!!errors.geofence}
           >
-            <FormLabel>Geofence</FormLabel>
+            <FormLabel data-test={testIds.geofence}>Geofence</FormLabel>
             {polygon.length === 0 ? (
               <Box
                 width="fit-content"
@@ -611,6 +640,7 @@ function AddInformationMetadata() {
                 onClick={() => {
                   router.push('/createGeofence')
                 }}
+                data-test={testIds.create_geofence}
               >
                 <Flex
                   flexDirection={'row'}
@@ -619,12 +649,14 @@ function AddInformationMetadata() {
                   cursor="pointer"
                 >
                   <Image
+                    data-test={testIds.geofence_icon}
                     src={addIcon}
                     alt="add_icon"
                     width={'1rem'}
                     height={'1rem'}
                   />
                   <Typography
+                    dataTest={testIds.geofence_text}
                     text="Draw geofence on a map"
                     fontSize="14px"
                     color="#013b76"
@@ -633,6 +665,7 @@ function AddInformationMetadata() {
               </Box>
             ) : (
               <Link
+                data-test={testIds.view_geofence}
                 color="#5c5cff"
                 onClick={() => router.push('/createGeofence')}
                 fontSize={'14px'}
@@ -644,6 +677,7 @@ function AddInformationMetadata() {
               <FormErrorMessage
                 position={'absolute'}
                 mt="0px"
+                data-test={testIds.geofence_error}
               >
                 {errors.geofence}
               </FormErrorMessage>
@@ -657,7 +691,7 @@ function AddInformationMetadata() {
         border="1px solid #72767e"
       >
         <FormControl mb="0.5rem">
-          <FormLabel>Rules</FormLabel>
+          <FormLabel data-test={testIds.policy_rules}>Rules</FormLabel>
           <Box
             sx={{
               border: '1px solid',
@@ -670,6 +704,7 @@ function AddInformationMetadata() {
             className="hideScroll"
           >
             <Code
+              data-test={testIds.policy_rules_code}
               height={'100%'}
               background="transparent"
               contentEditable={true}
@@ -692,6 +727,7 @@ function AddInformationMetadata() {
         display={{ base: 'block', md: 'flex' }}
       >
         <CustomButton
+          data-test={testIds.go_back_home}
           variant="outline"
           text="Go back"
           onClick={() => {
@@ -702,6 +738,7 @@ function AddInformationMetadata() {
           w={{ base: '100%', md: '100%' }}
         />
         <CustomButton
+          data-test={testIds.save_policy}
           variant="solid"
           bgGradient="linear(180deg, #000428 0%, #004e92 100%) !important"
           text="Save"

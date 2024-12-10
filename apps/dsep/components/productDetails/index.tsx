@@ -24,6 +24,7 @@ const ProductDetails: React.FC<Props> = ({ product }) => {
   const dispatch = useDispatch()
 
   function addToCartHandler() {
+    dispatch(cartActions.clearCart())
     dispatch(
       cartActions.addItemToCart({
         product: product,

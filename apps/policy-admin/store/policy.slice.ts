@@ -26,7 +26,7 @@ const initialState: PolicyState = {
   policyType: '',
   policyOwner: '',
   description: '',
-  country: '',
+  country: 'india',
   city: '',
   policyDocuments: '',
   applicableTo: [],

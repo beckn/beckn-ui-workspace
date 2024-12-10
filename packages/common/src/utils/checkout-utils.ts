@@ -67,12 +67,13 @@ export const getPaymentBreakDown = (initData: InitResponseModel[] | StatusRespon
 }
 
 export const getSubTotalAndDeliveryCharges = (initData: InitResponseModel[]) => {
-  let subTotal: number | string = 0
+  let subTotal: number = 0
   let currencySymbol
 
   if (initData && initData.length > 0) {
     initData.forEach(data => {
-      subTotal = parseFloat(data.message.order.quote.price.value).toFixed(2)
+      subTotal =
+        subTotal + Number(parseFloat((Number(data.message.order.quote.price.value) || 0).toString()).toFixed(2))
 
       currencySymbol = data.message.order.quote.price.currency
     })

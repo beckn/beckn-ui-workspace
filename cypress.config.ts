@@ -10,7 +10,7 @@ export default defineConfig({
       openMode: 0
     },
     setupNodeEvents(on, config) {
-      // implement node event listeners here
+      // Implement node event listeners here
     }
   }
 })

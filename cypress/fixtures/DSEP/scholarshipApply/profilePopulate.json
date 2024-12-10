@@ -1,0 +1,15 @@
+{
+  "data": {
+    "id": 23,
+    "attributes": {
+      "name": "krushna gaikwad",
+      "address": ", , Pune, maharashta, India",
+      "createdAt": "2024-01-29T09:22:45.706Z",
+      "updatedAt": "2024-06-25T07:23:38.023Z",
+      "publishedAt": "2024-01-29T09:22:45.701Z",
+      "phone": "8888888889",
+      "zip_code": "750021"
+    }
+  },
+  "meta": {}
+}

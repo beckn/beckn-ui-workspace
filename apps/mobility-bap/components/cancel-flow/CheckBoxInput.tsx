@@ -16,6 +16,7 @@ const CheckBoxInput: React.FC<CheckBoxInputProps> = ({ cancellationReason, check
       <Box
         className={styles.checkbox}
         fontSize={'15px'}
+        data-test={'checkbox-group'}
       >
         <input
           name={typeof id === 'number' ? id.toString() : id}
@@ -23,6 +24,7 @@ const CheckBoxInput: React.FC<CheckBoxInputProps> = ({ cancellationReason, check
           id={`checkbox-${id}`}
           onChange={handleChange}
           checked={checked}
+          data-test={`checkbox-${id}`}
         />
         <label htmlFor={`checkbox-${id}`}>
           <Text

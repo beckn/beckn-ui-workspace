@@ -13,6 +13,7 @@ const CustomDatePicker = (props: Partial<CustomDatePickerProps | DatePickerProps
     <Box
       as={DatePicker}
       {...props}
+      minDate={new Date()}
       sx={{
         '-webkit-padding-end': 'var(--chakra-space-8)',
         'padding-inline-end': 'var(--chakra-space-8)',

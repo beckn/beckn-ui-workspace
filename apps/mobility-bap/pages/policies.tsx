@@ -98,8 +98,6 @@ const Policies = () => {
           <option value="new">New</option>
           <option value="applied">Applied</option>
           <option value="disputed">Disputed</option>
-          <option value="active">Active</option>
-          <option value="inactive">Inactive</option>
         </Select>
       </Flex>
       <Divider />

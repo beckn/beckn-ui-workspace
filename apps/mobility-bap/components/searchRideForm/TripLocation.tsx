@@ -2,6 +2,7 @@ import React from 'react'
 import { Box, Divider, Flex, Image, useTheme } from '@chakra-ui/react'
 import { Typography } from '@beckn-ui/molecules'
 import { PickUpDropOffModel } from '@beckn-ui/common'
+import { testIds } from '@shared/dataTestIds'
 
 const TripLocation = ({
   pickupLocation,
@@ -37,6 +38,7 @@ const TripLocation = ({
             text="Pickup"
             fontSize="15px"
             fontWeight="400"
+            dataTest={testIds.mobility_pickup_label}
           />
           <Box
             as="span"
@@ -49,6 +51,7 @@ const TripLocation = ({
           text={pickupLocation?.address}
           fontWeight="500"
           fontSize="15px"
+          dataTest={testIds.mobility_pickup_address}
           style={{
             display: '-webkit-box',
             WebkitBoxOrient: 'vertical',
@@ -86,6 +89,7 @@ const TripLocation = ({
               text="Dropoff"
               fontSize="15px"
               fontWeight="400"
+              dataTest={testIds.mobility_dropoff_label}
             />
             <Box
               as="span"
@@ -98,6 +102,7 @@ const TripLocation = ({
             text={dropLocation?.address}
             fontWeight="500"
             fontSize="15px"
+            dataTest={testIds.mobility_dropoff_address}
             style={{
               display: '-webkit-box',
               WebkitBoxOrient: 'vertical',

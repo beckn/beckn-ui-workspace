@@ -12,6 +12,7 @@ import { useLanguage } from '@hooks/useLanguage'
 import { getCurrencyWithFare, getDistance } from '@utils/general'
 import { UserGeoLocationRootState } from '@lib/types/user'
 import { useSelector } from 'react-redux'
+import { testIds } from '@shared/dataTestIds'
 
 const RideDetails: React.FC<RideDetailsProps> = ({
   name,
@@ -67,6 +68,7 @@ const RideDetails: React.FC<RideDetailsProps> = ({
         <Flex direction={'column'}>
           <Typography
             text={t.totalFare}
+            dataTest={testIds.mobility_totalFare}
             fontSize="11px"
             fontWeight="400"
             color="#37474F"
@@ -83,6 +85,7 @@ const RideDetails: React.FC<RideDetailsProps> = ({
         >
           <Typography
             text={'Payment'}
+            dataTest={testIds.mobility_Payment_text}
             fontSize="12px"
             fontWeight="400"
             color="#37474F"
@@ -98,11 +101,13 @@ const RideDetails: React.FC<RideDetailsProps> = ({
               <Image
                 src="./images/cash.svg"
                 alt="payment-method"
+                data-test={testIds.mobility_Payment_image}
                 h={'16px'}
                 w={'25px'}
               />
               <Typography
                 text={t.cashText}
+                dataTest={testIds.mobility_cashText}
                 fontWeight="700"
                 fontSize="12px"
               />
@@ -139,6 +144,7 @@ const RideDetails: React.FC<RideDetailsProps> = ({
       />
       <Button
         text="Contact Support"
+        dataTest={testIds.mobility_cashText_Contact_Support}
         leftIcon={
           <Image
             src="./images/contactSupport.svg"

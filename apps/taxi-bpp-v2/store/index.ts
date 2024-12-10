@@ -46,6 +46,9 @@ const store = configureStore({
     }).concat(api.middleware)
 })
 
+if (process.env.NODE_ENV === 'development' && typeof window !== 'undefined') {
+  window.store = store
+}
 export const persistor = persistStore(store)
 
 export type RootState = ReturnType<typeof store.getState>
