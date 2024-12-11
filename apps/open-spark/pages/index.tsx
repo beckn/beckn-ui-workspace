@@ -322,7 +322,7 @@ const Homepage = () => {
                     <OrderStatusProgress
                       key={index}
                       label={data.label}
-                      statusTime={data.statusTime}
+                      statusTime={data.statusTime!}
                       noLine={data.noLine}
                       lastElement={data.lastElement}
                     />

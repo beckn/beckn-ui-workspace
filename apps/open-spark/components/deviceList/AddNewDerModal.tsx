@@ -6,19 +6,12 @@ import { Box, Flex, Image } from '@chakra-ui/react'
 import uploadIcon from '@public/images/upload_icon.svg'
 import pdfIcon from '@public/images/PDF.svg'
 import DragAndDropUpload from '@components/dragAndDropUpload'
-import RenderDocuments from '@components/documentsRenderer'
+import RenderDocuments, { DocumentProps } from '@components/documentsRenderer'
 
 interface Proofs {
   id: number
   name: string
   date: string
-}
-
-interface DocumentProps {
-  icon: string
-  title: string
-  file: any
-  date: Date
 }
 
 interface AddNewDerModalProps {
@@ -94,6 +87,8 @@ const AddNewDerModal = (props: AddNewDerModalProps) => {
           flexDir="column"
         >
           <Input
+            name="category"
+            type="text"
             value={category}
             label="Category"
             handleChange={e => setCategory(e.target.value)}
@@ -113,6 +108,7 @@ const AddNewDerModal = (props: AddNewDerModalProps) => {
           />
           <DragAndDropUpload
             multiple={true}
+            accept="image/png, image/jpeg, image/jpg, image/gif, .pdf, .txt"
             setFiles={handleFileChange}
             fileSelectionElement={(fileInputRef: any) => {
               return (

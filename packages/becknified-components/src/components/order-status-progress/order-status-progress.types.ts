@@ -1,5 +1,5 @@
 export interface OrderStatusProgressProps {
-  label: string
+  label: string | React.ReactNode
   statusTime: string
   className?: string
   noLine?: boolean
