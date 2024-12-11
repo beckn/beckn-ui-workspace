@@ -188,6 +188,7 @@ const Product = () => {
         </Link>
       </Flex>
       <Flex
+        data-test={testIds.disclaimer_text}
         alignItems={'center'}
         border={'1px solid #BFBFBF'}
         borderRadius="12px"
