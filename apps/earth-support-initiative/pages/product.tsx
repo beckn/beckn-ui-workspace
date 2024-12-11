@@ -188,6 +188,7 @@ const Product = () => {
         </Link>
       </Flex>
       <Flex
+        data-test={testIds.disclaimer_text}
         alignItems={'center'}
         border={'1px solid #BFBFBF'}
         borderRadius="12px"
@@ -205,7 +206,7 @@ const Product = () => {
             handleClick={handleOnProceed}
           />
         </Box>
-        ** Contains non-personal data only dataTest={testIds.disclaimer_text}
+        ** Contains non-personal data only
       </Flex>
     </Box>
   )

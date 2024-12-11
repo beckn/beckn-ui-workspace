@@ -646,7 +646,9 @@ const testIds = {
   sort_menu_item_2: 'menu-item-2',
   rating_container: 'rating-container',
   Proceed: 'Proceed',
-  Proceed_to_product: 'Proceed-to-product'
+  Proceed_to_product: 'Proceed-to-product',
+  disclaimer_text: 'disclaimer-text',
+  TermsandConditions_link: 'TermsandConditions-link'
 }
 
 export { testIds }
