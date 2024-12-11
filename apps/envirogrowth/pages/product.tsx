@@ -109,11 +109,13 @@ const Product = () => {
         <Typography
           text={`About ${selectedProduct.providerName}`}
           fontWeight={'800'}
+          dataTest={testIds.item_title}
         />
         <Typography text={selectedProduct.item.short_desc!} />
         <Typography
           text={selectedProduct.item.productInfo! as string}
           style={{ marginTop: '1rem' }}
+          dataTest={testIds.product_page_short_desc}
         />
       </Box>
 
@@ -179,12 +181,14 @@ const Product = () => {
           fontSize={['12px', '16px']}
           textDecoration="underline"
           href="https://www.google.com"
+          data-test={testIds.TermsandConditions_link}
           target="_blank"
         >
           Terms and Conditions
         </Link>
       </Flex>
       <Flex
+        data-test={testIds.disclaimer_text}
         alignItems={'center'}
         border={'1px solid #BFBFBF'}
         borderRadius="12px"
@@ -196,7 +200,8 @@ const Product = () => {
           mr="20px"
         >
           <Button
-            text="proceed"
+            text="Proceed"
+            dataTest={testIds.Proceed_to_product}
             disabled={!checkIsDisabled()}
             handleClick={handleOnProceed}
           />
