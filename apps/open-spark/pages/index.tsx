@@ -1,16 +1,15 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import { TopSheet, useGeolocation } from '@beckn-ui/common'
+import { formatDate, TopSheet, useGeolocation } from '@beckn-ui/common'
 import { useLanguage } from '@hooks/useLanguage'
-import { AuthRootState } from '@store/auth-slice'
 import { useRouter } from 'next/router'
 import profileIcon from '@public/images/user_profile.svg'
 import { Input, Typography } from '@beckn-ui/molecules'
-import { Box, Flex, HStack, Tag, TagLabel, TagCloseButton, Divider } from '@chakra-ui/react'
+import { Box, Flex, HStack, Tag, TagLabel, Divider, Text, TagCloseButton } from '@chakra-ui/react'
 import CustomeDateInput from '@components/dateRangePicker/CustomeDateInput'
 import SelectDate from '@components/dateRangePicker/SelectDate'
-import TotalEnergyUnits, { DashboardData } from '@components/totalEnerguUnit/TotalEnergyUnits'
+import TotalEnergyUnits from '@components/totalEnerguUnit/TotalEnergyUnits'
 import { QuestionOutlineIcon } from '@chakra-ui/icons'
 import { LiaPenSolid } from 'react-icons/lia'
 import EmptyCurrentTrade from '@components/currentTrade/EmptyCurrentTrade'
@@ -19,35 +18,17 @@ import { DetailCard, OrderStatusProgress } from '@beckn-ui/becknified-components
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import { format } from 'date-fns'
 import { RootState } from '@store/index'
-import { useDispatch, useSelector } from 'react-redux'
-import { ROLE } from '@lib/config'
+import { useSelector } from 'react-redux'
+import { ROLE, ROUTE_TYPE } from '@lib/config'
 import { useBapTradeDashboardQuery, useBppTradeDashboardQuery } from '@services/DashboardService'
-const currentTradeMockData = [
-  { name: 'energyToBuy', label: 'Energy to Buy', value: '210', disabled: true, symbol: '(KWh)' },
-  { name: 'priceFixed', label: 'Price Fixed', value: '08', disabled: true, symbol: '₹/units' }
-]
-const currentStatusmockData = [
-  {
-    label: 'Requirement Received',
-    statusTime: '12:11 pm',
-    noLine: false,
-    lastElement: false,
-    statusDescription: 'For more details go to My Trades'
-  },
-  {
-    label: 'For more details go to My Trades',
-    statusTime: '12:11 pm',
-    noLine: false,
-    lastElement: false,
-    statusDescription: 'For more details go to My Trades'
-  }
-]
+import Cookies from 'js-cookie'
+import axios from 'axios'
+import { DashboardData, StatusItem, TradeData } from '@lib/types/dashboard'
+import { parseAndFormatDate } from '@utils/parsedFormatDate-utils'
 
 const Homepage = () => {
   const { t } = useLanguage()
-  const dispatch = useDispatch()
   const router = useRouter()
-  const { user } = useSelector((state: AuthRootState) => state.auth)
   const apiKeyForGoogle = process.env.NEXT_PUBLIC_GOOGLE_API_KEY
   const today = format(new Date(), 'dd/MM/yy')
   const { role } = useSelector((state: RootState) => state.auth)
@@ -59,24 +40,47 @@ const Homepage = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [startDate, setStartDate] = useState<string>(today)
   const [endDate, setEndDate] = useState<string>(today)
-  const [emptyState, setEmptyState] = useState(false)
+  const [totalEnergyUnits, setTotalEnergyUnits] = useState<number>(0)
+  const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
+  const bearerToken = Cookies.get('authToken') || ''
+  const [currentTradeData, setCurrentTradeData] = useState<TradeData[]>([])
+  const [currentStatusData, setCurrentStatusData] = useState<StatusItem[]>([])
   const [dashboardTotalEnergyUnitsData, setDashboardTotalEnergyUnitsData] = useState<DashboardData>({
     previous_month: 0,
     current_month: 0,
     average: 0
   })
-  const { data: bapDashboardData } = useBapTradeDashboardQuery(undefined, {
-    skip: role !== ROLE.CONSUMER
-  })
-  const { data: bppDashboardData } = useBppTradeDashboardQuery(undefined, {
-    skip: role !== ROLE.PRODUCER
-  })
-  const [preferencesTags, setPreferencesTags] = useState(['Solar', 'Biomass', 'Wind Power'])
+  const [preferencesTags, setPreferencesTags] = useState<string[]>([])
   const totalEnergyText = role === ROLE.PRODUCER ? 'Produced' : 'Consumption'
 
-  const handleRemoveTag = (tagToRemove: string) => {
-    setPreferencesTags(prevTags => prevTags.filter(tag => tag !== tagToRemove))
-  }
+  const payloadStartDate = parseAndFormatDate(startDate)
+  const payloadEndDate = parseAndFormatDate(endDate)
+
+  const { data: bapDashboardData } = useBapTradeDashboardQuery(
+    {
+      startDate: payloadStartDate,
+      endDate: payloadEndDate,
+      credentials: bearerToken
+    },
+    {
+      skip: role !== ROLE.CONSUMER
+    }
+  )
+
+  const { data: bppDashboardData } = useBppTradeDashboardQuery(
+    {
+      startDate: payloadStartDate,
+      endDate: payloadEndDate,
+      credentials: bearerToken
+    },
+    {
+      skip: role !== ROLE.PRODUCER
+    }
+  )
+
+  // const handleRemoveTag = (tagToRemove: string) => {
+  //   setPreferencesTags(prevTags => prevTags.filter(tag => tag !== tagToRemove))
+  // }
 
   const handleModalOpen = () => setIsModalOpen(true)
   const handleModalClose = () => setIsModalOpen(false)
@@ -86,15 +90,91 @@ const Homepage = () => {
     setEndDate(end)
     handleModalClose()
   }
-
   useEffect(() => {
     if (role === ROLE.CONSUMER && bapDashboardData?.data?.consumption) {
-      setDashboardTotalEnergyUnitsData(bapDashboardData.data.consumption)
+      const { previous_month, current_month, average, totalInRange } = bapDashboardData.data.consumption
+      setDashboardTotalEnergyUnitsData({ previous_month, current_month, average })
+      setTotalEnergyUnits(totalInRange)
     } else if (role === ROLE.PRODUCER && bppDashboardData?.data?.production) {
-      setDashboardTotalEnergyUnitsData(bppDashboardData.data.production)
+      const { previous_month, current_month, average, totalInRange } = bppDashboardData.data.production
+      setDashboardTotalEnergyUnitsData({ previous_month, current_month, average })
+      setTotalEnergyUnits(totalInRange)
     }
-  }, [role, bapDashboardData, bppDashboardData])
+  }, [role, bapDashboardData, bppDashboardData, startDate, endDate])
 
+  const fetchLastTradeData = async () => {
+    try {
+      const response = await axios.get(`${strapiUrl}${ROUTE_TYPE[role!]}/trade`, {
+        headers: { Authorization: `Bearer ${bearerToken}` },
+        withCredentials: true
+      })
+
+      const result = response.data
+
+      const lastTrade = result[result.length - 1]
+
+      const mappedTrade: TradeData = {
+        id: lastTrade.id,
+        quantity: lastTrade.quantity,
+        price: lastTrade.price || 0
+      }
+
+      setCurrentTradeData([mappedTrade])
+      const statusData = createStatusData(lastTrade)
+      setCurrentStatusData(statusData)
+
+      const tags = [lastTrade.trusted_source && 'Trusted Source', lastTrade.cred_required && 'Solar Energy'].filter(
+        Boolean
+      )
+      setPreferencesTags(tags)
+    } catch (error) {
+      console.error('Error fetching last trade data:', error)
+    }
+  }
+  useEffect(() => {
+    fetchLastTradeData()
+  }, [])
+
+  const StatusLabel = () => {
+    return (
+      <Text
+        fontSize={'12px'}
+        fontWeight={500}
+      >
+        For more details go to{' '}
+        <span
+          style={{ color: '#4498E8', textDecoration: 'none', cursor: 'pointer', fontSize: '12px', fontWeight: '500' }}
+          onClick={() => router.push('/myTrades')}
+        >
+          My Trades
+        </span>
+      </Text>
+    )
+  }
+
+  const createStatusData = (tradeData: { status: string; createdAt: string }) => {
+    const { status, createdAt } = tradeData
+    const statusTime = formatDate(createdAt, 'hh:mm a')
+    const label = status === 'RECEIVED' ? 'Requirement Received' : 'Requirement Completed'
+
+    return [
+      {
+        label,
+        status,
+        statusTime,
+        noLine: false,
+        lastElement: false
+      },
+      {
+        label: <StatusLabel />,
+        statusTime: '',
+        noLine: true,
+        lastElement: true
+      }
+    ]
+  }
+
+  const latestStatus = currentStatusData.find(item => typeof item.status === 'string' && item.status !== '')
   return (
     <>
       <TopSheet
@@ -117,7 +197,8 @@ const Homepage = () => {
           fontSize="15px"
           fontWeight="600"
           sx={{
-            marginBottom: '10px'
+            marginBottom: '10px',
+            paddingTop: '30px'
           }}
         />
         <Flex
@@ -127,7 +208,7 @@ const Homepage = () => {
         >
           <Input
             name="energy"
-            value={'250 (KWh)'}
+            value={String(+totalEnergyUnits.toFixed(2))}
             type={'text'}
             handleChange={() => {
               console.log('Energy units changed')
@@ -158,9 +239,36 @@ const Homepage = () => {
               />
               <QuestionOutlineIcon />
             </HStack>
-            {emptyState ? <></> : <LiaPenSolid />}
+            {currentTradeData.length < 0 ? (
+              <></>
+            ) : (
+              <LiaPenSolid
+                onClick={() => router.push(role === ROLE.PRODUCER ? '/sellingPreference' : '/buyingPreference')}
+              />
+            )}
           </Flex>
-          {emptyState ? <EmptyCurrentTrade /> : <CurrentTrade data={currentTradeMockData} />}
+          {currentTradeData.length < 0 ? (
+            <EmptyCurrentTrade />
+          ) : (
+            <CurrentTrade
+              data={[
+                {
+                  name: 'energyToBuy',
+                  label: 'Energy to Buy',
+                  value: (currentTradeData[0]?.quantity ?? 0).toString(),
+                  symbol: '(KWh)',
+                  disabled: true
+                },
+                {
+                  name: 'priceFixed',
+                  label: 'Price Fixed',
+                  value: (currentTradeData[0]?.price ?? 0).toString(),
+                  symbol: '₹/units',
+                  disabled: true
+                }
+              ]}
+            />
+          )}
         </Box>
         <Box>
           <Typography
@@ -182,7 +290,7 @@ const Homepage = () => {
                 padding={'4px 8px'}
               >
                 <TagLabel>{tag}</TagLabel>
-                <TagCloseButton onClick={() => handleRemoveTag(tag)} />
+                {/* <TagCloseButton onClick={() => handleRemoveTag(tag)} /> */}
               </Tag>
             ))}
           </Flex>
@@ -201,24 +309,27 @@ const Homepage = () => {
                   fontWeight="600"
                 />
                 <Typography
-                  text="Pending"
+                  text={latestStatus?.status === 'RECEIVED' ? 'Pending' : 'Completed'}
                   fontSize="12px"
                   fontWeight="600"
-                  color="#BD942B" // '#5EC401' will change as per status
+                  color={latestStatus?.status === 'RECEIVED' ? '#BD942B' : '#5EC401'}
                 />
               </Flex>
               <Divider />
               <Box mt={'10px'}>
-                {currentStatusmockData.map((data, index) => (
-                  <OrderStatusProgress
-                    key={index}
-                    label={data.label}
-                    statusTime={data.statusTime}
-                    noLine={data.noLine}
-                    lastElement={data.lastElement}
-                    statusDescription={data.statusDescription}
-                  />
-                ))}
+                {currentStatusData.length > 0 ? (
+                  currentStatusData.map((data, index) => (
+                    <OrderStatusProgress
+                      key={index}
+                      label={data.label}
+                      statusTime={data.statusTime}
+                      noLine={data.noLine}
+                      lastElement={data.lastElement}
+                    />
+                  ))
+                ) : (
+                  <Text>No status updates available</Text>
+                )}
               </Box>
             </DetailCard>
           </Box>

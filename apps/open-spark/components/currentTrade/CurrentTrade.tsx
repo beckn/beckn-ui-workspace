@@ -3,7 +3,7 @@ import { Box, Flex } from '@chakra-ui/react'
 import React from 'react'
 
 interface CurrentTradeProps {
-  data: { name: string; label: string; value: string; disabled: boolean; symbol: string }[]
+  data: { name: string; label: string; value: string; disabled?: boolean; symbol: string }[]
 }
 
 const CurrentTrade = (props: CurrentTradeProps) => {
@@ -32,7 +32,11 @@ const CurrentTrade = (props: CurrentTradeProps) => {
                 height="36px"
                 mt={'8px'}
               >
-                <Typography text={item.symbol} />
+                <Typography
+                  text={item.symbol}
+                  fontSize="12px"
+                  fontWeight="500"
+                />
               </Box>
             )
           }}

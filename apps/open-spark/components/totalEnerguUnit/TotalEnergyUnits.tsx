@@ -1,12 +1,7 @@
 import React from 'react'
 import { Input, Typography } from '@beckn-ui/molecules'
 import { Box, Flex } from '@chakra-ui/react'
-
-export interface DashboardData {
-  previous_month: number
-  current_month: number
-  average: number
-}
+import { DashboardData } from '@lib/types/dashboard'
 
 interface TotalEnergyUnitsProps {
   dashboardTotalEnergyUnitsData: DashboardData
