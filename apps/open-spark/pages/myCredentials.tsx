@@ -16,6 +16,7 @@ import { FiPlusCircle } from 'react-icons/fi'
 import RenderDocuments from '@components/documentsRenderer'
 
 interface DocumentProps {
+  id?: string
   icon: string
   title: string
   date: Date
@@ -51,7 +52,8 @@ const MyCredentials = () => {
       const credData = result.map((data: any) => {
         const { credential } = data
         return {
-          title: data.type,
+          id: data.cred_id,
+          title: credential.credentialSubject.documentName,
           icon: jsonIcon,
           date: credential.issuanceDate,
           data: credential
@@ -82,16 +84,20 @@ const MyCredentials = () => {
       withCredentials: true
     }
 
-    // axios
-    //  .delete(`${strapiUrl}${ROUTE_TYPE[role!]}/delete-cred/${selectedFile?.[0].file._id}`, requestOptions)
-    //  .then(response => {
-    //     console.log('Deleted successfully:', response.data)
-    //     setSelectedFile(null)
-    //     getCredentials()
-    //   })
-    //  .catch(error => {
-    //     console.error('Error deleting:', error)
-    //   })
+    axios
+      .delete(`${strapiUrl}${ROUTE_TYPE[role!]}/cred/${data.id}`, requestOptions)
+      .then(response => {
+        console.log('Deleted successfully:', response.data)
+        getCredentials()
+        dispatch(
+          feedbackActions.setToastData({
+            toastData: { message: t.success, display: true, type: 'success', description: 'Deleted successfully' }
+          })
+        )
+      })
+      .catch(error => {
+        console.error('Error deleting:', error)
+      })
   }
 
   const handleOnDelete = (index: number, document: DocumentProps, type: 'cred' | 'upload') => {

@@ -60,6 +60,7 @@ const en: { [key: string]: string } = {
   errorUtilityCompany: 'Utility Company Required',
   logout: 'Logout',
   upload: 'Upload',
-  errorText: 'Something went wrong'
+  errorText: 'Something went wrong',
+  success: 'Success!'
 }
 export default en
