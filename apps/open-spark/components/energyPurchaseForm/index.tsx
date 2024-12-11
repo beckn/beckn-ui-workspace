@@ -14,30 +14,91 @@ import { QuestionOutlineIcon } from '@chakra-ui/icons'
 import React, { useState } from 'react'
 import { FaMinus, FaPlus } from 'react-icons/fa6'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
+import axios from 'axios'
+import { useSelector } from 'react-redux'
+import { RootState } from '@store/index'
+import { DOMAIN, ROLE, ROUTE_TYPE } from '@lib/config'
+import Cookies from 'js-cookie'
+import { useRouter } from 'next/router'
 
 interface EnergyPurchaseFormProps {
   preferenceType: string
 }
 
-export default function EnergyPurchaseForm(props: EnergyPurchaseFormProps) {
-  const { preferenceType } = props
+const checkboxOptions = [
+  { label: 'Solar Energy', key: 'solar' },
+  { label: 'Trusted Source', key: 'trustedSource' }
+]
+
+const checkboxStyles = {
+  '& .chakra-checkbox__control': {
+    border: '1px solid #141414',
+    borderRadius: '2px',
+    backgroundColor: '#FFFFFF'
+  },
+  '& .chakra-checkbox__control[data-checked]': {
+    backgroundColor: '#4498E8',
+    color: '#FFFFFF',
+    borderRadius: '2px'
+  }
+}
+
+export default function EnergyPurchaseForm({ preferenceType }: EnergyPurchaseFormProps) {
+  const { role } = useSelector((state: RootState) => state.auth)
+  const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
+  const bearerToken = Cookies.get('authToken') || ''
+  const router = useRouter()
+
   const [energyUnits, setEnergyUnits] = useState(0)
   const [pricePerUnit, setPricePerUnit] = useState(0)
-  const [preferences, setPreferences] = useState({
-    solar: false,
-    wind: false,
-    biomass: false,
-    hydro: false
-  })
+  const [preferences, setPreferences] = useState({ solar: false, trustedSource: false })
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleInputChange = (setter: React.Dispatch<React.SetStateAction<number>>, value: number) =>
+    setter(Math.max(0, value))
+
+  const handleCheckboxChange = (key: string, value: boolean) => setPreferences(prev => ({ ...prev, [key]: value }))
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    console.log({
-      energyUnits,
-      pricePerUnit,
-      preferences
-    })
+
+    const payload =
+      role === ROLE.CONSUMER
+        ? {
+            quantity: energyUnits,
+            unit: 'kwh',
+            item_name: 'energy',
+            trusted_source: preferences.trustedSource,
+            cred_required: preferences.solar,
+            recurring: false,
+            domain: DOMAIN,
+            price: pricePerUnit
+          }
+        : {
+            quantity: energyUnits,
+            unit: 'KWH',
+            item_name: 'energy',
+            trusted_source: preferences.trustedSource,
+            cred_required: preferences.solar,
+            recurring: true,
+            price: pricePerUnit
+          }
+
+    try {
+      const response = await axios.post(`${strapiUrl}${ROUTE_TYPE[role!]}/trade`, payload, {
+        headers: { Authorization: `Bearer ${bearerToken}` },
+        withCredentials: true
+      })
+
+      if (response.status === 200 || response.status === 204) {
+        console.log('Trade created successfully:', response.data)
+        router.push('/')
+      }
+    } catch (error) {
+      console.error('Error creating trade:', error)
+    }
   }
+
+  const isFormComplete = energyUnits > 0 && pricePerUnit > 0
 
   return (
     <Box
@@ -62,25 +123,31 @@ export default function EnergyPurchaseForm(props: EnergyPurchaseFormProps) {
             <QuestionOutlineIcon />
           </HStack>
           <HStack spacing={4}>
-            <Box onClick={() => setEnergyUnits(prev => prev + 1)}>
+            <Box
+              onClick={() => handleInputChange(setEnergyUnits, energyUnits + 1)}
+              cursor="pointer"
+            >
               <FaPlus />
             </Box>
             <Input
               type="number"
               value={energyUnits}
-              onChange={e => setEnergyUnits(Number(e.target.value))}
+              onChange={e => handleInputChange(setEnergyUnits, Number(e.target.value))}
               textAlign="center"
               width="100px"
               size="md"
             />
-            <Box onClick={() => setEnergyUnits(prev => Math.max(0, prev - 1))}>
+            <Box
+              onClick={() => handleInputChange(setEnergyUnits, energyUnits - 1)}
+              cursor="pointer"
+            >
               <FaMinus />
             </Box>
             <Text
               fontSize="15"
               fontWeight="500"
             >
-              units(KWh)
+              units (KWh)
             </Text>
           </HStack>
         </FormControl>
@@ -99,18 +166,24 @@ export default function EnergyPurchaseForm(props: EnergyPurchaseFormProps) {
             <QuestionOutlineIcon />
           </HStack>
           <HStack spacing={4}>
-            <Box onClick={() => setPricePerUnit(prev => prev + 1)}>
+            <Box
+              onClick={() => handleInputChange(setPricePerUnit, pricePerUnit + 1)}
+              cursor="pointer"
+            >
               <FaPlus />
             </Box>
             <Input
               type="number"
               value={pricePerUnit}
-              onChange={e => setPricePerUnit(Number(e.target.value))}
+              onChange={e => handleInputChange(setPricePerUnit, Number(e.target.value))}
               textAlign="center"
               width="100px"
               size="md"
             />
-            <Box onClick={() => setPricePerUnit(prev => Math.max(0, prev - 1))}>
+            <Box
+              onClick={() => handleInputChange(setPricePerUnit, pricePerUnit - 1)}
+              cursor="pointer"
+            >
               <FaMinus />
             </Box>
             <Text
@@ -135,89 +208,25 @@ export default function EnergyPurchaseForm(props: EnergyPurchaseFormProps) {
             columns={2}
             spacing={4}
           >
-            <Checkbox
-              size="sm"
-              isChecked={preferences.solar}
-              onChange={e => setPreferences(prev => ({ ...prev, solar: e.target.checked }))}
-              sx={{
-                '& .chakra-checkbox__control': {
-                  border: '1px solid #141414',
-                  borderRadius: '2px',
-                  backgroundColor: '#FFFFFF'
-                },
-                '& .chakra-checkbox__control[data-checked]': {
-                  backgroundColor: '#4498E8',
-                  color: '#FFFFFF',
-                  borderRadius: '2px'
-                }
-              }}
-            >
-              Solar Energy
-            </Checkbox>
-            <Checkbox
-              size="sm"
-              isChecked={preferences.wind}
-              onChange={e => setPreferences(prev => ({ ...prev, wind: e.target.checked }))}
-              sx={{
-                '& .chakra-checkbox__control': {
-                  border: '1px solid #141414',
-                  borderRadius: '2px',
-                  backgroundColor: '#FFFFFF'
-                },
-                '& .chakra-checkbox__control[data-checked]': {
-                  backgroundColor: '#4498E8',
-                  color: '#FFFFFF',
-                  borderRadius: '2px'
-                }
-              }}
-            >
-              Wind Power
-            </Checkbox>
-            <Checkbox
-              size="sm"
-              isChecked={preferences.biomass}
-              onChange={e => setPreferences(prev => ({ ...prev, biomass: e.target.checked }))}
-              sx={{
-                '& .chakra-checkbox__control': {
-                  border: '1px solid #141414',
-                  borderRadius: '2px',
-                  backgroundColor: '#FFFFFF'
-                },
-                '& .chakra-checkbox__control[data-checked]': {
-                  backgroundColor: '#4498E8',
-                  color: '#FFFFFF',
-                  borderRadius: '2px'
-                }
-              }}
-            >
-              Biomass Energy
-            </Checkbox>
-            <Checkbox
-              size="sm"
-              isChecked={preferences.hydro}
-              onChange={e => setPreferences(prev => ({ ...prev, hydro: e.target.checked }))}
-              sx={{
-                '& .chakra-checkbox__control': {
-                  border: '1px solid #141414',
-                  borderRadius: '2px',
-                  backgroundColor: '#FFFFFF'
-                },
-                '& .chakra-checkbox__control[data-checked]': {
-                  backgroundColor: '#4498E8',
-                  color: '#FFFFFF',
-                  borderRadius: '2px'
-                }
-              }}
-            >
-              Hydroelectric Energy
-            </Checkbox>
+            {checkboxOptions.map(option => (
+              <Checkbox
+                key={option.key}
+                size="sm"
+                isChecked={preferences[option.key as keyof typeof preferences]}
+                onChange={e => handleCheckboxChange(option.key, e.target.checked)}
+                sx={checkboxStyles}
+              >
+                {option.label}
+              </Checkbox>
+            ))}
           </SimpleGrid>
         </FormControl>
+
+        {/* Submit Button */}
         <BecknButton
-          children={'Submit'}
-          handleClick={() => {
-            console.log('object')
-          }}
+          children="Submit"
+          handleClick={handleSubmit}
+          disabled={!isFormComplete}
         />
       </VStack>
     </Box>
