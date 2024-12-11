@@ -178,6 +178,7 @@ const MyCredentials = () => {
           <Typography text="Upload credential documents" />
           <DragAndDropUpload
             multiple={true}
+            accept={'.json'}
             dragAndDrop={true}
             setFiles={handleFileChange}
             fileSelectionElement={(fileInputRef: any) => {

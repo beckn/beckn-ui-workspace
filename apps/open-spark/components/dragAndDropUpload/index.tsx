@@ -10,10 +10,11 @@ interface DragAndDropUploadProps {
     inputRef: React.MutableRefObject<HTMLInputElement | null>
   ) => React.ReactElement<any, any> | null
   setFiles: (files: File[]) => void
+  accept?: string
 }
 
 const DragAndDropUpload = (props: DragAndDropUploadProps) => {
-  const { fileSelectionElement, multiple, setFiles, dragAndDrop = false } = props
+  const { fileSelectionElement, multiple, setFiles, dragAndDrop = false, accept } = props
   const [isDragging, setIsDragging] = useState(false)
 
   const fileInputRef = useRef<HTMLInputElement | null>(null)
@@ -68,7 +69,7 @@ const DragAndDropUpload = (props: DragAndDropUploadProps) => {
       <Input
         type="file"
         multiple={multiple}
-        accept=".json"
+        accept={accept}
         style={{
           opacity: 0,
           width: '100%',

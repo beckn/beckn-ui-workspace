@@ -23,11 +23,6 @@ interface TradeMetaData {
   preferencesTags: string[]
 }
 
-const currentTradeMockData = [
-  { name: 'energyToBuy', label: 'Energy Sold', value: '210 (KWh)', disabled: true },
-  { name: 'priceFixed', label: 'Price', value: '08 ₹/units', disabled: true }
-]
-
 const TradeDetails = () => {
   const bearerToken = Cookies.get('authToken')
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
@@ -58,7 +53,7 @@ const TradeDetails = () => {
           quantity: result.quantity,
           date: result.createdAt,
           status: result.status,
-          tradeId: '20',
+          tradeId: result.id,
           tradeEvents: result.trade_events,
           preferencesTags: ['Solar', 'Biomass', 'Wind Power']
         })
