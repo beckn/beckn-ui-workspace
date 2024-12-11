@@ -52,6 +52,7 @@ const Homepage = () => {
   })
   const [preferencesTags, setPreferencesTags] = useState<string[]>([])
   const totalEnergyText = role === ROLE.PRODUCER ? 'Produced' : 'Consumption'
+  const currentAndPreffernceTest = role === ROLE.PRODUCER ? 'My Preferences' : 'Current Trade'
 
   const payloadStartDate = parseAndFormatDate(startDate)
   const payloadEndDate = parseAndFormatDate(endDate)
@@ -233,7 +234,7 @@ const Homepage = () => {
           >
             <HStack>
               <Typography
-                text="Current Trade"
+                text={currentAndPreffernceTest}
                 fontSize="15"
                 fontWeight="600"
               />
@@ -308,12 +309,14 @@ const Homepage = () => {
                   fontSize="14px"
                   fontWeight="600"
                 />
-                <Typography
-                  text={latestStatus?.status === 'RECEIVED' ? 'Pending' : 'Completed'}
-                  fontSize="12px"
-                  fontWeight="600"
-                  color={latestStatus?.status === 'RECEIVED' ? '#BD942B' : '#5EC401'}
-                />
+                {currentStatusData.length < 0 ? (
+                  <Typography
+                    text={latestStatus?.status === 'RECEIVED' ? 'Pending' : 'Completed'}
+                    fontSize="12px"
+                    fontWeight="600"
+                    color={latestStatus?.status === 'RECEIVED' ? '#BD942B' : '#5EC401'}
+                  />
+                ) : null}
               </Flex>
               <Divider />
               <Box mt={'10px'}>
@@ -338,7 +341,7 @@ const Homepage = () => {
         <BecknButton
           children={role === ROLE.CONSUMER ? 'Buy' : 'Sell'}
           handleClick={() => router.push(role === ROLE.PRODUCER ? '/sellingPreference' : '/buyingPreference')}
-          sx={{ marginTop: '30px' }}
+          sx={{ marginTop: '100px' }}
         />
       </Box>
       <SelectDate

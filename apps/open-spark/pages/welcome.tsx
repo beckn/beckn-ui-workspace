@@ -47,6 +47,7 @@ const welcome = () => {
         margin={{ base: '0px', lg: '150px', md: '100px' }}
         flexDir={'column'}
         rowGap={'10px'}
+        marginTop={'200px'}
       >
         <BecknButton
           dataTest={'consumer_button'}
