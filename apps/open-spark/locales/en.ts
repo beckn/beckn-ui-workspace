@@ -61,6 +61,7 @@ const en: { [key: string]: string } = {
   logout: 'Logout',
   upload: 'Upload',
   errorText: 'Something went wrong',
-  success: 'Success!'
+  success: 'Success!',
+  lockDemandSuccess: 'Demand Locked Successfully!'
 }
 export default en

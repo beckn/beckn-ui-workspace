@@ -17,7 +17,8 @@ const getHeaderTitleForPage = (
   name: string,
   pathName: string,
   locale: string | undefined,
-  headerConstants: SubHeaderConstants
+  headerConstants: SubHeaderConstants,
+  customPagename?: string
 ) => {
   const {
     headerNames: { defaultNames, frenchNames },
@@ -31,7 +32,7 @@ const getHeaderTitleForPage = (
           className={Styles.header_title_text}
           data-test={testIds.pageName}
         >
-          {values[pathName]}
+          {customPagename || values[pathName]}
         </Text>
       )
     default:
@@ -92,7 +93,13 @@ const SubHeader = (props: SubHeaderProps) => {
               </Box>
             )}
           </Box>
-          {getHeaderTitleForPage(storedHeaderText, router.pathname, locale, headerConstants)}
+          {getHeaderTitleForPage(
+            storedHeaderText,
+            router.pathname,
+            locale,
+            headerConstants,
+            (router.query?.pagename || '') as string
+          )}
           {showCartIcon && (
             <div className="flex gap-4">
               {!cartIconList?.includes(router.pathname) && (

@@ -4,7 +4,6 @@ import { useLanguage } from '@hooks/useLanguage'
 import { profileValidateForm } from '@beckn-ui/common/src/utils'
 import Cookies from 'js-cookie'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
-import { isEmpty } from '@beckn-ui/common/src/utils'
 import { useDispatch, useSelector } from 'react-redux'
 import { FormErrors, ProfileProps } from '@beckn-ui/common/lib/types'
 import axios from '@services/axios'
@@ -16,9 +15,10 @@ import logoutIcon from '@public/images/logOutIcon.svg'
 import NavigationItem from '@components/navigationItem'
 import { setProfileEditable, UserRootState } from '@store/user-slice'
 import { feedbackActions, logout } from '@beckn-ui/common'
-import { ROUTE_TYPE } from '@lib/config'
+import { ROLE, ROUTE_TYPE } from '@lib/config'
 import { AuthRootState } from '@store/auth-slice'
 import { useRouter } from 'next/router'
+import { InputProps } from '@beckn-ui/molecules'
 
 const ProfilePage = () => {
   const dispatch = useDispatch()
@@ -40,6 +40,8 @@ const ProfilePage = () => {
 
   const { profileEditable } = useSelector((state: UserRootState) => state.user)
   const { role } = useSelector((state: AuthRootState) => state.auth)
+
+  const isAdmin = useRef(role === ROLE.ADMIN)
 
   useEffect(() => {
     return () => {
@@ -142,6 +144,48 @@ const ProfilePage = () => {
     )
   }, [formData, formErrors])
 
+  const getInputs = () => {
+    const inputs: InputProps[] = [
+      {
+        type: 'text',
+        name: 'name',
+        value: formData.name,
+        handleChange: handleInputChange,
+        label: t.fullName,
+        error: formErrors.name,
+        dataTest: testIds.profile_inputName,
+        disabled: !profileEditable,
+        customInputBlurHandler: updateProfile
+      },
+      {
+        type: 'text',
+        name: 'customerId',
+        value: formData.customerId!,
+        handleChange: handleInputChange,
+        label: t.formCustomerId,
+        error: formErrors.customerId,
+        dataTest: testIds.profile_customerId,
+        disabled: true
+      },
+      {
+        type: 'text',
+        name: 'address',
+        value: formData.address!,
+        handleChange: handleInputChange,
+        label: t.formAddress,
+        error: formErrors.address,
+        dataTest: testIds.profile_address,
+        disabled: !profileEditable,
+        customInputBlurHandler: updateProfile
+      }
+    ]
+    if (isAdmin.current) {
+      inputs.splice(1, 1)
+    }
+
+    return inputs
+  }
+
   return (
     <Box
       margin={'0 auto'}
@@ -155,59 +199,30 @@ const ProfilePage = () => {
         dataTestForm={testIds.profile_form}
         schema={{
           buttons: [],
-          inputs: [
-            {
-              type: 'text',
-              name: 'name',
-              value: formData.name,
-              handleChange: handleInputChange,
-              label: t.fullName,
-              error: formErrors.name,
-              dataTest: testIds.profile_inputName,
-              disabled: !profileEditable,
-              customInputBlurHandler: updateProfile
-            },
-            {
-              type: 'text',
-              name: 'customerId',
-              value: formData.customerId!,
-              handleChange: handleInputChange,
-              label: t.formCustomerId,
-              error: formErrors.customerId,
-              dataTest: testIds.profile_customerId,
-              disabled: true
-            },
-            {
-              type: 'text',
-              name: 'address',
-              value: formData.address!,
-              handleChange: handleInputChange,
-              label: t.formAddress,
-              error: formErrors.address,
-              dataTest: testIds.profile_address,
-              disabled: !profileEditable,
-              customInputBlurHandler: updateProfile
-            }
-          ]
+          inputs: getInputs()
         }}
         isLoading={isLoading}
         customComponent={
           <Box marginTop={'-1.8rem'}>
-            <NavigationItem
-              icon={credIcon}
-              label={'My Credentials'}
-              handleClick={() => router.push('/myCredentials')}
-            />
-            <NavigationItem
-              icon={tradeIcon}
-              label={'My Trades'}
-              handleClick={() => router.push('/myTrades')}
-            />
-            <NavigationItem
-              icon={derIcon}
-              label={'My DERs'}
-              handleClick={() => router.push('/myDers')}
-            />
+            {!isAdmin.current && (
+              <>
+                <NavigationItem
+                  icon={credIcon}
+                  label={'My Credentials'}
+                  handleClick={() => router.push('/myCredentials')}
+                />
+                <NavigationItem
+                  icon={tradeIcon}
+                  label={'My Trades'}
+                  handleClick={() => router.push('/myTrades')}
+                />
+                <NavigationItem
+                  icon={derIcon}
+                  label={'My DERs'}
+                  handleClick={() => router.push('/myDers')}
+                />
+              </>
+            )}
             <NavigationItem
               icon={logoutIcon}
               label={t.logout}

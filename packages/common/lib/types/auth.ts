@@ -13,6 +13,11 @@ export interface User {
     first_name: string
     last_name: string
   }
+  role?: {
+    id: number
+    name: string
+    type: string
+  }
 }
 
 // Sign-In related models
