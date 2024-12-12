@@ -204,7 +204,7 @@ const Product = () => {
             handleClick={handleOnProceed}
           />
         </Box>
-        ** Contains non-personal data only dataTest={testIds.disclaimer_text}
+        ** Contains non-personal data only
       </Flex>
     </Box>
   )
