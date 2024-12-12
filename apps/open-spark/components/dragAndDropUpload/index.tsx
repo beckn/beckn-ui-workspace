@@ -46,6 +46,8 @@ const DragAndDropUpload = (props: DragAndDropUploadProps) => {
     if (e.target.files) {
       const uploadedFiles = Array.from(e.target.files)
       setFiles(uploadedFiles)
+
+      e.target.value = ''
     }
   }
 

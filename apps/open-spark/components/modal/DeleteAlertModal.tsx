@@ -3,14 +3,14 @@ import { Typography } from '@beckn-ui/molecules'
 import BecknButton from '@beckn-ui/molecules/src/components/button'
 import { Box, Flex } from '@chakra-ui/react'
 import React from 'react'
-interface DeleteDErModalProps {
+interface DeleteAlertModalProps {
   isOpen: boolean
   onClose: () => void
   handleConfirmDeleteDevice: () => void
   isLoading?: boolean
 }
 
-const DeleteDErModal = (props: DeleteDErModalProps) => {
+const DeleteAlertModal = (props: DeleteAlertModalProps) => {
   const { isOpen, onClose, handleConfirmDeleteDevice, isLoading } = props
   return (
     <Box>
@@ -55,4 +55,4 @@ const DeleteDErModal = (props: DeleteDErModalProps) => {
   )
 }
 
-export default DeleteDErModal
+export default DeleteAlertModal

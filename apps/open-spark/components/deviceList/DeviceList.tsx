@@ -4,7 +4,7 @@ import { BiPlusCircle } from 'react-icons/bi'
 import { CiCircleMinus } from 'react-icons/ci'
 import { Typography } from '@beckn-ui/molecules'
 import AddNewDerModal from './AddNewDerModal'
-import DeleteDErModal from './DeleteDErModal'
+import DeleteAlertModal from '../modal/DeleteAlertModal'
 import axios from 'axios'
 import { ROLE, ROUTE_TYPE } from '@lib/config'
 import { useSelector } from 'react-redux'
@@ -19,7 +19,7 @@ interface Device {
 
 interface DeviceListProps {
   initialDevices: Device[]
-  initialNearbyDevices: Device[]
+  initialNearbyDevices?: Device[]
   onDeviceChange: (devices: Device[]) => void
   fetchPairedData: () => void
 }
@@ -57,8 +57,8 @@ export default function DeviceList({ initialDevices, onDeviceChange, fetchPaired
         fetchPairedData()
         setIsModalOpen(false)
       }
-    } catch (error) {
-      console.error('Error adding device:', error.message)
+    } catch (error: any) {
+      console.error('Error adding device:', error?.message)
     } finally {
       setIsLoading(false)
       handleModalClose()
@@ -174,7 +174,7 @@ export default function DeviceList({ initialDevices, onDeviceChange, fetchPaired
         onSubmit={handleAddDevice}
         isLoading={isLoading}
       />
-      <DeleteDErModal
+      <DeleteAlertModal
         isOpen={isDeleteModalOpen}
         onClose={handleDeleteModalClose}
         handleConfirmDeleteDevice={handleConfirmDeleteDevice}
