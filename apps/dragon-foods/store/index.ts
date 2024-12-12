@@ -17,7 +17,7 @@ import cartSliceReducer from './cart-slice'
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['auth', 'cart', 'discovery', 'checkout', 'orders', 'status']
+  whitelist: ['cart', 'discovery', 'checkout', 'orders', 'status']
 }
 
 const appReducer = combineReducers({
