@@ -40,6 +40,7 @@ export interface CartProps {
     emptyCard?: EmptyCardProps
     actionButton?: {
       text: string
+      dataTest?: string
       handleOnClick: MouseEventHandler<HTMLButtonElement>
     }
   }
