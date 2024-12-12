@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { BecknAuth } from '@beckn-ui/becknified-components'
-import { Box, useBreakpoint } from '@chakra-ui/react'
+import { Box } from '@chakra-ui/react'
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import Router from 'next/router'
 import { FormErrors, SignInResponse, SignUpFormProps } from '@beckn-ui/common/lib/types'
@@ -24,23 +24,23 @@ const SignUp = () => {
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
 
   const [formData, setFormData] = useState<RegisterFormProps>({
+    name: '',
     email: '',
     password: '',
     address: '',
     mobileNumber: '',
-    name: '',
     utilityCompany: ''
   })
   const [formErrors, setFormErrors] = useState<CustomFormErrorProps>({
     name: '',
     email: '',
     password: '',
+    address: '',
     mobileNumber: '',
     utilityCompany: ''
   })
   const [utilities, setUtilities] = useState<any[]>([])
 
-  const breakpoint = useBreakpoint()
   const { role } = useSelector((state: AuthRootState) => state.auth)
   const [bapTradeRegister, { isLoading: bapLoading }] = useBapTradeRegisterMutation()
   const [bppTradeRegister, { isLoading: bppLoading }] = useBppTradeRegisterMutation()
@@ -65,7 +65,8 @@ const SignUp = () => {
     setUtilities([
       { value: 'Maharashtra State Power Corp. Ltd', label: 'Maharashtra State Power Corp. Ltd' },
       { value: 'Reliance Power', label: 'Reliance Power' },
-      { value: 'MSEB', label: 'MSEB' }
+      { value: 'MSEB', label: 'MSEB' },
+      { value: 'Gujarat Electricity Corp. Ltd', label: 'Gujarat Electricity Corp. Ltd' }
     ])
   }, [])
 
@@ -117,11 +118,12 @@ const SignUp = () => {
     const errors = signUpValidateForm(formData)
     const isFormValid = Object.values(errors).every(error => error === '')
     const signUpData = {
-      username: formData.email,
+      fullname: formData.name,
       email: formData.email,
+      address: formData.address,
       password: formData.password,
-      mobile: formData.mobileNumber,
-      utilityCompany: formData.utilityCompany
+      phone_no: formData.mobileNumber,
+      utility_name: formData.utilityCompany
     }
 
     if (isFormValid) {
@@ -133,28 +135,7 @@ const SignUp = () => {
         if (!registerResponse || (registerResponse as { error: FetchBaseQueryError })?.error)
           throw new Error('Could not register')
 
-        const myHeaders = new Headers()
-        myHeaders.append('Authorization', `Bearer ${(registerResponse as { data: SignInResponse }).data.jwt}`)
-
-        const currentFormData = new FormData()
-        const data = {
-          name: formData.name,
-          phone: formData.mobileNumber
-        }
-
-        currentFormData.append('data', JSON.stringify(data))
-
-        const requestOptions: RequestInit = {
-          method: 'POST',
-          headers: myHeaders,
-          redirect: 'follow',
-          body: currentFormData
-        }
-
-        fetch(`${baseUrl}/profiles`, requestOptions).then(response => {
-          Router.push('/')
-          return response.json()
-        })
+        Router.push('/')
       } catch (error) {
         console.error('An error occurred:', error)
       }

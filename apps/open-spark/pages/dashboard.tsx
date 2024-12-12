@@ -131,8 +131,36 @@ const Dashboard = () => {
       console.error('Error fetching last trade data:', error)
     }
   }
+
+  const fetchMyPreference = async () => {
+    try {
+      const response = await axios.get(`${strapiUrl}/trade-pref`, {
+        headers: { Authorization: `Bearer ${bearerToken}` },
+        withCredentials: true
+      })
+
+      const result = response.data
+      setCurrentTradeData([
+        {
+          id: result.prefId,
+          quantity: result.quantity,
+          price: result.price
+        }
+      ])
+
+      const tags = [result.trusted_source && 'Trusted Source', result.cred_required && 'Solar Energy'].filter(Boolean)
+      setPreferencesTags(tags)
+    } catch (error) {
+      console.error('Error fetching preference data:', error)
+    }
+  }
+
   useEffect(() => {
-    fetchLastTradeData()
+    if (role === ROLE.CONSUMER) {
+      fetchLastTradeData()
+    } else if (role === ROLE.PRODUCER) {
+      fetchMyPreference()
+    }
   }, [])
 
   const StatusLabel = () => {

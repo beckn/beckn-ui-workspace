@@ -109,10 +109,7 @@ const MyTrades = () => {
       overflowY="scroll"
       pb={'20px'}
     >
-      <Flex
-        gap="1rem"
-        flexDirection={'column'}
-      >
+      <Flex flexDirection={'column'}>
         {tradeList.map((trade, index) => {
           return (
             <Card
@@ -122,7 +119,7 @@ const MyTrades = () => {
                 return (
                   <Flex
                     flexDirection={'column'}
-                    gap="2px"
+                    gap="4px"
                   >
                     <Typography
                       text={`${trade.quantity} Units`}

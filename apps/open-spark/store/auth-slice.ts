@@ -92,7 +92,36 @@ const slice = createSlice({
       })
       .addMatcher(extendedAuthApi.endpoints.bppTradeLogin.matchRejected, (state, action) => {
         console.log('rejected', action)
-      })
+      }),
+      builder
+        .addMatcher(extendedAuthApi.endpoints.bapTradeRegister.matchPending, (state, action) => {
+          console.log('pending', action)
+        })
+        .addMatcher(extendedAuthApi.endpoints.bapTradeRegister.matchFulfilled, (state, action) => {
+          console.log('fulfilled', action)
+          state.user = action.payload.user
+          state.jwt = action.payload.jwt
+          Cookies.set('authToken', state.jwt)
+          state.isAuthenticated = true
+          Router.push('/')
+        })
+        .addMatcher(extendedAuthApi.endpoints.bapTradeRegister.matchRejected, (state, action) => {
+          console.log('rejected', action)
+        })
+        .addMatcher(extendedAuthApi.endpoints.bppTradeRegister.matchPending, (state, action) => {
+          console.log('pending', action)
+        })
+        .addMatcher(extendedAuthApi.endpoints.bppTradeRegister.matchFulfilled, (state, action) => {
+          console.log('fulfilled', action)
+          state.user = action.payload.user
+          state.jwt = action.payload.jwt
+          Cookies.set('authToken', state.jwt)
+          state.isAuthenticated = true
+          Router.push('/')
+        })
+        .addMatcher(extendedAuthApi.endpoints.bppTradeRegister.matchRejected, (state, action) => {
+          console.log('rejected', action)
+        })
   }
 })
 
