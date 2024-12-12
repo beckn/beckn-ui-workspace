@@ -3,7 +3,6 @@ import { Box, CardBody, Flex, Icon, Image, Stack, Card, useTheme, Text } from '@
 import { Typography } from '@beckn-ui/molecules'
 import { StarIcon, TimeIcon } from '@chakra-ui/icons'
 import { CurrencyType, ProductPrice } from '@beckn-ui/becknified-components'
-import { testIds } from '@shared/dataTestIds'
 
 type FrequentlyAccessedProps = {
   frequentlyAccessedData: Array<{
@@ -34,7 +33,6 @@ const FrequentlyAccessed: React.FC<FrequentlyAccessedProps> = ({ frequentlyAcces
         fontSize="17px"
         fontWeight="400"
         text="Frequently Accessed"
-        data-test={testIds.Frequently_accessed_text}
         sx={{ mb: '20px' }}
       />
 
@@ -47,7 +45,6 @@ const FrequentlyAccessed: React.FC<FrequentlyAccessedProps> = ({ frequentlyAcces
         >
           {frequentlyAccessedData.map((item, index) => (
             <Card
-              data-test={testIds.Frequently_accessed_item}
               key={index}
               mb={'20px'}
               boxShadow={'0px 8px 10px -6px rgba(0, 0, 0, 0.1), 0px 20px 25px -5px rgba(0, 0, 0, 0.1)'}

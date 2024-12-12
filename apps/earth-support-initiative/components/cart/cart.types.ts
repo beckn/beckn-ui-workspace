@@ -39,7 +39,6 @@ export interface CartProps {
     loader: LoaderProps
     emptyCard?: EmptyCardProps
     actionButton?: {
-      dataTest?: string
       text: string
       handleOnClick: MouseEventHandler<HTMLButtonElement>
     }

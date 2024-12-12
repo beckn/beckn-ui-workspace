@@ -7,7 +7,6 @@ import { CartProps } from './cart.types'
 import CartList from './cart-list'
 import Styles from './cart.module.css'
 import { Loader, Typography, Button as BecknButton, Button } from '@beckn-ui/molecules'
-import { testIds } from '@shared/dataTestIds'
 
 const Cart: React.FC<CartProps> = ({
   schema: { loader, cartItems, actionButton, emptyCard }, // Destructure props
@@ -82,7 +81,6 @@ const Cart: React.FC<CartProps> = ({
               <Typography
                 variant="subTitleRegular"
                 text="Request Overview"
-                dataTest={testIds.request_overview}
                 sx={{ paddingTop: '20px' }}
               />
               <CartList cartItems={cartItems} />
