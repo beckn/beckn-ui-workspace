@@ -131,8 +131,36 @@ const Dashboard = () => {
       console.error('Error fetching last trade data:', error)
     }
   }
+
+  const fetchMyPreference = async () => {
+    try {
+      const response = await axios.get(`${strapiUrl}/trade-pref`, {
+        headers: { Authorization: `Bearer ${bearerToken}` },
+        withCredentials: true
+      })
+
+      const result = response.data
+      setCurrentTradeData([
+        {
+          id: result.prefId,
+          quantity: result.quantity,
+          price: result.price
+        }
+      ])
+
+      const tags = [result.trusted_source && 'Trusted Source', result.cred_required && 'Solar Energy'].filter(Boolean)
+      setPreferencesTags(tags)
+    } catch (error) {
+      console.error('Error fetching preference data:', error)
+    }
+  }
+
   useEffect(() => {
-    fetchLastTradeData()
+    if (role === ROLE.CONSUMER) {
+      fetchLastTradeData()
+    } else if (role === ROLE.PRODUCER) {
+      fetchMyPreference()
+    }
   }, [])
 
   const StatusLabel = () => {
@@ -191,155 +219,164 @@ const Dashboard = () => {
         maxWidth={{ base: '100vw', md: '30rem', lg: '40rem' }}
         margin="calc(0rem + 68px) auto auto auto"
         backgroundColor="white"
+        height={'calc(100vh - 100px)'}
       >
-        <Typography
-          text={`Total Energy ${totalEnergyText}`}
-          fontSize="15px"
-          fontWeight="600"
-          sx={{
-            marginBottom: '10px',
-            paddingTop: '30px'
-          }}
-        />
         <Flex
-          columnGap={'20px'}
-          justifyContent="space-between"
-          alignItems="center"
+          flexDirection={'column'}
+          justifyContent={'space-between'}
         >
-          <Input
-            name="energy"
-            value={String(+totalEnergyUnits.toFixed(2))}
-            type={'text'}
-            handleChange={() => {
-              console.log('Energy units changed')
-            }}
-            label={'Energy Units'}
-            disabled={true}
-          />
-          <CustomeDateInput
-            startDate={startDate}
-            endDate={endDate}
-            onCalendarClick={handleModalOpen}
-          />
-        </Flex>
-        <Box>
-          <TotalEnergyUnits dashboardTotalEnergyUnitsData={dashboardTotalEnergyUnitsData} />
-        </Box>
-        <Box>
-          <Flex
-            justifyContent={'space-between'}
-            alignItems={'center'}
-            mb={'15px'}
-          >
-            <HStack>
-              <Typography
-                text="Current Trade"
-                fontSize="15"
-                fontWeight="600"
-              />
-              <QuestionOutlineIcon />
-            </HStack>
-            {currentTradeData.length < 0 ? (
-              <></>
-            ) : (
-              <LiaPenSolid
-                onClick={() => router.push(role === ROLE.PRODUCER ? '/sellingPreference' : '/buyingPreference')}
-              />
-            )}
-          </Flex>
-          {currentTradeData.length < 0 ? (
-            <EmptyCurrentTrade />
-          ) : (
-            <CurrentTrade
-              data={[
-                {
-                  name: 'energyToBuy',
-                  label: 'Energy to Buy',
-                  value: (currentTradeData[0]?.quantity ?? 0).toString(),
-                  symbol: '(KWh)',
-                  disabled: true
-                },
-                {
-                  name: 'priceFixed',
-                  label: 'Price Fixed',
-                  value: (currentTradeData[0]?.price ?? 0).toString(),
-                  symbol: '₹/units',
-                  disabled: true
-                }
-              ]}
+          <Box>
+            <Typography
+              text={`Total Energy ${totalEnergyText}`}
+              fontSize="15px"
+              fontWeight="600"
+              sx={{
+                marginBottom: '10px',
+                paddingTop: '30px'
+              }}
             />
-          )}
-        </Box>
-        <Box>
-          <Typography
-            text="Preferences"
-            fontSize="14px"
-            fontWeight="600"
-            sx={{ marginBottom: '10px' }}
-          />
-          <Flex
-            gap={'10px'}
-            flexWrap={'wrap'}
-          >
-            {preferencesTags.map((tag, index) => (
-              <Tag
-                key={index}
-                borderRadius="md"
-                variant="outline"
-                colorScheme="gray"
-                padding={'4px 8px'}
-              >
-                <TagLabel>{tag}</TagLabel>
-                {/* <TagCloseButton onClick={() => handleRemoveTag(tag)} /> */}
-              </Tag>
-            ))}
-          </Flex>
-        </Box>
-        {role !== ROLE.PRODUCER && (
-          <Box mt={'10px'}>
-            <DetailCard>
+            <Flex
+              columnGap={'20px'}
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              <Input
+                name="energy"
+                value={String(+totalEnergyUnits.toFixed(2))}
+                type={'text'}
+                handleChange={() => {
+                  console.log('Energy units changed')
+                }}
+                label={'Energy Units'}
+                disabled={true}
+              />
+              <CustomeDateInput
+                startDate={startDate}
+                endDate={endDate}
+                onCalendarClick={handleModalOpen}
+              />
+            </Flex>
+            <Box>
+              <TotalEnergyUnits dashboardTotalEnergyUnitsData={dashboardTotalEnergyUnitsData} />
+            </Box>
+            <Box>
               <Flex
                 justifyContent={'space-between'}
                 alignItems={'center'}
-                mb={'20px'}
+                mb={'15px'}
               >
+                <HStack>
+                  <Typography
+                    text="Current Trade"
+                    fontSize="15"
+                    fontWeight="600"
+                  />
+                  <QuestionOutlineIcon />
+                </HStack>
+                {currentTradeData.length < 0 ? (
+                  <></>
+                ) : (
+                  <LiaPenSolid
+                    onClick={() => router.push(role === ROLE.PRODUCER ? '/sellingPreference' : '/buyingPreference')}
+                  />
+                )}
+              </Flex>
+              {currentTradeData.length < 0 ? (
+                <EmptyCurrentTrade />
+              ) : (
+                <CurrentTrade
+                  data={[
+                    {
+                      name: 'energyToBuy',
+                      label: 'Energy to Buy',
+                      value: (currentTradeData[0]?.quantity ?? 0).toString(),
+                      symbol: '(KWh)',
+                      disabled: true
+                    },
+                    {
+                      name: 'priceFixed',
+                      label: 'Price Fixed',
+                      value: (currentTradeData[0]?.price ?? 0).toString(),
+                      symbol: '₹/units',
+                      disabled: true
+                    }
+                  ]}
+                />
+              )}
+            </Box>
+            {preferencesTags.length > 0 && (
+              <Box>
                 <Typography
-                  text="Current Status"
+                  text="Preferences"
                   fontSize="14px"
                   fontWeight="600"
+                  sx={{ marginBottom: '10px' }}
                 />
-                <Typography
-                  text={latestStatus?.status === 'RECEIVED' ? 'Pending' : 'Completed'}
-                  fontSize="12px"
-                  fontWeight="600"
-                  color={latestStatus?.status === 'RECEIVED' ? '#BD942B' : '#5EC401'}
-                />
-              </Flex>
-              <Divider />
-              <Box mt={'10px'}>
-                {currentStatusData.length > 0 ? (
-                  currentStatusData.map((data, index) => (
-                    <OrderStatusProgress
+                <Flex
+                  gap={'10px'}
+                  flexWrap={'wrap'}
+                >
+                  {preferencesTags.map((tag, index) => (
+                    <Tag
                       key={index}
-                      label={data.label}
-                      statusTime={data.statusTime!}
-                      noLine={data.noLine}
-                      lastElement={data.lastElement}
-                    />
-                  ))
-                ) : (
-                  <Text>No status updates available</Text>
-                )}
+                      borderRadius="md"
+                      variant="outline"
+                      colorScheme="gray"
+                      padding={'4px 8px'}
+                    >
+                      <TagLabel>{tag}</TagLabel>
+                      {/* <TagCloseButton onClick={() => handleRemoveTag(tag)} /> */}
+                    </Tag>
+                  ))}
+                </Flex>
               </Box>
-            </DetailCard>
+            )}
+            {role !== ROLE.PRODUCER && (
+              <Box mt={'10px'}>
+                <DetailCard>
+                  <Flex
+                    justifyContent={'space-between'}
+                    alignItems={'center'}
+                    mb={'20px'}
+                  >
+                    <Typography
+                      text="Current Status"
+                      fontSize="14px"
+                      fontWeight="600"
+                    />
+                    <Typography
+                      text={latestStatus?.status === 'RECEIVED' ? 'Pending' : 'Completed'}
+                      fontSize="12px"
+                      fontWeight="600"
+                      color={latestStatus?.status === 'RECEIVED' ? '#BD942B' : '#5EC401'}
+                    />
+                  </Flex>
+                  <Divider />
+                  <Box mt={'10px'}>
+                    {currentStatusData.length > 0 ? (
+                      currentStatusData.map((data, index) => (
+                        <OrderStatusProgress
+                          key={index}
+                          label={data.label}
+                          statusTime={data.statusTime!}
+                          noLine={data.noLine}
+                          lastElement={data.lastElement}
+                        />
+                      ))
+                    ) : (
+                      <Text>No status updates available</Text>
+                    )}
+                  </Box>
+                </DetailCard>
+              </Box>
+            )}
           </Box>
-        )}
-
-        <BecknButton
-          children={role === ROLE.CONSUMER ? 'Buy' : 'Sell'}
-          handleClick={() => router.push(role === ROLE.PRODUCER ? '/sellingPreference' : '/buyingPreference')}
-          sx={{ marginTop: '30px' }}
-        />
+          <BecknButton
+            children={role === ROLE.CONSUMER ? 'Buy' : 'Sell'}
+            handleClick={() => router.push(role === ROLE.PRODUCER ? '/sellingPreference' : '/buyingPreference')}
+            sx={{ marginTop: '30px' }}
+          />
+        </Flex>
       </Box>
       <SelectDate
         isOpen={isModalOpen}

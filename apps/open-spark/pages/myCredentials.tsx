@@ -14,6 +14,7 @@ import Cookies from 'js-cookie'
 import DragAndDropUpload from '@components/dragAndDropUpload'
 import { FiPlusCircle } from 'react-icons/fi'
 import RenderDocuments from '@components/documentsRenderer'
+import DeleteAlertModal from '@components/modal/DeleteAlertModal'
 
 interface DocumentProps {
   id?: string
@@ -29,6 +30,7 @@ const MyCredentials = () => {
   const [selectedFile, setSelectedFile] = useState<DocumentProps[]>([])
   const [allFilesProcessed, setAllFilesProcessed] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [openDeleteModal, setOpenDeleteModal] = useState<{ isOpen: boolean; handleOperation?: () => void }>()
 
   const dispatch = useDispatch()
   const { t } = useLanguage()
@@ -68,6 +70,7 @@ const MyCredentials = () => {
   }, [])
 
   const handleFileChange = (files: File[]) => {
+    console.log(files)
     if (files.length > 0) {
       const docs = files.map(file => {
         console.log('Selected file:', file)
@@ -94,6 +97,7 @@ const MyCredentials = () => {
             toastData: { message: t.success, display: true, type: 'success', description: 'Deleted successfully' }
           })
         )
+        setOpenDeleteModal({ isOpen: false })
       })
       .catch(error => {
         console.error('Error deleting:', error)
@@ -102,8 +106,7 @@ const MyCredentials = () => {
 
   const handleOnDelete = (index: number, document: DocumentProps, type: 'cred' | 'upload') => {
     if (type === 'cred') {
-      // setCredFiles(prevState => prevState!.filter((_, i) => i !== index))
-      deleteCredById(document)
+      setOpenDeleteModal({ isOpen: true, handleOperation: () => deleteCredById(document) })
     }
     if (type === 'upload') {
       setSelectedFile(prevState => prevState!.filter((_, i) => i !== index))
@@ -228,6 +231,11 @@ const MyCredentials = () => {
           isLoading={isLoading}
         />
       </Flex>
+      <DeleteAlertModal
+        isOpen={openDeleteModal?.isOpen!}
+        onClose={() => setOpenDeleteModal({ isOpen: false })}
+        handleConfirmDeleteDevice={() => openDeleteModal?.handleOperation?.()}
+      />
     </Box>
   )
 }

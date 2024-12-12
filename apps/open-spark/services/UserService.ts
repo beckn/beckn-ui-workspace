@@ -6,8 +6,13 @@ export interface SignInRequest {
   password: string
 }
 
-export interface RegisterRequest extends SignUpRequest {
-  utilityCompany: string
+export interface RegisterRequest {
+  fullname: string
+  email: string
+  address: string
+  phone_no: string
+  password: string
+  utility_name: string
 }
 
 const extendedAuthApi = Api.injectEndpoints({

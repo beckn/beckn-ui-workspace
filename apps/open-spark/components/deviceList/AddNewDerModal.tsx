@@ -17,9 +17,9 @@ interface Proofs {
 interface AddNewDerModalProps {
   isOpen: boolean
   onClose: () => void
-  proofs: Proofs[]
-  handleDelete: (id: number) => void
-  handleFileUpload: (event: any) => void
+  proofs?: Proofs[]
+  handleDelete?: (id: number) => void
+  handleFileUpload?: (event: any) => void
   onSubmit: (category: string, uploadedFiles: File[]) => Promise<void>
   isLoading?: boolean
 }

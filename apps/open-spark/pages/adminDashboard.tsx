@@ -123,7 +123,7 @@ const LockDemand = () => {
         maxWidth={{ base: '100vw', md: '30rem', lg: '40rem' }}
         margin="calc(0rem + 68px) auto auto auto"
         backgroundColor="white"
-        height={'calc(100vh - 92px'}
+        height={'calc(100vh - 92px)'}
       >
         <Flex
           flexDirection={'column'}
