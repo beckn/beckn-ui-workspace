@@ -45,9 +45,15 @@ const TradeDetails = () => {
       .get(`${strapiUrl}${ROUTE_TYPE[role!]}/trade?id=${id}`, requestOptions)
       .then(response => {
         const result = response.data
-        console.log(result)
+        const tags: string[] = []
+        if (result.trusted_source) {
+          tags.push('Trusted Source')
+        }
+        if (result.cred_required) {
+          tags.push('Solar Energy')
+        }
         setTradeDetails({
-          orderId: result.id,
+          orderId: result.orderId,
           name: result.item_name,
           price: result.price || 0,
           quantity: result.quantity,
@@ -55,7 +61,7 @@ const TradeDetails = () => {
           status: result.status,
           tradeId: result.id,
           tradeEvents: result.trade_events,
-          preferencesTags: ['Solar', 'Biomass', 'Wind Power']
+          preferencesTags: tags
         })
       })
       .catch(error => {
@@ -104,56 +110,62 @@ const TradeDetails = () => {
             }
           ]}
         />
-        <Box mt={'-2rem'}>
-          <Typography
-            text="Preferences"
-            fontSize="15"
-            fontWeight="600"
-            sx={{ marginBottom: '10px' }}
-          />
-          <Flex
-            gap={'10px'}
-            flexWrap={'wrap'}
-          >
-            {tradeDetails?.preferencesTags?.map((tag, index) => (
-              <Tag
-                key={index}
-                borderRadius="md"
-                variant="outline"
-                colorScheme="gray"
-                padding={'8px'}
-              >
-                <TagLabel>{tag}</TagLabel>
-              </Tag>
-            ))}
-          </Flex>
-        </Box>
+        {tradeDetails?.preferencesTags && tradeDetails?.preferencesTags?.length > 0 && (
+          <Box mt={'-2rem'}>
+            <Typography
+              text="Preferences"
+              fontSize="15"
+              fontWeight="600"
+              sx={{ marginBottom: '10px' }}
+            />
+            <Flex
+              gap={'10px'}
+              flexWrap={'wrap'}
+            >
+              {tradeDetails?.preferencesTags?.map((tag, index) => (
+                <Tag
+                  key={index}
+                  borderRadius="md"
+                  variant="outline"
+                  colorScheme="gray"
+                  padding={'8px'}
+                >
+                  <TagLabel>{tag}</TagLabel>
+                </Tag>
+              ))}
+            </Flex>
+          </Box>
+        )}
         <Flex
           flexDirection={'row'}
           justifyContent={'space-between'}
         >
-          <Flex gap="5px">
-            <Typography
-              text={`Order ID:`}
-              fontSize="15"
-              fontWeight="600"
-            />
-            <Typography
-              text={`${tradeDetails?.orderId}`}
-              fontSize="15"
-            />
-          </Flex>
-          <Flex gap="5px">
-            <Typography
-              text={`Trade ID:`}
-              fontSize="15"
-              fontWeight="600"
-            />
-            <Typography
-              text={`${tradeDetails?.tradeId}`}
-              fontSize="15"
-            />
-          </Flex>
+          {tradeDetails?.orderId && (
+            <Flex gap="5px">
+              <Typography
+                text={`Order ID:`}
+                fontSize="15"
+                fontWeight="600"
+              />
+              <Typography
+                text={`${tradeDetails?.orderId}`}
+                fontSize="15"
+              />
+            </Flex>
+          )}
+          {tradeDetails?.tradeId && (
+            <Flex gap="5px">
+              <Typography
+                text={`Trade ID:`}
+                fontSize="15"
+                fontWeight="600"
+              />
+              <Typography
+                text={`${tradeDetails?.tradeId}`}
+                fontSize="15"
+              />
+            </Flex>
+          )}
         </Flex>
       </Flex>
       <Box marginTop={'1rem'}>

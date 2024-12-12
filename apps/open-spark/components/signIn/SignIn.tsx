@@ -54,9 +54,23 @@ const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
     }
 
     try {
-      if (role === ROLE.CONSUMER) await bapTradeLogin(signInData).unwrap()
-      if (role === ROLE.PRODUCER) await bppTradeLogin(signInData).unwrap()
-      Router.push('/')
+      let roleType: ROLE | null = null
+      if (role === ROLE.CONSUMER) {
+        const res = await bapTradeLogin(signInData).unwrap()
+        if (res.user.role?.type.toUpperCase() === ROLE.CONSUMER) {
+          roleType = ROLE.CONSUMER
+        } else if (res.user.role?.type.toUpperCase() === ROLE.ADMIN) {
+          roleType = ROLE.ADMIN
+        }
+      }
+      if (role === ROLE.PRODUCER) {
+        await bppTradeLogin(signInData).unwrap()
+        roleType = ROLE.PRODUCER
+      }
+      if (roleType) {
+        dispatch(setRole({ role: roleType! }))
+        Router.push('/')
+      }
     } catch (error) {
       console.error('An error occurred:', error)
     }
