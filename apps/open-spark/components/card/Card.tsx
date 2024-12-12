@@ -13,6 +13,7 @@ const CardWithCheckBox: React.FC<CardBoxPropsModel> = props => {
     <Card
       className="border_radius_all"
       onClick={handleOnclick}
+      boxShadow={'0px 20px 25px 0px rgba(0, 0, 0, 0.1)'}
     >
       <CardBody
         padding={'20px 10px'}

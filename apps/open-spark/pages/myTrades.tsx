@@ -107,14 +107,16 @@ const MyTrades = () => {
       className="hideScroll"
       maxH={'calc(100vh - 80px)'}
       overflowY="scroll"
+      pb={'20px'}
     >
       <Flex
         gap="1rem"
         flexDirection={'column'}
       >
-        {tradeList.map(trade => {
+        {tradeList.map((trade, index) => {
           return (
             <Card
+              key={index}
               handleOnclick={() => handleOnCardClick(trade)}
               childComponent={() => {
                 return (
