@@ -105,6 +105,7 @@ const Product = () => {
         borderRadius="12px"
         p="16px"
         mb="20px"
+        minH={'140px'}
       >
         <Typography
           text={`About ${selectedProduct.providerName}`}
