@@ -134,7 +134,7 @@ const Dashboard = () => {
 
   const fetchMyPreference = async () => {
     try {
-      const response = await axios.get(`${strapiUrl}/trade-pref`, {
+      const response = await axios.get(`${strapiUrl}${ROUTE_TYPE[role!]}/trade-pref`, {
         headers: { Authorization: `Bearer ${bearerToken}` },
         withCredentials: true
       })
