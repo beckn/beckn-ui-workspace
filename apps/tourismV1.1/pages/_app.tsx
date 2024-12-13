@@ -11,14 +11,9 @@ import 'react-toastify/dist/ReactToastify.css'
 import '../styles/globals.css'
 import { Provider } from 'react-redux'
 import store, { persistor } from '@store/index'
-import { Garuda } from 'garudaa'
 import { PersistGate } from 'redux-persist/integration/react'
 import Layout from '@components/layout/Layout'
 
-Garuda.init({
-  projectId: '65c0d663cbe90cafae9185f6',
-  host: 'https://garuda-api.becknprotocol.io'
-})
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <BecknProvider

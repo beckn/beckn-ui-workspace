@@ -224,6 +224,7 @@ const Dashboard = () => {
         <Flex
           flexDirection={'column'}
           justifyContent={'space-between'}
+          height={'100%'}
         >
           <Box>
             <Typography
