@@ -11,7 +11,7 @@ import {
   VStack
 } from '@chakra-ui/react'
 import { QuestionOutlineIcon } from '@chakra-ui/icons'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FaMinus, FaPlus } from 'react-icons/fa6'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import axios from 'axios'
@@ -49,9 +49,20 @@ export default function EnergyPurchaseForm({ preferenceType }: EnergyPurchaseFor
   const bearerToken = Cookies.get('authToken') || ''
   const router = useRouter()
 
-  const [energyUnits, setEnergyUnits] = useState(0)
-  const [pricePerUnit, setPricePerUnit] = useState(0)
+  const [tradeId, setTradeId] = useState<string>()
+  const [energyUnits, setEnergyUnits] = useState<number>(0)
+  const [pricePerUnit, setPricePerUnit] = useState<number>(0)
   const [preferences, setPreferences] = useState({ solar: false, trustedSource: false })
+
+  useEffect(() => {
+    const { tradeId, quantity, price, preferencesTags } = router.query
+    if (tradeId && quantity && price) {
+      setTradeId(tradeId as string)
+      setEnergyUnits(Number(quantity))
+      setPricePerUnit(Number(price))
+      setPreferences(JSON.parse(preferencesTags as any))
+    }
+  }, [])
 
   const handleInputChange = (setter: React.Dispatch<React.SetStateAction<number>>, value: number) =>
     setter(Math.max(0, value))

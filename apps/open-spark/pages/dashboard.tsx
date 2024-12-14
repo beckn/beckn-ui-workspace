@@ -268,23 +268,38 @@ const Dashboard = () => {
               >
                 <HStack>
                   <Typography
-                    text="Current Trade"
+                    text={role === ROLE.PRODUCER ? 'My Preferences' : 'Current Trade'}
                     fontSize="15"
                     fontWeight="600"
                   />
                   <QuestionOutlineIcon />
                 </HStack>
-                {currentTradeData.length < 0 ? (
+                {currentTradeData.length === 0 ? (
                   <></>
                 ) : (
                   <LiaPenSolid
-                    onClick={() => router.push(role === ROLE.PRODUCER ? '/sellingPreference' : '/buyingPreference')}
+                    onClick={() =>
+                      router.push({
+                        pathname: role === ROLE.PRODUCER ? '/sellingPreference' : '/buyingPreference',
+                        query: {
+                          tradeId: currentTradeData[0]?.id,
+                          quantity: currentTradeData[0].quantity,
+                          price: currentTradeData[0].price,
+                          preferencesTags: JSON.stringify({
+                            solar: preferencesTags.includes('Solar Energy'),
+                            trustedSource: preferencesTags.includes('Trusted Source')
+                          })
+                        }
+                      })
+                    }
                   />
                 )}
               </Flex>
-              {currentTradeData.length < 0 ? (
-                <EmptyCurrentTrade />
-              ) : (
+            </Box>
+            {currentTradeData.length === 0 ? (
+              <EmptyCurrentTrade />
+            ) : (
+              <>
                 <CurrentTrade
                   data={[
                     {
@@ -303,73 +318,76 @@ const Dashboard = () => {
                     }
                   ]}
                 />
-              )}
-            </Box>
-            {preferencesTags.length > 0 && (
-              <Box>
-                <Typography
-                  text="Preferences"
-                  fontSize="14px"
-                  fontWeight="600"
-                  sx={{ marginBottom: '10px' }}
-                />
-                <Flex
-                  gap={'10px'}
-                  flexWrap={'wrap'}
-                >
-                  {preferencesTags.map((tag, index) => (
-                    <Tag
-                      key={index}
-                      borderRadius="md"
-                      variant="outline"
-                      colorScheme="gray"
-                      padding={'4px 8px'}
-                    >
-                      <TagLabel>{tag}</TagLabel>
-                      {/* <TagCloseButton onClick={() => handleRemoveTag(tag)} /> */}
-                    </Tag>
-                  ))}
-                </Flex>
-              </Box>
-            )}
-            {role !== ROLE.PRODUCER && (
-              <Box mt={'10px'}>
-                <DetailCard>
-                  <Flex
-                    justifyContent={'space-between'}
-                    alignItems={'center'}
-                    mb={'20px'}
-                  >
+
+                {preferencesTags.length > 0 && (
+                  <Box>
                     <Typography
-                      text="Current Status"
+                      text="Preferences"
                       fontSize="14px"
                       fontWeight="600"
+                      sx={{ marginBottom: '10px' }}
                     />
-                    <Typography
-                      text={latestStatus?.status === 'RECEIVED' ? 'Pending' : 'Completed'}
-                      fontSize="12px"
-                      fontWeight="600"
-                      color={latestStatus?.status === 'RECEIVED' ? '#BD942B' : '#5EC401'}
-                    />
-                  </Flex>
-                  <Divider />
-                  <Box mt={'10px'}>
-                    {currentStatusData.length > 0 ? (
-                      currentStatusData.map((data, index) => (
-                        <OrderStatusProgress
+                    <Flex
+                      gap={'10px'}
+                      flexWrap={'wrap'}
+                    >
+                      {preferencesTags.map((tag, index) => (
+                        <Tag
                           key={index}
-                          label={data.label}
-                          statusTime={data.statusTime!}
-                          noLine={data.noLine}
-                          lastElement={data.lastElement}
-                        />
-                      ))
-                    ) : (
-                      <Text>No status updates available</Text>
-                    )}
+                          borderRadius="md"
+                          variant="outline"
+                          colorScheme="gray"
+                          padding={'4px 8px'}
+                        >
+                          <TagLabel>{tag}</TagLabel>
+                          {/* <TagCloseButton onClick={() => handleRemoveTag(tag)} /> */}
+                        </Tag>
+                      ))}
+                    </Flex>
                   </Box>
-                </DetailCard>
-              </Box>
+                )}
+                {role !== ROLE.PRODUCER && (
+                  <Box mt={'10px'}>
+                    <DetailCard>
+                      <Flex
+                        justifyContent={'space-between'}
+                        alignItems={'center'}
+                        mb={'20px'}
+                      >
+                        <Typography
+                          text="Current Status"
+                          fontSize="14px"
+                          fontWeight="600"
+                        />
+                        {latestStatus?.status && (
+                          <Typography
+                            text={latestStatus?.status === 'RECEIVED' ? 'Pending' : 'Completed'}
+                            fontSize="12px"
+                            fontWeight="600"
+                            color={latestStatus?.status === 'RECEIVED' ? '#BD942B' : '#5EC401'}
+                          />
+                        )}
+                      </Flex>
+                      <Divider />
+                      <Box mt={'10px'}>
+                        {currentStatusData.length > 0 ? (
+                          currentStatusData.map((data, index) => (
+                            <OrderStatusProgress
+                              key={index}
+                              label={data.label}
+                              statusTime={data.statusTime!}
+                              noLine={data.noLine}
+                              lastElement={data.lastElement}
+                            />
+                          ))
+                        ) : (
+                          <Text>No status updates available</Text>
+                        )}
+                      </Box>
+                    </DetailCard>
+                  </Box>
+                )}
+              </>
             )}
           </Box>
           <BecknButton
