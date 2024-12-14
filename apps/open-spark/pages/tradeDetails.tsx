@@ -88,8 +88,8 @@ const TradeDetails = () => {
         flexDirection={'column'}
       >
         <Typography
-          text={`Date: ${formatDate(tradeDetails?.date!, 'dd/mm/yyyy')}`}
-          fontSize="15px"
+          text={`Date: ${formatDate(tradeDetails?.date!, 'dd/MM/yyyy')}`}
+          fontSize="16px"
           fontWeight="500"
         />
         <CurrentTrade
@@ -168,7 +168,7 @@ const TradeDetails = () => {
           )}
         </Flex>
       </Flex>
-      <Box marginTop={'1rem'}>
+      <Box padding={'1rem 0.5rem'}>
         <Accordion
           accordionHeader={'History'}
           isDisabled={true}
