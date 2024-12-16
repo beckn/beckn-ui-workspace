@@ -304,7 +304,7 @@ const Dashboard = () => {
                   data={[
                     {
                       name: 'energyToBuy',
-                      label: 'Energy to Buy',
+                      label: `Energy to ${role === ROLE.CONSUMER ? 'Buy' : 'Sell'}`,
                       value: (currentTradeData[0]?.quantity ?? 0).toString(),
                       symbol: '(KWh)',
                       disabled: true
