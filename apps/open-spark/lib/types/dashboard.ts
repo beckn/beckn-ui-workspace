@@ -12,6 +12,7 @@ export interface CurrentTradeData {
   symbol: string
 }
 export type StatusItem = {
+  isPending?: boolean
   label: string | React.ReactNode
   status?: string
   statusTime?: string

@@ -8,4 +8,5 @@ export interface OrderStatusProgressProps {
   dataTestStateTime?: string
   statusDescription?: string
   dataTestStateDescription?: string
+  statusIcon?: string
 }

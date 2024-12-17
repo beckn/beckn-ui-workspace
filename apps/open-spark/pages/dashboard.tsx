@@ -25,6 +25,7 @@ import Cookies from 'js-cookie'
 import axios from 'axios'
 import { DashboardData, StatusItem, TradeData } from '@lib/types/dashboard'
 import { parseAndFormatDate } from '@utils/parsedFormatDate-utils'
+import PendingIcon from '@public/images/pending.svg'
 
 const Dashboard = () => {
   const { t } = useLanguage()
@@ -103,32 +104,30 @@ const Dashboard = () => {
   }, [role, bapDashboardData, bppDashboardData, startDate, endDate])
 
   const fetchLastTradeData = async () => {
-    try {
-      const response = await axios.get(`${strapiUrl}${ROUTE_TYPE[role!]}/trade`, {
-        headers: { Authorization: `Bearer ${bearerToken}` },
-        withCredentials: true
-      })
+    const routerQueryId = router.query?.id
+    if (routerQueryId) {
+      try {
+        const response = await axios.get(`${strapiUrl}${ROUTE_TYPE[role!]}/trade?id=${routerQueryId}`, {
+          headers: { Authorization: `Bearer ${bearerToken}` },
+          withCredentials: true
+        })
 
-      const result = response.data
+        const result = response.data
+        const mappedTrade: TradeData = {
+          id: result.id,
+          quantity: result.quantity,
+          price: result.price || 0
+        }
 
-      const lastTrade = result[result.length - 1]
+        setCurrentTradeData([mappedTrade])
+        const statusData = createStatusData(result)
+        setCurrentStatusData(statusData)
 
-      const mappedTrade: TradeData = {
-        id: lastTrade.id,
-        quantity: lastTrade.quantity,
-        price: lastTrade.price || 0
+        const tags = [result.trusted_source && 'Trusted Source', result.cred_required && 'Solar Energy'].filter(Boolean)
+        setPreferencesTags(tags)
+      } catch (error) {
+        console.error('Error fetching last trade data:', error)
       }
-
-      setCurrentTradeData([mappedTrade])
-      const statusData = createStatusData(lastTrade)
-      setCurrentStatusData(statusData)
-
-      const tags = [lastTrade.trusted_source && 'Trusted Source', lastTrade.cred_required && 'Solar Energy'].filter(
-        Boolean
-      )
-      setPreferencesTags(tags)
-    } catch (error) {
-      console.error('Error fetching last trade data:', error)
     }
   }
 
@@ -183,19 +182,21 @@ const Dashboard = () => {
   const createStatusData = (tradeData: { status: string; createdAt: string }) => {
     const { status, createdAt } = tradeData
     const statusTime = formatDate(createdAt, 'hh:mm a')
-    const label = status === 'RECEIVED' ? 'Requirement Received' : 'Requirement Completed'
+    const isPending = status === 'RECEIVED'
 
     return [
       {
-        label,
+        label: isPending ? 'Requirement Received' : 'Requirement Completed',
         status,
         statusTime,
         noLine: false,
+        isPending,
         lastElement: false
       },
       {
         label: <StatusLabel />,
         statusTime: '',
+        isPending,
         noLine: true,
         lastElement: true
       }
@@ -378,6 +379,7 @@ const Dashboard = () => {
                               statusTime={data.statusTime!}
                               noLine={data.noLine}
                               lastElement={data.lastElement}
+                              statusIcon={data.isPending ? PendingIcon : null}
                             />
                           ))
                         ) : (
