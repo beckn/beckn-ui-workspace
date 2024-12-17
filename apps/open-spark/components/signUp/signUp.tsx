@@ -12,6 +12,7 @@ import { AuthRootState } from '@store/auth-slice'
 import { useSelector } from 'react-redux'
 import { ROLE, ROUTE_TYPE } from '@lib/config'
 import axios from '@services/axios'
+import Cookies from 'js-cookie'
 
 interface RegisterFormProps extends SignUpFormProps {
   utilityCompany: string
@@ -113,6 +114,26 @@ const SignUp = () => {
     }))
   }
 
+  const createTradeCatalogue = async () => {
+    const { name } = formData
+    const tradeCatalogueData = {
+      provider_name: `${name} Energy`,
+      short_desc: `${name} Energy Company`,
+      long_desc: `${name} Energy Company - Providing energy solutions`,
+      domain_name: 'uei:p2p_trading'
+    }
+
+    try {
+      const response = await axios.post(`${strapiUrl}${ROUTE_TYPE.PRODUCER}/profile`, tradeCatalogueData, {
+        headers: { Authorization: `Bearer ${Cookies.get('authToken') || ''}` },
+        withCredentials: true
+      })
+      console.log('Trade catalogue created:', response.data)
+    } catch (error) {
+      console.error('An error occurred:', error)
+    }
+  }
+
   // Handle sign-up action
   const handleSignUp = async () => {
     const errors = signUpValidateForm(formData)
@@ -130,7 +151,10 @@ const SignUp = () => {
       try {
         let registerResponse = null
         if (role === ROLE.CONSUMER) registerResponse = await bapTradeRegister(signUpData)
-        if (role === ROLE.PRODUCER) registerResponse = await bppTradeRegister(signUpData)
+        if (role === ROLE.PRODUCER) {
+          registerResponse = await bppTradeRegister(signUpData)
+          createTradeCatalogue()
+        }
 
         if (!registerResponse || (registerResponse as { error: FetchBaseQueryError })?.error)
           throw new Error('Could not register')

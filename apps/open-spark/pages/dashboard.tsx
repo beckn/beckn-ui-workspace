@@ -104,30 +104,31 @@ const Dashboard = () => {
   }, [role, bapDashboardData, bppDashboardData, startDate, endDate])
 
   const fetchLastTradeData = async () => {
-    const routerQueryId = router.query?.id
-    if (routerQueryId) {
-      try {
-        const response = await axios.get(`${strapiUrl}${ROUTE_TYPE[role!]}/trade?id=${routerQueryId}`, {
-          headers: { Authorization: `Bearer ${bearerToken}` },
-          withCredentials: true
-        })
+    try {
+      const response = await axios.get(`${strapiUrl}${ROUTE_TYPE[role!]}/trade`, {
+        headers: { Authorization: `Bearer ${bearerToken}` },
+        withCredentials: true
+      })
 
-        const result = response.data
-        const mappedTrade: TradeData = {
-          id: result.id,
-          quantity: result.quantity,
-          price: result.price || 0
-        }
+      const result = response.data
 
-        setCurrentTradeData([mappedTrade])
-        const statusData = createStatusData(result)
-        setCurrentStatusData(statusData)
+      const lastTrade = result[result.length - 1]
 
-        const tags = [result.trusted_source && 'Trusted Source', result.cred_required && 'Solar Energy'].filter(Boolean)
-        setPreferencesTags(tags)
-      } catch (error) {
-        console.error('Error fetching last trade data:', error)
+      const mappedTrade: TradeData = {
+        id: lastTrade.id,
+        quantity: lastTrade.quantity,
+        price: lastTrade.price || 0
       }
+
+      setCurrentTradeData([mappedTrade])
+      const statusData = createStatusData(lastTrade)
+      setCurrentStatusData(statusData)
+
+      const tags = [lastTrade.trusted_source && 'Trusted Source', lastTrade.cred_required && 'Solar Energy'].filter(
+        Boolean
+      )
+    } catch (error) {
+      console.error('Error fetching last trade data:', error)
     }
   }
 
@@ -275,7 +276,7 @@ const Dashboard = () => {
                   />
                   <QuestionOutlineIcon />
                 </HStack>
-                {currentTradeData.length === 0 ? (
+                {currentTradeData.length === 0 || latestStatus?.status === 'SUCCESS' ? (
                   <></>
                 ) : (
                   <LiaPenSolid
