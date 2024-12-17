@@ -62,6 +62,8 @@ const en: { [key: string]: string } = {
   upload: 'Upload',
   errorText: 'Something went wrong',
   success: 'Success!',
-  lockDemandSuccess: 'Demand Locked Successfully!'
+  lockDemandSuccess: 'Demand Locked Successfully!',
+  tradeCreateSuccess: 'Trade Created Successfully',
+  tradeUpdateSuccess: 'Trade Updated Successfully'
 }
 export default en

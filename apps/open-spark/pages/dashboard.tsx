@@ -127,6 +127,7 @@ const Dashboard = () => {
       const tags = [lastTrade.trusted_source && 'Trusted Source', lastTrade.cred_required && 'Solar Energy'].filter(
         Boolean
       )
+      setPreferencesTags(tags)
     } catch (error) {
       console.error('Error fetching last trade data:', error)
     }
@@ -276,13 +277,13 @@ const Dashboard = () => {
                   />
                   <QuestionOutlineIcon />
                 </HStack>
-                {currentTradeData.length === 0 || latestStatus?.status === 'SUCCESS' ? (
+                {role === ROLE.PRODUCER || currentTradeData.length === 0 || latestStatus?.status === 'SUCCESS' ? (
                   <></>
                 ) : (
                   <LiaPenSolid
                     onClick={() =>
                       router.push({
-                        pathname: role === ROLE.PRODUCER ? '/sellingPreference' : '/buyingPreference',
+                        pathname: '/buyingPreference',
                         query: {
                           tradeId: currentTradeData[0]?.id,
                           quantity: currentTradeData[0].quantity,

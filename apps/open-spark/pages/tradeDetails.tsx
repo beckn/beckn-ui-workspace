@@ -112,7 +112,7 @@ const TradeDetails = () => {
         flexDirection={'column'}
       >
         <Typography
-          text={`Date: ${formatDate(tradeDetails?.date!, 'dd/MM/yyyy')}`}
+          text={`Date: ${tradeDetails?.date ? formatDate(tradeDetails?.date!, 'dd/MM/yyyy') : ''}`}
           fontSize="16px"
           fontWeight="500"
         />
@@ -121,7 +121,7 @@ const TradeDetails = () => {
             {
               name: tradeDetails?.name!,
               label: role === ROLE.CONSUMER ? 'Energy Bought' : 'Energy Sold',
-              value: tradeDetails?.quantity!,
+              value: tradeDetails?.quantity! || '0',
               disabled: true,
               symbol: '(KWh)'
             },

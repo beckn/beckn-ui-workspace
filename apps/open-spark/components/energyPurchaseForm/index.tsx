@@ -15,11 +15,13 @@ import React, { useEffect, useState } from 'react'
 import { FaMinus, FaPlus } from 'react-icons/fa6'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import axios from 'axios'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@store/index'
 import { DOMAIN, ROLE, ROUTE_TYPE } from '@lib/config'
 import Cookies from 'js-cookie'
 import { useRouter } from 'next/router'
+import { feedbackActions } from '@beckn-ui/common'
+import { useLanguage } from '@hooks/useLanguage'
 
 interface EnergyPurchaseFormProps {
   preferenceType: string
@@ -48,6 +50,8 @@ export default function EnergyPurchaseForm({ preferenceType }: EnergyPurchaseFor
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
   const bearerToken = Cookies.get('authToken') || ''
   const router = useRouter()
+  const dispatch = useDispatch()
+  const { t } = useLanguage()
 
   const [tradeId, setTradeId] = useState<string>()
   const [energyUnits, setEnergyUnits] = useState<number>(0)
@@ -101,17 +105,44 @@ export default function EnergyPurchaseForm({ preferenceType }: EnergyPurchaseFor
           }
 
     try {
-      const response = await axios.post(`${strapiUrl}${ROUTE_TYPE[role!]}/trade`, payload, {
-        headers: { Authorization: `Bearer ${bearerToken}` },
-        withCredentials: true
-      })
+      if (tradeId) {
+        const response = await axios.put(`${strapiUrl}${ROUTE_TYPE[role!]}/trade?id=${tradeId}`, payload, {
+          headers: { Authorization: `Bearer ${bearerToken}` },
+          withCredentials: true
+        })
 
-      if (response.status === 200 || response.status === 204) {
-        console.log('Trade created successfully:', response.data)
-        router.push('/')
+        if (response.status === 200 || response.status === 204) {
+          console.log('Trade updated successfully:', response.data)
+          dispatch(
+            feedbackActions.setToastData({
+              toastData: { message: 'Success', display: true, type: 'success', description: t.tradeUpdateSuccess }
+            })
+          )
+          router.push('/')
+        }
+      } else {
+        const response = await axios.post(`${strapiUrl}${ROUTE_TYPE[role!]}/trade`, payload, {
+          headers: { Authorization: `Bearer ${bearerToken}` },
+          withCredentials: true
+        })
+
+        if (response.status === 200 || response.status === 204) {
+          console.log('Trade created successfully:', response.data)
+          dispatch(
+            feedbackActions.setToastData({
+              toastData: { message: 'Success', display: true, type: 'success', description: t.tradeCreateSuccess }
+            })
+          )
+          router.push('/')
+        }
       }
     } catch (error) {
-      console.error('Error creating trade:', error)
+      console.error('Error create/update trade:', error)
+      dispatch(
+        feedbackActions.setToastData({
+          toastData: { message: 'Error', display: true, type: 'error', description: t.errorText }
+        })
+      )
     }
   }
 
