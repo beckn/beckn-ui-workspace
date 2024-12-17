@@ -77,7 +77,7 @@ const TradeDetails = () => {
         }
 
         setTradeDetails({
-          orderId: result.orderId,
+          orderId: result.order?.id || null,
           name: result.item_name,
           price: result.price || 0,
           quantity: result.quantity,
