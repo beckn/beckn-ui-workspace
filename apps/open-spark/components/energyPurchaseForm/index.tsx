@@ -108,7 +108,16 @@ export default function EnergyPurchaseForm({ preferenceType }: EnergyPurchaseFor
 
       if (response.status === 200 || response.status === 204) {
         console.log('Trade created successfully:', response.data)
-        router.push('/')
+        if (role !== ROLE.PRODUCER) {
+          router.push({
+            pathname: '/',
+            query: { id: response.data?.id }
+          })
+        } else {
+          router.push({
+            pathname: '/'
+          })
+        }
       }
     } catch (error) {
       console.error('Error creating trade:', error)

@@ -3,6 +3,7 @@ import { Box, Flex, Image } from '@chakra-ui/react'
 import { Typography } from '@beckn-ui/molecules'
 import LineBlack from '../../../public/images/lineBlack.svg'
 import TrackIcon from '../../../public/images/TrackIcon.svg'
+import PendingIcon from '../../../public/images/pendingStatus.svg'
 import { OrderStatusProgressProps } from './order-status-progress.types'
 
 const OrderStatusProgress: React.FC<OrderStatusProgressProps> = ({
@@ -10,6 +11,7 @@ const OrderStatusProgress: React.FC<OrderStatusProgressProps> = ({
   statusTime,
   className = '',
   noLine = false,
+  statusIcon,
   lastElement,
   statusDescription,
   dataTestStateName = 'statusName',
@@ -30,7 +32,7 @@ const OrderStatusProgress: React.FC<OrderStatusProgressProps> = ({
             maxW={'unset'}
             width="18px"
             height="18px"
-            src={TrackIcon}
+            src={statusIcon || TrackIcon}
           />
           {!showNoLine && (
             <Image

@@ -10,6 +10,7 @@ import { formatDate } from '@beckn-ui/common'
 import CurrentTrade from '@components/currentTrade/CurrentTrade'
 import { Box, Divider, Flex, Stack, Tag, TagLabel } from '@chakra-ui/react'
 import { OrderStatusProgress } from '@beckn-ui/becknified-components'
+import PendingIcon from '@public/images/pending.svg'
 
 interface TradeMetaData {
   orderId: string
@@ -22,6 +23,17 @@ interface TradeMetaData {
   tradeEvents: any[]
   preferencesTags: string[]
 }
+
+const TRADDE_EVE_NUM = Object.freeze({
+  BUY_REQUEST: 'buy_request',
+  BECKN_SEARCH: 'beckn_search',
+  BECKN_ON_SEARCH: 'beckn_on_search',
+  BECKN_INIT: 'beckn_init',
+  BECKN_ON_INIT: 'beckn_on_init',
+  BECKN_CONFIRM: 'beckn_confirm',
+  BECKN_ON_CONFIRM: 'beckn_on_confirm',
+  PENDING: 'pending'
+})
 
 const TradeDetails = () => {
   const bearerToken = Cookies.get('authToken')
@@ -52,6 +64,18 @@ const TradeDetails = () => {
         if (result.cred_required) {
           tags.push('Solar Energy')
         }
+        const tradeEvents = result.trade_events || []
+        const lastEvent = tradeEvents[tradeEvents.length - 1]
+
+        if (!lastEvent || lastEvent.event_name !== TRADDE_EVE_NUM.BECKN_ON_CONFIRM) {
+          tradeEvents.push({
+            id: tradeEvents.length + 1,
+            event_name: TRADDE_EVE_NUM.PENDING,
+            description: 'Pending',
+            createdAt: new Date().toISOString()
+          })
+        }
+
         setTradeDetails({
           orderId: result.orderId,
           name: result.item_name,
@@ -197,7 +221,8 @@ const TradeDetails = () => {
                       label={data.description}
                       statusTime={formatDate(data.createdAt, "do MMM yyyy',' hh:mm a")}
                       noLine={true}
-                      lastElement={false}
+                      lastElement={index === tradeDetails.tradeEvents.length - 1}
+                      statusIcon={data.event_name === TRADDE_EVE_NUM.PENDING ? PendingIcon : null}
                     />
                   ))}
               </Stack>
