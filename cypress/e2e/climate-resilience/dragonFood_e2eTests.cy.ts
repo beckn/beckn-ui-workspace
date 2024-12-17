@@ -1,8 +1,30 @@
 import { testIds } from '../../../shared/dataTestIds'
-describe('End to End test cases for Dragon Food app', () => {
+describe('End to End test cases for Harmoni Aid app', () => {
+  const deployed_url = 'https://dragonfoods-dev.becknprotocol.io/signIn'
+  const invalidEmail = 'sanket.com'
+  const invalidPassword = 'password'
+  const unregisteredEmail = 'unregistered@example.com'
+  const unregisteredPassword = 'unreg@Pass123'
+  const validInputEmail = 'sanketbk@gmail.com'
+  const validInputPassword = 'P@ssw0rd'
+  const searchTerm = 'flood prediction'
+  const wrongSearchTerm = 'cake'
+  const product = 'Medium resolution integrated model flood prediction data'
+  const selectProductForCheckout = 'Medium resolution integrated model flood prediction data'
+  const filterByPriceProduct = 'High Resolution Probablistic Flood Prediction Model'
+  const filterByRatingProduct = 'Medium resolution integrated model flood prediction data'
+  const filterReset = 'Medium resolution integrated model flood prediction data'
+  const item_quantity = 'X 1'
+  const item_price = '₹10.00'
+  const totalPayment = '₹10.00'
+  const billing_name = 'Anand'
+  const billing_number = '9890989000'
+  const billing_email = 'anand@gmail.com'
+  const billing_pin_code = '1202 b2, Bengaluru urban, Bengaluru, Karnataka'
+  const billing_address = '560078'
+
   before(() => {
-    //cy.visit(testIds.deployed_url_base)
-    cy.visit('https://dragonfoods-dev.becknprotocol.io/signIn')
+    cy.visit(deployed_url)
   })
   context('Sign In Page', () => {
     it('should display the sign-in form elements and handle form submission states', () => {
@@ -15,11 +37,6 @@ describe('End to End test cases for Dragon Food app', () => {
     })
 
     it('should handle invalid login scenarios', () => {
-      const invalidEmail = 'sanket.com'
-      const invalidPassword = 'password'
-      const unregisteredEmail = 'unregistered@example.com'
-      const unregisteredPassword = 'unreg@Pass123'
-
       // Invalid email and password
       cy.getByData(testIds.auth_inputEmail).clear().type(invalidEmail)
       cy.getByData(testIds.auth_inputPassword).clear().type(invalidPassword)
@@ -39,15 +56,15 @@ describe('End to End test cases for Dragon Food app', () => {
     })
 
     it('should enable the Sign In button when both fields are filled', () => {
-      cy.getByData(testIds.auth_inputEmail).clear().type('sanketbk@gmail.com')
-      cy.getByData(testIds.auth_inputPassword).clear().type('P@ssw0rd')
+      cy.getByData(testIds.auth_inputEmail).clear().type(validInputEmail)
+      cy.getByData(testIds.auth_inputPassword).clear().type(validInputPassword)
       cy.getByData(testIds.auth_loginButton).should('not.be.disabled').click()
       cy.wait(2000)
     })
   })
   context('Landing Page', () => {
     it('should render the homepage components', () => {
-      // cy.getByData(testIds.homepage_appTitle).should('be.visible').and('contain.text', 'Dragon Food')
+      // cy.getByData(testIds.homepage_appTitle).should('be.visible').and('contain.text', 'Sky Analytics')
       // cy.getByData(testIds.homepage_appDescription)
       //     .should('be.visible')
       cy.getByData(testIds.locationIcon).should('be.visible')
@@ -60,8 +77,7 @@ describe('End to End test cases for Dragon Food app', () => {
   })
   context('Search Functionality', () => {
     // it('should handle wrong search keyword gracefully', () => {
-    //     const searchTerm = 'cake'
-    //     cy.getByData(testIds.searchInput).type(searchTerm)
+    //     cy.getByData(testIds.searchInput).type(wrongSearchTerm)
     //     cy.getByData(testIds.searchButton).click()
     //     cy.wait(18000)
     //     cy.getByData(testIds.noDataAvailable).should('be.visible')
@@ -73,7 +89,6 @@ describe('End to End test cases for Dragon Food app', () => {
     // })
     //Empty cart
     // it('should render the cart page with no items', () => {
-    //     const searchTerm = 'Flood prediction data in Sylhet'
     //     cy.getByData(testIds.searchInput).clear().type(searchTerm)
     //     cy.getByData(testIds.searchButton).click()
     //     cy.getByData(testIds.cartButton).click()
@@ -88,7 +103,6 @@ describe('End to End test cases for Dragon Food app', () => {
     // })
 
     it('should render home page component for Search result', () => {
-      const searchTerm = 'Flood prediction'
       cy.getByData(testIds.searchInput).clear().type(searchTerm)
       cy.getByData(testIds.searchButton).click()
       cy.wait(16000)
@@ -114,28 +128,20 @@ describe('End to End test cases for Dragon Food app', () => {
       cy.getByData(testIds.searchpage_sortByPrice).click()
       cy.getByData(testIds.sort_by_price_menu_list).find('[data-test="menu-item-2"]').click()
       cy.getByData(testIds.searchpage_applyFilter).click()
-      cy.getByData(testIds.searchpage_products)
-        .eq(0)
-        .should('contain.text', 'High Resolution Probablistic Flood Prediction Model')
+      cy.getByData(testIds.searchpage_products).eq(0).should('contain.text', filterByPriceProduct)
     })
     it('should handle filter by rating option in filter', () => {
       cy.getByData(testIds.searchpage_filterByRating).click()
       cy.getByData(testIds.filter_by_rating_menu_list).find('[data-test="menu-item-1"]').click()
       cy.getByData(testIds.searchpage_applyFilter).click()
-      cy.getByData(testIds.searchpage_products)
-        .eq(0)
-        .should('contain.text', 'Medium resolution integrated model flood prediction data')
+      cy.getByData(testIds.searchpage_products).eq(0).should('contain.text', filterByRatingProduct)
     })
     it('should handle reset applied filter', () => {
       cy.getByData(testIds.searchpage_resetBtn).click()
-      cy.getByData(testIds.searchpage_products)
-        .eq(0)
-        .should('contain.text', 'Medium resolution integrated model flood prediction data')
+      cy.getByData(testIds.searchpage_products).eq(0).should('contain.text', filterReset)
     })
     it('should navigate to product details on item click', () => {
-      cy.getByData(testIds.searchpage_products)
-        .contains('Medium resolution integrated model flood prediction data')
-        .click()
+      cy.getByData(testIds.searchpage_products).contains(selectProductForCheckout).click()
     })
   })
   context('Product Details', () => {
@@ -143,14 +149,17 @@ describe('End to End test cases for Dragon Food app', () => {
       cy.getByData(testIds.cartButton).should('be.visible')
       cy.getByData(testIds.goBack).should('be.visible')
       cy.getByData(testIds.product_page_Image).should('be.visible')
-      cy.getByData(testIds.item_title).should(
-        'contain.text',
-        'Medium resolution integrated model flood prediction data'
-      )
+      cy.getByData(testIds.item_title).should('contain.text', product)
       //cy.getByData(testIds.item_title).should('contain.text', 'Provided by Climatic')
       cy.getByData(testIds.rating_container).should('be.visible')
       cy.wait(1000)
-
+    })
+    it('should render about section of the selected product', () => {
+      // cy.getByData(testIds.).should('be.visible')
+      // cy.getByData(testIds.).should('be.visible')
+      // cy.getByData(testIds.).should('be.visible')
+    })
+    it('should validate and select all checkbox from every section ', () => {
       cy.getByData(testIds.product_details_checkbox).eq(0).should('contain.text', 'Model Confidence Levels')
       cy.getByData(testIds.product_checkbox).eq(0).should('contain.text', '90%')
       cy.getByData(testIds.product_checkbox).eq(1).should('contain.text', '85%')
@@ -209,6 +218,8 @@ describe('End to End test cases for Dragon Food app', () => {
       cy.get('.chakra-button').click()
       //cy.getByData(testIds.Proceed).click()
     })
+  })
+  context('Billing Details', () => {
     it('should validate Billing Details', () => {
       cy.getByData(testIds.open_form).click()
       cy.getByData(testIds.billing_name).clear().blur()
@@ -222,29 +233,28 @@ describe('End to End test cases for Dragon Food app', () => {
       cy.getByData(testIds.billing_pin_code).clear().blur()
       cy.contains('Zip Code is required').should('be.visible').type('{esc}')
     })
-    it('should fill Billing Details with valid data', () => {
+    it('Should fill Billing Details with valid data', () => {
       cy.getByData(testIds.open_form).click()
-      cy.getByData(testIds.billing_name).clear().type('Anand')
-      cy.getByData(testIds.billing_number).clear().type('9090898989')
-      cy.getByData(testIds.billing_email).clear().type('Anand@gmail.com')
-      cy.getByData(testIds.billing_address).clear().type('1202 b2, Bengaluru urban, Bengaluru, Karnataka')
-      cy.getByData(testIds.billing_pin_code).clear().type('560078')
+      cy.getByData(testIds.billing_name).clear().type(billing_name)
+      cy.getByData(testIds.billing_number).clear().type(billing_number)
+      cy.getByData(testIds.billing_email).clear().type(billing_email)
+      cy.getByData(testIds.billing_address).clear().type(billing_pin_code)
+      cy.getByData(testIds.billing_pin_code).clear().type(billing_address)
 
       cy.getByData(testIds.add_billing_details).click()
     })
-    it('Product and billing details validation ', () => {
-      cy.getByData(testIds.item_title).should(
-        'contain.text',
-        'Medium resolution integrated model flood prediction data'
-      )
-      cy.getByData(testIds.item_quantity).should('contain.text', 'X 1')
-      cy.getByData(testIds.item_price).should('contain.text', '₹10.00')
+    it('Product Details ', () => {
+      cy.getByData(testIds.item_title).should('contain.text', selectProductForCheckout)
+      cy.getByData(testIds.item_quantity).should('contain.text', item_quantity)
+      cy.getByData(testIds.item_price).should('contain.text', item_price)
       cy.getByData(testIds.payment_totalPayment).should('contain.text', 'Total')
-      cy.getByData(testIds.item_price).should('contain.text', '₹10.00')
+      cy.getByData(testIds.item_price).should('contain.text', totalPayment)
 
       cy.getByData(testIds.checkoutpage_changeFormDetails).should('be.visible')
       cy.getByData(testIds.proceed_to_checkout).should('be.visible').click()
     })
+  })
+  context('Proceed to Checkout', () => {
     it('should display payment Page with Result', () => {
       cy.contains(testIds.paymentpage_creditcardAndDebitCard).should('contain.text', 'Credit & Debit Cards')
       cy.getByData(testIds.paymentpage_visa).should('contain.text', '**** **** **** 1234')
@@ -272,20 +282,22 @@ describe('End to End test cases for Dragon Food app', () => {
       cy.getByData(testIds.confirmPageImage).should('be.visible')
       cy.getByData(testIds.grateful_message).should('be.visible')
       cy.getByData(testIds.track_order).should('be.visible')
+      cy.getByData(testIds.track_order).should('contain.text', validInputEmail)
       cy.wait(3000)
       cy.getByData(testIds.orderConfirmation_goBackToHome).should('be.visible').click()
     })
   })
   context('Request History ', () => {
+    it('Should nevigate to Frequently Accessed items', () => {
+      // add code
+    })
     it('Should nevigate to Request History', () => {
       cy.getByData(testIds.threeDots).click()
       cy.getByData(testIds.orderHistory_text_click).click()
       cy.wait(3000)
     })
     it('Should check all component of Request History', () => {
-      cy.getByData(testIds.order_history_item_name)
-        .eq(0)
-        .should('contain.text', 'Medium resolution integrated model flood prediction data')
+      cy.getByData(testIds.order_history_item_name).eq(0).should('contain.text', selectProductForCheckout)
       cy.getByData(testIds.accordion_click).eq(0).click()
 
       cy.getByData(testIds.order_history_Status).eq(0).should('contain.text', 'Pending')
