@@ -1,0 +1,226 @@
+{
+  "data": [
+    {
+      "context": {
+        "domain": "uei:p2p_trading",
+        "action": "on_confirm",
+        "version": "1.1.0",
+        "bpp_id": "bpp-ps-network-strapi-dev.example.io",
+        "bpp_uri": "http://bpp-ps-network-strapi-dev.example.io",
+        "country": "IND",
+        "city": "std:080",
+        "location": {
+          "country": {
+            "name": "India",
+            "code": "IND"
+          },
+          "city": {
+            "name": "Bangalore",
+            "code": "std:080"
+          }
+        },
+        "bap_id": "bap-ps-network-dev.example.io",
+        "bap_uri": "https://bap-ps-network-dev.example.io",
+        "transaction_id": "f45a4b75-64b1-4170-be37-b53dbfd87357",
+        "message_id": "82177cd1-2d05-46b5-9ef2-40a92ef838a8",
+        "ttl": "PT10M",
+        "timestamp": "2024-12-16T13:42:53.320Z"
+      },
+      "message": {
+        "orderId": "2635",
+        "provider": {
+          "id": "798",
+          "name": "Leela Energy Corp",
+          "short_desc": "Leela Energy Company",
+          "long_desc": "Big Leela Energy Company",
+          "images": [
+            {
+              "url": "https://file.aiquickdraw.com/imgcompressed/img/compressed_56a2f2ed06b49ceb7f8580c4bed33b52.webp",
+              "size_type": "sm"
+            }
+          ],
+          "fulfillments": [
+            {
+              "id": "27",
+              "type": "END",
+              "rateable": true,
+              "state": {
+                "description": "ORDER RECEIVED",
+                "descriptor": {
+                  "code": "ORDER_RECEIVED",
+                  "name": "ORDER RECEIVED"
+                }
+              }
+            },
+            {
+              "id": "27",
+              "type": "END",
+              "rateable": true
+            },
+            {
+              "id": "26",
+              "type": "START",
+              "rateable": true
+            }
+          ]
+        },
+        "items": [
+          {
+            "id": "322",
+            "name": "Energy",
+            "code": "energy",
+            "short_desc": "Excess power from my rooftop system to sell",
+            "images": [
+              {
+                "url": "https://file.aiquickdraw.com/imgcompressed/img/compressed_56a2f2ed06b49ceb7f8580c4bed33b52.webp",
+                "size_type": "sm"
+              }
+            ],
+            "price": {
+              "value": "13"
+            },
+            "rating": "null",
+            "rateable": true,
+            "quantity": {
+              "available": {
+                "count": 120,
+                "measure": {
+                  "value": "120",
+                  "unit": "kWh"
+                }
+              }
+            },
+            "categories": [
+              {
+                "id": "100",
+                "name": "SOLAR ENERGY"
+              }
+            ],
+            "fulfillments": [
+              {
+                "id": "27",
+                "type": "END"
+              },
+              {
+                "id": "27",
+                "type": "END"
+              },
+              {
+                "id": "26",
+                "type": "START"
+              }
+            ]
+          }
+        ],
+        "fulfillments": [
+          {
+            "id": "27",
+            "type": "END",
+            "stops": [
+              {
+                "location": {
+                  "gps": "28.6436082,77.08698369999999",
+                  "address": "Flat 208, A Block, Janakpuri West, New Delhi",
+                  "city": {
+                    "name": "New Delhi"
+                  },
+                  "state": {
+                    "name": "Delhi"
+                  },
+                  "country": {
+                    "code": "IND"
+                  },
+                  "area_code": "110018"
+                },
+                "contact": {
+                  "phone": "9886098860",
+                  "email": "anand@gmail.com"
+                }
+              }
+            ],
+            "state": {
+              "descriptor": {
+                "code": "ORDER_RECEIVED",
+                "short_desc": "ORDER RECEIVED"
+              },
+              "updated_at": "2024-12-16T13:42:53.241Z"
+            }
+          },
+          {
+            "id": "27",
+            "type": "END",
+            "rateable": true,
+            "state": {
+              "descriptor": {
+                "code": "ORDER_RECEIVED",
+                "short_desc": "ORDER RECEIVED"
+              },
+              "updated_at": "2024-12-16T13:42:53.241Z"
+            }
+          },
+          {
+            "id": "26",
+            "type": "START",
+            "rateable": true,
+            "state": {
+              "descriptor": {
+                "code": "ORDER_RECEIVED",
+                "short_desc": "ORDER RECEIVED"
+              },
+              "updated_at": "2024-12-16T13:42:53.241Z"
+            }
+          }
+        ],
+        "quote": {
+          "price": {
+            "value": "13"
+          },
+          "breakup": [
+            {
+              "title": "CGST",
+              "price": {
+                "currency": "INR",
+                "value": "5"
+              }
+            },
+            {
+              "title": "SGST",
+              "price": {
+                "currency": "INR",
+                "value": "5"
+              }
+            },
+            {
+              "title": "Convenience charges",
+              "price": {
+                "currency": "INR",
+                "value": "1"
+              }
+            },
+            {
+              "title": "Wheeling charges @ 0.5/unit",
+              "price": {
+                "currency": "INR",
+                "value": "1"
+              }
+            },
+            {
+              "title": "P2P Energy Cost",
+              "price": {
+                "currency": "INR"
+              }
+            }
+          ]
+        },
+        "billing": {
+          "city": {
+            "name": "New Delhi"
+          },
+          "state": {
+            "name": "Delhi"
+          }
+        }
+      }
+    }
+  ]
+}
