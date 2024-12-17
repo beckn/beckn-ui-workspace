@@ -60,12 +60,18 @@ export default function EnergyPurchaseForm({ preferenceType }: EnergyPurchaseFor
       setTradeId(tradeId as string)
       setEnergyUnits(Number(quantity))
       setPricePerUnit(Number(price))
-      setPreferences(JSON.parse(preferencesTags as any))
+      setPreferences(JSON.parse(preferencesTags as string))
     }
-  }, [])
+  }, [router.query])
 
-  const handleInputChange = (setter: React.Dispatch<React.SetStateAction<number>>, value: number) =>
-    setter(Math.max(0, value))
+  const handleInputChange = (setter: React.Dispatch<React.SetStateAction<number>>, value: string) => {
+    const numericValue = value.replace(/[^0-9]/g, '') // Allow only digits
+    if (numericValue === '') {
+      setter(0) // Set to 0 if empty
+    } else {
+      setter(Number(numericValue)) // Convert to number
+    }
+  }
 
   const handleCheckboxChange = (key: string, value: boolean) => setPreferences(prev => ({ ...prev, [key]: value }))
 
@@ -122,6 +128,7 @@ export default function EnergyPurchaseForm({ preferenceType }: EnergyPurchaseFor
         spacing={8}
         align="stretch"
       >
+        {/* Energy Units Input */}
         <FormControl>
           <HStack mb={2}>
             <FormLabel
@@ -135,21 +142,21 @@ export default function EnergyPurchaseForm({ preferenceType }: EnergyPurchaseFor
           </HStack>
           <HStack spacing={4}>
             <Box
-              onClick={() => handleInputChange(setEnergyUnits, energyUnits + 1)}
+              onClick={() => handleInputChange(setEnergyUnits, (energyUnits + 1).toString())}
               cursor="pointer"
             >
               <FaPlus />
             </Box>
             <Input
               type="number"
-              value={energyUnits}
-              onChange={e => handleInputChange(setEnergyUnits, Number(e.target.value))}
+              value={energyUnits.toString()}
+              onChange={e => handleInputChange(setEnergyUnits, e.target.value)}
               textAlign="center"
               width="100px"
               size="md"
             />
             <Box
-              onClick={() => handleInputChange(setEnergyUnits, energyUnits - 1)}
+              onClick={() => handleInputChange(setEnergyUnits, (energyUnits - 1).toString())}
               cursor="pointer"
             >
               <FaMinus />
@@ -178,21 +185,21 @@ export default function EnergyPurchaseForm({ preferenceType }: EnergyPurchaseFor
           </HStack>
           <HStack spacing={4}>
             <Box
-              onClick={() => handleInputChange(setPricePerUnit, pricePerUnit + 1)}
+              onClick={() => handleInputChange(setPricePerUnit, (pricePerUnit + 1).toString())}
               cursor="pointer"
             >
               <FaPlus />
             </Box>
             <Input
               type="number"
-              value={pricePerUnit}
-              onChange={e => handleInputChange(setPricePerUnit, Number(e.target.value))}
+              value={pricePerUnit.toString()}
+              onChange={e => handleInputChange(setPricePerUnit, e.target.value)}
               textAlign="center"
               width="100px"
               size="md"
             />
             <Box
-              onClick={() => handleInputChange(setPricePerUnit, pricePerUnit - 1)}
+              onClick={() => handleInputChange(setPricePerUnit, (pricePerUnit - 1).toString())}
               cursor="pointer"
             >
               <FaMinus />
@@ -207,6 +214,7 @@ export default function EnergyPurchaseForm({ preferenceType }: EnergyPurchaseFor
         </FormControl>
         <Divider />
 
+        {/* Preferences */}
         <FormControl>
           <FormLabel
             fontSize="15"
@@ -237,7 +245,7 @@ export default function EnergyPurchaseForm({ preferenceType }: EnergyPurchaseFor
         <BecknButton
           children="Submit"
           handleClick={handleSubmit}
-          disabled={!isFormComplete}
+          disabled={!isFormComplete} // Button disabled if form incomplete
         />
       </VStack>
     </Box>
