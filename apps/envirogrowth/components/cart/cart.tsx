@@ -93,6 +93,7 @@ const Cart: React.FC<CartProps> = ({
               alignSelf={'start'}
             >
               <Button
+                dataTest={testIds.Proceed}
                 text={actionButton?.text}
                 handleClick={actionButton?.handleOnClick}
               />
