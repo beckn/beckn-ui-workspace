@@ -122,8 +122,7 @@ const Dashboard = () => {
       })
 
       const result = response.data
-
-      const lastTrade = result[result.length - 1]
+      const lastTrade = result[0]
 
       const mappedTrade: TradeData = {
         id: lastTrade.id,
