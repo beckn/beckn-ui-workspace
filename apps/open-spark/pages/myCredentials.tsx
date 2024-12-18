@@ -55,7 +55,7 @@ const MyCredentials = () => {
         const { credential } = data
         return {
           id: data.cred_id,
-          title: credential.credentialSubject.documentName,
+          title: credential.credentialSubject?.documentName,
           icon: jsonIcon,
           date: credential.issuanceDate,
           data: credential
