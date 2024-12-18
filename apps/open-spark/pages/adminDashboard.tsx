@@ -284,6 +284,7 @@ const LockDemand = () => {
             isLoading={isLoading}
             handleClick={handleOnLockDemand}
             sx={{ margin: '1rem 0' }}
+            disabled={items.length === 0}
           />
         </Flex>
       </Box>
