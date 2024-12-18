@@ -6,7 +6,18 @@ import { useLanguage } from '@hooks/useLanguage'
 import { useRouter } from 'next/router'
 import profileIcon from '@public/images/user_profile.svg'
 import { Input, Typography } from '@beckn-ui/molecules'
-import { Box, Flex, HStack, Tag, TagLabel, Divider, Text, TagCloseButton } from '@chakra-ui/react'
+import {
+  Box,
+  Flex,
+  HStack,
+  Tag,
+  TagLabel,
+  Divider,
+  Text,
+  TagCloseButton,
+  InputRightAddon,
+  InputGroup
+} from '@chakra-ui/react'
 import CustomeDateInput from '@components/dateRangePicker/CustomeDateInput'
 import SelectDate from '@components/dateRangePicker/SelectDate'
 import TotalEnergyUnits from '@components/totalEnerguUnit/TotalEnergyUnits'
@@ -222,7 +233,7 @@ const Dashboard = () => {
         maxWidth={{ base: '100vw', md: '30rem', lg: '40rem' }}
         margin="calc(0rem + 68px) auto auto auto"
         backgroundColor="white"
-        height={'calc(100vh - 100px)'}
+        // height={'calc(100vh - 100px)'}
       >
         <Flex
           flexDirection={'column'}
@@ -253,7 +264,24 @@ const Dashboard = () => {
                 }}
                 label={'Energy Units'}
                 disabled={true}
+                rightElement={() => {
+                  return (
+                    <Box
+                      cursor="pointer"
+                      height="36px"
+                      mt={'8px'}
+                      opacity="0.4"
+                    >
+                      <Typography
+                        text={'(KWh)'}
+                        fontSize="15px"
+                        fontWeight="400"
+                      />
+                    </Box>
+                  )
+                }}
               />
+
               <CustomeDateInput
                 startDate={startDate}
                 endDate={endDate}

@@ -34,6 +34,22 @@ const TotalEnergyUnits: React.FC<TotalEnergyUnitsProps> = ({ dashboardTotalEnerg
             }}
             disabled={true}
             label={key.replace('_', ' ').replace(/^\w/, c => c.toUpperCase())}
+            rightElement={() => {
+              return (
+                <Box
+                  cursor="pointer"
+                  height="36px"
+                  mt={'8px'}
+                  opacity="0.4"
+                >
+                  <Typography
+                    text={'(KWh)'}
+                    fontSize="15px"
+                    fontWeight="400"
+                  />
+                </Box>
+              )
+            }}
           />
         ))}
       </Flex>
