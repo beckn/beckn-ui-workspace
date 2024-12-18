@@ -187,7 +187,9 @@ export default function EnergyPurchaseForm({ preferenceType }: EnergyPurchaseFor
               size="md"
             />
             <Box
-              onClick={() => handleInputChange(setEnergyUnits, (energyUnits - 1).toString())}
+              onClick={() => {
+                if (energyUnits > 0) handleInputChange(setEnergyUnits, (energyUnits - 1).toString())
+              }}
               cursor="pointer"
             >
               <FaMinus />
@@ -230,7 +232,9 @@ export default function EnergyPurchaseForm({ preferenceType }: EnergyPurchaseFor
               size="md"
             />
             <Box
-              onClick={() => handleInputChange(setPricePerUnit, (pricePerUnit - 1).toString())}
+              onClick={() => {
+                if (pricePerUnit > 0) handleInputChange(setPricePerUnit, (pricePerUnit - 1).toString())
+              }}
               cursor="pointer"
             >
               <FaMinus />
