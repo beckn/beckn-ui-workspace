@@ -28,8 +28,8 @@ const SignUp = () => {
     name: '',
     email: '',
     password: '',
-    address: '',
     mobileNumber: '',
+    address: '',
     utilityCompany: ''
   })
   const [formErrors, setFormErrors] = useState<CustomFormErrorProps>({
@@ -155,10 +155,16 @@ const SignUp = () => {
           registerResponse = await bppTradeRegister(signUpData)
           createTradeCatalogue()
         }
-
+        console.log(registerResponse)
         if (!registerResponse || (registerResponse as { error: FetchBaseQueryError })?.error)
           throw new Error('Could not register')
-
+        const jwtToken = registerResponse?.data?.data?.jwt
+        if (jwtToken) {
+          Cookies.set('authToken', jwtToken)
+          console.log('JWT Token saved:', jwtToken)
+        } else {
+          throw new Error('JWT token not found in the response')
+        }
         Router.push('/')
       } catch (error) {
         console.error('An error occurred:', error)
