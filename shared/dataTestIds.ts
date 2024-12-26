@@ -1,6 +1,6 @@
 const testIds = {
   // application wise base url
-  url_base: process.env.CYPRESS_BASE_URL || 'http://localhost:3010',
+  url_base: process.env.CYPRESS_BASE_URL || 'http://localhost:3000',
   url_base_retail: process.env.CYPRESS_BASE_URL || 'http://localhost:3002',
   url_base_tourism: process.env.CYPRESS_BASE_URL || 'http://localhost:3001',
   // general
@@ -651,7 +651,17 @@ const testIds = {
   Frequently_accessed_text: 'Frequently_accessed_text',
   TermsandConditions_link: 'TermsandConditions_link',
   disclaimer_text: 'disclaimer_text',
-  meterNumber: 'meterNumber'
+  meterNumber: 'meterNumber',
+
+  // Dragon Foods app
+  homePage_Image: 'homePage-Image',
+  Frequently_Accessed: 'Frequently-Accessed',
+  Frequently_Accessed_Card: 'Frequently-Accessed-Card',
+  Frequently_Accessed_image: 'Frequently-Accessed-image',
+  Frequently_Accessed_item_name: 'Frequently-Accessed-item-name',
+  Frequently_Accessed_provider_name: 'Frequently-Accessed-provider-name',
+  Frequently_Accessed_productInfo: 'Frequently-Accessed-productInfo',
+  Frequently_Accessed_item_rating: 'Frequently-Accessed-item-rating'
 }
 
 export { testIds }
