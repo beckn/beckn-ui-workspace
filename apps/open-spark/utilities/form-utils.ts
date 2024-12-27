@@ -2,6 +2,7 @@ import { FormErrors, SignInProps, SignUpProps, ProfileProps, ShippingFormData } 
 
 export interface CustomFormErrorProps extends FormErrors {
   utilityCompany?: string
+  address?: string
 }
 
 export const validateForm = (formData: ShippingFormData): FormErrors => {
@@ -89,9 +90,12 @@ export const signUpValidateForm = (formData: SignUpProps): CustomFormErrorProps 
   } else if (!/[0-9]/.test(formData.password)) {
     errors.password = 'errorPassword6'
   }
-  if (formData.mobileNumber.trim() === '') {
+  if (formData.address.trim() === '') {
+    errors.address = 'errorAddress'
+  }
+  if (formData?.mobileNumber?.trim() === '') {
     errors.mobileNumber = 'errorNumber'
-  } else if (!/^\d{10}$/.test(formData.mobileNumber)) {
+  } else if (!/^\d{10}$/.test(formData.mobileNumber!)) {
     errors.mobileNumber = 'errorNumber2'
   } else if (formData.utilityCompany.trim() === '') {
     errors.utilityCompany = 'errorUtilityCompany'

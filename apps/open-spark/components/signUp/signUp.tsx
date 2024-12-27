@@ -240,7 +240,8 @@ const SignUp = () => {
               name: 'address',
               value: formData.address,
               handleChange: handleInputChange,
-              label: t.enterAddrees
+              label: t.enterAddrees,
+              error: formErrors.address
             },
             {
               type: 'number',

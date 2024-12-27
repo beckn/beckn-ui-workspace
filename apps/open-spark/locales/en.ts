@@ -64,6 +64,10 @@ const en: { [key: string]: string } = {
   success: 'Success!',
   lockDemandSuccess: 'Demand Locked Successfully!',
   tradeCreateSuccess: 'Trade Created Successfully',
-  tradeUpdateSuccess: 'Trade Updated Successfully'
+  tradeUpdateSuccess: 'Trade Updated Successfully',
+  errorName: 'Name is required',
+  errorNumber: 'Mobile Number is required',
+  errorNumber2: 'Invalid Mobile Number',
+  errorAddress: 'Complete Address is required'
 }
 export default en
