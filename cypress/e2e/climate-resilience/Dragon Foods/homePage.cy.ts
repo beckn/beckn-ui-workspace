@@ -1,4 +1,4 @@
-import { testIds } from '../../../shared/dataTestIds'
+import { testIds } from '../../../../shared/dataTestIds'
 
 describe('Home Page Tests', () => {
   before(() => {
@@ -32,8 +32,10 @@ describe('Home Page Tests', () => {
     cy.getByData(testIds.searchInput).type('flood prediction')
     cy.getByData(testIds.searchButton).click()
     cy.getByData(testIds.loadingIndicator).should('be.visible')
+    cy.performSearch('floodprediction', {
+      fixture: 'Climate-resilience/DRAGON-FOODS/searchPage/searchResults.json'
+    })
     cy.url().should('include', `${testIds.url_search}`)
-    cy.wait(20000)
     cy.getByData(testIds.searchpage_products).first().click()
     cy.url().should('include', `${testIds.url_product}`)
     cy.getByData('home-icon').click()

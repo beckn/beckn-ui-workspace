@@ -1,4 +1,4 @@
-import { testIds } from '../../../shared/dataTestIds'
+import { testIds } from '../../../../shared/dataTestIds'
 
 describe('Check Auth flow', () => {
   context('Signin flow', () => {
