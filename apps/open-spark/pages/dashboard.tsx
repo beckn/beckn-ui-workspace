@@ -424,7 +424,7 @@ const Dashboard = () => {
           <BecknButton
             children={role === ROLE.CONSUMER ? 'Buy' : 'Sell'}
             handleClick={() => router.push(role === ROLE.PRODUCER ? '/sellingPreference' : '/buyingPreference')}
-            sx={{ marginTop: '30px' }}
+            sx={{ marginTop: '60px' }}
           />
         </Flex>
       </Box>

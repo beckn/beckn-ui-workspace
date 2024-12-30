@@ -7,11 +7,20 @@ import { TopHeader, SubHeader } from '@beckn-ui/common'
 import Constants from './constants'
 import { setProfileEditable, UserRootState } from '@store/user-slice'
 import { useDispatch, useSelector } from 'react-redux'
+import profileIcon from '@public/images/user_profile.svg'
 
 const Header = () => {
   const {
     TopHeader: { appLogoBlackList, homeIconBlackList, languageIconWhiteList, menuIconWhiteList, topHeaderBlackList },
-    SubHeader: { backIconList, bottomHeaderBlackList, headerBlackList, headerFrenchNames, headerNames, editIconList }
+    SubHeader: {
+      backIconList,
+      bottomHeaderBlackList,
+      headerBlackList,
+      headerFrenchNames,
+      headerNames,
+      editIconList,
+      profileSectionIcon
+    }
   } = Constants
 
   const router = useRouter()
@@ -21,6 +30,9 @@ const Header = () => {
 
   const renderTopHeader = !topHeaderBlackList.includes(router.pathname)
   const renderBottomHeader = !bottomHeaderBlackList.includes(router.pathname)
+  const profileSection = profileSectionIcon.includes(router.pathname)
+    ? { src: profileIcon, handleClick: () => router.push('/profile') }
+    : undefined
 
   return (
     <Box>
@@ -44,6 +56,7 @@ const Header = () => {
           locale={locale!}
           t={key => t[key]}
           showCartIcon={false}
+          profileSection={profileSection}
           headerConstants={{
             headerNames: {
               defaultNames: headerNames,
