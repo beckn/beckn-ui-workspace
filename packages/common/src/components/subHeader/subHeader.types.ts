@@ -16,10 +16,16 @@ export interface SubHeaderConstants {
   }
 }
 
+export interface ProfileSection {
+  src: string
+  handleClick: () => void
+}
+
 export interface SubHeaderProps extends TranslationProps {
   showCartIcon?: boolean
   headerConstants: SubHeaderConstants
   qrScanerValue?: string | any
   handleClick?: () => void
   handleClickOnEdit?: () => void
+  profileSection?: ProfileSection
 }

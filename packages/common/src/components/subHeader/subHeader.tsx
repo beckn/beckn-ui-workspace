@@ -53,7 +53,7 @@ const getHeaderTitleForPage = (
 }
 
 const SubHeader = (props: SubHeaderProps) => {
-  const { locale, t, showCartIcon = true, headerConstants, handleClickOnEdit } = props
+  const { locale, t, showCartIcon = true, headerConstants, handleClickOnEdit, profileSection } = props
   const {
     blackList: { backIconList, orderIconList, cartIconList, invoiceDownloadIconList, qrCodeScanerList, editIconList }
   } = headerConstants
@@ -109,6 +109,14 @@ const SubHeader = (props: SubHeaderProps) => {
                 />
               )}
             </div>
+          )}
+          {profileSection && (
+            <Image
+              cursor={'pointer'}
+              src={profileSection.src}
+              alt={'right-img'}
+              onClick={profileSection.handleClick}
+            />
           )}
           {orderIconList?.includes(router.pathname) && (
             <Image
