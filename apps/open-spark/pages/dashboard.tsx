@@ -294,7 +294,22 @@ const Dashboard = () => {
                   <QuestionOutlineIcon />
                 </HStack>
                 {role === ROLE.PRODUCER || currentTradeData.length === 0 || latestStatus?.status === 'SUCCESS' ? (
-                  <></>
+                  <LiaPenSolid
+                    onClick={() =>
+                      router.push({
+                        pathname: '/sellingPreference',
+                        query: {
+                          tradeId: currentTradeData[0]?.id,
+                          quantity: currentTradeData[0].quantity,
+                          price: currentTradeData[0].price,
+                          preferencesTags: JSON.stringify({
+                            solar: preferencesTags.includes('Solar Energy'),
+                            trustedSource: preferencesTags.includes('Trusted Source')
+                          })
+                        }
+                      })
+                    }
+                  />
                 ) : (
                   <LiaPenSolid
                     onClick={() =>
