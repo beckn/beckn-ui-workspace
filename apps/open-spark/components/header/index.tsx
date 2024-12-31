@@ -7,6 +7,8 @@ import { TopHeader, SubHeader } from '@beckn-ui/common'
 import Constants from './constants'
 import { setProfileEditable, UserRootState } from '@store/user-slice'
 import { useDispatch, useSelector } from 'react-redux'
+import { AuthRootState } from '@store/auth-slice'
+import { ROLE } from '@lib/config'
 import profileIcon from '@public/images/user_profile.svg'
 
 const Header = () => {
@@ -33,6 +35,11 @@ const Header = () => {
   const profileSection = profileSectionIcon.includes(router.pathname)
     ? { src: profileIcon, handleClick: () => router.push('/profile') }
     : undefined
+  const { role } = useSelector((state: AuthRootState) => state.auth)
+  const dynamicHeaderNames = {
+    ...headerNames,
+    '/tradeDetails': role === ROLE.CONSUMER ? 'No. of Units Bought' : 'No. of Units Sold'
+  }
 
   return (
     <Box>
@@ -59,7 +66,7 @@ const Header = () => {
           profileSection={profileSection}
           headerConstants={{
             headerNames: {
-              defaultNames: headerNames,
+              defaultNames: dynamicHeaderNames,
               frenchNames: headerFrenchNames
             },
             blackList: {
