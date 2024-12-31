@@ -6,18 +6,7 @@ import { useLanguage } from '@hooks/useLanguage'
 import { useRouter } from 'next/router'
 import profileIcon from '@public/images/user_profile.svg'
 import { Input, Typography } from '@beckn-ui/molecules'
-import {
-  Box,
-  Flex,
-  HStack,
-  Tag,
-  TagLabel,
-  Divider,
-  Text,
-  TagCloseButton,
-  InputRightAddon,
-  InputGroup
-} from '@chakra-ui/react'
+import { Box, Flex, HStack, Tag, TagLabel, Divider, Text } from '@chakra-ui/react'
 import CustomeDateInput from '@components/dateRangePicker/CustomeDateInput'
 import SelectDate from '@components/dateRangePicker/SelectDate'
 import TotalEnergyUnits from '@components/totalEnerguUnit/TotalEnergyUnits'
