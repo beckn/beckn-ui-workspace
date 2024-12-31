@@ -31,6 +31,7 @@ export interface FormErrors {
   city?: string
   state?: string
   country?: string
+  customerId?: string
 }
 
 export type ShippingFormData = {

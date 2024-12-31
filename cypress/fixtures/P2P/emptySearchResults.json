@@ -1,0 +1,34 @@
+{
+  "data": [
+    {
+      "context": {
+        "domain": "uei:p2p_trading",
+        "action": "on_search",
+        "version": "1.1.0",
+        "bpp_id": "bpp-ps-network-strapi2-dev.example.io",
+        "bpp_uri": "http://bpp-ps-network-strapi2-dev.example.io",
+        "country": "IND",
+        "city": "std:080",
+        "location": {
+          "country": {
+            "name": "India",
+            "code": "IND"
+          },
+          "city": {
+            "name": "Bangalore",
+            "code": "std:080"
+          }
+        },
+        "bap_id": "bap-ps-network-dev.example.io",
+        "bap_uri": "https://bap-ps-network-dev.example.io",
+        "transaction_id": "b6746727-3440-4824-8b2f-86dbbd645b78",
+        "message_id": "08694e23-2d70-4d2e-942a-4c2f966176cb",
+        "ttl": "PT10M",
+        "timestamp": "2024-12-03T07:36:00.698Z"
+      },
+      "message": {
+        "name": "BPP"
+      }
+    }
+  ]
+}

@@ -17,7 +17,19 @@ export interface AuthProps {
     buttons: ButtonProps[]
     socialButtons?: ButtonProps[]
     loader?: LoaderProps
+    showTermsCheckbox?: boolean
+    termsCheckboxProps?: {
+      isChecked: boolean
+      color?: string
+      onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+      termsText: {
+        serviceName: string
+        termsLink: string
+        privacyLink: string
+      }
+    }
   }
   isLoading?: boolean
   dataTestForm?: string
+  customComponent?: React.ReactElement<any, any> | null
 }

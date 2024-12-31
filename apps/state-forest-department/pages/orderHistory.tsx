@@ -166,6 +166,7 @@ const OrderHistory = () => {
             text={order.attributes.items[0].name}
             fontWeight="600"
             fontSize={'15px'}
+            dataTest="order_history_item_name"
           />
           <Text
             as={Typography}

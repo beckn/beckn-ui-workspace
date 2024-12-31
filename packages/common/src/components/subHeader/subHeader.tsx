@@ -17,7 +17,8 @@ const getHeaderTitleForPage = (
   name: string,
   pathName: string,
   locale: string | undefined,
-  headerConstants: SubHeaderConstants
+  headerConstants: SubHeaderConstants,
+  customPagename?: string
 ) => {
   const {
     headerNames: { defaultNames, frenchNames },
@@ -31,7 +32,7 @@ const getHeaderTitleForPage = (
           className={Styles.header_title_text}
           data-test={testIds.pageName}
         >
-          {values[pathName]}
+          {customPagename || values[pathName]}
         </Text>
       )
     default:
@@ -52,9 +53,9 @@ const getHeaderTitleForPage = (
 }
 
 const SubHeader = (props: SubHeaderProps) => {
-  const { locale, t, showCartIcon = true, headerConstants } = props
+  const { locale, t, showCartIcon = true, headerConstants, handleClickOnEdit, profileSection } = props
   const {
-    blackList: { backIconList, orderIconList, cartIconList, invoiceDownloadIconList, qrCodeScanerList }
+    blackList: { backIconList, orderIconList, cartIconList, invoiceDownloadIconList, qrCodeScanerList, editIconList }
   } = headerConstants
 
   const [isOrderModalOpen, setOrderModalOpen] = useState(false)
@@ -92,7 +93,13 @@ const SubHeader = (props: SubHeaderProps) => {
               </Box>
             )}
           </Box>
-          {getHeaderTitleForPage(storedHeaderText, router.pathname, locale, headerConstants)}
+          {getHeaderTitleForPage(
+            storedHeaderText,
+            router.pathname,
+            locale,
+            headerConstants,
+            (router.query?.pagename || '') as string
+          )}
           {showCartIcon && (
             <div className="flex gap-4">
               {!cartIconList?.includes(router.pathname) && (
@@ -102,6 +109,14 @@ const SubHeader = (props: SubHeaderProps) => {
                 />
               )}
             </div>
+          )}
+          {profileSection && (
+            <Image
+              cursor={'pointer'}
+              src={profileSection.src}
+              alt={'right-img'}
+              onClick={profileSection.handleClick}
+            />
           )}
           {orderIconList?.includes(router.pathname) && (
             <Image
@@ -130,6 +145,14 @@ const SubHeader = (props: SubHeaderProps) => {
               alt="invoice icon"
               mr={'20px'}
               data-test={testIds.orderDetails_tourism_QR_external_link}
+            />
+          )}
+          {editIconList?.includes(router.pathname) && (
+            <Image
+              cursor="pointer"
+              onClick={handleClickOnEdit}
+              src="/images/edit_icon.svg"
+              alt="edit icon"
             />
           )}
         </Box>

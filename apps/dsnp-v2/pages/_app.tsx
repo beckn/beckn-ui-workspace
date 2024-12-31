@@ -14,14 +14,8 @@ import { Provider, useDispatch } from 'react-redux'
 import store, { persistor } from '@store/index'
 import { useToast } from '@chakra-ui/react'
 import { parentURLs } from '@lib/config'
-// import { Garuda } from 'garudaa'
 import { PersistGate } from 'redux-persist/integration/react'
 import axios from '@services/axios'
-
-// Garuda.init({
-//   projectId: '65c0d663cbe90cafae9185f6',
-//   host: 'https://garuda-api.becknprotocol.io'
-// })
 
 function MyApp({ Component, pageProps }: AppProps) {
   const toast = useToast()

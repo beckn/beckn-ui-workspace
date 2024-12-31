@@ -20,7 +20,11 @@ export interface InputProps {
   handleChange: React.ChangeEventHandler<HTMLInputElement>
   label?: string
   dataTest?: string
+  disabled?: boolean
   options?: { label: string; value: string }[]
+  readOnly?: boolean
+  rightElement?: () => React.ReactElement<any, any> | null
+  customInputBlurHandler?: React.FocusEventHandler<HTMLInputElement>
 }
 export interface signInField {
   name: string

@@ -2,22 +2,20 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 import authReducer from './auth-slice'
-import riderReducer from './rider-slice'
-import rideStatusReducer from './rideStatus-slice'
+import userReducer from './user-slice'
 import { geoMapLocationSearchReducer, feedbackReducer } from '@beckn-ui/common'
 import api from '@services/api'
 
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['auth', 'rider', 'ridestatus']
+  whitelist: ['auth', 'user']
 }
 
 const appReducer = combineReducers({
   auth: authReducer,
   [api.reducerPath]: api.reducer,
-  rider: riderReducer,
-  rideStatus: rideStatusReducer,
+  user: userReducer,
   geoLocationSearchPageUI: geoMapLocationSearchReducer,
   feedback: feedbackReducer
 })

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { InputProps } from './input.types'
-import { Input as ChakraInput, IconButton, useTheme } from '@chakra-ui/react'
+import { Input as ChakraInput, IconButton, useTheme, Box } from '@chakra-ui/react'
 import Styles from './input.module.css'
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
 
@@ -14,7 +14,11 @@ const Input: React.FC<InputProps> = ({
   label,
   className,
   error,
-  dataTest
+  disabled,
+  dataTest,
+  readOnly = false,
+  rightElement,
+  customInputBlurHandler
 }) => {
   const theme = useTheme()
   const [isInputFocused, setIsInputFocused] = useState(false)
@@ -38,7 +42,10 @@ const Input: React.FC<InputProps> = ({
         data-testid="test-chakra-input"
         data-test={dataTest}
         onFocus={handleInputFocus}
-        onBlur={handleInputBlur}
+        onBlur={event => {
+          handleInputBlur()
+          customInputBlurHandler?.(event)
+        }}
         _focus={{ borderColor: theme.colors.primary[100], outline: 'none' }}
         _focusVisible={{ boxShadow: 'unset' }}
         className={Styles.input}
@@ -48,6 +55,8 @@ const Input: React.FC<InputProps> = ({
         name={name}
         value={value}
         onChange={handleChange}
+        disabled={disabled}
+        readOnly={readOnly}
       />
       {isPassword && (
         <IconButton
@@ -62,6 +71,16 @@ const Input: React.FC<InputProps> = ({
           size="sm"
           _hover="none"
         />
+      )}
+      {rightElement && (
+        <Box
+          position="absolute"
+          right="10px"
+          top="75%"
+          transform="translateY(-50%)"
+        >
+          {rightElement?.()}
+        </Box>
       )}
 
       {label && (

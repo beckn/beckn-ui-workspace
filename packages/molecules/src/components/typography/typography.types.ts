@@ -12,7 +12,7 @@ export type TextVariant =
   | 'tagRegular'
 
 export interface TypographyProps {
-  text: string
+  text: string | React.ReactNode
   variant?: TextVariant
   color?: string
   fontFamily?: string

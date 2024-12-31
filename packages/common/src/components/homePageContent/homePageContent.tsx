@@ -99,6 +99,7 @@ const HomePageContent: React.FC<HomePageContentProps> = ({
             <Image
               src={logoSrc}
               alt={altText}
+              data-test={testIds.homePage_Image}
             />
           </Flex>
         )

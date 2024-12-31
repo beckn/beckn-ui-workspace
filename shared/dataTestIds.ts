@@ -70,12 +70,6 @@ const testIds = {
   deployed_odr_url_home: 'https://onlinedisputeresolution-staging.becknprotocol.io',
   deployed_odr_url_search: 'https://onlinedisputeresolution-staging.becknprotocol.io/search',
 
-  // Deployed urls
-  deployed_dsep_url_base: 'unified-dsep-staging.becknprotocol.io/',
-  deployed_dsep_url_signup: 'unified-dsep-staging.becknprotocol.io/signUp',
-  deployed_dsep_url_home: 'unified-dsep-staging.becknprotocol.io/',
-  deployed_dsep_url_search: 'unified-dsep-staging.becknprotocol.io/search',
-
   //mobility url
   deployed_mob_url_base: 'https://mobility-dev.becknprotocol.io/',
   //policy portal
@@ -104,6 +98,7 @@ const testIds = {
   user_firstTimeLoginvalidPasswordOSC: 'Aniket@123',
   user_login: 'krushnaTest@test.com',
   dsep_user_login: 'krushna.gaikwad@eminds.ai',
+  dragon_foods_user_login: 'krushna@gmail.com',
   user_password: 'Krushna@123',
   // auth page
   auth_inputEmail: 'input-email',
@@ -203,6 +198,8 @@ const testIds = {
   profile_country: 'input-country',
   profile_text_click: 'profile-text',
   profile_form: 'profile-form',
+  profile_address: 'profile-address',
+  profile_customerId: 'profile-customerId',
   // order details page
   orderDetailspage_orderOverview: 'orderOverview',
   orderDetailspage_progressSummary: 'progressSummary',
@@ -600,6 +597,9 @@ const testIds = {
   footer_postfix_text: 'footer-postfix-text',
   footer_bottomfix_text: 'footer-bottomfix-text',
   P2P_hompage_button: 'p2p-homePage-btn',
+  P2P_productpage_price_text: 'P2P-productpage-price-text',
+  P2P_productpage_energyUnit_text: 'P2P-productpage-energyUnit-text',
+  P2P_productpage_input: 'P2P-productpage-input',
 
   //////////////   Envirogrowth data test ////////////////
 
@@ -610,8 +610,58 @@ const testIds = {
   frequently_accessed_star_icon: 'Frequently Accessed',
   frequently_accessed_rating: 'Frequently Accessed',
   request_overview: 'Request Overview',
+  logo_description: 'logo-description',
   envirogrowth_shortDesc: 'short-description',
-  envirogrowth_provider: 'short-provider'
+  envirogrowth_provider: 'short-provider',
+  product_details_checkbox: 'product-details-checkbox-section-title',
+  product_checkbox: 'product-checkbox',
+  product_radio: 'product-radio',
+  product_radio_text: 'product-radio-text',
+  open_form: 'open-form',
+  billing_name: 'name',
+  billing_number: 'mobileNumber',
+  billing_email: 'email',
+  billing_address: 'address',
+  billing_pin_code: 'pinCode',
+  add_billing_details: 'submit',
+  proceed_to_checkout: 'proceed-to-checkout',
+  confirm_button: 'confirm-button',
+  grateful_message: 'grateful-message',
+  order_history_Status: 'order_history_Status',
+  statusName: 'statusName',
+  statusTime: 'statusTime',
+  order_history_item_name: 'order_history_item_name',
+  order_history_provider: 'order_history_provider',
+  order_history_description: 'order_history_description',
+  track_order: 'track-order',
+  order_History_createdAt: 'order-History-createdAt',
+  sort_by_price_menu_list: 'sort-by-price-menu-list',
+  filter_by_rating_menu_list: 'filter-by-rating-menu-list',
+  sort_menu_item_1: 'menu-item-1',
+  sort_menu_item_2: 'menu-item-2',
+  rating_container: 'rating-container',
+  Proceed: 'Proceed',
+  Proceed_to_product: 'Proceed-to-product',
+  Frequently_accessed_item: 'Frequently_accessed_item',
+  Frequently_accessed_text: 'Frequently_accessed_text',
+  TermsandConditions_link: 'TermsandConditions_link',
+  disclaimer_text: 'disclaimer_text',
+  meterNumber: 'meterNumber',
+
+  // Dragon Foods app
+  homePage_Image: 'homePage-Image',
+  Frequently_Accessed: 'Frequently-Accessed',
+  Frequently_Accessed_Card: 'Frequently-Accessed-Card',
+  Frequently_Accessed_image: 'Frequently-Accessed-image',
+  Frequently_Accessed_item_name: 'Frequently-Accessed-item-name',
+  Frequently_Accessed_provider_name: 'Frequently-Accessed-provider-name',
+  Frequently_Accessed_productInfo: 'Frequently-Accessed-productInfo',
+  Frequently_Accessed_item_rating: 'Frequently-Accessed-item-rating',
+  dragon_foods_product_about_section: 'dragon-foods-product-about-section',
+  dragon_foods_product_about_short_desc: 'dragon-foods-product-about-short-desc',
+  dragon_foods_product_about_productInfo: 'dragon-foods-product-about-productInfo',
+  cart_page_shortDesc: 'cart-page-shortDesc',
+  cart_page_providerName: 'cart-page-providerName'
 }
 
 export { testIds }

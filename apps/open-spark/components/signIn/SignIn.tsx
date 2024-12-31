@@ -2,21 +2,25 @@ import React, { useState, useMemo } from 'react'
 import { BecknAuth } from '@beckn-ui/becknified-components'
 import { FormErrors, SignInFormProps } from '@beckn-ui/common/lib/types'
 import { signInValidateForm } from '@beckn-ui/common'
-import energyIcon from '@public/images/energy-icon.svg'
+import openSpark from '@public/images/openSparkLogo.svg'
 import { useLanguage } from '@hooks/useLanguage'
 import { Box } from '@chakra-ui/react'
 import Router from 'next/router'
 import { useBapTradeLoginMutation, useBppTradeLoginMutation } from '@services/UserService'
-import { accountType } from '@utils/auth'
+import { useDispatch, useSelector } from 'react-redux'
+import { AuthRootState, setRole } from '@store/auth-slice'
+import { ROLE } from '@lib/config'
 
 const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
   const [formData, setFormData] = useState<SignInFormProps>(initialFormData)
   const [formErrors, setFormErrors] = useState<FormErrors>({ email: '', password: '' })
-  const [bapLogin, { isLoading: bapLoading }] = useBapTradeLoginMutation()
-  const [bppLogin, { isLoading: bppLoading }] = useBppTradeLoginMutation()
-  const { t } = useLanguage()
 
-  // Handle input change and validation
+  const { role } = useSelector((state: AuthRootState) => state.auth)
+  const [bapTradeLogin, { isLoading: bapLoading }] = useBapTradeLoginMutation()
+  const [bppTradeLogin, { isLoading: bppLoading }] = useBppTradeLoginMutation()
+  const { t } = useLanguage()
+  const dispatch = useDispatch()
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
 
@@ -37,14 +41,12 @@ const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
     }))
   }
 
-  // Check if form is filled
   const isFormFilled = useMemo(() => {
     return (
       Object.values(formData).every(value => value !== '') && Object.values(formErrors).every(value => value === '')
     )
   }, [formData, formErrors])
 
-  // Handle sign-in action
   const handleSignIn = async () => {
     const signInData = {
       email: formData.email,
@@ -52,11 +54,25 @@ const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
     }
 
     try {
-      await bapLogin(signInData).unwrap()
-      Router.push('/')
+      let roleType: ROLE | null = null
+      if (role === ROLE.CONSUMER) {
+        const res = await bapTradeLogin(signInData).unwrap()
+        if (res.user.role?.type.toUpperCase() === ROLE.CONSUMER) {
+          roleType = ROLE.CONSUMER
+        } else if (res.user.role?.type.toUpperCase() === ROLE.ADMIN) {
+          roleType = ROLE.ADMIN
+        }
+      }
+      if (role === ROLE.PRODUCER) {
+        await bppTradeLogin(signInData).unwrap()
+        roleType = ROLE.PRODUCER
+      }
+      if (roleType) {
+        dispatch(setRole({ role: roleType! }))
+        Router.push('/')
+      }
     } catch (error) {
       console.error('An error occurred:', error)
-      // Handle error state or display error message
     }
   }
 
@@ -64,18 +80,18 @@ const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
     Router.push('/signUp')
   }
 
-  const handleChooseAuthType = (id: string) => {}
+  const handleOnRoleChange = (roleType: ROLE) => {
+    dispatch(setRole({ role: roleType }))
+  }
 
   return (
     <Box>
       <BecknAuth
         schema={{
           logo: {
-            src: energyIcon,
-            alt: 'energy-logo'
+            src: openSpark,
+            alt: 'openSpark-logo'
           },
-          chooseAuthType: accountType,
-          handleAccountType: handleChooseAuthType,
           buttons: [
             {
               text: t.signIn,
@@ -113,6 +129,15 @@ const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
               handleChange: handleInputChange,
               error: formErrors.password,
               dataTest: 'input-password'
+            }
+          ],
+          socialButtons: [
+            {
+              text: role === ROLE.CONSUMER ? 'Sign In as Producer' : 'Sign In as Consumer',
+              handleClick: () => handleOnRoleChange(role === ROLE.CONSUMER ? ROLE.PRODUCER : ROLE.CONSUMER),
+              variant: 'outline',
+              colorScheme: 'primary',
+              dataTest: 'producer-button'
             }
           ]
         }}

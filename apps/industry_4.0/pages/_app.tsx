@@ -12,12 +12,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import '../styles/globals.css'
 import { Provider } from 'react-redux'
 import store from '@store/index'
-import { Garuda } from 'garudaa'
 
-Garuda.init({
-  projectId: '65c0d663cbe90cafae9185f6',
-  host: 'https://garuda-api.becknprotocol.io'
-})
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <BecknProvider

@@ -31,6 +31,7 @@ const TopSheet: React.FC<TopSheetComponentProps> = ({
   searchPlaceholder = t('searchforlocation'),
   onlineOfflineSwitch = false,
   onlineStatus,
+  profileSection,
   handleOnSwitch,
   homePagePath = '/'
 }) => {
@@ -117,6 +118,14 @@ const TopSheet: React.FC<TopSheetComponentProps> = ({
             colorScheme={'green'}
             onChange={handleOnSwitch}
             data-test={testIds.taxi_BPP_switch_toggle_button}
+          />
+        )}
+        {profileSection && (
+          <Image
+            cursor={'pointer'}
+            src={profileSection.src}
+            alt={'right-img'}
+            onClick={profileSection.handleClick}
           />
         )}
       </Box>

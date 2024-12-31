@@ -53,6 +53,10 @@ body {
   background-color: rgb(var(--color-bg));
   color: rgb(var(--color-text-base));
 }
+.hideScroll {
+  scrollbar-width: none; /* Hides the scrollbar in Firefox */
+  -ms-overflow-style: none; /* Hides the scrollbar in Internet Explorer 10+ */
+}
 
 .hideScroll::-webkit-scrollbar {
   display: none;

@@ -12,7 +12,8 @@ describe('end to end testing', () => {
       })
   }
   before(() => {
-    cy.visit(testIds.deployed_tourism_url_base)
+    //cy.visit(testIds.deployed_tourism_url_base)
+    cy.visit('https://tourism-staging.becknprotocol.io')
   })
   context('Sign in With Valid ID and Password', () => {
     // Valid login scenarios
