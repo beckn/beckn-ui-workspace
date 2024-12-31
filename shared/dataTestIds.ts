@@ -70,12 +70,6 @@ const testIds = {
   deployed_odr_url_home: 'https://onlinedisputeresolution-staging.becknprotocol.io',
   deployed_odr_url_search: 'https://onlinedisputeresolution-staging.becknprotocol.io/search',
 
-  // Deployed urls
-  deployed_dsep_url_base: 'unified-dsep-staging.becknprotocol.io/',
-  deployed_dsep_url_signup: 'unified-dsep-staging.becknprotocol.io/signUp',
-  deployed_dsep_url_home: 'unified-dsep-staging.becknprotocol.io/',
-  deployed_dsep_url_search: 'unified-dsep-staging.becknprotocol.io/search',
-
   //mobility url
   deployed_mob_url_base: 'https://mobility-dev.becknprotocol.io/',
   //policy portal
@@ -104,6 +98,7 @@ const testIds = {
   user_firstTimeLoginvalidPasswordOSC: 'Aniket@123',
   user_login: 'krushnaTest@test.com',
   dsep_user_login: 'krushna.gaikwad@eminds.ai',
+  dragon_foods_user_login: 'krushna@gmail.com',
   user_password: 'Krushna@123',
   // auth page
   auth_inputEmail: 'input-email',
@@ -661,7 +656,12 @@ const testIds = {
   Frequently_Accessed_item_name: 'Frequently-Accessed-item-name',
   Frequently_Accessed_provider_name: 'Frequently-Accessed-provider-name',
   Frequently_Accessed_productInfo: 'Frequently-Accessed-productInfo',
-  Frequently_Accessed_item_rating: 'Frequently-Accessed-item-rating'
+  Frequently_Accessed_item_rating: 'Frequently-Accessed-item-rating',
+  dragon_foods_product_about_section: 'dragon-foods-product-about-section',
+  dragon_foods_product_about_short_desc: 'dragon-foods-product-about-short-desc',
+  dragon_foods_product_about_productInfo: 'dragon-foods-product-about-productInfo',
+  cart_page_shortDesc: 'cart-page-shortDesc',
+  cart_page_providerName: 'cart-page-providerName'
 }
 
 export { testIds }
