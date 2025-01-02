@@ -25,7 +25,7 @@ interface AddNewDerModalProps {
 }
 
 const AddNewDerModal = (props: AddNewDerModalProps) => {
-  const [category, setCategory] = useState('Lorem Ipsum Dior')
+  const [category, setCategory] = useState('')
   const [uploadedFiles, setUploadedFiles] = useState<DocumentProps[]>([])
   const [allFilesProcessed, setAllFilesProcessed] = useState<boolean>(false)
 
