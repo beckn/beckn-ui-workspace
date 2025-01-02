@@ -106,7 +106,8 @@ export default function EnergyPurchaseForm({ preferenceType }: EnergyPurchaseFor
 
     try {
       if (tradeId) {
-        const response = await axios.put(`${strapiUrl}${ROUTE_TYPE[role!]}/trade/${tradeId}`, payload, {
+        const endpoint = role === ROLE.CONSUMER ? `trade/${tradeId}` : `trade-pref`
+        const response = await axios.put(`${strapiUrl}${ROUTE_TYPE[role!]}/${endpoint}`, payload, {
           headers: { Authorization: `Bearer ${bearerToken}` },
           withCredentials: true
         })
