@@ -648,7 +648,7 @@ const testIds = {
   disclaimer_text: 'disclaimer_text',
   meterNumber: 'meterNumber',
 
-  // Dragon Foods app
+  // Dragon Foods, sky-analytics app
   homePage_Image: 'homePage-Image',
   Frequently_Accessed: 'Frequently-Accessed',
   Frequently_Accessed_Card: 'Frequently-Accessed-Card',
@@ -661,7 +661,10 @@ const testIds = {
   dragon_foods_product_about_short_desc: 'dragon-foods-product-about-short-desc',
   dragon_foods_product_about_productInfo: 'dragon-foods-product-about-productInfo',
   cart_page_shortDesc: 'cart-page-shortDesc',
-  cart_page_providerName: 'cart-page-providerName'
+  cart_page_providerName: 'cart-page-providerName',
+  product_about_section: 'product-about-section',
+  product_about_short_desc: 'product-about-short-desc',
+  product_about_productInfo: 'product-about-productInfo'
 }
 
 export { testIds }
