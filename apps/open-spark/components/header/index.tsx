@@ -38,7 +38,9 @@ const Header = () => {
   const { role } = useSelector((state: AuthRootState) => state.auth)
   const dynamicHeaderNames = {
     ...headerNames,
-    '/tradeDetails': role === ROLE.CONSUMER ? 'No. of Units Bought' : 'No. of Units Sold'
+    '/tradeDetails': role === ROLE.CONSUMER ? 'No. of Units Bought' : 'No. of Units Sold',
+    '/buyingPreference': `${Object.keys(router.query).length > 0 ? 'Edit' : ''} ${headerNames['/buyingPreference']}`,
+    '/sellingPreference': `${Object.keys(router.query).length > 0 ? 'Edit' : ''} ${headerNames['/sellingPreference']}`
   }
 
   return (

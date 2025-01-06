@@ -14,7 +14,7 @@ import { QuestionOutlineIcon } from '@chakra-ui/icons'
 import React, { useEffect, useState } from 'react'
 import { FaMinus, FaPlus } from 'react-icons/fa6'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
-import axios from 'axios'
+import axios from '@services/axios'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@store/index'
 import { DOMAIN, ROLE, ROUTE_TYPE } from '@lib/config'
@@ -139,11 +139,11 @@ export default function EnergyPurchaseForm({ preferenceType }: EnergyPurchaseFor
       }
     } catch (error) {
       console.error('Error create/update trade:', error)
-      dispatch(
-        feedbackActions.setToastData({
-          toastData: { message: 'Error', display: true, type: 'error', description: t.errorText }
-        })
-      )
+      // dispatch(
+      //   feedbackActions.setToastData({
+      //     toastData: { message: 'Error', display: true, type: 'error', description: t.errorText }
+      //   })
+      // )
     }
   }
 
