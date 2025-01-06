@@ -22,7 +22,7 @@ import { useSelector } from 'react-redux'
 import { ROLE, ROUTE_TYPE } from '@lib/config'
 import { useBapTradeDashboardQuery, useBppTradeDashboardQuery } from '@services/DashboardService'
 import Cookies from 'js-cookie'
-import axios from 'axios'
+import axios from '@services/axios'
 import { DashboardData, StatusItem, TradeData } from '@lib/types/dashboard'
 import { parseAndFormatDate } from '@utils/parsedFormatDate-utils'
 import PendingIcon from '@public/images/pending.svg'
@@ -205,6 +205,7 @@ const Dashboard = () => {
   }
 
   const latestStatus = currentStatusData.find(item => typeof item.status === 'string' && item.status !== '')
+
   return (
     <>
       <TopSheet
@@ -293,8 +294,9 @@ const Dashboard = () => {
                   />
                   <QuestionOutlineIcon />
                 </HStack>
-                {role === ROLE.PRODUCER || currentTradeData.length === 0 || latestStatus?.status === 'SUCCESS' ? (
+                {role === ROLE.PRODUCER && currentTradeData.length !== 0 && (
                   <LiaPenSolid
+                    cursor={'pointer'}
                     onClick={() =>
                       router.push({
                         pathname: '/sellingPreference',
@@ -310,8 +312,10 @@ const Dashboard = () => {
                       })
                     }
                   />
-                ) : (
+                )}
+                {role === ROLE.CONSUMER && currentTradeData.length !== 0 && latestStatus?.status !== 'SUCCESS' && (
                   <LiaPenSolid
+                    cursor={'pointer'}
                     onClick={() =>
                       router.push({
                         pathname: '/buyingPreference',

@@ -1,0 +1,15 @@
+{
+  "data": [
+    {
+      "context": {
+        "domain": "skyanalytics_flow",
+        "transaction_id": "12345",
+        "bpp_id": "bpp123",
+        "bpp_uri": "https://bpp.example.com"
+      },
+      "message": {
+        "providers": []
+      }
+    }
+  ]
+}
