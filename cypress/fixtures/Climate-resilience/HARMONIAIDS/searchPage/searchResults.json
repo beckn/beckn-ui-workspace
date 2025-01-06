@@ -1,0 +1,704 @@
+{
+  "data": [
+    {
+      "context": {
+        "domain": "harmoniaid",
+        "action": "on_search",
+        "version": "1.1.0",
+        "bpp_id": "bpp-ps-network-strapi-dev.becknprotocol.io",
+        "bpp_uri": "http://bpp-ps-network-strapi-dev.becknprotocol.io",
+        "country": "IND",
+        "city": "std:080",
+        "location": {
+          "country": {
+            "name": "India",
+            "code": "IND"
+          },
+          "city": {
+            "name": "Bangalore",
+            "code": "std:080"
+          }
+        },
+        "bap_id": "bap-ps-network-dev.becknprotocol.io",
+        "bap_uri": "https://bap-ps-network-dev.becknprotocol.io",
+        "transaction_id": "6909596c-02bf-41d7-8c96-133d3e4c6223",
+        "message_id": "69e06234-25c5-4f51-b722-6eabfc611572",
+        "ttl": "PT10M",
+        "timestamp": "2025-01-03T06:21:52.887Z"
+      },
+      "message": {
+        "name": "BPP",
+        "providers": [
+          {
+            "id": "805",
+            "name": "Ministry of Health",
+            "rating": "4.2",
+            "short_desc": "The Ministry of Health is the primary governmental body responsible for all public health and healthcare services in the country. ",
+            "long_desc": "License: CC BY-NC-SA  |  26 years in operation",
+            "items": [
+              {
+                "id": "329",
+                "name": "Health related population exposure and vulnerability data in Sylhet",
+                "price": {
+                  "value": "40"
+                },
+                "images": [
+                  {
+                    "url": "https://bpp-unified-strapi-dev.becknprotocol.io/uploads/Group_1000003473_4adefabc52.png"
+                  }
+                ],
+                "rating": "null",
+                "rateable": true,
+                "tags": [
+                  {
+                    "code": "Population Exposure Datapoints",
+                    "description": "Population Exposure Datapoints",
+                    "list": [
+                      {
+                        "code": "Distribution of population dependent on life-sustaining equipment",
+                        "value": "Distribution of population dependent on life-sustaining equipment",
+                        "display": true
+                      },
+                      {
+                        "code": "Distribution of population dependent on critical medicines",
+                        "value": "Distribution of population dependent on critical medicines",
+                        "display": true
+                      },
+                      {
+                        "code": "Distribution of population within reach of healthcare facilities",
+                        "value": "Distribution of population within reach of healthcare facilities",
+                        "display": true
+                      },
+                      {
+                        "code": "Distribution of population dependent on life-sustaining equipment",
+                        "value": "Distribution of population dependent on life-sustaining equipment",
+                        "display": true
+                      },
+                      {
+                        "code": "Distribution of population dependent on critical medicines",
+                        "value": "Distribution of population dependent on critical medicines",
+                        "display": true
+                      },
+                      {
+                        "code": "Distribution of population within reach of healthcare facilities",
+                        "value": "Distribution of population within reach of healthcare facilities",
+                        "display": true
+                      }
+                    ]
+                  },
+                  {
+                    "code": "Spatial Representation",
+                    "description": "Spatial Representation",
+                    "list": [
+                      {
+                        "code": "Vector",
+                        "value": "Vector",
+                        "display": true
+                      },
+                      {
+                        "code": "Raster",
+                        "value": "Raster",
+                        "display": true
+                      }
+                    ]
+                  },
+                  {
+                    "code": "Spatial Coverage",
+                    "description": "Spatial Coverage",
+                    "list": [
+                      {
+                        "code": "Balaganj",
+                        "value": "Balaganj",
+                        "display": true
+                      },
+                      {
+                        "code": "Biswanath",
+                        "value": "Biswanath",
+                        "display": true
+                      },
+                      {
+                        "code": "Kanaigath",
+                        "value": "Kanaigath",
+                        "display": true
+                      }
+                    ]
+                  },
+                  {
+                    "code": "Spatial Resolutions",
+                    "description": "Spatial Resolutions",
+                    "list": [
+                      {
+                        "code": "80 m",
+                        "value": "80 m",
+                        "display": true
+                      },
+                      {
+                        "code": "5 km",
+                        "value": "5 km",
+                        "display": true
+                      }
+                    ]
+                  },
+                  {
+                    "code": "Data Formats",
+                    "description": "Data Formats",
+                    "list": [
+                      {
+                        "code": "XML",
+                        "value": "XML",
+                        "display": true
+                      },
+                      {
+                        "code": "CSV",
+                        "value": "CSV",
+                        "display": true
+                      },
+                      {
+                        "code": "NetCDF",
+                        "value": "NetCDF",
+                        "display": true
+                      },
+                      {
+                        "code": "HDF",
+                        "value": "HDF",
+                        "display": true
+                      }
+                    ]
+                  },
+                  {
+                    "code": "Data Sharing Modes",
+                    "description": "Data Sharing Modes",
+                    "list": [
+                      {
+                        "code": "FTP",
+                        "value": "FTP",
+                        "display": true
+                      },
+                      {
+                        "code": "SOAP_API",
+                        "value": "SOAP_API",
+                        "display": true
+                      },
+                      {
+                        "code": "Email",
+                        "value": "Email",
+                        "display": true
+                      }
+                    ]
+                  },
+                  {
+                    "code": "Subscription Durations",
+                    "description": "Subscription Durations",
+                    "list": [
+                      {
+                        "code": "One time",
+                        "value": "One time",
+                        "display": true
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "images": [
+              {
+                "url": "https://makerspace/assembly/makerspace_logo.png"
+              }
+            ]
+          },
+          {
+            "id": "806",
+            "name": "Lepro Care Foundation",
+            "rating": "4.2",
+            "short_desc": "Founded in 1999, Lepro Care Foundation is a non-profit working towards the empowerment of persons with disabilities in North and East Bangladesh.",
+            "long_desc": "License: Proprietary  |  25 years in operation",
+            "items": [
+              {
+                "id": "330",
+                "name": "Population disability data in Sylhet",
+                "price": {
+                  "value": "50"
+                },
+                "images": [
+                  {
+                    "url": "https://bpp-unified-strapi-dev.becknprotocol.io/uploads/Group_1000003475_de588e89de.png"
+                  }
+                ],
+                "rating": "null",
+                "rateable": true,
+                "tags": [
+                  {
+                    "code": "Population Exposure Datapoints",
+                    "description": "Population Exposure Datapoints",
+                    "list": [
+                      {
+                        "code": "Distribution of population with disabitlities",
+                        "value": "Distribution of population with disabitlities",
+                        "display": true
+                      },
+                      {
+                        "code": "Distribution of population with disabitlities",
+                        "value": "Distribution of population with disabitlities",
+                        "display": true
+                      }
+                    ]
+                  },
+                  {
+                    "code": "Spatial Representation",
+                    "description": "Spatial Representation",
+                    "list": [
+                      {
+                        "code": "Vector",
+                        "value": "Vector",
+                        "display": true
+                      }
+                    ]
+                  },
+                  {
+                    "code": "Spatial Coverage",
+                    "description": "Spatial Coverage",
+                    "list": [
+                      {
+                        "code": "Beanibazar",
+                        "value": "Beanibazar",
+                        "display": true
+                      },
+                      {
+                        "code": "Gopalganj",
+                        "value": "Gopalganj",
+                        "display": true
+                      },
+                      {
+                        "code": "Balaganj",
+                        "value": "Balaganj",
+                        "display": true
+                      },
+                      {
+                        "code": "Biswanath",
+                        "value": "Biswanath",
+                        "display": true
+                      },
+                      {
+                        "code": "Kanaigath",
+                        "value": "Kanaigath",
+                        "display": true
+                      }
+                    ]
+                  },
+                  {
+                    "code": "Spatial Resolutions",
+                    "description": "Spatial Resolutions",
+                    "list": [
+                      {
+                        "code": "80 m",
+                        "value": "80 m",
+                        "display": true
+                      },
+                      {
+                        "code": "5 km",
+                        "value": "5 km",
+                        "display": true
+                      }
+                    ]
+                  },
+                  {
+                    "code": "Data Formats",
+                    "description": "Data Formats",
+                    "list": [
+                      {
+                        "code": "XML",
+                        "value": "XML",
+                        "display": true
+                      },
+                      {
+                        "code": "CSV",
+                        "value": "CSV",
+                        "display": true
+                      },
+                      {
+                        "code": "HDF",
+                        "value": "HDF",
+                        "display": true
+                      }
+                    ]
+                  },
+                  {
+                    "code": "Data Sharing Modes",
+                    "description": "Data Sharing Modes",
+                    "list": [
+                      {
+                        "code": "FTP",
+                        "value": "FTP",
+                        "display": true
+                      },
+                      {
+                        "code": "SOAP_API",
+                        "value": "SOAP_API",
+                        "display": true
+                      },
+                      {
+                        "code": "Email",
+                        "value": "Email",
+                        "display": true
+                      }
+                    ]
+                  },
+                  {
+                    "code": "Subscription Durations",
+                    "description": "Subscription Durations",
+                    "list": [
+                      {
+                        "code": "One time",
+                        "value": "One time",
+                        "display": true
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "images": [
+              {
+                "url": "https://makerspace/assembly/makerspace_logo.png"
+              }
+            ]
+          },
+          {
+            "id": "807",
+            "name": "Ministry of Home",
+            "rating": "4.2",
+            "short_desc": "The Ministry of Home is a key governmental body responsible for internal security, law enforcement, and civil administration, including aspects ...",
+            "long_desc": "License: CC BY-NC-SA  |  53 years in operation",
+            "items": [
+              {
+                "id": "331",
+                "name": "Housing Infrastructure quality data in Sylhet",
+                "price": {
+                  "value": "60"
+                },
+                "images": [
+                  {
+                    "url": "https://bpp-unified-strapi-dev.becknprotocol.io/uploads/Group_1000003466_8a7712c0bc.png"
+                  }
+                ],
+                "rating": "null",
+                "rateable": true,
+                "tags": [
+                  {
+                    "code": "Population Exposure Datapoints",
+                    "description": "Population Exposure Datapoints",
+                    "list": [
+                      {
+                        "code": "Housing building material",
+                        "value": "Housing building material",
+                        "display": true
+                      },
+                      {
+                        "code": "Housing building age",
+                        "value": "Housing building age",
+                        "display": true
+                      },
+                      {
+                        "code": "Distribution of homeless population",
+                        "value": "Distribution of homeless population",
+                        "display": true
+                      }
+                    ]
+                  },
+                  {
+                    "code": "Spatial Representation",
+                    "description": "Spatial Representation",
+                    "list": [
+                      {
+                        "code": "Vector",
+                        "value": "Vector",
+                        "display": true
+                      },
+                      {
+                        "code": "Raster",
+                        "value": "Raster",
+                        "display": true
+                      }
+                    ]
+                  },
+                  {
+                    "code": "Spatial Coverage",
+                    "description": "Spatial Coverage",
+                    "list": [
+                      {
+                        "code": "Beanibazar",
+                        "value": "Beanibazar",
+                        "display": true
+                      },
+                      {
+                        "code": "Gopalganj",
+                        "value": "Gopalganj",
+                        "display": true
+                      },
+                      {
+                        "code": "Balaganj",
+                        "value": "Balaganj",
+                        "display": true
+                      },
+                      {
+                        "code": "Biswanath",
+                        "value": "Biswanath",
+                        "display": true
+                      },
+                      {
+                        "code": "Kanaigath",
+                        "value": "Kanaigath",
+                        "display": true
+                      }
+                    ]
+                  },
+                  {
+                    "code": "Spatial Resolutions",
+                    "description": "Spatial Resolutions",
+                    "list": [
+                      {
+                        "code": "80 m",
+                        "value": "80 m",
+                        "display": true
+                      },
+                      {
+                        "code": "5 km",
+                        "value": "5 km",
+                        "display": true
+                      }
+                    ]
+                  },
+                  {
+                    "code": "Data Formats",
+                    "description": "Data Formats",
+                    "list": [
+                      {
+                        "code": "XML",
+                        "value": "XML",
+                        "display": true
+                      },
+                      {
+                        "code": "CSV",
+                        "value": "CSV",
+                        "display": true
+                      },
+                      {
+                        "code": "HDF",
+                        "value": "HDF",
+                        "display": true
+                      }
+                    ]
+                  },
+                  {
+                    "code": "Data Sharing Modes",
+                    "description": "Data Sharing Modes",
+                    "list": [
+                      {
+                        "code": "FTP",
+                        "value": "FTP",
+                        "display": true
+                      },
+                      {
+                        "code": "SOAP_API",
+                        "value": "SOAP_API",
+                        "display": true
+                      },
+                      {
+                        "code": "Email",
+                        "value": "Email",
+                        "display": true
+                      }
+                    ]
+                  },
+                  {
+                    "code": "Subscription Durations",
+                    "description": "Subscription Durations",
+                    "list": [
+                      {
+                        "code": "One time",
+                        "value": "One time",
+                        "display": true
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "images": [
+              {
+                "url": "https://makerspace/assembly/makerspace_logo.png"
+              }
+            ]
+          },
+          {
+            "id": "808",
+            "name": "Statistics Bureau",
+            "rating": "4.2",
+            "short_desc": "The Bureau of Statistics is the central statistical organization under the Ministry of Planning.",
+            "long_desc": "License: CC BY-NC-SA  |  46 years in operation",
+            "items": [
+              {
+                "id": "332",
+                "name": "Demographic exposure and vulnerability data in Sylhet",
+                "price": {
+                  "value": "70"
+                },
+                "images": [
+                  {
+                    "url": "https://bpp-unified-strapi-dev.becknprotocol.io/uploads/Group_1000003465_388196c0c4.png"
+                  }
+                ],
+                "rating": "null",
+                "rateable": true,
+                "tags": [
+                  {
+                    "code": "Population Exposure Datapoints",
+                    "description": "Population Exposure Datapoints",
+                    "list": [
+                      {
+                        "code": "Distribution of population density",
+                        "value": "Distribution of population density",
+                        "display": true
+                      },
+                      {
+                        "code": "Distribution of population age",
+                        "value": "Distribution of population age",
+                        "display": true
+                      },
+                      {
+                        "code": "Distribution of household income",
+                        "value": "Distribution of household income",
+                        "display": true
+                      },
+                      {
+                        "code": "Distribution of household size",
+                        "value": "Distribution of household size",
+                        "display": true
+                      }
+                    ]
+                  },
+                  {
+                    "code": "Spatial Representation",
+                    "description": "Spatial Representation",
+                    "list": [
+                      {
+                        "code": "Vector",
+                        "value": "Vector",
+                        "display": true
+                      },
+                      {
+                        "code": "Raster",
+                        "value": "Raster",
+                        "display": true
+                      }
+                    ]
+                  },
+                  {
+                    "code": "Spatial Coverage",
+                    "description": "Spatial Coverage",
+                    "list": [
+                      {
+                        "code": "Beanibazar",
+                        "value": "Beanibazar",
+                        "display": true
+                      },
+                      {
+                        "code": "Gopalganj",
+                        "value": "Gopalganj",
+                        "display": true
+                      },
+                      {
+                        "code": "Balaganj",
+                        "value": "Balaganj",
+                        "display": true
+                      },
+                      {
+                        "code": "Biswanath",
+                        "value": "Biswanath",
+                        "display": true
+                      },
+                      {
+                        "code": "Kanaigath",
+                        "value": "Kanaigath",
+                        "display": true
+                      }
+                    ]
+                  },
+                  {
+                    "code": "Spatial Resolutions",
+                    "description": "Spatial Resolutions",
+                    "list": [
+                      {
+                        "code": "80 m",
+                        "value": "80 m",
+                        "display": true
+                      },
+                      {
+                        "code": "5 km",
+                        "value": "5 km",
+                        "display": true
+                      }
+                    ]
+                  },
+                  {
+                    "code": "Data Formats",
+                    "description": "Data Formats",
+                    "list": [
+                      {
+                        "code": "XML",
+                        "value": "XML",
+                        "display": true
+                      },
+                      {
+                        "code": "CSV",
+                        "value": "CSV",
+                        "display": true
+                      },
+                      {
+                        "code": "NetCDF",
+                        "value": "NetCDF",
+                        "display": true
+                      }
+                    ]
+                  },
+                  {
+                    "code": "Data Sharing Modes",
+                    "description": "Data Sharing Modes",
+                    "list": [
+                      {
+                        "code": "FTP",
+                        "value": "FTP",
+                        "display": true
+                      },
+                      {
+                        "code": "Rest API",
+                        "value": "Rest API",
+                        "display": true
+                      }
+                    ]
+                  },
+                  {
+                    "code": "Subscription Durations",
+                    "description": "Subscription Durations",
+                    "list": [
+                      {
+                        "code": "One time",
+                        "value": "One time",
+                        "display": true
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "images": [
+              {
+                "url": "https://makerspace/assembly/makerspace_logo.png"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
