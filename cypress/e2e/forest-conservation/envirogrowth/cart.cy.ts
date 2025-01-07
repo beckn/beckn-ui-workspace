@@ -4,13 +4,13 @@ describe('Cart Page Tests', () => {
     cy.login(testIds.url_base, testIds.user_validEmail, testIds.user_validPassword)
   })
   context('When there are no items in cart', () => {
-    const searchTerm = 'floodprediction'
+    const searchTerm = 'data'
     beforeEach(() => {
       cy.visit(`${testIds.url_base}${testIds.url_home}`)
       cy.setGeolocation('getAddress')
       cy.wait('@getAddress')
       cy.performSearch(searchTerm, {
-        fixture: 'Climate-resilience/DRAGON-FOODS/searchPage/searchResults.json'
+        fixture: 'forest-conservation/ENVIROGROWTH/searchPage/searchResults.json'
       })
       cy.selectProduct(0)
       cy.url().should('include', testIds.url_product)
@@ -35,23 +35,18 @@ describe('Cart Page Tests', () => {
       cy.setGeolocation('getAddress')
       cy.wait('@getAddress')
       cy.performSearch(searchTerm, {
-        fixture: 'Climate-resilience/DRAGON-FOODS/searchPage/searchResults.json'
+        fixture: 'forest-conservation/ENVIROGROWTH/searchPage/searchResults.json'
       })
       cy.selectProduct(0)
       cy.url().should('include', testIds.url_product)
       cy.getByData('"product-checkbox"').eq(0).click()
+      cy.getByData('"product-checkbox"').eq(3).click()
       cy.getByData('"product-checkbox"').eq(5).click()
-      cy.getByData('"product-checkbox"').eq(8).click()
-      cy.getByData('"product-checkbox"').eq(11).click()
-      cy.getByData('"product-checkbox"').eq(15).click()
-      cy.getByData('"product-checkbox"').eq(18).click()
-      cy.getByData('"product-checkbox"').eq(20).click()
-      cy.getByData('"product-checkbox"').eq(21).click()
+      cy.getByData('"product-checkbox"').eq(9).click()
       cy.getByData('product-radio').eq(0).click()
-      cy.getByData('product-radio').eq(4).click()
-      cy.getByData('"product-checkbox"').eq(25).click()
+      cy.getByData('"product-checkbox"').eq(12).click()
       cy.getByData(testIds.Proceed_to_product).click()
-      cy.intercept('POST', '/select', { fixture: 'Climate-resilience/DRAGON-FOODS/cart/selectResult.json' }).as(
+      cy.intercept('POST', '/select', { fixture: 'forest-conservation/ENVIROGROWTH/cart/selectResult.json' }).as(
         'selectCall'
       )
       cy.wait('@selectCall')
@@ -62,13 +57,10 @@ describe('Cart Page Tests', () => {
 
     it('should render and display cart page with result', () => {
       cy.getByData(testIds.feedback).getByData('close').click()
-      cy.getByData(testIds.cart_page_shortDesc).should('be.visible')
-      cy.getByData(testIds.cart_page_shortDesc).should(
-        'contain.text',
-        'Medium resolution integrated model flood prediction data'
-      )
-      cy.getByData(testIds.cart_page_providerName).should('be.visible')
-      cy.getByData(testIds.cart_page_providerName).should('contain.text', 'Provided by Climatic')
+      cy.getByData(testIds.envirogrowth_shortDesc).should('be.visible')
+      cy.getByData(testIds.envirogrowth_shortDesc).should('contain.text', 'Archive of climate and weather data')
+      cy.getByData(testIds.envirogrowth_provider).should('be.visible')
+      cy.getByData(testIds.envirogrowth_provider).should('contain.text', 'Provided by Nationa Met Dept')
       cy.getByData(testIds.Proceed).click()
       cy.url().should('include', testIds.url_checkout)
     })
