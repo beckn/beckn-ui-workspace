@@ -51,7 +51,7 @@ describe('Search Page Tests', () => {
   })
 
   context('When there are search results', () => {
-    const searchTerm = 'floodprediction'
+    const searchTerm = 'weather forecast'
 
     beforeEach(() => {
       cy.visit(`${testIds.url_base}${testIds.url_home}`)
