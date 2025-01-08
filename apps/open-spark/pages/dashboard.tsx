@@ -5,7 +5,7 @@ import { formatDate, TopSheet, useGeolocation } from '@beckn-ui/common'
 import { useLanguage } from '@hooks/useLanguage'
 import { useRouter } from 'next/router'
 import profileIcon from '@public/images/user_profile.svg'
-import { Input, Typography } from '@beckn-ui/molecules'
+import { Input, LoaderWithMessage, Typography } from '@beckn-ui/molecules'
 import { Box, Flex, HStack, Tag, TagLabel, Divider, Text } from '@chakra-ui/react'
 import CustomeDateInput from '@components/dateRangePicker/CustomeDateInput'
 import SelectDate from '@components/dateRangePicker/SelectDate'
@@ -44,6 +44,8 @@ const Dashboard = () => {
   const [totalEnergyUnits, setTotalEnergyUnits] = useState<number>(0)
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
   const bearerToken = Cookies.get('authToken') || ''
+  const [isTradeLodaing, setIsTradeLoading] = useState(true)
+  const [isPreffrenceLodaing, setIsPreffrenceLoading] = useState(true)
   const [currentTradeData, setCurrentTradeData] = useState<TradeData[]>([])
   const [currentStatusData, setCurrentStatusData] = useState<StatusItem[]>([])
   const [dashboardTotalEnergyUnitsData, setDashboardTotalEnergyUnitsData] = useState<DashboardData>({
@@ -105,6 +107,7 @@ const Dashboard = () => {
 
   const fetchLastTradeData = async () => {
     try {
+      setIsTradeLoading(true)
       const response = await axios.get(`${strapiUrl}${ROUTE_TYPE[role!]}/trade`, {
         headers: { Authorization: `Bearer ${bearerToken}` },
         withCredentials: true
@@ -129,11 +132,14 @@ const Dashboard = () => {
       setPreferencesTags(tags)
     } catch (error) {
       console.error('Error fetching last trade data:', error)
+    } finally {
+      setIsTradeLoading(false)
     }
   }
 
   const fetchMyPreference = async () => {
     try {
+      setIsPreffrenceLoading(true)
       const response = await axios.get(`${strapiUrl}${ROUTE_TYPE[role!]}/trade-pref`, {
         headers: { Authorization: `Bearer ${bearerToken}` },
         withCredentials: true
@@ -152,6 +158,8 @@ const Dashboard = () => {
       setPreferencesTags(tags)
     } catch (error) {
       console.error('Error fetching preference data:', error)
+    } finally {
+      setIsPreffrenceLoading(false)
     }
   }
 
@@ -334,97 +342,116 @@ const Dashboard = () => {
                 )}
               </Flex>
             </Box>
-            {currentTradeData.length === 0 ? (
-              <EmptyCurrentTrade />
+            {isTradeLodaing && isPreffrenceLodaing ? (
+              <Box m={'40px'}>
+                <LoaderWithMessage
+                  loadingText={''}
+                  loadingSubText={''}
+                />
+              </Box>
             ) : (
               <>
-                <CurrentTrade
-                  data={[
-                    {
-                      name: 'energyToBuy',
-                      label: `Energy to ${role === ROLE.CONSUMER ? 'Buy' : 'Sell'}`,
-                      value: (currentTradeData[0]?.quantity ?? 0).toString(),
-                      symbol: '(KWh)',
-                      disabled: true
-                    },
-                    {
-                      name: 'priceFixed',
-                      label: 'Price Fixed',
-                      value: (currentTradeData[0]?.price ?? 0).toString(),
-                      symbol: '₹/units',
-                      disabled: true
-                    }
-                  ]}
-                />
-
-                {preferencesTags.length > 0 && (
-                  <Box>
-                    <Typography
-                      text="Preferences"
-                      fontSize="14px"
-                      fontWeight="600"
-                      sx={{ marginBottom: '10px' }}
+                {currentTradeData.length === 0 ? (
+                  role === ROLE.CONSUMER ? (
+                    <EmptyCurrentTrade />
+                  ) : (
+                    <></>
+                  )
+                ) : (
+                  <>
+                    <CurrentTrade
+                      data={[
+                        {
+                          name: 'energyToBuy',
+                          label: `Energy to ${role === ROLE.CONSUMER ? 'Buy' : 'Sell'}`,
+                          value: (currentTradeData[0]?.quantity ?? 0).toString(),
+                          symbol: '(KWh)',
+                          disabled: true
+                        },
+                        ...(role !== ROLE.CONSUMER
+                          ? [
+                              {
+                                name: 'priceFixed',
+                                label: 'Price Fixed',
+                                value: (currentTradeData[0]?.price ?? 0).toString(),
+                                symbol: '₹/units',
+                                disabled: true
+                              }
+                            ]
+                          : [])
+                      ]}
                     />
-                    <Flex
-                      gap={'10px'}
-                      flexWrap={'wrap'}
-                    >
-                      {preferencesTags.map((tag, index) => (
-                        <Tag
-                          key={index}
-                          borderRadius="md"
-                          variant="outline"
-                          colorScheme="gray"
-                          padding={'4px 8px'}
-                        >
-                          <TagLabel>{tag}</TagLabel>
-                          {/* <TagCloseButton onClick={() => handleRemoveTag(tag)} /> */}
-                        </Tag>
-                      ))}
-                    </Flex>
-                  </Box>
-                )}
-                {role !== ROLE.PRODUCER && (
-                  <Box mt={'10px'}>
-                    <DetailCard>
-                      <Flex
-                        justifyContent={'space-between'}
-                        alignItems={'center'}
-                        mb={'20px'}
-                      >
+
+                    {preferencesTags.length > 0 && (
+                      <Box>
                         <Typography
-                          text="Current Status"
+                          text="Preferences"
                           fontSize="14px"
                           fontWeight="600"
+                          sx={{ marginBottom: '10px' }}
                         />
-                        {latestStatus?.status && (
-                          <Typography
-                            text={latestStatus?.status === 'RECEIVED' ? 'Pending' : 'Completed'}
-                            fontSize="12px"
-                            fontWeight="600"
-                            color={latestStatus?.status === 'RECEIVED' ? '#BD942B' : '#5EC401'}
-                          />
-                        )}
-                      </Flex>
-                      <Divider />
-                      <Box mt={'10px'}>
-                        {currentStatusData.length > 0 ? (
-                          currentStatusData.map((data, index) => (
-                            <OrderStatusProgress
+                        <Flex
+                          gap={'10px'}
+                          flexWrap={'wrap'}
+                        >
+                          {preferencesTags.map((tag, index) => (
+                            <Tag
                               key={index}
-                              label={data.label}
-                              statusTime={data.statusTime!}
-                              noLine={data.noLine}
-                              lastElement={data.lastElement}
-                              statusIcon={data.isPending ? PendingIcon : null}
-                            />
-                          ))
-                        ) : (
-                          <Text>No status updates available</Text>
-                        )}
+                              borderRadius="md"
+                              variant="outline"
+                              colorScheme="gray"
+                              padding={'4px 8px'}
+                            >
+                              <TagLabel>{tag}</TagLabel>
+                              {/* <TagCloseButton onClick={() => handleRemoveTag(tag)} /> */}
+                            </Tag>
+                          ))}
+                        </Flex>
                       </Box>
-                    </DetailCard>
-                  </Box>
+                    )}
+                    {role !== ROLE.PRODUCER && (
+                      <Box mt={'10px'}>
+                        <DetailCard>
+                          <Flex
+                            justifyContent={'space-between'}
+                            alignItems={'center'}
+                            mb={'20px'}
+                          >
+                            <Typography
+                              text="Current Status"
+                              fontSize="14px"
+                              fontWeight="600"
+                            />
+                            {latestStatus?.status && (
+                              <Typography
+                                text={latestStatus?.status === 'RECEIVED' ? 'Pending' : 'Completed'}
+                                fontSize="12px"
+                                fontWeight="600"
+                                color={latestStatus?.status === 'RECEIVED' ? '#BD942B' : '#5EC401'}
+                              />
+                            )}
+                          </Flex>
+                          <Divider />
+                          <Box mt={'10px'}>
+                            {currentStatusData.length > 0 ? (
+                              currentStatusData.map((data, index) => (
+                                <OrderStatusProgress
+                                  key={index}
+                                  label={data.label}
+                                  statusTime={data.statusTime!}
+                                  noLine={data.noLine}
+                                  lastElement={data.lastElement}
+                                  statusIcon={data.isPending ? PendingIcon : null}
+                                />
+                              ))
+                            ) : (
+                              <Text>No status updates available</Text>
+                            )}
+                          </Box>
+                        </DetailCard>
+                      </Box>
+                    )}
+                  </>
                 )}
               </>
             )}
