@@ -111,7 +111,10 @@ const Product = () => {
           fontWeight={'800'}
           dataTest={testIds.item_title}
         />
-        <Typography text={selectedProduct.item.short_desc!} />
+        <Typography
+          text={selectedProduct.item.short_desc!}
+          dataTest={testIds.dragon_foods_product_about_short_desc}
+        />
         <Typography
           text={selectedProduct.item.productInfo! as string}
           style={{ marginTop: '1rem' }}
