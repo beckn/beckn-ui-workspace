@@ -292,3 +292,9 @@ select:-webkit-autofill:focus {
 .css-1juf683 {
   font-size: 12px !important;
 }
+
+@media only screen and (max-width: 370px) {
+  .mytrade-status {
+    gap: 2px !important;
+  }
+}
