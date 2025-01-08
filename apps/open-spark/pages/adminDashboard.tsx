@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@store/index'
 import Cookies from 'js-cookie'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
+import { MdOutlineRefresh } from 'react-icons/md'
 
 interface PendingTrades {
   id: number
@@ -26,7 +27,7 @@ const LockDemand = () => {
   const bearerToken = Cookies.get('authToken') || ''
 
   const [items, setItems] = useState<PendingTrades[]>([])
-  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isLockDemandLoading, setIsLockDemandLoading] = useState<boolean>(false)
 
   const { t } = useLanguage()
   const router = useRouter()
@@ -47,7 +48,6 @@ const LockDemand = () => {
       })
 
       const result = response.data
-
       const trades = result.map((tr: any) => {
         const {
           id,
@@ -55,25 +55,20 @@ const LockDemand = () => {
           createdAt,
           profile: { name }
         } = tr
-        return {
-          id,
-          name,
-          quantity,
-          createdAt
-        }
+        return { id, name, quantity, createdAt }
       })
-
       setItems(trades)
     } catch (error) {
       console.error('Error fetching pending trade data:', error)
     }
   }
+
   useEffect(() => {
     fetchPendingTrades()
   }, [])
 
   const handleOnLockDemand = () => {
-    setIsLoading(true)
+    setIsLockDemandLoading(true)
 
     axios
       .post(
@@ -97,12 +92,13 @@ const LockDemand = () => {
             }
           })
         )
+        fetchPendingTrades()
       })
       .catch(error => {
-        console.error('Error while lock demand:', error)
+        console.error('Error while locking demand:', error)
       })
       .finally(() => {
-        setIsLoading(false)
+        setIsLockDemandLoading(false)
       })
   }
 
@@ -136,6 +132,7 @@ const LockDemand = () => {
               fontWeight="600"
               fontSize="16px"
             />
+
             <Box
               maxH={'calc(100vh - 212px)'}
               overflowY="scroll"
@@ -281,7 +278,7 @@ const LockDemand = () => {
           </Box>
           <BecknButton
             children={'Lock Demand'}
-            isLoading={isLoading}
+            isLoading={isLockDemandLoading}
             handleClick={handleOnLockDemand}
             sx={{ margin: '1rem 0' }}
             disabled={items.length === 0}
