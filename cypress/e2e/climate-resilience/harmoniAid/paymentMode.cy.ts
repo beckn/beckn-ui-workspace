@@ -1,5 +1,5 @@
 import { testIds } from '../../../../shared/dataTestIds'
-import { initResponse } from '../../../fixtures/Climate-resilience/DRAGON-FOODS/checkoutPage/initResponse'
+import { initResponse } from '../../../fixtures/Climate-resilience/HARMONIAIDS/checkoutPage/initResponse'
 describe('Payment Page', () => {
   const searchTerm = 'floodprediction'
 
@@ -9,23 +9,19 @@ describe('Payment Page', () => {
     cy.setGeolocation('getAddress')
     cy.wait('@getAddress')
     cy.performSearch(searchTerm, {
-      fixture: 'Climate-resilience/DRAGON-FOODS/searchPage/searchResults.json'
+      fixture: 'Climate-resilience/HARMONIAIDS/searchPage/searchResults.json'
     })
     cy.selectProduct(0)
     cy.url().should('include', testIds.url_product)
     cy.getByData('"product-checkbox"').eq(0).click()
+    cy.getByData('"product-checkbox"').eq(4).click()
     cy.getByData('"product-checkbox"').eq(5).click()
     cy.getByData('"product-checkbox"').eq(8).click()
-    cy.getByData('"product-checkbox"').eq(11).click()
-    cy.getByData('"product-checkbox"').eq(15).click()
-    cy.getByData('"product-checkbox"').eq(18).click()
-    cy.getByData('"product-checkbox"').eq(20).click()
-    cy.getByData('"product-checkbox"').eq(21).click()
     cy.getByData('product-radio').eq(0).click()
-    cy.getByData('product-radio').eq(4).click()
-    cy.getByData('"product-checkbox"').eq(25).click()
+    cy.getByData('product-radio').eq(3).click()
+    cy.getByData('"product-checkbox"').eq(11).click()
     cy.getByData(testIds.Proceed_to_product).click()
-    cy.intercept('POST', '/select', { fixture: 'Climate-resilience/DRAGON-FOODS/cart/selectResult.json' }).as(
+    cy.intercept('POST', '/select', { fixture: 'Climate-resilience/HARMONIAIDS/cart/selectResult.json' }).as(
       'selectCall'
     )
     cy.wait('@selectCall')

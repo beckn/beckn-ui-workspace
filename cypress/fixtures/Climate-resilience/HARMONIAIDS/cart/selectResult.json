@@ -1,0 +1,144 @@
+{
+  "data": [
+    {
+      "context": {
+        "domain": "harmoniaid",
+        "action": "on_select",
+        "version": "1.1.0",
+        "bpp_id": "bpp-ps-network-strapi-dev.becknprotocol.io",
+        "bpp_uri": "http://bpp-ps-network-strapi-dev.becknprotocol.io",
+        "country": "IND",
+        "city": "std:080",
+        "location": {
+          "country": {
+            "name": "India",
+            "code": "IND"
+          },
+          "city": {
+            "name": "Bangalore",
+            "code": "std:080"
+          }
+        },
+        "bap_id": "bap-ps-network-dev.becknprotocol.io",
+        "bap_uri": "https://bap-ps-network-dev.becknprotocol.io",
+        "transaction_id": "7277911e-65a7-4660-9f79-0ad2b5c3ab29",
+        "message_id": "ba1b170d-afbd-4e12-90fa-c3749270e974",
+        "ttl": "PT10M",
+        "timestamp": "2025-01-06T08:33:36.900Z"
+      },
+      "message": {
+        "order": {
+          "quote": {
+            "price": {
+              "value": "40"
+            }
+          },
+          "provider": {
+            "id": "805",
+            "name": "Ministry of Health",
+            "short_desc": "The Ministry of Health is the primary governmental body responsible for all public health and healthcare services in the country. ",
+            "long_desc": "License: CC BY-NC-SA  |  26 years in operation",
+            "rating": "4.2",
+            "images": {
+              "url": "https://bpp-unified-strapi-dev.becknprotocol.io/uploads/Group_1000003473_4adefabc52.png",
+              "size_type": "sm"
+            }
+          },
+          "items": [
+            {
+              "id": "329",
+              "name": "Health related population exposure and vulnerability data in Sylhet",
+              "images": [
+                {
+                  "url": "https://bpp-unified-strapi-dev.becknprotocol.io/uploads/Group_1000003473_4adefabc52.png",
+                  "size_type": "sm"
+                }
+              ],
+              "price": {
+                "value": "40"
+              },
+              "rating": "null",
+              "rateable": true,
+              "quantity": {
+                "available": {
+                  "measure": {
+                    "value": "0",
+                    "unit": "kWh"
+                  }
+                }
+              },
+              "tags": [
+                {
+                  "code": "Spatial Representation",
+                  "description": "Spatial Representation",
+                  "list": [
+                    {
+                      "code": "Vector",
+                      "value": "Vector",
+                      "display": true
+                    }
+                  ]
+                },
+                {
+                  "code": "Spatial Coverage",
+                  "description": "Spatial Coverage",
+                  "list": [
+                    {
+                      "code": "Balaganj",
+                      "value": "Balaganj",
+                      "display": true
+                    }
+                  ]
+                },
+                {
+                  "code": "Spatial Resolutions",
+                  "description": "Spatial Resolutions",
+                  "list": [
+                    {
+                      "code": "80 m",
+                      "value": "80 m",
+                      "display": true
+                    }
+                  ]
+                },
+                {
+                  "code": "Data Formats",
+                  "description": "Data Formats",
+                  "list": [
+                    {
+                      "code": "XML",
+                      "value": "XML",
+                      "display": true
+                    }
+                  ]
+                },
+                {
+                  "code": "Data Sharing Modes",
+                  "description": "Data Sharing Modes",
+                  "list": [
+                    {
+                      "code": "FTP",
+                      "value": "FTP",
+                      "display": true
+                    }
+                  ]
+                },
+                {
+                  "code": "Subscription Durations",
+                  "description": "Subscription Durations",
+                  "list": [
+                    {
+                      "code": "One time",
+                      "value": "One time",
+                      "display": true
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

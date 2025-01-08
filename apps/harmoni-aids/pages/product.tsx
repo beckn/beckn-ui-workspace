@@ -109,13 +109,16 @@ const Product = () => {
         <Typography
           text={`About ${selectedProduct.providerName}`}
           fontWeight={'800'}
-          dataTest={testIds.item_title}
+          dataTest={testIds.product_about_section}
         />
-        <Typography text={selectedProduct.item.short_desc!} />
+        <Typography
+          text={selectedProduct.item.short_desc!}
+          dataTest={testIds.product_about_short_desc}
+        />
         <Typography
           text={selectedProduct.item.productInfo! as string}
           style={{ marginTop: '1rem' }}
-          dataTest={testIds.product_page_short_desc}
+          dataTest={testIds.product_about_productInfo}
         />
       </Box>
 

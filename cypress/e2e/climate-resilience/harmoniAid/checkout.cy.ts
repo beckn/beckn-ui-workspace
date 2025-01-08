@@ -1,6 +1,6 @@
 import { testIds } from '../../../../shared/dataTestIds'
-import { billingDetails } from '../../../fixtures/Climate-resilience/DRAGON-FOODS/checkoutPage/userDetails'
-import { initResponse } from '../../../fixtures/Climate-resilience/DRAGON-FOODS/checkoutPage/initResponse'
+import { billingDetails } from '../../../fixtures/Climate-resilience/HARMONIAIDS/checkoutPage/userDetails'
+import { initResponse } from '../../../fixtures/Climate-resilience/HARMONIAIDS/checkoutPage/initResponse'
 
 describe('Checkout Page', () => {
   const searchTerm = 'floodprediction'
@@ -11,23 +11,19 @@ describe('Checkout Page', () => {
     cy.setGeolocation('getAddress')
     cy.wait('@getAddress')
     cy.performSearch(searchTerm, {
-      fixture: 'Climate-resilience/DRAGON-FOODS/searchPage/searchResults.json'
+      fixture: 'Climate-resilience/HARMONIAIDS/searchPage/searchResults.json'
     })
     cy.selectProduct(0)
     cy.url().should('include', testIds.url_product)
     cy.getByData('"product-checkbox"').eq(0).click()
+    cy.getByData('"product-checkbox"').eq(4).click()
     cy.getByData('"product-checkbox"').eq(5).click()
     cy.getByData('"product-checkbox"').eq(8).click()
-    cy.getByData('"product-checkbox"').eq(11).click()
-    cy.getByData('"product-checkbox"').eq(15).click()
-    cy.getByData('"product-checkbox"').eq(18).click()
-    cy.getByData('"product-checkbox"').eq(20).click()
-    cy.getByData('"product-checkbox"').eq(21).click()
     cy.getByData('product-radio').eq(0).click()
-    cy.getByData('product-radio').eq(4).click()
-    cy.getByData('"product-checkbox"').eq(25).click()
+    cy.getByData('product-radio').eq(3).click()
+    cy.getByData('"product-checkbox"').eq(11).click()
     cy.getByData(testIds.Proceed_to_product).click()
-    cy.intercept('POST', '/select', { fixture: 'Climate-resilience/DRAGON-FOODS/cart/selectResult.json' }).as(
+    cy.intercept('POST', '/select', { fixture: 'Climate-resilience/HARMONIAIDS/cart/selectResult.json' }).as(
       'selectCall'
     )
     cy.wait('@selectCall')
@@ -39,9 +35,12 @@ describe('Checkout Page', () => {
 
   it('should display the item details', () => {
     cy.getByData(testIds.item_details).should('have.length', 1)
-    cy.getByData(testIds.item_title).should('contain.text', 'Medium resolution integrated model flood prediction data')
+    cy.getByData(testIds.item_title).should(
+      'contain.text',
+      'Health related population exposure and vulnerability data in Sylhet'
+    )
     cy.getByData(testIds.item_quantity).should('contain.text', 1)
-    cy.getByData(testIds.item_price).should('contain.text', '₹10.00')
+    cy.getByData(testIds.item_price).should('contain.text', '₹40.00')
   })
 
   it('should check the shipping, billing, payment section rendered or not & proceed btn', () => {
@@ -106,7 +105,7 @@ describe('Checkout Page', () => {
   it('should display the payment breakup details', () => {
     cy.getByData(testIds.checkoutpage_paymentDetails).within(() => {
       cy.getByData('totalPayment').should('contain.text', 'Total')
-      cy.getByData(testIds.item_price).eq(0).should('contain.text', '₹10.00')
+      cy.getByData(testIds.item_price).eq(0).should('contain.text', '₹40.00')
     })
   })
 
