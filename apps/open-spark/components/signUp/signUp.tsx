@@ -53,22 +53,17 @@ const SignUp = () => {
       .get(`${strapiUrl}${ROUTE_TYPE.CONSUMER}/get-utilities`)
       .then(response => {
         const result = response.data
-        const companies = result.map((company: any) => {
+        const companies = result?.records.map((company: any) => {
           return {
-            label: company.name,
-            value: company.name
+            label: company.details.company_name,
+            value: company.details.company_name
           }
         })
+        setUtilities(companies)
       })
       .catch(error => {
         console.error('Error fetching utilities:', error)
       })
-    setUtilities([
-      { value: 'Maharashtra State Power Corp. Ltd', label: 'Maharashtra State Power Corp. Ltd' },
-      { value: 'Reliance Power', label: 'Reliance Power' },
-      { value: 'MSEB', label: 'MSEB' },
-      { value: 'Gujarat Electricity Corp. Ltd', label: 'Gujarat Electricity Corp. Ltd' }
-    ])
   }, [])
 
   // Handle input change and validation
@@ -149,7 +144,7 @@ const SignUp = () => {
 
     if (isFormValid) {
       try {
-        let registerResponse = null
+        let registerResponse: any = null
         if (role === ROLE.CONSUMER) registerResponse = await bapTradeRegister(signUpData)
         if (role === ROLE.PRODUCER) {
           registerResponse = await bppTradeRegister(signUpData)
