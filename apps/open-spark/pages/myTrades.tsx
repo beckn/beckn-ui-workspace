@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react'
 import successIcon from '@public/images/green_tick_icon.svg'
 import inProgressIcon from '@public/images/in_progress_icon.svg'
 import failedIcon from '@public/images/failed_icon.svg'
-import { currencyMap, ROUTE_TYPE } from '@lib/config'
+import { currencyMap, ROLE, ROUTE_TYPE } from '@lib/config'
 import Cookies from 'js-cookie'
 import axios from '@services/axios'
 import { useDispatch, useSelector } from 'react-redux'
@@ -125,7 +125,7 @@ const MyTrades = () => {
                       text={`${trade.quantity} Units`}
                       fontWeight="600"
                     />
-                    <Typography text={`${currencyMap.INR}${trade.price}`} />
+                    {role !== ROLE.CONSUMER && <Typography text={`${currencyMap.INR}${trade.price}`} />}
                     <Flex justifyContent={'space-between'}>
                       <Flex flexDir={'row'}>
                         <Typography text={`Order ID: ${trade.orderId}`} />
