@@ -1,0 +1,132 @@
+{
+  "data": [
+    {
+      "context": {
+        "domain": "envirogrowth",
+        "action": "on_select",
+        "version": "1.1.0",
+        "bpp_id": "bpp-ps-network-strapi-dev.becknprotocol.io",
+        "bpp_uri": "http://bpp-ps-network-strapi-dev.becknprotocol.io",
+        "country": "IND",
+        "city": "std:080",
+        "location": {
+          "country": {
+            "name": "India",
+            "code": "IND"
+          },
+          "city": {
+            "name": "Bangalore",
+            "code": "std:080"
+          }
+        },
+        "bap_id": "bap-ps-network-dev.becknprotocol.io",
+        "bap_uri": "https://bap-ps-network-dev.becknprotocol.io",
+        "transaction_id": "ee96612b-9f1d-4f20-8ad4-b56dd5ed1a74",
+        "message_id": "72b89087-fa6b-4784-a3c3-fc9223c5ecc9",
+        "ttl": "PT10M",
+        "timestamp": "2025-01-05T17:56:44.310Z"
+      },
+      "message": {
+        "order": {
+          "quote": {
+            "price": {
+              "value": "80"
+            }
+          },
+          "provider": {
+            "id": "818",
+            "name": "Nationa Met Dept",
+            "short_desc": "National Metrological Department is responsible for maintaining the network of surface and upper air observatories, radar and satellite...",
+            "long_desc": "License: CC BY-NC-SA  |  63 years in operation",
+            "images": {
+              "url": "https://bpp-unified-strapi-dev.becknprotocol.io/uploads/Vector_1_013a42effa.png",
+              "size_type": "sm"
+            }
+          },
+          "items": [
+            {
+              "id": "342",
+              "name": "Archive of climate and weather data",
+              "images": [
+                {
+                  "url": "https://bpp-unified-strapi-dev.becknprotocol.io/uploads/Vector_1_013a42effa.png",
+                  "size_type": "sm"
+                }
+              ],
+              "price": {
+                "value": "80"
+              },
+              "rating": "null",
+              "rateable": true,
+              "quantity": {
+                "available": {
+                  "measure": {
+                    "value": "0",
+                    "unit": "kWh"
+                  }
+                }
+              },
+              "tags": [
+                {
+                  "code": "Spatial Representation",
+                  "description": "Spatial Representation",
+                  "list": [
+                    {
+                      "code": "Vector",
+                      "value": "Vector",
+                      "display": true
+                    }
+                  ]
+                },
+                {
+                  "code": "Spatial Resolutions",
+                  "description": "Spatial Resolutions",
+                  "list": [
+                    {
+                      "code": "50 km",
+                      "value": "50 km",
+                      "display": true
+                    }
+                  ]
+                },
+                {
+                  "code": "Data Formats",
+                  "description": "Data Formats",
+                  "list": [
+                    {
+                      "code": "CSV",
+                      "value": "CSV",
+                      "display": true
+                    }
+                  ]
+                },
+                {
+                  "code": "Temporal Coverage",
+                  "description": "Temporal Coverage",
+                  "list": [
+                    {
+                      "code": "5 year",
+                      "value": "5 year",
+                      "display": true
+                    }
+                  ]
+                },
+                {
+                  "code": "Data Sharing Modes",
+                  "description": "Data Sharing Modes",
+                  "list": [
+                    {
+                      "code": "FTP",
+                      "value": "FTP",
+                      "display": true
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

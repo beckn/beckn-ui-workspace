@@ -147,7 +147,7 @@ export default function EnergyPurchaseForm({ preferenceType }: EnergyPurchaseFor
     }
   }
 
-  const isFormComplete = energyUnits > 0 && pricePerUnit > 0
+  const isFormComplete = energyUnits > 0
 
   return (
     <Box
@@ -206,49 +206,51 @@ export default function EnergyPurchaseForm({ preferenceType }: EnergyPurchaseFor
         <Divider />
 
         {/* Price Per Unit Input */}
-        <FormControl>
-          <HStack mb={2}>
-            <FormLabel
-              m={0}
-              fontSize="15"
-              fontWeight="600"
-            >
-              Set a Price per unit to {preferenceType}
-            </FormLabel>
-            <QuestionOutlineIcon />
-          </HStack>
-          <HStack spacing={4}>
-            <Box
-              onClick={() => handleInputChange(setPricePerUnit, (pricePerUnit + 1).toString())}
-              cursor="pointer"
-            >
-              <FaPlus />
-            </Box>
-            <Input
-              type="number"
-              value={pricePerUnit.toString()}
-              onChange={e => handleInputChange(setPricePerUnit, e.target.value)}
-              textAlign="center"
-              width="100px"
-              size="md"
-            />
-            <Box
-              onClick={() => {
-                if (pricePerUnit > 0) handleInputChange(setPricePerUnit, (pricePerUnit - 1).toString())
-              }}
-              cursor="pointer"
-            >
-              <FaMinus />
-            </Box>
-            <Text
-              fontSize="15"
-              fontWeight="500"
-            >
-              ₹/units
-            </Text>
-          </HStack>
-        </FormControl>
-        <Divider />
+        {role !== ROLE.CONSUMER && (
+          <FormControl>
+            <HStack mb={2}>
+              <FormLabel
+                m={0}
+                fontSize="15"
+                fontWeight="600"
+              >
+                Set a Price per unit to {preferenceType}
+              </FormLabel>
+              <QuestionOutlineIcon />
+            </HStack>
+            <HStack spacing={4}>
+              <Box
+                onClick={() => handleInputChange(setPricePerUnit, (pricePerUnit + 1).toString())}
+                cursor="pointer"
+              >
+                <FaPlus />
+              </Box>
+              <Input
+                type="number"
+                value={pricePerUnit.toString()}
+                onChange={e => handleInputChange(setPricePerUnit, e.target.value)}
+                textAlign="center"
+                width="100px"
+                size="md"
+              />
+              <Box
+                onClick={() => {
+                  if (pricePerUnit > 0) handleInputChange(setPricePerUnit, (pricePerUnit - 1).toString())
+                }}
+                cursor="pointer"
+              >
+                <FaMinus />
+              </Box>
+              <Text
+                fontSize="15"
+                fontWeight="500"
+              >
+                ₹/units
+              </Text>
+            </HStack>
+            <Divider mt={'20px'} />
+          </FormControl>
+        )}
 
         {/* Preferences */}
         <FormControl>

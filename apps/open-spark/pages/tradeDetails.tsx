@@ -125,15 +125,20 @@ const TradeDetails = () => {
               disabled: true,
               symbol: '(KWh)'
             },
-            {
-              name: tradeDetails?.name!,
-              label: 'Price',
-              value: tradeDetails?.price.toString()!,
-              disabled: true,
-              symbol: '₹/units'
-            }
+            ...(role !== ROLE.CONSUMER && role !== ROLE.ADMIN
+              ? [
+                  {
+                    name: tradeDetails?.name!,
+                    label: 'Price',
+                    value: tradeDetails?.price.toString()!,
+                    disabled: true,
+                    symbol: '₹/units'
+                  }
+                ]
+              : [])
           ]}
         />
+
         {tradeDetails?.preferencesTags && tradeDetails?.preferencesTags?.length > 0 && (
           <Box mt={'-2rem'}>
             <Typography

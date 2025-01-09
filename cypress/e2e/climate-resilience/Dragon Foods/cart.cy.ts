@@ -61,7 +61,7 @@ describe('Cart Page Tests', () => {
     })
 
     it('should render and display cart page with result', () => {
-      // cy.getByData(testIds.feedback).getByData('close').click()
+      cy.getByData(testIds.feedback).getByData('close').click()
       cy.getByData(testIds.cart_page_shortDesc).should('be.visible')
       cy.getByData(testIds.cart_page_shortDesc).should(
         'contain.text',

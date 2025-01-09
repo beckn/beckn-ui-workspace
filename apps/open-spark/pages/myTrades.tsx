@@ -131,7 +131,10 @@ const MyTrades = () => {
                         <Typography text={`Order ID: ${trade.orderId}`} />
                         <Typography text={`, ${formatDate(trade.time, 'hh:mm a')}`} />
                       </Flex>
-                      <Flex gap="4px">
+                      <Flex
+                        gap="4px"
+                        className="mytrade-status"
+                      >
                         <Image
                           src={`${statusMap[trade.status].icon}`}
                           alt="status_icon"
