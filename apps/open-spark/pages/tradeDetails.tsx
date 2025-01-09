@@ -120,7 +120,7 @@ const TradeDetails = () => {
           data={[
             {
               name: tradeDetails?.name!,
-              label: role === ROLE.CONSUMER ? 'Energy Bought' : 'Energy Sold',
+              label: role === ROLE.CONSUMER || role === ROLE.ADMIN ? 'Energy Bought' : 'Energy Sold',
               value: tradeDetails?.quantity! || '0',
               disabled: true,
               symbol: '(KWh)'
