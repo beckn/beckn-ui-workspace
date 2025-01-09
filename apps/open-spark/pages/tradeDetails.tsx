@@ -125,7 +125,7 @@ const TradeDetails = () => {
               disabled: true,
               symbol: '(KWh)'
             },
-            ...(role !== ROLE.CONSUMER
+            ...(role !== ROLE.CONSUMER && role !== ROLE.ADMIN
               ? [
                   {
                     name: tradeDetails?.name!,
