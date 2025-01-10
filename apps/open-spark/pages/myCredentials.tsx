@@ -76,7 +76,8 @@ const MyCredentials = () => {
         console.log('Selected file:', file)
         return { title: file?.name!, icon: uploadIcon, date: new Date(), file: file }
       })
-      setSelectedFile(prevState => (prevState ? [...prevState, ...docs] : docs))
+      // setSelectedFile(prevState => (prevState ? [...prevState, ...docs] : docs))
+      setSelectedFile(docs)
     }
   }
 
@@ -179,41 +180,43 @@ const MyCredentials = () => {
             }}
           />
           <Typography text="Upload credential documents" />
-          <DragAndDropUpload
-            multiple={true}
-            accept={'.json'}
-            dragAndDrop={true}
-            setFiles={handleFileChange}
-            fileSelectionElement={(fileInputRef: any) => {
-              return (
-                <VStack>
-                  <Icon
-                    as={FiPlusCircle}
-                    boxSize={6}
-                    color="gray.500"
-                  />
-                  <Typography text={'Drop your file here'} />
-                  <HStack gap={1}>
-                    <Typography
-                      color="#4498E8"
-                      fontSize="8px"
-                      onClick={() => {
-                        if (fileInputRef.current) {
-                          fileInputRef.current.click()
-                        }
-                      }}
-                      sx={{ cursor: 'pointer', _hover: { textDecoration: 'underline' } }}
-                      text="Browse file"
-                    />{' '}
-                    <Typography
-                      fontSize="8px"
-                      text={'from your computer'}
+          {selectedFile.length === 0 && (
+            <DragAndDropUpload
+              multiple={false}
+              accept={'.json'}
+              dragAndDrop={true}
+              setFiles={handleFileChange}
+              fileSelectionElement={(fileInputRef: any) => {
+                return (
+                  <VStack>
+                    <Icon
+                      as={FiPlusCircle}
+                      boxSize={6}
+                      color="gray.500"
                     />
-                  </HStack>
-                </VStack>
-              )
-            }}
-          />
+                    <Typography text={'Drop your file here'} />
+                    <HStack gap={1}>
+                      <Typography
+                        color="#4498E8"
+                        fontSize="8px"
+                        onClick={() => {
+                          if (fileInputRef.current) {
+                            fileInputRef.current.click()
+                          }
+                        }}
+                        sx={{ cursor: 'pointer', _hover: { textDecoration: 'underline' } }}
+                        text="Browse file"
+                      />{' '}
+                      <Typography
+                        fontSize="8px"
+                        text={'from your computer'}
+                      />
+                    </HStack>
+                  </VStack>
+                )
+              }}
+            />
+          )}
           <RenderDocuments
             list={selectedFile || []}
             type="upload"

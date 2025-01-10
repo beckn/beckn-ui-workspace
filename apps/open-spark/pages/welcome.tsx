@@ -6,7 +6,7 @@ import Cookies from 'js-cookie'
 import { useRouter } from 'next/router'
 import React from 'react'
 import { useDispatch } from 'react-redux'
-import welcomeLogo from '../public/images/welcome.svg'
+import welcomeLogo from '@public/images/welcome.svg'
 
 const welcome = () => {
   const router = useRouter()
