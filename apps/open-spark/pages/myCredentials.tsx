@@ -139,18 +139,21 @@ const MyCredentials = () => {
         setIsLoading(false)
       })
   }
+  const clearAllFiles = () => {
+    setSelectedFile([])
+  }
 
   return (
     <Box
       margin={'0 auto'}
       maxW={['100%', '100%', '40rem', '40rem']}
       className="hideScroll"
-      maxH={'calc(100vh - 80px)'}
+      maxH={'calc(100vh - 100px)'}
       overflowY="scroll"
     >
       <Flex
         flexDirection={'column'}
-        height={'calc(100vh - 100px)'}
+        // height={'calc(100vh - 100px)'}
         justifyContent="space-between"
       >
         <Box>
@@ -179,7 +182,7 @@ const MyCredentials = () => {
               marginTop: '1rem'
             }}
           />
-          <Typography text="Upload credential documents" />
+          <Typography text="File upload description" />
           {selectedFile.length === 0 && (
             <DragAndDropUpload
               multiple={false}
@@ -226,13 +229,26 @@ const MyCredentials = () => {
             }}
           />
         </Box>
-        <BecknButton
-          text={t.upload}
-          disabled={selectedFile?.length === 0 || !allFilesProcessed}
-          sx={{ marginTop: '2rem' }}
-          handleClick={handleOnUpload}
-          isLoading={isLoading}
-        />
+        <Flex
+          alignItems={'center'}
+          mt={'20px'}
+        >
+          <BecknButton
+            children="Cancel"
+            variant="outline"
+            disabled={selectedFile?.length === 0 || !allFilesProcessed}
+            color="#E93324"
+            sx={{ marginRight: '8px', border: '1px solid red' }}
+            handleClick={clearAllFiles}
+          />
+          <BecknButton
+            text={t.upload}
+            disabled={selectedFile?.length === 0 || !allFilesProcessed}
+            sx={{ marginLeft: '8px' }}
+            handleClick={handleOnUpload}
+            isLoading={isLoading}
+          />
+        </Flex>
       </Flex>
       <DeleteAlertModal
         isOpen={openDeleteModal?.isOpen!}
