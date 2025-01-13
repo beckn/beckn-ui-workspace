@@ -3,6 +3,12 @@ import { Input, Typography } from '@beckn-ui/molecules'
 import { Box, Flex } from '@chakra-ui/react'
 import { DashboardData } from '@lib/types/dashboard'
 
+const unitsLabelMap: Record<string, string> = {
+  previous_month: 'Previous Month',
+  current_month: 'Current Month',
+  average: 'Average (per day)'
+}
+
 interface TotalEnergyUnitsProps {
   dashboardTotalEnergyUnitsData: DashboardData
 }
@@ -33,7 +39,7 @@ const TotalEnergyUnits: React.FC<TotalEnergyUnitsProps> = ({ dashboardTotalEnerg
               console.log(`${key} changed`)
             }}
             disabled={true}
-            label={key.replace('_', ' ').replace(/^\w/, c => c.toUpperCase())}
+            label={unitsLabelMap[key]}
             rightElement={() => {
               return (
                 <Box
