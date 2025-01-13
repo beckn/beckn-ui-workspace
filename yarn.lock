@@ -2429,6 +2429,10 @@ __metadata:
     jsonwebtoken: ^8.5.1
     leaflet: ^1.9.4
     lodash-webpack-plugin: ^0.11.6
+    mocha: ^10.7.3
+    mochawesome: ^7.1.3
+    mochawesome-merge: ^4.3.0
+    mochawesome-report-generator: ^6.2.0
     next: ^13.4.19
     next-connect: ^0.12.2
     next-sanity-image: ^3.2.1
@@ -2459,6 +2463,7 @@ __metadata:
     tailwindcss: ^3.1.4
     typescript: 4.6.4
     url-loader: ^4.1.1
+    wait-on: ^8.0.1
   languageName: unknown
   linkType: soft
 
@@ -2571,10 +2576,6 @@ __metadata:
     jsonwebtoken: ^8.5.1
     leaflet: ^1.9.4
     lodash-webpack-plugin: ^0.11.6
-    mocha: ^10.7.3
-    mochawesome: ^7.1.3
-    mochawesome-merge: ^4.3.0
-    mochawesome-report-generator: ^6.2.0
     next: ^13.4.19
     next-connect: ^0.12.2
     next-sanity-image: ^3.2.1
@@ -2605,7 +2606,6 @@ __metadata:
     tailwindcss: ^3.1.4
     typescript: 4.6.4
     url-loader: ^4.1.1
-    wait-on: ^8.0.1
   languageName: unknown
   linkType: soft
 
@@ -3181,9 +3181,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@cypress/request@npm:^3.0.1":
-  version: 3.0.5
-  resolution: "@cypress/request@npm:3.0.5"
+"@cypress/request@npm:^3.0.6":
+  version: 3.0.7
+  resolution: "@cypress/request@npm:3.0.7"
   dependencies:
     aws-sign2: ~0.7.0
     aws4: ^1.8.0
@@ -3198,12 +3198,12 @@ __metadata:
     json-stringify-safe: ~5.0.1
     mime-types: ~2.1.19
     performance-now: ^2.1.0
-    qs: 6.13.0
+    qs: 6.13.1
     safe-buffer: ^5.1.2
     tough-cookie: ^5.0.0
     tunnel-agent: ^0.6.0
     uuid: ^8.3.2
-  checksum: 7272c2c7c24c230bb976765e0ff18528f8fe995fdbe9ddf85ddec3ec12f744729130a17ad41fb91c99e733b8a1c07ce5d2553e115c66ac6e84c039117dd29680
+  checksum: af1736764789d8023ce35d1aeb6e2f317943e65a1e83c97d83d6230257a725832d299be8c2432e508e07b5fbe03ac00112247686756511f5ec380f82bc8e69ff
   languageName: node
   linkType: hard
 
@@ -8256,11 +8256,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cypress@npm:^13.12.0":
-  version: 13.14.2
-  resolution: "cypress@npm:13.14.2"
+"cypress-file-upload@npm:^5.0.8":
+  version: 5.0.8
+  resolution: "cypress-file-upload@npm:5.0.8"
+  peerDependencies:
+    cypress: ">3.0.0"
+  checksum: 9c70ca7e0bb137d0ec0b8d38987219ce15b26ac3a40e3ed4e78e6ad4690392eab905586848eec6ad8edd42ee480e68ccc63007b2ebd0a02f4b3eca116ff017e3
+  languageName: node
+  linkType: hard
+
+"cypress@npm:latest":
+  version: 13.16.1
+  resolution: "cypress@npm:13.16.1"
   dependencies:
-    "@cypress/request": ^3.0.1
+    "@cypress/request": ^3.0.6
     "@cypress/xvfb": ^1.2.4
     "@types/sinonjs__fake-timers": 8.1.1
     "@types/sizzle": ^2.3.2
@@ -8300,11 +8309,12 @@ __metadata:
     semver: ^7.5.3
     supports-color: ^8.1.1
     tmp: ~0.2.3
+    tree-kill: 1.2.2
     untildify: ^4.0.0
     yauzl: ^2.10.0
   bin:
     cypress: bin/cypress
-  checksum: ba7f7351ecb308b78c6ebad0ceda8bec05a472e3daeb5b7cde083737d59ec9dbc8bf7643c8b2c10c21afa07a65156d6b24bc1d072263a1f46442c683de8e875c
+  checksum: 9307ec98858979d01920b3da884223c1132501716fe055017f6aa19b0af58ae50998b502940678ce935804b383d8784a21da48fed3e53b740789aac1768c2a3f
   languageName: node
   linkType: hard
 
@@ -8411,17 +8421,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dateformat@npm:^4.5.1":
-  version: 4.6.3
-  resolution: "dateformat@npm:4.6.3"
-  checksum: c3aa0617c0a5b30595122bc8d1bee6276a9221e4d392087b41cbbdf175d9662ae0e50d0d6dcdf45caeac5153c4b5b0844265f8cd2b2245451e3da19e39e3b65d
-  languageName: node
-  linkType: hard
-
 "date-fns@npm:^4.1.0":
   version: 4.1.0
   resolution: "date-fns@npm:4.1.0"
   checksum: fb681b242cccabed45494468f64282a7d375ea970e0adbcc5dcc92dcb7aba49b2081c2c9739d41bf71ce89ed68dd73bebfe06ca35129490704775d091895710b
+  languageName: node
+  linkType: hard
+
+"dateformat@npm:^4.5.1":
+  version: 4.6.3
+  resolution: "dateformat@npm:4.6.3"
+  checksum: c3aa0617c0a5b30595122bc8d1bee6276a9221e4d392087b41cbbdf175d9662ae0e50d0d6dcdf45caeac5153c4b5b0844265f8cd2b2245451e3da19e39e3b65d
   languageName: node
   linkType: hard
 
@@ -10117,7 +10127,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"form-data@npm:^4.0.0, form-data@npm:~4.0.0":
+"form-data@npm:^4.0.0":
   version: 4.0.0
   resolution: "form-data@npm:4.0.0"
   dependencies:
@@ -10125,6 +10135,17 @@ __metadata:
     combined-stream: ^1.0.8
     mime-types: ^2.1.12
   checksum: 01135bf8675f9d5c61ff18e2e2932f719ca4de964e3be90ef4c36aacfc7b9cb2fceb5eca0b7e0190e3383fe51c5b37f4cb80b62ca06a99aaabfcfd6ac7c9328c
+  languageName: node
+  linkType: hard
+
+"form-data@npm:~4.0.0":
+  version: 4.0.1
+  resolution: "form-data@npm:4.0.1"
+  dependencies:
+    asynckit: ^0.4.0
+    combined-stream: ^1.0.8
+    mime-types: ^2.1.12
+  checksum: ccee458cd5baf234d6b57f349fe9cc5f9a2ea8fd1af5ecda501a18fd1572a6dd3bf08a49f00568afd995b6a65af34cb8dec083cf9d582c4e621836499498dd84
   languageName: node
   linkType: hard
 
@@ -15541,12 +15562,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"qs@npm:6.13.0, qs@npm:^6.10.3":
-  version: 6.13.0
-  resolution: "qs@npm:6.13.0"
+"qs@npm:6.13.1":
+  version: 6.13.1
+  resolution: "qs@npm:6.13.1"
   dependencies:
     side-channel: ^1.0.6
-  checksum: e9404dc0fc2849245107108ce9ec2766cde3be1b271de0bf1021d049dc5b98d1a2901e67b431ac5509f865420a7ed80b7acb3980099fe1c118a1c5d2e1432ad8
+  checksum: 86c5059146955fab76624e95771031541328c171b1d63d48a7ac3b1fdffe262faf8bc5fcadc1684e6f3da3ec87a8dedc8c0009792aceb20c5e94dc34cf468bb9
+  languageName: node
+  linkType: hard
+
+"qs@npm:^6.10.3":
+  version: 6.11.2
+  resolution: "qs@npm:6.11.2"
+  dependencies:
+    side-channel: ^1.0.4
+  checksum: e812f3c590b2262548647d62f1637b6989cc56656dc960b893fe2098d96e1bd633f36576f4cd7564dfbff9db42e17775884db96d846bebe4f37420d073ecdc0b
   languageName: node
   linkType: hard
 
@@ -17890,6 +17920,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"tldts-core@npm:^6.1.66":
+  version: 6.1.66
+  resolution: "tldts-core@npm:6.1.66"
+  checksum: a915d868b4cee4ce8054d957690d2deee8e75afb460b06dff423775360fdf1c3a642e5ad2b3215013cc6fb2249b1cf149de4de2cc5fcb5ba7ae530b9f2a8d318
+  languageName: node
+  linkType: hard
+
+"tldts@npm:^6.1.32":
+  version: 6.1.66
+  resolution: "tldts@npm:6.1.66"
+  dependencies:
+    tldts-core: ^6.1.66
+  bin:
+    tldts: bin/cli.js
+  checksum: 26d2cfe00f4275d98a4b53c43a116de69ecbdb7357336131c1358dcbc856b32f04d0dff7cb5482dc07f22a430c75a390d6b9df47b6d35f0d38017ece2fcd9128
+  languageName: node
+  linkType: hard
+
 "tmp@npm:~0.2.3":
   version: 0.2.3
   resolution: "tmp@npm:0.2.3"
@@ -17927,9 +17975,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tough-cookie@npm:^4.1.2, tough-cookie@npm:^4.1.3":
-  version: 4.1.4
-  resolution: "tough-cookie@npm:4.1.4"
+"tough-cookie@npm:^4.1.2":
+  version: 4.1.3
+  resolution: "tough-cookie@npm:4.1.3"
+  dependencies:
+    psl: ^1.1.33
+    punycode: ^2.1.1
+    universalify: ^0.2.0
+    url-parse: ^1.5.3
+  checksum: c9226afff36492a52118432611af083d1d8493a53ff41ec4ea48e5b583aec744b989e4280bcf476c910ec1525a89a4a0f1cae81c08b18fb2ec3a9b3a72b91dcc
+  languageName: node
+  linkType: hard
+
+"tough-cookie@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "tough-cookie@npm:5.0.0"
   dependencies:
     tldts: ^6.1.32
   checksum: 6f985b41e910ea7cb2556fba8128a594c8f1e4c0cfd929ea274d637441a7f81c98e146a4a1e0bcb0bfb55166d2e7f6e4d49566aa0c6e0caa5aa4f79ebf1d0bfc
@@ -18301,8 +18361,8 @@ __metadata:
   linkType: hard
 
 "typescript@patch:typescript@^4.6.4 || ^5.2.2#~builtin<compat/typescript>, typescript@patch:typescript@^5#~builtin<compat/typescript>":
-  version: 5.7.3
-  resolution: "typescript@patch:typescript@npm%3A5.7.3#~builtin<compat/typescript>::version=5.7.3&hash=f3b441"
+  version: 5.6.2
+  resolution: "typescript@patch:typescript@npm%3A5.6.2#~builtin<compat/typescript>::version=5.6.2&hash=29ae49"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
