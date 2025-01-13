@@ -47,6 +47,7 @@ const bottomHeaderBlackList = ['/orderConfirmation', '/', '/feedback', '/welcome
 const orderIconList = ['/orderDetails']
 const editIconList: string[] = ['/profile']
 const profileSectionIcon = ['/buyingPreference']
+const infoIconList: string[] = ['/myDers']
 
 export default {
   TopHeader: {
@@ -64,6 +65,7 @@ export default {
     orderIconList,
     bottomHeaderBlackList,
     editIconList,
-    profileSectionIcon
+    profileSectionIcon,
+    infoIconList
   }
 }
