@@ -472,7 +472,6 @@ __metadata:
     eslint: 8.14.0
     eslint-config-next: latest
     framer-motion: ^10.12.16
-    garudaa: ./garudaa-1.0.0.tgz
     js-cookie: ^3.0.1
     jsonwebtoken: ^8.5.1
     leaflet: ^1.9.4
@@ -607,6 +606,7 @@ __metadata:
     axios: ^0.27.2
     bcryptjs: ^2.4.3
     classnames: ^2.3.2
+    date-fns: ^4.1.0
     eslint: 8.14.0
     eslint-config-next: 12.1.6
     framer-motion: ^10.12.16
@@ -744,7 +744,6 @@ __metadata:
     eslint: 8.14.0
     eslint-config-next: latest
     framer-motion: ^10.12.16
-    garudaa: ./garudaa-1.0.0.tgz
     js-cookie: ^3.0.1
     jsonwebtoken: ^8.5.1
     leaflet: ^1.9.4
@@ -887,7 +886,6 @@ __metadata:
     eslint: 8.14.0
     eslint-config-next: latest
     framer-motion: ^10.12.16
-    garudaa: ./garudaa-1.0.0.tgz
     js-cookie: ^3.0.1
     jsonwebtoken: ^8.5.1
     leaflet: ^1.9.4
@@ -959,7 +957,6 @@ __metadata:
     eslint: 8.14.0
     eslint-config-next: latest
     framer-motion: ^10.12.16
-    garudaa: ./garudaa-1.0.0.tgz
     js-cookie: ^3.0.1
     jsonwebtoken: ^8.5.1
     leaflet: ^1.9.4
@@ -1031,7 +1028,6 @@ __metadata:
     eslint: 8.14.0
     eslint-config-next: latest
     framer-motion: ^10.12.16
-    garudaa: ./garudaa-1.0.0.tgz
     js-cookie: ^3.0.1
     jsonwebtoken: ^8.5.1
     leaflet: ^1.9.4
@@ -1103,7 +1099,6 @@ __metadata:
     eslint: 8.14.0
     eslint-config-next: latest
     framer-motion: ^10.12.16
-    garudaa: ./garudaa-1.0.0.tgz
     js-cookie: ^3.0.1
     jsonwebtoken: ^8.5.1
     leaflet: ^1.9.4
@@ -1175,7 +1170,6 @@ __metadata:
     eslint: 8.14.0
     eslint-config-next: latest
     framer-motion: ^10.12.16
-    garudaa: ./garudaa-1.0.0.tgz
     js-cookie: ^3.0.1
     jsonwebtoken: ^8.5.1
     leaflet: ^1.9.4
@@ -1376,7 +1370,6 @@ __metadata:
     eslint: 8.14.0
     eslint-config-next: latest
     framer-motion: ^10.12.16
-    garudaa: ./garudaa-1.0.0.tgz
     html-react-parser: ^5.1.10
     js-cookie: ^3.0.1
     jsonwebtoken: ^8.5.1
@@ -1516,7 +1509,6 @@ __metadata:
     eslint: 8.14.0
     eslint-config-next: latest
     framer-motion: ^10.12.16
-    garudaa: ./garudaa-1.0.0.tgz
     js-cookie: ^3.0.1
     jsonwebtoken: ^8.5.1
     leaflet: ^1.9.4
@@ -1735,7 +1727,6 @@ __metadata:
     eslint: 8.14.0
     eslint-config-next: latest
     framer-motion: ^10.12.16
-    garudaa: ./garudaa-1.0.0.tgz
     js-cookie: ^3.0.1
     jsonwebtoken: ^8.5.1
     leaflet: ^1.9.4
@@ -1807,7 +1798,6 @@ __metadata:
     eslint: 8.14.0
     eslint-config-next: latest
     framer-motion: ^10.12.16
-    garudaa: ./garudaa-1.0.0.tgz
     js-cookie: ^3.0.1
     jsonwebtoken: ^8.5.1
     leaflet: ^1.9.4
@@ -1879,7 +1869,6 @@ __metadata:
     eslint: 8.14.0
     eslint-config-next: latest
     framer-motion: ^10.12.16
-    garudaa: ./garudaa-1.0.0.tgz
     js-cookie: ^3.0.1
     jsonwebtoken: ^8.5.1
     leaflet: ^1.9.4
@@ -2054,7 +2043,6 @@ __metadata:
     eslint: 8.14.0
     eslint-config-next: latest
     framer-motion: ^10.12.16
-    garudaa: ./garudaa-1.0.0.tgz
     js-cookie: ^3.0.1
     jsonwebtoken: ^8.5.1
     leaflet: ^1.9.4
@@ -3515,9 +3503,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@cypress/request@npm:^3.0.0":
-  version: 3.0.1
-  resolution: "@cypress/request@npm:3.0.1"
+"@cypress/request@npm:^3.0.6":
+  version: 3.0.7
+  resolution: "@cypress/request@npm:3.0.7"
   dependencies:
     aws-sign2: ~0.7.0
     aws4: ^1.8.0
@@ -3525,19 +3513,19 @@ __metadata:
     combined-stream: ~1.0.6
     extend: ~3.0.2
     forever-agent: ~0.6.1
-    form-data: ~2.3.2
-    http-signature: ~1.3.6
+    form-data: ~4.0.0
+    http-signature: ~1.4.0
     is-typedarray: ~1.0.0
     isstream: ~0.1.2
     json-stringify-safe: ~5.0.1
     mime-types: ~2.1.19
     performance-now: ^2.1.0
-    qs: 6.10.4
+    qs: 6.13.1
     safe-buffer: ^5.1.2
-    tough-cookie: ^4.1.3
+    tough-cookie: ^5.0.0
     tunnel-agent: ^0.6.0
     uuid: ^8.3.2
-  checksum: 7175522ebdbe30e3c37973e204c437c23ce659e58d5939466615bddcd58d778f3a8ea40f087b965ae8b8138ea8d102b729c6eb18c6324f121f3778f4a2e8e727
+  checksum: af1736764789d8023ce35d1aeb6e2f317943e65a1e83c97d83d6230257a725832d299be8c2432e508e07b5fbe03ac00112247686756511f5ec380f82bc8e69ff
   languageName: node
   linkType: hard
 
@@ -7054,7 +7042,7 @@ __metadata:
     "@types/uuid": ^9.0.8
     "@typescript-eslint/eslint-plugin": ^6.6.0
     "@typescript-eslint/parser": ^6.6.0
-    cypress: ^13.12.0
+    cypress: latest
     cypress-file-upload: ^5.0.8
     eslint: ^8.49.0
     eslint-config-next: latest
@@ -7494,6 +7482,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"ci-info@npm:^4.0.0":
+  version: 4.1.0
+  resolution: "ci-info@npm:4.1.0"
+  checksum: dcf286abdc1bb1c4218b91e4a617b49781b282282089b7188e1417397ea00c6b967848e2360fb9a6b10021bf18a627f20ef698f47c2c9c875aeffd1d2ea51d1e
+  languageName: node
+  linkType: hard
+
 "cjs-module-lexer@npm:^1.0.0":
   version: 1.2.3
   resolution: "cjs-module-lexer@npm:1.2.3"
@@ -7689,7 +7684,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"combined-stream@npm:^1.0.6, combined-stream@npm:^1.0.8, combined-stream@npm:~1.0.6":
+"combined-stream@npm:^1.0.8, combined-stream@npm:~1.0.6":
   version: 1.0.8
   resolution: "combined-stream@npm:1.0.8"
   dependencies:
@@ -8186,11 +8181,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cypress@npm:^13.12.0":
-  version: 13.12.0
-  resolution: "cypress@npm:13.12.0"
+"cypress@npm:latest":
+  version: 13.16.1
+  resolution: "cypress@npm:13.16.1"
   dependencies:
-    "@cypress/request": ^3.0.0
+    "@cypress/request": ^3.0.6
     "@cypress/xvfb": ^1.2.4
     "@types/sinonjs__fake-timers": 8.1.1
     "@types/sizzle": ^2.3.2
@@ -8201,6 +8196,7 @@ __metadata:
     cachedir: ^2.3.0
     chalk: ^4.1.0
     check-more-types: ^2.24.0
+    ci-info: ^4.0.0
     cli-cursor: ^3.1.0
     cli-table3: ~0.6.1
     commander: ^6.2.1
@@ -8215,7 +8211,6 @@ __metadata:
     figures: ^3.2.0
     fs-extra: ^9.1.0
     getos: ^3.2.1
-    is-ci: ^3.0.1
     is-installed-globally: ~0.4.0
     lazy-ass: ^1.6.0
     listr2: ^3.8.3
@@ -8229,12 +8224,13 @@ __metadata:
     request-progress: ^3.0.0
     semver: ^7.5.3
     supports-color: ^8.1.1
-    tmp: ~0.2.1
+    tmp: ~0.2.3
+    tree-kill: 1.2.2
     untildify: ^4.0.0
     yauzl: ^2.10.0
   bin:
     cypress: bin/cypress
-  checksum: b60d6c6bddd129417a87b96add07a71aa5fd04d3d9ee52f9e5e6fdbe1cf117bba0769d4cce4e6fe6536219eaceb53b3dc4a19fc161d6b0f5a2401afde348f703
+  checksum: 9307ec98858979d01920b3da884223c1132501716fe055017f6aa19b0af58ae50998b502940678ce935804b383d8784a21da48fed3e53b740789aac1768c2a3f
   languageName: node
   linkType: hard
 
@@ -8316,6 +8312,13 @@ __metadata:
   version: 3.3.1
   resolution: "date-fns@npm:3.3.1"
   checksum: 6245e93a47de28ac96dffd4d62877f86e6b64854860ae1e00a4f83174d80bc8e59bd1259cf265223fb2ddce5c8e586dc9cc210f0d052faba2f7660e265877283
+  languageName: node
+  linkType: hard
+
+"date-fns@npm:^4.1.0":
+  version: 4.1.0
+  resolution: "date-fns@npm:4.1.0"
+  checksum: fb681b242cccabed45494468f64282a7d375ea970e0adbcc5dcc92dcb7aba49b2081c2c9739d41bf71ce89ed68dd73bebfe06ca35129490704775d091895710b
   languageName: node
   linkType: hard
 
@@ -9874,14 +9877,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"form-data@npm:~2.3.2":
-  version: 2.3.3
-  resolution: "form-data@npm:2.3.3"
+"form-data@npm:~4.0.0":
+  version: 4.0.1
+  resolution: "form-data@npm:4.0.1"
   dependencies:
     asynckit: ^0.4.0
-    combined-stream: ^1.0.6
+    combined-stream: ^1.0.8
     mime-types: ^2.1.12
-  checksum: 10c1780fa13dbe1ff3100114c2ce1f9307f8be10b14bf16e103815356ff567b6be39d70fc4a40f8990b9660012dc24b0f5e1dde1b6426166eb23a445ba068ca3
+  checksum: ccee458cd5baf234d6b57f349fe9cc5f9a2ea8fd1af5ecda501a18fd1572a6dd3bf08a49f00568afd995b6a65af34cb8dec083cf9d582c4e621836499498dd84
   languageName: node
   linkType: hard
 
@@ -10045,136 +10048,6 @@ __metadata:
   version: 1.2.3
   resolution: "functions-have-names@npm:1.2.3"
   checksum: c3f1f5ba20f4e962efb71344ce0a40722163e85bee2101ce25f88214e78182d2d2476aa85ef37950c579eb6cf6ee811c17b3101bb84004bb75655f3e33f3fdb5
-  languageName: node
-  linkType: hard
-
-"garudaa@file:./garudaa-1.0.0.tgz::locator=%40beckn-ui%2FOSC%40workspace%3Aapps%2FOSC":
-  version: 1.0.0
-  resolution: "garudaa@file:./garudaa-1.0.0.tgz::locator=%40beckn-ui%2FOSC%40workspace%3Aapps%2FOSC"
-  dependencies:
-    rrweb: ^2.0.0-alpha.1
-    rxjs: ^7.5.6
-  checksum: db3abbb9f05912ca6db4383a8b882cbe36e44277e7c673bc28b72f6432392c9f59b72c7d1948b659aa60132477819c98cd58192824033033cc46bc93fda9f9e6
-  languageName: node
-  linkType: hard
-
-"garudaa@file:./garudaa-1.0.0.tgz::locator=%40beckn-ui%2Fdragon-foods%40workspace%3Aapps%2Fdragon-foods":
-  version: 1.0.0
-  resolution: "garudaa@file:./garudaa-1.0.0.tgz::locator=%40beckn-ui%2Fdragon-foods%40workspace%3Aapps%2Fdragon-foods"
-  dependencies:
-    rrweb: ^2.0.0-alpha.1
-    rxjs: ^7.5.6
-  checksum: db3abbb9f05912ca6db4383a8b882cbe36e44277e7c673bc28b72f6432392c9f59b72c7d1948b659aa60132477819c98cd58192824033033cc46bc93fda9f9e6
-  languageName: node
-  linkType: hard
-
-"garudaa@file:./garudaa-1.0.0.tgz::locator=%40beckn-ui%2Fdsnp-v2%40workspace%3Aapps%2Fdsnp-v2":
-  version: 1.0.0
-  resolution: "garudaa@file:./garudaa-1.0.0.tgz::locator=%40beckn-ui%2Fdsnp-v2%40workspace%3Aapps%2Fdsnp-v2"
-  dependencies:
-    rrweb: ^2.0.0-alpha.1
-    rxjs: ^7.5.6
-  checksum: db3abbb9f05912ca6db4383a8b882cbe36e44277e7c673bc28b72f6432392c9f59b72c7d1948b659aa60132477819c98cd58192824033033cc46bc93fda9f9e6
-  languageName: node
-  linkType: hard
-
-"garudaa@file:./garudaa-1.0.0.tgz::locator=%40beckn-ui%2Fearth-support-initiative%40workspace%3Aapps%2Fearth-support-initiative":
-  version: 1.0.0
-  resolution: "garudaa@file:./garudaa-1.0.0.tgz::locator=%40beckn-ui%2Fearth-support-initiative%40workspace%3Aapps%2Fearth-support-initiative"
-  dependencies:
-    rrweb: ^2.0.0-alpha.1
-    rxjs: ^7.5.6
-  checksum: db3abbb9f05912ca6db4383a8b882cbe36e44277e7c673bc28b72f6432392c9f59b72c7d1948b659aa60132477819c98cd58192824033033cc46bc93fda9f9e6
-  languageName: node
-  linkType: hard
-
-"garudaa@file:./garudaa-1.0.0.tgz::locator=%40beckn-ui%2Fenvirogrowth%40workspace%3Aapps%2Fenvirogrowth":
-  version: 1.0.0
-  resolution: "garudaa@file:./garudaa-1.0.0.tgz::locator=%40beckn-ui%2Fenvirogrowth%40workspace%3Aapps%2Fenvirogrowth"
-  dependencies:
-    rrweb: ^2.0.0-alpha.1
-    rxjs: ^7.5.6
-  checksum: db3abbb9f05912ca6db4383a8b882cbe36e44277e7c673bc28b72f6432392c9f59b72c7d1948b659aa60132477819c98cd58192824033033cc46bc93fda9f9e6
-  languageName: node
-  linkType: hard
-
-"garudaa@file:./garudaa-1.0.0.tgz::locator=%40beckn-ui%2Fharmoni-aids%40workspace%3Aapps%2Fharmoni-aids":
-  version: 1.0.0
-  resolution: "garudaa@file:./garudaa-1.0.0.tgz::locator=%40beckn-ui%2Fharmoni-aids%40workspace%3Aapps%2Fharmoni-aids"
-  dependencies:
-    rrweb: ^2.0.0-alpha.1
-    rxjs: ^7.5.6
-  checksum: db3abbb9f05912ca6db4383a8b882cbe36e44277e7c673bc28b72f6432392c9f59b72c7d1948b659aa60132477819c98cd58192824033033cc46bc93fda9f9e6
-  languageName: node
-  linkType: hard
-
-"garudaa@file:./garudaa-1.0.0.tgz::locator=%40beckn-ui%2Findustry_4.0%40workspace%3Aapps%2Findustry_4.0":
-  version: 1.0.0
-  resolution: "garudaa@file:./garudaa-1.0.0.tgz::locator=%40beckn-ui%2Findustry_4.0%40workspace%3Aapps%2Findustry_4.0"
-  dependencies:
-    rrweb: ^2.0.0-alpha.1
-    rxjs: ^7.5.6
-  checksum: db3abbb9f05912ca6db4383a8b882cbe36e44277e7c673bc28b72f6432392c9f59b72c7d1948b659aa60132477819c98cd58192824033033cc46bc93fda9f9e6
-  languageName: node
-  linkType: hard
-
-"garudaa@file:./garudaa-1.0.0.tgz::locator=%40beckn-ui%2Fodr-v2%40workspace%3Aapps%2Fodr-v2":
-  version: 1.0.0
-  resolution: "garudaa@file:./garudaa-1.0.0.tgz::locator=%40beckn-ui%2Fodr-v2%40workspace%3Aapps%2Fodr-v2"
-  dependencies:
-    rrweb: ^2.0.0-alpha.1
-    rxjs: ^7.5.6
-  checksum: db3abbb9f05912ca6db4383a8b882cbe36e44277e7c673bc28b72f6432392c9f59b72c7d1948b659aa60132477819c98cd58192824033033cc46bc93fda9f9e6
-  languageName: node
-  linkType: hard
-
-"garudaa@file:./garudaa-1.0.0.tgz::locator=%40beckn-ui%2Fp2p-energy%40workspace%3Aapps%2Fp2p-energy":
-  version: 1.0.0
-  resolution: "garudaa@file:./garudaa-1.0.0.tgz::locator=%40beckn-ui%2Fp2p-energy%40workspace%3Aapps%2Fp2p-energy"
-  dependencies:
-    rrweb: ^2.0.0-alpha.1
-    rxjs: ^7.5.6
-  checksum: db3abbb9f05912ca6db4383a8b882cbe36e44277e7c673bc28b72f6432392c9f59b72c7d1948b659aa60132477819c98cd58192824033033cc46bc93fda9f9e6
-  languageName: node
-  linkType: hard
-
-"garudaa@file:./garudaa-1.0.0.tgz::locator=%40beckn-ui%2Fretail%40workspace%3Aapps%2Fretail":
-  version: 1.0.0
-  resolution: "garudaa@file:./garudaa-1.0.0.tgz::locator=%40beckn-ui%2Fretail%40workspace%3Aapps%2Fretail"
-  dependencies:
-    rrweb: ^2.0.0-alpha.1
-    rxjs: ^7.5.6
-  checksum: db3abbb9f05912ca6db4383a8b882cbe36e44277e7c673bc28b72f6432392c9f59b72c7d1948b659aa60132477819c98cd58192824033033cc46bc93fda9f9e6
-  languageName: node
-  linkType: hard
-
-"garudaa@file:./garudaa-1.0.0.tgz::locator=%40beckn-ui%2Fsky-analytics%40workspace%3Aapps%2Fsky-analytics":
-  version: 1.0.0
-  resolution: "garudaa@file:./garudaa-1.0.0.tgz::locator=%40beckn-ui%2Fsky-analytics%40workspace%3Aapps%2Fsky-analytics"
-  dependencies:
-    rrweb: ^2.0.0-alpha.1
-    rxjs: ^7.5.6
-  checksum: db3abbb9f05912ca6db4383a8b882cbe36e44277e7c673bc28b72f6432392c9f59b72c7d1948b659aa60132477819c98cd58192824033033cc46bc93fda9f9e6
-  languageName: node
-  linkType: hard
-
-"garudaa@file:./garudaa-1.0.0.tgz::locator=%40beckn-ui%2Fstate-forest-department%40workspace%3Aapps%2Fstate-forest-department":
-  version: 1.0.0
-  resolution: "garudaa@file:./garudaa-1.0.0.tgz::locator=%40beckn-ui%2Fstate-forest-department%40workspace%3Aapps%2Fstate-forest-department"
-  dependencies:
-    rrweb: ^2.0.0-alpha.1
-    rxjs: ^7.5.6
-  checksum: db3abbb9f05912ca6db4383a8b882cbe36e44277e7c673bc28b72f6432392c9f59b72c7d1948b659aa60132477819c98cd58192824033033cc46bc93fda9f9e6
-  languageName: node
-  linkType: hard
-
-"garudaa@file:./garudaa-1.0.0.tgz::locator=%40beckn-ui%2FtourismV1.1%40workspace%3Aapps%2FtourismV1.1":
-  version: 1.0.0
-  resolution: "garudaa@file:./garudaa-1.0.0.tgz::locator=%40beckn-ui%2FtourismV1.1%40workspace%3Aapps%2FtourismV1.1"
-  dependencies:
-    rrweb: ^2.0.0-alpha.1
-    rxjs: ^7.5.6
-  checksum: db3abbb9f05912ca6db4383a8b882cbe36e44277e7c673bc28b72f6432392c9f59b72c7d1948b659aa60132477819c98cd58192824033033cc46bc93fda9f9e6
   languageName: node
   linkType: hard
 
@@ -10706,14 +10579,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"http-signature@npm:~1.3.6":
-  version: 1.3.6
-  resolution: "http-signature@npm:1.3.6"
+"http-signature@npm:~1.4.0":
+  version: 1.4.0
+  resolution: "http-signature@npm:1.4.0"
   dependencies:
     assert-plus: ^1.0.0
     jsprim: ^2.0.2
-    sshpk: ^1.14.1
-  checksum: 10be2af4764e71fee0281392937050201ee576ac755c543f570d6d87134ce5e858663fe999a7adb3e4e368e1e356d0d7fec6b9542295b875726ff615188e7a0c
+    sshpk: ^1.18.0
+  checksum: f07f4cc0481e4461c68b9b7d1a25bf2ec4cef8e0061812b989c1e64f504b4b11f75f88022102aea05d25d47a87789599f1a310b1f8a56945a50c93e54c7ee076
   languageName: node
   linkType: hard
 
@@ -11070,17 +10943,6 @@ __metadata:
   version: 1.2.7
   resolution: "is-callable@npm:1.2.7"
   checksum: 61fd57d03b0d984e2ed3720fb1c7a897827ea174bd44402878e059542ea8c4aeedee0ea0985998aa5cc2736b2fa6e271c08587addb5b3959ac52cf665173d1ac
-  languageName: node
-  linkType: hard
-
-"is-ci@npm:^3.0.1":
-  version: 3.0.1
-  resolution: "is-ci@npm:3.0.1"
-  dependencies:
-    ci-info: ^3.2.0
-  bin:
-    is-ci: bin.js
-  checksum: 192c66dc7826d58f803ecae624860dccf1899fc1f3ac5505284c0a5cf5f889046ffeb958fa651e5725d5705c5bcb14f055b79150ea5fcad7456a9569de60260e
   languageName: node
   linkType: hard
 
@@ -14910,12 +14772,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"qs@npm:6.10.4":
-  version: 6.10.4
-  resolution: "qs@npm:6.10.4"
+"qs@npm:6.13.1":
+  version: 6.13.1
+  resolution: "qs@npm:6.13.1"
   dependencies:
-    side-channel: ^1.0.4
-  checksum: 31e4fedd759d01eae52dde6692abab175f9af3e639993c5caaa513a2a3607b34d8058d3ae52ceeccf37c3025f22ed5e90e9ddd6c2537e19c0562ddd10dc5b1eb
+    side-channel: ^1.0.6
+  checksum: 86c5059146955fab76624e95771031541328c171b1d63d48a7ac3b1fdffe262faf8bc5fcadc1684e6f3da3ec87a8dedc8c0009792aceb20c5e94dc34cf468bb9
   languageName: node
   linkType: hard
 
@@ -16157,7 +16019,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"side-channel@npm:^1.0.4":
+"side-channel@npm:^1.0.4, side-channel@npm:^1.0.6":
   version: 1.0.6
   resolution: "side-channel@npm:1.0.6"
   dependencies:
@@ -16431,7 +16293,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sshpk@npm:^1.14.1":
+"sshpk@npm:^1.18.0":
   version: 1.18.0
   resolution: "sshpk@npm:1.18.0"
   dependencies:
@@ -16996,7 +16858,25 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tmp@npm:~0.2.1":
+"tldts-core@npm:^6.1.66":
+  version: 6.1.66
+  resolution: "tldts-core@npm:6.1.66"
+  checksum: a915d868b4cee4ce8054d957690d2deee8e75afb460b06dff423775360fdf1c3a642e5ad2b3215013cc6fb2249b1cf149de4de2cc5fcb5ba7ae530b9f2a8d318
+  languageName: node
+  linkType: hard
+
+"tldts@npm:^6.1.32":
+  version: 6.1.66
+  resolution: "tldts@npm:6.1.66"
+  dependencies:
+    tldts-core: ^6.1.66
+  bin:
+    tldts: bin/cli.js
+  checksum: 26d2cfe00f4275d98a4b53c43a116de69ecbdb7357336131c1358dcbc856b32f04d0dff7cb5482dc07f22a430c75a390d6b9df47b6d35f0d38017ece2fcd9128
+  languageName: node
+  linkType: hard
+
+"tmp@npm:~0.2.3":
   version: 0.2.3
   resolution: "tmp@npm:0.2.3"
   checksum: 73b5c96b6e52da7e104d9d44afb5d106bb1e16d9fa7d00dbeb9e6522e61b571fbdb165c756c62164be9a3bbe192b9b268c236d370a2a0955c7689cd2ae377b95
@@ -17052,15 +16932,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tough-cookie@npm:^4.1.3":
-  version: 4.1.4
-  resolution: "tough-cookie@npm:4.1.4"
+"tough-cookie@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "tough-cookie@npm:5.0.0"
   dependencies:
-    psl: ^1.1.33
-    punycode: ^2.1.1
-    universalify: ^0.2.0
-    url-parse: ^1.5.3
-  checksum: 5815059f014c31179a303c673f753f7899a6fce94ac93712c88ea5f3c26e0c042b5f0c7a599a00f8e0feeca4615dba75c3dffc54f3c1a489978aa8205e09307c
+    tldts: ^6.1.32
+  checksum: 774f6c939c96f74b5847361f7e11e0d69383681d21a35a2d37a20956638e614ec521782d2d20bcb32b58638ff337bba87cc72fb72c987bd02ea0fdfc93994cdb
   languageName: node
   linkType: hard
 
@@ -17079,6 +16956,15 @@ __metadata:
   dependencies:
     punycode: ^2.3.0
   checksum: aeeb821ac2cd792e63ec84888b4fd6598ac6ed75d861579e21a5cf9d4ee78b2c6b94e7d45036f2ca2088bc85b9b46560ad23c4482979421063b24137349dbd96
+  languageName: node
+  linkType: hard
+
+"tree-kill@npm:1.2.2":
+  version: 1.2.2
+  resolution: "tree-kill@npm:1.2.2"
+  bin:
+    tree-kill: cli.js
+  checksum: 49117f5f410d19c84b0464d29afb9642c863bc5ba40fcb9a245d474c6d5cc64d1b177a6e6713129eb346b40aebb9d4631d967517f9fbe8251c35b21b13cd96c7
   languageName: node
   linkType: hard
 

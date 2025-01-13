@@ -1,6 +1,7 @@
 import DetailsCard from '@beckn-ui/becknified-components/src/components/checkout/details-card'
 import { Typography } from '@beckn-ui/molecules'
 import { CardBody, Stack } from '@chakra-ui/react'
+import { testIds } from '@shared/dataTestIds'
 import React from 'react'
 
 // Custom modules
@@ -22,12 +23,14 @@ const CartItem: React.FC<CartItemProps> = ({ id, shortDesc, providerName, source
                   fontSize="15px"
                   fontWeight={'600'}
                   text={shortDesc}
+                  dataTest={testIds.cart_page_shortDesc}
                 />
 
                 <Typography
                   fontSize="12px"
                   fontWeight={'400'}
                   text={`Provided by ${providerName}`}
+                  dataTest={testIds.cart_page_providerName}
                 />
               </Stack>
             </CardBody>

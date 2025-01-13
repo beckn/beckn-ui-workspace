@@ -1,0 +1,160 @@
+{
+  "data": [
+    {
+      "context": {
+        "domain": "skyanalytics_flow",
+        "action": "on_select",
+        "version": "1.1.0",
+        "bpp_id": "bpp-ps-network-strapi1-prod.becknprotocol.io",
+        "bpp_uri": "http://bpp-ps-network-strapi1-prod.becknprotocol.io",
+        "country": "IND",
+        "city": "std:080",
+        "location": {
+          "country": {
+            "name": "India",
+            "code": "IND"
+          },
+          "city": {
+            "name": "Bangalore",
+            "code": "std:080"
+          }
+        },
+        "bap_id": "bap-ps-network-prod.becknprotocol.io",
+        "bap_uri": "https://bap-ps-network-prod.becknprotocol.io",
+        "transaction_id": "78232be3-8bd2-4976-8050-1eedf6aa73c1",
+        "message_id": "70939e02-b594-431c-9904-bae3ddd79f39",
+        "ttl": "PT10M",
+        "timestamp": "2025-01-07T11:03:24.583Z"
+      },
+      "message": {
+        "order": {
+          "quote": {
+            "price": {
+              "value": "30"
+            }
+          },
+          "provider": {
+            "id": "810",
+            "name": "National Meterological Department",
+            "short_desc": "The National Meteorological Department is the national meteorological organization of the country, under Ministry of Defense.",
+            "long_desc": "License: CC BY-NC-SA  |  53 years in operation",
+            "rating": "4.2",
+            "images": {
+              "url": "https://bpp-unified-strapi-dev.becknprotocol.io/uploads/Group_1000003468_4b1c0ac8b3.png",
+              "size_type": "sm"
+            }
+          },
+          "items": [
+            {
+              "id": "334",
+              "name": "Surface and space based high resolution weather forecast and historical data",
+              "images": [
+                {
+                  "url": "https://bpp-unified-strapi-dev.becknprotocol.io/uploads/Group_1000003468_4b1c0ac8b3.png",
+                  "size_type": "sm"
+                }
+              ],
+              "price": {
+                "value": "30"
+              },
+              "rating": "null",
+              "rateable": true,
+              "quantity": {
+                "available": {
+                  "measure": {
+                    "value": "0",
+                    "unit": "kWh"
+                  }
+                }
+              },
+              "tags": [
+                {
+                  "code": "Confidence Levels",
+                  "description": "Confidence Levels",
+                  "list": [
+                    {
+                      "code": "90%",
+                      "value": "90%",
+                      "display": true
+                    }
+                  ]
+                },
+                {
+                  "code": "Spatial Representation",
+                  "description": "Spatial Representation",
+                  "list": [
+                    {
+                      "code": "Raster",
+                      "value": "Raster",
+                      "display": true
+                    }
+                  ]
+                },
+                {
+                  "code": "Spatial Coverage",
+                  "description": "Spatial Coverage",
+                  "list": [
+                    {
+                      "code": "Beanibazar",
+                      "value": "Beanibazar",
+                      "display": true
+                    },
+                    {
+                      "code": "Balaganj",
+                      "value": "Balaganj",
+                      "display": true
+                    }
+                  ]
+                },
+                {
+                  "code": "Spatial Resolutions",
+                  "description": "Spatial Resolutions",
+                  "list": [
+                    {
+                      "code": "1 km",
+                      "value": "1 km",
+                      "display": true
+                    }
+                  ]
+                },
+                {
+                  "code": "Data Formats",
+                  "description": "Data Formats",
+                  "list": [
+                    {
+                      "code": "XML",
+                      "value": "XML",
+                      "display": true
+                    }
+                  ]
+                },
+                {
+                  "code": "Data Sharing Modes",
+                  "description": "Data Sharing Modes",
+                  "list": [
+                    {
+                      "code": "FTP",
+                      "value": "FTP",
+                      "display": true
+                    }
+                  ]
+                },
+                {
+                  "code": "Subscription Durations",
+                  "description": "Subscription Durations",
+                  "list": [
+                    {
+                      "code": "One time",
+                      "value": "One time",
+                      "display": true
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

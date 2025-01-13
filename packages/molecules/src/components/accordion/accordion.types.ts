@@ -6,4 +6,6 @@ export interface AccordionProps {
   onToggle?: (expandedIndex: number | number[]) => void
   className?: string
   dataTest?: string
+  isDisabled?: boolean
+  defaultIndex?: number
 }

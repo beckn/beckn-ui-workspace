@@ -12,7 +12,13 @@ export interface SubHeaderConstants {
     cartIconList?: string[]
     invoiceDownloadIconList?: string[]
     qrCodeScanerList?: string[]
+    editIconList?: string[]
   }
+}
+
+export interface ProfileSection {
+  src: string
+  handleClick: () => void
 }
 
 export interface SubHeaderProps extends TranslationProps {
@@ -20,4 +26,6 @@ export interface SubHeaderProps extends TranslationProps {
   headerConstants: SubHeaderConstants
   qrScanerValue?: string | any
   handleClick?: () => void
+  handleClickOnEdit?: () => void
+  profileSection?: ProfileSection
 }

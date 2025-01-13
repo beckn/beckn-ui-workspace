@@ -13,6 +13,11 @@ export interface User {
     first_name: string
     last_name: string
   }
+  role?: {
+    id: number
+    name: string
+    type: string
+  }
 }
 
 // Sign-In related models
@@ -54,13 +59,15 @@ export interface SignUpResponse {
 // Profile related models
 export interface ProfileProps {
   name: string
-  mobileNumber: string
-  flatNumber: string | null
-  street: string | null
-  city: string
-  zipCode: string
-  state: string
-  country: string
+  mobileNumber?: string
+  flatNumber?: string | null
+  street?: string | null
+  city?: string
+  zipCode?: string
+  state?: string
+  country?: string
+  customerId?: string
+  address?: ''
 }
 
 // components related models

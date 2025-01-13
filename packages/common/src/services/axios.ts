@@ -19,7 +19,7 @@ const createAxiosInstance = (store: Store): CustomAxiosInstance => {
         feedbackActions.setToastData({
           toastData: {
             display: true,
-            message: 'Error!' || 'Something went wrong',
+            message: 'Error!',
             type: 'error',
             description:
               error?.response?.data?.error?.details?.errors?.[0].message.replace(

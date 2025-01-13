@@ -30,6 +30,9 @@
 Button.auth_btn {
   border: 1px solid;
 }
+.auth_checkbox_container label {
+  align-items: baseline;
+}
 
 @media (min-width: 1280px) {
   .main_container {

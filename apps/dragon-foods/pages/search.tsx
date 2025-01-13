@@ -35,7 +35,7 @@ const Search = () => {
       context: {
         domain: DOMAIN
       },
-      searchString: searchKeyword,
+      searchString: searchKeyword.trim(),
       location: '28.4594965,77.0266383'
     }
 

@@ -272,25 +272,29 @@ select:-webkit-autofill:focus {
 .hideScroll::-webkit-scrollbar {
   display: none;
 }
-#ride-modal .chakra-portal .chakra-modal__content-container,
-#ride-modal .chakra-portal .chakra-modal__overlay {
-  z-index: unset !important;
-  background: unset !important;
-  height: 0px !important;
-}
-.taxi-bpp-login button {
-  color: #1f2122;
-  border-color: transparent !important;
-}
-.taxi-bpp-login .chakra-input:-webkit-autofill {
-  -webkit-text-fill-color: #fff;
-  -webkit-box-shadow: 0 0 0px 1000px transparent inset;
-  transition: background-color 5000s ease-in-out 0s;
-}
-
-.taxi-bpp-btn-text {
-  color: #1f2122 !important;
-}
 .hideScroll::-webkit-scrollbar {
   display: none;
+}
+.input_input__F_m4r:not(:placeholder-shown) ~ .input_input_label__hv2in {
+  font-size: 12px;
+  font-weight: 500;
+}
+.css-vhc7ah {
+  padding-inline-start: unset !important;
+  padding-inline-end: unset !important;
+}
+.trade-status-accordion-button:disabled {
+  opacity: 1 !important;
+}
+.trade-status-accordion-icon {
+  display: none !important;
+}
+.css-1juf683 {
+  font-size: 12px !important;
+}
+
+@media only screen and (max-width: 370px) {
+  .mytrade-status {
+    gap: 2px !important;
+  }
 }

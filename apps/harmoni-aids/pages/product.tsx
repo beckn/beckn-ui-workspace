@@ -109,11 +109,16 @@ const Product = () => {
         <Typography
           text={`About ${selectedProduct.providerName}`}
           fontWeight={'800'}
+          dataTest={testIds.product_about_section}
         />
-        <Typography text={selectedProduct.item.short_desc!} />
+        <Typography
+          text={selectedProduct.item.short_desc!}
+          dataTest={testIds.product_about_short_desc}
+        />
         <Typography
           text={selectedProduct.item.productInfo! as string}
           style={{ marginTop: '1rem' }}
+          dataTest={testIds.product_about_productInfo}
         />
       </Box>
 
@@ -180,11 +185,13 @@ const Product = () => {
           textDecoration="underline"
           href="https://www.google.com"
           target="_blank"
+          data-test={testIds.TermsandConditions_link}
         >
           Terms and Conditions
         </Link>
       </Flex>
       <Flex
+        data-test={testIds.disclaimer_text}
         alignItems={'center'}
         border={'1px solid #BFBFBF'}
         borderRadius="12px"
@@ -196,7 +203,8 @@ const Product = () => {
           mr="20px"
         >
           <Button
-            text="proceed"
+            text="Proceed"
+            dataTest={testIds.Proceed_to_product}
             disabled={!checkIsDisabled()}
             handleClick={handleOnProceed}
           />

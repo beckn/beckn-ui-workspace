@@ -1,33 +1,52 @@
 type PathnameObjectType = Record<string, string>
 
 // -------------------------------- Top Header constants --------------------------------
-const appLogoBlackList = ['/signIn', '/signUp']
-const homeIconBlackList = ['/', '/signIn', '/', '/myRides', '/profile', '/signUp']
-const menuIconWhiteList = ['/', '/profile', '/myRides']
-const topHeaderBlackList: string[] = []
+const appLogoBlackList = ['/signIn', '/signUp', '/welcome']
+const homeIconBlackList = ['/', '/signIn', '/', '/myRides', '/profile', '/signUp', '/welcome']
+const menuIconWhiteList = ['/', '/profile', '/myRides', '/buyingPreference', '/sellingPreference', '/myDers']
+const topHeaderBlackList: string[] = ['/welcome']
 const languageIconWhiteList: string[] = []
 
 // -------------------------------- Sub Header constants --------------------------------
 const backIconList = ['/', '/signIn']
 
 const headerNames: PathnameObjectType = {
-  '/myRides': 'My Rides',
   '/signIn': 'Sign In',
   '/signUp': 'Sign Up',
   '/paymentMode': 'Select Payment Method',
-  '/profile': 'Profile'
+  '/profile': 'Profile',
+  '/myCredentials': 'My Credentials',
+  '/myTrades': 'My Trades',
+  '/buyingPreference': 'Buying Preferences',
+  '/sellingPreference': 'Selling Preferences',
+  '/myDers': 'My DERs',
+  '/tradeDetails': 'No. of Units Sold'
 }
 
 const headerFrenchNames: PathnameObjectType = {
-  '/rideHistory': 'Historique des Commandes',
   '/': 'Se Connecter',
   '/paymentMode': 'Sélectionner la Méthode de Paiement'
 }
 
-const headerBlackList = ['/myRides', '/', '/paymentMode', '/profile', '/signIn', '/signUp']
+const headerBlackList = [
+  '/',
+  '/paymentMode',
+  '/profile',
+  '/signIn',
+  '/signUp',
+  '/welcome',
+  '/myCredentials',
+  '/myTrades',
+  '/buyingPreference',
+  '/sellingPreference',
+  '/myDers',
+  '/tradeDetails'
+]
 
-const bottomHeaderBlackList = ['/orderConfirmation', '/', '/feedback']
+const bottomHeaderBlackList = ['/orderConfirmation', '/', '/feedback', '/welcome']
 const orderIconList = ['/orderDetails']
+const editIconList: string[] = ['/profile']
+const profileSectionIcon = ['/buyingPreference']
 
 export default {
   TopHeader: {
@@ -43,6 +62,8 @@ export default {
     headerFrenchNames,
     headerBlackList,
     orderIconList,
-    bottomHeaderBlackList
+    bottomHeaderBlackList,
+    editIconList,
+    profileSectionIcon
   }
 }

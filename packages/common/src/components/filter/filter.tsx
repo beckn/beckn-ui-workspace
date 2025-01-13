@@ -188,6 +188,9 @@ const Filter = ({
                   // dispatch(updatePolicyType(value || ''))
                   handleChange('searchByPrice', value.value)
                 }}
+                buttonStyles={{
+                  fontSize: '16px'
+                }}
                 name="searchByPrice"
                 dataTest={testIds.searchpage_sortByPrice}
               />
