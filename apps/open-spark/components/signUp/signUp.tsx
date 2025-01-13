@@ -64,6 +64,13 @@ const SignUp = () => {
       .catch(error => {
         console.error('Error fetching utilities:', error)
       })
+
+    setUtilities([
+      { value: 'Maharashtra State Power Corp. Ltd', label: 'Maharashtra State Power Corp. Ltd' },
+      { value: 'Reliance Power', label: 'Reliance Power' },
+      { value: 'MSEB', label: 'MSEB' },
+      { value: 'Gujarat Electricity Corp. Ltd', label: 'Gujarat Electricity Corp. Ltd' }
+    ])
   }, [])
 
   // Handle input change and validation

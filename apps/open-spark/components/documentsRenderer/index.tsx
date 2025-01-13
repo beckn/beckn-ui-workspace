@@ -85,6 +85,7 @@ const RenderDocuments = (props: RenderDocumentsProps) => {
                   text={document.title}
                   fontWeight="600"
                   sx={{
+                    maxWidth: '10rem',
                     noOfLines: 2,
                     textOverflow: 'ellipsis',
                     whiteSpace: 'pre-wrap',

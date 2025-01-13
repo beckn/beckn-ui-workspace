@@ -76,7 +76,8 @@ const MyCredentials = () => {
         console.log('Selected file:', file)
         return { title: file?.name!, icon: uploadIcon, date: new Date(), file: file }
       })
-      setSelectedFile(prevState => (prevState ? [...prevState, ...docs] : docs))
+      // setSelectedFile(prevState => (prevState ? [...prevState, ...docs] : docs))
+      setSelectedFile(docs)
     }
   }
 
@@ -138,18 +139,21 @@ const MyCredentials = () => {
         setIsLoading(false)
       })
   }
+  const clearAllFiles = () => {
+    setSelectedFile([])
+  }
 
   return (
     <Box
       margin={'0 auto'}
       maxW={['100%', '100%', '40rem', '40rem']}
       className="hideScroll"
-      maxH={'calc(100vh - 80px)'}
+      maxH={'calc(100vh - 100px)'}
       overflowY="scroll"
     >
       <Flex
         flexDirection={'column'}
-        height={'calc(100vh - 100px)'}
+        // height={'calc(100vh - 100px)'}
         justifyContent="space-between"
       >
         <Box>
@@ -178,42 +182,44 @@ const MyCredentials = () => {
               marginTop: '1rem'
             }}
           />
-          <Typography text="Upload credential documents" />
-          <DragAndDropUpload
-            multiple={true}
-            accept={'.json'}
-            dragAndDrop={true}
-            setFiles={handleFileChange}
-            fileSelectionElement={(fileInputRef: any) => {
-              return (
-                <VStack>
-                  <Icon
-                    as={FiPlusCircle}
-                    boxSize={6}
-                    color="gray.500"
-                  />
-                  <Typography text={'Drop your file here'} />
-                  <HStack gap={1}>
-                    <Typography
-                      color="#4498E8"
-                      fontSize="8px"
-                      onClick={() => {
-                        if (fileInputRef.current) {
-                          fileInputRef.current.click()
-                        }
-                      }}
-                      sx={{ cursor: 'pointer', _hover: { textDecoration: 'underline' } }}
-                      text="Browse file"
-                    />{' '}
-                    <Typography
-                      fontSize="8px"
-                      text={'from your computer'}
+          <Typography text="File upload description" />
+          {selectedFile.length === 0 && (
+            <DragAndDropUpload
+              multiple={false}
+              accept={'.json'}
+              dragAndDrop={true}
+              setFiles={handleFileChange}
+              fileSelectionElement={(fileInputRef: any) => {
+                return (
+                  <VStack>
+                    <Icon
+                      as={FiPlusCircle}
+                      boxSize={6}
+                      color="gray.500"
                     />
-                  </HStack>
-                </VStack>
-              )
-            }}
-          />
+                    <Typography text={'Drop your file here'} />
+                    <HStack gap={1}>
+                      <Typography
+                        color="#4498E8"
+                        fontSize="8px"
+                        onClick={() => {
+                          if (fileInputRef.current) {
+                            fileInputRef.current.click()
+                          }
+                        }}
+                        sx={{ cursor: 'pointer', _hover: { textDecoration: 'underline' } }}
+                        text="Browse file"
+                      />{' '}
+                      <Typography
+                        fontSize="8px"
+                        text={'from your computer'}
+                      />
+                    </HStack>
+                  </VStack>
+                )
+              }}
+            />
+          )}
           <RenderDocuments
             list={selectedFile || []}
             type="upload"
@@ -223,13 +229,26 @@ const MyCredentials = () => {
             }}
           />
         </Box>
-        <BecknButton
-          text={t.upload}
-          disabled={selectedFile?.length === 0 || !allFilesProcessed}
-          sx={{ marginTop: '2rem' }}
-          handleClick={handleOnUpload}
-          isLoading={isLoading}
-        />
+        <Flex
+          alignItems={'center'}
+          mt={'20px'}
+        >
+          <BecknButton
+            children="Cancel"
+            variant="outline"
+            disabled={selectedFile?.length === 0 || !allFilesProcessed}
+            color="#E93324"
+            sx={{ marginRight: '8px', border: '1px solid red' }}
+            handleClick={clearAllFiles}
+          />
+          <BecknButton
+            text={t.upload}
+            disabled={selectedFile?.length === 0 || !allFilesProcessed}
+            sx={{ marginLeft: '8px' }}
+            handleClick={handleOnUpload}
+            isLoading={isLoading}
+          />
+        </Flex>
       </Flex>
       <DeleteAlertModal
         isOpen={openDeleteModal?.isOpen!}

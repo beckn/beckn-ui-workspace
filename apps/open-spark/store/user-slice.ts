@@ -1,9 +1,9 @@
 import { Coordinate, PickUpDropOffModel } from '@beckn-ui/common'
-import { ModalDetails } from '@lib/types/mapScreen'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 export interface UserState {
   profileEditable: boolean
+  tradeExecutionProcessed?: boolean
 }
 
 export interface UserRootState {
@@ -11,7 +11,8 @@ export interface UserRootState {
 }
 
 const initialState: UserState = {
-  profileEditable: false
+  profileEditable: false,
+  tradeExecutionProcessed: false
 }
 
 const userSlice = createSlice({
@@ -20,9 +21,12 @@ const userSlice = createSlice({
   reducers: {
     setProfileEditable: (state, action: PayloadAction<{ profileEditable: boolean }>) => {
       state.profileEditable = action.payload.profileEditable
+    },
+    setTradeExecutionProcessed: (state, action: PayloadAction<boolean>) => {
+      state.tradeExecutionProcessed = action.payload
     }
   }
 })
 
-export const { setProfileEditable } = userSlice.actions
+export const { setProfileEditable, setTradeExecutionProcessed } = userSlice.actions
 export default userSlice.reducer
