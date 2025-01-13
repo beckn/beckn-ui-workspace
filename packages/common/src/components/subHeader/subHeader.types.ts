@@ -13,6 +13,7 @@ export interface SubHeaderConstants {
     invoiceDownloadIconList?: string[]
     qrCodeScanerList?: string[]
     editIconList?: string[]
+    infoIconList?: string[]
   }
 }
 
@@ -28,4 +29,5 @@ export interface SubHeaderProps extends TranslationProps {
   handleClick?: () => void
   handleClickOnEdit?: () => void
   profileSection?: ProfileSection
+  infoUrlLink?: string
 }

@@ -53,9 +53,17 @@ const getHeaderTitleForPage = (
 }
 
 const SubHeader = (props: SubHeaderProps) => {
-  const { locale, t, showCartIcon = true, headerConstants, handleClickOnEdit, profileSection } = props
+  const { locale, t, showCartIcon = true, headerConstants, handleClickOnEdit, profileSection, infoUrlLink } = props
   const {
-    blackList: { backIconList, orderIconList, cartIconList, invoiceDownloadIconList, qrCodeScanerList, editIconList }
+    blackList: {
+      backIconList,
+      orderIconList,
+      cartIconList,
+      invoiceDownloadIconList,
+      qrCodeScanerList,
+      editIconList,
+      infoIconList
+    }
   } = headerConstants
 
   const [isOrderModalOpen, setOrderModalOpen] = useState(false)
@@ -154,6 +162,19 @@ const SubHeader = (props: SubHeaderProps) => {
               src="/images/edit_icon.svg"
               alt="edit icon"
             />
+          )}
+          {infoIconList?.includes(router.pathname) && (
+            <a
+              href={infoUrlLink}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <Image
+                cursor="pointer"
+                src="/images/info_icon.svg"
+                alt="info icon"
+              />
+            </a>
           )}
         </Box>
       </Box>

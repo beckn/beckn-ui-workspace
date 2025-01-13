@@ -49,21 +49,21 @@ const SignUp = () => {
   const [termsAccepted, setTermsAccepted] = useState(false)
 
   useEffect(() => {
-    axios
-      .get(`${strapiUrl}${ROUTE_TYPE.CONSUMER}/get-utilities`)
-      .then(response => {
-        const result = response.data
-        const companies = result?.records.map((company: any) => {
-          return {
-            label: company.details.company_name,
-            value: company.details.company_name
-          }
-        })
-        setUtilities(companies)
-      })
-      .catch(error => {
-        console.error('Error fetching utilities:', error)
-      })
+    // axios
+    //   .get(`${strapiUrl}${ROUTE_TYPE.CONSUMER}/get-utilities`)
+    //   .then(response => {
+    //     const result = response.data
+    //     const companies = result?.records.map((company: any) => {
+    //       return {
+    //         label: company.details.company_name,
+    //         value: company.details.company_name
+    //       }
+    //     })
+    //     setUtilities(companies)
+    //   })
+    //   .catch(error => {
+    //     console.error('Error fetching utilities:', error)
+    //   })
 
     setUtilities([
       { value: 'Maharashtra State Power Corp. Ltd', label: 'Maharashtra State Power Corp. Ltd' },
