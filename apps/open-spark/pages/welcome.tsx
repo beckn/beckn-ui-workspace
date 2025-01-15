@@ -1,6 +1,7 @@
 import BecknButton from '@beckn-ui/molecules/src/components/button'
 import { Box, Flex, Image, Text } from '@chakra-ui/react'
 import { ROLE } from '@lib/config'
+import { testIds } from '@shared/dataTestIds'
 import { setRole } from '@store/auth-slice'
 import Cookies from 'js-cookie'
 import { useRouter } from 'next/router'
@@ -33,16 +34,19 @@ const welcome = () => {
         <Image
           src={welcomeLogo}
           alt="welcome_logo"
+          data-test={testIds.open_spark_img}
         />
         <Text
           fontSize="24px"
           fontWeight={400}
+          data-test={testIds.open_spark_welcome_text}
         >
           Hello,
         </Text>
         <Text
           fontSize="24px"
           fontWeight={400}
+          data-test={testIds.open_spark_welcome_text}
         >
           Welcome to Open Spark
         </Text>
