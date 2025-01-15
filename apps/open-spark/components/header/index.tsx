@@ -82,9 +82,7 @@ const Header = () => {
           handleClickOnEdit={() => {
             dispatch(setProfileEditable({ profileEditable: true }))
           }}
-          infoUrlLink={
-            'https://www.aemc.gov.au/energy-system/electricity/electricity-system/distributed-energy-resources'
-          }
+          infoUrlLink={'https://en.wikipedia.org/wiki/Distributed_generation'}
         />
       )}
     </Box>
