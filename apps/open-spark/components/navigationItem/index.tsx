@@ -35,6 +35,7 @@ const NavigationItem = (props: NavigationItemProps) => {
             }}
             text={label}
             color={color}
+            dataTest={label}
           />
         </Flex>
         {arrow && (

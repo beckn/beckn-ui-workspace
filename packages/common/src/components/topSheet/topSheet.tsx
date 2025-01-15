@@ -126,6 +126,7 @@ const TopSheet: React.FC<TopSheetComponentProps> = ({
             src={profileSection.src}
             alt={'right-img'}
             onClick={profileSection.handleClick}
+            data-test={testIds.topSheet_profile_icon}
           />
         )}
       </Box>
