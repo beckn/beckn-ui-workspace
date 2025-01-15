@@ -14,7 +14,7 @@ interface DragAndDropUploadProps {
 }
 
 const DragAndDropUpload = (props: DragAndDropUploadProps) => {
-  const { fileSelectionElement, multiple, setFiles, dragAndDrop = false, accept } = props
+  const { fileSelectionElement, multiple, setFiles, dragAndDrop = false, accept = '.json' } = props
   const [isDragging, setIsDragging] = useState(false)
 
   const fileInputRef = useRef<HTMLInputElement | null>(null)
@@ -46,10 +46,22 @@ const DragAndDropUpload = (props: DragAndDropUploadProps) => {
     if (e.target.files) {
       const uploadedFiles = Array.from(e.target.files)
 
-      const validFiles = uploadedFiles.filter(file => file.name.endsWith('.json'))
+      // Parse accept attribute and dynamically validate
+      const acceptedTypes = accept?.split(',').map(type => type.trim())
+      const validFiles = uploadedFiles.filter(file => {
+        return acceptedTypes?.some(type => {
+          if (type.startsWith('.')) {
+            // Match file extension
+            return file.name.endsWith(type)
+          } else {
+            // Match MIME type
+            return file.type === type
+          }
+        })
+      })
 
       if (validFiles.length !== uploadedFiles.length) {
-        alert('Only JSON files are allowed. Please upload valid .json files.')
+        alert(`Invalid files uploaded. Please upload files matching: ${accept}`)
       }
 
       if (validFiles.length > 0) {
