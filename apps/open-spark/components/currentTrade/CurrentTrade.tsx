@@ -13,6 +13,7 @@ const CurrentTrade = (props: CurrentTradeProps) => {
       justifyContent="space-between"
       alignItems="center"
       columnGap={'20px'}
+      marginBottom="-18px"
     >
       {data.map((item, index) => (
         <Input
