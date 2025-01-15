@@ -152,10 +152,14 @@ const SignUp = () => {
     if (isFormValid) {
       try {
         let registerResponse: any = null
-        if (role === ROLE.CONSUMER) registerResponse = await bapTradeRegister(signUpData)
+        let catalogueSuccess: any = null
+        if (role === ROLE.CONSUMER) {
+          registerResponse = await bapTradeRegister(signUpData)
+          catalogueSuccess = true
+        }
         if (role === ROLE.PRODUCER) {
           registerResponse = await bppTradeRegister(signUpData)
-          createTradeCatalogue()
+          catalogueSuccess = await createTradeCatalogue()
         }
         console.log(registerResponse)
         if (!registerResponse || (registerResponse as { error: FetchBaseQueryError })?.error)
@@ -167,7 +171,9 @@ const SignUp = () => {
         } else {
           throw new Error('JWT token not found in the response')
         }
-        Router.push('/')
+        if (catalogueSuccess) {
+          Router.push('/')
+        }
       } catch (error) {
         console.error('An error occurred:', error)
       }

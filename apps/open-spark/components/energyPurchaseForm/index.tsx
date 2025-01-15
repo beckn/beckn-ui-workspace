@@ -2,6 +2,7 @@ import {
   Box,
   Checkbox,
   Divider,
+  Flex,
   FormControl,
   FormLabel,
   HStack,
@@ -150,11 +151,14 @@ export default function EnergyPurchaseForm({ preferenceType }: EnergyPurchaseFor
   const isFormComplete = energyUnits > 0
 
   return (
-    <Box
+    <Flex
       as="form"
       onSubmit={handleSubmit}
       maxW="600px"
       mt="30px"
+      flexDir={'column'}
+      justifyContent={'space-between'}
+      height={'calc(100vh - 9rem)'}
     >
       <VStack
         spacing={8}
@@ -280,12 +284,12 @@ export default function EnergyPurchaseForm({ preferenceType }: EnergyPurchaseFor
         </FormControl>
 
         {/* Submit Button */}
-        <BecknButton
-          children="Submit"
-          handleClick={handleSubmit}
-          disabled={!isFormComplete} // Button disabled if form incomplete
-        />
       </VStack>
-    </Box>
+      <BecknButton
+        children="Submit"
+        handleClick={handleSubmit}
+        disabled={!isFormComplete} // Button disabled if form incomplete
+      />
+    </Flex>
   )
 }
