@@ -158,7 +158,7 @@ export default function EnergyPurchaseForm({ preferenceType }: EnergyPurchaseFor
       mt="30px"
       flexDir={'column'}
       justifyContent={'space-between'}
-      height={'calc(100vh - 9rem)'}
+      height={'calc(100vh - 8.5rem)'}
     >
       <VStack
         spacing={8}

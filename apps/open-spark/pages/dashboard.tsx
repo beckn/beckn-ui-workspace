@@ -230,12 +230,14 @@ const Dashboard = () => {
         maxWidth={{ base: '100vw', md: '30rem', lg: '40rem' }}
         margin="calc(0rem + 68px) auto auto auto"
         backgroundColor="white"
-        height={'calc(100vh - 100px)'}
+        className="hideScroll"
+        maxH={'calc(100vh - 100px)'}
+        overflowY="scroll"
       >
         <Flex
           flexDirection={'column'}
           justifyContent={'space-between'}
-          height={'100%'}
+          height={'calc(100vh - 100px)'}
         >
           <Box>
             <Typography
