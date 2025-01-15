@@ -664,7 +664,15 @@ const testIds = {
   cart_page_providerName: 'cart-page-providerName',
   product_about_section: 'product-about-section',
   product_about_short_desc: 'product-about-short-desc',
-  product_about_productInfo: 'product-about-productInfo'
+  product_about_productInfo: 'product-about-productInfo',
+
+  /////////Open Spark////////////
+  open_spark_img: 'open_spark_img',
+  open_spark_welcome_text: 'open_spark_welcome_text',
+  user_validEmail_consumer_flow: 'leela.tai@gmail.com',
+  user_validPassword_consumer_flow: 'Test@123',
+  user_validEmail_producer_flow: 'qqq@gmail.com',
+  user_validPassword_producer_flow: 'Test@123'
 }
 
 export { testIds }

@@ -45,7 +45,16 @@ const DragAndDropUpload = (props: DragAndDropUploadProps) => {
   const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const uploadedFiles = Array.from(e.target.files)
-      setFiles(uploadedFiles)
+
+      const validFiles = uploadedFiles.filter(file => file.name.endsWith('.json'))
+
+      if (validFiles.length !== uploadedFiles.length) {
+        alert('Only JSON files are allowed. Please upload valid .json files.')
+      }
+
+      if (validFiles.length > 0) {
+        setFiles(validFiles)
+      }
 
       e.target.value = ''
     }
