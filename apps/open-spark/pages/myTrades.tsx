@@ -92,6 +92,7 @@ const MyTrades = () => {
       >
         <Typography
           text="No trade history found."
+          dataTest="no_Trade_Found"
           fontWeight="400"
           fontSize="15px"
           style={{ placeSelf: 'center' }}
@@ -120,16 +121,29 @@ const MyTrades = () => {
                   <Flex
                     flexDirection={'column'}
                     gap="4px"
+                    data-test={'trades_card_click'}
                   >
                     <Typography
                       text={`${trade.quantity} Units`}
                       fontWeight="600"
+                      dataTest={'trade_quantity'}
                     />
-                    {role !== ROLE.CONSUMER && <Typography text={`${currencyMap.INR}${trade.price}`} />}
+                    {role !== ROLE.CONSUMER && (
+                      <Typography
+                        text={`${currencyMap.INR}${trade.price}`}
+                        dataTest={'trade_price'}
+                      />
+                    )}
                     <Flex justifyContent={'space-between'}>
                       <Flex flexDir={'row'}>
-                        <Typography text={`Order ID: ${trade.orderId}`} />
-                        <Typography text={`, ${formatDate(trade.time, 'hh:mm a')}`} />
+                        <Typography
+                          text={`Order ID: ${trade.orderId}`}
+                          dataTest={'trade_orderId'}
+                        />
+                        <Typography
+                          text={`, ${formatDate(trade.time, 'hh:mm a')}`}
+                          dataTest={'trade_Time'}
+                        />
                       </Flex>
                       <Flex
                         gap="4px"
@@ -142,6 +156,7 @@ const MyTrades = () => {
                         <Typography
                           color={statusMap[trade.status].color}
                           text={`${statusMap[trade.status].label}`}
+                          dataTest="trade-status"
                         />
                       </Flex>
                     </Flex>
