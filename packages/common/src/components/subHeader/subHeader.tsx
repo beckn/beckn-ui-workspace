@@ -161,6 +161,7 @@ const SubHeader = (props: SubHeaderProps) => {
               onClick={handleClickOnEdit}
               src="/images/edit_icon.svg"
               alt="edit icon"
+              data-test={testIds.edit_icon}
             />
           )}
           {infoIconList?.includes(router.pathname) && (

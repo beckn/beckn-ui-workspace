@@ -88,6 +88,7 @@ const testIds = {
   url_invoice: '/invoiceDetails',
   url_orderHistory: '/orderHistory',
   url_feedback: '/feedback',
+  url_profile: '/profile',
   // user credentials
   user_validEmail: 'ankit@gmail.com',
   user_validPassword: 'Enterthevoid@123',
@@ -672,7 +673,9 @@ const testIds = {
   user_validEmail_consumer_flow: 'leela.tai@gmail.com',
   user_validPassword_consumer_flow: 'Test@123',
   user_validEmail_producer_flow: 'qqq@gmail.com',
-  user_validPassword_producer_flow: 'Test@123'
+  user_validPassword_producer_flow: 'Test@123',
+  topSheet_profile_icon: 'topSheet-profile-icon',
+  edit_icon: 'edit-icon'
 }
 
 export { testIds }
