@@ -26,6 +26,7 @@ import axios from '@services/axios'
 import { DashboardData, StatusItem, TradeData } from '@lib/types/dashboard'
 import { parseAndFormatDate } from '@utils/parsedFormatDate-utils'
 import PendingIcon from '@public/images/pending.svg'
+import { testIds } from '@shared/dataTestIds'
 
 const Dashboard = () => {
   const { t } = useLanguage()
@@ -248,6 +249,7 @@ const Dashboard = () => {
                 marginBottom: '10px',
                 paddingTop: '30px'
               }}
+              dataTest={testIds.total_energy_text}
             />
             <Flex
               columnGap={'20px'}
@@ -255,6 +257,7 @@ const Dashboard = () => {
               alignItems="center"
             >
               <Input
+                dataTest={testIds.total_energy_input}
                 name="energy"
                 value={String(+totalEnergyUnits.toFixed(2))}
                 type={'text'}
@@ -275,6 +278,7 @@ const Dashboard = () => {
                         text={'(KWh)'}
                         fontSize="15px"
                         fontWeight="400"
+                        dataTest={testIds.total_energy_unit}
                       />
                     </Box>
                   )
@@ -301,11 +305,13 @@ const Dashboard = () => {
                     text={role === ROLE.PRODUCER ? 'My Preferences' : 'Current Trade'}
                     fontSize="15"
                     fontWeight="600"
+                    dataTest={testIds.current_trade}
                   />
                   <QuestionOutlineIcon />
                 </HStack>
                 {role === ROLE.PRODUCER && currentTradeData.length !== 0 && (
                   <LiaPenSolid
+                    data-test={testIds.current_trade_edit_btn}
                     cursor={'pointer'}
                     onClick={() =>
                       router.push({
@@ -325,6 +331,7 @@ const Dashboard = () => {
                 )}
                 {role === ROLE.CONSUMER && currentTradeData.length !== 0 && latestStatus?.status !== 'SUCCESS' && (
                   <LiaPenSolid
+                    data-test={testIds.current_trade_edit_btn}
                     cursor={'pointer'}
                     onClick={() =>
                       router.push({
@@ -347,6 +354,7 @@ const Dashboard = () => {
             {isTradeLodaing && isPreffrenceLodaing ? (
               <Box m={'40px'}>
                 <LoaderWithMessage
+                  dataTest={testIds.loader_with_mssg}
                   loadingText={''}
                   loadingSubText={''}
                 />
@@ -387,6 +395,7 @@ const Dashboard = () => {
                     {preferencesTags.length > 0 && (
                       <Box>
                         <Typography
+                          dataTest={testIds.preferencesTags_text}
                           text="Preferences"
                           fontSize="14px"
                           fontWeight="600"
@@ -404,7 +413,7 @@ const Dashboard = () => {
                               colorScheme="gray"
                               padding={'4px 8px'}
                             >
-                              <TagLabel>{tag}</TagLabel>
+                              <TagLabel data-test={testIds.preferencesTags_tags_label}>{tag}</TagLabel>
                               {/* <TagCloseButton onClick={() => handleRemoveTag(tag)} /> */}
                             </Tag>
                           ))}
@@ -420,12 +429,14 @@ const Dashboard = () => {
                             mb={'20px'}
                           >
                             <Typography
+                              dataTest={testIds.current_status}
                               text="Current Status"
                               fontSize="14px"
                               fontWeight="600"
                             />
                             {latestStatus?.status && (
                               <Typography
+                                dataTest={testIds.current_status_trade}
                                 text={latestStatus?.status === 'RECEIVED' ? 'Pending' : 'Completed'}
                                 fontSize="12px"
                                 fontWeight="600"
@@ -438,6 +449,9 @@ const Dashboard = () => {
                             {currentStatusData.length > 0 ? (
                               currentStatusData.map((data, index) => (
                                 <OrderStatusProgress
+                                  dataTestStateName={testIds.current_trade_order_status_name}
+                                  dataTestStateDescription={testIds.current_trade_order_status_discription}
+                                  dataTestStateTime={testIds.current_trade_order_status_time}
                                   key={index}
                                   label={data.label}
                                   statusTime={data.statusTime!}
@@ -462,6 +476,7 @@ const Dashboard = () => {
             children={role === ROLE.CONSUMER ? 'Buy' : 'Sell'}
             handleClick={() => router.push(role === ROLE.PRODUCER ? '/sellingPreference' : '/buyingPreference')}
             sx={{ marginTop: '60px' }}
+            dataTest="buy-preference"
           />
         </Flex>
       </Box>

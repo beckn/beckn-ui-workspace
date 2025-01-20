@@ -289,6 +289,7 @@ const SelectDate: React.FC<SelectDateProps> = ({ isOpen, onClose, onDateSelect, 
           children={isCustomRange ? 'Apply' : 'Save'}
           handleClick={handleSave}
           variant="solid"
+          dataTest="custom_date_save_btn"
         />
       </Box>
     </BottomModal>

@@ -16,19 +16,24 @@ const EmptyCurrentTrade = () => {
       mt={'20px'}
     >
       <Box>
-        <Image src="/images/emptyCurrentTrade.svg" />
+        <Image
+          src="/images/emptyCurrentTrade.svg"
+          data-test="empty-trade-img"
+        />
       </Box>
       <Typography
         text="No Trades Found!!"
         fontSize="15px"
         fontWeight="600"
         sx={{ textAlign: 'center' }}
+        dataTest="no-trade-found"
       />
       <Typography
         fontSize="15px"
         fontWeight="400"
         sx={{ textAlign: 'center' }}
         text={`Click on ${emptyCurrentText} to ${sellText} energy`}
+        dataTest="emptyCurrentText"
       />
     </Flex>
   )

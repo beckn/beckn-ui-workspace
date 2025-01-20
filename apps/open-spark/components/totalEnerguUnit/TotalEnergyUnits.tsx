@@ -2,6 +2,7 @@ import React from 'react'
 import { Input, Typography } from '@beckn-ui/molecules'
 import { Box, Flex } from '@chakra-ui/react'
 import { DashboardData } from '@lib/types/dashboard'
+import { testIds } from '@shared/dataTestIds'
 
 const unitsLabelMap: Record<string, string> = {
   previous_month: 'Previous Month',
@@ -23,6 +24,7 @@ const TotalEnergyUnits: React.FC<TotalEnergyUnitsProps> = ({ dashboardTotalEnerg
         sx={{
           marginBottom: '10px'
         }}
+        dataTest={testIds.total_energy_unit_text}
       />
       <Flex
         justifyContent="space-between"
@@ -31,6 +33,7 @@ const TotalEnergyUnits: React.FC<TotalEnergyUnitsProps> = ({ dashboardTotalEnerg
       >
         {Object.entries(dashboardTotalEnergyUnitsData).map(([key, value], index) => (
           <Input
+            dataTest={testIds.total_energy_unit_input}
             name={key}
             value={value}
             key={index}
@@ -49,6 +52,7 @@ const TotalEnergyUnits: React.FC<TotalEnergyUnitsProps> = ({ dashboardTotalEnerg
                   opacity="0.4"
                 >
                   <Typography
+                    dataTest={testIds.total_energy_unit_unit}
                     text={'(KWh)'}
                     fontSize="15px"
                     fontWeight="400"
