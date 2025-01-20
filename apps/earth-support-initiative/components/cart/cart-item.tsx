@@ -6,6 +6,7 @@ import React from 'react'
 // Custom modules
 import Styles from './cart-item.module.css'
 import { CartItemProps } from './cart.types'
+import { testIds } from '@shared/dataTestIds'
 
 const CartItem: React.FC<CartItemProps> = ({ id, shortDesc, providerName, sourceText, className }) => {
   return (
@@ -22,12 +23,14 @@ const CartItem: React.FC<CartItemProps> = ({ id, shortDesc, providerName, source
                   fontSize="15px"
                   fontWeight={'600'}
                   text={shortDesc}
+                  dataTest={testIds.cart_page_shortDesc}
                 />
 
                 <Typography
                   fontSize="12px"
                   fontWeight={'400'}
                   text={`Provided by ${providerName}`}
+                  dataTest={testIds.cart_page_providerName}
                 />
               </Stack>
             </CardBody>
