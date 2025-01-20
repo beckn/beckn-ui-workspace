@@ -693,6 +693,15 @@ const testIds = {
   current_status_trade: 'current_status_trade',
   current_trade_order_status_name: 'current_trade_order_status_name',
   current_trade_order_status_discription: 'current_trade_order_status_discription',
-  current_trade_order_status_time: 'current_trade_order_status_time'
+  current_trade_order_status_time: 'current_trade_order_status_time',
+  preference_type: 'preference_type',
+  questionOutlineIcon: 'questionOutlineIcon',
+  FaPlus: 'FaPlus',
+  FaMinus: 'FaMinus',
+  preference_type_input_buy: 'preference_type_input_buy',
+  preference_type_unit: 'preference_type_unit',
+  select_preference_type: 'select_preference_type',
+  select_preference_type_checkbox: 'select_preference_type_checkbox',
+  submit_preference_sell_buy_btn: 'submit_preference_sell_buy_btn'
 }
 export { testIds }
