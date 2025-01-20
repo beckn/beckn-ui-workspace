@@ -1,0 +1,287 @@
+[
+  {
+    "id": 34,
+    "type": "PROSUMER",
+    "category": "Solar panel 2",
+    "createdAt": "2024-12-17T05:20:03.677Z",
+    "updatedAt": "2024-12-17T05:20:03.677Z",
+    "credential": {
+      "id": 78,
+      "createdAt": "2024-12-17T05:20:03.641Z",
+      "updatedAt": "2024-12-17T05:20:03.641Z",
+      "vc": {
+        "id": "stmt:cord:s3ffDWe1hrGN4WrssiHbg21We8wXgpirsjbSpsdspKQKRd4WL",
+        "type": ["VerifiableCredential"],
+        "proof": [
+          {
+            "type": "Ed25519Signature2020",
+            "created": "Tue Dec 17 2024 05:20:01 GMT+0000 (Coordinated Universal Time)",
+            "proofValue": "z5FHGv55t6o5oZC9Vp4DusKBcYY4AtJV23hWaFiYis6QekUhwESDSxmVeJNHpWjpp9dYMMGN3sV3zAx3H9ztcfM3C",
+            "proofPurpose": "sr25519",
+            "verificationMethod": "did:cord:3zKcL2oAsvZZwFA5uPxtysk5jsai2TGx4AvrpJcBYmAwzGyN#0xaebd479b52b61ec4954a5478e6285bff0a5508b53f30ee5c552061efd4c89842"
+          },
+          {
+            "type": "CordProof2024",
+            "digest": "0xd47d2460f34636fbc18a5d74fefff943cd38b2671dc956985b61b8e56cb40c4a",
+            "spaceUri": "space:cord:c35h1XGuUXDHwtJTre7dwsb7KqZM5DWYA4kpPRuSx6BZJnXTg",
+            "schemaUri": "schema:cord:s356EvHMCEdivwpM2srB7s5etUAJB69erN8vHKzoog8E1VkBv",
+            "creatorUri": "did:cord:3zKcL2oAsvZZwFA5uPxtysk5jsai2TGx4AvrpJcBYmAwzGyN",
+            "elementUri": "stmt:cord:s3ffDWe1hrGN4WrssiHbg21We8wXgpirsjbSpsdspKQKRd4WL:d47d2460f34636fbc18a5d74fefff943cd38b2671dc956985b61b8e56cb40c4a",
+            "identifier": "stmt:cord:s3ffDWe1hrGN4WrssiHbg21We8wXgpirsjbSpsdspKQKRd4WL",
+            "genesisHash": "0x99f72c0a4e8ec69365bb2b480302b719465d838cfefa9db0c5a91eed5378285c"
+          },
+          {
+            "type": "CordSDRProof2024",
+            "hashes": [
+              "0x084cb96a94d499f21826fad062cfa1488a05ca630d6f6cd17e8ea6765285acbf",
+              "0x0c3158d68a741d60f655d5b1cb5141b82c1562c7d4259af46e5af250042c862c",
+              "0x492e62335df2f18fe45e0ddec5a8389ab2e8c756d764f5d19f84766618c98460",
+              "0xd985d85754a62b6fa63ad1511d8072b08a161af82b5708b0557a345ef17bb999"
+            ],
+            "nonceMap": {
+              "0x6458d1f07fc874323fe27692c1d79170b4f7eb3770add6079e875dbd1a143b8c": "a04ed289-5588-4b79-823e-f46bdc466bc2",
+              "0x8df02141868a991084e7cf0591e7e2d01b8aec8d9057275315f44aac8c85cd75": "9aadd63a-6bb0-4d18-8400-8098dc7b76bf",
+              "0xb93320b26ce9be75f563637f9514c0b364c391da9babf27444cc823d19cc05e9": "d8f7261d-78cd-4fbf-b0a5-bd5cd513fe33",
+              "0xe68cc9dcd0a55d0a3399440e2168c5ac03823b57338edad420656a15e655d895": "0fd26fd3-78dd-4df4-89f6-aff0df3ff6c6"
+            },
+            "genesisHash": "0x99f72c0a4e8ec69365bb2b480302b719465d838cfefa9db0c5a91eed5378285c",
+            "defaultDigest": "0x0c74cd32d576d678abf762671be6aed2572f2d29b1affe8662dd159c309a287e"
+          }
+        ],
+        "issuer": "did:cord:3zKcL2oAsvZZwFA5uPxtysk5jsai2TGx4AvrpJcBYmAwzGyN",
+        "@context": ["https://www.w3.org/2018/credentials/v1", "https://cord.network/2023/cred/v1"],
+        "metadata": {},
+        "validFrom": "2024-12-17T05:20:01.858Z",
+        "validUntil": "2025-12-17T05:20:01.858Z",
+        "issuanceDate": "2024-12-17T05:20:01.858Z",
+        "credentialHash": "0xd47d2460f34636fbc18a5d74fefff943cd38b2671dc956985b61b8e56cb40c4a",
+        "credentialSchema": {
+          "$id": "schema:cord:s356EvHMCEdivwpM2srB7s5etUAJB69erN8vHKzoog8E1VkBv",
+          "type": "object",
+          "title": "Test_224:3aeef806-815a-464f-9cfc-94222d708e8b",
+          "$schema": "http://cord.network/draft-01/schema#",
+          "required": [],
+          "properties": {
+            "type": {
+              "type": "string"
+            },
+            "proof": {
+              "type": "string"
+            },
+            "category": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "credentialSubject": {
+          "id": "did:cord:3zKcL2oAsvZZwFA5uPxtysk5jsai2TGx4AvrpJcBYmAwzGyN",
+          "type": "prosumer",
+          "proof": "a1b7bbb902b1328a00ae46e5e7f7f5a32caa269862f371581836834e4d6ff320",
+          "@context": {
+            "vocab": "schema:cord:s356EvHMCEdivwpM2srB7s5etUAJB69erN8vHKzoog8E1VkBv#"
+          },
+          "category": "Solar panel 2"
+        }
+      }
+    },
+    "proof": [
+      {
+        "id": 448,
+        "name": "json_icon.svg",
+        "url": "/uploads/json_icon_161fbefa26.svg",
+        "mime": "image/svg+xml"
+      }
+    ]
+  },
+  {
+    "id": 37,
+    "type": "PROSUMER",
+    "category": "Solar panel 2",
+    "createdAt": "2024-12-17T05:26:27.664Z",
+    "updatedAt": "2024-12-17T05:26:27.664Z",
+    "credential": {
+      "id": 85,
+      "createdAt": "2024-12-17T05:26:27.629Z",
+      "updatedAt": "2024-12-17T05:26:27.629Z",
+      "vc": {
+        "id": "stmt:cord:s3dB39ow67P1FySQxTARz2dYwnP8vuaemNVGpKYaKNBS2v9G3",
+        "type": ["VerifiableCredential"],
+        "proof": [
+          {
+            "type": "Ed25519Signature2020",
+            "created": "Tue Dec 17 2024 05:26:23 GMT+0000 (Coordinated Universal Time)",
+            "proofValue": "z5Sz1RK7BywCoU22bbUhd5HfQoYw3GbGZrfU54hYGvy5dYSWbUcy9tFYfxFt1yL8sBJWkW6MttYPnqWmP2FikRfzt",
+            "proofPurpose": "sr25519",
+            "verificationMethod": "did:cord:3zKcL2oAsvZZwFA5uPxtysk5jsai2TGx4AvrpJcBYmAwzGyN#0xaebd479b52b61ec4954a5478e6285bff0a5508b53f30ee5c552061efd4c89842"
+          },
+          {
+            "type": "CordProof2024",
+            "digest": "0xe32c61941285664624cce643a7c4d395256e33a9a5f90932aa456741b941599a",
+            "spaceUri": "space:cord:c35h1XGuUXDHwtJTre7dwsb7KqZM5DWYA4kpPRuSx6BZJnXTg",
+            "schemaUri": "schema:cord:s356EvHMCEdivwpM2srB7s5etUAJB69erN8vHKzoog8E1VkBv",
+            "creatorUri": "did:cord:3zKcL2oAsvZZwFA5uPxtysk5jsai2TGx4AvrpJcBYmAwzGyN",
+            "elementUri": "stmt:cord:s3dB39ow67P1FySQxTARz2dYwnP8vuaemNVGpKYaKNBS2v9G3:e32c61941285664624cce643a7c4d395256e33a9a5f90932aa456741b941599a",
+            "identifier": "stmt:cord:s3dB39ow67P1FySQxTARz2dYwnP8vuaemNVGpKYaKNBS2v9G3",
+            "genesisHash": "0x99f72c0a4e8ec69365bb2b480302b719465d838cfefa9db0c5a91eed5378285c"
+          },
+          {
+            "type": "CordSDRProof2024",
+            "hashes": [
+              "0x0af8f806c33f42ee0ae7bd8df2b7df37cf32f6ae0790a166120d0a41327ca945",
+              "0x336f035fc1ef83a34fac0b1a8cc1484b83deecf6b2362e9fc8aaa84570c1e208",
+              "0xae6760624910a0975d1de31005f51d15d042f44c9fe91a4fdb6cece84406429e",
+              "0xafe9421f3f05bd5dfba0ace78ba24e9f393a9ce855b8bd91aa4f3de3df898b95"
+            ],
+            "nonceMap": {
+              "0x2f5d8dc8b10fa4d02f07a8b324431042ea1758bd07f49ab9163add2671056736": "bf89ecff-e05e-40b1-b304-2b507d6e46d4",
+              "0x6458d1f07fc874323fe27692c1d79170b4f7eb3770add6079e875dbd1a143b8c": "df00e1c4-25a5-4803-848d-8f50aac36dd3",
+              "0x8df02141868a991084e7cf0591e7e2d01b8aec8d9057275315f44aac8c85cd75": "2ea1a8fd-b9ba-41a4-bcf9-5f5137f7c858",
+              "0xb93320b26ce9be75f563637f9514c0b364c391da9babf27444cc823d19cc05e9": "0849a6e4-3dba-4ed6-aa34-2efa020ff4a0"
+            },
+            "genesisHash": "0x99f72c0a4e8ec69365bb2b480302b719465d838cfefa9db0c5a91eed5378285c",
+            "defaultDigest": "0x2e9bb20cda92e69a69d3a846c83e4be06475f0cc47348f78adc98661891609db"
+          }
+        ],
+        "issuer": "did:cord:3zKcL2oAsvZZwFA5uPxtysk5jsai2TGx4AvrpJcBYmAwzGyN",
+        "@context": ["https://www.w3.org/2018/credentials/v1", "https://cord.network/2023/cred/v1"],
+        "metadata": {},
+        "validFrom": "2024-12-17T05:26:23.184Z",
+        "validUntil": "2025-12-17T05:26:23.184Z",
+        "issuanceDate": "2024-12-17T05:26:23.184Z",
+        "credentialHash": "0xe32c61941285664624cce643a7c4d395256e33a9a5f90932aa456741b941599a",
+        "credentialSchema": {
+          "$id": "schema:cord:s356EvHMCEdivwpM2srB7s5etUAJB69erN8vHKzoog8E1VkBv",
+          "type": "object",
+          "title": "Test_224:3aeef806-815a-464f-9cfc-94222d708e8b",
+          "$schema": "http://cord.network/draft-01/schema#",
+          "required": [],
+          "properties": {
+            "type": {
+              "type": "string"
+            },
+            "proof": {
+              "type": "string"
+            },
+            "category": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "credentialSubject": {
+          "id": "did:cord:3zKcL2oAsvZZwFA5uPxtysk5jsai2TGx4AvrpJcBYmAwzGyN",
+          "type": "PROSUMER",
+          "proof": "a1b7bbb902b1328a00ae46e5e7f7f5a32caa269862f371581836834e4d6ff320",
+          "@context": {
+            "vocab": "schema:cord:s356EvHMCEdivwpM2srB7s5etUAJB69erN8vHKzoog8E1VkBv#"
+          },
+          "category": "Solar panel 2"
+        }
+      }
+    },
+    "proof": [
+      {
+        "id": 455,
+        "name": "json_icon.svg",
+        "url": "/uploads/json_icon_cf11fe1b12.svg",
+        "mime": "image/svg+xml"
+      }
+    ]
+  },
+  {
+    "id": 50,
+    "type": "PROSUMER",
+    "category": "Water Filter",
+    "createdAt": "2025-01-17T10:57:57.671Z",
+    "updatedAt": "2025-01-17T10:57:57.671Z",
+    "credential": {
+      "id": 206,
+      "createdAt": "2025-01-17T10:57:57.655Z",
+      "updatedAt": "2025-01-17T10:57:57.655Z",
+      "vc": {
+        "id": "stmt:cord:s3eUFuuQSEG34UaaLaY36zL9HnGmke6oUtz2M5cKmpGU3mDsx",
+        "type": ["VerifiableCredential"],
+        "proof": [
+          {
+            "type": "Ed25519Signature2020",
+            "created": "Fri Jan 17 2025 10:57:54 GMT+0000 (Coordinated Universal Time)",
+            "proofValue": "z5AMtybwpoeDFR8RGpCmDeoAZGj9cxANpctqNDAdG2WrF7Cm5aCtsivYbHY2XiTQFfwxX9GUhr4Y8FG9G9r363JJo",
+            "proofPurpose": "sr25519",
+            "verificationMethod": "did:cord:3zKcL2oAsvZZwFA5uPxtysk5jsai2TGx4AvrpJcBYmAwzGyN#0xaebd479b52b61ec4954a5478e6285bff0a5508b53f30ee5c552061efd4c89842"
+          },
+          {
+            "type": "CordProof2024",
+            "digest": "0xdb2ce39568a2240d9722c7deca8d11de1b58f0e143523351bb858ce2acb5d13e",
+            "spaceUri": "space:cord:c35h1XGuUXDHwtJTre7dwsb7KqZM5DWYA4kpPRuSx6BZJnXTg",
+            "schemaUri": "schema:cord:s356EvHMCEdivwpM2srB7s5etUAJB69erN8vHKzoog8E1VkBv",
+            "creatorUri": "did:cord:3zKcL2oAsvZZwFA5uPxtysk5jsai2TGx4AvrpJcBYmAwzGyN",
+            "elementUri": "stmt:cord:s3eUFuuQSEG34UaaLaY36zL9HnGmke6oUtz2M5cKmpGU3mDsx:db2ce39568a2240d9722c7deca8d11de1b58f0e143523351bb858ce2acb5d13e",
+            "identifier": "stmt:cord:s3eUFuuQSEG34UaaLaY36zL9HnGmke6oUtz2M5cKmpGU3mDsx",
+            "genesisHash": "0x99f72c0a4e8ec69365bb2b480302b719465d838cfefa9db0c5a91eed5378285c"
+          },
+          {
+            "type": "CordSDRProof2024",
+            "hashes": [
+              "0x396501d0e3e4b94d2329d89e214c865a0933f64decade5507c38a2d9d36be3ed",
+              "0x63755aeede3334f89928ed6395b9894c52eb11ae924451351e2aa5da42445ae4",
+              "0xa0a55f4cc7f1c3a90a47ea06c66959e90791990fdaf592c34ae264b89e483d94",
+              "0xef246c5482481f405e500a985ad4dde7b7cffb79a6ef52af71d6fba9b31daf0c"
+            ],
+            "nonceMap": {
+              "0x15c551e7770474bc016a4cdefd68828f2a376c6cc0ea3d0993f7c0aece6cdaf4": "a0f15e56-8033-4301-823e-020774dc22ca",
+              "0x8df02141868a991084e7cf0591e7e2d01b8aec8d9057275315f44aac8c85cd75": "40ff6cb3-5d44-44d0-bfc0-424a9b9fe39f",
+              "0xa01662323565fe66a87318a49de5df3b564818242a276e8c1ef291981c76de26": "9b35d05a-2233-4ac5-92c9-0a3e656591a5",
+              "0xe68cc9dcd0a55d0a3399440e2168c5ac03823b57338edad420656a15e655d895": "0860b761-320b-400d-a419-57740588751d"
+            },
+            "genesisHash": "0x99f72c0a4e8ec69365bb2b480302b719465d838cfefa9db0c5a91eed5378285c",
+            "defaultDigest": "0x9b663ccc5a13d41bb840f6259ba94e248185ac5cc9cbdb18f1006a04bad87d41"
+          }
+        ],
+        "issuer": "did:cord:3zKcL2oAsvZZwFA5uPxtysk5jsai2TGx4AvrpJcBYmAwzGyN",
+        "@context": ["https://www.w3.org/2018/credentials/v1", "https://cord.network/2023/cred/v1"],
+        "metadata": {},
+        "validFrom": "2025-01-17T10:57:54.369Z",
+        "validUntil": "2026-01-17T10:57:54.369Z",
+        "issuanceDate": "2025-01-17T10:57:54.369Z",
+        "credentialHash": "0xdb2ce39568a2240d9722c7deca8d11de1b58f0e143523351bb858ce2acb5d13e",
+        "credentialSchema": {
+          "$id": "schema:cord:s356EvHMCEdivwpM2srB7s5etUAJB69erN8vHKzoog8E1VkBv",
+          "type": "object",
+          "title": "Test_224:3aeef806-815a-464f-9cfc-94222d708e8b",
+          "$schema": "http://cord.network/draft-01/schema#",
+          "required": [],
+          "properties": {
+            "type": {
+              "type": "string"
+            },
+            "proof": {
+              "type": "string"
+            },
+            "category": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "credentialSubject": {
+          "id": "did:cord:3zKcL2oAsvZZwFA5uPxtysk5jsai2TGx4AvrpJcBYmAwzGyN",
+          "type": "prosumer",
+          "proof": "9ce71a8a2b02afafe6f559223d743b49360324a71f610dcbf767bc3790f3862b",
+          "@context": {
+            "vocab": "schema:cord:s356EvHMCEdivwpM2srB7s5etUAJB69erN8vHKzoog8E1VkBv#"
+          },
+          "category": "Water Filter"
+        }
+      }
+    },
+    "proof": [
+      {
+        "id": 522,
+        "name": "sample_aadhar.pdf",
+        "url": "/uploads/sample_aadhar_d81631102e.pdf",
+        "mime": "application/pdf"
+      }
+    ]
+  }
+]
