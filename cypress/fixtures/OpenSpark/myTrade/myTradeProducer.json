@@ -1,0 +1,1138 @@
+[
+  {
+    "updatedAt": "2025-01-15T05:40:41.492Z",
+    "id": 271,
+    "unit": "KWH",
+    "item_name": "energy",
+    "trusted_source": false,
+    "cred_required": true,
+    "recurring": true,
+    "quantity": 33,
+    "createdAt": "2025-01-15T05:40:40.992Z",
+    "publishedAt": "2025-01-15T05:40:41.489Z",
+    "transaction_id": "55825b15-9614-420c-8c95-fd9d75aeee30",
+    "price": 1,
+    "trade_events": [
+      {
+        "id": 1886,
+        "event_name": "beckn_init",
+        "description": "Received purchase order",
+        "data": {
+          "unit": "KWH",
+          "agent": 7,
+          "quantity": 33,
+          "item_name": "energy",
+          "recurring": true,
+          "publishedAt": "2025-01-15T05:40:40.990Z",
+          "cred_required": true,
+          "transaction_id": "55825b15-9614-420c-8c95-fd9d75aeee30",
+          "trusted_source": false
+        },
+        "createdAt": "2025-01-15T05:40:41.019Z",
+        "updatedAt": "2025-01-15T05:40:41.019Z",
+        "publishedAt": "2025-01-15T05:40:41.017Z"
+      },
+      {
+        "id": 1887,
+        "event_name": "beckn_on_init",
+        "description": "Sending Order terms",
+        "data": [
+          {
+            "id": 6,
+            "items": [
+              {
+                "id": 6,
+                "code": "energy",
+                "name": "energy",
+                "image": [],
+                "createdAt": "2024-12-04T05:19:34.631Z",
+                "long_desc": null,
+                "updatedAt": "2024-12-04T05:37:57.165Z",
+                "short_desc": "Excess power from my rooftop system to sell",
+                "item_meta_id": null,
+                "max_quantity": 1,
+                "min_quantity": 20,
+                "sc_retail_product": {
+                  "id": 6,
+                  "sku": null,
+                  "item_id": 6,
+                  "on_sale": null,
+                  "virtual": null,
+                  "base_fee": null,
+                  "currency": null,
+                  "createdAt": "2024-12-04T05:19:34.624Z",
+                  "max_price": null,
+                  "min_price": "1",
+                  "recurring": true,
+                  "tax_class": null,
+                  "updatedAt": "2025-01-15T05:40:38.636Z",
+                  "tax_status": null,
+                  "total_sales": null,
+                  "downloadable": null,
+                  "rating_count": null,
+                  "stock_status": null,
+                  "cred_required": true,
+                  "quantity_unit": "KWH",
+                  "additional_fee": null,
+                  "average_rating": null,
+                  "product_cancel": [],
+                  "stock_quantity": 18841,
+                  "trusted_source": false,
+                  "price_bareakup_ids": []
+                },
+                "item_fulfillment_ids": [
+                  {
+                    "id": 9,
+                    "item_id": 6,
+                    "createdAt": "2024-12-04T05:19:34.637Z",
+                    "timestamp": "2024-12-04T05:19:34.636Z",
+                    "updatedAt": "2024-12-04T05:19:34.637Z",
+                    "location_id": null,
+                    "publishedAt": "2024-12-04T05:19:34.636Z",
+                    "fulfilment_id": {
+                      "id": 1,
+                      "type": "START",
+                      "rating": null,
+                      "service": null,
+                      "rateable": null,
+                      "createdAt": "2024-11-27T11:00:35.643Z",
+                      "updatedAt": "2024-11-27T11:00:36.659Z",
+                      "publishedAt": "2024-11-27T11:00:36.651Z"
+                    }
+                  },
+                  {
+                    "id": 10,
+                    "item_id": 6,
+                    "createdAt": "2024-12-04T05:19:34.655Z",
+                    "timestamp": "2025-12-04T05:19:34.652Z",
+                    "updatedAt": "2024-12-04T05:19:34.655Z",
+                    "location_id": null,
+                    "publishedAt": "2024-12-04T05:19:34.652Z",
+                    "fulfilment_id": {
+                      "id": 2,
+                      "type": "END",
+                      "rating": null,
+                      "service": null,
+                      "rateable": null,
+                      "createdAt": "2024-11-27T11:00:47.126Z",
+                      "updatedAt": "2024-11-27T11:00:48.003Z",
+                      "publishedAt": "2024-11-27T11:00:47.998Z"
+                    }
+                  }
+                ],
+                "cat_attr_tag_relations": [
+                  {
+                    "id": 5,
+                    "taxanomy": "CATEGORY",
+                    "createdAt": "2024-12-04T05:19:34.661Z",
+                    "updatedAt": "2024-12-04T05:19:34.661Z",
+                    "publishedAt": "2024-12-04T05:19:34.659Z",
+                    "taxanomy_id": {
+                      "id": 16,
+                      "title": "SOLAR ENERGY",
+                      "value": "SOLAR ENERGY",
+                      "createdAt": "2024-11-27T11:00:56.170Z",
+                      "parent_id": null,
+                      "updatedAt": "2024-11-27T11:00:56.170Z",
+                      "description": null,
+                      "publishedAt": "2024-11-27T11:00:56.167Z",
+                      "category_code": "SOLAR_ENERGY"
+                    }
+                  }
+                ]
+              }
+            ],
+            "agents": [
+              {
+                "id": 7,
+                "createdAt": "2024-12-02T10:44:10.275Z",
+                "last_name": "Bai",
+                "updatedAt": "2024-12-31T04:56:16.797Z",
+                "agent_fees": null,
+                "first_name": "Lisa EM",
+                "description": null,
+                "provider_id": 6,
+                "publishedAt": "2024-12-31T04:56:16.791Z",
+                "agent_profile": {
+                  "id": 7,
+                  "gps": null,
+                  "email": null,
+                  "address": "231, east end , sector 10, pritampura, delhi",
+                  "agent_id": 7,
+                  "createdAt": "2024-12-02T10:44:10.240Z",
+                  "institute": null,
+                  "updatedAt": "2025-01-10T09:50:09.415Z",
+                  "customer_id": "12347",
+                  "publishedAt": "2025-01-10T09:50:09.411Z",
+                  "passing_year": null,
+                  "phone_number": "8890099876",
+                  "power_source": null,
+                  "utility_name": "MSEB",
+                  "vehicle_make": null,
+                  "qualification": null,
+                  "vehicle_model": null,
+                  "registration_no": null
+                },
+                "connection_id": null,
+                "years_experience": null
+              }
+            ],
+            "billing": {
+              "name": "Leela tai ji",
+              "email": "leela.tai@gmail.com",
+              "phone": "9718329616"
+            },
+            "createdAt": "2024-12-04T05:19:34.617Z",
+            "long_desc": "XYZ Energy Company - Providing energy solutions",
+            "updatedAt": "2024-12-17T13:43:23.130Z",
+            "short_desc": "XYZ Energy Company",
+            "location_id": null,
+            "provider_id": null,
+            "category_ids": [
+              {
+                "id": 16,
+                "title": "SOLAR ENERGY",
+                "value": "SOLAR ENERGY",
+                "createdAt": "2024-11-27T11:00:56.170Z",
+                "updatedAt": "2024-11-27T11:00:56.170Z",
+                "description": null,
+                "publishedAt": "2024-11-27T11:00:56.167Z",
+                "category_code": "SOLAR_ENERGY"
+              }
+            ],
+            "fulfillments": [
+              {
+                "id": "1",
+                "type": "START"
+              },
+              {
+                "id": "2",
+                "type": "END"
+              },
+              {
+                "id": 1,
+                "type": "START",
+                "rating": null,
+                "service": null,
+                "rateable": null,
+                "createdAt": "2024-11-27T11:00:35.643Z",
+                "updatedAt": "2024-11-27T11:00:36.659Z",
+                "publishedAt": "2024-11-27T11:00:36.651Z"
+              },
+              {
+                "id": 2,
+                "type": "END",
+                "rating": null,
+                "service": null,
+                "rateable": null,
+                "createdAt": "2024-11-27T11:00:47.126Z",
+                "updatedAt": "2024-11-27T11:00:48.003Z",
+                "publishedAt": "2024-11-27T11:00:47.998Z"
+              },
+              {
+                "id": 1,
+                "type": "START",
+                "rating": null,
+                "service": null,
+                "rateable": null,
+                "createdAt": "2024-11-27T11:00:35.643Z",
+                "updatedAt": "2024-11-27T11:00:36.659Z",
+                "publishedAt": "2024-11-27T11:00:36.651Z"
+              },
+              {
+                "id": 2,
+                "type": "END",
+                "rating": null,
+                "service": null,
+                "rateable": null,
+                "createdAt": "2024-11-27T11:00:47.126Z",
+                "updatedAt": "2024-11-27T11:00:48.003Z",
+                "publishedAt": "2024-11-27T11:00:47.998Z"
+              }
+            ],
+            "provider_uri": null,
+            "provider_name": "XYZ Energy",
+            "payment_methods": [],
+            "provider_rating": null
+          }
+        ],
+        "createdAt": "2025-01-15T05:40:41.070Z",
+        "updatedAt": "2025-01-15T05:40:41.070Z",
+        "publishedAt": "2025-01-15T05:40:41.069Z"
+      },
+      {
+        "id": 1888,
+        "event_name": "beckn_confirm",
+        "description": "Order confirmation received",
+        "data": {},
+        "createdAt": "2025-01-15T05:40:41.364Z",
+        "updatedAt": "2025-01-15T05:40:41.364Z",
+        "publishedAt": "2025-01-15T05:40:41.362Z"
+      },
+      {
+        "id": 1889,
+        "event_name": "beckn_on_confirm",
+        "description": "Order Confirmation sent",
+        "data": {
+          "price": "1"
+        },
+        "createdAt": "2025-01-15T05:40:41.465Z",
+        "updatedAt": "2025-01-15T05:40:41.465Z",
+        "publishedAt": "2025-01-15T05:40:41.463Z"
+      }
+    ],
+    "status": "SUCCESS"
+  },
+  {
+    "updatedAt": "2025-01-15T05:40:38.674Z",
+    "id": 270,
+    "unit": "KWH",
+    "item_name": "energy",
+    "trusted_source": false,
+    "cred_required": true,
+    "recurring": true,
+    "quantity": 22,
+    "createdAt": "2025-01-15T05:40:37.536Z",
+    "publishedAt": "2025-01-15T05:40:38.672Z",
+    "transaction_id": "cb47a57a-e029-425f-bb41-a607e70a20e3",
+    "price": 1,
+    "trade_events": [
+      {
+        "id": 1880,
+        "event_name": "beckn_init",
+        "description": "Received purchase order",
+        "data": {
+          "unit": "KWH",
+          "agent": 7,
+          "quantity": 22,
+          "item_name": "energy",
+          "recurring": true,
+          "publishedAt": "2025-01-15T05:40:37.534Z",
+          "cred_required": true,
+          "transaction_id": "cb47a57a-e029-425f-bb41-a607e70a20e3",
+          "trusted_source": false
+        },
+        "createdAt": "2025-01-15T05:40:37.562Z",
+        "updatedAt": "2025-01-15T05:40:37.562Z",
+        "publishedAt": "2025-01-15T05:40:37.560Z"
+      },
+      {
+        "id": 1881,
+        "event_name": "beckn_on_init",
+        "description": "Sending Order terms",
+        "data": [
+          {
+            "id": 6,
+            "items": [
+              {
+                "id": 6,
+                "code": "energy",
+                "name": "energy",
+                "image": [],
+                "createdAt": "2024-12-04T05:19:34.631Z",
+                "long_desc": null,
+                "updatedAt": "2024-12-04T05:37:57.165Z",
+                "short_desc": "Excess power from my rooftop system to sell",
+                "item_meta_id": null,
+                "max_quantity": 1,
+                "min_quantity": 20,
+                "sc_retail_product": {
+                  "id": 6,
+                  "sku": null,
+                  "item_id": 6,
+                  "on_sale": null,
+                  "virtual": null,
+                  "base_fee": null,
+                  "currency": null,
+                  "createdAt": "2024-12-04T05:19:34.624Z",
+                  "max_price": null,
+                  "min_price": "1",
+                  "recurring": true,
+                  "tax_class": null,
+                  "updatedAt": "2025-01-15T05:40:34.553Z",
+                  "tax_status": null,
+                  "total_sales": null,
+                  "downloadable": null,
+                  "rating_count": null,
+                  "stock_status": null,
+                  "cred_required": true,
+                  "quantity_unit": "KWH",
+                  "additional_fee": null,
+                  "average_rating": null,
+                  "product_cancel": [],
+                  "stock_quantity": 18907,
+                  "trusted_source": false,
+                  "price_bareakup_ids": []
+                },
+                "item_fulfillment_ids": [
+                  {
+                    "id": 9,
+                    "item_id": 6,
+                    "createdAt": "2024-12-04T05:19:34.637Z",
+                    "timestamp": "2024-12-04T05:19:34.636Z",
+                    "updatedAt": "2024-12-04T05:19:34.637Z",
+                    "location_id": null,
+                    "publishedAt": "2024-12-04T05:19:34.636Z",
+                    "fulfilment_id": {
+                      "id": 1,
+                      "type": "START",
+                      "rating": null,
+                      "service": null,
+                      "rateable": null,
+                      "createdAt": "2024-11-27T11:00:35.643Z",
+                      "updatedAt": "2024-11-27T11:00:36.659Z",
+                      "publishedAt": "2024-11-27T11:00:36.651Z"
+                    }
+                  },
+                  {
+                    "id": 10,
+                    "item_id": 6,
+                    "createdAt": "2024-12-04T05:19:34.655Z",
+                    "timestamp": "2025-12-04T05:19:34.652Z",
+                    "updatedAt": "2024-12-04T05:19:34.655Z",
+                    "location_id": null,
+                    "publishedAt": "2024-12-04T05:19:34.652Z",
+                    "fulfilment_id": {
+                      "id": 2,
+                      "type": "END",
+                      "rating": null,
+                      "service": null,
+                      "rateable": null,
+                      "createdAt": "2024-11-27T11:00:47.126Z",
+                      "updatedAt": "2024-11-27T11:00:48.003Z",
+                      "publishedAt": "2024-11-27T11:00:47.998Z"
+                    }
+                  }
+                ],
+                "cat_attr_tag_relations": [
+                  {
+                    "id": 5,
+                    "taxanomy": "CATEGORY",
+                    "createdAt": "2024-12-04T05:19:34.661Z",
+                    "updatedAt": "2024-12-04T05:19:34.661Z",
+                    "publishedAt": "2024-12-04T05:19:34.659Z",
+                    "taxanomy_id": {
+                      "id": 16,
+                      "title": "SOLAR ENERGY",
+                      "value": "SOLAR ENERGY",
+                      "createdAt": "2024-11-27T11:00:56.170Z",
+                      "parent_id": null,
+                      "updatedAt": "2024-11-27T11:00:56.170Z",
+                      "description": null,
+                      "publishedAt": "2024-11-27T11:00:56.167Z",
+                      "category_code": "SOLAR_ENERGY"
+                    }
+                  }
+                ]
+              }
+            ],
+            "agents": [
+              {
+                "id": 7,
+                "createdAt": "2024-12-02T10:44:10.275Z",
+                "last_name": "Bai",
+                "updatedAt": "2024-12-31T04:56:16.797Z",
+                "agent_fees": null,
+                "first_name": "Lisa EM",
+                "description": null,
+                "provider_id": 6,
+                "publishedAt": "2024-12-31T04:56:16.791Z",
+                "agent_profile": {
+                  "id": 7,
+                  "gps": null,
+                  "email": null,
+                  "address": "231, east end , sector 10, pritampura, delhi",
+                  "agent_id": 7,
+                  "createdAt": "2024-12-02T10:44:10.240Z",
+                  "institute": null,
+                  "updatedAt": "2025-01-10T09:50:09.415Z",
+                  "customer_id": "12347",
+                  "publishedAt": "2025-01-10T09:50:09.411Z",
+                  "passing_year": null,
+                  "phone_number": "8890099876",
+                  "power_source": null,
+                  "utility_name": "MSEB",
+                  "vehicle_make": null,
+                  "qualification": null,
+                  "vehicle_model": null,
+                  "registration_no": null
+                },
+                "connection_id": null,
+                "years_experience": null
+              }
+            ],
+            "billing": {
+              "name": "Leela tai ji",
+              "email": "leela.tai@gmail.com",
+              "phone": "9718329616"
+            },
+            "createdAt": "2024-12-04T05:19:34.617Z",
+            "long_desc": "XYZ Energy Company - Providing energy solutions",
+            "updatedAt": "2024-12-17T13:43:23.130Z",
+            "short_desc": "XYZ Energy Company",
+            "location_id": null,
+            "provider_id": null,
+            "category_ids": [
+              {
+                "id": 16,
+                "title": "SOLAR ENERGY",
+                "value": "SOLAR ENERGY",
+                "createdAt": "2024-11-27T11:00:56.170Z",
+                "updatedAt": "2024-11-27T11:00:56.170Z",
+                "description": null,
+                "publishedAt": "2024-11-27T11:00:56.167Z",
+                "category_code": "SOLAR_ENERGY"
+              }
+            ],
+            "fulfillments": [
+              {
+                "id": "1",
+                "type": "START"
+              },
+              {
+                "id": "2",
+                "type": "END"
+              },
+              {
+                "id": 1,
+                "type": "START",
+                "rating": null,
+                "service": null,
+                "rateable": null,
+                "createdAt": "2024-11-27T11:00:35.643Z",
+                "updatedAt": "2024-11-27T11:00:36.659Z",
+                "publishedAt": "2024-11-27T11:00:36.651Z"
+              },
+              {
+                "id": 2,
+                "type": "END",
+                "rating": null,
+                "service": null,
+                "rateable": null,
+                "createdAt": "2024-11-27T11:00:47.126Z",
+                "updatedAt": "2024-11-27T11:00:48.003Z",
+                "publishedAt": "2024-11-27T11:00:47.998Z"
+              },
+              {
+                "id": 1,
+                "type": "START",
+                "rating": null,
+                "service": null,
+                "rateable": null,
+                "createdAt": "2024-11-27T11:00:35.643Z",
+                "updatedAt": "2024-11-27T11:00:36.659Z",
+                "publishedAt": "2024-11-27T11:00:36.651Z"
+              },
+              {
+                "id": 2,
+                "type": "END",
+                "rating": null,
+                "service": null,
+                "rateable": null,
+                "createdAt": "2024-11-27T11:00:47.126Z",
+                "updatedAt": "2024-11-27T11:00:48.003Z",
+                "publishedAt": "2024-11-27T11:00:47.998Z"
+              }
+            ],
+            "provider_uri": null,
+            "provider_name": "XYZ Energy",
+            "payment_methods": [],
+            "provider_rating": null
+          }
+        ],
+        "createdAt": "2025-01-15T05:40:37.613Z",
+        "updatedAt": "2025-01-15T05:40:37.613Z",
+        "publishedAt": "2025-01-15T05:40:37.611Z"
+      },
+      {
+        "id": 1884,
+        "event_name": "beckn_confirm",
+        "description": "Order confirmation received",
+        "data": {},
+        "createdAt": "2025-01-15T05:40:38.520Z",
+        "updatedAt": "2025-01-15T05:40:38.520Z",
+        "publishedAt": "2025-01-15T05:40:38.519Z"
+      },
+      {
+        "id": 1885,
+        "event_name": "beckn_on_confirm",
+        "description": "Order Confirmation sent",
+        "data": {
+          "price": "1"
+        },
+        "createdAt": "2025-01-15T05:40:38.640Z",
+        "updatedAt": "2025-01-15T05:40:38.640Z",
+        "publishedAt": "2025-01-15T05:40:38.639Z"
+      }
+    ],
+    "status": "SUCCESS"
+  },
+  {
+    "updatedAt": "2025-01-15T05:40:38.101Z",
+    "id": 269,
+    "unit": "KWH",
+    "item_name": "energy",
+    "trusted_source": false,
+    "cred_required": true,
+    "recurring": true,
+    "quantity": 44,
+    "createdAt": "2025-01-15T05:40:37.032Z",
+    "publishedAt": "2025-01-15T05:40:38.098Z",
+    "transaction_id": "477c5ae4-7556-499a-a03e-5e636da7183c",
+    "price": 1,
+    "trade_events": [
+      {
+        "id": 1878,
+        "event_name": "beckn_init",
+        "description": "Received purchase order",
+        "data": {
+          "unit": "KWH",
+          "agent": 7,
+          "quantity": 44,
+          "item_name": "energy",
+          "recurring": true,
+          "publishedAt": "2025-01-15T05:40:37.030Z",
+          "cred_required": true,
+          "transaction_id": "477c5ae4-7556-499a-a03e-5e636da7183c",
+          "trusted_source": false
+        },
+        "createdAt": "2025-01-15T05:40:37.057Z",
+        "updatedAt": "2025-01-15T05:40:37.057Z",
+        "publishedAt": "2025-01-15T05:40:37.056Z"
+      },
+      {
+        "id": 1879,
+        "event_name": "beckn_on_init",
+        "description": "Sending Order terms",
+        "data": [
+          {
+            "id": 6,
+            "items": [
+              {
+                "id": 6,
+                "code": "energy",
+                "name": "energy",
+                "image": [],
+                "createdAt": "2024-12-04T05:19:34.631Z",
+                "long_desc": null,
+                "updatedAt": "2024-12-04T05:37:57.165Z",
+                "short_desc": "Excess power from my rooftop system to sell",
+                "item_meta_id": null,
+                "max_quantity": 1,
+                "min_quantity": 20,
+                "sc_retail_product": {
+                  "id": 6,
+                  "sku": null,
+                  "item_id": 6,
+                  "on_sale": null,
+                  "virtual": null,
+                  "base_fee": null,
+                  "currency": null,
+                  "createdAt": "2024-12-04T05:19:34.624Z",
+                  "max_price": null,
+                  "min_price": "1",
+                  "recurring": true,
+                  "tax_class": null,
+                  "updatedAt": "2025-01-15T05:40:34.553Z",
+                  "tax_status": null,
+                  "total_sales": null,
+                  "downloadable": null,
+                  "rating_count": null,
+                  "stock_status": null,
+                  "cred_required": true,
+                  "quantity_unit": "KWH",
+                  "additional_fee": null,
+                  "average_rating": null,
+                  "product_cancel": [],
+                  "stock_quantity": 18907,
+                  "trusted_source": false,
+                  "price_bareakup_ids": []
+                },
+                "item_fulfillment_ids": [
+                  {
+                    "id": 9,
+                    "item_id": 6,
+                    "createdAt": "2024-12-04T05:19:34.637Z",
+                    "timestamp": "2024-12-04T05:19:34.636Z",
+                    "updatedAt": "2024-12-04T05:19:34.637Z",
+                    "location_id": null,
+                    "publishedAt": "2024-12-04T05:19:34.636Z",
+                    "fulfilment_id": {
+                      "id": 1,
+                      "type": "START",
+                      "rating": null,
+                      "service": null,
+                      "rateable": null,
+                      "createdAt": "2024-11-27T11:00:35.643Z",
+                      "updatedAt": "2024-11-27T11:00:36.659Z",
+                      "publishedAt": "2024-11-27T11:00:36.651Z"
+                    }
+                  },
+                  {
+                    "id": 10,
+                    "item_id": 6,
+                    "createdAt": "2024-12-04T05:19:34.655Z",
+                    "timestamp": "2025-12-04T05:19:34.652Z",
+                    "updatedAt": "2024-12-04T05:19:34.655Z",
+                    "location_id": null,
+                    "publishedAt": "2024-12-04T05:19:34.652Z",
+                    "fulfilment_id": {
+                      "id": 2,
+                      "type": "END",
+                      "rating": null,
+                      "service": null,
+                      "rateable": null,
+                      "createdAt": "2024-11-27T11:00:47.126Z",
+                      "updatedAt": "2024-11-27T11:00:48.003Z",
+                      "publishedAt": "2024-11-27T11:00:47.998Z"
+                    }
+                  }
+                ],
+                "cat_attr_tag_relations": [
+                  {
+                    "id": 5,
+                    "taxanomy": "CATEGORY",
+                    "createdAt": "2024-12-04T05:19:34.661Z",
+                    "updatedAt": "2024-12-04T05:19:34.661Z",
+                    "publishedAt": "2024-12-04T05:19:34.659Z",
+                    "taxanomy_id": {
+                      "id": 16,
+                      "title": "SOLAR ENERGY",
+                      "value": "SOLAR ENERGY",
+                      "createdAt": "2024-11-27T11:00:56.170Z",
+                      "parent_id": null,
+                      "updatedAt": "2024-11-27T11:00:56.170Z",
+                      "description": null,
+                      "publishedAt": "2024-11-27T11:00:56.167Z",
+                      "category_code": "SOLAR_ENERGY"
+                    }
+                  }
+                ]
+              }
+            ],
+            "agents": [
+              {
+                "id": 7,
+                "createdAt": "2024-12-02T10:44:10.275Z",
+                "last_name": "Bai",
+                "updatedAt": "2024-12-31T04:56:16.797Z",
+                "agent_fees": null,
+                "first_name": "Lisa EM",
+                "description": null,
+                "provider_id": 6,
+                "publishedAt": "2024-12-31T04:56:16.791Z",
+                "agent_profile": {
+                  "id": 7,
+                  "gps": null,
+                  "email": null,
+                  "address": "231, east end , sector 10, pritampura, delhi",
+                  "agent_id": 7,
+                  "createdAt": "2024-12-02T10:44:10.240Z",
+                  "institute": null,
+                  "updatedAt": "2025-01-10T09:50:09.415Z",
+                  "customer_id": "12347",
+                  "publishedAt": "2025-01-10T09:50:09.411Z",
+                  "passing_year": null,
+                  "phone_number": "8890099876",
+                  "power_source": null,
+                  "utility_name": "MSEB",
+                  "vehicle_make": null,
+                  "qualification": null,
+                  "vehicle_model": null,
+                  "registration_no": null
+                },
+                "connection_id": null,
+                "years_experience": null
+              }
+            ],
+            "billing": {
+              "name": "Leela tai ji",
+              "email": "leela.tai@gmail.com",
+              "phone": "9718329616"
+            },
+            "createdAt": "2024-12-04T05:19:34.617Z",
+            "long_desc": "XYZ Energy Company - Providing energy solutions",
+            "updatedAt": "2024-12-17T13:43:23.130Z",
+            "short_desc": "XYZ Energy Company",
+            "location_id": null,
+            "provider_id": null,
+            "category_ids": [
+              {
+                "id": 16,
+                "title": "SOLAR ENERGY",
+                "value": "SOLAR ENERGY",
+                "createdAt": "2024-11-27T11:00:56.170Z",
+                "updatedAt": "2024-11-27T11:00:56.170Z",
+                "description": null,
+                "publishedAt": "2024-11-27T11:00:56.167Z",
+                "category_code": "SOLAR_ENERGY"
+              }
+            ],
+            "fulfillments": [
+              {
+                "id": "1",
+                "type": "START"
+              },
+              {
+                "id": "2",
+                "type": "END"
+              },
+              {
+                "id": 1,
+                "type": "START",
+                "rating": null,
+                "service": null,
+                "rateable": null,
+                "createdAt": "2024-11-27T11:00:35.643Z",
+                "updatedAt": "2024-11-27T11:00:36.659Z",
+                "publishedAt": "2024-11-27T11:00:36.651Z"
+              },
+              {
+                "id": 2,
+                "type": "END",
+                "rating": null,
+                "service": null,
+                "rateable": null,
+                "createdAt": "2024-11-27T11:00:47.126Z",
+                "updatedAt": "2024-11-27T11:00:48.003Z",
+                "publishedAt": "2024-11-27T11:00:47.998Z"
+              },
+              {
+                "id": 1,
+                "type": "START",
+                "rating": null,
+                "service": null,
+                "rateable": null,
+                "createdAt": "2024-11-27T11:00:35.643Z",
+                "updatedAt": "2024-11-27T11:00:36.659Z",
+                "publishedAt": "2024-11-27T11:00:36.651Z"
+              },
+              {
+                "id": 2,
+                "type": "END",
+                "rating": null,
+                "service": null,
+                "rateable": null,
+                "createdAt": "2024-11-27T11:00:47.126Z",
+                "updatedAt": "2024-11-27T11:00:48.003Z",
+                "publishedAt": "2024-11-27T11:00:47.998Z"
+              }
+            ],
+            "provider_uri": null,
+            "provider_name": "XYZ Energy",
+            "payment_methods": [],
+            "provider_rating": null
+          }
+        ],
+        "createdAt": "2025-01-15T05:40:37.122Z",
+        "updatedAt": "2025-01-15T05:40:37.122Z",
+        "publishedAt": "2025-01-15T05:40:37.120Z"
+      },
+      {
+        "id": 1882,
+        "event_name": "beckn_confirm",
+        "description": "Order confirmation received",
+        "data": {},
+        "createdAt": "2025-01-15T05:40:37.955Z",
+        "updatedAt": "2025-01-15T05:40:37.955Z",
+        "publishedAt": "2025-01-15T05:40:37.953Z"
+      },
+      {
+        "id": 1883,
+        "event_name": "beckn_on_confirm",
+        "description": "Order Confirmation sent",
+        "data": {
+          "price": "1"
+        },
+        "createdAt": "2025-01-15T05:40:38.067Z",
+        "updatedAt": "2025-01-15T05:40:38.067Z",
+        "publishedAt": "2025-01-15T05:40:38.065Z"
+      }
+    ],
+    "status": "SUCCESS"
+  },
+  {
+    "updatedAt": "2025-01-15T05:40:34.592Z",
+    "id": 268,
+    "unit": "KWH",
+    "item_name": "energy",
+    "trusted_source": false,
+    "cred_required": true,
+    "recurring": true,
+    "quantity": 11,
+    "createdAt": "2025-01-15T05:40:33.652Z",
+    "publishedAt": "2025-01-15T05:40:34.587Z",
+    "transaction_id": "d9a9350a-6690-49ff-8b41-9e13f79fa205",
+    "price": 1,
+    "trade_events": [
+      {
+        "id": 1874,
+        "event_name": "beckn_init",
+        "description": "Received purchase order",
+        "data": {
+          "unit": "KWH",
+          "agent": 7,
+          "quantity": 11,
+          "item_name": "energy",
+          "recurring": true,
+          "publishedAt": "2025-01-15T05:40:33.650Z",
+          "cred_required": true,
+          "transaction_id": "d9a9350a-6690-49ff-8b41-9e13f79fa205",
+          "trusted_source": false
+        },
+        "createdAt": "2025-01-15T05:40:33.676Z",
+        "updatedAt": "2025-01-15T05:40:33.676Z",
+        "publishedAt": "2025-01-15T05:40:33.674Z"
+      },
+      {
+        "id": 1875,
+        "event_name": "beckn_on_init",
+        "description": "Sending Order terms",
+        "data": [
+          {
+            "id": 6,
+            "items": [
+              {
+                "id": 6,
+                "code": "energy",
+                "name": "energy",
+                "image": [],
+                "createdAt": "2024-12-04T05:19:34.631Z",
+                "long_desc": null,
+                "updatedAt": "2024-12-04T05:37:57.165Z",
+                "short_desc": "Excess power from my rooftop system to sell",
+                "item_meta_id": null,
+                "max_quantity": 1,
+                "min_quantity": 20,
+                "sc_retail_product": {
+                  "id": 6,
+                  "sku": null,
+                  "item_id": 6,
+                  "on_sale": null,
+                  "virtual": null,
+                  "base_fee": null,
+                  "currency": null,
+                  "createdAt": "2024-12-04T05:19:34.624Z",
+                  "max_price": null,
+                  "min_price": "1",
+                  "recurring": true,
+                  "tax_class": null,
+                  "updatedAt": "2025-01-15T05:34:26.760Z",
+                  "tax_status": null,
+                  "total_sales": null,
+                  "downloadable": null,
+                  "rating_count": null,
+                  "stock_status": null,
+                  "cred_required": true,
+                  "quantity_unit": "KWH",
+                  "additional_fee": null,
+                  "average_rating": null,
+                  "product_cancel": [],
+                  "stock_quantity": 18918,
+                  "trusted_source": false,
+                  "price_bareakup_ids": []
+                },
+                "item_fulfillment_ids": [
+                  {
+                    "id": 9,
+                    "item_id": 6,
+                    "createdAt": "2024-12-04T05:19:34.637Z",
+                    "timestamp": "2024-12-04T05:19:34.636Z",
+                    "updatedAt": "2024-12-04T05:19:34.637Z",
+                    "location_id": null,
+                    "publishedAt": "2024-12-04T05:19:34.636Z",
+                    "fulfilment_id": {
+                      "id": 1,
+                      "type": "START",
+                      "rating": null,
+                      "service": null,
+                      "rateable": null,
+                      "createdAt": "2024-11-27T11:00:35.643Z",
+                      "updatedAt": "2024-11-27T11:00:36.659Z",
+                      "publishedAt": "2024-11-27T11:00:36.651Z"
+                    }
+                  },
+                  {
+                    "id": 10,
+                    "item_id": 6,
+                    "createdAt": "2024-12-04T05:19:34.655Z",
+                    "timestamp": "2025-12-04T05:19:34.652Z",
+                    "updatedAt": "2024-12-04T05:19:34.655Z",
+                    "location_id": null,
+                    "publishedAt": "2024-12-04T05:19:34.652Z",
+                    "fulfilment_id": {
+                      "id": 2,
+                      "type": "END",
+                      "rating": null,
+                      "service": null,
+                      "rateable": null,
+                      "createdAt": "2024-11-27T11:00:47.126Z",
+                      "updatedAt": "2024-11-27T11:00:48.003Z",
+                      "publishedAt": "2024-11-27T11:00:47.998Z"
+                    }
+                  }
+                ],
+                "cat_attr_tag_relations": [
+                  {
+                    "id": 5,
+                    "taxanomy": "CATEGORY",
+                    "createdAt": "2024-12-04T05:19:34.661Z",
+                    "updatedAt": "2024-12-04T05:19:34.661Z",
+                    "publishedAt": "2024-12-04T05:19:34.659Z",
+                    "taxanomy_id": {
+                      "id": 16,
+                      "title": "SOLAR ENERGY",
+                      "value": "SOLAR ENERGY",
+                      "createdAt": "2024-11-27T11:00:56.170Z",
+                      "parent_id": null,
+                      "updatedAt": "2024-11-27T11:00:56.170Z",
+                      "description": null,
+                      "publishedAt": "2024-11-27T11:00:56.167Z",
+                      "category_code": "SOLAR_ENERGY"
+                    }
+                  }
+                ]
+              }
+            ],
+            "agents": [
+              {
+                "id": 7,
+                "createdAt": "2024-12-02T10:44:10.275Z",
+                "last_name": "Bai",
+                "updatedAt": "2024-12-31T04:56:16.797Z",
+                "agent_fees": null,
+                "first_name": "Lisa EM",
+                "description": null,
+                "provider_id": 6,
+                "publishedAt": "2024-12-31T04:56:16.791Z",
+                "agent_profile": {
+                  "id": 7,
+                  "gps": null,
+                  "email": null,
+                  "address": "231, east end , sector 10, pritampura, delhi",
+                  "agent_id": 7,
+                  "createdAt": "2024-12-02T10:44:10.240Z",
+                  "institute": null,
+                  "updatedAt": "2025-01-10T09:50:09.415Z",
+                  "customer_id": "12347",
+                  "publishedAt": "2025-01-10T09:50:09.411Z",
+                  "passing_year": null,
+                  "phone_number": "8890099876",
+                  "power_source": null,
+                  "utility_name": "MSEB",
+                  "vehicle_make": null,
+                  "qualification": null,
+                  "vehicle_model": null,
+                  "registration_no": null
+                },
+                "connection_id": null,
+                "years_experience": null
+              }
+            ],
+            "billing": {
+              "name": "Leela tai ji",
+              "email": "leela.tai@gmail.com",
+              "phone": "9718329616"
+            },
+            "createdAt": "2024-12-04T05:19:34.617Z",
+            "long_desc": "XYZ Energy Company - Providing energy solutions",
+            "updatedAt": "2024-12-17T13:43:23.130Z",
+            "short_desc": "XYZ Energy Company",
+            "location_id": null,
+            "provider_id": null,
+            "category_ids": [
+              {
+                "id": 16,
+                "title": "SOLAR ENERGY",
+                "value": "SOLAR ENERGY",
+                "createdAt": "2024-11-27T11:00:56.170Z",
+                "updatedAt": "2024-11-27T11:00:56.170Z",
+                "description": null,
+                "publishedAt": "2024-11-27T11:00:56.167Z",
+                "category_code": "SOLAR_ENERGY"
+              }
+            ],
+            "fulfillments": [
+              {
+                "id": "1",
+                "type": "START"
+              },
+              {
+                "id": "2",
+                "type": "END"
+              },
+              {
+                "id": 1,
+                "type": "START",
+                "rating": null,
+                "service": null,
+                "rateable": null,
+                "createdAt": "2024-11-27T11:00:35.643Z",
+                "updatedAt": "2024-11-27T11:00:36.659Z",
+                "publishedAt": "2024-11-27T11:00:36.651Z"
+              },
+              {
+                "id": 2,
+                "type": "END",
+                "rating": null,
+                "service": null,
+                "rateable": null,
+                "createdAt": "2024-11-27T11:00:47.126Z",
+                "updatedAt": "2024-11-27T11:00:48.003Z",
+                "publishedAt": "2024-11-27T11:00:47.998Z"
+              },
+              {
+                "id": 1,
+                "type": "START",
+                "rating": null,
+                "service": null,
+                "rateable": null,
+                "createdAt": "2024-11-27T11:00:35.643Z",
+                "updatedAt": "2024-11-27T11:00:36.659Z",
+                "publishedAt": "2024-11-27T11:00:36.651Z"
+              },
+              {
+                "id": 2,
+                "type": "END",
+                "rating": null,
+                "service": null,
+                "rateable": null,
+                "createdAt": "2024-11-27T11:00:47.126Z",
+                "updatedAt": "2024-11-27T11:00:48.003Z",
+                "publishedAt": "2024-11-27T11:00:47.998Z"
+              }
+            ],
+            "provider_uri": null,
+            "provider_name": "XYZ Energy",
+            "payment_methods": [],
+            "provider_rating": null
+          }
+        ],
+        "createdAt": "2025-01-15T05:40:33.734Z",
+        "updatedAt": "2025-01-15T05:40:33.734Z",
+        "publishedAt": "2025-01-15T05:40:33.731Z"
+      },
+      {
+        "id": 1876,
+        "event_name": "beckn_confirm",
+        "description": "Order confirmation received",
+        "data": {},
+        "createdAt": "2025-01-15T05:40:34.447Z",
+        "updatedAt": "2025-01-15T05:40:34.447Z",
+        "publishedAt": "2025-01-15T05:40:34.445Z"
+      },
+      {
+        "id": 1877,
+        "event_name": "beckn_on_confirm",
+        "description": "Order Confirmation sent",
+        "data": {
+          "price": "1"
+        },
+        "createdAt": "2025-01-15T05:40:34.555Z",
+        "updatedAt": "2025-01-15T05:40:34.555Z",
+        "publishedAt": "2025-01-15T05:40:34.553Z"
+      }
+    ],
+    "status": "SUCCESS"
+  }
+]
