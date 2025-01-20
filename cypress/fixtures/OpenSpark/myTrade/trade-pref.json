@@ -1,0 +1,9 @@
+{
+  "prefId": 6,
+  "price": "1",
+  "quantity": 18798,
+  "unit": "KWH",
+  "trusted_source": false,
+  "cred_required": true,
+  "recurring": true
+}

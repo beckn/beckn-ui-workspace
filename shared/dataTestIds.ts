@@ -674,8 +674,25 @@ const testIds = {
   user_validPassword_consumer_flow: 'Test@123',
   user_validEmail_producer_flow: 'qqq@gmail.com',
   user_validPassword_producer_flow: 'Test@123',
-  topSheet_profile_icon: 'topSheet-profile-icon',
-  edit_icon: 'edit-icon'
+  total_energy_text: 'total_energy_text',
+  total_energy_input: 'total_energy_input',
+  total_energy_unit: 'total_energy_unit',
+  total_energy_unit_text: 'total_energy_unit_text',
+  total_energy_unit_input: 'total_energy_unit_input',
+  total_energy_unit_unit: 'total_energy_unit_unit',
+  custom_date_input: 'custom_date_input',
+  custom_date_icon: 'custom_date_icon',
+  current_trade: 'current_trade',
+  current_trade_edit_btn: 'current_trade_edit_btn',
+  loader_with_mssg: 'loader_with_mssg',
+  currentTrade_input: 'currentTrade_input',
+  currentTrade_symbol: 'currentTrade_symbol',
+  preferencesTags_text: 'preferencesTags_text',
+  preferencesTags_tags_label: 'preferencesTags_tags_label',
+  current_status: 'current_status',
+  current_status_trade: 'current_status_trade',
+  current_trade_order_status_name: 'current_trade_order_status_name',
+  current_trade_order_status_discription: 'current_trade_order_status_discription',
+  current_trade_order_status_time: 'current_trade_order_status_time'
 }
-
 export { testIds }
