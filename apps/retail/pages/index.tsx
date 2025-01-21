@@ -164,7 +164,7 @@ const HomePage = () => {
       <HomePageContent
         blockOrder={['header', 'description', 'searchInput']}
         headerProps={{
-          name: 'Kuza One',
+          name: 'Open Commerce',
           title: t.forAll,
           description: t.subText
         }}

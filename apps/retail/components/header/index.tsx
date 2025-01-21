@@ -30,7 +30,7 @@ const Header = () => {
     <Box>
       {renderTopHeader && (
         <TopHeader
-          appLogo="/images/headerLogo.svg"
+          appLogo="/images/openCommerce_header.svg"
           t={key => t[key]}
           headerConstants={{
             blackList: {
