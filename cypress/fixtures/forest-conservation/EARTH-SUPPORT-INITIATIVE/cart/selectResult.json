@@ -1,0 +1,121 @@
+{
+  "data": [
+    {
+      "context": {
+        "domain": "earth_support_initiative",
+        "action": "on_select",
+        "version": "1.1.0",
+        "bpp_id": "bpp-ps-network-strapi-dev.becknprotocol.io",
+        "bpp_uri": "http://bpp-ps-network-strapi-dev.becknprotocol.io",
+        "country": "IND",
+        "city": "std:080",
+        "location": {
+          "country": {
+            "name": "India",
+            "code": "IND"
+          },
+          "city": {
+            "name": "Bangalore",
+            "code": "std:080"
+          }
+        },
+        "bap_id": "bap-ps-network-dev.becknprotocol.io",
+        "bap_uri": "https://bap-ps-network-dev.becknprotocol.io",
+        "transaction_id": "266eb047-a5b0-4dc8-b582-1527998493b7",
+        "message_id": "1c505b23-bcca-4024-87e6-0c578c1e34e1",
+        "ttl": "PT10M",
+        "timestamp": "2025-01-09T09:17:24.846Z"
+      },
+      "message": {
+        "order": {
+          "quote": {
+            "price": {
+              "value": "15"
+            }
+          },
+          "provider": {
+            "id": "816",
+            "name": "Enviogrowth",
+            "short_desc": "The Envirogrowth Foundation is a non-profit organization specializing in environmental restoration efforts using science-based approaches.",
+            "long_desc": "License: CC BY-NC-SA  |  7 years in operation",
+            "images": {
+              "url": "https://bpp-unified-strapi-dev.becknprotocol.io/uploads/Group_1000003530_af48d6930c.png",
+              "size_type": "sm"
+            }
+          },
+          "items": [
+            {
+              "id": "340",
+              "name": "On-field data of restoration project",
+              "images": [
+                {
+                  "url": "https://bpp-unified-strapi-dev.becknprotocol.io/uploads/Group_1000003530_af48d6930c.png",
+                  "size_type": "sm"
+                }
+              ],
+              "price": {
+                "value": "15"
+              },
+              "rating": "null",
+              "rateable": true,
+              "quantity": {
+                "available": {
+                  "measure": {
+                    "value": "0",
+                    "unit": "kWh"
+                  }
+                }
+              },
+              "tags": [
+                {
+                  "code": "Data Formats",
+                  "description": "Data Formats",
+                  "list": [
+                    {
+                      "code": "CSV",
+                      "value": "CSV",
+                      "display": true
+                    }
+                  ]
+                },
+                {
+                  "code": "Temporal Coverage",
+                  "description": "Temporal Coverage",
+                  "list": [
+                    {
+                      "code": "1 month",
+                      "value": "1 month",
+                      "display": true
+                    }
+                  ]
+                },
+                {
+                  "code": "Data Sharing Modes",
+                  "description": "Data Sharing Modes",
+                  "list": [
+                    {
+                      "code": "SOAP_API",
+                      "value": "SOAP_API",
+                      "display": true
+                    }
+                  ]
+                },
+                {
+                  "code": "Subscription Durations",
+                  "description": "Subscription Durations",
+                  "list": [
+                    {
+                      "code": "6 months",
+                      "value": "6 months",
+                      "display": true
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

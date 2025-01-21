@@ -22,6 +22,7 @@ const Header = () => {
     (state: { orderObjectUrl: { orderObjectUrl: string; isFlowCityOfParis: boolean } }) =>
       state.orderObjectUrl.isFlowCityOfParis
   )
+  console.log(isFlowCityOfParis)
 
   const {
     TopHeader: { appLogoBlackList, homeIconBlackList, languageIconWhiteList, menuIconWhiteList, topHeaderBlackList },

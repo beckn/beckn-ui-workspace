@@ -30,6 +30,7 @@ const DeleteAlertModal = (props: DeleteAlertModalProps) => {
             text="Are you sure you want to delete"
             fontSize="18px"
             fontWeight="400"
+            dataTest={'delete-modal-message'}
           />
           <Typography
             text="this item?"
@@ -42,12 +43,14 @@ const DeleteAlertModal = (props: DeleteAlertModalProps) => {
             variant="solid"
             handleClick={handleConfirmDeleteDevice}
             isLoading={isLoading}
+            dataTest={'delete-modal-yes-button'}
           />
           <BecknButton
             children="Cancel"
             variant="outline"
             color="#E93324"
             handleClick={onClose}
+            dataTest={'delete-modal-cancel-button'}
           />
         </Flex>
       </BottomModalScan>

@@ -11,10 +11,11 @@ interface NavigationItemProps {
   divider?: boolean
   color?: string
   handleClick?: () => void
+  dataTest?: string
 }
 
 const NavigationItem = (props: NavigationItemProps) => {
-  const { key, icon, label, divider = true, arrow = true, color, handleClick } = props
+  const { key, icon, label, divider = true, arrow = true, color, handleClick, dataTest } = props
   return (
     <>
       <Flex
@@ -35,6 +36,7 @@ const NavigationItem = (props: NavigationItemProps) => {
             }}
             text={label}
             color={color}
+            dataTest={dataTest}
           />
         </Flex>
         {arrow && (

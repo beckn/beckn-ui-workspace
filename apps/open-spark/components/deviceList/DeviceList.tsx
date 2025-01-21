@@ -124,12 +124,14 @@ export default function DeviceList({ initialDevices, onDeviceChange, fetchPaired
               text="Pair Device"
               fontWeight="600"
               fontSize="15px"
+              dataTest={'pair-device'}
             />
             <IconButton
               aria-label="Add device"
               icon={<BiPlusCircle size={20} />}
               variant="ghost"
               onClick={handleModalOpen}
+              data-test={'add-devices-icon'}
             />
           </Flex>
 
@@ -137,6 +139,7 @@ export default function DeviceList({ initialDevices, onDeviceChange, fetchPaired
             text="Paired"
             fontWeight="600"
             fontSize="12px"
+            dataTest={'paired'}
           />
 
           <VStack
@@ -155,12 +158,16 @@ export default function DeviceList({ initialDevices, onDeviceChange, fetchPaired
                 _hover={{ bg: 'gray.50' }}
                 boxShadow="rgba(0, 0, 0, 0.35) 0px 5px 15px"
               >
-                <Typography text={device?.name} />
+                <Typography
+                  text={device?.name}
+                  dataTest={'device_name'}
+                />
                 <CiCircleMinus
                   onClick={() => handleDeleteModalOpen(device?.id)}
                   style={{ cursor: 'pointer' }}
                   size={24}
                   opacity="0.5"
+                  data-test={'remove-paired-device'}
                 />
               </Flex>
             ))}

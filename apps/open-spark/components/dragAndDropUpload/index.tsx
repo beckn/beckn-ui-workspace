@@ -103,6 +103,7 @@ const DragAndDropUpload = (props: DragAndDropUploadProps) => {
         display="none"
         ref={fileInputRef}
         onChange={handleFileInput}
+        data-test={'document-upload'}
       />
       <>{fileSelectionElement?.(fileInputRef)}</>
     </Box>

@@ -53,12 +53,11 @@ const OrderConfirmation = () => {
         .then(res => {
           const qrUrl = res?.data?.qr_url
           dispatch(orderObjectUrlActions.addOrderObjectUrl(qrUrl))
-          const tags = confirmResponse[0].message.items[0].tags
-          const tags1 = tags?.[0].list
-          console.log(tags1)
-          const parisTag = tags1?.find(tag => tag.name === 'Paris')
+          const tags = confirmResponse[0].message.provider.id
+          console.log(tags)
+          const parisTag = tags === 'touring-paris'
           console.log(parisTag)
-          const isCityOfParisItem = parisTag?.name === 'Paris'
+          const isCityOfParisItem = parisTag
           console.log(isCityOfParisItem)
           if (isCityOfParisItem) {
             dispatch(orderObjectUrlActions.setisFlowCityOfParis(true))
