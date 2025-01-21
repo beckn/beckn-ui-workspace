@@ -304,7 +304,7 @@ export const getPayloadForOrderHistoryPost = (confirmData: ConfirmResponseModel[
           }
         },
         items,
-        quote: { price: { value: Number(quote.price.value) || 0 } },
+        quote: { price: { currency: quote.price.currency, value: Number(quote.price.value) || 0 } },
         payments
       }
     },
