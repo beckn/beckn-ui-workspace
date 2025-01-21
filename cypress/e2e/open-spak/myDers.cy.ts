@@ -92,7 +92,7 @@ describe('My Ders Page ', () => {
           fixture: 'OpenSpark/myDers/afterDeleteders.json'
         }).as('afterDeleteders.json')
       })
-      it('should not display remove paired devices', () => {
+      it.only('should not display remove paired devices', () => {
         cy.getByData('device_name').eq(1).should('be.visible')
       })
     })

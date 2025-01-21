@@ -15,6 +15,7 @@ import DragAndDropUpload from '@components/dragAndDropUpload'
 import { FiPlusCircle } from 'react-icons/fi'
 import RenderDocuments from '@components/documentsRenderer'
 import DeleteAlertModal from '@components/modal/DeleteAlertModal'
+import { testIds } from '@shared/dataTestIds'
 
 interface DocumentProps {
   id?: string
@@ -161,6 +162,7 @@ const MyCredentials = () => {
             <>
               <Typography
                 text="Credentials"
+                dataTest={testIds.Credentials_text}
                 fontWeight="600"
                 fontSize="16px"
                 style={{
@@ -176,13 +178,17 @@ const MyCredentials = () => {
           )}
           <Typography
             text="Upload a file"
+            dataTest={testIds.upload_file}
             fontWeight="600"
             fontSize="16px"
             style={{
               marginTop: '1rem'
             }}
           />
-          <Typography text="File upload description" />
+          <Typography
+            text="File upload description"
+            dataTest={testIds.File_upload_description}
+          />
           {selectedFile.length === 0 && (
             <DragAndDropUpload
               multiple={false}
@@ -197,9 +203,13 @@ const MyCredentials = () => {
                       boxSize={6}
                       color="gray.500"
                     />
-                    <Typography text={'Drop your file here'} />
+                    <Typography
+                      text={'Drop your file here'}
+                      dataTest={testIds.drop_your_file_here}
+                    />
                     <HStack gap={1}>
                       <Typography
+                        dataTest={testIds.Browse_file}
                         color="#4498E8"
                         fontSize="8px"
                         onClick={() => {
@@ -240,8 +250,10 @@ const MyCredentials = () => {
             color="#E93324"
             sx={{ marginRight: '8px', border: '1px solid red' }}
             handleClick={clearAllFiles}
+            dataTest={testIds.myCred_Cancel_button}
           />
           <BecknButton
+            dataTest={testIds.myCred_Upload_button}
             text={t.upload}
             disabled={selectedFile?.length === 0 || !allFilesProcessed}
             sx={{ marginLeft: '8px' }}
