@@ -7,6 +7,7 @@ import uploadIcon from '@public/images/upload_icon.svg'
 import pdfIcon from '@public/images/PDF.svg'
 import DragAndDropUpload from '@components/dragAndDropUpload'
 import RenderDocuments, { DocumentProps } from '@components/documentsRenderer'
+import { testIds } from '@shared/dataTestIds'
 
 interface Proofs {
   id: number
@@ -75,6 +76,7 @@ const AddNewDerModal = (props: AddNewDerModalProps) => {
           display="grid"
           height="100%"
           alignContent="center"
+          data-test={testIds.loadingIndicator}
         >
           <LoaderWithMessage
             loadingText="Please Wait"
@@ -92,6 +94,7 @@ const AddNewDerModal = (props: AddNewDerModalProps) => {
             value={category}
             label="Category"
             handleChange={e => setCategory(e.target.value)}
+            dataTest={'add-new-ders-input'}
           />
           <Typography
             text="Proofs"
@@ -141,6 +144,7 @@ const AddNewDerModal = (props: AddNewDerModalProps) => {
             disabled={!category.trim() || uploadedFiles.length === 0}
             sx={{ marginTop: '20px' }}
             isLoading={isLoading}
+            dataTest={'add-new-ders'}
           />
         </Flex>
       )}

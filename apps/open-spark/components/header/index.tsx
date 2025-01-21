@@ -21,7 +21,8 @@ const Header = () => {
       headerFrenchNames,
       headerNames,
       editIconList,
-      profileSectionIcon
+      profileSectionIcon,
+      infoIconList
     }
   } = Constants
 
@@ -74,12 +75,14 @@ const Header = () => {
             blackList: {
               headerList: headerBlackList,
               backIconList: backIconList,
-              editIconList: editIconList
+              editIconList: editIconList,
+              infoIconList: infoIconList
             }
           }}
           handleClickOnEdit={() => {
             dispatch(setProfileEditable({ profileEditable: true }))
           }}
+          infoUrlLink={'https://en.wikipedia.org/wiki/Distributed_generation'}
         />
       )}
     </Box>

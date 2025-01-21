@@ -1,7 +1,9 @@
 import React from 'react'
 import Router from 'next/router'
-import kuzaMobLogo from '@public/images/Logo.svg'
-import kuzaDeskLogo from '@public/images/KuzaLogo.svg'
+// import kuzaMobLogo from '@public/images/Logo.svg'
+// import kuzaDeskLogo from '@public/images/KuzaLogo.svg'
+import kuzaMobLogo from '@public/images/openCommerce_logo.svg'
+import kuzaDeskLogo from '@public/images/openCommerce_logo.svg'
 import { useLanguage } from '@hooks/useLanguage'
 import { SignUpPage } from '@beckn-ui/common'
 

@@ -210,16 +210,19 @@ const ProfilePage = () => {
                   icon={credIcon}
                   label={'My Credentials'}
                   handleClick={() => router.push('/myCredentials')}
+                  dataTest={'myCredintial'}
                 />
                 <NavigationItem
                   icon={tradeIcon}
                   label={'My Trades'}
                   handleClick={() => router.push('/myTrades')}
+                  dataTest={'myTrades'}
                 />
                 <NavigationItem
                   icon={derIcon}
                   label={'My DERs'}
                   handleClick={() => router.push('/myDers')}
+                  dataTest={'myDers'}
                 />
               </>
             )}

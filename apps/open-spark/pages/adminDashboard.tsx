@@ -13,6 +13,7 @@ import { RootState } from '@store/index'
 import Cookies from 'js-cookie'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import { MdOutlineRefresh } from 'react-icons/md'
+import { setTradeExecutionProcessed, UserRootState } from '@store/user-slice'
 
 interface PendingTrades {
   id: number
@@ -27,12 +28,13 @@ const LockDemand = () => {
   const bearerToken = Cookies.get('authToken') || ''
 
   const [items, setItems] = useState<PendingTrades[]>([])
-  const [isLockDemandLoading, setIsLockDemandLoading] = useState<boolean>(false)
+  // const [isLockDemandLoading, setIsLockDemandLoading] = useState<boolean>(false)
 
   const { t } = useLanguage()
   const router = useRouter()
   const dispatch = useDispatch()
   const { role } = useSelector((state: RootState) => state.auth)
+  const { tradeExecutionProcessed } = useSelector((state: UserRootState) => state.user)
 
   const {
     currentAddress,
@@ -68,7 +70,7 @@ const LockDemand = () => {
   }, [])
 
   const handleOnLockDemand = () => {
-    setIsLockDemandLoading(true)
+    dispatch(setTradeExecutionProcessed(true))
 
     axios
       .post(
@@ -98,7 +100,7 @@ const LockDemand = () => {
         console.error('Error while locking demand:', error)
       })
       .finally(() => {
-        setIsLockDemandLoading(false)
+        dispatch(setTradeExecutionProcessed(false))
       })
   }
 
@@ -278,7 +280,7 @@ const LockDemand = () => {
           </Box>
           <BecknButton
             children={'Lock Demand'}
-            isLoading={isLockDemandLoading}
+            isLoading={tradeExecutionProcessed}
             handleClick={handleOnLockDemand}
             sx={{ margin: '1rem 0' }}
             disabled={items.length === 0}

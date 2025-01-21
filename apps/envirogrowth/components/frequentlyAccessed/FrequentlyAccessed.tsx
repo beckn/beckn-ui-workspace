@@ -127,7 +127,7 @@ const FrequentlyAccessed: React.FC<FrequentlyAccessedProps> = ({ frequentlyAcces
                     fontSize="10px"
                     fontWeight="400"
                     text={item.item.rating}
-                    data-test={testIds.Frequently_Accessed_item_rating}
+                    dataTest={testIds.Frequently_Accessed_item_rating}
                   />
                 </Flex>
               </Flex>

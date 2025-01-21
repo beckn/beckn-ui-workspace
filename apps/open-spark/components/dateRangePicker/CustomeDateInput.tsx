@@ -2,6 +2,7 @@ import { Box, Icon } from '@chakra-ui/react'
 import { FiCalendar } from 'react-icons/fi'
 import React from 'react'
 import { Input } from '@beckn-ui/molecules'
+import { testIds } from '@shared/dataTestIds'
 
 interface CustomeDateInputProps {
   startDate: string
@@ -18,6 +19,7 @@ const CustomeDateInput = (props: CustomeDateInputProps) => {
       mt={'2 px'}
     >
       <Input
+        dataTest={testIds.custom_date_input}
         value={`${startDate || ''} - ${endDate || ''}`}
         label="Select a Date"
         readOnly={true}
@@ -33,6 +35,7 @@ const CustomeDateInput = (props: CustomeDateInputProps) => {
               mt={'8px'}
             >
               <Icon
+                data-test={testIds.custom_date_icon}
                 as={FiCalendar}
                 boxSize="20px"
                 color="#4498E8"

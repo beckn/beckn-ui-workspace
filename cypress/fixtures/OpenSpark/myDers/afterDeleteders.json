@@ -1,0 +1,86 @@
+[
+  {
+    "id": 10,
+    "type": "CONSUMER",
+    "category": "Storage battery2",
+    "createdAt": "2024-12-17T05:24:27.650Z",
+    "updatedAt": "2024-12-17T18:15:22.807Z",
+    "publishedAt": "2024-12-17T05:24:27.648Z",
+    "proofs": null
+  },
+  {
+    "id": 28,
+    "type": "CONSUMER",
+    "category": "sd",
+    "createdAt": "2025-01-17T07:00:39.703Z",
+    "updatedAt": "2025-01-17T07:00:39.703Z",
+    "publishedAt": "2025-01-17T07:00:39.696Z",
+    "proofs": [
+      {
+        "id": 480,
+        "name": "WhatsApp Image 2025-01-14 at 7.16.43 PM.jpeg",
+        "alternativeText": null,
+        "caption": null,
+        "width": 540,
+        "height": 1080,
+        "formats": {
+          "large": {
+            "ext": ".jpeg",
+            "url": "/uploads/large_Whats_App_Image_2025_01_14_at_7_16_43_PM_1a1b4791c6.jpeg",
+            "hash": "large_Whats_App_Image_2025_01_14_at_7_16_43_PM_1a1b4791c6",
+            "mime": "image/jpeg",
+            "name": "large_WhatsApp Image 2025-01-14 at 7.16.43 PM.jpeg",
+            "path": null,
+            "size": 64.31,
+            "width": 500,
+            "height": 1000
+          },
+          "small": {
+            "ext": ".jpeg",
+            "url": "/uploads/small_Whats_App_Image_2025_01_14_at_7_16_43_PM_1a1b4791c6.jpeg",
+            "hash": "small_Whats_App_Image_2025_01_14_at_7_16_43_PM_1a1b4791c6",
+            "mime": "image/jpeg",
+            "name": "small_WhatsApp Image 2025-01-14 at 7.16.43 PM.jpeg",
+            "path": null,
+            "size": 21.71,
+            "width": 250,
+            "height": 500
+          },
+          "medium": {
+            "ext": ".jpeg",
+            "url": "/uploads/medium_Whats_App_Image_2025_01_14_at_7_16_43_PM_1a1b4791c6.jpeg",
+            "hash": "medium_Whats_App_Image_2025_01_14_at_7_16_43_PM_1a1b4791c6",
+            "mime": "image/jpeg",
+            "name": "medium_WhatsApp Image 2025-01-14 at 7.16.43 PM.jpeg",
+            "path": null,
+            "size": 41.46,
+            "width": 375,
+            "height": 750
+          },
+          "thumbnail": {
+            "ext": ".jpeg",
+            "url": "/uploads/thumbnail_Whats_App_Image_2025_01_14_at_7_16_43_PM_1a1b4791c6.jpeg",
+            "hash": "thumbnail_Whats_App_Image_2025_01_14_at_7_16_43_PM_1a1b4791c6",
+            "mime": "image/jpeg",
+            "name": "thumbnail_WhatsApp Image 2025-01-14 at 7.16.43 PM.jpeg",
+            "path": null,
+            "size": 3.4,
+            "width": 78,
+            "height": 156
+          }
+        },
+        "hash": "Whats_App_Image_2025_01_14_at_7_16_43_PM_1a1b4791c6",
+        "ext": ".jpeg",
+        "mime": "image/jpeg",
+        "size": 63.57,
+        "url": "/uploads/Whats_App_Image_2025_01_14_at_7_16_43_PM_1a1b4791c6.jpeg",
+        "previewUrl": null,
+        "provider": "local",
+        "provider_metadata": null,
+        "folderPath": "/",
+        "createdAt": "2025-01-17T07:00:34.758Z",
+        "updatedAt": "2025-01-17T07:00:34.758Z"
+      }
+    ]
+  }
+]

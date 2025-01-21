@@ -49,21 +49,28 @@ const SignUp = () => {
   const [termsAccepted, setTermsAccepted] = useState(false)
 
   useEffect(() => {
-    axios
-      .get(`${strapiUrl}${ROUTE_TYPE.CONSUMER}/get-utilities`)
-      .then(response => {
-        const result = response.data
-        const companies = result?.records.map((company: any) => {
-          return {
-            label: company.details.company_name,
-            value: company.details.company_name
-          }
-        })
-        setUtilities(companies)
-      })
-      .catch(error => {
-        console.error('Error fetching utilities:', error)
-      })
+    // axios
+    //   .get(`${strapiUrl}${ROUTE_TYPE.CONSUMER}/get-utilities`)
+    //   .then(response => {
+    //     const result = response.data
+    //     const companies = result?.records.map((company: any) => {
+    //       return {
+    //         label: company.details.company_name,
+    //         value: company.details.company_name
+    //       }
+    //     })
+    //     setUtilities(companies)
+    //   })
+    //   .catch(error => {
+    //     console.error('Error fetching utilities:', error)
+    //   })
+
+    setUtilities([
+      { value: 'Maharashtra State Power Corp. Ltd', label: 'Maharashtra State Power Corp. Ltd' },
+      { value: 'Reliance Power', label: 'Reliance Power' },
+      { value: 'MSEB', label: 'MSEB' },
+      { value: 'Gujarat Electricity Corp. Ltd', label: 'Gujarat Electricity Corp. Ltd' }
+    ])
   }, [])
 
   // Handle input change and validation
@@ -145,10 +152,14 @@ const SignUp = () => {
     if (isFormValid) {
       try {
         let registerResponse: any = null
-        if (role === ROLE.CONSUMER) registerResponse = await bapTradeRegister(signUpData)
+        let catalogueSuccess: any = null
+        if (role === ROLE.CONSUMER) {
+          registerResponse = await bapTradeRegister(signUpData)
+          catalogueSuccess = true
+        }
         if (role === ROLE.PRODUCER) {
           registerResponse = await bppTradeRegister(signUpData)
-          createTradeCatalogue()
+          catalogueSuccess = await createTradeCatalogue()
         }
         console.log(registerResponse)
         if (!registerResponse || (registerResponse as { error: FetchBaseQueryError })?.error)
@@ -160,7 +171,9 @@ const SignUp = () => {
         } else {
           throw new Error('JWT token not found in the response')
         }
-        Router.push('/')
+        if (catalogueSuccess) {
+          Router.push('/')
+        }
       } catch (error) {
         console.error('An error occurred:', error)
       }

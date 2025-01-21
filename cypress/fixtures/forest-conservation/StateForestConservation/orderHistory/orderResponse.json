@@ -1,0 +1,302 @@
+{
+  "data": [
+    {
+      "id": 2570,
+      "attributes": {
+        "updatedAt": "2025-01-08T17:20:25.792Z",
+        "order_id": "2674",
+        "bpp_id": "bpp-ps-network-strapi-dev.becknprotocol.io",
+        "bpp_uri": "http://bpp-ps-network-strapi-dev.becknprotocol.io",
+        "currency": null,
+        "delivery_status": null,
+        "descriptor": {
+          "name": "Open Data Platform",
+          "short_desc": "Terragaze specializes in data collection and analysis using LiDAR technology."
+        },
+        "price": 50,
+        "billing": null,
+        "fulfillments": null,
+        "created_date": null,
+        "last_updated_date": null,
+        "quote": {
+          "price": {
+            "value": "50"
+          }
+        },
+        "transaction_id": "d2c29d8e-e614-4538-b168-4a56a7b2337d",
+        "message_id": null,
+        "payments": null,
+        "items": [
+          {
+            "id": "338",
+            "name": "Aerial LiDAR survey on Vanapur-Girivat belt data",
+            "tags": [
+              {
+                "list": [
+                  {
+                    "value": "Tree height",
+                    "display": true
+                  }
+                ],
+                "display": true,
+                "description": "Soil Hydrology"
+              },
+              {
+                "list": [
+                  {
+                    "value": "Canopy",
+                    "display": true
+                  }
+                ],
+                "display": true,
+                "description": "Soil Hydrology"
+              },
+              {
+                "list": [
+                  {
+                    "value": "Species",
+                    "display": true
+                  }
+                ],
+                "display": true,
+                "description": "Soil Hydrology"
+              },
+              {
+                "list": [
+                  {
+                    "value": "Leaf Area Index",
+                    "display": true
+                  }
+                ],
+                "display": true,
+                "description": "Soil Hydrology"
+              },
+              {
+                "list": [
+                  {
+                    "value": "Vector",
+                    "display": true
+                  }
+                ],
+                "display": true,
+                "description": "Spatial Representation"
+              },
+              {
+                "list": [
+                  {
+                    "value": "Raster",
+                    "display": true
+                  }
+                ],
+                "display": true,
+                "description": "Spatial Representation"
+              },
+              {
+                "list": [
+                  {
+                    "value": "Beanibazar",
+                    "display": true
+                  }
+                ],
+                "display": true,
+                "description": "Spatial Coverage"
+              },
+              {
+                "list": [
+                  {
+                    "value": "Gopalganj",
+                    "display": true
+                  }
+                ],
+                "display": true,
+                "description": "Spatial Coverage"
+              },
+              {
+                "list": [
+                  {
+                    "value": "Balaganj",
+                    "display": true
+                  }
+                ],
+                "display": true,
+                "description": "Spatial Coverage"
+              },
+              {
+                "list": [
+                  {
+                    "value": "Biswanath",
+                    "display": true
+                  }
+                ],
+                "display": true,
+                "description": "Spatial Coverage"
+              },
+              {
+                "list": [
+                  {
+                    "value": "Kanaigath",
+                    "display": true
+                  }
+                ],
+                "display": true,
+                "description": "Spatial Coverage"
+              },
+              {
+                "list": [
+                  {
+                    "value": "25 cm",
+                    "display": true
+                  }
+                ],
+                "display": true,
+                "description": "Spatial Resolutions"
+              },
+              {
+                "list": [
+                  {
+                    "value": "XML",
+                    "display": true
+                  }
+                ],
+                "display": true,
+                "description": "Data Formats"
+              },
+              {
+                "list": [
+                  {
+                    "value": "CSV",
+                    "display": true
+                  }
+                ],
+                "display": true,
+                "description": "Data Formats"
+              },
+              {
+                "list": [
+                  {
+                    "value": "NetCDF",
+                    "display": true
+                  }
+                ],
+                "display": true,
+                "description": "Data Formats"
+              },
+              {
+                "list": [
+                  {
+                    "value": "HDF",
+                    "display": true
+                  }
+                ],
+                "display": true,
+                "description": "Data Formats"
+              },
+              {
+                "list": [
+                  {
+                    "value": "1 month",
+                    "display": true
+                  }
+                ],
+                "display": true,
+                "description": "Temporal Coverage"
+              },
+              {
+                "list": [
+                  {
+                    "value": "2 month",
+                    "display": true
+                  }
+                ],
+                "display": true,
+                "description": "Temporal Coverage"
+              },
+              {
+                "list": [
+                  {
+                    "value": "3 month",
+                    "display": true
+                  }
+                ],
+                "display": true,
+                "description": "Temporal Coverage"
+              },
+              {
+                "list": [
+                  {
+                    "value": "FTP",
+                    "display": true
+                  }
+                ],
+                "display": true,
+                "description": "Data Sharing Modes"
+              },
+              {
+                "list": [
+                  {
+                    "value": "SOAP_API",
+                    "display": true
+                  }
+                ],
+                "display": true,
+                "description": "Data Sharing Modes"
+              },
+              {
+                "list": [
+                  {
+                    "value": "Email",
+                    "display": true
+                  }
+                ],
+                "display": true,
+                "description": "Data Sharing Modes"
+              },
+              {
+                "list": [
+                  {
+                    "value": "Rest API",
+                    "display": true
+                  }
+                ],
+                "display": true,
+                "description": "Data Sharing Modes"
+              }
+            ],
+            "price": {
+              "value": "50"
+            },
+            "images": [
+              {
+                "url": "https://bpp-unified-strapi-dev.becknprotocol.io/uploads/Group_1000003567_785094e798.png",
+                "size_type": "sm"
+              }
+            ],
+            "rating": "null",
+            "quantity": {
+              "available": {
+                "measure": {
+                  "unit": "kWh",
+                  "value": "0"
+                }
+              }
+            },
+            "rateable": true,
+            "long_desc": "License: Proprietary  |  7 years in operation",
+            "short_desc": "Terragaze specializes in data collection and analysis using LiDAR technology."
+          }
+        ],
+        "createdAt": "2025-01-08T17:20:25.792Z",
+        "publishedAt": "2025-01-08T17:20:25.784Z",
+        "domain": null
+      }
+    }
+  ],
+  "meta": {
+    "pagination": {
+      "page": 1,
+      "pageSize": 25,
+      "pageCount": 1,
+      "total": 2
+    }
+  }
+}

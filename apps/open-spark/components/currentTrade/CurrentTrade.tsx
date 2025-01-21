@@ -1,5 +1,6 @@
 import { Input, Typography } from '@beckn-ui/molecules'
 import { Box, Flex } from '@chakra-ui/react'
+import { testIds } from '@shared/dataTestIds'
 import React from 'react'
 
 interface CurrentTradeProps {
@@ -13,9 +14,11 @@ const CurrentTrade = (props: CurrentTradeProps) => {
       justifyContent="space-between"
       alignItems="center"
       columnGap={'20px'}
+      marginBottom="-18px"
     >
       {data.map((item, index) => (
         <Input
+          dataTest={testIds.currentTrade_input}
           name={item.name}
           value={item.value}
           key={index}
@@ -33,6 +36,7 @@ const CurrentTrade = (props: CurrentTradeProps) => {
                 mt={'8px'}
               >
                 <Typography
+                  dataTest={testIds.currentTrade_symbol}
                   text={item.symbol}
                   fontSize="12px"
                   fontWeight="500"

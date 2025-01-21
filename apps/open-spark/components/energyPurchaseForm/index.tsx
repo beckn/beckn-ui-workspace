@@ -2,6 +2,7 @@ import {
   Box,
   Checkbox,
   Divider,
+  Flex,
   FormControl,
   FormLabel,
   HStack,
@@ -22,6 +23,7 @@ import Cookies from 'js-cookie'
 import { useRouter } from 'next/router'
 import { feedbackActions } from '@beckn-ui/common'
 import { useLanguage } from '@hooks/useLanguage'
+import { testIds } from '@shared/dataTestIds'
 
 interface EnergyPurchaseFormProps {
   preferenceType: string
@@ -150,11 +152,14 @@ export default function EnergyPurchaseForm({ preferenceType }: EnergyPurchaseFor
   const isFormComplete = energyUnits > 0
 
   return (
-    <Box
+    <Flex
       as="form"
       onSubmit={handleSubmit}
       maxW="600px"
       mt="30px"
+      flexDir={'column'}
+      justifyContent={'space-between'}
+      height={'calc(100vh - 8.5rem)'}
     >
       <VStack
         spacing={8}
@@ -167,17 +172,18 @@ export default function EnergyPurchaseForm({ preferenceType }: EnergyPurchaseFor
               m={0}
               fontSize="15"
               fontWeight="600"
+              data-test={testIds.preference_type}
             >
               Energy to {preferenceType}
             </FormLabel>
-            <QuestionOutlineIcon />
+            <QuestionOutlineIcon data-test={testIds.questionOutlineIcon} />
           </HStack>
           <HStack spacing={4}>
             <Box
               onClick={() => handleInputChange(setEnergyUnits, (energyUnits + 1).toString())}
               cursor="pointer"
             >
-              <FaPlus />
+              <FaPlus data-test={testIds.FaPlus} />
             </Box>
             <Input
               type="number"
@@ -186,6 +192,7 @@ export default function EnergyPurchaseForm({ preferenceType }: EnergyPurchaseFor
               textAlign="center"
               width="100px"
               size="md"
+              data-test={testIds.preference_type_input_buy}
             />
             <Box
               onClick={() => {
@@ -193,11 +200,12 @@ export default function EnergyPurchaseForm({ preferenceType }: EnergyPurchaseFor
               }}
               cursor="pointer"
             >
-              <FaMinus />
+              <FaMinus data-test={testIds.FaMinus} />
             </Box>
             <Text
               fontSize="15"
               fontWeight="500"
+              data-test={testIds.preference_type_unit}
             >
               units (KWh)
             </Text>
@@ -258,6 +266,7 @@ export default function EnergyPurchaseForm({ preferenceType }: EnergyPurchaseFor
             fontSize="15"
             fontWeight="500"
             mb={4}
+            data-test={testIds.select_preference_type}
           >
             Select a preference to {preferenceType}
           </FormLabel>
@@ -272,6 +281,7 @@ export default function EnergyPurchaseForm({ preferenceType }: EnergyPurchaseFor
                 isChecked={preferences[option.key as keyof typeof preferences]}
                 onChange={e => handleCheckboxChange(option.key, e.target.checked)}
                 sx={checkboxStyles}
+                data-test={testIds.select_preference_type_checkbox}
               >
                 {option.label}
               </Checkbox>
@@ -280,12 +290,13 @@ export default function EnergyPurchaseForm({ preferenceType }: EnergyPurchaseFor
         </FormControl>
 
         {/* Submit Button */}
-        <BecknButton
-          children="Submit"
-          handleClick={handleSubmit}
-          disabled={!isFormComplete} // Button disabled if form incomplete
-        />
       </VStack>
-    </Box>
+      <BecknButton
+        children="Submit"
+        handleClick={handleSubmit}
+        disabled={!isFormComplete} // Button disabled if form incomplete
+        dataTest={testIds.submit_preference_sell_buy_btn}
+      />
+    </Flex>
   )
 }

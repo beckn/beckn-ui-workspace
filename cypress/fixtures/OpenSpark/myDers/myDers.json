@@ -1,0 +1,86 @@
+[
+  {
+    "id": 10,
+    "type": "CONSUMER",
+    "category": "Storage battery2",
+    "createdAt": "2024-12-17T05:24:27.650Z",
+    "updatedAt": "2024-12-17T18:15:22.807Z",
+    "publishedAt": "2024-12-17T05:24:27.648Z",
+    "proofs": null
+  },
+  {
+    "id": 27,
+    "type": "CONSUMER",
+    "category": "sd",
+    "createdAt": "2025-01-15T09:23:48.636Z",
+    "updatedAt": "2025-01-15T09:23:48.636Z",
+    "publishedAt": "2025-01-15T09:23:48.633Z",
+    "proofs": [
+      {
+        "id": 479,
+        "name": "8893737b-1c0f-44dc-b135-bc8fafdb159f.jpeg",
+        "alternativeText": null,
+        "caption": null,
+        "width": 1136,
+        "height": 1600,
+        "formats": {
+          "large": {
+            "ext": ".jpeg",
+            "url": "/uploads/large_8893737b_1c0f_44dc_b135_bc8fafdb159f_70b2bb8ed7.jpeg",
+            "hash": "large_8893737b_1c0f_44dc_b135_bc8fafdb159f_70b2bb8ed7",
+            "mime": "image/jpeg",
+            "name": "large_8893737b-1c0f-44dc-b135-bc8fafdb159f.jpeg",
+            "path": null,
+            "size": 157.32,
+            "width": 710,
+            "height": 1000
+          },
+          "small": {
+            "ext": ".jpeg",
+            "url": "/uploads/small_8893737b_1c0f_44dc_b135_bc8fafdb159f_70b2bb8ed7.jpeg",
+            "hash": "small_8893737b_1c0f_44dc_b135_bc8fafdb159f_70b2bb8ed7",
+            "mime": "image/jpeg",
+            "name": "small_8893737b-1c0f-44dc-b135-bc8fafdb159f.jpeg",
+            "path": null,
+            "size": 42.85,
+            "width": 355,
+            "height": 500
+          },
+          "medium": {
+            "ext": ".jpeg",
+            "url": "/uploads/medium_8893737b_1c0f_44dc_b135_bc8fafdb159f_70b2bb8ed7.jpeg",
+            "hash": "medium_8893737b_1c0f_44dc_b135_bc8fafdb159f_70b2bb8ed7",
+            "mime": "image/jpeg",
+            "name": "medium_8893737b-1c0f-44dc-b135-bc8fafdb159f.jpeg",
+            "path": null,
+            "size": 94.59,
+            "width": 533,
+            "height": 750
+          },
+          "thumbnail": {
+            "ext": ".jpeg",
+            "url": "/uploads/thumbnail_8893737b_1c0f_44dc_b135_bc8fafdb159f_70b2bb8ed7.jpeg",
+            "hash": "thumbnail_8893737b_1c0f_44dc_b135_bc8fafdb159f_70b2bb8ed7",
+            "mime": "image/jpeg",
+            "name": "thumbnail_8893737b-1c0f-44dc-b135-bc8fafdb159f.jpeg",
+            "path": null,
+            "size": 4.31,
+            "width": 111,
+            "height": 156
+          }
+        },
+        "hash": "8893737b_1c0f_44dc_b135_bc8fafdb159f_70b2bb8ed7",
+        "ext": ".jpeg",
+        "mime": "image/jpeg",
+        "size": 327.27,
+        "url": "/uploads/8893737b_1c0f_44dc_b135_bc8fafdb159f_70b2bb8ed7.jpeg",
+        "previewUrl": null,
+        "provider": "local",
+        "provider_metadata": null,
+        "folderPath": "/",
+        "createdAt": "2025-01-15T09:23:45.816Z",
+        "updatedAt": "2025-01-15T09:23:45.816Z"
+      }
+    ]
+  }
+]

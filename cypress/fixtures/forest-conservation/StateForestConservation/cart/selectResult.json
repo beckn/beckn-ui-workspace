@@ -1,0 +1,146 @@
+{
+  "data": [
+    {
+      "context": {
+        "domain": "state_forest_department",
+        "action": "on_select",
+        "version": "1.1.0",
+        "bpp_id": "bpp-ps-network-strapi-dev.becknprotocol.io",
+        "bpp_uri": "http://bpp-ps-network-strapi-dev.becknprotocol.io",
+        "country": "IND",
+        "city": "std:080",
+        "location": {
+          "country": {
+            "name": "India",
+            "code": "IND"
+          },
+          "city": {
+            "name": "Bangalore",
+            "code": "std:080"
+          }
+        },
+        "bap_id": "bap-ps-network-dev.becknprotocol.io",
+        "bap_uri": "https://bap-ps-network-dev.becknprotocol.io",
+        "transaction_id": "d2c29d8e-e614-4538-b168-4a56a7b2337d",
+        "message_id": "40c54f3c-ec80-4641-b13a-e783347044bc",
+        "ttl": "PT10M",
+        "timestamp": "2025-01-08T16:04:34.378Z"
+      },
+      "message": {
+        "order": {
+          "quote": {
+            "price": {
+              "value": "50"
+            }
+          },
+          "provider": {
+            "id": "814",
+            "name": "Open Data Platform",
+            "short_desc": "Terragaze specializes in data collection and analysis using LiDAR technology.",
+            "long_desc": "License: Proprietary  |  7 years in operation",
+            "rating": "4.2",
+            "images": {
+              "url": "https://bpp-unified-strapi-dev.becknprotocol.io/uploads/Group_1000003567_785094e798.png",
+              "size_type": "sm"
+            }
+          },
+          "items": [
+            {
+              "id": "338",
+              "name": "Aerial LiDAR survey on Vanapur-Girivat belt data",
+              "short_desc": "Terragaze specializes in data collection and analysis using LiDAR technology.",
+              "long_desc": "License: Proprietary  |  7 years in operation",
+              "images": [
+                {
+                  "url": "https://bpp-unified-strapi-dev.becknprotocol.io/uploads/Group_1000003567_785094e798.png",
+                  "size_type": "sm"
+                }
+              ],
+              "price": {
+                "value": "50"
+              },
+              "rating": "null",
+              "rateable": true,
+              "quantity": {
+                "available": {
+                  "measure": {
+                    "value": "0",
+                    "unit": "kWh"
+                  }
+                }
+              },
+              "tags": [
+                {
+                  "code": "Spatial Representation",
+                  "description": "Spatial Representation",
+                  "list": [
+                    {
+                      "code": "Vector",
+                      "value": "Vector",
+                      "display": true
+                    }
+                  ]
+                },
+                {
+                  "code": "Spatial Coverage",
+                  "description": "Spatial Coverage",
+                  "list": [
+                    {
+                      "code": "Beanibazar",
+                      "value": "Beanibazar",
+                      "display": true
+                    }
+                  ]
+                },
+                {
+                  "code": "Spatial Resolutions",
+                  "description": "Spatial Resolutions",
+                  "list": [
+                    {
+                      "code": "25 cm",
+                      "value": "25 cm",
+                      "display": true
+                    }
+                  ]
+                },
+                {
+                  "code": "Data Formats",
+                  "description": "Data Formats",
+                  "list": [
+                    {
+                      "code": "XML",
+                      "value": "XML",
+                      "display": true
+                    }
+                  ]
+                },
+                {
+                  "code": "Temporal Coverage",
+                  "description": "Temporal Coverage",
+                  "list": [
+                    {
+                      "code": "1 month",
+                      "value": "1 month",
+                      "display": true
+                    }
+                  ]
+                },
+                {
+                  "code": "Data Sharing Modes",
+                  "description": "Data Sharing Modes",
+                  "list": [
+                    {
+                      "code": "FTP",
+                      "value": "FTP",
+                      "display": true
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

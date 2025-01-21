@@ -1,0 +1,11 @@
+{
+  "der": {
+    "id": 30,
+    "type": "CONSUMER",
+    "category": "washing machine",
+    "createdAt": "2025-01-17T08:00:15.690Z",
+    "updatedAt": "2025-01-17T08:00:15.690Z",
+    "publishedAt": "2025-01-17T08:00:15.686Z"
+  },
+  "message": "Requested DER deleted Successfully"
+}

@@ -1,0 +1,28 @@
+{
+  "id": 189,
+  "unit": "kwh",
+  "item_name": "energy",
+  "trusted_source": false,
+  "cred_required": false,
+  "recurring": false,
+  "domain": "uei:p2p_trading",
+  "status": "RECEIVED",
+  "type": "BUY",
+  "quantity": 3,
+  "price": 0,
+  "createdAt": "2025-01-15T05:41:40.606Z",
+  "updatedAt": "2025-01-16T05:38:24.883Z",
+  "publishedAt": "2025-01-15T05:41:40.604Z",
+  "trade_events": [
+    {
+      "id": 1767,
+      "event_name": "buy_request",
+      "description": "Buy request received",
+      "data": {},
+      "createdAt": "2025-01-15T05:41:40.611Z",
+      "updatedAt": "2025-01-15T05:41:40.611Z",
+      "publishedAt": "2025-01-15T05:41:40.610Z"
+    }
+  ],
+  "order": null
+}
