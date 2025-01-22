@@ -4,8 +4,9 @@ import { useLanguage } from '../../hooks/useLanguage'
 import BottomModalScan from '@components/BottomModal/BottomModalScan'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import Typography from '@beckn-ui/molecules/src/components/typography/typography'
-import { ImportOrderModel } from '@beckn-ui/common/lib/types'
+import { ImportOrderModel, PaymentBreakDownModel } from '@beckn-ui/common/lib/types'
 import { testIds } from '@shared/dataTestIds'
+import { currencyMap } from '@lib/config'
 
 interface OrderDetailsProps {
   backOnImportedOrder: (newValue: boolean) => void
@@ -25,9 +26,20 @@ const OrderDetails: FC<OrderDetailsProps> = ({ backOnImportedOrder, importedOrde
   const orderId = importedtObjectOrder.id
   const createdAtTimeline = importedOrderObject.payments[0].time.timestamp
   console.log(importedtObjectOrder)
-  const totalPrice = itemData.price.value
+  // const totalPrice = itemData.price.value
   const noOfTravellers = itemData.quantity.selected.count
   const providerName = importedOrderObject.provider.descriptor.name
+
+  const createPaymentBreakdownMap = () => {
+    const paymentBreakdownMap: { total: number; currency: string } = { total: 0, currency: 'INR' }
+    if (importedOrderObject.quote.breakup.length > 0) {
+      importedOrderObject.quote.breakup.forEach(breakup => {
+        paymentBreakdownMap['total'] = paymentBreakdownMap['total'] + Number(breakup.price.value)
+        paymentBreakdownMap['currency'] = breakup.price.currency
+      })
+    }
+    return paymentBreakdownMap
+  }
 
   const getFormattedDate = (timestamp: string) => {
     const date = new Date(timestamp)
@@ -119,7 +131,7 @@ const OrderDetails: FC<OrderDetailsProps> = ({ backOnImportedOrder, importedOrde
             />
             <Typography
               variant="subTitleRegular"
-              text={`₹${Number(totalPrice) * noOfTravellers}`}
+              text={`${(currencyMap as any)[createPaymentBreakdownMap().currency]}${createPaymentBreakdownMap().total}`}
             />
           </Flex>
           <BecknButton
