@@ -50,7 +50,7 @@ const CheckoutPage = () => {
     mobileNumber: '0612345678',
     email: 'lisa.k@gmail.com',
     address: '15 rue du soleil, paris, france',
-    pinCode: '75001'
+    pinCode: '75020'
   })
 
   const [isBillingAddressSameAsShippingAddress, setIsBillingAddressSameAsShippingAddress] = useState(true)
@@ -60,7 +60,7 @@ const CheckoutPage = () => {
     mobileNumber: '0612345678',
     email: 'lisa.k@gmail.com',
     address: '15 rue du soleil, paris, france',
-    pinCode: '75001'
+    pinCode: '75020'
   })
 
   const router = useRouter()
