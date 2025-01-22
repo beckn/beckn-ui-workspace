@@ -28,8 +28,12 @@ export const geocodeFromPincode = async (pincode: string) => {
       const { country, state, city } = extractAddressComponents(
         response.results[1] ? response.results[1] : response.results[0]
       )
-      const lat = response.results[0].geometry.location.lat()
-      const lng = response.results[0].geometry.location.lng()
+      const lat = response.results[1]
+        ? response.results[1].geometry.location.lat()
+        : response.results[0].geometry.location.lat()
+      const lng = response.results[1]
+        ? response.results[1].geometry.location.lng()
+        : response.results[0].geometry.location.lng()
       return { country, state, city, lat, lng }
     } else {
       console.log('No results found')

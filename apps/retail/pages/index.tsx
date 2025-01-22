@@ -114,6 +114,8 @@ const HomePage = () => {
       })
       const promptType = himalayasTag ? 'HIMALAYAS' : 'PARIS'
 
+      console.log(himalayasTag, promptType)
+
       const payload = {
         message: {
           prompt_type: promptType,

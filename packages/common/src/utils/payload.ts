@@ -94,7 +94,7 @@ export const getInitPayload = async (
   fulfillments: { id: string; type: string } = { id: '3', type: 'Standard-shipping' }
 ) => {
   const cityData = await geocodeFromPincode(deliveryAddress.pinCode!)
-
+  console.log(cityData)
   const bppGroups = cartItems.reduce((acc: { [key: string]: CartItemForRequest[] }, item) => {
     if (!acc[item.bpp_id]) {
       acc[item.bpp_id] = []
