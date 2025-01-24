@@ -1,0 +1,78 @@
+{
+  "@context": ["https://www.w3.org/2018/credentials/v1", "https://cord.network/2023/cred/v1"],
+  "type": ["VerifiableCredential"],
+  "issuer": "did:cord:3zKcL2oAsvZZwFA5uPxtysk5jsai2TGx4AvrpJcBYmAwzGyN",
+  "issuanceDate": "2024-12-10T09:21:27.012Z",
+  "credentialSubject": {
+    "documentName": "Aadhar Card",
+    "type": "PROSUMER",
+    "proof": "9CE71A8A2B02AFAFE6F559223D743B49360324A71F610DCBF767BC3790F3862B",
+    "id": "did:cord:3zKcL2oAsvZZwFA5uPxtysk5jsai2TGx4AvrpJcBYmAwzGyN",
+    "@context": {
+      "vocab": "schema:cord:s361qsAZ9oNHtFD9vngtYewEkdJNNdYuiQHc9a4nibgZZkgQ5#"
+    }
+  },
+  "validFrom": "2024-12-10T09:21:27.012Z",
+  "validUntil": "2025-12-10T09:21:27.012Z",
+  "metadata": {},
+  "credentialSchema": {
+    "$id": "schema:cord:s361qsAZ9oNHtFD9vngtYewEkdJNNdYuiQHc9a4nibgZZkgQ5",
+    "title": "User Cred Schema:5bbb6047-25f5-41c4-b9d9-ab9d0eb6408c",
+    "properties": {
+      "documentName": {
+        "type": "string"
+      },
+      "proof": {
+        "type": "string"
+      },
+      "type": {
+        "type": "string"
+      },
+      "category": {
+        "type": "string"
+      }
+    },
+    "required": [],
+    "type": "object",
+    "additionalProperties": false,
+    "$schema": "http://cord.network/draft-01/schema#"
+  },
+  "credentialHash": "0xc9fd80776d943c5bf63423920b002497e48e1d96cf1e5543115f1e0d0a07dd7d",
+  "id": "stmt:cord:s3eMFj1bXVMYY8muhCFjvSFGaBkg4Mvtvqcyx47W7NR7xY9uW",
+  "proof": [
+    {
+      "type": "Ed25519Signature2020",
+      "created": "Tue Dec 10 2024 09:21:27 GMT+0000 (Coordinated Universal Time)",
+      "proofPurpose": "sr25519",
+      "verificationMethod": "did:cord:3zKcL2oAsvZZwFA5uPxtysk5jsai2TGx4AvrpJcBYmAwzGyN#0xaebd479b52b61ec4954a5478e6285bff0a5508b53f30ee5c552061efd4c89842",
+      "proofValue": "z4cdZsEqDHQsKbmPYxeNeLrSjWgqhGs4aD2o4BJYX2PsmU8Lmp8KEAFeC6sy5ymYT7bRGpizQmqwVpsXb8KRfohwU"
+    },
+    {
+      "type": "CordProof2024",
+      "elementUri": "stmt:cord:s3eMFj1bXVMYY8muhCFjvSFGaBkg4Mvtvqcyx47W7NR7xY9uW:c9fd80776d943c5bf63423920b002497e48e1d96cf1e5543115f1e0d0a07dd7d",
+      "spaceUri": "space:cord:c35h1XGuUXDHwtJTre7dwsb7KqZM5DWYA4kpPRuSx6BZJnXTg",
+      "schemaUri": "schema:cord:s361qsAZ9oNHtFD9vngtYewEkdJNNdYuiQHc9a4nibgZZkgQ5",
+      "creatorUri": "did:cord:3zKcL2oAsvZZwFA5uPxtysk5jsai2TGx4AvrpJcBYmAwzGyN",
+      "digest": "0xc9fd80776d943c5bf63423920b002497e48e1d96cf1e5543115f1e0d0a07dd7d",
+      "identifier": "stmt:cord:s3eMFj1bXVMYY8muhCFjvSFGaBkg4Mvtvqcyx47W7NR7xY9uW",
+      "genesisHash": "0x99f72c0a4e8ec69365bb2b480302b719465d838cfefa9db0c5a91eed5378285c"
+    },
+    {
+      "type": "CordSDRProof2024",
+      "defaultDigest": "0x4956536fe08fa3d73b6e828eff0668f0d60bb88cbd727d08d2115f330f7ba969",
+      "hashes": [
+        "0x8cde0d63a5d311675021a7ebd9bc505d6737dc78eace5a0c213ecb024ecc0494",
+        "0xbe8acccbce566548081584e953cdc9319cc3cf3a94d7491c4f290f70b85c27d5",
+        "0xc670b0f807b50461ee07f12343a093bc75fda5144e17a75bec0171f87a3730b8",
+        "0xd90cf630b54d06ccc3d009c3f3ddfaf6e52cfec32742a60d4b617b4b1a9a977e"
+      ],
+      "nonceMap": {
+        "0xc659b638f8a487c2044b7f803e94bb023095d8e7cb12681d0a12cd0561e22e77": "0c1a11d2-281c-4850-8de7-516391edf853",
+        "0x8909fd9b5b2c34efb196d40fc18ba53adc3c3f02afea10e5516392c35a99852d": "8446d1e2-30f2-4b7e-9ecf-d9c435205da4",
+        "0xe01505ef079688c73427c0eca8a4c8e73f6b76b75c45b0d263af635c8d03d97b": "b861a708-e4e7-4559-bcc7-55f3ebdc848a",
+        "0xc12bc153949ca6f4012428c671f804553cb805026bab898978c671e9983f933f": "68f275ea-0869-4b4b-85b6-6d3fb364b012"
+      },
+      "genesisHash": "0x99f72c0a4e8ec69365bb2b480302b719465d838cfefa9db0c5a91eed5378285c"
+    }
+  ]
+}

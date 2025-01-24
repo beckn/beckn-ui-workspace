@@ -708,6 +708,19 @@ const testIds = {
   FaPlus_unit: 'FaPlus_unit',
   FaMinus_unit: 'FaMinus_unit',
   set_price_per_unit: 'set_price_per_unit',
-  set_price_per_unit_input: 'set_price_per_unit_input'
+  set_price_per_unit_input: 'set_price_per_unit_input',
+  topSheet_profile_icon: 'topSheet-profile-icon',
+  edit_icon: 'edit-icon',
+  upload_file: 'upload-file',
+  File_upload_description: 'File-upload-description',
+  drop_your_file_here: 'drop-your-file-here',
+  Browse_file: 'Browse-file',
+  myCred_Cancel_button: 'myCred-Cancel-button',
+  myCred_Upload_button: 'myCred-Upload-button',
+  Credentials_text: 'Credentials-text',
+  document_upload_icon: 'document-upload-icon',
+  document_title: 'document-title',
+  document_uplaod_date: 'document-uplaod-date',
+  delete_Icon: 'delete-Icon'
 }
 export { testIds }

@@ -5,6 +5,7 @@ import { Typography } from '@beckn-ui/molecules'
 import deleteIcon from '@public/images/delete_icon.svg'
 import tickIcon from '@public/images/tick.svg'
 import { formatFileSize } from '@utils/general'
+import { testIds } from '@shared/dataTestIds'
 
 export interface DocumentProps {
   icon: string
@@ -74,6 +75,7 @@ const RenderDocuments = (props: RenderDocumentsProps) => {
               <Image
                 src={document.icon}
                 alt="doc_type"
+                data-test={testIds.document_upload_icon}
               />
               <Flex
                 flexDirection={'column'}
@@ -83,6 +85,7 @@ const RenderDocuments = (props: RenderDocumentsProps) => {
               >
                 <Typography
                   text={document.title}
+                  dataTest={testIds.document_title}
                   fontWeight="600"
                   sx={{
                     maxWidth: '10rem',
@@ -93,7 +96,10 @@ const RenderDocuments = (props: RenderDocumentsProps) => {
                   }}
                 />
                 {type === 'cred' ? (
-                  <Typography text={formatDate(document.date, "dd MMM yyyy 'at' hh:mm a")} />
+                  <Typography
+                    text={formatDate(document.date, "dd MMM yyyy 'at' hh:mm a")}
+                    dataTest={testIds.document_uplaod_date}
+                  />
                 ) : (
                   <>
                     <Typography
@@ -131,6 +137,7 @@ const RenderDocuments = (props: RenderDocumentsProps) => {
                   alignSelf={'center'}
                   width={'16px'}
                   height={'16px'}
+                  data-test={testIds.delete_Icon}
                   cursor="pointer"
                   onClick={() => handleOnDelete(index, document, type)}
                 />
