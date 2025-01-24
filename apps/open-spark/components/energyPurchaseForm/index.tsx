@@ -221,6 +221,7 @@ export default function EnergyPurchaseForm({ preferenceType }: EnergyPurchaseFor
                 m={0}
                 fontSize="15"
                 fontWeight="600"
+                data-test={testIds.set_price_per_unit}
               >
                 Set a Price per unit to {preferenceType}
               </FormLabel>
@@ -231,9 +232,10 @@ export default function EnergyPurchaseForm({ preferenceType }: EnergyPurchaseFor
                 onClick={() => handleInputChange(setPricePerUnit, (pricePerUnit + 1).toString())}
                 cursor="pointer"
               >
-                <FaPlus />
+                <FaPlus data-test={testIds.FaPlus_unit} />
               </Box>
               <Input
+                data-test={testIds.set_price_per_unit_input}
                 type="number"
                 value={pricePerUnit.toString()}
                 onChange={e => handleInputChange(setPricePerUnit, e.target.value)}
@@ -247,7 +249,7 @@ export default function EnergyPurchaseForm({ preferenceType }: EnergyPurchaseFor
                 }}
                 cursor="pointer"
               >
-                <FaMinus />
+                <FaMinus data-test={testIds.FaMinus_unit} />
               </Box>
               <Text
                 fontSize="15"
