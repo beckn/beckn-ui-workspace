@@ -721,6 +721,8 @@ const testIds = {
   document_upload_icon: 'document-upload-icon',
   document_title: 'document-title',
   document_uplaod_date: 'document-uplaod-date',
-  delete_Icon: 'delete-Icon'
+  delete_Icon: 'delete-Icon',
+  trade_details_date: 'trade-details-date',
+  trade_details_Id: 'trade-details-Id'
 }
 export { testIds }
