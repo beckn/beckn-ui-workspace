@@ -1,0 +1,15 @@
+{
+  "message": "Trade processing completed!",
+  "data": [
+    {
+      "tradeId": 206,
+      "status": "SUCCESS",
+      "message": "Trade executed successfully for Trade ID: 206"
+    },
+    {
+      "tradeId": 207,
+      "status": "SUCCESS",
+      "message": "Trade executed successfully for Trade ID: 207"
+    }
+  ]
+}
