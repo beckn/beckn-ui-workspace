@@ -11,6 +11,7 @@ import CurrentTrade from '@components/currentTrade/CurrentTrade'
 import { Box, Divider, Flex, Stack, Tag, TagLabel } from '@chakra-ui/react'
 import { OrderStatusProgress } from '@beckn-ui/becknified-components'
 import PendingIcon from '@public/images/pending.svg'
+import { testIds } from '@shared/dataTestIds'
 
 interface TradeMetaData {
   orderId: string
@@ -115,6 +116,7 @@ const TradeDetails = () => {
           text={`Date: ${tradeDetails?.date ? formatDate(tradeDetails?.date!, 'dd/MM/yyyy') : ''}`}
           fontSize="16px"
           fontWeight="500"
+          dataTest={testIds.trade_details_date}
         />
         <CurrentTrade
           data={[
@@ -188,6 +190,7 @@ const TradeDetails = () => {
                 text={`Trade ID:`}
                 fontSize="15"
                 fontWeight="600"
+                dataTest={testIds.trade_details_Id}
               />
               <Typography
                 text={`${tradeDetails?.tradeId}`}
