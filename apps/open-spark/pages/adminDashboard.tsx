@@ -14,6 +14,7 @@ import Cookies from 'js-cookie'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import { MdOutlineRefresh } from 'react-icons/md'
 import { setTradeExecutionProcessed, UserRootState } from '@store/user-slice'
+import { testIds } from '@shared/dataTestIds'
 
 interface PendingTrades {
   id: number
@@ -130,6 +131,7 @@ const LockDemand = () => {
         >
           <Box>
             <Typography
+              dataTest={testIds.total_aggregated_demand}
               text="Total Aggregated demand"
               fontWeight="600"
               fontSize="16px"
@@ -142,20 +144,25 @@ const LockDemand = () => {
               className="hideScroll"
               marginTop={'1rem'}
             >
-              <Table variant="simple">
+              <Table
+                variant="simple"
+                data-test={testIds.total_aggregated_table}
+              >
                 <Thead
+                  data-test={testIds.total_aggregated_table_head}
                   position="sticky"
                   top={0}
                   bg="white"
                   zIndex={1}
                 >
-                  <Tr>
+                  <Tr data-test={testIds.total_aggregated_table_row}>
                     <Th padding="0">
                       <Box
                         display="flex"
                         alignItems="center"
                         placeContent={'center'}
                         width={'64px'}
+                        data-test={testIds.total_aggregated_table_unit}
                       >
                         Unit
                       </Box>
@@ -166,6 +173,7 @@ const LockDemand = () => {
                         alignItems="center"
                         placeContent={'center'}
                         width={'130px'}
+                        data-test={testIds.total_aggregated_table_consumer}
                       >
                         Consumer
                       </Box>
@@ -176,6 +184,7 @@ const LockDemand = () => {
                         alignItems="center"
                         placeContent={'center'}
                         width={'70px'}
+                        data-test={testIds.total_aggregated_table_date}
                       >
                         Date
                       </Box>
@@ -205,6 +214,7 @@ const LockDemand = () => {
                           padding="0"
                         >
                           <Typography
+                            dataTest={testIds.total_aggregated_item_quantity}
                             text={item.quantity}
                             style={{
                               display: '-webkit-box',
@@ -223,6 +233,7 @@ const LockDemand = () => {
                           padding="0"
                         >
                           <Typography
+                            dataTest={testIds.total_aggregated_item_name}
                             text={item.name}
                             style={{
                               display: '-webkit-box',
@@ -241,6 +252,7 @@ const LockDemand = () => {
                           padding="0"
                         >
                           <Typography
+                            dataTest={testIds.total_aggregated_item_date}
                             text={formatDate(item.createdAt, 'yyyy-MM-dd')}
                             style={{
                               display: '-webkit-box',
@@ -256,6 +268,7 @@ const LockDemand = () => {
                         </Td>
                         <Td borderBottom={'1px dotted #004e92!important'}>
                           <Image
+                            data-test={testIds.total_aggregated_nav_img}
                             src={NavIcon}
                             alt="nav_icon"
                             width={'6px'}
@@ -267,6 +280,7 @@ const LockDemand = () => {
                     <Tr>
                       <Td colSpan={5}>
                         <Typography
+                          dataTest="noRows"
                           text="No rows"
                           fontWeight="600"
                           style={{ textAlign: 'center' }}
@@ -279,6 +293,7 @@ const LockDemand = () => {
             </Box>
           </Box>
           <BecknButton
+            dataTest={testIds.total_aggregated_lock_demand}
             children={'Lock Demand'}
             isLoading={tradeExecutionProcessed}
             handleClick={handleOnLockDemand}

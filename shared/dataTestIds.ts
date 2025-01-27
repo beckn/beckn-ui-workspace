@@ -674,6 +674,8 @@ const testIds = {
   user_validPassword_consumer_flow: 'Test@123',
   user_validEmail_producer_flow: 'qqq@gmail.com',
   user_validPassword_producer_flow: 'Test@123',
+  user_validEmail_admin_flow: 'admin@becknprotocol.io',
+  user_validPassword_admin_flow: 'Test@123',
   total_energy_text: 'total_energy_text',
   total_energy_input: 'total_energy_input',
   total_energy_unit: 'total_energy_unit',
@@ -723,6 +725,18 @@ const testIds = {
   document_uplaod_date: 'document-uplaod-date',
   delete_Icon: 'delete-Icon',
   trade_details_date: 'trade-details-date',
-  trade_details_Id: 'trade-details-Id'
+  trade_details_Id: 'trade-details-Id',
+  total_aggregated_demand: 'total_aggregated_demand',
+  total_aggregated_table: 'total_aggregated_table',
+  total_aggregated_table_head: 'total_aggregated_table_head',
+  total_aggregated_table_row: 'total_aggregated_table_row',
+  total_aggregated_table_unit: 'total_aggregated_table_unit',
+  total_aggregated_table_consumer: 'total_aggregated_table_consumer',
+  total_aggregated_table_date: 'total_aggregated_table_date',
+  total_aggregated_item_quantity: 'total_aggregated_item_quantity',
+  total_aggregated_item_name: 'total_aggregated_item_name',
+  total_aggregated_item_date: 'total_aggregated_item_date',
+  total_aggregated_nav_img: 'total_aggregated_nav_img',
+  total_aggregated_lock_demand: 'total_aggregated_lock_demand'
 }
 export { testIds }
