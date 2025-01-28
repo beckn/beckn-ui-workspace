@@ -9,12 +9,12 @@ export default function middleware(req: NextRequest) {
   const response = NextResponse.next()
   response.headers.set('Cache-Control', 'no-store')
 
-  if (role && loggedin && (pathname === '/signIn' || pathname === '/signUp' || pathname === '/welcome')) {
+  if (role && loggedin && (pathname === '/signIn' || pathname === '/signUp')) {
     return NextResponse.redirect(new URL('/', req.url))
   }
 
-  if (!role && !loggedin && pathname !== '/welcome') {
-    const signInRoute = '/welcome'
+  if (!role && !loggedin && pathname !== '/signIn' && pathname !== '/signUp') {
+    const signInRoute = '/signIn'
 
     return NextResponse.redirect(new URL(signInRoute, req.url))
   }
