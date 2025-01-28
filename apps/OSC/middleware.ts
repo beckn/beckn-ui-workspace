@@ -5,6 +5,9 @@ const locals = ['fa']
 export default function middleware(req: NextRequest) {
   const loggedin = req.cookies.get('authToken')
   const { pathname, href, host } = req.nextUrl
+  const response = NextResponse.next()
+  response.headers.set('Cache-Control', 'no-store')
+
   const urlSplitList = href.split('/')
   const hostIndex = urlSplitList.findIndex(item => item === host)
   let langSuffix = ''
@@ -22,7 +25,7 @@ export default function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL(redirectUrl, req.url))
   }
 
-  return NextResponse.next()
+  return response
 }
 
 export const config = {
