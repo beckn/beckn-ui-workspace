@@ -135,15 +135,19 @@ const Header: React.FC<HeaderProps> = ({
               }}
               className={Styles.top_header_modal}
             >
-              <Image
-                src={menuItem.icon}
-                alt="User profile"
-              />
-              <Typography
-                fontSize="16px"
-                text={menuItem.label}
-                color={menuItem?.color!}
-              />
+              {router.pathname !== menuItem.href && (
+                <>
+                  <Image
+                    src={menuItem.icon}
+                    alt={menuItem.label}
+                  />
+                  <Typography
+                    fontSize="16px"
+                    text={menuItem.label}
+                    color={menuItem?.color!}
+                  />
+                </>
+              )}
             </Box>
           ))}
         </Flex>
