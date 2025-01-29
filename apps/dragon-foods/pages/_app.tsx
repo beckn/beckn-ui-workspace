@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import type { AppProps } from 'next/app'
 
 import Layout from '@components/layout/Layout'
@@ -21,6 +21,16 @@ import ErrorBoundary from '@beckn-ui/common/src/components/errorBoundary'
 function MyApp({ Component, pageProps }: AppProps) {
   const { t } = useLanguage()
   const router = useRouter()
+  useEffect(() => {
+    const handleBackNavigation = () => {
+      if (!document.cookie.includes('authToken')) {
+        router.replace('/signIn')
+      }
+    }
+
+    window.addEventListener('popstate', handleBackNavigation)
+    return () => window.removeEventListener('popstate', handleBackNavigation)
+  }, [router])
   return (
     <BecknProvider
       theme={{

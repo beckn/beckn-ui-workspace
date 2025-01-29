@@ -6,7 +6,7 @@ export default function middleware(req: NextRequest) {
 
   // Create a response with no-store caching
   const response = NextResponse.next()
-  response.headers.set('Cache-Control', 'no-store')
+  response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate')
 
   const searchParams = req.nextUrl.searchParams
   const externalUrlParam = searchParams.get('external_url')
