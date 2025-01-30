@@ -20,7 +20,7 @@ const initialState: AuthState = {
   user: null,
   jwt: null,
   isAuthenticated: false,
-  role: null
+  role: ROLE.CONSUMER
 }
 
 const slice = createSlice({
@@ -29,8 +29,8 @@ const slice = createSlice({
   reducers: {
     logout: () => {
       Cookies.remove('authToken')
-      Cookies.remove('roleSelected')
-      Router.push('/welcome')
+      Cookies.remove('isVerified')
+      Router.push('/signIn')
       return initialState
     },
     setCredentials: (state, { payload: { user, jwt } }: PayloadAction<{ user: User; jwt: string }>) => {
@@ -43,21 +43,26 @@ const slice = createSlice({
   },
   extraReducers: builder => {
     builder
-      .addMatcher(extendedAuthApi.endpoints.bapTradeLogin.matchPending, (state, action) => {
+      .addMatcher(extendedAuthApi.endpoints.tradeLogin.matchPending, (state, action) => {
         console.log('pending', action)
       })
-      .addMatcher(extendedAuthApi.endpoints.bapTradeLogin.matchFulfilled, (state, action) => {
+      .addMatcher(extendedAuthApi.endpoints.tradeLogin.matchFulfilled, (state, action) => {
         console.log('fulfilled', action)
         state.user = action.payload.user
         state.jwt = action.payload.jwt
         state.isAuthenticated = true
         Cookies.set('authToken', state.jwt)
+        Cookies.set('isVerified', JSON.stringify(state.user?.isOtpVerified))
         const urlQuery = Router.query
 
         const hasNotQuery = JSON.stringify(urlQuery) === '{}'
 
         if (hasNotQuery) {
-          Router.push('/')
+          if (state.user.isOtpVerified) {
+            Router.push('/')
+          } else {
+            Router.push('/OTPVerification')
+          }
         } else {
           Router.push({
             pathname: '/',
@@ -65,39 +70,14 @@ const slice = createSlice({
           })
         }
       })
-      .addMatcher(extendedAuthApi.endpoints.bapTradeLogin.matchRejected, (state, action) => {
-        console.log('rejected', action)
-      })
-      .addMatcher(extendedAuthApi.endpoints.bppTradeLogin.matchPending, (state, action) => {
-        console.log('pending', action)
-      })
-      .addMatcher(extendedAuthApi.endpoints.bppTradeLogin.matchFulfilled, (state, action) => {
-        console.log('fulfilled', action)
-        state.user = action.payload.user
-        state.jwt = action.payload.jwt
-        state.isAuthenticated = true
-        Cookies.set('authToken', state.jwt)
-        const urlQuery = Router.query
-
-        const hasNotQuery = JSON.stringify(urlQuery) === '{}'
-
-        if (hasNotQuery) {
-          Router.push('/')
-        } else {
-          Router.push({
-            pathname: '/',
-            query: { external_url: urlQuery.external_url }
-          })
-        }
-      })
-      .addMatcher(extendedAuthApi.endpoints.bppTradeLogin.matchRejected, (state, action) => {
+      .addMatcher(extendedAuthApi.endpoints.tradeLogin.matchRejected, (state, action) => {
         console.log('rejected', action)
       }),
       builder
-        .addMatcher(extendedAuthApi.endpoints.bapTradeRegister.matchPending, (state, action) => {
+        .addMatcher(extendedAuthApi.endpoints.tradeRegister.matchPending, (state, action) => {
           console.log('pending', action)
         })
-        .addMatcher(extendedAuthApi.endpoints.bapTradeRegister.matchFulfilled, (state, action) => {
+        .addMatcher(extendedAuthApi.endpoints.tradeRegister.matchFulfilled, (state, action) => {
           console.log('fulfilled', action)
           state.user = action.payload.user
           state.jwt = action.payload.jwt
@@ -105,21 +85,26 @@ const slice = createSlice({
           state.isAuthenticated = true
           Router.push('/')
         })
-        .addMatcher(extendedAuthApi.endpoints.bapTradeRegister.matchRejected, (state, action) => {
+        .addMatcher(extendedAuthApi.endpoints.tradeRegister.matchRejected, (state, action) => {
           console.log('rejected', action)
-        })
-        .addMatcher(extendedAuthApi.endpoints.bppTradeRegister.matchPending, (state, action) => {
+        }),
+      builder
+        .addMatcher(extendedAuthApi.endpoints.verifyOtp.matchPending, (state, action) => {
           console.log('pending', action)
         })
-        .addMatcher(extendedAuthApi.endpoints.bppTradeRegister.matchFulfilled, (state, action) => {
+        .addMatcher(extendedAuthApi.endpoints.verifyOtp.matchFulfilled, (state, action) => {
           console.log('fulfilled', action)
-          state.user = action.payload.user
-          state.jwt = action.payload.jwt
-          Cookies.set('authToken', state.jwt)
-          state.isAuthenticated = true
-          Router.push('/')
+          // JSON.stringify(action.payload.user?.isOtpVerified)
+          const verified = action.payload?.message === 'Otp Verified Successfully' ? true : false
+          Cookies.set('isVerified', verified.toString())
+
+          if (verified) {
+            Router.push('/')
+          } else {
+            Router.back()
+          }
         })
-        .addMatcher(extendedAuthApi.endpoints.bppTradeRegister.matchRejected, (state, action) => {
+        .addMatcher(extendedAuthApi.endpoints.verifyOtp.matchRejected, (state, action) => {
           console.log('rejected', action)
         })
   }

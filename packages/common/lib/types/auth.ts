@@ -8,6 +8,7 @@ export interface User {
   provider: string
   updatedAt: Date
   username: string
+  isOtpVerified?: boolean
   agent?: {
     id: string
     first_name: string

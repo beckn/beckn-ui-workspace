@@ -1,10 +1,10 @@
 type PathnameObjectType = Record<string, string>
 
 // -------------------------------- Top Header constants --------------------------------
-const appLogoBlackList = ['/signIn', '/signUp', '/welcome']
-const homeIconBlackList = ['/', '/signIn', '/', '/myRides', '/profile', '/signUp', '/welcome']
+const appLogoBlackList = ['/signIn', '/signUp']
+const homeIconBlackList = ['/', '/signIn', '/', '/myRides', '/profile', '/signUp', '/OTPVerification']
 const menuIconWhiteList = ['/', '/profile', '/myRides', '/buyingPreference', '/sellingPreference', '/myDers']
-const topHeaderBlackList: string[] = ['/welcome']
+const topHeaderBlackList: string[] = []
 const languageIconWhiteList: string[] = []
 
 // -------------------------------- Sub Header constants --------------------------------
@@ -20,7 +20,8 @@ const headerNames: PathnameObjectType = {
   '/buyingPreference': 'Buying Preferences',
   '/sellingPreference': 'Selling Preferences',
   '/myDers': 'My DERs',
-  '/tradeDetails': 'No. of Units Sold'
+  '/tradeDetails': 'No. of Units Sold',
+  '/OTPVerification': 'Verify Yourself'
 }
 
 const headerFrenchNames: PathnameObjectType = {
@@ -34,16 +35,16 @@ const headerBlackList = [
   '/profile',
   '/signIn',
   '/signUp',
-  '/welcome',
   '/myCredentials',
   '/myTrades',
   '/buyingPreference',
   '/sellingPreference',
   '/myDers',
-  '/tradeDetails'
+  '/tradeDetails',
+  '/OTPVerification'
 ]
 
-const bottomHeaderBlackList = ['/orderConfirmation', '/', '/feedback', '/welcome']
+const bottomHeaderBlackList = ['/orderConfirmation', '/', '/feedback']
 const orderIconList = ['/orderDetails']
 const editIconList: string[] = ['/profile']
 const profileSectionIcon = ['/buyingPreference']

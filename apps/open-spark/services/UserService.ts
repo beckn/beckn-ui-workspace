@@ -1,5 +1,6 @@
 import Api from './api'
 import { SignInResponse, SignUpRequest } from '@beckn-ui/common'
+import Cookies from 'js-cookie'
 
 export interface SignInRequest {
   email: string
@@ -17,46 +18,35 @@ export interface RegisterRequest {
 
 const extendedAuthApi = Api.injectEndpoints({
   endpoints: build => ({
-    bapTradeLogin: build.mutation<SignInResponse, SignInRequest>({
+    tradeLogin: build.mutation<SignInResponse, SignInRequest>({
       query: credentials => ({
-        url: '/beckn-trade-bap/login',
+        url: '/unified-beckn-energy/login',
         method: 'POST',
         body: credentials
       })
     }),
-    bppTradeLogin: build.mutation<SignInResponse, SignInRequest>({
+    tradeRegister: build.mutation<SignInResponse, RegisterRequest>({
       query: credentials => ({
-        url: '/beckn-trade-bpp/login',
+        url: '/unified-beckn-energy/signup',
         method: 'POST',
         body: credentials
       })
     }),
-    bapTradeRegister: build.mutation<SignInResponse, RegisterRequest>({
-      query: credentials => ({
-        url: '/beckn-trade-bap/signup',
+    verifyOtp: build.mutation<any, { otp: number }>({
+      query: ({ otp }) => ({
+        url: '/unified-beckn-energy/verify-otp',
         method: 'POST',
-        body: credentials
-      })
-    }),
-    bppTradeRegister: build.mutation<SignInResponse, RegisterRequest>({
-      query: credentials => ({
-        url: '/beckn-trade-bpp/signup',
-        method: 'POST',
-        body: credentials
+        headers: { Authorization: 'Bearer ' + Cookies.get('authToken') },
+        body: { otp }
       })
     })
   })
 })
 
-export const {
-  useBapTradeLoginMutation,
-  useBppTradeLoginMutation,
-  useBapTradeRegisterMutation,
-  useBppTradeRegisterMutation
-} = extendedAuthApi
+export const { useTradeLoginMutation, useTradeRegisterMutation, useVerifyOtpMutation } = extendedAuthApi
 
 export const {
-  endpoints: { bapTradeLogin, bppTradeLogin, bapTradeRegister, bppTradeRegister }
+  endpoints: { tradeLogin, tradeRegister }
 } = extendedAuthApi
 
 export default extendedAuthApi
