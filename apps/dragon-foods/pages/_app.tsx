@@ -21,13 +21,7 @@ import ErrorBoundary from '@beckn-ui/common/src/components/errorBoundary'
 function MyApp({ Component, pageProps }: AppProps) {
   const { t } = useLanguage()
   const router = useRouter()
-  useEffect(() => {
-    window.addEventListener('pageshow', event => {
-      if (event.persisted) {
-        window.location.reload()
-      }
-    })
-  }, [])
+
   return (
     <BecknProvider
       theme={{
