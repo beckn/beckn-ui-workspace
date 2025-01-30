@@ -22,15 +22,12 @@ function MyApp({ Component, pageProps }: AppProps) {
   const { t } = useLanguage()
   const router = useRouter()
   useEffect(() => {
-    const handleBackNavigation = () => {
-      if (!document.cookie.includes('authToken')) {
-        router.replace('/signIn')
+    window.addEventListener('pageshow', event => {
+      if (event.persisted) {
+        window.location.reload()
       }
-    }
-
-    window.addEventListener('popstate', handleBackNavigation)
-    return () => window.removeEventListener('popstate', handleBackNavigation)
-  }, [router])
+    })
+  }, [])
   return (
     <BecknProvider
       theme={{
