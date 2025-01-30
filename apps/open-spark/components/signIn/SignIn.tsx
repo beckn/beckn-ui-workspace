@@ -53,15 +53,7 @@ const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
     }
 
     try {
-      const res = await tradeLogin(signInData).unwrap()
-      let roleType: ROLE | null = null
-      if (res.user.role?.type.toUpperCase() === ROLE.CONSUMER) roleType = ROLE.CONSUMER
-      else if (res.user.role?.type.toUpperCase() === ROLE.PRODUCER) roleType = ROLE.PRODUCER
-
-      if (roleType) {
-        dispatch(setRole({ role: roleType! }))
-        Router.push('/')
-      }
+      await tradeLogin(signInData).unwrap()
     } catch (error) {
       console.error('An error occurred:', error)
     }
