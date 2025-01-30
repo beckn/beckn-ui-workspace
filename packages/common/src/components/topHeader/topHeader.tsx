@@ -63,13 +63,6 @@ const Header: React.FC<HeaderProps> = ({
     window.location.reload()
     router.push('/signIn')
   }
-  useEffect(() => {
-    window.addEventListener('pageshow', event => {
-      if (event.persisted) {
-        window.location.reload()
-      }
-    })
-  }, [])
 
   return (
     <>
