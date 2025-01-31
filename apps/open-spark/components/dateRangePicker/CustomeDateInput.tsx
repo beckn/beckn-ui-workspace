@@ -8,24 +8,30 @@ interface CustomeDateInputProps {
   startDate: string
   endDate: string
   onCalendarClick: () => void
+  label?: string
 }
 
 const CustomeDateInput = (props: CustomeDateInputProps) => {
-  const { startDate, endDate, onCalendarClick } = props
+  const { startDate, endDate, onCalendarClick, label = 'Select a Date' } = props
   return (
     <Box
-      width="300px"
+      width="160px"
       position="relative"
-      mt={'2 px'}
+      mt={'0.9rem'}
     >
       <Input
         dataTest={testIds.custom_date_input}
         value={`${startDate || ''} - ${endDate || ''}`}
-        label="Select a Date"
+        label={label}
         readOnly={true}
         handleChange={() => {}}
         name={'date'}
         type="text"
+        sx={{
+          border: 'none',
+          fontSize: '14px',
+          width: 'fit-content'
+        }}
         rightElement={() => {
           return (
             <Box

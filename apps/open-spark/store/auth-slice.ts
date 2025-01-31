@@ -9,7 +9,6 @@ interface AuthState {
   user: null | User
   jwt: string | null
   isAuthenticated: boolean
-  role: ROLE | null
 }
 
 export interface AuthRootState {
@@ -19,8 +18,7 @@ export interface AuthRootState {
 const initialState: AuthState = {
   user: null,
   jwt: null,
-  isAuthenticated: false,
-  role: ROLE.CONSUMER
+  isAuthenticated: false
 }
 
 const slice = createSlice({
@@ -36,9 +34,6 @@ const slice = createSlice({
     setCredentials: (state, { payload: { user, jwt } }: PayloadAction<{ user: User; jwt: string }>) => {
       state.user = user
       state.jwt = jwt
-    },
-    setRole: (state, action: PayloadAction<{ role: ROLE }>) => {
-      state.role = action.payload.role
     }
   },
   extraReducers: builder => {
@@ -82,8 +77,13 @@ const slice = createSlice({
           state.user = action.payload.user
           state.jwt = action.payload.jwt
           Cookies.set('authToken', state.jwt)
+          Cookies.set('isVerified', JSON.stringify(state.user?.isOtpVerified))
           state.isAuthenticated = true
-          Router.push('/')
+          if (state.user.isOtpVerified) {
+            Router.push('/')
+          } else {
+            Router.push('/OTPVerification')
+          }
         })
         .addMatcher(extendedAuthApi.endpoints.tradeRegister.matchRejected, (state, action) => {
           console.log('rejected', action)
@@ -110,5 +110,5 @@ const slice = createSlice({
   }
 })
 
-export const { logout, setCredentials, setRole } = slice.actions
+export const { logout, setCredentials } = slice.actions
 export default slice.reducer

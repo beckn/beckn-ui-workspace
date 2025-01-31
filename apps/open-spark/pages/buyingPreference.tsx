@@ -1,4 +1,5 @@
 import { Box } from '@chakra-ui/react'
+import { ROLE } from '@lib/config'
 import PreferenceComponent from '../components/energyPurchaseForm'
 
 const BuyingPreference = () => {
@@ -10,7 +11,10 @@ const BuyingPreference = () => {
       maxH={'calc(100vh - 80px)'}
       overflowY="scroll"
     >
-      <PreferenceComponent preferenceType={'buy'} />
+      <PreferenceComponent
+        preferenceType={'buy'}
+        role={ROLE.BUY}
+      />
     </Box>
   )
 }

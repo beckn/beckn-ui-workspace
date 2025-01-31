@@ -39,9 +39,6 @@ const ProfilePage = () => {
   })
 
   const { profileEditable } = useSelector((state: UserRootState) => state.user)
-  const { role } = useSelector((state: AuthRootState) => state.auth)
-
-  const isAdmin = useRef(role === ROLE.ADMIN)
 
   useEffect(() => {
     return () => {
@@ -79,7 +76,7 @@ const ProfilePage = () => {
     setIsLoading(true)
 
     axios
-      .get(`${strapiUrl}${ROUTE_TYPE[role!]}/user-profile`, requestOptions)
+      .get(`${strapiUrl}${ROUTE_TYPE[ROLE.GENERAL]}/user-profile`, requestOptions)
       .then(response => {
         const result = response.data
         const { fullname, address, customer_id } = result
@@ -114,7 +111,7 @@ const ProfilePage = () => {
     }
 
     axios
-      .put(`${strapiUrl}${ROUTE_TYPE[role!]}/user-profile`, data, {
+      .put(`${strapiUrl}${ROUTE_TYPE[ROLE.GENERAL]}/user-profile`, data, {
         headers: { Authorization: `Bearer ${bearerToken}` }
       })
       .then(response => {
@@ -179,9 +176,6 @@ const ProfilePage = () => {
         customInputBlurHandler: updateProfile
       }
     ]
-    if (isAdmin.current) {
-      inputs.splice(1, 1)
-    }
 
     return inputs
   }
@@ -204,28 +198,26 @@ const ProfilePage = () => {
         isLoading={isLoading}
         customComponent={
           <Box marginTop={'-1.8rem'}>
-            {!isAdmin.current && (
-              <>
-                <NavigationItem
-                  icon={credIcon}
-                  label={'My Credentials'}
-                  handleClick={() => router.push('/myCredentials')}
-                  dataTest={'myCredintial'}
-                />
-                <NavigationItem
-                  icon={tradeIcon}
-                  label={'My Trades'}
-                  handleClick={() => router.push('/myTrades')}
-                  dataTest={'myTrades'}
-                />
-                <NavigationItem
-                  icon={derIcon}
-                  label={'My DERs'}
-                  handleClick={() => router.push('/myDers')}
-                  dataTest={'myDers'}
-                />
-              </>
-            )}
+            <>
+              <NavigationItem
+                icon={credIcon}
+                label={'My Credentials'}
+                handleClick={() => router.push('/myCredentials')}
+                dataTest={'myCredintial'}
+              />
+              <NavigationItem
+                icon={tradeIcon}
+                label={'My Trades'}
+                handleClick={() => router.push('/myTrades')}
+                dataTest={'myTrades'}
+              />
+              <NavigationItem
+                icon={derIcon}
+                label={'My DERs'}
+                handleClick={() => router.push('/myDers')}
+                dataTest={'myDers'}
+              />
+            </>
             <NavigationItem
               icon={logoutIcon}
               label={t.logout}

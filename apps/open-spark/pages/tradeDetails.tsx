@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Router from 'next/router'
 import Cookies from 'js-cookie'
 import axios from '@services/axios'
@@ -43,7 +43,7 @@ const TradeDetails = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [tradeDetails, setTradeDetails] = useState<TradeMetaData>()
 
-  const { role } = useSelector((state: AuthRootState) => state.auth)
+  const [role, setRole] = useState<ROLE>(ROLE.BUY)
 
   const getTradeDetailsById = async (id: string) => {
     const requestOptions = {
@@ -55,7 +55,7 @@ const TradeDetails = () => {
     setIsLoading(true)
 
     await axios
-      .get(`${strapiUrl}${ROUTE_TYPE[role!]}/trade?id=${id}`, requestOptions)
+      .get(`${strapiUrl}${ROUTE_TYPE[ROLE.GENERAL]}/trade?id=${id}`, requestOptions)
       .then(response => {
         const result = response.data
         const tags: string[] = []
@@ -122,12 +122,12 @@ const TradeDetails = () => {
           data={[
             {
               name: tradeDetails?.name!,
-              label: role === ROLE.CONSUMER || role === ROLE.ADMIN ? 'Energy Bought' : 'Energy Sold',
+              label: role === ROLE.BUY ? 'Energy Bought' : 'Energy Sold',
               value: tradeDetails?.quantity! || '0',
               disabled: true,
               symbol: '(KWh)'
             },
-            ...(role !== ROLE.CONSUMER && role !== ROLE.ADMIN
+            ...(role !== ROLE.BUY
               ? [
                   {
                     name: tradeDetails?.name!,

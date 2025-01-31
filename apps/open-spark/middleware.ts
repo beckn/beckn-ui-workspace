@@ -6,22 +6,25 @@ export default function middleware(req: NextRequest) {
   const loggedin = req.cookies.get('authToken')
   const isVerified = req.cookies.get('isVerified')?.value === 'true'
   const { pathname } = req.nextUrl
-  const response = NextResponse.next()
-  response.headers.set('Cache-Control', 'no-store')
 
-  if (loggedin && !isVerified && !['/signIn', '/signUp', '/OTPVerification'].includes(pathname)) {
+  if (loggedin && !isVerified && pathname !== '/signIn' && pathname !== '/signUp' && pathname !== '/OTPVerification') {
     return NextResponse.redirect(new URL('/signIn', req.url))
   }
 
-  if (loggedin && isVerified && ['/signIn', '/signUp', '/OTPVerification'].includes(pathname)) {
+  if (loggedin && isVerified && (pathname === '/signIn' || pathname === '/signUp' || pathname === '/OTPVerification')) {
     return NextResponse.redirect(new URL('/', req.url))
   }
 
-  if (!loggedin && !['/signIn', '/signUp', '/OTPVerification'].includes(pathname)) {
-    return NextResponse.redirect(new URL('/signIn', req.url))
+  // currently not allowed to nav /welcome page once role selected, pathname !== '/welcome'
+  if (!loggedin && pathname !== '/signIn' && pathname !== '/signUp') {
+    const signInRoute = '/signIn'
+
+    return NextResponse.redirect(new URL(signInRoute, req.url))
   }
 
-  return response
+  // It's important to return a response for all paths, you might want to return `undefined` or `NextResponse.next()`
+  // for other cases to let the request continue.
+  return NextResponse.next()
 }
 
 export const config = {

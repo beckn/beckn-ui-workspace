@@ -1,7 +1,8 @@
 import { Typography } from '@beckn-ui/molecules'
 import { Box, Flex, HStack, Image } from '@chakra-ui/react'
 import Card from '@components/card/Card'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
+import Router from 'next/router'
 import successIcon from '@public/images/green_tick_icon.svg'
 import inProgressIcon from '@public/images/in_progress_icon.svg'
 import failedIcon from '@public/images/failed_icon.svg'
@@ -36,10 +37,10 @@ const MyTrades = () => {
   const [checked, setChecked] = useState<boolean>(false)
   const [tradeList, setTradeList] = useState<TradeMetaData[]>([])
   const [isLoading, setIsLoading] = useState(false)
+  const [role, setRole] = useState<ROLE>()
 
   const dispatch = useDispatch()
   const router = useRouter()
-  const { role } = useSelector((state: AuthRootState) => state.auth)
 
   const getAllTradeList = async () => {
     const requestOptions = {
@@ -51,7 +52,7 @@ const MyTrades = () => {
     setIsLoading(true)
 
     await axios
-      .get(`${strapiUrl}${ROUTE_TYPE[role!]}/trade`, requestOptions)
+      .get(`${strapiUrl}${ROUTE_TYPE[ROLE.GENERAL]}/trade`, requestOptions)
       .then(response => {
         const result = response.data
         if (result.length === 0) {
@@ -128,7 +129,7 @@ const MyTrades = () => {
                       fontWeight="600"
                       dataTest={'trade_quantity'}
                     />
-                    {role !== ROLE.CONSUMER && (
+                    {role !== ROLE.BUY && (
                       <Typography
                         text={`${currencyMap.INR}${trade.price}`}
                         dataTest={'trade_price'}

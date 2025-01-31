@@ -68,6 +68,8 @@ const en: { [key: string]: string } = {
   errorName: 'Name is required',
   errorNumber: 'Mobile Number is required',
   errorNumber2: 'Invalid Mobile Number',
-  errorAddress: 'Complete Address is required'
+  errorAddress: 'Complete Address is required',
+  errorName2: 'Name can only contain letters and spaces',
+  errorName3: 'Name must contain at least 3 characters'
 }
 export default en

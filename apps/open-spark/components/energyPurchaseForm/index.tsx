@@ -27,6 +27,7 @@ import { testIds } from '@shared/dataTestIds'
 
 interface EnergyPurchaseFormProps {
   preferenceType: string
+  role: ROLE
 }
 
 const checkboxOptions = [
@@ -47,8 +48,7 @@ const checkboxStyles = {
   }
 }
 
-export default function EnergyPurchaseForm({ preferenceType }: EnergyPurchaseFormProps) {
-  const { role } = useSelector((state: RootState) => state.auth)
+export default function EnergyPurchaseForm({ preferenceType, role }: EnergyPurchaseFormProps) {
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
   const bearerToken = Cookies.get('authToken') || ''
   const router = useRouter()
@@ -85,7 +85,7 @@ export default function EnergyPurchaseForm({ preferenceType }: EnergyPurchaseFor
     e.preventDefault()
 
     const payload =
-      role === ROLE.CONSUMER
+      role === ROLE.BUY
         ? {
             quantity: energyUnits,
             unit: 'kwh',
@@ -108,7 +108,7 @@ export default function EnergyPurchaseForm({ preferenceType }: EnergyPurchaseFor
 
     try {
       if (tradeId) {
-        const endpoint = role === ROLE.CONSUMER ? `trade/${tradeId}` : `trade-pref`
+        const endpoint = role === ROLE.BUY ? `trade/${tradeId}` : `trade-pref`
         const response = await axios.put(`${strapiUrl}${ROUTE_TYPE[role!]}/${endpoint}`, payload, {
           headers: { Authorization: `Bearer ${bearerToken}` },
           withCredentials: true
@@ -214,7 +214,7 @@ export default function EnergyPurchaseForm({ preferenceType }: EnergyPurchaseFor
         <Divider />
 
         {/* Price Per Unit Input */}
-        {role !== ROLE.CONSUMER && (
+        {role !== ROLE.BUY && (
           <FormControl>
             <HStack mb={2}>
               <FormLabel
