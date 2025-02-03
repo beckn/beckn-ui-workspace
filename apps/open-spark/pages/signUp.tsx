@@ -1,10 +1,16 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Router from 'next/router'
 import { useLanguage } from '@hooks/useLanguage'
 import SignUp from '@components/signUp/signUp'
+import Cookies from 'js-cookie'
 
 const Register = () => {
   const { t } = useLanguage()
+
+  useEffect(() => {
+    Cookies.remove('authToken')
+    Cookies.remove('isVerified')
+  }, [])
 
   return <SignUp />
 }

@@ -1,3 +1,4 @@
+import { ROLE, ROUTE_TYPE } from '@lib/config'
 import Api from './api'
 
 interface DashboardMetrics {
@@ -18,22 +19,9 @@ interface DashboardApiResponse {
 
 const dashboardApi = Api.injectEndpoints({
   endpoints: build => ({
-    bppTradeDashboard: build.query<DashboardApiResponse, { startDate: string; endDate: string; credentials: string }>({
+    tradeDashboard: build.query<DashboardApiResponse, { startDate: string; endDate: string; credentials: string }>({
       query: ({ startDate, endDate, credentials }) => ({
-        url: `/beckn-trade-bpp/dashboard`,
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${credentials}`
-        },
-        params: {
-          startDate,
-          endDate
-        }
-      })
-    }),
-    bapTradeDashboard: build.query<DashboardApiResponse, { startDate: string; endDate: string; credentials: string }>({
-      query: ({ startDate, endDate, credentials }) => ({
-        url: `/beckn-trade-bap/dashboard`,
+        url: `${ROUTE_TYPE[ROLE.GENERAL]}/dashboard`,
         method: 'GET',
         headers: {
           Authorization: `Bearer ${credentials}`
@@ -47,10 +35,10 @@ const dashboardApi = Api.injectEndpoints({
   })
 })
 
-export const { useBapTradeDashboardQuery, useBppTradeDashboardQuery } = dashboardApi
+export const { useTradeDashboardQuery } = dashboardApi
 
 export const {
-  endpoints: { bppTradeDashboard, bapTradeDashboard }
+  endpoints: { tradeDashboard }
 } = dashboardApi
 
 export default dashboardApi

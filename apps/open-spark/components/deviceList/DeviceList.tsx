@@ -31,14 +31,15 @@ export default function DeviceList({ initialDevices, onDeviceChange, fetchPaired
   const [selectedDeviceIndex, setSelectedDeviceIndex] = useState<number | null>(null)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [isDeleteLoading, setIsDeleteLoading] = useState<boolean>(false)
+  const [role, setRole] = useState<ROLE>()
+
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
-  const { role } = useSelector((state: RootState) => state.auth)
   const bearerToken = Cookies.get('authToken')
 
   const handleAddDevice = async (category: string, uploadedFiles: File[]) => {
     setIsLoading(true)
     try {
-      const type = role === ROLE.PRODUCER ? 'prosumer' : 'consumer'
+      const type = role === ROLE.SELL ? 'prosumer' : 'consumer'
       const formData = new FormData()
 
       formData.append('type', type)

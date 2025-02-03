@@ -1,16 +1,23 @@
+import { feedbackActions } from '@beckn-ui/common'
 import { Typography } from '@beckn-ui/molecules'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import { Box, Button, Flex, Input } from '@chakra-ui/react'
+import { useLanguage } from '@hooks/useLanguage'
 import { useVerifyOtpMutation } from '@services/UserService'
 import React, { useEffect, useRef, useState } from 'react'
+import { useDispatch } from 'react-redux'
 import style from '../components/signIn/otp.module.css'
 
 const correctOTP = '123456'
+const numberOfDigits = 6
 
 const OTPVerification = () => {
-  const [OTP, setOTP] = useState(new Array(6).fill(''))
+  const [OTP, setOTP] = useState(new Array(numberOfDigits).fill(''))
   const [OTPError, setOTPError] = useState<string | null>(null)
   const otpBoxReference = useRef<any>([])
+
+  const dispatch = useDispatch()
+  const { t } = useLanguage()
 
   const [verifyOtp, { isLoading }] = useVerifyOtpMutation()
 
@@ -21,7 +28,7 @@ const OTPVerification = () => {
     newArr[index] = value
     setOTP(newArr)
 
-    if (value && index < 6 - 1) {
+    if (value && index < numberOfDigits - 1) {
       otpBoxReference.current[index + 1].focus()
     }
   }
@@ -30,26 +37,36 @@ const OTPVerification = () => {
     if (e.key === 'Backspace' && !e.target.value && index > 0) {
       otpBoxReference.current[index - 1].focus()
     }
-    if (e.key === 'Enter' && e.target.value && index < 6 - 1) {
+    if (e.key === 'Enter' && e.target.value && index < numberOfDigits - 1) {
       otpBoxReference.current[index + 1].focus()
     }
   }
 
-  useEffect(() => {
-    if (OTP.join('') !== '' && OTP.join('') !== correctOTP) {
-      setOTPError('❌ Wrong OTP Please Check Again')
-    } else {
-      setOTPError(null)
-    }
-  }, [OTP])
+  // useEffect(() => {
+  //   if (OTP.join('') !== '' && OTP.join('') !== correctOTP) {
+  //     setOTPError('❌ Wrong OTP Please Check Again')
+  //   } else {
+  //     setOTPError(null)
+  //   }
+  // }, [OTP])
 
   const handleVerifyOtp = async () => {
     const data = {
-      otp: Number(OTP)
+      otp: Number(OTP.join(''))
     }
 
     try {
-      await verifyOtp(data).unwrap()
+      const response = await verifyOtp(data).unwrap()
+      dispatch(
+        feedbackActions.setToastData({
+          toastData: {
+            message: t.success,
+            display: true,
+            type: 'success',
+            description: response.data.message
+          }
+        })
+      )
     } catch (error) {
       console.error('An error occurred:', error)
     }

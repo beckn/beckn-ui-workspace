@@ -5,10 +5,7 @@ import { RootState } from '@store/index'
 import React from 'react'
 import { useSelector } from 'react-redux'
 
-const EmptyCurrentTrade = () => {
-  const { role } = useSelector((state: RootState) => state.auth)
-  const emptyCurrentText = role === ROLE.CONSUMER ? '"Buy"' : '"Sell"'
-  const sellText = role === ROLE.PRODUCER ? 'sell' : 'purchase'
+const EmptyCurrentTrade = ({ text }: { text: string }) => {
   return (
     <Flex
       flexDir={'column'}
@@ -17,22 +14,15 @@ const EmptyCurrentTrade = () => {
     >
       <Box>
         <Image
-          src="/images/emptyCurrentTrade.svg"
+          src="/images/empty_trade.svg"
           data-test="empty-trade-img"
         />
       </Box>
       <Typography
-        text="No Trades Found!!"
-        fontSize="15px"
-        fontWeight="600"
-        sx={{ textAlign: 'center' }}
-        dataTest="no-trade-found"
-      />
-      <Typography
         fontSize="15px"
         fontWeight="400"
         sx={{ textAlign: 'center' }}
-        text={`Click on ${emptyCurrentText} to ${sellText} energy`}
+        text={`your data will appear here once you start ${text} energy `}
         dataTest="emptyCurrentText"
       />
     </Flex>

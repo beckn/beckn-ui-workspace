@@ -18,7 +18,8 @@ const Input: React.FC<InputProps> = ({
   dataTest,
   readOnly = false,
   rightElement,
-  customInputBlurHandler
+  customInputBlurHandler,
+  sx
 }) => {
   const theme = useTheme()
   const [isInputFocused, setIsInputFocused] = useState(false)
@@ -57,6 +58,7 @@ const Input: React.FC<InputProps> = ({
         onChange={handleChange}
         disabled={disabled}
         readOnly={readOnly}
+        sx={sx}
       />
       {isPassword && (
         <IconButton
@@ -75,7 +77,7 @@ const Input: React.FC<InputProps> = ({
       {rightElement && (
         <Box
           position="absolute"
-          right="10px"
+          right="0px"
           top="75%"
           transform="translateY(-50%)"
         >
