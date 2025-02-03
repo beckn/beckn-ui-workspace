@@ -9,7 +9,7 @@ import { AuthRootState } from '@store/auth-slice'
 import { useDispatch, useSelector } from 'react-redux'
 import { useLanguage } from '@hooks/useLanguage'
 import axios from '@services/axios'
-import { ROUTE_TYPE } from '@lib/config'
+import { ROLE, ROUTE_TYPE } from '@lib/config'
 import Cookies from 'js-cookie'
 import DragAndDropUpload from '@components/dragAndDropUpload'
 import { FiPlusCircle } from 'react-icons/fi'
@@ -39,8 +39,6 @@ const MyCredentials = () => {
 
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
 
-  const { role } = useSelector((state: AuthRootState) => state.auth)
-
   const getCredentials = async () => {
     const requestOptions = {
       method: 'GET',
@@ -48,7 +46,7 @@ const MyCredentials = () => {
       withCredentials: true
     }
 
-    const response = await axios.get(`${strapiUrl}${ROUTE_TYPE[role!]}/cred`, requestOptions)
+    const response = await axios.get(`${strapiUrl}${ROUTE_TYPE[ROLE.GENERAL]}/cred`, requestOptions)
     if (response.status === 200) {
       const result = response.data
       console.log(result)
@@ -90,7 +88,7 @@ const MyCredentials = () => {
     }
 
     axios
-      .delete(`${strapiUrl}${ROUTE_TYPE[role!]}/cred/${data.id}`, requestOptions)
+      .delete(`${strapiUrl}${ROUTE_TYPE[ROLE.GENERAL]}/cred/${data.id}`, requestOptions)
       .then(response => {
         console.log('Deleted successfully:', response.data)
         getCredentials()
@@ -123,7 +121,7 @@ const MyCredentials = () => {
     })
 
     axios
-      .post(`${strapiUrl}${ROUTE_TYPE[role!]}/upload-cred`, formData, {
+      .post(`${strapiUrl}${ROUTE_TYPE[ROLE.GENERAL]}/upload-cred`, formData, {
         headers: {
           Authorization: `Bearer ${bearerToken}`
         }
@@ -173,6 +171,7 @@ const MyCredentials = () => {
                 list={credFiles || []}
                 type="cred"
                 handleOnDelete={handleOnDelete}
+                showVerificationbatch={true}
               />
             </>
           )}

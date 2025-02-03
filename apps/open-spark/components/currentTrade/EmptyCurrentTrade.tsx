@@ -10,16 +10,17 @@ const EmptyCurrentTrade = ({ text }: { text: string }) => {
     <Flex
       flexDir={'column'}
       rowGap={'15px'}
-      mt={'20px'}
+      p={'0 2rem'}
     >
-      <Box>
-        <Image
-          src="/images/empty_trade.svg"
-          data-test="empty-trade-img"
-        />
-      </Box>
+      <Image
+        src="/images/empty_trade.svg"
+        data-test="empty-trade-img"
+        width="100px"
+        height="100px"
+        alignSelf="center"
+      />
       <Typography
-        fontSize="15px"
+        fontSize="12px"
         fontWeight="400"
         sx={{ textAlign: 'center' }}
         text={`your data will appear here once you start ${text} energy `}

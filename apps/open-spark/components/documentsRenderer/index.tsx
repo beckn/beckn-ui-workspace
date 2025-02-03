@@ -6,11 +6,14 @@ import deleteIcon from '@public/images/delete_icon.svg'
 import tickIcon from '@public/images/tick.svg'
 import { formatFileSize } from '@utils/general'
 import { testIds } from '@shared/dataTestIds'
+import VerifiedIcon from '@public/images/verified.svg'
+import UnverifiedIcon from '@public/images/unverified.svg'
 
 export interface DocumentProps {
   icon: string
   title: string
   date: Date
+  verified?: boolean
   file?: any
   data?: any
 }
@@ -18,12 +21,13 @@ export interface DocumentProps {
 interface RenderDocumentsProps {
   list: DocumentProps[]
   type: 'cred' | 'upload'
+  showVerificationbatch?: boolean
   handleOnDelete?: (index: number, document: DocumentProps, type: 'cred' | 'upload') => void
   onAllComplete?: (completed: boolean) => void
 }
 
 const RenderDocuments = (props: RenderDocumentsProps) => {
-  const { list, type, handleOnDelete, onAllComplete } = props
+  const { list, type, handleOnDelete, onAllComplete, showVerificationbatch = false } = props
 
   const [progressList, setProgressList] = useState<number[]>([])
 
@@ -83,23 +87,55 @@ const RenderDocuments = (props: RenderDocumentsProps) => {
                 marginLeft="1rem"
                 width="100%"
               >
-                <Typography
-                  text={document.title}
-                  dataTest={testIds.document_title}
-                  fontWeight="600"
-                  sx={{
-                    maxWidth: '10rem',
-                    noOfLines: 2,
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'pre-wrap',
-                    overflowWrap: 'break-word'
-                  }}
-                />
-                {type === 'cred' ? (
+                <Flex
+                  flexDir={'row'}
+                  gap="0.5rem"
+                >
                   <Typography
-                    text={formatDate(document.date, "dd MMM yyyy 'at' hh:mm a")}
-                    dataTest={testIds.document_uplaod_date}
+                    text={document.title}
+                    dataTest={testIds.document_title}
+                    fontWeight="600"
+                    sx={{
+                      maxWidth: '10rem',
+                      noOfLines: 2,
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'pre-wrap',
+                      overflowWrap: 'break-word'
+                    }}
                   />
+                  {showVerificationbatch &&
+                    type === 'cred' &&
+                    (document?.verified ? (
+                      <Image
+                        src={VerifiedIcon}
+                        width={'80px'}
+                        height={'18px'}
+                      />
+                    ) : (
+                      <Image
+                        src={UnverifiedIcon}
+                        width={'80px'}
+                        height={'18px'}
+                      />
+                    ))}
+                </Flex>
+                {type === 'cred' ? (
+                  <>
+                    <Typography
+                      text={formatDate(document.date, "dd MMM yyyy 'at' hh:mm a")}
+                      dataTest={testIds.document_uplaod_date}
+                    />
+                    {showVerificationbatch && !document?.verified && (
+                      <Typography
+                        text={'Verify Credential'}
+                        sx={{
+                          textDecoration: 'underline',
+                          color: '#4498E8',
+                          cursor: 'pointer'
+                        }}
+                      />
+                    )}
+                  </>
                 ) : (
                   <>
                     <Typography

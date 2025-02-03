@@ -31,7 +31,6 @@ export default function DeviceList({ initialDevices, onDeviceChange, fetchPaired
   const [selectedDeviceIndex, setSelectedDeviceIndex] = useState<number | null>(null)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [isDeleteLoading, setIsDeleteLoading] = useState<boolean>(false)
-  const [role, setRole] = useState<ROLE>()
 
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
   const bearerToken = Cookies.get('authToken')
@@ -39,16 +38,14 @@ export default function DeviceList({ initialDevices, onDeviceChange, fetchPaired
   const handleAddDevice = async (category: string, uploadedFiles: File[]) => {
     setIsLoading(true)
     try {
-      const type = role === ROLE.SELL ? 'prosumer' : 'consumer'
       const formData = new FormData()
 
-      formData.append('type', type)
       formData.append('category', category)
       uploadedFiles.forEach(file => {
         formData.append('proof', file)
       })
 
-      const response = await axios.post(`${strapiUrl}${ROUTE_TYPE[role!]}/der`, formData, {
+      const response = await axios.post(`${strapiUrl}${ROUTE_TYPE[ROLE.GENERAL]}/der`, formData, {
         headers: {
           Authorization: `Bearer ${bearerToken}`
         },
@@ -81,7 +78,7 @@ export default function DeviceList({ initialDevices, onDeviceChange, fetchPaired
 
   const handleRemoveDevice = async (index: number) => {
     try {
-      const response = await axios.delete(`${strapiUrl}${ROUTE_TYPE[role!]}/der/${index}`, {
+      const response = await axios.delete(`${strapiUrl}${ROUTE_TYPE[ROLE.GENERAL]}/der/${index}`, {
         headers: { Authorization: `Bearer ${bearerToken}` },
         withCredentials: true
       })

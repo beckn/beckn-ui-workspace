@@ -1,15 +1,12 @@
 import { Box } from '@chakra-ui/react'
 import DeviceList from '@components/deviceList/DeviceList'
 import { ROLE, ROUTE_TYPE } from '@lib/config'
-import { RootState } from '@store/index'
 import axios from '@services/axios'
 import Cookies from 'js-cookie'
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
 
 const MyDers = () => {
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
-  const { role } = useSelector((state: RootState) => state.auth)
   const bearerToken = Cookies.get('authToken')
   const [devices, setDevices] = useState<{ id: number; name: string; paired?: boolean }[]>([])
 
@@ -21,7 +18,7 @@ const MyDers = () => {
 
   const fetchPairedData = async () => {
     try {
-      const response = await axios.get(`${strapiUrl}${ROUTE_TYPE[role!]}/der`, {
+      const response = await axios.get(`${strapiUrl}${ROUTE_TYPE[ROLE.GENERAL]}/der`, {
         headers: { Authorization: `Bearer ${bearerToken}` },
         withCredentials: true
       })
@@ -39,10 +36,11 @@ const MyDers = () => {
   }
 
   useEffect(() => {
-    if (role && bearerToken && strapiUrl) {
+    if (bearerToken && strapiUrl) {
       fetchPairedData()
     }
-  }, [role, bearerToken, strapiUrl])
+  }, [bearerToken, strapiUrl])
+
   return (
     <Box
       maxWidth={{ base: '100vw', md: '30rem', lg: '40rem' }}
