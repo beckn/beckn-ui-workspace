@@ -51,8 +51,8 @@ const Dashboard = () => {
   const [status, setStatus] = useState<string>('CLOSED')
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
   const bearerToken = Cookies.get('authToken') || ''
-  const [isTradeLodaing, setIsTradeLoading] = useState(true)
-  const [isPreffrenceLodaing, setIsPreffrenceLoading] = useState(true)
+  const [isTradeLodaing, setIsTradeLoading] = useState(false)
+  const [isPreffrenceLodaing, setIsPreffrenceLoading] = useState(false)
   const [currentTradeData, setCurrentTradeData] = useState<TradeData[]>([])
   const [currentStatusData, setCurrentStatusData] = useState<StatusItem[]>([])
   const [dashboardTotalEnergyUnitsData, setDashboardTotalEnergyUnitsData] = useState<DashboardData>({
@@ -74,17 +74,6 @@ const Dashboard = () => {
     endDate: payloadEndDate,
     credentials: bearerToken
   })
-
-  // const { data: bppDashboardData } = useBppTradeDashboardQuery(
-  //   {
-  //     startDate: payloadStartDate,
-  //     endDate: payloadEndDate,
-  //     credentials: bearerToken
-  //   },
-  //   {
-  //     skip: role !== ROLE.SELL
-  //   }
-  // )
 
   // const handleRemoveTag = (tagToRemove: string) => {
   //   setPreferencesTags(prevTags => prevTags.filter(tag => tag !== tagToRemove))
@@ -173,11 +162,11 @@ const Dashboard = () => {
 
   useEffect(() => {
     getmarketStatus()
-    if (role === ROLE.BUY) {
-      fetchLastTradeData()
-    } else if (role === ROLE.SELL) {
-      fetchMyPreference()
-    }
+    // if (role === ROLE.BUY) {
+    //   fetchLastTradeData()
+    // } else if (role === ROLE.SELL) {
+    //   fetchMyPreference()
+    // }
   }, [role])
 
   useEffect(() => {
@@ -285,7 +274,7 @@ const Dashboard = () => {
                 <Grid
                   templateColumns={{ base: 'repeat(2, 1fr)', md: 'repeat(2, 1fr)' }}
                   width={{ base: '100%', md: '80%', lg: '100%' }}
-                  marginBottom={'2rem'}
+                  marginBottom={'1rem'}
                 >
                   {[
                     { label: 'Total Energy Consumed', description: `${+totalEnergyUnits.toFixed(2)} (KWh)` },
@@ -340,7 +329,7 @@ const Dashboard = () => {
                       />
                       <QuestionOutlineIcon />
                     </HStack>
-                    {role === ROLE.SELL && currentTradeData.length !== 0 && (
+                    {role === ROLE.SELL && currentTradeData.length !== 0 && status !== 'CLOSED' && (
                       <LiaPenSolid
                         data-test={testIds.current_trade_edit_btn}
                         cursor={'pointer'}
@@ -360,7 +349,7 @@ const Dashboard = () => {
                         }
                       />
                     )}
-                    {role === ROLE.BUY && currentTradeData.length !== 0 && (
+                    {role === ROLE.BUY && currentTradeData.length !== 0 && status !== 'CLOSED' && (
                       <LiaPenSolid
                         data-test={testIds.current_trade_edit_btn}
                         cursor={'pointer'}
@@ -392,56 +381,62 @@ const Dashboard = () => {
                   </Box>
                 ) : (
                   <>
-                    <CurrentTrade
-                      data={[
-                        {
-                          name: 'energyToBuy',
-                          label: `Energy to ${role === ROLE.BUY ? 'Buy' : 'Sell'}`,
-                          value: (currentTradeData[0]?.quantity ?? 0).toString(),
-                          symbol: '(KWh)',
-                          disabled: true
-                        },
-                        ...(role !== ROLE.BUY
-                          ? [
-                              {
-                                name: 'priceFixed',
-                                label: 'Price Fixed',
-                                value: (currentTradeData[0]?.price ?? 0).toString(),
-                                symbol: '₹/units',
-                                disabled: true
-                              }
-                            ]
-                          : [])
-                      ]}
-                    />
-
-                    {preferencesTags.length > 0 && (
-                      <Box>
-                        <Typography
-                          dataTest={testIds.preferencesTags_text}
-                          text="Preferences"
-                          fontSize="14px"
-                          fontWeight="600"
-                          sx={{ marginBottom: '10px' }}
+                    {currentTradeData.length === 0 ? (
+                      <EmptyCurrentTrade text={role === ROLE.BUY ? 'buying' : 'selling'} />
+                    ) : (
+                      <>
+                        <CurrentTrade
+                          data={[
+                            {
+                              name: 'energyToBuy',
+                              label: `Energy to ${role === ROLE.BUY ? 'Buy' : 'Sell'}`,
+                              value: (currentTradeData[0]?.quantity ?? 0).toString(),
+                              symbol: '(KWh)',
+                              disabled: true
+                            },
+                            ...(role !== ROLE.BUY
+                              ? [
+                                  {
+                                    name: 'priceFixed',
+                                    label: 'Price Fixed',
+                                    value: (currentTradeData[0]?.price ?? 0).toString(),
+                                    symbol: '₹/units',
+                                    disabled: true
+                                  }
+                                ]
+                              : [])
+                          ]}
                         />
-                        <Flex
-                          gap={'10px'}
-                          flexWrap={'wrap'}
-                        >
-                          {preferencesTags.map((tag, index) => (
-                            <Tag
-                              key={index}
-                              borderRadius="md"
-                              variant="outline"
-                              colorScheme="gray"
-                              padding={'4px 8px'}
+
+                        {preferencesTags.length > 0 && (
+                          <Box>
+                            <Typography
+                              dataTest={testIds.preferencesTags_text}
+                              text="Preferences"
+                              fontSize="14px"
+                              fontWeight="600"
+                              sx={{ marginBottom: '10px' }}
+                            />
+                            <Flex
+                              gap={'10px'}
+                              flexWrap={'wrap'}
                             >
-                              <TagLabel data-test={testIds.preferencesTags_tags_label}>{tag}</TagLabel>
-                              {/* <TagCloseButton onClick={() => handleRemoveTag(tag)} /> */}
-                            </Tag>
-                          ))}
-                        </Flex>
-                      </Box>
+                              {preferencesTags.map((tag, index) => (
+                                <Tag
+                                  key={index}
+                                  borderRadius="md"
+                                  variant="outline"
+                                  colorScheme="gray"
+                                  padding={'4px 8px'}
+                                >
+                                  <TagLabel data-test={testIds.preferencesTags_tags_label}>{tag}</TagLabel>
+                                  {/* <TagCloseButton onClick={() => handleRemoveTag(tag)} /> */}
+                                </Tag>
+                              ))}
+                            </Flex>
+                          </Box>
+                        )}
+                      </>
                     )}
                   </>
                 )}
@@ -450,6 +445,9 @@ const Dashboard = () => {
                 disabled={status === 'CLOSED'}
                 children={role === ROLE.BUY ? 'Buy' : 'Sell'}
                 handleClick={() => router.push(role === ROLE.SELL ? '/sellingPreference' : '/buyingPreference')}
+                sx={{
+                  marginTop: '1rem'
+                }}
                 dataTest="buy-preference"
               />
             </Flex>
