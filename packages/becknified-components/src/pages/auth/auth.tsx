@@ -16,7 +16,8 @@ const Auth: React.FC<AuthProps> = ({ schema, isLoading, dataTestForm, customComp
     chooseAuthType,
     handleAccountType,
     showTermsCheckbox = false,
-    termsCheckboxProps
+    termsCheckboxProps,
+    formName
   } = schema
 
   const [accountType, setAccountType] = useState<string>('')
@@ -65,6 +66,32 @@ const Auth: React.FC<AuthProps> = ({ schema, isLoading, dataTestForm, customComp
             )}
           </Flex>
         </Box>
+      )}
+      {formName && (
+        <Flex
+          flexDir={'row'}
+          width="100%"
+          whiteSpace="nowrap"
+          alignItems="center"
+          gap="0.5rem"
+          marginTop={'1rem'}
+        >
+          <Box
+            border={'1px solid #E2E2E2'}
+            width="100%"
+            height="0%"
+          />
+          <Typography
+            text={formName}
+            fontSize="10px"
+            color="#7C7C7C"
+          />
+          <Box
+            border={'1px solid #E2E2E2'}
+            width="100%"
+            height="0%"
+          />
+        </Flex>
       )}
       <Flex
         flexDirection={'column'}

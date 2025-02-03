@@ -58,7 +58,7 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
       <Head>
         <title>Open Spark Trade</title>
       </Head>
-      <div className={`${styles.container} ${styles.minHeight}`}>
+      <div className={`${styles.container} ${styles.minHeight} ${signIn || isSignUp ? styles.bgImage : ''}`}>
         <NextNProgress height={7} />
         <Header />
         {!geoLocationSearchPageVisible ? (

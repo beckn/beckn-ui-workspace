@@ -37,6 +37,12 @@
   margin-top: 95px;
 }
 
-.main.isHome{
-  margin-top:30px;
+.main.isHome {
+  margin-top: 30px;
+}
+
+.bgImage {
+  background-image: url('/images/login_bg_img.svg');
+  background-size: cover;
+  background-position: center;
 }
