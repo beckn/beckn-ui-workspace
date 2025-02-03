@@ -2,14 +2,15 @@ import React, { useState, useMemo } from 'react'
 import { BecknAuth } from '@beckn-ui/becknified-components'
 import { FormErrors, SignInFormProps } from '@beckn-ui/common/lib/types'
 import { signInValidateForm } from '@beckn-ui/common'
-import openSpark from '@public/images/openSparkLogo.svg'
+import openSpark from '@public/images/admin_logo.svg'
 import { useLanguage } from '@hooks/useLanguage'
-import { Box } from '@chakra-ui/react'
+import { Box, Flex } from '@chakra-ui/react'
 import Router from 'next/router'
 import { useBapTradeLoginMutation, useBppTradeLoginMutation } from '@services/UserService'
 import { useDispatch, useSelector } from 'react-redux'
 import { AuthRootState, setRole } from '@store/auth-slice'
 import { ROLE } from '@lib/config'
+import { Typography } from '@beckn-ui/molecules'
 
 const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
   const [formData, setFormData] = useState<SignInFormProps>(initialFormData)
@@ -72,13 +73,20 @@ const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
   }
 
   return (
-    <Box>
+    <Box
+      backgroundColor={'#ffffff'}
+      marginTop="6rem"
+      p={'1rem 1rem'}
+      borderRadius={'4px'}
+      position="relative"
+    >
       <BecknAuth
         schema={{
           logo: {
             src: openSpark,
             alt: 'openSpark-logo'
           },
+          formName: 'Admin Login',
           buttons: [
             {
               text: t.signIn,
