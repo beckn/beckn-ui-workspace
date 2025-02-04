@@ -4,7 +4,6 @@ import { Button, GenericDropdown, Input, Loader, Typography } from '@beckn-ui/mo
 import Styles from './auth.module.css'
 import { AuthProps } from './auth.types'
 import AuthDivider from './authDivider'
-import greenTick from '../../../public/images/green-tick.svg'
 
 const Auth: React.FC<AuthProps> = ({ schema, isLoading, dataTestForm, customComponent }) => {
   const {
@@ -16,7 +15,8 @@ const Auth: React.FC<AuthProps> = ({ schema, isLoading, dataTestForm, customComp
     chooseAuthType,
     handleAccountType,
     showTermsCheckbox = false,
-    termsCheckboxProps
+    termsCheckboxProps,
+    formName
   } = schema
 
   const [accountType, setAccountType] = useState<string>('')
@@ -38,7 +38,7 @@ const Auth: React.FC<AuthProps> = ({ schema, isLoading, dataTestForm, customComp
     <Box
       className={Styles.main_container}
       display="flex"
-      marginTop={{ base: '10px', md: '60px', lg: '70px' }}
+      marginTop={{ base: '10px', md: '10px', lg: '10px' }}
     >
       {logo && logo.src && (
         <Box width={'100%'}>
@@ -48,6 +48,9 @@ const Auth: React.FC<AuthProps> = ({ schema, isLoading, dataTestForm, customComp
               src={logo.src}
               alt={logo.alt}
               pt="15px"
+              style={{
+                width: '100%'
+              }}
             />
             {logo?.description && (
               <Typography
@@ -65,6 +68,32 @@ const Auth: React.FC<AuthProps> = ({ schema, isLoading, dataTestForm, customComp
             )}
           </Flex>
         </Box>
+      )}
+      {formName && (
+        <Flex
+          flexDir={'row'}
+          width="100%"
+          whiteSpace="nowrap"
+          alignItems="center"
+          gap="0.5rem"
+          marginTop={'1rem'}
+        >
+          <Box
+            border={'1px solid #E2E2E2'}
+            width="100%"
+            height="0%"
+          />
+          <Typography
+            text={formName}
+            fontSize="10px"
+            color="#7C7C7C"
+          />
+          <Box
+            border={'1px solid #E2E2E2'}
+            width="100%"
+            height="0%"
+          />
+        </Flex>
       )}
       <Flex
         flexDirection={'column'}
@@ -93,18 +122,6 @@ const Auth: React.FC<AuthProps> = ({ schema, isLoading, dataTestForm, customComp
                   src={authType.src}
                   alt={authType.alt}
                 />
-                {accountType === authType.id && (
-                  <Image
-                    src={greenTick}
-                    style={{
-                      position: 'absolute',
-                      bottom: '-14px',
-                      left: '2.6rem',
-                      width: '26px',
-                      backgroundColor: '#fff'
-                    }}
-                  />
-                )}
               </Box>
             ))}
           </Flex>
@@ -115,7 +132,7 @@ const Auth: React.FC<AuthProps> = ({ schema, isLoading, dataTestForm, customComp
         >
           <Box
             className={Styles.signin_container}
-            pt="40px"
+            pt="30px"
           >
             <Box mt="10px">
               {inputs.map((singleInput, index) => {

@@ -17,30 +17,9 @@ export interface RegisterRequest {
 
 const extendedAuthApi = Api.injectEndpoints({
   endpoints: build => ({
-    bapTradeLogin: build.mutation<SignInResponse, SignInRequest>({
+    login: build.mutation<SignInResponse, SignInRequest>({
       query: credentials => ({
-        url: '/beckn-trade-bap/login',
-        method: 'POST',
-        body: credentials
-      })
-    }),
-    bppTradeLogin: build.mutation<SignInResponse, SignInRequest>({
-      query: credentials => ({
-        url: '/beckn-trade-bpp/login',
-        method: 'POST',
-        body: credentials
-      })
-    }),
-    bapTradeRegister: build.mutation<SignInResponse, RegisterRequest>({
-      query: credentials => ({
-        url: '/beckn-trade-bap/signup',
-        method: 'POST',
-        body: credentials
-      })
-    }),
-    bppTradeRegister: build.mutation<SignInResponse, RegisterRequest>({
-      query: credentials => ({
-        url: '/beckn-trade-bpp/signup',
+        url: '/beckn-energy-admin/login',
         method: 'POST',
         body: credentials
       })
@@ -48,15 +27,10 @@ const extendedAuthApi = Api.injectEndpoints({
   })
 })
 
-export const {
-  useBapTradeLoginMutation,
-  useBppTradeLoginMutation,
-  useBapTradeRegisterMutation,
-  useBppTradeRegisterMutation
-} = extendedAuthApi
+export const { useLoginMutation } = extendedAuthApi
 
 export const {
-  endpoints: { bapTradeLogin, bppTradeLogin, bapTradeRegister, bppTradeRegister }
+  endpoints: { login }
 } = extendedAuthApi
 
 export default extendedAuthApi
