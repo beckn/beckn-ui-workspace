@@ -401,7 +401,14 @@ const Dashboard = () => {
                 ) : (
                   <>
                     {currentTradeData.length === 0 ? (
-                      <EmptyCurrentTrade text={role === ROLE.BUY ? 'buying' : 'selling'} />
+                      <EmptyCurrentTrade
+                        text={
+                          role === ROLE.BUY
+                            ? 'your data will appear here once you start buying energy'
+                            : 'your data will appear here once you start selling energy'
+                        }
+                        src={'/images/empty_trade.svg'}
+                      />
                     ) : (
                       <>
                         <CurrentTrade

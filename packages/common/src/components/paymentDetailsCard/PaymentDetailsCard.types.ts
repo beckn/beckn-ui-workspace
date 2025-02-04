@@ -4,9 +4,10 @@ export interface PaymentMethod {
   paymentMethod?: string
   paymentMethodNet?: string
   img?: string
-  category: 'Credit & Debit Cards' | 'UPI' | 'Other'
+  category: 'Credit & Debit Cards' | 'UPI' | 'Other' | 'Select Bank'
   disabled?: boolean
   dataTest?: string
+  paymentDescription?: string
 }
 
 export interface PaymentDetailsCardProps extends TranslationProps {

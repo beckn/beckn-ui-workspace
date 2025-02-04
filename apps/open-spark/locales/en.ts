@@ -70,6 +70,12 @@ const en: { [key: string]: string } = {
   errorNumber2: 'Invalid Mobile Number',
   errorAddress: 'Complete Address is required',
   errorName2: 'Name can only contain letters and spaces',
-  errorName3: 'Name must contain at least 3 characters'
+  errorName3: 'Name must contain at least 3 characters',
+  cardNumber: '**** **** **** 1234',
+  cashOnDelivery: 'Cash on Delivery',
+  netBanking: ' Net Banking',
+  procced: 'Proceed',
+  confirmOrder: 'Proceed',
+  errorAmount: 'Enter valid amount'
 }
 export default en

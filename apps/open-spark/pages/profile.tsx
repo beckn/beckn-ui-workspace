@@ -11,6 +11,7 @@ import { testIds } from '@shared/dataTestIds'
 import credIcon from '@public/images/cred_icon.svg'
 import tradeIcon from '@public/images/trade_icon.svg'
 import derIcon from '@public/images/der_icon.svg'
+import fundsIcon from '@public/images/funds.svg'
 import logoutIcon from '@public/images/logOutIcon.svg'
 import NavigationItem from '@components/navigationItem'
 import { setProfileEditable, UserRootState } from '@store/user-slice'
@@ -206,6 +207,12 @@ const ProfilePage = () => {
                 label={'My DERs'}
                 handleClick={() => router.push('/myDers')}
                 dataTest={'myDers'}
+              />
+              <NavigationItem
+                icon={fundsIcon}
+                label={'My Funds'}
+                handleClick={() => router.push('/myFunds')}
+                dataTest={'myFunds'}
               />
             </>
             <NavigationItem

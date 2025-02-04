@@ -2,8 +2,16 @@ type PathnameObjectType = Record<string, string>
 
 // -------------------------------- Top Header constants --------------------------------
 const appLogoBlackList = ['/signIn', '/signUp']
-const homeIconBlackList = ['/', '/signIn', '/', '/myRides', '/profile', '/signUp', '/OTPVerification']
-const menuIconWhiteList = ['/', '/profile', '/myRides', '/buyingPreference', '/sellingPreference', '/myDers']
+const homeIconBlackList = ['/', '/signIn', '/', '/profile', '/signUp', '/OTPVerification']
+const menuIconWhiteList = [
+  '/',
+  '/profile',
+  '/myRides',
+  '/buyingPreference',
+  '/sellingPreference',
+  '/myDers',
+  '/myFunds'
+]
 const topHeaderBlackList: string[] = []
 const languageIconWhiteList: string[] = []
 
@@ -21,7 +29,8 @@ const headerNames: PathnameObjectType = {
   '/sellingPreference': 'Selling Preferences',
   '/myDers': 'My DERs',
   '/tradeDetails': 'No. of Units Sold',
-  '/OTPVerification': 'Verify Yourself'
+  '/OTPVerification': 'Verify Yourself',
+  '/myFunds': 'My Funds'
 }
 
 const headerFrenchNames: PathnameObjectType = {
@@ -41,7 +50,8 @@ const headerBlackList = [
   '/sellingPreference',
   '/myDers',
   '/tradeDetails',
-  '/OTPVerification'
+  '/OTPVerification',
+  '/myFunds'
 ]
 
 const bottomHeaderBlackList = ['/orderConfirmation', '/', '/feedback']
