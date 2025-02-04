@@ -1,6 +1,6 @@
 import React, { ReactElement, ReactNode, useState } from 'react'
 import { Box, Card, CardBody, Divider, Flex, Image } from '@chakra-ui/react'
-import crossIcon from '@public/images/Indicator.svg'
+import crossIcon from '@public/images/crossIcon.svg'
 
 interface CancelBookingProps {
   title: string | ReactElement
