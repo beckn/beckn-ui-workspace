@@ -5,7 +5,7 @@ import { RootState } from '@store/index'
 import React from 'react'
 import { useSelector } from 'react-redux'
 
-const EmptyCurrentTrade = ({ text }: { text: string }) => {
+const EmptyCurrentTrade = ({ text, src }: { text: string; src: string }) => {
   return (
     <Flex
       flexDir={'column'}
@@ -13,7 +13,7 @@ const EmptyCurrentTrade = ({ text }: { text: string }) => {
       p={'0 2rem'}
     >
       <Image
-        src="/images/empty_trade.svg"
+        src={src}
         data-test="empty-trade-img"
         width="100px"
         height="100px"
@@ -23,7 +23,7 @@ const EmptyCurrentTrade = ({ text }: { text: string }) => {
         fontSize="12px"
         fontWeight="400"
         sx={{ textAlign: 'center' }}
-        text={`your data will appear here once you start ${text} energy `}
+        text={text}
         dataTest="emptyCurrentText"
       />
     </Flex>
