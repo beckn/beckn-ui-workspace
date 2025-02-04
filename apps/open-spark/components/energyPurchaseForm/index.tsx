@@ -24,28 +24,12 @@ import { useRouter } from 'next/router'
 import { feedbackActions } from '@beckn-ui/common'
 import { useLanguage } from '@hooks/useLanguage'
 import { testIds } from '@shared/dataTestIds'
+import BuyPaymentModule from '@components/buyPaymentModule/BuyPaymentModule'
+import BottomModal from '@beckn-ui/common/src/components/BottomModal/BottomModalScan'
 
 interface EnergyPurchaseFormProps {
   preferenceType: string
   role: ROLE
-}
-
-const checkboxOptions = [
-  { label: 'Solar Energy', key: 'solar' },
-  { label: 'Trusted Source', key: 'trustedSource' }
-]
-
-const checkboxStyles = {
-  '& .chakra-checkbox__control': {
-    border: '1px solid #141414',
-    borderRadius: '2px',
-    backgroundColor: '#FFFFFF'
-  },
-  '& .chakra-checkbox__control[data-checked]': {
-    backgroundColor: '#4498E8',
-    color: '#FFFFFF',
-    borderRadius: '2px'
-  }
 }
 
 export default function EnergyPurchaseForm({ preferenceType, role }: EnergyPurchaseFormProps) {
@@ -55,10 +39,12 @@ export default function EnergyPurchaseForm({ preferenceType, role }: EnergyPurch
   const dispatch = useDispatch()
   const { t } = useLanguage()
 
+  const [isChecked, setIsChecked] = useState(false)
   const [tradeId, setTradeId] = useState<string>()
   const [energyUnits, setEnergyUnits] = useState<number>(0)
   const [pricePerUnit, setPricePerUnit] = useState<number>(0)
   const [preferences, setPreferences] = useState({ solar: false, trustedSource: false })
+  const [isBuyModal, setIsBuyModal] = useState(false)
 
   useEffect(() => {
     const { tradeId, quantity, price, preferencesTags } = router.query
@@ -71,15 +57,18 @@ export default function EnergyPurchaseForm({ preferenceType, role }: EnergyPurch
   }, [router.query])
 
   const handleInputChange = (setter: React.Dispatch<React.SetStateAction<number>>, value: string) => {
-    const numericValue = value.replace(/[^0-9]/g, '') // Allow only digits
+    const numericValue = value.replace(/[^0-9]/g, '')
     if (numericValue === '') {
-      setter(0) // Set to 0 if empty
+      setter(0)
     } else {
-      setter(Number(numericValue)) // Convert to number
+      setter(Number(numericValue))
     }
   }
 
-  const handleCheckboxChange = (key: string, value: boolean) => setPreferences(prev => ({ ...prev, [key]: value }))
+  // const handleCheckboxChange = (key: string, value: boolean) => setPreferences(prev => ({ ...prev, [key]: value }))
+  const handleSubmitPreferences = () => {
+    setIsBuyModal(true)
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -149,7 +138,11 @@ export default function EnergyPurchaseForm({ preferenceType, role }: EnergyPurch
     }
   }
 
-  const isFormComplete = energyUnits > 0
+  const isFormComplete = role === ROLE.BUY ? energyUnits > 0 && isChecked : energyUnits > 0 && pricePerUnit > 0
+
+  const handleCheckboxChange = (checked: boolean) => {
+    setIsChecked(checked)
+  }
 
   return (
     <Flex
@@ -162,7 +155,7 @@ export default function EnergyPurchaseForm({ preferenceType, role }: EnergyPurch
       height={'calc(100vh - 8.5rem)'}
     >
       <VStack
-        spacing={8}
+        spacing={6}
         align="stretch"
       >
         {/* Energy Units Input */}
@@ -261,44 +254,58 @@ export default function EnergyPurchaseForm({ preferenceType, role }: EnergyPurch
             <Divider mt={'20px'} />
           </FormControl>
         )}
-
-        {/* Preferences */}
-        <FormControl>
-          <FormLabel
-            fontSize="15"
+        <Text>
+          <Text
+            as={'span'}
             fontWeight="500"
-            mb={4}
-            data-test={testIds.select_preference_type}
           >
-            Select a preference to {preferenceType}
-          </FormLabel>
-          <SimpleGrid
-            columns={2}
-            spacing={4}
+            Please Note:
+          </Text>{' '}
+          Energy order will be placed as per your selected preferences. Click here to{' '}
+          <Text
+            as={'span'}
+            cursor="pointer"
+            color={'#4498E8'}
           >
-            {checkboxOptions.map(option => (
-              <Checkbox
-                key={option.key}
-                size="sm"
-                isChecked={preferences[option.key as keyof typeof preferences]}
-                onChange={e => handleCheckboxChange(option.key, e.target.checked)}
-                sx={checkboxStyles}
-                data-test={testIds.select_preference_type_checkbox}
-              >
-                {option.label}
-              </Checkbox>
-            ))}
-          </SimpleGrid>
-        </FormControl>
+            change your preferences
+          </Text>
+        </Text>
 
+        {/* payment */}
+        {role === ROLE.BUY && (
+          <BuyPaymentModule
+            isChecked={isChecked}
+            fare="₹500"
+            onChange={handleCheckboxChange}
+          />
+        )}
         {/* Submit Button */}
       </VStack>
       <BecknButton
-        children="Submit"
-        handleClick={handleSubmit}
+        children={role === ROLE.BUY ? 'Place Buy Order' : 'List for Trade'}
+        handleClick={role === ROLE.BUY ? handleSubmitPreferences : handleSubmit}
         disabled={!isFormComplete} // Button disabled if form incomplete
         dataTest={testIds.submit_preference_sell_buy_btn}
       />
+
+      <BottomModal
+        isOpen={isBuyModal}
+        onClose={() => {
+          setIsBuyModal(false)
+        }}
+        modalHeader="Alert"
+      >
+        <Box p="0 24px">
+          <Text mb="34px">
+            The trades will only be executed during market hours. Any buy or sell orders placed after the market has
+            closed will be processed when the market opens again.
+          </Text>
+          <BecknButton
+            text="Ok, I Understand"
+            handleClick={handleSubmit}
+          />
+        </Box>
+      </BottomModal>
     </Flex>
   )
 }
