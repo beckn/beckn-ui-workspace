@@ -6,6 +6,7 @@ export interface AuthProps {
       alt: string
       description?: string
     }
+    formName?: string
     chooseAuthType?: {
       id: string
       src: string
