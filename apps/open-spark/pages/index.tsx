@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { formatDate, TopSheet, useGeolocation } from '@beckn-ui/common'
 import { useLanguage } from '@hooks/useLanguage'
 import { useRouter } from 'next/router'
@@ -65,6 +65,7 @@ const Dashboard = () => {
   const [currentTime, setCurrentTime] = useState(Date.now())
 
   const totalEnergyText = role === ROLE.SELL ? 'Produced' : 'Consumption'
+  const intervalRef = useRef<NodeJS.Timeout | null>(null)
 
   const payloadStartDate = parseAndFormatDate(startDate)
   const payloadEndDate = parseAndFormatDate(endDate)
@@ -161,22 +162,40 @@ const Dashboard = () => {
   }
 
   useEffect(() => {
-    getmarketStatus()
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current)
+    }
+
+    const startPolling = () => {
+      intervalRef.current = setInterval(() => {
+        getmarketStatus()
+      }, 5000)
+    }
+    startPolling()
     // if (role === ROLE.BUY) {
     //   fetchLastTradeData()
     // } else if (role === ROLE.SELL) {
     //   fetchMyPreference()
     // }
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current)
+      }
+    }
   }, [role])
 
   useEffect(() => {
-    let interval: NodeJS.Timeout
+    let interval: NodeJS.Timeout | null = null
     if (status === 'OPEN') {
       interval = setInterval(() => {
         setCurrentTime(Date.now())
       }, 1000)
     }
-    return () => clearInterval(interval)
+    return () => {
+      if (interval) {
+        clearInterval(interval)
+      }
+    }
   }, [status])
 
   const getFormattedElapsedTime = (initialTime: string): string => {

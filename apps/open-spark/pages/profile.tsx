@@ -131,16 +131,6 @@ const ProfilePage = () => {
       })
   }
 
-  const isFormFilled = useMemo(() => {
-    const { flatNumber, street, ...restFormData } = formData
-    const { flatNumber: flatNumberError, street: streetError, ...restFormErrors } = formErrors
-
-    return (
-      Object.values(restFormData).every(value => value !== '') &&
-      Object.values(restFormErrors).every(value => value === '')
-    )
-  }, [formData, formErrors])
-
   const getInputs = () => {
     const inputs: InputProps[] = [
       {

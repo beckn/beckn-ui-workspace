@@ -6,15 +6,11 @@ export const currencyMap = {
 }
 
 export enum ROLE {
-  'ADMIN' = 'ADMIN',
-  'CONSUMER' = 'CONSUMER',
-  'PRODUCER' = 'PRODUCER'
+  'ADMIN' = 'ADMIN'
 }
 
 export const ROUTE_TYPE = {
-  ADMIN: '/beckn-trade-bap',
-  CONSUMER: '/beckn-trade-bap',
-  PRODUCER: '/beckn-trade-bpp'
+  ADMIN: '/beckn-energy-admin'
 }
 
 export const DOMAIN = 'uei:p2p_trading'
