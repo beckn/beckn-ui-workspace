@@ -8,9 +8,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { FormErrors, ProfileProps } from '@beckn-ui/common/lib/types'
 import axios from '@services/axios'
 import { testIds } from '@shared/dataTestIds'
-import credIcon from '@public/images/cred_icon.svg'
-import tradeIcon from '@public/images/trade_icon.svg'
-import derIcon from '@public/images/der_icon.svg'
 import logoutIcon from '@public/images/logOutIcon.svg'
 import NavigationItem from '@components/navigationItem'
 import { setProfileEditable, UserRootState } from '@store/user-slice'
@@ -39,9 +36,6 @@ const ProfilePage = () => {
   })
 
   const { profileEditable } = useSelector((state: UserRootState) => state.user)
-  const { role } = useSelector((state: AuthRootState) => state.auth)
-
-  const isAdmin = useRef(role === ROLE.ADMIN)
 
   useEffect(() => {
     return () => {
@@ -79,7 +73,7 @@ const ProfilePage = () => {
     setIsLoading(true)
 
     axios
-      .get(`${strapiUrl}${ROUTE_TYPE[role!]}/user-profile`, requestOptions)
+      .get(`${strapiUrl}${ROUTE_TYPE[ROLE.ADMIN]}/user-profile`, requestOptions)
       .then(response => {
         const result = response.data
         const { fullname, address, customer_id } = result
@@ -114,7 +108,7 @@ const ProfilePage = () => {
     }
 
     axios
-      .put(`${strapiUrl}${ROUTE_TYPE[role!]}/user-profile`, data, {
+      .put(`${strapiUrl}${ROUTE_TYPE[ROLE.ADMIN]}/user-profile`, data, {
         headers: { Authorization: `Bearer ${bearerToken}` }
       })
       .then(response => {
@@ -134,16 +128,6 @@ const ProfilePage = () => {
       })
   }
 
-  const isFormFilled = useMemo(() => {
-    const { flatNumber, street, ...restFormData } = formData
-    const { flatNumber: flatNumberError, street: streetError, ...restFormErrors } = formErrors
-
-    return (
-      Object.values(restFormData).every(value => value !== '') &&
-      Object.values(restFormErrors).every(value => value === '')
-    )
-  }, [formData, formErrors])
-
   const getInputs = () => {
     const inputs: InputProps[] = [
       {
@@ -159,16 +143,6 @@ const ProfilePage = () => {
       },
       {
         type: 'text',
-        name: 'customerId',
-        value: formData.customerId!,
-        handleChange: handleInputChange,
-        label: t.formCustomerId,
-        error: formErrors.customerId,
-        dataTest: testIds.profile_customerId,
-        disabled: true
-      },
-      {
-        type: 'text',
         name: 'address',
         value: formData.address!,
         handleChange: handleInputChange,
@@ -179,9 +153,6 @@ const ProfilePage = () => {
         customInputBlurHandler: updateProfile
       }
     ]
-    if (isAdmin.current) {
-      inputs.splice(1, 1)
-    }
 
     return inputs
   }
@@ -204,28 +175,6 @@ const ProfilePage = () => {
         isLoading={isLoading}
         customComponent={
           <Box marginTop={'-1.8rem'}>
-            {!isAdmin.current && (
-              <>
-                <NavigationItem
-                  icon={credIcon}
-                  label={'My Credentials'}
-                  handleClick={() => router.push('/myCredentials')}
-                  dataTest={'myCredintial'}
-                />
-                <NavigationItem
-                  icon={tradeIcon}
-                  label={'My Trades'}
-                  handleClick={() => router.push('/myTrades')}
-                  dataTest={'myTrades'}
-                />
-                <NavigationItem
-                  icon={derIcon}
-                  label={'My DERs'}
-                  handleClick={() => router.push('/myDers')}
-                  dataTest={'myDers'}
-                />
-              </>
-            )}
             <NavigationItem
               icon={logoutIcon}
               label={t.logout}

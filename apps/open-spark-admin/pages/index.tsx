@@ -7,13 +7,15 @@ import NavIcon from '@public/images/nav_icon.svg'
 import profileIcon from '@public/images/user_profile.svg'
 import { useLanguage } from '@hooks/useLanguage'
 import axios from '@services/axios'
-import { ROUTE_TYPE } from '@lib/config'
+import { ROLE, ROUTE_TYPE } from '@lib/config'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@store/index'
 import Cookies from 'js-cookie'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import { setTradeExecutionProcessed, UserRootState } from '@store/user-slice'
 import { testIds } from '@shared/dataTestIds'
+import OpenIcon from '@public/images/open.svg'
+import CloseIcon from '@public/images/close.svg'
 
 interface PendingTrades {
   id: number
@@ -29,11 +31,13 @@ const LockDemand = () => {
 
   const [items, setItems] = useState<PendingTrades[]>([])
   // const [isLockDemandLoading, setIsLockDemandLoading] = useState<boolean>(false)
+  const [status, setStatus] = useState<string>('CLOSED')
+  const [startTime, setStartTime] = useState<string>()
+  const [currentTime, setCurrentTime] = useState(Date.now())
 
   const { t } = useLanguage()
   const router = useRouter()
   const dispatch = useDispatch()
-  const { role } = useSelector((state: RootState) => state.auth)
   const { tradeExecutionProcessed } = useSelector((state: UserRootState) => state.user)
 
   const {
@@ -44,7 +48,7 @@ const LockDemand = () => {
 
   const fetchPendingTrades = async () => {
     try {
-      const response = await axios.get(`${strapiUrl}${ROUTE_TYPE[role!]}/get-pending-trades`, {
+      const response = await axios.get(`${strapiUrl}${ROUTE_TYPE[ROLE.ADMIN]}/get-pending-trades`, {
         headers: { Authorization: `Bearer ${bearerToken}` },
         withCredentials: true
       })
@@ -65,7 +69,18 @@ const LockDemand = () => {
     }
   }
 
+  const getmarketStatus = async () => {
+    const response = await axios.get(`${strapiUrl}/api/market-status`, {
+      withCredentials: true
+    })
+
+    const result = response.data.data.attributes
+    setStatus(result.status)
+    setStartTime(result.updatedAt)
+  }
+
   useEffect(() => {
+    getmarketStatus()
     fetchPendingTrades()
   }, [])
 
@@ -74,7 +89,7 @@ const LockDemand = () => {
 
     axios
       .post(
-        `${strapiUrl}${ROUTE_TYPE[role!]}/start-trade`,
+        `${strapiUrl}${ROUTE_TYPE[ROLE.ADMIN]}/start-trade`,
         {},
         {
           headers: {
@@ -104,6 +119,54 @@ const LockDemand = () => {
       })
   }
 
+  useEffect(() => {
+    let interval: NodeJS.Timeout | null = null
+    if (status === 'OPEN') {
+      interval = setInterval(() => {
+        setCurrentTime(Date.now())
+      }, 1000)
+    }
+    return () => {
+      if (interval) {
+        clearInterval(interval)
+      }
+    }
+  }, [status])
+
+  const getFormattedElapsedTime = (initialTime: string): string => {
+    if (status === 'CLOSED' || !initialTime) return '00h : 00m : 00s'
+    const startTime = new Date(initialTime).getTime()
+    const elapsedTime = Math.floor((Date.now() - startTime) / 1000)
+
+    const hrs = Math.floor(elapsedTime / 3600)
+    const mins = Math.floor((elapsedTime % 3600) / 60)
+    const secs = elapsedTime % 60
+
+    const formattedHrs = formatDate(new Date(0, 0, 0, hrs), 'HH')
+    const formattedMins = formatDate(new Date(0, 0, 0, 0, mins), 'mm')
+    const formattedSecs = formatDate(new Date(0, 0, 0, 0, 0, secs), 'ss')
+
+    return `${formattedHrs}h : ${formattedMins}m : ${formattedSecs}s`
+  }
+
+  const handleUpdateMarketStatus = () => {
+    const data = { status: status === 'OPEN' ? 'CLOSED' : 'OPEN' }
+
+    axios
+      .put(`${strapiUrl}/beckn-energy-admin/market-status`, data, {
+        headers: {
+          Authorization: `Bearer ${bearerToken}`
+        }
+      })
+      .then(response => {
+        console.log('Market status updated successfully:', response.data)
+        getmarketStatus()
+      })
+      .catch(error => {
+        console.error('Error while updating market status:', error)
+      })
+  }
+
   return (
     <>
       <TopSheet
@@ -116,17 +179,51 @@ const LockDemand = () => {
           handleClick: () => router.push('/profile')
         }}
       />
-
       <Box
         maxWidth={{ base: '100vw', md: '30rem', lg: '40rem' }}
-        margin="calc(0rem + 68px) auto auto auto"
+        margin="calc(0rem + 90px) auto auto auto"
         backgroundColor="white"
-        height={'calc(100vh - 92px)'}
+        height={'calc(100vh - 120px)'}
       >
+        <Flex gap="1rem">
+          <BecknButton
+            text="Open Market"
+            disabled={status === 'OPEN'}
+            handleClick={handleUpdateMarketStatus}
+          />
+          <BecknButton
+            text="Close Market"
+            disabled={status === 'CLOSED'}
+            handleClick={handleUpdateMarketStatus}
+          />
+        </Flex>
+        <Flex
+          flexDirection={'row'}
+          justifyContent={'space-around'}
+          backgroundColor={'#4498E8'}
+          borderRadius="4px"
+          margin={'14px 0'}
+        >
+          <Typography
+            text={'Market Time'}
+            color={'#ffffff'}
+          />
+          <Typography
+            text={getFormattedElapsedTime(startTime!)}
+            color={'#ffffff'}
+          />
+          <Flex gap={'4px'}>
+            <Image src={status == 'OPEN' ? OpenIcon : CloseIcon} />
+            <Typography
+              text={status}
+              color={'#ffffff'}
+            />
+          </Flex>
+        </Flex>
         <Flex
           flexDirection={'column'}
           justifyContent={'space-between'}
-          height="100%"
+          height={'calc(100vh - 226px)'}
         >
           <Box>
             <Typography
@@ -134,6 +231,7 @@ const LockDemand = () => {
               text="Total Aggregated demand"
               fontWeight="600"
               fontSize="16px"
+              color="#4A4A4A"
             />
 
             <Box
