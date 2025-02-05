@@ -216,7 +216,7 @@ const Dashboard = () => {
 
     return `${formattedHrs}h : ${formattedMins}m : ${formattedSecs}s`
   }
-  console.log(isLoading)
+
   return (
     <>
       <TopSheet
@@ -335,7 +335,7 @@ const Dashboard = () => {
 
                             <Typography
                               text={data.description}
-                              fontSize={'18px'}
+                              fontSize={'16px'}
                               fontWeight={'600'}
                             />
                           </SkeletonText>

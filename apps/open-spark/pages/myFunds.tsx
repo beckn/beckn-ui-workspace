@@ -13,23 +13,43 @@ import { formatDate } from '@beckn-ui/common'
 import Pagination from '@components/pagination/pagination'
 import EmptyCurrentTrade from '@components/currentTrade/EmptyCurrentTrade'
 import { useRouter } from 'next/router'
+import SelectDate from '@components/dateRangePicker/SelectDate'
+import { parseAndFormatDate } from '@utils/parsedFormatDate-utils'
+
+interface TransactionMeta {
+  transactionType: 'ADD_FUND' | 'WITHDRAW_FUND' | 'SELLORDER' | 'BUYORDER'
+  name: string
+  date: string
+  amount: number
+}
+
+const TransactionMap = {
+  ADD_FUND: 'Deposit',
+  WITHDRAW_FUND: 'Withdraw',
+  SELLORDER: 'Sell Order',
+  BUYORDER: 'Buy Order'
+}
+
+enum TransactionType {
+  ADD_FUND = 'ADD_FUND',
+  WITHDRAW_FUND = 'WITHDRAW_FUND',
+  SELLORDER = 'SELLORDER',
+  BUYORDER = 'BUYORDER'
+}
 
 const MyFunds = () => {
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
   const bearerToken = Cookies.get('authToken')
+  const today = formatDate(new Date(), 'dd/MM/yy')
 
   const [balance, setBalance] = useState<number>(0)
   const [filterIndex, setFilterIndex] = useState<number>(0)
-  const [items, setItems] = useState<any>([
-    // {
-    //   transactionType: 'deposit',
-    //   name: 'deposit',
-    //   date: 'Oct 19, 05:45 AM',
-    //   amount: '+₹ 1000.00'
-    // }
-  ])
+  const [items, setItems] = useState<TransactionMeta[]>([])
   const [currentPage, setCurrentPage] = useState(1) // useState(meta.start / meta.limit + 1)
   const [totalPages, setTotalPages] = useState(10) // useState(Math.ceil(meta.total / meta.limit) || 1)
+  const [customStartDate, setCustomStartDate] = useState<string>(today)
+  const [customEndDate, setCustomEndDate] = useState<string>(today)
+  const [isCustomDateModalOpen, setIsCustomDateModalOpen] = useState(false)
 
   const router = useRouter()
 
@@ -47,12 +67,57 @@ const MyFunds = () => {
     }
   }
 
+  const fetchTransactions = async (
+    params?: { page: number; startDate: string; endDate: string },
+    callback?: Function
+  ) => {
+    try {
+      const response = await axios.get(`${strapiUrl}${ROUTE_TYPE[ROLE.GENERAL]}/wallet/transaction`, {
+        headers: { Authorization: `Bearer ${bearerToken}` },
+        withCredentials: true,
+        params
+      })
+      const result = response.data.map((transaction: any) => {
+        return {
+          transactionType: transaction.transaction_type,
+          name: transaction.transaction_type,
+          date: formatDate(new Date(transaction.createdAt), 'dd/MM/yyyy'),
+          amount: transaction.transaction_amount
+        }
+      })
+      setItems(result)
+      callback?.()
+    } catch (error) {
+      console.error('Error fetching transactions data:', error)
+    }
+  }
+
   useEffect(() => {
     fetchBalance()
+    fetchTransactions()
   }, [])
 
   const handleOnFilterChange = (index: number) => {
-    setFilterIndex(index)
+    switch (index) {
+      case 0:
+        fetchTransactions(undefined, () => setFilterIndex(index))
+        break
+      case 1:
+        fetchTransactions(
+          {
+            page: currentPage,
+            startDate: formatDate(new Date().setDate(new Date().getDate() - 6), 'yyyy-MM-dd'),
+            endDate: formatDate(new Date(), 'yyyy-MM-dd')
+          },
+          () => setFilterIndex(index)
+        )
+        break
+      case 2:
+        handleCustomDateModalOpen()
+        break
+      default:
+        fetchTransactions()
+    }
   }
 
   const handlePageChange = useCallback(
@@ -63,6 +128,23 @@ const MyFunds = () => {
     },
     [totalPages]
   )
+
+  const handleCustomDateModalOpen = () => setIsCustomDateModalOpen(true)
+  const handleCustomDateModalClose = () => setIsCustomDateModalOpen(false)
+
+  const handleDateChange = (start: string, end: string) => {
+    setCustomStartDate(start)
+    setCustomEndDate(end)
+    fetchTransactions(
+      {
+        page: currentPage,
+        startDate: parseAndFormatDate(start),
+        endDate: parseAndFormatDate(end)
+      },
+      () => setFilterIndex(2)
+    )
+    handleCustomDateModalClose()
+  }
 
   return (
     <Box
@@ -94,6 +176,7 @@ const MyFunds = () => {
         <Flex gap="1rem">
           <BecknButton
             text="Withdraw"
+            handleClick={() => router.push('/withdraw')}
             variant="outline"
             sx={{
               color: '#000000',
@@ -158,27 +241,27 @@ const MyFunds = () => {
             color="#4498E8"
           />
         </Flex>
-        <Flex
-          flexDirection={'row'}
-          justifyContent="space-between"
-        >
-          {['Latest', 'last 7 Days', 'Custom Date'].map((name, index) => (
-            <Typography
-              text={name}
-              sx={{
-                backgroundColor: filterIndex === index ? '#4498E8' : '#ffffff',
-                borderRadius: '20px',
-                padding: '1.8% 6%',
-                color: filterIndex === index ? '#ffffff' : '#000000',
-                border: `1px solid ${filterIndex === index ? 'transparent' : '#000000'}`
-              }}
-              onClick={() => handleOnFilterChange(index)}
-            />
-          ))}
-        </Flex>
-
-        {items.length > 0 ? (
+        {filterIndex > 0 || items.length > 0 ? (
           <>
+            <Flex
+              flexDirection={'row'}
+              justifyContent="space-between"
+            >
+              {['Latest', 'last 7 Days', 'Custom Date'].map((name, index) => (
+                <Typography
+                  text={name}
+                  sx={{
+                    backgroundColor: filterIndex === index ? '#4498E8' : '#ffffff',
+                    borderRadius: '20px',
+                    padding: '1.8% 6%',
+                    color: filterIndex === index ? '#ffffff' : '#000000',
+                    border: `1px solid ${filterIndex === index ? 'transparent' : '#000000'}`
+                  }}
+                  onClick={() => handleOnFilterChange(index)}
+                />
+              ))}
+            </Flex>
+
             <Box
               height={{ base: 'calc(100vh - 29rem)', md: 'calc(100vh - 30rem)' }}
               overflowY="scroll"
@@ -187,7 +270,7 @@ const MyFunds = () => {
             >
               <Table variant="simple">
                 <Tbody>
-                  {items.map((item: any, index: number) => (
+                  {items.map((item, index: number) => (
                     <Tr
                       key={index}
                       cursor="pointer"
@@ -201,7 +284,7 @@ const MyFunds = () => {
                           flexDirection={'row'}
                           gap="0.5rem"
                         >
-                          {item.transactionType === 'withdraw' && (
+                          {item.transactionType === TransactionType.WITHDRAW_FUND && (
                             <Box
                               width={'36px'}
                               height={'36px'}
@@ -213,7 +296,7 @@ const MyFunds = () => {
                               <Image src={ArrowOut} />
                             </Box>
                           )}
-                          {item.transactionType === 'deposit' && (
+                          {item.transactionType === TransactionType.ADD_FUND && (
                             <Box
                               width={'36px'}
                               height={'36px'}
@@ -227,7 +310,7 @@ const MyFunds = () => {
                           )}
                           <Flex flexDir={'column'}>
                             <Typography
-                              text={item.name}
+                              text={TransactionMap[item.transactionType]}
                               style={{
                                 fontWeight: '400',
                                 fontSize: '14px',
@@ -260,7 +343,7 @@ const MyFunds = () => {
                         padding="6px 0px"
                       >
                         <Typography
-                          text={item.amount}
+                          text={`${item.transactionType === TransactionType.ADD_FUND ? '+' : '-'}₹ ${item.amount}`}
                           style={{
                             fontWeight: '500',
                             fontSize: '16px',
@@ -302,6 +385,13 @@ const MyFunds = () => {
           </Box>
         )}
       </Flex>
+      <SelectDate
+        isOpen={isCustomDateModalOpen}
+        onClose={handleCustomDateModalClose}
+        onDateSelect={handleDateChange}
+        initialStartDate={customStartDate}
+        initialEndDate={customEndDate}
+      />
     </Box>
   )
 }
