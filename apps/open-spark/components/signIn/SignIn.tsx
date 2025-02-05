@@ -8,14 +8,13 @@ import { Box } from '@chakra-ui/react'
 import Router from 'next/router'
 import { useTradeLoginMutation } from '@services/UserService'
 import { useDispatch, useSelector } from 'react-redux'
-import { AuthRootState, setRole } from '@store/auth-slice'
+import { AuthRootState } from '@store/auth-slice'
 import { ROLE } from '@lib/config'
 
 const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
   const [formData, setFormData] = useState<SignInFormProps>(initialFormData)
   const [formErrors, setFormErrors] = useState<FormErrors>({ email: '', password: '' })
 
-  const { role } = useSelector((state: AuthRootState) => state.auth)
   const [tradeLogin, { isLoading }] = useTradeLoginMutation()
   const { t } = useLanguage()
   const dispatch = useDispatch()
@@ -61,10 +60,6 @@ const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
 
   const handleSignUp = () => {
     Router.push('/signUp')
-  }
-
-  const handleOnRoleChange = (roleType: ROLE) => {
-    dispatch(setRole({ role: roleType }))
   }
 
   return (

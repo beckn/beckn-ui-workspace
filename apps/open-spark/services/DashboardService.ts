@@ -19,7 +19,7 @@ interface DashboardApiResponse {
 
 const dashboardApi = Api.injectEndpoints({
   endpoints: build => ({
-    tradeDashboard: build.query<DashboardApiResponse, { startDate: string; endDate: string; credentials: string }>({
+    tradeDashboard: build.mutation<DashboardApiResponse, { startDate: string; endDate: string; credentials: string }>({
       query: ({ startDate, endDate, credentials }) => ({
         url: `${ROUTE_TYPE[ROLE.GENERAL]}/dashboard`,
         method: 'GET',
@@ -35,7 +35,7 @@ const dashboardApi = Api.injectEndpoints({
   })
 })
 
-export const { useTradeDashboardQuery } = dashboardApi
+export const { useTradeDashboardMutation } = dashboardApi
 
 export const {
   endpoints: { tradeDashboard }
