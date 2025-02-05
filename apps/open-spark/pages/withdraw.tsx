@@ -12,7 +12,7 @@ import Cookies from 'js-cookie'
 import BottomModal from '@beckn-ui/common/src/components/BottomModal/BottomModalScan'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import { LoaderWithMessage } from '@beckn-ui/molecules'
-import useOtpTimer from '@hooks/useOTPTimer'
+import useOtpTimer from '@hooks/useOtpTimer'
 
 function Withdraw() {
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
