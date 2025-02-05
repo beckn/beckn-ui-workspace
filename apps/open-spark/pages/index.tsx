@@ -1,36 +1,32 @@
 'use client'
 
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { formatDate, TopSheet, useGeolocation } from '@beckn-ui/common'
 import { useLanguage } from '@hooks/useLanguage'
 import { useRouter } from 'next/router'
 import profileIcon from '@public/images/user_profile.svg'
-import { Input, LoaderWithMessage, Typography } from '@beckn-ui/molecules'
-import { Box, Flex, HStack, Tag, TagLabel, Divider, Text, Image, Grid } from '@chakra-ui/react'
+import { LoaderWithMessage, Typography } from '@beckn-ui/molecules'
+import { Box, Flex, HStack, Tag, TagLabel, Image, Grid, Skeleton, SkeletonText } from '@chakra-ui/react'
 import CustomeDateInput from '@components/dateRangePicker/CustomeDateInput'
 import SelectDate from '@components/dateRangePicker/SelectDate'
-import TotalEnergyUnits from '@components/totalEnerguUnit/TotalEnergyUnits'
 import { QuestionOutlineIcon } from '@chakra-ui/icons'
 import { LiaPenSolid } from 'react-icons/lia'
 import EmptyCurrentTrade from '@components/currentTrade/EmptyCurrentTrade'
 import CurrentTrade from '@components/currentTrade/CurrentTrade'
-import { DetailCard, OrderStatusProgress } from '@beckn-ui/becknified-components'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import { format } from 'date-fns'
-import { RootState } from '@store/index'
-import { useSelector } from 'react-redux'
 import { ROLE, ROUTE_TYPE } from '@lib/config'
-import { useTradeDashboardQuery } from '@services/DashboardService'
+import { useTradeDashboardMutation } from '@services/DashboardService'
 import Cookies from 'js-cookie'
 import axios from '@services/axios'
 import { DashboardData, StatusItem, TradeData } from '@lib/types/dashboard'
 import { parseAndFormatDate } from '@utils/parsedFormatDate-utils'
-import PendingIcon from '@public/images/pending.svg'
 import { testIds } from '@shared/dataTestIds'
 import TabView from '@components/tab/tab'
 import Card from '@components/card/Card'
 import OpenIcon from '@public/images/open.svg'
 import CloseIcon from '@public/images/close.svg'
+import { useDispatch } from 'react-redux'
 
 const Dashboard = () => {
   const { t } = useLanguage()
@@ -66,15 +62,12 @@ const Dashboard = () => {
 
   const totalEnergyText = role === ROLE.SELL ? 'Produced' : 'Consumption'
   const intervalRef = useRef<NodeJS.Timeout | null>(null)
+  const dispatch = useDispatch()
 
   const payloadStartDate = parseAndFormatDate(startDate)
   const payloadEndDate = parseAndFormatDate(endDate)
 
-  const { data: dashboardData } = useTradeDashboardQuery({
-    startDate: payloadStartDate,
-    endDate: payloadEndDate,
-    credentials: bearerToken
-  })
+  const [tradeDashboard, { isLoading }] = useTradeDashboardMutation()
 
   // const handleRemoveTag = (tagToRemove: string) => {
   //   setPreferencesTags(prevTags => prevTags.filter(tag => tag !== tagToRemove))
@@ -89,7 +82,13 @@ const Dashboard = () => {
     handleModalClose()
   }
 
-  useEffect(() => {
+  const getDashboardDetails = useCallback(async () => {
+    const response: any = await tradeDashboard({
+      startDate: payloadStartDate,
+      endDate: payloadEndDate,
+      credentials: bearerToken
+    })
+    const dashboardData = response.data
     if (role === ROLE.BUY && dashboardData?.data?.consumption) {
       const { previous_month, current_month, average, totalInRange } = dashboardData.data.consumption
       setDashboardTotalEnergyUnitsData({ previous_month, current_month, average })
@@ -99,7 +98,11 @@ const Dashboard = () => {
       setDashboardTotalEnergyUnitsData({ previous_month, current_month, average })
       setTotalEnergyUnits(totalInRange)
     }
-  }, [role, dashboardData, startDate, endDate])
+  }, [role, startDate, endDate])
+
+  useEffect(() => {
+    getDashboardDetails()
+  }, [role, startDate, endDate])
 
   const fetchLastTradeData = async () => {
     try {
@@ -213,7 +216,7 @@ const Dashboard = () => {
 
     return `${formattedHrs}h : ${formattedMins}m : ${formattedSecs}s`
   }
-
+  console.log(isLoading)
   return (
     <>
       <TopSheet
@@ -314,20 +317,28 @@ const Dashboard = () => {
                       handleOnclick={() => {}}
                       childComponent={() => (
                         <Box padding="0 10px">
-                          <Typography
-                            text={data.label}
-                            fontSize={'12px'}
-                            style={{
-                              height: '60px',
-                              lineHeight: '15px',
-                              textWrap: 'wrap'
-                            }}
-                          />
-                          <Typography
-                            text={data.description}
-                            fontSize={'18px'}
-                            fontWeight={'600'}
-                          />
+                          <SkeletonText
+                            isLoaded={!isLoading}
+                            noOfLines={2}
+                            spacing={12}
+                            skeletonHeight="4"
+                          >
+                            <Typography
+                              text={data.label}
+                              fontSize={'12px'}
+                              style={{
+                                height: '60px',
+                                lineHeight: '15px',
+                                textWrap: 'wrap'
+                              }}
+                            />
+
+                            <Typography
+                              text={data.description}
+                              fontSize={'18px'}
+                              fontWeight={'600'}
+                            />
+                          </SkeletonText>
                         </Box>
                       )}
                     />
