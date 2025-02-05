@@ -3,29 +3,32 @@ import { useRouter } from 'next/router'
 import { useLanguage } from '../hooks/useLanguage'
 import { PaymentMethodSelection } from '@beckn-ui/common'
 import { testIds } from '@shared/dataTestIds'
-import Visa from '@public/images/visa.svg'
-import masterCard from '@public/images/masterCard.svg'
 import SBI from '@public/images/sbi.svg'
 import HDFC from '@public/images/hdfc.svg'
-import phonePay from '@public/images/phonePayPayment.svg'
-import CashOnDelivery from '@public/images/cash.svg'
-import NetBanking from '@public/images/netbanking.svg'
-import { FormControl, FormErrorMessage, FormLabel, Input } from '@chakra-ui/react'
+import { Box, FormControl, FormErrorMessage, FormLabel, Input } from '@chakra-ui/react'
 import axios from '@services/axios'
 import { ROLE, ROUTE_TYPE } from '@lib/config'
 import Cookies from 'js-cookie'
+import BottomModal from '@beckn-ui/common/src/components/BottomModal/BottomModalScan'
+import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
+import { LoaderWithMessage } from '@beckn-ui/molecules'
+import useOtpTimer from '@hooks/useOTPTimer'
 
-function PaymentMode() {
+function Withdraw() {
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
   const bearerToken = Cookies.get('authToken') || ''
 
   const { t } = useLanguage()
   const router = useRouter()
+  const otpTime = useOtpTimer()
 
   const [amount, setAmount] = useState('')
   const [formErrors, setFormErrors] = useState<{ name: string }>({
     name: ''
   })
+  const [verifyModal, setVerifyModal] = useState(false)
+  const [OTP, setOTP] = useState<string>('')
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const validateForm = (data: any) => {
     if (data.name.trim() === '') {
@@ -52,10 +55,11 @@ function PaymentMode() {
     }))
   }
 
-  const depositFund = async () => {
+  const withdrawFund = async () => {
+    setIsLoading(true)
     try {
       const response = await axios.post(
-        `${strapiUrl}${ROUTE_TYPE[ROLE.GENERAL]}/wallet/add-fund`,
+        `${strapiUrl}${ROUTE_TYPE[ROLE.GENERAL]}/wallet/withdraw-fund`,
         {
           transactionAmount: amount
         },
@@ -67,7 +71,14 @@ function PaymentMode() {
       router.push('/orderConfirmation')
     } catch (error) {
       console.error('Error fetching transactions data:', error)
+    } finally {
+      setIsLoading(false)
     }
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    withdrawFund()
   }
 
   return (
@@ -103,7 +114,7 @@ function PaymentMode() {
       <PaymentMethodSelection
         t={key => t[key]}
         disableButton={[undefined, '', '0'].includes(amount)}
-        handleOrderConfirmation={depositFund}
+        handleOrderConfirmation={() => setVerifyModal(true)}
         paymentMethods={[
           {
             category: 'Select Bank',
@@ -120,51 +131,65 @@ function PaymentMode() {
             paymentDescription: 'Account no: ******6578',
             paymentMethodNet: t.cardNumber,
             disabled: false
-          },
-          {
-            category: 'Credit & Debit Cards',
-            img: Visa,
-            paymentMethod: t.cardNumber,
-            paymentMethodNet: t.cardNumber,
-            disabled: true,
-            dataTest: testIds.paymentpage_visa
-          },
-          {
-            category: 'Credit & Debit Cards',
-            img: masterCard,
-            paymentMethod: t.cardNumber,
-            paymentMethodNet: t.cardNumber,
-            disabled: true,
-            dataTest: testIds.paymentpage_masterCard
-          },
-          {
-            category: 'UPI',
-            img: phonePay,
-            paymentMethod: t.phonePay || 'PhonePe UPI',
-            paymentMethodNet: t.phonePay || 'PhonePe UPI',
-            disabled: true,
-            dataTest: testIds.paymentpage_phonePay
-          },
-          {
-            category: 'Other',
-            img: NetBanking,
-            paymentMethod: t.netBanking,
-            paymentMethodNet: t.netBanking,
-            disabled: true,
-            dataTest: testIds.paymentpage_NetBanking
-          },
-          {
-            category: 'Other',
-            img: CashOnDelivery,
-            paymentMethod: t.cashOnDelivery,
-            paymentMethodNet: t.netBanking,
-            disabled: true,
-            dataTest: testIds.paymentpage_CashOnDelivery
           }
         ]}
       />
+      <BottomModal
+        isOpen={verifyModal}
+        onClose={() => {
+          setVerifyModal(false)
+        }}
+        modalHeader="Verify Transaction"
+        isLoading={isLoading}
+      >
+        {isLoading ? (
+          <Box
+            display="grid"
+            height="100%"
+            alignContent="center"
+            padding={'2rem 0'}
+            data-test={testIds.loadingIndicator}
+          >
+            <LoaderWithMessage
+              loadingText="Please Wait"
+              loadingSubText="While we process your payment"
+            />
+          </Box>
+        ) : (
+          <Box p="0 24px">
+            <FormControl mb="4rem">
+              <FormLabel
+                fontWeight={'400'}
+                fontSize={'12px'}
+              >{`Enter Verification OTP (${otpTime})`}</FormLabel>
+              <Input
+                type="number"
+                name="otp_verification"
+                placeholder=""
+                sx={{
+                  fontSize: '12px',
+                  _focusVisible: {
+                    zIndex: 0,
+                    borderColor: '#3182ce',
+                    boxShadow: '0 0 0 1px #3182ce'
+                  }
+                }}
+                value={OTP}
+                onChange={e => {
+                  setOTP(e.target.value || '')
+                }}
+              />
+            </FormControl>
+
+            <BecknButton
+              text="Verify"
+              handleClick={handleSubmit}
+            />
+          </Box>
+        )}
+      </BottomModal>
     </>
   )
 }
 
-export default PaymentMode
+export default Withdraw
