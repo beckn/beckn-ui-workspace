@@ -266,6 +266,7 @@ export default function EnergyPurchaseForm({ preferenceType, role }: EnergyPurch
             as={'span'}
             cursor="pointer"
             color={'#4498E8'}
+            onClick={() => router.push('/myPreference')}
           >
             change your preferences
           </Text>

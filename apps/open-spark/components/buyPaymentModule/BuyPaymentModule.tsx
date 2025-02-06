@@ -21,18 +21,6 @@ const BuyPaymentModule: React.FC<BuyPaymentModuleProps> = ({ isChecked, fare, on
 
   return (
     <>
-      <Flex
-        justifyContent={'space-between'}
-        mt={'10px'}
-        mb={'10px'}
-      >
-        <Typography
-          fontSize={'17px'}
-          fontWeight={'400'}
-          text={''}
-          dataTest={testIds.paymentpage_creditcardAndDebitCard}
-        />
-      </Flex>
       <Card className={Styles.border_radius_all}>
         <CardBody padding={'0 20px 15px 20px'}>
           <Flex

@@ -24,7 +24,10 @@ const NavigationItem = (props: NavigationItemProps) => {
         cursor="pointer"
         onClick={handleClick}
       >
-        <Flex gap={'1rem'}>
+        <Flex
+          gap={'1rem'}
+          alignItems="center"
+        >
           <Image
             src={icon}
             alt="nav_icon"
