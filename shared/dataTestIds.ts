@@ -737,6 +737,7 @@ const testIds = {
   total_aggregated_item_name: 'total_aggregated_item_name',
   total_aggregated_item_date: 'total_aggregated_item_date',
   total_aggregated_nav_img: 'total_aggregated_nav_img',
-  total_aggregated_lock_demand: 'total_aggregated_lock_demand'
+  total_aggregated_lock_demand: 'total_aggregated_lock_demand',
+  trade_details_UserDetail: 'trade-details-UserDetail'
 }
 export { testIds }
