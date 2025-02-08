@@ -31,7 +31,8 @@ const headerNames: PathnameObjectType = {
   '/tradeDetails': 'No. of Units Sold',
   '/OTPVerification': 'Verify Yourself',
   '/myFunds': 'My Funds',
-  '/withdraw': 'Withdraw'
+  '/withdraw': 'Withdraw',
+  '/myPreference': 'My Preferences'
 }
 
 const headerFrenchNames: PathnameObjectType = {
@@ -53,6 +54,7 @@ const headerBlackList = [
   '/tradeDetails',
   '/OTPVerification',
   '/myFunds',
+  '/myPreference',
   '/withdraw'
 ]
 

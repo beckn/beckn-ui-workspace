@@ -10,6 +10,7 @@ import axios from '@services/axios'
 import { testIds } from '@shared/dataTestIds'
 import credIcon from '@public/images/cred_icon.svg'
 import tradeIcon from '@public/images/trade_icon.svg'
+import myPreferenceIcon from '@public/images/myPreference.svg'
 import derIcon from '@public/images/der_icon.svg'
 import fundsIcon from '@public/images/funds.svg'
 import logoutIcon from '@public/images/logOutIcon.svg'
@@ -190,6 +191,12 @@ const ProfilePage = () => {
         customComponent={
           <Box marginTop={'-1.8rem'}>
             <>
+              <NavigationItem
+                icon={myPreferenceIcon}
+                label={'My Preferences'}
+                handleClick={() => router.push('/myPreference')}
+                dataTest={'myPreference'}
+              />
               <NavigationItem
                 icon={credIcon}
                 label={'My Credentials'}
