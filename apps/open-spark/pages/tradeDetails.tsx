@@ -1,17 +1,21 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Router from 'next/router'
 import Cookies from 'js-cookie'
 import axios from '@services/axios'
 import { ROLE, ROUTE_TYPE } from '@lib/config'
-import { AuthRootState } from '@store/auth-slice'
-import { useSelector } from 'react-redux'
-import { Accordion, Loader, Typography } from '@beckn-ui/molecules'
+
 import { formatDate } from '@beckn-ui/common'
-import CurrentTrade from '@components/currentTrade/CurrentTrade'
-import { Box, Divider, Flex, Stack, Tag, TagLabel } from '@chakra-ui/react'
+import { Box, Divider, Flex, Stack } from '@chakra-ui/react'
 import { OrderStatusProgress } from '@beckn-ui/becknified-components'
 import PendingIcon from '@public/images/pending.svg'
 import { testIds } from '@shared/dataTestIds'
+import OrderSummary from '@components/tradeDetails/OrderSummary'
+import UserDetails from '@components/tradeDetails/UserDetails'
+import nameIcon from '../public/images/name.svg'
+import CallphoneIcon from '../public/images/Call.svg'
+import emailIcon from '../public/images/mail.svg'
+import UserCredentials from '@components/tradeDetails/UserCredential'
+import { Accordion, Loader } from '@beckn-ui/molecules/src/components'
 
 interface TradeMetaData {
   orderId: string
@@ -35,6 +39,86 @@ const TRADDE_EVE_NUM = Object.freeze({
   BECKN_ON_CONFIRM: 'beckn_on_confirm',
   PENDING: 'pending'
 })
+
+const mockOrderData = {
+  date: '10/1/2025',
+  orderId: '103',
+  tradeId: '1104',
+  energyBought: '10 kwh',
+  rate: '7 ₹/units',
+  preferences: ['Solar Power', 'Trusted Source']
+}
+
+const detailRows = [
+  { label: 'Date', value: mockOrderData.date },
+  { label: 'Order ID', value: mockOrderData.orderId },
+  { label: 'Trade ID', value: mockOrderData.tradeId },
+  { label: 'Energy Bought', value: mockOrderData.energyBought },
+  { label: 'Rate', value: mockOrderData.rate }
+]
+const userCredentials = [
+  {
+    name: 'ID Proof',
+    type: 'PDF',
+    verifiedAt: '20 Oct 2024 at 11:30 am',
+    isVerified: true
+  },
+  {
+    name: 'Address Proof',
+    type: 'PDF',
+    verifiedAt: '20 Oct 2024 at 11:30 am',
+    isVerified: true
+  }
+]
+
+const mockTradeDetails = {
+  orderId: '103',
+  name: 'Solar Energy',
+  price: 70,
+  quantity: '10 kwh',
+  date: '2021-06-21T12:11:00Z',
+  status: 'pending',
+  tradeId: '1104',
+  preferencesTags: ['Solar Power', 'Trusted Source'],
+  tradeEvents: [
+    {
+      id: 1,
+      event_name: 'beckn_search',
+      description: 'Search',
+      createdAt: '2021-06-21T12:11:00Z'
+    },
+    {
+      id: 2,
+      event_name: 'beckn_on_search',
+      description: 'Select',
+      createdAt: '2021-06-21T12:21:00Z'
+    },
+    {
+      id: 3,
+      event_name: 'beckn_init',
+      description: 'Received Cred for Verification',
+      createdAt: '2021-06-21T12:31:00Z'
+    },
+    {
+      id: 4,
+      event_name: 'beckn_on_init',
+      description: 'Cred Verified',
+      createdAt: '2021-06-21T12:31:00Z'
+    },
+    {
+      id: 5,
+      event_name: 'beckn_confirm',
+      description: 'init',
+      createdAt: '2021-06-21T12:31:00Z'
+    },
+    {
+      id: 6,
+      event_name: 'pending',
+      description: 'Pending',
+      createdAt: '2021-06-21T12:31:00Z'
+    }
+  ]
+}
 
 const TradeDetails = () => {
   const bearerToken = Cookies.get('authToken')
@@ -99,6 +183,10 @@ const TradeDetails = () => {
     const { id } = Router.query
     getTradeDetailsById(id as string)
   }, [])
+  useEffect(() => {
+    setTradeDetails(mockTradeDetails)
+  }, [])
+  const roleName = role === ROLE.BUY ? 'Producer' : 'Consumer'
 
   return (
     <Box
@@ -107,99 +195,12 @@ const TradeDetails = () => {
       className="hideScroll"
       maxH={'calc(100vh - 80px)'}
       overflowY="scroll"
+      pb={'20px'}
     >
-      <Flex
-        gap="1rem"
-        flexDirection={'column'}
-      >
-        <Typography
-          text={`Date: ${tradeDetails?.date ? formatDate(tradeDetails?.date!, 'dd/MM/yyyy') : ''}`}
-          fontSize="16px"
-          fontWeight="500"
-          dataTest={testIds.trade_details_date}
-        />
-        <CurrentTrade
-          data={[
-            {
-              name: tradeDetails?.name!,
-              label: role === ROLE.BUY ? 'Energy Bought' : 'Energy Sold',
-              value: tradeDetails?.quantity! || '0',
-              disabled: true,
-              symbol: '(KWh)'
-            },
-            ...(role !== ROLE.BUY
-              ? [
-                  {
-                    name: tradeDetails?.name!,
-                    label: 'Price',
-                    value: tradeDetails?.price.toString()!,
-                    disabled: true,
-                    symbol: '₹/units'
-                  }
-                ]
-              : [])
-          ]}
-        />
-
-        {tradeDetails?.preferencesTags && tradeDetails?.preferencesTags?.length > 0 && (
-          <Box mt={'-2rem'}>
-            <Typography
-              text="Preferences"
-              fontSize="15"
-              fontWeight="600"
-              sx={{ marginBottom: '10px' }}
-            />
-            <Flex
-              gap={'10px'}
-              flexWrap={'wrap'}
-            >
-              {tradeDetails?.preferencesTags?.map((tag, index) => (
-                <Tag
-                  key={index}
-                  borderRadius="md"
-                  variant="outline"
-                  colorScheme="gray"
-                  padding={'8px'}
-                >
-                  <TagLabel>{tag}</TagLabel>
-                </Tag>
-              ))}
-            </Flex>
-          </Box>
-        )}
-        <Flex
-          flexDirection={'row'}
-          justifyContent={'space-between'}
-        >
-          {tradeDetails?.orderId && (
-            <Flex gap="5px">
-              <Typography
-                text={`Order ID:`}
-                fontSize="15"
-                fontWeight="600"
-              />
-              <Typography
-                text={`${tradeDetails?.orderId}`}
-                fontSize="15"
-              />
-            </Flex>
-          )}
-          {tradeDetails?.tradeId && (
-            <Flex gap="5px">
-              <Typography
-                text={`Trade ID:`}
-                fontSize="15"
-                fontWeight="600"
-                dataTest={testIds.trade_details_Id}
-              />
-              <Typography
-                text={`${tradeDetails?.tradeId}`}
-                fontSize="15"
-              />
-            </Flex>
-          )}
-        </Flex>
-      </Flex>
+      <OrderSummary
+        detailRows={detailRows}
+        preferences={mockOrderData.preferences}
+      />
       <Box padding={'1rem 0.5rem'}>
         <Accordion
           accordionHeader={'History'}
@@ -238,6 +239,18 @@ const TradeDetails = () => {
           </Flex>
         </Accordion>
       </Box>
+      <Stack>
+        <UserDetails
+          title={`${roleName} Details`} //based on Role (Consumer Credentials)
+          name={{ text: 'Leela', icon: nameIcon }}
+          mail={{ text: 'xxxxa.work@gmail.com', icon: emailIcon }}
+          mobile={{ text: '+91 79XXXX6980', icon: CallphoneIcon }}
+          dataTest={testIds.trade_details_UserDetail}
+        />
+      </Stack>
+      <Stack>
+        <UserCredentials userCredentials={userCredentials} />
+      </Stack>
     </Box>
   )
 }

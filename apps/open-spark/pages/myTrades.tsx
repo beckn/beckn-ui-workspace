@@ -1,20 +1,22 @@
 import { Typography } from '@beckn-ui/molecules'
-import { Box, Flex, HStack, Image } from '@chakra-ui/react'
+import { Box, Flex, Image } from '@chakra-ui/react'
 import Card from '@components/card/Card'
-import React, { useEffect, useRef, useState } from 'react'
-import Router from 'next/router'
+import React, { useEffect, useState } from 'react'
 import successIcon from '@public/images/green_tick_icon.svg'
 import inProgressIcon from '@public/images/in_progress_icon.svg'
 import failedIcon from '@public/images/failed_icon.svg'
 import { currencyMap, ROLE, ROUTE_TYPE } from '@lib/config'
 import Cookies from 'js-cookie'
 import axios from '@services/axios'
-import { useDispatch, useSelector } from 'react-redux'
-import { AuthRootState } from '@store/auth-slice'
-import { feedbackActions, formatDate } from '@beckn-ui/common'
+import { useDispatch } from 'react-redux'
+import { formatDate } from '@beckn-ui/common'
 import { useRouter } from 'next/router'
 
 type TradeStatus = 'SUCCESS' | 'RECEIVED' | 'FAILED'
+const tabs = [
+  { id: 'buy', label: 'Buy' },
+  { id: 'sell', label: 'Sell' }
+]
 
 interface TradeMetaData {
   quantity: string
@@ -23,6 +25,30 @@ interface TradeMetaData {
   time: string
   status: TradeStatus
 }
+// remove all mockdata
+const mockTradeList = [
+  {
+    quantity: '10',
+    price: 130,
+    orderId: '102',
+    time: '2024-02-04T06:00:00Z',
+    status: 'SUCCESS'
+  },
+  {
+    quantity: '10',
+    price: '130',
+    orderId: '103',
+    time: '2024-02-04T06:00:00Z',
+    status: 'IN_PROGRESS'
+  },
+  {
+    quantity: '10',
+    price: '130',
+    orderId: '104',
+    time: '2024-02-04T06:00:00Z',
+    status: 'FAILED'
+  }
+]
 
 const statusMap = {
   SUCCESS: { icon: successIcon, color: '#5EC401', label: 'Success' },
@@ -38,6 +64,7 @@ const MyTrades = () => {
   const [tradeList, setTradeList] = useState<TradeMetaData[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [role, setRole] = useState<ROLE>()
+  const [activeTab, setActiveTab] = useState('buy')
 
   const dispatch = useDispatch()
   const router = useRouter()
@@ -84,24 +111,10 @@ const MyTrades = () => {
     router.push({ pathname: '/tradeDetails', query: { id: data.orderId } })
   }
 
-  if (tradeList.length === 0) {
-    return (
-      <Box
-        display={'grid'}
-        height={'calc(100vh - 300px)'}
-        alignContent={'center'}
-      >
-        <Typography
-          text="No trade history found."
-          dataTest="no_Trade_Found"
-          fontWeight="400"
-          fontSize="15px"
-          style={{ placeSelf: 'center' }}
-        />
-      </Box>
-    )
-  }
-
+  useEffect(() => {
+    //remove this useEffect after api integration, just for mockdata
+    setTradeList(mockTradeList)
+  }, [])
   return (
     <Box
       margin={'0 auto'}
@@ -111,62 +124,105 @@ const MyTrades = () => {
       overflowY="scroll"
       pb={'20px'}
     >
+      <Box mb={4}>
+        <Flex
+          borderBottom="1px solid"
+          borderColor="gray.200"
+        >
+          {tabs.map(tab => (
+            <Box
+              key={tab.id}
+              flex={1}
+              py={2}
+              cursor="pointer"
+              onClick={() => setActiveTab(tab.id)}
+              borderBottom={activeTab === tab.id ? '3px solid #4498E8' : 'none'}
+              textAlign="center"
+            >
+              <Typography
+                text={tab.label}
+                color={activeTab === tab.id ? '#4498E8' : '#000000'}
+                fontSize="12px"
+                fontWeight={activeTab === tab.id ? '600' : '400'}
+                dataTest={`${tab.id}-tab`}
+              />
+            </Box>
+          ))}
+        </Flex>
+      </Box>
+
       <Flex flexDirection={'column'}>
-        {tradeList.map((trade, index) => {
-          return (
-            <Card
-              key={index}
-              handleOnclick={() => handleOnCardClick(trade)}
-              childComponent={() => {
-                return (
-                  <Flex
-                    flexDirection={'column'}
-                    gap="4px"
-                    data-test={'trades_card_click'}
-                  >
-                    <Typography
-                      text={`${trade.quantity} Units`}
-                      fontWeight="600"
-                      dataTest={'trade_quantity'}
-                    />
-                    {role !== ROLE.BUY && (
+        {tradeList.length === 0 ? (
+          <Box
+            display={'grid'}
+            height={'calc(100vh - 300px)'}
+            alignContent={'center'}
+          >
+            <Typography
+              text="No trade history found."
+              dataTest="no_Trade_Found"
+              fontWeight="400"
+              fontSize="15px"
+              style={{ placeSelf: 'center' }}
+            />
+          </Box>
+        ) : (
+          tradeList.map((trade, index) => {
+            return (
+              <Card
+                key={index}
+                handleOnclick={() => handleOnCardClick(trade)}
+                childComponent={() => {
+                  return (
+                    <Flex
+                      flexDirection={'column'}
+                      gap="4px"
+                      data-test={'trades_card_click'}
+                    >
                       <Typography
-                        text={`${currencyMap.INR}${trade.price}`}
-                        dataTest={'trade_price'}
+                        text={`${trade.quantity} Units`}
+                        fontWeight="600"
+                        dataTest={'trade_quantity'}
                       />
-                    )}
-                    <Flex justifyContent={'space-between'}>
-                      <Flex flexDir={'row'}>
+                      {role !== ROLE.BUY && (
                         <Typography
-                          text={`Order ID: ${trade.orderId}`}
-                          dataTest={'trade_orderId'}
+                          text={`${currencyMap.INR}${trade.price}`}
+                          dataTest={'trade_price'}
                         />
-                        <Typography
-                          text={`, ${formatDate(trade.time, 'hh:mm a')}`}
-                          dataTest={'trade_Time'}
-                        />
-                      </Flex>
-                      <Flex
-                        gap="4px"
-                        className="mytrade-status"
-                      >
-                        <Image
-                          src={`${statusMap[trade.status].icon}`}
-                          alt="status_icon"
-                        />
-                        <Typography
-                          color={statusMap[trade.status].color}
-                          text={`${statusMap[trade.status].label}`}
-                          dataTest="trade-status"
-                        />
+                      )}
+                      <Flex justifyContent={'space-between'}>
+                        <Flex flexDir={'row'}>
+                          <Typography
+                            text={`Order ID: ${trade.orderId}`}
+                            dataTest={'trade_orderId'}
+                          />
+                          <Typography
+                            text={`, ${formatDate(trade.time, 'hh:mm a')}`}
+                            dataTest={'trade_Time'}
+                          />
+                        </Flex>
+                        <Flex
+                          gap="4px"
+                          className="mytrade-status"
+                        >
+                          <Image
+                            // src={`${statusMap[trade.status].icon}`}
+                            alt="status_icon"
+                          />
+                          <Typography
+                            // color={statusMap[trade.status].color}
+                            // text={`${statusMap[trade.status].label}`}
+                            dataTest="trade-status"
+                          />
+                        </Flex>
                       </Flex>
                     </Flex>
-                  </Flex>
-                )
-              }}
-            />
-          )
-        })}
+                  )
+                }}
+              />
+            )
+          })
+        )}
       </Flex>
     </Box>
   )
