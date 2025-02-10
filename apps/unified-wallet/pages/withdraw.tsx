@@ -5,7 +5,7 @@ import { PaymentMethodSelection } from '@beckn-ui/common'
 import { testIds } from '@shared/dataTestIds'
 import SBI from '@public/images/sbi.svg'
 import HDFC from '@public/images/hdfc.svg'
-import { Box, FormControl, FormErrorMessage, FormLabel, Input } from '@chakra-ui/react'
+import { Box, FormControl, FormErrorMessage, FormLabel, Input, useTheme } from '@chakra-ui/react'
 import axios from '@services/axios'
 import { ROLE, ROUTE_TYPE } from '@lib/config'
 import Cookies from 'js-cookie'
@@ -13,6 +13,7 @@ import BottomModal from '@beckn-ui/common/src/components/BottomModal/BottomModal
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import { LoaderWithMessage } from '@beckn-ui/molecules'
 import useOtpTimer from '@hooks/useOtpTimer'
+import VerifyOTP from '@components/VerifyOTP/VerifyOTP'
 
 function Withdraw() {
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
@@ -29,6 +30,9 @@ function Withdraw() {
   const [verifyModal, setVerifyModal] = useState(false)
   const [OTP, setOTP] = useState<string>('')
   const [isLoading, setIsLoading] = useState<boolean>(false)
+
+  const theme = useTheme()
+  const primaryColor = theme.colors.primary['100']
 
   const validateForm = (data: any) => {
     if (data.name.trim() === '') {
@@ -95,8 +99,8 @@ function Withdraw() {
           sx={{
             _focusVisible: {
               zIndex: 0,
-              borderColor: '#3182ce',
-              boxShadow: '0 0 0 1px #3182ce'
+              borderColor: primaryColor,
+              boxShadow: `0 0 0 1px ${primaryColor}`
             }
           }}
           value={amount}
@@ -139,7 +143,7 @@ function Withdraw() {
         onClose={() => {
           setVerifyModal(false)
         }}
-        modalHeader="Verify Transaction"
+        modalHeader="OTP Verification"
         isLoading={isLoading}
       >
         {isLoading ? (
@@ -157,33 +161,9 @@ function Withdraw() {
           </Box>
         ) : (
           <Box p="0 24px">
-            <FormControl mb="4rem">
-              <FormLabel
-                fontWeight={'400'}
-                fontSize={'12px'}
-              >{`Enter Verification OTP (${otpTime})`}</FormLabel>
-              <Input
-                type="number"
-                name="otp_verification"
-                placeholder=""
-                sx={{
-                  fontSize: '12px',
-                  _focusVisible: {
-                    zIndex: 0,
-                    borderColor: '#3182ce',
-                    boxShadow: '0 0 0 1px #3182ce'
-                  }
-                }}
-                value={OTP}
-                onChange={e => {
-                  setOTP(e.target.value || '')
-                }}
-              />
-            </FormControl>
-
-            <BecknButton
-              text="Verify"
-              handleClick={handleSubmit}
+            <VerifyOTP
+              description="Enter the one time password the we have just sent to your registered mobile number."
+              handleVerifyOtp={handleSubmit}
             />
           </Box>
         )}
