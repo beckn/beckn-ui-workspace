@@ -293,6 +293,16 @@ select:-webkit-autofill:focus {
   font-size: 12px !important;
 }
 
+.chakra-form__label.dropDown_label {
+  margin: unset;
+  font-weight: unset;
+  padding: unset;
+}
+
+.cencel_btn_filter {
+  border: 1px solid #e93324 !important;
+}
+
 @media only screen and (max-width: 370px) {
   .mytrade-status {
     gap: 2px !important;

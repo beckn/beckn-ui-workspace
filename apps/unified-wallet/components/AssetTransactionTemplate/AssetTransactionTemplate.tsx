@@ -1,22 +1,17 @@
 import { Typography } from '@beckn-ui/molecules'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
-import { Box, Flex, Image, Table, Tbody, Td, Tr } from '@chakra-ui/react'
-import DeviceList from '@components/deviceList/DeviceList'
-import { ROLE, ROUTE_TYPE } from '@lib/config'
-import axios from '@services/axios'
-import Cookies from 'js-cookie'
-import React, { useCallback, useEffect, useState } from 'react'
+import { Box, Flex, Image, Table, Tbody, Td, Tr, useTheme } from '@chakra-ui/react'
+import React, { useCallback, useState } from 'react'
 import ArrowOut from '@public/images/arrow_outward.svg'
 import ArrowDown from '@public/images/arrow_downward.svg'
 import EmptyTransactionsIcon from '@public/images/empty_transactions.svg'
 import { formatDate } from '@beckn-ui/common'
 import Pagination from '@components/pagination/pagination'
-import EmptyCurrentTrade from '@components/currentTrade/EmptyScreenTemplate'
+import EmptyCurrentTrade from '@components/EmptyTemplates/EmptyScreenTemplate'
 import { useRouter } from 'next/router'
 import SelectDate from '@components/dateRangePicker/SelectDate'
-import { parseAndFormatDate } from '@utils/parsedFormatDate-utils'
 
-interface TransactionMeta {
+export interface TransactionMeta {
   transactionType: 'ADD_FUND' | 'WITHDRAW_FUND' | 'SELLORDER' | 'BUYORDER'
   name: string
   date: string
@@ -37,88 +32,47 @@ enum TransactionType {
   BUYORDER = 'BUYORDER'
 }
 
-const MyFunds = () => {
-  const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
-  const bearerToken = Cookies.get('authToken')
-  const today = formatDate(new Date(), 'dd/MM/yy')
+const assetHeaderName = {
+  fund: 'Current Balance',
+  energy: 'Total Energy Voucher'
+}
 
-  const [balance, setBalance] = useState<number>(0)
-  const [filterIndex, setFilterIndex] = useState<number>(0)
-  const [items, setItems] = useState<TransactionMeta[]>([])
-  const [currentPage, setCurrentPage] = useState(1) // useState(meta.start / meta.limit + 1)
-  const [totalPages, setTotalPages] = useState(10) // useState(Math.ceil(meta.total / meta.limit) || 1)
-  const [customStartDate, setCustomStartDate] = useState<string>(today)
-  const [customEndDate, setCustomEndDate] = useState<string>(today)
-  const [isCustomDateModalOpen, setIsCustomDateModalOpen] = useState(false)
+interface TransactionTemplateProps {
+  assetType: 'fund' | 'energy'
+  assetValue: string | number
+  isCustomDateModalOpen: boolean
+  filterIndex: number
+  items: TransactionMeta[]
+  totalPages: number
+  customStartDate: string
+  customEndDate: string
+  currentPage: number
+  setCurrentPage: React.Dispatch<React.SetStateAction<number>>
+  handleOnFilterChange?: (index: number) => void
+  handleCustomDateModalClose?: () => void
+  handleDateChange?: (start: string, end: string) => void
+}
+
+const AssetTransactionTemplate = (props: TransactionTemplateProps) => {
+  const {
+    assetType,
+    assetValue,
+    isCustomDateModalOpen,
+    totalPages,
+    filterIndex,
+    items,
+    customEndDate,
+    customStartDate,
+    currentPage,
+    setCurrentPage,
+    handleOnFilterChange,
+    handleCustomDateModalClose,
+    handleDateChange
+  } = props
 
   const router = useRouter()
-
-  const fetchBalance = async () => {
-    try {
-      const response = await axios.get(`${strapiUrl}${ROUTE_TYPE[ROLE.GENERAL]}/wallet/balance`, {
-        headers: { Authorization: `Bearer ${bearerToken}` },
-        withCredentials: true
-      })
-
-      const result = response.data.data
-      setBalance(result.balance)
-    } catch (error) {
-      console.error('Error fetching dashboard data:', error)
-    }
-  }
-
-  const fetchTransactions = async (
-    params?: { page: number; startDate: string; endDate: string },
-    callback?: Function
-  ) => {
-    try {
-      const response = await axios.get(`${strapiUrl}${ROUTE_TYPE[ROLE.GENERAL]}/wallet/transaction`, {
-        headers: { Authorization: `Bearer ${bearerToken}` },
-        withCredentials: true,
-        params
-      })
-      const result = response.data.map((transaction: any) => {
-        return {
-          transactionType: transaction.transaction_type,
-          name: transaction.transaction_type,
-          date: formatDate(new Date(transaction.createdAt), 'dd/MM/yyyy'),
-          amount: transaction.transaction_amount
-        }
-      })
-      setItems(result)
-      callback?.()
-    } catch (error) {
-      console.error('Error fetching transactions data:', error)
-    }
-  }
-
-  useEffect(() => {
-    fetchBalance()
-    fetchTransactions()
-  }, [])
-
-  const handleOnFilterChange = (index: number) => {
-    switch (index) {
-      case 0:
-        fetchTransactions(undefined, () => setFilterIndex(index))
-        break
-      case 1:
-        fetchTransactions(
-          {
-            page: currentPage,
-            startDate: formatDate(new Date().setDate(new Date().getDate() - 6), 'yyyy-MM-dd'),
-            endDate: formatDate(new Date(), 'yyyy-MM-dd')
-          },
-          () => setFilterIndex(index)
-        )
-        break
-      case 2:
-        handleCustomDateModalOpen()
-        break
-      default:
-        fetchTransactions()
-    }
-  }
+  const theme = useTheme()
+  const primaryColor = theme.colors.primary['100']
 
   const handlePageChange = useCallback(
     (newPage: number) => {
@@ -129,34 +83,12 @@ const MyFunds = () => {
     [totalPages]
   )
 
-  const handleCustomDateModalOpen = () => setIsCustomDateModalOpen(true)
-  const handleCustomDateModalClose = () => setIsCustomDateModalOpen(false)
-
-  const handleDateChange = (start: string, end: string) => {
-    setCustomStartDate(start)
-    setCustomEndDate(end)
-    fetchTransactions(
-      {
-        page: currentPage,
-        startDate: parseAndFormatDate(start),
-        endDate: parseAndFormatDate(end)
-      },
-      () => setFilterIndex(2)
-    )
-    handleCustomDateModalClose()
-  }
-
   return (
-    <Box
-      maxWidth={{ base: '100vw', md: '30rem', lg: '40rem' }}
-      margin="calc(0rem + 0px) auto auto auto"
-      backgroundColor="white"
-      placeItems={'center'}
-    >
+    <>
       <Flex
         width={'335px'}
-        height="162px"
-        backgroundColor={'#4498E8'}
+        gap="1rem"
+        backgroundColor={primaryColor}
         borderRadius="12px"
         p="1rem"
         flexDir={'column'}
@@ -164,66 +96,68 @@ const MyFunds = () => {
         boxShadow="0px 20px 25px 0px #0000001A"
       >
         <Typography
-          text="Current Balance"
+          text={assetHeaderName[assetType]}
           fontSize="15px"
           color="#ffffff"
         />
         <Typography
-          text={`₹ ${balance}`}
+          text={assetValue}
           fontSize="24px"
           color="#ffffff"
         />
-        <Flex gap="1rem">
-          <BecknButton
-            text="Withdraw"
-            handleClick={() => router.push('/withdraw')}
-            variant="outline"
-            sx={{
-              color: '#000000',
-              borderColor: '#ffffff',
-              backgroundColor: '#ffffff',
-              cursor: 'pointer',
-              fontSize: '12px',
-              padding: '1rem 0',
-              borderRadius: '20px',
-              height: '1.5rem',
-              marginBottom: '0px'
-            }}
-            leftIcon={
-              <Image
-                src={ArrowOut}
-                alt="withdraw-icon"
-              />
-            }
-          />
-          <BecknButton
-            text="Deposit"
-            handleClick={() => router.push('/paymentMode')}
-            variant="outline"
-            sx={{
-              color: '#000000',
-              borderColor: '#ffffff',
-              backgroundColor: '#ffffff',
-              cursor: 'pointer',
-              fontSize: '12px',
-              padding: '1rem 0',
-              borderRadius: '20px',
-              height: '1.5rem',
-              marginBottom: '0px'
-            }}
-            leftIcon={
-              <Image
-                src={ArrowDown}
-                alt="deposit-icon"
-              />
-            }
-          />
-        </Flex>
+        {assetType === 'fund' && (
+          <Flex gap="1rem">
+            <BecknButton
+              text="Withdraw"
+              handleClick={() => router.push('/withdraw')}
+              variant="outline"
+              sx={{
+                color: '#000000',
+                borderColor: '#ffffff',
+                backgroundColor: '#ffffff',
+                cursor: 'pointer',
+                fontSize: '12px',
+                padding: '1rem 0',
+                borderRadius: '20px',
+                height: '1.5rem',
+                marginBottom: '0px'
+              }}
+              leftIcon={
+                <Image
+                  src={ArrowOut}
+                  alt="withdraw-icon"
+                />
+              }
+            />
+            <BecknButton
+              text="Deposit"
+              handleClick={() => router.push('/paymentMode')}
+              variant="outline"
+              sx={{
+                color: '#000000',
+                borderColor: '#ffffff',
+                backgroundColor: '#ffffff',
+                cursor: 'pointer',
+                fontSize: '12px',
+                padding: '1rem 0',
+                borderRadius: '20px',
+                height: '1.5rem',
+                marginBottom: '0px'
+              }}
+              leftIcon={
+                <Image
+                  src={ArrowDown}
+                  alt="deposit-icon"
+                />
+              }
+            />
+          </Flex>
+        )}
       </Flex>
       <Flex
         flexDirection={'column'}
         width={'100%'}
-        p="1rem"
+        p="2rem 1rem"
         gap="1rem"
       >
         <Flex
@@ -236,10 +170,10 @@ const MyFunds = () => {
             fontWeight="500"
             fontSize="15px !important"
           />
-          <Typography
+          {/* <Typography
             text="View all"
             color="#4498E8"
-          />
+          /> */}
         </Flex>
         {filterIndex > 0 || items.length > 0 ? (
           <>
@@ -251,13 +185,13 @@ const MyFunds = () => {
                 <Typography
                   text={name}
                   sx={{
-                    backgroundColor: filterIndex === index ? '#4498E8' : '#ffffff',
+                    backgroundColor: filterIndex === index ? primaryColor : '#ffffff',
                     borderRadius: '20px',
                     padding: '1.8% 6%',
                     color: filterIndex === index ? '#ffffff' : '#000000',
                     border: `1px solid ${filterIndex === index ? 'transparent' : '#000000'}`
                   }}
-                  onClick={() => handleOnFilterChange(index)}
+                  onClick={() => handleOnFilterChange?.(index)}
                 />
               ))}
             </Flex>
@@ -284,7 +218,8 @@ const MyFunds = () => {
                           flexDirection={'row'}
                           gap="0.5rem"
                         >
-                          {item.transactionType === TransactionType.WITHDRAW_FUND && (
+                          {(item.transactionType === TransactionType.WITHDRAW_FUND ||
+                            item.transactionType === TransactionType.SELLORDER) && (
                             <Box
                               width={'36px'}
                               height={'36px'}
@@ -296,7 +231,8 @@ const MyFunds = () => {
                               <Image src={ArrowOut} />
                             </Box>
                           )}
-                          {item.transactionType === TransactionType.ADD_FUND && (
+                          {(item.transactionType === TransactionType.ADD_FUND ||
+                            item.transactionType === TransactionType.BUYORDER) && (
                             <Box
                               width={'36px'}
                               height={'36px'}
@@ -387,13 +323,13 @@ const MyFunds = () => {
       </Flex>
       <SelectDate
         isOpen={isCustomDateModalOpen}
-        onClose={handleCustomDateModalClose}
-        onDateSelect={handleDateChange}
+        onClose={handleCustomDateModalClose!}
+        onDateSelect={handleDateChange!}
         initialStartDate={customStartDate}
         initialEndDate={customEndDate}
       />
-    </Box>
+    </>
   )
 }
 
-export default MyFunds
+export default AssetTransactionTemplate

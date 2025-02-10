@@ -10,22 +10,30 @@ import HDFC from '@public/images/hdfc.svg'
 import phonePay from '@public/images/phonePayPayment.svg'
 import CashOnDelivery from '@public/images/cash.svg'
 import NetBanking from '@public/images/netbanking.svg'
-import { FormControl, FormErrorMessage, FormLabel, Input } from '@chakra-ui/react'
+import { Box, FormControl, FormErrorMessage, FormLabel, Input, useTheme } from '@chakra-ui/react'
 import axios from '@services/axios'
 import { ROLE, ROUTE_TYPE } from '@lib/config'
 import Cookies from 'js-cookie'
+import { LoaderWithMessage } from '@beckn-ui/molecules'
+import VerifyOTP from '@components/VerifyOTP/VerifyOTP'
+import BottomModal from '@beckn-ui/common/src/components/BottomModal/BottomModalScan'
 
 function PaymentMode() {
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
   const bearerToken = Cookies.get('authToken') || ''
 
-  const { t } = useLanguage()
-  const router = useRouter()
-
   const [amount, setAmount] = useState('')
   const [formErrors, setFormErrors] = useState<{ name: string }>({
     name: ''
   })
+  const [verifyModal, setVerifyModal] = useState(false)
+  const [OTP, setOTP] = useState<string>('')
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+
+  const { t } = useLanguage()
+  const router = useRouter()
+  const theme = useTheme()
+  const primaryColor = theme.colors.primary['100']
 
   const validateForm = (data: any) => {
     if (data.name.trim() === '') {
@@ -84,8 +92,8 @@ function PaymentMode() {
           sx={{
             _focusVisible: {
               zIndex: 0,
-              borderColor: '#3182ce',
-              boxShadow: '0 0 0 1px #3182ce'
+              borderColor: primaryColor,
+              boxShadow: `0 0 0 1px ${primaryColor}`
             }
           }}
           value={amount}
@@ -103,7 +111,7 @@ function PaymentMode() {
       <PaymentMethodSelection
         t={key => t[key]}
         disableButton={[undefined, '', '0'].includes(amount)}
-        handleOrderConfirmation={depositFund}
+        handleOrderConfirmation={() => setVerifyModal(true)}
         paymentMethods={[
           {
             category: 'Select Bank',
@@ -163,6 +171,36 @@ function PaymentMode() {
           }
         ]}
       />
+      <BottomModal
+        isOpen={verifyModal}
+        onClose={() => {
+          setVerifyModal(false)
+        }}
+        modalHeader="OTP Verification"
+        isLoading={isLoading}
+      >
+        {isLoading ? (
+          <Box
+            display="grid"
+            height="100%"
+            alignContent="center"
+            padding={'2rem 0'}
+            data-test={testIds.loadingIndicator}
+          >
+            <LoaderWithMessage
+              loadingText="Please Wait"
+              loadingSubText="While we process your payment"
+            />
+          </Box>
+        ) : (
+          <Box p="0 24px">
+            <VerifyOTP
+              description="Enter the one time password the we have just sent to your registered mobile number."
+              handleVerifyOtp={depositFund}
+            />
+          </Box>
+        )}
+      </BottomModal>
     </>
   )
 }

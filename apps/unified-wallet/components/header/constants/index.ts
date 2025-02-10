@@ -3,15 +3,7 @@ type PathnameObjectType = Record<string, string>
 // -------------------------------- Top Header constants --------------------------------
 const appLogoBlackList = ['/signIn', '/signUp']
 const homeIconBlackList = ['/', '/signIn', '/', '/profile', '/signUp', '/OTPVerification', '/paymentMode', '/withdraw']
-const menuIconWhiteList = [
-  '/',
-  '/profile',
-  '/myRides',
-  '/buyingPreference',
-  '/sellingPreference',
-  '/myDers',
-  '/myFunds'
-]
+const menuIconWhiteList = ['/', '/profile', '/financialAssets']
 const topHeaderBlackList: string[] = []
 const languageIconWhiteList: string[] = []
 
@@ -30,12 +22,13 @@ const headerNames: PathnameObjectType = {
   '/myDers': 'My DERs',
   '/tradeDetails': 'No. of Units Sold',
   '/OTPVerification': 'OTP',
-  '/myFunds': 'My Funds',
+  '/financialAssets': 'Financial Assets',
   '/withdraw': 'Withdraw',
   '/myIdentities': 'My Identities',
   '/myAssets': 'My Assets',
   '/myTransactions': 'My Transactions',
-  '/physicalAssets': 'Physical Assets'
+  '/physicalAssets': 'Physical Assets',
+  '/energyAssets': 'Energy Assets'
 }
 
 const headerFrenchNames: PathnameObjectType = {
@@ -56,13 +49,14 @@ const headerBlackList = [
   '/myDers',
   '/tradeDetails',
   '/OTPVerification',
-  '/myFunds',
+  '/financialAssets',
   '/myPreference',
   '/withdraw',
   '/myIdentities',
   '/myAssets',
   '/myTransactions',
-  '/physicalAssets'
+  '/physicalAssets',
+  '/energyAssets'
 ]
 
 const bottomHeaderBlackList = ['/orderConfirmation', '/', '/feedback']

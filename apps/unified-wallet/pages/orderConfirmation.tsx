@@ -4,13 +4,14 @@ import orderConfirmmark from '@public/images/orderConfirmmark.svg'
 import { useSelector } from 'react-redux'
 import { useLanguage } from '@hooks/useLanguage'
 import { ConfirmationPage } from '@beckn-ui/becknified-components'
-import { Box } from '@chakra-ui/react'
+import { Box, Flex } from '@chakra-ui/react'
 import Cookies from 'js-cookie'
 import { LoaderWithMessage } from '@beckn-ui/molecules'
 import { CheckoutRootState } from '@beckn-ui/common/src/store/checkout-slice'
 import { getPayloadForConfirm } from '@beckn-ui/common/src/utils'
 import { useConfirmMutation } from '@beckn-ui/common/src/services/confirm'
 import { testIds } from '@shared/dataTestIds'
+import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 
 const OrderConfirmation = () => {
   const { t } = useLanguage()
@@ -52,38 +53,36 @@ const OrderConfirmation = () => {
   // }
 
   return (
-    <Box mt={'-2rem'}>
-      <ConfirmationPage
-        className="kuza-order-confornation"
-        schema={{
-          iconSrc: orderConfirmmark,
-          successOrderMessage: 'Deposit Successful',
-          gratefulMessage: '',
-          buttons: [
-            {
-              text: 'View My Funds',
-              handleClick: () => {
-                router.push('/myFunds')
-              },
-              disabled: false,
-              variant: 'solid',
-              colorScheme: 'primary',
-              dataTest: testIds.orderConfirmation_viewOrderButton
-            },
-            {
-              text: 'Go Back Home',
-              handleClick: () => {
-                router.push('/')
-              },
-              disabled: false,
-              variant: 'outline',
-              colorScheme: 'primary',
-              dataTest: testIds.orderConfirmation_goBackToHome
-            }
-          ]
+    <Flex
+      flexDir="column"
+      justifyContent={'space-between'}
+      height="calc(100vh - 100px)"
+      maxWidth={{ base: '100vw', md: '30rem', lg: '40rem' }}
+      margin="-2rem auto"
+      backgroundColor="white"
+      justifySelf={'center'}
+    >
+      <Box>
+        <ConfirmationPage
+          className="kuza-order-confornation"
+          schema={{
+            iconSrc: orderConfirmmark,
+            successOrderMessage: 'Deposit Successful',
+            gratefulMessage: '',
+            buttons: []
+          }}
+        />
+      </Box>
+      <BecknButton
+        text="Go Back Home"
+        handleClick={() => {
+          router.push('/')
         }}
+        variant="outline"
+        dataTest={testIds.orderConfirmation_goBackToHome}
+        colorScheme="primary"
       />
-    </Box>
+    </Flex>
   )
 }
 
