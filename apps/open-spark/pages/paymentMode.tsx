@@ -14,6 +14,7 @@ import { FormControl, FormErrorMessage, FormLabel, Input } from '@chakra-ui/reac
 import axios from '@services/axios'
 import { ROLE, ROUTE_TYPE } from '@lib/config'
 import Cookies from 'js-cookie'
+import FormFieldInput from '@components/FormFieldInput/FormFieldInput'
 
 function PaymentMode() {
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
@@ -28,6 +29,9 @@ function PaymentMode() {
   })
 
   const validateForm = (data: any) => {
+    if (!data.name || typeof data.name !== 'string') {
+      return {}
+    }
     if (data.name.trim() === '') {
       return {}
     } else if (!/^(0|[1-9]\d*)(\.\d{1,2})?$/.test(data.name.trim())) {
@@ -40,6 +44,7 @@ function PaymentMode() {
     const { name, value } = e.target
     console.log(`handleInputChange`, e.target)
     setAmount(value)
+    console.log(amount)
 
     const formData = {
       [name]: value
@@ -72,34 +77,21 @@ function PaymentMode() {
 
   return (
     <>
-      <FormControl
-        mb="0.5rem"
-        isInvalid={!!formErrors.name}
-      >
-        <FormLabel>Enter Amount</FormLabel>
-        <Input
-          type="number"
-          name="name"
-          placeholder="₹ 0"
-          sx={{
-            _focusVisible: {
-              zIndex: 0,
-              borderColor: '#3182ce',
-              boxShadow: '0 0 0 1px #3182ce'
-            }
-          }}
-          value={amount}
-          onChange={handleInputChange}
-        />
-        {formErrors.name && (
-          <FormErrorMessage
-            position={'absolute'}
-            mt="0px"
-          >
-            {formErrors.name}
-          </FormErrorMessage>
-        )}
-      </FormControl>
+      <FormFieldInput
+        schema={[
+          {
+            type: 'number',
+            name: 'amount',
+            value: amount,
+            handleChange: handleInputChange,
+            label: 'Enter Amount',
+            placeholder: '₹ 0',
+            error: formErrors.name,
+            dataTest: 'payment_inputAmount'
+          }
+        ]}
+      />
+
       <PaymentMethodSelection
         t={key => t[key]}
         disableButton={[undefined, '', '0'].includes(amount)}
