@@ -5,7 +5,7 @@ import { PaymentMethodSelection } from '@beckn-ui/common'
 import { testIds } from '@shared/dataTestIds'
 import SBI from '@public/images/sbi.svg'
 import HDFC from '@public/images/hdfc.svg'
-import { Box, FormControl, FormErrorMessage, FormLabel, Input } from '@chakra-ui/react'
+import { Box, Flex, FormControl, FormErrorMessage, FormLabel, Input, Text } from '@chakra-ui/react'
 import axios from '@services/axios'
 import { ROLE, ROUTE_TYPE } from '@lib/config'
 import Cookies from 'js-cookie'
@@ -13,6 +13,7 @@ import BottomModal from '@beckn-ui/common/src/components/BottomModal/BottomModal
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import { LoaderWithMessage } from '@beckn-ui/molecules'
 import useOtpTimer from '@hooks/useOtpTimer'
+import FormFieldInput from '@components/FormFieldInput/FormFieldInput'
 
 function Withdraw() {
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
@@ -31,6 +32,9 @@ function Withdraw() {
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const validateForm = (data: any) => {
+    if (!data.name || typeof data.name !== 'string') {
+      return {}
+    }
     if (data.name.trim() === '') {
       return {}
     } else if (!/^(0|[1-9]\d*)(\.\d{1,2})?$/.test(data.name.trim())) {
@@ -75,6 +79,9 @@ function Withdraw() {
       setIsLoading(false)
     }
   }
+  const handleOppChange = (e: any) => {
+    setOTP(e.target.value || '')
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -83,34 +90,20 @@ function Withdraw() {
 
   return (
     <>
-      <FormControl
-        mb="0.5rem"
-        isInvalid={!!formErrors.name}
-      >
-        <FormLabel>Enter Amount</FormLabel>
-        <Input
-          type="number"
-          name="name"
-          placeholder="₹ 0"
-          sx={{
-            _focusVisible: {
-              zIndex: 0,
-              borderColor: '#3182ce',
-              boxShadow: '0 0 0 1px #3182ce'
-            }
-          }}
-          value={amount}
-          onChange={handleInputChange}
-        />
-        {formErrors.name && (
-          <FormErrorMessage
-            position={'absolute'}
-            mt="0px"
-          >
-            {formErrors.name}
-          </FormErrorMessage>
-        )}
-      </FormControl>
+      <FormFieldInput
+        schema={[
+          {
+            type: 'number',
+            name: 'amount',
+            value: amount,
+            handleChange: handleInputChange,
+            label: 'Enter Amount',
+            placeholder: '₹ 0',
+            error: formErrors.name,
+            dataTest: 'wallet_inputAmount'
+          }
+        ]}
+      />
       <PaymentMethodSelection
         t={key => t[key]}
         disableButton={[undefined, '', '0'].includes(amount)}
@@ -157,33 +150,36 @@ function Withdraw() {
           </Box>
         ) : (
           <Box p="0 24px">
-            <FormControl mb="4rem">
-              <FormLabel
-                fontWeight={'400'}
-                fontSize={'12px'}
-              >{`Enter Verification OTP (${otpTime})`}</FormLabel>
-              <Input
-                type="number"
-                name="otp_verification"
-                placeholder=""
-                sx={{
-                  fontSize: '12px',
-                  _focusVisible: {
-                    zIndex: 0,
-                    borderColor: '#3182ce',
-                    boxShadow: '0 0 0 1px #3182ce'
-                  }
-                }}
-                value={OTP}
-                onChange={e => {
-                  setOTP(e.target.value || '')
-                }}
-              />
-            </FormControl>
+            <FormFieldInput
+              schema={[
+                {
+                  type: 'number',
+                  name: 'otp_verification',
+                  value: OTP,
+                  handleChange: handleOppChange,
+                  label: `Enter Verification OTP (${otpTime})`,
+                  placeholder: '',
+                  error: formErrors.name,
+                  dataTest: 'otp_inputNumber'
+                }
+              ]}
+            />
+            <Flex
+              justifyContent={'flex-end'}
+              alignItems={'end'}
+            >
+              <Text
+                fontSize={'10px'}
+                fontWeight={400}
+              >
+                Didn’t receive OTP? <span style={{ color: '#4498E8', cursor: 'pointer' }}>Resend OTP</span>{' '}
+              </Text>
+            </Flex>
 
             <BecknButton
               text="Verify"
               handleClick={handleSubmit}
+              sx={{ mt: '60px' }}
             />
           </Box>
         )}

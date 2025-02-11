@@ -15,26 +15,40 @@ import EmptyCurrentTrade from '@components/currentTrade/EmptyCurrentTrade'
 import { useRouter } from 'next/router'
 import SelectDate from '@components/dateRangePicker/SelectDate'
 import { parseAndFormatDate } from '@utils/parsedFormatDate-utils'
+import BalanceCard from '@components/wallet/BalanceCard'
+import TransactionTable from '@components/wallet/TransactionTable'
 
-interface TransactionMeta {
+export interface TransactionMeta {
   transactionType: 'ADD_FUND' | 'WITHDRAW_FUND' | 'SELLORDER' | 'BUYORDER'
   name: string
   date: string
   amount: number
 }
 
-const TransactionMap = {
+export const TransactionMap = {
   ADD_FUND: 'Deposit',
   WITHDRAW_FUND: 'Withdraw',
   SELLORDER: 'Sell Order',
   BUYORDER: 'Buy Order'
 }
 
-enum TransactionType {
+export enum TransactionType {
   ADD_FUND = 'ADD_FUND',
   WITHDRAW_FUND = 'WITHDRAW_FUND',
   SELLORDER = 'SELLORDER',
   BUYORDER = 'BUYORDER'
+}
+
+const buttonStyle = {
+  color: '#000000',
+  borderColor: '#ffffff',
+  backgroundColor: '#ffffff',
+  cursor: 'pointer',
+  fontSize: '12px',
+  padding: '1rem 0',
+  borderRadius: '20px',
+  height: '1.5rem',
+  marginBottom: '0px'
 }
 
 const MyFunds = () => {
@@ -153,73 +167,18 @@ const MyFunds = () => {
       backgroundColor="white"
       placeItems={'center'}
     >
-      <Flex
-        width={'335px'}
-        height="162px"
-        backgroundColor={'#4498E8'}
-        borderRadius="12px"
-        p="1rem"
-        flexDir={'column'}
-        justifyContent="space-around"
-        boxShadow="0px 20px 25px 0px #0000001A"
-      >
-        <Typography
-          text="Current Balance"
-          fontSize="15px"
-          color="#ffffff"
-        />
-        <Typography
-          text={`₹ ${balance}`}
-          fontSize="24px"
-          color="#ffffff"
-        />
-        <Flex gap="1rem">
-          <BecknButton
-            text="Withdraw"
-            handleClick={() => router.push('/withdraw')}
-            variant="outline"
-            sx={{
-              color: '#000000',
-              borderColor: '#ffffff',
-              backgroundColor: '#ffffff',
-              cursor: 'pointer',
-              fontSize: '12px',
-              padding: '1rem 0',
-              borderRadius: '20px',
-              height: '1.5rem',
-              marginBottom: '0px'
-            }}
-            leftIcon={
-              <Image
-                src={ArrowOut}
-                alt="withdraw-icon"
-              />
-            }
-          />
-          <BecknButton
-            text="Deposit"
-            handleClick={() => router.push('/paymentMode')}
-            variant="outline"
-            sx={{
-              color: '#000000',
-              borderColor: '#ffffff',
-              backgroundColor: '#ffffff',
-              cursor: 'pointer',
-              fontSize: '12px',
-              padding: '1rem 0',
-              borderRadius: '20px',
-              height: '1.5rem',
-              marginBottom: '0px'
-            }}
-            leftIcon={
-              <Image
-                src={ArrowDown}
-                alt="deposit-icon"
-              />
-            }
-          />
-        </Flex>
-      </Flex>
+      <BalanceCard
+        backgroundColor="#4498E8"
+        currentBalanceText="Current Balance"
+        balanceAmount={`₹ ${balance}`}
+        withdrawText="Withdraw"
+        depositText="Deposit"
+        onWithdraw={() => router.push('/withdraw')}
+        onDeposit={() => router.push('/paymentMode')}
+        buttonSx={buttonStyle}
+        withdrawIcon={ArrowOut}
+        depositIcon={ArrowDown}
+      />
       <Flex
         flexDirection={'column'}
         width={'100%'}
@@ -261,120 +220,15 @@ const MyFunds = () => {
                 />
               ))}
             </Flex>
-
-            <Box
-              height={{ base: 'calc(100vh - 29rem)', md: 'calc(100vh - 30rem)' }}
-              overflowY="scroll"
-              overflowX="scroll"
-              className="hideScroll"
-            >
-              <Table variant="simple">
-                <Tbody>
-                  {items.map((item, index: number) => (
-                    <Tr
-                      key={index}
-                      cursor="pointer"
-                      _hover={{ backgroundColor: 'rgba(0, 0, 0, 0.04)' }}
-                    >
-                      <Td
-                        borderBottom={'1px dotted transparent !important'}
-                        padding="6px 0px"
-                      >
-                        <Flex
-                          flexDirection={'row'}
-                          gap="0.5rem"
-                        >
-                          {item.transactionType === TransactionType.WITHDRAW_FUND && (
-                            <Box
-                              width={'36px'}
-                              height={'36px'}
-                              alignContent="center"
-                              justifyItems="center"
-                              borderRadius="20px"
-                              boxShadow="14px 6px 24px 2px #0000001A"
-                            >
-                              <Image src={ArrowOut} />
-                            </Box>
-                          )}
-                          {item.transactionType === TransactionType.ADD_FUND && (
-                            <Box
-                              width={'36px'}
-                              height={'36px'}
-                              alignContent="center"
-                              justifyItems="center"
-                              borderRadius="20px"
-                              boxShadow="14px 6px 24px 2px #0000001A"
-                            >
-                              <Image src={ArrowDown} />
-                            </Box>
-                          )}
-                          <Flex flexDir={'column'}>
-                            <Typography
-                              text={TransactionMap[item.transactionType]}
-                              style={{
-                                fontWeight: '400',
-                                fontSize: '14px',
-                                display: '-webkit-box',
-                                WebkitBoxOrient: 'vertical',
-                                WebkitLineClamp: '2',
-                                overflow: 'hidden',
-                                textOverflow: 'ellipsis',
-                                whiteSpace: 'normal'
-                              }}
-                            />
-                            <Typography
-                              text={formatDate(item.date, 'yyyy-MM-dd')}
-                              style={{
-                                fontSize: '12px',
-                                display: '-webkit-box',
-                                WebkitBoxOrient: 'vertical',
-                                WebkitLineClamp: '2',
-                                overflow: 'hidden',
-                                textOverflow: 'ellipsis',
-                                whiteSpace: 'normal',
-                                opacity: '40%'
-                              }}
-                            />
-                          </Flex>
-                        </Flex>
-                      </Td>
-                      <Td
-                        borderBottom={'1px dotted transparent !important'}
-                        padding="6px 0px"
-                      >
-                        <Typography
-                          text={`${item.transactionType === TransactionType.ADD_FUND ? '+' : '-'}₹ ${item.amount}`}
-                          style={{
-                            fontWeight: '500',
-                            fontSize: '16px',
-                            display: '-webkit-box',
-                            WebkitBoxOrient: 'vertical',
-                            WebkitLineClamp: '2',
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            whiteSpace: 'normal',
-                            textAlign: 'end'
-                          }}
-                        />
-                      </Td>
-                    </Tr>
-                  ))}
-                </Tbody>
-              </Table>
-            </Box>
-            {items.length > 6 && (
-              <Box
-                width={'100%'}
-                bottom="0"
-                margin="1rem 0"
-              >
-                <Pagination
-                  currentPage={currentPage}
-                  totalPages={totalPages}
-                  handlePageChange={handlePageChange}
-                />
-              </Box>
-            )}
+            <TransactionTable
+              items={items}
+              currentPage={currentPage}
+              totalPages={totalPages}
+              handlePageChange={handlePageChange}
+              TransactionMap={TransactionMap}
+              ArrowOut={ArrowOut}
+              ArrowDown={ArrowDown}
+            />
           </>
         ) : (
           <Box marginTop={'6rem'}>
