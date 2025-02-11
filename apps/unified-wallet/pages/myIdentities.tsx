@@ -6,6 +6,8 @@ import { useLanguage } from '@hooks/useLanguage'
 import { useDispatch } from 'react-redux'
 import CredLayoutRenderer, { CredFormErrors, FormProps } from '@components/credLayoutRenderer/LayoutRenderer'
 import { validateCredForm } from '@utils/form-utils'
+import { ItemMetaData } from '@components/credLayoutRenderer/CatalogueRenderer'
+import AadharCard from '@public/images/aadharcard.svg'
 
 const options = [
   { label: 'Aadhar Card', value: 'aadhar_card' },
@@ -21,7 +23,16 @@ const MyIdentities = () => {
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
   const bearerToken = Cookies.get('authToken')
 
-  const [items, setItems] = useState<{ id: number; name: string; paired?: boolean }[]>([])
+  const [items, setItems] = useState<ItemMetaData[]>([
+    {
+      id: 1,
+      title: 'Aadhar Card',
+      description: 'Aadhar Unique Identification Authority of India',
+      datetime: '2022-08-25T13:45:30.789Z',
+      isVerified: true,
+      image: AadharCard
+    }
+  ])
   const [searchKeyword, setSearchKeyword] = useState<string>('')
   const [openModal, setOpenModal] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -188,7 +199,6 @@ const MyIdentities = () => {
               }
             ]
           },
-
           openModal,
           handleOpenModal,
           handleCloseModal
