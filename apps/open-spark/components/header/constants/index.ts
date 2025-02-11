@@ -58,7 +58,7 @@ const headerBlackList = [
   '/withdraw'
 ]
 
-const bottomHeaderBlackList = ['/orderConfirmation', '/', '/feedback']
+const bottomHeaderBlackList = ['/orderConfirmation', '/', '/feedback', '/peerToPeer']
 const orderIconList = ['/orderDetails']
 const editIconList: string[] = ['/profile']
 const profileSectionIcon = ['/buyingPreference']
