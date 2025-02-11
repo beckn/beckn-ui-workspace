@@ -7,6 +7,7 @@ import AddNewItemModal from '@components/modal/AddNewItemModal'
 import { validateCredForm } from '@utils/form-utils'
 import EmptyIcon from '@public/images/empty_cred.svg'
 import { useLanguage } from '@hooks/useLanguage'
+import CatalogueRenderer, { ItemMetaData } from './CatalogueRenderer'
 
 export interface FormProps {
   type?: string
@@ -32,7 +33,7 @@ export interface CredFormErrors {
 
 export interface CredLayoutRendererProps {
   schema: {
-    items: { id: number; name: string; paired?: boolean }[]
+    items: ItemMetaData[]
     search: {
       searchInputPlaceholder?: string
       searchKeyword: string
@@ -97,7 +98,9 @@ const CredLayoutRenderer: React.FC<CredLayoutRendererProps> = ({
         </Flex>
       </Box>
       <Flex justifyContent="center">
-        {items.length > 0 ? null : (
+        {items.length > 0 ? (
+          <CatalogueRenderer list={items} />
+        ) : (
           <EmptyScreenTemplate
             text={'No identities uploaded yet'}
             description="Click on “+Add New” button to securely add and access your documents anytime"
