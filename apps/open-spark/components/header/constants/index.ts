@@ -2,7 +2,20 @@ type PathnameObjectType = Record<string, string>
 
 // -------------------------------- Top Header constants --------------------------------
 const appLogoBlackList = ['/signIn', '/signUp']
-const homeIconBlackList = ['/', '/signIn', '/', '/profile', '/signUp', '/OTPVerification', '/paymentMode', '/withdraw']
+const homeIconBlackList = [
+  '/',
+  '/signIn',
+  '/',
+  '/profile',
+  '/signUp',
+  '/OTPVerification',
+  '/paymentMode',
+  '/withdraw',
+  '/search',
+  '/myStore',
+  '/cart',
+  '/checkout'
+]
 const menuIconWhiteList = [
   '/',
   '/profile',
@@ -16,7 +29,7 @@ const topHeaderBlackList: string[] = []
 const languageIconWhiteList: string[] = []
 
 // -------------------------------- Sub Header constants --------------------------------
-const backIconList = ['/', '/signIn']
+const backIconList = ['/', '/signIn', '/myStore']
 
 const headerNames: PathnameObjectType = {
   '/signIn': 'Sign In',
@@ -32,7 +45,11 @@ const headerNames: PathnameObjectType = {
   '/OTPVerification': 'Verify Yourself',
   '/myFunds': 'My Funds',
   '/withdraw': 'Withdraw',
-  '/myPreference': 'My Preferences'
+  '/myPreference': 'My Preferences',
+  '/search': 'Search Results',
+  '/myStore': '',
+  '/cart': 'Cart',
+  '/checkout': 'Billing & Shipping'
 }
 
 const headerFrenchNames: PathnameObjectType = {
@@ -55,10 +72,33 @@ const headerBlackList = [
   '/OTPVerification',
   '/myFunds',
   '/myPreference',
-  '/withdraw'
+  '/withdraw',
+  '/search',
+  '/myStore',
+  '/cart',
+  '/checkout'
 ]
 
-const bottomHeaderBlackList = ['/orderConfirmation', '/', '/feedback', '/peerToPeer']
+const cartIconBlackList: string[] = [
+  '/',
+  '/paymentMode',
+  '/profile',
+  '/signIn',
+  '/signUp',
+  '/myCredentials',
+  '/myTrades',
+  '/buyingPreference',
+  '/sellingPreference',
+  '/myDers',
+  '/tradeDetails',
+  '/OTPVerification',
+  '/myFunds',
+  '/myPreference',
+  '/withdraw',
+  '/cart',
+  '/checkout'
+]
+const bottomHeaderBlackList = ['/orderConfirmation', '/', '/feedback']
 const orderIconList = ['/orderDetails']
 const editIconList: string[] = ['/profile']
 const profileSectionIcon = ['/buyingPreference']
@@ -81,6 +121,7 @@ export default {
     bottomHeaderBlackList,
     editIconList,
     profileSectionIcon,
-    infoIconList
+    infoIconList,
+    cartIconBlackList
   }
 }

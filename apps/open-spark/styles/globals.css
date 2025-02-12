@@ -289,10 +289,35 @@ select:-webkit-autofill:focus {
 .trade-status-accordion-icon {
   display: none !important;
 }
-.css-1juf683 {
+/* .css-1juf683 {
   font-size: 12px !important;
+} */
+.myStore-homepage [data-test='app-title'] {
+  color: #4398e8;
+  font-size: 20px;
 }
-
+.myStore-homepage .topSheet_topsheet_wrapper__g91VI {
+  position: absolute;
+  top: 42px;
+  z-index: 999;
+  left: 0;
+  width: unset !important;
+}
+.cart-count {
+  background-color: #4398e8 !important;
+}
+.cart-count > p {
+  color: #fff !important;
+}
+.myStore-search-wrapper [data-test='filter-button'] svg rect,
+.myStore-search-wrapper [data-test='filter-button'] svg path {
+  fill: transparent;
+  stroke: #a7a7a7;
+}
+.myStore-product-details svg path {
+  fill: unset;
+  stroke: unset;
+}
 @media only screen and (max-width: 370px) {
   .mytrade-status {
     gap: 2px !important;
