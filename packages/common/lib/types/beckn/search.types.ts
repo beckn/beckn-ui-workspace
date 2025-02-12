@@ -8,6 +8,7 @@ interface LocationProvider {
   items: Item[]
   long_desc?: string
   short_desc?: string
+  price?: Price
   images: {
     url: string
     size_type: string

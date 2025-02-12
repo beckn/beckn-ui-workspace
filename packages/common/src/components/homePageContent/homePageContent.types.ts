@@ -20,6 +20,7 @@ export type BlockName =
   | 'geoLocationInput'
   | 'cardType'
   | 'customComponent'
+  | 'footerProps'
 export interface HomePageContentProps {
   blockOrder?: BlockName[]
   logos?: Logos
@@ -63,4 +64,5 @@ export interface HomePageContentProps {
     poweredByLogoSrc: string
     poweredByText: string
   }
+  showFooter?: boolean
 }

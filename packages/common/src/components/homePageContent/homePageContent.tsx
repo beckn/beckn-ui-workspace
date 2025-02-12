@@ -21,7 +21,8 @@ const HomePageContent: React.FC<HomePageContentProps> = ({
   geoLocationInput,
   footerProps,
   CardSelector,
-  customComponent
+  customComponent,
+  showFooter = true
 }) => {
   const { name, title, description, logoSrc, altText } = headerProps || {}
   const {
@@ -37,7 +38,7 @@ const HomePageContent: React.FC<HomePageContentProps> = ({
     activeCard: ''
   }
   const { label, onSearchByLocationClick } = searchByLocation || {}
-  const { poweredByText, poweredByLogoSrc } = footerProps
+  const { poweredByText, poweredByLogoSrc } = footerProps || {}
   const { placeholder, geoLocationSearchPageSelectedAddress, navigateToSearchResult } = geoLocationInput || {}
 
   const theme = useTheme()
@@ -270,10 +271,14 @@ const HomePageContent: React.FC<HomePageContentProps> = ({
       backgroundColor="white"
     >
       {blockOrder.map((block, index) => renderBlock(block, index))}
-      <PoweredBy
-        logoSrc={poweredByLogoSrc}
-        poweredByText={poweredByText}
-      />
+      {showFooter ? (
+        <PoweredBy
+          logoSrc={poweredByLogoSrc}
+          poweredByText={poweredByText}
+        />
+      ) : (
+        ''
+      )}
     </Box>
   )
 }

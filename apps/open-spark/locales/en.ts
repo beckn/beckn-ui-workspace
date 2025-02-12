@@ -76,6 +76,22 @@ const en: { [key: string]: string } = {
   netBanking: ' Net Banking',
   procced: 'Proceed',
   confirmOrder: 'Proceed',
-  errorAmount: 'Enter valid amount'
+  errorAmount: 'Enter valid amount',
+  subText:
+    "A global marketplace to discover and buy anything you need. Just type what you want to buy and we'll take care of the rest.",
+  addedToCart: 'Product added to cart',
+  formNumber: 'Mobile Number',
+  formEmail: 'Email ID',
+  formZipCode: 'Zip Code',
+  saveShippingDetails: 'Save Shipping Details',
+  saveBillingDetails: 'Save Billing Details',
+  proceedToCheckout: 'Proceed',
+  shipping: 'Shipping',
+  billing: 'Billing',
+  total: 'Total',
+  initializingOrderLoader: 'while we set things up for you',
+  quoteRequestLoader: 'Your order is getting processed',
+  emptyCardHeading: 'The Cart is Empty',
+  emptyCardSubHeading: 'Looks like you haven’t made your choice yet'
 }
 export default en
