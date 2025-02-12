@@ -79,7 +79,9 @@ const en: { [key: string]: string } = {
   errorAmount: 'Enter valid amount',
   subText:
     "A global marketplace to discover and buy anything you need. Just type what you want to buy and we'll take care of the rest.",
+  subTextForRenT: 'A global marketplace to rent what you need or offer your own rental services. ',
   addedToCart: 'Product added to cart',
+
   formNumber: 'Mobile Number',
   formEmail: 'Email ID',
   formZipCode: 'Zip Code',

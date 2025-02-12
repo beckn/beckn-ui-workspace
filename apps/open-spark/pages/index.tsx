@@ -2,7 +2,7 @@ import { Box, Flex, Image } from '@chakra-ui/react'
 import Carousel from '@components/carasoul/Carousel'
 import profileIcon from '@public/images/user_profile.svg'
 import { useRouter } from 'next/router'
-import React from 'react'
+import React, { useState } from 'react'
 import { TiShoppingCart } from 'react-icons/ti'
 import { TbHexagonLetterO } from 'react-icons/tb'
 import { SlEnergy } from 'react-icons/sl'
@@ -11,38 +11,16 @@ import { Typography } from '@beckn-ui/molecules'
 import { MdOutlineKeyboardArrowRight } from 'react-icons/md'
 import ShadowCardButton from '@components/buttonCard/ShadowCardButton'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
+import OpenWalletBottomModal from '@components/modal/OpenWalletBottomModal'
+import { buttonStyles, images } from '@components/constant'
 
-const images = [
-  {
-    src: '/images/homePage.svg',
-    text: 'home page'
-  },
-  {
-    src: '/images/homePage1.png',
-    text: 'home page'
-  },
-  {
-    src: '/images/homePage2.png',
-    text: 'home page'
-  }
-]
-const buttonStyles = {
-  width: '100%',
-  height: '54px',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-  px: '15px',
-  py: '20px',
-  margin: '10px',
-  borderRadius: 'lg',
-  background: 'white',
-  boxShadow: '0px 10px 14px 0px #0000001A',
-  _hover: { bg: 'gray.50' },
-  _active: { bg: 'gray.100' }
-}
 const HomePage = () => {
   const router = useRouter()
+  const [modalType, setModalType] = useState<'wallet' | 'link' | 'otp' | 'alert' | null>(null)
+
+  const handleModalOpen = (type: 'wallet' | 'link' | 'otp' | 'alert') => setModalType(type)
+  const handleModalClose = () => setModalType(null)
+
   return (
     <Box
       backgroundColor="white"
@@ -70,7 +48,7 @@ const HomePage = () => {
         <Box>
           <BecknButton
             text="Connect Wallet"
-            handleClick={() => router.push('/profile')}
+            handleClick={() => handleModalOpen('wallet')}
             sx={{
               width: '93px',
               height: '30px',
@@ -115,8 +93,8 @@ const HomePage = () => {
               text="Hire and Rent Services"
               textStyle="start"
               postIcon={<MdOutlineKeyboardArrowRight />}
-              handleClick={() => router.push('/hire')}
-              dataTest="store_button"
+              handleClick={() => router.push('/rentAndHire')}
+              dataTest="hire_button"
               sx={buttonStyles}
             />
             {/* <ShadowCardButton
@@ -140,6 +118,11 @@ const HomePage = () => {
           </Flex>
         </Box>
       </Box>
+      <OpenWalletBottomModal
+        modalType={modalType}
+        setModalType={setModalType}
+        onClose={handleModalClose}
+      />
     </Box>
   )
 }

@@ -29,7 +29,7 @@ const topHeaderBlackList: string[] = []
 const languageIconWhiteList: string[] = []
 
 // -------------------------------- Sub Header constants --------------------------------
-const backIconList = ['/', '/signIn', '/myStore']
+const backIconList = ['/', '/signIn', '/myStore', '/rentAndHire']
 
 const headerNames: PathnameObjectType = {
   '/signIn': 'Sign In',
