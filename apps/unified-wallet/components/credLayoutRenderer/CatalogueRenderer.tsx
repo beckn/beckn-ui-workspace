@@ -46,33 +46,35 @@ const CatalogueRenderer = (props: CatalogueRendererProps) => {
                 position={'relative'}
                 width={'100%'}
               >
-                <Box
-                  w={'125px'}
-                  position="relative"
-                  borderTopLeftRadius={'1rem'}
-                  borderBottomLeftRadius={'1rem'}
-                  overflow={'hidden'}
-                  display={'flex'}
-                  flexDirection={'column'}
-                  justifyContent={'space-between'}
-                  alignItems={'center'}
-                  margin="0.7rem"
-                >
+                {item.image && (
                   <Box
+                    w={'125px'}
+                    position="relative"
+                    borderTopLeftRadius={'1rem'}
+                    borderBottomLeftRadius={'1rem'}
+                    overflow={'hidden'}
                     display={'flex'}
+                    flexDirection={'column'}
+                    justifyContent={'space-between'}
                     alignItems={'center'}
-                    height={'100%'}
+                    margin="0.7rem"
                   >
-                    <Image
-                      src={item.image}
-                      width={'100%'}
+                    <Box
+                      display={'flex'}
+                      alignItems={'center'}
                       height={'100%'}
-                      alt={'item_image'}
-                      boxShadow={'0 20px 25px rgba(0, 0, 0, 0.1),0 8px 10px rgba(0, 0, 0, 0.05)'}
-                      //   objectFit={'cover'}
-                    />
+                    >
+                      <Image
+                        src={item.image}
+                        width={'100%'}
+                        height={'100%'}
+                        alt={'item_image'}
+                        boxShadow={'0 20px 25px rgba(0, 0, 0, 0.1),0 8px 10px rgba(0, 0, 0, 0.05)'}
+                        //   objectFit={'cover'}
+                      />
+                    </Box>
                   </Box>
-                </Box>
+                )}
                 <Box
                   p={'15px'}
                   pt={'11px'}
@@ -80,6 +82,7 @@ const CatalogueRenderer = (props: CatalogueRendererProps) => {
                   position={'relative'}
                   display={'flex'}
                   flexDir={'column'}
+                  alignSelf="center"
                 >
                   {item.title && (
                     <Flex
@@ -116,29 +119,33 @@ const CatalogueRenderer = (props: CatalogueRendererProps) => {
                     </Flex>
                   )}
 
-                  <Flex
-                    justifyContent={'space-between'}
-                    alignItems={'flex-start'}
-                    w={'100%'}
-                  >
-                    <Text
-                      fontSize={'10px'}
-                      mb={'0.4rem'}
-                      noOfLines={2}
-                      textOverflow="ellipsis"
-                      whiteSpace="pre-wrap"
-                      overflowWrap="break-word"
-                      color={'#5F5F5F'}
+                  {item.description && (
+                    <Flex
+                      justifyContent={'space-between'}
+                      alignItems={'flex-start'}
+                      w={'100%'}
                     >
-                      {item.description}
-                    </Text>
-                  </Flex>
+                      <Text
+                        fontSize={'10px'}
+                        mb={'0.4rem'}
+                        noOfLines={2}
+                        textOverflow="ellipsis"
+                        whiteSpace="pre-wrap"
+                        overflowWrap="break-word"
+                        color={'#5F5F5F'}
+                      >
+                        {item.description}
+                      </Text>
+                    </Flex>
+                  )}
 
-                  <Typography
-                    text={formatDate(item?.datetime!, 'do MMM yyyy, h.mma')}
-                    fontSize={'10px'}
-                    color={'#5F5F5F'}
-                  />
+                  {item?.datetime && (
+                    <Typography
+                      text={formatDate(item?.datetime!, 'do MMM yyyy, h.mma')}
+                      fontSize={'10px'}
+                      color={'#5F5F5F'}
+                    />
+                  )}
                 </Box>
               </Box>
             </Box>

@@ -18,6 +18,8 @@ export interface FormProps {
   assetsMaker?: string
   modelNumber?: string
   serialNumber?: string
+  country?: string
+  verificationMethod?: string
 }
 
 export interface CredFormErrors {
@@ -29,6 +31,8 @@ export interface CredFormErrors {
   assetsMaker?: string
   modelNumber?: string
   serialNumber?: string
+  country?: string
+  verificationMethod?: string
 }
 
 export interface CredLayoutRendererProps {

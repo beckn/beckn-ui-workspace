@@ -79,11 +79,13 @@ const en: { [key: string]: string } = {
   errorAmount: 'Enter valid amount',
   footerText: 'Powered by',
   errorType: 'Please select a type.',
-  errorCred: 'Credential number is required.',
-  errorCred1: 'Credential number must be at least 4 digits.',
+  errorCred: 'Id number is required.',
+  errorCred1: 'Id number must be at least 4 digits.',
   errorDeviceLoc: 'Device Location is required',
   errorAssetsMaker: 'Assets Maker is required',
   errorModelNumber: 'Model Number is required',
-  errorSerialNum: 'Serial Number is required'
+  errorSerialNum: 'Serial Number is required',
+  errorSelectVerificationMethod: 'Select Verification Method is required',
+  errorSelectCountry: 'Select Country is required'
 }
 export default en

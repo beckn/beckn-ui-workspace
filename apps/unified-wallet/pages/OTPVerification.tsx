@@ -2,6 +2,7 @@ import { Box } from '@chakra-ui/react'
 import VerifyOTP from '@components/VerifyOTP/VerifyOTP'
 import { useLanguage } from '@hooks/useLanguage'
 import { useVerifyOtpMutation } from '@services/UserService'
+import Cookies from 'js-cookie'
 import Router from 'next/router'
 import React, { useEffect, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
@@ -32,18 +33,8 @@ const OTPVerification = () => {
     }
 
     try {
+      Cookies.set('isVerified', 'true')
       Router.push('/')
-      // const response = await verifyOtp(data).unwrap()
-      // dispatch(
-      //   feedbackActions.setToastData({
-      //     toastData: {
-      //       message: t.success,
-      //       display: true,
-      //       type: 'success',
-      //       description: response.data.message
-      //     }
-      //   })
-      // )
     } catch (error) {
       console.error('An error occurred:', error)
     }

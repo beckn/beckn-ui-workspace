@@ -21,6 +21,7 @@ import { ROLE, ROUTE_TYPE } from '@lib/config'
 import { AuthRootState } from '@store/auth-slice'
 import { useRouter } from 'next/router'
 import { InputProps } from '@beckn-ui/molecules'
+import { extractMobileNumberFromSubjectDid } from '@utils/general'
 
 const ProfilePage = () => {
   const dispatch = useDispatch()
@@ -31,21 +32,20 @@ const ProfilePage = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [formData, setFormData] = useState<ProfileProps>({
     name: '',
-    customerId: '',
-    address: ''
+    mobileNumber: ''
   })
   const [formErrors, setFormErrors] = useState<FormErrors>({
     name: '',
-    customerId: '',
-    address: ''
+    mobileNumber: ''
   })
 
-  const { profileEditable } = useSelector((state: UserRootState) => state.user)
+  const { user } = useSelector((state: AuthRootState) => state.auth)
 
   useEffect(() => {
-    return () => {
-      dispatch(setProfileEditable({ profileEditable: false }))
-    }
+    setFormData({
+      name: '',
+      mobileNumber: user?.did ? extractMobileNumberFromSubjectDid(user?.did!) : ''
+    })
   }, [])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,104 +68,18 @@ const ProfilePage = () => {
     }))
   }
 
-  useEffect(() => {
-    const requestOptions = {
-      method: 'GET',
-      headers: { Authorization: `Bearer ${bearerToken}` },
-      withCredentials: true
-    }
-
-    setIsLoading(true)
-
-    axios
-      .get(`${strapiUrl}${ROUTE_TYPE[ROLE.GENERAL]}/user-profile`, requestOptions)
-      .then(response => {
-        const result = response.data
-        const { fullname, address, customer_id } = result
-        setFormData({
-          ...formData,
-          name: fullname,
-          address,
-          customerId: customer_id
-        })
-      })
-      .finally(() => {
-        setIsLoading(false)
-      })
-  }, [])
-
-  const updateProfile = () => {
-    if (formData.name === '' || formData.address === '') {
-      return
-    }
-    const errors = profileValidateForm(formData) as any
-    setFormErrors(prevErrors => ({
-      ...prevErrors,
-      ...Object.keys(errors).reduce((acc: any, key) => {
-        acc[key] = t[`${errors[key]}`] || ''
-        return acc
-      }, {} as FormErrors)
-    }))
-
-    const data = {
-      fullname: formData.name.trim(),
-      address: formData.address
-    }
-
-    axios
-      .put(`${strapiUrl}${ROUTE_TYPE[ROLE.GENERAL]}/user-profile`, data, {
-        headers: { Authorization: `Bearer ${bearerToken}` }
-      })
-      .then(response => {
-        // dispatch(
-        //   feedbackActions.setToastData({
-        //     toastData: { message: t.success, display: true, type: 'success', description: t.profileUpdateSuccess }
-        //   })
-        // )
-      })
-      .catch(error => {
-        console.log(error)
-        dispatch(
-          feedbackActions.setToastData({
-            toastData: { message: 'Error!', display: true, type: 'error', description: 'Unable to update' }
-          })
-        )
-      })
-  }
-
   const getInputs = () => {
     const inputs: InputProps[] = [
       {
         type: 'text',
-        name: 'name',
-        value: formData.name,
+        name: 'mobileNumber',
+        value: formData.mobileNumber!,
         handleChange: handleInputChange,
-        label: t.fullName,
-        error: formErrors.name,
-        dataTest: testIds.profile_inputName,
-        disabled: !profileEditable,
-        customInputBlurHandler: updateProfile
-      },
-      {
-        type: 'text',
-        name: 'customerId',
-        value: formData.customerId!,
-        handleChange: handleInputChange,
-        label: t.formCustomerId,
-        error: formErrors.customerId,
-        dataTest: testIds.profile_customerId,
-        disabled: true
-      },
-      {
-        type: 'text',
-        name: 'address',
-        value: formData.address!,
-        handleChange: handleInputChange,
-        label: t.formAddress,
-        error: formErrors.address,
-        dataTest: testIds.profile_address,
-        disabled: !profileEditable,
-        customInputBlurHandler: updateProfile
+        label: t.enterMobileNumber,
+        error: formErrors.mobileNumber,
+        dataTest: testIds.profile_inputMobileNumber,
+        disabled: true,
+        customInputBlurHandler: () => {}
       }
     ]
 
@@ -190,38 +104,6 @@ const ProfilePage = () => {
         isLoading={isLoading}
         customComponent={
           <Box marginTop={'-1.8rem'}>
-            <>
-              <NavigationItem
-                icon={myPreferenceIcon}
-                label={'My Preferences'}
-                handleClick={() => router.push('/myPreference')}
-                dataTest={'myPreference'}
-              />
-              <NavigationItem
-                icon={credIcon}
-                label={'My Credentials'}
-                handleClick={() => router.push('/myCredentials')}
-                dataTest={'myCredintial'}
-              />
-              <NavigationItem
-                icon={tradeIcon}
-                label={'My Trades'}
-                handleClick={() => router.push('/myTrades')}
-                dataTest={'myTrades'}
-              />
-              <NavigationItem
-                icon={derIcon}
-                label={'My DERs'}
-                handleClick={() => router.push('/myDers')}
-                dataTest={'myDers'}
-              />
-              <NavigationItem
-                icon={fundsIcon}
-                label={'My Funds'}
-                handleClick={() => router.push('/myFunds')}
-                dataTest={'myFunds'}
-              />
-            </>
             <NavigationItem
               icon={logoutIcon}
               label={t.logout}

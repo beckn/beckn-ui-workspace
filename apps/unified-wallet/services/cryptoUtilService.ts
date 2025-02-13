@@ -1,14 +1,6 @@
-import { DocumentPayload } from '@lib/types/becknDid'
 import axios from 'axios'
-import jwt from 'jsonwebtoken'
 
 const BASE_URL = process.env.NEXT_PUBLIC_CRYPTO_UTILS_BASE_URL
-
-export const signToken = (user: any) => {
-  return jwt.sign(user, process.env.JWT_SECRET as string, {
-    expiresIn: '30d'
-  })
-}
 
 export const generateKeyPairFromString = async (
   inputString: string
@@ -38,7 +30,7 @@ export const generateSignature = async (challenge: string, privateKey: string): 
       `${BASE_URL}/api/signature/generateSignature`,
       {
         hashAlgo: 'BLAKE2B-512',
-        payload: Number(challenge),
+        payload: challenge,
         signatureAlgo: 'Ed25519',
         privateKey
       },
@@ -53,39 +45,6 @@ export const generateSignature = async (challenge: string, privateKey: string): 
     return response.data?.SIGNATURE_KEY || ''
   } catch (error) {
     console.error('Error generating signature:', error)
-    throw error
-  }
-}
-
-export const generateAuthHeader = async (data: {
-  subjectId: string
-  privateKey: string
-  publicKey: string
-  payload: DocumentPayload
-}) => {
-  const { subjectId, privateKey, publicKey, payload } = data
-  try {
-    const response = await axios.post(
-      `${BASE_URL}/auth/sign`,
-      {
-        endpoint: `${subjectId}/documents`,
-        method: 'post',
-        keyId: '/subjects/users/phone/8899008890/verification_methods/0ed98e89-8fdd-4331-a4ce-dfb531effe85',
-        privateKey,
-        publicKey,
-        payload
-      },
-      {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }
-    )
-
-    console.log('Response:', response.data)
-    return response.data
-  } catch (error) {
-    console.error('Error:', error)
     throw error
   }
 }
