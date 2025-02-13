@@ -1,6 +1,6 @@
 import { formatDate } from '@beckn-ui/common'
 import { Typography } from '@beckn-ui/molecules'
-import { Box, Flex, Image, Text } from '@chakra-ui/react'
+import { Box, Flex, Image, Text, useTheme } from '@chakra-ui/react'
 import React from 'react'
 import VerifiedIcon from '@public/images/verified.svg'
 import UnverifiedIcon from '@public/images/unverified.svg'
@@ -12,6 +12,7 @@ export interface ItemMetaData {
   datetime?: string
   isVerified?: boolean
   image?: string
+  data?: any
 }
 
 interface CatalogueRendererProps {
@@ -21,6 +22,10 @@ interface CatalogueRendererProps {
 
 const CatalogueRenderer = (props: CatalogueRendererProps) => {
   const { list, renderMode = 'long' } = props
+
+  const theme = useTheme()
+  const primaryColor = theme.colors.primary['100']
+
   return (
     <>
       {list.map(item => {
@@ -69,7 +74,7 @@ const CatalogueRenderer = (props: CatalogueRendererProps) => {
                         width={'100%'}
                         height={'100%'}
                         alt={'item_image'}
-                        boxShadow={'0 20px 25px rgba(0, 0, 0, 0.1),0 8px 10px rgba(0, 0, 0, 0.05)'}
+                        // boxShadow={'0 20px 25px rgba(0, 0, 0, 0.1),0 8px 10px rgba(0, 0, 0, 0.05)'}
                         //   objectFit={'cover'}
                       />
                     </Box>
@@ -83,67 +88,97 @@ const CatalogueRenderer = (props: CatalogueRendererProps) => {
                   display={'flex'}
                   flexDir={'column'}
                   alignSelf="center"
+                  gap="6px"
                 >
-                  {item.title && (
-                    <Flex
-                      justifyContent={'space-between'}
-                      alignItems={'flex-start'}
-                      w={'100%'}
-                    >
-                      <Text
-                        fontWeight={'600'}
-                        fontSize={'16px'}
-                        mb={'0.7rem'}
-                        noOfLines={2}
-                        textOverflow="ellipsis"
-                        whiteSpace="pre-wrap"
-                        overflowWrap="break-word"
+                  <Box>
+                    {item.title && (
+                      <Flex
+                        justifyContent={'space-between'}
+                        alignItems={'flex-start'}
+                        w={'100%'}
                       >
-                        {item.title}
-                      </Text>
-                      <Box marginTop={'2px'}>
-                        {item?.isVerified ? (
-                          <Image
-                            src={VerifiedIcon}
-                            width={'80px'}
-                            height={'18px'}
-                          />
-                        ) : (
-                          <Image
-                            src={UnverifiedIcon}
-                            width={'80px'}
-                            height={'18px'}
-                          />
-                        )}
-                      </Box>
-                    </Flex>
-                  )}
+                        <Text
+                          fontWeight={'600'}
+                          fontSize={'16px'}
+                          // mb={'0.7rem'}
+                          noOfLines={1}
+                          textOverflow="ellipsis"
+                          whiteSpace="pre-wrap"
+                          overflowWrap="break-word"
+                        >
+                          {item.title}
+                        </Text>
+                        <Box marginTop={'2px'}>
+                          {item?.isVerified ? (
+                            <Image
+                              src={VerifiedIcon}
+                              width={'80px'}
+                              height={'18px'}
+                            />
+                          ) : (
+                            <Image
+                              src={UnverifiedIcon}
+                              width={'80px'}
+                              height={'18px'}
+                            />
+                          )}
+                        </Box>
+                      </Flex>
+                    )}
+                    {item.data.source && (
+                      <Flex
+                        flexDir={'row'}
+                        gap="2px"
+                      >
+                        <Typography
+                          text={`Source:`}
+                          fontWeight={'700'}
+                          fontSize="10px"
+                        />
+                        <Typography
+                          text={item.data.source}
+                          fontSize="10px"
+                          color="#9E9E9E"
+                        />
+                      </Flex>
+                    )}
 
-                  {item.description && (
-                    <Flex
-                      justifyContent={'space-between'}
-                      alignItems={'flex-start'}
-                      w={'100%'}
-                    >
-                      <Text
-                        fontSize={'10px'}
-                        mb={'0.4rem'}
-                        noOfLines={2}
-                        textOverflow="ellipsis"
-                        whiteSpace="pre-wrap"
-                        overflowWrap="break-word"
-                        color={'#5F5F5F'}
+                    {item.description && (
+                      <Flex
+                        justifyContent={'space-between'}
+                        alignItems={'flex-start'}
+                        w={'100%'}
                       >
-                        {item.description}
-                      </Text>
-                    </Flex>
-                  )}
+                        <Text
+                          fontSize={'10px'}
+                          mb={'0.4rem'}
+                          noOfLines={2}
+                          textOverflow="ellipsis"
+                          whiteSpace="pre-wrap"
+                          overflowWrap="break-word"
+                          color={'#5F5F5F'}
+                        >
+                          {item.description}
+                        </Text>
+                      </Flex>
+                    )}
+                  </Box>
+                  <Box height={'14px'}>
+                    {item?.data?.attachment && (
+                      <Typography
+                        text={item?.data?.attachment}
+                        fontSize={'10px'}
+                        fontWeight="600"
+                        color={primaryColor}
+                      />
+                    )}
+                  </Box>
 
                   {item?.datetime && (
                     <Typography
                       text={formatDate(item?.datetime!, 'do MMM yyyy, h.mma')}
                       fontSize={'10px'}
-                      color={'#5F5F5F'}
+                      color={'#9E9E9E'}
                     />
                   )}
                 </Box>

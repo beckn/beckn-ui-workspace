@@ -9,13 +9,14 @@ import { useDispatch } from 'react-redux'
 
 interface VerifyOTPProps {
   description: string
+  isLoading?: boolean
   handleVerifyOtp: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
 }
 
 const numberOfDigits = 6
 
 const VerifyOTP = (props: VerifyOTPProps) => {
-  const { description, handleVerifyOtp } = props
+  const { description, isLoading, handleVerifyOtp } = props
   const [OTP, setOTP] = useState(new Array(numberOfDigits).fill(''))
 
   const otpBoxReference = useRef<any>([])
@@ -121,6 +122,7 @@ const VerifyOTP = (props: VerifyOTPProps) => {
           handleClick={e => handleVerifyOtp(e)}
           sx={{ marginTop: '2rem' }}
           dataTest="otp_number"
+          isLoading={isLoading}
         />
       </Flex>
     </>

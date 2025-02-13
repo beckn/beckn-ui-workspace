@@ -46,26 +46,31 @@ const DragAndDropUpload = (props: DragAndDropUploadProps) => {
     if (e.target.files) {
       const uploadedFiles = Array.from(e.target.files)
 
-      // Parse accept attribute and dynamically validate
-      const acceptedTypes = accept?.split(',').map(type => type.trim())
-      const validFiles = uploadedFiles.filter(file => {
-        return acceptedTypes?.some(type => {
-          if (type.startsWith('.')) {
-            // Match file extension
-            return file.name.endsWith(type)
-          } else {
-            // Match MIME type
-            return file.type === type
-          }
+      if (!accept || accept === '*') {
+        // Accept all files if accept is undefined or '*'
+        setFiles(uploadedFiles)
+      } else {
+        // Parse accept attribute and dynamically validate
+        const acceptedTypes = accept?.split(',').map(type => type.trim())
+        const validFiles = uploadedFiles.filter(file => {
+          return acceptedTypes?.some(type => {
+            if (type.startsWith('.')) {
+              // Match file extension
+              return file.name.endsWith(type)
+            } else {
+              // Match MIME type
+              return file.type === type
+            }
+          })
         })
-      })
 
-      if (validFiles.length !== uploadedFiles.length) {
-        alert(`Invalid files uploaded. Please upload files matching: ${accept}`)
-      }
+        if (validFiles.length !== uploadedFiles.length) {
+          alert(`Invalid files uploaded. Please upload files matching: ${accept}`)
+        }
 
-      if (validFiles.length > 0) {
-        setFiles(validFiles)
+        if (validFiles.length > 0) {
+          setFiles(validFiles)
+        }
       }
 
       e.target.value = ''

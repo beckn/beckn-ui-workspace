@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react'
 import { Box, Flex } from '@chakra-ui/react'
-import { ButtonProps, InputProps, Typography } from '@beckn-ui/molecules'
+import { ButtonProps, InputProps, LoaderWithMessage, Typography } from '@beckn-ui/molecules'
 import SearchBar from '@beckn-ui/common/src/components/searchBar'
 import EmptyScreenTemplate from '@components/EmptyTemplates/EmptyScreenTemplate'
 import AddNewItemModal from '@components/modal/AddNewItemModal'
@@ -8,6 +8,7 @@ import { validateCredForm } from '@utils/form-utils'
 import EmptyIcon from '@public/images/empty_cred.svg'
 import { useLanguage } from '@hooks/useLanguage'
 import CatalogueRenderer, { ItemMetaData } from './CatalogueRenderer'
+import { DocumentProps } from '@components/documentsRenderer'
 
 export interface FormProps {
   type?: string
@@ -49,10 +50,12 @@ export interface CredLayoutRendererProps {
         inputs: InputProps[]
         buttons: ButtonProps[]
       }
+      isLoading?: boolean
       openModal: boolean
       handleOpenModal: () => void
       handleCloseModal: () => void
       renderFileUpload?: boolean
+      handleOnFileselectionChange?: (data: DocumentProps[]) => void
     }
   }
 }
@@ -61,7 +64,15 @@ const CredLayoutRenderer: React.FC<CredLayoutRendererProps> = ({
   schema: {
     items,
     search: { searchInputPlaceholder = 'Search', searchKeyword, setSearchKeyword },
-    modal: { schema: modalSchema, openModal, handleCloseModal, handleOpenModal, renderFileUpload }
+    modal: {
+      schema: modalSchema,
+      isLoading,
+      openModal,
+      handleCloseModal,
+      handleOpenModal,
+      renderFileUpload,
+      handleOnFileselectionChange
+    }
   }
 }) => {
   return (
@@ -101,9 +112,26 @@ const CredLayoutRenderer: React.FC<CredLayoutRendererProps> = ({
           />
         </Flex>
       </Box>
-      <Flex justifyContent="center">
+      <Box
+        // justifyContent="center"
+        // flexDirection={'column'}
+        height={'calc(100vh - 200px)'}
+        overflowY="scroll"
+        className="hideScroll"
+      >
         {items.length > 0 ? (
           <CatalogueRenderer list={items} />
+        ) : isLoading ? (
+          <Box
+            display={'grid'}
+            height={'calc(100vh - 300px)'}
+            alignContent={'center'}
+          >
+            <LoaderWithMessage
+              loadingSubText=""
+              loadingText={''}
+            />
+          </Box>
         ) : (
           <EmptyScreenTemplate
             text={'No identities uploaded yet'}
@@ -111,12 +139,14 @@ const CredLayoutRenderer: React.FC<CredLayoutRendererProps> = ({
             src={EmptyIcon}
           />
         )}
-      </Flex>
+      </Box>
       <AddNewItemModal
+        isLoading={isLoading}
         isOpen={openModal}
         onClose={handleCloseModal}
         schema={modalSchema}
         renderFileUpload={renderFileUpload}
+        handleOnFileselectionChange={handleOnFileselectionChange}
       />
     </Box>
   )

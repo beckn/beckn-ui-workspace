@@ -53,13 +53,13 @@ const MyAssets = () => {
           dataTest={'physical-assets'}
           renderType="card"
         />
-        <NavigationItem
+        {/* <NavigationItem
           icon={FinancialIcon}
           label={'Financial Assets'}
           handleClick={() => router.push('/financialAssets')}
           dataTest={'financial-assets'}
           renderType="card"
-        />
+        /> */}
         <NavigationItem
           icon={SparkIcon}
           label={'Energy Assets'}

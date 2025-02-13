@@ -49,3 +49,9 @@ export const extractAuthAndHeader = (
     return { authorization: null, payload: { name: '', stream: '' } }
   }
 }
+
+export const filterByKeyword = (data: any[], keyword: string, searchBy: string): any[] => {
+  if (!keyword.trim()) return data
+
+  return data.filter(item => item[searchBy].toLowerCase().includes(keyword.toLowerCase()))
+}

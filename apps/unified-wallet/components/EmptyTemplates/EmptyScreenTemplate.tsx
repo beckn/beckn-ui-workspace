@@ -11,6 +11,7 @@ const EmptyScreenTemplate = ({ text, description, src }: { text: string; descrip
       flexDir={'column'}
       rowGap={'15px'}
       p={'2rem 0'}
+      justifySelf="center"
     >
       <Image
         src={src}
