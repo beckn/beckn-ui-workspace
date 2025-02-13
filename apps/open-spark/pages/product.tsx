@@ -7,6 +7,7 @@ import { DiscoveryRootState, ParsedItemModel } from '@beckn-ui/common/lib/types'
 import { cartActions } from '@beckn-ui/common/src/store/cart-slice'
 import { feedbackActions } from '@beckn-ui/common/src/store/ui-feedback-slice'
 import { testIds } from '@shared/dataTestIds'
+import { RootState } from '@store/index'
 
 const Product = () => {
   const { t } = useLanguage()
@@ -34,6 +35,8 @@ const Product = () => {
   if (!selectedProduct) {
     return <></>
   }
+  const type = useSelector((state: RootState) => state.navigation.type)
+
   return (
     <Box
       className="hideScroll myStore-product-details"
@@ -64,7 +67,7 @@ const Product = () => {
               counter: counter,
               cta: {
                 dataTest: testIds.productpage_addTocartButton,
-                text: 'Add to Cart',
+                text: 'Proceed',
                 color: '#fff',
                 handleClick: () => {
                   dispatch(

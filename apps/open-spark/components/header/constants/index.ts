@@ -49,7 +49,8 @@ const headerNames: PathnameObjectType = {
   '/search': 'Search Results',
   '/myStore': '',
   '/cart': 'Cart',
-  '/checkout': 'Billing & Shipping'
+  '/checkout': 'Billing & Shipping',
+  '/confirmRent': 'Confirm Rent'
 }
 
 const headerFrenchNames: PathnameObjectType = {
@@ -76,7 +77,8 @@ const headerBlackList = [
   '/search',
   '/myStore',
   '/cart',
-  '/checkout'
+  '/checkout',
+  '/confirmRent'
 ]
 
 const cartIconBlackList: string[] = [
@@ -96,7 +98,8 @@ const cartIconBlackList: string[] = [
   '/myPreference',
   '/withdraw',
   '/cart',
-  '/checkout'
+  '/checkout',
+  '/confirmRent'
 ]
 const bottomHeaderBlackList = ['/orderConfirmation', '/', '/feedback']
 const orderIconList = ['/orderDetails']

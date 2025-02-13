@@ -3,6 +3,7 @@ import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, 
 import storage from 'redux-persist/lib/storage'
 import authReducer from './auth-slice'
 import userReducer from './user-slice'
+import navigationReducer from './navigation-slice'
 import {
   geoMapLocationSearchReducer,
   feedbackReducer,
@@ -26,7 +27,8 @@ const appReducer = combineReducers({
   checkout: checkoutReducer,
   discovery: DiscoveryReducer,
   geoLocationSearchPageUI: geoMapLocationSearchReducer,
-  feedback: feedbackReducer
+  feedback: feedbackReducer,
+  navigation: navigationReducer
 })
 
 const rootReducer = (state: any, action: any) => {

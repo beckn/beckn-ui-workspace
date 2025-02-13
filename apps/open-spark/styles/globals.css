@@ -323,3 +323,22 @@ select:-webkit-autofill:focus {
     gap: 2px !important;
   }
 }
+.css-1530p3w:active,
+.css-1530p3w[data-active] {
+  background: #4398e8 !important;
+}
+
+.css-1530p3w:hover,
+.css-1530p3w[data-hover] {
+  background: #4398e8 !important;
+}
+
+.css-522or8:active,
+.css-522or8[data-active] {
+  background: #4398e8 !important;
+}
+
+.css-522or8:hover,
+.css-522or8[data-hover] {
+  background: #4398e8 !important;
+}

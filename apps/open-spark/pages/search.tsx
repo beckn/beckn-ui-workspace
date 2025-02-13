@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import axios from '@services/axios'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useRouter } from 'next/router'
 
 import { discoveryActions, ParsedItemModel, SearchAndDiscover } from '@beckn-ui/common'
@@ -10,8 +10,11 @@ import { Product } from '@beckn-ui/becknified-components'
 import { testIds } from '@shared/dataTestIds'
 import { Box } from '@chakra-ui/react'
 import { parseSearchlist } from '@utils/search-utils'
+import { RootState } from '@store/index'
 
 const Search = () => {
+  const type = useSelector((state: RootState) => state.navigation.type)
+
   const [items, setItems] = useState<ParsedItemModel[]>([])
   const [originalItems, setOriginalItems] = useState<ParsedItemModel[]>([])
   const router = useRouter()
@@ -31,7 +34,7 @@ const Search = () => {
 
     const searchPayload = {
       context: {
-        domain: 'deg:retail'
+        domain: type === 'RENT_AND_HIRE' ? 'deg:rental' : 'deg:retail'
       },
       searchString: searchKeyword
     }
