@@ -128,6 +128,14 @@ export const validateCredForm = (formData: FormProps): CredFormErrors => {
     errors.credNumber = 'errorCred1'
   }
 
+  if (formData?.country?.trim() === '') {
+    errors.deviceLocation = 'errorSelectCountry'
+  }
+
+  if (formData?.verificationMethod?.trim() === '') {
+    errors.deviceLocation = 'errorSelectVerificationMethod'
+  }
+
   if (formData?.deviceLocation?.trim() === '') {
     errors.deviceLocation = 'errorDeviceLoc'
   }

@@ -72,9 +72,6 @@ const Header = () => {
               infoIconList: infoIconList
             }
           }}
-          handleClickOnEdit={() => {
-            dispatch(setProfileEditable({ profileEditable: true }))
-          }}
           infoUrlLink={'https://en.wikipedia.org/wiki/Distributed_generation'}
         />
       )}

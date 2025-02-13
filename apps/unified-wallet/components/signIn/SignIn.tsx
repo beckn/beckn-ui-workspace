@@ -1,23 +1,42 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 import { BecknAuth } from '@beckn-ui/becknified-components'
 import { FormErrors } from '@beckn-ui/common/lib/types'
 import AppLogo from '@public/images/wallet_logo.svg'
 import { useLanguage } from '@hooks/useLanguage'
 import { Box } from '@chakra-ui/react'
-import { useLoginMutation } from '@services/UserService'
 import { useDispatch } from 'react-redux'
 import { LoginFormProps } from '@lib/types/user'
 import { useRouter } from 'next/router'
 import { mobilePhoneValidate } from '@utils/form-utils'
+import {
+  useRegisterLoginUserMutation,
+  useGetUserMutation,
+  getVerificationMethods,
+  useGetVerificationMethodsMutation,
+  useVerifyMutation
+} from '@services/walletService'
+import Cookies from 'js-cookie'
+import { generateKeyPairFromString, generateSignature } from '@utils/auth'
+import { RegisterSubject } from '@lib/types/becknDid'
+import { setPrivateKeyAndPublicKey } from '@store/auth-slice'
 
 const SignIn = ({ initialFormData = { mobileNumber: '+91 ' } }) => {
   const [formData, setFormData] = useState<LoginFormProps>(initialFormData)
   const [formErrors, setFormErrors] = useState<FormErrors>({ mobileNumber: '' })
 
-  const [login, { isLoading }] = useLoginMutation()
   const { t } = useLanguage()
   const router = useRouter()
   const dispatch = useDispatch()
+
+  const [registerLoginUser, { isLoading }] = useRegisterLoginUserMutation()
+  const [getUser, { isLoading: getUserLoading }] = useGetUserMutation()
+  const [getVerificationMethods, { isLoading: getVerificationMethodLoading }] = useGetVerificationMethodsMutation()
+  const [verify, { isLoading: verifyLoading }] = useVerifyMutation()
+
+  useEffect(() => {
+    Cookies.remove('userDidAuth')
+    Cookies.remove('isVerified')
+  }, [])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let { name, value } = e.target
@@ -50,18 +69,42 @@ const SignIn = ({ initialFormData = { mobileNumber: '+91 ' } }) => {
 
   const isFormFilled = useMemo(() => {
     return (
-      Object.values(formData).every(value => value !== '') && Object.values(formErrors).every(value => value === '')
+      Object.values(formData).every(value => value !== '+91 ') && Object.values(formErrors).every(value => value === '')
     )
   }, [formData, formErrors])
 
+  const verifyDocument = async (user: RegisterSubject, privateKey: string) => {
+    try {
+      const verificationMethodsRes = await getVerificationMethods(user?.did!).unwrap()
+      const { did, challenge, controller } = verificationMethodsRes[0]
+
+      const regex = /verification_methods\/([^/]+)$/
+      const match = did.match(regex)
+      const verificationId = match?.[1] || ''
+
+      const signedResponse = await generateSignature(challenge!, privateKey)
+
+      await verify({ subjectId: controller?.did!, verificationId, signedDetails: signedResponse }).unwrap()
+    } catch (error) {
+      console.error('Error verifying document:', error)
+      throw new Error('Error verifying document')
+    }
+  }
+
   const handleSignIn = async () => {
+    const subjectKey = `users/phone/${formData.mobileNumber.replace(/^(\+91\s?)/, '')}`
+    const { publicKey, privateKey } = await generateKeyPairFromString(subjectKey)
+    dispatch(setPrivateKeyAndPublicKey({ publicKey, privateKey }))
     const signInData = {
-      mobileNumber: formData.mobileNumber.replace(/^(\+91\s?)/, '')
+      subject: { name: subjectKey },
+      publicKey
     }
 
     try {
-      // await login(signInData).unwrap()
-      router.push('/OTPVerification')
+      const res = await registerLoginUser(signInData).unwrap()
+      if (res[0].verification_methods[0].verified === 'N') {
+        await verifyDocument(res[0], privateKey)
+      }
     } catch (error) {
       console.error('An error occurred:', error)
     }

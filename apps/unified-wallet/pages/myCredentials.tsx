@@ -7,6 +7,7 @@ import { useDispatch } from 'react-redux'
 import CredLayoutRenderer, { CredFormErrors, FormProps } from '@components/credLayoutRenderer/LayoutRenderer'
 import { validateCredForm } from '@utils/form-utils'
 import { InputProps } from '@beckn-ui/molecules'
+import { ItemMetaData } from '@components/credLayoutRenderer/CatalogueRenderer'
 
 const options = [
   { label: 'Document', value: 'document' },
@@ -17,7 +18,7 @@ const MyCredentials = () => {
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
   const bearerToken = Cookies.get('authToken')
 
-  const [items, setItems] = useState<{ id: number; name: string; paired?: boolean }[]>([])
+  const [items, setItems] = useState<ItemMetaData[]>([])
   const [searchKeyword, setSearchKeyword] = useState<string>('')
   const [openModal, setOpenModal] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)

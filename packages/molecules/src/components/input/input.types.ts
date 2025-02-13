@@ -10,6 +10,12 @@ export enum InputTypeEnum {
   Checkbox = 'checkbox'
 }
 
+export interface SelectOptionType {
+  value: string
+  label: string
+  data?: any
+}
+
 //TODO type and variant to be changed into enum
 export interface InputProps {
   type: InputType
@@ -23,7 +29,7 @@ export interface InputProps {
   label?: string
   dataTest?: string
   disabled?: boolean
-  options?: { label: string; value: string }[]
+  options?: SelectOptionType[]
   readOnly?: boolean
   sx?: SystemStyleObject
   rightElement?: () => React.ReactElement<any, any> | null

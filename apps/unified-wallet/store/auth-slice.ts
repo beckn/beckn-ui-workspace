@@ -1,13 +1,14 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { User } from '@beckn-ui/common'
-import extendedAuthApi from '@services/UserService'
 import Cookies from 'js-cookie'
 import Router from 'next/router'
-import { ROLE } from '@lib/config'
+import extendedWalletApi from '@services/walletService'
+import { RegisterSubject } from '@lib/types/becknDid'
 
 interface AuthState {
-  user: null | User
-  jwt: string | null
+  user: null | RegisterSubject
+  privateKey: string
+  publicKey: string
   isAuthenticated: boolean
 }
 
@@ -17,7 +18,8 @@ export interface AuthRootState {
 
 const initialState: AuthState = {
   user: null,
-  jwt: null,
+  privateKey: '',
+  publicKey: '',
   isAuthenticated: false
 }
 
@@ -26,69 +28,44 @@ const slice = createSlice({
   initialState,
   reducers: {
     logout: () => {
-      Cookies.remove('authToken')
+      Cookies.remove('userDidAuth')
       Cookies.remove('isVerified')
       Router.push('/signIn')
       return initialState
     },
-    setCredentials: (state, { payload: { user, jwt } }: PayloadAction<{ user: User; jwt: string }>) => {
+    setCredentials: (state, { payload: { user, jwt } }: PayloadAction<{ user: RegisterSubject; jwt: string }>) => {
       state.user = user
-      state.jwt = jwt
+    },
+    setPrivateKeyAndPublicKey: (
+      state,
+      { payload: { privateKey, publicKey } }: PayloadAction<{ privateKey: string; publicKey: string }>
+    ) => {
+      state.privateKey = privateKey
+      state.publicKey = publicKey
     }
   },
   extraReducers: builder => {
     builder
-      .addMatcher(extendedAuthApi.endpoints.login.matchPending, (state, action) => {
+      .addMatcher(extendedWalletApi.endpoints.registerLoginUser.matchPending, (state, action) => {
         console.log('pending', action)
       })
-      .addMatcher(extendedAuthApi.endpoints.login.matchFulfilled, (state, action) => {
+      .addMatcher(extendedWalletApi.endpoints.registerLoginUser.matchFulfilled, (state, action) => {
         console.log('fulfilled', action)
-        state.user = action.payload.user
-        state.jwt = action.payload.jwt
+        state.user = action.payload?.[0]
         state.isAuthenticated = true
-        Cookies.set('authToken', state.jwt)
-        Cookies.set('isVerified', JSON.stringify(state.user?.isOtpVerified))
-        const urlQuery = Router.query
 
-        const hasNotQuery = JSON.stringify(urlQuery) === '{}'
+        Cookies.set('isVerified', 'false')
+        if (action.payload && action.payload.length > 0) {
+          Cookies.set('userDidAuth', action.payload?.[0]?.did)
 
-        if (hasNotQuery) {
-          if (state.user.isOtpVerified) {
-            Router.push('/')
-          } else {
-            Router.push('/OTPVerification')
-          }
-        } else {
-          Router.push({
-            pathname: '/',
-            query: { external_url: urlQuery.external_url }
-          })
+          Router.push('/OTPVerification')
         }
       })
-      .addMatcher(extendedAuthApi.endpoints.login.matchRejected, (state, action) => {
+      .addMatcher(extendedWalletApi.endpoints.registerLoginUser.matchRejected, (state, action) => {
         console.log('rejected', action)
-      }),
-      builder
-        .addMatcher(extendedAuthApi.endpoints.verifyOtp.matchPending, (state, action) => {
-          console.log('pending', action)
-        })
-        .addMatcher(extendedAuthApi.endpoints.verifyOtp.matchFulfilled, (state, action) => {
-          console.log('fulfilled', action)
-          // JSON.stringify(action.payload.user?.isOtpVerified)
-          const verified = action.payload?.message === 'Otp Verified Successfully' ? true : false
-          Cookies.set('isVerified', verified.toString())
-
-          if (verified) {
-            Router.push('/')
-          } else {
-            Router.back()
-          }
-        })
-        .addMatcher(extendedAuthApi.endpoints.verifyOtp.matchRejected, (state, action) => {
-          console.log('rejected', action)
-        })
+      })
   }
 })
 
-export const { logout, setCredentials } = slice.actions
+export const { logout, setCredentials, setPrivateKeyAndPublicKey } = slice.actions
 export default slice.reducer

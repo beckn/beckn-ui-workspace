@@ -7,6 +7,7 @@ import { useDispatch } from 'react-redux'
 import CredLayoutRenderer, { CredFormErrors, FormProps } from '@components/credLayoutRenderer/LayoutRenderer'
 import { validateCredForm } from '@utils/form-utils'
 import { InputProps } from '@beckn-ui/molecules'
+import { ItemMetaData } from '@components/credLayoutRenderer/CatalogueRenderer'
 
 const options = [
   { label: 'Refrigerator', value: 'refrigerator' },
@@ -25,7 +26,7 @@ const PhysicalAssets = () => {
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
   const bearerToken = Cookies.get('authToken')
 
-  const [items, setItems] = useState<{ id: number; name: string; paired?: boolean }[]>([])
+  const [items, setItems] = useState<ItemMetaData[]>([])
   const [searchKeyword, setSearchKeyword] = useState<string>('')
   const [openModal, setOpenModal] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -79,8 +80,8 @@ const PhysicalAssets = () => {
     }))
 
     const data = {
-      type: formData.type,
-      credName: formData.credName?.trim()
+      type: formData.type
+      // credName: formData.credName?.trim()
     }
     setIsLoading(true)
 
@@ -158,46 +159,45 @@ const PhysicalAssets = () => {
   const getInputs = useCallback(() => {
     const inputs: InputProps[] = [
       {
-        type: 'select',
+        type: 'text',
         name: 'type',
-        options: options,
         value: formData.type!,
-        handleChange: handleSelectChange,
-        label: 'Credential Type',
+        handleChange: handleInputChange,
+        label: 'Type',
         error: formErrors.type
-      },
-      {
-        type: 'text',
-        name: 'deviceLocation',
-        value: formData.deviceLocation!,
-        handleChange: handleInputChange,
-        label: 'Device Location',
-        error: formErrors.deviceLocation
-      },
-      {
-        type: 'text',
-        name: 'assetsMaker',
-        value: formData?.assetsMaker!,
-        handleChange: handleInputChange,
-        label: 'Assets Make',
-        error: formErrors?.assetsMaker!
-      },
-      {
-        type: 'text',
-        name: 'modelNumber',
-        value: formData?.modelNumber!,
-        handleChange: handleInputChange,
-        label: 'Model Number',
-        error: formErrors?.modelNumber!
-      },
-      {
-        type: 'text',
-        name: 'serialNumber',
-        value: formData?.serialNumber!,
-        handleChange: handleInputChange,
-        label: 'Serial Number',
-        error: formErrors?.serialNumber!
       }
+      // {
+      //   type: 'text',
+      //   name: 'deviceLocation',
+      //   value: formData.deviceLocation!,
+      //   handleChange: handleInputChange,
+      //   label: 'Device Location',
+      //   error: formErrors.deviceLocation
+      // },
+      // {
+      //   type: 'text',
+      //   name: 'assetsMaker',
+      //   value: formData?.assetsMaker!,
+      //   handleChange: handleInputChange,
+      //   label: 'Assets Make',
+      //   error: formErrors?.assetsMaker!
+      // },
+      // {
+      //   type: 'text',
+      //   name: 'modelNumber',
+      //   value: formData?.modelNumber!,
+      //   handleChange: handleInputChange,
+      //   label: 'Model Number',
+      //   error: formErrors?.modelNumber!
+      // },
+      // {
+      //   type: 'text',
+      //   name: 'serialNumber',
+      //   value: formData?.serialNumber!,
+      //   handleChange: handleInputChange,
+      //   label: 'Serial Number',
+      //   error: formErrors?.serialNumber!
+      // }
     ]
 
     return inputs
@@ -229,7 +229,7 @@ const PhysicalAssets = () => {
           openModal,
           handleOpenModal,
           handleCloseModal,
-          renderFileUpload: formData.type === 'document'
+          renderFileUpload: true
         }
       }}
     />
