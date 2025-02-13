@@ -64,7 +64,8 @@ export const getSelectPayload = (
           orders.push({
             items: [newItem],
             provider: {
-              id: item.providerId
+              id: item.providerId,
+              name: item.providerName
             },
             fulfillments:
               item.fulfillments &&

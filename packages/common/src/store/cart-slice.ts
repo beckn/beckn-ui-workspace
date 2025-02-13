@@ -38,6 +38,7 @@ const cartSlice = createSlice({
           bpp_id: newItem.bppId,
           bpp_uri: newItem.bppUri,
           providerId: newItem.providerId,
+          providerName: newItem.providerName,
           locations: newItem.providerCoordinates
         } as CartItemForRequest)
       } else {

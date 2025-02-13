@@ -101,6 +101,22 @@ const ProductCard: React.FC<ProductCardProps> = props => {
                   </Text>
                 </Flex>
               )}
+              <Flex
+                justifyContent={'space-between'}
+                alignItems={'flex-start'}
+                w={'100%'}
+              >
+                <Text
+                  fontSize={'0.8rem'}
+                  mb={'0.4rem'}
+                  noOfLines={2}
+                  textOverflow="ellipsis"
+                  whiteSpace="pre-wrap"
+                  overflowWrap="break-word"
+                >
+                  {product.shortDesc}
+                </Text>
+              </Flex>
               {product.source ? (
                 <Flex
                   alignItems={'flex-start'}
@@ -141,23 +157,6 @@ const ProductCard: React.FC<ProductCardProps> = props => {
                   </Text>
                 )
               )}
-
-              <Flex
-                justifyContent={'space-between'}
-                alignItems={'flex-start'}
-                w={'100%'}
-              >
-                <Text
-                  fontSize={'0.8rem'}
-                  mb={'0.4rem'}
-                  noOfLines={2}
-                  textOverflow="ellipsis"
-                  whiteSpace="pre-wrap"
-                  overflowWrap="break-word"
-                >
-                  {product.shortDesc}
-                </Text>
-              </Flex>
 
               {productInfoDataSource && typeof productInfoDataSource === 'string' && (
                 <Flex

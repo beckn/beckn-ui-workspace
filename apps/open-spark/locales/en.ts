@@ -96,6 +96,11 @@ const en: { [key: string]: string } = {
   initializingOrderLoader: 'while we set things up for you',
   quoteRequestLoader: 'Your order is getting processed',
   emptyCardHeading: 'The Cart is Empty',
-  emptyCardSubHeading: 'Looks like you haven’t made your choice yet'
+  emptyCardSubHeading: 'Looks like you haven’t made your choice yet',
+  gPay: 'Google Pay',
+  items: 'Order Overview',
+  loading: 'Loading Plans',
+  pleaseWait: 'Please wait!',
+  confirmLoaderSubtext: 'While we confirm your order'
 }
 export default en

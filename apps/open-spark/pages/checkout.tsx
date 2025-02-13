@@ -188,11 +188,17 @@ const CheckoutPage = () => {
   const createPaymentBreakdownMap = () => {
     const paymentBreakdownMap: PaymentBreakDownModel = {}
     if (isInitResultPresent()) {
-      initResponse[0].message.order.quote.breakup.forEach(breakup => {
-        paymentBreakdownMap[breakup.title] = {
-          value: breakup.price.value,
-          currency: breakup.price.currency
-        }
+      initResponse.map((res, ind) => {
+        res.message.order.quote.breakup.forEach(breakup => {
+          const quantity = Number(cartItems[ind]?.quantity) || 1
+          paymentBreakdownMap[breakup.title] = {
+            value: (
+              Number(paymentBreakdownMap[breakup.title]?.value || 0) +
+              quantity * Number(breakup.price.value)
+            ).toString(),
+            currency: breakup.price.currency
+          }
+        })
       })
     }
     return paymentBreakdownMap
@@ -288,7 +294,7 @@ const CheckoutPage = () => {
             text: t.proceedToCheckout,
             dataTest: testIds.checkoutpage_proceedToCheckout,
             handleClick: () => {
-              dispatch(cartActions.clearCart())
+              // dispatch(cartActions.clearCart())
               router.push('/paymentMode')
             }
           }

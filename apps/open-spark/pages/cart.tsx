@@ -1,4 +1,4 @@
-import { useRouter } from 'next/router'
+import { Router, useRouter } from 'next/router'
 
 import React from 'react'
 import { useEffect } from 'react'
@@ -29,6 +29,7 @@ const Cart = () => {
   const { t } = useLanguage()
 
   const { items, totalQuantity } = useSelector((state: ICartRootState) => state.cart)
+
   const totalAmount = useSelector((state: ICartRootState) => state.cart.totalAmount)
   const { transactionId, productList } = useSelector((state: DiscoveryRootState) => state.discovery)
 
@@ -46,6 +47,9 @@ const Cart = () => {
   //     dispatch(cartActions.addItemToCart({ product: selectedItem, quantity: 1 }))
   //   }
   // }
+  const handleShopButton = () => {
+    router.push('/myStore')
+  }
 
   if (isLoading) {
     return (
@@ -66,7 +70,68 @@ const Cart = () => {
       maxH="calc(100vh - 120px)"
       overflowY={'scroll'}
     >
-      {!items.length ? (
+      <BecknCart
+        isLoading={isLoading}
+        schema={{
+          cartItems: items.map(
+            singleItem =>
+              ({
+                id: singleItem.id,
+                className: 'myStore-cart',
+                quantity: singleItem.quantity,
+                name: singleItem.name,
+                image: singleItem.images?.[0].url,
+                price: Number(singleItem.price.value),
+                symbol: singleItem.price.currency,
+                totalAmountText: t.totalAmount,
+                handleIncrement: id => {
+                  const selectedItem = productList.find(singleItem => singleItem.item.id === id)
+                  if (selectedItem) {
+                    dispatch(cartActions.addItemToCart({ product: selectedItem, quantity: 1 }))
+                  }
+                },
+                handleDecrement: id => {
+                  dispatch(cartActions.removeItemFromCart(id))
+                }
+              }) as CartItemProps
+          ),
+
+          loader: { text: t.quoteRequestLoader, dataTest: testIds.loadingIndicator },
+          orderSummary: {
+            totalAmount: {
+              price: totalAmount,
+              currencyType: items[0]?.price.currency
+            },
+
+            totalQuantity: {
+              text: totalQuantity.toString(),
+              variant: 'subTitleSemibold'
+            },
+            pageCTA: {
+              text: 'Proceed',
+              handleClick: onOrderClick
+            },
+            orderSummaryText: t.orderSummary,
+            totalQuantityText: t.totalQuantity,
+            totalAmountText: 'Subtotal',
+            dataTestTotalQuantity: testIds.cartpage_totalQuantityText,
+            dataTestTotalAmount: testIds.cartpage_totalAmountText,
+            dataTestCta: testIds.cartpage_cartOrderButton
+          },
+          emptyCard: {
+            image: '/images/emptyCard.svg',
+            heading: t.emptyCardHeading,
+            subHeading: t.emptyCardSubHeading,
+            buttonText: 'Shop',
+            buttonHanler: handleShopButton,
+            dataTestImage: testIds.cartpage_emptyImage,
+            dataTestHeading: testIds.cartpage_emptyheading,
+            dataTestSubHeading: testIds.cartpage_emptySubHeading,
+            dataTestCta: testIds.cartpage_emptyButton
+          }
+        }}
+      />
+      {/* {!items.length ? (
         <EmptyCart />
       ) : (
         <>
@@ -199,7 +264,7 @@ const Cart = () => {
             </>
           ))}
         </>
-      )}
+      )} */}
     </Box>
   )
 }

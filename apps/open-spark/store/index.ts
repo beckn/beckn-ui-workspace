@@ -4,6 +4,9 @@ import storage from 'redux-persist/lib/storage'
 import authReducer from './auth-slice'
 import userReducer from './user-slice'
 import navigationReducer from './navigation-slice'
+import discoveryEmiPlanReducer from './discoveryEmiPlan-slice'
+import emiFormReducer from './emiForm-slice'
+import selectedEmiReducer from './emiSelect-slice'
 import {
   geoMapLocationSearchReducer,
   feedbackReducer,
@@ -16,7 +19,7 @@ import api from '@services/api'
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['auth', 'user', 'discovery', 'cart', 'checkout']
+  whitelist: ['auth', 'user', 'discovery', 'cart', 'checkout', 'discoveryEmiPlan', 'selectedEmi']
 }
 
 const appReducer = combineReducers({
@@ -28,6 +31,9 @@ const appReducer = combineReducers({
   discovery: DiscoveryReducer,
   geoLocationSearchPageUI: geoMapLocationSearchReducer,
   feedback: feedbackReducer,
+  discoveryEmiPlan: discoveryEmiPlanReducer,
+  emiForm: emiFormReducer,
+  selectedEmi: selectedEmiReducer,
   navigation: navigationReducer
 })
 
