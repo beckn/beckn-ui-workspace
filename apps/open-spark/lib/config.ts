@@ -18,3 +18,8 @@ export const ROUTE_TYPE = {
 }
 
 export const DOMAIN = 'uei:p2p_trading'
+
+export const EXPLORE_PATH = {
+  MY_STORE: 'MY_STORE',
+  RENT_AND_HIRE: 'RENT_AND_HIRE'
+}

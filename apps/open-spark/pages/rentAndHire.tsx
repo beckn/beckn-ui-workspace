@@ -1,14 +1,48 @@
-import Router, { useRouter } from 'next/router'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useLanguage } from '@hooks/useLanguage'
 import { HomePageContent, TopSheet, useGeolocation } from '@beckn-ui/common'
-import { Box } from '@chakra-ui/react'
+import { Box, Flex } from '@chakra-ui/react'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
+import { buttonStyles } from '@components/constant'
+import ShadowCardButton from '@components/buttonCard/ShadowCardButton'
+import { MdOutlineKeyboardArrowRight } from 'react-icons/md'
+import { Router, useRouter } from 'next/router'
+import { Typography } from '@beckn-ui/molecules'
+import { EXPLORE_PATH } from '@lib/config'
 
 const RentAndHire = () => {
+  const router = useRouter()
+  const rentalOptions = [
+    {
+      image: '/images/pentagon.svg',
+      text: 'Search Rental Services',
+      handleClick: () => {
+        router.push(`/myStore?type=${EXPLORE_PATH.RENT_AND_HIRE}`)
+      }
+    },
+    {
+      image: '/images/pentagon.svg',
+      text: 'Provide Rental Services',
+      handleClick: () => {
+        router.push('/provideRentalServices')
+      }
+    },
+    {
+      image: '/images/Order_history.svg',
+      text: 'Provide Rental Services',
+      handleClick: () => {
+        console.log('Navigating to provide rental services...')
+      }
+    },
+    {
+      image: '/images/Order_history.svg',
+      text: 'Provide Rental Services',
+      handleClick: () => {
+        console.log('Navigating to provide rental services...')
+      }
+    }
+  ]
   const { t } = useLanguage()
-  const [address, setAddress] = useState('')
-  const [searchTerm, setSearchTerm] = useState<string>('')
   const apiKeyForGoogle = process.env.NEXT_PUBLIC_GOOGLE_API_KEY
   const {
     currentAddress,
@@ -16,27 +50,11 @@ const RentAndHire = () => {
     loading: loadingForCurrentAddress
   } = useGeolocation(apiKeyForGoogle as string)
 
-  const router = useRouter()
-
   useEffect(() => {
     if (localStorage) {
       localStorage.clear()
     }
   }, [])
-
-  const navigateToSearchResults = () => {
-    if (searchTerm) {
-      localStorage.setItem('optionTags', JSON.stringify({ name: searchTerm }))
-      router.push(`/search?searchTerm=${searchTerm}`)
-    }
-  }
-
-  const searchIconClickHandler = (e: React.MouseEvent) => {
-    if (searchTerm) {
-      navigateToSearchResults()
-    }
-    e.preventDefault()
-  }
 
   return (
     <Box
@@ -49,24 +67,51 @@ const RentAndHire = () => {
         currentAddress={currentAddress}
         t={key => t[key]}
       />
-      <HomePageContent
-        blockOrder={['header', 'description', 'searchInput']}
-        headerProps={{
-          name: 'My Rental Services',
-          description: t.subTextForRenT
-        }}
-        searchProps={{
-          searchPlaceholder: t.searchPlaceholder,
-          setSearchTerm: setSearchTerm,
-          onSearchIconClick: searchIconClickHandler,
-          onSearchInputEnterPress: navigateToSearchResults
-        }}
-        showFooter={false}
-        footerProps={{
-          poweredByLogoSrc: '',
-          poweredByText: ''
-        }}
-      />
+      <Flex
+        mt={'100px'}
+        flexDir={'column'}
+        alignItems="start"
+        rowGap={'20px'}
+        mb={'20px'}
+      >
+        <Typography
+          text={t.rentAndHireHeading}
+          fontSize="20px"
+          fontWeight="600"
+          color="#4398E8"
+        />
+        <Typography
+          text={t.subTextForRenT}
+          fontSize="12px"
+          fontWeight="400"
+          color="#7C7C7C"
+        />
+      </Flex>
+      <Box
+        display="flex"
+        flexWrap="wrap"
+        justifyContent="space-between"
+        ml={'-10px'}
+        mr={'-10px'}
+      >
+        {rentalOptions.map((option, index) => (
+          <ShadowCardButton
+            key={index}
+            prefixIcon={
+              <img
+                src={option.image}
+                alt={option.text}
+              />
+            }
+            text={option.text}
+            textStyle="start"
+            postIcon={<MdOutlineKeyboardArrowRight />}
+            handleClick={option.handleClick}
+            dataTest={`hire_button_${index}`}
+            sx={buttonStyles}
+          />
+        ))}
+      </Box>
       <Box
         position={'absolute'}
         bottom="calc(0px + 10px)"
@@ -75,7 +120,7 @@ const RentAndHire = () => {
         <BecknButton
           text="Go Back Home"
           handleClick={() => {
-            Router.push('/')
+            router.push('/')
           }}
         />
       </Box>

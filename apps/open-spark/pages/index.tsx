@@ -13,13 +13,21 @@ import ShadowCardButton from '@components/buttonCard/ShadowCardButton'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import OpenWalletBottomModal from '@components/modal/OpenWalletBottomModal'
 import { buttonStyles, images } from '@components/constant'
-
+import { useDispatch } from 'react-redux'
+import { setNavigationType } from '@store/navigation-slice'
 const HomePage = () => {
   const router = useRouter()
   const [modalType, setModalType] = useState<'wallet' | 'link' | 'otp' | 'alert' | null>(null)
 
   const handleModalOpen = (type: 'wallet' | 'link' | 'otp' | 'alert') => setModalType(type)
   const handleModalClose = () => setModalType(null)
+
+  const dispatch = useDispatch()
+
+  const handleNavigation = (type: 'MY_STORE' | 'RENT_AND_HIRE') => {
+    dispatch(setNavigationType(type))
+    router.push(`/myStore`)
+  }
 
   return (
     <Box
@@ -83,7 +91,7 @@ const HomePage = () => {
               text="My Store"
               textStyle="start"
               postIcon={<MdOutlineKeyboardArrowRight />}
-              handleClick={() => router.push('/myStore')}
+              handleClick={() => handleNavigation('MY_STORE')}
               dataTest="store_button"
               sx={buttonStyles}
             />
@@ -93,7 +101,7 @@ const HomePage = () => {
               text="Hire and Rent Services"
               textStyle="start"
               postIcon={<MdOutlineKeyboardArrowRight />}
-              handleClick={() => router.push('/rentAndHire')}
+              handleClick={() => handleNavigation('RENT_AND_HIRE')}
               dataTest="hire_button"
               sx={buttonStyles}
             />

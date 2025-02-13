@@ -3,12 +3,18 @@ import React, { useEffect, useState } from 'react'
 import { useLanguage } from '@hooks/useLanguage'
 import { HomePageContent, TopSheet, useGeolocation } from '@beckn-ui/common'
 import { Box } from '@chakra-ui/react'
-import axios from '@services/axios'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
+import { buttonStyles } from '@components/constant'
+import { MdOutlineKeyboardArrowRight } from 'react-icons/md'
+import ShadowCardButton from '@components/buttonCard/ShadowCardButton'
+import { useSelector } from 'react-redux'
+import { RootState } from '@store/index'
 
 const MyStore = () => {
+  const router = useRouter()
+  const type = useSelector((state: RootState) => state.navigation.type)
+  console.log('dank', type)
   const { t } = useLanguage()
-  const [address, setAddress] = useState('')
   const [searchTerm, setSearchTerm] = useState<string>('')
   const apiKeyForGoogle = process.env.NEXT_PUBLIC_GOOGLE_API_KEY
   const {
@@ -16,8 +22,6 @@ const MyStore = () => {
     error: currentLocationFetchError,
     loading: loadingForCurrentAddress
   } = useGeolocation(apiKeyForGoogle as string)
-
-  const router = useRouter()
 
   useEffect(() => {
     if (localStorage) {
@@ -53,11 +57,11 @@ const MyStore = () => {
       <HomePageContent
         blockOrder={['header', 'description', 'searchInput']}
         headerProps={{
-          name: 'Hi, Welcome to the store!',
-          description: t.subText
+          name: type === 'RENT_AND_HIRE' ? t.rentAndHireHeading : t.myStoreHeading,
+          description: type === 'RENT_AND_HIRE' ? t.subTextForRenT : t.subText
         }}
         searchProps={{
-          searchPlaceholder: t.searchPlaceholder,
+          searchPlaceholder: type === 'RENT_AND_HIRE' ? 'Search for Rental Services ' : t.searchPlaceholder,
           setSearchTerm: setSearchTerm,
           onSearchIconClick: searchIconClickHandler,
           onSearchInputEnterPress: navigateToSearchResults
@@ -68,6 +72,26 @@ const MyStore = () => {
           poweredByText: ''
         }}
       />
+      {type === 'MY_STORE' && (
+        <Box
+          mt={'-60px'}
+          ml={'-10px'}
+        >
+          <ShadowCardButton
+            prefixIcon={
+              <img
+                src={'/images/pentagon.svg'}
+                alt={'orderHistory'}
+              />
+            }
+            text={'My Orders'}
+            textStyle="start"
+            postIcon={<MdOutlineKeyboardArrowRight />}
+            handleClick={() => router.push(`/myOrders`)}
+            sx={buttonStyles}
+          />
+        </Box>
+      )}
       <Box
         position={'absolute'}
         bottom="calc(0px + 10px)"

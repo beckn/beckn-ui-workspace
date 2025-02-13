@@ -77,8 +77,10 @@ const en: { [key: string]: string } = {
   procced: 'Proceed',
   confirmOrder: 'Proceed',
   errorAmount: 'Enter valid amount',
+  myStoreHeading: 'Hi, Welcome to the store!',
   subText:
     "A global marketplace to discover and buy anything you need. Just type what you want to buy and we'll take care of the rest.",
+  rentAndHireHeading: 'My Rental Services',
   subTextForRenT: 'A global marketplace to rent what you need or offer your own rental services. ',
   addedToCart: 'Product added to cart',
 
