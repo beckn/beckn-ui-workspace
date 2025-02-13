@@ -1,13 +1,13 @@
 import Router, { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { useLanguage } from '@hooks/useLanguage'
-import { HomePageContent, TopSheet, useGeolocation } from '@beckn-ui/common'
+import { cartActions, HomePageContent, TopSheet, useGeolocation } from '@beckn-ui/common'
 import { Box } from '@chakra-ui/react'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import { buttonStyles } from '@components/constant'
 import { MdOutlineKeyboardArrowRight } from 'react-icons/md'
 import ShadowCardButton from '@components/buttonCard/ShadowCardButton'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@store/index'
 
 const MyStore = () => {
@@ -15,6 +15,7 @@ const MyStore = () => {
   const type = useSelector((state: RootState) => state.navigation.type)
   console.log('dank', type)
   const { t } = useLanguage()
+  const dispatch = useDispatch()
   const [searchTerm, setSearchTerm] = useState<string>('')
   const apiKeyForGoogle = process.env.NEXT_PUBLIC_GOOGLE_API_KEY
   const {
@@ -26,6 +27,7 @@ const MyStore = () => {
   useEffect(() => {
     if (localStorage) {
       localStorage.clear()
+      dispatch(cartActions.clearCart())
     }
   }, [])
 
@@ -42,7 +44,7 @@ const MyStore = () => {
     }
     e.preventDefault()
   }
-
+  const homeButtonName = type === 'RENT_AND_HIRE' ? 'Go Back' : 'Go Back Home'
   return (
     <Box
       className="myStore-homepage"
@@ -98,9 +100,13 @@ const MyStore = () => {
         w={'calc(100% - 40px)'}
       >
         <BecknButton
-          text="Go Back Home"
+          text={homeButtonName}
           handleClick={() => {
-            Router.push('/')
+            if (type === 'RENT_AND_HIRE') {
+              router.push('/rentAndHire')
+            } else {
+              Router.push('/')
+            }
           }}
         />
       </Box>

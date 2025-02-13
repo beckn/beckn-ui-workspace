@@ -12,6 +12,7 @@ const ProductCta: React.FC<ProductCtaProps> = ({
   handleIncrement,
   counter,
   cta,
+  title,
   counterTitle,
   noCounter,
   dataTestCounterValue = 'counter-value',
@@ -32,9 +33,10 @@ const ProductCta: React.FC<ProductCtaProps> = ({
     >
       {isMobile && (
         <Typography
-          text={'Total'}
+          text={title || 'Total'}
           variant="subTextSemibold"
           style={{ marginBottom: '6px' }}
+          color={title ? '#939393' : '#000000'}
         />
       )}
 

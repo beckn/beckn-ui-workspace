@@ -19,6 +19,10 @@ import { DiscoveryRootState, ICartRootState, PaymentBreakDownModel } from '@beck
 import { cartActions } from '@beckn-ui/common/src/store/cart-slice'
 import { testIds } from '@shared/dataTestIds'
 import DetailsCard from '@beckn-ui/becknified-components/src/components/checkout/details-card'
+import { RootState } from '@store/index'
+import { DOMAIN_PATH } from '@lib/config'
+import { calcLength } from 'framer-motion'
+import { generateRentalInitPayload } from '@utils/checkout-util'
 
 export type ShippingFormData = {
   name: string
@@ -27,10 +31,11 @@ export type ShippingFormData = {
   address: string
   zipCode: string
 }
-
+const color = '#4398E8'
 const CheckoutPage = () => {
   const cartItems = useSelector((state: ICartRootState) => state.cart.items)
-
+  const type = useSelector((state: RootState) => state.navigation.type)
+  const selectRentalResponse = useSelector((state: RootState) => state.rental.orderData)
   const theme = useTheme()
   const bgColorOfSecondary = theme.colors.secondary['100']
   const toast = useToast()
@@ -52,7 +57,6 @@ const CheckoutPage = () => {
     address: '1202 b2, Bengaluru urban, Bengaluru, Karnataka',
     pinCode: '560078'
   })
-
   const router = useRouter()
   const dispatch = useDispatch()
   const [initialize, { isLoading, isError }] = useInitMutation()
@@ -61,7 +65,7 @@ const CheckoutPage = () => {
   const selectResponse = useSelector((state: CheckoutRootState) => state.checkout.selectResponse)
   const isBillingSameRedux = useSelector((state: CheckoutRootState) => state.checkout.isBillingSame)
   const { transactionId, productList } = useSelector((state: DiscoveryRootState) => state.discovery)
-  console.log(selectResponse)
+  const domain = type === 'RENT_AND_HIRE' ? DOMAIN_PATH.RENT_AND_HIRE : DOMAIN_PATH.MY_STORE
 
   //////////  For field Data ///////////
   const formFieldConfig: FormField[] = [
@@ -170,15 +174,16 @@ const CheckoutPage = () => {
   // useEffect(()=>{
   //   setIsBillingSame(isBillingSameRedux)
   // },[])
-
   const formSubmitHandler = (data: any) => {
     if (data) {
-      const { id, type } = selectResponse[0].message?.order.fulfillments[0]
-      getInitPayload(shippingFormData, billingFormData, cartItems, transactionId, 'deg:retail', { id, type }).then(
-        res => {
-          return initialize(res)
-        }
-      )
+      const { id, type } = selectResponse[0]?.message?.order?.fulfillments[0] || {}
+      const payloadPromise =
+        type === 'RENT_AND_HIRE'
+          ? generateRentalInitPayload(selectRentalResponse, shippingFormData, domain)
+          : getInitPayload(shippingFormData, billingFormData, cartItems, transactionId, domain, { id, type })
+      payloadPromise.then(res => {
+        return initialize(res)
+      })
     }
   }
 
@@ -216,6 +221,52 @@ const CheckoutPage = () => {
       </Box>
     )
   }
+  const rentalItems =
+    selectRentalResponse?.message?.order?.items?.map(singleItem => {
+      // Extract timestamps from the first available fulfillment
+      const fulfillmentStart = singleItem?.fulfillments?.find(f => f.type === 'RENTAL_START')
+      const fulfillmentEnd = singleItem?.fulfillments?.find(f => f.type === 'RENTAL_END')
+
+      // Ensure timestamps are numbers
+      let startTimestamp = fulfillmentStart ? Number(fulfillmentStart.state.name) : null
+      let endTimestamp = fulfillmentEnd ? Number(fulfillmentEnd.state.name) : null
+
+      // Convert milliseconds to seconds if needed
+      if (startTimestamp && startTimestamp > 9999999999) startTimestamp = Math.floor(startTimestamp / 1000)
+      if (endTimestamp && endTimestamp > 9999999999) endTimestamp = Math.floor(endTimestamp / 1000)
+
+      // Convert timestamps to human-readable format
+      const formatTime = (timestamp: number | null) => {
+        if (!timestamp) return 'N/A'
+        const date = new Date(timestamp * 1000) // Convert seconds to milliseconds
+        return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })
+      }
+
+      // Get formatted start and end times
+      const startTime = formatTime(startTimestamp)
+      const endTime = formatTime(endTimestamp)
+
+      // Calculate duration in hours
+      const duration =
+        startTimestamp && endTimestamp ? Math.round((endTimestamp - startTimestamp) / 3600) + ' hr' : 'N/A'
+
+      return {
+        batteryType: singleItem.name,
+        capacity: singleItem.code,
+        rentedFrom: selectRentalResponse?.message?.order?.provider?.name,
+        timeSlot: `${startTime} to ${endTime}`,
+        duration: duration
+      }
+    }) ?? []
+
+  const retailItems = cartItems.map(singleItem => ({
+    title: singleItem.name,
+    description: singleItem.short_desc,
+    quantity: singleItem.quantity,
+    price: singleItem.totalPrice,
+    currency: singleItem.price.currency,
+    image: singleItem.images?.[0].url
+  }))
 
   return (
     <Box
@@ -224,87 +275,82 @@ const CheckoutPage = () => {
       overflowY={'scroll'}
     >
       {/* start Item Details */}
-      <DetailsCard>
-        {cartItems.map((singleItem, ind) => (
-          <React.Fragment key={ind}>
-            <Box pb="10px">
-              <Flex alignItems={'center'}>
-                <Image
-                  src={singleItem.images?.[0].url}
-                  alt={'img'}
-                  width="120px"
-                  height="94px"
-                />
-                <Box>
-                  <Text
-                    fontSize="15px"
-                    fontWeight="600"
-                    noOfLines={2}
-                    textOverflow="ellipsis"
-                    whiteSpace="pre-wrap"
-                    overflowWrap="break-word"
-                    height={'fit-content'}
-                    mb="10px"
-                  >
-                    {singleItem.name}
-                  </Text>
-                  <Typography
-                    text={singleItem.short_desc}
-                    variant="subTextRegular"
+      {type !== 'RENT_AND_HIRE' && (
+        <DetailsCard>
+          {cartItems.map((singleItem, ind) => (
+            <React.Fragment key={ind}>
+              <Box pb="10px">
+                <Flex alignItems={'center'}>
+                  <Image
+                    src={singleItem.images?.[0].url}
+                    alt={'img'}
+                    width="120px"
+                    height="94px"
                   />
-                </Box>
-              </Flex>
-
-              <Box>
-                <Flex
-                  pb="5px"
-                  alignItems="center"
-                >
-                  <Flex alignItems="center">
+                  <Box>
                     <Text
-                      mr="10px"
-                      fontWeight={'600'}
+                      fontSize="15px"
+                      fontWeight="600"
+                      noOfLines={2}
+                      textOverflow="ellipsis"
+                      whiteSpace="pre-wrap"
+                      overflowWrap="break-word"
+                      height={'fit-content'}
+                      mb="10px"
                     >
-                      Qty
+                      {singleItem.name}
                     </Text>
                     <Typography
-                      className="quantity-checkout"
-                      text={` ${singleItem.quantity.toString()}`}
+                      text={singleItem.short_desc}
                       variant="subTextRegular"
-                    />
-                  </Flex>
-                  <Box ml="25px">
-                    <ProductPrice
-                      price={singleItem.totalPrice}
-                      currencyType={singleItem.price.currency}
                     />
                   </Box>
                 </Flex>
+
+                <Box>
+                  <Flex
+                    pb="5px"
+                    alignItems="center"
+                  >
+                    <Flex alignItems="center">
+                      <Text
+                        mr="10px"
+                        fontWeight={'600'}
+                      >
+                        Qty
+                      </Text>
+                      <Typography
+                        className="quantity-checkout"
+                        text={` ${singleItem.quantity.toString()}`}
+                        variant="subTextRegular"
+                      />
+                    </Flex>
+                    <Box ml="25px">
+                      <ProductPrice
+                        price={singleItem.totalPrice}
+                        currencyType={singleItem.price.currency}
+                      />
+                    </Box>
+                  </Flex>
+                </Box>
               </Box>
-            </Box>
-            <Divider />
-          </React.Fragment>
-        ))}
-      </DetailsCard>
+              <Divider />
+            </React.Fragment>
+          ))}
+        </DetailsCard>
+      )}
 
       <Checkout
         schema={{
-          // items: {
-          //   title: t.items,
-          //   data: cartItems.map((singleItem, ind) => ({
-          //     title: singleItem.name,
-          //     description: singleItem.short_desc,
-          //     quantity: singleItem.quantity,
-          //     // priceWithSymbol: `${currencyMap[singleItem.price.currency]}${singleItem.totalPrice}`,
-          //     price: singleItem.totalPrice,
-          //     currency: singleItem.price.currency,
-          //     image: singleItem.images?.[0].url
-          //   }))
-          // },
+          items: {
+            title: t.items,
+            data: type === 'RENT_AND_HIRE' ? rentalItems : retailItems,
+            type: type || ''
+          },
           shipping: {
             triggerFormTitle: t.change,
             showDetails: isInitResultPresent(),
-            color: bgColorOfSecondary,
+            color: type === 'RENT_AND_HIRE' ? color : bgColorOfSecondary,
             shippingDetails: {
               name: shippingFormData.name,
               location: shippingFormData.address!,
@@ -314,13 +360,13 @@ const CheckoutPage = () => {
             shippingForm: {
               formFieldConfig: formFieldConfig,
               onSubmit: formSubmitHandler,
-              submitButton: { text: t.saveShippingDetails },
+              submitButton: { text: type === 'RENT_AND_HIRE' ? t.saveBillingDetails : t.saveShippingDetails },
               values: shippingFormData,
               onChange: data => setShippingFormData(data)
             },
-            sectionTitle: t.shipping,
-            formTitle: t.addShippingDetails,
-            sectionSubtitle: t.addShippingDetails,
+            sectionTitle: type === 'RENT_AND_HIRE' ? t.billing : t.shipping,
+            formTitle: type === 'RENT_AND_HIRE' ? 'Add Billing Details' : t.addShippingDetails,
+            sectionSubtitle: type === 'RENT_AND_HIRE' ? 'Add Billing Details' : t.addShippingDetails,
             dataTest: testIds.checkoutpage_shippingDetails
           },
           billing: {
@@ -370,8 +416,12 @@ const CheckoutPage = () => {
             text: t.proceedToCheckout,
             dataTest: testIds.checkoutpage_proceedToCheckout,
             handleClick: () => {
-              // dispatch(cartActions.clearCart())
-              router.push('/paymentMode')
+              if (type === 'RENT_AND_HIRE') {
+                router.push('/retailPaymentMethod')
+              } else {
+                // dispatch(cartActions.clearCart())
+                router.push('/paymentMode')
+              }
             }
           }
         }}

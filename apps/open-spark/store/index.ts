@@ -7,6 +7,7 @@ import navigationReducer from './navigation-slice'
 import discoveryEmiPlanReducer from './discoveryEmiPlan-slice'
 import emiFormReducer from './emiForm-slice'
 import selectedEmiReducer from './emiSelect-slice'
+import rentalReducer from './rental-slice'
 import {
   geoMapLocationSearchReducer,
   feedbackReducer,
@@ -36,7 +37,8 @@ const appReducer = combineReducers({
   discoveryEmiPlan: discoveryEmiPlanReducer,
   emiForm: emiFormReducer,
   selectedEmi: selectedEmiReducer,
-  navigation: navigationReducer
+  navigation: navigationReducer,
+  rental: rentalReducer
 })
 
 const rootReducer = (state: any, action: any) => {

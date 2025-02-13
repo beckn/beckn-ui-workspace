@@ -7,6 +7,7 @@ export interface ProductCtaProps {
   handleDecrement?: () => void
   counter?: number
   cta: ButtonProps
+  title?: string
   counterTitle?: string
   noCounter?: boolean
   dataTestIncrementCounter?: string

@@ -8,9 +8,11 @@ import { cartActions } from '@beckn-ui/common/src/store/cart-slice'
 import { feedbackActions } from '@beckn-ui/common/src/store/ui-feedback-slice'
 import { testIds } from '@shared/dataTestIds'
 import { RootState } from '@store/index'
+import { useRouter } from 'next/router'
 
 const Product = () => {
   const { t } = useLanguage()
+  const router = useRouter()
   const selectedProduct: ParsedItemModel = useSelector((state: DiscoveryRootState) => state.discovery.selectedProduct)
   console.log(selectedProduct)
   const dispatch = useDispatch()
@@ -36,6 +38,58 @@ const Product = () => {
     return <></>
   }
   const type = useSelector((state: RootState) => state.navigation.type)
+  const productCta =
+    type === 'RENT_AND_HIRE'
+      ? {
+          title: 'Rental Price',
+          noCounter: true,
+          currency: selectedProduct.item.price.currency,
+          totalPrice: selectedProduct.item.price.value,
+          cta: {
+            dataTest: testIds.productpage_addTocartButton,
+            text: 'Proceed',
+            color: '#fff',
+            handleClick: () => {
+              dispatch(
+                cartActions.addItemToCart({
+                  product: selectedProduct,
+                  quantity: counter
+                })
+              )
+              router.push('/confirmRent')
+            }
+          }
+        }
+      : {
+          currency: selectedProduct.item.price.currency,
+          totalPrice: selectedProduct.item.price.value,
+          handleIncrement: increment,
+          handleDecrement: decrement,
+          counter: counter,
+          cta: {
+            dataTest: testIds.productpage_addTocartButton,
+            text: 'Add to Cart',
+            color: '#fff',
+            handleClick: () => {
+              dispatch(
+                cartActions.addItemToCart({
+                  product: selectedProduct,
+                  quantity: counter
+                })
+              )
+              dispatch(
+                feedbackActions.setToastData({
+                  toastData: {
+                    message: 'Success',
+                    display: true,
+                    type: 'success',
+                    description: t.addedToCart
+                  }
+                })
+              )
+            }
+          }
+        }
 
   return (
     <Box
@@ -60,31 +114,7 @@ const Product = () => {
               starCount: 5,
               dataTest: testIds.item_rating
             },
-            productCta: {
-              currency: selectedProduct.item.price.currency,
-              totalPrice: selectedProduct.item.price.value,
-              handleIncrement: increment,
-              handleDecrement: decrement,
-              counter: counter,
-              cta: {
-                dataTest: testIds.productpage_addTocartButton,
-                text: 'Add to Cart',
-                color: '#fff',
-                handleClick: () => {
-                  dispatch(
-                    cartActions.addItemToCart({
-                      product: selectedProduct,
-                      quantity: counter
-                    })
-                  )
-                  dispatch(
-                    feedbackActions.setToastData({
-                      toastData: { message: 'Success', display: true, type: 'success', description: t.addedToCart }
-                    })
-                  )
-                }
-              }
-            }
+            productCta
           }
         }}
       />

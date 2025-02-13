@@ -14,11 +14,14 @@ import { orderActions } from '@beckn-ui/common/src/store/order-slice'
 import { getPayloadForConfirm, getPayloadForOrderHistoryPost } from '@beckn-ui/common/src/utils'
 import { useConfirmMutation } from '@beckn-ui/common/src/services/confirm'
 import { testIds } from '@shared/dataTestIds'
-import { RETAIL_ORDER_CATEGORY_ID } from '../lib/config'
+import { FINANCE_ORDER_CATEGORY_ID, RENTAL_ORDER_CATEGORY_ID, RETAIL_ORDER_CATEGORY_ID } from '../lib/config'
 import { cartActions } from '@beckn-ui/common'
+import { RootState } from '@store/index'
 
 const retailOrderConfirmation = () => {
   const { t } = useLanguage()
+  const type = useSelector((state: RootState) => state.navigation.type)
+
   const router = useRouter()
   const [confirmData, setConfirmData] = useState<ConfirmResponseModel[]>([])
   const [confirm, { isLoading, data }] = useConfirmMutation()
@@ -27,8 +30,17 @@ const retailOrderConfirmation = () => {
 
   const initResponse = useSelector((state: CheckoutRootState) => state.checkout.initResponse)
   const confirmResponse = useSelector((state: CheckoutRootState) => state.checkout.confirmResponse)
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
+
+  const getOrderCategoryId = (type: any) => {
+    if (type === 'RENT_AND_HIRE') {
+      return RENTAL_ORDER_CATEGORY_ID
+    } else if (type === 'MY_STORE') {
+      return RETAIL_ORDER_CATEGORY_ID
+    } else {
+      return FINANCE_ORDER_CATEGORY_ID
+    }
+  }
 
   const bearerToken = Cookies.get('authToken')
   const axiosConfig = {
@@ -53,7 +65,7 @@ const retailOrderConfirmation = () => {
 
   useEffect(() => {
     if (confirmResponse && confirmResponse.length > 0) {
-      const ordersPayload = getPayloadForOrderHistoryPost(confirmResponse, RETAIL_ORDER_CATEGORY_ID)
+      const ordersPayload = getPayloadForOrderHistoryPost(confirmResponse, getOrderCategoryId(type))
       axios
         .post(`${strapiUrl}/unified-beckn-energy/order-history/create`, ordersPayload, axiosConfig)
         .then(res => {
@@ -89,7 +101,7 @@ const retailOrderConfirmation = () => {
 
           buttons: [
             {
-              text: 'View Order Details',
+              text: type === 'RENT_AND_HIRE' ? 'View My Rentals' : 'View Order Details',
               handleClick: () => {
                 const orderId = confirmResponse[0].message.orderId
                 const bppId = confirmResponse[0].context.bpp_id
@@ -103,8 +115,11 @@ const retailOrderConfirmation = () => {
                 }
                 localStorage.setItem('selectedOrder', JSON.stringify(orderObjectForStatusCall))
                 dispatch(checkoutActions.clearState())
-                dispatch(cartActions.clearCart())
-                router.push('/orderDetails')
+                if (type === 'RENT_AND_HIRE') {
+                  router.push('/myRental')
+                } else {
+                  router.push('/orderHistory')
+                }
               },
               disabled: false,
               variant: 'solid',

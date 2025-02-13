@@ -4,8 +4,9 @@ import { FormField, Typography, Loader, Button, LoaderWithMessage } from '@beckn
 import DetailsCard from './details-card'
 import ItemDetails from './checkout-item-details'
 import ShippingSection from './shipping-section'
-import { CheckoutProps, ShippingFormInitialValuesType } from './checkout.types'
+import { CheckoutProps, ItemDetailProps, ShippingFormInitialValuesType } from './checkout.types'
 import PaymentDetails from './payment-details'
+import OrderOverview, { RentalItemProps } from './order-overview'
 
 const Checkout: React.FC<CheckoutProps<FormField[]>> = ({
   schema: { items, loader, shipping, billing, payment, pageCTA },
@@ -42,35 +43,39 @@ const Checkout: React.FC<CheckoutProps<FormField[]>> = ({
         <Box pb={'10px'}>
           <Typography
             variant="titleRegular"
-            text={items?.title!}
+            text={items?.title || ''}
           />
         </Box>
-        <Box className="checkout-commom-item">
-          <DetailsCard>
-            {items?.data.map((item, i) => {
-              return (
-                <div
-                  key={i}
-                  data-test={dataTestItemDetails}
-                >
-                  <ItemDetails
-                    title={item.title}
-                    description={item.description}
-                    quantity={item.quantity}
-                    price={item.price}
-                    currency={item.currency}
-                    image={item.image}
-                  />
-                </div>
-              )
-            })}
-          </DetailsCard>
-        </Box>
+
+        <DetailsCard>
+          {items?.type === 'RENT_AND_HIRE' ? (
+            <OrderOverview items={items.data as RentalItemProps[]} />
+          ) : (
+            (items?.data as ItemDetailProps[]).map((item, i) => (
+              <div
+                key={i}
+                data-test={dataTestItemDetails}
+              >
+                <ItemDetails
+                  title={item.title}
+                  description={item.description}
+                  quantity={item.quantity}
+                  price={item.price}
+                  currency={item.currency}
+                  image={item.image}
+                />
+              </div>
+            ))
+          )}
+        </DetailsCard>
+
         {/* Shipping section */}
         <ShippingSection {...shipping} />
 
         {/* Billing Section */}
-        {billing && Object.keys(billing).length > 0 && <ShippingSection {...billing} />}
+        {items?.type !== 'RENT_AND_HIRE' && billing && Object.keys(billing).length > 0 && (
+          <ShippingSection {...billing} />
+        )}
 
         {hasInitResult && (
           <Box data-test={dataTestPaymentDetails}>

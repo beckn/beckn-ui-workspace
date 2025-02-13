@@ -1,123 +1,71 @@
 import { useState, useEffect } from 'react'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
-import React from 'react'
+import type React from 'react'
 import { Box, Button, Divider, Flex, Grid, HStack, Input, Text, VStack } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { Typography } from '@beckn-ui/molecules'
+import type { ICartRootState } from '@beckn-ui/common'
+import { useDispatch, useSelector } from 'react-redux'
+import { DOMAIN_PATH } from '@lib/config'
+import {
+  generateDates,
+  generateTimeSlots,
+  getTimeValue,
+  convertToTimestamp,
+  prepareApiPayload
+} from '../utilities/confirmRent-utils'
+import type { DateInfo, TimeSlot, CartItem } from '../lib/types/rentalTypes'
+import { setOrderData } from '@store/rental-slice'
 
 export default function ConfirmRent() {
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL
   const router = useRouter()
-  const [dates, setDates] = useState([])
-  const [timeSlots, setTimeSlots] = useState([])
-  const [selectedDate, setSelectedDate] = useState('')
-  const [fromTime, setFromTime] = useState('10:00 AM')
-  const [toTime, setToTime] = useState('10:00 PM')
-  const [isFocusedFrom, setIsFocusedFrom] = useState(false)
-  const [isFocusedTo, setIsFocusedTo] = useState(false)
-  const [isSelectingFrom, setIsSelectingFrom] = useState(true)
+  const dispatch = useDispatch()
+  const [dates, setDates] = useState<DateInfo[]>([])
+  const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([])
+  const [selectedDate, setSelectedDate] = useState<string>('')
+  const [fromTime, setFromTime] = useState<string>('')
+  const [toTime, setToTime] = useState<string>('')
+  const [isSelectingFrom, setIsSelectingFrom] = useState<boolean>(true)
+  const [activeField, setActiveField] = useState<'from' | 'to'>('from')
+  const cartItems = useSelector((state: ICartRootState) => state.cart.items) as CartItem[]
 
   useEffect(() => {
-    generateDates()
+    const generatedDates = generateDates()
+    setDates(generatedDates)
+    setSelectedDate(`${generatedDates[0].day} ${generatedDates[0].date}`)
   }, [])
 
   useEffect(() => {
     if (selectedDate) {
-      generateTimeSlots()
+      setTimeSlots(generateTimeSlots(selectedDate, dates))
     }
-  }, [selectedDate])
+  }, [selectedDate, dates])
 
-  const generateDates = () => {
-    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
-    const today = new Date()
-
-    const dateArray = Array.from({ length: 3 }, (_, index) => {
-      const date = new Date()
-      date.setDate(today.getDate() + index)
-      return {
-        day: days[date.getDay()],
-        date: date.getDate().toString(),
-        fullDate: date.toISOString().split('T')[0]
-      }
-    })
-
-    setDates(dateArray)
-    setSelectedDate(`${dateArray[0].day} ${dateArray[0].date}`)
-  }
-
-  const generateTimeSlots = () => {
-    const baseSlots = [
-      '10:00 AM',
-      '11:00 AM',
-      '12:00 PM',
-      '1:00 PM',
-      '2:00 PM',
-      '3:00 PM',
-      '4:00 PM',
-      '5:00 PM',
-      '6:00 PM',
-      '7:00 PM',
-      '8:00 PM',
-      '9:00 PM',
-      '10:00 PM'
-    ]
-
-    const now = new Date()
-    const currentHour = now.getHours()
-    const currentDate = now.toISOString().split('T')[0]
-
-    const selectedFullDate = dates.find(date => `${date.day} ${date.date}` === selectedDate)?.fullDate
-
-    const slots = baseSlots.map(slot => {
-      let slotHour = parseInt(slot.split(':')[0])
-      if (slot.includes('PM') && slotHour !== 12) {
-        slotHour += 12
-      } else if (slot.includes('AM') && slotHour === 12) {
-        slotHour = 0
-      }
-
-      const isDisabled = selectedFullDate === currentDate && slotHour <= currentHour
-
-      return { time: slot, disabled: isDisabled }
-    })
-
-    setTimeSlots(slots)
-  }
-
-  const handleDateSelection = dateString => {
+  const handleDateSelection = (dateString: string) => {
     setSelectedDate(dateString)
   }
 
-  const getTimeValue = timeStr => {
-    let hours = parseInt(timeStr.split(':')[0])
-    const isPM = timeStr.includes('PM')
-
-    if (isPM && hours !== 12) hours += 12
-    if (!isPM && hours === 12) hours = 0
-
-    return hours
-  }
-
-  const handleTimeSlotClick = time => {
+  const handleTimeSlotClick = (time: string) => {
     const isDisabled = timeSlots.find(slot => slot.time === time)?.disabled
+
     if (!isDisabled) {
-      if (isSelectingFrom) {
+      if (activeField === 'from') {
         setFromTime(time)
-        setToTime('')
-        setIsSelectingFrom(false)
+        setToTime('') // Reset "To" when changing "From"
       } else {
         const fromValue = getTimeValue(fromTime)
         const toValue = getTimeValue(time)
 
         if (toValue > fromValue) {
           setToTime(time)
-          setIsSelectingFrom(true)
         }
       }
     }
   }
 
   // Handle direct changes to the From time input
-  const handleFromTimeChange = event => {
+  const handleFromTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newTime = event.target.value
     if (timeSlots.some(slot => slot.time === newTime && !slot.disabled)) {
       setFromTime(newTime)
@@ -127,18 +75,62 @@ export default function ConfirmRent() {
   }
 
   // Handle direct changes to the To time input
-  const handleToTimeChange = event => {
+  const handleToTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newTime = event.target.value
-    if (timeSlots.some(slot => slot.time === newTime)) {
-      const fromValue = getTimeValue(fromTime)
-      const toValue = getTimeValue(newTime)
+    const fromValue = getTimeValue(fromTime)
+    const toValue = getTimeValue(newTime)
 
-      if (toValue > fromValue) {
-        setToTime(newTime)
-        setIsSelectingFrom(true)
-      }
+    if (timeSlots.some(slot => slot.time === newTime) && toValue > fromValue) {
+      setToTime(newTime)
+      setIsSelectingFrom(true) // Ensure we do not modify "From" again
     }
   }
+
+  const handleConfirm = async () => {
+    if (!cartItems.length) return
+    console.log('selectedDate', selectedDate)
+    console.log('fromTime', fromTime, toTime)
+
+    const fromTimestamp = convertToTimestamp(selectedDate, fromTime)
+    const toTimestamp = convertToTimestamp(selectedDate, toTime)
+    console.log('NewformTimestamp', fromTimestamp, toTimestamp)
+    const domain = DOMAIN_PATH.RENT_AND_HIRE
+    const payload = prepareApiPayload(cartItems, fromTimestamp, toTimestamp, domain)
+
+    try {
+      const response = await fetch(`${apiUrl}/select`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      })
+
+      if (response.ok) {
+        const responseData = await response.json()
+        console.log('API Response:', responseData?.data[0]?.message)
+        dispatch(setOrderData(responseData?.data[0]))
+        router.push('/checkout')
+      } else {
+        console.error('API Error:', response.statusText)
+      }
+    } catch (error) {
+      console.error('Network Error:', error)
+    }
+  }
+
+  const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true)
+
+  useEffect(() => {
+    const fromValue = getTimeValue(fromTime)
+    const toValue = getTimeValue(toTime)
+
+    if (fromTime && toTime && toValue > fromValue) {
+      setIsButtonDisabled(false)
+    } else {
+      setIsButtonDisabled(true)
+    }
+  }, [fromTime, toTime])
 
   return (
     <Box mt={5}>
@@ -202,10 +194,9 @@ export default function ConfirmRent() {
               <Input
                 value={fromTime}
                 width="110px"
-                borderColor={isFocusedFrom || isSelectingFrom ? '#4398E8' : '#979797'}
-                color={isFocusedFrom || isSelectingFrom ? '#4398E8' : '#000000'}
-                onFocus={() => setIsFocusedFrom(true)}
-                onBlur={() => setIsFocusedFrom(false)}
+                borderColor={activeField === 'from' ? '#4398E8' : '#979797'}
+                color={activeField === 'from' ? '#4398E8' : '#000000'}
+                onFocus={() => setActiveField('from')} // Track "From" selection
                 onChange={handleFromTimeChange}
                 readOnly
               />
@@ -230,10 +221,9 @@ export default function ConfirmRent() {
               <Input
                 value={toTime}
                 width="110px"
-                borderColor={isFocusedTo || !isSelectingFrom ? '#4398E8' : '#979797'}
-                color={isFocusedTo || !isSelectingFrom ? '#4398E8' : '#000000'}
-                onFocus={() => setIsFocusedTo(true)}
-                onBlur={() => setIsFocusedTo(false)}
+                borderColor={activeField === 'to' ? '#4398E8' : '#979797'}
+                color={activeField === 'to' ? '#4398E8' : '#000000'}
+                onFocus={() => setActiveField('to')} // Track "To" selection
                 onChange={handleToTimeChange}
                 readOnly
               />
@@ -281,8 +271,9 @@ export default function ConfirmRent() {
           </Grid>
         </Box>
         <BecknButton
+          disabled={isButtonDisabled}
           children="Confirm & Proceed"
-          handleClick={() => router.push('/checkout')}
+          handleClick={handleConfirm}
         />
       </Box>
     </Box>

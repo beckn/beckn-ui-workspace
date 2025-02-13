@@ -22,7 +22,7 @@ export const RETAIL_ORDER_CATEGORY_ID = 18
 export const RENTAL_ORDER_CATEGORY_ID = 20
 export const FINANCE_ORDER_CATEGORY_ID = 19
 
-export const EXPLORE_PATH = {
-  MY_STORE: 'MY_STORE',
-  RENT_AND_HIRE: 'RENT_AND_HIRE'
+export const DOMAIN_PATH = {
+  MY_STORE: 'deg:retail',
+  RENT_AND_HIRE: 'deg:rental'
 }
