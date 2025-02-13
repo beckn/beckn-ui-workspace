@@ -7,8 +7,9 @@ import AddNewItemModal from '@components/modal/AddNewItemModal'
 import { validateCredForm } from '@utils/form-utils'
 import EmptyIcon from '@public/images/empty_cred.svg'
 import { useLanguage } from '@hooks/useLanguage'
-import CatalogueRenderer, { ItemMetaData } from './CatalogueRenderer'
+import CatalogueRenderer from './CatalogueRenderer'
 import { DocumentProps } from '@components/documentsRenderer'
+import { ItemMetaData } from './ItemRenderer'
 
 export interface FormProps {
   type?: string
@@ -39,6 +40,7 @@ export interface CredFormErrors {
 export interface CredLayoutRendererProps {
   schema: {
     items: ItemMetaData[]
+    handleOnItemClick: (data: ItemMetaData) => void
     search: {
       searchInputPlaceholder?: string
       searchKeyword: string
@@ -63,6 +65,7 @@ export interface CredLayoutRendererProps {
 const CredLayoutRenderer: React.FC<CredLayoutRendererProps> = ({
   schema: {
     items,
+    handleOnItemClick,
     search: { searchInputPlaceholder = 'Search', searchKeyword, setSearchKeyword },
     modal: {
       schema: modalSchema,
@@ -120,7 +123,10 @@ const CredLayoutRenderer: React.FC<CredLayoutRendererProps> = ({
         className="hideScroll"
       >
         {items.length > 0 ? (
-          <CatalogueRenderer list={items} />
+          <CatalogueRenderer
+            list={items}
+            handleOnClick={handleOnItemClick}
+          />
         ) : isLoading ? (
           <Box
             display={'grid'}

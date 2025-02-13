@@ -11,20 +11,11 @@ import AssetTransactionTemplate, {
 } from '@components/AssetTransactionTemplate/AssetTransactionTemplate'
 
 const EnergyAssets = () => {
-  const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
-  const bearerToken = Cookies.get('authToken')
   const today = formatDate(new Date(), 'dd/MM/yy')
 
   const [balance, setBalance] = useState<number>(0)
   const [filterIndex, setFilterIndex] = useState<number>(0)
-  const [items, setItems] = useState<TransactionMeta[]>([
-    {
-      transactionType: 'BUYORDER',
-      name: 'Deposit',
-      date: formatDate(new Date(), 'dd/MM/yyyy'),
-      amount: 1000
-    }
-  ])
+  const [items, setItems] = useState<TransactionMeta[]>([])
   const [currentPage, setCurrentPage] = useState(1) // useState(meta.start / meta.limit + 1)
   const [totalPages, setTotalPages] = useState(10) // useState(Math.ceil(meta.total / meta.limit) || 1)
   const [customStartDate, setCustomStartDate] = useState<string>(today)
@@ -37,15 +28,10 @@ const EnergyAssets = () => {
 
   const fetchBalance = async () => {
     try {
-      const response = await axios.get(`${strapiUrl}${ROUTE_TYPE[ROLE.GENERAL]}/wallet/balance`, {
-        headers: { Authorization: `Bearer ${bearerToken}` },
-        withCredentials: true
-      })
-
-      const result = response.data.data
-      setBalance(result.balance)
+      // const result = []
+      // setBalance(result)
     } catch (error) {
-      console.error('Error fetching dashboard data:', error)
+      console.error('Error fetching data:', error)
     }
   }
 
@@ -54,21 +40,16 @@ const EnergyAssets = () => {
     callback?: Function
   ) => {
     try {
-      const response = await axios.get(`${strapiUrl}${ROUTE_TYPE[ROLE.GENERAL]}/wallet/transaction`, {
-        headers: { Authorization: `Bearer ${bearerToken}` },
-        withCredentials: true,
-        params
-      })
-      const result = response.data.map((transaction: any) => {
-        return {
-          transactionType: transaction.transaction_type,
-          name: transaction.transaction_type,
-          date: formatDate(new Date(transaction.createdAt), 'dd/MM/yyyy'),
-          amount: transaction.transaction_amount
-        }
-      })
-      setItems(result)
-      callback?.()
+      // const result = response.data.map((transaction: any) => {
+      //   return {
+      //     transactionType: transaction.transaction_type,
+      //     name: transaction.transaction_type,
+      //     date: formatDate(new Date(transaction.createdAt), 'dd/MM/yyyy'),
+      //     amount: transaction.transaction_amount
+      //   }
+      // })
+      // setItems(result)
+      // callback?.()
     } catch (error) {
       console.error('Error fetching transactions data:', error)
     }

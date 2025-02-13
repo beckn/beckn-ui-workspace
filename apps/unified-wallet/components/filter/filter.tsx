@@ -22,12 +22,12 @@ const activeLabelStyles = {
 }
 const filterPriceOption = [
   {
-    value: 'retail',
-    label: 'Retail'
+    value: 'service',
+    label: 'Service'
   },
   {
-    value: 'mobility',
-    label: 'Mobility'
+    value: 'retail',
+    label: 'Retail'
   }
 ]
 
@@ -131,29 +131,22 @@ const Filter = ({ handleApplyFilter, handleResetFilter, handleCancelFilter = () 
               Reset
             </Text>
           </Flex>
-          <Divider mb={'16px'} />
+          <Divider mb={'36px'} />
           <Box pb={'24px'}>
-            <FormControl variant="floating">
-              <FormLabel
-                className="dropDown_label"
-                fontSize="15px"
-              >
-                Domain
-              </FormLabel>
-              <GenericDropdown
-                options={filterPriceOption}
-                selectedValue={formData?.domain || ''}
-                handleChange={value => {
-                  handleChange('domain', value.value)
-                }}
-                buttonStyles={{
-                  fontSize: '14px',
-                  fontWeight: '400'
-                }}
-                name="domain"
-                dataTest={testIds.searchpage_sortByPrice}
-              />
-            </FormControl>
+            <GenericDropdown
+              options={filterPriceOption}
+              placeholder={'Domain'}
+              selectedValue={formData?.domain || ''}
+              handleChange={value => {
+                handleChange('domain', value.value)
+              }}
+              buttonStyles={{
+                fontSize: '14px',
+                fontWeight: '400'
+              }}
+              name="domain"
+              dataTest={testIds.searchpage_sortByPrice}
+            />
           </Box>
 
           <Button

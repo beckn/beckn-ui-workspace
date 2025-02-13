@@ -12,6 +12,8 @@ import { Box, useToast } from '@chakra-ui/react'
 import { feedbackActions, FeedbackRootState, GeoLocationInputList, ToastType } from '@beckn-ui/common'
 import { Toast } from '@beckn-ui/molecules'
 import { testIds } from '@shared/dataTestIds'
+import { AuthRootState } from '@store/auth-slice'
+import { logout } from '@store/auth-slice'
 
 const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const { locale } = useLanguage()
@@ -32,6 +34,28 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const {
     toast: { display, message, type, description }
   } = useSelector((state: FeedbackRootState) => state.feedback)
+  const { user } = useSelector((state: AuthRootState) => state.auth)
+
+  useEffect(() => {
+    if (!['/signIn', '/resetPassword'].includes(router.pathname)) {
+      let message = ''
+
+      try {
+        const isExpired: any = user?.did
+        if (!isExpired) message = 'Session expired, please log in again!'
+      } catch (error) {
+        console.error('Session decoding error:', error)
+        message = 'Session expired, please log in again!'
+      } finally {
+        if (message) {
+          alert(message)
+          // if (userConfirmed) {
+          dispatch(logout())
+          // }
+        }
+      }
+    }
+  }, [router])
 
   useEffect(() => {
     if (display) {

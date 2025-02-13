@@ -48,6 +48,14 @@ const extendedWalletApi = Api.injectEndpoints({
           body: signedDetails
         }
       }
+    }),
+    decodeStream: build.mutation<VerifyResponse, { subjectId: string }>({
+      query: ({ subjectId }) => {
+        return {
+          url: `${subjectId}/stream`,
+          method: 'GET'
+        }
+      }
     })
   })
 })
@@ -58,11 +66,12 @@ export const {
   useVerifyMutation,
   useGetVerificationMethodsMutation,
   useAddDocumentMutation,
-  useGetDocumentsMutation
+  useGetDocumentsMutation,
+  useDecodeStreamMutation
 } = extendedWalletApi
 
 export const {
-  endpoints: { getUser, getVerificationMethods, verify, registerLoginUser, addDocument, getDocuments }
+  endpoints: { getUser, getVerificationMethods, verify, registerLoginUser, addDocument, getDocuments, decodeStream }
 } = extendedWalletApi
 
 export default extendedWalletApi
