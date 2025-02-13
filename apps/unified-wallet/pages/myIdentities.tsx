@@ -3,7 +3,6 @@ import { useLanguage } from '@hooks/useLanguage'
 import { useDispatch, useSelector } from 'react-redux'
 import CredLayoutRenderer, { CredFormErrors, FormProps } from '@components/credLayoutRenderer/LayoutRenderer'
 import { validateCredForm } from '@utils/form-utils'
-import { ItemMetaData } from '@components/credLayoutRenderer/CatalogueRenderer'
 import AadharCard from '@public/images/aadharcard.svg'
 import DocIcon from '@public/images/doc_icon.svg'
 import { SelectOptionType } from '@beckn-ui/molecules'
@@ -27,6 +26,7 @@ import { parseDIDData } from '@utils/did'
 import BottomModalScan from '@beckn-ui/common/src/components/BottomModal/BottomModalScan'
 import { Box } from '@chakra-ui/react'
 import VerifyOTP from '@components/VerifyOTP/VerifyOTP'
+import { ItemMetaData } from '@components/credLayoutRenderer/ItemRenderer'
 
 const documentPatterns: Record<string, { regex: RegExp; image: string }> = {
   aadhar: { regex: /\baadhar\s?(card)?\b/i, image: AadharCard },
@@ -264,6 +264,7 @@ const MyIdentities = () => {
       <CredLayoutRenderer
         schema={{
           items: filteredItems,
+          handleOnItemClick: () => {},
           search: {
             searchInputPlaceholder: 'Search Identities',
             searchKeyword,

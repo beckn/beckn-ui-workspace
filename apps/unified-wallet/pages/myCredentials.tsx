@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import CredLayoutRenderer, { CredFormErrors, FormProps } from '@components/credLayoutRenderer/LayoutRenderer'
 import { validateCredForm } from '@utils/form-utils'
 import { InputProps } from '@beckn-ui/molecules'
-import { ItemMetaData } from '@components/credLayoutRenderer/CatalogueRenderer'
 import { AuthRootState } from '@store/auth-slice'
 import {
   useAddDocumentMutation,
@@ -17,6 +16,7 @@ import { extractAuthAndHeader, filterByKeyword, toBase64, toSnakeCase } from '@u
 import { generateAuthHeader } from '@services/cryptoUtilService'
 import { feedbackActions } from '@beckn-ui/common'
 import { DocumentProps } from '@components/documentsRenderer'
+import { ItemMetaData } from '@components/credLayoutRenderer/ItemRenderer'
 
 const options = [
   { label: 'Document', value: 'document' },
@@ -249,6 +249,7 @@ const MyCredentials = () => {
     <CredLayoutRenderer
       schema={{
         items: filteredItems,
+        handleOnItemClick: () => {},
         search: {
           searchInputPlaceholder: 'Search Credentials',
           searchKeyword,

@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import CredLayoutRenderer, { CredFormErrors, FormProps } from '@components/credLayoutRenderer/LayoutRenderer'
 import { validateCredForm } from '@utils/form-utils'
 import { InputProps } from '@beckn-ui/molecules'
-import { ItemMetaData } from '@components/credLayoutRenderer/CatalogueRenderer'
 import DocIcon from '@public/images/physical_icon.svg'
 import { DocumentProps } from '@components/documentsRenderer'
 import { AuthRootState } from '@store/auth-slice'
@@ -17,6 +16,8 @@ import { parseDIDData } from '@utils/did'
 import { extractAuthAndHeader, filterByKeyword, toBase64, toSnakeCase } from '@utils/general'
 import { generateAuthHeader } from '@services/cryptoUtilService'
 import { feedbackActions } from '@beckn-ui/common'
+import { useRouter } from 'next/router'
+import { ItemMetaData } from '@components/credLayoutRenderer/ItemRenderer'
 
 const PhysicalAssets = () => {
   const [items, setItems] = useState<ItemMetaData[]>([])
@@ -37,6 +38,7 @@ const PhysicalAssets = () => {
 
   const { t } = useLanguage()
   const dispatch = useDispatch()
+  const router = useRouter()
   const { user, privateKey, publicKey } = useSelector((state: AuthRootState) => state.auth)
   const [addDocument, { isLoading: addDocLoading }] = useAddDocumentMutation()
   const [getVerificationMethods, { isLoading: verificationMethodsLoading }] = useGetVerificationMethodsMutation()
@@ -95,7 +97,7 @@ const PhysicalAssets = () => {
       const data: any = {
         type: formData.type
       }
-      if (formData.type === 'document' && selectedFile) {
+      if (selectedFile) {
         data.fileName = selectedFile?.title
       }
       setIsLoading(true)
@@ -250,10 +252,22 @@ const PhysicalAssets = () => {
     return inputs
   }, [formData])
 
+  const handleOpenCredDetails = (data: ItemMetaData) => {
+    console.log(data)
+    router.push({
+      pathname: '/physicalAssetsDetails',
+      query: {
+        cred_name: data.title,
+        data: JSON.stringify(data)
+      }
+    })
+  }
+
   return (
     <CredLayoutRenderer
       schema={{
         items: filteredItems,
+        handleOnItemClick: data => handleOpenCredDetails(data),
         search: {
           searchInputPlaceholder: 'Search Assets',
           searchKeyword,

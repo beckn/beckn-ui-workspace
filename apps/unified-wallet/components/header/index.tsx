@@ -37,6 +37,11 @@ const Header = () => {
     ? { src: profileIcon, handleClick: () => router.push('/profile') }
     : undefined
 
+  const dynamicHeaderNames = {
+    ...headerNames,
+    '/physicalAssetsDetails': `${router.query.cred_name}`
+  }
+
   return (
     <Box>
       {renderTopHeader && (
@@ -62,7 +67,7 @@ const Header = () => {
           profileSection={profileSection}
           headerConstants={{
             headerNames: {
-              defaultNames: headerNames,
+              defaultNames: dynamicHeaderNames,
               frenchNames: headerFrenchNames
             },
             blackList: {

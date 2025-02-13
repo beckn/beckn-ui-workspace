@@ -7,7 +7,7 @@ export interface CardBoxPropsModel {
   styles?: React.CSSProperties
 }
 
-const CardWithCheckBox: React.FC<CardBoxPropsModel> = props => {
+const CardRenderer: React.FC<CardBoxPropsModel> = props => {
   const { childComponent, handleOnclick, styles } = props
 
   return (
@@ -19,7 +19,7 @@ const CardWithCheckBox: React.FC<CardBoxPropsModel> = props => {
       style={styles}
     >
       <CardBody
-        padding={'20px 10px'}
+        padding={'10px 10px'}
         h="54px"
       >
         {childComponent()}
@@ -28,4 +28,4 @@ const CardWithCheckBox: React.FC<CardBoxPropsModel> = props => {
   )
 }
 
-export default React.memo(CardWithCheckBox)
+export default React.memo(CardRenderer)
