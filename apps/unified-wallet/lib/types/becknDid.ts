@@ -1,3 +1,15 @@
+export type Identity = { type: string; id: string; did: string }
+export type Credential = { type: string; name: string; did: string }
+export type PhysicalAsset = { type: string; attachment: string | null; did: string; source: string }
+
+export interface ParsedData {
+  identities: Identity[]
+  assets: {
+    credentials: Credential[]
+    physical: PhysicalAsset[]
+  }
+}
+
 export type PurposeType =
   | 'Authentication'
   | 'Assertion'

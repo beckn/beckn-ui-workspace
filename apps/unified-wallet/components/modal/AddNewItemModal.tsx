@@ -3,7 +3,7 @@ import { Button, GenericDropdown, Input, Typography } from '@beckn-ui/molecules'
 import BecknButton from '@beckn-ui/molecules/src/components/button'
 import { Box, Flex, HStack, Icon, VStack } from '@chakra-ui/react'
 import { InputProps, ButtonProps } from '@beckn-ui/molecules'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { testIds } from '@shared/dataTestIds'
 import DragAndDropUpload from '@components/dragAndDropUpload'
 import { FiPlusCircle } from 'react-icons/fi'
@@ -29,20 +29,19 @@ interface DeleteAlertModalProps {
     buttons: ButtonProps[]
   }
   renderFileUpload?: boolean
+  handleOnFileselectionChange?: (data: DocumentProps[]) => void
 }
 
 const AddNewItemModal = (props: DeleteAlertModalProps) => {
-  const { isOpen, onClose, isLoading, schema, renderFileUpload } = props
+  const { isOpen, onClose, isLoading, schema, renderFileUpload, handleOnFileselectionChange } = props
   const { inputs, header, buttons } = schema
 
   const [selectedFile, setSelectedFile] = useState<DocumentProps[]>([])
   const [allFilesProcessed, setAllFilesProcessed] = useState<boolean>(false)
 
   const handleFileChange = (files: File[]) => {
-    console.log(files)
     if (files.length > 0) {
       const docs = files.map(file => {
-        console.log('Selected file:', file)
         return { title: file?.name!, icon: uploadIcon, date: new Date(), file: file }
       })
       // setSelectedFile(prevState => (prevState ? [...prevState, ...docs] : docs))
@@ -54,12 +53,17 @@ const AddNewItemModal = (props: DeleteAlertModalProps) => {
     setSelectedFile(prevState => prevState!.filter((_, i) => i !== index))
   }
 
+  useEffect(() => {
+    handleOnFileselectionChange?.(selectedFile)
+  }, [selectedFile])
+
   return (
     <Box>
       <BottomModalScan
         isOpen={isOpen}
         onClose={onClose}
         modalHeader={header}
+        isLoading={isLoading}
       >
         <Box
           alignItems="center"
@@ -105,47 +109,47 @@ const AddNewItemModal = (props: DeleteAlertModalProps) => {
                   text="File upload description"
                   dataTest={testIds.File_upload_description}
                 /> */}
-                {/* {selectedFile.length === 0 && ( */}
-                <DragAndDropUpload
-                  multiple={true}
-                  accept={'.json'}
-                  dragAndDrop={true}
-                  setFiles={handleFileChange}
-                  fileSelectionElement={(fileInputRef: any) => {
-                    return (
-                      <VStack>
-                        <Icon
-                          as={FiPlusCircle}
-                          boxSize={6}
-                          color="gray.500"
-                        />
-                        <Typography
-                          text={'Drop your file here'}
-                          dataTest={testIds.drop_your_file_here}
-                        />
-                        <HStack gap={1}>
-                          <Typography
-                            dataTest={testIds.Browse_file}
-                            color="#4498E8"
-                            fontSize="8px"
-                            onClick={() => {
-                              if (fileInputRef.current) {
-                                fileInputRef.current.click()
-                              }
-                            }}
-                            sx={{ cursor: 'pointer', _hover: { textDecoration: 'underline' } }}
-                            text="Browse file"
-                          />{' '}
-                          <Typography
-                            fontSize="8px"
-                            text={'from your computer'}
+                {selectedFile.length === 0 && (
+                  <DragAndDropUpload
+                    multiple={false}
+                    accept={'*'}
+                    dragAndDrop={true}
+                    setFiles={handleFileChange}
+                    fileSelectionElement={(fileInputRef: any) => {
+                      return (
+                        <VStack>
+                          <Icon
+                            as={FiPlusCircle}
+                            boxSize={6}
+                            color="gray.500"
                           />
-                        </HStack>
-                      </VStack>
-                    )
-                  }}
-                />
-                {/* )} */}
+                          <Typography
+                            text={'Drop your file here'}
+                            dataTest={testIds.drop_your_file_here}
+                          />
+                          <HStack gap={1}>
+                            <Typography
+                              dataTest={testIds.Browse_file}
+                              color="#4498E8"
+                              fontSize="8px"
+                              onClick={() => {
+                                if (fileInputRef.current) {
+                                  fileInputRef.current.click()
+                                }
+                              }}
+                              sx={{ cursor: 'pointer', _hover: { textDecoration: 'underline' } }}
+                              text="Browse file"
+                            />{' '}
+                            <Typography
+                              fontSize="8px"
+                              text={'from your computer'}
+                            />
+                          </HStack>
+                        </VStack>
+                      )
+                    }}
+                  />
+                )}
                 <RenderDocuments
                   list={selectedFile || []}
                   type="upload"

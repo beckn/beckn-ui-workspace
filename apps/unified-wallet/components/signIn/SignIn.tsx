@@ -16,9 +16,9 @@ import {
   useVerifyMutation
 } from '@services/walletService'
 import Cookies from 'js-cookie'
-import { generateKeyPairFromString, generateSignature } from '@utils/auth'
 import { RegisterSubject } from '@lib/types/becknDid'
 import { setPrivateKeyAndPublicKey } from '@store/auth-slice'
+import { generateKeyPairFromString, generateSignature } from '@services/cryptoUtilService'
 
 const SignIn = ({ initialFormData = { mobileNumber: '+91 ' } }) => {
   const [formData, setFormData] = useState<LoginFormProps>(initialFormData)

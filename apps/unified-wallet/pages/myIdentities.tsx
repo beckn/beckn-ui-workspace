@@ -1,53 +1,49 @@
-import { ROLE, ROUTE_TYPE } from '@lib/config'
-import axios from '@services/axios'
-import Cookies from 'js-cookie'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useLanguage } from '@hooks/useLanguage'
 import { useDispatch, useSelector } from 'react-redux'
 import CredLayoutRenderer, { CredFormErrors, FormProps } from '@components/credLayoutRenderer/LayoutRenderer'
 import { validateCredForm } from '@utils/form-utils'
 import { ItemMetaData } from '@components/credLayoutRenderer/CatalogueRenderer'
 import AadharCard from '@public/images/aadharcard.svg'
+import DocIcon from '@public/images/doc_icon.svg'
 import { SelectOptionType } from '@beckn-ui/molecules'
 import { countryWiseVerification } from '@utils/constants'
 import {
   useAddDocumentMutation,
   useGetDocumentsMutation,
-  useGetVerificationMethodsMutation,
-  useVerifyMutation
+  useGetVerificationMethodsMutation
 } from '@services/walletService'
 import { AuthRootState } from '@store/auth-slice'
 import {
   extractAuthAndHeader,
   extractMobileNumberFromSubjectDid,
-  fromBase64,
+  filterByKeyword,
   toBase64,
   toSnakeCase
 } from '@utils/general'
 import { feedbackActions } from '@beckn-ui/common'
-import { generateKeyPairFromString, generateSignature } from '@services/cryptoUtilService'
-import { generateAuthHeader } from '@utils/auth'
+import { generateAuthHeader } from '@services/cryptoUtilService'
+import { parseDIDData } from '@utils/did'
+import BottomModalScan from '@beckn-ui/common/src/components/BottomModal/BottomModalScan'
+import { Box } from '@chakra-ui/react'
+import VerifyOTP from '@components/VerifyOTP/VerifyOTP'
 
-const options = [
-  { label: 'Aadhar Card', value: 'aadhar_card' },
-  { label: 'PAN Card', value: 'pan_card' },
-  { label: 'Driving License', value: 'driving_license' },
-  { label: 'Passport', value: 'passport' },
-  { label: 'Voter ID', value: 'voter_id' },
-  { label: 'Ration Card', value: 'ration_card' },
-  { label: 'Birth Certificate', value: 'birth_certificate' }
-]
+const documentPatterns: Record<string, { regex: RegExp; image: string }> = {
+  aadhar: { regex: /\baadhar\s?(card)?\b/i, image: AadharCard },
+  pan: { regex: /\bpan\s?(card)?\b/i, image: DocIcon },
+  passport: { regex: /\bpass[-\s]?port\b/i, image: DocIcon },
+  drivinglicense: { regex: /\bdriving\s?(license|licence)\b/i, image: DocIcon }
+}
 
 const MyIdentities = () => {
-  const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
-  const bearerToken = Cookies.get('authToken')
-
   const [items, setItems] = useState<ItemMetaData[]>([])
+  const [filteredItems, setFilteredItems] = useState(items)
   const [searchKeyword, setSearchKeyword] = useState<string>('')
   const [openModal, setOpenModal] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isOTPModalOpen, setIsOTPModalOpen] = useState<boolean>(false)
 
-  const [countryDetails, setCountryDetails] = useState<Record<string, any>>()
+  // const [countryDetails, setCountryDetails] = useState<Record<string, any>>()
   const [formData, setFormData] = useState<FormProps>({
     type: '',
     credNumber: '',
@@ -85,30 +81,53 @@ const MyIdentities = () => {
     ]
   })
 
+  const getDocIcon = (docType: string) => {
+    for (const key in documentPatterns) {
+      if (documentPatterns[key].regex.test(docType)) {
+        return { image: documentPatterns[key].image }
+      }
+    }
+
+    return { image: DocIcon }
+  }
+
   const fetchCredentials = async () => {
     try {
+      setIsLoading(true)
       const result = await getDocuments(user?.did!).unwrap()
-      console.log(result)
-      const list: ItemMetaData[] = result.map((item, index) => {
-        const credData = JSON.parse(fromBase64(item.did))
+      const list: ItemMetaData[] = parseDIDData(result)['identities'].map((item, index) => {
+        const docType: any = item.type.toLowerCase().replace(/[^a-z]/g, '')
+        const { image } = getDocIcon(docType)
         return {
           id: index,
-          title: credData.type,
+          title: item.type,
           isVerified: true,
-          image: AadharCard,
+          image,
           datetime: new Date().toString(),
-          data: credData
+          data: item
         }
       })
       setItems(list)
+      setFilteredItems(list)
     } catch (error) {
       console.error('Error fetching dashboard data:', error)
+    } finally {
+      setIsLoading(false)
     }
   }
 
   useEffect(() => {
     fetchCredentials()
   }, [])
+
+  useEffect(() => {
+    if (searchKeyword && searchKeyword.trim() !== '') {
+      const filteredList = filterByKeyword(items, searchKeyword, 'title')
+      setFilteredItems(filteredList)
+    } else {
+      setFilteredItems(items)
+    }
+  }, [searchKeyword, items])
 
   const getCountries = () => {
     const countries = countryWiseVerification.map(data => ({
@@ -154,7 +173,8 @@ const MyIdentities = () => {
       const { did } = verificationMethodsRes[0]
 
       const authHeaderRes = await generateAuthHeader({
-        subjectId: did,
+        subjectId: user?.did!,
+        verification_did: did,
         privateKey,
         publicKey,
         payload: {
@@ -177,7 +197,7 @@ const MyIdentities = () => {
             toastData: { message: 'Success', display: true, type: 'success', description: 'Added Successfully!' }
           })
         )
-        setOpenModal(false)
+        setIsOTPModalOpen(false)
       } else {
         dispatch(
           feedbackActions.setToastData({
@@ -187,6 +207,9 @@ const MyIdentities = () => {
       }
     } catch (error) {
       console.error('An error occurred:', error)
+    } finally {
+      setIsLoading(false)
+      fetchCredentials()
     }
   }
 
@@ -237,69 +260,95 @@ const MyIdentities = () => {
   }, [formData, formErrors])
 
   return (
-    <CredLayoutRenderer
-      schema={{
-        items,
-        search: {
-          searchInputPlaceholder: 'Search Identities',
-          searchKeyword,
-          setSearchKeyword
-        },
-        modal: {
-          schema: {
-            header: 'Add New Identity',
-            inputs: [
-              {
-                type: 'select',
-                name: 'country',
-                options: options.country,
-                value: formData.country!,
-                handleChange: handleSelectChange,
-                label: 'Select Country',
-                error: formErrors.country
-              },
-              {
-                type: 'text',
-                name: 'type',
-                value: formData.type!,
-                handleChange: handleInputChange,
-                label: 'Identity Type',
-                error: formErrors.type
-              },
-              {
-                type: 'select',
-                name: 'verificationMethod',
-                options: options.verificationMethods,
-                value: formData.verificationMethod!,
-                handleChange: handleSelectChange,
-                label: 'Method Of Verification',
-                error: formErrors.verificationMethod
-              },
-              {
-                type: 'text',
-                name: 'credNumber',
-                value: formData.credNumber!,
-                handleChange: handleInputChange,
-                label: 'ID Number',
-                error: formErrors.credNumber
-              }
-            ],
-            buttons: [
-              {
-                text: 'Add',
-                handleClick: handleOnSubmit,
-                disabled: !isFormFilled,
-                variant: 'solid',
-                colorScheme: 'primary'
-              }
-            ]
+    <>
+      <CredLayoutRenderer
+        schema={{
+          items: filteredItems,
+          search: {
+            searchInputPlaceholder: 'Search Identities',
+            searchKeyword,
+            setSearchKeyword
           },
-          openModal,
-          handleOpenModal,
-          handleCloseModal
-        }
-      }}
-    />
+          modal: {
+            schema: {
+              header: 'Add New Identity',
+              inputs: [
+                {
+                  type: 'select',
+                  name: 'country',
+                  options: options.country,
+                  value: formData.country!,
+                  handleChange: handleSelectChange,
+                  label: 'Select Country',
+                  error: formErrors.country
+                },
+                {
+                  type: 'text',
+                  name: 'type',
+                  value: formData.type!,
+                  handleChange: handleInputChange,
+                  label: 'Identity Type',
+                  error: formErrors.type
+                },
+                {
+                  type: 'select',
+                  name: 'verificationMethod',
+                  options: options.verificationMethods,
+                  value: formData.verificationMethod!,
+                  handleChange: handleSelectChange,
+                  label: 'Method Of Verification',
+                  error: formErrors.verificationMethod
+                },
+                {
+                  type: 'text',
+                  name: 'credNumber',
+                  value: formData.credNumber!,
+                  handleChange: handleInputChange,
+                  label: 'ID Number',
+                  error: formErrors.credNumber
+                }
+              ],
+              buttons: [
+                {
+                  text: 'Add',
+                  handleClick: () => {
+                    setOpenModal(false)
+                    setIsOTPModalOpen(true)
+                  },
+                  disabled: !isFormFilled,
+                  variant: 'solid',
+                  colorScheme: 'primary',
+                  isLoading: isLoading
+                }
+              ]
+            },
+            isLoading,
+            openModal,
+            handleOpenModal,
+            handleCloseModal
+          }
+        }}
+      />
+      <BottomModalScan
+        isOpen={isOTPModalOpen}
+        onClose={() => setIsOTPModalOpen(false)}
+        modalHeader={'OTP Verification'}
+        isLoading={isLoading}
+      >
+        <Box
+          alignItems="center"
+          flexDir="column"
+          padding="0 20px 0 20px"
+          gap="10px"
+        >
+          <VerifyOTP
+            description="Enter the one time password the we have just sent to your mobile number"
+            isLoading={isLoading}
+            handleVerifyOtp={handleOnSubmit}
+          />
+        </Box>
+      </BottomModalScan>
+    </>
   )
 }
 

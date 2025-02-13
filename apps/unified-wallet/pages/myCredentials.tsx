@@ -1,13 +1,22 @@
-import { ROLE, ROUTE_TYPE } from '@lib/config'
-import axios from '@services/axios'
-import Cookies from 'js-cookie'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useLanguage } from '@hooks/useLanguage'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import CredLayoutRenderer, { CredFormErrors, FormProps } from '@components/credLayoutRenderer/LayoutRenderer'
 import { validateCredForm } from '@utils/form-utils'
 import { InputProps } from '@beckn-ui/molecules'
 import { ItemMetaData } from '@components/credLayoutRenderer/CatalogueRenderer'
+import { AuthRootState } from '@store/auth-slice'
+import {
+  useAddDocumentMutation,
+  useGetDocumentsMutation,
+  useGetVerificationMethodsMutation
+} from '@services/walletService'
+import DocIcon from '@public/images/doc_icon.svg'
+import { parseDIDData } from '@utils/did'
+import { extractAuthAndHeader, filterByKeyword, toBase64, toSnakeCase } from '@utils/general'
+import { generateAuthHeader } from '@services/cryptoUtilService'
+import { feedbackActions } from '@beckn-ui/common'
+import { DocumentProps } from '@components/documentsRenderer'
 
 const options = [
   { label: 'Document', value: 'document' },
@@ -15,13 +24,13 @@ const options = [
 ]
 
 const MyCredentials = () => {
-  const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
-  const bearerToken = Cookies.get('authToken')
-
   const [items, setItems] = useState<ItemMetaData[]>([])
+  const [filteredItems, setFilteredItems] = useState(items)
   const [searchKeyword, setSearchKeyword] = useState<string>('')
   const [openModal, setOpenModal] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [selectedFile, setSelectedFile] = useState<DocumentProps>()
+
   const [formData, setFormData] = useState<FormProps>({
     type: '',
     credName: ''
@@ -33,69 +42,126 @@ const MyCredentials = () => {
 
   const { t } = useLanguage()
   const dispatch = useDispatch()
+  const { user, privateKey, publicKey } = useSelector((state: AuthRootState) => state.auth)
+  const [addDocument, { isLoading: addDocLoading }] = useAddDocumentMutation()
+  const [getVerificationMethods, { isLoading: verificationMethodsLoading }] = useGetVerificationMethodsMutation()
+  const [getDocuments, { isLoading: verifyLoading }] = useGetDocumentsMutation()
 
-  const fetchPairedData = async () => {
+  const fetchCredentials = async () => {
     try {
-      const response = await axios.get(`${strapiUrl}${ROUTE_TYPE[ROLE.GENERAL]}/der`, {
-        headers: { Authorization: `Bearer ${bearerToken}` },
-        withCredentials: true
+      setIsLoading(true)
+      const result = await getDocuments(user?.did!).unwrap()
+      const list: ItemMetaData[] = parseDIDData(result)['assets']['credentials'].map((item, index) => {
+        return {
+          id: index,
+          title: item.name,
+          isVerified: true,
+          image: DocIcon,
+          datetime: new Date().toString(),
+          data: item
+        }
       })
-
-      const result = response.data
-      const mappedDevices = result.map((item: { category: string; id: number }) => ({
-        name: item.category,
-        paired: true,
-        id: item.id
-      }))
-      setItems(mappedDevices)
+      setItems(list)
+      setFilteredItems(list)
     } catch (error) {
       console.error('Error fetching dashboard data:', error)
+    } finally {
+      setIsLoading(false)
     }
   }
 
   useEffect(() => {
-    console.log(searchKeyword)
-    // fetchPairedData()
-  }, [searchKeyword])
+    fetchCredentials()
+  }, [])
+
+  useEffect(() => {
+    if (searchKeyword && searchKeyword.trim() !== '') {
+      const filteredList = filterByKeyword(items, searchKeyword, 'title')
+      setFilteredItems(filteredList)
+    } else {
+      setFilteredItems(items)
+    }
+  }, [searchKeyword, items])
 
   const handleOpenModal = () => setOpenModal(true)
   const handleCloseModal = () => setOpenModal(false)
 
-  const handleOnSubmit = () => {
-    const errors = validateCredForm(formData) as any
-    setFormErrors(prevErrors => ({
-      ...prevErrors,
-      ...Object.keys(errors).reduce((acc: any, key) => {
-        acc[key] = t[`${errors[key]}`] || ''
-        return acc
-      }, {} as CredFormErrors)
-    }))
+  const handleOnSubmit = async () => {
+    try {
+      const errors = validateCredForm(formData) as any
+      setFormErrors(prevErrors => ({
+        ...prevErrors,
+        ...Object.keys(errors).reduce((acc: any, key) => {
+          acc[key] = t[`${errors[key]}`] || ''
+          return acc
+        }, {} as CredFormErrors)
+      }))
 
-    const data = {
-      type: formData.type,
-      credName: formData.credName?.trim()
+      const data: any = {
+        type: formData.type,
+        credName: formData.credName?.trim()
+      }
+      if (formData.type === 'document' && selectedFile) {
+        data.fileName = selectedFile?.title
+      } else if (formData.type === 'url' && formData.url !== '') {
+        data.url = formData.url
+      }
+      setIsLoading(true)
+
+      const docDetails = JSON.stringify(data)
+
+      const verificationMethodsRes = await getVerificationMethods(user?.did!).unwrap()
+      const { did } = verificationMethodsRes[0]
+      let attachments = null
+      if (formData.url && formData.url !== '') {
+        attachments = formData.url
+      } else if (selectedFile) {
+        attachments = selectedFile?.title
+      }
+
+      const authHeaderRes = await generateAuthHeader({
+        subjectId: user?.did!,
+        verification_did: did,
+        privateKey,
+        publicKey,
+        payload: {
+          name: `assets/credentials/type/${toSnakeCase(data?.type!)}/cred_name/${toSnakeCase(data.credName)}${attachments ? '/' + attachments : ''}`,
+          stream: toBase64(docDetails)
+        }
+      })
+      const { authorization, payload } = extractAuthAndHeader(authHeaderRes)
+      if (authorization && payload) {
+        const addDocPayload = {
+          subjectId: user?.did!,
+          payload,
+          authorization
+        }
+
+        await addDocument(addDocPayload).unwrap()
+
+        dispatch(
+          feedbackActions.setToastData({
+            toastData: { message: 'Success', display: true, type: 'success', description: 'Added Successfully!' }
+          })
+        )
+        setOpenModal(false)
+      } else {
+        dispatch(
+          feedbackActions.setToastData({
+            toastData: { message: 'Error', display: true, type: 'error', description: t.errorText }
+          })
+        )
+      }
+    } catch (error) {
+      console.error('An error occurred:', error)
+    } finally {
+      setIsLoading(false)
+      fetchCredentials()
     }
-    setIsLoading(true)
+  }
 
-    const payload = JSON.stringify(data)
-    console.log(payload)
-    // axios
-    //   .post(`${strapiUrl}/profiles`, currentFormData, requestOptions)
-    //   .then(response => {
-    //     dispatch(
-    //       feedbackActions.setToastData({
-    //         toastData: { message: 'Success', display: true, type: 'success', description: 'Added Successfully!' }
-    //       })
-    //     )
-    //     setOpenModal(false)
-    //   })
-    //   .catch(error => {
-    //     console.log(error)
-    //   })
-    //   .finally(() => {
-    //     setIsLoading(false)
-    //   })
-    setOpenModal(false)
+  const handleOnFileselectionChange = (data: DocumentProps[]) => {
+    setSelectedFile(data[0])
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -182,7 +248,7 @@ const MyCredentials = () => {
   return (
     <CredLayoutRenderer
       schema={{
-        items,
+        items: filteredItems,
         search: {
           searchInputPlaceholder: 'Search Credentials',
           searchKeyword,
@@ -198,14 +264,17 @@ const MyCredentials = () => {
                 handleClick: handleOnSubmit,
                 disabled: !isFormFilled,
                 variant: 'solid',
-                colorScheme: 'primary'
+                colorScheme: 'primary',
+                isLoading: isLoading
               }
             ]
           },
+          isLoading,
           openModal,
           handleOpenModal,
           handleCloseModal,
-          renderFileUpload: formData.type === 'document'
+          renderFileUpload: formData.type === 'document',
+          handleOnFileselectionChange
         }
       }}
     />

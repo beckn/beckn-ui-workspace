@@ -1,35 +1,31 @@
-import { ROLE, ROUTE_TYPE } from '@lib/config'
-import axios from '@services/axios'
-import Cookies from 'js-cookie'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useLanguage } from '@hooks/useLanguage'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import CredLayoutRenderer, { CredFormErrors, FormProps } from '@components/credLayoutRenderer/LayoutRenderer'
 import { validateCredForm } from '@utils/form-utils'
 import { InputProps } from '@beckn-ui/molecules'
 import { ItemMetaData } from '@components/credLayoutRenderer/CatalogueRenderer'
-
-const options = [
-  { label: 'Refrigerator', value: 'refrigerator' },
-  { label: 'Air Conditioner', value: 'air_conditioner' },
-  { label: 'Washing Machine', value: 'washing_machine' },
-  { label: 'Microwave Oven', value: 'microwave_oven' },
-  { label: 'Dishwasher', value: 'dishwasher' },
-  { label: 'Television', value: 'television' },
-  { label: 'Laptop', value: 'laptop' },
-  { label: 'Smartphone', value: 'smartphone' },
-  { label: 'Printer', value: 'printer' },
-  { label: 'CCTV Camera', value: 'cctv_camera' }
-]
+import DocIcon from '@public/images/physical_icon.svg'
+import { DocumentProps } from '@components/documentsRenderer'
+import { AuthRootState } from '@store/auth-slice'
+import {
+  useAddDocumentMutation,
+  useGetDocumentsMutation,
+  useGetVerificationMethodsMutation
+} from '@services/walletService'
+import { parseDIDData } from '@utils/did'
+import { extractAuthAndHeader, filterByKeyword, toBase64, toSnakeCase } from '@utils/general'
+import { generateAuthHeader } from '@services/cryptoUtilService'
+import { feedbackActions } from '@beckn-ui/common'
 
 const PhysicalAssets = () => {
-  const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
-  const bearerToken = Cookies.get('authToken')
-
   const [items, setItems] = useState<ItemMetaData[]>([])
+  const [filteredItems, setFilteredItems] = useState(items)
   const [searchKeyword, setSearchKeyword] = useState<string>('')
   const [openModal, setOpenModal] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [selectedFile, setSelectedFile] = useState<DocumentProps>()
+
   const [formData, setFormData] = useState<FormProps>({
     type: '',
     credName: ''
@@ -41,69 +37,120 @@ const PhysicalAssets = () => {
 
   const { t } = useLanguage()
   const dispatch = useDispatch()
+  const { user, privateKey, publicKey } = useSelector((state: AuthRootState) => state.auth)
+  const [addDocument, { isLoading: addDocLoading }] = useAddDocumentMutation()
+  const [getVerificationMethods, { isLoading: verificationMethodsLoading }] = useGetVerificationMethodsMutation()
+  const [getDocuments, { isLoading: verifyLoading }] = useGetDocumentsMutation()
 
-  const fetchPairedData = async () => {
+  const fetchCredentials = async () => {
+    setIsLoading(true)
     try {
-      const response = await axios.get(`${strapiUrl}${ROUTE_TYPE[ROLE.GENERAL]}/der`, {
-        headers: { Authorization: `Bearer ${bearerToken}` },
-        withCredentials: true
+      const result = await getDocuments(user?.did!).unwrap()
+      const list: ItemMetaData[] = parseDIDData(result)['assets']['physical'].map((item, index) => {
+        return {
+          id: index,
+          title: item.type,
+          isVerified: true,
+          image: DocIcon,
+          datetime: new Date().toString(),
+          data: item
+        }
       })
-
-      const result = response.data
-      const mappedDevices = result.map((item: { category: string; id: number }) => ({
-        name: item.category,
-        paired: true,
-        id: item.id
-      }))
-      setItems(mappedDevices)
+      setItems(list)
+      setFilteredItems(list)
     } catch (error) {
       console.error('Error fetching dashboard data:', error)
+    } finally {
+      setIsLoading(false)
     }
   }
 
   useEffect(() => {
-    console.log(searchKeyword)
-    // fetchPairedData()
-  }, [searchKeyword])
+    fetchCredentials()
+  }, [])
+
+  useEffect(() => {
+    if (searchKeyword && searchKeyword.trim() !== '') {
+      const filteredList = filterByKeyword(items, searchKeyword, 'title')
+      setFilteredItems(filteredList)
+    } else {
+      setFilteredItems(items)
+    }
+  }, [searchKeyword, items])
 
   const handleOpenModal = () => setOpenModal(true)
   const handleCloseModal = () => setOpenModal(false)
 
-  const handleOnSubmit = () => {
-    const errors = validateCredForm(formData) as any
-    setFormErrors(prevErrors => ({
-      ...prevErrors,
-      ...Object.keys(errors).reduce((acc: any, key) => {
-        acc[key] = t[`${errors[key]}`] || ''
-        return acc
-      }, {} as CredFormErrors)
-    }))
+  const handleOnSubmit = async () => {
+    try {
+      const errors = validateCredForm(formData) as any
+      setFormErrors(prevErrors => ({
+        ...prevErrors,
+        ...Object.keys(errors).reduce((acc: any, key) => {
+          acc[key] = t[`${errors[key]}`] || ''
+          return acc
+        }, {} as CredFormErrors)
+      }))
 
-    const data = {
-      type: formData.type
-      // credName: formData.credName?.trim()
+      const data: any = {
+        type: formData.type
+      }
+      if (formData.type === 'document' && selectedFile) {
+        data.fileName = selectedFile?.title
+      }
+      setIsLoading(true)
+
+      const docDetails = JSON.stringify(data)
+
+      const verificationMethodsRes = await getVerificationMethods(user?.did!).unwrap()
+      const { did } = verificationMethodsRes[0]
+      let attachments = null
+      if (selectedFile) {
+        attachments = selectedFile?.title
+      }
+
+      const authHeaderRes = await generateAuthHeader({
+        subjectId: user?.did!,
+        verification_did: did,
+        privateKey,
+        publicKey,
+        payload: {
+          name: `assets/physical/type/${toSnakeCase(data?.type!)}${attachments ? '/' + attachments : ''}`,
+          stream: toBase64(docDetails)
+        }
+      })
+      const { authorization, payload } = extractAuthAndHeader(authHeaderRes)
+      if (authorization && payload) {
+        const addDocPayload = {
+          subjectId: user?.did!,
+          payload,
+          authorization
+        }
+
+        await addDocument(addDocPayload).unwrap()
+        dispatch(
+          feedbackActions.setToastData({
+            toastData: { message: 'Success', display: true, type: 'success', description: 'Added Successfully!' }
+          })
+        )
+        setOpenModal(false)
+      } else {
+        dispatch(
+          feedbackActions.setToastData({
+            toastData: { message: 'Error', display: true, type: 'error', description: t.errorText }
+          })
+        )
+      }
+    } catch (error) {
+      console.error('An error occurred:', error)
+    } finally {
+      setIsLoading(false)
+      fetchCredentials()
     }
-    setIsLoading(true)
+  }
 
-    const payload = JSON.stringify(data)
-    console.log(payload)
-    // axios
-    //   .post(`${strapiUrl}/profiles`, currentFormData, requestOptions)
-    //   .then(response => {
-    //     dispatch(
-    //       feedbackActions.setToastData({
-    //         toastData: { message: 'Success', display: true, type: 'success', description: 'Added Successfully!' }
-    //       })
-    //     )
-    //     setOpenModal(false)
-    //   })
-    //   .catch(error => {
-    //     console.log(error)
-    //   })
-    //   .finally(() => {
-    //     setIsLoading(false)
-    //   })
-    setOpenModal(false)
+  const handleOnFileselectionChange = (data: DocumentProps[]) => {
+    setSelectedFile(data[0])
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -126,25 +173,25 @@ const PhysicalAssets = () => {
     }))
   }
 
-  const handleSelectChange = (selectedItem: any) => {
-    const { label, value } = selectedItem
+  // const handleSelectChange = (selectedItem: any) => {
+  //   const { label, value } = selectedItem
 
-    setFormData(prevFormData => ({
-      ...prevFormData,
-      ['type']: value
-    }))
+  //   setFormData(prevFormData => ({
+  //     ...prevFormData,
+  //     ['type']: value
+  //   }))
 
-    const updatedFormData = {
-      ...formData,
-      ['type']: value
-    }
+  //   const updatedFormData = {
+  //     ...formData,
+  //     ['type']: value
+  //   }
 
-    const errors = validateCredForm(updatedFormData)
-    setFormErrors(prevErrors => ({
-      ...prevErrors,
-      ['type']: t[`${errors['type' as keyof CredFormErrors]}`] || ''
-    }))
-  }
+  //   const errors = validateCredForm(updatedFormData)
+  //   setFormErrors(prevErrors => ({
+  //     ...prevErrors,
+  //     ['type']: t[`${errors['type' as keyof CredFormErrors]}`] || ''
+  //   }))
+  // }
 
   const isFormFilled = useMemo(() => {
     const { credName, ...restFormData } = formData
@@ -206,7 +253,7 @@ const PhysicalAssets = () => {
   return (
     <CredLayoutRenderer
       schema={{
-        items,
+        items: filteredItems,
         search: {
           searchInputPlaceholder: 'Search Assets',
           searchKeyword,
@@ -222,14 +269,17 @@ const PhysicalAssets = () => {
                 handleClick: handleOnSubmit,
                 disabled: !isFormFilled,
                 variant: 'solid',
-                colorScheme: 'primary'
+                colorScheme: 'primary',
+                isLoading: isLoading
               }
             ]
           },
+          isLoading,
           openModal,
           handleOpenModal,
           handleCloseModal,
-          renderFileUpload: true
+          renderFileUpload: true,
+          handleOnFileselectionChange
         }
       }}
     />
