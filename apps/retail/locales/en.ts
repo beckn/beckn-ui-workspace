@@ -159,6 +159,7 @@ const en: { [key: string]: string } = {
   searchProducts: 'Search for Products',
   addToCart: 'Add To Cart',
   addedToCart: 'Product added to cart',
+
   order: 'Order',
   items: 'Items',
   saveShippingDetails: 'Save Shipping Details',

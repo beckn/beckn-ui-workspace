@@ -18,6 +18,7 @@ export const ROUTE_TYPE = {
 }
 
 export const DOMAIN = 'uei:p2p_trading'
+export const ORDER_CATEGORY_ID = 6
 
 export const EXPLORE_PATH = {
   MY_STORE: 'MY_STORE',

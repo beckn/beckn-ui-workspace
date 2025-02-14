@@ -14,7 +14,11 @@ const homeIconBlackList = [
   '/search',
   '/myStore',
   '/cart',
-  '/checkout'
+  '/checkout',
+  '/newPaymentOverView',
+  '/retailPaymentMethod',
+  '/retailOrderConfirmation',
+  '/orderHistory'
 ]
 const menuIconWhiteList = [
   '/',
@@ -50,7 +54,10 @@ const headerNames: PathnameObjectType = {
   '/myStore': '',
   '/cart': 'Cart',
   '/checkout': 'Billing & Shipping',
-  '/confirmRent': 'Confirm Rent'
+  '/confirmRent': 'Confirm Rent',
+  '/newPaymentOverView': 'New Payment Overview ',
+  '/retailPaymentMethod': 'Select Payment Method',
+  '/orderHistory': 'My Orders'
 }
 
 const headerFrenchNames: PathnameObjectType = {
@@ -78,6 +85,9 @@ const headerBlackList = [
   '/myStore',
   '/cart',
   '/checkout',
+  '/newPaymentOverView',
+  '/retailPaymentMethod',
+  '/orderHistory',
   '/confirmRent'
 ]
 
@@ -99,9 +109,12 @@ const cartIconBlackList: string[] = [
   '/withdraw',
   '/cart',
   '/checkout',
-  '/confirmRent'
+  '/confirmRent',
+  '/newPaymentOverView',
+  '/retailPaymentMethod',
+  '/orderHistory'
 ]
-const bottomHeaderBlackList = ['/orderConfirmation', '/', '/feedback']
+const bottomHeaderBlackList = ['/orderConfirmation', '/', '/feedback', '/retailOrderConfirmation']
 const orderIconList = ['/orderDetails']
 const editIconList: string[] = ['/profile']
 const profileSectionIcon = ['/buyingPreference']
