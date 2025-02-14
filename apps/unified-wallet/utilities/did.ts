@@ -6,7 +6,8 @@ export const parseDIDData = (data: { did: string }[]): ParsedData => {
     assets: {
       credentials: [],
       physical: []
-    }
+    },
+    transactions: []
   }
 
   const fileRegex = /^[^\/]+\.[a-zA-Z0-9]+$/
@@ -42,6 +43,15 @@ export const parseDIDData = (data: { did: string }[]): ParsedData => {
           did
         })
       }
+    } else if (parts[0] === 'transactions') {
+      result.transactions.push({
+        type: formatType(parts[2]),
+        category: formatType(parts[3]),
+        id: parts[5],
+        amount: parts[7],
+        totalItems: parts[9],
+        did
+      })
     }
   })
   console.log(result)

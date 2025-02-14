@@ -9,58 +9,85 @@ import { BottomModal, Typography } from '@beckn-ui/molecules'
 import Filter from '@components/filter'
 import CardRenderer from '@components/card/CardRenderer'
 import { formatDate } from '@beckn-ui/common'
+import { useLanguage } from '@hooks/useLanguage'
+import { useDispatch, useSelector } from 'react-redux'
+import { AuthRootState } from '@store/auth-slice'
+import { useGetDocumentsMutation } from '@services/walletService'
+import { ItemMetaData } from '@components/credLayoutRenderer/ItemRenderer'
+import { parseDIDData } from '@utils/did'
+import { filterByKeyword } from '@utils/general'
 
 interface TransactionItem {
-  id: string
+  id: string | number
   orderId: string
-  amount: string
+  amount: string | number
   noOfItems: number | string
   date: string
   category: string
 }
 
 const MyTransactions = () => {
+  const [searchKeyword, setSearchKeyword] = useState<string>('')
+  const [isLoading, setIsLoading] = useState<boolean>(false)
   const [isFilterOpen, setIsFilterOpen] = useState(false)
-  const [searchKeyword, setSearchKeyword] = useState('')
-  const [items, setItems] = useState<TransactionItem[]>([
-    {
-      id: '1',
-      orderId: '12345',
-      amount: '100',
-      noOfItems: 2,
-      date: '2022-01-01',
-      category: 'retail'
+  const [items, setItems] = useState<TransactionItem[]>([])
+  const [filteredItems, setFilteredItems] = useState(items)
+
+  const { t } = useLanguage()
+  const dispatch = useDispatch()
+  const { user, privateKey, publicKey } = useSelector((state: AuthRootState) => state.auth)
+  const [getDocuments, { isLoading: verifyLoading }] = useGetDocumentsMutation()
+
+  const fetchTransactions = async () => {
+    try {
+      setIsLoading(true)
+      const result = await getDocuments(user?.did!).unwrap()
+      const list: TransactionItem[] = parseDIDData(result)['transactions'].map((item, index) => {
+        return {
+          id: index,
+          orderId: item.id,
+          amount: item.amount,
+          noOfItems: item.totalItems,
+          date: new Date().toString(),
+          category: item.category
+        }
+      })
+      setItems(list)
+      setFilteredItems(list)
+    } catch (error) {
+      console.error('Error fetching dashboard data:', error)
+    } finally {
+      setIsLoading(false)
     }
-  ])
-  const [originalItems, setOriginalItems] = useState<[]>([])
+  }
 
   useEffect(() => {
-    console.log(searchKeyword)
-    // fetchPairedData()
-  }, [searchKeyword])
+    fetchTransactions()
+  }, [])
+
+  useEffect(() => {
+    if (searchKeyword && searchKeyword.trim() !== '') {
+      const filteredByCatList = filterByKeyword(items, searchKeyword, 'category')
+      const filteredByOrderIdList = filterByKeyword(items, searchKeyword, 'orderId')
+      setFilteredItems([...filteredByCatList, ...filteredByOrderIdList])
+    } else {
+      setFilteredItems(items)
+    }
+  }, [searchKeyword, items])
 
   const handleOpenModal = () => setIsFilterOpen(true)
   const handleCloseModal = () => setIsFilterOpen(false)
 
   const handleResetFilter = () => {
-    setItems(originalItems)
+    setFilteredItems(items)
   }
 
   const handleApplyFilter = (sortBy: string) => {
-    console.log(sortBy)
-    const sortedItemsCopy = [...originalItems]
+    const sortedItemsCopy = [...items]
 
-    // if (sortBy === 'LowtoHigh') {
-    //   sortedItemsCopy.sort((a, b) => parseFloat(a.item.price.value) - parseFloat(b.item.price.value))
-    // } else if (sortBy === 'HightoLow') {
-    //   sortedItemsCopy.sort((a, b) => parseFloat(b.item.price.value) - parseFloat(a.item.price.value))
-    // } else if (sortBy === 'RatingLowtoHigh') {
-    //   sortedItemsCopy.sort((a, b) => parseFloat(a.item.rating!) - parseFloat(b.item.rating!))
-    // } else if (sortBy === 'RatingHightoLow') {
-    //   sortedItemsCopy.sort((a, b) => parseFloat(b.item.rating!) - parseFloat(a.item.rating!))
-    // }
+    const result = sortedItemsCopy.filter(item => item.category.toLocaleLowerCase() === sortBy.toLocaleLowerCase())
 
-    setItems(sortedItemsCopy)
+    setFilteredItems(result)
     setIsFilterOpen(false)
   }
 
@@ -88,69 +115,68 @@ const MyTransactions = () => {
           <CustomFilterIconComponent />
         </Box>
       </Box>
-      <Flex justifyContent="center">
-        {items.length > 0 ? (
-          <CardRenderer
-            styles={{ width: '100%', height: '100%', padding: '0.5rem 0.5rem' }}
-            childComponent={() => {
-              return (
-                <>
-                  {items.map(item => {
-                    return (
-                      <Flex
-                        key={item.id}
-                        flexDir="column"
-                        gap="6px"
+      <Flex
+        justifyContent="center"
+        flexDir={'column'}
+      >
+        {filteredItems.length > 0 ? (
+          filteredItems.map(item => {
+            return (
+              <CardRenderer
+                styles={{ padding: '0.5rem 0.5rem' }}
+                childComponent={() => (
+                  <Flex
+                    key={item.id}
+                    flexDir="column"
+                    gap="6px"
+                  >
+                    <Flex
+                      flexDir={'row'}
+                      justifyContent="space-between"
+                    >
+                      <Typography
+                        text={`Placed at ${formatDate(item.date, 'do MMM yyyy, h.mma')}`}
+                        fontSize="12px"
+                      />
+                      <Box
+                        color={'#ffffff'}
+                        backgroundColor={'#4498E8'}
+                        fontSize="10px"
+                        padding="2px 6px"
+                        borderRadius="4px"
+                        textTransform="capitalize"
                       >
-                        <Flex
-                          flexDir={'row'}
-                          justifyContent="space-between"
-                        >
-                          <Typography
-                            text={`Placed at ${formatDate(item.date, 'do MMM yyyy, h.mma')}`}
-                            fontSize="12px"
-                          />
-                          <Box
-                            color={'#ffffff'}
-                            backgroundColor={'#4498E8'}
-                            fontSize="10px"
-                            padding="2px 6px"
-                            borderRadius="4px"
-                            textTransform="capitalize"
-                          >
-                            {item.category}
-                          </Box>
-                        </Flex>
-                        <Flex
-                          flexDir={'row'}
-                          gap="2px"
-                        >
-                          <Typography
-                            text={`Order ID:`}
-                            fontSize="12px"
-                          />
-                          <Typography
-                            text={item.orderId}
-                            fontWeight="600"
-                            fontSize="12px"
-                          />
-                        </Flex>
-                        <Typography
-                          text={`₹ ${item.amount}`}
-                          fontWeight="500"
-                          fontSize="12px"
-                        />
-                        <Typography
-                          text={`${item.noOfItems} item(s)`}
-                          fontSize="12px"
-                        />
-                      </Flex>
-                    )
-                  })}
-                </>
-              )
-            }}
-          />
+                        {item.category}
+                      </Box>
+                    </Flex>
+                    <Flex
+                      flexDir={'row'}
+                      gap="2px"
+                    >
+                      <Typography
+                        text={`Order ID:`}
+                        fontSize="12px"
+                      />
+                      <Typography
+                        text={item.orderId}
+                        fontWeight="600"
+                        fontSize="12px"
+                      />
+                    </Flex>
+                    <Typography
+                      text={`₹ ${item.amount}`}
+                      fontWeight="500"
+                      fontSize="12px"
+                    />
+                    <Typography
+                      text={`${item.noOfItems} item(s)`}
+                      fontSize="12px"
+                    />
+                  </Flex>
+                )}
+              />
+            )
+          })
         ) : (
           <EmptyScreenTemplate
             text={'There’s no transactions till now!'}

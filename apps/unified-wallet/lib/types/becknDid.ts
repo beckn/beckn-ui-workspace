@@ -1,6 +1,14 @@
 export type Identity = { type: string; id: string; did: string }
 export type Credential = { type: string; name: string; did: string }
 export type PhysicalAsset = { type: string; attachment: string | null; did: string; source: string }
+export type Transaction = {
+  type: string
+  id: string
+  category: string
+  totalItems: string | number
+  amount: string | number
+  did: string
+}
 
 export interface ParsedData {
   identities: Identity[]
@@ -8,6 +16,7 @@ export interface ParsedData {
     credentials: Credential[]
     physical: PhysicalAsset[]
   }
+  transactions: Transaction[]
 }
 
 export type PurposeType =
