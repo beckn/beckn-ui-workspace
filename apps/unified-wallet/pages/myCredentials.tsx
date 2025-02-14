@@ -145,6 +145,12 @@ const MyCredentials = () => {
           })
         )
         setOpenModal(false)
+        setFormData({
+          type: '',
+          credName: '',
+          url: ''
+        })
+        setSelectedFile(undefined)
       } else {
         dispatch(
           feedbackActions.setToastData({
@@ -272,6 +278,7 @@ const MyCredentials = () => {
           },
           isLoading,
           openModal,
+          clearDocuments: !selectedFile,
           handleOpenModal,
           handleCloseModal,
           renderFileUpload: formData.type === 'document',

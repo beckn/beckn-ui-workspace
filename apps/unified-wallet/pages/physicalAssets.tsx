@@ -117,7 +117,7 @@ const PhysicalAssets = () => {
         privateKey,
         publicKey,
         payload: {
-          name: `assets/physical/type/${toSnakeCase(data?.type!)}${attachments ? '/' + attachments : ''}`,
+          name: `assets/physical/type/${toSnakeCase(data?.type!)}/source/wallet${attachments ? '/' + attachments : ''}`,
           stream: toBase64(docDetails)
         }
       })
@@ -136,6 +136,11 @@ const PhysicalAssets = () => {
           })
         )
         setOpenModal(false)
+        setFormData({
+          type: '',
+          credName: ''
+        })
+        setSelectedFile(undefined)
       } else {
         dispatch(
           feedbackActions.setToastData({
@@ -290,6 +295,7 @@ const PhysicalAssets = () => {
           },
           isLoading,
           openModal,
+          clearDocuments: !selectedFile,
           handleOpenModal,
           handleCloseModal,
           renderFileUpload: true,

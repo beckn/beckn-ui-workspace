@@ -35,10 +35,10 @@ export const parseDIDData = (data: { did: string }[]): ParsedData => {
           did
         })
       } else if (category === 'physical') {
-        const attachment = fileRegex.test(parts[4] || '') ? parts[4] : null
+        const attachment = fileRegex.test(parts[6] || '') ? parts[6] : null
         result.assets.physical.push({
           type: formatType(parts[3]),
-          source: 'wallet',
+          source: parts[5],
           attachment,
           did
         })
