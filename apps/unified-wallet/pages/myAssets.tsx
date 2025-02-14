@@ -60,13 +60,13 @@ const MyAssets = () => {
           dataTest={'financial-assets'}
           renderType="card"
         /> */}
-        <NavigationItem
+        {/* <NavigationItem
           icon={SparkIcon}
           label={'Energy Assets'}
           handleClick={() => router.push('/energyAssets')}
           dataTest={'energy-assets'}
           renderType="card"
-        />
+        /> */}
       </Flex>
     </Box>
   )
