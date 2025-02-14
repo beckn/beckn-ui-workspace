@@ -29,11 +29,12 @@ interface DeleteAlertModalProps {
     buttons: ButtonProps[]
   }
   renderFileUpload?: boolean
+  clearDocuments?: boolean
   handleOnFileselectionChange?: (data: DocumentProps[]) => void
 }
 
 const AddNewItemModal = (props: DeleteAlertModalProps) => {
-  const { isOpen, onClose, isLoading, schema, renderFileUpload, handleOnFileselectionChange } = props
+  const { isOpen, onClose, isLoading, schema, renderFileUpload, handleOnFileselectionChange, clearDocuments } = props
   const { inputs, header, buttons } = schema
 
   const [selectedFile, setSelectedFile] = useState<DocumentProps[]>([])
@@ -56,6 +57,13 @@ const AddNewItemModal = (props: DeleteAlertModalProps) => {
   useEffect(() => {
     handleOnFileselectionChange?.(selectedFile)
   }, [selectedFile])
+
+  useEffect(() => {
+    if (clearDocuments) {
+      setSelectedFile([])
+      setAllFilesProcessed(false)
+    }
+  }, [clearDocuments])
 
   return (
     <Box>

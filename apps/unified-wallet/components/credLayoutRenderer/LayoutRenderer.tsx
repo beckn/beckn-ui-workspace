@@ -57,6 +57,7 @@ export interface CredLayoutRendererProps {
       handleOpenModal: () => void
       handleCloseModal: () => void
       renderFileUpload?: boolean
+      clearDocuments?: boolean
       handleOnFileselectionChange?: (data: DocumentProps[]) => void
     }
   }
@@ -74,6 +75,7 @@ const CredLayoutRenderer: React.FC<CredLayoutRendererProps> = ({
       handleCloseModal,
       handleOpenModal,
       renderFileUpload,
+      clearDocuments,
       handleOnFileselectionChange
     }
   }
@@ -152,6 +154,7 @@ const CredLayoutRenderer: React.FC<CredLayoutRendererProps> = ({
         onClose={handleCloseModal}
         schema={modalSchema}
         renderFileUpload={renderFileUpload}
+        clearDocuments={clearDocuments}
         handleOnFileselectionChange={handleOnFileselectionChange}
       />
     </Box>

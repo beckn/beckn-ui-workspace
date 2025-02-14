@@ -42,7 +42,7 @@ const RenderDocuments = (props: RenderDocumentsProps) => {
               if (newProgress[index] === undefined) newProgress[index] = 0
 
               if (newProgress[index] < 100) {
-                const randomIncrement = Math.floor(Math.random() * 10) + 1
+                const randomIncrement = Math.floor(Math.random() * 10) + 50
                 newProgress[index] = Math.min(newProgress[index] + randomIncrement, 100)
               }
               return newProgress

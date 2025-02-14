@@ -1,11 +1,11 @@
 import SearchBar from '@beckn-ui/common/src/components/searchBar/searchBar'
 import { Box, Flex } from '@chakra-ui/react'
 import EmptyScreenTemplate from '@components/EmptyTemplates/EmptyScreenTemplate'
-import React, { ReactElement, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import EmptyTransactionsIcon from '@public/images/empty_transactions.svg'
 import { testIds } from '@shared/dataTestIds'
 import CustomFilterIconComponent from '@beckn-ui/common/src/components/cutomFilterIcon/customFilterIcon'
-import { BottomModal, Typography } from '@beckn-ui/molecules'
+import { BottomModal, LoaderWithMessage, Typography } from '@beckn-ui/molecules'
 import Filter from '@components/filter'
 import CardRenderer from '@components/card/CardRenderer'
 import { formatDate } from '@beckn-ui/common'
@@ -177,6 +177,17 @@ const MyTransactions = () => {
               />
             )
           })
+        ) : isLoading ? (
+          <Box
+            display={'grid'}
+            height={'calc(100vh - 300px)'}
+            alignContent={'center'}
+          >
+            <LoaderWithMessage
+              loadingSubText=""
+              loadingText={''}
+            />
+          </Box>
         ) : (
           <EmptyScreenTemplate
             text={'There’s no transactions till now!'}
