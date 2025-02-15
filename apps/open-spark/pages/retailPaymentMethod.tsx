@@ -50,22 +50,6 @@ const RetailPaymentMode = () => {
           paymentMethodNet: t.phonePay || 'PhonePe UPI',
           disabled: false,
           dataTest: testIds.paymentpage_phonePay
-        },
-        {
-          category: 'Other',
-          img: NetBanking,
-          paymentMethod: t.netBanking,
-          paymentMethodNet: t.netBanking,
-          disabled: false,
-          dataTest: testIds.paymentpage_NetBanking
-        },
-        {
-          category: 'Other',
-          img: CashOnDelivery,
-          paymentMethod: 'Cash on Delivery',
-          paymentMethodNet: 'Cash on Delivery',
-          disabled: false,
-          dataTest: testIds.paymentpage_CashOnDelivery
         }
       ]}
     />

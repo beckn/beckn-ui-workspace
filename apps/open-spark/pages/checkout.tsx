@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Box, useToast, useTheme } from '@chakra-ui/react'
+import { Box, useToast, useTheme, Divider, Flex, Image, Text } from '@chakra-ui/react'
 import { DOMAIN } from '@lib/config'
 import { useLanguage } from '../hooks/useLanguage'
 import {
@@ -8,16 +8,17 @@ import {
   getInitPayload,
   getSubTotalAndDeliveryCharges
 } from '@beckn-ui/common/src/utils'
-import { Checkout } from '@beckn-ui/becknified-components'
+import { Checkout, ProductPrice } from '@beckn-ui/becknified-components'
 import { useRouter } from 'next/router'
 import { ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
 import { isEmpty } from '@beckn-ui/common/src/utils'
-import { FormField } from '@beckn-ui/molecules'
+import { FormField, Loader, Typography } from '@beckn-ui/molecules'
 import { checkoutActions, CheckoutRootState } from '@beckn-ui/common/src/store/checkout-slice'
 import { useInitMutation } from '@beckn-ui/common/src/services/init'
 import { DiscoveryRootState, ICartRootState, PaymentBreakDownModel } from '@beckn-ui/common'
 import { cartActions } from '@beckn-ui/common/src/store/cart-slice'
 import { testIds } from '@shared/dataTestIds'
+import DetailsCard from '@beckn-ui/becknified-components/src/components/checkout/details-card'
 
 export type ShippingFormData = {
   name: string
@@ -204,27 +205,102 @@ const CheckoutPage = () => {
     return paymentBreakdownMap
   }
 
+  if (isLoading) {
+    return (
+      <Box
+        display={'grid'}
+        height={'calc(100vh - 300px)'}
+        alignContent={'center'}
+      >
+        <Loader text={t.quoteRequestLoader} />
+      </Box>
+    )
+  }
+
   return (
     <Box
-      className="hideScroll"
+      className="hideScroll checkout-open-spark"
       maxH="calc(100vh - 100px)"
       overflowY={'scroll'}
     >
       {/* start Item Details */}
+      <DetailsCard>
+        {cartItems.map((singleItem, ind) => (
+          <React.Fragment key={ind}>
+            <Box pb="10px">
+              <Flex alignItems={'center'}>
+                <Image
+                  src={singleItem.images?.[0].url}
+                  alt={'img'}
+                  width="120px"
+                  height="94px"
+                />
+                <Box>
+                  <Text
+                    fontSize="15px"
+                    fontWeight="600"
+                    noOfLines={2}
+                    textOverflow="ellipsis"
+                    whiteSpace="pre-wrap"
+                    overflowWrap="break-word"
+                    height={'fit-content'}
+                    mb="10px"
+                  >
+                    {singleItem.name}
+                  </Text>
+                  <Typography
+                    text={singleItem.short_desc}
+                    variant="subTextRegular"
+                  />
+                </Box>
+              </Flex>
+
+              <Box>
+                <Flex
+                  pb="5px"
+                  alignItems="center"
+                >
+                  <Flex alignItems="center">
+                    <Text
+                      mr="10px"
+                      fontWeight={'600'}
+                    >
+                      Qty
+                    </Text>
+                    <Typography
+                      className="quantity-checkout"
+                      text={` ${singleItem.quantity.toString()}`}
+                      variant="subTextRegular"
+                    />
+                  </Flex>
+                  <Box ml="25px">
+                    <ProductPrice
+                      price={singleItem.totalPrice}
+                      currencyType={singleItem.price.currency}
+                    />
+                  </Box>
+                </Flex>
+              </Box>
+            </Box>
+            <Divider />
+          </React.Fragment>
+        ))}
+      </DetailsCard>
+
       <Checkout
         schema={{
-          items: {
-            title: t.items,
-            data: cartItems.map(singleItem => ({
-              title: singleItem.name,
-              description: singleItem.short_desc,
-              quantity: singleItem.quantity,
-              // priceWithSymbol: `${currencyMap[singleItem.price.currency]}${singleItem.totalPrice}`,
-              price: singleItem.totalPrice,
-              currency: singleItem.price.currency,
-              image: singleItem.images?.[0].url
-            }))
-          },
+          // items: {
+          //   title: t.items,
+          //   data: cartItems.map((singleItem, ind) => ({
+          //     title: singleItem.name,
+          //     description: singleItem.short_desc,
+          //     quantity: singleItem.quantity,
+          //     // priceWithSymbol: `${currencyMap[singleItem.price.currency]}${singleItem.totalPrice}`,
+          //     price: singleItem.totalPrice,
+          //     currency: singleItem.price.currency,
+          //     image: singleItem.images?.[0].url
+          //   }))
+          // },
           shipping: {
             triggerFormTitle: t.change,
             showDetails: isInitResultPresent(),
@@ -299,7 +375,7 @@ const CheckoutPage = () => {
             }
           }
         }}
-        isLoading={isLoading}
+        // isLoading={isLoading}
         hasInitResult={isInitResultPresent()}
       />
     </Box>

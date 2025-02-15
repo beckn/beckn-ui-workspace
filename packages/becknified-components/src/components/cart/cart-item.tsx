@@ -12,6 +12,7 @@ const CartItem: React.FC<CartItemProps> = ({
   id,
   quantity = 0,
   name,
+  providerName,
   image,
   price,
   symbol,
@@ -60,6 +61,14 @@ const CartItem: React.FC<CartItemProps> = ({
             >
               {name}
             </div>
+            {providerName && (
+              <div
+                className={Styles.product_provider}
+                data-test={testIds.cartpage_itemName}
+              >
+                <span> sold by:</span> {providerName}
+              </div>
+            )}
           </a>
         </div>
         <div className={Styles.product_count_price_container}>

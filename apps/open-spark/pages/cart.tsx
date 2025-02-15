@@ -66,7 +66,7 @@ const Cart = () => {
   return (
     <Box
       pt={['20px', '20px', '0px', '0px']}
-      className="hideScroll"
+      className="hideScroll cart-text"
       maxH="calc(100vh - 120px)"
       overflowY={'scroll'}
     >
@@ -80,6 +80,7 @@ const Cart = () => {
                 className: 'myStore-cart',
                 quantity: singleItem.quantity,
                 name: singleItem.name,
+                providerName: singleItem.providerName,
                 image: singleItem.images?.[0].url,
                 price: Number(singleItem.price.value),
                 symbol: singleItem.price.currency,

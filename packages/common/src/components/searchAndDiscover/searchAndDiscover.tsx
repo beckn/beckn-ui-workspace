@@ -50,7 +50,8 @@ const SearchAndDiscover: React.FC<SearchAndDiscoverProps> = ({
         rating: item.rating,
         source: t?.('itemSourceText') || 'Sold By',
         sourceText: providerName,
-        productInfo: item.productInfo
+        productInfo: item.productInfo,
+        domain: catalogItem.domain
       }
 
       const handleProductClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {

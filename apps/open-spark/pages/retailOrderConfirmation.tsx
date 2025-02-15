@@ -14,6 +14,8 @@ import { orderActions } from '@beckn-ui/common/src/store/order-slice'
 import { getPayloadForConfirm, getPayloadForOrderHistoryPost } from '@beckn-ui/common/src/utils'
 import { useConfirmMutation } from '@beckn-ui/common/src/services/confirm'
 import { testIds } from '@shared/dataTestIds'
+import { ORDER_CATEGORY_ID } from '../lib/config'
+import { cartActions } from '@beckn-ui/common'
 
 const retailOrderConfirmation = () => {
   const { t } = useLanguage()
@@ -32,7 +34,7 @@ const retailOrderConfirmation = () => {
   const axiosConfig = {
     headers: {
       Authorization: `Bearer ${bearerToken}`,
-      'Content-Type': 'application/json' // You can set the content type as needed
+      'Content-Type': 'application/json'
     }
   }
 
@@ -51,7 +53,7 @@ const retailOrderConfirmation = () => {
 
   useEffect(() => {
     if (confirmResponse && confirmResponse.length > 0) {
-      const ordersPayload = getPayloadForOrderHistoryPost(confirmResponse, 8)
+      const ordersPayload = getPayloadForOrderHistoryPost(confirmResponse, ORDER_CATEGORY_ID)
       axios
         .post(`${strapiUrl}/orders`, ordersPayload, axiosConfig)
         .then(res => {
@@ -101,6 +103,7 @@ const retailOrderConfirmation = () => {
                 }
                 localStorage.setItem('selectedOrder', JSON.stringify(orderObjectForStatusCall))
                 dispatch(checkoutActions.clearState())
+                dispatch(cartActions.clearCart())
                 router.push('/orderDetails')
               },
               disabled: false,
@@ -113,6 +116,7 @@ const retailOrderConfirmation = () => {
               handleClick: () => {
                 router.push('/')
                 dispatch(checkoutActions.clearState())
+                dispatch(cartActions.clearCart())
               },
               disabled: false,
               variant: 'outline',

@@ -117,7 +117,7 @@ const Search = () => {
   }
 
   return (
-    <Box className="myStore-search-wrapper">
+    <Box className="myStore-search-wrapper search-text">
       <SearchAndDiscover
         items={items}
         searchProps={{
@@ -134,9 +134,10 @@ const Search = () => {
         }}
         loaderProps={{
           isLoading,
-          loadingText: t.pleaseWait,
-          loadingSubText: t.searchLoaderSubText,
-          dataTest: testIds.loadingIndicator
+          loadingText: 'Please wait!',
+          loadingSubText: 'While we fetch catalogues from UEI',
+          dataTest: testIds.loadingIndicator,
+          image: './images/loder-img.svg'
         }}
         catalogProps={{
           viewDetailsClickHandler: handleViewDetailsClickHandler

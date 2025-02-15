@@ -45,27 +45,27 @@ const Checkout: React.FC<CheckoutProps<FormField[]>> = ({
             text={items?.title!}
           />
         </Box>
-
-        <DetailsCard>
-          {items?.data.map((item, i) => {
-            return (
-              <div
-                key={i}
-                data-test={dataTestItemDetails}
-              >
-                <ItemDetails
-                  title={item.title}
-                  description={item.description}
-                  quantity={item.quantity}
-                  price={item.price}
-                  currency={item.currency}
-                  image={item.image}
-                />
-              </div>
-            )
-          })}
-        </DetailsCard>
-
+        <Box className="checkout-commom-item">
+          <DetailsCard>
+            {items?.data.map((item, i) => {
+              return (
+                <div
+                  key={i}
+                  data-test={dataTestItemDetails}
+                >
+                  <ItemDetails
+                    title={item.title}
+                    description={item.description}
+                    quantity={item.quantity}
+                    price={item.price}
+                    currency={item.currency}
+                    image={item.image}
+                  />
+                </div>
+              )
+            })}
+          </DetailsCard>
+        </Box>
         {/* Shipping section */}
         <ShippingSection {...shipping} />
 
