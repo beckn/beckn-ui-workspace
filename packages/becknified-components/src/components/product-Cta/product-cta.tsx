@@ -65,13 +65,14 @@ const ProductCta: React.FC<ProductCtaProps> = ({
           mt="1rem"
         >
           <Box
-            data-test={dataTestIncrementCounter}
-            onClick={handleIncrement}
+            data-test={dataTestDecrementCounter}
+            onClick={handleDecrement}
             fontSize="24px"
             cursor={'pointer'}
           >
-            +
+            -
           </Box>
+
           <Box
             border={'1px solid #D9D9D9'}
             color={theme.colors.secondary[100]}
@@ -82,12 +83,12 @@ const ProductCta: React.FC<ProductCtaProps> = ({
             {counter}
           </Box>
           <Box
-            data-test={dataTestDecrementCounter}
-            onClick={handleDecrement}
+            data-test={dataTestIncrementCounter}
+            onClick={handleIncrement}
             fontSize="24px"
             cursor={'pointer'}
           >
-            -
+            +
           </Box>
         </Flex>
       )}

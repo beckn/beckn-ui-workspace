@@ -8,7 +8,7 @@ import {
 } from '@beckn-ui/common'
 import { Typography } from '@beckn-ui/molecules'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
-import { Box, Divider, Flex, Radio, RadioGroup, Stack, Text } from '@chakra-ui/react'
+import { Box, Divider, Flex, Radio, RadioGroup, Stack, Text, Image } from '@chakra-ui/react'
 import Router from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -53,49 +53,67 @@ const NewPaymentOverView = () => {
       >
         <DetailCard>
           {cartItems.map(items => (
-            <>
-              <Flex
-                justifyContent={'space-between'}
-                alignItems="center"
-                mb="10px"
-              >
-                <Typography
-                  fontSize="15px"
-                  text={items.name}
-                />
-                <Typography
-                  text={items.quantity}
-                  fontSize="12px"
-                  fontWeight="600"
-                />
-              </Flex>
-              <Flex
-                justifyContent={'space-between'}
-                alignItems="center"
-              >
-                <Typography
-                  fontSize="12px"
-                  text={items.providerName}
-                />
+            <React.Fragment>
+              <Box pb="10px">
                 <Flex alignItems={'center'}>
-                  <Typography
-                    fontWeight="600"
-                    fontSize="12px"
-                    text={'Rs.'}
-                    style={{ paddingRight: '2px' }}
+                  <Image
+                    src={items.images?.[0].url}
+                    alt={'img'}
+                    width="120px"
+                    height="94px"
                   />
-                  <Typography
-                    fontWeight="600"
-                    fontSize="12px"
-                    text={items.price.value}
-                  />
+                  <Box>
+                    <Text
+                      fontSize="15px"
+                      fontWeight="600"
+                      noOfLines={2}
+                      textOverflow="ellipsis"
+                      whiteSpace="pre-wrap"
+                      overflowWrap="break-word"
+                      height={'fit-content'}
+                      mb="10px"
+                    >
+                      {items.name}
+                    </Text>
+                    <Typography
+                      text={items.short_desc}
+                      variant="subTextRegular"
+                    />
+                  </Box>
                 </Flex>
-              </Flex>
-              <Divider
-                mt="15px"
-                mb="15px"
-              />
-            </>
+
+                <Box>
+                  <Flex
+                    pb="5px"
+                    alignItems="center"
+                  >
+                    <Flex alignItems="center">
+                      <Text
+                        mr="10px"
+                        fontWeight={'600'}
+                      >
+                        Qty
+                      </Text>
+                      <Typography
+                        className="quantity-checkout"
+                        text={items.quantity}
+                        fontSize="12px"
+                        fontWeight="600"
+                      />
+                    </Flex>
+                    <Box ml="25px">
+                      <Typography
+                        color="#4398E8"
+                        fontWeight="600"
+                        fontSize="12px"
+                        text={`₹ ${items.price.value}`}
+                      />
+                    </Box>
+                  </Flex>
+                </Box>
+              </Box>
+              <Divider />
+            </React.Fragment>
           ))}
         </DetailCard>
       </Box>
@@ -181,7 +199,7 @@ const NewPaymentOverView = () => {
         <Box mt="8px">
           <DetailCard>
             <RadioGroup>
-              {selectedEmi.map((emiPlan, ind: number) => (
+              {selectedEmi.map((emiPlan: any, ind: number) => (
                 <React.Fragment key={emiPlan.id}>
                   <Box
                     flex="1"
@@ -196,7 +214,7 @@ const NewPaymentOverView = () => {
                       />
                       <Box p="10px">
                         <Text fontSize="15px">
-                          {emiPlan.name} months: ₹ {monthlyInstallment[ind].monthlyInstallment}/months
+                          {emiPlan.name} months: ₹ {monthlyInstallment[ind].emi}/months
                         </Text>
                       </Box>
                     </Stack>
@@ -215,7 +233,6 @@ const NewPaymentOverView = () => {
         text="Proceed to Payment"
         handleClick={() => {
           Router.push('/retailPaymentMethod')
-          dispatch(cartActions.clearCart())
         }}
       />
     </>

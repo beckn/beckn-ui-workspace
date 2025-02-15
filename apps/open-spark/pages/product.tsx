@@ -39,7 +39,7 @@ const Product = () => {
 
   return (
     <Box
-      className="hideScroll myStore-product-details"
+      className="hideScroll myStore-product-details product-text"
       maxH="calc(100vh - 100px)"
       overflowY={'scroll'}
     >
@@ -48,6 +48,7 @@ const Product = () => {
           productSummary: {
             imageSrc: selectedProduct.item.images?.[0].url!,
             name: selectedProduct.item.name,
+            domain: selectedProduct.domain,
             providerName: selectedProduct.providerName,
             secondaryDescription: selectedProduct.item.long_desc,
             dataTestTitle: testIds.item_title,
@@ -67,7 +68,7 @@ const Product = () => {
               counter: counter,
               cta: {
                 dataTest: testIds.productpage_addTocartButton,
-                text: 'Proceed',
+                text: 'Add to Cart',
                 color: '#fff',
                 handleClick: () => {
                   dispatch(

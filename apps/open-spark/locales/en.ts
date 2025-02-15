@@ -77,7 +77,7 @@ const en: { [key: string]: string } = {
   procced: 'Proceed',
   confirmOrder: 'Proceed',
   errorAmount: 'Enter valid amount',
-  myStoreHeading: 'Hi, Welcome to the store!',
+  myStoreHeading: 'Hi, Welcome to the Energy Marketplace!',
   subText:
     "A global marketplace to discover and buy anything you need. Just type what you want to buy and we'll take care of the rest.",
   rentAndHireHeading: 'My Rental Services',

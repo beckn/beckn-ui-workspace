@@ -92,7 +92,7 @@ const HomePage = () => {
           >
             <ShadowCardButton
               prefixIcon={<TiShoppingCart size={28} />}
-              text="My Store"
+              text="Energy Marketplace"
               textStyle="start"
               postIcon={<MdOutlineKeyboardArrowRight />}
               handleClick={() => handleNavigation('MY_STORE')}

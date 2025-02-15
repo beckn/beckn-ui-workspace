@@ -9,6 +9,7 @@ export interface Product {
   price: string
   rateLabel?: string
   id: string
+  domain?: string
   rating?: string
   currencyType?: CurrencyType
   shortDesc?: string

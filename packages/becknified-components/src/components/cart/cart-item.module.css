@@ -4,7 +4,7 @@
   flex-wrap: wrap;
   padding-left: 0.5rem;
   padding-right: 0.5rem;
-  border-bottom: 2px solid #E3E8EF;
+  border-bottom: 2px solid #e3e8ef;
   margin-bottom: 1.5rem;
 
   @media (min-width: 640px) {
@@ -150,4 +150,11 @@
   margin-left: 0.25rem;
   margin-right: 0.25rem;
   font-size: 15px;
+}
+.product_provider {
+  font-size: 12px;
+}
+.product_provider span {
+  font-size: 12px;
+  font-weight: 600;
 }

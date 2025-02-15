@@ -71,6 +71,7 @@ const ProductCard: React.FC<ProductCardProps> = props => {
                   alt={'item_image'}
                   boxShadow={'0 20px 25px rgba(0, 0, 0, 0.1),0 8px 10px rgba(0, 0, 0, 0.05)'}
                   objectFit={'cover'}
+                  className="product-search-img"
                 />
               </Box>
             </Box>
@@ -106,16 +107,30 @@ const ProductCard: React.FC<ProductCardProps> = props => {
                 alignItems={'flex-start'}
                 w={'100%'}
               >
-                <Text
-                  fontSize={'0.8rem'}
-                  mb={'0.4rem'}
-                  noOfLines={2}
-                  textOverflow="ellipsis"
-                  whiteSpace="pre-wrap"
-                  overflowWrap="break-word"
-                >
-                  {product.shortDesc}
-                </Text>
+                {product.domain ? (
+                  <Text
+                    className="domain"
+                    fontSize={'0.8rem'}
+                    mb={'0.4rem'}
+                    noOfLines={2}
+                    textOverflow="ellipsis"
+                    whiteSpace="pre-wrap"
+                    overflowWrap="break-word"
+                  >
+                    {product.domain.split(':').join(' ').toLocaleLowerCase()}
+                  </Text>
+                ) : (
+                  <Text
+                    fontSize={'0.8rem'}
+                    mb={'0.4rem'}
+                    noOfLines={2}
+                    textOverflow="ellipsis"
+                    whiteSpace="pre-wrap"
+                    overflowWrap="break-word"
+                  >
+                    {product.shortDesc}
+                  </Text>
+                )}
               </Flex>
               {product.source ? (
                 <Flex

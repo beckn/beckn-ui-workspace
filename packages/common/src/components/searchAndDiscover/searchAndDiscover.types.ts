@@ -24,6 +24,7 @@ export interface SearchAndDiscoverProps {
     loadingSubText: string
     loadingText: string
     dataTest?: string
+    image?: string
   }
   catalogProps: {
     renderMode?: CatelogRenderMode

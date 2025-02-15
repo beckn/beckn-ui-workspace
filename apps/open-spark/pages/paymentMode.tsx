@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Router, { useRouter } from 'next/router'
 import { useLanguage } from '../hooks/useLanguage'
-import { CheckoutRootState, discoveryActions, PaymentMethodSelectionProps } from '@beckn-ui/common'
+import { CheckoutRootState, discoveryActions, ICartRootState, PaymentMethodSelectionProps } from '@beckn-ui/common'
 import { testIds } from '@shared/dataTestIds'
 import Visa from '@public/images/visa.svg'
 import masterCard from '@public/images/masterCard.svg'
@@ -42,15 +42,18 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
   const [openModal, setOpenModal] = useState<boolean>(false)
   const [emiPlans, setEmiPlans] = useState<any[]>([])
   const initResponse = useSelector((state: CheckoutRootState) => state.checkout.initResponse)
-  const price = initResponse[0]?.message.order.quote.price || 0
+
   const [isLoading, setIsLoading] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [showSuccess, setShowSuccess] = useState(false)
   const [checkedState, setCheckedState] = useState<string | null>(null)
+  const [checkedPayment, setCheckedPayment] = useState<string | null>(null)
   const formData = useSelector((state: any) => state.emiForm)
   const emiPlansData = useSelector((state: any) => state.discoveryEmiPlan)
   const { transactionId, products } = useSelector((state: any) => state.discoveryEmiPlan)
   const [selectedEmiDetails, setSelectedEmiDetails] = useState<any>(null)
+  const price = initResponse[0]?.message.order.quote.price || 0
+  const cartItems = useSelector((state: ICartRootState) => state.cart.items)
 
   const { t } = useLanguage()
   const router = useRouter()
@@ -94,7 +97,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
         img: Visa,
         paymentMethod: t.cardNumber,
         paymentMethodNet: t.cardNumber,
-        disabled: true,
+        disabled: false,
         dataTest: testIds.paymentpage_visa
       },
       {
@@ -102,7 +105,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
         img: masterCard,
         paymentMethod: t.cardNumber,
         paymentMethodNet: t.cardNumber,
-        disabled: true,
+        disabled: false,
         dataTest: testIds.paymentpage_masterCard
       },
 
@@ -111,7 +114,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
         img: gPay,
         paymentMethod: t.gPay || 'Google Pay',
         paymentMethodNet: t.gPay || 'Google Pay',
-        disabled: true,
+        disabled: false,
         dataTest: testIds.paymentpage_phonePay
       },
       {
@@ -119,30 +122,15 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
         img: phonePay,
         paymentMethod: t.phonePay || 'PhonePe UPI',
         paymentMethodNet: t.phonePay || 'PhonePe UPI',
-        disabled: true,
+        disabled: false,
         dataTest: testIds.paymentpage_phonePay
-      },
-      {
-        category: 'Other',
-        img: NetBanking,
-        paymentMethod: t.netBanking,
-        paymentMethodNet: t.netBanking,
-        disabled: true,
-        dataTest: testIds.paymentpage_NetBanking
-      },
-      {
-        category: 'Other',
-        img: CashOnDelivery,
-        paymentMethod: t.cashOnDelivery,
-        paymentMethodNet: t.netBanking,
-        disabled: true,
-        dataTest: testIds.paymentpage_CashOnDelivery
       }
     ]
   } = props
 
   const handleChange = (id: string) => {
-    setCheckedState(id === checkedState ? null : id)
+    setCheckedPayment(id === checkedState ? null : id)
+    setSelectedPlan('')
   }
 
   const handleInputChange = (field: string) => (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -171,19 +159,30 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
       console.error('Selected EMI plan not found!')
       return
     }
-    const emiDetails = selectedPlan.item.map((item: any) => {
-      const months = parseInt(item.name.match(/\d+/)?.[0] || '1')
-      const annualInterestRate = parseFloat(item.price.value)
-      const principal = parseFloat(price.value)
-      const monthlyInstallment = Math.floor(principal / months)
-      const monthlyInterestRate = annualInterestRate / 12 / 100
-      const emi =
-        (principal * monthlyInterestRate * Math.pow(1 + monthlyInterestRate, months)) /
-        (Math.pow(1 + monthlyInterestRate, months) - 1)
-      const totalCost = emi * months
-      const interestAmount = (principal * annualInterestRate) / 100
+    const emiDetails = selectedPlan.item.map((item: any, ind: number) => {
+      const quantity = Number(cartItems[0]?.quantity) || 1
+      const totalPrice = Number(cartItems[ind]?.price?.value || 0)
 
-      return { monthlyInstallment, interestAmount, annualInterestRate, totalCost }
+      const months = parseInt(item.name.match(/\d+/)?.[0] || '1')
+      const annualInterestRate = Number(parseFloat(item?.price?.value) || 0)
+      const priceValue = Number(price?.value) || 0
+      const priceTotal = priceValue * quantity
+      const principal = priceTotal || totalPrice || priceTotal + totalPrice
+
+      const monthlyInstallment = Math.floor(principal / months)
+
+      const monthlyInterestRate = annualInterestRate / 12 / 100
+      const emiWithoutInterest =
+        (principal * monthlyInterestRate * Math.pow(1 + monthlyInterestRate, months)) /
+          (Math.pow(1 + monthlyInterestRate, months) - 1) || 0
+
+      const totalInterest = (principal * annualInterestRate * months) / (12 * 100) || 0
+      const monthlyInterestShare = totalInterest / months || 0
+
+      const emi = Math.floor(emiWithoutInterest + monthlyInterestShare)
+      const totalCost = emi * months
+      const interestAmount = Number((principal * annualInterestRate) / 100) || 0
+      return { emi, interestAmount, annualInterestRate, totalCost }
     })
 
     dispatch(setEmiDetails({ emiDetails }))
@@ -193,6 +192,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
       console.error('Transaction ID is missing!')
       return
     }
+    setCheckedPayment(null)
 
     const selectedItems = selectedPlan.item.map((item: { id: any }) => ({
       id: item.id,
@@ -235,10 +235,16 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
       })
   }
 
+  const handleSyncWallet = () => {}
+
   return (
-    <>
+    <Box
+      className="hideScroll"
+      maxH="calc(100vh - 100px)"
+      overflowY={'scroll'}
+    >
       <PaymentDetailsCard
-        checkedState={checkedState!}
+        checkedState={checkedPayment!}
         handleChange={handleChange}
         paymentMethods={paymentMethods}
         t={key => t[key]}
@@ -349,18 +355,28 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                           </Flex>
 
                           {plan.item.map((item: any, index: number) => {
+                            const quantity = Number(cartItems[0]?.quantity) || 1
+                            const totalPrice = Number(cartItems[index]?.price?.value || 0)
+
                             const months = parseInt(item.name.match(/\d+/)?.[0] || '1')
-                            const annualInterestRate = parseFloat(item.price.value)
-                            const principal = parseFloat(price.value)
+                            const annualInterestRate = Number(parseFloat(item?.price?.value) || 0)
+                            const priceValue = Number(price?.value) || 0
+                            const priceTotal = priceValue * quantity
+                            const principal = priceTotal || totalPrice || priceTotal + totalPrice
+
                             const monthlyInstallment = Math.floor(principal / months)
 
                             const monthlyInterestRate = annualInterestRate / 12 / 100
-                            const emi =
+                            const emiWithoutInterest =
                               (principal * monthlyInterestRate * Math.pow(1 + monthlyInterestRate, months)) /
-                              (Math.pow(1 + monthlyInterestRate, months) - 1)
-                            const totalCost = emi * months
+                                (Math.pow(1 + monthlyInterestRate, months) - 1) || 0
 
-                            const interestAmount = (principal * annualInterestRate) / 100
+                            const totalInterest = (principal * annualInterestRate * months) / (12 * 100) || 0
+                            const monthlyInterestShare = totalInterest / months || 0
+
+                            const emi = Math.floor(emiWithoutInterest + monthlyInterestShare)
+                            const totalCost = emi * months
+                            const interestAmount = Number((principal * annualInterestRate) / 100) || 0
                             return (
                               <React.Fragment key={index}>
                                 <Flex
@@ -372,7 +388,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                                     fontWeight="500"
                                     color="#626060"
                                   >
-                                    ₹ {monthlyInstallment} x {item.name}m
+                                    ₹ {emi} x {item.name}m
                                   </Box>
                                   <Box
                                     fontSize="10px"
@@ -406,8 +422,13 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
       <BecknButton
         dataTest={testIds.paymentpage_confirmButton}
         children={t.confirmOrder}
-        handleClick={() => setOpenModal(true)}
-        disabled={(!checkedState && !selectedPlan) || disableButton}
+        handleClick={() => {
+          setOpenModal(true)
+          if (checkedPayment) {
+            router.push('/retailOrderConfirmation')
+          }
+        }}
+        disabled={(!checkedState && !selectedPlan && !checkedPayment) || disableButton}
       />
 
       {isSubmitting || showSuccess ? (
@@ -417,7 +438,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
         >
           <Box
             display={'grid'}
-            height={'40vh'}
+            height={'60vh'}
             alignContent={'center'}
           >
             {showSuccess ? (
@@ -425,6 +446,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                 justifyContent={'center'}
                 alignItems="center"
                 flexDirection={'column'}
+                mb="50px"
               >
                 <Image
                   src="./images/orderConfirmmark.svg"
@@ -461,48 +483,134 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
         </BottomModal>
       ) : (
         openModal &&
-        !showSuccess && ( // Ensure modal doesn't show after success
-          <AddNewItemModal
-            isLoading={false}
-            isOpen={openModal}
-            onClose={() => setOpenModal(false)}
-            schema={{
-              header: 'Add New Credential',
-              inputs: [
-                {
-                  type: 'select',
-                  name: 'country',
-                  options: [{ label: 'India', value: 'India' }],
-                  value: formData.country,
-                  handleChange: handleInputChange('country'),
-                  label: 'Select Country',
-                  error: ' '
-                },
-                {
-                  type: 'text',
-                  name: 'id-number',
-                  value: formData.idNumber,
-                  handleChange: handleInputChange('idNumber'),
-                  label: 'Aadhar Number',
-                  error: ''
-                }
-              ],
-              buttons: [
-                {
-                  text: 'Submit',
-                  handleClick: handleOnSubmit,
-                  disabled: false,
-                  variant: 'solid',
-                  colorScheme: 'primary'
-                }
-              ]
-            }}
-            renderFileUpload={true}
-            handleOnFileselectionChange={() => {}}
-          />
+        !showSuccess &&
+        !checkedPayment && (
+          <Box className="btm-modal-payment">
+            <BottomModal
+              isOpen={openModal}
+              onClose={() => setOpenModal(false)}
+            >
+              <Box pt="20px">
+                <Flex
+                  justifyContent={'space-between'}
+                  alignItems="center"
+                >
+                  <Typography
+                    fontSize="17px"
+                    text="EMI Application"
+                  />
+                  <Typography
+                    fontSize="15px"
+                    fontWeight="500"
+                    color="#4398E8"
+                    text="Sync wallet"
+                    onClick={handleSyncWallet}
+                  />
+                </Flex>
+                <Divider
+                  mb="24px"
+                  mt="4px"
+                />
+              </Box>
+              <Typography
+                fontWeight="400"
+                fontSize="15px"
+                text="Full Name"
+              />
+              <Input
+                paddingInlineStart={'unset'}
+                _focusVisible={{
+                  borderColor: 'unset'
+                }}
+                border={'unset'}
+                placeholder=""
+              />
+              <Divider
+                borderColor={'#3A3A3A'}
+                opacity="1"
+                mb="20px"
+              />
+              <Typography
+                fontWeight="400"
+                fontSize="15px"
+                text="Date of Birth"
+              />
+              <Input
+                paddingInlineStart={'unset'}
+                _focusVisible={{
+                  borderColor: 'unset'
+                }}
+                border={'unset'}
+                placeholder=""
+              />
+              <Divider
+                borderColor={'#3A3A3A'}
+                opacity="1"
+                mb="20px"
+              />
+              <Typography
+                fontWeight="400"
+                fontSize="15px"
+                text="Pan Card"
+              />
+              <Input
+                paddingInlineStart={'unset'}
+                _focusVisible={{
+                  borderColor: 'unset'
+                }}
+                border={'unset'}
+                placeholder=""
+              />
+              <Divider
+                borderColor={'#3A3A3A'}
+                opacity="1"
+                mb="20px"
+              />
+              <Typography
+                fontWeight="400"
+                fontSize="15px"
+                text="Aadhaar"
+              />
+              <Input
+                paddingInlineStart={'unset'}
+                _focusVisible={{
+                  borderColor: 'unset'
+                }}
+                border={'unset'}
+                placeholder=""
+              />
+              <Divider
+                borderColor={'#3A3A3A'}
+                opacity="1"
+                mb="20px"
+              />
+              <Typography
+                fontWeight="400"
+                fontSize="15px"
+                text="Mobile Number"
+              />
+              <Input
+                paddingInlineStart={'unset'}
+                _focusVisible={{
+                  borderColor: 'unset'
+                }}
+                border={'unset'}
+                placeholder=""
+              />
+              <Divider
+                borderColor={'#3A3A3A'}
+                opacity="1"
+                mb="20px"
+              />
+              <BecknButton
+                text="Submit"
+                handleClick={handleOnSubmit}
+              />
+            </BottomModal>
+          </Box>
         )
       )}
-    </>
+    </Box>
   )
 }
 

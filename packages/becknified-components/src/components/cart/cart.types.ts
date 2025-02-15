@@ -6,6 +6,7 @@ export interface CartItemProps {
   id: string
   quantity: number
   name: string
+  providerName?: string
   image: string
   price: number
   symbol: CurrencyType
