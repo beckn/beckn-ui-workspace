@@ -26,7 +26,11 @@ const HomePage = () => {
 
   const handleNavigation = (type: 'MY_STORE' | 'RENT_AND_HIRE') => {
     dispatch(setNavigationType(type))
-    router.push(`/myStore`)
+    if (type === 'RENT_AND_HIRE') {
+      router.push('/rentAndHire')
+    } else {
+      router.push('/myStore')
+    }
   }
 
   return (

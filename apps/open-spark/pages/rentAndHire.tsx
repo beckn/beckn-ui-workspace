@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useLanguage } from '@hooks/useLanguage'
 import { HomePageContent, TopSheet, useGeolocation } from '@beckn-ui/common'
-import { Box, Flex } from '@chakra-ui/react'
+import { Box, Flex, Button } from '@chakra-ui/react'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import { buttonStyles } from '@components/constant'
 import ShadowCardButton from '@components/buttonCard/ShadowCardButton'
@@ -9,9 +9,29 @@ import { MdOutlineKeyboardArrowRight } from 'react-icons/md'
 import { Router, useRouter } from 'next/router'
 import { Typography } from '@beckn-ui/molecules'
 import { EXPLORE_PATH } from '@lib/config'
+import RentalServiceModal from '../components/RentalServiceModal/RentalServiceModal'
 
 const RentAndHire = () => {
   const router = useRouter()
+  const { t } = useLanguage()
+  const apiKeyForGoogle = process.env.NEXT_PUBLIC_GOOGLE_API_KEY
+  const {
+    currentAddress,
+    error: currentLocationFetchError,
+    loading: loadingForCurrentAddress
+  } = useGeolocation(apiKeyForGoogle as string)
+
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
+  const handleOpenModal = () => setIsModalOpen(true)
+  const handleCloseModal = () => setIsModalOpen(false)
+
+  useEffect(() => {
+    if (localStorage) {
+      localStorage.clear()
+    }
+  }, [])
+
   const rentalOptions = [
     {
       image: '/images/pentagon.svg',
@@ -24,37 +44,24 @@ const RentAndHire = () => {
       image: '/images/pentagon.svg',
       text: 'Provide Rental Services',
       handleClick: () => {
-        router.push('/provideRentalServices')
+        handleOpenModal()
       }
     },
     {
       image: '/images/Order_history.svg',
-      text: 'Provide Rental Services',
+      text: 'My services',
       handleClick: () => {
         console.log('Navigating to provide rental services...')
       }
     },
     {
       image: '/images/Order_history.svg',
-      text: 'Provide Rental Services',
+      text: 'My Rentals',
       handleClick: () => {
         console.log('Navigating to provide rental services...')
       }
     }
   ]
-  const { t } = useLanguage()
-  const apiKeyForGoogle = process.env.NEXT_PUBLIC_GOOGLE_API_KEY
-  const {
-    currentAddress,
-    error: currentLocationFetchError,
-    loading: loadingForCurrentAddress
-  } = useGeolocation(apiKeyForGoogle as string)
-
-  useEffect(() => {
-    if (localStorage) {
-      localStorage.clear()
-    }
-  }, [])
 
   return (
     <Box
@@ -124,6 +131,11 @@ const RentAndHire = () => {
           }}
         />
       </Box>
+
+      <RentalServiceModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+      />
     </Box>
   )
 }
