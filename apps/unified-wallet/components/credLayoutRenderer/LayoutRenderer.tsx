@@ -43,6 +43,7 @@ export interface CredLayoutRendererProps {
   schema: {
     items: ItemMetaData[]
     handleOnItemClick: (data: ItemMetaData) => void
+    handleDeleteItem?: (item: ItemMetaData) => void
     search: {
       searchInputPlaceholder?: string
       searchKeyword: string
@@ -69,6 +70,7 @@ const CredLayoutRenderer: React.FC<CredLayoutRendererProps> = ({
   schema: {
     items,
     handleOnItemClick,
+    handleDeleteItem,
     search: { searchInputPlaceholder = 'Search', searchKeyword, setSearchKeyword },
     modal: {
       schema: modalSchema,
@@ -131,6 +133,7 @@ const CredLayoutRenderer: React.FC<CredLayoutRendererProps> = ({
           <CatalogueRenderer
             list={items}
             handleOnClick={handleOnItemClick}
+            handleDeleteItem={handleDeleteItem}
           />
         ) : isLoading ? (
           <Box

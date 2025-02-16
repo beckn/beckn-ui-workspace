@@ -311,5 +311,5 @@ select:-webkit-autofill:focus {
 }
 
 .subHeader_bottom_header__NOUrY {
-  z-index: 99999;
+  /* z-index: 99999; */
 }

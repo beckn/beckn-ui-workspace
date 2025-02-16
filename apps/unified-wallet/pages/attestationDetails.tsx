@@ -100,7 +100,7 @@ const AttestationDetails = () => {
           return orgData
             ? {
                 name: orgData.name,
-                img: orgData.icon //`/images/${orgData.name === 'Vault' ? 'attes_openwallet' : 'attes_openspark'}.svg`,
+                icon: orgData.icon //`/images/${orgData.name === 'Vault' ? 'attes_openwallet' : 'attes_openspark'}.svg`,
               }
             : null
         })
@@ -167,6 +167,7 @@ const AttestationDetails = () => {
           handleOnClick={() => {}}
           allowDeletion={false}
           attestationsCount={true}
+          renderingFrom={'attestationDetails'}
         />
       )}
     </Flex>

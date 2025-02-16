@@ -14,7 +14,13 @@ import { orderActions } from '@beckn-ui/common/src/store/order-slice'
 import { getPayloadForConfirm, getPayloadForOrderHistoryPost } from '@beckn-ui/common/src/utils'
 import { useConfirmMutation } from '@beckn-ui/common/src/services/confirm'
 import { testIds } from '@shared/dataTestIds'
-import { FINANCE_ORDER_CATEGORY_ID, RENTAL_ORDER_CATEGORY_ID, RETAIL_ORDER_CATEGORY_ID } from '../lib/config'
+import {
+  FINANCE_ORDER_CATEGORY_ID,
+  RENTAL_ORDER_CATEGORY_ID,
+  RETAIL_ORDER_CATEGORY_ID,
+  ROLE,
+  ROUTE_TYPE
+} from '../lib/config'
 import { cartActions } from '@beckn-ui/common'
 import { RootState } from '@store/index'
 import { OrderHistoryData } from '@lib/types/orderHistory'
@@ -73,6 +79,28 @@ const retailOrderConfirmation = () => {
       .join('; ')
   }
 
+  const attestDocument = () => {
+    try {
+      const requestOptions = {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${bearerToken}` },
+        withCredentials: true
+      }
+
+      const res = axios.post(
+        `${strapiUrl}${ROUTE_TYPE[ROLE.GENERAL]}/wallet/attest`,
+        {
+          wallet_doc_type: 'TRANSACTION',
+          document_id:
+            '/subjects/users/phone/8899008890/documents/assets/physical/type/battery_test/source/wallet/sample-invoice.pdf'
+        },
+        requestOptions
+      )
+    } catch (err) {
+      console.error('Error attesting document:', err)
+    }
+  }
+
   const handleOnAddToWallet = async () => {
     const orderConfirmationData = confirmResponse
     if (orderConfirmationData) {
@@ -110,7 +138,9 @@ const retailOrderConfirmation = () => {
             authorization
           }
 
-          await addDocument(addDocPayload).unwrap()
+          const res = await addDocument(addDocPayload).unwrap()
+          console.log(res)
+          // await attestDocument()
 
           // dispatch(
           //   feedbackActions.setToastData({
