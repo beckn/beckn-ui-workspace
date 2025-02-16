@@ -36,6 +36,11 @@ import { discoveryEmiPlanActions } from '@store/discoveryEmiPlan-slice'
 import AddNewItemModal from '@components/modal/AddNewItemModal'
 import { emiFormActions } from '@store/emiForm-slice'
 import { setApiResponse, setEmiDetails } from '@store/emiSelect-slice'
+import { UserRootState } from '@store/user-slice'
+import { AuthRootState } from '@store/auth-slice'
+import { useGetDocumentsMutation } from '@services/walletService'
+import { parseDIDData } from '@utils/did'
+import { ItemMetaData } from '@lib/types/becknDid'
 
 const PaymentMode = (props: PaymentMethodSelectionProps) => {
   const [selectedPlan, setSelectedPlan] = useState<string>('')
@@ -55,10 +60,14 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
   const [selectedEmiDetails, setSelectedEmiDetails] = useState<any>(null)
   const price = initResponse[0]?.message.order.quote.price || 0
   const cartItems = useSelector((state: ICartRootState) => state.cart.items)
+  const [aadharNumber, setAadharNumber] = useState<string>()
+  const [PANNumber, setPANNumber] = useState<string>()
 
   const { t } = useLanguage()
   const router = useRouter()
   const dispatch = useDispatch()
+  const { user } = useSelector((state: AuthRootState) => state.auth)
+  const [getDocuments, { isLoading: verifyLoading }] = useGetDocumentsMutation()
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
   const fetchEMIPlans = () => {
@@ -237,7 +246,38 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
       })
   }
 
-  const handleSyncWallet = () => {}
+  const fetchCredentials = async () => {
+    try {
+      setIsLoading(true)
+      const result = await getDocuments(user?.deg_wallet?.deg_wallet_id!).unwrap()
+      console.log(result)
+      const list: ItemMetaData[] = parseDIDData(result)['identities'].map((item, index) => {
+        if (/\/type\/aadhar_card\/id\//.test((item as any).did)) {
+          setAadharNumber(item.id)
+        }
+        if (/\/type\/pan_card\/id\//.test((item as any).did)) {
+          setPANNumber(item.id)
+        }
+        return {
+          id: index,
+          title: item.type,
+          isVerified: true,
+          image: '',
+          datetime: new Date().toString(),
+          data: item
+        }
+      })
+    } catch (error) {
+      console.error('Error fetching dashboard data:', error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleSyncWallet = async () => {
+    console.log(user?.deg_wallet?.deg_wallet_id)
+    const getDoc = await fetchCredentials()
+  }
 
   return (
     <Box
@@ -567,6 +607,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                 }}
                 border={'unset'}
                 placeholder=""
+                value={PANNumber}
               />
               <Divider
                 borderColor={'#3A3A3A'}
@@ -585,6 +626,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                 }}
                 border={'unset'}
                 placeholder=""
+                value={aadharNumber}
               />
               <Divider
                 borderColor={'#3A3A3A'}

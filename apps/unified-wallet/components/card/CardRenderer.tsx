@@ -19,7 +19,7 @@ const CardRenderer: React.FC<CardBoxPropsModel> = props => {
       style={styles}
     >
       <CardBody
-        padding={'10px 10px'}
+        padding={'0px 5px'}
         h="54px"
       >
         {childComponent()}

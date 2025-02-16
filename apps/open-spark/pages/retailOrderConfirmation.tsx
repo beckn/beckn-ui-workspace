@@ -17,6 +17,12 @@ import { testIds } from '@shared/dataTestIds'
 import { FINANCE_ORDER_CATEGORY_ID, RENTAL_ORDER_CATEGORY_ID, RETAIL_ORDER_CATEGORY_ID } from '../lib/config'
 import { cartActions } from '@beckn-ui/common'
 import { RootState } from '@store/index'
+import { OrderHistoryData } from '@lib/types/orderHistory'
+import { useAddDocumentMutation, useGetVerificationMethodsMutation } from '@services/walletService'
+import { generateAuthHeader, generateKeyPairFromString } from '@services/cryptoUtilService'
+import { AuthRootState } from '@store/auth-slice'
+import { extractAuthAndHeader, toBase64, toSnakeCase } from '@utils/general'
+import { feedbackActions } from '@beckn-ui/common'
 
 const retailOrderConfirmation = () => {
   const { t } = useLanguage()
@@ -26,6 +32,9 @@ const retailOrderConfirmation = () => {
   const [confirmData, setConfirmData] = useState<ConfirmResponseModel[]>([])
   const [confirm, { isLoading, data }] = useConfirmMutation()
   const dispatch = useDispatch()
+  const { user } = useSelector((state: AuthRootState) => state.auth)
+  const [addDocument, { isLoading: addDocLoading }] = useAddDocumentMutation()
+  const [getVerificationMethods, { isLoading: verificationMethodsLoading }] = useGetVerificationMethodsMutation()
   const [orderId, setOrderId] = useState<string>()
 
   const initResponse = useSelector((state: CheckoutRootState) => state.checkout.initResponse)
@@ -50,9 +59,81 @@ const retailOrderConfirmation = () => {
     }
   }
 
+  const extractItemsWithProvider = (orders: ConfirmResponseModel[]): string => {
+    if (!orders || orders.length === 0) return ''
+
+    return orders
+      .map(order => {
+        const providerName = order.message.provider.name
+        const itemNames = order.message.items.map((item: any) => item.name).join(', ')
+        let result = `${itemNames} by ${providerName}`
+
+        return result.length > 50 ? result.slice(0, 47) + '...' : result
+      })
+      .join('; ')
+  }
+
+  const handleOnAddToWallet = async () => {
+    const orderConfirmationData = confirmResponse
+    if (orderConfirmationData) {
+      try {
+        const subjectKey = user?.deg_wallet?.deg_wallet_id.replace('/subjects/', '')
+        const { publicKey, privateKey } = await generateKeyPairFromString(subjectKey!)
+
+        const data: any = orderConfirmationData
+
+        const docDetails = JSON.stringify(data)
+
+        const verificationMethodsRes = await getVerificationMethods(user?.deg_wallet?.deg_wallet_id!).unwrap()
+        const { did, challenge } = verificationMethodsRes[0]
+
+        const generatedOrderId = confirmResponse[0].message.orderId
+        const totalPrice = confirmResponse[0].message.quote.price.value
+        const totalItems = confirmResponse[0].message.items.length
+        const totalItemsStr = extractItemsWithProvider(confirmResponse)
+
+        const authHeaderRes = await generateAuthHeader({
+          subjectId: user?.deg_wallet?.deg_wallet_id!,
+          verification_did: did,
+          privateKey,
+          publicKey,
+          payload: {
+            name: `transactions/type/domain/energy/id/${generatedOrderId}/amount/${totalPrice}/total_items/${totalItems}/item_str/${totalItemsStr}`,
+            stream: toBase64(docDetails)
+          }
+        })
+        const { authorization, payload } = extractAuthAndHeader(authHeaderRes)
+        if (authorization && payload) {
+          const addDocPayload = {
+            subjectId: user?.deg_wallet?.deg_wallet_id!,
+            payload,
+            authorization
+          }
+
+          await addDocument(addDocPayload).unwrap()
+
+          // dispatch(
+          //   feedbackActions.setToastData({
+          //     toastData: { message: 'Success', display: true, type: 'success', description: 'Added Successfully!' }
+          //   })
+          // )
+        } else {
+          dispatch(
+            feedbackActions.setToastData({
+              toastData: { message: 'Error', display: true, type: 'error', description: 'Something went wrong!' }
+            })
+          )
+        }
+      } catch (error) {
+        console.error('An error occurred:', error)
+      }
+    }
+  }
+
   useEffect(() => {
     if (confirmResponse && confirmResponse.length > 0) {
       setOrderId(confirmResponse[0].message.orderId.slice(0, 8))
+      handleOnAddToWallet()
     }
   }, [confirmResponse])
 
