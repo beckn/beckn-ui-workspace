@@ -36,10 +36,11 @@ const Header = () => {
   const profileSection = profileSectionIcon.includes(router.pathname)
     ? { src: profileIcon, handleClick: () => router.push('/profile') }
     : undefined
-
+  console.log(router.query)
   const dynamicHeaderNames = {
     ...headerNames,
-    '/physicalAssetsDetails': `${router.query.cred_name}`
+    '/physicalAssetsDetails': `${router.query.cred_name}`,
+    '/attestationDetails': `${router.query.cred_name}`
   }
 
   return (

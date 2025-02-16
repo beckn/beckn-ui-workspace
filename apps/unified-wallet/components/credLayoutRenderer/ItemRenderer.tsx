@@ -26,7 +26,7 @@ interface ItemRendererProps {
   handleOnClick: (data: ItemMetaData) => void
 }
 
-const ORG_NAME_MAP: any = {
+export const ORG_NAME_MAP: any = {
   'open-wallet': { name: 'Vault', icon: VaultIcon },
   'open-spark': { name: 'Spark', icon: SparkIcon }
 }
@@ -66,7 +66,7 @@ const ItemRenderer = (props: ItemRendererProps) => {
     }
     return []
   }
-
+  console.log(item?.data)
   return (
     <Box
       //   minH={'168px'}
@@ -178,6 +178,9 @@ const ItemRenderer = (props: ItemRendererProps) => {
                     text={item.data.source}
                     fontSize="10px"
                     color="#9E9E9E"
+                    style={{
+                      textTransform: 'capitalize'
+                    }}
                   />
                 </Flex>
               )}
