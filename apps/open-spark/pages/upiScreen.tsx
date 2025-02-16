@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { Box, Text, Grid, Button, Flex, Circle, Image } from '@chakra-ui/react'
-import { useRouter } from 'next/router'
+import { Box, Text, Grid, Button, Flex, Circle, Image, Divider } from '@chakra-ui/react'
+import Router, { useRouter } from 'next/router'
 
 const UpiScreen = () => {
   const [pin, setPin] = useState<string[]>(Array(4).fill(''))
@@ -28,7 +28,7 @@ const UpiScreen = () => {
   const handleSubmit = () => {
     if (currentIndex === 4) {
       console.log('PIN submitted:', pin.join(''))
-      // Handle PIN submission
+      Router.push('/retailOrderConfirmation')
     }
   }
 
@@ -36,56 +36,85 @@ const UpiScreen = () => {
     <Box
       display="flex"
       flexDirection="column"
-      height="90vh"
+      height="calc(100vh - 46px)"
       justifyContent="space-between"
       backgroundColor="#fff"
+      marginTop={'-50px'}
     >
       {/* Top Section */}
-      <Box p={4}>
-        {/* Header */}
+      <Box>
+        <Text
+          fontSize={'17px'}
+          cursor="pointer"
+          onClick={() => router.back()}
+        >
+          Cancel
+        </Text>
+        <Divider
+          ml="-20px"
+          mb="10px"
+          mt="10px"
+          w={'calc(100% + 40px)'}
+        />
+
+        {/* Bank Details */}
         <Flex
           justify="space-between"
           align="center"
-          mb={6}
+          mb="2px"
         >
-          <Text
-            cursor="pointer"
-            onClick={() => router.back()}
-          >
-            Cancel
-          </Text>
+          <Box>
+            <Text
+              fontSize="14px"
+              fontWeight="500"
+            >
+              ICICI Bank
+            </Text>
+            <Text color="gray.500">XXXX3810</Text>
+          </Box>
           <Image
             src="/images/Bitmap-2.svg"
             alt="UPI Logo"
             height="30px"
           />
         </Flex>
-
-        {/* Bank Details */}
-        <Box mb={8}>
-          <Text
-            fontSize="16px"
-            fontWeight="500"
-          >
-            ICICI Bank
-          </Text>
-          <Text color="gray.500">XXXX3810</Text>
-        </Box>
-
         <Box
           backgroundColor="#DEDEDE"
-          p={4}
+          ml="-20px"
+          mr="-20px"
+          padding={'2px 20px'}
         >
-          <Flex
-            justify="space-between"
-            mb={2}
-          >
-            <Text color="gray.500">To:</Text>
-            <Text>Marie</Text>
+          <Flex justify="space-between">
+            <Text
+              color="#837D7D"
+              fontSize={'14px'}
+              fontWeight="700"
+            >
+              To:
+            </Text>
+            <Text
+              fontSize={'14px'}
+              fontWeight="700"
+              color="#837D7D"
+            >
+              Marie
+            </Text>
           </Flex>
           <Flex justify="space-between">
-            <Text color="gray.500">Sending:</Text>
-            <Text>10,000</Text>
+            <Text
+              color="#837D7D"
+              fontSize={'14px'}
+              fontWeight="700"
+            >
+              Sending:
+            </Text>
+            <Text
+              color="#837D7D"
+              fontSize={'14px'}
+              fontWeight="700"
+            >
+              10,000
+            </Text>
           </Flex>
         </Box>
       </Box>
@@ -106,7 +135,7 @@ const UpiScreen = () => {
           {pin.map((digit, index) => (
             <Circle
               key={index}
-              size="40px"
+              size="30px"
               border="2px solid"
               borderColor={digit ? '#4398E8' : 'gray.300'}
               bg={digit ? '#4398E8' : 'white'}
@@ -117,17 +146,20 @@ const UpiScreen = () => {
 
       {/* Bottom Section - Keypad */}
       <Grid
-        backgroundColor="#DEDEDE"
+        backgroundColor="#B6B6B6"
         templateColumns="repeat(3, 1fr)"
         gap={2}
         p={4}
+        ml="-20px"
+        mr="-20px"
       >
         {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(num => (
           <Button
             key={num}
-            h="60px"
+            h="46px"
             variant="outline"
             backgroundColor="#fff"
+            cursor={'pointer'}
             onClick={() => handleNumberClick(num.toString())}
           >
             <Box>
@@ -170,6 +202,7 @@ const UpiScreen = () => {
           textColor="black"
           backgroundColor="#fff"
           h="60px"
+          cursor={'pointer'}
           variant="outline"
           onClick={() => handleNumberClick('0')}
         >
@@ -177,8 +210,11 @@ const UpiScreen = () => {
         </Button>
         <Button
           h="60px"
+          cursor={'pointer'}
           variant="outline"
-          backgroundColor="#fff"
+          color={'#000000'}
+          background="#fff "
+          opacity={'1 !important'}
           onClick={handleSubmit}
           isDisabled={currentIndex !== 4}
         >

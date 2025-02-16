@@ -89,7 +89,7 @@ const MyStore = () => {
             text={'My Orders'}
             textStyle="start"
             postIcon={<MdOutlineKeyboardArrowRight />}
-            handleClick={() => router.push(`/myOrders`)}
+            handleClick={() => router.push(`/orderHistory`)}
             sx={buttonStyles}
           />
         </Box>

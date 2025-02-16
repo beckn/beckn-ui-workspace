@@ -7,17 +7,17 @@ import pendingIcon from '../public/images/pendingStatus.svg'
 import { useDispatch } from 'react-redux'
 import { formatTimestamp } from '@beckn-ui/common/src/utils'
 import { useRouter } from 'next/router'
-import { orderHistoryData } from '@beckn-ui/common/lib/types'
 import { orderActions } from '@beckn-ui/common/src/store/order-slice'
 import { testIds } from '@shared/dataTestIds'
-import { RENTAL_ORDER_CATEGORY_ID } from '@lib/config'
+import { RENTAL_ORDER_CATEGORY_ID, RETAIL_ORDER_CATEGORY_ID } from '@lib/config'
+import { OrderHistoryData } from '@lib/types/orderHistory'
 
 const orderStatusMap: Record<string, string> = {
   'In Review': 'Pending'
 }
 
 const OrderHistory = () => {
-  const [orderHistoryList, setOrderHistoryList] = useState<orderHistoryData[]>([])
+  const [orderHistoryList, setOrderHistoryList] = useState<OrderHistoryData[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
   const dispatch = useDispatch()
@@ -35,18 +35,17 @@ const OrderHistory = () => {
       redirect: 'follow'
     }
     fetch(
-      `${strapiUrl}/unified-beckn-energy/order-history/get?filters[category]=${RENTAL_ORDER_CATEGORY_ID}`,
+      `${strapiUrl}/unified-beckn-energy/order-history/get?filters[category]=${RETAIL_ORDER_CATEGORY_ID}`,
       requestOptions
     )
       .then(response => response.json())
       .then(result => {
-        console.log('result', result)
+        setOrderHistoryList(result)
+
+        setIsLoading(false)
         if (result.error) {
           return setError(result.error.message)
         }
-        console.log(result.data.reverse())
-        setOrderHistoryList(result.data.reverse())
-        setIsLoading(false)
       })
       .catch(error => {
         setIsLoading(false)
@@ -103,28 +102,35 @@ const OrderHistory = () => {
                 data-test={testIds.order_history_main_container}
                 onClick={() => {
                   const orderObjectForStatusCall = {
-                    bppId: order.attributes.bpp_id,
-                    bppUri: order.attributes.bpp_uri,
-                    orderId: order.attributes.order_id
+                    bppId: order.bpp_id,
+                    bppUri: order.bpp_uri,
+                    orderId: order.order_id
                   }
                   localStorage.setItem('selectedOrder', JSON.stringify(orderObjectForStatusCall))
                   dispatch(orderActions.addSelectedOrder({ orderDetails: orderObjectForStatusCall }))
-                  router.push('/orderDetails')
+                  // router.push('/orderDetails')
                 }}
                 gap={'5px'}
                 flexDirection={'column'}
               >
+                <Flex
+                  alignItems={'center'}
+                  justifyContent="space-between"
+                  cursor={'pointer'}
+                  color="#4398E8"
+                >
+                  <Text
+                    as={Typography}
+                    text={`Placed at ${formatTimestamp(order.createdAt)}`}
+                    fontWeight="400"
+                    fontSize={'12px'}
+                    dataTest={testIds.orderHistory_createdAt}
+                  />
+                  <Text>Add to wallet</Text>
+                </Flex>
                 <Text
                   as={Typography}
-                  text={`Placed at ${formatTimestamp(order.attributes.createdAt)}`}
-                  fontWeight="400"
-                  fontSize={'12px'}
-                  dataTest={testIds.orderHistory_createdAt}
-                />
-
-                <Text
-                  as={Typography}
-                  text={`Order ID: ${order.attributes.order_id}`}
+                  text={`Order ID: ${order.order_id}`}
                   fontWeight="400"
                   fontSize={'12px'}
                   dataTest={testIds.orderHistory_order_id}
@@ -132,7 +138,7 @@ const OrderHistory = () => {
 
                 <Text
                   as={Typography}
-                  text={`${order.attributes.quote.price.currency} ${order.attributes.quote.price.value}`}
+                  text={`${order.quote.price.currency} ${order.quote.price.value}`}
                   fontWeight="600"
                   fontSize={'12px'}
                   dataTest={testIds.orderHistory_Price}
@@ -156,7 +162,8 @@ const OrderHistory = () => {
                       paddingRight={'6px'}
                       data-test={testIds.orderHistory_pendingIcon}
                     />
-                    <Text>{orderStatusMap[order.attributes.delivery_status]}</Text>
+                    {/* <Text>{orderStatusMap[order.delivery_status]}</Text> */}
+                    <Text>{'Pending'}</Text>
                   </Flex>
                 </Flex>
               </Flex>
