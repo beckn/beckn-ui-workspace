@@ -15,6 +15,7 @@ import {
   DiscoveryReducer
 } from '@beckn-ui/common'
 import api from '@services/api'
+import didApi from '@services/didApi'
 
 const persistConfig = {
   key: 'root',
@@ -25,6 +26,7 @@ const persistConfig = {
 const appReducer = combineReducers({
   auth: authReducer,
   [api.reducerPath]: api.reducer,
+  [didApi.reducerPath]: didApi.reducer,
   user: userReducer,
   cart: cartSliceReducer,
   checkout: checkoutReducer,
@@ -58,7 +60,7 @@ const store = configureStore({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
       }
-    }).concat(api.middleware)
+    }).concat(api.middleware, didApi.middleware)
 })
 
 export const persistor = persistStore(store)

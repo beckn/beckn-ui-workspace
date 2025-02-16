@@ -34,6 +34,9 @@ const slice = createSlice({
     setCredentials: (state, { payload: { user, jwt } }: PayloadAction<{ user: User; jwt: string }>) => {
       state.user = user
       state.jwt = jwt
+    },
+    updateUserDetails: (state, { payload: { user } }: PayloadAction<{ user: User }>) => {
+      state.user = user
     }
   },
   extraReducers: builder => {
@@ -110,5 +113,5 @@ const slice = createSlice({
   }
 })
 
-export const { logout, setCredentials } = slice.actions
+export const { logout, setCredentials, updateUserDetails } = slice.actions
 export default slice.reducer

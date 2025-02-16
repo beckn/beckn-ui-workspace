@@ -4,6 +4,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 export interface UserState {
   profileEditable: boolean
   tradeExecutionProcessed?: boolean
+  shouldShowInitialAlert?: boolean
 }
 
 export interface UserRootState {
@@ -12,7 +13,8 @@ export interface UserRootState {
 
 const initialState: UserState = {
   profileEditable: false,
-  tradeExecutionProcessed: false
+  tradeExecutionProcessed: false,
+  shouldShowInitialAlert: true
 }
 
 const userSlice = createSlice({
@@ -24,9 +26,12 @@ const userSlice = createSlice({
     },
     setTradeExecutionProcessed: (state, action: PayloadAction<boolean>) => {
       state.tradeExecutionProcessed = action.payload
+    },
+    setShowInitialAlert: (state, action: PayloadAction<boolean>) => {
+      state.shouldShowInitialAlert = action.payload
     }
   }
 })
 
-export const { setProfileEditable, setTradeExecutionProcessed } = userSlice.actions
+export const { setProfileEditable, setTradeExecutionProcessed, setShowInitialAlert } = userSlice.actions
 export default userSlice.reducer

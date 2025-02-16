@@ -1,6 +1,6 @@
 import { Box, VStack, Image, Flex, Checkbox } from '@chakra-ui/react'
 import ShadowCardButton from '@components/buttonCard/ShadowCardButton'
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import metaMaskWallet from '@public/images/mm-logo 1.svg'
 import openSeaWallet from '@public/images/opensea-logo1.svg'
 import openWallet from '@public/images/open-wallet.svg'
@@ -8,6 +8,15 @@ import { BottomModal, Input, Typography } from '@beckn-ui/molecules'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import { useVerifyOtpMutation } from '@services/UserService'
 import { buttonStyles, checkboxLabels } from '@components/constant'
+import { AuthRootState, updateUserDetails } from '@store/auth-slice'
+import { useDispatch, useSelector } from 'react-redux'
+import { getMaskedMobileNumber } from '@utils/general'
+import { ROLE, ROUTE_TYPE } from '@lib/config'
+import axios from '@services/axios'
+import Cookies from 'js-cookie'
+import { useGetUserMutation } from '@services/walletService'
+import { feedbackActions } from '@beckn-ui/common'
+import { setShowInitialAlert, UserRootState } from '@store/user-slice'
 
 interface OpenWalletBottomModalProps {
   modalType: 'wallet' | 'link' | 'otp' | 'alert' | null
@@ -16,17 +25,32 @@ interface OpenWalletBottomModalProps {
 }
 
 const OpenWalletBottomModal: React.FC<OpenWalletBottomModalProps> = ({ modalType, setModalType }) => {
-  const [inputValue, setInputValue] = useState('')
   const [OTP, setOTP] = useState(new Array(6).fill(''))
   const otpBoxReference = useRef<any>([])
-  const [checkboxes, setCheckboxes] = useState(
+  const [checkboxes, setCheckboxes] = useState<any>(
     checkboxLabels.reduce((acc, label) => ({ ...acc, [label.toLowerCase()]: false }), {})
   )
+  const bearerToken = Cookies.get('authToken')
+  const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
+  const [isLoading, setIsLoading] = useState(false)
 
+  const dispatch = useDispatch()
+  const { user } = useSelector((state: AuthRootState) => state.auth)
   const [verifyOtp] = useVerifyOtpMutation()
+  const [getUser] = useGetUserMutation()
+
+  const [inputValue, setInputValue] = useState(`users/phone/${user?.agent?.agent_profile?.phone_number || ''}`)
+
+  useEffect(() => {
+    setCheckboxes({
+      identities: user?.deg_wallet?.energy_identities_consent,
+      assets: user?.deg_wallet?.energy_assets_consent,
+      transactions: user?.deg_wallet?.energy_transactions_consent
+    })
+  }, [user])
 
   const handleCheckboxChange = (name: string) => {
-    setCheckboxes(prev => ({
+    setCheckboxes((prev: any) => ({
       ...prev,
       [name.toLowerCase()]: !prev[name.toLowerCase()]
     }))
@@ -53,10 +77,65 @@ const OpenWalletBottomModal: React.FC<OpenWalletBottomModalProps> = ({ modalType
     }
   }
 
+  const handleValidateWalletProfileId = async () => {
+    try {
+      const response: any = await getUser(inputValue)
+      const result = response.data
+
+      if (result && Array.isArray(result) && result.length > 0) {
+        const walletData = result[0]
+        await handleLinkWallet({
+          wallet_id: walletData.did,
+          energy_identities_consent: false,
+          energy_assets_consent: false,
+          energy_transactions_consent: false
+        })
+        setModalType('otp')
+      } else {
+        console.error('Invalid profile ID')
+        dispatch(
+          feedbackActions.setToastData({
+            toastData: { message: 'Error!', display: true, type: 'error', description: 'Invalid Profile ID' }
+          })
+        )
+      }
+    } catch (error) {
+      console.error('Validation failed:', error)
+    }
+  }
+
+  const handleLinkWallet = async (payload: {
+    wallet_id: string
+    energy_identities_consent: boolean
+    energy_assets_consent: boolean
+    energy_transactions_consent: boolean
+  }) => {
+    const requestOptions = {
+      headers: { Authorization: `Bearer ${bearerToken}` },
+      withCredentials: true
+    }
+
+    setIsLoading(true)
+
+    axios
+      .post(`${strapiUrl}${ROUTE_TYPE[ROLE.GENERAL]}/wallet/link`, payload, requestOptions)
+      .then(response => {
+        const result = response.data
+        dispatch(updateUserDetails({ user: { ...user!, deg_wallet: result } }))
+        console.log('Wallet linked successfully:', result)
+      })
+      .catch(error => {
+        console.error('Wallet linking failed:', error)
+      })
+      .finally(() => {
+        setIsLoading(false)
+      })
+  }
+
   const walletOptions = [
     { text: 'Meta Mask Wallet', image: metaMaskWallet, handleClick: () => console.log('meta') },
     { text: 'OpenSea Wallet', image: openSeaWallet, handleClick: () => console.log('opensea') },
-    { text: 'Open Wallet', image: openWallet, handleClick: () => setModalType('link') }
+    { text: 'Vault', image: openWallet, handleClick: () => setModalType('link') }
   ]
 
   return (
@@ -101,7 +180,7 @@ const OpenWalletBottomModal: React.FC<OpenWalletBottomModalProps> = ({ modalType
           case 'link':
             return (
               <BottomModal
-                title="Link to your Open wallet profile"
+                title="Link to your Vault profile"
                 isOpen={true}
                 onClose={() => setModalType(null)}
               >
@@ -110,13 +189,14 @@ const OpenWalletBottomModal: React.FC<OpenWalletBottomModalProps> = ({ modalType
                     label="Profile ID"
                     handleChange={e => setInputValue(e.target.value)}
                     value={inputValue}
-                    type="number"
+                    disabled={true}
+                    type="text"
                     name={'profileId'}
                   />
                   <BecknButton
                     children="Link"
                     sx={{ bgColor: '#09BD71', color: 'white', mt: '20px' }}
-                    handleClick={() => setModalType('otp')}
+                    handleClick={handleValidateWalletProfileId}
                   />
                 </Box>
               </BottomModal>
@@ -130,7 +210,7 @@ const OpenWalletBottomModal: React.FC<OpenWalletBottomModalProps> = ({ modalType
                 onClose={() => setModalType(null)}
               >
                 <Typography
-                  text="Enter the one-time password we just sent to your registered mobile number."
+                  text={`Enter the one time password we have just sent to your ${getMaskedMobileNumber(user?.agent?.agent_profile?.phone_number?.toString() || '')}.`}
                   fontSize="12px"
                   fontWeight="400"
                   color="#80807F"
@@ -140,6 +220,7 @@ const OpenWalletBottomModal: React.FC<OpenWalletBottomModalProps> = ({ modalType
                     <input
                       key={index}
                       value={digit}
+                      type="number"
                       maxLength={1}
                       onChange={e => handleOTPChange(e.target.value, index)}
                       ref={el => (otpBoxReference.current[index] = el)}
@@ -162,7 +243,10 @@ const OpenWalletBottomModal: React.FC<OpenWalletBottomModalProps> = ({ modalType
                   mt="1rem"
                   mr="10px"
                 >
-                  <Typography text="Didn’t receive OTP?" />
+                  <Typography
+                    text="Didn’t receive OTP?"
+                    color="#80807F"
+                  />
                   <Typography
                     text="Resend OTP"
                     color="#09BD71"
@@ -190,7 +274,7 @@ const OpenWalletBottomModal: React.FC<OpenWalletBottomModalProps> = ({ modalType
                   mb="20px"
                 >
                   <Typography
-                    text="Open Spark would like to fetch the following information from your wallet:"
+                    text="Spark would like to fetch the following information from your wallet:"
                     fontSize="12px"
                     fontWeight="400"
                   />
@@ -216,7 +300,7 @@ const OpenWalletBottomModal: React.FC<OpenWalletBottomModalProps> = ({ modalType
                       py={3}
                     >
                       <Checkbox
-                        isChecked={checkboxes[label.toLowerCase()]}
+                        isChecked={checkboxes?.[label.toLowerCase()]}
                         onChange={() => handleCheckboxChange(label)}
                         width="100%"
                         spacing={3}
@@ -240,7 +324,18 @@ const OpenWalletBottomModal: React.FC<OpenWalletBottomModalProps> = ({ modalType
                 <BecknButton
                   children="Confirm"
                   disabled={!Object.values(checkboxes).some(Boolean)}
-                  handleClick={() => setModalType(null)}
+                  handleClick={async () => {
+                    if (user?.deg_wallet?.deg_wallet_id) {
+                      await handleLinkWallet({
+                        wallet_id: user?.deg_wallet?.deg_wallet_id!,
+                        energy_identities_consent: checkboxes.identities,
+                        energy_assets_consent: checkboxes.assets,
+                        energy_transactions_consent: checkboxes.transactions
+                      })
+                      dispatch(setShowInitialAlert(false))
+                      setModalType(null)
+                    }
+                  }}
                 />
                 <BecknButton
                   children="Skip for now"

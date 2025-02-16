@@ -4,3 +4,7 @@ export const formatFileSize = (bytes: number): string => {
   const i = Math.floor(Math.log(bytes) / Math.log(1024))
   return `${(bytes / Math.pow(1024, i)).toFixed(2)} ${sizes[i]}`
 }
+
+export const getMaskedMobileNumber = (phoneNumber: string) => {
+  return `+91 ${phoneNumber.slice(0, 2)}XXXX${phoneNumber.slice(-3)}`
+}
