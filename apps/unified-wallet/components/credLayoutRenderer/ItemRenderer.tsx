@@ -1,7 +1,18 @@
 import { formatDate } from '@beckn-ui/common'
 import { Typography } from '@beckn-ui/molecules'
-import { Accordion, Box, Flex, Image, Text, useTheme } from '@chakra-ui/react'
-import React, { useMemo, useState } from 'react'
+import {
+  Accordion,
+  AccordionButton,
+  AccordionItem,
+  AccordionPanel,
+  Box,
+  Divider,
+  Flex,
+  Image,
+  Text,
+  useTheme
+} from '@chakra-ui/react'
+import React, { useEffect, useMemo, useState } from 'react'
 import VerifiedIcon from '@public/images/verified.svg'
 import UnverifiedIcon from '@public/images/unverified.svg'
 import DownArrow from '@public/images/down_arrow.svg'
@@ -24,6 +35,7 @@ interface ItemRendererProps {
   renderMode?: 'short' | 'long'
   allowDeletion?: boolean
   handleOnClick: (data: ItemMetaData) => void
+  attestationsCount?: boolean
 }
 
 export const ORG_NAME_MAP: any = {
@@ -32,8 +44,15 @@ export const ORG_NAME_MAP: any = {
 }
 
 const ItemRenderer = (props: ItemRendererProps) => {
-  const { renderMode, item, handleOnClick, allowDeletion = true } = props
+  const { renderMode, item, handleOnClick, allowDeletion = true, attestationsCount = true } = props
   const [openAttestations, setOpenAttestations] = useState<boolean>(false)
+  const [isOpen, setIsOpen] = useState(false)
+
+  useEffect(() => {
+    if (item?.data?.attestations?.length > 0) {
+      setIsOpen(true)
+    }
+  }, [item?.data?.attestations])
 
   const theme = useTheme()
   const primaryColor = theme.colors.primary['100']
@@ -66,7 +85,6 @@ const ItemRenderer = (props: ItemRendererProps) => {
     }
     return []
   }
-  console.log(item?.data)
   return (
     <Box
       //   minH={'168px'}
@@ -84,182 +102,239 @@ const ItemRenderer = (props: ItemRendererProps) => {
       boxShadow={'0px 8px 10px 0px #0000001A'}
       onClick={() => handleOnClick(item)}
     >
-      <Accordion>
-        <Box
-          display={'flex'}
-          position={'relative'}
-          width={'100%'}
-        >
-          {item?.image && (
-            <Box
-              w={'125px'}
-              position="relative"
-              borderTopLeftRadius={'1rem'}
-              borderBottomLeftRadius={'1rem'}
-              overflow={'hidden'}
-              display={'flex'}
-              flexDirection={'column'}
-              justifyContent={'space-between'}
-              alignItems={'center'}
-              margin="0.7rem"
-            >
-              <Box
-                display={'flex'}
-                alignItems={'center'}
-                height={'100%'}
-              >
-                <Image
-                  src={item.image}
-                  // width={'100%'}
-                  // height={'100%'}
-                  alt={'item_image'}
-                  // boxShadow={'0 20px 25px rgba(0, 0, 0, 0.1),0 8px 10px rgba(0, 0, 0, 0.05)'}
-                  //   objectFit={'cover'}
-                />
-              </Box>
-            </Box>
-          )}
+      <Accordion
+        allowToggle
+        index={isOpen ? [0] : []}
+      >
+        <AccordionItem>
           <Box
-            p={'15px'}
-            pt={'11px'}
-            w={'100%'}
-            position={'relative'}
             display={'flex'}
-            flexDir={'column'}
-            alignSelf="center"
-            gap="6px"
+            position={'relative'}
+            width={'100%'}
           >
-            <Box>
-              {item.title && (
-                <Flex
-                  justifyContent={'space-between'}
-                  alignItems={'flex-start'}
-                  w={'100%'}
-                >
-                  <Text
-                    fontWeight={'600'}
-                    fontSize={'16px'}
-                    // mb={'0.7rem'}
-                    noOfLines={2}
-                    textOverflow="ellipsis"
-                    whiteSpace="pre-wrap"
-                    overflowWrap="break-word"
-                  >
-                    {item.title}
-                  </Text>
-                  <Box marginTop={'2px'}>
-                    {item?.isVerified ? (
-                      <Image
-                        src={VerifiedIcon}
-                        width={'80px'}
-                        height={'18px'}
-                      />
-                    ) : (
-                      <Image
-                        src={UnverifiedIcon}
-                        width={'80px'}
-                        height={'18px'}
-                      />
-                    )}
-                  </Box>
-                </Flex>
-              )}
-              {item.data.source && (
-                <Flex
-                  flexDir={'row'}
-                  gap="2px"
-                >
-                  <Typography
-                    text={`Source:`}
-                    fontWeight={'700'}
-                    fontSize="10px"
-                  />
-                  <Typography
-                    text={item.data.source}
-                    fontSize="10px"
-                    color="#9E9E9E"
-                    style={{
-                      textTransform: 'capitalize'
-                    }}
-                  />
-                </Flex>
-              )}
-
-              {item.description && (
-                <Flex
-                  justifyContent={'space-between'}
-                  alignItems={'flex-start'}
-                  w={'100%'}
-                >
-                  <Text
-                    fontSize={'10px'}
-                    // mb={'0.4rem'}
-                    noOfLines={2}
-                    textOverflow="ellipsis"
-                    whiteSpace="pre-wrap"
-                    overflowWrap="break-word"
-                    color={'#ACACAC'}
-                  >
-                    {`${item.description.slice(0, 2)}${getNoOfMasked(item.description.length - 6)}${item.description.slice(-4)}`}
-                  </Text>
-                </Flex>
-              )}
-            </Box>
-            {/* <Box height={'14px'}> */}
-            {item?.data?.attachment && (
-              <Typography
-                text={item?.data?.attachment}
-                fontSize={'10px'}
-                fontWeight="600"
-                color={primaryColor}
-              />
-            )}
-            {/* </Box> */}
-
-            {item?.datetime && (
-              <Flex
-                flexDir={'row'}
+            {item?.image && (
+              <Box
+                w={'125px'}
+                position="relative"
+                borderTopLeftRadius={'1rem'}
+                borderBottomLeftRadius={'1rem'}
+                overflow={'hidden'}
+                display={'flex'}
+                flexDirection={'column'}
                 justifyContent={'space-between'}
+                alignItems={'center'}
+                margin="0.7rem"
               >
-                <Flex flexDir={'column'}>
-                  <Typography
-                    text={formatDate(item?.datetime!, 'do MMM yyyy, h.mma')}
-                    fontSize={'10px'}
-                    color={'#5F5F5F'}
+                <Box
+                  display={'flex'}
+                  alignItems={'center'}
+                  height={'100%'}
+                >
+                  <Image
+                    src={item.image}
+                    // width={'100%'}
+                    // height={'100%'}
+                    alt={'item_image'}
+                    // boxShadow={'0 20px 25px rgba(0, 0, 0, 0.1),0 8px 10px rgba(0, 0, 0, 0.05)'}
+                    //   objectFit={'cover'}
                   />
-                  {item?.data?.attestations && item?.data?.attestations?.length > 0 && (
-                    <Flex
-                      flexDir={'row'}
-                      justifyContent={'space-between'}
+                </Box>
+              </Box>
+            )}
+            <Box
+              p={'15px'}
+              pt={'11px'}
+              w={'100%'}
+              position={'relative'}
+              display={'flex'}
+              flexDir={'column'}
+              alignSelf="center"
+              gap="6px"
+            >
+              <Box>
+                {item.title && (
+                  <Flex
+                    justifyContent={'space-between'}
+                    alignItems={'flex-start'}
+                    w={'100%'}
+                  >
+                    <Text
+                      fontWeight={'600'}
+                      fontSize={'16px'}
+                      // mb={'0.7rem'}
+                      noOfLines={2}
+                      textOverflow="ellipsis"
+                      whiteSpace="pre-wrap"
+                      overflowWrap="break-word"
                     >
-                      <Typography
-                        text={`Attested By (${item?.data?.attestations?.length})`}
-                        fontSize={'10px'}
-                        color={'#4498E8'}
-                      />
-                      <Image
-                        src={DownArrow}
-                        onClick={() => setOpenAttestations(true)}
-                      />
-                    </Flex>
-                  )}
-                </Flex>
-                {allowDeletion && (
-                  <Box
-                    alignSelf={'end'}
-                    cursor="pointer"
+                      {item.title}
+                    </Text>
+                    <Box marginTop={'2px'}>
+                      {item?.isVerified ? (
+                        <Image
+                          src={VerifiedIcon}
+                          width={'80px'}
+                          height={'18px'}
+                        />
+                      ) : (
+                        <Image
+                          src={UnverifiedIcon}
+                          width={'80px'}
+                          height={'18px'}
+                        />
+                      )}
+                    </Box>
+                  </Flex>
+                )}
+                {item.data.source && (
+                  <Flex
+                    flexDir={'row'}
+                    gap="2px"
                   >
                     <Typography
-                      text={`Remove`}
-                      fontSize={'10px'}
-                      color={'#FF4747'}
+                      text={`Source:`}
+                      fontWeight={'700'}
+                      fontSize="10px"
                     />
-                  </Box>
+                    <Typography
+                      text={item.data.source}
+                      fontSize="10px"
+                      color="#9E9E9E"
+                      style={{
+                        textTransform: 'capitalize'
+                      }}
+                    />
+                  </Flex>
                 )}
-              </Flex>
-            )}
+
+                {item.description && (
+                  <Flex
+                    justifyContent={'space-between'}
+                    alignItems={'flex-start'}
+                    w={'100%'}
+                  >
+                    <Text
+                      fontSize={'10px'}
+                      // mb={'0.4rem'}
+                      noOfLines={2}
+                      textOverflow="ellipsis"
+                      whiteSpace="pre-wrap"
+                      overflowWrap="break-word"
+                      color={'#ACACAC'}
+                    >
+                      {`${item.description.slice(0, 2)}${getNoOfMasked(item.description.length - 6)}${item.description.slice(-4)}`}
+                    </Text>
+                  </Flex>
+                )}
+              </Box>
+              {/* <Box height={'14px'}> */}
+              {item?.data?.attachment && (
+                <Typography
+                  text={item?.data?.attachment}
+                  fontSize={'10px'}
+                  fontWeight="600"
+                  color={primaryColor}
+                />
+              )}
+              {/* </Box> */}
+
+              {item?.datetime && (
+                <>
+                  <Flex
+                    flexDir={'row'}
+                    justifyContent={'space-between'}
+                  >
+                    <Flex flexDir={'column'}>
+                      <Typography
+                        text={formatDate(item?.datetime!, 'do MMM yyyy, h.mma')}
+                        fontSize={'10px'}
+                        color={'#5F5F5F'}
+                      />
+                      {attestationsCount && item?.data?.attestations?.length > 0 && (
+                        <AccordionButton
+                          className="accc-btn"
+                          bg="unset !important"
+                          pl="unset"
+                          onClick={() => setIsOpen(!isOpen)}
+                        >
+                          <Flex
+                            flexDir="row"
+                            justifyContent="space-between"
+                            alignItems="center"
+                          >
+                            <Typography
+                              text={`Attested By (${item?.data?.attestations?.length})`}
+                              fontSize="10px"
+                              color="#4498E8"
+                            />
+                            <Image
+                              src={DownArrow}
+                              onClick={e => {
+                                e.stopPropagation() // Prevents Accordion toggle if needed
+                                setOpenAttestations(true)
+                              }}
+                            />
+                          </Flex>
+                        </AccordionButton>
+                      )}
+                    </Flex>
+                    {allowDeletion && (
+                      <Box
+                        alignSelf={'end'}
+                        cursor="pointer"
+                      >
+                        <Typography
+                          text={`Remove`}
+                          fontSize={'10px'}
+                          color={'#FF4747'}
+                        />
+                      </Box>
+                    )}
+                  </Flex>
+                </>
+              )}
+            </Box>
           </Box>
-        </Box>
+          <AccordionPanel
+            pb={4}
+            pl="unset"
+            mt="10px"
+          >
+            {item?.data?.attestations?.map((attestation, index) => (
+              <>
+                <Flex
+                  pl="20px"
+                  pr="20px"
+                  key={index}
+                  alignItems="center"
+                  gap="5px"
+                  className="accordion-attestation-border"
+                >
+                  {attestation?.img && (
+                    <Image
+                      src={attestation?.img}
+                      alt="attestation"
+                    />
+                  )}
+                  <Text
+                    fontSize="16px"
+                    color={'#5F5F5F'}
+                    fontWeight="500"
+                  >
+                    {attestation.name}
+                  </Text>
+                </Flex>
+                <Divider
+                  mb="10px"
+                  mt="10px"
+                  ml="20px"
+                  mr="20px"
+                  w="unset"
+                />
+              </>
+            ))}
+          </AccordionPanel>
+        </AccordionItem>
       </Accordion>
     </Box>
   )

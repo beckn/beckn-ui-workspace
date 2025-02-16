@@ -38,6 +38,13 @@ const MyTransactions = () => {
   const { user, privateKey, publicKey } = useSelector((state: AuthRootState) => state.auth)
   const [getDocuments, { isLoading: verifyLoading }] = useGetDocumentsMutation()
 
+  const categoryColors: Record<string, string> = {
+    Retail: '#D58F0E',
+    Energy: '#51B651',
+    Healthcare: '#D86969',
+    default: '#4498E8'
+  }
+
   const fetchTransactions = async () => {
     try {
       setIsLoading(true)
@@ -49,7 +56,8 @@ const MyTransactions = () => {
           amount: item.amount,
           noOfItems: item.totalItems,
           date: new Date().toString(),
-          category: item.category
+          category: item.category,
+          color: categoryColors[item.category] || categoryColors.default
         }
       })
       setItems(list)
@@ -140,7 +148,7 @@ const MyTransactions = () => {
                       />
                       <Box
                         color={'#ffffff'}
-                        backgroundColor={'#4498E8'}
+                        backgroundColor={categoryColors[item.category] || categoryColors.default}
                         fontSize="10px"
                         padding="2px 6px"
                         borderRadius="4px"

@@ -298,7 +298,12 @@ select:-webkit-autofill:focus {
 .cencel_btn_filter {
   border: 1px solid #e93324 !important;
 }
-
+.accc-btn img {
+  padding-left: 4px;
+}
+.accordion-attestation-borde:last-child > .chakra-divider {
+  display: none;
+}
 @media only screen and (max-width: 370px) {
   .mytrade-status {
     gap: 2px !important;

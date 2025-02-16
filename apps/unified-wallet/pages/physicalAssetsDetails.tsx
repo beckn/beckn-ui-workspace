@@ -169,6 +169,7 @@ const PhysicalAssetsDetails = () => {
           item={item}
           renderMode={'long'}
           handleOnClick={() => {}}
+          attestationsCount={false}
         />
       )}
 
