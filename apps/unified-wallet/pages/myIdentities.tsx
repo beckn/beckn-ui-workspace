@@ -267,7 +267,7 @@ const MyIdentities = () => {
     <>
       <CredLayoutRenderer
         schema={{
-          items: filteredItems,
+          items: filteredItems.reverse(),
           handleOnItemClick: () => {},
           search: {
             searchInputPlaceholder: 'Search Identities',

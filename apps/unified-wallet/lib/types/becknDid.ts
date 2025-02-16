@@ -14,6 +14,7 @@ export type Transaction = {
   totalItems: string | number
   amount: string | number
   did: string
+  name: string
   attestations: AttestationData[]
 }
 

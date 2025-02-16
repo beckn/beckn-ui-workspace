@@ -254,7 +254,7 @@ const MyCredentials = () => {
   return (
     <CredLayoutRenderer
       schema={{
-        items: filteredItems,
+        items: filteredItems.reverse(),
         handleOnItemClick: () => {},
         search: {
           searchInputPlaceholder: 'Search Credentials',

@@ -1,6 +1,12 @@
-export type Identity = { type: string; id: string; did: string }
-export type Credential = { type: string; name: string; did: string }
-export type PhysicalAsset = { type: string; attachment: string | null; did: string; source: string }
+export type Identity = { type: string; id: string; did: string; attestations: AttestationData[] }
+export type Credential = { type: string; name: string; did: string; attestations: AttestationData[] }
+export type PhysicalAsset = {
+  type: string
+  attachment: string | null
+  did: string
+  source: string
+  attestations: AttestationData[]
+}
 export type Transaction = {
   type: string
   id: string
@@ -8,6 +14,13 @@ export type Transaction = {
   totalItems: string | number
   amount: string | number
   did: string
+  attestations: AttestationData[]
+}
+
+export interface AttestationData {
+  did: string
+  signature: string
+  verification_method: { did: string }
 }
 
 export interface ParsedData {
@@ -79,4 +92,14 @@ export interface VerifyResponse {
 export interface DocumentPayload {
   name: string
   stream: string
+}
+
+export interface ItemMetaData {
+  id: number
+  title: string
+  description?: string
+  datetime?: string
+  isVerified?: boolean
+  image?: string
+  data?: any
 }

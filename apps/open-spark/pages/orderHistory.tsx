@@ -126,7 +126,7 @@ const OrderHistory = () => {
                     fontSize={'12px'}
                     dataTest={testIds.orderHistory_createdAt}
                   />
-                  <Text>Add to wallet</Text>
+                  {/* <Text >Add to wallet</Text> */}
                 </Flex>
                 <Text
                   as={Typography}

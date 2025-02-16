@@ -53,7 +53,6 @@ export const parseDIDData = (data: { did: string; attestations?: AttestationData
         id: parts[5],
         amount: parts[7],
         totalItems: parts[9],
-        name: parts[11],
         did,
         attestations: attestations!
       })

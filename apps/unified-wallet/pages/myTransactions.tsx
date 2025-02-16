@@ -1,5 +1,5 @@
 import SearchBar from '@beckn-ui/common/src/components/searchBar/searchBar'
-import { Box, Flex } from '@chakra-ui/react'
+import { Box, Flex, Image } from '@chakra-ui/react'
 import EmptyScreenTemplate from '@components/EmptyTemplates/EmptyScreenTemplate'
 import React, { useEffect, useState } from 'react'
 import EmptyTransactionsIcon from '@public/images/empty_transactions.svg'
@@ -13,9 +13,11 @@ import { useLanguage } from '@hooks/useLanguage'
 import { useDispatch, useSelector } from 'react-redux'
 import { AuthRootState } from '@store/auth-slice'
 import { useGetDocumentsMutation } from '@services/walletService'
-import { ItemMetaData } from '@components/credLayoutRenderer/ItemRenderer'
 import { parseDIDData } from '@utils/did'
 import { filterByKeyword } from '@utils/general'
+import { useRouter } from 'next/router'
+import RetailIcon from '@public/images/retail_icon.svg'
+import OpenSparkIcon from '@public/images/open_spark_icon.svg'
 
 interface TransactionItem {
   id: string | number
@@ -23,6 +25,7 @@ interface TransactionItem {
   amount: string | number
   noOfItems: number | string
   date: string
+  name: string
   category: string
 }
 
@@ -35,14 +38,15 @@ const MyTransactions = () => {
 
   const { t } = useLanguage()
   const dispatch = useDispatch()
+  const router = useRouter()
   const { user, privateKey, publicKey } = useSelector((state: AuthRootState) => state.auth)
   const [getDocuments, { isLoading: verifyLoading }] = useGetDocumentsMutation()
 
-  const categoryColors: Record<string, string> = {
-    Retail: '#D58F0E',
-    Energy: '#51B651',
-    Healthcare: '#D86969',
-    default: '#4498E8'
+  const categoryColors: Record<string, any> = {
+    Retail: { color: '#D58F0E', icon: RetailIcon },
+    Energy: { color: '#51B651', icon: OpenSparkIcon },
+    Healthcare: { color: '#D86969', icon: '' },
+    default: { color: '#4498E8', icon: '' }
   }
 
   const fetchTransactions = async () => {
@@ -53,11 +57,13 @@ const MyTransactions = () => {
         return {
           id: index,
           orderId: item.id,
+          name: item.name,
           amount: item.amount,
           noOfItems: item.totalItems,
           date: new Date().toString(),
           category: item.category,
-          color: categoryColors[item.category] || categoryColors.default
+          color: categoryColors[item.category] || categoryColors.default,
+          data: item
         }
       })
       setItems(list)
@@ -99,6 +105,15 @@ const MyTransactions = () => {
     setIsFilterOpen(false)
   }
 
+  const handleOnOrderClick = (orderData: TransactionItem) => {
+    router.push({
+      pathname: '/orderDetailss',
+      query: {
+        data: JSON.stringify(orderData)
+      }
+    })
+  }
+
   return (
     <Box
       maxWidth={{ base: '100vw', md: '30rem', lg: '40rem' }}
@@ -128,7 +143,7 @@ const MyTransactions = () => {
         flexDir={'column'}
       >
         {filteredItems.length > 0 ? (
-          filteredItems.map(item => {
+          filteredItems.reverse().map(item => {
             return (
               <CardRenderer
                 styles={{ padding: '0.5rem 0.5rem' }}
@@ -137,49 +152,50 @@ const MyTransactions = () => {
                     key={item.id}
                     flexDir="column"
                     gap="6px"
+                    onClick={() => handleOnOrderClick(item)}
                   >
                     <Flex
                       flexDir={'row'}
                       justifyContent="space-between"
                     >
                       <Typography
-                        text={`Placed at ${formatDate(item.date, 'do MMM yyyy, h.mma')}`}
+                        text={item.name}
                         fontSize="12px"
+                        fontWeight="500"
                       />
                       <Box
                         color={'#ffffff'}
-                        backgroundColor={categoryColors[item.category] || categoryColors.default}
+                        backgroundColor={categoryColors[item.category]?.color || categoryColors.default.color}
                         fontSize="10px"
                         padding="2px 6px"
                         borderRadius="4px"
                         textTransform="capitalize"
+                        whiteSpace={'nowrap'}
+                        height="20px"
                       >
                         {item.category}
                       </Box>
                     </Flex>
+                    <Image
+                      src={categoryColors[item.category]?.icon || categoryColors.default.icon}
+                      width="58px"
+                      height={'16px'}
+                    />
                     <Flex
                       flexDir={'row'}
-                      gap="2px"
+                      justifyContent={'space-between'}
                     >
                       <Typography
-                        text={`Order ID:`}
-                        fontSize="12px"
+                        text={`Placed at ${formatDate(item.date, 'do MMM yyyy, h.mma')}`}
+                        fontSize="10px"
+                        fontWeight="300"
                       />
                       <Typography
-                        text={item.orderId}
-                        fontWeight="600"
-                        fontSize="12px"
+                        text={`₹ ${item.amount}`}
+                        fontWeight="500"
+                        fontSize="10px"
                       />
                     </Flex>
-                    <Typography
-                      text={`₹ ${item.amount}`}
-                      fontWeight="500"
-                      fontSize="12px"
-                    />
-                    <Typography
-                      text={`${item.noOfItems} item(s)`}
-                      fontSize="12px"
-                    />
                   </Flex>
                 )}
               />

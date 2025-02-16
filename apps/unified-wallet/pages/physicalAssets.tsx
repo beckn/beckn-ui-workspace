@@ -271,7 +271,7 @@ const PhysicalAssets = () => {
   return (
     <CredLayoutRenderer
       schema={{
-        items: filteredItems,
+        items: filteredItems.reverse(),
         handleOnItemClick: data => handleOpenCredDetails(data),
         search: {
           searchInputPlaceholder: 'Search Assets',
