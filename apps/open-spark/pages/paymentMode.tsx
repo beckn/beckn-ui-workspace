@@ -41,6 +41,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
   const [selectedPlan, setSelectedPlan] = useState<string>('')
   const [openModal, setOpenModal] = useState<boolean>(false)
   const [emiPlans, setEmiPlans] = useState<any[]>([])
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<string>('')
   const initResponse = useSelector((state: CheckoutRootState) => state.checkout.initResponse)
 
   const [isLoading, setIsLoading] = useState(false)
@@ -129,6 +130,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
   } = props
 
   const handleChange = (id: string) => {
+    setSelectedPaymentMethod(id)
     setCheckedPayment(id === checkedState ? null : id)
     setSelectedPlan('')
   }
@@ -425,7 +427,12 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
         handleClick={() => {
           setOpenModal(true)
           if (checkedPayment) {
-            router.push('/retailOrderConfirmation')
+            // router.push('/retailOrderConfirmation')
+            if (selectedPaymentMethod.includes('UPI')) {
+              router.push('/upiScreen')
+            } else {
+              router.push('/secureCheckout')
+            }
           }
         }}
         disabled={(!checkedState && !selectedPlan && !checkedPayment) || disableButton}
