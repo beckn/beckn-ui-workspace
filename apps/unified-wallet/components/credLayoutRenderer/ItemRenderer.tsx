@@ -117,6 +117,7 @@ const ItemRenderer = (props: ItemRendererProps) => {
       <Accordion
         allowToggle
         index={isOpen ? [0] : []}
+        width="100%"
       >
         <AccordionItem borderTopWidth={'0px !important'}>
           <Box
@@ -326,6 +327,7 @@ const ItemRenderer = (props: ItemRendererProps) => {
                     gap="5px"
                     className="accordion-attestation-border"
                     justifyContent={'space-between'}
+                    flexDirection={renderingFrom === 'attestationDetails' ? 'row-reverse' : 'inherit'}
                   >
                     <Text
                       fontSize="16px"

@@ -18,6 +18,8 @@ import { generateAuthHeader, generateAuthHeaderForDelete } from '@services/crypt
 import { feedbackActions } from '@beckn-ui/common'
 import { DocumentProps } from '@components/documentsRenderer'
 import { ItemMetaData } from '@components/credLayoutRenderer/ItemRenderer'
+import axios from '@services/axios'
+import { ROLE, ROUTE_TYPE } from '@lib/config'
 
 const options = [
   { label: 'Document', value: 'document' },
@@ -25,6 +27,8 @@ const options = [
 ]
 
 const MyCredentials = () => {
+  const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
+
   const [items, setItems] = useState<ItemMetaData[]>([])
   const [filteredItems, setFilteredItems] = useState(items)
   const [searchKeyword, setSearchKeyword] = useState<string>('')
@@ -88,6 +92,26 @@ const MyCredentials = () => {
   const handleOpenModal = () => setOpenModal(true)
   const handleCloseModal = () => setOpenModal(false)
 
+  const attestDocument = async (did: string) => {
+    try {
+      const requestOptions = {
+        method: 'POST',
+        withCredentials: true
+      }
+
+      const res = await axios.post(
+        `${strapiUrl}${ROUTE_TYPE[ROLE.GENERAL]}/wallet/attest`,
+        {
+          wallet_doc_type: 'IDENTITIES',
+          document_id: did
+        },
+        requestOptions
+      )
+    } catch (err) {
+      console.error('Error attesting document:', err)
+    }
+  }
+
   const handleOnSubmit = async () => {
     try {
       const errors = validateCredForm(formData) as any
@@ -139,7 +163,8 @@ const MyCredentials = () => {
           authorization
         }
 
-        await addDocument(addDocPayload).unwrap()
+        const res: any = await addDocument(addDocPayload).unwrap()
+        await attestDocument(res?.[0].did)
 
         dispatch(
           feedbackActions.setToastData({
@@ -309,7 +334,7 @@ const MyCredentials = () => {
   return (
     <CredLayoutRenderer
       schema={{
-        items: filteredItems.reverse(),
+        items: filteredItems,
         handleOnItemClick: () => {},
         handleDeleteItem,
         search: {

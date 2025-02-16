@@ -8,9 +8,7 @@ import { useTradeRegisterMutation } from '@services/UserService'
 import openSpark from '@public/images/openSparkLogo.svg'
 import { useLanguage } from '@hooks/useLanguage'
 import { CustomFormErrorProps, signUpValidateForm } from '@utils/form-utils'
-import { AuthRootState } from '@store/auth-slice'
-import { useSelector } from 'react-redux'
-import { ROLE, ROUTE_TYPE } from '@lib/config'
+import { ROUTE_TYPE } from '@lib/config'
 import axios from '@services/axios'
 import Cookies from 'js-cookie'
 
@@ -42,7 +40,6 @@ const SignUp = () => {
   })
   const [utilities, setUtilities] = useState<any[]>([])
 
-  const { role } = useSelector((state: AuthRootState) => state.auth)
   const [tradeRegister, { isLoading }] = useTradeRegisterMutation()
   const { t } = useLanguage()
   const [termsAccepted, setTermsAccepted] = useState(false)
@@ -125,7 +122,7 @@ const SignUp = () => {
     }
 
     try {
-      const response = await axios.post(`${strapiUrl}${ROUTE_TYPE.PRODUCER}/profile`, tradeCatalogueData, {
+      const response = await axios.post(`${strapiUrl}${ROUTE_TYPE.GENERAL}/profile`, tradeCatalogueData, {
         headers: { Authorization: `Bearer ${Cookies.get('authToken') || ''}` },
         withCredentials: true
       })
@@ -145,7 +142,7 @@ const SignUp = () => {
       address: formData.address,
       password: formData.password,
       phone_no: formData.mobileNumber,
-      utility_name: formData.utilityCompany
+      utility_name: ''
     }
 
     if (isFormValid) {
@@ -155,7 +152,7 @@ const SignUp = () => {
 
         registerResponse = await tradeRegister(signUpData)
         // for PRODUCER to create default catalogue
-        catalogueSuccess = await createTradeCatalogue()
+        catalogueSuccess = true // await createTradeCatalogue()
 
         console.log(registerResponse)
         if (!registerResponse || (registerResponse as { error: FetchBaseQueryError })?.error)
@@ -263,15 +260,15 @@ const SignUp = () => {
             //   label: t.selectUtilityCompany,
             //   error: formErrors.utilityCompany
             // },
-            {
-              type: 'select',
-              name: 'utilityCompany',
-              options: utilities,
-              value: formData.utilityCompany,
-              handleChange: handleSelectChange,
-              label: t.selectUtilityCompany,
-              error: formErrors.utilityCompany
-            },
+            // {
+            //   type: 'select',
+            //   name: 'utilityCompany',
+            //   options: utilities,
+            //   value: formData.utilityCompany,
+            //   handleChange: handleSelectChange,
+            //   label: t.selectUtilityCompany,
+            //   error: formErrors.utilityCompany
+            // },
             {
               type: 'password',
               name: 'password',

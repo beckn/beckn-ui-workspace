@@ -127,13 +127,13 @@ const OrderHistory = () => {
                     dataTest={testIds.orderHistory_createdAt}
                   />
                   {/* <Text >Add to wallet</Text> */}
-                  <Text
+                  {/* <Text
                     color={'#4398E8'}
                     fontSize={'10px'}
                     fontWeight="500"
                   >
                     Add to wallet
-                  </Text>
+                  </Text> */}
                 </Flex>
                 <Text
                   as={Typography}

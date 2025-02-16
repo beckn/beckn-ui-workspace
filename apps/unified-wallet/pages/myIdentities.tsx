@@ -349,7 +349,7 @@ const MyIdentities = () => {
     <>
       <CredLayoutRenderer
         schema={{
-          items: filteredItems.reverse(),
+          items: filteredItems,
           handleOnItemClick: () => {},
           handleDeleteItem,
           search: {

@@ -190,7 +190,7 @@ const ProfilePage = () => {
         isLoading={isLoading}
         customComponent={
           <Box marginTop={'-1.8rem'}>
-            <>
+            {/* <>
               <NavigationItem
                 icon={myPreferenceIcon}
                 label={'My Preferences'}
@@ -221,7 +221,7 @@ const ProfilePage = () => {
                 handleClick={() => router.push('/myFunds')}
                 dataTest={'myFunds'}
               />
-            </>
+            </> */}
             <NavigationItem
               icon={logoutIcon}
               label={t.logout}

@@ -19,8 +19,12 @@ import { generateAuthHeader, generateAuthHeaderForDelete } from '@services/crypt
 import { feedbackActions } from '@beckn-ui/common'
 import { useRouter } from 'next/router'
 import { ItemMetaData } from '@components/credLayoutRenderer/ItemRenderer'
+import axios from '@services/axios'
+import { ROLE, ROUTE_TYPE } from '@lib/config'
 
 const PhysicalAssets = () => {
+  const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
+
   const [items, setItems] = useState<ItemMetaData[]>([])
   const [filteredItems, setFilteredItems] = useState(items)
   const [searchKeyword, setSearchKeyword] = useState<string>('')
@@ -85,6 +89,26 @@ const PhysicalAssets = () => {
   const handleOpenModal = () => setOpenModal(true)
   const handleCloseModal = () => setOpenModal(false)
 
+  const attestDocument = async (did: string) => {
+    try {
+      const requestOptions = {
+        method: 'POST',
+        withCredentials: true
+      }
+
+      const res = await axios.post(
+        `${strapiUrl}${ROUTE_TYPE[ROLE.GENERAL]}/wallet/attest`,
+        {
+          wallet_doc_type: 'IDENTITIES',
+          document_id: did
+        },
+        requestOptions
+      )
+    } catch (err) {
+      console.error('Error attesting document:', err)
+    }
+  }
+
   const handleOnSubmit = async () => {
     try {
       const errors = validateCredForm(formData) as any
@@ -131,7 +155,9 @@ const PhysicalAssets = () => {
           authorization
         }
 
-        await addDocument(addDocPayload).unwrap()
+        const res: any = await addDocument(addDocPayload).unwrap()
+        await attestDocument(res?.[0].did)
+
         dispatch(
           feedbackActions.setToastData({
             toastData: { message: 'Success', display: true, type: 'success', description: 'Added Successfully!' }
@@ -326,7 +352,7 @@ const PhysicalAssets = () => {
   return (
     <CredLayoutRenderer
       schema={{
-        items: filteredItems.reverse(),
+        items: filteredItems,
         handleOnItemClick: data => handleOpenCredDetails(data),
         handleDeleteItem,
         search: {

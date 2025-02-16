@@ -145,7 +145,7 @@ const MyTransactions = () => {
         flexDir={'column'}
       >
         {filteredItems.length > 0 ? (
-          filteredItems.reverse().map((item, index) => {
+          filteredItems.map((item, index) => {
             return (
               <Box
                 key={index}

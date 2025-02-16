@@ -48,6 +48,7 @@ interface BatteryOption {
   timestamp: string
   isSelected?: boolean
   isVerified?: boolean
+  data?: any
 }
 
 const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose }) => {
@@ -105,7 +106,8 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
           source: item.source,
           invoice: item.attachment!,
           isVerified: true,
-          timestamp: new Date().toString()
+          timestamp: new Date().toString(),
+          data: item
         }
       })
       setBatteryOptions(list)
@@ -213,7 +215,7 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
     setUploadedFile(null)
     onClose()
   }
-
+  console.log(batteryOptions)
   const renderContent = () => {
     if (currentView === 'upload') {
       return (
@@ -434,6 +436,7 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
                       >
                         {formatDate(battery.timestamp, 'do MMM yyyy, h.mma')}
                       </Text>
+                      {/* <Text>{battery.data.attestation.length}</Text> */}
                     </Box>
                   </Flex>
                 </Box>

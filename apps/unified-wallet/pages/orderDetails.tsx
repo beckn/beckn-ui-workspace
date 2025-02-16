@@ -10,6 +10,7 @@ import axios from '@services/axios'
 import { useDecodeStreamMutation } from '@services/walletService'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
+import { v4 as uuidv4 } from 'uuid'
 
 const attestionItem = [
   {
@@ -23,8 +24,8 @@ const attestionItem = [
 ]
 
 export default function OrderDetails() {
-  const [orderDetails, setOrderDetails] = useState<ConfirmResponseModel[]>()
-  const apiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
+  const [orderDetails, setOrderDetails] = useState<{ data: ConfirmResponseModel[] }>()
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL
   const [statusData, setStatuData] = useState()
 
   const router = useRouter()
@@ -49,51 +50,50 @@ export default function OrderDetails() {
     }
   }, [])
 
-  console.log(orderDetails)
+  useEffect(() => {
+    console.log(orderDetails)
+    const fetchData = () => {
+      if (orderDetails) {
+        console.log(orderDetails)
+        const { bpp_id, bpp_uri, domain } = orderDetails?.data[0]?.context
+        const { orderId } = orderDetails?.data[0]?.message
+        const statusPayload = {
+          data: [
+            {
+              context: {
+                transaction_id: uuidv4(),
+                bpp_id: bpp_id,
+                bpp_uri: bpp_uri,
+                domain: domain || 'dg retail'
+              },
+              message: {
+                order_id: orderId,
+                orderId: orderId
+              }
+            }
+          ]
+        }
+        return axios
+          .post(`${apiUrl}/status`, statusPayload)
+          .then(res => {
+            const resData = res.data.data
+            console.log('Status data', resData)
+            setStatuData(resData)
+            localStorage.setItem('statusResponse', JSON.stringify(resData))
+          })
+          .catch(err => {
+            console.error('Error fetching order status:', err)
+          })
+          .finally(() => {
+            console.log('object')
+          })
+      }
+    }
+    fetchData()
 
-  // const fetchData = () => {
-  //   if (localStorage && localStorage.getItem('orderData')) {
-  //     console.log(orderDetails)
-  //     const { bppId, bppUri, domain } = orderDetails?.data[0]?.context
-  //     const { orderId } = orderDetails?.data[0]?.message
-  //     const statusPayload = {
-  //       data: [
-  //         {
-  //           context: {
-  //             transaction_id: uuidv4(),
-  //             bpp_id: bppId,
-  //             bpp_uri: bppUri,
-  //             domain: domain || 'dg retail'
-  //           },
-  //           message: {
-  //             order_id: orderId,
-  //             orderId: orderId
-  //           }
-  //         }
-  //       ]
-  //     }
-  //     return axios
-  //       .post(`${apiUrl}/status`, statusPayload)
-  //       .then(res => {
-  //         const resData = res.data.data
-  //         console.log('Status data', resData)
-  //         setStatuData(resData)
-  //         localStorage.setItem('statusResponse', JSON.stringify(resData))
-  //       })
-  //       .catch(err => {
-  //         console.error('Error fetching order status:', err)
-  //       })
-  //       .finally(() => {
-  //         console.log('object')
-  //       })
-  //   }
-  // }
-  // useEffect(() => {
-  //   fetchData()
-
-  //   const intervalId = setInterval(fetchData, 30000)
-  //   return () => clearInterval(intervalId)
-  // }, [apiUrl, orderDetails])
+    const intervalId = setInterval(fetchData, 30000)
+    return () => clearInterval(intervalId)
+  }, [apiUrl, orderDetails])
 
   return (
     <Box>
@@ -117,7 +117,7 @@ export default function OrderDetails() {
               fontWeight="400"
             />
             <Typography
-              text={formatTimestamp(orderDetails?.data[0]?.context?.timestamp)}
+              text={formatTimestamp(orderDetails?.data[0]?.context?.timestamp!)}
               fontSize="15px"
               fontWeight="400"
             />
@@ -224,9 +224,9 @@ export default function OrderDetails() {
 
       <Accordion accordionHeader={'Shipping & Billing'}>
         <ShippingBlock
-          name={{ text: orderDetails?.data[0]?.message?.billing?.name, icon: '/images/nameIcon.svg' }}
-          address={{ text: orderDetails?.data[0]?.message?.billing?.address, icon: '/images/locationIcon1.svg' }}
-          mobile={{ text: orderDetails?.data[0]?.message?.billing?.phone, icon: '/images/CallphoneIcon.svg' }}
+          name={{ text: orderDetails?.data[0]?.message?.billing?.name!, icon: '/images/nameIcon.svg' }}
+          address={{ text: orderDetails?.data[0]?.message?.billing?.address!, icon: '/images/locationIcon1.svg' }}
+          mobile={{ text: orderDetails?.data[0]?.message?.billing?.phone!, icon: '/images/CallphoneIcon.svg' }}
         />
       </Accordion>
 
@@ -238,7 +238,7 @@ export default function OrderDetails() {
           pt={'6px'}
         >
           <PaymentDetails
-            paymentBreakDown={orderDetails?.data ? getOrderDetailsPaymentBreakDown(orderDetails.data).breakUpMap : {}}
+            paymentBreakDown={orderDetails?.data ? getOrderDetailsPaymentBreakDown(orderDetails?.data).breakUpMap : {}}
             totalText="Total"
             totalValueWithCurrency={
               orderDetails?.data
@@ -273,7 +273,4 @@ export default function OrderDetails() {
       </Accordion>
     </Box>
   )
-}
-function uuidv4() {
-  throw new Error('Function not implemented.')
 }
