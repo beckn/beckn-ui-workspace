@@ -24,9 +24,9 @@ const headerNames: PathnameObjectType = {
   '/OTPVerification': 'OTP',
   '/financialAssets': 'Financial Assets',
   '/withdraw': 'Withdraw',
-  '/myIdentities': 'My Identities',
-  '/myAssets': 'My Assets',
-  '/myTransactions': 'My Transactions',
+  '/myIdentities': 'Manage Digital IDs',
+  '/myAssets': 'View & Manage Assets',
+  '/myTransactions': 'Transaction History',
   '/physicalAssets': 'Physical Assets',
   '/energyAssets': 'Energy Assets'
 }

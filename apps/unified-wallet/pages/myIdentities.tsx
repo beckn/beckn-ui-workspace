@@ -48,13 +48,15 @@ const MyIdentities = () => {
     type: '',
     credNumber: '',
     country: '',
-    verificationMethod: ''
+    verificationMethod: '',
+    energyBPId: ''
   })
   const [formErrors, setFormErrors] = useState<CredFormErrors>({
     type: '',
     credNumber: '',
     country: '',
-    verificationMethod: ''
+    verificationMethod: '',
+    energyBPId: ''
   })
 
   const { t } = useLanguage()
@@ -101,6 +103,7 @@ const MyIdentities = () => {
         return {
           id: index,
           title: item.type,
+          description: item.id,
           isVerified: true,
           image,
           datetime: new Date().toString(),
@@ -191,6 +194,7 @@ const MyIdentities = () => {
         }
 
         await addDocument(addDocPayload).unwrap()
+        // await addAttestations(addDocPayload).unwrap()
 
         dispatch(
           feedbackActions.setToastData({
@@ -290,6 +294,14 @@ const MyIdentities = () => {
                   handleChange: handleInputChange,
                   label: 'Identity Type',
                   error: formErrors.type
+                },
+                {
+                  type: 'text',
+                  name: 'energyBPId',
+                  value: formData.energyBPId!,
+                  handleChange: handleInputChange,
+                  label: 'Energy BP ID',
+                  error: formErrors.energyBPId
                 },
                 {
                   type: 'select',

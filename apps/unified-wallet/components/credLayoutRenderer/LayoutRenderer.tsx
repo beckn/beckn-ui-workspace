@@ -22,6 +22,7 @@ export interface FormProps {
   serialNumber?: string
   country?: string
   verificationMethod?: string
+  energyBPId?: string
 }
 
 export interface CredFormErrors {
@@ -35,6 +36,7 @@ export interface CredFormErrors {
   serialNumber?: string
   country?: string
   verificationMethod?: string
+  energyBPId?: string
 }
 
 export interface CredLayoutRendererProps {
@@ -123,6 +125,7 @@ const CredLayoutRenderer: React.FC<CredLayoutRendererProps> = ({
         height={'calc(100vh - 200px)'}
         overflowY="scroll"
         className="hideScroll"
+        padding={{ base: '0 0.5rem', md: '0 1rem', lg: '0 1rem' }}
       >
         {items.length > 0 ? (
           <CatalogueRenderer
