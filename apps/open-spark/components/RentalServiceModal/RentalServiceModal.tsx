@@ -50,7 +50,7 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
   const [currentView, setCurrentView] = useState<'upload' | 'select' | 'pricing'>('upload')
   const [selectedBattery, setSelectedBattery] = useState<string | null>(null)
 
-  const batteryOptions: BatteryOption[] = [
+  const [batteryOptions, setBatteryOptions] = useState<BatteryOption[]>([
     {
       id: '1',
       name: 'Battery -1',
@@ -65,7 +65,84 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
       invoice: 'Invoice.pdf',
       timestamp: '21st Jun 2021, 3.30pm'
     }
-  ]
+  ])
+
+  const handleAddFromWallet = async () => {
+    // TODO: write code from adding things to wallet and then update the state
+    // setBatteryOptions([...batteryOptions, {
+    //   id: '3',
+    //   name: 'Battery -3',
+    //   assetId: '123456',
+    //   invoice: 'Invoice.pdf',
+    // }])
+  }
+
+  const handlePublish = async () => {
+    //TODO:Aniket Generate this payload using wallet
+    const payload = {
+      providerDetails: {
+        data: [
+          {
+            context: {
+              domain: 'deg:retail',
+              action: 'on_confirm',
+              version: '1.1.0',
+              bpp_id: 'bpp-ps-network-strapi2-dev.becknprotocol.io',
+              bpp_uri: 'http://bpp-ps-network-strapi2-dev.becknprotocol.io',
+              country: 'IND',
+              city: 'std:080',
+              location: {
+                country: {
+                  name: 'India',
+                  code: 'IND'
+                },
+                city: {
+                  name: 'Bangalore',
+                  code: 'std:080'
+                }
+              },
+              bap_id: 'bap-ps-network-dev.becknprotocol.io',
+              bap_uri: 'https://bap-ps-network-dev.becknprotocol.io',
+              transaction_id: '68256397-8c35-41bc-94df-1d14bccce6bc',
+              message_id: 'd55cf853-4bca-4c09-933c-63ac82581e51',
+              ttl: 'PT10M',
+              timestamp: '2025-02-13T05:53:12.992Z'
+            },
+            message: {
+              // ... rest of the message object from your curl
+            }
+          }
+        ]
+      },
+      walletId: 'B124ZX',
+      startTime: '1739446641',
+      endTime: '2749646641',
+      price: '150'
+    }
+
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL}/unified-beckn-energy/rent-catalogue`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization:
+            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NDI1LCJpYXQiOjE3Mzk0NDYzMTUsImV4cCI6MTczOTUzMjcxNX0.-XbdsHb1hVJAgwhaFjUGmVaHh9S1t6klZbmHG0iqjtY'
+        },
+        body: JSON.stringify(payload)
+      })
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+
+      const data = await response.json()
+      console.log('API Response:', data)
+      return data
+    } catch (error) {
+      console.error('Error making API call:', error)
+      throw error
+    }
+  }
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
@@ -382,9 +459,7 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
           color="white"
           _hover={{ bg: '#3182CE' }}
           borderRadius="full"
-          onClick={() => {
-            console.log('Submit & Publish clicked')
-          }}
+          onClick={handlePublish}
         >
           Submit & Publish
         </Button>
@@ -410,9 +485,7 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
             color="#4398E8"
             fontSize="sm"
             cursor="pointer"
-            onClick={() => {
-              console.log('Add from wallet clicked')
-            }}
+            onClick={handleAddFromWallet}
           >
             Add from wallet
           </Text>
