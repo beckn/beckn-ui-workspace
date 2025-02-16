@@ -14,7 +14,7 @@ import { orderActions } from '@beckn-ui/common/src/store/order-slice'
 import { getPayloadForConfirm, getPayloadForOrderHistoryPost } from '@beckn-ui/common/src/utils'
 import { useConfirmMutation } from '@beckn-ui/common/src/services/confirm'
 import { testIds } from '@shared/dataTestIds'
-import { ORDER_CATEGORY_ID } from '../lib/config'
+import { RETAIL_ORDER_CATEGORY_ID } from '../lib/config'
 import { cartActions } from '@beckn-ui/common'
 
 const retailOrderConfirmation = () => {
@@ -53,9 +53,9 @@ const retailOrderConfirmation = () => {
 
   useEffect(() => {
     if (confirmResponse && confirmResponse.length > 0) {
-      const ordersPayload = getPayloadForOrderHistoryPost(confirmResponse, ORDER_CATEGORY_ID)
+      const ordersPayload = getPayloadForOrderHistoryPost(confirmResponse, RETAIL_ORDER_CATEGORY_ID)
       axios
-        .post(`${strapiUrl}/orders`, ordersPayload, axiosConfig)
+        .post(`${strapiUrl}/unified-beckn-energy/order-history/create`, ordersPayload, axiosConfig)
         .then(res => {
           return res
         })

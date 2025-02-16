@@ -309,9 +309,7 @@ export const getPayloadForOrderHistoryPost = (confirmData: ConfirmResponseModel[
         payments
       }
     },
-    category: {
-      set: [categoryId]
-    }
+    category: categoryId
   }
 
   return ordersPayload

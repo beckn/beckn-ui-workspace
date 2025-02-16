@@ -10,6 +10,7 @@ import { useRouter } from 'next/router'
 import { orderHistoryData } from '@beckn-ui/common/lib/types'
 import { orderActions } from '@beckn-ui/common/src/store/order-slice'
 import { testIds } from '@shared/dataTestIds'
+import { RENTAL_ORDER_CATEGORY_ID } from '@lib/config'
 
 const orderStatusMap: Record<string, string> = {
   'In Review': 'Pending'
@@ -33,10 +34,13 @@ const OrderHistory = () => {
       headers: myHeaders,
       redirect: 'follow'
     }
-    fetch(`${strapiUrl}/orders?filters[category]=6`, requestOptions)
+    fetch(
+      `${strapiUrl}/unified-beckn-energy/order-history/get?filters[category]=${RENTAL_ORDER_CATEGORY_ID}`,
+      requestOptions
+    )
       .then(response => response.json())
       .then(result => {
-        console.log('resluttt', result)
+        console.log('result', result)
         if (result.error) {
           return setError(result.error.message)
         }
