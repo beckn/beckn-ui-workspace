@@ -20,7 +20,10 @@ const homeIconBlackList = [
   '/retailOrderConfirmation',
   '/orderHistory',
   '/product',
-  '/secureCheckout'
+  '/secureCheckout',
+  '/myRental',
+  '/rentAndHire',
+  '/confirmRent'
 ]
 const menuIconWhiteList = [
   '/',
@@ -60,7 +63,8 @@ const headerNames: PathnameObjectType = {
   '/newPaymentOverView': 'New Payment Overview ',
   '/retailPaymentMethod': 'Select Payment Method',
   '/orderHistory': 'My Orders',
-  '/secureCheckout': 'Secure Checkout'
+  '/secureCheckout': 'Secure Checkout',
+  '/myRental': 'My Rentals'
 }
 
 const headerFrenchNames: PathnameObjectType = {
@@ -92,7 +96,8 @@ const headerBlackList = [
   '/retailPaymentMethod',
   '/orderHistory',
   '/confirmRent',
-  '/secureCheckout'
+  '/secureCheckout',
+  '/myRental'
 ]
 
 const cartIconBlackList: string[] = [
@@ -117,7 +122,9 @@ const cartIconBlackList: string[] = [
   '/newPaymentOverView',
   '/retailPaymentMethod',
   '/orderHistory',
-  '/secureCheckout'
+  '/secureCheckout',
+  '/myRental',
+  '/rentAndHire'
 ]
 const bottomHeaderBlackList = ['/orderConfirmation', '/', '/feedback', '/retailOrderConfirmation']
 const orderIconList = ['/orderDetails']

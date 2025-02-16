@@ -1,19 +1,22 @@
 import React, { useEffect, useState } from 'react'
 import { useLanguage } from '@hooks/useLanguage'
-import { HomePageContent, TopSheet, useGeolocation } from '@beckn-ui/common'
-import { Box, Flex, Button } from '@chakra-ui/react'
+import { cartActions, checkoutActions, HomePageContent, TopSheet, useGeolocation } from '@beckn-ui/common'
+import { Box, Flex } from '@chakra-ui/react'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import { buttonStyles } from '@components/constant'
 import ShadowCardButton from '@components/buttonCard/ShadowCardButton'
 import { MdOutlineKeyboardArrowRight } from 'react-icons/md'
 import { Router, useRouter } from 'next/router'
 import { Typography } from '@beckn-ui/molecules'
-import { EXPLORE_PATH } from '@lib/config'
 import RentalServiceModal from '../components/RentalServiceModal/RentalServiceModal'
+import { useDispatch, useSelector } from 'react-redux'
+import { RootState } from '@store/index'
 
 const RentAndHire = () => {
+  const type = useSelector((state: RootState) => state.navigation.type)
   const router = useRouter()
   const { t } = useLanguage()
+  const dispatch = useDispatch()
   const apiKeyForGoogle = process.env.NEXT_PUBLIC_GOOGLE_API_KEY
   const {
     currentAddress,
@@ -26,18 +29,12 @@ const RentAndHire = () => {
   const handleOpenModal = () => setIsModalOpen(true)
   const handleCloseModal = () => setIsModalOpen(false)
 
-  useEffect(() => {
-    if (localStorage) {
-      localStorage.clear()
-    }
-  }, [])
-
   const rentalOptions = [
     {
       image: '/images/pentagon.svg',
       text: 'Search Rental Services',
       handleClick: () => {
-        router.push(`/myStore?type=${EXPLORE_PATH.RENT_AND_HIRE}`)
+        if (type === 'RENT_AND_HIRE') router.push('/myStore')
       }
     },
     {
@@ -62,6 +59,14 @@ const RentAndHire = () => {
       }
     }
   ]
+
+  useEffect(() => {
+    if (localStorage) {
+      localStorage.clear()
+      dispatch(cartActions.clearCart())
+      dispatch(checkoutActions.clearState())
+    }
+  }, [])
 
   return (
     <Box

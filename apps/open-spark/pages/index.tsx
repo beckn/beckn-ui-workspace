@@ -34,7 +34,6 @@ const HomePage = () => {
 
   const handleModalOpen = (type: 'wallet' | 'link' | 'otp' | 'alert') => setModalType(type)
   const handleModalClose = () => setModalType(null)
-
   const dispatch = useDispatch()
 
   const handleNavigation = (type: 'MY_STORE' | 'RENT_AND_HIRE') => {
@@ -142,7 +141,7 @@ const HomePage = () => {
 
             <ShadowCardButton
               prefixIcon={<TbHexagonLetterO size={28} />}
-              text="Hire and Rent Services"
+              text="Rental Services"
               textStyle="start"
               postIcon={<MdOutlineKeyboardArrowRight />}
               handleClick={() => handleNavigation('RENT_AND_HIRE')}

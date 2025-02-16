@@ -5,7 +5,7 @@ import { useRouter } from 'next/router'
 
 import { discoveryActions, ParsedItemModel, SearchAndDiscover } from '@beckn-ui/common'
 import { useLanguage } from '@hooks/useLanguage'
-import { DOMAIN } from '@lib/config'
+import { DOMAIN, DOMAIN_PATH } from '@lib/config'
 import { Product } from '@beckn-ui/becknified-components'
 import { testIds } from '@shared/dataTestIds'
 import { Box } from '@chakra-ui/react'
@@ -34,7 +34,7 @@ const Search = () => {
 
     const searchPayload = {
       context: {
-        domain: type === 'RENT_AND_HIRE' ? 'deg:rental' : 'deg:retail'
+        domain: type === 'RENT_AND_HIRE' ? DOMAIN_PATH.RENT_AND_HIRE : DOMAIN_PATH.MY_STORE
       },
       searchString: searchKeyword
     }
