@@ -108,3 +108,27 @@ export const areShippingAndBillingDetailsSame = (
   }
   return !isBillingAddressComplete
 }
+
+export const getOrderDetailsPaymentBreakDown = (statusData: StatusResponseModel[]) => {
+  const quote = statusData[0]?.message?.quote // Ensure safe access
+  if (!quote) return { breakUpMap: {}, totalPricewithCurrent: { value: '0', currency: 'INR' } }
+
+  const breakUp = quote.breakup || []
+  const totalPricewithCurrent = {
+    value: quote.price?.value || '0',
+    currency: quote.price?.currency || 'INR'
+  }
+
+  const breakUpMap: Record<string, { currency: string; value: string }> = {}
+
+  breakUp.forEach(item => {
+    const {
+      title,
+      price: { currency, value }
+    } = item
+
+    breakUpMap[title] = { currency, value }
+  })
+
+  return { breakUpMap, totalPricewithCurrent }
+}

@@ -1,7 +1,7 @@
 import Router, { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { useLanguage } from '@hooks/useLanguage'
-import { cartActions, HomePageContent, TopSheet, useGeolocation } from '@beckn-ui/common'
+import { cartActions, checkoutActions, HomePageContent, TopSheet, useGeolocation } from '@beckn-ui/common'
 import { Box } from '@chakra-ui/react'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import { buttonStyles } from '@components/constant'
@@ -28,6 +28,7 @@ const MyStore = () => {
     if (localStorage) {
       localStorage.clear()
       dispatch(cartActions.clearCart())
+      dispatch(checkoutActions.clearState())
     }
   }, [])
 
