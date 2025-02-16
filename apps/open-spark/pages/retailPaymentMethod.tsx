@@ -11,11 +11,12 @@ import gPay from '@public/images/gpay.svg'
 import PaymentDetailsCard from '@beckn-ui/common/src/components/paymentDetailsCard'
 import { useDispatch, useSelector } from 'react-redux'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
+import { RootState } from '@store/index'
 
 const retailPaymentMethod = (props: PaymentMethodSelectionProps) => {
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<string>('')
   const initResponse = useSelector((state: CheckoutRootState) => state.checkout.initResponse)
-
+  const type = useSelector((state: RootState) => state.navigation.type)
   const [checkedState, setCheckedState] = useState<string | null>(null)
   const [checkedPayment, setCheckedPayment] = useState<string | null>(null)
 
@@ -89,8 +90,9 @@ const retailPaymentMethod = (props: PaymentMethodSelectionProps) => {
           dataTest={testIds.paymentpage_confirmButton}
           children={t.confirmOrder}
           handleClick={() => {
-            if (checkedPayment) {
-              // router.push('/retailOrderConfirmation')
+            if (type === 'RENT_AND_HIRE') {
+              router.push('/retailOrderConfirmation')
+            } else if (checkedPayment) {
               if (selectedPaymentMethod.includes('UPI')) {
                 router.push('/upiScreen')
               } else {

@@ -18,7 +18,6 @@ const homeIconBlackList = [
   '/newPaymentOverView',
   '/retailPaymentMethod',
   '/retailOrderConfirmation',
-  '/orderHistory',
   '/product',
   '/secureCheckout',
   '/upiScreen',

@@ -38,7 +38,6 @@ const MyTransactions = () => {
 
   const { t } = useLanguage()
   const dispatch = useDispatch()
-  const router = useRouter()
   const { user, privateKey, publicKey } = useSelector((state: AuthRootState) => state.auth)
   const [getDocuments, { isLoading: verifyLoading }] = useGetDocumentsMutation()
 
@@ -68,6 +67,7 @@ const MyTransactions = () => {
       })
       setItems(list)
       setFilteredItems(list)
+      console.log(filteredItems)
     } catch (error) {
       console.error('Error fetching dashboard data:', error)
     } finally {
@@ -104,13 +104,15 @@ const MyTransactions = () => {
     setFilteredItems(result)
     setIsFilterOpen(false)
   }
-
+  const router = useRouter()
   const handleOnOrderClick = (orderData: TransactionItem) => {
+    // const encodedProduct = window.btoa(encodeURIComponent(JSON.stringify(orderData as TransactionItem)))
+    localStorage.setItem('orderData', JSON.stringify(orderData))
     router.push({
-      pathname: '/orderDetailss',
-      query: {
-        data: JSON.stringify(orderData)
-      }
+      pathname: '/orderDetails'
+      // query: {
+      //   data: encodedProduct
+      // }
     })
   }
 
@@ -143,62 +145,68 @@ const MyTransactions = () => {
         flexDir={'column'}
       >
         {filteredItems.length > 0 ? (
-          filteredItems.reverse().map(item => {
+          filteredItems.reverse().map((item, index) => {
             return (
-              <CardRenderer
-                styles={{ padding: '0.5rem 0.5rem' }}
-                childComponent={() => (
-                  <Flex
-                    key={item.id}
-                    flexDir="column"
-                    gap="6px"
-                    onClick={() => handleOnOrderClick(item)}
-                  >
+              <Box
+                key={index}
+                onClick={() => {
+                  handleOnOrderClick(item)
+                }}
+              >
+                <CardRenderer
+                  styles={{ padding: '0.5rem 0.5rem' }}
+                  childComponent={() => (
                     <Flex
-                      flexDir={'row'}
-                      justifyContent="space-between"
+                      key={item.id}
+                      flexDir="column"
+                      gap="6px"
                     >
-                      <Typography
-                        text={item.name}
-                        fontSize="12px"
-                        fontWeight="500"
-                      />
-                      <Box
-                        color={'#ffffff'}
-                        backgroundColor={categoryColors[item.category]?.color || categoryColors.default.color}
-                        fontSize="10px"
-                        padding="2px 6px"
-                        borderRadius="4px"
-                        textTransform="capitalize"
-                        whiteSpace={'nowrap'}
-                        height="20px"
+                      <Flex
+                        flexDir={'row'}
+                        justifyContent="space-between"
                       >
-                        {item.category}
-                      </Box>
-                    </Flex>
-                    <Image
-                      src={categoryColors[item.category]?.icon || categoryColors.default.icon}
-                      width="58px"
-                      height={'16px'}
-                    />
-                    <Flex
-                      flexDir={'row'}
-                      justifyContent={'space-between'}
-                    >
-                      <Typography
-                        text={`Placed at ${formatDate(item.date, 'do MMM yyyy, h.mma')}`}
-                        fontSize="10px"
-                        fontWeight="300"
+                        <Typography
+                          text={item.name}
+                          fontSize="12px"
+                          fontWeight="500"
+                        />
+                        <Box
+                          color={'#ffffff'}
+                          backgroundColor={categoryColors[item.category]?.color || categoryColors.default.color}
+                          fontSize="10px"
+                          padding="2px 6px"
+                          borderRadius="4px"
+                          textTransform="capitalize"
+                          whiteSpace={'nowrap'}
+                          height="20px"
+                        >
+                          {item.category}
+                        </Box>
+                      </Flex>
+                      <Image
+                        src={categoryColors[item.category]?.icon || categoryColors.default.icon}
+                        width="58px"
+                        height={'16px'}
                       />
-                      <Typography
-                        text={`₹ ${item.amount}`}
-                        fontWeight="500"
-                        fontSize="10px"
-                      />
+                      <Flex
+                        flexDir={'row'}
+                        justifyContent={'space-between'}
+                      >
+                        <Typography
+                          text={`Placed at ${formatDate(item.date, 'do MMM yyyy, h.mma')}`}
+                          fontSize="10px"
+                          fontWeight="300"
+                        />
+                        <Typography
+                          text={`₹ ${item.amount}`}
+                          fontWeight="500"
+                          fontSize="10px"
+                        />
+                      </Flex>
                     </Flex>
-                  </Flex>
-                )}
-              />
+                  )}
+                />
+              </Box>
             )
           })
         ) : isLoading ? (
