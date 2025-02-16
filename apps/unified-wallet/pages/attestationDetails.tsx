@@ -110,6 +110,7 @@ const AttestationDetails = () => {
       return res
     }
   }
+  console.log(item)
 
   return (
     <Flex
@@ -165,6 +166,7 @@ const AttestationDetails = () => {
           renderMode={'long'}
           handleOnClick={() => {}}
           allowDeletion={false}
+          attestationsCount={true}
         />
       )}
     </Flex>
