@@ -28,12 +28,12 @@ const PhysicalAssetsDetails = () => {
 
   const getDecodedStreamData = async (data: ItemMetaData) => {
     const decodedRes: any = await decodeStream({ subjectId: data.data.did })
-    const { fileName } = decodedRes?.data
+    const details = decodedRes?.data
     console.log('Decoded:', decodedRes)
 
     setItem({
       ...data,
-      title: fileName,
+      title: details?.fileName!,
       image: DocIcon,
       data: { ...data.data, source: null, attachment: null }
     })
@@ -85,7 +85,7 @@ const PhysicalAssetsDetails = () => {
 
   const getAttestationItems = () => {
     const attestations: AttestationData[] = item?.data.attestations
-    if (attestations.length > 0) {
+    if (attestations?.length > 0) {
       const result: any = attestations
         .map(attestation => {
           const regex = /\/org\/([^\/]+)\/verification_methods/

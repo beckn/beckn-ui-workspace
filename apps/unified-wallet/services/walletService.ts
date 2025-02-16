@@ -63,6 +63,17 @@ const extendedWalletApi = Api.injectEndpoints({
           method: 'GET'
         }
       }
+    }),
+    deleteDocument: build.mutation<
+      VerifyResponse,
+      { subjectId: string; payload: { name: string; stream: string }; authorization: string }
+    >({
+      query: ({ subjectId, payload, authorization }) => ({
+        url: `${subjectId}`,
+        headers: { Authorization: authorization },
+        method: 'DELETE',
+        body: payload
+      })
     })
   })
 })
@@ -74,11 +85,21 @@ export const {
   useGetVerificationMethodsMutation,
   useAddDocumentMutation,
   useGetDocumentsMutation,
-  useDecodeStreamMutation
+  useDecodeStreamMutation,
+  useDeleteDocumentMutation
 } = extendedWalletApi
 
 export const {
-  endpoints: { getUser, getVerificationMethods, verify, registerLoginUser, addDocument, getDocuments, decodeStream }
+  endpoints: {
+    getUser,
+    getVerificationMethods,
+    verify,
+    registerLoginUser,
+    addDocument,
+    getDocuments,
+    decodeStream,
+    deleteDocument
+  }
 } = extendedWalletApi
 
 export default extendedWalletApi

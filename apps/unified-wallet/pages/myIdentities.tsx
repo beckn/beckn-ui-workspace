@@ -9,6 +9,7 @@ import { SelectOptionType } from '@beckn-ui/molecules'
 import { countryWiseVerification } from '@utils/constants'
 import {
   useAddDocumentMutation,
+  useDeleteDocumentMutation,
   useGetDocumentsMutation,
   useGetVerificationMethodsMutation
 } from '@services/walletService'
@@ -21,12 +22,15 @@ import {
   toSnakeCase
 } from '@utils/general'
 import { feedbackActions } from '@beckn-ui/common'
-import { generateAuthHeader } from '@services/cryptoUtilService'
+import { generateAuthHeader, generateAuthHeaderForDelete } from '@services/cryptoUtilService'
 import { parseDIDData } from '@utils/did'
 import BottomModalScan from '@beckn-ui/common/src/components/BottomModal/BottomModalScan'
 import { Box } from '@chakra-ui/react'
 import VerifyOTP from '@components/VerifyOTP/VerifyOTP'
 import { ItemMetaData } from '@components/credLayoutRenderer/ItemRenderer'
+import Cookies from 'js-cookie'
+import axios from '@services/axios'
+import { ROLE, ROUTE_TYPE } from '@lib/config'
 
 const documentPatterns: Record<string, { regex: RegExp; image: string }> = {
   aadhar: { regex: /\baadhar\s?(card)?\b/i, image: AadharCard },
@@ -36,6 +40,8 @@ const documentPatterns: Record<string, { regex: RegExp; image: string }> = {
 }
 
 const MyIdentities = () => {
+  const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
+
   const [items, setItems] = useState<ItemMetaData[]>([])
   const [filteredItems, setFilteredItems] = useState(items)
   const [searchKeyword, setSearchKeyword] = useState<string>('')
@@ -65,6 +71,9 @@ const MyIdentities = () => {
   const [addDocument, { isLoading: addDocLoading }] = useAddDocumentMutation()
   const [getVerificationMethods, { data: verificationMethods }] = useGetVerificationMethodsMutation()
   const [getDocuments, { isLoading: verifyLoading }] = useGetDocumentsMutation()
+  const [deleteDocument, { isLoading: deleteDocLoading }] = useDeleteDocumentMutation()
+
+  const bearerToken = Cookies.get('authToken')
 
   const [options, setOptions] = useState<{
     country: SelectOptionType[]
@@ -151,6 +160,26 @@ const MyIdentities = () => {
     setOpenModal(false)
   }
 
+  const attestDocument = async (did: string) => {
+    try {
+      const requestOptions = {
+        method: 'POST',
+        withCredentials: true
+      }
+
+      const res = await axios.post(
+        `${strapiUrl}${ROUTE_TYPE[ROLE.GENERAL]}/wallet/attest`,
+        {
+          wallet_doc_type: 'IDENTITIES',
+          document_id: did
+        },
+        requestOptions
+      )
+    } catch (err) {
+      console.error('Error attesting document:', err)
+    }
+  }
+
   const handleOnSubmit = async () => {
     try {
       const errors = validateCredForm(formData) as any
@@ -193,8 +222,8 @@ const MyIdentities = () => {
           authorization
         }
 
-        await addDocument(addDocPayload).unwrap()
-        // await addAttestations(addDocPayload).unwrap()
+        const res: any = await addDocument(addDocPayload).unwrap()
+        await attestDocument(res?.[0].did)
 
         dispatch(
           feedbackActions.setToastData({
@@ -213,6 +242,59 @@ const MyIdentities = () => {
       console.error('An error occurred:', error)
     } finally {
       setIsLoading(false)
+      fetchCredentials()
+    }
+  }
+
+  const handleDeleteItem = async (didItem: ItemMetaData) => {
+    console.log(didItem)
+    try {
+      const data = {
+        type: 'test',
+        credNumber: 'test'
+      }
+
+      const docDetails = JSON.stringify(data)
+
+      const verificationMethodsRes = await getVerificationMethods(user?.did!).unwrap()
+      const { did } = verificationMethodsRes[0]
+
+      const authHeaderRes = await generateAuthHeaderForDelete({
+        subjectId: didItem.data.did,
+        verification_did: did,
+        privateKey,
+        publicKey,
+        payload: {
+          name: '/data/verification',
+          stream: toBase64(docDetails)
+        }
+      })
+      const { authorization, payload } = extractAuthAndHeader(authHeaderRes)
+
+      if (authorization && payload) {
+        const deleteDocPayload = {
+          subjectId: didItem.data.did!,
+          payload,
+          authorization
+        }
+        console.log(deleteDocPayload)
+        await deleteDocument(deleteDocPayload).unwrap()
+
+        dispatch(
+          feedbackActions.setToastData({
+            toastData: { message: 'Success', display: true, type: 'success', description: 'Deleted Successfully!' }
+          })
+        )
+      } else {
+        dispatch(
+          feedbackActions.setToastData({
+            toastData: { message: 'Error', display: true, type: 'error', description: 'Something went wrong!' }
+          })
+        )
+      }
+    } catch (error) {
+      console.error('An error occurred:', error)
+    } finally {
       fetchCredentials()
     }
   }
@@ -269,6 +351,7 @@ const MyIdentities = () => {
         schema={{
           items: filteredItems.reverse(),
           handleOnItemClick: () => {},
+          handleDeleteItem,
           search: {
             searchInputPlaceholder: 'Search Identities',
             searchKeyword,

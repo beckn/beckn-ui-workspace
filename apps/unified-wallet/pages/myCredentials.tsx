@@ -7,13 +7,14 @@ import { InputProps } from '@beckn-ui/molecules'
 import { AuthRootState } from '@store/auth-slice'
 import {
   useAddDocumentMutation,
+  useDeleteDocumentMutation,
   useGetDocumentsMutation,
   useGetVerificationMethodsMutation
 } from '@services/walletService'
 import DocIcon from '@public/images/doc_icon.svg'
 import { parseDIDData } from '@utils/did'
 import { extractAuthAndHeader, filterByKeyword, toBase64, toSnakeCase } from '@utils/general'
-import { generateAuthHeader } from '@services/cryptoUtilService'
+import { generateAuthHeader, generateAuthHeaderForDelete } from '@services/cryptoUtilService'
 import { feedbackActions } from '@beckn-ui/common'
 import { DocumentProps } from '@components/documentsRenderer'
 import { ItemMetaData } from '@components/credLayoutRenderer/ItemRenderer'
@@ -46,6 +47,7 @@ const MyCredentials = () => {
   const [addDocument, { isLoading: addDocLoading }] = useAddDocumentMutation()
   const [getVerificationMethods, { isLoading: verificationMethodsLoading }] = useGetVerificationMethodsMutation()
   const [getDocuments, { isLoading: verifyLoading }] = useGetDocumentsMutation()
+  const [deleteDocument, { isLoading: deleteDocLoading }] = useDeleteDocumentMutation()
 
   const fetchCredentials = async () => {
     try {
@@ -166,6 +168,59 @@ const MyCredentials = () => {
     }
   }
 
+  const handleDeleteItem = async (didItem: ItemMetaData) => {
+    console.log(didItem)
+    try {
+      const data = {
+        type: 'test',
+        credNumber: 'test'
+      }
+
+      const docDetails = JSON.stringify(data)
+
+      const verificationMethodsRes = await getVerificationMethods(user?.did!).unwrap()
+      const { did } = verificationMethodsRes[0]
+
+      const authHeaderRes = await generateAuthHeaderForDelete({
+        subjectId: didItem.data.did,
+        verification_did: did,
+        privateKey,
+        publicKey,
+        payload: {
+          name: '/data/verification',
+          stream: toBase64(docDetails)
+        }
+      })
+      const { authorization, payload } = extractAuthAndHeader(authHeaderRes)
+
+      if (authorization && payload) {
+        const deleteDocPayload = {
+          subjectId: didItem.data.did!,
+          payload,
+          authorization
+        }
+        console.log(deleteDocPayload)
+        await deleteDocument(deleteDocPayload).unwrap()
+
+        dispatch(
+          feedbackActions.setToastData({
+            toastData: { message: 'Success', display: true, type: 'success', description: 'Deleted Successfully!' }
+          })
+        )
+      } else {
+        dispatch(
+          feedbackActions.setToastData({
+            toastData: { message: 'Error', display: true, type: 'error', description: 'Something went wrong!' }
+          })
+        )
+      }
+    } catch (error) {
+      console.error('An error occurred:', error)
+    } finally {
+      fetchCredentials()
+    }
+  }
+
   const handleOnFileselectionChange = (data: DocumentProps[]) => {
     setSelectedFile(data[0])
   }
@@ -256,6 +311,7 @@ const MyCredentials = () => {
       schema={{
         items: filteredItems.reverse(),
         handleOnItemClick: () => {},
+        handleDeleteItem,
         search: {
           searchInputPlaceholder: 'Search Credentials',
           searchKeyword,

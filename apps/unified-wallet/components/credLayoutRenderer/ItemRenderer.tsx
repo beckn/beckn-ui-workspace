@@ -12,13 +12,15 @@ import {
   Text,
   useTheme
 } from '@chakra-ui/react'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useState } from 'react'
 import VerifiedIcon from '@public/images/verified.svg'
 import UnverifiedIcon from '@public/images/unverified.svg'
 import DownArrow from '@public/images/down_arrow.svg'
 import VaultIcon from '@public/images/vault.svg'
 import SparkIcon from '@public/images/spark_icon.svg'
 import { AttestationData } from '@lib/types/becknDid'
+import { useSelector } from 'react-redux'
+import { AuthRootState } from '@store/auth-slice'
 
 export interface ItemMetaData {
   id: number
@@ -36,6 +38,8 @@ interface ItemRendererProps {
   allowDeletion?: boolean
   handleOnClick: (data: ItemMetaData) => void
   attestationsCount?: boolean
+  handleDeleteItem?: (item: ItemMetaData) => void
+  renderingFrom?: 'attestationDetails' | null
 }
 
 export const ORG_NAME_MAP: any = {
@@ -44,15 +48,23 @@ export const ORG_NAME_MAP: any = {
 }
 
 const ItemRenderer = (props: ItemRendererProps) => {
-  const { renderMode, item, handleOnClick, allowDeletion = true, attestationsCount = true } = props
+  const {
+    renderMode,
+    item,
+    handleOnClick,
+    allowDeletion = true,
+    attestationsCount = true,
+    handleDeleteItem,
+    renderingFrom
+  } = props
   const [openAttestations, setOpenAttestations] = useState<boolean>(false)
   const [isOpen, setIsOpen] = useState(false)
 
-  useEffect(() => {
-    if (item?.data?.attestations?.length > 0) {
-      setIsOpen(true)
-    }
-  }, [item?.data?.attestations])
+  // useEffect(() => {
+  //   if (item?.data?.attestations?.length > 0) {
+  //     setIsOpen(true)
+  //   }
+  // }, [item?.data?.attestations])
 
   const theme = useTheme()
   const primaryColor = theme.colors.primary['100']
@@ -68,7 +80,7 @@ const ItemRenderer = (props: ItemRendererProps) => {
   const getAttestationItems = () => {
     if (item?.data?.attestations?.length > 0) {
       const attestations: AttestationData[] = item.data.attestations
-
+      console.log(attestations)
       return attestations
         .map(attestation => {
           const regex = /\/org\/([^\/]+)\/verification_methods/
@@ -85,6 +97,7 @@ const ItemRenderer = (props: ItemRendererProps) => {
     }
     return []
   }
+  console.log(item.data.attestations)
   return (
     <Box
       //   minH={'168px'}
@@ -100,13 +113,12 @@ const ItemRenderer = (props: ItemRendererProps) => {
       transition="0.5s all"
       position={'relative'}
       boxShadow={'0px 8px 10px 0px #0000001A'}
-      onClick={() => handleOnClick(item)}
     >
       <Accordion
         allowToggle
         index={isOpen ? [0] : []}
       >
-        <AccordionItem>
+        <AccordionItem borderTopWidth={'0px !important'}>
           <Box
             display={'flex'}
             position={'relative'}
@@ -151,7 +163,7 @@ const ItemRenderer = (props: ItemRendererProps) => {
               alignSelf="center"
               gap="6px"
             >
-              <Box>
+              <Box onClick={() => handleOnClick(item)}>
                 {item.title && (
                   <Flex
                     justifyContent={'space-between'}
@@ -255,6 +267,7 @@ const ItemRenderer = (props: ItemRendererProps) => {
                           className="accc-btn"
                           bg="unset !important"
                           pl="unset"
+                          padding={'0 0'}
                           onClick={() => setIsOpen(!isOpen)}
                         >
                           <Flex
@@ -272,6 +285,7 @@ const ItemRenderer = (props: ItemRendererProps) => {
                               onClick={e => {
                                 e.stopPropagation() // Prevents Accordion toggle if needed
                                 setOpenAttestations(true)
+                                setIsOpen(!isOpen)
                               }}
                             />
                           </Flex>
@@ -287,6 +301,7 @@ const ItemRenderer = (props: ItemRendererProps) => {
                           text={`Remove`}
                           fontSize={'10px'}
                           color={'#FF4747'}
+                          onClick={() => handleDeleteItem?.(item)}
                         />
                       </Box>
                     )}
@@ -300,39 +315,42 @@ const ItemRenderer = (props: ItemRendererProps) => {
             pl="unset"
             mt="10px"
           >
-            {item?.data?.attestations?.map((attestation, index) => (
-              <>
-                <Flex
-                  pl="20px"
-                  pr="20px"
-                  key={index}
-                  alignItems="center"
-                  gap="5px"
-                  className="accordion-attestation-border"
-                >
-                  {attestation?.img && (
-                    <Image
-                      src={attestation?.img}
-                      alt="attestation"
-                    />
-                  )}
-                  <Text
-                    fontSize="16px"
-                    color={'#5F5F5F'}
-                    fontWeight="500"
+            {(renderingFrom === 'attestationDetails' ? item.data.attestations : getAttestationItems())?.map(
+              (attestation: any, index: number) => (
+                <>
+                  <Flex
+                    pl="20px"
+                    pr="20px"
+                    key={index}
+                    alignItems="center"
+                    gap="5px"
+                    className="accordion-attestation-border"
+                    justifyContent={'space-between'}
                   >
-                    {attestation.name}
-                  </Text>
-                </Flex>
-                <Divider
-                  mb="10px"
-                  mt="10px"
-                  ml="20px"
-                  mr="20px"
-                  w="unset"
-                />
-              </>
-            ))}
+                    <Text
+                      fontSize="16px"
+                      color={'#5F5F5F'}
+                      fontWeight="500"
+                    >
+                      {attestation.name}
+                    </Text>
+                    {attestation?.icon && (
+                      <Image
+                        src={attestation?.icon}
+                        alt="attestation"
+                      />
+                    )}
+                  </Flex>
+                  <Divider
+                    mb="10px"
+                    mt="10px"
+                    ml="20px"
+                    mr="20px"
+                    w="unset"
+                  />
+                </>
+              )
+            )}
           </AccordionPanel>
         </AccordionItem>
       </Accordion>

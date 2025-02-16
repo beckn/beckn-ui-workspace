@@ -83,3 +83,37 @@ export const generateAuthHeader = async (data: {
     throw error
   }
 }
+
+export const generateAuthHeaderForDelete = async (data: {
+  subjectId: string
+  verification_did: string
+  privateKey: string
+  publicKey: string
+  payload: DocumentPayload
+}) => {
+  const { subjectId, verification_did, privateKey, publicKey, payload } = data
+  try {
+    const response = await axios.post(
+      `${BASE_URL}/auth/sign`,
+      {
+        endpoint: `${subjectId}`,
+        method: 'delete',
+        keyId: verification_did,
+        privateKey,
+        publicKey,
+        payload
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+    )
+
+    console.log('Response:', response.data)
+    return response.data
+  } catch (error) {
+    console.error('Error:', error)
+    throw error
+  }
+}

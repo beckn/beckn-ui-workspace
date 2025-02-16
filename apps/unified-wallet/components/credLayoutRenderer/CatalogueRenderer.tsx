@@ -5,10 +5,11 @@ import ItemRenderer, { ItemMetaData } from './ItemRenderer'
 interface CatalogueRendererProps {
   list: ItemMetaData[]
   handleOnClick: (data: ItemMetaData) => void
+  handleDeleteItem?: (item: ItemMetaData) => void
 }
 
 const CatalogueRenderer = (props: CatalogueRendererProps) => {
-  const { list, handleOnClick } = props
+  const { list, handleOnClick, handleDeleteItem } = props
 
   return (
     <>
@@ -19,6 +20,7 @@ const CatalogueRenderer = (props: CatalogueRendererProps) => {
               item={item}
               renderMode={'long'}
               handleOnClick={handleOnClick}
+              handleDeleteItem={handleDeleteItem}
             />
           </>
         )

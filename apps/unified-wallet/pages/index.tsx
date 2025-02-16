@@ -39,6 +39,7 @@ const Dashboard = () => {
         mt={'20px'}
         mb={'15px'}
         width={'50%'}
+        gap="1rem"
       >
         <Image
           src={profileIcon}
