@@ -21,6 +21,7 @@ const homeIconBlackList = [
   '/orderHistory',
   '/product',
   '/secureCheckout',
+  '/upiScreen',
   '/myRental',
   '/rentAndHire',
   '/confirmRent'
@@ -126,7 +127,7 @@ const cartIconBlackList: string[] = [
   '/myRental',
   '/rentAndHire'
 ]
-const bottomHeaderBlackList = ['/orderConfirmation', '/', '/feedback', '/retailOrderConfirmation']
+const bottomHeaderBlackList = ['/orderConfirmation', '/', '/feedback', '/retailOrderConfirmation', '/upiScreen']
 const orderIconList = ['/orderDetails']
 const editIconList: string[] = ['/profile']
 const profileSectionIcon = ['/buyingPreference']
