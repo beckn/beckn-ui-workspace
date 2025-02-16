@@ -79,6 +79,7 @@ const VerifyOTP = (props: VerifyOTPProps) => {
             {OTP.map((digit, index) => (
               <Input
                 key={index}
+                type="number"
                 value={digit}
                 maxLength={1}
                 onChange={e => handleChange(e.target.value, index)}

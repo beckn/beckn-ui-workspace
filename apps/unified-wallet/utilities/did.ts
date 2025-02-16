@@ -1,6 +1,6 @@
-import { ParsedData } from '@lib/types/becknDid'
+import { AttestationData, ParsedData } from '@lib/types/becknDid'
 
-export const parseDIDData = (data: { did: string }[]): ParsedData => {
+export const parseDIDData = (data: { did: string; attestations?: AttestationData[] }[]): ParsedData => {
   const result: ParsedData = {
     identities: [],
     assets: {
@@ -12,7 +12,7 @@ export const parseDIDData = (data: { did: string }[]): ParsedData => {
 
   const fileRegex = /^[^\/]+\.[a-zA-Z0-9]+$/
 
-  data.forEach(({ did }) => {
+  data.forEach(({ did, attestations }) => {
     // Remove the prefix before processing
     const normalizedDID = did.replace(/^\/subjects\/users\/phone\/\d+\/documents\//, '')
     const parts = normalizedDID.split('/')
@@ -22,7 +22,8 @@ export const parseDIDData = (data: { did: string }[]): ParsedData => {
       result.identities.push({
         type: formatType(parts[2]), // Convert to title case
         id: parts[4],
-        did
+        did,
+        attestations: attestations!
       })
     } else if (parts[0] === 'assets') {
       const category = parts[1] // credentials | physical
@@ -32,7 +33,8 @@ export const parseDIDData = (data: { did: string }[]): ParsedData => {
           type: formatType(parts[3]),
           name: formatType(parts[5]),
           //   attachment,
-          did
+          did,
+          attestations: attestations!
         })
       } else if (category === 'physical') {
         const attachment = fileRegex.test(parts[6] || '') ? parts[6] : null
@@ -40,7 +42,8 @@ export const parseDIDData = (data: { did: string }[]): ParsedData => {
           type: formatType(parts[3]),
           source: parts[5],
           attachment,
-          did
+          did,
+          attestations: attestations!
         })
       }
     } else if (parts[0] === 'transactions') {
@@ -50,7 +53,8 @@ export const parseDIDData = (data: { did: string }[]): ParsedData => {
         id: parts[5],
         amount: parts[7],
         totalItems: parts[9],
-        did
+        did,
+        attestations: attestations!
       })
     }
   })

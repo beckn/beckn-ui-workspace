@@ -1,4 +1,11 @@
-import { VerifyResponse, Subject, VerificationMethod, VerificationResult, RegisterSubject } from '@lib/types/becknDid'
+import {
+  VerifyResponse,
+  Subject,
+  VerificationMethod,
+  VerificationResult,
+  RegisterSubject,
+  AttestationData
+} from '@lib/types/becknDid'
 import Api from './didApi'
 
 const extendedWalletApi = Api.injectEndpoints({
@@ -37,7 +44,7 @@ const extendedWalletApi = Api.injectEndpoints({
         body: payload
       })
     }),
-    getDocuments: build.mutation<{ did: string }[], string>({
+    getDocuments: build.mutation<{ did: string; attestations?: AttestationData[] }[], string>({
       query: subjectId => `${subjectId}/documents`
     }),
     verify: build.mutation<VerifyResponse, { subjectId: string; verificationId: string; signedDetails: string }>({

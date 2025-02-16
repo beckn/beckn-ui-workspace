@@ -6,13 +6,15 @@ import { useLanguage } from '@hooks/useLanguage'
 import { useRouter } from 'next/router'
 import profileIcon from '@public/images/user_profile.svg'
 import { Typography } from '@beckn-ui/molecules'
-import { Box, Flex, useTheme } from '@chakra-ui/react'
+import { Box, Divider, Flex, Image, Select, useTheme } from '@chakra-ui/react'
 import IdentityIcon from '@public/images/identity.svg'
 import AssetsIcon from '@public/images/assets.svg'
 import TransactionsIcon from '@public/images/transactions.svg'
 import beckenFooter from '@public/images/footer.svg'
 import PoweredBy from '@beckn-ui/common/src/components/poweredBy'
 import NavigationItem from '@components/navigationItem'
+import { AuthRootState } from '@store/auth-slice'
+import { useSelector } from 'react-redux'
 
 const Dashboard = () => {
   const { t } = useLanguage()
@@ -25,24 +27,40 @@ const Dashboard = () => {
     loading: loadingForCurrentAddress
   } = useGeolocation(apiKeyForGoogle as string)
 
+  const { user } = useSelector((state: AuthRootState) => state.auth)
   const theme = useTheme()
   const primaryColor = theme.colors.primary['100']
 
   return (
     <>
-      <TopSheet
-        currentLocationFetchError={currentLocationFetchError}
-        loadingForCurrentAddress={loadingForCurrentAddress}
-        currentAddress={currentAddress}
-        t={key => t[key]}
-        profileSection={{
-          src: profileIcon,
-          handleClick: () => router.push('/profile')
-        }}
-      />
+      <Flex
+        justifyContent={'space-between'}
+        alignItems={'center'}
+        mt={'20px'}
+        mb={'15px'}
+        width={'50%'}
+      >
+        <Image
+          src={profileIcon}
+          alt="profileIcon"
+          onClick={() => router.push('/profile')}
+        />
+        {user?.did && (
+          <Select
+            variant="unstyled"
+            placeholder={`/subj****${user?.did.slice(-4)}`}
+            value=""
+            style={{
+              pointerEvents: 'none',
+              width: 'fit-content'
+            }}
+          />
+        )}
+      </Flex>
+      <Divider mb={'36px'} />
       <Box
         maxWidth={{ base: '100vw', md: '30rem', lg: '40rem' }}
-        margin="calc(0rem + 130px) auto"
+        margin="calc(0rem + 50px) auto"
         backgroundColor="white"
       >
         <Typography
@@ -60,21 +78,21 @@ const Dashboard = () => {
         >
           <NavigationItem
             icon={IdentityIcon}
-            label={'My Identities'}
+            label={'Manage Digital IDs'}
             handleClick={() => router.push('/myIdentities')}
             dataTest={'identity'}
             renderType="card"
           />
           <NavigationItem
             icon={AssetsIcon}
-            label={'My Assets'}
+            label={'View & Manage Assets'}
             handleClick={() => router.push('/myAssets')}
             dataTest={'assets'}
             renderType="card"
           />
           <NavigationItem
             icon={TransactionsIcon}
-            label={'My Transactions'}
+            label={'Transaction History'}
             handleClick={() => router.push('/myTransactions')}
             dataTest={'transactions'}
             renderType="card"

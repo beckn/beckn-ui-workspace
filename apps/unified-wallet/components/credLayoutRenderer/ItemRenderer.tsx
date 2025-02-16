@@ -1,9 +1,13 @@
 import { formatDate } from '@beckn-ui/common'
 import { Typography } from '@beckn-ui/molecules'
-import { Box, Flex, Image, Text, useTheme } from '@chakra-ui/react'
-import React from 'react'
+import { Accordion, Box, Flex, Image, Text, useTheme } from '@chakra-ui/react'
+import React, { useMemo, useState } from 'react'
 import VerifiedIcon from '@public/images/verified.svg'
 import UnverifiedIcon from '@public/images/unverified.svg'
+import DownArrow from '@public/images/down_arrow.svg'
+import VaultIcon from '@public/images/vault.svg'
+import SparkIcon from '@public/images/spark_icon.svg'
+import { AttestationData } from '@lib/types/becknDid'
 
 export interface ItemMetaData {
   id: number
@@ -18,14 +22,50 @@ export interface ItemMetaData {
 interface ItemRendererProps {
   item: ItemMetaData
   renderMode?: 'short' | 'long'
+  allowDeletion?: boolean
   handleOnClick: (data: ItemMetaData) => void
 }
 
+const ORG_NAME_MAP: any = {
+  'open-wallet': { name: 'Vault', icon: VaultIcon },
+  'open-spark': { name: 'Spark', icon: SparkIcon }
+}
+
 const ItemRenderer = (props: ItemRendererProps) => {
-  const { renderMode, item, handleOnClick } = props
+  const { renderMode, item, handleOnClick, allowDeletion = true } = props
+  const [openAttestations, setOpenAttestations] = useState<boolean>(false)
 
   const theme = useTheme()
   const primaryColor = theme.colors.primary['100']
+
+  const getNoOfMasked = (value: number) => {
+    let text = 'X'
+    for (let i = 1; i < value; i++) {
+      text += 'X'
+    }
+    return text
+  }
+
+  const getAttestationItems = () => {
+    if (item?.data?.attestations?.length > 0) {
+      const attestations: AttestationData[] = item.data.attestations
+
+      return attestations
+        .map(attestation => {
+          const regex = /\/org\/([^\/]+)\/verification_methods/
+          const match = attestation.verification_method.did.match(regex)
+
+          if (!match) return null
+
+          const name = match[1]
+          const orgData = ORG_NAME_MAP[name]
+
+          return orgData ? { name: orgData.name, icon: orgData.icon } : null
+        })
+        .filter(Boolean)
+    }
+    return []
+  }
 
   return (
     <Box
@@ -44,124 +84,125 @@ const ItemRenderer = (props: ItemRendererProps) => {
       boxShadow={'0px 8px 10px 0px #0000001A'}
       onClick={() => handleOnClick(item)}
     >
-      <Box
-        display={'flex'}
-        position={'relative'}
-        width={'100%'}
-      >
-        {item?.image && (
-          <Box
-            w={'125px'}
-            position="relative"
-            borderTopLeftRadius={'1rem'}
-            borderBottomLeftRadius={'1rem'}
-            overflow={'hidden'}
-            display={'flex'}
-            flexDirection={'column'}
-            justifyContent={'space-between'}
-            alignItems={'center'}
-            margin="0.7rem"
-          >
-            <Box
-              display={'flex'}
-              alignItems={'center'}
-              height={'100%'}
-            >
-              <Image
-                src={item.image}
-                // width={'100%'}
-                // height={'100%'}
-                alt={'item_image'}
-                // boxShadow={'0 20px 25px rgba(0, 0, 0, 0.1),0 8px 10px rgba(0, 0, 0, 0.05)'}
-                //   objectFit={'cover'}
-              />
-            </Box>
-          </Box>
-        )}
+      <Accordion>
         <Box
-          p={'15px'}
-          pt={'11px'}
-          w={'100%'}
-          position={'relative'}
           display={'flex'}
-          flexDir={'column'}
-          alignSelf="center"
-          gap="6px"
+          position={'relative'}
+          width={'100%'}
         >
-          <Box>
-            {item.title && (
-              <Flex
-                justifyContent={'space-between'}
-                alignItems={'flex-start'}
-                w={'100%'}
+          {item?.image && (
+            <Box
+              w={'125px'}
+              position="relative"
+              borderTopLeftRadius={'1rem'}
+              borderBottomLeftRadius={'1rem'}
+              overflow={'hidden'}
+              display={'flex'}
+              flexDirection={'column'}
+              justifyContent={'space-between'}
+              alignItems={'center'}
+              margin="0.7rem"
+            >
+              <Box
+                display={'flex'}
+                alignItems={'center'}
+                height={'100%'}
               >
-                <Text
-                  fontWeight={'600'}
-                  fontSize={'16px'}
-                  // mb={'0.7rem'}
-                  noOfLines={2}
-                  textOverflow="ellipsis"
-                  whiteSpace="pre-wrap"
-                  overflowWrap="break-word"
+                <Image
+                  src={item.image}
+                  // width={'100%'}
+                  // height={'100%'}
+                  alt={'item_image'}
+                  // boxShadow={'0 20px 25px rgba(0, 0, 0, 0.1),0 8px 10px rgba(0, 0, 0, 0.05)'}
+                  //   objectFit={'cover'}
+                />
+              </Box>
+            </Box>
+          )}
+          <Box
+            p={'15px'}
+            pt={'11px'}
+            w={'100%'}
+            position={'relative'}
+            display={'flex'}
+            flexDir={'column'}
+            alignSelf="center"
+            gap="6px"
+          >
+            <Box>
+              {item.title && (
+                <Flex
+                  justifyContent={'space-between'}
+                  alignItems={'flex-start'}
+                  w={'100%'}
                 >
-                  {item.title}
-                </Text>
-                <Box marginTop={'2px'}>
-                  {item?.isVerified ? (
-                    <Image
-                      src={VerifiedIcon}
-                      width={'80px'}
-                      height={'18px'}
-                    />
-                  ) : (
-                    <Image
-                      src={UnverifiedIcon}
-                      width={'80px'}
-                      height={'18px'}
-                    />
-                  )}
-                </Box>
-              </Flex>
-            )}
-            {item.data.source && (
-              <Flex
-                flexDir={'row'}
-                gap="2px"
-              >
-                <Typography
-                  text={`Source:`}
-                  fontWeight={'700'}
-                  fontSize="10px"
-                />
-                <Typography
-                  text={item.data.source}
-                  fontSize="10px"
-                  color="#9E9E9E"
-                />
-              </Flex>
-            )}
+                  <Text
+                    fontWeight={'600'}
+                    fontSize={'16px'}
+                    // mb={'0.7rem'}
+                    noOfLines={2}
+                    textOverflow="ellipsis"
+                    whiteSpace="pre-wrap"
+                    overflowWrap="break-word"
+                  >
+                    {item.title}
+                  </Text>
+                  <Box marginTop={'2px'}>
+                    {item?.isVerified ? (
+                      <Image
+                        src={VerifiedIcon}
+                        width={'80px'}
+                        height={'18px'}
+                      />
+                    ) : (
+                      <Image
+                        src={UnverifiedIcon}
+                        width={'80px'}
+                        height={'18px'}
+                      />
+                    )}
+                  </Box>
+                </Flex>
+              )}
+              {item.data.source && (
+                <Flex
+                  flexDir={'row'}
+                  gap="2px"
+                >
+                  <Typography
+                    text={`Source:`}
+                    fontWeight={'700'}
+                    fontSize="10px"
+                  />
+                  <Typography
+                    text={item.data.source}
+                    fontSize="10px"
+                    color="#9E9E9E"
+                  />
+                </Flex>
+              )}
 
-            {item.description && (
-              <Flex
-                justifyContent={'space-between'}
-                alignItems={'flex-start'}
-                w={'100%'}
-              >
-                <Text
-                  fontSize={'10px'}
-                  mb={'0.4rem'}
-                  noOfLines={2}
-                  textOverflow="ellipsis"
-                  whiteSpace="pre-wrap"
-                  overflowWrap="break-word"
-                  color={'#5F5F5F'}
+              {item.description && (
+                <Flex
+                  justifyContent={'space-between'}
+                  alignItems={'flex-start'}
+                  w={'100%'}
                 >
-                  {item.description}
-                </Text>
-              </Flex>
-            )}
-          </Box>
-          <Box height={'14px'}>
+                  <Text
+                    fontSize={'10px'}
+                    // mb={'0.4rem'}
+                    noOfLines={2}
+                    textOverflow="ellipsis"
+                    whiteSpace="pre-wrap"
+                    overflowWrap="break-word"
+                    color={'#ACACAC'}
+                  >
+                    {`${item.description.slice(0, 2)}${getNoOfMasked(item.description.length - 6)}${item.description.slice(-4)}`}
+                  </Text>
+                </Flex>
+              )}
+            </Box>
+            {/* <Box height={'14px'}> */}
             {item?.data?.attachment && (
               <Typography
                 text={item?.data?.attachment}
@@ -170,29 +211,53 @@ const ItemRenderer = (props: ItemRendererProps) => {
                 color={primaryColor}
               />
             )}
-          </Box>
+            {/* </Box> */}
 
-          {item?.datetime && (
-            <Flex
-              flexDir={'row'}
-              justifyContent={'space-between'}
-            >
-              <Typography
-                text={formatDate(item?.datetime!, 'do MMM yyyy, h.mma')}
-                fontSize={'10px'}
-                color={'#9E9E9E'}
-              />
-              {item?.data?.attestations && item?.data?.attestations?.length > 0 && (
-                <Typography
-                  text={`Attestations (${item?.data?.attestations?.length})`}
-                  fontSize={'10px'}
-                  color={'#4498E8'}
-                />
-              )}
-            </Flex>
-          )}
+            {item?.datetime && (
+              <Flex
+                flexDir={'row'}
+                justifyContent={'space-between'}
+              >
+                <Flex flexDir={'column'}>
+                  <Typography
+                    text={formatDate(item?.datetime!, 'do MMM yyyy, h.mma')}
+                    fontSize={'10px'}
+                    color={'#5F5F5F'}
+                  />
+                  {item?.data?.attestations && item?.data?.attestations?.length > 0 && (
+                    <Flex
+                      flexDir={'row'}
+                      justifyContent={'space-between'}
+                    >
+                      <Typography
+                        text={`Attested By (${item?.data?.attestations?.length})`}
+                        fontSize={'10px'}
+                        color={'#4498E8'}
+                      />
+                      <Image
+                        src={DownArrow}
+                        onClick={() => setOpenAttestations(true)}
+                      />
+                    </Flex>
+                  )}
+                </Flex>
+                {allowDeletion && (
+                  <Box
+                    alignSelf={'end'}
+                    cursor="pointer"
+                  >
+                    <Typography
+                      text={`Remove`}
+                      fontSize={'10px'}
+                      color={'#FF4747'}
+                    />
+                  </Box>
+                )}
+              </Flex>
+            )}
+          </Box>
         </Box>
-      </Box>
+      </Accordion>
     </Box>
   )
 }
