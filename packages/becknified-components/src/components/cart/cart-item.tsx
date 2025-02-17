@@ -74,24 +74,6 @@ const CartItem: React.FC<CartItemProps> = ({
         <div className={Styles.product_count_price_container}>
           <div className={Styles.product_counter_layout_container}>
             <div className={Styles.product_counter_container}>
-              <div
-                className={Styles.plus_icon_container}
-                data-testid="test-increment"
-                data-test={testIds.cartpage_incrementButton}
-                onClick={() => increment()}
-              >
-                <HiOutlinePlusSm className={Styles.plus_icon} />
-              </div>
-              <input
-                className={Styles.product_counter_input}
-                type="number"
-                min={1}
-                max={10}
-                value={counter}
-                onChange={onInputNumberChangeHandler}
-                disabled
-                data-test={testIds.cartpage_input}
-              />
               {counter === 1 ? (
                 <div
                   className={Styles.delete_icon_container}
@@ -111,6 +93,24 @@ const CartItem: React.FC<CartItemProps> = ({
                   <HiMinusSm className={Styles.minus_icon} />
                 </div>
               )}
+              <input
+                className={Styles.product_counter_input}
+                type="number"
+                min={1}
+                max={10}
+                value={counter}
+                onChange={onInputNumberChangeHandler}
+                disabled
+                data-test={testIds.cartpage_input}
+              />
+              <div
+                className={Styles.plus_icon_container}
+                data-testid="test-increment"
+                data-test={testIds.cartpage_incrementButton}
+                onClick={() => increment()}
+              >
+                <HiOutlinePlusSm className={Styles.plus_icon} />
+              </div>
             </div>
           </div>
           <div

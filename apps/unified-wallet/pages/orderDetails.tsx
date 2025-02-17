@@ -1,6 +1,13 @@
 import { DetailCard } from '@beckn-ui/becknified-components'
 import PaymentDetails from '@beckn-ui/becknified-components/src/components/checkout/payment-details'
-import { ConfirmResponseModel, formatTimestamp, getOrderDetailsPaymentBreakDown } from '@beckn-ui/common'
+import {
+  ConfirmResponseModel,
+  formatTimestamp,
+  getOrderDetailsPaymentBreakDown,
+  StatusKey,
+  statusMap,
+  StatusResponseModel
+} from '@beckn-ui/common'
 import { Accordion, Typography } from '@beckn-ui/molecules'
 import { Box, CardBody, Flex, Text, Image, Divider } from '@chakra-ui/react'
 import { ItemMetaData } from '@components/credLayoutRenderer/ItemRenderer'
@@ -26,7 +33,9 @@ const attestionItem = [
 export default function OrderDetails() {
   const [orderDetails, setOrderDetails] = useState<{ data: ConfirmResponseModel[] }>()
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
-  const [statusData, setStatuData] = useState()
+  const [statusData, setStatuData] = useState<any>()
+  const [orderStatusMap, setOrderStatusMap] = useState<any[]>([])
+  const [currentStatusLabel, setCurrentStatusLabel] = useState('')
 
   const router = useRouter()
   const [decodeStream, { isLoading }] = useDecodeStreamMutation()
@@ -37,6 +46,18 @@ export default function OrderDetails() {
     console.log('Decoded:', decodedRes)
     setOrderDetails(decodedRes)
   }
+
+  useEffect(() => {
+    const storedOrderStatusMap = JSON.parse(localStorage.getItem('orderStatusMap') || '[]')
+    setOrderStatusMap(storedOrderStatusMap)
+  }, [])
+
+  useEffect(() => {
+    if (orderStatusMap.length > 0) {
+      localStorage.setItem('orderStatusMap', JSON.stringify(orderStatusMap))
+      setCurrentStatusLabel(orderStatusMap[orderStatusMap.length - 1].label)
+    }
+  }, [orderStatusMap])
 
   useEffect(() => {
     let data
@@ -94,6 +115,25 @@ export default function OrderDetails() {
     const intervalId = setInterval(fetchData, 30000)
     return () => clearInterval(intervalId)
   }, [apiUrl, orderDetails])
+
+  useEffect(() => {
+    console.log(statusData)
+    if (statusData?.length > 0) {
+      const newData = statusData
+        .map((status: StatusResponseModel) => {
+          const { tags } = status?.message?.order
+          const statusKey: string = tags?.[tags?.length - 1].list?.[0].value!
+          return {
+            label: statusMap[statusKey as StatusKey],
+            statusTime: status?.message?.order?.fulfillments[0]?.state?.updated_at || status?.context?.timestamp
+          }
+        })
+        .filter((status: any) => status.label)
+
+      const labelSet = new Set(orderStatusMap.map(status => status.label))
+      setOrderStatusMap(prevState => [...prevState, ...newData.filter((status: any) => !labelSet.has(status.label))])
+    }
+  }, [statusData])
 
   return (
     <Box>

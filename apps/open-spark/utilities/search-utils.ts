@@ -30,7 +30,7 @@ export const parseSearchlist = (data: SearchResponseModel[]) => {
             id: item.id,
             bppId: bpp_id,
             bppUri: bpp_uri,
-            domain,
+            domain: message.name,
             transactionId: transaction_id,
             providerId: provider.id,
             providerName: provider.name,

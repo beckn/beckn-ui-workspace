@@ -1491,6 +1491,7 @@ __metadata:
     postcss-import: ^14.1.0
     prettier: ^3.0.3
     react: ^18.2.0
+    react-datepicker: ^8.0.0
     react-dom: ^18.2.0
     react-hot-toast: ^2.2.0
     react-icons: ^4.3.1
@@ -2834,6 +2835,20 @@ __metadata:
     react: ">=17.0.0"
     react-dom: ">=17.0.0"
   checksum: 34a6283df3ae232546903dcdb69a5d2d13706a7ceb7b3779bb3b9b1ef042ad7241fe5d3899fd7c6713a0e890b86b56285f89a45de4344828877085a262f29713
+  languageName: node
+  linkType: hard
+
+"@floating-ui/react@npm:^0.27.3":
+  version: 0.27.4
+  resolution: "@floating-ui/react@npm:0.27.4"
+  dependencies:
+    "@floating-ui/react-dom": ^2.1.2
+    "@floating-ui/utils": ^0.2.9
+    tabbable: ^6.0.0
+  peerDependencies:
+    react: ">=17.0.0"
+    react-dom: ">=17.0.0"
+  checksum: e93ea89c5c533f355a4aef7de50e2c0c780024b7df6da53dd66b4bcee1a890442ed725173e4051538d1a0416faa433620303b4c375095793cb7a8d8a2a594377
   languageName: node
   linkType: hard
 
@@ -14347,6 +14362,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-datepicker@npm:^8.0.0":
+  version: 8.0.0
+  resolution: "react-datepicker@npm:8.0.0"
+  dependencies:
+    "@floating-ui/react": ^0.27.3
+    clsx: ^2.1.1
+    date-fns: ^4.1.0
+  peerDependencies:
+    react: ^16.9.0 || ^17 || ^18 || ^19 || ^19.0.0-rc
+    react-dom: ^16.9.0 || ^17 || ^18 || ^19 || ^19.0.0-rc
+  checksum: 66d8e8815de6ce42fd983986cb99375748de68ba90189e841879c29a07d29d32f84338bd0f38d96773599cd09721ae29ea56dac60ebd860bbd5ece5ed88bd175
+  languageName: node
+  linkType: hard
+
 "react-dates@npm:^21.8.0":
   version: 21.8.0
   resolution: "react-dates@npm:21.8.0"
@@ -16838,7 +16867,7 @@ __metadata:
 
 "typescript@patch:typescript@^4.6.4 || ^5.2.2#~builtin<compat/typescript>, typescript@patch:typescript@^5#~builtin<compat/typescript>":
   version: 5.7.3
-  resolution: "typescript@patch:typescript@npm%3A5.7.3#~builtin<compat/typescript>::version=5.7.3&hash=f3b441"
+  resolution: "typescript@patch:typescript@npm%3A5.7.3#~builtin<compat/typescript>::version=5.7.3&hash=29ae49"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver

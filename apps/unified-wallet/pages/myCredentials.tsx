@@ -102,8 +102,9 @@ const MyCredentials = () => {
       const res = await axios.post(
         `${strapiUrl}${ROUTE_TYPE[ROLE.GENERAL]}/wallet/attest`,
         {
-          wallet_doc_type: 'IDENTITIES',
-          document_id: did
+          wallet_doc_type: 'CREDENTIALS',
+          document_id: did,
+          deg_wallet_id: user?.did
         },
         requestOptions
       )

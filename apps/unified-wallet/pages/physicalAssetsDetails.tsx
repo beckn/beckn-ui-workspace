@@ -12,6 +12,7 @@ import { AuthRootState } from '@store/auth-slice'
 import { useSelector } from 'react-redux'
 import { extractMobileNumberFromSubjectDid } from '@utils/general'
 import { AttestationData } from '@lib/types/becknDid'
+import ProfileIcon from '@public/images/Profile.svg'
 
 const PhysicalAssetsDetails = () => {
   const [item, setItem] = useState<ItemMetaData>()
@@ -89,20 +90,27 @@ const PhysicalAssetsDetails = () => {
       const result: any = attestations
         .map(attestation => {
           const regex = /\/org\/([^\/]+)\/verification_methods/
-          const match = attestation.verification_method.did.match(regex)
+          if (attestation.verification_method.did.startsWith(user?.did!)) {
+            const orgData = { name: 'Self', icon: ProfileIcon }
 
-          if (!match) return null
+            return orgData ? { name: orgData.name, icon: orgData.icon } : null
+          }
+          if (attestation.verification_method.did.match(regex)) {
+            const match = attestation.verification_method.did.match(regex)
 
-          const name = match[1]
-          const orgData = ORG_NAME_MAP[name]
+            if (!match) return null
 
-          return orgData
-            ? {
-                name: orgData.name,
-                img: orgData.icon, //`/images/${orgData.name === 'Vault' ? 'attes_openwallet' : 'attes_openspark'}.svg`,
-                data: attestation
-              }
-            : null
+            const name = match[1]
+            const orgData = ORG_NAME_MAP[name]
+
+            return orgData
+              ? {
+                  name: orgData.name,
+                  img: orgData.icon, //`/images/${orgData.name === 'Vault' ? 'attes_openwallet' : 'attes_openspark'}.svg`,
+                  data: attestation
+                }
+              : null
+          }
         })
         .filter(Boolean)
       console.log(result)
