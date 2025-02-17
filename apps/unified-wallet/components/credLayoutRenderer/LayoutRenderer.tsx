@@ -23,6 +23,7 @@ export interface FormProps {
   country?: string
   verificationMethod?: string
   energyBPId?: string
+  utilityCompany?: string
 }
 
 export interface CredFormErrors {
@@ -37,6 +38,7 @@ export interface CredFormErrors {
   country?: string
   verificationMethod?: string
   energyBPId?: string
+  utilityCompany?: string
 }
 
 export interface CredLayoutRendererProps {

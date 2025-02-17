@@ -5,7 +5,7 @@ import CredLayoutRenderer, { CredFormErrors, FormProps } from '@components/credL
 import { validateCredForm } from '@utils/form-utils'
 import AadharCard from '@public/images/aadharcard.svg'
 import DocIcon from '@public/images/doc_icon.svg'
-import { SelectOptionType } from '@beckn-ui/molecules'
+import { Loader, SelectOptionType, Typography } from '@beckn-ui/molecules'
 import { countryWiseVerification } from '@utils/constants'
 import {
   useAddDocumentMutation,
@@ -25,7 +25,7 @@ import { feedbackActions } from '@beckn-ui/common'
 import { generateAuthHeader, generateAuthHeaderForDelete } from '@services/cryptoUtilService'
 import { parseDIDData } from '@utils/did'
 import BottomModalScan from '@beckn-ui/common/src/components/BottomModal/BottomModalScan'
-import { Box } from '@chakra-ui/react'
+import { Box, Divider, Flex } from '@chakra-ui/react'
 import VerifyOTP from '@components/VerifyOTP/VerifyOTP'
 import { ItemMetaData } from '@components/credLayoutRenderer/ItemRenderer'
 import Cookies from 'js-cookie'
@@ -39,6 +39,14 @@ const documentPatterns: Record<string, { regex: RegExp; image: string }> = {
   passport: { regex: /\bpass[-\s]?port\b/i, image: DocIcon },
   drivinglicense: { regex: /\bdriving\s?(license|licence)\b/i, image: DocIcon }
 }
+
+const utilities = [
+  { value: 'MSPCL', label: 'MSPCL (Maharashtra State Power)' },
+  { value: 'Reliance Power', label: 'Reliance Power' },
+  { value: 'MSEB', label: 'MSEB' },
+  { value: 'GECL', label: 'GECL (Gujarat Electricity)' },
+  { value: 'UPPCL', label: 'UPPCL (Uttar Pradesh Power Corp. Ltd)' }
+]
 
 const MyIdentities = () => {
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
@@ -57,16 +65,20 @@ const MyIdentities = () => {
     type: '',
     credNumber: '',
     country: '',
-    verificationMethod: ''
-    // energyBPId: ''
+    verificationMethod: '',
+    energyBPId: '',
+    utilityCompany: ''
   })
   const [formErrors, setFormErrors] = useState<CredFormErrors>({
     type: '',
     credNumber: '',
     country: '',
-    verificationMethod: ''
-    // energyBPId: ''
+    verificationMethod: '',
+    energyBPId: '',
+    utilityCompany: ''
   })
+  const [showBpId, setShowBpId] = useState<boolean>(false)
+  const [fetchBpId, setFetchBpId] = useState<boolean>(false)
 
   const { t } = useLanguage()
   const dispatch = useDispatch()
@@ -85,16 +97,16 @@ const MyIdentities = () => {
     country: [],
     verificationMethods: [
       {
-        label: 'Mobile Number',
+        label: 'Registered Mobile Number',
         value: user?.did ? extractMobileNumberFromSubjectDid(user?.did)! : ''
       },
       {
-        label: 'Email Id',
+        label: 'Registered Email Address',
         value: 'email_id'
       }
     ]
   })
-
+  console.log(showBpId)
   const getDocIcon = (docType: string) => {
     for (const key in documentPatterns) {
       if (documentPatterns[key].regex.test(docType)) {
@@ -143,6 +155,16 @@ const MyIdentities = () => {
       setFilteredItems(items)
     }
   }, [searchKeyword, items])
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (fetchBpId) {
+        setShowBpId(true)
+      }
+    }, 2000)
+
+    return () => clearTimeout(timer)
+  }, [fetchBpId])
 
   const getCountries = () => {
     const countries = countryWiseVerification.map(data => ({
@@ -199,7 +221,9 @@ const MyIdentities = () => {
         type: formData.type,
         credNumber: formData.credNumber?.trim(),
         country: formData.country,
-        verificationMethod: formData.verificationMethod
+        verificationMethod: formData.verificationMethod,
+        energyBPId: formData.energyBPId,
+        utilityCompany: formData.utilityCompany
       }
       setIsLoading(true)
 
@@ -389,14 +413,6 @@ const MyIdentities = () => {
                   label: 'Identity Type',
                   error: formErrors.type
                 },
-                // {
-                //   type: 'text',
-                //   name: 'energyBPId',
-                //   value: formData.energyBPId!,
-                //   handleChange: handleInputChange,
-                //   label: 'Energy BP ID',
-                //   error: formErrors.energyBPId
-                // },
                 {
                   type: 'text',
                   name: 'credNumber',
@@ -404,6 +420,23 @@ const MyIdentities = () => {
                   handleChange: handleInputChange,
                   label: 'ID Number',
                   error: formErrors.credNumber
+                },
+                {
+                  type: 'select',
+                  name: 'utilityCompany',
+                  options: utilities,
+                  value: formData.utilityCompany!,
+                  handleChange: handleSelectChange,
+                  label: t.selectUtilityCompany,
+                  error: formErrors.utilityCompany
+                },
+                {
+                  type: 'text',
+                  name: 'energyBPId',
+                  value: formData.energyBPId!,
+                  handleChange: handleInputChange,
+                  label: 'Energy BP ID',
+                  error: formErrors.energyBPId
                 },
                 {
                   type: 'select',
@@ -421,6 +454,7 @@ const MyIdentities = () => {
                   handleClick: () => {
                     setOpenModal(false)
                     setIsOTPModalOpen(true)
+                    setFetchBpId(true)
                   },
                   disabled: !isFormFilled,
                   variant: 'solid',
@@ -459,6 +493,33 @@ const MyIdentities = () => {
             isLoading={isLoading}
             handleVerifyOtp={handleOnSubmit}
           />
+          {fetchBpId && showBpId ? (
+            <Flex
+              flexDir={'column'}
+              gap="0.5rem"
+            >
+              <Typography
+                text="BP ID"
+                fontSize="16px"
+                fontWeight="400"
+              />
+              <Divider />
+              <Typography
+                text={'This ID belongs to Mr.Viraj K'}
+                fontSize="12px"
+                fontWeight="400"
+                color="#80807F"
+              />
+            </Flex>
+          ) : (
+            <Box
+              display={'grid'}
+              height={'calc(100vh - 800px)'}
+              alignContent={'center'}
+            >
+              <Loader />
+            </Box>
+          )}
         </Box>
       </BottomModalScan>
     </>
