@@ -44,6 +44,7 @@ export interface CredLayoutRendererProps {
     items: ItemMetaData[]
     handleOnItemClick: (data: ItemMetaData) => void
     handleDeleteItem?: (item: ItemMetaData) => void
+    showVerificationStatus?: boolean
     search: {
       searchInputPlaceholder?: string
       searchKeyword: string
@@ -71,6 +72,7 @@ const CredLayoutRenderer: React.FC<CredLayoutRendererProps> = ({
     items,
     handleOnItemClick,
     handleDeleteItem,
+    showVerificationStatus = true,
     search: { searchInputPlaceholder = 'Search', searchKeyword, setSearchKeyword },
     modal: {
       schema: modalSchema,
@@ -134,6 +136,7 @@ const CredLayoutRenderer: React.FC<CredLayoutRendererProps> = ({
             list={items}
             handleOnClick={handleOnItemClick}
             handleDeleteItem={handleDeleteItem}
+            showVerificationStatus={showVerificationStatus}
           />
         ) : isLoading ? (
           <Box

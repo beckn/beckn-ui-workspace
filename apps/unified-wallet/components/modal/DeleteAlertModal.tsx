@@ -28,13 +28,13 @@ const DeleteAlertModal = (props: DeleteAlertModalProps) => {
         >
           <Typography
             text="Are you sure you want to delete"
-            fontSize="18px"
+            fontSize="16px"
             fontWeight="400"
             dataTest={'delete-modal-message'}
           />
           <Typography
-            text="this item?"
-            fontSize="18px"
+            text="this?"
+            fontSize="16px"
             fontWeight="400"
             sx={{ marginBottom: '10px' }}
           />

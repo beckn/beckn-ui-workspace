@@ -20,6 +20,7 @@ import { DocumentProps } from '@components/documentsRenderer'
 import { ItemMetaData } from '@components/credLayoutRenderer/ItemRenderer'
 import axios from '@services/axios'
 import { ROLE, ROUTE_TYPE } from '@lib/config'
+import DeleteAlertModal from '@components/modal/DeleteAlertModal'
 
 const options = [
   { label: 'Document', value: 'document' },
@@ -35,6 +36,8 @@ const MyCredentials = () => {
   const [openModal, setOpenModal] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [selectedFile, setSelectedFile] = useState<DocumentProps>()
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false)
+  const [deleteItemDetails, setDeleteItemDetails] = useState<ItemMetaData>()
 
   const [formData, setFormData] = useState<FormProps>({
     type: '',
@@ -179,6 +182,7 @@ const MyCredentials = () => {
           url: ''
         })
         setSelectedFile(undefined)
+        setIsDeleteModalOpen(false)
       } else {
         dispatch(
           feedbackActions.setToastData({
@@ -333,41 +337,52 @@ const MyCredentials = () => {
   }, [formData])
 
   return (
-    <CredLayoutRenderer
-      schema={{
-        items: filteredItems,
-        handleOnItemClick: () => {},
-        handleDeleteItem,
-        search: {
-          searchInputPlaceholder: 'Search Credentials',
-          searchKeyword,
-          setSearchKeyword
-        },
-        modal: {
-          schema: {
-            header: 'Add New Credential',
-            inputs: getInputs(),
-            buttons: [
-              {
-                text: 'Add',
-                handleClick: handleOnSubmit,
-                disabled: !isFormFilled,
-                variant: 'solid',
-                colorScheme: 'primary',
-                isLoading: isLoading
-              }
-            ]
+    <>
+      <CredLayoutRenderer
+        schema={{
+          items: filteredItems,
+          handleOnItemClick: () => {},
+          handleDeleteItem: data => {
+            setDeleteItemDetails(data)
+            setIsDeleteModalOpen(true)
           },
-          isLoading,
-          openModal,
-          clearDocuments: !selectedFile,
-          handleOpenModal,
-          handleCloseModal,
-          renderFileUpload: formData.type === 'document',
-          handleOnFileselectionChange
-        }
-      }}
-    />
+          search: {
+            searchInputPlaceholder: 'Search Credentials',
+            searchKeyword,
+            setSearchKeyword
+          },
+          modal: {
+            schema: {
+              header: 'Add New Credential',
+              inputs: getInputs(),
+              buttons: [
+                {
+                  text: 'Add',
+                  handleClick: handleOnSubmit,
+                  disabled: !isFormFilled,
+                  variant: 'solid',
+                  colorScheme: 'primary',
+                  isLoading: isLoading
+                }
+              ]
+            },
+            isLoading,
+            openModal,
+            clearDocuments: !selectedFile,
+            handleOpenModal,
+            handleCloseModal,
+            renderFileUpload: formData.type === 'document',
+            handleOnFileselectionChange
+          }
+        }}
+      />
+      <DeleteAlertModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        handleConfirmDeleteDevice={() => handleDeleteItem(deleteItemDetails!)}
+        isLoading={false}
+      />
+    </>
   )
 }
 

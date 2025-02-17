@@ -41,6 +41,7 @@ interface ItemRendererProps {
   attestationsCount?: boolean
   handleDeleteItem?: (item: ItemMetaData) => void
   renderingFrom?: 'attestationDetails' | null
+  showVerificationStatus?: boolean
 }
 
 export const ORG_NAME_MAP: any = {
@@ -56,7 +57,8 @@ const ItemRenderer = (props: ItemRendererProps) => {
     allowDeletion = true,
     attestationsCount = true,
     handleDeleteItem,
-    renderingFrom
+    renderingFrom,
+    showVerificationStatus = true
   } = props
   const [openAttestations, setOpenAttestations] = useState<boolean>(false)
   const [isOpen, setIsOpen] = useState(false)
@@ -192,21 +194,23 @@ const ItemRenderer = (props: ItemRendererProps) => {
                     >
                       {item.title}
                     </Text>
-                    <Box marginTop={'2px'}>
-                      {item?.isVerified ? (
-                        <Image
-                          src={VerifiedIcon}
-                          width={'80px'}
-                          height={'18px'}
-                        />
-                      ) : (
-                        <Image
-                          src={UnverifiedIcon}
-                          width={'80px'}
-                          height={'18px'}
-                        />
-                      )}
-                    </Box>
+                    {showVerificationStatus && (
+                      <Box marginTop={'2px'}>
+                        {item?.isVerified ? (
+                          <Image
+                            src={VerifiedIcon}
+                            width={'80px'}
+                            height={'18px'}
+                          />
+                        ) : (
+                          <Image
+                            src={UnverifiedIcon}
+                            width={'80px'}
+                            height={'18px'}
+                          />
+                        )}
+                      </Box>
+                    )}
                   </Flex>
                 )}
                 {item.data.source && (
