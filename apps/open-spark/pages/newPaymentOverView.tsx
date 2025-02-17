@@ -46,7 +46,11 @@ const NewPaymentOverView = () => {
     createPaymentBreakdownMap()
   }, [])
   return (
-    <>
+    <Box
+      className="hideScroll"
+      maxH="calc(100vh - 100px)"
+      overflowY={'scroll'}
+    >
       <Typography
         text="Order Overview"
         fontSize="17px"
@@ -243,7 +247,7 @@ const NewPaymentOverView = () => {
           Router.push('/retailPaymentMethod')
         }}
       />
-    </>
+    </Box>
   )
 }
 
