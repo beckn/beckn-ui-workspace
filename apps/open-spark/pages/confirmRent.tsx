@@ -4,7 +4,7 @@ import type React from 'react'
 import { Box, Button, Divider, Flex, Grid, HStack, Input, Text, VStack } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { Typography } from '@beckn-ui/molecules'
-import type { ICartRootState } from '@beckn-ui/common'
+import { feedbackActions, type ICartRootState } from '@beckn-ui/common'
 import { useDispatch, useSelector } from 'react-redux'
 import { DOMAIN_PATH } from '@lib/config'
 import {
@@ -91,9 +91,14 @@ export default function ConfirmRent() {
     console.log('selectedDate', selectedDate)
     console.log('fromTime', fromTime, toTime)
 
+    localStorage.setItem('fromTime', fromTime)
+    localStorage.setItem('toTime', toTime)
+
     const fromTimestamp = convertToTimestamp(selectedDate, fromTime)
     const toTimestamp = convertToTimestamp(selectedDate, toTime)
-    console.log('NewformTimestamp', fromTimestamp, toTimestamp)
+
+    if (!fromTimestamp || !toTimestamp) return
+
     const domain = DOMAIN_PATH.RENT_AND_HIRE
     const payload = prepareApiPayload(cartItems, fromTimestamp, toTimestamp, domain)
 
@@ -109,8 +114,21 @@ export default function ConfirmRent() {
       if (response.ok) {
         const responseData = await response.json()
         console.log('API Response:', responseData?.data[0]?.message)
-        dispatch(setOrderData(responseData?.data[0]))
-        router.push('/checkout')
+        if (!responseData?.data[0]?.message.order.items) {
+          dispatch(
+            feedbackActions.setToastData({
+              toastData: {
+                message: 'Time slot Unavailable',
+                display: true,
+                type: 'error',
+                description: 'Please select a different time.'
+              }
+            })
+          )
+        } else {
+          dispatch(setOrderData(responseData?.data[0]))
+          router.push('/checkout')
+        }
       } else {
         console.error('API Error:', response.statusText)
       }
@@ -240,27 +258,31 @@ export default function ConfirmRent() {
             gap={2}
           >
             {timeSlots.map(({ time, disabled }) => {
-              const isFromTime = time === fromTime
-              const isToTime = time === toTime
+              const timeValue = getTimeValue(time)
+              const fromValue = getTimeValue(fromTime)
+              const toValue = getTimeValue(toTime)
+
+              const isFromTime = timeValue === fromValue
+              const isToTime = timeValue === toValue
+              const isInRange = fromValue && toValue && timeValue >= fromValue && timeValue <= toValue
               const isSelectable =
-                !disabled &&
-                (!fromTime || isFromTime || (isSelectingFrom ? true : getTimeValue(time) > getTimeValue(fromTime)))
+                !disabled && (!fromTime || isFromTime || (isSelectingFrom ? true : timeValue > fromValue))
 
               return (
                 <Button
                   key={time}
                   onClick={() => handleTimeSlotClick(time)}
-                  bg={isFromTime || isToTime ? '#4398E8' : '#FFFFFF'}
-                  color={isFromTime || isToTime ? '#FFFFFF' : '#000000'}
+                  bg={isFromTime || isToTime || isInRange ? '#4398E8' : '#FFFFFF'}
+                  color={isFromTime || isToTime || isInRange ? '#FFFFFF' : '#000000'}
                   borderWidth={1}
-                  borderColor={isFromTime || isToTime ? '#4398E8' : '#979797'}
+                  borderColor={isFromTime || isToTime || isInRange ? '#4398E8' : '#979797'}
                   p={2}
                   borderRadius="lg"
                   fontSize="sm"
                   opacity={!isSelectable ? 0.5 : 1}
                   cursor={!isSelectable ? 'not-allowed' : 'pointer'}
                   _hover={{
-                    bg: !isSelectable ? '#FFFFFF' : isFromTime || isToTime ? '#4398E8' : '#F5F5F5'
+                    bg: !isSelectable ? '#FFFFFF' : isFromTime || isToTime || isInRange ? '#4398E8' : '#F5F5F5'
                   }}
                   disabled={!isSelectable}
                 >
