@@ -185,11 +185,13 @@ const MyTransactions = () => {
                           {item.category}
                         </Box>
                       </Flex>
-                      <Image
-                        src={categoryColors[item.category]?.icon || categoryColors.default.icon}
-                        width="58px"
-                        height={'16px'}
-                      />
+                      {categoryColors[item.category]?.icon && (
+                        <Image
+                          src={categoryColors[item.category]?.icon}
+                          width="58px"
+                          height={'16px'}
+                        />
+                      )}
                       <Flex
                         flexDir={'row'}
                         justifyContent={'space-between'}

@@ -8,6 +8,7 @@ import ProductPrice from '../product-price'
 const ProductCta: React.FC<ProductCtaProps> = ({
   currency,
   totalPrice,
+  rateLabel,
   handleDecrement,
   handleIncrement,
   counter,
@@ -48,6 +49,7 @@ const ProductCta: React.FC<ProductCtaProps> = ({
         <ProductPrice
           currencyType={currency}
           price={parseFloat(totalPrice)}
+          rateLabel={rateLabel || ''}
         />
       </Flex>
       <Flex justifyContent={'center'}>

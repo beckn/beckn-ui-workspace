@@ -3,6 +3,7 @@ import { CurrencyType } from '../types'
 export interface ProductCtaProps {
   currency: CurrencyType
   totalPrice: string
+  rateLabel?: string
   handleIncrement?: () => void
   handleDecrement?: () => void
   counter?: number

@@ -222,7 +222,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
       const totalCost = emi * months
 
       const actualInterestAmount = totalCost - approvedLoanAmount
-      return { emi, actualInterestAmount, annualInterestRate, totalCost, payableAmount }
+      return { emi, actualInterestAmount, annualInterestRate, totalCost, payableAmount: newPayableAmount }
     })
 
     dispatch(setEmiDetails({ emiDetails }))
@@ -420,7 +420,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                               alignItems="center"
                             >
                               <Text fontSize={'10px'}>Pay Now</Text>
-                              <Text fontSize={'10px'}>₹{payableAmount}</Text>
+                              <Text fontSize={'10px'}>₹{payableAmount?.toFixed(2)}</Text>
                             </Flex>
                           </Box>
                           <Box
@@ -498,14 +498,14 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                                       fontWeight="500"
                                       color="#626060"
                                     >
-                                      ₹ {emi} x {item.name}m
+                                      ₹ {emi.toFixed(2)} x {item.name}m
                                     </Box>
                                     <Box
                                       fontSize="10px"
                                       fontWeight="500"
                                       color="#626060"
                                     >
-                                      ₹ {actualInterestAmount} ({annualInterestRate}%)
+                                      ₹ {actualInterestAmount.toFixed(2)} ({annualInterestRate}%)
                                     </Box>
                                     <Box>
                                       {dicountedSearch && (

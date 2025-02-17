@@ -43,7 +43,7 @@ const Search = () => {
       .post(`${apiUrl}/search`, searchPayload)
       .then(res => {
         dispatch(discoveryActions.addTransactionId({ transactionId: res.data.data[0].context.transaction_id }))
-        const parsedSearchItems = parseSearchlist(res.data.data)
+        const parsedSearchItems = parseSearchlist(res.data.data, type)
         dispatch(discoveryActions.addProducts({ products: parsedSearchItems }))
         setItems(parsedSearchItems)
         console.log(res.data.data)

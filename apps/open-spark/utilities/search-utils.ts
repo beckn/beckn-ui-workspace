@@ -5,7 +5,7 @@ const dummyLocation = {
   longitude: 77.596316
 }
 
-export const parseSearchlist = (data: SearchResponseModel[]) => {
+export const parseSearchlist = (data: SearchResponseModel[], type?: 'RENT_AND_HIRE' | 'MY_STORE') => {
   const itemsArray: ParsedItemModel[] = []
 
   data.forEach(entry => {
@@ -24,8 +24,11 @@ export const parseSearchlist = (data: SearchResponseModel[]) => {
             providerCoordinates = { latitude: lat, longitude: lng }
           }
         }
-
         provider.items.forEach(item => {
+          let itemData = item
+          if (type === 'RENT_AND_HIRE') {
+            itemData = { ...item, price: { ...item.price, rateLabel: '/ hr' } }
+          }
           itemsArray.push({
             id: item.id,
             bppId: bpp_id,
@@ -35,7 +38,7 @@ export const parseSearchlist = (data: SearchResponseModel[]) => {
             providerId: provider.id,
             providerName: provider.name,
             rating: provider.rating,
-            item,
+            item: itemData,
             providerCoordinates
           })
         })

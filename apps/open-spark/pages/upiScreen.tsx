@@ -117,7 +117,7 @@ const UpiScreen = () => {
               fontSize={'14px'}
               fontWeight="700"
             >
-              {payableAmount}
+              {`₹ ${payableAmount}`}
             </Text>
           </Flex>
         </Box>
