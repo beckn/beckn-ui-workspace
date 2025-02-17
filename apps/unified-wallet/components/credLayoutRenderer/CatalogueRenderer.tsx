@@ -6,10 +6,11 @@ interface CatalogueRendererProps {
   list: ItemMetaData[]
   handleOnClick: (data: ItemMetaData) => void
   handleDeleteItem?: (item: ItemMetaData) => void
+  showVerificationStatus?: boolean
 }
 
 const CatalogueRenderer = (props: CatalogueRendererProps) => {
-  const { list, handleOnClick, handleDeleteItem } = props
+  const { list, handleOnClick, handleDeleteItem, showVerificationStatus } = props
 
   return (
     <>
@@ -21,6 +22,7 @@ const CatalogueRenderer = (props: CatalogueRendererProps) => {
               renderMode={'long'}
               handleOnClick={handleOnClick}
               handleDeleteItem={handleDeleteItem}
+              showVerificationStatus={showVerificationStatus}
             />
           </>
         )

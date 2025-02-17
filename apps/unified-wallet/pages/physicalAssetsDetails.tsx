@@ -93,7 +93,7 @@ const PhysicalAssetsDetails = () => {
           if (attestation.verification_method.did.startsWith(user?.did!)) {
             const orgData = { name: 'Self', icon: ProfileIcon }
 
-            return orgData ? { name: orgData.name, icon: orgData.icon } : null
+            return orgData ? { name: orgData.name, img: orgData.icon } : null
           }
           if (attestation.verification_method.did.match(regex)) {
             const match = attestation.verification_method.did.match(regex)
@@ -178,6 +178,8 @@ const PhysicalAssetsDetails = () => {
           renderMode={'long'}
           handleOnClick={() => {}}
           attestationsCount={false}
+          allowDeletion={false}
+          showVerificationStatus={false}
         />
       )}
 
@@ -194,13 +196,15 @@ const PhysicalAssetsDetails = () => {
                   key={idx}
                   onClick={() => {
                     console.log(detail.label)
-                    router.push({
-                      pathname: '/attestationDetails',
-                      query: {
-                        cred_name: detail.label,
-                        data: JSON.stringify(detail.data)
-                      }
-                    })
+                    if (detail.label !== 'Self') {
+                      router.push({
+                        pathname: '/attestationDetails',
+                        query: {
+                          cred_name: detail.label,
+                          data: JSON.stringify(detail.data)
+                        }
+                      })
+                    }
                   }}
                 >
                   <Flex

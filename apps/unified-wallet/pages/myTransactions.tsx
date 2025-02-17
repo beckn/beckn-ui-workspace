@@ -165,11 +165,13 @@ const MyTransactions = () => {
                         flexDir={'row'}
                         justifyContent="space-between"
                       >
-                        <Typography
-                          text={item.name}
-                          fontSize="12px"
-                          fontWeight="500"
-                        />
+                        <Box width={'15rem'}>
+                          <Typography
+                            text={item.name}
+                            fontSize="12px"
+                            fontWeight="500"
+                          />
+                        </Box>
                         <Box
                           color={'#ffffff'}
                           backgroundColor={categoryColors[item.category]?.color || categoryColors.default.color}

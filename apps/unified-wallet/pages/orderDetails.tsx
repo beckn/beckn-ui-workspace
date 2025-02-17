@@ -10,25 +10,18 @@ import {
 } from '@beckn-ui/common'
 import { Accordion, Typography } from '@beckn-ui/molecules'
 import { Box, CardBody, Flex, Text, Image, Divider } from '@chakra-ui/react'
-import { ItemMetaData } from '@components/credLayoutRenderer/ItemRenderer'
+import { ItemMetaData, ORG_NAME_MAP } from '@components/credLayoutRenderer/ItemRenderer'
 import ShippingBlock from '@components/orderDetailComponents/Shipping'
 import { DOMAIN } from '@lib/config'
+import { AttestationData } from '@lib/types/becknDid'
 import axios from '@services/axios'
 import { useDecodeStreamMutation } from '@services/walletService'
+import { AuthRootState } from '@store/auth-slice'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 import { v4 as uuidv4 } from 'uuid'
-
-const attestionItem = [
-  {
-    name: 'Vault',
-    icon: '/images/vault.svg'
-  },
-  {
-    name: 'Spark',
-    icon: '/images/attes_openspark.svg'
-  }
-]
+import ProfileIcon from '@public/images/Profile.svg'
 
 export default function OrderDetails() {
   const [orderDetails, setOrderDetails] = useState<{ data: ConfirmResponseModel[] }>()
@@ -36,9 +29,14 @@ export default function OrderDetails() {
   const [statusData, setStatuData] = useState<any>()
   const [orderStatusMap, setOrderStatusMap] = useState<any[]>([])
   const [currentStatusLabel, setCurrentStatusLabel] = useState('')
+  const [attestationsDetails, setAttestationsDetails] = useState<{ name: string; icon: string }[]>([
+    // { name: 'Open Wallet' },
+    // { name: 'Open Spark' }
+  ])
 
   const router = useRouter()
   const [decodeStream, { isLoading }] = useDecodeStreamMutation()
+  const { user } = useSelector((state: AuthRootState) => state.auth)
 
   const getDecodedStreamData = async (data: ItemMetaData) => {
     console.log(data)
@@ -59,6 +57,40 @@ export default function OrderDetails() {
     }
   }, [orderStatusMap])
 
+  const getAttestationItems = (item: any) => {
+    const attestations: AttestationData[] = item?.data.attestations
+    if (attestations?.length > 0) {
+      const result: any = attestations
+        .map(attestation => {
+          const regex = /\/org\/([^\/]+)\/verification_methods/
+          if (attestation.verification_method.did.startsWith(user?.did!)) {
+            const orgData = { name: 'Self', icon: ProfileIcon }
+
+            return orgData ? { name: orgData.name, icon: orgData.icon } : null
+          }
+          if (attestation.verification_method.did.match(regex)) {
+            const match = attestation.verification_method.did.match(regex)
+
+            if (!match) return null
+
+            const name = match[1]
+            const orgData = ORG_NAME_MAP[name]
+
+            return orgData
+              ? {
+                  name: orgData.name,
+                  icon: orgData.icon, //`/images/${orgData.name === 'Vault' ? 'attes_openwallet' : 'attes_openspark'}.svg`,
+                  data: attestation
+                }
+              : null
+          }
+        })
+        .filter(Boolean)
+      console.log(result)
+      setAttestationsDetails(result)
+    }
+  }
+
   useEffect(() => {
     let data
     if (localStorage && localStorage.getItem('orderData')) {
@@ -67,6 +99,7 @@ export default function OrderDetails() {
       if (storedData) {
         data = JSON.parse(storedData)
         getDecodedStreamData(data)
+        getAttestationItems(data)
       }
     }
   }, [])
@@ -290,7 +323,7 @@ export default function OrderDetails() {
       </Accordion>
 
       <Accordion accordionHeader={'Attested by'}>
-        {attestionItem.map((item, index) => (
+        {attestationsDetails.map((item, index) => (
           <Flex
             pl={'20px'}
             pr={'20px'}
@@ -307,6 +340,8 @@ export default function OrderDetails() {
             <Image
               src={item.icon}
               alt={item.name}
+              width="24px"
+              height="24px"
             />
           </Flex>
         ))}

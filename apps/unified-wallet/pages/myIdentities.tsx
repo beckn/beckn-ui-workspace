@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useLanguage } from '@hooks/useLanguage'
 import { useDispatch, useSelector } from 'react-redux'
 import CredLayoutRenderer, { CredFormErrors, FormProps } from '@components/credLayoutRenderer/LayoutRenderer'
@@ -31,6 +31,7 @@ import { ItemMetaData } from '@components/credLayoutRenderer/ItemRenderer'
 import Cookies from 'js-cookie'
 import axios from '@services/axios'
 import { ROLE, ROUTE_TYPE } from '@lib/config'
+import DeleteAlertModal from '@components/modal/DeleteAlertModal'
 
 const documentPatterns: Record<string, { regex: RegExp; image: string }> = {
   aadhar: { regex: /\baadhar\s?(card)?\b/i, image: AadharCard },
@@ -48,6 +49,8 @@ const MyIdentities = () => {
   const [openModal, setOpenModal] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [isOTPModalOpen, setIsOTPModalOpen] = useState<boolean>(false)
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false)
+  const [deleteItemDetails, setDeleteItemDetails] = useState<ItemMetaData>()
 
   // const [countryDetails, setCountryDetails] = useState<Record<string, any>>()
   const [formData, setFormData] = useState<FormProps>({
@@ -247,58 +250,62 @@ const MyIdentities = () => {
     }
   }
 
-  const handleDeleteItem = async (didItem: ItemMetaData) => {
-    console.log(didItem)
-    try {
-      const data = {
-        type: 'test',
-        credNumber: 'test'
-      }
-
-      const docDetails = JSON.stringify(data)
-
-      const verificationMethodsRes = await getVerificationMethods(user?.did!).unwrap()
-      const { did } = verificationMethodsRes[0]
-
-      const authHeaderRes = await generateAuthHeaderForDelete({
-        subjectId: didItem.data.did,
-        verification_did: did,
-        privateKey,
-        publicKey,
-        payload: {
-          name: '/data/verification',
-          stream: toBase64(docDetails)
+  const handleDeleteItem = useCallback(
+    async (didItem: ItemMetaData) => {
+      console.log(didItem)
+      try {
+        const data = {
+          type: 'test',
+          credNumber: 'test'
         }
-      })
-      const { authorization, payload } = extractAuthAndHeader(authHeaderRes)
 
-      if (authorization && payload) {
-        const deleteDocPayload = {
-          subjectId: didItem.data.did!,
-          payload,
-          authorization
+        const docDetails = JSON.stringify(data)
+
+        const verificationMethodsRes = await getVerificationMethods(user?.did!).unwrap()
+        const { did } = verificationMethodsRes[0]
+
+        const authHeaderRes = await generateAuthHeaderForDelete({
+          subjectId: didItem.data.did,
+          verification_did: did,
+          privateKey,
+          publicKey,
+          payload: {
+            name: '/data/verification',
+            stream: toBase64(docDetails)
+          }
+        })
+        const { authorization, payload } = extractAuthAndHeader(authHeaderRes)
+
+        if (authorization && payload) {
+          const deleteDocPayload = {
+            subjectId: didItem.data.did!,
+            payload,
+            authorization
+          }
+          console.log(deleteDocPayload)
+          await deleteDocument(deleteDocPayload).unwrap()
+
+          dispatch(
+            feedbackActions.setToastData({
+              toastData: { message: 'Success', display: true, type: 'success', description: 'Deleted Successfully!' }
+            })
+          )
+          setIsDeleteModalOpen(false)
+        } else {
+          dispatch(
+            feedbackActions.setToastData({
+              toastData: { message: 'Error', display: true, type: 'error', description: 'Something went wrong!' }
+            })
+          )
         }
-        console.log(deleteDocPayload)
-        await deleteDocument(deleteDocPayload).unwrap()
-
-        dispatch(
-          feedbackActions.setToastData({
-            toastData: { message: 'Success', display: true, type: 'success', description: 'Deleted Successfully!' }
-          })
-        )
-      } else {
-        dispatch(
-          feedbackActions.setToastData({
-            toastData: { message: 'Error', display: true, type: 'error', description: 'Something went wrong!' }
-          })
-        )
+      } catch (error) {
+        console.error('An error occurred:', error)
+      } finally {
+        fetchCredentials()
       }
-    } catch (error) {
-      console.error('An error occurred:', error)
-    } finally {
-      fetchCredentials()
-    }
-  }
+    },
+    [deleteItemDetails]
+  )
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -352,7 +359,10 @@ const MyIdentities = () => {
         schema={{
           items: filteredItems,
           handleOnItemClick: () => {},
-          handleDeleteItem,
+          handleDeleteItem: data => {
+            setDeleteItemDetails(data)
+            setIsDeleteModalOpen(true)
+          },
           search: {
             searchInputPlaceholder: 'Search Identities',
             searchKeyword,
@@ -425,6 +435,12 @@ const MyIdentities = () => {
             handleCloseModal
           }
         }}
+      />
+      <DeleteAlertModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        handleConfirmDeleteDevice={() => handleDeleteItem(deleteItemDetails!)}
+        isLoading={false}
       />
       <BottomModalScan
         isOpen={isOTPModalOpen}

@@ -21,6 +21,7 @@ import { useRouter } from 'next/router'
 import { ItemMetaData } from '@components/credLayoutRenderer/ItemRenderer'
 import axios from '@services/axios'
 import { ROLE, ROUTE_TYPE } from '@lib/config'
+import DeleteAlertModal from '@components/modal/DeleteAlertModal'
 
 const PhysicalAssets = () => {
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
@@ -31,6 +32,8 @@ const PhysicalAssets = () => {
   const [openModal, setOpenModal] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [selectedFile, setSelectedFile] = useState<DocumentProps>()
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false)
+  const [deleteItemDetails, setDeleteItemDetails] = useState<ItemMetaData>()
 
   const [formData, setFormData] = useState<FormProps>({
     type: '',
@@ -224,6 +227,7 @@ const PhysicalAssets = () => {
             toastData: { message: 'Success', display: true, type: 'success', description: 'Deleted Successfully!' }
           })
         )
+        setIsDeleteModalOpen(false)
       } else {
         dispatch(
           feedbackActions.setToastData({
@@ -351,41 +355,53 @@ const PhysicalAssets = () => {
   }
 
   return (
-    <CredLayoutRenderer
-      schema={{
-        items: filteredItems,
-        handleOnItemClick: data => handleOpenCredDetails(data),
-        handleDeleteItem,
-        search: {
-          searchInputPlaceholder: 'Search Assets',
-          searchKeyword,
-          setSearchKeyword
-        },
-        modal: {
-          schema: {
-            header: 'Add New Asset',
-            inputs: getInputs(),
-            buttons: [
-              {
-                text: 'Add',
-                handleClick: handleOnSubmit,
-                disabled: !isFormFilled,
-                variant: 'solid',
-                colorScheme: 'primary',
-                isLoading: isLoading
-              }
-            ]
+    <>
+      <CredLayoutRenderer
+        schema={{
+          items: filteredItems,
+          handleOnItemClick: data => handleOpenCredDetails(data),
+          handleDeleteItem: data => {
+            setDeleteItemDetails(data)
+            setIsDeleteModalOpen(true)
           },
-          isLoading,
-          openModal,
-          clearDocuments: !selectedFile,
-          handleOpenModal,
-          handleCloseModal,
-          renderFileUpload: true,
-          handleOnFileselectionChange
-        }
-      }}
-    />
+          showVerificationStatus: false,
+          search: {
+            searchInputPlaceholder: 'Search Assets',
+            searchKeyword,
+            setSearchKeyword
+          },
+          modal: {
+            schema: {
+              header: 'Add New Asset',
+              inputs: getInputs(),
+              buttons: [
+                {
+                  text: 'Add',
+                  handleClick: handleOnSubmit,
+                  disabled: !isFormFilled,
+                  variant: 'solid',
+                  colorScheme: 'primary',
+                  isLoading: isLoading
+                }
+              ]
+            },
+            isLoading,
+            openModal,
+            clearDocuments: !selectedFile,
+            handleOpenModal,
+            handleCloseModal,
+            renderFileUpload: true,
+            handleOnFileselectionChange
+          }
+        }}
+      />
+      <DeleteAlertModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        handleConfirmDeleteDevice={() => handleDeleteItem(deleteItemDetails!)}
+        isLoading={false}
+      />
+    </>
   )
 }
 
