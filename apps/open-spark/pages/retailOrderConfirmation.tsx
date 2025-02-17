@@ -8,7 +8,7 @@ import axios from '@services/axios'
 import { Box } from '@chakra-ui/react'
 import Cookies from 'js-cookie'
 import { LoaderWithMessage, utilGenerateEllipsedText } from '@beckn-ui/molecules'
-import { ConfirmResponseModel } from '@beckn-ui/common/lib/types'
+import { ConfirmResponseModel, InitResponseModel } from '@beckn-ui/common/lib/types'
 import { checkoutActions, CheckoutRootState } from '@beckn-ui/common/src/store/checkout-slice'
 import { orderActions } from '@beckn-ui/common/src/store/order-slice'
 import { getPayloadForConfirm, getPayloadForOrderHistoryPost } from '@beckn-ui/common/src/utils'
@@ -29,6 +29,7 @@ import { generateAuthHeader, generateKeyPairFromString } from '@services/cryptoU
 import { AuthRootState } from '@store/auth-slice'
 import { extractAuthAndHeader, toBase64, toSnakeCase } from '@utils/general'
 import { feedbackActions } from '@beckn-ui/common'
+import { getRentalPayloadForConfirm, getRentalPayloadForOrderHistoryPost } from '@utils/confirm-util'
 
 const retailOrderConfirmation = () => {
   const { t } = useLanguage()
@@ -42,6 +43,16 @@ const retailOrderConfirmation = () => {
   const [addDocument, { isLoading: addDocLoading }] = useAddDocumentMutation()
   const [getVerificationMethods, { isLoading: verificationMethodsLoading }] = useGetVerificationMethodsMutation()
   const [orderId, setOrderId] = useState<string>()
+
+  const [fromTimestamp, setFromTimestamp] = useState<string>()
+  const [toTimestamp, setToTimestamp] = useState<string>()
+
+  useEffect(() => {
+    const fromTimestamp = localStorage.getItem('fromTimestamp')
+    const toTimestamp = localStorage.getItem('toTimestamp')
+    setFromTimestamp(fromTimestamp)
+    setToTimestamp(toTimestamp)
+  }, [])
 
   const initResponse = useSelector((state: CheckoutRootState) => state.checkout.initResponse)
   const confirmResponse = useSelector((state: CheckoutRootState) => state.checkout.confirmResponse)
@@ -233,14 +244,20 @@ const retailOrderConfirmation = () => {
 
   useEffect(() => {
     if (initResponse && initResponse.length > 0) {
-      const payLoad = getPayloadForConfirm(initResponse)
+      const payLoad =
+        type === 'RENT_AND_HIRE'
+          ? getRentalPayloadForConfirm(initResponse, fromTimestamp, toTimestamp)
+          : getPayloadForConfirm(initResponse)
       confirm(payLoad)
     }
-  }, [])
+  }, [initResponse, fromTimestamp, toTimestamp, type])
 
   useEffect(() => {
     if (confirmResponse && confirmResponse.length > 0) {
-      const ordersPayload = getPayloadForOrderHistoryPost(confirmResponse, getOrderCategoryId(type))
+      const ordersPayload =
+        type === 'RENT_AND_HIRE'
+          ? getRentalPayloadForOrderHistoryPost(confirmResponse, getOrderCategoryId(type), fromTimestamp, toTimestamp)
+          : getPayloadForOrderHistoryPost(confirmResponse, getOrderCategoryId(type))
       axios
         .post(`${strapiUrl}/unified-beckn-energy/order-history/create`, ordersPayload, axiosConfig)
         .then(res => {

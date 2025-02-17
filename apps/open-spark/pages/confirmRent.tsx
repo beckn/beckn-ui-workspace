@@ -97,6 +97,9 @@ export default function ConfirmRent() {
     const fromTimestamp = convertToTimestamp(selectedDate, fromTime)
     const toTimestamp = convertToTimestamp(selectedDate, toTime)
 
+    localStorage.setItem('fromTimestamp', fromTimestamp?.toString() || '')
+    localStorage.setItem('toTimestamp', toTimestamp?.toString() || '')
+
     if (!fromTimestamp || !toTimestamp) return
 
     const domain = DOMAIN_PATH.RENT_AND_HIRE
