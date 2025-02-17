@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { BottomModal, Typography } from '@beckn-ui/molecules'
+import { BottomModal, Loader, Typography } from '@beckn-ui/molecules'
 import {
   Box,
   Flex,
@@ -308,16 +308,11 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
             </Box>
           )}
 
-          <Button
-            width="100%"
-            bg="#4398E8"
+          <BecknButton
+            text="Next"
             color="white"
-            _hover={{ bg: '#3182CE' }}
-            borderRadius="full"
-            onClick={handleNext}
-          >
-            Next
-          </Button>
+            handleClick={handleNext}
+          />
         </>
       )
     }
@@ -562,7 +557,12 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
               color="#4398E8"
               fontSize="sm"
               cursor="pointer"
-              onClick={handleAddFromWallet}
+              onClick={() => {
+                setIsLoading(true)
+                setTimeout(() => {
+                  handleAddFromWallet()
+                }, 3000)
+              }}
             >
               Add from wallet
             </Text>
@@ -570,7 +570,7 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
         </Flex>
       }
     >
-      <Box p={4}>
+      <Box p={'1rem 0'}>
         <Stepper
           index={activeStep}
           colorScheme="blue"
@@ -648,7 +648,19 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
           ))}
         </Flex>
 
-        {renderContent()}
+        {isLoading ? (
+          <>
+            <Box
+              display={'grid'}
+              height={'calc(100vh - 510px)'}
+              alignContent={'center'}
+            >
+              <Loader />
+            </Box>
+          </>
+        ) : (
+          renderContent()
+        )}
       </Box>
     </BottomModal>
   )

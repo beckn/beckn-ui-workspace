@@ -115,11 +115,12 @@ export const areShippingAndBillingDetailsSame = (
 }
 
 export const getOrderDetailsPaymentBreakDown = (statusData: StatusResponseModel[]) => {
-  const quote = statusData[0]?.message?.quote // Ensure safe access
+  console.log('statusData', statusData)
+  const quote = statusData[0]?.message?.order.quote // Ensure safe access
   if (!quote) return { breakUpMap: {}, totalPricewithCurrent: { value: '0', currency: 'INR' } }
 
   const breakUp = quote.breakup || []
-  const totalPricewithCurrent = {
+  const totalPricewithCurrent: any = {
     value: quote.price?.value || '0',
     currency: quote.price?.currency || 'INR'
   }

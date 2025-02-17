@@ -1,11 +1,10 @@
-import { DetailCard } from '@beckn-ui/becknified-components'
+import { DetailCard, OrderStatusProgress, OrderStatusProgressProps } from '@beckn-ui/becknified-components'
 import PaymentDetails from '@beckn-ui/becknified-components/src/components/checkout/payment-details'
 import {
   ConfirmResponseModel,
   formatTimestamp,
   getOrderDetailsPaymentBreakDown,
-  StatusKey,
-  statusMap,
+  getPaymentBreakDown,
   StatusResponseModel
 } from '@beckn-ui/common'
 import { Accordion, Typography } from '@beckn-ui/molecules'
@@ -22,6 +21,12 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { v4 as uuidv4 } from 'uuid'
 import ProfileIcon from '@public/images/Profile.svg'
+import { useLanguage } from '@hooks/useLanguage'
+import { testIds } from '@shared/dataTestIds'
+import { StatusKey, statusMap } from '@lib/client'
+
+const DELIVERED = 'CLOSED'
+const CANCELLED = 'USER CANCELLED'
 
 export default function OrderDetails() {
   const [orderDetails, setOrderDetails] = useState<{ data: ConfirmResponseModel[] }>()
@@ -35,11 +40,11 @@ export default function OrderDetails() {
   ])
 
   const router = useRouter()
+  const { t } = useLanguage()
   const [decodeStream, { isLoading }] = useDecodeStreamMutation()
   const { user } = useSelector((state: AuthRootState) => state.auth)
 
   const getDecodedStreamData = async (data: ItemMetaData) => {
-    console.log(data)
     const decodedRes: any = await decodeStream({ subjectId: data.data.did })
     console.log('Decoded:', decodedRes)
     setOrderDetails(decodedRes)
@@ -92,23 +97,19 @@ export default function OrderDetails() {
   }
 
   useEffect(() => {
-    let data
     if (localStorage && localStorage.getItem('orderData')) {
-      console.log('data1', data)
-      const storedData = localStorage.getItem('orderData')
-      if (storedData) {
-        data = JSON.parse(storedData)
-        getDecodedStreamData(data)
-        getAttestationItems(data)
-      }
+      const storedData = JSON.parse(localStorage.getItem('orderData') as string)
+      getDecodedStreamData(storedData)
+      getAttestationItems(storedData)
+    }
+    return () => {
+      localStorage.removeItem('orderData')
     }
   }, [])
 
   useEffect(() => {
-    console.log(orderDetails)
     const fetchData = () => {
       if (orderDetails) {
-        console.log(orderDetails)
         const { bpp_id, bpp_uri, domain } = orderDetails?.data[0]?.context
         const { orderId } = orderDetails?.data[0]?.message
         const statusPayload = {
@@ -118,7 +119,7 @@ export default function OrderDetails() {
                 transaction_id: uuidv4(),
                 bpp_id: bpp_id,
                 bpp_uri: bpp_uri,
-                domain: domain || 'dg retail'
+                domain: domain || 'deg:retail'
               },
               message: {
                 order_id: orderId,
@@ -150,14 +151,13 @@ export default function OrderDetails() {
   }, [apiUrl, orderDetails])
 
   useEffect(() => {
-    console.log(statusData)
     if (statusData?.length > 0) {
       const newData = statusData
         .map((status: StatusResponseModel) => {
           const { tags } = status?.message?.order
           const statusKey: string = tags?.[tags?.length - 1].list?.[0].value!
           return {
-            label: statusMap[statusKey as StatusKey],
+            label: statusMap[status?.message?.order?.fulfillments[0]?.state?.descriptor?.code as StatusKey],
             statusTime: status?.message?.order?.fulfillments[0]?.state?.updated_at || status?.context?.timestamp
           }
         })
@@ -168,45 +168,63 @@ export default function OrderDetails() {
     }
   }, [statusData])
 
+  const isDelivered = orderDetails?.data[0]?.message?.fulfillments?.[0]?.state?.descriptor?.code === DELIVERED
+  const isCancelled = orderDetails?.data[0]?.message?.fulfillments?.[0]?.state?.descriptor?.code === CANCELLED
+
   return (
     <Box>
-      <Box pt={4}>
+      <Box
+        pb="15px"
+        pt="20px"
+      >
         <Typography
           variant="subTitleRegular"
-          text="Order Overview"
+          text={'Order Overview'}
           fontSize="17px"
         />
       </Box>
 
       <DetailCard>
-        <Flex
-          direction="column"
-          gap={2}
-        >
-          <Flex justify="space-between">
-            <Typography
-              text={'Placed at'}
-              fontSize="15px"
-              fontWeight="400"
+        <Flex>
+          {statusData && (
+            <Image
+              mr={'15px'}
+              height={['60px', '80px', '80px', '80px']}
+              w={['40px', '80px', '80px', '80px']}
+              src={statusData[0]?.message?.order?.items[0]?.images?.[0].url}
+              alt="product image"
             />
-            <Typography
-              text={formatTimestamp(orderDetails?.data[0]?.context?.timestamp!)}
-              fontSize="15px"
-              fontWeight="400"
-            />
-          </Flex>
-          <Flex justify="space-between">
-            <Typography
-              text={'Orders Fulfilled'}
-              fontSize="15px"
-              fontWeight="400"
-            />
-            <Typography
-              text={'0 of 2'}
-              fontSize="15px"
-              fontWeight="400"
-            />
-          </Flex>
+          )}
+          <Box w={'100%'}>
+            <Box
+              pt={'unset'}
+              pb={4}
+            >
+              {statusData && (
+                <Typography
+                  variant="subTitleSemibold"
+                  dataTest={testIds.orderDetailspage_productName}
+                  text={statusData[0]?.message?.order?.items[0]?.name}
+                />
+              )}
+            </Box>
+
+            <Flex
+              pt={'unset'}
+              justifyContent={'space-between'}
+              alignItems={'center'}
+            >
+              <Typography
+                variant="subTitleRegular"
+                text={'Placed at'}
+              />
+              <Typography
+                variant="subTitleRegular"
+                dataTest={testIds.orderDetailspage_productPlacedAt}
+                text={formatTimestamp(orderDetails?.data[0]?.context?.timestamp!)}
+              />
+            </Flex>
+          </Box>
         </Flex>
       </DetailCard>
 
@@ -232,36 +250,26 @@ export default function OrderDetails() {
                 fontSize="17px"
                 fontWeight="600"
               />
-              <Image
+              {/* <Image
                 src="/images/threeDots.svg"
                 alt="threeDots"
                 cursor={'pointer'}
-              />
+              /> */}
             </Flex>
 
             <Flex
               justifyContent={'space-between'}
               alignItems={'center'}
             >
-              <Flex maxWidth={'40vw'}>
-                {/* <Text
-                  textOverflow={'ellipsis'}
-                  overflow={'hidden'}
-                  whiteSpace={'nowrap'}
-                  fontSize={'12px'}
-                  fontWeight={'400'}
-                >
-                  {' 150Ah Tubular Battery by ebatterystore +1  '}
-                </Text> */}
-
+              <Flex maxWidth={'50vw'}>
                 <Typography
                   text={orderDetails?.data?.[0]?.message?.items?.[0]?.name}
                   fontSize="12px"
                   fontWeight="400"
                   sx={{
+                    noOfLines: 3,
                     textOverflow: 'ellipsis',
-                    overflow: 'hidden',
-                    whiteSpace: 'nowrap'
+                    overflow: 'hidden'
                   }}
                 />
               </Flex>
@@ -281,17 +289,18 @@ export default function OrderDetails() {
             width={'unset'}
             pt="15px"
           />
-          {/* <Box className="order_status_progress">
-            {orderStatuses.map((status, index) => (
+
+          <Box className="order_status_progress">
+            {orderStatusMap.map((status: OrderStatusProgressProps, index: number) => (
               <OrderStatusProgress
                 key={index}
-                label={status.title}
+                label={status.label}
                 statusTime={status.statusTime && formatTimestamp(status.statusTime)}
                 noLine={isDelivered || isCancelled}
-                lastElement={orderStatuses.length - 1 === index}
+                lastElement={orderStatusMap.length - 1 === index}
               />
             ))}
-          </Box> */}
+          </Box>
         </CardBody>
       </DetailCard>
 
@@ -310,15 +319,13 @@ export default function OrderDetails() {
           pb={'11px'}
           pt={'6px'}
         >
-          <PaymentDetails
-            paymentBreakDown={orderDetails?.data ? getOrderDetailsPaymentBreakDown(orderDetails?.data).breakUpMap : {}}
-            totalText="Total"
-            totalValueWithCurrency={
-              orderDetails?.data
-                ? getOrderDetailsPaymentBreakDown(orderDetails.data).totalPricewithCurrent
-                : { value: '0', currency: 'INR' }
-            }
-          />
+          {statusData && (
+            <PaymentDetails
+              paymentBreakDown={getPaymentBreakDown(statusData).breakUpMap}
+              totalText="Total"
+              totalValueWithCurrency={getPaymentBreakDown(statusData).totalPricewithCurrent}
+            />
+          )}
         </Box>
       </Accordion>
 

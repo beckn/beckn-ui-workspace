@@ -14,3 +14,14 @@ export const client = sanityClient({
 const builder = imageUrlBuilder(client)
 
 export const urlFor = (source: any) => builder.image(source)
+
+export const statusMap = {
+  IN_PROGRESS: 'Processing your order',
+  PaymentSettled: 'Ready to ship',
+  Cancelled: 'Order Cancelled!',
+  Shipped: 'Order Shipped',
+  Delivered: 'Order Delivered'
+}
+
+export type StatusMap = typeof statusMap
+export type StatusKey = keyof StatusMap
