@@ -341,16 +341,23 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                             className="radio-for-emi"
                             onChange={() => handleEmiSelect(plan.id)}
                           />
-                          <Box p="10px">
-                            <Text fontSize="15px">{plan.providerName}</Text>
-                            <Text
-                              fontWeight="500"
-                              color="#E12525"
-                              fontSize="10px"
-                            >
-                              {plan.providerShortDescription}
-                            </Text>
-                          </Box>
+                          <Flex
+                            justifyContent={'space-between'}
+                            alignItems="center"
+                            width={'84%'}
+                          >
+                            <Box p="10px">
+                              <Text fontSize="15px">{plan.providerName}</Text>
+                              <Text
+                                fontWeight="500"
+                                color="#E12525"
+                                fontSize="10px"
+                              >
+                                {plan.providerShortDescription}
+                              </Text>
+                            </Box>
+                            <Image src={plan.providerImage} />
+                          </Flex>
                         </Stack>
                       </Box>
                       <AccordionIcon />
@@ -510,7 +517,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                 <Typography
                   style={{ textAlign: 'center', paddingTop: '10px' }}
                   fontSize="15px"
-                  text={'Your documents have been successfully verified, and Kazam has approved your loan request!'}
+                  text={'Your documents have been successfully verified, and your loan request is approved!'}
                 />
               </Flex>
             ) : (

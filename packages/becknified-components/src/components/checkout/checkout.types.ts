@@ -85,7 +85,7 @@ export interface CheckoutProps<T extends FormField[]> {
     items?: {
       type: string
       title: string
-      data: ItemDetailProps[] | RentalItemProps[]
+      data?: ItemDetailProps[] | RentalItemProps[]
     }
     shipping?: ShippingSectionProps<T>
     billing?: ShippingSectionProps<T>

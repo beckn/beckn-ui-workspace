@@ -91,7 +91,11 @@ const retailPaymentMethod = (props: PaymentMethodSelectionProps) => {
           children={t.confirmOrder}
           handleClick={() => {
             if (type === 'RENT_AND_HIRE') {
-              router.push('/retailOrderConfirmation')
+              if (selectedPaymentMethod.includes('UPI')) {
+                router.push('/upiScreen')
+              } else {
+                router.push('/secureCheckout')
+              }
             } else if (checkedPayment) {
               if (selectedPaymentMethod.includes('UPI')) {
                 router.push('/upiScreen')
