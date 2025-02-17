@@ -21,6 +21,7 @@ import { ROLE, ROUTE_TYPE } from '@lib/config'
 import { AuthRootState } from '@store/auth-slice'
 import { useRouter } from 'next/router'
 import { InputProps } from '@beckn-ui/molecules'
+import { clearCache } from '@utils/indexedDB'
 
 const ProfilePage = () => {
   const dispatch = useDispatch()
@@ -228,8 +229,17 @@ const ProfilePage = () => {
               arrow={false}
               divider={false}
               color="red"
-              handleClick={() => {
-                dispatch(logout())
+              handleClick={async () => {
+                try {
+                  // Clear IndexedDB first
+                  await clearCache()
+                  // Then dispatch logout action
+                  dispatch(logout())
+                } catch (error) {
+                  console.error('Error clearing cache during logout:', error)
+                  // Still proceed with logout even if cache clear fails
+                  dispatch(logout())
+                }
               }}
             />
           </Box>

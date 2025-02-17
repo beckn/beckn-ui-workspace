@@ -11,6 +11,7 @@ import { testIds } from '@shared/dataTestIds'
 import { Box } from '@chakra-ui/react'
 import { parseSearchlist } from '@utils/search-utils'
 import { RootState } from '@store/index'
+import { initDB, getFromCache, setInCache } from '@utils/indexedDB'
 
 const Search = () => {
   const type = useSelector((state: RootState) => state.navigation.type)
@@ -28,51 +29,63 @@ const Search = () => {
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
-  const fetchDataForSearch = () => {
-    if (!searchKeyword) return
-    setIsLoading(true)
+  // Initialize IndexedDB when component mounts
+  useEffect(() => {
+    initDB().catch(console.error)
+  }, [])
 
-    const searchPayload = {
-      context: {
-        domain: type === 'RENT_AND_HIRE' ? DOMAIN_PATH.RENT_AND_HIRE : DOMAIN_PATH.MY_STORE
-      },
-      searchString: searchKeyword
+  const fetchDataForSearch = async () => {
+    if (!searchKeyword || !type) return
+
+    const cacheKey = `${type}_${searchKeyword.toLowerCase()}`
+
+    try {
+      const cachedResults = await getFromCache(cacheKey)
+      if (cachedResults) {
+        console.log('Getting results from cache')
+        setItems(cachedResults)
+        setOriginalItems(cachedResults)
+        dispatch(discoveryActions.addProducts({ products: cachedResults }))
+        return
+      }
+    } catch (error) {
+      console.error('Cache read error:', error)
     }
 
-    axios
-      .post(`${apiUrl}/search`, searchPayload)
-      .then(res => {
-        dispatch(discoveryActions.addTransactionId({ transactionId: res.data.data[0].context.transaction_id }))
-        const parsedSearchItems = parseSearchlist(res.data.data, type)
-        dispatch(discoveryActions.addProducts({ products: parsedSearchItems }))
-        setItems(parsedSearchItems)
-        console.log(res.data.data)
-        setOriginalItems(parsedSearchItems)
-        setIsLoading(false)
-      })
-      .catch(e => {
-        setIsLoading(false)
-      })
+    setIsLoading(true)
+
+    try {
+      const searchPayload = {
+        context: {
+          domain: type === 'RENT_AND_HIRE' ? 'deg:rental' : 'deg:retail'
+        },
+        searchString: searchKeyword
+      }
+
+      const res = await axios.post(`${apiUrl}/search`, searchPayload)
+      dispatch(discoveryActions.addTransactionId({ transactionId: res.data.data[0].context.transaction_id }))
+      const parsedSearchItems = parseSearchlist(res.data.data)
+      dispatch(discoveryActions.addProducts({ products: parsedSearchItems }))
+
+      // Cache the results
+      await setInCache(cacheKey, parsedSearchItems)
+
+      setItems(parsedSearchItems)
+      setOriginalItems(parsedSearchItems)
+    } catch (error) {
+      console.error('Search error:', error)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   useEffect(() => {
     if (searchKeyword) {
-      localStorage.removeItem('searchItems')
       localStorage.setItem('optionTags', JSON.stringify({ name: searchKeyword }))
       window.dispatchEvent(new Event('storage-optiontags'))
       fetchDataForSearch()
     }
   }, [searchKeyword])
-
-  useEffect(() => {
-    if (localStorage) {
-      const cachedSearchResults = localStorage.getItem('searchItems')
-      if (cachedSearchResults) {
-        const parsedCachedResults = JSON.parse(cachedSearchResults)
-        setItems(parsedCachedResults)
-      }
-    }
-  }, [])
 
   const handleFilterOpen = () => {
     setIsFilterOpen(!isFilterOpen)
