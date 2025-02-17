@@ -45,6 +45,7 @@ const Product = () => {
           noCounter: true,
           currency: selectedProduct.item.price.currency,
           totalPrice: selectedProduct.item.price.value,
+          rateLabel: '/ hr',
           cta: {
             dataTest: testIds.productpage_addTocartButton,
             text: 'Proceed',
@@ -112,7 +113,8 @@ const Product = () => {
               size: 20,
               setRating: () => {},
               starCount: 5,
-              dataTest: testIds.item_rating
+              dataTest: testIds.item_rating,
+              useDefaultColor: true
             },
             productCta
           }

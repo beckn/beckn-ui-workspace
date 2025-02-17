@@ -183,7 +183,7 @@ const RentAndHire = () => {
               <BecknButton
                 text="Go to My Services"
                 sx={{ marginTop: '1rem' }}
-                handleClick={() => router.push('/myServices')}
+                handleClick={() => router.push('/orderServices')}
               />
             </Flex>
           ) : (

@@ -23,6 +23,7 @@ import { RootState } from '@store/index'
 import { DOMAIN_PATH } from '@lib/config'
 import { calcLength } from 'framer-motion'
 import { calculateDuration, generateRentalInitPayload } from '@utils/checkout-util'
+import { setEmiDetails } from '@store/emiSelect-slice'
 
 export type ShippingFormData = {
   name: string
@@ -69,6 +70,8 @@ const CheckoutPage = () => {
   const [fromTime, setFromTime] = useState<string>()
   const [toTime, setToTime] = useState<string>()
   const [duration, setDuration] = useState<number>()
+
+  const emiDetails = useSelector((state: any) => state.selectedEmi.emiDetails[0])
 
   useEffect(() => {
     const storedFromTime = localStorage.getItem('fromTime')
@@ -410,6 +413,16 @@ const CheckoutPage = () => {
             dataTest: testIds.checkoutpage_proceedToCheckout,
             handleClick: () => {
               if (type === 'RENT_AND_HIRE') {
+                dispatch(
+                  setEmiDetails({
+                    emiDetails: [
+                      {
+                        ...emiDetails,
+                        payableAmount: getSubTotalAndDeliveryCharges(initResponse, duration).subTotal.toString()
+                      }
+                    ]
+                  })
+                )
                 router.push('/retailPaymentMethod')
               } else {
                 // dispatch(cartActions.clearCart())

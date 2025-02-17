@@ -63,3 +63,7 @@ export const filterByKeyword = (data: any[], keyword: string, searchBy: string):
 export const validateStartEndTime = (startTime: Date, endTime: Date): boolean => {
   return startTime.getTime() < endTime.getTime()
 }
+
+export const currencyFormat = (price: number | undefined) => {
+  return price ? new Intl.NumberFormat('en-GB').format(price) : null
+}

@@ -90,7 +90,7 @@ const retailOrderConfirmation = () => {
         withCredentials: true
       }
 
-      const res = axios.post(
+      const res = await axios.post(
         `${strapiUrl}${ROUTE_TYPE[ROLE.GENERAL]}/wallet/attest`,
         {
           wallet_doc_type: transactionType,

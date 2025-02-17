@@ -15,4 +15,5 @@ export interface StarRatingProps {
   size?: number
   ratingText?: string
   dataTest?: string
+  useDefaultColor?: boolean
 }
