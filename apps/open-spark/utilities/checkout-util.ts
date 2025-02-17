@@ -82,3 +82,29 @@ export const generateRentalInitPayload = async (
     ]
   }
 }
+
+export function calculateDuration(from: string, to: string): number {
+  // if (!from || !to) return 'Not available' // Handle null values
+
+  const parseTime = (timeStr: string): number => {
+    if (!timeStr.includes(' ')) return 0 // Ensure valid format
+    const [time, period] = timeStr.split(' ')
+    let [hours, minutes] = time.split(':').map(Number)
+
+    if (period === 'PM' && hours !== 12) hours += 12
+    if (period === 'AM' && hours === 12) hours = 0
+
+    return hours * 60 + minutes // Convert to total minutes
+  }
+
+  const fromMinutes = parseTime(from)
+  const toMinutes = parseTime(to)
+
+  const totalMinutes = toMinutes - fromMinutes
+  // if (totalMinutes < 0) return 'Invalid time range' // Handle overnight cases
+
+  // Convert to hours and minutes format
+  const hours = Math.floor(totalMinutes / 60)
+
+  return hours
+}

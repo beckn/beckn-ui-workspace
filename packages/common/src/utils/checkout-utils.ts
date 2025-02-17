@@ -70,7 +70,11 @@ export const getPaymentBreakDown = (initData: InitResponseModel[] | StatusRespon
   return { breakUpMap, totalPricewithCurrent }
 }
 
-export const getSubTotalAndDeliveryCharges = (initData: InitResponseModel[] | StatusResponseModel[]) => {
+export const getSubTotalAndDeliveryCharges = (
+  initData: InitResponseModel[] | StatusResponseModel[],
+  frequency?: number = 1
+) => {
+  console.log('frequency', frequency)
   let subTotal: number = 0
   let currencySymbol
 
@@ -78,13 +82,14 @@ export const getSubTotalAndDeliveryCharges = (initData: InitResponseModel[] | St
     initData.forEach(data => {
       if (data.message.order.quote.breakup) {
         data.message.order.quote.breakup.forEach(breakup => {
-          subTotal += Number(parseFloat((Number(breakup.price.value) || 0).toString()).toFixed(2))
+          const itemPrice = Number(parseFloat((Number(breakup.price.value) || 0).toString()).toFixed(2))
+          subTotal += itemPrice * frequency
         })
         currencySymbol = data.message.order.quote.breakup[0]?.price.currency
       }
     })
   }
-
+  console.log('Final subtotal:', subTotal)
   return { subTotal, currencySymbol }
 }
 

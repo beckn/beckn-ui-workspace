@@ -22,7 +22,7 @@ import DetailsCard from '@beckn-ui/becknified-components/src/components/checkout
 import { RootState } from '@store/index'
 import { DOMAIN_PATH } from '@lib/config'
 import { calcLength } from 'framer-motion'
-import { generateRentalInitPayload } from '@utils/checkout-util'
+import { calculateDuration, generateRentalInitPayload } from '@utils/checkout-util'
 
 export type ShippingFormData = {
   name: string
@@ -66,6 +66,22 @@ const CheckoutPage = () => {
   const isBillingSameRedux = useSelector((state: CheckoutRootState) => state.checkout.isBillingSame)
   const { transactionId, productList } = useSelector((state: DiscoveryRootState) => state.discovery)
   const domain = type === 'RENT_AND_HIRE' ? DOMAIN_PATH.RENT_AND_HIRE : DOMAIN_PATH.MY_STORE
+  const [fromTime, setFromTime] = useState<string>()
+  const [toTime, setToTime] = useState<string>()
+  const [duration, setDuration] = useState<number>()
+
+  useEffect(() => {
+    const storedFromTime = localStorage.getItem('fromTime')
+    const storedToTime = localStorage.getItem('toTime')
+
+    setFromTime(storedFromTime as string)
+    setToTime(storedToTime as string)
+
+    if (storedFromTime && storedToTime) {
+      const calculatedDuration = calculateDuration(storedFromTime, storedToTime)
+      setDuration(calculatedDuration)
+    }
+  }, [])
 
   //////////  For field Data ///////////
   const formFieldConfig: FormField[] = [
@@ -207,6 +223,8 @@ const CheckoutPage = () => {
         })
       })
     }
+    console.log(paymentBreakdownMap)
+
     return paymentBreakdownMap
   }
 
@@ -222,51 +240,16 @@ const CheckoutPage = () => {
     )
   }
   const rentalItems =
-    selectRentalResponse?.message?.order?.items?.map(singleItem => {
-      // Extract timestamps from the first available fulfillment
-      const fulfillmentStart = singleItem?.fulfillments?.find(f => f.type === 'RENTAL_START')
-      const fulfillmentEnd = singleItem?.fulfillments?.find(f => f.type === 'RENTAL_END')
-
-      // Ensure timestamps are numbers
-      let startTimestamp = fulfillmentStart ? Number(fulfillmentStart.state.name) : null
-      let endTimestamp = fulfillmentEnd ? Number(fulfillmentEnd.state.name) : null
-
-      // Convert milliseconds to seconds if needed
-      if (startTimestamp && startTimestamp > 9999999999) startTimestamp = Math.floor(startTimestamp / 1000)
-      if (endTimestamp && endTimestamp > 9999999999) endTimestamp = Math.floor(endTimestamp / 1000)
-
-      // Convert timestamps to human-readable format
-      const formatTime = (timestamp: number | null) => {
-        if (!timestamp) return 'N/A'
-        const date = new Date(timestamp * 1000) // Convert seconds to milliseconds
-        return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })
-      }
-
-      // Get formatted start and end times
-      const startTime = formatTime(startTimestamp)
-      const endTime = formatTime(endTimestamp)
-
-      // Calculate duration in hours
-      const duration =
-        startTimestamp && endTimestamp ? Math.round((endTimestamp - startTimestamp) / 3600) + ' hr' : 'N/A'
-
+    selectRentalResponse?.message?.order?.items?.map((singleItem: { name: string; code: string }) => {
       return {
         batteryType: singleItem.name,
         capacity: singleItem.code,
         rentedFrom: selectRentalResponse?.message?.order?.provider?.name,
-        timeSlot: `${startTime} to ${endTime}`,
-        duration: duration
+        timeSlot: `${fromTime} to ${toTime}`,
+        duration: `${duration} hrs`
       }
     }) ?? []
-
-  const retailItems = cartItems.map(singleItem => ({
-    title: singleItem.name,
-    description: singleItem.short_desc,
-    quantity: singleItem.quantity,
-    price: singleItem.totalPrice,
-    currency: singleItem.price.currency,
-    image: singleItem.images?.[0].url
-  }))
+  console.log('duration', duration)
 
   return (
     <Box
@@ -414,8 +397,8 @@ const CheckoutPage = () => {
               paymentBreakDown: createPaymentBreakdownMap(),
               totalText: t.total,
               totalValueWithCurrency: {
-                value: getSubTotalAndDeliveryCharges(initResponse).subTotal.toString(),
-                currency: getSubTotalAndDeliveryCharges(initResponse).currencySymbol!
+                value: getSubTotalAndDeliveryCharges(initResponse, duration).subTotal.toString(),
+                currency: getSubTotalAndDeliveryCharges(initResponse, duration).currencySymbol!
               }
             }
           },

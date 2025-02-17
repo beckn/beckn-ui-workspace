@@ -32,6 +32,9 @@ export const generateTimeSlots = (selectedDate: string, dates: DateInfo[]): Time
     '10:00 PM'
   ]
 
+  // Define slots that should always be disabled
+  const disabledSlots = ['8:00 PM', '9:00 PM', '10:00 PM']
+
   const now = new Date()
   const currentHour = now.getHours()
   const currentDate = now.toISOString().split('T')[0]
@@ -42,7 +45,15 @@ export const generateTimeSlots = (selectedDate: string, dates: DateInfo[]): Time
     if (slot.includes('PM') && slotHour !== 12) slotHour += 12
     if (slot.includes('AM') && slotHour === 12) slotHour = 0
 
-    return { time: slot, disabled: selectedFullDate === currentDate && slotHour <= currentHour }
+    // Slot is disabled if:
+    // 1. It's in the disabledSlots array OR
+    // 2. It's before or equal to current hour on the current date
+    const isDisabled = disabledSlots.includes(slot) || (selectedFullDate === currentDate && slotHour <= currentHour)
+
+    return {
+      time: slot,
+      disabled: isDisabled
+    }
   })
 }
 
@@ -57,21 +68,33 @@ export const getTimeValue = (timeStr: string): number => {
 }
 
 export const convertToTimestamp = (selectedDate: string, selectedTime: string): number | null => {
-  if (!selectedDate || !selectedTime) return null // Ensure valid inputs
+  if (!selectedDate || !selectedTime) return null
 
   try {
-    // Extract day and date, e.g., "Wed 14 Feb"
-    const [, day, month, date] = selectedDate.split(' ')
-    const fullDate = `${date} ${month} ${new Date().getFullYear()} ${selectedTime}`
+    // Parse the date components from selectedDate (e.g., "Mon 17")
+    const [, date] = selectedDate.split(' ')
 
-    // Convert to a valid Date object
-    const dateObject = new Date(fullDate)
-    if (isNaN(dateObject.getTime())) {
-      console.error('Invalid Date Conversion:', fullDate)
-      return null
+    // Create a base date for the current month and year
+    const now = new Date()
+    const year = now.getFullYear()
+    const month = now.getMonth()
+
+    // Parse time components
+    const [time, period] = selectedTime.split(' ')
+    const [hours, minutes] = time.split(':')
+
+    // Convert to 24-hour format
+    let hour = parseInt(hours)
+    if (period === 'PM' && hour !== 12) {
+      hour += 12
+    } else if (period === 'AM' && hour === 12) {
+      hour = 0
     }
 
-    // Convert to UNIX timestamp (seconds)
+    // Create the date object with the components
+    const dateObject = new Date(year, month, parseInt(date), hour, parseInt(minutes), 0)
+
+    // Convert to epoch timestamp
     return Math.floor(dateObject.getTime() / 1000)
   } catch (error) {
     console.error('Timestamp Conversion Error:', error)
@@ -85,6 +108,7 @@ export const prepareApiPayload = (
   toTimestamp: number,
   domain: string
 ): ApiPayload => {
+  console.log(cartItems)
   return {
     data: cartItems.map(item => ({
       context: {

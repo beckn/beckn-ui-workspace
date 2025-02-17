@@ -51,7 +51,7 @@ const Product = () => {
             color: '#fff',
             handleClick: () => {
               dispatch(
-                cartActions.addItemToCart({
+                cartActions.addRentalItem({
                   product: selectedProduct,
                   quantity: counter
                 })

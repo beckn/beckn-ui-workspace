@@ -21,7 +21,6 @@ const homeIconBlackList = [
   '/product',
   '/secureCheckout',
   '/upiScreen',
-  '/myRental',
   '/rentAndHire',
   '/confirmRent'
 ]
@@ -65,7 +64,8 @@ const headerNames: PathnameObjectType = {
   '/orderHistory': 'My Orders',
   '/secureCheckout': 'Secure Checkout',
   '/myRental': 'My Rentals',
-  '/rentAndHire': ''
+  '/rentAndHire': '',
+  '/orderServices': 'My Services'
 }
 
 const headerFrenchNames: PathnameObjectType = {
@@ -99,7 +99,8 @@ const headerBlackList = [
   '/confirmRent',
   '/secureCheckout',
   '/myRental',
-  '/rentAndHire'
+  '/rentAndHire',
+  '/orderServices'
 ]
 
 const cartIconBlackList: string[] = [

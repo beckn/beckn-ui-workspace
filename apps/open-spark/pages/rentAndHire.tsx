@@ -50,14 +50,14 @@ const RentAndHire = () => {
       image: '/images/Order_history.svg',
       text: 'My services',
       handleClick: () => {
-        console.log('Navigating to provide rental services...')
+        router.push('/orderServices')
       }
     },
     {
       image: '/images/Order_history.svg',
       text: 'My Rentals',
       handleClick: () => {
-        console.log('Navigating to provide rental services...')
+        router.push('/myRental')
       }
     }
   ]

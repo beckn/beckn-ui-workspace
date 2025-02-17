@@ -49,6 +49,34 @@ const cartSlice = createSlice({
         existingItem.totalPrice = totalPrice
       }
     },
+    addRentalItem(
+      state: ICart,
+      action: PayloadAction<{
+        product: ParsedItemModel
+        quantity: number
+      }>
+    ) {
+      const newItem = action.payload.product
+
+      // Clear the cart before adding the new rental item
+      state.items = []
+
+      // Add the new item
+      state.items.push({
+        ...newItem.item,
+        quantity: 1, // Since we are only adding one item
+        totalPrice: parseFloat(newItem.item.price.value),
+        bpp_id: newItem.bppId,
+        bpp_uri: newItem.bppUri,
+        providerId: newItem.providerId,
+        providerName: newItem.providerName,
+        locations: newItem.providerCoordinates
+      } as CartItemForRequest)
+
+      // Update total quantity and total amount
+      state.totalQuantity = 1 // Only one item in the cart
+      state.totalAmount = parseFloat(newItem.item.price.value)
+    },
 
     removeItemFromCart(
       state: ICart,
