@@ -168,19 +168,22 @@ const PhysicalAssetsDetails = () => {
         </>
       )}
 
-      <Typography
-        text="Documents"
-        fontSize="16px"
-      />
-      {item && (
-        <ItemRenderer
-          item={item}
-          renderMode={'long'}
-          handleOnClick={() => {}}
-          attestationsCount={false}
-          allowDeletion={false}
-          showVerificationStatus={false}
-        />
+      {item?.title && (
+        <>
+          <Typography
+            text="Documents"
+            fontSize="16px"
+          />
+
+          <ItemRenderer
+            item={item}
+            renderMode={'long'}
+            handleOnClick={() => {}}
+            attestationsCount={false}
+            allowDeletion={false}
+            showVerificationStatus={false}
+          />
+        </>
       )}
 
       {attestationsDetails.length > 0 && (

@@ -475,3 +475,6 @@ select:-webkit-autofill:focus {
 .checkout-open-spark .overview-checkout {
   display: none;
 }
+.react-datepicker-wrapper {
+  width: 100% !important;
+}

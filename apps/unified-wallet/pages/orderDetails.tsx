@@ -25,7 +25,7 @@ import { useLanguage } from '@hooks/useLanguage'
 import { testIds } from '@shared/dataTestIds'
 import { StatusKey, statusMap } from '@lib/client'
 
-const DELIVERED = 'CLOSED'
+const DELIVERED = 'ORDER_DELIVERED'
 const CANCELLED = 'USER CANCELLED'
 
 export default function OrderDetails() {
@@ -277,9 +277,10 @@ export default function OrderDetails() {
               <Text
                 fontSize={'15px'}
                 fontWeight={'500'}
-                color={'#BD942B'} // change base on status
+                data-test={testIds.orderDetailspage_orderStatus}
+                color={statusData[0].message.order.status === 'CANCELLED' ? 'red' : 'green'}
               >
-                {'pending'}
+                {statusData[0].message.order.status}
               </Text>
             </Flex>
           </>

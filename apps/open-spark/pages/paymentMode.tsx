@@ -66,19 +66,26 @@ interface EMIApplicationModalProps {
   isOpen: boolean
   onClose: () => void
   handleSyncWallet: () => void
+  syncWalletIsLoading?: boolean
+  walletDetails?: { aadharNumber: string; panNumber: string }
 }
 
-const EMIApplicationModal = ({ isOpen, onClose, handleSyncWallet }: EMIApplicationModalProps) => {
+const EMIApplicationModal = ({
+  isOpen,
+  onClose,
+  handleSyncWallet,
+  syncWalletIsLoading,
+  walletDetails
+}: EMIApplicationModalProps) => {
   const [formData, setFormData] = useState<FormData>({
     fullName: '',
     dateOfBirth: null,
-    panCard: '',
-    aadhaar: '',
+    panCard: walletDetails?.panNumber || '',
+    aadhaar: walletDetails?.aadharNumber || '',
     mobileNumber: ''
   })
 
   const [errors, setErrors] = useState<FormErrors>({})
-  const [syncWalletIsLoading, setSyncWalletIsLoading] = useState(false)
   const toast = useToast()
 
   const validateForm = (): boolean => {
@@ -188,12 +195,7 @@ const EMIApplicationModal = ({ isOpen, onClose, handleSyncWallet }: EMIApplicati
             fontWeight="500"
             color="#4398E8"
             text="Sync wallet"
-            onClick={() => {
-              setSyncWalletIsLoading(true)
-              setTimeout(() => {
-                handleSyncWallet()
-              }, 3000)
-            }}
+            onClick={handleSyncWallet}
           />
         </Flex>
         <Divider
@@ -989,8 +991,18 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
           <Box className="btm-modal-payment">
             <EMIApplicationModal
               isOpen={openModal}
-              onClose={() => setOpenModal(false)}
-              handleSyncWallet={handleSyncWallet}
+              onClose={handleOnSubmit}
+              handleSyncWallet={() => {
+                setSyncWalletIsLoading(true)
+                setTimeout(() => {
+                  handleSyncWallet()
+                }, 3000)
+              }}
+              syncWalletIsLoading={syncWalletIsLoading}
+              walletDetails={{
+                aadharNumber: aadharNumber!,
+                panNumber: PANNumber!
+              }}
             />
           </Box>
         )
