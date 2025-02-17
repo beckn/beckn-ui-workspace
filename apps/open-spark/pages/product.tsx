@@ -92,6 +92,8 @@ const Product = () => {
           }
         }
 
+  console.log('Dank ci/cd check')
+
   return (
     <Box
       className="hideScroll myStore-product-details product-text"
