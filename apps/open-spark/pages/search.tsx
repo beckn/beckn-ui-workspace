@@ -37,12 +37,14 @@ const Search = () => {
   const fetchDataForSearch = async () => {
     if (!searchKeyword || !type) return
 
-    const cacheKey = `${type}_${searchKeyword.toLowerCase()}`
+    // Create cache key with type prefix
+    const cacheKey =
+      type === 'RENT_AND_HIRE' ? `rental_${searchKeyword.toLowerCase()}` : `retail_${searchKeyword.toLowerCase()}`
 
     try {
       const cachedResults = await getFromCache(cacheKey)
       if (cachedResults) {
-        console.log('Getting results from cache')
+        console.log(`Getting ${type} results from cache`)
         setItems(cachedResults)
         setOriginalItems(cachedResults)
         dispatch(discoveryActions.addProducts({ products: cachedResults }))
@@ -67,7 +69,7 @@ const Search = () => {
       const parsedSearchItems = parseSearchlist(res.data.data, type)
       dispatch(discoveryActions.addProducts({ products: parsedSearchItems }))
 
-      // Cache the results
+      // Cache the results with type-specific prefix
       await setInCache(cacheKey, parsedSearchItems)
 
       setItems(parsedSearchItems)
