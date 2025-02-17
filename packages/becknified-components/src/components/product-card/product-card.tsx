@@ -77,7 +77,7 @@ const ProductCard: React.FC<ProductCardProps> = props => {
             </Box>
             <Box
               p={'15px'}
-              pt={'11px'}
+              pt={'10px'}
               w={'100%'}
               position={'relative'}
               display={'flex'}
@@ -111,7 +111,7 @@ const ProductCard: React.FC<ProductCardProps> = props => {
                   <Text
                     className="domain"
                     fontSize={'0.8rem'}
-                    mb={'0.4rem'}
+                    mb={'10px'}
                     noOfLines={2}
                     textOverflow="ellipsis"
                     whiteSpace="pre-wrap"
@@ -216,7 +216,7 @@ const ProductCard: React.FC<ProductCardProps> = props => {
                 justifyContent={'space-between'}
                 alignItems={'center'}
                 position={'absolute'}
-                bottom={'6px'}
+                bottom={'10px'}
                 width={'calc(100% - 30px)'}
               >
                 <ProductPrice

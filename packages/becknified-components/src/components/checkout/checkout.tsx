@@ -46,29 +46,29 @@ const Checkout: React.FC<CheckoutProps<FormField[]>> = ({
             text={items?.title || ''}
           />
         </Box>
-
-        <DetailsCard>
-          {items?.type === 'RENT_AND_HIRE' ? (
-            <OrderOverview items={items.data as RentalItemProps[]} />
-          ) : (
-            (items?.data as ItemDetailProps[]).map((item, i) => (
-              <div
-                key={i}
-                data-test={dataTestItemDetails}
-              >
-                <ItemDetails
-                  title={item.title}
-                  description={item.description}
-                  quantity={item.quantity}
-                  price={item.price}
-                  currency={item.currency}
-                  image={item.image}
-                />
-              </div>
-            ))
-          )}
-        </DetailsCard>
-
+        <Box className="overview-checkout">
+          <DetailsCard>
+            {items?.type === 'RENT_AND_HIRE' ? (
+              <OrderOverview items={items.data as RentalItemProps[]} />
+            ) : (
+              (items?.data as ItemDetailProps[])?.map((item, i) => (
+                <div
+                  key={i}
+                  data-test={dataTestItemDetails}
+                >
+                  <ItemDetails
+                    title={item.title}
+                    description={item.description}
+                    quantity={item.quantity}
+                    price={item.price}
+                    currency={item.currency}
+                    image={item.image}
+                  />
+                </div>
+              ))
+            )}
+          </DetailsCard>
+        </Box>
         {/* Shipping section */}
         <ShippingSection {...shipping} />
 

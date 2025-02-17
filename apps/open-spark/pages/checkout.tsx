@@ -270,83 +270,93 @@ const CheckoutPage = () => {
 
   return (
     <Box
-      className="hideScroll checkout-open-spark"
+      className={`hideScroll ${type !== 'RENT_AND_HIRE' ? 'checkout-open-spark' : ''}`}
       maxH="calc(100vh - 100px)"
       overflowY={'scroll'}
     >
-      {/* start Item Details */}
       {type !== 'RENT_AND_HIRE' && (
-        <DetailsCard>
-          {cartItems.map((singleItem, ind) => (
-            <React.Fragment key={ind}>
-              <Box pb="10px">
-                <Flex alignItems={'center'}>
-                  <Image
-                    src={singleItem.images?.[0].url}
-                    alt={'img'}
-                    width="120px"
-                    height="94px"
-                  />
-                  <Box>
-                    <Text
-                      fontSize="15px"
-                      fontWeight="600"
-                      noOfLines={2}
-                      textOverflow="ellipsis"
-                      whiteSpace="pre-wrap"
-                      overflowWrap="break-word"
-                      height={'fit-content'}
-                      mb="10px"
-                    >
-                      {singleItem.name}
-                    </Text>
-                    <Typography
-                      text={singleItem.short_desc}
-                      variant="subTextRegular"
+        <>
+          <Box
+            fontSize={'17px'}
+            marginBottom="10px"
+            mt="10px"
+          >
+            Order Overview
+          </Box>
+          <DetailsCard>
+            {cartItems.map((singleItem, ind) => (
+              <React.Fragment key={ind}>
+                <Box pb="10px">
+                  <Flex alignItems={'center'}>
+                    <Image
+                      src={singleItem.images?.[0].url}
+                      alt={'img'}
+                      width="120px"
+                      height="94px"
                     />
-                  </Box>
-                </Flex>
-
-                <Box>
-                  <Flex
-                    pb="5px"
-                    alignItems="center"
-                  >
-                    <Flex alignItems="center">
+                    <Box>
                       <Text
-                        mr="10px"
-                        fontWeight={'600'}
+                        fontSize="15px"
+                        fontWeight="600"
+                        noOfLines={2}
+                        textOverflow="ellipsis"
+                        whiteSpace="pre-wrap"
+                        overflowWrap="break-word"
+                        height={'fit-content'}
+                        mb="10px"
                       >
-                        Qty
+                        {singleItem.name}
                       </Text>
                       <Typography
-                        className="quantity-checkout"
-                        text={` ${singleItem.quantity.toString()}`}
+                        text={singleItem.short_desc}
                         variant="subTextRegular"
-                      />
-                    </Flex>
-                    <Box ml="25px">
-                      <ProductPrice
-                        price={singleItem.totalPrice}
-                        currencyType={singleItem.price.currency}
                       />
                     </Box>
                   </Flex>
+
+                  <Box>
+                    <Flex
+                      pb="5px"
+                      alignItems="center"
+                    >
+                      <Flex alignItems="center">
+                        <Text
+                          mr="10px"
+                          fontWeight={'600'}
+                        >
+                          Qty
+                        </Text>
+                        <Typography
+                          className="quantity-checkout"
+                          text={` ${singleItem.quantity.toString()}`}
+                          variant="subTextRegular"
+                        />
+                      </Flex>
+                      <Box ml="25px">
+                        <ProductPrice
+                          price={singleItem.totalPrice}
+                          currencyType={singleItem.price.currency}
+                        />
+                      </Box>
+                    </Flex>
+                  </Box>
                 </Box>
-              </Box>
-              <Divider />
-            </React.Fragment>
-          ))}
-        </DetailsCard>
+                <Divider />
+              </React.Fragment>
+            ))}
+          </DetailsCard>
+        </>
       )}
 
       <Checkout
         schema={{
-          items: {
-            title: t.items,
-            data: type === 'RENT_AND_HIRE' ? rentalItems : retailItems,
-            type: type || ''
-          },
+          ...(type === 'RENT_AND_HIRE' && {
+            items: {
+              title: t.items,
+              data: rentalItems,
+              type: type || ''
+            }
+          }),
           shipping: {
             triggerFormTitle: t.change,
             showDetails: isInitResultPresent(),
