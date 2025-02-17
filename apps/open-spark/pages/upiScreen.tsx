@@ -1,11 +1,15 @@
 import React, { useState } from 'react'
 import { Box, Text, Grid, Button, Flex, Circle, Image, Divider } from '@chakra-ui/react'
 import Router, { useRouter } from 'next/router'
+import { useSelector } from 'react-redux'
+import { DiscoveryRootState } from '@beckn-ui/common'
 
 const UpiScreen = () => {
   const [pin, setPin] = useState<string[]>(Array(4).fill(''))
   const [currentIndex, setCurrentIndex] = useState(0)
   const router = useRouter()
+  const payableAmount = useSelector((state: any) => state.selectedEmi.emiDetails[0]?.payableAmount)
+  const providerName = useSelector((state: DiscoveryRootState) => state.discovery.selectedProduct.providerName)
 
   const handleNumberClick = (num: string) => {
     if (currentIndex < 4) {
@@ -97,7 +101,7 @@ const UpiScreen = () => {
               fontWeight="700"
               color="#837D7D"
             >
-              Marie
+              {providerName}
             </Text>
           </Flex>
           <Flex justify="space-between">
@@ -113,7 +117,7 @@ const UpiScreen = () => {
               fontSize={'14px'}
               fontWeight="700"
             >
-              10,000
+              {payableAmount}
             </Text>
           </Flex>
         </Box>

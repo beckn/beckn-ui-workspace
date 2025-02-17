@@ -62,6 +62,11 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
   const cartItems = useSelector((state: ICartRootState) => state.cart.items)
   const [aadharNumber, setAadharNumber] = useState<string>()
   const [PANNumber, setPANNumber] = useState<string>()
+  const [payableAmount, setPayableAmount] = useState<number>()
+  const [dicountedSearch, setDicountedSearch] = useState(false)
+  const [newTotalCost, setNewTotalCost] = useState(() => {
+    return Number(localStorage.getItem('totalCost')) || 0
+  })
 
   const { t } = useLanguage()
   const router = useRouter()
@@ -70,12 +75,22 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
   const [getDocuments, { isLoading: verifyLoading }] = useGetDocumentsMutation()
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
-  const fetchEMIPlans = () => {
+  const fetchEMIPlans = (isDiscounted = false) => {
     const searchPayload = {
       context: {
         domain: 'deg:finance'
       },
-      searchString: ''
+      searchString: '',
+      ...(isDiscounted && {
+        tags: [
+          {
+            descriptor: {
+              code: 'preFinanced',
+              name: 'true'
+            }
+          }
+        ]
+      })
     }
 
     axios
@@ -96,7 +111,16 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
 
   useEffect(() => {
     fetchEMIPlans()
+    localStorage.removeItem('totalCost')
   }, [])
+
+  const handleDiscountedSearch = () => {
+    setIsLoading(true)
+    fetchEMIPlans(true)
+    setDicountedSearch(true)
+
+    setIsLoading(false)
+  }
 
   const {
     handleOrderConfirmation,
@@ -179,21 +203,26 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
       const priceValue = Number(price?.value) || 0
       const priceTotal = priceValue * quantity
       const principal = priceTotal || totalPrice || priceTotal + totalPrice
+      const approvedLoanPercentage = Number(item.code) || 0
+      const approvedLoanAmount =
+        (approvedLoanPercentage / 100) * principal + Number(emiPlans[ind].providerShortDescription)
+      const newPayableAmount = Number(principal - approvedLoanAmount) || 0
 
-      const monthlyInstallment = Math.floor(principal / months)
+      if (payableAmount !== newPayableAmount) {
+        setPayableAmount(newPayableAmount)
+      }
 
       const monthlyInterestRate = annualInterestRate / 12 / 100
       const emiWithoutInterest =
-        (principal * monthlyInterestRate * Math.pow(1 + monthlyInterestRate, months)) /
+        (approvedLoanAmount * monthlyInterestRate * Math.pow(1 + monthlyInterestRate, months)) /
           (Math.pow(1 + monthlyInterestRate, months) - 1) || 0
 
-      const totalInterest = (principal * annualInterestRate * months) / (12 * 100) || 0
-      const monthlyInterestShare = totalInterest / months || 0
+      const emi = Math.floor(emiWithoutInterest)
 
-      const emi = Math.floor(emiWithoutInterest + monthlyInterestShare)
       const totalCost = emi * months
-      const interestAmount = Number((principal * annualInterestRate) / 100) || 0
-      return { emi, interestAmount, annualInterestRate, totalCost }
+
+      const actualInterestAmount = totalCost - approvedLoanAmount
+      return { emi, actualInterestAmount, annualInterestRate, totalCost, payableAmount }
     })
 
     dispatch(setEmiDetails({ emiDetails }))
@@ -323,146 +352,230 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                 value={selectedPlan}
                 className="radio-group-emi"
               >
-                {emiPlans.map(plan => (
-                  <AccordionItem
-                    key={plan.id}
-                    border="none"
-                  >
-                    <AccordionButton className="btn-for-emi">
-                      <Box
-                        flex="1"
-                        textAlign="left"
-                      >
-                        <Stack direction="row">
-                          <Radio
-                            _focusVisible={{ boxShadow: 'unset' }}
-                            value={plan.id}
-                            colorScheme="green"
-                            className="radio-for-emi"
-                            onChange={() => handleEmiSelect(plan.id)}
-                          />
-                          <Flex
-                            justifyContent={'space-between'}
-                            alignItems="center"
-                            width={'84%'}
-                          >
-                            <Box p="10px">
-                              <Text fontSize="15px">{plan.providerName}</Text>
-                              <Text
-                                fontWeight="500"
-                                color="#E12525"
-                                fontSize="10px"
-                              >
-                                {plan.providerShortDescription}
-                              </Text>
-                            </Box>
-                            <Image src={plan.providerImage} />
-                          </Flex>
-                        </Stack>
-                      </Box>
-                      <AccordionIcon />
-                    </AccordionButton>
-
-                    <Box p="0 20px">
-                      <Divider
-                        color="#D9D9D9"
-                        borderWidth="1.5px"
-                      />
-                    </Box>
-
-                    {emiPlans.length > 0 && (
-                      <AccordionPanel>
+                {emiPlans.map(plan => {
+                  return (
+                    <AccordionItem
+                      key={plan.id}
+                      border="none"
+                    >
+                      <AccordionButton className="btn-for-emi">
                         <Box
-                          boxShadow="0px 4px 10px rgba(0, 0, 0, 0.1)"
-                          borderRadius="12px"
-                          p="8px"
+                          flex="1"
+                          textAlign="left"
                         >
-                          <Flex
-                            justifyContent="space-between"
-                            p="12px 20px"
-                            bg="#D9D9D9"
-                            borderRadius="6px"
-                          >
-                            <Box
-                              fontSize="10px"
-                              fontWeight="500"
+                          <Stack direction="row">
+                            <Radio
+                              _focusVisible={{ boxShadow: 'unset' }}
+                              value={plan.id}
+                              colorScheme="green"
+                              className="radio-for-emi"
+                              onChange={() => handleEmiSelect(plan.id)}
+                            />
+                            <Flex
+                              justifyContent={'space-between'}
+                              alignItems="center"
+                              width={'84%'}
                             >
-                              EMI plan
-                            </Box>
-                            <Box
-                              fontSize="10px"
-                              fontWeight="500"
-                            >
-                              Interest rate (p.a)
-                            </Box>
-                            <Box
-                              fontSize="10px"
-                              fontWeight="500"
-                            >
-                              Total Cost
-                            </Box>
-                          </Flex>
-
-                          {plan.item.map((item: any, index: number) => {
-                            const quantity = Number(cartItems[0]?.quantity) || 1
-                            const totalPrice = Number(cartItems[index]?.price?.value || 0)
-
-                            const months = parseInt(item.name.match(/\d+/)?.[0] || '1')
-                            const annualInterestRate = Number(parseFloat(item?.price?.value) || 0)
-                            const priceValue = Number(price?.value) || 0
-                            const priceTotal = priceValue * quantity
-                            const principal = priceTotal || totalPrice || priceTotal + totalPrice
-
-                            const monthlyInstallment = Math.floor(principal / months)
-
-                            const monthlyInterestRate = annualInterestRate / 12 / 100
-                            const emiWithoutInterest =
-                              (principal * monthlyInterestRate * Math.pow(1 + monthlyInterestRate, months)) /
-                                (Math.pow(1 + monthlyInterestRate, months) - 1) || 0
-
-                            const totalInterest = (principal * annualInterestRate * months) / (12 * 100) || 0
-                            const monthlyInterestShare = totalInterest / months || 0
-
-                            const emi = Math.floor(emiWithoutInterest + monthlyInterestShare)
-                            const totalCost = emi * months
-                            const interestAmount = Number((principal * annualInterestRate) / 100) || 0
-                            return (
-                              <React.Fragment key={index}>
-                                <Flex
-                                  justifyContent="space-between"
-                                  p="12px 20px"
+                              <Box p="10px">
+                                <Text fontSize="15px">{plan.providerName}</Text>
+                                <Text
+                                  fontWeight="500"
+                                  color="#E12525"
+                                  fontSize="10px"
                                 >
-                                  <Box
-                                    fontSize="10px"
-                                    fontWeight="500"
-                                    color="#626060"
-                                  >
-                                    ₹ {emi} x {item.name}m
-                                  </Box>
-                                  <Box
-                                    fontSize="10px"
-                                    fontWeight="500"
-                                    color="#626060"
-                                  >
-                                    ₹ {interestAmount} ({annualInterestRate}%)
-                                  </Box>
-                                  <Box
-                                    fontSize="10px"
-                                    fontWeight="500"
-                                    color="#626060"
-                                  >
-                                    ₹ {totalCost.toFixed(2)}
-                                  </Box>
-                                </Flex>
-                                <Divider />
-                              </React.Fragment>
-                            )
-                          })}
+                                  Processing Fee: {plan.providerShortDescription}
+                                </Text>
+                              </Box>
+                              <Image src={plan.providerImage} />
+                            </Flex>
+                          </Stack>
                         </Box>
-                      </AccordionPanel>
-                    )}
-                  </AccordionItem>
-                ))}
+                        <AccordionIcon />
+                      </AccordionButton>
+
+                      <Box p="0 20px">
+                        <Divider
+                          color="#D9D9D9"
+                          borderWidth="1.5px"
+                        />
+                      </Box>
+
+                      {emiPlans.length > 0 && (
+                        <AccordionPanel>
+                          <Box
+                            boxShadow="0px 4px 10px rgba(0, 0, 0, 0.1)"
+                            borderRadius="12px"
+                            p="8px"
+                            mb="10px"
+                          >
+                            <Text
+                              fontSize={'10px'}
+                              fontWeight="500"
+                              mb="8px"
+                            >
+                              New Payment Overview
+                            </Text>
+                            <Flex
+                              justifyContent={'space-between'}
+                              alignItems="center"
+                            >
+                              <Text fontSize={'10px'}>Pay Now</Text>
+                              <Text fontSize={'10px'}>₹{payableAmount}</Text>
+                            </Flex>
+                          </Box>
+                          <Box
+                            boxShadow="0px 4px 10px rgba(0, 0, 0, 0.1)"
+                            borderRadius="12px"
+                            p="10px"
+                          >
+                            <Flex
+                              justifyContent="space-between"
+                              p="12px 20px"
+                              bg="#D9D9D9"
+                              borderRadius="6px"
+                            >
+                              <Box
+                                fontSize="10px"
+                                fontWeight="500"
+                              >
+                                EMI plan
+                              </Box>
+                              <Box
+                                fontSize="10px"
+                                fontWeight="500"
+                              >
+                                Interest rate (p.a)
+                              </Box>
+                              <Box
+                                fontSize="10px"
+                                fontWeight="500"
+                              >
+                                Total Cost
+                              </Box>
+                            </Flex>
+
+                            {plan.item.map((item: any, index: number) => {
+                              const quantity = Number(cartItems[0]?.quantity) || 1
+                              const totalPrice = Number(cartItems[index]?.price?.value || 0)
+                              const months = parseInt(item.name.match(/\d+/)?.[0] || '1')
+                              const annualInterestRate = Number(parseFloat(item?.price?.value) || 0)
+                              const priceValue = Number(price?.value) || 0
+                              const processingFees = Number(emiPlans[index].providerShortDescription) || 0
+
+                              const priceTotal = priceValue * quantity
+                              const principal = priceTotal || totalPrice || priceTotal + totalPrice
+                              const approvedLoanPercentage = Number(item.code) || 0
+                              const approvedLoanAmount = (approvedLoanPercentage / 100) * principal + processingFees // Include processing fees
+
+                              const newPayableAmount = Number(principal - approvedLoanAmount) || 0
+
+                              if (payableAmount !== newPayableAmount) {
+                                setPayableAmount(newPayableAmount)
+                              }
+
+                              const monthlyInterestRate = annualInterestRate / 12 / 100
+                              const emiWithoutInterest =
+                                (approvedLoanAmount * monthlyInterestRate * Math.pow(1 + monthlyInterestRate, months)) /
+                                  (Math.pow(1 + monthlyInterestRate, months) - 1) || 0
+
+                              const emi = Math.floor(emiWithoutInterest + processingFees / months)
+
+                              const totalCost = emi * months
+                              if (!localStorage.getItem('totalCost')) {
+                                localStorage.setItem('totalCost', totalCost.toString())
+                              }
+
+                              const actualInterestAmount = totalCost - approvedLoanAmount
+
+                              return (
+                                <React.Fragment key={index}>
+                                  <Flex
+                                    justifyContent="space-between"
+                                    p="12px 20px"
+                                  >
+                                    <Box
+                                      fontSize="10px"
+                                      fontWeight="500"
+                                      color="#626060"
+                                    >
+                                      ₹ {emi} x {item.name}m
+                                    </Box>
+                                    <Box
+                                      fontSize="10px"
+                                      fontWeight="500"
+                                      color="#626060"
+                                    >
+                                      ₹ {actualInterestAmount} ({annualInterestRate}%)
+                                    </Box>
+                                    <Box>
+                                      {dicountedSearch && (
+                                        <Box
+                                          textDecoration="line-through"
+                                          fontSize="10px"
+                                          fontWeight="500"
+                                          color="#626060"
+                                        >
+                                          ₹{localStorage.getItem('totalCost')}.00
+                                        </Box>
+                                      )}
+                                      <Box
+                                        fontSize="10px"
+                                        fontWeight="500"
+                                        color="#626060"
+                                      >
+                                        ₹ {totalCost.toFixed(2)}
+                                      </Box>
+                                    </Box>
+                                  </Flex>
+                                  <Divider />
+                                </React.Fragment>
+                              )
+                            })}
+                            {!dicountedSearch ? (
+                              <Box
+                                pt="5px"
+                                onClick={handleDiscountedSearch}
+                              >
+                                <Text
+                                  fontSize={'10px'}
+                                  fontWeight="500"
+                                  as="span"
+                                >
+                                  for better interest
+                                  <Text
+                                    pl="5px"
+                                    as="span"
+                                    fontWeight="500"
+                                    fontSize={'10px'}
+                                    color="#4398E8"
+                                    cursor={'pointer'}
+                                  >
+                                    sync your transactions from wallet
+                                  </Text>
+                                </Text>
+                              </Box>
+                            ) : (
+                              <Box
+                                lineHeight={'14px'}
+                                pt="5px"
+                                onClick={handleDiscountedSearch}
+                              >
+                                <Text
+                                  fontSize={'10px'}
+                                  fontWeight="500"
+                                  as="span"
+                                >
+                                  {`Congratulations! We have added 2% discount based on your criteria.`}
+                                  transactions
+                                </Text>
+                              </Box>
+                            )}
+                          </Box>
+                        </AccordionPanel>
+                      )}
+                    </AccordionItem>
+                  )
+                })}
               </RadioGroup>
             </Accordion>
           </Box>
