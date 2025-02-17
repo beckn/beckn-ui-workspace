@@ -5,6 +5,7 @@ interface EmiDetail {
   interestAmount: number
   annualInterestRate: number
   totalCost: number
+  payableAmount?: number
 }
 
 interface ApiResponse {
