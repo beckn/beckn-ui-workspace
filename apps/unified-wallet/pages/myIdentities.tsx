@@ -54,15 +54,15 @@ const MyIdentities = () => {
     type: '',
     credNumber: '',
     country: '',
-    verificationMethod: '',
-    energyBPId: ''
+    verificationMethod: ''
+    // energyBPId: ''
   })
   const [formErrors, setFormErrors] = useState<CredFormErrors>({
     type: '',
     credNumber: '',
     country: '',
-    verificationMethod: '',
-    energyBPId: ''
+    verificationMethod: ''
+    // energyBPId: ''
   })
 
   const { t } = useLanguage()
@@ -171,7 +171,8 @@ const MyIdentities = () => {
         `${strapiUrl}${ROUTE_TYPE[ROLE.GENERAL]}/wallet/attest`,
         {
           wallet_doc_type: 'IDENTITIES',
-          document_id: did
+          document_id: did,
+          deg_wallet_id: user?.did
         },
         requestOptions
       )
@@ -378,13 +379,21 @@ const MyIdentities = () => {
                   label: 'Identity Type',
                   error: formErrors.type
                 },
+                // {
+                //   type: 'text',
+                //   name: 'energyBPId',
+                //   value: formData.energyBPId!,
+                //   handleChange: handleInputChange,
+                //   label: 'Energy BP ID',
+                //   error: formErrors.energyBPId
+                // },
                 {
                   type: 'text',
-                  name: 'energyBPId',
-                  value: formData.energyBPId!,
+                  name: 'credNumber',
+                  value: formData.credNumber!,
                   handleChange: handleInputChange,
-                  label: 'Energy BP ID',
-                  error: formErrors.energyBPId
+                  label: 'ID Number',
+                  error: formErrors.credNumber
                 },
                 {
                   type: 'select',
@@ -394,14 +403,6 @@ const MyIdentities = () => {
                   handleChange: handleSelectChange,
                   label: 'Method Of Verification',
                   error: formErrors.verificationMethod
-                },
-                {
-                  type: 'text',
-                  name: 'credNumber',
-                  value: formData.credNumber!,
-                  handleChange: handleInputChange,
-                  label: 'ID Number',
-                  error: formErrors.credNumber
                 }
               ],
               buttons: [

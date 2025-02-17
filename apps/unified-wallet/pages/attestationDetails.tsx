@@ -16,8 +16,8 @@ import MinistryIcon from '@public/images/min_power.svg'
 import GovnIcon from '@public/images/gov_ind.svg'
 
 export const ATTES_ORG_NAME_MAP: any = {
-  meit: { name: 'Ministry of Power', icon: MinistryIcon },
-  mnre: { name: 'B.E.E, Govt. og India', icon: GovnIcon }
+  meit: { name: 'Ministry of Electronics and Information Technology', icon: MinistryIcon },
+  mnre: { name: 'Ministry of New and Renewable Energy', icon: GovnIcon }
 }
 
 const AttestationDetails = () => {

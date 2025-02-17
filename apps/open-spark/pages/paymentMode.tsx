@@ -517,7 +517,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                 <Typography
                   style={{ textAlign: 'center', paddingTop: '10px' }}
                   fontSize="15px"
-                  text={'Your documents have been successfully verified, and your loan request is approved!'}
+                  text={'Your documents have been successfully verified, and your loan request has been approved!'}
                 />
               </Flex>
             ) : (

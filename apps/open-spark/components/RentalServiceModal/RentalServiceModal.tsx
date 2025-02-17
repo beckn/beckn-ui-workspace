@@ -19,17 +19,23 @@ import { CheckIcon, AddIcon } from '@chakra-ui/icons'
 import Image from 'next/image'
 import { useSelector } from 'react-redux'
 import { AuthRootState } from '@store/auth-slice'
-import { useGetDocumentsMutation } from '@services/walletService'
+import { decodeStream, useDecodeStreamMutation, useGetDocumentsMutation } from '@services/walletService'
 import { parseDIDData } from '@utils/did'
 import { formatDate } from '@beckn-ui/common'
 import Cookies from 'js-cookie'
 import axios from '@services/axios'
 import VerifiedIcon from '@public/images/verified.svg'
 import UnverifiedIcon from '@public/images/unverified.svg'
+import { ItemMetaData } from '@lib/types/becknDid'
+import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
+import CustomDatePicker from '@components/dateTimePicker/customDatePicker'
+import CustomTimePicker from '@components/dateTimePicker/customTimePicker'
+import { validateStartEndTime } from '@utils/general'
 
 interface RentalServiceModalProps {
   isOpen: boolean
   onClose: () => void
+  handleOnSubmit: ({ success, startLoading }: { success: boolean; startLoading: boolean }) => void
 }
 
 const steps = [{ title: 'Add Asset for rental' }, { title: 'Add Price & Rental Duration' }]
@@ -51,7 +57,7 @@ interface BatteryOption {
   data?: any
 }
 
-const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose }) => {
+const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose, handleOnSubmit }) => {
   const { activeStep, setActiveStep } = useSteps({
     index: 0,
     count: steps.length
@@ -62,9 +68,11 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
   const [selectedBattery, setSelectedBattery] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [price, setPrice] = useState<string>('100')
-  const [fromTime, setFromTime] = useState<string>('10:00 AM')
-  const [toTime, setToTime] = useState<string>(`10:00 PM`)
-  const [date, setDate] = useState<string>('21/02/2025')
+  const [fromTime, setFromTime] = useState<Date>(new Date())
+  const [toTime, setToTime] = useState<Date>(new Date())
+  const [date, setDate] = useState<string>(new Date().toISOString())
+  const [confirmResOfWalletCatalogue, setConfirmResOfWalletCatalogue] = useState<any>(null)
+  const [showTimeError, setShowTimeError] = useState(false)
 
   const [batteryOptions, setBatteryOptions] = useState<BatteryOption[]>([
     // {
@@ -92,6 +100,14 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
 
   const { user } = useSelector((state: AuthRootState) => state.auth)
   const [getDocuments, { isLoading: verifyLoading }] = useGetDocumentsMutation()
+  const [decodeStream] = useDecodeStreamMutation()
+
+  const getDecodedStreamData = async (data: any) => {
+    console.log(data)
+    const decodedRes: any = await decodeStream({ subjectId: data.data.did })
+    console.log('Decoded:', decodedRes)
+    return decodedRes
+  }
 
   const fetchCredentials = async () => {
     try {
@@ -127,45 +143,18 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
 
   const handlePublish = async () => {
     //TODO:Aniket Generate this payload using wallet
+    handleOnSubmit({ startLoading: true, success: true })
+    const confirmRes = await getDecodedStreamData(confirmResOfWalletCatalogue)
+    console.log('Confirm Res:', confirmRes.data.confirmDetails)
+
     const payload = {
       providerDetails: {
-        data: [
-          {
-            context: {
-              domain: 'deg:retail',
-              action: 'on_confirm',
-              version: '1.1.0',
-              bpp_id: 'bpp-ps-network-strapi2-dev.becknprotocol.io',
-              bpp_uri: 'http://bpp-ps-network-strapi2-dev.becknprotocol.io',
-              country: 'IND',
-              city: 'std:080',
-              location: {
-                country: {
-                  name: 'India',
-                  code: 'IND'
-                },
-                city: {
-                  name: 'Bangalore',
-                  code: 'std:080'
-                }
-              },
-              bap_id: 'bap-ps-network-dev.becknprotocol.io',
-              bap_uri: 'https://bap-ps-network-dev.becknprotocol.io',
-              transaction_id: '68256397-8c35-41bc-94df-1d14bccce6bc',
-              message_id: 'd55cf853-4bca-4c09-933c-63ac82581e51',
-              ttl: 'PT10M',
-              timestamp: '2025-02-13T05:53:12.992Z'
-            },
-            message: {
-              // ... rest of the message object from your curl
-            }
-          }
-        ]
+        data: confirmRes.data.confirmDetails
       },
-      walletId: 'B124ZX',
-      startTime: new Date().getMilliseconds(),
-      endTime: new Date().getMilliseconds(),
-      price: price
+      walletId: user?.deg_wallet?.deg_wallet_id,
+      startTime: `${Math.floor(new Date(fromTime).getTime() / 1000)}`,
+      endTime: `${Math.floor(new Date(toTime).getTime() / 1000)}`,
+      price: price.toString()
     }
 
     try {
@@ -179,7 +168,8 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
 
       const data = response.data
       console.log('API Response:', data)
-      return data
+      handleClose()
+      handleOnSubmit({ startLoading: false, success: true })
     } catch (error) {
       console.error('Error making API call:', error)
       throw error
@@ -249,6 +239,7 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
             <input
               type="file"
               id="file-upload"
+              disabled={true}
               onChange={handleFileChange}
               style={{ display: 'none' }}
             />
@@ -334,55 +325,67 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
     if (currentView === 'select') {
       return (
         <Box>
-          {batteryOptions.map(battery => (
-            <Box
-              key={battery.id}
-              mb={4}
-              p={4}
-              borderRadius="md"
-              border="1px solid #E2E8F0"
-              cursor="pointer"
-              onClick={() => setSelectedBattery(battery.id)}
-              position="relative"
-              bg="white"
-              boxShadow="sm"
-            >
-              <Flex align="center">
-                <Circle
-                  size="20px"
-                  border="1px solid"
-                  borderColor={selectedBattery === battery.id ? '#4398E8' : '#E2E8F0'}
-                  mr={3}
-                >
-                  {selectedBattery === battery.id && (
-                    <Circle
-                      size="12px"
-                      bg="#4398E8"
-                    />
-                  )}
-                </Circle>
-                <Box>
-                  <Flex
-                    align="center"
-                    mb={2}
+          <Box
+            className="hideScroll"
+            maxH={{ base: 'calc(100vh - 500px)', md: 'calc(100vh - 600px)', lg: 'calc(100vh - 600px)' }}
+            overflowY={'scroll'}
+          >
+            {batteryOptions.map(battery => (
+              <Box
+                key={battery.id}
+                mb={4}
+                p={4}
+                borderRadius="md"
+                border="1px solid #E2E8F0"
+                cursor="pointer"
+                onClick={() => {
+                  setSelectedBattery(battery.id)
+                  setConfirmResOfWalletCatalogue(battery)
+                }}
+                position="relative"
+                bg="white"
+                boxShadow="sm"
+              >
+                <Flex align="center">
+                  <Circle
+                    size="20px"
+                    border="1px solid"
+                    borderColor={selectedBattery === battery.id ? '#4398E8' : '#E2E8F0'}
+                    mr={3}
                   >
-                    <Image
-                      src="/images/battery-box.svg"
-                      alt="Battery Box"
-                      width={65}
-                      height={65}
-                      style={{ marginRight: '16px' }}
-                    />
-                    <Box>
-                      <Flex>
-                        <Text
-                          fontSize="16px"
-                          fontWeight="500"
-                          mb={1}
-                        >
-                          {battery.name}
-                        </Text>
-                        <Box
+                    {selectedBattery === battery.id && (
+                      <Circle
+                        size="12px"
+                        bg="#4398E8"
+                      />
+                    )}
+                  </Circle>
+                  <Box>
+                    <Flex
+                      align="center"
+                      mb={2}
+                    >
+                      <Image
+                        src="/images/battery-box.svg"
+                        alt="Battery Box"
+                        width={65}
+                        height={65}
+                        style={{ marginRight: '16px' }}
+                      />
+                      <Box>
+                        <Flex>
+                          <Text
+                            fontSize="12px"
+                            fontWeight="500"
+                            mb={1}
+                            noOfLines={2}
+                            textOverflow="ellipsis"
+                            whiteSpace="pre-wrap"
+                            overflowWrap="break-word"
+                          >
+                            {battery.name}
+                          </Text>
+                          {/* <Box
                           marginTop={'2px'}
                           width="60px"
                         >
@@ -401,59 +404,55 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
                               height={18}
                             />
                           )}
-                        </Box>
-                      </Flex>
-                      <Flex>
+                        </Box> */}
+                        </Flex>
+                        <Flex>
+                          <Text
+                            fontSize="13px"
+                            color="gray.600"
+                            fontWeight={'600'}
+                            mb={1}
+                          >
+                            {`Source:`}
+                          </Text>
+                          <Text
+                            fontSize="13px"
+                            color="gray.600"
+                            mb={1}
+                            ml={1}
+                            textTransform="capitalize"
+                          >
+                            {`${battery.source}`}
+                          </Text>
+                        </Flex>
                         <Text
-                          fontSize="13px"
-                          color="gray.600"
-                          fontWeight={'600'}
+                          fontSize="12px"
+                          color="#4398E8"
+                          textDecoration="underline"
                           mb={1}
                         >
-                          {`Source:`}
+                          {battery.invoice}
                         </Text>
                         <Text
-                          fontSize="13px"
-                          color="gray.600"
-                          mb={1}
-                          ml={1}
-                          textTransform="capitalize"
+                          fontSize="12px"
+                          color="gray.500"
                         >
-                          {`${battery.source}`}
+                          {formatDate(battery.timestamp, 'do MMM yyyy, h.mma')}
                         </Text>
-                      </Flex>
-                      <Text
-                        fontSize="12px"
-                        color="#4398E8"
-                        textDecoration="underline"
-                        mb={1}
-                      >
-                        {battery.invoice}
-                      </Text>
-                      <Text
-                        fontSize="12px"
-                        color="gray.500"
-                      >
-                        {formatDate(battery.timestamp, 'do MMM yyyy, h.mma')}
-                      </Text>
-                      {/* <Text>{battery.data.attestation.length}</Text> */}
-                    </Box>
-                  </Flex>
-                </Box>
-              </Flex>
-            </Box>
-          ))}
+                        {/* <Text>{battery.data.attestation.length}</Text> */}
+                      </Box>
+                    </Flex>
+                  </Box>
+                </Flex>
+              </Box>
+            ))}
+          </Box>
 
-          <Button
-            width="100%"
-            bg="#4398E8"
+          <BecknButton
+            text="Next"
             color="white"
-            _hover={{ bg: '#3182CE' }}
-            borderRadius="full"
-            onClick={handlePricing}
-          >
-            Next
-          </Button>
+            handleClick={handlePricing}
+          />
         </Box>
       )
     }
@@ -469,24 +468,13 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
             Date
           </Text>
           <Flex align="center">
-            <Input
-              value={date}
-              width="200px"
-              borderRadius="md"
-              mr={2}
-              onChange={e => setDate(e.target.value)}
+            <CustomDatePicker
+              selected={new Date(date)}
+              placeholderText="Select 'from' date"
+              onChange={(date: any) => setDate(date?.toISOString())}
+              dateFormat="dd-MM-yyyy"
+              isInvalid={false}
             />
-            <Box
-              as="span"
-              cursor="pointer"
-            >
-              <Image
-                src="/images/calendar.svg"
-                alt="Calendar"
-                width={24}
-                height={24}
-              />
-            </Box>
           </Flex>
         </Box>
 
@@ -497,21 +485,27 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
           >
             Time
           </Text>
-          <Flex align="center">
-            <Input
-              value={fromTime}
-              width="200px"
-              borderRadius="md"
-              mr={2}
-              onChange={e => setFromTime(e.target.value)}
-            />
-            <Text mx={3}>-</Text>
-            <Input
-              value={toTime}
-              width="200px"
-              borderRadius="md"
-              onChange={e => setToTime(e.target.value)}
-            />
+          <Flex
+            align="center"
+            flexDir={'column'}
+          >
+            <Flex align="center">
+              <CustomTimePicker
+                selected={fromTime}
+                placeholderText="Select 'from'"
+                onChange={(date: any) => setFromTime(date)}
+                dateFormat="h:mm aa"
+                isInvalid={false}
+              />
+              <Text mx={3}>-</Text>
+              <CustomTimePicker
+                selected={toTime}
+                placeholderText="Select 'to'"
+                onChange={(date: any) => setToTime(date)}
+                dateFormat="h:mm aa"
+                isInvalid={false}
+              />
+            </Flex>
           </Flex>
         </Box>
 
@@ -525,6 +519,7 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
           <Flex align="center">
             <Input
               value={price}
+              autoFocus={true}
               width="100px"
               borderRadius="md"
               mr={3}

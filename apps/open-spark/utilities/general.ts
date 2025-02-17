@@ -59,3 +59,7 @@ export const filterByKeyword = (data: any[], keyword: string, searchBy: string):
 
   return data.filter(item => item[searchBy].toLowerCase().includes(keyword.toLowerCase()))
 }
+
+export const validateStartEndTime = (startTime: Date, endTime: Date): boolean => {
+  return startTime.getTime() < endTime.getTime()
+}

@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { useLanguage } from '@hooks/useLanguage'
 import { cartActions, checkoutActions, HomePageContent, TopSheet, useGeolocation } from '@beckn-ui/common'
-import { Box, Flex } from '@chakra-ui/react'
+import { Box, Flex, Image } from '@chakra-ui/react'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import { buttonStyles } from '@components/constant'
 import ShadowCardButton from '@components/buttonCard/ShadowCardButton'
 import { MdOutlineKeyboardArrowRight } from 'react-icons/md'
 import { Router, useRouter } from 'next/router'
-import { Typography } from '@beckn-ui/molecules'
+import { BottomModal, Loader, Typography } from '@beckn-ui/molecules'
 import RentalServiceModal from '../components/RentalServiceModal/RentalServiceModal'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@store/index'
@@ -25,6 +25,8 @@ const RentAndHire = () => {
   } = useGeolocation(apiKeyForGoogle as string)
 
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [showSuccess, setShowSuccess] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleOpenModal = () => setIsModalOpen(true)
   const handleCloseModal = () => setIsModalOpen(false)
@@ -140,7 +142,65 @@ const RentAndHire = () => {
       <RentalServiceModal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
+        handleOnSubmit={({ success, startLoading }: { success: boolean; startLoading: boolean }) => {
+          setShowSuccess(success)
+          setIsLoading(startLoading)
+        }}
       />
+      <BottomModal
+        onClose={() => {}}
+        isOpen={showSuccess}
+      >
+        <Box
+          display={'grid'}
+          alignContent={'center'}
+          margin={`${!isLoading ? '0 0' : '4rem 0'}`}
+          gap="1rem"
+        >
+          {!isLoading ? (
+            <Flex
+              justifyContent={'center'}
+              alignItems="center"
+              flexDirection={'column'}
+            >
+              <Image
+                src="./images/orderConfirmmark.svg"
+                alt="confirmation img"
+                mt="20px"
+              />
+
+              <Typography
+                style={{ textAlign: 'center' }}
+                fontWeight="500"
+                fontSize="17px"
+                text={'Congratulations!'}
+              />
+              <Typography
+                style={{ textAlign: 'center', paddingTop: '10px' }}
+                fontSize="15px"
+                text={'Your service has been successfully published'}
+              />
+              <BecknButton
+                text="Go to My Services"
+                sx={{ marginTop: '1rem' }}
+                handleClick={() => router.push('/myServices')}
+              />
+            </Flex>
+          ) : (
+            <Loader>
+              <Typography
+                fontWeight="500"
+                fontSize="17px"
+                text={'Please wait!'}
+              />
+              <Typography
+                fontSize="15px"
+                text={'While we process your request'}
+              />
+            </Loader>
+          )}
+        </Box>
+      </BottomModal>
     </Box>
   )
 }

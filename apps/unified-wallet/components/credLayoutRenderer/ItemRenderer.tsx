@@ -21,6 +21,7 @@ import SparkIcon from '@public/images/spark_icon.svg'
 import { AttestationData } from '@lib/types/becknDid'
 import { useSelector } from 'react-redux'
 import { AuthRootState } from '@store/auth-slice'
+import ProfileIcon from '@public/images/Profile.svg'
 
 export interface ItemMetaData {
   id: number
@@ -67,6 +68,7 @@ const ItemRenderer = (props: ItemRendererProps) => {
   // }, [item?.data?.attestations])
 
   const theme = useTheme()
+  const { user } = useSelector((state: AuthRootState) => state.auth)
   const primaryColor = theme.colors.primary['100']
 
   const getNoOfMasked = (value: number) => {
@@ -84,14 +86,22 @@ const ItemRenderer = (props: ItemRendererProps) => {
       return attestations
         .map(attestation => {
           const regex = /\/org\/([^\/]+)\/verification_methods/
-          const match = attestation.verification_method.did.match(regex)
 
-          if (!match) return null
+          if (attestation.verification_method.did.startsWith(user?.did!)) {
+            const orgData = { name: 'Self', icon: ProfileIcon }
 
-          const name = match[1]
-          const orgData = ORG_NAME_MAP[name]
+            return orgData ? { name: orgData.name, icon: orgData.icon } : null
+          }
+          if (attestation.verification_method.did.match(regex)) {
+            const match = attestation.verification_method.did.match(regex)
 
-          return orgData ? { name: orgData.name, icon: orgData.icon } : null
+            if (!match) return null
+
+            const name = match[1]
+            const orgData = ORG_NAME_MAP[name]
+
+            return orgData ? { name: orgData.name, icon: orgData.icon } : null
+          }
         })
         .filter(Boolean)
     }

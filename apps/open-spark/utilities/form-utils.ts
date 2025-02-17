@@ -97,9 +97,10 @@ export const signUpValidateForm = (formData: SignUpProps): CustomFormErrorProps 
     errors.mobileNumber = 'errorNumber'
   } else if (!/^\d{10}$/.test(formData.mobileNumber!)) {
     errors.mobileNumber = 'errorNumber2'
-  } else if (formData.utilityCompany.trim() === '') {
-    errors.utilityCompany = 'errorUtilityCompany'
   }
+  //  else if (formData.utilityCompany.trim() === '') {
+  //   errors.utilityCompany = 'errorUtilityCompany'
+  // }
   return errors
 }
 export const profileValidateForm = (formData: ProfileProps): FormErrors => {

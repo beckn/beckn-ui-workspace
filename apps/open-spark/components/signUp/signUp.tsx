@@ -13,7 +13,7 @@ import axios from '@services/axios'
 import Cookies from 'js-cookie'
 
 interface RegisterFormProps extends SignUpFormProps {
-  utilityCompany: string
+  utilityCompany?: string
   address: string
 }
 
@@ -27,16 +27,14 @@ const SignUp = () => {
     email: '',
     password: '',
     mobileNumber: '',
-    address: '',
-    utilityCompany: ''
+    address: ''
   })
   const [formErrors, setFormErrors] = useState<CustomFormErrorProps>({
     name: '',
     email: '',
     password: '',
     address: '',
-    mobileNumber: '',
-    utilityCompany: ''
+    mobileNumber: ''
   })
   const [utilities, setUtilities] = useState<any[]>([])
 
