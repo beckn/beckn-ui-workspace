@@ -81,13 +81,16 @@ const ProfilePage = () => {
     axios
       .get(`${strapiUrl}${ROUTE_TYPE[ROLE.GENERAL]}/user-profile`, requestOptions)
       .then(response => {
-        const result = response.data
-        const { fullname, address, customer_id } = result
+        const result = response.data.agent
+
+        console.log(result)
+        const { first_name, last_name, address, agent_profile } = result
         setFormData({
           ...formData,
-          name: fullname,
-          address,
-          customerId: customer_id
+          name: `${first_name} ${last_name || ''}`,
+          address: agent_profile.address,
+          customerId: agent_profile.customer_id,
+          mobileNumber: agent_profile.phone_number
         })
       })
       .finally(() => {
@@ -166,6 +169,17 @@ const ProfilePage = () => {
         error: formErrors.address,
         dataTest: testIds.profile_address,
         disabled: !profileEditable,
+        customInputBlurHandler: updateProfile
+      },
+      {
+        type: 'text',
+        name: 'mobileNumber',
+        value: formData.mobileNumber!,
+        handleChange: handleInputChange,
+        label: t.formNumber,
+        error: formErrors.mobileNumber,
+        dataTest: '',
+        disabled: true,
         customInputBlurHandler: updateProfile
       }
     ]

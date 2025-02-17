@@ -308,6 +308,7 @@ select:-webkit-autofill:focus {
 }
 .cart-count > p {
   color: #fff !important;
+  margin-bottom: unset;
 }
 .myStore-search-wrapper [data-test='filter-button'] svg rect,
 .myStore-search-wrapper [data-test='filter-button'] svg path {
