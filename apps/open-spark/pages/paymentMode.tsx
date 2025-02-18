@@ -68,6 +68,7 @@ interface EMIApplicationModalProps {
   handleSyncWallet: () => void
   syncWalletIsLoading?: boolean
   walletDetails?: { aadharNumber: string; panNumber: string }
+  handleOnSubmitForm: () => void
 }
 
 const EMIApplicationModal = ({
@@ -75,7 +76,8 @@ const EMIApplicationModal = ({
   onClose,
   handleSyncWallet,
   syncWalletIsLoading,
-  walletDetails
+  walletDetails,
+  handleOnSubmitForm
 }: EMIApplicationModalProps) => {
   const [formData, setFormData] = useState<FormData>({
     fullName: '',
@@ -87,6 +89,14 @@ const EMIApplicationModal = ({
 
   const [errors, setErrors] = useState<FormErrors>({})
   const toast = useToast()
+
+  useEffect(() => {
+    setFormData(prevFormData => ({
+      ...prevFormData,
+      panCard: walletDetails?.panNumber || '',
+      aadhaar: walletDetails?.aadharNumber || ''
+    }))
+  }, [walletDetails])
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {}
@@ -164,7 +174,7 @@ const EMIApplicationModal = ({
         duration: 3000,
         isClosable: true
       })
-      onClose()
+      handleOnSubmitForm()
     } else {
       toast({
         title: 'Error',
@@ -398,6 +408,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
   const [PANNumber, setPANNumber] = useState<string>()
   const [payableAmount, setPayableAmount] = useState<number>()
   const [dicountedSearch, setDicountedSearch] = useState(false)
+  const [previousIndex, setPreviousIndex] = useState<number>()
   const [newTotalCost, setNewTotalCost] = useState(() => {
     return Number(localStorage.getItem('totalCost')) || 0
   })
@@ -435,7 +446,6 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
         dispatch(discoveryEmiPlanActions.addProducts({ products: parsedSearchItems }))
         setEmiPlans(parsedSearchItems)
         setIsLoading(true)
-        console.log(res.data.data)
       })
       .catch(e => {
         setIsLoading(false)
@@ -682,7 +692,11 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
             p="12px 4px"
             pb="20px"
           >
-            <Accordion allowToggle>
+            <Accordion
+              allowToggle
+              index={previousIndex}
+              onChange={indx => setPreviousIndex(indx as number)}
+            >
               <RadioGroup
                 onChange={setSelectedPlan}
                 value={selectedPlan}
@@ -991,7 +1005,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
           <Box className="btm-modal-payment">
             <EMIApplicationModal
               isOpen={openModal}
-              onClose={handleOnSubmit}
+              onClose={() => setOpenModal(false)}
               handleSyncWallet={() => {
                 setSyncWalletIsLoading(true)
                 setTimeout(() => {
@@ -1003,6 +1017,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                 aadharNumber: aadharNumber!,
                 panNumber: PANNumber!
               }}
+              handleOnSubmitForm={handleOnSubmit}
             />
           </Box>
         )

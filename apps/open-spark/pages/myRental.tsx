@@ -1,4 +1,4 @@
-import OrderOverview, { mapOrderData } from '@components/orderOverview/OrderOverview'
+import OrderOverview, { mapOrderData, OrderItem } from '@components/orderOverview/OrderOverview'
 import Cookies from 'js-cookie'
 import { Loader } from '@beckn-ui/molecules'
 import { Box, Text } from '@chakra-ui/react'
@@ -9,7 +9,7 @@ import { orderHistoryData } from '@beckn-ui/common/lib/types'
 import { RENTAL_ORDER_CATEGORY_ID } from '@lib/config'
 
 const MyRental = () => {
-  const [orderHistoryList, setOrderHistoryList] = useState<orderHistoryData[]>([])
+  const [orderHistoryList, setOrderHistoryList] = useState<OrderItem[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
   const dispatch = useDispatch()
@@ -17,7 +17,7 @@ const MyRental = () => {
 
   const bearerToken = Cookies.get('authToken')
   const router = useRouter()
-  console.log(bearerToken)
+
   useEffect(() => {
     const myHeaders = new Headers()
     myHeaders.append('Authorization', `Bearer ${bearerToken}`)
@@ -32,7 +32,6 @@ const MyRental = () => {
     )
       .then(response => response.json())
       .then(result => {
-        console.log('resluttt', result)
         if (result.error) {
           return setError(result.error.message)
         } else {
@@ -76,7 +75,7 @@ const MyRental = () => {
       </Box>
     )
   }
-  console.log(orderHistoryList)
+
   return (
     <Box
       maxH="calc(100vh - 110px)"

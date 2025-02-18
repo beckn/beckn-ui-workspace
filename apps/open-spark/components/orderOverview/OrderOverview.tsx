@@ -5,7 +5,7 @@ import completedIcon from '../../public/images/completed.svg'
 import pendingIcon from '../../public/images/pendingYellow.svg'
 import React from 'react'
 
-type OrderItem = {
+export type OrderItem = {
   batteryType: string
   capacity: string
   rentedFrom: string
@@ -26,7 +26,6 @@ const orderStatusIcons: Record<string, string> = {
 }
 
 const OrderOverview: React.FC<OrderOverviewProps> = ({ items, showPriceAndStatus = true }) => {
-  console.log(items)
   return (
     <>
       {items.map((item, index) => (
@@ -125,35 +124,41 @@ export default OrderOverview
 
 export const mapOrderData = (data: any[]): OrderItem[] => {
   return data.map(order => {
-    const item = order.items[0]
-    const fulfillmentStart = item.fulfillments?.find(f => f.type === 'RENTAL_START')
-    const fulfillmentEnd = item.fulfillments?.find(f => f.type === 'RENTAL_END')
+    try {
+      const item = order.items[0]
+      const fulfillmentStart = item.fulfillments?.find(f => f.type === 'RENTAL_START' && f.state)
+      const fulfillmentEnd = item.fulfillments?.find(f => f.type === 'RENTAL_END' && f.state)
 
-    let startTimestamp = fulfillmentStart ? Number(fulfillmentStart.state.name) : null
-    let endTimestamp = fulfillmentEnd ? Number(fulfillmentEnd.state.name) : null
+      let startTimestamp = fulfillmentStart ? Number(fulfillmentStart.state?.name || 0) : null
+      let endTimestamp = fulfillmentEnd ? Number(fulfillmentEnd.state?.name || 0) : null
 
-    if (startTimestamp && startTimestamp > 9999999999) startTimestamp = Math.floor(startTimestamp / 1000)
-    if (endTimestamp && endTimestamp > 9999999999) endTimestamp = Math.floor(endTimestamp / 1000)
+      if (startTimestamp && startTimestamp > 9999999999) startTimestamp = Math.floor(startTimestamp / 1000)
+      if (endTimestamp && endTimestamp > 9999999999) endTimestamp = Math.floor(endTimestamp / 1000)
 
-    const formatTime = (timestamp: number | null) => {
-      if (!timestamp) return 'N/A'
-      const date = new Date(timestamp * 1000)
-      return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })
-    }
+      const formatTime = (timestamp: number | null) => {
+        if (!timestamp) return 'N/A'
+        const date = new Date(timestamp * 1000)
+        return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })
+      }
 
-    const startTime = formatTime(startTimestamp)
-    const endTime = formatTime(endTimestamp)
-    const duration = startTimestamp && endTimestamp ? Math.round((endTimestamp - startTimestamp) / 3600) + ' hr' : 'N/A'
-    const paymentStatus = order.payments.some(payment => payment.status === 'PAID') ? 'PAID' : 'NON_PAID'
+      const startTime = formatTime(startTimestamp)
+      const endTime = formatTime(endTimestamp)
+      const calculatedDuration = startTimestamp && endTimestamp ? Math.round((endTimestamp - startTimestamp) / 3600) : 0
+      const duration = calculatedDuration ? calculatedDuration + ' hr' : 'N/A'
+      const paymentStatus = order.payments.some(payment => payment.status === 'PAID') ? 'PAID' : 'NON_PAID'
 
-    return {
-      batteryType: item.name,
-      capacity: item.code,
-      rentedFrom: order.descriptor.name,
-      timeSlot: `${startTime} - ${endTime}`,
-      duration,
-      price: order.quote.price.value,
-      status: paymentStatus
+      return {
+        batteryType: item.name,
+        capacity: item.code,
+        rentedFrom: order.descriptor.name,
+        timeSlot: `${startTime} - ${endTime}`,
+        duration,
+        price: `${Number(order.quote.price.value) * Number(calculatedDuration)}`,
+        status: paymentStatus
+      }
+    } catch (error) {
+      console.error('Error mapping order data:', error)
+      return {} as OrderItem
     }
   })
 }

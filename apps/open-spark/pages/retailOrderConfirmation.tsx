@@ -29,6 +29,7 @@ import { generateAuthHeader, generateKeyPairFromString } from '@services/cryptoU
 import { AuthRootState } from '@store/auth-slice'
 import { extractAuthAndHeader, toBase64, toSnakeCase } from '@utils/general'
 import { feedbackActions } from '@beckn-ui/common'
+import { getRentalPayloadForConfirm } from '@utils/confirm-utils'
 
 const retailOrderConfirmation = () => {
   const { t } = useLanguage()
@@ -42,6 +43,21 @@ const retailOrderConfirmation = () => {
   const [addDocument, { isLoading: addDocLoading }] = useAddDocumentMutation()
   const [getVerificationMethods, { isLoading: verificationMethodsLoading }] = useGetVerificationMethodsMutation()
   const [orderId, setOrderId] = useState<string>()
+
+  const [timestamp, setTimestamp] = useState<Record<string, any>>({
+    fromTime: localStorage.getItem('fromTimestamp'),
+    toTime: localStorage.getItem('toTimestamp')
+  })
+  const [toTimestamp, setToTimestamp] = useState<string>()
+
+  // useEffect(() => {
+  //   const fromTimestamp = localStorage.getItem('fromTimestamp')
+  //   const toTimestamp = localStorage.getItem('toTimestamp')
+  //   if (fromTimestamp && toTimestamp) {
+  //     setFromTimestamp(fromTimestamp)
+  //     setToTimestamp(toTimestamp)
+  //   }
+  // }, [])
 
   const initResponse = useSelector((state: CheckoutRootState) => state.checkout.initResponse)
   const confirmResponse = useSelector((state: CheckoutRootState) => state.checkout.confirmResponse)
@@ -233,10 +249,13 @@ const retailOrderConfirmation = () => {
 
   useEffect(() => {
     if (initResponse && initResponse.length > 0) {
-      const payLoad = getPayloadForConfirm(initResponse)
-      confirm(payLoad)
+      const payload =
+        type === 'RENT_AND_HIRE'
+          ? getRentalPayloadForConfirm(initResponse, timestamp.fromTime!, timestamp.toTime!)
+          : getPayloadForConfirm(initResponse)
+      confirm(payload)
     }
-  }, [])
+  }, [initResponse, timestamp])
 
   useEffect(() => {
     if (confirmResponse && confirmResponse.length > 0) {

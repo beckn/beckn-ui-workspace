@@ -6,7 +6,8 @@ import { useLanguage } from '../hooks/useLanguage'
 import {
   areShippingAndBillingDetailsSame,
   getInitPayload,
-  getSubTotalAndDeliveryCharges
+  getSubTotalAndDeliveryCharges,
+  getTotalCartItems
 } from '@beckn-ui/common/src/utils'
 import { Checkout, ProductPrice } from '@beckn-ui/becknified-components'
 import { useRouter } from 'next/router'
@@ -24,6 +25,7 @@ import { DOMAIN_PATH } from '@lib/config'
 import { calcLength } from 'framer-motion'
 import { calculateDuration, generateRentalInitPayload } from '@utils/checkout-util'
 import { setEmiDetails } from '@store/emiSelect-slice'
+import { formatDate } from '@beckn-ui/common'
 
 export type ShippingFormData = {
   name: string
@@ -74,14 +76,15 @@ const CheckoutPage = () => {
   const emiDetails = useSelector((state: any) => state.selectedEmi.emiDetails[0])
 
   useEffect(() => {
-    const storedFromTime = localStorage.getItem('fromTime')
-    const storedToTime = localStorage.getItem('toTime')
+    const storedFromTime = localStorage.getItem('fromTimestamp')
+    const storedToTime = localStorage.getItem('toTimestamp')
+    const formatedFromTime = formatDate(Number(storedFromTime) * 1000, 'h:mm a') as string
+    const formatedToTime = formatDate(Number(storedToTime) * 1000, 'h:mm a') as string
+    setFromTime(formatedFromTime)
+    setToTime(formatedToTime)
 
-    setFromTime(storedFromTime as string)
-    setToTime(storedToTime as string)
-
-    if (storedFromTime && storedToTime) {
-      const calculatedDuration = calculateDuration(storedFromTime, storedToTime)
+    if (formatedFromTime && formatedToTime) {
+      const calculatedDuration = calculateDuration(formatedFromTime, formatedToTime)
       setDuration(calculatedDuration)
     }
   }, [])
@@ -219,7 +222,7 @@ const CheckoutPage = () => {
           paymentBreakdownMap[breakup.title] = {
             value: (
               Number(paymentBreakdownMap[breakup.title]?.value || 0) +
-              quantity * Number(breakup.price.value)
+              quantity * Number(breakup.price.value) * (type === 'RENT_AND_HIRE' ? duration || 1 : 1)
             ).toString(),
             currency: breakup.price.currency
           }
@@ -400,8 +403,12 @@ const CheckoutPage = () => {
               paymentBreakDown: createPaymentBreakdownMap(),
               totalText: t.total,
               totalValueWithCurrency: {
-                value: getSubTotalAndDeliveryCharges(initResponse, duration).subTotal.toString(),
-                currency: getSubTotalAndDeliveryCharges(initResponse, duration).currencySymbol!
+                value: getSubTotalAndDeliveryCharges(
+                  initResponse,
+                  type === 'RENT_AND_HIRE' ? duration : getTotalCartItems(cartItems)
+                ).subTotal.toString(),
+                currency: getSubTotalAndDeliveryCharges(initResponse, type === 'RENT_AND_HIRE' ? duration : 1)
+                  .currencySymbol!
               }
             }
           },
@@ -413,21 +420,24 @@ const CheckoutPage = () => {
             dataTest: testIds.checkoutpage_proceedToCheckout,
             handleClick: () => {
               if (type === 'RENT_AND_HIRE') {
-                dispatch(
-                  setEmiDetails({
-                    emiDetails: [
-                      {
-                        ...emiDetails,
-                        payableAmount: getSubTotalAndDeliveryCharges(initResponse, duration).subTotal.toString()
-                      }
-                    ]
-                  })
-                )
                 router.push('/retailPaymentMethod')
               } else {
                 // dispatch(cartActions.clearCart())
                 router.push('/paymentMode')
               }
+              dispatch(
+                setEmiDetails({
+                  emiDetails: [
+                    {
+                      ...emiDetails,
+                      payableAmount: getSubTotalAndDeliveryCharges(
+                        initResponse,
+                        type === 'RENT_AND_HIRE' ? duration : getTotalCartItems(cartItems)
+                      ).subTotal.toString()
+                    }
+                  ]
+                })
+              )
             }
           }
         }}

@@ -91,11 +91,10 @@ export default function ConfirmRent() {
     console.log('selectedDate', selectedDate)
     console.log('fromTime', fromTime, toTime)
 
-    localStorage.setItem('fromTime', fromTime)
-    localStorage.setItem('toTime', toTime)
-
     const fromTimestamp = convertToTimestamp(selectedDate, fromTime)
     const toTimestamp = convertToTimestamp(selectedDate, toTime)
+    localStorage.setItem('fromTimestamp', fromTimestamp?.toString()!)
+    localStorage.setItem('toTimestamp', toTimestamp?.toString()!)
 
     if (!fromTimestamp || !toTimestamp) return
 
