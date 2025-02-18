@@ -66,19 +66,37 @@ interface EMIApplicationModalProps {
   isOpen: boolean
   onClose: () => void
   handleSyncWallet: () => void
+  syncWalletIsLoading?: boolean
+  walletDetails?: { aadharNumber: string; panNumber: string }
+  handleOnSubmitForm: () => void
 }
 
-const EMIApplicationModal = ({ isOpen, onClose, handleSyncWallet }: EMIApplicationModalProps) => {
+const EMIApplicationModal = ({
+  isOpen,
+  onClose,
+  handleSyncWallet,
+  syncWalletIsLoading,
+  walletDetails,
+  handleOnSubmitForm
+}: EMIApplicationModalProps) => {
   const [formData, setFormData] = useState<FormData>({
     fullName: '',
     dateOfBirth: null,
-    panCard: '',
-    aadhaar: '',
+    panCard: walletDetails?.panNumber || '',
+    aadhaar: walletDetails?.aadharNumber || '',
     mobileNumber: ''
   })
 
   const [errors, setErrors] = useState<FormErrors>({})
   const toast = useToast()
+
+  useEffect(() => {
+    setFormData(prevFormData => ({
+      ...prevFormData,
+      panCard: walletDetails?.panNumber || '',
+      aadhaar: walletDetails?.aadharNumber || ''
+    }))
+  }, [walletDetails])
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {}
@@ -156,7 +174,7 @@ const EMIApplicationModal = ({ isOpen, onClose, handleSyncWallet }: EMIApplicati
         duration: 3000,
         isClosable: true
       })
-      onClose()
+      handleOnSubmitForm()
     } else {
       toast({
         title: 'Error',
@@ -196,159 +214,173 @@ const EMIApplicationModal = ({ isOpen, onClose, handleSyncWallet }: EMIApplicati
         />
       </Box>
 
-      {/* Full Name Field */}
-      <Box mb="20px">
-        <Typography
-          fontWeight="400"
-          fontSize="15px"
-          text="Full Name *"
-        />
-        <Input
-          value={formData.fullName}
-          onChange={e => handleInputChange('fullName', e.target.value)}
-          paddingInlineStart="unset"
-          _focusVisible={{ borderColor: errors.fullName ? 'red.500' : '#4398E8' }}
-          border="unset"
-          borderBottom="1px solid"
-          borderColor={errors.fullName ? 'red.500' : '#3A3A3A'}
-          borderRadius="0"
-        />
-        {errors.fullName && (
-          <Typography
-            color="red.500"
-            fontSize="12px"
-            text={errors.fullName}
-          />
-        )}
-      </Box>
-
-      {/* Date of Birth Field */}
-      <Box
-        mb="20px"
-        position="relative"
-        width="100%"
-      >
-        <Typography
-          fontWeight="400"
-          fontSize="15px"
-          text="Date of Birth *"
-        />
-        <DatePicker
-          selected={formData.dateOfBirth}
-          onChange={date => {
-            setFormData(prev => ({ ...prev, dateOfBirth: date }))
-            if (errors.dateOfBirth) {
-              setErrors(prev => ({ ...prev, dateOfBirth: undefined }))
-            }
-          }}
-          dateFormat="dd/MM/yyyy"
-          maxDate={new Date()}
-          customInput={
+      {syncWalletIsLoading ? (
+        <>
+          <Box
+            display={'grid'}
+            height={'calc(100vh - 510px)'}
+            alignContent={'center'}
+          >
+            <Loader />
+          </Box>
+        </>
+      ) : (
+        <>
+          {/* Full Name Field */}
+          <Box mb="20px">
+            <Typography
+              fontWeight="400"
+              fontSize="15px"
+              text="Full Name *"
+            />
             <Input
-              width="100%"
+              value={formData.fullName}
+              onChange={e => handleInputChange('fullName', e.target.value)}
               paddingInlineStart="unset"
-              _focusVisible={{ borderColor: errors.dateOfBirth ? 'red.500' : '#4398E8' }}
+              _focusVisible={{ borderColor: errors.fullName ? 'red.500' : '#4398E8' }}
               border="unset"
               borderBottom="1px solid"
-              borderColor={errors.dateOfBirth ? 'red.500' : '#3A3A3A'}
+              borderColor={errors.fullName ? 'red.500' : '#3A3A3A'}
               borderRadius="0"
-              style={{ width: '100%' }}
             />
-          }
-        />
-        {errors.dateOfBirth && (
-          <Typography
-            color="red.500"
-            fontSize="12px"
-            text={errors.dateOfBirth}
-          />
-        )}
-      </Box>
+            {errors.fullName && (
+              <Typography
+                color="red.500"
+                fontSize="12px"
+                text={errors.fullName}
+              />
+            )}
+          </Box>
 
-      {/* PAN Card Field */}
-      <Box mb="20px">
-        <Typography
-          fontWeight="400"
-          fontSize="15px"
-          text="PAN Card *"
-        />
-        <Input
-          value={formData.panCard}
-          onChange={e => handleInputChange('panCard', e.target.value)}
-          paddingInlineStart="unset"
-          _focusVisible={{ borderColor: errors.panCard ? 'red.500' : '#4398E8' }}
-          border="unset"
-          borderBottom="1px solid"
-          borderColor={errors.panCard ? 'red.500' : '#3A3A3A'}
-          borderRadius="0"
-        />
-        {errors.panCard && (
-          <Typography
-            color="red.500"
-            fontSize="12px"
-            text={errors.panCard}
-          />
-        )}
-      </Box>
+          {/* Date of Birth Field */}
+          <Box
+            mb="20px"
+            position="relative"
+            width="100%"
+          >
+            <Typography
+              fontWeight="400"
+              fontSize="15px"
+              text="Date of Birth *"
+            />
+            <DatePicker
+              selected={formData.dateOfBirth}
+              onChange={date => {
+                setFormData(prev => ({ ...prev, dateOfBirth: date }))
+                if (errors.dateOfBirth) {
+                  setErrors(prev => ({ ...prev, dateOfBirth: undefined }))
+                }
+              }}
+              dateFormat="dd/MM/yyyy"
+              maxDate={new Date()}
+              customInput={
+                <Input
+                  width="100%"
+                  paddingInlineStart="unset"
+                  _focusVisible={{ borderColor: errors.dateOfBirth ? 'red.500' : '#4398E8' }}
+                  border="unset"
+                  borderBottom="1px solid"
+                  borderColor={errors.dateOfBirth ? 'red.500' : '#3A3A3A'}
+                  borderRadius="0"
+                  style={{ width: '100%' }}
+                />
+              }
+            />
+            {errors.dateOfBirth && (
+              <Typography
+                color="red.500"
+                fontSize="12px"
+                text={errors.dateOfBirth}
+              />
+            )}
+          </Box>
 
-      {/* Aadhaar Field */}
-      <Box mb="20px">
-        <Typography
-          fontWeight="400"
-          fontSize="15px"
-          text="Aadhaar *"
-        />
-        <Input
-          value={formData.aadhaar}
-          onChange={e => handleInputChange('aadhaar', e.target.value)}
-          paddingInlineStart="unset"
-          _focusVisible={{ borderColor: errors.aadhaar ? 'red.500' : '#4398E8' }}
-          border="unset"
-          borderBottom="1px solid"
-          borderColor={errors.aadhaar ? 'red.500' : '#3A3A3A'}
-          borderRadius="0"
-        />
-        {errors.aadhaar && (
-          <Typography
-            color="red.500"
-            fontSize="12px"
-            text={errors.aadhaar}
-          />
-        )}
-      </Box>
+          {/* PAN Card Field */}
+          <Box mb="20px">
+            <Typography
+              fontWeight="400"
+              fontSize="15px"
+              text="PAN Card *"
+            />
+            <Input
+              value={formData.panCard}
+              onChange={e => handleInputChange('panCard', e.target.value)}
+              paddingInlineStart="unset"
+              _focusVisible={{ borderColor: errors.panCard ? 'red.500' : '#4398E8' }}
+              border="unset"
+              borderBottom="1px solid"
+              borderColor={errors.panCard ? 'red.500' : '#3A3A3A'}
+              borderRadius="0"
+            />
+            {errors.panCard && (
+              <Typography
+                color="red.500"
+                fontSize="12px"
+                text={errors.panCard}
+              />
+            )}
+          </Box>
 
-      {/* Mobile Number Field */}
-      <Box mb="20px">
-        <Typography
-          fontWeight="400"
-          fontSize="15px"
-          text="Mobile Number *"
-        />
-        <Input
-          value={formData.mobileNumber}
-          onChange={e => handleInputChange('mobileNumber', e.target.value)}
-          maxLength={10}
-          paddingInlineStart="unset"
-          _focusVisible={{ borderColor: errors.mobileNumber ? 'red.500' : '#4398E8' }}
-          border="unset"
-          borderBottom="1px solid"
-          borderColor={errors.mobileNumber ? 'red.500' : '#3A3A3A'}
-          borderRadius="0"
-          type="tel"
-        />
-        {errors.mobileNumber && (
-          <Typography
-            color="red.500"
-            fontSize="12px"
-            text={errors.mobileNumber}
-          />
-        )}
-      </Box>
+          {/* Aadhaar Field */}
+          <Box mb="20px">
+            <Typography
+              fontWeight="400"
+              fontSize="15px"
+              text="Aadhaar *"
+            />
+            <Input
+              value={formData.aadhaar}
+              onChange={e => handleInputChange('aadhaar', e.target.value)}
+              paddingInlineStart="unset"
+              _focusVisible={{ borderColor: errors.aadhaar ? 'red.500' : '#4398E8' }}
+              border="unset"
+              borderBottom="1px solid"
+              borderColor={errors.aadhaar ? 'red.500' : '#3A3A3A'}
+              borderRadius="0"
+            />
+            {errors.aadhaar && (
+              <Typography
+                color="red.500"
+                fontSize="12px"
+                text={errors.aadhaar}
+              />
+            )}
+          </Box>
 
-      <BecknButton
-        text="Submit"
-        handleClick={handleSubmit}
-      />
+          {/* Mobile Number Field */}
+          <Box mb="20px">
+            <Typography
+              fontWeight="400"
+              fontSize="15px"
+              text="Mobile Number *"
+            />
+            <Input
+              value={formData.mobileNumber}
+              onChange={e => handleInputChange('mobileNumber', e.target.value)}
+              maxLength={10}
+              paddingInlineStart="unset"
+              _focusVisible={{ borderColor: errors.mobileNumber ? 'red.500' : '#4398E8' }}
+              border="unset"
+              borderBottom="1px solid"
+              borderColor={errors.mobileNumber ? 'red.500' : '#3A3A3A'}
+              borderRadius="0"
+              type="tel"
+            />
+            {errors.mobileNumber && (
+              <Typography
+                color="red.500"
+                fontSize="12px"
+                text={errors.mobileNumber}
+              />
+            )}
+          </Box>
+
+          <BecknButton
+            text="Submit"
+            handleClick={handleSubmit}
+          />
+        </>
+      )}
     </BottomModal>
   )
 }
@@ -361,6 +393,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
   const initResponse = useSelector((state: CheckoutRootState) => state.checkout.initResponse)
 
   const [isLoading, setIsLoading] = useState(false)
+  const [syncWalletIsLoading, setSyncWalletIsLoading] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [showSuccess, setShowSuccess] = useState(false)
   const [checkedState, setCheckedState] = useState<string | null>(null)
@@ -375,6 +408,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
   const [PANNumber, setPANNumber] = useState<string>()
   const [payableAmount, setPayableAmount] = useState<number>()
   const [dicountedSearch, setDicountedSearch] = useState(false)
+  const [previousIndex, setPreviousIndex] = useState<number>()
   const [newTotalCost, setNewTotalCost] = useState(() => {
     return Number(localStorage.getItem('totalCost')) || 0
   })
@@ -412,7 +446,6 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
         dispatch(discoveryEmiPlanActions.addProducts({ products: parsedSearchItems }))
         setEmiPlans(parsedSearchItems)
         setIsLoading(true)
-        console.log(res.data.data)
       })
       .catch(e => {
         setIsLoading(false)
@@ -589,6 +622,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
   const fetchCredentials = async () => {
     try {
       setIsLoading(true)
+      setSyncWalletIsLoading(true)
       const result = await getDocuments(user?.deg_wallet?.deg_wallet_id!).unwrap()
       console.log(result)
       const list: ItemMetaData[] = parseDIDData(result)['identities'].map((item, index) => {
@@ -611,6 +645,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
       console.error('Error fetching dashboard data:', error)
     } finally {
       setIsLoading(false)
+      setSyncWalletIsLoading(false)
     }
   }
 
@@ -657,7 +692,11 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
             p="12px 4px"
             pb="20px"
           >
-            <Accordion allowToggle>
+            <Accordion
+              allowToggle
+              index={previousIndex}
+              onChange={indx => setPreviousIndex(indx as number)}
+            >
               <RadioGroup
                 onChange={setSelectedPlan}
                 value={selectedPlan}
@@ -967,7 +1006,18 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
             <EMIApplicationModal
               isOpen={openModal}
               onClose={() => setOpenModal(false)}
-              handleSyncWallet={handleSyncWallet}
+              handleSyncWallet={() => {
+                setSyncWalletIsLoading(true)
+                setTimeout(() => {
+                  handleSyncWallet()
+                }, 3000)
+              }}
+              syncWalletIsLoading={syncWalletIsLoading}
+              walletDetails={{
+                aadharNumber: aadharNumber!,
+                panNumber: PANNumber!
+              }}
+              handleOnSubmitForm={handleOnSubmit}
             />
           </Box>
         )
