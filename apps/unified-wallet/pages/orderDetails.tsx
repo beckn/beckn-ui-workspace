@@ -24,6 +24,7 @@ import ProfileIcon from '@public/images/Profile.svg'
 import { useLanguage } from '@hooks/useLanguage'
 import { testIds } from '@shared/dataTestIds'
 import { StatusKey, statusMap } from '@lib/client'
+import LoaderWithMessage from '@beckn-ui/molecules/src/components/LoaderWithMessage/loader-with-message'
 
 const DELIVERED = 'ORDER_DELIVERED'
 const CANCELLED = 'USER CANCELLED'
@@ -104,6 +105,8 @@ export default function OrderDetails() {
     }
     return () => {
       localStorage.removeItem('orderData')
+      localStorage.removeItem('orderStatusMap')
+      localStorage.removeItem('statusResponse')
     }
   }, [])
 
@@ -173,187 +176,202 @@ export default function OrderDetails() {
 
   return (
     <Box>
-      <Box
-        pb="15px"
-        pt="20px"
-      >
-        <Typography
-          variant="subTitleRegular"
-          text={'Order Overview'}
-          fontSize="17px"
-        />
-      </Box>
-
-      <DetailCard>
-        <Flex>
-          {statusData && (
-            <Image
-              mr={'15px'}
-              height={['60px', '80px', '80px', '80px']}
-              w={['40px', '80px', '80px', '80px']}
-              src={statusData[0]?.message?.order?.items[0]?.images?.[0].url}
-              alt="product image"
+      {orderDetails && statusData ? (
+        <>
+          <Box
+            pb="15px"
+            pt="20px"
+          >
+            <Typography
+              variant="subTitleRegular"
+              text={'Order Overview'}
+              fontSize="17px"
             />
-          )}
-          <Box w={'100%'}>
-            <Box
-              pt={'unset'}
-              pb={4}
-            >
+          </Box>
+
+          <DetailCard>
+            <Flex>
               {statusData && (
-                <Typography
-                  variant="subTitleSemibold"
-                  dataTest={testIds.orderDetailspage_productName}
-                  text={statusData[0]?.message?.order?.items[0]?.name}
+                <Image
+                  mr={'15px'}
+                  height={['60px', '80px', '80px', '80px']}
+                  w={['40px', '80px', '80px', '80px']}
+                  src={statusData[0]?.message?.order?.items[0]?.images?.[0].url}
+                  alt="product image"
                 />
               )}
-            </Box>
+              <Box w={'100%'}>
+                <Box
+                  pt={'unset'}
+                  pb={4}
+                >
+                  {statusData && (
+                    <Typography
+                      variant="subTitleSemibold"
+                      dataTest={testIds.orderDetailspage_productName}
+                      text={statusData[0]?.message?.order?.items[0]?.name}
+                    />
+                  )}
+                </Box>
 
-            <Flex
-              pt={'unset'}
-              justifyContent={'space-between'}
-              alignItems={'center'}
-            >
-              <Typography
-                variant="subTitleRegular"
-                text={'Placed at'}
-              />
-              <Typography
-                variant="subTitleRegular"
-                dataTest={testIds.orderDetailspage_productPlacedAt}
-                text={formatTimestamp(orderDetails?.data[0]?.context?.timestamp!)}
-              />
+                <Flex
+                  pt={'unset'}
+                  justifyContent={'space-between'}
+                  alignItems={'center'}
+                >
+                  <Typography
+                    variant="subTitleRegular"
+                    text={'Placed at'}
+                  />
+                  <Typography
+                    variant="subTitleRegular"
+                    dataTest={testIds.orderDetailspage_productPlacedAt}
+                    text={formatTimestamp(orderDetails?.data[0]?.context?.timestamp!)}
+                  />
+                </Flex>
+              </Box>
             </Flex>
+          </DetailCard>
+
+          {/* Progress Summary */}
+          <Box pt={4}>
+            <Typography
+              variant="subTitleRegular"
+              text="Progress Summary"
+              fontSize="17px"
+            />
           </Box>
-        </Flex>
-      </DetailCard>
 
-      {/* Progress Summary */}
-      <Box pt={4}>
-        <Typography
-          variant="subTitleRegular"
-          text="Progress Summary"
-          fontSize="17px"
-        />
-      </Box>
-
-      <DetailCard>
-        <CardBody p={'unset'}>
-          <>
-            <Flex
-              justifyContent="space-between"
-              alignItems="center"
-            >
-              <Text
-                as={Typography}
-                text={`Order Id:  ${orderDetails?.data[0]?.message?.orderId}`}
-                fontSize="17px"
-                fontWeight="600"
-              />
-              {/* <Image
+          <DetailCard>
+            <CardBody p={'unset'}>
+              <>
+                <Flex
+                  justifyContent="space-between"
+                  alignItems="center"
+                >
+                  <Text
+                    as={Typography}
+                    text={`Order Id:  ${orderDetails?.data[0]?.message?.orderId}`}
+                    fontSize="17px"
+                    fontWeight="600"
+                  />
+                  {/* <Image
                 src="/images/threeDots.svg"
                 alt="threeDots"
                 cursor={'pointer'}
               /> */}
-            </Flex>
+                </Flex>
 
-            <Flex
-              justifyContent={'space-between'}
-              alignItems={'center'}
+                <Flex
+                  justifyContent={'space-between'}
+                  alignItems={'center'}
+                >
+                  <Flex maxWidth={'50vw'}>
+                    <Typography
+                      text={orderDetails?.data?.[0]?.message?.items?.[0]?.name}
+                      fontSize="12px"
+                      fontWeight="400"
+                      sx={{
+                        noOfLines: 3,
+                        textOverflow: 'ellipsis',
+                        overflow: 'hidden'
+                      }}
+                    />
+                  </Flex>
+
+                  <Text
+                    fontSize={'15px'}
+                    fontWeight={'500'}
+                    data-test={testIds.orderDetailspage_orderStatus}
+                    color={statusData?.[0]?.message.order.status === 'CANCELLED' ? 'red' : 'green'}
+                  >
+                    {statusData?.[0]?.message.order.status}
+                  </Text>
+                </Flex>
+              </>
+              <Divider
+                mr={'-20px'}
+                ml="-20px"
+                width={'unset'}
+                pt="15px"
+              />
+
+              <Box className="order_status_progress">
+                {orderStatusMap.map((status: OrderStatusProgressProps, index: number) => (
+                  <OrderStatusProgress
+                    key={index}
+                    label={status.label}
+                    statusTime={status.statusTime && formatTimestamp(status.statusTime)}
+                    noLine={isDelivered || isCancelled}
+                    lastElement={orderStatusMap.length - 1 === index}
+                  />
+                ))}
+              </Box>
+            </CardBody>
+          </DetailCard>
+
+          <Accordion accordionHeader={'Shipping & Billing'}>
+            <ShippingBlock
+              name={{ text: orderDetails?.data[0]?.message?.billing?.name!, icon: '/images/nameIcon.svg' }}
+              address={{ text: orderDetails?.data[0]?.message?.billing?.address!, icon: '/images/locationIcon1.svg' }}
+              mobile={{ text: orderDetails?.data[0]?.message?.billing?.phone!, icon: '/images/CallphoneIcon.svg' }}
+            />
+          </Accordion>
+
+          <Accordion accordionHeader={'Payment'}>
+            <Box
+              pl={'14px'}
+              pr={'11px'}
+              pb={'11px'}
+              pt={'6px'}
             >
-              <Flex maxWidth={'50vw'}>
+              {statusData && (
+                <PaymentDetails
+                  paymentBreakDown={getPaymentBreakDown(statusData).breakUpMap}
+                  totalText="Total"
+                  totalValueWithCurrency={getPaymentBreakDown(statusData).totalPricewithCurrent}
+                />
+              )}
+            </Box>
+          </Accordion>
+
+          <Accordion accordionHeader={'Attested by'}>
+            {attestationsDetails.map((item, index) => (
+              <Flex
+                pl={'20px'}
+                pr={'20px'}
+                pb={'11px'}
+                pt={'6px'}
+                justify="space-between"
+                key={index}
+              >
                 <Typography
-                  text={orderDetails?.data?.[0]?.message?.items?.[0]?.name}
-                  fontSize="12px"
-                  fontWeight="400"
-                  sx={{
-                    noOfLines: 3,
-                    textOverflow: 'ellipsis',
-                    overflow: 'hidden'
-                  }}
+                  text={item.name}
+                  fontSize="16px"
+                  fontWeight="500"
+                />
+                <Image
+                  src={item.icon}
+                  alt={item.name}
+                  width="24px"
+                  height="24px"
                 />
               </Flex>
-
-              <Text
-                fontSize={'15px'}
-                fontWeight={'500'}
-                data-test={testIds.orderDetailspage_orderStatus}
-                color={statusData[0].message.order.status === 'CANCELLED' ? 'red' : 'green'}
-              >
-                {statusData[0].message.order.status}
-              </Text>
-            </Flex>
-          </>
-          <Divider
-            mr={'-20px'}
-            ml="-20px"
-            width={'unset'}
-            pt="15px"
-          />
-
-          <Box className="order_status_progress">
-            {orderStatusMap.map((status: OrderStatusProgressProps, index: number) => (
-              <OrderStatusProgress
-                key={index}
-                label={status.label}
-                statusTime={status.statusTime && formatTimestamp(status.statusTime)}
-                noLine={isDelivered || isCancelled}
-                lastElement={orderStatusMap.length - 1 === index}
-              />
             ))}
-          </Box>
-        </CardBody>
-      </DetailCard>
-
-      <Accordion accordionHeader={'Shipping & Billing'}>
-        <ShippingBlock
-          name={{ text: orderDetails?.data[0]?.message?.billing?.name!, icon: '/images/nameIcon.svg' }}
-          address={{ text: orderDetails?.data[0]?.message?.billing?.address!, icon: '/images/locationIcon1.svg' }}
-          mobile={{ text: orderDetails?.data[0]?.message?.billing?.phone!, icon: '/images/CallphoneIcon.svg' }}
-        />
-      </Accordion>
-
-      <Accordion accordionHeader={'Payment'}>
+          </Accordion>
+        </>
+      ) : (
         <Box
-          pl={'14px'}
-          pr={'11px'}
-          pb={'11px'}
-          pt={'6px'}
+          display={'grid'}
+          height={'calc(100vh - 300px)'}
+          alignContent={'center'}
         >
-          {statusData && (
-            <PaymentDetails
-              paymentBreakDown={getPaymentBreakDown(statusData).breakUpMap}
-              totalText="Total"
-              totalValueWithCurrency={getPaymentBreakDown(statusData).totalPricewithCurrent}
-            />
-          )}
+          <LoaderWithMessage
+            loadingText={''}
+            loadingSubText={''}
+          />
         </Box>
-      </Accordion>
-
-      <Accordion accordionHeader={'Attested by'}>
-        {attestationsDetails.map((item, index) => (
-          <Flex
-            pl={'20px'}
-            pr={'20px'}
-            pb={'11px'}
-            pt={'6px'}
-            justify="space-between"
-            key={index}
-          >
-            <Typography
-              text={item.name}
-              fontSize="16px"
-              fontWeight="500"
-            />
-            <Image
-              src={item.icon}
-              alt={item.name}
-              width="24px"
-              height="24px"
-            />
-          </Flex>
-        ))}
-      </Accordion>
+      )}
     </Box>
   )
 }
