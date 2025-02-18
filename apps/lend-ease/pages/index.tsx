@@ -31,6 +31,8 @@ interface OrderDetails {
 }
 
 interface Order {
+  items: any
+  customer_id: any
   id: number
   state_code: string
   state_value: string
@@ -222,7 +224,7 @@ const HomePage = () => {
                       whiteSpace={'nowrap'}
                       overflow={'hidden'}
                     >
-                      {order.order_id.order_transaction_id}
+                      {order.customer_id.first_name}
                     </Text>
                   </Flex>
                   <Flex mb="5px">
@@ -241,7 +243,7 @@ const HomePage = () => {
                       whiteSpace={'nowrap'}
                       overflow={'hidden'}
                     >
-                      {order.order_id.order_transaction_id}
+                      {order?.order_id.items[0].name}
                     </Text>
                   </Flex>
                   <Flex mb="5px">
@@ -260,7 +262,7 @@ const HomePage = () => {
                       whiteSpace={'nowrap'}
                       overflow={'hidden'}
                     >
-                      {order.order_id.order_transaction_id}
+                      {order?.order_id.items[0].name}
                     </Text>
                   </Flex>
                   <Flex mb="5px">
@@ -279,7 +281,7 @@ const HomePage = () => {
                       whiteSpace={'nowrap'}
                       overflow={'hidden'}
                     >
-                      {order.order_id.order_transaction_id}
+                      {order?.order_id.items[0].name}
                     </Text>
                   </Flex>
 
