@@ -25,7 +25,7 @@ const Stepper: React.FC<StepperProps> = ({ currentStep, steps }) => {
         left="24px"
         right="24px"
         height="1px"
-        bg="#4398E8"
+        bg="#228B22"
         zIndex={0}
       />
 
@@ -41,13 +41,13 @@ const Stepper: React.FC<StepperProps> = ({ currentStep, steps }) => {
               w="24px"
               h="24px"
               borderRadius="full"
-              bg={currentStep >= step.step ? '#4398E8' : 'transparent'}
+              bg={currentStep >= step.step ? '#228B22' : 'transparent'}
               border="1px solid"
-              borderColor="#4398E8"
+              borderColor="#228B22"
               display="flex"
               alignItems="center"
               justifyContent="center"
-              color={currentStep >= step.step ? 'white' : '#4398E8'}
+              color={currentStep >= step.step ? 'white' : '#228B22'}
               fontSize="12px"
               fontWeight="600"
               zIndex={1}
@@ -57,7 +57,7 @@ const Stepper: React.FC<StepperProps> = ({ currentStep, steps }) => {
             <Text
               mt={2}
               fontSize="12px"
-              color={currentStep >= step.step ? '#4398E8' : '#6B7280'}
+              color={currentStep >= step.step ? '#228B22' : '#6B7280'}
               textAlign="center"
               maxW="80px"
               lineHeight="1.2"

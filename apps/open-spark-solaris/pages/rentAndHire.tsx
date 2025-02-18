@@ -92,7 +92,7 @@ const RentAndHire = () => {
           text={t.rentAndHireHeading}
           fontSize="20px"
           fontWeight="600"
-          color="#4398E8"
+          color="#228B22"
         />
         <Typography
           text={t.subTextForRenT}

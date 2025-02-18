@@ -142,8 +142,8 @@ const UpiScreen = () => {
               key={index}
               size="30px"
               border="2px solid"
-              borderColor={digit ? '#4398E8' : 'gray.300'}
-              bg={digit ? '#4398E8' : 'white'}
+              borderColor={digit ? '#228B22' : 'gray.300'}
+              bg={digit ? '#228B22' : 'white'}
             />
           ))}
         </Flex>

@@ -101,7 +101,7 @@ const OrderOverview: React.FC<OrderOverviewProps> = ({ items, showPriceAndStatus
               mt={3}
             >
               <Typography
-                color="#4398E8"
+                color="#228B22"
                 text={`Rs. ${item.price}`}
               />
               <Flex alignItems="center">

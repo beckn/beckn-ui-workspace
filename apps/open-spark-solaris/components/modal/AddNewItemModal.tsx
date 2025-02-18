@@ -77,7 +77,7 @@ const AddNewItemModal = (props: DeleteAlertModalProps) => {
             <Typography
               fontSize="15px"
               fontWeight="500"
-              color="#4398E8"
+              color="#228B22"
               text="Sync wallet"
               onClick={handleSyncWallet}
             />

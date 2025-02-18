@@ -170,7 +170,7 @@ export default function ConfirmRent() {
                 <Button
                   key={dateString}
                   onClick={() => handleDateSelection(dateString)}
-                  bg={selectedDate === dateString ? '#4398E8' : '#FFFFFF'}
+                  bg={selectedDate === dateString ? '#228B22' : '#FFFFFF'}
                   color={selectedDate === dateString ? '#FFFFFF' : '#000000'}
                   borderWidth={1}
                   width="60px"
@@ -211,8 +211,8 @@ export default function ConfirmRent() {
               <Input
                 value={fromTime}
                 width="110px"
-                borderColor={activeField === 'from' ? '#4398E8' : '#979797'}
-                color={activeField === 'from' ? '#4398E8' : '#000000'}
+                borderColor={activeField === 'from' ? '#228B22' : '#979797'}
+                color={activeField === 'from' ? '#228B22' : '#000000'}
                 onFocus={() => setActiveField('from')} // Track "From" selection
                 onChange={handleFromTimeChange}
                 readOnly
@@ -238,8 +238,8 @@ export default function ConfirmRent() {
               <Input
                 value={toTime}
                 width="110px"
-                borderColor={activeField === 'to' ? '#4398E8' : '#979797'}
-                color={activeField === 'to' ? '#4398E8' : '#000000'}
+                borderColor={activeField === 'to' ? '#228B22' : '#979797'}
+                color={activeField === 'to' ? '#228B22' : '#000000'}
                 onFocus={() => setActiveField('to')} // Track "To" selection
                 onChange={handleToTimeChange}
                 readOnly
@@ -271,17 +271,17 @@ export default function ConfirmRent() {
                 <Button
                   key={time}
                   onClick={() => handleTimeSlotClick(time)}
-                  bg={isFromTime || isToTime || isInRange ? '#4398E8' : '#FFFFFF'}
+                  bg={isFromTime || isToTime || isInRange ? '#228B22' : '#FFFFFF'}
                   color={isFromTime || isToTime || isInRange ? '#FFFFFF' : '#000000'}
                   borderWidth={1}
-                  borderColor={isFromTime || isToTime || isInRange ? '#4398E8' : '#979797'}
+                  borderColor={isFromTime || isToTime || isInRange ? '#228B22' : '#979797'}
                   p={2}
                   borderRadius="lg"
                   fontSize="sm"
                   opacity={!isSelectable ? 0.5 : 1}
                   cursor={!isSelectable ? 'not-allowed' : 'pointer'}
                   _hover={{
-                    bg: !isSelectable ? '#FFFFFF' : isFromTime || isToTime || isInRange ? '#4398E8' : '#F5F5F5'
+                    bg: !isSelectable ? '#FFFFFF' : isFromTime || isToTime || isInRange ? '#228B22' : '#F5F5F5'
                   }}
                   disabled={!isSelectable}
                 >

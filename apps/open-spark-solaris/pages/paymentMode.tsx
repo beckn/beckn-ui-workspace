@@ -203,7 +203,7 @@ const EMIApplicationModal = ({
           <Typography
             fontSize="15px"
             fontWeight="500"
-            color="#4398E8"
+            color="#228B22"
             text="Sync wallet"
             onClick={handleSyncWallet}
           />
@@ -237,7 +237,7 @@ const EMIApplicationModal = ({
               value={formData.fullName}
               onChange={e => handleInputChange('fullName', e.target.value)}
               paddingInlineStart="unset"
-              _focusVisible={{ borderColor: errors.fullName ? 'red.500' : '#4398E8' }}
+              _focusVisible={{ borderColor: errors.fullName ? 'red.500' : '#228B22' }}
               border="unset"
               borderBottom="1px solid"
               borderColor={errors.fullName ? 'red.500' : '#3A3A3A'}
@@ -277,7 +277,7 @@ const EMIApplicationModal = ({
                 <Input
                   width="100%"
                   paddingInlineStart="unset"
-                  _focusVisible={{ borderColor: errors.dateOfBirth ? 'red.500' : '#4398E8' }}
+                  _focusVisible={{ borderColor: errors.dateOfBirth ? 'red.500' : '#228B22' }}
                   border="unset"
                   borderBottom="1px solid"
                   borderColor={errors.dateOfBirth ? 'red.500' : '#3A3A3A'}
@@ -306,7 +306,7 @@ const EMIApplicationModal = ({
               value={formData.panCard}
               onChange={e => handleInputChange('panCard', e.target.value)}
               paddingInlineStart="unset"
-              _focusVisible={{ borderColor: errors.panCard ? 'red.500' : '#4398E8' }}
+              _focusVisible={{ borderColor: errors.panCard ? 'red.500' : '#228B22' }}
               border="unset"
               borderBottom="1px solid"
               borderColor={errors.panCard ? 'red.500' : '#3A3A3A'}
@@ -332,7 +332,7 @@ const EMIApplicationModal = ({
               value={formData.aadhaar}
               onChange={e => handleInputChange('aadhaar', e.target.value)}
               paddingInlineStart="unset"
-              _focusVisible={{ borderColor: errors.aadhaar ? 'red.500' : '#4398E8' }}
+              _focusVisible={{ borderColor: errors.aadhaar ? 'red.500' : '#228B22' }}
               border="unset"
               borderBottom="1px solid"
               borderColor={errors.aadhaar ? 'red.500' : '#3A3A3A'}
@@ -359,7 +359,7 @@ const EMIApplicationModal = ({
               onChange={e => handleInputChange('mobileNumber', e.target.value)}
               maxLength={10}
               paddingInlineStart="unset"
-              _focusVisible={{ borderColor: errors.mobileNumber ? 'red.500' : '#4398E8' }}
+              _focusVisible={{ borderColor: errors.mobileNumber ? 'red.500' : '#228B22' }}
               border="unset"
               borderBottom="1px solid"
               borderColor={errors.mobileNumber ? 'red.500' : '#3A3A3A'}
@@ -897,7 +897,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                                     as="span"
                                     fontWeight="500"
                                     fontSize={'10px'}
-                                    color="#4398E8"
+                                    color="#228B22"
                                     cursor={'pointer'}
                                   >
                                     sync your transactions from wallet

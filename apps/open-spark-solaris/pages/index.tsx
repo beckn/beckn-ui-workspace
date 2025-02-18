@@ -19,10 +19,16 @@ import Cookies from 'js-cookie'
 import { AuthRootState } from '@store/auth-slice'
 import { DegWalletDetails } from '@beckn-ui/common'
 import { UserRootState } from '@store/user-slice'
+import RentalServiceModal from '../components/RentalServiceModal/RentalServiceModal'
 
 const HomePage = () => {
   const bearerToken = Cookies.get('authToken')
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
+
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const handleOpenModal = () => setIsModalOpen(true)
+  const handleCloseModal = () => setIsModalOpen(false)
+  const [showSuccess, setShowSuccess] = useState(false)
 
   const [isLoading, setIsLoading] = useState(false)
   const [walletDetails, setWalletDetails] = useState<DegWalletDetails>()
@@ -132,16 +138,33 @@ const HomePage = () => {
           >
             <ShadowCardButton
               prefixIcon={<TiShoppingCart size={28} />}
-              text="Search Rental Services"
+              text="Provide Rental Services"
               textStyle="start"
               postIcon={<MdOutlineKeyboardArrowRight />}
-              handleClick={() => handleNavigation('RENT_AND_HIRE')}
+              handleClick={() => handleOpenModal()}
+              dataTest="store_button"
+              sx={buttonStyles}
+            />
+            <ShadowCardButton
+              prefixIcon={<TiShoppingCart size={28} />}
+              text="My Services"
+              textStyle="start"
+              postIcon={<MdOutlineKeyboardArrowRight />}
+              handleClick={() => router.push('/orderHistory')}
               dataTest="store_button"
               sx={buttonStyles}
             />
           </Flex>
         </Box>
       </Box>
+      <RentalServiceModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        handleOnSubmit={({ success, startLoading }: { success: boolean; startLoading: boolean }) => {
+          setShowSuccess(success)
+          setIsLoading(startLoading)
+        }}
+      />
       <OpenWalletBottomModal
         modalType={modalType}
         setModalType={setModalType}

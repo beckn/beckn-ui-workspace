@@ -117,7 +117,7 @@ const OrderHistory = () => {
                   alignItems={'center'}
                   justifyContent="space-between"
                   cursor={'pointer'}
-                  color="#4398E8"
+                  color="#228B22"
                 >
                   <Text
                     as={Typography}
@@ -128,7 +128,7 @@ const OrderHistory = () => {
                   />
                   {/* <Text >Add to wallet</Text> */}
                   {/* <Text
-                    color={'#4398E8'}
+                    color={'#228B22'}
                     fontSize={'10px'}
                     fontWeight="500"
                   >

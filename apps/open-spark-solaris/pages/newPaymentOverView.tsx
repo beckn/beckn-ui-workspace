@@ -114,7 +114,7 @@ const NewPaymentOverView = () => {
                     </Flex>
                     <Box ml="25px">
                       <Typography
-                        color="#4398E8"
+                        color="#228B22"
                         fontWeight="600"
                         fontSize="12px"
                         text={`₹ ${items.price.value}`}

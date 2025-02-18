@@ -64,7 +64,7 @@ const SecureCheckout = () => {
           <Text fontSize="12px">Didn’t receive OTP? </Text>
           <Text
             fontSize="12px"
-            color="#4398E8"
+            color="#228B22"
             cursor="pointer"
           >
             Resend

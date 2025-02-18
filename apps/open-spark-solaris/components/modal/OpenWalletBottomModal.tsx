@@ -310,8 +310,8 @@ const OpenWalletBottomModal: React.FC<OpenWalletBottomModalProps> = ({ modalType
                             height: '24px',
                             borderRadius: '3px',
                             _checked: {
-                              bg: '#4398E8',
-                              borderColor: '#4398E8'
+                              bg: '#228B22',
+                              borderColor: '#228B22'
                             }
                           }
                         }}

@@ -1444,9 +1444,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@beckn-ui/open-spark-search-rental@workspace:apps/open-spark-search-rental":
+"@beckn-ui/open-spark-solaris@workspace:apps/open-spark-solaris":
   version: 0.0.0-use.local
-  resolution: "@beckn-ui/open-spark-search-rental@workspace:apps/open-spark-search-rental"
+  resolution: "@beckn-ui/open-spark-solaris@workspace:apps/open-spark-solaris"
   dependencies:
     "@beckn-ui/prettier-config": "workspace:^"
     "@chakra-ui/icons": ^2.0.19

@@ -34,7 +34,7 @@ export type ShippingFormData = {
   address: string
   zipCode: string
 }
-const color = '#4398E8'
+const color = '#228B22'
 const CheckoutPage = () => {
   const cartItems = useSelector((state: ICartRootState) => state.cart.items)
   const type = useSelector((state: RootState) => state.navigation.type)

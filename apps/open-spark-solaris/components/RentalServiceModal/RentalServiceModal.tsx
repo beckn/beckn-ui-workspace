@@ -261,7 +261,7 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
                   color="gray.500"
                   fontSize="xs"
                 >
-                  <span style={{ textDecoration: 'underline', color: '#4398E8' }}>Browse file</span> from your device
+                  <span style={{ textDecoration: 'underline', color: '#228B22' }}>Browse file</span> from your device
                 </Text>
               </Flex>
             </label>
@@ -283,7 +283,7 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
                   <Box
                     as="span"
                     mr={2}
-                    color="#4398E8"
+                    color="#228B22"
                   >
                     📄
                   </Box>
@@ -297,7 +297,7 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
                     </Text>
                   </Box>
                 </Flex>
-                <CheckIcon color="#4398E8" />
+                <CheckIcon color="#228B22" />
               </Flex>
               <Progress
                 value={uploadedFile.progress}
@@ -310,7 +310,7 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
 
           <Button
             width="100%"
-            bg="#4398E8"
+            bg="#228B22"
             color="white"
             _hover={{ bg: '#3182CE' }}
             borderRadius="full"
@@ -350,13 +350,13 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
                   <Circle
                     size="20px"
                     border="1px solid"
-                    borderColor={selectedBattery === battery.id ? '#4398E8' : '#E2E8F0'}
+                    borderColor={selectedBattery === battery.id ? '#228B22' : '#E2E8F0'}
                     mr={3}
                   >
                     {selectedBattery === battery.id && (
                       <Circle
                         size="12px"
-                        bg="#4398E8"
+                        bg="#228B22"
                       />
                     )}
                   </Circle>
@@ -427,7 +427,7 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
                         </Flex>
                         <Text
                           fontSize="12px"
-                          color="#4398E8"
+                          color="#228B22"
                           textDecoration="underline"
                           mb={1}
                         >
@@ -531,7 +531,7 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
 
         <Button
           width="100%"
-          bg="#4398E8"
+          bg="#228B22"
           color="white"
           _hover={{ bg: '#3182CE' }}
           borderRadius="full"
@@ -559,7 +559,7 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
           />
           {currentView === 'upload' && (
             <Text
-              color="#4398E8"
+              color="#228B22"
               fontSize="sm"
               cursor="pointer"
               onClick={handleAddFromWallet}
@@ -587,7 +587,7 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
                   complete={
                     <Circle
                       size="24px"
-                      bg="#4398E8"
+                      bg="#228B22"
                       color="white"
                     >
                       <CheckIcon />
@@ -597,8 +597,8 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
                     <Circle
                       size="24px"
                       bg="transparent"
-                      color="#4398E8"
-                      border="1px solid #4398E8"
+                      color="#228B22"
+                      border="1px solid #228B22"
                     >
                       {index + 1}
                     </Circle>
@@ -606,7 +606,7 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
                   active={
                     <Circle
                       size="24px"
-                      bg="#4398E8"
+                      bg="#228B22"
                       color="white"
                     >
                       <CheckIcon />
@@ -619,7 +619,7 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
                   ml: '0',
                   height: '4px'
                 }}
-                backgroundColor="#4398E8"
+                backgroundColor="#228B22"
               />
             </Step>
           ))}
@@ -633,7 +633,7 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
             <Text
               key={index}
               fontSize="12px"
-              color={activeStep >= index ? '#4398E8' : '#6B7280'}
+              color={activeStep >= index ? '#228B22' : '#6B7280'}
               textAlign="center"
               maxW="80px"
               onClick={() => {

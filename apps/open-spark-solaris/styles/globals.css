@@ -293,7 +293,7 @@ select:-webkit-autofill:focus {
   font-size: 12px !important;
 } */
 .myStore-homepage [data-test='app-title'] {
-  color: #4398e8;
+  color: #228B22;
   font-size: 20px;
 }
 .myStore-homepage .topSheet_topsheet_wrapper__g91VI {
@@ -304,7 +304,7 @@ select:-webkit-autofill:focus {
   width: unset !important;
 }
 .cart-count {
-  background-color: #4398e8 !important;
+  background-color: #228B22 !important;
 }
 .cart-count > p {
   color: #fff !important;
@@ -458,22 +458,22 @@ select:-webkit-autofill:focus {
 }
 .css-1530p3w:active,
 .css-1530p3w[data-active] {
-  background: #4398e8 !important;
+  background: #228B22 !important;
 }
 
 .css-1530p3w:hover,
 .css-1530p3w[data-hover] {
-  background: #4398e8 !important;
+  background: #228B22 !important;
 }
 
 .css-522or8:active,
 .css-522or8[data-active] {
-  background: #4398e8 !important;
+  background: #228B22 !important;
 }
 
 .css-522or8:hover,
 .css-522or8[data-hover] {
-  background: #4398e8 !important;
+  background: #228B22 !important;
 }
 .checkout-open-spark .overview-checkout {
   display: none;
