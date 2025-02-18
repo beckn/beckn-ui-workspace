@@ -21,7 +21,11 @@ const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQue
 ) => {
   const result = await baseQueryWithRetry(args, api, extraOptions)
   if (result.error && result.error.status === 400) {
-    const message = (result.error.data as any)?.error || 'Something went wrong'
+    console.log(result)
+    let message = (result.error.data as any)?.error || 'Something went wrong'
+    if ((result.error.data as any)?.status === 'FAILED') {
+      message = 'Document already present'
+    }
     api.dispatch(
       feedbackActions.setToastData({
         toastData: { message: 'Error!', display: true, type: 'error', description: message }

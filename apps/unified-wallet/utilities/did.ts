@@ -52,10 +52,10 @@ export const parseDIDData = (data: { did: string; attestations?: AttestationData
         category: formatType(parts[3]),
         id: parts[5],
         amount: parts[7],
-        totalItems: parts[9],
-        name: parts[11],
+        name: parts[9],
         did,
-        attestations: attestations!
+        attestations: attestations!,
+        placedAt: parts[10]
       })
     }
   })

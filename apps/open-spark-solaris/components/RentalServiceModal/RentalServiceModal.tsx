@@ -366,7 +366,7 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
                       mb={2}
                     >
                       <Image
-                        src="/images/battery-box.svg"
+                        src="/images/battery_icon.svg"
                         alt="Battery Box"
                         width={65}
                         height={65}

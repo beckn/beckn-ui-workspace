@@ -22,11 +22,15 @@ const activeLabelStyles = {
 }
 const filterPriceOption = [
   {
-    value: 'service',
-    label: 'Service'
+    value: 'Energy',
+    label: 'Energy'
   },
   {
-    value: 'retail',
+    value: 'Healthcare',
+    label: 'Healthcare'
+  },
+  {
+    value: 'Retail',
     label: 'Retail'
   }
 ]

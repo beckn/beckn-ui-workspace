@@ -11,11 +11,11 @@ export type Transaction = {
   type: string
   id: string
   category: string
-  totalItems: string | number
   amount: string | number
   did: string
   name: string
   attestations: AttestationData[]
+  placedAt?: string
 }
 
 export interface AttestationData {
