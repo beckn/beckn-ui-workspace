@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { BottomModal, Typography } from '@beckn-ui/molecules'
+import React, { useRef, useState } from 'react'
+import { BottomModal, Loader, Typography } from '@beckn-ui/molecules'
 import {
   Box,
   Flex,
@@ -13,7 +13,10 @@ import {
   Circle,
   StepSeparator,
   Button,
-  Progress
+  Progress,
+  VStack,
+  Icon,
+  HStack
 } from '@chakra-ui/react'
 import { CheckIcon, AddIcon } from '@chakra-ui/icons'
 import Image from 'next/image'
@@ -31,6 +34,7 @@ import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import CustomDatePicker from '@components/dateTimePicker/customDatePicker'
 import CustomTimePicker from '@components/dateTimePicker/customTimePicker'
 import { validateStartEndTime } from '@utils/general'
+import { FiPlusCircle } from 'react-icons/fi'
 
 interface RentalServiceModalProps {
   isOpen: boolean
@@ -38,7 +42,7 @@ interface RentalServiceModalProps {
   handleOnSubmit: ({ success, startLoading }: { success: boolean; startLoading: boolean }) => void
 }
 
-const steps = [{ title: 'Add Asset for rental' }, { title: 'Add Price & Rental Duration' }]
+const steps = [{ title: 'Add Asset' }, { title: 'Add Price & Duration' }]
 
 interface FileUploadInfo {
   name: string
@@ -102,6 +106,8 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
   const [getDocuments, { isLoading: verifyLoading }] = useGetDocumentsMutation()
   const [decodeStream] = useDecodeStreamMutation()
 
+  const fileInputRef = useRef<HTMLInputElement | null>(null)
+
   const getDecodedStreamData = async (data: any) => {
     console.log(data)
     const decodedRes: any = await decodeStream({ subjectId: data.data.did })
@@ -115,7 +121,6 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
       const result = await getDocuments(user?.deg_wallet?.deg_wallet_id!).unwrap()
       console.log(result)
       const list: BatteryOption[] = parseDIDData(result)['assets']['physical'].map((item, index) => {
-        console.log(item)
         return {
           id: index.toString(),
           name: item.type,
@@ -177,6 +182,7 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
   }
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log('File:', event.target.files)
     const file = event.target.files?.[0]
     if (file) {
       setUploadedFile({
@@ -240,30 +246,41 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
               type="file"
               id="file-upload"
               disabled={true}
+              ref={fileInputRef}
               onChange={handleFileChange}
               style={{ display: 'none' }}
             />
             <label htmlFor="file-upload">
-              <Flex
-                direction="column"
-                align="center"
-                cursor="pointer"
+              <Box
+                width={'100%'}
+                height={'100%'}
+                onClick={() => {
+                  if (fileInputRef.current) {
+                    fileInputRef.current.click()
+                  }
+                }}
               >
-                <Circle
-                  size="20px"
-                  border="1px solid #E2E8F0"
-                  mb={2}
-                >
-                  <AddIcon />
-                </Circle>
-                <Text>Drop your files here</Text>
-                <Text
-                  color="gray.500"
-                  fontSize="xs"
-                >
-                  <span style={{ textDecoration: 'underline', color: '#228B22' }}>Browse file</span> from your device
-                </Text>
-              </Flex>
+                <VStack>
+                  <Icon
+                    as={FiPlusCircle}
+                    boxSize={6}
+                    color="gray.500"
+                  />
+                  <Typography text={'Upload your file here'} />
+                  <HStack gap={1}>
+                    <Typography
+                      color="#4498E8"
+                      fontSize="10px"
+                      sx={{ cursor: 'pointer', _hover: { textDecoration: 'underline' } }}
+                      text="Browse file"
+                    />{' '}
+                    <Typography
+                      fontSize="10px"
+                      text={'from your computer'}
+                    />
+                  </HStack>
+                </VStack>
+              </Box>
             </label>
           </Box>
 
@@ -308,16 +325,10 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
             </Box>
           )}
 
-          <Button
-            width="100%"
-            bg="#228B22"
-            color="white"
-            _hover={{ bg: '#3182CE' }}
-            borderRadius="full"
-            onClick={handleNext}
-          >
-            Next
-          </Button>
+          <BecknButton
+            text="Next"
+            handleClick={handleNext}
+          />
         </>
       )
     }
@@ -329,6 +340,7 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
             className="hideScroll"
             maxH={{ base: 'calc(100vh - 500px)', md: 'calc(100vh - 600px)', lg: 'calc(100vh - 600px)' }}
             overflowY={'scroll'}
+            p="0 4px"
           >
             {batteryOptions.map(battery => (
               <Box
@@ -336,7 +348,7 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
                 mb={4}
                 p={4}
                 borderRadius="md"
-                border="1px solid #E2E8F0"
+                border="0.5px solid #E2E8F0"
                 cursor="pointer"
                 onClick={() => {
                   setSelectedBattery(battery.id)
@@ -344,7 +356,7 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
                 }}
                 position="relative"
                 bg="white"
-                boxShadow="sm"
+                boxShadow="2px 12px 12px -2px #0000001A"
               >
                 <Flex align="center">
                   <Circle
@@ -529,16 +541,10 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
           </Flex>
         </Box>
 
-        <Button
-          width="100%"
-          bg="#228B22"
-          color="white"
-          _hover={{ bg: '#3182CE' }}
-          borderRadius="full"
-          onClick={handlePublish}
-        >
-          Submit & Publish
-        </Button>
+        <BecknButton
+          text={'Submit & Publish'}
+          handleClick={handlePublish}
+        />
       </Box>
     )
   }
@@ -570,14 +576,14 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
         </Flex>
       }
     >
-      <Box p={4}>
+      <Box p={'10px 4px'}>
         <Stepper
           index={activeStep}
           colorScheme="blue"
           size="sm"
           gap={2}
           mb={2}
-          mr={7}
+          mr={12}
           ml={7}
         >
           {steps.map((step, index) => (
@@ -619,7 +625,7 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
                   ml: '0',
                   height: '4px'
                 }}
-                backgroundColor="#228B22"
+                background="#228B22 !important"
               />
             </Step>
           ))}
@@ -627,15 +633,19 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
 
         <Flex
           justify="space-between"
-          mb={6}
+          // mb={6}
+          gap={2}
+          mb={2}
+          mr={'0.9rem'}
+          ml={'0.9rem'}
         >
           {steps.map((step, index) => (
             <Text
               key={index}
-              fontSize="12px"
+              fontSize="10px"
               color={activeStep >= index ? '#228B22' : '#6B7280'}
               textAlign="center"
-              maxW="80px"
+              maxW="110px"
               onClick={() => {
                 if (index === 0) {
                   setCurrentView('upload')
@@ -648,7 +658,19 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
           ))}
         </Flex>
 
-        {renderContent()}
+        {isLoading ? (
+          <>
+            <Box
+              display={'grid'}
+              height={'calc(100vh - 510px)'}
+              alignContent={'center'}
+            >
+              <Loader />
+            </Box>
+          </>
+        ) : (
+          renderContent()
+        )}
       </Box>
     </BottomModal>
   )
