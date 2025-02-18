@@ -38,11 +38,12 @@ const HomePage = () => {
 
   const handleNavigation = (type: 'MY_STORE' | 'RENT_AND_HIRE') => {
     dispatch(setNavigationType(type))
-    if (type === 'RENT_AND_HIRE') {
-      router.push('/rentAndHire')
-    } else {
-      router.push('/myStore')
-    }
+    router.push('/myStore')
+    // if (type === 'RENT_AND_HIRE') {
+    //   router.push('/rentAndHire')
+    // } else {
+    //   router.push('/myStore')
+    // }
   }
 
   useEffect(() => {
@@ -131,41 +132,13 @@ const HomePage = () => {
           >
             <ShadowCardButton
               prefixIcon={<TiShoppingCart size={28} />}
-              text="Energy Marketplace"
-              textStyle="start"
-              postIcon={<MdOutlineKeyboardArrowRight />}
-              handleClick={() => handleNavigation('MY_STORE')}
-              dataTest="store_button"
-              sx={buttonStyles}
-            />
-
-            <ShadowCardButton
-              prefixIcon={<TbHexagonLetterO size={28} />}
-              text="Rental Services"
+              text="Search Rental Services"
               textStyle="start"
               postIcon={<MdOutlineKeyboardArrowRight />}
               handleClick={() => handleNavigation('RENT_AND_HIRE')}
-              dataTest="hire_button"
+              dataTest="store_button"
               sx={buttonStyles}
             />
-            {/* <ShadowCardButton
-              prefixIcon={<SlEnergy size={28} />}
-              text="Peer to Peer Energy Trading"
-              textStyle="start"
-              postIcon={<MdOutlineKeyboardArrowRight />}
-              handleClick={() => router.push('/peerToPeer')}
-              dataTest="store_button"
-              sx={buttonStyles}
-            /> */}
-            {/* <ShadowCardButton
-              prefixIcon={<TbCertificate size={28} />}
-              text="Loans & Subsidies"
-              textStyle="start"
-              postIcon={<MdOutlineKeyboardArrowRight />}
-              handleClick={() => router.push('/loanAndSubsidies')}
-              dataTest="store_button"
-              sx={buttonStyles}
-            /> */}
           </Flex>
         </Box>
       </Box>
