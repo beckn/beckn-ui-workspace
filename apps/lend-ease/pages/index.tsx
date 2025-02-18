@@ -30,16 +30,6 @@ const HomePage = () => {
   const handleModalClose = () => setModalType(null)
   const dispatch = useDispatch()
 
-  const handleNavigation = (type: 'MY_STORE' | 'RENT_AND_HIRE', pathname: string) => {
-    dispatch(setNavigationType(type))
-    router.push(pathname)
-    // if (type === 'RENT_AND_HIRE') {
-    //   router.push('/rentAndHire')
-    // } else {
-    //   router.push('/myStore')
-    // }
-  }
-
   useEffect(() => {
     if (user && user?.deg_wallet) {
       setWalletDetails(user.deg_wallet)
@@ -99,7 +89,7 @@ const HomePage = () => {
               text="Loans"
               textStyle="start"
               postIcon={<MdOutlineKeyboardArrowRight />}
-              handleClick={() => handleNavigation('MY_STORE', '/myStore')}
+              handleClick={() => router.push('/loans')}
               dataTest="store_button"
               sx={buttonStyles}
             />
@@ -126,74 +116,80 @@ const HomePage = () => {
               See all
             </Text>
           </Flex>
-          <DetailsCard>
-            <Flex
-              mb="5px"
-              justifyContent={'space-between'}
-              alignItems="center"
-            >
-              <Text
-                fontSize={'12px'}
-                fontWeight="500"
+          <Box
+            className={'hideScroll'}
+            // maxH="calc(100vh - 100px)"
+            // overflowY={'scroll'}
+          >
+            <DetailsCard>
+              <Flex
+                mb="5px"
+                justifyContent={'space-between'}
+                alignItems="center"
               >
-                Battery Finance
-              </Text>
-              <Text
-                padding={'2px 4px'}
-                fontSize={'10px'}
-                color="#fff"
-                bg={'#51B651'}
-                borderRadius="4px"
-              >
-                Approved
-              </Text>
-            </Flex>
-            <Flex mb="5px">
-              <Text
-                mr="4px"
-                fontSize={'10px'}
-                fontWeight="500"
-              >
-                Applicants Name:
-              </Text>
-              <Text
-                fontWeight={'300'}
-                fontSize={'10px'}
-              >
-                Viraj K
-              </Text>
-            </Flex>
-            <Flex mb="5px">
-              <Text
-                mr="4px"
-                fontSize={'10px'}
-                fontWeight="500"
-              >
-                Stage:
-              </Text>
-              <Text
-                fontWeight={'300'}
-                fontSize={'10px'}
-              >
-                Sanctioned
-              </Text>
-            </Flex>
-            <Flex mb="5px">
-              <Text
-                mr="4px"
-                fontSize={'10px'}
-                fontWeight="500"
-              >
-                Placed at:
-              </Text>
-              <Text
-                fontWeight={'300'}
-                fontSize={'10px'}
-              >
-                21st Jun 2021, 12:21pm
-              </Text>
-            </Flex>
-          </DetailsCard>
+                <Text
+                  fontSize={'12px'}
+                  fontWeight="500"
+                >
+                  Battery Finance
+                </Text>
+                <Text
+                  padding={'2px 4px'}
+                  fontSize={'10px'}
+                  color="#fff"
+                  bg={'#51B651'}
+                  borderRadius="4px"
+                >
+                  Approved
+                </Text>
+              </Flex>
+              <Flex mb="5px">
+                <Text
+                  mr="4px"
+                  fontSize={'10px'}
+                  fontWeight="500"
+                >
+                  Applicants Name:
+                </Text>
+                <Text
+                  fontWeight={'300'}
+                  fontSize={'10px'}
+                >
+                  Viraj K
+                </Text>
+              </Flex>
+              <Flex mb="5px">
+                <Text
+                  mr="4px"
+                  fontSize={'10px'}
+                  fontWeight="500"
+                >
+                  Stage:
+                </Text>
+                <Text
+                  fontWeight={'300'}
+                  fontSize={'10px'}
+                >
+                  Sanctioned
+                </Text>
+              </Flex>
+              <Flex mb="5px">
+                <Text
+                  mr="4px"
+                  fontSize={'10px'}
+                  fontWeight="500"
+                >
+                  Placed at:
+                </Text>
+                <Text
+                  fontWeight={'300'}
+                  fontSize={'10px'}
+                >
+                  21st Jun 2021, 12:21pm
+                </Text>
+              </Flex>
+            </DetailsCard>
+          </Box>
         </Box>
       </Box>
     </Box>
