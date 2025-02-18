@@ -21,6 +21,7 @@ import { ItemMetaData } from '@components/credLayoutRenderer/ItemRenderer'
 import axios from '@services/axios'
 import { ROLE, ROUTE_TYPE } from '@lib/config'
 import DeleteAlertModal from '@components/modal/DeleteAlertModal'
+import { Box } from '@chakra-ui/react'
 
 const options = [
   { label: 'Document', value: 'document' },
@@ -337,7 +338,11 @@ const MyCredentials = () => {
   }, [formData])
 
   return (
-    <>
+    <Box
+      className="hideScroll"
+      maxH="calc(100vh - 100px)"
+      overflowY={'scroll'}
+    >
       <CredLayoutRenderer
         schema={{
           items: filteredItems,
@@ -382,7 +387,7 @@ const MyCredentials = () => {
         handleConfirmDeleteDevice={() => handleDeleteItem(deleteItemDetails!)}
         isLoading={false}
       />
-    </>
+    </Box>
   )
 }
 

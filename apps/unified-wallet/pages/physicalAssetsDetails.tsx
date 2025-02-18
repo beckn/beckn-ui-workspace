@@ -128,6 +128,9 @@ const PhysicalAssetsDetails = () => {
     <Flex
       flexDir={'column'}
       gap="1rem"
+      className="hideScroll"
+      maxH="calc(100vh - 100px)"
+      overflowY={'scroll'}
     >
       {ownerDetails && (
         <>

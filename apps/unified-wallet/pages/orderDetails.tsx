@@ -175,7 +175,11 @@ export default function OrderDetails() {
   const isCancelled = orderDetails?.data[0]?.message?.fulfillments?.[0]?.state?.descriptor?.code === CANCELLED
 
   return (
-    <Box>
+    <Box
+      className="hideScroll"
+      maxH="calc(100vh - 100px)"
+      overflowY={'scroll'}
+    >
       {orderDetails && statusData ? (
         <>
           <Box

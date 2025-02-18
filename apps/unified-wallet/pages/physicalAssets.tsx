@@ -22,6 +22,7 @@ import { ItemMetaData } from '@components/credLayoutRenderer/ItemRenderer'
 import axios from '@services/axios'
 import { ROLE, ROUTE_TYPE } from '@lib/config'
 import DeleteAlertModal from '@components/modal/DeleteAlertModal'
+import { Box } from '@chakra-ui/react'
 
 const PhysicalAssets = () => {
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
@@ -355,7 +356,11 @@ const PhysicalAssets = () => {
   }
 
   return (
-    <>
+    <Box
+      className="hideScroll"
+      maxH="calc(100vh - 100px)"
+      overflowY={'scroll'}
+    >
       <CredLayoutRenderer
         schema={{
           items: filteredItems,
@@ -401,7 +406,7 @@ const PhysicalAssets = () => {
         handleConfirmDeleteDevice={() => handleDeleteItem(deleteItemDetails!)}
         isLoading={false}
       />
-    </>
+    </Box>
   )
 }
 

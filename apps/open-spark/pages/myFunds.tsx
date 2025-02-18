@@ -166,6 +166,9 @@ const MyFunds = () => {
       margin="calc(0rem + 0px) auto auto auto"
       backgroundColor="white"
       placeItems={'center'}
+      className="hideScroll"
+      maxH="calc(100vh - 100px)"
+      overflowY={'scroll'}
     >
       <BalanceCard
         backgroundColor="#4498E8"

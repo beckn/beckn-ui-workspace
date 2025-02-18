@@ -79,7 +79,7 @@ function PaymentMode() {
   }
 
   return (
-    <>
+    <Box>
       <FormControl
         mb="0.5rem"
         isInvalid={!!formErrors.name}
@@ -201,7 +201,7 @@ function PaymentMode() {
           </Box>
         )}
       </BottomModal>
-    </>
+    </Box>
   )
 }
 
