@@ -87,7 +87,7 @@ const CartItem: React.FC<CartItemProps> = ({
                 className={Styles.product_provider}
                 data-test={testIds.cartpage_itemName}
               >
-                <span> sold by:</span> {providerName}
+                <span> Sold By:</span> {providerName}
               </div>
             )}
           </a>

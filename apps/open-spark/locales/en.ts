@@ -110,6 +110,7 @@ const en: { [key: string]: string } = {
   loading: 'Fetching financing plan from ONDC...',
   pleaseWait: 'Please wait!',
   fetchingTrackLoaderSubtext: 'While we fetch for tracking and support details',
-  confirmLoaderSubtext: 'While we confirm your order'
+  confirmLoaderSubtext: 'While we confirm your order',
+  itemSourceText: ''
 }
 export default en

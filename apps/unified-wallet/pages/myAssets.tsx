@@ -32,9 +32,9 @@ const MyAssets = () => {
       maxWidth={{ base: '100vw', md: '30rem', lg: '40rem' }}
       margin="calc(0rem + 26px) auto"
       backgroundColor="white"
-      className="hideScroll"
-      maxH="calc(100vh - 100px)"
-      overflowY={'scroll'}
+      // className="hideScroll"
+      // // maxH="calc(100vh - 100px)"
+      // overflowY={'scroll'}
     >
       <Flex
         marginTop={'1rem'}

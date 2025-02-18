@@ -76,3 +76,9 @@ export const generateRandomCode = (): string => {
   }
   return code
 }
+
+export const formatTime = (timestamp: number | null) => {
+  if (!timestamp) return 'N/A'
+  const date = new Date(timestamp * 1000)
+  return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })
+}

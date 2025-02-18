@@ -18,6 +18,7 @@ import { currencyFormat, filterByKeyword } from '@utils/general'
 import { useRouter } from 'next/router'
 import RetailIcon from '@public/images/retail_icon.svg'
 import OpenSparkIcon from '@public/images/open_spark_icon.svg'
+import { Transaction } from '@lib/types/becknDid'
 
 interface TransactionItem {
   id: string | number
@@ -26,6 +27,8 @@ interface TransactionItem {
   date: string
   name: string
   category: string
+  color?: string
+  data: Transaction
 }
 
 const MyTransactions = () => {
@@ -51,19 +54,22 @@ const MyTransactions = () => {
     try {
       setIsLoading(true)
       const result = await getDocuments(user?.did!).unwrap()
-      const list: TransactionItem[] = parseDIDData(result)['transactions'].map((item, index) => {
-        // const orderPlacedAt = Math.floor(new Date(confirmResponse[0].context.timestamp).getTime() / 1000)
-        return {
-          id: index,
-          orderId: item.id,
-          name: item.name,
-          amount: item.amount,
-          date: formatDate((Number(item.placedAt) * 1000)!, 'do MMM yyyy, h:mma'),
-          category: item.category,
-          color: categoryColors[item.category] || categoryColors.default,
-          data: item
-        }
-      })
+      const list: TransactionItem[] = parseDIDData(result)
+        ['transactions'].map((item, index) => {
+          if (formatDate((Number(item.placedAt) * 1000)!, 'do MMM yyyy, h:mma') === 'Invalid date') return
+          return {
+            id: index,
+            orderId: item.id,
+            name: item.name,
+            amount: item.amount,
+            date: formatDate((Number(item.placedAt) * 1000)!, 'do MMM yyyy, h:mma'),
+            category: item.category,
+            color: categoryColors[item.category] || categoryColors.default,
+            data: item
+          }
+        })
+        .filter(val => val)
+        .sort((a, b) => Number(b.data.placedAt) - Number(a.data.placedAt))
       setItems(list)
       setFilteredItems(list)
       console.log(filteredItems)

@@ -9,6 +9,7 @@ import {
 import { Typography } from '@beckn-ui/molecules'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import { Box, Divider, Flex, Radio, RadioGroup, Stack, Text, Image } from '@chakra-ui/react'
+import { currencyFormat } from '@utils/general'
 import Router from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -117,7 +118,7 @@ const NewPaymentOverView = () => {
                         color="#4398E8"
                         fontWeight="600"
                         fontSize="12px"
-                        text={`₹ ${items.price.value}`}
+                        text={`₹ ${currencyFormat(Number(items.price.value))}`}
                       />
                     </Box>
                   </Flex>
@@ -151,7 +152,7 @@ const NewPaymentOverView = () => {
               />
               <Typography
                 fontSize="15px"
-                text={totalValue.total}
+                text={currencyFormat(totalValue.total)}
               />
             </Flex>
           </Flex>
@@ -171,7 +172,7 @@ const NewPaymentOverView = () => {
               />
               <Typography
                 fontSize="15px"
-                text={totalValue.discountAmount}
+                text={currencyFormat(totalValue.discountAmount)}
               />
             </Flex>
           </Flex>
@@ -198,16 +199,16 @@ const NewPaymentOverView = () => {
               <Typography
                 fontSize="15px"
                 fontWeight="600"
-                text={payableValue}
+                text={currencyFormat(Number(payableValue?.toFixed(2)))}
               />
             </Flex>
           </Flex>
         </DetailCard>
-        <Typography
+        {/* <Typography
           text="Loan Tenure"
           fontSize="17px"
-        />
-        <Box mt="8px">
+        /> */}
+        {/* <Box mt="8px">
           <DetailCard>
             <RadioGroup onChange={value => setSelectedEmiPlan(value)}>
               {selectedEmi.map((emiPlan: any, ind: number) => (
@@ -225,7 +226,7 @@ const NewPaymentOverView = () => {
                       />
                       <Box p="10px">
                         <Text fontSize="15px">
-                          {emiPlan.name} months: ₹ {monthlyInstallment[ind].emi}/months
+                          {emiPlan.name} months: ₹ {currencyFormat(monthlyInstallment[ind].emi)}/months
                         </Text>
                       </Box>
                     </Stack>
@@ -238,11 +239,11 @@ const NewPaymentOverView = () => {
               ))}
             </RadioGroup>
           </DetailCard>
-        </Box>
+        </Box> */}
       </Box>
       <BecknButton
         text="Proceed to Payment"
-        disabled={!selectedEmiPlan}
+        // disabled={!selectedEmiPlan}
         handleClick={() => {
           Router.push('/retailPaymentMethod')
         }}

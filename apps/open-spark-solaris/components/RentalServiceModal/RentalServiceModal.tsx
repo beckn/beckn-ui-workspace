@@ -150,11 +150,11 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
     //TODO:Aniket Generate this payload using wallet
     handleOnSubmit({ startLoading: true, success: true })
     const confirmRes = await getDecodedStreamData(confirmResOfWalletCatalogue)
-    console.log('Confirm Res:', confirmRes.data.confirmDetails)
+    console.log('Confirm Res:', confirmRes.data.confirmDetails[0])
 
     const payload = {
       providerDetails: {
-        data: confirmRes.data.confirmDetails
+        data: [{ ...confirmRes.data.confirmDetails[0], message: confirmRes.data.confirmDetails[0].message.order }]
       },
       walletId: user?.deg_wallet?.deg_wallet_id,
       startTime: `${Math.floor(new Date(fromTime).getTime() / 1000)}`,
