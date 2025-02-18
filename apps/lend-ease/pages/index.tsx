@@ -97,19 +97,17 @@ const HomePage = () => {
   return (
     <Box
       backgroundColor="white"
-      className="hideScroll"
-      maxH={'calc(100vh - 10px)'}
-      overflowY="scroll"
       ml={'-20px'}
       mr={'-20px'}
     >
       <Flex
-        justifyContent={'flex-end'}
+        justifyContent={'space-between'}
         alignItems={'center'}
-        mt={'20px'}
-        mb={'15px'}
+        mt={'8px'}
         pl={'20px'}
         pr={'20px'}
+        h="60px"
+        boxShadow="0px 4px 20px 0px #00000014"
       >
         <Box>
           <Image
@@ -118,30 +116,27 @@ const HomePage = () => {
             onClick={() => {}}
           />
         </Box>
-        <Box></Box>
+        <Text
+          padding={'8px 10px'}
+          borderRadius="6px"
+          backgroundColor="#4398E8"
+          color={'#fff'}
+          onClick={() => router.push('/loans')}
+        >
+          Manage Loan Catalog
+        </Text>
       </Flex>
-      <Box>
-        <Carousel images={images} />
+      <Box
+        className="hideScroll"
+        maxH={'calc(100vh - 100px)'}
+        overflowY="scroll"
+      >
         <Box
           padding={'10px'}
           mr={'10px'}
           ml="10px"
           mt="10px"
         >
-          <Flex
-            columnGap={'20px'}
-            flexDirection="column"
-          >
-            <ShadowCardButton
-              prefixIcon={<Image src="./images/svg8.svg" />}
-              text="Loans"
-              textStyle="start"
-              postIcon={<MdOutlineKeyboardArrowRight />}
-              handleClick={() => router.push('/loans')}
-              dataTest="store_button"
-              sx={buttonStyles}
-            />
-          </Flex>
           <Flex
             justifyContent={'space-between'}
             alignItems="center"
@@ -188,7 +183,7 @@ const HomePage = () => {
                 </Text>
               </Box>
             ) : (
-              orders.slice(0, 2).map(order => (
+              orders.slice(0, 5).map(order => (
                 <DetailsCard key={order.id}>
                   <Flex
                     mb="5px"
@@ -216,12 +211,16 @@ const HomePage = () => {
                       mr="4px"
                       fontSize={'10px'}
                       fontWeight="500"
+                      minWidth={'fit-content'}
                     >
-                      Transaction ID:
+                      Applicants Name:
                     </Text>
                     <Text
                       fontWeight={'300'}
                       fontSize={'10px'}
+                      textOverflow={'ellipsis'}
+                      whiteSpace={'nowrap'}
+                      overflow={'hidden'}
                     >
                       {order.order_id.order_transaction_id}
                     </Text>
@@ -231,16 +230,59 @@ const HomePage = () => {
                       mr="4px"
                       fontSize={'10px'}
                       fontWeight="500"
+                      minWidth={'fit-content'}
                     >
-                      Stage:
+                      Loan Amount:
                     </Text>
                     <Text
                       fontWeight={'300'}
                       fontSize={'10px'}
+                      textOverflow={'ellipsis'}
+                      whiteSpace={'nowrap'}
+                      overflow={'hidden'}
                     >
-                      {order.state_value}
+                      {order.order_id.order_transaction_id}
                     </Text>
                   </Flex>
+                  <Flex mb="5px">
+                    <Text
+                      mr="4px"
+                      fontSize={'10px'}
+                      fontWeight="500"
+                      minWidth={'fit-content'}
+                    >
+                      Loan Tenure:
+                    </Text>
+                    <Text
+                      fontWeight={'300'}
+                      fontSize={'10px'}
+                      textOverflow={'ellipsis'}
+                      whiteSpace={'nowrap'}
+                      overflow={'hidden'}
+                    >
+                      {order.order_id.order_transaction_id}
+                    </Text>
+                  </Flex>
+                  <Flex mb="5px">
+                    <Text
+                      mr="4px"
+                      fontSize={'10px'}
+                      fontWeight="500"
+                      minWidth={'fit-content'}
+                    >
+                      Rate of Interest:
+                    </Text>
+                    <Text
+                      fontWeight={'300'}
+                      fontSize={'10px'}
+                      textOverflow={'ellipsis'}
+                      whiteSpace={'nowrap'}
+                      overflow={'hidden'}
+                    >
+                      {order.order_id.order_transaction_id}
+                    </Text>
+                  </Flex>
+
                   <Flex mb="5px">
                     <Text
                       mr="4px"

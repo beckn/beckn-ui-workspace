@@ -57,15 +57,11 @@ const LoanApplications = () => {
   }, [])
 
   return (
-    <Box p={4}>
-      <Text
-        fontSize="20px"
-        fontWeight="600"
-        mb={6}
-      >
-        All Loan Applications
-      </Text>
-
+    <Box
+      className="hideScroll"
+      maxH={'calc(100vh - 100px)'}
+      overflowY="scroll"
+    >
       {isLoading ? (
         <Box
           textAlign="center"
@@ -94,18 +90,18 @@ const LoanApplications = () => {
             <DetailsCard key={order.id}>
               <Flex
                 mb="5px"
-                justifyContent="space-between"
+                justifyContent={'space-between'}
                 alignItems="center"
               >
                 <Text
-                  fontSize="12px"
+                  fontSize={'12px'}
                   fontWeight="500"
                 >
                   {order.order_id.items[0].short_desc}
                 </Text>
                 <Text
-                  padding="2px 4px"
-                  fontSize="10px"
+                  padding={'2px 4px'}
+                  fontSize={'10px'}
                   color="#fff"
                   bg={order.state_code === 'LOAN_DISBURSED' ? '#51B651' : '#F6AD55'}
                   borderRadius="4px"
@@ -116,14 +112,18 @@ const LoanApplications = () => {
               <Flex mb="5px">
                 <Text
                   mr="4px"
-                  fontSize="10px"
+                  fontSize={'10px'}
                   fontWeight="500"
+                  minWidth={'fit-content'}
                 >
-                  Transaction ID:
+                  Applicants Name:
                 </Text>
                 <Text
-                  fontWeight="300"
-                  fontSize="10px"
+                  fontWeight={'300'}
+                  fontSize={'10px'}
+                  textOverflow={'ellipsis'}
+                  whiteSpace={'nowrap'}
+                  overflow={'hidden'}
                 >
                   {order.order_id.order_transaction_id}
                 </Text>
@@ -131,29 +131,72 @@ const LoanApplications = () => {
               <Flex mb="5px">
                 <Text
                   mr="4px"
-                  fontSize="10px"
+                  fontSize={'10px'}
                   fontWeight="500"
+                  minWidth={'fit-content'}
                 >
-                  Stage:
+                  Loan Amount:
                 </Text>
                 <Text
-                  fontWeight="300"
-                  fontSize="10px"
+                  fontWeight={'300'}
+                  fontSize={'10px'}
+                  textOverflow={'ellipsis'}
+                  whiteSpace={'nowrap'}
+                  overflow={'hidden'}
                 >
-                  {order.state_value}
+                  {order.order_id.order_transaction_id}
                 </Text>
               </Flex>
               <Flex mb="5px">
                 <Text
                   mr="4px"
-                  fontSize="10px"
+                  fontSize={'10px'}
+                  fontWeight="500"
+                  minWidth={'fit-content'}
+                >
+                  Loan Tenure:
+                </Text>
+                <Text
+                  fontWeight={'300'}
+                  fontSize={'10px'}
+                  textOverflow={'ellipsis'}
+                  whiteSpace={'nowrap'}
+                  overflow={'hidden'}
+                >
+                  {order.order_id.order_transaction_id}
+                </Text>
+              </Flex>
+              <Flex mb="5px">
+                <Text
+                  mr="4px"
+                  fontSize={'10px'}
+                  fontWeight="500"
+                  minWidth={'fit-content'}
+                >
+                  Rate of Interest:
+                </Text>
+                <Text
+                  fontWeight={'300'}
+                  fontSize={'10px'}
+                  textOverflow={'ellipsis'}
+                  whiteSpace={'nowrap'}
+                  overflow={'hidden'}
+                >
+                  {order.order_id.order_transaction_id}
+                </Text>
+              </Flex>
+
+              <Flex mb="5px">
+                <Text
+                  mr="4px"
+                  fontSize={'10px'}
                   fontWeight="500"
                 >
                   Placed at:
                 </Text>
                 <Text
-                  fontWeight="300"
-                  fontSize="10px"
+                  fontWeight={'300'}
+                  fontSize={'10px'}
                 >
                   {new Date(order.createdAt).toLocaleString('en-US', {
                     day: 'numeric',

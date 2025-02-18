@@ -23,7 +23,9 @@ const homeIconBlackList = [
   '/upiScreen',
   '/rentAndHire',
   '/confirmRent',
-  '/loans'
+  '/loans',
+  '/energyFinance',
+  '/loanApplications'
 ]
 const menuIconWhiteList = [
   '/',
@@ -67,7 +69,9 @@ const headerNames: PathnameObjectType = {
   '/myRental': 'My Rentals',
   '/rentAndHire': '',
   '/orderServices': 'My Services',
-  '/loans': 'Loans'
+  '/loans': 'Loans',
+  '/energyFinance': 'Energy Financing',
+  '/loanApplications': 'Loan Applications'
 }
 
 const headerFrenchNames: PathnameObjectType = {
@@ -103,7 +107,9 @@ const headerBlackList = [
   '/myRental',
   '/rentAndHire',
   '/orderServices',
-  '/loans'
+  '/loans',
+  '/energyFinance',
+  '/loanApplications'
 ]
 
 const bottomHeaderBlackList = ['/orderConfirmation', '/', '/feedback', '/retailOrderConfirmation', '/upiScreen']

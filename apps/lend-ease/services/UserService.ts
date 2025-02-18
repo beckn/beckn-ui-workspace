@@ -26,7 +26,7 @@ const extendedAuthApi = Api.injectEndpoints({
     }),
     tradeRegister: build.mutation<SignInResponse, RegisterRequest>({
       query: credentials => ({
-        url: '/unified-beckn-energy/signup',
+        url: '/beckn-energy-finance/signup',
         method: 'POST',
         body: credentials
       })
