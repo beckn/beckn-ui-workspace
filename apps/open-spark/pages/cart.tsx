@@ -78,6 +78,7 @@ const Cart = () => {
               ({
                 id: singleItem.id,
                 className: 'myStore-cart',
+                alignment: 'row',
                 quantity: singleItem.quantity,
                 name: singleItem.name,
                 providerName: singleItem.providerName,

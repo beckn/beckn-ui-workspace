@@ -15,4 +15,5 @@ export interface ProductSummaryPropsModel {
   dataTestTitle?: string
   dataTestDescription?: string
   domain?: string
+  showPriceInSummary?: boolean
 }

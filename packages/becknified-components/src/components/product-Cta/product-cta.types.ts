@@ -14,4 +14,5 @@ export interface ProductCtaProps {
   dataTestIncrementCounter?: string
   dataTestCounterValue?: string
   dataTestDecrementCounter?: string
+  noPrice?: boolean
 }

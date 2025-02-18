@@ -18,7 +18,8 @@ const ProductCta: React.FC<ProductCtaProps> = ({
   noCounter,
   dataTestCounterValue = 'counter-value',
   dataTestDecrementCounter = 'decrement-counter',
-  dataTestIncrementCounter = 'increment-counter'
+  dataTestIncrementCounter = 'increment-counter',
+  noPrice
 }) => {
   const theme = useTheme()
   const { isMobile } = useResponsive()
@@ -41,17 +42,15 @@ const ProductCta: React.FC<ProductCtaProps> = ({
         />
       )}
 
-      <Flex
-        alignItems={'center'}
-        gap="2"
-        mb={'10px'}
-      >
-        <ProductPrice
-          currencyType={currency}
-          price={parseFloat(totalPrice)}
-          rateLabel={rateLabel || ''}
-        />
-      </Flex>
+      {!noPrice && (
+        <Flex justifyContent={'center'}>
+          <ProductPrice
+            currencyType={currency}
+            price={parseFloat(totalPrice)}
+            rateLabel={rateLabel || ''}
+          />
+        </Flex>
+      )}
       <Flex justifyContent={'center'}>
         <Typography
           text={counterTitle!}

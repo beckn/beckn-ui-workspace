@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Flex, Spinner, Text } from '@chakra-ui/react'
+import { Box, Flex, Spinner, Text, Image } from '@chakra-ui/react'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import DetailsCard from '@beckn-ui/becknified-components/src/components/checkout/details-card'
+import loanIcon from '@public/images/svg8.svg'
 
 interface OrderItem {
   id: number
@@ -28,6 +29,15 @@ interface Order {
   updatedAt: string
   publishedAt: string
   order_id: OrderDetails
+}
+
+interface DetailsCardProps {
+  alignment?: 'row' | 'column'
+}
+
+const truncateString = (str: string, num: number) => {
+  if (str.length <= num) return str
+  return str.slice(0, num) + '...'
 }
 
 const LoanApplications = () => {
@@ -87,24 +97,64 @@ const LoanApplications = () => {
       ) : (
         <Box className="hideScroll">
           {orders.map(order => (
-            <DetailsCard key={order.id}>
+            <DetailsCard
+              key={order.id}
+              alignment="row"
+            >
               <Flex
                 mb="5px"
                 justifyContent={'space-between'}
                 alignItems="center"
               >
-                <Text
-                  fontSize={'12px'}
-                  fontWeight="500"
-                >
-                  {order.order_id.items[0].short_desc}
-                </Text>
+                {alignment === 'row' ? (
+                  <Flex
+                    alignItems="center"
+                    flex="1"
+                  >
+                    <Box
+                      width="48px"
+                      height="48px"
+                      minWidth="48px"
+                      marginRight="12px"
+                      borderRadius="8px"
+                      overflow="hidden"
+                      backgroundColor="#F5F5F5"
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
+                    >
+                      <Image
+                        src={loanIcon}
+                        alt="loan"
+                        width="32px"
+                        height="32px"
+                      />
+                    </Box>
+                    <Text
+                      fontSize="11px"
+                      fontWeight="500"
+                      noOfLines={1}
+                      title={order.order_id.items[0].short_desc}
+                      maxWidth="150px"
+                    >
+                      {truncateString(order.order_id.items[0].short_desc, 20)}
+                    </Text>
+                  </Flex>
+                ) : (
+                  <Text
+                    fontSize="12px"
+                    fontWeight="500"
+                  >
+                    {order.order_id.items[0].short_desc}
+                  </Text>
+                )}
                 <Text
                   padding={'2px 4px'}
                   fontSize={'10px'}
                   color="#fff"
                   bg={order.state_code === 'LOAN_DISBURSED' ? '#51B651' : '#F6AD55'}
                   borderRadius="4px"
+                  marginLeft={alignment === 'row' ? '8px' : '0'}
                 >
                   {order.state_value}
                 </Text>

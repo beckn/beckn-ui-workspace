@@ -43,6 +43,7 @@ const Product = () => {
       ? {
           title: 'Rental Price',
           noCounter: true,
+          noPrice: true,
           currency: selectedProduct.item.price.currency,
           totalPrice: selectedProduct.item.price.value,
           rateLabel: '/ hr',
@@ -63,6 +64,7 @@ const Product = () => {
         }
       : {
           currency: selectedProduct.item.price.currency,
+          noPrice: true,
           totalPrice: selectedProduct.item.price.value,
           handleIncrement: increment,
           handleDecrement: decrement,
@@ -92,8 +94,6 @@ const Product = () => {
           }
         }
 
-  console.log('Dank ci/cd check')
-
   return (
     <Box
       className="hideScroll myStore-product-details product-text"
@@ -104,6 +104,7 @@ const Product = () => {
         schema={{
           productSummary: {
             imageSrc: selectedProduct.item.images?.[0].url!,
+            showPriceInSummary: true,
             name: selectedProduct.item.name,
             domain: selectedProduct.domain,
             providerName: selectedProduct.providerName,

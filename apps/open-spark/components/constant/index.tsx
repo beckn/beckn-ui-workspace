@@ -20,11 +20,7 @@ export const images = [
     text: 'home page'
   },
   {
-    src: '/images/homePage1.png',
-    text: 'home page'
-  },
-  {
-    src: '/images/homePage2.png',
+    src: '/images/homePage1.svg',
     text: 'home page'
   }
 ]

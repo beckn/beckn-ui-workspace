@@ -14,6 +14,7 @@ export interface CartItemProps {
   handleDecrement: (id: string) => void
   className?: string
   totalAmountText?: string
+  alignment?: 'row' | 'column'
 }
 
 export interface CartListProps {

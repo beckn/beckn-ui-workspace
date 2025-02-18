@@ -86,11 +86,6 @@ const HomePage = () => {
             height="38px"
             onClick={() => router.push('/profile')}
           />
-          {/* <Image
-            src={profileIcon}
-            alt="profileIcon"
-            onClick={() => router.push('/profile')}
-          /> */}
         </Box>
         <Box>
           {user?.deg_wallet ? (
@@ -154,34 +149,6 @@ const HomePage = () => {
               dataTest="hire_button"
               sx={buttonStyles}
             />
-
-            {/* <ShadowCardButton
-              prefixIcon={<TbHexagonLetterO size={28} />}
-              text="Rental Services"
-              textStyle="start"
-              postIcon={<MdOutlineKeyboardArrowRight />}
-              handleClick={() => handleNavigation('RENT_AND_HIRE')}
-              dataTest="hire_button"
-              sx={buttonStyles}
-            /> */}
-            {/* <ShadowCardButton
-              prefixIcon={<SlEnergy size={28} />}
-              text="Peer to Peer Energy Trading"
-              textStyle="start"
-              postIcon={<MdOutlineKeyboardArrowRight />}
-              handleClick={() => router.push('/peerToPeer')}
-              dataTest="store_button"
-              sx={buttonStyles}
-            /> */}
-            {/* <ShadowCardButton
-              prefixIcon={<TbCertificate size={28} />}
-              text="Loans & Subsidies"
-              textStyle="start"
-              postIcon={<MdOutlineKeyboardArrowRight />}
-              handleClick={() => router.push('/loanAndSubsidies')}
-              dataTest="store_button"
-              sx={buttonStyles}
-            /> */}
           </Flex>
         </Box>
       </Box>

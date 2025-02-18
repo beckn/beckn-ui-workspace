@@ -1,4 +1,4 @@
-import { Image } from '@chakra-ui/react'
+import { Image, Flex } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import { HiMinusSm, HiOutlinePlusSm, HiOutlineTrash } from 'react-icons/hi'
 import ProductPrice from '../product-price'
@@ -19,9 +19,16 @@ const CartItem: React.FC<CartItemProps> = ({
   handleDecrement,
   handleIncrement,
   className,
+  alignment = 'column',
   totalAmountText
 }) => {
   const [counter, setCounter] = useState(quantity)
+
+  // Add truncate function
+  const truncateText = (text: string, maxLength: number) => {
+    if (text.length <= maxLength) return text
+    return text.slice(0, maxLength) + '...'
+  }
 
   function increment() {
     setCounter(prev => ++prev!)
@@ -47,20 +54,34 @@ const CartItem: React.FC<CartItemProps> = ({
       <div className={Styles.cart_item_layout_container}>
         <div className={Styles.prouct_details_container}>
           <a className={Styles.product_details}>
-            <div className={Styles.product_image_container}>
-              <Image
-                src={image}
-                alt={name}
-                className="object-contain"
-                data-test={testIds.cartpage_itemImage}
-              />
-            </div>
-            <div
-              className={Styles.product_name}
-              data-test={testIds.cartpage_itemName}
+            <Flex
+              flexDirection={alignment === 'row' ? 'row' : 'column'}
+              justifyContent={'space-between'}
+              alignItems={'center'}
+              gap={'10px'}
             >
-              {name}
-            </div>
+              <div className={Styles.product_image_container}>
+                <Image
+                  src={image}
+                  alt={name}
+                  // className="object-contain"
+                  data-test={testIds.cartpage_itemImage}
+                />
+              </div>
+              <div
+                className={Styles.product_name}
+                style={{
+                  width: alignment === 'row' ? '100%' : 'auto',
+                  fontSize: '14px'
+                }}
+                data-test={testIds.cartpage_itemName}
+                title={name}
+              >
+                {alignment === 'row' ? truncateText(name, 30) : name}
+              </div>
+            </Flex>
+
+            {/* Provider name field */}
             {providerName && (
               <div
                 className={Styles.product_provider}

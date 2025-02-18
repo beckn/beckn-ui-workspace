@@ -26,6 +26,7 @@ import { calcLength } from 'framer-motion'
 import { calculateDuration, generateRentalInitPayload } from '@utils/checkout-util'
 import { setEmiDetails } from '@store/emiSelect-slice'
 import { formatDate } from '@beckn-ui/common'
+import { AuthRootState } from '@store/auth-slice'
 
 export type ShippingFormData = {
   name: string
@@ -42,24 +43,26 @@ const CheckoutPage = () => {
   const theme = useTheme()
   const bgColorOfSecondary = theme.colors.secondary['100']
   const toast = useToast()
+  const { user } = useSelector((state: AuthRootState) => state.auth)
 
   const [shippingFormData, setShippingFormData] = useState<ShippingFormInitialValuesType>({
-    name: 'Lisa',
-    mobileNumber: '9811259151',
-    email: 'lisa.k@gmail.com',
-    address: '1202 b2, Bengaluru urban, Bengaluru, Karnataka',
-    pinCode: '560078'
+    name: '',
+    mobileNumber: '',
+    email: '',
+    address: '',
+    pinCode: ''
   })
 
   const [isBillingAddressSameAsShippingAddress, setIsBillingAddressSameAsShippingAddress] = useState(true)
 
   const [billingFormData, setBillingFormData] = useState<ShippingFormInitialValuesType>({
-    name: 'lisa',
-    mobileNumber: '9811259151',
-    email: 'lisa.k@gmail.com',
-    address: '1202 b2, Bengaluru urban, Bengaluru, Karnataka',
-    pinCode: '560078'
+    name: '',
+    mobileNumber: '',
+    email: '',
+    address: '',
+    pinCode: ''
   })
+
   const router = useRouter()
   const dispatch = useDispatch()
   const [initialize, { isLoading, isError }] = useInitMutation()
@@ -142,20 +145,38 @@ const CheckoutPage = () => {
   ]
 
   useEffect(() => {
-    if (localStorage) {
-      if (localStorage.getItem('userPhone')) {
-        const copiedFormData = structuredClone(shippingFormData)
-        const copiedBillingFormData = structuredClone(billingFormData)
+    console.log('Dank user', user)
 
-        copiedFormData.mobileNumber = localStorage.getItem('userPhone') as string
-        copiedBillingFormData.mobileNumber = localStorage.getItem('userPhone') as string
+    let formData = {
+      name: '',
+      mobileNumber: '',
+      email: '',
+      address: '1202 b2, Bengaluru urban, Bengaluru, Karnataka',
+      pinCode: '560078'
+    }
 
-        setShippingFormData(copiedFormData)
-        setBillingFormData(copiedBillingFormData)
+    if (user?.agent) {
+      // If user.agent exists, use its data
+      formData = {
+        ...formData,
+        name: user.agent.first_name.trim(),
+        mobileNumber: user.agent.agent_profile.phone_number.toString(),
+        email: user.email || ''
+      }
+    } else {
+      // If no user.agent, use default data
+      formData = {
+        ...formData,
+        name: 'Lisa',
+        mobileNumber: '9811259151',
+        email: 'lisa.k@gmail.com'
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+
+    console.log('Dank formData', formData)
+    setShippingFormData(formData)
+    setBillingFormData(formData)
+  }, [user])
 
   useEffect(() => {
     if (isBillingSameRedux) {
@@ -262,6 +283,7 @@ const CheckoutPage = () => {
       className={`hideScroll ${type !== 'RENT_AND_HIRE' ? 'checkout-open-spark' : ''}`}
       maxH="calc(100vh - 100px)"
       overflowY={'scroll'}
+      padding={'0 10px'}
     >
       {type !== 'RENT_AND_HIRE' && (
         <>

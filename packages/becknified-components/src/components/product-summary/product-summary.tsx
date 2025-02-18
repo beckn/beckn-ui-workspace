@@ -1,5 +1,5 @@
 import { Typography, Button } from '@beckn-ui/molecules'
-import { StarRating } from '@beckn-ui/becknified-components'
+import { ProductPrice, StarRating } from '@beckn-ui/becknified-components'
 import { Box, Image, Flex, Text } from '@chakra-ui/react'
 import React from 'react'
 import { ProductSummaryPropsModel } from './product-summary.types'
@@ -21,7 +21,8 @@ const ProductSummary: React.FC<ProductSummaryPropsModel> = props => {
     starRating,
     productCta,
     dataTestTitle = 'item-title',
-    dataTestDescription = 'item-description'
+    dataTestDescription = 'item-description',
+    showPriceInSummary = false
   } = props
 
   return (
@@ -100,6 +101,16 @@ const ProductSummary: React.FC<ProductSummaryPropsModel> = props => {
                   </Flex>
                 )}
               </Box>
+              {showPriceInSummary && (
+                <Box>
+                  <ProductPrice
+                    color="black"
+                    currencyType={productCta?.currency}
+                    price={parseFloat(productCta?.totalPrice || '0')}
+                    rateLabel={productCta?.rateLabel}
+                  />
+                </Box>
+              )}
               {starRating && <StarRating {...starRating} />}
               {secondaryDescription && (
                 <Box minHeight="10rem">
