@@ -89,7 +89,7 @@ const renderCardDetails = (catalogue: Catalogue, details: CardDetail[]) => {
       acc.push(
         <Flex
           key={idx / 2}
-          mt={idx > 0 ? '5px' : '0'}
+          mt={idx > 0 ? '8px' : '0'}
         >
           <Flex
             justifyContent={'center'}
@@ -97,7 +97,7 @@ const renderCardDetails = (catalogue: Catalogue, details: CardDetail[]) => {
             borderRight="0.5px solid #F0F0F0"
             borderBottom={'0.5px solid #F0F0F0'}
           >
-            <Box mb={4}>
+            <Box mb={'10px'}>
               <Typography
                 text={catalogue?.tag_group_id?.[details[idx].index]?.value || 'N/A'}
                 fontSize="10px"
@@ -222,7 +222,10 @@ const EnergyFinance = () => {
 
   if (!catalogues.length) {
     return (
-      <Box textAlign="center">
+      <Box
+        textAlign="center"
+        mt="40px"
+      >
         <Typography
           text="No catalogues available"
           fontSize="18px"
@@ -270,9 +273,9 @@ const EnergyFinance = () => {
                     w={'fit-content'}
                     p="10px 20px"
                   >
-                    <Text fontSize={'10px'}>Foreclosure charges: 2%</Text>
-                    <Text fontSize={'10px'}>Late payment charges: 3%</Text>
-                    <Text fontSize={'10px'}>Pre-payment terms:Allowed with 1% fee</Text>
+                    <Text fontSize={'10px'}>Foreclosure charges: {catalogue?.tag_group_id?.[4].value}</Text>
+                    <Text fontSize={'10px'}>Late payment charges: {catalogue?.tag_group_id?.[7].value}</Text>
+                    <Text fontSize={'10px'}>Pre-payment terms: {catalogue?.tag_group_id?.[8].value}</Text>
                   </Box>
                 </PopoverContent>
               </Popover>

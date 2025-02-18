@@ -310,8 +310,8 @@ select:-webkit-autofill:focus {
   color: #fff !important;
   margin-bottom: unset;
 }
-.myStore-search-wrapper [data-test='filter-button'] svg rect,
-.myStore-search-wrapper [data-test='filter-button'] svg path {
+.myStore-search-wrapper svg rect,
+.myStore-search-wrapper svg path {
   fill: transparent;
   stroke: #a7a7a7;
 }

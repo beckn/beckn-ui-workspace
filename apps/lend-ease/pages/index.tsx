@@ -16,6 +16,7 @@ import DetailsCard from '@beckn-ui/becknified-components/src/components/checkout
 import axios from 'axios'
 
 interface OrderItem {
+  sc_retail_product: any
   id: number
   name: string
   short_desc: string
@@ -243,7 +244,7 @@ const HomePage = () => {
                       whiteSpace={'nowrap'}
                       overflow={'hidden'}
                     >
-                      {order?.order_id.items[0].name}
+                      {/* {order?.order_id.items[0].name} */} NA
                     </Text>
                   </Flex>
                   <Flex mb="5px">
@@ -262,7 +263,7 @@ const HomePage = () => {
                       whiteSpace={'nowrap'}
                       overflow={'hidden'}
                     >
-                      {order?.order_id.items[0].name}
+                      {order?.order_id.items[0].name} months
                     </Text>
                   </Flex>
                   <Flex mb="5px">
@@ -281,7 +282,7 @@ const HomePage = () => {
                       whiteSpace={'nowrap'}
                       overflow={'hidden'}
                     >
-                      {order?.order_id.items[0].name}
+                      {order?.order_id.items[0].sc_retail_product.max_price} %
                     </Text>
                   </Flex>
 
