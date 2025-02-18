@@ -57,7 +57,7 @@ const OpenWalletBottomModal: React.FC<OpenWalletBottomModalProps> = ({ modalType
   }
 
   const handleOTPChange = (value: string, index: number) => {
-    let newArr = [...OTP]
+    const newArr = [...OTP]
     newArr[index] = value
     setOTP(newArr)
 
@@ -133,7 +133,7 @@ const OpenWalletBottomModal: React.FC<OpenWalletBottomModalProps> = ({ modalType
   }
 
   const walletOptions = [
-    { text: 'Meta Mask Wallet', image: metaMaskWallet, handleClick: () => console.log('meta') },
+    { text: 'MetaMask Wallet', image: metaMaskWallet, handleClick: () => console.log('meta') },
     { text: 'OpenSea Wallet', image: openSeaWallet, handleClick: () => console.log('opensea') },
     { text: 'Vault', image: openWallet, handleClick: () => setModalType('link') }
   ]
