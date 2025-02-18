@@ -25,7 +25,7 @@ const OrderHistory = () => {
 
   const bearerToken = Cookies.get('authToken')
   const router = useRouter()
-  console.log(bearerToken)
+
   useEffect(() => {
     const myHeaders = new Headers()
     myHeaders.append('Authorization', `Bearer ${bearerToken}`)
@@ -108,7 +108,7 @@ const OrderHistory = () => {
                   }
                   localStorage.setItem('selectedOrder', JSON.stringify(orderObjectForStatusCall))
                   dispatch(orderActions.addSelectedOrder({ orderDetails: orderObjectForStatusCall }))
-                  // router.push('/orderDetails')
+                  router.push('/orderDetails')
                 }}
                 gap={'5px'}
                 flexDirection={'column'}
@@ -127,13 +127,6 @@ const OrderHistory = () => {
                     dataTest={testIds.orderHistory_createdAt}
                   />
                   {/* <Text >Add to wallet</Text> */}
-                  {/* <Text
-                    color={'#4398E8'}
-                    fontSize={'10px'}
-                    fontWeight="500"
-                  >
-                    Add to wallet
-                  </Text> */}
                 </Flex>
                 <Text
                   as={Typography}
@@ -169,8 +162,7 @@ const OrderHistory = () => {
                       paddingRight={'6px'}
                       data-test={testIds.orderHistory_pendingIcon}
                     />
-                    {/* <Text>{orderStatusMap[order.delivery_status]}</Text> */}
-                    <Text>{'Pending'}</Text>
+                    <Text>{orderStatusMap[order.delivery_status!] || 'Pending'}</Text>
                   </Flex>
                 </Flex>
               </Flex>

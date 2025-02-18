@@ -289,7 +289,7 @@ export default function OrderDetails() {
                     data-test={testIds.orderDetailspage_orderStatus}
                     color={statusData?.[0]?.message.order.status === 'CANCELLED' ? 'red' : 'green'}
                   >
-                    {statusData?.[0]?.message.order.status}
+                    {statusData[0].message.order.status === 'ACTIVE' ? 'COMPLETED' : statusData[0].message.order.status}
                   </Text>
                 </Flex>
               </>

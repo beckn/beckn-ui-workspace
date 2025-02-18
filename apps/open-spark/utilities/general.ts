@@ -67,3 +67,12 @@ export const validateStartEndTime = (startTime: Date, endTime: Date): boolean =>
 export const currencyFormat = (price: number | undefined) => {
   return price ? new Intl.NumberFormat('en-GB').format(price) : null
 }
+
+export const generateRandomCode = (): string => {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+  let code = ''
+  for (let i = 0; i < 3; i++) {
+    code += chars.charAt(Math.floor(Math.random() * chars.length))
+  }
+  return code
+}

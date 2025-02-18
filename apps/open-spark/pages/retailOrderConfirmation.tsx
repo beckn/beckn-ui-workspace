@@ -27,7 +27,7 @@ import { OrderHistoryData } from '@lib/types/orderHistory'
 import { useAddDocumentMutation, useGetVerificationMethodsMutation } from '@services/walletService'
 import { generateAuthHeader, generateKeyPairFromString } from '@services/cryptoUtilService'
 import { AuthRootState } from '@store/auth-slice'
-import { extractAuthAndHeader, toBase64, toSnakeCase } from '@utils/general'
+import { extractAuthAndHeader, generateRandomCode, toBase64, toSnakeCase } from '@utils/general'
 import { feedbackActions } from '@beckn-ui/common'
 import { getRentalPayloadForConfirm } from '@utils/confirm-utils'
 
@@ -180,71 +180,10 @@ const retailOrderConfirmation = () => {
     }
   }
 
-  const handleOnAddToPhysicalAsset = async () => {
-    const orderConfirmationData = confirmResponse
-    if (orderConfirmationData) {
-      try {
-        const subjectKey = user?.deg_wallet?.deg_wallet_id.replace('/subjects/', '')
-        const { publicKey, privateKey } = await generateKeyPairFromString(subjectKey!)
-        const totalItemsStr = extractItemsWithProvider(confirmResponse[0].message.items[0].name)
-
-        const data: any = {
-          type: totalItemsStr,
-          confirmDetails: confirmResponse
-        }
-
-        const docDetails = JSON.stringify(data)
-
-        const verificationMethodsRes = await getVerificationMethods(user?.deg_wallet?.deg_wallet_id!).unwrap()
-        const { did, challenge } = verificationMethodsRes[0]
-
-        const authHeaderRes = await generateAuthHeader({
-          subjectId: user?.deg_wallet?.deg_wallet_id!,
-          verification_did: did,
-          privateKey,
-          publicKey,
-          payload: {
-            name: `assets/physical/type/${toSnakeCase(data?.type!)}/source/spark`,
-            stream: toBase64(docDetails)
-          }
-        })
-        const { authorization, payload } = extractAuthAndHeader(authHeaderRes)
-        if (authorization && payload) {
-          const addDocPayload = {
-            subjectId: user?.deg_wallet?.deg_wallet_id!,
-            payload,
-            authorization
-          }
-
-          const res: any = await addDocument(addDocPayload).unwrap()
-          console.log(res)
-          await attestDocument(res?.[0]?.did, 'PHYSICAL_ASSETS')
-
-          // dispatch(
-          //   feedbackActions.setToastData({
-          //     toastData: { message: 'Success', display: true, type: 'success', description: 'Added Successfully!' }
-          //   })
-          // )
-        } else {
-          dispatch(
-            feedbackActions.setToastData({
-              toastData: { message: 'Error', display: true, type: 'error', description: 'Something went wrong!' }
-            })
-          )
-        }
-      } catch (error) {
-        console.error('An error occurred:', error)
-      }
-    }
-  }
-
   useEffect(() => {
     if (confirmResponse && confirmResponse.length > 0) {
       setOrderId(confirmResponse[0].message.orderId.slice(0, 8))
       handleOnAddToWallet()
-      if (type === 'MY_STORE') {
-        handleOnAddToPhysicalAsset()
-      }
     }
   }, [confirmResponse])
 
@@ -298,9 +237,9 @@ const retailOrderConfirmation = () => {
             {
               text: type === 'RENT_AND_HIRE' ? 'View My Rentals' : 'View Order Details',
               handleClick: () => {
-                const orderId = confirmResponse[0].message.orderId
-                const bppId = confirmResponse[0].context.bpp_id
-                const bppUri = confirmResponse[0].context.bpp_uri
+                const orderId = confirmResponse?.[0].message.orderId
+                const bppId = confirmResponse?.[0].context.bpp_id
+                const bppUri = confirmResponse?.[0].context.bpp_uri
 
                 dispatch(orderActions.addSelectedOrder({ orderDetails: { orderId, bppId, bppUri } }))
                 const orderObjectForStatusCall = {

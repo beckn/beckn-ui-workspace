@@ -481,3 +481,7 @@ select:-webkit-autofill:focus {
 .react-datepicker-wrapper {
   width: 100% !important;
 }
+.order_status_progress {
+  padding: 20px;
+  padding-left: unset;
+}
