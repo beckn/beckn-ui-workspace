@@ -64,6 +64,7 @@ export interface ShippingDetailsProps {
   location: string
   number: number | string
   title: string
+  noAccordion?: boolean
 }
 
 type TotalAmountWithCurreny = {

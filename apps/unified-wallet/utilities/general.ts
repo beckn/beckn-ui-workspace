@@ -64,3 +64,7 @@ export const generateRandomCode = (): string => {
   }
   return code
 }
+
+export const currencyFormat = (price: number | undefined) => {
+  return price ? new Intl.NumberFormat('en-GB').format(price) : null
+}
