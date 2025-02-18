@@ -13,7 +13,8 @@ import {
   feedbackReducer,
   cartSliceReducer,
   checkoutReducer,
-  DiscoveryReducer
+  DiscoveryReducer,
+  OrderReducer
 } from '@beckn-ui/common'
 import api from '@services/api'
 import didApi from '@services/didApi'
@@ -36,6 +37,7 @@ const appReducer = combineReducers({
   feedback: feedbackReducer,
   discoveryEmiPlan: discoveryEmiPlanReducer,
   emiForm: emiFormReducer,
+  orders: OrderReducer,
   selectedEmi: selectedEmiReducer,
   navigation: navigationReducer,
   rental: rentalReducer

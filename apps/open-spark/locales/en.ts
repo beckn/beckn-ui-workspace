@@ -83,7 +83,10 @@ const en: { [key: string]: string } = {
   rentAndHireHeading: 'Battery Rental',
   subTextForRenT: 'A global marketplace to rent batteries. Find the right battery for your needs with ease.',
   addedToCart: 'Product added to cart',
-
+  orderOverview: 'Order Overview',
+  placedAt: 'Placed at',
+  progressSummary: 'Progress Summary',
+  payment: 'Payment',
   formNumber: 'Mobile Number',
   formEmail: 'Email ID',
   formZipCode: 'Zip Code',
@@ -95,12 +98,18 @@ const en: { [key: string]: string } = {
   total: 'Total',
   initializingOrderLoader: 'while we set things up for you',
   quoteRequestLoader: 'Your order is getting processed',
+  unabletoTrack: 'Unable to get the track url',
+  howTodo: 'How did we do?',
+  statusLoaderSubText: 'while we update the current status of your order.',
   emptyCardHeading: 'The Cart is Empty',
+  rateUs: 'Rate Us',
   emptyCardSubHeading: 'Looks like you haven’t made your choice yet',
   gPay: 'Google Pay',
   items: 'Order Overview',
+  allRequestFullfilled: 'All orders delivered!',
   loading: 'Fetching financing plan from ONDC...',
   pleaseWait: 'Please wait!',
+  fetchingTrackLoaderSubtext: 'While we fetch for tracking and support details',
   confirmLoaderSubtext: 'While we confirm your order'
 }
 export default en
