@@ -44,6 +44,13 @@ import { parseDIDData } from '@utils/did'
 import { ItemMetaData } from '@lib/types/becknDid'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
+import { currencyFormat } from '@utils/general'
+
+const messagesList = [
+  'Fetching transactions from your wallet...',
+  'Sending transaction history to Bajaj Finserv...',
+  'Fetching updated offers...'
+]
 
 interface FormData {
   fullName: string
@@ -67,7 +74,13 @@ interface EMIApplicationModalProps {
   onClose: () => void
   handleSyncWallet: () => void
   syncWalletIsLoading?: boolean
-  walletDetails?: { aadharNumber: string; panNumber: string }
+  walletDetails?: {
+    aadharNumber: string
+    panNumber: string
+    fullName: string
+    dateOfBirth: Date | null
+    mobileNumber: string
+  }
   handleOnSubmitForm: () => void
 }
 
@@ -80,11 +93,11 @@ const EMIApplicationModal = ({
   handleOnSubmitForm
 }: EMIApplicationModalProps) => {
   const [formData, setFormData] = useState<FormData>({
-    fullName: '',
-    dateOfBirth: null,
+    fullName: walletDetails?.fullName || '',
+    dateOfBirth: walletDetails?.dateOfBirth || null,
     panCard: walletDetails?.panNumber || '',
     aadhaar: walletDetails?.aadharNumber || '',
-    mobileNumber: ''
+    mobileNumber: walletDetails?.mobileNumber || ''
   })
 
   const [errors, setErrors] = useState<FormErrors>({})
@@ -94,7 +107,10 @@ const EMIApplicationModal = ({
     setFormData(prevFormData => ({
       ...prevFormData,
       panCard: walletDetails?.panNumber || '',
-      aadhaar: walletDetails?.aadharNumber || ''
+      aadhaar: walletDetails?.aadharNumber || '',
+      fullName: walletDetails?.fullName || '',
+      dateOfBirth: walletDetails?.dateOfBirth || null,
+      mobileNumber: walletDetails?.mobileNumber || ''
     }))
   }, [walletDetails])
 
@@ -406,8 +422,17 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
   const cartItems = useSelector((state: ICartRootState) => state.cart.items)
   const [aadharNumber, setAadharNumber] = useState<string>()
   const [PANNumber, setPANNumber] = useState<string>()
+  const [walletDetails, setWalletDetails] = useState<any>({
+    fullName: '',
+    dateOfBirth: '',
+    mobileNumber: '',
+    aadharNumber: '',
+    panNumber: ''
+  })
   const [payableAmount, setPayableAmount] = useState<number>()
   const [dicountedSearch, setDicountedSearch] = useState(false)
+  const [newCalculationIsLoading, setNewCalculationIsLoading] = useState(false)
+  const [fetchTransactionsMessage, setFetchTransactionsMessage] = useState('')
   const [previousIndex, setPreviousIndex] = useState<number>()
   const [newTotalCost, setNewTotalCost] = useState(() => {
     return Number(localStorage.getItem('totalCost')) || 0
@@ -459,11 +484,17 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
   }, [])
 
   const handleDiscountedSearch = () => {
-    setIsLoading(true)
-    fetchEMIPlans(true)
-    setDicountedSearch(true)
-
-    setIsLoading(false)
+    setNewCalculationIsLoading(true)
+    messagesList.forEach((message, index) => {
+      setTimeout(() => {
+        setFetchTransactionsMessage(message)
+      }, index * 1500)
+    })
+    setTimeout(() => {
+      fetchEMIPlans(true)
+      setDicountedSearch(true)
+      setNewCalculationIsLoading(false)
+    }, 5000)
   }
 
   const {
@@ -624,14 +655,24 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
       setIsLoading(true)
       setSyncWalletIsLoading(true)
       const result = await getDocuments(user?.deg_wallet?.deg_wallet_id!).unwrap()
-      console.log(result)
       const list: ItemMetaData[] = parseDIDData(result)['identities'].map((item, index) => {
+        let data = {
+          fullName: `${user?.agent?.first_name || ''} ${user?.agent?.last_name || ''}`,
+          dateOfBirth: new Date('01/05/1994'),
+          mobileNumber: `${user?.agent?.agent_profile.phone_number}`,
+          aadharNumber: '123456789012',
+          panNumber: 'EPLPB9268F'
+        }
+
         if (/\/type\/aadhar_card\/id\//.test((item as any).did)) {
           setAadharNumber(item.id)
         }
         if (/\/type\/pan_card\/id\//.test((item as any).did)) {
           setPANNumber(item.id)
         }
+
+        setWalletDetails(data)
+
         return {
           id: index,
           title: item.type,
@@ -752,175 +793,200 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
 
                       {emiPlans.length > 0 && (
                         <AccordionPanel>
-                          <Box
-                            boxShadow="0px 4px 10px rgba(0, 0, 0, 0.1)"
-                            borderRadius="12px"
-                            p="8px"
-                            mb="10px"
-                          >
-                            <Text
-                              fontSize={'10px'}
-                              fontWeight="500"
-                              mb="8px"
-                            >
-                              New Payment Overview
-                            </Text>
-                            <Flex
-                              justifyContent={'space-between'}
-                              alignItems="center"
-                            >
-                              <Text fontSize={'10px'}>Pay Now</Text>
-                              <Text fontSize={'10px'}>₹{payableAmount?.toFixed(2)}</Text>
-                            </Flex>
-                          </Box>
-                          <Box
-                            boxShadow="0px 4px 10px rgba(0, 0, 0, 0.1)"
-                            borderRadius="12px"
-                            p="10px"
-                          >
-                            <Flex
-                              justifyContent="space-between"
-                              p="12px 20px"
-                              bg="#D9D9D9"
-                              borderRadius="6px"
-                            >
+                          {newCalculationIsLoading ? (
+                            <>
+                              <Loader>
+                                <Typography
+                                  fontWeight="500"
+                                  fontSize="12px"
+                                  text={'Please wait!'}
+                                />
+                                <Typography
+                                  fontSize="12px"
+                                  text={fetchTransactionsMessage}
+                                />
+                              </Loader>
+                            </>
+                          ) : (
+                            <>
                               <Box
-                                fontSize="10px"
-                                fontWeight="500"
+                                boxShadow="0px 4px 10px rgba(0, 0, 0, 0.1)"
+                                borderRadius="12px"
+                                p="8px"
+                                mb="10px"
                               >
-                                EMI plan
+                                <Text
+                                  fontSize={'10px'}
+                                  fontWeight="500"
+                                  mb="8px"
+                                >
+                                  Payment Overview
+                                </Text>
+                                <Flex
+                                  justifyContent={'space-between'}
+                                  alignItems="center"
+                                >
+                                  <Text fontSize={'10px'}>Initial Payment</Text>
+                                  <Text fontSize={'10px'}>₹{currencyFormat(Number(payableAmount?.toFixed(2)))}</Text>
+                                </Flex>
                               </Box>
                               <Box
-                                fontSize="10px"
-                                fontWeight="500"
+                                boxShadow="0px 4px 10px rgba(0, 0, 0, 0.1)"
+                                borderRadius="12px"
+                                p="10px"
                               >
-                                Interest rate (p.a)
-                              </Box>
-                              <Box
-                                fontSize="10px"
-                                fontWeight="500"
-                              >
-                                Total Cost
-                              </Box>
-                            </Flex>
-
-                            {plan.item.map((item: any, index: number) => {
-                              const quantity = Number(cartItems[0]?.quantity) || 1
-                              const totalPrice = Number(cartItems[index]?.price?.value || 0)
-                              const months = parseInt(item.name.match(/\d+/)?.[0] || '1')
-                              const annualInterestRate = Number(parseFloat(item?.price?.value) || 0)
-                              const priceValue = Number(price?.value) || 0
-                              const processingFees = Number(emiPlans[index].providerShortDescription) || 0
-
-                              const priceTotal = priceValue * quantity
-                              const principal = priceTotal || totalPrice || priceTotal + totalPrice
-                              const approvedLoanPercentage = Number(item.code) || 0
-                              const approvedLoanAmount = (approvedLoanPercentage / 100) * principal + processingFees // Include processing fees
-
-                              const newPayableAmount = Number(principal - approvedLoanAmount) || 0
-
-                              if (payableAmount !== newPayableAmount) {
-                                setPayableAmount(newPayableAmount)
-                              }
-
-                              const monthlyInterestRate = annualInterestRate / 12 / 100
-                              const emiWithoutInterest =
-                                (approvedLoanAmount * monthlyInterestRate * Math.pow(1 + monthlyInterestRate, months)) /
-                                  (Math.pow(1 + monthlyInterestRate, months) - 1) || 0
-
-                              const emi = Math.floor(emiWithoutInterest + processingFees / months)
-
-                              const totalCost = emi * months
-                              if (!localStorage.getItem('totalCost')) {
-                                localStorage.setItem('totalCost', totalCost.toString())
-                              }
-
-                              const actualInterestAmount = totalCost - approvedLoanAmount
-
-                              return (
-                                <React.Fragment key={index}>
-                                  <Flex
-                                    justifyContent="space-between"
-                                    p="12px 20px"
+                                <Flex
+                                  justifyContent="space-between"
+                                  p="12px 20px"
+                                  bg="#D9D9D9"
+                                  borderRadius="6px"
+                                >
+                                  <Box
+                                    fontSize="10px"
+                                    fontWeight="500"
                                   >
-                                    <Box
-                                      fontSize="10px"
-                                      fontWeight="500"
-                                      color="#626060"
-                                    >
-                                      ₹ {emi.toFixed(2)} x {item.name}m
-                                    </Box>
-                                    <Box
-                                      fontSize="10px"
-                                      fontWeight="500"
-                                      color="#626060"
-                                    >
-                                      ₹ {actualInterestAmount.toFixed(2)} ({annualInterestRate}%)
-                                    </Box>
-                                    <Box>
-                                      {dicountedSearch && (
+                                    EMI plan
+                                  </Box>
+                                  <Box
+                                    fontSize="10px"
+                                    fontWeight="500"
+                                  >
+                                    Interest rate (p.a)
+                                  </Box>
+                                  <Box
+                                    fontSize="10px"
+                                    fontWeight="500"
+                                  >
+                                    Total Cost
+                                  </Box>
+                                </Flex>
+
+                                {plan.item.map((item: any, index: number) => {
+                                  const quantity = Number(cartItems[0]?.quantity) || 1
+                                  const totalPrice = Number(cartItems[index]?.price?.value || 0)
+                                  const months = parseInt(item.name.match(/\d+/)?.[0] || '1')
+                                  const annualInterestRate = Number(parseFloat(item?.price?.value) || 0)
+                                  const priceValue = Number(price?.value) || 0
+                                  const processingFees = Number(emiPlans[index].providerShortDescription) || 0
+
+                                  const priceTotal = priceValue * quantity
+                                  const principal = priceTotal || totalPrice || priceTotal + totalPrice
+                                  const approvedLoanPercentage = Number(item.code) || 0
+                                  const approvedLoanAmount = (approvedLoanPercentage / 100) * principal + processingFees // Include processing fees
+
+                                  const newPayableAmount = Number(principal - approvedLoanAmount) || 0
+
+                                  if (payableAmount !== newPayableAmount) {
+                                    setPayableAmount(newPayableAmount)
+                                  }
+
+                                  const monthlyInterestRate = annualInterestRate / 12 / 100
+                                  const emiWithoutInterest =
+                                    (approvedLoanAmount *
+                                      monthlyInterestRate *
+                                      Math.pow(1 + monthlyInterestRate, months)) /
+                                      (Math.pow(1 + monthlyInterestRate, months) - 1) || 0
+
+                                  const emi = Math.floor(emiWithoutInterest + processingFees / months)
+
+                                  const totalCost = emi * months
+                                  if (!localStorage.getItem('totalCost')) {
+                                    localStorage.setItem('totalCost', totalCost.toString())
+                                  }
+
+                                  const actualInterestAmount = totalCost - approvedLoanAmount
+
+                                  return (
+                                    <React.Fragment key={index}>
+                                      <Flex
+                                        justifyContent="space-between"
+                                        p="12px 20px"
+                                      >
                                         <Box
-                                          textDecoration="line-through"
                                           fontSize="10px"
                                           fontWeight="500"
                                           color="#626060"
                                         >
-                                          ₹{localStorage.getItem('totalCost')}.00
+                                          ₹ {currencyFormat(Number(emi.toFixed(2)))} x {item.name}m
                                         </Box>
-                                      )}
-                                      <Box
-                                        fontSize="10px"
+                                        <Box
+                                          fontSize="10px"
+                                          fontWeight="500"
+                                          color="#626060"
+                                        >
+                                          ₹ {currencyFormat(Number(actualInterestAmount.toFixed(2)))} (
+                                          {annualInterestRate}
+                                          %)
+                                        </Box>
+                                        <Box>
+                                          {dicountedSearch && (
+                                            <Box
+                                              textDecoration="line-through"
+                                              fontSize="10px"
+                                              fontWeight="500"
+                                              color="#626060"
+                                            >
+                                              ₹{localStorage.getItem('totalCost')}.00
+                                            </Box>
+                                          )}
+                                          <Box
+                                            fontSize="10px"
+                                            fontWeight="500"
+                                            color={`${dicountedSearch ? '#3C8508' : '#626060'}`}
+                                          >
+                                            ₹ {currencyFormat(Number(totalCost.toFixed(2)))}
+                                          </Box>
+                                        </Box>
+                                      </Flex>
+                                      <Divider />
+                                    </React.Fragment>
+                                  )
+                                })}
+                                {!dicountedSearch ? (
+                                  <Box pt="5px">
+                                    <Text
+                                      fontSize={'10px'}
+                                      fontWeight="500"
+                                      as="span"
+                                      display={'flex'}
+                                      flexDirection={'row'}
+                                      justifyContent={'space-evenly'}
+                                      alignItems="center"
+                                    >
+                                      for better offers sync your transactions
+                                      <Text
+                                        as="span"
                                         fontWeight="500"
-                                        color="#626060"
+                                        fontSize={'10px'}
+                                        backgroundColor="#4398E8"
+                                        padding={'3px'}
+                                        borderRadius="4px"
+                                        color="#fff"
+                                        cursor={'pointer'}
+                                        onClick={handleDiscountedSearch}
                                       >
-                                        ₹ {totalCost.toFixed(2)}
-                                      </Box>
-                                    </Box>
-                                  </Flex>
-                                  <Divider />
-                                </React.Fragment>
-                              )
-                            })}
-                            {!dicountedSearch ? (
-                              <Box
-                                pt="5px"
-                                onClick={handleDiscountedSearch}
-                              >
-                                <Text
-                                  fontSize={'10px'}
-                                  fontWeight="500"
-                                  as="span"
-                                >
-                                  for better interest
-                                  <Text
-                                    pl="5px"
-                                    as="span"
-                                    fontWeight="500"
-                                    fontSize={'10px'}
-                                    color="#4398E8"
-                                    cursor={'pointer'}
+                                        Sync now
+                                      </Text>
+                                    </Text>
+                                  </Box>
+                                ) : (
+                                  <Box
+                                    lineHeight={'14px'}
+                                    pt="5px"
+                                    onClick={handleDiscountedSearch}
                                   >
-                                    sync your transactions from wallet
-                                  </Text>
-                                </Text>
+                                    <Text
+                                      fontSize={'10px'}
+                                      fontWeight="500"
+                                      as="span"
+                                    >
+                                      {`🎉 Congratulations! You have received a 2% discount on interest rates based on your transactions.`}
+                                    </Text>
+                                  </Box>
+                                )}
                               </Box>
-                            ) : (
-                              <Box
-                                lineHeight={'14px'}
-                                pt="5px"
-                                onClick={handleDiscountedSearch}
-                              >
-                                <Text
-                                  fontSize={'10px'}
-                                  fontWeight="500"
-                                  as="span"
-                                >
-                                  {`Congratulations! We have added 2% discount based on your criteria.`}
-                                  transactions
-                                </Text>
-                              </Box>
-                            )}
-                          </Box>
+                            </>
+                          )}
                         </AccordionPanel>
                       )}
                     </AccordionItem>
@@ -1014,6 +1080,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
               }}
               syncWalletIsLoading={syncWalletIsLoading}
               walletDetails={{
+                ...walletDetails,
                 aadharNumber: aadharNumber!,
                 panNumber: PANNumber!
               }}

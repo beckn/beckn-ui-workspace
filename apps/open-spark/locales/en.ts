@@ -80,8 +80,8 @@ const en: { [key: string]: string } = {
   myStoreHeading: 'Hi, Welcome to the Energy Marketplace!',
   subText:
     "A global marketplace to discover and buy anything you need. Just type what you want to buy and we'll take care of the rest.",
-  rentAndHireHeading: 'My Rental Services',
-  subTextForRenT: 'A global marketplace to rent what you need or offer your own rental services. ',
+  rentAndHireHeading: 'Battery Rental',
+  subTextForRenT: 'A global marketplace to rent batteries. Find the right battery for your needs with ease.',
   addedToCart: 'Product added to cart',
 
   formNumber: 'Mobile Number',
@@ -90,8 +90,8 @@ const en: { [key: string]: string } = {
   saveShippingDetails: 'Save Shipping Details',
   saveBillingDetails: 'Save Billing Details',
   proceedToCheckout: 'Proceed',
-  shipping: 'Shipping',
-  billing: 'Billing',
+  shipping: 'Shipping Address',
+  billing: 'Billing Address',
   total: 'Total',
   initializingOrderLoader: 'while we set things up for you',
   quoteRequestLoader: 'Your order is getting processed',
@@ -99,7 +99,7 @@ const en: { [key: string]: string } = {
   emptyCardSubHeading: 'Looks like you haven’t made your choice yet',
   gPay: 'Google Pay',
   items: 'Order Overview',
-  loading: 'Loading Plans',
+  loading: 'Fetching financing plan from ONDC...',
   pleaseWait: 'Please wait!',
   confirmLoaderSubtext: 'While we confirm your order'
 }

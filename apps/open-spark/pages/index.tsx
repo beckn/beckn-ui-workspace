@@ -1,4 +1,4 @@
-import { Box, Flex, Image, Select } from '@chakra-ui/react'
+import { Avatar, Box, Flex, Image, Select } from '@chakra-ui/react'
 import Carousel from '@components/carasoul/Carousel'
 import profileIcon from '@public/images/user_profile.svg'
 import { useRouter } from 'next/router'
@@ -80,11 +80,17 @@ const HomePage = () => {
         pr={'20px'}
       >
         <Box>
-          <Image
+          <Avatar
+            name={`${user?.agent?.first_name || ''} ${user?.agent?.last_name || ''}`}
+            width="38px"
+            height="38px"
+            onClick={() => router.push('/profile')}
+          />
+          {/* <Image
             src={profileIcon}
             alt="profileIcon"
             onClick={() => router.push('/profile')}
-          />
+          /> */}
         </Box>
         <Box>
           {user?.deg_wallet ? (
@@ -132,7 +138,7 @@ const HomePage = () => {
           >
             <ShadowCardButton
               prefixIcon={<TiShoppingCart size={28} />}
-              text="Energy Marketplace"
+              text="Marketplace"
               textStyle="start"
               postIcon={<MdOutlineKeyboardArrowRight />}
               handleClick={() => handleNavigation('MY_STORE', '/myStore')}
@@ -141,20 +147,10 @@ const HomePage = () => {
             />
             <ShadowCardButton
               prefixIcon={<TbHexagonLetterO size={28} />}
-              text="Search Rental Services"
+              text="Battery Rental"
               textStyle="start"
               postIcon={<MdOutlineKeyboardArrowRight />}
               handleClick={() => handleNavigation('RENT_AND_HIRE', '/myStore')}
-              dataTest="hire_button"
-              sx={buttonStyles}
-            />
-
-            <ShadowCardButton
-              prefixIcon={<TbHexagonLetterO size={28} />}
-              text="My Rentals"
-              textStyle="start"
-              postIcon={<MdOutlineKeyboardArrowRight />}
-              handleClick={() => handleNavigation('RENT_AND_HIRE', '/myRental')}
               dataTest="hire_button"
               sx={buttonStyles}
             />

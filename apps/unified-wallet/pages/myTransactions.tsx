@@ -14,7 +14,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { AuthRootState } from '@store/auth-slice'
 import { useGetDocumentsMutation } from '@services/walletService'
 import { parseDIDData } from '@utils/did'
-import { filterByKeyword } from '@utils/general'
+import { currencyFormat, filterByKeyword } from '@utils/general'
 import { useRouter } from 'next/router'
 import RetailIcon from '@public/images/retail_icon.svg'
 import OpenSparkIcon from '@public/images/open_spark_icon.svg'
@@ -206,7 +206,7 @@ const MyTransactions = () => {
                           fontWeight="300"
                         />
                         <Typography
-                          text={`₹ ${item.amount}`}
+                          text={`₹ ${currencyFormat(Number(item.amount))}`}
                           fontWeight="500"
                           fontSize="10px"
                         />

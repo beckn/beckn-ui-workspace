@@ -354,7 +354,8 @@ const CheckoutPage = () => {
               name: shippingFormData.name,
               location: shippingFormData.address!,
               number: shippingFormData.mobileNumber,
-              title: t.shipping
+              title: '',
+              noAccordion: true
             },
             shippingForm: {
               formFieldConfig: formFieldConfig,
@@ -386,7 +387,8 @@ const CheckoutPage = () => {
               name: billingFormData.name,
               location: billingFormData.address!,
               number: billingFormData.mobileNumber,
-              title: t.billing
+              title: '',
+              noAccordion: true
             },
             shippingForm: {
               formFieldConfig: formFieldConfig,
