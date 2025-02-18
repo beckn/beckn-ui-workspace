@@ -37,6 +37,11 @@ interface RetailProduct {
   recurring: boolean
 }
 
+interface TagGroupItem {
+  value: string
+  // add other properties that exist in tag_group_id items
+}
+
 interface Catalogue {
   id: number
   name: string
@@ -44,6 +49,7 @@ interface Catalogue {
   code: string
   long_desc: string
   sc_retail_product: RetailProduct
+  tag_group_id: TagGroupItem[] | null // mark as possibly null
 }
 
 interface ApiResponse {
@@ -130,7 +136,8 @@ const EnergyFinance = () => {
       overflowY="scroll"
     >
       {catalogues.map((catalogue, ind) => (
-        <DetailsCard>
+        <DetailsCard key={catalogue.id}>
+          {/* Header section */}
           <Flex
             justifyContent={'space-between'}
             mb="10px"
@@ -170,6 +177,7 @@ const EnergyFinance = () => {
             />
           </Flex>
 
+          {/* Status badges */}
           <Flex
             justifyContent={'space-between'}
             alignItems="center"
@@ -210,7 +218,7 @@ const EnergyFinance = () => {
             >
               <Box mb={4}>
                 <Typography
-                  text={`Rs. ${catalogue.sc_retail_product.min_price} - Rs. ${catalogue.sc_retail_product.max_price}`}
+                  text={catalogue?.tag_group_id?.[0]?.value || 'N/A'}
                   fontSize="10px"
                   fontWeight="300"
                   style={{ opacity: '0.6', marginBottom: '5px', textAlign: 'center' }}
@@ -230,7 +238,7 @@ const EnergyFinance = () => {
             >
               <Box>
                 <Typography
-                  text={`${catalogue.code}%`}
+                  text={catalogue?.tag_group_id?.[1]?.value || 'N/A'}
                   fontSize="10px"
                   fontWeight="300"
                   style={{ opacity: '0.6', marginBottom: '5px', textAlign: 'center' }}
@@ -244,6 +252,7 @@ const EnergyFinance = () => {
               </Box>
             </Flex>
           </Flex>
+
           {/* Interest Rate */}
           <Flex mt="5px">
             <Flex
@@ -254,7 +263,7 @@ const EnergyFinance = () => {
             >
               <Box mb={4}>
                 <Typography
-                  text={`Rs. ${catalogue.sc_retail_product.min_price} - Rs. ${catalogue.sc_retail_product.max_price}`}
+                  text={catalogue?.tag_group_id?.[2]?.value || 'N/A'}
                   fontSize="10px"
                   fontWeight="300"
                   style={{ opacity: '0.6', marginBottom: '5px', textAlign: 'center' }}
@@ -274,7 +283,7 @@ const EnergyFinance = () => {
             >
               <Box>
                 <Typography
-                  text={`${catalogue.code}%`}
+                  text={catalogue?.tag_group_id?.[3]?.value || 'N/A'}
                   fontSize="10px"
                   fontWeight="300"
                   style={{ opacity: '0.6', marginBottom: '5px', textAlign: 'center' }}
@@ -288,7 +297,8 @@ const EnergyFinance = () => {
               </Box>
             </Flex>
           </Flex>
-          {/* ///////yh//// */}
+
+          {/* Foreclosure Charges */}
           <Flex mt="5px">
             <Flex
               justifyContent={'center'}
@@ -298,7 +308,7 @@ const EnergyFinance = () => {
             >
               <Box mb={4}>
                 <Typography
-                  text={`Rs. ${catalogue.sc_retail_product.min_price} - Rs. ${catalogue.sc_retail_product.max_price}`}
+                  text={catalogue?.tag_group_id?.[4]?.value || 'N/A'}
                   fontSize="10px"
                   fontWeight="300"
                   style={{ opacity: '0.6', marginBottom: '5px', textAlign: 'center' }}
@@ -318,7 +328,7 @@ const EnergyFinance = () => {
             >
               <Box>
                 <Typography
-                  text={`${catalogue.code}%`}
+                  text={catalogue?.tag_group_id?.[5]?.value || 'N/A'}
                   fontSize="10px"
                   fontWeight="300"
                   style={{ opacity: '0.6', marginBottom: '5px', textAlign: 'center' }}
@@ -347,15 +357,23 @@ const EnergyFinance = () => {
               gap={2}
               ml="10px"
             >
-              <Box
-                padding={'4px 8px'}
-                bg={'#BEBBBB'}
-                color={'#000'}
-                borderRadius="4px"
-                fontSize="8px"
-              >
-                {catalogue.name} months
-              </Box>
+              {(() => {
+                const value = catalogue?.tag_group_id?.[6]?.value || 'N/A'
+                const valuesArray = value.split(',').map(item => item.trim())
+
+                return valuesArray.map((item, index) => (
+                  <Box
+                    key={index}
+                    padding="4px 8px"
+                    bg="#BEBBBB"
+                    color="#000"
+                    borderRadius="4px"
+                    fontSize="8px"
+                  >
+                    {item}
+                  </Box>
+                ))
+              })()}
             </Flex>
           </Flex>
         </DetailsCard>

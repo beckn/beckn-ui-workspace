@@ -9,7 +9,7 @@ import { SlEnergy } from 'react-icons/sl'
 const loans = () => {
   const router = useRouter()
   return (
-    <Box>
+    <Box mt="10px">
       <ShadowCardButton
         prefixIcon={<SlEnergy />}
         text="Energy Financing"
