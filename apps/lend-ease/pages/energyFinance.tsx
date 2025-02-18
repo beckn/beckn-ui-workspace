@@ -1,8 +1,26 @@
 import Cookies from 'js-cookie'
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import { Box, Grid, Spinner, useToast, Flex } from '@chakra-ui/react'
+import {
+  Box,
+  Grid,
+  Spinner,
+  useToast,
+  Flex,
+  Divider,
+  Tooltip,
+  PopoverBody,
+  PopoverTrigger,
+  Popover,
+  IconButton,
+  PopoverContent,
+  Text,
+  Image
+} from '@chakra-ui/react'
 import { Typography } from '@beckn-ui/molecules'
+import DetailsCard from '@beckn-ui/becknified-components/src/components/checkout/details-card'
+import { IoIosInformationCircleOutline } from 'react-icons/io'
+import { MdOutlineModeEdit } from 'react-icons/md'
 
 const bearerToken = Cookies.get('authToken')
 
@@ -90,13 +108,9 @@ const EnergyFinance = () => {
     )
   }
 
-  // Show message if no catalogues
   if (!catalogues.length) {
     return (
-      <Box
-        p={6}
-        textAlign="center"
-      >
+      <Box textAlign="center">
         <Typography
           text="No catalogues available"
           fontSize="18px"
@@ -109,154 +123,243 @@ const EnergyFinance = () => {
   console.log('Dank', catalogues)
 
   return (
-    <Box p={6}>
-      <Typography
-        text="Solar Panel Loan Schemes"
-        fontSize="24px"
-        fontWeight="600"
-        style={{ marginBottom: '24px' }}
-      />
-
-      <Grid
-        templateColumns="repeat(auto-fill, minmax(350px, 1fr))"
-        gap={6}
-      >
-        {catalogues.map(catalogue => (
-          <Box
-            key={catalogue.id}
-            borderWidth="1px"
-            borderRadius="16px"
-            overflow="hidden"
-            p={5}
-            boxShadow="0px 4px 8px rgba(0, 0, 0, 0.1)"
-            bg="white"
+    <Box
+      w={'100%'}
+      className="hideScroll"
+      maxH={'calc(100vh - 100px)'}
+      overflowY="scroll"
+    >
+      {catalogues.map((catalogue, ind) => (
+        <DetailsCard>
+          <Flex
+            justifyContent={'space-between'}
+            mb="10px"
           >
-            {/* Header */}
+            <Flex alignItems="center">
+              <Typography
+                text={catalogue.short_desc}
+                fontSize="14px"
+                fontWeight="600"
+                style={{ marginRight: '10px' }}
+              />
+              <Popover trigger="click">
+                <PopoverTrigger>
+                  <IoIosInformationCircleOutline />
+                </PopoverTrigger>
+                <PopoverContent
+                  w={'fit-content'}
+                  top="34px"
+                  left={'10px'}
+                  background="#E3E1E1"
+                  _focusVisible={{ boxShadow: 'unset', outline: 'unset' }}
+                >
+                  <Box
+                    w={'fit-content'}
+                    p="10px 20px"
+                  >
+                    <Text fontSize={'10px'}>Foreclosure charges: 2%</Text>
+                    <Text fontSize={'10px'}>Late payment charges: 3%</Text>
+                    <Text fontSize={'10px'}>Pre-payment terms:Allowed with 1% fee</Text>
+                  </Box>
+                </PopoverContent>
+              </Popover>
+            </Flex>
+            <Image
+              src="./images/edit.svg"
+              opacity={'0.8'}
+            />
+          </Flex>
+
+          <Flex
+            justifyContent={'space-between'}
+            alignItems="center"
+          >
+            <Typography
+              text="Energy Financing"
+              fontSize="10px"
+              color="#fff"
+              style={{
+                backgroundColor: '#0069B4',
+                padding: '4px 8px',
+                borderRadius: '4px'
+              }}
+            />
+            <Typography
+              text="Active"
+              fontSize="10px"
+              color="#fff"
+              style={{
+                backgroundColor: '#51B651',
+                padding: '4px 8px',
+                borderRadius: '4px'
+              }}
+            />
+          </Flex>
+          <Divider
+            mb="10px"
+            mt="10px"
+          />
+
+          {/* Principal Amount */}
+          <Flex>
             <Flex
-              justifyContent="space-between"
-              alignItems="center"
-              mb={4}
+              justifyContent={'center'}
+              w={'50%'}
+              borderRight="0.5px solid #F0F0F0"
+              borderBottom={'0.5px solid #F0F0F0'}
             >
-              <Box>
+              <Box mb={4}>
                 <Typography
-                  text="Energy Financing"
-                  fontSize="14px"
-                  color="#3182CE"
-                  style={{
-                    backgroundColor: '#EBF8FF',
-                    padding: '4px 12px',
-                    borderRadius: '16px'
-                  }}
+                  text={`Rs. ${catalogue.sc_retail_product.min_price} - Rs. ${catalogue.sc_retail_product.max_price}`}
+                  fontSize="10px"
+                  fontWeight="300"
+                  style={{ opacity: '0.6', marginBottom: '5px', textAlign: 'center' }}
                 />
-              </Box>
-              <Box>
                 <Typography
-                  text="Active"
-                  fontSize="14px"
-                  color="#38A169"
-                  style={{
-                    backgroundColor: '#F0FFF4',
-                    padding: '4px 12px',
-                    borderRadius: '16px'
-                  }}
+                  text="Principal Amount"
+                  fontSize="10px"
+                  fontWeight="500"
+                  style={{ textAlign: 'center' }}
                 />
               </Box>
             </Flex>
-
-            {/* Principal Amount */}
-            <Box mb={4}>
-              <Typography
-                text="Principal Amount"
-                fontSize="14px"
-                color="gray.600"
-                mb={1}
-              />
-              <Typography
-                text={`Rs. ${catalogue.sc_retail_product.min_price} - Rs. ${catalogue.sc_retail_product.max_price}`}
-                fontSize="16px"
-                fontWeight="600"
-              />
-            </Box>
-
-            {/* Interest Rate */}
-            <Grid
-              templateColumns="repeat(2, 1fr)"
-              gap={4}
-              mb={4}
+            <Flex
+              justifyContent={'center'}
+              w={'50%'}
+              borderBottom={'0.5px solid #F0F0F0'}
             >
               <Box>
-                <Typography
-                  text="Interest Rate"
-                  fontSize="14px"
-                  color="gray.600"
-                  mb={1}
-                />
                 <Typography
                   text={`${catalogue.code}%`}
-                  fontSize="16px"
-                  fontWeight="600"
+                  fontSize="10px"
+                  fontWeight="300"
+                  style={{ opacity: '0.6', marginBottom: '5px', textAlign: 'center' }}
+                />
+                <Typography
+                  text="Initial Payment"
+                  fontWeight="500"
+                  fontSize="10px"
+                  style={{ textAlign: 'center' }}
                 />
               </Box>
+            </Flex>
+          </Flex>
+          {/* Interest Rate */}
+          <Flex mt="5px">
+            <Flex
+              justifyContent={'center'}
+              w={'50%'}
+              borderRight="0.5px solid #F0F0F0"
+              borderBottom={'0.5px solid #F0F0F0'}
+            >
+              <Box mb={4}>
+                <Typography
+                  text={`Rs. ${catalogue.sc_retail_product.min_price} - Rs. ${catalogue.sc_retail_product.max_price}`}
+                  fontSize="10px"
+                  fontWeight="300"
+                  style={{ opacity: '0.6', marginBottom: '5px', textAlign: 'center' }}
+                />
+                <Typography
+                  text="Interest Rate"
+                  fontSize="10px"
+                  fontWeight="500"
+                  style={{ textAlign: 'center' }}
+                />
+              </Box>
+            </Flex>
+            <Flex
+              justifyContent={'center'}
+              w={'50%'}
+              borderBottom={'0.5px solid #F0F0F0'}
+            >
               <Box>
                 <Typography
-                  text="Processing Fees"
-                  fontSize="14px"
-                  color="gray.600"
-                  mb={1}
+                  text={`${catalogue.code}%`}
+                  fontSize="10px"
+                  fontWeight="300"
+                  style={{ opacity: '0.6', marginBottom: '5px', textAlign: 'center' }}
                 />
                 <Typography
-                  text={`Rs.${catalogue.sc_retail_product.min_price}`}
-                  fontSize="16px"
-                  fontWeight="600"
+                  text="Processing Fees"
+                  fontSize="10px"
+                  fontWeight="500"
+                  style={{ textAlign: 'center' }}
                 />
               </Box>
-            </Grid>
-
-            {/* Loan Tenure */}
-            <Box>
-              <Typography
-                text="Loan Tenure:"
-                fontSize="14px"
-                color="gray.600"
-                mb={2}
-              />
-              <Flex gap={2}>
-                {[6, 9, 12].map(months => (
-                  <Box
-                    key={months}
-                    bg={catalogue.name === months.toString() ? 'blue.500' : 'gray.100'}
-                    color={catalogue.name === months.toString() ? 'white' : 'gray.600'}
-                    px={3}
-                    py={1}
-                    borderRadius="full"
-                    fontSize="14px"
-                  >
-                    {months} months
-                  </Box>
-                ))}
-              </Flex>
-            </Box>
-
-            {/* Rating */}
+            </Flex>
+          </Flex>
+          {/* ///////yh//// */}
+          <Flex mt="5px">
             <Flex
-              alignItems="center"
-              mt={4}
+              justifyContent={'center'}
+              w={'50%'}
+              borderRight="0.5px solid #F0F0F0"
+              borderBottom={'0.5px solid #F0F0F0'}
+            >
+              <Box mb={4}>
+                <Typography
+                  text={`Rs. ${catalogue.sc_retail_product.min_price} - Rs. ${catalogue.sc_retail_product.max_price}`}
+                  fontSize="10px"
+                  fontWeight="300"
+                  style={{ opacity: '0.6', marginBottom: '5px', textAlign: 'center' }}
+                />
+                <Typography
+                  text="Foreclosure Charges"
+                  fontSize="10px"
+                  fontWeight="500"
+                  style={{ textAlign: 'center' }}
+                />
+              </Box>
+            </Flex>
+            <Flex
+              justifyContent={'center'}
+              w={'50%'}
+              borderBottom={'0.5px solid #F0F0F0'}
+            >
+              <Box>
+                <Typography
+                  text={`${catalogue.code}%`}
+                  fontSize="10px"
+                  fontWeight="300"
+                  style={{ opacity: '0.6', marginBottom: '5px', textAlign: 'center' }}
+                />
+                <Typography
+                  text="EMI Method"
+                  fontSize="10px"
+                  fontWeight="500"
+                  style={{ textAlign: 'center' }}
+                />
+              </Box>
+            </Flex>
+          </Flex>
+
+          {/* Loan Tenure */}
+          <Flex
+            mt="10px"
+            alignItems={'center'}
+          >
+            <Typography
+              text="Loan Tenure:"
+              fontSize="10px"
+              fontWeight="500"
+            />
+            <Flex
+              gap={2}
+              ml="10px"
             >
               <Box
-                color="yellow.400"
-                mr={2}
+                padding={'4px 8px'}
+                bg={'#BEBBBB'}
+                color={'#000'}
+                borderRadius="4px"
+                fontSize="8px"
               >
-                ★
+                {catalogue.name} months
               </Box>
-              <Typography
-                text={catalogue.sc_retail_product.average_rating}
-                fontSize="14px"
-                fontWeight="500"
-              />
             </Flex>
-          </Box>
-        ))}
-      </Grid>
+          </Flex>
+        </DetailsCard>
+      ))}
     </Box>
   )
 }
