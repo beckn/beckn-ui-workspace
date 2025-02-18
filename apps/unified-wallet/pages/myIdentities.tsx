@@ -378,7 +378,11 @@ const MyIdentities = () => {
   }, [formData, formErrors])
 
   return (
-    <>
+    <Box
+      className="hideScroll"
+      maxH="calc(100vh - 100px)"
+      overflowY={'scroll'}
+    >
       <CredLayoutRenderer
         schema={{
           items: filteredItems,
@@ -522,7 +526,7 @@ const MyIdentities = () => {
           )}
         </Box>
       </BottomModalScan>
-    </>
+    </Box>
   )
 }
 

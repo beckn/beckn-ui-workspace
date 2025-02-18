@@ -30,7 +30,9 @@ const VerifyOTP = (props: VerifyOTPProps) => {
     }
   }, [])
 
-  const handleChange = (value: any, index: any) => {
+  const handleChange = (value: string, index: number) => {
+    if (!/^[0-9]?$/.test(value)) return
+
     let newArr = [...OTP]
     newArr[index] = value
     setOTP(newArr)
@@ -79,7 +81,9 @@ const VerifyOTP = (props: VerifyOTPProps) => {
             {OTP.map((digit, index) => (
               <Input
                 key={index}
-                type="number"
+                type="text"
+                inputMode="numeric"
+                pattern="[0-9]"
                 value={digit}
                 maxLength={1}
                 onChange={e => handleChange(e.target.value, index)}

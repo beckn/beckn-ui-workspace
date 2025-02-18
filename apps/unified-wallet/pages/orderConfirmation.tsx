@@ -61,6 +61,9 @@ const OrderConfirmation = () => {
       margin="-2rem auto"
       backgroundColor="white"
       justifySelf={'center'}
+      className="hideScroll"
+      maxH="calc(100vh - 100px)"
+      overflowY={'scroll'}
     >
       <Box>
         <ConfirmationPage

@@ -81,6 +81,9 @@ const MyPreference = () => {
       mt="20px"
       position={'relative'}
       height={'calc(100vh - 130px)'}
+      className="hideScroll"
+      maxH="calc(100vh - 100px)"
+      overflowY={'scroll'}
     >
       <Typography
         text={'Select your preference'}

@@ -151,7 +151,12 @@ export default function ConfirmRent() {
   }, [fromTime, toTime])
 
   return (
-    <Box mt={5}>
+    <Box
+      mt={5}
+      className="hideScroll"
+      maxH="calc(100vh - 100px)"
+      overflowY={'scroll'}
+    >
       <Box>
         <Box mb={'40px'}>
           <Typography
