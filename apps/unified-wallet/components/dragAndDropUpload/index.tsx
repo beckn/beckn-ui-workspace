@@ -80,7 +80,7 @@ const DragAndDropUpload = (props: DragAndDropUploadProps) => {
   return (
     <Box
       width="100%"
-      padding={'2rem 0'}
+      padding={'1rem 0'}
       border="1px dashed"
       borderColor={isDragging ? 'blue.400' : 'gray.300'}
       borderRadius="lg"

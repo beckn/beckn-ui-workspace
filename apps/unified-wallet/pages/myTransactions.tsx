@@ -152,6 +152,7 @@ const MyTransactions = () => {
             return (
               <Box
                 key={index}
+                cursor="pointer"
                 onClick={() => {
                   handleOnOrderClick(item)
                 }}

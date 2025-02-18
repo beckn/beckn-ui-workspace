@@ -55,3 +55,12 @@ export const filterByKeyword = (data: any[], keyword: string, searchBy: string):
 
   return data.filter(item => item[searchBy].toLowerCase().includes(keyword.toLowerCase()))
 }
+
+export const generateRandomCode = (): string => {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+  let code = ''
+  for (let i = 0; i < 3; i++) {
+    code += chars.charAt(Math.floor(Math.random() * chars.length))
+  }
+  return code
+}
