@@ -1,6 +1,5 @@
 import Api from './api'
 import { SignInResponse, SignUpRequest } from '@beckn-ui/common'
-import Cookies from 'js-cookie'
 
 export interface SignInRequest {
   email: string
@@ -20,7 +19,7 @@ const extendedAuthApi = Api.injectEndpoints({
   endpoints: build => ({
     tradeLogin: build.mutation<SignInResponse, SignInRequest>({
       query: credentials => ({
-        url: '/unified-beckn-energy/login',
+        url: '/beckn-energy-finance/login',
         method: 'POST',
         body: credentials
       })
@@ -31,19 +30,11 @@ const extendedAuthApi = Api.injectEndpoints({
         method: 'POST',
         body: credentials
       })
-    }),
-    verifyOtp: build.mutation<any, { otp: number }>({
-      query: ({ otp }) => ({
-        url: '/unified-beckn-energy/verify-otp',
-        method: 'POST',
-        headers: { Authorization: 'Bearer ' + Cookies.get('authToken') },
-        body: { otp }
-      })
     })
   })
 })
 
-export const { useTradeLoginMutation, useTradeRegisterMutation, useVerifyOtpMutation } = extendedAuthApi
+export const { useTradeLoginMutation, useTradeRegisterMutation } = extendedAuthApi
 
 export const {
   endpoints: { tradeLogin, tradeRegister }

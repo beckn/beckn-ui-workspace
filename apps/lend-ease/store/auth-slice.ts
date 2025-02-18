@@ -56,11 +56,7 @@ const slice = createSlice({
         const hasNotQuery = JSON.stringify(urlQuery) === '{}'
 
         if (hasNotQuery) {
-          if (state.user.isOtpVerified) {
-            Router.push('/')
-          } else {
-            Router.push('/OTPVerification')
-          }
+          Router.push('/')
         } else {
           Router.push({
             pathname: '/',
@@ -82,32 +78,9 @@ const slice = createSlice({
           Cookies.set('authToken', state.jwt)
           Cookies.set('isVerified', JSON.stringify(state.user?.isOtpVerified))
           state.isAuthenticated = true
-          if (state.user.isOtpVerified) {
-            Router.push('/')
-          } else {
-            Router.push('/OTPVerification')
-          }
+          Router.push('/')
         })
         .addMatcher(extendedAuthApi.endpoints.tradeRegister.matchRejected, (state, action) => {
-          console.log('rejected', action)
-        }),
-      builder
-        .addMatcher(extendedAuthApi.endpoints.verifyOtp.matchPending, (state, action) => {
-          console.log('pending', action)
-        })
-        .addMatcher(extendedAuthApi.endpoints.verifyOtp.matchFulfilled, (state, action) => {
-          console.log('fulfilled', action)
-          // JSON.stringify(action.payload.user?.isOtpVerified)
-          const verified = action.payload?.message === 'Otp Verified Successfully' ? true : false
-          Cookies.set('isVerified', verified.toString())
-
-          if (verified) {
-            Router.push('/')
-          } else {
-            Router.back()
-          }
-        })
-        .addMatcher(extendedAuthApi.endpoints.verifyOtp.matchRejected, (state, action) => {
           console.log('rejected', action)
         })
   }
