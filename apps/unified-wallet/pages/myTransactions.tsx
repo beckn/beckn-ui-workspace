@@ -23,7 +23,6 @@ interface TransactionItem {
   id: string | number
   orderId: string
   amount: string | number
-  noOfItems: number | string
   date: string
   name: string
   category: string
@@ -53,13 +52,13 @@ const MyTransactions = () => {
       setIsLoading(true)
       const result = await getDocuments(user?.did!).unwrap()
       const list: TransactionItem[] = parseDIDData(result)['transactions'].map((item, index) => {
+        // const orderPlacedAt = Math.floor(new Date(confirmResponse[0].context.timestamp).getTime() / 1000)
         return {
           id: index,
           orderId: item.id,
           name: item.name,
           amount: item.amount,
-          noOfItems: item.totalItems,
-          date: new Date().toString(),
+          date: formatDate((Number(item.placedAt) * 1000)!, 'do MMM yyyy, h:mma'),
           category: item.category,
           color: categoryColors[item.category] || categoryColors.default,
           data: item
@@ -97,11 +96,15 @@ const MyTransactions = () => {
   }
 
   const handleApplyFilter = (sortBy: string) => {
-    const sortedItemsCopy = [...items]
+    if (sortBy === '') {
+      setFilteredItems(items)
+    } else {
+      const sortedItemsCopy = [...items]
 
-    const result = sortedItemsCopy.filter(item => item.category.toLocaleLowerCase() === sortBy.toLocaleLowerCase())
+      const result = sortedItemsCopy.filter(item => item.category.toLocaleLowerCase() === sortBy.toLocaleLowerCase())
 
-    setFilteredItems(result)
+      setFilteredItems(result)
+    }
     setIsFilterOpen(false)
   }
   const router = useRouter()
@@ -201,7 +204,7 @@ const MyTransactions = () => {
                         justifyContent={'space-between'}
                       >
                         <Typography
-                          text={`Placed at ${formatDate(item.date, 'do MMM yyyy, h.mma')}`}
+                          text={`Placed at ${item.date}`}
                           fontSize="10px"
                           fontWeight="300"
                         />
@@ -230,7 +233,7 @@ const MyTransactions = () => {
           </Box>
         ) : (
           <EmptyScreenTemplate
-            text={'There’s no transactions till now!'}
+            text={'You have no transactions yet!'}
             src={EmptyTransactionsIcon}
           />
         )}

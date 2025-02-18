@@ -138,6 +138,7 @@ const retailOrderConfirmation = () => {
         const totalPrice = confirmResponse[0].message.quote.price.value
         const totalItems = confirmResponse[0].message.items.length
         const totalItemsStr = extractItemsWithProvider(confirmResponse)
+        const orderPlacedAt = Math.floor(new Date(confirmResponse[0].context.timestamp).getTime() / 1000)
 
         const authHeaderRes = await generateAuthHeader({
           subjectId: user?.deg_wallet?.deg_wallet_id!,
@@ -145,7 +146,7 @@ const retailOrderConfirmation = () => {
           privateKey,
           publicKey,
           payload: {
-            name: `transactions/type/domain/energy/id/${generatedOrderId}/amount/${totalPrice}/total_items/${totalItems}/item_str/${totalItemsStr}`,
+            name: `transactions/type/domain/energy/id/${generatedOrderId}/amount/${totalPrice}/item_str/${totalItemsStr}/${orderPlacedAt}`,
             stream: toBase64(docDetails)
           }
         })

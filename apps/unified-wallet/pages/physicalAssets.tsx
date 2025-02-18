@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import CredLayoutRenderer, { CredFormErrors, FormProps } from '@components/credLayoutRenderer/LayoutRenderer'
 import { validateCredForm } from '@utils/form-utils'
 import { InputProps } from '@beckn-ui/molecules'
-import DocIcon from '@public/images/physical_icon.svg'
+import DocIcon from '@public/images/battery_icon.svg'
 import { DocumentProps } from '@components/documentsRenderer'
 import { AuthRootState } from '@store/auth-slice'
 import {
@@ -23,7 +23,6 @@ import axios from '@services/axios'
 import { ROLE, ROUTE_TYPE } from '@lib/config'
 import DeleteAlertModal from '@components/modal/DeleteAlertModal'
 import { Box } from '@chakra-ui/react'
-import { v4 as uuidv4 } from 'uuid'
 
 const options = [
   { label: 'Battery', value: 'Battery' },

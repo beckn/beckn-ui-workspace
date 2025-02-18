@@ -84,7 +84,6 @@ const ItemRenderer = (props: ItemRendererProps) => {
   const getAttestationItems = () => {
     if (item?.data?.attestations?.length > 0) {
       const attestations: AttestationData[] = item.data.attestations
-      console.log(attestations)
       return attestations
         .map(attestation => {
           const regex = /\/org\/([^\/]+)\/verification_methods/
@@ -109,7 +108,7 @@ const ItemRenderer = (props: ItemRendererProps) => {
     }
     return []
   }
-  console.log(item.data.attestations)
+
   return (
     <Box
       //   minH={'168px'}

@@ -18,6 +18,7 @@ import {
   extractAuthAndHeader,
   extractMobileNumberFromSubjectDid,
   filterByKeyword,
+  generateRandomCode,
   toBase64,
   toSnakeCase
 } from '@utils/general'
@@ -48,6 +49,17 @@ const utilities = [
   { value: 'UPCL', label: 'Uttarakhand Power Corporation Limited' }
 ]
 
+const verificationMethodsOptions = [
+  {
+    label: 'Registered Mobile Number',
+    value: 'mobile_number'
+  },
+  {
+    label: 'Registered Email Address',
+    value: 'email_id'
+  }
+]
+
 const MyIdentities = () => {
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
 
@@ -63,10 +75,10 @@ const MyIdentities = () => {
   // const [countryDetails, setCountryDetails] = useState<Record<string, any>>()
   const [formData, setFormData] = useState<FormProps>({
     type: 'Electricity',
-    credNumber: '',
+    credNumber: '5487774000',
     // country: '',
-    verificationMethod: '',
-    utilityCompany: ''
+    verificationMethod: 'mobile_number',
+    utilityCompany: 'BESCOM'
   })
   const [formErrors, setFormErrors] = useState<CredFormErrors>({
     type: '',
@@ -96,7 +108,7 @@ const MyIdentities = () => {
     verificationMethods: [
       {
         label: 'Registered Mobile Number',
-        value: user?.did ? extractMobileNumberFromSubjectDid(user?.did)! : ''
+        value: 'mobile_number'
       },
       {
         label: 'Registered Email Address',
@@ -178,7 +190,13 @@ const MyIdentities = () => {
     setOpenModal(true)
   }
   const handleCloseModal = () => {
-    setFormData({ type: '', credNumber: '', country: '', verificationMethod: '' })
+    setFormData({
+      type: 'Electricity',
+      credNumber: '5487774000',
+      // country: '',
+      verificationMethod: 'mobile_number',
+      utilityCompany: 'BESCOM'
+    })
     setOptions({ country: [], verificationMethods: [] })
     setOpenModal(false)
   }
@@ -235,7 +253,7 @@ const MyIdentities = () => {
         privateKey,
         publicKey,
         payload: {
-          name: `identities/type/${toSnakeCase(data?.type!)}/id/${data.credNumber}`,
+          name: `identities/type/${toSnakeCase(data?.type!)}/id/${data.credNumber}/${generateRandomCode()}`,
           stream: toBase64(docDetails)
         }
       })
@@ -406,14 +424,14 @@ const MyIdentities = () => {
                 //   label: 'Select Country',
                 //   error: formErrors.country
                 // },
-                {
-                  type: 'text',
-                  name: 'type',
-                  value: formData.type!,
-                  handleChange: handleInputChange,
-                  label: 'Connection Type',
-                  error: formErrors.type
-                },
+                // {
+                //   type: 'text',
+                //   name: 'type',
+                //   value: formData.type!,
+                //   handleChange: handleInputChange,
+                //   label: 'Connection Type',
+                //   error: formErrors.type
+                // },
                 {
                   type: 'text',
                   name: 'credNumber',
@@ -434,7 +452,7 @@ const MyIdentities = () => {
                 {
                   type: 'select',
                   name: 'verificationMethod',
-                  options: options.verificationMethods,
+                  options: verificationMethodsOptions,
                   value: formData.verificationMethod!,
                   handleChange: handleSelectChange,
                   label: 'Method Of Verification',
