@@ -90,7 +90,7 @@ export const getSubTotalAndDeliveryCharges = (
     })
   }
   console.log('Final subtotal:', subTotal)
-  return { subTotal, currencySymbol }
+  return { subTotal: Math.round(subTotal), currencySymbol }
 }
 
 export const getTotalCartItems = (cartItems: CartRetailItem[]) => {
