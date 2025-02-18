@@ -18,7 +18,6 @@ const Header = () => {
     SubHeader: {
       backIconList,
       bottomHeaderBlackList,
-      cartIconBlackList,
       headerBlackList,
       headerFrenchNames,
       headerNames,
@@ -70,7 +69,7 @@ const Header = () => {
         <SubHeader
           locale={locale!}
           t={key => t[key]}
-          showCartIcon={showCartIcon}
+          showCartIcon={false}
           profileSection={profileSection}
           headerConstants={{
             headerNames: {
@@ -81,8 +80,7 @@ const Header = () => {
               headerList: headerBlackList,
               backIconList: backIconList,
               editIconList: editIconList,
-              infoIconList: infoIconList,
-              cartIconList: cartIconBlackList
+              infoIconList: infoIconList
             }
           }}
           handleClickOnEdit={() => {

@@ -22,7 +22,8 @@ const homeIconBlackList = [
   '/secureCheckout',
   '/upiScreen',
   '/rentAndHire',
-  '/confirmRent'
+  '/confirmRent',
+  '/loans'
 ]
 const menuIconWhiteList = [
   '/',
@@ -65,7 +66,8 @@ const headerNames: PathnameObjectType = {
   '/secureCheckout': 'Secure Checkout',
   '/myRental': 'My Rentals',
   '/rentAndHire': '',
-  '/orderServices': 'My Services'
+  '/orderServices': 'My Services',
+  '/loans': 'Loans'
 }
 
 const headerFrenchNames: PathnameObjectType = {
@@ -100,35 +102,10 @@ const headerBlackList = [
   '/secureCheckout',
   '/myRental',
   '/rentAndHire',
-  '/orderServices'
+  '/orderServices',
+  '/loans'
 ]
 
-const cartIconBlackList: string[] = [
-  '/',
-  '/paymentMode',
-  '/profile',
-  '/signIn',
-  '/signUp',
-  '/myCredentials',
-  '/myTrades',
-  '/buyingPreference',
-  '/sellingPreference',
-  '/myDers',
-  '/tradeDetails',
-  '/OTPVerification',
-  '/myFunds',
-  '/myPreference',
-  '/withdraw',
-  '/cart',
-  '/checkout',
-  '/confirmRent',
-  '/newPaymentOverView',
-  '/retailPaymentMethod',
-  '/orderHistory',
-  '/secureCheckout',
-  '/myRental',
-  '/rentAndHire'
-]
 const bottomHeaderBlackList = ['/orderConfirmation', '/', '/feedback', '/retailOrderConfirmation', '/upiScreen']
 const orderIconList = ['/orderDetails']
 const editIconList: string[] = ['/profile']
@@ -152,7 +129,6 @@ export default {
     bottomHeaderBlackList,
     editIconList,
     profileSectionIcon,
-    infoIconList,
-    cartIconBlackList
+    infoIconList
   }
 }
