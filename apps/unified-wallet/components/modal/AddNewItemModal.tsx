@@ -125,35 +125,40 @@ const AddNewItemModal = (props: DeleteAlertModalProps) => {
                     setFiles={handleFileChange}
                     fileSelectionElement={(fileInputRef: any) => {
                       return (
-                        <VStack>
-                          <Icon
-                            as={FiPlusCircle}
-                            boxSize={6}
-                            color="gray.500"
-                          />
-                          <Typography
-                            text={'Drop your file here'}
-                            dataTest={testIds.drop_your_file_here}
-                          />
-                          <HStack gap={1}>
-                            <Typography
-                              dataTest={testIds.Browse_file}
-                              color="#4498E8"
-                              fontSize="8px"
-                              onClick={() => {
-                                if (fileInputRef.current) {
-                                  fileInputRef.current.click()
-                                }
-                              }}
-                              sx={{ cursor: 'pointer', _hover: { textDecoration: 'underline' } }}
-                              text="Browse file"
-                            />{' '}
-                            <Typography
-                              fontSize="8px"
-                              text={'from your computer'}
+                        <Box
+                          width={'100%'}
+                          height={'100%'}
+                          onClick={() => {
+                            if (fileInputRef.current) {
+                              fileInputRef.current.click()
+                            }
+                          }}
+                        >
+                          <VStack>
+                            <Icon
+                              as={FiPlusCircle}
+                              boxSize={6}
+                              color="gray.500"
                             />
-                          </HStack>
-                        </VStack>
+                            <Typography
+                              text={'Upload your file here'}
+                              dataTest={testIds.drop_your_file_here}
+                            />
+                            <HStack gap={1}>
+                              <Typography
+                                dataTest={testIds.Browse_file}
+                                color="#4498E8"
+                                fontSize="10px"
+                                sx={{ cursor: 'pointer', _hover: { textDecoration: 'underline' } }}
+                                text="Browse file"
+                              />{' '}
+                              <Typography
+                                fontSize="10px"
+                                text={'from your computer'}
+                              />
+                            </HStack>
+                          </VStack>
+                        </Box>
                       )
                     }}
                   />

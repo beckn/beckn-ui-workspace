@@ -79,21 +79,21 @@ const Dashboard = () => {
         >
           <NavigationItem
             icon={IdentityIcon}
-            label={'Manage Digital IDs'}
+            label={'Connections'}
             handleClick={() => router.push('/myIdentities')}
             dataTest={'identity'}
             renderType="card"
           />
           <NavigationItem
             icon={AssetsIcon}
-            label={'View & Manage Assets'}
+            label={'Energy Assets'}
             handleClick={() => router.push('/myAssets')}
             dataTest={'assets'}
             renderType="card"
           />
           <NavigationItem
             icon={TransactionsIcon}
-            label={'Transaction History'}
+            label={'Energy Transactions'}
             handleClick={() => router.push('/myTransactions')}
             dataTest={'transactions'}
             renderType="card"

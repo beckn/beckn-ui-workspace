@@ -14,7 +14,7 @@ import {
   useGetVerificationMethodsMutation
 } from '@services/walletService'
 import { parseDIDData } from '@utils/did'
-import { extractAuthAndHeader, filterByKeyword, toBase64, toSnakeCase } from '@utils/general'
+import { extractAuthAndHeader, filterByKeyword, generateRandomCode, toBase64, toSnakeCase } from '@utils/general'
 import { generateAuthHeader, generateAuthHeaderForDelete } from '@services/cryptoUtilService'
 import { feedbackActions } from '@beckn-ui/common'
 import { useRouter } from 'next/router'
@@ -23,6 +23,12 @@ import axios from '@services/axios'
 import { ROLE, ROUTE_TYPE } from '@lib/config'
 import DeleteAlertModal from '@components/modal/DeleteAlertModal'
 import { Box } from '@chakra-ui/react'
+import { v4 as uuidv4 } from 'uuid'
+
+const options = [
+  { label: 'Battery', value: 'Battery' },
+  { label: 'Solar panel', value: 'Solar panel' }
+]
 
 const PhysicalAssets = () => {
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
@@ -148,7 +154,7 @@ const PhysicalAssets = () => {
         privateKey,
         publicKey,
         payload: {
-          name: `assets/physical/type/${toSnakeCase(data?.type!)}/source/wallet${attachments ? '/' + attachments : ''}`,
+          name: `assets/physical/type/${toSnakeCase(data?.type!)}/source/wallet${attachments ? '/' + attachments : ''}/${generateRandomCode()}`,
           stream: toBase64(docDetails)
         }
       })
@@ -247,6 +253,26 @@ const PhysicalAssets = () => {
     setSelectedFile(data[0])
   }
 
+  const handleSelectChange = (selectedItem: any) => {
+    const { name, value, data } = selectedItem
+
+    setFormData(prevFormData => ({
+      ...prevFormData,
+      [name]: value
+    }))
+
+    const updatedFormData = {
+      ...formData,
+      [name]: value
+    }
+
+    const errors = validateCredForm(updatedFormData)
+    setFormErrors(prevErrors => ({
+      ...prevErrors,
+      [name]: t[`${errors[name as keyof CredFormErrors]}`] || ''
+    }))
+  }
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
 
@@ -300,10 +326,11 @@ const PhysicalAssets = () => {
   const getInputs = useCallback(() => {
     const inputs: InputProps[] = [
       {
-        type: 'text',
+        type: 'select',
         name: 'type',
         value: formData.type!,
-        handleChange: handleInputChange,
+        options: options,
+        handleChange: handleSelectChange,
         label: 'Type',
         error: formErrors.type
       }

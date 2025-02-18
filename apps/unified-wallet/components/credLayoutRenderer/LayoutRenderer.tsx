@@ -153,8 +153,8 @@ const CredLayoutRenderer: React.FC<CredLayoutRendererProps> = ({
           </Box>
         ) : (
           <EmptyScreenTemplate
-            text={'No identities uploaded yet'}
-            description="Click on “+Add New” button to securely add and access your documents anytime"
+            text={'No records found.'}
+            description="Click on the “+ Add New” button to securely add and access your documents at any time."
             src={EmptyIcon}
           />
         )}

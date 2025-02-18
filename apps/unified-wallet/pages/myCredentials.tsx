@@ -42,7 +42,7 @@ const MyCredentials = () => {
 
   const [formData, setFormData] = useState<FormProps>({
     type: '',
-    credName: ''
+    credName: 'Solar Panel Ownership Certificate'
   })
   const [formErrors, setFormErrors] = useState<CredFormErrors>({
     type: '',
@@ -351,6 +351,7 @@ const MyCredentials = () => {
             setDeleteItemDetails(data)
             setIsDeleteModalOpen(true)
           },
+          showVerificationStatus: false,
           search: {
             searchInputPlaceholder: 'Search Credentials',
             searchKeyword,

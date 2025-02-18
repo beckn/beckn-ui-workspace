@@ -41,11 +41,11 @@ const documentPatterns: Record<string, { regex: RegExp; image: string }> = {
 }
 
 const utilities = [
-  { value: 'MSPCL', label: 'MSPCL (Maharashtra State Power)' },
-  { value: 'Reliance Power', label: 'Reliance Power' },
-  { value: 'MSEB', label: 'MSEB' },
-  { value: 'GECL', label: 'GECL (Gujarat Electricity)' },
-  { value: 'UPPCL', label: 'UPPCL (Uttar Pradesh Power Corp. Ltd)' }
+  { value: 'JVVNL', label: 'Jaipur Vidyut Vitran Nigam Limited' },
+  { value: 'PVVNL', label: 'Purvanchal Vidyut Vitran Nigam Limited' },
+  { value: 'BESCOM', label: 'Bangalore Electricity Supply Limited' },
+  { value: 'DPN', label: 'Department of Power, Nagaland' },
+  { value: 'UPCL', label: 'Uttarakhand Power Corporation Limited' }
 ]
 
 const MyIdentities = () => {
@@ -62,19 +62,17 @@ const MyIdentities = () => {
 
   // const [countryDetails, setCountryDetails] = useState<Record<string, any>>()
   const [formData, setFormData] = useState<FormProps>({
-    type: '',
+    type: 'Electricity',
     credNumber: '',
-    country: '',
+    // country: '',
     verificationMethod: '',
-    energyBPId: '',
     utilityCompany: ''
   })
   const [formErrors, setFormErrors] = useState<CredFormErrors>({
     type: '',
     credNumber: '',
-    country: '',
+    // country: '',
     verificationMethod: '',
-    energyBPId: '',
     utilityCompany: ''
   })
   const [showBpId, setShowBpId] = useState<boolean>(false)
@@ -106,7 +104,7 @@ const MyIdentities = () => {
       }
     ]
   })
-  console.log(showBpId)
+
   const getDocIcon = (docType: string) => {
     for (const key in documentPatterns) {
       if (documentPatterns[key].regex.test(docType)) {
@@ -220,9 +218,8 @@ const MyIdentities = () => {
       const data = {
         type: formData.type,
         credNumber: formData.credNumber?.trim(),
-        country: formData.country,
+        // country: formData.country,
         verificationMethod: formData.verificationMethod,
-        energyBPId: formData.energyBPId,
         utilityCompany: formData.utilityCompany
       }
       setIsLoading(true)
@@ -392,29 +389,29 @@ const MyIdentities = () => {
             setIsDeleteModalOpen(true)
           },
           search: {
-            searchInputPlaceholder: 'Search Identities',
+            searchInputPlaceholder: 'Search Connections',
             searchKeyword,
             setSearchKeyword
           },
           modal: {
             schema: {
-              header: 'Add New Identity',
+              header: 'Add New Connection',
               inputs: [
-                {
-                  type: 'select',
-                  name: 'country',
-                  options: options.country,
-                  value: formData.country!,
-                  handleChange: handleSelectChange,
-                  label: 'Select Country',
-                  error: formErrors.country
-                },
+                // {
+                //   type: 'select',
+                //   name: 'country',
+                //   options: options.country,
+                //   value: formData.country!,
+                //   handleChange: handleSelectChange,
+                //   label: 'Select Country',
+                //   error: formErrors.country
+                // },
                 {
                   type: 'text',
                   name: 'type',
                   value: formData.type!,
                   handleChange: handleInputChange,
-                  label: 'Identity Type',
+                  label: 'Connection Type',
                   error: formErrors.type
                 },
                 {
@@ -422,7 +419,7 @@ const MyIdentities = () => {
                   name: 'credNumber',
                   value: formData.credNumber!,
                   handleChange: handleInputChange,
-                  label: 'ID Number',
+                  label: 'Connection Number',
                   error: formErrors.credNumber
                 },
                 {
@@ -433,14 +430,6 @@ const MyIdentities = () => {
                   handleChange: handleSelectChange,
                   label: t.selectUtilityCompany,
                   error: formErrors.utilityCompany
-                },
-                {
-                  type: 'text',
-                  name: 'energyBPId',
-                  value: formData.energyBPId!,
-                  handleChange: handleInputChange,
-                  label: 'Energy BP ID',
-                  error: formErrors.energyBPId
                 },
                 {
                   type: 'select',
@@ -482,7 +471,11 @@ const MyIdentities = () => {
       />
       <BottomModalScan
         isOpen={isOTPModalOpen}
-        onClose={() => setIsOTPModalOpen(false)}
+        onClose={() => {
+          setIsOTPModalOpen(false)
+          setFetchBpId(false)
+          setShowBpId(false)
+        }}
         modalHeader={'OTP Verification'}
         isLoading={isLoading}
       >
@@ -493,7 +486,7 @@ const MyIdentities = () => {
           gap="10px"
         >
           <VerifyOTP
-            description="Enter the one time password the we have just sent to your mobile number"
+            description="Enter the one-time password (OTP) sent to your registered mobile number."
             isLoading={isLoading}
             handleVerifyOtp={handleOnSubmit}
           />
@@ -503,13 +496,13 @@ const MyIdentities = () => {
               gap="0.5rem"
             >
               <Typography
-                text="BP ID"
+                text="Connection Number"
                 fontSize="16px"
                 fontWeight="400"
               />
               <Divider />
               <Typography
-                text={'This ID belongs to Mr.Viraj K'}
+                text={'This connection belongs to Mr. Ravi Prakash.'}
                 fontSize="12px"
                 fontWeight="400"
                 color="#80807F"

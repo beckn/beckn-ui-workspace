@@ -182,6 +182,7 @@ const ItemRenderer = (props: ItemRendererProps) => {
                     justifyContent={'space-between'}
                     alignItems={'flex-start'}
                     w={'100%'}
+                    gap="10px"
                   >
                     <Text
                       fontWeight={'600'}
@@ -191,6 +192,7 @@ const ItemRenderer = (props: ItemRendererProps) => {
                       textOverflow="ellipsis"
                       whiteSpace="pre-wrap"
                       overflowWrap="break-word"
+                      width={'10rem'}
                     >
                       {item.title}
                     </Text>
@@ -284,6 +286,7 @@ const ItemRenderer = (props: ItemRendererProps) => {
                           pl="unset"
                           padding={'0 0'}
                           onClick={() => setIsOpen(!isOpen)}
+                          marginTop={'6px'}
                         >
                           <Flex
                             flexDir="row"
@@ -326,16 +329,15 @@ const ItemRenderer = (props: ItemRendererProps) => {
             </Box>
           </Box>
           <AccordionPanel
-            pb={4}
-            pl="unset"
-            mt="10px"
+            pb={'0px'}
+            // mt="10px"
           >
             {(renderingFrom === 'attestationDetails' ? item.data.attestations : getAttestationItems())?.map(
               (attestation: any, index: number) => (
                 <>
                   <Flex
-                    pl="20px"
-                    pr="20px"
+                    pl="10px"
+                    pr="0px"
                     key={index}
                     alignItems="center"
                     gap="5px"
@@ -344,7 +346,7 @@ const ItemRenderer = (props: ItemRendererProps) => {
                     flexDirection={renderingFrom === 'attestationDetails' ? 'row-reverse' : 'inherit'}
                   >
                     <Text
-                      fontSize="16px"
+                      fontSize="14px"
                       color={'#5F5F5F'}
                       fontWeight="500"
                     >
@@ -354,14 +356,16 @@ const ItemRenderer = (props: ItemRendererProps) => {
                       <Image
                         src={attestation?.icon}
                         alt="attestation"
+                        width="20px"
+                        height="16px"
                       />
                     )}
                   </Flex>
                   <Divider
                     mb="10px"
                     mt="10px"
-                    ml="20px"
-                    mr="20px"
+                    ml="10px"
+                    mr="0px"
                     w="unset"
                   />
                 </>
