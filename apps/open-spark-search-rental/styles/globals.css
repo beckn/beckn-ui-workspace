@@ -308,6 +308,7 @@ select:-webkit-autofill:focus {
 }
 .cart-count > p {
   color: #fff !important;
+  margin-bottom: unset;
 }
 .myStore-search-wrapper [data-test='filter-button'] svg rect,
 .myStore-search-wrapper [data-test='filter-button'] svg path {
@@ -408,6 +409,9 @@ select:-webkit-autofill:focus {
 .product-text .chakra-text {
   font-size: 15px !important;
 }
+.product-text .chakra-text {
+  margin-bottom: unset !important;
+}
 .order-summary_orderSummaryContainer__v8MgZ {
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1) !important;
   background-color: #fff !important;
@@ -473,4 +477,7 @@ select:-webkit-autofill:focus {
 }
 .checkout-open-spark .overview-checkout {
   display: none;
+}
+.react-datepicker-wrapper {
+  width: 100% !important;
 }
