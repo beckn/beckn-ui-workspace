@@ -21,6 +21,7 @@ import { Typography } from '@beckn-ui/molecules'
 import DetailsCard from '@beckn-ui/becknified-components/src/components/checkout/details-card'
 import { IoIosInformationCircleOutline } from 'react-icons/io'
 import { MdOutlineModeEdit } from 'react-icons/md'
+import { useRouter } from 'next/router'
 
 const bearerToken = Cookies.get('authToken')
 
@@ -49,7 +50,13 @@ interface Catalogue {
   code: string
   long_desc: string
   sc_retail_product: RetailProduct
-  tag_group_id: TagGroupItem[] | null // mark as possibly null
+  tag_group_id: TagGroupItem[] | null
+  cat_attr_tag_relations: Array<{
+    taxanomy_id: {
+      title: string
+      value: string
+    }
+  }>
 }
 
 interface ApiResponse {
@@ -61,33 +68,130 @@ interface ApiResponse {
 
 const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
 
+interface CardDetail {
+  value: string
+  label: string
+  index: number
+}
+
+const cardDetails: CardDetail[] = [
+  { value: '0', label: 'Principal Amount', index: 0 },
+  { value: '1', label: 'Initial Payment', index: 1 },
+  { value: '2', label: 'Interest Rate', index: 2 },
+  { value: '3', label: 'Processing Fees', index: 3 },
+  { value: '4', label: 'Foreclosure Charges', index: 4 },
+  { value: '5', label: 'EMI Method', index: 5 }
+]
+
+const renderCardDetails = (catalogue: Catalogue, details: CardDetail[]) => {
+  return details.reduce((acc: JSX.Element[], curr, idx) => {
+    if (idx % 2 === 0) {
+      acc.push(
+        <Flex
+          key={idx / 2}
+          mt={idx > 0 ? '5px' : '0'}
+        >
+          <Flex
+            justifyContent={'center'}
+            w={'50%'}
+            borderRight="0.5px solid #F0F0F0"
+            borderBottom={'0.5px solid #F0F0F0'}
+          >
+            <Box mb={4}>
+              <Typography
+                text={catalogue?.tag_group_id?.[details[idx].index]?.value || 'N/A'}
+                fontSize="10px"
+                fontWeight="300"
+                style={{ opacity: '0.6', marginBottom: '5px', textAlign: 'center' }}
+              />
+              <Typography
+                text={details[idx].label}
+                fontSize="10px"
+                fontWeight="500"
+                style={{ textAlign: 'center' }}
+              />
+            </Box>
+          </Flex>
+          {idx + 1 < details.length && (
+            <Flex
+              justifyContent={'center'}
+              w={'50%'}
+              borderBottom={'0.5px solid #F0F0F0'}
+            >
+              <Box>
+                <Typography
+                  text={catalogue?.tag_group_id?.[details[idx + 1].index]?.value || 'N/A'}
+                  fontSize="10px"
+                  fontWeight="300"
+                  style={{ opacity: '0.6', marginBottom: '5px', textAlign: 'center' }}
+                />
+                <Typography
+                  text={details[idx + 1].label}
+                  fontSize="10px"
+                  fontWeight="500"
+                  style={{ textAlign: 'center' }}
+                />
+              </Box>
+            </Flex>
+          )}
+        </Flex>
+      )
+    }
+    return acc
+  }, [])
+}
+
 const EnergyFinance = () => {
   const [catalogues, setCatalogues] = useState<Catalogue[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const toast = useToast()
+  const router = useRouter()
 
   const fetchCatalogues = async () => {
     try {
-      const response: ApiResponse = await axios.get(`${strapiUrl}/beckn-energy-finance/catalogues`, {
+      setIsLoading(true)
+      console.log('Fetching catalogues with token:', bearerToken)
+      console.log('API URL:', `${strapiUrl}/beckn-energy-finance/catalogues`)
+
+      const response = await axios.get(`${strapiUrl}/beckn-energy-finance/catalogues`, {
         headers: {
           Authorization: `Bearer ${bearerToken}`
         }
       })
 
-      // Safely access the data
-      const catalogueData = response?.data?.items || []
-      console.log(response.data.items)
+      console.log('Raw API response:', response)
+
+      if (!response.data || !response.data.items) {
+        throw new Error('Invalid response structure')
+      }
+
+      // Get loan types from query
+      const loanTypes = ((router.query.type as string) || '').split('-').filter(Boolean)
+      console.log('Filtering for loan types:', loanTypes)
+
+      // Filter catalogues based on loan types
+      const catalogueData = response.data.items.filter(catalogue => {
+        const catalogueType = catalogue.cat_attr_tag_relations?.[0]?.taxanomy_id?.title
+        console.log('Catalogue type:', catalogueType, 'for catalogue:', catalogue.id)
+        return loanTypes.includes(catalogueType)
+      })
+
+      console.log('Filtered catalogues:', catalogueData)
       setCatalogues(catalogueData)
-    } catch (error) {
-      console.error('Error fetching catalogues:', error)
+    } catch (error: any) {
+      console.error('Detailed error:', {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status
+      })
+
       toast({
         title: 'Error',
-        description: 'Failed to fetch catalogues. Please try again later.',
+        description: error.response?.data?.message || 'Failed to fetch catalogues. Please try again later.',
         status: 'error',
         duration: 5000,
         isClosable: true
       })
-      // Set empty array in case of error
       setCatalogues([])
     } finally {
       setIsLoading(false)
@@ -95,8 +199,10 @@ const EnergyFinance = () => {
   }
 
   useEffect(() => {
-    fetchCatalogues()
-  }, [])
+    if (router.query.type) {
+      fetchCatalogues()
+    }
+  }, [router.query.type])
 
   if (isLoading) {
     return (
@@ -208,140 +314,8 @@ const EnergyFinance = () => {
             mt="10px"
           />
 
-          {/* Principal Amount */}
-          <Flex>
-            <Flex
-              justifyContent={'center'}
-              w={'50%'}
-              borderRight="0.5px solid #F0F0F0"
-              borderBottom={'0.5px solid #F0F0F0'}
-            >
-              <Box mb={4}>
-                <Typography
-                  text={catalogue?.tag_group_id?.[0]?.value || 'N/A'}
-                  fontSize="10px"
-                  fontWeight="300"
-                  style={{ opacity: '0.6', marginBottom: '5px', textAlign: 'center' }}
-                />
-                <Typography
-                  text="Principal Amount"
-                  fontSize="10px"
-                  fontWeight="500"
-                  style={{ textAlign: 'center' }}
-                />
-              </Box>
-            </Flex>
-            <Flex
-              justifyContent={'center'}
-              w={'50%'}
-              borderBottom={'0.5px solid #F0F0F0'}
-            >
-              <Box>
-                <Typography
-                  text={catalogue?.tag_group_id?.[1]?.value || 'N/A'}
-                  fontSize="10px"
-                  fontWeight="300"
-                  style={{ opacity: '0.6', marginBottom: '5px', textAlign: 'center' }}
-                />
-                <Typography
-                  text="Initial Payment"
-                  fontWeight="500"
-                  fontSize="10px"
-                  style={{ textAlign: 'center' }}
-                />
-              </Box>
-            </Flex>
-          </Flex>
-
-          {/* Interest Rate */}
-          <Flex mt="5px">
-            <Flex
-              justifyContent={'center'}
-              w={'50%'}
-              borderRight="0.5px solid #F0F0F0"
-              borderBottom={'0.5px solid #F0F0F0'}
-            >
-              <Box mb={4}>
-                <Typography
-                  text={catalogue?.tag_group_id?.[2]?.value || 'N/A'}
-                  fontSize="10px"
-                  fontWeight="300"
-                  style={{ opacity: '0.6', marginBottom: '5px', textAlign: 'center' }}
-                />
-                <Typography
-                  text="Interest Rate"
-                  fontSize="10px"
-                  fontWeight="500"
-                  style={{ textAlign: 'center' }}
-                />
-              </Box>
-            </Flex>
-            <Flex
-              justifyContent={'center'}
-              w={'50%'}
-              borderBottom={'0.5px solid #F0F0F0'}
-            >
-              <Box>
-                <Typography
-                  text={catalogue?.tag_group_id?.[3]?.value || 'N/A'}
-                  fontSize="10px"
-                  fontWeight="300"
-                  style={{ opacity: '0.6', marginBottom: '5px', textAlign: 'center' }}
-                />
-                <Typography
-                  text="Processing Fees"
-                  fontSize="10px"
-                  fontWeight="500"
-                  style={{ textAlign: 'center' }}
-                />
-              </Box>
-            </Flex>
-          </Flex>
-
-          {/* Foreclosure Charges */}
-          <Flex mt="5px">
-            <Flex
-              justifyContent={'center'}
-              w={'50%'}
-              borderRight="0.5px solid #F0F0F0"
-              borderBottom={'0.5px solid #F0F0F0'}
-            >
-              <Box mb={4}>
-                <Typography
-                  text={catalogue?.tag_group_id?.[4]?.value || 'N/A'}
-                  fontSize="10px"
-                  fontWeight="300"
-                  style={{ opacity: '0.6', marginBottom: '5px', textAlign: 'center' }}
-                />
-                <Typography
-                  text="Foreclosure Charges"
-                  fontSize="10px"
-                  fontWeight="500"
-                  style={{ textAlign: 'center' }}
-                />
-              </Box>
-            </Flex>
-            <Flex
-              justifyContent={'center'}
-              w={'50%'}
-              borderBottom={'0.5px solid #F0F0F0'}
-            >
-              <Box>
-                <Typography
-                  text={catalogue?.tag_group_id?.[5]?.value || 'N/A'}
-                  fontSize="10px"
-                  fontWeight="300"
-                  style={{ opacity: '0.6', marginBottom: '5px', textAlign: 'center' }}
-                />
-                <Typography
-                  text="EMI Method"
-                  fontSize="10px"
-                  fontWeight="500"
-                  style={{ textAlign: 'center' }}
-                />
-              </Box>
-            </Flex>
-          </Flex>
+          {/* Card Details */}
+          {renderCardDetails(catalogue, cardDetails)}
 
           {/* Loan Tenure */}
           <Flex

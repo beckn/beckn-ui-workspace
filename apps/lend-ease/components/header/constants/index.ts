@@ -70,7 +70,7 @@ const headerNames: PathnameObjectType = {
   '/rentAndHire': '',
   '/orderServices': 'My Services',
   '/loans': 'Loans',
-  '/energyFinance': 'Energy Financing',
+  // '/energyFinance': 'Energy Financing',
   '/loanApplications': 'Loan Applications'
 }
 
@@ -108,7 +108,7 @@ const headerBlackList = [
   '/rentAndHire',
   '/orderServices',
   '/loans',
-  '/energyFinance',
+  // '/energyFinance',
   '/loanApplications'
 ]
 

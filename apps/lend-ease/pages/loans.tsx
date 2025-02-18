@@ -8,6 +8,17 @@ import { SlEnergy } from 'react-icons/sl'
 
 const loans = () => {
   const router = useRouter()
+
+  const handleLoanTypeNavigation = (type: string, text: string) => {
+    // Store option text in localStorage
+    localStorage.setItem('selectCardHeaderText', JSON.stringify(text))
+
+    router.push({
+      pathname: '/energyFinance',
+      query: { type }
+    })
+  }
+
   return (
     <Box mt="10px">
       <ShadowCardButton
@@ -15,7 +26,7 @@ const loans = () => {
         text="Energy Financing"
         textStyle="start"
         postIcon={<MdOutlineKeyboardArrowRight />}
-        handleClick={() => router.push('/energyFinance')}
+        handleClick={() => handleLoanTypeNavigation('loan_type_battery-loan_type_solar', 'Energy Financing')}
         dataTest="store_button"
         sx={buttonStyles}
       />
@@ -24,7 +35,7 @@ const loans = () => {
         text="Home Loans"
         textStyle="start"
         postIcon={<MdOutlineKeyboardArrowRight />}
-        handleClick={() => router.push('/loans')}
+        handleClick={() => handleLoanTypeNavigation('loan_type_home', 'Home Loans')}
         dataTest="store_button"
         sx={buttonStyles}
       />
@@ -33,7 +44,7 @@ const loans = () => {
         text="Vehicle Financing"
         textStyle="start"
         postIcon={<MdOutlineKeyboardArrowRight />}
-        handleClick={() => router.push('/loans')}
+        handleClick={() => handleLoanTypeNavigation('loan_type_vehicle', 'Vehicle Financing')}
         dataTest="store_button"
         sx={buttonStyles}
       />
@@ -42,7 +53,7 @@ const loans = () => {
         text="Personal Loan"
         textStyle="start"
         postIcon={<MdOutlineKeyboardArrowRight />}
-        handleClick={() => router.push('/loans')}
+        handleClick={() => handleLoanTypeNavigation('loan_type_personal', 'Personal Loan')}
         dataTest="store_button"
         sx={buttonStyles}
       />
