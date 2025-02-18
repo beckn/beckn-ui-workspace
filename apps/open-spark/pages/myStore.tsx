@@ -103,11 +103,12 @@ const MyStore = () => {
         <BecknButton
           text={homeButtonName}
           handleClick={() => {
-            if (type === 'RENT_AND_HIRE') {
-              router.push('/rentAndHire')
-            } else {
-              Router.push('/')
-            }
+            // if (type === 'RENT_AND_HIRE') {
+            //   router.push('/rentAndHire')
+            // } else {
+            //   Router.push('/')
+            // }
+            router.push('/')
           }}
         />
       </Box>

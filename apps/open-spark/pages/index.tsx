@@ -36,13 +36,14 @@ const HomePage = () => {
   const handleModalClose = () => setModalType(null)
   const dispatch = useDispatch()
 
-  const handleNavigation = (type: 'MY_STORE' | 'RENT_AND_HIRE') => {
+  const handleNavigation = (type: 'MY_STORE' | 'RENT_AND_HIRE', pathname: string) => {
     dispatch(setNavigationType(type))
-    if (type === 'RENT_AND_HIRE') {
-      router.push('/rentAndHire')
-    } else {
-      router.push('/myStore')
-    }
+    router.push(pathname)
+    // if (type === 'RENT_AND_HIRE') {
+    //   router.push('/rentAndHire')
+    // } else {
+    //   router.push('/myStore')
+    // }
   }
 
   useEffect(() => {
@@ -134,12 +135,31 @@ const HomePage = () => {
               text="Energy Marketplace"
               textStyle="start"
               postIcon={<MdOutlineKeyboardArrowRight />}
-              handleClick={() => handleNavigation('MY_STORE')}
+              handleClick={() => handleNavigation('MY_STORE', '/myStore')}
               dataTest="store_button"
+              sx={buttonStyles}
+            />
+            <ShadowCardButton
+              prefixIcon={<TbHexagonLetterO size={28} />}
+              text="Search Rental Services"
+              textStyle="start"
+              postIcon={<MdOutlineKeyboardArrowRight />}
+              handleClick={() => handleNavigation('RENT_AND_HIRE', '/myStore')}
+              dataTest="hire_button"
               sx={buttonStyles}
             />
 
             <ShadowCardButton
+              prefixIcon={<TbHexagonLetterO size={28} />}
+              text="My Rentals"
+              textStyle="start"
+              postIcon={<MdOutlineKeyboardArrowRight />}
+              handleClick={() => handleNavigation('RENT_AND_HIRE', '/myRental')}
+              dataTest="hire_button"
+              sx={buttonStyles}
+            />
+
+            {/* <ShadowCardButton
               prefixIcon={<TbHexagonLetterO size={28} />}
               text="Rental Services"
               textStyle="start"
@@ -147,7 +167,7 @@ const HomePage = () => {
               handleClick={() => handleNavigation('RENT_AND_HIRE')}
               dataTest="hire_button"
               sx={buttonStyles}
-            />
+            /> */}
             {/* <ShadowCardButton
               prefixIcon={<SlEnergy size={28} />}
               text="Peer to Peer Energy Trading"
