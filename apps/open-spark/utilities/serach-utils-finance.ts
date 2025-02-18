@@ -54,6 +54,6 @@ export const parseSearchFinancelist = (data: SearchResponseModel[]) => {
       }
     })
   })
-
+  console.log('itemsArray:', itemsArray)
   return itemsArray
 }

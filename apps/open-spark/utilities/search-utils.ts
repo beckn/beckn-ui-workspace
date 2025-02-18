@@ -1,4 +1,5 @@
-import { ParsedItemModel, SearchResponseModel } from '@beckn-ui/common'
+import { formatDate, ParsedItemModel, SearchResponseModel } from '@beckn-ui/common'
+import { formatTime } from './general'
 
 const dummyLocation = {
   latitude: 12.909955,
@@ -26,17 +27,38 @@ export const parseSearchlist = (data: SearchResponseModel[], type?: 'RENT_AND_HI
         }
         provider.items.forEach(item => {
           let itemData = item
+          console.log('type:', item)
+
+          const fulfillmentStart: any = item.fulfillments?.find(f => f.type === 'RENTAL_START' && f.state)
+          const fulfillmentEnd: any = item.fulfillments?.find(f => f.type === 'RENTAL_END' && f.state)
+          let startTimestamp = fulfillmentStart ? Number(fulfillmentStart.state?.name || 0) : null
+          let endTimestamp = fulfillmentEnd ? Number(fulfillmentEnd.state?.name || 0) : null
+
+          const startTime = formatTime(startTimestamp)
+          const endTime = formatTime(endTimestamp)
+
+          const date = formatDate(Number(startTimestamp) * 1000, 'dd/MM/yy')
+
           if (type === 'RENT_AND_HIRE') {
-            itemData = { ...item, price: { ...item.price, rateLabel: '/ hr' } }
+            itemData = {
+              ...item,
+              short_desc: '',
+              rating: '',
+              price: { ...item.price, rateLabel: 'per hour' },
+              productInfo: {
+                Availability: date,
+                Time: `${startTime} - ${endTime}`
+              }
+            }
           }
           itemsArray.push({
             id: item.id,
             bppId: bpp_id,
             bppUri: bpp_uri,
-            domain: message.name,
+            domain: type === 'MY_STORE' ? message.name : '',
             transactionId: transaction_id,
             providerId: provider.id,
-            providerName: provider.name,
+            providerName: type === 'MY_STORE' ? provider.name : '',
             rating: provider.rating,
             item: itemData,
             providerCoordinates

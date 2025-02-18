@@ -1,7 +1,7 @@
 import BottomModalScan from '@beckn-ui/common/src/components/BottomModal/BottomModalScan'
-import { BottomModal, Button, GenericDropdown, Input, Typography } from '@beckn-ui/molecules'
+import { Button, GenericDropdown, Input, Typography } from '@beckn-ui/molecules'
 import BecknButton from '@beckn-ui/molecules/src/components/button'
-import { Box, Divider, Flex, HStack, Icon, VStack } from '@chakra-ui/react'
+import { Box, Flex, HStack, Icon, VStack } from '@chakra-ui/react'
 import { InputProps, ButtonProps } from '@beckn-ui/molecules'
 import React, { useEffect, useState } from 'react'
 import { testIds } from '@shared/dataTestIds'
@@ -29,11 +29,12 @@ interface DeleteAlertModalProps {
     buttons: ButtonProps[]
   }
   renderFileUpload?: boolean
+  clearDocuments?: boolean
   handleOnFileselectionChange?: (data: DocumentProps[]) => void
 }
 
 const AddNewItemModal = (props: DeleteAlertModalProps) => {
-  const { isOpen, onClose, isLoading, schema, renderFileUpload, handleOnFileselectionChange } = props
+  const { isOpen, onClose, isLoading, schema, renderFileUpload, handleOnFileselectionChange, clearDocuments } = props
   const { inputs, header, buttons } = schema
 
   const [selectedFile, setSelectedFile] = useState<DocumentProps[]>([])
@@ -57,41 +58,26 @@ const AddNewItemModal = (props: DeleteAlertModalProps) => {
     handleOnFileselectionChange?.(selectedFile)
   }, [selectedFile])
 
-  const handleSyncWallet = () => {}
+  useEffect(() => {
+    if (clearDocuments) {
+      setSelectedFile([])
+      setAllFilesProcessed(false)
+    }
+  }, [clearDocuments])
 
   return (
     <Box>
-      <BottomModal
+      <BottomModalScan
         isOpen={isOpen}
         onClose={onClose}
+        modalHeader={header}
+        isLoading={isLoading}
       >
-        <Box pt="20px">
-          <Flex
-            justifyContent={'space-between'}
-            alignItems="center"
-          >
-            <Typography
-              fontSize="17px"
-              text="EMI Application"
-            />
-            <Typography
-              fontSize="15px"
-              fontWeight="500"
-              color="#4398E8"
-              text="Sync wallet"
-              onClick={handleSyncWallet}
-            />
-          </Flex>
-          <Divider
-            mb="24px"
-            mt="4px"
-          />
-        </Box>
         <Box
           alignItems="center"
           flexDir="column"
-          mt="40px"
-          className="dropdown-emi"
+          padding="0 20px 0 20px"
+          gap="10px"
         >
           <Box mt="10px">
             {inputs.map((singleInput, index) => {
@@ -139,35 +125,40 @@ const AddNewItemModal = (props: DeleteAlertModalProps) => {
                     setFiles={handleFileChange}
                     fileSelectionElement={(fileInputRef: any) => {
                       return (
-                        <VStack>
-                          <Icon
-                            as={FiPlusCircle}
-                            boxSize={6}
-                            color="gray.500"
-                          />
-                          <Typography
-                            text={'Drop your file here'}
-                            dataTest={testIds.drop_your_file_here}
-                          />
-                          <HStack gap={1}>
-                            <Typography
-                              dataTest={testIds.Browse_file}
-                              color="#4498E8"
-                              fontSize="8px"
-                              onClick={() => {
-                                if (fileInputRef.current) {
-                                  fileInputRef.current.click()
-                                }
-                              }}
-                              sx={{ cursor: 'pointer', _hover: { textDecoration: 'underline' } }}
-                              text="Browse file"
-                            />{' '}
-                            <Typography
-                              fontSize="8px"
-                              text={'from your computer'}
+                        <Box
+                          width={'100%'}
+                          height={'100%'}
+                          onClick={() => {
+                            if (fileInputRef.current) {
+                              fileInputRef.current.click()
+                            }
+                          }}
+                        >
+                          <VStack>
+                            <Icon
+                              as={FiPlusCircle}
+                              boxSize={6}
+                              color="gray.500"
                             />
-                          </HStack>
-                        </VStack>
+                            <Typography
+                              text={'Upload your file here'}
+                              dataTest={testIds.drop_your_file_here}
+                            />
+                            <HStack gap={1}>
+                              <Typography
+                                dataTest={testIds.Browse_file}
+                                color="#4498E8"
+                                fontSize="10px"
+                                sx={{ cursor: 'pointer', _hover: { textDecoration: 'underline' } }}
+                                text="Browse file"
+                              />{' '}
+                              <Typography
+                                fontSize="10px"
+                                text={'from your computer'}
+                              />
+                            </HStack>
+                          </VStack>
+                        </Box>
                       )
                     }}
                   />
@@ -193,7 +184,7 @@ const AddNewItemModal = (props: DeleteAlertModalProps) => {
             )
           })}
         </Box>
-      </BottomModal>
+      </BottomModalScan>
     </Box>
   )
 }

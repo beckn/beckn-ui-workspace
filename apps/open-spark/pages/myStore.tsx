@@ -64,7 +64,8 @@ const MyStore = () => {
           description: type === 'RENT_AND_HIRE' ? t.subTextForRenT : t.subText
         }}
         searchProps={{
-          searchPlaceholder: type === 'RENT_AND_HIRE' ? 'Search for Rental Services ' : t.searchPlaceholder,
+          searchPlaceholder:
+            type === 'RENT_AND_HIRE' ? 'Search for Batteries, Capacity, Availability' : t.searchPlaceholder,
           setSearchTerm: setSearchTerm,
           onSearchIconClick: searchIconClickHandler,
           onSearchInputEnterPress: navigateToSearchResults

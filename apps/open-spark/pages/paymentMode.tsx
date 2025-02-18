@@ -21,13 +21,14 @@ import {
   Input,
   ButtonProps,
   Image,
-  useToast
+  useToast,
+  Select
 } from '@chakra-ui/react'
 import phonePay from '@public/images/phonePayPayment.svg'
 import gPay from '@public/images/gpay.svg'
 import CashOnDelivery from '@public/images/cash.svg'
 import NetBanking from '@public/images/netbanking.svg'
-import { BottomModal, InputProps, Loader, SelectOptionType, Typography } from '@beckn-ui/molecules'
+import { BottomModal, GenericDropdown, InputProps, Loader, SelectOptionType, Typography } from '@beckn-ui/molecules'
 import PaymentDetailsCard from '@beckn-ui/common/src/components/paymentDetailsCard'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import { useDispatch, useSelector } from 'react-redux'
@@ -45,6 +46,7 @@ import { ItemMetaData } from '@lib/types/becknDid'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import { currencyFormat } from '@utils/general'
+import { DetailCard } from '@beckn-ui/becknified-components'
 
 const messagesList = [
   'Fetching transactions from your wallet...',
@@ -58,6 +60,7 @@ interface FormData {
   panCard: string
   aadhaar: string
   mobileNumber: string
+  loanTenure?: string
 }
 
 interface FormErrors {
@@ -66,6 +69,7 @@ interface FormErrors {
   panCard?: string
   aadhaar?: string
   mobileNumber?: string
+  loanTenure?: string
 }
 
 // Add interface for EMIApplicationModal props
@@ -82,6 +86,7 @@ interface EMIApplicationModalProps {
     mobileNumber: string
   }
   handleOnSubmitForm: () => void
+  syncWalletSuccess?: boolean
 }
 
 const EMIApplicationModal = ({
@@ -90,18 +95,23 @@ const EMIApplicationModal = ({
   handleSyncWallet,
   syncWalletIsLoading,
   walletDetails,
-  handleOnSubmitForm
+  handleOnSubmitForm,
+  syncWalletSuccess
 }: EMIApplicationModalProps) => {
   const [formData, setFormData] = useState<FormData>({
     fullName: walletDetails?.fullName || '',
     dateOfBirth: walletDetails?.dateOfBirth || null,
     panCard: walletDetails?.panNumber || '',
     aadhaar: walletDetails?.aadharNumber || '',
-    mobileNumber: walletDetails?.mobileNumber || ''
+    mobileNumber: walletDetails?.mobileNumber || '',
+    loanTenure: ''
   })
 
   const [errors, setErrors] = useState<FormErrors>({})
   const toast = useToast()
+  const [selectedEmiPlan, setSelectedEmiPlan] = useState<string | null>(null)
+  const selectedEmi = useSelector((state: any) => state.selectedEmi.apiResponse[0]?.message.order.items) || 0
+  const monthlyInstallment = useSelector((state: any) => state.selectedEmi.emiDetails)
 
   useEffect(() => {
     setFormData(prevFormData => ({
@@ -110,7 +120,8 @@ const EMIApplicationModal = ({
       aadhaar: walletDetails?.aadharNumber || '',
       fullName: walletDetails?.fullName || '',
       dateOfBirth: walletDetails?.dateOfBirth || null,
-      mobileNumber: walletDetails?.mobileNumber || ''
+      mobileNumber: walletDetails?.mobileNumber || '',
+      loanTenure: ''
     }))
   }, [walletDetails])
 
@@ -179,6 +190,26 @@ const EMIApplicationModal = ({
     }
   }
 
+  const handleSelectChange = (selectedItem: any) => {
+    const { name, value, data } = selectedItem
+
+    setFormData(prevFormData => ({
+      ...prevFormData,
+      [name]: value
+    }))
+
+    const updatedFormData = {
+      ...formData,
+      [name]: value
+    }
+
+    // const errors = validateCredForm(updatedFormData)
+    // setErrors(prevErrors => ({
+    //   ...prevErrors,
+    //   [name]: t[`${errors[name as keyof CredFormErrors]}`] || ''
+    // }))
+  }
+
   const handleSubmit = () => {
     if (validateForm()) {
       console.log('Form submitted:', formData)
@@ -244,11 +275,24 @@ const EMIApplicationModal = ({
         <>
           {/* Full Name Field */}
           <Box mb="20px">
-            <Typography
-              fontWeight="400"
-              fontSize="15px"
-              text="Full Name *"
-            />
+            <Flex
+              flexDir={'row'}
+              justifyContent={'space-between'}
+            >
+              <Typography
+                fontWeight="400"
+                fontSize="15px"
+                text="Full Name *"
+              />
+              {syncWalletSuccess && formData.fullName && (
+                <Typography
+                  fontWeight="400"
+                  fontSize="12px"
+                  text="Verified by Vault"
+                  color="#53A052"
+                />
+              )}
+            </Flex>
             <Input
               value={formData.fullName}
               onChange={e => handleInputChange('fullName', e.target.value)}
@@ -274,11 +318,24 @@ const EMIApplicationModal = ({
             position="relative"
             width="100%"
           >
-            <Typography
-              fontWeight="400"
-              fontSize="15px"
-              text="Date of Birth *"
-            />
+            <Flex
+              flexDir={'row'}
+              justifyContent={'space-between'}
+            >
+              <Typography
+                fontWeight="400"
+                fontSize="15px"
+                text="Date of Birth *"
+              />
+              {syncWalletSuccess && formData.dateOfBirth && (
+                <Typography
+                  fontWeight="400"
+                  fontSize="12px"
+                  text="Verified by Vault"
+                  color="#53A052"
+                />
+              )}
+            </Flex>
             <DatePicker
               selected={formData.dateOfBirth}
               onChange={date => {
@@ -313,11 +370,24 @@ const EMIApplicationModal = ({
 
           {/* PAN Card Field */}
           <Box mb="20px">
-            <Typography
-              fontWeight="400"
-              fontSize="15px"
-              text="PAN Card *"
-            />
+            <Flex
+              flexDir={'row'}
+              justifyContent={'space-between'}
+            >
+              <Typography
+                fontWeight="400"
+                fontSize="15px"
+                text="PAN Card *"
+              />
+              {syncWalletSuccess && formData.panCard && (
+                <Typography
+                  fontWeight="400"
+                  fontSize="12px"
+                  text="Verified by Vault"
+                  color="#53A052"
+                />
+              )}
+            </Flex>
             <Input
               value={formData.panCard}
               onChange={e => handleInputChange('panCard', e.target.value)}
@@ -339,11 +409,24 @@ const EMIApplicationModal = ({
 
           {/* Aadhaar Field */}
           <Box mb="20px">
-            <Typography
-              fontWeight="400"
-              fontSize="15px"
-              text="Aadhaar *"
-            />
+            <Flex
+              flexDir={'row'}
+              justifyContent={'space-between'}
+            >
+              <Typography
+                fontWeight="400"
+                fontSize="15px"
+                text="Aadhaar *"
+              />
+              {syncWalletSuccess && formData.aadhaar && (
+                <Typography
+                  fontWeight="400"
+                  fontSize="12px"
+                  text="Verified by Vault"
+                  color="#53A052"
+                />
+              )}
+            </Flex>
             <Input
               value={formData.aadhaar}
               onChange={e => handleInputChange('aadhaar', e.target.value)}
@@ -365,11 +448,24 @@ const EMIApplicationModal = ({
 
           {/* Mobile Number Field */}
           <Box mb="20px">
-            <Typography
-              fontWeight="400"
-              fontSize="15px"
-              text="Mobile Number *"
-            />
+            <Flex
+              flexDir={'row'}
+              justifyContent={'space-between'}
+            >
+              <Typography
+                fontWeight="400"
+                fontSize="15px"
+                text="Mobile Number *"
+              />
+              {syncWalletSuccess && formData.mobileNumber && (
+                <Typography
+                  fontWeight="400"
+                  fontSize="12px"
+                  text="Verified by Vault"
+                  color="#53A052"
+                />
+              )}
+            </Flex>
             <Input
               value={formData.mobileNumber}
               onChange={e => handleInputChange('mobileNumber', e.target.value)}
@@ -389,6 +485,31 @@ const EMIApplicationModal = ({
                 text={errors.mobileNumber}
               />
             )}
+          </Box>
+          <Box mb="20px">
+            <Typography
+              fontWeight="400"
+              fontSize="15px"
+              text="Loan Tenure *"
+            />
+
+            <GenericDropdown
+              name={'loanTenure'}
+              options={[
+                {
+                  label: `${selectedEmi[0].name} months: ₹ ${currencyFormat(monthlyInstallment[0].emi)}/months`,
+                  value: `${selectedEmi[0].name} months: ₹ ${currencyFormat(monthlyInstallment[0].emi)}/months`
+                },
+                {
+                  label: `${selectedEmi[1].name} months: ₹ ${currencyFormat(monthlyInstallment[1].emi)}/months`,
+                  value: `${selectedEmi[1].name} months: ₹ ${currencyFormat(monthlyInstallment[1].emi)}/months`
+                }
+              ]}
+              placeholder={''}
+              selectedValue={formData.loanTenure!}
+              handleChange={handleSelectChange}
+              buttonStyles={{ marginBottom: '35px', borderBottom: '1px solid #3A3A3A' }}
+            />
           </Box>
 
           <BecknButton
@@ -429,6 +550,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
     aadharNumber: '',
     panNumber: ''
   })
+  const [syncWalletSuccess, setSyncWalletSuccess] = useState(false)
   const [payableAmount, setPayableAmount] = useState<number>()
   const [dicountedSearch, setDicountedSearch] = useState(false)
   const [newCalculationIsLoading, setNewCalculationIsLoading] = useState(false)
@@ -451,6 +573,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
         domain: 'deg:finance'
       },
       searchString: '',
+      category: { categoryCode: 'loan_type', categoryName: 'Battery' },
       ...(isDiscounted && {
         tags: [
           {
@@ -672,6 +795,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
         }
 
         setWalletDetails(data)
+        setSyncWalletSuccess(true)
 
         return {
           id: index,
@@ -867,6 +991,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                                   const months = parseInt(item.name.match(/\d+/)?.[0] || '1')
                                   const annualInterestRate = Number(parseFloat(item?.price?.value) || 0)
                                   const priceValue = Number(price?.value) || 0
+
                                   const processingFees = Number(emiPlans[index].providerShortDescription) || 0
 
                                   const priceTotal = priceValue * quantity
@@ -1085,6 +1210,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                 panNumber: PANNumber!
               }}
               handleOnSubmitForm={handleOnSubmit}
+              syncWalletSuccess={syncWalletSuccess}
             />
           </Box>
         )

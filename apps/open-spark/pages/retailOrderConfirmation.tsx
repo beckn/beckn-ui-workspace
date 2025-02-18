@@ -237,18 +237,20 @@ const retailOrderConfirmation = () => {
             {
               text: type === 'RENT_AND_HIRE' ? 'View My Rentals' : 'View Order Details',
               handleClick: () => {
-                const orderId = confirmResponse?.[0].message.orderId
-                const bppId = confirmResponse?.[0].context.bpp_id
-                const bppUri = confirmResponse?.[0].context.bpp_uri
+                if (confirmResponse && confirmResponse.length > 0) {
+                  const orderId = confirmResponse?.[0].message.orderId
+                  const bppId = confirmResponse?.[0].context.bpp_id
+                  const bppUri = confirmResponse?.[0].context.bpp_uri
 
-                dispatch(orderActions.addSelectedOrder({ orderDetails: { orderId, bppId, bppUri } }))
-                const orderObjectForStatusCall = {
-                  bppId: bppId,
-                  bppUri: bppUri,
-                  orderId: orderId
+                  dispatch(orderActions.addSelectedOrder({ orderDetails: { orderId, bppId, bppUri } }))
+                  const orderObjectForStatusCall = {
+                    bppId: bppId,
+                    bppUri: bppUri,
+                    orderId: orderId
+                  }
+                  localStorage.setItem('selectedOrder', JSON.stringify(orderObjectForStatusCall))
+                  dispatch(checkoutActions.clearState())
                 }
-                localStorage.setItem('selectedOrder', JSON.stringify(orderObjectForStatusCall))
-                dispatch(checkoutActions.clearState())
                 if (type === 'RENT_AND_HIRE') {
                   router.push('/myRental')
                 } else {

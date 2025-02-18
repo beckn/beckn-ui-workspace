@@ -126,11 +126,11 @@ export const mapOrderData = (data: any[]): OrderItem[] => {
   return data.map(order => {
     try {
       const item = order.items[0]
-      const fulfillmentStart = item.fulfillments?.find(f => f.type === 'RENTAL_START' && f.state)
-      const fulfillmentEnd = item.fulfillments?.find(f => f.type === 'RENTAL_END' && f.state)
+      const fulfillmentStart = order.fulfillments?.find(f => f.type === 'RENTAL_START' && f.state)
+      const fulfillmentEnd = order.fulfillments?.find(f => f.type === 'RENTAL_END' && f.state)
 
-      let startTimestamp = fulfillmentStart ? Number(fulfillmentStart.state?.name || 0) : null
-      let endTimestamp = fulfillmentEnd ? Number(fulfillmentEnd.state?.name || 0) : null
+      let startTimestamp = fulfillmentStart ? Number(fulfillmentStart.state?.descriptor?.short_desc || 0) : null
+      let endTimestamp = fulfillmentEnd ? Number(fulfillmentEnd.state?.descriptor?.short_desc || 0) : null
 
       if (startTimestamp && startTimestamp > 9999999999) startTimestamp = Math.floor(startTimestamp / 1000)
       if (endTimestamp && endTimestamp > 9999999999) endTimestamp = Math.floor(endTimestamp / 1000)
@@ -153,7 +153,7 @@ export const mapOrderData = (data: any[]): OrderItem[] => {
         rentedFrom: order.descriptor.name,
         timeSlot: `${startTime} - ${endTime}`,
         duration,
-        price: `${Number(order.quote.price.value) * Number(calculatedDuration)}`,
+        price: `${Number(order.quote.price.value) * Number(calculatedDuration) * 1.18}`,
         status: paymentStatus
       }
     } catch (error) {

@@ -120,19 +120,21 @@ const ProductCard: React.FC<ProductCardProps> = props => {
                     {product.domain.split(':').join(' ').toLocaleLowerCase()}
                   </Text>
                 ) : (
-                  <Text
-                    fontSize={'0.8rem'}
-                    mb={'0.4rem'}
-                    noOfLines={2}
-                    textOverflow="ellipsis"
-                    whiteSpace="pre-wrap"
-                    overflowWrap="break-word"
-                  >
-                    {product.shortDesc}
-                  </Text>
+                  product.shortDesc && (
+                    <Text
+                      fontSize={'0.8rem'}
+                      mb={'0.4rem'}
+                      noOfLines={2}
+                      textOverflow="ellipsis"
+                      whiteSpace="pre-wrap"
+                      overflowWrap="break-word"
+                    >
+                      {product.shortDesc}
+                    </Text>
+                  )
                 )}
               </Flex>
-              {product.source ? (
+              {product.source && product.sourceText ? (
                 <Flex
                   alignItems={'flex-start'}
                   w={'100%'}
