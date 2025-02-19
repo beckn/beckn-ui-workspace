@@ -246,7 +246,7 @@ const ProfilePage = () => {
               handleClick={async () => {
                 try {
                   // Clear IndexedDB first
-                  await clearCache()
+                  // await clearCache()
                   // Then dispatch logout action
                   dispatch(logout())
                 } catch (error) {
