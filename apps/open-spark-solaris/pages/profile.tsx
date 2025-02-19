@@ -21,6 +21,7 @@ import { ROLE, ROUTE_TYPE } from '@lib/config'
 import { AuthRootState } from '@store/auth-slice'
 import { useRouter } from 'next/router'
 import { InputProps } from '@beckn-ui/molecules'
+// import { clearCache } from '@utils/indexedDB'
 
 const ProfilePage = () => {
   const dispatch = useDispatch()
@@ -80,13 +81,16 @@ const ProfilePage = () => {
     axios
       .get(`${strapiUrl}${ROUTE_TYPE[ROLE.GENERAL]}/user-profile`, requestOptions)
       .then(response => {
-        const result = response.data
-        const { fullname, address, customer_id } = result
+        const result = response.data.agent
+
+        console.log(result)
+        const { first_name, last_name, address, agent_profile } = result
         setFormData({
           ...formData,
-          name: fullname,
-          address,
-          customerId: customer_id
+          name: `${first_name} ${last_name || ''}`,
+          address: agent_profile.address,
+          customerId: agent_profile.customer_id,
+          mobileNumber: agent_profile.phone_number
         })
       })
       .finally(() => {
@@ -166,6 +170,17 @@ const ProfilePage = () => {
         dataTest: testIds.profile_address,
         disabled: !profileEditable,
         customInputBlurHandler: updateProfile
+      },
+      {
+        type: 'text',
+        name: 'mobileNumber',
+        value: formData.mobileNumber!,
+        handleChange: handleInputChange,
+        label: t.formNumber,
+        error: formErrors.mobileNumber,
+        dataTest: '',
+        disabled: true,
+        customInputBlurHandler: updateProfile
       }
     ]
 
@@ -231,6 +246,7 @@ const ProfilePage = () => {
               handleClick={async () => {
                 try {
                   // Clear IndexedDB first
+                  // await clearCache()
                   // Then dispatch logout action
                   dispatch(logout())
                 } catch (error) {
