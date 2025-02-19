@@ -156,9 +156,12 @@ const Search = () => {
         loaderProps={{
           isLoading,
           loadingText: 'Please wait!',
-          loadingSubText: 'fetching catalogues from the ONDC network',
-          dataTest: testIds.loadingIndicator,
-          image: './images/loder-img-1.svg'
+          loadingSubText:
+            type === 'RENT_AND_HIRE'
+              ? 'fetching catalogues from the UEI network'
+              : 'fetching catalogues from the ONDC network',
+          dataTest: testIds.loadingIndicator
+          // image: type === 'RENT_AND_HIRE' ? './images/loder-img.svg' : './images/loder-img-1.svg'
         }}
         catalogProps={{
           viewDetailsClickHandler: handleViewDetailsClickHandler

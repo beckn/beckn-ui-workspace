@@ -46,12 +46,12 @@ const SearchAndDiscover: React.FC<SearchAndDiscoverProps> = ({
         name: item.name,
         // shortDesc: item.short_desc,
         price: item.price.value,
-        // rateLabel: item.price?.rateLabel,
+        rateLabel: item.price?.rateLabel,
         rating: item.rating,
         // source: t?.('itemSourceText') || 'Sold By',
         // sourceText: providerName,
-        // productInfo: item.productInfo,
-        domainCategory: item.productInfo.providerImage
+        productInfo: item.productInfo,
+        domainCategory: item.productInfo.image
       }
       console.log('product', item.productInfo)
       const handleProductClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
