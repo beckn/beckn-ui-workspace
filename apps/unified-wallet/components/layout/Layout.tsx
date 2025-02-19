@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
@@ -14,6 +14,7 @@ import { Toast } from '@beckn-ui/molecules'
 import { testIds } from '@shared/dataTestIds'
 import { AuthRootState } from '@store/auth-slice'
 import { logout } from '@store/auth-slice'
+import Splash from '@components/splash/splash'
 
 const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const { locale } = useLanguage()
@@ -35,6 +36,8 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
     toast: { display, message, type, description }
   } = useSelector((state: FeedbackRootState) => state.feedback)
   const { user } = useSelector((state: AuthRootState) => state.auth)
+
+  const [showSplash, setShowSplash] = useState(true)
 
   useEffect(() => {
     if (!['/signIn', '/resetPassword'].includes(router.pathname)) {
@@ -76,6 +79,19 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
       dispatch(feedbackActions.toggleToast({ display: false }))
     }
   }, [display])
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowSplash(false)
+    }, 2000)
+
+    return () => clearTimeout(timer)
+  }, [])
+
+  // Show splash screen for first 2 seconds
+  if (showSplash) {
+    return <Splash />
+  }
 
   return (
     <div>
