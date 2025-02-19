@@ -51,6 +51,14 @@ export const parseSearchlist = (data: SearchResponseModel[], type?: 'RENT_AND_HI
                 Time: `${startTime} - ${endTime}`
               }
             }
+          } else if (type === 'MY_STORE') {
+            itemData = {
+              ...item,
+
+              productInfo: {
+                providerImage: provider?.images[0]?.url
+              }
+            }
           }
           itemsArray.push({
             id: item.id,

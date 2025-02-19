@@ -4,18 +4,21 @@ import { CurrencyType } from '../types'
 
 export type CatelogRenderMode = 'full' | 'short'
 export interface Product {
+  providerImg?: any
   images: string[]
   name: string
   price: string
   rateLabel?: string
   id: string
-  domain?: string
+  domain?: string | Record<string, any>
   rating?: string
   currencyType?: CurrencyType
   shortDesc?: string
   source?: string
   sourceText?: string
   productInfo?: Record<string, any> | string
+  guideImage?: string | any
+  domainCategory?: string
 }
 
 export interface ProductCardProps {
