@@ -779,7 +779,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
       setSyncWalletIsLoading(true)
       const result = await getDocuments(user?.deg_wallet?.deg_wallet_id!).unwrap()
       const list: ItemMetaData[] = parseDIDData(result)['identities'].map((item, index) => {
-        let data = {
+        const data = {
           fullName: `${user?.agent?.first_name || ''} ${user?.agent?.last_name || ''}`,
           dateOfBirth: new Date('01/05/1994'),
           mobileNumber: `${user?.agent?.agent_profile.phone_number}`,
@@ -821,6 +821,71 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
   const handleSyncWallet = async () => {
     console.log(user?.deg_wallet?.deg_wallet_id)
     const getDoc = await fetchCredentials()
+  }
+
+  const calculateEMIDetails = (item: any, cartItems: any[], index: number, price: any, plan: any) => {
+    console.log('Dank', plan)
+    const storageKey = `originalInterestRate_${plan.id}`
+
+    const quantity = Number(cartItems[0]?.quantity) || 1
+    const totalPrice = Number(cartItems[index]?.price?.value || 0)
+    const months = parseInt(item.name.match(/\d+/)?.[0] || '1')
+    const annualInterestRate = Number(parseFloat(item?.price?.value) || 0)
+    const priceValue = Number(price?.value) || 0
+    const processingFees = Number(emiPlans[index].providerShortDescription) || 0
+
+    // Only store the original rate once per provider/loan type
+    const storedRate = localStorage.getItem(storageKey)
+    if (!storedRate) {
+      // Store the highest interest rate as the original rate
+      const allRatesForProvider = plan.item.map(item => Number(parseFloat(item?.price?.value) || 0))
+      const maxRate = Math.max(...allRatesForProvider)
+      localStorage.setItem(storageKey, maxRate.toString())
+    }
+
+    // Calculate with current interest rate
+    const priceTotal = priceValue * quantity
+    const principal = priceTotal || totalPrice || priceTotal + totalPrice
+    const approvedLoanPercentage = Number(item.code) || 0
+    const approvedLoanAmount = (approvedLoanPercentage / 100) * principal + processingFees
+
+    const newPayableAmount = Number(principal - approvedLoanAmount) || 0
+
+    if (payableAmount !== newPayableAmount) {
+      setPayableAmount(newPayableAmount)
+    }
+
+    const monthlyInterestRate = annualInterestRate / 12 / 100
+    const emiWithoutInterest =
+      (approvedLoanAmount * monthlyInterestRate * Math.pow(1 + monthlyInterestRate, months)) /
+        (Math.pow(1 + monthlyInterestRate, months) - 1) || 0
+
+    const emi = Math.floor(emiWithoutInterest + processingFees / months)
+    const totalCost = emi * months
+
+    // Calculate with original (non-discounted) interest rate
+    const originalMonthlyRate = Number(storedRate) / 12 / 100
+    const originalEmiWithoutInterest =
+      (approvedLoanAmount * originalMonthlyRate * Math.pow(1 + originalMonthlyRate, months)) /
+        (Math.pow(1 + originalMonthlyRate, months) - 1) || 0
+
+    const originalEmi = Math.floor(originalEmiWithoutInterest + processingFees / months)
+    const nonDiscountedPrice = originalEmi * months
+
+    if (!localStorage.getItem('totalCost')) {
+      localStorage.setItem('totalCost', nonDiscountedPrice.toString())
+    }
+
+    const actualInterestAmount = totalCost - approvedLoanAmount
+
+    return {
+      emi,
+      totalCost,
+      actualInterestAmount,
+      payableAmount: newPayableAmount,
+      originalRate: annualInterestRate,
+      nonDiscountedPrice
+    }
   }
 
   return (
@@ -874,7 +939,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                 {emiPlans.map(plan => {
                   return (
                     <AccordionItem
-                      key={plan.id}
+                      key={plan.provider_id}
                       border="none"
                     >
                       <AccordionButton className="btn-for-emi">
@@ -990,40 +1055,14 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                                 </Flex>
 
                                 {plan.item.map((item: any, index: number) => {
-                                  const quantity = Number(cartItems[0]?.quantity) || 1
-                                  const totalPrice = Number(cartItems[index]?.price?.value || 0)
-                                  const months = parseInt(item.name.match(/\d+/)?.[0] || '1')
-                                  const annualInterestRate = Number(parseFloat(item?.price?.value) || 0)
-                                  const priceValue = Number(price?.value) || 0
-
-                                  const processingFees = Number(emiPlans[index].providerShortDescription) || 0
-
-                                  const priceTotal = priceValue * quantity
-                                  const principal = priceTotal || totalPrice || priceTotal + totalPrice
-                                  const approvedLoanPercentage = Number(item.code) || 0
-                                  const approvedLoanAmount = (approvedLoanPercentage / 100) * principal + processingFees // Include processing fees
-
-                                  const newPayableAmount = Number(principal - approvedLoanAmount) || 0
-
-                                  if (payableAmount !== newPayableAmount) {
-                                    setPayableAmount(newPayableAmount)
-                                  }
-
-                                  const monthlyInterestRate = annualInterestRate / 12 / 100
-                                  const emiWithoutInterest =
-                                    (approvedLoanAmount *
-                                      monthlyInterestRate *
-                                      Math.pow(1 + monthlyInterestRate, months)) /
-                                      (Math.pow(1 + monthlyInterestRate, months) - 1) || 0
-
-                                  const emi = Math.floor(emiWithoutInterest + processingFees / months)
-
-                                  const totalCost = emi * months
-                                  if (!localStorage.getItem('totalCost')) {
-                                    localStorage.setItem('totalCost', totalCost.toString())
-                                  }
-
-                                  const actualInterestAmount = totalCost - approvedLoanAmount
+                                  const {
+                                    emi,
+                                    totalCost,
+                                    actualInterestAmount,
+                                    payableAmount,
+                                    originalRate,
+                                    nonDiscountedPrice
+                                  } = calculateEMIDetails(item, cartItems, index, price, plan)
 
                                   return (
                                     <React.Fragment key={index}>
@@ -1043,8 +1082,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                                           fontWeight="500"
                                           color="#626060"
                                         >
-                                          ₹ {currencyFormat(Number(actualInterestAmount.toFixed(2)))} (
-                                          {annualInterestRate}
+                                          ₹ {currencyFormat(Number(actualInterestAmount.toFixed(2)))} ({originalRate}
                                           %)
                                         </Box>
                                         <Box>
@@ -1055,7 +1093,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                                               fontWeight="500"
                                               color="#626060"
                                             >
-                                              ₹{localStorage.getItem('totalCost')}.00
+                                              ₹{nonDiscountedPrice}.00
                                             </Box>
                                           )}
                                           <Box
