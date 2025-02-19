@@ -3,21 +3,44 @@ import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, 
 import storage from 'redux-persist/lib/storage'
 import authReducer from './auth-slice'
 import userReducer from './user-slice'
-import { geoMapLocationSearchReducer, feedbackReducer } from '@beckn-ui/common'
+import navigationReducer from './navigation-slice'
+import discoveryEmiPlanReducer from './discoveryEmiPlan-slice'
+import emiFormReducer from './emiForm-slice'
+import selectedEmiReducer from './emiSelect-slice'
+import rentalReducer from './rental-slice'
+import {
+  geoMapLocationSearchReducer,
+  feedbackReducer,
+  cartSliceReducer,
+  checkoutReducer,
+  DiscoveryReducer,
+  OrderReducer
+} from '@beckn-ui/common'
 import api from '@services/api'
+import didApi from '@services/didApi'
 
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['auth', 'user']
+  whitelist: ['auth', 'user', 'discovery', 'cart', 'checkout', 'discoveryEmiPlan', 'selectedEmi']
 }
 
 const appReducer = combineReducers({
   auth: authReducer,
   [api.reducerPath]: api.reducer,
+  [didApi.reducerPath]: didApi.reducer,
   user: userReducer,
+  cart: cartSliceReducer,
+  checkout: checkoutReducer,
+  discovery: DiscoveryReducer,
   geoLocationSearchPageUI: geoMapLocationSearchReducer,
-  feedback: feedbackReducer
+  feedback: feedbackReducer,
+  discoveryEmiPlan: discoveryEmiPlanReducer,
+  emiForm: emiFormReducer,
+  orders: OrderReducer,
+  selectedEmi: selectedEmiReducer,
+  navigation: navigationReducer,
+  rental: rentalReducer
 })
 
 const rootReducer = (state: any, action: any) => {
@@ -41,7 +64,7 @@ const store = configureStore({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
       }
-    }).concat(api.middleware)
+    }).concat(api.middleware, didApi.middleware)
 })
 
 export const persistor = persistStore(store)

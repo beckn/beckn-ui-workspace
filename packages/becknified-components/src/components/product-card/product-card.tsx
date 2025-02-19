@@ -4,6 +4,7 @@ import StarIcon from '../../../public/images/Star.svg'
 import { ProductCardProps } from './product-card.types'
 import ProductPrice from '../product-price'
 import ProductRating from '../product-rating'
+import guideImage from '../images/GUIDE.svg'
 
 const ProductCard: React.FC<ProductCardProps> = props => {
   const {
@@ -17,7 +18,7 @@ const ProductCard: React.FC<ProductCardProps> = props => {
     dataTest = 'products',
     renderMode = 'short'
   } = props
-
+  console.log(product)
   if (ComponentRenderer) {
     return <ComponentRenderer dataSource={dataSource} />
   }
@@ -42,6 +43,7 @@ const ProductCard: React.FC<ProductCardProps> = props => {
           boxShadow={'0px 8px 10px 0px #0000001A'}
           data-test={dataTest}
         >
+          {/* {props.product?.guideImage && <Image src={props.product?.guideImage} />} */}
           <Box
             display={'flex'}
             position={'relative'}
@@ -71,12 +73,13 @@ const ProductCard: React.FC<ProductCardProps> = props => {
                   alt={'item_image'}
                   boxShadow={'0 20px 25px rgba(0, 0, 0, 0.1),0 8px 10px rgba(0, 0, 0, 0.05)'}
                   objectFit={'cover'}
+                  className="product-search-img"
                 />
               </Box>
             </Box>
             <Box
               p={'15px'}
-              pt={'11px'}
+              pt={'10px'}
               w={'100%'}
               position={'relative'}
               display={'flex'}
@@ -99,9 +102,36 @@ const ProductCard: React.FC<ProductCardProps> = props => {
                   >
                     {product.name}
                   </Text>
+                  {product.domainCategory && <Image src={guideImage} />}
                 </Flex>
               )}
-              {product.source ? (
+              <Flex
+                justifyContent={'space-between'}
+                alignItems={'flex-start'}
+                w={'100%'}
+              >
+                {product.domainCategory ? (
+                  <Image
+                    w={'60px'}
+                    mt="5px"
+                    src={typeof product.domainCategory === 'string' ? product.domainCategory : ''}
+                  />
+                ) : (
+                  product.shortDesc && (
+                    <Text
+                      fontSize={'0.8rem'}
+                      mb={'0.4rem'}
+                      noOfLines={2}
+                      textOverflow="ellipsis"
+                      whiteSpace="pre-wrap"
+                      overflowWrap="break-word"
+                    >
+                      {product.shortDesc}
+                    </Text>
+                  )
+                )}
+              </Flex>
+              {product.source && product.sourceText ? (
                 <Flex
                   alignItems={'flex-start'}
                   w={'100%'}
@@ -141,23 +171,6 @@ const ProductCard: React.FC<ProductCardProps> = props => {
                   </Text>
                 )
               )}
-
-              <Flex
-                justifyContent={'space-between'}
-                alignItems={'flex-start'}
-                w={'100%'}
-              >
-                <Text
-                  fontSize={'0.8rem'}
-                  mb={'0.4rem'}
-                  noOfLines={2}
-                  textOverflow="ellipsis"
-                  whiteSpace="pre-wrap"
-                  overflowWrap="break-word"
-                >
-                  {product.shortDesc}
-                </Text>
-              </Flex>
 
               {productInfoDataSource && typeof productInfoDataSource === 'string' && (
                 <Flex
@@ -202,7 +215,7 @@ const ProductCard: React.FC<ProductCardProps> = props => {
                 justifyContent={'space-between'}
                 alignItems={'center'}
                 position={'absolute'}
-                bottom={'6px'}
+                bottom={'10px'}
                 width={'calc(100% - 30px)'}
               >
                 <ProductPrice

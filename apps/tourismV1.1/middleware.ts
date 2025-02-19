@@ -7,6 +7,8 @@ export default function middleware(req: NextRequest) {
   const loggedin = req.cookies.get('authToken')
   const { pathname, href, host, searchParams } = req.nextUrl
   const response = NextResponse.next()
+  response.headers.set('Cache-Control', 'no-store')
+
   // const tourismType = req.cookies.get('tourismType')?.value || ''
   const queryTourismType = searchParams.get('tourismType')
   const tourismType = queryTourismType

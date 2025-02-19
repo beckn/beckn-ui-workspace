@@ -58,7 +58,7 @@ export type SelectFulfillments = { id: string }[]
 
 export type SelectOrder = {
   items: SelectItems
-  provider: { id: string }
+  provider: { id: string; name?: string }
   fulfillments: SelectFulfillments
 }
 

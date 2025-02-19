@@ -13,6 +13,7 @@ const PaymentMethodSelection = (props: PaymentMethodSelectionProps) => {
   const {
     t,
     handleOrderConfirmation,
+    disableButton = false,
     paymentMethods = [
       {
         category: 'Credit & Debit Cards',
@@ -78,12 +79,13 @@ const PaymentMethodSelection = (props: PaymentMethodSelectionProps) => {
         <Box
           width={{ base: '100%', md: '70%' }}
           style={{ marginTop: '2rem ' }}
+          placeSelf="center"
         >
           <BecknButton
             dataTest={testIds.paymentpage_confirmButton}
             children={t('confirmOrder')}
             handleClick={handleOrderConfirmation}
-            disabled={!checkedState}
+            disabled={!checkedState || disableButton}
           />
         </Box>
       </Box>

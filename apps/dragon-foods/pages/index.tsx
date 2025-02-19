@@ -12,7 +12,9 @@ import { Box } from '@chakra-ui/react'
 const HomePage = () => {
   const { t } = useLanguage()
   const dispatch = useDispatch()
+
   const [searchTerm, setSearchTerm] = useState<string>('')
+
   const apiKeyForGoogle = process.env.NEXT_PUBLIC_GOOGLE_API_KEY
 
   const {

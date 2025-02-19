@@ -1,6 +1,6 @@
 import { Typography, Button } from '@beckn-ui/molecules'
-import { StarRating } from '@beckn-ui/becknified-components'
-import { Box, Image, Flex } from '@chakra-ui/react'
+import { ProductPrice, StarRating } from '@beckn-ui/becknified-components'
+import { Box, Image, Flex, Text } from '@chakra-ui/react'
 import React from 'react'
 import { ProductSummaryPropsModel } from './product-summary.types'
 import ProductDescription from '../prouct-description'
@@ -11,6 +11,8 @@ const ProductSummary: React.FC<ProductSummaryPropsModel> = props => {
   const {
     imageSrc,
     name,
+    domain,
+    providerImage,
     providerName,
     itemForRenderer,
     ProductSummaryRenderer,
@@ -20,7 +22,8 @@ const ProductSummary: React.FC<ProductSummaryPropsModel> = props => {
     starRating,
     productCta,
     dataTestTitle = 'item-title',
-    dataTestDescription = 'item-description'
+    dataTestDescription = 'item-description',
+    showPriceInSummary = false
   } = props
 
   return (
@@ -67,6 +70,39 @@ const ProductSummary: React.FC<ProductSummaryPropsModel> = props => {
                   fontSize={'20px'}
                   fontWeight={'500'}
                 />
+                {providerImage && (
+                  <Image
+                    margin={'0 auto'}
+                    mt="15px"
+                    src={providerImage}
+                  />
+                )}
+                {domain && (
+                  <Flex
+                    alignItems={'center'}
+                    justifyContent="center"
+                    mb={'0.4rem'}
+                    mt="15px"
+                  >
+                    <Text
+                      fontSize={'15px'}
+                      fontWeight="500"
+                      mr="5px"
+                    >
+                      Platform:{' '}
+                    </Text>
+
+                    <Text
+                      fontSize={'0.8rem'}
+                      noOfLines={2}
+                      textOverflow="ellipsis"
+                      whiteSpace="pre-wrap"
+                      overflowWrap="break-word"
+                    >
+                      {domain.split(':').join(' ').toLocaleLowerCase()}
+                    </Text>
+                  </Flex>
+                )}
                 {providerName && (
                   <Flex marginTop={'1rem'}>
                     <Typography
@@ -86,6 +122,16 @@ const ProductSummary: React.FC<ProductSummaryPropsModel> = props => {
                   </Flex>
                 )}
               </Box>
+              {showPriceInSummary && (
+                <Box>
+                  <ProductPrice
+                    color="black"
+                    currencyType={productCta?.currency}
+                    price={parseFloat(productCta?.totalPrice || '0')}
+                    rateLabel={productCta?.rateLabel}
+                  />
+                </Box>
+              )}
               {starRating && <StarRating {...starRating} />}
               {secondaryDescription && (
                 <Box minHeight="10rem">

@@ -83,14 +83,27 @@ const PaymentDetailsCard: React.FC<PaymentDetailsCardProps> = ({ t, paymentMetho
                             data-test={testIds.paymentpage_image}
                           />
                         )}
-                        <Text
-                          fontSize={'15px'}
-                          fontWeight={400}
-                          data-test={method.dataTest}
-                          ml={'6px'}
-                        >
-                          {method.paymentMethod}
-                        </Text>
+                        <Flex flexDirection={'column'}>
+                          <Text
+                            fontSize={'15px'}
+                            fontWeight={400}
+                            data-test={method.dataTest}
+                            ml={'6px'}
+                          >
+                            {method.paymentMethod}
+                          </Text>
+                          {method.paymentDescription && (
+                            <Text
+                              fontSize={'12px'}
+                              fontWeight={400}
+                              // data-test={method.dataTest}
+                              ml={'6px'}
+                              color={'#7F7D7D'}
+                            >
+                              {method.paymentDescription}
+                            </Text>
+                          )}
+                        </Flex>
                       </Flex>
                     </label>
                   </Flex>

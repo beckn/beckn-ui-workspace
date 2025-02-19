@@ -30,7 +30,8 @@ const ProductPrice: React.FC<ProductPriceProps> = props => {
     variant = 'subTextSemibold',
     fontStyle,
     colorScheme = 'secondary',
-    rateLabel
+    rateLabel,
+    fontWeight
   } = props
 
   const textColor = colorScheme === 'primary' ? theme.colors.primary[100] : theme.colors.secondary[100]
@@ -41,7 +42,7 @@ const ProductPrice: React.FC<ProductPriceProps> = props => {
       justify={'space-between'}
       // width={'42px'}
       fontSize={'15px'}
-      fontWeight={'600'}
+      fontWeight={fontWeight || '600'}
       color={color}
       className={className}
     >
@@ -51,6 +52,7 @@ const ProductPrice: React.FC<ProductPriceProps> = props => {
         text={formatCurrency(price, currencyType, rateLabel)}
         color={color || textColor}
         style={fontStyle}
+        fontWeight={fontWeight}
       />
     </Flex>
   )

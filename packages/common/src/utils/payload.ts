@@ -64,7 +64,8 @@ export const getSelectPayload = (
           orders.push({
             items: [newItem],
             provider: {
-              id: item.providerId
+              id: item.providerId,
+              name: item.providerName
             },
             fulfillments:
               item.fulfillments &&
@@ -284,7 +285,8 @@ export const getPayloadForOrderHistoryPost = (confirmData: ConfirmResponseModel[
     provider: { id, name, short_desc },
     items,
     quote,
-    payments
+    payments,
+    fulfillments
   } = confirmData[0].message
 
   const ordersPayload = {
@@ -304,13 +306,12 @@ export const getPayloadForOrderHistoryPost = (confirmData: ConfirmResponseModel[
           }
         },
         items,
+        fulfillments,
         quote: { price: { currency: quote.price.currency, value: Number(quote.price.value) || 0 } },
         payments
       }
     },
-    category: {
-      set: [categoryId]
-    }
+    category: categoryId
   }
 
   return ordersPayload

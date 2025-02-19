@@ -6,6 +6,7 @@ export interface CartItemProps {
   id: string
   quantity: number
   name: string
+  providerName?: string
   image: string
   price: number
   symbol: CurrencyType
@@ -13,6 +14,7 @@ export interface CartItemProps {
   handleDecrement: (id: string) => void
   className?: string
   totalAmountText?: string
+  alignment?: 'row' | 'column'
 }
 
 export interface CartListProps {

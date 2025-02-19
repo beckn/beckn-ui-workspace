@@ -1,3 +1,5 @@
+import { SystemStyleObject } from '@chakra-ui/react'
+
 export type InputType = 'text' | 'password' | 'email' | 'number' | 'select'
 
 export enum InputTypeEnum {
@@ -6,6 +8,12 @@ export enum InputTypeEnum {
   Email = 'email',
   Number = 'number',
   Checkbox = 'checkbox'
+}
+
+export interface SelectOptionType {
+  value: string
+  label: string
+  data?: any
 }
 
 //TODO type and variant to be changed into enum
@@ -21,8 +29,9 @@ export interface InputProps {
   label?: string
   dataTest?: string
   disabled?: boolean
-  options?: { label: string; value: string }[]
+  options?: SelectOptionType[]
   readOnly?: boolean
+  sx?: SystemStyleObject
   rightElement?: () => React.ReactElement<any, any> | null
   customInputBlurHandler?: React.FocusEventHandler<HTMLInputElement>
 }

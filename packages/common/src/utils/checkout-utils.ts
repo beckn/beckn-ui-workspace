@@ -70,7 +70,11 @@ export const getPaymentBreakDown = (initData: InitResponseModel[] | StatusRespon
   return { breakUpMap, totalPricewithCurrent }
 }
 
-export const getSubTotalAndDeliveryCharges = (initData: InitResponseModel[] | StatusResponseModel[]) => {
+export const getSubTotalAndDeliveryCharges = (
+  initData: InitResponseModel[] | StatusResponseModel[],
+  frequency?: number = 1
+) => {
+  console.log('frequency', frequency)
   let subTotal: number = 0
   let currencySymbol
 
@@ -78,14 +82,15 @@ export const getSubTotalAndDeliveryCharges = (initData: InitResponseModel[] | St
     initData.forEach(data => {
       if (data.message.order.quote.breakup) {
         data.message.order.quote.breakup.forEach(breakup => {
-          subTotal += Number(parseFloat((Number(breakup.price.value) || 0).toString()).toFixed(2))
+          const itemPrice = Number(parseFloat((Number(breakup.price.value) || 0).toString()).toFixed(2))
+          subTotal += itemPrice * frequency
         })
         currencySymbol = data.message.order.quote.breakup[0]?.price.currency
       }
     })
   }
-
-  return { subTotal, currencySymbol }
+  console.log('Final subtotal:', subTotal)
+  return { subTotal: Math.round(subTotal), currencySymbol }
 }
 
 export const getTotalCartItems = (cartItems: CartRetailItem[]) => {
@@ -107,4 +112,29 @@ export const areShippingAndBillingDetailsSame = (
     return areObjectPropertiesEqual(formData, billingFormData)
   }
   return !isBillingAddressComplete
+}
+
+export const getOrderDetailsPaymentBreakDown = (statusData: StatusResponseModel[]) => {
+  console.log('statusData', statusData)
+  const quote = statusData[0]?.message?.order.quote // Ensure safe access
+  if (!quote) return { breakUpMap: {}, totalPricewithCurrent: { value: '0', currency: 'INR' } }
+
+  const breakUp = quote.breakup || []
+  const totalPricewithCurrent: any = {
+    value: quote.price?.value || '0',
+    currency: quote.price?.currency || 'INR'
+  }
+
+  const breakUpMap: Record<string, { currency: string; value: string }> = {}
+
+  breakUp.forEach(item => {
+    const {
+      title,
+      price: { currency, value }
+    } = item
+
+    breakUpMap[title] = { currency, value }
+  })
+
+  return { breakUpMap, totalPricewithCurrent }
 }

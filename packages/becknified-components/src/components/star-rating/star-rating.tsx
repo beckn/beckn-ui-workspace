@@ -24,11 +24,11 @@ import { StarRatingProps } from './star-rating.types'
  */
 
 const StarRating: React.FC<StarRatingProps> = props => {
-  const { rating = 0, ratingText = '', setRating, size = 20, starCount = 5, dataTest } = props
+  const { rating = 0, ratingText = '', setRating, size = 20, starCount = 5, dataTest, useDefaultColor = false } = props
   const [hover, setHover] = useState<number | null>(null)
   const theme = useTheme()
 
-  const primaryColor = theme.colors.primary['100']
+  const primaryColor = useDefaultColor ? '#F4B73F' : theme.colors.primary['100']
 
   return (
     <Box mb="20px">

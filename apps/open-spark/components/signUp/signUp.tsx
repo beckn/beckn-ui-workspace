@@ -3,19 +3,17 @@ import { BecknAuth } from '@beckn-ui/becknified-components'
 import { Box } from '@chakra-ui/react'
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import Router from 'next/router'
-import { FormErrors, SignInResponse, SignUpFormProps } from '@beckn-ui/common/lib/types'
-import { useBapTradeRegisterMutation, useBppTradeRegisterMutation } from '@services/UserService'
-import openSpark from '@public/images/openSparkLogo.svg'
+import { FormErrors, SignUpFormProps } from '@beckn-ui/common/lib/types'
+import { useTradeRegisterMutation } from '@services/UserService'
+import openSpark from '@public/images/spark-log.svg'
 import { useLanguage } from '@hooks/useLanguage'
 import { CustomFormErrorProps, signUpValidateForm } from '@utils/form-utils'
-import { AuthRootState } from '@store/auth-slice'
-import { useSelector } from 'react-redux'
-import { ROLE, ROUTE_TYPE } from '@lib/config'
+import { ROUTE_TYPE } from '@lib/config'
 import axios from '@services/axios'
 import Cookies from 'js-cookie'
 
 interface RegisterFormProps extends SignUpFormProps {
-  utilityCompany: string
+  utilityCompany?: string
   address: string
 }
 
@@ -29,22 +27,18 @@ const SignUp = () => {
     email: '',
     password: '',
     mobileNumber: '',
-    address: '',
-    utilityCompany: ''
+    address: ''
   })
   const [formErrors, setFormErrors] = useState<CustomFormErrorProps>({
     name: '',
     email: '',
     password: '',
     address: '',
-    mobileNumber: '',
-    utilityCompany: ''
+    mobileNumber: ''
   })
   const [utilities, setUtilities] = useState<any[]>([])
 
-  const { role } = useSelector((state: AuthRootState) => state.auth)
-  const [bapTradeRegister, { isLoading: bapLoading }] = useBapTradeRegisterMutation()
-  const [bppTradeRegister, { isLoading: bppLoading }] = useBppTradeRegisterMutation()
+  const [tradeRegister, { isLoading }] = useTradeRegisterMutation()
   const { t } = useLanguage()
   const [termsAccepted, setTermsAccepted] = useState(false)
 
@@ -126,7 +120,7 @@ const SignUp = () => {
     }
 
     try {
-      const response = await axios.post(`${strapiUrl}${ROUTE_TYPE.PRODUCER}/profile`, tradeCatalogueData, {
+      const response = await axios.post(`${strapiUrl}${ROUTE_TYPE.GENERAL}/profile`, tradeCatalogueData, {
         headers: { Authorization: `Bearer ${Cookies.get('authToken') || ''}` },
         withCredentials: true
       })
@@ -146,21 +140,18 @@ const SignUp = () => {
       address: formData.address,
       password: formData.password,
       phone_no: formData.mobileNumber,
-      utility_name: formData.utilityCompany
+      utility_name: ''
     }
 
     if (isFormValid) {
       try {
         let registerResponse: any = null
         let catalogueSuccess: any = null
-        if (role === ROLE.CONSUMER) {
-          registerResponse = await bapTradeRegister(signUpData)
-          catalogueSuccess = true
-        }
-        if (role === ROLE.PRODUCER) {
-          registerResponse = await bppTradeRegister(signUpData)
-          catalogueSuccess = await createTradeCatalogue()
-        }
+
+        registerResponse = await tradeRegister(signUpData)
+        // for PRODUCER to create default catalogue
+        catalogueSuccess = true // await createTradeCatalogue()
+
         console.log(registerResponse)
         if (!registerResponse || (registerResponse as { error: FetchBaseQueryError })?.error)
           throw new Error('Could not register')
@@ -216,14 +207,14 @@ const SignUp = () => {
               disabled: !isFormFilled || !termsAccepted,
               variant: 'solid',
               colorScheme: 'primary',
-              isLoading: bapLoading || bppLoading
+              isLoading: isLoading
             },
             {
               text: t.signIn,
               handleClick: handleSignIn,
               variant: 'outline',
               colorScheme: 'primary',
-              disabled: bapLoading || bppLoading
+              disabled: isLoading
             }
           ],
           inputs: [
@@ -267,15 +258,15 @@ const SignUp = () => {
             //   label: t.selectUtilityCompany,
             //   error: formErrors.utilityCompany
             // },
-            {
-              type: 'select',
-              name: 'utilityCompany',
-              options: utilities,
-              value: formData.utilityCompany,
-              handleChange: handleSelectChange,
-              label: t.selectUtilityCompany,
-              error: formErrors.utilityCompany
-            },
+            // {
+            //   type: 'select',
+            //   name: 'utilityCompany',
+            //   options: utilities,
+            //   value: formData.utilityCompany,
+            //   handleChange: handleSelectChange,
+            //   label: t.selectUtilityCompany,
+            //   error: formErrors.utilityCompany
+            // },
             {
               type: 'password',
               name: 'password',

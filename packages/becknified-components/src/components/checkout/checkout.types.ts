@@ -7,6 +7,7 @@ import {
   InputType
 } from '@beckn-ui/molecules'
 import { CurrencyType } from '../types'
+import { RentalItemProps } from './order-overview'
 
 export type ShippingFormInitialValuesType = {
   name: string
@@ -63,6 +64,7 @@ export interface ShippingDetailsProps {
   location: string
   number: number | string
   title: string
+  noAccordion?: boolean
 }
 
 type TotalAmountWithCurreny = {
@@ -82,10 +84,11 @@ export interface PaymentDetailsProps {
 export interface CheckoutProps<T extends FormField[]> {
   schema: {
     items?: {
+      type: string
       title: string
-      data: ItemDetailProps[]
+      data?: ItemDetailProps[] | RentalItemProps[]
     }
-    shipping: ShippingSectionProps<T>
+    shipping?: ShippingSectionProps<T>
     billing?: ShippingSectionProps<T>
     payment: {
       title: string

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { Box, Flex, Image } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
@@ -38,7 +38,8 @@ const Header: React.FC<HeaderProps> = ({
       label: t('logoutIcon'),
       href: '/signIn',
       icon: '/images/logOutIcon.svg',
-      color: 'red'
+      color: 'red',
+      handleOnClick: logout
     }
   ],
   settingsMenu = true,
@@ -55,6 +56,12 @@ const Header: React.FC<HeaderProps> = ({
 
   const handleMenuModalClose = () => {
     setMenuModalOpen(false)
+  }
+  const handleLogout = () => {
+    dispatch(logout())
+    localStorage.clear()
+    window.location.reload()
+    router.push('/signIn')
   }
 
   return (
@@ -125,25 +132,39 @@ const Header: React.FC<HeaderProps> = ({
               cursor={'pointer'}
               data-test={menuItem.dataTest}
               key={index}
+              //   onClick={() => {
+              //     if (menuItem.id === 'logout') {
+              //       menuItem?.handleOnClick?.()
+              //       dispatch(logout())
+              //     }
+              //     router.push(menuItem.href)
+              //     setMenuModalOpen(false)
+              //   }}
+              //   className={Styles.top_header_modal}
+              // >
               onClick={() => {
                 if (menuItem.id === 'logout') {
-                  menuItem?.handleOnClick?.()
-                  dispatch(logout())
+                  handleLogout()
+                } else {
+                  router.push(menuItem.href)
                 }
-                router.push(menuItem.href)
                 setMenuModalOpen(false)
               }}
               className={Styles.top_header_modal}
             >
-              <Image
-                src={menuItem.icon}
-                alt="User profile"
-              />
-              <Typography
-                fontSize="16px"
-                text={menuItem.label}
-                color={menuItem?.color!}
-              />
+              {router.pathname !== menuItem.href && (
+                <>
+                  <Image
+                    src={menuItem.icon}
+                    alt={menuItem.label}
+                  />
+                  <Typography
+                    fontSize="16px"
+                    text={menuItem.label}
+                    color={menuItem?.color!}
+                  />
+                </>
+              )}
             </Box>
           ))}
         </Flex>

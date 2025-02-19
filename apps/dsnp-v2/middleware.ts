@@ -6,7 +6,8 @@ export default function middleware(req: NextRequest) {
   // TypeScript will correctly understand the type of `loggedin`
   const loggedin = req.cookies.get('authToken')
   const { pathname } = req.nextUrl
-  console.log('Dank', pathname, loggedin)
+  const response = NextResponse.next()
+  response.headers.set('Cache-Control', 'no-store')
 
   if (loggedin && (pathname === '/signin' || pathname === '/signUp')) {
     // Correctly redirect to the home page if the user is already logged in
@@ -20,7 +21,7 @@ export default function middleware(req: NextRequest) {
 
   // It's important to return a response for all paths, you might want to return `undefined` or `NextResponse.next()`
   // for other cases to let the request continue.
-  return NextResponse.next()
+  return response
 }
 
 export const config = {

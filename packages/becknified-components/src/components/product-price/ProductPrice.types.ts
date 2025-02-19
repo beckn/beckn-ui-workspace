@@ -10,6 +10,7 @@ export interface ProductPriceProps {
   colorScheme?: 'primary' | 'secondary'
   dataTestItemPrice?: string
   rateLabel?: string
+  fontWeight?: string
 }
 
 export type CurrencyType = 'GBP' | 'EUR' | 'INR' | 'USD'

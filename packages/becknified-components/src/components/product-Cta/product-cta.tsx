@@ -8,15 +8,18 @@ import ProductPrice from '../product-price'
 const ProductCta: React.FC<ProductCtaProps> = ({
   currency,
   totalPrice,
+  rateLabel,
   handleDecrement,
   handleIncrement,
   counter,
   cta,
+  title,
   counterTitle,
   noCounter,
   dataTestCounterValue = 'counter-value',
   dataTestDecrementCounter = 'decrement-counter',
-  dataTestIncrementCounter = 'increment-counter'
+  dataTestIncrementCounter = 'increment-counter',
+  noPrice
 }) => {
   const theme = useTheme()
   const { isMobile } = useResponsive()
@@ -32,22 +35,22 @@ const ProductCta: React.FC<ProductCtaProps> = ({
     >
       {isMobile && (
         <Typography
-          text={'Total'}
+          text={title || 'Total'}
           variant="subTextSemibold"
           style={{ marginBottom: '6px' }}
+          color={title ? '#939393' : '#000000'}
         />
       )}
 
-      <Flex
-        alignItems={'center'}
-        gap="2"
-        mb={'10px'}
-      >
-        <ProductPrice
-          currencyType={currency}
-          price={parseFloat(totalPrice)}
-        />
-      </Flex>
+      {!noPrice && (
+        <Flex justifyContent={'center'}>
+          <ProductPrice
+            currencyType={currency}
+            price={parseFloat(totalPrice)}
+            rateLabel={rateLabel || ''}
+          />
+        </Flex>
+      )}
       <Flex justifyContent={'center'}>
         <Typography
           text={counterTitle!}
@@ -65,13 +68,14 @@ const ProductCta: React.FC<ProductCtaProps> = ({
           mt="1rem"
         >
           <Box
-            data-test={dataTestIncrementCounter}
-            onClick={handleIncrement}
+            data-test={dataTestDecrementCounter}
+            onClick={handleDecrement}
             fontSize="24px"
             cursor={'pointer'}
           >
-            +
+            -
           </Box>
+
           <Box
             border={'1px solid #D9D9D9'}
             color={theme.colors.secondary[100]}
@@ -82,12 +86,12 @@ const ProductCta: React.FC<ProductCtaProps> = ({
             {counter}
           </Box>
           <Box
-            data-test={dataTestDecrementCounter}
-            onClick={handleDecrement}
+            data-test={dataTestIncrementCounter}
+            onClick={handleIncrement}
             fontSize="24px"
             cursor={'pointer'}
           >
-            -
+            +
           </Box>
         </Flex>
       )}

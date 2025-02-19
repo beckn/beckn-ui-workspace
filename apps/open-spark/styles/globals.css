@@ -289,12 +289,199 @@ select:-webkit-autofill:focus {
 .trade-status-accordion-icon {
   display: none !important;
 }
-.css-1juf683 {
+/* .css-1juf683 {
   font-size: 12px !important;
+} */
+.myStore-homepage [data-test='app-title'] {
+  color: #4398e8;
+  font-size: 20px;
 }
-
+.myStore-homepage .topSheet_topsheet_wrapper__g91VI {
+  position: absolute;
+  top: 42px;
+  z-index: 999;
+  left: 0;
+  width: unset !important;
+}
+.cart-count {
+  background-color: #4398e8 !important;
+}
+.cart-count > p {
+  color: #fff !important;
+  margin-bottom: unset;
+}
+.myStore-search-wrapper [data-test='filter-button'] svg rect,
+.myStore-search-wrapper [data-test='filter-button'] svg path {
+  fill: transparent;
+  stroke: #a7a7a7;
+}
+.myStore-product-details svg path {
+  fill: unset;
+  stroke: unset;
+}
+.filter-wrapper {
+  height: unset !important;
+}
+.filter-wrapper .dropDown_label {
+  padding-left: unset !important;
+  margin-left: unset !important;
+}
+.cencel_btn_filter {
+  border: 1px solid #e93324 !important;
+}
+.myStore-search-wrapper p {
+  display: -webkit-box;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.myStore-search-wrapper img.product-search-img {
+  object-fit: unset !important;
+  /* height: 60px;
+  width: 90px; */
+  box-shadow: unset;
+}
+.myStore-search-wrapper .-product_card_layout_container {
+  min-height: 140px;
+}
+.radio-for-emi {
+  width: 20px !important;
+  height: 20px !important;
+}
+.radio-for-emi::before {
+  background: #53a052 !important  ;
+  height: 14px !important;
+  width: 14px !important;
+  position: absolute !important;
+}
+.radio-for-emi[data-checked][data-hover][data-focus-visible] {
+  background: transparent !important  ;
+  border-color: inherit !important  ;
+  box-shadow: unset !important;
+}
+.radio-for-emi[data-checked] {
+  background: transparent !important  ;
+  border-color: inherit !important  ;
+}
+.btn-for-emi[data-hover],
+.btn-for-emi:hover {
+  background: unset !important;
+}
+.emi-chakra-select {
+  padding-inline-start: unset !important;
+}
+.dropdown-emi label {
+  font-size: 17px !important;
+  font-weight: 400 !important;
+  top: -20px !important;
+}
+.cart-text .cart-item_product_image_container__n9Q9Z {
+  margin-bottom: 10px !important;
+}
+.cart-text .cart-item_product_name__qWsHK {
+  font-size: 15px;
+}
+/* .myStore-cart {
+  position: relative;
+}
+.myStore-cart input {
+  display: none;
+}
+.myStore-cart .cart-item_plus_icon_container__rtSke {
+  display: none;
+}
+.myStore-cart .cart-item_minus_icon_container__z25aM,
+.myStore-cart .cart-item_delete_icon_container__7Fnhn {
+  position: absolute;
+  right: 0;
+  top: 0;
+} */
+.cart-item_product_count_price_container__X6rK1 {
+  align-items: center;
+  justify-content: space-between;
+  /* width: 80%;
+  margin: 0 auto; */
+  flex: unset !important;
+}
+.cart-text .chakra-text,
+.search-text .chakra-text,
+.product-text .chakra-text {
+  font-size: 15px !important;
+}
+.product-text .chakra-text {
+  margin-bottom: unset !important;
+}
+.order-summary_orderSummaryContainer__v8MgZ {
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1) !important;
+  background-color: #fff !important;
+  border-width: 0 !important;
+}
+.cart-item_product_name__qWsHK {
+  justify-content: center;
+}
+.product-text .domain {
+  margin: 0 auto;
+  margin-top: 15px !important;
+}
+.domain {
+  border-radius: 12px;
+  font-size: 10px;
+  padding: 2px 6px;
+  color: #fff !important;
+  background-color: #4498e8;
+  width: fit-content;
+}
+.product-text .-product_summary_name {
+  text-align: center;
+}
+.product-text .css-13dls4l {
+  justify-content: center;
+}
+.checkout-open-spark .checkout-commom-item {
+  display: none;
+}
+.quantity-checkout {
+  border: 1px solid #d9d9d9;
+  border-radius: 8px;
+  padding: 4px 10px;
+  width: 40px;
+  text-align: center;
+}
+.chakra-modal__body {
+  max-height: calc(100vh - 6rem) !important;
+}
 @media only screen and (max-width: 370px) {
   .mytrade-status {
     gap: 2px !important;
   }
+}
+.css-1530p3w:active,
+.css-1530p3w[data-active] {
+  background: #4398e8 !important;
+}
+
+.css-1530p3w:hover,
+.css-1530p3w[data-hover] {
+  background: #4398e8 !important;
+}
+
+.css-522or8:active,
+.css-522or8[data-active] {
+  background: #4398e8 !important;
+}
+
+.css-522or8:hover,
+.css-522or8[data-hover] {
+  background: #4398e8 !important;
+}
+.checkout-open-spark .overview-checkout {
+  display: none;
+}
+.react-datepicker-wrapper {
+  width: 100% !important;
+}
+.order_status_progress {
+  padding: 20px;
+  padding-left: unset;
 }

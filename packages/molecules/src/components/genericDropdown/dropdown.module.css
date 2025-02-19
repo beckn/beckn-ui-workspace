@@ -1,0 +1,12 @@
+.input_label {
+  font-size: 14px;
+  position: absolute;
+  pointer-events: none;
+  top: 11px;
+  font-weight: 400;
+  left: 0px;
+  white-space: nowrap;
+  transition: 0.2s ease all;
+  -moz-transition: 0.2s ease all;
+  -webkit-transition: 0.2s ease all;
+}

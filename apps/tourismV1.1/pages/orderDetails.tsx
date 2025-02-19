@@ -674,7 +674,7 @@ const OrderDetails = () => {
       maxH="calc(100vh - 100px)"
       overflowY="scroll"
     >
-      <Box
+      {/* <Box
         maxW={{ base: '100%', md: '50%' }}
         margin="0 auto"
         data-test={testIds.order_feedback_container}
@@ -729,7 +729,7 @@ const OrderDetails = () => {
             </CardBody>
           </Card>
         )}
-      </Box>
+      </Box> */}
       <Box
         display={{ base: 'block', lg: 'flex' }}
         justifyContent="space-between"
