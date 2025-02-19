@@ -11,7 +11,7 @@ import { testIds } from '@shared/dataTestIds'
 import { Box } from '@chakra-ui/react'
 import { parseSearchlist } from '@utils/search-utils'
 import { RootState } from '@store/index'
-import { initDB, getFromCache, setInCache } from '@utils/indexedDB'
+// import { initDB, getFromCache, setInCache } from '@utils/indexedDB'
 
 const Search = () => {
   const type = useSelector((state: RootState) => state.navigation.type)
@@ -30,29 +30,29 @@ const Search = () => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
   // Initialize IndexedDB when component mounts
-  useEffect(() => {
-    initDB().catch(console.error)
-  }, [])
+  // useEffect(() => {
+  //   initDB().catch(console.error)
+  // }, [])
 
   const fetchDataForSearch = async () => {
     if (!searchKeyword || !type) return
 
     // Create cache key with type prefix
-    const cacheKey =
-      type === 'RENT_AND_HIRE' ? `rental_${searchKeyword.toLowerCase()}` : `retail_${searchKeyword.toLowerCase()}`
+    // const cacheKey =
+    //   type === 'RENT_AND_HIRE' ? `rental_${searchKeyword.toLowerCase()}` : `retail_${searchKeyword.toLowerCase()}`
 
-    try {
-      const cachedResults = await getFromCache(cacheKey)
-      if (cachedResults) {
-        console.log(`Getting ${type} results from cache`)
-        setItems(cachedResults)
-        setOriginalItems(cachedResults)
-        dispatch(discoveryActions.addProducts({ products: cachedResults }))
-        return
-      }
-    } catch (error) {
-      console.error('Cache read error:', error)
-    }
+    // try {
+    // const cachedResults = await getFromCache(cacheKey)
+    //   if (cachedResults) {
+    //     console.log(`Getting ${type} results from cache`)
+    //     setItems(cachedResults)
+    //     setOriginalItems(cachedResults)
+    //     dispatch(discoveryActions.addProducts({ products: cachedResults }))
+    //     return
+    //   }
+    // } catch (error) {
+    //   console.error('Cache read error:', error)
+    // }
 
     setIsLoading(true)
 
@@ -70,7 +70,7 @@ const Search = () => {
       dispatch(discoveryActions.addProducts({ products: parsedSearchItems }))
 
       // Cache the results with type-specific prefix
-      await setInCache(cacheKey, parsedSearchItems)
+      // await setInCache(cacheKey, parsedSearchItems)
 
       setItems(parsedSearchItems)
       setOriginalItems(parsedSearchItems)
