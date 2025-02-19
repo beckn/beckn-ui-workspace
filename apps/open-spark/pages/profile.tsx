@@ -10,7 +10,9 @@ import axios from '@services/axios'
 import { testIds } from '@shared/dataTestIds'
 import credIcon from '@public/images/cred_icon.svg'
 import tradeIcon from '@public/images/trade_icon.svg'
+import myPreferenceIcon from '@public/images/myPreference.svg'
 import derIcon from '@public/images/der_icon.svg'
+import fundsIcon from '@public/images/funds.svg'
 import logoutIcon from '@public/images/logOutIcon.svg'
 import NavigationItem from '@components/navigationItem'
 import { setProfileEditable, UserRootState } from '@store/user-slice'
@@ -19,6 +21,7 @@ import { ROLE, ROUTE_TYPE } from '@lib/config'
 import { AuthRootState } from '@store/auth-slice'
 import { useRouter } from 'next/router'
 import { InputProps } from '@beckn-ui/molecules'
+import { clearCache } from '@utils/indexedDB'
 
 const ProfilePage = () => {
   const dispatch = useDispatch()
@@ -39,9 +42,6 @@ const ProfilePage = () => {
   })
 
   const { profileEditable } = useSelector((state: UserRootState) => state.user)
-  const { role } = useSelector((state: AuthRootState) => state.auth)
-
-  const isAdmin = useRef(role === ROLE.ADMIN)
 
   useEffect(() => {
     return () => {
@@ -79,15 +79,18 @@ const ProfilePage = () => {
     setIsLoading(true)
 
     axios
-      .get(`${strapiUrl}${ROUTE_TYPE[role!]}/user-profile`, requestOptions)
+      .get(`${strapiUrl}${ROUTE_TYPE[ROLE.GENERAL]}/user-profile`, requestOptions)
       .then(response => {
-        const result = response.data
-        const { fullname, address, customer_id } = result
+        const result = response.data.agent
+
+        console.log(result)
+        const { first_name, last_name, address, agent_profile } = result
         setFormData({
           ...formData,
-          name: fullname,
-          address,
-          customerId: customer_id
+          name: `${first_name} ${last_name || ''}`,
+          address: agent_profile.address,
+          customerId: agent_profile.customer_id,
+          mobileNumber: agent_profile.phone_number
         })
       })
       .finally(() => {
@@ -114,7 +117,7 @@ const ProfilePage = () => {
     }
 
     axios
-      .put(`${strapiUrl}${ROUTE_TYPE[role!]}/user-profile`, data, {
+      .put(`${strapiUrl}${ROUTE_TYPE[ROLE.GENERAL]}/user-profile`, data, {
         headers: { Authorization: `Bearer ${bearerToken}` }
       })
       .then(response => {
@@ -133,16 +136,6 @@ const ProfilePage = () => {
         )
       })
   }
-
-  const isFormFilled = useMemo(() => {
-    const { flatNumber, street, ...restFormData } = formData
-    const { flatNumber: flatNumberError, street: streetError, ...restFormErrors } = formErrors
-
-    return (
-      Object.values(restFormData).every(value => value !== '') &&
-      Object.values(restFormErrors).every(value => value === '')
-    )
-  }, [formData, formErrors])
 
   const getInputs = () => {
     const inputs: InputProps[] = [
@@ -177,11 +170,19 @@ const ProfilePage = () => {
         dataTest: testIds.profile_address,
         disabled: !profileEditable,
         customInputBlurHandler: updateProfile
+      },
+      {
+        type: 'text',
+        name: 'mobileNumber',
+        value: formData.mobileNumber!,
+        handleChange: handleInputChange,
+        label: t.formNumber,
+        error: formErrors.mobileNumber,
+        dataTest: '',
+        disabled: true,
+        customInputBlurHandler: updateProfile
       }
     ]
-    if (isAdmin.current) {
-      inputs.splice(1, 1)
-    }
 
     return inputs
   }
@@ -204,36 +205,55 @@ const ProfilePage = () => {
         isLoading={isLoading}
         customComponent={
           <Box marginTop={'-1.8rem'}>
-            {!isAdmin.current && (
-              <>
-                <NavigationItem
-                  icon={credIcon}
-                  label={'My Credentials'}
-                  handleClick={() => router.push('/myCredentials')}
-                  dataTest={'myCredintial'}
-                />
-                <NavigationItem
-                  icon={tradeIcon}
-                  label={'My Trades'}
-                  handleClick={() => router.push('/myTrades')}
-                  dataTest={'myTrades'}
-                />
-                <NavigationItem
-                  icon={derIcon}
-                  label={'My DERs'}
-                  handleClick={() => router.push('/myDers')}
-                  dataTest={'myDers'}
-                />
-              </>
-            )}
+            {/* <>
+              <NavigationItem
+                icon={myPreferenceIcon}
+                label={'My Preferences'}
+                handleClick={() => router.push('/myPreference')}
+                dataTest={'myPreference'}
+              />
+              <NavigationItem
+                icon={credIcon}
+                label={'My Credentials'}
+                handleClick={() => router.push('/myCredentials')}
+                dataTest={'myCredintial'}
+              />
+              <NavigationItem
+                icon={tradeIcon}
+                label={'My Trades'}
+                handleClick={() => router.push('/myTrades')}
+                dataTest={'myTrades'}
+              />
+              <NavigationItem
+                icon={derIcon}
+                label={'My DERs'}
+                handleClick={() => router.push('/myDers')}
+                dataTest={'myDers'}
+              />
+              <NavigationItem
+                icon={fundsIcon}
+                label={'My Funds'}
+                handleClick={() => router.push('/myFunds')}
+                dataTest={'myFunds'}
+              />
+            </> */}
             <NavigationItem
               icon={logoutIcon}
               label={t.logout}
               arrow={false}
               divider={false}
               color="red"
-              handleClick={() => {
-                dispatch(logout())
+              handleClick={async () => {
+                try {
+                  // Clear IndexedDB first
+                  await clearCache()
+                  // Then dispatch logout action
+                  dispatch(logout())
+                } catch (error) {
+                  console.error('Error clearing cache during logout:', error)
+                  // Still proceed with logout even if cache clear fails
+                  dispatch(logout())
+                }
               }}
             />
           </Box>

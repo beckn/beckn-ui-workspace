@@ -50,9 +50,10 @@ const SearchAndDiscover: React.FC<SearchAndDiscoverProps> = ({
         rating: item.rating,
         source: t?.('itemSourceText') || 'Sold By',
         sourceText: providerName,
-        productInfo: item.productInfo
+        productInfo: item.productInfo,
+        domain: catalogItem.domain
       }
-
+      console.log('product', product)
       const handleProductClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         event.preventDefault()
         viewDetailsClickHandler(catalogItem, product)

@@ -149,6 +149,7 @@ const en: { [key: string]: string } = {
   emptyCardSubHeading: 'Looks like you haven’t made your choice yet',
   shop: 'Shop',
   orderId: 'Order id',
+
   forAll: 'for All',
   subText:
     "A global marketplace to discover anything you need. Just type where you want to go and we'll take care of the rest.",
@@ -159,6 +160,7 @@ const en: { [key: string]: string } = {
   searchProducts: 'Search for Products',
   addToCart: 'Add To Cart',
   addedToCart: 'Product added to cart',
+
   order: 'Order',
   items: 'Items',
   saveShippingDetails: 'Save Shipping Details',

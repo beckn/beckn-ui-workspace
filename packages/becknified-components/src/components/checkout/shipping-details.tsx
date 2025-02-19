@@ -6,56 +6,110 @@ import nameIcon from '../../../public/images/nameIcon.svg'
 import { Typography } from '@beckn-ui/molecules'
 import { Accordion } from '@beckn-ui/molecules'
 import { ShippingDetailsProps } from './checkout.types'
+import DetailsCard from './details-card'
 
 const ShippingDetails: React.FC<ShippingDetailsProps> = props => {
   return (
-    <Accordion accordionHeader={props.title}>
-      <CardBody
-        pt={'unset'}
-        pb={'15px'}
-      >
-        <Box>
-          <Stack
-            divider={<StackDivider />}
-            spacing="4"
+    <>
+      {props.noAccordion ? (
+        <DetailsCard>
+          <CardBody
+            pt={'unset'}
+            pb={'15px'}
+            p="0"
           >
-            <Flex alignItems={'center'}>
-              <Image
-                src={nameIcon}
-                alt={'nameIcon'}
-                pr={'12px'}
-              />
-              <Typography
-                variant="subTitleRegular"
-                text={props.name}
-              />
-            </Flex>
-            <Flex alignItems={'center'}>
-              <Image
-                src={locationIcon}
-                alt={'locationIcon'}
-                pr={'12px'}
-              />
-              <Typography
-                variant="subTitleRegular"
-                text={props.location}
-              />
-            </Flex>
-            <Flex alignItems={'center'}>
-              <Image
-                src={CallphoneIcon}
-                alt={'CallphoneIcon'}
-                pr={'12px'}
-              />
-              <Typography
-                variant="subTitleRegular"
-                text={props.number.toString()}
-              />
-            </Flex>
-          </Stack>
-        </Box>
-      </CardBody>
-    </Accordion>
+            <Box>
+              <Stack
+                divider={<StackDivider />}
+                spacing="4"
+              >
+                <Flex alignItems={'center'}>
+                  <Image
+                    src={nameIcon}
+                    alt={'nameIcon'}
+                    pr={'12px'}
+                  />
+                  <Typography
+                    variant="subTitleRegular"
+                    text={props.name}
+                  />
+                </Flex>
+                <Flex alignItems={'center'}>
+                  <Image
+                    src={locationIcon}
+                    alt={'locationIcon'}
+                    pr={'12px'}
+                  />
+                  <Typography
+                    variant="subTitleRegular"
+                    text={props.location}
+                  />
+                </Flex>
+                <Flex alignItems={'center'}>
+                  <Image
+                    src={CallphoneIcon}
+                    alt={'CallphoneIcon'}
+                    pr={'12px'}
+                  />
+                  <Typography
+                    variant="subTitleRegular"
+                    text={props.number.toString()}
+                  />
+                </Flex>
+              </Stack>
+            </Box>
+          </CardBody>
+        </DetailsCard>
+      ) : (
+        <Accordion accordionHeader={props.title}>
+          <CardBody
+            pt={'unset'}
+            pb={'15px'}
+          >
+            <Box>
+              <Stack
+                divider={<StackDivider />}
+                spacing="4"
+              >
+                <Flex alignItems={'center'}>
+                  <Image
+                    src={nameIcon}
+                    alt={'nameIcon'}
+                    pr={'12px'}
+                  />
+                  <Typography
+                    variant="subTitleRegular"
+                    text={props.name}
+                  />
+                </Flex>
+                <Flex alignItems={'center'}>
+                  <Image
+                    src={locationIcon}
+                    alt={'locationIcon'}
+                    pr={'12px'}
+                  />
+                  <Typography
+                    variant="subTitleRegular"
+                    text={props.location}
+                  />
+                </Flex>
+                <Flex alignItems={'center'}>
+                  <Image
+                    src={CallphoneIcon}
+                    alt={'CallphoneIcon'}
+                    pr={'12px'}
+                  />
+                  <Typography
+                    variant="subTitleRegular"
+                    text={props.number.toString()}
+                  />
+                </Flex>
+              </Stack>
+            </Box>
+          </CardBody>
+        </Accordion>
+      )}
+    </>
   )
 }
 

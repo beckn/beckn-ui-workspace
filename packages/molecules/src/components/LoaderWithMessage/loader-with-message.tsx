@@ -1,10 +1,10 @@
 import { Loader } from '@beckn-ui/molecules'
-import { Box, Text } from '@chakra-ui/react'
+import { Box, Text, Image } from '@chakra-ui/react'
 import React from 'react'
 import { LoaderWithMessagePropsModel } from './loader-with-message.types'
 
 const LoaderWithMessage: React.FC<LoaderWithMessagePropsModel> = props => {
-  const { loadingText = '', loadingSubText = '', dataTest } = props
+  const { loadingText = '', loadingSubText = '', dataTest, image } = props
   return (
     <Loader dataTest={dataTest}>
       <Box
@@ -26,6 +26,12 @@ const LoaderWithMessage: React.FC<LoaderWithMessagePropsModel> = props => {
         >
           {loadingSubText}
         </Text>
+        {image && (
+          <Image
+            mt="20px"
+            src={image}
+          />
+        )}
       </Box>
     </Loader>
   )

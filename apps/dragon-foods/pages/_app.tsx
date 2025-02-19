@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import type { AppProps } from 'next/app'
 
 import Layout from '@components/layout/Layout'
@@ -21,6 +21,7 @@ import ErrorBoundary from '@beckn-ui/common/src/components/errorBoundary'
 function MyApp({ Component, pageProps }: AppProps) {
   const { t } = useLanguage()
   const router = useRouter()
+
   return (
     <BecknProvider
       theme={{

@@ -8,16 +8,21 @@ export interface User {
   provider: string
   updatedAt: Date
   username: string
+  isOtpVerified?: boolean
   agent?: {
     id: string
     first_name: string
     last_name: string
+    agent_profile: {
+      phone_number: number | string
+    }
   }
   role?: {
     id: number
     name: string
     type: string
   }
+  deg_wallet?: DegWalletDetails
 }
 
 // Sign-In related models
@@ -97,4 +102,16 @@ export interface SignUpComponentProps {
   onSignUp: () => void
   initialFormData?: SignUpFormProps
   t: (key: string) => string
+}
+
+export interface DegWalletDetails {
+  id: number
+  energy_identities_consent: boolean
+  energy_assets_consent: boolean
+  energy_transactions_consent: boolean
+  deg_wallet_id: string
+  createdAt?: string
+  updatedAt?: string
+  publishedAt?: string
+  provider: string | null
 }

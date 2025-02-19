@@ -14,4 +14,7 @@ export interface ProductSummaryPropsModel {
   productCta?: ProductCtaProps
   dataTestTitle?: string
   dataTestDescription?: string
+  domain?: string
+  showPriceInSummary?: boolean
+  providerImage?: string
 }

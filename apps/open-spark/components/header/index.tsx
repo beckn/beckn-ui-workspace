@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { AuthRootState } from '@store/auth-slice'
 import { ROLE } from '@lib/config'
 import profileIcon from '@public/images/user_profile.svg'
+import { RootState } from '@store/index'
 
 const Header = () => {
   const {
@@ -17,6 +18,7 @@ const Header = () => {
     SubHeader: {
       backIconList,
       bottomHeaderBlackList,
+      cartIconBlackList,
       headerBlackList,
       headerFrenchNames,
       headerNames,
@@ -30,6 +32,9 @@ const Header = () => {
   const { t, locale } = useLanguage()
   const dispatch = useDispatch()
   const { profileEditable } = useSelector((state: UserRootState) => state.user)
+
+  const pathType = useSelector((state: RootState) => state.navigation.type)
+  const showCartIcon = pathType !== 'RENT_AND_HIRE'
 
   const renderTopHeader = !topHeaderBlackList.includes(router.pathname)
   const renderBottomHeader = !bottomHeaderBlackList.includes(router.pathname)
@@ -48,7 +53,7 @@ const Header = () => {
     <Box>
       {renderTopHeader && (
         <TopHeader
-          appLogo={'/images/OpenSparkTopLogo.svg'}
+          appLogo={'/images/Spark.svg'}
           t={key => t[key]}
           headerConstants={{
             blackList: {
@@ -65,7 +70,7 @@ const Header = () => {
         <SubHeader
           locale={locale!}
           t={key => t[key]}
-          showCartIcon={false}
+          showCartIcon={showCartIcon}
           profileSection={profileSection}
           headerConstants={{
             headerNames: {
@@ -76,7 +81,8 @@ const Header = () => {
               headerList: headerBlackList,
               backIconList: backIconList,
               editIconList: editIconList,
-              infoIconList: infoIconList
+              infoIconList: infoIconList,
+              cartIconList: cartIconBlackList
             }
           }}
           handleClickOnEdit={() => {

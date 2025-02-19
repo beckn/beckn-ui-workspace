@@ -28,12 +28,17 @@ const getHeaderTitleForPage = (
   switch (true) {
     case headerList.includes(pathName):
       return (
-        <Text
-          className={Styles.header_title_text}
-          data-test={testIds.pageName}
+        <Box
+          className={Styles.header_title}
+          w={['60%', '60%', 'unset']}
         >
-          {customPagename || values[pathName]}
-        </Text>
+          <Text
+            className={Styles.header_title_text}
+            data-test={testIds.pageName}
+          >
+            {customPagename || values[pathName]}
+          </Text>
+        </Box>
       )
     default:
       return (

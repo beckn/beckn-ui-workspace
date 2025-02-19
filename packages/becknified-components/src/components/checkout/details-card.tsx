@@ -11,7 +11,9 @@ const DetailsCard: React.FC<DetailsCardProps> = props => {
     <>
       <Card
         mb={'20px'}
-        boxShadow={'0px 8px 10px -6px rgba(0, 0, 0, 0.1), 0px 20px 25px -5px rgba(0, 0, 0, 0.1)'}
+        boxShadow={
+          '0px 4px 6px -1px rgba(0, 0, 0, 0.1), 0px 2px 4px -1px rgba(0, 0, 0, 0.06), 0px 8px 24px 0px rgba(0, 0, 0, 0.12)'
+        }
         borderRadius={'12px'}
         opacity={props.isDisabled ? 0.5 : 'unset'}
         pointerEvents={props.isDisabled ? 'none' : 'auto'}

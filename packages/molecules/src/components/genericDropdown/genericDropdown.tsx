@@ -1,7 +1,8 @@
-import { Menu, MenuButton, MenuList, MenuItem, Button } from '@chakra-ui/react'
+import { Menu, MenuButton, MenuList, MenuItem, Button, FormLabel, Box, useTheme } from '@chakra-ui/react'
 import { ChevronDownIcon } from '@chakra-ui/icons'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import _ from 'lodash'
+import Styles from './dropdown.module.css'
 
 interface OptionModel {
   value: string
@@ -36,6 +37,10 @@ export const GenericDropdown = <T extends string | number>({
 }: DropdownProps<T>) => {
   const menuButtonRef = useRef<HTMLButtonElement>(null)
   const [menuWidth, setMenuWidth] = useState<string | null>(null)
+  const [active, setActive] = useState(false)
+
+  const theme = useTheme()
+  const primaryColor = theme.colors.primary['100']
 
   useEffect(() => {
     if (menuButtonRef.current) {
@@ -43,14 +48,17 @@ export const GenericDropdown = <T extends string | number>({
     }
   }, [menuButtonRef.current])
 
+  const selectedOption = useCallback(() => options?.find(option => option.value === selectedValue), [selectedValue])
+
   const getSelectedLabel = () => {
-    const selectedOption = options?.find(option => option.value === selectedValue)
-    return selectedOption ? selectedOption.label : _.startCase(placeholder)
+    const selectedValue = selectedOption()
+    return selectedValue ? selectedValue.label : '' // _.startCase(placeholder)
   }
 
   return (
     <Menu key={key}>
       <MenuButton
+        position={'relative'}
         as={Button}
         rightIcon={
           <ChevronDownIcon
@@ -61,7 +69,7 @@ export const GenericDropdown = <T extends string | number>({
         sx={{
           width: '100%',
           borderBottom: '1px solid #e2e8f0',
-          fontSize: '14px',
+          fontSize: '16px',
           borderRadius: 'unset',
           padding: '0 16px',
           paddingLeft: 'unset',
@@ -69,14 +77,23 @@ export const GenericDropdown = <T extends string | number>({
           transition: 'all 0.3s ease-in-out',
           marginBottom: '0px',
           _hover: { backgroundColor: '#ffffff' },
-          _active: { backgroundColor: '#ffffff' },
+          _active: { backgroundColor: '#ffffff', borderColor: primaryColor },
           textAlign: 'left',
+          // color: selectedOption() ? '' : '#868686',
           ...buttonStyles
         }}
         name={name}
         ref={menuButtonRef}
         data-test={dataTest}
       >
+        {placeholder && (
+          <label
+            className={Styles.input_label}
+            style={{ color: active ? primaryColor : 'inherit', top: active || selectedOption() ? '-11px' : '11px' }}
+          >
+            {placeholder}
+          </label>
+        )}
         {getSelectedLabel()}
       </MenuButton>
       <MenuList
@@ -84,11 +101,13 @@ export const GenericDropdown = <T extends string | number>({
         maxHeight={maxHeight} // Add max height
         overflowY="auto"
         data-test={`${dataTest}-menu-list`}
+        onFocus={() => setActive(true)}
+        onBlur={() => setActive(false)}
       >
         {options?.map((option: OptionModel, index) => (
           <MenuItem
             key={index}
-            onClick={() => handleChange(option)}
+            onClick={() => handleChange({ ...option, name } as any)}
             style={withColors && option.color ? { color: option.color } : {}}
             data-test={`menu-item-${index}`}
             fontSize={'14px'}

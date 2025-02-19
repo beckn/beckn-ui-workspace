@@ -1,6 +1,10 @@
+import SearchAndDiscoverOpenSpark from './searchAndDiscover/searchAndDiscoverOpenSpark'
+
 export { default as TopSheet } from './topSheet'
 export { default as HomePageContent } from './homePageContent'
 export { default as SearchAndDiscover } from './searchAndDiscover'
+export { SearchAndDiscoverOpenSpark }
+
 export { default as TopHeader } from './topHeader'
 export { default as SubHeader } from './subHeader'
 export { default as PaymentMethodSelection } from './paymentMethodSelection'
