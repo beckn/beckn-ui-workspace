@@ -110,12 +110,18 @@ const ProductCard: React.FC<ProductCardProps> = props => {
                 alignItems={'flex-start'}
                 w={'100%'}
               >
-                {product.domainCategory ? (
-                  <Image
-                    w={'60px'}
-                    mt="5px"
-                    src={typeof product.domainCategory === 'string' ? product.domainCategory : ''}
-                  />
+                {product.domain ? (
+                  <Text
+                    className="domain"
+                    fontSize={'0.8rem'}
+                    mb={'10px'}
+                    noOfLines={2}
+                    textOverflow="ellipsis"
+                    whiteSpace="pre-wrap"
+                    overflowWrap="break-word"
+                  >
+                    {product.domain.split(':').join(' ').toLocaleLowerCase()}
+                  </Text>
                 ) : (
                   product.shortDesc && (
                     <Text
@@ -190,26 +196,36 @@ const ProductCard: React.FC<ProductCardProps> = props => {
                 </Flex>
               )}
               {productInfoDataSource &&
-                typeof productInfoDataSource === 'object' &&
-                Object.entries(productInfoDataSource as Record<string, any>).map(([key, value]) => (
-                  <Flex
-                    fontSize="12px"
-                    alignItems="center"
-                    mb="8px"
-                    key={key}
-                  >
-                    <Text fontWeight="600">{key}:</Text>
-                    <Text
-                      pl="3px"
-                      noOfLines={1}
-                      textOverflow="ellipsis"
-                      whiteSpace="pre-wrap"
-                      overflowWrap="break-word"
+              typeof productInfoDataSource === 'object' &&
+              Object.keys(productInfoDataSource).includes('image') ? (
+                <Image
+                  w={'60px'}
+                  mt="5px"
+                  src={productInfoDataSource['image']}
+                />
+              ) : (
+                <>
+                  {Object.entries(productInfoDataSource as Record<string, any>).map(([key, value]) => (
+                    <Flex
+                      fontSize="12px"
+                      alignItems="center"
+                      mb="8px"
+                      key={key}
                     >
-                      {value}
-                    </Text>
-                  </Flex>
-                ))}
+                      <Text fontWeight="600">{key}:</Text>
+                      <Text
+                        pl="3px"
+                        noOfLines={1}
+                        textOverflow="ellipsis"
+                        whiteSpace="pre-wrap"
+                        overflowWrap="break-word"
+                      >
+                        {value}
+                      </Text>
+                    </Flex>
+                  ))}
+                </>
+              )}
 
               <Flex
                 justifyContent={'space-between'}

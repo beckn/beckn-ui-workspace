@@ -33,7 +33,7 @@ const ProductCta: React.FC<ProductCtaProps> = ({
       borderRadius={'4px'}
       mb="20px"
     >
-      {isMobile && (
+      {!noPrice && isMobile && (
         <Typography
           text={title || 'Total'}
           variant="subTextSemibold"
