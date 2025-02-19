@@ -36,7 +36,7 @@ import axios from '@services/axios'
 import { parseSearchFinancelist } from '@utils/serach-utils-finance'
 import { discoveryEmiPlanActions } from '@store/discoveryEmiPlan-slice'
 import AddNewItemModal from '@components/modal/AddNewItemModal'
-import { emiFormActions } from '@store/emiForm-slice'
+import { emiFormActions, EMIFormState } from '@store/emiForm-slice'
 import { setApiResponse, setEmiDetails } from '@store/emiSelect-slice'
 import { UserRootState } from '@store/user-slice'
 import { AuthRootState } from '@store/auth-slice'
@@ -109,6 +109,7 @@ const EMIApplicationModal = ({
 
   const [errors, setErrors] = useState<FormErrors>({})
   const toast = useToast()
+  const dispatch = useDispatch()
   const [selectedEmiPlan, setSelectedEmiPlan] = useState<string | null>(null)
   const selectedEmi = useSelector((state: any) => state.selectedEmi.apiResponse[0]?.message.order.items) || 0
   const monthlyInstallment = useSelector((state: any) => state.selectedEmi.emiDetails)
@@ -180,6 +181,8 @@ const EMIApplicationModal = ({
       ...prev,
       [field]: value
     }))
+
+    dispatch(emiFormActions.updateForm({ [field]: value }))
 
     // Clear error when user starts typing
     if (errors[field]) {
@@ -535,7 +538,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
   const [showSuccess, setShowSuccess] = useState(false)
   const [checkedState, setCheckedState] = useState<string | null>(null)
   const [checkedPayment, setCheckedPayment] = useState<string | null>(null)
-  const formData = useSelector((state: any) => state.emiForm)
+  const formData = useSelector((state: EMIFormState) => state)
   const emiPlansData = useSelector((state: any) => state.discoveryEmiPlan)
   const { transactionId, products } = useSelector((state: any) => state.discoveryEmiPlan)
   const [selectedEmiDetails, setSelectedEmiDetails] = useState<any>(null)
@@ -565,6 +568,8 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
   const dispatch = useDispatch()
   const { user } = useSelector((state: AuthRootState) => state.auth)
   const [getDocuments, { isLoading: verifyLoading }] = useGetDocumentsMutation()
+  const selectAPIRes = useSelector((state: any) => state.selectedEmi.apiResponse)
+  const selectedEmi = useSelector((state: any) => state.selectedEmi.apiResponse[0]?.message?.order?.items) || []
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
   const fetchEMIPlans = (isDiscounted = false) => {
@@ -666,15 +671,111 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
     setSelectedPlan('')
   }
 
-  const handleInputChange = (field: string) => (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    dispatch(emiFormActions.updateForm({ [field]: event.target.value }))
+  const handleFinanceOnConfirm = () => {
+    if (selectAPIRes && selectedEmi.length > 0) {
+      const calculatedEMIs = JSON.parse(localStorage.getItem('calculatedEMIs')!) || 0
+      console.log('selectedPlan', calculatedEMIs[selectedEmi[0].id]) // calculatedEMIs[selectedPlan.i])
+
+      const payload = {
+        data: [
+          {
+            context: {
+              transaction_id: transactionId,
+              bpp_id: selectAPIRes[0].context.bpp_id,
+              bpp_uri: selectAPIRes[0].context.bpp_uri,
+              domain: 'deg:finance'
+            },
+            message: {
+              orders: [
+                {
+                  items: selectAPIRes[0].message.order.items.filter(item => item.id === selectedEmi[0].id), // calculatedEMIs[selectedPlan.i].id),
+                  provider: {
+                    id: selectAPIRes[0].message.order.provider.id
+                  },
+                  fulfillments: [
+                    {
+                      type: 'Delivery',
+                      customer: {
+                        person: {
+                          name: formData.fullName
+                        },
+                        contact: {
+                          phone: formData.mobileNumber
+                        }
+                      },
+                      stops: [
+                        {
+                          location: {
+                            gps: '13.2008459,77.708736',
+                            address:
+                              "123, Terminal 1, Kempegowda Int'\''l Airport Rd, A - Block, Gangamuthanahalli, Karnataka 560300, India",
+                            city: {
+                              name: 'Gangamuthanahalli'
+                            },
+                            state: {
+                              name: 'Karnataka'
+                            },
+                            country: {
+                              code: 'IND'
+                            },
+                            area_code: '75001'
+                          },
+                          contact: {
+                            phone: formData.mobileNumber,
+                            email: user?.email
+                          }
+                        }
+                      ]
+                    }
+                  ],
+                  billing: {
+                    name: formData.fullName,
+                    address:
+                      "123, Terminal 1, Kempegowda Int'\''l Airport Rd, A - Block, Gangamuthanahalli, Karnataka 560300, India",
+                    state: {
+                      name: 'Gangamuthanahalli'
+                    },
+                    city: {
+                      name: 'Karnataka'
+                    },
+                    email: user?.email,
+                    phone: formData.mobileNumber
+                  },
+                  payments: [
+                    {
+                      params: {
+                        amount: `${calculatedEMIs[selectedEmi[0].id].totalCost}`,
+                        currency: 'INR',
+                        bank_account_number: '1234002341',
+                        bank_code: 'INB0004321'
+                      },
+                      status: 'PAID',
+                      type: 'PRE-FULFILLMENT'
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+      axios
+        .post(`${apiUrl}/confirm`, payload)
+        .then(response => {
+          // dispatch(setApiResponse(response.data))
+        })
+        .catch(error => {
+          console.error('Error calling select API:', error.response ? error.response.data : error.message)
+        })
+    }
   }
 
   const handleOnSubmit = () => {
     console.log('Submitting Form:', formData)
-
+    console.log(localStorage.getItem('actualCost'))
     setIsSubmitting(true)
     setOpenModal(false)
+    handleFinanceOnConfirm()
 
     setTimeout(() => {
       setIsSubmitting(false)
@@ -693,6 +794,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
       return
     }
     const emiDetails = selectedPlan.item.map((item: any, ind: number) => {
+      const itemId = item.id
       const quantity = Number(cartItems[0]?.quantity) || 1
       const totalPrice = Number(cartItems[ind]?.price?.value || 0)
 
@@ -720,7 +822,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
       const totalCost = emi * months
 
       const actualInterestAmount = totalCost - approvedLoanAmount
-      return { emi, actualInterestAmount, annualInterestRate, totalCost, payableAmount: newPayableAmount }
+      return { emi, actualInterestAmount, annualInterestRate, totalCost, payableAmount: newPayableAmount, itemId }
     })
 
     dispatch(setEmiDetails({ emiDetails }))
@@ -824,7 +926,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
   }
 
   const calculateEMIDetails = (item: any, cartItems: any[], index: number, price: any, plan: any) => {
-    console.log('Dank', plan)
+    console.log('Dank', plan, item, cartItems)
     const storageKey = `originalInterestRate_${plan.id}`
 
     const quantity = Number(cartItems[0]?.quantity) || 1
@@ -877,7 +979,20 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
     }
 
     const actualInterestAmount = totalCost - approvedLoanAmount
-
+    localStorage.setItem(
+      'calculatedEMIs',
+      JSON.stringify({
+        ...JSON.parse(localStorage.getItem('calculatedEMIs')!),
+        [item.id]: {
+          emi,
+          totalCost,
+          actualInterestAmount,
+          payableAmount: newPayableAmount,
+          originalRate: annualInterestRate,
+          nonDiscountedPrice
+        }
+      })
+    )
     return {
       emi,
       totalCost,

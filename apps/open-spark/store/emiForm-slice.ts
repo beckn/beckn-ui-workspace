@@ -1,13 +1,25 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-interface EMIFormState {
+export interface EMIFormState {
   country: string
   idNumber: string
+  panCard: string
+  aadhaar: string
+  fullName: string
+  dateOfBirth: Date | null
+  mobileNumber: string
+  loanTenure: string
 }
 
 const initialState: EMIFormState = {
-  country: 'India',
-  idNumber: ''
+  country: '',
+  idNumber: '',
+  panCard: '',
+  aadhaar: '',
+  fullName: '',
+  dateOfBirth: null,
+  mobileNumber: '',
+  loanTenure: ''
 }
 
 const emiFormSlice = createSlice({
