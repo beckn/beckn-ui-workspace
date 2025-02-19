@@ -21,6 +21,7 @@ const OrderSummaryBox: React.FC<OrderSummaryProps> = ({
       <div className={styles.orderSummaryContainer}>
         <Typography
           variant="titleRegular"
+          fontWeight="600"
           text={orderSummaryText}
           dataTest={dataTestText}
         />

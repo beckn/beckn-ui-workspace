@@ -400,8 +400,8 @@ select:-webkit-autofill:focus {
 .cart-item_product_count_price_container__X6rK1 {
   align-items: center;
   justify-content: space-between;
-  width: 80%;
-  margin: 0 auto;
+  /* width: 80%;
+  margin: 0 auto; */
   flex: unset !important;
 }
 .cart-text .chakra-text,

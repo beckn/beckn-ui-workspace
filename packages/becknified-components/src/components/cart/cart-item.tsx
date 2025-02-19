@@ -68,72 +68,74 @@ const CartItem: React.FC<CartItemProps> = ({
                   data-test={testIds.cartpage_itemImage}
                 />
               </div>
-              <div
-                className={Styles.product_name}
-                style={{
-                  width: alignment === 'row' ? '100%' : 'auto',
-                  fontSize: '14px'
-                }}
-                data-test={testIds.cartpage_itemName}
-                title={name}
-              >
-                {alignment === 'row' ? truncateText(name, 30) : name}
+              <div>
+                <div
+                  className={Styles.product_name}
+                  style={{
+                    width: alignment === 'row' ? '100%' : 'auto',
+                    fontSize: '14px'
+                  }}
+                  data-test={testIds.cartpage_itemName}
+                  title={name}
+                >
+                  {alignment === 'row' ? truncateText(name, 40) : name}
+                </div>
+                {providerName && (
+                  <div
+                    className={Styles.product_provider}
+                    data-test={testIds.cartpage_itemName}
+                  >
+                    <span> Sold By:</span> {providerName}
+                  </div>
+                )}
               </div>
             </Flex>
 
             {/* Provider name field */}
-            {providerName && (
-              <div
-                className={Styles.product_provider}
-                data-test={testIds.cartpage_itemName}
-              >
-                <span> Sold By:</span> {providerName}
-              </div>
-            )}
           </a>
         </div>
         <div className={Styles.product_count_price_container}>
-          <div className={Styles.product_counter_layout_container}>
-            <div className={Styles.product_counter_container}>
-              {counter === 1 ? (
-                <div
-                  className={Styles.delete_icon_container}
-                  data-testid="test-delete"
-                  data-test={testIds.cartpage_trashButton}
-                  onClick={() => decrement()}
-                >
-                  <HiOutlineTrash className={Styles.delete_icon} />
-                </div>
-              ) : (
-                <div
-                  onClick={() => decrement()}
-                  data-testid="test-decrement"
-                  className={Styles.minus_icon_container}
-                  data-test={testIds.cartpage_decrementButton}
-                >
-                  <HiMinusSm className={Styles.minus_icon} />
-                </div>
-              )}
-              <input
-                className={Styles.product_counter_input}
-                type="number"
-                min={1}
-                max={10}
-                value={counter}
-                onChange={onInputNumberChangeHandler}
-                disabled
-                data-test={testIds.cartpage_input}
-              />
+          {/* <div className={Styles.product_counter_layout_container}> */}
+          <div className={Styles.product_counter_container}>
+            {counter === 1 ? (
               <div
-                className={Styles.plus_icon_container}
-                data-testid="test-increment"
-                data-test={testIds.cartpage_incrementButton}
-                onClick={() => increment()}
+                className={Styles.delete_icon_container}
+                data-testid="test-delete"
+                data-test={testIds.cartpage_trashButton}
+                onClick={() => decrement()}
               >
-                <HiOutlinePlusSm className={Styles.plus_icon} />
+                <HiOutlineTrash className={Styles.delete_icon} />
               </div>
+            ) : (
+              <div
+                onClick={() => decrement()}
+                data-testid="test-decrement"
+                className={Styles.minus_icon_container}
+                data-test={testIds.cartpage_decrementButton}
+              >
+                <HiMinusSm className={Styles.minus_icon} />
+              </div>
+            )}
+            <input
+              className={Styles.product_counter_input}
+              type="number"
+              min={1}
+              max={10}
+              value={counter}
+              onChange={onInputNumberChangeHandler}
+              disabled
+              data-test={testIds.cartpage_input}
+            />
+            <div
+              className={Styles.plus_icon_container}
+              data-testid="test-increment"
+              data-test={testIds.cartpage_incrementButton}
+              onClick={() => increment()}
+            >
+              <HiOutlinePlusSm className={Styles.plus_icon} />
             </div>
           </div>
+          {/* </div> */}
           <div
             className={Styles.total_amount_container}
             data-Test={testIds.cartpage_productPrice}

@@ -139,7 +139,10 @@ const Search = () => {
         items={items}
         searchProps={{
           searchKeyword: searchKeyword as string,
-          placeholder: type === 'RENT_AND_HIRE' ? 'Search for Batteries, Capacity, Availability' : t.searchPlaceholder,
+          placeholder:
+            type === 'RENT_AND_HIRE'
+              ? 'Search for Batteries, Capacity, Availability'
+              : 'Search for Batteries, Solar panels...',
           setSearchKeyword,
           fetchDataOnSearch: fetchDataForSearch
         }}
