@@ -184,7 +184,6 @@ const retailOrderConfirmation = () => {
     if (confirmResponse && confirmResponse.length > 0) {
       setOrderId(confirmResponse[0].message.orderId.slice(0, 8))
       handleOnAddToWallet()
-      dispatch(cartActions.clearCart())
     }
   }, [confirmResponse])
 

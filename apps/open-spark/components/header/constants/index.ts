@@ -127,7 +127,8 @@ const cartIconBlackList: string[] = [
   '/orderHistory',
   '/secureCheckout',
   '/myRental',
-  '/rentAndHire'
+  '/rentAndHire',
+  '/orderDetails'
 ]
 const bottomHeaderBlackList = ['/orderConfirmation', '/', '/feedback', '/retailOrderConfirmation', '/upiScreen']
 const orderIconList = ['/orderDetails']

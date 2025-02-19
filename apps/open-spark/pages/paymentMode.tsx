@@ -889,6 +889,8 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
       }
       setAadharNumber('743160366069')
       setPANNumber('EPLPB9268F')
+      setWalletDetails(data)
+      setSyncWalletSuccess(true)
       const list: ItemMetaData[] = parseDIDData(result)['identities'].map((item, index) => {
         console.log('Dank', list)
         if (/\/type\/aadhar_card\/id\//.test((item as any).did)) {
@@ -911,8 +913,6 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
           data: item
         }
       })
-      setWalletDetails(data)
-      setSyncWalletSuccess(true)
     } catch (error) {
       console.error('Error fetching dashboard data:', error)
     } finally {

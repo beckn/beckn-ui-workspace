@@ -20,11 +20,11 @@ import {
 } from '@chakra-ui/react'
 import { CheckIcon, AddIcon } from '@chakra-ui/icons'
 import Image from 'next/image'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { AuthRootState } from '@store/auth-slice'
 import { decodeStream, useDecodeStreamMutation, useGetDocumentsMutation } from '@services/walletService'
 import { parseDIDData } from '@utils/did'
-import { formatDate } from '@beckn-ui/common'
+import { feedbackActions, formatDate } from '@beckn-ui/common'
 import Cookies from 'js-cookie'
 import axios from '@services/axios'
 import VerifiedIcon from '@public/images/verified.svg'
@@ -102,6 +102,7 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
     }
   }
 
+  const dispatch = useDispatch()
   const { user } = useSelector((state: AuthRootState) => state.auth)
   const [getDocuments, { isLoading: verifyLoading }] = useGetDocumentsMutation()
   const [decodeStream] = useDecodeStreamMutation()
@@ -175,6 +176,11 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
       console.log('API Response:', data)
       handleClose()
       handleOnSubmit({ startLoading: false, success: true })
+      dispatch(
+        feedbackActions.setToastData({
+          toastData: { message: 'Success', display: true, type: 'success', description: 'Published Successfully!' }
+        })
+      )
     } catch (error) {
       console.error('Error making API call:', error)
       throw error
