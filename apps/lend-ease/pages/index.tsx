@@ -25,6 +25,7 @@ interface OrderItem {
 }
 
 interface OrderDetails {
+  total_amount: ReactNode
   id: number
   status: string
   order_transaction_id: string
@@ -122,7 +123,7 @@ const HomePage = () => {
         <Text
           padding={'8px 10px'}
           borderRadius="6px"
-          backgroundColor="#4398E8"
+          backgroundColor="#1E3A5F"
           color={'#fff'}
           onClick={() => router.push('/loans')}
         >
@@ -244,7 +245,7 @@ const HomePage = () => {
                       whiteSpace={'nowrap'}
                       overflow={'hidden'}
                     >
-                      {/* {order?.order_id.items[0].name} */} NA
+                      Rs. {order?.order_id.total_amount}
                     </Text>
                   </Flex>
                   <Flex mb="5px">

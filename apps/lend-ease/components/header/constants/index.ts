@@ -69,7 +69,7 @@ const headerNames: PathnameObjectType = {
   '/myRental': 'My Rentals',
   '/rentAndHire': '',
   '/orderServices': 'My Services',
-  '/loans': 'Loans',
+  '/loans': 'Select Categories',
   // '/energyFinance': 'Energy Financing',
   '/loanApplications': 'Loan Applications'
 }
