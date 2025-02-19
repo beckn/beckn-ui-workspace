@@ -65,7 +65,9 @@ const MyStore = () => {
         }}
         searchProps={{
           searchPlaceholder:
-            type === 'RENT_AND_HIRE' ? 'Search for Batteries, Capacity, Availability' : t.searchPlaceholder,
+            type === 'RENT_AND_HIRE'
+              ? 'Search for Batteries, Capacity, Availability'
+              : 'Search for Batteries, Solar panels...',
           setSearchTerm: setSearchTerm,
           onSearchIconClick: searchIconClickHandler,
           onSearchInputEnterPress: navigateToSearchResults
