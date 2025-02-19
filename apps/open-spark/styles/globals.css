@@ -343,7 +343,7 @@ select:-webkit-autofill:focus {
   box-shadow: unset;
 }
 .myStore-search-wrapper .-product_card_layout_container {
-  min-height: 140px;
+  min-height: 160px;
 }
 .radio-for-emi {
   width: 20px !important;
