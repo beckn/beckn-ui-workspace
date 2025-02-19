@@ -11,6 +11,7 @@ import { orderActions } from '@beckn-ui/common/src/store/order-slice'
 import { testIds } from '@shared/dataTestIds'
 import { RENTAL_ORDER_CATEGORY_ID, RETAIL_ORDER_CATEGORY_ID } from '@lib/config'
 import { OrderHistoryData } from '@lib/types/orderHistory'
+import axios from '@services/axios'
 
 const orderStatusMap: Record<string, string> = {
   'In Review': 'Pending'
@@ -27,27 +28,23 @@ const OrderHistory = () => {
   const router = useRouter()
   console.log(bearerToken)
   useEffect(() => {
-    const myHeaders = new Headers()
-    myHeaders.append('Authorization', `Bearer ${bearerToken}`)
-    const requestOptions: RequestInit = {
-      method: 'GET',
-      headers: myHeaders,
-      redirect: 'follow'
-    }
-    fetch(
-      `${strapiUrl}/unified-beckn-energy/order-history/get?filters[category]=${RENTAL_ORDER_CATEGORY_ID}`,
-      requestOptions
-    )
-      .then(response => response.json())
-      .then(result => {
-        setOrderHistoryList(result)
-
-        setIsLoading(false)
-        if (result.error) {
-          return setError(result.error.message)
+    axios
+      .get(`${strapiUrl}/unified-beckn-energy/order-history/get?filters[category]=${RENTAL_ORDER_CATEGORY_ID}`, {
+        headers: {
+          Authorization: `Bearer ${bearerToken}`,
+          'Content-Type': 'application/json'
         }
       })
+      // .then(response => response.json())
+      .then(result => {
+        setOrderHistoryList(result.data)
+
+        setIsLoading(false)
+      })
       .catch(error => {
+        if (error) {
+          return setError(error.message)
+        }
         setIsLoading(false)
       })
       .finally(() => setIsLoading(false))
