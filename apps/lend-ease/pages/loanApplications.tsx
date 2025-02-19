@@ -86,7 +86,7 @@ const LoanApplications = () => {
 
   return (
     <Box
-      className="hideScroll"
+      className="hideScroll myStore-search-wrapper"
       maxH={'calc(100vh - 100px)'}
       overflowY="scroll"
     >
@@ -176,7 +176,7 @@ const LoanApplications = () => {
                   whiteSpace={'nowrap'}
                   overflow={'hidden'}
                 >
-                  {order.order_id.order_transaction_id}
+                  {order.customer_id.first_name}
                 </Text>
               </Flex>
               <Flex mb="5px">
@@ -195,7 +195,7 @@ const LoanApplications = () => {
                   whiteSpace={'nowrap'}
                   overflow={'hidden'}
                 >
-                  {order.order_id.order_transaction_id}
+                  {/* {order?.order_id.items[0].name} */} NA
                 </Text>
               </Flex>
               <Flex mb="5px">
@@ -214,7 +214,7 @@ const LoanApplications = () => {
                   whiteSpace={'nowrap'}
                   overflow={'hidden'}
                 >
-                  {order.order_id.order_transaction_id}
+                  {order?.order_id.items[0].name} months
                 </Text>
               </Flex>
               <Flex mb="5px">
@@ -233,7 +233,7 @@ const LoanApplications = () => {
                   whiteSpace={'nowrap'}
                   overflow={'hidden'}
                 >
-                  {order.order_id.order_transaction_id}
+                  {order?.order_id.items[0].sc_retail_product.max_price} %
                 </Text>
               </Flex>
 
