@@ -56,18 +56,18 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
     }
   }, [display])
 
-  // useEffect(() => {
-  //   const timer = setTimeout(() => {
-  //     setShowSplash(false)
-  //   }, 2000)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowSplash(false)
+    }, 2000)
 
-  //   return () => clearTimeout(timer)
-  // }, [])
+    return () => clearTimeout(timer)
+  }, [])
 
-  // // Show splash screen for first 2 seconds
-  // if (showSplash) {
-  //   return <Splash />
-  // }
+  // Show splash screen for first 2 seconds
+  if (showSplash) {
+    return <Splash />
+  }
 
   return (
     <div>

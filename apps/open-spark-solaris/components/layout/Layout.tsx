@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
@@ -12,6 +12,7 @@ import { Box, useToast } from '@chakra-ui/react'
 import { feedbackActions, FeedbackRootState, GeoLocationInputList, ToastType } from '@beckn-ui/common'
 import { Toast } from '@beckn-ui/molecules'
 import { testIds } from '@shared/dataTestIds'
+import Splash from '@components/splash/splash'
 
 const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const { locale } = useLanguage()
@@ -33,6 +34,8 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
     toast: { display, message, type, description }
   } = useSelector((state: FeedbackRootState) => state.feedback)
 
+  const [showSplash, setShowSplash] = useState(true)
+
   useEffect(() => {
     if (display) {
       toast({
@@ -53,10 +56,23 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
     }
   }, [display])
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowSplash(false)
+    }, 2000)
+
+    return () => clearTimeout(timer)
+  }, [])
+
+  // Show splash screen for first 2 seconds
+  if (showSplash) {
+    return <Splash />
+  }
+
   return (
     <div>
       <Head>
-        <title>Open Spark Trade</title>
+        <title>Open Spark Solaris</title>
       </Head>
       <div className={`${styles.container} ${styles.minHeight}`}>
         <NextNProgress height={7} />
