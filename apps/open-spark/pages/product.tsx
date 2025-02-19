@@ -14,7 +14,7 @@ const Product = () => {
   const { t } = useLanguage()
   const router = useRouter()
   const selectedProduct: ParsedItemModel = useSelector((state: DiscoveryRootState) => state.discovery.selectedProduct)
-  console.log(selectedProduct)
+  console.log('Dank', selectedProduct)
   const dispatch = useDispatch()
   const [counter, setCounter] = useState(1)
   const [totalPrice, setTotalPrice] = useState<number>(Number(selectedProduct.item.price.value))

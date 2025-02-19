@@ -67,6 +67,7 @@ const Search = () => {
       const res = await axios.post(`${apiUrl}/search`, searchPayload)
       dispatch(discoveryActions.addTransactionId({ transactionId: res.data.data[0].context.transaction_id }))
       const parsedSearchItems = parseSearchlist(res.data.data, type)
+      console.log('Dank inside', parsedSearchItems)
       dispatch(discoveryActions.addProducts({ products: parsedSearchItems }))
 
       // Cache the results with type-specific prefix
@@ -120,6 +121,7 @@ const Search = () => {
 
   const handleViewDetailsClickHandler = (selectedItem: ParsedItemModel, product: Product) => {
     const { item } = selectedItem
+    console.log('Dank inside', selectedItem)
     dispatch(discoveryActions.addSingleProduct({ product: selectedItem }))
     router.push({
       pathname: '/product',

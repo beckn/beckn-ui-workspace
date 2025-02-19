@@ -31,8 +31,8 @@ export const parseSearchlist = (data: SearchResponseModel[], type?: 'RENT_AND_HI
 
           const fulfillmentStart: any = item.fulfillments?.find(f => f.type === 'RENTAL_START' && f.state)
           const fulfillmentEnd: any = item.fulfillments?.find(f => f.type === 'RENTAL_END' && f.state)
-          let startTimestamp = fulfillmentStart ? Number(fulfillmentStart.state?.name || 0) : null
-          let endTimestamp = fulfillmentEnd ? Number(fulfillmentEnd.state?.name || 0) : null
+          const startTimestamp = fulfillmentStart ? Number(fulfillmentStart.state?.name || 0) : null
+          const endTimestamp = fulfillmentEnd ? Number(fulfillmentEnd.state?.name || 0) : null
 
           const startTime = formatTime(startTimestamp)
           const endTime = formatTime(endTimestamp)
@@ -43,6 +43,7 @@ export const parseSearchlist = (data: SearchResponseModel[], type?: 'RENT_AND_HI
             itemData = {
               ...item,
               short_desc: '',
+              long_desc: item.long_desc || item.short_desc || '',
               rating: '',
               price: { ...item.price, rateLabel: 'per hour' },
               productInfo: {
