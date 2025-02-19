@@ -35,7 +35,7 @@ const OrderHistory = () => {
       redirect: 'follow'
     }
     fetch(
-      `${strapiUrl}/unified-beckn-energy/order-history/get?filters[category]=${RETAIL_ORDER_CATEGORY_ID}`,
+      `${strapiUrl}/unified-beckn-energy/order-history/get?filters[category]=${RENTAL_ORDER_CATEGORY_ID}`,
       requestOptions
     )
       .then(response => response.json())
