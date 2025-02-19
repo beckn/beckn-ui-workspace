@@ -569,7 +569,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
   const { user } = useSelector((state: AuthRootState) => state.auth)
   const [getDocuments, { isLoading: verifyLoading }] = useGetDocumentsMutation()
   const selectAPIRes = useSelector((state: any) => state.selectedEmi.apiResponse)
-  const selectedEmi = useSelector((state: any) => state.selectedEmi.apiResponse[0]?.message?.order?.items) || []
+  const selectedEmi = useSelector((state: any) => state.selectedEmi?.apiResponse?.[0]?.message?.order?.items) || []
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
   const fetchEMIPlans = (isDiscounted = false) => {
@@ -688,7 +688,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
             message: {
               orders: [
                 {
-                  items: selectAPIRes[0].message.order.items.filter(item => item.id === selectedEmi[0].id), // calculatedEMIs[selectedPlan.i].id),
+                  items: selectAPIRes[0].message.order.items.filter((item: any) => item.id === selectedEmi[0].id), // calculatedEMIs[selectedPlan.i].id),
                   provider: {
                     id: selectAPIRes[0].message.order.provider.id
                   },
@@ -880,15 +880,17 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
       setIsLoading(true)
       setSyncWalletIsLoading(true)
       const result = await getDocuments(user?.deg_wallet?.deg_wallet_id!).unwrap()
+      const data = {
+        fullName: `${user?.agent?.first_name || ''} ${user?.agent?.last_name || ''}`,
+        dateOfBirth: new Date('01/05/1994'),
+        mobileNumber: `${user?.agent?.agent_profile.phone_number}`,
+        aadharNumber: '743160366069',
+        panNumber: 'EPLPB9268F'
+      }
+      setAadharNumber('743160366069')
+      setPANNumber('EPLPB9268F')
       const list: ItemMetaData[] = parseDIDData(result)['identities'].map((item, index) => {
-        const data = {
-          fullName: `${user?.agent?.first_name || ''} ${user?.agent?.last_name || ''}`,
-          dateOfBirth: new Date('01/05/1994'),
-          mobileNumber: `${user?.agent?.agent_profile.phone_number}`,
-          aadharNumber: '743160366069',
-          panNumber: 'EPLPB9268F'
-        }
-
+        console.log('Dank', list)
         if (/\/type\/aadhar_card\/id\//.test((item as any).did)) {
           setAadharNumber(item.id)
         } else {
@@ -900,9 +902,6 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
           setPANNumber('EPLPB9268F')
         }
 
-        setWalletDetails(data)
-        setSyncWalletSuccess(true)
-
         return {
           id: index,
           title: item.type,
@@ -912,6 +911,8 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
           data: item
         }
       })
+      setWalletDetails(data)
+      setSyncWalletSuccess(true)
     } catch (error) {
       console.error('Error fetching dashboard data:', error)
     } finally {
@@ -926,7 +927,6 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
   }
 
   const calculateEMIDetails = (item: any, cartItems: any[], index: number, price: any, plan: any) => {
-    console.log('Dank', plan, item, cartItems)
     const storageKey = `originalInterestRate_${plan.id}`
 
     const quantity = Number(cartItems[0]?.quantity) || 1
@@ -940,7 +940,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
     const storedRate = localStorage.getItem(storageKey)
     if (!storedRate) {
       // Store the highest interest rate as the original rate
-      const allRatesForProvider = plan.item.map(item => Number(parseFloat(item?.price?.value) || 0))
+      const allRatesForProvider = plan.item.map((item: any) => Number(parseFloat(item?.price?.value) || 0))
       const maxRate = Math.max(...allRatesForProvider)
       localStorage.setItem(storageKey, maxRate.toString())
     }
