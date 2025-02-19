@@ -54,9 +54,8 @@ export const parseSearchlist = (data: SearchResponseModel[], type?: 'RENT_AND_HI
           } else if (type === 'MY_STORE') {
             itemData = {
               ...item,
-
               productInfo: {
-                providerImage: provider?.images[0]?.url
+                image: provider?.images[0]?.url
               }
             }
           }
