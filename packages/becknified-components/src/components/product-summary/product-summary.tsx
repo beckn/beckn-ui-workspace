@@ -12,6 +12,7 @@ const ProductSummary: React.FC<ProductSummaryPropsModel> = props => {
     imageSrc,
     name,
     domain,
+    providerImage,
     providerName,
     itemForRenderer,
     ProductSummaryRenderer,
@@ -69,18 +70,38 @@ const ProductSummary: React.FC<ProductSummaryPropsModel> = props => {
                   fontSize={'20px'}
                   fontWeight={'500'}
                 />
+                {providerImage && (
+                  <Image
+                    margin={'0 auto'}
+                    mt="15px"
+                    src={providerImage}
+                  />
+                )}
                 {domain && (
-                  <Text
-                    className="domain"
-                    fontSize={'0.8rem'}
+                  <Flex
+                    alignItems={'center'}
+                    justifyContent="center"
                     mb={'0.4rem'}
-                    noOfLines={2}
-                    textOverflow="ellipsis"
-                    whiteSpace="pre-wrap"
-                    overflowWrap="break-word"
+                    mt="15px"
                   >
-                    {domain.split(':').join(' ').toLocaleLowerCase()}
-                  </Text>
+                    <Text
+                      fontSize={'15px'}
+                      fontWeight="500"
+                      mr="5px"
+                    >
+                      Platform:{' '}
+                    </Text>
+
+                    <Text
+                      fontSize={'0.8rem'}
+                      noOfLines={2}
+                      textOverflow="ellipsis"
+                      whiteSpace="pre-wrap"
+                      overflowWrap="break-word"
+                    >
+                      {domain.split(':').join(' ').toLocaleLowerCase()}
+                    </Text>
+                  </Flex>
                 )}
                 {providerName && (
                   <Flex marginTop={'1rem'}>

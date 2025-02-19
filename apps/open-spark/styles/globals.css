@@ -331,7 +331,7 @@ select:-webkit-autofill:focus {
 }
 .myStore-search-wrapper p {
   display: -webkit-box;
-  -webkit-line-clamp: 1 !important;
+  -webkit-line-clamp: 2 !important;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -343,7 +343,7 @@ select:-webkit-autofill:focus {
   box-shadow: unset;
 }
 .myStore-search-wrapper .-product_card_layout_container {
-  min-height: 148px;
+  min-height: 140px;
 }
 .radio-for-emi {
   width: 20px !important;
@@ -422,7 +422,7 @@ select:-webkit-autofill:focus {
 }
 .product-text .domain {
   margin: 0 auto;
-  margin-top: 10px !important;
+  margin-top: 15px !important;
 }
 .domain {
   border-radius: 12px;

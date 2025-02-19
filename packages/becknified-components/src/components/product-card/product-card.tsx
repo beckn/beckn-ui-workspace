@@ -4,6 +4,7 @@ import StarIcon from '../../../public/images/Star.svg'
 import { ProductCardProps } from './product-card.types'
 import ProductPrice from '../product-price'
 import ProductRating from '../product-rating'
+import guideImage from '../images/GUIDE.svg'
 
 const ProductCard: React.FC<ProductCardProps> = props => {
   const {
@@ -17,7 +18,7 @@ const ProductCard: React.FC<ProductCardProps> = props => {
     dataTest = 'products',
     renderMode = 'short'
   } = props
-
+  console.log(product)
   if (ComponentRenderer) {
     return <ComponentRenderer dataSource={dataSource} />
   }
@@ -42,6 +43,7 @@ const ProductCard: React.FC<ProductCardProps> = props => {
           boxShadow={'0px 8px 10px 0px #0000001A'}
           data-test={dataTest}
         >
+          {/* {props.product?.guideImage && <Image src={props.product?.guideImage} />} */}
           <Box
             display={'flex'}
             position={'relative'}
@@ -100,6 +102,7 @@ const ProductCard: React.FC<ProductCardProps> = props => {
                   >
                     {product.name}
                   </Text>
+                  {product.domainCategory && <Image src={guideImage} />}
                 </Flex>
               )}
               <Flex
@@ -107,18 +110,12 @@ const ProductCard: React.FC<ProductCardProps> = props => {
                 alignItems={'flex-start'}
                 w={'100%'}
               >
-                {product.domain ? (
-                  <Text
-                    className="domain"
-                    fontSize={'0.8rem'}
-                    mb={'10px'}
-                    noOfLines={2}
-                    textOverflow="ellipsis"
-                    whiteSpace="pre-wrap"
-                    overflowWrap="break-word"
-                  >
-                    {product.domain.split(':').join(' ').toLocaleLowerCase()}
-                  </Text>
+                {product.domainCategory ? (
+                  <Image
+                    w={'60px'}
+                    mt="5px"
+                    src={typeof product.domainCategory === 'string' ? product.domainCategory : ''}
+                  />
                 ) : (
                   product.shortDesc && (
                     <Text

@@ -14,10 +14,14 @@ interface LocationProvider {
     size_type: string
   }[]
 }
+export interface providerImages {
+  url?: string
+}
 
-interface Message {
+export interface Message {
   name: string
   providers: LocationProvider[]
+  images?: providerImages[]
 }
 
 export interface SearchResponseModel {
@@ -29,13 +33,16 @@ export interface ParsedItemModel {
   id: string
   bppId: string
   bppUri: string
-  domain: string
+  domain?: string
   transactionId: string
   providerId: string
   providerName: string
+  providerImg?: Message[]
   item: Item
   rating?: string
   providerCoordinates: Coordinate
+  Message?: Message
+  domainCategory?: string
 }
 
 export interface AssemblyData {

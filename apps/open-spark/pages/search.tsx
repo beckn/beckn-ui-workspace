@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, Image } from 'react'
 import axios from '@services/axios'
 import { useDispatch, useSelector } from 'react-redux'
 import { useRouter } from 'next/router'
 
-import { discoveryActions, ParsedItemModel, SearchAndDiscover } from '@beckn-ui/common'
+import { discoveryActions, ParsedItemModel, SearchAndDiscover, SearchAndDiscoverOpenSpark } from '@beckn-ui/common'
 import { useLanguage } from '@hooks/useLanguage'
 import { DOMAIN, DOMAIN_PATH } from '@lib/config'
 import { Product } from '@beckn-ui/becknified-components'
@@ -135,7 +135,7 @@ const Search = () => {
 
   return (
     <Box className="myStore-search-wrapper search-text">
-      <SearchAndDiscover
+      <SearchAndDiscoverOpenSpark
         items={items}
         searchProps={{
           searchKeyword: searchKeyword as string,
@@ -156,9 +156,9 @@ const Search = () => {
         loaderProps={{
           isLoading,
           loadingText: 'Please wait!',
-          loadingSubText: 'While we fetch catalogues from UEI',
+          loadingSubText: 'fetching catalogues from the ONDC network',
           dataTest: testIds.loadingIndicator,
-          image: './images/loder-img.svg'
+          image: './images/loder-img-1.svg'
         }}
         catalogProps={{
           viewDetailsClickHandler: handleViewDetailsClickHandler

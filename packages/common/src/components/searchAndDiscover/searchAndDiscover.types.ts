@@ -1,5 +1,5 @@
 import { CatelogRenderMode, Product } from '@beckn-ui/becknified-components'
-import { ParsedItemModel } from '../../../lib/types'
+import { ParsedItemModel, SearchResponseModel } from '../../../lib/types'
 
 export interface SearchAndDiscoverProps {
   items: ParsedItemModel[]
