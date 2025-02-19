@@ -742,9 +742,9 @@ const OrderDetails = () => {
   const { address, name, phone } = billing
   const {
     customer: {
-      contact: { phone: shippingPhone },
-      person: { name: shippingName }
-    },
+      contact: { phone: shippingPhone, email: shippingEmail } = {},
+      person: { name: shippingName } = {}
+    } = {},
     stops
   } = fulfillments[0]
 
@@ -974,9 +974,9 @@ const OrderDetails = () => {
           {isDesktop && (
             <ShippingBlock
               title={t.shipping}
-              name={{ text: updatedShippingName || shippingName, icon: nameIcon }}
+              name={{ text: updatedShippingName! || shippingName!, icon: nameIcon }}
               address={{ text: shipmentAddress, icon: locationIcon }}
-              mobile={{ text: updateShippingPhone || shippingPhone, icon: CallphoneIcon }}
+              mobile={{ text: updateShippingPhone || shippingPhone!, icon: CallphoneIcon }}
               dataTest={testIds.orderDetailspage_shippingDetails}
             />
           )}
@@ -984,9 +984,9 @@ const OrderDetails = () => {
             <Accordion accordionHeader={t.shipping}>
               <ShippingBlock
                 // title={t.shipping}
-                name={{ text: updatedShippingName || shippingName, icon: nameIcon }}
+                name={{ text: updatedShippingName || shippingName!, icon: nameIcon }}
                 address={{ text: shipmentAddress, icon: locationIcon }}
-                mobile={{ text: updateShippingPhone || shippingPhone, icon: CallphoneIcon }}
+                mobile={{ text: updateShippingPhone || shippingPhone!, icon: CallphoneIcon }}
                 dataTest={testIds.orderDetailspage_shippingDetails}
               />
             </Accordion>
