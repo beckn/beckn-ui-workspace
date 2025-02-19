@@ -90,7 +90,7 @@ const Search = () => {
   }, [searchKeyword])
 
   const handleFilterOpen = () => {
-    setIsFilterOpen(!isFilterOpen)
+    // setIsFilterOpen(!isFilterOpen)
   }
 
   const handleFilterClose = () => {
