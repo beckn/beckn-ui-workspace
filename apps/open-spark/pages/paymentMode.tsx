@@ -559,7 +559,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
   const [newTotalCost, setNewTotalCost] = useState(() => {
     return Number(localStorage.getItem('totalCost')) || 0
   })
-
+  console.log(newTotalCost)
   const { t } = useLanguage()
   const router = useRouter()
   const dispatch = useDispatch()
@@ -614,10 +614,10 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
       }, index * 1500)
     })
     setTimeout(() => {
-      fetchEMIPlans(true)
       setDicountedSearch(true)
       setNewCalculationIsLoading(false)
-    }, 5000)
+    }, 10000)
+    fetchEMIPlans(true)
   }
 
   const {
@@ -783,15 +783,19 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
           fullName: `${user?.agent?.first_name || ''} ${user?.agent?.last_name || ''}`,
           dateOfBirth: new Date('01/05/1994'),
           mobileNumber: `${user?.agent?.agent_profile.phone_number}`,
-          aadharNumber: '123456789012',
+          aadharNumber: '743160366069',
           panNumber: 'EPLPB9268F'
         }
 
         if (/\/type\/aadhar_card\/id\//.test((item as any).did)) {
           setAadharNumber(item.id)
+        } else {
+          setAadharNumber('743160366069')
         }
         if (/\/type\/pan_card\/id\//.test((item as any).did)) {
           setPANNumber(item.id)
+        } else {
+          setPANNumber('EPLPB9268F')
         }
 
         setWalletDetails(data)
@@ -1088,7 +1092,12 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                                         borderRadius="4px"
                                         color="#fff"
                                         cursor={'pointer'}
-                                        onClick={handleDiscountedSearch}
+                                        onClick={() => {
+                                          // if (!localStorage.getItem('totalCost')) {
+                                          //   localStorage.setItem('totalCost', newTotalCost.toString())
+                                          // }
+                                          handleDiscountedSearch()
+                                        }}
                                       >
                                         Sync now
                                       </Text>
@@ -1098,7 +1107,6 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                                   <Box
                                     lineHeight={'14px'}
                                     pt="5px"
-                                    onClick={handleDiscountedSearch}
                                   >
                                     <Text
                                       fontSize={'10px'}
