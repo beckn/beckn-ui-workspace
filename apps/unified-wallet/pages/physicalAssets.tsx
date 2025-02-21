@@ -23,6 +23,7 @@ import axios from '@services/axios'
 import { ROLE, ROUTE_TYPE } from '@lib/config'
 import DeleteAlertModal from '@components/modal/DeleteAlertModal'
 import { Box } from '@chakra-ui/react'
+import { useUploadFileMutation } from '@services/UserService'
 
 const options = [
   { label: 'Battery', value: 'Battery' },
@@ -58,6 +59,7 @@ const PhysicalAssets = () => {
   const [getVerificationMethods, { isLoading: verificationMethodsLoading }] = useGetVerificationMethodsMutation()
   const [getDocuments, { isLoading: verifyLoading }] = useGetDocumentsMutation()
   const [deleteDocument, { isLoading: deleteDocLoading }] = useDeleteDocumentMutation()
+  const [uploadFile] = useUploadFileMutation()
 
   const fetchCredentials = async () => {
     setIsLoading(true)
@@ -135,6 +137,10 @@ const PhysicalAssets = () => {
       }
       if (selectedFile) {
         data.fileName = selectedFile?.title
+        const uploadPayload = new FormData()
+        uploadPayload.append('file', selectedFile.file)
+        const res: any = await uploadFile(uploadPayload)
+        data.fileUrl = res.data.fileUrl
       }
       setIsLoading(true)
 
