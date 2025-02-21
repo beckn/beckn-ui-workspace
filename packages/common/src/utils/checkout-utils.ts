@@ -1,5 +1,5 @@
 import { areObjectPropertiesEqual } from './general'
-import { ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
+import { CurrencyType, ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
 import { CartRetailItem, InitResponseModel, StatusResponseModel } from '../../lib/types'
 
 export const extractAddressComponents = (result: google.maps.GeocoderResult) => {
@@ -75,11 +75,16 @@ export const getSubTotalAndDeliveryCharges = (
   frequency?: number = 1
 ) => {
   console.log('frequency', frequency)
+  let totalPriceWithCurrency: { value: number; currency: CurrencyType } = { value: 0, currency: 'INR' }
   let subTotal: number = 0
   let currencySymbol
 
   if (initData && initData.length > 0) {
     initData.forEach(data => {
+      totalPriceWithCurrency = {
+        value: totalPriceWithCurrency.value + Number(data.message.order.quote.price?.value) || 0,
+        currency: data.message.order.quote.price?.currency || 'INR'
+      }
       if (data.message.order.quote.breakup) {
         data.message.order.quote.breakup.forEach(breakup => {
           const itemPrice = Number(parseFloat((Number(breakup.price.value) || 0).toString()).toFixed(2))
@@ -90,7 +95,11 @@ export const getSubTotalAndDeliveryCharges = (
     })
   }
   console.log('Final subtotal:', subTotal)
-  return { subTotal: Math.round(subTotal), currencySymbol }
+  const paymentBreakup = {
+    subTotal: subTotal ? Math.round(subTotal) : totalPriceWithCurrency.value,
+    currencySymbol: subTotal ? currencySymbol : totalPriceWithCurrency.currency
+  }
+  return paymentBreakup
 }
 
 export const getTotalCartItems = (cartItems: CartRetailItem[]) => {
