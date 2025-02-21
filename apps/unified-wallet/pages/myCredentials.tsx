@@ -22,6 +22,7 @@ import axios from '@services/axios'
 import { ROLE, ROUTE_TYPE } from '@lib/config'
 import DeleteAlertModal from '@components/modal/DeleteAlertModal'
 import { Box } from '@chakra-ui/react'
+import { useUploadFileMutation } from '@services/UserService'
 
 const options = [
   { label: 'Document', value: 'document' },
@@ -56,6 +57,7 @@ const MyCredentials = () => {
   const [getVerificationMethods, { isLoading: verificationMethodsLoading }] = useGetVerificationMethodsMutation()
   const [getDocuments, { isLoading: verifyLoading }] = useGetDocumentsMutation()
   const [deleteDocument, { isLoading: deleteDocLoading }] = useDeleteDocumentMutation()
+  const [uploadFile] = useUploadFileMutation()
 
   const fetchCredentials = async () => {
     try {
@@ -134,6 +136,10 @@ const MyCredentials = () => {
       }
       if (formData.type === 'document' && selectedFile) {
         data.fileName = selectedFile?.title
+        const uploadPayload = new FormData()
+        uploadPayload.append('file', selectedFile.file)
+        const res: any = await uploadFile(uploadPayload)
+        data.fileUrl = res.data.fileUrl
       } else if (formData.type === 'url' && formData.url !== '') {
         data.url = formData.url
       }

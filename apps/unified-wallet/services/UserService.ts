@@ -35,14 +35,22 @@ const extendedAuthApi = Api.injectEndpoints({
         headers: { Authorization: 'Bearer ' + Cookies.get('authToken') },
         body: { otp }
       })
+    }),
+    uploadFile: build.mutation({
+      query: (data: any) => ({
+        url: '/api/custom-upload',
+        method: 'POST',
+        headers: { Authorization: 'Bearer ' + Cookies.get('authToken') },
+        body: data
+      })
     })
   })
 })
 
-export const { useLoginMutation, useVerifyOtpMutation } = extendedAuthApi
+export const { useLoginMutation, useVerifyOtpMutation, useUploadFileMutation } = extendedAuthApi
 
 export const {
-  endpoints: { login, verifyOtp }
+  endpoints: { login, verifyOtp, uploadFile }
 } = extendedAuthApi
 
 export default extendedAuthApi
