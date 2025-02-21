@@ -42,6 +42,7 @@ export const parseSearchlist = (data: SearchResponseModel[], type?: 'RENT_AND_HI
           if (type === 'RENT_AND_HIRE') {
             itemData = {
               ...item,
+              name: provider.name,
               short_desc: '',
               long_desc: item.long_desc || item.short_desc || '',
               rating: '',

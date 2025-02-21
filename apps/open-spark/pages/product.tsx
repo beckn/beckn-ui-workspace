@@ -106,7 +106,7 @@ const Product = () => {
             imageSrc: selectedProduct.item.images?.[0].url!,
             showPriceInSummary: true,
             name: selectedProduct.item.name,
-            providerImage: selectedProduct?.item.productInfo?.providerImage,
+            providerImage: selectedProduct?.item.productInfo?.image,
             domain: selectedProduct.domain,
             // providerName: selectedProduct.providerName,
             secondaryDescription: selectedProduct.item.long_desc,
