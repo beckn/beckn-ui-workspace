@@ -31,6 +31,7 @@ export interface ItemMetaData {
   isVerified?: boolean
   image?: string
   data?: any
+  fileUrl?: string
 }
 
 interface ItemRendererProps {
