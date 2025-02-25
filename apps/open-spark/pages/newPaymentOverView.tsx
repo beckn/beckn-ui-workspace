@@ -88,6 +88,18 @@ const NewPaymentOverView = () => {
                       text={items.short_desc}
                       variant="subTextRegular"
                     />
+                    <Flex>
+                      <Typography
+                        fontWeight="600"
+                        text={'Sold by:'}
+                        variant="subTextRegular"
+                        style={{ width: '68px' }}
+                      />
+                      <Typography
+                        text={items.productInfo.providerName}
+                        variant="subTextRegular"
+                      />
+                    </Flex>
                   </Box>
                 </Flex>
 
@@ -162,7 +174,7 @@ const NewPaymentOverView = () => {
           >
             <Typography
               fontSize="15px"
-              text={`Loan Approved ${coverage}%`}
+              text={`Loan Approved (${coverage}%)`}
             />
             <Flex alignItems={'center'}>
               <Typography

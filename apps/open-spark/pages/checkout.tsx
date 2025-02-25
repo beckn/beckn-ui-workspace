@@ -322,6 +322,18 @@ const CheckoutPage = () => {
                         text={singleItem.short_desc}
                         variant="subTextRegular"
                       />
+                      <Flex>
+                        <Typography
+                          fontWeight="600"
+                          text={'Sold by:'}
+                          variant="subTextRegular"
+                          style={{ width: '68px' }}
+                        />
+                        <Typography
+                          text={singleItem.productInfo.providerName}
+                          variant="subTextRegular"
+                        />
+                      </Flex>
                     </Box>
                   </Flex>
 

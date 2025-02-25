@@ -57,7 +57,8 @@ export const parseSearchlist = (data: SearchResponseModel[], type?: 'RENT_AND_HI
               ...item,
               short_desc: undefined,
               productInfo: {
-                image: provider?.images[0]?.url
+                image: provider?.images[0]?.url,
+                providerName: provider.name
               },
               infoGuideIcon: '../images/GUIDE.svg' // TODO: need to fix this, currently not supported
             }
@@ -69,7 +70,7 @@ export const parseSearchlist = (data: SearchResponseModel[], type?: 'RENT_AND_HI
             domain: type === 'MY_STORE' ? message.name : '',
             transactionId: transaction_id,
             providerId: provider.id,
-            providerName: '',
+            // providerName: '',
             rating: provider.rating,
             item: itemData,
             providerCoordinates

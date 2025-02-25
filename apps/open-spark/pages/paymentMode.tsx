@@ -203,7 +203,6 @@ const EMIApplicationModal = ({
       ...formData,
       [name]: value
     }
-
     // const errors = validateCredForm(updatedFormData)
     // setErrors(prevErrors => ({
     //   ...prevErrors,
