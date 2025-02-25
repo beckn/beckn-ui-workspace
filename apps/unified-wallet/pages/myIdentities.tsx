@@ -22,7 +22,7 @@ import {
   toBase64,
   toSnakeCase
 } from '@utils/general'
-import { feedbackActions } from '@beckn-ui/common'
+import { feedbackActions, formatDate } from '@beckn-ui/common'
 import { generateAuthHeader, generateAuthHeaderForDelete } from '@services/cryptoUtilService'
 import { parseDIDData } from '@utils/did'
 import BottomModalScan from '@beckn-ui/common/src/components/BottomModal/BottomModalScan'
@@ -131,19 +131,22 @@ const MyIdentities = () => {
     try {
       setIsLoading(true)
       const result = await getDocuments(user?.did!).unwrap()
-      const list: ItemMetaData[] = parseDIDData(result)['identities'].map((item, index) => {
-        const docType: any = item.type.toLowerCase().replace(/[^a-z]/g, '')
-        const { image } = getDocIcon(docType)
-        return {
-          id: index,
-          title: item.type,
-          description: item.id,
-          isVerified: true,
-          image,
-          datetime: new Date().toString(),
-          data: item
-        }
-      })
+      const list: ItemMetaData[] = parseDIDData(result)
+        ['identities'].map((item, index) => {
+          const docType: any = item.type.toLowerCase().replace(/[^a-z]/g, '')
+          const { image } = getDocIcon(docType)
+          return {
+            id: index,
+            title: item.type,
+            description: item.id,
+            isVerified: true,
+            image,
+            datetime: item.createdAt || new Date(),
+            data: item
+          }
+        })
+        .filter(val => val)
+        .sort((a, b) => Number(b.data.createdAt) - Number(a.data.createdAt))
       setItems(list)
       setFilteredItems(list)
     } catch (error) {
@@ -243,7 +246,7 @@ const MyIdentities = () => {
       setIsLoading(true)
 
       const docDetails = JSON.stringify(data)
-
+      const createdAt = Math.floor(new Date().getTime() / 1000)
       const verificationMethodsRes = await getVerificationMethods(user?.did!).unwrap()
       const { did } = verificationMethodsRes[0]
 
@@ -253,7 +256,7 @@ const MyIdentities = () => {
         privateKey,
         publicKey,
         payload: {
-          name: `identities/type/${toSnakeCase(data?.type!)}/id/${data.credNumber}/${generateRandomCode()}`,
+          name: `identities/type/${toSnakeCase(data?.type!)}/id/${data.credNumber}/${createdAt}/${generateRandomCode()}`,
           stream: toBase64(docDetails)
         }
       })

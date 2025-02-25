@@ -313,6 +313,7 @@ const OrderDetails = () => {
         }
 
         const docDetails = JSON.stringify(data)
+        const createdAt = Math.floor(new Date().getTime() / 1000)
         const generatedOrderId = orderConfirmationData[0].message.order.id
         const verificationMethodsRes = await getVerificationMethods(user?.deg_wallet?.deg_wallet_id!).unwrap()
         const { did, challenge } = verificationMethodsRes[0]
@@ -323,7 +324,7 @@ const OrderDetails = () => {
           privateKey,
           publicKey,
           payload: {
-            name: `assets/physical/type/${toSnakeCase(data?.type!)}/source/spark/${generatedOrderId}`,
+            name: `assets/physical/type/${toSnakeCase(data?.type!)}/source/spark/${createdAt}/${generatedOrderId}`,
             stream: toBase64(docDetails)
           }
         })

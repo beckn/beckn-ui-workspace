@@ -19,13 +19,6 @@ import { useSelector } from 'react-redux'
 const Dashboard = () => {
   const { t } = useLanguage()
   const router = useRouter()
-  const apiKeyForGoogle = process.env.NEXT_PUBLIC_GOOGLE_API_KEY
-
-  const {
-    currentAddress,
-    error: currentLocationFetchError,
-    loading: loadingForCurrentAddress
-  } = useGeolocation(apiKeyForGoogle as string)
 
   const { user } = useSelector((state: AuthRootState) => state.auth)
   const theme = useTheme()

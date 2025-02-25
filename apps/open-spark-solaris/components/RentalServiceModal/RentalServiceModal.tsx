@@ -121,17 +121,20 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
       setIsLoading(true)
       const result = await getDocuments(user?.deg_wallet?.deg_wallet_id!).unwrap()
       console.log(result)
-      const list: BatteryOption[] = parseDIDData(result)['assets']['physical'].map((item, index) => {
-        return {
-          id: index.toString(),
-          name: item.type,
-          source: item.source,
-          invoice: item.attachment!,
-          isVerified: true,
-          timestamp: new Date().toString(),
-          data: item
-        }
-      })
+      const list: BatteryOption[] = parseDIDData(result)
+        ['assets']['physical'].map((item, index) => {
+          return {
+            id: index.toString(),
+            name: item.type,
+            source: item.source,
+            invoice: item.attachment!,
+            isVerified: true,
+            timestamp: item.createdAt || new Date(),
+            data: item
+          }
+        })
+        .filter(val => val)
+        .sort((a, b) => Number(b.data.createdAt) - Number(a.data.createdAt))
       setBatteryOptions(list)
     } catch (error) {
       console.error('Error fetching dashboard data:', error)
@@ -455,7 +458,7 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
                           fontSize="12px"
                           color="gray.500"
                         >
-                          {formatDate(battery.timestamp, 'do MMM yyyy, h.mma')}
+                          {formatDate((Number(battery?.timestamp) * 1000)!, 'do MMM yyyy, h.mma')}
                         </Text>
                         {/* <Text>{battery.data.attestation.length}</Text> */}
                       </Box>
