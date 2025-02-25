@@ -55,9 +55,11 @@ export const parseSearchlist = (data: SearchResponseModel[], type?: 'RENT_AND_HI
           } else if (type === 'MY_STORE') {
             itemData = {
               ...item,
+              short_desc: undefined,
               productInfo: {
                 image: provider?.images[0]?.url
-              }
+              },
+              infoGuideIcon: '../images/GUIDE.svg' // TODO: need to fix this, currently not supported
             }
           }
           itemsArray.push({
@@ -67,7 +69,7 @@ export const parseSearchlist = (data: SearchResponseModel[], type?: 'RENT_AND_HI
             domain: type === 'MY_STORE' ? message.name : '',
             transactionId: transaction_id,
             providerId: provider.id,
-            providerName: type === 'MY_STORE' ? provider.name : '',
+            providerName: '',
             rating: provider.rating,
             item: itemData,
             providerCoordinates
