@@ -19,13 +19,39 @@ import AssetsIcon from '@public/images/assets.svg'
 import TransactionsIcon from '@public/images/transactions.svg'
 import FinancialIcon from '@public/images/financial.svg'
 import SparkIcon from '@public/images/spark.svg'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import beckenFooter from '@public/images/footer.svg'
 import PoweredBy from '@beckn-ui/common/src/components/poweredBy'
 import NavigationItem from '@components/navigationItem'
+import { useGetDocumentsMutation } from '@services/walletService'
+import { AuthRootState } from '@store/auth-slice'
+import { parseDIDData } from '@utils/did'
 
 const MyAssets = () => {
+  const [count, setCount] = useState<{ credentialsCount: number; physicalAssetsCount: number }>({
+    credentialsCount: 0,
+    physicalAssetsCount: 0
+  })
+
   const router = useRouter()
+
+  const { user } = useSelector((state: AuthRootState) => state.auth)
+  const [getDocuments] = useGetDocumentsMutation()
+
+  const fetchCredentials = async () => {
+    try {
+      const result = await getDocuments(user?.did!).unwrap()
+      const credentialsCount = parseDIDData(result)['assets']['credentials'].length
+      const physicalAssetsCount = parseDIDData(result)['assets']['physical'].length
+      setCount({ credentialsCount, physicalAssetsCount })
+    } catch (error) {
+      console.error('Error fetching dashboard data:', error)
+    }
+  }
+
+  useEffect(() => {
+    fetchCredentials()
+  }, [])
 
   return (
     <Box
@@ -44,14 +70,14 @@ const MyAssets = () => {
       >
         <NavigationItem
           icon={IdentityIcon}
-          label={'My Credentials'}
+          label={`My Credentials ${count?.credentialsCount > 0 ? `(${count?.credentialsCount})` : ''}`}
           handleClick={() => router.push('/myCredentials')}
           dataTest={'credentials'}
           renderType="card"
         />
         <NavigationItem
           icon={AssetsIcon}
-          label={'Physical Assets'}
+          label={`Physical Assets ${count?.physicalAssetsCount > 0 ? `(${count?.physicalAssetsCount})` : ''}`}
           handleClick={() => router.push('/physicalAssets')}
           dataTest={'physical-assets'}
           renderType="card"

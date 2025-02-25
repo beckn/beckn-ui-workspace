@@ -65,7 +65,8 @@ const headerNames: PathnameObjectType = {
   '/secureCheckout': 'Secure Checkout',
   '/myRental': 'My Rentals',
   '/rentAndHire': '',
-  '/orderServices': 'My Services'
+  '/orderServices': 'My Services',
+  '/orderDetails': 'Order Details'
 }
 
 const headerFrenchNames: PathnameObjectType = {
@@ -100,7 +101,8 @@ const headerBlackList = [
   '/secureCheckout',
   '/myRental',
   '/rentAndHire',
-  '/orderServices'
+  '/orderServices',
+  '/orderDetails'
 ]
 
 const cartIconBlackList: string[] = [

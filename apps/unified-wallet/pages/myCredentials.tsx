@@ -244,6 +244,7 @@ const MyCredentials = () => {
             toastData: { message: 'Success', display: true, type: 'success', description: 'Deleted Successfully!' }
           })
         )
+        setIsDeleteModalOpen(false)
       } else {
         dispatch(
           feedbackActions.setToastData({

@@ -177,96 +177,97 @@ const ItemRenderer = (props: ItemRendererProps) => {
               gap="6px"
             >
               <Box onClick={() => handleOnClick(item)}>
-                {item.title && (
-                  <Flex
-                    justifyContent={'space-between'}
-                    alignItems={'flex-start'}
-                    w={'100%'}
-                    gap="10px"
-                  >
-                    <Text
-                      fontWeight={'600'}
-                      fontSize={'16px'}
-                      // mb={'0.7rem'}
-                      noOfLines={2}
-                      textOverflow="ellipsis"
-                      whiteSpace="pre-wrap"
-                      overflowWrap="break-word"
-                      width={'10rem'}
+                <Box>
+                  {item.title && (
+                    <Flex
+                      justifyContent={'space-between'}
+                      alignItems={'flex-start'}
+                      w={'100%'}
+                      gap="10px"
                     >
-                      {item.title}
-                    </Text>
-                    {showVerificationStatus && (
-                      <Box marginTop={'2px'}>
-                        {item?.isVerified ? (
-                          <Image
-                            src={VerifiedIcon}
-                            width={'80px'}
-                            height={'18px'}
-                          />
-                        ) : (
-                          <Image
-                            src={UnverifiedIcon}
-                            width={'80px'}
-                            height={'18px'}
-                          />
-                        )}
-                      </Box>
-                    )}
-                  </Flex>
-                )}
-                {item.data.source && (
-                  <Flex
-                    flexDir={'row'}
-                    gap="2px"
-                  >
-                    <Typography
-                      text={`Source:`}
-                      fontWeight={'700'}
-                      fontSize="10px"
-                    />
-                    <Typography
-                      text={item.data.source}
-                      fontSize="10px"
-                      color="#9E9E9E"
-                      style={{
-                        textTransform: 'capitalize'
-                      }}
-                    />
-                  </Flex>
-                )}
+                      <Text
+                        fontWeight={'600'}
+                        fontSize={'16px'}
+                        // mb={'0.7rem'}
+                        noOfLines={2}
+                        textOverflow="ellipsis"
+                        whiteSpace="pre-wrap"
+                        overflowWrap="break-word"
+                        width={'10rem'}
+                      >
+                        {item.title}
+                      </Text>
+                      {showVerificationStatus && (
+                        <Box marginTop={'2px'}>
+                          {item?.isVerified ? (
+                            <Image
+                              src={VerifiedIcon}
+                              width={'100px'}
+                              height={'22px'}
+                            />
+                          ) : (
+                            <Image
+                              src={UnverifiedIcon}
+                              width={'100px'}
+                              height={'22px'}
+                            />
+                          )}
+                        </Box>
+                      )}
+                    </Flex>
+                  )}
+                  {item.data.source && (
+                    <Flex
+                      flexDir={'row'}
+                      gap="2px"
+                    >
+                      <Typography
+                        text={`Source:`}
+                        fontWeight={'700'}
+                        fontSize="10px"
+                      />
+                      <Typography
+                        text={item.data.source}
+                        fontSize="10px"
+                        color="#9E9E9E"
+                        style={{
+                          textTransform: 'capitalize'
+                        }}
+                      />
+                    </Flex>
+                  )}
 
-                {item.description && (
-                  <Flex
-                    justifyContent={'space-between'}
-                    alignItems={'flex-start'}
-                    w={'100%'}
-                  >
-                    <Text
-                      fontSize={'10px'}
-                      // mb={'0.4rem'}
-                      noOfLines={2}
-                      textOverflow="ellipsis"
-                      whiteSpace="pre-wrap"
-                      overflowWrap="break-word"
-                      color={'#ACACAC'}
+                  {item.description && (
+                    <Flex
+                      justifyContent={'space-between'}
+                      alignItems={'flex-start'}
+                      w={'100%'}
                     >
-                      {`${item.description.slice(0, 2)}${getNoOfMasked(item.description.length - 6)}${item.description.slice(-4)}`}
-                    </Text>
-                  </Flex>
+                      <Text
+                        fontSize={'10px'}
+                        // mb={'0.4rem'}
+                        noOfLines={2}
+                        textOverflow="ellipsis"
+                        whiteSpace="pre-wrap"
+                        overflowWrap="break-word"
+                        color={'#ACACAC'}
+                      >
+                        {`${item.description.slice(0, 2)}${getNoOfMasked(item.description.length - 6)}${item.description.slice(-4)}`}
+                      </Text>
+                    </Flex>
+                  )}
+                </Box>
+                {/* <Box height={'14px'}> */}
+                {item?.data?.attachment && (
+                  <Typography
+                    text={item?.data?.attachment}
+                    fontSize={'10px'}
+                    fontWeight="600"
+                    color={primaryColor}
+                  />
                 )}
+                {/* </Box> */}
               </Box>
-              {/* <Box height={'14px'}> */}
-              {item?.data?.attachment && (
-                <Typography
-                  text={item?.data?.attachment}
-                  fontSize={'10px'}
-                  fontWeight="600"
-                  color={primaryColor}
-                />
-              )}
-              {/* </Box> */}
-
               {item?.datetime && (
                 <>
                   <Flex
@@ -331,6 +332,7 @@ const ItemRenderer = (props: ItemRendererProps) => {
           <AccordionPanel
             pb={'0px'}
             // mt="10px"
+            cursor="default"
           >
             {(renderingFrom === 'attestationDetails' ? item.data.attestations : getAttestationItems())?.map(
               (attestation: any, index: number) => (
@@ -356,8 +358,8 @@ const ItemRenderer = (props: ItemRendererProps) => {
                       <Image
                         src={attestation?.icon}
                         alt="attestation"
-                        width="20px"
-                        height="16px"
+                        width={renderingFrom === 'attestationDetails' ? '100px' : '20px'}
+                        height={renderingFrom === 'attestationDetails' ? '22px' : '16px'}
                       />
                     )}
                   </Flex>

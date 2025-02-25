@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import Router, { useRouter } from 'next/router'
 import { useLanguage } from '../hooks/useLanguage'
 import { CheckoutRootState, discoveryActions, ICartRootState, PaymentMethodSelectionProps } from '@beckn-ui/common'
@@ -47,12 +47,6 @@ import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import { currencyFormat } from '@utils/general'
 import { DetailCard } from '@beckn-ui/becknified-components'
-
-const messagesList = [
-  'Fetching transactions from your wallet...',
-  'Sending transaction history to Bajaj Finserv...',
-  'Fetching updated offers...'
-]
 
 interface FormData {
   fullName: string
@@ -160,6 +154,10 @@ const EMIApplicationModal = ({
       newErrors.mobileNumber = 'Mobile number must be 10 digits'
     }
 
+    if (!formData.loanTenure) {
+      newErrors.loanTenure = 'Loan tenure is required'
+    }
+
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
@@ -235,6 +233,10 @@ const EMIApplicationModal = ({
       })
     }
   }
+
+  const isFormFilled = useMemo(() => {
+    return Object.values(formData).every(value => value !== '') && Object.values(errors).every(value => value === '')
+  }, [formData, errors])
 
   return (
     <BottomModal
@@ -517,6 +519,7 @@ const EMIApplicationModal = ({
 
           <BecknButton
             text="Submit"
+            disabled={!isFormFilled}
             handleClick={handleSubmit}
           />
         </>
@@ -611,7 +614,12 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
     localStorage.removeItem('totalCost')
   }, [])
 
-  const handleDiscountedSearch = () => {
+  const handleDiscountedSearch = (text: string) => {
+    const messagesList = [
+      'Fetching transactions from your wallet...',
+      `Sending transaction history to ${text}...`,
+      'Fetching updated offers...'
+    ]
     setNewCalculationIsLoading(true)
     messagesList.forEach((message, index) => {
       setTimeout(() => {
@@ -1249,7 +1257,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                                           // if (!localStorage.getItem('totalCost')) {
                                           //   localStorage.setItem('totalCost', newTotalCost.toString())
                                           // }
-                                          handleDiscountedSearch()
+                                          handleDiscountedSearch(plan.providerName)
                                         }}
                                       >
                                         Sync now
