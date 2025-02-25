@@ -41,7 +41,6 @@ const Toast: React.FC<ToastProps> = ({ status, title, description, onClose, data
       position="relative"
       data-testid="main_container"
       data-test={dataTest}
-      minH="200px"
     >
       <Flex
         justifyContent={'space-between'}
