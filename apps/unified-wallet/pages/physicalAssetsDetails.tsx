@@ -36,6 +36,7 @@ const PhysicalAssetsDetails = () => {
       ...data,
       title: details?.fileName!,
       image: DocIcon,
+      fileUrl: details?.fileUrl,
       data: { ...data.data, source: null, attachment: null }
     })
   }
@@ -181,7 +182,9 @@ const PhysicalAssetsDetails = () => {
           <ItemRenderer
             item={item}
             renderMode={'long'}
-            handleOnClick={() => {}}
+            handleOnClick={() => {
+              window.open(`${process.env.NEXT_PUBLIC_STRAPI_URL}${item.fileUrl}`, '_blank')
+            }}
             attestationsCount={false}
             allowDeletion={false}
             showVerificationStatus={false}
