@@ -1040,6 +1040,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
             display={'grid'}
             height={'calc(60vh - 300px)'}
             alignContent={'center'}
+            textAlign="center"
           >
             <Loader text={t.loading} />
           </Box>
