@@ -81,7 +81,7 @@ const Cart = () => {
                 alignment: 'row',
                 quantity: singleItem.quantity,
                 name: singleItem.name,
-                providerName: singleItem.providerName,
+                providerName: singleItem.productInfo.providerName,
                 image: singleItem.images?.[0].url,
                 price: Number(singleItem.price.value),
                 symbol: singleItem.price.currency,
@@ -115,7 +115,7 @@ const Cart = () => {
             },
             orderSummaryText: t.orderSummary,
             totalQuantityText: t.totalQuantity,
-            totalAmountText: 'Subtotal',
+            totalAmountText: 'Total Amount',
             dataTestTotalQuantity: testIds.cartpage_totalQuantityText,
             dataTestTotalAmount: testIds.cartpage_totalAmountText,
             dataTestCta: testIds.cartpage_cartOrderButton
