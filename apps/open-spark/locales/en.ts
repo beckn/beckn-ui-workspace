@@ -107,7 +107,7 @@ const en: { [key: string]: string } = {
   gPay: 'Google Pay',
   items: 'Order Overview',
   allRequestFullfilled: 'All orders delivered!',
-  loading: 'Fetching financing plan from ONDC...',
+  loading: 'Fetching the best finance options from the ONDC network...',
   pleaseWait: 'Please wait!',
   fetchingTrackLoaderSubtext: 'While we fetch for tracking and support details',
   confirmLoaderSubtext: 'While we confirm your order',
