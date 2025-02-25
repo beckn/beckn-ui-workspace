@@ -80,7 +80,7 @@ const MyStore = () => {
       />
       {type === 'MY_STORE' && (
         <Flex
-          mt={'-60px'}
+          mt={'-80px'}
           ml={'-10px'}
           mr={'-10px'}
         >
@@ -101,7 +101,7 @@ const MyStore = () => {
       )}
       {type === 'RENT_AND_HIRE' && (
         <Flex
-          mt={'-60px'}
+          mt={'-80px'}
           ml={'-10px'}
           mr={'-10px'}
         >
