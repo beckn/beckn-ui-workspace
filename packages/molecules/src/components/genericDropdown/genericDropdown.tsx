@@ -102,6 +102,7 @@ export const GenericDropdown = <T extends string | number>({
         ref={menuButtonRef}
         data-test={dataTest}
       >
+        {getPlaceholderText()}
         {renderValueText()}
       </MenuButton>
       <MenuList

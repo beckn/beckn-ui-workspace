@@ -90,6 +90,7 @@ const OpenWalletBottomModal: React.FC<OpenWalletBottomModalProps> = ({ modalType
           energy_assets_consent: false,
           energy_transactions_consent: false
         })
+        dispatch(setShowInitialAlert(false))
         setModalType('otp')
       } else {
         console.error('Invalid profile ID')

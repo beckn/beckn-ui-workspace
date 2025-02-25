@@ -106,7 +106,7 @@ export const getTotalCartItems = (cartItems: CartRetailItem[]) => {
   let quantity = 0
 
   cartItems.forEach(item => {
-    quantity += item.quantity
+    quantity += Number(item.quantity)
   })
 
   return quantity
