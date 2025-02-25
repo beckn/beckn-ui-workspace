@@ -155,6 +155,7 @@ export default function ConfirmRent() {
       className="hideScroll"
       maxH="calc(100vh - 100px)"
       overflowY={'scroll'}
+      mb={5}
     >
       <Box>
         <Box mb={'40px'}>
