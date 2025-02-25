@@ -111,6 +111,8 @@ const en: { [key: string]: string } = {
   pleaseWait: 'Please wait!',
   fetchingTrackLoaderSubtext: 'While we fetch for tracking and support details',
   confirmLoaderSubtext: 'While we confirm your order',
-  itemSourceText: ''
+  itemSourceText: '',
+  emptyOrderHistoryText: 'This space appears quite empty!',
+  noExistingWorkflowText: 'No existing workflows found; create a new workflow to proceed.'
 }
 export default en

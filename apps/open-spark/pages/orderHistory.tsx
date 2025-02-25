@@ -11,6 +11,7 @@ import { orderActions } from '@beckn-ui/common/src/store/order-slice'
 import { testIds } from '@shared/dataTestIds'
 import { RENTAL_ORDER_CATEGORY_ID, RETAIL_ORDER_CATEGORY_ID } from '@lib/config'
 import { OrderHistoryData } from '@lib/types/orderHistory'
+import EmptyOrder from '@components/orderHistory/emptyOrder'
 
 const orderStatusMap: Record<string, string> = {
   'In Review': 'Pending'
@@ -91,85 +92,89 @@ const OrderHistory = () => {
       w={['100%', '100%', '70%', '62%']}
       margin="0 auto"
     >
-      <Box
-        mt={'23px'}
-        cursor={'pointer'}
-      >
-        {orderHistoryList.map((order, idx) => {
-          return (
-            <DetailCard key={idx}>
-              <Flex
-                data-test={testIds.order_history_main_container}
-                onClick={() => {
-                  const orderObjectForStatusCall = {
-                    bppId: order.bpp_id,
-                    bppUri: order.bpp_uri,
-                    orderId: order.order_id
-                  }
-                  localStorage.setItem('selectedOrder', JSON.stringify(orderObjectForStatusCall))
-                  dispatch(orderActions.addSelectedOrder({ orderDetails: orderObjectForStatusCall }))
-                  // router.push('/orderDetails')
-                }}
-                gap={'5px'}
-                flexDirection={'column'}
-              >
+      {!orderHistoryList.length ? (
+        <EmptyOrder />
+      ) : (
+        <Box
+          mt={'23px'}
+          cursor={'pointer'}
+        >
+          {orderHistoryList.map((order, idx) => {
+            return (
+              <DetailCard key={idx}>
                 <Flex
-                  alignItems={'center'}
-                  justifyContent="space-between"
-                  cursor={'pointer'}
-                  color="#4398E8"
+                  data-test={testIds.order_history_main_container}
+                  onClick={() => {
+                    const orderObjectForStatusCall = {
+                      bppId: order.bpp_id,
+                      bppUri: order.bpp_uri,
+                      orderId: order.order_id
+                    }
+                    localStorage.setItem('selectedOrder', JSON.stringify(orderObjectForStatusCall))
+                    dispatch(orderActions.addSelectedOrder({ orderDetails: orderObjectForStatusCall }))
+                    // router.push('/orderDetails')
+                  }}
+                  gap={'5px'}
+                  flexDirection={'column'}
                 >
-                  <Text
-                    as={Typography}
-                    text={`Placed at ${formatTimestamp(order.createdAt)}`}
-                    fontWeight="400"
-                    fontSize={'12px'}
-                    dataTest={testIds.orderHistory_createdAt}
-                  />
-                  {/* <Text >Add to wallet</Text> */}
-                </Flex>
-                <Text
-                  as={Typography}
-                  text={`Order ID: ${order.order_id}`}
-                  fontWeight="400"
-                  fontSize={'12px'}
-                  dataTest={testIds.orderHistory_order_id}
-                />
-
-                <Text
-                  as={Typography}
-                  text={`${order.quote.price.currency} ${order.quote.price.value}`}
-                  fontWeight="600"
-                  fontSize={'12px'}
-                  dataTest={testIds.orderHistory_Price}
-                />
-
-                <Flex
-                  fontSize={'10px'}
-                  justifyContent={'space-between'}
-                  alignItems={'center'}
-                >
-                  <Text
-                    as={Typography}
-                    text={'1 Item'}
-                    fontWeight="400"
-                    fontSize={'12px'}
-                  />
-
-                  <Flex>
-                    <Image
-                      src={pendingIcon}
-                      paddingRight={'6px'}
-                      data-test={testIds.orderHistory_pendingIcon}
+                  <Flex
+                    alignItems={'center'}
+                    justifyContent="space-between"
+                    cursor={'pointer'}
+                    color="#4398E8"
+                  >
+                    <Text
+                      as={Typography}
+                      text={`Placed at ${formatTimestamp(order.createdAt)}`}
+                      fontWeight="400"
+                      fontSize={'12px'}
+                      dataTest={testIds.orderHistory_createdAt}
                     />
-                    <Text>{orderStatusMap[order.delivery_status!] || 'Pending'}</Text>
+                    {/* <Text >Add to wallet</Text> */}
+                  </Flex>
+                  <Text
+                    as={Typography}
+                    text={`Order ID: ${order.order_id}`}
+                    fontWeight="400"
+                    fontSize={'12px'}
+                    dataTest={testIds.orderHistory_order_id}
+                  />
+
+                  <Text
+                    as={Typography}
+                    text={`${order.quote.price.currency} ${order.quote.price.value}`}
+                    fontWeight="600"
+                    fontSize={'12px'}
+                    dataTest={testIds.orderHistory_Price}
+                  />
+
+                  <Flex
+                    fontSize={'10px'}
+                    justifyContent={'space-between'}
+                    alignItems={'center'}
+                  >
+                    <Text
+                      as={Typography}
+                      text={'1 Item'}
+                      fontWeight="400"
+                      fontSize={'12px'}
+                    />
+
+                    <Flex>
+                      <Image
+                        src={pendingIcon}
+                        paddingRight={'6px'}
+                        data-test={testIds.orderHistory_pendingIcon}
+                      />
+                      <Text>{orderStatusMap[order.delivery_status!] || 'Pending'}</Text>
+                    </Flex>
                   </Flex>
                 </Flex>
-              </Flex>
-            </DetailCard>
-          )
-        })}
-      </Box>
+              </DetailCard>
+            )
+          })}
+        </Box>
+      )}
     </Box>
   )
 }
