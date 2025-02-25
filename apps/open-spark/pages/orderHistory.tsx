@@ -108,7 +108,7 @@ const OrderHistory = () => {
                   }
                   localStorage.setItem('selectedOrder', JSON.stringify(orderObjectForStatusCall))
                   dispatch(orderActions.addSelectedOrder({ orderDetails: orderObjectForStatusCall }))
-                  router.push('/orderDetails')
+                  // router.push('/orderDetails')
                 }}
                 gap={'5px'}
                 flexDirection={'column'}

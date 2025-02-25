@@ -17,8 +17,7 @@ export interface Product {
   source?: string
   sourceText?: string
   productInfo?: Record<string, any> | string
-  guideImage?: string | any
-  domainCategory?: string
+  infoGuideIcon?: string
 }
 
 export interface ProductCardProps {

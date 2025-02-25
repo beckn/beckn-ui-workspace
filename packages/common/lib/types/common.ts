@@ -112,6 +112,7 @@ export interface Item {
   rating?: string
   locations?: Location[] | Coordinate
   productInfo?: Record<string, any> | string
+  infoGuideIcon?: string
 }
 
 export interface Tag {
