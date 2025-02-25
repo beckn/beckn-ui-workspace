@@ -55,6 +55,22 @@ export const GenericDropdown = <T extends string | number>({
     return selectedValue ? selectedValue.label : '' // _.startCase(placeholder)
   }
 
+  const getPlaceholderText = () => {
+    return (
+      <label
+        className={Styles.input_label}
+        style={{ color: active ? primaryColor : 'inherit', top: active || selectedOption() ? '-11px' : '11px' }}
+      >
+        {placeholder}
+      </label>
+    )
+  }
+
+  const renderValueText = () => {
+    const selectedValueText = getSelectedLabel()
+    return selectedValueText === '' ? getPlaceholderText() : selectedValueText
+  }
+
   return (
     <Menu key={key}>
       <MenuButton
@@ -86,15 +102,7 @@ export const GenericDropdown = <T extends string | number>({
         ref={menuButtonRef}
         data-test={dataTest}
       >
-        {placeholder && (
-          <label
-            className={Styles.input_label}
-            style={{ color: active ? primaryColor : 'inherit', top: active || selectedOption() ? '-11px' : '11px' }}
-          >
-            {placeholder}
-          </label>
-        )}
-        {getSelectedLabel()}
+        {renderValueText()}
       </MenuButton>
       <MenuList
         minWidth={menuWidth || 'auto'}

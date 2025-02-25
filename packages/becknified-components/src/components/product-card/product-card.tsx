@@ -102,7 +102,7 @@ const ProductCard: React.FC<ProductCardProps> = props => {
                   >
                     {product.name}
                   </Text>
-                  {product.domainCategory && <Image src={guideImage} />}
+                  {product.infoGuideIcon && <Image src={guideImage} />}
                 </Flex>
               )}
               <Flex
@@ -110,31 +110,17 @@ const ProductCard: React.FC<ProductCardProps> = props => {
                 alignItems={'flex-start'}
                 w={'100%'}
               >
-                {product.domain ? (
+                {product.shortDesc && (
                   <Text
-                    className="domain"
                     fontSize={'0.8rem'}
-                    mb={'10px'}
+                    mb={'0.4rem'}
                     noOfLines={2}
                     textOverflow="ellipsis"
                     whiteSpace="pre-wrap"
                     overflowWrap="break-word"
                   >
-                    {product.domain.split(':').join(' ').toLocaleLowerCase()}
+                    {product.shortDesc}
                   </Text>
-                ) : (
-                  product.shortDesc && (
-                    <Text
-                      fontSize={'0.8rem'}
-                      mb={'0.4rem'}
-                      noOfLines={2}
-                      textOverflow="ellipsis"
-                      whiteSpace="pre-wrap"
-                      overflowWrap="break-word"
-                    >
-                      {product.shortDesc}
-                    </Text>
-                  )
                 )}
               </Flex>
               {product.source && product.sourceText ? (
