@@ -111,7 +111,7 @@ const EMIApplicationModal = ({
   const toast = useToast()
   const dispatch = useDispatch()
   const [selectedEmiPlan, setSelectedEmiPlan] = useState<string | null>(null)
-  const selectedEmi = useSelector((state: any) => state.selectedEmi.apiResponse[0]?.message.order.items) || 0
+  const selectedEmi = useSelector((state: any) => state.selectedEmi.apiResponse?.[0]?.message.order.items) || 0
   const monthlyInstallment = useSelector((state: any) => state.selectedEmi.emiDetails)
 
   useEffect(() => {

@@ -1,9 +1,9 @@
-import React, { useEffect, useState, Image } from 'react'
+import React, { useEffect, useState } from 'react'
 import axios from '@services/axios'
 import { useDispatch, useSelector } from 'react-redux'
 import { useRouter } from 'next/router'
 
-import { discoveryActions, ParsedItemModel, SearchAndDiscover, SearchAndDiscoverOpenSpark } from '@beckn-ui/common'
+import { discoveryActions, ParsedItemModel, SearchAndDiscover } from '@beckn-ui/common'
 import { useLanguage } from '@hooks/useLanguage'
 import { DOMAIN, DOMAIN_PATH } from '@lib/config'
 import { Product } from '@beckn-ui/becknified-components'
@@ -135,7 +135,7 @@ const Search = () => {
 
   return (
     <Box className="myStore-search-wrapper search-text">
-      <SearchAndDiscoverOpenSpark
+      <SearchAndDiscover
         items={items}
         searchProps={{
           searchKeyword: searchKeyword as string,

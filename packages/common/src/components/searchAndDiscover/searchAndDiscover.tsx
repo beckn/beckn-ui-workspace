@@ -51,7 +51,8 @@ const SearchAndDiscover: React.FC<SearchAndDiscoverProps> = ({
         source: t?.('itemSourceText') || 'Sold By',
         sourceText: providerName,
         productInfo: item.productInfo,
-        domain: catalogItem.domain
+        domain: catalogItem.domain,
+        infoGuideIcon: item?.infoGuideIcon
       }
       console.log('product', product)
       const handleProductClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
