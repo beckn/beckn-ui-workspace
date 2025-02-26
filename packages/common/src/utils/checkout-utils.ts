@@ -96,7 +96,7 @@ export const getSubTotalAndDeliveryCharges = (
   }
   console.log('Final subtotal:', subTotal)
   const paymentBreakup = {
-    subTotal: subTotal ? Math.round(subTotal) : totalPriceWithCurrency.value,
+    subTotal: subTotal ? Number(subTotal).toFixed(2) : totalPriceWithCurrency.value,
     currencySymbol: subTotal ? currencySymbol : totalPriceWithCurrency.currency
   }
   return paymentBreakup
