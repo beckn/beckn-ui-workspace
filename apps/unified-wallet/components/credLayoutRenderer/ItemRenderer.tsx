@@ -64,6 +64,8 @@ const ItemRenderer = (props: ItemRendererProps) => {
   const [openAttestations, setOpenAttestations] = useState<boolean>(false)
   const [isOpen, setIsOpen] = useState(false)
 
+  console.log('Dank', item)
+
   // useEffect(() => {
   //   if (item?.data?.attestations?.length > 0) {
   //     setIsOpen(true)
@@ -276,7 +278,7 @@ const ItemRenderer = (props: ItemRendererProps) => {
                   >
                     <Flex flexDir={'column'}>
                       <Typography
-                        text={formatDate((Number(item?.datetime) * 1000)!, 'do MMM yyyy, h.mma')}
+                        text={formatDate(new Date(item?.datetime || ''), 'do MMM yyyy, h.mma')}
                         fontSize={'10px'}
                         color={'#5F5F5F'}
                       />
