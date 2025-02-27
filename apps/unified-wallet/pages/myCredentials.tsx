@@ -154,7 +154,7 @@ const MyCredentials = () => {
       const { did } = verificationMethodsRes[0]
       let attachments = null
       if (formData.url && formData.url !== '') {
-        attachments = formData.url
+        attachments = formData.url.replace(/^https?:\/\//, '')
       } else if (selectedFile) {
         attachments = selectedFile?.title
       }
