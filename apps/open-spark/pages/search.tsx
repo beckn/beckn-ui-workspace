@@ -122,7 +122,11 @@ const Search = () => {
   const handleViewDetailsClickHandler = (selectedItem: ParsedItemModel, product: Product) => {
     const { item } = selectedItem
     console.log('Dank inside', selectedItem)
-    dispatch(discoveryActions.addSingleProduct({ product: selectedItem }))
+    dispatch(
+      discoveryActions.addSingleProduct({
+        product: { ...selectedItem, providerName: product?.productInfo?.providerName }
+      })
+    )
     router.push({
       pathname: '/product',
       query: {
