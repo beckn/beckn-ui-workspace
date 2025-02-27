@@ -9,6 +9,7 @@ import {
 import { Typography } from '@beckn-ui/molecules'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import { Box, Divider, Flex, Radio, RadioGroup, Stack, Text, Image } from '@chakra-ui/react'
+import { setEmiDetails } from '@store/emiSelect-slice'
 import { currencyFormat } from '@utils/general'
 import Router from 'next/router'
 import React, { useEffect, useState } from 'react'
@@ -29,6 +30,7 @@ const NewPaymentOverView = () => {
   const [payableValue, setPayableValue] = useState<number>()
   const cartItems = useSelector((state: ICartRootState) => state.cart.items)
   const dispatch = useDispatch()
+  const emiDetails = useSelector((state: any) => state.selectedEmi.emiDetails[0])
 
   const createPaymentBreakdownMap = () => {
     const total = cartItems.reduce((sum, item) => {
@@ -37,7 +39,7 @@ const NewPaymentOverView = () => {
     }, 0)
 
     const discountPercentage = Number(coverage)
-    const discountAmount = (total * discountPercentage) / 100
+    const discountAmount = total * (discountPercentage / 100)
 
     setTotalValue({ total, discountAmount })
     setPayableValue(total - discountAmount - Number(processingFee))
@@ -130,7 +132,7 @@ const NewPaymentOverView = () => {
                         color="#4398E8"
                         fontWeight="600"
                         fontSize="12px"
-                        text={`₹ ${currencyFormat(Number(items.price.value))}`}
+                        text={`₹ ${currencyFormat(Number(items.price.value) * items.quantity)}`}
                       />
                     </Box>
                   </Flex>
@@ -257,6 +259,16 @@ const NewPaymentOverView = () => {
         text="Proceed to Payment"
         // disabled={!selectedEmiPlan}
         handleClick={() => {
+          dispatch(
+            setEmiDetails({
+              emiDetails: [
+                {
+                  ...emiDetails,
+                  payableAmount: Number(payableValue?.toFixed(2))
+                }
+              ]
+            })
+          )
           Router.push('/retailPaymentMethod')
         }}
       />

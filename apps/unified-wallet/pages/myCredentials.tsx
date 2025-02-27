@@ -70,7 +70,7 @@ const MyCredentials = () => {
             title: item.name,
             isVerified: true,
             image: DocIcon,
-            datetime: item.createdAt || Math.floor(new Date().getTime() / 1000),
+            datetime: item?.createdAt?.length > 5 ? item.createdAt : Math.floor(new Date().getTime() / 1000),
             data: item
           }
         })

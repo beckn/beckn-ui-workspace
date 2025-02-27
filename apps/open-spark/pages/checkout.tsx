@@ -6,8 +6,7 @@ import { useLanguage } from '../hooks/useLanguage'
 import {
   areShippingAndBillingDetailsSame,
   getInitPayload,
-  getSubTotalAndDeliveryCharges,
-  getTotalCartItems
+  getSubTotalAndDeliveryCharges
 } from '@beckn-ui/common/src/utils'
 import { Checkout, ProductPrice } from '@beckn-ui/becknified-components'
 import { useRouter } from 'next/router'
@@ -229,7 +228,7 @@ const CheckoutPage = () => {
       })
     }
   }
-
+  console.log(shippingFormData)
   const isInitResultPresent = () => {
     return !!initResponse && initResponse.length > 0
   }
@@ -277,6 +276,17 @@ const CheckoutPage = () => {
       }
     }) ?? []
   console.log('duration', duration)
+
+  const getCartItemsWithQuantity = () => {
+    const cartItemQuantity: any = {}
+    cartItems.forEach((item: any) => {
+      cartItemQuantity[item.id] = {
+        id: item.id,
+        quantity: item.quantity
+      }
+    })
+    return cartItemQuantity
+  }
 
   return (
     <Box
@@ -357,7 +367,7 @@ const CheckoutPage = () => {
                       </Flex>
                       <Box ml="25px">
                         <ProductPrice
-                          price={singleItem.totalPrice}
+                          price={Number(singleItem.price.value) * singleItem.quantity}
                           currencyType={singleItem.price.currency}
                         />
                       </Box>
@@ -441,7 +451,7 @@ const CheckoutPage = () => {
               totalValueWithCurrency: {
                 value: getSubTotalAndDeliveryCharges(
                   initResponse,
-                  type === 'RENT_AND_HIRE' ? duration : getTotalCartItems(cartItems)
+                  type === 'RENT_AND_HIRE' ? duration : getCartItemsWithQuantity()
                 ).subTotal.toString(),
                 currency: getSubTotalAndDeliveryCharges(initResponse, type === 'RENT_AND_HIRE' ? duration : 1)
                   .currencySymbol!
@@ -468,7 +478,7 @@ const CheckoutPage = () => {
                       ...emiDetails,
                       payableAmount: getSubTotalAndDeliveryCharges(
                         initResponse,
-                        type === 'RENT_AND_HIRE' ? duration : getTotalCartItems(cartItems)
+                        type === 'RENT_AND_HIRE' ? duration : getCartItemsWithQuantity()
                       ).subTotal.toString()
                     }
                   ]

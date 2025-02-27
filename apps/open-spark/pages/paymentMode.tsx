@@ -256,6 +256,7 @@ const EMIApplicationModal = ({
             fontWeight="500"
             color="#4398E8"
             text="Sync wallet"
+            style={{ cursor: 'pointer' }}
             onClick={handleSyncWallet}
           />
         </Flex>

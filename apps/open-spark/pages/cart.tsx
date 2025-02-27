@@ -81,7 +81,7 @@ const Cart = () => {
                 alignment: 'row',
                 quantity: singleItem.quantity,
                 name: singleItem.name,
-                providerName: singleItem.productInfo.providerName,
+                providerName: singleItem?.productInfo?.providerName!,
                 image: singleItem.images?.[0].url,
                 price: Number(singleItem.price.value),
                 symbol: singleItem.price.currency,
