@@ -71,7 +71,7 @@ const HomePage = () => {
           Authorization: `Bearer ${bearerToken}`
         }
       })
-      console.log('Dank', response.data.orders)
+
       setOrders(response.data.orders || [])
     } catch (error) {
       console.error('Error fetching orders:', error)
@@ -117,7 +117,7 @@ const HomePage = () => {
           <Image
             src={profileIcon}
             alt="profileIcon"
-            onClick={() => {}}
+            onClick={() => router.push('/profile')}
           />
         </Box>
         <Text
