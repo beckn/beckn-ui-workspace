@@ -141,7 +141,7 @@ const MyIdentities = () => {
             description: item.id,
             isVerified: true,
             image,
-            datetime: item.createdAt || Math.floor(new Date().getTime() / 1000),
+            datetime: item?.createdAt?.length > 5 ? item.createdAt : Math.floor(new Date().getTime() / 1000),
             data: item
           }
         })

@@ -169,7 +169,8 @@ export const getInitPayload = async (
               },
               contact: {
                 phone: deliveryAddress.mobileNumber,
-                email: deliveryAddress.email
+                email: deliveryAddress.email,
+                name: deliveryAddress.name
               }
             }
           ]
