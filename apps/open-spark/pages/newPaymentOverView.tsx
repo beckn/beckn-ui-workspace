@@ -201,7 +201,7 @@ const NewPaymentOverView = () => {
             <Typography
               fontWeight="600"
               fontSize="15px"
-              text={'Total Amount to be paid up front'}
+              text={'Total Amount to be paid upfront'}
             />
             <Flex alignItems={'center'}>
               <Typography
