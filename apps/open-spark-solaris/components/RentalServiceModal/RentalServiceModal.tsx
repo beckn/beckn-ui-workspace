@@ -129,7 +129,7 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
             source: item.source,
             invoice: item.attachment!,
             isVerified: true,
-            timestamp: item.createdAt || new Date(),
+            timestamp: item.createdAt || Math.floor(new Date().getTime() / 1000),
             data: item
           }
         })

@@ -72,7 +72,7 @@ const PhysicalAssets = () => {
             title: item.type,
             isVerified: true,
             image: DocIcon,
-            datetime: item.createdAt || new Date(),
+            datetime: item.createdAt || Math.floor(new Date().getTime() / 1000),
             data: item
           }
         })

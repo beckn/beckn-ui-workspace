@@ -278,7 +278,7 @@ const ItemRenderer = (props: ItemRendererProps) => {
                   >
                     <Flex flexDir={'column'}>
                       <Typography
-                        text={formatDate(new Date(item?.datetime || ''), 'do MMM yyyy, h.mma')}
+                        text={formatDate(new Date(Number(item?.datetime) * 1000 || ''), 'do MMM yyyy, h.mma')}
                         fontSize={'10px'}
                         color={'#5F5F5F'}
                       />
