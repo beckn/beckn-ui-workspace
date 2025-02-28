@@ -1,48 +1,38 @@
 import { ConfirmResponseModel, InitResponseModel } from '@beckn-ui/common'
 
 export const getPayloadForConfirm = (initResponse: InitResponseModel[], cartPriceDetails: any) => {
-  const {
-    context,
-    message: {
-      order: { billing, fulfillments, items, payments, provider, quote, type }
-    }
-  } = initResponse[0]
-  const { transaction_id, bpp_id, bpp_uri, domain } = context
-
   const payload = {
-    data: [
-      {
-        context: {
-          transaction_id: transaction_id,
-          bpp_id: bpp_id,
-          bpp_uri: bpp_uri,
-          domain: domain
-        },
-        message: {
-          orders: [
-            {
-              provider: {
-                id: provider.id
-              },
-              items: items,
-              fulfillments: fulfillments,
-              billing: billing,
-              payments: [
-                {
-                  id: payments?.[0]?.id,
-                  params: {
-                    amount: `${cartPriceDetails.totalCartPrice || quote?.price?.value}`,
-                    currency: quote?.price?.currency
-                  },
-                  status: 'PAID',
-                  type: 'ON-FULFILLMENT'
-                }
-              ]
-            }
-          ]
-        }
+    data: initResponse.map(({ context, message: { order } }) => ({
+      context: {
+        transaction_id: context.transaction_id,
+        bpp_id: context.bpp_id,
+        bpp_uri: context.bpp_uri,
+        domain: context.domain
+      },
+      message: {
+        orders: [
+          {
+            provider: {
+              id: order.provider.id
+            },
+            items: order.items,
+            fulfillments: order.fulfillments,
+            billing: order.billing,
+            payments: [
+              {
+                id: order.payments?.[0]?.id,
+                params: {
+                  amount: `${cartPriceDetails[order.provider.id].totalPrice || order.quote?.price?.value}`,
+                  currency: order.quote?.price?.currency
+                },
+                status: 'PAID',
+                type: 'ON-FULFILLMENT'
+              }
+            ]
+          }
+        ]
       }
-    ]
+    }))
   }
 
   return payload
@@ -54,45 +44,36 @@ export const getPayloadForOrderHistoryPost = (
   cartPriceDetails: any
 ) => {
   console.log(categoryId)
-  const { bpp_id, bpp_uri, transaction_id } = confirmData[0].context
-  const {
-    orderId,
-    provider: { id, name, short_desc },
-    items,
-    quote,
-    payments,
-    fulfillments
-  } = confirmData[0].message
 
-  const ordersPayload = {
+  const ordersPayload = confirmData.map(({ context, message }) => ({
     context: {
-      bpp_id,
-      bpp_uri,
-      transaction_id
+      bpp_id: context.bpp_id,
+      bpp_uri: context.bpp_uri,
+      transaction_id: context.transaction_id
     },
     message: {
       order: {
-        id: orderId,
+        id: message.orderId,
         provider: {
-          id,
+          id: message.provider.id,
           descriptor: {
-            name,
-            short_desc
+            name: message.provider.name,
+            short_desc: message.provider.short_desc
           }
         },
-        items,
-        fulfillments,
+        items: message.items,
+        fulfillments: message.fulfillments,
         quote: {
           price: {
-            currency: quote.price.currency,
-            value: Number(cartPriceDetails.totalCartPrice || quote.price.value) || 0
+            currency: message.quote.price.currency,
+            value: Number(cartPriceDetails[message.provider.id].totalPrice || message.quote.price.value) || 0
           }
         },
-        payments
+        payments: message.payments
       }
     },
     category: categoryId
-  }
+  }))
 
-  return ordersPayload
+  return { data: ordersPayload }
 }

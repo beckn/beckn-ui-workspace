@@ -876,7 +876,7 @@ const OrderDetails = () => {
                   <Text
                     as={Typography}
                     // TODO
-                    text={`Order Id: ${orderMetaData.orderIds[0].slice(0, 5)}...`}
+                    text={`Order Id: ${JSON.parse(localStorage.getItem('selectedOrder')!).orderId}`}
                     dataTest={testIds.orderDetailspage_orderId}
                     fontSize="17px"
                     fontWeight="600"
