@@ -22,6 +22,7 @@ interface OrderDetails {
 }
 
 interface Order {
+  customer_id: any
   id: number
   state_code: string
   state_value: string
@@ -195,7 +196,7 @@ const LoanApplications = () => {
                   whiteSpace={'nowrap'}
                   overflow={'hidden'}
                 >
-                  {/* {order?.order_id.items[0].name} */} NA
+                  Rs. {order?.order_id.total_amount}
                 </Text>
               </Flex>
               <Flex mb="5px">
