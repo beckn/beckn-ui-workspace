@@ -159,7 +159,7 @@ const OrderHistory = () => {
                   >
                     <Text
                       as={Typography}
-                      text={'1 Item'}
+                      text={`${order.items.length} Item${order.items.length > 1 ? 's' : ''}`}
                       fontWeight="400"
                       fontSize={'12px'}
                     />
