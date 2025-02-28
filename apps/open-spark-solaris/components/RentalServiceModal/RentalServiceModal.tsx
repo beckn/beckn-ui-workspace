@@ -72,8 +72,6 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
   const [selectedBattery, setSelectedBattery] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [price, setPrice] = useState<string>('100')
-  const [fromTime, setFromTime] = useState<Date>(new Date())
-  const [toTime, setToTime] = useState<Date>(new Date())
   const [date, setDate] = useState<string>(new Date().toISOString())
   const [confirmResOfWalletCatalogue, setConfirmResOfWalletCatalogue] = useState<any>(null)
   const [showTimeError, setShowTimeError] = useState(false)
@@ -163,7 +161,8 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
       walletId: user?.deg_wallet?.deg_wallet_id,
       startTime: `${Math.floor(new Date(fromTime).getTime() / 1000)}`,
       endTime: `${Math.floor(new Date(toTime).getTime() / 1000)}`,
-      price: price.toString()
+      price: price.toString(),
+      date: date
     }
 
     try {
@@ -221,6 +220,39 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
     onClose()
   }
   console.log(batteryOptions)
+
+  // Add this helper function to round up time to nearest hour
+  const roundToNextHour = (date: Date) => {
+    const roundedDate = new Date(date)
+    // If minutes are not 0, round up to next hour
+    if (roundedDate.getMinutes() > 0) {
+      roundedDate.setHours(roundedDate.getHours() + 1)
+    }
+    roundedDate.setMinutes(0)
+    roundedDate.setSeconds(0)
+    roundedDate.setMilliseconds(0)
+    return roundedDate
+  }
+
+  // Initialize with rounded current time
+  const [fromTime, setFromTime] = useState<Date>(roundToNextHour(new Date()))
+  const [toTime, setToTime] = useState<Date>(() => {
+    const initialEndTime = roundToNextHour(new Date())
+    initialEndTime.setHours(initialEndTime.getHours() + 1)
+    return initialEndTime
+  })
+
+  // Update the time change handlers
+  const handleFromTimeChange = (date: Date) => {
+    const roundedTime = roundToNextHour(date)
+    setFromTime(roundedTime)
+  }
+
+  const handleToTimeChange = (date: Date) => {
+    const roundedTime = roundToNextHour(date)
+    setToTime(roundedTime)
+  }
+
   const renderContent = () => {
     if (currentView === 'upload') {
       return (
@@ -533,7 +565,7 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
               <CustomTimePicker
                 selected={fromTime}
                 placeholderText="Select 'from'"
-                onChange={(date: any) => setFromTime(date)}
+                onChange={handleFromTimeChange}
                 dateFormat="h:mm aa"
                 isInvalid={false}
               />
@@ -541,7 +573,7 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
               <CustomTimePicker
                 selected={toTime}
                 placeholderText="Select 'to'"
-                onChange={(date: any) => setToTime(date)}
+                onChange={handleToTimeChange}
                 dateFormat="h:mm aa"
                 isInvalid={false}
               />

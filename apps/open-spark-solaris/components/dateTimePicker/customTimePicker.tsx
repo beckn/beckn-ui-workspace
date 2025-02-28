@@ -16,7 +16,7 @@ const CustomTimePicker = (props: Partial<CustomTimePickerProps & DatePickerProps
       {...rest}
       showTimeSelect
       showTimeSelectOnly
-      timeIntervals={15} // Adjust the interval as needed (e.g., 15 mins)
+      timeIntervals={60} // Adjust the interval as needed (e.g., 15 mins)
       timeCaption="Time"
       dateFormat="h:mm aa" // 12-hour format with AM/PM
       sx={{
