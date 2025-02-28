@@ -124,7 +124,7 @@ const Search = () => {
     console.log('Dank inside', selectedItem)
     dispatch(
       discoveryActions.addSingleProduct({
-        product: { ...selectedItem, providerName: product?.productInfo?.providerName }
+        product: { ...selectedItem, providerName: product?.productInfo?.providerName || product?.name }
       })
     )
     router.push({
