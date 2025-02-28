@@ -18,7 +18,7 @@ const ProductCard: React.FC<ProductCardProps> = props => {
     dataTest = 'products',
     renderMode = 'short'
   } = props
-  console.log(product)
+
   if (ComponentRenderer) {
     return <ComponentRenderer dataSource={dataSource} />
   }

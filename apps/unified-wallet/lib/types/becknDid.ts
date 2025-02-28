@@ -1,11 +1,24 @@
-export type Identity = { type: string; id: string; did: string; attestations: AttestationData[] }
-export type Credential = { type: string; name: string; did: string; attestations: AttestationData[] }
+export type Identity = {
+  type: string
+  id: string
+  did: string
+  attestations: AttestationData[]
+  createdAt?: string | number
+}
+export type Credential = {
+  type: string
+  name: string
+  did: string
+  attestations: AttestationData[]
+  createdAt?: string | number
+}
 export type PhysicalAsset = {
   type: string
   attachment: string | null
   did: string
   source: string
   attestations: AttestationData[]
+  createdAt?: string | number
 }
 export type Transaction = {
   type: string

@@ -1,7 +1,7 @@
 import BottomModalScan from '@beckn-ui/common/src/components/BottomModal/BottomModalScan'
 import { Button, GenericDropdown, Input, Typography } from '@beckn-ui/molecules'
 import BecknButton from '@beckn-ui/molecules/src/components/button'
-import { Box, Flex, HStack, Icon, VStack } from '@chakra-ui/react'
+import { Box, Flex, FormLabel, HStack, Icon, VStack } from '@chakra-ui/react'
 import { InputProps, ButtonProps } from '@beckn-ui/molecules'
 import React, { useEffect, useState } from 'react'
 import { testIds } from '@shared/dataTestIds'

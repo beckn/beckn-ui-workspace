@@ -50,6 +50,10 @@ const SignIn = ({ initialFormData = { mobileNumber: '+91 ' } }) => {
       value = '+91 '
     }
 
+    const numericPart = value.replace(/\D/g, '').slice(2)
+
+    value = `+91 ${numericPart}`
+
     setFormData(prevFormData => ({
       ...prevFormData,
       [name]: value

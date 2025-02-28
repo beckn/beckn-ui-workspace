@@ -152,5 +152,11 @@ export const validateCredForm = (formData: FormProps): CredFormErrors => {
     errors.serialNumber = 'errorSerialNum'
   }
 
+  if (formData?.url?.trim() === '') {
+    errors.url = 'errorUrl'
+  } else if (!/^(https?:\/\/)?([\w-]+\.)+[a-zA-Z]{2,}(:\d{1,5})?(\/[^\s]*)?$/.test(formData.url!)) {
+    errors.url = 'errorUrl1'
+  }
+
   return errors
 }

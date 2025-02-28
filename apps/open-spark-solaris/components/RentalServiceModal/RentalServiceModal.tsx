@@ -121,17 +121,20 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
       setIsLoading(true)
       const result = await getDocuments(user?.deg_wallet?.deg_wallet_id!).unwrap()
       console.log(result)
-      const list: BatteryOption[] = parseDIDData(result)['assets']['physical'].map((item, index) => {
-        return {
-          id: index.toString(),
-          name: item.type,
-          source: item.source,
-          invoice: item.attachment!,
-          isVerified: true,
-          timestamp: new Date().toString(),
-          data: item
-        }
-      })
+      const list: BatteryOption[] = parseDIDData(result)
+        ['assets']['physical'].map((item, index) => {
+          return {
+            id: index.toString(),
+            name: item.type,
+            source: item.source,
+            invoice: item.attachment!,
+            isVerified: true,
+            timestamp: item?.createdAt?.length > 5 ? item.createdAt : Math.floor(new Date().getTime() / 1000),
+            data: item
+          }
+        })
+        .filter(val => val)
+        .sort((a, b) => Number(b.data.createdAt) - Number(a.data.createdAt))
       setBatteryOptions(list)
     } catch (error) {
       console.error('Error fetching dashboard data:', error)
@@ -222,26 +225,26 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
     if (currentView === 'upload') {
       return (
         <>
-          <Box mb={4}>
+          {/* <Box mb={4}>
             <Text mb={2}>Device</Text>
             <Input
               placeholder="Battery"
               value="Battery"
               isReadOnly
             />
-          </Box>
+          </Box> */}
 
-          <Box mb={4}>
+          {/* <Box mb={4}>
             <Text mb={2}>Asset ID</Text>
             <Input
               placeholder="MK-0123459"
               value="MK-0123459"
               isReadOnly
             />
-          </Box>
+          </Box> */}
 
           {/* File Upload Section */}
-          <Box
+          {/* <Box
             border="1px dashed #E2E8F0"
             borderRadius="md"
             p={4}
@@ -288,10 +291,10 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
                 </VStack>
               </Box>
             </label>
-          </Box>
+          </Box> */}
 
           {/* File Preview */}
-          {uploadedFile && (
+          {/* {uploadedFile && (
             <Box
               border="1px solid #E2E8F0"
               borderRadius="md"
@@ -329,12 +332,32 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
                 mt={2}
               />
             </Box>
-          )}
+          )} */}
+          <Box p={4}>
+            <Text
+              textAlign={'center'}
+              color="#858585"
+              fontSize={'14px'}
+            >
+              Click on "Add from wallet" to fetch your battery for renting!
+            </Text>
+          </Box>
 
           <BecknButton
+            text="Add from wallet"
+            handleClick={handleAddFromWallet}
+          />
+
+          {batteryOptions.length > 0 && (
+            <BecknButton
+              text="Next"
+              handleClick={handleNext}
+            />
+          )}
+          {/* <BecknButton
             text="Next"
             handleClick={handleNext}
-          />
+          /> */}
         </>
       )
     }
@@ -403,26 +426,6 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
                           >
                             {battery.name}
                           </Text>
-                          {/* <Box
-                          marginTop={'2px'}
-                          width="60px"
-                        >
-                          {battery?.isVerified ? (
-                            <Image
-                              src={VerifiedIcon}
-                              alt=""
-                              width={80}
-                              height={18}
-                            />
-                          ) : (
-                            <Image
-                              src={UnverifiedIcon}
-                              alt=""
-                              width={80}
-                              height={18}
-                            />
-                          )}
-                        </Box> */}
                         </Flex>
                         <Flex>
                           <Text
@@ -455,7 +458,7 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
                           fontSize="12px"
                           color="gray.500"
                         >
-                          {formatDate(battery.timestamp, 'do MMM yyyy, h.mma')}
+                          {formatDate((Number(battery?.timestamp) * 1000)!, 'do MMM yyyy, h.mma')}
                         </Text>
                         {/* <Text>{battery.data.attestation.length}</Text> */}
                       </Box>
@@ -546,7 +549,6 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
             <Text color="gray.600">Rs. per hour</Text>
           </Flex>
         </Box>
-
         <BecknButton
           text={'Submit & Publish'}
           handleClick={handlePublish}
@@ -569,7 +571,7 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
             text="Provide Rental Service"
             fontSize="16px"
           />
-          {currentView === 'upload' && (
+          {/* {currentView === 'upload' && (
             <Text
               color="#228B22"
               fontSize="sm"
@@ -578,7 +580,7 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
             >
               Add from wallet
             </Text>
-          )}
+          )} */}
         </Flex>
       }
     >

@@ -26,6 +26,7 @@ const EmptyScreenTemplate = ({ text, description, src }: { text: string; descrip
         dataTest="emptyText"
       />
       <Typography
+        style={{ textAlign: 'center', margin: '0 auto' }}
         fontSize="10px"
         fontWeight="400"
         sx={{ textAlign: 'center', color: '#8B8B8B', lineHeight: '16px', width: '14rem' }}

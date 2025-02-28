@@ -69,6 +69,7 @@ const en: { [key: string]: string } = {
   errorNumber: 'Mobile Number is required',
   errorNumber2: 'Invalid Mobile Number',
   errorAddress: 'Complete Address is required',
+  errorAddressMinLength: 'Address must be at least 3 characters long',
   errorName2: 'Name can only contain letters and spaces',
   errorName3: 'Name must contain at least 3 characters',
   cardNumber: '**** **** **** 1234',
@@ -107,10 +108,13 @@ const en: { [key: string]: string } = {
   gPay: 'Google Pay',
   items: 'Order Overview',
   allRequestFullfilled: 'All orders delivered!',
-  loading: 'Fetching financing plan from ONDC...',
+  loading: 'Fetching the best finance options from the ONDC network...',
   pleaseWait: 'Please wait!',
   fetchingTrackLoaderSubtext: 'While we fetch for tracking and support details',
   confirmLoaderSubtext: 'While we confirm your order',
-  itemSourceText: ''
+  itemSourceText: '',
+  emptyOrderHistoryText: 'This space appears quite empty!',
+  noExistingWorkflowText: 'No existing workflows found; create a new workflow to proceed.',
+  noProduct: 'There are no products in this category yet! New products will be added soon.'
 }
 export default en

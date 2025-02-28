@@ -76,7 +76,6 @@ const ItemDetails: React.FC<ItemDetailProps> = ({
           </Flex>
         </Box>
       </Box>
-      <Divider mb={'15px'} />
     </>
   )
 }

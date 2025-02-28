@@ -54,7 +54,7 @@ const SearchAndDiscover: React.FC<SearchAndDiscoverProps> = ({
         domain: catalogItem.domain,
         infoGuideIcon: item?.infoGuideIcon
       }
-      console.log('product', product)
+
       const handleProductClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         event.preventDefault()
         viewDetailsClickHandler(catalogItem, product)

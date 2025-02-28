@@ -72,7 +72,7 @@ export const getPaymentBreakDown = (initData: InitResponseModel[] | StatusRespon
 
 export const getSubTotalAndDeliveryCharges = (
   initData: InitResponseModel[] | StatusResponseModel[],
-  frequency?: number = 1
+  frequency?: number | Record<string, any>
 ) => {
   console.log('frequency', frequency)
   let totalPriceWithCurrency: { value: number; currency: CurrencyType } = { value: 0, currency: 'INR' }
@@ -80,15 +80,24 @@ export const getSubTotalAndDeliveryCharges = (
   let currencySymbol
 
   if (initData && initData.length > 0) {
+    let quantity = 1
     initData.forEach(data => {
+      if (typeof frequency !== 'number') {
+        ;(data.message.order.items as any).forEach((item: any) => {
+          quantity = frequency?.[item.id].quantity
+        })
+      } else {
+        quantity = frequency
+      }
+
       totalPriceWithCurrency = {
         value: totalPriceWithCurrency.value + Number(data.message.order.quote.price?.value) || 0,
         currency: data.message.order.quote.price?.currency || 'INR'
       }
       if (data.message.order.quote.breakup) {
         data.message.order.quote.breakup.forEach(breakup => {
-          const itemPrice = Number(parseFloat((Number(breakup.price.value) || 0).toString()).toFixed(2))
-          subTotal += itemPrice * frequency
+          const itemPrice = Number(breakup.price.value) || 0
+          subTotal += itemPrice * quantity
         })
         currencySymbol = data.message.order.quote.breakup[0]?.price.currency
       }
@@ -96,7 +105,7 @@ export const getSubTotalAndDeliveryCharges = (
   }
   console.log('Final subtotal:', subTotal)
   const paymentBreakup = {
-    subTotal: subTotal ? Math.round(subTotal) : totalPriceWithCurrency.value,
+    subTotal: subTotal ? subTotal : totalPriceWithCurrency.value,
     currencySymbol: subTotal ? currencySymbol : totalPriceWithCurrency.currency
   }
   return paymentBreakup
@@ -106,7 +115,7 @@ export const getTotalCartItems = (cartItems: CartRetailItem[]) => {
   let quantity = 0
 
   cartItems.forEach(item => {
-    quantity += item.quantity
+    quantity += Number(item.quantity)
   })
 
   return quantity

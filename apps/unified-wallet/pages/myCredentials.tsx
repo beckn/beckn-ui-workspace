@@ -15,7 +15,7 @@ import DocIcon from '@public/images/doc_icon.svg'
 import { parseDIDData } from '@utils/did'
 import { extractAuthAndHeader, filterByKeyword, toBase64, toSnakeCase } from '@utils/general'
 import { generateAuthHeader, generateAuthHeaderForDelete } from '@services/cryptoUtilService'
-import { feedbackActions } from '@beckn-ui/common'
+import { feedbackActions, formatDate } from '@beckn-ui/common'
 import { DocumentProps } from '@components/documentsRenderer'
 import { ItemMetaData } from '@components/credLayoutRenderer/ItemRenderer'
 import axios from '@services/axios'
@@ -63,16 +63,19 @@ const MyCredentials = () => {
     try {
       setIsLoading(true)
       const result = await getDocuments(user?.did!).unwrap()
-      const list: ItemMetaData[] = parseDIDData(result)['assets']['credentials'].map((item, index) => {
-        return {
-          id: index,
-          title: item.name,
-          isVerified: true,
-          image: DocIcon,
-          datetime: new Date().toString(),
-          data: item
-        }
-      })
+      const list: ItemMetaData[] = parseDIDData(result)
+        ['assets']['credentials'].map((item, index) => {
+          return {
+            id: index,
+            title: item.name,
+            isVerified: true,
+            image: DocIcon,
+            datetime: item?.createdAt?.length > 5 ? item.createdAt : Math.floor(new Date().getTime() / 1000),
+            data: item
+          }
+        })
+        .filter(val => val)
+        .sort((a, b) => Number(b.data.createdAt) - Number(a.data.createdAt))
       setItems(list)
       setFilteredItems(list)
     } catch (error) {
@@ -146,12 +149,12 @@ const MyCredentials = () => {
       setIsLoading(true)
 
       const docDetails = JSON.stringify(data)
-
+      const createdAt = Math.floor(new Date().getTime() / 1000)
       const verificationMethodsRes = await getVerificationMethods(user?.did!).unwrap()
       const { did } = verificationMethodsRes[0]
       let attachments = null
       if (formData.url && formData.url !== '') {
-        attachments = formData.url
+        attachments = formData.url.replace(/^https?:\/\//, '')
       } else if (selectedFile) {
         attachments = selectedFile?.title
       }
@@ -162,7 +165,7 @@ const MyCredentials = () => {
         privateKey,
         publicKey,
         payload: {
-          name: `assets/credentials/type/${toSnakeCase(data?.type!)}/cred_name/${toSnakeCase(data.credName)}${attachments ? '/' + attachments : ''}`,
+          name: `assets/credentials/type/${toSnakeCase(data?.type!)}/cred_name/${toSnakeCase(data.credName)}${attachments ? '/' + attachments : ''}/${createdAt}`,
           stream: toBase64(docDetails)
         }
       })
@@ -244,6 +247,7 @@ const MyCredentials = () => {
             toastData: { message: 'Success', display: true, type: 'success', description: 'Deleted Successfully!' }
           })
         )
+        setIsDeleteModalOpen(false)
       } else {
         dispatch(
           feedbackActions.setToastData({

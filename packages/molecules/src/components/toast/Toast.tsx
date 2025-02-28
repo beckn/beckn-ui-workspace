@@ -77,7 +77,7 @@ const Toast: React.FC<ToastProps> = ({ status, title, description, onClose, data
           variant="subTitleRegular"
           text={description}
           data-testid={`toast_description`}
-          style={{ marginLeft: '2rem' }}
+          style={{ marginLeft: '2rem', marginBottom: 'unset !important' }}
         />
       )}
     </Box>

@@ -16,7 +16,7 @@ import {
 import { parseDIDData } from '@utils/did'
 import { extractAuthAndHeader, filterByKeyword, generateRandomCode, toBase64, toSnakeCase } from '@utils/general'
 import { generateAuthHeader, generateAuthHeaderForDelete } from '@services/cryptoUtilService'
-import { feedbackActions } from '@beckn-ui/common'
+import { feedbackActions, formatDate } from '@beckn-ui/common'
 import { useRouter } from 'next/router'
 import { ItemMetaData } from '@components/credLayoutRenderer/ItemRenderer'
 import axios from '@services/axios'
@@ -65,16 +65,19 @@ const PhysicalAssets = () => {
     setIsLoading(true)
     try {
       const result = await getDocuments(user?.did!).unwrap()
-      const list: ItemMetaData[] = parseDIDData(result)['assets']['physical'].map((item, index) => {
-        return {
-          id: index,
-          title: item.type,
-          isVerified: true,
-          image: DocIcon,
-          datetime: new Date().toString(),
-          data: item
-        }
-      })
+      const list: ItemMetaData[] = parseDIDData(result)
+        ['assets']['physical'].map((item, index) => {
+          return {
+            id: index,
+            title: item.type,
+            isVerified: true,
+            image: DocIcon,
+            datetime: item?.createdAt?.length > 5 ? item.createdAt : Math.floor(new Date().getTime() / 1000),
+            data: item
+          }
+        })
+        .filter(val => val)
+        .sort((a, b) => Number(b.data.createdAt) - Number(a.data.createdAt))
       setItems(list)
       setFilteredItems(list)
     } catch (error) {
@@ -145,7 +148,7 @@ const PhysicalAssets = () => {
       setIsLoading(true)
 
       const docDetails = JSON.stringify(data)
-
+      const createdAt = Math.floor(new Date().getTime() / 1000)
       const verificationMethodsRes = await getVerificationMethods(user?.did!).unwrap()
       const { did } = verificationMethodsRes[0]
       let attachments = null
@@ -159,7 +162,7 @@ const PhysicalAssets = () => {
         privateKey,
         publicKey,
         payload: {
-          name: `assets/physical/type/${toSnakeCase(data?.type!)}/source/wallet${attachments ? '/' + attachments : ''}/${generateRandomCode()}`,
+          name: `assets/physical/type/${toSnakeCase(data?.type!)}/source/wallet${attachments ? '/' + attachments : ''}/${createdAt}/${generateRandomCode()}`,
           stream: toBase64(docDetails)
         }
       })

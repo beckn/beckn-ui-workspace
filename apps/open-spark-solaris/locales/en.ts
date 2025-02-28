@@ -101,6 +101,7 @@ const en: { [key: string]: string } = {
   items: 'Order Overview',
   loading: 'Loading Plans',
   pleaseWait: 'Please wait!',
-  confirmLoaderSubtext: 'While we confirm your order'
+  confirmLoaderSubtext: 'While we confirm your order',
+  noProduct: 'There are no products in this category yet! New products will be added soon.'
 }
 export default en
