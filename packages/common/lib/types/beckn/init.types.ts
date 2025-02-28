@@ -110,6 +110,7 @@ export type QuoteBreakupInfo = {
     value: string
   }
   title: string
+  item?: { id: string }
 }
 
 type QuoteInfo = {

@@ -80,22 +80,19 @@ export const getSubTotalAndDeliveryCharges = (
   let currencySymbol
 
   if (initData && initData.length > 0) {
-    let quantity = 1
     initData.forEach(data => {
-      if (typeof frequency !== 'number') {
-        ;(data.message.order.items as any).forEach((item: any) => {
-          quantity = frequency?.[item.id].quantity
-        })
-      } else {
-        quantity = frequency
-      }
-
       totalPriceWithCurrency = {
         value: totalPriceWithCurrency.value + Number(data.message.order.quote.price?.value) || 0,
         currency: data.message.order.quote.price?.currency || 'INR'
       }
       if (data.message.order.quote.breakup) {
         data.message.order.quote.breakup.forEach(breakup => {
+          let quantity = 1
+          if (typeof frequency !== 'number') {
+            quantity = frequency?.[breakup.item?.id!]?.quantity || 1
+          } else {
+            quantity = frequency
+          }
           const itemPrice = Number(breakup.price.value) || 0
           subTotal += itemPrice * quantity
         })

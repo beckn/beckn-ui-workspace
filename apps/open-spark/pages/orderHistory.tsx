@@ -12,6 +12,7 @@ import { testIds } from '@shared/dataTestIds'
 import { RENTAL_ORDER_CATEGORY_ID, RETAIL_ORDER_CATEGORY_ID } from '@lib/config'
 import { OrderHistoryData } from '@lib/types/orderHistory'
 import EmptyOrder from '@components/orderHistory/emptyOrder'
+import { currencyFormat } from '@utils/general'
 
 const orderStatusMap: Record<string, string> = {
   'In Review': 'Pending'
@@ -157,7 +158,7 @@ const OrderHistory = () => {
 
                     <Text
                       as={Typography}
-                      text={`${order.quote.price.currency} ${order.quote.price.value}`}
+                      text={`${order.quote.price.currency} ${currencyFormat(Number(order.quote.price.value))}`}
                       fontWeight="600"
                       fontSize={'12px'}
                       dataTest={testIds.orderHistory_Price}

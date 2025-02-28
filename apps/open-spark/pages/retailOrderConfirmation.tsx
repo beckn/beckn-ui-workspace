@@ -8,10 +8,10 @@ import axios from '@services/axios'
 import { Box } from '@chakra-ui/react'
 import Cookies from 'js-cookie'
 import { LoaderWithMessage, utilGenerateEllipsedText } from '@beckn-ui/molecules'
-import { ConfirmResponseModel } from '@beckn-ui/common/lib/types'
+import { ConfirmResponseModel, ICartRootState } from '@beckn-ui/common/lib/types'
 import { checkoutActions, CheckoutRootState } from '@beckn-ui/common/src/store/checkout-slice'
 import { orderActions } from '@beckn-ui/common/src/store/order-slice'
-import { getPayloadForConfirm, getPayloadForOrderHistoryPost } from '@beckn-ui/common/src/utils'
+// import { getPayloadForOrderHistoryPost } from '@beckn-ui/common/src/utils'
 import { useConfirmMutation } from '@beckn-ui/common/src/services/confirm'
 import { testIds } from '@shared/dataTestIds'
 import {
@@ -30,6 +30,7 @@ import { AuthRootState } from '@store/auth-slice'
 import { extractAuthAndHeader, generateRandomCode, toBase64, toSnakeCase } from '@utils/general'
 import { feedbackActions } from '@beckn-ui/common'
 import { getRentalPayloadForConfirm } from '@utils/confirm-utils'
+import { getPayloadForConfirm, getPayloadForOrderHistoryPost } from '@utils/payload'
 
 const retailOrderConfirmation = () => {
   const { t } = useLanguage()
@@ -61,6 +62,7 @@ const retailOrderConfirmation = () => {
 
   const initResponse = useSelector((state: CheckoutRootState) => state.checkout.initResponse)
   const confirmResponse = useSelector((state: CheckoutRootState) => state.checkout.confirmResponse)
+  const cartItems = useSelector((state: ICartRootState) => state.cart.items)
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
 
   const getOrderCategoryId = (type: any) => {
@@ -187,19 +189,38 @@ const retailOrderConfirmation = () => {
     }
   }, [confirmResponse])
 
+  const getCartItemsWithQuantity = () => {
+    const cartItemQuantity: any = {}
+    let totalCartPrice: number = 0
+    cartItems.forEach((item: any) => {
+      const totalPrice = Number(item.price.value) * item.quantity
+      cartItemQuantity[item.id] = {
+        id: item.id,
+        quantity: item.quantity,
+        totalPrice: totalPrice
+      }
+      totalCartPrice = totalCartPrice + totalPrice
+    })
+    return { cartItemQuantity, totalCartPrice }
+  }
+
   useEffect(() => {
     if (initResponse && initResponse.length > 0) {
       const payload =
         type === 'RENT_AND_HIRE'
           ? getRentalPayloadForConfirm(initResponse, timestamp.fromTime!, timestamp.toTime!)
-          : getPayloadForConfirm(initResponse)
+          : getPayloadForConfirm(initResponse, getCartItemsWithQuantity()) // fixed temporary once Rahul fixes the changes regarding dynamic price calculation on BE revert the chnges and do the fixes accord.
       confirm(payload)
     }
   }, [initResponse, timestamp])
 
   useEffect(() => {
     if (confirmResponse && confirmResponse.length > 0) {
-      const ordersPayload = getPayloadForOrderHistoryPost(confirmResponse, getOrderCategoryId(type))
+      const ordersPayload = getPayloadForOrderHistoryPost(
+        confirmResponse,
+        getOrderCategoryId(type),
+        getCartItemsWithQuantity()
+      ) // fixed temporary once Rahul fixes the changes regarding dynamic price calculation on BE revert the chnges and do the fixes accord.
       axios
         .post(`${strapiUrl}/unified-beckn-energy/order-history/create`, ordersPayload, axiosConfig)
         .then(res => {

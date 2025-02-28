@@ -934,14 +934,28 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
     const getDoc = await fetchCredentials()
   }
 
+  const getCartItemsWithQuantity = () => {
+    const cartItemQuantity: any = {}
+    let totalCartPrice: number = 0
+    cartItems.forEach((item: any) => {
+      const totalPrice = Number(item.price.value) * item.quantity
+      cartItemQuantity[item.id] = {
+        id: item.id,
+        quantity: item.quantity,
+        totalPrice: totalPrice
+      }
+      totalCartPrice = totalCartPrice + totalPrice
+    })
+    return { cartItemQuantity, totalCartPrice }
+  }
+
   const calculateEMIDetails = (item: any, cartItems: any[], index: number, price: any, plan: any) => {
     const storageKey = `originalInterestRate_${plan.id}`
 
-    const quantity = Number(cartItems[0]?.quantity) || 1
-    const totalPrice = Number(cartItems[index]?.price?.value || 0)
+    const cartDetails = getCartItemsWithQuantity()
+    const totalCartPrice = Number(cartDetails.totalCartPrice || 0)
     const months = parseInt(item.name.match(/\d+/)?.[0] || '1')
     const annualInterestRate = Number(parseFloat(item?.price?.value) || 0)
-    const priceValue = Number(price?.value) || 0
     const processingFees = Number(emiPlans[index].providerShortDescription) || 0
 
     // Only store the original rate once per provider/loan type
@@ -954,8 +968,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
     }
 
     // Calculate with current interest rate
-    const priceTotal = priceValue * quantity
-    const principal = priceTotal || totalPrice || priceTotal + totalPrice
+    const principal = totalCartPrice
     const approvedLoanPercentage = Number(item.code) || 0
     const approvedLoanAmount = (approvedLoanPercentage / 100) * principal + processingFees
 

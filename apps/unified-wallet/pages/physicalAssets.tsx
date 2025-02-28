@@ -183,10 +183,6 @@ const PhysicalAssets = () => {
           })
         )
         setOpenModal(false)
-        setFormData({
-          type: '',
-          credName: ''
-        })
         setSelectedFile(undefined)
       } else {
         dispatch(
@@ -327,9 +323,10 @@ const PhysicalAssets = () => {
 
     return (
       Object.values(restFormData).every(value => value !== '') &&
-      Object.values(restFormErrors).every(value => value === '')
+      Object.values(restFormErrors).every(value => value === '') &&
+      selectedFile
     )
-  }, [formData, formErrors])
+  }, [formData, formErrors, selectedFile])
 
   const getInputs = useCallback(() => {
     const inputs: InputProps[] = [

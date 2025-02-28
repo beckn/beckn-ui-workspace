@@ -234,11 +234,12 @@ const CheckoutPage = () => {
   }
 
   const createPaymentBreakdownMap = () => {
+    const cartItemsWithQuantity = getCartItemsWithQuantity()
     const paymentBreakdownMap: PaymentBreakDownModel = {}
     if (isInitResultPresent()) {
       initResponse.map((res, ind) => {
         res.message.order.quote.breakup.forEach(breakup => {
-          const quantity = Number(cartItems[ind]?.quantity) || 1
+          let quantity = cartItemsWithQuantity[breakup.item?.id!]?.quantity || 1
           paymentBreakdownMap[breakup.title] = {
             value: (
               Number(paymentBreakdownMap[breakup.title]?.value || 0) +

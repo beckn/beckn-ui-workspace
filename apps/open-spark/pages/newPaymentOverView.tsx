@@ -98,7 +98,7 @@ const NewPaymentOverView = () => {
                         style={{ width: '68px' }}
                       />
                       <Typography
-                        text={items.productInfo.providerName}
+                        text={items?.productInfo?.providerName}
                         variant="subTextRegular"
                       />
                     </Flex>
@@ -201,6 +201,7 @@ const NewPaymentOverView = () => {
             <Typography
               fontWeight="600"
               fontSize="15px"
+              style={{ width: '12rem' }}
               text={'Total Amount to be paid upfront'}
             />
             <Flex alignItems={'center'}>
