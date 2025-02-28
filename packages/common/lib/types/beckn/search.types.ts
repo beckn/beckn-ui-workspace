@@ -36,7 +36,7 @@ export interface ParsedItemModel {
   domain?: string
   transactionId: string
   providerId: string
-  providerName: string
+  providerName?: string
   providerImg?: Message[]
   item: Item
   rating?: string

@@ -50,7 +50,7 @@ const HomePage = () => {
     if (user && user?.deg_wallet) {
       setWalletDetails(user.deg_wallet)
     }
-
+    console.log(shouldShowInitialAlert)
     if (
       shouldShowInitialAlert &&
       user?.deg_wallet &&

@@ -61,7 +61,7 @@ const headerNames: PathnameObjectType = {
   '/confirmRent': 'Confirm Rent',
   '/newPaymentOverView': 'New Payment Overview ',
   '/retailPaymentMethod': 'Select Payment Method',
-  '/orderHistory': 'My Orders',
+  '/orderHistory': 'My Services',
   '/secureCheckout': 'Secure Checkout',
   '/myRental': 'My Rentals',
   '/rentAndHire': '',

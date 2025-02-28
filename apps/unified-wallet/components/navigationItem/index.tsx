@@ -54,6 +54,7 @@ const NavigationItem = (props: NavigationItemProps) => {
         </Flex>
         {arrow && (
           <Image
+            w={'8px'}
             src={navIcon}
             alt="nav_arrow"
           />

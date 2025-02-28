@@ -102,7 +102,7 @@ const OrderOverview: React.FC<OrderOverviewProps> = ({ items, showPriceAndStatus
             >
               <Typography
                 color="#4398E8"
-                text={`Rs. ${item.price}`}
+                text={`Rs. ${Number(item.price).toFixed(2)}`}
               />
               <Flex alignItems="center">
                 <Image

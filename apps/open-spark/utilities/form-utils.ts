@@ -26,6 +26,8 @@ export const validateForm = (formData: ShippingFormData): FormErrors => {
 
   if (formData.address.trim() === '') {
     errors.address = 'errorAddress'
+  } else if (formData.address.trim().length < 3) {
+    errors.address = 'errorAddressMinLength'
   }
 
   if (formData.zipCode.trim() === '') {
@@ -92,6 +94,8 @@ export const signUpValidateForm = (formData: SignUpProps): CustomFormErrorProps 
   }
   if (formData.address.trim() === '') {
     errors.address = 'errorAddress'
+  } else if (formData.address.trim().length < 3) {
+    errors.address = 'errorAddressMinLength'
   }
   if (formData?.mobileNumber?.trim() === '') {
     errors.mobileNumber = 'errorNumber'

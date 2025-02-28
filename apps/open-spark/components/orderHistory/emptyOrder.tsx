@@ -2,7 +2,7 @@ import React from 'react'
 import { Text, Flex, Image } from '@chakra-ui/react'
 import { Typography } from '@beckn-ui/molecules'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
-import orderHistoreyPageIcon from '../../public/images/orderHistoryPageIcon.svg'
+import orderHistoreyPageIcon from '../../public/images/orderHistory-1.svg'
 import { useLanguage } from '@hooks/useLanguage'
 import { useRouter } from 'next/router'
 import { testIds } from '@shared/dataTestIds'
@@ -29,25 +29,26 @@ const EmptyOrder = () => {
 
         <Text
           as={Typography}
-          text={t.emptyOrderHistoryText}
+          text={'Nothing to show right now!'}
           fontWeight="600"
           fontSize={'15px'}
           align={'center'}
           dataTest={testIds.emptyOrderHistoryText}
         />
-        <Text
+        {/* <Text
           as={Typography}
-          text={t.noExistingWorkflowText}
+          text={'go back home CTA'}
           fontWeight="400"
           fontSize={'15px'}
           align={'center'}
           dataTest={testIds.noExistingWorkflowText}
-        />
+        /> */}
       </Flex>
 
       <BecknButton
+        text="Go back home"
         dataTest={testIds.emptyOrder_button}
-        children="Create New Workflow"
+        children=""
         handleClick={() => router.push('/')}
       />
     </Flex>

@@ -6,8 +6,7 @@ import { useLanguage } from '../hooks/useLanguage'
 import {
   areShippingAndBillingDetailsSame,
   getInitPayload,
-  getSubTotalAndDeliveryCharges,
-  getTotalCartItems
+  getSubTotalAndDeliveryCharges
 } from '@beckn-ui/common/src/utils'
 import { Checkout, ProductPrice } from '@beckn-ui/becknified-components'
 import { useRouter } from 'next/router'
@@ -257,6 +256,17 @@ const CheckoutPage = () => {
     }) ?? []
   console.log('duration', duration)
 
+  const getCartItemsWithQuantity = () => {
+    const cartItemQuantity: any = {}
+    cartItems.forEach((item: any) => {
+      cartItemQuantity[item.id] = {
+        id: item.id,
+        quantity: item.quantity
+      }
+    })
+    return cartItemQuantity
+  }
+
   return (
     <Box
       className={`hideScroll ${type !== 'RENT_AND_HIRE' ? 'checkout-open-spark' : ''}`}
@@ -405,7 +415,7 @@ const CheckoutPage = () => {
               totalValueWithCurrency: {
                 value: getSubTotalAndDeliveryCharges(
                   initResponse,
-                  type === 'RENT_AND_HIRE' ? duration : getTotalCartItems(cartItems)
+                  type === 'RENT_AND_HIRE' ? duration : getCartItemsWithQuantity()
                 ).subTotal.toString(),
                 currency: getSubTotalAndDeliveryCharges(initResponse, type === 'RENT_AND_HIRE' ? duration : 1)
                   .currencySymbol!
@@ -432,7 +442,7 @@ const CheckoutPage = () => {
                       ...emiDetails,
                       payableAmount: getSubTotalAndDeliveryCharges(
                         initResponse,
-                        type === 'RENT_AND_HIRE' ? duration : getTotalCartItems(cartItems)
+                        type === 'RENT_AND_HIRE' ? duration : getCartItemsWithQuantity()
                       ).subTotal.toString()
                     }
                   ]

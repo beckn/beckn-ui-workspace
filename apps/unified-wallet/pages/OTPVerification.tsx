@@ -49,7 +49,7 @@ const OTPVerification = () => {
       marginTop={{ base: '10px', md: '60px', lg: '20px' }}
     >
       <VerifyOTP
-        description="Enter the one time password we have just sent to your mobile number"
+        description="Enter the one-time password we have just sent to your mobile number"
         handleVerifyOtp={handleVerifyOtp}
       />
     </Box>

@@ -203,6 +203,7 @@ const PhysicalAssetsDetails = () => {
               {profile.details.map((detail: any, idx: number) => (
                 <Box
                   key={idx}
+                  cursor={detail.label !== 'Self' ? 'pointer' : 'default'}
                   onClick={() => {
                     console.log(detail.label)
                     if (detail.label !== 'Self') {

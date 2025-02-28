@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Box, useBreakpoint } from '@chakra-ui/react'
+import { Box, Divider, useBreakpoint } from '@chakra-ui/react'
 import { FormField, Typography, Loader, Button, LoaderWithMessage } from '@beckn-ui/molecules'
 import DetailsCard from './details-card'
 import ItemDetails from './checkout-item-details'
@@ -51,7 +51,7 @@ const Checkout: React.FC<CheckoutProps<FormField[]>> = ({
             {items?.type === 'RENT_AND_HIRE' ? (
               <OrderOverview items={items.data as RentalItemProps[]} />
             ) : (
-              (items?.data as ItemDetailProps[])?.map((item, i) => (
+              (items?.data as ItemDetailProps[])?.map((item, i, arr) => (
                 <div
                   key={i}
                   data-test={dataTestItemDetails}
@@ -64,6 +64,7 @@ const Checkout: React.FC<CheckoutProps<FormField[]>> = ({
                     currency={item.currency}
                     image={item.image}
                   />
+                  {arr.length > 1 && i !== arr.length - 1 && <Divider mb={'15px'} />}
                 </div>
               ))
             )}

@@ -86,6 +86,8 @@ const en: { [key: string]: string } = {
   errorModelNumber: 'Model Number is required',
   errorSerialNum: 'Serial Number is required',
   errorSelectVerificationMethod: 'Select Verification Method is required',
-  errorSelectCountry: 'Select Country is required'
+  errorSelectCountry: 'Select Country is required',
+  errorUrl: 'URL is required',
+  errorUrl1: 'Invalid URL'
 }
 export default en
