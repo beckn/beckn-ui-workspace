@@ -131,7 +131,7 @@ const cartIconBlackList: string[] = [
 ]
 const bottomHeaderBlackList = ['/orderConfirmation', '/', '/feedback', '/retailOrderConfirmation', '/upiScreen']
 const orderIconList = ['/orderDetails']
-const editIconList: string[] = ['']
+const editIconList: string[] = ['/profile']
 const profileSectionIcon = ['/buyingPreference']
 const infoIconList: string[] = ['/myDers']
 
