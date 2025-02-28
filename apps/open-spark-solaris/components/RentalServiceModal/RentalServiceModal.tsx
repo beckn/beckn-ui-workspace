@@ -469,11 +469,30 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
             ))}
           </Box>
 
-          <BecknButton
-            text="Next"
-            color="white"
-            handleClick={handlePricing}
-          />
+          {batteryOptions.length > 0 && (
+            <BecknButton
+              text="Next"
+              handleClick={handleNext}
+              disabled={!selectedBattery}
+            />
+          )}
+          {batteryOptions.length === 0 && (
+            <>
+              <Box p={4}>
+                <Text
+                  textAlign={'center'}
+                  color="#858585"
+                  fontSize={'14px'}
+                >
+                  No Assets found
+                </Text>
+              </Box>
+              <BecknButton
+                text="Back"
+                handleClick={() => setCurrentView('upload')}
+              />
+            </>
+          )}
         </Box>
       )
     }
