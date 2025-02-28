@@ -3,7 +3,7 @@ import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import type React from 'react'
 import { Box, Flex, Text } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
-import { feedbackActions, type ICartRootState } from '@beckn-ui/common'
+import { DiscoveryRootState, feedbackActions, formatDate, ParsedItemModel, type ICartRootState } from '@beckn-ui/common'
 import { useDispatch, useSelector } from 'react-redux'
 import { DOMAIN_PATH } from '@lib/config'
 import { prepareApiPayload } from '../utilities/confirmRent-utils'
@@ -13,13 +13,15 @@ import CustomTimePicker from '@components/dateTimePicker/customTimePicker'
 import CustomDatePicker from '@components/dateTimePicker/customDatePicker'
 
 export default function ConfirmRent() {
-  const [fromTime, setFromTime] = useState<Date>(new Date())
-  const [toTime, setToTime] = useState<Date>(new Date())
+  // const [fromTime, setFromTime] = useState<Date>(new Date())
+  // const [toTime, setToTime] = useState<Date>(new Date())
   const [date, setDate] = useState<string>(new Date().toISOString())
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
   const router = useRouter()
   const dispatch = useDispatch()
   const cartItems = useSelector((state: ICartRootState) => state.cart.items) as CartItem[]
+  const selectedProduct: ParsedItemModel = useSelector((state: DiscoveryRootState) => state.discovery.selectedProduct)
+  const rentalDate = selectedProduct.item.fulfillments[0].state?.name
 
   const handleConfirm = async () => {
     const formTimestamp = Math.floor(new Date(fromTime).getTime() / 1000)
@@ -64,6 +66,37 @@ export default function ConfirmRent() {
     }
   }
 
+  const roundToNextHour = (date: Date) => {
+    const roundedDate = new Date(date)
+    // If minutes are not 0, round up to next hour
+    if (roundedDate.getMinutes() > 0) {
+      roundedDate.setHours(roundedDate.getHours() + 1)
+    }
+    roundedDate.setMinutes(0)
+    roundedDate.setSeconds(0)
+    roundedDate.setMilliseconds(0)
+    return roundedDate
+  }
+
+  // Initialize with rounded current time
+  const [fromTime, setFromTime] = useState<Date>(roundToNextHour(new Date()))
+  const [toTime, setToTime] = useState<Date>(() => {
+    const initialEndTime = roundToNextHour(new Date())
+    initialEndTime.setHours(initialEndTime.getHours() + 1)
+    return initialEndTime
+  })
+
+  // Update the time change handlers
+  const handleFromTimeChange = (date: Date) => {
+    const roundedTime = roundToNextHour(date)
+    setFromTime(roundedTime)
+  }
+
+  const handleToTimeChange = (date: Date) => {
+    const roundedTime = roundToNextHour(date)
+    setToTime(roundedTime)
+  }
+
   return (
     <Box
       mt={5}
@@ -81,7 +114,7 @@ export default function ConfirmRent() {
         </Text>
         <Flex align="center">
           <CustomDatePicker
-            selected={new Date(date)}
+            selected={formatDate(Number(rentalDate) * 1000, 'MM/dd/yy')}
             placeholderText="Select 'from' date"
             onChange={(date: any) => setDate(date?.toISOString())}
             dateFormat="dd-MM-yyyy"
@@ -105,7 +138,7 @@ export default function ConfirmRent() {
             <CustomTimePicker
               selected={fromTime}
               placeholderText="Select 'from'"
-              onChange={(date: any) => setFromTime(date)}
+              onChange={handleFromTimeChange}
               dateFormat="h:mm aa"
               isInvalid={false}
             />
@@ -113,7 +146,7 @@ export default function ConfirmRent() {
             <CustomTimePicker
               selected={toTime}
               placeholderText="Select 'to'"
-              onChange={(date: any) => setToTime(date)}
+              onChange={handleToTimeChange}
               dateFormat="h:mm aa"
               isInvalid={false}
             />
