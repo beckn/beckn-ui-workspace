@@ -84,6 +84,7 @@ const HomePage = () => {
             name={`${user?.agent?.first_name || ''} ${user?.agent?.last_name || ''}`}
             width="38px"
             height="38px"
+            cursor={'pointer'}
             onClick={() => router.push('/profile')}
           />
         </Box>
