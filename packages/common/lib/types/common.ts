@@ -34,6 +34,7 @@ export interface Price {
 export interface QuoteBreakup {
   title: string
   price: Price
+  item?: { id: string }
 }
 
 export interface Quote {

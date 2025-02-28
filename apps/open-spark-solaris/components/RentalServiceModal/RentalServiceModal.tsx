@@ -217,6 +217,7 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
     setCurrentView('upload')
     setSelectedBattery(null)
     setUploadedFile(null)
+    setBatteryOptions([])
     onClose()
   }
   console.log(batteryOptions)
@@ -543,7 +544,11 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
             <CustomDatePicker
               selected={new Date(date)}
               placeholderText="Select 'from' date"
-              onChange={(date: any) => setDate(date?.toISOString())}
+              onChange={(date: any) => {
+                setDate(date?.toISOString())
+                setFromTime(roundToNextHour(new Date(date)))
+                setToTime(roundToNextHour(new Date(date)))
+              }}
               dateFormat="dd-MM-yyyy"
               isInvalid={false}
             />
