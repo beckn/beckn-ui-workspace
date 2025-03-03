@@ -395,7 +395,6 @@ const MyIdentities = () => {
       Object.values(formData).every(value => value !== '') && Object.values(formErrors).every(value => value === '')
     )
   }, [formData, formErrors])
-  console.log(formData, formErrors)
 
   return (
     <Box

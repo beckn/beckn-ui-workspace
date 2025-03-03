@@ -101,7 +101,14 @@ const PhysicalAssets = () => {
   }, [searchKeyword, items])
 
   const handleOpenModal = () => setOpenModal(true)
-  const handleCloseModal = () => setOpenModal(false)
+  const handleCloseModal = () => {
+    setFormData({
+      type: '',
+      credName: ''
+    })
+    setSelectedFile(undefined)
+    setOpenModal(false)
+  }
 
   const attestDocument = async (did: string) => {
     try {
@@ -127,6 +134,7 @@ const PhysicalAssets = () => {
   const handleOnSubmit = async () => {
     try {
       const errors = validateCredForm(formData) as any
+      delete errors?.url
       setFormErrors(prevErrors => ({
         ...prevErrors,
         ...Object.keys(errors).reduce((acc: any, key) => {
@@ -320,7 +328,7 @@ const PhysicalAssets = () => {
   const isFormFilled = useMemo(() => {
     const { credName, ...restFormData } = formData
     const { credName: credNameError, ...restFormErrors } = formErrors
-
+    console.log(formData, formErrors, selectedFile)
     return (
       Object.values(restFormData).every(value => value !== '') &&
       Object.values(restFormErrors).every(value => value === '') &&
@@ -374,7 +382,7 @@ const PhysicalAssets = () => {
     ]
 
     return inputs
-  }, [formData])
+  }, [formData, formErrors])
 
   const handleOpenCredDetails = (data: ItemMetaData) => {
     console.log(data)
