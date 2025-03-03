@@ -79,7 +79,7 @@ interface EMIApplicationModalProps {
     dateOfBirth: Date | null
     mobileNumber: string
   }
-  handleOnSubmitForm: () => void
+  handleOnSubmitForm: (data: FormData) => void
   syncWalletSuccess?: boolean
 }
 
@@ -221,7 +221,7 @@ const EMIApplicationModal = ({
         duration: 3000,
         isClosable: true
       })
-      handleOnSubmitForm()
+      handleOnSubmitForm(formData)
     } else {
       toast({
         title: 'Error',
@@ -562,6 +562,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
   const [newCalculationIsLoading, setNewCalculationIsLoading] = useState(false)
   const [fetchTransactionsMessage, setFetchTransactionsMessage] = useState('')
   const [previousIndex, setPreviousIndex] = useState<number>()
+  const [isAppliedForDiscountingEMIPlans, setIsAppliedForDiscountingEMIPlans] = useState<boolean>(false)
   const [newTotalCost, setNewTotalCost] = useState(() => {
     return Number(localStorage.getItem('totalCost')) || 0
   })
@@ -573,6 +574,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
   const [getDocuments, { isLoading: verifyLoading }] = useGetDocumentsMutation()
   const selectAPIRes = useSelector((state: any) => state.selectedEmi.apiResponse)
   const selectedEmi = useSelector((state: any) => state.selectedEmi?.apiResponse?.[0]?.message?.order?.items) || []
+  const selectedEMIDetails = useSelector((state: any) => state.selectedEmi.emiDetails)
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
   const fetchEMIPlans = (isDiscounted = false) => {
@@ -635,6 +637,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
       setNewCalculationIsLoading(false)
     }, 10000)
     fetchEMIPlans(true)
+    setIsAppliedForDiscountingEMIPlans(true)
   }
 
   const {
@@ -683,10 +686,10 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
     setSelectedPlan('')
   }
 
-  const handleFinanceOnConfirm = () => {
+  const handleFinanceOnConfirm = (data: FormData) => {
     if (selectAPIRes && selectedEmi.length > 0) {
       const calculatedEMIs = JSON.parse(localStorage.getItem('calculatedEMIs')!) || 0
-      console.log('selectedPlan', calculatedEMIs[selectedEmi[0].id]) // calculatedEMIs[selectedPlan.i])
+      console.log('selectedPlan', calculatedEMIs[selectedEmi[0].id], data) // calculatedEMIs[selectedPlan.i])
 
       const payload = {
         data: [
@@ -700,7 +703,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
             message: {
               orders: [
                 {
-                  items: selectAPIRes[0].message.order.items.filter((item: any) => item.id === selectedEmi[0].id), // calculatedEMIs[selectedPlan.i].id),
+                  items: selectAPIRes[0].message.order.items.filter((item: any) => item.id === data.loanTenure), // calculatedEMIs[selectedPlan.i].id),
                   provider: {
                     id: selectAPIRes[0].message.order.provider.id
                   },
@@ -709,10 +712,10 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                       type: 'Delivery',
                       customer: {
                         person: {
-                          name: formData.fullName
+                          name: data.fullName
                         },
                         contact: {
-                          phone: formData.mobileNumber
+                          phone: data.mobileNumber
                         }
                       },
                       stops: [
@@ -741,7 +744,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                     }
                   ],
                   billing: {
-                    name: formData.fullName,
+                    name: data.fullName,
                     address:
                       "123, Terminal 1, Kempegowda Int'\''l Airport Rd, A - Block, Gangamuthanahalli, Karnataka 560300, India",
                     state: {
@@ -751,7 +754,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                       name: 'Karnataka'
                     },
                     email: user?.email,
-                    phone: formData.mobileNumber
+                    phone: data.mobileNumber
                   },
                   payments: [
                     {
@@ -764,7 +767,17 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                       status: 'PAID',
                       type: 'PRE-FULFILLMENT'
                     }
-                  ]
+                  ],
+                  ...(isAppliedForDiscountingEMIPlans && {
+                    tags: [
+                      {
+                        descriptor: {
+                          code: 'preFinanced',
+                          name: 'true'
+                        }
+                      }
+                    ]
+                  })
                 }
               ]
             }
@@ -782,12 +795,12 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
     }
   }
 
-  const handleOnSubmit = () => {
-    console.log('Submitting Form:', formData)
+  const handleOnSubmit = (data: FormData) => {
+    console.log('Submitting Form:', data)
     console.log(localStorage.getItem('actualCost'))
     setIsSubmitting(true)
     setOpenModal(false)
-    handleFinanceOnConfirm()
+    handleFinanceOnConfirm(data)
 
     setTimeout(() => {
       setIsSubmitting(false)
