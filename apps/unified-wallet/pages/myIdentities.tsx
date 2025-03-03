@@ -228,6 +228,7 @@ const MyIdentities = () => {
   const handleOnSubmit = async () => {
     try {
       const errors = validateCredForm(formData) as any
+      delete errors.url
       setFormErrors(prevErrors => ({
         ...prevErrors,
         ...Object.keys(errors).reduce((acc: any, key) => {
@@ -351,7 +352,7 @@ const MyIdentities = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
-
+    console.log(name, value)
     setFormData((prevFormData: FormProps) => ({
       ...prevFormData,
       [name]: value
@@ -394,6 +395,7 @@ const MyIdentities = () => {
       Object.values(formData).every(value => value !== '') && Object.values(formErrors).every(value => value === '')
     )
   }, [formData, formErrors])
+  console.log(formData, formErrors)
 
   return (
     <Box

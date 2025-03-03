@@ -24,7 +24,7 @@ export const parseDIDData = (data: { did: string; attestations?: AttestationData
         id: parts[4],
         did,
         attestations: attestations!,
-        createdAt: parts[6]
+        createdAt: parts[5]
       })
     } else if (parts[0] === 'assets') {
       const category = parts[1] // credentials | physical

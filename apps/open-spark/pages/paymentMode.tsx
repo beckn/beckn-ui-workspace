@@ -503,11 +503,11 @@ const EMIApplicationModal = ({
               options={[
                 {
                   label: `${selectedEmi[0].name} months: ₹ ${currencyFormat(monthlyInstallment[0].emi)}/months`,
-                  value: `${selectedEmi[0].name} months: ₹ ${currencyFormat(monthlyInstallment[0].emi)}/months`
+                  value: monthlyInstallment[0].itemId
                 },
                 {
                   label: `${selectedEmi[1].name} months: ₹ ${currencyFormat(monthlyInstallment[1].emi)}/months`,
-                  value: `${selectedEmi[1].name} months: ₹ ${currencyFormat(monthlyInstallment[1].emi)}/months`
+                  value: monthlyInstallment[1].itemId
                 }
               ]}
               placeholder={''}
@@ -602,6 +602,10 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
         dispatch(discoveryEmiPlanActions.addProducts({ products: parsedSearchItems }))
         setEmiPlans(parsedSearchItems)
         setIsLoading(true)
+        if (isDiscounted) {
+          const selectedPlanData = parsedSearchItems.find(plan => plan.id === selectedPlan)
+          handleEmiSelect(selectedPlanData?.id!, parsedSearchItems)
+        }
       })
       .catch(e => {
         setIsLoading(false)
@@ -795,8 +799,9 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
       }, 3000)
     }, 5000)
   }
-  const handleEmiSelect = (planId: string) => {
-    const selectedPlan = emiPlans.find(plan => plan.id === planId)
+  const handleEmiSelect = (planId: string, customEMIPlans?: any[]) => {
+    const emiPlanList = customEMIPlans ? customEMIPlans : emiPlans
+    const selectedPlan = emiPlanList.find(plan => plan.id === planId)
     if (!selectedPlan) {
       console.error('Selected EMI plan not found!')
       return
@@ -808,12 +813,12 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
 
       const months = parseInt(item.name.match(/\d+/)?.[0] || '1')
       const annualInterestRate = Number(parseFloat(item?.price?.value) || 0)
+      const processingFees = Number(emiPlanList[ind].providerShortDescription) || 0
       const priceValue = Number(price?.value) || 0
       const priceTotal = priceValue * quantity
       const principal = priceTotal || totalPrice || priceTotal + totalPrice
       const approvedLoanPercentage = Number(item.code) || 0
-      const approvedLoanAmount =
-        (approvedLoanPercentage / 100) * principal + Number(emiPlans[ind].providerShortDescription)
+      const approvedLoanAmount = (approvedLoanPercentage / 100) * principal
       const newPayableAmount = Number(principal - approvedLoanAmount) || 0
 
       if (payableAmount !== newPayableAmount) {
@@ -825,7 +830,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
         (approvedLoanAmount * monthlyInterestRate * Math.pow(1 + monthlyInterestRate, months)) /
           (Math.pow(1 + monthlyInterestRate, months) - 1) || 0
 
-      const emi = Math.floor(emiWithoutInterest)
+      const emi = Math.floor(emiWithoutInterest + processingFees / months) // no interest calculated on processing fees
 
       const totalCost = emi * months
 
@@ -970,7 +975,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
     // Calculate with current interest rate
     const principal = totalCartPrice
     const approvedLoanPercentage = Number(item.code) || 0
-    const approvedLoanAmount = (approvedLoanPercentage / 100) * principal + processingFees
+    const approvedLoanAmount = (approvedLoanPercentage / 100) * principal
 
     const newPayableAmount = Number(principal - approvedLoanAmount) || 0
 
@@ -983,7 +988,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
       (approvedLoanAmount * monthlyInterestRate * Math.pow(1 + monthlyInterestRate, months)) /
         (Math.pow(1 + monthlyInterestRate, months) - 1) || 0
 
-    const emi = Math.floor(emiWithoutInterest + processingFees / months)
+    const emi = Math.floor(emiWithoutInterest + processingFees / months) // no interest calculated on processing fees
     const totalCost = emi * months
 
     // Calculate with original (non-discounted) interest rate
@@ -992,7 +997,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
       (approvedLoanAmount * originalMonthlyRate * Math.pow(1 + originalMonthlyRate, months)) /
         (Math.pow(1 + originalMonthlyRate, months) - 1) || 0
 
-    const originalEmi = Math.floor(originalEmiWithoutInterest + processingFees / months)
+    const originalEmi = Math.floor(originalEmiWithoutInterest + processingFees / months) // no interest calculated on processing fees
     const nonDiscountedPrice = originalEmi * months
 
     if (!localStorage.getItem('totalCost')) {

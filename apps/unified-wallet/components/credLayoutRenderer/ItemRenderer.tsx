@@ -64,8 +64,6 @@ const ItemRenderer = (props: ItemRendererProps) => {
   const [openAttestations, setOpenAttestations] = useState<boolean>(false)
   const [isOpen, setIsOpen] = useState(false)
 
-  console.log('Dank', item)
-
   // useEffect(() => {
   //   if (item?.data?.attestations?.length > 0) {
   //     setIsOpen(true)
