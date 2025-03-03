@@ -24,6 +24,7 @@ const OTPVerification = () => {
   useEffect(() => {}, [])
 
   const handleChange = (value: any, index: any) => {
+    if (!/^[0-9]?$/.test(value)) return
     let newArr = [...OTP]
     newArr[index] = value
     setOTP(newArr)

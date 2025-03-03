@@ -26,7 +26,7 @@ const en: { [key: string]: string } = {
   formAddress: 'Address',
   formCustomerId: 'Customer Id',
   name: 'Name',
-  fullName: 'Full Name / Company Name',
+  fullName: 'Enter Full Name / Company Name',
   password: 'Password',
   enterPassword: 'Enter Password',
   email: 'Email',
