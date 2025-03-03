@@ -500,7 +500,12 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
               mr={3}
               onChange={e => setPrice(e.target.value)}
               onKeyDown={e => {
+                // Prevent negative numbers and 'e'
                 if (e.key === '-' || e.key === 'e') {
+                  e.preventDefault()
+                }
+                // Prevent down arrow key when value is 1 or less
+                if (e.key === 'ArrowDown' && parseInt(price) <= 1) {
                   e.preventDefault()
                 }
               }}
