@@ -16,12 +16,12 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 const NewPaymentOverView = () => {
-  const selectedProduct: ParsedItemModel = useSelector((state: DiscoveryRootState) => state.discovery.selectedProduct)
-  const selectedEmi = useSelector((state: any) => state.selectedEmi.apiResponse[0]?.message.order.items) || 0
-  const processingFee =
-    useSelector((state: any) => state.selectedEmi.apiResponse[0]?.message.order.provider.short_desc) || 0
+  // const selectedProduct: ParsedItemModel = useSelector((state: DiscoveryRootState) => state.discovery.selectedProduct)
+  // const selectedEmi = useSelector((state: any) => state.selectedEmi.apiResponse[0]?.message.order.items) || 0
+  // const processingFee =
+  //   useSelector((state: any) => state.selectedEmi.apiResponse[0]?.message.order.provider.short_desc) || 0
   const coverage = useSelector((state: any) => state.discoveryEmiPlan.products[0]?.item[0]?.code) || 0
-  const monthlyInstallment = useSelector((state: any) => state.selectedEmi.emiDetails)
+  // const monthlyInstallment = useSelector((state: any) => state.selectedEmi.emiDetails)
   const [totalValue, setTotalValue] = useState<{ total: number; discountAmount: number }>({
     total: 0,
     discountAmount: 0
@@ -42,7 +42,7 @@ const NewPaymentOverView = () => {
     const discountAmount = total * (discountPercentage / 100)
 
     setTotalValue({ total, discountAmount })
-    setPayableValue(total - discountAmount - Number(processingFee))
+    setPayableValue(total - discountAmount)
   }
 
   useEffect(() => {
