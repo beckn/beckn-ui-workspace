@@ -125,6 +125,7 @@ const MyCredentials = () => {
   const handleOnSubmit = async () => {
     try {
       const errors = validateCredForm(formData) as any
+      delete errors?.url
       setFormErrors(prevErrors => ({
         ...prevErrors,
         ...Object.keys(errors).reduce((acc: any, key) => {
@@ -318,6 +319,7 @@ const MyCredentials = () => {
         value: formData.type!,
         handleChange: handleSelectChange,
         label: 'Credential Type',
+        placeholder: 'Select Type',
         error: formErrors.type
       },
       {

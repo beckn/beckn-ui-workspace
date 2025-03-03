@@ -39,10 +39,12 @@ const PhysicalAssetsDetails = () => {
       fileUrl: details?.fileUrl,
       data: { ...data.data, source: null, attachment: null }
     })
-  }
-
-  const getUserData = async () => {
-    setOwnerDetails({ name: '', address: '', phoneNumber: extractMobileNumberFromSubjectDid(user?.did!)! })
+    const metaData = details?.confirmDetails?.[0]?.message?.billing
+    setOwnerDetails({
+      name: metaData?.name || '',
+      address: metaData?.address || '',
+      phoneNumber: extractMobileNumberFromSubjectDid(user?.did!)!
+    })
   }
 
   useEffect(() => {
@@ -51,7 +53,6 @@ const PhysicalAssetsDetails = () => {
       console.log('Data:', data)
       getDecodedStreamData(data)
     }
-    getUserData()
   }, [])
 
   const profiles = ownerDetails

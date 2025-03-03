@@ -72,7 +72,6 @@ const MyTransactions = () => {
         .sort((a, b) => Number(b.data.placedAt) - Number(a.data.placedAt))
       setItems(list)
       setFilteredItems(list)
-      console.log(filteredItems)
     } catch (error) {
       console.error('Error fetching dashboard data:', error)
     } finally {
