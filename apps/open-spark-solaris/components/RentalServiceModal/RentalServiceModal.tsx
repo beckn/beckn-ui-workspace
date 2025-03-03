@@ -76,22 +76,7 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
   const [confirmResOfWalletCatalogue, setConfirmResOfWalletCatalogue] = useState<any>(null)
   const [showTimeError, setShowTimeError] = useState(false)
 
-  const [batteryOptions, setBatteryOptions] = useState<BatteryOption[]>([
-    // {
-    //   id: '1',
-    //   name: 'Battery -1',
-    //   assetId: '123456',
-    //   invoice: 'Invoice.pdf',
-    //   timestamp: '21st Jun 2021, 3.30pm'
-    // },
-    // {
-    //   id: '2',
-    //   name: 'Battery -2',
-    //   assetId: '123456',
-    //   invoice: 'Invoice.pdf',
-    //   timestamp: '21st Jun 2021, 3.30pm'
-    // }
-  ])
+  const [batteryOptions, setBatteryOptions] = useState<BatteryOption[]>([])
   const bearerToken = Cookies.get('authToken')
   const axiosConfig = {
     headers: {
@@ -254,118 +239,26 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
     setToTime(roundedTime)
   }
 
+  // Add this helper function at the top of the component
+  const isToday = (dateToCheck: Date) => {
+    const today = new Date()
+    return (
+      dateToCheck.getDate() === today.getDate() &&
+      dateToCheck.getMonth() === today.getMonth() &&
+      dateToCheck.getFullYear() === today.getFullYear()
+    )
+  }
+
+  // Add this helper function to check if a time is in the past
+  const isTimePast = (timeToCheck: Date) => {
+    const now = new Date()
+    return timeToCheck.getTime() < now.getTime()
+  }
+
   const renderContent = () => {
     if (currentView === 'upload') {
       return (
         <>
-          {/* <Box mb={4}>
-            <Text mb={2}>Device</Text>
-            <Input
-              placeholder="Battery"
-              value="Battery"
-              isReadOnly
-            />
-          </Box> */}
-
-          {/* <Box mb={4}>
-            <Text mb={2}>Asset ID</Text>
-            <Input
-              placeholder="MK-0123459"
-              value="MK-0123459"
-              isReadOnly
-            />
-          </Box> */}
-
-          {/* File Upload Section */}
-          {/* <Box
-            border="1px dashed #E2E8F0"
-            borderRadius="md"
-            p={4}
-            mb={4}
-            textAlign="center"
-          >
-            <input
-              type="file"
-              id="file-upload"
-              disabled={true}
-              ref={fileInputRef}
-              onChange={handleFileChange}
-              style={{ display: 'none' }}
-            />
-            <label htmlFor="file-upload">
-              <Box
-                width={'100%'}
-                height={'100%'}
-                onClick={() => {
-                  if (fileInputRef.current) {
-                    fileInputRef.current.click()
-                  }
-                }}
-              >
-                <VStack>
-                  <Icon
-                    as={FiPlusCircle}
-                    boxSize={6}
-                    color="gray.500"
-                  />
-                  <Typography text={'Upload your file here'} />
-                  <HStack gap={1}>
-                    <Typography
-                      color="#4498E8"
-                      fontSize="10px"
-                      sx={{ cursor: 'pointer', _hover: { textDecoration: 'underline' } }}
-                      text="Browse file"
-                    />{' '}
-                    <Typography
-                      fontSize="10px"
-                      text={'from your computer'}
-                    />
-                  </HStack>
-                </VStack>
-              </Box>
-            </label>
-          </Box> */}
-
-          {/* File Preview */}
-          {/* {uploadedFile && (
-            <Box
-              border="1px solid #E2E8F0"
-              borderRadius="md"
-              p={4}
-              mb={4}
-            >
-              <Flex
-                justify="space-between"
-                align="center"
-              >
-                <Flex align="center">
-                  <Box
-                    as="span"
-                    mr={2}
-                    color="#228B22"
-                  >
-                    📄
-                  </Box>
-                  <Box>
-                    <Text>{uploadedFile.name}</Text>
-                    <Text
-                      fontSize="sm"
-                      color="gray.500"
-                    >
-                      {uploadedFile.size}
-                    </Text>
-                  </Box>
-                </Flex>
-                <CheckIcon color="#228B22" />
-              </Flex>
-              <Progress
-                value={uploadedFile.progress}
-                size="sm"
-                colorScheme="blue"
-                mt={2}
-              />
-            </Box>
-          )} */}
           <Box p={4}>
             <Text
               textAlign={'center'}
@@ -387,10 +280,6 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
               handleClick={handleNext}
             />
           )}
-          {/* <BecknButton
-            text="Next"
-            handleClick={handleNext}
-          /> */}
         </>
       )
     }
@@ -573,6 +462,7 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
                 onChange={handleFromTimeChange}
                 dateFormat="h:mm aa"
                 isInvalid={false}
+                minTime={isToday(new Date(date)) ? new Date() : undefined}
               />
               <Text mx={3}>-</Text>
               <CustomTimePicker
@@ -581,6 +471,13 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
                 onChange={handleToTimeChange}
                 dateFormat="h:mm aa"
                 isInvalid={false}
+                minTime={
+                  isToday(new Date(date))
+                    ? fromTime.getTime() > new Date().getTime()
+                      ? fromTime
+                      : new Date()
+                    : fromTime
+                }
               />
             </Flex>
           </Flex>
@@ -595,12 +492,18 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
           </Text>
           <Flex align="center">
             <Input
+              type="number"
               value={price}
               autoFocus={true}
               width="100px"
               borderRadius="md"
               mr={3}
               onChange={e => setPrice(e.target.value)}
+              onKeyDown={e => {
+                if (e.key === '-' || e.key === 'e') {
+                  e.preventDefault()
+                }
+              }}
             />
             <Text color="gray.600">Rs. per hour</Text>
           </Flex>
@@ -608,6 +511,11 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
         <BecknButton
           text={'Submit & Publish'}
           handleClick={handlePublish}
+          disabled={
+            fromTime.getTime() === toTime.getTime() ||
+            (isToday(new Date(date)) && (isTimePast(fromTime) || isTimePast(toTime))) ||
+            toTime.getTime() < fromTime.getTime()
+          }
         />
       </Box>
     )
@@ -627,16 +535,6 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
             text="Provide Rental Service"
             fontSize="16px"
           />
-          {/* {currentView === 'upload' && (
-            <Text
-              color="#228B22"
-              fontSize="sm"
-              cursor="pointer"
-              onClick={handleAddFromWallet}
-            >
-              Add from wallet
-            </Text>
-          )} */}
         </Flex>
       }
     >

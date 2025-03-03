@@ -144,7 +144,7 @@ const NewPaymentOverView = () => {
         </DetailCard>
       </Box>
       <Typography
-        text="New Payment Options"
+        text="New Payment Overview"
         fontSize="17px"
       />
       <Box mt="8px">
@@ -193,6 +193,7 @@ const NewPaymentOverView = () => {
           <Divider
             mt="15px"
             mb="15px"
+            opacity={'1'}
           />
           <Flex
             justifyContent={'space-between'}
