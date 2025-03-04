@@ -70,10 +70,10 @@ export const getPaymentBreakDown = (
     } else {
       quantity = frequency
     }
-
+    console.log(Number(value), quantity)
     breakUpMap[title] = {
       currency: currency,
-      value: Number(value) * quantity
+      value: (breakUpMap[title]?.value || 0) + Number(value) * quantity
     }
   })
 
