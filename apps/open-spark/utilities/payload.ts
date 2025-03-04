@@ -15,7 +15,15 @@ export const getPayloadForConfirm = (initResponse: InitResponseModel[], cartPric
             provider: {
               id: order.provider.id
             },
-            items: order.items,
+            items: (order.items as any).map((data: any) => {
+              return {
+                ...data,
+                quantity: {
+                  ...data.quantity,
+                  selected: { count: cartPriceDetails[order.provider.id][data.id].quantity }
+                }
+              }
+            }),
             fulfillments: order.fulfillments,
             billing: order.billing,
             payments: [

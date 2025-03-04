@@ -213,31 +213,28 @@ const retailOrderConfirmation = () => {
   }, [confirmResponse])
 
   const getCartItemsWithQuantity = () => {
-    const cartItemQuantity: any = {}
-    cartItems.forEach((item: any) => {
-      if (cartItemQuantity[item.providerId]) {
-        const totalPrice = Number(item.price.value) * item.quantity
-        cartItemQuantity[item.providerId][item.id] = {
-          id: item.id,
-          quantity: item.quantity,
-          totalPrice: totalPrice
-        }
+    const cartItemQuantity: Record<string, any> = {}
 
-        cartItemQuantity[item.providerId]['totalPrice'] =
-          cartItemQuantity?.[item.providerId]?.['totalPrice'] || 0 + totalPrice
-      } else {
-        cartItemQuantity[item.providerId] = {}
-        cartItemQuantity[item.providerId][item.id] = {
-          id: item.id,
-          quantity: item.quantity,
-          totalPrice: Number(item.price.value) * item.quantity
-        }
-        cartItemQuantity[item.providerId]['totalPrice'] = Number(item.price.value) * item.quantity
+    cartItems.forEach((item: any) => {
+      const itemTotalPrice = Number(item.price.value) * item.quantity
+
+      if (!cartItemQuantity[item.providerId]) {
+        cartItemQuantity[item.providerId] = { totalPrice: 0 }
       }
+
+      cartItemQuantity[item.providerId][item.id] = {
+        id: item.id,
+        quantity: item.quantity,
+        totalPrice: itemTotalPrice
+      }
+
+      cartItemQuantity[item.providerId]['totalPrice'] += itemTotalPrice
     })
+
     console.log(cartItemQuantity)
     return cartItemQuantity
   }
+
   console.log(getCartItemsWithQuantity())
   useEffect(() => {
     if (initResponse && initResponse.length > 0) {
