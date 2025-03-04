@@ -208,7 +208,9 @@ const retailOrderConfirmation = () => {
   useEffect(() => {
     if (confirmResponse && confirmResponse.length > 0) {
       setOrderId(confirmResponse[0].message.orderId.slice(0, 8))
-      handleOnAddToWallet()
+      if (user?.deg_wallet && user?.deg_wallet.energy_transactions_consent) {
+        handleOnAddToWallet()
+      }
     }
   }, [confirmResponse])
 
