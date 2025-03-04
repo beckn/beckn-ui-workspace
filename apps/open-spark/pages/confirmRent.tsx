@@ -97,6 +97,22 @@ export default function ConfirmRent() {
     setToTime(roundedTime)
   }
 
+  // Add this helper function at the top of the component
+  const isToday = (dateToCheck: Date) => {
+    const today = new Date()
+    return (
+      dateToCheck.getDate() === today.getDate() &&
+      dateToCheck.getMonth() === today.getMonth() &&
+      dateToCheck.getFullYear() === today.getFullYear()
+    )
+  }
+
+  // Add this helper function to check if a time is in the past
+  const isTimePast = (timeToCheck: Date) => {
+    const now = new Date()
+    return timeToCheck.getTime() < now.getTime()
+  }
+
   return (
     <Box
       mt={5}
@@ -114,9 +130,13 @@ export default function ConfirmRent() {
         </Text>
         <Flex align="center">
           <CustomDatePicker
-            selected={formatDate(Number(rentalDate) * 1000, 'MM/dd/yy')}
+            selected={new Date(date)}
             placeholderText="Select 'from' date"
-            onChange={(date: any) => setDate(date?.toISOString())}
+            onChange={(date: any) => {
+              setDate(date?.toISOString())
+              setFromTime(roundToNextHour(new Date(date)))
+              setToTime(roundToNextHour(new Date(date)))
+            }}
             dateFormat="dd-MM-yyyy"
             isInvalid={false}
           />
@@ -141,6 +161,7 @@ export default function ConfirmRent() {
               onChange={handleFromTimeChange}
               dateFormat="h:mm aa"
               isInvalid={false}
+              minTime={isToday(new Date(date)) ? new Date() : undefined}
             />
             <Text mx={3}>-</Text>
             <CustomTimePicker
@@ -149,14 +170,22 @@ export default function ConfirmRent() {
               onChange={handleToTimeChange}
               dateFormat="h:mm aa"
               isInvalid={false}
+              minTime={
+                isToday(new Date(date)) ? (fromTime.getTime() > new Date().getTime() ? fromTime : new Date()) : fromTime
+              }
             />
           </Flex>
         </Flex>
       </Box>
       <Box mt={'250px'}>
         <BecknButton
-          children="Confirm & Proceed"
+          text="Confirm & Proceed"
           handleClick={handleConfirm}
+          disabled={
+            fromTime.getTime() === toTime.getTime() ||
+            (isToday(new Date(date)) && (isTimePast(fromTime) || isTimePast(toTime))) ||
+            toTime.getTime() < fromTime.getTime()
+          }
         />
       </Box>
     </Box>
