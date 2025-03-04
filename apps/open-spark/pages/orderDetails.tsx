@@ -769,6 +769,17 @@ const OrderDetails = () => {
     return count
   }
 
+  const getItemsWithQuantity = () => {
+    const cartItemQuantity: any = {}
+    data.statusData[0].message.order.items.forEach((item: any) => {
+      cartItemQuantity[item.id] = {
+        id: item.id,
+        quantity: item.quantity
+      }
+    })
+    return cartItemQuantity
+  }
+
   return (
     <Box
       className="hideScroll"
@@ -1019,9 +1030,11 @@ const OrderDetails = () => {
               <PaymentDetails
                 title="Payment"
                 hasBoxShadow={true}
-                paymentBreakDown={getPaymentBreakDown(data.statusData).breakUpMap}
+                paymentBreakDown={getPaymentBreakDown(data.statusData, getItemsWithQuantity()).breakUpMap}
                 totalText="Total"
-                totalValueWithCurrency={getPaymentBreakDown(data.statusData).totalPricewithCurrent}
+                totalValueWithCurrency={
+                  getPaymentBreakDown(data.statusData, getItemsWithQuantity()).totalPricewithCurrent
+                }
                 dataTest={testIds.orderDetailspage_paymentDetails}
               />
             </Box>

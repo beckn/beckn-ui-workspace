@@ -45,12 +45,15 @@ export const geocodeFromPincode = async (pincode: string) => {
   }
 }
 
-export const getPaymentBreakDown = (initData: InitResponseModel[] | StatusResponseModel[]) => {
+export const getPaymentBreakDown = (
+  initData: InitResponseModel[] | StatusResponseModel[],
+  frequency?: number | Record<string, any>
+) => {
   const quote = initData[0].message.order.quote
   const breakUp = quote.breakup
   const totalPricewithCurrent = {
-    value: getSubTotalAndDeliveryCharges(initData).subTotal.toString(),
-    currency: getSubTotalAndDeliveryCharges(initData).currencySymbol!
+    value: getSubTotalAndDeliveryCharges(initData, frequency || 1).subTotal.toString(),
+    currency: getSubTotalAndDeliveryCharges(initData, frequency || 1).currencySymbol!
   }
 
   const breakUpMap: Record<string, any> = {}
@@ -61,9 +64,16 @@ export const getPaymentBreakDown = (initData: InitResponseModel[] | StatusRespon
       price: { currency, value }
     } = item
 
+    let quantity = 1
+    if (typeof frequency !== 'number') {
+      quantity = frequency?.[item.item?.id!]?.quantity || 1
+    } else {
+      quantity = frequency
+    }
+
     breakUpMap[title] = {
       currency: currency,
-      value: value
+      value: Number(value) * quantity
     }
   })
 
