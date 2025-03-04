@@ -485,3 +485,6 @@ select:-webkit-autofill:focus {
   padding: 20px;
   padding-left: unset;
 }
+.toast-text {
+  margin-bottom: unset !important;
+}

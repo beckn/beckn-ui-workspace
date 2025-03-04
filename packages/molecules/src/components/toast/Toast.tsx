@@ -62,6 +62,7 @@ const Toast: React.FC<ToastProps> = ({ status, title, description, onClose, data
             />
           )}
           <Typography
+            className="toast-text"
             variant="subTitleSemibold"
             text={title}
           />
