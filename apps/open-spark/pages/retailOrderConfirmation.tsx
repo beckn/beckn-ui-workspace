@@ -216,9 +216,23 @@ const retailOrderConfirmation = () => {
 
   const getCartItemsWithQuantity = () => {
     const cartItemQuantity: Record<string, any> = {}
+    const initItemsBreakupPrice: Record<string, any> = {}
+
+    initResponse.forEach(initData => {
+      const paymentBreakup: any = initData.message.order.quote.breakup
+      paymentBreakup.forEach((item: any) => {
+        if (initItemsBreakupPrice[item.item.id]) {
+          initItemsBreakupPrice[item.item.id][item.title] = item.price.value
+        } else {
+          initItemsBreakupPrice[item.item.id] = {}
+          initItemsBreakupPrice[item.item.id][item.title] = item.price.value
+        }
+      })
+    })
 
     cartItems.forEach((item: any) => {
-      const itemTotalPrice = Number(item.price.value) * item.quantity
+      const itemTotalPrice =
+        Number(item.price.value) * item.quantity + Number(initItemsBreakupPrice?.[item.id]?.['Delivery Charge'] || 0)
 
       if (!cartItemQuantity[item.providerId]) {
         cartItemQuantity[item.providerId] = { totalPrice: 0 }
