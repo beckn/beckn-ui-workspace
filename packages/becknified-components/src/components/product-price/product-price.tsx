@@ -6,17 +6,27 @@ import { Typography } from '@beckn-ui/molecules'
 const formatCurrency = (price: number, currencyType: CurrencyType, rateLabel: string = '') => {
   const currencyOptions = {
     GBP: { locale: 'en-GB', currency: 'GBP' },
-    EUR: { locale: 'de-DE', currency: 'EUR' },
+    EUR: { locale: 'en-US', currency: 'EUR' },
     INR: { locale: 'en-IN', currency: 'INR' },
     USD: { locale: 'en-US', currency: 'USD' }
   }
 
   const { locale, currency } = currencyOptions[currencyType]
 
-  return `${new Intl.NumberFormat(locale, {
-    style: 'currency',
-    currency: currency
-  }).format(price)} ${rateLabel}`
+  const formattedNumber = new Intl.NumberFormat(locale, {
+    style: 'decimal',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }).format(price)
+
+  const currencySymbols = {
+    EUR: '€',
+    GBP: '£',
+    INR: '₹',
+    USD: '$'
+  }
+
+  return `${formattedNumber} ${currencySymbols[currencyType]} ${rateLabel}`.trim()
 }
 
 const ProductPrice: React.FC<ProductPriceProps> = props => {
