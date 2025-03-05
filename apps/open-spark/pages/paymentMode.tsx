@@ -759,7 +759,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                   payments: [
                     {
                       params: {
-                        amount: `${calculatedEMIs[selectedEmi[0].id].totalCost}`,
+                        amount: `${calculatedEMIs[selectedEmi[0].id].totalCost - calculatedEMIs[selectedEmi[0].id].actualInterestAmount}`,
                         currency: 'INR',
                         bank_account_number: '1234002341',
                         bank_code: 'INB0004321'
