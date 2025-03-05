@@ -164,15 +164,14 @@ const OrderHistory = () => {
                       fontSize={'12px'}
                     />
 
-                    <Flex>
+                    {/* <Flex>
                       <Image
                         src={pendingIcon}
                         paddingRight={'6px'}
                         data-test={testIds.orderHistory_pendingIcon}
                       />
-                      {/* <Text>{orderStatusMap[order.delivery_status]}</Text> */}
                       <Text>{'Pending'}</Text>
-                    </Flex>
+                    </Flex> */}
                   </Flex>
                 </Flex>
               </DetailCard>

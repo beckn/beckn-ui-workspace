@@ -338,7 +338,7 @@ const CheckoutPage = () => {
                           fontWeight="600"
                           text={'Sold by:'}
                           variant="subTextRegular"
-                          style={{ width: '68px' }}
+                          style={{ marginRight: '2px', whiteSpace: 'nowrap' }}
                         />
                         <Typography
                           text={singleItem.productInfo.providerName}
