@@ -16,6 +16,25 @@ export interface User {
     agent_profile: {
       phone_number: number | string
     }
+    provider_id?: {
+      id: number
+      provider_name: string
+      short_desc: string
+      long_desc: string
+      provider_id: string | null
+      provider_uri: string
+      provider_rating: string
+      createdAt: string
+      updatedAt: string
+      logo?: {
+        id: number
+        url: string
+        size_type: string | null
+        createdAt: string
+        updatedAt: string
+        publishedAt: string
+      }
+    }
   }
   role?: {
     id: number
