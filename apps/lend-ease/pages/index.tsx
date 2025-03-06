@@ -116,9 +116,10 @@ const HomePage = () => {
       >
         <Box>
           <Image
-            src={profileIcon}
+            src={user?.agent?.provider_id?.logo?.url || profileIcon}
             alt="profileIcon"
             onClick={() => router.push('/profile')}
+            cursor={'pointer'}
           />
         </Box>
         <Text
