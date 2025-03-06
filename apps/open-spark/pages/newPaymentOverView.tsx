@@ -16,12 +16,12 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 const NewPaymentOverView = () => {
-  const selectedProduct: ParsedItemModel = useSelector((state: DiscoveryRootState) => state.discovery.selectedProduct)
-  const selectedEmi = useSelector((state: any) => state.selectedEmi.apiResponse[0]?.message.order.items) || 0
-  const processingFee =
-    useSelector((state: any) => state.selectedEmi.apiResponse[0]?.message.order.provider.short_desc) || 0
+  // const selectedProduct: ParsedItemModel = useSelector((state: DiscoveryRootState) => state.discovery.selectedProduct)
+  // const selectedEmi = useSelector((state: any) => state.selectedEmi.apiResponse[0]?.message.order.items) || 0
+  // const processingFee =
+  //   useSelector((state: any) => state.selectedEmi.apiResponse[0]?.message.order.provider.short_desc) || 0
   const coverage = useSelector((state: any) => state.discoveryEmiPlan.products[0]?.item[0]?.code) || 0
-  const monthlyInstallment = useSelector((state: any) => state.selectedEmi.emiDetails)
+  // const monthlyInstallment = useSelector((state: any) => state.selectedEmi.emiDetails)
   const [totalValue, setTotalValue] = useState<{ total: number; discountAmount: number }>({
     total: 0,
     discountAmount: 0
@@ -42,7 +42,7 @@ const NewPaymentOverView = () => {
     const discountAmount = total * (discountPercentage / 100)
 
     setTotalValue({ total, discountAmount })
-    setPayableValue(total - discountAmount - Number(processingFee))
+    setPayableValue(total - discountAmount)
   }
 
   useEffect(() => {
@@ -98,7 +98,7 @@ const NewPaymentOverView = () => {
                         style={{ width: '68px' }}
                       />
                       <Typography
-                        text={items.productInfo.providerName}
+                        text={items?.productInfo?.providerName}
                         variant="subTextRegular"
                       />
                     </Flex>
@@ -144,7 +144,7 @@ const NewPaymentOverView = () => {
         </DetailCard>
       </Box>
       <Typography
-        text="New Payment Options"
+        text="New Payment Overview"
         fontSize="17px"
       />
       <Box mt="8px">
@@ -193,6 +193,7 @@ const NewPaymentOverView = () => {
           <Divider
             mt="15px"
             mb="15px"
+            opacity={'1'}
           />
           <Flex
             justifyContent={'space-between'}
@@ -201,6 +202,7 @@ const NewPaymentOverView = () => {
             <Typography
               fontWeight="600"
               fontSize="15px"
+              style={{ width: '12rem' }}
               text={'Total Amount to be paid upfront'}
             />
             <Flex alignItems={'center'}>

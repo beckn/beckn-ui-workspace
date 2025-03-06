@@ -39,7 +39,8 @@ export default function OrderDetails() {
     // { name: 'Open Wallet' },
     // { name: 'Open Spark' }
   ])
-
+  const domain = orderDetails?.data?.context.domain
+  console.log(domain)
   const router = useRouter()
   const { t } = useLanguage()
   const [decodeStream, { isLoading }] = useDecodeStreamMutation()
@@ -113,8 +114,8 @@ export default function OrderDetails() {
   useEffect(() => {
     const fetchData = () => {
       if (orderDetails) {
-        const { bpp_id, bpp_uri, domain } = orderDetails?.data[0]?.context
-        const { orderId } = orderDetails?.data[0]?.message
+        const { bpp_id, bpp_uri, domain } = orderDetails?.data?.context
+        const { orderId } = orderDetails?.data?.message
         const statusPayload = {
           data: [
             {
@@ -171,8 +172,8 @@ export default function OrderDetails() {
     }
   }, [statusData])
 
-  const isDelivered = orderDetails?.data[0]?.message?.fulfillments?.[0]?.state?.descriptor?.code === DELIVERED
-  const isCancelled = orderDetails?.data[0]?.message?.fulfillments?.[0]?.state?.descriptor?.code === CANCELLED
+  const isDelivered = orderDetails?.data?.message?.fulfillments?.[0]?.state?.descriptor?.code === DELIVERED
+  const isCancelled = orderDetails?.data?.message?.fulfillments?.[0]?.state?.descriptor?.code === CANCELLED
 
   return (
     <Box
@@ -230,7 +231,7 @@ export default function OrderDetails() {
                   <Typography
                     variant="subTitleRegular"
                     dataTest={testIds.orderDetailspage_productPlacedAt}
-                    text={formatTimestamp(orderDetails?.data[0]?.context?.timestamp!)}
+                    text={formatTimestamp(orderDetails?.data?.context?.timestamp!)}
                   />
                 </Flex>
               </Box>
@@ -255,7 +256,7 @@ export default function OrderDetails() {
                 >
                   <Text
                     as={Typography}
-                    text={`Order Id:  ${orderDetails?.data[0]?.message?.orderId}`}
+                    text={`Order Id:  ${orderDetails?.data?.message?.orderId}`}
                     fontSize="17px"
                     fontWeight="600"
                   />
@@ -316,9 +317,9 @@ export default function OrderDetails() {
 
           <Accordion accordionHeader={'Shipping & Billing'}>
             <ShippingBlock
-              name={{ text: orderDetails?.data[0]?.message?.billing?.name!, icon: '/images/nameIcon.svg' }}
-              address={{ text: orderDetails?.data[0]?.message?.billing?.address!, icon: '/images/locationIcon1.svg' }}
-              mobile={{ text: orderDetails?.data[0]?.message?.billing?.phone!, icon: '/images/CallphoneIcon.svg' }}
+              name={{ text: orderDetails?.data?.message?.billing?.name!, icon: '/images/nameIcon.svg' }}
+              address={{ text: orderDetails?.data?.message?.billing?.address!, icon: '/images/locationIcon1.svg' }}
+              mobile={{ text: orderDetails?.data?.message?.billing?.phone!, icon: '/images/CallphoneIcon.svg' }}
             />
           </Accordion>
 

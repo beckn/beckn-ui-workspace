@@ -7,6 +7,8 @@ import { useVerifyOtpMutation } from '@services/UserService'
 import React, { useEffect, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import style from '../components/signIn/otp.module.css'
+import Router from 'next/router'
+import Cookies from 'js-cookie'
 
 const correctOTP = '123456'
 const numberOfDigits = 6
@@ -24,6 +26,7 @@ const OTPVerification = () => {
   useEffect(() => {}, [])
 
   const handleChange = (value: any, index: any) => {
+    if (!/^[0-9]?$/.test(value)) return
     let newArr = [...OTP]
     newArr[index] = value
     setOTP(newArr)
@@ -57,6 +60,7 @@ const OTPVerification = () => {
 
     try {
       const response = await verifyOtp(data).unwrap()
+      Cookies.set('isVerified', 'true')
       dispatch(
         feedbackActions.setToastData({
           toastData: {

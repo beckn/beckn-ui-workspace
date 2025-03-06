@@ -299,62 +299,75 @@ const OrderDetails = () => {
   }
 
   const handleOnAddToPhysicalAsset = async (statusRes: any) => {
-    const orderConfirmationData = JSON.parse(statusRes)
-    if (orderConfirmationData) {
-      try {
-        const subjectKey = user?.deg_wallet?.deg_wallet_id.replace('/subjects/', '')
-        const { publicKey, privateKey } = await generateKeyPairFromString(subjectKey!)
-        console.log(orderConfirmationData)
-        const totalItemsStr = extractItemsWithProvider(orderConfirmationData[0].message.order.items[0].name)
+    if (user?.deg_wallet && user?.deg_wallet.energy_assets_consent) {
+      const orderConfirmationData = JSON.parse(statusRes)
+      if (orderConfirmationData) {
+        try {
+          const subjectKey = user?.deg_wallet?.deg_wallet_id.replace('/subjects/', '')
+          const { publicKey, privateKey } = await generateKeyPairFromString(subjectKey!)
+          console.log(orderConfirmationData)
+          const totalItemsStr = extractItemsWithProvider(orderConfirmationData[0].message.order.items[0].name)
 
-        const data: any = {
-          type: totalItemsStr,
-          confirmDetails: orderConfirmationData
+          const data: any = {
+            type: totalItemsStr,
+            confirmDetails: orderConfirmationData
+          }
+
+          const docDetails = JSON.stringify(data)
+          const createdAt = Math.floor(new Date().getTime() / 1000)
+          const generatedOrderId = orderConfirmationData[0].message.order.id
+          const verificationMethodsRes = await getVerificationMethods(user?.deg_wallet?.deg_wallet_id!).unwrap()
+          const { did, challenge } = verificationMethodsRes[0]
+
+          const authHeaderRes = await generateAuthHeader({
+            subjectId: user?.deg_wallet?.deg_wallet_id!,
+            verification_did: did,
+            privateKey,
+            publicKey,
+            payload: {
+              name: `assets/physical/type/${toSnakeCase(data?.type!)}/source/spark/${createdAt}/${generatedOrderId}`,
+              stream: toBase64(docDetails)
+            }
+          })
+          const { authorization, payload } = extractAuthAndHeader(authHeaderRes)
+          if (authorization && payload) {
+            const addDocPayload = {
+              subjectId: user?.deg_wallet?.deg_wallet_id!,
+              payload,
+              authorization
+            }
+
+            const res: any = await addDocument(addDocPayload).unwrap()
+            console.log(res)
+            await attestDocument(res?.[0]?.did, 'PHYSICAL_ASSETS')
+
+            dispatch(
+              feedbackActions.setToastData({
+                toastData: { message: 'Success', display: true, type: 'success', description: 'Added Successfully!' }
+              })
+            )
+          } else {
+            dispatch(
+              feedbackActions.setToastData({
+                toastData: { message: 'Error', display: true, type: 'error', description: 'Something went wrong!' }
+              })
+            )
+          }
+        } catch (error) {
+          console.error('An error occurred:', error)
         }
-
-        const docDetails = JSON.stringify(data)
-        const createdAt = Math.floor(new Date().getTime() / 1000)
-        const generatedOrderId = orderConfirmationData[0].message.order.id
-        const verificationMethodsRes = await getVerificationMethods(user?.deg_wallet?.deg_wallet_id!).unwrap()
-        const { did, challenge } = verificationMethodsRes[0]
-
-        const authHeaderRes = await generateAuthHeader({
-          subjectId: user?.deg_wallet?.deg_wallet_id!,
-          verification_did: did,
-          privateKey,
-          publicKey,
-          payload: {
-            name: `assets/physical/type/${toSnakeCase(data?.type!)}/source/spark/${createdAt}/${generatedOrderId}`,
-            stream: toBase64(docDetails)
+      }
+    } else {
+      dispatch(
+        feedbackActions.setToastData({
+          toastData: {
+            message: user?.deg_wallet?.energy_assets_consent ? 'Warning' : 'Wallet not connected!',
+            display: true,
+            type: 'warning',
+            description: 'Please connect your wallet before proceeding.'
           }
         })
-        const { authorization, payload } = extractAuthAndHeader(authHeaderRes)
-        if (authorization && payload) {
-          const addDocPayload = {
-            subjectId: user?.deg_wallet?.deg_wallet_id!,
-            payload,
-            authorization
-          }
-
-          const res: any = await addDocument(addDocPayload).unwrap()
-          console.log(res)
-          await attestDocument(res?.[0]?.did, 'PHYSICAL_ASSETS')
-
-          dispatch(
-            feedbackActions.setToastData({
-              toastData: { message: 'Success', display: true, type: 'success', description: 'Added Successfully!' }
-            })
-          )
-        } else {
-          dispatch(
-            feedbackActions.setToastData({
-              toastData: { message: 'Error', display: true, type: 'error', description: 'Something went wrong!' }
-            })
-          )
-        }
-      } catch (error) {
-        console.error('An error occurred:', error)
-      }
+      )
     }
   }
 
@@ -453,7 +466,7 @@ const OrderDetails = () => {
 
     fetchData()
 
-    const intervalId = setInterval(fetchData, 30000)
+    const intervalId = setInterval(fetchData, 60000)
 
     return () => clearInterval(intervalId)
   }, [apiUrl, data.confirmData])
@@ -769,6 +782,17 @@ const OrderDetails = () => {
     return count
   }
 
+  const getItemsWithQuantity = () => {
+    const cartItemQuantity: any = {}
+    data.statusData[0].message.order.items.forEach((item: any) => {
+      cartItemQuantity[item.id] = {
+        id: item.id,
+        quantity: item.quantity.selected.count
+      }
+    })
+    return cartItemQuantity
+  }
+
   return (
     <Box
       className="hideScroll"
@@ -876,7 +900,7 @@ const OrderDetails = () => {
                   <Text
                     as={Typography}
                     // TODO
-                    text={`Order Id: ${orderMetaData.orderIds[0].slice(0, 5)}...`}
+                    text={`Order Id: ${JSON.parse(localStorage.getItem('selectedOrder')!).orderId}`}
                     dataTest={testIds.orderDetailspage_orderId}
                     fontSize="17px"
                     fontWeight="600"
@@ -1019,9 +1043,11 @@ const OrderDetails = () => {
               <PaymentDetails
                 title="Payment"
                 hasBoxShadow={true}
-                paymentBreakDown={getPaymentBreakDown(data.statusData).breakUpMap}
+                paymentBreakDown={getPaymentBreakDown(data.statusData, getItemsWithQuantity()).breakUpMap}
                 totalText="Total"
-                totalValueWithCurrency={getPaymentBreakDown(data.statusData).totalPricewithCurrent}
+                totalValueWithCurrency={
+                  getPaymentBreakDown(data.statusData, getItemsWithQuantity()).totalPricewithCurrent
+                }
                 dataTest={testIds.orderDetailspage_paymentDetails}
               />
             </Box>
@@ -1036,9 +1062,11 @@ const OrderDetails = () => {
                 pt={'6px'}
               >
                 <PaymentDetails
-                  paymentBreakDown={getPaymentBreakDown(data.statusData).breakUpMap}
+                  paymentBreakDown={getPaymentBreakDown(data.statusData, getItemsWithQuantity()).breakUpMap}
                   totalText="Total"
-                  totalValueWithCurrency={getPaymentBreakDown(data.statusData).totalPricewithCurrent}
+                  totalValueWithCurrency={
+                    getPaymentBreakDown(data.statusData, getItemsWithQuantity()).totalPricewithCurrent
+                  }
                   dataTest={testIds.orderDetailspage_paymentDetails}
                 />
               </Box>

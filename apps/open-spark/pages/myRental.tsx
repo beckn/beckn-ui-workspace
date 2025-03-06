@@ -7,6 +7,7 @@ import { useDispatch } from 'react-redux'
 import { useRouter } from 'next/router'
 import { orderHistoryData } from '@beckn-ui/common/lib/types'
 import { RENTAL_ORDER_CATEGORY_ID } from '@lib/config'
+import EmptyOrder from '@components/orderHistory/emptyOrder'
 
 const MyRental = () => {
   const [orderHistoryList, setOrderHistoryList] = useState<OrderItem[]>([])
@@ -82,10 +83,14 @@ const MyRental = () => {
       overflowY="scroll"
       className="hideScroll"
     >
-      <OrderOverview
-        items={orderHistoryList}
-        showPriceAndStatus={true}
-      />
+      {!orderHistoryList.length ? (
+        <EmptyOrder />
+      ) : (
+        <OrderOverview
+          items={orderHistoryList}
+          showPriceAndStatus={true}
+        />
+      )}
     </Box>
   )
 }

@@ -4,6 +4,7 @@ import Router, { useRouter } from 'next/router'
 import { useSelector } from 'react-redux'
 import { DiscoveryRootState } from '@beckn-ui/common'
 import { currencyFormat } from '@utils/general'
+import ClearIcon from '../public/images/clearIcon.svg'
 
 const UpiScreen = () => {
   const [pin, setPin] = useState<string[]>(Array(4).fill(''))
@@ -201,7 +202,10 @@ const UpiScreen = () => {
           variant="outline"
           onClick={handleDelete}
         >
-          ✕
+          <Image
+            src={ClearIcon}
+            alt="Clear"
+          />
         </Button>
         <Button
           textColor="black"

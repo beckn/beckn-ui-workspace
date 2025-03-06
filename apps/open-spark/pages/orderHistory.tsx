@@ -4,6 +4,7 @@ import { Loader, Typography } from '@beckn-ui/molecules'
 import { Box, Text, Flex, Image } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import pendingIcon from '../public/images/pendingStatus.svg'
+import completedIcon from '../public/images/completed.svg'
 import { useDispatch } from 'react-redux'
 import { formatTimestamp } from '@beckn-ui/common/src/utils'
 import { useRouter } from 'next/router'
@@ -12,9 +13,11 @@ import { testIds } from '@shared/dataTestIds'
 import { RENTAL_ORDER_CATEGORY_ID, RETAIL_ORDER_CATEGORY_ID } from '@lib/config'
 import { OrderHistoryData } from '@lib/types/orderHistory'
 import EmptyOrder from '@components/orderHistory/emptyOrder'
+import { currencyFormat } from '@utils/general'
 
 const orderStatusMap: Record<string, string> = {
-  'In Review': 'Pending'
+  'In Review': 'Pending',
+  ORDER_DELIVERED: 'Completed'
 }
 
 const OrderHistory = () => {
@@ -157,7 +160,7 @@ const OrderHistory = () => {
 
                     <Text
                       as={Typography}
-                      text={`${order.quote.price.currency} ${order.quote.price.value}`}
+                      text={`${order.quote.price.currency} ${currencyFormat(Number(order.quote.price.value))}`}
                       fontWeight="600"
                       fontSize={'12px'}
                       dataTest={testIds.orderHistory_Price}
@@ -170,14 +173,14 @@ const OrderHistory = () => {
                     >
                       <Text
                         as={Typography}
-                        text={'1 Item'}
+                        text={`${order.items.length} Item${order.items.length > 1 ? 's' : ''}`}
                         fontWeight="400"
                         fontSize={'12px'}
                       />
 
                       <Flex>
                         <Image
-                          src={pendingIcon}
+                          src={order.delivery_status === 'ORDER_DELIVERED' ? completedIcon : pendingIcon}
                           paddingRight={'6px'}
                           data-test={testIds.orderHistory_pendingIcon}
                         />

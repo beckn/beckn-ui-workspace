@@ -125,6 +125,7 @@ const MyCredentials = () => {
   const handleOnSubmit = async () => {
     try {
       const errors = validateCredForm(formData) as any
+      delete errors?.url
       setFormErrors(prevErrors => ({
         ...prevErrors,
         ...Object.keys(errors).reduce((acc: any, key) => {
@@ -186,11 +187,6 @@ const MyCredentials = () => {
           })
         )
         setOpenModal(false)
-        setFormData({
-          type: '',
-          credName: '',
-          url: ''
-        })
         setSelectedFile(undefined)
         setIsDeleteModalOpen(false)
       } else {
@@ -307,10 +303,12 @@ const MyCredentials = () => {
   }
 
   const isFormFilled = useMemo(() => {
-    return (
-      Object.values(formData).every(value => value !== '') && Object.values(formErrors).every(value => value === '')
-    )
-  }, [formData, formErrors])
+    return Object.values(formData).every(value => value !== '') &&
+      Object.values(formErrors).every(value => value === '') &&
+      formData.type === 'url'
+      ? formData.url !== '' && formErrors.url === ''
+      : selectedFile
+  }, [formData, formErrors, selectedFile])
 
   const getInputs = useCallback(() => {
     const inputs: InputProps[] = [
@@ -321,6 +319,7 @@ const MyCredentials = () => {
         value: formData.type!,
         handleChange: handleSelectChange,
         label: 'Credential Type',
+        placeholder: 'Select Type',
         error: formErrors.type
       },
       {
@@ -345,6 +344,12 @@ const MyCredentials = () => {
     }
 
     return inputs
+  }, [formData])
+
+  useEffect(() => {
+    if (formData.type === 'url') {
+      setSelectedFile(undefined)
+    }
   }, [formData])
 
   return (

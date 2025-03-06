@@ -150,16 +150,16 @@ const ProfilePage = () => {
         disabled: !profileEditable,
         customInputBlurHandler: updateProfile
       },
-      {
-        type: 'text',
-        name: 'customerId',
-        value: formData.customerId!,
-        handleChange: handleInputChange,
-        label: t.formCustomerId,
-        error: formErrors.customerId,
-        dataTest: testIds.profile_customerId,
-        disabled: true
-      },
+      // {
+      //   type: 'text',
+      //   name: 'customerId',
+      //   value: formData.customerId!,
+      //   handleChange: handleInputChange,
+      //   label: t.formCustomerId,
+      //   error: formErrors.customerId,
+      //   dataTest: testIds.profile_customerId,
+      //   disabled: true
+      // },
       {
         type: 'text',
         name: 'address',

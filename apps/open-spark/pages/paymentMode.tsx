@@ -79,7 +79,7 @@ interface EMIApplicationModalProps {
     dateOfBirth: Date | null
     mobileNumber: string
   }
-  handleOnSubmitForm: () => void
+  handleOnSubmitForm: (data: FormData) => void
   syncWalletSuccess?: boolean
 }
 
@@ -221,7 +221,7 @@ const EMIApplicationModal = ({
         duration: 3000,
         isClosable: true
       })
-      handleOnSubmitForm()
+      handleOnSubmitForm(formData)
     } else {
       toast({
         title: 'Error',
@@ -503,11 +503,11 @@ const EMIApplicationModal = ({
               options={[
                 {
                   label: `${selectedEmi[0].name} months: ₹ ${currencyFormat(monthlyInstallment[0].emi)}/months`,
-                  value: `${selectedEmi[0].name} months: ₹ ${currencyFormat(monthlyInstallment[0].emi)}/months`
+                  value: monthlyInstallment[0].itemId
                 },
                 {
                   label: `${selectedEmi[1].name} months: ₹ ${currencyFormat(monthlyInstallment[1].emi)}/months`,
-                  value: `${selectedEmi[1].name} months: ₹ ${currencyFormat(monthlyInstallment[1].emi)}/months`
+                  value: monthlyInstallment[1].itemId
                 }
               ]}
               placeholder={''}
@@ -562,6 +562,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
   const [newCalculationIsLoading, setNewCalculationIsLoading] = useState(false)
   const [fetchTransactionsMessage, setFetchTransactionsMessage] = useState('')
   const [previousIndex, setPreviousIndex] = useState<number>()
+  const [isAppliedForDiscountingEMIPlans, setIsAppliedForDiscountingEMIPlans] = useState<boolean>(false)
   const [newTotalCost, setNewTotalCost] = useState(() => {
     return Number(localStorage.getItem('totalCost')) || 0
   })
@@ -573,6 +574,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
   const [getDocuments, { isLoading: verifyLoading }] = useGetDocumentsMutation()
   const selectAPIRes = useSelector((state: any) => state.selectedEmi.apiResponse)
   const selectedEmi = useSelector((state: any) => state.selectedEmi?.apiResponse?.[0]?.message?.order?.items) || []
+  const selectedEMIDetails = useSelector((state: any) => state.selectedEmi.emiDetails)
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
   const fetchEMIPlans = (isDiscounted = false) => {
@@ -602,6 +604,10 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
         dispatch(discoveryEmiPlanActions.addProducts({ products: parsedSearchItems }))
         setEmiPlans(parsedSearchItems)
         setIsLoading(true)
+        if (isDiscounted) {
+          const selectedPlanData = parsedSearchItems.find(plan => plan.id === selectedPlan)
+          handleEmiSelect(selectedPlanData?.id!, parsedSearchItems)
+        }
       })
       .catch(e => {
         setIsLoading(false)
@@ -631,6 +637,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
       setNewCalculationIsLoading(false)
     }, 10000)
     fetchEMIPlans(true)
+    setIsAppliedForDiscountingEMIPlans(true)
   }
 
   const {
@@ -679,10 +686,10 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
     setSelectedPlan('')
   }
 
-  const handleFinanceOnConfirm = () => {
+  const handleFinanceOnConfirm = (data: FormData) => {
     if (selectAPIRes && selectedEmi.length > 0) {
       const calculatedEMIs = JSON.parse(localStorage.getItem('calculatedEMIs')!) || 0
-      console.log('selectedPlan', calculatedEMIs[selectedEmi[0].id]) // calculatedEMIs[selectedPlan.i])
+      console.log('selectedPlan', calculatedEMIs[selectedEmi[0].id], data) // calculatedEMIs[selectedPlan.i])
 
       const payload = {
         data: [
@@ -696,7 +703,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
             message: {
               orders: [
                 {
-                  items: selectAPIRes[0].message.order.items.filter((item: any) => item.id === selectedEmi[0].id), // calculatedEMIs[selectedPlan.i].id),
+                  items: selectAPIRes[0].message.order.items.filter((item: any) => item.id === data.loanTenure), // calculatedEMIs[selectedPlan.i].id),
                   provider: {
                     id: selectAPIRes[0].message.order.provider.id
                   },
@@ -705,10 +712,10 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                       type: 'Delivery',
                       customer: {
                         person: {
-                          name: formData.fullName
+                          name: data.fullName
                         },
                         contact: {
-                          phone: formData.mobileNumber
+                          phone: data.mobileNumber
                         }
                       },
                       stops: [
@@ -737,7 +744,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                     }
                   ],
                   billing: {
-                    name: formData.fullName,
+                    name: data.fullName,
                     address:
                       "123, Terminal 1, Kempegowda Int'\''l Airport Rd, A - Block, Gangamuthanahalli, Karnataka 560300, India",
                     state: {
@@ -747,12 +754,12 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                       name: 'Karnataka'
                     },
                     email: user?.email,
-                    phone: formData.mobileNumber
+                    phone: data.mobileNumber
                   },
                   payments: [
                     {
                       params: {
-                        amount: `${calculatedEMIs[selectedEmi[0].id].totalCost}`,
+                        amount: `${calculatedEMIs[selectedEmi[0].id].totalCost - calculatedEMIs[selectedEmi[0].id].actualInterestAmount}`,
                         currency: 'INR',
                         bank_account_number: '1234002341',
                         bank_code: 'INB0004321'
@@ -760,7 +767,17 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                       status: 'PAID',
                       type: 'PRE-FULFILLMENT'
                     }
-                  ]
+                  ],
+                  ...(isAppliedForDiscountingEMIPlans && {
+                    tags: [
+                      {
+                        descriptor: {
+                          code: 'preFinanced',
+                          name: 'true'
+                        }
+                      }
+                    ]
+                  })
                 }
               ]
             }
@@ -778,12 +795,12 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
     }
   }
 
-  const handleOnSubmit = () => {
-    console.log('Submitting Form:', formData)
+  const handleOnSubmit = (data: FormData) => {
+    console.log('Submitting Form:', data)
     console.log(localStorage.getItem('actualCost'))
     setIsSubmitting(true)
     setOpenModal(false)
-    handleFinanceOnConfirm()
+    handleFinanceOnConfirm(data)
 
     setTimeout(() => {
       setIsSubmitting(false)
@@ -795,8 +812,9 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
       }, 3000)
     }, 5000)
   }
-  const handleEmiSelect = (planId: string) => {
-    const selectedPlan = emiPlans.find(plan => plan.id === planId)
+  const handleEmiSelect = (planId: string, customEMIPlans?: any[]) => {
+    const emiPlanList = customEMIPlans ? customEMIPlans : emiPlans
+    const selectedPlan = emiPlanList.find(plan => plan.id === planId)
     if (!selectedPlan) {
       console.error('Selected EMI plan not found!')
       return
@@ -808,12 +826,12 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
 
       const months = parseInt(item.name.match(/\d+/)?.[0] || '1')
       const annualInterestRate = Number(parseFloat(item?.price?.value) || 0)
+      const processingFees = Number(emiPlanList[ind].providerShortDescription) || 0
       const priceValue = Number(price?.value) || 0
       const priceTotal = priceValue * quantity
       const principal = priceTotal || totalPrice || priceTotal + totalPrice
       const approvedLoanPercentage = Number(item.code) || 0
-      const approvedLoanAmount =
-        (approvedLoanPercentage / 100) * principal + Number(emiPlans[ind].providerShortDescription)
+      const approvedLoanAmount = (approvedLoanPercentage / 100) * principal
       const newPayableAmount = Number(principal - approvedLoanAmount) || 0
 
       if (payableAmount !== newPayableAmount) {
@@ -825,7 +843,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
         (approvedLoanAmount * monthlyInterestRate * Math.pow(1 + monthlyInterestRate, months)) /
           (Math.pow(1 + monthlyInterestRate, months) - 1) || 0
 
-      const emi = Math.floor(emiWithoutInterest)
+      const emi = Math.floor(emiWithoutInterest + processingFees / months) // no interest calculated on processing fees
 
       const totalCost = emi * months
 
@@ -934,14 +952,28 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
     const getDoc = await fetchCredentials()
   }
 
+  const getCartItemsWithQuantity = () => {
+    const cartItemQuantity: any = {}
+    let totalCartPrice: number = 0
+    cartItems.forEach((item: any) => {
+      const totalPrice = Number(item.price.value) * item.quantity
+      cartItemQuantity[item.id] = {
+        id: item.id,
+        quantity: item.quantity,
+        totalPrice: totalPrice
+      }
+      totalCartPrice = totalCartPrice + totalPrice
+    })
+    return { cartItemQuantity, totalCartPrice }
+  }
+
   const calculateEMIDetails = (item: any, cartItems: any[], index: number, price: any, plan: any) => {
     const storageKey = `originalInterestRate_${plan.id}`
 
-    const quantity = Number(cartItems[0]?.quantity) || 1
-    const totalPrice = Number(cartItems[index]?.price?.value || 0)
+    const cartDetails = getCartItemsWithQuantity()
+    const totalCartPrice = Number(cartDetails.totalCartPrice || 0)
     const months = parseInt(item.name.match(/\d+/)?.[0] || '1')
     const annualInterestRate = Number(parseFloat(item?.price?.value) || 0)
-    const priceValue = Number(price?.value) || 0
     const processingFees = Number(emiPlans[index].providerShortDescription) || 0
 
     // Only store the original rate once per provider/loan type
@@ -954,10 +986,9 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
     }
 
     // Calculate with current interest rate
-    const priceTotal = priceValue * quantity
-    const principal = priceTotal || totalPrice || priceTotal + totalPrice
+    const principal = totalCartPrice
     const approvedLoanPercentage = Number(item.code) || 0
-    const approvedLoanAmount = (approvedLoanPercentage / 100) * principal + processingFees
+    const approvedLoanAmount = (approvedLoanPercentage / 100) * principal
 
     const newPayableAmount = Number(principal - approvedLoanAmount) || 0
 
@@ -970,7 +1001,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
       (approvedLoanAmount * monthlyInterestRate * Math.pow(1 + monthlyInterestRate, months)) /
         (Math.pow(1 + monthlyInterestRate, months) - 1) || 0
 
-    const emi = Math.floor(emiWithoutInterest + processingFees / months)
+    const emi = Math.floor(emiWithoutInterest + processingFees / months) // no interest calculated on processing fees
     const totalCost = emi * months
 
     // Calculate with original (non-discounted) interest rate
@@ -979,7 +1010,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
       (approvedLoanAmount * originalMonthlyRate * Math.pow(1 + originalMonthlyRate, months)) /
         (Math.pow(1 + originalMonthlyRate, months) - 1) || 0
 
-    const originalEmi = Math.floor(originalEmiWithoutInterest + processingFees / months)
+    const originalEmi = Math.floor(originalEmiWithoutInterest + processingFees / months) // no interest calculated on processing fees
     const nonDiscountedPrice = originalEmi * months
 
     if (!localStorage.getItem('totalCost')) {
