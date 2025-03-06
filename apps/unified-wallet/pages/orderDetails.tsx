@@ -39,7 +39,8 @@ export default function OrderDetails() {
     // { name: 'Open Wallet' },
     // { name: 'Open Spark' }
   ])
-
+  const domain = orderDetails?.data?.context.domain
+  console.log(domain)
   const router = useRouter()
   const { t } = useLanguage()
   const [decodeStream, { isLoading }] = useDecodeStreamMutation()

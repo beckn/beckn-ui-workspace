@@ -49,10 +49,15 @@ export const getPaymentBreakDown = (
   initData: InitResponseModel[] | StatusResponseModel[],
   frequency?: number | Record<string, any>
 ) => {
+  const selectedCount = initData[0].message?.order?.items[0]?.quantity?.selected?.count
+  const domain = initData[0].context.domain
   const quote = initData[0].message.order.quote
   const breakUp = quote.breakup
   const totalPricewithCurrent = {
-    value: getSubTotalAndDeliveryCharges(initData, frequency || 1).subTotal.toString(),
+    value:
+      domain === 'deg:rental'
+        ? getSubTotalAndDeliveryCharges(initData, selectedCount || 1).subTotal.toString()
+        : getSubTotalAndDeliveryCharges(initData, frequency || 1).subTotal.toString(),
     currency: getSubTotalAndDeliveryCharges(initData, frequency || 1).currencySymbol!
   }
 
@@ -73,7 +78,10 @@ export const getPaymentBreakDown = (
     console.log(Number(value), quantity)
     breakUpMap[title] = {
       currency: currency,
-      value: (breakUpMap[title]?.value || 0) + Number(value) * quantity
+      value:
+        domain === 'deg:rental'
+          ? (breakUpMap[title]?.value || 0) + Number(value) * selectedCount
+          : (breakUpMap[title]?.value || 0) + Number(value) * quantity
     }
   })
 
