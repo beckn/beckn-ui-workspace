@@ -57,9 +57,11 @@ const slice = createSlice({
 
         if (hasNotQuery) {
           if (state.user.isOtpVerified) {
-            Router.push('/')
-          } else {
             Router.push('/OTPVerification')
+            Cookies.set('isVerified', 'false')
+          } else {
+            Router.push('/')
+            Cookies.set('isVerified', 'false')
           }
         } else {
           Router.push({

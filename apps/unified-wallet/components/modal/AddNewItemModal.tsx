@@ -147,7 +147,7 @@ const AddNewItemModal = (props: DeleteAlertModalProps) => {
                             <HStack gap={1}>
                               <Typography
                                 dataTest={testIds.Browse_file}
-                                color="#4498E8"
+                                color="#09BD71"
                                 fontSize="10px"
                                 sx={{ cursor: 'pointer', _hover: { textDecoration: 'underline' } }}
                                 text="Browse file"

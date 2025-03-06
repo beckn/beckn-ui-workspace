@@ -1,26 +1,47 @@
 import React, { useState, useMemo } from 'react'
 import { BecknAuth } from '@beckn-ui/becknified-components'
-import { FormErrors, SignInFormProps } from '@beckn-ui/common/lib/types'
 import { signInValidateForm } from '@beckn-ui/common'
 import openSpark from '@public/images/solaris_icon.svg'
 import { useLanguage } from '@hooks/useLanguage'
 import { Box } from '@chakra-ui/react'
 import Router from 'next/router'
 import { useTradeLoginMutation } from '@services/UserService'
-import { useDispatch, useSelector } from 'react-redux'
-import { AuthRootState } from '@store/auth-slice'
-import { ROLE } from '@lib/config'
+import { useDispatch } from 'react-redux'
+import { mobilePhoneValidate } from '@utils/form-utils'
 
-const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
+export interface SignInFormProps {
+  mobileNumber: string
+}
+interface FormErrors {
+  mobileNumber: string
+}
+
+interface SignInProps {
+  initialFormData?: SignInFormProps
+}
+
+const SignIn = ({ initialFormData = { mobileNumber: '+91 ' } }: SignInProps) => {
   const [formData, setFormData] = useState<SignInFormProps>(initialFormData)
-  const [formErrors, setFormErrors] = useState<FormErrors>({ email: '', password: '' })
+  const [formErrors, setFormErrors] = useState<FormErrors>({ mobileNumber: '' })
 
   const [tradeLogin, { isLoading }] = useTradeLoginMutation()
   const { t } = useLanguage()
   const dispatch = useDispatch()
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
+    let { name, value } = e.target
+
+    if (!value.startsWith('+91 ')) {
+      value = '+91 '
+    }
+
+    // Prevent clearing the field
+    if (value.length < 4) {
+      value = '+91 '
+    }
+    const numericPart = value.replace(/\D/g, '').slice(2)
+
+    value = `+91 ${numericPart}`
 
     setFormData(prevFormData => ({
       ...prevFormData,
@@ -32,7 +53,7 @@ const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
       [name]: value
     }
 
-    const errors = signInValidateForm(updatedFormData)
+    const errors = mobilePhoneValidate(updatedFormData)
     setFormErrors(prevErrors => ({
       ...prevErrors,
       [name]: t[`${errors[name as keyof FormErrors]}`] || ''
@@ -41,14 +62,13 @@ const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
 
   const isFormFilled = useMemo(() => {
     return (
-      Object.values(formData).every(value => value !== '') && Object.values(formErrors).every(value => value === '')
+      Object.values(formData).every(value => value !== '+91 ') && Object.values(formErrors).every(value => value === '')
     )
   }, [formData, formErrors])
 
   const handleSignIn = async () => {
     const signInData = {
-      email: formData.email,
-      password: formData.password
+      phone: formData.mobileNumber.replace('+91 ', '')
     }
 
     try {
@@ -92,21 +112,12 @@ const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
           inputs: [
             {
               type: 'text',
-              name: 'email',
-              label: t.enterEmailID,
-              value: formData.email,
+              name: 'mobileNumber',
+              label: t.enterMobileNumber,
+              value: formData.mobileNumber,
               handleChange: handleInputChange,
-              error: formErrors.email,
-              dataTest: 'input-email'
-            },
-            {
-              type: 'password',
-              name: 'password',
-              label: t.enterPassword,
-              value: formData.password,
-              handleChange: handleInputChange,
-              error: formErrors.password,
-              dataTest: 'input-password'
+              error: formErrors.mobileNumber,
+              dataTest: 'input-mobile-number'
             }
           ]
         }}

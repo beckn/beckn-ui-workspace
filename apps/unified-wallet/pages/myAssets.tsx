@@ -70,14 +70,14 @@ const MyAssets = () => {
       >
         <NavigationItem
           icon={IdentityIcon}
-          label={`My Credentials ${count?.credentialsCount > 0 ? `(${count?.credentialsCount})` : ''}`}
+          label={`My Credentials (${count?.credentialsCount || 0})`}
           handleClick={() => router.push('/myCredentials')}
           dataTest={'credentials'}
           renderType="card"
         />
         <NavigationItem
           icon={AssetsIcon}
-          label={`Physical Assets ${count?.physicalAssetsCount > 0 ? `(${count?.physicalAssetsCount})` : ''}`}
+          label={`Physical Assets (${count?.physicalAssetsCount || 0})`}
           handleClick={() => router.push('/physicalAssets')}
           dataTest={'physical-assets'}
           renderType="card"

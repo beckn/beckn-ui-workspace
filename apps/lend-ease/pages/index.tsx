@@ -14,6 +14,7 @@ import { DegWalletDetails } from '@beckn-ui/common'
 import { UserRootState } from '@store/user-slice'
 import DetailsCard from '@beckn-ui/becknified-components/src/components/checkout/details-card'
 import axios from 'axios'
+import { currencyFormat } from '@utils/general'
 
 interface OrderItem {
   sc_retail_product: any
@@ -115,9 +116,10 @@ const HomePage = () => {
       >
         <Box>
           <Image
-            src={profileIcon}
+            src={user?.agent?.provider_id?.logo?.url || profileIcon}
             alt="profileIcon"
             onClick={() => router.push('/profile')}
+            cursor={'pointer'}
           />
         </Box>
         <Text
@@ -226,7 +228,7 @@ const HomePage = () => {
                       whiteSpace={'nowrap'}
                       overflow={'hidden'}
                     >
-                      {order.customer_id.first_name}
+                      {`${order.customer_id.first_name} ${order.customer_id.last_name}`}
                     </Text>
                   </Flex>
                   <Flex mb="5px">
@@ -245,7 +247,7 @@ const HomePage = () => {
                       whiteSpace={'nowrap'}
                       overflow={'hidden'}
                     >
-                      Rs. {order?.order_id.total_amount}
+                      Rs. {currencyFormat(order?.order_id.total_amount)}
                     </Text>
                   </Flex>
                   <Flex mb="5px">

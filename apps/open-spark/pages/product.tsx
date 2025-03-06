@@ -68,7 +68,7 @@ const Product = () => {
           totalPrice: selectedProduct.item.price.value,
           handleIncrement: increment,
           handleDecrement: decrement,
-          // counterTitle: 'Select Quantity',
+          counterTitle: 'Select Quantity',
           counter: counter,
           cta: {
             dataTest: testIds.productpage_addTocartButton,

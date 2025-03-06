@@ -95,7 +95,7 @@ const OpenWalletBottomModal: React.FC<OpenWalletBottomModalProps> = ({ modalType
         console.error('Invalid profile ID')
         dispatch(
           feedbackActions.setToastData({
-            toastData: { message: 'Error!', display: true, type: 'error', description: 'Invalid Profile ID' }
+            toastData: { message: 'Error!', display: true, type: 'error', description: 'Wallet not found' }
           })
         )
       }

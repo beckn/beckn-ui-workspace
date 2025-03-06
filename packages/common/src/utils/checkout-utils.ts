@@ -45,12 +45,20 @@ export const geocodeFromPincode = async (pincode: string) => {
   }
 }
 
-export const getPaymentBreakDown = (initData: InitResponseModel[] | StatusResponseModel[]) => {
+export const getPaymentBreakDown = (
+  initData: InitResponseModel[] | StatusResponseModel[],
+  frequency?: number | Record<string, any>
+) => {
+  const selectedCount = initData[0].message?.order?.items[0]?.quantity?.selected?.count
+  const domain = initData[0].context.domain
   const quote = initData[0].message.order.quote
   const breakUp = quote.breakup
   const totalPricewithCurrent = {
-    value: getSubTotalAndDeliveryCharges(initData).subTotal.toString(),
-    currency: getSubTotalAndDeliveryCharges(initData).currencySymbol!
+    value:
+      domain === 'deg:rental'
+        ? getSubTotalAndDeliveryCharges(initData, selectedCount || 1).subTotal.toString()
+        : getSubTotalAndDeliveryCharges(initData, frequency || 1).subTotal.toString(),
+    currency: getSubTotalAndDeliveryCharges(initData, frequency || 1).currencySymbol!
   }
 
   const breakUpMap: Record<string, any> = {}
@@ -61,9 +69,19 @@ export const getPaymentBreakDown = (initData: InitResponseModel[] | StatusRespon
       price: { currency, value }
     } = item
 
+    let quantity = 1
+    if (typeof frequency !== 'number') {
+      quantity = frequency?.[item.item?.id!]?.quantity || 1
+    } else {
+      quantity = frequency
+    }
+    console.log(Number(value), quantity)
     breakUpMap[title] = {
       currency: currency,
-      value: value
+      value:
+        domain === 'deg:rental'
+          ? (breakUpMap[title]?.value || 0) + Number(value) * selectedCount
+          : (breakUpMap[title]?.value || 0) + Number(value) * quantity
     }
   })
 
@@ -80,22 +98,19 @@ export const getSubTotalAndDeliveryCharges = (
   let currencySymbol
 
   if (initData && initData.length > 0) {
-    let quantity = 1
     initData.forEach(data => {
-      if (typeof frequency !== 'number') {
-        ;(data.message.order.items as any).forEach((item: any) => {
-          quantity = frequency?.[item.id].quantity
-        })
-      } else {
-        quantity = frequency
-      }
-
       totalPriceWithCurrency = {
         value: totalPriceWithCurrency.value + Number(data.message.order.quote.price?.value) || 0,
         currency: data.message.order.quote.price?.currency || 'INR'
       }
       if (data.message.order.quote.breakup) {
         data.message.order.quote.breakup.forEach(breakup => {
+          let quantity = 1
+          if (typeof frequency !== 'number') {
+            quantity = frequency?.[breakup.item?.id!]?.quantity || 1
+          } else {
+            quantity = frequency
+          }
           const itemPrice = Number(breakup.price.value) || 0
           subTotal += itemPrice * quantity
         })

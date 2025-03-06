@@ -3,8 +3,7 @@ import { SignInResponse, SignUpRequest } from '@beckn-ui/common'
 import Cookies from 'js-cookie'
 
 export interface SignInRequest {
-  email: string
-  password: string
+  phone: string
 }
 
 export interface RegisterRequest {
@@ -20,7 +19,7 @@ const extendedAuthApi = Api.injectEndpoints({
   endpoints: build => ({
     tradeLogin: build.mutation<SignInResponse, SignInRequest>({
       query: credentials => ({
-        url: '/unified-beckn-energy/login',
+        url: '/beckn-energy-finance/mobile-login',
         method: 'POST',
         body: credentials
       })

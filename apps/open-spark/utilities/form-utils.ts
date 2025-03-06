@@ -145,3 +145,14 @@ export const profileValidateForm = (formData: ProfileProps): FormErrors => {
   }
   return errors
 }
+
+export const mobilePhoneValidate = (formData: { mobileNumber: string }): FormErrors => {
+  const errors: FormErrors = {}
+
+  if (formData.mobileNumber.trim() === '') {
+    errors.mobileNumber = 'errorNumber'
+  } else if (!/^\+91\s?\d{10}$/.test(formData.mobileNumber)) {
+    errors.mobileNumber = 'errorNumber2'
+  }
+  return errors
+}

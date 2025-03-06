@@ -23,9 +23,10 @@ interface OpenWalletBottomModalProps {
   setModalType: (type: 'wallet' | 'link' | 'otp' | 'alert' | null) => void
   onClose?: () => void
 }
+const numberOfDigits = 6
 
 const OpenWalletBottomModal: React.FC<OpenWalletBottomModalProps> = ({ modalType, setModalType }) => {
-  const [OTP, setOTP] = useState(new Array(6).fill(''))
+  const [OTP, setOTP] = useState(new Array(numberOfDigits).fill(''))
   const otpBoxReference = useRef<any>([])
   const [checkboxes, setCheckboxes] = useState<any>(
     checkboxLabels.reduce((acc, label) => ({ ...acc, [label.toLowerCase()]: false }), {})
@@ -55,13 +56,29 @@ const OpenWalletBottomModal: React.FC<OpenWalletBottomModalProps> = ({ modalType
       [name.toLowerCase()]: !prev[name.toLowerCase()]
     }))
   }
+  useEffect(() => {
+    return () => {
+      setOTP(new Array(numberOfDigits).fill(''))
+    }
+  }, [])
 
-  const handleOTPChange = (value: string, index: number) => {
-    const newArr = [...OTP]
+  const handleChange = (value: string, index: number) => {
+    if (!/^[0-9]?$/.test(value)) return
+
+    let newArr = [...OTP]
     newArr[index] = value
     setOTP(newArr)
 
-    if (value && index < 5) {
+    if (value && index < numberOfDigits - 1) {
+      otpBoxReference.current[index + 1].focus()
+    }
+  }
+
+  const handleBackspaceAndEnter = (e: any, index: any) => {
+    if (e.key === 'Backspace' && !e.target.value && index > 0) {
+      otpBoxReference.current[index - 1].focus()
+    }
+    if (e.key === 'Enter' && e.target.value && index < numberOfDigits - 1) {
       otpBoxReference.current[index + 1].focus()
     }
   }
@@ -223,7 +240,10 @@ const OpenWalletBottomModal: React.FC<OpenWalletBottomModalProps> = ({ modalType
                       value={digit}
                       type="number"
                       maxLength={1}
-                      onChange={e => handleOTPChange(e.target.value, index)}
+                      inputMode="numeric"
+                      pattern="[0-9]"
+                      onChange={e => handleChange(e.target.value, index)}
+                      onKeyUp={e => handleBackspaceAndEnter(e, index)}
                       ref={el => (otpBoxReference.current[index] = el)}
                       style={{
                         width: '42px',

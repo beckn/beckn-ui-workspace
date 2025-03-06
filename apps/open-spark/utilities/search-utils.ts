@@ -25,6 +25,7 @@ export const parseSearchlist = (data: SearchResponseModel[], type?: 'RENT_AND_HI
             providerCoordinates = { latitude: lat, longitude: lng }
           }
         }
+
         provider.items.forEach(item => {
           let itemData = item
           console.log('type:', item)
