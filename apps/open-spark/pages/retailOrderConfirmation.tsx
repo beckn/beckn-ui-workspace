@@ -21,7 +21,7 @@ import {
   ROLE,
   ROUTE_TYPE
 } from '../lib/config'
-import { cartActions } from '@beckn-ui/common'
+import { cartActions, formatDate } from '@beckn-ui/common'
 import { RootState } from '@store/index'
 import { OrderHistoryData } from '@lib/types/orderHistory'
 import { useAddDocumentMutation, useGetVerificationMethodsMutation } from '@services/walletService'
@@ -31,6 +31,7 @@ import { extractAuthAndHeader, generateRandomCode, toBase64, toSnakeCase } from 
 import { feedbackActions } from '@beckn-ui/common'
 import { getRentalPayloadForConfirm } from '@utils/confirm-utils'
 import { getPayloadForConfirm, getPayloadForOrderHistoryPost } from '@utils/payload'
+import { calculateDuration } from '@utils/checkout-util'
 
 const retailOrderConfirmation = () => {
   const { t } = useLanguage()
@@ -50,6 +51,23 @@ const retailOrderConfirmation = () => {
     toTime: localStorage.getItem('toTimestamp')
   })
   const [toTimestamp, setToTimestamp] = useState<string>()
+  const [fromTime, setFromTime] = useState<string>()
+  const [toTime, setToTime] = useState<string>()
+  const [duration, setDuration] = useState<number>()
+
+  // useEffect(() => {
+  //   const storedFromTime = localStorage.getItem('fromTimestamp')
+  //   const storedToTime = localStorage.getItem('toTimestamp')
+  //   const formatedFromTime = formatDate(Number(storedFromTime) * 1000, 'h:mm a') as string
+  //   const formatedToTime = formatDate(Number(storedToTime) * 1000, 'h:mm a') as string
+  //   setFromTime(formatedFromTime)
+  //   setToTime(formatedToTime)
+
+  //   if (formatedFromTime && formatedToTime) {
+  //     const calculatedDuration = calculateDuration(formatedFromTime, formatedToTime)
+  //     setDuration(calculatedDuration)
+  //   }
+  // }, [])
 
   // useEffect(() => {
   //   const fromTimestamp = localStorage.getItem('fromTimestamp')
@@ -247,16 +265,26 @@ const retailOrderConfirmation = () => {
       cartItemQuantity[item.providerId]['totalPrice'] += itemTotalPrice
     })
 
-    console.log(cartItemQuantity)
     return cartItemQuantity
   }
 
   console.log(getCartItemsWithQuantity())
   useEffect(() => {
+    const storedFromTime = localStorage.getItem('fromTimestamp')
+    const storedToTime = localStorage.getItem('toTimestamp')
+    const formatedFromTime = formatDate(Number(storedFromTime) * 1000, 'h:mm a') as string
+    const formatedToTime = formatDate(Number(storedToTime) * 1000, 'h:mm a') as string
+    setFromTime(formatedFromTime)
+    setToTime(formatedToTime)
+
+    // if (formatedFromTime && formatedToTime) {
+    const calculatedDuration = calculateDuration(formatedFromTime, formatedToTime)
+    //   setDuration(calculatedDuration)
+    // }
     if (initResponse && initResponse.length > 0) {
       const payload =
         type === 'RENT_AND_HIRE'
-          ? getRentalPayloadForConfirm(initResponse, timestamp.fromTime!, timestamp.toTime!)
+          ? getRentalPayloadForConfirm(initResponse, timestamp.fromTime!, timestamp.toTime!, calculatedDuration!)
           : getPayloadForConfirm(initResponse, getCartItemsWithQuantity()) // fixed temporary once Rahul fixes the changes regarding dynamic price calculation on BE revert the chnges and do the fixes accord.
       confirm(payload)
     }

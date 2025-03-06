@@ -49,7 +49,7 @@ const MyTransactions = () => {
     Healthcare: { color: '#D86969', icon: '' },
     default: { color: '#4498E8', icon: '' }
   }
-
+  console.log(items)
   const fetchTransactions = async () => {
     try {
       setIsLoading(true)
