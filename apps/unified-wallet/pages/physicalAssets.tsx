@@ -147,6 +147,19 @@ const PhysicalAssets = () => {
         type: formData.type
       }
       if (selectedFile) {
+        if (selectedFile.file.size > 1 * 1024 * 1024) {
+          dispatch(
+            feedbackActions.setToastData({
+              toastData: {
+                message: 'Error',
+                display: true,
+                type: 'error',
+                description: 'File size should be less than 1MB.'
+              }
+            })
+          )
+          return
+        }
         data.fileName = selectedFile?.title
         const uploadPayload = new FormData()
         uploadPayload.append('file', selectedFile.file)
