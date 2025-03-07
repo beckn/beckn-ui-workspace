@@ -18,7 +18,7 @@ const extendedAuthApi = Api.injectEndpoints({
   endpoints: build => ({
     tradeLogin: build.mutation<SignInResponse, SignInRequest>({
       query: credentials => ({
-        url: '/unified-beckn-energy/mobile-login',
+        url: '/beckn-energy-finance/mobile-login',
         method: 'POST',
         body: credentials
       })
