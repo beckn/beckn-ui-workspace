@@ -259,6 +259,7 @@ const MyCredentials = () => {
   }
 
   const handleOnFileselectionChange = (data: DocumentProps[]) => {
+    console.log(data)
     setSelectedFile(data[0])
   }
 
@@ -351,7 +352,7 @@ const MyCredentials = () => {
       setSelectedFile(undefined)
     }
   }, [formData])
-
+  console.log(selectedFile)
   return (
     <Box
       className="hideScroll"
