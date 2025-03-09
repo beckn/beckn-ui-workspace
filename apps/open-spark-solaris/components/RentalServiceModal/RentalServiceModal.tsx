@@ -112,7 +112,10 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
             source: item.source,
             invoice: item.attachment!,
             isVerified: true,
-            timestamp: item?.createdAt?.length > 5 ? item.createdAt : Math.floor(new Date().getTime() / 1000),
+            timestamp:
+              item?.createdAt?.length > 5 && !isNaN(item?.createdAt as number)
+                ? item.createdAt
+                : Math.floor(new Date().getTime() / 1000),
             data: item
           }
         })
@@ -127,10 +130,23 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
   }
 
   const handleAddFromWallet = async () => {
-    setCurrentView('select')
-    setActiveStep(0)
-    console.log(user?.deg_wallet?.deg_wallet_id)
-    const getDoc = await fetchCredentials()
+    if (user?.deg_wallet && user?.deg_wallet.energy_assets_consent) {
+      setCurrentView('select')
+      setActiveStep(0)
+      console.log(user?.deg_wallet?.deg_wallet_id)
+      const getDoc = await fetchCredentials()
+    } else {
+      dispatch(
+        feedbackActions.setToastData({
+          toastData: {
+            message: user?.deg_wallet?.energy_assets_consent ? 'Warning' : 'Wallet not connected!',
+            display: true,
+            type: 'warning',
+            description: 'Please connect your wallet before proceeding.'
+          }
+        })
+      )
+    }
   }
 
   const handlePublish = async () => {
