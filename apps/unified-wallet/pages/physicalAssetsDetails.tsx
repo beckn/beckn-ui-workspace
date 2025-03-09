@@ -39,11 +39,11 @@ const PhysicalAssetsDetails = () => {
       fileUrl: details?.fileUrl,
       data: { ...data.data, source: null, attachment: null }
     })
-    const metaData = details?.confirmDetails?.[0]?.message?.billing
+    const metaData = details?.confirmDetails?.[0]?.message?.order?.billing
     setOwnerDetails({
       name: metaData?.name || '',
       address: metaData?.address || '',
-      phoneNumber: extractMobileNumberFromSubjectDid(user?.did!)!
+      phoneNumber: metaData?.phone || extractMobileNumberFromSubjectDid(user?.did!)!
     })
   }
 
