@@ -1,0 +1,231 @@
+import { Typography } from '@beckn-ui/molecules'
+import { Box, Flex, Image } from '@chakra-ui/react'
+import Card from '@components/card/Card'
+import React, { useEffect, useState } from 'react'
+import successIcon from '@public/images/green_tick_icon.svg'
+import inProgressIcon from '@public/images/in_progress_icon.svg'
+import failedIcon from '@public/images/failed_icon.svg'
+import { currencyMap, ROLE, ROUTE_TYPE } from '@lib/config'
+import Cookies from 'js-cookie'
+import axios from '@services/axios'
+import { useDispatch } from 'react-redux'
+import { formatDate } from '@beckn-ui/common'
+import { useRouter } from 'next/router'
+
+type TradeStatus = 'SUCCESS' | 'IN_PROGRESS' | 'FAILED'
+const tabs = [
+  { id: 'buy', label: 'Buy' },
+  { id: 'sell', label: 'Sell' }
+]
+
+interface TradeMetaData {
+  quantity: string
+  price: number | string
+  orderId: string
+  time: string
+  status: TradeStatus
+}
+// remove all mockdata
+const mockTradeList: TradeMetaData[] = [
+  {
+    quantity: '10',
+    price: 130,
+    orderId: '102',
+    time: '2024-02-04T06:00:00Z',
+    status: 'SUCCESS'
+  },
+  {
+    quantity: '10',
+    price: '130',
+    orderId: '103',
+    time: '2024-02-04T06:00:00Z',
+    status: 'IN_PROGRESS'
+  },
+  {
+    quantity: '10',
+    price: '130',
+    orderId: '104',
+    time: '2024-02-04T06:00:00Z',
+    status: 'FAILED'
+  }
+]
+
+const statusMap: Record<TradeStatus, { icon: any; color: string; label: string }> = {
+  SUCCESS: { icon: successIcon, color: '#5EC401', label: 'Success' },
+  IN_PROGRESS: { icon: inProgressIcon, color: '#BD942B', label: 'In progress' },
+  FAILED: { icon: failedIcon, color: '#E93324', label: 'Failed' }
+}
+
+const MyTrades = () => {
+  const bearerToken = Cookies.get('authToken')
+  const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
+
+  const [checked, setChecked] = useState<boolean>(false)
+  const [tradeList, setTradeList] = useState<TradeMetaData[]>([])
+  const [isLoading, setIsLoading] = useState(false)
+  const [role, setRole] = useState<ROLE>()
+  const [activeTab, setActiveTab] = useState('buy')
+
+  const dispatch = useDispatch()
+  const router = useRouter()
+
+  const getAllTradeList = async () => {
+    const requestOptions = {
+      method: 'GET',
+      headers: { Authorization: `Bearer ${bearerToken}` },
+      withCredentials: true
+    }
+
+    setIsLoading(true)
+
+    await axios
+      .get(`${strapiUrl}${ROUTE_TYPE[ROLE.GENERAL]}/trade`, requestOptions)
+      .then(response => {
+        const result = response.data
+        if (result.length === 0) {
+          return setTradeList([])
+        }
+        const list = result.map((data: any) => {
+          return {
+            orderId: data.id,
+            price: data.price || 0,
+            quantity: data.quantity,
+            time: data.createdAt,
+            status: data.status
+          }
+        })
+
+        setTradeList(list)
+      })
+      .catch(error => {
+        setIsLoading(false)
+        console.error('Error fetching trade data:', error)
+      })
+  }
+
+  useEffect(() => {
+    getAllTradeList()
+  }, [])
+
+  const handleOnCardClick = (data: TradeMetaData) => {
+    router.push({ pathname: '/tradeDetails', query: { id: data.orderId } })
+  }
+
+  useEffect(() => {
+    //remove this useEffect after api integration, just for mockdata
+    setTradeList(mockTradeList)
+  }, [])
+  return (
+    <Box
+      margin={'0 auto'}
+      maxW={['100%', '100%', '40rem', '40rem']}
+      className="hideScroll"
+      maxH={'calc(100vh - 80px)'}
+      overflowY="scroll"
+      pb={'20px'}
+    >
+      <Box mb={4}>
+        <Flex
+          borderBottom="1px solid"
+          borderColor="gray.200"
+        >
+          {tabs.map(tab => (
+            <Box
+              key={tab.id}
+              flex={1}
+              py={2}
+              cursor="pointer"
+              onClick={() => setActiveTab(tab.id)}
+              borderBottom={activeTab === tab.id ? '3px solid #4498E8' : 'none'}
+              textAlign="center"
+            >
+              <Typography
+                text={tab.label}
+                color={activeTab === tab.id ? '#4498E8' : '#000000'}
+                fontSize="12px"
+                fontWeight={activeTab === tab.id ? '600' : '400'}
+                dataTest={`${tab.id}-tab`}
+              />
+            </Box>
+          ))}
+        </Flex>
+      </Box>
+
+      <Flex flexDirection={'column'}>
+        {tradeList.length === 0 ? (
+          <Box
+            display={'grid'}
+            height={'calc(100vh - 300px)'}
+            alignContent={'center'}
+          >
+            <Typography
+              text="No trade history found."
+              dataTest="no_Trade_Found"
+              fontWeight="400"
+              fontSize="15px"
+              style={{ placeSelf: 'center' }}
+            />
+          </Box>
+        ) : (
+          tradeList.map((trade, index) => {
+            return (
+              <Card
+                key={index}
+                handleOnclick={() => handleOnCardClick(trade)}
+                childComponent={() => {
+                  return (
+                    <Flex
+                      flexDirection={'column'}
+                      gap="4px"
+                      data-test={'trades_card_click'}
+                    >
+                      <Typography
+                        text={`${trade.quantity} Units`}
+                        fontWeight="600"
+                        dataTest={'trade_quantity'}
+                      />
+                      {role !== ROLE.BUY && (
+                        <Typography
+                          text={`${currencyMap.INR}${trade.price}`}
+                          dataTest={'trade_price'}
+                        />
+                      )}
+                      <Flex justifyContent={'space-between'}>
+                        <Flex flexDir={'row'}>
+                          <Typography
+                            text={`Order ID: ${trade.orderId}`}
+                            dataTest={'trade_orderId'}
+                          />
+                          <Typography
+                            text={`, ${formatDate(trade.time, 'hh:mm a')}`}
+                            dataTest={'trade_Time'}
+                          />
+                        </Flex>
+                        <Flex
+                          gap="4px"
+                          className="mytrade-status"
+                        >
+                          <Image
+                            src={`${statusMap[trade.status].icon}`}
+                            alt="status_icon"
+                          />
+                          <Typography
+                            color={statusMap[trade.status].color}
+                            text={`${statusMap[trade.status].label}`}
+                            dataTest="trade-status"
+                          />
+                        </Flex>
+                      </Flex>
+                    </Flex>
+                  )
+                }}
+              />
+            )
+          })
+        )}
+      </Flex>
+    </Box>
+  )
+}
+
+export default MyTrades
