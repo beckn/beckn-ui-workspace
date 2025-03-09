@@ -25,4 +25,4 @@ export const images = [
   }
 ]
 
-export const checkboxLabels = ['Identities', 'Assets', 'Transactions']
+export const checkboxLabels = ['Identities', 'Assets']
