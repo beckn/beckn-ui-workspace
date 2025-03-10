@@ -3,7 +3,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 export default function middleware(req: NextRequest) {
-  const loggedin = req.cookies.get('authToken')
+  const loggedin = req.cookies.get('adminAuthToken')
   const { pathname } = req.nextUrl
 
   if (loggedin && (pathname === '/signIn' || pathname === '/signUp')) {

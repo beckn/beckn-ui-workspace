@@ -37,13 +37,11 @@ const TRADDE_EVE_NUM = Object.freeze({
 })
 
 const TradeDetails = () => {
-  const bearerToken = Cookies.get('authToken')
+  const bearerToken = Cookies.get('adminAuthToken')
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
 
   const [isLoading, setIsLoading] = useState(false)
   const [tradeDetails, setTradeDetails] = useState<TradeMetaData>()
-
-  const { role } = useSelector((state: AuthRootState) => state.auth)
 
   const getTradeDetailsById = async (id: string) => {
     const requestOptions = {
@@ -55,7 +53,7 @@ const TradeDetails = () => {
     setIsLoading(true)
 
     await axios
-      .get(`${strapiUrl}${ROUTE_TYPE[role!]}/trade?id=${id}`, requestOptions)
+      .get(`${strapiUrl}${ROUTE_TYPE[ROLE.ADMIN]}/trade?id=${id}`, requestOptions)
       .then(response => {
         const result = response.data
         const tags: string[] = []
@@ -119,26 +117,28 @@ const TradeDetails = () => {
           dataTest={testIds.trade_details_date}
         />
         <CurrentTrade
-          data={[
-            {
-              name: tradeDetails?.name!,
-              label: role === ROLE.CONSUMER || role === ROLE.ADMIN ? 'Energy Bought' : 'Energy Sold',
-              value: tradeDetails?.quantity! || '0',
-              disabled: true,
-              symbol: '(KWh)'
-            },
-            ...(role !== ROLE.CONSUMER && role !== ROLE.ADMIN
-              ? [
-                  {
-                    name: tradeDetails?.name!,
-                    label: 'Price',
-                    value: tradeDetails?.price.toString()!,
-                    disabled: true,
-                    symbol: '₹/units'
-                  }
-                ]
-              : [])
-          ]}
+          data={
+            [
+              {
+                name: tradeDetails?.name!,
+                label: 'Energy Bought',
+                value: tradeDetails?.quantity! || '0',
+                disabled: true,
+                symbol: '(KWh)'
+              }
+              // ...(role !== ROLE.CONSUMER && role !== ROLE.ADMIN
+              //   ? [
+              // {
+              //   name: tradeDetails?.name!,
+              //   label: 'Price',
+              //   value: tradeDetails?.price.toString()!,
+              //   disabled: true,
+              //   symbol: '₹/units'
+              // }
+            ]
+            // : [])
+            // ]
+          }
         />
 
         {tradeDetails?.preferencesTags && tradeDetails?.preferencesTags?.length > 0 && (
