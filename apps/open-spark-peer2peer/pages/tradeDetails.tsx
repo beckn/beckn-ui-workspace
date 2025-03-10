@@ -27,6 +27,7 @@ interface TradeMetaData {
   tradeId: string
   tradeEvents: any[]
   preferencesTags: string[]
+  providerDetails: { name: string; emailId: string; phoneNumber: string } | null
 }
 
 const TRADDE_EVE_NUM = Object.freeze({
@@ -40,22 +41,22 @@ const TRADDE_EVE_NUM = Object.freeze({
   PENDING: 'pending'
 })
 
-const mockOrderData = {
-  date: '10/1/2025',
-  orderId: '103',
-  tradeId: '1104',
-  energyBought: '10 kwh',
-  rate: '7 ₹/units',
-  preferences: ['Solar Power', 'Trusted Source']
-}
+// const mockOrderData = {
+//   date: '10/1/2025',
+//   orderId: '103',
+//   tradeId: '1104',
+//   energyBought: '10 kwh',
+//   rate: '7 ₹/units',
+//   preferences: ['Solar Power', 'Trusted Source']
+// }
 
-const detailRows = [
-  { label: 'Date', value: mockOrderData.date },
-  { label: 'Order ID', value: mockOrderData.orderId },
-  { label: 'Trade ID', value: mockOrderData.tradeId },
-  { label: 'Energy Bought', value: mockOrderData.energyBought },
-  { label: 'Rate', value: mockOrderData.rate }
-]
+// const detailRows = [
+//   { label: 'Date', value: mockOrderData.date },
+//   { label: 'Order ID', value: mockOrderData.orderId },
+//   { label: 'Trade ID', value: mockOrderData.tradeId },
+//   { label: 'Energy Bought', value: mockOrderData.energyBought },
+//   { label: 'Rate', value: mockOrderData.rate }
+// ]
 const userCredentials = [
   {
     name: 'ID Proof',
@@ -71,57 +72,8 @@ const userCredentials = [
   }
 ]
 
-const mockTradeDetails = {
-  orderId: '103',
-  name: 'Solar Energy',
-  price: 70,
-  quantity: '10 kwh',
-  date: '2021-06-21T12:11:00Z',
-  status: 'pending',
-  tradeId: '1104',
-  preferencesTags: ['Solar Power', 'Trusted Source'],
-  tradeEvents: [
-    {
-      id: 1,
-      event_name: 'beckn_search',
-      description: 'Search',
-      createdAt: '2021-06-21T12:11:00Z'
-    },
-    {
-      id: 2,
-      event_name: 'beckn_on_search',
-      description: 'Select',
-      createdAt: '2021-06-21T12:21:00Z'
-    },
-    {
-      id: 3,
-      event_name: 'beckn_init',
-      description: 'Received Cred for Verification',
-      createdAt: '2021-06-21T12:31:00Z'
-    },
-    {
-      id: 4,
-      event_name: 'beckn_on_init',
-      description: 'Cred Verified',
-      createdAt: '2021-06-21T12:31:00Z'
-    },
-    {
-      id: 5,
-      event_name: 'beckn_confirm',
-      description: 'init',
-      createdAt: '2021-06-21T12:31:00Z'
-    },
-    {
-      id: 6,
-      event_name: 'pending',
-      description: 'Pending',
-      createdAt: '2021-06-21T12:31:00Z'
-    }
-  ]
-}
-
 const TradeDetails = () => {
-  const bearerToken = Cookies.get('authToken')
+  const bearerToken = Cookies.get('p2pAuthToken')
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
 
   const [isLoading, setIsLoading] = useState(false)
@@ -129,7 +81,7 @@ const TradeDetails = () => {
 
   const [role, setRole] = useState<ROLE>(ROLE.BUY)
 
-  const getTradeDetailsById = async (id: string) => {
+  const getTradeDetailsById = async (id: string, type: ROLE) => {
     const requestOptions = {
       method: 'GET',
       headers: { Authorization: `Bearer ${bearerToken}` },
@@ -139,7 +91,7 @@ const TradeDetails = () => {
     setIsLoading(true)
 
     await axios
-      .get(`${strapiUrl}${ROUTE_TYPE[ROLE.GENERAL]}/trade?id=${id}`, requestOptions)
+      .get(`${strapiUrl}${ROUTE_TYPE[type]}/trade?id=${id}`, requestOptions)
       .then(response => {
         const result = response.data
         const tags: string[] = []
@@ -160,17 +112,17 @@ const TradeDetails = () => {
             createdAt: new Date().toISOString()
           })
         }
-
         setTradeDetails({
           orderId: result.order?.id || null,
           name: result.item_name,
           price: result.price || 0,
           quantity: result.quantity,
-          date: result.createdAt,
+          date: formatDate(result.createdAt, 'dd/MM/yyyy'),
           status: result.status,
           tradeId: result.id,
           tradeEvents: result.trade_events,
-          preferencesTags: tags
+          preferencesTags: tags,
+          providerDetails: null
         })
       })
       .catch(error => {
@@ -180,12 +132,10 @@ const TradeDetails = () => {
   }
 
   useEffect(() => {
-    const { id } = Router.query
-    getTradeDetailsById(id as string)
+    const { id, type } = Router.query
+    getTradeDetailsById(id as string, type as ROLE)
   }, [])
-  useEffect(() => {
-    setTradeDetails(mockTradeDetails)
-  }, [])
+
   const roleName = role === ROLE.BUY ? 'Producer' : 'Consumer'
 
   return (
@@ -197,10 +147,18 @@ const TradeDetails = () => {
       overflowY="scroll"
       pb={'20px'}
     >
-      <OrderSummary
-        detailRows={detailRows}
-        preferences={mockOrderData.preferences}
-      />
+      {tradeDetails?.orderId && (
+        <OrderSummary
+          detailRows={[
+            { label: 'Date', value: tradeDetails?.date! },
+            { label: 'Order ID', value: tradeDetails?.orderId! },
+            { label: 'Trade ID', value: tradeDetails?.tradeId! },
+            { label: 'Energy Bought', value: `${tradeDetails?.quantity!} kwh` },
+            { label: 'Rate', value: `${Number(tradeDetails?.price) / Number(tradeDetails?.quantity)} ₹/units` }
+          ]}
+          preferences={tradeDetails?.preferencesTags!}
+        />
+      )}
       <Box padding={'1rem 0.5rem'}>
         <Accordion
           accordionHeader={'History'}
@@ -239,18 +197,20 @@ const TradeDetails = () => {
           </Flex>
         </Accordion>
       </Box>
-      <Stack>
-        <UserDetails
-          title={`${roleName} Details`} //based on Role (Consumer Credentials)
-          name={{ text: 'Leela', icon: nameIcon }}
-          mail={{ text: 'xxxxa.work@gmail.com', icon: emailIcon }}
-          mobile={{ text: '+91 79XXXX6980', icon: CallphoneIcon }}
-          dataTest={testIds.trade_details_UserDetail}
-        />
-      </Stack>
-      <Stack>
+      {tradeDetails?.providerDetails && (
+        <Stack>
+          <UserDetails
+            title={`${roleName} Details`} //based on Role (Consumer Credentials)
+            name={{ text: tradeDetails?.providerDetails.name!, icon: nameIcon }}
+            mail={{ text: tradeDetails?.providerDetails.emailId!, icon: emailIcon }}
+            mobile={{ text: tradeDetails?.providerDetails.phoneNumber!, icon: CallphoneIcon }}
+            dataTest={testIds.trade_details_UserDetail}
+          />
+        </Stack>
+      )}
+      {/* <Stack>
         <UserCredentials userCredentials={userCredentials} />
-      </Stack>
+      </Stack> */}
     </Box>
   )
 }

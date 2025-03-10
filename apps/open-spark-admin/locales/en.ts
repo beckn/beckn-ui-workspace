@@ -63,6 +63,7 @@ const en: { [key: string]: string } = {
   errorText: 'Something went wrong',
   success: 'Success!',
   lockDemandSuccess: 'Demand Locked Successfully!',
+  lockDemandFailed: 'Demand Failed!',
   tradeCreateSuccess: 'Trade Created Successfully',
   tradeUpdateSuccess: 'Trade Updated Successfully',
   errorName: 'Name is required',

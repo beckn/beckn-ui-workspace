@@ -6,7 +6,7 @@ import { useLanguage } from '@hooks/useLanguage'
 import { useRouter } from 'next/router'
 import profileIcon from '@public/images/user_profile.svg'
 import { LoaderWithMessage, Typography } from '@beckn-ui/molecules'
-import { Box, Flex, HStack, Tag, TagLabel, Image, Grid, Skeleton, SkeletonText } from '@chakra-ui/react'
+import { Box, Flex, HStack, Tag, TagLabel, Image, Grid, Skeleton, SkeletonText, useTheme } from '@chakra-ui/react'
 import CustomeDateInput from '@components/dateRangePicker/CustomeDateInput'
 import SelectDate from '@components/dateRangePicker/SelectDate'
 import { QuestionOutlineIcon } from '@chakra-ui/icons'
@@ -31,7 +31,9 @@ import { useDispatch } from 'react-redux'
 const Dashboard = () => {
   const { t } = useLanguage()
   const router = useRouter()
+  const theme = useTheme()
   const apiKeyForGoogle = process.env.NEXT_PUBLIC_GOOGLE_API_KEY
+  const primaryColor = theme.colors.primary['100']
   const today = format(new Date(), 'dd/MM/yy')
   const {
     currentAddress,
@@ -46,7 +48,7 @@ const Dashboard = () => {
   const [totalEnergyUnits, setTotalEnergyUnits] = useState<number>(0)
   const [status, setStatus] = useState<string>('CLOSED')
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
-  const bearerToken = Cookies.get('authToken') || ''
+  const bearerToken = Cookies.get('p2pAuthToken') || ''
   const [isTradeLodaing, setIsTradeLoading] = useState(false)
   const [isPreffrenceLodaing, setIsPreffrenceLoading] = useState(false)
   const [currentTradeData, setCurrentTradeData] = useState<TradeData[]>([])
@@ -114,16 +116,20 @@ const Dashboard = () => {
 
       const result = response.data
       const lastTrade = result[0]
+      if (lastTrade.status === 'SUCCESS') {
+        setCurrentTradeData([])
+      } else {
+        const mappedTrade: TradeData = {
+          id: lastTrade.id,
+          quantity: lastTrade.quantity || 0,
+          price: lastTrade.price || 0
+        }
 
-      const mappedTrade: TradeData = {
-        id: lastTrade.id,
-        quantity: lastTrade.quantity,
-        price: lastTrade.price || 0
+        setCurrentTradeData([mappedTrade])
       }
-
-      setCurrentTradeData([mappedTrade])
     } catch (error) {
       console.error('Error fetching last trade data:', error)
+      setCurrentTradeData([])
     } finally {
       setIsTradeLoading(false)
     }
@@ -141,14 +147,15 @@ const Dashboard = () => {
       setCurrentTradeData([
         {
           id: result.prefId,
-          quantity: result.quantity,
-          price: result.price
+          quantity: result.quantity || 0,
+          price: result.price || 0
         }
       ])
       // const tags = [result.trusted_source && 'Trusted Source', result.cred_required && 'Solar Energy'].filter(Boolean)
       // setPreferencesTags(tags)
     } catch (error) {
       console.error('Error fetching preference data:', error)
+      setCurrentTradeData([])
     } finally {
       setIsPreffrenceLoading(false)
     }
@@ -162,9 +169,15 @@ const Dashboard = () => {
     const result = response.data.data.attributes
     setStatus(result.status)
     setStartTime(result.updatedAt)
+    localStorage.setItem('market-status', JSON.stringify({ status: result.status, startTime: result.updatedAt }))
   }
 
   useEffect(() => {
+    const prevMarketStatus = JSON.parse(localStorage.getItem('market-status')!)
+    if (prevMarketStatus) {
+      setStatus(prevMarketStatus.status)
+      setStartTime(prevMarketStatus.startTime)
+    }
     if (intervalRef.current) {
       clearInterval(intervalRef.current)
     }
@@ -175,11 +188,11 @@ const Dashboard = () => {
       }, 5000)
     }
     startPolling()
-    // if (role === ROLE.BUY) {
-    //   fetchLastTradeData()
-    // } else if (role === ROLE.SELL) {
-    //   fetchMyPreference()
-    // }
+    if (role === ROLE.BUY) {
+      fetchLastTradeData()
+    } else if (role === ROLE.SELL) {
+      fetchMyPreference()
+    }
     return () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current)
@@ -238,7 +251,7 @@ const Dashboard = () => {
         <Flex
           flexDirection={'row'}
           justifyContent={'space-around'}
-          backgroundColor={'#4498E8'}
+          backgroundColor={primaryColor}
           borderRadius="4px"
           margin={'14px 0'}
         >

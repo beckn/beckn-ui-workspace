@@ -34,12 +34,12 @@ interface EnergyPurchaseFormProps {
 
 export default function EnergyPurchaseForm({ preferenceType, role }: EnergyPurchaseFormProps) {
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
-  const bearerToken = Cookies.get('authToken') || ''
+  const bearerToken = Cookies.get('p2pAuthToken') || ''
   const router = useRouter()
   const dispatch = useDispatch()
   const { t } = useLanguage()
 
-  const [isChecked, setIsChecked] = useState(false)
+  const [isChecked, setIsChecked] = useState(true)
   const [tradeId, setTradeId] = useState<string>()
   const [energyUnits, setEnergyUnits] = useState<number>(0)
   const [pricePerUnit, setPricePerUnit] = useState<number>(0)
@@ -273,13 +273,13 @@ export default function EnergyPurchaseForm({ preferenceType, role }: EnergyPurch
         </Text>
 
         {/* payment */}
-        {role === ROLE.BUY && (
+        {/* {role === ROLE.BUY && (
           <BuyPaymentModule
             isChecked={isChecked}
             fare="₹500"
             onChange={handleCheckboxChange}
           />
-        )}
+        )} */}
         {/* Submit Button */}
       </VStack>
       <BecknButton

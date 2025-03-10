@@ -26,7 +26,7 @@ const slice = createSlice({
   initialState,
   reducers: {
     logout: () => {
-      Cookies.remove('authToken')
+      Cookies.remove('p2pAuthToken')
       Cookies.remove('isVerified')
       Router.push('/signIn')
       return initialState
@@ -46,7 +46,7 @@ const slice = createSlice({
         state.user = action.payload.user
         state.jwt = action.payload.jwt
         state.isAuthenticated = true
-        Cookies.set('authToken', state.jwt)
+        Cookies.set('p2pAuthToken', state.jwt)
         Cookies.set('isVerified', JSON.stringify(state.user?.isOtpVerified))
         const urlQuery = Router.query
 
@@ -76,7 +76,7 @@ const slice = createSlice({
           console.log('fulfilled', action)
           state.user = action.payload.user
           state.jwt = action.payload.jwt
-          Cookies.set('authToken', state.jwt)
+          Cookies.set('p2pAuthToken', state.jwt)
           Cookies.set('isVerified', JSON.stringify(state.user?.isOtpVerified))
           state.isAuthenticated = true
           if (state.user.isOtpVerified) {

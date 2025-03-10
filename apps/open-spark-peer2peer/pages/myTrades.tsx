@@ -12,7 +12,7 @@ import { useDispatch } from 'react-redux'
 import { formatDate } from '@beckn-ui/common'
 import { useRouter } from 'next/router'
 
-type TradeStatus = 'SUCCESS' | 'IN_PROGRESS' | 'FAILED'
+type TradeStatus = 'SUCCESS' | 'RECEIVED' | 'FAILED'
 const tabs = [
   { id: 'buy', label: 'Buy' },
   { id: 'sell', label: 'Sell' }
@@ -24,6 +24,7 @@ interface TradeMetaData {
   orderId: string
   time: string
   status: TradeStatus
+  order?: any
 }
 // remove all mockdata
 const mockTradeList: TradeMetaData[] = [
@@ -39,7 +40,7 @@ const mockTradeList: TradeMetaData[] = [
     price: '130',
     orderId: '103',
     time: '2024-02-04T06:00:00Z',
-    status: 'IN_PROGRESS'
+    status: 'RECEIVED'
   },
   {
     quantity: '10',
@@ -52,12 +53,12 @@ const mockTradeList: TradeMetaData[] = [
 
 const statusMap: Record<TradeStatus, { icon: any; color: string; label: string }> = {
   SUCCESS: { icon: successIcon, color: '#5EC401', label: 'Success' },
-  IN_PROGRESS: { icon: inProgressIcon, color: '#BD942B', label: 'In progress' },
+  RECEIVED: { icon: inProgressIcon, color: '#BD942B', label: 'In progress' },
   FAILED: { icon: failedIcon, color: '#E93324', label: 'Failed' }
 }
 
 const MyTrades = () => {
-  const bearerToken = Cookies.get('authToken')
+  const bearerToken = Cookies.get('p2pAuthToken')
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
 
   const [checked, setChecked] = useState<boolean>(false)
@@ -79,7 +80,7 @@ const MyTrades = () => {
     setIsLoading(true)
 
     await axios
-      .get(`${strapiUrl}${ROUTE_TYPE[ROLE.GENERAL]}/trade`, requestOptions)
+      .get(`${strapiUrl}${ROUTE_TYPE[activeTab === 'buy' ? ROLE.BUY : ROLE.SELL]}/trade`, requestOptions)
       .then(response => {
         const result = response.data
         if (result.length === 0) {
@@ -88,7 +89,7 @@ const MyTrades = () => {
         const list = result.map((data: any) => {
           return {
             orderId: data.id,
-            price: data.price || 0,
+            price: data?.price || data?.order?.price || 0,
             quantity: data.quantity,
             time: data.createdAt,
             status: data.status
@@ -105,16 +106,15 @@ const MyTrades = () => {
 
   useEffect(() => {
     getAllTradeList()
-  }, [])
+  }, [activeTab])
 
   const handleOnCardClick = (data: TradeMetaData) => {
-    router.push({ pathname: '/tradeDetails', query: { id: data.orderId } })
+    router.push({
+      pathname: '/tradeDetails',
+      query: { id: data.orderId, type: activeTab === 'buy' ? ROLE.BUY : ROLE.SELL }
+    })
   }
 
-  useEffect(() => {
-    //remove this useEffect after api integration, just for mockdata
-    setTradeList(mockTradeList)
-  }, [])
   return (
     <Box
       margin={'0 auto'}
@@ -171,7 +171,7 @@ const MyTrades = () => {
             return (
               <Card
                 key={index}
-                handleOnclick={() => handleOnCardClick(trade)}
+                handleOnclick={() => trade.order && handleOnCardClick(trade)}
                 childComponent={() => {
                   return (
                     <Flex
@@ -184,7 +184,7 @@ const MyTrades = () => {
                         fontWeight="600"
                         dataTest={'trade_quantity'}
                       />
-                      {role !== ROLE.BUY && (
+                      {role !== ROLE.BUY && Number(trade.price) > 0 && (
                         <Typography
                           text={`${currencyMap.INR}${trade.price}`}
                           dataTest={'trade_price'}

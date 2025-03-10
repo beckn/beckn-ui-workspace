@@ -21,7 +21,7 @@ const OrderConfirmation = () => {
   // const confirmResponse = useSelector((state: CheckoutRootState) => state.checkout.confirmResponse)
   // const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
 
-  // const bearerToken = Cookies.get('authToken')
+  // const bearerToken = Cookies.get('p2pAuthToken')
   // const axiosConfig = {
   //   headers: {
   //     Authorization: `Bearer ${bearerToken}`,

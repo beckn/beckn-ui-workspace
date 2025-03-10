@@ -17,7 +17,7 @@ import FormFieldInput from '@components/FormFieldInput/FormFieldInput'
 
 function Withdraw() {
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
-  const bearerToken = Cookies.get('authToken') || ''
+  const bearerToken = Cookies.get('p2pAuthToken') || ''
 
   const { t } = useLanguage()
   const router = useRouter()

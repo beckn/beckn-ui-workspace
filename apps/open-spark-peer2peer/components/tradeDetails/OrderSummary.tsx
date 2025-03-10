@@ -54,35 +54,37 @@ const OrderSummary = ({ detailRows, preferences }: OrderSummaryProps) => {
             </Flex>
           ))}
 
-          <Box mt={2}>
-            <Typography
-              text="Selected Preferences"
-              color="#282828"
-              fontSize="12px"
-              fontWeight="400"
-              sx={{ mb: '5px' }}
-            />
-            <Flex
-              gap={3}
-              flexWrap="wrap"
-            >
-              {preferences.map((pref, index) => (
-                <Box
-                  key={index}
-                  border="1px solid #000000"
-                  borderRadius="8px"
-                  padding={'5px 10px'}
-                >
-                  <Typography
-                    text={pref}
-                    color="#282828"
-                    fontSize="12px"
-                    fontWeight="400"
-                  />
-                </Box>
-              ))}
-            </Flex>
-          </Box>
+          {preferences.length > 0 && (
+            <Box mt={2}>
+              <Typography
+                text="Selected Preferences"
+                color="#282828"
+                fontSize="12px"
+                fontWeight="400"
+                sx={{ mb: '5px' }}
+              />
+              <Flex
+                gap={3}
+                flexWrap="wrap"
+              >
+                {preferences.map((pref, index) => (
+                  <Box
+                    key={index}
+                    border="1px solid #000000"
+                    borderRadius="8px"
+                    padding={'5px 10px'}
+                  >
+                    <Typography
+                      text={pref}
+                      color="#282828"
+                      fontSize="12px"
+                      fontWeight="400"
+                    />
+                  </Box>
+                ))}
+              </Flex>
+            </Box>
+          )}
         </Flex>
       </CardBody>
     </Card>

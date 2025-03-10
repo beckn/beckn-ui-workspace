@@ -33,7 +33,7 @@ export default function DeviceList({ initialDevices, onDeviceChange, fetchPaired
   const [isDeleteLoading, setIsDeleteLoading] = useState<boolean>(false)
 
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
-  const bearerToken = Cookies.get('authToken')
+  const bearerToken = Cookies.get('p2pAuthToken')
 
   const handleAddDevice = async (category: string, uploadedFiles: File[]) => {
     setIsLoading(true)

@@ -26,7 +26,7 @@ const ProfilePage = () => {
   const dispatch = useDispatch()
   const { t } = useLanguage()
   const router = useRouter()
-  const bearerToken = Cookies.get('authToken')
+  const bearerToken = Cookies.get('p2pAuthToken')
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
   const [isLoading, setIsLoading] = useState(false)
   const [formData, setFormData] = useState<ProfileProps>({
@@ -81,12 +81,12 @@ const ProfilePage = () => {
       .get(`${strapiUrl}${ROUTE_TYPE[ROLE.GENERAL]}/user-profile`, requestOptions)
       .then(response => {
         const result = response.data
-        const { fullname, address, customer_id } = result
+        const { agent } = result
         setFormData({
           ...formData,
-          name: fullname,
-          address,
-          customerId: customer_id
+          name: `${agent?.first_name || ''}`,
+          address: agent?.agent_profile?.address || '',
+          customerId: agent?.agent_profile?.customer_id
         })
       })
       .finally(() => {
@@ -197,19 +197,19 @@ const ProfilePage = () => {
                 handleClick={() => router.push('/myPreference')}
                 dataTest={'myPreference'}
               />
-              <NavigationItem
+              {/* <NavigationItem
                 icon={credIcon}
                 label={'My Credentials'}
                 handleClick={() => router.push('/myCredentials')}
                 dataTest={'myCredintial'}
-              />
+              /> */}
               <NavigationItem
                 icon={tradeIcon}
                 label={'My Trades'}
                 handleClick={() => router.push('/myTrades')}
                 dataTest={'myTrades'}
               />
-              <NavigationItem
+              {/* <NavigationItem
                 icon={derIcon}
                 label={'My DERs'}
                 handleClick={() => router.push('/myDers')}
@@ -220,7 +220,7 @@ const ProfilePage = () => {
                 label={'My Funds'}
                 handleClick={() => router.push('/myFunds')}
                 dataTest={'myFunds'}
-              />
+              /> */}
             </>
             <NavigationItem
               icon={logoutIcon}

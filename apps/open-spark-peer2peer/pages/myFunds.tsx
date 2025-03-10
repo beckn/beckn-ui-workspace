@@ -53,7 +53,7 @@ const buttonStyle = {
 
 const MyFunds = () => {
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
-  const bearerToken = Cookies.get('authToken')
+  const bearerToken = Cookies.get('p2pAuthToken')
   const today = formatDate(new Date(), 'dd/MM/yy')
 
   const [balance, setBalance] = useState<number>(0)

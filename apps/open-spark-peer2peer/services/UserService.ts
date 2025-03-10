@@ -36,7 +36,7 @@ const extendedAuthApi = Api.injectEndpoints({
       query: ({ otp }) => ({
         url: '/unified-beckn-energy/verify-otp',
         method: 'POST',
-        headers: { Authorization: 'Bearer ' + Cookies.get('authToken') },
+        headers: { Authorization: 'Bearer ' + Cookies.get('p2pAuthToken') },
         body: { otp }
       })
     })

@@ -7,7 +7,7 @@ import React, { useEffect, useState } from 'react'
 
 const MyDers = () => {
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
-  const bearerToken = Cookies.get('authToken')
+  const bearerToken = Cookies.get('p2pAuthToken')
   const [devices, setDevices] = useState<{ id: number; name: string; paired?: boolean }[]>([])
 
   const handleDeviceChange = (

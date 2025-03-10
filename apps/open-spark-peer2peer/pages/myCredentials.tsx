@@ -35,7 +35,7 @@ const MyCredentials = () => {
 
   const dispatch = useDispatch()
   const { t } = useLanguage()
-  const bearerToken = Cookies.get('authToken')
+  const bearerToken = Cookies.get('p2pAuthToken')
 
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
 

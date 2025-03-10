@@ -16,7 +16,7 @@ const LABEL_MAPPING: Record<string, string> = {
 
 const MyPreference = () => {
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
-  const token = Cookies.get('authToken')
+  const token = Cookies.get('p2pAuthToken')
   const dispatch = useDispatch()
 
   const [preferences, setPreferences] = useState<{ [key: string]: boolean }>({})

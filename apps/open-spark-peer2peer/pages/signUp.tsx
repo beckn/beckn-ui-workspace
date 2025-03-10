@@ -8,7 +8,7 @@ const Register = () => {
   const { t } = useLanguage()
 
   useEffect(() => {
-    Cookies.remove('authToken')
+    Cookies.remove('p2pAuthToken')
     Cookies.remove('isVerified')
   }, [])
 

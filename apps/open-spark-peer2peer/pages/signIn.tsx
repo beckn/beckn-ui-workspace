@@ -4,7 +4,7 @@ import Cookies from 'js-cookie'
 
 const Login = () => {
   useEffect(() => {
-    Cookies.remove('authToken')
+    Cookies.remove('p2pAuthToken')
     Cookies.remove('isVerified')
     localStorage.clear()
   }, [])

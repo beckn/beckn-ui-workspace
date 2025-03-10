@@ -42,7 +42,6 @@ const SignUp = () => {
   })
   const [utilities, setUtilities] = useState<any[]>([])
 
-  const { role } = useSelector((state: AuthRootState) => state.auth)
   const [tradeRegister, { isLoading }] = useTradeRegisterMutation()
   const { t } = useLanguage()
   const [termsAccepted, setTermsAccepted] = useState(false)
@@ -125,8 +124,8 @@ const SignUp = () => {
     }
 
     try {
-      const response = await axios.post(`${strapiUrl}${ROUTE_TYPE.PRODUCER}/profile`, tradeCatalogueData, {
-        headers: { Authorization: `Bearer ${Cookies.get('authToken') || ''}` },
+      const response = await axios.post(`${strapiUrl}${ROUTE_TYPE.GENERAL}/profile`, tradeCatalogueData, {
+        headers: { Authorization: `Bearer ${Cookies.get('p2pAuthToken') || ''}` },
         withCredentials: true
       })
       console.log('Trade catalogue created:', response.data)
@@ -162,7 +161,7 @@ const SignUp = () => {
           throw new Error('Could not register')
         const jwtToken = registerResponse?.data?.data?.jwt
         if (jwtToken) {
-          Cookies.set('authToken', jwtToken)
+          Cookies.set('p2pAuthToken', jwtToken)
           console.log('JWT Token saved:', jwtToken)
         } else {
           throw new Error('JWT token not found in the response')

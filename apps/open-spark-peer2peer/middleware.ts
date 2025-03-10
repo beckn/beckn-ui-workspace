@@ -3,7 +3,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 export default function middleware(req: NextRequest) {
-  const loggedin = req.cookies.get('authToken')
+  const loggedin = req.cookies.get('p2pAuthToken')
   const isVerified = req.cookies.get('isVerified')?.value === 'true'
   const { pathname } = req.nextUrl
 
