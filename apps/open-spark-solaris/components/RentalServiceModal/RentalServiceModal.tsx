@@ -119,7 +119,7 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
             data: item
           }
         })
-        .filter(val => val)
+        .filter(val => val && val.source.toLocaleLowerCase() !== 'wallet')
         .sort((a, b) => Number(b.data.createdAt) - Number(a.data.createdAt))
       setBatteryOptions(list)
     } catch (error) {
@@ -340,10 +340,7 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
                     )}
                   </Circle>
                   <Box>
-                    <Flex
-                      align="center"
-                      mb={2}
-                    >
+                    <Flex align="center">
                       <Image
                         src="/images/battery_icon.svg"
                         alt="Battery Box"
@@ -633,6 +630,7 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
                 if (index === 0) {
                   setCurrentView('upload')
                   setActiveStep(0)
+                  setBatteryOptions([])
                 }
               }}
             >
