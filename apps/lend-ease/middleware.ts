@@ -4,13 +4,14 @@ import { NextRequest, NextResponse } from 'next/server'
 
 export default function middleware(req: NextRequest) {
   const loggedin = req.cookies.get('authToken')
+  const isVerified = req.cookies.get('isVerified')?.value === 'true'
   const { pathname } = req.nextUrl
 
-  // if (loggedin && pathname !== '/signIn' && pathname !== '/signUp' && pathname !== '/') {
-  //   return NextResponse.redirect(new URL('/signIn', req.url))
-  // }
+  if (loggedin && !isVerified && pathname !== '/signIn' && pathname !== '/signUp' && pathname !== '/OTPVerification') {
+    return NextResponse.redirect(new URL('/signIn', req.url))
+  }
 
-  if (loggedin && (pathname === '/signIn' || pathname === '/signUp')) {
+  if (loggedin && isVerified && (pathname === '/signIn' || pathname === '/signUp' || pathname === '/OTPVerification')) {
     return NextResponse.redirect(new URL('/', req.url))
   }
 

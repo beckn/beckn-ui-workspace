@@ -9,6 +9,9 @@ import DragAndDropUpload from '@components/dragAndDropUpload'
 import { FiPlusCircle } from 'react-icons/fi'
 import RenderDocuments from '@components/documentsRenderer'
 import uploadIcon from '@public/images/upload_file_icon.svg'
+import { useDispatch } from 'react-redux'
+import { feedbackActions } from '@beckn-ui/common'
+import { useLanguage } from '@hooks/useLanguage'
 
 interface DocumentProps {
   id?: string
@@ -28,25 +31,49 @@ interface DeleteAlertModalProps {
     inputs: InputProps[]
     buttons: ButtonProps[]
   }
+  MAX_FILE_SIZE?: string
   renderFileUpload?: boolean
   clearDocuments?: boolean
   handleOnFileselectionChange?: (data: DocumentProps[]) => void
 }
 
 const AddNewItemModal = (props: DeleteAlertModalProps) => {
-  const { isOpen, onClose, isLoading, schema, renderFileUpload, handleOnFileselectionChange, clearDocuments } = props
+  const {
+    isOpen,
+    onClose,
+    isLoading,
+    schema,
+    renderFileUpload,
+    handleOnFileselectionChange,
+    clearDocuments,
+    MAX_FILE_SIZE = 2 * 1024 * 1024
+  } = props
   const { inputs, header, buttons } = schema
 
   const [selectedFile, setSelectedFile] = useState<DocumentProps[]>([])
   const [allFilesProcessed, setAllFilesProcessed] = useState<boolean>(false)
 
+  const { t } = useLanguage()
+  const dispatch = useDispatch()
+
   const handleFileChange = (files: File[]) => {
-    if (files.length > 0) {
-      const docs = files.map(file => {
-        return { title: file?.name!, icon: uploadIcon, date: new Date(), file: file }
-      })
-      // setSelectedFile(prevState => (prevState ? [...prevState, ...docs] : docs))
-      setSelectedFile(docs)
+    try {
+      if (files.length > 0) {
+        const docs = files.map(file => {
+          if (file.size > MAX_FILE_SIZE) {
+            throw new Error('File size exceeds 2MB! Please upload a smaller file.')
+          }
+          return { title: file?.name!, icon: uploadIcon, date: new Date(), file: file }
+        })
+        // setSelectedFile(prevState => (prevState ? [...prevState, ...docs] : docs))
+        setSelectedFile(docs)
+      }
+    } catch (err: any) {
+      dispatch(
+        feedbackActions.setToastData({
+          toastData: { message: 'Error!', display: true, type: 'error', description: err?.message || t.errorText }
+        })
+      )
     }
   }
 

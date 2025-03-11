@@ -46,7 +46,7 @@ export const parseDIDData = (data: { did: string; attestations?: AttestationData
           attachment,
           did,
           attestations: attestations!,
-          createdAt: parts[7]
+          createdAt: parts[6]
         })
       }
     } else if (parts[0] === 'transactions') {

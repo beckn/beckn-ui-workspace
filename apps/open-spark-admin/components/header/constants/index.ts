@@ -45,7 +45,7 @@ const headerBlackList = [
 
 const bottomHeaderBlackList = ['/orderConfirmation', '/', '/feedback', '/welcome']
 const orderIconList = ['/orderDetails']
-const editIconList: string[] = ['/profile']
+const editIconList: string[] = ['']
 const profileSectionIcon = ['/buyingPreference']
 const infoIconList: string[] = ['/myDers']
 

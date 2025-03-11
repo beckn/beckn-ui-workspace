@@ -27,7 +27,7 @@ interface PendingTrades {
 const LockDemand = () => {
   const apiKeyForGoogle = process.env.NEXT_PUBLIC_GOOGLE_API_KEY
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
-  const bearerToken = Cookies.get('authToken') || ''
+  const bearerToken = Cookies.get('adminAuthToken') || ''
 
   const [items, setItems] = useState<PendingTrades[]>([])
   // const [isLockDemandLoading, setIsLockDemandLoading] = useState<boolean>(false)
@@ -54,15 +54,18 @@ const LockDemand = () => {
       })
 
       const result = response.data
-      const trades = result.map((tr: any) => {
-        const {
-          id,
-          quantity,
-          createdAt,
-          profile: { name }
-        } = tr
-        return { id, name, quantity, createdAt }
-      })
+      const trades = result
+        .map((tr: any) => {
+          if (!tr.agent) return null
+          const {
+            id,
+            quantity,
+            createdAt,
+            agent: { first_name }
+          } = tr
+          return { id, name: `${first_name || ''}`, quantity, createdAt }
+        })
+        .filter((val: any) => val)
       setItems(trades)
     } catch (error) {
       console.error('Error fetching pending trade data:', error)
@@ -99,16 +102,29 @@ const LockDemand = () => {
       )
       .then(response => {
         console.log('Trade started successfully:', response.data)
-        dispatch(
-          feedbackActions.setToastData({
-            toastData: {
-              message: t.success,
-              display: true,
-              type: 'success',
-              description: response.data.message || t.lockDemandSuccess
-            }
-          })
-        )
+        if (response.data.data.length > 0 && response.data.data[0].status === 'FAILED') {
+          dispatch(
+            feedbackActions.setToastData({
+              toastData: {
+                message: t.error,
+                display: true,
+                type: 'error',
+                description: t.lockDemandFailed
+              }
+            })
+          )
+        } else {
+          dispatch(
+            feedbackActions.setToastData({
+              toastData: {
+                message: t.success,
+                display: true,
+                type: 'success',
+                description: response.data.message || t.lockDemandSuccess
+              }
+            })
+          )
+        }
         fetchPendingTrades()
       })
       .catch(error => {

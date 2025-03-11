@@ -21,7 +21,7 @@ const ProfilePage = () => {
   const dispatch = useDispatch()
   const { t } = useLanguage()
   const router = useRouter()
-  const bearerToken = Cookies.get('authToken')
+  const bearerToken = Cookies.get('adminAuthToken')
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
   const [isLoading, setIsLoading] = useState(false)
   const [formData, setFormData] = useState<ProfileProps>({
@@ -63,99 +63,99 @@ const ProfilePage = () => {
     }))
   }
 
-  useEffect(() => {
-    const requestOptions = {
-      method: 'GET',
-      headers: { Authorization: `Bearer ${bearerToken}` },
-      withCredentials: true
-    }
+  // useEffect(() => {
+  //   const requestOptions = {
+  //     method: 'GET',
+  //     headers: { Authorization: `Bearer ${bearerToken}` },
+  //     withCredentials: true
+  //   }
 
-    setIsLoading(true)
+  //   setIsLoading(true)
 
-    axios
-      .get(`${strapiUrl}${ROUTE_TYPE[ROLE.ADMIN]}/user-profile`, requestOptions)
-      .then(response => {
-        const result = response.data
-        const { fullname, address, customer_id } = result
-        setFormData({
-          ...formData,
-          name: fullname,
-          address,
-          customerId: customer_id
-        })
-      })
-      .finally(() => {
-        setIsLoading(false)
-      })
-  }, [])
+  //   axios
+  //     .get(`${strapiUrl}${ROUTE_TYPE[ROLE.ADMIN]}/user-profile`, requestOptions)
+  //     .then(response => {
+  //       const result = response.data
+  //       const { fullname, address, customer_id } = result
+  //       setFormData({
+  //         ...formData,
+  //         name: fullname,
+  //         address,
+  //         customerId: customer_id
+  //       })
+  //     })
+  //     .finally(() => {
+  //       setIsLoading(false)
+  //     })
+  // }, [])
 
-  const updateProfile = () => {
-    if (formData.name === '' || formData.address === '') {
-      return
-    }
-    const errors = profileValidateForm(formData) as any
-    setFormErrors(prevErrors => ({
-      ...prevErrors,
-      ...Object.keys(errors).reduce((acc: any, key) => {
-        acc[key] = t[`${errors[key]}`] || ''
-        return acc
-      }, {} as FormErrors)
-    }))
+  // const updateProfile = () => {
+  //   if (formData.name === '' || formData.address === '') {
+  //     return
+  //   }
+  //   const errors = profileValidateForm(formData) as any
+  //   setFormErrors(prevErrors => ({
+  //     ...prevErrors,
+  //     ...Object.keys(errors).reduce((acc: any, key) => {
+  //       acc[key] = t[`${errors[key]}`] || ''
+  //       return acc
+  //     }, {} as FormErrors)
+  //   }))
 
-    const data = {
-      fullname: formData.name.trim(),
-      address: formData.address
-    }
+  //   const data = {
+  //     fullname: formData.name.trim(),
+  //     address: formData.address
+  //   }
 
-    axios
-      .put(`${strapiUrl}${ROUTE_TYPE[ROLE.ADMIN]}/user-profile`, data, {
-        headers: { Authorization: `Bearer ${bearerToken}` }
-      })
-      .then(response => {
-        // dispatch(
-        //   feedbackActions.setToastData({
-        //     toastData: { message: t.success, display: true, type: 'success', description: t.profileUpdateSuccess }
-        //   })
-        // )
-      })
-      .catch(error => {
-        console.log(error)
-        dispatch(
-          feedbackActions.setToastData({
-            toastData: { message: 'Error!', display: true, type: 'error', description: 'Unable to update' }
-          })
-        )
-      })
-  }
+  //   axios
+  //     .put(`${strapiUrl}${ROUTE_TYPE[ROLE.ADMIN]}/user-profile`, data, {
+  //       headers: { Authorization: `Bearer ${bearerToken}` }
+  //     })
+  //     .then(response => {
+  //       // dispatch(
+  //       //   feedbackActions.setToastData({
+  //       //     toastData: { message: t.success, display: true, type: 'success', description: t.profileUpdateSuccess }
+  //       //   })
+  //       // )
+  //     })
+  //     .catch(error => {
+  //       console.log(error)
+  //       dispatch(
+  //         feedbackActions.setToastData({
+  //           toastData: { message: 'Error!', display: true, type: 'error', description: 'Unable to update' }
+  //         })
+  //       )
+  //     })
+  // }
 
-  const getInputs = () => {
-    const inputs: InputProps[] = [
-      {
-        type: 'text',
-        name: 'name',
-        value: formData.name,
-        handleChange: handleInputChange,
-        label: t.fullName,
-        error: formErrors.name,
-        dataTest: testIds.profile_inputName,
-        disabled: !profileEditable,
-        customInputBlurHandler: updateProfile
-      },
-      {
-        type: 'text',
-        name: 'address',
-        value: formData.address!,
-        handleChange: handleInputChange,
-        label: t.formAddress,
-        error: formErrors.address,
-        dataTest: testIds.profile_address,
-        disabled: !profileEditable,
-        customInputBlurHandler: updateProfile
-      }
-    ]
+  // const getInputs = () => {
+  //   const inputs: InputProps[] = [
+  //     {
+  //       type: 'text',
+  //       name: 'name',
+  //       value: formData.name,
+  //       handleChange: handleInputChange,
+  //       label: t.fullName,
+  //       error: formErrors.name,
+  //       dataTest: testIds.profile_inputName,
+  //       disabled: !profileEditable,
+  //       customInputBlurHandler: updateProfile
+  //     },
+  //     {
+  //       type: 'text',
+  //       name: 'address',
+  //       value: formData.address!,
+  //       handleChange: handleInputChange,
+  //       label: t.formAddress,
+  //       error: formErrors.address,
+  //       dataTest: testIds.profile_address,
+  //       disabled: !profileEditable,
+  //       customInputBlurHandler: updateProfile
+  //     }
+  //   ]
 
-    return inputs
-  }
+  //   return inputs
+  // }
 
   return (
     <Box
@@ -170,7 +170,7 @@ const ProfilePage = () => {
         dataTestForm={testIds.profile_form}
         schema={{
           buttons: [],
-          inputs: getInputs()
+          inputs: []
         }}
         isLoading={isLoading}
         customComponent={
