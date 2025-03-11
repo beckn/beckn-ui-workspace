@@ -112,11 +112,14 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
             source: item.source,
             invoice: item.attachment!,
             isVerified: true,
-            timestamp: item?.createdAt?.length > 5 ? item.createdAt : Math.floor(new Date().getTime() / 1000),
+            timestamp:
+              item?.createdAt?.length > 5 && !isNaN(item?.createdAt as number)
+                ? item.createdAt
+                : Math.floor(new Date().getTime() / 1000),
             data: item
           }
         })
-        .filter(val => val)
+        .filter(val => val && val.source.toLocaleLowerCase() !== 'wallet')
         .sort((a, b) => Number(b.data.createdAt) - Number(a.data.createdAt))
       setBatteryOptions(list)
     } catch (error) {
@@ -127,10 +130,23 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
   }
 
   const handleAddFromWallet = async () => {
-    setCurrentView('select')
-    setActiveStep(0)
-    console.log(user?.deg_wallet?.deg_wallet_id)
-    const getDoc = await fetchCredentials()
+    if (user?.deg_wallet && user?.deg_wallet.energy_assets_consent) {
+      setCurrentView('select')
+      setActiveStep(0)
+      console.log(user?.deg_wallet?.deg_wallet_id)
+      const getDoc = await fetchCredentials()
+    } else {
+      dispatch(
+        feedbackActions.setToastData({
+          toastData: {
+            message: user?.deg_wallet?.energy_assets_consent ? 'Warning' : 'Wallet not connected!',
+            display: true,
+            type: 'warning',
+            description: 'Please connect your wallet before proceeding.'
+          }
+        })
+      )
+    }
   }
 
   const handlePublish = async () => {
@@ -324,10 +340,7 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
                     )}
                   </Circle>
                   <Box>
-                    <Flex
-                      align="center"
-                      mb={2}
-                    >
+                    <Flex align="center">
                       <Image
                         src="/images/battery_icon.svg"
                         alt="Battery Box"
@@ -617,6 +630,7 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
                 if (index === 0) {
                   setCurrentView('upload')
                   setActiveStep(0)
+                  setBatteryOptions([])
                 }
               }}
             >

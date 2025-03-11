@@ -72,7 +72,10 @@ const PhysicalAssets = () => {
             title: item.type,
             isVerified: true,
             image: DocIcon,
-            datetime: item?.createdAt?.length > 5 ? item.createdAt : Math.floor(new Date().getTime() / 1000),
+            datetime:
+              item?.createdAt?.length > 5 && !isNaN(item?.createdAt as number)
+                ? item.createdAt
+                : Math.floor(new Date().getTime() / 1000),
             data: item
           }
         })
@@ -147,6 +150,19 @@ const PhysicalAssets = () => {
         type: formData.type
       }
       if (selectedFile) {
+        if (selectedFile.file.size > 1 * 1024 * 1024) {
+          dispatch(
+            feedbackActions.setToastData({
+              toastData: {
+                message: 'Error',
+                display: true,
+                type: 'error',
+                description: 'File size should be less than 1MB.'
+              }
+            })
+          )
+          return
+        }
         data.fileName = selectedFile?.title
         const uploadPayload = new FormData()
         uploadPayload.append('file', selectedFile.file)
@@ -170,7 +186,7 @@ const PhysicalAssets = () => {
         privateKey,
         publicKey,
         payload: {
-          name: `assets/physical/type/${toSnakeCase(data?.type!)}/source/wallet${attachments ? '/' + attachments : ''}/${createdAt}/${generateRandomCode()}`,
+          name: `assets/physical/type/${toSnakeCase(data?.type!)}/source/wallet/${createdAt}${attachments ? '/' + attachments : ''}/${generateRandomCode()}`,
           stream: toBase64(docDetails)
         }
       })

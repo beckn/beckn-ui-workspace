@@ -25,7 +25,7 @@ const SignUp = () => {
   const [formData, setFormData] = useState<RegisterFormProps>({
     name: '',
     email: '',
-    password: '',
+    password: 'Test@123',
     mobileNumber: '',
     address: ''
   })
@@ -249,7 +249,7 @@ const SignUp = () => {
               handleChange: handleInputChange,
               label: t.enterMobileNumber,
               error: formErrors.mobileNumber
-            },
+            }
             // {
             //   type: 'text',
             //   name: 'utilityCompany',
@@ -267,14 +267,14 @@ const SignUp = () => {
             //   label: t.selectUtilityCompany,
             //   error: formErrors.utilityCompany
             // },
-            {
-              type: 'password',
-              name: 'password',
-              value: formData.password,
-              handleChange: handleInputChange,
-              label: t.enterPassword,
-              error: formErrors.password
-            }
+            // {
+            //   type: 'password',
+            //   name: 'password',
+            //   value: formData.password,
+            //   handleChange: handleInputChange,
+            //   label: t.enterPassword,
+            //   error: formErrors.password
+            // }
           ],
           showTermsCheckbox: true,
           termsCheckboxProps: {

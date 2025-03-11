@@ -87,7 +87,7 @@ const ProfilePage = () => {
         const { first_name, last_name, address, agent_profile } = result
         setFormData({
           ...formData,
-          name: `${first_name} ${last_name || ''}`,
+          name: `${first_name}`,
           address: agent_profile.address,
           customerId: agent_profile.customer_id,
           mobileNumber: agent_profile.phone_number

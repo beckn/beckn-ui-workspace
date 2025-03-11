@@ -50,13 +50,13 @@ const slice = createSlice({
         state.jwt = action.payload.jwt
         state.isAuthenticated = true
         Cookies.set('authToken', state.jwt)
-        Cookies.set('isVerified', JSON.stringify(state.user?.isOtpVerified))
+        Cookies.set('isVerified', 'false')
         const urlQuery = Router.query
 
         const hasNotQuery = JSON.stringify(urlQuery) === '{}'
 
         if (hasNotQuery) {
-          Router.push('/')
+          Router.push('/OTPVerification')
         } else {
           Router.push({
             pathname: '/',

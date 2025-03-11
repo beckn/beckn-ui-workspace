@@ -26,7 +26,7 @@ const slice = createSlice({
   initialState,
   reducers: {
     logout: () => {
-      Cookies.remove('authToken')
+      Cookies.remove('adminAuthToken')
       Cookies.remove('roleSelected')
       Router.push('/welcome')
       return initialState
@@ -46,7 +46,7 @@ const slice = createSlice({
         state.user = action.payload.user
         state.jwt = action.payload.jwt
         state.isAuthenticated = true
-        Cookies.set('authToken', state.jwt)
+        Cookies.set('adminAuthToken', state.jwt)
         const urlQuery = Router.query
 
         const hasNotQuery = JSON.stringify(urlQuery) === '{}'

@@ -314,7 +314,7 @@ const OrderDetails = () => {
           }
 
           const docDetails = JSON.stringify(data)
-          const createdAt = Math.floor(new Date().getTime() / 1000)
+          const createdAt = formatTimestamp(statusOrderData?.order?.created_at)
           const generatedOrderId = orderConfirmationData[0].message.order.id
           const verificationMethodsRes = await getVerificationMethods(user?.deg_wallet?.deg_wallet_id!).unwrap()
           const { did, challenge } = verificationMethodsRes[0]

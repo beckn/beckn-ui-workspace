@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import Router, { useRouter } from 'next/router'
 import { useLanguage } from '../hooks/useLanguage'
 import { CheckoutRootState, discoveryActions, ICartRootState, PaymentMethodSelectionProps } from '@beckn-ui/common'
@@ -557,9 +557,9 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
     panNumber: ''
   })
   const [syncWalletSuccess, setSyncWalletSuccess] = useState(false)
-  const [payableAmount, setPayableAmount] = useState<number>()
+  const [payableAmount, setPayableAmount] = useState<Record<string, number>>()
   const [dicountedSearch, setDicountedSearch] = useState(false)
-  const [newCalculationIsLoading, setNewCalculationIsLoading] = useState(false)
+  const [newCalculationIsLoading, setNewCalculationIsLoading] = useState<Record<string, boolean>>()
   const [fetchTransactionsMessage, setFetchTransactionsMessage] = useState('')
   const [previousIndex, setPreviousIndex] = useState<number>()
   const [isAppliedForDiscountingEMIPlans, setIsAppliedForDiscountingEMIPlans] = useState<boolean>(false)
@@ -567,6 +567,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
     return Number(localStorage.getItem('totalCost')) || 0
   })
   console.log(newTotalCost)
+  // const payableAmountRef = useRef<Record<string, number>>()
   const { t } = useLanguage()
   const router = useRouter()
   const dispatch = useDispatch()
@@ -576,15 +577,38 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
   const selectedEmi = useSelector((state: any) => state.selectedEmi?.apiResponse?.[0]?.message?.order?.items) || []
   const selectedEMIDetails = useSelector((state: any) => state.selectedEmi.emiDetails)
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
+  console.log(selectedPlan)
 
-  const fetchEMIPlans = (isDiscounted = false) => {
+  const mergeUniqueObjects = (arr1: any[], arr2: any[]): any[] => {
+    const mergedMap = new Map<string, any>()
+
+    // Add all objects from arr2 first
+    arr2.forEach(obj => {
+      mergedMap.set(obj.id, obj)
+    })
+
+    // Override with objects from arr1 if ID matches
+    arr1.forEach(obj => {
+      mergedMap.set(obj.id, obj)
+    })
+
+    return Array.from(mergedMap.values())
+  }
+
+  const fetchEMIPlans = (providerId?: string) => {
+    // console.log(selectedItem)
     const searchPayload = {
       context: {
         domain: 'deg:finance'
       },
       searchString: '',
+      ...(providerId && {
+        provider: {
+          providerId
+        }
+      }),
       category: { categoryCode: 'loan_type', categoryName: 'Battery' },
-      ...(isDiscounted && {
+      ...(providerId && {
         tags: [
           {
             descriptor: {
@@ -600,13 +624,16 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
       .post(`${apiUrl}/search`, searchPayload)
       .then(res => {
         dispatch(discoveryEmiPlanActions.addTransactionId({ transactionId: res.data.data[0].context.transaction_id }))
+        const prevUnselectedEmiPlans = [...emiPlans].filter(item => item.id !== selectedPlan)
         const parsedSearchItems = parseSearchFinancelist(res.data.data)
-        dispatch(discoveryEmiPlanActions.addProducts({ products: parsedSearchItems }))
-        setEmiPlans(parsedSearchItems)
+        const formatedSearchData = mergeUniqueObjects(parsedSearchItems, prevUnselectedEmiPlans)
+        console.log('daata', formatedSearchData)
+        dispatch(discoveryEmiPlanActions.addProducts({ products: formatedSearchData }))
+        setEmiPlans(formatedSearchData)
         setIsLoading(true)
-        if (isDiscounted) {
-          const selectedPlanData = parsedSearchItems.find(plan => plan.id === selectedPlan)
-          handleEmiSelect(selectedPlanData?.id!, parsedSearchItems)
+        if (providerId) {
+          const selectedPlanData = formatedSearchData.find(plan => plan.id === selectedPlan)
+          handleEmiSelect(selectedPlanData?.id!, formatedSearchData)
         }
       })
       .catch(e => {
@@ -614,19 +641,19 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
         console.log('error')
       })
   }
-
+  console.log(emiPlans)
   useEffect(() => {
     fetchEMIPlans()
     localStorage.removeItem('totalCost')
   }, [])
 
-  const handleDiscountedSearch = (text: string) => {
+  const handleDiscountedSearch = (text: string, providerId: string) => {
     const messagesList = [
       'Fetching transactions from your wallet...',
       `Sending transaction history to ${text}...`,
       'Fetching updated offers...'
     ]
-    setNewCalculationIsLoading(true)
+    setNewCalculationIsLoading(prevState => ({ ...prevState, [providerId]: true }))
     messagesList.forEach((message, index) => {
       setTimeout(() => {
         setFetchTransactionsMessage(message)
@@ -634,9 +661,9 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
     })
     setTimeout(() => {
       setDicountedSearch(true)
-      setNewCalculationIsLoading(false)
+      setNewCalculationIsLoading(prevState => ({ ...prevState, [providerId]: false }))
     }, 10000)
-    fetchEMIPlans(true)
+    fetchEMIPlans(providerId)
     setIsAppliedForDiscountingEMIPlans(true)
   }
 
@@ -834,8 +861,9 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
       const approvedLoanAmount = (approvedLoanPercentage / 100) * principal
       const newPayableAmount = Number(principal - approvedLoanAmount) || 0
 
-      if (payableAmount !== newPayableAmount) {
-        setPayableAmount(newPayableAmount)
+      if (payableAmount && payableAmount?.[planId] !== newPayableAmount) {
+        setPayableAmount(prevState => ({ ...prevState, [planId]: newPayableAmount }))
+        // payableAmountRef.current = {...payableAmountRef.current, [planId]: newPayableAmount }
       }
 
       const monthlyInterestRate = annualInterestRate / 12 / 100
@@ -992,8 +1020,9 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
 
     const newPayableAmount = Number(principal - approvedLoanAmount) || 0
 
-    if (payableAmount !== newPayableAmount) {
-      setPayableAmount(newPayableAmount)
+    if (payableAmount?.[plan.id] !== newPayableAmount) {
+      setPayableAmount(prevState => ({ ...prevState, [plan.id]: newPayableAmount }))
+      // payableAmountRef.current = { ...payableAmountRef.current, [plan.id]: newPayableAmount }
     }
 
     const monthlyInterestRate = annualInterestRate / 12 / 100
@@ -1013,15 +1042,15 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
     const originalEmi = Math.floor(originalEmiWithoutInterest + processingFees / months) // no interest calculated on processing fees
     const nonDiscountedPrice = originalEmi * months
 
-    if (!localStorage.getItem('totalCost')) {
-      localStorage.setItem('totalCost', nonDiscountedPrice.toString())
+    if (!localStorage.getItem(`totalCost`)) {
+      localStorage.setItem(`totalCost`, nonDiscountedPrice.toString())
     }
 
     const actualInterestAmount = totalCost - approvedLoanAmount
     localStorage.setItem(
-      'calculatedEMIs',
+      `calculatedEMIs`,
       JSON.stringify({
-        ...JSON.parse(localStorage.getItem('calculatedEMIs')!),
+        ...JSON.parse(localStorage.getItem(`calculatedEMIs`)!),
         [item.id]: {
           emi,
           totalCost,
@@ -1141,7 +1170,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
 
                       {emiPlans.length > 0 && (
                         <AccordionPanel>
-                          {newCalculationIsLoading ? (
+                          {newCalculationIsLoading && newCalculationIsLoading?.[plan.id] ? (
                             <>
                               <Loader>
                                 <Typography
@@ -1175,7 +1204,9 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                                   alignItems="center"
                                 >
                                   <Text fontSize={'10px'}>Initial Payment</Text>
-                                  <Text fontSize={'10px'}>₹{currencyFormat(Number(payableAmount?.toFixed(2)))}</Text>
+                                  <Text fontSize={'10px'}>
+                                    ₹{currencyFormat(Number(payableAmount?.[plan.id]?.toFixed(2)))}
+                                  </Text>
                                 </Flex>
                               </Box>
                               <Box
@@ -1241,7 +1272,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                                           %)
                                         </Box>
                                         <Box>
-                                          {dicountedSearch && (
+                                          {plan.item[0].code === '90' && (
                                             <Box
                                               textDecoration="line-through"
                                               fontSize="10px"
@@ -1254,7 +1285,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                                           <Box
                                             fontSize="10px"
                                             fontWeight="500"
-                                            color={`${dicountedSearch ? '#3C8508' : '#626060'}`}
+                                            color={`${plan.item[0].code === '90' ? '#3C8508' : '#626060'}`}
                                           >
                                             ₹ {currencyFormat(Number(totalCost.toFixed(2)))}
                                           </Box>
@@ -1264,7 +1295,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                                     </React.Fragment>
                                   )
                                 })}
-                                {!dicountedSearch ? (
+                                {plan.item[0].code !== '90' ? (
                                   <Box pt="5px">
                                     <Text
                                       fontSize={'10px'}
@@ -1289,7 +1320,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                                           // if (!localStorage.getItem('totalCost')) {
                                           //   localStorage.setItem('totalCost', newTotalCost.toString())
                                           // }
-                                          handleDiscountedSearch(plan.providerName)
+                                          handleDiscountedSearch(plan.providerName, plan.id)
                                         }}
                                       >
                                         Sync now

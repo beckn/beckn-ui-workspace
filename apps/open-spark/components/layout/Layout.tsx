@@ -9,10 +9,12 @@ import styles from './Layout.module.css'
 import NextNProgress from 'nextjs-progressbar'
 import { IGeoLocationSearchPageRootState } from '@beckn-ui/common/lib/types'
 import { Box, useToast } from '@chakra-ui/react'
-import { feedbackActions, FeedbackRootState, GeoLocationInputList, ToastType } from '@beckn-ui/common'
+import { checkTokenExpiry, feedbackActions, FeedbackRootState, GeoLocationInputList, ToastType } from '@beckn-ui/common'
 import { Toast } from '@beckn-ui/molecules'
 import { testIds } from '@shared/dataTestIds'
 import Splash from '../splash/splash'
+import Cookies from 'js-cookie'
+import { logout } from '@store/auth-slice'
 
 const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const { locale } = useLanguage()
@@ -35,6 +37,28 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   } = useSelector((state: FeedbackRootState) => state.feedback)
 
   const [showSplash, setShowSplash] = useState(true)
+
+  useEffect(() => {
+    if (!['/signIn', '/signUp', '/OTPVerification'].includes(router.pathname)) {
+      const token = Cookies.get('authToken')
+      let message = ''
+
+      try {
+        const isExpired: any = checkTokenExpiry(token)
+        if (isExpired) message = 'Token expired, please log in again!'
+      } catch (error) {
+        console.error('Token decoding error:', error)
+        message = 'Token decode failed, please log in again!'
+      } finally {
+        if (message) {
+          alert(message)
+          // if (userConfirmed) {
+          dispatch(logout())
+          // }
+        }
+      }
+    }
+  }, [router])
 
   useEffect(() => {
     if (display) {
