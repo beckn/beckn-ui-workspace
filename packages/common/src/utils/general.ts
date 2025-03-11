@@ -1,6 +1,7 @@
 import { ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
 import { Coordinate } from '../../lib/types'
 import { format } from 'date-fns'
+import jwt from 'jsonwebtoken'
 
 export const toBinary = (objectString: string) => {
   const codeUnits = Uint16Array.from({ length: objectString.length }, (element, index) =>
@@ -96,4 +97,17 @@ export function formatDate(date: string | number | Date, formatType: string): st
     console.error('Error formatting date:', error)
     return 'Invalid date'
   }
+}
+
+export const checkTokenExpiry = (token: any) => {
+  const decoded: any = jwt.decode(token) // Just decodes, no verification
+
+  if (decoded && decoded.exp) {
+    const currentTime = Math.floor(Date.now() / 1000)
+    if (currentTime > decoded.exp) {
+      console.log('Token has expired')
+      return true
+    }
+  }
+  return false
 }
