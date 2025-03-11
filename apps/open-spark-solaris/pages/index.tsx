@@ -100,10 +100,7 @@ const HomePage = () => {
           /> */}
         </Box>
         <Box>
-          {user?.deg_wallet &&
-          (user?.deg_wallet.energy_assets_consent ||
-            user?.deg_wallet.energy_identities_consent ||
-            user?.deg_wallet.energy_transactions_consent) ? (
+          {user?.deg_wallet ? (
             <Select
               variant="unstyled"
               placeholder={`/subj****${user?.deg_wallet.deg_wallet_id.slice(-4)}`}
