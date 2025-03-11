@@ -126,6 +126,7 @@ const HomePage = () => {
           padding={'8px 10px'}
           borderRadius="6px"
           backgroundColor="#1E3A5F"
+          cursor={'pointer'}
           color={'#fff'}
           onClick={() => router.push('/loans')}
         >
