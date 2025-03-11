@@ -20,7 +20,7 @@ import api from '@services/api'
 import didApi from '@services/didApi'
 
 const persistConfig = {
-  key: 'root',
+  key: 'spark-root',
   storage,
   whitelist: ['auth', 'user', 'discovery', 'cart', 'checkout', 'discoveryEmiPlan', 'selectedEmi']
 }

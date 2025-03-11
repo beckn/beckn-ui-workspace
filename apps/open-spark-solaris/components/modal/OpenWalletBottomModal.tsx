@@ -71,6 +71,12 @@ const OpenWalletBottomModal: React.FC<OpenWalletBottomModalProps> = ({ modalType
 
     try {
       await verifyOtp(data).unwrap()
+      await handleLinkWallet({
+        wallet_id: `/subjects/${inputValue}`,
+        energy_identities_consent: false,
+        energy_assets_consent: false,
+        energy_transactions_consent: false
+      })
       setModalType('alert')
     } catch (error) {
       console.error('OTP verification failed:', error)
@@ -84,12 +90,6 @@ const OpenWalletBottomModal: React.FC<OpenWalletBottomModalProps> = ({ modalType
 
       if (result && Array.isArray(result) && result.length > 0) {
         const walletData = result[0]
-        await handleLinkWallet({
-          wallet_id: walletData.did,
-          energy_identities_consent: false,
-          energy_assets_consent: false,
-          energy_transactions_consent: false
-        })
         setModalType('otp')
       } else {
         console.error('Invalid profile ID')
