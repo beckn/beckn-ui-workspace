@@ -44,7 +44,7 @@ const appReducer = combineReducers({
 const rootReducer = (state: any, action: any) => {
   if (action.type === 'auth/logout') {
     if (localStorage) {
-      localStorage.removeItem('persist:root')
+      localStorage.removeItem('persist:solaris-root')
       localStorage.clear()
     }
     state = undefined
