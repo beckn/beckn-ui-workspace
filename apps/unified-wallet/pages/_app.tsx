@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import type { AppProps } from 'next/app'
 import Layout from '@components/layout/Layout'
 import { BecknProvider } from '@beckn-ui/molecules'
@@ -17,17 +17,6 @@ import { PersistGate } from 'redux-persist/integration/react'
 function MyApp({ Component, pageProps }: AppProps) {
   const { t } = useLanguage()
   const router = useRouter()
-
-  useEffect(() => {
-    router.beforePopState(({ url }) => {
-      window.parent.postMessage({ appName: 'wallet', route: url }, '*')
-      return true // Allows Next.js to proceed with navigation
-    })
-
-    return () => {
-      router.beforePopState(() => true) // Cleanup
-    }
-  }, [])
 
   return (
     <BecknProvider
