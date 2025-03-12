@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import type { AppProps } from 'next/app'
 import Layout from '@components/layout/Layout'
 import { BecknProvider } from '@beckn-ui/molecules'
@@ -17,6 +17,18 @@ import { PersistGate } from 'redux-persist/integration/react'
 function MyApp({ Component, pageProps }: AppProps) {
   const { t } = useLanguage()
   const router = useRouter()
+
+  useEffect(() => {
+    const handleRouteChange = (url: string) => {
+      window.parent.postMessage({ appName: 'openspark', url }, '*')
+    }
+
+    router.events.on('routeChangeComplete', handleRouteChange)
+
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteChange)
+    }
+  }, [])
   return (
     <BecknProvider
       theme={{
