@@ -57,11 +57,21 @@ const OpenWalletBottomModal: React.FC<OpenWalletBottomModalProps> = ({ modalType
   }
 
   const handleOTPChange = (value: string, index: number) => {
+    if (!/^[0-9]?$/.test(value)) return
     const newArr = [...OTP]
     newArr[index] = value
     setOTP(newArr)
 
     if (value && index < 5) {
+      otpBoxReference.current[index + 1].focus()
+    }
+  }
+
+  const handleBackspaceAndEnter = (e: any, index: any) => {
+    if (e.key === 'Backspace' && !e.target.value && index > 0) {
+      otpBoxReference.current[index - 1].focus()
+    }
+    if (e.key === 'Enter' && e.target.value && index < numberOfDigits - 1) {
       otpBoxReference.current[index + 1].focus()
     }
   }
@@ -223,6 +233,7 @@ const OpenWalletBottomModal: React.FC<OpenWalletBottomModalProps> = ({ modalType
                       type="number"
                       maxLength={1}
                       onChange={e => handleOTPChange(e.target.value, index)}
+                      onKeyUp={e => handleBackspaceAndEnter(e, index)}
                       ref={el => (otpBoxReference.current[index] = el)}
                       style={{
                         width: '42px',
