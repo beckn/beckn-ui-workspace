@@ -104,6 +104,8 @@ const OTPVerification = () => {
               key={index}
               value={digit}
               maxLength={1}
+              inputMode="numeric"
+              pattern="[0-9]"
               onChange={e => handleChange(e.target.value, index)}
               onKeyUp={e => handleBackspaceAndEnter(e, index)}
               ref={el => (otpBoxReference.current[index] = el)}
