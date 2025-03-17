@@ -310,18 +310,18 @@ const Dashboard = () => {
                   marginBottom={'1rem'}
                 >
                   {[
-                    { label: 'Total Energy Consumed', description: `${+totalEnergyUnits.toFixed(2)} (KWh)` },
+                    { label: 'Total Energy Consumed', description: `${+totalEnergyUnits.toFixed(2)} KWh` },
                     {
                       label: 'Energy Consumption last month',
-                      description: `${+dashboardTotalEnergyUnitsData.previous_month.toFixed(2)} (KWh)`
+                      description: `${+dashboardTotalEnergyUnitsData.previous_month.toFixed(2)} KWh`
                     },
                     {
                       label: 'Energy Consumed this month',
-                      description: `${+dashboardTotalEnergyUnitsData.current_month.toFixed(2)} (KWh)`
+                      description: `${+dashboardTotalEnergyUnitsData.current_month.toFixed(2)} KWh`
                     },
                     {
                       label: 'Average Energy Consumption',
-                      description: `${+dashboardTotalEnergyUnitsData.average.toFixed(2)} (KWh)`
+                      description: `${+dashboardTotalEnergyUnitsData.average.toFixed(2)} KWh`
                     }
                   ].map(data => (
                     <Card

@@ -11,6 +11,7 @@ import {
   Text,
   VStack
 } from '@chakra-ui/react'
+import { GoAlert } from 'react-icons/go'
 import { QuestionOutlineIcon } from '@chakra-ui/icons'
 import React, { useEffect, useState } from 'react'
 import { FaMinus, FaPlus } from 'react-icons/fa6'
@@ -26,6 +27,7 @@ import { useLanguage } from '@hooks/useLanguage'
 import { testIds } from '@shared/dataTestIds'
 import BuyPaymentModule from '@components/buyPaymentModule/BuyPaymentModule'
 import BottomModal from '@beckn-ui/common/src/components/BottomModal/BottomModalScan'
+import { Typography } from '@beckn-ui/molecules'
 
 interface EnergyPurchaseFormProps {
   preferenceType: string
@@ -143,6 +145,22 @@ export default function EnergyPurchaseForm({ preferenceType, role }: EnergyPurch
   const handleCheckboxChange = (checked: boolean) => {
     setIsChecked(checked)
   }
+
+  const alertModalHeader = (
+    <Flex alignItems={'center'}>
+      <Typography
+        text={'Alert'}
+        fontSize={'20px'}
+        fontWeight={'500'}
+        color={'#000000'}
+        sx={{ mr: '10px' }}
+      />
+      <GoAlert
+        color="#F3D020"
+        size={'20px'}
+      />
+    </Flex>
+  )
 
   return (
     <Flex
@@ -294,7 +312,7 @@ export default function EnergyPurchaseForm({ preferenceType, role }: EnergyPurch
         onClose={() => {
           setIsBuyModal(false)
         }}
-        modalHeader="Alert"
+        modalHeader={alertModalHeader}
       >
         <Box p="0 24px">
           <Text mb="34px">
