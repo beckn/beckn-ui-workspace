@@ -1,0 +1,96 @@
+.manageUserContainer {
+  padding: 8px 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  overflow-x: auto;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin: 2rem 0px 1rem 0px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  /* padding: 20px; */
+  /* background-color: #f9f9f9; */
+  border-radius: 8px;
+  /* box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); */
+}
+
+.column {
+  grid-template-columns: auto 1fr;
+  /* align-items: center; */
+  gap: 10px;
+  width: 100%;
+}
+
+.row label {
+  font-weight: bold;
+  justify-self: start;
+  margin-right: 10px;
+  width: 100%;
+  padding: 8px;
+  justify-self: stretch;
+  display: block;
+  /* margin: 10px 0; */
+}
+
+.row input[type='text'],
+.row input[type='password'],
+.row input[type='number'],
+.row input[type='checkbox'] {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  justify-self: stretch;
+  display: block;
+  /* margin: 10px 0; */
+}
+
+.row input[type='checkbox'] {
+  width: 2rem;
+  margin: 0px;
+}
+.submitButtonContainer {
+  padding: 2rem 1rem 1rem 1rem;
+  width: 100%;
+}
+.submitButton {
+  padding: 10px 20px;
+  background-color: #3056d3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  align-self: center;
+  width: 100%;
+}
+.doneButton {
+  padding: 10px 20px;
+  background-color: #3056d3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  align-self: center;
+  width: 100%;
+}
+.flex {
+  display: flex;
+}
+
+.flexColumn {
+  flex-direction: column;
+}
+
+.gap10 {
+  gap: 10px;
+}

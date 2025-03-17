@@ -1,0 +1,10 @@
+.title {
+  color: #000;
+}
+.rolesContainer {
+  padding: 8px 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  overflow-x: auto;
+  height: calc(100vh - 64px);
+}
