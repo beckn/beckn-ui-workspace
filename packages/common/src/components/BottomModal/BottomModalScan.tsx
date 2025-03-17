@@ -6,7 +6,7 @@ interface ModalProps {
   onClose: () => void
   children: React.ReactNode
   partialClose?: boolean
-  modalHeader?: string
+  modalHeader?: string | React.ReactNode
   isLoading?: boolean
 }
 

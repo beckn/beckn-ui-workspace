@@ -260,6 +260,7 @@ const SelectDate: React.FC<SelectDateProps> = ({ isOpen, onClose, onDateSelect, 
         <VStack align="stretch">
           {customDateOptions.map((option, index) => (
             <Text
+              cursor={'pointer'}
               key={option}
               justifyContent="flex-start"
               fontWeight={500}
