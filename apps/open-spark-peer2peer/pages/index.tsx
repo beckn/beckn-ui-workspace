@@ -62,7 +62,7 @@ const Dashboard = () => {
   const [startTime, setStartTime] = useState<string>()
   const [currentTime, setCurrentTime] = useState(Date.now())
 
-  const totalEnergyText = role === ROLE.SELL ? 'Produced' : 'Consumption'
+  const totalEnergyText = role === ROLE.SELL ? 'Production' : 'Consumption'
   const intervalRef = useRef<NodeJS.Timeout | null>(null)
   const dispatch = useDispatch()
 
@@ -310,18 +310,21 @@ const Dashboard = () => {
                   marginBottom={'1rem'}
                 >
                   {[
-                    { label: 'Total Energy Consumed', description: `${+totalEnergyUnits.toFixed(2)} KWh` },
                     {
-                      label: 'Energy Consumption last month',
-                      description: `${+dashboardTotalEnergyUnitsData.previous_month.toFixed(2)} KWh`
+                      label: role === ROLE.BUY ? 'Total Energy Consumed' : 'Total Energy Produced',
+                      description: `${+totalEnergyUnits.toFixed(2)} (KWh)`
                     },
                     {
-                      label: 'Energy Consumed this month',
-                      description: `${+dashboardTotalEnergyUnitsData.current_month.toFixed(2)} KWh`
+                      label: role === ROLE.BUY ? 'Energy Consumption last month' : 'Energy Produced last month',
+                      description: `${+dashboardTotalEnergyUnitsData.previous_month.toFixed(2)} (KWh)`
                     },
                     {
-                      label: 'Average Energy Consumption',
-                      description: `${+dashboardTotalEnergyUnitsData.average.toFixed(2)} KWh`
+                      label: role === ROLE.BUY ? 'Energy Consumed this month' : 'Energy Produced this month',
+                      description: `${+dashboardTotalEnergyUnitsData.current_month.toFixed(2)} (KWh)`
+                    },
+                    {
+                      label: role === ROLE.BUY ? 'Average Energy Consumption' : 'Average Energy Produced',
+                      description: `${+dashboardTotalEnergyUnitsData.average.toFixed(2)} (KWh)`
                     }
                   ].map(data => (
                     <Card
