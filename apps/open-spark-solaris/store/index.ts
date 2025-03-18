@@ -19,7 +19,7 @@ import api from '@services/api'
 import didApi from '@services/didApi'
 
 const persistConfig = {
-  key: 'root',
+  key: 'solaris-root',
   storage,
   whitelist: ['auth', 'user', 'discovery', 'cart', 'checkout', 'discoveryEmiPlan', 'selectedEmi']
 }
@@ -44,7 +44,7 @@ const appReducer = combineReducers({
 const rootReducer = (state: any, action: any) => {
   if (action.type === 'auth/logout') {
     if (localStorage) {
-      localStorage.removeItem('persist:root')
+      localStorage.removeItem('persist:solaris-root')
       localStorage.clear()
     }
     state = undefined

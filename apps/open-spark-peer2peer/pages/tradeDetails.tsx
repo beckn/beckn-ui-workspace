@@ -117,7 +117,7 @@ const TradeDetails = () => {
           name: result.item_name,
           price: result.price || 0,
           quantity: result.quantity,
-          date: formatDate(result.createdAt, 'dd/MM/yyyy'),
+          date: result.createdAt,
           status: result.status,
           tradeId: result.id,
           tradeEvents: result.trade_events,
@@ -132,8 +132,8 @@ const TradeDetails = () => {
   }
 
   useEffect(() => {
-    const { id, type } = Router.query
-    getTradeDetailsById(id as string, type as ROLE)
+    const { tradeId, date, quantity, type } = Router.query
+    getTradeDetailsById(tradeId as string, type as ROLE)
   }, [])
 
   const roleName = role === ROLE.BUY ? 'Producer' : 'Consumer'
@@ -147,18 +147,21 @@ const TradeDetails = () => {
       overflowY="scroll"
       pb={'20px'}
     >
-      {tradeDetails?.orderId && (
-        <OrderSummary
-          detailRows={[
-            { label: 'Date', value: tradeDetails?.date! },
-            { label: 'Order ID', value: tradeDetails?.orderId! },
-            { label: 'Trade ID', value: tradeDetails?.tradeId! },
-            { label: 'Energy Bought', value: `${tradeDetails?.quantity!} kwh` },
-            { label: 'Rate', value: `${Number(tradeDetails?.price) / Number(tradeDetails?.quantity)} ₹/units` }
-          ]}
-          preferences={tradeDetails?.preferencesTags!}
-        />
-      )}
+      {/* {tradeDetails?.orderId && ( */}
+      <OrderSummary
+        detailRows={[
+          { label: 'Date', value: formatDate(`${Router.query.date || tradeDetails?.date!}`, 'dd/MM/yyyy') },
+          { label: 'Order ID', value: tradeDetails?.orderId! || '-' },
+          { label: 'Trade ID', value: `${Router.query.tradeId || tradeDetails?.tradeId!}` },
+          { label: 'Energy Bought', value: `${Router.query.quantity || tradeDetails?.quantity!} kwh` },
+          {
+            label: 'Rate',
+            value: tradeDetails?.price ? `${Number(tradeDetails?.price) / Number(tradeDetails?.quantity)} ₹/units` : '-'
+          }
+        ]}
+        preferences={tradeDetails?.preferencesTags!}
+      />
+      {/* )} */}
       <Box padding={'1rem 0.5rem'}>
         <Accordion
           accordionHeader={'History'}

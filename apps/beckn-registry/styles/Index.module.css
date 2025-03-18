@@ -1,0 +1,29 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.navbar {
+  display: flex;
+  background-color: #3056d3;
+  padding: 10px;
+}
+
+.navList {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.navItem {
+  margin-right: 20px;
+  color: white;
+  cursor: pointer;
+}
+
+.content {
+  flex-grow: 1;
+  background-color: #fff;
+}

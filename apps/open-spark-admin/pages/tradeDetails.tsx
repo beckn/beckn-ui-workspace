@@ -11,7 +11,12 @@ import CurrentTrade from '@components/currentTrade/CurrentTrade'
 import { Box, Divider, Flex, Stack, Tag, TagLabel } from '@chakra-ui/react'
 import { OrderStatusProgress } from '@beckn-ui/becknified-components'
 import PendingIcon from '@public/images/pending.svg'
+import nameIcon from '../public/images/name.svg'
+import CallphoneIcon from '../public/images/Call.svg'
+import emailIcon from '../public/images/mail.svg'
 import { testIds } from '@shared/dataTestIds'
+import OrderSummary from '@components/tradeDetails/OrderSummary'
+import UserDetails from '@components/tradeDetails/UserDetails'
 
 interface TradeMetaData {
   orderId: string
@@ -23,6 +28,7 @@ interface TradeMetaData {
   tradeId: string
   tradeEvents: any[]
   preferencesTags: string[]
+  providerDetails: { name: string; emailId: string; phoneNumber: string } | null
 }
 
 const TRADDE_EVE_NUM = Object.freeze({
@@ -84,7 +90,8 @@ const TradeDetails = () => {
           status: result.status,
           tradeId: result.id,
           tradeEvents: result.trade_events,
-          preferencesTags: tags
+          preferencesTags: tags,
+          providerDetails: null
         })
       })
       .catch(error => {
@@ -105,101 +112,21 @@ const TradeDetails = () => {
       className="hideScroll"
       maxH={'calc(100vh - 80px)'}
       overflowY="scroll"
+      pb={'20px'}
     >
-      <Flex
-        gap="1rem"
-        flexDirection={'column'}
-      >
-        <Typography
-          text={`Date: ${tradeDetails?.date ? formatDate(tradeDetails?.date!, 'dd/MM/yyyy') : ''}`}
-          fontSize="16px"
-          fontWeight="500"
-          dataTest={testIds.trade_details_date}
-        />
-        <CurrentTrade
-          data={
-            [
-              {
-                name: tradeDetails?.name!,
-                label: 'Energy Bought',
-                value: tradeDetails?.quantity! || '0',
-                disabled: true,
-                symbol: '(KWh)'
-              }
-              // ...(role !== ROLE.CONSUMER && role !== ROLE.ADMIN
-              //   ? [
-              // {
-              //   name: tradeDetails?.name!,
-              //   label: 'Price',
-              //   value: tradeDetails?.price.toString()!,
-              //   disabled: true,
-              //   symbol: '₹/units'
-              // }
-            ]
-            // : [])
-            // ]
+      <OrderSummary
+        detailRows={[
+          { label: 'Date', value: formatDate(`${Router.query.date || tradeDetails?.date!}`, 'dd/MM/yyyy') },
+          { label: 'Order ID', value: tradeDetails?.orderId! || '-' },
+          { label: 'Trade ID', value: `${Router.query.tradeId || tradeDetails?.tradeId!}` },
+          { label: 'Energy Bought', value: `${Router.query.quantity || tradeDetails?.quantity!} kwh` },
+          {
+            label: 'Rate',
+            value: tradeDetails?.price ? `${Number(tradeDetails?.price) / Number(tradeDetails?.quantity)} ₹/units` : '-'
           }
-        />
-
-        {tradeDetails?.preferencesTags && tradeDetails?.preferencesTags?.length > 0 && (
-          <Box mt={'-2rem'}>
-            <Typography
-              text="Preferences"
-              fontSize="15"
-              fontWeight="600"
-              sx={{ marginBottom: '10px' }}
-            />
-            <Flex
-              gap={'10px'}
-              flexWrap={'wrap'}
-            >
-              {tradeDetails?.preferencesTags?.map((tag, index) => (
-                <Tag
-                  key={index}
-                  borderRadius="md"
-                  variant="outline"
-                  colorScheme="gray"
-                  padding={'8px'}
-                >
-                  <TagLabel>{tag}</TagLabel>
-                </Tag>
-              ))}
-            </Flex>
-          </Box>
-        )}
-        <Flex
-          flexDirection={'row'}
-          justifyContent={'space-between'}
-        >
-          {tradeDetails?.orderId && (
-            <Flex gap="5px">
-              <Typography
-                text={`Order ID:`}
-                fontSize="15"
-                fontWeight="600"
-              />
-              <Typography
-                text={`${tradeDetails?.orderId}`}
-                fontSize="15"
-              />
-            </Flex>
-          )}
-          {tradeDetails?.tradeId && (
-            <Flex gap="5px">
-              <Typography
-                text={`Trade ID:`}
-                fontSize="15"
-                fontWeight="600"
-                dataTest={testIds.trade_details_Id}
-              />
-              <Typography
-                text={`${tradeDetails?.tradeId}`}
-                fontSize="15"
-              />
-            </Flex>
-          )}
-        </Flex>
-      </Flex>
+        ]}
+        preferences={tradeDetails?.preferencesTags!}
+      />
       <Box padding={'1rem 0.5rem'}>
         <Accordion
           accordionHeader={'History'}
@@ -238,6 +165,17 @@ const TradeDetails = () => {
           </Flex>
         </Accordion>
       </Box>
+      {tradeDetails?.providerDetails && (
+        <Stack>
+          <UserDetails
+            title={`Producer Details`} //based on Role (Consumer Credentials)
+            name={{ text: tradeDetails?.providerDetails.name!, icon: nameIcon }}
+            mail={{ text: tradeDetails?.providerDetails.emailId!, icon: emailIcon }}
+            mobile={{ text: tradeDetails?.providerDetails.phoneNumber!, icon: CallphoneIcon }}
+            dataTest={testIds.trade_details_UserDetail}
+          />
+        </Stack>
+      )}
     </Box>
   )
 }

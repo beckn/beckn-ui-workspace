@@ -11,6 +11,7 @@ import {
   Text,
   VStack
 } from '@chakra-ui/react'
+import { GoAlert } from 'react-icons/go'
 import { QuestionOutlineIcon } from '@chakra-ui/icons'
 import React, { useEffect, useState } from 'react'
 import { FaMinus, FaPlus } from 'react-icons/fa6'
@@ -26,6 +27,7 @@ import { useLanguage } from '@hooks/useLanguage'
 import { testIds } from '@shared/dataTestIds'
 import BuyPaymentModule from '@components/buyPaymentModule/BuyPaymentModule'
 import BottomModal from '@beckn-ui/common/src/components/BottomModal/BottomModalScan'
+import { Typography } from '@beckn-ui/molecules'
 
 interface EnergyPurchaseFormProps {
   preferenceType: string
@@ -144,6 +146,22 @@ export default function EnergyPurchaseForm({ preferenceType, role }: EnergyPurch
     setIsChecked(checked)
   }
 
+  const alertModalHeader = (
+    <Flex alignItems={'center'}>
+      <Typography
+        text={'Alert'}
+        fontSize={'20px'}
+        fontWeight={'500'}
+        color={'#000000'}
+        sx={{ mr: '10px' }}
+      />
+      <GoAlert
+        color="#F3D020"
+        size={'20px'}
+      />
+    </Flex>
+  )
+
   return (
     <Flex
       as="form"
@@ -173,10 +191,12 @@ export default function EnergyPurchaseForm({ preferenceType, role }: EnergyPurch
           </HStack>
           <HStack spacing={4}>
             <Box
-              onClick={() => handleInputChange(setEnergyUnits, (energyUnits + 1).toString())}
+              onClick={() => {
+                if (energyUnits > 0) handleInputChange(setEnergyUnits, (energyUnits - 1).toString())
+              }}
               cursor="pointer"
             >
-              <FaPlus data-test={testIds.FaPlus} />
+              <FaMinus data-test={testIds.FaMinus} />
             </Box>
             <Input
               type="number"
@@ -188,12 +208,10 @@ export default function EnergyPurchaseForm({ preferenceType, role }: EnergyPurch
               data-test={testIds.preference_type_input_buy}
             />
             <Box
-              onClick={() => {
-                if (energyUnits > 0) handleInputChange(setEnergyUnits, (energyUnits - 1).toString())
-              }}
+              onClick={() => handleInputChange(setEnergyUnits, (energyUnits + 1).toString())}
               cursor="pointer"
             >
-              <FaMinus data-test={testIds.FaMinus} />
+              <FaPlus data-test={testIds.FaPlus} />
             </Box>
             <Text
               fontSize="15"
@@ -222,10 +240,12 @@ export default function EnergyPurchaseForm({ preferenceType, role }: EnergyPurch
             </HStack>
             <HStack spacing={4}>
               <Box
-                onClick={() => handleInputChange(setPricePerUnit, (pricePerUnit + 1).toString())}
+                onClick={() => {
+                  if (pricePerUnit > 0) handleInputChange(setPricePerUnit, (pricePerUnit - 1).toString())
+                }}
                 cursor="pointer"
               >
-                <FaPlus data-test={testIds.FaPlus_unit} />
+                <FaMinus data-test={testIds.FaMinus_unit} />
               </Box>
               <Input
                 data-test={testIds.set_price_per_unit_input}
@@ -237,12 +257,10 @@ export default function EnergyPurchaseForm({ preferenceType, role }: EnergyPurch
                 size="md"
               />
               <Box
-                onClick={() => {
-                  if (pricePerUnit > 0) handleInputChange(setPricePerUnit, (pricePerUnit - 1).toString())
-                }}
+                onClick={() => handleInputChange(setPricePerUnit, (pricePerUnit + 1).toString())}
                 cursor="pointer"
               >
-                <FaMinus data-test={testIds.FaMinus_unit} />
+                <FaPlus data-test={testIds.FaPlus_unit} />
               </Box>
               <Text
                 fontSize="15"
@@ -294,7 +312,7 @@ export default function EnergyPurchaseForm({ preferenceType, role }: EnergyPurch
         onClose={() => {
           setIsBuyModal(false)
         }}
-        modalHeader="Alert"
+        modalHeader={alertModalHeader}
       >
         <Box p="0 24px">
           <Text mb="34px">

@@ -17,6 +17,7 @@ import { PersistGate } from 'redux-persist/integration/react'
 function MyApp({ Component, pageProps }: AppProps) {
   const { t } = useLanguage()
   const router = useRouter()
+
   return (
     <BecknProvider
       theme={{
