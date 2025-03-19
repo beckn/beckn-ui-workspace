@@ -44,9 +44,9 @@ const Cart = () => {
 
   return (
     <Box
-      pt={['20px', '20px', '0px', '0px']}
+      pt={['0px', '20px', '0px', '0px']}
       className="hideScroll"
-      maxH="calc(100vh - 120px)"
+      maxH="calc(100vh - 90px)"
       overflowY={'scroll'}
     >
       <BecknCart

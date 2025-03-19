@@ -47,16 +47,46 @@ export default function EnergyPurchaseForm({ preferenceType, role }: EnergyPurch
   const [pricePerUnit, setPricePerUnit] = useState<number>(0)
   const [preferences, setPreferences] = useState({ solar: false, trustedSource: false })
   const [isBuyModal, setIsBuyModal] = useState(false)
+  const preferencesTags = useSelector((state: RootState) => state.user.preferences)
 
   useEffect(() => {
     const { tradeId, quantity, price, preferencesTags } = router.query
+    const formStorageKey = `energyFormData_${role}`
+
     if (tradeId && quantity && price) {
       setTradeId(tradeId as string)
       setEnergyUnits(Number(quantity))
       setPricePerUnit(Number(price))
-      setPreferences(JSON.parse(preferencesTags as string))
+      if (preferencesTags) {
+        setPreferences(JSON.parse(preferencesTags as string))
+      }
+    } else {
+      try {
+        const savedData = JSON.parse(localStorage.getItem(formStorageKey) || '{}')
+
+        if (savedData.energyUnits !== undefined) setEnergyUnits(savedData.energyUnits)
+        if (savedData.pricePerUnit !== undefined) setPricePerUnit(savedData.pricePerUnit)
+        if (savedData.isChecked !== undefined) setIsChecked(savedData.isChecked)
+        if (savedData.tradeId) setTradeId(savedData.tradeId)
+      } catch (error) {
+        console.error('Error loading saved form data:', error)
+      }
     }
-  }, [router.query])
+  }, [router.query, role])
+
+  useEffect(() => {
+    const formStorageKey = `energyFormData_${role}`
+
+    localStorage.setItem(
+      formStorageKey,
+      JSON.stringify({
+        energyUnits,
+        pricePerUnit,
+        isChecked,
+        tradeId
+      })
+    )
+  }, [energyUnits, pricePerUnit, isChecked, tradeId, role])
 
   const handleInputChange = (setter: React.Dispatch<React.SetStateAction<number>>, value: string) => {
     const numericValue = value.replace(/[^0-9]/g, '')
@@ -67,7 +97,6 @@ export default function EnergyPurchaseForm({ preferenceType, role }: EnergyPurch
     }
   }
 
-  // const handleCheckboxChange = (key: string, value: boolean) => setPreferences(prev => ({ ...prev, [key]: value }))
   const handleSubmitPreferences = () => {
     setIsBuyModal(true)
   }
@@ -81,8 +110,8 @@ export default function EnergyPurchaseForm({ preferenceType, role }: EnergyPurch
             quantity: energyUnits,
             unit: 'kwh',
             item_name: 'energy',
-            trusted_source: preferences.trustedSource,
-            cred_required: preferences.solar,
+            trusted_source: preferencesTags.trustedSource,
+            cred_required: preferencesTags.credRequired,
             recurring: false,
             domain: DOMAIN,
             price: pricePerUnit
@@ -91,8 +120,8 @@ export default function EnergyPurchaseForm({ preferenceType, role }: EnergyPurch
             quantity: energyUnits,
             unit: 'KWH',
             item_name: 'energy',
-            trusted_source: preferences.trustedSource,
-            cred_required: preferences.solar,
+            trusted_source: preferencesTags.trustedSource,
+            cred_required: preferencesTags.credRequired,
             recurring: true,
             price: pricePerUnit
           }
@@ -107,12 +136,14 @@ export default function EnergyPurchaseForm({ preferenceType, role }: EnergyPurch
 
         if (response.status === 200 || response.status === 204) {
           console.log('Trade updated successfully:', response.data)
+          localStorage.removeItem(`energyFormData_${role}`)
+
           dispatch(
             feedbackActions.setToastData({
               toastData: { message: 'Success', display: true, type: 'success', description: t.tradeUpdateSuccess }
             })
           )
-          router.push('/')
+          router.push(`/?tab=${role === ROLE.BUY ? 'buy' : 'sell'}`)
         }
       } else {
         const response = await axios.post(`${strapiUrl}${ROUTE_TYPE[role!]}/trade`, payload, {
@@ -122,12 +153,14 @@ export default function EnergyPurchaseForm({ preferenceType, role }: EnergyPurch
 
         if (response.status === 200 || response.status === 204) {
           console.log('Trade created successfully:', response.data)
+          localStorage.removeItem(`energyFormData_${role}`)
+
           dispatch(
             feedbackActions.setToastData({
               toastData: { message: 'Success', display: true, type: 'success', description: t.tradeCreateSuccess }
             })
           )
-          router.push('/')
+          router.push(`/?tab=${role === ROLE.BUY ? 'buy' : 'sell'}`)
         }
       }
     } catch (error) {
