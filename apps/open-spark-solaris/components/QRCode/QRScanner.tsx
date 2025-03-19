@@ -109,6 +109,8 @@ const QRCodeScanner: React.FC<QRCodeScannerProps> = ({ showScanner, setShowScann
     const intervalId = setInterval(() => {
       const videoElement = document.getElementById('qr-scanner') as HTMLVideoElement
       if (videoElement && videoElement.readyState === 4) {
+        videoElement.setAttribute('disablePictureInPicture', 'true')
+        videoElement.setAttribute('controlsList', 'nodownload nofullscreen')
         setVideoReady(true)
         clearInterval(intervalId)
       }
