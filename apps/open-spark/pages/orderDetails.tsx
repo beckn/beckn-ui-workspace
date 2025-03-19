@@ -7,6 +7,7 @@ import {
   CardBody,
   Divider,
   Flex,
+  HStack,
   Image,
   Radio,
   RadioGroup,
@@ -66,6 +67,7 @@ import { extractAuthAndHeader, generateRandomCode, toBase64, toSnakeCase } from 
 import { RootState } from '@store/index'
 import { StatusKey, statusMap } from '@lib/types/order'
 import ShippingBlock from '@components/orderDetailComponents/Shipping'
+import QRCodeGenerator from '@components/QRCode/QRGenerator'
 
 const DELIVERED = 'ORDER_DELIVERED'
 const CANCELLED = 'USER CANCELLED'
@@ -146,7 +148,7 @@ const OrderDetails = () => {
   const orderCancelReason = [
     { id: 1, reason: 'Merchant is taking too long' },
     { id: 2, reason: 'Ordered by mistake' },
-    { id: 3, reason: 'I’ve changed my mind' },
+    { id: 3, reason: "I've changed my mind" },
     { id: 4, reason: 'Other' }
   ]
 
@@ -793,6 +795,44 @@ const OrderDetails = () => {
     return cartItemQuantity
   }
 
+  const getQRCodeData = () => {
+    const orderConfirmationData = JSON.parse(localStorage.getItem('statusResponse')!)
+    if (orderConfirmationData) {
+      const totalItemsStr = extractItemsWithProvider(orderConfirmationData[0].message.order.items[0].name)
+      const createdAt = formatTimestamp(statusOrderData?.order?.created_at)
+      const generatedOrderId = orderConfirmationData[0].message.order.id
+      const { bpp_id, bpp_uri } = orderConfirmationData[0].context
+
+      const statusPayload = {
+        data: [
+          {
+            context: {
+              transaction_id: uuidv4(),
+              bpp_id,
+              bpp_uri,
+              domain: type === 'MY_STORE' ? DOMAIN_PATH.MY_STORE : DOMAIN_PATH.RENT_AND_HIRE
+            },
+            message: {
+              order_id: generatedOrderId,
+              orderId: generatedOrderId
+            }
+          }
+        ]
+      }
+      // Use a more compact data structure
+      const data = {
+        name: totalItemsStr,
+        source: 'spark',
+        createdAt: createdAt,
+        generatedOrderId: generatedOrderId,
+        payload: statusPayload
+      }
+
+      return data
+    }
+    return ''
+  }
+
   return (
     <Box
       className="hideScroll"
@@ -1072,6 +1112,16 @@ const OrderDetails = () => {
               </Box>
             </Accordion>
           )}
+
+          <Accordion accordionHeader={'QR Code'}>
+            <HStack
+              justifyContent={'center'}
+              alignItems={'center'}
+              pb={'20px'}
+            >
+              <QRCodeGenerator inputValue={getQRCodeData() || ''} />
+            </HStack>
+          </Accordion>
 
           {/* Display main bottom modal */}
           <BottomModal
