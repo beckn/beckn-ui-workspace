@@ -6,7 +6,7 @@ import { useLanguage } from '@hooks/useLanguage'
 import { useRouter } from 'next/router'
 import profileIcon from '@public/images/user_profile.svg'
 import { LoaderWithMessage, Typography } from '@beckn-ui/molecules'
-import { Box, Flex, HStack, Tag, TagLabel, Image, Grid, Skeleton, SkeletonText, useTheme } from '@chakra-ui/react'
+import { Box, Flex, HStack, Image, Grid, SkeletonText, useTheme } from '@chakra-ui/react'
 import CustomeDateInput from '@components/dateRangePicker/CustomeDateInput'
 import SelectDate from '@components/dateRangePicker/SelectDate'
 import { QuestionOutlineIcon } from '@chakra-ui/icons'
@@ -19,14 +19,15 @@ import { ROLE, ROUTE_TYPE } from '@lib/config'
 import { useTradeDashboardMutation } from '@services/DashboardService'
 import Cookies from 'js-cookie'
 import axios from '@services/axios'
-import { DashboardData, StatusItem, TradeData } from '@lib/types/dashboard'
+import { DashboardData, TradeData } from '@lib/types/dashboard'
 import { parseAndFormatDate } from '@utils/parsedFormatDate-utils'
 import { testIds } from '@shared/dataTestIds'
 import TabView from '@components/tab/tab'
 import Card from '@components/card/Card'
 import OpenIcon from '@public/images/open.svg'
 import CloseIcon from '@public/images/close.svg'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { RootState } from '@store/index'
 
 const Dashboard = () => {
   const { t } = useLanguage()
@@ -41,9 +42,13 @@ const Dashboard = () => {
     loading: loadingForCurrentAddress
   } = useGeolocation(apiKeyForGoogle as string)
 
-  const [role, setRole] = useState<ROLE>(ROLE.BUY)
+  const [role, setRole] = useState<ROLE>(() => {
+    const tabParam = router.query.tab as string
+    return tabParam === 'sell' ? ROLE.SELL : ROLE.BUY
+  })
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [startDate, setStartDate] = useState<string>(today)
+
   const [endDate, setEndDate] = useState<string>(today)
   const [totalEnergyUnits, setTotalEnergyUnits] = useState<number>(0)
   const [status, setStatus] = useState<string>('CLOSED')
@@ -52,28 +57,23 @@ const Dashboard = () => {
   const [isTradeLodaing, setIsTradeLoading] = useState(false)
   const [isPreffrenceLodaing, setIsPreffrenceLoading] = useState(false)
   const [currentTradeData, setCurrentTradeData] = useState<TradeData[]>([])
-  const [currentStatusData, setCurrentStatusData] = useState<StatusItem[]>([])
   const [dashboardTotalEnergyUnitsData, setDashboardTotalEnergyUnitsData] = useState<DashboardData>({
     previous_month: 0,
     current_month: 0,
     average: 0
   })
-  const [preferencesTags, setPreferencesTags] = useState<string[]>([])
+  const preferencesTags = useSelector((state: RootState) => state.user.preferences)
+
   const [startTime, setStartTime] = useState<string>()
   const [currentTime, setCurrentTime] = useState(Date.now())
 
   const totalEnergyText = role === ROLE.SELL ? 'Production' : 'Consumption'
   const intervalRef = useRef<NodeJS.Timeout | null>(null)
-  const dispatch = useDispatch()
 
   const payloadStartDate = parseAndFormatDate(startDate)
   const payloadEndDate = parseAndFormatDate(endDate)
 
   const [tradeDashboard, { isLoading }] = useTradeDashboardMutation()
-
-  // const handleRemoveTag = (tagToRemove: string) => {
-  //   setPreferencesTags(prevTags => prevTags.filter(tag => tag !== tagToRemove))
-  // }
 
   const handleModalOpen = () => setIsModalOpen(true)
   const handleModalClose = () => setIsModalOpen(false)
@@ -214,6 +214,17 @@ const Dashboard = () => {
     }
   }, [status])
 
+  useEffect(() => {
+    if (router.isReady && router.query.tab) {
+      const tabParam = router.query.tab as string
+      if (tabParam === 'buy') {
+        setRole(ROLE.BUY)
+      } else if (tabParam === 'sell') {
+        setRole(ROLE.SELL)
+      }
+    }
+  }, [router.isReady, router.query.tab, role])
+
   const getFormattedElapsedTime = (initialTime: string): string => {
     if (status === 'CLOSED' || !initialTime) return '00h : 00m : 00s'
     const startTime = new Date(initialTime).getTime()
@@ -273,7 +284,11 @@ const Dashboard = () => {
         </Flex>
         <TabView
           list={['Buy', 'Sell']}
-          setCurrentTab={value => setRole(value === 'Buy' ? ROLE.BUY : ROLE.SELL)}
+          setCurrentTab={value => {
+            const newRole = value === 'Buy' ? ROLE.BUY : ROLE.SELL
+            setRole(newRole)
+            router.push(`/?tab=${value.toLowerCase()}`, undefined, { shallow: false })
+          }}
           currentTab={role === ROLE.BUY ? 'Buy' : 'Sell'}
           TabContent={
             <Flex
@@ -312,22 +327,23 @@ const Dashboard = () => {
                   {[
                     {
                       label: role === ROLE.BUY ? 'Total Energy Consumed' : 'Total Energy Produced',
-                      description: `${+totalEnergyUnits.toFixed(2)} (KWh)`
+                      description: `${+totalEnergyUnits.toFixed(2)} KWh`
                     },
                     {
                       label: role === ROLE.BUY ? 'Energy Consumption last month' : 'Energy Produced last month',
-                      description: `${+dashboardTotalEnergyUnitsData.previous_month.toFixed(2)} (KWh)`
+                      description: `${+dashboardTotalEnergyUnitsData.previous_month.toFixed(2)} KWh`
                     },
                     {
                       label: role === ROLE.BUY ? 'Energy Consumed this month' : 'Energy Produced this month',
-                      description: `${+dashboardTotalEnergyUnitsData.current_month.toFixed(2)} (KWh)`
+                      description: `${+dashboardTotalEnergyUnitsData.current_month.toFixed(2)} KWh`
                     },
                     {
                       label: role === ROLE.BUY ? 'Average Energy Consumption' : 'Average Energy Produced',
-                      description: `${+dashboardTotalEnergyUnitsData.average.toFixed(2)} (KWh)`
+                      description: `${+dashboardTotalEnergyUnitsData.average.toFixed(2)} KWh`
                     }
-                  ].map(data => (
+                  ].map((data, index) => (
                     <Card
+                      key={index}
                       handleOnclick={() => {}}
                       childComponent={() => (
                         <Box padding="0 10px">
@@ -385,8 +401,8 @@ const Dashboard = () => {
                               quantity: currentTradeData[0].quantity,
                               price: currentTradeData[0].price,
                               preferencesTags: JSON.stringify({
-                                solar: preferencesTags.includes('Solar Energy'),
-                                trustedSource: preferencesTags.includes('Trusted Source')
+                                solar: preferencesTags.cred_required,
+                                trustedSource: preferencesTags.trusted_source
                               })
                             }
                           })
@@ -405,8 +421,8 @@ const Dashboard = () => {
                               quantity: currentTradeData[0].quantity,
                               price: currentTradeData[0].price,
                               preferencesTags: JSON.stringify({
-                                solar: preferencesTags.includes('Solar Energy'),
-                                trustedSource: preferencesTags.includes('Trusted Source')
+                                solar: preferencesTags.cred_required,
+                                trustedSource: preferencesTags.trusted_source
                               })
                             }
                           })
@@ -458,35 +474,6 @@ const Dashboard = () => {
                               : [])
                           ]}
                         />
-
-                        {preferencesTags.length > 0 && (
-                          <Box>
-                            <Typography
-                              dataTest={testIds.preferencesTags_text}
-                              text="Preferences"
-                              fontSize="14px"
-                              fontWeight="600"
-                              sx={{ marginBottom: '10px' }}
-                            />
-                            <Flex
-                              gap={'10px'}
-                              flexWrap={'wrap'}
-                            >
-                              {preferencesTags.map((tag, index) => (
-                                <Tag
-                                  key={index}
-                                  borderRadius="md"
-                                  variant="outline"
-                                  colorScheme="gray"
-                                  padding={'4px 8px'}
-                                >
-                                  <TagLabel data-test={testIds.preferencesTags_tags_label}>{tag}</TagLabel>
-                                  {/* <TagCloseButton onClick={() => handleRemoveTag(tag)} /> */}
-                                </Tag>
-                              ))}
-                            </Flex>
-                          </Box>
-                        )}
                       </>
                     )}
                   </>
