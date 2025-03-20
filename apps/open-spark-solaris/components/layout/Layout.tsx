@@ -14,7 +14,7 @@ import { Toast } from '@beckn-ui/molecules'
 import { testIds } from '@shared/dataTestIds'
 import Splash from '@components/splash/splash'
 import Cookies from 'js-cookie'
-import { logout } from '@store/auth-slice'
+import { AuthRootState, logout } from '@store/auth-slice'
 
 const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const { locale } = useLanguage()
@@ -35,6 +35,7 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const {
     toast: { display, message, type, description }
   } = useSelector((state: FeedbackRootState) => state.feedback)
+  const { user } = useSelector((state: AuthRootState) => state.auth)
 
   const [showSplash, setShowSplash] = useState(true)
 
@@ -45,7 +46,7 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
 
       try {
         const isExpired: any = checkTokenExpiry(token)
-        if (isExpired) message = 'Token expired, please log in again!'
+        if (isExpired || !user) message = 'Token expired, please log in again!'
       } catch (error) {
         console.error('Token decoding error:', error)
         message = 'Token decode failed, please log in again!'

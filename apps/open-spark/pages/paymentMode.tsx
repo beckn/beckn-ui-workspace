@@ -1,7 +1,13 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import Router, { useRouter } from 'next/router'
 import { useLanguage } from '../hooks/useLanguage'
-import { CheckoutRootState, discoveryActions, ICartRootState, PaymentMethodSelectionProps } from '@beckn-ui/common'
+import {
+  CheckoutRootState,
+  discoveryActions,
+  feedbackActions,
+  ICartRootState,
+  PaymentMethodSelectionProps
+} from '@beckn-ui/common'
 import { testIds } from '@shared/dataTestIds'
 import Visa from '@public/images/visa.svg'
 import masterCard from '@public/images/masterCard.svg'
@@ -104,6 +110,7 @@ const EMIApplicationModal = ({
   const [errors, setErrors] = useState<FormErrors>({})
   const toast = useToast()
   const dispatch = useDispatch()
+  const { user } = useSelector((state: AuthRootState) => state.auth)
   const [selectedEmiPlan, setSelectedEmiPlan] = useState<string | null>(null)
   const selectedEmi = useSelector((state: any) => state.selectedEmi.apiResponse?.[0]?.message.order.items) || 0
   const monthlyInstallment = useSelector((state: any) => state.selectedEmi.emiDetails)
@@ -257,7 +264,22 @@ const EMIApplicationModal = ({
             color="#4398E8"
             text="Sync wallet"
             style={{ cursor: 'pointer' }}
-            onClick={handleSyncWallet}
+            onClick={() => {
+              if (user?.deg_wallet) {
+                handleSyncWallet()
+              } else {
+                dispatch(
+                  feedbackActions.setToastData({
+                    toastData: {
+                      message: 'Wallet not connected!',
+                      display: true,
+                      type: 'warning',
+                      description: 'Please connect your wallet before proceeding.'
+                    }
+                  })
+                )
+              }
+            }}
           />
         </Flex>
         <Divider
@@ -1071,6 +1093,24 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
     }
   }
 
+  const checkIsWalletTransactionsExist = async () => {
+    const result = await getDocuments(user?.deg_wallet?.deg_wallet_id!).unwrap()
+    const count = parseDIDData(result)['transactions'].length > 0 || 0
+    if (count === 0) {
+      dispatch(
+        feedbackActions.setToastData({
+          toastData: {
+            message: 'Error',
+            display: true,
+            type: 'error',
+            description: 'You do not have any transaction in your wallet to avail discount.'
+          }
+        })
+      )
+    }
+    return !!count
+  }
+
   return (
     <Box
       className="hideScroll"
@@ -1316,11 +1356,13 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                                         borderRadius="4px"
                                         color="#fff"
                                         cursor={'pointer'}
-                                        onClick={() => {
+                                        onClick={async () => {
                                           // if (!localStorage.getItem('totalCost')) {
                                           //   localStorage.setItem('totalCost', newTotalCost.toString())
                                           // }
-                                          handleDiscountedSearch(plan.providerName, plan.id)
+                                          if (await checkIsWalletTransactionsExist()) {
+                                            handleDiscountedSearch(plan.providerName, plan.id)
+                                          }
                                         }}
                                       >
                                         Sync now
