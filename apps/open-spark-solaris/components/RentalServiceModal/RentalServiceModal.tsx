@@ -171,7 +171,12 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
   }
 
   const getOrderStatusData = (scannedData: any) => {
-    if (scannedData && scannedData?.userId && scannedData?.userPhone && scannedData?.payload) {
+    if (
+      scannedData &&
+      scannedData?.userId === user?.id &&
+      scannedData?.userPhone === user?.agent?.agent_profile.phone_number &&
+      scannedData?.payload
+    ) {
       setIsLoading(true)
       axios
         .post(`${apiUrl}/status`, scannedData.payload)
