@@ -28,3 +28,8 @@ cypress/videos/
 # Cypress reports and logs
 cypress/reports/
 cypress/logs/
+
+# PWA Generated Files (for apps inside `/apps/`)
+apps/**/public/sw.js
+apps/**/public/workbox-*
+apps/**/public/cache
