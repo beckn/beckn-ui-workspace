@@ -422,7 +422,7 @@ const LockDemand = () => {
             isLoading={tradeExecutionProcessed}
             handleClick={handleOnLockDemand}
             sx={{ margin: '1rem 0' }}
-            disabled={items.length === 0}
+            disabled={items.length === 0 || status === 'CLOSED'}
           />
         </Flex>
       </Box>
