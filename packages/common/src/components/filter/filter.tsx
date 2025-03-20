@@ -183,7 +183,7 @@ const Filter = ({
               </FormLabel>
               <GenericDropdown
                 options={filterPriceOption}
-                placeholder="Select Information Category"
+                // placeholder="Select Information Category"
                 selectedValue={formData?.searchByPrice || ''}
                 handleChange={value => {
                   // dispatch(updatePolicyType(value || ''))
@@ -227,7 +227,7 @@ const Filter = ({
                 </FormLabel>
                 <GenericDropdown
                   options={filterRatingOption}
-                  placeholder="Select Information Category"
+                  // placeholder="Select Information Category"
                   selectedValue={formData?.searchByRating || ''}
                   handleChange={value => {
                     // dispatch(updatePolicyType(value || ''))
