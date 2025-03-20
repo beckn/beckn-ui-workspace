@@ -821,6 +821,8 @@ const OrderDetails = () => {
       }
       // Use a more compact data structure
       const data = {
+        userId: user?.id || null,
+        userPhone: user?.agent?.agent_profile.phone_number || 0,
         name: totalItemsStr,
         source: 'spark',
         createdAt: createdAt,
