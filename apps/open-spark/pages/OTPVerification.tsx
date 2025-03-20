@@ -100,7 +100,7 @@ const OTPVerification = () => {
       <Flex
         flexDirection={'column'}
         justifyContent={'space-between'}
-        height={'calc(100vh - 190px)'}
+        height={'calc(100vh - 200px)'}
       >
         <Box mt={'25px'}>
           {OTP.map((digit, index) => (
