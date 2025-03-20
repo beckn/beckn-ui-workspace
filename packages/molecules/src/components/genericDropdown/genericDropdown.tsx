@@ -29,7 +29,7 @@ export const GenericDropdown = <T extends string | number>({
   options,
   selectedValue,
   handleChange,
-  placeholder = 'Select an option',
+  placeholder = '',
   buttonStyles,
   withColors = false,
   maxHeight = '200px',
@@ -57,12 +57,18 @@ export const GenericDropdown = <T extends string | number>({
 
   const getPlaceholderText = () => {
     return (
-      <label
-        className={Styles.input_label}
-        style={{ color: active ? primaryColor : 'inherit', top: active || selectedOption() ? '-11px' : '11px' }}
-      >
-        {placeholder}
-      </label>
+      <>
+        {!placeholder ? (
+          <></>
+        ) : (
+          <label
+            className={Styles.input_label}
+            style={{ color: active ? primaryColor : 'inherit', top: active || selectedOption() ? '-11px' : '11px' }}
+          >
+            {placeholder}
+          </label>
+        )}
+      </>
     )
   }
 

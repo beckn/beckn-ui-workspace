@@ -171,7 +171,12 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
   }
 
   const getOrderStatusData = (scannedData: any) => {
-    if (scannedData && scannedData?.payload) {
+    if (
+      scannedData &&
+      scannedData?.userId === user?.id &&
+      scannedData?.userPhone === user?.agent?.agent_profile.phone_number &&
+      scannedData?.payload
+    ) {
       setIsLoading(true)
       axios
         .post(`${apiUrl}/status`, scannedData.payload)
@@ -202,6 +207,17 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
         .finally(() => {
           setIsLoading(false)
         })
+    } else {
+      dispatch(
+        feedbackActions.setToastData({
+          toastData: {
+            message: 'Invalid QR code!',
+            display: true,
+            type: 'error',
+            description: 'Please scan a valid QR code.'
+          }
+        })
+      )
     }
   }
 
