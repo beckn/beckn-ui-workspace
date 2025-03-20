@@ -14,6 +14,7 @@ const TabView = (props: TabViewProps) => {
 
   return (
     <Tabs
+      index={list.indexOf(currentTab)}
       variant="soft-rounded"
       colorScheme="primary"
       onChange={index => setCurrentTab(list[index])}

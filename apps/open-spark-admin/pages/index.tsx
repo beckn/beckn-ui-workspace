@@ -4,6 +4,7 @@ import { Box, Flex, Image, Table, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/re
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import NavIcon from '@public/images/nav_icon.svg'
+import openSpark from '@public/images/jharkhandlogo.svg'
 import profileIcon from '@public/images/user_profile.svg'
 import { useLanguage } from '@hooks/useLanguage'
 import axios from '@services/axios'
@@ -39,12 +40,6 @@ const LockDemand = () => {
   const router = useRouter()
   const dispatch = useDispatch()
   const { tradeExecutionProcessed } = useSelector((state: UserRootState) => state.user)
-
-  const {
-    currentAddress,
-    error: currentLocationFetchError,
-    loading: loadingForCurrentAddress
-  } = useGeolocation(apiKeyForGoogle as string)
 
   const fetchPendingTrades = async () => {
     try {
@@ -185,16 +180,32 @@ const LockDemand = () => {
 
   return (
     <>
-      <TopSheet
-        currentLocationFetchError={currentLocationFetchError}
-        loadingForCurrentAddress={loadingForCurrentAddress}
-        currentAddress={currentAddress}
-        t={key => t[key]}
-        profileSection={{
-          src: profileIcon,
-          handleClick: () => router.push('/profile')
-        }}
-      />
+      <Flex
+        position={'fixed'}
+        left="0"
+        right={'0'}
+        top="30px"
+        backgroundColor={'#fff'}
+        boxShadow=" 0 4px 20px 0 rgba(0, 0, 0, .07)"
+        zIndex={'1'}
+        pl="20px"
+        pr="20px"
+        height={'60px'}
+        alignItems={'center'}
+        justifyContent="space-between"
+      >
+        <Image
+          src={openSpark}
+          alt="img"
+        />
+        <Image
+          onClick={() => {
+            router.push('/profile')
+          }}
+          src={profileIcon}
+          alt="img"
+        />
+      </Flex>
       <Box
         maxWidth={{ base: '100vw', md: '30rem', lg: '40rem' }}
         margin="calc(0rem + 90px) auto auto auto"
@@ -277,7 +288,7 @@ const LockDemand = () => {
                         width={'64px'}
                         data-test={testIds.total_aggregated_table_unit}
                       >
-                        Unit
+                        Units
                       </Box>
                     </Th>
                     <Th padding="0">

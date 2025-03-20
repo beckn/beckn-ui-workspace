@@ -1671,6 +1671,7 @@ __metadata:
     "@types/jsonwebtoken": ^8.5.8
     "@types/leaflet": ^1.9.3
     "@types/node": 17.0.31
+    "@types/pako": ^2.0.3
     "@types/react": 18.0.8
     "@types/react-dom": 18.0.3
     "@types/react-redux": ^7.1.24
@@ -1694,6 +1695,7 @@ __metadata:
     next-sitemap: ^3.1.17
     next-themes: ^0.2.0
     nextjs-progressbar: ^0.0.14
+    pako: ^2.1.0
     postcss: ^8.4.14
     postcss-import: ^14.1.0
     prettier: ^3.0.3
@@ -1704,6 +1706,7 @@ __metadata:
     react-icons: ^4.3.1
     react-leaflet: ^4.2.1
     react-leaflet-custom-control: ^1.3.5
+    react-qr-reader: ^3.0.0-beta-1
     react-query: ^3.38.1
     react-redux: ^8.0.2
     react-slick: ^0.29.0
@@ -1739,6 +1742,7 @@ __metadata:
     "@types/jsonwebtoken": ^8.5.8
     "@types/leaflet": ^1.9.3
     "@types/node": 17.0.31
+    "@types/pako": ^2.0.3
     "@types/react": 18.0.8
     "@types/react-dom": 18.0.3
     "@types/react-redux": ^7.1.24
@@ -1750,21 +1754,25 @@ __metadata:
     axios: ^0.27.2
     bcryptjs: ^2.4.3
     classnames: ^2.3.2
+    crypto-js: ^4.2.0
     eslint: 8.14.0
     eslint-config-next: latest
     framer-motion: ^10.12.16
     js-cookie: ^3.0.1
     jsonwebtoken: ^8.5.1
     leaflet: ^1.9.4
+    lz-string: ^1.5.0
     next: ^13.4.19
     next-connect: ^0.12.2
     next-sanity-image: ^3.2.1
     next-sitemap: ^3.1.17
     next-themes: ^0.2.0
     nextjs-progressbar: ^0.0.14
+    pako: ^2.1.0
     postcss: ^8.4.14
     postcss-import: ^14.1.0
     prettier: ^3.0.3
+    qrcode.react: ^4.2.0
     react: ^18.2.0
     react-datepicker: ^8.0.0
     react-dom: ^18.2.0
@@ -1772,6 +1780,8 @@ __metadata:
     react-icons: ^4.3.1
     react-leaflet: ^4.2.1
     react-leaflet-custom-control: ^1.3.5
+    react-qr-code: ^2.0.15
+    react-qr-reader: ^3.0.0-beta-1
     react-query: ^3.38.1
     react-redux: ^8.0.2
     react-slick: ^0.29.0
@@ -5272,6 +5282,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/pako@npm:^2.0.3":
+  version: 2.0.3
+  resolution: "@types/pako@npm:2.0.3"
+  checksum: 0746dd5d29eccf5b2e6cceb3ccb093851219e78bd2e2e20d25757e247987139e061e5d4ba37cb5295493f06e3c683c74f8876011cd8a3f3748a09244fbc841d9
+  languageName: node
+  linkType: hard
+
 "@types/parse-json@npm:^4.0.0":
   version: 4.0.2
   resolution: "@types/parse-json@npm:4.0.2"
@@ -5860,6 +5877,40 @@ __metadata:
     optimize-css-assets-webpack-plugin: ^5.0.1
     postcss-loader: 3.0.0
   checksum: ca1618c4a3075e982e06d68301e8f6c6fd3b811ca9afcbffcf0990fc28c8ac14282e7ab9a8f71336766af190588034bdb71320fcfdcb52d80a83c7e830f4d7a8
+  languageName: node
+  linkType: hard
+
+"@zxing/browser@npm:0.0.7":
+  version: 0.0.7
+  resolution: "@zxing/browser@npm:0.0.7"
+  dependencies:
+    "@zxing/text-encoding": ^0.9.0
+  peerDependencies:
+    "@zxing/library": ^0.18.3
+  dependenciesMeta:
+    "@zxing/text-encoding":
+      optional: true
+  checksum: 5f56628382a053436f0fd4163d0853e11f24059655e26e5311a97baae5fce524efe6fc397a82de7634b12585568c714789bca75d9747478d6030d27b907fc3ab
+  languageName: node
+  linkType: hard
+
+"@zxing/library@npm:^0.18.3":
+  version: 0.18.6
+  resolution: "@zxing/library@npm:0.18.6"
+  dependencies:
+    "@zxing/text-encoding": ~0.9.0
+    ts-custom-error: ^3.0.0
+  dependenciesMeta:
+    "@zxing/text-encoding":
+      optional: true
+  checksum: 564a25f6245b4fd81b4ce686116bf1fe577daa2aaee4263b4dea3776676482fd3e063ad43783c6378713a4a3dcefd311b6154b6cd43e7be24bb7e7c3e5fec98a
+  languageName: node
+  linkType: hard
+
+"@zxing/text-encoding@npm:^0.9.0, @zxing/text-encoding@npm:~0.9.0":
+  version: 0.9.0
+  resolution: "@zxing/text-encoding@npm:0.9.0"
+  checksum: c23b12aee7639382e4949961304a1294776afaffa40f579e09ffecd0e5e68cf26ef3edd75009de46da8a536e571448755ca68b3e2ea707d53793c0edb2e2c34a
   languageName: node
   linkType: hard
 
@@ -7532,6 +7583,13 @@ __metadata:
     shebang-command: ^2.0.0
     which: ^2.0.1
   checksum: 8d306efacaf6f3f60e0224c287664093fa9185680b2d195852ba9a863f85d02dcc737094c6e512175f8ee0161f9b87c73c6826034c2422e39de7d6569cf4503b
+  languageName: node
+  linkType: hard
+
+"crypto-js@npm:^4.2.0":
+  version: 4.2.0
+  resolution: "crypto-js@npm:4.2.0"
+  checksum: f051666dbc077c8324777f44fbd3aaea2986f198fe85092535130d17026c7c2ccf2d23ee5b29b36f7a4a07312db2fae23c9094b644cc35f7858b1b4fcaf27774
   languageName: node
   linkType: hard
 
@@ -13626,6 +13684,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"pako@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "pako@npm:2.1.0"
+  checksum: 71666548644c9a4d056bcaba849ca6fd7242c6cf1af0646d3346f3079a1c7f4a66ffec6f7369ee0dc88f61926c10d6ab05da3e1fca44b83551839e89edd75a3e
+  languageName: node
+  linkType: hard
+
 "parent-module@npm:^1.0.0":
   version: 1.0.1
   resolution: "parent-module@npm:1.0.1"
@@ -14551,12 +14616,28 @@ __metadata:
   languageName: node
   linkType: hard
 
+"qr.js@npm:0.0.0":
+  version: 0.0.0
+  resolution: "qr.js@npm:0.0.0"
+  checksum: 5ac6c393967bdeaa660e7fd3a501a25eb538c1f6008a4d30ab2b97bbe520e5c236530090773f1578aa0a523cdaa6923c866615e21143f9e7cd22abd41c789b69
+  languageName: node
+  linkType: hard
+
 "qrcode.react@npm:^3.1.0":
   version: 3.2.0
   resolution: "qrcode.react@npm:3.2.0"
   peerDependencies:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
   checksum: 55d020ca482d57e8d73ee9e2e18f152184fd3d7d2d0742ae54ec58c5a3bab08b242a648585178d7fc91877fc75d6fbad7a35fb51bc4bddd4374e1de450ca78e7
+  languageName: node
+  linkType: hard
+
+"qrcode.react@npm:^4.2.0":
+  version: 4.2.0
+  resolution: "qrcode.react@npm:4.2.0"
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+  checksum: fe7f496bb3696eedf4113390c6feda386e7a5e5d69d12fcc2489c55ecec467f682dc99b0d8085afbeb8ed3962c1f7554b26225cd78b72e78416f9506abbebd5d
   languageName: node
   linkType: hard
 
@@ -14940,6 +15021,32 @@ __metadata:
   version: 2.0.2
   resolution: "react-property@npm:2.0.2"
   checksum: c67fb2590dad9102239b2e574fbc078b472e227b66c3d64e1949426e33889d78c2ac5369cc4c740bb8fe61665505940e39a78d113261ac52410f7538089fe367
+  languageName: node
+  linkType: hard
+
+"react-qr-code@npm:^2.0.15":
+  version: 2.0.15
+  resolution: "react-qr-code@npm:2.0.15"
+  dependencies:
+    prop-types: ^15.8.1
+    qr.js: 0.0.0
+  peerDependencies:
+    react: "*"
+  checksum: 4124b7c2ce71bfe94279d85322175c881ba87dcc9b67f3c6d6e2806854a8792cf5f9ed8e10ea04c22e39aa060ef12fb39e679e780cba14f168d3cd6cffb7086d
+  languageName: node
+  linkType: hard
+
+"react-qr-reader@npm:^3.0.0-beta-1":
+  version: 3.0.0-beta-1
+  resolution: "react-qr-reader@npm:3.0.0-beta-1"
+  dependencies:
+    "@zxing/browser": 0.0.7
+    "@zxing/library": ^0.18.3
+    rollup: ^2.67.2
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0
+    react-dom: ^16.8.0 || ^17.0.0
+  checksum: f85fc490251cba1b763b9f1eb56ac8fb3cd006fcb189ed2b4e8e59bfb61f9493d96274aeb5e980b6093b9ca5595af76893369ecc00562664d033f37f567bd00d
   languageName: node
   linkType: hard
 
@@ -15572,6 +15679,20 @@ __metadata:
   bin:
     rimraf: dist/esm/bin.mjs
   checksum: 50e27388dd2b3fa6677385fc1e2966e9157c89c86853b96d02e6915663a96b7ff4d590e14f6f70e90f9b554093aa5dbc05ac3012876be558c06a65437337bc05
+  languageName: node
+  linkType: hard
+
+"rollup@npm:^2.67.2":
+  version: 2.79.2
+  resolution: "rollup@npm:2.79.2"
+  dependencies:
+    fsevents: ~2.3.2
+  dependenciesMeta:
+    fsevents:
+      optional: true
+  bin:
+    rollup: dist/bin/rollup
+  checksum: df7aa4c8b95245dede157b06ab71e1921de6080757d30e9bf31f8fb142064d12dda865e2bafbab4349588f43425b2965a290c9a5da1c048246a70fc21734ebd7
   languageName: node
   linkType: hard
 
@@ -16903,6 +17024,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"ts-custom-error@npm:^3.0.0":
+  version: 3.3.1
+  resolution: "ts-custom-error@npm:3.3.1"
+  checksum: 50a1e825fced68d70049bd8d282379a635e43aa023a370fa8e736b12a6edba7f18a2d731fa194ac35303a8b625be56e121bdb31d8a0318250d1a8b277059fce3
+  languageName: node
+  linkType: hard
+
 "ts-interface-checker@npm:^0.1.9":
   version: 0.1.13
   resolution: "ts-interface-checker@npm:0.1.13"
@@ -17195,7 +17323,7 @@ __metadata:
 
 "typescript@patch:typescript@^4.6.4 || ^5.2.2#~builtin<compat/typescript>, typescript@patch:typescript@^5#~builtin<compat/typescript>":
   version: 5.7.3
-  resolution: "typescript@patch:typescript@npm%3A5.7.3#~builtin<compat/typescript>::version=5.7.3&hash=29ae49"
+  resolution: "typescript@patch:typescript@npm%3A5.7.3#~builtin<compat/typescript>::version=5.7.3&hash=f3b441"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
