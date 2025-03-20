@@ -24,6 +24,7 @@ const OTPVerification = () => {
   useEffect(() => {}, [])
 
   const handleChange = (value: any, index: any) => {
+    if (!/^[0-9]?$/.test(value)) return
     let newArr = [...OTP]
     newArr[index] = value
     setOTP(newArr)
@@ -104,6 +105,8 @@ const OTPVerification = () => {
               key={index}
               value={digit}
               maxLength={1}
+              inputMode="numeric"
+              pattern="[0-9]"
               onChange={e => handleChange(e.target.value, index)}
               onKeyUp={e => handleBackspaceAndEnter(e, index)}
               ref={el => (otpBoxReference.current[index] = el)}

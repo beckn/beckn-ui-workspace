@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { BottomModal, Loader, Typography } from '@beckn-ui/molecules'
 import {
   Box,
@@ -16,7 +16,8 @@ import {
   Progress,
   VStack,
   Icon,
-  HStack
+  HStack,
+  useTheme
 } from '@chakra-ui/react'
 import { CheckIcon, AddIcon } from '@chakra-ui/icons'
 import Image from 'next/image'
@@ -35,6 +36,18 @@ import CustomDatePicker from '@components/dateTimePicker/customDatePicker'
 import CustomTimePicker from '@components/dateTimePicker/customTimePicker'
 import { validateStartEndTime } from '@utils/general'
 import { FiPlusCircle } from 'react-icons/fi'
+import pako from 'pako'
+import { QrReader } from 'react-qr-reader'
+import QRCodeScanner from '@components/QRCode/QRScanner'
+import BottomModalScan from '@beckn-ui/common/src/components/BottomModal/BottomModalScan'
+
+const SECRET_KEY = '40aead339c69a7ec08fb445ddff258b2' // Must be 32 characters for AES-256
+
+// Utility for Encoding to Base64
+const arrayBufferToBase64 = (buffer: ArrayBuffer) => btoa(String.fromCharCode(...(new Uint8Array(buffer) as any)))
+
+// Utility for Decoding Base64
+const base64ToArrayBuffer = (base64: string) => Uint8Array.from(atob(base64), c => c.charCodeAt(0))
 
 interface RentalServiceModalProps {
   isOpen: boolean
@@ -62,6 +75,8 @@ interface BatteryOption {
 }
 
 const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose, handleOnSubmit }) => {
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL
+
   const { activeStep, setActiveStep } = useSteps({
     index: 0,
     count: steps.length
@@ -74,7 +89,9 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
   const [price, setPrice] = useState<string>('100')
   const [date, setDate] = useState<string>(new Date().toISOString())
   const [confirmResOfWalletCatalogue, setConfirmResOfWalletCatalogue] = useState<any>(null)
+  const [confirmResOfQRScannedData, setConfirmResOfQRScannedData] = useState<any>(null)
   const [showTimeError, setShowTimeError] = useState(false)
+  const [showScanner, setShowScanner] = useState(false)
 
   const [batteryOptions, setBatteryOptions] = useState<BatteryOption[]>([])
   const bearerToken = Cookies.get('authToken')
@@ -149,44 +166,105 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
     }
   }
 
-  const handlePublish = async () => {
-    //TODO:Aniket Generate this payload using wallet
-    handleOnSubmit({ startLoading: true, success: true })
-    const confirmRes = await getDecodedStreamData(confirmResOfWalletCatalogue)
-    console.log('Confirm Res:', confirmRes.data.confirmDetails[0])
+  const handleOpenScanner = () => {
+    setShowScanner(true)
+  }
 
-    const payload = {
-      providerDetails: {
-        data: [{ ...confirmRes.data.confirmDetails[0], message: confirmRes.data.confirmDetails[0].message.order }]
-      },
-      walletId: user?.deg_wallet?.deg_wallet_id,
-      startTime: `${Math.floor(new Date(fromTime).getTime() / 1000)}`,
-      endTime: `${Math.floor(new Date(toTime).getTime() / 1000)}`,
-      price: price.toString(),
-      date: date
-    }
-
-    try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_STRAPI_URL}/unified-beckn-energy/rent-catalogue`,
-        payload,
-        {
-          headers: axiosConfig.headers
-        }
-      )
-
-      const data = response.data
-      console.log('API Response:', data)
-      handleClose()
-      handleOnSubmit({ startLoading: false, success: true })
+  const getOrderStatusData = (scannedData: any) => {
+    if (
+      scannedData &&
+      scannedData?.userId === user?.id &&
+      scannedData?.userPhone === user?.agent?.agent_profile.phone_number &&
+      scannedData?.payload
+    ) {
+      setIsLoading(true)
+      axios
+        .post(`${apiUrl}/status`, scannedData.payload)
+        .then(res => {
+          const resData = { data: { confirmDetails: res.data.data } }
+          const item = scannedData
+          setBatteryOptions([
+            {
+              id: '0',
+              name: item.name,
+              source: item.source,
+              invoice: '',
+              isVerified: true,
+              timestamp:
+                item?.createdAt?.length > 5 && !isNaN(item?.createdAt as number)
+                  ? item.createdAt
+                  : Math.floor(new Date().getTime() / 1000),
+              data: null
+            }
+          ])
+          setConfirmResOfQRScannedData(resData)
+          setCurrentView('select')
+          setActiveStep(0)
+        })
+        .catch(err => {
+          console.error('Error fetching asset status:', err)
+        })
+        .finally(() => {
+          setIsLoading(false)
+        })
+    } else {
       dispatch(
         feedbackActions.setToastData({
-          toastData: { message: 'Success', display: true, type: 'success', description: 'Published Successfully!' }
+          toastData: {
+            message: 'Invalid QR code!',
+            display: true,
+            type: 'error',
+            description: 'Please scan a valid QR code.'
+          }
         })
       )
-    } catch (error) {
-      console.error('Error making API call:', error)
-      throw error
+    }
+  }
+
+  const handlePublish = async () => {
+    handleOnSubmit({ startLoading: true, success: true })
+    let confirmRes = null
+    if (confirmResOfWalletCatalogue) {
+      confirmRes = await getDecodedStreamData(confirmResOfWalletCatalogue)
+    } else if (confirmResOfQRScannedData) {
+      confirmRes = confirmResOfQRScannedData
+    }
+    if (confirmRes) {
+      console.log('Confirm Res:', confirmRes.data.confirmDetails[0])
+
+      const payload = {
+        providerDetails: {
+          data: [{ ...confirmRes.data.confirmDetails[0], message: confirmRes.data.confirmDetails[0].message.order }]
+        },
+        walletId: user?.deg_wallet?.deg_wallet_id,
+        startTime: `${Math.floor(new Date(fromTime).getTime() / 1000)}`,
+        endTime: `${Math.floor(new Date(toTime).getTime() / 1000)}`,
+        price: price.toString(),
+        date: date
+      }
+
+      try {
+        const response = await axios.post(
+          `${process.env.NEXT_PUBLIC_STRAPI_URL}/unified-beckn-energy/rent-catalogue`,
+          payload,
+          {
+            headers: axiosConfig.headers
+          }
+        )
+
+        const data = response.data
+        console.log('API Response:', data)
+        handleClose()
+        handleOnSubmit({ startLoading: false, success: true })
+        dispatch(
+          feedbackActions.setToastData({
+            toastData: { message: 'Success', display: true, type: 'success', description: 'Published Successfully!' }
+          })
+        )
+      } catch (error) {
+        console.error('Error making API call:', error)
+        throw error
+      }
     }
   }
 
@@ -219,6 +297,9 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
     setSelectedBattery(null)
     setUploadedFile(null)
     setBatteryOptions([])
+    setConfirmResOfWalletCatalogue(null)
+    setConfirmResOfQRScannedData(null)
+    setIsLoading(false)
     onClose()
   }
   console.log(batteryOptions)
@@ -289,6 +370,11 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
             text="Add from wallet"
             handleClick={handleAddFromWallet}
           />
+          <BecknButton
+            text="Scan QR Code"
+            variant="outline"
+            handleClick={handleOpenScanner}
+          />
 
           {batteryOptions.length > 0 && (
             <BecknButton
@@ -319,7 +405,9 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
                 cursor="pointer"
                 onClick={() => {
                   setSelectedBattery(battery.id)
-                  setConfirmResOfWalletCatalogue(battery)
+                  if (battery.data) {
+                    setConfirmResOfWalletCatalogue(battery)
+                  }
                 }}
                 position="relative"
                 bg="white"
@@ -540,120 +628,128 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
   }
 
   return (
-    <BottomModal
-      isOpen={isOpen}
-      onClose={handleClose}
-      title={
-        <Flex
-          justify="space-between"
-          align="center"
-          width="100%"
-        >
-          <Typography
-            text="Provide Rental Service"
-            fontSize="16px"
-          />
-        </Flex>
-      }
-    >
-      <Box p={'10px 4px'}>
-        <Stepper
-          index={activeStep}
-          colorScheme="blue"
-          size="sm"
-          gap={2}
-          mb={2}
-          mr={12}
-          ml={7}
-        >
-          {steps.map((step, index) => (
-            <Step key={index}>
-              <StepIndicator>
-                <StepStatus
-                  complete={
-                    <Circle
-                      size="24px"
-                      bg="#228B22"
-                      color="white"
-                    >
-                      <CheckIcon />
-                    </Circle>
-                  }
-                  incomplete={
-                    <Circle
-                      size="24px"
-                      bg="transparent"
-                      color="#228B22"
-                      border="1px solid #228B22"
-                    >
-                      {index + 1}
-                    </Circle>
-                  }
-                  active={
-                    <Circle
-                      size="24px"
-                      bg="#228B22"
-                      color="white"
-                    >
-                      <CheckIcon />
-                    </Circle>
-                  }
+    <>
+      <BottomModal
+        isOpen={isOpen}
+        onClose={handleClose}
+        title={
+          <Flex
+            justify="space-between"
+            align="center"
+            width="100%"
+          >
+            <Typography
+              text="Provide Rental Service"
+              fontSize="16px"
+            />
+          </Flex>
+        }
+      >
+        <Box p={'10px 4px'}>
+          <Stepper
+            index={activeStep}
+            colorScheme="blue"
+            size="sm"
+            gap={2}
+            mb={2}
+            mr={12}
+            ml={7}
+          >
+            {steps.map((step, index) => (
+              <Step key={index}>
+                <StepIndicator>
+                  <StepStatus
+                    complete={
+                      <Circle
+                        size="24px"
+                        bg="#228B22"
+                        color="white"
+                      >
+                        <CheckIcon />
+                      </Circle>
+                    }
+                    incomplete={
+                      <Circle
+                        size="24px"
+                        bg="transparent"
+                        color="#228B22"
+                        border="1px solid #228B22"
+                      >
+                        {index + 1}
+                      </Circle>
+                    }
+                    active={
+                      <Circle
+                        size="24px"
+                        bg="#228B22"
+                        color="white"
+                      >
+                        <CheckIcon />
+                      </Circle>
+                    }
+                  />
+                </StepIndicator>
+                <StepSeparator
+                  _horizontal={{
+                    ml: '0',
+                    height: '4px'
+                  }}
+                  background="#228B22 !important"
                 />
-              </StepIndicator>
-              <StepSeparator
-                _horizontal={{
-                  ml: '0',
-                  height: '4px'
+              </Step>
+            ))}
+          </Stepper>
+
+          <Flex
+            justify="space-between"
+            // mb={6}
+            gap={2}
+            mb={2}
+            mr={'0.9rem'}
+            ml={'0.9rem'}
+          >
+            {steps.map((step, index) => (
+              <Text
+                key={index}
+                fontSize="10px"
+                color={activeStep >= index ? '#228B22' : '#6B7280'}
+                textAlign="center"
+                maxW="110px"
+                onClick={() => {
+                  if (index === 0) {
+                    setCurrentView('upload')
+                    setActiveStep(0)
+                    setBatteryOptions([])
+                  }
                 }}
-                background="#228B22 !important"
-              />
-            </Step>
-          ))}
-        </Stepper>
+              >
+                {step.title}
+              </Text>
+            ))}
+          </Flex>
 
-        <Flex
-          justify="space-between"
-          // mb={6}
-          gap={2}
-          mb={2}
-          mr={'0.9rem'}
-          ml={'0.9rem'}
-        >
-          {steps.map((step, index) => (
-            <Text
-              key={index}
-              fontSize="10px"
-              color={activeStep >= index ? '#228B22' : '#6B7280'}
-              textAlign="center"
-              maxW="110px"
-              onClick={() => {
-                if (index === 0) {
-                  setCurrentView('upload')
-                  setActiveStep(0)
-                  setBatteryOptions([])
-                }
-              }}
-            >
-              {step.title}
-            </Text>
-          ))}
-        </Flex>
+          {isLoading ? (
+            <>
+              <Box
+                display={'grid'}
+                height={'calc(100vh - 510px)'}
+                alignContent={'center'}
+              >
+                <Loader />
+              </Box>
+            </>
+          ) : (
+            renderContent()
+          )}
+        </Box>
+      </BottomModal>
 
-        {isLoading ? (
-          <>
-            <Box
-              display={'grid'}
-              height={'calc(100vh - 510px)'}
-              alignContent={'center'}
-            >
-              <Loader />
-            </Box>
-          </>
-        ) : (
-          renderContent()
-        )}
-      </Box>
-    </BottomModal>
+      <QRCodeScanner
+        showScanner={showScanner}
+        setShowScanner={setShowScanner}
+        setScannedData={scannedData => getOrderStatusData(scannedData)}
+      />
+    </>
   )
 }
 

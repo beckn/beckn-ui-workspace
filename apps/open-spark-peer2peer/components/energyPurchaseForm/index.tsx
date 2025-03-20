@@ -11,6 +11,7 @@ import {
   Text,
   VStack
 } from '@chakra-ui/react'
+import { GoAlert } from 'react-icons/go'
 import { QuestionOutlineIcon } from '@chakra-ui/icons'
 import React, { useEffect, useState } from 'react'
 import { FaMinus, FaPlus } from 'react-icons/fa6'
@@ -26,6 +27,7 @@ import { useLanguage } from '@hooks/useLanguage'
 import { testIds } from '@shared/dataTestIds'
 import BuyPaymentModule from '@components/buyPaymentModule/BuyPaymentModule'
 import BottomModal from '@beckn-ui/common/src/components/BottomModal/BottomModalScan'
+import { Typography } from '@beckn-ui/molecules'
 
 interface EnergyPurchaseFormProps {
   preferenceType: string
@@ -45,16 +47,46 @@ export default function EnergyPurchaseForm({ preferenceType, role }: EnergyPurch
   const [pricePerUnit, setPricePerUnit] = useState<number>(0)
   const [preferences, setPreferences] = useState({ solar: false, trustedSource: false })
   const [isBuyModal, setIsBuyModal] = useState(false)
+  const preferencesTags = useSelector((state: RootState) => state.user.preferences)
 
   useEffect(() => {
     const { tradeId, quantity, price, preferencesTags } = router.query
+    const formStorageKey = `energyFormData_${role}`
+
     if (tradeId && quantity && price) {
       setTradeId(tradeId as string)
       setEnergyUnits(Number(quantity))
       setPricePerUnit(Number(price))
-      setPreferences(JSON.parse(preferencesTags as string))
+      if (preferencesTags) {
+        setPreferences(JSON.parse(preferencesTags as string))
+      }
+    } else {
+      try {
+        const savedData = JSON.parse(localStorage.getItem(formStorageKey) || '{}')
+
+        if (savedData.energyUnits !== undefined) setEnergyUnits(savedData.energyUnits)
+        if (savedData.pricePerUnit !== undefined) setPricePerUnit(savedData.pricePerUnit)
+        if (savedData.isChecked !== undefined) setIsChecked(savedData.isChecked)
+        if (savedData.tradeId) setTradeId(savedData.tradeId)
+      } catch (error) {
+        console.error('Error loading saved form data:', error)
+      }
     }
-  }, [router.query])
+  }, [router.query, role])
+
+  useEffect(() => {
+    const formStorageKey = `energyFormData_${role}`
+
+    localStorage.setItem(
+      formStorageKey,
+      JSON.stringify({
+        energyUnits,
+        pricePerUnit,
+        isChecked,
+        tradeId
+      })
+    )
+  }, [energyUnits, pricePerUnit, isChecked, tradeId, role])
 
   const handleInputChange = (setter: React.Dispatch<React.SetStateAction<number>>, value: string) => {
     const numericValue = value.replace(/[^0-9]/g, '')
@@ -65,7 +97,6 @@ export default function EnergyPurchaseForm({ preferenceType, role }: EnergyPurch
     }
   }
 
-  // const handleCheckboxChange = (key: string, value: boolean) => setPreferences(prev => ({ ...prev, [key]: value }))
   const handleSubmitPreferences = () => {
     setIsBuyModal(true)
   }
@@ -79,8 +110,8 @@ export default function EnergyPurchaseForm({ preferenceType, role }: EnergyPurch
             quantity: energyUnits,
             unit: 'kwh',
             item_name: 'energy',
-            trusted_source: preferences.trustedSource,
-            cred_required: preferences.solar,
+            trusted_source: preferencesTags.trustedSource,
+            cred_required: preferencesTags.credRequired,
             recurring: false,
             domain: DOMAIN,
             price: pricePerUnit
@@ -89,8 +120,8 @@ export default function EnergyPurchaseForm({ preferenceType, role }: EnergyPurch
             quantity: energyUnits,
             unit: 'KWH',
             item_name: 'energy',
-            trusted_source: preferences.trustedSource,
-            cred_required: preferences.solar,
+            trusted_source: preferencesTags.trustedSource,
+            cred_required: preferencesTags.credRequired,
             recurring: true,
             price: pricePerUnit
           }
@@ -105,12 +136,14 @@ export default function EnergyPurchaseForm({ preferenceType, role }: EnergyPurch
 
         if (response.status === 200 || response.status === 204) {
           console.log('Trade updated successfully:', response.data)
+          localStorage.removeItem(`energyFormData_${role}`)
+
           dispatch(
             feedbackActions.setToastData({
               toastData: { message: 'Success', display: true, type: 'success', description: t.tradeUpdateSuccess }
             })
           )
-          router.push('/')
+          router.push(`/?tab=${role === ROLE.BUY ? 'buy' : 'sell'}`)
         }
       } else {
         const response = await axios.post(`${strapiUrl}${ROUTE_TYPE[role!]}/trade`, payload, {
@@ -120,12 +153,14 @@ export default function EnergyPurchaseForm({ preferenceType, role }: EnergyPurch
 
         if (response.status === 200 || response.status === 204) {
           console.log('Trade created successfully:', response.data)
+          localStorage.removeItem(`energyFormData_${role}`)
+
           dispatch(
             feedbackActions.setToastData({
               toastData: { message: 'Success', display: true, type: 'success', description: t.tradeCreateSuccess }
             })
           )
-          router.push('/')
+          router.push(`/?tab=${role === ROLE.BUY ? 'buy' : 'sell'}`)
         }
       }
     } catch (error) {
@@ -143,6 +178,22 @@ export default function EnergyPurchaseForm({ preferenceType, role }: EnergyPurch
   const handleCheckboxChange = (checked: boolean) => {
     setIsChecked(checked)
   }
+
+  const alertModalHeader = (
+    <Flex alignItems={'center'}>
+      <Typography
+        text={'Alert'}
+        fontSize={'20px'}
+        fontWeight={'500'}
+        color={'#000000'}
+        sx={{ mr: '10px' }}
+      />
+      <GoAlert
+        color="#F3D020"
+        size={'20px'}
+      />
+    </Flex>
+  )
 
   return (
     <Flex
@@ -173,10 +224,12 @@ export default function EnergyPurchaseForm({ preferenceType, role }: EnergyPurch
           </HStack>
           <HStack spacing={4}>
             <Box
-              onClick={() => handleInputChange(setEnergyUnits, (energyUnits + 1).toString())}
+              onClick={() => {
+                if (energyUnits > 0) handleInputChange(setEnergyUnits, (energyUnits - 1).toString())
+              }}
               cursor="pointer"
             >
-              <FaPlus data-test={testIds.FaPlus} />
+              <FaMinus data-test={testIds.FaMinus} />
             </Box>
             <Input
               type="number"
@@ -188,12 +241,10 @@ export default function EnergyPurchaseForm({ preferenceType, role }: EnergyPurch
               data-test={testIds.preference_type_input_buy}
             />
             <Box
-              onClick={() => {
-                if (energyUnits > 0) handleInputChange(setEnergyUnits, (energyUnits - 1).toString())
-              }}
+              onClick={() => handleInputChange(setEnergyUnits, (energyUnits + 1).toString())}
               cursor="pointer"
             >
-              <FaMinus data-test={testIds.FaMinus} />
+              <FaPlus data-test={testIds.FaPlus} />
             </Box>
             <Text
               fontSize="15"
@@ -222,10 +273,12 @@ export default function EnergyPurchaseForm({ preferenceType, role }: EnergyPurch
             </HStack>
             <HStack spacing={4}>
               <Box
-                onClick={() => handleInputChange(setPricePerUnit, (pricePerUnit + 1).toString())}
+                onClick={() => {
+                  if (pricePerUnit > 0) handleInputChange(setPricePerUnit, (pricePerUnit - 1).toString())
+                }}
                 cursor="pointer"
               >
-                <FaPlus data-test={testIds.FaPlus_unit} />
+                <FaMinus data-test={testIds.FaMinus_unit} />
               </Box>
               <Input
                 data-test={testIds.set_price_per_unit_input}
@@ -237,12 +290,10 @@ export default function EnergyPurchaseForm({ preferenceType, role }: EnergyPurch
                 size="md"
               />
               <Box
-                onClick={() => {
-                  if (pricePerUnit > 0) handleInputChange(setPricePerUnit, (pricePerUnit - 1).toString())
-                }}
+                onClick={() => handleInputChange(setPricePerUnit, (pricePerUnit + 1).toString())}
                 cursor="pointer"
               >
-                <FaMinus data-test={testIds.FaMinus_unit} />
+                <FaPlus data-test={testIds.FaPlus_unit} />
               </Box>
               <Text
                 fontSize="15"
@@ -294,7 +345,7 @@ export default function EnergyPurchaseForm({ preferenceType, role }: EnergyPurch
         onClose={() => {
           setIsBuyModal(false)
         }}
-        modalHeader="Alert"
+        modalHeader={alertModalHeader}
       >
         <Box p="0 24px">
           <Text mb="34px">

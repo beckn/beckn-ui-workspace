@@ -8,6 +8,7 @@ import axios from '@services/axios'
 import Cookies from 'js-cookie'
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
+import { setPreferences } from '@store/user-slice'
 
 const LABEL_MAPPING: Record<string, string> = {
   trustedSource: 'Trusted Sources',
@@ -19,7 +20,6 @@ const MyPreference = () => {
   const token = Cookies.get('p2pAuthToken')
   const dispatch = useDispatch()
 
-  const [preferences, setPreferences] = useState<{ [key: string]: boolean }>({})
   const [updatedPreferences, setUpdatedPreferences] = useState<{ [key: string]: boolean }>({})
 
   useEffect(() => {
@@ -35,7 +35,7 @@ const MyPreference = () => {
             Authorization: `Bearer ${token}`
           }
         })
-        setPreferences(response.data || {})
+        dispatch(setPreferences(response.data || {}))
         setUpdatedPreferences(response.data || {})
       } catch (error) {
         console.error('Error fetching user preferences:', error)
@@ -59,7 +59,7 @@ const MyPreference = () => {
           Authorization: `Bearer ${token}`
         }
       })
-      setPreferences(updatedPreferences)
+      dispatch(setPreferences(updatedPreferences))
       dispatch(
         feedbackActions.setToastData({
           toastData: {

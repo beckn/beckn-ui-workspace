@@ -181,35 +181,39 @@ const ProductCard: React.FC<ProductCardProps> = props => {
                   </Text>
                 </Flex>
               )}
-              {productInfoDataSource && typeof productInfoDataSource === 'object' && (
+              {productInfoDataSource && (
                 <>
-                  {Object.keys(productInfoDataSource).includes('image') ? (
-                    <Image
-                      w={'60px'}
-                      mt="5px"
-                      src={productInfoDataSource['image']}
-                    />
-                  ) : (
+                  {typeof productInfoDataSource === 'object' && (
                     <>
-                      {Object.entries(productInfoDataSource as Record<string, any>).map(([key, value]) => (
-                        <Flex
-                          fontSize="12px"
-                          alignItems="center"
-                          mb="8px"
-                          key={key}
-                        >
-                          <Text fontWeight="600">{key}:</Text>
-                          <Text
-                            pl="3px"
-                            noOfLines={1}
-                            textOverflow="ellipsis"
-                            whiteSpace="pre-wrap"
-                            overflowWrap="break-word"
-                          >
-                            {value}
-                          </Text>
-                        </Flex>
-                      ))}
+                      {Object.keys(productInfoDataSource).includes('image') ? (
+                        <Image
+                          w={'60px'}
+                          mt="5px"
+                          src={productInfoDataSource['image']}
+                        />
+                      ) : (
+                        <>
+                          {Object.entries(productInfoDataSource as Record<string, any>).map(([key, value]) => (
+                            <Flex
+                              fontSize="12px"
+                              alignItems="center"
+                              mb="8px"
+                              key={key}
+                            >
+                              <Text fontWeight="600">{key}:</Text>
+                              <Text
+                                pl="3px"
+                                noOfLines={1}
+                                textOverflow="ellipsis"
+                                whiteSpace="pre-wrap"
+                                overflowWrap="break-word"
+                              >
+                                {value}
+                              </Text>
+                            </Flex>
+                          ))}
+                        </>
+                      )}
                     </>
                   )}
                 </>

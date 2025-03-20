@@ -21,35 +21,12 @@ const tabs = [
 interface TradeMetaData {
   quantity: string
   price: number | string
-  orderId: string
+  tradeId: string
+  orderId?: string
   time: string
   status: TradeStatus
   order?: any
 }
-// remove all mockdata
-const mockTradeList: TradeMetaData[] = [
-  {
-    quantity: '10',
-    price: 130,
-    orderId: '102',
-    time: '2024-02-04T06:00:00Z',
-    status: 'SUCCESS'
-  },
-  {
-    quantity: '10',
-    price: '130',
-    orderId: '103',
-    time: '2024-02-04T06:00:00Z',
-    status: 'RECEIVED'
-  },
-  {
-    quantity: '10',
-    price: '130',
-    orderId: '104',
-    time: '2024-02-04T06:00:00Z',
-    status: 'FAILED'
-  }
-]
 
 const statusMap: Record<TradeStatus, { icon: any; color: string; label: string }> = {
   SUCCESS: { icon: successIcon, color: '#5EC401', label: 'Success' },
@@ -88,11 +65,12 @@ const MyTrades = () => {
         }
         const list = result.map((data: any) => {
           return {
-            orderId: data.id,
+            tradeId: data.id,
             price: data?.price || data?.order?.price || 0,
             quantity: data.quantity,
             time: data.createdAt,
-            status: data.status
+            status: data.status,
+            order: data.order
           }
         })
 
@@ -111,10 +89,15 @@ const MyTrades = () => {
   const handleOnCardClick = (data: TradeMetaData) => {
     router.push({
       pathname: '/tradeDetails',
-      query: { id: data.orderId, type: activeTab === 'buy' ? ROLE.BUY : ROLE.SELL }
+      query: {
+        tradeId: data.tradeId,
+        date: data.time,
+        quantity: data.quantity,
+        type: activeTab === 'buy' ? ROLE.BUY : ROLE.SELL
+      }
     })
   }
-
+  console.log(tradeList)
   return (
     <Box
       margin={'0 auto'}
@@ -171,7 +154,7 @@ const MyTrades = () => {
             return (
               <Card
                 key={index}
-                handleOnclick={() => trade.order && handleOnCardClick(trade)}
+                handleOnclick={() => handleOnCardClick(trade)}
                 childComponent={() => {
                   return (
                     <Flex
@@ -193,8 +176,8 @@ const MyTrades = () => {
                       <Flex justifyContent={'space-between'}>
                         <Flex flexDir={'row'}>
                           <Typography
-                            text={`Order ID: ${trade.orderId}`}
-                            dataTest={'trade_orderId'}
+                            text={`Trade ID: ${trade.tradeId}`}
+                            dataTest={'trade_Id'}
                           />
                           <Typography
                             text={`, ${formatDate(trade.time, 'hh:mm a')}`}

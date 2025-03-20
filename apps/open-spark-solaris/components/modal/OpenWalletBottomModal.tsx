@@ -57,6 +57,7 @@ const OpenWalletBottomModal: React.FC<OpenWalletBottomModalProps> = ({ modalType
   }
 
   const handleOTPChange = (value: string, index: number) => {
+    if (!/^[0-9]?$/.test(value)) return
     const newArr = [...OTP]
     newArr[index] = value
     setOTP(newArr)
@@ -66,11 +67,26 @@ const OpenWalletBottomModal: React.FC<OpenWalletBottomModalProps> = ({ modalType
     }
   }
 
+  const handleBackspaceAndEnter = (e: any, index: any) => {
+    if (e.key === 'Backspace' && !e.target.value && index > 0) {
+      otpBoxReference.current[index - 1].focus()
+    }
+    if (e.key === 'Enter' && e.target.value && index < numberOfDigits - 1) {
+      otpBoxReference.current[index + 1].focus()
+    }
+  }
+
   const handleVerifyOtp = async () => {
     const data = { otp: Number(OTP.join('')) }
 
     try {
       await verifyOtp(data).unwrap()
+      await handleLinkWallet({
+        wallet_id: `/subjects/${inputValue}`,
+        energy_identities_consent: false,
+        energy_assets_consent: false,
+        energy_transactions_consent: false
+      })
       setModalType('alert')
     } catch (error) {
       console.error('OTP verification failed:', error)
@@ -84,12 +100,6 @@ const OpenWalletBottomModal: React.FC<OpenWalletBottomModalProps> = ({ modalType
 
       if (result && Array.isArray(result) && result.length > 0) {
         const walletData = result[0]
-        await handleLinkWallet({
-          wallet_id: walletData.did,
-          energy_identities_consent: false,
-          energy_assets_consent: false,
-          energy_transactions_consent: false
-        })
         setModalType('otp')
       } else {
         console.error('Invalid profile ID')
@@ -223,6 +233,7 @@ const OpenWalletBottomModal: React.FC<OpenWalletBottomModalProps> = ({ modalType
                       type="number"
                       maxLength={1}
                       onChange={e => handleOTPChange(e.target.value, index)}
+                      onKeyUp={e => handleBackspaceAndEnter(e, index)}
                       ref={el => (otpBoxReference.current[index] = el)}
                       style={{
                         width: '42px',
