@@ -9,7 +9,6 @@ const homeIconBlackList = [
   '/profile',
   '/signUp',
   '/OTPVerification',
-  '/paymentMode',
   '/withdraw',
   '/search',
   '/myStore',
