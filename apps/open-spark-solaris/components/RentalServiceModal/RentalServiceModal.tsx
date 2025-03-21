@@ -190,10 +190,7 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
               source: item.source,
               invoice: '',
               isVerified: true,
-              timestamp:
-                item?.createdAt?.length > 5 && !isNaN(item?.createdAt as number)
-                  ? item.createdAt
-                  : Math.floor(new Date().getTime() / 1000),
+              timestamp: item.createdAt || Math.floor(new Date().getTime() / 1000),
               data: null
             }
           ])
