@@ -1094,21 +1094,34 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
   }
 
   const checkIsWalletTransactionsExist = async () => {
-    const result = await getDocuments(user?.deg_wallet?.deg_wallet_id!).unwrap()
-    const count = parseDIDData(result)['transactions'].length > 0 || 0
-    if (count === 0) {
+    if (user?.deg_wallet) {
+      const result = await getDocuments(user?.deg_wallet?.deg_wallet_id!).unwrap()
+      const count = parseDIDData(result)['transactions'].length > 0 || 0
+      if (count === 0) {
+        dispatch(
+          feedbackActions.setToastData({
+            toastData: {
+              message: 'Error',
+              display: true,
+              type: 'error',
+              description: 'You do not have any transaction in your wallet to avail discount.'
+            }
+          })
+        )
+      }
+      return !!count
+    } else {
       dispatch(
         feedbackActions.setToastData({
           toastData: {
-            message: 'Error',
+            message: 'Wallet not connected!',
             display: true,
-            type: 'error',
-            description: 'You do not have any transaction in your wallet to avail discount.'
+            type: 'warning',
+            description: 'Please connect your wallet before proceeding.'
           }
         })
       )
     }
-    return !!count
   }
 
   return (

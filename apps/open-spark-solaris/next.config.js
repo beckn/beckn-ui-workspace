@@ -1,6 +1,14 @@
 /** @type {import('next').NextConfig} */
+const withPWA = require('next-pwa')({
+  dest: 'public', // Service Worker will be generated here
+  register: true, // Automatically registers the Service Worker
+  skipWaiting: true, // Forces the new Service Worker to activate immediately
+  fallbacks: {
+    page: '/offline.html' // Optional fallback page for offline mode
+  }
+})
 
-const nextConfig = {
+const nextConfig = withPWA({
   reactStrictMode: false,
   transpilePackages: ['@beckn-ui/**'],
   i18n: {
@@ -44,6 +52,6 @@ const nextConfig = {
 
     return config
   }
-}
+})
 
 module.exports = nextConfig
