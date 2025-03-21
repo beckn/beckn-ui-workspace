@@ -412,6 +412,11 @@ select:-webkit-autofill:focus {
 .product-text .chakra-text {
   margin-bottom: unset !important;
 }
+.product-price .chakra-text,
+.product-star-rating .chakra-text,
+.custom-product-info .chakra-text {
+  font-size: 13px !important;
+}
 .order-summary_orderSummaryContainer__v8MgZ {
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1) !important;
   background-color: #fff !important;

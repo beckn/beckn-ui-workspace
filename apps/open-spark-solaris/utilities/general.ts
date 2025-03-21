@@ -67,3 +67,16 @@ export const validateStartEndTime = (startTime: Date, endTime: Date): boolean =>
 export const currencyFormat = (price: number | undefined) => {
   return price ? new Intl.NumberFormat('en-GB').format(price) : null
 }
+
+// Add this helper function to round up time to nearest hour
+export const roundToNextHour = (date: Date) => {
+  const roundedDate = new Date(date)
+  // If minutes are not 0, round up to next hour
+  if (roundedDate.getMinutes() > 0) {
+    roundedDate.setHours(roundedDate.getHours() + 1)
+  }
+  roundedDate.setMinutes(0)
+  roundedDate.setSeconds(0)
+  roundedDate.setMilliseconds(0)
+  return roundedDate
+}

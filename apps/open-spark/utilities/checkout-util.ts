@@ -83,28 +83,54 @@ export const generateRentalInitPayload = async (
   }
 }
 
+// export function calculateDuration(from: string, to: string): number {
+//   // if (!from || !to) return 'Not available' // Handle null values
+
+//   const parseTime = (timeStr: string): number => {
+//     if (!timeStr.includes(' ')) return 0 // Ensure valid format
+//     const [time, period] = timeStr.split(' ')
+//     let [hours, minutes] = time.split(':').map(Number)
+
+//     if (period === 'PM' && hours !== 12) hours += 12
+//     if (period === 'AM' && hours === 12) hours = 0
+
+//     return hours * 60 + minutes // Convert to total minutes
+//   }
+
+//   const fromMinutes = parseTime(from)
+//   const toMinutes = parseTime(to)
+
+//   const totalMinutes = toMinutes - fromMinutes
+//   // if (totalMinutes < 0) return 'Invalid time range' // Handle overnight cases
+
+//   // Convert to hours and minutes format
+//   const hours = Math.floor(totalMinutes / 60)
+
+//   return hours
+// }
+
 export function calculateDuration(from: string, to: string): number {
-  // if (!from || !to) return 'Not available' // Handle null values
-
-  const parseTime = (timeStr: string): number => {
-    if (!timeStr.includes(' ')) return 0 // Ensure valid format
-    const [time, period] = timeStr.split(' ')
-    let [hours, minutes] = time.split(':').map(Number)
-
-    if (period === 'PM' && hours !== 12) hours += 12
-    if (period === 'AM' && hours === 12) hours = 0
-
-    return hours * 60 + minutes // Convert to total minutes
+  const parseDateTime = (dateTimeStr: string): number => {
+    const parsedDate = new Date(Number(dateTimeStr))
+    if (isNaN(parsedDate.getTime())) {
+      throw new Error('Invalid date format')
+    }
+    return parsedDate.getTime()
   }
 
-  const fromMinutes = parseTime(from)
-  const toMinutes = parseTime(to)
+  try {
+    const fromTime = parseDateTime(from)
+    const toTime = parseDateTime(to)
 
-  const totalMinutes = toMinutes - fromMinutes
-  // if (totalMinutes < 0) return 'Invalid time range' // Handle overnight cases
+    const durationMs = toTime - fromTime
+    if (durationMs < 0) {
+      throw new Error('Invalid time range')
+    }
 
-  // Convert to hours and minutes format
-  const hours = Math.floor(totalMinutes / 60)
-
-  return hours
+    const totalHours = durationMs / (1000 * 60 * 60)
+    return totalHours
+  } catch (error) {
+    console.error('Error calculating duration:', error)
+    return 0
+  }
 }
