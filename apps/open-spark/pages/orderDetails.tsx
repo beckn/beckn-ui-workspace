@@ -316,7 +316,7 @@ const OrderDetails = () => {
           }
 
           const docDetails = JSON.stringify(data)
-          const createdAt = formatTimestamp(statusOrderData?.order?.created_at)
+          const createdAt = Math.floor(new Date(statusOrderData?.order?.created_at).getTime() / 1000)
           const generatedOrderId = orderConfirmationData[0].message.order.id
           const verificationMethodsRes = await getVerificationMethods(user?.deg_wallet?.deg_wallet_id!).unwrap()
           const { did, challenge } = verificationMethodsRes[0]
@@ -799,7 +799,7 @@ const OrderDetails = () => {
     const orderConfirmationData = JSON.parse(localStorage.getItem('statusResponse')!)
     if (orderConfirmationData) {
       const totalItemsStr = extractItemsWithProvider(orderConfirmationData[0].message.order.items[0].name)
-      const createdAt = formatTimestamp(statusOrderData?.order?.created_at)
+      const createdAt = Math.floor(new Date(orderConfirmationData[0].message?.order?.created_at).getTime() / 1000)
       const generatedOrderId = orderConfirmationData[0].message.order.id
       const { bpp_id, bpp_uri } = orderConfirmationData[0].context
 
