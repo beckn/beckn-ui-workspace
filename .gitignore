@@ -33,3 +33,4 @@ cypress/logs/
 apps/**/public/sw.js
 apps/**/public/workbox-*
 apps/**/public/cache
+.qodo

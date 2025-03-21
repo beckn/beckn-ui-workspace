@@ -153,11 +153,11 @@ const CheckoutPage = () => {
     const paymentBreakdownMap: PaymentBreakDownModel = {}
     let totalPayment: number = 0
     if (isInitResultPresent()) {
-      const perUnitCost = parseFloat(initResponse[0].message.order.quote.price.value)
+      const perUnitCost = parseFloat(initResponse[0]?.message?.order?.quote?.price?.value)
       const units = cartItems?.[0]?.quantity
       // Calculate the base cost
       const baseCost = perUnitCost * units
-      initResponse[0].message.order.quote.breakup.forEach(breakupItem => {
+      initResponse[0]?.message?.order?.quote?.breakup?.forEach(breakupItem => {
         let price = parseFloat(breakupItem.price.value)
         console.log(breakupItem)
         if (breakupItem.title === 'P2P Energy Cost') {
