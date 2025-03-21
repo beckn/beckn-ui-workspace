@@ -52,25 +52,8 @@ const slice = createSlice({
         Cookies.set('authToken', state.jwt)
         Cookies.set('isVerified', JSON.stringify(state.user?.isOtpVerified))
 
-        const urlQuery = Router.query
-
-        const hasNotQuery = JSON.stringify(urlQuery) === '{}'
-
-        if (hasNotQuery) {
-          if (state.user.isOtpVerified) {
-            Router.push('/OTPVerification')
-            Cookies.set('isVerified', 'false')
-          } else {
-            Router.push('/')
-            Cookies.set('isVerified', 'false')
-          }
-        } else {
-          Cookies.set('isVerified', 'false')
-          Router.push({
-            pathname: '/',
-            query: { external_url: urlQuery.external_url }
-          })
-        }
+        Router.push('/OTPVerification')
+        Cookies.set('isVerified', 'false')
       })
       .addMatcher(extendedAuthApi.endpoints.tradeLogin.matchRejected, (state, action) => {
         console.log('rejected', action)
@@ -86,11 +69,8 @@ const slice = createSlice({
           Cookies.set('authToken', state.jwt)
           Cookies.set('isVerified', JSON.stringify(state.user?.isOtpVerified))
           state.isAuthenticated = true
-          if (state.user.isOtpVerified) {
-            Router.push('/')
-          } else {
-            Router.push('/OTPVerification')
-          }
+
+          Router.push('/OTPVerification')
         })
         .addMatcher(extendedAuthApi.endpoints.tradeRegister.matchRejected, (state, action) => {
           console.log('rejected', action)
