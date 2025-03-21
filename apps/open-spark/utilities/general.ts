@@ -79,6 +79,19 @@ export const generateRandomCode = (): string => {
 
 export const formatTime = (timestamp: number | null) => {
   if (!timestamp) return 'N/A'
-  const date = new Date(timestamp * 1000)
+  const date = new Date(timestamp)
   return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })
+}
+
+// Add this helper function to round up time to nearest hour
+export const roundToNextHour = (date: Date) => {
+  const roundedDate = new Date(date)
+  // If minutes are not 0, round up to next hour
+  if (roundedDate.getMinutes() > 0) {
+    roundedDate.setHours(roundedDate.getHours() + 1)
+  }
+  roundedDate.setMinutes(0)
+  roundedDate.setSeconds(0)
+  roundedDate.setMilliseconds(0)
+  return roundedDate
 }

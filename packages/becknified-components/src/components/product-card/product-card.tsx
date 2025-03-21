@@ -199,8 +199,14 @@ const ProductCard: React.FC<ProductCardProps> = props => {
                               alignItems="center"
                               mb="8px"
                               key={key}
+                              className="custom-product-info"
                             >
-                              <Text fontWeight="600">{key}:</Text>
+                              <Text
+                                fontWeight="600"
+                                whiteSpace={'nowrap'}
+                              >
+                                {key}:
+                              </Text>
                               <Text
                                 pl="3px"
                                 noOfLines={1}
@@ -230,11 +236,13 @@ const ProductCard: React.FC<ProductCardProps> = props => {
                   currencyType={currency}
                   price={parseFloat(product.price)}
                   rateLabel={product.rateLabel}
+                  className="product-price"
                 />
                 {product.rating && product.rating !== 'null' && (
                   <ProductRating
                     ratingValue={product.rating}
                     ratingIcon={StarIcon}
+                    className="product-star-rating"
                   />
                 )}
               </Flex>

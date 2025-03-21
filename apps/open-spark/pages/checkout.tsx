@@ -80,13 +80,13 @@ const CheckoutPage = () => {
   useEffect(() => {
     const storedFromTime = localStorage.getItem('fromTimestamp')
     const storedToTime = localStorage.getItem('toTimestamp')
-    const formatedFromTime = formatDate(Number(storedFromTime) * 1000, 'h:mm a') as string
-    const formatedToTime = formatDate(Number(storedToTime) * 1000, 'h:mm a') as string
+    const formatedFromTime = formatDate(Number(storedFromTime), 'dd/MM/yy, h:mm a') as string
+    const formatedToTime = formatDate(Number(storedToTime), 'dd/MM/yy, h:mm a') as string
     setFromTime(formatedFromTime)
     setToTime(formatedToTime)
 
     if (formatedFromTime && formatedToTime) {
-      const calculatedDuration = calculateDuration(formatedFromTime, formatedToTime)
+      const calculatedDuration = calculateDuration(storedFromTime!, storedToTime!)
       setDuration(calculatedDuration)
     }
   }, [])
@@ -272,7 +272,7 @@ const CheckoutPage = () => {
         batteryType: singleItem.name,
         capacity: singleItem.code,
         rentedFrom: selectRentalResponse?.message?.order?.provider?.name,
-        timeSlot: `${fromTime} to ${toTime}`,
+        timeSlot: `${fromTime} - ${toTime}`,
         duration: `${duration} hrs`
       }
     }) ?? []
