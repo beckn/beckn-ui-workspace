@@ -1101,9 +1101,9 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
         dispatch(
           feedbackActions.setToastData({
             toastData: {
-              message: 'Error',
+              message: 'Oops! No Transactions Found',
               display: true,
-              type: 'error',
+              type: 'warning',
               description: 'You do not have any transaction in your wallet to avail discount.'
             }
           })
