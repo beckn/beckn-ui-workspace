@@ -12,7 +12,6 @@ import {
   VStack
 } from '@chakra-ui/react'
 import { GoAlert } from 'react-icons/go'
-import { QuestionOutlineIcon } from '@chakra-ui/icons'
 import React, { useEffect, useState } from 'react'
 import { FaMinus, FaPlus } from 'react-icons/fa6'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
@@ -220,7 +219,6 @@ export default function EnergyPurchaseForm({ preferenceType, role }: EnergyPurch
             >
               Energy to {preferenceType}
             </FormLabel>
-            <QuestionOutlineIcon data-test={testIds.questionOutlineIcon} />
           </HStack>
           <HStack spacing={4}>
             <Box
@@ -269,7 +267,6 @@ export default function EnergyPurchaseForm({ preferenceType, role }: EnergyPurch
               >
                 Set a Price per unit to {preferenceType}
               </FormLabel>
-              <QuestionOutlineIcon />
             </HStack>
             <HStack spacing={4}>
               <Box

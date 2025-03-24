@@ -9,7 +9,6 @@ import { LoaderWithMessage, Typography } from '@beckn-ui/molecules'
 import { Box, Flex, HStack, Image, Grid, SkeletonText, useTheme } from '@chakra-ui/react'
 import CustomeDateInput from '@components/dateRangePicker/CustomeDateInput'
 import SelectDate from '@components/dateRangePicker/SelectDate'
-import { QuestionOutlineIcon } from '@chakra-ui/icons'
 import { LiaPenSolid } from 'react-icons/lia'
 import EmptyCurrentTrade from '@components/currentTrade/EmptyCurrentTrade'
 import CurrentTrade from '@components/currentTrade/CurrentTrade'
@@ -387,7 +386,6 @@ const Dashboard = () => {
                         fontWeight="600"
                         dataTest={testIds.current_trade}
                       />
-                      <QuestionOutlineIcon />
                     </HStack>
                     {role === ROLE.SELL && currentTradeData.length !== 0 && status !== 'CLOSED' && (
                       <LiaPenSolid
