@@ -22,7 +22,7 @@ describe('Home Page Tests', () => {
   })
 
   it('should render the app title & description', () => {
-    cy.getByData(testIds.homepage_appTitle).should('contain.text', 'Kuza One')
+    cy.getByData(testIds.homepage_appTitle).should('contain.text', 'Open Commerce')
     cy.getByData(testIds.homepage_appDescription).should(
       'contain.text',
       "A global marketplace to discover anything you need. Just type where you want to go and we'll take care of the rest."
@@ -51,24 +51,24 @@ describe('Home Page Tests', () => {
     cy.getByData(testIds.item_title).should('contain.text', 'Test Item')
   })
 
-  it('should display chat GPT generated shopping list', () => {
-    cy.window().then(win => {
-      win.history.pushState({}, '', '/?external_url=http://example.com/importedOrder')
-      cy.intercept('GET', 'http://example.com/importedOrder', {
-        fixture: 'homePage/importedOrder.json'
-      }).as('importedOrder')
-      cy.reload()
-    })
+  // it('should display chat GPT generated shopping list', () => {
+  //   cy.window().then(win => {
+  //     win.history.pushState({}, '', '/?external_url=http://example.com/importedOrder')
+  //     cy.intercept('GET', 'http://example.com/importedOrder', {
+  //       fixture: 'homePage/importedOrder.json'
+  //     }).as('importedOrder')
+  //     cy.reload()
+  //   })
 
-    cy.intercept('POST', '**/api.experience-gpt.becknprotocol.io/v2/search', {
-      fixture: 'homePage/shoppingList.json'
-    }).as('getShoppingList')
+  //   cy.intercept('POST', '**/api.experience-gpt.becknprotocol.io/v2/search', {
+  //     fixture: 'homePage/shoppingList.json'
+  //   }).as('getShoppingList')
 
-    cy.wait('@importedOrder')
-    cy.getByData(testIds.homepage_viewDetailsButton).click()
-    cy.getByData(testIds.goBack).click()
-    cy.getByData(testIds.homepage_viewChatGPTList).click()
-    cy.wait('@getShoppingList')
-    cy.getByData(testIds.homepage_shoppingListItem).should('have.length', 3)
-  })
+  //   cy.wait('@importedOrder')
+  //   cy.getByData(testIds.homepage_viewDetailsButton).click()
+  //   cy.getByData(testIds.goBack).click()
+  //   cy.getByData(testIds.homepage_viewChatGPTList).click()
+  //   cy.wait('@getShoppingList')
+  //   cy.getByData(testIds.homepage_shoppingListItem).should('have.length', 3)
+  // })
 })

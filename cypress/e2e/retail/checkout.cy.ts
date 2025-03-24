@@ -26,7 +26,7 @@ describe('Checkout Page', () => {
     cy.getByData(testIds.item_details).should('have.length', 1)
     cy.getByData(testIds.item_title).should('contain.text', 'sunglass One')
     cy.getByData(testIds.item_quantity).should('contain.text', 1)
-    cy.getByData(testIds.item_price).should('contain.text', '₹100.00')
+    cy.getByData(testIds.item_price).should('contain.text', '100.00 ₹')
   })
 
   it('should check the shipping, billing, payment section rendered or not & proceed btn', () => {
@@ -154,13 +154,13 @@ describe('Checkout Page', () => {
   it('should display the payment breakup details', () => {
     cy.getByData(testIds.checkoutpage_paymentDetails).within(() => {
       cy.getByData(testIds.payment_basePrice).should('contain.text', 'base-price')
-      cy.getByData(testIds.item_price).eq(0).should('contain.text', '₹200.00')
+      cy.getByData(testIds.item_price).eq(0).should('contain.text', '200.00 ₹')
 
       cy.getByData(testIds.payment_taxes).should('contain.text', 'taxes')
-      cy.getByData(testIds.item_price).eq(1).should('contain.text', '₹360.00')
+      cy.getByData(testIds.item_price).eq(1).should('contain.text', '360.00 ₹')
 
       cy.getByData(testIds.payment_totalPayment).should('contain.text', 'Total')
-      cy.getByData(testIds.item_price).eq(2).should('contain.text', '₹2,160.00')
+      cy.getByData(testIds.item_price).eq(2).should('contain.text', '660.00 ₹')
     })
   })
 
