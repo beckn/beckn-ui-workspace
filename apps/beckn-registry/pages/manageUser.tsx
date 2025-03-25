@@ -8,40 +8,17 @@ const ManageUser: React.FC = () => {
   const { query } = router
 
   const [formData, setFormData] = useState({
-    name: '',
-    changePassword: '',
-    numMinutesToKeyExpiration: '',
-    firstName: '',
-    lastName: '',
+    username: '',
     longName: '',
-    admin: false,
-    passwordEncrypted: false,
-    staff: false,
-    currentLat: '',
-    currentLng: '',
-    accountClosureInitiated: false,
-    accountClosed: false,
-    notificationEnabled: false,
-    emailNotificationEnabled: false,
-    whatsAppNotificationEnabled: false,
+    email: '',
+    changePassword: '',
     phoneNumber: '',
-    updatedAt: '',
-    createdAt: '',
+    alternatePhoneNumber: '',
     updaterUser: '',
     creatorUser: '',
-    company: '',
-    lat: '',
-    lng: '',
-    addressLine1: '',
-    addressLine2: '',
-    addressLine3: '',
-    addressLine4: '',
-    city: '',
-    state: '',
-    country: '',
-    pinCode: '',
-    email: '',
-    alternatePhoneNumber: ''
+    updatedAt: '',
+    createdAt: '',
+    admin: false
   })
 
   const [mode, setMode] = useState<'add' | 'edit' | 'view'>('add')
@@ -105,88 +82,35 @@ const ManageUser: React.FC = () => {
         <div className={styles.column + ' ' + styles.flex}>
           <div className={styles.column + ' ' + styles.flex + ' ' + styles.flexColumn + ' ' + styles.gap10}>
             <div className={styles.row}>
-              <label>{en.manageUser.name}</label>
+              <label>{en.manageUser.username}</label>
               <input
                 type="text"
-                name="name"
-                value={formData.name}
+                name="username"
+                value={formData.username}
                 onChange={handleChange}
                 disabled={mode === 'view'}
               />
             </div>
             <div className={styles.row}>
-              <label>{en.manageUser.changePassword}</label>
-              <input
-                type="password"
-                name="changePassword"
-                value={formData.changePassword}
-                onChange={handleChange}
-                disabled={mode === 'view'}
-              />
-            </div>
-            <div className={styles.row}>
-              <label>{en.manageUser.numMinutesToKeyExpiration}</label>
+              <label>{en.manageUser.email}</label>
               <input
                 type="text"
-                name="numMinutesToKeyExpiration"
-                value={formData.numMinutesToKeyExpiration}
+                name="email"
+                value={formData.email}
                 onChange={handleChange}
                 disabled={mode === 'view'}
               />
             </div>
             <div className={styles.row}>
-              <label>{en.manageUser.firstName}</label>
+              <label>{en.manageUser.phoneNumber}</label>
               <input
                 type="text"
-                name="firstName"
-                value={formData.firstName}
+                name="phoneNumber"
+                value={formData.phoneNumber}
                 onChange={handleChange}
                 disabled={mode === 'view'}
               />
             </div>
-            <div className={styles.row}>
-              <label>{en.manageUser.currentLat}</label>
-              <input
-                type="text"
-                name="currentLat"
-                value={formData.currentLat}
-                onChange={handleChange}
-                disabled={mode === 'view'}
-              />
-            </div>
-
-            <div className={styles.row}>
-              <label>{en.manageUser.accountClosureInitiated}</label>
-              <input
-                type="checkbox"
-                name="accountClosureInitiated"
-                checked={formData.accountClosureInitiated}
-                onChange={handleChange}
-                disabled={mode === 'view'}
-              />
-            </div>
-            <div className={styles.row}>
-              <label>{en.manageUser.notificationEnabled}</label>
-              <input
-                type="checkbox"
-                name="notificationEnabled"
-                checked={formData.notificationEnabled}
-                onChange={handleChange}
-                disabled={mode === 'view'}
-              />
-            </div>
-
-            <div className={styles.row}>
-              <label>{en.manageUser.whatsAppNotificationEnabled}</label>
-              <input
-                type="checkbox"
-                name="whatsAppNotificationEnabled"
-                checked={formData.whatsAppNotificationEnabled}
-                onChange={handleChange}
-                disabled={mode === 'view'}
-              />
-            </div>
-
             <div className={styles.row}>
               <label>{en.manageUser.updaterUser}</label>
               <input
@@ -194,7 +118,7 @@ const ManageUser: React.FC = () => {
                 name="updaterUser"
                 value={formData.updaterUser}
                 onChange={handleChange}
-                disabled={mode === 'view'}
+                disabled={true}
               />
             </div>
             <div className={styles.row}>
@@ -204,79 +128,16 @@ const ManageUser: React.FC = () => {
                 name="creatorUser"
                 value={formData.creatorUser}
                 onChange={handleChange}
-                disabled={mode === 'view'}
-              />
-            </div>
-            <div className={styles.row}>
-              <label>{en.manageUser.company}</label>
-              <input
-                type="text"
-                name="company"
-                value={formData.company}
-                onChange={handleChange}
-                disabled={mode === 'view'}
-              />
-            </div>
-            <div className={styles.row}>
-              <label>{en.manageUser.lng}</label>
-              <input
-                type="text"
-                name="lng"
-                value={formData.lng}
-                onChange={handleChange}
-                disabled={mode === 'view'}
-              />
-            </div>
-            <div className={styles.row}>
-              <label>{en.manageUser.addressLine2}</label>
-              <input
-                type="text"
-                name="addressLine2"
-                value={formData.addressLine2}
-                onChange={handleChange}
-                disabled={mode === 'view'}
+                disabled={true}
               />
             </div>
 
             <div className={styles.row}>
-              <label>{en.manageUser.addressLine4}</label>
+              <label>{en.manageUser.admin}</label>
               <input
-                type="text"
-                name="addressLine4"
-                value={formData.addressLine4}
-                onChange={handleChange}
-                disabled={mode === 'view'}
-              />
-            </div>
-
-            <div className={styles.row}>
-              <label>{en.manageUser.state}</label>
-              <input
-                type="text"
-                name="state"
-                value={formData.state}
-                onChange={handleChange}
-                disabled={mode === 'view'}
-              />
-            </div>
-
-            <div className={styles.row}>
-              <label>{en.manageUser.pinCode}</label>
-              <input
-                type="text"
-                name="pinCode"
-                value={formData.pinCode}
-                onChange={handleChange}
-                disabled={mode === 'view'}
-              />
-            </div>
-
-            <div className={styles.row}>
-              <label>{en.manageUser.alternatePhoneNumber}</label>
-              <input
-                type="text"
-                name="alternatePhoneNumber"
-                value={formData.alternatePhoneNumber}
+                type="checkbox"
+                name="admin"
+                checked={formData.admin}
                 onChange={handleChange}
                 disabled={mode === 'view'}
               />
@@ -295,73 +156,21 @@ const ManageUser: React.FC = () => {
               />
             </div>
             <div className={styles.row}>
-              <label>{en.manageUser.admin}</label>
+              <label>{en.manageUser.changePassword}</label>
               <input
-                type="checkbox"
-                name="admin"
-                checked={formData.admin}
+                type="password"
+                name="changePassword"
+                value={formData.changePassword}
                 onChange={handleChange}
                 disabled={mode === 'view'}
               />
             </div>
             <div className={styles.row}>
-              <label>{en.manageUser.passwordEncrypted}</label>
-              <input
-                type="checkbox"
-                name="passwordEncrypted"
-                checked={formData.passwordEncrypted}
-                onChange={handleChange}
-                disabled={mode === 'view'}
-              />
-            </div>
-
-            <div className={styles.row}>
-              <label>{en.manageUser.lastName}</label>
+              <label>{en.manageUser.alternatePhoneNumber}</label>
               <input
                 type="text"
-                name="lastName"
-                value={formData.lastName}
-                onChange={handleChange}
-                disabled={mode === 'view'}
-              />
-            </div>
-            <div className={styles.row}>
-              <label>{en.manageUser.currentLng}</label>
-              <input
-                type="text"
-                name="currentLng"
-                value={formData.currentLng}
-                onChange={handleChange}
-                disabled={mode === 'view'}
-              />
-            </div>
-            <div className={styles.row}>
-              <label>{en.manageUser.accountClosed}</label>
-              <input
-                type="checkbox"
-                name="accountClosed"
-                checked={formData.accountClosed}
-                onChange={handleChange}
-                disabled={mode === 'view'}
-              />
-            </div>
-
-            <div className={styles.row}>
-              <label>{en.manageUser.emailNotificationEnabled}</label>
-              <input
-                type="checkbox"
-                name="emailNotificationEnabled"
-                checked={formData.emailNotificationEnabled}
-                onChange={handleChange}
-                disabled={mode === 'view'}
-              />
-            </div>
-            <div className={styles.row}>
-              <label>{en.manageUser.phoneNumber}</label>
-              <input
-                type="text"
-                name="phoneNumber"
-                value={formData.phoneNumber}
+                name="alternatePhoneNumber"
+                value={formData.alternatePhoneNumber}
                 onChange={handleChange}
                 disabled={mode === 'view'}
               />
@@ -374,7 +183,7 @@ const ManageUser: React.FC = () => {
                 name="updatedAt"
                 value={formData.updatedAt}
                 onChange={handleChange}
-                disabled={mode === 'view'}
+                disabled={true}
               />
             </div>
             <div className={styles.row}>
@@ -384,77 +193,7 @@ const ManageUser: React.FC = () => {
                 name="createdAt"
                 value={formData.createdAt}
                 onChange={handleChange}
-                disabled={mode === 'view'}
-              />
-            </div>
-            <div className={styles.row}>
-              <label>{en.manageUser.lat}</label>
-              <input
-                type="text"
-                name="lat"
-                value={formData.lat}
-                onChange={handleChange}
-                disabled={mode === 'view'}
-              />
-            </div>
-            <div className={styles.row}>
-              <label>{en.manageUser.addressLine1}</label>
-              <input
-                type="text"
-                name="addressLine1"
-                value={formData.addressLine1}
-                onChange={handleChange}
-                disabled={mode === 'view'}
-              />
-            </div>
-            <div className={styles.row}>
-              <label>{en.manageUser.addressLine3}</label>
-              <input
-                type="text"
-                name="addressLine3"
-                value={formData.addressLine3}
-                onChange={handleChange}
-                disabled={mode === 'view'}
-              />
-            </div>
-            <div className={styles.row}>
-              <label>{en.manageUser.city}</label>
-              <input
-                type="text"
-                name="city"
-                value={formData.city}
-                onChange={handleChange}
-                disabled={mode === 'view'}
-              />
-            </div>
-            <div className={styles.row}>
-              <label>{en.manageUser.country}</label>
-              <input
-                type="text"
-                name="country"
-                value={formData.country}
-                onChange={handleChange}
-                disabled={mode === 'view'}
-              />
-            </div>
-            <div className={styles.row}>
-              <label>{en.manageUser.email}</label>
-              <input
-                type="text"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                disabled={mode === 'view'}
-              />
-            </div>
-            <div className={styles.row}>
-              <label>{en.manageUser.staff}</label>
-              <input
-                type="checkbox"
-                name="staff"
-                checked={formData.staff}
-                onChange={handleChange}
-                disabled={mode === 'view'}
+                disabled={true}
               />
             </div>
           </div>
