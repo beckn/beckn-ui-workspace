@@ -80,6 +80,12 @@ const testIds = {
   deployed_odr_url_home: 'https://onlinedisputeresolution-staging.becknprotocol.io//',
   deployed_odr_url_search: 'https://onlinedisputeresolution-staging.becknprotocol.io//search',
 
+  //mobility url
+  deployed_mob_url_base: 'https://mobility-dev.becknprotocol.io/',
+  //policy portal
+  deployed_policy_url_base: 'https://policyadmin-dev.becknprotocol.io/',
+  //open spark
+  deployed_openSpark_url_signIn: 'https://opensparkv2-dev.becknprotocol.io/',
   // urls
   url_signup: '/signUp',
   url_home: '/',
@@ -682,6 +688,14 @@ const testIds = {
   user_validPassword_producer_flow: 'Test@123',
   user_validEmail_admin_flow: 'admin@becknprotocol.io',
   user_validPassword_admin_flow: 'Test@123',
+  topSheet_profile_icon: 'topSheet-profile-icon',
+  edit_icon: 'edit-icon',
+  myCredintial: 'myCredintial',
+  myTrades: 'myTrades',
+  myDers: 'myDers',
+  buy_preference: 'buy-preference',
+  /////////Open Spark////////////
+
   total_energy_text: 'total_energy_text',
   total_energy_input: 'total_energy_input',
   total_energy_unit: 'total_energy_unit',
@@ -717,8 +731,6 @@ const testIds = {
   FaMinus_unit: 'FaMinus_unit',
   set_price_per_unit: 'set_price_per_unit',
   set_price_per_unit_input: 'set_price_per_unit_input',
-  topSheet_profile_icon: 'topSheet-profile-icon',
-  edit_icon: 'edit-icon',
   upload_file: 'upload-file',
   File_upload_description: 'File-upload-description',
   drop_your_file_here: 'drop-your-file-here',
