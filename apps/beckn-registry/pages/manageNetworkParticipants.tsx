@@ -7,8 +7,17 @@ import ActionHeaders from '../components/actionHeaders'
 const ManageNetworkParticipants: React.FC = () => {
   const router = useRouter()
   const [formData, setFormData] = useState({
-    participantId: '',
-    kycComplete: false
+    subscriberId: '',
+    keyId: '',
+    type: '',
+    domain: '',
+    signingPublicKey: '',
+    encrPublicKey: '',
+    validFrom: '',
+    validUntil: '',
+    status: '',
+    createdAt: '',
+    updatedAt: ''
   })
 
   const { mode: queryMode, ...participantDataQuery } = router.query
@@ -74,23 +83,123 @@ const ManageNetworkParticipants: React.FC = () => {
       >
         <div className={styles.row}>
           <div className={styles.row}>
-            <label>{en.networkParticipants.participantId}</label>
+            <label>{en.networkParticipants.subscriberId}</label>
             <input
               type="text"
-              name="participantId"
-              value={formData.participantId}
+              name="subscriberId"
+              value={formData.subscriberId}
+              onChange={handleChange}
+              disabled={true}
+            />
+          </div>
+          <div className={styles.row}>
+            <label>{en.networkParticipants.keyId}</label>
+            <input
+              type="text"
+              name="keyId"
+              value={formData.keyId}
+              onChange={handleChange}
+              disabled={true}
+            />
+          </div>
+        </div>
+        <div className={styles.row}>
+          <div className={styles.row}>
+            <label>{en.networkParticipants.type}</label>
+            <input
+              type="text"
+              name="type"
+              value={formData.type}
               onChange={handleChange}
               disabled={mode === 'view'}
             />
           </div>
           <div className={styles.row}>
-            <label>{en.networkParticipants.kycComplete}</label>
+            <label>{en.networkParticipants.domain}</label>
             <input
-              type="checkbox"
-              name="kycComplete"
-              checked={formData.kycComplete}
+              type="text"
+              name="domain"
+              value={formData.domain}
               onChange={handleChange}
               disabled={mode === 'view'}
+            />
+          </div>
+        </div>
+        <div className={styles.row}>
+          <div className={styles.row}>
+            <label>{en.networkParticipants.signingPublicKey}</label>
+            <input
+              type="text"
+              name="signingPublicKey"
+              value={formData.signingPublicKey}
+              onChange={handleChange}
+              disabled={mode === 'view'}
+            />
+          </div>
+          <div className={styles.row}>
+            <label>{en.networkParticipants.encrPublicKey}</label>
+            <input
+              type="text"
+              name="encrPublicKey"
+              value={formData.encrPublicKey}
+              onChange={handleChange}
+              disabled={mode === 'view'}
+            />
+          </div>
+        </div>
+        <div className={styles.row}>
+          <div className={styles.row}>
+            <label>{en.networkParticipants.validFrom}</label>
+            <input
+              type="text"
+              name="validFrom"
+              value={formData.validFrom}
+              onChange={handleChange}
+              disabled={mode === 'view'}
+            />
+          </div>
+          <div className={styles.row}>
+            <label>{en.networkParticipants.validUntil}</label>
+            <input
+              type="text"
+              name="validUntil"
+              value={formData.validUntil}
+              onChange={handleChange}
+              disabled={mode === 'view'}
+            />
+          </div>
+        </div>
+        <div className={styles.row}>
+          <div className={styles.row}>
+            <label>{en.networkParticipants.status}</label>
+            <input
+              type="text"
+              name="status"
+              value={formData.status}
+              onChange={handleChange}
+              disabled={mode === 'view'}
+            />
+          </div>
+          <div className={styles.row}>
+            <label>{en.networkParticipants.createdAt}</label>
+            <input
+              type="text"
+              name="createdAt"
+              value={formData.createdAt}
+              onChange={handleChange}
+              disabled={true}
+            />
+          </div>
+        </div>
+        <div className={styles.row}>
+          <div className={styles.row}>
+            <label>{en.networkParticipants.updatedAt}</label>
+            <input
+              type="text"
+              name="updatedAt"
+              value={formData.updatedAt}
+              onChange={handleChange}
+              disabled={true}
             />
           </div>
         </div>
