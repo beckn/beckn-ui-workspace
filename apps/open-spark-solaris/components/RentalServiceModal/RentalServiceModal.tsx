@@ -237,8 +237,8 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
           data: [{ ...confirmRes.data.confirmDetails[0], message: confirmRes.data.confirmDetails[0].message.order }]
         },
         walletId: user?.deg_wallet?.deg_wallet_id,
-        startTime: `${new Date(startDate).getTime()}`,
-        endTime: `${new Date(endDate).getTime()}`,
+        startTime: `${new Date(startDate).getTime() / 1000}`,
+        endTime: `${new Date(endDate).getTime() / 1000}`,
         price: price.toString()
       }
 
