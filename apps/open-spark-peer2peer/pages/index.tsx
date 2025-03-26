@@ -50,7 +50,19 @@ const Dashboard = () => {
 
   const [endDate, setEndDate] = useState<string>(today)
   const [totalEnergyUnits, setTotalEnergyUnits] = useState<number>(0)
-  const [status, setStatus] = useState<string>('CLOSED')
+  const [status, setStatus] = useState<string>(() => {
+    // Attempt to load cached market status from localStorage first
+    try {
+      const cachedStatus = localStorage.getItem('market-status')
+      if (cachedStatus) {
+        const parsedStatus = JSON.parse(cachedStatus)
+        return parsedStatus.status || 'CLOSED'
+      }
+    } catch (error) {
+      console.error('Error parsing cached market status:', error)
+    }
+    return 'CLOSED'
+  })
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
   const bearerToken = Cookies.get('p2pAuthToken') || ''
   const [isTradeLodaing, setIsTradeLoading] = useState(false)
@@ -168,22 +180,25 @@ const Dashboard = () => {
   }
 
   const getmarketStatus = async () => {
-    const response = await axios.get(`${strapiUrl}/api/market-status`, {
-      withCredentials: true
-    })
+    try {
+      const response = await axios.get(`${strapiUrl}/api/market-status`, {
+        withCredentials: true
+      })
 
-    const result = response.data.data.attributes
-    setStatus(result.status)
-    setStartTime(result.updatedAt)
-    localStorage.setItem('market-status', JSON.stringify({ status: result.status, startTime: result.updatedAt }))
+      const result = response.data.data.attributes
+      setStatus(result.status)
+      setStartTime(result.updatedAt)
+      localStorage.setItem('market-status', JSON.stringify({ status: result.status, startTime: result.updatedAt }))
+    } catch (error) {
+      console.error('Error fetching market status:', error)
+      // If there's an error, don't update the status, keep using what we have
+    }
   }
 
   useEffect(() => {
-    const prevMarketStatus = JSON.parse(localStorage.getItem('market-status')!)
-    if (prevMarketStatus) {
-      setStatus(prevMarketStatus.status)
-      setStartTime(prevMarketStatus.startTime)
-    }
+    // Immediately fetch market status when component mounts
+    getmarketStatus()
+
     if (intervalRef.current) {
       clearInterval(intervalRef.current)
     }
@@ -194,6 +209,7 @@ const Dashboard = () => {
       }, 5000)
     }
     startPolling()
+
     if (role === ROLE.BUY) {
       fetchLastTradeData()
     } else if (role === ROLE.SELL) {
