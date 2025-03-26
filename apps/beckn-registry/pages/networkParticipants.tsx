@@ -42,7 +42,7 @@ const NetworkParticipants = () => {
       encrPublicKey: 'encryptionKey123',
       validFrom: '2023-01-01',
       validUntil: '2024-01-01',
-      status: 'active',
+      status: 'published',
       createdAt: '2023-01-01',
       updatedAt: '2023-06-01'
     },
@@ -55,7 +55,7 @@ const NetworkParticipants = () => {
       encrPublicKey: 'encryptionKey456',
       validFrom: '2023-02-01',
       validUntil: '2024-02-01',
-      status: 'inactive',
+      status: 'unpublished',
       createdAt: '2023-02-01',
       updatedAt: '2023-07-01'
     },
@@ -68,7 +68,7 @@ const NetworkParticipants = () => {
       encrPublicKey: 'encryptionKey789',
       validFrom: '2023-03-01',
       validUntil: '2024-03-01',
-      status: 'active',
+      status: 'published',
       createdAt: '2023-03-01',
       updatedAt: '2023-08-01'
     }

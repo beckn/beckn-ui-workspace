@@ -111,26 +111,30 @@ const ManageUser: React.FC = () => {
                 disabled={mode === 'view'}
               />
             </div>
-            <div className={styles.row}>
-              <label>{en.manageUser.updaterUser}</label>
-              <input
-                type="text"
-                name="updaterUser"
-                value={formData.updaterUser}
-                onChange={handleChange}
-                disabled={true}
-              />
-            </div>
-            <div className={styles.row}>
-              <label>{en.manageUser.creatorUser}</label>
-              <input
-                type="text"
-                name="creatorUser"
-                value={formData.creatorUser}
-                onChange={handleChange}
-                disabled={true}
-              />
-            </div>
+            {mode === 'view' && (
+              <>
+                <div className={styles.row}>
+                  <label>{en.manageUser.updaterUser}</label>
+                  <input
+                    type="text"
+                    name="updaterUser"
+                    value={formData.updaterUser}
+                    onChange={handleChange}
+                    disabled={true}
+                  />
+                </div>
+                <div className={styles.row}>
+                  <label>{en.manageUser.creatorUser}</label>
+                  <input
+                    type="text"
+                    name="creatorUser"
+                    value={formData.creatorUser}
+                    onChange={handleChange}
+                    disabled={true}
+                  />
+                </div>
+              </>
+            )}
 
             <div className={styles.row}>
               <label>{en.manageUser.admin}</label>
@@ -176,26 +180,30 @@ const ManageUser: React.FC = () => {
               />
             </div>
 
-            <div className={styles.row}>
-              <label>{en.manageUser.updatedAt}</label>
-              <input
-                type="text"
-                name="updatedAt"
-                value={formData.updatedAt}
-                onChange={handleChange}
-                disabled={true}
-              />
-            </div>
-            <div className={styles.row}>
-              <label>{en.manageUser.createdAt}</label>
-              <input
-                type="text"
-                name="createdAt"
-                value={formData.createdAt}
-                onChange={handleChange}
-                disabled={true}
-              />
-            </div>
+            {mode === 'view' && (
+              <>
+                <div className={styles.row}>
+                  <label>{en.manageUser.updatedAt}</label>
+                  <input
+                    type="text"
+                    name="updatedAt"
+                    value={formData.updatedAt}
+                    onChange={handleChange}
+                    disabled={true}
+                  />
+                </div>
+                <div className={styles.row}>
+                  <label>{en.manageUser.createdAt}</label>
+                  <input
+                    type="text"
+                    name="createdAt"
+                    value={formData.createdAt}
+                    onChange={handleChange}
+                    disabled={true}
+                  />
+                </div>
+              </>
+            )}
           </div>
         </div>
         <div className={styles.submitButtonContainer}>
