@@ -269,6 +269,7 @@ const LockDemand = () => {
               marginTop={'1rem'}
             >
               <Table
+                className={`${tradeExecutionProcessed ? 'tableHide' : ''}`}
                 variant="simple"
                 data-test={testIds.total_aggregated_table}
               >
