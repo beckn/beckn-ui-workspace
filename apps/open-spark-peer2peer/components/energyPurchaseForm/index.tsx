@@ -47,11 +47,14 @@ export default function EnergyPurchaseForm({ preferenceType, role }: EnergyPurch
   const [preferences, setPreferences] = useState({ solar: false, trustedSource: false })
   const [isBuyModal, setIsBuyModal] = useState(false)
   const preferencesTags = useSelector((state: RootState) => state.user.preferences)
-
+  const [status, setStatus] = useState<string>()
   useEffect(() => {
-    const { tradeId, quantity, price, preferencesTags } = router.query
+    const { tradeId, quantity, price, preferencesTags, status } = router.query
     const formStorageKey = `energyFormData_${role}`
 
+    if (status) {
+      setStatus(status as string)
+    }
     if (tradeId && quantity && price) {
       setTradeId(tradeId as string)
       setEnergyUnits(Number(quantity))
@@ -96,8 +99,13 @@ export default function EnergyPurchaseForm({ preferenceType, role }: EnergyPurch
     }
   }
 
-  const handleSubmitPreferences = () => {
-    setIsBuyModal(true)
+  const handleSubmitPreferences = (e: React.FormEvent) => {
+    console.log('status', status)
+    if (status === 'CLOSED') {
+      setIsBuyModal(true)
+    } else if (status === 'OPEN') {
+      handleSubmit(e)
+    }
   }
 
   const handleSubmit = async (e: React.FormEvent) => {

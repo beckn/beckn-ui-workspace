@@ -83,6 +83,13 @@ const Dashboard = () => {
     handleModalClose()
   }
 
+  useEffect(() => {
+    // Clear only form-related localStorage items instead of everything
+    localStorage.removeItem('energyFormData_BUY')
+    localStorage.removeItem('energyFormData_SELL')
+    // Keep market-status and other important data
+  }, [])
+
   const getDashboardDetails = useCallback(async () => {
     const response: any = await tradeDashboard({
       startDate: payloadStartDate,
@@ -387,7 +394,7 @@ const Dashboard = () => {
                         dataTest={testIds.current_trade}
                       />
                     </HStack>
-                    {role === ROLE.SELL && currentTradeData.length !== 0 && status !== 'CLOSED' && (
+                    {role === ROLE.SELL && currentTradeData.length !== 0 && (
                       <LiaPenSolid
                         data-test={testIds.current_trade_edit_btn}
                         cursor={'pointer'}
@@ -398,6 +405,7 @@ const Dashboard = () => {
                               tradeId: currentTradeData[0]?.id,
                               quantity: currentTradeData[0].quantity,
                               price: currentTradeData[0].price,
+                              status: status,
                               preferencesTags: JSON.stringify({
                                 solar: preferencesTags.cred_required,
                                 trustedSource: preferencesTags.trusted_source
@@ -407,7 +415,7 @@ const Dashboard = () => {
                         }
                       />
                     )}
-                    {role === ROLE.BUY && currentTradeData.length !== 0 && status !== 'CLOSED' && (
+                    {role === ROLE.BUY && currentTradeData.length !== 0 && (
                       <LiaPenSolid
                         data-test={testIds.current_trade_edit_btn}
                         cursor={'pointer'}
@@ -418,6 +426,7 @@ const Dashboard = () => {
                               tradeId: currentTradeData[0]?.id,
                               quantity: currentTradeData[0].quantity,
                               price: currentTradeData[0].price,
+                              status: status,
                               preferencesTags: JSON.stringify({
                                 solar: preferencesTags.cred_required,
                                 trustedSource: preferencesTags.trusted_source
@@ -478,9 +487,14 @@ const Dashboard = () => {
                 )}
               </Box>
               <BecknButton
-                disabled={status === 'CLOSED'}
+                // disabled={status === 'CLOSED'}
                 children={role === ROLE.BUY ? 'Buy' : 'Sell'}
-                handleClick={() => router.push(role === ROLE.SELL ? '/sellingPreference' : '/buyingPreference')}
+                handleClick={() =>
+                  router.push({
+                    pathname: role === ROLE.SELL ? '/sellingPreference' : '/buyingPreference',
+                    query: { status }
+                  })
+                }
                 sx={{
                   marginTop: '1rem'
                 }}

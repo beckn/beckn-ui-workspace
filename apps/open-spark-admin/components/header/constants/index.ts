@@ -11,7 +11,7 @@ const languageIconWhiteList: string[] = []
 const backIconList = ['/', '/signIn']
 
 const headerNames: PathnameObjectType = {
-  '/signIn': 'Sign In',
+  '/signIn': '',
   '/signUp': 'Sign Up',
   '/paymentMode': 'Select Payment Method',
   '/profile': 'Profile',
