@@ -59,6 +59,8 @@ const Cart = () => {
                 quantity: singleItem.quantity,
                 name: singleItem.name,
                 image: singleItem.images?.[0].url,
+                providerName: singleItem.providerName,
+                shortDesc: singleItem.short_desc,
                 price: Number(singleItem.price.value),
                 symbol: singleItem.price.currency,
                 totalAmountText: t.totalAmount,

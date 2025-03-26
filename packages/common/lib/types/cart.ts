@@ -15,6 +15,7 @@ export interface CartItemForRequest extends CartRetailItem {
   bpp_uri: string
   providerId: string
   providerName?: string
+  shortDesc?: string
   locations: Coordinate
 }
 

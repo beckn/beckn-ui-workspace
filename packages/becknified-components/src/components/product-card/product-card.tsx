@@ -28,7 +28,7 @@ const ProductCard: React.FC<ProductCardProps> = props => {
         <Box
           className={`${className}-product_card_layout_container`}
           onClick={productClickHandler}
-          minH={'168px'}
+          // minH={'168px'}
           width={['100%', '100%', '100%', `${renderMode === 'short' ? 'calc(50% - 16px)' : '100%'}`]}
           m={['0 0 16px 0', '0 0 16px 0', '8px', '8px']}
           backgroundColor={'#fff'}
@@ -94,7 +94,7 @@ const ProductCard: React.FC<ProductCardProps> = props => {
                   <Text
                     fontWeight={'600'}
                     fontSize={'1rem'}
-                    mb={'0.7rem'}
+                    mb="10px"
                     noOfLines={2}
                     textOverflow="ellipsis"
                     whiteSpace="pre-wrap"
@@ -113,7 +113,7 @@ const ProductCard: React.FC<ProductCardProps> = props => {
                 {product.shortDesc && (
                   <Text
                     fontSize={'0.8rem'}
-                    mb={'0.4rem'}
+                    mb="10px"
                     noOfLines={2}
                     textOverflow="ellipsis"
                     whiteSpace="pre-wrap"
@@ -130,7 +130,7 @@ const ProductCard: React.FC<ProductCardProps> = props => {
                 >
                   <Text
                     fontSize={'0.8rem'}
-                    mb={'0.4rem'}
+                    mb="10px"
                     fontWeight={'600'}
                     mr="5px"
                     flex={'none'}
@@ -139,7 +139,7 @@ const ProductCard: React.FC<ProductCardProps> = props => {
                   </Text>
                   <Text
                     fontSize={'0.8rem'}
-                    mb={'0.4rem'}
+                    mb="10px"
                     w={['60%', '60%', 'unset']}
                     noOfLines={2}
                     textOverflow="ellipsis"
@@ -153,7 +153,7 @@ const ProductCard: React.FC<ProductCardProps> = props => {
                 product.sourceText && (
                   <Text
                     fontSize={'0.8rem'}
-                    mb={'0.7rem'}
+                    mb="10px"
                     noOfLines={2}
                     textOverflow="ellipsis"
                     whiteSpace="pre-wrap"
@@ -168,7 +168,7 @@ const ProductCard: React.FC<ProductCardProps> = props => {
                 <Flex
                   fontSize="12px"
                   alignItems="center"
-                  mb="8px"
+                  mb="10px"
                 >
                   <Text
                     pl="3px"
@@ -197,7 +197,7 @@ const ProductCard: React.FC<ProductCardProps> = props => {
                             <Flex
                               fontSize="12px"
                               alignItems="center"
-                              mb="8px"
+                              mb="10px"
                               key={key}
                               className="custom-product-info"
                             >
@@ -228,9 +228,9 @@ const ProductCard: React.FC<ProductCardProps> = props => {
               <Flex
                 justifyContent={'space-between'}
                 alignItems={'center'}
-                position={'absolute'}
-                bottom={'10px'}
-                width={'calc(100% - 30px)'}
+                // position={'absolute'}
+                // bottom={'10px'}
+                width={'calc(100% - 12px)'}
               >
                 <ProductPrice
                   currencyType={currency}
