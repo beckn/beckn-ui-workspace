@@ -25,25 +25,25 @@ const orderCancellation = () => {
         // content: t.orderPlaced,
         // contentMessage: t.orderSuccesfully,
         successOrderMessage: 'ORDER CANCELLED!',
-        gratefulMessage: 'Your Order has been cancelled',
-        orderIdMessage: orderId ? `Order number is: ${orderId}...` : '',
-        trackOrderMessage: `If you have already paid, you will be refunded soon.`,
+        gratefulMessage: 'Your order has been successfully cancelled.',
+        // orderIdMessage: orderId ? `Order number is: ${orderId}...` : '',
+        trackOrderMessage: `Your refund will be processed shortly.`,
 
         buttons: [
           {
-            text: 'View Details',
+            text: 'Go Back Home',
             handleClick: () => {
-              router.push('/orderDetails')
+              router.push('/')
+              dispatch(checkoutActions.clearState())
             },
             disabled: false,
             variant: 'solid',
             colorScheme: 'primary'
           },
           {
-            text: 'Go Back Home',
+            text: 'View Details',
             handleClick: () => {
-              router.push('/')
-              dispatch(checkoutActions.clearState())
+              router.push('/orderDetails')
             },
             disabled: false,
             variant: 'outline',

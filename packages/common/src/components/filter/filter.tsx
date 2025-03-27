@@ -22,8 +22,9 @@ const activeLabelStyles = {
 }
 const filterPriceOption = [
   {
-    value: '',
+    value: ' ',
     label: 'Price'
+    // isDisabled: true
   },
   {
     value: 'LowtoHigh',
@@ -32,12 +33,11 @@ const filterPriceOption = [
   {
     value: 'HightoLow',
     label: 'Price -- High to Low'
-  }
-]
-const filterRatingOption = [
+  },
   {
-    value: '',
-    label: 'Rating'
+    value: 'defaultRating',
+    label: 'Rating',
+    isDisabled: true
   },
   {
     value: 'RatingLowtoHigh',
@@ -48,12 +48,26 @@ const filterRatingOption = [
     label: 'Rating -- High to Low'
   }
 ]
+// const filterRatingOption = [
+//   {
+//     value: '',
+//     label: 'Rating'
+//   },
+//   {
+//     value: 'RatingLowtoHigh',
+//     label: 'Rating -- Low to High'
+//   },
+//   {
+//     value: 'RatingHightoLow',
+//     label: 'Rating -- High to Low'
+//   }
+// ]
 
 const Filter = ({
   handleApplyFilter,
   handleResetFilter,
   handleCancelFilter = () => {},
-  sortByRating = true
+  sortByRating = false
 }: FilterPropsModel) => {
   const theme = useTheme()
   const customTheme = extendTheme({
@@ -179,7 +193,7 @@ const Filter = ({
                 className="dropDown_label"
                 fontSize="15px"
               >
-                Sort By Price
+                Sort by
               </FormLabel>
               <GenericDropdown
                 options={filterPriceOption}
@@ -187,6 +201,7 @@ const Filter = ({
                 selectedValue={formData?.searchByPrice || ''}
                 handleChange={value => {
                   // dispatch(updatePolicyType(value || ''))
+                  // if (value.value === 'default' || value.value === 'defaultRating') return
                   handleChange('searchByPrice', value.value)
                 }}
                 buttonStyles={{
@@ -198,10 +213,10 @@ const Filter = ({
             </FormControl>
           </Box>
 
-          {sortByRating && (
+          {/* {sortByRating && (
             <Box pb={'26px'}>
-              <FormControl variant="floating">
-                {/* <Select
+              <FormControl variant="floating"> */}
+          {/* <Select
                   data-test={testIds.searchpage_filterByRating}
                   onChange={e => handleChange('searchByRating', e.target.value)}
                   value={formData?.searchByRating || ''}
@@ -219,7 +234,7 @@ const Filter = ({
                   <option value="RatingLowtoHigh">Rating -- Low to High</option>
                   <option value="RatingHightoLow">Rating -- High to Low</option>
                 </Select> */}
-                <FormLabel
+          {/* <FormLabel
                   className="dropDown_label"
                   fontSize="15px"
                 >
@@ -241,7 +256,7 @@ const Filter = ({
                 />
               </FormControl>
             </Box>
-          )}
+          )} */}
           <Button
             buttonText={'Apply Filter'}
             background={primaryColor}
@@ -256,7 +271,7 @@ const Filter = ({
           <Box display={['block', 'block', 'none', 'none']}>
             <Button
               className="cencel_btn_filter"
-              buttonText={'Cancel'}
+              buttonText={'Back'}
               background={'#fff'}
               color={'#e93324'}
               isDisabled={false}

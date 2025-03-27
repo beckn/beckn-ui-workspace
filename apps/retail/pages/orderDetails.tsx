@@ -208,7 +208,7 @@ const OrderDetails = () => {
     },
     {
       image: '/images/updateOrder.svg',
-      text: 'Update Order',
+      text: 'Edit Order',
       onClick: () => {
         Router.push('/updateShippingDetails')
       }
@@ -233,12 +233,12 @@ const OrderDetails = () => {
   const callMenuItem = (supportInfo: SupportModel) => [
     {
       image: '/images/callCustomer.svg',
-      text: 'Call Customer Service',
+      text: 'Call for urgent assistance',
       onClick: () => handleCallCustomer(supportInfo.phone)
     },
     {
       image: '/images/emailCustomer.svg',
-      text: 'Email Customer Service',
+      text: 'Email for enquiries',
       onClick: () => handleEmailCustomer(supportInfo.email)
     }
   ]
@@ -740,21 +740,57 @@ const OrderDetails = () => {
             <Flex>
               <Image
                 mr={'15px'}
-                height={['60px', '80px', '80px', '80px']}
-                w={['40px', '80px', '80px', '80px']}
+                height={'100px'}
+                w={'100px'}
                 src={data.statusData[0]?.message?.order?.items[0]?.images?.[0].url}
                 alt="product image"
               />
               <Box w={'100%'}>
                 <Box
                   pt={'unset'}
-                  pb={4}
+                  pb={'10px'}
                 >
                   <Typography
+                    style={{
+                      display: '-webkit-box',
+                      WebkitLineClamp: 2,
+                      WebkitBoxOrient: 'vertical',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis'
+                    }}
                     variant="subTitleSemibold"
                     dataTest={testIds.orderDetailspage_productName}
                     text={data.statusData[0]?.message?.order?.items[0]?.name}
                   />
+                  <Box mt="10px">
+                    <Typography
+                      style={{
+                        display: '-webkit-box',
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: 'vertical',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis'
+                      }}
+                      fontSize="12px"
+                      // dataTest={testIds.orderDetailspage_productDesc}
+                      text={data.statusData[0]?.message?.order?.items[0]?.short_desc}
+                    />
+                  </Box>
+                  <Flex mt="10px">
+                    <Typography
+                      fontSize="12px"
+                      variant="subTitleSemibold"
+                      // dataTest={testIds.orderDetailspage_productQuantity}
+                      text={'Quantity :'}
+                    />
+                    <Typography
+                      style={{ marginLeft: '8px' }}
+                      fontSize="12px"
+                      // dataTest={testIds.orderDetailspage_productQuantity}
+                      // text={data.statusData[0]?.message?.order?.items[0]?.quantity}
+                      text={`${data.statusData[0]?.message?.order?.items[0]?.quantity?.selected.count} unit`}
+                    />
+                  </Flex>
                 </Box>
 
                 <Flex
@@ -763,10 +799,12 @@ const OrderDetails = () => {
                   alignItems={'center'}
                 >
                   <Typography
-                    variant="subTitleRegular"
-                    text={t.placedAt}
+                    fontSize="10px"
+                    variant="subTitleSemibold"
+                    text={`${t.placedAt} :`}
                   />
                   <Typography
+                    fontSize="10px"
                     variant="subTitleRegular"
                     dataTest={testIds.orderDetailspage_productPlacedAt}
                     text={formatTimestamp(created_at)}
@@ -800,7 +838,7 @@ const OrderDetails = () => {
                   <Text
                     as={Typography}
                     // TODO
-                    text={`Order Id: ${orderMetaData.orderIds[0].slice(0, 5)}...`}
+                    text={`Order Id: ${orderMetaData.orderIds[0]}`}
                     dataTest={testIds.orderDetailspage_orderId}
                     fontSize="17px"
                     fontWeight="600"
@@ -1085,13 +1123,14 @@ const OrderDetails = () => {
                   m="20px"
                   height="124px"
                   resize="none"
-                  placeholder="Please specify the reason"
+                  fontSize={'12px'}
+                  placeholder="If you chose 'Other', please specify the reason"
                   boxShadow="0px 4px 6px -1px rgba(0, 0, 0, 0.1), 0px 2px 4px -2px rgba(0, 0, 0, 0.1)"
                 />
                 <Box m="20px">
                   <BecknButton
                     disabled={uiState.isProceedDisabled}
-                    children="Proceed"
+                    children="Confirm Cancellation"
                     className="checkout_btn"
                     handleClick={() => {
                       dispatch(statusActions.addStatusResponse({ statusResponse: data.statusData }))
