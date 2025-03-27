@@ -35,7 +35,7 @@ const BecknButton: React.FC<ButtonProps> = ({
       isLoading={isLoading}
       color={color}
       data-test={dataTest}
-      sx={sx}
+      borderWidth="1px"
     >
       {children ? children : text}
     </Button>

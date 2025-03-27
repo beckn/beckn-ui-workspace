@@ -412,6 +412,12 @@ select:-webkit-autofill:focus {
 .product-text .chakra-text {
   margin-bottom: unset !important;
 }
+.product-price .chakra-text,
+.product-star-rating .chakra-text,
+.custom-product-info .chakra-text {
+  flex-wrap: wrap;
+  font-size: 13px !important;
+}
 .order-summary_orderSummaryContainer__v8MgZ {
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1) !important;
   background-color: #fff !important;
@@ -454,6 +460,11 @@ select:-webkit-autofill:focus {
 @media only screen and (max-width: 370px) {
   .mytrade-status {
     gap: 2px !important;
+  }
+  .product-price .chakra-text,
+  .product-star-rating .chakra-text,
+  .custom-product-info .chakra-text {
+    font-size: 11px !important;
   }
 }
 .css-1530p3w:active,

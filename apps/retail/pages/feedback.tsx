@@ -93,25 +93,19 @@ const Feedback = () => {
   return (
     <Box
       className="hideScroll"
-      maxH={'calc(100vh - 100px)'}
+      maxH={'calc(100vh - 60px)'}
       overflowY="scroll"
       display={{ base: 'block', lg: 'flex' }}
       justifyContent="space-around"
       padding={{ base: '0 10px', lg: '3rem' }}
       // alignItems="center"
+      mt="-40px"
     >
       <Box mb={'10px'}>
-        <Image
-          src={feedbackImg}
-          margin={'0 auto'}
-          data-test={testIds.feedback_image}
-        />
-      </Box>
-      <Box>
         <Box
-          pt={{ base: '2rem', lg: '0' }}
+          // pt={{ base: '2rem', lg: '0' }}
           textAlign={{ base: 'center', lg: 'left' }}
-          pb={'15px'}
+          pb={'35px'}
           display={{ base: 'block', lg: 'flex' }}
           flexDir="column"
           gap="1rem"
@@ -139,7 +133,13 @@ const Feedback = () => {
             dataTest={testIds.feedbackPage_pleaseShareYourFeedback}
           />
         </Box>
-
+        <Image
+          src={feedbackImg}
+          margin={'0 auto'}
+          data-test={testIds.feedback_image}
+        />
+      </Box>
+      <Box>
         <Box>
           <StarRating
             ratingText={t.rateDeliveryExperience}

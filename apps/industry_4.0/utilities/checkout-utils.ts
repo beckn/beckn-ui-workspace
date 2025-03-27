@@ -178,12 +178,12 @@ export const getPayloadForInitRequest = async (selectData: ParsedItemModel, ship
   }
 }
 
-export const getPaymentBreakDown = (initData: InitResponseModel[] | StatusResponseModel[]) => {
+export const getPaymentBreakDown = (initData: InitResponseModel[] | StatusResponseModel[], quantity?: number) => {
   const quote = initData[0].message.order.quote
   const breakUp = quote.breakup
   const totalPricewithCurrent = {
     currency: quote.price.currency,
-    value: quote.price.value
+    value: quantity && quantity > 1 ? (parseFloat(quote.price.value) * quantity).toString() : quote.price.value
   }
 
   const breakUpMap: Record<string, any> = {}
@@ -196,7 +196,7 @@ export const getPaymentBreakDown = (initData: InitResponseModel[] | StatusRespon
 
     breakUpMap[title] = {
       currency: currency,
-      value: value
+      value: quantity && quantity > 1 ? (parseFloat(value) * quantity).toString() : value
     }
   })
 

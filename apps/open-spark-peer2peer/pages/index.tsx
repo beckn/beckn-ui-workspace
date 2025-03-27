@@ -9,7 +9,6 @@ import { LoaderWithMessage, Typography } from '@beckn-ui/molecules'
 import { Box, Flex, HStack, Image, Grid, SkeletonText, useTheme } from '@chakra-ui/react'
 import CustomeDateInput from '@components/dateRangePicker/CustomeDateInput'
 import SelectDate from '@components/dateRangePicker/SelectDate'
-import { QuestionOutlineIcon } from '@chakra-ui/icons'
 import { LiaPenSolid } from 'react-icons/lia'
 import EmptyCurrentTrade from '@components/currentTrade/EmptyCurrentTrade'
 import CurrentTrade from '@components/currentTrade/CurrentTrade'
@@ -51,7 +50,19 @@ const Dashboard = () => {
 
   const [endDate, setEndDate] = useState<string>(today)
   const [totalEnergyUnits, setTotalEnergyUnits] = useState<number>(0)
-  const [status, setStatus] = useState<string>('CLOSED')
+  const [status, setStatus] = useState<string>(() => {
+    // Attempt to load cached market status from localStorage first
+    try {
+      const cachedStatus = localStorage.getItem('market-status')
+      if (cachedStatus) {
+        const parsedStatus = JSON.parse(cachedStatus)
+        return parsedStatus.status || 'CLOSED'
+      }
+    } catch (error) {
+      console.error('Error parsing cached market status:', error)
+    }
+    return 'CLOSED'
+  })
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
   const bearerToken = Cookies.get('p2pAuthToken') || ''
   const [isTradeLodaing, setIsTradeLoading] = useState(false)
@@ -83,6 +94,13 @@ const Dashboard = () => {
     setEndDate(end)
     handleModalClose()
   }
+
+  useEffect(() => {
+    // Clear only form-related localStorage items instead of everything
+    localStorage.removeItem('energyFormData_BUY')
+    localStorage.removeItem('energyFormData_SELL')
+    // Keep market-status and other important data
+  }, [])
 
   const getDashboardDetails = useCallback(async () => {
     const response: any = await tradeDashboard({
@@ -162,22 +180,25 @@ const Dashboard = () => {
   }
 
   const getmarketStatus = async () => {
-    const response = await axios.get(`${strapiUrl}/api/market-status`, {
-      withCredentials: true
-    })
+    try {
+      const response = await axios.get(`${strapiUrl}/api/market-status`, {
+        withCredentials: true
+      })
 
-    const result = response.data.data.attributes
-    setStatus(result.status)
-    setStartTime(result.updatedAt)
-    localStorage.setItem('market-status', JSON.stringify({ status: result.status, startTime: result.updatedAt }))
+      const result = response.data.data.attributes
+      setStatus(result.status)
+      setStartTime(result.updatedAt)
+      localStorage.setItem('market-status', JSON.stringify({ status: result.status, startTime: result.updatedAt }))
+    } catch (error) {
+      console.error('Error fetching market status:', error)
+      // If there's an error, don't update the status, keep using what we have
+    }
   }
 
   useEffect(() => {
-    const prevMarketStatus = JSON.parse(localStorage.getItem('market-status')!)
-    if (prevMarketStatus) {
-      setStatus(prevMarketStatus.status)
-      setStartTime(prevMarketStatus.startTime)
-    }
+    // Immediately fetch market status when component mounts
+    getmarketStatus()
+
     if (intervalRef.current) {
       clearInterval(intervalRef.current)
     }
@@ -188,6 +209,7 @@ const Dashboard = () => {
       }, 5000)
     }
     startPolling()
+
     if (role === ROLE.BUY) {
       fetchLastTradeData()
     } else if (role === ROLE.SELL) {
@@ -387,9 +409,8 @@ const Dashboard = () => {
                         fontWeight="600"
                         dataTest={testIds.current_trade}
                       />
-                      <QuestionOutlineIcon />
                     </HStack>
-                    {role === ROLE.SELL && currentTradeData.length !== 0 && status !== 'CLOSED' && (
+                    {role === ROLE.SELL && currentTradeData.length !== 0 && (
                       <LiaPenSolid
                         data-test={testIds.current_trade_edit_btn}
                         cursor={'pointer'}
@@ -400,6 +421,7 @@ const Dashboard = () => {
                               tradeId: currentTradeData[0]?.id,
                               quantity: currentTradeData[0].quantity,
                               price: currentTradeData[0].price,
+                              status: status,
                               preferencesTags: JSON.stringify({
                                 solar: preferencesTags.cred_required,
                                 trustedSource: preferencesTags.trusted_source
@@ -409,7 +431,7 @@ const Dashboard = () => {
                         }
                       />
                     )}
-                    {role === ROLE.BUY && currentTradeData.length !== 0 && status !== 'CLOSED' && (
+                    {role === ROLE.BUY && currentTradeData.length !== 0 && (
                       <LiaPenSolid
                         data-test={testIds.current_trade_edit_btn}
                         cursor={'pointer'}
@@ -420,6 +442,7 @@ const Dashboard = () => {
                               tradeId: currentTradeData[0]?.id,
                               quantity: currentTradeData[0].quantity,
                               price: currentTradeData[0].price,
+                              status: status,
                               preferencesTags: JSON.stringify({
                                 solar: preferencesTags.cred_required,
                                 trustedSource: preferencesTags.trusted_source
@@ -480,9 +503,14 @@ const Dashboard = () => {
                 )}
               </Box>
               <BecknButton
-                disabled={status === 'CLOSED'}
+                // disabled={status === 'CLOSED'}
                 children={role === ROLE.BUY ? 'Buy' : 'Sell'}
-                handleClick={() => router.push(role === ROLE.SELL ? '/sellingPreference' : '/buyingPreference')}
+                handleClick={() =>
+                  router.push({
+                    pathname: role === ROLE.SELL ? '/sellingPreference' : '/buyingPreference',
+                    query: { status }
+                  })
+                }
                 sx={{
                   marginTop: '1rem'
                 }}

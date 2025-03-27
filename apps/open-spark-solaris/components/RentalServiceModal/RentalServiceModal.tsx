@@ -34,7 +34,7 @@ import { ItemMetaData } from '@lib/types/becknDid'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import CustomDatePicker from '@components/dateTimePicker/customDatePicker'
 import CustomTimePicker from '@components/dateTimePicker/customTimePicker'
-import { validateStartEndTime } from '@utils/general'
+import { roundToNextHour, validateStartEndTime } from '@utils/general'
 import { FiPlusCircle } from 'react-icons/fi'
 import pako from 'pako'
 import { QrReader } from 'react-qr-reader'
@@ -87,7 +87,10 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
   const [selectedBattery, setSelectedBattery] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [price, setPrice] = useState<string>('100')
-  const [date, setDate] = useState<string>(new Date().toISOString())
+  const [startDate, setStartDate] = useState<string>(roundToNextHour(new Date()).toISOString())
+  const [endDate, setEndDate] = useState<string>(
+    roundToNextHour(new Date(new Date(startDate).setHours(new Date(startDate).getHours() + 1))).toISOString()
+  )
   const [confirmResOfWalletCatalogue, setConfirmResOfWalletCatalogue] = useState<any>(null)
   const [confirmResOfQRScannedData, setConfirmResOfQRScannedData] = useState<any>(null)
   const [showTimeError, setShowTimeError] = useState(false)
@@ -234,10 +237,9 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
           data: [{ ...confirmRes.data.confirmDetails[0], message: confirmRes.data.confirmDetails[0].message.order }]
         },
         walletId: user?.deg_wallet?.deg_wallet_id,
-        startTime: `${Math.floor(new Date(fromTime).getTime() / 1000)}`,
-        endTime: `${Math.floor(new Date(toTime).getTime() / 1000)}`,
-        price: price.toString(),
-        date: date
+        startTime: `${new Date(startDate).getTime() / 1000}`,
+        endTime: `${new Date(endDate).getTime() / 1000}`,
+        price: price.toString()
       }
 
       try {
@@ -301,19 +303,6 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
   }
   console.log(batteryOptions)
 
-  // Add this helper function to round up time to nearest hour
-  const roundToNextHour = (date: Date) => {
-    const roundedDate = new Date(date)
-    // If minutes are not 0, round up to next hour
-    if (roundedDate.getMinutes() > 0) {
-      roundedDate.setHours(roundedDate.getHours() + 1)
-    }
-    roundedDate.setMinutes(0)
-    roundedDate.setSeconds(0)
-    roundedDate.setMilliseconds(0)
-    return roundedDate
-  }
-
   // Initialize with rounded current time
   const [fromTime, setFromTime] = useState<Date>(roundToNextHour(new Date()))
   const [toTime, setToTime] = useState<Date>(() => {
@@ -349,6 +338,67 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
     return timeToCheck.getTime() < now.getTime()
   }
 
+  const getMinTimeForStartDate = () => {
+    const now = new Date()
+    const selectedDate = new Date(startDate)
+    const isToday = now.toDateString() === selectedDate.toDateString()
+
+    return isToday ? now : new Date(selectedDate.setHours(0, 0, 0, 0))
+  }
+
+  const getMinDateForEndDate = () => {
+    const selectedDate = new Date(startDate)
+    if (selectedDate.getHours() === 23) {
+      selectedDate.setDate(selectedDate.getDate() + 1)
+      selectedDate.setHours(0, 0, 0, 0)
+    }
+    return selectedDate
+  }
+
+  const getMinTimeForEndDate = () => {
+    const start = new Date(startDate)
+    const end = new Date(endDate)
+    const isSameDay = start.toDateString() === end.toDateString()
+
+    if (isSameDay) {
+      let hours = start.getHours() + 1
+      if (hours >= 24) {
+        start.setDate(start.getDate() + 1)
+        hours = 0
+      }
+      start.setHours(hours, 0, 0, 0)
+      return start
+    }
+    end.setHours(0, 0, 0, 0)
+    return end
+  }
+
+  const handleStartDateChange = (date: Date | null) => {
+    if (!date) return
+    const selectedDate = new Date(date)
+
+    const newEndDate = new Date(selectedDate)
+    const selectedHours = selectedDate.getHours()
+    if (selectedHours === 23) {
+      newEndDate.setDate(newEndDate.getDate() + 1)
+      newEndDate.setHours(0, 0, 0, 0)
+    } else {
+      newEndDate.setHours(selectedHours + 1, 0, 0, 0)
+    }
+
+    setStartDate(roundToNextHour(selectedDate).toISOString())
+    setEndDate(roundToNextHour(newEndDate).toISOString())
+    setFromTime(roundToNextHour(selectedDate))
+    setToTime(roundToNextHour(selectedDate))
+  }
+
+  const handleEndDateChange = (date: Date | null) => {
+    if (!date) return
+    setEndDate(roundToNextHour(new Date(date)).toISOString())
+    setFromTime(roundToNextHour(new Date(date)))
+    setToTime(roundToNextHour(new Date(date)))
+  }
+
   const renderContent = () => {
     if (currentView === 'upload') {
       return (
@@ -359,7 +409,7 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
               color="#858585"
               fontSize={'14px'}
             >
-              Click on "Add from wallet" to fetch your battery for renting!
+              {'Click on "Add from wallet" to fetch your battery for renting!'}
             </Text>
           </Box>
 
@@ -523,26 +573,49 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
         <Box mb={6}>
           <Text
             mb={3}
+            mt={3}
             fontSize="16px"
           >
-            Date
+            From Date
           </Text>
           <Flex align="center">
             <CustomDatePicker
-              selected={new Date(date)}
+              selected={new Date(startDate)}
               placeholderText="Select 'from' date"
-              onChange={(date: any) => {
-                setDate(date?.toISOString())
-                setFromTime(roundToNextHour(new Date(date)))
-                setToTime(roundToNextHour(new Date(date)))
-              }}
-              dateFormat="dd-MM-yyyy"
+              showTimeSelect
+              minDate={new Date()}
+              minTime={getMinTimeForStartDate()}
+              maxTime={new Date(new Date().setHours(23, 0, 0, 0))}
+              timeIntervals={60}
+              onChange={handleStartDateChange}
+              dateFormat="dd-MM-yyyy hh:mm a"
+              isInvalid={false}
+            />
+          </Flex>
+          <Text
+            mb={3}
+            mt={3}
+            fontSize="16px"
+          >
+            To Date
+          </Text>
+          <Flex align="center">
+            <CustomDatePicker
+              selected={new Date(endDate)}
+              placeholderText="Select 'to' date"
+              showTimeSelect
+              minDate={getMinDateForEndDate()}
+              minTime={getMinTimeForEndDate()}
+              maxTime={new Date(new Date(startDate).setHours(new Date(startDate).getHours() === 23 ? 47 : 23, 0, 0, 0))}
+              timeIntervals={60}
+              onChange={handleEndDateChange}
+              dateFormat="dd-MM-yyyy hh:mm a"
               isInvalid={false}
             />
           </Flex>
         </Box>
 
-        <Box mb={6}>
+        {/* <Box mb={6}>
           <Text
             mb={3}
             fontSize="16px"
@@ -560,7 +633,7 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
                 onChange={handleFromTimeChange}
                 dateFormat="h:mm aa"
                 isInvalid={false}
-                minTime={isToday(new Date(date)) ? new Date() : undefined}
+                minTime={isToday(new Date(startDate)) ? new Date() : undefined}
               />
               <Text mx={3}>-</Text>
               <CustomTimePicker
@@ -570,7 +643,7 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
                 dateFormat="h:mm aa"
                 isInvalid={false}
                 minTime={
-                  isToday(new Date(date))
+                  isToday(new Date(endDate))
                     ? fromTime.getTime() > new Date().getTime()
                       ? fromTime
                       : new Date()
@@ -579,7 +652,7 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
               />
             </Flex>
           </Flex>
-        </Box>
+        </Box> */}
 
         <Box mb={6}>
           <Text
@@ -614,11 +687,7 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
         <BecknButton
           text={'Submit & Publish'}
           handleClick={handlePublish}
-          disabled={
-            fromTime.getTime() === toTime.getTime() ||
-            (isToday(new Date(date)) && (isTimePast(fromTime) || isTimePast(toTime))) ||
-            toTime.getTime() < fromTime.getTime()
-          }
+          disabled={price === '' || price === '0'}
         />
       </Box>
     )
@@ -712,6 +781,7 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
                 color={activeStep >= index ? '#228B22' : '#6B7280'}
                 textAlign="center"
                 maxW="110px"
+                cursor={index === 0 ? 'pointer' : 'default'}
                 onClick={() => {
                   if (index === 0) {
                     setCurrentView('upload')

@@ -7,9 +7,37 @@ import ActionHeaders from '../components/actionHeaders'
 const ManageNetworkParticipants: React.FC = () => {
   const router = useRouter()
   const [formData, setFormData] = useState({
-    participantId: '',
-    kycComplete: false
+    subscriberId: '',
+    keyId: '',
+    type: '',
+    domain: '',
+    signingPublicKey: '',
+    encrPublicKey: '',
+    validFrom: '',
+    validUntil: '',
+    status: '',
+    createdAt: '',
+    updatedAt: ''
   })
+
+  const [dateError, setDateError] = useState('')
+
+  const typeOptions = [
+    { value: 'BAP', label: 'BAP' },
+    { value: 'BPP', label: 'BPP' }
+  ]
+
+  const domainOptions = [
+    { value: 'retail', label: 'Retail' },
+    { value: 'mobility', label: 'Mobility' },
+    { value: 'healthcare', label: 'Healthcare' },
+    { value: 'education', label: 'Education' }
+  ]
+
+  const statusOptions = [
+    { value: 'published', label: 'Published' },
+    { value: 'unpublished', label: 'Unpublished' }
+  ]
 
   const { mode: queryMode, ...participantDataQuery } = router.query
 
@@ -27,12 +55,43 @@ const ManageNetworkParticipants: React.FC = () => {
 
   const [mode, setMode] = useState<'add' | 'edit' | 'view'>('add')
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type, checked } = e.target
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target
     setFormData({
       ...formData,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: value,
+      ...(name === 'validFrom' && { validUntil: '' })
     })
+
+    // Validate dates when either validFrom or validUntil changes
+    if (name === 'validFrom' || name === 'validUntil') {
+      const fromDate = name === 'validFrom' ? value : formData.validFrom
+      const untilDate = name === 'validUntil' ? value : formData.validUntil
+
+      if (fromDate && untilDate) {
+        const from = new Date(fromDate)
+        const until = new Date(untilDate)
+        if (from > until) {
+          setDateError('Valid From date must be less than or equal to Valid Until date')
+        } else {
+          setDateError('')
+        }
+      } else {
+        setDateError('')
+      }
+    }
+  }
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (dateError) {
+      return
+    }
+    if (mode === 'add') {
+      handleAdd()
+    } else if (mode === 'edit') {
+      handleEdit()
+    }
   }
 
   const handleAdd = () => {
@@ -63,37 +122,182 @@ const ManageNetworkParticipants: React.FC = () => {
       <h2>{en.networkParticipants.title}</h2>
       <form
         className={styles.form}
-        onSubmit={e => {
-          e.preventDefault()
-          if (mode === 'add') {
-            handleAdd()
-          } else if (mode === 'edit') {
-            handleEdit()
-          }
-        }}
+        onSubmit={handleSubmit}
       >
         <div className={styles.row}>
           <div className={styles.row}>
-            <label>{en.networkParticipants.participantId}</label>
+            <label>{en.networkParticipants.subscriberId}</label>
             <input
               type="text"
-              name="participantId"
-              value={formData.participantId}
+              name="subscriberId"
+              value={formData.subscriberId}
               onChange={handleChange}
               disabled={mode === 'view'}
             />
           </div>
           <div className={styles.row}>
-            <label>{en.networkParticipants.kycComplete}</label>
+            <label>{en.networkParticipants.keyId}</label>
             <input
-              type="checkbox"
-              name="kycComplete"
-              checked={formData.kycComplete}
+              type="text"
+              name="keyId"
+              value={formData.keyId}
               onChange={handleChange}
               disabled={mode === 'view'}
             />
           </div>
         </div>
+        <div className={styles.row}>
+          <div className={styles.row}>
+            <label>{en.networkParticipants.type}</label>
+            <select
+              name="type"
+              value={formData.type}
+              onChange={handleChange}
+              disabled={mode === 'view'}
+              className={styles.select}
+            >
+              <option
+                value=""
+                disabled
+              >
+                Select Type
+              </option>
+              {typeOptions.map(option => (
+                <option
+                  key={option.value}
+                  value={option.value}
+                >
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className={styles.row}>
+            <label>{en.networkParticipants.domain}</label>
+            <select
+              name="domain"
+              value={formData.domain}
+              onChange={handleChange}
+              disabled={mode === 'view'}
+              className={styles.select}
+            >
+              <option
+                value=""
+                disabled
+              >
+                Select Domain
+              </option>
+              {domainOptions.map(option => (
+                <option
+                  key={option.value}
+                  value={option.value}
+                >
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+        <div className={styles.row}>
+          <div className={styles.row}>
+            <label>{en.networkParticipants.signingPublicKey}</label>
+            <input
+              type="text"
+              name="signingPublicKey"
+              value={formData.signingPublicKey}
+              onChange={handleChange}
+              disabled={mode === 'view'}
+            />
+          </div>
+          <div className={styles.row}>
+            <label>{en.networkParticipants.encrPublicKey}</label>
+            <input
+              type="text"
+              name="encrPublicKey"
+              value={formData.encrPublicKey}
+              onChange={handleChange}
+              disabled={mode === 'view'}
+            />
+          </div>
+        </div>
+        <div className={styles.row}>
+          <div className={styles.row}>
+            <label>{en.networkParticipants.validFrom}</label>
+            <input
+              type="date"
+              name="validFrom"
+              value={formData.validFrom}
+              onChange={handleChange}
+              disabled={mode === 'view'}
+              min={new Date().toISOString().split('T')[0]}
+            />
+          </div>
+          <div className={styles.row}>
+            <label>{en.networkParticipants.validUntil}</label>
+            <input
+              type="date"
+              name="validUntil"
+              value={formData.validUntil}
+              onChange={handleChange}
+              disabled={mode === 'view'}
+              min={formData.validFrom || new Date().toISOString().split('T')[0]}
+            />
+          </div>
+        </div>
+        {dateError && <div className={styles.error}>{dateError}</div>}
+        <div className={styles.row}>
+          <div className={styles.row}>
+            <label>{en.networkParticipants.status}</label>
+            <select
+              name="status"
+              value={formData.status}
+              onChange={handleChange}
+              disabled={mode === 'view'}
+              className={styles.select}
+            >
+              <option
+                value=""
+                disabled
+              >
+                Select Status
+              </option>
+              {statusOptions.map(option => (
+                <option
+                  key={option.value}
+                  value={option.value}
+                >
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </div>
+          {mode === 'view' && (
+            <div className={styles.row}>
+              <label>{en.networkParticipants.createdAt}</label>
+              <input
+                type="text"
+                name="createdAt"
+                value={formData.createdAt}
+                onChange={handleChange}
+                disabled={true}
+              />
+            </div>
+          )}
+        </div>
+        {mode === 'view' && (
+          <div className={styles.row}>
+            <div className={styles.row}>
+              <label>{en.networkParticipants.updatedAt}</label>
+              <input
+                type="text"
+                name="updatedAt"
+                value={formData.updatedAt}
+                onChange={handleChange}
+                disabled={true}
+              />
+            </div>
+          </div>
+        )}
 
         {mode === 'add' && (
           <div className={styles.row}>

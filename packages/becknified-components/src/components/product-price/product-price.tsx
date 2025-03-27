@@ -63,6 +63,7 @@ const ProductPrice: React.FC<ProductPriceProps> = props => {
         color={color || textColor}
         style={fontStyle}
         fontWeight={fontWeight}
+        fontSize="15px"
       />
     </Flex>
   )

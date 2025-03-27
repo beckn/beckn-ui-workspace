@@ -10,20 +10,16 @@ import { useRouter } from 'next/router'
 type Role =
   | {
       name: string
-      staff: string
+      // staff: string
     }
   | { [key: string]: string | number | boolean }
 
 const Roles: React.FC = () => {
-  const rolesData = [
-    { name: 'test-staff', staff: 'Y' },
-    { name: 'ADMIN', staff: 'Y' },
-    { name: 'USER', staff: 'N' }
-  ]
+  const rolesData = [{ name: 'test-staff' }, { name: 'ADMIN' }, { name: 'USER' }]
 
   const columns = [
-    { header: en.roles.name, accessor: 'name' },
-    { header: en.roles.staff, accessor: 'staff' }
+    { header: en.roles.name, accessor: 'name' }
+    // { header: en.roles.staff, accessor: 'staff' }
   ]
 
   const router = useRouter()

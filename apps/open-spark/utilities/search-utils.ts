@@ -38,7 +38,8 @@ export const parseSearchlist = (data: SearchResponseModel[], type?: 'RENT_AND_HI
           const startTime = formatTime(startTimestamp)
           const endTime = formatTime(endTimestamp)
 
-          const date = formatDate(Number(startTimestamp) * 1000, 'dd/MM/yy')
+          const startDate = formatDate(Number(startTimestamp)!, 'dd/MM/yy')
+          const endDate = formatDate(Number(endTimestamp)!, 'dd/MM/yy')
 
           if (type === 'RENT_AND_HIRE') {
             itemData = {
@@ -49,7 +50,7 @@ export const parseSearchlist = (data: SearchResponseModel[], type?: 'RENT_AND_HI
               rating: '',
               price: { ...item.price, rateLabel: 'per hour' },
               productInfo: {
-                Availability: date,
+                Availability: `${startDate} - ${endDate}`,
                 Time: `${startTime} - ${endTime}`
               }
             }

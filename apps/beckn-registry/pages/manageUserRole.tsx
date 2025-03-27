@@ -15,6 +15,20 @@ const ManageUserRole: React.FC = () => {
     createdAt: ''
   })
 
+  const userOptions = [
+    { value: 'user1', label: 'John Doe' },
+    { value: 'user2', label: 'Jane Smith' },
+    { value: 'user3', label: 'Mike Johnson' },
+    { value: 'user4', label: 'Sarah Williams' }
+  ]
+
+  const roleOptions = [
+    { value: 'admin', label: 'Admin' },
+    { value: 'staff', label: 'Staff' },
+    { value: 'viewer', label: 'Viewer' },
+    { value: 'editor', label: 'Editor' }
+  ]
+
   const { mode: queryMode, ...userRoleDataQuery } = router.query
 
   useEffect(() => {
@@ -31,7 +45,7 @@ const ManageUserRole: React.FC = () => {
     }
   }, [])
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target
     setFormData({
       ...formData,
@@ -74,26 +88,56 @@ const ManageUserRole: React.FC = () => {
         <div className={styles.row}>
           <div className={styles.row}>
             <label>{en.userRoles.user}</label>
-            <input
-              type="text"
+            <select
               name="user"
               value={formData.user}
               onChange={handleChange}
               disabled={mode === 'view'}
-            />
+              className={styles.select}
+            >
+              <option
+                value=""
+                disabled
+              >
+                Select User
+              </option>
+              {userOptions.map(option => (
+                <option
+                  key={option.value}
+                  value={option.value}
+                >
+                  {option.label}
+                </option>
+              ))}
+            </select>
           </div>
           <div className={styles.row}>
             <label>{en.userRoles.role}</label>
-            <input
-              type="text"
+            <select
               name="role"
               value={formData.role}
               onChange={handleChange}
               disabled={mode === 'view'}
-            />
+              className={styles.select}
+            >
+              <option
+                value=""
+                disabled
+              >
+                Select Role
+              </option>
+              {roleOptions.map(option => (
+                <option
+                  key={option.value}
+                  value={option.value}
+                >
+                  {option.label}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
-        {mode !== 'add' && (
+        {mode === 'view' && (
           <>
             <div className={styles.row}>
               <div className={styles.row}>

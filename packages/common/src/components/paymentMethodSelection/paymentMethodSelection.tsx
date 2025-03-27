@@ -64,7 +64,7 @@ const PaymentMethodSelection = (props: PaymentMethodSelectionProps) => {
     >
       <Box
         position={'relative'}
-        maxWidth={{ base: '90%', md: '70%' }}
+        maxWidth={{ base: '100%', md: '70%' }}
         margin="auto"
       >
         <Box>

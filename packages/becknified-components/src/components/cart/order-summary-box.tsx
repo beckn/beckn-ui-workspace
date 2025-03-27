@@ -18,13 +18,14 @@ const OrderSummaryBox: React.FC<OrderSummaryProps> = ({
 }) => {
   return (
     <>
+      <Typography
+        variant="titleRegular"
+        fontWeight="600"
+        text={orderSummaryText}
+        dataTest={dataTestText}
+        className={styles.orderSummaryText}
+      />
       <div className={styles.orderSummaryContainer}>
-        <Typography
-          variant="titleRegular"
-          fontWeight="600"
-          text={orderSummaryText}
-          dataTest={dataTestText}
-        />
         <div className={styles.orderSummaryDetails}>
           <div className={styles.orderSummaryDetailRow}>
             <Typography
@@ -43,6 +44,8 @@ const OrderSummaryBox: React.FC<OrderSummaryProps> = ({
             <ProductPrice {...totalAmount} />
           </div>
         </div>
+      </div>
+      <div className={styles.CTA_btn}>
         <Button
           {...pageCTA}
           dataTest={dataTestCta}
