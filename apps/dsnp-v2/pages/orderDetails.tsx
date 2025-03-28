@@ -53,7 +53,9 @@ import {
   SupportModel,
   UIState,
   formatTimestamp,
-  getPaymentBreakDown
+  getPaymentBreakDown,
+  createPaymentBreakdownMap,
+  getTotalPriceWithCurrency
 } from '@beckn-ui/common'
 
 const statusMap = {
@@ -911,9 +913,9 @@ const OrderDetails = () => {
               <PaymentDetails
                 title="Payment"
                 hasBoxShadow={true}
-                paymentBreakDown={getPaymentBreakDown(data.statusData).breakUpMap}
+                paymentBreakDown={createPaymentBreakdownMap(data.statusData)}
                 totalText="Total"
-                totalValueWithCurrency={getPaymentBreakDown(data.statusData).totalPricewithCurrent}
+                totalValueWithCurrency={getTotalPriceWithCurrency(data.statusData)}
               />
             </Box>
           )}
@@ -927,9 +929,9 @@ const OrderDetails = () => {
                 pt={'6px'}
               >
                 <PaymentDetails
-                  paymentBreakDown={getPaymentBreakDown(data.statusData).breakUpMap}
+                  paymentBreakDown={createPaymentBreakdownMap(data.statusData)}
                   totalText="Total"
-                  totalValueWithCurrency={getPaymentBreakDown(data.statusData).totalPricewithCurrent}
+                  totalValueWithCurrency={getTotalPriceWithCurrency(data.statusData)}
                 />
               </Box>
             </Accordion>

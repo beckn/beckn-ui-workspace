@@ -35,12 +35,14 @@ import BottomModalScan from '@components/BottomModal/BottomModalScan'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import {
   ConfirmResponseModel,
+  createPaymentBreakdownMap,
   DataState,
   DiscoveryRootState,
   feedbackActions,
   formatTimestamp,
   getPayloadForOrderStatus,
   getPaymentBreakDown,
+  getTotalPriceWithCurrency,
   isEmpty,
   OrdersRootState,
   ProcessState,
@@ -953,9 +955,9 @@ const OrderDetails = () => {
               <PaymentDetails
                 title="Payment"
                 hasBoxShadow={true}
-                paymentBreakDown={getPaymentBreakDown(data.statusData).breakUpMap}
+                paymentBreakDown={createPaymentBreakdownMap(data.statusData)}
                 totalText="Total"
-                totalValueWithCurrency={getPaymentBreakDown(data.statusData).totalPricewithCurrent}
+                totalValueWithCurrency={getTotalPriceWithCurrency(data.statusData)}
                 dataTest={testIds.orderDetailspage_paymentDetails}
               />
             </Box>
@@ -970,9 +972,9 @@ const OrderDetails = () => {
                 pt={'6px'}
               >
                 <PaymentDetails
-                  paymentBreakDown={getPaymentBreakDown(data.statusData).breakUpMap}
+                  paymentBreakDown={createPaymentBreakdownMap(data.statusData)}
                   totalText={t.totalText}
-                  totalValueWithCurrency={getPaymentBreakDown(data.statusData).totalPricewithCurrent}
+                  totalValueWithCurrency={getTotalPriceWithCurrency(data.statusData)}
                   dataTest={testIds.orderDetailspage_paymentDetails}
                 />
               </Box>

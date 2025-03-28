@@ -12,9 +12,11 @@ import {
   cartActions,
   checkoutActions,
   CheckoutRootState,
+  createPaymentBreakdownMap,
   DiscoveryRootState,
   getInitPayload,
   getSubTotalAndDeliveryCharges,
+  getTotalPriceWithCurrency,
   ICartRootState,
   isEmpty
 } from '@beckn-ui/common'
@@ -149,19 +151,6 @@ const CheckoutPage = () => {
     return !!initResponse && initResponse.length > 0 && !!initResponse[0].message
   }
 
-  const createPaymentBreakdownMap = () => {
-    const paymentBreakdownMap: Record<string, { value: string; currency: string }> = {}
-    if (isInitResultPresent()) {
-      initResponse[0].message.order.quote.breakup.forEach(breakup => {
-        paymentBreakdownMap[breakup.title] = {
-          value: breakup.price.value,
-          currency: breakup.price.currency
-        }
-      })
-    }
-    return paymentBreakdownMap
-  }
-
   return (
     <Box
       className="hideScroll"
@@ -226,12 +215,9 @@ const CheckoutPage = () => {
             title: 'Payment',
             paymentDetails: {
               hasBoxShadow: false,
-              paymentBreakDown: createPaymentBreakdownMap(),
+              paymentBreakDown: createPaymentBreakdownMap(initResponse),
               totalText: 'Total',
-              totalValueWithCurrency: {
-                value: getSubTotalAndDeliveryCharges(initResponse).subTotal.toString(),
-                currency: getSubTotalAndDeliveryCharges(initResponse).currencySymbol!
-              }
+              totalValueWithCurrency: getTotalPriceWithCurrency(initResponse)
             }
           },
           loader: {

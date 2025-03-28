@@ -5,8 +5,9 @@ import { DOMAIN } from '@lib/config'
 import { useLanguage } from '../hooks/useLanguage'
 import {
   areShippingAndBillingDetailsSame,
+  createPaymentBreakdownMap,
   getInitPayload,
-  getSubTotalAndDeliveryCharges
+  getTotalPriceWithCurrency
 } from '@beckn-ui/common/src/utils'
 import { Checkout } from '@beckn-ui/becknified-components'
 import { useRouter } from 'next/router'
@@ -15,7 +16,7 @@ import { isEmpty } from '@beckn-ui/common/src/utils'
 import { FormField } from '@beckn-ui/molecules'
 import { checkoutActions, CheckoutRootState } from '@beckn-ui/common/src/store/checkout-slice'
 import { useInitMutation } from '@beckn-ui/common/src/services/init'
-import { DiscoveryRootState, ICartRootState, PaymentBreakDownModel } from '@beckn-ui/common'
+import { DiscoveryRootState, ICartRootState } from '@beckn-ui/common'
 import { cartActions } from '@beckn-ui/common/src/store/cart-slice'
 import { testIds } from '@shared/dataTestIds'
 
@@ -29,7 +30,7 @@ export type ShippingFormData = {
 
 const CheckoutPage = () => {
   const cartItems = useSelector((state: ICartRootState) => state.cart.items)
-  const retailName = cartItems[0]?.categories[0]?.name
+  const retailName = cartItems?.[0]?.categories?.[0]?.name || cartItems?.[0]?.name
 
   const theme = useTheme()
   const bgColorOfSecondary = theme.colors.secondary['100']
@@ -147,7 +148,6 @@ const CheckoutPage = () => {
         setBillingFormData(copiedBillingFormData)
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -183,7 +183,6 @@ const CheckoutPage = () => {
     setIsBillingAddressSameAsShippingAddress(
       areShippingAndBillingDetailsSame(isBillingAddressComplete, shippingFormData, billingFormData)
     )
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [billingFormData])
 
   // useEffect(()=>{
@@ -201,19 +200,6 @@ const CheckoutPage = () => {
 
   const isInitResultPresent = () => {
     return !!initResponse && initResponse.length > 0
-  }
-
-  const createPaymentBreakdownMap = () => {
-    const paymentBreakdownMap: PaymentBreakDownModel = {}
-    if (isInitResultPresent()) {
-      initResponse[0].message.order.quote.breakup.forEach(breakup => {
-        paymentBreakdownMap[breakup.title] = {
-          value: breakup.price.value,
-          currency: breakup.price.currency
-        }
-      })
-    }
-    return paymentBreakdownMap
   }
 
   return (
@@ -291,12 +277,9 @@ const CheckoutPage = () => {
             title: t.payment,
             paymentDetails: {
               hasBoxShadow: false,
-              paymentBreakDown: createPaymentBreakdownMap(),
+              paymentBreakDown: createPaymentBreakdownMap(initResponse),
               totalText: t.total,
-              totalValueWithCurrency: {
-                value: getSubTotalAndDeliveryCharges(initResponse).subTotal.toString(),
-                currency: getSubTotalAndDeliveryCharges(initResponse).currencySymbol!
-              }
+              totalValueWithCurrency: getTotalPriceWithCurrency(initResponse)
             }
           },
           loader: {

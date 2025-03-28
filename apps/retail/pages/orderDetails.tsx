@@ -26,7 +26,12 @@ import ViewMoreOrderModal from '@components/orderDetailComponents/ViewMoreOrder'
 // import { statusActions } from '@store/status-slice'
 import { DetailCard, OrderStatusProgress, OrderStatusProgressProps } from '@beckn-ui/becknified-components'
 import useResponsive from '@beckn-ui/becknified-components/src/hooks/useResponsive'
-import { getPaymentBreakDown, isEmpty } from '@beckn-ui/common/src/utils'
+import {
+  createPaymentBreakdownMap,
+  getPaymentBreakDown,
+  getTotalPriceWithCurrency,
+  isEmpty
+} from '@beckn-ui/common/src/utils'
 import { useLanguage } from '@hooks/useLanguage'
 import { getPayloadForOrderStatus, formatTimestamp } from '@beckn-ui/common/src/utils'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
@@ -986,9 +991,9 @@ const OrderDetails = () => {
               <PaymentDetails
                 title="Payment"
                 hasBoxShadow={true}
-                paymentBreakDown={getPaymentBreakDown(data.statusData).breakUpMap}
+                paymentBreakDown={createPaymentBreakdownMap(data.statusData)}
                 totalText="Total"
-                totalValueWithCurrency={getPaymentBreakDown(data.statusData).totalPricewithCurrent}
+                totalValueWithCurrency={getTotalPriceWithCurrency(data.statusData)}
                 dataTest={testIds.orderDetailspage_paymentDetails}
               />
             </Box>
@@ -1003,9 +1008,9 @@ const OrderDetails = () => {
                 pt={'6px'}
               >
                 <PaymentDetails
-                  paymentBreakDown={getPaymentBreakDown(data.statusData).breakUpMap}
+                  paymentBreakDown={createPaymentBreakdownMap(data.statusData)}
                   totalText="Total"
-                  totalValueWithCurrency={getPaymentBreakDown(data.statusData).totalPricewithCurrent}
+                  totalValueWithCurrency={getTotalPriceWithCurrency(data.statusData)}
                   dataTest={testIds.orderDetailspage_paymentDetails}
                 />
               </Box>

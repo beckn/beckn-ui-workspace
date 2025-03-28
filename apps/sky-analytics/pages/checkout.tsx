@@ -3,7 +3,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Box, useTheme } from '@chakra-ui/react'
 import { DOMAIN } from '@lib/config'
 import { useLanguage } from '../hooks/useLanguage'
-import { getInitPayload, getSubTotalAndDeliveryCharges } from '@beckn-ui/common/src/utils'
+import {
+  createPaymentBreakdownMap,
+  getInitPayload,
+  getSubTotalAndDeliveryCharges,
+  getTotalPriceWithCurrency
+} from '@beckn-ui/common/src/utils'
 import { Checkout } from '@beckn-ui/becknified-components'
 import { useRouter } from 'next/router'
 import { ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
@@ -143,21 +148,6 @@ const CheckoutPage = () => {
     return !!initResponse && initResponse.length > 0
   }
 
-  const createPaymentBreakdownMap = () => {
-    const paymentBreakdownMap: PaymentBreakDownModel = {}
-    if (isInitResultPresent()) {
-      initResponse.forEach(initRes => {
-        initRes.message.order.quote?.breakup?.forEach(breakup => {
-          paymentBreakdownMap[breakup.title] = {
-            value: breakup.price.value,
-            currency: breakup.price.currency
-          }
-        })
-      })
-    }
-    return paymentBreakdownMap
-  }
-
   return (
     <Box
       className="hideScroll"
@@ -206,12 +196,9 @@ const CheckoutPage = () => {
             title: t.payment,
             paymentDetails: {
               hasBoxShadow: false,
-              paymentBreakDown: createPaymentBreakdownMap(),
+              paymentBreakDown: createPaymentBreakdownMap(initResponse),
               totalText: t.total,
-              totalValueWithCurrency: {
-                value: getSubTotalAndDeliveryCharges(initResponse).subTotal.toString(),
-                currency: getSubTotalAndDeliveryCharges(initResponse).currencySymbol!
-              }
+              totalValueWithCurrency: getTotalPriceWithCurrency(initResponse)
             }
           },
           loader: {

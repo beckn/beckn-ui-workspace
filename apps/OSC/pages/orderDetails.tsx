@@ -42,10 +42,12 @@ import { DOMAIN } from '@lib/config'
 import PaymentDetails from '@beckn-ui/becknified-components/src/components/checkout/payment-details'
 import BottomModalScan from '../components/BottomModal/BottomModalScan'
 import {
+  createPaymentBreakdownMap,
   feedbackActions,
   formatTimestamp,
   getPayloadForOrderStatus,
   getPaymentBreakDown,
+  getTotalPriceWithCurrency,
   isEmpty,
   OrdersRootState,
   statusActions
@@ -917,9 +919,9 @@ const OrderDetails = () => {
               <PaymentDetails
                 title={t.payment}
                 hasBoxShadow={true}
-                paymentBreakDown={getPaymentBreakDown(data.statusData).breakUpMap}
+                paymentBreakDown={createPaymentBreakdownMap(data.statusData)}
                 totalText={t.total}
-                totalValueWithCurrency={getPaymentBreakDown(data.statusData).totalPricewithCurrent}
+                totalValueWithCurrency={getTotalPriceWithCurrency(data.statusData)}
                 dataTest={testIds.orderDetailspage_paymentDetails}
               />
             </Box>
@@ -934,9 +936,9 @@ const OrderDetails = () => {
                 pt={'6px'}
               >
                 <PaymentDetails
-                  paymentBreakDown={getPaymentBreakDown(data.statusData).breakUpMap}
+                  paymentBreakDown={createPaymentBreakdownMap(data.statusData)}
                   totalText={t.total}
-                  totalValueWithCurrency={getPaymentBreakDown(data.statusData).totalPricewithCurrent}
+                  totalValueWithCurrency={getTotalPriceWithCurrency(data.statusData)}
                   dataTest={testIds.orderDetailspage_paymentDetails}
                 />
               </Box>

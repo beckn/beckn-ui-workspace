@@ -1,6 +1,12 @@
 import { areObjectPropertiesEqual } from './general'
 import { CurrencyType, ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
-import { CartRetailItem, InitResponseModel, StatusResponseModel } from '../../lib/types'
+import {
+  CartRetailItem,
+  CostBreakdownModel,
+  InitResponseModel,
+  PaymentBreakDownModel,
+  StatusResponseModel
+} from '../../lib/types'
 
 export const extractAddressComponents = (result: google.maps.GeocoderResult) => {
   let country = 'IN',
@@ -170,4 +176,24 @@ export const getOrderDetailsPaymentBreakDown = (statusData: StatusResponseModel[
   })
 
   return { breakUpMap, totalPricewithCurrent }
+}
+
+export const createPaymentBreakdownMap = (initResponse: InitResponseModel[] | StatusResponseModel[]) => {
+  const paymentBreakdownMap: PaymentBreakDownModel = {}
+  if (initResponse && initResponse.length > 0) {
+    initResponse?.[0]?.message?.order?.quote?.breakup?.forEach(breakup => {
+      paymentBreakdownMap[breakup.title] = {
+        value: breakup.price.value,
+        currency: breakup.price.currency
+      }
+    })
+  }
+  return paymentBreakdownMap
+}
+
+export const getTotalPriceWithCurrency = (initResponse: InitResponseModel[] | StatusResponseModel[]) => {
+  return {
+    value: initResponse?.[0]?.message?.order?.quote?.price?.value,
+    currency: initResponse?.[0]?.message?.order?.quote?.price?.currency
+  }
 }

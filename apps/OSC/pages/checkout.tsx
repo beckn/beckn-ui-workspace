@@ -10,12 +10,12 @@ import {
   cartActions,
   checkoutActions,
   CheckoutRootState,
+  createPaymentBreakdownMap,
   DiscoveryRootState,
   getInitPayload,
-  getSubTotalAndDeliveryCharges,
+  getTotalPriceWithCurrency,
   ICartRootState,
-  isEmpty,
-  PaymentBreakDownModel
+  isEmpty
 } from '@beckn-ui/common'
 
 import { Checkout } from '@beckn-ui/becknified-components'
@@ -211,19 +211,6 @@ const CheckoutPage = () => {
     return !!initResponse && initResponse.length > 0
   }
 
-  const createPaymentBreakdownMap = () => {
-    const paymentBreakdownMap: PaymentBreakDownModel = {}
-    if (isInitResultPresent()) {
-      initResponse[0].message.order.quote.breakup.forEach(breakup => {
-        paymentBreakdownMap[breakup.title] = {
-          value: breakup.price.value,
-          currency: breakup.price.currency
-        }
-      })
-    }
-    return paymentBreakdownMap
-  }
-
   if (isLoading) {
     return (
       <Box
@@ -315,12 +302,9 @@ const CheckoutPage = () => {
             title: t.payment,
             paymentDetails: {
               hasBoxShadow: false,
-              paymentBreakDown: createPaymentBreakdownMap(),
+              paymentBreakDown: createPaymentBreakdownMap(initResponse),
               totalText: t.total,
-              totalValueWithCurrency: {
-                value: getSubTotalAndDeliveryCharges(initResponse).subTotal.toString(),
-                currency: getSubTotalAndDeliveryCharges(initResponse).currencySymbol!
-              }
+              totalValueWithCurrency: getTotalPriceWithCurrency(initResponse)
             }
           },
           loader: {

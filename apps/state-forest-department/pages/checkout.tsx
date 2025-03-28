@@ -3,15 +3,14 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Box, useTheme } from '@chakra-ui/react'
 import { DOMAIN } from '@lib/config'
 import { useLanguage } from '../hooks/useLanguage'
-import { getInitPayload, getSubTotalAndDeliveryCharges } from '@beckn-ui/common/src/utils'
+import { createPaymentBreakdownMap, getInitPayload, getTotalPriceWithCurrency } from '@beckn-ui/common/src/utils'
 import { Checkout } from '@beckn-ui/becknified-components'
 import { useRouter } from 'next/router'
 import { ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
-import { isEmpty } from '@beckn-ui/common/src/utils'
 import { FormField } from '@beckn-ui/molecules'
 import { checkoutActions, CheckoutRootState } from '@beckn-ui/common/src/store/checkout-slice'
 import { useInitMutation } from '@beckn-ui/common/src/services/init'
-import { DiscoveryRootState, ICartRootState, ParsedItemModel, PaymentBreakDownModel } from '@beckn-ui/common'
+import { DiscoveryRootState, ICartRootState } from '@beckn-ui/common'
 import { cartActions } from '@beckn-ui/common/src/store/cart-slice'
 import { testIds } from '@shared/dataTestIds'
 
@@ -143,21 +142,6 @@ const CheckoutPage = () => {
     return !!initResponse && initResponse.length > 0
   }
 
-  const createPaymentBreakdownMap = () => {
-    const paymentBreakdownMap: PaymentBreakDownModel = {}
-    if (isInitResultPresent()) {
-      initResponse.forEach(initRes => {
-        initRes.message.order.quote?.breakup?.forEach(breakup => {
-          paymentBreakdownMap[breakup.title] = {
-            value: breakup.price.value,
-            currency: breakup.price.currency
-          }
-        })
-      })
-    }
-    return paymentBreakdownMap
-  }
-
   return (
     <Box
       className="hideScroll"
@@ -206,12 +190,9 @@ const CheckoutPage = () => {
             title: t.payment,
             paymentDetails: {
               hasBoxShadow: false,
-              paymentBreakDown: createPaymentBreakdownMap(),
+              paymentBreakDown: createPaymentBreakdownMap(initResponse),
               totalText: t.total,
-              totalValueWithCurrency: {
-                value: getSubTotalAndDeliveryCharges(initResponse).subTotal.toString(),
-                currency: getSubTotalAndDeliveryCharges(initResponse).currencySymbol!
-              }
+              totalValueWithCurrency: getTotalPriceWithCurrency(initResponse)
             }
           },
           loader: {

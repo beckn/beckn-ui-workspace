@@ -49,7 +49,7 @@ const PaymentDetails: React.FC<PaymentDetailsProps> = props => {
                   color: '#000000',
                   fontSize: '15px'
                 }}
-                price={value.value}
+                price={Number(value.value)}
                 currencyType={value.currency}
               />
             </Flex>

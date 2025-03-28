@@ -9,7 +9,7 @@ import useRequest from '../hooks/useRequest'
 
 import { Checkout } from '@beckn-ui/becknified-components'
 
-import { Router, useRouter } from 'next/router'
+import { useRouter } from 'next/router'
 import { ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
 import { FormField } from '@beckn-ui/molecules'
@@ -20,13 +20,13 @@ import {
   cartActions,
   checkoutActions,
   CheckoutRootState,
+  createPaymentBreakdownMap,
   DiscoveryRootState,
   getInitPayload,
   getSelectPayload,
-  getSubTotalAndDeliveryCharges,
+  getTotalPriceWithCurrency,
   ICartRootState,
-  isEmpty,
-  PaymentBreakDownModel
+  isEmpty
 } from '@beckn-ui/common'
 import { testIds } from '@shared/dataTestIds'
 
@@ -244,19 +244,6 @@ const CheckoutPage = () => {
     return !!initResponse && initResponse.length > 0
   }
 
-  const createPaymentBreakdownMap = () => {
-    const paymentBreakdownMap: PaymentBreakDownModel = {}
-    if (isInitResultPresent()) {
-      initResponse[0].message.order.quote.breakup.forEach(breakup => {
-        paymentBreakdownMap[breakup.title] = {
-          value: breakup.price.value,
-          currency: breakup.price.currency
-        }
-      })
-    }
-    return paymentBreakdownMap
-  }
-
   if (isSelectLoading || isLoading) {
     return (
       <Box
@@ -347,12 +334,9 @@ const CheckoutPage = () => {
             title: `${t.paymentText}`,
             paymentDetails: {
               hasBoxShadow: false,
-              paymentBreakDown: createPaymentBreakdownMap(),
+              paymentBreakDown: createPaymentBreakdownMap(initResponse),
               totalText: `${t.total}`,
-              totalValueWithCurrency: {
-                value: getSubTotalAndDeliveryCharges(initResponse).subTotal.toString(),
-                currency: getSubTotalAndDeliveryCharges(initResponse).currencySymbol!
-              }
+              totalValueWithCurrency: getTotalPriceWithCurrency(initResponse)
             }
           },
           loader: {

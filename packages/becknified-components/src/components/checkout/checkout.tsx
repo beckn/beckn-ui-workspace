@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Box, Divider, useBreakpoint } from '@chakra-ui/react'
-import { FormField, Typography, Loader, Button, LoaderWithMessage } from '@beckn-ui/molecules'
+import { FormField, Typography, Loader, Button } from '@beckn-ui/molecules'
 import DetailsCard from './details-card'
 import ItemDetails from './checkout-item-details'
 import ShippingSection from './shipping-section'
-import { CheckoutProps, ItemDetailProps, ShippingFormInitialValuesType } from './checkout.types'
+import { CheckoutProps, ItemDetailProps } from './checkout.types'
 import PaymentDetails from './payment-details'
 import OrderOverview, { RentalItemProps } from './order-overview'
 
@@ -27,11 +27,7 @@ const Checkout: React.FC<CheckoutProps<FormField[]>> = ({
       </Box>
     )
 
-  const { disabled, ...restButtonProps } = pageCTA
-
-  const [shippingData, setShippingData] = useState<ShippingFormInitialValuesType>(
-    shipping.shippingForm.values || ({} as ShippingFormInitialValuesType)
-  )
+  const { ...restButtonProps } = pageCTA
 
   const breakpoint = useBreakpoint()
   const mobileBreakpoints = ['base', 'sm', 'md']
@@ -71,7 +67,7 @@ const Checkout: React.FC<CheckoutProps<FormField[]>> = ({
           </DetailsCard>
         </Box>
         {/* Shipping section */}
-        <ShippingSection {...shipping} />
+        <ShippingSection {...shipping!} />
 
         {/* Billing Section */}
         {items?.type !== 'RENT_AND_HIRE' && billing && Object.keys(billing).length > 0 && (

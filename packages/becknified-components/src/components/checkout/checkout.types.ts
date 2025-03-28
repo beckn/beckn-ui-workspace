@@ -1,11 +1,4 @@
-import {
-  FormData,
-  FormField,
-  ButtonProps,
-  LoaderProps,
-  LoaderWithMessagePropsModel,
-  InputType
-} from '@beckn-ui/molecules'
+import { FormData, FormField, ButtonProps, LoaderProps } from '@beckn-ui/molecules'
 import { CurrencyType } from '../types'
 import { RentalItemProps } from './order-overview'
 
@@ -84,7 +77,7 @@ export interface PaymentDetailsProps {
 export interface CheckoutProps<T extends FormField[]> {
   schema: {
     items?: {
-      type: string
+      type?: string
       title: string
       data?: ItemDetailProps[] | RentalItemProps[]
     }

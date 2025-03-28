@@ -142,7 +142,7 @@ const OrderHistory = () => {
 
                   <Text
                     as={Typography}
-                    text={`${order.attributes.quote.price.currency} ${order.attributes.quote.price.value}`}
+                    text={`${order.attributes.quote.price.currency || 'INR'} ${order.attributes.quote.price.value}`}
                     fontWeight="600"
                     fontSize={'12px'}
                     dataTest={testIds.orderHistory_Price}
