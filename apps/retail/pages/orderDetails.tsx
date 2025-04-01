@@ -118,11 +118,24 @@ const OrderDetails = () => {
     if (data.statusData.length > 0) {
       const newData = data.statusData
         .map((status: StatusResponseModel) => {
-          const { tags } = status?.message?.order
-          const statusKey: string = tags?.[tags?.length - 1].list?.[0].value!
+          const order = status?.message?.order
+          const tags = order?.tags
+          const fulfillmentState = order?.fulfillments?.[0]?.state?.descriptor?.code
+
+          // Try to get status from tags first, then fallback to fulfillment state
+          let statusKey: string | undefined
+          if (tags && tags.length > 0) {
+            const lastTag = tags[tags.length - 1]
+            if (lastTag?.list?.[0]?.value) {
+              statusKey = lastTag.list[0].value
+            }
+          } else if (fulfillmentState) {
+            statusKey = fulfillmentState
+          }
+
           return {
-            label: statusMap[statusKey as StatusKey],
-            statusTime: status?.message?.order?.fulfillments[0]?.state?.updated_at || status?.context?.timestamp
+            label: statusKey ? statusMap[statusKey as StatusKey] : undefined,
+            statusTime: order?.fulfillments?.[0]?.state?.updated_at || status?.context?.timestamp
           }
         })
         .filter(status => status.label)
@@ -250,6 +263,7 @@ const OrderDetails = () => {
 
   // Fetch data on component
   useEffect(() => {
+    localStorage.removeItem('statusResponse')
     const fetchData = () => {
       if (localStorage && localStorage.getItem('selectedOrder')) {
         const selectedOrderData = JSON.parse(localStorage.getItem('selectedOrder') as string)
@@ -624,6 +638,11 @@ const OrderDetails = () => {
     }
   }
 
+  if (!data.statusData?.[0]?.message) {
+    localStorage.removeItem('statusResponse')
+    return <></>
+  }
+
   const ordersLength = data.statusData.length
   const { created_at } = data.statusData[0].message.order
   const { order } = data.statusData[0].message
@@ -725,7 +744,6 @@ const OrderDetails = () => {
       <Box
         display={{ base: 'block', lg: 'flex' }}
         justifyContent="space-between"
-        marginTop="2rem"
         gap="3rem"
       >
         <Box width={{ base: '100%', lg: '80%' }}>
@@ -749,6 +767,7 @@ const OrderDetails = () => {
                 w={'100px'}
                 src={data.statusData[0]?.message?.order?.items[0]?.images?.[0].url}
                 alt="product image"
+                alignSelf={'center'}
               />
               <Box w={'100%'}>
                 <Box
@@ -781,7 +800,12 @@ const OrderDetails = () => {
                       text={data.statusData[0]?.message?.order?.items[0]?.short_desc}
                     />
                   </Box>
-                  <Flex mt="10px">
+                </Box>
+                <Flex
+                  gap={'10px'}
+                  flexDir={'column'}
+                >
+                  <Flex>
                     <Typography
                       fontSize="10px"
                       variant="subTitleSemibold"
@@ -789,32 +813,27 @@ const OrderDetails = () => {
                       text={'Quantity :'}
                     />
                     <Typography
-                      style={{ marginLeft: '8px' }}
+                      style={{ marginLeft: '5px' }}
                       fontSize="12px"
                       // dataTest={testIds.orderDetailspage_productQuantity}
                       // text={data.statusData[0]?.message?.order?.items[0]?.quantity}
-                      text={`${data.statusData[0]?.message?.order?.items[0]?.quantity?.selected.count} unit`}
+                      text={`${(data.statusData[0]?.message?.order?.items[0]?.quantity as QuantityDetails)?.selected.count} unit`}
                     />
                   </Flex>
-                </Box>
 
-                <Flex
-                  pt={'unset'}
-                  justifyContent={'space-between'}
-                  alignItems={'center'}
-                >
-                  <Typography
-                    fontSize="10px"
-                    variant="subTitleSemibold"
-                    sx={{ width: '70px' }}
-                    text={`${t.placedAt} :`}
-                  />
-                  <Typography
-                    fontSize="10px"
-                    variant="subTitleRegular"
-                    dataTest={testIds.orderDetailspage_productPlacedAt}
-                    text={formatTimestamp(created_at)}
-                  />
+                  <Flex>
+                    <Typography
+                      fontSize="12px"
+                      variant="subTitleSemibold"
+                      text={`${t.placedAt} :`}
+                    />
+                    <Typography
+                      style={{ marginLeft: '5px' }}
+                      fontSize="12px"
+                      dataTest={testIds.orderDetailspage_productPlacedAt}
+                      text={formatTimestamp(created_at)}
+                    />
+                  </Flex>
                 </Flex>
               </Box>
             </Flex>
@@ -942,7 +961,6 @@ const OrderDetails = () => {
         <Box
           display="flex"
           flexDir={{ base: 'column', lg: 'column' }}
-          gap="1rem"
         >
           {isDesktop && (
             <ShippingBlock

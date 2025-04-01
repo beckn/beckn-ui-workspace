@@ -19,7 +19,7 @@ const DetailCard: React.FC<DetailsCardProps> = props => {
         }}
         opacity={isDisabled ? 0.5 : 'unset'}
         pointerEvents={isDisabled ? 'none' : 'auto'}
-        margin={'0 0.5rem 20px 0.5rem'}
+        margin={'0 0 20px 0'}
       >
         <CardBody
           className={`${className} card_body`}

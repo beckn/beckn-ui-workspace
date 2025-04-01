@@ -193,7 +193,7 @@ export const createPaymentBreakdownMap = (initResponse: InitResponseModel[] | St
 
 export const getTotalPriceWithCurrency = (initResponse: InitResponseModel[] | StatusResponseModel[]) => {
   return {
-    value: initResponse?.[0]?.message?.order?.quote?.price?.value,
+    value: Number(initResponse?.[0]?.message?.order?.quote?.price?.value),
     currency: initResponse?.[0]?.message?.order?.quote?.price?.currency
   }
 }

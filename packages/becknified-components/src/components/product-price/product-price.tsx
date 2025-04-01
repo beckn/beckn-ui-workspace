@@ -64,6 +64,9 @@ const ProductPrice: React.FC<ProductPriceProps> = props => {
         style={fontStyle}
         fontWeight={fontWeight}
         fontSize="15px"
+        sx={{
+          whiteSpace: 'nowrap'
+        }}
       />
     </Flex>
   )

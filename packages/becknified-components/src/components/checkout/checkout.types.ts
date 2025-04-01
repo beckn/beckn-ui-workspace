@@ -62,7 +62,7 @@ export interface ShippingDetailsProps {
 
 type TotalAmountWithCurreny = {
   currency: CurrencyType
-  value: string
+  value: string | number
 }
 export interface PaymentDetailsProps {
   paymentBreakDown: Record<string, any>
