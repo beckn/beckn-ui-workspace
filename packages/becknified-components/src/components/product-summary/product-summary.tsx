@@ -134,7 +134,7 @@ const ProductSummary: React.FC<ProductSummaryPropsModel> = props => {
               )}
               {starRating && <StarRating {...starRating} />}
               {secondaryDescription && (
-                <Box minHeight="10rem">
+                <Box>
                   <ProductDescription
                     description={secondaryDescription as string}
                     dataTest={dataTestDescription}
