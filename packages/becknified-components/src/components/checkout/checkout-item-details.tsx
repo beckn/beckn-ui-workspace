@@ -60,6 +60,14 @@ const ItemDetails: React.FC<ItemDetailProps> = ({
             alignItems={'center'}
           >
             <Typography
+              style={{
+                display: '-webkit-box',
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: 'vertical',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'normal' // allow line breaks
+              }}
               text={description!}
               dataTest={dataTestDescription}
               variant="subTextRegular"

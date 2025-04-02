@@ -74,7 +74,7 @@ const CartItem: React.FC<CartItemProps> = ({
                   className={Styles.product_name}
                   style={{
                     width: alignment === 'row' ? '100%' : 'auto',
-                    fontSize: '14px'
+                    fontSize: '15px'
                   }}
                   data-test={testIds.cartpage_itemName}
                   title={name}
