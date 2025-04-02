@@ -51,6 +51,8 @@ const en: { [key: string]: string } = {
   orderPlaced: ' Order Placed',
   currencySymbol: '€',
   orderOverview: 'Order Overview',
+  itemDetails: 'Item Details',
+  fullfillmentDetails: 'Fulfillment Details',
   assembly: 'Assembly',
   shipping: 'Shipping',
   billing: 'Billing',

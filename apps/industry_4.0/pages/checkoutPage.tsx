@@ -8,14 +8,14 @@ import DetailsCard from '@beckn-ui/becknified-components/src/components/checkout
 import ShippingSection from '@beckn-ui/becknified-components/src/components/checkout/shipping-section'
 import PaymentDetails from '@beckn-ui/becknified-components/src/components/checkout/payment-details'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
-import { getPayloadForInitRequest, getPaymentBreakDown } from '@utils/checkout-utils'
+import { getPayloadForInitRequest } from '@utils/checkout-utils'
 
 import { useLanguage } from '../hooks/useLanguage'
 import { AssemblyData, ParsedItemModel } from '../types/search.types'
 import { SelectResponseModel } from '../types/select.types'
-import { InitResponseModel } from '../types/init.types'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
 import { testIds } from '@shared/dataTestIds'
+import { createPaymentBreakdownMap, getTotalPriceWithCurrency, InitResponseModel } from '@beckn-ui/common'
 
 const CheckoutPage = () => {
   const { t } = useLanguage()
@@ -207,7 +207,7 @@ const CheckoutPage = () => {
             },
             submitButton: { text: 'Save Shipping Details' },
             values: detailsForm,
-            onChange: data => () => {
+            onChange: () => {
               return
             }
           }}
@@ -266,7 +266,7 @@ const CheckoutPage = () => {
             },
             submitButton: { text: 'Save Billing Details' },
             values: billingFormData,
-            onChange: data => () => {
+            onChange: () => {
               return
             }
           }}
@@ -281,9 +281,9 @@ const CheckoutPage = () => {
             </Box>
             <PaymentDetails
               dataTest={testIds.checkoutpage_paymentDetails}
-              paymentBreakDown={getPaymentBreakDown(initData, assemblyDetails?.quantity).breakUpMap}
+              paymentBreakDown={createPaymentBreakdownMap(initData)}
               totalText={t.total}
-              totalValueWithCurrency={getPaymentBreakDown(initData, assemblyDetails?.quantity).totalPricewithCurrent}
+              totalValueWithCurrency={getTotalPriceWithCurrency(initData)}
             />
           </DetailsCard>
         )}
@@ -292,13 +292,13 @@ const CheckoutPage = () => {
         <BecknButton
           disabled={!initData.length}
           dataTest={testIds.checkoutpage_proceedToCheckout}
-          children="Proceed to Payment"
+          text="Proceed to Payment"
           className="checkout_btn "
           handleClick={() => router.push('/paymentMode')}
         />
         <BecknButton
-          dataTest={testIds.checkoutpage_cancelOrder}
-          children="Cancel Order"
+          dataTest={testIds.checkoutpage_cancelOrder_button}
+          text="Cancel Order"
           variant="outline"
           className="checkout_btn"
           handleClick={() => router.push('/')}

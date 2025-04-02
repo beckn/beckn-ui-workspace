@@ -3,7 +3,7 @@ import axios from '@services/axios'
 import { useDispatch, useSelector } from 'react-redux'
 import { useRouter } from 'next/router'
 
-import { parseSearchlist, SearchAndDiscover } from '@beckn-ui/common'
+import { parseSearchlist, SearchAndDiscover, setLocalStorage } from '@beckn-ui/common'
 import { useLanguage } from '@hooks/useLanguage'
 import { ParsedItemModel } from '@beckn-ui/common/lib/types'
 import { discoveryActions } from '@beckn-ui/common/src/store/discovery-slice'
@@ -44,7 +44,7 @@ const Search = () => {
     const searchKeywords = (searchTerm as SearchTermModel).searchKeyword.split(',').map(keyword => keyword.trim())
 
     // Create search payloads with different combinations
-    const searchPromises = searchKeywords.map((keyword, index) => {
+    const searchPromises = searchKeywords.map(keyword => {
       const searchString = keyword
 
       const searchPayload = {
@@ -94,7 +94,7 @@ const Search = () => {
         dispatch(setOriginalItems(parsedSearchItems))
         setIsLoading(false)
       })
-      .catch(e => {
+      .catch(() => {
         setIsLoading(false)
       })
       .finally(() => {
@@ -105,7 +105,7 @@ const Search = () => {
   useEffect(() => {
     if ((searchTerm as SearchTermModel).searchKeyword) {
       localStorage.removeItem('searchItems')
-      localStorage.setItem('optionTags', JSON.stringify({ name: (searchTerm as SearchTermModel).searchKeyword }))
+      setLocalStorage('optionTags', { name: (searchTerm as SearchTermModel).searchKeyword })
       window.dispatchEvent(new Event('storage-optiontags'))
       fetchDataForSearch()
     }
@@ -133,20 +133,54 @@ const Search = () => {
     dispatch(setItems(originalItems))
   }
 
-  const handleApplyFilter = (sortBy: string) => {
-    const sortedItemsCopy = [...originalItems]
+  const handleApplyFilter = (filters: Record<string, string>) => {
+    let filteredItems = [...originalItems]
 
-    if (sortBy === 'LowtoHigh') {
-      sortedItemsCopy.sort((a, b) => parseFloat(a.item.price.value) - parseFloat(b.item.price.value))
-    } else if (sortBy === 'HightoLow') {
-      sortedItemsCopy.sort((a, b) => parseFloat(b.item.price.value) - parseFloat(a.item.price.value))
-    } else if (sortBy === 'RatingLowtoHigh') {
-      sortedItemsCopy.sort((a, b) => parseFloat(a.item.rating!) - parseFloat(b.item.rating!))
-    } else if (sortBy === 'RatingHightoLow') {
-      sortedItemsCopy.sort((a, b) => parseFloat(b.item.rating!) - parseFloat(a.item.rating!))
+    // Apply search/sort by
+    if (filters.searchBy) {
+      switch (filters.searchBy) {
+        case 'priceHighToLow':
+          filteredItems.sort((a, b) => parseFloat(b.item.price.value) - parseFloat(a.item.price.value))
+          break
+        case 'priceLowToHigh':
+          filteredItems.sort((a, b) => parseFloat(a.item.price.value) - parseFloat(b.item.price.value))
+          break
+        case 'newest':
+          // Sort by created timestamp if available in tags
+          filteredItems.sort((a, b) => {
+            const aTimestamp = a.item.tags?.find(t => t.code === 'created_at')?.list?.[0]?.value || '0'
+            const bTimestamp = b.item.tags?.find(t => t.code === 'created_at')?.list?.[0]?.value || '0'
+            return parseInt(bTimestamp) - parseInt(aTimestamp)
+          })
+          break
+        // For 'relevance', we keep the original order
+        default:
+          break
+      }
     }
 
-    dispatch(setItems(sortedItemsCopy))
+    // Apply service type filter
+    if (filters.serviceType && filters.serviceType !== '') {
+      filteredItems = filteredItems.filter(item => item.item.fulfillments?.some(f => f.type === filters.serviceType))
+    }
+
+    // Apply rating filter
+    if (filters.rating) {
+      const minRating = parseFloat(filters.rating)
+      filteredItems = filteredItems.filter(item => parseFloat(item.item.rating || '0') >= minRating)
+    }
+
+    // Apply deals filter
+    if (filters.deals && filters.deals !== 'all') {
+      filteredItems = filteredItems.filter(item => {
+        const discountTag = item.item.tags?.find(t => t.code === 'discount')
+        const discountValue = discountTag?.list?.[0]?.value
+        const hasDiscount = discountValue ? parseFloat(discountValue) > 0 : false
+        return filters.deals === 'deals' ? hasDiscount : !hasDiscount
+      })
+    }
+
+    setItems(filteredItems)
     setIsFilterOpen(false)
   }
 
@@ -176,7 +210,101 @@ const Search = () => {
         handleFilterOpen,
         handleFilterClose,
         handleResetFilter,
-        handleApplyFilter
+        handleApplyFilter,
+        fields: [
+          {
+            name: 'searchBy',
+            label: 'Search by',
+            type: 'dropdown',
+            defaultValue: 'relevance',
+            options: [
+              {
+                value: 'relevance',
+                label: 'Relevance'
+              },
+              {
+                value: 'priceHighToLow',
+                label: 'Price: High to Low'
+              },
+              {
+                value: 'priceLowToHigh',
+                label: 'Price: Low to High'
+              },
+              {
+                value: 'newest',
+                label: 'Newest First'
+              }
+            ]
+          },
+          {
+            name: 'serviceType',
+            label: 'Service Type',
+            type: 'dropdown',
+            defaultValue: '',
+            options: [
+              {
+                value: '',
+                label: 'Select'
+              },
+              {
+                value: 'delivery',
+                label: 'Delivery'
+              },
+              {
+                value: 'pickup',
+                label: 'Pickup'
+              },
+              {
+                value: 'dineIn',
+                label: 'Dine In'
+              }
+            ]
+          },
+          {
+            name: 'rating',
+            label: 'Rating',
+            type: 'dropdown',
+            defaultValue: '4+',
+            options: [
+              {
+                value: '4+',
+                label: '4+'
+              },
+              {
+                value: '3+',
+                label: '3+'
+              },
+              {
+                value: '2+',
+                label: '2+'
+              },
+              {
+                value: '1+',
+                label: '1+'
+              }
+            ]
+          },
+          {
+            name: 'deals',
+            label: 'Deals & Discounts',
+            type: 'dropdown',
+            defaultValue: 'all',
+            options: [
+              {
+                value: 'all',
+                label: 'All prices'
+              },
+              {
+                value: 'deals',
+                label: 'With Deals'
+              },
+              {
+                value: 'noDeals',
+                label: 'Without Deals'
+              }
+            ]
+          }
+        ]
       }}
       loaderProps={{
         isLoading,
@@ -187,7 +315,7 @@ const Search = () => {
       catalogProps={{
         viewDetailsClickHandler: handleViewDetailsClickHandler
       }}
-      noProduct={key => t.noProduct}
+      noProduct={() => t.noProduct}
     />
   )
 }

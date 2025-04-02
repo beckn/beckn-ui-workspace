@@ -1,8 +1,7 @@
 import React from 'react'
-import { DetailCard } from '@beckn-ui/becknified-components'
-import { Accordion, Typography } from '@beckn-ui/molecules'
-import { Box, Flex, Image } from '@chakra-ui/react'
-import { formatTimestamp, getPaymentBreakDown } from '../../../utils'
+import { Accordion } from '@beckn-ui/molecules'
+import { Box } from '@chakra-ui/react'
+import { createPaymentBreakdownMap, getTotalPriceWithCurrency, getPaymentBreakDown } from '../../../utils'
 import { OrderSummaryProps } from '../orderDetails.types'
 import useResponsive from '@beckn-ui/becknified-components/src/hooks/useResponsive'
 import DetailsPanel from './DetailsPanel'
@@ -43,9 +42,9 @@ const OrderSummary = (props: OrderSummaryProps) => {
           <PaymentDetails
             title="Payment"
             hasBoxShadow={true}
-            paymentBreakDown={getPaymentBreakDown(statusData).breakUpMap}
+            paymentBreakDown={createPaymentBreakdownMap(statusData)}
             totalText="Total"
-            totalValueWithCurrency={getPaymentBreakDown(statusData).totalPricewithCurrent}
+            totalValueWithCurrency={getTotalPriceWithCurrency(statusData)}
           />
         </Box>
       )}
@@ -58,9 +57,9 @@ const OrderSummary = (props: OrderSummaryProps) => {
             pt={'6px'}
           >
             <PaymentDetails
-              paymentBreakDown={getPaymentBreakDown(statusData).breakUpMap}
+              paymentBreakDown={createPaymentBreakdownMap(statusData)}
               totalText="Total"
-              totalValueWithCurrency={getPaymentBreakDown(statusData).totalPricewithCurrent}
+              totalValueWithCurrency={getTotalPriceWithCurrency(statusData)}
             />
           </Box>
         </Accordion>

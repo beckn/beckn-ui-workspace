@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Box, useBreakpoint } from '@chakra-ui/react'
-import { FormField, Typography, Loader, Button, LoaderWithMessage } from '@beckn-ui/molecules'
+import { FormField, Typography, Loader, Button } from '@beckn-ui/molecules'
 import DetailsCard from './details-card'
 import ItemDetails from './checkout-item-details'
 import ShippingSection from './shipping-section'

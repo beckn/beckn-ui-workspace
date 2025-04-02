@@ -1,9 +1,12 @@
-import React from 'react'
-import { Text, Box, Flex, Divider, Image } from '@chakra-ui/react'
+import React, { useState } from 'react'
+import { Box, Flex, Divider, Image, Collapse } from '@chakra-ui/react'
 import { Typography } from '@beckn-ui/molecules'
 import { ItemDetailProps } from './checkout.types'
 import { useBreakpoint } from '@chakra-ui/react'
 import ProductPrice from '../product-price'
+import DownArrowIcon from '@public/images/arrow_drop_down.svg'
+import UpArrowIcon from '@public/images/arrow_drop_up.svg'
+import { formatCurrency } from '../product-price/product-price'
 
 const ItemDetails: React.FC<ItemDetailProps> = ({
   title,
@@ -11,23 +14,24 @@ const ItemDetails: React.FC<ItemDetailProps> = ({
   description,
   image,
   price,
-  currency,
+  currency = 'INR',
+  breakUp,
   dataTestTitle = 'item-title',
   dataTestQuantity = 'item-quantity',
   dataTestDescription = 'item-description'
 }) => {
+  const [isExpanded, setIsExpanded] = useState(false)
   const breakpoint = useBreakpoint()
   const mobileBreakpoints = ['base', 'sm', 'md']
   const isLargeScreen = !mobileBreakpoints.includes(breakpoint)
-
+  console.log(breakUp)
   return (
     <>
       <Box
-        pb={'10px'}
         display="flex"
         width="100%"
       >
-        {isLargeScreen && (
+        {/* {isLargeScreen && (
           <Box mr="1rem">
             <Image
               src={image}
@@ -36,8 +40,9 @@ const ItemDetails: React.FC<ItemDetailProps> = ({
               height="4rem"
             />
           </Box>
-        )}
-        <Box flexGrow={1}>
+        )} */}
+
+        {/* <Box flexGrow={1}>
           <Flex
             pb={'5px'}
             justifyContent={'space-between'}
@@ -75,13 +80,136 @@ const ItemDetails: React.FC<ItemDetailProps> = ({
             <ProductPrice
               price={price}
               currencyType={currency}
-            />
-            {/* <Typography
+            /> */}
+        {/* <Typography
               text={priceWithSymbol}
               color="primary.100"
               variant="subTitleRegular"
             /> */}
+        {/* </Flex>
+        </Box>  */}
+
+        <Box flexGrow={1}>
+          <Flex>
+            <Box
+              mr="1rem"
+              width={'20%'}
+              alignSelf={'center'}
+            >
+              <Image
+                src={image}
+                alt={title.length > 15 ? `${title.substring(0, 15)}...` : title}
+                width="4rem"
+                height="4rem"
+              />
+            </Box>
+            <Flex
+              flexDir={'column'}
+              justifyContent="space-between"
+              alignItems="start"
+              width={'80%'}
+              gap={'1rem'}
+            >
+              <Flex
+                flexDirection={'row'}
+                justifyContent={'space-between'}
+                width={'100%'}
+              >
+                <Typography
+                  text={title}
+                  variant="subTitleRegular"
+                  dataTest={dataTestTitle}
+                  sx={{
+                    noOfLines: 2,
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'normal'
+                  }}
+                />
+                <Image
+                  onClick={() => setIsExpanded(!isExpanded)}
+                  src={isExpanded ? UpArrowIcon : DownArrowIcon}
+                  alt="arrow"
+                  width="10px"
+                  height="10px"
+                  alignSelf={'center'}
+                />
+              </Flex>
+              <Flex
+                justifyContent={'space-between'}
+                width={'100%'}
+              >
+                <Typography
+                  text={`Quantity: ${quantity}`}
+                  variant="subTextRegular"
+                  color="#595959"
+                  fontWeight={'500'}
+                  fontSize="12px"
+                />
+                <ProductPrice
+                  price={price}
+                  currencyType={currency}
+                  fontSize="12px"
+                  fontWeight={'600'}
+                />
+              </Flex>
+            </Flex>
           </Flex>
+
+          <Collapse
+            in={isExpanded}
+            animateOpacity
+          >
+            <Box
+              bg="#F0F0F0"
+              p={'10px 15px'}
+              borderRadius="md"
+              mt={2}
+            >
+              {breakUp &&
+                Object.keys(breakUp).length > 0 &&
+                Object.entries(Object.values(breakUp)[0]).map(([key, value]) => (
+                  <Flex
+                    key={key}
+                    justifyContent="space-between"
+                    mb={2}
+                  >
+                    <Typography
+                      text={key}
+                      variant="subTextRegular"
+                      fontSize="12px"
+                      fontWeight={'400'}
+                    />
+                    <Typography
+                      text={`${formatCurrency(Number(value.value), value.currency)}`}
+                      variant="subTextRegular"
+                      fontSize="12px"
+                      fontWeight={'400'}
+                    />
+                  </Flex>
+                ))}
+
+              <Divider my={2} />
+
+              <Flex
+                justifyContent="space-between"
+                fontWeight="bold"
+              >
+                <Typography
+                  text="Total"
+                  variant="subTitleRegular"
+                  fontSize="12px"
+                  fontWeight={'600'}
+                />
+                <Typography
+                  text={`${formatCurrency(Number(price), currency)}`}
+                  variant="subTitleRegular"
+                  fontSize="12px"
+                  fontWeight={'600'}
+                />
+              </Flex>
+            </Box>
+          </Collapse>
         </Box>
       </Box>
     </>

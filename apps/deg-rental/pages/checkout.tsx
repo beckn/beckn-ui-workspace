@@ -223,16 +223,12 @@ const CheckoutPage = () => {
   // },[])
   const formSubmitHandler = (data: any) => {
     if (data) {
-      const { id, type: fulfillmentType } = selectResponse[0]?.message?.order?.fulfillments[0] || {}
       const payloadPromise =
         type === 'RENT_AND_HIRE'
           ? generateRentalInitPayload(selectRentalResponse, shippingFormData, domain, {
               location: getCountryCode()
             })
-          : getInitPayload(shippingFormData, billingFormData, cartItems, transactionId, domain, {
-              id,
-              type: fulfillmentType
-            })
+          : getInitPayload(shippingFormData, billingFormData, cartItems, transactionId, domain, selectResponse)
       payloadPromise.then(res => {
         return initialize(res)
       })

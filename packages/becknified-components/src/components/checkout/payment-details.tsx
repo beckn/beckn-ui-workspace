@@ -15,6 +15,7 @@ const PaymentDetails: React.FC<PaymentDetailsProps> = props => {
           <Typography
             variant="subTitleRegular"
             fontSize="17px"
+            fontWeight="600"
             text={props.title}
           />
         </Box>
@@ -56,7 +57,12 @@ const PaymentDetails: React.FC<PaymentDetailsProps> = props => {
           )
         })}
 
-        <Divider mb={'15px'} />
+        <Divider
+          width={'unset'}
+          border="0.5px solid #BFBFBF"
+          opacity={0.5}
+          margin={'10px 0px'}
+        />
         <Flex
           justifyContent={'space-between'}
           alignItems={'center'}

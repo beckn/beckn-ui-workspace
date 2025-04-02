@@ -62,7 +62,6 @@ const ScholarshipCard = () => {
     <Box
       className="hideScroll"
       maxH={'calc(100vh - 100px)'}
-      overflowY="scroll"
     >
       {scholarShips.length > 0 ? (
         scholarShips.map(scholarShip => {

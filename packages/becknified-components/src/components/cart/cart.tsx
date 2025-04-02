@@ -1,19 +1,20 @@
 import React from 'react'
 import cl from 'classnames'
-import { Box, calc, Flex, Image } from '@chakra-ui/react'
+import { Box, Flex, Image } from '@chakra-ui/react'
 
 // Custom
 import { CartProps } from './cart.types'
 import CartList from './cart-list'
 import Styles from './cart.module.css'
-import { Loader, Typography, Button as BecknButton } from '@beckn-ui/molecules'
+import { Typography, Button as BecknButton, LoaderWithMessage } from '@beckn-ui/molecules'
 import OrderSummaryBox from './order-summary-box'
 
 const Cart: React.FC<CartProps> = ({
   schema: { loader, cartItems, orderSummary, emptyCard }, // Destructure props
   isLoading = false,
   emptyText = 'Empty cart',
-  className
+  className,
+  dataTestCta = 'cart-order-button'
 }) => {
   if (isLoading) {
     return (
@@ -23,7 +24,7 @@ const Cart: React.FC<CartProps> = ({
         justifyContent="center"
         alignItems={'center'}
       >
-        <Loader {...loader} />
+        <LoaderWithMessage {...loader} />
       </Box>
     )
   }
@@ -89,8 +90,24 @@ const Cart: React.FC<CartProps> = ({
               />
             </Flex>
           )}
-          {cartItems.length > 0 && <CartList cartItems={cartItems} />} {/* If cart is not empty, render cart items */}
-          {cartItems.length > 0 && <OrderSummaryBox {...orderSummary} />}{' '}
+          {cartItems.length > 0 && (
+            <Flex
+              flexDir={'column'}
+              justifyContent={'space-between'}
+              height={'calc(100vh - 110px)'}
+            >
+              <Box>
+                <CartList cartItems={cartItems} /> {/* If cart is not empty, render cart items */}
+                <OrderSummaryBox {...orderSummary} />
+              </Box>
+              <div className={Styles.CTA_btn}>
+                <BecknButton
+                  {...orderSummary.pageCTA}
+                  dataTest={dataTestCta}
+                />
+              </div>
+            </Flex>
+          )}
         </>
       )}
     </Box>

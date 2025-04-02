@@ -64,6 +64,7 @@ const en: { [key: string]: string } = {
   invoiceDetails: 'Invoice Details',
   cardNumber: '**** **** **** 1234',
   procced: 'Proceed',
+  errorText: 'Something went wrong',
   clicktheShopbuttontobuyitemsforthistrip: 'Click ‘Proceed’ to continue',
   toImportthisorderanotherapp: 'to Import this order another app',
   scanthisQR: 'Scan this QR ',
@@ -135,6 +136,7 @@ const en: { [key: string]: string } = {
   errorState1: 'State can only contain letters and spaces',
   errorCity1: 'City can only contain letters and spaces',
   searchPlaceholder: 'Search for Products',
-  noProduct: 'There are no products in this category yet! New products will be added soon.'
+  noProduct: 'There are no products in this category yet! New products will be added soon.',
+  quoteRequestLoader: 'Getting quotes'
 }
 export default en

@@ -13,12 +13,13 @@ import {
   createPaymentBreakdownMap,
   DiscoveryRootState,
   getInitPayload,
+  getItemWiseBreakUp,
   getTotalPriceWithCurrency,
   ICartRootState,
   isEmpty
 } from '@beckn-ui/common'
 
-import { Checkout } from '@beckn-ui/becknified-components'
+import { Checkout, ItemDetailProps } from '@beckn-ui/becknified-components'
 
 import { useRouter } from 'next/router'
 import { ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
@@ -139,7 +140,6 @@ const CheckoutPage = () => {
         setBillingFormData(copiedBillingFormData)
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -175,7 +175,6 @@ const CheckoutPage = () => {
     setIsBillingAddressSameAsShippingAddress(
       areShippingAndBillingDetailsSame(isBillingAddressComplete, shippingFormData, billingFormData)
     )
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [billingFormData])
 
   // useEffect(()=>{
@@ -184,8 +183,7 @@ const CheckoutPage = () => {
 
   const formSubmitHandler = (data: any) => {
     if (data) {
-      const { id, type } = selectResponse[0].message.order.fulfillments[0]
-      getInitPayload(shippingFormData, billingFormData, cartItems, transactionId, DOMAIN, { id, type }).then(res => {
+      getInitPayload(shippingFormData, billingFormData, cartItems, transactionId, DOMAIN, selectResponse).then(res => {
         return initialize(res)
       })
       // TODO :_ To check this again
@@ -241,10 +239,11 @@ const CheckoutPage = () => {
               description: singleItem.short_desc,
               quantity: singleItem.quantity,
               // priceWithSymbol: `${currencyMap[singleItem.price.currency]}${singleItem.totalPrice}`,
-              price: parseFloat(singleItem.price.value) * singleItem.quantity,
-              currency: singleItem.price.currency,
-              image: singleItem.images?.[0].url
-            }))
+              price: parseFloat(selectResponse[0].message.order.quote.price.value),
+              currency: selectResponse[0].message.order.quote.price.currency,
+              image: singleItem.images?.[0].url,
+              breakUp: getItemWiseBreakUp(selectResponse, singleItem.id)
+            })) as ItemDetailProps[]
           },
           shipping: {
             triggerFormTitle: t.change,

@@ -15,11 +15,12 @@ import {
   createPaymentBreakdownMap,
   DiscoveryRootState,
   getInitPayload,
-  getSubTotalAndDeliveryCharges,
+  getItemWiseBreakUp,
   getTotalPriceWithCurrency,
   ICartRootState,
   isEmpty
 } from '@beckn-ui/common'
+import { useLanguage } from '@hooks/useLanguage'
 
 export type ShippingFormData = {
   name: string
@@ -54,6 +55,7 @@ const CheckoutPage = () => {
     pinCode: '110001'
   })
 
+  const { t } = useLanguage()
   const router = useRouter()
   const dispatch = useDispatch()
   const [initialize, { isLoading, isError }] = useInitMutation()
@@ -123,9 +125,7 @@ const CheckoutPage = () => {
 
   const formSubmitHandler = (data: any) => {
     if (data) {
-      const { id, type } = selectResponse[0].message.order.fulfillments[0]
-      console.log('Dank', id, type)
-      getInitPayload(shippingFormData, billingFormData, cartItems, transactionId, DOMAIN, { id, type }).then(res => {
+      getInitPayload(shippingFormData, billingFormData, cartItems, transactionId, DOMAIN, selectResponse).then(res => {
         return initialize(res)
       })
       // TODO :_ To check this again
@@ -155,21 +155,21 @@ const CheckoutPage = () => {
     <Box
       className="hideScroll"
       maxH="calc(100vh - 100px)"
-      overflowY={'scroll'}
     >
       {/* start Item Details */}
       <Checkout
         schema={{
           items: {
-            title: 'Items',
+            title: t.orderOverview,
             data: cartItems.map(singleItem => ({
               title: singleItem.name,
               description: singleItem.short_desc,
               quantity: singleItem.quantity,
               // priceWithSymbol: `${currencyMap[singleItem.price.currency]}${singleItem.totalPrice}`,
-              price: parseFloat(singleItem.price.value) * singleItem.quantity,
-              currency: singleItem.price.currency,
-              image: singleItem.images?.[0].url
+              price: parseFloat(selectResponse[0].message.order.quote.price.value),
+              currency: selectResponse[0].message.order.quote.price.currency,
+              image: singleItem.images?.[0].url,
+              breakUp: getItemWiseBreakUp(selectResponse, singleItem.id)
             }))
           },
           shipping: {
@@ -226,7 +226,6 @@ const CheckoutPage = () => {
           pageCTA: {
             text: 'Proceed to Checkout',
             handleClick: () => {
-              dispatch(cartActions.clearCart())
               router.push('/paymentMode')
             }
           }

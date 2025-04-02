@@ -31,7 +31,7 @@ const StarRating: React.FC<StarRatingProps> = props => {
   const primaryColor = useDefaultColor ? '#F4B73F' : theme.colors.primary['100']
 
   return (
-    <Box mb="20px">
+    <Box mb="6px">
       <Text
         as={Typography}
         fontSize={'15px'}

@@ -1,4 +1,4 @@
-import Router, { useRouter } from 'next/router'
+import Router from 'next/router'
 import React, { useEffect, useState } from 'react'
 import JobDetailsPage from '../components/jobDetails/JobDetailsPage'
 import { ParsedItemModel } from '../types/search.types'

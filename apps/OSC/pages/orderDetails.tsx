@@ -31,7 +31,9 @@ import {
   ProcessState,
   StatusResponseModel,
   SupportModel,
-  DiscoveryRootState
+  StatusKey,
+  statusMap,
+  OrderStatus
 } from '@beckn-ui/common/lib/types'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
 import CallphoneIcon from '../public/images/CallphoneIcon.svg'
@@ -53,14 +55,6 @@ import {
   statusActions
 } from '@beckn-ui/common'
 import { testIds } from '@shared/dataTestIds'
-
-const statusMap = {
-  ArrangingPayment: 'Processing your order',
-  PaymentSettled: 'Ready to ship',
-  Cancelled: 'Order Cancelled!',
-  Shipped: 'Order Shipped',
-  Delivered: 'Order Delivered'
-}
 
 const DELIVERED = 'Delivered'
 const CANCELLED = 'CANCELLED'
@@ -94,9 +88,9 @@ const OrderDetails = () => {
   const { t } = useLanguage()
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const [orderStatusMap, setOrderStatusMap] = useState<any[]>([])
+  const [orderStatusMap, setOrderStatusMap] = useState<OrderStatus[]>([])
+  const [isError, setIsError] = useState(false)
   const { isDesktop } = useResponsive()
-  const { transactionId } = useSelector((state: DiscoveryRootState) => state.discovery)
   const orderMetaData = useSelector((state: OrdersRootState) => state.orders.selectedOrderDetails)
   const dispatch = useDispatch()
   const [currentStatusLabel, setCurrentStatusLabel] = useState('')
@@ -117,15 +111,26 @@ const OrderDetails = () => {
     if (data.statusData.length > 0) {
       const newData = data.statusData
         .map((status: StatusResponseModel) => {
-          const { tags } = status?.message?.order
+          const order = status?.message?.order
+          const tags = order?.tags
+          const fulfillmentState = order?.fulfillments?.[0]?.state?.descriptor?.code
+
+          let statusKey: string | undefined
+          if (tags && tags.length > 0) {
+            const lastTag = tags[tags.length - 1]
+            if (lastTag?.list?.[0]?.value) {
+              statusKey = lastTag.list[0].value
+            }
+          } else if (fulfillmentState) {
+            statusKey = fulfillmentState
+          }
 
           return {
-            label: statusMap[tags[tags.length - 1].list[0].value],
-            // statusTime: status?.message?.order?.fulfillments[0]?.state?.updated_at
+            label: statusKey ? statusMap[statusKey as StatusKey] : '',
             statusTime: status?.message?.order?.fulfillments[0]?.state?.updated_at || status?.context?.timestamp
           }
         })
-        .filter((status: any) => status.label)
+        .filter(status => status.label)
 
       const labelSet = new Set(orderStatusMap.map(status => status.label))
       setOrderStatusMap(prevState => [...prevState, ...newData.filter(status => !labelSet.has(status.label))])
@@ -248,96 +253,66 @@ const OrderDetails = () => {
     }
   ]
 
-  // Fetch data on component
+  // Fetch data
   useEffect(() => {
-    const fetchData = () => {
-      if (localStorage && localStorage.getItem('selectedOrder')) {
-        const selectedOrderData = JSON.parse(localStorage.getItem('selectedOrder') as string)
-        const { bppId, bppUri, orderId } = selectedOrderData
-        const statusPayload = {
-          data: [
-            {
-              context: {
-                transaction_id: uuidv4(),
-                bpp_id: bppId,
-                bpp_uri: bppUri,
-                domain: DOMAIN
-              },
-              message: {
-                order_id: orderId
+    localStorage.removeItem('statusResponse')
+    const fetchData = async () => {
+      try {
+        setUiState(prevState => ({ ...prevState, isLoading: true }))
+
+        let statusPayload
+        if (localStorage.getItem('selectedOrder')) {
+          const selectedOrderData = JSON.parse(localStorage.getItem('selectedOrder') as string)
+          const { bppId, bppUri, orderId } = selectedOrderData
+          statusPayload = {
+            data: [
+              {
+                context: {
+                  transaction_id: uuidv4(),
+                  bpp_id: bppId,
+                  bpp_uri: bppUri,
+                  domain: DOMAIN
+                },
+                message: {
+                  order_id: orderId,
+                  orderId: orderId
+                }
               }
-            }
-          ]
+            ]
+          }
+        } else if (data.confirmData?.length) {
+          statusPayload = getPayloadForOrderStatus(data.confirmData)
+        } else {
+          return
         }
-        setUiState(prevState => ({
+
+        const response = await axios.post(`${apiUrl}/status`, statusPayload)
+
+        if (
+          JSON.stringify(response.data) === '{}' ||
+          response.data?.data?.length === 0 ||
+          !response.data?.data?.[0]?.message
+        ) {
+          setIsError(true)
+          return
+        }
+
+        const resData = response.data.data
+        setData(prevState => ({
           ...prevState,
-          isLoading: true
+          statusData: resData
         }))
-
-        return axios
-          .post(`${apiUrl}/status`, statusPayload)
-          .then(res => {
-            const resData = res.data.data
-            setData(prevState => ({
-              ...prevState,
-              statusData: resData
-            }))
-            localStorage.setItem('statusResponse', JSON.stringify(resData))
-          })
-          .catch(err => {
-            console.error('Error fetching order status:', err)
-          })
-          .finally(() => {
-            setUiState(prevState => ({
-              ...prevState,
-              isLoading: false
-            }))
-
-            setProcessState(prevState => ({
-              ...prevState,
-              apiCalled: true
-            }))
-          })
-      }
-      if (data.confirmData && data.confirmData.length > 0) {
-        const parsedConfirmData: ConfirmResponseModel[] = JSON.parse(localStorage.getItem('confirmResponse') as string)
-        const statusPayload = getPayloadForOrderStatus(parsedConfirmData)
-        setUiState(prevState => ({
-          ...prevState,
-          isLoading: true
-        }))
-
-        return axios
-          .post(`${apiUrl}/status`, statusPayload)
-          .then(res => {
-            const resData = res.data.data
-            setData(prevState => ({
-              ...prevState,
-              statusData: resData
-            }))
-
-            localStorage.setItem('statusResponse', JSON.stringify(resData))
-          })
-          .catch(err => {
-            console.error('Error fetching order status:', err)
-          })
-          .finally(() => {
-            setUiState(prevState => ({
-              ...prevState,
-              isLoading: false
-            }))
-            setProcessState(prevState => ({
-              ...prevState,
-              apiCalled: true
-            }))
-          })
+        localStorage.setItem('statusResponse', JSON.stringify(resData))
+      } catch (error) {
+        console.error('Error fetching order status:', error)
+      } finally {
+        setUiState(prevState => ({ ...prevState, isLoading: false }))
+        setProcessState(prevState => ({ ...prevState, apiCalled: true }))
       }
     }
 
     fetchData()
-
     const intervalId = setInterval(fetchData, 30000)
-
     return () => clearInterval(intervalId)
   }, [apiUrl, data.confirmData])
 
@@ -364,36 +339,31 @@ const OrderDetails = () => {
   }, [isCancelled])
 
   const handleOrderDotsClick = async () => {
-    setUiState(prevState => ({
-      ...prevState,
-      isLoadingForTrackAndSupport: true
-    }))
+    setUiState(prevState => ({ ...prevState, isLoadingForTrackAndSupport: true }))
 
     try {
-      setUiState(prevState => ({
-        ...prevState,
-        isMenuModalOpen: true
-      }))
+      setUiState(prevState => ({ ...prevState, isMenuModalOpen: true }))
 
-      if (data.confirmData && data.confirmData.length > 0) {
-        const { domain, bpp_id, bpp_uri, transaction_id } = data.confirmData[0].context
+      let trackPayload, supportPayload
+      if (data.confirmData?.length) {
+        const { domain, bpp_id, bpp_uri } = data.confirmData[0].context
         const orderId = data.confirmData[0].message.orderId
-        const trackPayload = {
+
+        trackPayload = {
           data: [
             {
               context: {
-                domain: domain,
-                bpp_id: bpp_id,
-                bpp_uri: bpp_uri,
+                domain,
+                bpp_id,
+                bpp_uri,
                 transaction_id: uuidv4()
               },
               orderId
-              // callbackUrl: 'https://dhp-network-bap.becknprotocol.io/track/callback'
             }
           ]
         }
 
-        const supportPayload = {
+        supportPayload = {
           data: [
             {
               context: {
@@ -414,52 +384,31 @@ const OrderDetails = () => {
             }
           ]
         }
-
-        const [trackResponse, supportResponse] = await Promise.all([
-          axios.post(`${apiUrl}/track`, trackPayload),
-          axios.post(`${apiUrl}/support`, supportPayload)
-        ])
-
-        if (!isEmpty(trackResponse.data) && !isEmpty(supportResponse.data)) {
-          setData(prevState => ({
-            ...prevState,
-            trackUrl: trackResponse.data.data[0].message && trackResponse.data.data[0].message.tracking.url,
-            supportData: {
-              email: supportResponse.data.data[0].message && supportResponse.data.data[0].message.support.email,
-              phone: supportResponse.data.data[0].message && supportResponse.data.data[0].message.support.phone
-            }
-          }))
-
-          setUiState(prevState => ({
-            ...prevState,
-            isLoadingForTrackAndSupport: false
-          }))
-        }
       } else if (localStorage.getItem('selectedOrder') && localStorage.getItem('statusResponse')) {
         const selectedOrderData = JSON.parse(localStorage.getItem('selectedOrder') as string)
         const { bppId, bppUri, orderId } = selectedOrderData
         const statusResponseData = JSON.parse(localStorage.getItem('statusResponse') as string)
-        const { domain, transaction_id } = statusResponseData[0].context
-        const trackPayload = {
+        const { domain } = statusResponseData[0].context
+
+        trackPayload = {
           data: [
             {
               context: {
-                domain: domain,
+                domain,
                 bpp_id: bppId,
                 bpp_uri: bppUri,
                 transaction_id: uuidv4()
               },
-              orderId,
-              callbackUrl: 'https://dhp-network-bap.becknprotocol.io/track/callback'
+              orderId
             }
           ]
         }
 
-        const supportPayload = {
+        supportPayload = {
           data: [
             {
               context: {
-                domain: domain,
+                domain,
                 bpp_id: bppId,
                 bpp_uri: bppUri,
                 transaction_id: uuidv4()
@@ -476,7 +425,9 @@ const OrderDetails = () => {
             }
           ]
         }
+      }
 
+      if (trackPayload && supportPayload) {
         const [trackResponse, supportResponse] = await Promise.all([
           axios.post(`${apiUrl}/track`, trackPayload),
           axios.post(`${apiUrl}/support`, supportPayload)
@@ -485,29 +436,89 @@ const OrderDetails = () => {
         if (!isEmpty(trackResponse.data) && !isEmpty(supportResponse.data)) {
           setData(prevState => ({
             ...prevState,
-            trackUrl: trackResponse.data.data[0].message && trackResponse.data.data[0].message.tracking.url,
+            trackUrl: trackResponse.data.data[0].message?.tracking?.url,
             supportData: {
-              email: supportResponse.data.data[0].message && supportResponse.data.data[0].message.support.email,
-              phone: supportResponse.data.data[0].message && supportResponse.data.data[0].message.support.phone
+              email: supportResponse.data.data[0].message?.support?.email,
+              phone: supportResponse.data.data[0].message?.support?.phone
             }
-          }))
-
-          setUiState(prevState => ({
-            ...prevState,
-            isLoadingForTrackAndSupport: false
           }))
         }
       }
-      setUiState(prevState => ({
-        ...prevState,
-        isLoadingForTrackAndSupport: false
-      }))
     } catch (error) {
-      setUiState(prevState => ({
-        ...prevState,
-        isLoadingForTrackAndSupport: false
-      }))
       console.error(error)
+    } finally {
+      setUiState(prevState => ({ ...prevState, isLoadingForTrackAndSupport: false }))
+    }
+  }
+
+  const handleCancelButton = async (
+    confirmData: ConfirmResponseModel[] | null | undefined,
+    statusData: StatusResponseModel[],
+    cancellationReason: string
+  ) => {
+    try {
+      setUiState(prevState => ({ ...prevState, isLoadingForCancel: true }))
+
+      let cancelPayload
+      if (confirmData?.length) {
+        const { bpp_id, bpp_uri, domain } = confirmData[0].context
+        const orderId = confirmData[0].message.orderId
+
+        cancelPayload = {
+          data: [
+            {
+              context: {
+                transaction_id: uuidv4(),
+                bpp_id,
+                bpp_uri,
+                domain
+              },
+              message: {
+                order_id: orderId,
+                cancellation_reason_id: '4',
+                descriptor: {
+                  short_desc: cancellationReason
+                }
+              }
+            }
+          ]
+        }
+      } else if (statusData?.length && localStorage.getItem('selectedOrder')) {
+        const selectedOrderData = JSON.parse(localStorage.getItem('selectedOrder') as string)
+        const { orderId } = selectedOrderData
+        const { bpp_id, bpp_uri, domain } = statusData[0].context
+
+        cancelPayload = {
+          data: [
+            {
+              context: {
+                transaction_id: uuidv4(),
+                bpp_id,
+                bpp_uri,
+                domain
+              },
+              message: {
+                order_id: orderId,
+                cancellation_reason_id: '4',
+                descriptor: {
+                  short_desc: cancellationReason
+                }
+              }
+            }
+          ]
+        }
+      }
+
+      if (cancelPayload) {
+        const cancelResponse = await axios.post(`${apiUrl}/cancel`, cancelPayload)
+        if (cancelResponse.data.data.length > 0) {
+          router.push('/orderCancellation')
+        }
+      }
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setUiState(prevState => ({ ...prevState, isLoadingForCancel: false }))
     }
   }
 
@@ -527,97 +538,33 @@ const OrderDetails = () => {
     )
   }
 
+  if (isError) {
+    dispatch(
+      feedbackActions.setToastData({
+        toastData: {
+          message: 'Error',
+          display: true,
+          type: 'error',
+          description: t.errorText
+        }
+      })
+    )
+    return <></>
+  }
+
   if (!data.confirmData?.length && !localStorage.getItem('selectedOrder')) {
     return <></>
   }
 
-  const handleCancelButton = async (
-    confirmData: ConfirmResponseModel[] | null | undefined,
-    statusData: StatusResponseModel[],
-    cancellationReason: string
-  ) => {
-    try {
-      setUiState(prevState => ({
-        ...prevState,
-        isLoadingForCancel: true
-      }))
-
-      // console.log(confirmData)
-      if (confirmData && confirmData.length > 0) {
-        const { transaction_id, bpp_id, bpp_uri, domain } = confirmData[0].context
-        const orderId = confirmData[0].message.orderId
-        const cancelPayload = {
-          data: [
-            {
-              context: {
-                transaction_id: uuidv4(),
-                bpp_id,
-                bpp_uri,
-                domain
-              },
-              message: {
-                order_id: orderId,
-                cancellation_reason_id: '4',
-                descriptor: {
-                  short_desc: cancellationReason
-                }
-              }
-            }
-          ]
-        }
-
-        const cancelResponse = await axios.post(`${apiUrl}/cancel`, cancelPayload)
-
-        if (cancelResponse.data.data.length > 0) {
-          router.push('/orderCancellation')
-        }
-      } else if (statusData && statusData.length > 0 && localStorage.getItem('selectedOrder')) {
-        const selectedOrderData = JSON.parse(localStorage.getItem('selectedOrder') as string)
-        const { orderId } = selectedOrderData
-        const { transaction_id, bpp_id, bpp_uri, domain } = statusData[0].context
-        const cancelPayload = {
-          data: [
-            {
-              context: {
-                transaction_id: uuidv4(),
-                bpp_id,
-                bpp_uri,
-                domain
-              },
-              message: {
-                order_id: orderId,
-                cancellation_reason_id: '4',
-                descriptor: {
-                  short_desc: cancellationReason
-                }
-              }
-            }
-          ]
-        }
-
-        const cancelResponse = await axios.post(`${apiUrl}/cancel`, cancelPayload)
-        if (cancelResponse.data.data.length > 0) {
-          router.push('/orderCancellation')
-        }
-      }
-    } catch (error) {
-      console.error(error)
-    } finally {
-      setUiState(prevState => ({
-        ...prevState,
-        isLoadingForCancel: false
-      }))
-    }
+  if (!data.statusData?.[0]?.message) {
+    localStorage.removeItem('statusResponse')
+    return <></>
   }
 
-  const ordersLength = data.statusData.length
+  // Data preparation
   const { created_at } = data.statusData[0].message.order
   const { order } = data.statusData[0].message
-  const {
-    billing,
-    fulfillments,
-    quote: { breakup, price }
-  } = order
+  const { billing, fulfillments } = order
   const { address, name, phone } = billing
   const {
     customer: {
@@ -626,15 +573,12 @@ const OrderDetails = () => {
     },
     stops
   } = fulfillments[0]
+
   const {
     location: { address: shipmentAddress },
-    contact: { phone: updateShippingPhone, email: updatedShippingEmail, name: updatedShippingName }
+    contact: { phone: updateShippingPhone, name: updatedShippingName }
   } = stops[0]
 
-  const filteredOrder = data.statusData.filter(res => {
-    const { state } = res.message.order.fulfillments[0]
-    return state && res.message.order.fulfillments[0].state.descriptor.code.toLowerCase() === 'delivered'
-  })
   return (
     <Box
       className="hideScroll"
@@ -721,7 +665,7 @@ const OrderDetails = () => {
                 mr={'15px'}
                 height={['60px', '80px', '80px', '80px']}
                 w={['40px', '80px', '80px', '80px']}
-                src={data.statusData[0]?.message?.order?.items[0]?.images[0].url}
+                src={data.statusData[0]?.message?.order?.items[0]?.images?.[0]?.url}
                 alt="product image"
               />
               <Box w={'100%'}>
@@ -1070,7 +1014,7 @@ const OrderDetails = () => {
                 <Box m="20px">
                   <BecknButton
                     disabled={uiState.isProceedDisabled}
-                    children={t.proceed}
+                    text={t.proceed}
                     className="checkout_btn"
                     handleClick={() => {
                       dispatch(statusActions.addStatusResponse({ statusResponse: data.statusData }))

@@ -142,6 +142,7 @@ interface Order {
   payments: Payment[]
   cancellation_terms: CancellationTerms[]
   type: string
+  status: string
 }
 
 interface Context {

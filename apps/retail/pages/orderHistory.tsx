@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie'
 import { DetailCard } from '@beckn-ui/becknified-components'
-import { Loader, Typography } from '@beckn-ui/molecules'
+import { LoaderWithMessage, Typography } from '@beckn-ui/molecules'
 import { Box, Text, Flex, Image } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import pendingIcon from '../public/images/pendingStatus.svg'
@@ -12,9 +12,13 @@ import EmptyOrder from '@components/orderHistory/emptyOrder'
 import { orderHistoryData } from '@beckn-ui/common/lib/types'
 import { orderActions } from '@beckn-ui/common/src/store/order-slice'
 import { testIds } from '@shared/dataTestIds'
+import { useLanguage } from '@hooks/useLanguage'
+import { formatCurrency } from '@beckn-ui/becknified-components/src/components/product-price/product-price'
 
 const orderStatusMap: Record<string, string> = {
-  'In Review': 'Pending'
+  'In Review': 'Pending',
+  ORDER_DELIVERED: 'Completed',
+  ORDER_CANCELLED: 'Cancelled'
 }
 
 const orderStatusIconMap: Record<string, string> = {
@@ -27,11 +31,12 @@ const OrderHistory = () => {
   const [isLoading, setIsLoading] = useState(true)
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
   const dispatch = useDispatch()
+  const { t } = useLanguage()
   const [error, setError] = useState('')
 
   const bearerToken = Cookies.get('authToken')
   const router = useRouter()
-  console.log(bearerToken)
+
   useEffect(() => {
     const myHeaders = new Headers()
     myHeaders.append('Authorization', `Bearer ${bearerToken}`)
@@ -43,15 +48,13 @@ const OrderHistory = () => {
     fetch(`${strapiUrl}/orders?filters[category]=6&sort[0]=updatedAt:desc`, requestOptions)
       .then(response => response.json())
       .then(result => {
-        console.log('resluttt', result)
         if (result.error) {
           return setError(result.error.message)
         }
-        console.log(result.data.reverse())
         setOrderHistoryList(result.data.reverse())
         setIsLoading(false)
       })
-      .catch(error => {
+      .catch(() => {
         setIsLoading(false)
       })
       .finally(() => setIsLoading(false))
@@ -64,7 +67,10 @@ const OrderHistory = () => {
         height={'calc(100vh - 300px)'}
         alignContent={'center'}
       >
-        <Loader />
+        <LoaderWithMessage
+          loadingText={t.pleaseWait}
+          loadingSubText={''}
+        />
       </Box>
     )
   }
@@ -91,7 +97,6 @@ const OrderHistory = () => {
     <Box
       className="hideScroll"
       maxH={'calc(100vh - 100px)'}
-      overflowY="scroll"
       w={['100%', '100%', '70%', '62%']}
       margin="0 auto"
     >
@@ -142,7 +147,7 @@ const OrderHistory = () => {
 
                   <Text
                     as={Typography}
-                    text={`${order.attributes.quote.price.currency || 'INR'} ${order.attributes.quote.price.value}`}
+                    text={`${formatCurrency(Number(order.attributes.quote.price.value), order.attributes.quote.price.currency || 'INR')}`}
                     fontWeight="600"
                     fontSize={'12px'}
                     dataTest={testIds.orderHistory_Price}
@@ -155,7 +160,7 @@ const OrderHistory = () => {
                   >
                     <Text
                       as={Typography}
-                      text={'1 Item'}
+                      text={`${order?.attributes?.items?.length || 0} Items`}
                       fontWeight="400"
                       fontSize={'12px'}
                     />
@@ -166,6 +171,7 @@ const OrderHistory = () => {
                         paddingRight={'6px'}
                         data-test={testIds.orderHistory_pendingIcon}
                       />
+                      <Text>{orderStatusMap[order?.attributes?.delivery_status] || 'Pending'}</Text>
                     </Flex>
                   </Flex>
                 </Flex>

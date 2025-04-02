@@ -18,7 +18,8 @@ import { api, authReducer } from '@beckn-ui/common'
 
 const persistConfig = {
   key: 'root',
-  storage
+  storage,
+  whitelist: ['auth', 'cart']
 }
 
 const appReducer = combineReducers({

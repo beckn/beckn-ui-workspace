@@ -12,6 +12,10 @@ import { ToastType } from '@beckn-ui/molecules/src/components/toast/Toast-type'
 import { useToast } from '@chakra-ui/react'
 import { feedbackActions, FeedbackRootState } from '../../store/ui-feedback-slice'
 import { testIds } from '@shared/dataTestIds'
+import { checkTokenExpiry } from '@beckn-ui/common'
+import { logout } from '@beckn-ui/common'
+import Cookies from 'js-cookie'
+import { RootState } from '@store/index'
 
 const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const { locale } = useLanguage()
@@ -29,6 +33,29 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const {
     toast: { display, message, type, description }
   } = useSelector((state: FeedbackRootState) => state.feedback)
+  const { user } = useSelector((state: RootState) => state.auth)
+
+  useEffect(() => {
+    if (!['/signin', '/signUp', '/OTPVerification'].includes(router.pathname)) {
+      const token = Cookies.get('authToken')
+      let message = ''
+
+      try {
+        const isExpired: any = checkTokenExpiry(token)
+        if (isExpired || !user) message = 'Token expired, please log in again!'
+      } catch (error) {
+        console.error('Token decoding error:', error)
+        message = 'Token decode failed, please log in again!'
+      } finally {
+        if (message) {
+          alert(message)
+          // if (userConfirmed) {
+          dispatch(logout())
+          // }
+        }
+      }
+    }
+  }, [router])
 
   useEffect(() => {
     if (display) {
@@ -84,6 +111,9 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
               ['mt-[118px]']: isSearch
             }
           )}
+          style={{
+            overflowY: 'scroll'
+          }}
         >
           {children}
         </main>

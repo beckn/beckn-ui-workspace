@@ -9,3 +9,8 @@ export const statusMap = {
 
 export type StatusMap = typeof statusMap
 export type StatusKey = keyof StatusMap
+
+export interface OrderStatus {
+  label: string
+  statusTime: string
+}

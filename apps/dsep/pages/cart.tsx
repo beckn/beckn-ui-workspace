@@ -13,7 +13,6 @@ import EmptyCart from '../components/cart/EmptyCart'
 import { Box } from '@chakra-ui/react'
 import { Item, SelectResponseModel } from '../lib/types/select.types'
 import LoaderWithMessage from '@beckn-ui/molecules/src/components/LoaderWithMessage/loader-with-message'
-import { toast } from 'react-toastify'
 import { testIds } from '@shared/dataTestIds'
 
 const Cart = () => {
@@ -36,7 +35,6 @@ const Cart = () => {
         quoteRequest.fetchData(`${apiUrl}/select`, 'POST', payLoadForQuoteRequest)
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -49,7 +47,6 @@ const Cart = () => {
       const items = getItemsForCart(selectResponse.data)
       setItemsForCart(items)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [quoteRequest.data])
 
   useEffect(() => {
@@ -95,7 +92,6 @@ const Cart = () => {
     <Box
       className="hideScroll"
       maxH={'calc(100vh - 100px)'}
-      overflowY="scroll"
     >
       {/* <Breadcrumb /> */}
       <div className="flex justify-center flex-col md:flex-row items-start relative max-w-[2100px] mx-auto">

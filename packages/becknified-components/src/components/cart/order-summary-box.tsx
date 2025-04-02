@@ -2,17 +2,15 @@ import React from 'react'
 import ProductPrice from '../product-price'
 import { OrderSummaryProps } from './cart.types'
 import styles from './order-summary.module.css'
-import { Button, Typography } from '@beckn-ui/molecules'
+import { Typography } from '@beckn-ui/molecules'
 
 const OrderSummaryBox: React.FC<OrderSummaryProps> = ({
   totalAmount,
   totalQuantity,
-  pageCTA,
   orderSummaryText = 'Order Summary',
   totalQuantityText = 'Total Quantity',
   totalAmountText = 'Total Amount',
   dataTestText = 'order-summary',
-  dataTestCta = 'cart-order-button',
   dataTestTotalQuantity = 'total-quantity-text',
   dataTestTotalAmount = 'total-amount-text'
 }) => {
@@ -45,12 +43,12 @@ const OrderSummaryBox: React.FC<OrderSummaryProps> = ({
           </div>
         </div>
       </div>
-      <div className={styles.CTA_btn}>
+      {/* <div className={styles.CTA_btn}>
         <Button
           {...pageCTA}
           dataTest={dataTestCta}
         />
-      </div>
+      </div> */}
     </>
   )
 }

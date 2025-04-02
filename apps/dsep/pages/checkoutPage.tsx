@@ -7,19 +7,19 @@ import { useLanguage } from '../hooks/useLanguage'
 import addShippingBtn from '../public/images/offer.svg'
 import { ICartRootState } from '../lib/types/cart'
 import { cartActions } from '../store/cart-slice'
-import { getPaymentBreakDown, handleFormSubmit } from '../utilities/checkout-utils'
+import { handleFormSubmit } from '../utilities/checkout-utils'
 import { useRouter } from 'next/router'
 import Cookies from 'js-cookie'
 import ShippingSection from '@beckn-ui/becknified-components/src/components/checkout/shipping-section'
 import addBillingButton from '../public/images/addShippingBtn.svg'
 import { SelectResponseModel } from '../lib/types/select.types'
 import { Typography } from '@beckn-ui/molecules'
-import { InitResponseModel } from '../lib/types/init.types'
 import LoaderWithMessage from '@beckn-ui/molecules/src/components/LoaderWithMessage/loader-with-message'
 import PaymentDetails from '@beckn-ui/becknified-components/src/components/checkout/payment-details'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import axios from '../services/axios'
 import { testIds } from '@shared/dataTestIds'
+import { createPaymentBreakdownMap, getTotalPriceWithCurrency, InitResponseModel } from '@beckn-ui/common'
 
 export type ShippingFormData = {
   name: string
@@ -40,12 +40,12 @@ const CheckoutPage = () => {
   // TODO :- check for refactoring and some issue fix in this component
   const [isLoadingForInit, setIsLoadingForInit] = useState(false)
   const [isError, setIsError] = useState(false)
-  const [initData, setInitData] = useState<InitResponseModel | null>(null)
+  const [initData, setInitData] = useState<InitResponseModel[] | null>(null)
   const [selectResponse, setSelectResponse] = useState<SelectResponseModel | null>(null)
 
   const router = useRouter()
   const dispatch = useDispatch()
-  const { t, locale } = useLanguage()
+  const { t } = useLanguage()
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
   const cartItems = useSelector((state: ICartRootState) => state.cart.items)
@@ -114,7 +114,6 @@ const CheckoutPage = () => {
         })
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -155,7 +154,6 @@ const CheckoutPage = () => {
     <Box
       className="hideScroll"
       maxH={'calc(100vh - 100px)'}
-      overflowY="scroll"
     >
       {/* <AppHeader appHeaderText={t.checkout} /> */}
       {/* start Item Details */}
@@ -259,16 +257,15 @@ const CheckoutPage = () => {
             <Text fontSize={'17px'}>{t.paymentText}</Text>
           </Flex>
           <DetailCard>
-            {initData.data.map((data, idx) => {
-              return (
-                <PaymentDetails
-                  key={idx}
-                  paymentBreakDown={getPaymentBreakDown(data).breakUpMap}
-                  totalText={t.total}
-                  totalValueWithCurrency={getPaymentBreakDown(data).totalPricewithCurrent}
-                />
-              )
-            })}
+            {/* {initData.data.map((data, idx) => {
+              return ( */}
+            <PaymentDetails
+              paymentBreakDown={createPaymentBreakdownMap(initData)}
+              totalText={t.total}
+              totalValueWithCurrency={getTotalPriceWithCurrency(initData)}
+            />
+            {/* )
+            })} */}
           </DetailCard>
         </Box>
       )}
@@ -276,7 +273,7 @@ const CheckoutPage = () => {
         <BecknButton
           dataTest={testIds.checkoutpage_proceedToCheckout}
           disabled={!!!initData}
-          children={t.confirm}
+          text={t.confirm}
           className="checkout_btn "
           handleClick={() => {
             dispatch(cartActions.clearCart())

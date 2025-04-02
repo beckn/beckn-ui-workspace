@@ -1,3 +1,4 @@
+import React from 'react'
 import type { NextPage } from 'next'
 import { useLanguage } from '../hooks/useLanguage'
 import { Image } from '@chakra-ui/react'

@@ -4,7 +4,9 @@ import {
   CartRetailItem,
   CostBreakdownModel,
   InitResponseModel,
+  ItemWisePaymentBreakDownModel,
   PaymentBreakDownModel,
+  SelectResponseModel,
   StatusResponseModel
 } from '../../lib/types'
 
@@ -178,6 +180,29 @@ export const getOrderDetailsPaymentBreakDown = (statusData: StatusResponseModel[
   return { breakUpMap, totalPricewithCurrent }
 }
 
+export const getItemWiseBreakUp = (
+  selectResponse: SelectResponseModel[] | StatusResponseModel[],
+  selectedItemId: string
+) => {
+  const paymentBreakdownMap: ItemWisePaymentBreakDownModel = {}
+  if (selectResponse && selectResponse.length > 0) {
+    selectResponse.forEach(response => {
+      response?.message?.order?.quote?.breakup?.forEach(breakup => {
+        if (breakup.item?.id === selectedItemId) {
+          if (!paymentBreakdownMap[breakup.item?.id]) {
+            paymentBreakdownMap[breakup.item?.id] = {}
+          }
+          paymentBreakdownMap[breakup.item?.id][breakup?.title] = {
+            value: breakup.price.value,
+            currency: breakup.price.currency || ('INR' as CurrencyType)
+          }
+        }
+      })
+    })
+  }
+  return paymentBreakdownMap
+}
+
 export const createPaymentBreakdownMap = (initResponse: InitResponseModel[] | StatusResponseModel[]) => {
   const paymentBreakdownMap: PaymentBreakDownModel = {}
   if (initResponse && initResponse.length > 0) {
@@ -192,8 +217,12 @@ export const createPaymentBreakdownMap = (initResponse: InitResponseModel[] | St
 }
 
 export const getTotalPriceWithCurrency = (initResponse: InitResponseModel[] | StatusResponseModel[]) => {
-  return {
-    value: Number(initResponse?.[0]?.message?.order?.quote?.price?.value),
-    currency: initResponse?.[0]?.message?.order?.quote?.price?.currency
-  }
+  let totalPriceWithCurrency: { value: number; currency: CurrencyType } = { value: 0, currency: 'INR' }
+  initResponse.forEach(response => {
+    totalPriceWithCurrency = {
+      value: totalPriceWithCurrency.value + Number(response?.message?.order?.quote?.price?.value) || 0,
+      currency: response?.message?.order?.quote?.price?.currency || 'INR'
+    }
+  })
+  return totalPriceWithCurrency
 }

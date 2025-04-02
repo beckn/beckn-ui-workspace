@@ -16,3 +16,4 @@ export { default as OrderSummary } from './orderDetails/subComponents/orderSumma
 export { default as AllOrderDeliveredBatch } from './orderDetails/subComponents/allOrderDeliveredBatch'
 export { default as GeoLocationInputList } from './geoLocationInput/GeoLocationInputList'
 export { default as OptionsGroup } from './OptionsGroup'
+export { default as OrderConfirmationModal } from './Modal/OrderConfirmationModal'

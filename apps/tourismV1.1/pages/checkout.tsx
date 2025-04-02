@@ -10,19 +10,19 @@ import useRequest from '../hooks/useRequest'
 import { Checkout } from '@beckn-ui/becknified-components'
 
 import { useRouter } from 'next/router'
-import { ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
+import { ShippingFormInitialValuesType, ItemDetailProps } from '@beckn-ui/becknified-components'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
 import { FormField } from '@beckn-ui/molecules'
 import { useInitMutation } from '@beckn-ui/common/src/services/init'
 import { useSelectMutation } from '@beckn-ui/common/src/services/select'
 import {
   areShippingAndBillingDetailsSame,
-  cartActions,
   checkoutActions,
   CheckoutRootState,
   createPaymentBreakdownMap,
   DiscoveryRootState,
   getInitPayload,
+  getItemWiseBreakUp,
   getSelectPayload,
   getTotalPriceWithCurrency,
   ICartRootState,
@@ -216,9 +216,8 @@ const CheckoutPage = () => {
   // },[])
 
   const formSubmitHandler = (data: any) => {
-    if (data) {
-      const { id, type } = selectResponse[0].message.order.fulfillments[0]
-      getInitPayload(shippingFormData, billingFormData, cartItems, transactionId, DOMAIN, { id, type }).then(res => {
+    if (data && selectResponse.length > 0) {
+      getInitPayload(shippingFormData, billingFormData, cartItems, transactionId, DOMAIN, selectResponse).then(res => {
         return initialize(res)
       })
       // TODO :_ To check this again
@@ -264,7 +263,6 @@ const CheckoutPage = () => {
     <Box
       className="hideScroll"
       maxH="calc(100vh - 100px)"
-      overflowY={'scroll'}
     >
       {/* start Item Details */}
       <Checkout
@@ -276,10 +274,11 @@ const CheckoutPage = () => {
               description: singleItem.short_desc,
               quantity: singleItem.quantity,
               // priceWithSymbol: `${currencyMap[singleItem.price.currency]}${singleItem.totalPrice}`,
-              price: singleItem.totalPrice,
+              price: Number(singleItem.price.value),
               currency: singleItem.price.currency,
-              image: singleItem.images?.[0].url
-            }))
+              image: singleItem.images?.[0].url,
+              breakUp: getItemWiseBreakUp(selectResponse, singleItem.id)
+            })) as ItemDetailProps[]
           },
           shipping: {
             showDetails: isInitResultPresent(),
@@ -346,7 +345,6 @@ const CheckoutPage = () => {
             text: `${t.checkout}`,
             dataTest: testIds.checkoutpage_proceedToCheckout,
             handleClick: () => {
-              dispatch(cartActions.clearCart())
               router.push('/paymentMode')
             }
           }

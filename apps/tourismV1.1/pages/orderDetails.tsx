@@ -3,7 +3,6 @@ import axios from 'axios'
 import Router, { useRouter } from 'next/router'
 import {
   Box,
-  Card,
   CardBody,
   Divider,
   Flex,
@@ -41,7 +40,6 @@ import {
   feedbackActions,
   formatTimestamp,
   getPayloadForOrderStatus,
-  getPaymentBreakDown,
   getTotalPriceWithCurrency,
   isEmpty,
   OrdersRootState,
@@ -674,7 +672,6 @@ const OrderDetails = () => {
     <Box
       className="hideScroll"
       maxH="calc(100vh - 100px)"
-      overflowY="scroll"
     >
       {/* <Box
         maxW={{ base: '100%', md: '50%' }}

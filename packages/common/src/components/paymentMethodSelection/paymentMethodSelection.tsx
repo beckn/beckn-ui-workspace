@@ -60,14 +60,13 @@ const PaymentMethodSelection = (props: PaymentMethodSelectionProps) => {
       mt={['20px', '20px', '0px', '0px']}
       className="hideScroll"
       maxH="calc(100vh - 120px)"
-      overflowY={'scroll'}
     >
       <Box
         position={'relative'}
         maxWidth={{ base: '100%', md: '70%' }}
         margin="auto"
       >
-        <Box>
+        <Box paddingBottom={'5rem'}>
           <PaymentDetailsCard
             t={t}
             checkedState={checkedState!}
@@ -77,13 +76,17 @@ const PaymentMethodSelection = (props: PaymentMethodSelectionProps) => {
         </Box>
 
         <Box
-          width={{ base: '100%', md: '70%' }}
+          width={{ base: '90%', md: '70%' }}
           style={{ marginTop: '2rem ' }}
           placeSelf="center"
+          position={'fixed'}
+          bottom={0}
+          left={0}
+          right={0}
         >
           <BecknButton
             dataTest={testIds.paymentpage_confirmButton}
-            children={t('confirmOrder')}
+            text={t('confirmOrder')}
             handleClick={handleOrderConfirmation}
             disabled={!checkedState || disableButton}
           />

@@ -23,7 +23,7 @@ const DetailCard: React.FC<DetailsCardProps> = props => {
       >
         <CardBody
           className={`${className} card_body`}
-          padding={'15px 20px'}
+          padding={'15px'}
         >
           {children}
         </CardBody>

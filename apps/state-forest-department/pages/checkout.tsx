@@ -3,8 +3,13 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Box, useTheme } from '@chakra-ui/react'
 import { DOMAIN } from '@lib/config'
 import { useLanguage } from '../hooks/useLanguage'
-import { createPaymentBreakdownMap, getInitPayload, getTotalPriceWithCurrency } from '@beckn-ui/common/src/utils'
-import { Checkout } from '@beckn-ui/becknified-components'
+import {
+  createPaymentBreakdownMap,
+  getInitPayload,
+  getItemWiseBreakUp,
+  getTotalPriceWithCurrency
+} from '@beckn-ui/common/src/utils'
+import { Checkout, ItemDetailProps } from '@beckn-ui/becknified-components'
 import { useRouter } from 'next/router'
 import { ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
 import { FormField } from '@beckn-ui/molecules'
@@ -40,9 +45,10 @@ const CheckoutPage = () => {
   console.log(cartItems)
   const router = useRouter()
   const dispatch = useDispatch()
-  const [initialize, { isLoading, isError }] = useInitMutation()
-  const { t, locale } = useLanguage()
+  const [initialize, { isLoading }] = useInitMutation()
+  const { t } = useLanguage()
   const initResponse = useSelector((state: CheckoutRootState) => state.checkout.initResponse)
+  const selectResponse = useSelector((state: CheckoutRootState) => state.checkout.selectResponse)
   const { transactionId } = useSelector((state: DiscoveryRootState) => state.discovery)
 
   //////////  For field Data ///////////
@@ -146,7 +152,6 @@ const CheckoutPage = () => {
     <Box
       className="hideScroll"
       maxH="calc(100vh - 100px)"
-      overflowY={'scroll'}
     >
       {/* start Item Details */}
       <Checkout
@@ -158,10 +163,11 @@ const CheckoutPage = () => {
               description: singleItem.providerName,
               quantity: 1,
               // priceWithSymbol: `${currencyMap[singleItem.price.currency]}${singleItem.totalPrice}`,
-              price: Number(singleItem.price.value),
-              currency: singleItem.price.currency,
-              image: singleItem.images?.[0].url
-            }))
+              price: parseFloat(selectResponse[0].message.order.quote.price.value),
+              currency: selectResponse[0].message.order.quote.price.currency,
+              image: singleItem.images?.[0].url,
+              breakUp: getItemWiseBreakUp(selectResponse, singleItem.id)
+            })) as ItemDetailProps[]
           },
           shipping: {
             triggerFormTitle: t.change,

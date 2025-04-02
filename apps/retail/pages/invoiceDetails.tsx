@@ -4,7 +4,7 @@ import { DetailCard } from '@beckn-ui/becknified-components'
 import Typography from '@beckn-ui/molecules/src/components/typography/typography'
 import { Box, Flex } from '@chakra-ui/react'
 import { useLanguage } from '@hooks/useLanguage'
-import { formatTimestamp, getPaymentBreakDown } from '@beckn-ui/common/src/utils'
+import { createPaymentBreakdownMap, formatTimestamp, getTotalPriceWithCurrency } from '@beckn-ui/common/src/utils'
 import { StatusResponseModel } from '@beckn-ui/common/lib/types'
 import { testIds } from '@shared/dataTestIds'
 
@@ -34,8 +34,13 @@ const invoiceDetails = () => {
     <Box
       className="hideScroll"
       maxH={'calc(100vh - 100px)'}
-      overflowY="scroll"
     >
+      <Box pb={'15px'}>
+        <Typography
+          variant="titleSemibold"
+          text={t.orderOverview}
+        />
+      </Box>
       <DetailCard>
         <Flex
           pt={'unset'}
@@ -69,18 +74,18 @@ const invoiceDetails = () => {
           </Flex>
         </Box>
       </DetailCard>
+      <Box pb={'15px'}>
+        <Typography
+          variant="titleSemibold"
+          text={t.payment}
+        />
+      </Box>
       <DetailCard>
-        <Box pb={'15px'}>
-          <Typography
-            variant="titleSemibold"
-            text={t.payment}
-          />
-        </Box>
         <PaymentDetails
-          paymentBreakDown={getPaymentBreakDown(statusData).breakUpMap}
+          paymentBreakDown={createPaymentBreakdownMap(statusData)}
           totalText="Total"
           dataTest={testIds.orderDetailspage_paymentDetails}
-          totalValueWithCurrency={getPaymentBreakDown(statusData).totalPricewithCurrent}
+          totalValueWithCurrency={getTotalPriceWithCurrency(statusData)}
         />
       </DetailCard>
     </Box>

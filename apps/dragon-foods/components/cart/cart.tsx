@@ -89,8 +89,7 @@ const Cart: React.FC<CartProps> = ({
             </Box>
             <Box
               w="307px"
-              mr="20px"
-              alignSelf={'start'}
+              alignSelf={'center'}
             >
               <Button
                 dataTest={testIds.Proceed}

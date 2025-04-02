@@ -1,7 +1,7 @@
 import { FormData, FormField, ButtonProps, LoaderProps } from '@beckn-ui/molecules'
 import { CurrencyType } from '../types'
 import { RentalItemProps } from './order-overview'
-
+import { ItemWisePaymentBreakDownModel, PaymentBreakDownModel } from '@beckn-ui/common'
 export type ShippingFormInitialValuesType = {
   name: string
   mobileNumber: string
@@ -13,7 +13,7 @@ export type ShippingFormInitialValuesType = {
 
 export interface ShippingFormProps<T extends FormField[]> {
   formFieldConfig?: FormField[]
-  onSubmit: (data: FormData<T>) => void
+  onSubmit: (data: ShippingFormInitialValuesType | FormData<T>) => void
   submitButton: ButtonProps
   values?: ShippingFormInitialValuesType
   onChange?: (data: ShippingFormInitialValuesType) => void
@@ -50,6 +50,7 @@ export interface ItemDetailProps {
   dataTestTitle?: string
   dataTestQuantity?: string
   dataTestDescription?: string
+  breakUp?: ItemWisePaymentBreakDownModel
 }
 
 export interface ShippingDetailsProps {
@@ -65,7 +66,7 @@ type TotalAmountWithCurreny = {
   value: string | number
 }
 export interface PaymentDetailsProps {
-  paymentBreakDown: Record<string, any>
+  paymentBreakDown: PaymentBreakDownModel
   totalText: string
   title?: string
   hasBoxShadow?: boolean

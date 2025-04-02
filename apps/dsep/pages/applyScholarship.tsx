@@ -2,15 +2,10 @@ import { Box } from '@chakra-ui/react'
 import Cookies from 'js-cookie'
 import Router from 'next/router'
 import React, { useEffect, useState } from 'react'
-import { Button, LoaderWithMessage } from '@beckn-ui/molecules'
-import { JobCredential } from '../components/jobApply/JobApply.types'
-import ScholarshipAddDetails from '../components/scholarship/addDetails/ScholarshipAddDetails'
+import { LoaderWithMessage } from '@beckn-ui/molecules'
 import { ScholarshipApplyFormDataModel } from '../components/scholarship/scholarshipCard/Scholarship.types'
-import UploadFile from '../components/uploadFile/UploadFile'
 import { useLanguage } from '../hooks/useLanguage'
-import { FormErrors, validateForm } from '../utilities/detailsForm-utils'
-
-import { toast } from 'react-toastify'
+import { FormErrors } from '../utilities/detailsForm-utils'
 import 'react-toastify/dist/ReactToastify.css'
 
 import { ParsedItemModel } from '../types/search.types'
@@ -197,7 +192,6 @@ const ApplyScholarship = () => {
     <Box
       className="hideScroll"
       maxH={'calc(100vh - 100px)'}
-      overflowY="scroll"
     >
       <ApplyScholarshipForm
         xInputHtml={xInputHtml}

@@ -44,7 +44,7 @@ const ShippingSection: React.FC<ShippingSectionProps<FormField[]>> = ({
       >
         <Typography
           variant="titleRegular"
-          color={color}
+          // color={color}
           text={sectionTitle}
         />
         {((isBilling && !isChecked) || (!isBilling && showDetails)) && (
@@ -92,7 +92,10 @@ const ShippingSection: React.FC<ShippingSectionProps<FormField[]>> = ({
           </Flex>
         </DetailsCard>
       ) : (
-        <ShippingDetails {...shippingDetails} />
+        <ShippingDetails
+          {...shippingDetails}
+          noAccordion={true}
+        />
       )}
 
       <BottomModal
