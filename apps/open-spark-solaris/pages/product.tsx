@@ -14,7 +14,7 @@ const Product = () => {
   const { t } = useLanguage()
   const router = useRouter()
   const selectedProduct: ParsedItemModel = useSelector((state: DiscoveryRootState) => state.discovery.selectedProduct)
-  console.log(selectedProduct)
+  console.log('Dank', selectedProduct)
   const dispatch = useDispatch()
   const [counter, setCounter] = useState(1)
   const [totalPrice, setTotalPrice] = useState<number>(Number(selectedProduct.item.price.value))
@@ -43,6 +43,7 @@ const Product = () => {
       ? {
           title: 'Rental Price',
           noCounter: true,
+          noPrice: true,
           currency: selectedProduct.item.price.currency,
           totalPrice: selectedProduct.item.price.value,
           rateLabel: '/ hr',
@@ -63,9 +64,11 @@ const Product = () => {
         }
       : {
           currency: selectedProduct.item.price.currency,
+          noPrice: true,
           totalPrice: selectedProduct.item.price.value,
           handleIncrement: increment,
           handleDecrement: decrement,
+          counterTitle: 'Select Quantity',
           counter: counter,
           cta: {
             dataTest: testIds.productpage_addTocartButton,
@@ -92,8 +95,6 @@ const Product = () => {
           }
         }
 
-  console.log('Dank ci/cd check')
-
   return (
     <Box
       className="hideScroll myStore-product-details product-text"
@@ -103,10 +104,12 @@ const Product = () => {
       <ProductDetailPage
         schema={{
           productSummary: {
-            imageSrc: selectedProduct.item.images?.[0].url!,
+            imageSrc: selectedProduct.item.images?.[0].url || '',
+            showPriceInSummary: true,
             name: selectedProduct.item.name,
+            providerImage: selectedProduct?.item.productInfo?.image,
             domain: selectedProduct.domain,
-            providerName: selectedProduct.providerName,
+            // providerName: selectedProduct.providerName,
             secondaryDescription: selectedProduct.item.long_desc,
             dataTestTitle: testIds.item_title,
             dataTestDescription: testIds.item_description,
