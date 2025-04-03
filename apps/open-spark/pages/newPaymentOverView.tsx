@@ -20,13 +20,13 @@ const NewPaymentOverView = () => {
   // const selectedEmi = useSelector((state: any) => state.selectedEmi.apiResponse[0]?.message.order.items) || 0
   // const processingFee =
   //   useSelector((state: any) => state.selectedEmi.apiResponse[0]?.message.order.provider.short_desc) || 0
-  const coverage = useSelector((state: any) => state.discoveryEmiPlan.products[0]?.item[0]?.code) || 0
+  const coverage = useSelector((state: any) => state.selectedEmi.apiResponse[0]?.message.order.items[0]?.code) || 0
   // const monthlyInstallment = useSelector((state: any) => state.selectedEmi.emiDetails)
   const [totalValue, setTotalValue] = useState<{ total: number; discountAmount: number }>({
     total: 0,
     discountAmount: 0
   })
-  const [selectedEmiPlan, setSelectedEmiPlan] = useState<string | null>(null)
+
   const [payableValue, setPayableValue] = useState<number>()
   const cartItems = useSelector((state: ICartRootState) => state.cart.items)
   const dispatch = useDispatch()
