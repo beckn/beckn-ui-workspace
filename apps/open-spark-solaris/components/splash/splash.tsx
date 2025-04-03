@@ -10,14 +10,14 @@ const Splash = () => {
       height="100vh"
     >
       <Image
-        src="./images/solaris_icon.svg"
+        src="./images/rental_app_logo.svg"
         alt="splash-img"
         mb="20px"
       />
-      <Image
+      {/* <Image
         src="./images/splash-footer.svg"
         alt="splash-footer-img"
-      />
+      /> */}
     </Flex>
   )
 }

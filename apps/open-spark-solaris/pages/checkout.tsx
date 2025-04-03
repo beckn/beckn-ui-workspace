@@ -150,8 +150,8 @@ const CheckoutPage = () => {
       name: '',
       mobileNumber: '',
       email: '',
-      address: '1202 b2, Bengaluru urban, Bengaluru, Karnataka',
-      pinCode: '560078'
+      address: '5890 W Vernor Hwy, Detroit, Michigan',
+      pinCode: '48209'
     }
 
     if (user?.agent) {
@@ -161,7 +161,8 @@ const CheckoutPage = () => {
         name: user.agent.first_name.trim(),
         mobileNumber: `${user.agent.agent_profile.phone_number}`,
         email: user.email || '',
-        address: user.agent.agent_profile.address || ''
+        address: '5890 W Vernor Hwy, Detroit, Michigan',
+        pinCode: '48209'
       }
     } else {
       // If no user.agent, use default data
@@ -169,7 +170,9 @@ const CheckoutPage = () => {
         ...formData,
         name: 'Lisa',
         mobileNumber: '9811259151',
-        email: 'lisa.k@gmail.com'
+        email: 'lisa.k@gmail.com',
+        address: '5890 W Vernor Hwy, Detroit, Michigan',
+        pinCode: '48209'
       }
     }
 
