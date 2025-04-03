@@ -696,6 +696,7 @@ const OrderDetails = () => {
                 color="#0560FA"
                 as={Typography}
                 text={t.rateUs}
+                cursor="pointer"
               />
             </Flex>
           </CardBody>

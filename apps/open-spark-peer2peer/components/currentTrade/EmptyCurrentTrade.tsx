@@ -22,7 +22,7 @@ const EmptyCurrentTrade = ({ text, src }: { text: string; src: string }) => {
       <Typography
         fontSize="12px"
         fontWeight="400"
-        sx={{ textAlign: 'center' }}
+        sx={{ textAlign: 'center', mb: '10px' }}
         text={text}
         dataTest="emptyCurrentText"
       />
