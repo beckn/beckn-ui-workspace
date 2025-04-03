@@ -863,6 +863,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
   }
   const handleEmiSelect = (planId: string, customEMIPlans?: any[]) => {
     const emiPlanList = customEMIPlans ? customEMIPlans : emiPlans
+    console.log('emiPlanList', emiPlanList)
     const selectedPlan = emiPlanList.find(plan => plan.id === planId)
     if (!selectedPlan) {
       console.error('Selected EMI plan not found!')
@@ -934,7 +935,17 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                 items: selectedItems,
                 provider: {
                   id: selectedPlan.providerId
-                }
+                },
+                ...(isAppliedForDiscountingEMIPlans && {
+                  tags: [
+                    {
+                      descriptor: {
+                        code: 'preFinanced',
+                        name: 'true'
+                      }
+                    }
+                  ]
+                })
               }
             ]
           }
@@ -968,7 +979,6 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
       setWalletDetails(data)
       setSyncWalletSuccess(true)
       const list: ItemMetaData[] = parseDIDData(result)['identities'].map((item, index) => {
-        console.log('Dank', list)
         if (/\/type\/aadhar_card\/id\//.test((item as any).did)) {
           setAadharNumber(item.id)
         } else {
@@ -989,6 +999,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
           data: item
         }
       })
+      return list
     } catch (error) {
       console.error('Error fetching dashboard data:', error)
     } finally {
@@ -1000,6 +1011,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
   const handleSyncWallet = async () => {
     console.log(user?.deg_wallet?.deg_wallet_id)
     const getDoc = await fetchCredentials()
+    console.log('getDoc', getDoc)
   }
 
   const getCartItemsWithQuantity = () => {
