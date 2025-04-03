@@ -72,21 +72,28 @@ const Dashboard = () => {
         >
           <NavigationItem
             icon={IdentityIcon}
-            label={'Connections'}
-            handleClick={() => router.push('/myIdentities')}
+            label={'Identities'}
+            handleClick={() => {}}
             dataTest={'identity'}
             renderType="card"
           />
           <NavigationItem
+            icon={IdentityIcon}
+            label={'Connections'}
+            handleClick={() => router.push('/connections')}
+            dataTest={'connections'}
+            renderType="card"
+          />
+          <NavigationItem
             icon={AssetsIcon}
-            label={'Energy Assets'}
+            label={'Assets'}
             handleClick={() => router.push('/myAssets')}
             dataTest={'assets'}
             renderType="card"
           />
           <NavigationItem
             icon={TransactionsIcon}
-            label={'Energy Transactions'}
+            label={'Transactions'}
             handleClick={() => router.push('/myTransactions')}
             dataTest={'transactions'}
             renderType="card"

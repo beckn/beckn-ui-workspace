@@ -1,7 +1,8 @@
 import React, { useState, useMemo, useEffect } from 'react'
 import { BecknAuth } from '@beckn-ui/becknified-components'
 import { FormErrors } from '@beckn-ui/common/lib/types'
-import AppLogo from '@public/images/wallet_logo.svg'
+// import AppLogo from '@public/images/wallet_logo.svg'
+import AppLogo from '@public/images/wallet_app_logo.svg'
 import { useLanguage } from '@hooks/useLanguage'
 import { Box } from '@chakra-ui/react'
 import { useDispatch } from 'react-redux'
@@ -20,7 +21,7 @@ import { RegisterSubject } from '@lib/types/becknDid'
 import { setPrivateKeyAndPublicKey } from '@store/auth-slice'
 import { generateKeyPairFromString, generateSignature } from '@services/cryptoUtilService'
 
-const SignIn = ({ initialFormData = { mobileNumber: '+91 ' } }) => {
+const SignIn = ({ initialFormData = { mobileNumber: '' } }) => {
   const [formData, setFormData] = useState<LoginFormProps>(initialFormData)
   const [formErrors, setFormErrors] = useState<FormErrors>({ mobileNumber: '' })
 
@@ -41,18 +42,19 @@ const SignIn = ({ initialFormData = { mobileNumber: '+91 ' } }) => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let { name, value } = e.target
 
-    if (!value.startsWith('+91 ')) {
-      value = '+91 '
-    }
+    // if (!value.startsWith('+91 ')) {
+    //   value = '+91 '
+    // }
 
-    // Prevent clearing the field
-    if (value.length < 4) {
-      value = '+91 '
-    }
+    // // Prevent clearing the field
+    // if (value.length < 4) {
+    //   value = '+91 '
+    // }
 
-    const numericPart = value.replace(/\D/g, '').slice(2)
+    const numericPart = value //.replace(/\D/g, '').slice(2)
 
-    value = `+91 ${numericPart}`
+    // value = `+91 ${numericPart}`
+    value = `${numericPart}`
 
     setFormData(prevFormData => ({
       ...prevFormData,
@@ -64,7 +66,7 @@ const SignIn = ({ initialFormData = { mobileNumber: '+91 ' } }) => {
       [name]: value
     }
 
-    const errors = mobilePhoneValidate(updatedFormData)
+    const errors = mobilePhoneValidate(updatedFormData, false)
     setFormErrors(prevErrors => ({
       ...prevErrors,
       [name]: t[`${errors[name as keyof FormErrors]}`] || ''
@@ -73,7 +75,8 @@ const SignIn = ({ initialFormData = { mobileNumber: '+91 ' } }) => {
 
   const isFormFilled = useMemo(() => {
     return (
-      Object.values(formData).every(value => value !== '+91 ') && Object.values(formErrors).every(value => value === '')
+      // Object.values(formData).every(value => value !== '+91 ') &&
+      Object.values(formErrors).every(value => value === '')
     )
   }, [formData, formErrors])
 

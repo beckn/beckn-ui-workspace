@@ -14,8 +14,15 @@ import {
   useGetVerificationMethodsMutation
 } from '@services/walletService'
 import { AuthRootState } from '@store/auth-slice'
-import { extractAuthAndHeader, filterByKeyword, generateRandomCode, toBase64, toSnakeCase } from '@utils/general'
-import { feedbackActions } from '@beckn-ui/common'
+import {
+  extractAuthAndHeader,
+  extractMobileNumberFromSubjectDid,
+  filterByKeyword,
+  generateRandomCode,
+  toBase64,
+  toSnakeCase
+} from '@utils/general'
+import { feedbackActions, formatDate } from '@beckn-ui/common'
 import { generateAuthHeader, generateAuthHeaderForDelete } from '@services/cryptoUtilService'
 import { parseDIDData } from '@utils/did'
 import BottomModalScan from '@beckn-ui/common/src/components/BottomModal/BottomModalScan'
@@ -53,7 +60,7 @@ const verificationMethodsOptions = [
   }
 ]
 
-const MyIdentities = () => {
+const Connections = () => {
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
 
   const [items, setItems] = useState<ItemMetaData[]>([])
@@ -70,7 +77,7 @@ const MyIdentities = () => {
     type: 'Electricity',
     credNumber: '5487774000',
     // country: '',
-    verificationMethod: 'mobile_number',
+    verificationMethod: 'email_id',
     utilityCompany: 'BESCOM'
   })
   const [formErrors, setFormErrors] = useState<CredFormErrors>({
@@ -86,10 +93,12 @@ const MyIdentities = () => {
   const { t } = useLanguage()
   const dispatch = useDispatch()
   const { user, privateKey, publicKey } = useSelector((state: AuthRootState) => state.auth)
-  const [addDocument] = useAddDocumentMutation()
-  const [getVerificationMethods] = useGetVerificationMethodsMutation()
-  const [getDocuments] = useGetDocumentsMutation()
-  const [deleteDocument] = useDeleteDocumentMutation()
+  const [addDocument, { isLoading: addDocLoading }] = useAddDocumentMutation()
+  const [getVerificationMethods, { data: verificationMethods }] = useGetVerificationMethodsMutation()
+  const [getDocuments, { isLoading: verifyLoading }] = useGetDocumentsMutation()
+  const [deleteDocument, { isLoading: deleteDocLoading }] = useDeleteDocumentMutation()
+
+  const bearerToken = Cookies.get('authToken')
 
   const [options, setOptions] = useState<{
     country: SelectOptionType[]
@@ -502,7 +511,7 @@ const MyIdentities = () => {
           gap="10px"
         >
           <VerifyOTP
-            description="Enter the one-time password (OTP) sent to your registered mobile number."
+            description={`Enter the one-time password (OTP) sent to your registered ${formData.verificationMethod === 'mobile_number' ? 'mobile number' : 'email address'}.`}
             isLoading={isLoading}
             handleVerifyOtp={handleOnSubmit}
           />
@@ -539,4 +548,4 @@ const MyIdentities = () => {
   )
 }
 
-export default MyIdentities
+export default Connections
