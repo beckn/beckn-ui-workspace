@@ -14,15 +14,8 @@ import {
   useGetVerificationMethodsMutation
 } from '@services/walletService'
 import { AuthRootState } from '@store/auth-slice'
-import {
-  extractAuthAndHeader,
-  extractMobileNumberFromSubjectDid,
-  filterByKeyword,
-  generateRandomCode,
-  toBase64,
-  toSnakeCase
-} from '@utils/general'
-import { feedbackActions, formatDate } from '@beckn-ui/common'
+import { extractAuthAndHeader, filterByKeyword, generateRandomCode, toBase64, toSnakeCase } from '@utils/general'
+import { feedbackActions } from '@beckn-ui/common'
 import { generateAuthHeader, generateAuthHeaderForDelete } from '@services/cryptoUtilService'
 import { parseDIDData } from '@utils/did'
 import BottomModalScan from '@beckn-ui/common/src/components/BottomModal/BottomModalScan'
@@ -78,7 +71,7 @@ const Connections = () => {
     credNumber: '5487774000',
     // country: '',
     verificationMethod: 'email_id',
-    utilityCompany: 'BESCOM'
+    utilityCompany: 'Duke Energy'
   })
   const [formErrors, setFormErrors] = useState<CredFormErrors>({
     type: '',
@@ -93,18 +86,18 @@ const Connections = () => {
   const { t } = useLanguage()
   const dispatch = useDispatch()
   const { user, privateKey, publicKey } = useSelector((state: AuthRootState) => state.auth)
-  const [addDocument, { isLoading: addDocLoading }] = useAddDocumentMutation()
-  const [getVerificationMethods, { data: verificationMethods }] = useGetVerificationMethodsMutation()
-  const [getDocuments, { isLoading: verifyLoading }] = useGetDocumentsMutation()
-  const [deleteDocument, { isLoading: deleteDocLoading }] = useDeleteDocumentMutation()
-
-  const bearerToken = Cookies.get('authToken')
+  const [addDocument] = useAddDocumentMutation()
+  const [getVerificationMethods] = useGetVerificationMethodsMutation()
+  const [getDocuments] = useGetDocumentsMutation()
+  const [deleteDocument] = useDeleteDocumentMutation()
 
   const [options, setOptions] = useState<{
     country: SelectOptionType[]
+    utilities: SelectOptionType[]
     verificationMethods: SelectOptionType[]
   }>({
     country: [],
+    utilities: utilities,
     verificationMethods: [
       {
         label: 'Registered Mobile Number',
@@ -191,9 +184,37 @@ const Connections = () => {
     setOptions({ ...options, country: countries })
   }
 
+  const getUtilities = async () => {
+    try {
+      const response: any = await axios.get(
+        `${strapiUrl}${ROUTE_TYPE[ROLE.GENERAL]}/utility/companies?country_code=${'USA'}`
+      )
+
+      if (!response?.data || !Array.isArray(response.data.utility_companies)) {
+        throw new Error('Invalid response format from utility companies API')
+      }
+
+      const utilities = response.data.utility_companies.map((utility: any) => {
+        return {
+          label: utility.company_name,
+          value: utility.company_name,
+          data: utility
+        }
+      })
+      console.log(utilities)
+      setOptions({ ...options, utilities: utilities })
+    } catch (error) {
+      console.error('Error fetching utilities:', error)
+      setOptions({ ...options, utilities: [] })
+    }
+  }
+
   const handleOpenModal = () => {
+    getUtilities()
     getCountries()
-    setOpenModal(true)
+    setTimeout(() => {
+      setOpenModal(true)
+    }, 1000)
   }
   const handleCloseModal = () => {
     setFormData({
@@ -201,9 +222,9 @@ const Connections = () => {
       credNumber: '5487774000',
       // country: '',
       verificationMethod: 'mobile_number',
-      utilityCompany: 'BESCOM'
+      utilityCompany: 'Duke Energy'
     })
-    setOptions({ country: [], verificationMethods: [] })
+    setOptions({ country: [], utilities: [], verificationMethods: [] })
     setOpenModal(false)
   }
 
@@ -375,7 +396,7 @@ const Connections = () => {
 
   const handleSelectChange = (selectedItem: any) => {
     const { name, value, data } = selectedItem
-
+    console.log(name, value)
     setFormData(prevFormData => ({
       ...prevFormData,
       [name]: value
@@ -450,7 +471,7 @@ const Connections = () => {
                 {
                   type: 'select',
                   name: 'utilityCompany',
-                  options: utilities,
+                  options: options.utilities,
                   value: formData.utilityCompany!,
                   handleChange: handleSelectChange,
                   label: t.selectUtilityCompany,
