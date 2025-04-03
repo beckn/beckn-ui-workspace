@@ -19,12 +19,17 @@ import Cookies from 'js-cookie'
 import { AuthRootState } from '@store/auth-slice'
 import { DegWalletDetails } from '@beckn-ui/common'
 import { UserRootState } from '@store/user-slice'
+import RentalServiceModal from '@components/RentalServiceModal/RentalServiceModal'
+import MyServicesIcon from '@public/images/my_services.svg'
 
 const HomePage = () => {
   const bearerToken = Cookies.get('authToken')
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
 
   const [isLoading, setIsLoading] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [showSuccess, setShowSuccess] = useState(false)
+
   const [walletDetails, setWalletDetails] = useState<DegWalletDetails>()
   const [modalType, setModalType] = useState<'wallet' | 'link' | 'otp' | 'alert' | null>(null)
 
@@ -35,6 +40,9 @@ const HomePage = () => {
   const handleModalOpen = (type: 'wallet' | 'link' | 'otp' | 'alert') => setModalType(type)
   const handleModalClose = () => setModalType(null)
   const dispatch = useDispatch()
+
+  const handleOpenModal = () => setIsModalOpen(true)
+  const handleCloseModal = () => setIsModalOpen(false)
 
   const handleNavigation = (type: 'MY_STORE' | 'RENT_AND_HIRE', pathname: string) => {
     dispatch(setNavigationType(type))
@@ -150,9 +158,42 @@ const HomePage = () => {
               dataTest="hire_button"
               sx={buttonStyles}
             /> */}
+            <ShadowCardButton
+              prefixIcon={<TbHexagonLetterO size={28} />}
+              text="Provide Rental Services"
+              textStyle="start"
+              postIcon={<MdOutlineKeyboardArrowRight />}
+              handleClick={() => handleOpenModal()}
+              dataTest="store_button"
+              sx={buttonStyles}
+            />
+            <ShadowCardButton
+              prefixIcon={
+                <Image
+                  src={MyServicesIcon}
+                  alt="myServices"
+                  width={'28px'}
+                  height={'28px'}
+                />
+              }
+              text="My Services"
+              textStyle="start"
+              postIcon={<MdOutlineKeyboardArrowRight />}
+              handleClick={() => router.push('/myServices')}
+              dataTest="store_button"
+              sx={buttonStyles}
+            />
           </Flex>
         </Box>
       </Box>
+      <RentalServiceModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        handleOnSubmit={({ success, startLoading }: { success: boolean; startLoading: boolean }) => {
+          setShowSuccess(success)
+          setIsLoading(startLoading)
+        }}
+      />
       <OpenWalletBottomModal
         modalType={modalType}
         setModalType={setModalType}

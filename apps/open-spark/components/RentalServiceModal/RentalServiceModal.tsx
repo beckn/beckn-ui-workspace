@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { BottomModal, Loader, Typography } from '@beckn-ui/molecules'
 import {
   Box,
@@ -11,26 +11,29 @@ import {
   Stepper,
   useSteps,
   Circle,
-  StepSeparator,
-  Button,
-  Progress
+  StepSeparator
 } from '@chakra-ui/react'
-import { CheckIcon, AddIcon } from '@chakra-ui/icons'
+import { CheckIcon } from '@chakra-ui/icons'
 import Image from 'next/image'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { AuthRootState } from '@store/auth-slice'
-import { decodeStream, useDecodeStreamMutation, useGetDocumentsMutation } from '@services/walletService'
+import { useDecodeStreamMutation, useGetDocumentsMutation } from '@services/walletService'
 import { parseDIDData } from '@utils/did'
-import { formatDate } from '@beckn-ui/common'
+import { feedbackActions, formatDate } from '@beckn-ui/common'
 import Cookies from 'js-cookie'
 import axios from '@services/axios'
-import VerifiedIcon from '@public/images/verified.svg'
-import UnverifiedIcon from '@public/images/unverified.svg'
-import { ItemMetaData } from '@lib/types/becknDid'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import CustomDatePicker from '@components/dateTimePicker/customDatePicker'
-import CustomTimePicker from '@components/dateTimePicker/customTimePicker'
-import { validateStartEndTime } from '@utils/general'
+import { roundToNextHour } from '@utils/general'
+import QRCodeScanner from '@components/QRCode/QRScanner'
+
+const SECRET_KEY = '40aead339c69a7ec08fb445ddff258b2' // Must be 32 characters for AES-256
+
+// Utility for Encoding to Base64
+const arrayBufferToBase64 = (buffer: ArrayBuffer) => btoa(String.fromCharCode(...(new Uint8Array(buffer) as any)))
+
+// Utility for Decoding Base64
+const base64ToArrayBuffer = (base64: string) => Uint8Array.from(atob(base64), c => c.charCodeAt(0))
 
 interface RentalServiceModalProps {
   isOpen: boolean
@@ -38,7 +41,7 @@ interface RentalServiceModalProps {
   handleOnSubmit: ({ success, startLoading }: { success: boolean; startLoading: boolean }) => void
 }
 
-const steps = [{ title: 'Add Asset for rental' }, { title: 'Add Price & Rental Duration' }]
+const steps = [{ title: 'Add Asset' }, { title: 'Add Price & Duration' }]
 
 interface FileUploadInfo {
   name: string
@@ -58,6 +61,8 @@ interface BatteryOption {
 }
 
 const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose, handleOnSubmit }) => {
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL
+
   const { activeStep, setActiveStep } = useSteps({
     index: 0,
     count: steps.length
@@ -68,28 +73,16 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
   const [selectedBattery, setSelectedBattery] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [price, setPrice] = useState<string>('100')
-  const [fromTime, setFromTime] = useState<Date>(new Date())
-  const [toTime, setToTime] = useState<Date>(new Date())
-  const [date, setDate] = useState<string>(new Date().toISOString())
+  const [startDate, setStartDate] = useState<string>(roundToNextHour(new Date()).toISOString())
+  const [endDate, setEndDate] = useState<string>(
+    roundToNextHour(new Date(new Date(startDate).setHours(new Date(startDate).getHours() + 1))).toISOString()
+  )
   const [confirmResOfWalletCatalogue, setConfirmResOfWalletCatalogue] = useState<any>(null)
+  const [confirmResOfQRScannedData, setConfirmResOfQRScannedData] = useState<any>(null)
   const [showTimeError, setShowTimeError] = useState(false)
+  const [showScanner, setShowScanner] = useState(false)
 
-  const [batteryOptions, setBatteryOptions] = useState<BatteryOption[]>([
-    // {
-    //   id: '1',
-    //   name: 'Battery -1',
-    //   assetId: '123456',
-    //   invoice: 'Invoice.pdf',
-    //   timestamp: '21st Jun 2021, 3.30pm'
-    // },
-    // {
-    //   id: '2',
-    //   name: 'Battery -2',
-    //   assetId: '123456',
-    //   invoice: 'Invoice.pdf',
-    //   timestamp: '21st Jun 2021, 3.30pm'
-    // }
-  ])
+  const [batteryOptions, setBatteryOptions] = useState<BatteryOption[]>([])
   const bearerToken = Cookies.get('authToken')
   const axiosConfig = {
     headers: {
@@ -98,9 +91,12 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
     }
   }
 
+  const dispatch = useDispatch()
   const { user } = useSelector((state: AuthRootState) => state.auth)
   const [getDocuments, { isLoading: verifyLoading }] = useGetDocumentsMutation()
   const [decodeStream] = useDecodeStreamMutation()
+
+  const fileInputRef = useRef<HTMLInputElement | null>(null)
 
   const getDecodedStreamData = async (data: any) => {
     console.log(data)
@@ -114,18 +110,23 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
       setIsLoading(true)
       const result = await getDocuments(user?.deg_wallet?.deg_wallet_id!).unwrap()
       console.log(result)
-      const list: BatteryOption[] = parseDIDData(result)['assets']['physical'].map((item, index) => {
-        console.log(item)
-        return {
-          id: index.toString(),
-          name: item.type,
-          source: item.source,
-          invoice: item.attachment!,
-          isVerified: true,
-          timestamp: new Date().toString(),
-          data: item
-        }
-      })
+      const list: BatteryOption[] = parseDIDData(result)
+        ['assets']['physical'].map((item, index) => {
+          return {
+            id: index.toString(),
+            name: item.type,
+            source: item.source,
+            invoice: item.attachment!,
+            isVerified: true,
+            timestamp:
+              item?.createdAt?.length > 5 && !isNaN(item?.createdAt as number)
+                ? item.createdAt
+                : Math.floor(new Date().getTime() / 1000),
+            data: item
+          }
+        })
+        .filter(val => val && val.source.toLocaleLowerCase() !== 'wallet')
+        .sort((a, b) => Number(b.data.createdAt) - Number(a.data.createdAt))
       setBatteryOptions(list)
     } catch (error) {
       console.error('Error fetching dashboard data:', error)
@@ -135,48 +136,125 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
   }
 
   const handleAddFromWallet = async () => {
-    setCurrentView('select')
-    setActiveStep(0)
-    console.log(user?.deg_wallet?.deg_wallet_id)
-    const getDoc = await fetchCredentials()
+    if (user?.deg_wallet && user?.deg_wallet.energy_assets_consent) {
+      setCurrentView('select')
+      setActiveStep(0)
+      console.log(user?.deg_wallet?.deg_wallet_id)
+      const getDoc = await fetchCredentials()
+    } else {
+      dispatch(
+        feedbackActions.setToastData({
+          toastData: {
+            message: user?.deg_wallet?.energy_assets_consent ? 'Warning' : 'Wallet not connected!',
+            display: true,
+            type: 'warning',
+            description: 'Please connect your wallet before proceeding.'
+          }
+        })
+      )
+    }
+  }
+
+  const handleOpenScanner = () => {
+    setShowScanner(true)
+  }
+
+  const getOrderStatusData = (scannedData: any) => {
+    if (
+      scannedData &&
+      scannedData?.userId === user?.id &&
+      scannedData?.userPhone === user?.agent?.agent_profile.phone_number &&
+      scannedData?.payload
+    ) {
+      setIsLoading(true)
+      axios
+        .post(`${apiUrl}/status`, scannedData.payload)
+        .then(res => {
+          const resData = { data: { confirmDetails: res.data.data } }
+          const item = scannedData
+          setBatteryOptions([
+            {
+              id: '0',
+              name: item.name,
+              source: item.source,
+              invoice: '',
+              isVerified: true,
+              timestamp: item.createdAt || Math.floor(new Date().getTime() / 1000),
+              data: null
+            }
+          ])
+          setConfirmResOfQRScannedData(resData)
+          setCurrentView('select')
+          setActiveStep(0)
+        })
+        .catch(err => {
+          console.error('Error fetching asset status:', err)
+        })
+        .finally(() => {
+          setIsLoading(false)
+        })
+    } else {
+      dispatch(
+        feedbackActions.setToastData({
+          toastData: {
+            message: 'Invalid QR code!',
+            display: true,
+            type: 'error',
+            description: 'Please scan a valid QR code.'
+          }
+        })
+      )
+    }
   }
 
   const handlePublish = async () => {
-    //TODO:Aniket Generate this payload using wallet
     handleOnSubmit({ startLoading: true, success: true })
-    const confirmRes = await getDecodedStreamData(confirmResOfWalletCatalogue)
-    console.log('Confirm Res:', confirmRes.data.confirmDetails)
-
-    const payload = {
-      providerDetails: {
-        data: confirmRes.data.confirmDetails
-      },
-      walletId: user?.deg_wallet?.deg_wallet_id,
-      startTime: `${Math.floor(new Date(fromTime).getTime() / 1000)}`,
-      endTime: `${Math.floor(new Date(toTime).getTime() / 1000)}`,
-      price: price.toString()
+    let confirmRes = null
+    if (confirmResOfWalletCatalogue) {
+      confirmRes = await getDecodedStreamData(confirmResOfWalletCatalogue)
+    } else if (confirmResOfQRScannedData) {
+      confirmRes = confirmResOfQRScannedData
     }
+    if (confirmRes) {
+      console.log('Confirm Res:', confirmRes.data.confirmDetails[0])
 
-    try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_STRAPI_URL}/unified-beckn-energy/rent-catalogue`,
-        payload,
-        {
-          headers: axiosConfig.headers
-        }
-      )
+      const payload = {
+        providerDetails: {
+          data: [{ ...confirmRes.data.confirmDetails[0], message: confirmRes.data.confirmDetails[0].message.order }]
+        },
+        walletId: user?.deg_wallet?.deg_wallet_id,
+        startTime: `${new Date(startDate).getTime() / 1000}`,
+        endTime: `${new Date(endDate).getTime() / 1000}`,
+        price: price.toString()
+      }
 
-      const data = response.data
-      console.log('API Response:', data)
-      handleClose()
-      handleOnSubmit({ startLoading: false, success: true })
-    } catch (error) {
-      console.error('Error making API call:', error)
-      throw error
+      try {
+        const response = await axios.post(
+          `${process.env.NEXT_PUBLIC_STRAPI_URL}/unified-beckn-energy/rent-catalogue`,
+          payload,
+          {
+            headers: axiosConfig.headers
+          }
+        )
+
+        const data = response.data
+        console.log('API Response:', data)
+        handleClose()
+        handleOnSubmit({ startLoading: false, success: true })
+        dispatch(
+          feedbackActions.setToastData({
+            toastData: { message: 'Success', display: true, type: 'success', description: 'Published Successfully!' }
+          })
+        )
+      } catch (error) {
+        console.error('Error making API call:', error)
+        throw error
+      }
     }
   }
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log('File:', event.target.files)
     const file = event.target.files?.[0]
     if (file) {
       setUploadedFile({
@@ -203,116 +281,140 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
     setCurrentView('upload')
     setSelectedBattery(null)
     setUploadedFile(null)
+    setBatteryOptions([])
+    setConfirmResOfWalletCatalogue(null)
+    setConfirmResOfQRScannedData(null)
+    setIsLoading(false)
     onClose()
   }
   console.log(batteryOptions)
+
+  // Initialize with rounded current time
+  const [fromTime, setFromTime] = useState<Date>(roundToNextHour(new Date()))
+  const [toTime, setToTime] = useState<Date>(() => {
+    const initialEndTime = roundToNextHour(new Date())
+    initialEndTime.setHours(initialEndTime.getHours() + 1)
+    return initialEndTime
+  })
+
+  // Update the time change handlers
+  const handleFromTimeChange = (date: Date) => {
+    const roundedTime = roundToNextHour(date)
+    setFromTime(roundedTime)
+  }
+
+  const handleToTimeChange = (date: Date) => {
+    const roundedTime = roundToNextHour(date)
+    setToTime(roundedTime)
+  }
+
+  // Add this helper function at the top of the component
+  const isToday = (dateToCheck: Date) => {
+    const today = new Date()
+    return (
+      dateToCheck.getDate() === today.getDate() &&
+      dateToCheck.getMonth() === today.getMonth() &&
+      dateToCheck.getFullYear() === today.getFullYear()
+    )
+  }
+
+  // Add this helper function to check if a time is in the past
+  const isTimePast = (timeToCheck: Date) => {
+    const now = new Date()
+    return timeToCheck.getTime() < now.getTime()
+  }
+
+  const getMinTimeForStartDate = () => {
+    const now = new Date()
+    const selectedDate = new Date(startDate)
+    const isToday = now.toDateString() === selectedDate.toDateString()
+
+    return isToday ? now : new Date(selectedDate.setHours(0, 0, 0, 0))
+  }
+
+  const getMinDateForEndDate = () => {
+    const selectedDate = new Date(startDate)
+    if (selectedDate.getHours() === 23) {
+      selectedDate.setDate(selectedDate.getDate() + 1)
+      selectedDate.setHours(0, 0, 0, 0)
+    }
+    return selectedDate
+  }
+
+  const getMinTimeForEndDate = () => {
+    const start = new Date(startDate)
+    const end = new Date(endDate)
+    const isSameDay = start.toDateString() === end.toDateString()
+
+    if (isSameDay) {
+      let hours = start.getHours() + 1
+      if (hours >= 24) {
+        start.setDate(start.getDate() + 1)
+        hours = 0
+      }
+      start.setHours(hours, 0, 0, 0)
+      return start
+    }
+    end.setHours(0, 0, 0, 0)
+    return end
+  }
+
+  const handleStartDateChange = (date: Date | null) => {
+    if (!date) return
+    const selectedDate = new Date(date)
+
+    const newEndDate = new Date(selectedDate)
+    const selectedHours = selectedDate.getHours()
+    if (selectedHours === 23) {
+      newEndDate.setDate(newEndDate.getDate() + 1)
+      newEndDate.setHours(0, 0, 0, 0)
+    } else {
+      newEndDate.setHours(selectedHours + 1, 0, 0, 0)
+    }
+
+    setStartDate(roundToNextHour(selectedDate).toISOString())
+    setEndDate(roundToNextHour(newEndDate).toISOString())
+    setFromTime(roundToNextHour(selectedDate))
+    setToTime(roundToNextHour(selectedDate))
+  }
+
+  const handleEndDateChange = (date: Date | null) => {
+    if (!date) return
+    setEndDate(roundToNextHour(new Date(date)).toISOString())
+    setFromTime(roundToNextHour(new Date(date)))
+    setToTime(roundToNextHour(new Date(date)))
+  }
+
   const renderContent = () => {
     if (currentView === 'upload') {
       return (
         <>
-          <Box mb={4}>
-            <Text mb={2}>Device</Text>
-            <Input
-              placeholder="Battery"
-              value="Battery"
-              isReadOnly
-            />
-          </Box>
-
-          <Box mb={4}>
-            <Text mb={2}>Asset ID</Text>
-            <Input
-              placeholder="MK-0123459"
-              value="MK-0123459"
-              isReadOnly
-            />
-          </Box>
-
-          {/* File Upload Section */}
-          <Box
-            border="1px dashed #E2E8F0"
-            borderRadius="md"
-            p={4}
-            mb={4}
-            textAlign="center"
-          >
-            <input
-              type="file"
-              id="file-upload"
-              disabled={true}
-              onChange={handleFileChange}
-              style={{ display: 'none' }}
-            />
-            <label htmlFor="file-upload">
-              <Flex
-                direction="column"
-                align="center"
-                cursor="pointer"
-              >
-                <Circle
-                  size="20px"
-                  border="1px solid #E2E8F0"
-                  mb={2}
-                >
-                  <AddIcon />
-                </Circle>
-                <Text>Drop your files here</Text>
-                <Text
-                  color="gray.500"
-                  fontSize="xs"
-                >
-                  <span style={{ textDecoration: 'underline', color: '#4398E8' }}>Browse file</span> from your device
-                </Text>
-              </Flex>
-            </label>
-          </Box>
-
-          {/* File Preview */}
-          {uploadedFile && (
-            <Box
-              border="1px solid #E2E8F0"
-              borderRadius="md"
-              p={4}
-              mb={4}
+          <Box p={4}>
+            <Text
+              textAlign={'center'}
+              color="#858585"
+              fontSize={'14px'}
             >
-              <Flex
-                justify="space-between"
-                align="center"
-              >
-                <Flex align="center">
-                  <Box
-                    as="span"
-                    mr={2}
-                    color="#4398E8"
-                  >
-                    📄
-                  </Box>
-                  <Box>
-                    <Text>{uploadedFile.name}</Text>
-                    <Text
-                      fontSize="sm"
-                      color="gray.500"
-                    >
-                      {uploadedFile.size}
-                    </Text>
-                  </Box>
-                </Flex>
-                <CheckIcon color="#4398E8" />
-              </Flex>
-              <Progress
-                value={uploadedFile.progress}
-                size="sm"
-                colorScheme="blue"
-                mt={2}
-              />
-            </Box>
-          )}
+              {'Click on "Add from wallet" to fetch your battery for renting!'}
+            </Text>
+          </Box>
 
           <BecknButton
-            text="Next"
-            color="white"
-            handleClick={handleNext}
+            text="Add from wallet"
+            handleClick={handleAddFromWallet}
           />
+          <BecknButton
+            text="Scan QR Code"
+            variant="outline"
+            handleClick={handleOpenScanner}
+          />
+
+          {batteryOptions.length > 0 && (
+            <BecknButton
+              text="Next"
+              handleClick={handleNext}
+            />
+          )}
         </>
       )
     }
@@ -324,6 +426,7 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
             className="hideScroll"
             maxH={{ base: 'calc(100vh - 500px)', md: 'calc(100vh - 600px)', lg: 'calc(100vh - 600px)' }}
             overflowY={'scroll'}
+            p="0 4px"
           >
             {batteryOptions.map(battery => (
               <Box
@@ -331,37 +434,36 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
                 mb={4}
                 p={4}
                 borderRadius="md"
-                border="1px solid #E2E8F0"
+                border="0.5px solid #E2E8F0"
                 cursor="pointer"
                 onClick={() => {
                   setSelectedBattery(battery.id)
-                  setConfirmResOfWalletCatalogue(battery)
+                  if (battery.data) {
+                    setConfirmResOfWalletCatalogue(battery)
+                  }
                 }}
                 position="relative"
                 bg="white"
-                boxShadow="sm"
+                boxShadow="2px 12px 12px -2px #0000001A"
               >
                 <Flex align="center">
                   <Circle
                     size="20px"
                     border="1px solid"
-                    borderColor={selectedBattery === battery.id ? '#4398E8' : '#E2E8F0'}
+                    borderColor={selectedBattery === battery.id ? '#4498E8' : '#E2E8F0'}
                     mr={3}
                   >
                     {selectedBattery === battery.id && (
                       <Circle
                         size="12px"
-                        bg="#4398E8"
+                        bg="#4498E8"
                       />
                     )}
                   </Circle>
                   <Box>
-                    <Flex
-                      align="center"
-                      mb={2}
-                    >
+                    <Flex align="center">
                       <Image
-                        src="/images/battery-box.svg"
+                        src="/images/battery_icon.svg"
                         alt="Battery Box"
                         width={65}
                         height={65}
@@ -380,26 +482,6 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
                           >
                             {battery.name}
                           </Text>
-                          {/* <Box
-                          marginTop={'2px'}
-                          width="60px"
-                        >
-                          {battery?.isVerified ? (
-                            <Image
-                              src={VerifiedIcon}
-                              alt=""
-                              width={80}
-                              height={18}
-                            />
-                          ) : (
-                            <Image
-                              src={UnverifiedIcon}
-                              alt=""
-                              width={80}
-                              height={18}
-                            />
-                          )}
-                        </Box> */}
                         </Flex>
                         <Flex>
                           <Text
@@ -422,7 +504,7 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
                         </Flex>
                         <Text
                           fontSize="12px"
-                          color="#4398E8"
+                          color="#228B22"
                           textDecoration="underline"
                           mb={1}
                         >
@@ -432,7 +514,7 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
                           fontSize="12px"
                           color="gray.500"
                         >
-                          {formatDate(battery.timestamp, 'do MMM yyyy, h.mma')}
+                          {formatDate((Number(battery?.timestamp) * 1000)!, 'do MMM yyyy, h.mma')}
                         </Text>
                         {/* <Text>{battery.data.attestation.length}</Text> */}
                       </Box>
@@ -443,11 +525,30 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
             ))}
           </Box>
 
-          <BecknButton
-            text="Next"
-            color="white"
-            handleClick={handlePricing}
-          />
+          {batteryOptions.length > 0 && (
+            <BecknButton
+              text="Next"
+              handleClick={handleNext}
+              disabled={!selectedBattery}
+            />
+          )}
+          {batteryOptions.length === 0 && (
+            <>
+              <Box p={4}>
+                <Text
+                  textAlign={'center'}
+                  color="#858585"
+                  fontSize={'14px'}
+                >
+                  No Assets found
+                </Text>
+              </Box>
+              <BecknButton
+                text="Back"
+                handleClick={() => setCurrentView('upload')}
+              />
+            </>
+          )}
         </Box>
       )
     }
@@ -458,22 +559,49 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
         <Box mb={6}>
           <Text
             mb={3}
+            mt={3}
             fontSize="16px"
           >
-            Date
+            From Date
           </Text>
           <Flex align="center">
             <CustomDatePicker
-              selected={new Date(date)}
+              selected={new Date(startDate)}
               placeholderText="Select 'from' date"
-              onChange={(date: any) => setDate(date?.toISOString())}
-              dateFormat="dd-MM-yyyy"
+              showTimeSelect
+              minDate={new Date()}
+              minTime={getMinTimeForStartDate()}
+              maxTime={new Date(new Date().setHours(23, 0, 0, 0))}
+              timeIntervals={60}
+              onChange={handleStartDateChange}
+              dateFormat="dd-MM-yyyy hh:mm a"
+              isInvalid={false}
+            />
+          </Flex>
+          <Text
+            mb={3}
+            mt={3}
+            fontSize="16px"
+          >
+            To Date
+          </Text>
+          <Flex align="center">
+            <CustomDatePicker
+              selected={new Date(endDate)}
+              placeholderText="Select 'to' date"
+              showTimeSelect
+              minDate={getMinDateForEndDate()}
+              minTime={getMinTimeForEndDate()}
+              maxTime={new Date(new Date(startDate).setHours(new Date(startDate).getHours() === 23 ? 47 : 23, 0, 0, 0))}
+              timeIntervals={60}
+              onChange={handleEndDateChange}
+              dateFormat="dd-MM-yyyy hh:mm a"
               isInvalid={false}
             />
           </Flex>
         </Box>
 
-        <Box mb={6}>
+        {/* <Box mb={6}>
           <Text
             mb={3}
             fontSize="16px"
@@ -488,21 +616,29 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
               <CustomTimePicker
                 selected={fromTime}
                 placeholderText="Select 'from'"
-                onChange={(date: any) => setFromTime(date)}
+                onChange={handleFromTimeChange}
                 dateFormat="h:mm aa"
                 isInvalid={false}
+                minTime={isToday(new Date(startDate)) ? new Date() : undefined}
               />
               <Text mx={3}>-</Text>
               <CustomTimePicker
                 selected={toTime}
                 placeholderText="Select 'to'"
-                onChange={(date: any) => setToTime(date)}
+                onChange={handleToTimeChange}
                 dateFormat="h:mm aa"
                 isInvalid={false}
+                minTime={
+                  isToday(new Date(endDate))
+                    ? fromTime.getTime() > new Date().getTime()
+                      ? fromTime
+                      : new Date()
+                    : fromTime
+                }
               />
             </Flex>
           </Flex>
-        </Box>
+        </Box> */}
 
         <Box mb={6}>
           <Text
@@ -513,156 +649,160 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
           </Text>
           <Flex align="center">
             <Input
+              type="number"
               value={price}
               autoFocus={true}
               width="100px"
               borderRadius="md"
               mr={3}
               onChange={e => setPrice(e.target.value)}
+              onKeyDown={e => {
+                // Prevent negative numbers and 'e'
+                if (e.key === '-' || e.key === 'e') {
+                  e.preventDefault()
+                }
+                // Prevent down arrow key when value is 1 or less
+                if (e.key === 'ArrowDown' && parseInt(price) <= 1) {
+                  e.preventDefault()
+                }
+              }}
             />
             <Text color="gray.600">Rs. per hour</Text>
           </Flex>
         </Box>
-
-        <Button
-          width="100%"
-          bg="#4398E8"
-          color="white"
-          _hover={{ bg: '#3182CE' }}
-          borderRadius="full"
-          onClick={handlePublish}
-        >
-          Submit & Publish
-        </Button>
+        <BecknButton
+          text={'Submit & Publish'}
+          handleClick={handlePublish}
+          disabled={price === '' || price === '0'}
+        />
       </Box>
     )
   }
 
   return (
-    <BottomModal
-      isOpen={isOpen}
-      onClose={handleClose}
-      title={
-        <Flex
-          justify="space-between"
-          align="center"
-          width="100%"
-        >
-          <Typography
-            text="Provide Rental Service"
-            fontSize="16px"
-          />
-          {currentView === 'upload' && (
-            <Text
-              color="#4398E8"
-              fontSize="sm"
-              cursor="pointer"
-              onClick={() => {
-                setIsLoading(true)
-                setTimeout(() => {
-                  handleAddFromWallet()
-                }, 3000)
-              }}
-            >
-              Add from wallet
-            </Text>
-          )}
-        </Flex>
-      }
-    >
-      <Box p={'1rem 0'}>
-        <Stepper
-          index={activeStep}
-          colorScheme="blue"
-          size="sm"
-          gap={2}
-          mb={2}
-          mr={7}
-          ml={7}
-        >
-          {steps.map((step, index) => (
-            <Step key={index}>
-              <StepIndicator>
-                <StepStatus
-                  complete={
-                    <Circle
-                      size="24px"
-                      bg="#4398E8"
-                      color="white"
-                    >
-                      <CheckIcon />
-                    </Circle>
-                  }
-                  incomplete={
-                    <Circle
-                      size="24px"
-                      bg="transparent"
-                      color="#4398E8"
-                      border="1px solid #4398E8"
-                    >
-                      {index + 1}
-                    </Circle>
-                  }
-                  active={
-                    <Circle
-                      size="24px"
-                      bg="#4398E8"
-                      color="white"
-                    >
-                      <CheckIcon />
-                    </Circle>
-                  }
+    <>
+      <BottomModal
+        isOpen={isOpen}
+        onClose={handleClose}
+        title={
+          <Flex
+            justify="space-between"
+            align="center"
+            width="100%"
+          >
+            <Typography
+              text="Provide Rental Service"
+              fontSize="16px"
+            />
+          </Flex>
+        }
+      >
+        <Box p={'10px 4px'}>
+          <Stepper
+            index={activeStep}
+            colorScheme="blue"
+            size="sm"
+            gap={2}
+            mb={2}
+            mr={12}
+            ml={7}
+          >
+            {steps.map((step, index) => (
+              <Step key={index}>
+                <StepIndicator>
+                  <StepStatus
+                    complete={
+                      <Circle
+                        size="24px"
+                        bg="#4498E8"
+                        color="white"
+                      >
+                        <CheckIcon />
+                      </Circle>
+                    }
+                    incomplete={
+                      <Circle
+                        size="24px"
+                        bg="transparent"
+                        color="#4498E8"
+                        border="1px solid #4498E8"
+                      >
+                        {index + 1}
+                      </Circle>
+                    }
+                    active={
+                      <Circle
+                        size="24px"
+                        bg="#4498E8"
+                        color="white"
+                      >
+                        <CheckIcon />
+                      </Circle>
+                    }
+                  />
+                </StepIndicator>
+                <StepSeparator
+                  _horizontal={{
+                    ml: '0',
+                    height: '4px'
+                  }}
+                  background="#4498E8 !important"
                 />
-              </StepIndicator>
-              <StepSeparator
-                _horizontal={{
-                  ml: '0',
-                  height: '4px'
+              </Step>
+            ))}
+          </Stepper>
+
+          <Flex
+            justify="space-between"
+            // mb={6}
+            gap={2}
+            mb={2}
+            mr={'0.9rem'}
+            ml={'0.9rem'}
+          >
+            {steps.map((step, index) => (
+              <Text
+                key={index}
+                fontSize="10px"
+                color={activeStep >= index ? '#4498E8' : '#6B7280'}
+                textAlign="center"
+                maxW="110px"
+                cursor={index === 0 ? 'pointer' : 'default'}
+                onClick={() => {
+                  if (index === 0) {
+                    setCurrentView('upload')
+                    setActiveStep(0)
+                    setBatteryOptions([])
+                  }
                 }}
-                backgroundColor="#4398E8"
-              />
-            </Step>
-          ))}
-        </Stepper>
+              >
+                {step.title}
+              </Text>
+            ))}
+          </Flex>
 
-        <Flex
-          justify="space-between"
-          mb={6}
-        >
-          {steps.map((step, index) => (
-            <Text
-              key={index}
-              fontSize="12px"
-              color={activeStep >= index ? '#4398E8' : '#6B7280'}
-              textAlign="center"
-              maxW="80px"
-              onClick={() => {
-                if (index === 0) {
-                  setCurrentView('upload')
-                  setActiveStep(0)
-                }
-              }}
-            >
-              {step.title}
-            </Text>
-          ))}
-        </Flex>
+          {isLoading ? (
+            <>
+              <Box
+                display={'grid'}
+                height={'calc(100vh - 510px)'}
+                alignContent={'center'}
+              >
+                <Loader />
+              </Box>
+            </>
+          ) : (
+            renderContent()
+          )}
+        </Box>
+      </BottomModal>
 
-        {isLoading ? (
-          <>
-            <Box
-              display={'grid'}
-              height={'calc(100vh - 510px)'}
-              alignContent={'center'}
-            >
-              <Loader />
-            </Box>
-          </>
-        ) : (
-          renderContent()
-        )}
-      </Box>
-    </BottomModal>
+      <QRCodeScanner
+        showScanner={showScanner}
+        setShowScanner={setShowScanner}
+        setScannedData={scannedData => getOrderStatusData(scannedData)}
+      />
+    </>
   )
 }
 

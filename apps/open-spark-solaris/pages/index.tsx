@@ -152,7 +152,7 @@ const HomePage = () => {
               dataTest="hire_button"
               sx={buttonStyles}
             />
-            <ShadowCardButton
+            {/* <ShadowCardButton
               prefixIcon={<TiShoppingCart size={28} />}
               text="Provide Rental Services"
               textStyle="start"
@@ -169,7 +169,7 @@ const HomePage = () => {
               handleClick={() => router.push('/orderHistory')}
               dataTest="store_button"
               sx={buttonStyles}
-            />
+            /> */}
           </Flex>
         </Box>
       </Box>
