@@ -99,7 +99,7 @@ const SignIn = ({ initialFormData = { mobileNumber: '' } }) => {
   }
 
   const handleSignIn = async () => {
-    const subjectKey = `users/phone/${formData.mobileNumber.replace(/^(\+91\s?)/, '')}`
+    const subjectKey = `users/phone/${formData.mobileNumber}` //.replace(/^(\+91\s?)/, '')
     const { publicKey, privateKey } = await generateKeyPairFromString(subjectKey)
     dispatch(setPrivateKeyAndPublicKey({ publicKey, privateKey }))
     const signInData = {

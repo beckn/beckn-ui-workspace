@@ -51,7 +51,7 @@ export default function Document() {
         />
         <link
           rel="shortcut icon"
-          href="./images/taxi_hub.svg"
+          href="./images/rental_app_logo.svg"
         />
       </Head>
       <body>
