@@ -1,7 +1,19 @@
 import { Box, Flex, Image, Text } from '@chakra-ui/react'
-import React from 'react'
+import React, { useState } from 'react'
 
 const index = () => {
+  const [iframeUrl, setIframeUrl] = useState('https://spark.becknprotocol.io')
+
+  React.useEffect(() => {
+    // Get URL from query parameter
+    const urlParams = new URLSearchParams(window.location.search)
+    const urlFromQuery = urlParams.get('url')
+
+    if (urlFromQuery) {
+      setIframeUrl(urlFromQuery)
+    }
+  }, [])
+
   return (
     <Box p="60px">
       <Flex
@@ -14,10 +26,10 @@ const index = () => {
           alt=""
         />
         <Box
-          maxW={'720px'}
+          maxW={'50rem'}
           textAlign="center"
           position="relative"
-          padding="10px"
+          padding="10px 20px"
           backdropFilter="blur(10px)"
           backgroundColor="#9D9D9D03"
           backdrop-filter="blur(69.5999984741211px)"
@@ -26,16 +38,16 @@ const index = () => {
             as={'span'}
             fontSize={'32px'}
             fontWeight="600"
-            background="linear-gradient(90.13deg, #E99060 2.76%, #A77CA5 38.62%)"
-            style={{ WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}
           >
-            Retail Consumer
-          </Text>{' '}
-          <Text
-            as={'span'}
-            fontSize={'32px'}
-            fontWeight="600"
-          >
+            <Text
+              as={'span'}
+              fontSize={'32px'}
+              fontWeight="600"
+              background="linear-gradient(90.13deg, #E99060 2.76%, #A77CA5 38.62%)"
+              style={{ WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}
+            >
+              Retail Consumer
+            </Text>{' '}
             experience for purchasing and renting out energy services
           </Text>
         </Box>
@@ -51,7 +63,7 @@ const index = () => {
                 //   ref={iframeRef}
                 className="ChooseExpIframe"
                 allow="clipboard-read; clipboard-write; geolocation; camera; fullscreen"
-                src={'https://retail-dev.becknprotocol.io/'}
+                src={iframeUrl}
                 frameBorder="0"
                 allowFullScreen
                 scrolling={'no'}
