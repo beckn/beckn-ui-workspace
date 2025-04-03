@@ -71,9 +71,10 @@ const ProductCard: React.FC<ProductCardProps> = props => {
                   width={'100%'}
                   height={'100%'}
                   alt={'item_image'}
-                  boxShadow={'0 20px 25px rgba(0, 0, 0, 0.1),0 8px 10px rgba(0, 0, 0, 0.05)'}
+                  // boxShadow={'0 20px 25px rgba(0, 0, 0, 0.1),0 8px 10px rgba(0, 0, 0, 0.05)'}
                   objectFit={'cover'}
                   className="product-search-img"
+                  maxH={'fit-content'}
                 />
               </Box>
             </Box>
@@ -169,68 +170,68 @@ const ProductCard: React.FC<ProductCardProps> = props => {
                   )
                 )}
 
-                {productInfoDataSource && typeof productInfoDataSource === 'string' && (
-                  <Flex
-                    fontSize="12px"
-                    alignItems="center"
-                    mb="10px"
+              {productInfoDataSource && typeof productInfoDataSource === 'string' && (
+                <Flex
+                  fontSize="12px"
+                  alignItems="center"
+                  mb="10px"
+                >
+                  <Text
+                    pl="3px"
+                    noOfLines={1}
+                    textOverflow="ellipsis"
+                    whiteSpace="pre-wrap"
+                    overflowWrap="break-word"
                   >
-                    <Text
-                      pl="3px"
-                      noOfLines={1}
-                      textOverflow="ellipsis"
-                      whiteSpace="pre-wrap"
-                      overflowWrap="break-word"
-                    >
-                      {productInfoDataSource as string}
-                    </Text>
-                  </Flex>
-                )}
-                {productInfoDataSource && (
-                  <>
-                    {typeof productInfoDataSource === 'object' && (
-                      <>
-                        {Object.keys(productInfoDataSource).includes('image') ? (
-                          <Image
-                            w={'60px'}
-                            mt="5px"
-                            src={productInfoDataSource['image']}
-                          />
-                        ) : (
-                          <>
-                            {Object.entries(productInfoDataSource as Record<string, any>).map(([key, value]) => (
-                              <Flex
-                                fontSize="12px"
-                                alignItems="center"
-                                mb="10px"
-                                key={key}
-                                className="custom-product-info"
+                    {productInfoDataSource as string}
+                  </Text>
+                </Flex>
+              )}
+              {productInfoDataSource && (
+                <>
+                  {typeof productInfoDataSource === 'object' && (
+                    <>
+                      {Object.keys(productInfoDataSource).includes('image') ? (
+                        <Image
+                          w={'60px'}
+                          mt="5px"
+                          mb="14px"
+                          src={productInfoDataSource['image']}
+                        />
+                      ) : (
+                        <>
+                          {Object.entries(productInfoDataSource as Record<string, any>).map(([key, value]) => (
+                            <Flex
+                              fontSize="12px"
+                              alignItems="center"
+                              mb="10px"
+                              key={key}
+                              className="custom-product-info"
+                            >
+                              <Text
+                                fontWeight="600"
+                                whiteSpace={'nowrap'}
                               >
-                                <Text
-                                  fontWeight="600"
-                                  whiteSpace={'nowrap'}
-                                  minW="fit-content"
-                                >
-                                  {key}:
-                                </Text>
-                                <Text
-                                  pl="3px"
-                                  noOfLines={2}
-                                  textOverflow="ellipsis"
-                                  whiteSpace="pre-wrap"
-                                  overflowWrap="break-word"
-                                >
-                                  {value}
-                                </Text>
-                              </Flex>
-                            ))}
-                          </>
-                        )}
-                      </>
-                    )}
-                  </>
-                )}
-              </Box>
+                                {key}:
+                              </Text>
+                              <Text
+                                pl="3px"
+                                noOfLines={1}
+                                textOverflow="ellipsis"
+                                whiteSpace="pre-wrap"
+                                overflowWrap="break-word"
+                              >
+                                {value}
+                              </Text>
+                            </Flex>
+                          ))}
+                        </>
+                      )}
+                    </>
+                  )}
+                </>
+              )}
+
               <Flex
                 justifyContent={'space-between'}
                 alignItems={'center'}
