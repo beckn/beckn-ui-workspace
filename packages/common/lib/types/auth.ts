@@ -15,6 +15,7 @@ export interface User {
     last_name: string
     agent_profile: {
       phone_number: number | string
+      address?: string
     }
     provider_id?: {
       id: number

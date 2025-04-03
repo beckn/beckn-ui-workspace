@@ -144,6 +144,15 @@ const HomePage = () => {
             flexDirection="column"
           >
             <ShadowCardButton
+              prefixIcon={<TbHexagonLetterO size={28} />}
+              text="Battery Rental"
+              textStyle="start"
+              postIcon={<MdOutlineKeyboardArrowRight />}
+              handleClick={() => handleNavigation('RENT_AND_HIRE')}
+              dataTest="hire_button"
+              sx={buttonStyles}
+            />
+            <ShadowCardButton
               prefixIcon={<TiShoppingCart size={28} />}
               text="Provide Rental Services"
               textStyle="start"
