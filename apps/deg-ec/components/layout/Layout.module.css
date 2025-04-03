@@ -1,6 +1,6 @@
 .layout_container {
   background-image: url('/images/cover_image.svg');
-  height: 100vh;
+  height: calc(100vh - -6rem);
   width: 100vw;
   /* background-repeat: no-repeat; */
   /* background-size: 100vw 100vh; */
