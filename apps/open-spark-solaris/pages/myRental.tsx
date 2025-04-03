@@ -3,20 +3,16 @@ import Cookies from 'js-cookie'
 import { Loader } from '@beckn-ui/molecules'
 import { Box, Text } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
-import { useRouter } from 'next/router'
-import { orderHistoryData } from '@beckn-ui/common/lib/types'
 import { RENTAL_ORDER_CATEGORY_ID } from '@lib/config'
+import EmptyOrder from '@components/orderHistory/emptyOrder'
 
 const MyRental = () => {
   const [orderHistoryList, setOrderHistoryList] = useState<OrderItem[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
-  const dispatch = useDispatch()
   const [error, setError] = useState('')
 
   const bearerToken = Cookies.get('authToken')
-  const router = useRouter()
 
   useEffect(() => {
     const myHeaders = new Headers()
@@ -40,7 +36,7 @@ const MyRental = () => {
         }
         setIsLoading(false)
       })
-      .catch(error => {
+      .catch(() => {
         setIsLoading(false)
       })
       .finally(() => setIsLoading(false))
@@ -82,10 +78,14 @@ const MyRental = () => {
       overflowY="scroll"
       className="hideScroll"
     >
-      <OrderOverview
-        items={orderHistoryList}
-        showPriceAndStatus={true}
-      />
+      {!orderHistoryList.length ? (
+        <EmptyOrder />
+      ) : (
+        <OrderOverview
+          items={orderHistoryList}
+          showPriceAndStatus={true}
+        />
+      )}
     </Box>
   )
 }

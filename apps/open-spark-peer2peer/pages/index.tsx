@@ -162,13 +162,17 @@ const Dashboard = () => {
       })
 
       const result = response.data
-      setCurrentTradeData([
-        {
-          id: result.prefId,
-          quantity: result.quantity || 0,
-          price: result.price || 0
-        }
-      ])
+      if (result.quantity !== 0) {
+        setCurrentTradeData([
+          {
+            id: result.prefId,
+            quantity: result.quantity || 0,
+            price: result.price || 0
+          }
+        ])
+      } else {
+        setCurrentTradeData([])
+      }
       // const tags = [result.trusted_source && 'Trusted Source', result.cred_required && 'Solar Energy'].filter(Boolean)
       // setPreferencesTags(tags)
     } catch (error) {
@@ -279,7 +283,7 @@ const Dashboard = () => {
         maxWidth={{ base: '100vw', md: '30rem', lg: '40rem' }}
         margin="calc(0rem + 90px) auto auto auto"
         backgroundColor="white"
-        height={'calc(100vh - 120px)'}
+        height={'calc(100vh)'}
       >
         <Flex
           flexDirection={'row'}

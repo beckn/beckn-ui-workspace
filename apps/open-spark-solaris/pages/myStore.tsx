@@ -1,8 +1,8 @@
-import Router, { useRouter } from 'next/router'
+import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { useLanguage } from '@hooks/useLanguage'
 import { cartActions, checkoutActions, HomePageContent, TopSheet, useGeolocation } from '@beckn-ui/common'
-import { Box } from '@chakra-ui/react'
+import { Box, Flex } from '@chakra-ui/react'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import { buttonStyles } from '@components/constant'
 import { MdOutlineKeyboardArrowRight } from 'react-icons/md'
@@ -64,7 +64,10 @@ const MyStore = () => {
           description: type === 'RENT_AND_HIRE' ? t.subTextForRenT : t.subText
         }}
         searchProps={{
-          searchPlaceholder: type === 'RENT_AND_HIRE' ? 'Search for Rental Services ' : t.searchPlaceholder,
+          searchPlaceholder:
+            type === 'RENT_AND_HIRE'
+              ? 'Search for Batteries, Capacity, Availability'
+              : 'Search for Batteries, Solar panels...',
           setSearchTerm: setSearchTerm,
           onSearchIconClick: searchIconClickHandler,
           onSearchInputEnterPress: navigateToSearchResults
@@ -76,9 +79,10 @@ const MyStore = () => {
         }}
       />
       {type === 'MY_STORE' && (
-        <Box
-          mt={'-60px'}
+        <Flex
+          mt={'-80px'}
           ml={'-10px'}
+          mr={'-10px'}
         >
           <ShadowCardButton
             prefixIcon={
@@ -93,7 +97,28 @@ const MyStore = () => {
             handleClick={() => router.push(`/orderHistory`)}
             sx={buttonStyles}
           />
-        </Box>
+        </Flex>
+      )}
+      {type === 'RENT_AND_HIRE' && (
+        <Flex
+          mt={'-80px'}
+          ml={'-10px'}
+          mr={'-10px'}
+        >
+          <ShadowCardButton
+            prefixIcon={
+              <img
+                src={'/images/pentagon.svg'}
+                alt={'orderHistory'}
+              />
+            }
+            text={'My Rentals'}
+            textStyle="start"
+            postIcon={<MdOutlineKeyboardArrowRight />}
+            handleClick={() => router.push(`/myRental`)}
+            sx={buttonStyles}
+          />
+        </Flex>
       )}
       <Box
         position={'absolute'}
@@ -103,11 +128,12 @@ const MyStore = () => {
         <BecknButton
           text={homeButtonName}
           handleClick={() => {
-            if (type === 'RENT_AND_HIRE') {
-              router.push('/rentAndHire')
-            } else {
-              Router.push('/')
-            }
+            // if (type === 'RENT_AND_HIRE') {
+            //   router.push('/rentAndHire')
+            // } else {
+            //   Router.push('/')
+            // }
+            router.push('/')
           }}
         />
       </Box>

@@ -2,12 +2,21 @@ import { DetailCard } from '@beckn-ui/becknified-components'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import { Flex, Text, Image, Divider, Input, Box } from '@chakra-ui/react'
 import Visa from '@public/images/Bitmap.svg'
+import { AuthRootState } from '@store/auth-slice'
 import Router from 'next/router'
 import React, { useState } from 'react'
+import { useSelector } from 'react-redux'
 
 const SecureCheckout = () => {
+  const { user } = useSelector((state: AuthRootState) => state.auth)
   const [otp, setOtp] = useState('')
   const [isVerified, setIsVerified] = useState(false)
+
+  const maskedPhone = user?.agent?.agent_profile?.phone_number
+    ? String(user?.agent?.agent_profile?.phone_number).slice(0, 2) +
+      'XXXX' +
+      String(user?.agent?.agent_profile?.phone_number).slice(-4)
+    : '98XXXX554'
 
   const handleVerify = () => {
     if (otp.length === 6) {
@@ -40,7 +49,7 @@ const SecureCheckout = () => {
           color="#80807F"
           mb="10px"
         >
-          We have sent a verification code by text message to +91 98XXXX554.
+          We have sent a verification code by text message to +91 {maskedPhone}.
         </Text>
         <Text
           mb="5px"
@@ -51,9 +60,18 @@ const SecureCheckout = () => {
         <Input
           border="1px solid #000000"
           value={otp}
+          type="number"
           onChange={e => setOtp(e.target.value)}
           maxLength={6}
           placeholder="Enter 6-digit OTP"
+          onKeyDown={e => {
+            if (e.key === '-' || e.key === 'e') {
+              e.preventDefault()
+            }
+            if (e.key === 'ArrowDown' && parseInt(otp) <= 1) {
+              e.preventDefault()
+            }
+          }}
         />
         <Flex
           alignItems="center"
@@ -61,10 +79,15 @@ const SecureCheckout = () => {
           mt="5px"
           mb="30px"
         >
-          <Text fontSize="12px">Didn’t receive OTP? </Text>
           <Text
             fontSize="12px"
-            color="#228B22"
+            mr="5px"
+          >
+            Didn't receive OTP?
+          </Text>
+          <Text
+            fontSize="12px"
+            color="#4398E8"
             cursor="pointer"
           >
             Resend

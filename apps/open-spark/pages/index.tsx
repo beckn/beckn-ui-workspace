@@ -141,7 +141,7 @@ const HomePage = () => {
               dataTest="store_button"
               sx={buttonStyles}
             />
-            <ShadowCardButton
+            {/* <ShadowCardButton
               prefixIcon={<TbHexagonLetterO size={28} />}
               text="Battery Rental"
               textStyle="start"
@@ -149,7 +149,7 @@ const HomePage = () => {
               handleClick={() => handleNavigation('RENT_AND_HIRE', '/myStore')}
               dataTest="hire_button"
               sx={buttonStyles}
-            />
+            /> */}
           </Flex>
         </Box>
       </Box>

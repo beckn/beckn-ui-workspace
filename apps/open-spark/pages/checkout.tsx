@@ -159,8 +159,9 @@ const CheckoutPage = () => {
       formData = {
         ...formData,
         name: user.agent.first_name.trim(),
-        mobileNumber: user.agent.agent_profile.phone_number,
-        email: user.email || ''
+        mobileNumber: `${user.agent.agent_profile.phone_number}`,
+        email: user.email || '',
+        address: user.agent.agent_profile.address || ''
       }
     } else {
       // If no user.agent, use default data

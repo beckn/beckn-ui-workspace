@@ -1,4 +1,5 @@
-import { ParsedItemModel, SearchResponseModel } from '@beckn-ui/common'
+import { formatDate, ParsedItemModel, SearchResponseModel } from '@beckn-ui/common'
+import { formatTime } from './general'
 
 const dummyLocation = {
   latitude: 12.909955,
@@ -24,19 +25,54 @@ export const parseSearchlist = (data: SearchResponseModel[], type?: 'RENT_AND_HI
             providerCoordinates = { latitude: lat, longitude: lng }
           }
         }
+
         provider.items.forEach(item => {
           let itemData = item
+          console.log('type:', item)
+
+          const fulfillmentStart: any = item.fulfillments?.find(f => f.type === 'RENTAL_START' && f.state)
+          const fulfillmentEnd: any = item.fulfillments?.find(f => f.type === 'RENTAL_END' && f.state)
+          const startTimestamp = fulfillmentStart ? Number(fulfillmentStart.state?.name || 0) : null
+          const endTimestamp = fulfillmentEnd ? Number(fulfillmentEnd.state?.name || 0) : null
+
+          const startTime = formatTime(startTimestamp! * 1000)
+          const endTime = formatTime(endTimestamp! * 1000)
+
+          const startDate = formatDate(Number(startTimestamp! * 1000), 'dd/MM/yy')
+          const endDate = formatDate(Number(endTimestamp! * 1000), 'dd/MM/yy')
+
           if (type === 'RENT_AND_HIRE') {
-            itemData = { ...item, price: { ...item.price, rateLabel: '/ hr' } }
+            itemData = {
+              ...item,
+              name: provider.name,
+              short_desc: '',
+              long_desc: item.long_desc || item.short_desc || '',
+              rating: '',
+              price: { ...item.price, rateLabel: 'per hour' },
+              productInfo: {
+                Availability: `${startDate} - ${endDate}`,
+                Time: `${startTime} - ${endTime}`
+              }
+            }
+          } else if (type === 'MY_STORE') {
+            itemData = {
+              ...item,
+              short_desc: undefined,
+              productInfo: {
+                image: provider?.images[0]?.url,
+                providerName: provider.name
+              },
+              infoGuideIcon: '../images/GUIDE.svg' // TODO: need to fix this, currently not supported
+            }
           }
           itemsArray.push({
             id: item.id,
             bppId: bpp_id,
             bppUri: bpp_uri,
-            domain: message.name,
+            domain: type === 'MY_STORE' ? message.name : '',
             transactionId: transaction_id,
             providerId: provider.id,
-            providerName: provider.name,
+            // providerName: '',
             rating: provider.rating,
             item: itemData,
             providerCoordinates

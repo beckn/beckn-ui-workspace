@@ -68,6 +68,12 @@ export const currencyFormat = (price: number | undefined) => {
   return price ? new Intl.NumberFormat('en-GB').format(price) : null
 }
 
+export const formatTime = (timestamp: number | null) => {
+  if (!timestamp) return 'N/A'
+  const date = new Date(timestamp)
+  return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })
+}
+
 // Add this helper function to round up time to nearest hour
 export const roundToNextHour = (date: Date) => {
   const roundedDate = new Date(date)
