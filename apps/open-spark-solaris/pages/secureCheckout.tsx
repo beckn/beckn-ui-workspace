@@ -1,7 +1,7 @@
 import { DetailCard } from '@beckn-ui/becknified-components'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import { Flex, Text, Image, Divider, Input, Box } from '@chakra-ui/react'
-import Visa from '@public/images/Bitmap.svg'
+import Visa from '@public/images/american.svg'
 import { AuthRootState } from '@store/auth-slice'
 import Router from 'next/router'
 import React, { useState } from 'react'
@@ -31,13 +31,13 @@ const SecureCheckout = () => {
           justifyContent="space-between"
           alignItems="center"
         >
-          <Text
+          {/* <Text
             fontSize="14px"
             fontWeight="700"
-            color="#B02A30"
+            color="#006FCC"
           >
-            ICICI Bank
-          </Text>
+            American Express
+          </Text> */}
           <Image src={Visa} />
         </Flex>
         <Divider
