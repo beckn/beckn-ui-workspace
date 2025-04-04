@@ -106,16 +106,19 @@ export const prepareApiPayload = (
   cartItems: CartItem[],
   fromTimestamp: number,
   toTimestamp: number,
-  domain: string
+  domain: string,
+  location?: any
 ): ApiPayload => {
   console.log(cartItems)
+  console.log(location)
   return {
     data: cartItems.map(item => ({
       context: {
         transaction_id: crypto.randomUUID(),
         bpp_id: item.bpp_id,
         bpp_uri: item.bpp_uri,
-        domain: domain
+        domain: domain,
+        ...(location && location)
       },
       message: {
         orders: [

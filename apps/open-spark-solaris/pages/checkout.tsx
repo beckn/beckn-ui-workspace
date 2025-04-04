@@ -26,6 +26,7 @@ import { calculateDuration, generateRentalInitPayload } from '@utils/checkout-ut
 import { setEmiDetails } from '@store/emiSelect-slice'
 import { formatDate } from '@beckn-ui/common'
 import { AuthRootState } from '@store/auth-slice'
+import { getCountryCode } from '@utils/general'
 
 export type ShippingFormData = {
   name: string
@@ -34,7 +35,7 @@ export type ShippingFormData = {
   address: string
   zipCode: string
 }
-const color = '#4398E8'
+const color = '#53A052'
 const CheckoutPage = () => {
   const cartItems = useSelector((state: ICartRootState) => state.cart.items)
   const type = useSelector((state: RootState) => state.navigation.type)
@@ -222,11 +223,16 @@ const CheckoutPage = () => {
   // },[])
   const formSubmitHandler = (data: any) => {
     if (data) {
-      const { id, type } = selectResponse[0]?.message?.order?.fulfillments[0] || {}
+      const { id, type: fulfillmentType } = selectResponse[0]?.message?.order?.fulfillments[0] || {}
       const payloadPromise =
         type === 'RENT_AND_HIRE'
-          ? generateRentalInitPayload(selectRentalResponse, shippingFormData, domain)
-          : getInitPayload(shippingFormData, billingFormData, cartItems, transactionId, domain, { id, type })
+          ? generateRentalInitPayload(selectRentalResponse, shippingFormData, domain, {
+              location: getCountryCode()
+            })
+          : getInitPayload(shippingFormData, billingFormData, cartItems, transactionId, domain, {
+              id,
+              type: fulfillmentType
+            })
       payloadPromise.then(res => {
         return initialize(res)
       })

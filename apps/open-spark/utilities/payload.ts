@@ -8,7 +8,7 @@ export const getPayloadForConfirm = (initResponse: InitResponseModel[], cartPric
         bpp_id: context.bpp_id,
         bpp_uri: context.bpp_uri,
         domain: context.domain,
-        ...(location && { location })
+        ...(location && location)
       },
       message: {
         orders: [

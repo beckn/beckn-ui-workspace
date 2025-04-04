@@ -99,27 +99,6 @@ const MyStore = () => {
           />
         </Flex>
       )}
-      {type === 'RENT_AND_HIRE' && (
-        <Flex
-          mt={'-80px'}
-          ml={'-10px'}
-          mr={'-10px'}
-        >
-          <ShadowCardButton
-            prefixIcon={
-              <img
-                src={'/images/pentagon.svg'}
-                alt={'orderHistory'}
-              />
-            }
-            text={'My Rentals'}
-            textStyle="start"
-            postIcon={<MdOutlineKeyboardArrowRight />}
-            handleClick={() => router.push(`/myRental`)}
-            sx={buttonStyles}
-          />
-        </Flex>
-      )}
       <Box
         position={'absolute'}
         bottom="calc(0px + 10px)"

@@ -25,7 +25,7 @@ const formatCurrency = (price: number, currencyType: CurrencyType, rateLabel: st
     INR: '₹',
     USD: '$'
   }
-
+  console.log(currencyType)
   return `${currencySymbols[currencyType]}${formattedNumber} ${rateLabel}`.trim()
 }
 

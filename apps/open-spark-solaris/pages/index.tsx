@@ -20,6 +20,7 @@ import { AuthRootState } from '@store/auth-slice'
 import { DegWalletDetails } from '@beckn-ui/common'
 import { UserRootState } from '@store/user-slice'
 import RentalServiceModal from '../components/RentalServiceModal/RentalServiceModal'
+import { RootState } from '@store/index'
 
 const HomePage = () => {
   const bearerToken = Cookies.get('authToken')
@@ -34,6 +35,7 @@ const HomePage = () => {
   const [walletDetails, setWalletDetails] = useState<DegWalletDetails>()
   const [modalType, setModalType] = useState<'wallet' | 'link' | 'otp' | 'alert' | null>(null)
 
+  const type = useSelector((state: RootState) => state.navigation.type)
   const router = useRouter()
   const { user } = useSelector((state: AuthRootState) => state.auth)
   const { shouldShowInitialAlert } = useSelector((state: UserRootState) => state.user)
@@ -170,6 +172,21 @@ const HomePage = () => {
               dataTest="store_button"
               sx={buttonStyles}
             /> */}
+            {type === 'RENT_AND_HIRE' && (
+              <ShadowCardButton
+                prefixIcon={
+                  <img
+                    src={'/images/pentagon.svg'}
+                    alt={'orderHistory'}
+                  />
+                }
+                text={'My Rentals'}
+                textStyle="start"
+                postIcon={<MdOutlineKeyboardArrowRight />}
+                handleClick={() => router.push(`/myRental`)}
+                sx={buttonStyles}
+              />
+            )}
           </Flex>
         </Box>
       </Box>
