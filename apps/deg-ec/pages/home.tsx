@@ -20,9 +20,10 @@ interface ExperienceCardProps {
   title: string
   icon: string
   url: string
+  isDisabled?: boolean
 }
 
-const ExperienceCard = ({ title, icon, url }: ExperienceCardProps) => {
+const ExperienceCard = ({ title, icon, url, isDisabled = false }: ExperienceCardProps) => {
   const router = useRouter()
 
   useEffect(() => {
@@ -48,17 +49,18 @@ const ExperienceCard = ({ title, icon, url }: ExperienceCardProps) => {
     <Box
       w="311px"
       height={'284px'}
-      bg="white"
+      bg={isDisabled ? 'gray.50' : 'white'}
       borderRadius="34px"
       border={'1px solid #000'}
       p="24px"
       position="relative"
       overflow="hidden"
-      cursor="pointer"
+      cursor={isDisabled ? 'not-allowed' : 'pointer'}
       transition="all 0.3s ease"
-      _hover={{ transform: 'translateY(-20px)' }}
+      _hover={{ transform: isDisabled ? 'translateY(-20px)' : 'translateY(-20px)' }}
+      opacity={isDisabled ? 0.7 : 1}
       onClick={() => {
-        if (url) {
+        if (!isDisabled && url) {
           router.push(`/landing?url=${encodeURIComponent(url)}&title=${encodeURIComponent(title)}`)
         }
       }}
@@ -68,12 +70,16 @@ const ExperienceCard = ({ title, icon, url }: ExperienceCardProps) => {
         top="0"
         left="0"
         height="60px"
-        bgGradient="linear-gradient(89.78deg, #FABD74 0.3%, #F6A468 99.93%)"
+        bgGradient={
+          isDisabled
+            ? 'linear-gradient(89.78deg, #D1D1D1 0.3%, #C4C4C4 99.93%)'
+            : 'linear-gradient(89.78deg, #FABD74 0.3%, #F6A468 99.93%)'
+        }
         borderBottomRightRadius="34px"
       >
         <Text
           fontSize={'20px'}
-          color="#000000"
+          color={isDisabled ? 'gray.600' : '#000000'}
           p="16px"
         >
           {title}
@@ -87,6 +93,7 @@ const ExperienceCard = ({ title, icon, url }: ExperienceCardProps) => {
         <Image
           src={icon}
           alt={title}
+          opacity={isDisabled ? 0.5 : 1}
         />
       </Box>
     </Box>
@@ -264,6 +271,7 @@ const Home = () => {
               title={exp.title}
               icon={exp.icon}
               url={exp.url}
+              isDisabled={exp.title === 'P2P Energy Trading' || exp.title === 'EV Charging'}
             />
           ))}
         </Grid>
