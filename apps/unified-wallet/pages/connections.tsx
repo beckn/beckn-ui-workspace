@@ -555,7 +555,7 @@ const Connections = () => {
               />
               <Divider />
               <Typography
-                text={'This connection belongs to Jack Smith'}
+                text={'This Connection belongs to Detroit Public School'}
                 fontSize="12px"
                 fontWeight="400"
                 color="#80807F"
