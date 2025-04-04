@@ -60,17 +60,19 @@ import { currencyMap } from '@lib/config'
 interface FormData {
   fullName: string
   dateOfBirth: Date | null
-  panCard: string
-  aadhaar: string
-  mobileNumber: string
+  // panCard?: string
+  // aadhaar?: string
+  ssNumber?: string
+  mobileNumber?: string
   loanTenure?: string
 }
 
 interface FormErrors {
   fullName?: string
   dateOfBirth?: string
-  panCard?: string
-  aadhaar?: string
+  // panCard?: string
+  // aadhaar?: string
+  ssNumber?: string
   mobileNumber?: string
   loanTenure?: string
 }
@@ -82,11 +84,12 @@ interface EMIApplicationModalProps {
   handleSyncWallet: () => void
   syncWalletIsLoading?: boolean
   walletDetails?: {
-    aadharNumber: string
-    panNumber: string
+    aadharNumber?: string
+    panNumber?: string
     fullName: string
     dateOfBirth: Date | null
     mobileNumber: string
+    ssNumber: string
   }
   handleOnSubmitForm: (data: FormData) => void
   syncWalletSuccess?: boolean
@@ -105,8 +108,9 @@ const EMIApplicationModal = ({
     fullName: walletDetails?.fullName || '',
     dateOfBirth: walletDetails?.dateOfBirth || null,
     panCard: walletDetails?.panNumber || '',
-    aadhaar: walletDetails?.aadharNumber || '',
-    mobileNumber: walletDetails?.mobileNumber || '',
+    // aadhaar: walletDetails?.aadharNumber || '',
+    // mobileNumber: walletDetails?.mobileNumber || '',
+    ssNumber: walletDetails?.ssNumber || '',
     loanTenure: ''
   })
 
@@ -121,8 +125,9 @@ const EMIApplicationModal = ({
   useEffect(() => {
     setFormData(prevFormData => ({
       ...prevFormData,
-      panCard: walletDetails?.panNumber || '',
-      aadhaar: walletDetails?.aadharNumber || '',
+      // panCard: walletDetails?.panNumber || '',
+      // aadhaar: walletDetails?.aadharNumber || '',
+      ssNumber: walletDetails?.ssNumber || '',
       fullName: walletDetails?.fullName || '',
       dateOfBirth: walletDetails?.dateOfBirth || null,
       mobileNumber: walletDetails?.mobileNumber || '',
@@ -144,23 +149,28 @@ const EMIApplicationModal = ({
     }
 
     // PAN Card validation
-    if (!formData.panCard.trim()) {
-      newErrors.panCard = 'PAN card number is required'
-    } else if (!/^[A-Z0-9]{10}$/.test(formData.panCard.toUpperCase())) {
-      newErrors.panCard = 'PAN card must be 10 characters'
-    }
+    // if (!formData.panCard.trim()) {
+    //   newErrors.panCard = 'PAN card number is required'
+    // } else if (!/^[A-Z0-9]{10}$/.test(formData.panCard.toUpperCase())) {
+    //   newErrors.panCard = 'PAN card must be 10 characters'
+    // }
 
-    // Aadhaar validation
-    if (!formData.aadhaar.trim()) {
-      newErrors.aadhaar = 'Aadhaar number is required'
-    } else if (!/^\d{12}$/.test(formData.aadhaar)) {
-      newErrors.aadhaar = 'Aadhaar must be 12 digits'
+    // // Aadhaar validation
+    // if (!formData.aadhaar.trim()) {
+    //   newErrors.aadhaar = 'Aadhaar number is required'
+    // } else if (!/^\d{12}$/.test(formData.aadhaar)) {
+    //   newErrors.aadhaar = 'Aadhaar must be 12 digits'
+    // }
+    if (!formData.ssNumber!.trim()) {
+      newErrors.ssNumber = 'SS number is required'
+    } else if (!/^\d{9}$/.test(formData.ssNumber!)) {
+      newErrors.ssNumber = 'SS number must be 9 digits'
     }
 
     // Mobile Number validation
-    if (!formData.mobileNumber.trim()) {
+    if (!formData.mobileNumber!.trim()) {
       newErrors.mobileNumber = 'Mobile number is required'
-    } else if (!/^\d{10}$/.test(formData.mobileNumber)) {
+    } else if (!/^\d{10}$/.test(formData.mobileNumber!)) {
       newErrors.mobileNumber = 'Mobile number must be 10 digits'
     }
 
@@ -177,13 +187,13 @@ const EMIApplicationModal = ({
     if (field === 'mobileNumber' && !/^\d*$/.test(value)) {
       return // Only allow digits in mobile number
     }
-    if (field === 'aadhaar' && !/^\d*$/.test(value)) {
-      return // Only allow digits in aadhaar
-    }
-    if (field === 'panCard') {
-      value = value.toUpperCase() // Convert PAN to uppercase
-      if (value.length > 10) return // Limit to 10 characters
-    }
+    // if (field === 'aadhaar' && !/^\d*$/.test(value)) {
+    //   return // Only allow digits in aadhaar
+    // }
+    // if (field === 'panCard') {
+    //   value = value.toUpperCase() // Convert PAN to uppercase
+    //   if (value.length > 10) return // Limit to 10 characters
+    // }
 
     setFormData(prev => ({
       ...prev,
@@ -399,7 +409,7 @@ const EMIApplicationModal = ({
           </Box>
 
           {/* PAN Card Field */}
-          <Box mb="20px">
+          {/* <Box mb="20px">
             <Flex
               flexDir={'row'}
               justifyContent={'space-between'}
@@ -435,10 +445,10 @@ const EMIApplicationModal = ({
                 text={errors.panCard}
               />
             )}
-          </Box>
+          </Box> */}
 
           {/* Aadhaar Field */}
-          <Box mb="20px">
+          {/* <Box mb="20px">
             <Flex
               flexDir={'row'}
               justifyContent={'space-between'}
@@ -472,6 +482,45 @@ const EMIApplicationModal = ({
                 color="red.500"
                 fontSize="12px"
                 text={errors.aadhaar}
+              />
+            )}
+          </Box> */}
+
+          {/* SSN Field */}
+          <Box mb="20px">
+            <Flex
+              flexDir={'row'}
+              justifyContent={'space-between'}
+            >
+              <Typography
+                fontWeight="400"
+                fontSize="15px"
+                text="Social Security Number *"
+              />
+              {syncWalletSuccess && formData.ssNumber && (
+                <Typography
+                  fontWeight="400"
+                  fontSize="12px"
+                  text="Verified by Vault"
+                  color="#53A052"
+                />
+              )}
+            </Flex>
+            <Input
+              value={formData.ssNumber ? formData.ssNumber.replace(/^(.{5})/g, '*****') : ''}
+              onChange={e => handleInputChange('ssNumber', e.target.value)}
+              paddingInlineStart="unset"
+              _focusVisible={{ borderColor: errors.ssNumber ? 'red.500' : '#4398E8' }}
+              border="unset"
+              borderBottom="1px solid"
+              borderColor={errors.ssNumber ? 'red.500' : '#3A3A3A'}
+              borderRadius="0"
+            />
+            {errors.ssNumber && (
+              <Typography
+                color="red.500"
+                fontSize="12px"
+                text={errors.ssNumber}
               />
             )}
           </Box>
@@ -568,6 +617,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
   const cartItems = useSelector((state: ICartRootState) => state.cart.items)
   const [aadharNumber, setAadharNumber] = useState<string>()
   const [PANNumber, setPANNumber] = useState<string>()
+  const [SSNumber, setSSNumber] = useState<string>()
   const [walletDetails, setWalletDetails] = useState<any>({
     fullName: '',
     dateOfBirth: '',
@@ -992,6 +1042,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
       }
       setAadharNumber('743160366069')
       setPANNumber('EPLPB9268F')
+      setSSNumber('675721423')
       setWalletDetails(data)
       setSyncWalletSuccess(true)
       const list: ItemMetaData[] = parseDIDData(result)['identities'].map((item, index) => {
@@ -1005,6 +1056,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
         } else {
           setPANNumber('EPLPB9268F')
         }
+        setSSNumber('675721423')
 
         return {
           id: index,
@@ -1531,8 +1583,9 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
               syncWalletIsLoading={syncWalletIsLoading}
               walletDetails={{
                 ...walletDetails,
-                aadharNumber: aadharNumber!,
-                panNumber: PANNumber!
+                // aadharNumber: aadharNumber!,
+                // panNumber: PANNumber!,
+                ssNumber: SSNumber!
               }}
               handleOnSubmitForm={handleOnSubmit}
               syncWalletSuccess={syncWalletSuccess}
