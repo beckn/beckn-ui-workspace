@@ -198,7 +198,7 @@ export const mapOrderData = (data: any[]): OrderItem[] => {
         rentedFrom: order.descriptor.name,
         timeSlot: `${startTime} - ${endTime}`,
         duration,
-        price: `${Number(order.quote.price.value) * Number(calculatedDuration)}`,
+        price: `${Number(order.quote.price.value)}`,
         status: paymentStatus
       }
     } catch (error) {
