@@ -1,5 +1,6 @@
-import { Box, Flex, Image, Text } from '@chakra-ui/react'
-import React, { useState } from 'react'
+import { Box, Flex, Image, Text, Button } from '@chakra-ui/react'
+import React, { useState, useEffect } from 'react'
+import Cookies from 'js-cookie'
 
 const index = () => {
   const [iframeUrl, setIframeUrl] = useState('https://spark.becknprotocol.io')
@@ -13,6 +14,27 @@ const index = () => {
       setIframeUrl(urlFromQuery)
     }
   }, [])
+
+  useEffect(() => {
+    const countryData = {
+      name: 'United States',
+      country_code: 'USA'
+    }
+
+    Cookies.set('country', JSON.stringify(countryData), {
+      expires: 7,
+      path: '/',
+      sameSite: 'strict'
+    })
+  }, [])
+
+  const countryCookie = Cookies.get('country') // Gets the URL-encoded string
+
+  const decodedCookie = countryCookie ? decodeURIComponent(countryCookie) : ''
+
+  // const countryData = JSON.parse(decodedCookie)
+
+  console.log(decodedCookie)
 
   return (
     <Box p="60px">
@@ -46,9 +68,9 @@ const index = () => {
               background="linear-gradient(90.13deg, #E99060 2.76%, #A77CA5 38.62%)"
               style={{ WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}
             >
-              Retail Consumer
+              Rental
             </Text>{' '}
-            experience for purchasing and renting out energy services
+            experience for discovering and renting energy related equipments
           </Text>
         </Box>
         <Text w={'130px'}></Text>
