@@ -31,10 +31,13 @@ const Dashboard = () => {
       <Flex
         // justifyContent={'space-between'}
         alignItems={'center'}
-        mt={'20px'}
-        mb={'15px'}
-        width={'50%'}
+        padding="20px"
+        ml="-20px"
+        mr="-20px"
+        bg="#fff"
+        // width={'50%'}
         gap="1rem"
+        boxShadow={'rgba(0, 0, 0, 0.1) 2px 14px 40px 4px'}
       >
         <Image
           src={profileIcon}
@@ -65,11 +68,11 @@ const Dashboard = () => {
           )
         )}
       </Flex>
-      <Divider mb={'36px'} />
+      {/* <Divider mb={'36px'} /> */}
       <Box
         maxWidth={{ base: '100vw', md: '30rem', lg: '40rem' }}
         margin="calc(0rem + 50px) auto"
-        background="#d9ebce"
+        // background="#d9ebce"
       >
         <Typography
           style={{ marginTop: '-15px', marginBottom: '15px' }}
