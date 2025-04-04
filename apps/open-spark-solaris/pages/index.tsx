@@ -87,31 +87,43 @@ const HomePage = () => {
         pl={'20px'}
         pr={'20px'}
       >
-        <Box>
-          <Avatar
-            name={`${user?.agent?.first_name || ''} ${user?.agent?.last_name || ''}`}
-            width="38px"
-            height="38px"
-            cursor={'pointer'}
-            onClick={() => router.push('/profile')}
-          />
-          {/* <Image
+        <Flex
+          gap={'10px'}
+          justify={'center'}
+          alignItems={'center'}
+        >
+          <Image
             src={profileIcon}
             alt="profileIcon"
             onClick={() => router.push('/profile')}
-          /> */}
-        </Box>
-        <Box>
-          {user?.deg_wallet ? (
-            <Select
-              variant="unstyled"
-              placeholder={`/subj****${user?.deg_wallet.deg_wallet_id.slice(-4)}`}
-              value=""
-              style={{
-                pointerEvents: 'none'
+          />
+
+          {user?.agent && (
+            <Typography
+              fontSize="14px"
+              color={'#3A3A3A'}
+              text={user?.agent?.first_name + ' ' + (user?.agent?.last_name ?? '')}
+              sx={{
+                maxWidth: '180px',
+                noOfLines: 2,
+                overflow: 'hidden',
+                textOverflow: 'ellipsis'
               }}
             />
+          )}
+        </Flex>
+        <Box>
+          {user?.deg_wallet ? (
+            <></>
           ) : (
+            // <Select
+            //   variant="unstyled"
+            //   placeholder={`/subj****${user?.deg_wallet.deg_wallet_id.slice(-4)}`}
+            //   value=""
+            //   style={{
+            //     pointerEvents: 'none'
+            //   }}
+            // />
             <BecknButton
               text="Connect Wallet"
               handleClick={() => handleModalOpen('wallet')}

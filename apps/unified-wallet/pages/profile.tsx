@@ -107,7 +107,17 @@ const ProfilePage = () => {
         customInputBlurHandler: () => {}
       }
     ]
-
+    if (user?.did) {
+      inputs.push({
+        type: 'text',
+        name: 'userDid',
+        value: `/subj****${user?.did.slice(-4)}`,
+        handleChange: handleInputChange,
+        label: 'Wallet ID',
+        disabled: true,
+        customInputBlurHandler: () => {}
+      })
+    }
     return inputs
   }
 
