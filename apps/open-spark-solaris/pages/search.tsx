@@ -162,8 +162,8 @@ const Search = () => {
           loadingText: 'Please wait!',
           loadingSubText:
             type === 'RENT_AND_HIRE'
-              ? 'fetching catalogues from the UEI network'
-              : 'fetching catalogues from the ONDC network',
+              ? 'fetching catalogues from the Open network'
+              : 'fetching catalogues from the Open network',
           dataTest: testIds.loadingIndicator
           // image: type === 'RENT_AND_HIRE' ? './images/loder-img.svg' : './images/loder-img-1.svg'
         }}
