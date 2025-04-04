@@ -196,7 +196,7 @@ const Home = () => {
               background="linear-gradient(90.13deg, #E99060 2.76%, #A77CA5 38.62%)"
               style={{ WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}
             >
-              Digital Energy Grid (D.E.G)
+              Digital Energy Grid (DEG)
             </Text>{' '}
             experience centre
           </Text>
