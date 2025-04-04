@@ -4,7 +4,8 @@ export const getRentalPayloadForConfirm = (
   initResponse: InitResponseModel[],
   fromTimestamp: string,
   toTimestamp: string,
-  calculatedDuration: any
+  calculatedDuration: any,
+  location?: any
 ) => {
   const payload = {
     data: initResponse.map(
@@ -18,7 +19,8 @@ export const getRentalPayloadForConfirm = (
           transaction_id: transaction_id,
           bpp_id: bpp_id,
           bpp_uri: bpp_uri,
-          domain: domain
+          domain: domain,
+          ...(location && location)
         },
         message: {
           orders: [

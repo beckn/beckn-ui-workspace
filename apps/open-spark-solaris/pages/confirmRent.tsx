@@ -11,7 +11,7 @@ import type { CartItem } from '../lib/types/rentalTypes'
 import { setOrderData } from '@store/rental-slice'
 import CustomTimePicker from '@components/dateTimePicker/customTimePicker'
 import CustomDatePicker from '@components/dateTimePicker/customDatePicker'
-import { roundToNextHour } from '@utils/general'
+import { getCountryCode, roundToNextHour } from '@utils/general'
 
 export default function ConfirmRent() {
   // const [fromTime, setFromTime] = useState<Date>(new Date())
@@ -33,7 +33,10 @@ export default function ConfirmRent() {
     localStorage.setItem('fromTimestamp', formTimestamp.toString())
     localStorage.setItem('toTimestamp', toTimestamp.toString())
     const domain = DOMAIN_PATH.RENT_AND_HIRE
-    const payload = prepareApiPayload(cartItems, formTimestamp, toTimestamp, domain)
+    console.log(getCountryCode())
+    const payload = prepareApiPayload(cartItems, formTimestamp, toTimestamp, domain, {
+      location: getCountryCode()
+    })
 
     try {
       const response = await fetch(`${apiUrl}/select`, {

@@ -46,6 +46,8 @@ import { parseDIDData } from '@utils/did'
 import { ItemMetaData } from '@lib/types/becknDid'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
+import { getCountryCode } from '@utils/general'
+import { currencyMap } from '@lib/config'
 
 interface FormData {
   fullName: string
@@ -787,7 +789,10 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                               alignItems="center"
                             >
                               <Text fontSize={'10px'}>Pay Now</Text>
-                              <Text fontSize={'10px'}>₹{payableAmount?.toFixed(2)}</Text>
+                              <Text fontSize={'10px'}>
+                                {currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}
+                                {payableAmount?.toFixed(2)}
+                              </Text>
                             </Flex>
                           </Box>
                           <Box
@@ -865,14 +870,16 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                                       fontWeight="500"
                                       color="#626060"
                                     >
-                                      ₹ {emi.toFixed(2)} x {item.name}m
+                                      {currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}
+                                      {emi.toFixed(2)} x {item.name}m
                                     </Box>
                                     <Box
                                       fontSize="10px"
                                       fontWeight="500"
                                       color="#626060"
                                     >
-                                      ₹ {actualInterestAmount.toFixed(2)} ({annualInterestRate}%)
+                                      {currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}
+                                      {actualInterestAmount.toFixed(2)} ({annualInterestRate}%)
                                     </Box>
                                     <Box>
                                       {dicountedSearch && (
@@ -882,7 +889,8 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                                           fontWeight="500"
                                           color="#626060"
                                         >
-                                          ₹{localStorage.getItem('totalCost')}.00
+                                          {currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}
+                                          {localStorage.getItem('totalCost')}.00
                                         </Box>
                                       )}
                                       <Box
@@ -890,7 +898,8 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                                         fontWeight="500"
                                         color="#626060"
                                       >
-                                        ₹ {totalCost.toFixed(2)}
+                                        {currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}
+                                        {totalCost.toFixed(2)}
                                       </Box>
                                     </Box>
                                   </Flex>

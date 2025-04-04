@@ -26,7 +26,7 @@ import { RootState } from '@store/index'
 import { useAddDocumentMutation, useGetVerificationMethodsMutation } from '@services/walletService'
 import { generateAuthHeader, generateKeyPairFromString } from '@services/cryptoUtilService'
 import { AuthRootState } from '@store/auth-slice'
-import { extractAuthAndHeader, toBase64 } from '@utils/general'
+import { extractAuthAndHeader, getCountryCode, toBase64 } from '@utils/general'
 import { feedbackActions } from '@beckn-ui/common'
 import { getRentalPayloadForConfirm } from '@utils/confirm-utils'
 import { getPayloadForConfirm, getPayloadForOrderHistoryPost } from '@utils/payload'
@@ -283,7 +283,9 @@ const retailOrderConfirmation = () => {
     if (initResponse && initResponse.length > 0) {
       const payload =
         type === 'RENT_AND_HIRE'
-          ? getRentalPayloadForConfirm(initResponse, timestamp.fromTime!, timestamp.toTime!, calculatedDuration!)
+          ? getRentalPayloadForConfirm(initResponse, timestamp.fromTime!, timestamp.toTime!, calculatedDuration!, {
+              location: getCountryCode()
+            })
           : getPayloadForConfirm(initResponse, getCartItemsWithQuantity()) // fixed temporary once Rahul fixes the changes regarding dynamic price calculation on BE revert the chnges and do the fixes accord.
       confirm(payload)
     }

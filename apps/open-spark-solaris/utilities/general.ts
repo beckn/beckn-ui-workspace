@@ -86,3 +86,7 @@ export const roundToNextHour = (date: Date) => {
   roundedDate.setMilliseconds(0)
   return roundedDate
 }
+
+export const getCountryCode = (): { country: { name: string; code: string } } => {
+  return { country: { name: 'United States', code: 'USA' } } // JSON.parse(localStorage.getItem('country_code') || '{}')
+}

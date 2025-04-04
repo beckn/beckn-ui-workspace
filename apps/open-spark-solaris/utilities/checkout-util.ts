@@ -3,7 +3,8 @@ import { ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
 export const generateRentalInitPayload = async (
   selectedRentalResponse: any,
   shippingFormData: ShippingFormInitialValuesType | Record<string, any>,
-  domain: string
+  domain: string,
+  location?: any
 ) => {
   return {
     data: [
@@ -12,7 +13,8 @@ export const generateRentalInitPayload = async (
           transaction_id: selectedRentalResponse?.context?.transaction_id,
           bpp_id: selectedRentalResponse?.context?.bpp_id,
           bpp_uri: selectedRentalResponse?.context?.bpp_uri,
-          domain: domain
+          domain: domain,
+          ...(location && location)
         },
         message: {
           orders: [
@@ -25,7 +27,7 @@ export const generateRentalInitPayload = async (
                   id: item.id,
                   quantity: {
                     selected: {
-                      count: item.quantity || 1
+                      count: Number(item.quantity) || 1
                     }
                   },
                   fulfillment_ids: item.fulfillments?.map(f => f.id) || []
