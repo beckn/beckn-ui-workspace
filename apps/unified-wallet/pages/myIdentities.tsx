@@ -518,7 +518,7 @@ const MyIdentities = () => {
               />
               <Divider />
               <Typography
-                text={'This connection belongs to Mr. Ravi Prakash.'}
+                text={'This connection belongs to Jack.'}
                 fontSize="12px"
                 fontWeight="400"
                 color="#80807F"

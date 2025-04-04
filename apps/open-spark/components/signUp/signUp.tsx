@@ -282,7 +282,7 @@ const SignUp = () => {
             color: '#4498E8',
             onChange: e => setTermsAccepted(e.target.checked),
             termsText: {
-              serviceName: 'Open Spark',
+              serviceName: '',
               termsLink: '/terms',
               privacyLink: '/privacy'
             }
