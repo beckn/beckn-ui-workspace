@@ -596,6 +596,40 @@ const EMIApplicationModal = ({
   )
 }
 
+interface EMIPlan {
+  id: string
+  provider_id?: string
+  providerName?: string
+  providerShortDescription?: string
+  providerImage?: string
+  item: Array<{
+    id: string
+    name: string
+    price: {
+      value: string
+    }
+    code: string
+  }>
+  bppId?: string
+  bppUri?: string
+}
+
+const mergeUniqueObjects = (arr1: EMIPlan[], arr2: EMIPlan[]): EMIPlan[] => {
+  const mergedMap = new Map<string, EMIPlan>()
+
+  // Add all objects from arr2 first
+  arr2.forEach(obj => {
+    mergedMap.set(obj.id, obj)
+  })
+
+  // Override with objects from arr1 if ID matches
+  arr1.forEach(obj => {
+    mergedMap.set(obj.id, obj)
+  })
+
+  return Array.from(mergedMap.values())
+}
+
 const PaymentMode = (props: PaymentMethodSelectionProps) => {
   const [selectedPlan, setSelectedPlan] = useState<string>('')
   const [openModal, setOpenModal] = useState<boolean>(false)
@@ -648,24 +682,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
   console.log(selectedPlan)
 
-  const mergeUniqueObjects = (arr1: any[], arr2: any[]): any[] => {
-    const mergedMap = new Map<string, any>()
-
-    // Add all objects from arr2 first
-    arr2.forEach(obj => {
-      mergedMap.set(obj.id, obj)
-    })
-
-    // Override with objects from arr1 if ID matches
-    arr1.forEach(obj => {
-      mergedMap.set(obj.id, obj)
-    })
-
-    return Array.from(mergedMap.values())
-  }
-
   const fetchEMIPlans = (providerId?: string) => {
-    // console.log(selectedItem)
     const searchPayload = {
       context: {
         domain: 'deg:finance',
@@ -694,21 +711,32 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
       .post(`${apiUrl}/search`, searchPayload)
       .then(res => {
         dispatch(discoveryEmiPlanActions.addTransactionId({ transactionId: res.data.data[0].context.transaction_id }))
-        const prevUnselectedEmiPlans = [...emiPlans].filter(item => item.id !== selectedPlan)
-        const parsedSearchItems = parseSearchFinancelist(res.data.data)
-        const formatedSearchData = mergeUniqueObjects(parsedSearchItems, prevUnselectedEmiPlans)
-        console.log('daata', formatedSearchData)
-        dispatch(discoveryEmiPlanActions.addProducts({ products: formatedSearchData }))
-        setEmiPlans(formatedSearchData)
+
+        // Get current emiPlans state
+        const currentEmiPlans = [...emiPlans]
+
+        // Parse new search results and assert type
+        const parsedSearchItems = parseSearchFinancelist(res.data.data) as unknown as EMIPlan[]
+
+        // Merge with existing plans, preserving unselected ones
+        const mergedPlans = mergeUniqueObjects(parsedSearchItems, currentEmiPlans)
+
+        // Update state with merged plans
+        dispatch(discoveryEmiPlanActions.addProducts({ products: mergedPlans }))
+        setEmiPlans(mergedPlans)
         setIsLoading(true)
-        if (providerId) {
-          const selectedPlanData = formatedSearchData.find(plan => plan.id === selectedPlan)
-          handleEmiSelect(selectedPlanData?.id!, formatedSearchData)
-        }
+        setSelectedPlan('')
+        // If this is a provider-specific search, handle the selected plan
+        // if (providerId) {
+        //   const selectedPlanData = mergedPlans.find(plan => plan.id === selectedPlan)
+        //   if (selectedPlanData) {
+        //     handleEmiSelect(selectedPlanData.id, mergedPlans)
+        //   }
+        // }
       })
-      .catch(e => {
+      .catch(error => {
         setIsLoading(false)
-        console.log('error')
+        console.error('Error fetching EMI plans:', error)
       })
   }
   console.log(emiPlans)
