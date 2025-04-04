@@ -869,15 +869,20 @@ const OrderDetails = () => {
               fontSize="17px"
             />
             {type === 'MY_STORE' && processState.allOrderDelivered && (
-              <Text
-                color={'#4398E8'}
-                fontSize={'10px'}
-                fontWeight="500"
-                cursor={'pointer'}
-                onClick={() => handleOnAddToPhysicalAsset(localStorage.getItem('statusResponse'))}
-              >
-                Add to wallet
-              </Text>
+              <BecknButton
+                text="Add to wallet"
+                handleClick={() => handleOnAddToPhysicalAsset(localStorage.getItem('statusResponse'))}
+                color="#4398E8"
+                variant="outline"
+                sx={{
+                  fontWeight: '500',
+                  fontSize: '10px',
+                  width: '5rem',
+                  height: '0.4rem',
+                  padding: '0.8rem !important',
+                  marginBottom: '0 !important'
+                }}
+              />
             )}
           </Flex>
 
