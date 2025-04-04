@@ -16,8 +16,9 @@ import { useGetDocumentsMutation } from '@services/walletService'
 import { parseDIDData } from '@utils/did'
 import { currencyFormat, filterByKeyword, getCountryCode } from '@utils/general'
 import { useRouter } from 'next/router'
-import RetailIcon from '@public/images/retail_icon.svg'
+import RetailIcon from '@public/images/retail_leasing.svg'
 import OpenSparkIcon from '@public/images/open_spark_icon.svg'
+import RentalIcon from '@public/images/rental.svg'
 import { Transaction } from '@lib/types/becknDid'
 import { currencyMap } from '@lib/config'
 
@@ -28,6 +29,7 @@ interface TransactionItem {
   date: string
   name: string
   category: string
+  type: string
   color?: string
   data: Transaction
 }
@@ -45,10 +47,11 @@ const MyTransactions = () => {
   const [getDocuments, { isLoading: verifyLoading }] = useGetDocumentsMutation()
 
   const categoryColors: Record<string, any> = {
-    Retail: { color: '#D58F0E', icon: RetailIcon },
+    Retail: { color: '#51B651', icon: RetailIcon },
+    Rental: { color: '#51B651', icon: RentalIcon },
     Energy: { color: '#51B651', icon: OpenSparkIcon },
     Healthcare: { color: '#D86969', icon: '' },
-    default: { color: '#4498E8', icon: '' }
+    default: { color: '#51B651', icon: '' }
   }
   console.log(items)
   const fetchTransactions = async () => {
@@ -58,6 +61,7 @@ const MyTransactions = () => {
       const list: TransactionItem[] = parseDIDData(result)
         ['transactions'].map((item, index) => {
           if (formatDate((Number(item.placedAt) * 1000)!, 'do MMM yyyy, h:mma') === 'Invalid date') return
+          console.log(item)
           return {
             id: index,
             orderId: item.id,
@@ -65,7 +69,8 @@ const MyTransactions = () => {
             amount: item.amount,
             date: formatDate((Number(item.placedAt) * 1000)!, 'do MMM yyyy, h:mma'),
             category: item.category,
-            color: categoryColors[item.category] || categoryColors.default,
+            type: item.type,
+            color: categoryColors[item.type] || categoryColors.default,
             data: item
           }
         })
@@ -187,7 +192,7 @@ const MyTransactions = () => {
                         </Box>
                         <Box
                           color={'#ffffff'}
-                          backgroundColor={categoryColors[item.category]?.color || categoryColors.default.color}
+                          backgroundColor={categoryColors[item.type]?.color || categoryColors.default.color}
                           fontSize="10px"
                           padding="2px 6px"
                           borderRadius="4px"
@@ -198,11 +203,12 @@ const MyTransactions = () => {
                           {item.category}
                         </Box>
                       </Flex>
-                      {categoryColors[item.category]?.icon && (
+                      {categoryColors[item.type]?.icon && (
                         <Image
-                          src={categoryColors[item.category]?.icon}
-                          width="58px"
+                          src={categoryColors[item.type]?.icon}
+                          width="auto"
                           height={'16px'}
+                          marginInlineEnd={'auto'}
                         />
                       )}
                       <Flex

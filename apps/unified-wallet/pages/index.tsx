@@ -15,10 +15,12 @@ import PoweredBy from '@beckn-ui/common/src/components/poweredBy'
 import NavigationItem from '@components/navigationItem'
 import { AuthRootState } from '@store/auth-slice'
 import { useSelector } from 'react-redux'
+import { UserRootState } from '@store/user-slice'
 
 const Dashboard = () => {
   const { t } = useLanguage()
   const router = useRouter()
+  const { profileDetails } = useSelector((state: UserRootState) => state.user)
 
   const { user } = useSelector((state: AuthRootState) => state.auth)
   const theme = useTheme()
@@ -27,7 +29,7 @@ const Dashboard = () => {
   return (
     <>
       <Flex
-        justifyContent={'space-between'}
+        // justifyContent={'space-between'}
         alignItems={'center'}
         mt={'20px'}
         mb={'15px'}
@@ -39,16 +41,28 @@ const Dashboard = () => {
           alt="profileIcon"
           onClick={() => router.push('/profile')}
         />
-        {user?.did && (
-          <Select
-            variant="unstyled"
-            placeholder={`/subj****${user?.did.slice(-4)}`}
-            value=""
+        {profileDetails?.agent ? (
+          <Typography
+            fontSize="16px"
+            color={'#3A3A3A'}
+            text={profileDetails?.agent?.first_name + ' ' + (profileDetails?.agent?.last_name ?? '')}
             style={{
               pointerEvents: 'none',
               width: 'fit-content'
             }}
           />
+        ) : (
+          user?.did && (
+            <Select
+              variant="unstyled"
+              placeholder={`/subj****${user?.did.slice(-4)}`}
+              value=""
+              style={{
+                pointerEvents: 'none',
+                width: 'fit-content'
+              }}
+            />
+          )
         )}
       </Flex>
       <Divider mb={'36px'} />

@@ -38,8 +38,11 @@ const MyServices = () => {
       })
       // .then(response => response.json())
       .then(result => {
-        console.log(result.data.items)
-        setOrderHistoryList(result.data.items)
+        if (result.data.message.includes('No Provider is linked to this user to get catalogues')) {
+          setOrderHistoryList([])
+        } else {
+          setOrderHistoryList(result.data.items)
+        }
 
         setIsLoading(false)
       })
@@ -60,24 +63,6 @@ const MyServices = () => {
         alignContent={'center'}
       >
         <Loader />
-      </Box>
-    )
-  }
-
-  if (error.length) {
-    return (
-      <Box
-        display={'grid'}
-        height={'calc(100vh - 300px)'}
-        alignContent={'center'}
-      >
-        <Text
-          fontWeight={500}
-          fontSize={'15px'}
-          textAlign={'center'}
-        >
-          {error}
-        </Text>
       </Box>
     )
   }

@@ -167,7 +167,7 @@ const retailOrderConfirmation = () => {
           privateKey,
           publicKey,
           payload: {
-            name: `transactions/type/domain/energy/id/${generatedOrderId}/amount/${totalPrice}/item_str/${totalItemsStr}/${orderPlacedAt}`,
+            name: `transactions/type/retail/energy/id/${generatedOrderId}/amount/${totalPrice}/item_str/${totalItemsStr}/${orderPlacedAt}`,
             stream: toBase64(docDetails)
           }
         })
