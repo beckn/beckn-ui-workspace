@@ -49,7 +49,7 @@ const ExperienceCard = ({ title, icon, url, isDisabled = false }: ExperienceCard
     <Box
       w="311px"
       height={'284px'}
-      bg={isDisabled ? 'gray.50' : 'white'}
+      bg={isDisabled ? '#fff' : 'white'}
       borderRadius="34px"
       border={'1px solid #000'}
       p="24px"
@@ -58,7 +58,7 @@ const ExperienceCard = ({ title, icon, url, isDisabled = false }: ExperienceCard
       cursor={isDisabled ? 'not-allowed' : 'pointer'}
       transition="all 0.3s ease"
       _hover={{ transform: isDisabled ? 'translateY(-20px)' : 'translateY(-20px)' }}
-      opacity={isDisabled ? 0.7 : 1}
+      opacity={isDisabled ? 1 : 1}
       onClick={() => {
         if (!isDisabled && url) {
           router.push(`/landing?url=${encodeURIComponent(url)}&title=${encodeURIComponent(title)}`)
@@ -72,7 +72,7 @@ const ExperienceCard = ({ title, icon, url, isDisabled = false }: ExperienceCard
         height="60px"
         bgGradient={
           isDisabled
-            ? 'linear-gradient(89.78deg, #D1D1D1 0.3%, #C4C4C4 99.93%)'
+            ? 'linear-gradient(89.78deg, #D2CCC6 0.3%, #C2C2C2 99.93%)'
             : 'linear-gradient(89.78deg, #FABD74 0.3%, #F6A468 99.93%)'
         }
         borderBottomRightRadius="34px"
@@ -204,6 +204,7 @@ const Home = () => {
 
         <Menu>
           <MenuButton
+            background={'#fff'}
             as={Button}
             variant="outline"
             color={'#000'}
