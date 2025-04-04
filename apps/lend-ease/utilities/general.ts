@@ -8,7 +8,7 @@ export const formatFileSize = (bytes: number): string => {
 }
 
 export const getMaskedMobileNumber = (phoneNumber: string) => {
-  return `+91 ${phoneNumber.slice(0, 2)}XXXX${phoneNumber.slice(-3)}`
+  return `${phoneNumber.slice(0, 2)}XXXX${phoneNumber.slice(-3)}`
 }
 
 export const extractMobileNumberFromSubjectDid = (subject: string) => {
