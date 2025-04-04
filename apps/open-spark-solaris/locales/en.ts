@@ -98,6 +98,8 @@ const en: { [key: string]: string } = {
   emptyCardHeading: 'The Cart is Empty',
   emptyCardSubHeading: 'Looks like you haven’t made your choice yet',
   gPay: 'Google Pay',
+  applyPay: 'Apple Pay',
+  stripePay: 'Stripe',
   items: 'Order Overview',
   loading: 'Loading Plans',
   pleaseWait: 'Please wait!',
