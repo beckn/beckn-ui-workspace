@@ -26,6 +26,7 @@ import { calculateDuration, generateRentalInitPayload } from '@utils/checkout-ut
 import { setEmiDetails } from '@store/emiSelect-slice'
 import { formatDate } from '@beckn-ui/common'
 import { AuthRootState } from '@store/auth-slice'
+import { getCountryCode } from '@utils/general'
 
 export type ShippingFormData = {
   name: string
@@ -226,7 +227,17 @@ const CheckoutPage = () => {
       const payloadPromise =
         type === 'RENT_AND_HIRE'
           ? generateRentalInitPayload(selectRentalResponse, shippingFormData, domain)
-          : getInitPayload(shippingFormData, billingFormData, cartItems, transactionId, domain, { id, type })
+          : getInitPayload(
+              shippingFormData,
+              billingFormData,
+              cartItems,
+              transactionId,
+              domain,
+              { id, type },
+              {
+                location: getCountryCode()
+              }
+            )
       payloadPromise.then(res => {
         return initialize(res)
       })

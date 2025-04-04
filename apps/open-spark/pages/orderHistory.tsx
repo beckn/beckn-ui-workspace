@@ -10,10 +10,10 @@ import { formatTimestamp } from '@beckn-ui/common/src/utils'
 import { useRouter } from 'next/router'
 import { orderActions } from '@beckn-ui/common/src/store/order-slice'
 import { testIds } from '@shared/dataTestIds'
-import { RENTAL_ORDER_CATEGORY_ID, RETAIL_ORDER_CATEGORY_ID } from '@lib/config'
+import { currencyMap, RENTAL_ORDER_CATEGORY_ID, RETAIL_ORDER_CATEGORY_ID } from '@lib/config'
 import { OrderHistoryData } from '@lib/types/orderHistory'
 import EmptyOrder from '@components/orderHistory/emptyOrder'
-import { currencyFormat } from '@utils/general'
+import { currencyFormat, getCountryCode } from '@utils/general'
 
 const orderStatusMap: Record<string, string> = {
   'In Review': 'Pending',
@@ -160,7 +160,7 @@ const OrderHistory = () => {
 
                     <Text
                       as={Typography}
-                      text={`${order.quote.price.currency} ${currencyFormat(Number(order.quote.price.value))}`}
+                      text={`${currencyMap[order.quote.price.currency as keyof typeof currencyMap]}${currencyFormat(Number(order.quote.price.value))}`}
                       fontWeight="600"
                       fontSize={'12px'}
                       dataTest={testIds.orderHistory_Price}

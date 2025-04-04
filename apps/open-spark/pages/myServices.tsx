@@ -8,10 +8,11 @@ import { formatTimestamp } from '@beckn-ui/common/src/utils'
 import { useRouter } from 'next/router'
 import { orderActions } from '@beckn-ui/common/src/store/order-slice'
 import { testIds } from '@shared/dataTestIds'
-import { RENTAL_ORDER_CATEGORY_ID } from '@lib/config'
+import { currencyMap, RENTAL_ORDER_CATEGORY_ID } from '@lib/config'
 import { OrderHistoryData } from '@lib/types/orderHistory'
 import axios from '@services/axios'
 import EmptyOrder from '@components/orderHistory/emptyOrder'
+import { getCountryCode } from '@utils/general'
 
 const orderStatusMap: Record<string, string> = {
   'In Review': 'Pending'
@@ -146,7 +147,7 @@ const MyServices = () => {
 
                   <Text
                     as={Typography}
-                    text={`${order.sc_retail_product.currency} ${order.sc_retail_product.min_price} ${order.sc_retail_product.quantity_unit}`}
+                    text={`${currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}${order.sc_retail_product.min_price} ${order.sc_retail_product.quantity_unit}`}
                     fontWeight="600"
                     fontSize={'12px'}
                     dataTest={testIds.orderHistory_Price}

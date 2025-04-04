@@ -1,13 +1,14 @@
 import { ConfirmResponseModel, InitResponseModel } from '@beckn-ui/common'
 
-export const getPayloadForConfirm = (initResponse: InitResponseModel[], cartPriceDetails: any) => {
+export const getPayloadForConfirm = (initResponse: InitResponseModel[], cartPriceDetails: any, location?: any) => {
   const payload = {
     data: initResponse.map(({ context, message: { order } }) => ({
       context: {
         transaction_id: context.transaction_id,
         bpp_id: context.bpp_id,
         bpp_uri: context.bpp_uri,
-        domain: context.domain
+        domain: context.domain,
+        ...(location && { location })
       },
       message: {
         orders: [

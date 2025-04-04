@@ -24,8 +24,9 @@ import Cookies from 'js-cookie'
 import axios from '@services/axios'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import CustomDatePicker from '@components/dateTimePicker/customDatePicker'
-import { roundToNextHour } from '@utils/general'
+import { getCountryCode, roundToNextHour } from '@utils/general'
 import QRCodeScanner from '@components/QRCode/QRScanner'
+import { currencyMap } from '@lib/config'
 
 const SECRET_KEY = '40aead339c69a7ec08fb445ddff258b2' // Must be 32 characters for AES-256
 
@@ -667,7 +668,7 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
                 }
               }}
             />
-            <Text color="gray.600">Rs. per hour</Text>
+            <Text color="gray.600">{`${currencyMap[getCountryCode().country.code as keyof typeof currencyMap]} per hour`}</Text>
           </Flex>
         </Box>
         <BecknButton
