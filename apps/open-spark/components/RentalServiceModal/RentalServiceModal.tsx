@@ -73,7 +73,7 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
   const [currentView, setCurrentView] = useState<'upload' | 'select' | 'pricing'>('upload')
   const [selectedBattery, setSelectedBattery] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
-  const [price, setPrice] = useState<string>('100')
+  const [price, setPrice] = useState<string>('10')
   const [startDate, setStartDate] = useState<string>(roundToNextHour(new Date()).toISOString())
   const [endDate, setEndDate] = useState<string>(
     roundToNextHour(new Date(new Date(startDate).setHours(new Date(startDate).getHours() + 1))).toISOString()
@@ -648,7 +648,10 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
           >
             Price
           </Text>
-          <Flex align="center">
+          <Flex
+            align="center"
+            position={'relative'}
+          >
             <Input
               type="number"
               value={price}
@@ -656,6 +659,7 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
               width="100px"
               borderRadius="md"
               mr={3}
+              pl="20px"
               onChange={e => setPrice(e.target.value)}
               onKeyDown={e => {
                 // Prevent negative numbers and 'e'
@@ -668,7 +672,13 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
                 }
               }}
             />
-            <Text color="gray.600">{`${currencyMap[getCountryCode().country.code as keyof typeof currencyMap]} per hour`}</Text>
+            <Text
+              fontSize={'16px'}
+              color="gray.600"
+              position={'absolute'}
+              left="10px"
+            >{`${currencyMap[getCountryCode().country.code as keyof typeof currencyMap]} `}</Text>
+            <Text color="gray.600">{` per hour`}</Text>
           </Flex>
         </Box>
         <BecknButton
