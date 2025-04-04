@@ -172,21 +172,20 @@ const HomePage = () => {
               dataTest="store_button"
               sx={buttonStyles}
             /> */}
-            {type === 'RENT_AND_HIRE' && (
-              <ShadowCardButton
-                prefixIcon={
-                  <img
-                    src={'/images/pentagon.svg'}
-                    alt={'orderHistory'}
-                  />
-                }
-                text={'My Rentals'}
-                textStyle="start"
-                postIcon={<MdOutlineKeyboardArrowRight />}
-                handleClick={() => router.push(`/myRental`)}
-                sx={buttonStyles}
-              />
-            )}
+
+            <ShadowCardButton
+              prefixIcon={
+                <img
+                  src={'/images/pentagon.svg'}
+                  alt={'orderHistory'}
+                />
+              }
+              text={'My Rentals'}
+              textStyle="start"
+              postIcon={<MdOutlineKeyboardArrowRight />}
+              handleClick={() => router.push(`/myRental`)}
+              sx={buttonStyles}
+            />
           </Flex>
         </Box>
       </Box>
