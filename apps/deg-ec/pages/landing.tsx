@@ -1,19 +1,17 @@
-import { Box, Flex, Image, Text, Button } from '@chakra-ui/react'
-import React, { useState, useEffect } from 'react'
-import Cookies from 'js-cookie'
+import { Box, Divider, Flex, Image, Text } from '@chakra-ui/react'
+import React, { useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
 
-const index = () => {
-  const [iframeUrl, setIframeUrl] = useState('https://spark.becknprotocol.io')
+const Landing = () => {
+  const router = useRouter()
+  const [iframeUrl, setIframeUrl] = useState('')
 
-  React.useEffect(() => {
-    // Get URL from query parameter
-    const urlParams = new URLSearchParams(window.location.search)
-    const urlFromQuery = urlParams.get('url')
-
-    if (urlFromQuery) {
-      setIframeUrl(urlFromQuery)
+  useEffect(() => {
+    const { url } = router.query
+    if (url && typeof url === 'string') {
+      setIframeUrl(decodeURIComponent(url))
     }
-  }, [])
+  }, [router.query])
 
   // useEffect(() => {
   //   const countryData = {
@@ -46,15 +44,16 @@ const index = () => {
         <Image
           src="/images/logo.svg"
           alt=""
+          cursor="pointer"
+          onClick={() => router.push('/home')}
         />
         <Box
-          maxW={'50rem'}
+          maxW={'720px'}
           textAlign="center"
           position="relative"
           padding="10px 20px"
           backdropFilter="blur(10px)"
           backgroundColor="#9D9D9D03"
-          backdrop-filter="blur(69.5999984741211px)"
         >
           <Text
             as={'span'}
@@ -79,10 +78,8 @@ const index = () => {
       <div className="smartphone-wrapper">
         <div className="smartphone">
           <div className="content">
-            <>
+            {iframeUrl && (
               <iframe
-                //@ts-ignore
-                //   ref={iframeRef}
                 className="ChooseExpIframe"
                 allow="clipboard-read; clipboard-write; geolocation; camera; fullscreen"
                 src={iframeUrl}
@@ -94,12 +91,41 @@ const index = () => {
                 style={{ borderRadius: '36px' }}
                 loading="eager"
               />
-            </>
+            )}
           </div>
         </div>
       </div>
+      <Box
+        w={'50px'}
+        h="104px"
+        boxShadow="16px 17px 22px 23px #00000008"
+        borderRadius={'50px'}
+        bg="#fff"
+        p="6px"
+        position={'absolute'}
+        right="60px"
+        top={'calc(50vh - 25px)'}
+        display="flex"
+        justifyContent={'center'}
+        alignItems="center"
+        flexDirection={'column'}
+      >
+        <Image
+          src="/images/homeIcon.svg"
+          alt=""
+          cursor={'pointer'}
+          onClick={() => router.push('/home')}
+        />
+        <Divider />
+        <Image
+          src="/images/exitIcon.svg"
+          alt=""
+          cursor={'pointer'}
+          onClick={() => router.push('/')}
+        />
+      </Box>
     </Box>
   )
 }
 
-export default index
+export default Landing

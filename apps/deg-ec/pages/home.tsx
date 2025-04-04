@@ -9,7 +9,8 @@ import {
   Menu,
   MenuButton,
   MenuList,
-  MenuItem
+  MenuItem,
+  Divider
 } from '@chakra-ui/react'
 import Cookies from 'js-cookie'
 import { useRouter } from 'next/router'
@@ -18,18 +19,10 @@ import React, { useEffect, useState } from 'react'
 interface ExperienceCardProps {
   title: string
   icon: string
+  url: string
 }
 
-const ExperienceCard = ({ title, icon }: ExperienceCardProps) => {
-  // React.useEffect(() => {
-  //   // Get URL from query parameter
-  //   const urlParams = new URLSearchParams(window.location.search)
-  //   const urlFromQuery = urlParams.get('url')
-
-  //   if (urlFromQuery) {
-  //     setIframeUrl(urlFromQuery)
-  //   }
-  // }, [])
+const ExperienceCard = ({ title, icon, url }: ExperienceCardProps) => {
   const router = useRouter()
 
   useEffect(() => {
@@ -45,11 +38,9 @@ const ExperienceCard = ({ title, icon }: ExperienceCardProps) => {
     })
   }, [])
 
-  const countryCookie = Cookies.get('country_code') // Gets the URL-encoded string
+  const countryCookie = Cookies.get('country_code')
 
   const decodedCookie = countryCookie ? decodeURIComponent(countryCookie) : ''
-
-  // const countryData = JSON.parse(decodedCookie)
 
   console.log(decodedCookie)
 
@@ -67,7 +58,9 @@ const ExperienceCard = ({ title, icon }: ExperienceCardProps) => {
       transition="all 0.3s ease"
       _hover={{ transform: 'translateY(-20px)' }}
       onClick={() => {
-        router.push(`/deg-ec?url=${title}`)
+        if (url) {
+          router.push(`/landing?url=${encodeURIComponent(url)}`)
+        }
       }}
     >
       <Box
@@ -75,7 +68,6 @@ const ExperienceCard = ({ title, icon }: ExperienceCardProps) => {
         top="0"
         left="0"
         height="60px"
-        // width="150px"
         bgGradient="linear-gradient(89.78deg, #FABD74 0.3%, #F6A468 99.93%)"
         borderBottomRightRadius="34px"
       >
@@ -102,6 +94,7 @@ const ExperienceCard = ({ title, icon }: ExperienceCardProps) => {
 }
 
 const Home = () => {
+  const router = useRouter()
   const [selectedCountry, setSelectedCountry] = useState({
     name: 'USA',
     fullName: 'USA',
@@ -139,13 +132,17 @@ const Home = () => {
     }
   ]
 
-  const experiences = [
-    { title: 'Retail Experience', icon: '/images/retail.svg', url: 'retail' },
-    { title: 'Rental Experience', icon: '/images/rental.svg', url: 'rental' },
-    { title: 'Wallet Experience', icon: '/images/wallet.svg', url: 'wallet' },
-    { title: 'Finance Experience', icon: '/images/finance.svg', url: 'finance' },
-    { title: 'P2P Energy Trading', icon: '/images/p2p.svg', url: 'p2p' },
-    { title: 'EV Charging', icon: '/images/charging.svg', url: 'charging' }
+  const experiences: Array<{ title: string; icon: string; url: string }> = [
+    { title: 'Retail Experience', icon: '/images/retail.svg', url: process.env.NEXT_PUBLIC_OPEN_SPARK_RETAIL || '' },
+    { title: 'Rental Experience', icon: '/images/rental.svg', url: process.env.NEXT_PUBLIC_OPEN_SPARK_RENTAL || '' },
+    { title: 'Wallet Experience', icon: '/images/wallet.svg', url: process.env.NEXT_PUBLIC_OPEN_SPARK_WALLET || '' },
+    {
+      title: 'Finance Experience',
+      icon: '/images/finance.svg',
+      url: process.env.NEXT_PUBLIC_OPEN_SPARK_LEND_EASE || ''
+    },
+    { title: 'P2P Energy Trading', icon: '/images/p2p.svg', url: '' },
+    { title: 'EV Charging', icon: '/images/charging.svg', url: '' }
   ]
 
   return (
@@ -233,7 +230,9 @@ const Home = () => {
                   />
                 }
                 onClick={() => {
+                  Cookies.remove('country_code')
                   setSelectedCountry(country)
+
                   Cookies.set('country_code', JSON.stringify(country.data), {
                     path: '/',
                     sameSite: 'strict'
@@ -262,9 +261,40 @@ const Home = () => {
               key={index}
               title={exp.title}
               icon={exp.icon}
+              url={exp.url}
             />
           ))}
         </Grid>
+      </Box>
+
+      <Box
+        w={'50px'}
+        h="104px"
+        boxShadow="16px 17px 22px 23px #00000008"
+        borderRadius={'50px'}
+        bg="#fff"
+        p="6px"
+        position={'absolute'}
+        right="60px"
+        top={'calc(50vh - 25px)'}
+        display="flex"
+        justifyContent={'center'}
+        alignItems="center"
+        flexDirection={'column'}
+      >
+        <Image
+          src="/images/homeIcon.svg"
+          alt=""
+          cursor={'pointer'}
+          onClick={() => router.push('/home')}
+        />
+        <Divider />
+        <Image
+          src="/images/exitIcon.svg"
+          alt=""
+          cursor={'pointer'}
+          onClick={() => router.push('/')}
+        />
       </Box>
     </Box>
   )
