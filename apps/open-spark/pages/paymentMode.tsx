@@ -51,8 +51,9 @@ import { parseDIDData } from '@utils/did'
 import { ItemMetaData } from '@lib/types/becknDid'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
-import { currencyFormat } from '@utils/general'
+import { currencyFormat, getCountryCode } from '@utils/general'
 import { DetailCard } from '@beckn-ui/becknified-components'
+import { currencyMap } from '@lib/config'
 
 interface FormData {
   fullName: string
@@ -522,16 +523,10 @@ const EMIApplicationModal = ({
 
             <GenericDropdown
               name={'loanTenure'}
-              options={[
-                {
-                  label: `${selectedEmi[0].name} months: ₹ ${currencyFormat(monthlyInstallment[0].emi)}/months`,
-                  value: monthlyInstallment[0].itemId
-                },
-                {
-                  label: `${selectedEmi[1].name} months: ₹ ${currencyFormat(monthlyInstallment[1].emi)}/months`,
-                  value: monthlyInstallment[1].itemId
-                }
-              ]}
+              options={selectedEmi?.map((emi: any, index: number) => ({
+                label: `${emi.name} months: ${currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}${currencyFormat(monthlyInstallment[index].emi)}/months`,
+                value: monthlyInstallment[index].itemId
+              }))}
               placeholder={''}
               selectedValue={formData.loanTenure!}
               handleChange={handleSelectChange}
@@ -621,7 +616,8 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
     // console.log(selectedItem)
     const searchPayload = {
       context: {
-        domain: 'deg:finance'
+        domain: 'deg:finance',
+        location: getCountryCode()
       },
       searchString: '',
       ...(providerId && {
@@ -747,7 +743,8 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
               transaction_id: transactionId,
               bpp_id: selectAPIRes[0].context.bpp_id,
               bpp_uri: selectAPIRes[0].context.bpp_uri,
-              domain: 'deg:finance'
+              domain: 'deg:finance',
+              location: getCountryCode()
             },
             message: {
               orders: [
@@ -809,7 +806,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                     {
                       params: {
                         amount: `${calculatedEMIs[selectedEmi[0].id].totalCost - calculatedEMIs[selectedEmi[0].id].actualInterestAmount}`,
-                        currency: 'INR',
+                        currency: `${currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}`,
                         bank_account_number: '1234002341',
                         bank_code: 'INB0004321'
                       },
@@ -927,7 +924,8 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
             transaction_id: transactionId,
             bpp_id: selectedPlan.bppId,
             bpp_uri: selectedPlan.bppUri,
-            domain: 'deg:finance'
+            domain: 'deg:finance',
+            location: getCountryCode()
           },
           message: {
             orders: [
@@ -1219,7 +1217,11 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                                   Processing Fee: {plan.providerShortDescription}
                                 </Text>
                               </Box>
-                              <Image src={plan.providerImage} />
+                              <Image
+                                src={plan.providerImage}
+                                width="100px"
+                                height="auto"
+                              />
                             </Flex>
                           </Stack>
                         </Box>
@@ -1270,7 +1272,8 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                                 >
                                   <Text fontSize={'10px'}>Initial Payment</Text>
                                   <Text fontSize={'10px'}>
-                                    ₹{currencyFormat(Number(payableAmount?.[plan.id]?.toFixed(2)))}
+                                    {currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}
+                                    {currencyFormat(Number(payableAmount?.[plan.id]?.toFixed(2)))}
                                   </Text>
                                 </Flex>
                               </Box>
@@ -1326,14 +1329,16 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                                           fontWeight="500"
                                           color="#626060"
                                         >
-                                          ₹ {currencyFormat(Number(emi.toFixed(2)))} x {item.name}m
+                                          {currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}
+                                          {currencyFormat(Number(emi.toFixed(2)))} x {item.name}m
                                         </Box>
                                         <Box
                                           fontSize="10px"
                                           fontWeight="500"
                                           color="#626060"
                                         >
-                                          ₹ {currencyFormat(Number(actualInterestAmount.toFixed(2)))} ({originalRate}
+                                          {currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}
+                                          {currencyFormat(Number(actualInterestAmount.toFixed(2)))} ({originalRate}
                                           %)
                                         </Box>
                                         <Box>
@@ -1344,7 +1349,8 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                                               fontWeight="500"
                                               color="#626060"
                                             >
-                                              ₹{nonDiscountedPrice}.00
+                                              {currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}
+                                              {nonDiscountedPrice}.00
                                             </Box>
                                           )}
                                           <Box
@@ -1352,7 +1358,8 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                                             fontWeight="500"
                                             color={`${plan.item[0].code === '90' ? '#3C8508' : '#626060'}`}
                                           >
-                                            ₹ {currencyFormat(Number(totalCost.toFixed(2)))}
+                                            {currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}
+                                            {currencyFormat(Number(totalCost.toFixed(2)))}
                                           </Box>
                                         </Box>
                                       </Flex>

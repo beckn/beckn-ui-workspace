@@ -12,6 +12,7 @@ import { Box } from '@chakra-ui/react'
 import { parseSearchlist } from '@utils/search-utils'
 import { RootState } from '@store/index'
 import { initDB, getFromCache, setInCache } from '@utils/indexedDB'
+import { getCountryCode } from '@utils/general'
 
 const Search = () => {
   const type = useSelector((state: RootState) => state.navigation.type)
@@ -59,7 +60,8 @@ const Search = () => {
     try {
       const searchPayload = {
         context: {
-          domain: type === 'RENT_AND_HIRE' ? 'deg:rental' : 'deg:retail'
+          domain: type === 'RENT_AND_HIRE' ? 'deg:rental' : 'deg:retail',
+          location: getCountryCode()
         },
         searchString: searchKeyword
       }
