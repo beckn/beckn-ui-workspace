@@ -37,7 +37,7 @@ const OrderOverview: React.FC<OrderOverviewProps> = ({ items, showPriceAndStatus
     const [endDate, endTime] = end.split(', ')
 
     return {
-      date: startDate, // Since both dates are same
+      date: `${startDate} - ${endDate}`, // Since both dates are same
       startTime,
       endTime
     }
@@ -181,7 +181,7 @@ export const mapOrderData = (data: any[]): OrderItem[] => {
         rentedFrom: order.descriptor.name,
         timeSlot: `${startTime} - ${endTime}`,
         duration,
-        price: `${Number(order.quote.price.value) * Number(calculatedDuration) * 1.18}`,
+        price: `${Number(order.quote.price.value) * Number(calculatedDuration)}`,
         status: paymentStatus
       }
     } catch (error) {

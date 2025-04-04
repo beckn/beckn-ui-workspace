@@ -74,7 +74,7 @@ export const getPayloadForOrderHistoryPost = (
         quote: {
           price: {
             currency: message.quote.price.currency,
-            value: Number(cartPriceDetails[message.provider.id].totalPrice || message.quote.price.value) || 0
+            value: Number(message.quote.price.value) || 0
           }
         },
         payments: message.payments

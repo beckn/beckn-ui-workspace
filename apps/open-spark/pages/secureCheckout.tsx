@@ -1,7 +1,7 @@
 import { DetailCard } from '@beckn-ui/becknified-components'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import { Flex, Text, Image, Divider, Input, Box } from '@chakra-ui/react'
-import Visa from '@public/images/american.svg'
+import Visa from '@public/images/stripe_icon.svg'
 import { AuthRootState } from '@store/auth-slice'
 import Router from 'next/router'
 import React, { useState } from 'react'
@@ -38,7 +38,11 @@ const SecureCheckout = () => {
           >
             American Express
           </Text> */}
-          <Image src={Visa} />
+          <Image
+            src={Visa}
+            width="auto"
+            height="30px"
+          />
         </Flex>
         <Divider
           mt="10px"

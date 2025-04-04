@@ -19,7 +19,7 @@ const OrderOverview: React.FC<{ items: RentalItemProps[] }> = ({ items }) => {
     const [endDate, endTime] = end.split(', ')
 
     return {
-      date: startDate, // Since both dates are same
+      date: `${startDate} - ${endDate}`, // Since both dates are same
       startTime,
       endTime
     }

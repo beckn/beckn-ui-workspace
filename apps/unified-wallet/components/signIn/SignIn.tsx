@@ -20,8 +20,13 @@ import Cookies from 'js-cookie'
 import { RegisterSubject } from '@lib/types/becknDid'
 import { setPrivateKeyAndPublicKey } from '@store/auth-slice'
 import { generateKeyPairFromString, generateSignature } from '@services/cryptoUtilService'
+import axios from 'axios'
+import { ROLE, ROUTE_TYPE } from '@lib/config'
+import { setProfileDetails } from '@store/user-slice'
 
 const SignIn = ({ initialFormData = { mobileNumber: '' } }) => {
+  const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
+
   const [formData, setFormData] = useState<LoginFormProps>(initialFormData)
   const [formErrors, setFormErrors] = useState<FormErrors>({ mobileNumber: '' })
 
@@ -108,6 +113,17 @@ const SignIn = ({ initialFormData = { mobileNumber: '' } }) => {
     }
 
     try {
+      try {
+        const strapiMobileLogin = await axios.post(`${strapiUrl}${ROUTE_TYPE[ROLE.GENERAL]}/mobile-login`, {
+          phone: formData.mobileNumber
+        })
+        console.log('strapiMobileLogin', strapiMobileLogin)
+        if (strapiMobileLogin.status === 200) {
+          dispatch(setProfileDetails(strapiMobileLogin.data.user))
+        }
+      } catch (error) {
+        console.error('An error occurred while strapi mobile login:', error)
+      }
       const res = await registerLoginUser(signInData).unwrap()
       if (res[0].verification_methods[0].verified === 'N') {
         await verifyDocument(res[0], privateKey)
