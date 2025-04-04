@@ -16,7 +16,7 @@ const Splash = () => {
         mb="20px"
       />
       <Image
-        src="./images/splash-footer.svg"
+        src="./images/footer_splash.svg"
         alt="splash-footer-img"
       />
     </Flex>

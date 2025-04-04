@@ -15,10 +15,10 @@ const Splash = () => {
         alt="splash-img"
         mb="20px"
       />
-      {/* <Image
-        src="./images/splash-footer.svg"
+      <Image
+        src="./images/footer_splash.svg"
         alt="splash-footer-img"
-      /> */}
+      />
     </Flex>
   )
 }
