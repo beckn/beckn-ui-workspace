@@ -481,3 +481,24 @@ select:-webkit-autofill:focus {
 .react-datepicker-wrapper {
   width: 100% !important;
 }
+.myStore-homepage .css-1em4q9y {
+  background: #d8e2ee;
+}
+input {
+  border-color: unset !important;
+}
+
+.css-k008qs input {
+  border-color: #fff !important;
+  background-color: #fff;
+}
+.myStore-search-wrapper svg {
+  background: #fff;
+  border-radius: 12px;
+}
+.-product_summary_container .css-afhyro {
+  background: #fff;
+}
+.lend_ease_loanApp input {
+  background: #fff;
+}

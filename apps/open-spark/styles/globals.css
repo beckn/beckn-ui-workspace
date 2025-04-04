@@ -499,3 +499,21 @@ select:-webkit-autofill:focus {
 .toast-text {
   margin-bottom: unset !important;
 }
+.myStore-homepage .css-1em4q9y {
+  background: #deeaf5;
+}
+input {
+  border-color: unset !important;
+}
+
+.css-k008qs input {
+  border-color: #fff !important;
+  background-color: #fff;
+}
+.myStore-search-wrapper svg {
+  background: #fff;
+  border-radius: 12px;
+}
+.-product_summary_container .css-afhyro {
+  background: #fff;
+}
