@@ -1,4 +1,5 @@
 import { DocumentPayload } from '@lib/types/becknDid'
+import Cookies from 'js-cookie'
 
 export const formatFileSize = (bytes: number): string => {
   const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']
@@ -88,5 +89,6 @@ export const roundToNextHour = (date: Date) => {
 }
 
 export const getCountryCode = (): { country: { name: string; code: string } } => {
-  return { country: { name: 'United States', code: 'USA' } } // JSON.parse(localStorage.getItem('country_code') || '{}')
+  const countryCode = Cookies.get('country_code')
+  return countryCode ? JSON.parse(countryCode) : { country: { name: 'United States', code: 'USA' } }
 }

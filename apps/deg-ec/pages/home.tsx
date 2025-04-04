@@ -11,7 +11,9 @@ import {
   MenuList,
   MenuItem
 } from '@chakra-ui/react'
-import React, { useState } from 'react'
+import Cookies from 'js-cookie'
+import { useRouter } from 'next/router'
+import React, { useEffect, useState } from 'react'
 
 interface ExperienceCardProps {
   title: string
@@ -19,6 +21,38 @@ interface ExperienceCardProps {
 }
 
 const ExperienceCard = ({ title, icon }: ExperienceCardProps) => {
+  // React.useEffect(() => {
+  //   // Get URL from query parameter
+  //   const urlParams = new URLSearchParams(window.location.search)
+  //   const urlFromQuery = urlParams.get('url')
+
+  //   if (urlFromQuery) {
+  //     setIframeUrl(urlFromQuery)
+  //   }
+  // }, [])
+  const router = useRouter()
+
+  useEffect(() => {
+    const countryData = {
+      country: {
+        name: 'United States',
+        code: 'USA'
+      }
+    }
+    Cookies.set('country_code', JSON.stringify(countryData), {
+      path: '/',
+      sameSite: 'strict'
+    })
+  }, [])
+
+  const countryCookie = Cookies.get('country_code') // Gets the URL-encoded string
+
+  const decodedCookie = countryCookie ? decodeURIComponent(countryCookie) : ''
+
+  // const countryData = JSON.parse(decodedCookie)
+
+  console.log(decodedCookie)
+
   return (
     <Box
       w="311px"
@@ -32,6 +66,9 @@ const ExperienceCard = ({ title, icon }: ExperienceCardProps) => {
       cursor="pointer"
       transition="all 0.3s ease"
       _hover={{ transform: 'translateY(-20px)' }}
+      onClick={() => {
+        router.push(`/deg-ec?url=${title}`)
+      }}
     >
       <Box
         position="absolute"
@@ -65,20 +102,50 @@ const ExperienceCard = ({ title, icon }: ExperienceCardProps) => {
 }
 
 const Home = () => {
-  const [selectedCountry, setSelectedCountry] = useState({ name: 'USA', flag: '/images/usa.svg' })
+  const [selectedCountry, setSelectedCountry] = useState({
+    name: 'USA',
+    fullName: 'USA',
+    flag: '/images/usa.svg',
+    data: {
+      country: {
+        name: 'United States',
+        code: 'USA'
+      }
+    }
+  })
 
   const countries = [
-    { name: 'USA', fullName: 'United States', flag: '/images/usa.svg' },
-    { name: 'IND', fullName: 'India', flag: '/images/india.svg' }
+    {
+      name: 'USA',
+      fullName: 'USA',
+      flag: '/images/usa.svg',
+      data: {
+        country: {
+          name: 'United States',
+          code: 'USA'
+        }
+      }
+    },
+    {
+      name: 'IND',
+      fullName: 'IND',
+      flag: '/images/india.svg',
+      data: {
+        country: {
+          name: 'India',
+          code: 'IND'
+        }
+      }
+    }
   ]
 
   const experiences = [
-    { title: 'Retail Experience', icon: '/images/retail.svg' },
-    { title: 'Rental Experience', icon: '/images/rental.svg' },
-    { title: 'Wallet Experience', icon: '/images/wallet.svg' },
-    { title: 'Finance Experience', icon: '/images/finance.svg' },
-    { title: 'P2P Energy Trading', icon: '/images/p2p.svg' },
-    { title: 'EV Charging', icon: '/images/charging.svg' }
+    { title: 'Retail Experience', icon: '/images/retail.svg', url: 'retail' },
+    { title: 'Rental Experience', icon: '/images/rental.svg', url: 'rental' },
+    { title: 'Wallet Experience', icon: '/images/wallet.svg', url: 'wallet' },
+    { title: 'Finance Experience', icon: '/images/finance.svg', url: 'finance' },
+    { title: 'P2P Energy Trading', icon: '/images/p2p.svg', url: 'p2p' },
+    { title: 'EV Charging', icon: '/images/charging.svg', url: 'charging' }
   ]
 
   return (
@@ -165,7 +232,13 @@ const Home = () => {
                     h="24px"
                   />
                 }
-                onClick={() => setSelectedCountry(country)}
+                onClick={() => {
+                  setSelectedCountry(country)
+                  Cookies.set('country_code', JSON.stringify(country.data), {
+                    path: '/',
+                    sameSite: 'strict'
+                  })
+                }}
                 borderRadius="12px"
                 _hover={{ bg: 'gray.50' }}
               >

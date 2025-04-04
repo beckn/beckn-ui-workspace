@@ -14,11 +14,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import { AuthRootState } from '@store/auth-slice'
 import { useGetDocumentsMutation } from '@services/walletService'
 import { parseDIDData } from '@utils/did'
-import { currencyFormat, filterByKeyword } from '@utils/general'
+import { currencyFormat, filterByKeyword, getCountryCode } from '@utils/general'
 import { useRouter } from 'next/router'
 import RetailIcon from '@public/images/retail_icon.svg'
 import OpenSparkIcon from '@public/images/open_spark_icon.svg'
 import { Transaction } from '@lib/types/becknDid'
+import { currencyMap } from '@lib/config'
 
 interface TransactionItem {
   id: string | number
@@ -214,7 +215,7 @@ const MyTransactions = () => {
                           fontWeight="300"
                         />
                         <Typography
-                          text={`₹ ${currencyFormat(Number(item.amount))}`}
+                          text={`${currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}${currencyFormat(Number(item.amount))}`}
                           fontWeight="500"
                           fontSize="10px"
                         />

@@ -14,7 +14,14 @@ import {
   useGetVerificationMethodsMutation
 } from '@services/walletService'
 import { AuthRootState } from '@store/auth-slice'
-import { extractAuthAndHeader, filterByKeyword, generateRandomCode, toBase64, toSnakeCase } from '@utils/general'
+import {
+  extractAuthAndHeader,
+  filterByKeyword,
+  generateRandomCode,
+  getCountryCode,
+  toBase64,
+  toSnakeCase
+} from '@utils/general'
 import { feedbackActions } from '@beckn-ui/common'
 import { generateAuthHeader, generateAuthHeaderForDelete } from '@services/cryptoUtilService'
 import { parseDIDData } from '@utils/did'
@@ -187,7 +194,7 @@ const Connections = () => {
   const getUtilities = async () => {
     try {
       const response: any = await axios.get(
-        `${strapiUrl}${ROUTE_TYPE[ROLE.GENERAL]}/utility/companies?country_code=${'USA'}`
+        `${strapiUrl}${ROUTE_TYPE[ROLE.GENERAL]}/utility/companies?country_code=${getCountryCode()?.country?.code || 'USA'}`
       )
 
       if (!response?.data || !Array.isArray(response.data.utility_companies)) {

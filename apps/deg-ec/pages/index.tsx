@@ -1,105 +1,86 @@
-import { Box, Flex, Image, Text, Button } from '@chakra-ui/react'
-import React, { useState, useEffect } from 'react'
-import Cookies from 'js-cookie'
+import { Box, Button, Flex, Image, Text } from '@chakra-ui/react'
+import { useRouter } from 'next/router'
+import React from 'react'
 
-const index = () => {
-  const [iframeUrl, setIframeUrl] = useState('https://spark.becknprotocol.io')
-
-  React.useEffect(() => {
-    // Get URL from query parameter
-    const urlParams = new URLSearchParams(window.location.search)
-    const urlFromQuery = urlParams.get('url')
-
-    if (urlFromQuery) {
-      setIframeUrl(urlFromQuery)
-    }
-  }, [])
-
-  useEffect(() => {
-    const countryData = {
-      name: 'United States',
-      country_code: 'USA'
-    }
-
-    Cookies.set('country', JSON.stringify(countryData), {
-      expires: 7,
-      path: '/',
-      sameSite: 'strict'
-    })
-  }, [])
-
-  const countryCookie = Cookies.get('country') // Gets the URL-encoded string
-
-  const decodedCookie = countryCookie ? decodeURIComponent(countryCookie) : ''
-
-  // const countryData = JSON.parse(decodedCookie)
-
-  console.log(decodedCookie)
-
+const landing = () => {
+  const router = useRouter()
   return (
-    <Box p="60px">
-      <Flex
-        alignItems={'center'}
-        justifyContent="space-between"
-        mb="30px"
+    <Box
+      position={'relative'}
+      height="100vh"
+    >
+      <Image
+        src="/images/left.svg"
+        position={'absolute'}
+        bottom="0"
+        left={'0'}
+      />
+      <Box
+        p="60px"
+        // backgroundImage={'/images/landing.svg'}
+        // height="100vh"
+        // backgroundRepeat={'no-repeat'}
       >
         <Image
+          margin={'0 auto'}
           src="/images/logo.svg"
           alt=""
+          mb="36px"
         />
-        <Box
-          maxW={'50rem'}
+        <Text
+          fontSize={'64px'}
+          color="#4E4646"
+          backdropFilter="blur(2px)"
+          padding={'10px'}
           textAlign="center"
-          position="relative"
-          padding="10px 20px"
-          backdropFilter="blur(10px)"
-          backgroundColor="#9D9D9D03"
-          backdrop-filter="blur(69.5999984741211px)"
+          lineHeight={'80px'}
+          maxW="702px"
+          margin={'0 auto'}
         >
-          <Text
-            as={'span'}
-            fontSize={'32px'}
-            fontWeight="600"
-          >
-            <Text
-              as={'span'}
-              fontSize={'32px'}
-              fontWeight="600"
-              background="linear-gradient(90.13deg, #E99060 2.76%, #A77CA5 38.62%)"
-              style={{ WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}
-            >
-              Rental
-            </Text>{' '}
-            experience for discovering and renting energy related equipments
-          </Text>
-        </Box>
-        <Text w={'130px'}></Text>
-      </Flex>
+          Welcome to the DEG Experience Center
+        </Text>
 
-      <div className="smartphone-wrapper">
-        <div className="smartphone">
-          <div className="content">
-            <>
-              <iframe
-                //@ts-ignore
-                //   ref={iframeRef}
-                className="ChooseExpIframe"
-                allow="clipboard-read; clipboard-write; geolocation; camera; fullscreen"
-                src={iframeUrl}
-                frameBorder="0"
-                allowFullScreen
-                scrolling={'no'}
-                width={'100%'}
-                height={'100%'}
-                style={{ borderRadius: '36px' }}
-                loading="eager"
+        <Flex
+          justifyContent="center"
+          mt="180px"
+          alignItems={'center'}
+        >
+          <Button
+            rightIcon={
+              <Image
+                src="/images/arrow.svg"
+                alt="arrow"
+                w="28px"
+                h="28px"
               />
-            </>
-          </div>
-        </div>
-      </div>
+            }
+            bgGradient="linear-gradient(90.13deg, #E99060 2.76%, #A77CA5 38.62%)"
+            color="#000"
+            px="20px"
+            py="10px"
+            fontSize="28px"
+            w="168px"
+            h="62px"
+            _hover={{
+              opacity: 0.9
+            }}
+            borderRadius="full"
+            onClick={() => {
+              router.push('/home')
+            }}
+          >
+            begin
+          </Button>
+        </Flex>
+      </Box>
+      <Image
+        src="/images/right.svg"
+        position={'absolute'}
+        top="100px"
+        right={'100px'}
+      />
     </Box>
   )
 }
 
-export default index
+export default landing
