@@ -5,6 +5,8 @@ import Cookies from 'js-cookie'
 import DetailsCard from '@beckn-ui/becknified-components/src/components/checkout/details-card'
 import SearchBar from '@beckn-ui/common/src/components/searchBar/searchBar'
 import CustomFilterIconComponent from '@beckn-ui/common/src/components/cutomFilterIcon/customFilterIcon'
+import { currencyMap } from '@lib/config'
+import { getCountryCode } from '@utils/general'
 
 interface OrderItem {
   id: number
@@ -98,8 +100,9 @@ const LoanApplications = () => {
         gap="10px"
         position="sticky"
         top="0"
-        backgroundColor="white"
+        // backgroundColor="white"
         zIndex="1"
+        className="lend_ease_loanApp"
       >
         <SearchBar
           searchString={searchKeyword}
@@ -196,7 +199,7 @@ const LoanApplications = () => {
                   whiteSpace={'nowrap'}
                   overflow={'hidden'}
                 >
-                  Rs. {order?.order_id.total_amount}
+                  {`${currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}${order?.order_id.total_amount}`}
                 </Text>
               </Flex>
               <Flex mb="5px">

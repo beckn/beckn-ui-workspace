@@ -13,7 +13,8 @@ import { geocodeFromPincode } from './checkout-utils'
 export const getSelectPayload = (
   inputData: CartItemForRequest[],
   transactionId: string,
-  domain = 'retail'
+  domain = 'retail',
+  location?: any
 ): { data: SelectData } => {
   const transaction_id = transactionId
 
@@ -32,7 +33,8 @@ export const getSelectPayload = (
       transaction_id,
       bpp_id,
       bpp_uri: items[0].bpp_uri,
-      domain
+      domain,
+      ...(location && { location })
     }
 
     const orders: SelectOrder[] = []
@@ -92,7 +94,8 @@ export const getInitPayload = async (
   cartItems: CartItemForRequest[],
   transaction_id: string,
   domain: string = 'retail:1.1.0',
-  fulfillments: { id: string; type: string } = { id: '3', type: 'Standard-shipping' }
+  fulfillments: { id: string; type: string } = { id: '3', type: 'Standard-shipping' },
+  location?: any
 ) => {
   const cityData = await geocodeFromPincode(deliveryAddress.pinCode!)
   console.log(cityData)
@@ -110,7 +113,8 @@ export const getInitPayload = async (
         transaction_id: transaction_id,
         bpp_id: bpp_id,
         bpp_uri: items[0].bpp_uri,
-        domain: domain
+        domain: domain,
+        ...(location && { location })
       },
       message: {
         orders: transformOrdersByProvider(items, fulfillments)
@@ -254,7 +258,7 @@ export const getPayloadForConfirm = (initResponse: InitResponseModel[]) => {
   return payload
 }
 
-export const getPayloadForOrderStatus = (confirmResponse: ConfirmResponseModel[]) => {
+export const getPayloadForOrderStatus = (confirmResponse: ConfirmResponseModel[], location?: any) => {
   const {
     context: { transaction_id, bpp_id, bpp_uri, domain },
     message: { orderId }
@@ -266,7 +270,8 @@ export const getPayloadForOrderStatus = (confirmResponse: ConfirmResponseModel[]
           transaction_id: transaction_id,
           bpp_id: bpp_id,
           bpp_uri: bpp_uri,
-          domain: domain
+          domain: domain,
+          ...(location && { location })
         },
         message: {
           order_id: orderId

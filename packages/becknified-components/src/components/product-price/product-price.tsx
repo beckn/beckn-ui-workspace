@@ -25,8 +25,8 @@ const formatCurrency = (price: number, currencyType: CurrencyType, rateLabel: st
     INR: '₹',
     USD: '$'
   }
-
-  return `${formattedNumber} ${currencySymbols[currencyType]} ${rateLabel}`.trim()
+  console.log(currencyType)
+  return `${currencySymbols[currencyType]}${formattedNumber} ${rateLabel}`.trim()
 }
 
 const ProductPrice: React.FC<ProductPriceProps> = props => {

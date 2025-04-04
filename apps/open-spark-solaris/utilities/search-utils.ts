@@ -50,8 +50,8 @@ export const parseSearchlist = (data: SearchResponseModel[], type?: 'RENT_AND_HI
               rating: '',
               price: { ...item.price, rateLabel: 'per hour' },
               productInfo: {
-                Availability: `${startDate} - ${endDate}`,
-                Time: `${startTime} - ${endTime}`
+                From: `${startDate}, ${startTime}`,
+                To: `${endDate}, ${endTime}`
               }
             }
           } else if (type === 'MY_STORE') {

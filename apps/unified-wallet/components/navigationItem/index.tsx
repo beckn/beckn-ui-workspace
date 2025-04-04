@@ -29,7 +29,8 @@ const NavigationItem = (props: NavigationItemProps) => {
             ? {
                 boxShadow: 'rgba(0, 0, 0, 0.1) 2px 14px 40px 4px',
                 padding: '1.5rem 1.5rem',
-                borderRadius: '12px'
+                borderRadius: '12px',
+                background: '#fff'
               }
             : {}
         }

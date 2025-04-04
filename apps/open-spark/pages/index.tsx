@@ -19,12 +19,17 @@ import Cookies from 'js-cookie'
 import { AuthRootState } from '@store/auth-slice'
 import { DegWalletDetails } from '@beckn-ui/common'
 import { UserRootState } from '@store/user-slice'
+import RentalServiceModal from '@components/RentalServiceModal/RentalServiceModal'
+import MyServicesIcon from '@public/images/my_services.svg'
 
 const HomePage = () => {
   const bearerToken = Cookies.get('authToken')
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
 
   const [isLoading, setIsLoading] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [showSuccess, setShowSuccess] = useState(false)
+
   const [walletDetails, setWalletDetails] = useState<DegWalletDetails>()
   const [modalType, setModalType] = useState<'wallet' | 'link' | 'otp' | 'alert' | null>(null)
 
@@ -35,6 +40,9 @@ const HomePage = () => {
   const handleModalOpen = (type: 'wallet' | 'link' | 'otp' | 'alert') => setModalType(type)
   const handleModalClose = () => setModalType(null)
   const dispatch = useDispatch()
+
+  const handleOpenModal = () => setIsModalOpen(true)
+  const handleCloseModal = () => setIsModalOpen(false)
 
   const handleNavigation = (type: 'MY_STORE' | 'RENT_AND_HIRE', pathname: string) => {
     dispatch(setNavigationType(type))
@@ -79,43 +87,58 @@ const HomePage = () => {
         pl={'20px'}
         pr={'20px'}
       >
-        <Box>
-          <Avatar
-            name={`${user?.agent?.first_name || ''} ${user?.agent?.last_name || ''}`}
-            width="38px"
-            height="38px"
-            cursor={'pointer'}
+        <Flex
+          gap={'10px'}
+          justify={'center'}
+          alignItems={'center'}
+        >
+          <Image
+            src={profileIcon}
+            alt="profileIcon"
             onClick={() => router.push('/profile')}
           />
-        </Box>
-        <Box>
-          {user?.deg_wallet ? (
-            <Select
-              variant="unstyled"
-              placeholder={`/subj****${user?.deg_wallet.deg_wallet_id.slice(-4)}`}
-              value=""
-              style={{
-                pointerEvents: 'none'
-              }}
-            />
-          ) : (
-            <BecknButton
-              text="Connect Wallet"
-              handleClick={() => handleModalOpen('wallet')}
+
+          {user?.agent && (
+            <Typography
+              fontSize="14px"
+              color={'#3A3A3A'}
+              text={user?.agent?.first_name + ' ' + (user?.agent?.last_name ?? '')}
               sx={{
-                width: '93px',
-                height: '30px',
-                fontSize: '10px',
-                fontWeight: '400',
-                padding: '10px',
-                borderRadius: '6px',
-                mb: 'unset'
+                maxWidth: '180px',
+                noOfLines: 2,
+                overflow: 'hidden',
+                textOverflow: 'ellipsis'
               }}
             />
           )}
-        </Box>
+        </Flex>
+        {user?.deg_wallet ? (
+          <></>
+        ) : (
+          // <Select
+          //   variant="unstyled"
+          //   placeholder={`/subj****${user?.deg_wallet.deg_wallet_id.slice(-4)}`}
+          //   value=""
+          //   style={{
+          //     pointerEvents: 'none'
+          //   }}
+          // />
+          <BecknButton
+            text="Connect Wallet"
+            handleClick={() => handleModalOpen('wallet')}
+            sx={{
+              width: '93px',
+              height: '30px',
+              fontSize: '10px',
+              fontWeight: '400',
+              padding: '10px',
+              borderRadius: '6px',
+              mb: 'unset'
+            }}
+          />
+        )}
       </Flex>
-      <Box>
+      <Box background="#deeaf5">
         <Carousel images={images} />
         <Box
           padding={'10px'}
@@ -150,9 +173,42 @@ const HomePage = () => {
               dataTest="hire_button"
               sx={buttonStyles}
             /> */}
+            <ShadowCardButton
+              prefixIcon={<TbHexagonLetterO size={28} />}
+              text="Provide Rental Services"
+              textStyle="start"
+              postIcon={<MdOutlineKeyboardArrowRight />}
+              handleClick={() => handleOpenModal()}
+              dataTest="store_button"
+              sx={buttonStyles}
+            />
+            <ShadowCardButton
+              prefixIcon={
+                <Image
+                  src={MyServicesIcon}
+                  alt="myServices"
+                  width={'28px'}
+                  height={'28px'}
+                />
+              }
+              text="My Services"
+              textStyle="start"
+              postIcon={<MdOutlineKeyboardArrowRight />}
+              handleClick={() => router.push('/myServices')}
+              dataTest="store_button"
+              sx={buttonStyles}
+            />
           </Flex>
         </Box>
       </Box>
+      <RentalServiceModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        handleOnSubmit={({ success, startLoading }: { success: boolean; startLoading: boolean }) => {
+          setShowSuccess(success)
+          setIsLoading(startLoading)
+        }}
+      />
       <OpenWalletBottomModal
         modalType={modalType}
         setModalType={setModalType}

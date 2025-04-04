@@ -1,4 +1,5 @@
 import { DocumentPayload } from '@lib/types/becknDid'
+import Cookies from 'js-cookie'
 
 export const formatFileSize = (bytes: number): string => {
   const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']
@@ -67,4 +68,9 @@ export const generateRandomCode = (): string => {
 
 export const currencyFormat = (price: number | undefined) => {
   return price ? new Intl.NumberFormat('en-GB').format(price) : null
+}
+
+export const getCountryCode = (): { country: { name: string; code: string } } => {
+  const countryCode = Cookies.get('country_code')
+  return countryCode ? JSON.parse(countryCode) : { country: { name: 'United States', code: 'USA' } }
 }

@@ -20,6 +20,7 @@ import { AuthRootState } from '@store/auth-slice'
 import { DegWalletDetails } from '@beckn-ui/common'
 import { UserRootState } from '@store/user-slice'
 import RentalServiceModal from '../components/RentalServiceModal/RentalServiceModal'
+import { RootState } from '@store/index'
 
 const HomePage = () => {
   const bearerToken = Cookies.get('authToken')
@@ -34,6 +35,7 @@ const HomePage = () => {
   const [walletDetails, setWalletDetails] = useState<DegWalletDetails>()
   const [modalType, setModalType] = useState<'wallet' | 'link' | 'otp' | 'alert' | null>(null)
 
+  const type = useSelector((state: RootState) => state.navigation.type)
   const router = useRouter()
   const { user } = useSelector((state: AuthRootState) => state.auth)
   const { shouldShowInitialAlert } = useSelector((state: UserRootState) => state.user)
@@ -85,31 +87,43 @@ const HomePage = () => {
         pl={'20px'}
         pr={'20px'}
       >
-        <Box>
-          <Avatar
-            name={`${user?.agent?.first_name || ''} ${user?.agent?.last_name || ''}`}
-            width="38px"
-            height="38px"
-            cursor={'pointer'}
-            onClick={() => router.push('/profile')}
-          />
-          {/* <Image
+        <Flex
+          gap={'10px'}
+          justify={'center'}
+          alignItems={'center'}
+        >
+          <Image
             src={profileIcon}
             alt="profileIcon"
             onClick={() => router.push('/profile')}
-          /> */}
-        </Box>
-        <Box>
-          {user?.deg_wallet ? (
-            <Select
-              variant="unstyled"
-              placeholder={`/subj****${user?.deg_wallet.deg_wallet_id.slice(-4)}`}
-              value=""
-              style={{
-                pointerEvents: 'none'
+          />
+
+          {user?.agent && (
+            <Typography
+              fontSize="14px"
+              color={'#3A3A3A'}
+              text={user?.agent?.first_name + ' ' + (user?.agent?.last_name ?? '')}
+              sx={{
+                maxWidth: '180px',
+                noOfLines: 2,
+                overflow: 'hidden',
+                textOverflow: 'ellipsis'
               }}
             />
+          )}
+        </Flex>
+        <Box>
+          {user?.deg_wallet ? (
+            <></>
           ) : (
+            // <Select
+            //   variant="unstyled"
+            //   placeholder={`/subj****${user?.deg_wallet.deg_wallet_id.slice(-4)}`}
+            //   value=""
+            //   style={{
+            //     pointerEvents: 'none'
+            //   }}
+            // />
             <BecknButton
               text="Connect Wallet"
               handleClick={() => handleModalOpen('wallet')}
@@ -126,7 +140,7 @@ const HomePage = () => {
           )}
         </Box>
       </Flex>
-      <Box>
+      <Box background="#E4FFE4">
         <Carousel images={images} />
         <Box
           padding={'10px'}
@@ -152,7 +166,7 @@ const HomePage = () => {
               dataTest="hire_button"
               sx={buttonStyles}
             />
-            <ShadowCardButton
+            {/* <ShadowCardButton
               prefixIcon={<TiShoppingCart size={28} />}
               text="Provide Rental Services"
               textStyle="start"
@@ -168,6 +182,20 @@ const HomePage = () => {
               postIcon={<MdOutlineKeyboardArrowRight />}
               handleClick={() => router.push('/orderHistory')}
               dataTest="store_button"
+              sx={buttonStyles}
+            /> */}
+
+            <ShadowCardButton
+              prefixIcon={
+                <img
+                  src={'/images/pentagon.svg'}
+                  alt={'orderHistory'}
+                />
+              }
+              text={'My Rentals'}
+              textStyle="start"
+              postIcon={<MdOutlineKeyboardArrowRight />}
+              handleClick={() => router.push(`/myRental`)}
               sx={buttonStyles}
             />
           </Flex>

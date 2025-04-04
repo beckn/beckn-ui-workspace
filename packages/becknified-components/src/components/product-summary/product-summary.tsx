@@ -74,6 +74,7 @@ const ProductSummary: React.FC<ProductSummaryPropsModel> = props => {
                   <Image
                     margin={'0 auto'}
                     mt="15px"
+                    maxW={'150px'}
                     src={providerImage}
                   />
                 )}

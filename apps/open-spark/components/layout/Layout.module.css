@@ -3,6 +3,7 @@
 .container {
   display: flex;
   flex-direction: column;
+  background: #deeaf5;
 }
 
 .container.homepage {
@@ -37,6 +38,6 @@
   margin-top: 95px;
 }
 
-.main.isHome{
-  margin-top:30px;
+.main.isHome {
+  margin-top: 30px;
 }

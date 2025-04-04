@@ -57,7 +57,7 @@ const MyAssets = () => {
     <Box
       maxWidth={{ base: '100vw', md: '30rem', lg: '40rem' }}
       margin="calc(0rem + 26px) auto"
-      backgroundColor="white"
+      // backgroundColor="white"
       // className="hideScroll"
       // // maxH="calc(100vh - 100px)"
       // overflowY={'scroll'}

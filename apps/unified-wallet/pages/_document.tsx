@@ -22,7 +22,7 @@ export default function Document() {
         />
         <link
           rel="shortcut icon"
-          href="./images/app_name.svg"
+          href="./images/wallet_app_name.svg"
         />
       </Head>
       <body>

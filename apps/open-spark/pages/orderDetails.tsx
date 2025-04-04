@@ -63,7 +63,7 @@ import {
   useAddDocumentMutation,
   useGetVerificationMethodsMutation
 } from '@services/walletService'
-import { extractAuthAndHeader, generateRandomCode, toBase64, toSnakeCase } from '@utils/general'
+import { extractAuthAndHeader, generateRandomCode, getCountryCode, toBase64, toSnakeCase } from '@utils/general'
 import { RootState } from '@store/index'
 import { StatusKey, statusMap } from '@lib/types/order'
 import ShippingBlock from '@components/orderDetailComponents/Shipping'
@@ -386,7 +386,8 @@ const OrderDetails = () => {
                 transaction_id: uuidv4(),
                 bpp_id: bppId,
                 bpp_uri: bppUri,
-                domain: type === 'MY_STORE' ? DOMAIN_PATH.MY_STORE : DOMAIN_PATH.RENT_AND_HIRE
+                domain: type === 'MY_STORE' ? DOMAIN_PATH.MY_STORE : DOMAIN_PATH.RENT_AND_HIRE,
+                location: getCountryCode()
               },
               message: {
                 order_id: orderId,
@@ -430,7 +431,9 @@ const OrderDetails = () => {
       }
       if (data.confirmData && data.confirmData.length > 0) {
         const parsedConfirmData: ConfirmResponseModel[] = JSON.parse(localStorage.getItem('confirmResponse') as string)
-        const statusPayload = getPayloadForOrderStatus(parsedConfirmData)
+        const statusPayload = getPayloadForOrderStatus(parsedConfirmData, {
+          location: getCountryCode()
+        })
         setUiState(prevState => ({
           ...prevState,
           isLoading: true
@@ -866,15 +869,20 @@ const OrderDetails = () => {
               fontSize="17px"
             />
             {type === 'MY_STORE' && processState.allOrderDelivered && (
-              <Text
-                color={'#4398E8'}
-                fontSize={'10px'}
-                fontWeight="500"
-                cursor={'pointer'}
-                onClick={() => handleOnAddToPhysicalAsset(localStorage.getItem('statusResponse'))}
-              >
-                Add to wallet
-              </Text>
+              <BecknButton
+                text="Add to wallet"
+                handleClick={() => handleOnAddToPhysicalAsset(localStorage.getItem('statusResponse'))}
+                color="#FFFFFF"
+                variant="solid"
+                sx={{
+                  fontWeight: '500',
+                  fontSize: '12px',
+                  width: '7.5rem',
+                  height: '0.4rem',
+                  padding: '1rem !important',
+                  marginBottom: '0 !important'
+                }}
+              />
             )}
           </Flex>
 

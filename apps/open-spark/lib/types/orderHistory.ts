@@ -59,7 +59,35 @@ export interface Item {
   fulfillments: Fulfillment[]
 }
 
+export interface ScRetailProduct {
+  id: number
+  sku: string | null
+  downloadable: boolean | null
+  min_price: string
+  max_price: string | null
+  on_sale: boolean | null
+  stock_quantity: number
+  stock_status: string | null
+  rating_count: number | null
+  average_rating: number | null
+  total_sales: number | null
+  tax_status: string | null
+  tax_class: string | null
+  virtual: boolean | null
+  currency: string
+  additional_fee: number | null
+  base_fee: number | null
+  quantity_unit: string
+  trusted_source: boolean
+  cred_required: boolean
+  recurring: boolean
+  createdAt: string
+  updatedAt: string
+  item_id: number
+}
+
 export interface OrderHistoryData {
+  sc_retail_product: ScRetailProduct
   id: number
   order_id: string
   bpp_id: string

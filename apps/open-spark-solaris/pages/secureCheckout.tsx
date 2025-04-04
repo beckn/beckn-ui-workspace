@@ -1,16 +1,18 @@
 import { DetailCard } from '@beckn-ui/becknified-components'
+import { feedbackActions } from '@beckn-ui/common'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import { Flex, Text, Image, Divider, Input, Box } from '@chakra-ui/react'
-import Visa from '@public/images/Bitmap.svg'
+import Visa from '@public/images/stripe_icon.svg'
 import { AuthRootState } from '@store/auth-slice'
 import Router from 'next/router'
 import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 const SecureCheckout = () => {
   const { user } = useSelector((state: AuthRootState) => state.auth)
   const [otp, setOtp] = useState('')
   const [isVerified, setIsVerified] = useState(false)
+  const dispatch = useDispatch()
 
   const maskedPhone = user?.agent?.agent_profile?.phone_number
     ? String(user?.agent?.agent_profile?.phone_number).slice(0, 2) +
@@ -21,6 +23,16 @@ const SecureCheckout = () => {
   const handleVerify = () => {
     if (otp.length === 6) {
       setIsVerified(true) // Enable "Proceed" after verification
+      dispatch(
+        feedbackActions.setToastData({
+          toastData: {
+            message: 'Success',
+            display: true,
+            type: 'success',
+            description: 'OTP verified successfully, Click on Proceed to continue'
+          }
+        })
+      )
     }
   }
 
@@ -31,14 +43,18 @@ const SecureCheckout = () => {
           justifyContent="space-between"
           alignItems="center"
         >
-          <Text
+          {/* <Text
             fontSize="14px"
             fontWeight="700"
-            color="#B02A30"
+            color="#006FCC"
           >
-            ICICI Bank
-          </Text>
-          <Image src={Visa} />
+            American Express
+          </Text> */}
+          <Image
+            src={Visa}
+            width="auto"
+            height="30px"
+          />
         </Flex>
         <Divider
           mt="10px"
@@ -49,7 +65,7 @@ const SecureCheckout = () => {
           color="#80807F"
           mb="10px"
         >
-          We have sent a verification code by text message to +91 {maskedPhone}.
+          We have sent a verification code by text message to {maskedPhone}.
         </Text>
         <Text
           mb="5px"

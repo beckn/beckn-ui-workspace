@@ -9,8 +9,9 @@ import {
 import { Typography } from '@beckn-ui/molecules'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import { Box, Divider, Flex, Radio, RadioGroup, Stack, Text, Image } from '@chakra-ui/react'
+import { currencyMap } from '@lib/config'
 import { setEmiDetails } from '@store/emiSelect-slice'
-import { currencyFormat } from '@utils/general'
+import { currencyFormat, getCountryCode } from '@utils/general'
 import Router from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -132,7 +133,7 @@ const NewPaymentOverView = () => {
                         color="#4398E8"
                         fontWeight="600"
                         fontSize="12px"
-                        text={`₹ ${currencyFormat(Number(items.price.value) * items.quantity)}`}
+                        text={` ${currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}${currencyFormat(Number(items.price.value) * items.quantity)}`}
                       />
                     </Box>
                   </Flex>
@@ -161,8 +162,8 @@ const NewPaymentOverView = () => {
             <Flex alignItems={'center'}>
               <Typography
                 fontSize="15px"
-                text={'Rs.'}
-                style={{ paddingRight: '2px' }}
+                text={currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}
+                // style={{ paddingRight: '2px' }}
               />
               <Typography
                 fontSize="15px"
@@ -181,8 +182,8 @@ const NewPaymentOverView = () => {
             <Flex alignItems={'center'}>
               <Typography
                 fontSize="15px"
-                text={'-Rs.'}
-                style={{ paddingRight: '2px' }}
+                text={`-${currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}`}
+                // style={{ paddingRight: '2px' }}
               />
               <Typography
                 fontSize="15px"
@@ -209,8 +210,8 @@ const NewPaymentOverView = () => {
               <Typography
                 fontSize="15px"
                 fontWeight="600"
-                text={'Rs.'}
-                style={{ paddingRight: '2px' }}
+                text={currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}
+                // style={{ paddingRight: '2px' }}
               />
               <Typography
                 fontSize="15px"
