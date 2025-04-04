@@ -1,5 +1,5 @@
 import { Box } from '@chakra-ui/react'
-import style from './layout.module.css'
+import style from './Layout.module.css'
 import React from 'react'
 
 const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {

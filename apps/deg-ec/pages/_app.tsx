@@ -10,13 +10,10 @@ import 'slick-carousel/slick/slick-theme.css'
 import 'react-toastify/dist/ReactToastify.css'
 
 import '../styles/globals.css'
-import { Provider } from 'react-redux'
-import { useRouter } from 'next/router'
-import ErrorBoundary from '@beckn-ui/common/src/components/errorBoundary'
 
 function MyApp({ Component, pageProps }: AppProps) {
   // const { t } = useLanguage()
-  const router = useRouter()
+
   return (
     <BecknProvider
       theme={{
