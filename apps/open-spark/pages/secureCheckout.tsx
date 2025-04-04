@@ -49,7 +49,7 @@ const SecureCheckout = () => {
           color="#80807F"
           mb="10px"
         >
-          We have sent a verification code by text message to +91 {maskedPhone}.
+          We have sent a verification code by text message to {maskedPhone}.
         </Text>
         <Text
           mb="5px"
