@@ -59,7 +59,7 @@ import { currencyMap } from '@lib/config'
 
 interface FormData {
   fullName: string
-  dateOfBirth: Date | null
+  // dateOfBirth: Date | null
   // panCard?: string
   // aadhaar?: string
   ssNumber?: string
@@ -69,7 +69,7 @@ interface FormData {
 
 interface FormErrors {
   fullName?: string
-  dateOfBirth?: string
+  // dateOfBirth?: string
   // panCard?: string
   // aadhaar?: string
   ssNumber?: string
@@ -87,7 +87,7 @@ interface EMIApplicationModalProps {
     aadharNumber?: string
     panNumber?: string
     fullName: string
-    dateOfBirth: Date | null
+    // dateOfBirth: Date | null
     mobileNumber: string
     ssNumber: string
   }
@@ -106,10 +106,10 @@ const EMIApplicationModal = ({
 }: EMIApplicationModalProps) => {
   const [formData, setFormData] = useState<FormData>({
     fullName: walletDetails?.fullName || '',
-    dateOfBirth: walletDetails?.dateOfBirth || null,
-    panCard: walletDetails?.panNumber || '',
+    // dateOfBirth: walletDetails?.dateOfBirth || null,
+    // panCard: walletDetails?.panNumber || '',
     // aadhaar: walletDetails?.aadharNumber || '',
-    // mobileNumber: walletDetails?.mobileNumber || '',
+    mobileNumber: walletDetails?.mobileNumber || '',
     ssNumber: walletDetails?.ssNumber || '',
     loanTenure: ''
   })
@@ -129,7 +129,7 @@ const EMIApplicationModal = ({
       // aadhaar: walletDetails?.aadharNumber || '',
       ssNumber: walletDetails?.ssNumber || '',
       fullName: walletDetails?.fullName || '',
-      dateOfBirth: walletDetails?.dateOfBirth || null,
+      // dateOfBirth: walletDetails?.dateOfBirth || null,
       mobileNumber: walletDetails?.mobileNumber || '',
       loanTenure: ''
     }))
@@ -144,9 +144,9 @@ const EMIApplicationModal = ({
     }
 
     // Date of Birth validation
-    if (!formData.dateOfBirth) {
-      newErrors.dateOfBirth = 'Date of birth is required'
-    }
+    // if (!formData.dateOfBirth) {
+    //   newErrors.dateOfBirth = 'Date of birth is required'
+    // }
 
     // PAN Card validation
     // if (!formData.panCard.trim()) {
@@ -353,7 +353,7 @@ const EMIApplicationModal = ({
           </Box>
 
           {/* Date of Birth Field */}
-          <Box
+          {/* <Box
             mb="20px"
             position="relative"
             width="100%"
@@ -406,7 +406,7 @@ const EMIApplicationModal = ({
                 text={errors.dateOfBirth}
               />
             )}
-          </Box>
+          </Box> */}
 
           {/* PAN Card Field */}
           {/* <Box mb="20px">
@@ -495,7 +495,7 @@ const EMIApplicationModal = ({
               <Typography
                 fontWeight="400"
                 fontSize="15px"
-                text="Social Security Number *"
+                text="Identification Number *"
               />
               {syncWalletSuccess && formData.ssNumber && (
                 <Typography
@@ -620,10 +620,10 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
   const [SSNumber, setSSNumber] = useState<string>()
   const [walletDetails, setWalletDetails] = useState<any>({
     fullName: '',
-    dateOfBirth: '',
-    mobileNumber: '',
-    aadharNumber: '',
-    panNumber: ''
+    // dateOfBirth: '',
+    mobileNumber: ''
+    // aadharNumber: '',
+    // panNumber: ''
   })
   const [syncWalletSuccess, setSyncWalletSuccess] = useState(false)
   const [payableAmount, setPayableAmount] = useState<Record<string, number>>()
@@ -1035,10 +1035,10 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
       const result = await getDocuments(user?.deg_wallet?.deg_wallet_id!).unwrap()
       const data = {
         fullName: `${user?.agent?.first_name || ''} ${user?.agent?.last_name || ''}`,
-        dateOfBirth: new Date('01/05/1994'),
-        mobileNumber: `${user?.agent?.agent_profile.phone_number}`,
-        aadharNumber: '743160366069',
-        panNumber: 'EPLPB9268F'
+        // dateOfBirth: new Date('01/05/1994'),
+        mobileNumber: `${user?.agent?.agent_profile.phone_number}`
+        // aadharNumber: '743160366069',
+        // panNumber: 'EPLPB9268F'
       }
       setAadharNumber('743160366069')
       setPANNumber('EPLPB9268F')
