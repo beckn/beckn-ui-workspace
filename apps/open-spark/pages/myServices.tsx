@@ -29,7 +29,7 @@ const MyServices = () => {
 
   useEffect(() => {
     axios
-      .get(`${strapiUrl}/unified-beckn-energy/order-history/get?filters[category]=${RENTAL_ORDER_CATEGORY_ID}`, {
+      .get(`${strapiUrl}/unified-beckn-energy/rent-catalogue`, {
         headers: {
           Authorization: `Bearer ${bearerToken}`,
           'Content-Type': 'application/json'
@@ -37,7 +37,8 @@ const MyServices = () => {
       })
       // .then(response => response.json())
       .then(result => {
-        setOrderHistoryList(result.data)
+        console.log(result.data.items)
+        setOrderHistoryList(result.data.items)
 
         setIsLoading(false)
       })
@@ -137,7 +138,7 @@ const MyServices = () => {
                   </Flex>
                   <Text
                     as={Typography}
-                    text={`Order ID: ${order.order_id}`}
+                    text={`Order ID: ${order.id}`}
                     fontWeight="400"
                     fontSize={'12px'}
                     dataTest={testIds.orderHistory_order_id}
@@ -145,7 +146,7 @@ const MyServices = () => {
 
                   <Text
                     as={Typography}
-                    text={`${order.quote.price.currency} ${order.quote.price.value}`}
+                    text={`${order.sc_retail_product.currency} ${order.sc_retail_product.min_price} ${order.sc_retail_product.quantity_unit}`}
                     fontWeight="600"
                     fontSize={'12px'}
                     dataTest={testIds.orderHistory_Price}
@@ -158,7 +159,7 @@ const MyServices = () => {
                   >
                     <Text
                       as={Typography}
-                      text={`${order.items.length} Item${order.items.length > 1 ? 's' : ''}`}
+                      text={`1 Item`}
                       fontWeight="400"
                       fontSize={'12px'}
                     />

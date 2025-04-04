@@ -4,18 +4,26 @@ import { SearchBarProps } from './searchBar.types'
 import { testIds } from '@shared/dataTestIds'
 
 const SearchBar: React.FC<SearchBarProps> = ({ searchString, handleChange, placeholder = 'Search', selectedInput }) => {
-  const [searchText, setSearchText] = useState<string | string[] | undefined>(searchString)
-  const [inputValue, setInputValue] = useState<string | string[] | undefined>('')
+  const [inputValue, setInputValue] = useState('')
 
   const inputChangeHandler = (event: React.BaseSyntheticEvent) => {
-    setSearchText(event.target.value)
+    setInputValue(event.target.value)
   }
   useEffect(() => {
-    setInputValue(selectedInput ? `${selectedInput} ; ${searchText}` : searchText)
-  }, [searchText, selectedInput])
+    // Convert searchString to a string, handling arrays and undefined cases
+    const safeSearchString = searchString
+      ? Array.isArray(searchString)
+        ? searchString.join(',')
+        : String(searchString)
+      : ''
+
+    setInputValue(selectedInput ? `${selectedInput} ; ${safeSearchString}` : safeSearchString)
+  }, [searchString, selectedInput])
 
   const handleSubmit = () => {
-    handleChange(searchText)
+    const [newCategory, ...newSearchTextParts] = inputValue.split(' ; ')
+    const newSearchText = newSearchTextParts.join(' ; ')
+    handleChange(newCategory && newSearchTextParts.length > 0 ? `${newCategory} ; ${newSearchText}` : inputValue)
   }
 
   return (
