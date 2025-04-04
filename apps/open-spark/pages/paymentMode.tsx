@@ -30,8 +30,10 @@ import {
   useToast,
   Select
 } from '@chakra-ui/react'
-import phonePay from '@public/images/phonePayPayment.svg'
-import gPay from '@public/images/gpay.svg'
+// import phonePay from '@public/images/phonePayPayment.svg'
+// import gPay from '@public/images/gpay.svg'
+import applyPay from '@public/images/visaNew.svg'
+import stripePay from '@public/images/masterNew.svg'
 import CashOnDelivery from '@public/images/cash.svg'
 import NetBanking from '@public/images/netbanking.svg'
 import { BottomModal, GenericDropdown, InputProps, Loader, SelectOptionType, Typography } from '@beckn-ui/molecules'
@@ -709,23 +711,39 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
         disabled: false,
         dataTest: testIds.paymentpage_masterCard
       },
-
       {
-        category: 'UPI',
-        img: gPay,
-        paymentMethod: t.gPay || 'Google Pay',
-        paymentMethodNet: t.gPay || 'Google Pay',
-        disabled: false,
+        category: 'Other Payment Options',
+        img: applyPay,
+        paymentMethod: t.applyPay || 'Apple Pay',
+        paymentMethodNet: t.applyPay || 'Apple Pay',
+        disabled: true,
         dataTest: testIds.paymentpage_phonePay
       },
       {
-        category: 'UPI',
-        img: phonePay,
-        paymentMethod: t.phonePay || 'PhonePe UPI',
-        paymentMethodNet: t.phonePay || 'PhonePe UPI',
-        disabled: false,
+        category: 'Other Payment Options',
+        img: stripePay,
+        paymentMethod: t.stripePay || 'Stripe',
+        paymentMethodNet: t.stripePay || 'Stripe',
+        disabled: true,
         dataTest: testIds.paymentpage_phonePay
       }
+
+      // {
+      //   category: 'UPI',
+      //   img: gPay,
+      //   paymentMethod: t.gPay || 'Google Pay',
+      //   paymentMethodNet: t.gPay || 'Google Pay',
+      //   disabled: false,
+      //   dataTest: testIds.paymentpage_phonePay
+      // },
+      // {
+      //   category: 'UPI',
+      //   img: phonePay,
+      //   paymentMethod: t.phonePay || 'PhonePe UPI',
+      //   paymentMethodNet: t.phonePay || 'PhonePe UPI',
+      //   disabled: false,
+      //   dataTest: testIds.paymentpage_phonePay
+      // }
     ]
   } = props
 
