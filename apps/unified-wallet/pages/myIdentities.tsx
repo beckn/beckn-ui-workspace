@@ -14,15 +14,8 @@ import {
   useGetVerificationMethodsMutation
 } from '@services/walletService'
 import { AuthRootState } from '@store/auth-slice'
-import {
-  extractAuthAndHeader,
-  extractMobileNumberFromSubjectDid,
-  filterByKeyword,
-  generateRandomCode,
-  toBase64,
-  toSnakeCase
-} from '@utils/general'
-import { feedbackActions, formatDate } from '@beckn-ui/common'
+import { extractAuthAndHeader, filterByKeyword, generateRandomCode, toBase64, toSnakeCase } from '@utils/general'
+import { feedbackActions } from '@beckn-ui/common'
 import { generateAuthHeader, generateAuthHeaderForDelete } from '@services/cryptoUtilService'
 import { parseDIDData } from '@utils/did'
 import BottomModalScan from '@beckn-ui/common/src/components/BottomModal/BottomModalScan'
@@ -93,12 +86,10 @@ const MyIdentities = () => {
   const { t } = useLanguage()
   const dispatch = useDispatch()
   const { user, privateKey, publicKey } = useSelector((state: AuthRootState) => state.auth)
-  const [addDocument, { isLoading: addDocLoading }] = useAddDocumentMutation()
-  const [getVerificationMethods, { data: verificationMethods }] = useGetVerificationMethodsMutation()
-  const [getDocuments, { isLoading: verifyLoading }] = useGetDocumentsMutation()
-  const [deleteDocument, { isLoading: deleteDocLoading }] = useDeleteDocumentMutation()
-
-  const bearerToken = Cookies.get('authToken')
+  const [addDocument] = useAddDocumentMutation()
+  const [getVerificationMethods] = useGetVerificationMethodsMutation()
+  const [getDocuments] = useGetDocumentsMutation()
+  const [deleteDocument] = useDeleteDocumentMutation()
 
   const [options, setOptions] = useState<{
     country: SelectOptionType[]
@@ -527,7 +518,7 @@ const MyIdentities = () => {
               />
               <Divider />
               <Typography
-                text={'This connection belongs to Mr. Ravi Prakash.'}
+                text={'This Connection belongs to Detroit Public School'}
                 fontSize="12px"
                 fontWeight="400"
                 color="#80807F"

@@ -30,8 +30,10 @@ import {
   useToast,
   Select
 } from '@chakra-ui/react'
-import phonePay from '@public/images/phonePayPayment.svg'
-import gPay from '@public/images/gpay.svg'
+// import phonePay from '@public/images/phonePayPayment.svg'
+// import gPay from '@public/images/gpay.svg'
+import applyPay from '@public/images/visaNew.svg'
+import stripePay from '@public/images/masterNew.svg'
 import CashOnDelivery from '@public/images/cash.svg'
 import NetBanking from '@public/images/netbanking.svg'
 import { BottomModal, GenericDropdown, InputProps, Loader, SelectOptionType, Typography } from '@beckn-ui/molecules'
@@ -51,23 +53,26 @@ import { parseDIDData } from '@utils/did'
 import { ItemMetaData } from '@lib/types/becknDid'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
-import { currencyFormat } from '@utils/general'
+import { currencyFormat, getCountryCode } from '@utils/general'
 import { DetailCard } from '@beckn-ui/becknified-components'
+import { currencyMap } from '@lib/config'
 
 interface FormData {
   fullName: string
-  dateOfBirth: Date | null
-  panCard: string
-  aadhaar: string
-  mobileNumber: string
+  // dateOfBirth: Date | null
+  // panCard?: string
+  // aadhaar?: string
+  ssNumber?: string
+  mobileNumber?: string
   loanTenure?: string
 }
 
 interface FormErrors {
   fullName?: string
-  dateOfBirth?: string
-  panCard?: string
-  aadhaar?: string
+  // dateOfBirth?: string
+  // panCard?: string
+  // aadhaar?: string
+  ssNumber?: string
   mobileNumber?: string
   loanTenure?: string
 }
@@ -79,11 +84,12 @@ interface EMIApplicationModalProps {
   handleSyncWallet: () => void
   syncWalletIsLoading?: boolean
   walletDetails?: {
-    aadharNumber: string
-    panNumber: string
+    aadharNumber?: string
+    panNumber?: string
     fullName: string
-    dateOfBirth: Date | null
+    // dateOfBirth: Date | null
     mobileNumber: string
+    ssNumber: string
   }
   handleOnSubmitForm: (data: FormData) => void
   syncWalletSuccess?: boolean
@@ -100,10 +106,11 @@ const EMIApplicationModal = ({
 }: EMIApplicationModalProps) => {
   const [formData, setFormData] = useState<FormData>({
     fullName: walletDetails?.fullName || '',
-    dateOfBirth: walletDetails?.dateOfBirth || null,
-    panCard: walletDetails?.panNumber || '',
-    aadhaar: walletDetails?.aadharNumber || '',
+    // dateOfBirth: walletDetails?.dateOfBirth || null,
+    // panCard: walletDetails?.panNumber || '',
+    // aadhaar: walletDetails?.aadharNumber || '',
     mobileNumber: walletDetails?.mobileNumber || '',
+    ssNumber: walletDetails?.ssNumber || '',
     loanTenure: ''
   })
 
@@ -118,10 +125,11 @@ const EMIApplicationModal = ({
   useEffect(() => {
     setFormData(prevFormData => ({
       ...prevFormData,
-      panCard: walletDetails?.panNumber || '',
-      aadhaar: walletDetails?.aadharNumber || '',
+      // panCard: walletDetails?.panNumber || '',
+      // aadhaar: walletDetails?.aadharNumber || '',
+      ssNumber: walletDetails?.ssNumber || '',
       fullName: walletDetails?.fullName || '',
-      dateOfBirth: walletDetails?.dateOfBirth || null,
+      // dateOfBirth: walletDetails?.dateOfBirth || null,
       mobileNumber: walletDetails?.mobileNumber || '',
       loanTenure: ''
     }))
@@ -136,28 +144,33 @@ const EMIApplicationModal = ({
     }
 
     // Date of Birth validation
-    if (!formData.dateOfBirth) {
-      newErrors.dateOfBirth = 'Date of birth is required'
-    }
+    // if (!formData.dateOfBirth) {
+    //   newErrors.dateOfBirth = 'Date of birth is required'
+    // }
 
     // PAN Card validation
-    if (!formData.panCard.trim()) {
-      newErrors.panCard = 'PAN card number is required'
-    } else if (!/^[A-Z0-9]{10}$/.test(formData.panCard.toUpperCase())) {
-      newErrors.panCard = 'PAN card must be 10 characters'
-    }
+    // if (!formData.panCard.trim()) {
+    //   newErrors.panCard = 'PAN card number is required'
+    // } else if (!/^[A-Z0-9]{10}$/.test(formData.panCard.toUpperCase())) {
+    //   newErrors.panCard = 'PAN card must be 10 characters'
+    // }
 
-    // Aadhaar validation
-    if (!formData.aadhaar.trim()) {
-      newErrors.aadhaar = 'Aadhaar number is required'
-    } else if (!/^\d{12}$/.test(formData.aadhaar)) {
-      newErrors.aadhaar = 'Aadhaar must be 12 digits'
+    // // Aadhaar validation
+    // if (!formData.aadhaar.trim()) {
+    //   newErrors.aadhaar = 'Aadhaar number is required'
+    // } else if (!/^\d{12}$/.test(formData.aadhaar)) {
+    //   newErrors.aadhaar = 'Aadhaar must be 12 digits'
+    // }
+    if (!formData.ssNumber!.trim()) {
+      newErrors.ssNumber = 'SS number is required'
+    } else if (!/^\d{9}$/.test(formData.ssNumber!)) {
+      newErrors.ssNumber = 'SS number must be 9 digits'
     }
 
     // Mobile Number validation
-    if (!formData.mobileNumber.trim()) {
+    if (!formData.mobileNumber!.trim()) {
       newErrors.mobileNumber = 'Mobile number is required'
-    } else if (!/^\d{10}$/.test(formData.mobileNumber)) {
+    } else if (!/^\d{10}$/.test(formData.mobileNumber!)) {
       newErrors.mobileNumber = 'Mobile number must be 10 digits'
     }
 
@@ -174,13 +187,13 @@ const EMIApplicationModal = ({
     if (field === 'mobileNumber' && !/^\d*$/.test(value)) {
       return // Only allow digits in mobile number
     }
-    if (field === 'aadhaar' && !/^\d*$/.test(value)) {
-      return // Only allow digits in aadhaar
-    }
-    if (field === 'panCard') {
-      value = value.toUpperCase() // Convert PAN to uppercase
-      if (value.length > 10) return // Limit to 10 characters
-    }
+    // if (field === 'aadhaar' && !/^\d*$/.test(value)) {
+    //   return // Only allow digits in aadhaar
+    // }
+    // if (field === 'panCard') {
+    //   value = value.toUpperCase() // Convert PAN to uppercase
+    //   if (value.length > 10) return // Limit to 10 characters
+    // }
 
     setFormData(prev => ({
       ...prev,
@@ -340,7 +353,7 @@ const EMIApplicationModal = ({
           </Box>
 
           {/* Date of Birth Field */}
-          <Box
+          {/* <Box
             mb="20px"
             position="relative"
             width="100%"
@@ -393,10 +406,10 @@ const EMIApplicationModal = ({
                 text={errors.dateOfBirth}
               />
             )}
-          </Box>
+          </Box> */}
 
           {/* PAN Card Field */}
-          <Box mb="20px">
+          {/* <Box mb="20px">
             <Flex
               flexDir={'row'}
               justifyContent={'space-between'}
@@ -432,10 +445,10 @@ const EMIApplicationModal = ({
                 text={errors.panCard}
               />
             )}
-          </Box>
+          </Box> */}
 
           {/* Aadhaar Field */}
-          <Box mb="20px">
+          {/* <Box mb="20px">
             <Flex
               flexDir={'row'}
               justifyContent={'space-between'}
@@ -469,6 +482,45 @@ const EMIApplicationModal = ({
                 color="red.500"
                 fontSize="12px"
                 text={errors.aadhaar}
+              />
+            )}
+          </Box> */}
+
+          {/* SSN Field */}
+          <Box mb="20px">
+            <Flex
+              flexDir={'row'}
+              justifyContent={'space-between'}
+            >
+              <Typography
+                fontWeight="400"
+                fontSize="15px"
+                text="Identification Number *"
+              />
+              {syncWalletSuccess && formData.ssNumber && (
+                <Typography
+                  fontWeight="400"
+                  fontSize="12px"
+                  text="Verified by Vault"
+                  color="#53A052"
+                />
+              )}
+            </Flex>
+            <Input
+              value={formData.ssNumber ? formData.ssNumber.replace(/^(.{5})/g, '*****') : ''}
+              onChange={e => handleInputChange('ssNumber', e.target.value)}
+              paddingInlineStart="unset"
+              _focusVisible={{ borderColor: errors.ssNumber ? 'red.500' : '#4398E8' }}
+              border="unset"
+              borderBottom="1px solid"
+              borderColor={errors.ssNumber ? 'red.500' : '#3A3A3A'}
+              borderRadius="0"
+            />
+            {errors.ssNumber && (
+              <Typography
+                color="red.500"
+                fontSize="12px"
+                text={errors.ssNumber}
               />
             )}
           </Box>
@@ -522,16 +574,10 @@ const EMIApplicationModal = ({
 
             <GenericDropdown
               name={'loanTenure'}
-              options={[
-                {
-                  label: `${selectedEmi[0].name} months: ₹ ${currencyFormat(monthlyInstallment[0].emi)}/months`,
-                  value: monthlyInstallment[0].itemId
-                },
-                {
-                  label: `${selectedEmi[1].name} months: ₹ ${currencyFormat(monthlyInstallment[1].emi)}/months`,
-                  value: monthlyInstallment[1].itemId
-                }
-              ]}
+              options={selectedEmi?.map((emi: any, index: number) => ({
+                label: `${emi.name} months: ${currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}${currencyFormat(monthlyInstallment[index].emi)}/months`,
+                value: monthlyInstallment[index].itemId
+              }))}
               placeholder={''}
               selectedValue={formData.loanTenure!}
               handleChange={handleSelectChange}
@@ -548,6 +594,40 @@ const EMIApplicationModal = ({
       )}
     </BottomModal>
   )
+}
+
+interface EMIPlan {
+  id: string
+  provider_id?: string
+  providerName?: string
+  providerShortDescription?: string
+  providerImage?: string
+  item: Array<{
+    id: string
+    name: string
+    price: {
+      value: string
+    }
+    code: string
+  }>
+  bppId?: string
+  bppUri?: string
+}
+
+const mergeUniqueObjects = (arr1: EMIPlan[], arr2: EMIPlan[]): EMIPlan[] => {
+  const mergedMap = new Map<string, EMIPlan>()
+
+  // Add all objects from arr2 first
+  arr2.forEach(obj => {
+    mergedMap.set(obj.id, obj)
+  })
+
+  // Override with objects from arr1 if ID matches
+  arr1.forEach(obj => {
+    mergedMap.set(obj.id, obj)
+  })
+
+  return Array.from(mergedMap.values())
 }
 
 const PaymentMode = (props: PaymentMethodSelectionProps) => {
@@ -571,12 +651,13 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
   const cartItems = useSelector((state: ICartRootState) => state.cart.items)
   const [aadharNumber, setAadharNumber] = useState<string>()
   const [PANNumber, setPANNumber] = useState<string>()
+  const [SSNumber, setSSNumber] = useState<string>()
   const [walletDetails, setWalletDetails] = useState<any>({
     fullName: '',
-    dateOfBirth: '',
-    mobileNumber: '',
-    aadharNumber: '',
-    panNumber: ''
+    // dateOfBirth: '',
+    mobileNumber: ''
+    // aadharNumber: '',
+    // panNumber: ''
   })
   const [syncWalletSuccess, setSyncWalletSuccess] = useState(false)
   const [payableAmount, setPayableAmount] = useState<Record<string, number>>()
@@ -601,27 +682,11 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
   console.log(selectedPlan)
 
-  const mergeUniqueObjects = (arr1: any[], arr2: any[]): any[] => {
-    const mergedMap = new Map<string, any>()
-
-    // Add all objects from arr2 first
-    arr2.forEach(obj => {
-      mergedMap.set(obj.id, obj)
-    })
-
-    // Override with objects from arr1 if ID matches
-    arr1.forEach(obj => {
-      mergedMap.set(obj.id, obj)
-    })
-
-    return Array.from(mergedMap.values())
-  }
-
   const fetchEMIPlans = (providerId?: string) => {
-    // console.log(selectedItem)
     const searchPayload = {
       context: {
-        domain: 'deg:finance'
+        domain: 'deg:finance',
+        location: getCountryCode()
       },
       searchString: '',
       ...(providerId && {
@@ -646,21 +711,32 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
       .post(`${apiUrl}/search`, searchPayload)
       .then(res => {
         dispatch(discoveryEmiPlanActions.addTransactionId({ transactionId: res.data.data[0].context.transaction_id }))
-        const prevUnselectedEmiPlans = [...emiPlans].filter(item => item.id !== selectedPlan)
-        const parsedSearchItems = parseSearchFinancelist(res.data.data)
-        const formatedSearchData = mergeUniqueObjects(parsedSearchItems, prevUnselectedEmiPlans)
-        console.log('daata', formatedSearchData)
-        dispatch(discoveryEmiPlanActions.addProducts({ products: formatedSearchData }))
-        setEmiPlans(formatedSearchData)
+
+        // Get current emiPlans state
+        const currentEmiPlans = [...emiPlans]
+
+        // Parse new search results and assert type
+        const parsedSearchItems = parseSearchFinancelist(res.data.data) as unknown as EMIPlan[]
+
+        // Merge with existing plans, preserving unselected ones
+        const mergedPlans = mergeUniqueObjects(parsedSearchItems, currentEmiPlans)
+
+        // Update state with merged plans
+        dispatch(discoveryEmiPlanActions.addProducts({ products: mergedPlans }))
+        setEmiPlans(mergedPlans)
         setIsLoading(true)
-        if (providerId) {
-          const selectedPlanData = formatedSearchData.find(plan => plan.id === selectedPlan)
-          handleEmiSelect(selectedPlanData?.id!, formatedSearchData)
-        }
+        setSelectedPlan('')
+        // If this is a provider-specific search, handle the selected plan
+        // if (providerId) {
+        //   const selectedPlanData = mergedPlans.find(plan => plan.id === selectedPlan)
+        //   if (selectedPlanData) {
+        //     handleEmiSelect(selectedPlanData.id, mergedPlans)
+        //   }
+        // }
       })
-      .catch(e => {
+      .catch(error => {
         setIsLoading(false)
-        console.log('error')
+        console.error('Error fetching EMI plans:', error)
       })
   }
   console.log(emiPlans)
@@ -709,23 +785,39 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
         disabled: false,
         dataTest: testIds.paymentpage_masterCard
       },
-
       {
-        category: 'UPI',
-        img: gPay,
-        paymentMethod: t.gPay || 'Google Pay',
-        paymentMethodNet: t.gPay || 'Google Pay',
-        disabled: false,
+        category: 'Other Payment Options',
+        img: applyPay,
+        paymentMethod: t.applyPay || 'Apple Pay',
+        paymentMethodNet: t.applyPay || 'Apple Pay',
+        disabled: true,
         dataTest: testIds.paymentpage_phonePay
       },
       {
-        category: 'UPI',
-        img: phonePay,
-        paymentMethod: t.phonePay || 'PhonePe UPI',
-        paymentMethodNet: t.phonePay || 'PhonePe UPI',
-        disabled: false,
+        category: 'Other Payment Options',
+        img: stripePay,
+        paymentMethod: t.stripePay || 'Stripe',
+        paymentMethodNet: t.stripePay || 'Stripe',
+        disabled: true,
         dataTest: testIds.paymentpage_phonePay
       }
+
+      // {
+      //   category: 'UPI',
+      //   img: gPay,
+      //   paymentMethod: t.gPay || 'Google Pay',
+      //   paymentMethodNet: t.gPay || 'Google Pay',
+      //   disabled: false,
+      //   dataTest: testIds.paymentpage_phonePay
+      // },
+      // {
+      //   category: 'UPI',
+      //   img: phonePay,
+      //   paymentMethod: t.phonePay || 'PhonePe UPI',
+      //   paymentMethodNet: t.phonePay || 'PhonePe UPI',
+      //   disabled: false,
+      //   dataTest: testIds.paymentpage_phonePay
+      // }
     ]
   } = props
 
@@ -747,7 +839,8 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
               transaction_id: transactionId,
               bpp_id: selectAPIRes[0].context.bpp_id,
               bpp_uri: selectAPIRes[0].context.bpp_uri,
-              domain: 'deg:finance'
+              domain: 'deg:finance',
+              location: getCountryCode()
             },
             message: {
               orders: [
@@ -809,7 +902,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                     {
                       params: {
                         amount: `${calculatedEMIs[selectedEmi[0].id].totalCost - calculatedEMIs[selectedEmi[0].id].actualInterestAmount}`,
-                        currency: 'INR',
+                        currency: `${currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}`,
                         bank_account_number: '1234002341',
                         bank_code: 'INB0004321'
                       },
@@ -863,6 +956,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
   }
   const handleEmiSelect = (planId: string, customEMIPlans?: any[]) => {
     const emiPlanList = customEMIPlans ? customEMIPlans : emiPlans
+    console.log('emiPlanList', emiPlanList)
     const selectedPlan = emiPlanList.find(plan => plan.id === planId)
     if (!selectedPlan) {
       console.error('Selected EMI plan not found!')
@@ -926,7 +1020,8 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
             transaction_id: transactionId,
             bpp_id: selectedPlan.bppId,
             bpp_uri: selectedPlan.bppUri,
-            domain: 'deg:finance'
+            domain: 'deg:finance',
+            location: getCountryCode()
           },
           message: {
             orders: [
@@ -934,7 +1029,17 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                 items: selectedItems,
                 provider: {
                   id: selectedPlan.providerId
-                }
+                },
+                ...(isAppliedForDiscountingEMIPlans && {
+                  tags: [
+                    {
+                      descriptor: {
+                        code: 'preFinanced',
+                        name: 'true'
+                      }
+                    }
+                  ]
+                })
               }
             ]
           }
@@ -958,17 +1063,17 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
       const result = await getDocuments(user?.deg_wallet?.deg_wallet_id!).unwrap()
       const data = {
         fullName: `${user?.agent?.first_name || ''} ${user?.agent?.last_name || ''}`,
-        dateOfBirth: new Date('01/05/1994'),
-        mobileNumber: `${user?.agent?.agent_profile.phone_number}`,
-        aadharNumber: '743160366069',
-        panNumber: 'EPLPB9268F'
+        // dateOfBirth: new Date('01/05/1994'),
+        mobileNumber: `${user?.agent?.agent_profile.phone_number}`
+        // aadharNumber: '743160366069',
+        // panNumber: 'EPLPB9268F'
       }
       setAadharNumber('743160366069')
       setPANNumber('EPLPB9268F')
+      setSSNumber('675721423')
       setWalletDetails(data)
       setSyncWalletSuccess(true)
       const list: ItemMetaData[] = parseDIDData(result)['identities'].map((item, index) => {
-        console.log('Dank', list)
         if (/\/type\/aadhar_card\/id\//.test((item as any).did)) {
           setAadharNumber(item.id)
         } else {
@@ -979,6 +1084,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
         } else {
           setPANNumber('EPLPB9268F')
         }
+        setSSNumber('675721423')
 
         return {
           id: index,
@@ -989,6 +1095,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
           data: item
         }
       })
+      return list
     } catch (error) {
       console.error('Error fetching dashboard data:', error)
     } finally {
@@ -1000,6 +1107,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
   const handleSyncWallet = async () => {
     console.log(user?.deg_wallet?.deg_wallet_id)
     const getDoc = await fetchCredentials()
+    console.log('getDoc', getDoc)
   }
 
   const getCartItemsWithQuantity = () => {
@@ -1101,9 +1209,9 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
         dispatch(
           feedbackActions.setToastData({
             toastData: {
-              message: 'Error',
+              message: 'Oops! No Transactions Found',
               display: true,
-              type: 'error',
+              type: 'warning',
               description: 'You do not have any transaction in your wallet to avail discount.'
             }
           })
@@ -1143,6 +1251,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
         style={{ marginTop: '20px' }}
       />
       <Box
+        background={'#fff'}
         boxShadow="0px 4px 10px rgba(0, 0, 0, 0.1)"
         borderRadius="12px"
         margin={'0 auto'}
@@ -1207,7 +1316,11 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                                   Processing Fee: {plan.providerShortDescription}
                                 </Text>
                               </Box>
-                              <Image src={plan.providerImage} />
+                              <Image
+                                src={plan.providerImage}
+                                width="100px"
+                                height="auto"
+                              />
                             </Flex>
                           </Stack>
                         </Box>
@@ -1258,7 +1371,8 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                                 >
                                   <Text fontSize={'10px'}>Initial Payment</Text>
                                   <Text fontSize={'10px'}>
-                                    ₹{currencyFormat(Number(payableAmount?.[plan.id]?.toFixed(2)))}
+                                    {currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}
+                                    {currencyFormat(Number(payableAmount?.[plan.id]?.toFixed(2)))}
                                   </Text>
                                 </Flex>
                               </Box>
@@ -1314,14 +1428,16 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                                           fontWeight="500"
                                           color="#626060"
                                         >
-                                          ₹ {currencyFormat(Number(emi.toFixed(2)))} x {item.name}m
+                                          {currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}
+                                          {currencyFormat(Number(emi.toFixed(2)))} x {item.name}m
                                         </Box>
                                         <Box
                                           fontSize="10px"
                                           fontWeight="500"
                                           color="#626060"
                                         >
-                                          ₹ {currencyFormat(Number(actualInterestAmount.toFixed(2)))} ({originalRate}
+                                          {currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}
+                                          {currencyFormat(Number(actualInterestAmount.toFixed(2)))} ({originalRate}
                                           %)
                                         </Box>
                                         <Box>
@@ -1332,7 +1448,8 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                                               fontWeight="500"
                                               color="#626060"
                                             >
-                                              ₹{nonDiscountedPrice}.00
+                                              {currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}
+                                              {nonDiscountedPrice}.00
                                             </Box>
                                           )}
                                           <Box
@@ -1340,7 +1457,8 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                                             fontWeight="500"
                                             color={`${plan.item[0].code === '90' ? '#3C8508' : '#626060'}`}
                                           >
-                                            ₹ {currencyFormat(Number(totalCost.toFixed(2)))}
+                                            {currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}
+                                            {currencyFormat(Number(totalCost.toFixed(2)))}
                                           </Box>
                                         </Box>
                                       </Flex>
@@ -1493,8 +1611,9 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
               syncWalletIsLoading={syncWalletIsLoading}
               walletDetails={{
                 ...walletDetails,
-                aadharNumber: aadharNumber!,
-                panNumber: PANNumber!
+                // aadharNumber: aadharNumber!,
+                // panNumber: PANNumber!,
+                ssNumber: SSNumber!
               }}
               handleOnSubmitForm={handleOnSubmit}
               syncWalletSuccess={syncWalletSuccess}

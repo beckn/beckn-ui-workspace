@@ -11,11 +11,15 @@ import type { CartItem } from '../lib/types/rentalTypes'
 import { setOrderData } from '@store/rental-slice'
 import CustomTimePicker from '@components/dateTimePicker/customTimePicker'
 import CustomDatePicker from '@components/dateTimePicker/customDatePicker'
+import { roundToNextHour } from '@utils/general'
 
 export default function ConfirmRent() {
   // const [fromTime, setFromTime] = useState<Date>(new Date())
   // const [toTime, setToTime] = useState<Date>(new Date())
-  const [date, setDate] = useState<string>(new Date().toISOString())
+  const [startDate, setStartDate] = useState<string>(roundToNextHour(new Date()).toISOString())
+  const [endDate, setEndDate] = useState<string>(
+    roundToNextHour(new Date(new Date(startDate).setHours(new Date(startDate).getHours() + 1))).toISOString()
+  )
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
   const router = useRouter()
   const dispatch = useDispatch()
@@ -24,8 +28,8 @@ export default function ConfirmRent() {
   const rentalDate = selectedProduct.item.fulfillments[0].state?.name
 
   const handleConfirm = async () => {
-    const formTimestamp = Math.floor(new Date(fromTime).getTime() / 1000)
-    const toTimestamp = Math.floor(new Date(toTime).getTime() / 1000)
+    const formTimestamp = new Date(startDate).getTime()
+    const toTimestamp = new Date(endDate).getTime()
     localStorage.setItem('fromTimestamp', formTimestamp.toString())
     localStorage.setItem('toTimestamp', toTimestamp.toString())
     const domain = DOMAIN_PATH.RENT_AND_HIRE
@@ -66,18 +70,6 @@ export default function ConfirmRent() {
     }
   }
 
-  const roundToNextHour = (date: Date) => {
-    const roundedDate = new Date(date)
-    // If minutes are not 0, round up to next hour
-    if (roundedDate.getMinutes() > 0) {
-      roundedDate.setHours(roundedDate.getHours() + 1)
-    }
-    roundedDate.setMinutes(0)
-    roundedDate.setSeconds(0)
-    roundedDate.setMilliseconds(0)
-    return roundedDate
-  }
-
   // Initialize with rounded current time
   const [fromTime, setFromTime] = useState<Date>(roundToNextHour(new Date()))
   const [toTime, setToTime] = useState<Date>(() => {
@@ -113,6 +105,67 @@ export default function ConfirmRent() {
     return timeToCheck.getTime() < now.getTime()
   }
 
+  const getMinTimeForStartDate = () => {
+    const now = new Date()
+    const selectedDate = new Date(startDate)
+    const isToday = now.toDateString() === selectedDate.toDateString()
+
+    return isToday ? now : new Date(selectedDate.setHours(0, 0, 0, 0))
+  }
+
+  const getMinDateForEndDate = () => {
+    const selectedDate = new Date(startDate)
+    if (selectedDate.getHours() === 23) {
+      selectedDate.setDate(selectedDate.getDate() + 1)
+      selectedDate.setHours(0, 0, 0, 0)
+    }
+    return selectedDate
+  }
+
+  const getMinTimeForEndDate = () => {
+    const start = new Date(startDate)
+    const end = new Date(endDate)
+    const isSameDay = start.toDateString() === end.toDateString()
+
+    if (isSameDay) {
+      let hours = start.getHours() + 1
+      if (hours >= 24) {
+        start.setDate(start.getDate() + 1)
+        hours = 0
+      }
+      start.setHours(hours, 0, 0, 0)
+      return start
+    }
+    end.setHours(0, 0, 0, 0)
+    return end
+  }
+
+  const handleStartDateChange = (date: Date | null) => {
+    if (!date) return
+    const selectedDate = new Date(date)
+
+    const newEndDate = new Date(selectedDate)
+    const selectedHours = selectedDate.getHours()
+    if (selectedHours === 23) {
+      newEndDate.setDate(newEndDate.getDate() + 1)
+      newEndDate.setHours(0, 0, 0, 0)
+    } else {
+      newEndDate.setHours(selectedHours + 1, 0, 0, 0)
+    }
+
+    setStartDate(roundToNextHour(selectedDate).toISOString())
+    setEndDate(roundToNextHour(newEndDate).toISOString())
+    setFromTime(roundToNextHour(selectedDate))
+    setToTime(roundToNextHour(selectedDate))
+  }
+
+  const handleEndDateChange = (date: Date | null) => {
+    if (!date) return
+    setEndDate(roundToNextHour(new Date(date)).toISOString())
+    setFromTime(roundToNextHour(new Date(date)))
+    setToTime(roundToNextHour(new Date(date)))
+  }
+
   return (
     <Box
       mt={5}
@@ -121,29 +174,52 @@ export default function ConfirmRent() {
       overflowY={'scroll'}
       mb={5}
     >
-      <Box mb={9}>
+      <Box mb={6}>
         <Text
           mb={3}
+          mt={3}
           fontSize="16px"
         >
-          Select Date
+          From Date
         </Text>
         <Flex align="center">
           <CustomDatePicker
-            selected={new Date(date)}
+            selected={new Date(startDate)}
             placeholderText="Select 'from' date"
-            onChange={(date: any) => {
-              setDate(date?.toISOString())
-              setFromTime(roundToNextHour(new Date(date)))
-              setToTime(roundToNextHour(new Date(date)))
-            }}
-            dateFormat="dd-MM-yyyy"
+            showTimeSelect
+            minDate={new Date()}
+            minTime={getMinTimeForStartDate()}
+            maxTime={new Date(new Date().setHours(23, 0, 0, 0))}
+            timeIntervals={60}
+            onChange={handleStartDateChange}
+            dateFormat="dd-MM-yyyy hh:mm a"
+            isInvalid={false}
+          />
+        </Flex>
+        <Text
+          mb={3}
+          mt={3}
+          fontSize="16px"
+        >
+          To Date
+        </Text>
+        <Flex align="center">
+          <CustomDatePicker
+            selected={new Date(endDate)}
+            placeholderText="Select 'to' date"
+            showTimeSelect
+            minDate={getMinDateForEndDate()}
+            minTime={getMinTimeForEndDate()}
+            maxTime={new Date(new Date(startDate).setHours(new Date(startDate).getHours() === 23 ? 47 : 23, 0, 0, 0))}
+            timeIntervals={60}
+            onChange={handleEndDateChange}
+            dateFormat="dd-MM-yyyy hh:mm a"
             isInvalid={false}
           />
         </Flex>
       </Box>
 
-      <Box mb={6}>
+      {/* <Box mb={6}>
         <Text
           mb={3}
           fontSize="16px"
@@ -176,16 +252,11 @@ export default function ConfirmRent() {
             />
           </Flex>
         </Flex>
-      </Box>
+      </Box> */}
       <Box mt={'250px'}>
         <BecknButton
           text="Confirm & Proceed"
           handleClick={handleConfirm}
-          disabled={
-            fromTime.getTime() === toTime.getTime() ||
-            (isToday(new Date(date)) && (isTimePast(fromTime) || isTimePast(toTime))) ||
-            toTime.getTime() < fromTime.getTime()
-          }
         />
       </Box>
     </Box>

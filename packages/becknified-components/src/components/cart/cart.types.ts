@@ -7,6 +7,7 @@ export interface CartItemProps {
   quantity: number
   name: string
   providerName?: string
+  shortDesc?: string
   image: string
   price: number
   symbol: CurrencyType

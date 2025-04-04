@@ -412,6 +412,12 @@ select:-webkit-autofill:focus {
 .product-text .chakra-text {
   margin-bottom: unset !important;
 }
+.product-price .chakra-text,
+.product-star-rating .chakra-text,
+.custom-product-info .chakra-text {
+  flex-wrap: wrap;
+  font-size: 13px !important;
+}
 .order-summary_orderSummaryContainer__v8MgZ {
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1) !important;
   background-color: #fff !important;
@@ -455,6 +461,11 @@ select:-webkit-autofill:focus {
   .mytrade-status {
     gap: 2px !important;
   }
+  .product-price .chakra-text,
+  .product-star-rating .chakra-text,
+  .custom-product-info .chakra-text {
+    font-size: 11px !important;
+  }
 }
 .css-1530p3w:active,
 .css-1530p3w[data-active] {
@@ -487,4 +498,22 @@ select:-webkit-autofill:focus {
 }
 .toast-text {
   margin-bottom: unset !important;
+}
+.myStore-homepage .css-1em4q9y {
+  background: #deeaf5;
+}
+input {
+  border-color: unset !important;
+}
+
+.css-k008qs input {
+  border-color: #fff !important;
+  background-color: #fff;
+}
+.myStore-search-wrapper svg {
+  background: #fff;
+  border-radius: 12px;
+}
+.-product_summary_container .css-afhyro {
+  background: #fff;
 }

@@ -8,12 +8,11 @@ interface CustomDatePickerProps {
 }
 
 const CustomDatePicker = (props: Partial<CustomDatePickerProps | DatePickerProps>) => {
-  const { isInvalid = false, ...rest } = props
+  const { isInvalid = false, minDate = new Date(), ...rest } = props as DatePickerProps
   return (
     <Box
       as={DatePicker}
       {...props}
-      minDate={new Date()}
       sx={{
         '-webkit-padding-end': 'var(--chakra-space-8)',
         'padding-inline-end': 'var(--chakra-space-8)',

@@ -298,3 +298,8 @@ select:-webkit-autofill:focus {
     gap: 2px !important;
   }
 }
+.tableHide tr {
+  pointer-events: none;
+  cursor: not-allowed;
+  opacity: 0.6;
+}

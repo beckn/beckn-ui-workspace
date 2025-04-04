@@ -20,7 +20,7 @@ const en = {
     title: 'Role'
   },
   manageUser: {
-    name: 'Name',
+    username: 'User Name',
     changePassword: 'Change Password',
     numMinutesToKeyExpiration: 'Num Minutes To Key Expiration',
     firstName: 'First Name',
@@ -37,7 +37,7 @@ const en = {
     state: 'State',
     pinCode: 'Pin Code',
     alternatePhoneNumber: 'Alternate Phone Number',
-    longName: 'Long Name',
+    longName: 'Full Name',
     admin: 'Admin',
     passwordEncrypted: 'Password Encrypted',
     lastName: 'Last Name',
@@ -101,7 +101,7 @@ const en = {
     searchPlaceholder: 'Search User Roles...'
   },
   users: {
-    name: 'Name',
+    username: 'User Name',
     longName: 'Long Name',
     changePassword: 'Change Password',
     admin: 'Admin',
@@ -138,8 +138,18 @@ const en = {
     searchPlaceholder: 'Refine your search here...'
   },
   networkParticipants: {
-    participantId: 'Participant Id',
-    kycComplete: 'Kyc Complete',
+    subscriberId: 'Subscriber Id',
+    keyId: 'Key Id',
+    url: 'URL',
+    type: 'Type',
+    domain: 'Domain',
+    signingPublicKey: 'Signing Public Key',
+    encrPublicKey: 'Encrypted Public Key',
+    validFrom: 'Valid From',
+    validUntil: 'Valid Until',
+    status: 'Status',
+    createdAt: 'Created At',
+    updatedAt: 'Updated At',
     view: 'View',
     edit: 'Edit',
     delete: 'Delete',

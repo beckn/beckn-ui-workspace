@@ -19,14 +19,59 @@ const NetworkParticipants = () => {
   const router = useRouter()
 
   const columns = [
-    { header: en.networkParticipants.participantId, accessor: 'participantId' },
-    { header: en.networkParticipants.kycComplete, accessor: 'kycComplete' }
+    { header: en.networkParticipants.subscriberId, accessor: 'subscriberId' },
+    { header: en.networkParticipants.keyId, accessor: 'keyId' },
+    { header: en.networkParticipants.type, accessor: 'type' },
+    { header: en.networkParticipants.domain, accessor: 'domain' },
+    { header: en.networkParticipants.signingPublicKey, accessor: 'signingPublicKey' },
+    { header: en.networkParticipants.encrPublicKey, accessor: 'encrPublicKey' },
+    { header: en.networkParticipants.validFrom, accessor: 'validFrom' },
+    { header: en.networkParticipants.validUntil, accessor: 'validUntil' },
+    { header: en.networkParticipants.status, accessor: 'status' },
+    { header: en.networkParticipants.createdAt, accessor: 'createdAt' },
+    { header: en.networkParticipants.updatedAt, accessor: 'updatedAt' }
   ]
 
   const data = [
-    { participantId: 'alex-nounce-bap', kycComplete: 'Y' },
-    { participantId: 'prasad-test', kycComplete: 'Y' },
-    { participantId: 'onix-bpp.becknprotocol.io', kycComplete: 'Y' }
+    {
+      subscriberId: 'sub-001',
+      keyId: 'key-001',
+      type: 'BAP',
+      domain: 'example.com',
+      signingPublicKey: 'signingKey123',
+      encrPublicKey: 'encryptionKey123',
+      validFrom: '2023-01-01',
+      validUntil: '2024-01-01',
+      status: 'published',
+      createdAt: '2023-01-01',
+      updatedAt: '2023-06-01'
+    },
+    {
+      subscriberId: 'sub-002',
+      keyId: 'key-002',
+      type: 'BPP',
+      domain: 'anotherexample.com',
+      signingPublicKey: 'signingKey456',
+      encrPublicKey: 'encryptionKey456',
+      validFrom: '2023-02-01',
+      validUntil: '2024-02-01',
+      status: 'unpublished',
+      createdAt: '2023-02-01',
+      updatedAt: '2023-07-01'
+    },
+    {
+      subscriberId: 'sub-003',
+      keyId: 'key-003',
+      type: 'BAP',
+      domain: 'yetanotherexample.com',
+      signingPublicKey: 'signingKey789',
+      encrPublicKey: 'encryptionKey789',
+      validFrom: '2023-03-01',
+      validUntil: '2024-03-01',
+      status: 'published',
+      createdAt: '2023-03-01',
+      updatedAt: '2023-08-01'
+    }
     // Add more data as needed
   ]
 

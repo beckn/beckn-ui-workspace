@@ -11,6 +11,20 @@ export interface RentalItemProps {
 }
 
 const OrderOverview: React.FC<{ items: RentalItemProps[] }> = ({ items }) => {
+  const formatDateTime = (timeSlot: string | undefined) => {
+    if (!timeSlot) return { date: '', startTime: '', endTime: '' }
+
+    const [start, end] = timeSlot.split(' - ')
+    const [startDate, startTime] = start.split(', ')
+    const [endDate, endTime] = end.split(', ')
+
+    return {
+      date: `${startDate} - ${endDate}`, // Since both dates are same
+      startTime,
+      endTime
+    }
+  }
+
   if (!items.length) return null
 
   return (
@@ -53,31 +67,48 @@ const OrderOverview: React.FC<{ items: RentalItemProps[] }> = ({ items }) => {
               alignItems="center"
             >
               <Typography
-                text="Time Slot:"
+                text="Date:"
                 fontSize="12px"
                 fontWeight="600"
               />
               <Typography
-                text={` ${item.timeSlot}`}
+                text={` ${formatDateTime(item.timeSlot).date}`}
                 fontSize="12px"
                 sx={{ ml: 1 }}
               />
             </Flex>
+            <Flex justifyContent={'space-between'}>
+              <Flex
+                mb={3}
+                alignItems="center"
+              >
+                <Typography
+                  text="Time Slot:"
+                  fontSize="12px"
+                  fontWeight="600"
+                />
+                <Typography
+                  text={` ${formatDateTime(item.timeSlot).startTime} - ${formatDateTime(item.timeSlot).endTime}`}
+                  fontSize="12px"
+                  sx={{ ml: 1 }}
+                />
+              </Flex>
 
-            <Flex
-              mb={3}
-              alignItems="center"
-            >
-              <Typography
-                text="Duration:"
-                fontSize="12px"
-                fontWeight="600"
-              />
-              <Typography
-                text={` ${item.duration}`}
-                fontSize="12px"
-                sx={{ ml: 1 }}
-              />
+              <Flex
+                mb={3}
+                alignItems="center"
+              >
+                <Typography
+                  text="Duration:"
+                  fontSize="12px"
+                  fontWeight="600"
+                />
+                <Typography
+                  text={` ${item.duration}`}
+                  fontSize="12px"
+                  sx={{ ml: 1 }}
+                />
+              </Flex>
             </Flex>
           </Box>
           {index < items.length - 1 && (

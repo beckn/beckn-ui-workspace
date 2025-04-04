@@ -241,7 +241,7 @@ const UpdateShippingDetails = () => {
         onSubmit={() => handleSubmit(shippingDetails, confirmData as ConfirmResponseModel[])}
         values={shippingDetails}
         onChange={handleFormChange}
-        submitButton={{ text: 'Submit' }}
+        submitButton={{ text: 'Save Changes' }}
       />
     </Box>
   )

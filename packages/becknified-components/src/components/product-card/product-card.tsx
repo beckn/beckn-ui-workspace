@@ -28,7 +28,7 @@ const ProductCard: React.FC<ProductCardProps> = props => {
         <Box
           className={`${className}-product_card_layout_container`}
           onClick={productClickHandler}
-          minH={'168px'}
+          // minH={'168px'}
           width={['100%', '100%', '100%', `${renderMode === 'short' ? 'calc(50% - 16px)' : '100%'}`]}
           m={['0 0 16px 0', '0 0 16px 0', '8px', '8px']}
           backgroundColor={'#fff'}
@@ -77,168 +77,181 @@ const ProductCard: React.FC<ProductCardProps> = props => {
                 />
               </Box>
             </Box>
-            <Box
+            <Flex
+              flexDirection={'column'}
+              justifyContent={'space-between'}
+              width={'100%'}
               p={'15px'}
               pt={'10px'}
-              w={'100%'}
-              position={'relative'}
-              display={'flex'}
-              flexDir={'column'}
             >
-              {product.name && (
+              <Box
+                w={'100%'}
+                position={'relative'}
+                display={'flex'}
+                flexDir={'column'}
+              >
+                {product.name && (
+                  <Flex
+                    justifyContent={'space-between'}
+                    alignItems={'flex-start'}
+                    w={'100%'}
+                  >
+                    <Text
+                      fontWeight={'600'}
+                      fontSize={'1rem'}
+                      mb="10px"
+                      noOfLines={2}
+                      textOverflow="ellipsis"
+                      whiteSpace="pre-wrap"
+                      overflowWrap="break-word"
+                    >
+                      {product.name}
+                    </Text>
+                    {product.infoGuideIcon && <Image src={guideImage} />}
+                  </Flex>
+                )}
                 <Flex
                   justifyContent={'space-between'}
                   alignItems={'flex-start'}
                   w={'100%'}
                 >
-                  <Text
-                    fontWeight={'600'}
-                    fontSize={'1rem'}
-                    mb={'0.7rem'}
-                    noOfLines={2}
-                    textOverflow="ellipsis"
-                    whiteSpace="pre-wrap"
-                    overflowWrap="break-word"
-                  >
-                    {product.name}
-                  </Text>
-                  {product.infoGuideIcon && <Image src={guideImage} />}
-                </Flex>
-              )}
-              <Flex
-                justifyContent={'space-between'}
-                alignItems={'flex-start'}
-                w={'100%'}
-              >
-                {product.shortDesc && (
-                  <Text
-                    fontSize={'0.8rem'}
-                    mb={'0.4rem'}
-                    noOfLines={2}
-                    textOverflow="ellipsis"
-                    whiteSpace="pre-wrap"
-                    overflowWrap="break-word"
-                  >
-                    {product.shortDesc}
-                  </Text>
-                )}
-              </Flex>
-              {product.source && product.sourceText ? (
-                <Flex
-                  alignItems={'flex-start'}
-                  w={'100%'}
-                >
-                  <Text
-                    fontSize={'0.8rem'}
-                    mb={'0.4rem'}
-                    fontWeight={'600'}
-                    mr="5px"
-                    flex={'none'}
-                  >
-                    {product.source} :
-                  </Text>
-                  <Text
-                    fontSize={'0.8rem'}
-                    mb={'0.4rem'}
-                    w={['60%', '60%', 'unset']}
-                    noOfLines={2}
-                    textOverflow="ellipsis"
-                    whiteSpace="pre-wrap"
-                    overflowWrap="break-word"
-                  >
-                    {product.sourceText}
-                  </Text>
-                </Flex>
-              ) : (
-                product.sourceText && (
-                  <Text
-                    fontSize={'0.8rem'}
-                    mb={'0.7rem'}
-                    noOfLines={2}
-                    textOverflow="ellipsis"
-                    whiteSpace="pre-wrap"
-                    overflowWrap="break-word"
-                  >
-                    {product.sourceText}
-                  </Text>
-                )
-              )}
-
-              {productInfoDataSource && typeof productInfoDataSource === 'string' && (
-                <Flex
-                  fontSize="12px"
-                  alignItems="center"
-                  mb="8px"
-                >
-                  <Text
-                    pl="3px"
-                    noOfLines={1}
-                    textOverflow="ellipsis"
-                    whiteSpace="pre-wrap"
-                    overflowWrap="break-word"
-                  >
-                    {productInfoDataSource as string}
-                  </Text>
-                </Flex>
-              )}
-              {productInfoDataSource && (
-                <>
-                  {typeof productInfoDataSource === 'object' && (
-                    <>
-                      {Object.keys(productInfoDataSource).includes('image') ? (
-                        <Image
-                          w={'60px'}
-                          mt="5px"
-                          src={productInfoDataSource['image']}
-                        />
-                      ) : (
-                        <>
-                          {Object.entries(productInfoDataSource as Record<string, any>).map(([key, value]) => (
-                            <Flex
-                              fontSize="12px"
-                              alignItems="center"
-                              mb="8px"
-                              key={key}
-                            >
-                              <Text fontWeight="600">{key}:</Text>
-                              <Text
-                                pl="3px"
-                                noOfLines={1}
-                                textOverflow="ellipsis"
-                                whiteSpace="pre-wrap"
-                                overflowWrap="break-word"
-                              >
-                                {value}
-                              </Text>
-                            </Flex>
-                          ))}
-                        </>
-                      )}
-                    </>
+                  {product.shortDesc && (
+                    <Text
+                      fontSize={'0.8rem'}
+                      mb="10px"
+                      noOfLines={2}
+                      textOverflow="ellipsis"
+                      whiteSpace="pre-wrap"
+                      overflowWrap="break-word"
+                    >
+                      {product.shortDesc}
+                    </Text>
                   )}
-                </>
-              )}
+                </Flex>
+                {product.source && product.sourceText ? (
+                  <Flex
+                    alignItems={'flex-start'}
+                    w={'100%'}
+                  >
+                    <Text
+                      fontSize={'0.8rem'}
+                      mb="10px"
+                      fontWeight={'600'}
+                      mr="5px"
+                      flex={'none'}
+                    >
+                      {product.source} :
+                    </Text>
+                    <Text
+                      fontSize={'0.8rem'}
+                      mb="10px"
+                      w={['60%', '60%', 'unset']}
+                      noOfLines={2}
+                      textOverflow="ellipsis"
+                      whiteSpace="pre-wrap"
+                      overflowWrap="break-word"
+                    >
+                      {product.sourceText}
+                    </Text>
+                  </Flex>
+                ) : (
+                  product.sourceText && (
+                    <Text
+                      fontSize={'0.8rem'}
+                      mb="10px"
+                      noOfLines={2}
+                      textOverflow="ellipsis"
+                      whiteSpace="pre-wrap"
+                      overflowWrap="break-word"
+                    >
+                      {product.sourceText}
+                    </Text>
+                  )
+                )}
 
+                {productInfoDataSource && typeof productInfoDataSource === 'string' && (
+                  <Flex
+                    fontSize="12px"
+                    alignItems="center"
+                    mb="10px"
+                  >
+                    <Text
+                      pl="3px"
+                      noOfLines={1}
+                      textOverflow="ellipsis"
+                      whiteSpace="pre-wrap"
+                      overflowWrap="break-word"
+                    >
+                      {productInfoDataSource as string}
+                    </Text>
+                  </Flex>
+                )}
+                {productInfoDataSource && (
+                  <>
+                    {typeof productInfoDataSource === 'object' && (
+                      <>
+                        {Object.keys(productInfoDataSource).includes('image') ? (
+                          <Image
+                            w={'60px'}
+                            mt="5px"
+                            src={productInfoDataSource['image']}
+                          />
+                        ) : (
+                          <>
+                            {Object.entries(productInfoDataSource as Record<string, any>).map(([key, value]) => (
+                              <Flex
+                                fontSize="12px"
+                                alignItems="center"
+                                mb="10px"
+                                key={key}
+                                className="custom-product-info"
+                              >
+                                <Text
+                                  fontWeight="600"
+                                  whiteSpace={'nowrap'}
+                                >
+                                  {key}:
+                                </Text>
+                                <Text
+                                  pl="3px"
+                                  noOfLines={1}
+                                  textOverflow="ellipsis"
+                                  whiteSpace="pre-wrap"
+                                  overflowWrap="break-word"
+                                >
+                                  {value}
+                                </Text>
+                              </Flex>
+                            ))}
+                          </>
+                        )}
+                      </>
+                    )}
+                  </>
+                )}
+              </Box>
               <Flex
                 justifyContent={'space-between'}
                 alignItems={'center'}
-                position={'absolute'}
-                bottom={'10px'}
-                width={'calc(100% - 30px)'}
+                // position={'absolute'}
+                // bottom={'10px'}
+                // width={'calc(100% - 12px)'}
               >
                 <ProductPrice
                   currencyType={currency}
                   price={parseFloat(product.price)}
                   rateLabel={product.rateLabel}
+                  className="product-price"
                 />
                 {product.rating && product.rating !== 'null' && (
                   <ProductRating
                     ratingValue={product.rating}
                     ratingIcon={StarIcon}
+                    className="product-star-rating"
                   />
                 )}
               </Flex>
-            </Box>
+            </Flex>
           </Box>
         </Box>
       ) : (

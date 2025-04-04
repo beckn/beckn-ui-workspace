@@ -22,7 +22,10 @@ on:
       - 'apps/envirogrowth/**'
       - 'apps/earth-support-initiative/**'
       - 'apps/open-spark/**'
-     
+      - 'apps/deg-ec/**'
+      - 'apps/open-spark-admin/**'
+      - 'apps/open-spark-p2p/**'
+      
 
 jobs:
   build:
@@ -347,3 +350,59 @@ jobs:
         if: env.open-spark_changed == 'true'
         run: |
           curl -X POST -d {} "${{ secrets.OPEN_SPARK_DEVELOP_AMPLIFY_WEBHOOK_URL }}" -H "Content-Type:application/json" 
+
+#   open-spark-admin
+
+      - name: Check for open-spark-admin changes
+        id: check_open-spark-admin_changes
+        run: |
+          if git diff --name-only HEAD~1 HEAD | grep '^apps/open-spark-admin/'; then
+            echo "Changes in open-spark-admin detected."
+            echo "open-spark-admin_changed=true" >> $GITHUB_ENV
+          else
+            echo "No changes in open-spark-admin. Skipping webhook trigger."
+            echo "open-spark-admin=false" >> $GITHUB_ENV
+          fi
+
+      - name: Trigger open-spark-admin deployment if changes are detected
+        if: env.open-spark-admin_changed == 'true'
+        run: |
+          curl -X POST -d {} "${{ secrets.OPEN_SPARK_ADMIN_DEVELOP_AMPLIFY_WEBHOOK_URL }}" -H "Content-Type:application/json" 
+
+#   open-spark-p2p
+
+      - name: Check for open-spark-p2p changes
+        id: check_open-spark-p2p_changes
+        run: |
+          if git diff --name-only HEAD~1 HEAD | grep '^apps/open-spark-p2p/'; then
+            echo "Changes in open-spark-p2p detected."
+            echo "open-spark-p2p_changed=true" >> $GITHUB_ENV
+          else
+            echo "No changes in open-spark-p2p. Skipping webhook trigger."
+            echo "open-spark-p2p=false" >> $GITHUB_ENV
+          fi
+
+      - name: Trigger open-spark-p2p deployment if changes are detected
+        if: env.open-spark-p2p_changed == 'true'
+        run: |
+          curl -X POST -d {} "${{ secrets.OPEN_SPARK_P2P_DEVELOP_AMPLIFY_WEBHOOK_URL }}" -H "Content-Type:application/json" 
+
+
+
+ #   deg-ec
+
+      - name: Check for deg-ec changes
+        id: check_deg-ec_changes
+        run: |
+          if git diff --name-only HEAD~1 HEAD | grep '^apps/deg-ec/'; then
+            echo "Changes in deg-ec detected."
+            echo "deg-ec_changed=true" >> $GITHUB_ENV
+          else
+            echo "No changes in deg-ec. Skipping webhook trigger."
+            echo "deg-ec=false" >> $GITHUB_ENV
+          fi
+
+      - name: Trigger deg-ec deployment if changes are detected
+        if: env.deg-ec_changed == 'true'
+        run: |
+          curl -X POST -d {} "${{ secrets.DEG_EC_DEVELOP_AMPLIFY_WEBHOOK_URL }}" -H "Content-Type:application/json" 

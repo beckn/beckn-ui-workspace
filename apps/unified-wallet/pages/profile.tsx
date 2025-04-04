@@ -40,10 +40,13 @@ const ProfilePage = () => {
   })
 
   const { user } = useSelector((state: AuthRootState) => state.auth)
-
+  const { profileDetails } = useSelector((state: UserRootState) => state.user)
   useEffect(() => {
     setFormData({
-      name: '',
+      name: profileDetails?.agent
+        ? (profileDetails?.agent?.first_name ?? '') + ' ' + (profileDetails?.agent?.last_name ?? '')
+        : '',
+      address: profileDetails?.agent?.agent_profile?.address ?? '',
       mobileNumber: user?.did ? extractMobileNumberFromSubjectDid(user?.did!) : ''
     })
   }, [])
@@ -72,6 +75,28 @@ const ProfilePage = () => {
     const inputs: InputProps[] = [
       {
         type: 'text',
+        name: 'name',
+        value: formData.name,
+        handleChange: handleInputChange,
+        label: t.fullName,
+        error: formErrors.name,
+        dataTest: testIds.profile_inputName,
+        disabled: true
+        // customInputBlurHandler: updateProfile
+      },
+      {
+        type: 'text',
+        name: 'address',
+        value: formData.address!,
+        handleChange: handleInputChange,
+        label: t.formAddress,
+        error: formErrors.address,
+        dataTest: testIds.profile_address,
+        disabled: true
+        // customInputBlurHandler: updateProfile
+      },
+      {
+        type: 'text',
         name: 'mobileNumber',
         value: formData.mobileNumber!,
         handleChange: handleInputChange,
@@ -82,7 +107,17 @@ const ProfilePage = () => {
         customInputBlurHandler: () => {}
       }
     ]
-
+    if (user?.did) {
+      inputs.push({
+        type: 'text',
+        name: 'userDid',
+        value: `/subj****${user?.did.slice(-4)}`,
+        handleChange: handleInputChange,
+        label: 'Wallet ID',
+        disabled: true,
+        customInputBlurHandler: () => {}
+      })
+    }
     return inputs
   }
 

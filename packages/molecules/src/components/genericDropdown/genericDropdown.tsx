@@ -32,7 +32,7 @@ export const GenericDropdown = <T extends string | number>({
   placeholder = '',
   buttonStyles,
   withColors = false,
-  maxHeight = '200px',
+  maxHeight = '140px',
   dataTest
 }: DropdownProps<T>) => {
   const menuButtonRef = useRef<HTMLButtonElement>(null)

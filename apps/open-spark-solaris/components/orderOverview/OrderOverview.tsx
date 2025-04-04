@@ -4,8 +4,12 @@ import { Box, Flex, Image } from '@chakra-ui/react'
 import completedIcon from '../../public/images/completed.svg'
 import pendingIcon from '../../public/images/pendingYellow.svg'
 import React from 'react'
+import { formatDate } from '@beckn-ui/common'
+import { getCountryCode } from '@utils/general'
+import { currencyMap } from '@lib/config'
 
 export type OrderItem = {
+  orderId: any
   batteryType: string
   capacity: string
   rentedFrom: string
@@ -26,6 +30,19 @@ const orderStatusIcons: Record<string, string> = {
 }
 
 const OrderOverview: React.FC<OrderOverviewProps> = ({ items, showPriceAndStatus = true }) => {
+  const formatDateTime = (timeSlot: string | undefined) => {
+    if (!timeSlot) return { date: '', startTime: '', endTime: '' }
+
+    const [start, end] = timeSlot.split(' - ')
+    const [startDate, startTime] = start.split(', ')
+    const [endDate, endTime] = end.split(', ')
+
+    return {
+      date: `${startDate} - ${endDate}`, // Since both dates are same
+      startTime,
+      endTime
+    }
+  }
   return (
     <>
       {items.map((item, index) => (
@@ -66,28 +83,61 @@ const OrderOverview: React.FC<OrderOverviewProps> = ({ items, showPriceAndStatus
               alignItems="center"
             >
               <Typography
-                text="Time Slot:"
+                text="Date:"
                 fontSize="12px"
                 fontWeight="600"
               />
               <Typography
-                text={` ${item.timeSlot}`}
+                text={` ${formatDateTime(item.timeSlot).date}`}
                 fontSize="12px"
                 sx={{ ml: 1 }}
               />
             </Flex>
 
+            <Flex justifyContent={'space-between'}>
+              <Flex
+                mb={3}
+                alignItems="center"
+              >
+                <Typography
+                  text="Time Slot:"
+                  fontSize="12px"
+                  fontWeight="600"
+                />
+                <Typography
+                  text={` ${formatDateTime(item.timeSlot).startTime} - ${formatDateTime(item.timeSlot).endTime}`}
+                  fontSize="12px"
+                  sx={{ ml: 1 }}
+                />
+              </Flex>
+
+              <Flex
+                mb={3}
+                alignItems="center"
+              >
+                <Typography
+                  text="Duration:"
+                  fontSize="12px"
+                  fontWeight="600"
+                />
+                <Typography
+                  text={` ${item.duration}`}
+                  fontSize="12px"
+                  sx={{ ml: 1 }}
+                />
+              </Flex>
+            </Flex>
             <Flex
               mb={3}
               alignItems="center"
             >
               <Typography
-                text="Duration:"
+                text="Order ID:"
                 fontSize="12px"
                 fontWeight="600"
               />
               <Typography
-                text={` ${item.duration}`}
+                text={` ${item.orderId}`}
                 fontSize="12px"
                 sx={{ ml: 1 }}
               />
@@ -101,8 +151,8 @@ const OrderOverview: React.FC<OrderOverviewProps> = ({ items, showPriceAndStatus
               mt={3}
             >
               <Typography
-                color="#228B22"
-                text={`Rs. ${item.price}`}
+                color="#4398E8"
+                text={`${currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}${Number(item.price).toFixed(2)}`}
               />
               <Flex alignItems="center">
                 <Image
@@ -126,34 +176,29 @@ export const mapOrderData = (data: any[]): OrderItem[] => {
   return data.map(order => {
     try {
       const item = order.items[0]
-      const fulfillmentStart = item.fulfillments?.find(f => f.type === 'RENTAL_START' && f.state)
-      const fulfillmentEnd = item.fulfillments?.find(f => f.type === 'RENTAL_END' && f.state)
+      const fulfillmentStart = order.fulfillments?.find(f => f.type === 'RENTAL_START' && f.state)
+      const fulfillmentEnd = order.fulfillments?.find(f => f.type === 'RENTAL_END' && f.state)
 
-      let startTimestamp = fulfillmentStart ? Number(fulfillmentStart.state?.name || 0) : null
-      let endTimestamp = fulfillmentEnd ? Number(fulfillmentEnd.state?.name || 0) : null
+      let startTimestamp = fulfillmentStart ? Number(fulfillmentStart.state?.descriptor?.short_desc || 0) : null
+      let endTimestamp = fulfillmentEnd ? Number(fulfillmentEnd.state?.descriptor?.short_desc || 0) : null
 
       if (startTimestamp && startTimestamp > 9999999999) startTimestamp = Math.floor(startTimestamp / 1000)
       if (endTimestamp && endTimestamp > 9999999999) endTimestamp = Math.floor(endTimestamp / 1000)
 
-      const formatTime = (timestamp: number | null) => {
-        if (!timestamp) return 'N/A'
-        const date = new Date(timestamp * 1000)
-        return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })
-      }
-
-      const startTime = formatTime(startTimestamp)
-      const endTime = formatTime(endTimestamp)
+      const startTime = formatDate(startTimestamp! * 1000, 'dd/MM/yy, h:mm a')
+      const endTime = formatDate(endTimestamp! * 1000, 'dd/MM/yy, h:mm a')
       const calculatedDuration = startTimestamp && endTimestamp ? Math.round((endTimestamp - startTimestamp) / 3600) : 0
       const duration = calculatedDuration ? calculatedDuration + ' hr' : 'N/A'
       const paymentStatus = order.payments.some(payment => payment.status === 'PAID') ? 'PAID' : 'NON_PAID'
 
       return {
+        orderId: order.order_id,
         batteryType: item.name,
         capacity: item.code,
         rentedFrom: order.descriptor.name,
         timeSlot: `${startTime} - ${endTime}`,
         duration,
-        price: `${Number(order.quote.price.value) * Number(calculatedDuration)}`,
+        price: `${Number(order.quote.price.value)}`,
         status: paymentStatus
       }
     } catch (error) {

@@ -13,6 +13,7 @@ const CartItem: React.FC<CartItemProps> = ({
   quantity = 0,
   name,
   providerName,
+  shortDesc,
   image,
   price,
   symbol,
@@ -55,10 +56,10 @@ const CartItem: React.FC<CartItemProps> = ({
         <div className={Styles.prouct_details_container}>
           <a className={Styles.product_details}>
             <Flex
-              flexDirection={alignment === 'row' ? 'row' : 'column'}
+              flexDirection={'row'}
               justifyContent={'space-between'}
               alignItems={'center'}
-              gap={'10px'}
+              gap={'15px'}
             >
               <div className={Styles.product_image_container}>
                 <Image
@@ -73,13 +74,21 @@ const CartItem: React.FC<CartItemProps> = ({
                   className={Styles.product_name}
                   style={{
                     width: alignment === 'row' ? '100%' : 'auto',
-                    fontSize: '14px'
+                    fontSize: '15px'
                   }}
                   data-test={testIds.cartpage_itemName}
                   title={name}
                 >
                   {alignment === 'row' ? truncateText(name, 40) : name}
                 </div>
+                {shortDesc && (
+                  <div
+                    className={Styles.product_shortDesc}
+                    data-test={testIds.cartpage_itemName}
+                  >
+                    {shortDesc}
+                  </div>
+                )}
                 {providerName && (
                   <div
                     className={Styles.product_provider}
@@ -140,7 +149,7 @@ const CartItem: React.FC<CartItemProps> = ({
             className={Styles.total_amount_container}
             data-Test={testIds.cartpage_productPrice}
           >
-            <p>{totalAmountText}</p>
+            {/* <p>{totalAmountText}</p> */}
             <ProductPrice
               price={price * counter}
               currencyType={symbol}

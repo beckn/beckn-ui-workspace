@@ -26,6 +26,7 @@ import { calculateDuration, generateRentalInitPayload } from '@utils/checkout-ut
 import { setEmiDetails } from '@store/emiSelect-slice'
 import { formatDate } from '@beckn-ui/common'
 import { AuthRootState } from '@store/auth-slice'
+import { getCountryCode } from '@utils/general'
 
 export type ShippingFormData = {
   name: string
@@ -80,13 +81,13 @@ const CheckoutPage = () => {
   useEffect(() => {
     const storedFromTime = localStorage.getItem('fromTimestamp')
     const storedToTime = localStorage.getItem('toTimestamp')
-    const formatedFromTime = formatDate(Number(storedFromTime) * 1000, 'h:mm a') as string
-    const formatedToTime = formatDate(Number(storedToTime) * 1000, 'h:mm a') as string
+    const formatedFromTime = formatDate(Number(storedFromTime), 'dd/MM/yy, h:mm a') as string
+    const formatedToTime = formatDate(Number(storedToTime), 'dd/MM/yy, h:mm a') as string
     setFromTime(formatedFromTime)
     setToTime(formatedToTime)
 
     if (formatedFromTime && formatedToTime) {
-      const calculatedDuration = calculateDuration(formatedFromTime, formatedToTime)
+      const calculatedDuration = calculateDuration(storedFromTime!, storedToTime!)
       setDuration(calculatedDuration)
     }
   }, [])
@@ -150,8 +151,8 @@ const CheckoutPage = () => {
       name: '',
       mobileNumber: '',
       email: '',
-      address: '1202 b2, Bengaluru urban, Bengaluru, Karnataka',
-      pinCode: '560078'
+      address: '5890 W Vernor Hwy, Detroit, Michigan',
+      pinCode: '48209'
     }
 
     if (user?.agent) {
@@ -159,8 +160,10 @@ const CheckoutPage = () => {
       formData = {
         ...formData,
         name: user.agent.first_name.trim(),
-        mobileNumber: user.agent.agent_profile.phone_number,
-        email: user.email || ''
+        mobileNumber: `${user.agent.agent_profile.phone_number}`,
+        email: user.email || '',
+        address: '5890 W Vernor Hwy, Detroit, Michigan',
+        pinCode: '48209'
       }
     } else {
       // If no user.agent, use default data
@@ -168,7 +171,9 @@ const CheckoutPage = () => {
         ...formData,
         name: 'Lisa',
         mobileNumber: '9811259151',
-        email: 'lisa.k@gmail.com'
+        email: 'lisa.k@gmail.com',
+        address: '5890 W Vernor Hwy, Detroit, Michigan',
+        pinCode: '48209'
       }
     }
 
@@ -222,7 +227,17 @@ const CheckoutPage = () => {
       const payloadPromise =
         type === 'RENT_AND_HIRE'
           ? generateRentalInitPayload(selectRentalResponse, shippingFormData, domain)
-          : getInitPayload(shippingFormData, billingFormData, cartItems, transactionId, domain, { id, type })
+          : getInitPayload(
+              shippingFormData,
+              billingFormData,
+              cartItems,
+              transactionId,
+              domain,
+              { id, type },
+              {
+                location: getCountryCode()
+              }
+            )
       payloadPromise.then(res => {
         return initialize(res)
       })
@@ -272,7 +287,7 @@ const CheckoutPage = () => {
         batteryType: singleItem.name,
         capacity: singleItem.code,
         rentedFrom: selectRentalResponse?.message?.order?.provider?.name,
-        timeSlot: `${fromTime} to ${toTime}`,
+        timeSlot: `${fromTime} - ${toTime}`,
         duration: `${duration} hrs`
       }
     }) ?? []

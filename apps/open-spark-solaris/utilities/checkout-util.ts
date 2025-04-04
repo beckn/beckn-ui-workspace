@@ -3,7 +3,8 @@ import { ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
 export const generateRentalInitPayload = async (
   selectedRentalResponse: any,
   shippingFormData: ShippingFormInitialValuesType | Record<string, any>,
-  domain: string
+  domain: string,
+  location?: any
 ) => {
   return {
     data: [
@@ -12,7 +13,8 @@ export const generateRentalInitPayload = async (
           transaction_id: selectedRentalResponse?.context?.transaction_id,
           bpp_id: selectedRentalResponse?.context?.bpp_id,
           bpp_uri: selectedRentalResponse?.context?.bpp_uri,
-          domain: domain
+          domain: domain,
+          ...(location && location)
         },
         message: {
           orders: [
@@ -25,7 +27,7 @@ export const generateRentalInitPayload = async (
                   id: item.id,
                   quantity: {
                     selected: {
-                      count: item.quantity || 1
+                      count: Number(item.quantity) || 1
                     }
                   },
                   fulfillment_ids: item.fulfillments?.map(f => f.id) || []
@@ -83,28 +85,12 @@ export const generateRentalInitPayload = async (
   }
 }
 
-export function calculateDuration(from: string, to: string): number {
-  // if (!from || !to) return 'Not available' // Handle null values
+export function calculateDuration(from: number, to: number): number {
+  if (!from || !to) return 0 // Handle invalid inputs
 
-  const parseTime = (timeStr: string): number => {
-    if (!timeStr.includes(' ')) return 0 // Ensure valid format
-    const [time, period] = timeStr.split(' ')
-    let [hours, minutes] = time.split(':').map(Number)
+  // Convert milliseconds to hours
+  const diffInMs = to - from
+  const diffInHours = Math.floor(diffInMs / (1000 * 60 * 60))
 
-    if (period === 'PM' && hours !== 12) hours += 12
-    if (period === 'AM' && hours === 12) hours = 0
-
-    return hours * 60 + minutes // Convert to total minutes
-  }
-
-  const fromMinutes = parseTime(from)
-  const toMinutes = parseTime(to)
-
-  const totalMinutes = toMinutes - fromMinutes
-  // if (totalMinutes < 0) return 'Invalid time range' // Handle overnight cases
-
-  // Convert to hours and minutes format
-  const hours = Math.floor(totalMinutes / 60)
-
-  return hours
+  return diffInHours
 }

@@ -101,13 +101,13 @@ describe('Order Details Page', () => {
     it('should render the payment breakup details', () => {
       cy.getByData(testIds.orderDetailspage_paymentDetails).within(() => {
         cy.getByData(testIds.payment_basePrice).should('contain.text', 'base-price')
-        cy.getByData(testIds.item_price).eq(0).should('contain.text', '₹200.00')
+        cy.getByData(testIds.item_price).eq(0).should('contain.text', '300.00 ₹')
 
         cy.getByData(testIds.payment_taxes).should('contain.text', 'taxes')
-        cy.getByData(testIds.item_price).eq(1).should('contain.text', '₹360.00')
+        cy.getByData(testIds.item_price).eq(1).should('contain.text', '360.00 ₹')
 
         cy.getByData(testIds.payment_totalPayment).should('contain.text', 'Total')
-        cy.getByData(testIds.item_price).eq(2).should('contain.text', '₹2,160.00')
+        cy.getByData(testIds.item_price).eq(2).should('contain.text', '660.00 ₹')
       })
     })
   })
@@ -294,13 +294,13 @@ describe('Order Details Page', () => {
     it('should render the payment breakup details', () => {
       cy.getByData(testIds.orderDetailspage_paymentDetails).within(() => {
         cy.getByData(testIds.payment_basePrice).should('contain.text', 'base-price')
-        cy.getByData(testIds.item_price).eq(0).should('contain.text', '₹200.00')
+        cy.getByData(testIds.item_price).eq(0).should('contain.text', '300.00 ₹')
 
         cy.getByData(testIds.payment_taxes).should('contain.text', 'taxes')
-        cy.getByData(testIds.item_price).eq(1).should('contain.text', '₹360.00')
+        cy.getByData(testIds.item_price).eq(1).should('contain.text', '360.00 ₹')
 
         cy.getByData(testIds.payment_totalPayment).should('contain.text', 'Total')
-        cy.getByData(testIds.item_price).eq(2).should('contain.text', '₹2,160.00')
+        cy.getByData(testIds.item_price).eq(2).should('contain.text', '660.00 ₹')
       })
     })
   })

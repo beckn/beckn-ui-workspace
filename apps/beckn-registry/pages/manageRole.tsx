@@ -6,7 +6,7 @@ import ActionHeaders from '../components/actionHeaders'
 const ManageRole = () => {
   const [formData, setFormData] = useState({
     name: '',
-    staff: false,
+    // staff: false,
     creatorUser: '',
     updaterUser: '',
     createdAt: '',
@@ -87,7 +87,7 @@ const ManageRole = () => {
               disabled={mode === 'view'}
             />
           </div>
-          <div className={styles.row}>
+          {/* <div className={styles.row}>
             <label className={styles.label}>Staff</label>
             <input
               type="checkbox"
@@ -97,21 +97,23 @@ const ManageRole = () => {
               onChange={handleChange}
               disabled={mode === 'view'}
             />
-          </div>
+          </div> */}
+          {mode !== 'add' && (
+            <div className={styles.row}>
+              <label className={styles.label}>Creator User</label>
+              <input
+                type="text"
+                name="creatorUser"
+                className={styles.input}
+                value={formData.creatorUser}
+                disabled
+              />
+            </div>
+          )}
         </div>
         {mode !== 'add' && (
           <>
             <div className={styles.row}>
-              <div className={styles.row}>
-                <label className={styles.label}>Creator User</label>
-                <input
-                  type="text"
-                  name="creatorUser"
-                  className={styles.input}
-                  value={formData.creatorUser}
-                  disabled
-                />
-              </div>
               <div className={styles.row}>
                 <label className={styles.label}>Updater User</label>
                 <input
@@ -122,8 +124,6 @@ const ManageRole = () => {
                   disabled
                 />
               </div>
-            </div>
-            <div className={styles.row}>
               <div className={styles.row}>
                 <label className={styles.label}>Created At</label>
                 <input
@@ -134,6 +134,8 @@ const ManageRole = () => {
                   disabled
                 />
               </div>
+            </div>
+            <div className={styles.row}>
               <div className={styles.row}>
                 <label className={styles.label}>Updated At</label>
                 <input

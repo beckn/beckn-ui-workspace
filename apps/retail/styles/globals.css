@@ -112,11 +112,21 @@ select.chakra-select {
   margin: 0 auto;
 }
 .cencel_btn_filter {
-  border: 1px solid #e93324 !important;
+  border: 1px solid #919191 !important;
+  color: #919191 !important;
 }
 .-product_summary_container button.chakra-button {
-  color: #fff !important;
+  color: #565555 !important;
 }
-.-product_card_layout_container img{
+.-product_card_layout_container img {
   object-fit: unset;
+}
+.filter-btn {
+  color: #565555 !important;
+}
+.filter-svg-style path {
+  stroke: #a7a7a7 !important;
+}
+.chakra-button {
+  color: #565555 !important;
 }

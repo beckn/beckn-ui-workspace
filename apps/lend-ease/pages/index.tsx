@@ -14,7 +14,8 @@ import { DegWalletDetails } from '@beckn-ui/common'
 import { UserRootState } from '@store/user-slice'
 import DetailsCard from '@beckn-ui/becknified-components/src/components/checkout/details-card'
 import axios from 'axios'
-import { currencyFormat } from '@utils/general'
+import { currencyFormat, getCountryCode } from '@utils/general'
+import { currencyMap } from '@lib/config'
 
 interface OrderItem {
   sc_retail_product: any
@@ -101,18 +102,19 @@ const HomePage = () => {
 
   return (
     <Box
-      backgroundColor="white"
+      // backgroundColor="white"
       ml={'-20px'}
       mr={'-20px'}
     >
       <Flex
         justifyContent={'space-between'}
         alignItems={'center'}
-        mt={'8px'}
+        mt={'6px'}
         pl={'20px'}
         pr={'20px'}
         h="60px"
         boxShadow="0px 4px 20px 0px #00000014"
+        background={'#fff'}
       >
         <Box>
           <Image
@@ -120,6 +122,7 @@ const HomePage = () => {
             alt="profileIcon"
             onClick={() => router.push('/profile')}
             cursor={'pointer'}
+            maxWidth={'10rem'}
           />
         </Box>
         <Text
@@ -248,7 +251,7 @@ const HomePage = () => {
                       whiteSpace={'nowrap'}
                       overflow={'hidden'}
                     >
-                      Rs. {currencyFormat(order?.order_id.total_amount)}
+                      {`${currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}${currencyFormat(order?.order_id.total_amount)}`}
                     </Text>
                   </Flex>
                   <Flex mb="5px">

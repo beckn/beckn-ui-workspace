@@ -17,14 +17,14 @@ const headerNames: PathnameObjectType = {
   '/invoiceDetails': 'Invoice Details',
   '/signIn': 'Sign In',
   '/signUp': 'Sign Up',
-  '/cart': 'Cart',
+  '/cart': 'My Cart',
   '/paymentMode': 'Select Payment Method',
   '/assemblyDetails': 'Add Assembly Details',
-  '/updateShippingDetails': 'Shipping Details',
+  '/updateShippingDetails': 'Edit Shipping Details',
   '/orderCancellation': 'Order Cancel',
   '/feedback': '',
   '/profile': 'My Profile',
-  '/search': 'Search results',
+  '/search': 'Search Results',
   '/checkout': 'Billing & Shipping'
 }
 

@@ -1,3 +1,4 @@
+import React from 'react'
 import { Html, Head, Main, NextScript } from 'next/document'
 export default function Document() {
   return (
@@ -6,6 +7,34 @@ export default function Document() {
         <meta
           name="description"
           content="A retail app powered by beckn protocol"
+        />
+        <meta
+          name="theme-color"
+          content="#000000"
+        />
+        <meta
+          name="apple-mobile-web-app-capable"
+          content="yes"
+        />
+        <meta
+          name="apple-mobile-web-app-status-bar-style"
+          content="default"
+        />
+        <meta
+          name="apple-mobile-web-app-title"
+          content="Open Spark Solaris"
+        />
+        <meta
+          name="format-detection"
+          content="telephone=no"
+        />
+        <meta
+          name="mobile-web-app-capable"
+          content="yes"
+        />
+        <link
+          rel="manifest"
+          href="/manifest.json"
         />
         <link
           rel="preconnect"
@@ -22,7 +51,7 @@ export default function Document() {
         />
         <link
           rel="shortcut icon"
-          href="./images/taxi_hub.svg"
+          href="./images/rental_app_logo.svg"
         />
       </Head>
       <body>

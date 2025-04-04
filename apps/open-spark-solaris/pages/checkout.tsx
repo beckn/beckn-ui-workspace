@@ -25,6 +25,8 @@ import { calcLength } from 'framer-motion'
 import { calculateDuration, generateRentalInitPayload } from '@utils/checkout-util'
 import { setEmiDetails } from '@store/emiSelect-slice'
 import { formatDate } from '@beckn-ui/common'
+import { AuthRootState } from '@store/auth-slice'
+import { getCountryCode } from '@utils/general'
 
 export type ShippingFormData = {
   name: string
@@ -33,7 +35,7 @@ export type ShippingFormData = {
   address: string
   zipCode: string
 }
-const color = '#228B22'
+const color = '#53A052'
 const CheckoutPage = () => {
   const cartItems = useSelector((state: ICartRootState) => state.cart.items)
   const type = useSelector((state: RootState) => state.navigation.type)
@@ -41,24 +43,26 @@ const CheckoutPage = () => {
   const theme = useTheme()
   const bgColorOfSecondary = theme.colors.secondary['100']
   const toast = useToast()
+  const { user } = useSelector((state: AuthRootState) => state.auth)
 
   const [shippingFormData, setShippingFormData] = useState<ShippingFormInitialValuesType>({
-    name: 'Lisa',
-    mobileNumber: '9811259151',
-    email: 'lisa.k@gmail.com',
-    address: '1202 b2, Bengaluru urban, Bengaluru, Karnataka',
-    pinCode: '560078'
+    name: '',
+    mobileNumber: '',
+    email: '',
+    address: '',
+    pinCode: ''
   })
 
   const [isBillingAddressSameAsShippingAddress, setIsBillingAddressSameAsShippingAddress] = useState(true)
 
   const [billingFormData, setBillingFormData] = useState<ShippingFormInitialValuesType>({
-    name: 'lisa',
-    mobileNumber: '9811259151',
-    email: 'lisa.k@gmail.com',
-    address: '1202 b2, Bengaluru urban, Bengaluru, Karnataka',
-    pinCode: '560078'
+    name: '',
+    mobileNumber: '',
+    email: '',
+    address: '',
+    pinCode: ''
   })
+
   const router = useRouter()
   const dispatch = useDispatch()
   const [initialize, { isLoading, isError }] = useInitMutation()
@@ -75,15 +79,15 @@ const CheckoutPage = () => {
   const emiDetails = useSelector((state: any) => state.selectedEmi.emiDetails[0])
 
   useEffect(() => {
-    const storedFromTime = localStorage.getItem('fromTimestamp')
-    const storedToTime = localStorage.getItem('toTimestamp')
-    const formatedFromTime = formatDate(Number(storedFromTime) * 1000, 'h:mm a') as string
-    const formatedToTime = formatDate(Number(storedToTime) * 1000, 'h:mm a') as string
+    const storedFromTime = Number(localStorage.getItem('fromTimestamp')) * 1000
+    const storedToTime = Number(localStorage.getItem('toTimestamp')) * 1000
+    const formatedFromTime = formatDate(storedFromTime, 'dd/MM/yy, h:mm a') as string
+    const formatedToTime = formatDate(storedToTime, 'dd/MM/yy, h:mm a') as string
     setFromTime(formatedFromTime)
     setToTime(formatedToTime)
 
     if (formatedFromTime && formatedToTime) {
-      const calculatedDuration = calculateDuration(formatedFromTime, formatedToTime)
+      const calculatedDuration = calculateDuration(storedFromTime, storedToTime)
       setDuration(calculatedDuration)
     }
   }, [])
@@ -141,20 +145,42 @@ const CheckoutPage = () => {
   ]
 
   useEffect(() => {
-    if (localStorage) {
-      if (localStorage.getItem('userPhone')) {
-        const copiedFormData = structuredClone(shippingFormData)
-        const copiedBillingFormData = structuredClone(billingFormData)
+    console.log('Dank user', user)
 
-        copiedFormData.mobileNumber = localStorage.getItem('userPhone') as string
-        copiedBillingFormData.mobileNumber = localStorage.getItem('userPhone') as string
+    let formData = {
+      name: '',
+      mobileNumber: '',
+      email: '',
+      address: '5890 W Vernor Hwy, Detroit, Michigan',
+      pinCode: '48209'
+    }
 
-        setShippingFormData(copiedFormData)
-        setBillingFormData(copiedBillingFormData)
+    if (user?.agent) {
+      // If user.agent exists, use its data
+      formData = {
+        ...formData,
+        name: user.agent.first_name.trim(),
+        mobileNumber: `${user.agent.agent_profile.phone_number}`,
+        email: user.email || '',
+        address: '5890 W Vernor Hwy, Detroit, Michigan',
+        pinCode: '48209'
+      }
+    } else {
+      // If no user.agent, use default data
+      formData = {
+        ...formData,
+        name: 'Lisa',
+        mobileNumber: '9811259151',
+        email: 'lisa.k@gmail.com',
+        address: '5890 W Vernor Hwy, Detroit, Michigan',
+        pinCode: '48209'
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+
+    console.log('Dank formData', formData)
+    setShippingFormData(formData)
+    setBillingFormData(formData)
+  }, [user])
 
   useEffect(() => {
     if (isBillingSameRedux) {
@@ -197,27 +223,33 @@ const CheckoutPage = () => {
   // },[])
   const formSubmitHandler = (data: any) => {
     if (data) {
-      const { id, type } = selectResponse[0]?.message?.order?.fulfillments[0] || {}
+      const { id, type: fulfillmentType } = selectResponse[0]?.message?.order?.fulfillments[0] || {}
       const payloadPromise =
         type === 'RENT_AND_HIRE'
-          ? generateRentalInitPayload(selectRentalResponse, shippingFormData, domain)
-          : getInitPayload(shippingFormData, billingFormData, cartItems, transactionId, domain, { id, type })
+          ? generateRentalInitPayload(selectRentalResponse, shippingFormData, domain, {
+              location: getCountryCode()
+            })
+          : getInitPayload(shippingFormData, billingFormData, cartItems, transactionId, domain, {
+              id,
+              type: fulfillmentType
+            })
       payloadPromise.then(res => {
         return initialize(res)
       })
     }
   }
-
+  console.log(shippingFormData)
   const isInitResultPresent = () => {
     return !!initResponse && initResponse.length > 0
   }
 
   const createPaymentBreakdownMap = () => {
+    const cartItemsWithQuantity = getCartItemsWithQuantity()
     const paymentBreakdownMap: PaymentBreakDownModel = {}
     if (isInitResultPresent()) {
       initResponse.map((res, ind) => {
         res.message.order.quote.breakup.forEach(breakup => {
-          const quantity = Number(cartItems[ind]?.quantity) || 1
+          let quantity = cartItemsWithQuantity[breakup.item?.id!]?.quantity || 1
           paymentBreakdownMap[breakup.title] = {
             value: (
               Number(paymentBreakdownMap[breakup.title]?.value || 0) +
@@ -250,7 +282,7 @@ const CheckoutPage = () => {
         batteryType: singleItem.name,
         capacity: singleItem.code,
         rentedFrom: selectRentalResponse?.message?.order?.provider?.name,
-        timeSlot: `${fromTime} to ${toTime}`,
+        timeSlot: `${fromTime} - ${toTime}`,
         duration: `${duration} hrs`
       }
     }) ?? []
@@ -272,6 +304,7 @@ const CheckoutPage = () => {
       className={`hideScroll ${type !== 'RENT_AND_HIRE' ? 'checkout-open-spark' : ''}`}
       maxH="calc(100vh - 100px)"
       overflowY={'scroll'}
+      padding={'0 10px'}
     >
       {type !== 'RENT_AND_HIRE' && (
         <>
@@ -310,6 +343,18 @@ const CheckoutPage = () => {
                         text={singleItem.short_desc}
                         variant="subTextRegular"
                       />
+                      <Flex>
+                        <Typography
+                          fontWeight="600"
+                          text={'Sold by:'}
+                          variant="subTextRegular"
+                          style={{ marginRight: '2px', whiteSpace: 'nowrap' }}
+                        />
+                        <Typography
+                          text={singleItem.productInfo.providerName}
+                          variant="subTextRegular"
+                        />
+                      </Flex>
                     </Box>
                   </Flex>
 
@@ -333,7 +378,7 @@ const CheckoutPage = () => {
                       </Flex>
                       <Box ml="25px">
                         <ProductPrice
-                          price={singleItem.totalPrice}
+                          price={Number(singleItem.price.value) * singleItem.quantity}
                           currencyType={singleItem.price.currency}
                         />
                       </Box>
@@ -364,7 +409,8 @@ const CheckoutPage = () => {
               name: shippingFormData.name,
               location: shippingFormData.address!,
               number: shippingFormData.mobileNumber,
-              title: t.shipping
+              title: '',
+              noAccordion: true
             },
             shippingForm: {
               formFieldConfig: formFieldConfig,
@@ -396,7 +442,8 @@ const CheckoutPage = () => {
               name: billingFormData.name,
               location: billingFormData.address!,
               number: billingFormData.mobileNumber,
-              title: t.billing
+              title: '',
+              noAccordion: true
             },
             shippingForm: {
               formFieldConfig: formFieldConfig,

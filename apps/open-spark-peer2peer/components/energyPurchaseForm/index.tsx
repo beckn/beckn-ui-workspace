@@ -12,7 +12,6 @@ import {
   VStack
 } from '@chakra-ui/react'
 import { GoAlert } from 'react-icons/go'
-import { QuestionOutlineIcon } from '@chakra-ui/icons'
 import React, { useEffect, useState } from 'react'
 import { FaMinus, FaPlus } from 'react-icons/fa6'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
@@ -48,11 +47,14 @@ export default function EnergyPurchaseForm({ preferenceType, role }: EnergyPurch
   const [preferences, setPreferences] = useState({ solar: false, trustedSource: false })
   const [isBuyModal, setIsBuyModal] = useState(false)
   const preferencesTags = useSelector((state: RootState) => state.user.preferences)
-
+  const [status, setStatus] = useState<string>()
   useEffect(() => {
-    const { tradeId, quantity, price, preferencesTags } = router.query
+    const { tradeId, quantity, price, preferencesTags, status } = router.query
     const formStorageKey = `energyFormData_${role}`
 
+    if (status) {
+      setStatus(status as string)
+    }
     if (tradeId && quantity && price) {
       setTradeId(tradeId as string)
       setEnergyUnits(Number(quantity))
@@ -97,8 +99,13 @@ export default function EnergyPurchaseForm({ preferenceType, role }: EnergyPurch
     }
   }
 
-  const handleSubmitPreferences = () => {
-    setIsBuyModal(true)
+  const handleSubmitPreferences = (e: React.FormEvent) => {
+    console.log('status', status)
+    if (status === 'CLOSED') {
+      setIsBuyModal(true)
+    } else if (status === 'OPEN') {
+      handleSubmit(e)
+    }
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -220,7 +227,6 @@ export default function EnergyPurchaseForm({ preferenceType, role }: EnergyPurch
             >
               Energy to {preferenceType}
             </FormLabel>
-            <QuestionOutlineIcon data-test={testIds.questionOutlineIcon} />
           </HStack>
           <HStack spacing={4}>
             <Box
@@ -269,7 +275,6 @@ export default function EnergyPurchaseForm({ preferenceType, role }: EnergyPurch
               >
                 Set a Price per unit to {preferenceType}
               </FormLabel>
-              <QuestionOutlineIcon />
             </HStack>
             <HStack spacing={4}>
               <Box

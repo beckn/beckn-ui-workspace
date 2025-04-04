@@ -9,9 +9,17 @@ import { useLanguage } from '@hooks/useLanguage'
 import { getPaymentBreakDown } from '@utils/checkout-utils'
 import { StatusResponseModel } from '../types/status.types'
 import { testIds } from '@shared/dataTestIds'
+import { AssemblyData } from '../types/search.types'
 
 const invoiceDetails = () => {
   const [statusData, setStatusData] = useState<StatusResponseModel[]>([])
+  const [assemblyDetails, setAssemblyDetails] = useState<AssemblyData | null>(null)
+  useEffect(() => {
+    if (localStorage && localStorage.getItem('assemblyDetails')) {
+      const parsedAssemblyDetails = JSON.parse(localStorage.getItem('assemblyDetails') as string)
+      setAssemblyDetails(parsedAssemblyDetails)
+    }
+  }, [])
 
   useEffect(() => {
     if (localStorage && localStorage.getItem('statusResponse')) {
@@ -84,9 +92,9 @@ const invoiceDetails = () => {
         </Box>
         <PaymentDetails
           dataTest={testIds.orderDetailspage_paymentDetails}
-          paymentBreakDown={getPaymentBreakDown(statusData).breakUpMap}
+          paymentBreakDown={getPaymentBreakDown(statusData, assemblyDetails?.quantity).breakUpMap}
           totalText="Total"
-          totalValueWithCurrency={getPaymentBreakDown(statusData).totalPricewithCurrent}
+          totalValueWithCurrency={getPaymentBreakDown(statusData, assemblyDetails?.quantity).totalPricewithCurrent}
         />
       </DetailsCard>
 

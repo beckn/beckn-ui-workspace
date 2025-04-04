@@ -190,7 +190,7 @@ const LockDemand = () => {
         zIndex={'1'}
         pl="20px"
         pr="20px"
-        height={'60px'}
+        // height={'60px'}
         alignItems={'center'}
         justifyContent="space-between"
       >
@@ -208,9 +208,9 @@ const LockDemand = () => {
       </Flex>
       <Box
         maxWidth={{ base: '100vw', md: '30rem', lg: '40rem' }}
-        margin="calc(0rem + 90px) auto auto auto"
+        margin="calc(0rem + 60px) auto auto auto"
         backgroundColor="white"
-        height={'calc(100vh - 120px)'}
+        // height={'calc(100vh - 330px)'}
       >
         <Flex gap="1rem">
           <BecknButton
@@ -262,13 +262,14 @@ const LockDemand = () => {
             />
 
             <Box
-              maxH={'calc(100vh - 212px)'}
+              maxH={'calc(100vh - 330px)'}
               overflowY="scroll"
               overflowX="scroll"
               className="hideScroll"
               marginTop={'1rem'}
             >
               <Table
+                className={`${tradeExecutionProcessed ? 'tableHide' : ''}`}
                 variant="simple"
                 data-test={testIds.total_aggregated_table}
               >
@@ -416,6 +417,7 @@ const LockDemand = () => {
               </Table>
             </Box>
           </Box>
+
           <BecknButton
             dataTest={testIds.total_aggregated_lock_demand}
             children={'Lock Demand'}

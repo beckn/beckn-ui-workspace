@@ -43,7 +43,7 @@ const ProductCta: React.FC<ProductCtaProps> = ({
       )}
 
       {!noPrice && (
-        <Flex justifyContent={'center'}>
+        <Flex>
           <ProductPrice
             currencyType={currency}
             price={parseFloat(totalPrice)}
@@ -51,7 +51,7 @@ const ProductCta: React.FC<ProductCtaProps> = ({
           />
         </Flex>
       )}
-      <Flex justifyContent={'center'}>
+      <Flex>
         <Typography
           text={counterTitle!}
           variant="subTitleRegular"

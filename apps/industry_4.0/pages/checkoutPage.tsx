@@ -281,9 +281,9 @@ const CheckoutPage = () => {
             </Box>
             <PaymentDetails
               dataTest={testIds.checkoutpage_paymentDetails}
-              paymentBreakDown={getPaymentBreakDown(initData).breakUpMap}
+              paymentBreakDown={getPaymentBreakDown(initData, assemblyDetails?.quantity).breakUpMap}
               totalText={t.total}
-              totalValueWithCurrency={getPaymentBreakDown(initData).totalPricewithCurrent}
+              totalValueWithCurrency={getPaymentBreakDown(initData, assemblyDetails?.quantity).totalPricewithCurrent}
             />
           </DetailsCard>
         )}

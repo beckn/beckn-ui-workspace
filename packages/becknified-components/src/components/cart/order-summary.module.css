@@ -1,27 +1,8 @@
 .orderSummaryContainer {
-  flex-grow: 1;
-  position: sticky;
-  bottom: 0.5rem;
-  left: 0;
-  right: 0;
-  top: 9rem;
-  box-shadow:
-    0 10px 15px -3px rgba(0, 0, 0, 0.1),
-    0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  background-color: #fcfbfe;
-  border-width: 2px;
-  border-radius: 0.5rem;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  margin-left: -1rem;
-  margin-right: -1rem;
-  width: 98vw;
-  min-width: 300px;
-  max-width: 100%;
-  margin-top: 15px;
-  z-index: 9;
+  box-shadow: 0px 8px 10px 0px #0000001a;
+  border-radius: 12px;
+  width: 100%;
+  padding: 15px 20px;
 }
 
 .orderSummaryDetails {
@@ -30,7 +11,10 @@
   margin-bottom: 1rem;
   font-size: 15px;
 }
-
+.orderSummaryText {
+  width: 100%;
+  margin-bottom: 10px;
+}
 .orderSummaryDetailRow {
   display: flex;
   align-items: center;
@@ -56,3 +40,7 @@
 }
 
 /* Additional styles for different screen sizes can be added using media queries */
+.CTA_btn {
+  margin-top: 20px;
+  width: 100%;
+}

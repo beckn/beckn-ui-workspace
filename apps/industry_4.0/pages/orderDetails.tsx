@@ -282,7 +282,8 @@ const OrderDetails = () => {
   }, [apiUrl, data.confirmData])
 
   // Check if the order is delivered
-  const isDelivered = data.statusData?.[0]?.message?.order?.fulfillments?.[0]?.state?.descriptor?.code === 'DELIVERED'
+  const isDelivered =
+    data.statusData?.[0]?.message?.order?.fulfillments?.[0]?.state?.descriptor?.code === 'ORDER_COMPLETE'
 
   useEffect(() => {
     if (isDelivered) {
@@ -532,6 +533,11 @@ const OrderDetails = () => {
     }
   }
 
+  const isCompleted =
+    data.statusData?.[0]?.message?.order?.fulfillments?.[0]?.state?.descriptor?.code === 'ORDER_COMPLETE'
+  const isCancelled = data.statusData?.[0]?.message?.order?.status === 'CANCELLED'
+
+  console.log(isCompleted)
   return (
     <Box
       className="hideScroll"
@@ -666,6 +672,8 @@ const OrderDetails = () => {
               <OrderStatusProgress
                 key={index}
                 label={status.label}
+                noLine={isCompleted || isCancelled}
+                lastElement={index === orderStatusMap.length - 1}
                 statusTime={formatTimestamp(status.statusTime)}
               />
             ))}

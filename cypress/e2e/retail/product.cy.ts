@@ -26,7 +26,7 @@ describe('Product details Page Tests', () => {
     cy.getByData(testIds.item_title).should('contain.text', 'sunglass One')
     cy.getByData(testIds.item_rating).eq(4)
     cy.getByData(testIds.item_description).should('contain.text', 'Protect you from sun rays and wind Polarised')
-    cy.getByData(testIds.item_price).should('contain.text', '₹100.00')
+    cy.getByData(testIds.item_price).should('contain.text', '100.00 ₹')
     cy.getByData(testIds.productpage_incrementCounter).should('be.visible')
     cy.getByData(testIds.productpage_counterValue).should('be.visible')
     cy.getByData(testIds.productpage_decrementCounter).should('be.visible')
