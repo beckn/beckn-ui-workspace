@@ -38,7 +38,11 @@ const MyServices = () => {
       })
       // .then(response => response.json())
       .then(result => {
-        if (result.data.message.includes('No Provider is linked to this user to get catalogues')) {
+        console.log('result', result.data.message)
+        if (
+          result.data.message &&
+          result.data.message.includes('No Provider is linked to this user to get catalogues')
+        ) {
           setOrderHistoryList([])
         } else {
           setOrderHistoryList(result.data.items)
