@@ -1173,6 +1173,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
         style={{ marginTop: '20px' }}
       />
       <Box
+        background={'#fff'}
         boxShadow="0px 4px 10px rgba(0, 0, 0, 0.1)"
         borderRadius="12px"
         margin={'0 auto'}

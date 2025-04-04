@@ -101,18 +101,19 @@ const HomePage = () => {
 
   return (
     <Box
-      backgroundColor="white"
+      // backgroundColor="white"
       ml={'-20px'}
       mr={'-20px'}
     >
       <Flex
         justifyContent={'space-between'}
         alignItems={'center'}
-        mt={'8px'}
+        mt={'6px'}
         pl={'20px'}
         pr={'20px'}
         h="60px"
         boxShadow="0px 4px 20px 0px #00000014"
+        background={'#fff'}
       >
         <Box>
           <Image

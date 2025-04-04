@@ -55,7 +55,7 @@ const Dashboard = () => {
       <Box
         maxWidth={{ base: '100vw', md: '30rem', lg: '40rem' }}
         margin="calc(0rem + 50px) auto"
-        backgroundColor="white"
+        background="#d9ebce"
       >
         <Typography
           style={{ marginTop: '-15px', marginBottom: '15px' }}

@@ -123,7 +123,7 @@ const HomePage = () => {
           )}
         </Box>
       </Flex>
-      <Box>
+      <Box background="#deeaf5">
         <Carousel images={images} />
         <Box
           padding={'10px'}

@@ -98,8 +98,9 @@ const LoanApplications = () => {
         gap="10px"
         position="sticky"
         top="0"
-        backgroundColor="white"
+        // backgroundColor="white"
         zIndex="1"
+        className="lend_ease_loanApp"
       >
         <SearchBar
           searchString={searchKeyword}

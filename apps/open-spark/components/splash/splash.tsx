@@ -8,6 +8,7 @@ const Splash = () => {
       justifyContent={'center'}
       alignItems="center"
       height="100vh"
+      background="#deeaf5"
     >
       <Image
         src="./images/spark_icon_new.svg"

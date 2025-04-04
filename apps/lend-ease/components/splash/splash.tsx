@@ -8,6 +8,7 @@ const Splash = () => {
       justifyContent={'center'}
       alignItems="center"
       height="100vh"
+      background="#d8e2ee"
     >
       <Image
         src="./images/lend-ease-logo.svg"

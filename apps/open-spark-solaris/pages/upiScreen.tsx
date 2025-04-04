@@ -46,6 +46,7 @@ const UpiScreen = () => {
       justifyContent="space-between"
       backgroundColor="#fff"
       marginTop={'-50px'}
+      background="#E4FFE4"
     >
       {/* Top Section */}
       <Box>

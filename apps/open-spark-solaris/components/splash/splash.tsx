@@ -8,6 +8,7 @@ const Splash = () => {
       justifyContent={'center'}
       alignItems="center"
       height="100vh"
+      background="#E4FFE4"
     >
       <Image
         src="./images/rental_app_logo.svg"
