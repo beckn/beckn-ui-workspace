@@ -872,14 +872,14 @@ const OrderDetails = () => {
               <BecknButton
                 text="Add to wallet"
                 handleClick={() => handleOnAddToPhysicalAsset(localStorage.getItem('statusResponse'))}
-                color="#4398E8"
-                variant="outline"
+                color="#FFFFFF"
+                variant="solid"
                 sx={{
                   fontWeight: '500',
-                  fontSize: '10px',
-                  width: '5rem',
+                  fontSize: '12px',
+                  width: '7.5rem',
                   height: '0.4rem',
-                  padding: '0.8rem !important',
+                  padding: '1rem !important',
                   marginBottom: '0 !important'
                 }}
               />
