@@ -59,7 +59,7 @@ const ExperienceCard = ({ title, icon, url }: ExperienceCardProps) => {
       _hover={{ transform: 'translateY(-20px)' }}
       onClick={() => {
         if (url) {
-          router.push(`/landing?url=${encodeURIComponent(url)}`)
+          router.push(`/landing?url=${encodeURIComponent(url)}&title=${encodeURIComponent(title)}`)
         }
       }}
     >
@@ -144,6 +144,8 @@ const Home = () => {
     { title: 'P2P Energy Trading', icon: '/images/p2p.svg', url: '' },
     { title: 'EV Charging', icon: '/images/charging.svg', url: '' }
   ]
+
+  console.log(experiences)
 
   return (
     <Box

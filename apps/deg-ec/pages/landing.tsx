@@ -5,11 +5,38 @@ import { useRouter } from 'next/router'
 const Landing = () => {
   const router = useRouter()
   const [iframeUrl, setIframeUrl] = useState('')
+  const [pageText, setPageText] = useState('')
 
   useEffect(() => {
-    const { url } = router.query
+    const { url, title } = router.query
     if (url && typeof url === 'string') {
       setIframeUrl(decodeURIComponent(url))
+    }
+
+    if (title && typeof title === 'string') {
+      const decodedTitle = decodeURIComponent(title)
+      switch (decodedTitle) {
+        case 'Retail Experience':
+          setPageText(' Consumer experience for purchasing and renting out energy services')
+          break
+        case 'Rental Experience':
+          setPageText(' experience for discovering and renting energy related equipments')
+          break
+        case 'Wallet Experience':
+          setPageText(' experience for securely storing all your assets, transactions and documentation in one place')
+          break
+        case 'Finance Experience':
+          setPageText(' experience for bankers to monitor and manage loan requests')
+          break
+        case 'P2P Energy Trading':
+          setPageText(' Energy Trading experience to trade excess energy directly with peers in real time')
+          break
+        case 'EV Charging':
+          setPageText(' Charging experience for managing and monitoring charging stations')
+          break
+        default:
+          setPageText('')
+      }
     }
   }, [router.query])
 
@@ -48,7 +75,7 @@ const Landing = () => {
           onClick={() => router.push('/home')}
         />
         <Box
-          maxW={'720px'}
+          maxW={'880px'}
           textAlign="center"
           position="relative"
           padding="10px 20px"
@@ -67,9 +94,11 @@ const Landing = () => {
               background="linear-gradient(90.13deg, #E99060 2.76%, #A77CA5 38.62%)"
               style={{ WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}
             >
-              Rental
+              {router.query.title && typeof router.query.title === 'string'
+                ? decodeURIComponent(router.query.title).split(' ')[0]
+                : ''}
             </Text>{' '}
-            experience for discovering and renting energy related equipments
+            {pageText}
           </Text>
         </Box>
         <Text w={'130px'}></Text>
