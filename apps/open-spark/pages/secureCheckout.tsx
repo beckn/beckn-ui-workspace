@@ -1,16 +1,18 @@
 import { DetailCard } from '@beckn-ui/becknified-components'
+import { feedbackActions } from '@beckn-ui/common'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import { Flex, Text, Image, Divider, Input, Box } from '@chakra-ui/react'
 import Visa from '@public/images/american.svg'
 import { AuthRootState } from '@store/auth-slice'
 import Router from 'next/router'
 import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 const SecureCheckout = () => {
   const { user } = useSelector((state: AuthRootState) => state.auth)
   const [otp, setOtp] = useState('')
   const [isVerified, setIsVerified] = useState(false)
+  const dispatch = useDispatch()
 
   const maskedPhone = user?.agent?.agent_profile?.phone_number
     ? String(user?.agent?.agent_profile?.phone_number).slice(0, 2) +
@@ -21,6 +23,16 @@ const SecureCheckout = () => {
   const handleVerify = () => {
     if (otp.length === 6) {
       setIsVerified(true) // Enable "Proceed" after verification
+      dispatch(
+        feedbackActions.setToastData({
+          toastData: {
+            message: 'Success',
+            display: true,
+            type: 'success',
+            description: 'OTP verified successfully, Click on Proceed to continue'
+          }
+        })
+      )
     }
   }
 

@@ -9,6 +9,7 @@ import { getCountryCode } from '@utils/general'
 import { currencyMap } from '@lib/config'
 
 export type OrderItem = {
+  orderId: any
   batteryType: string
   capacity: string
   rentedFrom: string
@@ -126,6 +127,21 @@ const OrderOverview: React.FC<OrderOverviewProps> = ({ items, showPriceAndStatus
                 />
               </Flex>
             </Flex>
+            <Flex
+              mb={3}
+              alignItems="center"
+            >
+              <Typography
+                text="Order ID:"
+                fontSize="12px"
+                fontWeight="600"
+              />
+              <Typography
+                text={` ${item.orderId}`}
+                fontSize="12px"
+                sx={{ ml: 1 }}
+              />
+            </Flex>
           </Box>
 
           {showPriceAndStatus && (
@@ -176,6 +192,7 @@ export const mapOrderData = (data: any[]): OrderItem[] => {
       const paymentStatus = order.payments.some(payment => payment.status === 'PAID') ? 'PAID' : 'NON_PAID'
 
       return {
+        orderId: order.order_id,
         batteryType: item.name,
         capacity: item.code,
         rentedFrom: order.descriptor.name,
