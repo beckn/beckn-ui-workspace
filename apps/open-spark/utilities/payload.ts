@@ -31,7 +31,7 @@ export const getPayloadForConfirm = (initResponse: InitResponseModel[], cartPric
               {
                 id: order.payments?.[0]?.id,
                 params: {
-                  amount: `${cartPriceDetails[order.provider.id].totalPrice || order.quote?.price?.value}`,
+                  amount: `${order.quote?.price?.value}`,
                   currency: order.quote?.price?.currency
                 },
                 status: 'PAID',
