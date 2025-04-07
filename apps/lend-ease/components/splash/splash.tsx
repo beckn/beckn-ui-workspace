@@ -11,7 +11,7 @@ const Splash = () => {
       background="#d8e2ee"
     >
       <Image
-        src="./images/lend-ease-logo.svg"
+        src="./images/finance_app_logo.svg"
         alt="splash-img"
         mb="20px"
       />
