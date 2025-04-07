@@ -9,7 +9,6 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
       <Head>
         <title>DEG</title>
       </Head>
-      (
       <Box
         p="60px"
         className={style.layout_container}
