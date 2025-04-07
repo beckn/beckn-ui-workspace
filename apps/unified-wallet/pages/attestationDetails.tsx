@@ -48,7 +48,7 @@ const AttestationDetails = () => {
       title: 'Wallet License',
       isVerified: true,
       image: DocIcon,
-      datetime: new Date().toString(),
+      datetime: Math.floor(new Date().getTime() / 1000).toString(),
       data: { ...data.data, source: null, attachment: null, attestations: decodedRes }
     })
   }

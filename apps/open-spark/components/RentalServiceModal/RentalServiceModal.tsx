@@ -126,7 +126,8 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
             data: item
           }
         })
-        .filter(val => val && val.source.toLocaleLowerCase() !== 'wallet')
+        // .filter(val => val && val.source.toLocaleLowerCase() !== 'wallet')
+        .filter(val => val && val.name.toLowerCase() !== 'battery' && val.name.toLowerCase() !== 'solar panel')
         .sort((a, b) => Number(b.data.createdAt) - Number(a.data.createdAt))
       setBatteryOptions(list)
     } catch (error) {
@@ -404,11 +405,11 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
             text="Add from wallet"
             handleClick={handleAddFromWallet}
           />
-          <BecknButton
+          {/* <BecknButton
             text="Scan QR Code"
             variant="outline"
             handleClick={handleOpenScanner}
-          />
+          /> */}
 
           {batteryOptions.length > 0 && (
             <BecknButton
@@ -812,11 +813,11 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
         </Box>
       </BottomModal>
 
-      <QRCodeScanner
+      {/* <QRCodeScanner
         showScanner={showScanner}
         setShowScanner={setShowScanner}
         setScannedData={scannedData => getOrderStatusData(scannedData)}
-      />
+      /> */}
     </>
   )
 }
