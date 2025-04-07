@@ -9,7 +9,13 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
       <Head>
         <title>DEG</title>
       </Head>
-      <Box className={style.layout_container}> {children}</Box>
+      (
+      <Box
+        p="60px"
+        className={style.layout_container}
+      >
+        {children}
+      </Box>
     </>
   )
 }
