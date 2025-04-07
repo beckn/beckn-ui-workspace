@@ -34,13 +34,12 @@ import { ItemMetaData } from '@lib/types/becknDid'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import CustomDatePicker from '@components/dateTimePicker/customDatePicker'
 import CustomTimePicker from '@components/dateTimePicker/customTimePicker'
-import { getCountryCode, roundToNextHour, validateStartEndTime } from '@utils/general'
+import { roundToNextHour, validateStartEndTime } from '@utils/general'
 import { FiPlusCircle } from 'react-icons/fi'
 import pako from 'pako'
 import { QrReader } from 'react-qr-reader'
 import QRCodeScanner from '@components/QRCode/QRScanner'
 import BottomModalScan from '@beckn-ui/common/src/components/BottomModal/BottomModalScan'
-import { currencyMap } from '@lib/config'
 
 const SECRET_KEY = '40aead339c69a7ec08fb445ddff258b2' // Must be 32 characters for AES-256
 
@@ -140,7 +139,8 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
             data: item
           }
         })
-        .filter(val => val && val.source.toLocaleLowerCase() !== 'wallet')
+        // .filter(val => val && val.source.toLocaleLowerCase() !== 'wallet')
+        .filter(val => val && val.name.toLowerCase() !== 'battery' && val.name.toLowerCase() !== 'solar panel')
         .sort((a, b) => Number(b.data.createdAt) - Number(a.data.createdAt))
       setBatteryOptions(list)
     } catch (error) {
@@ -418,11 +418,11 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
             text="Add from wallet"
             handleClick={handleAddFromWallet}
           />
-          <BecknButton
+          {/* <BecknButton
             text="Scan QR Code"
             variant="outline"
             handleClick={handleOpenScanner}
-          />
+          /> */}
 
           {batteryOptions.length > 0 && (
             <BecknButton
@@ -682,9 +682,7 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
                 }
               }}
             />
-            <Text color="gray.600">
-              {`${currencyMap[getCountryCode().country.code as keyof typeof currencyMap]} per hour`}
-            </Text>
+            <Text color="gray.600">Rs. per hour</Text>
           </Flex>
         </Box>
         <BecknButton
@@ -814,11 +812,11 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
         </Box>
       </BottomModal>
 
-      <QRCodeScanner
+      {/* <QRCodeScanner
         showScanner={showScanner}
         setShowScanner={setShowScanner}
         setScannedData={scannedData => getOrderStatusData(scannedData)}
-      />
+      /> */}
     </>
   )
 }

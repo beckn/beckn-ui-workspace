@@ -23,10 +23,8 @@ import {
   Image,
   useToast
 } from '@chakra-ui/react'
-// import phonePay from '@public/images/phonePayPayment.svg'
-// import gPay from '@public/images/gpay.svg'
-import applyPay from '@public/images/visaNew.svg'
-import stripePay from '@public/images/masterNew.svg'
+import phonePay from '@public/images/phonePayPayment.svg'
+import gPay from '@public/images/gpay.svg'
 import CashOnDelivery from '@public/images/cash.svg'
 import NetBanking from '@public/images/netbanking.svg'
 import { BottomModal, InputProps, Loader, SelectOptionType, Typography } from '@beckn-ui/molecules'
@@ -46,8 +44,6 @@ import { parseDIDData } from '@utils/did'
 import { ItemMetaData } from '@lib/types/becknDid'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
-import { getCountryCode } from '@utils/general'
-import { currencyMap } from '@lib/config'
 
 interface FormData {
   fullName: string
@@ -490,38 +486,23 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
         disabled: false,
         dataTest: testIds.paymentpage_masterCard
       },
+
       {
-        category: 'Other Payment Options',
-        img: applyPay,
-        paymentMethod: t.applyPay || 'Apple Pay',
-        paymentMethodNet: t.applyPay || 'Apple Pay',
-        disabled: true,
+        category: 'UPI',
+        img: gPay,
+        paymentMethod: t.gPay || 'Google Pay',
+        paymentMethodNet: t.gPay || 'Google Pay',
+        disabled: false,
         dataTest: testIds.paymentpage_phonePay
       },
       {
-        category: 'Other Payment Options',
-        img: stripePay,
-        paymentMethod: t.stripePay || 'Stripe',
-        paymentMethodNet: t.stripePay || 'Stripe',
-        disabled: true,
+        category: 'UPI',
+        img: phonePay,
+        paymentMethod: t.phonePay || 'PhonePe UPI',
+        paymentMethodNet: t.phonePay || 'PhonePe UPI',
+        disabled: false,
         dataTest: testIds.paymentpage_phonePay
       }
-      // {
-      //   category: 'UPI',
-      //   img: gPay,
-      //   paymentMethod: t.gPay || 'Google Pay',
-      //   paymentMethodNet: t.gPay || 'Google Pay',
-      //   disabled: false,
-      //   dataTest: testIds.paymentpage_phonePay
-      // },
-      // {
-      //   category: 'UPI',
-      //   img: phonePay,
-      //   paymentMethod: t.phonePay || 'PhonePe UPI',
-      //   paymentMethodNet: t.phonePay || 'PhonePe UPI',
-      //   disabled: false,
-      //   dataTest: testIds.paymentpage_phonePay
-      // }
     ]
   } = props
 
@@ -789,10 +770,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                               alignItems="center"
                             >
                               <Text fontSize={'10px'}>Pay Now</Text>
-                              <Text fontSize={'10px'}>
-                                {currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}
-                                {payableAmount?.toFixed(2)}
-                              </Text>
+                              <Text fontSize={'10px'}>₹{payableAmount?.toFixed(2)}</Text>
                             </Flex>
                           </Box>
                           <Box
@@ -870,16 +848,14 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                                       fontWeight="500"
                                       color="#626060"
                                     >
-                                      {currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}
-                                      {emi.toFixed(2)} x {item.name}m
+                                      ₹ {emi.toFixed(2)} x {item.name}m
                                     </Box>
                                     <Box
                                       fontSize="10px"
                                       fontWeight="500"
                                       color="#626060"
                                     >
-                                      {currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}
-                                      {actualInterestAmount.toFixed(2)} ({annualInterestRate}%)
+                                      ₹ {actualInterestAmount.toFixed(2)} ({annualInterestRate}%)
                                     </Box>
                                     <Box>
                                       {dicountedSearch && (
@@ -889,8 +865,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                                           fontWeight="500"
                                           color="#626060"
                                         >
-                                          {currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}
-                                          {localStorage.getItem('totalCost')}.00
+                                          ₹{localStorage.getItem('totalCost')}.00
                                         </Box>
                                       )}
                                       <Box
@@ -898,8 +873,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                                         fontWeight="500"
                                         color="#626060"
                                       >
-                                        {currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}
-                                        {totalCost.toFixed(2)}
+                                        ₹ {totalCost.toFixed(2)}
                                       </Box>
                                     </Box>
                                   </Flex>

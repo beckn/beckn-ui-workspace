@@ -3,9 +3,7 @@ import { Box, Text, Grid, Button, Flex, Circle, Image, Divider } from '@chakra-u
 import Router, { useRouter } from 'next/router'
 import { useSelector } from 'react-redux'
 import { DiscoveryRootState } from '@beckn-ui/common'
-import { currencyFormat, getCountryCode } from '@utils/general'
-import ClearIcon from '../public/images/clearIcon.svg'
-import { currencyMap } from '@lib/config'
+import { currencyFormat } from '@utils/general'
 
 const UpiScreen = () => {
   const [pin, setPin] = useState<string[]>(Array(4).fill(''))
@@ -47,7 +45,6 @@ const UpiScreen = () => {
       justifyContent="space-between"
       backgroundColor="#fff"
       marginTop={'-50px'}
-      background="#E4FFE4"
     >
       {/* Top Section */}
       <Box>
@@ -121,7 +118,7 @@ const UpiScreen = () => {
               fontSize={'14px'}
               fontWeight="700"
             >
-              {`${currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}${currencyFormat(payableAmount)}`}
+              {`₹ ${currencyFormat(payableAmount)}`}
             </Text>
           </Flex>
         </Box>
@@ -145,8 +142,8 @@ const UpiScreen = () => {
               key={index}
               size="30px"
               border="2px solid"
-              borderColor={digit ? '#4398E8' : 'gray.300'}
-              bg={digit ? '#4398E8' : 'white'}
+              borderColor={digit ? '#228B22' : 'gray.300'}
+              bg={digit ? '#228B22' : 'white'}
             />
           ))}
         </Flex>
@@ -204,10 +201,7 @@ const UpiScreen = () => {
           variant="outline"
           onClick={handleDelete}
         >
-          <Image
-            src={ClearIcon}
-            alt="Clear"
-          />
+          ✕
         </Button>
         <Button
           textColor="black"

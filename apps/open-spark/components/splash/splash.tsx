@@ -8,15 +8,14 @@ const Splash = () => {
       justifyContent={'center'}
       alignItems="center"
       height="100vh"
-      background="#deeaf5"
     >
       <Image
-        src="./images/spark_icon_new.svg"
+        src="./images/spark-splas.svg"
         alt="splash-img"
         mb="20px"
       />
       <Image
-        src="./images/footer_splash.svg"
+        src="./images/splash-footer.svg"
         alt="splash-footer-img"
       />
     </Flex>

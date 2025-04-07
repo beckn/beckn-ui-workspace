@@ -9,8 +9,6 @@ import {
 import { Typography } from '@beckn-ui/molecules'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import { Box, Divider, Flex, Radio, RadioGroup, Stack, Text, Image } from '@chakra-ui/react'
-import { currencyMap } from '@lib/config'
-import { getCountryCode } from '@utils/general'
 import Router from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -119,7 +117,7 @@ const NewPaymentOverView = () => {
                         color="#228B22"
                         fontWeight="600"
                         fontSize="12px"
-                        text={`${currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}${items.price.value}`}
+                        text={`₹ ${items.price.value}`}
                       />
                     </Box>
                   </Flex>
@@ -148,7 +146,7 @@ const NewPaymentOverView = () => {
             <Flex alignItems={'center'}>
               <Typography
                 fontSize="15px"
-                text={`${currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}`}
+                text={'Rs.'}
                 style={{ paddingRight: '2px' }}
               />
               <Typography
@@ -168,7 +166,7 @@ const NewPaymentOverView = () => {
             <Flex alignItems={'center'}>
               <Typography
                 fontSize="15px"
-                text={`-${currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}`}
+                text={'-Rs.'}
                 style={{ paddingRight: '2px' }}
               />
               <Typography
@@ -194,7 +192,7 @@ const NewPaymentOverView = () => {
               <Typography
                 fontSize="15px"
                 fontWeight="600"
-                text={`${currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}`}
+                text={'Rs.'}
                 style={{ paddingRight: '2px' }}
               />
               <Typography
@@ -227,9 +225,7 @@ const NewPaymentOverView = () => {
                       />
                       <Box p="10px">
                         <Text fontSize="15px">
-                          {emiPlan.name} months:{' '}
-                          {currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}
-                          {monthlyInstallment[ind].emi}/months
+                          {emiPlan.name} months: ₹ {monthlyInstallment[ind].emi}/months
                         </Text>
                       </Box>
                     </Stack>

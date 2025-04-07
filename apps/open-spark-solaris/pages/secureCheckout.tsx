@@ -1,38 +1,17 @@
 import { DetailCard } from '@beckn-ui/becknified-components'
-import { feedbackActions } from '@beckn-ui/common'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import { Flex, Text, Image, Divider, Input, Box } from '@chakra-ui/react'
-import Visa from '@public/images/stripe_icon.svg'
-import { AuthRootState } from '@store/auth-slice'
+import Visa from '@public/images/Bitmap.svg'
 import Router from 'next/router'
 import React, { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 
 const SecureCheckout = () => {
-  const { user } = useSelector((state: AuthRootState) => state.auth)
   const [otp, setOtp] = useState('')
   const [isVerified, setIsVerified] = useState(false)
-  const dispatch = useDispatch()
-
-  const maskedPhone = user?.agent?.agent_profile?.phone_number
-    ? String(user?.agent?.agent_profile?.phone_number).slice(0, 2) +
-      'XXXX' +
-      String(user?.agent?.agent_profile?.phone_number).slice(-4)
-    : '98XXXX554'
 
   const handleVerify = () => {
     if (otp.length === 6) {
       setIsVerified(true) // Enable "Proceed" after verification
-      dispatch(
-        feedbackActions.setToastData({
-          toastData: {
-            message: 'Success',
-            display: true,
-            type: 'success',
-            description: 'OTP verified successfully, Click on Proceed to continue'
-          }
-        })
-      )
     }
   }
 
@@ -43,18 +22,14 @@ const SecureCheckout = () => {
           justifyContent="space-between"
           alignItems="center"
         >
-          {/* <Text
+          <Text
             fontSize="14px"
             fontWeight="700"
-            color="#006FCC"
+            color="#B02A30"
           >
-            American Express
-          </Text> */}
-          <Image
-            src={Visa}
-            width="auto"
-            height="30px"
-          />
+            ICICI Bank
+          </Text>
+          <Image src={Visa} />
         </Flex>
         <Divider
           mt="10px"
@@ -65,7 +40,7 @@ const SecureCheckout = () => {
           color="#80807F"
           mb="10px"
         >
-          We have sent a verification code by text message to {maskedPhone}.
+          We have sent a verification code by text message to +91 98XXXX554.
         </Text>
         <Text
           mb="5px"
@@ -76,18 +51,9 @@ const SecureCheckout = () => {
         <Input
           border="1px solid #000000"
           value={otp}
-          type="number"
           onChange={e => setOtp(e.target.value)}
           maxLength={6}
           placeholder="Enter 6-digit OTP"
-          onKeyDown={e => {
-            if (e.key === '-' || e.key === 'e') {
-              e.preventDefault()
-            }
-            if (e.key === 'ArrowDown' && parseInt(otp) <= 1) {
-              e.preventDefault()
-            }
-          }}
         />
         <Flex
           alignItems="center"
@@ -95,15 +61,10 @@ const SecureCheckout = () => {
           mt="5px"
           mb="30px"
         >
+          <Text fontSize="12px">Didn’t receive OTP? </Text>
           <Text
             fontSize="12px"
-            mr="5px"
-          >
-            Didn't receive OTP?
-          </Text>
-          <Text
-            fontSize="12px"
-            color="#4398E8"
+            color="#228B22"
             cursor="pointer"
           >
             Resend

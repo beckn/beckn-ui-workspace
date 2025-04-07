@@ -12,8 +12,6 @@ import PaymentDetailsCard from '@beckn-ui/common/src/components/paymentDetailsCa
 import { useDispatch, useSelector } from 'react-redux'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import { RootState } from '@store/index'
-import applyPay from '@public/images/visaNew.svg'
-import stripePay from '@public/images/masterNew.svg'
 
 const retailPaymentMethod = (props: PaymentMethodSelectionProps) => {
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<string>('')
@@ -46,20 +44,21 @@ const retailPaymentMethod = (props: PaymentMethodSelectionProps) => {
         disabled: false,
         dataTest: testIds.paymentpage_masterCard
       },
+
       {
-        category: 'Other Payment Options',
-        img: applyPay,
-        paymentMethod: t.applyPay || 'Apple Pay',
-        paymentMethodNet: t.applyPay || 'Apple Pay',
-        disabled: true,
+        category: 'UPI',
+        img: gPay,
+        paymentMethod: t.gPay || 'Google Pay',
+        paymentMethodNet: t.gPay || 'Google Pay',
+        disabled: false,
         dataTest: testIds.paymentpage_phonePay
       },
       {
-        category: 'Other Payment Options',
-        img: stripePay,
-        paymentMethod: t.stripePay || 'Stripe',
-        paymentMethodNet: t.stripePay || 'Stripe',
-        disabled: true,
+        category: 'UPI',
+        img: phonePay,
+        paymentMethod: t.phonePay || 'PhonePe UPI',
+        paymentMethodNet: t.phonePay || 'PhonePe UPI',
+        disabled: false,
         dataTest: testIds.paymentpage_phonePay
       }
     ]
