@@ -26,7 +26,6 @@ import { calculateDuration, generateRentalInitPayload } from '@utils/checkout-ut
 import { setEmiDetails } from '@store/emiSelect-slice'
 import { formatDate } from '@beckn-ui/common'
 import { AuthRootState } from '@store/auth-slice'
-import { getCountryCode } from '@utils/general'
 
 export type ShippingFormData = {
   name: string
@@ -151,8 +150,8 @@ const CheckoutPage = () => {
       name: '',
       mobileNumber: '',
       email: '',
-      address: '5890 W Vernor Hwy, Detroit, Michigan',
-      pinCode: '48209'
+      address: '1202 b2, Bengaluru urban, Bengaluru, Karnataka',
+      pinCode: '560078'
     }
 
     if (user?.agent) {
@@ -160,10 +159,8 @@ const CheckoutPage = () => {
       formData = {
         ...formData,
         name: user.agent.first_name.trim(),
-        mobileNumber: `${user.agent.agent_profile.phone_number}`,
-        email: user.email || '',
-        address: '5890 W Vernor Hwy, Detroit, Michigan',
-        pinCode: '48209'
+        mobileNumber: user.agent.agent_profile.phone_number,
+        email: user.email || ''
       }
     } else {
       // If no user.agent, use default data
@@ -171,9 +168,7 @@ const CheckoutPage = () => {
         ...formData,
         name: 'Lisa',
         mobileNumber: '9811259151',
-        email: 'lisa.k@gmail.com',
-        address: '5890 W Vernor Hwy, Detroit, Michigan',
-        pinCode: '48209'
+        email: 'lisa.k@gmail.com'
       }
     }
 
@@ -227,17 +222,7 @@ const CheckoutPage = () => {
       const payloadPromise =
         type === 'RENT_AND_HIRE'
           ? generateRentalInitPayload(selectRentalResponse, shippingFormData, domain)
-          : getInitPayload(
-              shippingFormData,
-              billingFormData,
-              cartItems,
-              transactionId,
-              domain,
-              { id, type },
-              {
-                location: getCountryCode()
-              }
-            )
+          : getInitPayload(shippingFormData, billingFormData, cartItems, transactionId, domain, { id, type })
       payloadPromise.then(res => {
         return initialize(res)
       })

@@ -15,12 +15,10 @@ import PoweredBy from '@beckn-ui/common/src/components/poweredBy'
 import NavigationItem from '@components/navigationItem'
 import { AuthRootState } from '@store/auth-slice'
 import { useSelector } from 'react-redux'
-import { UserRootState } from '@store/user-slice'
 
 const Dashboard = () => {
   const { t } = useLanguage()
   const router = useRouter()
-  const { profileDetails } = useSelector((state: UserRootState) => state.user)
 
   const { user } = useSelector((state: AuthRootState) => state.auth)
   const theme = useTheme()
@@ -29,50 +27,35 @@ const Dashboard = () => {
   return (
     <>
       <Flex
-        // justifyContent={'space-between'}
+        justifyContent={'space-between'}
         alignItems={'center'}
-        padding="20px"
-        ml="-20px"
-        mr="-20px"
-        bg="#fff"
-        // width={'50%'}
+        mt={'20px'}
+        mb={'15px'}
+        width={'50%'}
         gap="1rem"
-        boxShadow={'rgba(0, 0, 0, 0.1) 2px 14px 40px 4px'}
       >
         <Image
           src={profileIcon}
           alt="profileIcon"
           onClick={() => router.push('/profile')}
         />
-        {profileDetails?.agent ? (
-          <Typography
-            fontSize="16px"
-            color={'#3A3A3A'}
-            text={profileDetails?.agent?.first_name + ' ' + (profileDetails?.agent?.last_name ?? '')}
+        {user?.did && (
+          <Select
+            variant="unstyled"
+            placeholder={`/subj****${user?.did.slice(-4)}`}
+            value=""
             style={{
               pointerEvents: 'none',
               width: 'fit-content'
             }}
           />
-        ) : (
-          user?.did && (
-            <Select
-              variant="unstyled"
-              placeholder={`/subj****${user?.did.slice(-4)}`}
-              value=""
-              style={{
-                pointerEvents: 'none',
-                width: 'fit-content'
-              }}
-            />
-          )
         )}
       </Flex>
-      {/* <Divider mb={'36px'} /> */}
+      <Divider mb={'36px'} />
       <Box
         maxWidth={{ base: '100vw', md: '30rem', lg: '40rem' }}
         margin="calc(0rem + 50px) auto"
-        // background="#d9ebce"
+        backgroundColor="white"
       >
         <Typography
           style={{ marginTop: '-15px', marginBottom: '15px' }}
@@ -89,28 +72,21 @@ const Dashboard = () => {
         >
           <NavigationItem
             icon={IdentityIcon}
-            label={'Identities'}
-            handleClick={() => {}}
+            label={'Connections'}
+            handleClick={() => router.push('/myIdentities')}
             dataTest={'identity'}
             renderType="card"
           />
           <NavigationItem
-            icon={IdentityIcon}
-            label={'Connections'}
-            handleClick={() => router.push('/connections')}
-            dataTest={'connections'}
-            renderType="card"
-          />
-          <NavigationItem
             icon={AssetsIcon}
-            label={'Assets'}
+            label={'Energy Assets'}
             handleClick={() => router.push('/myAssets')}
             dataTest={'assets'}
             renderType="card"
           />
           <NavigationItem
             icon={TransactionsIcon}
-            label={'Transactions'}
+            label={'Energy Transactions'}
             handleClick={() => router.push('/myTransactions')}
             dataTest={'transactions'}
             renderType="card"

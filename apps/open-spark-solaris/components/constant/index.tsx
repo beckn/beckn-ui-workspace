@@ -20,9 +20,9 @@ export const images = [
     text: 'home page'
   },
   {
-    src: '/images/homePage1.svg',
+    src: '/images/homePage1.png',
     text: 'home page'
   }
 ]
 
-export const checkboxLabels = ['Identities', 'Assets', 'Transactions']
+export const checkboxLabels = ['Identities', 'Assets']

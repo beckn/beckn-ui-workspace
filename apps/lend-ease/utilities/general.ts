@@ -1,5 +1,4 @@
 import { DocumentPayload } from '@lib/types/becknDid'
-import Cookies from 'js-cookie'
 
 export const formatFileSize = (bytes: number): string => {
   const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']
@@ -9,7 +8,7 @@ export const formatFileSize = (bytes: number): string => {
 }
 
 export const getMaskedMobileNumber = (phoneNumber: string) => {
-  return `${phoneNumber.slice(0, 2)}XXXX${phoneNumber.slice(-3)}`
+  return `+91 ${phoneNumber.slice(0, 2)}XXXX${phoneNumber.slice(-3)}`
 }
 
 export const extractMobileNumberFromSubjectDid = (subject: string) => {
@@ -67,9 +66,4 @@ export const validateStartEndTime = (startTime: Date, endTime: Date): boolean =>
 
 export const currencyFormat = (price: number | undefined) => {
   return price ? new Intl.NumberFormat('en-GB').format(price) : null
-}
-
-export const getCountryCode = (): { country: { name: string; code: string } } => {
-  const countryCode = Cookies.get('country_code')
-  return countryCode ? JSON.parse(countryCode) : { country: { name: 'United States', code: 'USA' } }
 }

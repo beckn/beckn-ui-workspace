@@ -1,14 +1,13 @@
 import { ConfirmResponseModel, InitResponseModel } from '@beckn-ui/common'
 
-export const getPayloadForConfirm = (initResponse: InitResponseModel[], cartPriceDetails: any, location?: any) => {
+export const getPayloadForConfirm = (initResponse: InitResponseModel[], cartPriceDetails: any) => {
   const payload = {
     data: initResponse.map(({ context, message: { order } }) => ({
       context: {
         transaction_id: context.transaction_id,
         bpp_id: context.bpp_id,
         bpp_uri: context.bpp_uri,
-        domain: context.domain,
-        ...(location && location)
+        domain: context.domain
       },
       message: {
         orders: [
@@ -31,7 +30,7 @@ export const getPayloadForConfirm = (initResponse: InitResponseModel[], cartPric
               {
                 id: order.payments?.[0]?.id,
                 params: {
-                  amount: `${order.quote?.price?.value}`,
+                  amount: `${cartPriceDetails[order.provider.id].totalPrice || order.quote?.price?.value}`,
                   currency: order.quote?.price?.currency
                 },
                 status: 'PAID',
@@ -75,7 +74,7 @@ export const getPayloadForOrderHistoryPost = (
         quote: {
           price: {
             currency: message.quote.price.currency,
-            value: Number(message.quote.price.value) || 0
+            value: Number(cartPriceDetails[message.provider.id].totalPrice || message.quote.price.value) || 0
           }
         },
         payments: message.payments

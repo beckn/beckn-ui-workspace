@@ -27,7 +27,7 @@ import { OrderHistoryData } from '@lib/types/orderHistory'
 import { useAddDocumentMutation, useGetVerificationMethodsMutation } from '@services/walletService'
 import { generateAuthHeader, generateKeyPairFromString } from '@services/cryptoUtilService'
 import { AuthRootState } from '@store/auth-slice'
-import { extractAuthAndHeader, generateRandomCode, getCountryCode, toBase64, toSnakeCase } from '@utils/general'
+import { extractAuthAndHeader, generateRandomCode, toBase64, toSnakeCase } from '@utils/general'
 import { feedbackActions } from '@beckn-ui/common'
 import { getRentalPayloadForConfirm } from '@utils/confirm-utils'
 import { getPayloadForConfirm, getPayloadForOrderHistoryPost } from '@utils/payload'
@@ -167,7 +167,7 @@ const retailOrderConfirmation = () => {
           privateKey,
           publicKey,
           payload: {
-            name: `transactions/type/retail/energy/id/${generatedOrderId}/amount/${totalPrice}/item_str/${totalItemsStr}/${orderPlacedAt}`,
+            name: `transactions/type/domain/energy/id/${generatedOrderId}/amount/${totalPrice}/item_str/${totalItemsStr}/${orderPlacedAt}`,
             stream: toBase64(docDetails)
           }
         })
@@ -285,9 +285,7 @@ const retailOrderConfirmation = () => {
       const payload =
         type === 'RENT_AND_HIRE'
           ? getRentalPayloadForConfirm(initResponse, timestamp.fromTime!, timestamp.toTime!, calculatedDuration!)
-          : getPayloadForConfirm(initResponse, getCartItemsWithQuantity(), {
-              location: getCountryCode()
-            }) // fixed temporary once Rahul fixes the changes regarding dynamic price calculation on BE revert the chnges and do the fixes accord.
+          : getPayloadForConfirm(initResponse, getCartItemsWithQuantity()) // fixed temporary once Rahul fixes the changes regarding dynamic price calculation on BE revert the chnges and do the fixes accord.
       confirm(payload)
     }
   }, [initResponse, timestamp])

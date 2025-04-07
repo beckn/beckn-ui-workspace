@@ -3,9 +3,8 @@ import { Box, Text, Grid, Button, Flex, Circle, Image, Divider } from '@chakra-u
 import Router, { useRouter } from 'next/router'
 import { useSelector } from 'react-redux'
 import { DiscoveryRootState } from '@beckn-ui/common'
-import { currencyFormat, getCountryCode } from '@utils/general'
+import { currencyFormat } from '@utils/general'
 import ClearIcon from '../public/images/clearIcon.svg'
-import { currencyMap } from '@lib/config'
 
 const UpiScreen = () => {
   const [pin, setPin] = useState<string[]>(Array(4).fill(''))
@@ -45,7 +44,7 @@ const UpiScreen = () => {
       flexDirection="column"
       height="calc(100vh - 46px)"
       justifyContent="space-between"
-      // backgroundColor="#fff"
+      backgroundColor="#fff"
       marginTop={'-50px'}
     >
       {/* Top Section */}
@@ -120,7 +119,7 @@ const UpiScreen = () => {
               fontSize={'14px'}
               fontWeight="700"
             >
-              {`${currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}${currencyFormat(payableAmount)}`}
+              {`₹ ${currencyFormat(payableAmount)}`}
             </Text>
           </Flex>
         </Box>

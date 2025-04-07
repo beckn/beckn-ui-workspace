@@ -19,7 +19,6 @@ import { Type } from 'react-toastify/dist/utils'
 import { Loader, Typography } from '@beckn-ui/molecules'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import EmptyCart from '@components/emptyCart/emptyCart'
-import { getCountryCode } from '@utils/general'
 
 const Cart = () => {
   const [fetchQuotes, { isLoading, data, isError }] = useSelectMutation()
@@ -36,11 +35,7 @@ const Cart = () => {
 
   useEffect(() => {
     if (items.length > 0) {
-      fetchQuotes(
-        getSelectPayload(items, transactionId, 'deg:retail', {
-          location: getCountryCode()
-        })
-      )
+      fetchQuotes(getSelectPayload(items, transactionId, 'deg:retail'))
     }
   }, [totalQuantity])
 

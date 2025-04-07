@@ -9,9 +9,8 @@ import {
 import { Typography } from '@beckn-ui/molecules'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import { Box, Divider, Flex, Radio, RadioGroup, Stack, Text, Image } from '@chakra-ui/react'
-import { currencyMap } from '@lib/config'
 import { setEmiDetails } from '@store/emiSelect-slice'
-import { currencyFormat, getCountryCode } from '@utils/general'
+import { currencyFormat } from '@utils/general'
 import Router from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -21,13 +20,13 @@ const NewPaymentOverView = () => {
   // const selectedEmi = useSelector((state: any) => state.selectedEmi.apiResponse[0]?.message.order.items) || 0
   // const processingFee =
   //   useSelector((state: any) => state.selectedEmi.apiResponse[0]?.message.order.provider.short_desc) || 0
-  const coverage = useSelector((state: any) => state.selectedEmi.apiResponse[0]?.message.order.items[0]?.code) || 0
+  const coverage = useSelector((state: any) => state.discoveryEmiPlan.products[0]?.item[0]?.code) || 0
   // const monthlyInstallment = useSelector((state: any) => state.selectedEmi.emiDetails)
   const [totalValue, setTotalValue] = useState<{ total: number; discountAmount: number }>({
     total: 0,
     discountAmount: 0
   })
-
+  const [selectedEmiPlan, setSelectedEmiPlan] = useState<string | null>(null)
   const [payableValue, setPayableValue] = useState<number>()
   const cartItems = useSelector((state: ICartRootState) => state.cart.items)
   const dispatch = useDispatch()
@@ -133,7 +132,7 @@ const NewPaymentOverView = () => {
                         color="#4398E8"
                         fontWeight="600"
                         fontSize="12px"
-                        text={` ${currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}${currencyFormat(Number(items.price.value) * items.quantity)}`}
+                        text={`₹ ${currencyFormat(Number(items.price.value) * items.quantity)}`}
                       />
                     </Box>
                   </Flex>
@@ -162,8 +161,8 @@ const NewPaymentOverView = () => {
             <Flex alignItems={'center'}>
               <Typography
                 fontSize="15px"
-                text={currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}
-                // style={{ paddingRight: '2px' }}
+                text={'Rs.'}
+                style={{ paddingRight: '2px' }}
               />
               <Typography
                 fontSize="15px"
@@ -182,8 +181,8 @@ const NewPaymentOverView = () => {
             <Flex alignItems={'center'}>
               <Typography
                 fontSize="15px"
-                text={`-${currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}`}
-                // style={{ paddingRight: '2px' }}
+                text={'-Rs.'}
+                style={{ paddingRight: '2px' }}
               />
               <Typography
                 fontSize="15px"
@@ -210,8 +209,8 @@ const NewPaymentOverView = () => {
               <Typography
                 fontSize="15px"
                 fontWeight="600"
-                text={currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}
-                // style={{ paddingRight: '2px' }}
+                text={'Rs.'}
+                style={{ paddingRight: '2px' }}
               />
               <Typography
                 fontSize="15px"

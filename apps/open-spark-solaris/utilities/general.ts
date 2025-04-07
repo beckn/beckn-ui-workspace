@@ -1,5 +1,4 @@
 import { DocumentPayload } from '@lib/types/becknDid'
-import Cookies from 'js-cookie'
 
 export const formatFileSize = (bytes: number): string => {
   const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']
@@ -9,7 +8,7 @@ export const formatFileSize = (bytes: number): string => {
 }
 
 export const getMaskedMobileNumber = (phoneNumber: string) => {
-  return `${phoneNumber.slice(0, 2)}XXXX${phoneNumber.slice(-3)}`
+  return `+91 ${phoneNumber.slice(0, 2)}XXXX${phoneNumber.slice(-3)}`
 }
 
 export const extractMobileNumberFromSubjectDid = (subject: string) => {
@@ -69,12 +68,6 @@ export const currencyFormat = (price: number | undefined) => {
   return price ? new Intl.NumberFormat('en-GB').format(price) : null
 }
 
-export const formatTime = (timestamp: number | null) => {
-  if (!timestamp) return 'N/A'
-  const date = new Date(timestamp)
-  return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })
-}
-
 // Add this helper function to round up time to nearest hour
 export const roundToNextHour = (date: Date) => {
   const roundedDate = new Date(date)
@@ -86,9 +79,4 @@ export const roundToNextHour = (date: Date) => {
   roundedDate.setSeconds(0)
   roundedDate.setMilliseconds(0)
   return roundedDate
-}
-
-export const getCountryCode = (): { country: { name: string; code: string } } => {
-  const countryCode = Cookies.get('country_code')
-  return countryCode ? JSON.parse(countryCode) : { country: { name: 'United States', code: 'USA' } }
 }

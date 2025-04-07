@@ -12,7 +12,6 @@ import { Box } from '@chakra-ui/react'
 import { parseSearchlist } from '@utils/search-utils'
 import { RootState } from '@store/index'
 import { initDB, getFromCache, setInCache } from '@utils/indexedDB'
-import { getCountryCode } from '@utils/general'
 
 const Search = () => {
   const type = useSelector((state: RootState) => state.navigation.type)
@@ -60,8 +59,7 @@ const Search = () => {
     try {
       const searchPayload = {
         context: {
-          domain: type === 'RENT_AND_HIRE' ? 'deg:rental' : 'deg:retail',
-          location: getCountryCode()
+          domain: type === 'RENT_AND_HIRE' ? 'deg:rental' : 'deg:retail'
         },
         searchString: searchKeyword
       }
@@ -165,7 +163,7 @@ const Search = () => {
           loadingSubText:
             type === 'RENT_AND_HIRE'
               ? 'fetching catalogues from the UEI network'
-              : 'fetching catalogues from the Open network',
+              : 'fetching catalogues from the ONDC network',
           dataTest: testIds.loadingIndicator
           // image: type === 'RENT_AND_HIRE' ? './images/loder-img.svg' : './images/loder-img-1.svg'
         }}

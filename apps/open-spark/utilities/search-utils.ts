@@ -35,11 +35,11 @@ export const parseSearchlist = (data: SearchResponseModel[], type?: 'RENT_AND_HI
           const startTimestamp = fulfillmentStart ? Number(fulfillmentStart.state?.name || 0) : null
           const endTimestamp = fulfillmentEnd ? Number(fulfillmentEnd.state?.name || 0) : null
 
-          const startTime = formatTime(startTimestamp! * 1000)
-          const endTime = formatTime(endTimestamp! * 1000)
+          const startTime = formatTime(startTimestamp)
+          const endTime = formatTime(endTimestamp)
 
-          const startDate = formatDate(Number(startTimestamp! * 1000), 'dd/MM/yy')
-          const endDate = formatDate(Number(endTimestamp! * 1000), 'dd/MM/yy')
+          const startDate = formatDate(Number(startTimestamp)!, 'dd/MM/yy')
+          const endDate = formatDate(Number(endTimestamp)!, 'dd/MM/yy')
 
           if (type === 'RENT_AND_HIRE') {
             itemData = {
