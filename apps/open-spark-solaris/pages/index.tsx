@@ -157,7 +157,7 @@ const HomePage = () => {
               text="My Services"
               textStyle="start"
               postIcon={<MdOutlineKeyboardArrowRight />}
-              handleClick={() => router.push('/orderHistory')}
+              handleClick={() => router.push('/myServices')}
               dataTest="store_button"
               sx={buttonStyles}
             />
