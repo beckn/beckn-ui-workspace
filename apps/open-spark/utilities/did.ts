@@ -23,7 +23,8 @@ export const parseDIDData = (data: { did: string; attestations?: AttestationData
         type: formatType(parts[2]), // Convert to title case
         id: parts[4],
         did,
-        attestations: attestations!
+        attestations: attestations!,
+        createdAt: parts[6]
       })
     } else if (parts[0] === 'assets') {
       const category = parts[1] // credentials | physical
@@ -34,7 +35,8 @@ export const parseDIDData = (data: { did: string; attestations?: AttestationData
           name: formatType(parts[5]),
           //   attachment,
           did,
-          attestations: attestations!
+          attestations: attestations!,
+          createdAt: parts[7]
         })
       } else if (category === 'physical') {
         const attachment = fileRegex.test(parts[6] || '') ? parts[6] : null
@@ -43,7 +45,8 @@ export const parseDIDData = (data: { did: string; attestations?: AttestationData
           source: parts[5],
           attachment,
           did,
-          attestations: attestations!
+          attestations: attestations!,
+          createdAt: parts[6]
         })
       }
     } else if (parts[0] === 'transactions') {

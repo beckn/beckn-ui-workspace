@@ -50,7 +50,6 @@ export const parseDIDData = (data: { did: string; attestations?: AttestationData
         })
       }
     } else if (parts[0] === 'transactions') {
-      console.log(parts)
       result.transactions.push({
         type: formatType(parts[2]),
         category: formatType(parts[3]),
