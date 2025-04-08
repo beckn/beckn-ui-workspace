@@ -199,7 +199,6 @@ const PhysicalAssets = () => {
       }
       setIsLoading(true)
 
-      const docDetails = JSON.stringify(data)
       const createdAt = Math.floor(new Date().getTime() / 1000)
       let generatedOrderId = generateRandomCode()
       const verificationMethodsRes = await getVerificationMethods(user?.did!).unwrap()
@@ -211,6 +210,8 @@ const PhysicalAssets = () => {
         data.confirmDetails = orderConfirmationData
         generatedOrderId = orderConfirmationData[0].message.order.id
       }
+
+      const docDetails = JSON.stringify(data)
 
       let attachments = null
       if (selectedFile) {
