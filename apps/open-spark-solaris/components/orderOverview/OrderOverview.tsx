@@ -4,6 +4,8 @@ import { Box, Flex, Image } from '@chakra-ui/react'
 import completedIcon from '../../public/images/completed.svg'
 import pendingIcon from '../../public/images/pendingYellow.svg'
 import React from 'react'
+import { currencyMap } from '@lib/config'
+import { getCountryCode } from '@utils/general'
 
 export type OrderItem = {
   batteryType: string
@@ -102,7 +104,7 @@ const OrderOverview: React.FC<OrderOverviewProps> = ({ items, showPriceAndStatus
             >
               <Typography
                 color="#228B22"
-                text={`Rs. ${item.price}`}
+                text={`${currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}${item.price}`}
               />
               <Flex alignItems="center">
                 <Image
