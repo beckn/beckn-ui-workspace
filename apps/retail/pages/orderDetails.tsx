@@ -842,6 +842,12 @@ const OrderDetails = () => {
                     dataTest={testIds.orderDetailspage_orderId}
                     fontSize="17px"
                     fontWeight="600"
+                    sx={{
+                      w: '230px',
+                      textOverflow: 'ellipsis',
+                      overflow: 'hidden',
+                      whiteSpace: 'nowrap'
+                    }}
                   />
                   <Image
                     onClick={handleOrderDotsClick}

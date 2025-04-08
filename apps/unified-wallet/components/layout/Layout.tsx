@@ -96,7 +96,7 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   return (
     <div>
       <Head>
-        <title>Wallet</title>
+        <title>Open Wallet</title>
       </Head>
       <div className={`${styles.container} ${styles.minHeight}`}>
         <NextNProgress height={7} />

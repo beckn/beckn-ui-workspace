@@ -11,8 +11,7 @@ import { testIds } from '@shared/dataTestIds'
 import { Box } from '@chakra-ui/react'
 import { parseSearchlist } from '@utils/search-utils'
 import { RootState } from '@store/index'
-import { initDB, getFromCache, setInCache } from '@utils/indexedDB'
-import { getCountryCode } from '@utils/general'
+// import { initDB, getFromCache, setInCache } from '@utils/indexedDB'
 
 const Search = () => {
   const type = useSelector((state: RootState) => state.navigation.type)
@@ -31,49 +30,47 @@ const Search = () => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
   // Initialize IndexedDB when component mounts
-  useEffect(() => {
-    initDB().catch(console.error)
-  }, [])
+  // useEffect(() => {
+  //   initDB().catch(console.error)
+  // }, [])
 
   const fetchDataForSearch = async () => {
     if (!searchKeyword || !type) return
 
     // Create cache key with type prefix
-    const cacheKey =
-      type === 'RENT_AND_HIRE' ? `rental_${searchKeyword.toLowerCase()}` : `retail_${searchKeyword.toLowerCase()}`
+    // const cacheKey =
+    //   type === 'RENT_AND_HIRE' ? `rental_${searchKeyword.toLowerCase()}` : `retail_${searchKeyword.toLowerCase()}`
 
-    try {
-      const cachedResults = await getFromCache(cacheKey)
-      if (cachedResults) {
-        console.log(`Getting ${type} results from cache`)
-        setItems(cachedResults)
-        setOriginalItems(cachedResults)
-        dispatch(discoveryActions.addProducts({ products: cachedResults }))
-        return
-      }
-    } catch (error) {
-      console.error('Cache read error:', error)
-    }
+    // try {
+    // const cachedResults = await getFromCache(cacheKey)
+    //   if (cachedResults) {
+    //     console.log(`Getting ${type} results from cache`)
+    //     setItems(cachedResults)
+    //     setOriginalItems(cachedResults)
+    //     dispatch(discoveryActions.addProducts({ products: cachedResults }))
+    //     return
+    //   }
+    // } catch (error) {
+    //   console.error('Cache read error:', error)
+    // }
 
     setIsLoading(true)
 
     try {
       const searchPayload = {
         context: {
-          domain: type === 'RENT_AND_HIRE' ? 'deg:rental' : 'deg:retail',
-          location: getCountryCode()
+          domain: type === 'RENT_AND_HIRE' ? 'deg:rental' : 'deg:retail'
         },
         searchString: searchKeyword
       }
 
       const res = await axios.post(`${apiUrl}/search`, searchPayload)
       dispatch(discoveryActions.addTransactionId({ transactionId: res.data.data[0].context.transaction_id }))
-      const parsedSearchItems = parseSearchlist(res.data.data, type)
-      console.log('Dank inside', parsedSearchItems)
+      const parsedSearchItems = parseSearchlist(res.data.data)
       dispatch(discoveryActions.addProducts({ products: parsedSearchItems }))
 
       // Cache the results with type-specific prefix
-      await setInCache(cacheKey, parsedSearchItems)
+      // await setInCache(cacheKey, parsedSearchItems)
 
       setItems(parsedSearchItems)
       setOriginalItems(parsedSearchItems)
@@ -93,7 +90,7 @@ const Search = () => {
   }, [searchKeyword])
 
   const handleFilterOpen = () => {
-    // setIsFilterOpen(!isFilterOpen)
+    setIsFilterOpen(!isFilterOpen)
   }
 
   const handleFilterClose = () => {
@@ -123,12 +120,7 @@ const Search = () => {
 
   const handleViewDetailsClickHandler = (selectedItem: ParsedItemModel, product: Product) => {
     const { item } = selectedItem
-    console.log('Dank inside', selectedItem)
-    dispatch(
-      discoveryActions.addSingleProduct({
-        product: { ...selectedItem, providerName: product?.productInfo?.providerName || product?.name }
-      })
-    )
+    dispatch(discoveryActions.addSingleProduct({ product: selectedItem }))
     router.push({
       pathname: '/product',
       query: {
@@ -145,10 +137,6 @@ const Search = () => {
         items={items}
         searchProps={{
           searchKeyword: searchKeyword as string,
-          placeholder:
-            type === 'RENT_AND_HIRE'
-              ? 'Search for Batteries, Capacity, Availability'
-              : 'Search for Batteries, Solar panels...',
           setSearchKeyword,
           fetchDataOnSearch: fetchDataForSearch
         }}
@@ -162,12 +150,9 @@ const Search = () => {
         loaderProps={{
           isLoading,
           loadingText: 'Please wait!',
-          loadingSubText:
-            type === 'RENT_AND_HIRE'
-              ? 'fetching catalogues from the Open network'
-              : 'fetching catalogues from the Open network',
-          dataTest: testIds.loadingIndicator
-          // image: type === 'RENT_AND_HIRE' ? './images/loder-img.svg' : './images/loder-img-1.svg'
+          loadingSubText: 'While we fetch catalogues from UEI',
+          dataTest: testIds.loadingIndicator,
+          image: './images/loder-img.svg'
         }}
         catalogProps={{
           viewDetailsClickHandler: handleViewDetailsClickHandler

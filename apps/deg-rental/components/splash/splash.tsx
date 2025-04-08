@@ -1,0 +1,25 @@
+import { Box, Flex, Image } from '@chakra-ui/react'
+import React from 'react'
+
+const Splash = () => {
+  return (
+    <Flex
+      flexDirection={'column'}
+      justifyContent={'center'}
+      alignItems="center"
+      height="100vh"
+      background="#E4FFE4"
+    >
+      <Image
+        src="./images/rental_app_logo.svg"
+        alt="splash-img"
+        mb="20px"
+      />
+      <Image
+        src="./images/footer_splash.svg"
+        alt="splash-footer-img"
+      />
+    </Flex>
+  )
+}
+export default Splash

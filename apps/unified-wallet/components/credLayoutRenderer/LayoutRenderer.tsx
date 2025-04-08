@@ -92,8 +92,7 @@ const CredLayoutRenderer: React.FC<CredLayoutRendererProps> = ({
     <Box
       maxWidth={{ base: '100vw', md: '30rem', lg: '40rem' }}
       margin="calc(0rem + 0px) auto auto auto"
-      // backgroundColor="white"
-      className="connection_search"
+      backgroundColor="white"
     >
       <Box
         display="flex"

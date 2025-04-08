@@ -7,11 +7,11 @@ import { ConfirmationPage } from '@beckn-ui/becknified-components'
 import axios from '@services/axios'
 import { Box } from '@chakra-ui/react'
 import Cookies from 'js-cookie'
-import { LoaderWithMessage } from '@beckn-ui/molecules'
-import { ConfirmResponseModel, ICartRootState } from '@beckn-ui/common/lib/types'
+import { LoaderWithMessage, utilGenerateEllipsedText } from '@beckn-ui/molecules'
+import { ConfirmResponseModel } from '@beckn-ui/common/lib/types'
 import { checkoutActions, CheckoutRootState } from '@beckn-ui/common/src/store/checkout-slice'
 import { orderActions } from '@beckn-ui/common/src/store/order-slice'
-// import { getPayloadForOrderHistoryPost } from '@beckn-ui/common/src/utils'
+import { getPayloadForConfirm, getPayloadForOrderHistoryPost } from '@beckn-ui/common/src/utils'
 import { useConfirmMutation } from '@beckn-ui/common/src/services/confirm'
 import { testIds } from '@shared/dataTestIds'
 import {
@@ -21,16 +21,15 @@ import {
   ROLE,
   ROUTE_TYPE
 } from '../lib/config'
-import { cartActions, formatDate } from '@beckn-ui/common'
+import { cartActions } from '@beckn-ui/common'
 import { RootState } from '@store/index'
+import { OrderHistoryData } from '@lib/types/orderHistory'
 import { useAddDocumentMutation, useGetVerificationMethodsMutation } from '@services/walletService'
 import { generateAuthHeader, generateKeyPairFromString } from '@services/cryptoUtilService'
 import { AuthRootState } from '@store/auth-slice'
-import { extractAuthAndHeader, getCountryCode, toBase64 } from '@utils/general'
+import { extractAuthAndHeader, toBase64, toSnakeCase } from '@utils/general'
 import { feedbackActions } from '@beckn-ui/common'
 import { getRentalPayloadForConfirm } from '@utils/confirm-utils'
-import { getPayloadForConfirm, getPayloadForOrderHistoryPost } from '@utils/payload'
-import { calculateDuration } from '@utils/checkout-util'
 
 const retailOrderConfirmation = () => {
   const { t } = useLanguage()
@@ -50,23 +49,6 @@ const retailOrderConfirmation = () => {
     toTime: localStorage.getItem('toTimestamp')
   })
   const [toTimestamp, setToTimestamp] = useState<string>()
-  const [fromTime, setFromTime] = useState<string>()
-  const [toTime, setToTime] = useState<string>()
-  const [duration, setDuration] = useState<number>()
-
-  // useEffect(() => {
-  //   const storedFromTime = localStorage.getItem('fromTimestamp')
-  //   const storedToTime = localStorage.getItem('toTimestamp')
-  //   const formatedFromTime = formatDate(Number(storedFromTime) * 1000, 'h:mm a') as string
-  //   const formatedToTime = formatDate(Number(storedToTime) * 1000, 'h:mm a') as string
-  //   setFromTime(formatedFromTime)
-  //   setToTime(formatedToTime)
-
-  //   if (formatedFromTime && formatedToTime) {
-  //     const calculatedDuration = calculateDuration(formatedFromTime, formatedToTime)
-  //     setDuration(calculatedDuration)
-  //   }
-  // }, [])
 
   // useEffect(() => {
   //   const fromTimestamp = localStorage.getItem('fromTimestamp')
@@ -79,7 +61,6 @@ const retailOrderConfirmation = () => {
 
   const initResponse = useSelector((state: CheckoutRootState) => state.checkout.initResponse)
   const confirmResponse = useSelector((state: CheckoutRootState) => state.checkout.confirmResponse)
-  const cartItems = useSelector((state: ICartRootState) => state.cart.items)
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
 
   const getOrderCategoryId = (type: any) => {
@@ -140,25 +121,23 @@ const retailOrderConfirmation = () => {
   }
 
   const handleOnAddToWallet = async () => {
-    if (!confirmResponse) return
+    const orderConfirmationData = confirmResponse
+    if (orderConfirmationData) {
+      try {
+        const subjectKey = user?.deg_wallet?.deg_wallet_id.replace('/subjects/', '')
+        const { publicKey, privateKey } = await generateKeyPairFromString(subjectKey!)
 
-    try {
-      const subjectKey = user?.deg_wallet?.deg_wallet_id.replace('/subjects/', '')
-      const { publicKey, privateKey } = await generateKeyPairFromString(subjectKey!)
+        const data: any = orderConfirmationData
 
-      const verificationMethodsRes = await getVerificationMethods(user?.deg_wallet?.deg_wallet_id!).unwrap()
-      const { did, challenge } = verificationMethodsRes[0]
+        const docDetails = JSON.stringify(data)
 
-      // Process each confirmation response
-      for (const response of confirmResponse) {
-        const { context, message } = response
-        const generatedOrderId = message.orderId
-        const totalPrice = message.quote.price.value
-        const totalItems = message.items.length
-        const totalItemsStr = extractItemsWithProvider([response]) // Process per index
-        const orderPlacedAt = Math.floor(new Date(context.timestamp).getTime() / 1000)
+        const verificationMethodsRes = await getVerificationMethods(user?.deg_wallet?.deg_wallet_id!).unwrap()
+        const { did, challenge } = verificationMethodsRes[0]
 
-        const docDetails = JSON.stringify(response)
+        const generatedOrderId = confirmResponse[0].message.orderId
+        const totalPrice = confirmResponse[0].message.quote.price.value
+        const totalItems = confirmResponse[0].message.items.length
+        const totalItemsStr = extractItemsWithProvider(confirmResponse)
 
         const authHeaderRes = await generateAuthHeader({
           subjectId: user?.deg_wallet?.deg_wallet_id!,
@@ -166,11 +145,10 @@ const retailOrderConfirmation = () => {
           privateKey,
           publicKey,
           payload: {
-            name: `transactions/type/rental/energy/id/${generatedOrderId}/amount/${totalPrice}/item_str/${totalItemsStr}/${orderPlacedAt}`,
+            name: `transactions/type/domain/energy/id/${generatedOrderId}/amount/${totalPrice}/total_items/${totalItems}/item_str/${totalItemsStr}`,
             stream: toBase64(docDetails)
           }
         })
-
         const { authorization, payload } = extractAuthAndHeader(authHeaderRes)
         if (authorization && payload) {
           const addDocPayload = {
@@ -183,129 +161,111 @@ const retailOrderConfirmation = () => {
           console.log(res)
           await attestDocument(res?.[0]?.did, 'TRANSACTION')
 
-          // Show success message for each index processed
           // dispatch(
           //   feedbackActions.setToastData({
-          //     toastData: {
-          //       message: 'Success',
-          //       display: true,
-          //       type: 'success',
-          //       description: `Order ${generatedOrderId} added successfully!`
-          //     }
+          //     toastData: { message: 'Success', display: true, type: 'success', description: 'Added Successfully!' }
           //   })
           // )
         } else {
           dispatch(
             feedbackActions.setToastData({
-              toastData: {
-                message: 'Error',
-                display: true,
-                type: 'error',
-                description: `Failed to add order ${generatedOrderId}.`
-              }
+              toastData: { message: 'Error', display: true, type: 'error', description: 'Something went wrong!' }
             })
           )
         }
+      } catch (error) {
+        console.error('An error occurred:', error)
       }
-    } catch (error) {
-      console.error('An error occurred:', error)
-      dispatch(
-        feedbackActions.setToastData({
-          toastData: {
-            message: 'Error',
-            display: true,
-            type: 'error',
-            description: 'Something went wrong!'
+    }
+  }
+
+  const handleOnAddToPhysicalAsset = async () => {
+    const orderConfirmationData = confirmResponse
+    if (orderConfirmationData) {
+      try {
+        const subjectKey = user?.deg_wallet?.deg_wallet_id.replace('/subjects/', '')
+        const { publicKey, privateKey } = await generateKeyPairFromString(subjectKey!)
+        const totalItemsStr = extractItemsWithProvider(confirmResponse[0].message.items[0].name)
+
+        const data: any = {
+          type: totalItemsStr,
+          confirmDetails: confirmResponse
+        }
+
+        const docDetails = JSON.stringify(data)
+
+        const verificationMethodsRes = await getVerificationMethods(user?.deg_wallet?.deg_wallet_id!).unwrap()
+        const { did, challenge } = verificationMethodsRes[0]
+
+        const authHeaderRes = await generateAuthHeader({
+          subjectId: user?.deg_wallet?.deg_wallet_id!,
+          verification_did: did,
+          privateKey,
+          publicKey,
+          payload: {
+            name: `assets/physical/type/${toSnakeCase(data?.type!)}/source/spark`,
+            stream: toBase64(docDetails)
           }
         })
-      )
+        const { authorization, payload } = extractAuthAndHeader(authHeaderRes)
+        if (authorization && payload) {
+          const addDocPayload = {
+            subjectId: user?.deg_wallet?.deg_wallet_id!,
+            payload,
+            authorization
+          }
+
+          const res: any = await addDocument(addDocPayload).unwrap()
+          console.log(res)
+          await attestDocument(res?.[0]?.did, 'PHYSICAL_ASSETS')
+
+          // dispatch(
+          //   feedbackActions.setToastData({
+          //     toastData: { message: 'Success', display: true, type: 'success', description: 'Added Successfully!' }
+          //   })
+          // )
+        } else {
+          dispatch(
+            feedbackActions.setToastData({
+              toastData: { message: 'Error', display: true, type: 'error', description: 'Something went wrong!' }
+            })
+          )
+        }
+      } catch (error) {
+        console.error('An error occurred:', error)
+      }
     }
   }
 
   useEffect(() => {
     if (confirmResponse && confirmResponse.length > 0) {
       setOrderId(confirmResponse[0].message.orderId.slice(0, 8))
-      if (user?.deg_wallet && user?.deg_wallet.energy_transactions_consent) {
-        handleOnAddToWallet()
+      handleOnAddToWallet()
+      if (type === 'MY_STORE') {
+        handleOnAddToPhysicalAsset()
       }
     }
   }, [confirmResponse])
 
-  const getCartItemsWithQuantity = () => {
-    const cartItemQuantity: Record<string, any> = {}
-    const initItemsBreakupPrice: Record<string, any> = {}
-
-    initResponse.forEach(initData => {
-      const paymentBreakup: any = initData.message.order.quote.breakup
-      paymentBreakup.forEach((item: any) => {
-        if (initItemsBreakupPrice[item.item.id]) {
-          initItemsBreakupPrice[item.item.id][item.title] = item.price.value
-        } else {
-          initItemsBreakupPrice[item.item.id] = {}
-          initItemsBreakupPrice[item.item.id][item.title] = item.price.value
-        }
-      })
-    })
-
-    cartItems.forEach((item: any) => {
-      const itemTotalPrice =
-        Number(item.price.value) * item.quantity + Number(initItemsBreakupPrice?.[item.id]?.['Delivery Charge'] || 0)
-
-      if (!cartItemQuantity[item.providerId]) {
-        cartItemQuantity[item.providerId] = { totalPrice: 0 }
-      }
-
-      cartItemQuantity[item.providerId][item.id] = {
-        id: item.id,
-        quantity: item.quantity,
-        totalPrice: itemTotalPrice
-      }
-
-      cartItemQuantity[item.providerId]['totalPrice'] += itemTotalPrice
-    })
-
-    return cartItemQuantity
-  }
-
-  console.log(getCartItemsWithQuantity())
   useEffect(() => {
-    const storedFromTime = Number(localStorage.getItem('fromTimestamp')) * 1000
-    const storedToTime = Number(localStorage.getItem('toTimestamp')) * 1000
-    const formatedFromTime = formatDate(storedFromTime, 'dd/MM/yy, h:mm a') as string
-    const formatedToTime = formatDate(storedToTime, 'dd/MM/yy, h:mm a') as string
-    setFromTime(formatedFromTime)
-    setToTime(formatedToTime)
-
-    // if (formatedFromTime && formatedToTime) {
-    const calculatedDuration = calculateDuration(storedFromTime, storedToTime)
-    //   setDuration(calculatedDuration)
-    // }
     if (initResponse && initResponse.length > 0) {
       const payload =
         type === 'RENT_AND_HIRE'
-          ? getRentalPayloadForConfirm(initResponse, timestamp.fromTime!, timestamp.toTime!, calculatedDuration!, {
-              location: getCountryCode()
-            })
-          : getPayloadForConfirm(initResponse, getCartItemsWithQuantity()) // fixed temporary once Rahul fixes the changes regarding dynamic price calculation on BE revert the chnges and do the fixes accord.
+          ? getRentalPayloadForConfirm(initResponse, timestamp.fromTime!, timestamp.toTime!)
+          : getPayloadForConfirm(initResponse)
       confirm(payload)
     }
   }, [initResponse, timestamp])
 
   useEffect(() => {
     if (confirmResponse && confirmResponse.length > 0) {
-      const ordersPayload = getPayloadForOrderHistoryPost(
-        confirmResponse,
-        getOrderCategoryId(type),
-        getCartItemsWithQuantity()
-      ) // fixed temporary once Rahul fixes the changes regarding dynamic price calculation on BE revert the chnges and do the fixes accord.
-      ordersPayload.data.forEach(payload => {
-        axios
-          .post(`${strapiUrl}/unified-beckn-energy/order-history/create`, payload, axiosConfig)
-          .then(res => {
-            return res
-          })
-          .catch(err => console.error(err))
-      })
+      const ordersPayload = getPayloadForOrderHistoryPost(confirmResponse, getOrderCategoryId(type))
+      axios
+        .post(`${strapiUrl}/unified-beckn-energy/order-history/create`, ordersPayload, axiosConfig)
+        .then(res => {
+          return res
+        })
+        .catch(err => console.error(err))
     }
   }, [confirmResponse])
 
@@ -337,26 +297,18 @@ const retailOrderConfirmation = () => {
             {
               text: type === 'RENT_AND_HIRE' ? 'View My Rentals' : 'View Order Details',
               handleClick: () => {
-                if (confirmResponse && confirmResponse.length > 0) {
-                  const selectedOrders = confirmResponse.map(response => {
-                    const orderId = response.message.orderId
-                    const bppId = response.context.bpp_id
-                    const bppUri = response.context.bpp_uri
+                const orderId = confirmResponse[0].message.orderId
+                const bppId = confirmResponse[0].context.bpp_id
+                const bppUri = confirmResponse[0].context.bpp_uri
 
-                    return { orderId, bppId, bppUri }
-                  })
-
-                  // Dispatch each order separately
-                  selectedOrders.forEach(orderDetails => {
-                    dispatch(orderActions.addSelectedOrder({ orderDetails }))
-
-                    // Save each order in localStorage
-                    localStorage.setItem('selectedOrder', JSON.stringify(orderDetails))
-                  })
-
-                  dispatch(checkoutActions.clearState())
+                dispatch(orderActions.addSelectedOrder({ orderDetails: { orderId, bppId, bppUri } }))
+                const orderObjectForStatusCall = {
+                  bppId: bppId,
+                  bppUri: bppUri,
+                  orderId: orderId
                 }
-
+                localStorage.setItem('selectedOrder', JSON.stringify(orderObjectForStatusCall))
+                dispatch(checkoutActions.clearState())
                 if (type === 'RENT_AND_HIRE') {
                   router.push('/myRental')
                 } else {

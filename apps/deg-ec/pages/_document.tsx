@@ -22,7 +22,7 @@ export default function Document() {
         />
         <link
           rel="shortcut icon"
-          href="/images/openCommerce_header.svg"
+          href="/images/app_logo.png"
         />
       </Head>
       <body>

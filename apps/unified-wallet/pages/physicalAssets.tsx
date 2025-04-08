@@ -14,9 +14,16 @@ import {
   useGetVerificationMethodsMutation
 } from '@services/walletService'
 import { parseDIDData } from '@utils/did'
-import { extractAuthAndHeader, filterByKeyword, generateRandomCode, toBase64, toSnakeCase } from '@utils/general'
+import {
+  extractAuthAndHeader,
+  extractMobileNumberFromSubjectDid,
+  filterByKeyword,
+  generateRandomCode,
+  toBase64,
+  toSnakeCase
+} from '@utils/general'
 import { generateAuthHeader, generateAuthHeaderForDelete } from '@services/cryptoUtilService'
-import { feedbackActions, formatDate } from '@beckn-ui/common'
+import { ConfirmResponseModel, feedbackActions, formatDate } from '@beckn-ui/common'
 import { useRouter } from 'next/router'
 import { ItemMetaData } from '@components/credLayoutRenderer/ItemRenderer'
 import axios from '@services/axios'
@@ -24,6 +31,8 @@ import { ROLE, ROUTE_TYPE } from '@lib/config'
 import DeleteAlertModal from '@components/modal/DeleteAlertModal'
 import { Box } from '@chakra-ui/react'
 import { useUploadFileMutation } from '@services/UserService'
+import QRCodeScanner from '@components/QRCode/QRScanner'
+import { UserRootState } from '@store/user-slice'
 
 const options = [
   { label: 'Battery', value: 'Battery' },
@@ -32,6 +41,7 @@ const options = [
 
 const PhysicalAssets = () => {
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
   const [items, setItems] = useState<ItemMetaData[]>([])
   const [filteredItems, setFilteredItems] = useState(items)
@@ -41,6 +51,8 @@ const PhysicalAssets = () => {
   const [selectedFile, setSelectedFile] = useState<DocumentProps>()
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false)
   const [deleteItemDetails, setDeleteItemDetails] = useState<ItemMetaData>()
+  const [showScanner, setShowScanner] = useState(false)
+  const [confirmResOfQRScannedData, setConfirmResOfQRScannedData] = useState<any>(null)
 
   const [formData, setFormData] = useState<FormProps>({
     type: '',
@@ -134,21 +146,43 @@ const PhysicalAssets = () => {
     }
   }
 
-  const handleOnSubmit = async () => {
+  const extractItemsWithProvider = (orders: ConfirmResponseModel[] | string): string => {
+    if (!orders || (Array.isArray(orders) && orders.length === 0)) return ''
+
+    if (typeof orders === 'string') {
+      return orders.length > 50 ? orders.slice(0, 47) + '...' : orders
+    }
+
+    return orders
+      .map(order => {
+        const providerName = order.message.provider.name
+        const itemNames = order.message.items.map((item: any) => item.name).join(', ')
+        let result = `${itemNames} by ${providerName}`
+
+        return result.length > 50 ? result.slice(0, 47) + '...' : result
+      })
+      .join('; ')
+  }
+
+  const handleOnSubmit = async (statusRes?: any) => {
     try {
-      const errors = validateCredForm(formData) as any
-      delete errors?.url
-      setFormErrors(prevErrors => ({
-        ...prevErrors,
-        ...Object.keys(errors).reduce((acc: any, key) => {
-          acc[key] = t[`${errors[key]}`] || ''
-          return acc
-        }, {} as CredFormErrors)
-      }))
+      const orderConfirmationData = statusRes
+      if (!orderConfirmationData) {
+        const errors = validateCredForm(formData) as any
+        delete errors?.url
+        setFormErrors(prevErrors => ({
+          ...prevErrors,
+          ...Object.keys(errors).reduce((acc: any, key) => {
+            acc[key] = t[`${errors[key]}`] || ''
+            return acc
+          }, {} as CredFormErrors)
+        }))
+      }
 
       const data: any = {
         type: formData.type
       }
+
       if (selectedFile) {
         if (selectedFile.file.size > 1 * 1024 * 1024) {
           dispatch(
@@ -171,10 +205,20 @@ const PhysicalAssets = () => {
       }
       setIsLoading(true)
 
-      const docDetails = JSON.stringify(data)
       const createdAt = Math.floor(new Date().getTime() / 1000)
+      let generatedOrderId = generateRandomCode()
       const verificationMethodsRes = await getVerificationMethods(user?.did!).unwrap()
       const { did } = verificationMethodsRes[0]
+
+      if (orderConfirmationData) {
+        const totalItemsStr = extractItemsWithProvider(orderConfirmationData[0].message.order.items[0].name)
+        data.type = totalItemsStr
+        data.confirmDetails = orderConfirmationData
+        generatedOrderId = orderConfirmationData[0].message.order.id
+      }
+
+      const docDetails = JSON.stringify(data)
+
       let attachments = null
       if (selectedFile) {
         attachments = selectedFile?.title
@@ -186,7 +230,7 @@ const PhysicalAssets = () => {
         privateKey,
         publicKey,
         payload: {
-          name: `assets/physical/type/${toSnakeCase(data?.type!)}/source/wallet/${createdAt}${attachments ? '/' + attachments : ''}/${generateRandomCode()}`,
+          name: `assets/physical/type/${toSnakeCase(data?.type!)}/source/wallet/${createdAt}${attachments ? '/' + attachments : ''}/${generatedOrderId}`,
           stream: toBase64(docDetails)
         }
       })
@@ -411,6 +455,43 @@ const PhysicalAssets = () => {
     })
   }
 
+  const handleOpenScanner = () => {
+    setShowScanner(true)
+  }
+
+  const getOrderStatusData = (scannedData: any) => {
+    if (
+      user?.did &&
+      scannedData &&
+      scannedData?.userPhone === extractMobileNumberFromSubjectDid(user?.did) &&
+      scannedData?.payload
+    ) {
+      setIsLoading(true)
+      axios
+        .post(`${apiUrl}/status`, scannedData.payload)
+        .then(res => {
+          handleOnSubmit(res.data.data)
+        })
+        .catch(err => {
+          console.error('Error fetching asset status:', err)
+        })
+        .finally(() => {
+          setIsLoading(false)
+        })
+    } else {
+      dispatch(
+        feedbackActions.setToastData({
+          toastData: {
+            message: 'Invalid QR code!',
+            display: true,
+            type: 'error',
+            description: 'Please scan a valid QR code.'
+          }
+        })
+      )
+    }
+  }
+
   return (
     <Box
       className="hideScroll"
@@ -443,6 +524,14 @@ const PhysicalAssets = () => {
                   variant: 'solid',
                   colorScheme: 'primary',
                   isLoading: isLoading
+                },
+                {
+                  text: 'Scan QR Code',
+                  handleClick: handleOpenScanner,
+                  disabled: false,
+                  variant: 'outline',
+                  colorScheme: 'primary',
+                  isLoading: false
                 }
               ]
             },
@@ -461,6 +550,11 @@ const PhysicalAssets = () => {
         onClose={() => setIsDeleteModalOpen(false)}
         handleConfirmDeleteDevice={() => handleDeleteItem(deleteItemDetails!)}
         isLoading={false}
+      />
+      <QRCodeScanner
+        showScanner={showScanner}
+        setShowScanner={setShowScanner}
+        setScannedData={scannedData => getOrderStatusData(scannedData)}
       />
     </Box>
   )

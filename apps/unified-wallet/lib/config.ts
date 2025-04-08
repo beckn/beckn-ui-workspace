@@ -2,9 +2,7 @@ export const currencyMap = {
   EUR: '€',
   INR: '₹',
   USD: '$',
-  GMD: 'D',
-  USA: '$',
-  IND: '₹'
+  GMD: 'D'
 }
 
 export enum ROLE {

@@ -1,42 +1,105 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import type React from 'react'
-import { Box, Flex, Text } from '@chakra-ui/react'
+import { Box, Button, Divider, Flex, Grid, HStack, Input, Text, VStack } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
-import { DiscoveryRootState, feedbackActions, formatDate, ParsedItemModel, type ICartRootState } from '@beckn-ui/common'
+import { Typography } from '@beckn-ui/molecules'
+import { feedbackActions, type ICartRootState } from '@beckn-ui/common'
 import { useDispatch, useSelector } from 'react-redux'
 import { DOMAIN_PATH } from '@lib/config'
-import { prepareApiPayload } from '../utilities/confirmRent-utils'
-import type { CartItem } from '../lib/types/rentalTypes'
+import {
+  generateDates,
+  generateTimeSlots,
+  getTimeValue,
+  convertToTimestamp,
+  prepareApiPayload
+} from '../utilities/confirmRent-utils'
+import type { DateInfo, TimeSlot, CartItem } from '../lib/types/rentalTypes'
 import { setOrderData } from '@store/rental-slice'
-import CustomTimePicker from '@components/dateTimePicker/customTimePicker'
-import CustomDatePicker from '@components/dateTimePicker/customDatePicker'
-import { getCountryCode, roundToNextHour } from '@utils/general'
 
 export default function ConfirmRent() {
-  // const [fromTime, setFromTime] = useState<Date>(new Date())
-  // const [toTime, setToTime] = useState<Date>(new Date())
-  const [startDate, setStartDate] = useState<string>(roundToNextHour(new Date()).toISOString())
-  const [endDate, setEndDate] = useState<string>(
-    roundToNextHour(new Date(new Date(startDate).setHours(new Date(startDate).getHours() + 1))).toISOString()
-  )
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
   const router = useRouter()
   const dispatch = useDispatch()
+  const [dates, setDates] = useState<DateInfo[]>([])
+  const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([])
+  const [selectedDate, setSelectedDate] = useState<string>('')
+  const [fromTime, setFromTime] = useState<string>('')
+  const [toTime, setToTime] = useState<string>('')
+  const [isSelectingFrom, setIsSelectingFrom] = useState<boolean>(true)
+  const [activeField, setActiveField] = useState<'from' | 'to'>('from')
   const cartItems = useSelector((state: ICartRootState) => state.cart.items) as CartItem[]
-  const selectedProduct: ParsedItemModel = useSelector((state: DiscoveryRootState) => state.discovery.selectedProduct)
-  const rentalDate = selectedProduct.item.fulfillments[0].state?.name
+
+  useEffect(() => {
+    const generatedDates = generateDates()
+    setDates(generatedDates)
+    setSelectedDate(`${generatedDates[0].day} ${generatedDates[0].date}`)
+  }, [])
+
+  useEffect(() => {
+    if (selectedDate) {
+      setTimeSlots(generateTimeSlots(selectedDate, dates))
+    }
+  }, [selectedDate, dates])
+
+  const handleDateSelection = (dateString: string) => {
+    setSelectedDate(dateString)
+  }
+
+  const handleTimeSlotClick = (time: string) => {
+    const isDisabled = timeSlots.find(slot => slot.time === time)?.disabled
+
+    if (!isDisabled) {
+      if (activeField === 'from') {
+        setFromTime(time)
+        setToTime('') // Reset "To" when changing "From"
+      } else {
+        const fromValue = getTimeValue(fromTime)
+        const toValue = getTimeValue(time)
+
+        if (toValue > fromValue) {
+          setToTime(time)
+        }
+      }
+    }
+  }
+
+  // Handle direct changes to the From time input
+  const handleFromTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newTime = event.target.value
+    if (timeSlots.some(slot => slot.time === newTime && !slot.disabled)) {
+      setFromTime(newTime)
+      setToTime('')
+      setIsSelectingFrom(false)
+    }
+  }
+
+  // Handle direct changes to the To time input
+  const handleToTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newTime = event.target.value
+    const fromValue = getTimeValue(fromTime)
+    const toValue = getTimeValue(newTime)
+
+    if (timeSlots.some(slot => slot.time === newTime) && toValue > fromValue) {
+      setToTime(newTime)
+      setIsSelectingFrom(true) // Ensure we do not modify "From" again
+    }
+  }
 
   const handleConfirm = async () => {
-    const formTimestamp = Math.floor(new Date(startDate).getTime() / 1000)
-    const toTimestamp = Math.floor(new Date(endDate).getTime() / 1000)
-    localStorage.setItem('fromTimestamp', formTimestamp.toString())
-    localStorage.setItem('toTimestamp', toTimestamp.toString())
+    if (!cartItems.length) return
+    console.log('selectedDate', selectedDate)
+    console.log('fromTime', fromTime, toTime)
+
+    const fromTimestamp = convertToTimestamp(selectedDate, fromTime)
+    const toTimestamp = convertToTimestamp(selectedDate, toTime)
+    localStorage.setItem('fromTimestamp', fromTimestamp?.toString()!)
+    localStorage.setItem('toTimestamp', toTimestamp?.toString()!)
+
+    if (!fromTimestamp || !toTimestamp) return
+
     const domain = DOMAIN_PATH.RENT_AND_HIRE
-    console.log(getCountryCode())
-    const payload = prepareApiPayload(cartItems, formTimestamp, toTimestamp, domain, {
-      location: getCountryCode()
-    })
+    const payload = prepareApiPayload(cartItems, fromTimestamp, toTimestamp, domain)
 
     try {
       const response = await fetch(`${apiUrl}/select`, {
@@ -73,192 +136,164 @@ export default function ConfirmRent() {
     }
   }
 
-  // Initialize with rounded current time
-  const [fromTime, setFromTime] = useState<Date>(roundToNextHour(new Date()))
-  const [toTime, setToTime] = useState<Date>(() => {
-    const initialEndTime = roundToNextHour(new Date())
-    initialEndTime.setHours(initialEndTime.getHours() + 1)
-    return initialEndTime
-  })
+  const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true)
 
-  // Update the time change handlers
-  const handleFromTimeChange = (date: Date) => {
-    const roundedTime = roundToNextHour(date)
-    setFromTime(roundedTime)
-  }
+  useEffect(() => {
+    const fromValue = getTimeValue(fromTime)
+    const toValue = getTimeValue(toTime)
 
-  const handleToTimeChange = (date: Date) => {
-    const roundedTime = roundToNextHour(date)
-    setToTime(roundedTime)
-  }
-
-  // Add this helper function at the top of the component
-  const isToday = (dateToCheck: Date) => {
-    const today = new Date()
-    return (
-      dateToCheck.getDate() === today.getDate() &&
-      dateToCheck.getMonth() === today.getMonth() &&
-      dateToCheck.getFullYear() === today.getFullYear()
-    )
-  }
-
-  // Add this helper function to check if a time is in the past
-  const isTimePast = (timeToCheck: Date) => {
-    const now = new Date()
-    return timeToCheck.getTime() < now.getTime()
-  }
-
-  const getMinTimeForStartDate = () => {
-    const now = new Date()
-    const selectedDate = new Date(startDate)
-    const isToday = now.toDateString() === selectedDate.toDateString()
-
-    return isToday ? now : new Date(selectedDate.setHours(0, 0, 0, 0))
-  }
-
-  const getMinDateForEndDate = () => {
-    const selectedDate = new Date(startDate)
-    if (selectedDate.getHours() === 23) {
-      selectedDate.setDate(selectedDate.getDate() + 1)
-      selectedDate.setHours(0, 0, 0, 0)
-    }
-    return selectedDate
-  }
-
-  const getMinTimeForEndDate = () => {
-    const start = new Date(startDate)
-    const end = new Date(endDate)
-    const isSameDay = start.toDateString() === end.toDateString()
-
-    if (isSameDay) {
-      let hours = start.getHours() + 1
-      if (hours >= 24) {
-        start.setDate(start.getDate() + 1)
-        hours = 0
-      }
-      start.setHours(hours, 0, 0, 0)
-      return start
-    }
-    end.setHours(0, 0, 0, 0)
-    return end
-  }
-
-  const handleStartDateChange = (date: Date | null) => {
-    if (!date) return
-    const selectedDate = new Date(date)
-
-    const newEndDate = new Date(selectedDate)
-    const selectedHours = selectedDate.getHours()
-    if (selectedHours === 23) {
-      newEndDate.setDate(newEndDate.getDate() + 1)
-      newEndDate.setHours(0, 0, 0, 0)
+    if (fromTime && toTime && toValue > fromValue) {
+      setIsButtonDisabled(false)
     } else {
-      newEndDate.setHours(selectedHours + 1, 0, 0, 0)
+      setIsButtonDisabled(true)
     }
-
-    setStartDate(roundToNextHour(selectedDate).toISOString())
-    setEndDate(roundToNextHour(newEndDate).toISOString())
-    setFromTime(roundToNextHour(selectedDate))
-    setToTime(roundToNextHour(selectedDate))
-  }
-
-  const handleEndDateChange = (date: Date | null) => {
-    if (!date) return
-    setEndDate(roundToNextHour(new Date(date)).toISOString())
-    setFromTime(roundToNextHour(new Date(date)))
-    setToTime(roundToNextHour(new Date(date)))
-  }
+  }, [fromTime, toTime])
 
   return (
-    <Box
-      mt={5}
-      className="hideScroll"
-      maxH="calc(100vh - 100px)"
-      overflowY={'scroll'}
-      mb={5}
-    >
-      <Box mb={6}>
-        <Text
-          mb={3}
-          mt={3}
-          fontSize="16px"
-        >
-          From Date
-        </Text>
-        <Flex align="center">
-          <CustomDatePicker
-            selected={new Date(startDate)}
-            placeholderText="Select 'from' date"
-            showTimeSelect
-            minDate={new Date()}
-            minTime={getMinTimeForStartDate()}
-            maxTime={new Date(new Date().setHours(23, 0, 0, 0))}
-            timeIntervals={60}
-            onChange={handleStartDateChange}
-            dateFormat="dd-MM-yyyy hh:mm a"
-            isInvalid={false}
+    <Box mt={5}>
+      <Box>
+        <Box mb={'40px'}>
+          <Typography
+            text="Select Date:"
+            fontSize="17px"
+            fontWeight="400"
+            sx={{ mb: '10px' }}
           />
-        </Flex>
-        <Text
-          mb={3}
-          mt={3}
-          fontSize="16px"
-        >
-          To Date
-        </Text>
-        <Flex align="center">
-          <CustomDatePicker
-            selected={new Date(endDate)}
-            placeholderText="Select 'to' date"
-            showTimeSelect
-            minDate={getMinDateForEndDate()}
-            minTime={getMinTimeForEndDate()}
-            maxTime={new Date(new Date(startDate).setHours(new Date(startDate).getHours() === 23 ? 47 : 23, 0, 0, 0))}
-            timeIntervals={60}
-            onChange={handleEndDateChange}
-            dateFormat="dd-MM-yyyy hh:mm a"
-            isInvalid={false}
-          />
-        </Flex>
-      </Box>
 
-      {/* <Box mb={6}>
-        <Text
-          mb={3}
-          fontSize="16px"
-        >
-          Select Time
-        </Text>
-        <Flex
-          align="center"
-          flexDir={'column'}
-        >
-          <Flex align="center">
-            <CustomTimePicker
-              selected={fromTime}
-              placeholderText="Select 'from'"
-              onChange={handleFromTimeChange}
-              dateFormat="h:mm aa"
-              isInvalid={false}
-              minTime={isToday(new Date(date)) ? new Date() : undefined}
-            />
-            <Text mx={3}>-</Text>
-            <CustomTimePicker
-              selected={toTime}
-              placeholderText="Select 'to'"
-              onChange={handleToTimeChange}
-              dateFormat="h:mm aa"
-              isInvalid={false}
-              minTime={
-                isToday(new Date(date)) ? (fromTime.getTime() > new Date().getTime() ? fromTime : new Date()) : fromTime
-              }
-            />
+          <Flex
+            gap={2}
+            justifyContent="start"
+          >
+            {dates.map(({ day, date }) => {
+              const dateString = `${day} ${date}`
+              return (
+                <Button
+                  key={dateString}
+                  onClick={() => handleDateSelection(dateString)}
+                  bg={selectedDate === dateString ? '#228B22' : '#FFFFFF'}
+                  color={selectedDate === dateString ? '#FFFFFF' : '#000000'}
+                  borderWidth={1}
+                  width="60px"
+                  height="70px"
+                  p={4}
+                  borderRadius="lg"
+                >
+                  <Box textAlign="center">
+                    <Text color={selectedDate === dateString ? '#FFFFFF' : '#000000'}>{day}</Text>
+                    <Text color={selectedDate === dateString ? '#FFFFFF' : '#000000'}>{date}</Text>
+                  </Box>
+                </Button>
+              )
+            })}
           </Flex>
-        </Flex>
-      </Box> */}
-      <Box mt={'250px'}>
+        </Box>
+
+        <Box mb={'40px'}>
+          <Typography
+            text="Select Time slot:"
+            fontSize="17px"
+            fontWeight="400"
+            sx={{ mb: '20px' }}
+          />
+          <HStack
+            spacing={4}
+            align="flex-end"
+          >
+            <VStack
+              align="flex-start"
+              spacing={1}
+            >
+              <Typography
+                text="From"
+                fontSize="15px"
+                fontWeight="400"
+              />
+              <Input
+                value={fromTime}
+                width="110px"
+                borderColor={activeField === 'from' ? '#228B22' : '#979797'}
+                color={activeField === 'from' ? '#228B22' : '#000000'}
+                onFocus={() => setActiveField('from')} // Track "From" selection
+                onChange={handleFromTimeChange}
+                readOnly
+              />
+            </VStack>
+
+            <Typography
+              text="-"
+              fontSize="15px"
+              fontWeight="400"
+              sx={{ mb: 2 }}
+            />
+
+            <VStack
+              align="flex-start"
+              spacing={1}
+            >
+              <Typography
+                text="To"
+                fontSize="15px"
+                fontWeight="400"
+              />
+              <Input
+                value={toTime}
+                width="110px"
+                borderColor={activeField === 'to' ? '#228B22' : '#979797'}
+                color={activeField === 'to' ? '#228B22' : '#000000'}
+                onFocus={() => setActiveField('to')} // Track "To" selection
+                onChange={handleToTimeChange}
+                readOnly
+              />
+            </VStack>
+          </HStack>
+
+          <Divider
+            mb={5}
+            mt={5}
+          />
+
+          <Grid
+            templateColumns="repeat(4, 1fr)"
+            gap={2}
+          >
+            {timeSlots.map(({ time, disabled }) => {
+              const timeValue = getTimeValue(time)
+              const fromValue = getTimeValue(fromTime)
+              const toValue = getTimeValue(toTime)
+
+              const isFromTime = timeValue === fromValue
+              const isToTime = timeValue === toValue
+              const isInRange = fromValue && toValue && timeValue >= fromValue && timeValue <= toValue
+              const isSelectable =
+                !disabled && (!fromTime || isFromTime || (isSelectingFrom ? true : timeValue > fromValue))
+
+              return (
+                <Button
+                  key={time}
+                  onClick={() => handleTimeSlotClick(time)}
+                  bg={isFromTime || isToTime || isInRange ? '#228B22' : '#FFFFFF'}
+                  color={isFromTime || isToTime || isInRange ? '#FFFFFF' : '#000000'}
+                  borderWidth={1}
+                  borderColor={isFromTime || isToTime || isInRange ? '#228B22' : '#979797'}
+                  p={2}
+                  borderRadius="lg"
+                  fontSize="sm"
+                  opacity={!isSelectable ? 0.5 : 1}
+                  cursor={!isSelectable ? 'not-allowed' : 'pointer'}
+                  _hover={{
+                    bg: !isSelectable ? '#FFFFFF' : isFromTime || isToTime || isInRange ? '#228B22' : '#F5F5F5'
+                  }}
+                  disabled={!isSelectable}
+                >
+                  {time}
+                </Button>
+              )
+            })}
+          </Grid>
+        </Box>
         <BecknButton
-          text="Confirm & Proceed"
+          disabled={isButtonDisabled}
+          children="Confirm & Proceed"
           handleClick={handleConfirm}
         />
       </Box>

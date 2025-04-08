@@ -27,7 +27,7 @@ const NewPaymentOverView = () => {
     total: 0,
     discountAmount: 0
   })
-
+  const [selectedEmiPlan, setSelectedEmiPlan] = useState<string | null>(null)
   const [payableValue, setPayableValue] = useState<number>()
   const cartItems = useSelector((state: ICartRootState) => state.cart.items)
   const dispatch = useDispatch()
@@ -133,7 +133,7 @@ const NewPaymentOverView = () => {
                         color="#4398E8"
                         fontWeight="600"
                         fontSize="12px"
-                        text={` ${currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}${currencyFormat(Number(items.price.value) * items.quantity)}`}
+                        text={`${currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}${currencyFormat(Number(items.price.value) * items.quantity)}`}
                       />
                     </Box>
                   </Flex>
@@ -162,8 +162,8 @@ const NewPaymentOverView = () => {
             <Flex alignItems={'center'}>
               <Typography
                 fontSize="15px"
-                text={currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}
-                // style={{ paddingRight: '2px' }}
+                text={'Rs.'}
+                style={{ paddingRight: '2px' }}
               />
               <Typography
                 fontSize="15px"
@@ -182,8 +182,8 @@ const NewPaymentOverView = () => {
             <Flex alignItems={'center'}>
               <Typography
                 fontSize="15px"
-                text={`-${currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}`}
-                // style={{ paddingRight: '2px' }}
+                text={'-Rs.'}
+                style={{ paddingRight: '2px' }}
               />
               <Typography
                 fontSize="15px"
@@ -210,8 +210,8 @@ const NewPaymentOverView = () => {
               <Typography
                 fontSize="15px"
                 fontWeight="600"
-                text={currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}
-                // style={{ paddingRight: '2px' }}
+                text={'Rs.'}
+                style={{ paddingRight: '2px' }}
               />
               <Typography
                 fontSize="15px"
