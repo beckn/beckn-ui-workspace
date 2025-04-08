@@ -56,14 +56,10 @@ const Dashboard = () => {
           />
         ) : (
           user?.did && (
-            <Select
-              variant="unstyled"
-              placeholder={`/subj****${user?.did.slice(-4)}`}
-              value=""
-              style={{
-                pointerEvents: 'none',
-                width: 'fit-content'
-              }}
+            <Typography
+              text={`/subj****${user?.did.slice(-4)}`}
+              fontSize="15px"
+              color={'#3A3A3A'}
             />
           )
         )}
