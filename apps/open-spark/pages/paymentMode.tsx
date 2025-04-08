@@ -896,44 +896,50 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
       const itemId = item.id
 
       // Calculate total price across all cart items
-      const totalCartPrice = cartItems.reduce((sum, cartItem) => {
-        return sum + Number(cartItem?.price?.value || 0) * Number(cartItem?.quantity || 1)
-      }, 0)
+      const cartDetails = getCartItemsWithQuantity()
+      const totalCartPrice = Number(cartDetails.totalCartPrice || 0)
 
       const months = parseInt(item.name.match(/\d+/)?.[0] || '1')
       const annualInterestRate = Number(parseFloat(item?.price?.value) || 0)
-      const processingFees = Number(emiPlanList[ind].providerShortDescription) || 0
+      const processingFees = Number(selectedPlan.providerShortDescription) || 0
       const priceValue = Number(price?.value) || 0
 
       // Use total cart price as principal
       const principal = totalCartPrice || priceValue
+
       const approvedLoanPercentage = Number(item.code) || 0
       const approvedLoanAmount = (approvedLoanPercentage / 100) * principal
       const newPayableAmount = Number(principal - approvedLoanAmount) || 0
 
       if (payableAmount && payableAmount?.[planId] !== newPayableAmount) {
         setPayableAmount(prevState => ({ ...prevState, [planId]: newPayableAmount }))
-        // payableAmountRef.current = {...payableAmountRef.current, [planId]: newPayableAmount }
       }
 
+      // Calculate EMI using same formula as calculateEMIDetails
       const monthlyInterestRate = annualInterestRate / 12 / 100
       const emiWithoutInterest =
         monthlyInterestRate > 0
           ? (approvedLoanAmount * monthlyInterestRate * Math.pow(1 + monthlyInterestRate, months)) /
             (Math.pow(1 + monthlyInterestRate, months) - 1)
           : approvedLoanAmount / months
+      const emi = Math.floor(emiWithoutInterest + processingFees / months)
 
-      const emi = Math.floor(emiWithoutInterest + processingFees / months) // no interest calculated on processing fees
-
+      // Calculate total cost and interest
       const totalCost = emi * months
-
       const actualInterestAmount = totalCost - approvedLoanAmount
-      return { emi, actualInterestAmount, annualInterestRate, totalCost, payableAmount: newPayableAmount, itemId }
+
+      return {
+        emi,
+        actualInterestAmount,
+        annualInterestRate,
+        totalCost,
+        payableAmount: newPayableAmount,
+        itemId
+      }
     })
 
     dispatch(setEmiDetails({ emiDetails }))
 
-    // Ensure `transactionId` is defined
     if (!transactionId) {
       console.error('Transaction ID is missing!')
       return
@@ -1054,7 +1060,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
       }
       totalCartPrice = totalCartPrice + totalPrice
     })
-    console.log('cartItemQuantity', { cartItemQuantity, totalCartPrice })
+
     return { cartItemQuantity, totalCartPrice }
   }
 
@@ -1080,6 +1086,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
 
     // Calculate loan amount
     const principal = totalCartPrice
+    console.log('principal', principal)
     const approvedLoanPercentage = Number(item.code) || 0
     const approvedLoanAmount = (approvedLoanPercentage / 100) * principal
     const newPayableAmount = principal - approvedLoanAmount
