@@ -16,7 +16,7 @@
     "paths": {
       "@shared/*": ["./shared/*"]
     },
-    "types": ["node", "jest", "@testing-library/jest-dom"]
+    "types": ["node", "jest", "@testing-library/jest-dom", "cypress-mochawesome-reporter"]
   },
   "exclude": ["node_modules"]
 }
