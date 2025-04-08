@@ -53,13 +53,22 @@ const OrderOverview: React.FC<OrderOverviewProps> = ({ items, showPriceAndStatus
               fontSize="17px"
               fontWeight="600"
             />
-            <Typography
-              text={item.capacity}
-              fontSize="12px"
-              fontWeight="400"
-              color="gray.600"
-              sx={{ mb: 3 }}
-            />
+            <Flex
+              mb={3}
+              mt={3}
+              alignItems="center"
+            >
+              <Typography
+                text="Order ID:"
+                fontSize="12px"
+                fontWeight="600"
+              />
+              <Typography
+                text={` ${item.orderId}`}
+                fontSize="12px"
+                sx={{ ml: 1 }}
+              />
+            </Flex>
 
             <Flex
               mb={3}
@@ -126,21 +135,6 @@ const OrderOverview: React.FC<OrderOverviewProps> = ({ items, showPriceAndStatus
                   sx={{ ml: 1 }}
                 />
               </Flex>
-            </Flex>
-            <Flex
-              mb={3}
-              alignItems="center"
-            >
-              <Typography
-                text="Order ID:"
-                fontSize="12px"
-                fontWeight="600"
-              />
-              <Typography
-                text={` ${item.orderId}`}
-                fontSize="12px"
-                sx={{ ml: 1 }}
-              />
             </Flex>
           </Box>
 
