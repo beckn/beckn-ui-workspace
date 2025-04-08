@@ -14,7 +14,14 @@ import {
   useGetVerificationMethodsMutation
 } from '@services/walletService'
 import { parseDIDData } from '@utils/did'
-import { extractAuthAndHeader, filterByKeyword, generateRandomCode, toBase64, toSnakeCase } from '@utils/general'
+import {
+  extractAuthAndHeader,
+  extractMobileNumberFromSubjectDid,
+  filterByKeyword,
+  generateRandomCode,
+  toBase64,
+  toSnakeCase
+} from '@utils/general'
 import { generateAuthHeader, generateAuthHeaderForDelete } from '@services/cryptoUtilService'
 import { ConfirmResponseModel, feedbackActions, formatDate } from '@beckn-ui/common'
 import { useRouter } from 'next/router'
@@ -60,7 +67,6 @@ const PhysicalAssets = () => {
   const dispatch = useDispatch()
   const router = useRouter()
   const { user, privateKey, publicKey } = useSelector((state: AuthRootState) => state.auth)
-  const { profileDetails } = useSelector((state: UserRootState) => state.user)
   const [addDocument, { isLoading: addDocLoading }] = useAddDocumentMutation()
   const [getVerificationMethods, { isLoading: verificationMethodsLoading }] = useGetVerificationMethodsMutation()
   const [getDocuments, { isLoading: verifyLoading }] = useGetDocumentsMutation()
@@ -455,10 +461,9 @@ const PhysicalAssets = () => {
 
   const getOrderStatusData = (scannedData: any) => {
     if (
-      profileDetails &&
+      user?.did &&
       scannedData &&
-      scannedData?.userId === profileDetails?.id &&
-      scannedData?.userPhone === profileDetails?.agent?.agent_profile.phone_number &&
+      scannedData?.userPhone === extractMobileNumberFromSubjectDid(user?.did) &&
       scannedData?.payload
     ) {
       setIsLoading(true)
