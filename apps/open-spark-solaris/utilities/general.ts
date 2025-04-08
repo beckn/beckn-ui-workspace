@@ -80,3 +80,8 @@ export const roundToNextHour = (date: Date) => {
   roundedDate.setMilliseconds(0)
   return roundedDate
 }
+
+export const getCountryCode = (): { country: { name: string; code: string } } => {
+  // const countryCode = Cookies.get('country_code')
+  return { country: { name: 'India', code: 'IND' } }
+}

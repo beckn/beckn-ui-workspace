@@ -34,12 +34,13 @@ import { ItemMetaData } from '@lib/types/becknDid'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import CustomDatePicker from '@components/dateTimePicker/customDatePicker'
 import CustomTimePicker from '@components/dateTimePicker/customTimePicker'
-import { roundToNextHour, validateStartEndTime } from '@utils/general'
+import { getCountryCode, roundToNextHour, validateStartEndTime } from '@utils/general'
 import { FiPlusCircle } from 'react-icons/fi'
 import pako from 'pako'
 import { QrReader } from 'react-qr-reader'
 import QRCodeScanner from '@components/QRCode/QRScanner'
 import BottomModalScan from '@beckn-ui/common/src/components/BottomModal/BottomModalScan'
+import { currencyMap } from '@lib/config'
 
 const SECRET_KEY = '40aead339c69a7ec08fb445ddff258b2' // Must be 32 characters for AES-256
 
@@ -682,7 +683,9 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
                 }
               }}
             />
-            <Text color="gray.600">Rs. per hour</Text>
+            <Text color="gray.600">
+              {currencyMap[getCountryCode().country.code as keyof typeof currencyMap]} per hour
+            </Text>
           </Flex>
         </Box>
         <BecknButton

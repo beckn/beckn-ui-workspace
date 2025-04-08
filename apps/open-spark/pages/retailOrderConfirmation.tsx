@@ -250,7 +250,8 @@ const retailOrderConfirmation = () => {
 
     cartItems.forEach((item: any) => {
       const itemTotalPrice =
-        Number(item.price.value) * item.quantity + Number(initItemsBreakupPrice?.[item.id]?.['Delivery Charge'] || 0)
+        Number(item.price.value) * item.quantity +
+        Number(initItemsBreakupPrice?.[item.id]?.['Delivery Charge'] || 0) * item.quantity
 
       if (!cartItemQuantity[item.providerId]) {
         cartItemQuantity[item.providerId] = { totalPrice: 0 }
@@ -268,7 +269,7 @@ const retailOrderConfirmation = () => {
     return cartItemQuantity
   }
 
-  console.log(getCartItemsWithQuantity())
+  console.log('cart', getCartItemsWithQuantity())
   useEffect(() => {
     const storedFromTime = localStorage.getItem('fromTimestamp')
     const storedToTime = localStorage.getItem('toTimestamp')

@@ -43,7 +43,7 @@ import { parseSearchFinancelist } from '@utils/serach-utils-finance'
 import { discoveryEmiPlanActions } from '@store/discoveryEmiPlan-slice'
 import AddNewItemModal from '@components/modal/AddNewItemModal'
 import { emiFormActions, EMIFormState } from '@store/emiForm-slice'
-import { setApiResponse, setEmiDetails } from '@store/emiSelect-slice'
+import { EmiDetail, setApiResponse, setEmiDetails } from '@store/emiSelect-slice'
 import { UserRootState } from '@store/user-slice'
 import { AuthRootState } from '@store/auth-slice'
 import { useGetDocumentsMutation } from '@services/walletService'
@@ -51,8 +51,9 @@ import { parseDIDData } from '@utils/did'
 import { ItemMetaData } from '@lib/types/becknDid'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
-import { currencyFormat } from '@utils/general'
+import { currencyFormat, getCountryCode } from '@utils/general'
 import { DetailCard } from '@beckn-ui/becknified-components'
+import { currencyMap } from '@lib/config'
 
 interface FormData {
   fullName: string
@@ -893,15 +894,19 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
     }
     const emiDetails = selectedPlan.item.map((item: any, ind: number) => {
       const itemId = item.id
-      const quantity = Number(cartItems[0]?.quantity) || 1
-      const totalPrice = Number(cartItems[ind]?.price?.value || 0)
+
+      // Calculate total price across all cart items
+      const totalCartPrice = cartItems.reduce((sum, cartItem) => {
+        return sum + Number(cartItem?.price?.value || 0) * Number(cartItem?.quantity || 1)
+      }, 0)
 
       const months = parseInt(item.name.match(/\d+/)?.[0] || '1')
       const annualInterestRate = Number(parseFloat(item?.price?.value) || 0)
       const processingFees = Number(emiPlanList[ind].providerShortDescription) || 0
       const priceValue = Number(price?.value) || 0
-      const priceTotal = priceValue * quantity
-      const principal = priceTotal || totalPrice || priceTotal + totalPrice
+
+      // Use total cart price as principal
+      const principal = totalCartPrice || priceValue
       const approvedLoanPercentage = Number(item.code) || 0
       const approvedLoanAmount = (approvedLoanPercentage / 100) * principal
       const newPayableAmount = Number(principal - approvedLoanAmount) || 0
@@ -913,8 +918,10 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
 
       const monthlyInterestRate = annualInterestRate / 12 / 100
       const emiWithoutInterest =
-        (approvedLoanAmount * monthlyInterestRate * Math.pow(1 + monthlyInterestRate, months)) /
-          (Math.pow(1 + monthlyInterestRate, months) - 1) || 0
+        monthlyInterestRate > 0
+          ? (approvedLoanAmount * monthlyInterestRate * Math.pow(1 + monthlyInterestRate, months)) /
+            (Math.pow(1 + monthlyInterestRate, months) - 1)
+          : approvedLoanAmount / months
 
       const emi = Math.floor(emiWithoutInterest + processingFees / months) // no interest calculated on processing fees
 
@@ -937,7 +944,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
       id: item.id,
       selected: {
         quantity: {
-          count: 1
+          count: cartItems.reduce((total, item) => total + Number(item.quantity || 1), 0)
         }
       }
     }))
@@ -1047,65 +1054,76 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
       }
       totalCartPrice = totalCartPrice + totalPrice
     })
+    console.log('cartItemQuantity', { cartItemQuantity, totalCartPrice })
     return { cartItemQuantity, totalCartPrice }
   }
 
   const calculateEMIDetails = (item: any, cartItems: any[], index: number, price: any, plan: any) => {
     const storageKey = `originalInterestRate_${plan.id}`
 
+    // Get total cart price from all items
     const cartDetails = getCartItemsWithQuantity()
     const totalCartPrice = Number(cartDetails.totalCartPrice || 0)
+
+    // Extract EMI plan details
     const months = parseInt(item.name.match(/\d+/)?.[0] || '1')
     const annualInterestRate = Number(parseFloat(item?.price?.value) || 0)
-    const processingFees = Number(emiPlans[index].providerShortDescription) || 0
+    const processingFees = Number(plan.providerShortDescription) || 0
 
-    // Only store the original rate once per provider/loan type
+    // Store original interest rate if not already stored
     const storedRate = localStorage.getItem(storageKey)
     if (!storedRate) {
-      // Store the highest interest rate as the original rate
       const allRatesForProvider = plan.item.map((item: any) => Number(parseFloat(item?.price?.value) || 0))
       const maxRate = Math.max(...allRatesForProvider)
       localStorage.setItem(storageKey, maxRate.toString())
     }
 
-    // Calculate with current interest rate
+    // Calculate loan amount
     const principal = totalCartPrice
     const approvedLoanPercentage = Number(item.code) || 0
     const approvedLoanAmount = (approvedLoanPercentage / 100) * principal
+    const newPayableAmount = principal - approvedLoanAmount
 
-    const newPayableAmount = Number(principal - approvedLoanAmount) || 0
-
+    // Update payable amount state if changed
     if (payableAmount?.[plan.id] !== newPayableAmount) {
       setPayableAmount(prevState => ({ ...prevState, [plan.id]: newPayableAmount }))
-      // payableAmountRef.current = { ...payableAmountRef.current, [plan.id]: newPayableAmount }
     }
 
+    // Calculate EMI with current interest rate
     const monthlyInterestRate = annualInterestRate / 12 / 100
     const emiWithoutInterest =
-      (approvedLoanAmount * monthlyInterestRate * Math.pow(1 + monthlyInterestRate, months)) /
-        (Math.pow(1 + monthlyInterestRate, months) - 1) || 0
+      monthlyInterestRate > 0
+        ? (approvedLoanAmount * monthlyInterestRate * Math.pow(1 + monthlyInterestRate, months)) /
+          (Math.pow(1 + monthlyInterestRate, months) - 1)
+        : approvedLoanAmount / months
 
-    const emi = Math.floor(emiWithoutInterest + processingFees / months) // no interest calculated on processing fees
+    const emi = Math.floor(emiWithoutInterest + processingFees / months)
     const totalCost = emi * months
 
-    // Calculate with original (non-discounted) interest rate
+    // Calculate EMI with original (non-discounted) rate
     const originalMonthlyRate = Number(storedRate) / 12 / 100
     const originalEmiWithoutInterest =
-      (approvedLoanAmount * originalMonthlyRate * Math.pow(1 + originalMonthlyRate, months)) /
-        (Math.pow(1 + originalMonthlyRate, months) - 1) || 0
+      originalMonthlyRate > 0
+        ? (approvedLoanAmount * originalMonthlyRate * Math.pow(1 + originalMonthlyRate, months)) /
+          (Math.pow(1 + originalMonthlyRate, months) - 1)
+        : approvedLoanAmount / months
 
-    const originalEmi = Math.floor(originalEmiWithoutInterest + processingFees / months) // no interest calculated on processing fees
+    const originalEmi = Math.floor(originalEmiWithoutInterest + processingFees / months)
     const nonDiscountedPrice = originalEmi * months
 
-    if (!localStorage.getItem(`totalCost`)) {
-      localStorage.setItem(`totalCost`, nonDiscountedPrice.toString())
+    // Store total cost if not already stored
+    if (!localStorage.getItem('totalCost')) {
+      localStorage.setItem('totalCost', nonDiscountedPrice.toString())
     }
 
     const actualInterestAmount = totalCost - approvedLoanAmount
+
+    // Store calculated EMI details
+    const calculatedEMIs = JSON.parse(localStorage.getItem('calculatedEMIs') || '{}')
     localStorage.setItem(
-      `calculatedEMIs`,
+      'calculatedEMIs',
       JSON.stringify({
-        ...JSON.parse(localStorage.getItem(`calculatedEMIs`)!),
+        ...calculatedEMIs,
         [item.id]: {
           emi,
           totalCost,
@@ -1116,6 +1134,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
         }
       })
     )
+
     return {
       emi,
       totalCost,
@@ -1291,7 +1310,8 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                                 >
                                   <Text fontSize={'10px'}>Initial Payment</Text>
                                   <Text fontSize={'10px'}>
-                                    ₹{currencyFormat(Number(payableAmount?.[plan.id]?.toFixed(2)))}
+                                    {currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}
+                                    {currencyFormat(Number(payableAmount?.[plan.id]?.toFixed(2)))}
                                   </Text>
                                 </Flex>
                               </Box>
@@ -1347,14 +1367,16 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                                           fontWeight="500"
                                           color="#626060"
                                         >
-                                          ₹ {currencyFormat(Number(emi.toFixed(2)))} x {item.name}m
+                                          {currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}
+                                          {currencyFormat(Number(emi.toFixed(2)))} x {item.name}m
                                         </Box>
                                         <Box
                                           fontSize="10px"
                                           fontWeight="500"
                                           color="#626060"
                                         >
-                                          ₹ {currencyFormat(Number(actualInterestAmount.toFixed(2)))} ({originalRate}
+                                          {currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}
+                                          {currencyFormat(Number(actualInterestAmount.toFixed(2)))} ({originalRate}
                                           %)
                                         </Box>
                                         <Box>
@@ -1365,7 +1387,8 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                                               fontWeight="500"
                                               color="#626060"
                                             >
-                                              ₹{nonDiscountedPrice}.00
+                                              {currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}
+                                              {nonDiscountedPrice}.00
                                             </Box>
                                           )}
                                           <Box
@@ -1373,7 +1396,8 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                                             fontWeight="500"
                                             color={`${plan.item[0].code === '90' ? '#3C8508' : '#626060'}`}
                                           >
-                                            ₹ {currencyFormat(Number(totalCost.toFixed(2)))}
+                                            {currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}
+                                            {currencyFormat(Number(totalCost.toFixed(2)))}
                                           </Box>
                                         </Box>
                                       </Flex>

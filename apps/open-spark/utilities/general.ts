@@ -1,4 +1,5 @@
 import { DocumentPayload } from '@lib/types/becknDid'
+import Cookies from 'js-cookie'
 
 export const formatFileSize = (bytes: number): string => {
   const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']
@@ -94,4 +95,9 @@ export const roundToNextHour = (date: Date) => {
   roundedDate.setSeconds(0)
   roundedDate.setMilliseconds(0)
   return roundedDate
+}
+
+export const getCountryCode = (): { country: { name: string; code: string } } => {
+  // const countryCode = Cookies.get('country_code')
+  return { country: { name: 'India', code: 'IND' } }
 }

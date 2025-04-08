@@ -30,7 +30,8 @@ import { ItemMetaData } from '@lib/types/becknDid'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import CustomDatePicker from '@components/dateTimePicker/customDatePicker'
 import CustomTimePicker from '@components/dateTimePicker/customTimePicker'
-import { validateStartEndTime } from '@utils/general'
+import { getCountryCode, validateStartEndTime } from '@utils/general'
+import { currencyMap } from '@lib/config'
 
 interface RentalServiceModalProps {
   isOpen: boolean
@@ -520,7 +521,9 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
               mr={3}
               onChange={e => setPrice(e.target.value)}
             />
-            <Text color="gray.600">Rs. per hour</Text>
+            <Text color="gray.600">
+              {currencyMap[getCountryCode().country.code as keyof typeof currencyMap]} per hour
+            </Text>
           </Flex>
         </Box>
 
