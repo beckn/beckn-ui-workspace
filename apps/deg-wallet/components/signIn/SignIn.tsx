@@ -80,8 +80,7 @@ const SignIn = ({ initialFormData = { mobileNumber: '' } }) => {
 
   const isFormFilled = useMemo(() => {
     return (
-      // Object.values(formData).every(value => value !== '+91 ') &&
-      Object.values(formErrors).every(value => value === '')
+      Object.values(formData).every(value => value !== '') && Object.values(formErrors).every(value => value === '')
     )
   }, [formData, formErrors])
 
