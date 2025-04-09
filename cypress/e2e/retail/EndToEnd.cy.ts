@@ -4,7 +4,7 @@ import { initResponse } from '../../fixtures/checkoutPage/initResponse'
 // import { HomeIcon } from '../../../apps/taxi-bpp/src/lib/icons/home-icon';
 describe('User Journey', () => {
   before(() => {
-    cy.visit(testIds.deployed_url_base)
+    cy.visit(Cypress.env('CYPRESS_BASE_URL'))
   })
 
   // Sign In Page

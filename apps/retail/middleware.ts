@@ -9,6 +9,10 @@ export default function middleware(req: NextRequest) {
   const response = NextResponse.next()
   response.headers.set('Cache-Control', 'no-store')
 
+  if (pathname === '/test-report.html') {
+    return response
+  }
+
   const searchParams = req.nextUrl.searchParams
 
   const externalUrlParam = searchParams.get('external_url')

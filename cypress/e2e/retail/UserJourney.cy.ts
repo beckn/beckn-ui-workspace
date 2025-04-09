@@ -4,7 +4,7 @@ describe('Product details Page Tests', () => {
   const searchTerm = 'sunglass'
 
   before(() => {
-    cy.visit(testIds.deployed_url_home)
+    cy.visit(Cypress.env('CYPRESS_BASE_URL'))
   })
 
   it('Happy Flow should work', () => {

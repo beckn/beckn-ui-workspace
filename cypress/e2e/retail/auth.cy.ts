@@ -5,7 +5,7 @@ import { testIds } from '../../../shared/dataTestIds'
 describe('Check Auth flow', () => {
   context('Signin flow', () => {
     beforeEach(() => {
-      cy.visit(testIds.url_base_retail)
+      cy.visit(Cypress.env('CYPRESS_BASE_URL'))
     })
 
     it('should display the sign-in form with email and password fields', () => {
@@ -48,7 +48,7 @@ describe('Check Auth flow', () => {
     })
 
     it('should redirect to homePage and have token in cookie on successful login', () => {
-      cy.login(testIds.url_base_retail, testIds.user_validEmail, testIds.user_validPassword)
+      cy.login(Cypress.env('CYPRESS_BASE_URL'), testIds.user_validEmail, testIds.user_validPassword)
       cy.url().should('include', testIds.url_home)
       cy.getCookie('authToken').should('exist')
     })

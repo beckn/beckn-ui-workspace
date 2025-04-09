@@ -3,12 +3,14 @@ import cypressMochawesomeReporter from 'cypress-mochawesome-reporter/plugin'
 
 export default defineConfig({
   e2e: {
-    baseUrl: process.env.CYPRESS_BASE_URL,
     testIsolation: false,
     experimentalRunAllSpecs: true,
     retries: { runMode: 2, openMode: 0 },
     setupNodeEvents(on, config) {
-      cypressMochawesomeReporter(on) // 👈 Integrates mochawesome
+      // Load required vars into Cypress runtime environment
+      config.env.CYPRESS_BASE_URL = process.env.CYPRESS_BASE_URL || 'http://localhost:3000'
+
+      cypressMochawesomeReporter(on, config) // 👈 Integrates mochawesome
       return config
     },
     reporter: 'cypress-mochawesome-reporter'
