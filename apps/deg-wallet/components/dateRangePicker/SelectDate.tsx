@@ -13,7 +13,6 @@ import {
   isSameDay,
   isAfter,
   isBefore,
-  parse,
   subDays
 } from 'date-fns'
 import BecknButton from '@beckn-ui/molecules/src/components/button'
@@ -22,9 +21,9 @@ import BottomModal from '@beckn-ui/common/src/components/BottomModal/BottomModal
 interface SelectDateProps {
   isOpen: boolean
   onClose: () => void
-  onDateSelect: (startDate: string, endDate: string) => void
-  initialStartDate: string
-  initialEndDate: string
+  onDateSelect: (startDate: Date, endDate: Date) => void
+  initialStartDate: Date
+  initialEndDate: Date
 }
 
 const customDateOptions = [
@@ -42,8 +41,8 @@ const customDateOptions = [
 const SelectDate: React.FC<SelectDateProps> = ({ isOpen, onClose, onDateSelect, initialStartDate, initialEndDate }) => {
   const [isCustomRange, setIsCustomRange] = useState(false)
   const [currentMonth, setCurrentMonth] = useState<Date>(new Date())
-  const [startDate, setStartDate] = useState<Date | null>(parse(initialStartDate, 'dd/MM/yy', new Date()))
-  const [endDate, setEndDate] = useState<Date | null>(parse(initialEndDate, 'dd/MM/yy', new Date()))
+  const [startDate, setStartDate] = useState<Date | null>(new Date())
+  const [endDate, setEndDate] = useState<Date | null>(new Date())
   const [selectedOptionIndex, setSelectedOptionIndex] = useState<number>()
 
   const handleQuickSelect = (option: string, index: number) => {
@@ -245,7 +244,8 @@ const SelectDate: React.FC<SelectDateProps> = ({ isOpen, onClose, onDateSelect, 
 
   const handleSave = () => {
     if (startDate && endDate) {
-      onDateSelect(format(startDate, 'dd/MM/yy'), format(endDate, 'dd/MM/yy'))
+      console.log(startDate, endDate)
+      onDateSelect(startDate, endDate)
     }
     onClose()
   }
