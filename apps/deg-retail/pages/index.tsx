@@ -72,7 +72,6 @@ const HomePage = () => {
 
   return (
     <Box
-      backgroundColor="white"
       className="hideScroll"
       maxH={'calc(100vh - 10px)'}
       overflowY="scroll"
@@ -82,15 +81,19 @@ const HomePage = () => {
       <Flex
         justifyContent={'space-between'}
         alignItems={'center'}
-        mt={'20px'}
-        mb={'15px'}
-        pl={'20px'}
-        pr={'20px'}
+        mt={'6px'}
+        p="15px 0"
+        width={'100vw'}
+        position="fixed"
+        left={'0'}
+        background="#fff"
+        boxShadow={'0px 4px 20px 0px rgba(0, 0, 0, 0.07)'}
       >
         <Flex
           gap={'10px'}
           justify={'center'}
           alignItems={'center'}
+          p="0 10rem"
         >
           <Image
             src={profileIcon}
@@ -138,7 +141,10 @@ const HomePage = () => {
           />
         )}
       </Flex>
-      <Box background="#deeaf5">
+      <Box
+        background="#deeaf5"
+        mt="65px"
+      >
         <Carousel images={images} />
         <Box
           padding={'10px'}

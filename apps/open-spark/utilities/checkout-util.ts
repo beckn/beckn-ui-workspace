@@ -109,28 +109,37 @@ export const generateRentalInitPayload = async (
 //   return hours
 // }
 
-export function calculateDuration(from: string, to: string): number {
-  const parseDateTime = (dateTimeStr: string): number => {
-    const parsedDate = new Date(Number(dateTimeStr))
-    if (isNaN(parsedDate.getTime())) {
-      throw new Error('Invalid date format')
-    }
-    return parsedDate.getTime()
-  }
+// export function calculateDuration(from: string, to: string): number {
+//   const parseDateTime = (dateTimeStr: string): number => {
+//     const parsedDate = new Date(Number(dateTimeStr))
+//     if (isNaN(parsedDate.getTime())) {
+//       throw new Error('Invalid date format')
+//     }
+//     return parsedDate.getTime()
+//   }
 
-  try {
-    const fromTime = parseDateTime(from)
-    const toTime = parseDateTime(to)
+//   try {
+//     const fromTime = parseDateTime(from)
+//     const toTime = parseDateTime(to)
 
-    const durationMs = toTime - fromTime
-    if (durationMs < 0) {
-      throw new Error('Invalid time range')
-    }
+//     const durationMs = toTime - fromTime
+//     if (durationMs < 0) {
+//       throw new Error('Invalid time range')
+//     }
 
-    const totalHours = durationMs / (1000 * 60 * 60)
-    return totalHours
-  } catch (error) {
-    console.error('Error calculating duration:', error)
-    return 0
-  }
+//     const totalHours = durationMs / (1000 * 60 * 60)
+//     return totalHours
+//   } catch (error) {
+//     console.error('Error calculating duration:', error)
+//     return 0
+//   }
+// }
+export function calculateDuration(from: number, to: number): number {
+  if (!from || !to) return 0 // Handle invalid inputs
+
+  // Convert milliseconds to hours
+  const diffInMs = to - from
+  const diffInHours = Math.floor(diffInMs / (1000 * 60 * 60))
+
+  return diffInHours
 }
