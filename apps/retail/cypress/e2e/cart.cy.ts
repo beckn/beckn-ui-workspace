@@ -1,12 +1,12 @@
-import { testIds } from '../../../shared/dataTestIds'
+import { testIds } from '../../../../shared/dataTestIds'
 describe('Cart Page Tests', () => {
   before(() => {
-    cy.login(Cypress.env('CYPRESS_BASE_URL'), testIds.user_validEmail, testIds.user_validPassword)
+    cy.login(testIds.url_base_retail, testIds.user_validEmail, testIds.user_validPassword)
   })
   context('When there are no items in cart', () => {
     const searchTerm = 'sunglass'
     beforeEach(() => {
-      cy.visit(`${Cypress.env('CYPRESS_BASE_URL')}${testIds.url_home}`)
+      cy.visit(`${testIds.url_base_retail}${testIds.url_home}`)
       cy.setGeolocation('getAddress')
       cy.wait('@getAddress')
       cy.performSearch(searchTerm, {
@@ -29,7 +29,7 @@ describe('Cart Page Tests', () => {
   context('should render When there are Items in Cart', () => {
     const searchTerm = 'sunglass'
     beforeEach(() => {
-      cy.visit(`${Cypress.env('CYPRESS_BASE_URL')}${testIds.url_home}`)
+      cy.visit(`${testIds.url_base_retail}${testIds.url_home}`)
       cy.setGeolocation('getAddress')
       cy.wait('@getAddress')
       cy.performSearch(searchTerm, {

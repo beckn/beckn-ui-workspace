@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "postbuild": "next-sitemap",
-    "export": "next export"
+    "export": "next export",
+    "cy:open": "cypress open",
+    "cy:run": "cypress run"
   },
   "prettier": "@beckn-ui/prettier-config",
   "dependencies": {
@@ -37,6 +39,10 @@
     "js-cookie": "^3.0.1",
     "jsonwebtoken": "^8.5.1",
     "leaflet": "^1.9.4",
+    "mocha": "^10.7.3",
+    "mochawesome": "^7.1.3",
+    "mochawesome-merge": "^4.3.0",
+    "mochawesome-report-generator": "^6.2.0",
     "next": "^13.4.19",
     "next-connect": "^0.12.2",
     "next-sanity-image": "^3.2.1",
@@ -61,7 +67,8 @@
     "redux-persist": "^6.0.0",
     "slick-carousel": "^1.8.1",
     "stripe": "^9.1.0",
-    "url-loader": "^4.1.1"
+    "url-loader": "^4.1.1",
+    "wait-on": "^8.0.1"
   },
   "devDependencies": {
     "@beckn-ui/prettier-config": "workspace:^",

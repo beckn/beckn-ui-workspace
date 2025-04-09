@@ -29,6 +29,9 @@ cypress/videos/
 cypress/reports/
 cypress/logs/
 
+# Cypress test report app wise
+apps/**/public/*.html
+
 # PWA Generated Files (for apps inside `/apps/`)
 apps/**/public/sw.js
 apps/**/public/sw.js.map

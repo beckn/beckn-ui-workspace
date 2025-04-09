@@ -1,11 +1,11 @@
-import { testIds } from '../../../shared/dataTestIds'
+import { testIds } from '../../../../shared/dataTestIds'
 
 // boc testing level 2
 
 describe('Check Auth flow', () => {
   context('Signin flow', () => {
     beforeEach(() => {
-      cy.visit(Cypress.env('CYPRESS_BASE_URL'))
+      cy.visit(testIds.url_base_retail)
     })
 
     it('should display the sign-in form with email and password fields', () => {
@@ -48,7 +48,7 @@ describe('Check Auth flow', () => {
     })
 
     it('should redirect to homePage and have token in cookie on successful login', () => {
-      cy.login(Cypress.env('CYPRESS_BASE_URL'), testIds.user_validEmail, testIds.user_validPassword)
+      cy.login(testIds.url_base_retail, testIds.user_validEmail, testIds.user_validPassword)
       cy.url().should('include', testIds.url_home)
       cy.getCookie('authToken').should('exist')
     })

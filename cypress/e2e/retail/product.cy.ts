@@ -4,11 +4,11 @@ describe('Product details Page Tests', () => {
   const searchTerm = 'sunglass'
 
   before(() => {
-    cy.login(testIds.url_base_retail, testIds.user_validEmail, testIds.user_validPassword)
+    cy.login(Cypress.env('CYPRESS_BASE_URL'), testIds.user_validEmail, testIds.user_validPassword)
   })
 
   beforeEach(() => {
-    cy.visit(`${testIds.url_base_retail}${testIds.url_home}`)
+    cy.visit(`${Cypress.env('CYPRESS_BASE_URL')}${testIds.url_home}`)
     cy.setGeolocation('getAddress')
     cy.wait('@getAddress')
     cy.performSearch(searchTerm, {
