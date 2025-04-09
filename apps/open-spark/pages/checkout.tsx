@@ -78,8 +78,8 @@ const CheckoutPage = () => {
   const emiDetails = useSelector((state: any) => state.selectedEmi.emiDetails[0])
 
   useEffect(() => {
-    const storedFromTime = localStorage.getItem('fromTimestamp')
-    const storedToTime = localStorage.getItem('toTimestamp')
+    const storedFromTime = Number(localStorage.getItem('fromTimestamp')) * 1000
+    const storedToTime = Number(localStorage.getItem('toTimestamp')) * 1000
     const formatedFromTime = formatDate(Number(storedFromTime), 'dd/MM/yy, h:mm a') as string
     const formatedToTime = formatDate(Number(storedToTime), 'dd/MM/yy, h:mm a') as string
     setFromTime(formatedFromTime)

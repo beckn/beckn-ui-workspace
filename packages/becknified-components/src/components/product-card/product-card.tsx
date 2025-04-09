@@ -209,12 +209,13 @@ const ProductCard: React.FC<ProductCardProps> = props => {
                                 <Text
                                   fontWeight="600"
                                   whiteSpace={'nowrap'}
+                                  minW="fit-content"
                                 >
                                   {key}:
                                 </Text>
                                 <Text
                                   pl="3px"
-                                  noOfLines={1}
+                                  noOfLines={2}
                                   textOverflow="ellipsis"
                                   whiteSpace="pre-wrap"
                                   overflowWrap="break-word"
