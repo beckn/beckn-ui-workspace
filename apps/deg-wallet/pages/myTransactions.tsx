@@ -1,5 +1,5 @@
 import SearchBar from '@beckn-ui/common/src/components/searchBar/searchBar'
-import { Box, Flex, Image } from '@chakra-ui/react'
+import { Box, Flex, Image, useTheme } from '@chakra-ui/react'
 import EmptyScreenTemplate from '@components/EmptyTemplates/EmptyScreenTemplate'
 import React, { useEffect, useState } from 'react'
 import EmptyTransactionsIcon from '@public/images/empty_transactions.svg'
@@ -21,6 +21,7 @@ import OpenSparkIcon from '@public/images/open_spark_icon.svg'
 import RentalIcon from '@public/images/rental.svg'
 import { Transaction } from '@lib/types/becknDid'
 import { currencyMap } from '@lib/config'
+import SelectDate from '@components/dateRangePicker/SelectDate'
 
 interface TransactionItem {
   id: string | number
@@ -35,14 +36,22 @@ interface TransactionItem {
 }
 
 const MyTransactions = () => {
+  const today = new Date()
+
   const [searchKeyword, setSearchKeyword] = useState<string>('')
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [isFilterOpen, setIsFilterOpen] = useState(false)
   const [items, setItems] = useState<TransactionItem[]>([])
   const [filteredItems, setFilteredItems] = useState(items)
+  const [filterIndex, setFilterIndex] = useState<number>(0)
+  const [isCustomDateModalOpen, setIsCustomDateModalOpen] = useState(false)
+  const [customStartDate, setCustomStartDate] = useState<Date>(today)
+  const [customEndDate, setCustomEndDate] = useState<Date>(today)
 
   const { t } = useLanguage()
   const dispatch = useDispatch()
+  const theme = useTheme()
+  const primaryColor = theme.colors.primary['100']
   const { user, privateKey, publicKey } = useSelector((state: AuthRootState) => state.auth)
   const [getDocuments, { isLoading: verifyLoading }] = useGetDocumentsMutation()
 
@@ -53,7 +62,7 @@ const MyTransactions = () => {
     Healthcare: { color: '#D86969', icon: '' },
     default: { color: '#51B651', icon: '' }
   }
-  console.log(items)
+
   const fetchTransactions = async () => {
     try {
       setIsLoading(true)
@@ -61,7 +70,6 @@ const MyTransactions = () => {
       const list: TransactionItem[] = parseDIDData(result)
         ['transactions'].map((item, index) => {
           if (formatDate((Number(item.placedAt) * 1000)!, 'do MMM yyyy, h:mma') === 'Invalid date') return
-          console.log(item)
           return {
             id: index,
             orderId: item.id,
@@ -130,6 +138,70 @@ const MyTransactions = () => {
     })
   }
 
+  const handleCustomDateModalOpen = () => setIsCustomDateModalOpen(true)
+  const handleCustomDateModalClose = () => setIsCustomDateModalOpen(false)
+
+  const handleOnFilterChange = (index: number, customDate?: { startDate: Date; endDate: Date }) => {
+    const today = new Date()
+    let filteredList = [...items]
+
+    switch (index) {
+      case 0: // Latest
+        filteredList = [...items]
+        break
+      case 1: // Last 7 Days
+        const sevenDaysAgo = new Date(today)
+        sevenDaysAgo.setDate(today.getDate() - 7)
+        const sevenDaysAgoTimestamp = Math.floor(sevenDaysAgo.getTime() / 1000)
+
+        filteredList = items.filter(item => {
+          const itemTimestamp = Number(item.data.placedAt)
+          return itemTimestamp >= sevenDaysAgoTimestamp
+        })
+        break
+      case 2: // Custom Date
+        if (customDate) {
+          const startDate = new Date(customDate.startDate)
+          const endDate = new Date(customDate.endDate)
+
+          startDate.setHours(0, 0, 0, 0)
+
+          endDate.setHours(23, 59, 59, 999)
+
+          const startTimestamp = Math.floor(startDate.getTime() / 1000)
+          const endTimestamp = Math.floor(endDate.getTime() / 1000)
+
+          filteredList = items.filter(item => {
+            const itemTimestamp = Number(item.data.placedAt)
+
+            return itemTimestamp >= startTimestamp && itemTimestamp <= endTimestamp
+          })
+
+          if (filteredList.length === 0) {
+            filteredList = []
+          }
+        } else {
+          handleCustomDateModalOpen()
+          return
+        }
+        break
+      default:
+        filteredList = [...items]
+    }
+    setFilteredItems(filteredList)
+    setFilterIndex(index)
+  }
+
+  const handleDateChange = (start: Date, end: Date) => {
+    setCustomStartDate(start)
+    setCustomEndDate(end)
+    handleOnFilterChange(2, {
+      startDate: start,
+      endDate: end
+    })
+    handleCustomDateModalClose()
+  }
+
   return (
     <Box
       maxWidth={{ base: '100vw', md: '30rem', lg: '40rem' }}
@@ -157,6 +229,26 @@ const MyTransactions = () => {
           <CustomFilterIconComponent />
         </Box>
       </Box>
+      <Flex
+        flexDirection={'row'}
+        justifyContent="space-between"
+      >
+        {['Latest', 'last 7 Days', 'Custom Date'].map((name, index) => (
+          <>
+            <Typography
+              text={name}
+              sx={{
+                backgroundColor: filterIndex === index ? primaryColor : '#ffffff',
+                borderRadius: '20px',
+                padding: '1.8% 6%',
+                color: filterIndex === index ? '#ffffff' : '#000000',
+                border: `1px solid ${filterIndex === index ? 'transparent' : '#000000'}`
+              }}
+              onClick={() => handleOnFilterChange(index)}
+            />
+          </>
+        ))}
+      </Flex>
       <Flex
         justifyContent="center"
         flexDir={'column'}
@@ -260,6 +352,13 @@ const MyTransactions = () => {
           handleCancelFilter={handleCloseModal}
         />
       </BottomModal>
+      <SelectDate
+        isOpen={isCustomDateModalOpen}
+        onClose={handleCustomDateModalClose}
+        onDateSelect={handleDateChange}
+        initialStartDate={customStartDate}
+        initialEndDate={customEndDate}
+      />
     </Box>
   )
 }
