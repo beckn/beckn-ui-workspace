@@ -11,15 +11,6 @@ export default defineConfig({
       cypressMochawesomeReporter(on) // 👈 Integrates mochawesome
       return config
     },
-    reporter: 'cypress-mochawesome-reporter',
-    reporterOptions: {
-      reportDir: 'cypress/reports',
-      overwrite: false,
-      html: true,
-      json: true,
-      charts: true,
-      embeddedScreenshots: true,
-      inlineAssets: true
-    }
+    reporter: 'cypress-mochawesome-reporter'
   }
 })
