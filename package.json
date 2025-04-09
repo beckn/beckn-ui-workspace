@@ -112,7 +112,7 @@
     "dev:deg-finance": "yarn workspace @beckn-ui/deg-finance dev",
     "start:deg-finance": "yarn workspace @beckn-ui/deg-finance start",
     "build:deg-finance": "yarn workspace @beckn-ui/deg-finance build",
-    "cy:retail": "cypress run --spec 'cypress/e2e/retail/auth.cy.ts' --reporter cypress-mochawesome-reporter --reporter-options 'reportDir=cypress/reports/retail,reportFilename=index,overwrite=true,html=true,json=true,embeddedScreenshots=true,inlineAssets=true'",
+    "cy:retail": "cypress run --spec 'cypress/e2e/retail' --reporter cypress-mochawesome-reporter --reporter-options 'reportDir=cypress/reports/retail,reportFilename=index,overwrite=true,html=true,json=true,embeddedScreenshots=true,inlineAssets=true'",
     "posttest:retail": "cp cypress/reports/retail/index.html apps/retail/public/test-report.html",
     "cy:osc": "cypress run --spec 'cypress/e2e/osc' --reporter cypress-mochawesome-reporter --reporter-options 'reportDir=cypress/reports/osc,reportFilename=index,overwrite=true,html=true,json=true,embeddedScreenshots=true,inlineAssets=true'",
     "posttest:osc": "cp cypress/reports/osc/index.html apps/osc/public/test-report.html",
