@@ -15,12 +15,7 @@ const landing = () => {
         bottom="0"
         left={'0'}
       />
-      <Box
-        p="60px"
-        // backgroundImage={'/images/landing.svg'}
-        // height="100vh"
-        // backgroundRepeat={'no-repeat'}
-      >
+      <Box>
         <Image
           margin={'0 auto'}
           src="/images/logo.svg"
