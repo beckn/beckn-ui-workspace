@@ -90,10 +90,11 @@ const HomePage = () => {
         boxShadow={'0px 4px 20px 0px rgba(0, 0, 0, 0.07)'}
       >
         <Flex
+          className="sub-header-DEG"
           gap={'10px'}
           justify={'center'}
           alignItems={'center'}
-          p="0 10rem"
+          // p={'0 10rem'}
         >
           <Image
             src={profileIcon}
