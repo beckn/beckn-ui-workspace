@@ -148,7 +148,7 @@ const NewPaymentOverView = () => {
             <Flex alignItems={'center'}>
               <Typography
                 fontSize="15px"
-                text={`${currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}`}
+                text={'Rs.'}
                 style={{ paddingRight: '2px' }}
               />
               <Typography
@@ -168,7 +168,7 @@ const NewPaymentOverView = () => {
             <Flex alignItems={'center'}>
               <Typography
                 fontSize="15px"
-                text={`-${currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}`}
+                text={'-Rs.'}
                 style={{ paddingRight: '2px' }}
               />
               <Typography
@@ -194,7 +194,7 @@ const NewPaymentOverView = () => {
               <Typography
                 fontSize="15px"
                 fontWeight="600"
-                text={`${currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}`}
+                text={'Rs.'}
                 style={{ paddingRight: '2px' }}
               />
               <Typography

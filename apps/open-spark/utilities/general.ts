@@ -9,7 +9,7 @@ export const formatFileSize = (bytes: number): string => {
 }
 
 export const getMaskedMobileNumber = (phoneNumber: string) => {
-  return `${phoneNumber.slice(0, 2)}XXXX${phoneNumber.slice(-3)}`
+  return `+91 ${phoneNumber.slice(0, 2)}XXXX${phoneNumber.slice(-3)}`
 }
 
 export const extractMobileNumberFromSubjectDid = (subject: string) => {
@@ -98,6 +98,6 @@ export const roundToNextHour = (date: Date) => {
 }
 
 export const getCountryCode = (): { country: { name: string; code: string } } => {
-  const countryCode = Cookies.get('country_code')
-  return countryCode ? JSON.parse(countryCode) : { country: { name: 'United States', code: 'USA' } }
+  // const countryCode = Cookies.get('country_code')
+  return { country: { name: 'India', code: 'IND' } }
 }

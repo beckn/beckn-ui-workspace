@@ -20,7 +20,7 @@ interface SignInProps {
   initialFormData?: SignInFormProps
 }
 
-const SignIn = ({ initialFormData = { mobileNumber: '' } }: SignInProps) => {
+const SignIn = ({ initialFormData = { mobileNumber: '+91 ' } }: SignInProps) => {
   const [formData, setFormData] = useState<SignInFormProps>(initialFormData)
   const [formErrors, setFormErrors] = useState<FormErrors>({ mobileNumber: '' })
 
@@ -31,17 +31,17 @@ const SignIn = ({ initialFormData = { mobileNumber: '' } }: SignInProps) => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let { name, value } = e.target
 
-    // if (!value.startsWith('+91 ')) {
-    //   value = '+91 '
-    // }
+    if (!value.startsWith('+91 ')) {
+      value = '+91 '
+    }
 
-    // // Prevent clearing the field
-    // if (value.length < 4) {
-    //   value = '+91 '
-    // }
-    const numericPart = value //.replace(/\D/g, '').slice(2)
+    // Prevent clearing the field
+    if (value.length < 4) {
+      value = '+91 '
+    }
+    const numericPart = value.replace(/\D/g, '').slice(2)
 
-    value = `${numericPart}`
+    value = `+91 ${numericPart}`
 
     setFormData(prevFormData => ({
       ...prevFormData,
@@ -53,7 +53,7 @@ const SignIn = ({ initialFormData = { mobileNumber: '' } }: SignInProps) => {
       [name]: value
     }
 
-    const errors = mobilePhoneValidate(updatedFormData, false)
+    const errors = mobilePhoneValidate(updatedFormData)
     setFormErrors(prevErrors => ({
       ...prevErrors,
       [name]: t[`${errors[name as keyof FormErrors]}`] || ''
@@ -62,14 +62,13 @@ const SignIn = ({ initialFormData = { mobileNumber: '' } }: SignInProps) => {
 
   const isFormFilled = useMemo(() => {
     return (
-      // Object.values(formData).every(value => value !== '+91 ') &&
-      Object.values(formErrors).every(value => value === '')
+      Object.values(formData).every(value => value !== '+91 ') && Object.values(formErrors).every(value => value === '')
     )
   }, [formData, formErrors])
 
   const handleSignIn = async () => {
     const signInData = {
-      phone: formData.mobileNumber //.replace('+91 ', '')
+      phone: formData.mobileNumber.replace('+91 ', '')
     }
 
     try {

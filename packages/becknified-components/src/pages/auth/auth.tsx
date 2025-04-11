@@ -147,7 +147,6 @@ const Auth: React.FC<AuthProps> = ({ schema, isLoading, dataTestForm, customComp
             <Flex
               mb="20px"
               className={Styles.auth_checkbox_container}
-              flexDirection="column"
               alignItems="flex-start"
             >
               <Checkbox
@@ -168,45 +167,41 @@ const Auth: React.FC<AuthProps> = ({ schema, isLoading, dataTestForm, customComp
                     borderRadius: '2px'
                   }
                 }}
+              />
+              <Flex
+                ml={2}
+                fontSize="12px"
+                fontWeight={400}
+                flexWrap="wrap"
+                alignItems="center"
               >
-                <Text
-                  fontSize="12px"
-                  fontWeight={400}
+                <Text as="span">I agree to the {termsCheckboxProps.termsText.serviceName}</Text>
+                <Link
+                  ml={1}
+                  _hover={{ textDecoration: 'none' }}
+                  href={termsCheckboxProps.termsText.termsLink}
+                  isExternal
+                  color={termsCheckboxProps.color}
+                  target="_blank"
                 >
-                  I agree to the {termsCheckboxProps.termsText.serviceName}
-                  <Link
-                    ml={'5px'}
-                    _hover={{ textDecoration: 'none' }}
-                    href={termsCheckboxProps.termsText.termsLink}
-                    isExternal
-                    color={termsCheckboxProps.color}
-                    fontSize={'12px'}
-                    target="_blank"
-                  >
-                    Terms of Service
-                  </Link>
-                  <Text
-                    as="span"
-                    // display={['none', 'inline']}
-                    fontSize="12px"
-                    fontWeight={400}
-                    ml="5px"
-                  >
-                    and
-                  </Text>
+                  Terms of Service
+                </Link>
+                <Text
+                  as="span"
+                  mx={1}
+                >
+                  and
                 </Text>
                 <Link
-                  mt={['5px', '0']}
                   _hover={{ textDecoration: 'none' }}
                   href={termsCheckboxProps.termsText.privacyLink}
                   isExternal
                   color={termsCheckboxProps.color}
-                  fontSize={'12px'}
                   target="_blank"
                 >
                   Privacy Policy
                 </Link>
-              </Checkbox>
+              </Flex>
             </Flex>
           )}
 

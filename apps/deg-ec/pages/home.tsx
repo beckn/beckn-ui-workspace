@@ -1,49 +1,17 @@
-import {
-  Box,
-  Button,
-  Flex,
-  Grid,
-  Image,
-  Text,
-  useColorModeValue,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  Divider
-} from '@chakra-ui/react'
+import { Box, Button, Flex, Grid, Image, Text, Menu, MenuButton, MenuList, MenuItem } from '@chakra-ui/react'
+import Navbar from '@components/navbar/Navbar'
 import Cookies from 'js-cookie'
 import { useRouter } from 'next/router'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 
 interface ExperienceCardProps {
   title: string
   icon: string
-  url: string
   isDisabled?: boolean
 }
 
-const ExperienceCard = ({ title, icon, url, isDisabled = false }: ExperienceCardProps) => {
+const ExperienceCard = ({ title, icon, isDisabled = false }: ExperienceCardProps) => {
   const router = useRouter()
-
-  useEffect(() => {
-    const countryData = {
-      country: {
-        name: 'United States',
-        code: 'USA'
-      }
-    }
-    Cookies.set('country_code', JSON.stringify(countryData), {
-      path: '/',
-      sameSite: 'strict'
-    })
-  }, [])
-
-  const countryCookie = Cookies.get('country_code')
-
-  const decodedCookie = countryCookie ? decodeURIComponent(countryCookie) : ''
-
-  console.log(decodedCookie)
 
   return (
     <Box
@@ -60,8 +28,9 @@ const ExperienceCard = ({ title, icon, url, isDisabled = false }: ExperienceCard
       _hover={{ transform: isDisabled ? 'translateY(-20px)' : 'translateY(-20px)' }}
       opacity={isDisabled ? 1 : 1}
       onClick={() => {
-        if (!isDisabled && url) {
-          router.push(`/landing?url=${encodeURIComponent(url)}&title=${encodeURIComponent(title)}`)
+        if (!isDisabled) {
+          const route = title.toLowerCase().split(' ')[0]
+          router.push(`/${route}`)
         }
       }}
     >
@@ -139,26 +108,20 @@ const Home = () => {
     }
   ]
 
-  const experiences: Array<{ title: string; icon: string; url: string }> = [
-    { title: 'Retail Experience', icon: '/images/retail.svg', url: process.env.NEXT_PUBLIC_OPEN_SPARK_RETAIL || '' },
-    { title: 'Rental Experience', icon: '/images/rental.svg', url: process.env.NEXT_PUBLIC_OPEN_SPARK_RENTAL || '' },
-    { title: 'Wallet Experience', icon: '/images/wallet.svg', url: process.env.NEXT_PUBLIC_OPEN_SPARK_WALLET || '' },
+  const experiences: Array<{ title: string; icon: string }> = [
+    { title: 'Retail Experience', icon: '/images/retail.svg' },
+    { title: 'Rental Experience', icon: '/images/rental.svg' },
+    { title: 'Wallet Experience', icon: '/images/wallet.svg' },
     {
       title: 'Finance Experience',
-      icon: '/images/finance.svg',
-      url: process.env.NEXT_PUBLIC_OPEN_SPARK_LEND_EASE || ''
+      icon: '/images/finance.svg'
     },
-    { title: 'P2P Energy Trading', icon: '/images/p2p.svg', url: '' },
-    { title: 'EV Charging', icon: '/images/charging.svg', url: '' }
+    { title: 'P2P Energy Trading', icon: '/images/p2p.svg' },
+    { title: 'EV Charging', icon: '/images/charging.svg' }
   ]
 
-  console.log(experiences)
-
   return (
-    <Box
-      p="60px"
-      backgroundImage={'/images/Home.svg'}
-    >
+    <Box backgroundImage={'/images/Home.svg'}>
       <Flex
         justifyContent="space-between"
         alignItems="center"
@@ -271,42 +234,13 @@ const Home = () => {
               key={index}
               title={exp.title}
               icon={exp.icon}
-              url={exp.url}
               isDisabled={exp.title === 'P2P Energy Trading' || exp.title === 'EV Charging'}
             />
           ))}
         </Grid>
       </Box>
 
-      <Box
-        w={'50px'}
-        h="104px"
-        boxShadow="16px 17px 22px 23px #00000008"
-        borderRadius={'50px'}
-        bg="#fff"
-        p="6px"
-        position={'absolute'}
-        right="60px"
-        top={'calc(50vh - 25px)'}
-        display="flex"
-        justifyContent={'center'}
-        alignItems="center"
-        flexDirection={'column'}
-      >
-        <Image
-          src="/images/homeIcon.svg"
-          alt=""
-          cursor={'pointer'}
-          onClick={() => router.push('/home')}
-        />
-        <Divider />
-        <Image
-          src="/images/exitIcon.svg"
-          alt=""
-          cursor={'pointer'}
-          onClick={() => router.push('/')}
-        />
-      </Box>
+      <Navbar />
     </Box>
   )
 }

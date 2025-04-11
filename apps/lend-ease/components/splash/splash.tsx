@@ -8,7 +8,6 @@ const Splash = () => {
       justifyContent={'center'}
       alignItems="center"
       height="100vh"
-      background="#d8e2ee"
     >
       <Image
         src="./images/finance_app_logo.svg"
@@ -16,7 +15,7 @@ const Splash = () => {
         mb="20px"
       />
       <Image
-        src="./images/footer_splash.svg"
+        src="./images/splash-footer.svg"
         alt="splash-footer-img"
       />
     </Flex>

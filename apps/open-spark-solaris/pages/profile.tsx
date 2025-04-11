@@ -42,7 +42,6 @@ const ProfilePage = () => {
   })
 
   const { profileEditable } = useSelector((state: UserRootState) => state.user)
-  const { user } = useSelector((state: AuthRootState) => state.auth)
 
   useEffect(() => {
     return () => {
@@ -184,18 +183,6 @@ const ProfilePage = () => {
         customInputBlurHandler: updateProfile
       }
     ]
-    const walletId = user?.deg_wallet?.deg_wallet_id?.slice(-4)
-    if (user?.deg_wallet?.deg_wallet_id) {
-      inputs.push({
-        type: 'text',
-        name: 'userDid',
-        value: `/subj****${walletId}`,
-        handleChange: handleInputChange,
-        label: 'Wallet ID',
-        disabled: true,
-        customInputBlurHandler: () => {}
-      })
-    }
 
     return inputs
   }

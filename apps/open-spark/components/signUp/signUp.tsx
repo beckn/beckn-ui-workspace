@@ -5,7 +5,7 @@ import { FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import Router from 'next/router'
 import { FormErrors, SignUpFormProps } from '@beckn-ui/common/lib/types'
 import { useTradeRegisterMutation } from '@services/UserService'
-import openSpark from '@public/images/spark_icon_new.svg'
+import openSpark from '@public/images/spark-log.svg'
 import { useLanguage } from '@hooks/useLanguage'
 import { CustomFormErrorProps, signUpValidateForm } from '@utils/form-utils'
 import { ROUTE_TYPE } from '@lib/config'
@@ -282,7 +282,7 @@ const SignUp = () => {
             color: '#4498E8',
             onChange: e => setTermsAccepted(e.target.checked),
             termsText: {
-              serviceName: '',
+              serviceName: 'Open Spark',
               termsLink: '/terms',
               privacyLink: '/privacy'
             }

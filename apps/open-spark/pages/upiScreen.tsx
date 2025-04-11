@@ -45,7 +45,7 @@ const UpiScreen = () => {
       flexDirection="column"
       height="calc(100vh - 46px)"
       justifyContent="space-between"
-      // backgroundColor="#fff"
+      backgroundColor="#fff"
       marginTop={'-50px'}
     >
       {/* Top Section */}

@@ -4,7 +4,6 @@ import Router, { useRouter } from 'next/router'
 import { useSelector } from 'react-redux'
 import { DiscoveryRootState } from '@beckn-ui/common'
 import { currencyFormat, getCountryCode } from '@utils/general'
-import ClearIcon from '../public/images/clearIcon.svg'
 import { currencyMap } from '@lib/config'
 
 const UpiScreen = () => {
@@ -47,7 +46,6 @@ const UpiScreen = () => {
       justifyContent="space-between"
       backgroundColor="#fff"
       marginTop={'-50px'}
-      background="#E4FFE4"
     >
       {/* Top Section */}
       <Box>
@@ -145,8 +143,8 @@ const UpiScreen = () => {
               key={index}
               size="30px"
               border="2px solid"
-              borderColor={digit ? '#4398E8' : 'gray.300'}
-              bg={digit ? '#4398E8' : 'white'}
+              borderColor={digit ? '#228B22' : 'gray.300'}
+              bg={digit ? '#228B22' : 'white'}
             />
           ))}
         </Flex>
@@ -204,10 +202,7 @@ const UpiScreen = () => {
           variant="outline"
           onClick={handleDelete}
         >
-          <Image
-            src={ClearIcon}
-            alt="Clear"
-          />
+          ✕
         </Button>
         <Button
           textColor="black"
