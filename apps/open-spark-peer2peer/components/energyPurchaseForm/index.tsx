@@ -340,8 +340,8 @@ export default function EnergyPurchaseForm({ preferenceType, role }: EnergyPurch
       </VStack>
       <BecknButton
         children={role === ROLE.BUY ? 'Place Buy Order' : 'List for Trade'}
-        handleClick={role === ROLE.BUY ? handleSubmitPreferences : handleSubmit}
-        disabled={!isFormComplete} // Button disabled if form incomplete
+        handleClick={handleSubmitPreferences}
+        disabled={!isFormComplete}
         dataTest={testIds.submit_preference_sell_buy_btn}
       />
 
