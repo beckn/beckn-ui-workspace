@@ -145,7 +145,7 @@ const OpenWalletBottomModal: React.FC<OpenWalletBottomModalProps> = ({ modalType
   const walletOptions = [
     { text: 'MetaMask Wallet', image: metaMaskWallet, handleClick: () => console.log('meta') },
     { text: 'OpenSea Wallet', image: openSeaWallet, handleClick: () => console.log('opensea') },
-    { text: 'Vault', image: openWallet, handleClick: () => setModalType('link') }
+    { text: 'Wallet', image: openWallet, handleClick: () => setModalType('link') }
   ]
 
   return (
@@ -190,7 +190,7 @@ const OpenWalletBottomModal: React.FC<OpenWalletBottomModalProps> = ({ modalType
           case 'link':
             return (
               <BottomModal
-                title="Link to your Vault profile"
+                title="Link to your Wallet profile"
                 isOpen={true}
                 onClose={() => setModalType(null)}
               >
