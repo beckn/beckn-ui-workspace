@@ -1140,6 +1140,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
 
     // Get total cart price from all items
     const cartDetails = getCartItemsWithQuantity()
+    console.log('cartDetails', cartDetails)
     const totalCartPrice = Number(cartDetails.totalCartPrice || 0)
 
     // Extract EMI plan details

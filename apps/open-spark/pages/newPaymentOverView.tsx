@@ -34,16 +34,26 @@ const NewPaymentOverView = () => {
   const emiDetails = useSelector((state: any) => state.selectedEmi.emiDetails[0])
 
   const createPaymentBreakdownMap = () => {
-    const total = cartItems.reduce((sum, item) => {
+    let total = 0
+    let deliveryCharge = 0
+
+    cartItems.forEach(item => {
+      const isDeliveryCharge = item.name?.toLowerCase().includes('delivery charge')
       const quantity = Number(item.quantity) || 1
-      return sum + quantity * Number(item.price?.value || 0)
-    }, 0)
+      const price = Number(item.price?.value || 0)
+
+      if (isDeliveryCharge) {
+        deliveryCharge += price // Don't multiply delivery charge by quantity
+      } else {
+        total += quantity * price
+      }
+    })
 
     const discountPercentage = Number(coverage)
     const discountAmount = total * (discountPercentage / 100)
 
-    setTotalValue({ total, discountAmount })
-    setPayableValue(total - discountAmount)
+    setTotalValue({ total: total + deliveryCharge, discountAmount })
+    setPayableValue(total + deliveryCharge - discountAmount)
   }
 
   useEffect(() => {

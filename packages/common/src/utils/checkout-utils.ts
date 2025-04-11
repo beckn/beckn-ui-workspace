@@ -92,9 +92,9 @@ export const getSubTotalAndDeliveryCharges = (
   initData: InitResponseModel[] | StatusResponseModel[],
   frequency?: number | Record<string, any>
 ) => {
-  console.log('frequency', frequency)
   let totalPriceWithCurrency: { value: number; currency: CurrencyType } = { value: 0, currency: 'INR' }
   let subTotal: number = 0
+  let deliveryCharge: number = 0
   let currencySymbol
 
   if (initData && initData.length > 0) {
@@ -103,25 +103,41 @@ export const getSubTotalAndDeliveryCharges = (
         value: totalPriceWithCurrency.value + Number(data.message.order.quote.price?.value) || 0,
         currency: data.message.order.quote.price?.currency || 'INR'
       }
+
       if (data.message.order.quote.breakup) {
         data.message.order.quote.breakup.forEach(breakup => {
-          let quantity = 1
-          if (typeof frequency !== 'number') {
-            quantity = frequency?.[breakup.item?.id!]?.quantity || 1
-          } else {
-            quantity = frequency
-          }
+          const isDeliveryCharge = breakup.title.toLowerCase().includes('delivery charge')
           const itemPrice = Number(breakup.price.value) || 0
-          subTotal += itemPrice * quantity
+
+          if (isDeliveryCharge) {
+            // Add delivery charge without multiplying by quantity
+            deliveryCharge += itemPrice
+          } else {
+            // For non-delivery items, apply quantity
+            let quantity = 1
+            if (typeof frequency !== 'number') {
+              quantity = frequency?.[breakup.item?.id!]?.quantity || 1
+            } else {
+              quantity = frequency
+            }
+            subTotal += itemPrice * quantity
+          }
         })
         currencySymbol = data.message.order.quote.breakup[0]?.price.currency
       }
     })
   }
-  console.log('Final subtotal:', subTotal)
+
+  // Add delivery charge to subtotal for final calculation
+  const finalTotal = subTotal + deliveryCharge
+
+  console.log('Final subtotal:', finalTotal)
+  console.log('Delivery charge:', deliveryCharge)
+
   const paymentBreakup = {
-    subTotal: subTotal ? subTotal : totalPriceWithCurrency.value,
-    currencySymbol: subTotal ? currencySymbol : totalPriceWithCurrency.currency
+    subTotal: finalTotal || totalPriceWithCurrency.value,
+    deliveryCharge,
+    currencySymbol: finalTotal ? currencySymbol : totalPriceWithCurrency.currency
   }
   return paymentBreakup
 }

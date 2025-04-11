@@ -254,7 +254,9 @@ const CheckoutPage = () => {
     if (isInitResultPresent()) {
       initResponse.map((res, ind) => {
         res.message.order.quote.breakup.forEach(breakup => {
-          let quantity = cartItemsWithQuantity[breakup.item?.id!]?.quantity || 1
+          const isDeliveryCharge = breakup.title.toLowerCase().includes('delivery charge')
+          const quantity = isDeliveryCharge ? 1 : cartItemsWithQuantity[breakup.item?.id!]?.quantity || 1
+
           paymentBreakdownMap[breakup.title] = {
             value: (
               Number(paymentBreakdownMap[breakup.title]?.value || 0) +
@@ -321,78 +323,85 @@ const CheckoutPage = () => {
             Order Overview
           </Box>
           <DetailsCard>
-            {cartItems.map((singleItem, ind) => (
-              <React.Fragment key={ind}>
-                <Box pb="10px">
-                  <Flex alignItems={'center'}>
-                    <Image
-                      src={singleItem.images?.[0].url}
-                      alt={'img'}
-                      width="120px"
-                      height="94px"
-                    />
-                    <Box>
-                      <Text
-                        fontSize="15px"
-                        fontWeight="600"
-                        noOfLines={2}
-                        textOverflow="ellipsis"
-                        whiteSpace="pre-wrap"
-                        overflowWrap="break-word"
-                        height={'fit-content'}
-                        mb="10px"
-                      >
-                        {singleItem.name}
-                      </Text>
-                      <Typography
-                        text={singleItem.short_desc}
-                        variant="subTextRegular"
-                      />
-                      <Flex>
-                        <Typography
-                          fontWeight="600"
-                          text={'Sold by:'}
-                          variant="subTextRegular"
-                          style={{ marginRight: '2px', whiteSpace: 'nowrap' }}
-                        />
-                        <Typography
-                          text={singleItem.productInfo.providerName}
-                          variant="subTextRegular"
-                        />
-                      </Flex>
-                    </Box>
-                  </Flex>
+            {cartItems.map((singleItem, ind) => {
+              const isDeliveryCharge = singleItem.name?.toLowerCase().includes('delivery charge')
+              const price = isDeliveryCharge
+                ? Number(singleItem.price.value)
+                : Number(singleItem.price.value) * singleItem.quantity
 
-                  <Box>
-                    <Flex
-                      pb="5px"
-                      alignItems="center"
-                    >
-                      <Flex alignItems="center">
+              return (
+                <React.Fragment key={ind}>
+                  <Box pb="10px">
+                    <Flex alignItems={'center'}>
+                      <Image
+                        src={singleItem.images?.[0].url}
+                        alt={'img'}
+                        width="120px"
+                        height="94px"
+                      />
+                      <Box>
                         <Text
-                          mr="10px"
-                          fontWeight={'600'}
+                          fontSize="15px"
+                          fontWeight="600"
+                          noOfLines={2}
+                          textOverflow="ellipsis"
+                          whiteSpace="pre-wrap"
+                          overflowWrap="break-word"
+                          height={'fit-content'}
+                          mb="10px"
                         >
-                          Qty
+                          {singleItem.name}
                         </Text>
                         <Typography
-                          className="quantity-checkout"
-                          text={` ${singleItem.quantity.toString()}`}
+                          text={singleItem.short_desc}
                           variant="subTextRegular"
                         />
-                      </Flex>
-                      <Box ml="25px">
-                        <ProductPrice
-                          price={Number(singleItem.price.value) * singleItem.quantity}
-                          currencyType={singleItem.price.currency}
-                        />
+                        <Flex>
+                          <Typography
+                            fontWeight="600"
+                            text={'Sold by:'}
+                            variant="subTextRegular"
+                            style={{ marginRight: '2px', whiteSpace: 'nowrap' }}
+                          />
+                          <Typography
+                            text={singleItem.productInfo?.providerName}
+                            variant="subTextRegular"
+                          />
+                        </Flex>
                       </Box>
                     </Flex>
+
+                    <Box>
+                      <Flex
+                        pb="5px"
+                        alignItems="center"
+                      >
+                        <Flex alignItems="center">
+                          <Text
+                            mr="10px"
+                            fontWeight={'600'}
+                          >
+                            Qty
+                          </Text>
+                          <Typography
+                            className="quantity-checkout"
+                            text={` ${singleItem.quantity.toString()}`}
+                            variant="subTextRegular"
+                          />
+                        </Flex>
+                        <Box ml="25px">
+                          <ProductPrice
+                            price={price}
+                            currencyType={singleItem.price.currency}
+                          />
+                        </Box>
+                      </Flex>
+                    </Box>
                   </Box>
-                </Box>
-                <Divider />
-              </React.Fragment>
-            ))}
+                  <Divider />
+                </React.Fragment>
+              )
+            })}
           </DetailsCard>
         </>
       )}

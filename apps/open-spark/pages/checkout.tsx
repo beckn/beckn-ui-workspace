@@ -239,7 +239,9 @@ const CheckoutPage = () => {
     if (isInitResultPresent()) {
       initResponse.map((res, ind) => {
         res.message.order.quote.breakup.forEach(breakup => {
-          let quantity = cartItemsWithQuantity[breakup.item?.id!]?.quantity || 1
+          const isDeliveryCharge = breakup.title.toLowerCase().includes('delivery charge')
+          const quantity = isDeliveryCharge ? 1 : cartItemsWithQuantity[breakup.item?.id!]?.quantity || 1
+
           paymentBreakdownMap[breakup.title] = {
             value: (
               Number(paymentBreakdownMap[breakup.title]?.value || 0) +
