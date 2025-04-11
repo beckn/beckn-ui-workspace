@@ -34,7 +34,7 @@ const BottomModal: React.FC<BottomModalProps> = ({
       motionPreset="slideInBottom"
     >
       <ModalOverlay
-        z-index={backgroundAccessControl ? 'unset' : undefined}
+        z-index={backgroundAccessControl ? 'unset' : `1`}
         background={backgroundAccessControl ? 'unset' : undefined}
         height={backgroundAccessControl ? '0px' : '100vh'}
       />

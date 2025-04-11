@@ -4,6 +4,7 @@ import { Button } from '@chakra-ui/react'
 
 const BecknButton: React.FC<ButtonProps> = ({
   leftIcon,
+  rightIcon,
   text,
   handleClick,
   className,
@@ -24,6 +25,7 @@ const BecknButton: React.FC<ButtonProps> = ({
     <Button
       id={id}
       leftIcon={leftIcon}
+      rightIcon={rightIcon}
       width={fullWidth ? 'full' : 'initial'}
       onClick={handleClick}
       className={className}

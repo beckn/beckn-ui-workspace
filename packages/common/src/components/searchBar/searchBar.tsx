@@ -36,11 +36,12 @@ const SearchBar: React.FC<SearchBarProps> = ({ searchString, handleChange, place
           p={'20px'}
           bg="transparent"
           borderRadius={'12px'}
-          _focus={{ outline: 'none' }}
+          _focus={{ outline: 'none', backgroundColor: '#ffffff' }}
           _focusVisible={{ zIndex: 1, borderColor: '#3182ce', boxShadow: '0 0 0 0 #3182ce' }}
           w="full"
           type="search"
           placeholder={placeholder}
+          backgroundColor={'#ffffff'}
           onChange={inputChangeHandler}
           data-test={testIds.searchInput}
           value={inputValue}
@@ -54,6 +55,8 @@ const SearchBar: React.FC<SearchBarProps> = ({ searchString, handleChange, place
           onClick={handleSubmit}
           cursor={'pointer'}
           zIndex={9999}
+          backgroundColor={'#ffffff'}
+          padding={'0px 3px'}
         >
           <Image src={'/images/searchInput.svg'} />
         </Box>

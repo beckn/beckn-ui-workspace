@@ -12,7 +12,7 @@
   -webkit-transition: 0.2s ease all;
 }
 .input {
-  font-size: 15px;
+  font-size: 16px;
   display: block;
   padding: 15px 0 0 0;
   width: 100%;
@@ -21,15 +21,21 @@
   border-bottom: 1px solid #43464e;
   box-sizing: border-box;
 }
-.error {
-  font-size: 10px;
+
+/* Default error styles (for non-rounded inputs) */
+.input_container:not(.rounded) .error {
+  font-size: 12px;
   color: rgba(var(--color-primary));
+  position: absolute;
+  left: 0;
+  bottom: -20px;
+  margin-top: 4px;
 }
 
-/* .input:focus {
-  outline: none;
-  border-color: #a71b4a;
-} */
+.input_container:not(.rounded):has(.error) {
+  margin-bottom: 35px;
+}
+
 .input.otp_number_input:focus {
   outline: none;
   border-color: #000;
@@ -57,11 +63,71 @@
   top: -12px;
   font-size: 14px;
 }
-.error {
-  font-size: 10px;
+
+/* Rounded variant specific styles */
+.input_container.rounded {
+  margin-bottom: 35px;
+}
+
+.input_container.rounded .input {
+  border: 1px solid #989898;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 16px;
+  height: auto;
+}
+
+.input_container.rounded .input:focus {
+  /* border-color: var(--color-primary, #3182ce); */
+  outline: none;
+}
+
+.input_container.rounded .input_label {
+  left: 16px;
+  font-size: 14px;
+  font-weight: 400;
+  color: #a0aec0;
+  background-color: transparent;
+  padding: 0;
+  transform: translateY(-50%);
+  top: 50%;
+  transform-origin: left top;
+  transition: all 0.2s ease-out;
+}
+
+.input_container.rounded .input:focus ~ .input_label,
+.input_container.rounded .input:not(:placeholder-shown) ~ .input_label {
+  top: 0;
+  transform: translateY(-50%) scale(0.85);
+  background-color: white;
+  padding: 0 4px;
+  color: var(--color-primary, #3182ce);
+}
+
+.input_container.rounded .input:not(:focus):not(:placeholder-shown) ~ .input_label {
+  color: #4a5568;
+}
+
+/* Error state for rounded variant */
+.input_container.rounded.has_error .input {
+  border-color: #a71b4a;
+}
+
+.input_container.rounded.has_error .input:focus {
+  border-color: #a71b4a;
+}
+
+.input_container.rounded.has_error .input:focus ~ .input_label,
+.input_container.rounded.has_error .input:not(:focus):not(:placeholder-shown) ~ .input_label,
+.input_container.rounded.has_error .input_label {
   color: #a71b4a;
 }
 
-.input_container:has(.error) {
-  margin-bottom: 25px;
+.input_container.rounded .error {
+  font-size: 12px;
+  color: #a71b4a;
+  position: absolute;
+  left: 16px;
+  bottom: -20px;
+  margin-top: 4px;
 }
