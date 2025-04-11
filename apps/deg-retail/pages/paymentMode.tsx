@@ -1335,7 +1335,9 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                                   color="#E12525"
                                   fontSize="10px"
                                 >
-                                  Processing Fee: {plan.providerShortDescription}
+                                  Processing Fee:{' '}
+                                  {currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}
+                                  {plan.providerShortDescription}
                                 </Text>
                               </Box>
                               <Image
