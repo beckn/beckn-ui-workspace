@@ -2,13 +2,16 @@ import { DetailCard, OrderStatusProgress, OrderStatusProgressProps } from '@beck
 import PaymentDetails from '@beckn-ui/becknified-components/src/components/checkout/payment-details'
 import {
   ConfirmResponseModel,
+  DataState,
   formatTimestamp,
   getOrderDetailsPaymentBreakDown,
   getPaymentBreakDown,
+  Item,
+  QuantityDetails,
   StatusResponseModel
 } from '@beckn-ui/common'
 import { Accordion, Typography } from '@beckn-ui/molecules'
-import { Box, CardBody, Flex, Text, Image, Divider } from '@chakra-ui/react'
+import { Box, CardBody, Flex, Text, Image, Divider, useDisclosure } from '@chakra-ui/react'
 import { ItemMetaData, ORG_NAME_MAP } from '@components/credLayoutRenderer/ItemRenderer'
 import ShippingBlock from '@components/orderDetailComponents/Shipping'
 import { DOMAIN } from '@lib/config'
@@ -33,6 +36,7 @@ export default function OrderDetails() {
   const [orderDetails, setOrderDetails] = useState<{ data: ConfirmResponseModel[] }>()
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
   const [statusData, setStatuData] = useState<any>()
+  const { isOpen, onOpen, onClose } = useDisclosure()
   const [orderStatusMap, setOrderStatusMap] = useState<any[]>([])
   const [currentStatusLabel, setCurrentStatusLabel] = useState('')
   const [attestationsDetails, setAttestationsDetails] = useState<{ name: string; icon: string }[]>([
@@ -175,6 +179,24 @@ export default function OrderDetails() {
   const isDelivered = orderDetails?.data?.message?.fulfillments?.[0]?.state?.descriptor?.code === DELIVERED
   const isCancelled = orderDetails?.data?.message?.fulfillments?.[0]?.state?.descriptor?.code === CANCELLED
 
+  const getItemsWithQuantity = () => {
+    const cartItemQuantity: any = {}
+    statusData[0].message.order.items.forEach((item: any) => {
+      cartItemQuantity[item.id] = {
+        id: item.id,
+        quantity: item.quantity.selected.count
+      }
+    })
+    return cartItemQuantity
+  }
+  const totalQuantityOfOrder = () => {
+    let count = 0
+    statusData[0].message.order.items.forEach((item: Item) => {
+      count += (item.quantity as QuantityDetails)?.selected?.count
+    })
+    return count
+  }
+
   return (
     <Box
       className="hideScroll"
@@ -271,24 +293,36 @@ export default function OrderDetails() {
                   justifyContent={'space-between'}
                   alignItems={'center'}
                 >
-                  <Flex maxWidth={'50vw'}>
-                    <Typography
-                      text={orderDetails?.data?.[0]?.message?.items?.[0]?.name}
-                      fontSize="12px"
-                      fontWeight="400"
-                      sx={{
-                        noOfLines: 3,
-                        textOverflow: 'ellipsis',
-                        overflow: 'hidden'
-                      }}
-                    />
+                  <Flex maxWidth={'40vw'}>
+                    <Text
+                      textOverflow={'ellipsis'}
+                      overflow={'hidden'}
+                      whiteSpace={'nowrap'}
+                      fontSize={'12px'}
+                      fontWeight={'400'}
+                      data-test={testIds.orderDetailspage_orderSummaryItemName}
+                    >
+                      {statusData[0]?.message?.order?.items[0]?.name}
+                    </Text>
+                    {totalQuantityOfOrder() > 1 && (
+                      <Text
+                        pl={'5px'}
+                        color={'green'}
+                        fontSize={'12px'}
+                        fontWeight={'600'}
+                        data-test={testIds.orderDetailspage_orderSummaryTotalItems}
+                        onClick={onOpen}
+                      >
+                        +{totalQuantityOfOrder() - 1}
+                      </Text>
+                    )}
                   </Flex>
 
                   <Text
                     fontSize={'15px'}
                     fontWeight={'500'}
                     data-test={testIds.orderDetailspage_orderStatus}
-                    color={statusData?.[0]?.message.order.status === 'CANCELLED' ? 'red' : 'green'}
+                    color={statusData[0].message.order.status === 'CANCELLED' ? 'red' : 'green'}
                   >
                     {statusData[0].message.order.status === 'ACTIVE' ? 'COMPLETED' : statusData[0].message.order.status}
                   </Text>
@@ -332,9 +366,10 @@ export default function OrderDetails() {
             >
               {statusData && (
                 <PaymentDetails
-                  paymentBreakDown={getPaymentBreakDown(statusData).breakUpMap}
+                  paymentBreakDown={getPaymentBreakDown(statusData, getItemsWithQuantity()).breakUpMap}
                   totalText="Total"
-                  totalValueWithCurrency={getPaymentBreakDown(statusData).totalPricewithCurrent}
+                  totalValueWithCurrency={getPaymentBreakDown(statusData, getItemsWithQuantity()).totalPricewithCurrent}
+                  dataTest={testIds.orderDetailspage_paymentDetails}
                 />
               )}
             </Box>
