@@ -81,6 +81,7 @@ const retailOrderConfirmation = () => {
   const initResponse = useSelector((state: CheckoutRootState) => state.checkout.initResponse)
   const confirmResponse = useSelector((state: CheckoutRootState) => state.checkout.confirmResponse)
   const cartItems = useSelector((state: ICartRootState) => state.cart.items)
+  const emiDetails = useSelector((state: any) => state.selectedEmi.emiDetails[0])
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
 
   const getOrderCategoryId = (type: any) => {
@@ -285,20 +286,23 @@ const retailOrderConfirmation = () => {
       const payload =
         type === 'RENT_AND_HIRE'
           ? getRentalPayloadForConfirm(initResponse, timestamp.fromTime!, timestamp.toTime!, calculatedDuration!)
-          : getPayloadForConfirm(initResponse, getCartItemsWithQuantity(), {
-              location: getCountryCode()
-            }) // fixed temporary once Rahul fixes the changes regarding dynamic price calculation on BE revert the chnges and do the fixes accord.
+          : getPayloadForConfirm(
+              initResponse,
+              { cartDetails: getCartItemsWithQuantity(), emiDetails },
+              {
+                location: getCountryCode()
+              }
+            ) // fixed temporary once Rahul fixes the changes regarding dynamic price calculation on BE revert the chnges and do the fixes accord.
       confirm(payload)
     }
   }, [initResponse, timestamp])
 
   useEffect(() => {
     if (confirmResponse && confirmResponse.length > 0) {
-      const ordersPayload = getPayloadForOrderHistoryPost(
-        confirmResponse,
-        getOrderCategoryId(type),
-        getCartItemsWithQuantity()
-      ) // fixed temporary once Rahul fixes the changes regarding dynamic price calculation on BE revert the chnges and do the fixes accord.
+      const ordersPayload = getPayloadForOrderHistoryPost(confirmResponse, getOrderCategoryId(type), {
+        cartDetails: getCartItemsWithQuantity(),
+        emiDetails
+      }) // fixed temporary once Rahul fixes the changes regarding dynamic price calculation on BE revert the chnges and do the fixes accord.
       ordersPayload.data.forEach(payload => {
         axios
           .post(`${strapiUrl}/unified-beckn-energy/order-history/create`, payload, axiosConfig)

@@ -1,6 +1,6 @@
 import { ConfirmResponseModel, InitResponseModel } from '@beckn-ui/common'
 
-export const getPayloadForConfirm = (initResponse: InitResponseModel[], cartPriceDetails: any, location?: any) => {
+export const getPayloadForConfirm = (initResponse: InitResponseModel[], cartAndEmiDetails: any, location?: any) => {
   const payload = {
     data: initResponse.map(({ context, message: { order } }) => ({
       context: {
@@ -21,7 +21,7 @@ export const getPayloadForConfirm = (initResponse: InitResponseModel[], cartPric
                 ...data,
                 quantity: {
                   ...data.quantity,
-                  selected: { count: cartPriceDetails[order.provider.id][data.id].quantity }
+                  selected: { count: cartAndEmiDetails.cartDetails[order.provider.id][data.id].quantity }
                 }
               }
             }),
@@ -31,7 +31,11 @@ export const getPayloadForConfirm = (initResponse: InitResponseModel[], cartPric
               {
                 id: order.payments?.[0]?.id,
                 params: {
-                  amount: `${order.quote?.price?.value}`,
+                  amount: `${
+                    Number(order.quote?.price?.value) +
+                    Number(cartAndEmiDetails.emiDetails.deliveryCharges) +
+                    Number(cartAndEmiDetails.emiDetails.processingFee)
+                  }`,
                   currency: order.quote?.price?.currency
                 },
                 status: 'PAID',
@@ -50,7 +54,7 @@ export const getPayloadForConfirm = (initResponse: InitResponseModel[], cartPric
 export const getPayloadForOrderHistoryPost = (
   confirmData: ConfirmResponseModel[],
   categoryId: number,
-  cartPriceDetails: any
+  cartAndEmiDetails: any
 ) => {
   console.log(categoryId)
 
@@ -75,7 +79,7 @@ export const getPayloadForOrderHistoryPost = (
         quote: {
           price: {
             currency: message.quote.price.currency,
-            value: Number(message.quote.price.value) || 0
+            value: Number(message.quote.price.value)
           }
         },
         payments: message.payments
