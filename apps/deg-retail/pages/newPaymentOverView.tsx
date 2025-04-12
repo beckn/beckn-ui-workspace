@@ -1,6 +1,7 @@
 import { DetailCard } from '@beckn-ui/becknified-components'
 import {
   cartActions,
+  CheckoutRootState,
   DiscoveryRootState,
   ICartRootState,
   ParsedItemModel,
@@ -174,6 +175,7 @@ const NewPaymentOverView = () => {
           <Flex
             justifyContent={'space-between'}
             alignItems="center"
+            mb="15px"
           >
             <Typography
               fontSize="15px"
@@ -188,6 +190,47 @@ const NewPaymentOverView = () => {
               <Typography
                 fontSize="15px"
                 text={currencyFormat(totalValue.discountAmount)}
+              />
+            </Flex>
+          </Flex>
+          <Flex
+            justifyContent={'space-between'}
+            alignItems="center"
+            mb="15px"
+          >
+            <Typography
+              fontSize="15px"
+              text={'Processing Fee'}
+            />
+            <Flex alignItems={'center'}>
+              <Typography
+                fontSize="15px"
+                text={`+${currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}`}
+                // style={{ paddingRight: '2px' }}
+              />
+              <Typography
+                fontSize="15px"
+                text={currencyFormat(emiDetails.processingFee)}
+              />
+            </Flex>
+          </Flex>
+          <Flex
+            justifyContent={'space-between'}
+            alignItems="center"
+          >
+            <Typography
+              fontSize="15px"
+              text={'Delivery Charges'}
+            />
+            <Flex alignItems={'center'}>
+              <Typography
+                fontSize="15px"
+                text={`+${currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}`}
+                // style={{ paddingRight: '2px' }}
+              />
+              <Typography
+                fontSize="15px"
+                text={currencyFormat(emiDetails.deliveryCharges)}
               />
             </Flex>
           </Flex>
@@ -216,7 +259,11 @@ const NewPaymentOverView = () => {
               <Typography
                 fontSize="15px"
                 fontWeight="600"
-                text={currencyFormat(Number(payableValue?.toFixed(2)))}
+                text={currencyFormat(
+                  Number(payableValue?.toFixed(2)) +
+                    Number(emiDetails.processingFee) +
+                    Number(emiDetails.deliveryCharges)
+                )}
               />
             </Flex>
           </Flex>

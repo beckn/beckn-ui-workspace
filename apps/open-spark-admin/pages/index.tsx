@@ -180,6 +180,18 @@ const LockDemand = () => {
 
   return (
     <>
+      {tradeExecutionProcessed && (
+        <Box
+          position="fixed"
+          top="0"
+          left="0"
+          right="0"
+          bottom="0"
+          bg="rgba(0, 0, 0, 0.3)"
+          zIndex="9999"
+          cursor="not-allowed"
+        />
+      )}
       <Flex
         position={'fixed'}
         left="0"

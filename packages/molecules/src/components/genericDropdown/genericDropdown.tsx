@@ -21,6 +21,7 @@ interface DropdownProps<T> {
   withColors?: boolean
   maxHeight?: string
   dataTest?: string
+  disabled?: boolean
 }
 
 export const GenericDropdown = <T extends string | number>({
@@ -33,7 +34,8 @@ export const GenericDropdown = <T extends string | number>({
   buttonStyles,
   withColors = false,
   maxHeight = '140px',
-  dataTest
+  dataTest,
+  disabled = false
 }: DropdownProps<T>) => {
   const menuButtonRef = useRef<HTMLButtonElement>(null)
   const [menuWidth, setMenuWidth] = useState<string | null>(null)
@@ -88,6 +90,7 @@ export const GenericDropdown = <T extends string | number>({
             height={'1.3rem'}
           />
         }
+        disabled={disabled}
         sx={{
           width: '100%',
           borderBottom: '1px solid #e2e8f0',

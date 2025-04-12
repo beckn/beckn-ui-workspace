@@ -19,7 +19,6 @@ import {
   AccordionIcon,
   Box,
   Radio,
-  RadioGroup,
   Stack,
   Text,
   Divider,
@@ -56,6 +55,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 import { currencyFormat, getCountryCode } from '@utils/general'
 import { DetailCard } from '@beckn-ui/becknified-components'
 import { currencyMap } from '@lib/config'
+import infoIcon from '@public/images/info_icon_blue.svg'
 
 interface FormData {
   fullName: string
@@ -131,7 +131,7 @@ const EMIApplicationModal = ({
       fullName: walletDetails?.fullName || '',
       // dateOfBirth: walletDetails?.dateOfBirth || null,
       mobileNumber: walletDetails?.mobileNumber || '',
-      loanTenure: ''
+      loanTenure: monthlyInstallment[0].itemId
     }))
   }, [walletDetails])
 
@@ -579,6 +579,7 @@ const EMIApplicationModal = ({
                 value: monthlyInstallment[index].itemId
               }))}
               placeholder={''}
+              disabled={true}
               selectedValue={formData.loanTenure!}
               handleChange={handleSelectChange}
               buttonStyles={{ marginBottom: '35px', borderBottom: '1px solid #3A3A3A' }}
@@ -630,12 +631,124 @@ const mergeUniqueObjects = (arr1: EMIPlan[], arr2: EMIPlan[]): EMIPlan[] => {
   return Array.from(mergedMap.values())
 }
 
+interface EMIBreakupModalProps {
+  isOpen: boolean
+  onClose: () => void
+  selectedPlanDetails: {
+    itemCost: number
+    loanAmount: number
+    downPayment: number
+    interestRate: number
+    tenure: number
+    emi: number
+    processingFees: number
+    savings: number
+    totalAmount: number
+  } | null
+}
+
+const EMIBreakupModal = ({ isOpen, onClose, selectedPlanDetails }: EMIBreakupModalProps) => {
+  if (!selectedPlanDetails) return null
+
+  const renderDetailRow = (
+    label: string,
+    value: string,
+    options?: {
+      fontSize?: string
+      color?: string
+      fontWeight?: string
+    }
+  ) => (
+    <Flex
+      justifyContent="space-between"
+      alignItems="center"
+      mb={3}
+    >
+      <Text
+        fontSize={options?.fontSize || '12px'}
+        fontWeight={options?.fontWeight}
+      >
+        {label}
+      </Text>
+      <Text
+        fontSize={options?.fontSize || '12px'}
+        color={options?.color}
+        fontWeight={options?.fontWeight}
+      >
+        {value}
+      </Text>
+    </Flex>
+  )
+
+  return (
+    <BottomModal
+      isOpen={isOpen}
+      onClose={onClose}
+    >
+      <Box pt="20px">
+        <Typography
+          fontSize="17px"
+          text="EMI Plan Breakup"
+        />
+        <Divider
+          mb="24px"
+          mt="4px"
+        />
+
+        <Box
+          padding={'10px 10px 2px 10px'}
+          backgroundColor="#F0F0F0"
+        >
+          {renderDetailRow(
+            'Item Cost',
+            `${currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}${currencyFormat(selectedPlanDetails.itemCost)}`
+          )}
+          {renderDetailRow(
+            'Loan Amount',
+            `${currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}${currencyFormat(selectedPlanDetails.loanAmount)}`
+          )}
+          {renderDetailRow(
+            'Down Payment',
+            `${currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}${currencyFormat(selectedPlanDetails.downPayment)}`
+          )}
+          {renderDetailRow('Interest Rate', `${selectedPlanDetails.interestRate}%`)}
+          {renderDetailRow('Tenure', `${selectedPlanDetails.tenure} months`)}
+          {renderDetailRow(
+            'EMI',
+            `${currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}${currencyFormat(selectedPlanDetails.emi)}`
+          )}
+          {renderDetailRow(
+            'Processing Fees',
+            `${currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}${currencyFormat(selectedPlanDetails.processingFees)}`
+          )}
+          {selectedPlanDetails.savings > 0 &&
+            renderDetailRow(
+              'Savings',
+              `${currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}${currencyFormat(selectedPlanDetails.savings)}`,
+              { color: '#000', fontWeight: '600' }
+            )}
+          <Divider my="12px" />
+          {renderDetailRow(
+            'Total Amount',
+            `${currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}${currencyFormat(selectedPlanDetails.totalAmount)}`,
+            {
+              fontSize: '12px',
+              fontWeight: '600'
+            }
+          )}
+        </Box>
+      </Box>
+    </BottomModal>
+  )
+}
+
 const PaymentMode = (props: PaymentMethodSelectionProps) => {
   const [selectedPlan, setSelectedPlan] = useState<string>('')
   const [openModal, setOpenModal] = useState<boolean>(false)
   const [emiPlans, setEmiPlans] = useState<any[]>([])
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<string>('')
   const initResponse = useSelector((state: CheckoutRootState) => state.checkout.initResponse)
+  const [deliveryCharges, setDeliveryCharges] = useState<number>(0)
 
   const [isLoading, setIsLoading] = useState(false)
   const [syncWalletIsLoading, setSyncWalletIsLoading] = useState(false)
@@ -665,7 +778,8 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
   const [newCalculationIsLoading, setNewCalculationIsLoading] = useState<Record<string, boolean>>()
   const [fetchTransactionsMessage, setFetchTransactionsMessage] = useState('')
   const [previousIndex, setPreviousIndex] = useState<number>()
-  const [isAppliedForDiscountingEMIPlans, setIsAppliedForDiscountingEMIPlans] = useState<boolean>(false)
+  const [isAppliedForDiscountingEMIPlans, setIsAppliedForDiscountingEMIPlans] = useState<Record<string, boolean>>({})
+  const [selectedEMIPlanItemId, setSelectedEMIPlanItemId] = useState<string>('')
   const [newTotalCost, setNewTotalCost] = useState(() => {
     return Number(localStorage.getItem('totalCost')) || 0
   })
@@ -681,6 +795,30 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
   const selectedEMIDetails = useSelector((state: any) => state.selectedEmi.emiDetails)
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
   console.log(selectedPlan)
+  const [showEMIBreakup, setShowEMIBreakup] = useState(false)
+  const [selectedEMIBreakup, setSelectedEMIBreakup] = useState<EMIBreakupModalProps['selectedPlanDetails']>(null)
+
+  useEffect(() => {
+    if (initResponse && initResponse.length > 0) {
+      // Find the selected provider's delivery charges and multiply by quantity
+      let totalDeliveryCharges = 0
+      const { cartItemQuantity } = getCartItemsWithQuantity()
+      console.log(cartItemQuantity)
+      initResponse.forEach((response: any) =>
+        response?.message?.order?.quote?.breakup.forEach((item: any) => {
+          if (item?.title?.toLowerCase() === 'delivery charge') {
+            const cartItem = cartItemQuantity[item.item.id]
+            const quantity = cartItem ? cartItem.quantity : 1
+            const chargePerItem = Number(item.price.value)
+            console.log(chargePerItem, quantity)
+            totalDeliveryCharges += chargePerItem * quantity
+          }
+        })
+      )
+      console.log(totalDeliveryCharges)
+      setDeliveryCharges(totalDeliveryCharges)
+    }
+  }, [initResponse])
 
   const fetchEMIPlans = (providerId?: string) => {
     const searchPayload = {
@@ -726,6 +864,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
         setEmiPlans(mergedPlans)
         setIsLoading(true)
         setSelectedPlan('')
+        setSelectedEMIPlanItemId('')
         // If this is a provider-specific search, handle the selected plan
         // if (providerId) {
         //   const selectedPlanData = mergedPlans.find(plan => plan.id === selectedPlan)
@@ -761,8 +900,8 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
       setDicountedSearch(true)
       setNewCalculationIsLoading(prevState => ({ ...prevState, [providerId]: false }))
     }, 10000)
+    setIsAppliedForDiscountingEMIPlans(prevState => ({ ...prevState, [providerId]: true }))
     fetchEMIPlans(providerId)
-    setIsAppliedForDiscountingEMIPlans(true)
   }
 
   const {
@@ -910,7 +1049,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                       type: 'PRE-FULFILLMENT'
                     }
                   ],
-                  ...(isAppliedForDiscountingEMIPlans && {
+                  ...(isAppliedForDiscountingEMIPlans[selectAPIRes[0].message.order.provider.id] && {
                     tags: [
                       {
                         descriptor: {
@@ -954,58 +1093,93 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
       }, 3000)
     }, 5000)
   }
-  const handleEmiSelect = (planId: string, customEMIPlans?: any[]) => {
+
+  const handleEmiSelect = (planId: string, itemId?: string, customEMIPlans?: any[]) => {
     const emiPlanList = customEMIPlans ? customEMIPlans : emiPlans
     const selectedPlan = emiPlanList.find(plan => plan.id === planId)
     if (!selectedPlan) {
       console.error('Selected EMI plan not found!')
       return
     }
-    const emiDetails = selectedPlan.item.map((item: any, ind: number) => {
-      const itemId = item.id
 
-      // Calculate total price across all cart items
-      const cartDetails = getCartItemsWithQuantity()
-      const totalCartPrice = Number(cartDetails.totalCartPrice || 0)
+    // Find the selected EMI item
+    const selectedItem = selectedPlan.item.find((item: any) => item.id === (itemId || selectedEMIPlanItemId))
+    if (!selectedItem) {
+      console.error('Selected EMI item not found!')
+      return
+    }
 
-      const months = parseInt(item.name.match(/\d+/)?.[0] || '1')
-      const annualInterestRate = Number(parseFloat(item?.price?.value) || 0)
-      const processingFees = Number(selectedPlan.providerShortDescription) || 0
-      const priceValue = Number(price?.value) || 0
+    // Calculate total price across all cart items
+    const cartDetails = getCartItemsWithQuantity()
+    const totalCartPrice = Number(cartDetails.totalCartPrice || 0)
+    const processingFee = Number(selectedPlan.providerShortDescription) || 0
 
-      // Use total cart price as principal
-      const principal = totalCartPrice || priceValue
+    // Extract EMI plan details
+    const months = parseInt(selectedItem.name.match(/\d+/)?.[0] || '1')
+    const annualInterestRate = Number(parseFloat(selectedItem?.price?.value) || 0)
 
-      const approvedLoanPercentage = Number(item.code) || 0
-      const approvedLoanAmount = (approvedLoanPercentage / 100) * principal
-      const newPayableAmount = Number(principal - approvedLoanAmount) || 0
+    // Calculate loan amount (excluding delivery charges)
+    const principal = totalCartPrice
+    const approvedLoanPercentage = Number(selectedItem.code) || 0
+    const approvedLoanAmount = (approvedLoanPercentage / 100) * principal
+    const newPayableAmount = principal - approvedLoanAmount + processingFee
 
-      if (payableAmount && payableAmount?.[planId] !== newPayableAmount) {
-        setPayableAmount(prevState => ({ ...prevState, [planId]: newPayableAmount }))
-      }
+    // Calculate EMI with current interest rate
+    const monthlyInterestRate = annualInterestRate / 12 / 100
+    const emi =
+      monthlyInterestRate > 0
+        ? Math.round(
+            (approvedLoanAmount * monthlyInterestRate * Math.pow(1 + monthlyInterestRate, months)) /
+              (Math.pow(1 + monthlyInterestRate, months) - 1)
+          )
+        : Math.round(approvedLoanAmount / months)
 
-      // Calculate EMI using same formula as calculateEMIDetails
-      const monthlyInterestRate = annualInterestRate / 12 / 100
-      const emiWithoutInterest =
-        monthlyInterestRate > 0
-          ? (approvedLoanAmount * monthlyInterestRate * Math.pow(1 + monthlyInterestRate, months)) /
-            (Math.pow(1 + monthlyInterestRate, months) - 1)
-          : approvedLoanAmount / months
-      const emi = Math.floor(emiWithoutInterest + processingFees / months)
+    const totalCost = emi * months
+    const actualInterestAmount = totalCost - approvedLoanAmount
 
-      // Calculate total cost and interest
-      const totalCost = emi * months
-      const actualInterestAmount = totalCost - approvedLoanAmount
+    // Calculate EMI with original (non-discounted) rate
+    const storageKey = `originalInterestRate_${planId}`
+    const storedRate = localStorage.getItem(storageKey)
+    let originalEmi = emi
+    let nonDiscountedPrice = totalCost
+    let originalInterestAmount = actualInterestAmount
 
-      return {
+    if (storedRate) {
+      const originalMonthlyRate = Number(storedRate) / 12 / 100
+      originalEmi =
+        originalMonthlyRate > 0
+          ? Math.round(
+              (approvedLoanAmount * originalMonthlyRate * Math.pow(1 + originalMonthlyRate, months)) /
+                (Math.pow(1 + originalMonthlyRate, months) - 1)
+            )
+          : Math.round(approvedLoanAmount / months)
+      nonDiscountedPrice = originalEmi * months
+      originalInterestAmount = nonDiscountedPrice - approvedLoanAmount
+    }
+
+    // Calculate savings amount
+    const savings = nonDiscountedPrice - totalCost
+
+    const emiDetails = [
+      {
         emi,
         actualInterestAmount,
         annualInterestRate,
         totalCost,
         payableAmount: newPayableAmount,
-        itemId
+        itemId: selectedItem.id,
+        originalRate: storedRate ? Number(storedRate) : annualInterestRate,
+        nonDiscountedPrice,
+        originalEmi,
+        originalInterestAmount,
+        monthlyInstallment: emi,
+        interestAmount: actualInterestAmount,
+        processingFee,
+        deliveryCharges,
+        months,
+        savings
       }
-    })
+    ]
 
     dispatch(setEmiDetails({ emiDetails }))
 
@@ -1015,14 +1189,16 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
     }
     setCheckedPayment(null)
 
-    const selectedItems = selectedPlan.item.map((item: { id: any }) => ({
-      id: item.id,
-      selected: {
-        quantity: {
-          count: cartItems.reduce((total, item) => total + Number(item.quantity || 1), 0)
+    const selectedItems = [
+      {
+        id: selectedItem.id,
+        selected: {
+          quantity: {
+            count: 1
+          }
         }
       }
-    }))
+    ]
 
     const payload = {
       data: [
@@ -1040,7 +1216,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                 provider: {
                   id: selectedPlan.providerId
                 },
-                ...(isAppliedForDiscountingEMIPlans && {
+                ...(isAppliedForDiscountingEMIPlans[selectedPlan.providerId] && {
                   tags: [
                     {
                       descriptor: {
@@ -1145,7 +1321,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
     // Extract EMI plan details
     const months = parseInt(item.name.match(/\d+/)?.[0] || '1')
     const annualInterestRate = Number(parseFloat(item?.price?.value) || 0)
-    const processingFees = Number(plan.providerShortDescription) || 0
+    const processingFee = Number(plan.providerShortDescription) || 0
 
     // Store original interest rate if not already stored
     const storedRate = localStorage.getItem(storageKey)
@@ -1155,12 +1331,11 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
       localStorage.setItem(storageKey, maxRate.toString())
     }
 
-    // Calculate loan amount
+    // Calculate loan amount (excluding delivery charges)
     const principal = totalCartPrice
-    console.log('principal', principal)
     const approvedLoanPercentage = Number(item.code) || 0
     const approvedLoanAmount = (approvedLoanPercentage / 100) * principal
-    const newPayableAmount = principal - approvedLoanAmount
+    const newPayableAmount = principal - approvedLoanAmount + processingFee
 
     // Update payable amount state if changed
     if (payableAmount?.[plan.id] !== newPayableAmount) {
@@ -1169,32 +1344,29 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
 
     // Calculate EMI with current interest rate
     const monthlyInterestRate = annualInterestRate / 12 / 100
-    const emiWithoutInterest =
+    const emi =
       monthlyInterestRate > 0
-        ? (approvedLoanAmount * monthlyInterestRate * Math.pow(1 + monthlyInterestRate, months)) /
-          (Math.pow(1 + monthlyInterestRate, months) - 1)
-        : approvedLoanAmount / months
+        ? Math.round(
+            (approvedLoanAmount * monthlyInterestRate * Math.pow(1 + monthlyInterestRate, months)) /
+              (Math.pow(1 + monthlyInterestRate, months) - 1)
+          )
+        : Math.round(approvedLoanAmount / months)
 
-    const emi = Math.floor(emiWithoutInterest + processingFees / months)
     const totalCost = emi * months
+    const actualInterestAmount = totalCost - approvedLoanAmount
 
     // Calculate EMI with original (non-discounted) rate
     const originalMonthlyRate = Number(storedRate) / 12 / 100
-    const originalEmiWithoutInterest =
+    const originalEmi =
       originalMonthlyRate > 0
-        ? (approvedLoanAmount * originalMonthlyRate * Math.pow(1 + originalMonthlyRate, months)) /
-          (Math.pow(1 + originalMonthlyRate, months) - 1)
-        : approvedLoanAmount / months
+        ? Math.round(
+            (approvedLoanAmount * originalMonthlyRate * Math.pow(1 + originalMonthlyRate, months)) /
+              (Math.pow(1 + originalMonthlyRate, months) - 1)
+          )
+        : Math.round(approvedLoanAmount / months)
 
-    const originalEmi = Math.floor(originalEmiWithoutInterest + processingFees / months)
     const nonDiscountedPrice = originalEmi * months
-
-    // Store total cost if not already stored
-    if (!localStorage.getItem('totalCost')) {
-      localStorage.setItem('totalCost', nonDiscountedPrice.toString())
-    }
-
-    const actualInterestAmount = totalCost - approvedLoanAmount
+    const originalInterestAmount = nonDiscountedPrice - approvedLoanAmount
 
     // Store calculated EMI details
     const calculatedEMIs = JSON.parse(localStorage.getItem('calculatedEMIs') || '{}')
@@ -1207,8 +1379,13 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
           totalCost,
           actualInterestAmount,
           payableAmount: newPayableAmount,
-          originalRate: annualInterestRate,
-          nonDiscountedPrice
+          originalRate: Number(storedRate),
+          nonDiscountedPrice,
+          originalEmi,
+          originalInterestAmount,
+          currentRate: annualInterestRate,
+          processingFee,
+          deliveryCharges
         }
       })
     )
@@ -1218,8 +1395,13 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
       totalCost,
       actualInterestAmount,
       payableAmount: newPayableAmount,
-      originalRate: annualInterestRate,
-      nonDiscountedPrice
+      originalRate: Number(storedRate),
+      nonDiscountedPrice,
+      originalEmi,
+      originalInterestAmount,
+      currentRate: annualInterestRate,
+      processingFee,
+      deliveryCharges
     }
   }
 
@@ -1254,55 +1436,107 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
     }
   }
 
-  return (
-    <Box
-      className="hideScroll"
-      maxH="calc(100vh - 100px)"
-      overflowY={'scroll'}
-    >
-      <PaymentDetailsCard
-        checkedState={checkedPayment!}
-        handleChange={handleChange}
-        paymentMethods={paymentMethods}
-        t={key => t[key]}
-      />
+  // Add this function to handle info icon click
+  const handleInfoClick = (plan: any, selectedItem: any) => {
+    const cartDetails = getCartItemsWithQuantity()
+    const totalCartPrice = Number(cartDetails.totalCartPrice || 0)
+    const months = parseInt(selectedItem.name.match(/\d+/)?.[0] || '1')
+    const annualInterestRate = Number(parseFloat(selectedItem?.price?.value) || 0)
+    const approvedLoanPercentage = Number(selectedItem.code) || 0
+    const loanAmount = (approvedLoanPercentage / 100) * totalCartPrice
+    const downPayment = totalCartPrice - loanAmount
 
-      <Typography
-        text="Available EMI Plans"
-        fontSize="17px"
-        style={{ marginTop: '20px' }}
-      />
+    // Calculate EMI and total cost with current interest rate
+    const monthlyInterestRate = annualInterestRate / 12 / 100
+    const emi =
+      monthlyInterestRate > 0
+        ? Math.round(
+            (loanAmount * monthlyInterestRate * Math.pow(1 + monthlyInterestRate, months)) /
+              (Math.pow(1 + monthlyInterestRate, months) - 1)
+          )
+        : Math.round(loanAmount / months)
+
+    const totalCost = emi * months
+
+    // Calculate original EMI and total cost (before discount)
+    const storageKey = `originalInterestRate_${plan.id}`
+    const storedRate = localStorage.getItem(storageKey)
+    const originalInterestRate = storedRate ? Number(storedRate) : annualInterestRate
+    const originalMonthlyRate = originalInterestRate / 12 / 100
+
+    const originalEmi =
+      originalMonthlyRate > 0
+        ? Math.round(
+            (loanAmount * originalMonthlyRate * Math.pow(1 + originalMonthlyRate, months)) /
+              (Math.pow(1 + originalMonthlyRate, months) - 1)
+          )
+        : Math.round(loanAmount / months)
+
+    const originalTotalCost = originalEmi * months
+
+    // Calculate savings (difference between original and discounted total costs)
+    const processingFees = Number(plan.providerShortDescription) || 0
+    const savings = isAppliedForDiscountingEMIPlans[plan.id] ? originalTotalCost - totalCost : 0
+
+    setSelectedEMIBreakup({
+      itemCost: totalCartPrice,
+      loanAmount,
+      downPayment,
+      interestRate: annualInterestRate,
+      tenure: months,
+      emi,
+      processingFees,
+      savings,
+      totalAmount: totalCost + processingFees + downPayment
+    })
+    setShowEMIBreakup(true)
+  }
+
+  return (
+    <>
       <Box
-        background={'#fff'}
-        boxShadow="0px 4px 10px rgba(0, 0, 0, 0.1)"
-        borderRadius="12px"
-        margin={'0 auto'}
-        mt="20px"
-        mb="20px"
+        className="hideScroll"
+        maxH="calc(100vh - 100px)"
+        overflowY={'scroll'}
       >
-        {!isLoading ? (
-          <Box
-            display={'grid'}
-            height={'calc(60vh - 300px)'}
-            alignContent={'center'}
-            textAlign="center"
-          >
-            <Loader text={t.loading} />
-          </Box>
-        ) : (
-          <Box
-            p="12px 4px"
-            pb="20px"
-          >
-            <Accordion
-              allowToggle
-              index={previousIndex}
-              onChange={indx => setPreviousIndex(indx as number)}
+        <PaymentDetailsCard
+          checkedState={checkedPayment!}
+          handleChange={handleChange}
+          paymentMethods={paymentMethods}
+          t={key => t[key]}
+        />
+
+        <Typography
+          text="Available EMI Plans"
+          fontSize="17px"
+          style={{ marginTop: '20px' }}
+        />
+        <Box
+          background={'#fff'}
+          boxShadow="0px 4px 10px rgba(0, 0, 0, 0.1)"
+          borderRadius="12px"
+          margin={'0 auto'}
+          mt="20px"
+          mb="20px"
+        >
+          {!isLoading ? (
+            <Box
+              display={'grid'}
+              height={'calc(60vh - 300px)'}
+              alignContent={'center'}
+              textAlign="center"
             >
-              <RadioGroup
-                onChange={setSelectedPlan}
-                value={selectedPlan}
-                className="radio-group-emi"
+              <Loader text={t.loading} />
+            </Box>
+          ) : (
+            <Box
+              p="12px 4px"
+              pb="20px"
+            >
+              <Accordion
+                allowToggle
+                index={previousIndex}
+                onChange={indx => setPreviousIndex(indx as number)}
               >
                 {emiPlans.map(plan => {
                   return (
@@ -1318,10 +1552,14 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                           <Stack direction="row">
                             <Radio
                               _focusVisible={{ boxShadow: 'unset' }}
-                              value={plan.id}
                               colorScheme="green"
                               className="radio-for-emi"
-                              onChange={() => handleEmiSelect(plan.id)}
+                              isChecked={selectedPlan === plan.id}
+                              onChange={() => {
+                                setSelectedPlan(plan.id)
+                                setSelectedEMIPlanItemId('') // Reset child selection when parent changes
+                                handleEmiSelect(plan.id)
+                              }}
                             />
                             <Flex
                               justifyContent={'space-between'}
@@ -1329,7 +1567,30 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                               width={'84%'}
                             >
                               <Box p="10px">
-                                <Text fontSize="15px">{plan.providerName}</Text>
+                                <Text
+                                  fontSize="14px"
+                                  display={'flex'}
+                                  whiteSpace={'nowrap'}
+                                >
+                                  {plan.providerName}
+                                  <Image
+                                    src={infoIcon}
+                                    ml={1}
+                                    cursor={
+                                      selectedEMIPlanItemId && selectedPlan === plan.id ? 'pointer' : 'not-allowed'
+                                    }
+                                    opacity={selectedEMIPlanItemId && selectedPlan === plan.id ? 1 : 0.5}
+                                    onClick={e => {
+                                      if (!selectedEMIPlanItemId || selectedPlan !== plan.id) return
+                                      e.preventDefault()
+                                      e.stopPropagation()
+                                      const selectedItem = plan.item.find(item => item.id === selectedEMIPlanItemId)
+                                      if (selectedItem) {
+                                        handleInfoClick(plan, selectedItem)
+                                      }
+                                    }}
+                                  />
+                                </Text>
                                 <Text
                                   fontWeight="500"
                                   color="#E12525"
@@ -1438,59 +1699,118 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                                     actualInterestAmount,
                                     payableAmount,
                                     originalRate,
-                                    nonDiscountedPrice
+                                    nonDiscountedPrice,
+                                    originalEmi,
+                                    originalInterestAmount,
+                                    currentRate
                                   } = calculateEMIDetails(item, cartItems, index, price, plan)
 
                                   return (
                                     <React.Fragment key={index}>
-                                      <Flex
-                                        justifyContent="space-between"
-                                        p="12px 20px"
-                                      >
-                                        <Box
-                                          fontSize="10px"
-                                          fontWeight="500"
-                                          color="#626060"
+                                      <Flex position={'relative'}>
+                                        <Radio
+                                          _focusVisible={{ boxShadow: 'unset' }}
+                                          colorScheme="green"
+                                          className="radio-for-emi-item"
+                                          position={'absolute'}
+                                          top="10px"
+                                          isChecked={selectedEMIPlanItemId === item.id}
+                                          onChange={() => {
+                                            setSelectedEMIPlanItemId(item.id)
+                                            // Always select the parent plan when an item is selected
+                                            setSelectedPlan(plan.id)
+                                            handleEmiSelect(plan.id, item.id)
+                                          }}
+                                        />
+                                        <Flex
+                                          justifyContent="space-between"
+                                          p="12px 20px"
+                                          width={'100%'}
                                         >
-                                          {currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}
-                                          {currencyFormat(Number(emi.toFixed(2)))} x {item.name}m
-                                        </Box>
-                                        <Box
-                                          fontSize="10px"
-                                          fontWeight="500"
-                                          color="#626060"
-                                        >
-                                          {currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}
-                                          {currencyFormat(Number(actualInterestAmount.toFixed(2)))} ({originalRate}
-                                          %)
-                                        </Box>
-                                        <Box>
-                                          {plan.item[0].code === '90' && (
-                                            <Box
-                                              textDecoration="line-through"
-                                              fontSize="10px"
-                                              fontWeight="500"
-                                              color="#626060"
-                                            >
-                                              {currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}
-                                              {nonDiscountedPrice}.00
-                                            </Box>
-                                          )}
                                           <Box
                                             fontSize="10px"
                                             fontWeight="500"
-                                            color={`${plan.item[0].code === '90' ? '#3C8508' : '#626060'}`}
+                                            color="#626060"
                                           >
-                                            {currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}
-                                            {currencyFormat(Number(totalCost.toFixed(2)))}
+                                            {isAppliedForDiscountingEMIPlans[plan.id] ? (
+                                              <>
+                                                <Box textDecoration="line-through">
+                                                  {
+                                                    currencyMap[
+                                                      getCountryCode().country.code as keyof typeof currencyMap
+                                                    ]
+                                                  }
+                                                  {currencyFormat(Number(originalEmi.toFixed(2)))} x {item.name}m
+                                                </Box>
+                                                <Box color="#3C8508">
+                                                  {
+                                                    currencyMap[
+                                                      getCountryCode().country.code as keyof typeof currencyMap
+                                                    ]
+                                                  }
+                                                  {currencyFormat(Number(emi.toFixed(2)))} x {item.name}m
+                                                </Box>
+                                              </>
+                                            ) : (
+                                              <>
+                                                {currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}
+                                                {currencyFormat(Number(emi.toFixed(2)))} x {item.name}m
+                                              </>
+                                            )}
                                           </Box>
-                                        </Box>
+                                          <Box
+                                            fontSize="10px"
+                                            fontWeight="500"
+                                            color="#626060"
+                                          >
+                                            <>
+                                              {currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}
+                                              {currencyFormat(Number(actualInterestAmount.toFixed(2)))} ({currentRate}%)
+                                            </>
+                                          </Box>
+                                          <Box
+                                            fontSize="10px"
+                                            fontWeight="500"
+                                            color="#626060"
+                                          >
+                                            {isAppliedForDiscountingEMIPlans[plan.id] ? (
+                                              <>
+                                                <Box color="#3C8508">
+                                                  {
+                                                    currencyMap[
+                                                      getCountryCode().country.code as keyof typeof currencyMap
+                                                    ]
+                                                  }
+                                                  {currencyFormat(Number(totalCost.toFixed(2)))}
+                                                </Box>
+                                              </>
+                                            ) : (
+                                              <>
+                                                {currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}
+                                                {currencyFormat(Number(totalCost.toFixed(2)))}
+                                              </>
+                                            )}
+                                          </Box>
+                                        </Flex>
                                       </Flex>
                                       <Divider />
                                     </React.Fragment>
                                   )
                                 })}
-                                {plan.item[0].code !== '90' ? (
+                                {isAppliedForDiscountingEMIPlans[plan.id] ? (
+                                  <Box
+                                    lineHeight={'14px'}
+                                    pt="5px"
+                                  >
+                                    <Text
+                                      fontSize={'10px'}
+                                      fontWeight="500"
+                                      as="span"
+                                    >
+                                      {`🎉 Congratulations! You have received a 2% discount on interest rates based on your transactions.`}
+                                    </Text>
+                                  </Box>
+                                ) : (
                                   <Box pt="5px">
                                     <Text
                                       fontSize={'10px'}
@@ -1512,9 +1832,6 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                                         color="#fff"
                                         cursor={'pointer'}
                                         onClick={async () => {
-                                          // if (!localStorage.getItem('totalCost')) {
-                                          //   localStorage.setItem('totalCost', newTotalCost.toString())
-                                          // }
                                           if (await checkIsWalletTransactionsExist()) {
                                             handleDiscountedSearch(plan.providerName, plan.id)
                                           }
@@ -1522,19 +1839,6 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                                       >
                                         Sync now
                                       </Text>
-                                    </Text>
-                                  </Box>
-                                ) : (
-                                  <Box
-                                    lineHeight={'14px'}
-                                    pt="5px"
-                                  >
-                                    <Text
-                                      fontSize={'10px'}
-                                      fontWeight="500"
-                                      as="span"
-                                    >
-                                      {`🎉 Congratulations! You have received a 2% discount on interest rates based on your transactions.`}
                                     </Text>
                                   </Box>
                                 )}
@@ -1546,106 +1850,112 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                     </AccordionItem>
                   )
                 })}
-              </RadioGroup>
-            </Accordion>
-          </Box>
+              </Accordion>
+            </Box>
+          )}
+        </Box>
+        <BecknButton
+          dataTest={testIds.paymentpage_confirmButton}
+          children={t.confirmOrder}
+          handleClick={() => {
+            setOpenModal(true)
+            if (checkedPayment) {
+              // router.push('/retailOrderConfirmation')
+              if (selectedPaymentMethod.includes('UPI')) {
+                router.push('/upiScreen')
+              } else {
+                router.push('/secureCheckout')
+              }
+            }
+          }}
+          disabled={(!checkedState && !(selectedPlan && selectedEMIPlanItemId) && !checkedPayment) || disableButton}
+        />
+
+        {isSubmitting || showSuccess ? (
+          <BottomModal
+            onClose={() => {}}
+            isOpen={isSubmitting || showSuccess}
+          >
+            <Box
+              display={'grid'}
+              height={'60vh'}
+              alignContent={'center'}
+            >
+              {showSuccess ? (
+                <Flex
+                  justifyContent={'center'}
+                  alignItems="center"
+                  flexDirection={'column'}
+                  mb="50px"
+                >
+                  <Image
+                    src="./images/orderConfirmmark.svg"
+                    alt="confirmation img"
+                    mt="20px"
+                  />
+
+                  <Typography
+                    style={{ textAlign: 'center' }}
+                    fontWeight="500"
+                    fontSize="17px"
+                    text={'Congratulations!'}
+                  />
+                  <Typography
+                    style={{ textAlign: 'center', paddingTop: '10px' }}
+                    fontSize="15px"
+                    text={'Your documents have been successfully verified, and your loan request has been approved!'}
+                  />
+                </Flex>
+              ) : (
+                <Loader>
+                  <Typography
+                    fontWeight="500"
+                    fontSize="17px"
+                    text={'Please wait!'}
+                  />
+                  <Typography
+                    fontSize="15px"
+                    text={'While your documents are being verified'}
+                  />
+                </Loader>
+              )}
+            </Box>
+          </BottomModal>
+        ) : (
+          openModal &&
+          !showSuccess &&
+          !checkedPayment && (
+            <Box className="btm-modal-payment">
+              <EMIApplicationModal
+                isOpen={openModal}
+                onClose={() => setOpenModal(false)}
+                handleSyncWallet={() => {
+                  setSyncWalletIsLoading(true)
+                  setTimeout(() => {
+                    handleSyncWallet()
+                  }, 3000)
+                }}
+                syncWalletIsLoading={syncWalletIsLoading}
+                walletDetails={{
+                  ...walletDetails,
+                  // aadharNumber: aadharNumber!,
+                  // panNumber: PANNumber!,
+                  ssNumber: SSNumber!
+                }}
+                handleOnSubmitForm={handleOnSubmit}
+                syncWalletSuccess={syncWalletSuccess}
+              />
+            </Box>
+          )
         )}
       </Box>
-      <BecknButton
-        dataTest={testIds.paymentpage_confirmButton}
-        children={t.confirmOrder}
-        handleClick={() => {
-          setOpenModal(true)
-          if (checkedPayment) {
-            // router.push('/retailOrderConfirmation')
-            if (selectedPaymentMethod.includes('UPI')) {
-              router.push('/upiScreen')
-            } else {
-              router.push('/secureCheckout')
-            }
-          }
-        }}
-        disabled={(!checkedState && !selectedPlan && !checkedPayment) || disableButton}
+
+      <EMIBreakupModal
+        isOpen={showEMIBreakup}
+        onClose={() => setShowEMIBreakup(false)}
+        selectedPlanDetails={selectedEMIBreakup}
       />
-
-      {isSubmitting || showSuccess ? (
-        <BottomModal
-          onClose={() => {}}
-          isOpen={isSubmitting || showSuccess}
-        >
-          <Box
-            display={'grid'}
-            height={'60vh'}
-            alignContent={'center'}
-          >
-            {showSuccess ? (
-              <Flex
-                justifyContent={'center'}
-                alignItems="center"
-                flexDirection={'column'}
-                mb="50px"
-              >
-                <Image
-                  src="./images/orderConfirmmark.svg"
-                  alt="confirmation img"
-                  mt="20px"
-                />
-
-                <Typography
-                  style={{ textAlign: 'center' }}
-                  fontWeight="500"
-                  fontSize="17px"
-                  text={'Congratulations!'}
-                />
-                <Typography
-                  style={{ textAlign: 'center', paddingTop: '10px' }}
-                  fontSize="15px"
-                  text={'Your documents have been successfully verified, and your loan request has been approved!'}
-                />
-              </Flex>
-            ) : (
-              <Loader>
-                <Typography
-                  fontWeight="500"
-                  fontSize="17px"
-                  text={'Please wait!'}
-                />
-                <Typography
-                  fontSize="15px"
-                  text={'While your documents are being verified'}
-                />
-              </Loader>
-            )}
-          </Box>
-        </BottomModal>
-      ) : (
-        openModal &&
-        !showSuccess &&
-        !checkedPayment && (
-          <Box className="btm-modal-payment">
-            <EMIApplicationModal
-              isOpen={openModal}
-              onClose={() => setOpenModal(false)}
-              handleSyncWallet={() => {
-                setSyncWalletIsLoading(true)
-                setTimeout(() => {
-                  handleSyncWallet()
-                }, 3000)
-              }}
-              syncWalletIsLoading={syncWalletIsLoading}
-              walletDetails={{
-                ...walletDetails,
-                // aadharNumber: aadharNumber!,
-                // panNumber: PANNumber!,
-                ssNumber: SSNumber!
-              }}
-              handleOnSubmitForm={handleOnSubmit}
-              syncWalletSuccess={syncWalletSuccess}
-            />
-          </Box>
-        )
-      )}
-    </Box>
+    </>
   )
 }
 
