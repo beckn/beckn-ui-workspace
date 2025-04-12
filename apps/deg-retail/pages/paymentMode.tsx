@@ -800,16 +800,23 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
 
   useEffect(() => {
     if (initResponse && initResponse.length > 0) {
-      // Find the selected provider's delivery charges
-      let deliveryCharges = 0
+      // Find the selected provider's delivery charges and multiply by quantity
+      let totalDeliveryCharges = 0
+      const { cartItemQuantity } = getCartItemsWithQuantity()
+      console.log(cartItemQuantity)
       initResponse.forEach((response: any) =>
         response?.message?.order?.quote?.breakup.forEach((item: any) => {
           if (item?.title?.toLowerCase() === 'delivery charge') {
-            deliveryCharges = Number(item.price.value)
+            const cartItem = cartItemQuantity[item.item.id]
+            const quantity = cartItem ? cartItem.quantity : 1
+            const chargePerItem = Number(item.price.value)
+            console.log(chargePerItem, quantity)
+            totalDeliveryCharges += chargePerItem * quantity
           }
         })
       )
-      setDeliveryCharges(deliveryCharges)
+      console.log(totalDeliveryCharges)
+      setDeliveryCharges(totalDeliveryCharges)
     }
   }, [initResponse])
 
@@ -1561,8 +1568,9 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                             >
                               <Box p="10px">
                                 <Text
-                                  fontSize="15px"
+                                  fontSize="14px"
                                   display={'flex'}
+                                  whiteSpace={'nowrap'}
                                 >
                                   {plan.providerName}
                                   <Image

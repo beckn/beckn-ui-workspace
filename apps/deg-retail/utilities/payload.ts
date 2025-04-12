@@ -32,7 +32,12 @@ export const getPayloadForConfirm = (initResponse: InitResponseModel[], cartAndE
                 id: order.payments?.[0]?.id,
                 params: {
                   amount: `${
-                    Number(order.quote?.price?.value) +
+                    (order.items as any).reduce((total: number, item: any) => {
+                      return (
+                        total +
+                        Number(item.price.value) * cartAndEmiDetails.cartDetails[order.provider.id][item.id].quantity
+                      )
+                    }, 0) +
                     Number(cartAndEmiDetails.emiDetails.deliveryCharges) +
                     Number(cartAndEmiDetails.emiDetails.processingFee)
                   }`,
