@@ -28,7 +28,7 @@ export default function ConfirmRent() {
   const rentalDate = selectedProduct.item.fulfillments[0].state?.name
 
   const handleConfirm = async () => {
-    const formTimestamp = Math.floor(new Date(startDate).getTime() / 1000)
+    const formTimestamp = Math.floor(new Date(startDate).getTime() / 1000 + 1)
     const toTimestamp = Math.floor(new Date(endDate).getTime() / 1000)
     localStorage.setItem('fromTimestamp', formTimestamp.toString())
     localStorage.setItem('toTimestamp', toTimestamp.toString())
