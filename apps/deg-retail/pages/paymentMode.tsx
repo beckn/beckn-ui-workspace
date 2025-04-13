@@ -118,8 +118,8 @@ const EMIApplicationModal = ({
   const toast = useToast()
   const dispatch = useDispatch()
   const { user } = useSelector((state: AuthRootState) => state.auth)
-  const [selectedEmiPlan, setSelectedEmiPlan] = useState<string | null>(null)
-  const selectedEmi = useSelector((state: any) => state.selectedEmi.apiResponse?.[0]?.message.order.items) || 0
+  const selectedEmi = useSelector((state: any) => state.selectedEmi.apiResponse?.[0]?.message.order.items) || []
+
   const monthlyInstallment = useSelector((state: any) => state.selectedEmi.emiDetails)
 
   useEffect(() => {
@@ -194,13 +194,14 @@ const EMIApplicationModal = ({
     //   value = value.toUpperCase() // Convert PAN to uppercase
     //   if (value.length > 10) return // Limit to 10 characters
     // }
+    if (field === 'ssNumber' && !/^\d*$/.test(value)) {
+      return // Only allow digits in SS number
+    }
 
     setFormData(prev => ({
       ...prev,
       [field]: value
     }))
-
-    dispatch(emiFormActions.updateForm({ [field]: value }))
 
     // Clear error when user starts typing
     if (errors[field]) {
@@ -231,6 +232,7 @@ const EMIApplicationModal = ({
   }
 
   const handleSubmit = () => {
+    dispatch(emiFormActions.updateForm(formData))
     if (validateForm()) {
       console.log('Form submitted:', formData)
       // Add your submission logic here
@@ -328,7 +330,7 @@ const EMIApplicationModal = ({
                 <Typography
                   fontWeight="400"
                   fontSize="12px"
-                  text="Verified by Vault"
+                  text="Verified by Wallet"
                   color="#53A052"
                 />
               )}
@@ -501,14 +503,22 @@ const EMIApplicationModal = ({
                 <Typography
                   fontWeight="400"
                   fontSize="12px"
-                  text="Verified by Vault"
+                  text="Verified by Wallet"
                   color="#53A052"
                 />
               )}
             </Flex>
             <Input
-              value={formData.ssNumber ? formData.ssNumber.replace(/^(.{5})/g, '*****') : ''}
+              value={
+                formData.ssNumber
+                  ? document.activeElement?.id === 'ssInput'
+                    ? formData.ssNumber
+                    : formData.ssNumber.replace(/^(.{5})/g, '*****')
+                  : ''
+              }
+              id="ssInput"
               onChange={e => handleInputChange('ssNumber', e.target.value)}
+              maxLength={9}
               paddingInlineStart="unset"
               _focusVisible={{ borderColor: errors.ssNumber ? 'red.500' : '#4398E8' }}
               border="unset"
@@ -540,7 +550,7 @@ const EMIApplicationModal = ({
                 <Typography
                   fontWeight="400"
                   fontSize="12px"
-                  text="Verified by Vault"
+                  text="Verified by Wallet"
                   color="#53A052"
                 />
               )}
@@ -963,7 +973,22 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
   const handleChange = (id: string) => {
     setSelectedPaymentMethod(id)
     setCheckedPayment(id === checkedState ? null : id)
+    dispatch(
+      setEmiDetails({
+        emiDetails: [
+          {
+            annualInterestRate: 0,
+            interestAmount: 0,
+            monthlyInstallment: 0,
+            totalCost: 0,
+            processingFee: 0,
+            deliveryCharges: deliveryCharges
+          }
+        ]
+      })
+    )
     setSelectedPlan('')
+    setSelectedEMIPlanItemId('')
   }
 
   const handleFinanceOnConfirm = (data: FormData) => {
@@ -1556,6 +1581,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                               className="radio-for-emi"
                               isChecked={selectedPlan === plan.id}
                               onChange={() => {
+                                setCheckedPayment(null)
                                 setSelectedPlan(plan.id)
                                 setSelectedEMIPlanItemId('') // Reset child selection when parent changes
                                 handleEmiSelect(plan.id)
@@ -1716,6 +1742,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
                                           top="10px"
                                           isChecked={selectedEMIPlanItemId === item.id}
                                           onChange={() => {
+                                            setCheckedPayment(null)
                                             setSelectedEMIPlanItemId(item.id)
                                             // Always select the parent plan when an item is selected
                                             setSelectedPlan(plan.id)
@@ -1924,7 +1951,8 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
         ) : (
           openModal &&
           !showSuccess &&
-          !checkedPayment && (
+          !checkedPayment &&
+          selectedEmi.length > 0 && (
             <Box className="btm-modal-payment">
               <EMIApplicationModal
                 isOpen={openModal}

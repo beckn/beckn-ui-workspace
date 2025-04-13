@@ -94,18 +94,18 @@ const Home = () => {
           code: 'USA'
         }
       }
-    },
-    {
-      name: 'IND',
-      fullName: 'IND',
-      flag: '/images/india.svg',
-      data: {
-        country: {
-          name: 'India',
-          code: 'IND'
-        }
-      }
     }
+    // {
+    //   name: 'IND',
+    //   fullName: 'IND',
+    //   flag: '/images/india.svg',
+    //   data: {
+    //     country: {
+    //       name: 'India',
+    //       code: 'IND'
+    //     }
+    //   }
+    // }
   ]
 
   const experiences: Array<{ title: string; icon: string }> = [

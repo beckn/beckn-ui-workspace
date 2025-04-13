@@ -38,8 +38,8 @@ export const getPayloadForConfirm = (initResponse: InitResponseModel[], cartAndE
                         Number(item.price.value) * cartAndEmiDetails.cartDetails[order.provider.id][item.id].quantity
                       )
                     }, 0) +
-                    Number(cartAndEmiDetails.emiDetails.deliveryCharges) +
-                    Number(cartAndEmiDetails.emiDetails.processingFee)
+                    Number(cartAndEmiDetails?.emiDetails?.deliveryCharges || 0) +
+                    Number(cartAndEmiDetails?.emiDetails?.processingFee || 0)
                   }`,
                   currency: order.quote?.price?.currency
                 },
