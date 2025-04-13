@@ -32,6 +32,7 @@ import { feedbackActions } from '@beckn-ui/common'
 import { getRentalPayloadForConfirm } from '@utils/confirm-utils'
 import { getPayloadForConfirm, getPayloadForOrderHistoryPost } from '@utils/payload'
 import { calculateDuration } from '@utils/checkout-util'
+import { EmiDetail } from '@store/emiSelect-slice'
 
 const retailOrderConfirmation = () => {
   const { t } = useLanguage()
@@ -81,7 +82,7 @@ const retailOrderConfirmation = () => {
   const initResponse = useSelector((state: CheckoutRootState) => state.checkout.initResponse)
   const confirmResponse = useSelector((state: CheckoutRootState) => state.checkout.confirmResponse)
   const cartItems = useSelector((state: ICartRootState) => state.cart.items)
-  const emiDetails = useSelector((state: any) => state.selectedEmi.emiDetails[0])
+  const emiDetails: EmiDetail = useSelector((state: any) => state.selectedEmi.emiDetails[0])
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
 
   const getOrderCategoryId = (type: any) => {
