@@ -681,7 +681,7 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
               top="50%"
               transform="translateY(-50%)"
               pointerEvents="none"
-              zIndex={1}
+              zIndex={0}
             >{`${currencyMap[getCountryCode().country.code as keyof typeof currencyMap]} `}</Text>
             <Text color="gray.600">{` per hour`}</Text>
           </Flex>

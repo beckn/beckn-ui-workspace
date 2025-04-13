@@ -517,11 +517,3 @@ input {
 .-product_summary_container .css-afhyro {
   background: #fff;
 }
-.sub-header-DEG {
-  padding: 0 10rem;
-}
-@media screen and (min-width: 280px) and (max-width: 991px) {
-  .sub-header-DEG {
-    padding: 0 20px;
-  }
-}

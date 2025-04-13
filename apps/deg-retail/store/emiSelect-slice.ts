@@ -1,11 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-interface EmiDetail {
+export interface EmiDetail {
   monthlyInstallment: number
   interestAmount: number
   annualInterestRate: number
   totalCost: number
   payableAmount?: number
+  processingFee?: number
+  deliveryCharges?: number
 }
 
 interface ApiResponse {

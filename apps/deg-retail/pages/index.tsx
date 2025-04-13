@@ -88,6 +88,8 @@ const HomePage = () => {
         left={'0'}
         background="#fff"
         boxShadow={'0px 4px 20px 0px rgba(0, 0, 0, 0.07)'}
+        pl={'20px'}
+        pr={'20px'}
       >
         <Flex
           className="sub-header-DEG"
@@ -116,31 +118,33 @@ const HomePage = () => {
             />
           )}
         </Flex>
-        {user?.deg_wallet ? (
-          <></>
-        ) : (
-          // <Select
-          //   variant="unstyled"
-          //   placeholder={`/subj****${user?.deg_wallet.deg_wallet_id.slice(-4)}`}
-          //   value=""
-          //   style={{
-          //     pointerEvents: 'none'
-          //   }}
-          // />
-          <BecknButton
-            text="Connect Wallet"
-            handleClick={() => handleModalOpen('wallet')}
-            sx={{
-              width: '93px',
-              height: '30px',
-              fontSize: '10px',
-              fontWeight: '400',
-              padding: '10px',
-              borderRadius: '6px',
-              mb: 'unset'
-            }}
-          />
-        )}
+        <Box>
+          {user?.deg_wallet ? (
+            <></>
+          ) : (
+            // <Select
+            //   variant="unstyled"
+            //   placeholder={`/subj****${user?.deg_wallet.deg_wallet_id.slice(-4)}`}
+            //   value=""
+            //   style={{
+            //     pointerEvents: 'none'
+            //   }}
+            // />
+            <BecknButton
+              text="Connect Wallet"
+              handleClick={() => handleModalOpen('wallet')}
+              sx={{
+                width: '93px',
+                height: '30px',
+                fontSize: '10px',
+                fontWeight: '400',
+                padding: '10px',
+                borderRadius: '6px',
+                mb: 'unset'
+              }}
+            />
+          )}
+        </Box>
       </Flex>
       <Box
         background="#deeaf5"

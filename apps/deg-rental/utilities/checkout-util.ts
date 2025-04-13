@@ -88,9 +88,9 @@ export const generateRentalInitPayload = async (
 export function calculateDuration(from: number, to: number): number {
   if (!from || !to) return 0 // Handle invalid inputs
 
-  // Convert milliseconds to hours
+  // Convert milliseconds to hours and round up
   const diffInMs = to - from
-  const diffInHours = Math.floor(diffInMs / (1000 * 60 * 60))
+  const diffInHours = Math.ceil(diffInMs / (1000 * 60 * 60))
 
   return diffInHours
 }
