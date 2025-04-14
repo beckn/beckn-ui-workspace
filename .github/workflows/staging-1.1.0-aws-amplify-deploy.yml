@@ -410,3 +410,22 @@ jobs:
           curl -X POST -d {} "${{ secrets.DEG_FINANCE_STAGING_AMPLIFY_WEBHOOK_URL }}" -H "Content-Type:application/json" 
 
           
+
+ #   deg-ec
+
+      - name: Check for deg-ec changes
+        id: check_deg-ec_changes
+        run: |
+          if git diff --name-only HEAD~1 HEAD | grep '^apps/deg-ec/'; then
+            echo "Changes in deg-ec detected."
+            echo "deg-ec_changed=true" >> $GITHUB_ENV
+          else
+            echo "No changes in deg-ec. Skipping webhook trigger."
+            echo "deg-ec=false" >> $GITHUB_ENV
+          fi
+
+      - name: Trigger deg-ec deployment if changes are detected
+        if: env.deg-ec_changed == 'true'
+        run: |
+          curl -X POST -d {} "${{ secrets.DEG_EC_STAGING_AMPLIFY_WEBHOOK_URL }}" -H "Content-Type:application/json" 
+
