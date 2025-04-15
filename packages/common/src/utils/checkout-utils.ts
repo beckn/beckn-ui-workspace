@@ -49,10 +49,10 @@ export const getPaymentBreakDown = (
   initData: InitResponseModel[] | StatusResponseModel[],
   frequency?: number | Record<string, any>
 ) => {
-  const selectedCount = initData[0].message?.order?.items[0]?.quantity?.selected?.count
-  const domain = initData[0].context.domain
-  const quote = initData[0].message.order.quote
-  const breakUp = quote.breakup
+  const selectedCount = initData?.[0]?.message?.order?.items?.[0]?.quantity?.selected?.count || 1
+  const domain = initData?.[0]?.context?.domain
+  const quote = initData?.[0]?.message?.order?.quote
+  const breakUp = quote?.breakup
   const totalPricewithCurrent = {
     value:
       domain === 'deg:rental'
@@ -63,7 +63,7 @@ export const getPaymentBreakDown = (
 
   const breakUpMap: Record<string, any> = {}
 
-  breakUp.forEach(item => {
+  breakUp?.forEach(item => {
     const {
       title,
       price: { currency, value }

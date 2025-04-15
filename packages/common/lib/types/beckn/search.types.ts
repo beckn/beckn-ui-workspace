@@ -42,6 +42,7 @@ export interface ParsedItemModel {
   rating?: string
   providerCoordinates: Coordinate
   Message?: Message
+  location?: Location
 }
 
 export interface AssemblyData {

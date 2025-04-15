@@ -3,7 +3,7 @@ import { Box, Divider, Flex, HStack, Image, Text } from '@chakra-ui/react'
 import { BottomModal } from '@beckn-ui/molecules'
 import Styles from './subHeader.module.css'
 import { useRouter } from 'next/router'
-import backIcon from '../../../public/images/Back.svg'
+import backIcon from '@public/images/Back.svg'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import CartIconWithCount from '../cartIconWithCount/cartIconWithCount'
 import Qrcode from '../qrCode'
@@ -25,6 +25,7 @@ const getHeaderTitleForPage = (
     blackList: { headerList }
   } = headerConstants
   const values = locale === 'en' ? defaultNames : frenchNames
+  console.log(customPagename, values[pathName])
   switch (true) {
     case headerList.includes(pathName):
       return (

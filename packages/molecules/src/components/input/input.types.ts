@@ -32,6 +32,7 @@ export interface InputProps {
   options?: SelectOptionType[]
   readOnly?: boolean
   sx?: SystemStyleObject
+  leftElement?: () => React.ReactElement<any, any> | null
   rightElement?: () => React.ReactElement<any, any> | null
   customInputBlurHandler?: React.FocusEventHandler<HTMLInputElement>
 }
