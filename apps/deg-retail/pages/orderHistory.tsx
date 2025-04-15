@@ -173,7 +173,7 @@ const OrderHistory = () => {
                     >
                       <Text
                         as={Typography}
-                        text={`${order.items.length} Item${order.items.length > 1 ? 's' : ''}`}
+                        text={`${order.items[0].quantity?.selected?.count} ${Number(order.items[0].quantity?.selected?.count) > 1 ? 'items' : 'item'}`}
                         fontWeight="400"
                         fontSize={'12px'}
                       />

@@ -128,6 +128,10 @@ const OrderHistory = () => {
                     fontWeight="400"
                     fontSize={'12px'}
                     dataTest={testIds.orderHistory_order_id}
+                    maxWidth={{ base: '180px', md: 'none' }}
+                    overflow={{ base: 'hidden', md: 'visible' }}
+                    textOverflow={{ base: 'ellipsis', md: 'clip' }}
+                    whiteSpace={{ base: 'nowrap', md: 'normal' }}
                   />
 
                   <Text
