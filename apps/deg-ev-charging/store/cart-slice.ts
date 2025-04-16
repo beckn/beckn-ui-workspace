@@ -16,20 +16,21 @@ const cartSlice = createSlice({
       action: PayloadAction<{
         product: ParsedItemModel
         quantity: number
+        amountToPay?: number
       }>
     ) {
       const newItem = action.payload.product
       const quantity = Number(action.payload.quantity) // Ensure quantity is a number
-      const price = Number(newItem.item.price.value) // Ensure price is a number
+      const price = Number(action.payload.amountToPay || newItem.item.price.value) // Ensure price is a number
 
       const existingItem = state.items.find(item => item.id === newItem.item.id)
 
       state.totalQuantity = quantity
 
-      state.totalAmount = Number((quantity * price).toFixed(2))
+      state.totalAmount = Number(price.toFixed(2))
 
       if (!existingItem) {
-        const totalPrice = Number((price * quantity).toFixed(2))
+        const totalPrice = Number(price.toFixed(2))
 
         state.items.push({
           ...newItem.item,
@@ -42,7 +43,7 @@ const cartSlice = createSlice({
           locations: newItem.providerCoordinates
         } as CartItemForRequest)
       } else {
-        const totalPrice = Number((parseFloat(existingItem.price.value) * quantity).toFixed(2))
+        const totalPrice = Number(price.toFixed(2))
 
         existingItem.quantity = quantity
         existingItem.totalPrice = totalPrice

@@ -35,6 +35,7 @@ export interface InputProps {
   leftElement?: () => React.ReactElement<any, any> | null
   rightElement?: () => React.ReactElement<any, any> | null
   customInputBlurHandler?: React.FocusEventHandler<HTMLInputElement>
+  step?: string | number | undefined
 }
 export interface signInField {
   name: string

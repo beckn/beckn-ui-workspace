@@ -16,9 +16,9 @@ interface BottomModalProps {
 }
 
 const vehicleTypes = [
-  { label: '4 Wheel', value: '4_wheel' },
-  { label: '2 Wheel', value: '2_wheel' },
-  { label: '3 Wheel', value: '3_wheel' }
+  { label: '2 Wheeler', value: '2_wheel' },
+  { label: '3 Wheeler', value: '3_wheel' },
+  { label: '4 Wheeler', value: '4_wheel' }
 ]
 
 const ChargerBottomModal: React.FC<BottomModalProps> = ({ charger, onNavigate, onSelect, onClose }) => {

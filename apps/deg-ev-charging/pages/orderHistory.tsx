@@ -29,19 +29,17 @@ const OrderHistory = () => {
     fetch(`${strapiUrl}/unified-beckn-energy/order-history/get?filters[category]=${ORDER_CATEGORY_ID}`, requestOptions)
       .then(response => response.json())
       .then(result => {
-        console.log('result', result)
         const parsedData: ChargingHistoryResponse = { activeSession: [], history: [] }
         result.forEach((item: any) => {
           if (item.items.length > 0) {
             const details = item.items[0]
             if (item.delivery_status === '100') {
-              console.log('item', details.duration)
               parsedData.history.push({
                 id: item.order_id,
                 name: details.name,
                 type: details.type || '',
                 duration: `${details.duration ? details.duration + ' min' : ''}`,
-                cost: details.price.value || 0,
+                cost: Number(details.price.value) * Number(details?.quantity?.selected?.measure?.value || 0),
                 date: formatDate(item.publishedAt, 'dd/MM/yyyy; hh:mm a'),
                 status: 'Completed'
               })
@@ -51,7 +49,7 @@ const OrderHistory = () => {
                 name: details.name,
                 type: details.type || '',
                 duration: `${details.duration ? details.duration + ' min' : ''}`,
-                cost: details.price.value || 0,
+                cost: Number(details.price.value || 0) * Number(details?.quantity?.selected?.measure?.value || 0),
                 date: formatDate(item.publishedAt, 'dd/MM/yyyy; hh:mm a'),
                 status: 'In Progress'
               })
@@ -67,6 +65,7 @@ const OrderHistory = () => {
         }
       })
       .catch(error => {
+        console.log('error', error)
         setIsLoading(false)
       })
       .finally(() => setIsLoading(false))
@@ -139,11 +138,11 @@ const OrderHistory = () => {
         </>
       )}
 
-      {!data?.activeSession && (!data?.history || data.history.length === 0) && (
+      {/* {(!data?.activeSession || data?.activeSession.length === 0) && (!data?.history || data.history.length === 0) && (
         <Center h="calc(100vh - 200px)">
           <Text color="gray.500">No charging sessions found</Text>
         </Center>
-      )}
+      )} */}
     </Box>
   )
 }

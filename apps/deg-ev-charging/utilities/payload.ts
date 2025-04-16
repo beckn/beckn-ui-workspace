@@ -1,6 +1,12 @@
 import { SelectData, SelectItem, SelectOrder } from '@lib/types/beckn/select'
 import { InitOrder, InitSingleData } from '@lib/types/beckn/init'
-import { InitResponseModel, ConfirmResponseModel, CartItemForRequest, geocodeFromPincode } from '@beckn-ui/common'
+import {
+  InitResponseModel,
+  ConfirmResponseModel,
+  CartItemForRequest,
+  geocodeFromPincode,
+  QuantityDetails
+} from '@beckn-ui/common'
 import { ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
 import { SelectedCharger } from '@store/chargerSelect-slice'
 
@@ -50,7 +56,9 @@ export const getSelectPayload = (
           id: item.id,
           quantity: {
             selected: {
-              count: parseFloat(item.quantity.toString())
+              measure: {
+                value: item.quantity.toString()
+              }
             }
           },
           tags: [
@@ -97,7 +105,7 @@ export const getSelectPayload = (
 export const getInitPayload = async (
   deliveryAddress: ShippingFormInitialValuesType,
   billingAddress: ShippingFormInitialValuesType | Record<string, any>,
-  cartItems: CartItemForRequest[],
+  cartDetails: { cartItems: CartItemForRequest[]; updatedQuantity: string },
   transaction_id: string,
   domain: string = 'retail:1.1.0',
   fulfillments: { id: string; type: string } = { id: '3', type: 'Standard-shipping' },
@@ -105,7 +113,7 @@ export const getInitPayload = async (
 ) => {
   const cityData = await geocodeFromPincode(deliveryAddress.pinCode!)
   console.log(cityData)
-  const bppGroups = cartItems.reduce((acc: { [key: string]: CartItemForRequest[] }, item) => {
+  const bppGroups = cartDetails.cartItems.reduce((acc: { [key: string]: CartItemForRequest[] }, item) => {
     if (!acc[item.bpp_id]) {
       acc[item.bpp_id] = []
     }
@@ -123,12 +131,16 @@ export const getInitPayload = async (
         ...(location && { location })
       },
       message: {
-        orders: transformOrdersByProvider(items, fulfillments)
+        orders: transformOrdersByProvider(items, fulfillments, cartDetails.updatedQuantity)
       }
     }
   })
 
-  function transformOrdersByProvider(items: CartItemForRequest[], fullf: { id: string; type: string }) {
+  function transformOrdersByProvider(
+    items: CartItemForRequest[],
+    fullf: { id: string; type: string },
+    quantity: string
+  ) {
     const providerGroups = items.reduce((acc: { [key: string]: CartItemForRequest[] }, item) => {
       const providerKey = `${item.bpp_id}_${item.providerId}`
       if (!acc[providerKey]) {
@@ -144,7 +156,9 @@ export const getInitPayload = async (
         id: item.id,
         quantity: {
           selected: {
-            count: item.quantity
+            measure: {
+              value: quantity.toString() || item.quantity.toString()
+            }
           }
         }
       }))
@@ -301,7 +315,11 @@ export const getPayloadForConfirm = (initResponse: InitResponseModel[], location
                 ...data,
                 quantity: {
                   ...data.quantity,
-                  selected: { count: 1 }
+                  selected: {
+                    measure: {
+                      value: data.quantity.selected.measure.value.toString()
+                    }
+                  }
                 }
               }
             }),
@@ -351,7 +369,9 @@ export const getPayloadForOrderHistoryPost = (confirmData: ConfirmResponseModel[
         quote: {
           price: {
             currency: message.quote.price.currency,
-            value: Number(message.quote.price.value)
+            value:
+              parseFloat(message.quote.price.value) *
+              parseFloat((message.items?.[0]?.quantity as QuantityDetails)?.selected.measure.value)
           }
         },
         payments: message.payments

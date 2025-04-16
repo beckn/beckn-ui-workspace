@@ -66,13 +66,15 @@ const MonitorCharging = () => {
       const { message } = confirmOrderData[0]
       setChargingDetails(prev => ({
         ...prev,
+        consumedUnit: parseFloat(message.items?.[0]?.quantity.selected.measure.value),
         stationId: message.id,
         stationName: message.provider.name,
         chargerId: message.items?.[0]?.id,
         chargerName: message.items?.[0]?.name,
         power: message.power,
         portType: message.items?.[0]?.tags?.[0]?.list?.[0]?.name || message.items?.[0]?.tags?.[0]?.list?.[0]?.value,
-        totalCost: message.quote?.price?.value
+        totalCost:
+          parseFloat(message.quote?.price?.value) * parseFloat(message.items?.[0]?.quantity.selected.measure.value)
       }))
     }
   }, [])
@@ -118,9 +120,11 @@ const MonitorCharging = () => {
                 setChargingState('COMPLETED')
                 setChargingDetails(prev => ({
                   ...prev,
-                  consumedUnit: statusData.message.order.items?.[0]?.quantity.selected.count,
+                  consumedUnit: parseFloat(statusData.message.order.items?.[0]?.quantity.selected.measure.value),
                   bookingTime: statusData.message.order.duration,
-                  totalCost: statusData.message.order.quote?.price?.value,
+                  totalCost:
+                    parseFloat(statusData.message.order.quote?.price?.value) *
+                    parseFloat(statusData.message.order.items?.[0]?.quantity.selected.measure.value),
                   chargerId: statusData.message.order.items?.[0]?.id,
                   chargerName: statusData.message.order.items?.[0]?.name,
                   stationId: statusData.message.order.id,

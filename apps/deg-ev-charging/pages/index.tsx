@@ -1,14 +1,6 @@
 import React, { useCallback, useState, memo, useMemo, useEffect } from 'react'
 import dynamic from 'next/dynamic'
-import {
-  cartActions,
-  Coordinate,
-  discoveryActions,
-  Item,
-  Location,
-  ParsedItemModel,
-  useGeolocation
-} from '@beckn-ui/common'
+import { Coordinate, discoveryActions, Item, Location, ParsedItemModel, useGeolocation } from '@beckn-ui/common'
 import OpenWalletBottomModal from '@components/Modal/OpenWalletBottomModal'
 import { useConnectWallet } from '@hooks/useConnectWallet'
 import { AuthRootState } from '@store/auth-slice'
@@ -27,6 +19,7 @@ import { useRouter } from 'next/router'
 import { ChargerPort, chargerSelectActions, SelectedCharger } from '@store/chargerSelect-slice'
 import { Loader } from '@beckn-ui/molecules'
 import { setCurrentLocation } from '@store/user-slice'
+import { cartActions } from '@store/cart-slice'
 
 const MapWithNoSSR = dynamic(() => import('@components/Map'), { ssr: false })
 
