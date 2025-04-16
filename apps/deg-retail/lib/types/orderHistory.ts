@@ -31,6 +31,9 @@ export interface Fulfillment {
 }
 
 export interface Quantity {
+  selected: {
+    count: number
+  }
   available: {
     count: number
     measure: {

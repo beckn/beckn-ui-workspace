@@ -66,7 +66,7 @@ const SelectDeliveryModal: React.FC<SelectDeliveryModalProps> = props => {
               size="md"
               value="1"
             >
-              <span style={{ fontSize: '15px' }}>{props.addressOfTheEndLocation}</span>
+              <span style={{ fontSize: '16px' }}>{props.addressOfTheEndLocation}</span>
             </Radio>
             <Radio
               _checked={{
