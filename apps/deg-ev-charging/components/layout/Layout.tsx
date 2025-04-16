@@ -9,7 +9,14 @@ import styles from './Layout.module.css'
 import NextNProgress from 'nextjs-progressbar'
 import { IGeoLocationSearchPageRootState } from '@beckn-ui/common/lib/types'
 import { Box, useToast } from '@chakra-ui/react'
-import { checkTokenExpiry, feedbackActions, FeedbackRootState, GeoLocationInputList, ToastType } from '@beckn-ui/common'
+import {
+  checkoutActions,
+  checkTokenExpiry,
+  feedbackActions,
+  FeedbackRootState,
+  GeoLocationInputList,
+  ToastType
+} from '@beckn-ui/common'
 import { Toast } from '@beckn-ui/molecules'
 import { testIds } from '@shared/dataTestIds'
 import Splash from '../splash/splash'
@@ -57,6 +64,7 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
         if (message) {
           alert(message)
           // if (userConfirmed) {
+          dispatch(checkoutActions.clearState())
           dispatch(logout())
           // }
         }

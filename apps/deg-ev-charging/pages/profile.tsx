@@ -10,7 +10,7 @@ import axios from '@services/axios'
 import { testIds } from '@shared/dataTestIds'
 import LogoutIcon from '@public/images/logout_icon.svg'
 import { setProfileEditable, UserRootState } from '@store/user-slice'
-import { feedbackActions, logout } from '@beckn-ui/common'
+import { checkoutActions, feedbackActions, logout } from '@beckn-ui/common'
 import { ROLE, ROUTE_TYPE } from '@lib/config'
 import { InputProps, Typography } from '@beckn-ui/molecules'
 import NavigationItem from '@components/NavigationItem'
@@ -81,13 +81,12 @@ const ProfilePage = () => {
       .then(response => {
         const result = response.data.agent
 
-        console.log(result)
         const { first_name, agent_profile } = result
         setFormData({
           ...formData,
           name: `${first_name}`,
           address: agent_profile.address,
-          email: agent_profile.email,
+          email: response.data.email,
           mobileNumber: agent_profile.phone_number
         })
       })
@@ -257,7 +256,10 @@ const ProfilePage = () => {
           icon={LogoutIcon}
           label={'Logout'}
           color="#4461F2"
-          handleClick={() => dispatch(logout())}
+          handleClick={() => {
+            dispatch(checkoutActions.clearState())
+            dispatch(logout())
+          }}
           dataTest={'logout'}
         />
       </Flex>

@@ -6,10 +6,8 @@ import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import {
   CheckoutRootState,
   DiscoveryRootState,
-  getPaymentBreakDown,
   ICartRootState,
   CartItemForRequest,
-  cartActions,
   Item,
   ParsedItemModel
 } from '@beckn-ui/common'
@@ -23,10 +21,12 @@ import { useSelectMutation } from '@beckn-ui/common/src/services/select'
 import { useLanguage } from '@hooks/useLanguage'
 import { ChargerSelectRootState } from '@store/chargerSelect-slice'
 import { useRouter } from 'next/router'
+import { cartActions } from '@store/cart-slice'
+import { getPaymentBreakDown } from '@utils/checkout-utils'
 
 interface FormData {
-  amountToPay: number
-  kwhToCharge: number
+  amountToPay: string
+  kwhToCharge: string
 }
 
 interface FormErrors {
@@ -56,7 +56,7 @@ const validateForm = (formData: FormData) => {
 const ChargerDetails = () => {
   const domain = DOMAIN
 
-  const [formData, setFormData] = useState<FormData>({ amountToPay: 0, kwhToCharge: 0 })
+  const [formData, setFormData] = useState<FormData>({ amountToPay: '', kwhToCharge: '' })
   const [formErrors, setFormErrors] = useState<FormErrors>({ amountToPay: '', kwhToCharge: '' })
   const [showPayment, setShowPayment] = useState(false)
   const [chargerDetails, setChargerDetails] = useState({
@@ -69,14 +69,23 @@ const ChargerDetails = () => {
     power: '',
     portId: ''
   })
+  const [isLoading, setIsLoading] = useState<{
+    select: boolean
+    updateCart: boolean
+    initialize: boolean
+  }>({
+    select: false,
+    updateCart: false,
+    initialize: false
+  })
 
   const initResponse = useSelector((state: CheckoutRootState) => state.checkout?.initResponse)
   const selectResponse = useSelector((state: CheckoutRootState) => state.checkout?.selectResponse)
   const { items, totalQuantity, totalAmount } = useSelector((state: ICartRootState) => state.cart)
   const { selectedCharger } = useSelector((state: ChargerSelectRootState) => state?.selectCharger)
   const { transactionId } = useSelector((state: DiscoveryRootState) => state.discovery)
-  const [fetchQuotes, { isLoading: selectLoading }] = useSelectMutation()
-  const [initialize, { isLoading: initializeLoading }] = useInitMutation()
+  const [fetchQuotes, { isLoading: selectLoading, error: selectError }] = useSelectMutation()
+  const [initialize, { isLoading: initializeLoading, error: initializeError }] = useInitMutation()
   const { user } = useSelector((state: AuthRootState) => state.auth)
   const { t } = useLanguage()
   const router = useRouter()
@@ -102,6 +111,7 @@ const ChargerDetails = () => {
 
   useEffect(() => {
     if (items && items.length > 0) {
+      setIsLoading(prev => ({ ...prev, select: true }))
       console.log(selectedCharger)
       const firstItem = items[0] as CartItemForRequest
       const initialAmount = parseFloat(selectedCharger?.rate?.toString() || '0') || 0
@@ -119,8 +129,8 @@ const ChargerDetails = () => {
       })
 
       setFormData({
-        amountToPay: totalAmount,
-        kwhToCharge: totalQuantity
+        amountToPay: totalAmount.toString(),
+        kwhToCharge: totalQuantity.toString()
       })
 
       fetchQuotes(
@@ -134,9 +144,14 @@ const ChargerDetails = () => {
           selectedCharger || undefined
         )
       )
+        .unwrap()
+        .then(() => {})
+        .catch(() => {
+          setIsLoading(prev => ({ ...prev, select: false }))
+        })
     }
   }, [items, transactionId, selectedCharger, totalQuantity])
-  console.log('totalQuantity', totalQuantity)
+
   useEffect(() => {
     console.log('Dank user', user)
 
@@ -177,25 +192,27 @@ const ChargerDetails = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
-    const numericValue = parseFloat(value) || 0
+    console.log('Dank value', Number(value))
+    const numericValue = value
+
+    if (Number(numericValue) < 0) return
 
     let updatedFormData = { ...formData }
 
     if (name === 'kwhToCharge') {
-      // Calculate amount based on kWh and rate
-      const calculatedAmount = numericValue * chargerDetails.rate
+      const calculatedAmount = Number((parseFloat(numericValue) * chargerDetails.rate).toFixed(2))
+
       updatedFormData = {
         ...formData,
         kwhToCharge: numericValue,
-        amountToPay: calculatedAmount
+        amountToPay: calculatedAmount.toString()
       }
     } else if (name === 'amountToPay') {
-      // Calculate kWh based on amount and rate
-      const calculatedKwh = numericValue / chargerDetails.rate
+      const calculatedKwh = Number((parseFloat(numericValue) / chargerDetails.rate).toFixed(2))
       updatedFormData = {
         ...formData,
         amountToPay: numericValue,
-        kwhToCharge: calculatedKwh
+        kwhToCharge: calculatedKwh.toString()
       }
     }
 
@@ -204,7 +221,8 @@ const ChargerDetails = () => {
     const errors = validateForm(updatedFormData)
     setFormErrors(prevErrors => ({
       ...prevErrors,
-      [name]: errors[name as keyof FormErrors] || ''
+      ['kwhToCharge']: errors['kwhToCharge'] || '',
+      ['amountToPay']: errors['amountToPay'] || ''
     }))
   }
 
@@ -220,7 +238,8 @@ const ChargerDetails = () => {
         label: 'Amount to Pay',
         error: formErrors.amountToPay,
         dataTest: '',
-        disabled: false,
+        disabled: true,
+        step: '0.01',
         leftElement: () => (
           <Text fontSize={'14px'}>{currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}</Text>
         )
@@ -235,53 +254,57 @@ const ChargerDetails = () => {
         label: 'kWh to Charge',
         error: formErrors.kwhToCharge,
         dataTest: '',
-        disabled: false
+        disabled: initResponse.length > 0,
+        step: '0.01'
       }
     ]
     return inputs
   }
 
-  const handleInitialize = useCallback(async () => {
-    console.log(formData.kwhToCharge)
-    dispatch(
-      cartActions.addItemToCart({
-        product: {
-          ...selectedCharger?.data?.providerDetails,
-          item: selectedCharger?.data?.itemDetails as Item
-        } as ParsedItemModel,
-        quantity: formData.kwhToCharge
-      })
-    )
+  const handleInitCall = useCallback(async () => {
+    if (selectResponse.length === 0) return
+    const { id, type } = selectResponse[0]?.message?.order?.fulfillments[0] || {}
 
-    setTimeout(() => {
-      const { id, type } = selectResponse[0]?.message?.order?.fulfillments[0] || {}
-      const payloadPromise = getInitPayload(
-        shippingFormData,
-        billingFormData,
-        items,
-        transactionId,
-        domain,
-        { id, type },
-        {
-          location: getCountryCode()
-        }
-      )
-      payloadPromise.then(async res => {
+    const payloadPromise = getInitPayload(
+      shippingFormData,
+      billingFormData,
+      { cartItems: items, updatedQuantity: formData.kwhToCharge },
+      transactionId,
+      domain,
+      { id, type },
+      {
+        location: getCountryCode()
+      }
+    )
+    payloadPromise
+      .then(async res => {
         await initialize(res)
         setShowPayment(true)
       })
-    }, 5000)
-  }, [
-    formData,
-    items,
-    transactionId,
-    selectedCharger,
-    totalQuantity,
-    shippingFormData,
-    billingFormData,
-    initialize,
-    selectResponse
-  ])
+      .finally(() => {
+        setIsLoading(prev => ({ ...prev, updateCart: false }))
+      })
+  }, [shippingFormData, billingFormData, items, transactionId, domain, selectResponse, formData])
+
+  const handleInitialize = useCallback(async () => {
+    setIsLoading(prev => ({ ...prev, updateCart: true }))
+
+    await new Promise<void>(resolve => {
+      dispatch(
+        cartActions.addItemToCart({
+          product: {
+            ...selectedCharger?.data?.providerDetails,
+            item: selectedCharger?.data?.itemDetails as Item
+          } as ParsedItemModel,
+          amountToPay: parseFloat(formData.amountToPay),
+          quantity: parseFloat(formData.kwhToCharge)
+        })
+      )
+      resolve()
+    })
+
+    await handleInitCall()
+  }, [formData, selectedCharger, dispatch])
 
   const isFormFilled = useMemo(() => {
     return (
@@ -290,17 +313,31 @@ const ChargerDetails = () => {
     )
   }, [formData, formErrors])
 
-  //   if (selectLoading) {
-  //     return (
-  //       <Box
-  //         display={'grid'}
-  //         height={'calc(100vh - 300px)'}
-  //         alignContent={'center'}
-  //       >
-  //         <Loader text={t.quoteRequestLoader} />
-  //       </Box>
-  //     )
-  //   }
+  if (isLoading.select && !isLoading.updateCart) {
+    return (
+      <Box
+        display={'grid'}
+        height={'calc(100vh - 300px)'}
+        alignContent={'center'}
+        justifyContent={'center'}
+      >
+        <Loader text={t.quoteRequestLoader} />
+      </Box>
+    )
+  }
+
+  if (selectError || initializeError) {
+    return (
+      <Box
+        display={'grid'}
+        height={'calc(100vh - 300px)'}
+        alignContent={'center'}
+        justifyContent={'center'}
+      >
+        <Text fontSize={'16px'}>{t.errorText}</Text>
+      </Box>
+    )
+  }
 
   return (
     <Container
@@ -456,8 +493,8 @@ const ChargerDetails = () => {
                       handleClick: handleInitialize,
                       variant: 'solid',
                       colorScheme: 'primary',
-                      isLoading: initializeLoading,
-                      disabled: !isFormFilled
+                      isLoading: isLoading.updateCart,
+                      disabled: !isFormFilled || initResponse.length > 0
                     }
                   ],
                   inputs: getInputs()
@@ -487,28 +524,30 @@ const ChargerDetails = () => {
                 </Heading>
 
                 <Stack spacing={3}>
-                  {Object.entries(getPaymentBreakDown(initResponse).breakUpMap).map(([label, amount]) => (
-                    <Flex
-                      key={label}
-                      justify="space-between"
-                    >
-                      <Text
-                        color="#000000"
-                        fontSize={'12px'}
-                        fontWeight={'500'}
+                  {Object.entries(getPaymentBreakDown(initResponse, parseFloat(formData.kwhToCharge)).breakUpMap).map(
+                    ([label, amount]) => (
+                      <Flex
+                        key={label}
+                        justify="space-between"
                       >
-                        {label}
-                      </Text>
-                      <Text
-                        color="#797979"
-                        fontSize={'12px'}
-                        fontWeight={'500'}
-                      >
-                        {currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}
-                        {amount.value}
-                      </Text>
-                    </Flex>
-                  ))}
+                        <Text
+                          color="#000000"
+                          fontSize={'12px'}
+                          fontWeight={'500'}
+                        >
+                          {label}
+                        </Text>
+                        <Text
+                          color="#797979"
+                          fontSize={'12px'}
+                          fontWeight={'500'}
+                        >
+                          {currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}
+                          {amount.value}
+                        </Text>
+                      </Flex>
+                    )
+                  )}
                 </Stack>
               </CardBody>
             </Card>
@@ -542,7 +581,7 @@ const ChargerDetails = () => {
                       fontWeight="700"
                     >
                       {currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}
-                      {getPaymentBreakDown(initResponse).totalPricewithCurrent.value}
+                      {getPaymentBreakDown(initResponse, parseFloat(formData.kwhToCharge)).totalPricewithCurrent.value}
                     </Text>
                   </Flex>
                   <Box>

@@ -87,9 +87,9 @@ const OrderDetails = () => {
               ...prevState,
               statusData: {
                 chargingDetails: {
-                  consumedUnit: resData.consumedUnit,
+                  consumedUnit: resData.items?.[0]?.quantity?.selected?.measure?.value || 0,
                   bookingTime: resData.bookingTime,
-                  totalCost: resData.quote?.price?.value,
+                  totalCost: resData.quote?.price?.value * Number(resData.items?.[0]?.quantity.selected.measure.value),
                   chargerId: resData.items?.[0]?.id,
                   chargerName: resData.items?.[0]?.name,
                   stationId: resData.id,
@@ -106,7 +106,7 @@ const OrderDetails = () => {
                 paymentDetails: {
                   method: 'Card',
                   transactionId: resData.transactionId,
-                  totalCost: resData.quote?.price?.value,
+                  totalCost: resData.quote?.price?.value * Number(resData.items?.[0]?.quantity.selected.measure.value),
                   status: 'Paid'
                 },
                 locationDetails: {
@@ -144,9 +144,9 @@ const OrderDetails = () => {
               ...prevState,
               statusData: {
                 chargingDetails: {
-                  consumedUnit: resData.items?.[0]?.quantity.selected.count,
+                  consumedUnit: resData.items?.[0]?.quantity.selected.measure?.value,
                   bookingTime: resData.duration,
-                  totalCost: resData.quote?.price?.value,
+                  totalCost: resData.quote?.price?.value * Number(resData.items?.[0]?.quantity.selected.measure.value),
                   chargerId: resData.items?.[0]?.id,
                   chargerName: resData.items?.[0]?.name,
                   stationId: resData.id,
@@ -163,7 +163,7 @@ const OrderDetails = () => {
                 paymentDetails: {
                   method: 'Card',
                   transactionId: resData.transactionId,
-                  totalCost: resData.quote?.price?.value,
+                  totalCost: resData.quote?.price?.value * Number(resData.items?.[0]?.quantity.selected.measure.value),
                   status: 'Paid'
                 },
                 locationDetails: {
@@ -187,9 +187,9 @@ const OrderDetails = () => {
 
     fetchData()
 
-    const intervalId = setInterval(fetchData, 60000)
+    // const intervalId = setInterval(fetchData, 60000)
 
-    return () => clearInterval(intervalId)
+    // return () => clearInterval(intervalId)
   }, [apiUrl, data.confirmData])
 
   if (isLoading) {

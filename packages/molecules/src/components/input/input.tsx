@@ -20,7 +20,8 @@ const Input: React.FC<InputProps> = ({
   leftElement,
   rightElement,
   customInputBlurHandler,
-  sx
+  sx,
+  step
 }) => {
   const theme = useTheme()
   const [isInputFocused, setIsInputFocused] = useState(false)
@@ -70,6 +71,7 @@ const Input: React.FC<InputProps> = ({
         onChange={handleChange}
         disabled={disabled}
         readOnly={readOnly}
+        step={step}
         sx={{
           ...(variant === 'rounded' && {
             _placeholder: {

@@ -56,8 +56,8 @@ export const getPaymentBreakDown = (
   const totalPricewithCurrent = {
     value:
       domain === 'deg:rental'
-        ? getSubTotalAndDeliveryCharges(initData, selectedCount || 1).subTotal.toString()
-        : getSubTotalAndDeliveryCharges(initData, frequency || 1).subTotal.toString(),
+        ? getSubTotalAndDeliveryCharges(initData, selectedCount || 1).subTotal.toFixed(2)
+        : getSubTotalAndDeliveryCharges(initData, frequency || 1).subTotal.toFixed(2),
     currency: getSubTotalAndDeliveryCharges(initData, frequency || 1).currencySymbol!
   }
 
@@ -80,8 +80,8 @@ export const getPaymentBreakDown = (
       currency: currency,
       value:
         domain === 'deg:rental'
-          ? (breakUpMap[title]?.value || 0) + Number(value) * selectedCount
-          : (breakUpMap[title]?.value || 0) + Number(value) * quantity
+          ? ((breakUpMap[title]?.value || 0) + Number(value) * selectedCount).toFixed(2)
+          : ((breakUpMap[title]?.value || 0) + Number(value) * quantity).toFixed(2)
     }
   })
 
