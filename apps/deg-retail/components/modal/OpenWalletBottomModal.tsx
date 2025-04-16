@@ -238,7 +238,6 @@ const OpenWalletBottomModal: React.FC<OpenWalletBottomModalProps> = ({ modalType
                     <input
                       key={index}
                       value={digit}
-                      type="number"
                       maxLength={1}
                       inputMode="numeric"
                       pattern="[0-9]"
@@ -248,6 +247,7 @@ const OpenWalletBottomModal: React.FC<OpenWalletBottomModalProps> = ({ modalType
                       style={{
                         width: '42px',
                         height: '46px',
+                        padding: '12px',
                         margin: '0 6px',
                         border: '1px solid #0000001A',
                         backgroundColor: '#D9D9D933',
@@ -295,7 +295,7 @@ const OpenWalletBottomModal: React.FC<OpenWalletBottomModalProps> = ({ modalType
                   mb="20px"
                 >
                   <Typography
-                    text="Spark would like to fetch the following information from your wallet:"
+                    text="retail and leasing app would like to fetch the following information from your wallet:"
                     fontSize="12px"
                     fontWeight="400"
                   />

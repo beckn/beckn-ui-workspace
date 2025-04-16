@@ -324,7 +324,10 @@ const CheckoutPage = () => {
             {cartItems.map((singleItem, ind) => (
               <React.Fragment key={ind}>
                 <Box pb="10px">
-                  <Flex alignItems={'center'}>
+                  <Flex
+                    alignItems={'center'}
+                    gap="8px"
+                  >
                     <Image
                       src={singleItem.images?.[0].url}
                       alt={'img'}

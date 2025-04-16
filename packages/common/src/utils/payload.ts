@@ -210,7 +210,7 @@ export const getInitPayload = async (
   return { data }
 }
 
-export const getPayloadForConfirm = (initResponse: InitResponseModel[]) => {
+export const getPayloadForConfirm = (initResponse: InitResponseModel[], location?: any) => {
   const {
     context,
     message: {
@@ -226,7 +226,8 @@ export const getPayloadForConfirm = (initResponse: InitResponseModel[]) => {
           transaction_id: transaction_id,
           bpp_id: bpp_id,
           bpp_uri: bpp_uri,
-          domain: domain
+          domain: domain,
+          ...(location && location)
         },
         message: {
           orders: [

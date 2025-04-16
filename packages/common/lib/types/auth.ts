@@ -84,6 +84,7 @@ export interface SignUpResponse {
 // Profile related models
 export interface ProfileProps {
   name: string
+  email?: string
   mobileNumber?: string
   flatNumber?: string | null
   street?: string | null
