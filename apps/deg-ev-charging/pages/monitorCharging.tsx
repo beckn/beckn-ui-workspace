@@ -41,7 +41,7 @@ type ChargingState = 'NOT_STARTED' | 'IN_PROGRESS' | 'COMPLETED'
 const MonitorCharging = () => {
   const [chargingState, setChargingState] = useState<ChargingState>('NOT_STARTED')
   const [chargingProgress, setChargingProgress] = useState(0)
-  const [remainingTime, setRemainingTime] = useState(30)
+  const [remainingTime, setRemainingTime] = useState(60)
   const [chargingDetails, setChargingDetails] = useState<ChargingDetails>({
     consumedUnit: 0,
     bookingTime: 0,
@@ -64,17 +64,27 @@ const MonitorCharging = () => {
     if (localStorage && localStorage.getItem('confirmResponse')) {
       const confirmOrderData = JSON.parse(localStorage.getItem('confirmResponse') as string)
       const { message } = confirmOrderData[0]
+      console.log(
+        (
+          Number(parseFloat(message.quote?.price?.value)) *
+          Number(parseFloat(message.items?.[0]?.quantity.selected.measure.value))
+        ).toFixed(2)
+      )
       setChargingDetails(prev => ({
         ...prev,
-        consumedUnit: parseFloat(message.items?.[0]?.quantity.selected.measure.value),
+        consumedUnit: Number(parseFloat(message.items?.[0]?.quantity.selected.measure.value).toFixed(2)),
         stationId: message.id,
         stationName: message.provider.name,
         chargerId: message.items?.[0]?.id,
         chargerName: message.items?.[0]?.name,
         power: message.power,
         portType: message.items?.[0]?.tags?.[0]?.list?.[0]?.name || message.items?.[0]?.tags?.[0]?.list?.[0]?.value,
-        totalCost:
-          parseFloat(message.quote?.price?.value) * parseFloat(message.items?.[0]?.quantity.selected.measure.value)
+        totalCost: Number(
+          (
+            Number(parseFloat(message.quote?.price?.value)) *
+            Number(parseFloat(message.items?.[0]?.quantity.selected.measure.value))
+          ).toFixed(2)
+        )
       }))
     }
   }, [])
@@ -120,11 +130,16 @@ const MonitorCharging = () => {
                 setChargingState('COMPLETED')
                 setChargingDetails(prev => ({
                   ...prev,
-                  consumedUnit: parseFloat(statusData.message.order.items?.[0]?.quantity.selected.measure.value),
+                  consumedUnit: Number(
+                    parseFloat(statusData.message.order.items?.[0]?.quantity.selected.measure.value).toFixed(2)
+                  ),
                   bookingTime: statusData.message.order.duration,
-                  totalCost:
-                    parseFloat(statusData.message.order.quote?.price?.value) *
-                    parseFloat(statusData.message.order.items?.[0]?.quantity.selected.measure.value),
+                  totalCost: Number(
+                    (
+                      Number(parseFloat(statusData.message.order.quote?.price?.value)) *
+                      Number(parseFloat(statusData.message.order.items?.[0]?.quantity.selected.measure.value))
+                    ).toFixed(2)
+                  ),
                   chargerId: statusData.message.order.items?.[0]?.id,
                   chargerName: statusData.message.order.items?.[0]?.name,
                   stationId: statusData.message.order.id,

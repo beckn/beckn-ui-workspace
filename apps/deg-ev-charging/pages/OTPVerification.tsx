@@ -94,6 +94,7 @@ const OTPVerification = () => {
         flexDirection={'column'}
         justifyContent={'space-between'}
         height={'calc(100vh - 650px)'}
+        gap={'20px'}
       >
         <Box mt={'25px'}>
           <Flex gap={'1rem'}>
