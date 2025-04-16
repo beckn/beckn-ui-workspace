@@ -262,7 +262,8 @@ const Map: React.FC<MapProps> = (props: MapProps) => {
           <SearchBar
             searchString={searchQuery}
             placeholder={'Search Location'}
-            handleChange={handleOnSearch!}
+            handleChange={() => {}}
+            handleOnFocus={() => handleOnSearch?.('')}
           />
         )}
         {showConnectWallet && (

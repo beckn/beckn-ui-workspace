@@ -12,6 +12,7 @@ import { Box, useToast } from '@chakra-ui/react'
 import {
   checkoutActions,
   checkTokenExpiry,
+  clearSource,
   feedbackActions,
   FeedbackRootState,
   GeoLocationInputList,
@@ -64,6 +65,7 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
         if (message) {
           alert(message)
           // if (userConfirmed) {
+          dispatch(clearSource())
           dispatch(checkoutActions.clearState())
           dispatch(logout())
           // }

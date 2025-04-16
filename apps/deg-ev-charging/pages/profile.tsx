@@ -10,7 +10,7 @@ import axios from '@services/axios'
 import { testIds } from '@shared/dataTestIds'
 import LogoutIcon from '@public/images/logout_icon.svg'
 import { setProfileEditable, UserRootState } from '@store/user-slice'
-import { checkoutActions, feedbackActions, logout } from '@beckn-ui/common'
+import { checkoutActions, clearSource, feedbackActions, logout } from '@beckn-ui/common'
 import { ROLE, ROUTE_TYPE } from '@lib/config'
 import { InputProps, Typography } from '@beckn-ui/molecules'
 import NavigationItem from '@components/NavigationItem'
@@ -257,6 +257,7 @@ const ProfilePage = () => {
           label={'Logout'}
           color="#4461F2"
           handleClick={() => {
+            dispatch(clearSource())
             dispatch(checkoutActions.clearState())
             dispatch(logout())
           }}

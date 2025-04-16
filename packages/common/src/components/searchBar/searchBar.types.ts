@@ -3,4 +3,5 @@ export interface SearchBarProps {
   selectedInput?: string | string[] | undefined
   handleChange: Function
   placeholder?: string
+  handleOnFocus?: React.FocusEventHandler<HTMLInputElement> | undefined
 }

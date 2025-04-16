@@ -1,6 +1,15 @@
 import React, { useCallback, useState, memo, useMemo, useEffect } from 'react'
 import dynamic from 'next/dynamic'
-import { Coordinate, discoveryActions, Item, Location, ParsedItemModel, useGeolocation } from '@beckn-ui/common'
+import {
+  Coordinate,
+  discoveryActions,
+  IGeoLocationSearchPageRootState,
+  Item,
+  Location,
+  ParsedItemModel,
+  toggleLocationSearchPageVisibility,
+  useGeolocation
+} from '@beckn-ui/common'
 import OpenWalletBottomModal from '@components/Modal/OpenWalletBottomModal'
 import { useConnectWallet } from '@hooks/useConnectWallet'
 import { AuthRootState } from '@store/auth-slice'
@@ -18,7 +27,7 @@ import { parseSearchlist } from '@utils/search-utils'
 import { useRouter } from 'next/router'
 import { ChargerPort, chargerSelectActions, SelectedCharger } from '@store/chargerSelect-slice'
 import { Loader } from '@beckn-ui/molecules'
-import { setCurrentLocation } from '@store/user-slice'
+import { setCurrentLocation, UserRootState } from '@store/user-slice'
 import { cartActions } from '@store/cart-slice'
 
 const MapWithNoSSR = dynamic(() => import('@components/Map'), { ssr: false })
@@ -132,61 +141,80 @@ const Homepage = () => {
   const dispatch = useDispatch()
   const { user } = useSelector((state: AuthRootState) => state.auth)
   const router = useRouter()
+  const { currentLocation } = useSelector((state: UserRootState) => state.user)
+  const { geoLatLong, geoAddress } = useSelector(
+    (state: IGeoLocationSearchPageRootState) => state.geoLocationSearchPageUI
+  )
 
   useEffect(() => {
-    if (coordinates) {
+    if (geoLatLong) {
+      dispatch(
+        setCurrentLocation({ latitude: Number(geoLatLong.split(',')[0]), longitude: Number(geoLatLong.split(',')[1]) })
+      )
+      setSearchQuery(geoAddress)
+    } else if (coordinates) {
       dispatch(
         setCurrentLocation({ latitude: Number(coordinates?.latitude), longitude: Number(coordinates?.longitude) })
       )
     }
-  }, [coordinates])
+  }, [coordinates, geoLatLong])
 
-  const fetchEvChargers = useCallback(
-    async (query: string = '') => {
-      try {
-        const searchPayload = {
-          context: {
-            domain: DOMAIN,
-            location: getCountryCode()
-          },
-          searchString: query,
-          fulfillment: {
-            stops: [
-              {
-                location: `${coordinates?.latitude},${coordinates?.longitude}`
-              }
-            ]
-          }
+  const fetchEvChargers = useCallback(async () => {
+    try {
+      const searchPayload = {
+        context: {
+          domain: DOMAIN,
+          location: getCountryCode()
+        },
+        searchString: 'ev charger',
+        fulfillment: {
+          stops: [
+            {
+              location: `${currentLocation?.latitude},${currentLocation?.longitude}`
+            }
+          ]
         }
-        setIsLoading(true)
-        setDestination(undefined)
-
-        const res = await axios.post(`${apiUrl}/search`, searchPayload)
-        if (res.data.data.length > 0) {
-          dispatch(
-            discoveryActions.addTransactionId({
-              transactionId: res.data.data[0].context.transaction_id
-            })
-          )
-
-          console.log('Dank inside', res.data.data)
-
-          const parsedSearchItems = parseSearchlist(res.data.data)
-          console.log('Dank inside', parsedSearchItems)
-          const transformedChargers = parsedSearchItems.map((item: ParsedItemModel) => transformToEVCharger(item))
-          console.log('Dank inside transformed', transformedChargers)
-          setEvChargers(transformedChargers)
-        } else {
-          setEvChargers([])
-        }
-      } catch (error) {
-        console.error('Error fetching EV chargers:', error)
-      } finally {
-        setIsLoading(false)
       }
-    },
-    [apiUrl, dispatch, coordinates]
-  )
+      setIsLoading(true)
+      setDestination(undefined)
+
+      const res = await axios.post(`${apiUrl}/search`, searchPayload)
+      if (res.data.data.length > 0) {
+        dispatch(
+          discoveryActions.addTransactionId({
+            transactionId: res.data.data[0].context.transaction_id
+          })
+        )
+
+        const parsedSearchItems = parseSearchlist(res.data.data)
+        const transformedChargers = parsedSearchItems.map((item: ParsedItemModel) => transformToEVCharger(item))
+        setEvChargers(transformedChargers)
+      } else {
+        setEvChargers([])
+      }
+    } catch (error) {
+      console.error('Error fetching EV chargers:', error)
+    } finally {
+      setIsLoading(false)
+    }
+  }, [apiUrl, dispatch, currentLocation])
+
+  useEffect(() => {
+    let timeoutId: NodeJS.Timeout
+
+    if (geoLatLong) {
+      // Debounce the fetch call to prevent multiple rapid calls
+      timeoutId = setTimeout(() => {
+        fetchEvChargers()
+      }, 500)
+    }
+
+    return () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId)
+      }
+    }
+  }, [geoLatLong, fetchEvChargers])
 
   const handleConnectWallet = useCallback(() => {
     handleModalOpen('link')
@@ -236,13 +264,14 @@ const Homepage = () => {
     setSelectedCharger(null)
   }, [])
 
-  const handleSearch = useCallback(
-    (query: string) => {
-      setSearchQuery(query)
-      fetchEvChargers(query)
-    },
-    [fetchEvChargers]
-  )
+  const handleWhenSearchLocation = () => {
+    dispatch(toggleLocationSearchPageVisibility({ visible: true, addressType: '' }))
+  }
+
+  const handleSearch = useCallback((query: string) => {
+    setSearchQuery(query)
+    handleWhenSearchLocation()
+  }, [])
 
   const isWalletConnected = useMemo(() => Boolean(user?.deg_wallet?.deg_wallet_id), [user?.deg_wallet?.deg_wallet_id])
 
@@ -250,7 +279,7 @@ const Homepage = () => {
     <>
       <div className="relative overflow-hidden max-h-[100vh]">
         <MemoizedMap
-          origin={coordinates!}
+          origin={currentLocation!}
           destination={destination!}
           startNavigation={startNavigation}
           showMyLocation={showMyLocation}
