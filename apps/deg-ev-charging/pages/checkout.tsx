@@ -264,11 +264,14 @@ const ChargerDetails = () => {
   const handleInitCall = useCallback(async () => {
     if (selectResponse.length === 0) return
     const { id, type } = selectResponse[0]?.message?.order?.fulfillments[0] || {}
-
+    console.log(items.map(item => ({ ...item, tags: selectResponse[0]?.message?.order?.items[0]?.tags })))
     const payloadPromise = getInitPayload(
       shippingFormData,
       billingFormData,
-      { cartItems: items, updatedQuantity: formData.kwhToCharge },
+      {
+        cartItems: items.map(item => ({ ...item, tags: selectResponse[0]?.message?.order?.items[0]?.tags })),
+        updatedQuantity: formData.kwhToCharge
+      },
       transactionId,
       domain,
       { id, type },

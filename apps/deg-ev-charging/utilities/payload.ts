@@ -160,7 +160,18 @@ export const getInitPayload = async (
               value: quantity.toString() || item.quantity.toString()
             }
           }
-        }
+        },
+        tags: [
+          {
+            list: [
+              {
+                descriptor: { code: 'port_type', name: item.tags?.[0]?.list[0]?.name || '' },
+                value: item.tags?.[0]?.list[0]?.value || '',
+                display: true
+              }
+            ]
+          }
+        ]
       }))
 
       const fulfillments = [
@@ -320,7 +331,18 @@ export const getPayloadForConfirm = (initResponse: InitResponseModel[], location
                       value: data.quantity.selected.measure.value.toString()
                     }
                   }
-                }
+                },
+                tags: [
+                  {
+                    list: [
+                      {
+                        descriptor: { code: 'port_type', name: data.tags?.[0]?.list[0]?.name || '' },
+                        value: data.tags?.[0]?.list[0]?.value || '',
+                        display: true
+                      }
+                    ]
+                  }
+                ]
               }
             }),
             fulfillments: order.fulfillments,
