@@ -234,7 +234,7 @@ const Home = () => {
               key={index}
               title={exp.title}
               icon={exp.icon}
-              isDisabled={exp.title === 'P2P Energy Trading' || exp.title === 'EV Charging'}
+              isDisabled={exp.title === 'P2P Energy Trading'}
             />
           ))}
         </Grid>
