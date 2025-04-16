@@ -1,10 +1,10 @@
 import { Box, Flex, Image, Input, Text } from '@chakra-ui/react'
 import React from 'react'
 import Styles from './GeoLocationInput.module.css'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { useState } from 'react'
-import backArrow from '@public/images/Back.svg'
-import locationMarker from '../../../public/images/SearchLocationMarker.svg'
+import backArrow from '@public/images/location-back.svg'
+import locationMarker from '@public/images/SearchLocationMarker.svg'
 import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete'
 import { IoClose } from 'react-icons/io5'
 import {
@@ -91,7 +91,7 @@ const GeoLocationInputList: React.FC = () => {
                       autoFocus={true}
                       borderRadius={'12px'}
                       name="search_input"
-                      placeholder="Search for Location"
+                      placeholder="Search Location"
                       className={`${Styles.search_box_input}`}
                       data-test={testIds.loaction_list}
                     />
