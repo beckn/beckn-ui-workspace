@@ -87,9 +87,14 @@ const OrderDetails = () => {
               ...prevState,
               statusData: {
                 chargingDetails: {
-                  consumedUnit: resData.items?.[0]?.quantity?.selected?.measure?.value || 0,
+                  consumedUnit: parseFloat(resData.items?.[0]?.quantity?.selected?.measure?.value || 0).toFixed(2),
                   bookingTime: resData.bookingTime,
-                  totalCost: resData.quote?.price?.value * Number(resData.items?.[0]?.quantity.selected.measure.value),
+                  totalCost: Number(
+                    (
+                      Number(parseFloat(resData.quote?.price?.value)) *
+                      Number(parseFloat(resData.items?.[0]?.quantity?.selected?.measure?.value))
+                    ).toFixed(2)
+                  ),
                   chargerId: resData.items?.[0]?.id,
                   chargerName: resData.items?.[0]?.name,
                   stationId: resData.id,
@@ -106,7 +111,12 @@ const OrderDetails = () => {
                 paymentDetails: {
                   method: 'Card',
                   transactionId: resData.transactionId,
-                  totalCost: resData.quote?.price?.value * Number(resData.items?.[0]?.quantity.selected.measure.value),
+                  totalCost: Number(
+                    (
+                      Number(parseFloat(resData.quote?.price?.value)) *
+                      Number(parseFloat(resData.items?.[0]?.quantity?.selected?.measure?.value))
+                    ).toFixed(2)
+                  ),
                   status: 'Paid'
                 },
                 locationDetails: {
@@ -144,9 +154,14 @@ const OrderDetails = () => {
               ...prevState,
               statusData: {
                 chargingDetails: {
-                  consumedUnit: resData.items?.[0]?.quantity.selected.measure?.value,
+                  consumedUnit: parseFloat(resData.items?.[0]?.quantity.selected.measure?.value || 0).toFixed(2),
                   bookingTime: resData.duration,
-                  totalCost: resData.quote?.price?.value * Number(resData.items?.[0]?.quantity.selected.measure.value),
+                  totalCost: Number(
+                    (
+                      Number(parseFloat(resData.quote?.price?.value)) *
+                      Number(parseFloat(resData.items?.[0]?.quantity.selected.measure.value))
+                    ).toFixed(2)
+                  ),
                   chargerId: resData.items?.[0]?.id,
                   chargerName: resData.items?.[0]?.name,
                   stationId: resData.id,
@@ -163,7 +178,12 @@ const OrderDetails = () => {
                 paymentDetails: {
                   method: 'Card',
                   transactionId: resData.transactionId,
-                  totalCost: resData.quote?.price?.value * Number(resData.items?.[0]?.quantity.selected.measure.value),
+                  totalCost: Number(
+                    (
+                      Number(parseFloat(resData.quote?.price?.value)) *
+                      Number(parseFloat(resData.items?.[0]?.quantity.selected.measure.value))
+                    ).toFixed(2)
+                  ),
                   status: 'Paid'
                 },
                 locationDetails: {
