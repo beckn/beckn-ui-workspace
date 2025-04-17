@@ -23,7 +23,7 @@ import { getCountryCode } from '@utils/general'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import { useRouter } from 'next/router'
 import axios from '@services/axios'
-import { ConfirmResponseModel, getPayloadForOrderStatus } from '@beckn-ui/common'
+import { ConfirmResponseModel, getPayloadForOrderStatus, getPaymentBreakDown } from '@beckn-ui/common'
 import { UserRootState } from '@store/user-slice'
 import { useSelector } from 'react-redux'
 
@@ -111,6 +111,10 @@ const OrderDetails = () => {
                 paymentDetails: {
                   method: 'Card',
                   transactionId: resData.transactionId,
+                  breakUp: getPaymentBreakDown(
+                    res?.data?.data,
+                    Number(resData.items?.[0]?.quantity?.selected?.measure?.value)
+                  ).breakUpMap,
                   totalCost: Number(
                     (
                       Number(parseFloat(resData.quote?.price?.value)) *
@@ -178,6 +182,10 @@ const OrderDetails = () => {
                 paymentDetails: {
                   method: 'Card',
                   transactionId: resData.transactionId,
+                  breakUp: getPaymentBreakDown(
+                    res?.data?.data,
+                    Number(resData.items?.[0]?.quantity?.selected?.measure?.value)
+                  ).breakUpMap,
                   totalCost: Number(
                     (
                       Number(parseFloat(resData.quote?.price?.value)) *
@@ -211,7 +219,7 @@ const OrderDetails = () => {
 
     // return () => clearInterval(intervalId)
   }, [apiUrl, data.confirmData])
-
+  console.log(data.statusData)
   if (isLoading) {
     return (
       <Center h="calc(100vh - 100px)">
@@ -300,7 +308,7 @@ const OrderDetails = () => {
                   color="#595959"
                   fontWeight={'500'}
                 >
-                  Consumed Unit
+                  {`${'Consumed Unit'}:`}
                 </Text>
                 <Text
                   color={'#797979'}
@@ -311,7 +319,7 @@ const OrderDetails = () => {
               </Flex>
             )}
 
-            {data.statusData?.chargingDetails.bookingTime && (
+            {/* {data.statusData?.chargingDetails.bookingTime && (
               <Flex justify="space-between">
                 <Text
                   color="#595959"
@@ -326,14 +334,14 @@ const OrderDetails = () => {
                   {data.statusData?.chargingDetails.bookingTime} mins
                 </Text>
               </Flex>
-            )}
+            )} */}
 
             <Flex justify="space-between">
               <Text
                 color="#595959"
                 fontWeight={'500'}
               >
-                Station Name
+                {`${'Station Name'}:`}
               </Text>
               <Text
                 color={'#797979'}
@@ -348,7 +356,7 @@ const OrderDetails = () => {
                 color="#595959"
                 fontWeight={'500'}
               >
-                Charger Name
+                {`${'Charger Name'}:`}
               </Text>
               <Text
                 color={'#797979'}
@@ -363,7 +371,7 @@ const OrderDetails = () => {
                 color="#595959"
                 fontWeight={'500'}
               >
-                Total Cost
+                {`${'Total Cost'}:`}
               </Text>
               <Text
                 color={'#4461F2'}
@@ -510,34 +518,30 @@ const OrderDetails = () => {
           spacing={1}
           align="stretch"
         >
-          <Flex justify="space-between">
-            <Text
-              color="#595959"
-              fontWeight={'500'}
-            >
-              Method
-            </Text>
-            <Text
-              color={'#797979'}
-              fontWeight={'500'}
-            >
-              {data.statusData?.paymentDetails.method}
-            </Text>
-          </Flex>
-          <Flex justify="space-between">
-            <Text
-              color="#595959"
-              fontWeight={'500'}
-            >
-              Transaction ID
-            </Text>
-            <Text
-              color={'#797979'}
-              fontWeight={'500'}
-            >
-              {data.statusData?.paymentDetails.transactionId}
-            </Text>
-          </Flex>
+          <Stack spacing={1}>
+            {Object.entries(data.statusData?.paymentDetails?.breakUp || {}).map(([label, amount]) => (
+              <Flex
+                key={label}
+                justify="space-between"
+              >
+                <Text
+                  color="#595959"
+                  fontSize={'12px'}
+                  fontWeight={'500'}
+                >
+                  {`${label}:`}
+                </Text>
+                <Text
+                  color="#797979"
+                  fontSize={'12px'}
+                  fontWeight={'500'}
+                >
+                  {currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}
+                  {amount.value}
+                </Text>
+              </Flex>
+            ))}
+          </Stack>
           <Divider />
           <Flex justify="space-between">
             <Text

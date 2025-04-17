@@ -1,4 +1,6 @@
 export interface ChargingSession {
+  bppId: string
+  bppUri: string
   id: string
   name: string
   type: string
