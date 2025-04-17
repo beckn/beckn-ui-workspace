@@ -70,18 +70,20 @@ const Search = () => {
             { type: 'END_TIME', time: { duration: optionTags.endTime } }
           ]
         },
-        tags: [
-          {
-            list: [
-              {
-                descriptor: {
-                  code: 'Renting Capacity'
-                },
-                value: optionTags.rentingCapacity
-              }
-            ]
-          }
-        ]
+        item: {
+          tags: [
+            {
+              list: [
+                {
+                  descriptor: {
+                    code: 'Renting Capacity'
+                  },
+                  value: optionTags.rentingCapacity
+                }
+              ]
+            }
+          ]
+        }
       }
 
       const res = await axios.post(`${apiUrl}/search`, searchPayload)
