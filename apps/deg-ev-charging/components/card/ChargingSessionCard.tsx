@@ -24,6 +24,7 @@ const ChargingSessionCard = ({ session }: ChargingSessionCardProps) => {
       mb={4}
       border="1px"
       borderColor="gray.100"
+      cursor={'pointer'}
       onClick={() => {
         router.push(`/orderDetails`)
       }}
@@ -44,12 +45,13 @@ const ChargingSessionCard = ({ session }: ChargingSessionCardProps) => {
         <Box w={['100%', '100%', '50%', '50%']}>
           <Flex
             justify="space-between"
-            align="center"
+            align="flex-start"
             mb={2}
           >
             <Text
               fontSize="14px"
               fontWeight="400"
+              noOfLines={2}
             >
               {session.name}
             </Text>
