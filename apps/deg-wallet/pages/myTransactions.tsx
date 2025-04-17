@@ -19,6 +19,7 @@ import { useRouter } from 'next/router'
 import RetailIcon from '@public/images/retail_leasing.svg'
 import OpenSparkIcon from '@public/images/open_spark_icon.svg'
 import RentalIcon from '@public/images/rental.svg'
+import EvChargingIcon from '@public/images/ev_charging.svg'
 import { Transaction } from '@lib/types/becknDid'
 import { currencyMap } from '@lib/config'
 import SelectDate from '@components/dateRangePicker/SelectDate'
@@ -59,6 +60,7 @@ const MyTransactions = () => {
     Retail: { color: '#51B651', icon: RetailIcon },
     Rental: { color: '#51B651', icon: RentalIcon },
     Energy: { color: '#51B651', icon: OpenSparkIcon },
+    'Ev Charging': { color: '#51B651', icon: EvChargingIcon },
     Healthcare: { color: '#D86969', icon: '' },
     default: { color: '#51B651', icon: '' }
   }
