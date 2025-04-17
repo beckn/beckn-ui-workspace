@@ -35,6 +35,8 @@ const OrderHistory = () => {
             const details = item.items[0]
             if (item.delivery_status === '100') {
               parsedData.history.push({
+                bppId: item.bpp_id,
+                bppUri: item.bpp_uri,
                 id: item.order_id,
                 name: details.name,
                 type: details.type || '',
@@ -45,6 +47,8 @@ const OrderHistory = () => {
               })
             } else {
               parsedData.activeSession.push({
+                bppId: item.bpp_id,
+                bppUri: item.bpp_uri,
                 id: item.order_id,
                 name: details.name,
                 type: details.type || '',
