@@ -17,6 +17,7 @@ import { ORDER_CATEGORY_ID } from '../lib/config'
 import { getPayloadForConfirm, getPayloadForOrderHistoryPost } from '@utils/payload'
 import { getCountryCode } from '@utils/general'
 import { cartActions } from '@store/cart-slice'
+import { clearSource } from '@beckn-ui/common'
 
 const OrderConfirmation = () => {
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
@@ -113,8 +114,8 @@ const OrderConfirmation = () => {
                     // Save each order in localStorage
                     localStorage.setItem('selectedOrder', JSON.stringify(orderDetails))
                   })
-
                   dispatch(checkoutActions.clearState())
+                  dispatch(clearSource())
                 }
 
                 router.push('/monitorCharging')

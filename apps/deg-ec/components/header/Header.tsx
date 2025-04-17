@@ -19,8 +19,8 @@ const Header: React.FC<HeaderProps> = ({ experienceTitle }) => {
         return 'experience for bankers to monitor and manage loan requests'
       case 'P2P ':
         return 'Energy Trading experience to trade excess energy directly with peers in real time'
-      case 'EV ':
-        return 'Charging experience for managing and monitoring charging stations'
+      case 'EV Charging':
+        return 'experience to locate, book, and start EV charging sessions in real time'
       default:
         return ''
     }
