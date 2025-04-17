@@ -346,6 +346,9 @@ const ChargerDetails = () => {
     <Container
       maxW="md"
       padding={'20px 0px'}
+      className="hideScroll"
+      overflowY="scroll"
+      height={'calc(100vh - 100px)'}
     >
       <VStack
         spacing={6}
