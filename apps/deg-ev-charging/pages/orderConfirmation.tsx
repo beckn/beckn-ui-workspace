@@ -7,17 +7,19 @@ import { ConfirmationPage } from '@beckn-ui/becknified-components'
 import axios from '@services/axios'
 import { Box, Image } from '@chakra-ui/react'
 import Cookies from 'js-cookie'
-import { LoaderWithMessage } from '@beckn-ui/molecules'
 import { checkoutActions, CheckoutRootState } from '@beckn-ui/common/src/store/checkout-slice'
 import { orderActions } from '@beckn-ui/common/src/store/order-slice'
 // import { getPayloadForOrderHistoryPost } from '@beckn-ui/common/src/utils'
 import { useConfirmMutation } from '@beckn-ui/common/src/services/confirm'
 import { testIds } from '@shared/dataTestIds'
-import { ORDER_CATEGORY_ID } from '../lib/config'
+import { ORDER_CATEGORY_ID, ROLE, ROUTE_TYPE } from '../lib/config'
 import { getPayloadForConfirm, getPayloadForOrderHistoryPost } from '@utils/payload'
-import { getCountryCode } from '@utils/general'
+import { extractAuthAndHeader, getCountryCode, toBase64 } from '@utils/general'
 import { cartActions } from '@store/cart-slice'
-import { clearSource } from '@beckn-ui/common'
+import { clearSource, ConfirmResponseModel, feedbackActions, QuantityDetails } from '@beckn-ui/common'
+import { AuthRootState } from '@store/auth-slice'
+import { generateAuthHeader, generateKeyPairFromString } from '@store/cryptoUtilService'
+import { useAddDocumentMutation, useGetVerificationMethodsMutation } from '@services/walletService'
 
 const OrderConfirmation = () => {
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
@@ -28,7 +30,10 @@ const OrderConfirmation = () => {
   const router = useRouter()
   const [confirm, { isLoading }] = useConfirmMutation()
   const dispatch = useDispatch()
+  const [addDocument, { isLoading: addDocLoading }] = useAddDocumentMutation()
+  const [getVerificationMethods, { isLoading: verificationMethodsLoading }] = useGetVerificationMethodsMutation()
 
+  const { user } = useSelector((state: AuthRootState) => state.auth)
   const initResponse = useSelector((state: CheckoutRootState) => state.checkout?.initResponse)
   const confirmResponse = useSelector((state: CheckoutRootState) => state.checkout?.confirmResponse)
 
@@ -40,6 +45,45 @@ const OrderConfirmation = () => {
     }
   }
 
+  const extractItemsWithProvider = (orders: ConfirmResponseModel[] | string): string => {
+    if (!orders || (Array.isArray(orders) && orders.length === 0)) return ''
+
+    if (typeof orders === 'string') {
+      return orders.length > 50 ? orders.slice(0, 47) + '...' : orders
+    }
+
+    return orders
+      .map(order => {
+        const providerName = order.message.provider.name
+        const itemNames = order.message.items.map((item: any) => item.name).join(', ')
+        let result = `${itemNames} by ${providerName}`
+
+        return result.length > 50 ? result.slice(0, 47) + '...' : result
+      })
+      .join('; ')
+  }
+
+  const attestDocument = async (did: string, transactionType: 'PHYSICAL_ASSETS' | 'TRANSACTION') => {
+    try {
+      const requestOptions = {
+        method: 'POST',
+        withCredentials: true
+      }
+
+      const res = await axios.post(
+        `${strapiUrl}${ROUTE_TYPE[ROLE.GENERAL]}/wallet/attest`,
+        {
+          wallet_doc_type: transactionType,
+          document_id: did,
+          deg_wallet_id: user?.deg_wallet?.deg_wallet_id!
+        },
+        requestOptions
+      )
+    } catch (err) {
+      console.error('Error attesting document:', err)
+    }
+  }
+
   useEffect(() => {
     if (initResponse && initResponse.length > 0) {
       const payload = getPayloadForConfirm(initResponse, { location: getCountryCode() })
@@ -47,8 +91,97 @@ const OrderConfirmation = () => {
     }
   }, [initResponse])
 
+  const handleOnAddToWallet = async () => {
+    if (!confirmResponse) return
+
+    try {
+      const subjectKey = user?.deg_wallet?.deg_wallet_id.replace('/subjects/', '')
+      const { publicKey, privateKey } = await generateKeyPairFromString(subjectKey!)
+
+      const verificationMethodsRes = await getVerificationMethods(user?.deg_wallet?.deg_wallet_id!).unwrap()
+      const { did, challenge } = verificationMethodsRes[0]
+
+      // Process each confirmation response
+      for (const response of confirmResponse) {
+        const { context, message } = response
+        const generatedOrderId = message.orderId
+        const totalPrice =
+          Number(message.quote.price.value) *
+          Number((message.items?.[0]?.quantity as QuantityDetails)?.selected.measure.value)
+        const totalItems = message.items.length
+        const totalItemsStr = extractItemsWithProvider([response]) // Process per index
+        const orderPlacedAt = Math.floor(new Date(context.timestamp).getTime() / 1000)
+
+        const docDetails = JSON.stringify(response)
+
+        const authHeaderRes = await generateAuthHeader({
+          subjectId: user?.deg_wallet?.deg_wallet_id!,
+          verification_did: did,
+          privateKey,
+          publicKey,
+          payload: {
+            name: `transactions/type/ev_charging/energy/id/${generatedOrderId}/amount/${totalPrice}/item_str/${totalItemsStr}/${orderPlacedAt}`,
+            stream: toBase64(docDetails)
+          }
+        })
+
+        const { authorization, payload } = extractAuthAndHeader(authHeaderRes)
+        if (authorization && payload) {
+          const addDocPayload = {
+            subjectId: user?.deg_wallet?.deg_wallet_id!,
+            payload,
+            authorization
+          }
+
+          const res: any = await addDocument(addDocPayload).unwrap()
+          console.log(res)
+          await attestDocument(res?.[0]?.did, 'TRANSACTION')
+
+          // Show success message for each index processed
+          // dispatch(
+          //   feedbackActions.setToastData({
+          //     toastData: {
+          //       message: 'Success',
+          //       display: true,
+          //       type: 'success',
+          //       description: `Order ${generatedOrderId} added successfully!`
+          //     }
+          //   })
+          // )
+        } else {
+          dispatch(
+            feedbackActions.setToastData({
+              toastData: {
+                message: 'Error',
+                display: true,
+                type: 'error',
+                description: `Failed to add order ${generatedOrderId}.`
+              }
+            })
+          )
+        }
+      }
+    } catch (error) {
+      console.error('An error occurred:', error)
+      dispatch(
+        feedbackActions.setToastData({
+          toastData: {
+            message: 'Error',
+            display: true,
+            type: 'error',
+            description: 'Something went wrong!'
+          }
+        })
+      )
+    }
+  }
+
   useEffect(() => {
     if (confirmResponse && confirmResponse.length > 0) {
+      if (user?.deg_wallet && user?.deg_wallet.energy_transactions_consent) {
+        handleOnAddToWallet()
+      }
+
       localStorage.setItem('confirmResponse', JSON.stringify(confirmResponse))
       const ordersPayload = getPayloadForOrderHistoryPost(confirmResponse, ORDER_CATEGORY_ID)
       ordersPayload.data.forEach(payload => {

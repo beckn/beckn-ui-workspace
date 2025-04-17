@@ -66,8 +66,8 @@ const Search = () => {
         searchString: searchKeyword,
         fulfillment: {
           stops: [
-            { type: 'start_time', time: { duration: optionTags.startTime } },
-            { type: 'end_time', time: { duration: optionTags.endTime } }
+            { type: 'START_TIME', time: { duration: optionTags.startTime } },
+            { type: 'END_TIME', time: { duration: optionTags.endTime } }
           ]
         },
         tags: [
@@ -169,7 +169,10 @@ const Search = () => {
   }
 
   return (
-    <Box className="myStore-search-wrapper search-text">
+    <Box
+      className="myStore-search-wrapper search-text"
+      mt={'1rem'}
+    >
       <SearchAndDiscover
         items={items}
         searchProps={{
