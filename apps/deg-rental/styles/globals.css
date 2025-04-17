@@ -489,6 +489,8 @@ select:-webkit-autofill:focus {
 }
 .myStore-homepage .css-1em4q9y {
   background: #e4ffe4;
+  margin: 0;
+  padding: 20px;
 }
 input {
   border-color: unset !important;
@@ -507,4 +509,11 @@ input {
 }
 .react-datepicker__input-container {
   background: #fff;
+}
+.renting-capacity-input .css-1ase9gc {
+  top: 50% !important;
+  right: 10px !important;
+}
+.renting-capacity-input .input_input_container__h_7Wp.input_rounded__oI6QF .input_input__F_m4r {
+  padding: 8px 50px 8px 16px !important;
 }
