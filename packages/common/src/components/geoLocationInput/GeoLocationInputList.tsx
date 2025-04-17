@@ -3,7 +3,7 @@ import React from 'react'
 import Styles from './GeoLocationInput.module.css'
 import { useDispatch } from 'react-redux'
 import { useState } from 'react'
-import backArrow from '@public/images/location-back.svg'
+import backArrow from '@public/images/Back.svg'
 import locationMarker from '@public/images/SearchLocationMarker.svg'
 import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete'
 import { IoClose } from 'react-icons/io5'
@@ -13,7 +13,9 @@ import {
 } from '@beckn-ui/common/src/store/geoMapLocationSearch-slice'
 import { testIds } from '@shared/dataTestIds'
 
-const GeoLocationInputList: React.FC = () => {
+const GeoLocationInputList = (props: { backIcon?: string }) => {
+  const { backIcon } = props
+
   const dispatch = useDispatch()
   const [address, setAddress] = useState<string>('')
   const handleSelect = async (data: string) => {
@@ -66,7 +68,7 @@ const GeoLocationInputList: React.FC = () => {
                   }}
                 >
                   <Image
-                    src={backArrow}
+                    src={backIcon || backArrow}
                     onClick={() => {
                       closeGeoLocationSearchPage()
                     }}
