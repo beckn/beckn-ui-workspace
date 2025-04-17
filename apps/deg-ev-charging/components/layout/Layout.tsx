@@ -9,6 +9,7 @@ import styles from './Layout.module.css'
 import NextNProgress from 'nextjs-progressbar'
 import { IGeoLocationSearchPageRootState } from '@beckn-ui/common/lib/types'
 import { Box, useToast } from '@chakra-ui/react'
+import backArrow from '@public/images/location-back.svg'
 import {
   checkoutActions,
   checkTokenExpiry,
@@ -131,7 +132,7 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
             {bottomNavigatorWhiteList.includes(router.pathname) && <BottomNavigator />}
           </Box>
         ) : (
-          <GeoLocationInputList />
+          <GeoLocationInputList backIcon={backArrow} />
         )}
       </div>
       <ToastContainer
