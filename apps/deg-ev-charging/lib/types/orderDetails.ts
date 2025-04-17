@@ -15,6 +15,7 @@ export interface PaymentDetails {
   method: string
   transactionId: string
   totalCost: number
+  breakUp: Record<string, any> | undefined
   status: 'Paid' | 'Pending'
 }
 

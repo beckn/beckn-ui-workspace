@@ -1,6 +1,7 @@
 import React, { useCallback, useState, memo, useMemo, useEffect } from 'react'
 import dynamic from 'next/dynamic'
 import {
+  checkoutActions,
   Coordinate,
   discoveryActions,
   IGeoLocationSearchPageRootState,
@@ -238,6 +239,7 @@ const Homepage = () => {
       console.log('Selected charger:', selectedCharger)
       if (selectedCharger) {
         dispatch(cartActions.clearCart())
+        dispatch(checkoutActions.clearState())
         dispatch(
           chargerSelectActions.setSelectedCharger({
             ...(selectedCharger as SelectedCharger),

@@ -7,6 +7,7 @@ import CompletedIcon from '@public/images/completed_charging.svg'
 import { currencyMap } from '@lib/config'
 import { getCountryCode } from '@utils/general'
 import { useRouter } from 'next/router'
+import { orderActions } from '@beckn-ui/common'
 
 interface ChargingSessionCardProps {
   session: ChargingSession
@@ -14,6 +15,10 @@ interface ChargingSessionCardProps {
 
 const ChargingSessionCard = ({ session }: ChargingSessionCardProps) => {
   const router = useRouter()
+
+  function dispatch(arg0: any) {
+    throw new Error('Function not implemented.')
+  }
 
   return (
     <Box
@@ -26,7 +31,15 @@ const ChargingSessionCard = ({ session }: ChargingSessionCardProps) => {
       borderColor="gray.100"
       cursor={'pointer'}
       onClick={() => {
-        router.push(`/orderDetails`)
+        if (session.id) {
+          const orderObjectForStatusCall = {
+            bppId: session.bppId,
+            bppUri: session.bppUri,
+            orderId: session.id
+          }
+          localStorage.setItem('selectedOrder', JSON.stringify(orderObjectForStatusCall))
+          router.push('/orderDetails')
+        }
       }}
     >
       <HStack justifyContent={'space-between'}>

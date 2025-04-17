@@ -303,7 +303,9 @@ const ChargerDetails = () => {
           quantity: parseFloat(formData.kwhToCharge)
         })
       )
-      resolve()
+      setTimeout(() => {
+        resolve()
+      }, 1000)
     })
 
     await handleInitCall()
