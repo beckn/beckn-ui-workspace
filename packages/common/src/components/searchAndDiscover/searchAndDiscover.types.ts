@@ -12,6 +12,7 @@ export interface SearchAndDiscoverProps {
     fetchDataOnSearch: () => void
   }
   filterProps?: {
+    showFilterField?: boolean
     isFilterOpen: boolean
     sortByRating?: boolean
     handleFilterOpen: () => void

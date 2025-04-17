@@ -27,8 +27,15 @@ const SearchAndDiscover: React.FC<SearchAndDiscoverProps> = ({
     placeholder,
     showSearchField = true
   } = searchProps
-  const { isFilterOpen, sortByRating, handleApplyFilter, handleResetFilter, handleFilterOpen, handleFilterClose } =
-    filterProps || {}
+  const {
+    isFilterOpen,
+    sortByRating,
+    handleApplyFilter,
+    handleResetFilter,
+    handleFilterOpen,
+    handleFilterClose,
+    showFilterField = true
+  } = filterProps || {}
   const { viewDetailsClickHandler, renderMode } = catalogProps
 
   const breakpoint = useBreakpoint()
@@ -110,7 +117,7 @@ const SearchAndDiscover: React.FC<SearchAndDiscoverProps> = ({
                 }}
               />
             )}
-            {filterProps && (isSmallScreen || isMediumScreen) && (
+            {filterProps && showFilterField && (isSmallScreen || isMediumScreen) && (
               <Box
                 onClick={handleFilterOpen}
                 cursor="pointer"
@@ -173,6 +180,10 @@ const SearchAndDiscover: React.FC<SearchAndDiscoverProps> = ({
                     opacity={0.5}
                     textAlign="center"
                     data-test={testIds.noDataAvailable}
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    height="calc(100vh - 300px)"
                   >
                     {noProduct('No Product')}
                   </Box>
