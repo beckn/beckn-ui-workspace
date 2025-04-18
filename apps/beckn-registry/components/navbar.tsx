@@ -3,12 +3,14 @@ import { useRouter } from 'next/router'
 import Dropdown from './Dropdown'
 import styles from '../styles/Index.module.css'
 import en from '../locales/en'
+import { useAppDispatch } from '../store/hooks'
+import { logout } from '../store/slices/authSlice'
 
 const Navbar: React.FC = () => {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
   const dropdownRef = useRef<HTMLDivElement | null>(null)
   const router = useRouter()
-
+  const dispatch = useAppDispatch()
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -45,6 +47,7 @@ const Navbar: React.FC = () => {
             {
               name: en.navbar.signout,
               handleClick: () => {
+                dispatch(logout())
                 router.push('/signIn')
                 handleToggle('')
               }

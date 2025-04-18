@@ -1,14 +1,112 @@
-import React from 'react'
-import styles from '../styles/SignIn.module.css'
+import React, { useState } from 'react'
 import { useRouter } from 'next/router'
-import en from '../locales/en'
+import styles from '../styles/SignIn.module.css'
+import { useAppDispatch } from '../store/hooks'
+import { register } from '../store/slices/authSlice'
+import { showToast } from '../components/Toast'
+
+interface FormData {
+  email: string
+  password: string
+  confirmPassword: string
+}
+
+interface FormErrors {
+  email?: string
+  password?: string
+  confirmPassword?: string
+}
 
 const SignUp: React.FC = () => {
   const router = useRouter()
+  const dispatch = useAppDispatch()
 
-  const handleSignUp = (event: React.MouseEvent<HTMLAnchorElement>) => {
-    event.preventDefault()
-    router.push('/')
+  const [formData, setFormData] = useState<FormData>({
+    email: '',
+    password: '',
+    confirmPassword: ''
+  })
+  const [errors, setErrors] = useState<FormErrors>({})
+  const [isLoading, setIsLoading] = useState(false)
+
+  const validateField = (name: string, value: string): string | undefined => {
+    switch (name) {
+      case 'email':
+        if (!value) return 'Email is required'
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return 'Please enter a valid email address'
+        return undefined
+      case 'password':
+        if (!value) return 'Password is required'
+        if (value.length < 8) return 'Password must be at least 8 characters long'
+        return undefined
+      case 'confirmPassword':
+        if (!value) return 'Please confirm your password'
+        if (value !== formData.password) return 'Passwords do not match'
+        return undefined
+      default:
+        return undefined
+    }
+  }
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }))
+
+    // Validate the field as user types
+    const error = validateField(name, value)
+    setErrors(prev => ({
+      ...prev,
+      [name]: error
+    }))
+
+    // Special case: validate confirmPassword when password changes
+    if (name === 'password' && formData.confirmPassword) {
+      const confirmError = validateField('confirmPassword', formData.confirmPassword)
+      setErrors(prev => ({
+        ...prev,
+        confirmPassword: confirmError
+      }))
+    }
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+
+    // Validate all fields before submission
+    const newErrors: FormErrors = {}
+    Object.keys(formData).forEach(key => {
+      const error = validateField(key, formData[key as keyof FormData])
+      if (error) {
+        newErrors[key as keyof FormErrors] = error
+      }
+    })
+
+    setErrors(newErrors)
+    if (Object.keys(newErrors).length > 0) {
+      return
+    }
+
+    setIsLoading(true)
+    try {
+      await dispatch(
+        register({
+          email: formData.email,
+          password: formData.password
+        })
+      ).unwrap()
+      showToast({
+        message: 'Registration successful! Please check your email to verify your account.',
+        type: 'success'
+      })
+      router.push('/signIn')
+    } catch (error) {
+      // Error is handled by the auth slice
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -18,42 +116,73 @@ const SignUp: React.FC = () => {
         alt="Logo"
         className={styles.logo}
       />
-      <form className={styles.form}>
-        <input
-          type="text"
-          placeholder={en.signUp.userPlaceholder}
-          className={styles.input}
-        />
-        <input
-          type="password"
-          placeholder={en.signUp.passwordPlaceholder}
-          className={styles.input}
-        />
-        <input
-          type="password"
-          placeholder={en.signUp.reenterPasswordPlaceholder}
-          className={styles.input}
-        />
+      <form
+        className={styles.form}
+        onSubmit={handleSubmit}
+      >
+        <div className={styles.inputContainer}>
+          <input
+            type="text"
+            name="email"
+            placeholder="User"
+            className={`${styles.input} ${errors.email ? styles.error : ''}`}
+            value={formData.email}
+            onChange={handleChange}
+          />
+          <div className={styles.errorContainer}>
+            {errors.email && <p className={styles.errorMessage}>{errors.email}</p>}
+          </div>
+        </div>
+
+        <div className={styles.inputContainer}>
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            className={`${styles.input} ${errors.password ? styles.error : ''}`}
+            value={formData.password}
+            onChange={handleChange}
+          />
+          <div className={styles.errorContainer}>
+            {errors.password && <p className={styles.errorMessage}>{errors.password}</p>}
+          </div>
+        </div>
+
+        <div className={styles.inputContainer}>
+          <input
+            type="password"
+            name="confirmPassword"
+            placeholder="Re-enter Password"
+            className={`${styles.input} ${errors.confirmPassword ? styles.error : ''}`}
+            value={formData.confirmPassword}
+            onChange={handleChange}
+          />
+          <div className={styles.errorContainer}>
+            {errors.confirmPassword && <p className={styles.errorMessage}>{errors.confirmPassword}</p>}
+          </div>
+        </div>
+
         <button
           type="submit"
           className={styles.button}
-          onClick={handleSignUp}
+          disabled={isLoading}
         >
-          {en.signUp.registerButton}
+          {isLoading ? 'Creating account...' : 'Register'}
         </button>
       </form>
+
       <div className={styles.links}>
         <a
           href="/forgotPassword"
           className={styles.link}
         >
-          {en.signUp.forgotPasswordLink}
+          Forgot Password
         </a>
         <a
           href="/signIn"
           className={styles.link}
         >
-          {en.signUp.existingUserLink}
+          I&apos;m an Existing User
         </a>
       </div>
     </div>

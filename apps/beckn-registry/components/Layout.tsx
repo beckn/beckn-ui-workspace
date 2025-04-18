@@ -2,7 +2,7 @@ import React from 'react'
 import { useRouter } from 'next/router'
 import Navbar from './navbar'
 
-const blackListedRoutes = ['/signIn', '/signUp', '/forgotPassword']
+const blackListedRoutes = ['/signIn', '/signUp', '/forgotPassword', '/email-confirmation']
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const router = useRouter()
