@@ -20,8 +20,19 @@ export const statusMap = {
   PaymentSettled: 'Ready to ship',
   Cancelled: 'Order Cancelled!',
   Shipped: 'Order Shipped',
-  ORDER_DELIVERED: 'Order Delivered'
+  ORDER_DELIVERED: 'Order Delivered',
+  CHARGING_IN_PROGRESS: 'Charging in Progress',
+  CHARGING_COMPLETED: 'Charging Completed'
 }
 
 export type StatusMap = typeof statusMap
 export type StatusKey = keyof StatusMap
+
+export const ParentStatusMap = {
+  ACTIVE: 'In Progress',
+  COMPLETE: 'Completed',
+  CANCELLED: 'Cancelled'
+}
+
+export type ParentStatusMap = typeof ParentStatusMap
+export type ParentStatusKey = keyof ParentStatusMap

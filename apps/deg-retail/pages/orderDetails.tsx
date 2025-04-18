@@ -65,7 +65,7 @@ import {
 } from '@services/walletService'
 import { extractAuthAndHeader, generateRandomCode, getCountryCode, toBase64, toSnakeCase } from '@utils/general'
 import { RootState } from '@store/index'
-import { StatusKey, statusMap } from '@lib/types/order'
+import { StatusKey, statusMap, parentStatusMap, ParentStatusKey } from '@lib/types/order'
 import ShippingBlock from '@components/orderDetailComponents/Shipping'
 import QRCodeGenerator from '@components/QRCode/QRGenerator'
 
@@ -997,11 +997,15 @@ const OrderDetails = () => {
                     fontSize={'15px'}
                     fontWeight={'500'}
                     data-test={testIds.orderDetailspage_orderStatus}
-                    color={data.statusData[0].message.order.status === 'CANCELLED' ? 'red' : 'green'}
+                    color={
+                      data.statusData[0].message.order.status === 'CANCELLED'
+                        ? 'red'
+                        : data.statusData[0].message.order.status === 'ACTIVE'
+                          ? '#BD942B'
+                          : 'green'
+                    }
                   >
-                    {data.statusData[0].message.order.status === 'ACTIVE'
-                      ? 'COMPLETED'
-                      : data.statusData[0].message.order.status}
+                    {parentStatusMap[data.statusData[0].message.order.status as ParentStatusKey]}
                   </Text>
                 </Flex>
               </>
