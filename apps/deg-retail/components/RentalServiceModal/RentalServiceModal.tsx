@@ -66,7 +66,7 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
   const [selectedBattery, setSelectedBattery] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [price, setPrice] = useState<string>('10')
-  const [rentingCapacity, setRentingCapacity] = useState<number>(0)
+  const [rentingCapacity, setRentingCapacity] = useState<string>('0')
   const [maxCapacity, setMaxCapacity] = useState<number>(0)
   const [startDate, setStartDate] = useState<string>(roundToNextHour(new Date()).toISOString())
   const [endDate, setEndDate] = useState<string>(
@@ -662,9 +662,9 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
                 width="100px"
                 borderRadius="md"
                 onChange={e => {
-                  const value = parseInt(e.target.value)
+                  const value = parseInt(e.target.value) || 0
                   if (!isNaN(value) && value >= 0 && value <= maxCapacity) {
-                    setRentingCapacity(value)
+                    setRentingCapacity(value.toString())
                   }
                 }}
               />
@@ -682,7 +682,9 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
               max={maxCapacity}
               onMouseDown={() => capacityInputRef.current?.focus()}
               onTouchStart={() => capacityInputRef.current?.focus()}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setRentingCapacity(parseInt(e.target.value))}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setRentingCapacity(parseInt(e.target.value).toString())
+              }
               sx={{
                 width: '100%',
                 height: '6px',
@@ -690,7 +692,7 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
                 appearance: 'none',
                 backgroundColor: '#969494 !important',
                 outline: 'none',
-                background: `linear-gradient(to right, ${primaryColor} 0%, ${primaryColor} ${(rentingCapacity / maxCapacity) * 100}%, #969494 ${(rentingCapacity / maxCapacity) * 100}%, #969494 100%) !important`,
+                background: `linear-gradient(to right, ${primaryColor} 0%, ${primaryColor} ${(Number(rentingCapacity) / maxCapacity) * 100}%, #969494 ${(Number(rentingCapacity) / maxCapacity) * 100}%, #969494 100%) !important`,
                 '&::-webkit-slider-thumb': {
                   appearance: 'none',
                   width: '16px',
@@ -721,7 +723,7 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
               </Text>
               <Text
                 fontSize="14px"
-                color={rentingCapacity === maxCapacity ? primaryColor : '#000000'}
+                color={Number(rentingCapacity) === maxCapacity ? primaryColor : '#000000'}
               >
                 Max
               </Text>
@@ -732,7 +734,7 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
         <BecknButton
           text={'Submit & Publish'}
           handleClick={handlePublish}
-          disabled={price === '' || price === '0' || rentingCapacity === 0}
+          disabled={price === '' || price === '0' || Number(rentingCapacity) === 0}
         />
       </Box>
     )

@@ -43,7 +43,7 @@ export default function OrderDetails() {
     // { name: 'Open Spark' }
   ])
   const domain = orderDetails?.data?.context.domain
-  console.log(domain)
+
   const router = useRouter()
   const { t } = useLanguage()
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -70,7 +70,6 @@ export default function OrderDetails() {
 
   const getAttestationItems = (item: any) => {
     const attestations: AttestationData[] = item?.data.attestations
-    console.log('attestations', attestations)
     if (attestations?.length > 0) {
       const result: any = attestations
         .map(attestation => {
@@ -99,7 +98,7 @@ export default function OrderDetails() {
           }
         })
         .filter(Boolean)
-      console.log(result)
+
       setAttestationsDetails(result)
     }
   }
