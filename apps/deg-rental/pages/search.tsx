@@ -40,7 +40,9 @@ const Search = () => {
 
     // Create cache key with type prefix
     const cacheKey =
-      type === 'RENT_AND_HIRE' ? `rental_${searchKeyword.toLowerCase()}` : `retail_${searchKeyword.toLowerCase()}`
+      type === 'RENT_AND_HIRE'
+        ? `rental_${searchKeyword.toLowerCase()}_${optionTags?.rentingCapacity}_${optionTags?.startTime}_${optionTags?.endTime}`
+        : `retail_${searchKeyword.toLowerCase()}`
 
     try {
       const cachedResults = await getFromCache(cacheKey)
@@ -70,18 +72,20 @@ const Search = () => {
             { type: 'END_TIME', time: { duration: optionTags.endTime } }
           ]
         },
-        tags: [
-          {
-            list: [
-              {
-                descriptor: {
-                  code: 'Renting Capacity'
-                },
-                value: optionTags.rentingCapacity
-              }
-            ]
-          }
-        ]
+        item: {
+          tags: [
+            {
+              list: [
+                {
+                  descriptor: {
+                    code: 'Renting Capacity'
+                  },
+                  value: optionTags.rentingCapacity
+                }
+              ]
+            }
+          ]
+        }
       }
 
       const res = await axios.post(`${apiUrl}/search`, searchPayload)
