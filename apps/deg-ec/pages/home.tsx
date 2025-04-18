@@ -2,7 +2,7 @@ import { Box, Button, Flex, Grid, Image, Text, Menu, MenuButton, MenuList, MenuI
 import Navbar from '@components/navbar/Navbar'
 import Cookies from 'js-cookie'
 import { useRouter } from 'next/router'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 interface ExperienceCardProps {
   title: string
@@ -106,6 +106,14 @@ const Home = () => {
     //   }
     // }
   ]
+
+  useEffect(() => {
+    setSelectedCountry(countries[0])
+    Cookies.set('country_code', JSON.stringify(countries[0].data), {
+      path: '/',
+      sameSite: 'strict'
+    })
+  }, [])
 
   const experiences: Array<{ title: string; icon: string; url: string }> = [
     { title: 'Retail Experience', icon: '/images/retail.svg', url: '/retail' },

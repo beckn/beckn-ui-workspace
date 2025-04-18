@@ -90,5 +90,5 @@ export const roundToNextHour = (date: Date) => {
 
 export const getCountryCode = (): { country: { name: string; code: string } } => {
   const countryCode = Cookies.get('country_code')
-  return countryCode ? JSON.parse(countryCode) : { country: { name: 'India', code: 'IND' } }
+  return countryCode ? JSON.parse(countryCode) : { country: { name: 'United States', code: 'USA' } }
 }

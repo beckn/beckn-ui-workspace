@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic'
 import {
   checkoutActions,
   Coordinate,
+  DegWalletDetails,
   discoveryActions,
   IGeoLocationSearchPageRootState,
   Item,
@@ -134,6 +135,7 @@ const Homepage = () => {
   const [searchQuery, setSearchQuery] = useState('')
   const [destination, setDestination] = useState<Coordinate>()
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [walletDetails, setWalletDetails] = useState<DegWalletDetails>()
 
   const { modalType, handleModalOpen, handleModalClose } = useConnectWallet()
 
@@ -142,7 +144,7 @@ const Homepage = () => {
   const dispatch = useDispatch()
   const { user } = useSelector((state: AuthRootState) => state.auth)
   const router = useRouter()
-  const { currentLocation } = useSelector((state: UserRootState) => state.user)
+  const { currentLocation, shouldShowInitialAlert } = useSelector((state: UserRootState) => state.user)
   const { geoLatLong, geoAddress } = useSelector(
     (state: IGeoLocationSearchPageRootState) => state.geoLocationSearchPageUI
   )
@@ -159,6 +161,22 @@ const Homepage = () => {
       )
     }
   }, [coordinates, geoLatLong])
+
+  useEffect(() => {
+    if (user && user?.deg_wallet) {
+      setWalletDetails(user.deg_wallet)
+    }
+    console.log(shouldShowInitialAlert)
+    if (
+      shouldShowInitialAlert &&
+      user?.deg_wallet &&
+      (!user?.deg_wallet.energy_assets_consent ||
+        !user?.deg_wallet.energy_identities_consent ||
+        !user?.deg_wallet.energy_transactions_consent)
+    ) {
+      handleModalOpen('alert')
+    }
+  }, [user, shouldShowInitialAlert])
 
   const fetchEvChargers = useCallback(async () => {
     try {

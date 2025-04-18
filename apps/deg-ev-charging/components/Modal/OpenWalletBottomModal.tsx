@@ -87,7 +87,7 @@ const OpenWalletBottomModal: React.FC<OpenWalletBottomModalProps> = ({ modalType
     const data = { otp: Number(OTP.join('')) }
 
     try {
-      await verifyOtp(data).unwrap()
+      // await verifyOtp(data).unwrap()
       await handleLinkWallet({
         wallet_id: `/subjects/${inputValue}`,
         energy_identities_consent: false,
@@ -140,19 +140,19 @@ const OpenWalletBottomModal: React.FC<OpenWalletBottomModalProps> = ({ modalType
 
     setIsLoading(true)
 
-    axios
-      .post(`${strapiUrl}${ROUTE_TYPE[ROLE.GENERAL]}/wallet/link`, payload, requestOptions)
-      .then(response => {
-        const result = response.data
-        dispatch(updateUserDetails({ user: { ...user!, deg_wallet: result } }))
-        console.log('Wallet linked successfully:', result)
-      })
-      .catch(error => {
-        console.error('Wallet linking failed:', error)
-      })
-      .finally(() => {
-        setIsLoading(false)
-      })
+    // axios
+    //   .post(`${strapiUrl}${ROUTE_TYPE[ROLE.GENERAL]}/wallet/link`, payload, requestOptions)
+    //   .then(response => {
+    //     const result = response.data
+    //     dispatch(updateUserDetails({ user: { ...user!, deg_wallet: result } }))
+    //     console.log('Wallet linked successfully:', result)
+    //   })
+    //   .catch(error => {
+    //     console.error('Wallet linking failed:', error)
+    //   })
+    //   .finally(() => {
+    //     setIsLoading(false)
+    //   })
   }
 
   const walletOptions = [
