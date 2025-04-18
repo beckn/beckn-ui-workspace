@@ -2,7 +2,14 @@ import { useRouter } from 'next/router'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useLanguage } from '@hooks/useLanguage'
 import profileIcon from '@public/images/user_profile.svg'
-import { cartActions, checkoutActions, HomePageContent, TopSheet, useGeolocation } from '@beckn-ui/common'
+import {
+  cartActions,
+  checkoutActions,
+  DegWalletDetails,
+  HomePageContent,
+  TopSheet,
+  useGeolocation
+} from '@beckn-ui/common'
 import { Box, Flex, Image, Text } from '@chakra-ui/react'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import { buttonStyles } from '@components/constant'
@@ -24,6 +31,7 @@ const MyStore = () => {
     roundToNextHour(new Date(new Date(startDate).setHours(new Date(startDate).getHours() + 1))).toISOString()
   )
   const [rentingCapacity, setRentingCapacity] = useState<string>('')
+  const [walletDetails, setWalletDetails] = useState<DegWalletDetails>()
   const [modalType, setModalType] = useState<'wallet' | 'link' | 'otp' | 'alert' | null>(null)
 
   const router = useRouter()
@@ -46,6 +54,22 @@ const MyStore = () => {
       dispatch(checkoutActions.clearState())
     }
   }, [])
+
+  useEffect(() => {
+    if (user && user?.deg_wallet) {
+      setWalletDetails(user.deg_wallet)
+    }
+    console.log(shouldShowInitialAlert)
+    if (
+      shouldShowInitialAlert &&
+      user?.deg_wallet &&
+      (!user?.deg_wallet.energy_assets_consent ||
+        !user?.deg_wallet.energy_identities_consent ||
+        !user?.deg_wallet.energy_transactions_consent)
+    ) {
+      setModalType('alert')
+    }
+  }, [user, shouldShowInitialAlert])
 
   const navigateToSearchResults = useCallback(
     (searchByRentingCapacity: boolean = false) => {
