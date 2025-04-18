@@ -140,19 +140,19 @@ const OpenWalletBottomModal: React.FC<OpenWalletBottomModalProps> = ({ modalType
 
     setIsLoading(true)
 
-    // axios
-    //   .post(`${strapiUrl}${ROUTE_TYPE[ROLE.GENERAL]}/wallet/link`, payload, requestOptions)
-    //   .then(response => {
-    //     const result = response.data
-    //     dispatch(updateUserDetails({ user: { ...user!, deg_wallet: result } }))
-    //     console.log('Wallet linked successfully:', result)
-    //   })
-    //   .catch(error => {
-    //     console.error('Wallet linking failed:', error)
-    //   })
-    //   .finally(() => {
-    //     setIsLoading(false)
-    //   })
+    axios
+      .post(`${strapiUrl}${ROUTE_TYPE[ROLE.GENERAL]}/wallet/link`, payload, requestOptions)
+      .then(response => {
+        const result = response.data
+        dispatch(updateUserDetails({ user: { ...user!, deg_wallet: result } }))
+        console.log('Wallet linked successfully:', result)
+      })
+      .catch(error => {
+        console.error('Wallet linking failed:', error)
+      })
+      .finally(() => {
+        setIsLoading(false)
+      })
   }
 
   const walletOptions = [
@@ -348,12 +348,12 @@ const OpenWalletBottomModal: React.FC<OpenWalletBottomModalProps> = ({ modalType
                   ))}
                 </VStack>
                 <BecknButton
-                  children="Confirm"
+                  text="Confirm"
                   disabled={!Object.values(checkboxes).some(Boolean)}
                   handleClick={async () => {
                     if (user?.deg_wallet?.deg_wallet_id) {
                       await handleLinkWallet({
-                        wallet_id: user?.deg_wallet?.deg_wallet_id!,
+                        wallet_id: user?.deg_wallet?.deg_wallet_id,
                         energy_identities_consent: checkboxes.identities,
                         energy_assets_consent: checkboxes.assets,
                         energy_transactions_consent: checkboxes.transactions
@@ -364,7 +364,7 @@ const OpenWalletBottomModal: React.FC<OpenWalletBottomModalProps> = ({ modalType
                   }}
                 />
                 <BecknButton
-                  children="Skip for now"
+                  text="Skip for now"
                   handleClick={() => setModalType(null)}
                   variant="outline"
                   color="#D14040"
