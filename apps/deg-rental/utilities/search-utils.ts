@@ -50,7 +50,7 @@ export const parseSearchlist = (data: SearchResponseModel[], type?: 'RENT_AND_HI
               rating: '',
               price: { ...item.price, rateLabel: 'per hour' },
               productInfo: {
-                Capacity: item.tags?.[0]?.list?.[0]?.value,
+                Capacity: `${item.tags?.[0]?.list?.[0]?.value} kWh`,
                 From: `${startDate}, ${startTime}`,
                 To: `${endDate}, ${endTime}`
               }
