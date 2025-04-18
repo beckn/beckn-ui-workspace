@@ -16,8 +16,9 @@ import React, { useState } from 'react'
 import VerifiedIcon from '@public/images/verified.svg'
 import UnverifiedIcon from '@public/images/unverified.svg'
 import DownArrow from '@public/images/down_arrow.svg'
-import VaultIcon from '@public/images/vault.svg'
-import SparkIcon from '@public/images/spark_icon.svg'
+import RetailIcon from '@public/images/spark_icon.svg'
+import RentalIcon from '@public/images/rental_attest.svg'
+import EVChargingIcon from '@public/images/ev_attest.svg'
 import { AttestationData } from '@lib/types/becknDid'
 import { useSelector } from 'react-redux'
 import { AuthRootState } from '@store/auth-slice'
@@ -46,8 +47,9 @@ interface ItemRendererProps {
 }
 
 export const ORG_NAME_MAP: any = {
-  'open-wallet': { name: 'Vault', icon: VaultIcon },
-  'open-spark': { name: 'Spark', icon: SparkIcon }
+  retail: { name: 'Retail', icon: RetailIcon },
+  rental: { name: 'Rental', icon: RentalIcon },
+  ev_charging: { name: 'EV Charging App', icon: EVChargingIcon }
 }
 
 const ItemRenderer = (props: ItemRendererProps) => {

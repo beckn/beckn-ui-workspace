@@ -732,7 +732,7 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
         <BecknButton
           text={'Submit & Publish'}
           handleClick={handlePublish}
-          disabled={price === '' || price === '0'}
+          disabled={price === '' || price === '0' || rentingCapacity === 0}
         />
       </Box>
     )
