@@ -5,7 +5,7 @@ import { profileValidateForm } from '@beckn-ui/common/src/utils'
 import Cookies from 'js-cookie'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { FormErrors, ProfileProps } from '@beckn-ui/common/lib/types'
+import { DegWalletDetails, FormErrors, ProfileProps } from '@beckn-ui/common/lib/types'
 import axios from '@services/axios'
 import { testIds } from '@shared/dataTestIds'
 import LogoutIcon from '@public/images/logout_icon.svg'
@@ -35,10 +35,11 @@ const ProfilePage = () => {
     email: '',
     address: ''
   })
+  const [walletDetails, setWalletDetails] = useState<DegWalletDetails>()
 
   const { modalType, handleModalOpen, handleModalClose } = useConnectWallet()
 
-  const { profileEditable } = useSelector((state: UserRootState) => state.user)
+  const { profileEditable, shouldShowInitialAlert } = useSelector((state: UserRootState) => state.user)
   const { user } = useSelector((state: AuthRootState) => state.auth)
 
   useEffect(() => {
@@ -46,6 +47,22 @@ const ProfilePage = () => {
       dispatch(setProfileEditable({ profileEditable: false }))
     }
   }, [])
+
+  useEffect(() => {
+    if (user && user?.deg_wallet) {
+      setWalletDetails(user.deg_wallet)
+    }
+    console.log(shouldShowInitialAlert)
+    if (
+      shouldShowInitialAlert &&
+      user?.deg_wallet &&
+      (!user?.deg_wallet.energy_assets_consent ||
+        !user?.deg_wallet.energy_identities_consent ||
+        !user?.deg_wallet.energy_transactions_consent)
+    ) {
+      handleModalOpen('alert')
+    }
+  }, [user, shouldShowInitialAlert])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target

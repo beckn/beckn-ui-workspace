@@ -143,9 +143,8 @@ const Homepage = () => {
   const { coordinates } = useGeolocation(apiKeyForGoogle as string)
   const dispatch = useDispatch()
   const { user } = useSelector((state: AuthRootState) => state.auth)
-  const { shouldShowInitialAlert } = useSelector((state: UserRootState) => state.user)
   const router = useRouter()
-  const { currentLocation } = useSelector((state: UserRootState) => state.user)
+  const { currentLocation, shouldShowInitialAlert } = useSelector((state: UserRootState) => state.user)
   const { geoLatLong, geoAddress } = useSelector(
     (state: IGeoLocationSearchPageRootState) => state.geoLocationSearchPageUI
   )
