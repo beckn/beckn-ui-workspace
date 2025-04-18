@@ -40,7 +40,9 @@ const Search = () => {
 
     // Create cache key with type prefix
     const cacheKey =
-      type === 'RENT_AND_HIRE' ? `rental_${searchKeyword.toLowerCase()}` : `retail_${searchKeyword.toLowerCase()}`
+      type === 'RENT_AND_HIRE'
+        ? `rental_${searchKeyword.toLowerCase()}_${optionTags?.rentingCapacity}_${optionTags?.startTime}_${optionTags?.endTime}`
+        : `retail_${searchKeyword.toLowerCase()}`
 
     try {
       const cachedResults = await getFromCache(cacheKey)
