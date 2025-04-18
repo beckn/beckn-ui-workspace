@@ -224,7 +224,7 @@ const MyStore = () => {
           <>
             <Box
               p={'10px'}
-              bg="#EDEDED"
+              bg="#D1F2D1"
               borderRadius="6px"
             >
               <Box mb={6}>
