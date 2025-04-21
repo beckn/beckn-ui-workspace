@@ -8,8 +8,8 @@
 }
 
 .logo {
-  width: 120px;
-  height: 120px;
+  width: 220px;
+  height: 220px;
   margin-bottom: 2rem;
 }
 
@@ -32,7 +32,6 @@
   padding: 10px;
   border: 1px solid #e2e8f0;
   border-radius: 0.375rem;
-
   width: 100%;
 }
 
