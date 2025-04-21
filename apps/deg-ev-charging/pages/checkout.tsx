@@ -305,7 +305,7 @@ const ChargerDetails = () => {
       )
       setTimeout(() => {
         resolve()
-      }, 1000)
+      }, 2000)
     })
 
     await handleInitCall()

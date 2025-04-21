@@ -350,7 +350,10 @@ const OpenWalletBottomModal: React.FC<OpenWalletBottomModalProps> = ({ modalType
                 />
                 <BecknButton
                   children="Skip for now"
-                  handleClick={() => setModalType(null)}
+                  handleClick={() => {
+                    dispatch(setShowInitialAlert(false))
+                    setModalType(null)
+                  }}
                   variant="outline"
                   color="#D14040"
                   sx={{ border: '1px' }}

@@ -4,9 +4,9 @@ import { useLoadScript, GoogleMap, DirectionsRenderer, MarkerF } from '@react-go
 import { formatCoords } from '@utils/geoLocation-utils'
 import MyLocation from '@public/images/my_location.svg'
 import { testIds } from '@shared/dataTestIds'
-import { Box, Flex } from '@chakra-ui/react'
+import { Box, Flex, Image, Input } from '@chakra-ui/react'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
-import SearchBar from '@beckn-ui/common/src/components/searchBar/searchBar'
+// import SearchBar from '@beckn-ui/common/src/components/searchBar/searchBar'
 
 interface EVCharger {
   id: string
@@ -242,6 +242,14 @@ const Map: React.FC<MapProps> = (props: MapProps) => {
     }
   }
 
+  const onFocusChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    handleOnSearch?.(e.target.value)
+  }
+
+  const clearSearch = () => {
+    handleOnSearch?.('')
+  }
+
   return (
     <Box
       data-test={testIds.mobility_map}
@@ -257,14 +265,66 @@ const Map: React.FC<MapProps> = (props: MapProps) => {
         width="90%"
         maxWidth="800px"
         alignItems="center"
+        margin={'20px auto'}
       >
         {enableSearch && (
-          <SearchBar
-            searchString={searchQuery}
-            placeholder={'Search Location'}
-            handleChange={() => {}}
-            handleOnFocus={() => handleOnSearch?.('')}
-          />
+          // <SearchBar
+          //   searchString={searchQuery}
+          //   placeholder={'Search Location'}
+          //   handleChange={(text: string) => {
+          //     console.log('text', text)
+          //   }}
+          //   // handleOnFocus={() => handleOnSearch?.('')}
+          // />
+          <Box
+            position="relative"
+            width="100%"
+            className="map_search_input"
+          >
+            <Input
+              pl="40px"
+              pr="40px"
+              height="40px"
+              backgroundColor="#F7F7F7"
+              border="1px solid #E5E5E5"
+              borderRadius="16px"
+              fontSize="16px"
+              placeholder="Search Location"
+              _placeholder={{ color: '#666666' }}
+              value={searchQuery}
+              _focus={{
+                outline: 'none',
+                boxShadow: 'none',
+                borderColor: '#E5E5E5',
+                backgroundColor: '#ffffff'
+              }}
+              onChange={onFocusChange}
+              data-test={testIds.device_location_input}
+            />
+            <Image
+              position="absolute"
+              left="12px"
+              top="50%"
+              transform="translateY(-50%)"
+              src="/images/searchInput.svg"
+              width="20px"
+              zIndex={1}
+              data-test={testIds.device_location_search_icon}
+            />
+            {searchQuery && (
+              <Image
+                position="absolute"
+                right="12px"
+                top="50%"
+                transform="translateY(-50%)"
+                src="/images/clearIcon.svg"
+                width="20px"
+                zIndex={1}
+                cursor="pointer"
+                onClick={clearSearch}
+              />
+            )}
+          </Box>
         )}
         {showConnectWallet && (
           <BecknButton
