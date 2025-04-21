@@ -27,3 +27,9 @@
   flex-grow: 1;
   background-color: #fff;
 }
+
+.title {
+  padding-left: 1rem;
+  font-size: 24px;
+  font-weight: 600;
+}

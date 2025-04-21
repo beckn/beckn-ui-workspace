@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import CustomTable, { Action } from '../components/CustomTable'
 import styles from '../styles/NetworkParticipants.module.css'
 import SearchInput from '../components/SearchInput'
@@ -7,73 +7,81 @@ import en from '../locales/en'
 import { faEye, faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useRouter } from 'next/router'
+import {
+  useGetNetworkParticipantsQuery,
+  useDeleteNetworkParticipantMutation,
+  NetworkParticipant as APINetworkParticipant
+} from '../services/networkParticipantServices'
+import { showToast } from '../components/Toast'
+import AlertModal from '../components/AlertModal'
 
-type NetworkParticipant =
-  | {
-      participantId: string
-      kycComplete: string
-    }
-  | { [key: string]: string | number | boolean }
+type TableData = { [key: string]: string | number | boolean }
 
 const NetworkParticipants = () => {
   const router = useRouter()
+  const { data: participants, isLoading, error } = useGetNetworkParticipantsQuery()
+  const [deleteNetworkParticipant] = useDeleteNetworkParticipantMutation()
+  const [deleteModalState, setDeleteModalState] = useState<{
+    isOpen: boolean
+    subscriberId: string | null
+  }>({
+    isOpen: false,
+    subscriberId: null
+  })
 
   const columns = [
-    { header: en.networkParticipants.subscriberId, accessor: 'subscriberId' },
-    { header: en.networkParticipants.keyId, accessor: 'keyId' },
+    { header: en.networkParticipants.subscriberId, accessor: 'subscriber_id' },
+    { header: en.networkParticipants.subscriberUrl, accessor: 'subscriber_url' },
+    { header: en.networkParticipants.keyId, accessor: 'unique_key_id' },
     { header: en.networkParticipants.type, accessor: 'type' },
     { header: en.networkParticipants.domain, accessor: 'domain' },
-    { header: en.networkParticipants.signingPublicKey, accessor: 'signingPublicKey' },
-    { header: en.networkParticipants.encrPublicKey, accessor: 'encrPublicKey' },
-    { header: en.networkParticipants.validFrom, accessor: 'validFrom' },
-    { header: en.networkParticipants.validUntil, accessor: 'validUntil' },
+    { header: en.networkParticipants.signingPublicKey, accessor: 'signing_public_key' },
+    { header: en.networkParticipants.encrPublicKey, accessor: 'encr_public_key' },
+    { header: en.networkParticipants.validFrom, accessor: 'valid_from' },
+    { header: en.networkParticipants.validUntil, accessor: 'valid_until' },
     { header: en.networkParticipants.status, accessor: 'status' },
-    { header: en.networkParticipants.createdAt, accessor: 'createdAt' },
-    { header: en.networkParticipants.updatedAt, accessor: 'updatedAt' }
+    { header: en.networkParticipants.createdAt, accessor: 'created' },
+    { header: en.networkParticipants.updatedAt, accessor: 'updated' }
   ]
 
-  const data = [
-    {
-      subscriberId: 'sub-001',
-      keyId: 'key-001',
-      type: 'BAP',
-      domain: 'example.com',
-      signingPublicKey: 'signingKey123',
-      encrPublicKey: 'encryptionKey123',
-      validFrom: '2023-01-01',
-      validUntil: '2024-01-01',
-      status: 'published',
-      createdAt: '2023-01-01',
-      updatedAt: '2023-06-01'
-    },
-    {
-      subscriberId: 'sub-002',
-      keyId: 'key-002',
-      type: 'BPP',
-      domain: 'anotherexample.com',
-      signingPublicKey: 'signingKey456',
-      encrPublicKey: 'encryptionKey456',
-      validFrom: '2023-02-01',
-      validUntil: '2024-02-01',
-      status: 'unpublished',
-      createdAt: '2023-02-01',
-      updatedAt: '2023-07-01'
-    },
-    {
-      subscriberId: 'sub-003',
-      keyId: 'key-003',
-      type: 'BAP',
-      domain: 'yetanotherexample.com',
-      signingPublicKey: 'signingKey789',
-      encrPublicKey: 'encryptionKey789',
-      validFrom: '2023-03-01',
-      validUntil: '2024-03-01',
-      status: 'published',
-      createdAt: '2023-03-01',
-      updatedAt: '2023-08-01'
+  const handleDelete = async (subscriberId: string) => {
+    try {
+      await deleteNetworkParticipant(subscriberId).unwrap()
+      showToast({
+        message: 'Network participant deleted successfully',
+        type: 'success'
+      })
+    } catch (error) {
+      showToast({
+        message: 'Failed to delete network participant',
+        type: 'error'
+      })
     }
-    // Add more data as needed
-  ]
+  }
+
+  const handleDeleteClick = (subscriberId: string) => {
+    setDeleteModalState({
+      isOpen: true,
+      subscriberId
+    })
+  }
+
+  const handleDeleteConfirm = () => {
+    if (deleteModalState.subscriberId) {
+      handleDelete(deleteModalState.subscriberId)
+    }
+    setDeleteModalState({
+      isOpen: false,
+      subscriberId: null
+    })
+  }
+
+  const handleDeleteCancel = () => {
+    setDeleteModalState({
+      isOpen: false,
+      subscriberId: null
+    })
+  }
 
   const actions: Action[] = [
     {
@@ -84,7 +92,7 @@ const NetworkParticipants = () => {
         />
       ),
       title: en.networkParticipants.view,
-      onClick: (row: NetworkParticipant) => handleViewParticipant(row)
+      onClick: (row: TableData) => handleViewParticipant(row as unknown as APINetworkParticipant)
     },
     {
       icon: (
@@ -94,7 +102,7 @@ const NetworkParticipants = () => {
         />
       ),
       title: en.networkParticipants.edit,
-      onClick: (row: NetworkParticipant) => handleEditParticipant(row)
+      onClick: (row: TableData) => handleEditParticipant(row as unknown as APINetworkParticipant)
     },
     {
       icon: (
@@ -104,10 +112,7 @@ const NetworkParticipants = () => {
         />
       ),
       title: en.networkParticipants.delete,
-      onClick: (row: NetworkParticipant) => {
-        console.log('Delete', row)
-        // Implement delete logic here
-      }
+      onClick: (row: TableData) => handleDeleteClick(row.subscriber_id as string)
     }
   ]
 
@@ -115,12 +120,40 @@ const NetworkParticipants = () => {
     router.push({ pathname: '/manageNetworkParticipants', query: { mode: 'add' } })
   }
 
-  const handleEditParticipant = (participant: NetworkParticipant) => {
+  const handleEditParticipant = (participant: APINetworkParticipant) => {
     router.push({ pathname: '/manageNetworkParticipants', query: { mode: 'edit', ...participant } })
   }
 
-  const handleViewParticipant = (participant: NetworkParticipant) => {
+  const handleViewParticipant = (participant: APINetworkParticipant) => {
     router.push({ pathname: '/manageNetworkParticipants', query: { mode: 'view', ...participant } })
+  }
+
+  if (isLoading) {
+    return (
+      <div className={styles.networkParticipantsContainer}>
+        <ActionHeaders
+          onPlusClick={handleAddParticipant}
+          onBackClick={() => router.back()}
+          onHomeClick={() => router.push('/')}
+        />
+        <h2 className={styles.title}>{en.networkParticipants.title}</h2>
+        <div>Loading...</div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className={styles.networkParticipantsContainer}>
+        <ActionHeaders
+          onPlusClick={handleAddParticipant}
+          onBackClick={() => router.back()}
+          onHomeClick={() => router.push('/')}
+        />
+        <h2 className={styles.title}>{en.networkParticipants.title}</h2>
+        <div>Error loading network participants</div>
+      </div>
+    )
   }
 
   return (
@@ -137,8 +170,15 @@ const NetworkParticipants = () => {
       />
       <CustomTable
         columns={columns}
-        data={data}
+        data={participants as unknown as TableData[]}
         actions={actions}
+      />
+      <AlertModal
+        isOpen={deleteModalState.isOpen}
+        title="Delete Network Participant"
+        message="Are you sure you want to delete this network participant? This action cannot be undone."
+        onConfirm={handleDeleteConfirm}
+        onClose={handleDeleteCancel}
       />
     </div>
   )

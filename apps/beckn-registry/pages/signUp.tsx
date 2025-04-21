@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
 import { useRouter } from 'next/router'
-import styles from '../styles/SignIn.module.css'
-import { useAppDispatch } from '../store/hooks'
-import { register } from '../store/slices/authSlice'
-import { showToast } from '../components/Toast'
+import styles from '@styles/SignIn.module.css'
+import { showToast } from '@components/Toast'
+import { useRegisterMutation } from '@services/authServices'
 
 interface FormData {
   email: string
@@ -19,7 +18,6 @@ interface FormErrors {
 
 const SignUp: React.FC = () => {
   const router = useRouter()
-  const dispatch = useAppDispatch()
 
   const [formData, setFormData] = useState<FormData>({
     email: '',
@@ -28,6 +26,8 @@ const SignUp: React.FC = () => {
   })
   const [errors, setErrors] = useState<FormErrors>({})
   const [isLoading, setIsLoading] = useState(false)
+
+  const [register] = useRegisterMutation()
 
   const validateField = (name: string, value: string): string | undefined => {
     switch (name) {
@@ -91,19 +91,21 @@ const SignUp: React.FC = () => {
 
     setIsLoading(true)
     try {
-      await dispatch(
-        register({
-          email: formData.email,
-          password: formData.password
-        })
-      ).unwrap()
+      await register({
+        email: formData.email,
+        password: formData.password,
+        username: formData.email
+      }).unwrap()
       showToast({
         message: 'Registration successful! Please check your email to verify your account.',
         type: 'success'
       })
       router.push('/signIn')
-    } catch (error) {
-      // Error is handled by the auth slice
+    } catch (error: any) {
+      showToast({
+        message: error.message || 'Registration failed! Please try again.',
+        type: 'error'
+      })
     } finally {
       setIsLoading(false)
     }

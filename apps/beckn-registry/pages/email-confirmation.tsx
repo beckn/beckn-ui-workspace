@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import styles from '@styles/EmailConfirmation.module.css'
 import { showToast } from '@components/Toast'
-import { useAppDispatch } from '@store/hooks'
-import { verifyEmail } from '@store/slices/authSlice'
+import { useVerifyEmailMutation } from '@services/authServices'
 
 const EmailVerification: React.FC = () => {
-  const router = useRouter()
-  const dispatch = useAppDispatch()
   const [isVerifying, setIsVerifying] = useState(true)
   const [verificationStatus, setVerificationStatus] = useState<'pending' | 'success' | 'error'>('pending')
+
+  const router = useRouter()
+  const [verifyEmail] = useVerifyEmailMutation()
 
   useEffect(() => {
     const { token } = router.query
@@ -18,7 +18,7 @@ const EmailVerification: React.FC = () => {
       if (!token) return
 
       try {
-        await dispatch(verifyEmail(token as string)).unwrap()
+        await verifyEmail(token as string).unwrap()
         setVerificationStatus('success')
         showToast({ message: 'Email verified successfully!', type: 'success' })
         // Redirect to login page after 3 seconds
@@ -36,7 +36,7 @@ const EmailVerification: React.FC = () => {
     if (token) {
       verifyToken()
     }
-  }, [router.query, dispatch, router])
+  }, [router.query, router])
 
   return (
     <div className={styles.container}>
