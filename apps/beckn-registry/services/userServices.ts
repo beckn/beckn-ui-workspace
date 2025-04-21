@@ -27,7 +27,7 @@ interface User {
 
 export const userApi = api.injectEndpoints({
   endpoints: build => ({
-    getCurrentUser: build.query<User[], void>({
+    getCurrentUser: build.query<User, void>({
       query: () => '/users/me'
     }),
     updateCurrentUser: build.mutation<User, Record<string, string | boolean>>({

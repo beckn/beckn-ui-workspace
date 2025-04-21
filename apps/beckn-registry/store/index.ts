@@ -4,17 +4,19 @@ import storage from 'redux-persist/lib/storage'
 import authReducer from './auth-slice'
 import api from '@services/api'
 import userReducer from './user-slice'
+import networkParticipantsReducer from './networkParticipant-slice'
 
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['auth', 'user']
+  whitelist: ['auth', 'user', 'networkParticipants']
 }
 
 const appReducer = combineReducers({
   auth: authReducer,
   [api.reducerPath]: api.reducer,
-  user: userReducer
+  user: userReducer,
+  networkParticipants: networkParticipantsReducer
 })
 
 const rootReducer = (state: any, action: any) => {
