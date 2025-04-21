@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Text, Center } from '@chakra-ui/react'
+import { Box, Text } from '@chakra-ui/react'
 import ChargingSessionCard from '../components/card/ChargingSessionCard'
 import { ChargingHistoryResponse } from '@lib/types/orderHistory'
 import { Loader } from '@beckn-ui/molecules'
@@ -7,6 +7,8 @@ import Cookies from 'js-cookie'
 import { useRouter } from 'next/router'
 import { ORDER_CATEGORY_ID } from '@lib/config'
 import { formatDate } from '@beckn-ui/common'
+import EmptyScreenTemplate from '@components/EmptyTemplates/EmptyScreenTemplate'
+import EmptyIcon from '@public/images/empty_cred.svg'
 
 const OrderHistory = () => {
   const [data, setData] = useState<ChargingHistoryResponse | null>(null)
@@ -87,11 +89,13 @@ const OrderHistory = () => {
     )
   }
 
-  if (error) {
+  if (error || (data?.activeSession.length === 0 && data?.history.length === 0)) {
     return (
-      <Center h="calc(100vh - 100px)">
-        <Text color="red.500">{error}</Text>
-      </Center>
+      <EmptyScreenTemplate
+        text={'No Chargers to show'}
+        description="No chargers are shown in your history. Book one to see it here!"
+        src={EmptyIcon}
+      />
     )
   }
 

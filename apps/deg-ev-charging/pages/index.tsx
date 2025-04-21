@@ -2,6 +2,7 @@ import React, { useCallback, useState, memo, useMemo, useEffect } from 'react'
 import dynamic from 'next/dynamic'
 import {
   checkoutActions,
+  clearSource,
   Coordinate,
   DegWalletDetails,
   discoveryActions,
@@ -77,7 +78,8 @@ const MemoizedMap = memo(
     isWalletConnected,
     evChargers,
     handleOnSearch,
-    searchQuery
+    searchQuery,
+    returnToCurrentLocation
   }: {
     origin: Coordinate
     destination: Coordinate
@@ -89,11 +91,14 @@ const MemoizedMap = memo(
     evChargers: EVCharger[]
     handleOnSearch: (query: string) => void
     searchQuery: string
+    returnToCurrentLocation: (
+      location: {
+        latitude: number
+        longitude: number
+        address?: string
+      } | null
+    ) => void
   }) => {
-    const returnToCurrentLocation = useCallback(() => {
-      console.log('returnToCurrentLocation')
-    }, [])
-
     return (
       <MapWithNoSSR
         origin={origin}
@@ -149,6 +154,30 @@ const Homepage = () => {
     (state: IGeoLocationSearchPageRootState) => state.geoLocationSearchPageUI
   )
 
+  const returnToCurrentLocation = useCallback(
+    (
+      location?: {
+        latitude: number
+        longitude: number
+        address?: string
+      } | null
+    ) => {
+      if (coordinates || location) {
+        dispatch(
+          setCurrentLocation({
+            latitude: Number(coordinates?.latitude || location?.latitude),
+            longitude: Number(coordinates?.longitude || location?.longitude)
+          })
+        )
+        if (location) {
+          setSearchQuery('')
+          dispatch(clearSource())
+        }
+      }
+    },
+    [coordinates, dispatch]
+  )
+
   useEffect(() => {
     if (geoLatLong) {
       dispatch(
@@ -156,9 +185,7 @@ const Homepage = () => {
       )
       setSearchQuery(geoAddress)
     } else if (coordinates) {
-      dispatch(
-        setCurrentLocation({ latitude: Number(coordinates?.latitude), longitude: Number(coordinates?.longitude) })
-      )
+      returnToCurrentLocation()
     }
   }, [coordinates, geoLatLong])
 
@@ -290,7 +317,11 @@ const Homepage = () => {
 
   const handleSearch = useCallback((query: string) => {
     setSearchQuery(query)
-    handleWhenSearchLocation()
+    if (query) {
+      handleWhenSearchLocation()
+    } else if (!query) {
+      dispatch(clearSource())
+    }
   }, [])
 
   const isWalletConnected = useMemo(() => Boolean(user?.deg_wallet?.deg_wallet_id), [user?.deg_wallet?.deg_wallet_id])
@@ -309,6 +340,7 @@ const Homepage = () => {
           evChargers={evChargers}
           handleOnSearch={handleSearch}
           searchQuery={searchQuery}
+          returnToCurrentLocation={returnToCurrentLocation}
         />
         {isLoading && (
           <div className="absolute inset-0 bg-black bg-opacity-30 flex justify-center items-center z-50 h-[100vh]">

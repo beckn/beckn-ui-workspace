@@ -1,7 +1,7 @@
 import { Box, Flex, Image, Input, Text } from '@chakra-ui/react'
 import React from 'react'
 import Styles from './GeoLocationInput.module.css'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useState } from 'react'
 import backArrow from '@public/images/Back.svg'
 import locationMarker from '@public/images/SearchLocationMarker.svg'
@@ -12,12 +12,14 @@ import {
   toggleLocationSearchPageVisibility
 } from '@beckn-ui/common/src/store/geoMapLocationSearch-slice'
 import { testIds } from '@shared/dataTestIds'
+import { IGeoLocationSearchPageRootState } from '../../../lib/types'
 
 const GeoLocationInputList = (props: { backIcon?: string }) => {
   const { backIcon } = props
 
   const dispatch = useDispatch()
-  const [address, setAddress] = useState<string>('')
+  const { geoAddress } = useSelector((state: IGeoLocationSearchPageRootState) => state.geoLocationSearchPageUI)
+  const [address, setAddress] = useState<string>(geoAddress)
   const handleSelect = async (data: string) => {
     const addressData = await geocodeByAddress(data)
     const addressComponents = addressData[0].address_components
@@ -92,6 +94,7 @@ const GeoLocationInputList = (props: { backIcon?: string }) => {
                       _focusVisible={{ boxShadow: 'none' }}
                       autoFocus={true}
                       borderRadius={'12px'}
+                      padding={'0 34px 0 16px'}
                       name="search_input"
                       placeholder="Search Location"
                       className={`${Styles.search_box_input}`}

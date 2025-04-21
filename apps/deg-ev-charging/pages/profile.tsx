@@ -228,7 +228,7 @@ const ProfilePage = () => {
       <Flex
         flexDir={'column'}
         justifyContent={'space-between'}
-        height={'calc(100vh - 14rem)'}
+        height={'calc(100vh - 12rem)'}
       >
         <Box position={'relative'}>
           <Flex
