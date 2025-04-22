@@ -5,35 +5,42 @@ interface NetworkParticipantsState {
   participants: NetworkParticipant[]
   loading: boolean
   error: string | null
-  deleteLoading: boolean
-  deleteError: string | null
-  updateLoading: boolean
-  updateError: string | null
+  pagination: {
+    page: number
+    pageSize: number
+    total: number
+  }
 }
 
 const initialState: NetworkParticipantsState = {
   participants: [],
   loading: false,
   error: null,
-  deleteLoading: false,
-  deleteError: null,
-  updateLoading: false,
-  updateError: null
+  pagination: {
+    page: 1,
+    pageSize: 10,
+    total: 0
+  }
 }
 
-const networkParticipantsSlice = createSlice({
-  name: 'networkParticipants',
+const networkParticipantSlice = createSlice({
+  name: 'networkParticipant',
   initialState,
   reducers: {
-    clearParticipants: state => {
-      state.participants = []
+    clearError: state => {
       state.error = null
     },
-    clearDeleteError: state => {
-      state.deleteError = null
+    setParticipants: (state, action) => {
+      state.participants = action.payload
     },
-    clearUpdateError: state => {
-      state.updateError = null
+    setPagination: (state, action) => {
+      state.pagination = action.payload
+    },
+    setLoading: (state, action) => {
+      state.loading = action.payload
+    },
+    setError: (state, action) => {
+      state.error = action.payload
     }
   },
   extraReducers: builder => {
@@ -45,7 +52,12 @@ const networkParticipantsSlice = createSlice({
       })
       .addMatcher(networkParticipantsApi.endpoints.getNetworkParticipants.matchFulfilled, (state, action) => {
         state.loading = false
-        state.participants = action.payload
+        state.participants = action.payload.results
+        // state.pagination = {
+        //   page: action.payload.pagination.page,
+        //   pageSize: action.payload.pagination.pageSize,
+        //   total: action.payload.pagination.total
+        // }
       })
       .addMatcher(networkParticipantsApi.endpoints.getNetworkParticipants.matchRejected, (state, action) => {
         state.loading = false
@@ -53,30 +65,42 @@ const networkParticipantsSlice = createSlice({
       })
       // Delete Network Participant
       .addMatcher(networkParticipantsApi.endpoints.deleteNetworkParticipant.matchPending, state => {
-        state.deleteLoading = true
-        state.deleteError = null
+        state.loading = true
+        state.error = null
       })
       .addMatcher(networkParticipantsApi.endpoints.deleteNetworkParticipant.matchFulfilled, state => {
-        state.deleteLoading = false
+        state.loading = false
       })
       .addMatcher(networkParticipantsApi.endpoints.deleteNetworkParticipant.matchRejected, (state, action) => {
-        state.deleteLoading = false
-        state.deleteError = action.error.message || 'Failed to delete network participant'
+        state.loading = false
+        state.error = action.error.message || 'Failed to delete network participant'
       })
       // Update Network Participant
       .addMatcher(networkParticipantsApi.endpoints.updateNetworkParticipant.matchPending, state => {
-        state.updateLoading = true
-        state.updateError = null
+        state.loading = true
+        state.error = null
       })
       .addMatcher(networkParticipantsApi.endpoints.updateNetworkParticipant.matchFulfilled, state => {
-        state.updateLoading = false
+        state.loading = false
       })
       .addMatcher(networkParticipantsApi.endpoints.updateNetworkParticipant.matchRejected, (state, action) => {
-        state.updateLoading = false
-        state.updateError = action.error.message || 'Failed to update network participant'
+        state.loading = false
+        state.error = action.error.message || 'Failed to update network participant'
+      })
+      // Create Network Participant
+      .addMatcher(networkParticipantsApi.endpoints.addNetworkParticipant.matchPending, state => {
+        state.loading = true
+        state.error = null
+      })
+      .addMatcher(networkParticipantsApi.endpoints.addNetworkParticipant.matchFulfilled, state => {
+        state.loading = false
+      })
+      .addMatcher(networkParticipantsApi.endpoints.addNetworkParticipant.matchRejected, (state, action) => {
+        state.loading = false
+        state.error = action.error.message || 'Failed to add network participant'
       })
   }
 })
 
-export const { clearParticipants, clearDeleteError, clearUpdateError } = networkParticipantsSlice.actions
-export default networkParticipantsSlice.reducer
+export const { clearError, setParticipants, setPagination, setLoading, setError } = networkParticipantSlice.actions
+export default networkParticipantSlice.reducer

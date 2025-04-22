@@ -290,185 +290,185 @@ const ManageUser: React.FC = () => {
           }
         }}
       >
-        <div className={styles.column + ' ' + styles.flex}>
-          <div className={styles.column + ' ' + styles.flex + ' ' + styles.flexColumn + ' ' + styles.gap10}>
-            <div className={styles.row}>
-              <label>{en.manageUser.username}</label>
-              <div className={styles.inputContainer}>
-                <input
-                  type="text"
-                  name="username"
-                  value={formData.username}
-                  onChange={handleChange}
-                  disabled={mode === 'view'}
-                  required
-                  className={errors.username ? styles.errorInput : ''}
-                />
-                <div className={styles.errorContainer}>
-                  {errors.username && <span className={styles.errorMessage}>{errors.username}</span>}
-                </div>
-              </div>
-            </div>
-            <div className={styles.row}>
-              <label>{en.manageUser.email}</label>
-              <div className={styles.inputContainer}>
-                <input
-                  type="text"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  disabled={mode === 'view'}
-                  required
-                  className={errors.email ? styles.errorInput : ''}
-                />
-                <div className={styles.errorContainer}>
-                  {errors.email && <span className={styles.errorMessage}>{errors.email}</span>}
-                </div>
-              </div>
-            </div>
-            <div className={styles.row}>
-              <label>{en.manageUser.phoneNumber}</label>
-              <div className={styles.inputContainer}>
-                <input
-                  type="text"
-                  name="phoneNumber"
-                  value={formData.phoneNumber}
-                  onChange={handleChange}
-                  disabled={mode === 'view'}
-                  required
-                  className={errors.phoneNumber ? styles.errorInput : ''}
-                />
-                <div className={styles.errorContainer}>
-                  {errors.phoneNumber && <span className={styles.errorMessage}>{errors.phoneNumber}</span>}
-                </div>
-              </div>
-            </div>
-            {mode === 'view' && (
-              <>
-                <div className={styles.row}>
-                  <label>{en.manageUser.updaterUser}</label>
-                  <div className={styles.inputContainer}>
-                    <input
-                      type="text"
-                      name="updaterUser"
-                      value={formData.updaterUser}
-                      onChange={handleChange}
-                      disabled={true}
-                    />
-                    <div className={styles.errorContainer}></div>
-                  </div>
-                </div>
-                <div className={styles.row}>
-                  <label>{en.manageUser.creatorUser}</label>
-                  <div className={styles.inputContainer}>
-                    <input
-                      type="text"
-                      name="creatorUser"
-                      value={formData.creatorUser}
-                      onChange={handleChange}
-                      disabled={true}
-                    />
-                    <div className={styles.errorContainer}></div>
-                  </div>
-                </div>
-              </>
-            )}
-
-            <div className={styles.row}>
-              <label>{en.manageUser.admin}</label>
+        <div className={styles.row}>
+          <div className={styles.row}>
+            <label>{en.manageUser.username}</label>
+            <div className={styles.inputContainer}>
               <input
-                type="checkbox"
-                name="admin"
-                checked={formData.admin}
+                type="text"
+                name="username"
+                value={formData.username}
                 onChange={handleChange}
                 disabled={mode === 'view'}
+                required
+                className={errors.username ? styles.errorInput : ''}
               />
+              <div className={styles.errorContainer}>
+                {errors.username && <span className={styles.errorMessage}>{errors.username}</span>}
+              </div>
             </div>
           </div>
-
-          <div className={styles.column + ' ' + styles.flex + ' ' + styles.flexColumn + ' ' + styles.gap10}>
+          <div className={styles.row}>
+            <label>{en.manageUser.longName}</label>
+            <div className={styles.inputContainer}>
+              <input
+                type="text"
+                name="longName"
+                value={formData.longName}
+                onChange={handleChange}
+                disabled={mode === 'view'}
+                required
+                className={errors.longName ? styles.errorInput : ''}
+              />
+              <div className={styles.errorContainer}>
+                {errors.longName && <span className={styles.errorMessage}>{errors.longName}</span>}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className={styles.row}>
+          <div className={styles.row}>
+            <label>{en.manageUser.email}</label>
+            <div className={styles.inputContainer}>
+              <input
+                type="text"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                disabled={mode === 'view'}
+                required
+                className={errors.email ? styles.errorInput : ''}
+              />
+              <div className={styles.errorContainer}>
+                {errors.email && <span className={styles.errorMessage}>{errors.email}</span>}
+              </div>
+            </div>
+          </div>
+          <div className={styles.row}>
+            <label>{en.manageUser.changePassword}</label>
+            <div className={styles.inputContainer}>
+              <input
+                type="password"
+                name="changePassword"
+                value={formData.changePassword}
+                onChange={handleChange}
+                disabled={mode === 'view'}
+                className={errors.changePassword ? styles.errorInput : ''}
+              />
+              <div className={styles.errorContainer}>
+                {errors.changePassword && <span className={styles.errorMessage}>{errors.changePassword}</span>}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className={styles.row}>
+          <div className={styles.row}>
+            <label>{en.manageUser.phoneNumber}</label>
+            <div className={styles.inputContainer}>
+              <input
+                type="text"
+                name="phoneNumber"
+                value={formData.phoneNumber}
+                onChange={handleChange}
+                disabled={mode === 'view'}
+                required
+                className={errors.phoneNumber ? styles.errorInput : ''}
+              />
+              <div className={styles.errorContainer}>
+                {errors.phoneNumber && <span className={styles.errorMessage}>{errors.phoneNumber}</span>}
+              </div>
+            </div>
+          </div>
+          <div className={styles.row}>
+            <label>{en.manageUser.alternatePhoneNumber}</label>
+            <div className={styles.inputContainer}>
+              <input
+                type="text"
+                name="alternatePhoneNumber"
+                value={formData.alternatePhoneNumber}
+                onChange={handleChange}
+                disabled={mode === 'view'}
+                className={errors.alternatePhoneNumber ? styles.errorInput : ''}
+              />
+              <div className={styles.errorContainer}>
+                {errors.alternatePhoneNumber && (
+                  <span className={styles.errorMessage}>{errors.alternatePhoneNumber}</span>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+        {mode === 'view' && (
+          <div className={styles.row}>
             <div className={styles.row}>
-              <label>{en.manageUser.longName}</label>
+              <label>{en.manageUser.updaterUser}</label>
               <div className={styles.inputContainer}>
                 <input
                   type="text"
-                  name="longName"
-                  value={formData.longName}
+                  name="updaterUser"
+                  value={formData.updaterUser}
                   onChange={handleChange}
-                  disabled={mode === 'view'}
-                  required
-                  className={errors.longName ? styles.errorInput : ''}
+                  disabled={true}
                 />
-                <div className={styles.errorContainer}>
-                  {errors.longName && <span className={styles.errorMessage}>{errors.longName}</span>}
-                </div>
+                <div className={styles.errorContainer}></div>
               </div>
             </div>
             <div className={styles.row}>
-              <label>{en.manageUser.changePassword}</label>
-              <div className={styles.inputContainer}>
-                <input
-                  type="password"
-                  name="changePassword"
-                  value={formData.changePassword}
-                  onChange={handleChange}
-                  disabled={mode === 'view'}
-                  className={errors.changePassword ? styles.errorInput : ''}
-                />
-                <div className={styles.errorContainer}>
-                  {errors.changePassword && <span className={styles.errorMessage}>{errors.changePassword}</span>}
-                </div>
-              </div>
-            </div>
-            <div className={styles.row}>
-              <label>{en.manageUser.alternatePhoneNumber}</label>
+              <label>{en.manageUser.creatorUser}</label>
               <div className={styles.inputContainer}>
                 <input
                   type="text"
-                  name="alternatePhoneNumber"
-                  value={formData.alternatePhoneNumber}
+                  name="creatorUser"
+                  value={formData.creatorUser}
                   onChange={handleChange}
-                  disabled={mode === 'view'}
-                  className={errors.alternatePhoneNumber ? styles.errorInput : ''}
+                  disabled={true}
                 />
-                <div className={styles.errorContainer}>
-                  {errors.alternatePhoneNumber && (
-                    <span className={styles.errorMessage}>{errors.alternatePhoneNumber}</span>
-                  )}
-                </div>
+                <div className={styles.errorContainer}></div>
               </div>
             </div>
+          </div>
+        )}
 
-            {mode === 'view' && (
-              <>
-                <div className={styles.row}>
-                  <label>{en.manageUser.updatedAt}</label>
-                  <div className={styles.inputContainer}>
-                    <input
-                      type="text"
-                      name="updatedAt"
-                      value={formData.updatedAt}
-                      onChange={handleChange}
-                      disabled={true}
-                    />
-                    <div className={styles.errorContainer}></div>
-                  </div>
-                </div>
-                <div className={styles.row}>
-                  <label>{en.manageUser.createdAt}</label>
-                  <div className={styles.inputContainer}>
-                    <input
-                      type="text"
-                      name="createdAt"
-                      value={formData.createdAt}
-                      onChange={handleChange}
-                      disabled={true}
-                    />
-                    <div className={styles.errorContainer}></div>
-                  </div>
-                </div>
-              </>
-            )}
+        {mode === 'view' && (
+          <div className={styles.row}>
+            <div className={styles.row}>
+              <label>{en.manageUser.updatedAt}</label>
+              <div className={styles.inputContainer}>
+                <input
+                  type="text"
+                  name="updatedAt"
+                  value={formData.updatedAt}
+                  onChange={handleChange}
+                  disabled={true}
+                />
+                <div className={styles.errorContainer}></div>
+              </div>
+            </div>
+            <div className={styles.row}>
+              <label>{en.manageUser.createdAt}</label>
+              <div className={styles.inputContainer}>
+                <input
+                  type="text"
+                  name="createdAt"
+                  value={formData.createdAt}
+                  onChange={handleChange}
+                  disabled={true}
+                />
+                <div className={styles.errorContainer}></div>
+              </div>
+            </div>
+          </div>
+        )}
+        <div className={styles.row}>
+          <div className={styles.row}>
+            <label>{en.manageUser.admin}</label>
+            <input
+              type="checkbox"
+              name="admin"
+              checked={formData.admin}
+              onChange={handleChange}
+              disabled={mode === 'view'}
+            />
           </div>
         </div>
         <div className={styles.submitButtonContainer}>

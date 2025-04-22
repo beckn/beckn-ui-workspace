@@ -2,33 +2,66 @@ import api from './api'
 
 export interface NetworkParticipant {
   subscriber_id: string
+  subscriber_url: string
+  unique_key_id: string
   type: string
   domain: string
+  name: string
   city: string
   country: string
   signing_public_key: string
-  encryption_public_key: string
+  encr_public_key: string
+  valid_from: string
+  valid_until: string
   status: string
   created: string
   updated: string
 }
 
+export interface AddNetworkParticipantPayload {
+  subscriber_id: string
+  url: string
+  key_id: string
+  type: string
+  domain: string
+  signing_public_key: string
+  encr_public_key: string
+  valid_from: string
+  valid_until: string
+  status: string
+}
+
 export interface UpdateNetworkParticipantPayload {
-  data: {
-    signing_public_key: string
-    encr_public_key: string
-    subscriber_url: string
-    valid_from: string
-    valid_until: string
+  subscriber_id: string
+  url: string
+  key_id: string
+  type: string
+  domain: string
+  signing_public_key: string
+  encr_public_key: string
+  valid_from: string
+  valid_until: string
+  status: string
+}
+
+export interface NetworkParticipantResponse {
+  results: NetworkParticipant[]
+  pagination: {
+    page: number
+    pageSize: number
+    total: number
   }
 }
 
 export const networkParticipantsApi = api.injectEndpoints({
   endpoints: build => ({
-    getNetworkParticipants: build.query<NetworkParticipant[], void>({
-      query: () => ({
+    getNetworkParticipants: build.query<NetworkParticipantResponse, { page: number; pageSize: number }>({
+      query: ({ page, pageSize }) => ({
         url: '/subscribers',
-        method: 'GET'
+        params: {
+          'pagination[page]': page,
+          'pagination[pageSize]': pageSize
+        }
       }),
       providesTags: ['NetworkParticipants']
     }),
@@ -36,6 +69,14 @@ export const networkParticipantsApi = api.injectEndpoints({
       query: subscriberId => ({
         url: `/subscribers/${subscriberId}`,
         method: 'DELETE'
+      }),
+      invalidatesTags: ['NetworkParticipants']
+    }),
+    addNetworkParticipant: build.mutation<NetworkParticipant, AddNetworkParticipantPayload>({
+      query: data => ({
+        url: '/subscribers/subscribe',
+        method: 'POST',
+        body: data
       }),
       invalidatesTags: ['NetworkParticipants']
     }),
@@ -49,6 +90,13 @@ export const networkParticipantsApi = api.injectEndpoints({
         body: data
       }),
       invalidatesTags: ['NetworkParticipants']
+    }),
+    getNetworkParticipantById: build.query<NetworkParticipant, string>({
+      query: subscriberId => ({
+        url: `/subscribers/${subscriberId}`,
+        method: 'GET'
+      }),
+      providesTags: ['NetworkParticipants']
     })
   })
 })
@@ -56,5 +104,7 @@ export const networkParticipantsApi = api.injectEndpoints({
 export const {
   useGetNetworkParticipantsQuery,
   useDeleteNetworkParticipantMutation,
-  useUpdateNetworkParticipantMutation
+  useAddNetworkParticipantMutation,
+  useUpdateNetworkParticipantMutation,
+  useGetNetworkParticipantByIdQuery
 } = networkParticipantsApi
