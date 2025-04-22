@@ -139,6 +139,7 @@ const en = {
   },
   networkParticipants: {
     subscriberId: 'Subscriber Id',
+    subscriberUrl: 'Subscriber URL',
     keyId: 'Key Id',
     url: 'URL',
     type: 'Type',

@@ -2,9 +2,8 @@ import React, { useState } from 'react'
 import { useRouter } from 'next/router'
 import styles from '@styles/SignIn.module.css'
 import en from '@locales/en'
-import { useAppDispatch } from '@store/hooks'
-import { login } from '@store/slices/authSlice'
 import { showToast } from '@components/Toast'
+import { useLoginMutation } from '@services/authServices'
 
 interface FormData {
   email: string
@@ -17,8 +16,6 @@ interface FormErrors {
 }
 
 const SignIn: React.FC = () => {
-  const router = useRouter()
-  const dispatch = useAppDispatch()
   const [formData, setFormData] = useState<FormData>({
     email: '',
     password: ''
@@ -26,7 +23,9 @@ const SignIn: React.FC = () => {
   const [errors, setErrors] = useState<FormErrors>({})
   const [isLoading, setIsLoading] = useState(false)
 
-  // Validation regex patterns
+  const router = useRouter()
+  const [login] = useLoginMutation()
+
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
   const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&]{8,}$/
 
@@ -53,7 +52,6 @@ const SignIn: React.FC = () => {
       [name]: value
     }))
 
-    // Validate the field as user types
     const error = validateField(name, value)
     setErrors(prev => ({
       ...prev,
@@ -64,7 +62,6 @@ const SignIn: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    // Validate all fields before submission
     const newErrors: FormErrors = {}
     Object.keys(formData).forEach(key => {
       const error = validateField(key, formData[key as keyof FormData])
@@ -80,11 +77,11 @@ const SignIn: React.FC = () => {
 
     setIsLoading(true)
     try {
-      await dispatch(login({ identifier: formData.email, password: formData.password })).unwrap()
+      await login({ identifier: formData.email, password: formData.password }).unwrap()
       showToast({ message: 'Login successful!', type: 'success' })
       router.push('/')
-    } catch (error) {
-      // Error is handled by the auth slice
+    } catch (error: any) {
+      showToast({ message: error || error.message || 'Login failed!', type: 'error' })
     } finally {
       setIsLoading(false)
     }

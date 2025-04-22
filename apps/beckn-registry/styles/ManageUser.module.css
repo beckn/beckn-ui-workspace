@@ -17,7 +17,7 @@
 .row {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
+  /* gap: 20px; */
   /* padding: 20px; */
   /* background-color: #f9f9f9; */
   border-radius: 8px;
@@ -27,7 +27,7 @@
 .column {
   grid-template-columns: auto 1fr;
   /* align-items: center; */
-  gap: 10px;
+  /* gap: 10px; */
   width: 100%;
 }
 
@@ -63,6 +63,9 @@
   padding: 2rem 1rem 1rem 1rem;
   width: 100%;
 }
+.submitButtonContainer .row {
+  gap: 20px;
+}
 .submitButton {
   padding: 10px 20px;
   background-color: #3056d3;
@@ -92,5 +95,28 @@
 }
 
 .gap10 {
-  gap: 10px;
+  /* gap: 10px; */
+}
+
+.inputContainer {
+  display: flex;
+  flex-direction: column;
+  /* gap: 0.25rem; */
+  width: 100%;
+}
+
+.input.error {
+  border-color: #ef4444;
+}
+
+.errorContainer {
+  min-height: 1.25rem;
+  display: flex;
+  align-items: center;
+}
+
+.errorMessage {
+  color: #ef4444;
+  font-size: 12px;
+  margin: 0;
 }

@@ -5,7 +5,7 @@ const Index: React.FC = () => {
   return (
     <div className={styles.container}>
       <div className={styles.content}>
-        <h1>Welcome to the Registry</h1>
+        <h1 className={styles.title}>Welcome to the Registry</h1>
       </div>
     </div>
   )
