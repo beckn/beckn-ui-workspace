@@ -933,23 +933,23 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
         paymentMethodNet: t.cardNumber,
         disabled: false,
         dataTest: testIds.paymentpage_masterCard
-      },
-      {
-        category: 'Other Payment Options',
-        img: applyPay,
-        paymentMethod: t.applyPay || 'Apple Pay',
-        paymentMethodNet: t.applyPay || 'Apple Pay',
-        disabled: true,
-        dataTest: testIds.paymentpage_phonePay
-      },
-      {
-        category: 'Other Payment Options',
-        img: stripePay,
-        paymentMethod: t.stripePay || 'Stripe',
-        paymentMethodNet: t.stripePay || 'Stripe',
-        disabled: true,
-        dataTest: testIds.paymentpage_phonePay
       }
+      // {
+      //   category: 'Other Payment Options',
+      //   img: applyPay,
+      //   paymentMethod: t.applyPay || 'Apple Pay',
+      //   paymentMethodNet: t.applyPay || 'Apple Pay',
+      //   disabled: true,
+      //   dataTest: testIds.paymentpage_phonePay
+      // },
+      // {
+      //   category: 'Other Payment Options',
+      //   img: stripePay,
+      //   paymentMethod: t.stripePay || 'Stripe',
+      //   paymentMethodNet: t.stripePay || 'Stripe',
+      //   disabled: true,
+      //   dataTest: testIds.paymentpage_phonePay
+      // }
 
       // {
       //   category: 'UPI',
