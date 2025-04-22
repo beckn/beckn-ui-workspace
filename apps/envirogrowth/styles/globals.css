@@ -150,3 +150,13 @@ select.chakra-select {
   padding: 16px;
   margin-bottom: 20px;
 }
+.SFD-search .-product_card_layout_container .css-3lf2mu {
+  flex-direction: column;
+}
+.SFD-search .-product_card_layout_container .css-3lf2mu > .css-14vhyuq {
+  width: unset;
+  box-shadow: unset;
+}
+.SFD-search .-product_card_layout_container .css-3lf2mu > .css-14vhyuq img {
+  box-shadow: unset;
+}

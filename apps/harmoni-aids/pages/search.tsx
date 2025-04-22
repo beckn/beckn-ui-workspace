@@ -12,6 +12,7 @@ import { Product } from '@beckn-ui/becknified-components'
 import { testIds } from '@shared/dataTestIds'
 import { RootState } from '@store/index'
 import { parseSearchlist } from '../utils/search-utils'
+import { Box } from '@chakra-ui/react'
 
 const Search = () => {
   const [items, setItems] = useState<ParsedItemModel[]>([])
@@ -133,33 +134,35 @@ const Search = () => {
   }
 
   return (
-    <SearchAndDiscover
-      t={key => t[key]}
-      items={items}
-      searchProps={{
-        searchKeyword: searchKeyword as string,
-        setSearchKeyword,
-        fetchDataOnSearch: fetchDataForSearch
-      }}
-      filterProps={{
-        isFilterOpen: isFilterOpen,
-        handleFilterOpen,
-        handleFilterClose,
-        handleResetFilter,
-        handleApplyFilter
-      }}
-      loaderProps={{
-        isLoading,
-        loadingText: t.pleaseWait,
-        loadingSubText: t.searchLoaderSubText,
-        dataTest: testIds.loadingIndicator
-      }}
-      catalogProps={{
-        renderMode: 'full',
-        viewDetailsClickHandler: handleViewDetailsClickHandler
-      }}
-      noProduct={key => t.noProduct}
-    />
+    <Box className="SFD-search">
+      <SearchAndDiscover
+        t={key => t[key]}
+        items={items}
+        searchProps={{
+          searchKeyword: searchKeyword as string,
+          setSearchKeyword,
+          fetchDataOnSearch: fetchDataForSearch
+        }}
+        filterProps={{
+          isFilterOpen: isFilterOpen,
+          handleFilterOpen,
+          handleFilterClose,
+          handleResetFilter,
+          handleApplyFilter
+        }}
+        loaderProps={{
+          isLoading,
+          loadingText: t.pleaseWait,
+          loadingSubText: t.searchLoaderSubText,
+          dataTest: testIds.loadingIndicator
+        }}
+        catalogProps={{
+          renderMode: 'full',
+          viewDetailsClickHandler: handleViewDetailsClickHandler
+        }}
+        noProduct={key => t.noProduct}
+      />
+    </Box>
   )
 }
 
