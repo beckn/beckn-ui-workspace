@@ -1,11 +1,30 @@
 import React, { useState, useEffect } from 'react'
-import styles from '../styles/ManageNetworkDomain.module.css'
+import styles from '@styles/ManageNetworkDomain.module.css'
 import { useRouter } from 'next/router'
-import en from '../locales/en'
-import ActionHeaders from '../components/actionHeaders'
+import en from '@locales/en'
+import ActionHeaders from '@components/actionHeaders'
+import {
+  useGetNetworkDomainByIdQuery,
+  useCreateNetworkDomainMutation,
+  useUpdateNetworkDomainMutation
+} from '@services/networkDomainServices'
+import { showToast } from '@components/Toast'
+
+interface FormErrors {
+  name?: string
+  description?: string
+  schemaUrl?: string
+}
 
 const ManageNetworkDomain: React.FC = () => {
   const router = useRouter()
+  const { mode: queryMode, documentId } = router.query
+  const { data: domainData } = useGetNetworkDomainByIdQuery(documentId as string, {
+    skip: !documentId || queryMode === 'add'
+  })
+  const [createNetworkDomain] = useCreateNetworkDomainMutation()
+  const [updateNetworkDomain] = useUpdateNetworkDomainMutation()
+
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -16,43 +35,154 @@ const ManageNetworkDomain: React.FC = () => {
     createdAt: ''
   })
 
-  const { mode: queryMode, ...networkDomainDataQuery } = router.query
-
+  const [errors, setErrors] = useState<FormErrors>({})
   const [mode, setMode] = useState<'add' | 'edit' | 'view'>('add')
 
   useEffect(() => {
-    if (networkDomainDataQuery) {
-      setFormData(networkDomainDataQuery as typeof formData)
+    if (domainData) {
+      setFormData({
+        name: domainData.data.name,
+        description: domainData.data.description || '',
+        schemaUrl: domainData.data.schema_url || '',
+        updaterUser: domainData.data.updater_user || '',
+        creatorUser: domainData.data.creator_user || '',
+        updatedAt: domainData.data.updated_at || '',
+        createdAt: domainData.data.created_at || ''
+      })
     }
-  }, [])
+  }, [domainData])
 
   useEffect(() => {
     if (queryMode) {
       setMode(queryMode as 'add' | 'edit' | 'view')
     }
-  }, [])
+  }, [queryMode])
+
+  const validateField = (name: string, value: string): string | undefined => {
+    switch (name) {
+      case 'name':
+        if (!value.trim()) return 'Name is required'
+        return undefined
+      case 'description':
+        if (!value.trim()) return 'Description is required'
+        return undefined
+      case 'schemaUrl':
+        if (!value.trim()) return 'Schema URL is required'
+        if (!value.match(/^https?:\/\/.+/)) return 'Schema URL must be a valid URL'
+        return undefined
+      default:
+        return undefined
+    }
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
-    setFormData({
-      ...formData,
+    setFormData(prev => ({
+      ...prev,
       [name]: value
+    }))
+
+    // Validate field immediately
+    const error = validateField(name, value)
+    setErrors(prev => ({
+      ...prev,
+      [name]: error
+    }))
+  }
+
+  const validateForm = (): boolean => {
+    const newErrors: FormErrors = {}
+
+    // Validate all fields
+    Object.keys(formData).forEach(key => {
+      if (key !== 'updaterUser' && key !== 'creatorUser' && key !== 'updatedAt' && key !== 'createdAt') {
+        const error = validateField(key, formData[key as keyof typeof formData])
+        if (error) {
+          newErrors[key as keyof FormErrors] = error
+        }
+      }
     })
+
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
   }
 
-  const handleAdd = () => {
-    console.log('Add NetworkDomain:', formData)
-    router.push('/networkDomains')
+  const handleAdd = async () => {
+    if (!validateForm()) return
+
+    try {
+      const domainData = {
+        name: formData.name,
+        description: formData.description,
+        schema_url: formData.schemaUrl
+      }
+      await createNetworkDomain(domainData).unwrap()
+      showToast({
+        message: 'Network domain added successfully',
+        type: 'success'
+      })
+      router.push('/networkDomains')
+    } catch (error) {
+      showToast({
+        message: 'Failed to add network domain',
+        type: 'error'
+      })
+    }
   }
 
-  const handleSaveAndMore = () => {
-    console.log('Save & More:', formData)
-    // Logic for saving and adding more
+  const handleSaveAndMore = async () => {
+    if (!validateForm()) return
+
+    try {
+      const domainData = {
+        name: formData.name,
+        description: formData.description,
+        schema_url: formData.schemaUrl
+      }
+      await createNetworkDomain(domainData).unwrap()
+      showToast({
+        message: 'Network domain added successfully',
+        type: 'success'
+      })
+      setFormData({
+        name: '',
+        description: '',
+        schemaUrl: '',
+        updaterUser: '',
+        creatorUser: '',
+        updatedAt: '',
+        createdAt: ''
+      })
+      setErrors({})
+    } catch (error) {
+      showToast({
+        message: 'Failed to add network domain',
+        type: 'error'
+      })
+    }
   }
 
-  const handleEdit = () => {
-    console.log('Edit NetworkDomain:', formData)
-    router.push('/networkDomains')
+  const handleEdit = async () => {
+    if (!validateForm()) return
+
+    try {
+      const domainData = {
+        name: formData.name,
+        description: formData.description,
+        schema_url: formData.schemaUrl
+      }
+      await updateNetworkDomain({ documentId: documentId as string, networkDomain: domainData }).unwrap()
+      showToast({
+        message: 'Network domain updated successfully',
+        type: 'success'
+      })
+      router.push('/networkDomains')
+    } catch (error) {
+      showToast({
+        message: 'Failed to update network domain',
+        type: 'error'
+      })
+    }
   }
 
   const handleClose = () => {
@@ -80,46 +210,67 @@ const ManageNetworkDomain: React.FC = () => {
         <div className={styles.row}>
           <div className={styles.row}>
             <label>{en.networkDomains.name}</label>
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              disabled={mode === 'view'}
-            />
+            <div className={styles.inputContainer}>
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                disabled={mode === 'view'}
+                className={errors.name ? styles.errorInput : ''}
+              />
+              <div className={styles.errorContainer}>
+                {errors.name && <span className={styles.errorMessage}>{errors.name}</span>}
+              </div>
+            </div>
           </div>
           <div className={styles.row}>
             <label>{en.networkDomains.description}</label>
-            <input
-              type="text"
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
-              disabled={mode === 'view'}
-            />
+            <div className={styles.inputContainer}>
+              <input
+                type="text"
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+                disabled={mode === 'view'}
+                className={errors.description ? styles.errorInput : ''}
+              />
+              <div className={styles.errorContainer}>
+                {errors.description && <span className={styles.errorMessage}>{errors.description}</span>}
+              </div>
+            </div>
           </div>
         </div>
         <div className={styles.row}>
           <div className={styles.row}>
             <label>{en.networkDomains.schemaUrl}</label>
-            <input
-              type="text"
-              name="schemaUrl"
-              value={formData.schemaUrl}
-              onChange={handleChange}
-              disabled={mode === 'view'}
-            />
+            <div className={styles.inputContainer}>
+              <input
+                type="text"
+                name="schemaUrl"
+                value={formData.schemaUrl}
+                onChange={handleChange}
+                disabled={mode === 'view'}
+                className={errors.schemaUrl ? styles.errorInput : ''}
+              />
+              <div className={styles.errorContainer}>
+                {errors.schemaUrl && <span className={styles.errorMessage}>{errors.schemaUrl}</span>}
+              </div>
+            </div>
           </div>
           <div className={styles.row}>
             {mode !== 'add' && (
               <>
                 <label>{en.networkDomains.updaterUser}</label>
-                <input
-                  type="text"
-                  name="updaterUser"
-                  value={formData.updaterUser}
-                  disabled
-                />
+                <div className={styles.inputContainer}>
+                  <input
+                    type="text"
+                    name="updaterUser"
+                    value={formData.updaterUser}
+                    disabled
+                  />
+                  <div className={styles.errorContainer}></div>
+                </div>
               </>
             )}
           </div>
@@ -129,32 +280,41 @@ const ManageNetworkDomain: React.FC = () => {
             <div className={styles.row}>
               <div className={styles.row}>
                 <label>{en.networkDomains.creatorUser}</label>
-                <input
-                  type="text"
-                  name="creatorUser"
-                  value={formData.creatorUser}
-                  disabled
-                />
+                <div className={styles.inputContainer}>
+                  <input
+                    type="text"
+                    name="creatorUser"
+                    value={formData.creatorUser}
+                    disabled
+                  />
+                  <div className={styles.errorContainer}></div>
+                </div>
               </div>
               <div className={styles.row}>
                 <label>{en.networkDomains.updatedAt}</label>
-                <input
-                  type="text"
-                  name="updatedAt"
-                  value={formData.updatedAt}
-                  disabled
-                />
+                <div className={styles.inputContainer}>
+                  <input
+                    type="text"
+                    name="updatedAt"
+                    value={formData.updatedAt}
+                    disabled
+                  />
+                  <div className={styles.errorContainer}></div>
+                </div>
               </div>
             </div>
             <div className={styles.row}>
               <div className={styles.row}>
                 <label>{en.networkDomains.createdAt}</label>
-                <input
-                  type="text"
-                  name="createdAt"
-                  value={formData.createdAt}
-                  disabled
-                />
+                <div className={styles.inputContainer}>
+                  <input
+                    type="text"
+                    name="createdAt"
+                    value={formData.createdAt}
+                    disabled
+                  />
+                  <div className={styles.errorContainer}></div>
+                </div>
               </div>
             </div>
           </>

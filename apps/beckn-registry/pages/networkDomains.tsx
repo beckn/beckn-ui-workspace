@@ -1,61 +1,119 @@
-import React from 'react'
-import CustomTable, { Action } from '../components/CustomTable'
-import SearchInput from '../components/SearchInput'
-import styles from '../styles/NetworkDomains.module.css'
-import ActionHeaders from '../components/actionHeaders'
-import en from '../locales/en'
+import React, { useEffect, useState } from 'react'
+import CustomTable, { Action, TableData } from '@components/CustomTable'
+import SearchInput from '@components/SearchInput'
+import styles from '@styles/NetworkDomains.module.css'
+import ActionHeaders from '@components/actionHeaders'
+import en from '@locales/en'
 import { faEye, faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useRouter } from 'next/router'
-
-type NetworkDomain =
-  | {
-      name: string
-      description: string
-      schemaUrl: string
-    }
-  | { [key: string]: string | number | boolean }
+import { useDeleteNetworkDomainMutation, useGetNetworkDomainsQuery } from '@services/networkDomainServices'
+import { useDispatch } from 'react-redux'
+import { setDomains, setPagination, setLoading, setError } from '@store/networkDomain-slice'
+import AlertModal from '@components/AlertModal'
+import { showToast } from '@components/Toast'
 
 const NetworkDomains: React.FC = () => {
-  const data = [
-    { name: 'u-test:domain', description: 'test domain', schemaUrl: 'schema-url.com' },
-    { name: 'deg:finance', description: 'deg:finance', schemaUrl: '' },
-    { name: 'deg:rental', description: 'deg:rental', schemaUrl: '' },
-    { name: 'deg:retail', description: 'deg:retail', schemaUrl: '' },
-    { name: 'earth_support_initiative', description: 'earth_support_initiative', schemaUrl: '' },
-    { name: 'envirogrowth', description: 'envirogrowth', schemaUrl: '' },
-    { name: 'state_forest_department', description: 'state_forest_department', schemaUrl: '' },
-    { name: 'harmoniaid', description: 'harmoniaid', schemaUrl: '' },
-    { name: 'skyanalytics_flow', description: 'skyanalytics_flow', schemaUrl: '' },
-    { name: 'dragon_foods', description: 'dragon_foods', schemaUrl: '' },
-    { name: 'climate', description: 'climate', schemaUrl: '' },
-    { name: 'resilience_climate', description: 'resilience_climate', schemaUrl: '' },
-    { name: 'dsep:scholarships', description: 'dsep:scholarships', schemaUrl: '' },
-    { name: 'uei:p2p-trading', description: 'uei:p2p-trading', schemaUrl: '' },
-    { name: 'uei:p2p_trading', description: 'uei:p2p_trading', schemaUrl: '' }
-  ]
+  const router = useRouter()
+  const dispatch = useDispatch()
+
+  const { data: domains, isLoading, error: queryError, refetch } = useGetNetworkDomainsQuery({ page: 1, pageSize: 10 })
+  const [deleteNetworkDomain] = useDeleteNetworkDomainMutation()
+  const [deleteModalState, setDeleteModalState] = useState<{
+    isOpen: boolean
+    documentId: string | null
+  }>({
+    isOpen: false,
+    documentId: null
+  })
+
+  useEffect(() => {
+    if (domains) {
+      dispatch(setDomains(domains.results))
+      dispatch(
+        setPagination({
+          page: domains.pagination.page,
+          pageSize: domains.pagination.pageSize,
+          total: domains.pagination.total
+        })
+      )
+    }
+    dispatch(setLoading(isLoading))
+    if (queryError) {
+      dispatch(setError('Failed to fetch network domains'))
+    }
+  }, [domains, isLoading, queryError, dispatch])
 
   const columns = [
     { header: en.networkDomains.name, accessor: 'name' },
     { header: en.networkDomains.description, accessor: 'description' },
-    { header: en.networkDomains.schemaUrl, accessor: 'schemaUrl' }
+    { header: en.networkDomains.schemaUrl, accessor: 'schema_url' }
   ]
 
-  const router = useRouter()
+  const handleSearch = () => {
+    refetch()
+  }
+
+  // const handlePageChange = (newPage: number) => {
+  //   // dispatch(setPagination({ ...pagination, page: newPage }))
+  // }
+
+  // const handlePageSizeChange = (newPageSize: number) => {
+  //   // dispatch(setPagination({ ...pagination, pageSize: newPageSize, page: 1 }))
+  // }
 
   const handleAddNetworkDomain = () => {
     router.push({ pathname: '/manageNetworkDomain', query: { mode: 'add' } })
   }
 
-  const handleEditNetworkDomain = (networkDomain: NetworkDomain) => {
-    router.push({ pathname: '/manageNetworkDomain', query: { mode: 'edit', ...networkDomain } })
+  const handleEditNetworkDomain = (networkDomain: TableData) => {
+    router.push({ pathname: '/manageNetworkDomain', query: { mode: 'edit', documentId: networkDomain.documentId } })
   }
 
-  const handleViewNetworkDomain = (networkDomain: NetworkDomain) => {
-    router.push({ pathname: '/manageNetworkDomain', query: { mode: 'view', ...networkDomain } })
+  const handleViewNetworkDomain = (networkDomain: TableData) => {
+    router.push({ pathname: '/manageNetworkDomain', query: { mode: 'view', documentId: networkDomain.documentId } })
   }
 
-  const actions: Action[] = [
+  const handleDelete = async (documentId: string) => {
+    try {
+      await deleteNetworkDomain(documentId).unwrap()
+      showToast({
+        message: 'Network domain deleted successfully',
+        type: 'success'
+      })
+    } catch (error) {
+      showToast({
+        message: 'Failed to delete network domain',
+        type: 'error'
+      })
+    }
+  }
+
+  const handleDeleteClick = (documentId: string) => {
+    setDeleteModalState({
+      isOpen: true,
+      documentId
+    })
+  }
+
+  const handleDeleteConfirm = () => {
+    if (deleteModalState.documentId) {
+      handleDelete(deleteModalState.documentId)
+    }
+    setDeleteModalState({
+      isOpen: false,
+      documentId: null
+    })
+  }
+
+  const handleDeleteCancel = () => {
+    setDeleteModalState({
+      isOpen: false,
+      documentId: null
+    })
+  }
+
+  const actions: Action<TableData>[] = [
     {
       icon: (
         <FontAwesomeIcon
@@ -84,9 +142,48 @@ const NetworkDomains: React.FC = () => {
         />
       ),
       title: en.networkDomains.delete,
-      onClick: row => console.log('Delete', row)
+      onClick: (row: TableData) => handleDeleteClick(row.documentId as string)
     }
   ]
+
+  if (isLoading) {
+    return (
+      <div className={styles.networkDomainContainer}>
+        <ActionHeaders
+          onPlusClick={handleAddNetworkDomain}
+          onBackClick={() => router.back()}
+          onHomeClick={() => router.push('/')}
+        />
+        <h2 className={styles.title}>{en.networkDomains.title}</h2>
+        <div className={styles.loadingContainer}>
+          <div className={styles.spinner}></div>
+          <p>Loading network domains...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (queryError) {
+    return (
+      <div className={styles.networkParticipantsContainer}>
+        <ActionHeaders
+          onPlusClick={handleAddNetworkDomain}
+          onBackClick={() => router.back()}
+          onHomeClick={() => router.push('/')}
+        />
+        <h2 className={styles.title}>{en.networkDomains.title}</h2>
+        <div className={styles.errorContainer}>
+          <p>Error loading network domains. Please try again later.</p>
+          <button
+            onClick={() => refetch()}
+            className={styles.retryButton}
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className={styles.networkDomainContainer}>
@@ -98,15 +195,31 @@ const NetworkDomains: React.FC = () => {
       <h2 className={styles.title}>{en.networkDomains.title}</h2>
       <SearchInput
         placeholder={en.networkDomains.searchPlaceholder}
-        onSearch={() => console.log('Search clicked')}
+        onSearch={handleSearch}
       />
       <div className={styles.tableContainer}>
         <CustomTable
           columns={columns}
-          data={data}
+          data={domains?.results as unknown as TableData[]}
           actions={actions}
+          pagination={{
+            currentPage: domains?.pagination.page ?? 1,
+            pageSize: domains?.pagination.pageSize ?? 10,
+            total: domains?.pagination.total ?? 0,
+            onPageChange: (page: number) => console.log('Page changed to', page),
+            onPageSizeChange: (pageSize: number) => console.log('Page size changed to', pageSize)
+          }}
         />
       </div>
+      <AlertModal
+        isOpen={deleteModalState.isOpen}
+        onClose={handleDeleteCancel}
+        onConfirm={handleDeleteConfirm}
+        title="Delete Network Domain"
+        message={`Are you sure you want to delete this network domain? This action cannot be undone.`}
+        confirmText="Delete"
+        cancelText="Cancel"
+      />
     </div>
   )
 }
