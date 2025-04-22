@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { BottomModal, Loader, Typography } from '@beckn-ui/molecules'
 import {
   Box,
@@ -136,6 +136,8 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
     if (user?.deg_wallet && user?.deg_wallet.energy_assets_consent) {
       setCurrentView('select')
       setActiveStep(0)
+      setMaxCapacity(0)
+      setRentingCapacity('0')
       console.log(user?.deg_wallet?.deg_wallet_id)
       const getDoc = await fetchCredentials()
     } else {
@@ -834,6 +836,8 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
                     setCurrentView('upload')
                     setActiveStep(0)
                     setBatteryOptions([])
+                    setMaxCapacity(0)
+                    setRentingCapacity('0')
                   }
                 }}
               >
