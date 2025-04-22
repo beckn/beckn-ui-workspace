@@ -37,7 +37,7 @@ const Users: React.FC = () => {
     userId: null
   })
 
-  const { data, isLoading, error } = useGetUsersQuery({ page, pageSize })
+  const { data, isLoading, error: queryError, refetch } = useGetUsersQuery({ page, pageSize })
   const [deleteUser] = useDeleteUserMutation()
 
   useEffect(() => {
@@ -121,7 +121,7 @@ const Users: React.FC = () => {
     setDeleteModal({ isOpen: false, userId: null })
   }
 
-  const actions: Action[] = [
+  const actions: Action<TableRow>[] = [
     {
       icon: (
         <FontAwesomeIcon
@@ -155,11 +155,42 @@ const Users: React.FC = () => {
   ]
 
   if (isLoading) {
-    return <div>Loading...</div>
+    return (
+      <div className={styles.usersContainer}>
+        <ActionHeaders
+          onPlusClick={handleAddUser}
+          onBackClick={() => router.back()}
+          onHomeClick={() => router.push('/')}
+        />
+        <h2 className={styles.title}>{en.users.title}</h2>
+        <div className={styles.loadingContainer}>
+          <div className={styles.spinner}></div>
+          <p>Loading users...</p>
+        </div>
+      </div>
+    )
   }
 
-  if (error) {
-    return <div>Error loading users</div>
+  if (queryError) {
+    return (
+      <div className={styles.usersContainer}>
+        <ActionHeaders
+          onPlusClick={handleAddUser}
+          onBackClick={() => router.back()}
+          onHomeClick={() => router.push('/')}
+        />
+        <h2 className={styles.title}>{en.users.title}</h2>
+        <div className={styles.errorContainer}>
+          <p>Error loading users. Please try again later.</p>
+          <button
+            onClick={() => refetch()}
+            className={styles.retryButton}
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    )
   }
 
   return (

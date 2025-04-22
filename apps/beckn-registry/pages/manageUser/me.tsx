@@ -39,7 +39,7 @@ const ManageMe: React.FC = () => {
   })
   const [errors, setErrors] = useState<FormErrors>({})
 
-  const { data: currentUser } = useGetCurrentUserQuery()
+  const { data: currentUser, isLoading, error: queryError, refetch } = useGetCurrentUserQuery()
   const [updateProfile] = useUpdateCurrentUserMutation()
 
   useEffect(() => {
@@ -151,6 +151,43 @@ const ManageMe: React.FC = () => {
         type: 'error'
       })
     }
+  }
+
+  if (isLoading) {
+    return (
+      <div className={styles.manageUserContainer}>
+        <ActionHeaders
+          onBackClick={() => router.back()}
+          onHomeClick={() => router.push('/')}
+        />
+        <h2 className={styles.title}>{en.users.title}</h2>
+        <div className={styles.loadingContainer}>
+          <div className={styles.spinner}></div>
+          <p>Loading profile...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (queryError) {
+    return (
+      <div className={styles.manageUserContainer}>
+        <ActionHeaders
+          onBackClick={() => router.back()}
+          onHomeClick={() => router.push('/')}
+        />
+        <h2 className={styles.title}>{en.users.title}</h2>
+        <div className={styles.errorContainer}>
+          <p>Error loading profile. Please try again later.</p>
+          <button
+            onClick={() => refetch()}
+            className={styles.retryButton}
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    )
   }
 
   return (

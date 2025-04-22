@@ -41,6 +41,7 @@ const NetworkParticipants = () => {
   })
 
   useEffect(() => {
+    console.log('participants', participants)
     if (participants) {
       dispatch(setParticipants(participants.results))
       // dispatch(
@@ -163,14 +164,14 @@ const NetworkParticipants = () => {
   const handleEditParticipant = (participant: APINetworkParticipant) => {
     router.push({
       pathname: '/manageNetworkParticipants',
-      query: { mode: 'edit', subscriber_id: participant.subscriber_id }
+      query: { mode: 'edit', documentId: participant.name }
     })
   }
 
   const handleViewParticipant = (participant: APINetworkParticipant) => {
     router.push({
       pathname: '/manageNetworkParticipants',
-      query: { mode: 'view', subscriber_id: participant.subscriber_id }
+      query: { mode: 'view', documentId: participant.name }
     })
   }
 
