@@ -19,7 +19,7 @@ interface FormErrors {
 const ManageNetworkDomain: React.FC = () => {
   const router = useRouter()
   const { mode: queryMode, documentId } = router.query
-  const { data: domainData } = useGetNetworkDomainByIdQuery(documentId as string, {
+  const { data: domainData, isLoading } = useGetNetworkDomainByIdQuery(documentId as string, {
     skip: !documentId || queryMode === 'add'
   })
   const [createNetworkDomain] = useCreateNetworkDomainMutation()
@@ -41,13 +41,13 @@ const ManageNetworkDomain: React.FC = () => {
   useEffect(() => {
     if (domainData) {
       setFormData({
-        name: domainData.data.name,
-        description: domainData.data.description || '',
-        schemaUrl: domainData.data.schema_url || '',
-        updaterUser: domainData.data.updater_user || '',
-        creatorUser: domainData.data.creator_user || '',
-        updatedAt: domainData.data.updated_at || '',
-        createdAt: domainData.data.created_at || ''
+        name: domainData.name,
+        description: domainData.description || '',
+        schemaUrl: domainData.schema_url || '',
+        updaterUser: domainData.updater_user || '',
+        creatorUser: domainData.creator_user || '',
+        updatedAt: domainData.updated_at || '',
+        createdAt: domainData.created_at || ''
       })
     }
   }, [domainData])
@@ -187,6 +187,10 @@ const ManageNetworkDomain: React.FC = () => {
 
   const handleClose = () => {
     router.push('/networkDomains')
+  }
+
+  if (isLoading && mode !== 'add') {
+    return <div>Loading...</div>
   }
 
   return (

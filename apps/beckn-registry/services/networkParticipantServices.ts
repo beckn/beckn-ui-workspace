@@ -6,6 +6,7 @@ export interface NetworkParticipant {
   unique_key_id: string
   type: string
   domain: string
+  name: string
   city: string
   country: string
   signing_public_key: string

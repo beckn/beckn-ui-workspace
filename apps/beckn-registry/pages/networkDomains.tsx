@@ -17,7 +17,7 @@ const NetworkDomains: React.FC = () => {
   const router = useRouter()
   const dispatch = useDispatch()
 
-  const { data: domains, isLoading, error: queryError, refetch } = useGetNetworkDomainsQuery({ page: 1, pageSize: 10 })
+  const { data: domains, isLoading, error: queryError, refetch } = useGetNetworkDomainsQuery({ page: 1, pageSize: 100 })
   const [deleteNetworkDomain] = useDeleteNetworkDomainMutation()
   const [deleteModalState, setDeleteModalState] = useState<{
     isOpen: boolean
@@ -165,7 +165,7 @@ const NetworkDomains: React.FC = () => {
 
   if (queryError) {
     return (
-      <div className={styles.networkParticipantsContainer}>
+      <div className={styles.networkDomainContainer}>
         <ActionHeaders
           onPlusClick={handleAddNetworkDomain}
           onBackClick={() => router.back()}

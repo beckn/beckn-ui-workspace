@@ -9,6 +9,7 @@ import {
   useUpdateNetworkParticipantMutation
 } from '../services/networkParticipantServices'
 import { showToast } from '../components/Toast'
+import { useGetNetworkDomainsQuery } from '@services/networkDomainServices'
 
 interface FormErrors {
   subscriberId?: string
@@ -25,10 +26,11 @@ interface FormErrors {
 
 const ManageNetworkParticipants: React.FC = () => {
   const router = useRouter()
-  const { mode: queryMode, subscriber_id } = router.query
+  const { mode: queryMode, documentId } = router.query
 
-  const { data: participantData, isLoading } = useGetNetworkParticipantByIdQuery(subscriber_id as string, {
-    skip: !subscriber_id || queryMode === 'add'
+  const { data: domainData } = useGetNetworkDomainsQuery({ page: 1, pageSize: 100 })
+  const { data: participantData, isLoading } = useGetNetworkParticipantByIdQuery(documentId as string, {
+    skip: !documentId || queryMode === 'add'
   })
   const [addNetworkParticipant] = useAddNetworkParticipantMutation()
   const [updateNetworkParticipant] = useUpdateNetworkParticipantMutation()
@@ -53,18 +55,23 @@ const ManageNetworkParticipants: React.FC = () => {
 
   const typeOptions = [
     { value: 'BAP', label: 'BAP' },
-    { value: 'BPP', label: 'BPP' }
+    { value: 'BPP', label: 'BPP' },
+    { value: 'LREG', label: 'LREG' },
+    { value: 'CREG', label: 'CREG' },
+    { value: 'RREG', label: 'RREG' },
+    { value: 'BG', label: 'BG' }
   ]
 
-  const domainOptions = [
-    { value: 'retail', label: 'Retail' },
-    { value: 'mobility', label: 'Mobility' },
-    { value: 'healthcare', label: 'Healthcare' },
-    { value: 'education', label: 'Education' }
-  ]
+  const domainOptions = domainData?.results.map(domain => ({
+    value: domain.name,
+    label: domain.name
+  }))
 
   const statusOptions = [
+    { value: 'INITIATED', label: 'INITIATED' },
+    { value: 'UNDER_SUBSCRIPTION', label: 'UNDER_SUBSCRIPTION' },
     { value: 'SUBSCRIBED', label: 'SUBSCRIBED' },
+    { value: 'INVALID_SSL', label: 'INVALID_SSL' },
     { value: 'UNSUBSCRIBED', label: 'UNSUBSCRIBED' }
   ]
 
@@ -78,11 +85,11 @@ const ManageNetworkParticipants: React.FC = () => {
         domain: participantData.domain,
         signingPublicKey: participantData.signing_public_key,
         encrPublicKey: participantData.encr_public_key,
-        validFrom: participantData.valid_from || '',
-        validUntil: participantData.valid_until || '',
+        validFrom: participantData.valid_from.split('T')[0] || '',
+        validUntil: participantData.valid_until.split('T')[0] || '',
         status: participantData.status,
-        createdAt: participantData.created,
-        updatedAt: participantData.updated
+        createdAt: participantData.created.split('T')[0] || '',
+        updatedAt: participantData.updated.split('T')[0] || ''
       })
     }
   }, [participantData])
@@ -273,7 +280,7 @@ const ManageNetworkParticipants: React.FC = () => {
         valid_until: formData.validUntil,
         status: formData.status
       }
-      await updateNetworkParticipant({ subscriberId: subscriber_id as string, data: participantData }).unwrap()
+      await updateNetworkParticipant({ subscriberId: documentId as string, data: participantData }).unwrap()
       showToast({
         message: 'Network participant updated successfully',
         type: 'success'
@@ -412,7 +419,7 @@ const ManageNetworkParticipants: React.FC = () => {
                 >
                   Select Domain
                 </option>
-                {domainOptions.map(option => (
+                {domainOptions?.map(option => (
                   <option
                     key={option.value}
                     value={option.value}
@@ -474,11 +481,11 @@ const ManageNetworkParticipants: React.FC = () => {
               />
               <div className={styles.errorContainer}>
                 {errors.validFrom && <span className={styles.errorMessage}>{errors.validFrom}</span>}
+                {dateError && <div className={styles.errorMessage}>{dateError}</div>}
               </div>
             </div>
           </div>
         </div>
-        {dateError && <div className={styles.error}>{dateError}</div>}
         <div className={styles.row}>
           <div className={styles.row}>
             <label>{en.networkParticipants.validUntil}</label>

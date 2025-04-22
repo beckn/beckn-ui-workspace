@@ -31,7 +31,7 @@ export const networkDomainApi = api.injectEndpoints({
         }
       })
     }),
-    getNetworkDomainById: builder.query<{ data: NetworkDomain }, string>({
+    getNetworkDomainById: builder.query<NetworkDomain, string>({
       query: documentId => `/network-domains/${documentId}`
     }),
     createNetworkDomain: builder.mutation<{ data: NetworkDomain }, NetworkDomain>({
