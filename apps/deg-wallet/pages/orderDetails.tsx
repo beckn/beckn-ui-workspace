@@ -2,16 +2,17 @@ import { DetailCard, OrderStatusProgress, OrderStatusProgressProps } from '@beck
 import PaymentDetails from '@beckn-ui/becknified-components/src/components/checkout/payment-details'
 import {
   ConfirmResponseModel,
+  DataState,
   formatTimestamp,
-  getOrderDetailsPaymentBreakDown,
   getPaymentBreakDown,
+  Item,
+  QuantityDetails,
   StatusResponseModel
 } from '@beckn-ui/common'
 import { Accordion, Typography } from '@beckn-ui/molecules'
-import { Box, CardBody, Flex, Text, Image, Divider } from '@chakra-ui/react'
+import { Box, CardBody, Flex, Text, Image, Divider, useDisclosure } from '@chakra-ui/react'
 import { ItemMetaData, ORG_NAME_MAP } from '@components/credLayoutRenderer/ItemRenderer'
 import ShippingBlock from '@components/orderDetailComponents/Shipping'
-import { DOMAIN } from '@lib/config'
 import { AttestationData } from '@lib/types/becknDid'
 import axios from '@services/axios'
 import { useDecodeStreamMutation } from '@services/walletService'
@@ -21,13 +22,15 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { v4 as uuidv4 } from 'uuid'
 import ProfileIcon from '@public/images/Profile.svg'
+import ChargingIcon from '@public/images/charging_icon.svg'
 import { useLanguage } from '@hooks/useLanguage'
 import { testIds } from '@shared/dataTestIds'
-import { StatusKey, statusMap } from '@lib/client'
+import { ParentStatusKey, ParentStatusMap, StatusKey, statusMap } from '@lib/client'
 import LoaderWithMessage from '@beckn-ui/molecules/src/components/LoaderWithMessage/loader-with-message'
 
 const DELIVERED = 'ORDER_DELIVERED'
 const CANCELLED = 'USER CANCELLED'
+const CHARGING_STATUS = 'CHARGING_STATUS'
 
 export default function OrderDetails() {
   const [orderDetails, setOrderDetails] = useState<{ data: ConfirmResponseModel[] }>()
@@ -40,9 +43,10 @@ export default function OrderDetails() {
     // { name: 'Open Spark' }
   ])
   const domain = orderDetails?.data?.context.domain
-  console.log(domain)
+
   const router = useRouter()
   const { t } = useLanguage()
+  const { isOpen, onOpen, onClose } = useDisclosure()
   const [decodeStream, { isLoading }] = useDecodeStreamMutation()
   const { user } = useSelector((state: AuthRootState) => state.auth)
 
@@ -69,19 +73,20 @@ export default function OrderDetails() {
     if (attestations?.length > 0) {
       const result: any = attestations
         .map(attestation => {
-          const regex = /\/org\/([^\/]+)\/verification_methods/
+          const regex = /\/type\/([^\/]+)\//
+
           if (attestation.verification_method.did.startsWith(user?.did!)) {
             const orgData = { name: 'Self', icon: ProfileIcon }
 
             return orgData ? { name: orgData.name, icon: orgData.icon } : null
           }
-          if (attestation.verification_method.did.match(regex)) {
-            const match = attestation.verification_method.did.match(regex)
+          if (attestation.did.match(regex)) {
+            const match = attestation.did.match(regex)
 
             if (!match) return null
 
-            const name = match[1]
-            const orgData = ORG_NAME_MAP[name]
+            const domainType = match[1]
+            const orgData = ORG_NAME_MAP[domainType]
 
             return orgData
               ? {
@@ -93,7 +98,7 @@ export default function OrderDetails() {
           }
         })
         .filter(Boolean)
-      console.log(result)
+
       setAttestationsDetails(result)
     }
   }
@@ -154,14 +159,35 @@ export default function OrderDetails() {
     return () => clearInterval(intervalId)
   }, [apiUrl, orderDetails])
 
+  const totalQuantityOfOrder = (data: any) => {
+    let count = 0
+    data[0].message.order.items.forEach((item: Item) => {
+      count += (item.quantity as QuantityDetails)?.selected?.count
+    })
+    return count
+  }
+
   useEffect(() => {
     if (statusData?.length > 0) {
       const newData = statusData
         .map((status: StatusResponseModel) => {
           const { tags } = status?.message?.order
-          const statusKey: string = tags?.[tags?.length - 1].list?.[0].value!
+          let statusKey: string = status?.message?.order?.fulfillments[0]?.state?.descriptor?.code as StatusKey
+          if (
+            statusKey === 'CHARGING_STATUS' &&
+            Number(status?.message?.order?.fulfillments[0]?.state?.descriptor?.short_desc) === 100
+          ) {
+            statusKey = 'CHARGING_COMPLETED'
+          } else if (
+            statusKey === 'CHARGING_STATUS' &&
+            Number(status?.message?.order?.fulfillments[0]?.state?.descriptor?.short_desc) < 100
+          ) {
+            statusKey = 'CHARGING_IN_PROGRESS'
+          } else if (statusKey === 'timestamp') {
+            statusKey = 'ORDER_DELIVERED'
+          }
           return {
-            label: statusMap[status?.message?.order?.fulfillments[0]?.state?.descriptor?.code as StatusKey],
+            label: statusMap[statusKey as StatusKey],
             statusTime: status?.message?.order?.fulfillments[0]?.state?.updated_at || status?.context?.timestamp
           }
         })
@@ -172,7 +198,21 @@ export default function OrderDetails() {
     }
   }, [statusData])
 
-  const isDelivered = orderDetails?.data?.message?.fulfillments?.[0]?.state?.descriptor?.code === DELIVERED
+  let isDelivered = orderDetails?.data?.message?.fulfillments?.[0]?.state?.descriptor?.code === DELIVERED
+
+  if (
+    statusData?.[0]?.message?.order?.fulfillments?.[0]?.state?.descriptor?.code === CHARGING_STATUS &&
+    Number(statusData[0]?.message?.order?.fulfillments?.[0]?.state?.descriptor?.short_desc) === 100
+  ) {
+    isDelivered = true
+  } else if (
+    statusData?.[0]?.message?.order?.fulfillments?.[0]?.state?.descriptor?.code === CHARGING_STATUS &&
+    Number(statusData[0]?.message?.order?.fulfillments?.[0]?.state?.descriptor?.short_desc) < 100
+  ) {
+    isDelivered = false
+  } else if (statusData?.[0]?.message?.order?.fulfillments?.[0]?.state?.descriptor?.code === 'timestamp') {
+    isDelivered = true
+  }
   const isCancelled = orderDetails?.data?.message?.fulfillments?.[0]?.state?.descriptor?.code === CANCELLED
 
   return (
@@ -203,6 +243,10 @@ export default function OrderDetails() {
                   w={['40px', '80px', '80px', '80px']}
                   src={statusData[0]?.message?.order?.items[0]?.images?.[0].url}
                   alt="product image"
+                  onError={e => {
+                    const target = e.target as HTMLImageElement
+                    target.src = ChargingIcon
+                  }}
                 />
               )}
               <Box w={'100%'}>
@@ -271,26 +315,44 @@ export default function OrderDetails() {
                   justifyContent={'space-between'}
                   alignItems={'center'}
                 >
-                  <Flex maxWidth={'50vw'}>
-                    <Typography
-                      text={orderDetails?.data?.[0]?.message?.items?.[0]?.name}
-                      fontSize="12px"
-                      fontWeight="400"
-                      sx={{
-                        noOfLines: 3,
-                        textOverflow: 'ellipsis',
-                        overflow: 'hidden'
-                      }}
-                    />
+                  <Flex maxWidth={'40vw'}>
+                    <Text
+                      textOverflow={'ellipsis'}
+                      overflow={'hidden'}
+                      whiteSpace={'nowrap'}
+                      fontSize={'12px'}
+                      fontWeight={'400'}
+                      data-test={testIds.orderDetailspage_orderSummaryItemName}
+                    >
+                      {statusData[0]?.message?.order?.items[0]?.name}
+                    </Text>
+                    {totalQuantityOfOrder(statusData) > 1 && (
+                      <Text
+                        pl={'5px'}
+                        color={'green'}
+                        fontSize={'12px'}
+                        fontWeight={'600'}
+                        data-test={testIds.orderDetailspage_orderSummaryTotalItems}
+                        onClick={onOpen}
+                      >
+                        +{totalQuantityOfOrder(statusData) - 1}
+                      </Text>
+                    )}
                   </Flex>
 
                   <Text
-                    fontSize={'15px'}
+                    fontSize={'12px'}
                     fontWeight={'500'}
                     data-test={testIds.orderDetailspage_orderStatus}
-                    color={statusData?.[0]?.message.order.status === 'CANCELLED' ? 'red' : 'green'}
+                    color={
+                      statusData?.[0]?.message.order.status === 'CANCELLED'
+                        ? 'red'
+                        : statusData?.[0]?.message.order.status === 'ACTIVE'
+                          ? '#BD942B'
+                          : 'green'
+                    }
                   >
-                    {statusData[0].message.order.status === 'ACTIVE' ? 'COMPLETED' : statusData[0].message.order.status}
+                    {ParentStatusMap[statusData[0].message.order.status as ParentStatusKey]}
                   </Text>
                 </Flex>
               </>

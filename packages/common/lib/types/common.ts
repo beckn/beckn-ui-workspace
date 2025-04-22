@@ -8,6 +8,7 @@ export interface Location {
     name: string
   }
   country: {
+    name?: string
     code: string
   }
   area_code: string

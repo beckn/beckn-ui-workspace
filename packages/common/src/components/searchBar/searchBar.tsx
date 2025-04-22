@@ -3,7 +3,13 @@ import { Box, Flex, Image, Input } from '@chakra-ui/react'
 import { SearchBarProps } from './searchBar.types'
 import { testIds } from '@shared/dataTestIds'
 
-const SearchBar: React.FC<SearchBarProps> = ({ searchString, handleChange, placeholder = 'Search', selectedInput }) => {
+const SearchBar: React.FC<SearchBarProps> = ({
+  searchString,
+  handleChange,
+  placeholder = 'Search',
+  selectedInput,
+  handleOnFocus
+}) => {
   const [inputValue, setInputValue] = useState('')
 
   const inputChangeHandler = (event: React.BaseSyntheticEvent) => {
@@ -36,12 +42,14 @@ const SearchBar: React.FC<SearchBarProps> = ({ searchString, handleChange, place
           p={'20px'}
           bg="transparent"
           borderRadius={'12px'}
-          _focus={{ outline: 'none' }}
+          _focus={{ outline: 'none', backgroundColor: '#ffffff' }}
           _focusVisible={{ zIndex: 1, borderColor: '#3182ce', boxShadow: '0 0 0 0 #3182ce' }}
           w="full"
           type="search"
           placeholder={placeholder}
+          backgroundColor={'#ffffff'}
           onChange={inputChangeHandler}
+          onFocus={handleOnFocus}
           data-test={testIds.searchInput}
           value={inputValue}
           onKeyDown={event => event.key === 'Enter' && handleSubmit()}
@@ -54,6 +62,8 @@ const SearchBar: React.FC<SearchBarProps> = ({ searchString, handleChange, place
           onClick={handleSubmit}
           cursor={'pointer'}
           zIndex={9999}
+          backgroundColor={'#ffffff'}
+          padding={'0px 3px'}
         >
           <Image src={'/images/searchInput.svg'} />
         </Box>

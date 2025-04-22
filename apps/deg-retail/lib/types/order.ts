@@ -8,3 +8,12 @@ export const statusMap = {
 
 export type StatusMap = typeof statusMap
 export type StatusKey = keyof StatusMap
+
+export const parentStatusMap = {
+  ACTIVE: 'In Progress',
+  COMPLETE: 'Completed',
+  CANCELLED: 'Cancelled'
+}
+
+export type ParentStatusMap = typeof parentStatusMap
+export type ParentStatusKey = keyof ParentStatusMap

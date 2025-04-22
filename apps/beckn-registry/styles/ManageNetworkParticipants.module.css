@@ -5,11 +5,15 @@
   overflow-x: auto;
 }
 
+.title {
+  color: #000;
+}
+
 .form {
   display: flex;
   flex-direction: column;
   margin: 2rem 0px 1rem 0px;
-  gap: 10px;
+  /* gap: 10px; */
 }
 
 .row {
@@ -96,4 +100,27 @@
 .row input[type='checkbox']:disabled {
   opacity: 0.6;
   color: #000;
+}
+
+.inputContainer {
+  display: flex;
+  flex-direction: column;
+  /* gap: 0.25rem; */
+  width: 100%;
+}
+
+.input.error {
+  border-color: #ef4444;
+}
+
+.errorContainer {
+  min-height: 1.25rem;
+  display: flex;
+  align-items: center;
+}
+
+.errorMessage {
+  color: #ef4444;
+  font-size: 12px;
+  margin: 0;
 }

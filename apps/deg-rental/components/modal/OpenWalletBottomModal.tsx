@@ -285,7 +285,7 @@ const OpenWalletBottomModal: React.FC<OpenWalletBottomModalProps> = ({ modalType
                   mb="20px"
                 >
                   <Typography
-                    text="Spark would like to fetch the following information from your wallet:"
+                    text="Rental would like to fetch the following information from your wallet:"
                     fontSize="12px"
                     fontWeight="400"
                   />
@@ -350,7 +350,10 @@ const OpenWalletBottomModal: React.FC<OpenWalletBottomModalProps> = ({ modalType
                 />
                 <BecknButton
                   children="Skip for now"
-                  handleClick={() => setModalType(null)}
+                  handleClick={() => {
+                    dispatch(setShowInitialAlert(false))
+                    setModalType(null)
+                  }}
                   variant="outline"
                   color="#D14040"
                   sx={{ border: '1px' }}

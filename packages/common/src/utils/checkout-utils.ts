@@ -49,21 +49,21 @@ export const getPaymentBreakDown = (
   initData: InitResponseModel[] | StatusResponseModel[],
   frequency?: number | Record<string, any>
 ) => {
-  const selectedCount = initData[0].message?.order?.items[0]?.quantity?.selected?.count
-  const domain = initData[0].context.domain
-  const quote = initData[0].message.order.quote
-  const breakUp = quote.breakup
+  const selectedCount = initData?.[0]?.message?.order?.items?.[0]?.quantity?.selected?.count || 1
+  const domain = initData?.[0]?.context?.domain
+  const quote = initData?.[0]?.message?.order?.quote
+  const breakUp = quote?.breakup
   const totalPricewithCurrent = {
     value:
       domain === 'deg:rental'
-        ? getSubTotalAndDeliveryCharges(initData, selectedCount || 1).subTotal.toString()
-        : getSubTotalAndDeliveryCharges(initData, frequency || 1).subTotal.toString(),
+        ? getSubTotalAndDeliveryCharges(initData, selectedCount || 1).subTotal.toFixed(2)
+        : getSubTotalAndDeliveryCharges(initData, frequency || 1).subTotal.toFixed(2),
     currency: getSubTotalAndDeliveryCharges(initData, frequency || 1).currencySymbol!
   }
 
   const breakUpMap: Record<string, any> = {}
 
-  breakUp.forEach(item => {
+  breakUp?.forEach(item => {
     const {
       title,
       price: { currency, value }
@@ -80,8 +80,8 @@ export const getPaymentBreakDown = (
       currency: currency,
       value:
         domain === 'deg:rental'
-          ? (breakUpMap[title]?.value || 0) + Number(value) * selectedCount
-          : (breakUpMap[title]?.value || 0) + Number(value) * quantity
+          ? ((breakUpMap[title]?.value || 0) + Number(value) * selectedCount).toFixed(2)
+          : ((breakUpMap[title]?.value || 0) + Number(value) * quantity).toFixed(2)
     }
   })
 

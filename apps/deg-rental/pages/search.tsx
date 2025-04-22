@@ -35,12 +35,14 @@ const Search = () => {
     initDB().catch(console.error)
   }, [])
 
-  const fetchDataForSearch = async () => {
+  const fetchDataForSearch = async (optionTags?: any) => {
     if (!searchKeyword || !type) return
 
     // Create cache key with type prefix
     const cacheKey =
-      type === 'RENT_AND_HIRE' ? `rental_${searchKeyword.toLowerCase()}` : `retail_${searchKeyword.toLowerCase()}`
+      type === 'RENT_AND_HIRE'
+        ? `rental_${searchKeyword.toLowerCase()}_${optionTags?.rentingCapacity}_${optionTags?.startTime}_${optionTags?.endTime}`
+        : `retail_${searchKeyword.toLowerCase()}`
 
     try {
       const cachedResults = await getFromCache(cacheKey)
@@ -63,7 +65,27 @@ const Search = () => {
           domain: type === 'RENT_AND_HIRE' ? 'deg:rental' : 'deg:retail',
           location: getCountryCode()
         },
-        searchString: searchKeyword
+        searchString: searchKeyword,
+        fulfillment: {
+          stops: [
+            { type: 'START_TIME', time: { duration: optionTags.startTime } },
+            { type: 'END_TIME', time: { duration: optionTags.endTime } }
+          ]
+        },
+        item: {
+          tags: [
+            {
+              list: [
+                {
+                  descriptor: {
+                    code: 'Renting Capacity'
+                  },
+                  value: optionTags.rentingCapacity
+                }
+              ]
+            }
+          ]
+        }
       }
 
       const res = await axios.post(`${apiUrl}/search`, searchPayload)
@@ -85,7 +107,18 @@ const Search = () => {
   }
 
   useEffect(() => {
-    if (searchKeyword) {
+    const optionTags = JSON.parse(localStorage.getItem('optionTags') || '{}')
+    console.log(
+      'Dank inside',
+      optionTags,
+      optionTags?.renting?.rentingCapacity,
+      optionTags?.renting?.startTime,
+      optionTags?.renting?.endTime
+    )
+    if (optionTags?.renting) {
+      fetchDataForSearch(optionTags.renting)
+      setSearchKeyword('battery')
+    } else if (searchKeyword) {
       localStorage.setItem('optionTags', JSON.stringify({ name: searchKeyword }))
       window.dispatchEvent(new Event('storage-optiontags'))
       fetchDataForSearch()
@@ -140,10 +173,14 @@ const Search = () => {
   }
 
   return (
-    <Box className="myStore-search-wrapper search-text">
+    <Box
+      className="myStore-search-wrapper search-text"
+      mt={'1rem'}
+    >
       <SearchAndDiscover
         items={items}
         searchProps={{
+          showSearchField: type === 'RENT_AND_HIRE' ? false : true,
           searchKeyword: searchKeyword as string,
           placeholder:
             type === 'RENT_AND_HIRE'
@@ -153,6 +190,7 @@ const Search = () => {
           fetchDataOnSearch: fetchDataForSearch
         }}
         filterProps={{
+          showFilterField: type === 'RENT_AND_HIRE' ? false : true,
           isFilterOpen: isFilterOpen,
           handleFilterOpen,
           handleFilterClose,

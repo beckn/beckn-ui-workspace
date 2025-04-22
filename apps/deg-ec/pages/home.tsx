@@ -2,7 +2,7 @@ import { Box, Button, Flex, Grid, Image, Text, Menu, MenuButton, MenuList, MenuI
 import Navbar from '@components/navbar/Navbar'
 import Cookies from 'js-cookie'
 import { useRouter } from 'next/router'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 interface ExperienceCardProps {
   title: string
@@ -10,7 +10,7 @@ interface ExperienceCardProps {
   isDisabled?: boolean
 }
 
-const ExperienceCard = ({ title, icon, isDisabled = false }: ExperienceCardProps) => {
+const ExperienceCard = ({ title, icon, isDisabled = false, url }: ExperienceCardProps) => {
   const router = useRouter()
 
   return (
@@ -29,8 +29,7 @@ const ExperienceCard = ({ title, icon, isDisabled = false }: ExperienceCardProps
       opacity={isDisabled ? 1 : 1}
       onClick={() => {
         if (!isDisabled) {
-          const route = title.toLowerCase().split(' ')[0]
-          router.push(`/${route}`)
+          router.push(`${url}`)
         }
       }}
     >
@@ -108,16 +107,25 @@ const Home = () => {
     // }
   ]
 
-  const experiences: Array<{ title: string; icon: string }> = [
-    { title: 'Retail Experience', icon: '/images/retail.svg' },
-    { title: 'Rental Experience', icon: '/images/rental.svg' },
-    { title: 'Wallet Experience', icon: '/images/wallet.svg' },
+  useEffect(() => {
+    setSelectedCountry(countries[0])
+    Cookies.set('country_code', JSON.stringify(countries[0].data), {
+      path: '/',
+      sameSite: 'strict'
+    })
+  }, [])
+
+  const experiences: Array<{ title: string; icon: string; url: string }> = [
+    { title: 'Retail Experience', icon: '/images/retail.svg', url: '/retail' },
+    { title: 'Rental Experience', icon: '/images/rental.svg', url: '/rental' },
+    { title: 'Wallet Experience', icon: '/images/wallet.svg', url: '/wallet' },
     {
       title: 'Finance Experience',
-      icon: '/images/finance.svg'
+      icon: '/images/finance.svg',
+      url: '/finance'
     },
-    { title: 'P2P Energy Trading', icon: '/images/p2p.svg' },
-    { title: 'EV Charging', icon: '/images/charging.svg' }
+    { title: 'EV Charging', icon: '/images/charging.svg', url: '/ev' },
+    { title: 'P2P Energy Trading', icon: '/images/p2p.svg', url: '/p2p' }
   ]
 
   return (
@@ -234,6 +242,7 @@ const Home = () => {
               key={index}
               title={exp.title}
               icon={exp.icon}
+              url={exp.url}
               isDisabled={exp.title === 'P2P Energy Trading' || exp.title === 'EV Charging'}
             />
           ))}

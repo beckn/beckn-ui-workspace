@@ -15,6 +15,7 @@ export interface ButtonProps {
   colorScheme?: 'primary' | 'secondary'
   type?: ButtonType
   leftIcon?: React.ReactElement
+  rightIcon?: React.ReactElement
   isLoading?: boolean
   loadingText?: string
   color?: string

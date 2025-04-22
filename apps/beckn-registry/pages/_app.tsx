@@ -1,16 +1,22 @@
 import React from 'react'
 import type { AppProps } from 'next/app'
+import { Provider } from 'react-redux'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
-import 'react-toastify/dist/ReactToastify.css'
 import '../styles/globals.css'
-import Layout from '../components/Layout'
+import Layout from '@components/Layout'
+import store from '@store/index'
+import { ToastProvider } from '@components/Toast'
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <Layout>
-      <Component {...pageProps} />
-    </Layout>
+    <Provider store={store}>
+      <ToastProvider>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </ToastProvider>
+    </Provider>
   )
 }
 

@@ -39,6 +39,7 @@ const ShadowCardButton: React.FC<BecknButtonProps> = ({
       colorScheme={colorScheme}
       variant={variant}
       data-test={dataTest}
+      bg="#ffffff"
       {...props}
     >
       {prefixIcon && (

@@ -72,7 +72,7 @@ const Header: React.FC<HeaderProps> = ({
       >
         <Box className={Styles.top_header_wrapper}>
           <Box>
-            {!appLogoBlackList.includes(router.pathname) && (
+            {appLogo && !appLogoBlackList.includes(router.pathname) && (
               <Image
                 src={appLogo}
                 alt="App logo"

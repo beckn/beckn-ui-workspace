@@ -1,13 +1,16 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import Dropdown from './Dropdown'
-import styles from '../styles/Index.module.css'
-import en from '../locales/en'
+import styles from '@styles/Index.module.css'
+import en from '@locales/en'
+import { logout } from '@store/auth-slice'
+import { useDispatch } from 'react-redux'
 
 const Navbar: React.FC = () => {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
   const dropdownRef = useRef<HTMLDivElement | null>(null)
   const router = useRouter()
+  const dispatch = useDispatch()
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -38,13 +41,14 @@ const Navbar: React.FC = () => {
             {
               name: en.navbar.settings,
               handleClick: () => {
-                router.push('/manageUser')
+                router.push('/manageUser/me')
                 handleToggle('')
               }
             },
             {
               name: en.navbar.signout,
               handleClick: () => {
+                dispatch(logout())
                 router.push('/signIn')
                 handleToggle('')
               }

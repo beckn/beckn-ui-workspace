@@ -4,7 +4,7 @@ import Styles from './GeoLocationInput.module.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { useState } from 'react'
 import backArrow from '@public/images/Back.svg'
-import locationMarker from '../../../public/images/SearchLocationMarker.svg'
+import locationMarker from '@public/images/SearchLocationMarker.svg'
 import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete'
 import { IoClose } from 'react-icons/io5'
 import {
@@ -12,10 +12,14 @@ import {
   toggleLocationSearchPageVisibility
 } from '@beckn-ui/common/src/store/geoMapLocationSearch-slice'
 import { testIds } from '@shared/dataTestIds'
+import { IGeoLocationSearchPageRootState } from '../../../lib/types'
 
-const GeoLocationInputList: React.FC = () => {
+const GeoLocationInputList = (props: { backIcon?: string }) => {
+  const { backIcon } = props
+
   const dispatch = useDispatch()
-  const [address, setAddress] = useState<string>('')
+  const { geoAddress } = useSelector((state: IGeoLocationSearchPageRootState) => state.geoLocationSearchPageUI)
+  const [address, setAddress] = useState<string>(geoAddress)
   const handleSelect = async (data: string) => {
     const addressData = await geocodeByAddress(data)
     const addressComponents = addressData[0].address_components
@@ -66,7 +70,7 @@ const GeoLocationInputList: React.FC = () => {
                   }}
                 >
                   <Image
-                    src={backArrow}
+                    src={backIcon || backArrow}
                     onClick={() => {
                       closeGeoLocationSearchPage()
                     }}
@@ -90,8 +94,9 @@ const GeoLocationInputList: React.FC = () => {
                       _focusVisible={{ boxShadow: 'none' }}
                       autoFocus={true}
                       borderRadius={'12px'}
+                      padding={'0 34px 0 16px'}
                       name="search_input"
-                      placeholder="Search for Location"
+                      placeholder="Search Location"
                       className={`${Styles.search_box_input}`}
                       data-test={testIds.loaction_list}
                     />
