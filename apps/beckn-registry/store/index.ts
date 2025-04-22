@@ -5,18 +5,20 @@ import authReducer from './auth-slice'
 import api from '@services/api'
 import userReducer from './user-slice'
 import networkParticipantsReducer from './networkParticipant-slice'
+import networkDomainReducer from './networkDomain-slice'
 
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['auth', 'user', 'networkParticipants']
+  whitelist: ['auth', 'user', 'networkParticipants', 'networkDomains']
 }
 
 const appReducer = combineReducers({
   auth: authReducer,
   [api.reducerPath]: api.reducer,
   user: userReducer,
-  networkParticipants: networkParticipantsReducer
+  networkParticipants: networkParticipantsReducer,
+  networkDomains: networkDomainReducer
 })
 
 const rootReducer = (state: any, action: any) => {
