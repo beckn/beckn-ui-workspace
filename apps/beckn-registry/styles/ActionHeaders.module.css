@@ -21,6 +21,17 @@
   font-size: 24px;
   color: #3056d3;
   position: relative;
+  opacity: 1;
+  transition: opacity 0.2s ease;
+}
+
+.actionButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.actionButton.hidden {
+  display: none;
 }
 
 .actionButton:hover::after {

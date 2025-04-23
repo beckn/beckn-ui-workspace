@@ -1,11 +1,11 @@
 .tableContainer {
   overflow-x: auto;
-  height: calc(100vh - 250px);
+  max-height: calc(100vh - 350px);
+  margin-top: 20px;
 }
 .table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 20px;
 }
 
 .table th,
@@ -63,4 +63,39 @@
 .headerContainer {
   display: flex;
   align-items: center;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+  padding: 10px;
+}
+
+.pagination button {
+  padding: 5px 10px;
+  background-color: #3056d3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.pagination select {
+  padding: 5px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: white;
+}
+
+.pagination span {
+  color: #666;
+  font-size: 14px;
 }

@@ -10,6 +10,8 @@ import {
 } from '../services/networkParticipantServices'
 import { showToast } from '../components/Toast'
 import { useGetNetworkDomainsQuery } from '@services/networkDomainServices'
+import UnauthorizedAccess from '@components/UnauthorizedAccess'
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query'
 
 interface FormErrors {
   subscriberId?: string
@@ -28,12 +30,16 @@ const ManageNetworkParticipants: React.FC = () => {
   const router = useRouter()
   const { mode: queryMode, documentId } = router.query
 
-  const { data: domainData } = useGetNetworkDomainsQuery({ page: 1, pageSize: 100 })
-  const { data: participantData, isLoading } = useGetNetworkParticipantByIdQuery(documentId as string, {
+  const { data: domainData, error: domainError, refetch } = useGetNetworkDomainsQuery({ page: 1, pageSize: 100 })
+  const {
+    data: participantData,
+    isLoading,
+    error: participantError
+  } = useGetNetworkParticipantByIdQuery(documentId as string, {
     skip: !documentId || queryMode === 'add'
   })
   const [addNetworkParticipant] = useAddNetworkParticipantMutation()
-  const [updateNetworkParticipant] = useUpdateNetworkParticipantMutation()
+  const [updateNetworkParticipant, { error: updateError }] = useUpdateNetworkParticipantMutation()
 
   const [formData, setFormData] = useState({
     subscriberId: '',
@@ -202,8 +208,8 @@ const ManageNetworkParticipants: React.FC = () => {
         domain: formData.domain,
         signing_public_key: formData.signingPublicKey,
         encr_public_key: formData.encrPublicKey,
-        valid_from: formData.validFrom,
-        valid_until: formData.validUntil,
+        valid_from: new Date(formData.validFrom).toISOString(),
+        valid_until: new Date(formData.validUntil).toISOString(),
         status: formData.status
       }
       await addNetworkParticipant(participantData).unwrap()
@@ -232,8 +238,8 @@ const ManageNetworkParticipants: React.FC = () => {
         domain: formData.domain,
         signing_public_key: formData.signingPublicKey,
         encr_public_key: formData.encrPublicKey,
-        valid_from: formData.validFrom,
-        valid_until: formData.validUntil,
+        valid_from: new Date(formData.validFrom).toISOString(),
+        valid_until: new Date(formData.validUntil).toISOString(),
         status: formData.status
       }
       await addNetworkParticipant(participantData).unwrap()
@@ -276,8 +282,8 @@ const ManageNetworkParticipants: React.FC = () => {
         domain: formData.domain,
         signing_public_key: formData.signingPublicKey,
         encr_public_key: formData.encrPublicKey,
-        valid_from: formData.validFrom,
-        valid_until: formData.validUntil,
+        valid_from: new Date(formData.validFrom).toISOString(),
+        valid_until: new Date(formData.validUntil).toISOString(),
         status: formData.status
       }
       await updateNetworkParticipant({ subscriberId: documentId as string, data: participantData }).unwrap()
@@ -299,8 +305,18 @@ const ManageNetworkParticipants: React.FC = () => {
   }
 
   if (isLoading && mode !== 'add') {
-    return <div>Loading...</div>
+    return (
+      <div className={styles.manageNetworkParticipantsContainer + ' ' + styles.loadingContainer}>
+        <div className={styles.spinner}></div>
+        <p>Loading...</p>
+      </div>
+    )
   }
+
+  const error =
+    (domainError as FetchBaseQueryError) ||
+    (participantError as FetchBaseQueryError) ||
+    (updateError as FetchBaseQueryError)
 
   return (
     <div className={styles.manageNetworkParticipantsContainer}>
@@ -601,6 +617,12 @@ const ManageNetworkParticipants: React.FC = () => {
           </button>
         )}
       </form>
+      {error?.status === 401 && (
+        <UnauthorizedAccess
+          onRetry={() => refetch()}
+          closeButton={true}
+        />
+      )}
     </div>
   )
 }

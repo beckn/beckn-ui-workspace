@@ -9,6 +9,8 @@ import {
   useUpdateNetworkDomainMutation
 } from '@services/networkDomainServices'
 import { showToast } from '@components/Toast'
+import UnauthorizedAccess from '@components/UnauthorizedAccess'
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query'
 
 interface FormErrors {
   name?: string
@@ -19,11 +21,16 @@ interface FormErrors {
 const ManageNetworkDomain: React.FC = () => {
   const router = useRouter()
   const { mode: queryMode, documentId } = router.query
-  const { data: domainData, isLoading } = useGetNetworkDomainByIdQuery(documentId as string, {
+  const {
+    data: domainData,
+    isLoading,
+    error: queryError,
+    refetch
+  } = useGetNetworkDomainByIdQuery(documentId as string, {
     skip: !documentId || queryMode === 'add'
   })
   const [createNetworkDomain] = useCreateNetworkDomainMutation()
-  const [updateNetworkDomain] = useUpdateNetworkDomainMutation()
+  const [updateNetworkDomain, { error: updateError }] = useUpdateNetworkDomainMutation()
 
   const [formData, setFormData] = useState({
     name: '',
@@ -190,8 +197,15 @@ const ManageNetworkDomain: React.FC = () => {
   }
 
   if (isLoading && mode !== 'add') {
-    return <div>Loading...</div>
+    return (
+      <div className={styles.manageNetworkDomainContainer + ' ' + styles.loadingContainer}>
+        <div className={styles.spinner}></div>
+        <p>Loading...</p>
+      </div>
+    )
   }
+
+  const error = (queryError as FetchBaseQueryError) || (updateError as FetchBaseQueryError)
 
   return (
     <div className={styles.manageNetworkDomainContainer}>
@@ -335,7 +349,6 @@ const ManageNetworkDomain: React.FC = () => {
             <button
               type="submit"
               className={styles.doneButton}
-              onClick={handleAdd}
             >
               Done
             </button>
@@ -345,7 +358,6 @@ const ManageNetworkDomain: React.FC = () => {
           <button
             type="submit"
             className={styles.doneButton}
-            onClick={handleEdit}
           >
             Done
           </button>
@@ -360,6 +372,12 @@ const ManageNetworkDomain: React.FC = () => {
           </button>
         )}
       </form>
+      {error?.status === 401 && (
+        <UnauthorizedAccess
+          onRetry={() => refetch()}
+          closeButton={true}
+        />
+      )}
     </div>
   )
 }

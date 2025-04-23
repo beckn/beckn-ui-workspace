@@ -26,6 +26,7 @@
   flex-direction: column;
   gap: 0.25rem;
   width: 100%;
+  position: relative;
 }
 
 .input {
@@ -37,12 +38,46 @@
 
 .input:focus {
   outline: none;
-  border-color: #007bff;
+  border-color: #3056d3;
   box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.1);
 }
 
-.input.error {
+.input.error,
+.passwordInput.error {
   border-color: #ef4444;
+}
+
+.passwordInputContainer {
+  position: relative;
+  width: 100%;
+}
+
+.passwordInput {
+  padding: 10px 40px 10px 10px;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.375rem;
+  width: 100%;
+}
+
+.passwordInput:focus {
+  outline: none;
+  border-color: #3056d3;
+  box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.1);
+}
+
+.eyeIcon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #6b7280;
+  width: 20px;
+  height: 20px;
+}
+
+.eyeIcon:hover {
+  color: #4b5563;
 }
 
 .errorContainer {
@@ -59,7 +94,7 @@
 
 .button {
   padding: 0.75rem;
-  background-color: #007bff;
+  background-color: #3056d3;
   color: white;
   border: none;
   border-radius: 0.375rem;
@@ -70,7 +105,7 @@
 }
 
 .button:hover {
-  background-color: #4338ca;
+  background-color: #3056d3;
 }
 
 .button:disabled {
@@ -87,7 +122,7 @@
 }
 
 .link {
-  color: #007bff;
+  color: #3056d3;
   text-decoration: none;
   font-size: 0.875rem;
 }

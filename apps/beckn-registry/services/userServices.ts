@@ -25,6 +25,16 @@ interface User {
   }
 }
 
+type UsersResponse = {
+  results: User[]
+  pagination: {
+    page: number
+    pageSize: number
+    pageCount: number
+    total: number
+  }
+}
+
 export const userApi = api.injectEndpoints({
   endpoints: build => ({
     getCurrentUser: build.query<User, void>({
@@ -37,23 +47,35 @@ export const userApi = api.injectEndpoints({
         body: profileData
       })
     }),
-    getUsers: build.query<User[], { page: number; pageSize: number }>({
-      query: ({ page, pageSize }) => ({
-        url: '/users',
-        params: {
+    getUsers: build.query<UsersResponse, { page: number; pageSize: number; searchQuery?: string }>({
+      query: ({ page, pageSize, searchQuery }) => {
+        const params: Record<string, string | number> = {
           'populate[0]': 'role',
           'pagination[page]': page,
           'pagination[pageSize]': pageSize
         }
-      }),
+
+        if (searchQuery) {
+          params['filters[$or][0][username][$contains]'] = searchQuery
+          params['filters[$or][1][fullName][$contains]'] = searchQuery
+          params['filters[$or][2][email][$contains]'] = searchQuery
+          params['filters[$or][3][phoneNumber][$contains]'] = searchQuery
+          params['filters[$or][4][alternatePhoneNumber][$contains]'] = searchQuery
+        }
+
+        return {
+          url: '/users',
+          params
+        }
+      },
       providesTags: result =>
         result
-          ? [...result.map(({ id }) => ({ type: 'User' as const, id })), { type: 'User' as const, id: 'LIST' }]
+          ? [...result.results.map(({ id }) => ({ type: 'User' as const, id })), { type: 'User' as const, id: 'LIST' }]
           : [{ type: 'User' as const, id: 'LIST' }]
     }),
-    getUserById: build.query<User, number>({
+    getUserById: build.query<User, string>({
       query: id => ({
-        url: `/user/${id}`,
+        url: `/users/${id}`,
         params: {
           'populate[0]': 'role'
         }
@@ -68,7 +90,7 @@ export const userApi = api.injectEndpoints({
       }),
       invalidatesTags: [{ type: 'User' as const, id: 'LIST' }]
     }),
-    updateUser: build.mutation<User, { id: number; data: Partial<User> }>({
+    updateUser: build.mutation<User, { id: string; data: Partial<User> }>({
       query: ({ id, data }) => ({
         url: `/users/${id}`,
         method: 'PUT',
