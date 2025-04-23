@@ -1,6 +1,6 @@
 import { SystemStyleObject } from '@chakra-ui/react'
 
-export type InputType = 'text' | 'password' | 'email' | 'number' | 'select'
+export type InputType = 'text' | 'password' | 'email' | 'number' | 'select' | 'tel'
 
 export enum InputTypeEnum {
   Text = 'text',

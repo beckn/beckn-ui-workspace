@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux'
 import { useState } from 'react'
 import backArrow from '/public/images/Back.svg'
 import searchMagnifyIcon from '../../public/images/search_magnify_icon.svg'
-import locationMarker from '../../public/images/searchlocationmarker.svg'
+import locationMarker from '../../public/images/SearchLocationMarker.svg'
 import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete'
 import { setGeoAddressAndLatLong, toggleLocationSearchPageVisibility } from '@beckn-ui/common'
 

@@ -72,6 +72,12 @@ const SignUp = () => {
     console.log(e)
     const { name, value } = e.target
 
+    if (name === 'mobileNumber') {
+      if (!/^\d*$/.test(value)) {
+        return
+      }
+    }
+
     setFormData(prevFormData => ({
       ...prevFormData,
       [name]: value
@@ -243,7 +249,7 @@ const SignUp = () => {
               error: formErrors.address
             },
             {
-              type: 'number',
+              type: 'tel',
               name: 'mobileNumber',
               value: formData.mobileNumber,
               handleChange: handleInputChange,
