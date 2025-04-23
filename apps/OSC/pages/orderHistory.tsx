@@ -37,7 +37,6 @@ const OrderHistory = () => {
     fetch(`${strapiUrl}/orders?filters[category]=8`, requestOptions)
       .then(response => response.json())
       .then(result => {
-        console.log('resluttt', result)
         if (result.error) {
           return setError(result.error.message)
         }
@@ -79,8 +78,6 @@ const OrderHistory = () => {
       </Box>
     )
   }
-
-  console.log('orderHistory:List', orderHistoryList)
 
   return (
     <Box
