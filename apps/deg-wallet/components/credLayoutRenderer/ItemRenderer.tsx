@@ -27,6 +27,7 @@ import ProfileIcon from '@public/images/Profile.svg'
 export interface ItemMetaData {
   id: number
   title: string
+  source?: string
   description?: string
   datetime?: string
   isVerified?: boolean
@@ -218,7 +219,7 @@ const ItemRenderer = (props: ItemRendererProps) => {
                       )}
                     </Flex>
                   )}
-                  {item.data.source && (
+                  {item.source && (
                     <Flex
                       flexDir={'row'}
                       gap="2px"
@@ -229,7 +230,7 @@ const ItemRenderer = (props: ItemRendererProps) => {
                         fontSize="10px"
                       />
                       <Typography
-                        text={item.data.source}
+                        text={item.source}
                         fontSize="10px"
                         color="#9E9E9E"
                         style={{
