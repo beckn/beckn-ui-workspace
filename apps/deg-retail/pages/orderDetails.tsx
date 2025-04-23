@@ -327,7 +327,7 @@ const OrderDetails = () => {
             privateKey,
             publicKey,
             payload: {
-              name: `assets/physical/type/${toSnakeCase(data?.type!)}/source/spark/${createdAt}/${generatedOrderId}`,
+              name: `assets/physical/type/${toSnakeCase(data?.type!)}/source/retail/${createdAt}/${generatedOrderId}`,
               stream: toBase64(docDetails)
             }
           })
