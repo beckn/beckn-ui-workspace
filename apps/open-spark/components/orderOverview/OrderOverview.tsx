@@ -38,13 +38,13 @@ const OrderOverview: React.FC<OrderOverviewProps> = ({ items, showPriceAndStatus
               fontSize="17px"
               fontWeight="600"
             />
-            <Typography
+            {/* <Typography
               text={item.capacity}
               fontSize="12px"
               fontWeight="400"
               color="gray.600"
               sx={{ mb: 3 }}
-            />
+            /> */}
 
             <Flex
               mb={3}
