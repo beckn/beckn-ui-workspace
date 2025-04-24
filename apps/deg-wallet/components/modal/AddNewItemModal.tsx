@@ -126,6 +126,9 @@ const AddNewItemModal = (props: DeleteAlertModalProps) => {
                   dataTest={singleInput.dataTest}
                   key={index}
                   {...singleInput}
+                  sx={{
+                    borderBottom: '1px solid #e2e8f0 !important'
+                  }}
                 />
               )
             })}

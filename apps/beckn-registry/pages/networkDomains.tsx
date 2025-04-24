@@ -8,17 +8,35 @@ import { faEye, faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useRouter } from 'next/router'
 import { useDeleteNetworkDomainMutation, useGetNetworkDomainsQuery } from '@services/networkDomainServices'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { setDomains, setPagination, setLoading, setError } from '@store/networkDomain-slice'
 import AlertModal from '@components/AlertModal'
 import { showToast } from '@components/Toast'
+import UnauthorizedAccess from '@components/UnauthorizedAccess'
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query'
+import { RootState } from '@store/index'
 
 const NetworkDomains: React.FC = () => {
   const router = useRouter()
   const dispatch = useDispatch()
+  const { user } = useSelector((state: RootState) => state.auth)
+  const isAdmin = user?.role?.type.toLowerCase() === 'admin'
+  const { pagination } = useSelector((state: RootState) => state.networkDomains)
+  const [currentPage, setCurrentPage] = useState(pagination?.page || 1)
+  const [currentPageSize, setCurrentPageSize] = useState(pagination?.pageSize || 10)
+  const [searchQuery, setSearchQuery] = useState('')
 
-  const { data: domains, isLoading, error: queryError, refetch } = useGetNetworkDomainsQuery({ page: 1, pageSize: 100 })
-  const [deleteNetworkDomain] = useDeleteNetworkDomainMutation()
+  const {
+    data: domains,
+    isLoading,
+    error: queryError,
+    refetch
+  } = useGetNetworkDomainsQuery({
+    page: currentPage,
+    pageSize: currentPageSize,
+    searchQuery: searchQuery.trim() || undefined
+  })
+  const [deleteNetworkDomain, { error: deleteError }] = useDeleteNetworkDomainMutation()
   const [deleteModalState, setDeleteModalState] = useState<{
     isOpen: boolean
     documentId: string | null
@@ -32,14 +50,18 @@ const NetworkDomains: React.FC = () => {
       dispatch(setDomains(domains.results))
       dispatch(
         setPagination({
-          page: domains.pagination.page,
-          pageSize: domains.pagination.pageSize,
-          total: domains.pagination.total
+          page: Number(domains.pagination.page),
+          pageSize: Number(domains.pagination.pageSize),
+          total: Number(domains.pagination.total)
         })
       )
     }
     dispatch(setLoading(isLoading))
     if (queryError) {
+      const error = queryError as FetchBaseQueryError
+      if (error.status === 401) {
+        return
+      }
       dispatch(setError('Failed to fetch network domains'))
     }
   }, [domains, isLoading, queryError, dispatch])
@@ -50,17 +72,23 @@ const NetworkDomains: React.FC = () => {
     { header: en.networkDomains.schemaUrl, accessor: 'schema_url' }
   ]
 
-  const handleSearch = () => {
-    refetch()
+  const handleSearch = (query: string) => {
+    if (query.trim() === '') {
+      refetch()
+    } else {
+      setSearchQuery(query)
+      setCurrentPage(1)
+    }
   }
 
-  // const handlePageChange = (newPage: number) => {
-  //   // dispatch(setPagination({ ...pagination, page: newPage }))
-  // }
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage)
+  }
 
-  // const handlePageSizeChange = (newPageSize: number) => {
-  //   // dispatch(setPagination({ ...pagination, pageSize: newPageSize, page: 1 }))
-  // }
+  const handlePageSizeChange = (newPageSize: number) => {
+    setCurrentPageSize(newPageSize)
+    setCurrentPage(1)
+  }
 
   const handleAddNetworkDomain = () => {
     router.push({ pathname: '/manageNetworkDomain', query: { mode: 'add' } })
@@ -81,6 +109,7 @@ const NetworkDomains: React.FC = () => {
         message: 'Network domain deleted successfully',
         type: 'success'
       })
+      refetch()
     } catch (error) {
       showToast({
         message: 'Failed to delete network domain',
@@ -146,11 +175,13 @@ const NetworkDomains: React.FC = () => {
     }
   ]
 
+  const error = (queryError as FetchBaseQueryError) || (deleteError as FetchBaseQueryError)
+
   if (isLoading) {
     return (
       <div className={styles.networkDomainContainer}>
         <ActionHeaders
-          onPlusClick={handleAddNetworkDomain}
+          onPlusClick={isAdmin ? handleAddNetworkDomain : undefined}
           onBackClick={() => router.back()}
           onHomeClick={() => router.push('/')}
         />
@@ -167,7 +198,7 @@ const NetworkDomains: React.FC = () => {
     return (
       <div className={styles.networkDomainContainer}>
         <ActionHeaders
-          onPlusClick={handleAddNetworkDomain}
+          onPlusClick={isAdmin ? handleAddNetworkDomain : undefined}
           onBackClick={() => router.back()}
           onHomeClick={() => router.push('/')}
         />
@@ -185,10 +216,26 @@ const NetworkDomains: React.FC = () => {
     )
   }
 
+  if (domains?.results.length === 0) {
+    return (
+      <div className={styles.networkDomainContainer}>
+        <ActionHeaders
+          onPlusClick={handleAddNetworkDomain}
+          onBackClick={() => router.back()}
+          onHomeClick={() => router.push('/')}
+        />
+        <h2 className={styles.title}>{en.networkDomains.title}</h2>
+        <div className={styles.emptyContainer}>
+          <p>No network domains found.</p>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className={styles.networkDomainContainer}>
       <ActionHeaders
-        onPlusClick={handleAddNetworkDomain}
+        onPlusClick={isAdmin ? handleAddNetworkDomain : undefined}
         onBackClick={() => router.back()}
         onHomeClick={() => router.push('/')}
       />
@@ -203,11 +250,11 @@ const NetworkDomains: React.FC = () => {
           data={domains?.results as unknown as TableData[]}
           actions={actions}
           pagination={{
-            currentPage: domains?.pagination.page ?? 1,
-            pageSize: domains?.pagination.pageSize ?? 10,
-            total: domains?.pagination.total ?? 0,
-            onPageChange: (page: number) => console.log('Page changed to', page),
-            onPageSizeChange: (pageSize: number) => console.log('Page size changed to', pageSize)
+            currentPage: currentPage,
+            pageSize: currentPageSize,
+            total: pagination?.total || 1,
+            onPageChange: handlePageChange,
+            onPageSizeChange: handlePageSizeChange
           }}
         />
       </div>
@@ -220,6 +267,12 @@ const NetworkDomains: React.FC = () => {
         confirmText="Delete"
         cancelText="Cancel"
       />
+      {error?.status === 401 && (
+        <UnauthorizedAccess
+          onRetry={refetch}
+          closeButton={true}
+        />
+      )}
     </div>
   )
 }

@@ -26,6 +26,7 @@ const SignUp: React.FC = () => {
   })
   const [errors, setErrors] = useState<FormErrors>({})
   const [isLoading, setIsLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
 
   const [register] = useRegisterMutation()
 
@@ -72,6 +73,10 @@ const SignUp: React.FC = () => {
     }
   }
 
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword)
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
@@ -102,10 +107,7 @@ const SignUp: React.FC = () => {
       })
       router.push('/signIn')
     } catch (error: any) {
-      showToast({
-        message: error.message || 'Registration failed! Please try again.',
-        type: 'error'
-      })
+      console.log('Error in sign up', error)
     } finally {
       setIsLoading(false)
     }
@@ -137,14 +139,22 @@ const SignUp: React.FC = () => {
         </div>
 
         <div className={styles.inputContainer}>
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            className={`${styles.input} ${errors.password ? styles.error : ''}`}
-            value={formData.password}
-            onChange={handleChange}
-          />
+          <div className={styles.passwordInputContainer}>
+            <input
+              type={showPassword ? 'text' : 'password'}
+              name="password"
+              placeholder="Password"
+              className={`${styles.passwordInput} ${errors.password ? styles.error : ''}`}
+              value={formData.password}
+              onChange={handleChange}
+            />
+            <span
+              className={styles.eyeIcon}
+              onClick={togglePasswordVisibility}
+            >
+              {showPassword ? '👁️' : '👁️‍🗨️'}
+            </span>
+          </div>
           <div className={styles.errorContainer}>
             {errors.password && <p className={styles.errorMessage}>{errors.password}</p>}
           </div>

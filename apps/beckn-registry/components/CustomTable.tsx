@@ -56,62 +56,64 @@ const CustomTable = <T extends Record<string, string | number | boolean>>({
   }
 
   return (
-    <div className={styles.tableContainer}>
-      <table className={styles.table}>
-        <thead>
-          <tr>
-            {actions && <th></th>}
-            {columns.map((col, index) => (
-              <th key={index}>
-                <div className={styles.headerContainer}>
-                  {col.header}
-                  <div
-                    className={styles.arrowContainer}
-                    onClick={() => requestSort(col.accessor)}
-                  >
-                    <span className={styles.arrow}>{'▲'}</span>
-                    <span className={styles.arrow}>{'▼'}</span>
-                  </div>
-                </div>
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {isLoading ? (
+    <>
+      <div className={styles.tableContainer}>
+        <table className={styles.table}>
+          <thead>
             <tr>
-              <td
-                colSpan={columns.length + (actions ? 1 : 0)}
-                className={styles.loadingCell}
-              >
-                Loading...
-              </td>
+              {actions && <th></th>}
+              {columns.map((col, index) => (
+                <th key={index}>
+                  <div className={styles.headerContainer}>
+                    {col.header}
+                    <div
+                      className={styles.arrowContainer}
+                      onClick={() => requestSort(col.accessor)}
+                    >
+                      <span className={styles.arrow}>{'▲'}</span>
+                      <span className={styles.arrow}>{'▼'}</span>
+                    </div>
+                  </div>
+                </th>
+              ))}
             </tr>
-          ) : (
-            sortedData?.map((row, rowIndex) => (
-              <tr key={rowIndex}>
-                {actions && (
-                  <td>
-                    {actions.map((action, actionIndex) => (
-                      <button
-                        key={actionIndex}
-                        className={styles.iconButton}
-                        title={action.title}
-                        onClick={() => action.onClick(row)}
-                      >
-                        {action.icon}
-                      </button>
-                    ))}
-                  </td>
-                )}
-                {columns.map((col, colIndex) => (
-                  <td key={colIndex}>{row[col.accessor]}</td>
-                ))}
+          </thead>
+          <tbody>
+            {isLoading ? (
+              <tr>
+                <td
+                  colSpan={columns.length + (actions ? 1 : 0)}
+                  className={styles.loadingCell}
+                >
+                  Loading...
+                </td>
               </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+            ) : (
+              sortedData?.map((row, rowIndex) => (
+                <tr key={rowIndex}>
+                  {actions && (
+                    <td>
+                      {actions.map((action, actionIndex) => (
+                        <button
+                          key={actionIndex}
+                          className={styles.iconButton}
+                          title={action.title}
+                          onClick={() => action.onClick(row)}
+                        >
+                          {action.icon}
+                        </button>
+                      ))}
+                    </td>
+                  )}
+                  {columns.map((col, colIndex) => (
+                    <td key={colIndex}>{row[col.accessor]}</td>
+                  ))}
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
       {pagination && (
         <div className={styles.pagination}>
           <button
@@ -139,7 +141,7 @@ const CustomTable = <T extends Record<string, string | number | boolean>>({
           </select>
         </div>
       )}
-    </div>
+    </>
   )
 }
 

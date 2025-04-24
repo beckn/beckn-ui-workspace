@@ -22,14 +22,24 @@ export interface NetworkDomainResponse {
 
 export const networkDomainApi = api.injectEndpoints({
   endpoints: builder => ({
-    getNetworkDomains: builder.query<NetworkDomainResponse, { page: number; pageSize: number }>({
-      query: ({ page, pageSize }) => ({
-        url: '/network-domains',
-        params: {
+    getNetworkDomains: builder.query<NetworkDomainResponse, { page: number; pageSize: number; searchQuery?: string }>({
+      query: ({ page, pageSize, searchQuery }) => {
+        const params: Record<string, string | number> = {
           'pagination[page]': page,
           'pagination[pageSize]': pageSize
         }
-      })
+
+        if (searchQuery) {
+          params['filters[$or][0][name][$contains]'] = searchQuery
+          params['filters[$or][1][description][$contains]'] = searchQuery
+          params['filters[$or][2][schema_url][$contains]'] = searchQuery
+        }
+
+        return {
+          url: '/network-domains',
+          params
+        }
+      }
     }),
     getNetworkDomainById: builder.query<NetworkDomain, string>({
       query: documentId => `/network-domains/${documentId}`

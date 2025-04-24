@@ -1,3 +1,11 @@
+export type PersonalIdentity = {
+  type: string
+  id: string
+  did: string
+  attestations: AttestationData[]
+  createdAt?: string | number
+}
+
 export type Identity = {
   type: string
   id: string
@@ -38,6 +46,7 @@ export interface AttestationData {
 }
 
 export interface ParsedData {
+  personal_identities: PersonalIdentity[]
   identities: Identity[]
   assets: {
     credentials: Credential[]

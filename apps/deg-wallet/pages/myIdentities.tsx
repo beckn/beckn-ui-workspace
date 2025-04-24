@@ -14,7 +14,14 @@ import {
   useGetVerificationMethodsMutation
 } from '@services/walletService'
 import { AuthRootState } from '@store/auth-slice'
-import { extractAuthAndHeader, filterByKeyword, generateRandomCode, toBase64, toSnakeCase } from '@utils/general'
+import {
+  extractAuthAndHeader,
+  extractMobileNumberFromSubjectDid,
+  filterByKeyword,
+  generateRandomCode,
+  toBase64,
+  toSnakeCase
+} from '@utils/general'
 import { feedbackActions } from '@beckn-ui/common'
 import { generateAuthHeader, generateAuthHeaderForDelete } from '@services/cryptoUtilService'
 import { parseDIDData } from '@utils/did'
@@ -22,10 +29,10 @@ import BottomModalScan from '@beckn-ui/common/src/components/BottomModal/BottomM
 import { Box, Divider, Flex } from '@chakra-ui/react'
 import VerifyOTP from '@components/VerifyOTP/VerifyOTP'
 import { ItemMetaData } from '@components/credLayoutRenderer/ItemRenderer'
-import Cookies from 'js-cookie'
 import axios from '@services/axios'
 import { ROLE, ROUTE_TYPE } from '@lib/config'
 import DeleteAlertModal from '@components/modal/DeleteAlertModal'
+import { RootState } from '@store/index'
 
 const documentPatterns: Record<string, { regex: RegExp; image: string }> = {
   aadhar: { regex: /\baadhar\s?(card)?\b/i, image: AadharCard },
@@ -34,12 +41,11 @@ const documentPatterns: Record<string, { regex: RegExp; image: string }> = {
   drivinglicense: { regex: /\bdriving\s?(license|licence)\b/i, image: DocIcon }
 }
 
-const utilities = [
-  { value: 'JVVNL', label: 'Jaipur Vidyut Vitran Nigam Limited' },
-  { value: 'PVVNL', label: 'Purvanchal Vidyut Vitran Nigam Limited' },
-  { value: 'BESCOM', label: 'Bangalore Electricity Supply Limited' },
-  { value: 'DPN', label: 'Department of Power, Nagaland' },
-  { value: 'UPCL', label: 'Uttarakhand Power Corporation Limited' }
+const identityTypes = [
+  { value: 'AADHAAR', label: 'Aadhaar Card' },
+  { value: 'PAN', label: 'PAN Card' },
+  { value: 'PASSPORT', label: 'Passport' },
+  { value: 'DRIVING_LICENSE', label: 'Driving License' }
 ]
 
 const verificationMethodsOptions = [
@@ -67,18 +73,18 @@ const MyIdentities = () => {
 
   // const [countryDetails, setCountryDetails] = useState<Record<string, any>>()
   const [formData, setFormData] = useState<FormProps>({
-    type: 'Electricity',
-    credNumber: '5487774000',
+    type: '',
+    credNumber: '',
     // country: '',
-    verificationMethod: 'mobile_number',
-    utilityCompany: 'BESCOM'
+    verificationMethod: 'email_id'
+    // utilityCompany: ''
   })
   const [formErrors, setFormErrors] = useState<CredFormErrors>({
     type: '',
     credNumber: '',
     // country: '',
-    verificationMethod: '',
-    utilityCompany: ''
+    verificationMethod: ''
+    // utilityCompany: ''
   })
   const [showBpId, setShowBpId] = useState<boolean>(false)
   const [fetchBpId, setFetchBpId] = useState<boolean>(false)
@@ -86,6 +92,7 @@ const MyIdentities = () => {
   const { t } = useLanguage()
   const dispatch = useDispatch()
   const { user, privateKey, publicKey } = useSelector((state: AuthRootState) => state.auth)
+  const { profileDetails } = useSelector((state: RootState) => state.user)
   const [addDocument] = useAddDocumentMutation()
   const [getVerificationMethods] = useGetVerificationMethodsMutation()
   const [getDocuments] = useGetDocumentsMutation()
@@ -122,25 +129,22 @@ const MyIdentities = () => {
     try {
       setIsLoading(true)
       const result = await getDocuments(user?.did!).unwrap()
-      const list: ItemMetaData[] = parseDIDData(result)
-        ['identities'].map((item, index) => {
-          const docType: any = item.type.toLowerCase().replace(/[^a-z]/g, '')
-          const { image } = getDocIcon(docType)
-          return {
-            id: index,
-            title: item.type,
-            description: item.id,
-            isVerified: true,
-            image,
-            datetime:
-              item?.createdAt?.length > 5 && !isNaN(item?.createdAt as number)
-                ? item.createdAt
-                : Math.floor(new Date().getTime() / 1000),
-            data: item
-          }
-        })
-        .filter(val => val)
-        .sort((a, b) => Number(b.data.createdAt) - Number(a.data.createdAt))
+      const list: ItemMetaData[] = parseDIDData(result)['personal_identities'].map((item, index) => {
+        const docType: any = item.type.toLowerCase().replace(/[^a-z]/g, '')
+        const { image } = getDocIcon(docType)
+        return {
+          id: index,
+          title: item.type,
+          description: item.id,
+          isVerified: true,
+          image,
+          datetime:
+            item?.createdAt?.length > 5 && !isNaN(item?.createdAt as number)
+              ? item.createdAt
+              : Math.floor(new Date().getTime() / 1000),
+          data: item
+        }
+      })
       setItems(list)
       setFilteredItems(list)
     } catch (error) {
@@ -187,13 +191,7 @@ const MyIdentities = () => {
     setOpenModal(true)
   }
   const handleCloseModal = () => {
-    setFormData({
-      type: 'Electricity',
-      credNumber: '5487774000',
-      // country: '',
-      verificationMethod: 'mobile_number',
-      utilityCompany: 'BESCOM'
-    })
+    setFormData({ type: '', credNumber: '', verificationMethod: '' })
     setOptions({ country: [], verificationMethods: [] })
     setOpenModal(false)
   }
@@ -208,7 +206,7 @@ const MyIdentities = () => {
       const res = await axios.post(
         `${strapiUrl}${ROUTE_TYPE[ROLE.GENERAL]}/wallet/attest`,
         {
-          wallet_doc_type: 'IDENTITIES',
+          wallet_doc_type: 'PERSONAL_IDENTITIES',
           document_id: did,
           deg_wallet_id: user?.did
         },
@@ -235,8 +233,8 @@ const MyIdentities = () => {
         type: formData.type,
         credNumber: formData.credNumber?.trim(),
         // country: formData.country,
-        verificationMethod: formData.verificationMethod,
-        utilityCompany: formData.utilityCompany
+        verificationMethod: formData.verificationMethod
+        // utilityCompany: formData.utilityCompany
       }
       setIsLoading(true)
 
@@ -251,7 +249,7 @@ const MyIdentities = () => {
         privateKey,
         publicKey,
         payload: {
-          name: `identities/type/${toSnakeCase(data?.type!)}/id/${data.credNumber}/${createdAt}/${generateRandomCode()}`,
+          name: `personal_identities/type/${toSnakeCase(data?.type!)}/id/${data.credNumber}/${createdAt}/${generateRandomCode()}`,
           stream: toBase64(docDetails)
         }
       })
@@ -289,7 +287,6 @@ const MyIdentities = () => {
 
   const handleDeleteItem = useCallback(
     async (didItem: ItemMetaData) => {
-      console.log(didItem)
       try {
         const data = {
           type: 'test',
@@ -319,7 +316,7 @@ const MyIdentities = () => {
             payload,
             authorization
           }
-          console.log(deleteDocPayload)
+
           await deleteDocument(deleteDocPayload).unwrap()
 
           dispatch(
@@ -346,7 +343,7 @@ const MyIdentities = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
-    console.log(name, value)
+
     setFormData((prevFormData: FormProps) => ({
       ...prevFormData,
       [name]: value
@@ -405,47 +402,30 @@ const MyIdentities = () => {
             setIsDeleteModalOpen(true)
           },
           search: {
-            searchInputPlaceholder: 'Search Connections',
+            searchInputPlaceholder: 'Search Identities',
             searchKeyword,
             setSearchKeyword
           },
           modal: {
             schema: {
-              header: 'Add New Connection',
+              header: 'Add New Identity',
               inputs: [
-                // {
-                //   type: 'select',
-                //   name: 'country',
-                //   options: options.country,
-                //   value: formData.country!,
-                //   handleChange: handleSelectChange,
-                //   label: 'Select Country',
-                //   error: formErrors.country
-                // },
-                // {
-                //   type: 'text',
-                //   name: 'type',
-                //   value: formData.type!,
-                //   handleChange: handleInputChange,
-                //   label: 'Connection Type',
-                //   error: formErrors.type
-                // },
+                {
+                  type: 'select',
+                  name: 'type',
+                  options: identityTypes,
+                  value: formData.type!,
+                  handleChange: handleSelectChange,
+                  label: 'Identity Type',
+                  error: formErrors.type
+                },
                 {
                   type: 'text',
                   name: 'credNumber',
                   value: formData.credNumber!,
                   handleChange: handleInputChange,
-                  label: 'Connection Number',
+                  label: 'Identity Number',
                   error: formErrors.credNumber
-                },
-                {
-                  type: 'select',
-                  name: 'utilityCompany',
-                  options: utilities,
-                  value: formData.utilityCompany!,
-                  handleChange: handleSelectChange,
-                  label: t.selectUtilityCompany,
-                  error: formErrors.utilityCompany
                 },
                 {
                   type: 'select',
@@ -502,28 +482,32 @@ const MyIdentities = () => {
           gap="10px"
         >
           <VerifyOTP
-            description="Enter the one-time password (OTP) sent to your registered mobile number."
+            description={`Enter the one-time password (OTP) sent to your registered ${formData.verificationMethod === 'mobile_number' ? 'mobile number' : 'email address'}.`}
             isLoading={isLoading}
             handleVerifyOtp={handleOnSubmit}
           />
           {fetchBpId && showBpId ? (
-            <Flex
-              flexDir={'column'}
-              gap="0.5rem"
-            >
-              <Typography
-                text="Connection Number"
-                fontSize="16px"
-                fontWeight="400"
-              />
-              <Divider />
-              <Typography
-                text={'This Connection belongs to Detroit Public School'}
-                fontSize="12px"
-                fontWeight="400"
-                color="#80807F"
-              />
-            </Flex>
+            profileDetails?.agent?.first_name ? (
+              <Flex
+                flexDir={'column'}
+                gap="0.5rem"
+              >
+                <Typography
+                  text="Identity Number"
+                  fontSize="16px"
+                  fontWeight="400"
+                />
+                <Divider />
+                <Typography
+                  text={`This Identity belongs to ${profileDetails?.agent?.first_name}`}
+                  fontSize="12px"
+                  fontWeight="400"
+                  color="#80807F"
+                />
+              </Flex>
+            ) : (
+              <></>
+            )
           ) : (
             <Box
               display={'grid'}

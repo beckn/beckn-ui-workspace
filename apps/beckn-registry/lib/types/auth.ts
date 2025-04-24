@@ -37,6 +37,8 @@ export interface User {
   emailVerified: boolean
   accountStatus: string
   publishedAt: string
+  updaterUser?: string
+  creatorUser?: string
   role?: {
     id: number
     documentId: string
