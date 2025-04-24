@@ -10,7 +10,7 @@ const Splash = () => {
       height="100vh"
     >
       <Image
-        src="./images/finance_app_logo.svg"
+        src="./images/lend-ease.svg"
         alt="splash-img"
         mb="20px"
       />

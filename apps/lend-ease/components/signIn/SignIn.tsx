@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react'
 import { BecknAuth } from '@beckn-ui/becknified-components'
 import { signInValidateForm } from '@beckn-ui/common'
-import lendEase from '@public/images/finance_app_logo.svg'
+import lendEase from '@public/images/lend-ease.svg'
 import { useLanguage } from '@hooks/useLanguage'
 import { Box } from '@chakra-ui/react'
 import Router from 'next/router'
