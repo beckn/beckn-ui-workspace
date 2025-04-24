@@ -62,13 +62,13 @@ const Navbar: React.FC = () => {
         <Dropdown
           label={en.navbar.admin}
           options={[
-            {
-              name: en.navbar.role,
-              handleClick: () => {
-                router.push('/roles')
-                handleToggle('')
-              }
-            },
+            // {
+            //   name: en.navbar.role,
+            //   handleClick: () => {
+            //     router.push('/roles')
+            //     handleToggle('')
+            //   }
+            // },
             {
               name: en.navbar.user,
               handleClick: () => {
@@ -82,14 +82,14 @@ const Navbar: React.FC = () => {
                 router.push('/networkParticipants')
                 handleToggle('')
               }
-            },
-            {
-              name: en.navbar.userRole,
-              handleClick: () => {
-                router.push('/userRoles')
-                handleToggle('')
-              }
             }
+            // {
+            //   name: en.navbar.userRole,
+            //   handleClick: () => {
+            //     router.push('/userRoles')
+            //     handleToggle('')
+            //   }
+            // }
           ]}
           isActive={activeDropdown === 'Admin'}
           onToggle={() => handleToggle('Admin')}
