@@ -61,7 +61,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
           data-test={testIds.searchButton}
           onClick={handleSubmit}
           cursor={'pointer'}
-          zIndex={9999}
+          zIndex={999}
           backgroundColor={'#ffffff'}
           padding={'0px 3px'}
         >
