@@ -313,8 +313,9 @@ const CheckoutPage = () => {
                     <Image
                       src={singleItem.images?.[0].url}
                       alt={'img'}
-                      width="120px"
+                      width="100px"
                       height="94px"
+                      objectFit={'contain'}
                     />
                     <Box>
                       <Text
