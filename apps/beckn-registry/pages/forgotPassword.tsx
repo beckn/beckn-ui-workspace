@@ -1,14 +1,27 @@
-import React from 'react'
-import styles from '../styles/SignIn.module.css'
+import React, { useState } from 'react'
+import styles from '@styles/SignIn.module.css'
 import { useRouter } from 'next/router'
-import en from '../locales/en'
+import en from '@locales/en'
+
+interface FormErrors {
+  email?: string
+}
+
+interface FormData {
+  email: string
+}
 
 const ForgotPassword: React.FC = () => {
+  const [formData, setFormData] = useState<FormData>({
+    email: ''
+  })
+  const [errors, setErrors] = useState<FormErrors>({})
+  // const [isLoading, setIsLoading] = useState(false)
+
   const router = useRouter()
 
   const handleForgotPassword = (event: React.MouseEvent) => {
     event.preventDefault()
-    console.log('Link clicked')
     router.push('/')
   }
 
@@ -20,11 +33,16 @@ const ForgotPassword: React.FC = () => {
         className={styles.logo}
       />
       <form className={styles.form}>
-        <input
-          type="text"
-          placeholder={en.forgotPassword.userPlaceholder}
-          className={styles.input}
-        />
+        <div className={styles.inputContainer}>
+          <input
+            type="text"
+            placeholder={en.forgotPassword.userPlaceholder}
+            className={styles.input}
+          />
+          <div className={styles.errorContainer}>
+            {errors.email && <p className={styles.errorMessage}>{errors.email}</p>}
+          </div>
+        </div>
         <button
           type="submit"
           className={styles.button}

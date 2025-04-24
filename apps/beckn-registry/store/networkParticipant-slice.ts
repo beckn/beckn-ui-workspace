@@ -53,11 +53,11 @@ const networkParticipantSlice = createSlice({
       .addMatcher(networkParticipantsApi.endpoints.getNetworkParticipants.matchFulfilled, (state, action) => {
         state.loading = false
         state.participants = action.payload.results
-        // state.pagination = {
-        //   page: action.payload.pagination.page,
-        //   pageSize: action.payload.pagination.pageSize,
-        //   total: action.payload.pagination.total
-        // }
+        state.pagination = {
+          page: Number(action.payload.pagination.page),
+          pageSize: Number(action.payload.pagination.pageSize),
+          total: Number(action.payload.pagination.total)
+        }
       })
       .addMatcher(networkParticipantsApi.endpoints.getNetworkParticipants.matchRejected, (state, action) => {
         state.loading = false

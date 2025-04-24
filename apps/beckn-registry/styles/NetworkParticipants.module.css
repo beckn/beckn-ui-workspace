@@ -83,3 +83,11 @@
 .retryButton:hover {
   background-color: #1e3a8a;
 }
+
+.emptyContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+}

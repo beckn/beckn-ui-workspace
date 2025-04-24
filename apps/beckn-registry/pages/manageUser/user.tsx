@@ -5,6 +5,8 @@ import { useRouter } from 'next/router'
 import ActionHeaders from '@components/actionHeaders'
 import { useAddUserMutation, useUpdateUserMutation, useGetUserByIdQuery } from '@services/userServices'
 import { showToast } from '@components/Toast'
+import UnauthorizedAccess from '@components/UnauthorizedAccess'
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query'
 
 interface UserFormData {
   username: string
@@ -24,21 +26,25 @@ interface FormErrors {
   username?: string
   longName?: string
   email?: string
+  changePassword?: string
   phoneNumber?: string
   alternatePhoneNumber?: string
-  changePassword?: string
 }
 
 const ManageUser: React.FC = () => {
   const router = useRouter()
   const { query } = router
-  const userId = query.id ? Number(query.id) : null
+  const userId = query.id ? query.id : null
   const mode = query.mode as 'add' | 'edit' | 'view'
 
-  const { data: userData, isLoading } = useGetUserByIdQuery(userId!, { skip: !userId || mode === 'add' })
+  const {
+    data: userData,
+    isLoading,
+    error: queryError
+  } = useGetUserByIdQuery(userId as string, { skip: !userId || mode === 'add' })
   const [addUser] = useAddUserMutation()
-  const [updateUser] = useUpdateUserMutation()
-  console.log('userData', userData)
+  const [updateUser, { error: updateError }] = useUpdateUserMutation()
+
   const [formData, setFormData] = useState<UserFormData>({
     username: '',
     longName: '',
@@ -74,38 +80,43 @@ const ManageUser: React.FC = () => {
   }, [userData, mode])
 
   const validateField = (name: string, value: string): string | undefined => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    const phoneRegex = /^\+?[1-9]\d{9,14}$/
     const usernameRegex = /^[a-zA-Z0-9_]{3,20}$/
-    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+    const phoneRegex = /^[0-9]{10}$/
 
     switch (name) {
       case 'username':
-        if (!value.trim()) return 'Username is required'
-        if (!usernameRegex.test(value))
-          return 'Username must be 3-20 characters and can only contain letters, numbers, and underscores'
-        return undefined
+        if (!usernameRegex.test(value) && !emailRegex.test(value)) {
+          return 'Username must be either 3-20 characters (letters, numbers, underscore) or a valid email address'
+        }
+        break
       case 'longName':
-        if (!value.trim()) return 'Full name is required'
-        return undefined
+        if (value.length < 3) {
+          return 'Name must be at least 3 characters long'
+        }
+        break
       case 'email':
-        if (!value.trim()) return 'Email is required'
-        if (!emailRegex.test(value)) return 'Please enter a valid email address'
-        return undefined
+        if (!emailRegex.test(value)) {
+          return 'Please enter a valid email address'
+        }
+        break
       case 'phoneNumber':
-        if (!value.trim()) return 'Phone number is required'
-        if (!phoneRegex.test(value)) return 'Please enter a valid phone number'
-        return undefined
+        if (!phoneRegex.test(value)) {
+          return 'Phone number must be 10 digits'
+        }
+        break
       case 'alternatePhoneNumber':
-        if (value && !phoneRegex.test(value)) return 'Please enter a valid phone number'
-        return undefined
+        if (value && !phoneRegex.test(value)) {
+          return 'Alternate phone number must be 10 digits'
+        }
+        break
       case 'changePassword':
-        if (value && !passwordRegex.test(value))
-          return 'Password must be at least 8 characters long and contain at least one letter and one number'
-        return undefined
-      default:
-        return undefined
+        if (value && value.length < 6) {
+          return 'Password must be at least 6 characters long'
+        }
+        break
     }
+    return undefined
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -251,7 +262,7 @@ const ManageUser: React.FC = () => {
           updatedAt: ''
         }
       }
-      await updateUser({ id: Number(query.id), data: userData }).unwrap()
+      await updateUser({ id: query.id as string, data: userData }).unwrap()
       showToast({
         message: 'User updated successfully',
         type: 'success'
@@ -270,8 +281,15 @@ const ManageUser: React.FC = () => {
   }
 
   if (isLoading && mode !== 'add') {
-    return <div>Loading...</div>
+    return (
+      <div className={styles.manageUserContainer + ' ' + styles.loadingContainer}>
+        <div className={styles.spinner}></div>
+        <p>Loading...</p>
+      </div>
+    )
   }
+
+  const error = (queryError as FetchBaseQueryError) || (updateError as FetchBaseQueryError)
 
   return (
     <div className={styles.manageUserContainer}>
@@ -484,7 +502,6 @@ const ManageUser: React.FC = () => {
               <button
                 type="submit"
                 className={styles.doneButton}
-                onClick={handleAdd}
               >
                 Done
               </button>
@@ -494,7 +511,6 @@ const ManageUser: React.FC = () => {
             <button
               type="submit"
               className={styles.doneButton}
-              onClick={handleEdit}
             >
               Done
             </button>
@@ -510,6 +526,12 @@ const ManageUser: React.FC = () => {
           )}
         </div>
       </form>
+      {error?.status === 401 && (
+        <UnauthorizedAccess
+          onRetry={() => router.reload()}
+          closeButton={true}
+        />
+      )}
     </div>
   )
 }
