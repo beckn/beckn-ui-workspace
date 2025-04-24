@@ -296,7 +296,7 @@ const OpenWalletBottomModal: React.FC<OpenWalletBottomModalProps> = ({ modalType
                   mb="20px"
                 >
                   <Typography
-                    text="retail and leasing app would like to fetch the following information from your wallet:"
+                    text="Retail and leasing app would like to fetch the following information from your wallet:"
                     fontSize="12px"
                     fontWeight="400"
                   />
