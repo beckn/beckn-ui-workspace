@@ -30,7 +30,8 @@ const headerNames: PathnameObjectType = {
   '/physicalAssets': 'Physical Assets',
   '/energyAssets': 'Assets',
   '/attestationDetails': 'Attestation Details',
-  '/orderDetails': 'Order Details'
+  '/orderDetails': 'Order Details',
+  '/myIdentities': 'Identities'
 }
 
 const headerFrenchNames: PathnameObjectType = {
@@ -60,7 +61,8 @@ const headerBlackList = [
   '/physicalAssets',
   '/energyAssets',
   '/attestationDetails',
-  '/orderDetails'
+  '/orderDetails',
+  '/myIdentities'
 ]
 
 const bottomHeaderBlackList = ['/orderConfirmation', '/', '/feedback']

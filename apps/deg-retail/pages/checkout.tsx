@@ -151,8 +151,8 @@ const CheckoutPage = () => {
       name: '',
       mobileNumber: '',
       email: '',
-      address: '5890 W Vernor Hwy, Detroit, Michigan',
-      pinCode: '48209'
+      address: '', // 5890 W Vernor Hwy, Detroit, Michigan
+      pinCode: ''
     }
 
     if (user?.agent) {
@@ -162,18 +162,18 @@ const CheckoutPage = () => {
         name: user.agent.first_name.trim(),
         mobileNumber: `${user.agent.agent_profile.phone_number}`,
         email: user.email || '',
-        address: '5890 W Vernor Hwy, Detroit, Michigan',
+        address: user.agent.agent_profile.address || '',
         pinCode: '48209'
       }
     } else {
       // If no user.agent, use default data
       formData = {
-        ...formData,
-        name: 'Lisa',
-        mobileNumber: '9811259151',
-        email: 'lisa.k@gmail.com',
-        address: '5890 W Vernor Hwy, Detroit, Michigan',
-        pinCode: '48209'
+        ...formData
+        // name: 'Lisa',
+        // mobileNumber: '9811259151',
+        // email: 'lisa.k@gmail.com',
+        // address: '5890 W Vernor Hwy, Detroit, Michigan',
+        // pinCode: '48209'
       }
     }
 

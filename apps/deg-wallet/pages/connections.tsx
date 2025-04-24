@@ -546,25 +546,27 @@ const Connections = () => {
             handleVerifyOtp={handleOnSubmit}
           />
           {fetchBpId && showBpId ? (
-            <Flex
-              flexDir={'column'}
-              gap="0.5rem"
-            >
-              <Typography
-                text="Connection Number"
-                fontSize="16px"
-                fontWeight="400"
-              />
-              <Divider />
-              {profileDetails?.agent?.first_name && (
+            profileDetails?.agent?.first_name ? (
+              <Flex
+                flexDir={'column'}
+                gap="0.5rem"
+              >
+                <Typography
+                  text="Connection Number"
+                  fontSize="16px"
+                  fontWeight="400"
+                />
+                <Divider />
                 <Typography
                   text={`This Connection belongs to ${profileDetails?.agent?.first_name}`}
                   fontSize="12px"
                   fontWeight="400"
                   color="#80807F"
                 />
-              )}
-            </Flex>
+              </Flex>
+            ) : (
+              <></>
+            )
           ) : (
             <Box
               display={'grid'}

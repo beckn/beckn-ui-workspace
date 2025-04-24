@@ -2,6 +2,7 @@ import { AttestationData, ParsedData } from '@lib/types/becknDid'
 
 export const parseDIDData = (data: { did: string; attestations?: AttestationData[] }[]): ParsedData => {
   const result: ParsedData = {
+    personal_identities: [],
     identities: [],
     assets: {
       credentials: [],
@@ -17,7 +18,16 @@ export const parseDIDData = (data: { did: string; attestations?: AttestationData
     const normalizedDID = did.replace(/^\/subjects\/users\/phone\/\d+\/documents\//, '')
     const parts = normalizedDID.split('/')
 
-    if (parts[0] === 'identities') {
+    if (parts[0] === 'personal_identities') {
+      // Extract personal_identity type and ID
+      result.personal_identities.push({
+        type: formatType(parts[2]), // Convert to title case
+        id: parts[4],
+        did,
+        attestations: attestations!,
+        createdAt: parts[5]
+      })
+    } else if (parts[0] === 'identities') {
       // Extract identity type and ID
       result.identities.push({
         type: formatType(parts[2]), // Convert to title case
