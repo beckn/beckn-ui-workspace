@@ -52,7 +52,7 @@ const Header = () => {
     <Box>
       {renderTopHeader && (
         <TopHeader
-          appLogo={'/images/finance_app_name.svg'}
+          appLogo={'/images/lend-ease-header.svg'}
           t={key => t[key]}
           headerConstants={{
             blackList: {
