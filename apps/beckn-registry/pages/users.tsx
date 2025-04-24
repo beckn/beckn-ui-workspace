@@ -134,12 +134,9 @@ const Users: React.FC = () => {
   }
 
   const handleSearch = (query: string) => {
-    if (query.trim() === '') {
-      refetch()
-    } else {
-      setSearchQuery(query)
-      setCurrentPage(1)
-    }
+    setSearchQuery(query)
+    setCurrentPage(1)
+    refetch()
   }
 
   const handleDeleteConfirm = async () => {
