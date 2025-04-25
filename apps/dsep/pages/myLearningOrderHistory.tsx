@@ -26,7 +26,7 @@ const myLearningOrderHistory = () => {
       redirect: 'follow'
     } as RequestInit
 
-    fetch(`${apiUrl}/orders?filters[category]=1`, requestOptions)
+    fetch(`${apiUrl}/orders?filters[category]=1&sort[0]=updatedAt:desc`, requestOptions)
       .then(response => response.json())
       .then(result => {
         setCoursesOrders(result.data)
