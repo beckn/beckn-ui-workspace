@@ -26,7 +26,7 @@ const myJobsOrderHistory = () => {
       redirect: 'follow'
     } as RequestInit
 
-    fetch(`${apiUrl}/orders?filters[category]=3`, requestOptions)
+    fetch(`${apiUrl}/orders?filters[category]=3&sort[0]=updatedAt:desc`, requestOptions)
       .then(response => response.json())
       .then(result => {
         setJobsOrders(result.data)

@@ -36,7 +36,7 @@ const myScholarship = () => {
       redirect: 'follow'
     } as RequestInit
 
-    fetch(`${apiUrl}/orders?filters[category]=2`, requestOptions)
+    fetch(`${apiUrl}/orders?filters[category]=2&sort[0]=updatedAt:desc`, requestOptions)
       .then(response => response.json())
       .then(result => {
         setScholarshipOrders(result.data)
