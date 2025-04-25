@@ -42,9 +42,9 @@ const documentPatterns: Record<string, { regex: RegExp; image: string }> = {
 }
 
 const identityTypes = [
-  { value: 'AADHAAR', label: 'Aadhaar Card' },
-  { value: 'PAN', label: 'PAN Card' },
-  { value: 'PASSPORT', label: 'Passport' },
+  // { value: 'AADHAAR', label: 'Aadhaar Card' },
+  // { value: 'PAN', label: 'PAN Card' },
+  // { value: 'PASSPORT', label: 'Passport' },
   { value: 'DRIVING_LICENSE', label: 'Driving License' }
 ]
 
@@ -73,7 +73,7 @@ const MyIdentities = () => {
 
   // const [countryDetails, setCountryDetails] = useState<Record<string, any>>()
   const [formData, setFormData] = useState<FormProps>({
-    type: '',
+    type: 'DRIVING_LICENSE',
     credNumber: '',
     // country: '',
     verificationMethod: 'email_id'
