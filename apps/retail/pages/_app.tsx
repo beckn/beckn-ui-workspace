@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import type { AppProps } from 'next/app'
 
 import Layout from '@components/layout/Layout'
@@ -13,11 +13,16 @@ import '../styles/globals.css'
 import { Provider } from 'react-redux'
 import store from '@store/index'
 import { Garuda } from 'garudaa'
+import { setupAxiosInterceptors } from '@utils/api-utils'
 
+// Initialize Garuda
 Garuda.init({
   projectId: '65c0d663cbe90cafae9185f6',
   host: 'https://garuda-api.becknprotocol.io'
 })
+
+// Set up axios interceptors for cache control
+setupAxiosInterceptors()
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <BecknProvider
