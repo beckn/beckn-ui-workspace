@@ -12,6 +12,7 @@ import ProductCardRenderer from '@components/productCard/product-card-renderer'
 import SearchBar from '../components/header/SearchBar'
 import { useLanguage } from '../hooks/useLanguage'
 import { ParsedItemModel } from '../types/search.types'
+import { fetchWithCacheControl } from '@utils/api-utils'
 import TopSheet from '@components/topSheet/TopSheet'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
 import Filter from '../components/filter/Filter'
@@ -78,8 +79,10 @@ const Search = () => {
 
   const fetchDataForSearch = () => {
     setIsLoading(true)
-    axios
-      .post(`${apiUrl}/client/v2/search`, searchPayload)
+    fetchWithCacheControl(`${apiUrl}/client/v2/search`, {
+      method: 'POST',
+      data: searchPayload
+    })
       .then(res => {
         const parsedSearchItems = transformData(res.data)
         localStorage.setItem('searchItems', JSON.stringify(parsedSearchItems))

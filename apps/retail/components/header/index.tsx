@@ -10,6 +10,8 @@ import Qrcode from '@components/qrCode/Qrcode'
 import BottomModalScan from '@components/BottomModal/BottomModalScan'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import TopSheet from '@components/topSheet/TopSheet'
+import { useDispatch } from 'react-redux'
+import { logoutUser } from '@utils/logout'
 
 type PathnameObjectType = { [key: string]: string }
 
@@ -137,9 +139,8 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
                 w={'20px'}
                 h={'20px'}
                 onClick={() => {
-                  const user = localStorage.getItem('userPhone') as string
-                  localStorage.clear()
-                  localStorage.setItem('userPhone', user)
+                  const dispatch = useDispatch()
+                  logoutUser(dispatch, router)
                   router.push(`/homePage`)
                 }}
                 src="/images/Home_icon.svg"
@@ -178,6 +179,20 @@ const TopHeader: React.FC<TopHeaderProps> = ({ handleMenuClick }) => {
             alt="Order history icon"
           />
           {t['orderHistory']}
+        </Box>
+        <Box
+          onClick={() => {
+            const dispatch = useDispatch()
+            logoutUser(dispatch, router)
+            setMenuModalOpen(false)
+          }}
+          className={styles.top_header_modal}
+        >
+          <Image
+            src="/images/logout.svg"
+            alt="Logout icon"
+          />
+          Logout
         </Box>
       </BottomModal>
     </>
