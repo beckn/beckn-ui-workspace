@@ -66,21 +66,51 @@ const Search = () => {
         searchString: searchKeyword
       }
 
-      const res = await axios.post(`${apiUrl}/search`, searchPayload)
-      dispatch(discoveryActions.addTransactionId({ transactionId: res.data.data[0].context.transaction_id }))
-      const parsedSearchItems = parseSearchlist(res.data.data, type)
-      console.log('Dank inside', parsedSearchItems)
-      dispatch(discoveryActions.addProducts({ products: parsedSearchItems }))
+      const response = await fetch(`${apiUrl}/search`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(searchPayload)
+      })
 
-      // Cache the results with type-specific prefix
-      await setInCache(cacheKey, parsedSearchItems)
+      if (!response.body) throw new Error('No response body')
 
-      setItems(parsedSearchItems)
-      setOriginalItems(parsedSearchItems)
-    } catch (error) {
-      console.error('Search error:', error)
-    } finally {
+      const reader = response.body.getReader()
+      const decoder = new TextDecoder()
+      let buffer = ''
+      let allParsedItems: ParsedItemModel[] = []
+
+      while (true) {
+        const { done, value } = await reader.read()
+        console.log('Dank inside', done, value)
+        if (done) break
+        buffer += decoder.decode(value, { stream: true })
+
+        const lines = buffer.split('\n')
+        buffer = lines.pop()!
+
+        for (const line of lines) {
+          if (line.trim()) {
+            try {
+              const json = JSON.parse(line)
+              const parsedItems = parseSearchlist([json], type)
+              allParsedItems = [...allParsedItems, ...parsedItems]
+              console.log('Dank inside', allParsedItems)
+              setItems([...allParsedItems])
+              setOriginalItems([...allParsedItems])
+              dispatch(discoveryActions.addProducts({ products: parsedItems }))
+            } catch (err) {
+              console.error('Failed to parse line:', line, err)
+            }
+          }
+        }
+      }
+      // dispatch(discoveryActions.addTransactionId({ transactionId: res.data.data[0].context.transaction_id }))
+
+      await setInCache(cacheKey, allParsedItems)
       setIsLoading(false)
+    } catch (error) {
+      setIsLoading(false)
+      console.error('Search error:', error)
     }
   }
 
