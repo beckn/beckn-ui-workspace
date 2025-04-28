@@ -60,6 +60,7 @@ const en: { [key: string]: string } = {
   errorUtilityCompany: 'Utility Company Required',
   logout: 'Logout',
   upload: 'Upload',
+  error: 'Error!',
   errorText: 'Something went wrong',
   success: 'Success!',
   lockDemandSuccess: 'Demand Locked Successfully!',
