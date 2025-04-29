@@ -24,6 +24,7 @@ import { setNavigationType } from '@store/navigation-slice'
 import { AuthRootState } from '@store/auth-slice'
 import { UserRootState } from '@store/user-slice'
 import OpenWalletBottomModal from '@components/modal/OpenWalletBottomModal'
+import { clearCache } from '@utils/indexedDB'
 
 const MyStore = () => {
   const [startDate, setStartDate] = useState<string>(roundToNextHour(new Date()).toISOString())
@@ -70,6 +71,10 @@ const MyStore = () => {
       setModalType('alert')
     }
   }, [user, shouldShowInitialAlert])
+
+  useEffect(() => {
+    clearCache().catch(console.error)
+  }, [])
 
   const navigateToSearchResults = useCallback(
     (searchByRentingCapacity: boolean = false) => {
