@@ -160,216 +160,222 @@ const MyStore = () => {
 
   const homeButtonName = type === 'RENT_AND_HIRE' ? 'Go Back' : 'Go Back Home'
   return (
-    <Box
-      className="myStore-homepage hideScroll"
-      backgroundColor="white"
-      maxH={'calc(100vh - 10px)'}
-      overflowY="scroll"
-      ml={'-20px'}
-      mr={'-20px'}
-    >
-      <Flex
-        justifyContent={'space-between'}
-        alignItems={'center'}
-        mt={'20px'}
-        mb={'15px'}
-        pl={'20px'}
-        pr={'20px'}
-      >
+    <>
+      <Box backgroundColor={'#fff'}>
         <Flex
-          gap={'10px'}
-          justify={'center'}
+          justifyContent={'space-between'}
           alignItems={'center'}
+          p="16px"
+          backgroundColor="#fff"
+          mt="6px"
+          ml="-20px"
+          mr="-20px"
+          position={'fixed'}
+          w="100%"
         >
-          <Image
-            src={profileIcon}
-            alt="profileIcon"
-            onClick={() => router.push('/profile')}
-          />
-
-          {user?.agent && (
-            <Typography
-              fontSize="14px"
-              color={'#3A3A3A'}
-              text={user?.agent?.first_name + ' ' + (user?.agent?.last_name ?? '')}
-              sx={{
-                maxWidth: '180px',
-                noOfLines: 2,
-                overflow: 'hidden',
-                textOverflow: 'ellipsis'
-              }}
+          <Flex
+            gap={'10px'}
+            justify={'center'}
+            alignItems={'center'}
+          >
+            <Image
+              src={profileIcon}
+              alt="profileIcon"
+              onClick={() => router.push('/profile')}
             />
-          )}
-        </Flex>
-        <Box>
-          {user?.deg_wallet ? (
-            <></>
-          ) : (
-            // <Select
-            //   variant="unstyled"
-            //   placeholder={`/subj****${user?.deg_wallet.deg_wallet_id.slice(-4)}`}
-            //   value=""
-            //   style={{
-            //     pointerEvents: 'none'
-            //   }}
-            // />
-            <BecknButton
-              text="Connect Wallet"
-              handleClick={() => handleModalOpen('wallet')}
-              sx={{
-                width: '93px',
-                height: '30px',
-                fontSize: '10px',
-                fontWeight: '400',
-                padding: '10px',
-                borderRadius: '6px',
-                mb: 'unset'
-              }}
-            />
-          )}
-        </Box>
-      </Flex>
-      <HomePageContent
-        blockOrder={['header', 'description', 'customComponent']}
-        headerProps={{
-          name: type === 'RENT_AND_HIRE' ? t.rentAndHireHeading : t.myStoreHeading,
-          description: type === 'RENT_AND_HIRE' ? t.subTextForRenT : t.subText
-        }}
-        searchProps={{
-          searchPlaceholder:
-            type === 'RENT_AND_HIRE'
-              ? 'Search for Batteries, Capacity, Availability'
-              : 'Search for Batteries, Solar panels...',
-          setSearchTerm: setSearchTerm,
-          onSearchIconClick: searchIconClickHandler,
-          onSearchInputEnterPress: navigateToSearchResults
-        }}
-        showFooter={false}
-        footerProps={{
-          poweredByLogoSrc: '',
-          poweredByText: ''
-        }}
-        customComponent={
-          <>
-            <Box
-              p={'10px'}
-              bg="#D1F2D1"
-              borderRadius="6px"
-            >
-              <Box mb={6}>
-                <Text
-                  mb={3}
-                  mt={3}
-                  fontSize="15px"
-                >
-                  Rental Start Date
-                </Text>
-                <Flex align="center">
-                  <CustomDatePicker
-                    selected={new Date(startDate)}
-                    placeholderText="Select Date & Time"
-                    showTimeSelect
-                    minDate={new Date()}
-                    minTime={getMinTimeForStartDate()}
-                    maxTime={new Date(new Date().setHours(23, 0, 0, 0))}
-                    timeIntervals={60}
-                    onChange={handleStartDateChange}
-                    dateFormat="dd-MM-yyyy hh:mm a"
-                    isInvalid={false}
-                  />
-                </Flex>
-                <Text
-                  mb={3}
-                  mt={3}
-                  fontSize="15px"
-                >
-                  Rental End Date
-                </Text>
-                <Flex align="center">
-                  <CustomDatePicker
-                    selected={new Date(endDate)}
-                    placeholderText="Select Date & Time"
-                    showTimeSelect
-                    minDate={getMinDateForEndDate()}
-                    minTime={getMinTimeForEndDate()}
-                    maxTime={
-                      new Date(new Date(startDate).setHours(new Date(startDate).getHours() === 23 ? 47 : 23, 0, 0, 0))
-                    }
-                    timeIntervals={60}
-                    onChange={handleEndDateChange}
-                    dateFormat="dd-MM-yyyy hh:mm a"
-                    isInvalid={false}
-                  />
-                </Flex>
-                <Text
-                  mb={3}
-                  mt={3}
-                  fontSize="15px"
-                >
-                  Battery Capacity
-                </Text>
-                <Box
-                  position="relative"
-                  mb={4}
-                  className="renting-capacity-input"
-                >
-                  <Input
-                    type="number"
-                    name="rentingCapacity"
-                    variant="rounded"
-                    value={rentingCapacity}
-                    handleChange={e => {
-                      const value = parseInt(e.target.value) || 0
-                      if (!isNaN(value) && value >= 0) {
-                        setRentingCapacity(value.toString())
-                      }
-                    }}
-                    sx={{
-                      backgroundColor: '#fff',
-                      '&:focus': {
-                        backgroundColor: '#fff'
-                      }
-                    }}
-                    rightElement={() => (
-                      <Typography
-                        text="Kwh"
-                        fontSize="16px"
-                      />
-                    )}
-                  />
-                </Box>
-              </Box>
 
+            {user?.agent && (
+              <Typography
+                fontSize="14px"
+                color={'#3A3A3A'}
+                text={user?.agent?.first_name + ' ' + (user?.agent?.last_name ?? '')}
+                sx={{
+                  maxWidth: '180px',
+                  noOfLines: 2,
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis'
+                }}
+              />
+            )}
+          </Flex>
+          <Box>
+            {user?.deg_wallet ? (
+              <></>
+            ) : (
+              // <Select
+              //   variant="unstyled"
+              //   placeholder={`/subj****${user?.deg_wallet.deg_wallet_id.slice(-4)}`}
+              //   value=""
+              //   style={{
+              //     pointerEvents: 'none'
+              //   }}
+              // />
               <BecknButton
-                text="Search"
-                disabled={rentingCapacity === '' || rentingCapacity === '0'}
-                handleClick={() => navigateToSearchResults(true)}
+                text="Connect Wallet"
+                handleClick={() => handleModalOpen('wallet')}
+                sx={{
+                  width: '93px',
+                  height: '30px',
+                  fontSize: '10px',
+                  fontWeight: '400',
+                  padding: '10px',
+                  borderRadius: '6px',
+                  mb: 'unset'
+                }}
               />
-            </Box>
-          </>
-        }
-      />
-      {type === 'RENT_AND_HIRE' && (
-        <Flex
-          bg="#e4ffe4"
-          padding={'0 10px'}
-        >
-          <ShadowCardButton
-            prefixIcon={
-              <img
-                src={'/images/pentagon.svg'}
-                alt={'orderHistory'}
-              />
-            }
-            text={'My Rentals'}
-            textStyle="start"
-            postIcon={<MdOutlineKeyboardArrowRight />}
-            handleClick={() => router.push(`/myRental`)}
-            sx={buttonStyles}
-          />
+            )}
+          </Box>
         </Flex>
-      )}
-      {/* <Box
+      </Box>
+      <Box
+        className="myStore-homepage hideScroll"
+        maxH={'calc(100vh - 84px)'}
+        overflowY="scroll"
+        ml={'-20px'}
+        mr={'-20px'}
+        mt="60px"
+      >
+        <HomePageContent
+          blockOrder={['header', 'description', 'customComponent']}
+          headerProps={{
+            name: type === 'RENT_AND_HIRE' ? t.rentAndHireHeading : t.myStoreHeading,
+            description: type === 'RENT_AND_HIRE' ? t.subTextForRenT : t.subText
+          }}
+          searchProps={{
+            searchPlaceholder:
+              type === 'RENT_AND_HIRE'
+                ? 'Search for Batteries, Capacity, Availability'
+                : 'Search for Batteries, Solar panels...',
+            setSearchTerm: setSearchTerm,
+            onSearchIconClick: searchIconClickHandler,
+            onSearchInputEnterPress: navigateToSearchResults
+          }}
+          showFooter={false}
+          footerProps={{
+            poweredByLogoSrc: '',
+            poweredByText: ''
+          }}
+          customComponent={
+            <>
+              <Box
+                p={'10px'}
+                bg="#D1F2D1"
+                borderRadius="6px"
+              >
+                <Box mb={6}>
+                  <Text
+                    mb={3}
+                    mt={3}
+                    fontSize="15px"
+                  >
+                    Rental Start Date
+                  </Text>
+                  <Flex align="center">
+                    <CustomDatePicker
+                      selected={new Date(startDate)}
+                      placeholderText="Select Date & Time"
+                      showTimeSelect
+                      minDate={new Date()}
+                      minTime={getMinTimeForStartDate()}
+                      maxTime={new Date(new Date().setHours(23, 0, 0, 0))}
+                      timeIntervals={60}
+                      onChange={handleStartDateChange}
+                      dateFormat="dd-MM-yyyy hh:mm a"
+                      isInvalid={false}
+                    />
+                  </Flex>
+                  <Text
+                    mb={3}
+                    mt={3}
+                    fontSize="15px"
+                  >
+                    Rental End Date
+                  </Text>
+                  <Flex align="center">
+                    <CustomDatePicker
+                      selected={new Date(endDate)}
+                      placeholderText="Select Date & Time"
+                      showTimeSelect
+                      minDate={getMinDateForEndDate()}
+                      minTime={getMinTimeForEndDate()}
+                      maxTime={
+                        new Date(new Date(startDate).setHours(new Date(startDate).getHours() === 23 ? 47 : 23, 0, 0, 0))
+                      }
+                      timeIntervals={60}
+                      onChange={handleEndDateChange}
+                      dateFormat="dd-MM-yyyy hh:mm a"
+                      isInvalid={false}
+                    />
+                  </Flex>
+                  <Text
+                    mb={3}
+                    mt={3}
+                    fontSize="15px"
+                  >
+                    Battery Capacity
+                  </Text>
+                  <Box
+                    position="relative"
+                    mb={4}
+                    className="renting-capacity-input"
+                  >
+                    <Input
+                      type="number"
+                      name="rentingCapacity"
+                      variant="rounded"
+                      value={rentingCapacity}
+                      handleChange={e => {
+                        const value = parseInt(e.target.value) || 0
+                        if (!isNaN(value) && value >= 0) {
+                          setRentingCapacity(value.toString())
+                        }
+                      }}
+                      sx={{
+                        backgroundColor: '#fff',
+                        '&:focus': {
+                          backgroundColor: '#fff'
+                        }
+                      }}
+                      rightElement={() => (
+                        <Typography
+                          text="Kwh"
+                          fontSize="16px"
+                        />
+                      )}
+                    />
+                  </Box>
+                </Box>
+
+                <BecknButton
+                  text="Search"
+                  disabled={rentingCapacity === '' || rentingCapacity === '0'}
+                  handleClick={() => navigateToSearchResults(true)}
+                />
+              </Box>
+            </>
+          }
+        />
+        {type === 'RENT_AND_HIRE' && (
+          <Flex
+            bg="#e4ffe4"
+            padding={'0 10px'}
+          >
+            <ShadowCardButton
+              prefixIcon={
+                <img
+                  src={'/images/pentagon.svg'}
+                  alt={'orderHistory'}
+                />
+              }
+              text={'My Rentals'}
+              textStyle="start"
+              postIcon={<MdOutlineKeyboardArrowRight />}
+              handleClick={() => router.push(`/myRental`)}
+              sx={buttonStyles}
+            />
+          </Flex>
+        )}
+        {/* <Box
         position={'absolute'}
         bottom="calc(0px + 10px)"
         w={'calc(100% - 40px)'}
@@ -386,12 +392,13 @@ const MyStore = () => {
           }}
         />
       </Box> */}
-      <OpenWalletBottomModal
-        modalType={modalType}
-        setModalType={setModalType}
-        onClose={handleModalClose}
-      />
-    </Box>
+        <OpenWalletBottomModal
+          modalType={modalType}
+          setModalType={setModalType}
+          onClose={handleModalClose}
+        />
+      </Box>
+    </>
   )
 }
 
