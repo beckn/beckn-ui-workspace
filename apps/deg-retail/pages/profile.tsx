@@ -35,7 +35,7 @@ const ProfilePage = () => {
     customerId: '',
     address: ''
   })
-  const [formErrors, setFormErrors] = useState<FormErrors>({
+  const [formErrors, setFormErrors] = useState<FormErrors & { [key: string]: string }>({
     name: '',
     customerId: '',
     address: ''
@@ -62,7 +62,7 @@ const ProfilePage = () => {
       [name]: value
     }
 
-    const errors = profileValidateForm(updatedFormData) as any
+    const errors = profileValidateForm(updatedFormData) as Record<string, string>
     setFormErrors(prevErrors => ({
       ...prevErrors,
       [name]: t[`${errors[name]}`] || ''
@@ -84,7 +84,7 @@ const ProfilePage = () => {
         const result = response.data.agent
 
         console.log(result)
-        const { first_name, last_name, address, agent_profile } = result
+        const { first_name, agent_profile } = result
         setFormData({
           ...formData,
           name: `${first_name}`,
@@ -102,13 +102,16 @@ const ProfilePage = () => {
     if (formData.name === '' || formData.address === '') {
       return
     }
-    const errors = profileValidateForm(formData) as any
+    const errors = profileValidateForm(formData) as Record<string, string>
     setFormErrors(prevErrors => ({
       ...prevErrors,
-      ...Object.keys(errors).reduce((acc: any, key) => {
-        acc[key] = t[`${errors[key]}`] || ''
-        return acc
-      }, {} as FormErrors)
+      ...Object.keys(errors).reduce(
+        (acc, key) => {
+          ;(acc as Record<string, string>)[key] = t[`${errors[key]}`] || ''
+          return acc
+        },
+        { ...prevErrors } as Record<string, string>
+      )
     }))
 
     const data = {
@@ -247,7 +250,7 @@ const ProfilePage = () => {
               handleClick={async () => {
                 try {
                   // Clear IndexedDB first
-                  // await clearCache()
+                  await clearCache()
                   // Then dispatch logout action
                   dispatch(logout())
                 } catch (error) {
