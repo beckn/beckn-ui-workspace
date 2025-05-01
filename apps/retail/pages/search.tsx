@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import axios from '@services/axios'
+// import axios from '@services/axios'
 import { useDispatch } from 'react-redux'
 import { useRouter } from 'next/router'
 
@@ -25,41 +25,64 @@ const Search = () => {
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
-  const fetchDataForSearch = () => {
+  const fetchDataForSearch = async () => {
     if (!searchKeyword) return
     setIsLoading(true)
 
     const searchPayload = {
-      context: {
-        domain: DOMAIN
-      },
+      context: { domain: DOMAIN },
       searchString: searchKeyword,
-      category: {
-        categoryCode: router.query.category || 'Retail'
-      },
+      category: { categoryCode: router.query.category || 'Retail' },
       fulfillment: {
         type: 'Delivery',
-        stops: [
-          {
-            location: '28.4594965,77.0266383'
-          }
-        ]
+        stops: [{ location: '28.4594965,77.0266383' }]
       }
     }
 
-    axios
-      .post(`${apiUrl}/search`, searchPayload)
-      .then(res => {
-        dispatch(discoveryActions.addTransactionId({ transactionId: res.data.data[0].context.transaction_id }))
-        const parsedSearchItems = parseSearchlist(res.data.data)
-        dispatch(discoveryActions.addProducts({ products: parsedSearchItems }))
-        setItems(parsedSearchItems)
-        setOriginalItems(parsedSearchItems)
-        setIsLoading(false)
+    try {
+      const response = await fetch(`${apiUrl}/search`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(searchPayload)
       })
-      .catch(e => {
-        setIsLoading(false)
-      })
+
+      if (!response.body) throw new Error('No response body')
+
+      const reader = response.body.getReader()
+      const decoder = new TextDecoder()
+      let buffer = ''
+      let allParsedItems: ParsedItemModel[] = []
+
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) break
+        buffer += decoder.decode(value, { stream: true })
+
+        const lines = buffer.split('\n')
+        buffer = lines.pop()!
+
+        for (const line of lines) {
+          if (line.trim()) {
+            try {
+              const json = JSON.parse(line)
+              const parsedItems = parseSearchlist([json])
+              allParsedItems = [...allParsedItems, ...parsedItems]
+              dispatch(discoveryActions.addProducts({ products: parsedItems }))
+              setItems([...allParsedItems])
+              setOriginalItems([...allParsedItems])
+
+              // dispatch(discoveryActions.addTransactionId({ transactionId: res.data.data[0].context.transaction_id }))
+            } catch (err) {
+              console.error('Failed to parse line:', line, err)
+            }
+          }
+        }
+      }
+
+      setIsLoading(false)
+    } catch (e) {
+      setIsLoading(false)
+    }
   }
 
   useEffect(() => {

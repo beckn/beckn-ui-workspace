@@ -28,7 +28,6 @@ export const parseSearchlist = (data: SearchResponseModel[], type?: 'RENT_AND_HI
 
         provider.items.forEach(item => {
           let itemData = item
-          console.log('type:', item)
 
           const fulfillmentStart: any = item.fulfillments?.find(f => f.type === 'RENTAL_START' && f.state)
           const fulfillmentEnd: any = item.fulfillments?.find(f => f.type === 'RENTAL_END' && f.state)
