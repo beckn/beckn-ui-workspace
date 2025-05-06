@@ -397,8 +397,8 @@ const LockDemand = () => {
                               overflow: 'hidden',
                               textOverflow: 'ellipsis',
                               whiteSpace: 'normal',
-                              textAlign: 'center',
-                              width: '70px'
+                              textAlign: 'center'
+                              // width: '70px'
                             }}
                           />
                         </Td>

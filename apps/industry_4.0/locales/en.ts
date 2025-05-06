@@ -102,7 +102,8 @@ const en: { [key: string]: string } = {
   success: 'Success!',
   updatedSuccessfully: 'Order Updated Successfully!',
   error: 'Error!',
-  unabletoTrack: 'Unable to get the track url',
+  unabletoTrack: 'Tracking details are unavailable. Please try again later or contact support.',
+
   profileIcon: 'My Profile',
   logoutIcon: 'Logout',
   enterFlatDetails: 'Enter Flat, House no, Building , etc',

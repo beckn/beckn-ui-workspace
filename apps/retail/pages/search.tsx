@@ -29,29 +29,55 @@ const Search = () => {
     if (!searchKeyword) return
     setIsLoading(true)
 
-    const searchPayload = {
-      context: {
-        domain: DOMAIN
-      },
-      searchString: searchKeyword,
-      category: {
-        categoryCode: router.query.category || 'Retail'
-      },
-      fulfillment: {
-        type: 'Delivery',
-        stops: [
-          {
-            location: '28.4594965,77.0266383'
-          }
-        ]
-      }
-    }
+    // Split search keyword by comma and trim each keyword
+    const searchKeywords = searchKeyword.split(',').map(keyword => keyword.trim())
 
-    axios
-      .post(`${apiUrl}/search`, searchPayload)
-      .then(res => {
-        dispatch(discoveryActions.addTransactionId({ transactionId: res.data.data[0].context.transaction_id }))
-        const parsedSearchItems = parseSearchlist(res.data.data)
+    // Create search payloads with different combinations
+    const searchPromises = searchKeywords.map((keyword, index) => {
+      const searchString = keyword
+
+      const searchPayload = {
+        context: {
+          domain: DOMAIN
+        },
+        searchString: searchString,
+        category: {
+          categoryCode: router.query.category || 'Retail'
+        },
+        fulfillment: {
+          type: 'Delivery',
+          stops: [
+            {
+              location: '28.4594965,77.0266383'
+            }
+          ]
+        }
+      }
+
+      return axios.post(`${apiUrl}/search`, searchPayload)
+    })
+
+    Promise.all(searchPromises)
+      .then(responses => {
+        // Process each response and extract items
+        const allResults = responses
+          .filter(res => res?.data?.data?.[0]?.message?.providers)
+          .map(res => res.data.data[0]) // Keep the original response structure
+
+        console.log('allResults', allResults)
+
+        // Get transaction ID from first valid response
+        const firstValidResponse = responses.find(res => res?.data?.data?.[0]?.context?.transaction_id)
+        if (firstValidResponse) {
+          dispatch(
+            discoveryActions.addTransactionId({
+              transactionId: firstValidResponse.data.data[0].context.transaction_id
+            })
+          )
+        }
+
+        // Parse and combine all search items
+        const parsedSearchItems = parseSearchlist(allResults)
         dispatch(discoveryActions.addProducts({ products: parsedSearchItems }))
         setItems(parsedSearchItems)
         setOriginalItems(parsedSearchItems)

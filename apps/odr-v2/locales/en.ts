@@ -149,7 +149,7 @@ const en: { [key: string]: string } = {
   profileUpdateSuccess: 'Profile updated successfully!',
   error: 'Error!',
   fixError: 'Please fix the errors in the form before submitting.',
-  unabletoTrack: 'Unable to get the track url',
+  unabletoTrack: 'Tracking details are unavailable. Please try again later or contact support.',
   errorCountry: 'Country is Required',
   errorState: 'State is Required',
   errorCity: 'City is Required',
