@@ -142,13 +142,13 @@ const OrderDetails = () => {
       image: '/images/trackOrder.svg',
       text: 'Track Order',
       onClick: () => {
-        if (trackingUrl) window.open(trackingUrl, '_blank')
-        else
-          dispatch(
-            feedbackActions.setToastData({
-              toastData: { message: t.error, display: true, type: 'error', description: t.unabletoTrack }
-            })
-          )
+        // if (trackingUrl) window.open(trackingUrl, '_blank')
+        // else
+        dispatch(
+          feedbackActions.setToastData({
+            toastData: { message: 'Warning', display: true, type: 'warning', description: t.unabletoTrack }
+          })
+        )
       }
     },
     {

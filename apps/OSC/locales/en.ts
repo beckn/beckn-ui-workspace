@@ -171,7 +171,8 @@ const en: { [key: string]: string } = {
   merchantTakingTo: 'Merchant is taking too long',
   orderMistake: 'Ordered by mistake',
   iHaveChange: 'I’ve changed my mind',
-  unabletoTrack: 'Unable to get the track url',
+  unabletoTrack: 'Tracking details are unavailable. Please try again later or contact support.',
+
   cancelOrder: 'Cancel Order',
   callCustomer: 'Call Customer Service',
   emailCustomer: 'Email Customer Service',
