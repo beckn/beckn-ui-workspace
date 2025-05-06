@@ -88,7 +88,7 @@ const SelectDeliveryModal: React.FC<SelectDeliveryModalProps> = props => {
         <BecknButton
           children={t.searchItems}
           handleClick={() => {
-            const selectedItems = props.selectedValues.join(',').replace(',', ' ')
+            const selectedItems = props.selectedValues.join(',')
             router.push(`/search?searchTerm=${selectedItems}&category=${convertTourismCategoryToRetail(category)}`)
           }}
           disabled={false}
