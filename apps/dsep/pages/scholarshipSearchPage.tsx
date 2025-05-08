@@ -8,12 +8,15 @@ import { ParsedItemModel } from '../types/search.types'
 import { getParsedSearchlist } from '../utilities/search-utils'
 import axios from '../services/axios'
 import { testIds } from '@shared/dataTestIds'
+import { useRouter } from 'next/router'
 
 const ScholarshipCard = () => {
+  const router = useRouter()
   const [isLoading, setIsLoading] = useState(true)
   const [scholarShips, setScholarships] = useState<ParsedItemModel[]>([])
   const [isError, setIsError] = useState(false)
   const dsepScholarshipUrl = process.env.NEXT_PUBLIC_API_URL
+  const [searchKeyword, setSearchKeyword] = useState(router.query?.searchTerm || '')
 
   const { t } = useLanguage()
 
@@ -23,7 +26,7 @@ const ScholarshipCard = () => {
         context: {
           domain: 'dsep:scholarships'
         },
-        searchString: ''
+        searchString: searchKeyword
       })
       const searchData = getParsedSearchlist(scholarshipSearchResponse.data.data)
       setScholarships(searchData)
