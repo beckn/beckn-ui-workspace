@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import axios from '@services/axios'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useRouter } from 'next/router'
 
 import { parseSearchlist, SearchAndDiscover } from '@beckn-ui/common'
@@ -10,27 +10,38 @@ import { discoveryActions } from '@beckn-ui/common/src/store/discovery-slice'
 import { DOMAIN } from '@lib/config'
 import { Product } from '@beckn-ui/becknified-components'
 import { testIds } from '@shared/dataTestIds'
+import { RootState } from '@store/index'
+import { SearchTermModel, setItems, setOriginalItems, setSearchTerm } from '@beckn-ui/common/src/store/search-slice'
 
 const Search = () => {
-  const [items, setItems] = useState<ParsedItemModel[]>([])
-  const [originalItems, setOriginalItems] = useState<ParsedItemModel[]>([])
   const router = useRouter()
-  const [searchKeyword, setSearchKeyword] = useState<string>((router.query?.searchTerm as string) || '')
+  const dispatch = useDispatch()
+  const { t } = useLanguage()
+  const { items, originalItems, searchTerm } = useSelector((state: RootState) => state.search)
 
   const [isLoading, setIsLoading] = useState(false)
   const [isFilterOpen, setIsFilterOpen] = useState(false)
 
-  const dispatch = useDispatch()
-  const { t } = useLanguage()
-
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
+  const previousSearchTermRef = useRef((searchTerm as SearchTermModel).searchKeyword)
 
   const fetchDataForSearch = () => {
-    if (!searchKeyword) return
+    if (!(searchTerm as SearchTermModel).searchKeyword) return
+
     setIsLoading(true)
+    if (
+      previousSearchTermRef.current === (searchTerm as SearchTermModel).searchKeyword &&
+      originalItems &&
+      originalItems.length > 0
+    ) {
+      dispatch(setItems(originalItems))
+      dispatch(setOriginalItems(originalItems))
+      setIsLoading(false)
+      return
+    }
 
     // Split search keyword by comma and trim each keyword
-    const searchKeywords = searchKeyword.split(',').map(keyword => keyword.trim())
+    const searchKeywords = (searchTerm as SearchTermModel).searchKeyword.split(',').map(keyword => keyword.trim())
 
     // Create search payloads with different combinations
     const searchPromises = searchKeywords.map((keyword, index) => {
@@ -42,7 +53,7 @@ const Search = () => {
         },
         searchString: searchString,
         category: {
-          categoryCode: router.query.category || 'Retail'
+          categoryCode: (searchTerm as SearchTermModel).category || 'Retail'
         },
         fulfillment: {
           type: 'Delivery',
@@ -79,30 +90,33 @@ const Search = () => {
         // Parse and combine all search items
         const parsedSearchItems = parseSearchlist(allResults)
         dispatch(discoveryActions.addProducts({ products: parsedSearchItems }))
-        setItems(parsedSearchItems)
-        setOriginalItems(parsedSearchItems)
+        dispatch(setItems(parsedSearchItems))
+        dispatch(setOriginalItems(parsedSearchItems))
         setIsLoading(false)
       })
       .catch(e => {
         setIsLoading(false)
       })
+      .finally(() => {
+        previousSearchTermRef.current = (searchTerm as SearchTermModel).searchKeyword
+      })
   }
 
   useEffect(() => {
-    if (searchKeyword) {
+    if ((searchTerm as SearchTermModel).searchKeyword) {
       localStorage.removeItem('searchItems')
-      localStorage.setItem('optionTags', JSON.stringify({ name: searchKeyword }))
+      localStorage.setItem('optionTags', JSON.stringify({ name: (searchTerm as SearchTermModel).searchKeyword }))
       window.dispatchEvent(new Event('storage-optiontags'))
       fetchDataForSearch()
     }
-  }, [searchKeyword])
+  }, [searchTerm])
 
   useEffect(() => {
     if (localStorage) {
       const cachedSearchResults = localStorage.getItem('searchItems')
       if (cachedSearchResults) {
         const parsedCachedResults = JSON.parse(cachedSearchResults)
-        setItems(parsedCachedResults)
+        dispatch(setItems(parsedCachedResults))
       }
     }
   }, [])
@@ -116,7 +130,7 @@ const Search = () => {
   }
 
   const handleResetFilter = () => {
-    setItems(originalItems)
+    dispatch(setItems(originalItems))
   }
 
   const handleApplyFilter = (sortBy: string) => {
@@ -132,7 +146,7 @@ const Search = () => {
       sortedItemsCopy.sort((a, b) => parseFloat(b.item.rating!) - parseFloat(a.item.rating!))
     }
 
-    setItems(sortedItemsCopy)
+    dispatch(setItems(sortedItemsCopy))
     setIsFilterOpen(false)
   }
 
@@ -143,7 +157,7 @@ const Search = () => {
       pathname: '/product',
       query: {
         id: item.id,
-        search: searchKeyword
+        search: (searchTerm as SearchTermModel).searchKeyword
       }
     })
     localStorage.setItem('selectCardHeaderText', JSON.stringify(product.name))
@@ -153,8 +167,8 @@ const Search = () => {
     <SearchAndDiscover
       items={items}
       searchProps={{
-        searchKeyword: searchKeyword as string,
-        setSearchKeyword,
+        searchKeyword: (searchTerm as SearchTermModel).searchKeyword,
+        setSearchKeyword: (term: string) => dispatch(setSearchTerm({ searchKeyword: term })),
         fetchDataOnSearch: fetchDataForSearch
       }}
       filterProps={{

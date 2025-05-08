@@ -24,3 +24,6 @@ export * from './geoMapLocationSearch-slice'
 
 export { default as settingBoxReducer } from './settingBox-slice'
 export * from './settingBox-slice'
+
+export { default as searchReducer } from './search-slice'
+export * from './search-slice'
