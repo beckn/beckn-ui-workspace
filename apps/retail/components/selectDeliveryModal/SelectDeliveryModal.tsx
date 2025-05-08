@@ -7,6 +7,8 @@ import BottomModalScan from '@components/BottomModal/BottomModalScan'
 import Typography from '@beckn-ui/molecules/src/components/typography/typography'
 import { ImportOrderModel } from '@beckn-ui/common/lib/types'
 import { testIds } from '@shared/dataTestIds'
+import { setSearchTerm } from '@beckn-ui/common'
+import { useDispatch } from 'react-redux'
 
 interface SelectDeliveryModalProps {
   backOnImportedOrder: (newValue: boolean) => void
@@ -29,6 +31,7 @@ const convertTourismCategoryToRetail = (category: string) => {
 
 const SelectDeliveryModal: React.FC<SelectDeliveryModalProps> = props => {
   const router = useRouter()
+  const dispatch = useDispatch()
   const { isOpen, onOpen, onClose } = useDisclosure({ defaultIsOpen: true })
   const { t } = useLanguage()
 
@@ -89,7 +92,10 @@ const SelectDeliveryModal: React.FC<SelectDeliveryModalProps> = props => {
           children={t.searchItems}
           handleClick={() => {
             const selectedItems = props.selectedValues.join(',')
-            router.push(`/search?searchTerm=${selectedItems}&category=${convertTourismCategoryToRetail(category)}`)
+            dispatch(
+              setSearchTerm({ searchKeyword: selectedItems, category: convertTourismCategoryToRetail(category) })
+            )
+            router.push(`/search`)
           }}
           disabled={false}
           data-test={testIds.chat_gpt_address_button}

@@ -113,7 +113,7 @@ const SearchAndDiscover: React.FC<SearchAndDiscoverProps> = ({
                   localStorage.removeItem('optionTags')
                   setLocalStorage('optionTags', { name: text })
                   window.dispatchEvent(new Event('storage-optiontags'))
-                  fetchDataOnSearch()
+                  // fetchDataOnSearch()
                 }}
               />
             )}

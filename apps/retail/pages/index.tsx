@@ -8,11 +8,15 @@ import OrderDetails from '@components/orderDetails/ImportedOrderDetails'
 import ShoppingList from '@components/shoppingList/ShoppingList'
 import SelectDeliveryModal from '@components/selectDeliveryModal/SelectDeliveryModal'
 import { HomePageContent, ImportOrderModel, ImportOrderShoppingList, TopSheet, useGeolocation } from '@beckn-ui/common'
+import { useDispatch, useSelector } from 'react-redux'
+import { RootState } from '@store/index'
+import { resetSearch, SearchTermModel, setSearchTerm } from '@beckn-ui/common/src/store/search-slice'
 
 const HomePage = () => {
   const { t } = useLanguage()
+  const dispatch = useDispatch()
+  const { searchTerm } = useSelector((state: RootState) => state.search)
 
-  const [searchTerm, setSearchTerm] = useState<string>('')
   const [importedOrder, setImportedOrder] = useState<boolean>(false)
   const [viewOrderDetails, setViewOrderDetails] = useState<boolean>(false)
   const [chatGtpList, setChatGtpList] = useState<boolean>(false)
@@ -36,20 +40,21 @@ const HomePage = () => {
   const router = useRouter()
 
   useEffect(() => {
+    dispatch(resetSearch())
     if (localStorage) {
       localStorage.clear()
     }
   }, [])
 
   const navigateToSearchResults = () => {
-    if (searchTerm) {
-      localStorage.setItem('optionTags', JSON.stringify({ name: searchTerm }))
-      router.push(`/search?searchTerm=${searchTerm}`)
+    if ((searchTerm as SearchTermModel).searchKeyword) {
+      localStorage.setItem('optionTags', JSON.stringify({ name: (searchTerm as SearchTermModel).searchKeyword }))
+      router.push(`/search`)
     }
   }
 
   const searchIconClickHandler = (e: React.MouseEvent) => {
-    if (searchTerm) {
+    if ((searchTerm as SearchTermModel).searchKeyword) {
       navigateToSearchResults()
     }
     e.preventDefault()
@@ -172,7 +177,7 @@ const HomePage = () => {
         }}
         searchProps={{
           searchPlaceholder: t.searchPlaceholder,
-          setSearchTerm: setSearchTerm,
+          setSearchTerm: (term: string) => dispatch(setSearchTerm({ searchKeyword: term })),
           onSearchIconClick: searchIconClickHandler,
           onSearchInputEnterPress: navigateToSearchResults
         }}
