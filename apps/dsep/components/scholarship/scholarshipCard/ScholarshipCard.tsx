@@ -14,6 +14,7 @@ interface ScholarshipCardProps {
 }
 
 const ScholarshipCard: FC<ScholarshipCardProps> = props => {
+  console.log(props)
   const { t } = useLanguage()
   return (
     <DetailCard>
@@ -62,7 +63,7 @@ const ScholarshipCard: FC<ScholarshipCardProps> = props => {
           <Typography text={props.scholarshipStatus} />
         </Flex>
       </Flex>
-      {props.scholarshipStatus === 'Approved' ? (
+      {props.scholarshipStatus === 'Approved' || props.scholarshipStatus === null ? (
         <>
           <Divider
             mt={'15px'}
