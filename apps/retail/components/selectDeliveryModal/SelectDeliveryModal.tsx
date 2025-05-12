@@ -36,6 +36,7 @@ const SelectDeliveryModal: React.FC<SelectDeliveryModalProps> = props => {
   const { t } = useLanguage()
 
   const travelerAddress = props.importedOrderObject.billing.address
+  const areaCode = props.importedOrderObject.fulfillments?.[0]?.stops?.[0]?.location?.area_code
 
   const { category = 'Tourism' } = props
 
@@ -69,7 +70,7 @@ const SelectDeliveryModal: React.FC<SelectDeliveryModalProps> = props => {
               size="md"
               value="1"
             >
-              <span style={{ fontSize: '16px' }}>{props.addressOfTheEndLocation}</span>
+              <span style={{ fontSize: '16px', fontWeight: '400' }}>{props.addressOfTheEndLocation}</span>
             </Radio>
             <Radio
               _checked={{
@@ -82,7 +83,7 @@ const SelectDeliveryModal: React.FC<SelectDeliveryModalProps> = props => {
               <Box style={{ fontSize: '15px' }}>
                 <Typography
                   variant="subTitleRegular"
-                  text={travelerAddress}
+                  text={`${travelerAddress} ${areaCode}`}
                 />
               </Box>
             </Radio>
