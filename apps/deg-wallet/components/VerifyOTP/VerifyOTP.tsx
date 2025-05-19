@@ -66,12 +66,12 @@ const VerifyOTP = (props: VerifyOTPProps) => {
           fontSize="12px"
           color="#80807F"
           style={{
-            marginTop: '16px',
+            marginTop: '40px',
             textAlign: 'left'
           }}
         />
         <Box
-          mt={'25px'}
+          mt={'30px'}
           alignSelf="center"
         >
           <Flex
@@ -104,7 +104,7 @@ const VerifyOTP = (props: VerifyOTPProps) => {
           </Flex>
           <Flex
             justifyContent={'end'}
-            marginTop={'1.5rem'}
+            marginTop={'30px'}
           >
             <Typography
               text={'Didn’t receive OTP?'}

@@ -1,7 +1,7 @@
 type PathnameObjectType = Record<string, string>
 
 // -------------------------------- Top Header constants --------------------------------
-const appLogoBlackList = ['/signIn', '/signUp']
+const appLogoBlackList = ['/signIn', '/signUp', '/OTPVerification']
 const homeIconBlackList = ['/', '/signIn', '/', '/profile', '/signUp', '/OTPVerification', '/paymentMode', '/withdraw']
 const menuIconWhiteList = ['/', '/profile', '/financialAssets']
 const topHeaderBlackList: string[] = []

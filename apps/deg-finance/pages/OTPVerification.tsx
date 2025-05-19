@@ -83,16 +83,12 @@ const OTPVerification = () => {
       marginTop={{ base: '10px', md: '60px', lg: '20px' }}
     >
       <Typography
-        text="One Time Password"
-        fontSize="20px"
-        fontWeight="500"
-      />
-      <Typography
-        text={'Please enter the 6 digit OTP received from your utility provider'}
+        text={'Enter the one-time password we just sent to your mobile number.'}
         fontSize="12px"
         color="#5F5F5F"
         style={{
-          marginTop: '16px'
+          marginTop: '40px',
+          textAlign: 'left'
         }}
       />
       <Flex
@@ -100,7 +96,7 @@ const OTPVerification = () => {
         justifyContent={'space-between'}
         height={'calc(100vh - 190px)'}
       >
-        <Box mt={'25px'}>
+        <Box mt={'30px'}>
           {OTP.map((digit, index) => (
             <Input
               key={index}
@@ -122,8 +118,8 @@ const OTPVerification = () => {
             />
           ))}
           <Flex
-            justifyContent={'center'}
-            marginTop={'1rem'}
+            justifyContent={'end'}
+            marginTop={'30px'}
           >
             <Typography text={'Didn’t receive OTP?'} />
             <Typography
@@ -138,7 +134,7 @@ const OTPVerification = () => {
           </Flex>
         </Box>
         <BecknButton
-          text="Submit"
+          text="Verify"
           handleClick={handleVerifyOtp}
           // sx={{ marginTop: '60px' }}
           dataTest="otp_number"
