@@ -4,6 +4,7 @@ import { Loader, Typography } from '@beckn-ui/molecules'
 import { Box, Text, Flex, Image } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import pendingIcon from '../public/images/pendingStatus.svg'
+import completedIcon from '../public/images/TrackIcon.svg'
 import { useDispatch } from 'react-redux'
 import { formatTimestamp } from '@beckn-ui/common/src/utils'
 import { useRouter } from 'next/router'
@@ -14,6 +15,11 @@ import { testIds } from '@shared/dataTestIds'
 
 const orderStatusMap: Record<string, string> = {
   'In Review': 'Pending'
+}
+
+const orderStatusIconMap: Record<string, string> = {
+  'ORDER COMPLETED': completedIcon,
+  'ORDER RECEIVED': pendingIcon
 }
 
 const OrderHistory = () => {
@@ -156,11 +162,10 @@ const OrderHistory = () => {
 
                     <Flex>
                       <Image
-                        src={pendingIcon}
+                        src={orderStatusIconMap[order.attributes.delivery_status] || pendingIcon}
                         paddingRight={'6px'}
                         data-test={testIds.orderHistory_pendingIcon}
                       />
-                      <Text>{orderStatusMap[order.attributes.delivery_status]}</Text>
                     </Flex>
                   </Flex>
                 </Flex>

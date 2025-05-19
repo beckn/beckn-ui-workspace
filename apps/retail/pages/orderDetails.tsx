@@ -197,13 +197,13 @@ const OrderDetails = () => {
       image: '/images/trackOrder.svg',
       text: 'Track Order',
       onClick: () => {
-        // if (trackingUrl) window.open(trackingUrl, '_blank')
-        // else
-        dispatch(
-          feedbackActions.setToastData({
-            toastData: { message: 'Warning', display: true, type: 'warning', description: t.unabletoTrack }
-          })
-        )
+        if (trackingUrl) window.open(trackingUrl, '_blank')
+        else
+          dispatch(
+            feedbackActions.setToastData({
+              toastData: { message: 'Warning', display: true, type: 'warning', description: t.unabletoTrack }
+            })
+          )
       }
     },
     {
@@ -778,7 +778,7 @@ const OrderDetails = () => {
                   </Box>
                   <Flex mt="10px">
                     <Typography
-                      fontSize="12px"
+                      fontSize="10px"
                       variant="subTitleSemibold"
                       // dataTest={testIds.orderDetailspage_productQuantity}
                       text={'Quantity :'}
@@ -801,6 +801,7 @@ const OrderDetails = () => {
                   <Typography
                     fontSize="10px"
                     variant="subTitleSemibold"
+                    sx={{ width: '70px' }}
                     text={`${t.placedAt} :`}
                   />
                   <Typography
