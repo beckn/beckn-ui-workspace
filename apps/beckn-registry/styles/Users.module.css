@@ -4,6 +4,7 @@
   border-radius: 8px;
   overflow-x: auto;
   height: calc(100vh - 64px);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
 .searchInput {
@@ -16,19 +17,25 @@
 
 .searchButton {
   padding: 10px 20px;
-  background-color: #3056d3;
+  background: linear-gradient(135deg, #4f7cff 0%, #6b8eff 100%);
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(79, 124, 255, 0.3);
 }
 
 .searchButton:hover {
-  background-color: #0056b3;
+  background: linear-gradient(135deg, #3d6bff 0%, #5a7dff 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(79, 124, 255, 0.4);
 }
 
 .tableContainer {
   overflow-x: auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .table {
@@ -36,10 +43,14 @@
 }
 
 .title {
-  color: #000;
+  color: #2d3748;
   margin: 20px 0;
   font-size: 24px;
   font-weight: 600;
+  background: linear-gradient(135deg, #4f7cff 0%, #6b8eff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .loadingContainer {
@@ -49,15 +60,19 @@
   justify-content: center;
   padding: 40px;
   gap: 20px;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border-radius: 12px;
+  margin: 20px 0;
 }
 
 .spinner {
   width: 40px;
   height: 40px;
-  border: 4px solid #f3f3f3;
-  border-top: 4px solid #3056d3;
+  border: 4px solid #e2e8f0;
+  border-top: 4px solid #4f7cff;
   border-radius: 50%;
   animation: spin 1s linear infinite;
+  box-shadow: 0 2px 8px rgba(79, 124, 255, 0.2);
 }
 
 @keyframes spin {
@@ -77,20 +92,29 @@
   padding: 40px;
   gap: 20px;
   color: #dc3545;
+  background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+  border-radius: 12px;
+  margin: 20px 0;
+  border: 1px solid #fecaca;
 }
 
 .retryButton {
-  padding: 8px 16px;
-  background-color: #3056d3;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #4f7cff 0%, #6b8eff 100%);
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
   font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(79, 124, 255, 0.3);
 }
 
 .retryButton:hover {
-  background-color: #1e3a8a;
+  background: linear-gradient(135deg, #3d6bff 0%, #5a7dff 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(79, 124, 255, 0.4);
 }
 
 .emptyContainer {
@@ -99,4 +123,8 @@
   align-items: center;
   justify-content: center;
   padding: 40px;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border-radius: 12px;
+  margin: 20px 0;
+  color: #64748b;
 }

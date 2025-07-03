@@ -176,7 +176,7 @@ const SignUp: React.FC = () => {
 
         <button
           type="submit"
-          className={styles.button}
+          className={`${styles.button} ${isLoading ? styles.loading : ''}`}
           disabled={isLoading}
         >
           {isLoading ? 'Creating account...' : 'Register'}

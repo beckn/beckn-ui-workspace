@@ -19,10 +19,18 @@
   border: none;
   cursor: pointer;
   font-size: 24px;
-  color: #3056d3;
+  color: #4f7cff;
   position: relative;
   opacity: 1;
-  transition: opacity 0.2s ease;
+  transition: all 0.3s ease;
+  padding: 8px;
+  border-radius: 6px;
+}
+
+.actionButton:hover {
+  background-color: #f1f5f9;
+  transform: scale(1.1);
+  color: #3d6bff;
 }
 
 .actionButton:disabled {
@@ -37,15 +45,16 @@
 .actionButton:hover::after {
   content: attr(title);
   position: absolute;
-  top: 30px;
+  top: 35px;
   left: 50%;
   transform: translateX(-50%);
-  background-color: #333;
+  background: linear-gradient(135deg, #4f7cff 0%, #6b8eff 100%);
   color: #fff;
-  padding: 5px 10px;
-  border-radius: 4px;
+  padding: 6px 12px;
+  border-radius: 6px;
   white-space: nowrap;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 12px rgba(79, 124, 255, 0.3);
   z-index: 1;
-  font-size: 10px;
+  font-size: 11px;
+  font-weight: 500;
 }
