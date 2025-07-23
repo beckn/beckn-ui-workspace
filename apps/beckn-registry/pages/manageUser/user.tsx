@@ -12,7 +12,7 @@ interface UserFormData {
   username: string
   longName: string
   email: string
-  changePassword: string
+  // changePassword: string
   phoneNumber: string
   alternatePhoneNumber: string
   updaterUser: string
@@ -26,7 +26,7 @@ interface FormErrors {
   username?: string
   longName?: string
   email?: string
-  changePassword?: string
+  // changePassword?: string
   phoneNumber?: string
   alternatePhoneNumber?: string
 }
@@ -49,7 +49,7 @@ const ManageUser: React.FC = () => {
     username: '',
     longName: '',
     email: '',
-    changePassword: '',
+    // changePassword: '',
     phoneNumber: '',
     alternatePhoneNumber: '',
     updaterUser: '',
@@ -71,10 +71,10 @@ const ManageUser: React.FC = () => {
         alternatePhoneNumber: userData.alternatePhoneNumber,
         updaterUser: userData.updaterUser || '',
         creatorUser: userData.creatorUser || '',
-        updatedAt: userData.updatedAt,
-        createdAt: userData.createdAt,
-        admin: userData.role.type === 'admin',
-        changePassword: ''
+        updatedAt: userData.updatedAt ? new Date(userData.updatedAt).toISOString().split('T')[0] : '',
+        createdAt: userData.createdAt ? new Date(userData.createdAt).toISOString().split('T')[0] : '',
+        admin: userData.role.type === 'admin'
+        // changePassword: ''
       })
     }
   }, [userData, mode])
@@ -110,11 +110,11 @@ const ManageUser: React.FC = () => {
           return 'Alternate phone number must be 10 digits'
         }
         break
-      case 'changePassword':
-        if (value && value.length < 6) {
-          return 'Password must be at least 6 characters long'
-        }
-        break
+      // case 'changePassword':
+      //   if (value && value.length < 6) {
+      //     return 'Password must be at least 6 characters long'
+      //   }
+      //   break
     }
     return undefined
   }
@@ -224,7 +224,7 @@ const ManageUser: React.FC = () => {
         username: '',
         longName: '',
         email: '',
-        changePassword: '',
+        // changePassword: '',
         phoneNumber: '',
         alternatePhoneNumber: '',
         updaterUser: '',
@@ -362,7 +362,7 @@ const ManageUser: React.FC = () => {
               </div>
             </div>
           </div>
-          <div className={styles.row}>
+          {/* <div className={styles.row}>
             <label>{en.manageUser.changePassword}</label>
             <div className={styles.inputContainer}>
               <input
@@ -377,9 +377,7 @@ const ManageUser: React.FC = () => {
                 {errors.changePassword && <span className={styles.errorMessage}>{errors.changePassword}</span>}
               </div>
             </div>
-          </div>
-        </div>
-        <div className={styles.row}>
+          </div> */}
           <div className={styles.row}>
             <label>{en.manageUser.phoneNumber}</label>
             <div className={styles.inputContainer}>
@@ -397,6 +395,8 @@ const ManageUser: React.FC = () => {
               </div>
             </div>
           </div>
+        </div>
+        <div className={styles.row}>
           <div className={styles.row}>
             <label>{en.manageUser.alternatePhoneNumber}</label>
             <div className={styles.inputContainer}>
@@ -414,6 +414,16 @@ const ManageUser: React.FC = () => {
                 )}
               </div>
             </div>
+          </div>
+          <div className={styles.row}>
+            <label>{en.manageUser.admin}</label>
+            <input
+              type="checkbox"
+              name="admin"
+              checked={formData.admin}
+              onChange={handleChange}
+              disabled={mode === 'view'}
+            />
           </div>
         </div>
         {mode === 'view' && (
@@ -477,18 +487,6 @@ const ManageUser: React.FC = () => {
             </div>
           </div>
         )}
-        <div className={styles.row}>
-          <div className={styles.row}>
-            <label>{en.manageUser.admin}</label>
-            <input
-              type="checkbox"
-              name="admin"
-              checked={formData.admin}
-              onChange={handleChange}
-              disabled={mode === 'view'}
-            />
-          </div>
-        </div>
         <div className={styles.submitButtonContainer}>
           {mode === 'add' && (
             <div className={styles.row}>

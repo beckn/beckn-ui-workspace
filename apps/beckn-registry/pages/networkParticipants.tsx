@@ -68,11 +68,13 @@ const NetworkParticipants = () => {
           total: participants.pagination.total
         })
       )
+      console.log('participants', participants)
 
       setTableData(
         participants?.results.map(participant => ({
           subscriber_id: participant.subscriber_id,
           subscriber_url: participant.subscriber_url,
+          name: participant.name,
           unique_key_id: participant.unique_key_id,
           type: participant.type,
           domain: participant.domain,
@@ -212,6 +214,7 @@ const NetworkParticipants = () => {
   }
 
   const handleViewParticipant = (participant: APINetworkParticipant) => {
+    console.log('participant', participant)
     router.push({
       pathname: '/manageNetworkParticipants',
       query: { mode: 'view', documentId: participant.name }
@@ -259,22 +262,6 @@ const NetworkParticipants = () => {
     )
   }
 
-  if (tableData.length === 0) {
-    return (
-      <div className={styles.networkParticipantsContainer}>
-        <ActionHeaders
-          onPlusClick={handleAddParticipant}
-          onBackClick={() => router.back()}
-          onHomeClick={() => router.push('/')}
-        />
-        <h2 className={styles.title}>{en.networkParticipants.title}</h2>
-        <div className={styles.emptyContainer}>
-          <p>No network participants found.</p>
-        </div>
-      </div>
-    )
-  }
-
   return (
     <div className={styles.networkParticipantsContainer}>
       <ActionHeaders
@@ -287,25 +274,33 @@ const NetworkParticipants = () => {
         placeholder={en.networkParticipants.searchPlaceholder}
         onSearch={handleSearch}
       />
-      <CustomTable
-        columns={columns}
-        data={tableData}
-        actions={actions}
-        pagination={{
-          currentPage: currentPage,
-          pageSize: currentPageSize,
-          total: pagination?.total || 1,
-          onPageChange: handlePageChange,
-          onPageSizeChange: handlePageSizeChange
-        }}
-      />
-      <AlertModal
-        isOpen={deleteModalState.isOpen}
-        title="Delete Network Participant"
-        message="Are you sure you want to delete this network participant? This action cannot be undone."
-        onConfirm={handleDeleteConfirm}
-        onClose={handleDeleteCancel}
-      />
+      {participants?.results.length === 0 ? (
+        <div className={styles.emptyContainer}>
+          <p>No network participants found.</p>
+        </div>
+      ) : (
+        <>
+          <CustomTable
+            columns={columns}
+            data={tableData}
+            actions={actions}
+            pagination={{
+              currentPage: currentPage,
+              pageSize: currentPageSize,
+              total: pagination?.total || 1,
+              onPageChange: handlePageChange,
+              onPageSizeChange: handlePageSizeChange
+            }}
+          />
+          <AlertModal
+            isOpen={deleteModalState.isOpen}
+            title="Delete Network Participant"
+            message="Are you sure you want to delete this network participant? This action cannot be undone."
+            onConfirm={handleDeleteConfirm}
+            onClose={handleDeleteCancel}
+          />
+        </>
+      )}
       {error?.status === 401 && (
         <UnauthorizedAccess
           onRetry={refetch}

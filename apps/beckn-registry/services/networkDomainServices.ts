@@ -6,8 +6,8 @@ export interface NetworkDomain {
   schema_url: string
   updater_user?: string
   creator_user?: string
-  updated_at?: string
-  created_at?: string
+  updatedAt?: string
+  createdAt?: string
 }
 
 export interface NetworkDomainResponse {

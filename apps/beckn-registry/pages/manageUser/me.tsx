@@ -21,7 +21,7 @@ interface FormErrors {
   email?: string
   phoneNumber?: string
   alternatePhoneNumber?: string
-  changePassword?: string
+  // changePassword?: string
 }
 
 const ManageMe: React.FC = () => {
@@ -32,7 +32,7 @@ const ManageMe: React.FC = () => {
     username: '',
     longName: '',
     email: '',
-    changePassword: '',
+    // changePassword: '',
     phoneNumber: '',
     alternatePhoneNumber: '',
     admin: false
@@ -60,32 +60,32 @@ const ManageMe: React.FC = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     const phoneRegex = /^\+?[1-9]\d{9,14}$/
     const usernameRegex = /^[a-zA-Z0-9_]{3,20}$/
-    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/
+    // const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/
 
     switch (name) {
       case 'username':
-        if (!value.trim()) return 'Username is required'
+        if (!value?.trim()) return 'Username is required'
         if (!usernameRegex.test(value))
           return 'Username must be 3-20 characters and can only contain letters, numbers, and underscores'
         return undefined
       case 'longName':
-        if (!value.trim()) return 'Full name is required'
+        if (!value?.trim()) return 'Full name is required'
         return undefined
       case 'email':
-        if (!value.trim()) return 'Email is required'
+        if (!value?.trim()) return 'Email is required'
         if (!emailRegex.test(value)) return 'Please enter a valid email address'
         return undefined
       case 'phoneNumber':
-        if (!value.trim()) return 'Phone number is required'
+        if (!value?.trim()) return 'Phone number is required'
         if (!phoneRegex.test(value)) return 'Please enter a valid phone number'
         return undefined
       case 'alternatePhoneNumber':
         if (value && !phoneRegex.test(value)) return 'Please enter a valid phone number'
         return undefined
-      case 'changePassword':
-        if (value && !passwordRegex.test(value))
-          return 'Password must be at least 8 characters long and contain at least one letter and one number'
-        return undefined
+      // case 'changePassword':
+      //   if (value && !passwordRegex.test(value))
+      //     return 'Password must be at least 8 characters long and contain at least one letter and one number'
+      //   return undefined
       default:
         return undefined
     }
@@ -279,7 +279,7 @@ const ManageMe: React.FC = () => {
                 </div>
               </div>
             </div>
-            <div className={styles.row}>
+            {/* <div className={styles.row}>
               <label>{en.manageUser.changePassword}</label>
               <div className={styles.inputContainer}>
                 <input
@@ -293,7 +293,7 @@ const ManageMe: React.FC = () => {
                   {errors.changePassword && <span className={styles.errorMessage}>{errors.changePassword}</span>}
                 </div>
               </div>
-            </div>
+            </div> */}
             <div className={styles.row}>
               <label>{en.manageUser.alternatePhoneNumber}</label>
               <div className={styles.inputContainer}>
