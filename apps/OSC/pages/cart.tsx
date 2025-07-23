@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useLanguage } from '@hooks/useLanguage'
-import { Cart as BecknCart } from '@beckn-ui/becknified-components'
+import { Cart as BecknCart, CurrencyType } from '@beckn-ui/becknified-components'
 import { Box } from '@chakra-ui/react'
 import { DOMAIN } from '@lib/config'
 import {
@@ -39,8 +39,18 @@ const Cart = () => {
 
   useEffect(() => {
     if (selectResponse && selectResponse.length > 0) {
-      const qoute = selectResponse[0].message.order.quote
-      setQuote(qoute)
+      const finalQuote = { value: 0, currency: 'INR' }
+      selectResponse.forEach(response => {
+        const qoute = response.message.order.quote
+        if (Number(qoute.price.value)) {
+          finalQuote.value = finalQuote.value + Number(qoute.price.value)
+          finalQuote.currency = qoute.price.currency
+        }
+      })
+      setQuote({
+        price: { value: finalQuote.value.toString(), currency: finalQuote.currency as CurrencyType },
+        breakup: []
+      })
     }
   }, [selectResponse])
 
@@ -67,8 +77,8 @@ const Cart = () => {
             quantity: singleItem.quantity,
             name: singleItem.name,
             image: singleItem.images?.[0].url,
-            price: Number(quote?.price.value),
-            symbol: quote?.price.currency,
+            price: Number(singleItem?.price.value),
+            symbol: singleItem?.price.currency,
             totalAmountText: t.totalAmount,
             handleIncrement: id => {
               const selectedItem = productList.find(singleItem => singleItem.item.id === id)

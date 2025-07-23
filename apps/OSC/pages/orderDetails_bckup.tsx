@@ -16,83 +16,50 @@ import {
   useDisclosure,
   useTheme
 } from '@chakra-ui/react'
-import { Accordion, BottomModal, LoaderWithMessage, Typography } from '@beckn-ui/molecules'
+import { Accordion, BottomModal, Typography } from '@beckn-ui/molecules'
 import { v4 as uuidv4 } from 'uuid'
 import { useDispatch, useSelector } from 'react-redux'
 import ViewMoreOrderModal from '@components/orderDetailComponents/ViewMoreOrder'
-import {
-  DetailCard,
-  ItemDetailProps,
-  OrderStatusProgress,
-  OrderStatusProgressProps
-} from '@beckn-ui/becknified-components'
+import { DetailCard, OrderStatusProgress, OrderStatusProgressProps } from '@beckn-ui/becknified-components'
 import useResponsive from '@beckn-ui/becknified-components/src/hooks/useResponsive'
-import {
-  createPaymentBreakdownMap,
-  getItemWiseBreakUp,
-  getTotalPriceWithCurrency,
-  isEmpty
-} from '@beckn-ui/common/src/utils'
 import { useLanguage } from '@hooks/useLanguage'
-import { getPayloadForOrderStatus, formatTimestamp } from '@beckn-ui/common/src/utils'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
-import BottomModalScan from '@components/BottomModal/BottomModalScan'
+import {
+  ConfirmResponseModel,
+  UIState,
+  DataState,
+  ProcessState,
+  StatusResponseModel,
+  SupportModel,
+  StatusKey,
+  statusMap,
+  OrderStatus
+} from '@beckn-ui/common/lib/types'
+import LoaderWithMessage from '@components/loader/LoaderWithMessage'
 import CallphoneIcon from '../public/images/CallphoneIcon.svg'
 import locationIcon from '../public/images/locationIcon.svg'
 import nameIcon from '../public/images/nameIcon.svg'
 import ShippingBlock from '@components/orderDetailComponents/Shipping'
-import PaymentDetails from '@beckn-ui/becknified-components/src/components/checkout/payment-details'
-import {
-  ConfirmResponseModel,
-  DataState,
-  Item,
-  OrderStatus,
-  ProcessState,
-  QuantityDetails,
-  StatusKey,
-  statusMap,
-  StatusResponseModel,
-  UIState
-} from '@beckn-ui/common/lib/types'
-import { statusActions } from '@beckn-ui/common/src/store/status-slice'
-import { OrdersRootState } from '@beckn-ui/common/src/store/order-slice'
-import { feedbackActions } from '@beckn-ui/common/src/store/ui-feedback-slice'
 import { DOMAIN } from '@lib/config'
+import PaymentDetails from '@beckn-ui/becknified-components/src/components/checkout/payment-details'
+import BottomModalScan from '../components/BottomModal/BottomModalScan'
+import {
+  createPaymentBreakdownMap,
+  feedbackActions,
+  formatTimestamp,
+  getPayloadForOrderStatus,
+  getPaymentBreakDown,
+  getTotalPriceWithCurrency,
+  isEmpty,
+  OrdersRootState,
+  statusActions
+} from '@beckn-ui/common'
 import { testIds } from '@shared/dataTestIds'
-import successIcon from '@public/images/order_complete.svg'
-import DetailsCard from '@beckn-ui/becknified-components/src/components/checkout/details-card'
-import ItemDetails from '@beckn-ui/becknified-components/src/components/checkout/checkout-item-details'
 
 const DELIVERED = 'Delivered'
 const CANCELLED = 'CANCELLED'
 
-interface MenuItem {
-  image: string
-  text: string | React.ReactNode
-  onClick: () => void
-}
-
-// Constants
-const ORDER_CANCEL_REASONS = [
-  { id: 1, reason: 'Merchant is taking too long' },
-  { id: 2, reason: 'Ordered by mistake' },
-  { id: 3, reason: 'I’ve changed my mind' },
-  { id: 4, reason: 'Other' }
-]
-
-type ParentStatus = 'ACTIVE' | 'COMPLETE' | 'CANCELLED'
-
-const parentStatusMap: Record<
-  ParentStatus,
-  { borderColor: string; bgColor: string; color: string; icon: string | undefined; label: string }
-> = {
-  ACTIVE: { borderColor: '#F0D402', bgColor: '#FFF9CC', color: '#807000', icon: undefined, label: 'In Progress' },
-  COMPLETE: { borderColor: '#C0F7E2', bgColor: '#D2F9EA', color: '#11704C', icon: successIcon, label: 'Completed' },
-  CANCELLED: { borderColor: '#E93324', bgColor: '#FFD2D2', color: '#E93324', icon: undefined, label: 'Cancelled' }
-}
-
 const OrderDetails = () => {
-  // State
   const [uiState, setUiState] = useState<UIState>({
     isProceedDisabled: true,
     isLoading: true,
@@ -101,6 +68,8 @@ const OrderDetails = () => {
     isCancelMenuModalOpen: false,
     isLoadingForCancel: false
   })
+
+  const theme = useTheme()
 
   const [data, setData] = useState<DataState>({
     confirmData: null,
@@ -115,21 +84,17 @@ const OrderDetails = () => {
     radioValue: '',
     orderCancelled: false
   })
-
-  const [orderStatusMap, setOrderStatusMap] = useState<OrderStatus[]>([])
-  const [isError, setIsError] = useState(false)
-
-  // Hooks
-  const theme = useTheme()
   const router = useRouter()
   const { t } = useLanguage()
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const [orderStatusMap, setOrderStatusMap] = useState<OrderStatus[]>([])
+  const [isError, setIsError] = useState(false)
   const { isDesktop } = useResponsive()
   const orderMetaData = useSelector((state: OrdersRootState) => state.orders.selectedOrderDetails)
   const dispatch = useDispatch()
+  const [currentStatusLabel, setCurrentStatusLabel] = useState('')
 
-  // Effects
   useEffect(() => {
     const storedOrderStatusMap = JSON.parse(localStorage.getItem('orderStatusMap') || '[]')
     setOrderStatusMap(storedOrderStatusMap)
@@ -138,6 +103,7 @@ const OrderDetails = () => {
   useEffect(() => {
     if (orderStatusMap.length > 0) {
       localStorage.setItem('orderStatusMap', JSON.stringify(orderStatusMap))
+      setCurrentStatusLabel(orderStatusMap[orderStatusMap.length - 1].label)
     }
   }, [orderStatusMap])
 
@@ -161,7 +127,7 @@ const OrderDetails = () => {
 
           return {
             label: statusKey ? statusMap[statusKey as StatusKey] : '',
-            statusTime: order?.fulfillments?.[0]?.state?.updated_at || status?.context?.timestamp
+            statusTime: status?.message?.order?.fulfillments[0]?.state?.updated_at || status?.context?.timestamp
           }
         })
         .filter(status => status.label)
@@ -170,6 +136,13 @@ const OrderDetails = () => {
       setOrderStatusMap(prevState => [...prevState, ...newData.filter(status => !labelSet.has(status.label))])
     }
   }, [data.statusData])
+
+  const orderCancelReason = [
+    { id: 1, reason: t.merchantTakingTo },
+    { id: 2, reason: t.orderMistake },
+    { id: 3, reason: t.iHaveChange },
+    { id: 4, reason: t.other }
+  ]
 
   useEffect(() => {
     if (localStorage && localStorage.getItem('confirmResponse')) {
@@ -180,6 +153,105 @@ const OrderDetails = () => {
       }))
     }
   }, [])
+
+  // Define functions to handle menu modal opening and closing
+  const handleMenuModalClose = () => {
+    setUiState(prevState => ({
+      ...prevState,
+      isMenuModalOpen: false
+    }))
+  }
+
+  const handleCancelMenuModalClose = () => {
+    setUiState(prevState => ({
+      ...prevState,
+      isCancelMenuModalOpen: false
+    }))
+  }
+
+  const handleCancelMenuModalOpen = () => {
+    setUiState(prevState => ({
+      ...prevState,
+      isCancelMenuModalOpen: true,
+      isMenuModalOpen: false
+    }))
+  }
+
+  const handleEmailCustomer = (email: string) => {
+    const subject = 'Regarding Your Order'
+    const body = 'Dear Customer,\n\n'
+
+    const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+
+    window.open(mailtoLink, '_blank')
+    setUiState(prevState => ({
+      ...prevState,
+      isMenuModalOpen: false
+    }))
+  }
+  const handleCallCustomer = (phoneNumber: string) => {
+    // Use tel: protocol to initiate the phone call
+    const telLink = `tel:${phoneNumber}`
+
+    // Open the phone app to initiate the call
+    window.open(telLink, '_blank')
+    setUiState(prevState => ({
+      ...prevState,
+      isMenuModalOpen: false
+    }))
+  }
+
+  // Define menu items for the main menu
+  const menuItems = (trackingUrl: string) => [
+    {
+      image: '/images/trackOrder.svg',
+      text: t.trackOrder,
+      onClick: () => {
+        if (trackingUrl) window.open(trackingUrl, '_blank')
+        else
+          dispatch(
+            feedbackActions.setToastData({
+              toastData: { message: 'Warning', display: true, type: 'warning', description: t.unabletoTrack }
+            })
+          )
+      }
+    },
+    {
+      image: '/images/updateOrder.svg',
+      text: t.updateOrder,
+      onClick: () => {
+        Router.push('/updateShippingDetails')
+      }
+    },
+    {
+      image: '/images/cancelOrder.svg',
+      text: (
+        <Text
+          as="span"
+          color="#E93324"
+          fontWeight="400"
+          fontSize="15px"
+        >
+          {t.cancelOrder}
+        </Text>
+      ),
+      onClick: handleCancelMenuModalOpen
+    }
+  ]
+
+  // Define menu items for the call menu
+  const callMenuItem = (supportInfo: SupportModel) => [
+    {
+      image: '/images/callCustomer.svg',
+      text: t.callCustomer,
+      onClick: () => handleCallCustomer(supportInfo.phone)
+    },
+    {
+      image: '/images/emailCustomer.svg',
+      text: t.emailCustomer,
+      onClick: () => handleEmailCustomer(supportInfo.email)
+    }
+  ]
 
   // Fetch data
   useEffect(() => {
@@ -244,52 +316,27 @@ const OrderDetails = () => {
     return () => clearInterval(intervalId)
   }, [apiUrl, data.confirmData])
 
-  // Status checks
+  // Check if the order is delivered  come her
   const isDelivered = data.statusData?.[0]?.message?.order?.fulfillments?.[0]?.state?.descriptor?.code === DELIVERED
   const isCancelled = data.statusData?.[0]?.message?.order?.status === CANCELLED
 
   useEffect(() => {
     if (isDelivered) {
-      setProcessState(prevState => ({ ...prevState, allOrderDelivered: true }))
+      setProcessState(prevState => ({
+        ...prevState,
+        allOrderDelivered: true
+      }))
     }
   }, [isDelivered])
 
   useEffect(() => {
     if (isCancelled) {
-      setProcessState(prevState => ({ ...prevState, orderCancelled: true }))
+      setProcessState(prevState => ({
+        ...prevState,
+        orderCancelled: true
+      }))
     }
   }, [isCancelled])
-
-  // Handlers
-  const handleMenuModalClose = () => {
-    setUiState(prevState => ({ ...prevState, isMenuModalOpen: false }))
-  }
-
-  const handleCancelMenuModalClose = () => {
-    setUiState(prevState => ({ ...prevState, isCancelMenuModalOpen: false }))
-  }
-
-  const handleCancelMenuModalOpen = () => {
-    setUiState(prevState => ({
-      ...prevState,
-      isCancelMenuModalOpen: true,
-      isMenuModalOpen: false
-    }))
-  }
-
-  const handleEmailCustomer = (email: string) => {
-    const subject = 'Regarding Your Order'
-    const body = 'Dear Customer,\n\n'
-    const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
-    window.open(mailtoLink, '_blank')
-    setUiState(prevState => ({ ...prevState, isMenuModalOpen: false }))
-  }
-
-  const handleCallCustomer = (phoneNumber: string) => {
-    const telLink = `tel:${phoneNumber}`
-    window.open(telLink, '_blank')
-    setUiState(prevState => ({ ...prevState, isMenuModalOpen: false }))
-  }
 
   const handleOrderDotsClick = async () => {
     setUiState(prevState => ({ ...prevState, isLoadingForTrackAndSupport: true }))
@@ -475,58 +522,7 @@ const OrderDetails = () => {
     }
   }
 
-  // Menu items
-  const menuItems: MenuItem[] = [
-    {
-      image: '/images/trackOrder.svg',
-      text: 'Track Order',
-      onClick: () => {
-        if (data.trackUrl) window.open(data.trackUrl, '_blank')
-        else
-          dispatch(
-            feedbackActions.setToastData({
-              toastData: { message: 'Warning', display: true, type: 'warning', description: t.unabletoTrack }
-            })
-          )
-      }
-    },
-    {
-      image: '/images/updateOrder.svg',
-      text: 'Edit Order',
-      onClick: () => {
-        Router.push('/updateShippingDetails')
-      }
-    },
-    {
-      image: '/images/cancelOrder.svg',
-      text: (
-        <Text
-          as="span"
-          color="#E93324"
-          fontWeight="400"
-          fontSize="15px"
-        >
-          Cancel Order
-        </Text>
-      ),
-      onClick: handleCancelMenuModalOpen
-    }
-  ]
-
-  const callMenuItem: MenuItem[] = [
-    {
-      image: '/images/callCustomer.svg',
-      text: 'Call for urgent assistance',
-      onClick: () => handleCallCustomer(data.supportData?.phone || '')
-    },
-    {
-      image: '/images/emailCustomer.svg',
-      text: 'Email for enquiries',
-      onClick: () => handleEmailCustomer(data.supportData?.email || '')
-    }
-  ]
-
-  // Loading states
+  // Display loading state if data is still being fetched
   if (uiState.isLoading && !processState.apiCalled) {
     return (
       <Box
@@ -583,26 +579,15 @@ const OrderDetails = () => {
     contact: { phone: updateShippingPhone, name: updatedShippingName }
   } = stops[0]
 
-  const getItems = (data: DataState): ItemDetailProps[] => {
-    return data.statusData[0].message.order.items.map((item: Item) => ({
-      title: item.name,
-      quantity: (item.quantity as QuantityDetails)?.selected?.count,
-      price: Number(getItemWiseBreakUp(data.statusData, item.id).totalPricewithCurrent.value),
-      currency: getItemWiseBreakUp(data.statusData, item.id).totalPricewithCurrent.currency,
-      image: item.images?.[0].url,
-      breakUp: getItemWiseBreakUp(data.statusData, item.id).paymentBreakdownMap
-    }))
-  }
-
   return (
     <Box
       className="hideScroll"
       maxH="calc(100vh - 100px)"
+      overflowY="scroll"
     >
       <Box
         maxW={{ base: '100%', md: '50%' }}
         margin="0 auto"
-        data-test={testIds.order_feedback_container}
       >
         {processState.allOrderDelivered && (
           <Card
@@ -655,169 +640,147 @@ const OrderDetails = () => {
           </Card>
         )}
       </Box>
-
       <Box
         display={{ base: 'block', lg: 'flex' }}
         justifyContent="space-between"
+        marginTop="2rem"
         gap="3rem"
       >
         <Box width={{ base: '100%', lg: '80%' }}>
-          <DetailCard>
-            <Flex
-              flexDir={'column'}
-              justifyContent={'space-between'}
-              gap="5px"
-            >
-              <Flex
-                flexDir={'row'}
-                justifyContent={'space-between'}
-              >
-                <Typography
-                  variant="subTitleRegular"
-                  dataTest={testIds.orderDetailspage_orderOverview}
-                  text={t.orderOverview}
-                  fontSize="17px"
-                  fontWeight="600"
-                />
-                <Flex
-                  gap="4px"
-                  className="mytrade-status"
-                >
-                  <Flex
-                    alignItems="center"
-                    gap="4px"
-                    border={`0.5px solid ${parentStatusMap[data.statusData[0].message.order.status as ParentStatus].borderColor}`}
-                    borderRadius="4px"
-                    padding="4px 8px"
-                    bgColor={parentStatusMap[data.statusData[0].message.order.status as ParentStatus].bgColor}
-                  >
-                    {parentStatusMap[data.statusData[0].message.order.status as ParentStatus].icon && (
-                      <Image
-                        src={`${parentStatusMap[data.statusData[0].message.order.status as ParentStatus].icon}`}
-                        alt="status_icon"
-                      />
-                    )}
-                    <Typography
-                      color={parentStatusMap[data.statusData[0].message.order.status as ParentStatus].color}
-                      text={`${parentStatusMap[data.statusData[0].message.order.status as ParentStatus].label}`}
-                      dataTest="order-status"
-                    />
-                  </Flex>
-                </Flex>
-              </Flex>
-              <Flex
-                flexDir="row"
-                gap="6rem"
-                justifyContent="space-between"
-              >
-                <Typography
-                  sx={{
-                    whiteSpace: 'nowrap'
-                  }}
-                  text="Order ID"
-                />
-                <Typography
-                  sx={{
-                    whiteSpace: 'nowrap',
-                    maxW: '10rem',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    textAlign: 'end'
-                  }}
-                  text={orderMetaData.orderIds[0]}
-                />
-              </Flex>
-              <Flex
-                flexDir="row"
-                gap="6rem"
-                justifyContent="space-between"
-              >
-                <Typography
-                  sx={{
-                    whiteSpace: 'nowrap'
-                  }}
-                  text="Placed at"
-                />
-                <Typography
-                  sx={{
-                    whiteSpace: 'nowrap'
-                  }}
-                  text={formatTimestamp(created_at)}
-                />
-              </Flex>
-            </Flex>
-          </DetailCard>
+          <Box
+            pb="15px"
+            pt="20px"
+          >
+            <Typography
+              variant="subTitleRegular"
+              dataTest={testIds.orderDetailspage_orderOverview}
+              text={t.orderOverview}
+              fontSize="17px"
+            />
+          </Box>
 
           <DetailCard>
-            <Flex
-              flexDir={'column'}
-              justifyContent={'space-between'}
-              gap="10px"
-            >
-              <Typography
-                variant="subTitleRegular"
-                text={t.itemDetails}
-                fontSize="17px"
-                fontWeight="600"
+            <Flex>
+              <Image
+                mr={'15px'}
+                height={['60px', '80px', '80px', '80px']}
+                w={['40px', '80px', '80px', '80px']}
+                src={data.statusData[0]?.message?.order?.items[0]?.images?.[0]?.url}
+                alt="product image"
               />
-              <Box>
-                {(getItems(data) as ItemDetailProps[])?.map((item, i, arr) => (
-                  <>
-                    <DetailsCard key={i}>
-                      <div key={i}>
-                        <ItemDetails
-                          title={item.title}
-                          description={item.description}
-                          quantity={item.quantity}
-                          price={item.price}
-                          currency={item.currency}
-                          image={item.image}
-                          breakUp={item.breakUp}
-                        />
-                      </div>
-                    </DetailsCard>
-                    {arr.length > 1 && i !== arr.length - 1 && (
-                      <Divider
-                        color={'#BFBFBF'}
-                        margin={'15px -20px'}
-                        border="0.5px solid #BFBFBF"
-                        opacity={0.5}
-                      />
-                    )}
-                  </>
-                ))}
+              <Box w={'100%'}>
+                <Box
+                  pt={'unset'}
+                  pb={4}
+                >
+                  <Typography
+                    variant="subTitleSemibold"
+                    dataTest={testIds.orderDetailspage_productName}
+                    text={data.statusData[0]?.message?.order?.items[0]?.name}
+                  />
+                </Box>
+
+                <Flex
+                  pt={'unset'}
+                  justifyContent={'space-between'}
+                  alignItems={'center'}
+                >
+                  <Typography
+                    variant="subTitleRegular"
+                    text={t.placedAt}
+                  />
+                  <Typography
+                    variant="subTitleRegular"
+                    dataTest={testIds.orderDetailspage_productPlacedAt}
+                    text={formatTimestamp(created_at)}
+                  />
+                </Flex>
               </Box>
             </Flex>
           </DetailCard>
 
+          {/* Display progress summary */}
+          <Box
+            pb="15px"
+            pt="20px"
+          >
+            <Typography
+              variant="subTitleRegular"
+              dataTest={testIds.orderDetailspage_progressSummary}
+              text={t.progressSummary}
+              fontSize="17px"
+            />
+          </Box>
+
+          {/* Display order status details */}
           <DetailCard>
             <CardBody p={'unset'}>
-              <Flex
-                justifyContent="space-between"
-                alignItems="center"
-              >
-                <Typography
-                  text={t.fullfillmentDetails}
-                  dataTest={testIds.orderDetailspage_orderId}
-                  fontSize="17px"
-                  fontWeight="600"
-                />
-                <Image
-                  onClick={handleOrderDotsClick}
-                  src="/images/threeDots.svg"
-                  data-test={testIds.orderDetailspage_otherOptions}
-                  alt="threeDots"
-                  cursor={'pointer'}
-                />
-              </Flex>
+              <>
+                <Flex
+                  justifyContent="space-between"
+                  alignItems="center"
+                >
+                  <Text
+                    as={Typography}
+                    // TODO
+                    text={`${t.orderId} ${orderMetaData.orderIds[0].slice(0, 5)}...`}
+                    dataTest={testIds.orderDetailspage_orderId}
+                    fontSize="17px"
+                    fontWeight="600"
+                  />
+                  <Image
+                    onClick={handleOrderDotsClick}
+                    src="/images/threeDots.svg"
+                    data-test={testIds.orderDetailspage_otherOptions}
+                    alt="threeDots"
+                  />
+                </Flex>
 
+                <Flex
+                  justifyContent={'space-between'}
+                  alignItems={'center'}
+                >
+                  <Flex maxWidth={'40vw'}>
+                    <Text
+                      textOverflow={'ellipsis'}
+                      overflow={'hidden'}
+                      whiteSpace={'nowrap'}
+                      fontSize={'12px'}
+                      fontWeight={'400'}
+                      data-test={testIds.orderDetailspage_orderSummaryItemName}
+                    >
+                      {data.statusData[0]?.message?.order?.items[0]?.name}
+                    </Text>
+                    {data.statusData[0].message.order.items.length > 1 && (
+                      <Text
+                        pl={'5px'}
+                        color={'rgba(var(--color-primary))'}
+                        fontSize={'12px'}
+                        fontWeight={'600'}
+                        onClick={onOpen}
+                        data-test={testIds.orderDetailspage_orderSummaryTotalItems}
+                      >
+                        +{data.statusData[0].message.order.items.length - 1}
+                      </Text>
+                    )}
+                  </Flex>
+
+                  <Text
+                    fontSize={'15px'}
+                    fontWeight={'500'}
+                    data-test={testIds.orderDetailspage_orderStatus}
+                    color={data.statusData[0].message.order.status === 'CANCELLED' ? 'red' : 'green'}
+                  >
+                    {data.statusData[0].message.order.status}
+                  </Text>
+                </Flex>
+              </>
               <Divider
+                mr={'-20px'}
+                ml="-20px"
                 width={'unset'}
-                border="0.5px solid #BFBFBF"
-                opacity={0.5}
-                margin={'15px -20px'}
+                pt="15px"
               />
-
               <ViewMoreOrderModal
                 isOpen={isOpen}
                 onOpen={onOpen}
@@ -827,6 +790,7 @@ const OrderDetails = () => {
                 dataTest={testIds.orderDetailspage_viewMoreOrders}
               />
 
+              {/* Display order status progress */}
               <Box
                 className="order_status_progress"
                 data-test={testIds.orderDetailspage_orderStatusMap}
@@ -845,129 +809,87 @@ const OrderDetails = () => {
           </DetailCard>
         </Box>
 
+        {/* shipping and billing address */}
+
         <Box
           display="flex"
           flexDir={{ base: 'column', lg: 'column' }}
+          gap="1rem"
         >
-          {isDesktop ? (
-            <>
-              <DetailCard>
-                <Typography
-                  text={`${t.shipping} & ${t.billing}`}
-                  fontSize="17px"
-                  fontWeight="600"
-                />
-                <ShippingBlock
-                  title={t.shipping}
-                  name={{ text: updatedShippingName || shippingName, icon: nameIcon }}
-                  address={{ text: shipmentAddress, icon: locationIcon }}
-                  mobile={{ text: updateShippingPhone || shippingPhone, icon: CallphoneIcon }}
-                  dataTest={testIds.orderDetailspage_shippingDetails}
-                />
-                <ShippingBlock
-                  title={t.billing}
-                  name={{ text: name, icon: nameIcon }}
-                  address={{ text: address, icon: locationIcon }}
-                  mobile={{ text: phone, icon: CallphoneIcon }}
-                  dataTest={testIds.orderDetailspage_billingDetails}
-                />
-              </DetailCard>
-              <Box>
+          {isDesktop && (
+            <ShippingBlock
+              title={t.shipping}
+              name={{ text: updatedShippingName || shippingName, icon: nameIcon }}
+              address={{ text: shipmentAddress, icon: locationIcon }}
+              mobile={{ text: updateShippingPhone || shippingPhone, icon: CallphoneIcon }}
+              dataTest={testIds.orderDetailspage_shippingDetails}
+            />
+          )}
+          {!isDesktop && (
+            <Accordion accordionHeader={t.shipping}>
+              <ShippingBlock
+                // title={t.shipping}
+                name={{ text: updatedShippingName || shippingName, icon: nameIcon }}
+                address={{ text: shipmentAddress, icon: locationIcon }}
+                mobile={{ text: updateShippingPhone || shippingPhone, icon: CallphoneIcon }}
+                dataTest={testIds.orderDetailspage_shippingDetails}
+              />
+            </Accordion>
+          )}
+
+          {isDesktop && (
+            <ShippingBlock
+              title={t.billing}
+              name={{ text: name, icon: nameIcon }}
+              address={{ text: address, icon: locationIcon }}
+              mobile={{ text: phone, icon: CallphoneIcon }}
+              dataTest={testIds.orderDetailspage_billingDetails}
+            />
+          )}
+          {!isDesktop && (
+            <Accordion accordionHeader={t.billing}>
+              <ShippingBlock
+                // title={t.shipping}
+                name={{ text: name, icon: nameIcon }}
+                address={{ text: address, icon: locationIcon }}
+                mobile={{ text: phone, icon: CallphoneIcon }}
+                dataTest={testIds.orderDetailspage_billingDetails}
+              />
+            </Accordion>
+          )}
+
+          {isDesktop && (
+            <Box>
+              <PaymentDetails
+                title={t.payment}
+                hasBoxShadow={true}
+                paymentBreakDown={createPaymentBreakdownMap(data.statusData)}
+                totalText={t.total}
+                totalValueWithCurrency={getTotalPriceWithCurrency(data.statusData)}
+                dataTest={testIds.orderDetailspage_paymentDetails}
+              />
+            </Box>
+          )}
+
+          {!isDesktop && (
+            <Accordion accordionHeader={t.payment}>
+              <Box
+                pl={'14px'}
+                pr={'11px'}
+                pb={'11px'}
+                pt={'6px'}
+              >
                 <PaymentDetails
-                  title="Payment"
-                  hasBoxShadow={true}
                   paymentBreakDown={createPaymentBreakdownMap(data.statusData)}
-                  totalText="Total"
+                  totalText={t.total}
                   totalValueWithCurrency={getTotalPriceWithCurrency(data.statusData)}
                   dataTest={testIds.orderDetailspage_paymentDetails}
                 />
               </Box>
-            </>
-          ) : (
-            <>
-              <Accordion
-                accordionHeader={
-                  <Typography
-                    text={`${t.shipping} & ${t.billing}`}
-                    fontSize="17px"
-                    fontWeight="600"
-                  />
-                }
-              >
-                <ShippingBlock
-                  title={t.shipping}
-                  name={{ text: updatedShippingName || shippingName, icon: nameIcon }}
-                  address={{ text: shipmentAddress, icon: locationIcon }}
-                  mobile={{ text: updateShippingPhone || shippingPhone, icon: CallphoneIcon }}
-                  dataTest={testIds.orderDetailspage_shippingDetails}
-                />
-                <ShippingBlock
-                  title={t.billing}
-                  name={{ text: name, icon: nameIcon }}
-                  address={{ text: address, icon: locationIcon }}
-                  mobile={{ text: phone, icon: CallphoneIcon }}
-                  dataTest={testIds.orderDetailspage_billingDetails}
-                />
-              </Accordion>
-              {/* <Accordion accordionHeader={t.billing}>
-                <ShippingBlock
-                  name={{ text: name, icon: nameIcon }}
-                  address={{ text: address, icon: locationIcon }}
-                  mobile={{ text: phone, icon: CallphoneIcon }}
-                  dataTest={testIds.orderDetailspage_billingDetails}
-                />
-              </Accordion> */}
-              <Accordion
-                accordionHeader={
-                  <Flex gap="10px">
-                    <Typography
-                      text={t.payment}
-                      fontSize="17px"
-                      fontWeight="600"
-                    />
-                    <Flex gap="4px">
-                      <Flex
-                        alignItems="center"
-                        gap="2px"
-                        border={`0.5px solid #C0F7E2`}
-                        borderRadius="4px"
-                        padding="4px 8px"
-                        bgColor={'#D2F9EA'}
-                      >
-                        <Image
-                          src={successIcon}
-                          alt="status_icon"
-                          width="12px"
-                          height="12px"
-                        />
-                        <Typography
-                          color={'#11704C'}
-                          text={`Paid`}
-                          fontSize="10px"
-                          fontWeight="400"
-                        />
-                      </Flex>
-                    </Flex>
-                  </Flex>
-                }
-              >
-                <Box
-                  pl={'14px'}
-                  pr={'11px'}
-                  pb={'11px'}
-                  pt={'6px'}
-                >
-                  <PaymentDetails
-                    paymentBreakDown={createPaymentBreakdownMap(data.statusData)}
-                    totalText="Total"
-                    totalValueWithCurrency={getTotalPriceWithCurrency(data.statusData)}
-                    dataTest={testIds.orderDetailspage_paymentDetails}
-                  />
-                </Box>
-              </Accordion>
-            </>
+            </Accordion>
           )}
 
+          {/* Display main bottom modal */}
           <BottomModal
             title=""
             isOpen={uiState.isMenuModalOpen}
@@ -991,7 +913,7 @@ const OrderDetails = () => {
                 gap="20px"
                 p={'20px 0px'}
               >
-                {menuItems.map((menuItem, index) => (
+                {menuItems(data.trackUrl as string).map((menuItem, index) => (
                   <Flex
                     key={index}
                     columnGap="10px"
@@ -1004,14 +926,14 @@ const OrderDetails = () => {
                     <Text
                       as={Typography}
                       text={menuItem.text as string}
-                      fontSize="15px"
                       dataTest={testIds.orderDetailspage_menuItemName}
+                      fontSize="15px"
                       fontWeight={400}
                     />
                   </Flex>
                 ))}
                 <Divider />
-                {callMenuItem.map((menuItem, index) => (
+                {callMenuItem(data.supportData as SupportModel).map((menuItem, index) => (
                   <Flex
                     key={index}
                     columnGap="10px"
@@ -1033,6 +955,8 @@ const OrderDetails = () => {
               </Stack>
             )}
           </BottomModal>
+
+          {/* Display cancellation bottom modal */}
 
           <BottomModalScan
             isOpen={uiState.isCancelMenuModalOpen}
@@ -1069,7 +993,7 @@ const OrderDetails = () => {
                   value={processState.radioValue}
                   pl="20px"
                 >
-                  {ORDER_CANCEL_REASONS.map(reasonObj => (
+                  {orderCancelReason.map(reasonObj => (
                     <Stack
                       pb="10px"
                       direction="column"
@@ -1084,13 +1008,13 @@ const OrderDetails = () => {
                   m="20px"
                   height="124px"
                   resize="none"
-                  fontSize={'12px'}
-                  placeholder="If you chose 'Other', please specify the reason"
+                  placeholder={t.specifyReason}
                   boxShadow="0px 4px 6px -1px rgba(0, 0, 0, 0.1), 0px 2px 4px -2px rgba(0, 0, 0, 0.1)"
                 />
                 <Box m="20px">
                   <BecknButton
                     disabled={uiState.isProceedDisabled}
+                    text={t.proceed}
                     className="checkout_btn"
                     handleClick={() => {
                       dispatch(statusActions.addStatusResponse({ statusResponse: data.statusData }))
@@ -1100,9 +1024,7 @@ const OrderDetails = () => {
                         processState.radioValue
                       )
                     }}
-                  >
-                    Confirm Cancellation
-                  </BecknButton>
+                  />
                 </Box>
               </>
             )}

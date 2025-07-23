@@ -165,8 +165,8 @@ const CheckoutPage = () => {
               // priceWithSymbol: `${currencyMap[singleItem.price.currency]}${singleItem.totalPrice}`,
               price: Number(singleItem.price.value),
               currency: singleItem.price.currency,
-              image: singleItem.images?.[0].url,
-              breakUp: getItemWiseBreakUp(selectResponse, singleItem.id)
+              image: singleItem.images?.[0].url
+              // breakUp: getItemWiseBreakUp(selectResponse, singleItem.id)
             })) as ItemDetailProps[]
           },
           shipping: {

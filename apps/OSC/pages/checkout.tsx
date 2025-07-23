@@ -239,10 +239,10 @@ const CheckoutPage = () => {
               description: singleItem.short_desc,
               quantity: singleItem.quantity,
               // priceWithSymbol: `${currencyMap[singleItem.price.currency]}${singleItem.totalPrice}`,
-              price: parseFloat(selectResponse[0].message.order.quote.price.value),
-              currency: selectResponse[0].message.order.quote.price.currency,
+              price: Number(getItemWiseBreakUp(selectResponse, singleItem.id).totalPricewithCurrent.value),
+              currency: singleItem.price.currency,
               image: singleItem.images?.[0].url,
-              breakUp: getItemWiseBreakUp(selectResponse, singleItem.id)
+              breakUp: getItemWiseBreakUp(selectResponse, singleItem.id).paymentBreakdownMap
             })) as ItemDetailProps[]
           },
           shipping: {

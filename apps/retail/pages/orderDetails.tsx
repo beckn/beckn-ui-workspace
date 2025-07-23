@@ -587,10 +587,10 @@ const OrderDetails = () => {
     return data.statusData[0].message.order.items.map((item: Item) => ({
       title: item.name,
       quantity: (item.quantity as QuantityDetails)?.selected?.count,
-      price: Number(item.price.value),
-      currency: item.price.currency || 'INR',
+      price: Number(getItemWiseBreakUp(data.statusData, item.id).totalPricewithCurrent.value),
+      currency: getItemWiseBreakUp(data.statusData, item.id).totalPricewithCurrent.currency,
       image: item.images?.[0].url,
-      breakUp: getItemWiseBreakUp(data.statusData, item.id)
+      breakUp: getItemWiseBreakUp(data.statusData, item.id).paymentBreakdownMap
     }))
   }
 

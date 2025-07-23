@@ -2,7 +2,6 @@ import { areObjectPropertiesEqual } from './general'
 import { CurrencyType, ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
 import {
   CartRetailItem,
-  CostBreakdownModel,
   InitResponseModel,
   ItemWisePaymentBreakDownModel,
   PaymentBreakDownModel,
@@ -185,6 +184,10 @@ export const getItemWiseBreakUp = (
   selectedItemId: string
 ) => {
   const paymentBreakdownMap: ItemWisePaymentBreakDownModel = {}
+  const totalPricewithCurrent: { value: number; currency: CurrencyType } = {
+    value: 0,
+    currency: 'INR'
+  }
   if (selectResponse && selectResponse.length > 0) {
     selectResponse.forEach(response => {
       response?.message?.order?.quote?.breakup?.forEach(breakup => {
@@ -196,11 +199,12 @@ export const getItemWiseBreakUp = (
             value: breakup.price.value,
             currency: breakup.price.currency || ('INR' as CurrencyType)
           }
+          totalPricewithCurrent.value += Number(breakup.price.value)
         }
       })
     })
   }
-  return paymentBreakdownMap
+  return { paymentBreakdownMap, totalPricewithCurrent }
 }
 
 export const createPaymentBreakdownMap = (initResponse: InitResponseModel[] | StatusResponseModel[]) => {
