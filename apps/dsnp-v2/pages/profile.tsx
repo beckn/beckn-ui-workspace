@@ -166,7 +166,6 @@ const ProfilePage = () => {
       maxW={['100%', '100%', '40rem', '40rem']}
       className="hideScroll osc_profile"
       maxH={'calc(100vh - 80px)'}
-      overflowY="scroll"
     >
       <BecknAuth
         schema={{

@@ -16,54 +16,83 @@ import {
   useDisclosure,
   useTheme
 } from '@chakra-ui/react'
-import { Accordion, BottomModal, Typography } from '@beckn-ui/molecules'
+import { Accordion, BottomModal, LoaderWithMessage, Typography } from '@beckn-ui/molecules'
 import { v4 as uuidv4 } from 'uuid'
 import { useDispatch, useSelector } from 'react-redux'
 import ViewMoreOrderModal from '@components/orderDetailComponents/ViewMoreOrder'
-import { DetailCard, OrderStatusProgress, OrderStatusProgressProps } from '@beckn-ui/becknified-components'
-import useResponsive from '@beckn-ui/becknified-components/src/hooks/useResponsive'
-import { useLanguage } from '@hooks/useLanguage'
-import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import {
-  ConfirmResponseModel,
-  UIState,
-  DataState,
-  ProcessState,
-  StatusResponseModel,
-  SupportModel,
-  DiscoveryRootState
-} from '@beckn-ui/common/lib/types'
-import LoaderWithMessage from '@components/loader/LoaderWithMessage'
+  DetailCard,
+  ItemDetailProps,
+  OrderStatusProgress,
+  OrderStatusProgressProps
+} from '@beckn-ui/becknified-components'
+import useResponsive from '@beckn-ui/becknified-components/src/hooks/useResponsive'
+import {
+  createPaymentBreakdownMap,
+  getItemWiseBreakUp,
+  getTotalPriceWithCurrency,
+  isEmpty
+} from '@beckn-ui/common/src/utils'
+import { useLanguage } from '@hooks/useLanguage'
+import { getPayloadForOrderStatus, formatTimestamp } from '@beckn-ui/common/src/utils'
+import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
+import BottomModalScan from '@components/BottomModal/BottomModalScan'
 import CallphoneIcon from '../public/images/CallphoneIcon.svg'
 import locationIcon from '../public/images/locationIcon.svg'
 import nameIcon from '../public/images/nameIcon.svg'
 import ShippingBlock from '@components/orderDetailComponents/Shipping'
-import { DOMAIN } from '@lib/config'
 import PaymentDetails from '@beckn-ui/becknified-components/src/components/checkout/payment-details'
-import BottomModalScan from '../components/BottomModal/BottomModalScan'
 import {
-  feedbackActions,
-  formatTimestamp,
-  getPayloadForOrderStatus,
-  getPaymentBreakDown,
-  isEmpty,
-  OrdersRootState,
-  statusActions
-} from '@beckn-ui/common'
+  ConfirmResponseModel,
+  DataState,
+  Item,
+  OrderStatus,
+  ProcessState,
+  QuantityDetails,
+  StatusKey,
+  statusMap,
+  StatusResponseModel,
+  UIState
+} from '@beckn-ui/common/lib/types'
+import { statusActions } from '@beckn-ui/common/src/store/status-slice'
+import { OrdersRootState } from '@beckn-ui/common/src/store/order-slice'
+import { feedbackActions } from '@beckn-ui/common/src/store/ui-feedback-slice'
+import { DOMAIN } from '@lib/config'
 import { testIds } from '@shared/dataTestIds'
-
-const statusMap = {
-  ArrangingPayment: 'Processing your order',
-  PaymentSettled: 'Ready to ship',
-  Cancelled: 'Order Cancelled!',
-  Shipped: 'Order Shipped',
-  Delivered: 'Order Delivered'
-}
+import successIcon from '@public/images/order_complete.svg'
+import DetailsCard from '@beckn-ui/becknified-components/src/components/checkout/details-card'
+import ItemDetails from '@beckn-ui/becknified-components/src/components/checkout/checkout-item-details'
 
 const DELIVERED = 'Delivered'
 const CANCELLED = 'CANCELLED'
 
+interface MenuItem {
+  image: string
+  text: string | React.ReactNode
+  onClick: () => void
+}
+
+// Constants
+const ORDER_CANCEL_REASONS = [
+  { id: 1, reason: 'Merchant is taking too long' },
+  { id: 2, reason: 'Ordered by mistake' },
+  { id: 3, reason: 'I’ve changed my mind' },
+  { id: 4, reason: 'Other' }
+]
+
+type ParentStatus = 'ACTIVE' | 'COMPLETE' | 'CANCELLED'
+
+const parentStatusMap: Record<
+  ParentStatus,
+  { borderColor: string; bgColor: string; color: string; icon: string | undefined; label: string }
+> = {
+  ACTIVE: { borderColor: '#F0D402', bgColor: '#FFF9CC', color: '#807000', icon: undefined, label: 'In Progress' },
+  COMPLETE: { borderColor: '#C0F7E2', bgColor: '#D2F9EA', color: '#11704C', icon: successIcon, label: 'Completed' },
+  CANCELLED: { borderColor: '#E93324', bgColor: '#FFD2D2', color: '#E93324', icon: undefined, label: 'Cancelled' }
+}
+
 const OrderDetails = () => {
+  // State
   const [uiState, setUiState] = useState<UIState>({
     isProceedDisabled: true,
     isLoading: true,
@@ -72,8 +101,6 @@ const OrderDetails = () => {
     isCancelMenuModalOpen: false,
     isLoadingForCancel: false
   })
-
-  const theme = useTheme()
 
   const [data, setData] = useState<DataState>({
     confirmData: null,
@@ -88,17 +115,21 @@ const OrderDetails = () => {
     radioValue: '',
     orderCancelled: false
   })
+
+  const [orderStatusMap, setOrderStatusMap] = useState<OrderStatus[]>([])
+  const [isError, setIsError] = useState(false)
+
+  // Hooks
+  const theme = useTheme()
   const router = useRouter()
   const { t } = useLanguage()
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const [orderStatusMap, setOrderStatusMap] = useState<any[]>([])
   const { isDesktop } = useResponsive()
-  const { transactionId } = useSelector((state: DiscoveryRootState) => state.discovery)
   const orderMetaData = useSelector((state: OrdersRootState) => state.orders.selectedOrderDetails)
   const dispatch = useDispatch()
-  const [currentStatusLabel, setCurrentStatusLabel] = useState('')
 
+  // Effects
   useEffect(() => {
     const storedOrderStatusMap = JSON.parse(localStorage.getItem('orderStatusMap') || '[]')
     setOrderStatusMap(storedOrderStatusMap)
@@ -107,7 +138,6 @@ const OrderDetails = () => {
   useEffect(() => {
     if (orderStatusMap.length > 0) {
       localStorage.setItem('orderStatusMap', JSON.stringify(orderStatusMap))
-      setCurrentStatusLabel(orderStatusMap[orderStatusMap.length - 1].label)
     }
   }, [orderStatusMap])
 
@@ -115,27 +145,31 @@ const OrderDetails = () => {
     if (data.statusData.length > 0) {
       const newData = data.statusData
         .map((status: StatusResponseModel) => {
-          const { tags } = status?.message?.order
+          const order = status?.message?.order
+          const tags = order?.tags
+          const fulfillmentState = order?.fulfillments?.[0]?.state?.descriptor?.code
+
+          let statusKey: string | undefined
+          if (tags && tags.length > 0) {
+            const lastTag = tags[tags.length - 1]
+            if (lastTag?.list?.[0]?.value) {
+              statusKey = lastTag.list[0].value
+            }
+          } else if (fulfillmentState) {
+            statusKey = fulfillmentState
+          }
 
           return {
-            label: statusMap[tags[tags.length - 1].list[0].value],
-            // statusTime: status?.message?.order?.fulfillments[0]?.state?.updated_at
-            statusTime: status?.message?.order?.fulfillments[0]?.state?.updated_at || status?.context?.timestamp
+            label: statusKey ? statusMap[statusKey as StatusKey] : '',
+            statusTime: order?.fulfillments?.[0]?.state?.updated_at || status?.context?.timestamp
           }
         })
-        .filter((status: any) => status.label)
+        .filter(status => status.label)
 
       const labelSet = new Set(orderStatusMap.map(status => status.label))
       setOrderStatusMap(prevState => [...prevState, ...newData.filter(status => !labelSet.has(status.label))])
     }
   }, [data.statusData])
-
-  const orderCancelReason = [
-    { id: 1, reason: t.merchantTakingTo },
-    { id: 2, reason: t.orderMistake },
-    { id: 3, reason: t.iHaveChange },
-    { id: 4, reason: t.other }
-  ]
 
   useEffect(() => {
     if (localStorage && localStorage.getItem('confirmResponse')) {
@@ -147,19 +181,92 @@ const OrderDetails = () => {
     }
   }, [])
 
-  // Define functions to handle menu modal opening and closing
+  // Fetch data
+  useEffect(() => {
+    localStorage.removeItem('statusResponse')
+    const fetchData = async () => {
+      try {
+        setUiState(prevState => ({ ...prevState, isLoading: true }))
+
+        let statusPayload
+        if (localStorage.getItem('selectedOrder')) {
+          const selectedOrderData = JSON.parse(localStorage.getItem('selectedOrder') as string)
+          const { bppId, bppUri, orderId } = selectedOrderData
+          statusPayload = {
+            data: [
+              {
+                context: {
+                  transaction_id: uuidv4(),
+                  bpp_id: bppId,
+                  bpp_uri: bppUri,
+                  domain: DOMAIN
+                },
+                message: {
+                  order_id: orderId,
+                  orderId: orderId
+                }
+              }
+            ]
+          }
+        } else if (data.confirmData?.length) {
+          statusPayload = getPayloadForOrderStatus(data.confirmData)
+        } else {
+          return
+        }
+
+        const response = await axios.post(`${apiUrl}/status`, statusPayload)
+
+        if (
+          JSON.stringify(response.data) === '{}' ||
+          response.data?.data?.length === 0 ||
+          !response.data?.data?.[0]?.message
+        ) {
+          setIsError(true)
+          return
+        }
+
+        const resData = response.data.data
+        setData(prevState => ({
+          ...prevState,
+          statusData: resData
+        }))
+        localStorage.setItem('statusResponse', JSON.stringify(resData))
+      } catch (error) {
+        console.error('Error fetching order status:', error)
+      } finally {
+        setUiState(prevState => ({ ...prevState, isLoading: false }))
+        setProcessState(prevState => ({ ...prevState, apiCalled: true }))
+      }
+    }
+
+    fetchData()
+    const intervalId = setInterval(fetchData, 30000)
+    return () => clearInterval(intervalId)
+  }, [apiUrl, data.confirmData])
+
+  // Status checks
+  const isDelivered = data.statusData?.[0]?.message?.order?.fulfillments?.[0]?.state?.descriptor?.code === DELIVERED
+  const isCancelled = data.statusData?.[0]?.message?.order?.status === CANCELLED
+
+  useEffect(() => {
+    if (isDelivered) {
+      setProcessState(prevState => ({ ...prevState, allOrderDelivered: true }))
+    }
+  }, [isDelivered])
+
+  useEffect(() => {
+    if (isCancelled) {
+      setProcessState(prevState => ({ ...prevState, orderCancelled: true }))
+    }
+  }, [isCancelled])
+
+  // Handlers
   const handleMenuModalClose = () => {
-    setUiState(prevState => ({
-      ...prevState,
-      isMenuModalOpen: false
-    }))
+    setUiState(prevState => ({ ...prevState, isMenuModalOpen: false }))
   }
 
   const handleCancelMenuModalClose = () => {
-    setUiState(prevState => ({
-      ...prevState,
-      isCancelMenuModalOpen: false
-    }))
+    setUiState(prevState => ({ ...prevState, isCancelMenuModalOpen: false }))
   }
 
   const handleCancelMenuModalOpen = () => {
@@ -173,225 +280,43 @@ const OrderDetails = () => {
   const handleEmailCustomer = (email: string) => {
     const subject = 'Regarding Your Order'
     const body = 'Dear Customer,\n\n'
-
     const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
-
     window.open(mailtoLink, '_blank')
-    setUiState(prevState => ({
-      ...prevState,
-      isMenuModalOpen: false
-    }))
+    setUiState(prevState => ({ ...prevState, isMenuModalOpen: false }))
   }
+
   const handleCallCustomer = (phoneNumber: string) => {
-    // Use tel: protocol to initiate the phone call
     const telLink = `tel:${phoneNumber}`
-
-    // Open the phone app to initiate the call
     window.open(telLink, '_blank')
-    setUiState(prevState => ({
-      ...prevState,
-      isMenuModalOpen: false
-    }))
+    setUiState(prevState => ({ ...prevState, isMenuModalOpen: false }))
   }
-
-  // Define menu items for the main menu
-  const menuItems = (trackingUrl: string) => [
-    {
-      image: '/images/trackOrder.svg',
-      text: t.trackOrder,
-      onClick: () => {
-        if (trackingUrl) window.open(trackingUrl, '_blank')
-        else
-          dispatch(
-            feedbackActions.setToastData({
-              toastData: { message: 'Warning', display: true, type: 'warning', description: t.unabletoTrack }
-            })
-          )
-      }
-    },
-    {
-      image: '/images/updateOrder.svg',
-      text: t.updateOrder,
-      onClick: () => {
-        Router.push('/updateShippingDetails')
-      }
-    },
-    {
-      image: '/images/cancelOrder.svg',
-      text: (
-        <Text
-          as="span"
-          color="#E93324"
-          fontWeight="400"
-          fontSize="15px"
-        >
-          {t.cancelOrder}
-        </Text>
-      ),
-      onClick: handleCancelMenuModalOpen
-    }
-  ]
-
-  // Define menu items for the call menu
-  const callMenuItem = (supportInfo: SupportModel) => [
-    {
-      image: '/images/callCustomer.svg',
-      text: t.callCustomer,
-      onClick: () => handleCallCustomer(supportInfo.phone)
-    },
-    {
-      image: '/images/emailCustomer.svg',
-      text: t.emailCustomer,
-      onClick: () => handleEmailCustomer(supportInfo.email)
-    }
-  ]
-
-  // Fetch data on component
-  useEffect(() => {
-    const fetchData = () => {
-      if (localStorage && localStorage.getItem('selectedOrder')) {
-        const selectedOrderData = JSON.parse(localStorage.getItem('selectedOrder') as string)
-        const { bppId, bppUri, orderId } = selectedOrderData
-        const statusPayload = {
-          data: [
-            {
-              context: {
-                transaction_id: uuidv4(),
-                bpp_id: bppId,
-                bpp_uri: bppUri,
-                domain: DOMAIN
-              },
-              message: {
-                order_id: orderId
-              }
-            }
-          ]
-        }
-        setUiState(prevState => ({
-          ...prevState,
-          isLoading: true
-        }))
-
-        return axios
-          .post(`${apiUrl}/status`, statusPayload)
-          .then(res => {
-            const resData = res.data.data
-            setData(prevState => ({
-              ...prevState,
-              statusData: resData
-            }))
-            localStorage.setItem('statusResponse', JSON.stringify(resData))
-          })
-          .catch(err => {
-            console.error('Error fetching order status:', err)
-          })
-          .finally(() => {
-            setUiState(prevState => ({
-              ...prevState,
-              isLoading: false
-            }))
-
-            setProcessState(prevState => ({
-              ...prevState,
-              apiCalled: true
-            }))
-          })
-      }
-      if (data.confirmData && data.confirmData.length > 0) {
-        const parsedConfirmData: ConfirmResponseModel[] = JSON.parse(localStorage.getItem('confirmResponse') as string)
-        const statusPayload = getPayloadForOrderStatus(parsedConfirmData)
-        setUiState(prevState => ({
-          ...prevState,
-          isLoading: true
-        }))
-
-        return axios
-          .post(`${apiUrl}/status`, statusPayload)
-          .then(res => {
-            const resData = res.data.data
-            setData(prevState => ({
-              ...prevState,
-              statusData: resData
-            }))
-
-            localStorage.setItem('statusResponse', JSON.stringify(resData))
-          })
-          .catch(err => {
-            console.error('Error fetching order status:', err)
-          })
-          .finally(() => {
-            setUiState(prevState => ({
-              ...prevState,
-              isLoading: false
-            }))
-            setProcessState(prevState => ({
-              ...prevState,
-              apiCalled: true
-            }))
-          })
-      }
-    }
-
-    fetchData()
-
-    const intervalId = setInterval(fetchData, 30000)
-
-    return () => clearInterval(intervalId)
-  }, [apiUrl, data.confirmData])
-
-  // Check if the order is delivered  come her
-  const isDelivered = data.statusData?.[0]?.message?.order?.fulfillments?.[0]?.state?.descriptor?.code === DELIVERED
-  const isCancelled = data.statusData?.[0]?.message?.order?.status === CANCELLED
-
-  useEffect(() => {
-    if (isDelivered) {
-      setProcessState(prevState => ({
-        ...prevState,
-        allOrderDelivered: true
-      }))
-    }
-  }, [isDelivered])
-
-  useEffect(() => {
-    if (isCancelled) {
-      setProcessState(prevState => ({
-        ...prevState,
-        orderCancelled: true
-      }))
-    }
-  }, [isCancelled])
 
   const handleOrderDotsClick = async () => {
-    setUiState(prevState => ({
-      ...prevState,
-      isLoadingForTrackAndSupport: true
-    }))
+    setUiState(prevState => ({ ...prevState, isLoadingForTrackAndSupport: true }))
 
     try {
-      setUiState(prevState => ({
-        ...prevState,
-        isMenuModalOpen: true
-      }))
+      setUiState(prevState => ({ ...prevState, isMenuModalOpen: true }))
 
-      if (data.confirmData && data.confirmData.length > 0) {
-        const { domain, bpp_id, bpp_uri, transaction_id } = data.confirmData[0].context
+      let trackPayload, supportPayload
+      if (data.confirmData?.length) {
+        const { domain, bpp_id, bpp_uri } = data.confirmData[0].context
         const orderId = data.confirmData[0].message.orderId
-        const trackPayload = {
+
+        trackPayload = {
           data: [
             {
               context: {
-                domain: domain,
-                bpp_id: bpp_id,
-                bpp_uri: bpp_uri,
+                domain,
+                bpp_id,
+                bpp_uri,
                 transaction_id: uuidv4()
               },
               orderId
-              // callbackUrl: 'https://dhp-network-bap.becknprotocol.io/track/callback'
             }
           ]
         }
 
-        const supportPayload = {
+        supportPayload = {
           data: [
             {
               context: {
@@ -412,52 +337,31 @@ const OrderDetails = () => {
             }
           ]
         }
-
-        const [trackResponse, supportResponse] = await Promise.all([
-          axios.post(`${apiUrl}/track`, trackPayload),
-          axios.post(`${apiUrl}/support`, supportPayload)
-        ])
-
-        if (!isEmpty(trackResponse.data) && !isEmpty(supportResponse.data)) {
-          setData(prevState => ({
-            ...prevState,
-            trackUrl: trackResponse.data.data[0].message && trackResponse.data.data[0].message.tracking.url,
-            supportData: {
-              email: supportResponse.data.data[0].message && supportResponse.data.data[0].message.support.email,
-              phone: supportResponse.data.data[0].message && supportResponse.data.data[0].message.support.phone
-            }
-          }))
-
-          setUiState(prevState => ({
-            ...prevState,
-            isLoadingForTrackAndSupport: false
-          }))
-        }
       } else if (localStorage.getItem('selectedOrder') && localStorage.getItem('statusResponse')) {
         const selectedOrderData = JSON.parse(localStorage.getItem('selectedOrder') as string)
         const { bppId, bppUri, orderId } = selectedOrderData
         const statusResponseData = JSON.parse(localStorage.getItem('statusResponse') as string)
-        const { domain, transaction_id } = statusResponseData[0].context
-        const trackPayload = {
+        const { domain } = statusResponseData[0].context
+
+        trackPayload = {
           data: [
             {
               context: {
-                domain: domain,
+                domain,
                 bpp_id: bppId,
                 bpp_uri: bppUri,
                 transaction_id: uuidv4()
               },
-              orderId,
-              callbackUrl: 'https://dhp-network-bap.becknprotocol.io/track/callback'
+              orderId
             }
           ]
         }
 
-        const supportPayload = {
+        supportPayload = {
           data: [
             {
               context: {
-                domain: domain,
+                domain,
                 bpp_id: bppId,
                 bpp_uri: bppUri,
                 transaction_id: uuidv4()
@@ -474,7 +378,9 @@ const OrderDetails = () => {
             }
           ]
         }
+      }
 
+      if (trackPayload && supportPayload) {
         const [trackResponse, supportResponse] = await Promise.all([
           axios.post(`${apiUrl}/track`, trackPayload),
           axios.post(`${apiUrl}/support`, supportPayload)
@@ -483,33 +389,144 @@ const OrderDetails = () => {
         if (!isEmpty(trackResponse.data) && !isEmpty(supportResponse.data)) {
           setData(prevState => ({
             ...prevState,
-            trackUrl: trackResponse.data.data[0].message && trackResponse.data.data[0].message.tracking.url,
+            trackUrl: trackResponse.data.data[0].message?.tracking?.url,
             supportData: {
-              email: supportResponse.data.data[0].message && supportResponse.data.data[0].message.support.email,
-              phone: supportResponse.data.data[0].message && supportResponse.data.data[0].message.support.phone
+              email: supportResponse.data.data[0].message?.support?.email,
+              phone: supportResponse.data.data[0].message?.support?.phone
             }
-          }))
-
-          setUiState(prevState => ({
-            ...prevState,
-            isLoadingForTrackAndSupport: false
           }))
         }
       }
-      setUiState(prevState => ({
-        ...prevState,
-        isLoadingForTrackAndSupport: false
-      }))
     } catch (error) {
-      setUiState(prevState => ({
-        ...prevState,
-        isLoadingForTrackAndSupport: false
-      }))
       console.error(error)
+    } finally {
+      setUiState(prevState => ({ ...prevState, isLoadingForTrackAndSupport: false }))
     }
   }
 
-  // Display loading state if data is still being fetched
+  const handleCancelButton = async (
+    confirmData: ConfirmResponseModel[] | null | undefined,
+    statusData: StatusResponseModel[],
+    cancellationReason: string
+  ) => {
+    try {
+      setUiState(prevState => ({ ...prevState, isLoadingForCancel: true }))
+
+      let cancelPayload
+      if (confirmData?.length) {
+        const { bpp_id, bpp_uri, domain } = confirmData[0].context
+        const orderId = confirmData[0].message.orderId
+
+        cancelPayload = {
+          data: [
+            {
+              context: {
+                transaction_id: uuidv4(),
+                bpp_id,
+                bpp_uri,
+                domain
+              },
+              message: {
+                order_id: orderId,
+                cancellation_reason_id: '4',
+                descriptor: {
+                  short_desc: cancellationReason
+                }
+              }
+            }
+          ]
+        }
+      } else if (statusData?.length && localStorage.getItem('selectedOrder')) {
+        const selectedOrderData = JSON.parse(localStorage.getItem('selectedOrder') as string)
+        const { orderId } = selectedOrderData
+        const { bpp_id, bpp_uri, domain } = statusData[0].context
+
+        cancelPayload = {
+          data: [
+            {
+              context: {
+                transaction_id: uuidv4(),
+                bpp_id,
+                bpp_uri,
+                domain
+              },
+              message: {
+                order_id: orderId,
+                cancellation_reason_id: '4',
+                descriptor: {
+                  short_desc: cancellationReason
+                }
+              }
+            }
+          ]
+        }
+      }
+
+      if (cancelPayload) {
+        const cancelResponse = await axios.post(`${apiUrl}/cancel`, cancelPayload)
+        if (cancelResponse.data.data.length > 0) {
+          router.push('/orderCancellation')
+        }
+      }
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setUiState(prevState => ({ ...prevState, isLoadingForCancel: false }))
+    }
+  }
+
+  // Menu items
+  const menuItems: MenuItem[] = [
+    {
+      image: '/images/trackOrder.svg',
+      text: 'Track Order',
+      onClick: () => {
+        if (data.trackUrl) window.open(data.trackUrl, '_blank')
+        else
+          dispatch(
+            feedbackActions.setToastData({
+              toastData: { message: 'Warning', display: true, type: 'warning', description: t.unabletoTrack }
+            })
+          )
+      }
+    },
+    {
+      image: '/images/updateOrder.svg',
+      text: 'Edit Order',
+      onClick: () => {
+        Router.push('/updateShippingDetails')
+      }
+    },
+    {
+      image: '/images/cancelOrder.svg',
+      text: (
+        <Text
+          as="span"
+          color="#E93324"
+          fontWeight="400"
+          fontSize="15px"
+        >
+          Cancel Order
+        </Text>
+      ),
+      onClick: handleCancelMenuModalOpen
+    }
+  ]
+
+  const callMenuItem: MenuItem[] = [
+    {
+      image: '/images/callCustomer.svg',
+      text: 'Call for urgent assistance',
+      onClick: () => handleCallCustomer(data.supportData?.phone || '')
+    },
+    {
+      image: '/images/emailCustomer.svg',
+      text: 'Email for enquiries',
+      onClick: () => handleEmailCustomer(data.supportData?.email || '')
+    }
+  ]
+
+  // Loading states
   if (uiState.isLoading && !processState.apiCalled) {
     return (
       <Box
@@ -525,97 +542,33 @@ const OrderDetails = () => {
     )
   }
 
+  if (isError) {
+    dispatch(
+      feedbackActions.setToastData({
+        toastData: {
+          message: 'Error',
+          display: true,
+          type: 'error',
+          description: t.errorText
+        }
+      })
+    )
+    return <></>
+  }
+
   if (!data.confirmData?.length && !localStorage.getItem('selectedOrder')) {
     return <></>
   }
 
-  const handleCancelButton = async (
-    confirmData: ConfirmResponseModel[] | null | undefined,
-    statusData: StatusResponseModel[],
-    cancellationReason: string
-  ) => {
-    try {
-      setUiState(prevState => ({
-        ...prevState,
-        isLoadingForCancel: true
-      }))
-
-      // console.log(confirmData)
-      if (confirmData && confirmData.length > 0) {
-        const { transaction_id, bpp_id, bpp_uri, domain } = confirmData[0].context
-        const orderId = confirmData[0].message.orderId
-        const cancelPayload = {
-          data: [
-            {
-              context: {
-                transaction_id: uuidv4(),
-                bpp_id,
-                bpp_uri,
-                domain
-              },
-              message: {
-                order_id: orderId,
-                cancellation_reason_id: '4',
-                descriptor: {
-                  short_desc: cancellationReason
-                }
-              }
-            }
-          ]
-        }
-
-        const cancelResponse = await axios.post(`${apiUrl}/cancel`, cancelPayload)
-
-        if (cancelResponse.data.data.length > 0) {
-          router.push('/orderCancellation')
-        }
-      } else if (statusData && statusData.length > 0 && localStorage.getItem('selectedOrder')) {
-        const selectedOrderData = JSON.parse(localStorage.getItem('selectedOrder') as string)
-        const { orderId } = selectedOrderData
-        const { transaction_id, bpp_id, bpp_uri, domain } = statusData[0].context
-        const cancelPayload = {
-          data: [
-            {
-              context: {
-                transaction_id: uuidv4(),
-                bpp_id,
-                bpp_uri,
-                domain
-              },
-              message: {
-                order_id: orderId,
-                cancellation_reason_id: '4',
-                descriptor: {
-                  short_desc: cancellationReason
-                }
-              }
-            }
-          ]
-        }
-
-        const cancelResponse = await axios.post(`${apiUrl}/cancel`, cancelPayload)
-        if (cancelResponse.data.data.length > 0) {
-          router.push('/orderCancellation')
-        }
-      }
-    } catch (error) {
-      console.error(error)
-    } finally {
-      setUiState(prevState => ({
-        ...prevState,
-        isLoadingForCancel: false
-      }))
-    }
+  if (!data.statusData?.[0]?.message) {
+    localStorage.removeItem('statusResponse')
+    return <></>
   }
 
-  const ordersLength = data.statusData.length
+  // Data preparation
   const { created_at } = data.statusData[0].message.order
   const { order } = data.statusData[0].message
-  const {
-    billing,
-    fulfillments,
-    quote: { breakup, price }
-  } = order
+  const { billing, fulfillments } = order
   const { address, name, phone } = billing
   const {
     customer: {
@@ -624,24 +577,32 @@ const OrderDetails = () => {
     },
     stops
   } = fulfillments[0]
+
   const {
     location: { address: shipmentAddress },
-    contact: { phone: updateShippingPhone, email: updatedShippingEmail, name: updatedShippingName }
+    contact: { phone: updateShippingPhone, name: updatedShippingName }
   } = stops[0]
 
-  const filteredOrder = data.statusData.filter(res => {
-    const { state } = res.message.order.fulfillments[0]
-    return state && res.message.order.fulfillments[0].state.descriptor.code.toLowerCase() === 'delivered'
-  })
+  const getItems = (data: DataState): ItemDetailProps[] => {
+    return data.statusData[0].message.order.items.map((item: Item) => ({
+      title: item.name,
+      quantity: (item.quantity as QuantityDetails)?.selected?.count,
+      price: Number(getItemWiseBreakUp(data.statusData, item.id).totalPricewithCurrent.value),
+      currency: getItemWiseBreakUp(data.statusData, item.id).totalPricewithCurrent.currency,
+      image: item.images?.[0].url,
+      breakUp: getItemWiseBreakUp(data.statusData, item.id).paymentBreakdownMap
+    }))
+  }
+
   return (
     <Box
       className="hideScroll"
       maxH="calc(100vh - 100px)"
-      overflowY="scroll"
     >
       <Box
         maxW={{ base: '100%', md: '50%' }}
         margin="0 auto"
+        data-test={testIds.order_feedback_container}
       >
         {processState.allOrderDelivered && (
           <Card
@@ -694,147 +655,169 @@ const OrderDetails = () => {
           </Card>
         )}
       </Box>
+
       <Box
         display={{ base: 'block', lg: 'flex' }}
         justifyContent="space-between"
-        marginTop="2rem"
         gap="3rem"
       >
         <Box width={{ base: '100%', lg: '80%' }}>
-          <Box
-            pb="15px"
-            pt="20px"
-          >
-            <Typography
-              variant="subTitleRegular"
-              dataTest={testIds.orderDetailspage_orderOverview}
-              text={t.orderOverview}
-              fontSize="17px"
-            />
-          </Box>
+          <DetailCard>
+            <Flex
+              flexDir={'column'}
+              justifyContent={'space-between'}
+              gap="5px"
+            >
+              <Flex
+                flexDir={'row'}
+                justifyContent={'space-between'}
+              >
+                <Typography
+                  variant="subTitleRegular"
+                  dataTest={testIds.orderDetailspage_orderOverview}
+                  text={t.orderOverview}
+                  fontSize="17px"
+                  fontWeight="600"
+                />
+                <Flex
+                  gap="4px"
+                  className="mytrade-status"
+                >
+                  <Flex
+                    alignItems="center"
+                    gap="4px"
+                    border={`0.5px solid ${parentStatusMap[data.statusData[0].message.order.status as ParentStatus].borderColor}`}
+                    borderRadius="4px"
+                    padding="4px 8px"
+                    bgColor={parentStatusMap[data.statusData[0].message.order.status as ParentStatus].bgColor}
+                  >
+                    {parentStatusMap[data.statusData[0].message.order.status as ParentStatus].icon && (
+                      <Image
+                        src={`${parentStatusMap[data.statusData[0].message.order.status as ParentStatus].icon}`}
+                        alt="status_icon"
+                      />
+                    )}
+                    <Typography
+                      color={parentStatusMap[data.statusData[0].message.order.status as ParentStatus].color}
+                      text={`${parentStatusMap[data.statusData[0].message.order.status as ParentStatus].label}`}
+                      dataTest="order-status"
+                    />
+                  </Flex>
+                </Flex>
+              </Flex>
+              <Flex
+                flexDir="row"
+                gap="6rem"
+                justifyContent="space-between"
+              >
+                <Typography
+                  sx={{
+                    whiteSpace: 'nowrap'
+                  }}
+                  text="Order ID"
+                />
+                <Typography
+                  sx={{
+                    whiteSpace: 'nowrap',
+                    maxW: '10rem',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    textAlign: 'end'
+                  }}
+                  text={orderMetaData.orderIds[0]}
+                />
+              </Flex>
+              <Flex
+                flexDir="row"
+                gap="6rem"
+                justifyContent="space-between"
+              >
+                <Typography
+                  sx={{
+                    whiteSpace: 'nowrap'
+                  }}
+                  text="Placed at"
+                />
+                <Typography
+                  sx={{
+                    whiteSpace: 'nowrap'
+                  }}
+                  text={formatTimestamp(created_at)}
+                />
+              </Flex>
+            </Flex>
+          </DetailCard>
 
           <DetailCard>
-            <Flex>
-              <Image
-                mr={'15px'}
-                height={['60px', '80px', '80px', '80px']}
-                w={['40px', '80px', '80px', '80px']}
-                src={data.statusData[0]?.message?.order?.items[0]?.images[0].url}
-                alt="product image"
+            <Flex
+              flexDir={'column'}
+              justifyContent={'space-between'}
+              gap="10px"
+            >
+              <Typography
+                variant="subTitleRegular"
+                text={t.itemDetails}
+                fontSize="17px"
+                fontWeight="600"
               />
-              <Box w={'100%'}>
-                <Box
-                  pt={'unset'}
-                  pb={4}
-                >
-                  <Typography
-                    variant="subTitleSemibold"
-                    dataTest={testIds.orderDetailspage_productName}
-                    text={data.statusData[0]?.message?.order?.items[0]?.name}
-                  />
-                </Box>
-
-                <Flex
-                  pt={'unset'}
-                  justifyContent={'space-between'}
-                  alignItems={'center'}
-                >
-                  <Typography
-                    variant="subTitleRegular"
-                    text={t.placedAt}
-                  />
-                  <Typography
-                    variant="subTitleRegular"
-                    dataTest={testIds.orderDetailspage_productPlacedAt}
-                    text={formatTimestamp(created_at)}
-                  />
-                </Flex>
+              <Box>
+                {(getItems(data) as ItemDetailProps[])?.map((item, i, arr) => (
+                  <>
+                    <DetailsCard key={i}>
+                      <div key={i}>
+                        <ItemDetails
+                          title={item.title}
+                          description={item.description}
+                          quantity={item.quantity}
+                          price={item.price}
+                          currency={item.currency}
+                          image={item.image}
+                          breakUp={item.breakUp}
+                        />
+                      </div>
+                    </DetailsCard>
+                    {arr.length > 1 && i !== arr.length - 1 && (
+                      <Divider
+                        color={'#BFBFBF'}
+                        margin={'15px -20px'}
+                        border="0.5px solid #BFBFBF"
+                        opacity={0.5}
+                      />
+                    )}
+                  </>
+                ))}
               </Box>
             </Flex>
           </DetailCard>
 
-          {/* Display progress summary */}
-          <Box
-            pb="15px"
-            pt="20px"
-          >
-            <Typography
-              variant="subTitleRegular"
-              dataTest={testIds.orderDetailspage_progressSummary}
-              text={t.progressSummary}
-              fontSize="17px"
-            />
-          </Box>
-
-          {/* Display order status details */}
           <DetailCard>
             <CardBody p={'unset'}>
-              <>
-                <Flex
-                  justifyContent="space-between"
-                  alignItems="center"
-                >
-                  <Text
-                    as={Typography}
-                    // TODO
-                    text={`${t.orderId} ${orderMetaData.orderIds[0].slice(0, 5)}...`}
-                    dataTest={testIds.orderDetailspage_orderId}
-                    fontSize="17px"
-                    fontWeight="600"
-                  />
-                  <Image
-                    onClick={handleOrderDotsClick}
-                    src="/images/threeDots.svg"
-                    data-test={testIds.orderDetailspage_otherOptions}
-                    alt="threeDots"
-                  />
-                </Flex>
+              <Flex
+                justifyContent="space-between"
+                alignItems="center"
+              >
+                <Typography
+                  text={t.fullfillmentDetails}
+                  dataTest={testIds.orderDetailspage_orderId}
+                  fontSize="17px"
+                  fontWeight="600"
+                />
+                <Image
+                  onClick={handleOrderDotsClick}
+                  src="/images/threeDots.svg"
+                  data-test={testIds.orderDetailspage_otherOptions}
+                  alt="threeDots"
+                  cursor={'pointer'}
+                />
+              </Flex>
 
-                <Flex
-                  justifyContent={'space-between'}
-                  alignItems={'center'}
-                >
-                  <Flex maxWidth={'40vw'}>
-                    <Text
-                      textOverflow={'ellipsis'}
-                      overflow={'hidden'}
-                      whiteSpace={'nowrap'}
-                      fontSize={'12px'}
-                      fontWeight={'400'}
-                      data-test={testIds.orderDetailspage_orderSummaryItemName}
-                    >
-                      {data.statusData[0]?.message?.order?.items[0]?.name}
-                    </Text>
-                    {data.statusData[0].message.order.items.length > 1 && (
-                      <Text
-                        pl={'5px'}
-                        color={'rgba(var(--color-primary))'}
-                        fontSize={'12px'}
-                        fontWeight={'600'}
-                        onClick={onOpen}
-                        data-test={testIds.orderDetailspage_orderSummaryTotalItems}
-                      >
-                        +{data.statusData[0].message.order.items.length - 1}
-                      </Text>
-                    )}
-                  </Flex>
-
-                  <Text
-                    fontSize={'15px'}
-                    fontWeight={'500'}
-                    data-test={testIds.orderDetailspage_orderStatus}
-                    color={data.statusData[0].message.order.status === 'CANCELLED' ? 'red' : 'green'}
-                  >
-                    {data.statusData[0].message.order.status}
-                  </Text>
-                </Flex>
-              </>
               <Divider
-                mr={'-20px'}
-                ml="-20px"
                 width={'unset'}
-                pt="15px"
+                border="0.5px solid #BFBFBF"
+                opacity={0.5}
+                margin={'15px -20px'}
               />
+
               <ViewMoreOrderModal
                 isOpen={isOpen}
                 onOpen={onOpen}
@@ -844,7 +827,6 @@ const OrderDetails = () => {
                 dataTest={testIds.orderDetailspage_viewMoreOrders}
               />
 
-              {/* Display order status progress */}
               <Box
                 className="order_status_progress"
                 data-test={testIds.orderDetailspage_orderStatusMap}
@@ -863,87 +845,129 @@ const OrderDetails = () => {
           </DetailCard>
         </Box>
 
-        {/* shipping and billing address */}
-
         <Box
           display="flex"
           flexDir={{ base: 'column', lg: 'column' }}
-          gap="1rem"
         >
-          {isDesktop && (
-            <ShippingBlock
-              title={t.shipping}
-              name={{ text: updatedShippingName || shippingName, icon: nameIcon }}
-              address={{ text: shipmentAddress, icon: locationIcon }}
-              mobile={{ text: updateShippingPhone || shippingPhone, icon: CallphoneIcon }}
-              dataTest={testIds.orderDetailspage_shippingDetails}
-            />
-          )}
-          {!isDesktop && (
-            <Accordion accordionHeader={t.shipping}>
-              <ShippingBlock
-                // title={t.shipping}
-                name={{ text: updatedShippingName || shippingName, icon: nameIcon }}
-                address={{ text: shipmentAddress, icon: locationIcon }}
-                mobile={{ text: updateShippingPhone || shippingPhone, icon: CallphoneIcon }}
-                dataTest={testIds.orderDetailspage_shippingDetails}
-              />
-            </Accordion>
-          )}
-
-          {isDesktop && (
-            <ShippingBlock
-              title={t.billing}
-              name={{ text: name, icon: nameIcon }}
-              address={{ text: address, icon: locationIcon }}
-              mobile={{ text: phone, icon: CallphoneIcon }}
-              dataTest={testIds.orderDetailspage_billingDetails}
-            />
-          )}
-          {!isDesktop && (
-            <Accordion accordionHeader={t.billing}>
-              <ShippingBlock
-                // title={t.shipping}
-                name={{ text: name, icon: nameIcon }}
-                address={{ text: address, icon: locationIcon }}
-                mobile={{ text: phone, icon: CallphoneIcon }}
-                dataTest={testIds.orderDetailspage_billingDetails}
-              />
-            </Accordion>
-          )}
-
-          {isDesktop && (
-            <Box>
-              <PaymentDetails
-                title={t.payment}
-                hasBoxShadow={true}
-                paymentBreakDown={getPaymentBreakDown(data.statusData).breakUpMap}
-                totalText={t.total}
-                totalValueWithCurrency={getPaymentBreakDown(data.statusData).totalPricewithCurrent}
-                dataTest={testIds.orderDetailspage_paymentDetails}
-              />
-            </Box>
-          )}
-
-          {!isDesktop && (
-            <Accordion accordionHeader={t.payment}>
-              <Box
-                pl={'14px'}
-                pr={'11px'}
-                pb={'11px'}
-                pt={'6px'}
-              >
+          {isDesktop ? (
+            <>
+              <DetailCard>
+                <Typography
+                  text={`${t.shipping} & ${t.billing}`}
+                  fontSize="17px"
+                  fontWeight="600"
+                />
+                <ShippingBlock
+                  title={t.shipping}
+                  name={{ text: updatedShippingName || shippingName, icon: nameIcon }}
+                  address={{ text: shipmentAddress, icon: locationIcon }}
+                  mobile={{ text: updateShippingPhone || shippingPhone, icon: CallphoneIcon }}
+                  dataTest={testIds.orderDetailspage_shippingDetails}
+                />
+                <ShippingBlock
+                  title={t.billing}
+                  name={{ text: name, icon: nameIcon }}
+                  address={{ text: address, icon: locationIcon }}
+                  mobile={{ text: phone, icon: CallphoneIcon }}
+                  dataTest={testIds.orderDetailspage_billingDetails}
+                />
+              </DetailCard>
+              <Box>
                 <PaymentDetails
-                  paymentBreakDown={getPaymentBreakDown(data.statusData).breakUpMap}
-                  totalText={t.total}
-                  totalValueWithCurrency={getPaymentBreakDown(data.statusData).totalPricewithCurrent}
+                  title="Payment"
+                  hasBoxShadow={true}
+                  paymentBreakDown={createPaymentBreakdownMap(data.statusData)}
+                  totalText="Total"
+                  totalValueWithCurrency={getTotalPriceWithCurrency(data.statusData)}
                   dataTest={testIds.orderDetailspage_paymentDetails}
                 />
               </Box>
-            </Accordion>
+            </>
+          ) : (
+            <>
+              <Accordion
+                accordionHeader={
+                  <Typography
+                    text={`${t.shipping} & ${t.billing}`}
+                    fontSize="17px"
+                    fontWeight="600"
+                  />
+                }
+              >
+                <ShippingBlock
+                  title={t.shipping}
+                  name={{ text: updatedShippingName || shippingName, icon: nameIcon }}
+                  address={{ text: shipmentAddress, icon: locationIcon }}
+                  mobile={{ text: updateShippingPhone || shippingPhone, icon: CallphoneIcon }}
+                  dataTest={testIds.orderDetailspage_shippingDetails}
+                />
+                <ShippingBlock
+                  title={t.billing}
+                  name={{ text: name, icon: nameIcon }}
+                  address={{ text: address, icon: locationIcon }}
+                  mobile={{ text: phone, icon: CallphoneIcon }}
+                  dataTest={testIds.orderDetailspage_billingDetails}
+                />
+              </Accordion>
+              {/* <Accordion accordionHeader={t.billing}>
+                <ShippingBlock
+                  name={{ text: name, icon: nameIcon }}
+                  address={{ text: address, icon: locationIcon }}
+                  mobile={{ text: phone, icon: CallphoneIcon }}
+                  dataTest={testIds.orderDetailspage_billingDetails}
+                />
+              </Accordion> */}
+              <Accordion
+                accordionHeader={
+                  <Flex gap="10px">
+                    <Typography
+                      text={t.payment}
+                      fontSize="17px"
+                      fontWeight="600"
+                    />
+                    <Flex gap="4px">
+                      <Flex
+                        alignItems="center"
+                        gap="2px"
+                        border={`0.5px solid #C0F7E2`}
+                        borderRadius="4px"
+                        padding="4px 8px"
+                        bgColor={'#D2F9EA'}
+                      >
+                        <Image
+                          src={successIcon}
+                          alt="status_icon"
+                          width="12px"
+                          height="12px"
+                        />
+                        <Typography
+                          color={'#11704C'}
+                          text={`Paid`}
+                          fontSize="10px"
+                          fontWeight="400"
+                        />
+                      </Flex>
+                    </Flex>
+                  </Flex>
+                }
+              >
+                <Box
+                  pl={'14px'}
+                  pr={'11px'}
+                  pb={'11px'}
+                  pt={'6px'}
+                >
+                  <PaymentDetails
+                    paymentBreakDown={createPaymentBreakdownMap(data.statusData)}
+                    totalText="Total"
+                    totalValueWithCurrency={getTotalPriceWithCurrency(data.statusData)}
+                    dataTest={testIds.orderDetailspage_paymentDetails}
+                  />
+                </Box>
+              </Accordion>
+            </>
           )}
 
-          {/* Display main bottom modal */}
           <BottomModal
             title=""
             isOpen={uiState.isMenuModalOpen}
@@ -967,7 +991,7 @@ const OrderDetails = () => {
                 gap="20px"
                 p={'20px 0px'}
               >
-                {menuItems(data.trackUrl as string).map((menuItem, index) => (
+                {menuItems.map((menuItem, index) => (
                   <Flex
                     key={index}
                     columnGap="10px"
@@ -980,14 +1004,14 @@ const OrderDetails = () => {
                     <Text
                       as={Typography}
                       text={menuItem.text as string}
-                      dataTest={testIds.orderDetailspage_menuItemName}
                       fontSize="15px"
+                      dataTest={testIds.orderDetailspage_menuItemName}
                       fontWeight={400}
                     />
                   </Flex>
                 ))}
                 <Divider />
-                {callMenuItem(data.supportData as SupportModel).map((menuItem, index) => (
+                {callMenuItem.map((menuItem, index) => (
                   <Flex
                     key={index}
                     columnGap="10px"
@@ -1009,8 +1033,6 @@ const OrderDetails = () => {
               </Stack>
             )}
           </BottomModal>
-
-          {/* Display cancellation bottom modal */}
 
           <BottomModalScan
             isOpen={uiState.isCancelMenuModalOpen}
@@ -1047,7 +1069,7 @@ const OrderDetails = () => {
                   value={processState.radioValue}
                   pl="20px"
                 >
-                  {orderCancelReason.map(reasonObj => (
+                  {ORDER_CANCEL_REASONS.map(reasonObj => (
                     <Stack
                       pb="10px"
                       direction="column"
@@ -1062,13 +1084,13 @@ const OrderDetails = () => {
                   m="20px"
                   height="124px"
                   resize="none"
-                  placeholder={t.specifyReason}
+                  fontSize={'12px'}
+                  placeholder="If you chose 'Other', please specify the reason"
                   boxShadow="0px 4px 6px -1px rgba(0, 0, 0, 0.1), 0px 2px 4px -2px rgba(0, 0, 0, 0.1)"
                 />
                 <Box m="20px">
                   <BecknButton
                     disabled={uiState.isProceedDisabled}
-                    children={t.proceed}
                     className="checkout_btn"
                     handleClick={() => {
                       dispatch(statusActions.addStatusResponse({ statusResponse: data.statusData }))
@@ -1078,7 +1100,9 @@ const OrderDetails = () => {
                         processState.radioValue
                       )
                     }}
-                  />
+                  >
+                    Confirm Cancellation
+                  </BecknButton>
                 </Box>
               </>
             )}

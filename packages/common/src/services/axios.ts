@@ -14,7 +14,35 @@ const createAxiosInstance = (store: Store): CustomAxiosInstance => {
   axios.interceptors.response.use(
     (response: AxiosResponse) => response,
     (error: AxiosError) => {
-      // Check if the error response exists and dispatch an action to the Redux store
+      // Handle network errors
+      if (!error.response) {
+        if (error.message.includes('ERR_NETWORK_CHANGED')) {
+          store.dispatch(
+            feedbackActions.setToastData({
+              toastData: {
+                display: true,
+                message: 'Network Error',
+                type: 'error',
+                description: 'Network connection changed. Please check your connection and try again.'
+              }
+            })
+          )
+        } else if (error.message.includes('Network Error')) {
+          store.dispatch(
+            feedbackActions.setToastData({
+              toastData: {
+                display: true,
+                message: 'Network Error',
+                type: 'error',
+                description: 'Please check your internet connection and try again.'
+              }
+            })
+          )
+        }
+        return Promise.reject(error)
+      }
+
+      // Handle other errors
       store.dispatch(
         feedbackActions.setToastData({
           toastData: {
@@ -32,7 +60,6 @@ const createAxiosInstance = (store: Store): CustomAxiosInstance => {
         })
       )
 
-      // Reject the promise to allow further error handling in the calling code
       return Promise.reject(error)
     }
   )

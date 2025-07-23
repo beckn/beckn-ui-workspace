@@ -14,8 +14,10 @@ import GeoLocationInputList from '@components/geoLocationInput/GeoLocationInputL
 import { Box, Text, useToast } from '@chakra-ui/react'
 import { Toast } from '@beckn-ui/molecules'
 import { ToastType } from '@beckn-ui/molecules/src/components/toast/Toast-type'
-import { feedbackActions, FeedbackRootState } from '@beckn-ui/common'
+import { checkTokenExpiry, feedbackActions, FeedbackRootState, logout } from '@beckn-ui/common'
 import { testIds } from '@shared/dataTestIds'
+import Cookies from 'js-cookie'
+import { RootState } from '@store/index'
 
 const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const { locale } = useLanguage()
@@ -35,6 +37,29 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const {
     toast: { display, message, type, description }
   } = useSelector((state: FeedbackRootState) => state.feedback)
+  const { user } = useSelector((state: RootState) => state.auth)
+
+  useEffect(() => {
+    if (!['/signIn', '/signUp', '/OTPVerification'].includes(router.pathname)) {
+      const token = Cookies.get('authToken')
+      let message = ''
+
+      try {
+        const isExpired: any = checkTokenExpiry(token)
+        if (isExpired || !user) message = 'Token expired, please log in again!'
+      } catch (error) {
+        console.error('Token decoding error:', error)
+        message = 'Token decode failed, please log in again!'
+      } finally {
+        if (message) {
+          alert(message)
+          // if (userConfirmed) {
+          dispatch(logout())
+          // }
+        }
+      }
+    }
+  }, [router])
 
   useEffect(() => {
     if (display) {

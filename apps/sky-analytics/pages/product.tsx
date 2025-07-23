@@ -1,7 +1,7 @@
 import React, { useCallback, useRef, useState } from 'react'
 import { ProductDetailPage } from '@beckn-ui/becknified-components'
 import { useDispatch, useSelector } from 'react-redux'
-import { Box, Flex, Link, Text, useTheme } from '@chakra-ui/react'
+import { Box, Flex, Link, useTheme } from '@chakra-ui/react'
 import { useLanguage } from '@hooks/useLanguage'
 import { DiscoveryRootState, ParsedItemModel } from '@beckn-ui/common/lib/types'
 import { cartActions } from '@beckn-ui/common/src/store/cart-slice'
@@ -45,11 +45,11 @@ const Product = () => {
   }, [])
 
   const handleOnProceed = () => {
-    let dataObjectsArray: any = getSelectedProductDetails(selectedItems)
+    const dataObjectsArray: any = getSelectedProductDetails(selectedItems)
     dispatch(
       cartActions.addItemToCart({
         product: { ...selectedProduct, item: { ...selectedProduct.item, tags: dataObjectsArray } },
-        quantity: 0
+        quantity: 1
       })
     )
     dispatch(
@@ -77,7 +77,6 @@ const Product = () => {
     <Box
       className="hideScroll"
       maxH="calc(100vh - 100px)"
-      overflowY={'scroll'}
     >
       <ProductDetailPage
         schema={{

@@ -3,7 +3,8 @@ import React from 'react'
 import { CurrencyType, ProductPriceProps } from './ProductPrice.types'
 import { Typography } from '@beckn-ui/molecules'
 
-const formatCurrency = (price: number, currencyType: CurrencyType, rateLabel: string = '') => {
+export const formatCurrency = (price: number, currencyType: CurrencyType, rateLabel: string = '') => {
+  if (!currencyType) return ''
   const currencyOptions = {
     GBP: { locale: 'en-GB', currency: 'GBP' },
     EUR: { locale: 'en-US', currency: 'EUR' },
@@ -25,8 +26,8 @@ const formatCurrency = (price: number, currencyType: CurrencyType, rateLabel: st
     INR: '₹',
     USD: '$'
   }
-  console.log(currencyType)
-  return `${currencySymbols[currencyType]}${formattedNumber} ${rateLabel}`.trim()
+
+  return `${currencySymbols[currencyType]} ${formattedNumber} ${rateLabel}`.trim()
 }
 
 const ProductPrice: React.FC<ProductPriceProps> = props => {
@@ -41,7 +42,8 @@ const ProductPrice: React.FC<ProductPriceProps> = props => {
     fontStyle,
     colorScheme = 'secondary',
     rateLabel,
-    fontWeight
+    fontWeight,
+    fontSize = '15px'
   } = props
 
   const textColor = colorScheme === 'primary' ? theme.colors.primary[100] : theme.colors.secondary[100]
@@ -63,7 +65,10 @@ const ProductPrice: React.FC<ProductPriceProps> = props => {
         color={color || textColor}
         style={fontStyle}
         fontWeight={fontWeight}
-        fontSize="15px"
+        fontSize={fontSize}
+        sx={{
+          whiteSpace: 'nowrap'
+        }}
       />
     </Flex>
   )

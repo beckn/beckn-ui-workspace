@@ -3,8 +3,14 @@ export const statusMap = {
   PaymentSettled: 'Ready to ship',
   Cancelled: 'Order Cancelled!',
   Shipped: 'Order Shipped',
-  Delivered: 'Order Delivered'
+  Delivered: 'Order Delivered',
+  ORDER_RECEIVED: 'Processing your order'
 }
 
 export type StatusMap = typeof statusMap
 export type StatusKey = keyof StatusMap
+
+export interface OrderStatus {
+  label: string
+  statusTime: string
+}

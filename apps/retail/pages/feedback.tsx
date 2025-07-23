@@ -1,15 +1,14 @@
-import { Box, Text, Image, Textarea, useToast } from '@chakra-ui/react'
+import { Box, Text, Image, Textarea } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 import StarRating from '../components/starRating/StarRating'
 import { useLanguage } from '../hooks/useLanguage'
 import feedbackImg from '../public/images/feedbackImg.svg'
-import { Typography } from '@beckn-ui/molecules'
+import { LoaderWithMessage, Typography } from '@beckn-ui/molecules'
 import { useDispatch, useSelector } from 'react-redux'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import useResponsive from '@beckn-ui/becknified-components/src/hooks/useResponsive'
 import axios from '@services/axios'
-import LoaderWithMessage from '@components/loader/LoaderWithMessage'
 import { StatusRootState } from '@beckn-ui/common/src/store/status-slice'
 import { StatusResponseModel } from '@beckn-ui/common/lib/types'
 import { feedbackActions } from '@beckn-ui/common/src/store/ui-feedback-slice'
@@ -23,7 +22,7 @@ const Feedback = () => {
   const [isLoadingForRating, setIsLoadingForRating] = useState(false)
   const statusResponse = useSelector((state: StatusRootState) => state.status.statusResponse)
   const { isDesktop } = useResponsive()
-  const toast = useToast()
+
   const dispatch = useDispatch()
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
@@ -173,14 +172,14 @@ const Feedback = () => {
             gap="1rem"
           >
             <BecknButton
-              children="Submit Review"
+              text="Submit Review"
               dataTest={testIds.feedback_submitReview}
               className="checkout_btn "
               disabled={!ratingForStore}
               handleClick={() => handleSubmitReview(statusResponse)}
             />
             <BecknButton
-              children="Skip for Now"
+              text="Skip for Now"
               dataTest={testIds.feedback_skip_forNow}
               variant="outline"
               className="checkout_btn"

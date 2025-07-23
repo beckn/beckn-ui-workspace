@@ -105,7 +105,7 @@ const ProductSummary: React.FC<ProductSummaryPropsModel> = props => {
                   </Flex>
                 )}
                 {providerName && (
-                  <Flex marginTop={'1rem'}>
+                  <Flex marginTop={'6px'}>
                     <Typography
                       dataTest={dataTestTitle}
                       className={`${className}-product_summary_provider_name`}

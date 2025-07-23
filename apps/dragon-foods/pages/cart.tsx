@@ -1,12 +1,9 @@
 import { useRouter } from 'next/router'
-
 import React from 'react'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useLanguage } from '@hooks/useLanguage'
-
 import { Box } from '@chakra-ui/react'
-
 import { DiscoveryRootState, ICartRootState } from '@beckn-ui/common/lib/types'
 import { DOMAIN } from '@lib/config'
 import { useSelectMutation } from '@beckn-ui/common/src/services/select'
@@ -17,14 +14,14 @@ import { feedbackActions } from '@beckn-ui/common'
 import { getSelectPayload } from '../utils/payload'
 
 const RequestOverview = () => {
-  const [fetchQuotes, { isLoading, data, isError }] = useSelectMutation()
+  const [fetchQuotes, { isLoading }] = useSelectMutation()
   const dispatch = useDispatch()
 
   const router = useRouter()
   const { t } = useLanguage()
 
   const { items, totalQuantity } = useSelector((state: ICartRootState) => state.cart)
-  const { transactionId, selectedProduct } = useSelector((state: DiscoveryRootState) => state.discovery)
+  const { transactionId } = useSelector((state: DiscoveryRootState) => state.discovery)
 
   useEffect(() => {
     if (items.length > 0) {
@@ -50,7 +47,6 @@ const RequestOverview = () => {
       pt={['20px', '20px', '0px', '0px']}
       className="hideScroll"
       maxH="calc(100vh - 120px)"
-      overflowY={'scroll'}
     >
       <Cart
         isLoading={isLoading}

@@ -83,7 +83,7 @@ const ViewMoreOrderModal: React.FC<ViewMoreOrderModalProps> = props => {
                   </Box>
                   <Typography
                     fontWeight={'600'}
-                    text={`${currencyMap[item.price.currency]} ${item.price.value} `}
+                    text={`${currencyMap[item.price.currency || 'INR']} ${item.price.value} `}
                   />
                 </Flex>
               )

@@ -15,7 +15,6 @@ import {
   orderCancelReason
 } from '../utilities/orderDetails-utils'
 import { getPaymentBreakDown } from '../utilities/checkout-utils'
-import TrackIcon from '../public/images/TrackIcon.svg'
 import useRequest from '../hooks/useRequest'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
@@ -29,7 +28,7 @@ import { ShippingFormData } from './checkoutPage'
 import CancelOrderForm from '../components/orderDetails/cancel-order-form'
 import RateUsCard from '../components/orderDetails/rate-us-card'
 import OrderOverview from '../components/orderDetails/order-overview'
-import { toast } from 'react-toastify'
+
 import PaymentDetails from '@beckn-ui/becknified-components/src/components/checkout/payment-details'
 import axios from '../services/axios'
 import { feedbackActions } from '../store/ui-feedback-slice'
@@ -257,7 +256,6 @@ const OrderDetails = () => {
     <Box
       className="hideScroll"
       maxH={'calc(100vh - 100px)'}
-      overflowY="scroll"
     >
       {areAllCoursesCompleted && (
         <RateUsCard

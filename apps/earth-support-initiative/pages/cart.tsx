@@ -50,7 +50,6 @@ const RequestOverview = () => {
       pt={['20px', '20px', '0px', '0px']}
       className="hideScroll"
       maxH="calc(100vh - 120px)"
-      overflowY={'scroll'}
     >
       <Cart
         isLoading={isLoading}

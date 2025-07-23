@@ -41,6 +41,10 @@ const checkoutSlice = createSlice({
     },
     setTotalBillingItems(state, action: PayloadAction<{ totalBillingItems: number }>) {
       state.totalBillingItems = action.payload.totalBillingItems
+    },
+    resetInitResponse(state) {
+      state.initResponse = []
+      state.isBillingSame = true
     }
   },
   extraReducers: builder => {

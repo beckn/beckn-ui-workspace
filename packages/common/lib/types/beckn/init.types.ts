@@ -40,7 +40,7 @@ interface OrderInfo {
         long_desc: string
         images: ImageInfo
       }
-  items: Item | ItemInfo
+  items: Item[] | ItemInfo
   fulfillments: Array<FulfillmentInfo>
   quote: Quote | QuoteInfo
   billing: Billing | BillingInfo

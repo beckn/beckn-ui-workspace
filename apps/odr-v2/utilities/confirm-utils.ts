@@ -1,5 +1,4 @@
-import { ConfirmResponseModel } from '../types/confirm.types'
-import { InitResponseModel } from '../types/init.types'
+import { InitResponseModel, ConfirmResponseModel } from '@beckn-ui/common'
 
 export const getPayloadForTrackRequest = (
   confirmOrderMetaDataPerBpp: any,

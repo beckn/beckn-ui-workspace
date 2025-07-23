@@ -4,43 +4,66 @@ import orderConfirmmark from '../public/images/orderConfirmmark.svg'
 import { useSelector, useDispatch } from 'react-redux'
 import { useLanguage } from '../hooks/useLanguage'
 import { ConfirmationPage } from '@beckn-ui/becknified-components'
-import { CheckoutRootState, checkoutActions, orderActions } from '@beckn-ui/common/src/store'
+import { CheckoutRootState, cartActions, checkoutActions, orderActions } from '@beckn-ui/common/src/store'
 import { getPayloadForConfirm, getPayloadForOrderHistoryPost } from '@utils/confirm-utils'
 import axios from '@services/axios'
 import { Box } from '@chakra-ui/react'
 import Cookies from 'js-cookie'
-import { ConfirmResponseModel } from '../types/confirm.types'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
 import { utilGenerateEllipsedText } from '@beckn-ui/molecules'
 import { useConfirmMutation } from '@beckn-ui/common/src/services/confirm'
 import { testIds } from '@shared/dataTestIds'
+import { OrderConfirmationModal } from '@beckn-ui/common'
 
 const OrderConfirmation = () => {
   const { t } = useLanguage()
   const router = useRouter()
-  const [confirmData, setConfirmData] = useState<ConfirmResponseModel[]>([])
-  const [confirm, { isLoading, data, isError }] = useConfirmMutation()
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [orderId, setOrderId] = useState<string>()
+  const [confirm, { isLoading, isError }] = useConfirmMutation()
   const dispatch = useDispatch()
 
   const initResponse = useSelector((state: CheckoutRootState) => state.checkout.initResponse)
   const confirmResponse = useSelector((state: CheckoutRootState) => state.checkout.confirmResponse)
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL
+
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
 
   const bearerToken = Cookies.get('authToken')
   const axiosConfig = {
     headers: {
       Authorization: `Bearer ${bearerToken}`,
-      'Content-Type': 'application/json' // You can set the content type as needed
+      'Content-Type': 'application/json'
     }
   }
 
   useEffect(() => {
+    if (confirmResponse && confirmResponse.length > 0) {
+      const orderIds: string[] = []
+      confirmResponse.forEach(response => {
+        orderIds.push(utilGenerateEllipsedText(response.message.orderId))
+      })
+      setOrderId(orderIds.join(', '))
+    }
+  }, [confirmResponse])
+
+  const handleConfirm = () => {
     if (initResponse && initResponse.length > 0) {
       const payLoad = getPayloadForConfirm(initResponse)
-      confirm(payLoad)
+      confirm(payLoad).then(() => {
+        dispatch(cartActions.clearCart())
+      })
     }
+  }
+
+  useEffect(() => {
+    handleConfirm()
   }, [])
+
+  useEffect(() => {
+    if (isError) {
+      setIsModalOpen(true)
+    }
+  }, [isError])
 
   useEffect(() => {
     if (confirmResponse && confirmResponse.length > 0) {
@@ -69,6 +92,27 @@ const OrderConfirmation = () => {
     )
   }
 
+  if (isError && isModalOpen) {
+    return (
+      <>
+        <OrderConfirmationModal
+          isOpen={isModalOpen}
+          headerText="Order Confirmation Failed"
+          subHeaderText="We couldn't confirm your order. Please try again or go back to home."
+          onClose={() => setIsModalOpen(false)}
+          onRetry={handleConfirm}
+          onGoTo={{
+            onClick: () => {
+              router.push('/')
+              dispatch(checkoutActions.clearState())
+            },
+            text: 'Go Back Home'
+          }}
+        />
+      </>
+    )
+  }
+
   return (
     <Box mt={'-2rem'}>
       <ConfirmationPage
@@ -77,10 +121,7 @@ const OrderConfirmation = () => {
           iconSrc: orderConfirmmark,
           successOrderMessage: 'ORDER SUCCESFULL',
           gratefulMessage: 'Thank you for your order!',
-          orderIdMessage:
-            confirmResponse && confirmResponse.length > 0
-              ? `Order number is: ${utilGenerateEllipsedText(confirmResponse[0].message.orderId)}`
-              : '',
+          orderIdMessage: confirmResponse && confirmResponse.length > 0 ? `Order number is: ${orderId}` : '',
           trackOrderMessage: `You can track your order in "My Order" section`,
 
           buttons: [

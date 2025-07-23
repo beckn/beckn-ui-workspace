@@ -13,6 +13,9 @@ import { FeedbackRootState, feedbackActions, ToastType } from '@store/ui-feedbac
 import { Toast } from '@beckn-ui/molecules/src/components'
 import { useToast } from '@chakra-ui/react'
 import { testIds } from '@shared/dataTestIds'
+import Cookies from 'js-cookie'
+import { checkTokenExpiry, logout } from '@beckn-ui/common'
+import { RootState } from '@store/index'
 
 const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const { locale } = useLanguage()
@@ -24,12 +27,36 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const geoLocationSearchPageVisible = useSelector((state: IGeoLocationSearchPageRootState) => {
     return state.geoLocationSearchPageUI.geoLocationSearchPageVisible
   })
+  const { user } = useSelector((state: RootState) => state.auth)
+
   const toast = useToast()
   const dispatch = useDispatch()
 
   const {
     toast: { display, message, type, description }
   } = useSelector((state: FeedbackRootState) => state.feedback)
+
+  useEffect(() => {
+    if (!['/signin', '/signUp'].includes(router.pathname)) {
+      const token = Cookies.get('authToken')
+      let message = ''
+
+      try {
+        const isExpired: any = checkTokenExpiry(token)
+        if (isExpired || !user) message = 'Token expired, please log in again!'
+      } catch (error) {
+        console.error('Token decoding error:', error)
+        message = 'Token decode failed, please log in again!'
+      } finally {
+        if (message) {
+          alert(message)
+          // if (userConfirmed) {
+          dispatch(logout())
+          // }
+        }
+      }
+    }
+  }, [router])
 
   useEffect(() => {
     if (display) {
@@ -62,6 +89,7 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
         <Header />
         {!geoLocationSearchPageVisible ? (
           <main
+            style={{ overflowY: 'scroll' }}
             className={`${styles.main} ${!isHomepage ? styles.withPadding : ''} ${
               !isHomepage && !isSearch ? styles.withMargin : ''
             } ${isHomepage ? styles.homepageMargin : isSearch ? styles.searchMargin : ''} 

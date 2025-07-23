@@ -40,7 +40,7 @@ const ProductCard: React.FC<ProductCardProps> = props => {
           }}
           transition="0.5s all"
           position={'relative'}
-          boxShadow={'0px 8px 10px 0px #0000001A'}
+          boxShadow={'0px 8px 30px 0px #0000001A'}
           data-test={dataTest}
         >
           {/* {props.product?.guideImage && <Image src={props.product?.guideImage} />} */}

@@ -3,11 +3,10 @@ import React, { useEffect, useState } from 'react'
 import PaymentDetails from '@beckn-ui/becknified-components/src/components/checkout/payment-details'
 import Accordion from '@beckn-ui/molecules/src/components/accordion/Accordion'
 import Typography from '@beckn-ui/molecules/src/components/typography/typography'
-import { Box, Flex, HStack, Stack } from '@chakra-ui/react'
+import { Box, Flex, HStack } from '@chakra-ui/react'
 import Qrcode from '@components/qrCode/Qrcode'
 import { useLanguage } from '@hooks/useLanguage'
-import { getPaymentBreakDown } from '@utils/checkout-utils'
-import { StatusResponseModel } from '../types/status.types'
+import { createPaymentBreakdownMap, getTotalPriceWithCurrency, StatusResponseModel } from '@beckn-ui/common'
 import { testIds } from '@shared/dataTestIds'
 import { AssemblyData } from '../types/search.types'
 
@@ -43,7 +42,7 @@ const invoiceDetails = () => {
     }
   } = statusData[0]
 
-  const { name } = items
+  const { name } = items[0]
 
   const { t } = useLanguage()
   return (
@@ -92,9 +91,9 @@ const invoiceDetails = () => {
         </Box>
         <PaymentDetails
           dataTest={testIds.orderDetailspage_paymentDetails}
-          paymentBreakDown={getPaymentBreakDown(statusData, assemblyDetails?.quantity).breakUpMap}
+          paymentBreakDown={createPaymentBreakdownMap(statusData)}
           totalText="Total"
-          totalValueWithCurrency={getPaymentBreakDown(statusData, assemblyDetails?.quantity).totalPricewithCurrent}
+          totalValueWithCurrency={getTotalPriceWithCurrency(statusData)}
         />
       </DetailsCard>
 

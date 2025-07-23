@@ -27,7 +27,6 @@ const OrderHistory = () => {
     if (localStorage && localStorage.getItem('userPhone')) {
       fetchData(`${apiUrl}/client/v2/orders?userId=${localStorage.getItem('userPhone')}`, 'GET')
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {

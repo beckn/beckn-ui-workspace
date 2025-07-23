@@ -19,6 +19,8 @@ const assemblyDetails = () => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
   const fetchSelectData = (selectPayload: any) => {
+    setIsLoadingForSelect(true)
+
     axios
       .post(`${apiUrl}/select`, selectPayload)
       .then(res => {
@@ -30,6 +32,8 @@ const assemblyDetails = () => {
       .catch(e => {
         setError(e.message)
         console.error(e)
+      })
+      .finally(() => {
         setIsLoadingForSelect(false)
       })
   }

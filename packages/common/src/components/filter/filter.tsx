@@ -6,68 +6,58 @@ import {
   Flex,
   FormControl,
   FormLabel,
-  Select,
   Text,
   useTheme
 } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import { getLocalStorage, setLocalStorage } from '../../utils'
 import Button from '../button/button'
-import { FilterPropsModel } from './filter.types'
+import { FilterPropsModel, FilterFieldConfig } from './filter.types'
 import { testIds } from '@shared/dataTestIds'
 import { GenericDropdown } from '@beckn-ui/molecules'
 
 const activeLabelStyles = {
   // transform: 'scale(1) translateY(-24px)'
 }
-const filterPriceOption = [
-  {
-    value: ' ',
-    label: 'Price'
-    // isDisabled: true
-  },
-  {
-    value: 'LowtoHigh',
-    label: 'Price -- Low to High'
-  },
-  {
-    value: 'HightoLow',
-    label: 'Price -- High to Low'
-  },
-  {
-    value: 'defaultRating',
-    label: 'Rating',
-    isDisabled: true
-  },
-  {
-    value: 'RatingLowtoHigh',
-    label: 'Rating -- Low to High'
-  },
-  {
-    value: 'RatingHightoLow',
-    label: 'Rating -- High to Low'
-  }
-]
-// const filterRatingOption = [
-//   {
-//     value: '',
-//     label: 'Rating'
-//   },
-//   {
-//     value: 'RatingLowtoHigh',
-//     label: 'Rating -- Low to High'
-//   },
-//   {
-//     value: 'RatingHightoLow',
-//     label: 'Rating -- High to Low'
-//   }
-// ]
+
+const defaultSortField: FilterFieldConfig = {
+  name: 'sortBy',
+  label: 'Sort by',
+  type: 'dropdown',
+  options: [
+    {
+      value: '',
+      label: 'Price'
+    },
+    {
+      value: 'LowtoHigh',
+      label: 'Price -- Low to High'
+    },
+    {
+      value: 'HightoLow',
+      label: 'Price -- High to Low'
+    },
+    {
+      value: 'defaultRating',
+      label: 'Rating',
+      isDisabled: true
+    },
+    {
+      value: 'RatingLowtoHigh',
+      label: 'Rating -- Low to High'
+    },
+    {
+      value: 'RatingHightoLow',
+      label: 'Rating -- High to Low'
+    }
+  ]
+}
 
 const Filter = ({
   handleApplyFilter,
   handleResetFilter,
   handleCancelFilter = () => {},
-  sortByRating = false
+  fields = []
 }: FilterPropsModel) => {
   const theme = useTheme()
   const customTheme = extendTheme({
@@ -115,31 +105,67 @@ const Filter = ({
   const primaryColor = customTheme.colors.primary['100']
   const secondaryColor = customTheme.colors.secondary['100']
 
-  const getFormData = (): Record<string, any> | undefined => {
+  const getFormData = (): Record<string, string> => {
     if (localStorage) {
-      const localFormData: any = getLocalStorage('formData')
-      return localFormData
+      const localFormData = getLocalStorage('formData')
+      return (localFormData || {}) as Record<string, string>
     }
+    return {} as Record<string, string>
   }
-  const [formData, setFormData] = useState(getFormData())
-  const [sortBy, setSortBy] = useState<string>('')
+
+  const [formData, setFormData] = useState<Record<string, string>>(getFormData())
+
   const handleChange = (name: string, value: string) => {
-    setSortBy(value)
     setFormData(prevData => ({
       ...prevData,
       [name]: value
     }))
   }
+
   const resetFilter = () => {
-    setSortBy('')
     setFormData({})
     handleResetFilter()
   }
+
   useEffect(() => {
     if (localStorage) {
       setLocalStorage('formData', formData)
     }
-  }, [formData, sortBy])
+  }, [formData])
+
+  const renderField = (field: FilterFieldConfig) => {
+    switch (field.type) {
+      case 'dropdown':
+        return (
+          <FormControl
+            variant="floating"
+            key={field.name}
+          >
+            <FormLabel
+              className="dropDown_label"
+              fontSize="15px"
+            >
+              {field.label}
+            </FormLabel>
+            <GenericDropdown
+              options={field.options || []}
+              selectedValue={formData[field.name] || field.defaultValue || ''}
+              handleChange={value => handleChange(field.name, value.value)}
+              buttonStyles={{
+                fontSize: '16px'
+              }}
+              name={field.name}
+              dataTest={`filter-${field.name}`}
+            />
+          </FormControl>
+        )
+      // Add cases for other field types here
+      default:
+        return null
+    }
+  }
+
+  const allFields = fields.length > 0 ? fields : [defaultSortField]
 
   return (
     <>
@@ -148,7 +174,7 @@ const Filter = ({
           height={['100%', '100%', '320px']}
           w={['100%', '350px']}
           p={['unset', '20px']}
-          boxShadow={['unset', '0px 8px 10px 0px #0000001A']}
+          boxShadow={['unset', '0px 8px 30px 0px #0000001A']}
           margin={['unset', '0 auto', '0 auto', '20px 0 0 0']}
           data-test={testIds.searchpage_filterContainer}
           className="filter-wrapper"
@@ -169,94 +195,14 @@ const Filter = ({
               Reset
             </Text>
           </Flex>
-          <Divider mb={'44px'} />
-          <Box pb={'24px'}>
-            <FormControl variant="floating">
-              {/* <Select
-                data-test={testIds.searchpage_sortByPrice}
-                onChange={e => handleChange('searchByPrice', e.target.value)}
-                value={formData?.searchByPrice || ''}
-                fontSize="15px"
-                height={'30px'}
-                border={'unset'}
-                borderRadius="unset"
-                borderBottom={'1px solid'}
-                paddingBottom={'2px'}
-                cursor="pointer"
-                _focusVisible={{ zIndex: 1, borderColor: '#3182ce' }}
-              >
-                <option value="">Price</option>
-                <option value="LowtoHigh">Price -- Low to High</option>
-                <option value="HightoLow">Price -- High to Low</option>
-              </Select> */}
-              <FormLabel
-                className="dropDown_label"
-                fontSize="15px"
-              >
-                Sort by
-              </FormLabel>
-              <GenericDropdown
-                options={filterPriceOption}
-                // placeholder="Select Information Category"
-                selectedValue={formData?.searchByPrice || ''}
-                handleChange={value => {
-                  // dispatch(updatePolicyType(value || ''))
-                  // if (value.value === 'default' || value.value === 'defaultRating') return
-                  handleChange('searchByPrice', value.value)
-                }}
-                buttonStyles={{
-                  fontSize: '16px'
-                }}
-                name="searchByPrice"
-                dataTest={testIds.searchpage_sortByPrice}
-              />
-            </FormControl>
-          </Box>
-
-          {/* {sortByRating && (
-            <Box pb={'26px'}>
-              <FormControl variant="floating"> */}
-          {/* <Select
-                  data-test={testIds.searchpage_filterByRating}
-                  onChange={e => handleChange('searchByRating', e.target.value)}
-                  value={formData?.searchByRating || ''}
-                  fontSize="15px"
-                  height={'30px'}
-                  border={'unset'}
-                  borderRadius="unset"
-                  borderBottom={'1px solid'}
-                  paddingBottom={'2px'}
-                  boxShadow={'none'}
-                  cursor="pointer"
-                  _focusVisible={{ zIndex: 1, borderColor: '#3182ce' }}
-                >
-                  <option value="">Rating</option>
-                  <option value="RatingLowtoHigh">Rating -- Low to High</option>
-                  <option value="RatingHightoLow">Rating -- High to Low</option>
-                </Select> */}
-          {/* <FormLabel
-                  className="dropDown_label"
-                  fontSize="15px"
-                >
-                  Filter By Rating
-                </FormLabel>
-                <GenericDropdown
-                  options={filterRatingOption}
-                  // placeholder="Select Information Category"
-                  selectedValue={formData?.searchByRating || ''}
-                  handleChange={value => {
-                    // dispatch(updatePolicyType(value || ''))
-                    handleChange('searchByRating', value.value)
-                  }}
-                  buttonStyles={{
-                    fontSize: '16px'
-                  }}
-                  name="searchByRating"
-                  dataTest={testIds.searchpage_filterByRating}
-                />
-              </FormControl>
-            </Box>
-          )} */}
+          <Divider mb={'24px'} />
+          <Flex
+            pb={'24px'}
+            flexDir={'column'}
+            gap={'1rem'}
+          >
+            {allFields.map(field => renderField(field))}
+          </Flex>
           <Button
             buttonText={'Apply Filter'}
             background={primaryColor}
@@ -265,7 +211,7 @@ const Filter = ({
             isDisabled={false}
             dataTest={'apply-filter'}
             handleOnClick={() => {
-              handleApplyFilter(sortBy)
+              handleApplyFilter(formData)
             }}
           />
           <Box display={['block', 'block', 'none', 'none']}>
