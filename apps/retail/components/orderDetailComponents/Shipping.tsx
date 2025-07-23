@@ -1,6 +1,6 @@
 import React from 'react'
 import { Typography } from '@beckn-ui/molecules'
-import { Box, Stack, StackDivider, Flex, Image } from '@chakra-ui/react'
+import { Box, Stack, StackDivider, Flex } from '@chakra-ui/react'
 import { testIds } from '@shared/dataTestIds'
 
 export interface ShippingBlockProps {
@@ -21,7 +21,7 @@ export interface ShippingBlockProps {
   dataTest?: string
 }
 
-const ShippingBlock: React.FC<ShippingBlockProps> = ({ title, name, address, mobile, responsive, dataTest }) => {
+const ShippingBlock: React.FC<ShippingBlockProps> = ({ title, name, address, mobile, dataTest }) => {
   return (
     <Box
       data-test={dataTest}
