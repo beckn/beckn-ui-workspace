@@ -5,11 +5,11 @@ import styles from '../styles/Index.module.css'
 const Index: React.FC = () => {
   const router = useRouter()
 
-  const quickStats = [
-    { label: 'Total Users', value: '1,234', icon: '👥' },
-    { label: 'Active Networks', value: '56', icon: '🌐' },
-    { label: 'System Health', value: '99.9%', icon: '✅' }
-  ]
+  // const quickStats = [
+  //   { label: 'Total Users', value: '1,234', icon: '👥' },
+  //   { label: 'Active Networks', value: '56', icon: '🌐' },
+  //   { label: 'System Health', value: '99.9%', icon: '✅' }
+  // ]
 
   return (
     <div className={styles.container}>
@@ -24,7 +24,7 @@ const Index: React.FC = () => {
         </div>
 
         {/* Quick Stats */}
-        <div className={styles.statsSection}>
+        {/* <div className={styles.statsSection}>
           <h2 className={styles.sectionTitle}>System Overview</h2>
           <div className={styles.statsGrid}>
             {quickStats.map((stat, index) => (
@@ -40,7 +40,7 @@ const Index: React.FC = () => {
               </div>
             ))}
           </div>
-        </div>
+        </div> */}
 
         {/* Quick Access */}
         <div className={styles.quickAccess}>

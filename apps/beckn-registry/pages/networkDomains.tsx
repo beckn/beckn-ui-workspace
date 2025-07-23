@@ -213,22 +213,6 @@ const NetworkDomains: React.FC = () => {
     )
   }
 
-  if (domains?.results.length === 0) {
-    return (
-      <div className={styles.networkDomainContainer}>
-        <ActionHeaders
-          onPlusClick={handleAddNetworkDomain}
-          onBackClick={() => router.back()}
-          onHomeClick={() => router.push('/')}
-        />
-        <h2 className={styles.title}>{en.networkDomains.title}</h2>
-        <div className={styles.emptyContainer}>
-          <p>No network domains found.</p>
-        </div>
-      </div>
-    )
-  }
-
   return (
     <div className={styles.networkDomainContainer}>
       <ActionHeaders
@@ -241,29 +225,37 @@ const NetworkDomains: React.FC = () => {
         placeholder={en.networkDomains.searchPlaceholder}
         onSearch={handleSearch}
       />
-      <div className={styles.tableContainer}>
-        <CustomTable
-          columns={columns}
-          data={domains?.results as unknown as TableData[]}
-          actions={actions}
-          pagination={{
-            currentPage: currentPage,
-            pageSize: currentPageSize,
-            total: pagination?.total || 1,
-            onPageChange: handlePageChange,
-            onPageSizeChange: handlePageSizeChange
-          }}
-        />
-      </div>
-      <AlertModal
-        isOpen={deleteModalState.isOpen}
-        onClose={handleDeleteCancel}
-        onConfirm={handleDeleteConfirm}
-        title="Delete Network Domain"
-        message={`Are you sure you want to delete this network domain? This action cannot be undone.`}
-        confirmText="Delete"
-        cancelText="Cancel"
-      />
+      {domains?.results.length === 0 ? (
+        <div className={styles.emptyContainer}>
+          <p>No network domains found.</p>
+        </div>
+      ) : (
+        <>
+          <div className={styles.tableContainer}>
+            <CustomTable
+              columns={columns}
+              data={domains?.results as unknown as TableData[]}
+              actions={actions}
+              pagination={{
+                currentPage: currentPage,
+                pageSize: currentPageSize,
+                total: pagination?.total || 1,
+                onPageChange: handlePageChange,
+                onPageSizeChange: handlePageSizeChange
+              }}
+            />
+          </div>
+          <AlertModal
+            isOpen={deleteModalState.isOpen}
+            onClose={handleDeleteCancel}
+            onConfirm={handleDeleteConfirm}
+            title="Delete Network Domain"
+            message={`Are you sure you want to delete this network domain? This action cannot be undone.`}
+            confirmText="Delete"
+            cancelText="Cancel"
+          />
+        </>
+      )}
       {error?.status === 401 && (
         <UnauthorizedAccess
           onRetry={refetch}
