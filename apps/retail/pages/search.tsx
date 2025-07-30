@@ -158,7 +158,7 @@ const Search = () => {
           break
       }
     }
-
+    console.log('filters', filters)
     // Apply service type filter
     if (filters.serviceType && filters.serviceType !== '') {
       filteredItems = filteredItems.filter(item => item.item.fulfillments?.some(f => f.type === filters.serviceType))
@@ -179,8 +179,8 @@ const Search = () => {
         return filters.deals === 'deals' ? hasDiscount : !hasDiscount
       })
     }
-
-    setItems(filteredItems)
+    console.log('filteredItems', filteredItems)
+    dispatch(setItems(filteredItems))
     setIsFilterOpen(false)
   }
 
@@ -264,8 +264,12 @@ const Search = () => {
             name: 'rating',
             label: 'Rating',
             type: 'dropdown',
-            defaultValue: '4+',
+            defaultValue: '',
             options: [
+              {
+                value: '',
+                label: 'Select'
+              },
               {
                 value: '4+',
                 label: '4+'
@@ -288,8 +292,12 @@ const Search = () => {
             name: 'deals',
             label: 'Deals & Discounts',
             type: 'dropdown',
-            defaultValue: 'all',
+            defaultValue: '',
             options: [
+              {
+                value: '',
+                label: 'Select'
+              },
               {
                 value: 'all',
                 label: 'All prices'
