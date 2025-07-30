@@ -51,7 +51,7 @@ const OrderHistory = () => {
         if (result.error) {
           return setError(result.error.message)
         }
-        setOrderHistoryList(result.data.reverse())
+        setOrderHistoryList(result.data)
         setIsLoading(false)
       })
       .catch(() => {
@@ -99,6 +99,7 @@ const OrderHistory = () => {
       maxH={'calc(100vh - 100px)'}
       w={['100%', '100%', '70%', '62%']}
       margin="0 auto"
+      marginBottom={'14rem'}
     >
       {!orderHistoryList.length ? (
         <EmptyOrder />

@@ -80,15 +80,27 @@ const ORDER_CANCEL_REASONS = [
   { id: 4, reason: 'Other' }
 ]
 
-type ParentStatus = 'ACTIVE' | 'COMPLETE' | 'CANCELLED'
+type ParentStatus = 'ORDER_RECEIVED' | 'COMPLETE' | 'USER CANCELLED'
 
 const parentStatusMap: Record<
   ParentStatus,
   { borderColor: string; bgColor: string; color: string; icon: string | undefined; label: string }
 > = {
-  ACTIVE: { borderColor: '#F0D402', bgColor: '#FFF9CC', color: '#807000', icon: undefined, label: 'In Progress' },
+  ORDER_RECEIVED: {
+    borderColor: '#F0D402',
+    bgColor: '#FFF9CC',
+    color: '#807000',
+    icon: undefined,
+    label: 'In Progress'
+  },
   COMPLETE: { borderColor: '#C0F7E2', bgColor: '#D2F9EA', color: '#11704C', icon: successIcon, label: 'Completed' },
-  CANCELLED: { borderColor: '#E93324', bgColor: '#FFD2D2', color: '#E93324', icon: undefined, label: 'Cancelled' }
+  'USER CANCELLED': {
+    borderColor: '#E93324',
+    bgColor: '#FFD2D2',
+    color: '#E93324',
+    icon: undefined,
+    label: 'Cancelled'
+  }
 }
 
 const OrderDetails = () => {
@@ -686,20 +698,30 @@ const OrderDetails = () => {
                   <Flex
                     alignItems="center"
                     gap="4px"
-                    border={`0.5px solid ${parentStatusMap[data.statusData[0].message.order.status as ParentStatus].borderColor}`}
+                    border={`0.5px solid ${parentStatusMap[data.statusData[0].message.order.fulfillments[0].state.descriptor.code as ParentStatus].borderColor}`}
                     borderRadius="4px"
                     padding="4px 8px"
-                    bgColor={parentStatusMap[data.statusData[0].message.order.status as ParentStatus].bgColor}
+                    bgColor={
+                      parentStatusMap[
+                        data.statusData[0].message.order.fulfillments[0].state.descriptor.code as ParentStatus
+                      ].bgColor
+                    }
                   >
-                    {parentStatusMap[data.statusData[0].message.order.status as ParentStatus].icon && (
+                    {parentStatusMap[
+                      data.statusData[0].message.order.fulfillments[0].state.descriptor.code as ParentStatus
+                    ].icon && (
                       <Image
-                        src={`${parentStatusMap[data.statusData[0].message.order.status as ParentStatus].icon}`}
+                        src={`${parentStatusMap[data.statusData[0].message.order.fulfillments[0].state.descriptor.code as ParentStatus].icon}`}
                         alt="status_icon"
                       />
                     )}
                     <Typography
-                      color={parentStatusMap[data.statusData[0].message.order.status as ParentStatus].color}
-                      text={`${parentStatusMap[data.statusData[0].message.order.status as ParentStatus].label}`}
+                      color={
+                        parentStatusMap[
+                          data.statusData[0].message.order.fulfillments[0].state.descriptor.code as ParentStatus
+                        ].color
+                      }
+                      text={`${parentStatusMap[data.statusData[0].message.order.fulfillments[0].state.descriptor.code as ParentStatus].label}`}
                       dataTest="order-status"
                     />
                   </Flex>
@@ -991,26 +1013,31 @@ const OrderDetails = () => {
                 gap="20px"
                 p={'20px 0px'}
               >
-                {menuItems.map((menuItem, index) => (
-                  <Flex
-                    key={index}
-                    columnGap="10px"
-                    alignItems="center"
-                    onClick={menuItem.onClick}
-                    cursor={'pointer'}
-                    data-test={testIds.orderDetailspage_menuItem}
-                  >
-                    <Image src={menuItem.image} />
-                    <Text
-                      as={Typography}
-                      text={menuItem.text as string}
-                      fontSize="15px"
-                      dataTest={testIds.orderDetailspage_menuItemName}
-                      fontWeight={400}
-                    />
-                  </Flex>
-                ))}
-                <Divider />
+                {!(['COMPLETE', 'USER CANCELLED'] as ParentStatus[]).includes(
+                  data.statusData[0].message.order.fulfillments[0].state.descriptor.code as ParentStatus
+                ) &&
+                  menuItems.map((menuItem, index) => (
+                    <>
+                      <Flex
+                        key={index}
+                        columnGap="10px"
+                        alignItems="center"
+                        onClick={menuItem.onClick}
+                        cursor={'pointer'}
+                        data-test={testIds.orderDetailspage_menuItem}
+                      >
+                        <Image src={menuItem.image} />
+                        <Text
+                          as={Typography}
+                          text={menuItem.text as string}
+                          fontSize="15px"
+                          dataTest={testIds.orderDetailspage_menuItemName}
+                          fontWeight={400}
+                        />
+                      </Flex>
+                      <Divider />
+                    </>
+                  ))}
                 {callMenuItem.map((menuItem, index) => (
                   <Flex
                     key={index}
