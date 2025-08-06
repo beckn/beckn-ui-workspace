@@ -30,6 +30,8 @@
     "dev:retail": "yarn workspace @beckn-ui/retail dev",
     "build:retail": "yarn workspace @beckn-ui/retail build",
     "start:retail": "yarn workspace @beckn-ui/retail start",
+    "build:export:retail": "yarn workspace @beckn-ui/retail build && yarn workspace @beckn-ui/retail export",
+    "deploy:retail": "yarn workspace @beckn-ui/retail deploy",
     "dev:mobility-bap": "yarn workspace @beckn-ui/mobility-bap dev",
     "build:mobility-bap": "yarn workspace @beckn-ui/mobility-bap build",
     "start:mobility-bap": "yarn workspace @beckn-ui/mobility-bap start",

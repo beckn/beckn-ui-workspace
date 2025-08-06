@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "postbuild": "next-sitemap",
-    "export": "next export"
+    "export": "next export",
+    "deploy": "firebase deploy --only hosting"
   },
   "prettier": "@beckn-ui/prettier-config",
   "dependencies": {

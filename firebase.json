@@ -1,0 +1,18 @@
+{
+  "hosting": [
+    {
+      "target": "retail",
+      "public": "apps/retail/public",
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+      "rewrites": [
+        {
+          "source": "**",
+          "function": "retailApp"
+        }
+      ]
+    }
+  ],
+  "functions": {
+    "source": "apps/retail/functions"
+  }
+}
