@@ -2,7 +2,7 @@
   "hosting": [
     {
       "target": "retail",
-      "public": "apps/retail/public",
+      "public": "apps/retail/out",
       "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
       "rewrites": [
         {

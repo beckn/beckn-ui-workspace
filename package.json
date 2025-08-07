@@ -126,6 +126,7 @@
     ]
   },
   "dependencies": {
+    "@beckn-ui/retail": "workspace:^",
     "@beckn-ui/taxi-bpp-v2": "workspace:^",
     "@googlemaps/js-api-loader": "^1.16.6",
     "@react-google-maps/api": "^2.19.3",
@@ -134,9 +135,12 @@
     "@types/googlemaps": "^3.43.3",
     "@types/mongoose": "^5.11.97",
     "eslint-config-next": "latest",
+    "firebase-admin": "^13.4.0",
+    "firebase-functions": "^6.4.0",
     "mongodb": "^6.2.0",
     "mongoose": "^8.0.0",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "workspace": "^0.0.1-preview.2"
   },
   "devDependencies": {
     "@beckn-ui/prettier-config": "workspace:^",
