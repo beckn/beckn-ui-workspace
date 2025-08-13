@@ -80,7 +80,7 @@ const ORDER_CANCEL_REASONS = [
   { id: 4, reason: 'Other' }
 ]
 
-type ParentStatus = 'ORDER_RECEIVED' | 'COMPLETE' | 'USER CANCELLED'
+type ParentStatus = 'ORDER_RECEIVED' | 'COMPLETE' | 'USER CANCELLED' | 'ORDER_DISPATCHED'
 
 const parentStatusMap: Record<
   ParentStatus,
@@ -100,6 +100,13 @@ const parentStatusMap: Record<
     color: '#E93324',
     icon: undefined,
     label: 'Cancelled'
+  },
+  ORDER_DISPATCHED: {
+    borderColor: '#F0D402',
+    bgColor: '#FFF9CC',
+    color: '#807000',
+    icon: undefined,
+    label: 'Dispatched'
   }
 }
 
@@ -698,20 +705,20 @@ const OrderDetails = () => {
                   <Flex
                     alignItems="center"
                     gap="4px"
-                    border={`0.5px solid ${parentStatusMap[data.statusData[0].message.order.fulfillments[0].state.descriptor.code as ParentStatus].borderColor}`}
+                    border={`0.5px solid ${parentStatusMap[data.statusData[0].message.order.fulfillments[0].state.descriptor.code as ParentStatus]?.borderColor || '#F0D402'}`}
                     borderRadius="4px"
                     padding="4px 8px"
                     bgColor={
                       parentStatusMap[
                         data.statusData[0].message.order.fulfillments[0].state.descriptor.code as ParentStatus
-                      ].bgColor
+                      ]?.bgColor || '#FFF9CC'
                     }
                   >
                     {parentStatusMap[
                       data.statusData[0].message.order.fulfillments[0].state.descriptor.code as ParentStatus
-                    ].icon && (
+                    ]?.icon && (
                       <Image
-                        src={`${parentStatusMap[data.statusData[0].message.order.fulfillments[0].state.descriptor.code as ParentStatus].icon}`}
+                        src={`${parentStatusMap[data.statusData[0].message.order.fulfillments[0].state.descriptor.code as ParentStatus]?.icon}`}
                         alt="status_icon"
                       />
                     )}
@@ -719,9 +726,9 @@ const OrderDetails = () => {
                       color={
                         parentStatusMap[
                           data.statusData[0].message.order.fulfillments[0].state.descriptor.code as ParentStatus
-                        ].color
+                        ]?.color || '#807000'
                       }
-                      text={`${parentStatusMap[data.statusData[0].message.order.fulfillments[0].state.descriptor.code as ParentStatus].label}`}
+                      text={`${parentStatusMap[data.statusData[0].message.order.fulfillments[0].state.descriptor.code as ParentStatus]?.label || 'In Progress'}`}
                       dataTest="order-status"
                     />
                   </Flex>
