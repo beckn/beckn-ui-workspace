@@ -15,7 +15,7 @@ import AddSection from '@components/x-input/AddSection'
 import { useInitMutation } from '@beckn-ui/common/src/services/init'
 import { useSelectMutation } from '@beckn-ui/common/src/services/select'
 import { testIds } from '@shared/dataTestIds'
-import { DiscoveryRootState, getSelectPayload, ICartRootState, isEmpty } from '@beckn-ui/common'
+import { DiscoveryRootState, getSelectPayload, ICartRootState, isEmpty, Item } from '@beckn-ui/common'
 
 export type ShippingFormData = {
   name: string
@@ -75,6 +75,23 @@ const CheckoutPage = () => {
   const breakpoint = useBreakpoint()
   const mobileBreakpoints = ['base', 'sm', 'md']
   const isLargeScreen = !mobileBreakpoints.includes(breakpoint)
+
+  useEffect(() => {
+    if (isSelectError) {
+      toast({
+        title: 'Error',
+        description: 'Failed to fetch quotes. Redirecting back...',
+        status: 'error',
+        duration: 3000,
+        isClosable: true
+      })
+      // Small delay to show the toast before redirecting
+      const timer = setTimeout(() => {
+        router.back()
+      }, 1000)
+      return () => clearTimeout(timer)
+    }
+  }, [isSelectError, router, toast])
 
   useEffect(() => {
     fetchQuotes(getSelectPayload(items, transactionId, DOMAIN))
@@ -216,30 +233,34 @@ const CheckoutPage = () => {
         <ShippingSection {...complainantDetails} />
         <ShippingSection {...respondentDetails} />
 
-        <AddSection
-          htmlString={selectResponse?.[0]?.message.order.items?.[0]?.xinput.html}
-          disabled={isSectionDisabled(selectResponse, null, true)}
-          modalTitle="Add Dispute Details"
-          form_id="odrDisputeDetailsForm"
-          sectionSubTitle="Dispute Details"
-          notifySubmit={setDisputeFormSubmitted}
-          isFormSubmit={disputeFormSubmitted}
-          dataTest={testIds.checkoutpage_dispute_Details}
-        />
+        {selectResponse?.[0]?.message.order.items?.[0]?.xinput?.html && (
+          <AddSection
+            htmlString={selectResponse?.[0]?.message.order.items?.[0]?.xinput?.html}
+            disabled={isSectionDisabled(selectResponse, null, true)}
+            modalTitle="Add Dispute Details"
+            form_id="odrDisputeDetailsForm"
+            sectionSubTitle="Dispute Details"
+            notifySubmit={setDisputeFormSubmitted}
+            isFormSubmit={disputeFormSubmitted}
+            dataTest={testIds.checkoutpage_dispute_Details}
+          />
+        )}
 
-        <AddSection
-          htmlString={initResponse?.[0]?.message.order.items?.[0]?.xinput.html}
-          disabled={isSectionDisabled(selectResponse, initResponse, disputeFormSubmitted)}
-          modalTitle="Consent Form"
-          form_id="odrConsentForm"
-          sectionSubTitle="Consent"
-          preSubmissionTitle="Consent Form"
-          postSubmissionTitle="Consent form added"
-          notifySubmit={setConsentFormSubmitted}
-          isFormSubmit={consentFormSubmitted}
-          bottomGap="10"
-          dataTest={testIds.checkoutpage_consent_Details}
-        />
+        {(initResponse?.[0]?.message.order.items as Item[])?.[0]?.xinput?.html && (
+          <AddSection
+            htmlString={(initResponse?.[0]?.message.order.items as Item[])?.[0]?.xinput?.html || ''}
+            disabled={isSectionDisabled(selectResponse, initResponse, disputeFormSubmitted)}
+            modalTitle="Consent Form"
+            form_id="odrConsentForm"
+            sectionSubTitle="Consent"
+            preSubmissionTitle="Consent Form"
+            postSubmissionTitle="Consent form added"
+            notifySubmit={setConsentFormSubmitted}
+            isFormSubmit={consentFormSubmitted}
+            bottomGap="10"
+            dataTest={testIds.checkoutpage_consent_Details}
+          />
+        )}
         <Box
           width={isLargeScreen ? '40%' : '100%'}
           margin="auto"
@@ -249,7 +270,6 @@ const CheckoutPage = () => {
             dataTest={testIds.checkoutpage_proceedToCheckout}
             text="Confirm"
             handleClick={() => {
-              dispatch(cartActions.clearCart())
               router.push('/orderConfirmation')
             }}
           />

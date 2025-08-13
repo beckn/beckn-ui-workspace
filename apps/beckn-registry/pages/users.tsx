@@ -21,7 +21,7 @@ export type User = {
   username: string
   longName: string
   email: string
-  changePassword?: string
+  // changePassword?: string
   admin: string
   phoneNumber: string
   alternatePhoneNumber?: string
@@ -245,22 +245,6 @@ const Users: React.FC = () => {
     )
   }
 
-  if (users && users?.results.length === 0) {
-    return (
-      <div className={styles.usersContainer}>
-        <ActionHeaders
-          onPlusClick={handleAddUser}
-          onBackClick={() => router.back()}
-          onHomeClick={() => router.push('/')}
-        />
-        <h2 className={styles.title}>{en.users.title}</h2>
-        <div className={styles.emptyContainer}>
-          <p>No users found.</p>
-        </div>
-      </div>
-    )
-  }
-
   return (
     <div className={styles.usersContainer}>
       <ActionHeaders
@@ -273,27 +257,35 @@ const Users: React.FC = () => {
         placeholder={en.users.searchPlaceholder}
         onSearch={(query: string) => handleSearch(query)}
       />
-      <div className={styles.tableContainer}>
-        <CustomTable
-          columns={columns}
-          data={tableData}
-          actions={actions}
-          pagination={{
-            currentPage: currentPage,
-            pageSize: currentPageSize,
-            total: pagination?.total || 1,
-            onPageChange: handlePageChange,
-            onPageSizeChange: handlePageSizeChange
-          }}
-        />
-      </div>
-      <AlertModal
-        isOpen={deleteModal.isOpen}
-        onClose={handleDeleteCancel}
-        onConfirm={handleDeleteConfirm}
-        title="Delete User"
-        message="Are you sure you want to delete this user? This action cannot be undone."
-      />
+      {users?.results.length === 0 ? (
+        <div className={styles.emptyContainer}>
+          <p>No users found.</p>
+        </div>
+      ) : (
+        <>
+          <div className={styles.tableContainer}>
+            <CustomTable
+              columns={columns}
+              data={tableData}
+              actions={actions}
+              pagination={{
+                currentPage: currentPage,
+                pageSize: currentPageSize,
+                total: pagination?.total || 1,
+                onPageChange: handlePageChange,
+                onPageSizeChange: handlePageSizeChange
+              }}
+            />
+          </div>
+          <AlertModal
+            isOpen={deleteModal.isOpen}
+            onClose={handleDeleteCancel}
+            onConfirm={handleDeleteConfirm}
+            title="Delete User"
+            message="Are you sure you want to delete this user? This action cannot be undone."
+          />
+        </>
+      )}
       {error?.status === 401 && (
         <UnauthorizedAccess
           onRetry={refetch}

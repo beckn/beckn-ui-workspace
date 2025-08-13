@@ -1,6 +1,6 @@
 import React from 'react'
 import { Typography } from '@beckn-ui/molecules'
-import { Box, Stack, StackDivider, Flex, Image } from '@chakra-ui/react'
+import { Box, Stack, StackDivider, Flex } from '@chakra-ui/react'
 import { testIds } from '@shared/dataTestIds'
 
 export interface ShippingBlockProps {
@@ -21,66 +21,81 @@ export interface ShippingBlockProps {
   dataTest?: string
 }
 
-const ShippingBlock: React.FC<ShippingBlockProps> = ({ title, name, address, mobile, responsive, dataTest }) => {
+const ShippingBlock: React.FC<ShippingBlockProps> = ({ title, name, address, mobile, dataTest }) => {
   return (
-    <Box data-test={dataTest}>
-      {title && (
-        <Box marginBottom="1rem">
-          <Typography
-            variant="subTitleRegular"
-            fontSize="17px"
-            text={title}
-          />
-        </Box>
-      )}
+    <Box
+      data-test={dataTest}
+      padding={'10px 15px'}
+    >
       <Box
-        pl={'14px'}
-        pr={'11px'}
-        pb={'11px'}
-        pt={'6px'}
-        boxShadow={{
-          base: '0px 8px 10px -6px rgba(0, 0, 0, 0.1), 0px 20px 25px -5px rgba(0, 0, 0, 0.1)',
-          md: '0px 8px 10px -6px rgba(0, 0, 0, 0.1), 0px 8px 20px -5px rgba(0, 0, 0, 0.1)'
-        }}
+        padding={'12px 14px'}
+        bg={'#F0F0F0'}
+        borderRadius={'5px'}
       >
+        {title && (
+          <Box marginBottom="0.5rem">
+            <Typography
+              variant="subTitleRegular"
+              fontSize="12px"
+              fontWeight="600"
+              text={title}
+            />
+          </Box>
+        )}
         <Stack
-          divider={<StackDivider />}
-          spacing="4"
+          divider={
+            <StackDivider
+              width={'unset'}
+              border="0px solid #000000"
+              opacity={0.2}
+              margin={'15px -20px'}
+            />
+          }
+          spacing="1"
         >
-          <Flex alignItems={'center'}>
-            <Image
-              alt="name-icon"
-              src={name.icon}
-              pr={'12px'}
+          <Flex flexDir={'column'}>
+            <Typography
+              variant="subTitleRegular"
+              text={'Name'}
+              fontSize={'12px'}
+              fontWeight={'500'}
             />
             <Typography
               variant="subTitleRegular"
               dataTest={testIds.orderDetailspage_name}
               text={name.text}
+              fontSize={'12px'}
+              fontWeight={'400'}
             />
           </Flex>
-          <Flex alignItems={'center'}>
-            <Image
-              alt="location-icon"
-              src={address.icon}
-              pr={'12px'}
+          <Flex flexDir={'column'}>
+            <Typography
+              variant="subTitleRegular"
+              text={'Address'}
+              fontSize={'12px'}
+              fontWeight={'500'}
             />
             <Typography
               variant="subTitleRegular"
               dataTest={testIds.orderDetailspage_address}
               text={address.text}
+              fontSize={'12px'}
+              fontWeight={'400'}
             />
           </Flex>
-          <Flex alignItems={'center'}>
-            <Image
-              alt="call-icon"
-              src={mobile.icon}
-              pr={'12px'}
+          <Flex flexDir={'column'}>
+            <Typography
+              variant="subTitleRegular"
+              text={'Contact number'}
+              fontSize={'12px'}
+              fontWeight={'500'}
             />
             <Typography
               variant="subTitleRegular"
               dataTest={testIds.orderDetailspage_mobileNumber}
               text={mobile.text}
+              fontSize={'12px'}
+              fontWeight={'400'}
             />
           </Flex>
         </Stack>

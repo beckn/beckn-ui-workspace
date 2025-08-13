@@ -1,5 +1,6 @@
 import { CatelogRenderMode, Product } from '@beckn-ui/becknified-components'
-import { ParsedItemModel, SearchResponseModel } from '../../../lib/types'
+import { ParsedItemModel } from '../../../lib/types'
+import { FilterFieldConfig } from '../filter/filter.types'
 
 export interface SearchAndDiscoverProps {
   items: ParsedItemModel[]
@@ -14,11 +15,11 @@ export interface SearchAndDiscoverProps {
   filterProps?: {
     showFilterField?: boolean
     isFilterOpen: boolean
-    sortByRating?: boolean
     handleFilterOpen: () => void
     handleFilterClose: () => void
     handleResetFilter: () => void
-    handleApplyFilter: (value: string) => void
+    handleApplyFilter: (filters: Record<string, string>) => void
+    fields?: FilterFieldConfig[]
   }
   loaderProps: {
     isLoading: boolean

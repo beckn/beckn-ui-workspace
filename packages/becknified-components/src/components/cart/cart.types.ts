@@ -1,4 +1,4 @@
-import { LoaderProps, TypographyProps, ButtonProps } from '@beckn-ui/molecules'
+import { TypographyProps, ButtonProps, LoaderWithMessagePropsModel } from '@beckn-ui/molecules'
 import { MouseEventHandler } from 'react'
 import { CurrencyType, ProductPriceProps } from '../types'
 
@@ -48,11 +48,12 @@ interface EmptyCardProps {
 export interface CartProps {
   schema: {
     cartItems: CartItemProps[]
-    loader: LoaderProps
+    loader: LoaderWithMessagePropsModel
     orderSummary: OrderSummaryProps
     emptyCard?: EmptyCardProps
   }
   className?: string
   isLoading?: boolean
   emptyText?: string
+  dataTestCta?: string
 }

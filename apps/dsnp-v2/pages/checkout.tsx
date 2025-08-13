@@ -12,12 +12,15 @@ import {
   cartActions,
   checkoutActions,
   CheckoutRootState,
+  createPaymentBreakdownMap,
   DiscoveryRootState,
   getInitPayload,
-  getSubTotalAndDeliveryCharges,
+  getItemWiseBreakUp,
+  getTotalPriceWithCurrency,
   ICartRootState,
   isEmpty
 } from '@beckn-ui/common'
+import { useLanguage } from '@hooks/useLanguage'
 
 export type ShippingFormData = {
   name: string
@@ -52,6 +55,7 @@ const CheckoutPage = () => {
     pinCode: '110001'
   })
 
+  const { t } = useLanguage()
   const router = useRouter()
   const dispatch = useDispatch()
   const [initialize, { isLoading, isError }] = useInitMutation()
@@ -121,9 +125,7 @@ const CheckoutPage = () => {
 
   const formSubmitHandler = (data: any) => {
     if (data) {
-      const { id, type } = selectResponse[0].message.order.fulfillments[0]
-      console.log('Dank', id, type)
-      getInitPayload(shippingFormData, billingFormData, cartItems, transactionId, DOMAIN, { id, type }).then(res => {
+      getInitPayload(shippingFormData, billingFormData, cartItems, transactionId, DOMAIN, selectResponse).then(res => {
         return initialize(res)
       })
       // TODO :_ To check this again
@@ -149,38 +151,25 @@ const CheckoutPage = () => {
     return !!initResponse && initResponse.length > 0 && !!initResponse[0].message
   }
 
-  const createPaymentBreakdownMap = () => {
-    const paymentBreakdownMap: Record<string, { value: string; currency: string }> = {}
-    if (isInitResultPresent()) {
-      initResponse[0].message.order.quote.breakup.forEach(breakup => {
-        paymentBreakdownMap[breakup.title] = {
-          value: breakup.price.value,
-          currency: breakup.price.currency
-        }
-      })
-    }
-    return paymentBreakdownMap
-  }
-
   return (
     <Box
       className="hideScroll"
       maxH="calc(100vh - 100px)"
-      overflowY={'scroll'}
     >
       {/* start Item Details */}
       <Checkout
         schema={{
           items: {
-            title: 'Items',
+            title: t.orderOverview,
             data: cartItems.map(singleItem => ({
               title: singleItem.name,
               description: singleItem.short_desc,
               quantity: singleItem.quantity,
               // priceWithSymbol: `${currencyMap[singleItem.price.currency]}${singleItem.totalPrice}`,
-              price: parseFloat(singleItem.price.value) * singleItem.quantity,
+              price: Number(singleItem.price.value),
               currency: singleItem.price.currency,
               image: singleItem.images?.[0].url
+              // breakUp: getItemWiseBreakUp(selectResponse, singleItem.id).paymentBreakdownMap
             }))
           },
           shipping: {
@@ -226,12 +215,9 @@ const CheckoutPage = () => {
             title: 'Payment',
             paymentDetails: {
               hasBoxShadow: false,
-              paymentBreakDown: createPaymentBreakdownMap(),
+              paymentBreakDown: createPaymentBreakdownMap(initResponse),
               totalText: 'Total',
-              totalValueWithCurrency: {
-                value: getSubTotalAndDeliveryCharges(initResponse).subTotal.toString(),
-                currency: getSubTotalAndDeliveryCharges(initResponse).currencySymbol!
-              }
+              totalValueWithCurrency: getTotalPriceWithCurrency(initResponse)
             }
           },
           loader: {
@@ -240,7 +226,6 @@ const CheckoutPage = () => {
           pageCTA: {
             text: 'Proceed to Checkout',
             handleClick: () => {
-              dispatch(cartActions.clearCart())
               router.push('/paymentMode')
             }
           }

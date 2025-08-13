@@ -1,8 +1,6 @@
 import { Box } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
-import { ParsedScholarshipData } from '../components/scholarship/scholarshipCard/Scholarship.types'
 import ScholarshipDetails from '../components/scholarship/scholarshipDetails/ScholarshipDetails'
-import { RetailItem } from '../lib/types/products'
 import { ParsedItemModel } from '../types/search.types'
 
 const ScholarshipDetailsPage = () => {
@@ -25,7 +23,6 @@ const ScholarshipDetailsPage = () => {
     <Box
       className="hideScroll"
       maxH={'calc(100vh - 100px)'}
-      overflowY="scroll"
     >
       <ScholarshipDetails scholarship={selectedScholarship} />
     </Box>

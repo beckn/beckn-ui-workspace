@@ -1,13 +1,9 @@
-import { Box, Flex, Text } from '@chakra-ui/react'
-import { Button, Typography } from '@beckn-ui/molecules'
+import { Box } from '@chakra-ui/react'
 import LoaderWithMessage from '@beckn-ui/molecules/src/components/LoaderWithMessage/loader-with-message'
-import { toast } from 'react-toastify'
 import Cookies from 'js-cookie'
-import { JobApplyFormData, JobCredential } from '../components/jobApply/JobApply.types'
+import { JobApplyFormData } from '../components/jobApply/JobApply.types'
 import React, { useEffect, useState } from 'react'
 import Router, { useRouter } from 'next/router'
-import JobApply from '../components/jobApply/JobApply'
-import UploadFile from '../components/uploadFile/UploadFile'
 import ApplyJobForm from '../components/applyJob/apply-job'
 import { fromBinary } from '../utilities/common-utils'
 import { useLanguage } from '../hooks/useLanguage'
@@ -26,7 +22,6 @@ import axios from '../services/axios'
 import { testIds } from '@shared/dataTestIds'
 
 const jobApply = () => {
-  const [selectedFiles, setSelectedFiles] = useState<File[]>([])
   const [formData, setFormData] = useState<JobApplyFormData>({
     name: '',
     mobileNumber: '',
@@ -37,19 +32,18 @@ const jobApply = () => {
   const [jobForApply, setJobForApply] = useState<ParsedItemModel | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [isLoadingInSelect, setIsLoadingInSelect] = useState(true)
-  const [isDeclarationChecked, setIsDeclarationChecked] = useState(false)
+
   const [jobSelectResponse, setJobSelectResponse] = useState<SelectResponseModel | null>(null)
   const [jobInitResponse, setJobInitResponse] = useState<InitResponseModel | null>(null)
 
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
   const dsepUrl = process.env.NEXT_PUBLIC_API_URL
-  const coreStrapiUrl = process.env.NEXT_PUBLIC_CORE_STRAPI_URL
 
   const bearerToken = Cookies.get('authToken')
   const axiosConfig = {
     headers: {
       Authorization: `Bearer ${bearerToken}`,
-      'Content-Type': 'application/json' // You can set the content type as needed
+      'Content-Type': 'application/json'
     }
   }
 
@@ -214,7 +208,6 @@ const jobApply = () => {
     <Box
       className="hideScroll"
       maxH={'calc(100vh - 100px)'}
-      overflowY="scroll"
       mt={'15px'}
     >
       <ApplyJobForm

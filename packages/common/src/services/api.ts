@@ -23,14 +23,46 @@ const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQue
   extraOptions
 ) => {
   const result = await baseQueryWithRetry(args, api, extraOptions)
-  if (result.error && result.error.status === 400) {
-    const { message } = (result.error.data as any)?.error || 'Something went wrong'
-    api.dispatch(
-      feedbackActions.setToastData({
-        toastData: { message: 'Error!', display: true, type: 'error', description: message }
-      })
-    )
+
+  if (result.error) {
+    // Handle network errors
+    if (result.error.status === 'FETCH_ERROR' || result.error.status === 'PARSING_ERROR') {
+      const errorMessage = result.error.error?.toString() || 'Network Error'
+      if (errorMessage.includes('ERR_NETWORK_CHANGED')) {
+        api.dispatch(
+          feedbackActions.setToastData({
+            toastData: {
+              message: 'Network Error',
+              display: true,
+              type: 'error',
+              description: 'Network connection changed. Please check your connection and try again.'
+            }
+          })
+        )
+      } else {
+        api.dispatch(
+          feedbackActions.setToastData({
+            toastData: {
+              message: 'Network Error',
+              display: true,
+              type: 'error',
+              description: 'Please check your internet connection and try again.'
+            }
+          })
+        )
+      }
+    } else if (result.error.status === 400) {
+      const { message } = (result.error.data as { error: { message: string } })?.error || {
+        message: 'Something went wrong'
+      }
+      api.dispatch(
+        feedbackActions.setToastData({
+          toastData: { message: 'Error!', display: true, type: 'error', description: message }
+        })
+      )
+    }
   }
+
   return result
 }
 

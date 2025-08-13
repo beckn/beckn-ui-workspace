@@ -11,6 +11,7 @@ export interface ProductPriceProps {
   dataTestItemPrice?: string
   rateLabel?: string
   fontWeight?: string
+  fontSize?: string
 }
 
 export type CurrencyType = 'GBP' | 'EUR' | 'INR' | 'USD'

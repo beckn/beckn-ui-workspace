@@ -91,7 +91,6 @@ const myScholarship = () => {
     <Box
       className="hideScroll"
       maxH={'calc(100vh - 100px)'}
-      overflowY="scroll"
     >
       {scholarshipOrders.map((scholarshipOrder, index) => {
         const {

@@ -36,7 +36,7 @@ const ManageNetworkParticipants: React.FC = () => {
     isLoading,
     error: participantError
   } = useGetNetworkParticipantByIdQuery(documentId as string, {
-    skip: !documentId || queryMode === 'add'
+    // skip: !documentId || queryMode === 'add'
   })
   const [addNetworkParticipant] = useAddNetworkParticipantMutation()
   const [updateNetworkParticipant, { error: updateError }] = useUpdateNetworkParticipantMutation()
@@ -94,8 +94,8 @@ const ManageNetworkParticipants: React.FC = () => {
         validFrom: participantData.valid_from.split('T')[0] || '',
         validUntil: participantData.valid_until.split('T')[0] || '',
         status: participantData.status,
-        createdAt: participantData.created.split('T')[0] || '',
-        updatedAt: participantData.updated.split('T')[0] || ''
+        createdAt: participantData.created ? new Date(participantData.created).toISOString().split('T')[0] : '',
+        updatedAt: participantData.updated ? new Date(participantData.updated).toISOString().split('T')[0] : ''
       })
     }
   }, [participantData])
@@ -619,8 +619,19 @@ const ManageNetworkParticipants: React.FC = () => {
       </form>
       {error?.status === 401 && (
         <UnauthorizedAccess
-          onRetry={() => refetch()}
+          onRetry={() => {
+            if (!formData.subscriberId) {
+              handleClose()
+            } else {
+              refetch()
+            }
+          }}
           closeButton={true}
+          onClose={() => {
+            if (!formData.subscriberId) {
+              handleClose()
+            }
+          }}
         />
       )}
     </div>

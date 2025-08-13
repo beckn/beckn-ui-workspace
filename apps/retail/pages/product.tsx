@@ -38,13 +38,13 @@ const Product = () => {
     <Box
       className="hideScroll"
       maxH="calc(100vh - 100px)"
-      overflowY={'scroll'}
     >
       <ProductDetailPage
         schema={{
           productSummary: {
-            imageSrc: selectedProduct.item.images?.[0].url!,
+            imageSrc: selectedProduct?.item?.images?.[0]?.url || '',
             name: selectedProduct.item.name,
+            providerName: selectedProduct.providerName,
             secondaryDescription: selectedProduct.item.long_desc,
             dataTestTitle: testIds.item_title,
             dataTestDescription: testIds.item_description,

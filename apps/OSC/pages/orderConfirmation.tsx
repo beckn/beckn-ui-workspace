@@ -7,10 +7,10 @@ import { ConfirmationPage } from '@beckn-ui/becknified-components'
 import axios from '@services/axios'
 import { Box } from '@chakra-ui/react'
 import Cookies from 'js-cookie'
-import { ConfirmResponseModel } from '@beckn-ui/common/lib/types'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
 import { useConfirmMutation } from '@beckn-ui/common/src/services/confirm'
 import {
+  cartActions,
   checkoutActions,
   CheckoutRootState,
   getPayloadForConfirm,
@@ -19,18 +19,16 @@ import {
 } from '@beckn-ui/common'
 import { ORDER_CATEGORY_ID } from '../lib/config'
 import { testIds } from '@shared/dataTestIds'
-
+import { utilGenerateEllipsedText } from '@beckn-ui/molecules'
 const OrderConfirmation = () => {
   const { t } = useLanguage()
   const router = useRouter()
-  const [confirmData, setConfirmData] = useState<ConfirmResponseModel[]>([])
-  const [confirm, { isLoading, data }] = useConfirmMutation()
-  const [orderId, setOrderId] = useState()
+  const [confirm, { isLoading }] = useConfirmMutation()
+  const [orderId, setOrderId] = useState<string>()
   const dispatch = useDispatch()
 
   const initResponse = useSelector((state: CheckoutRootState) => state.checkout.initResponse)
   const confirmResponse = useSelector((state: CheckoutRootState) => state.checkout.confirmResponse)
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
 
   const bearerToken = Cookies.get('authToken')
@@ -44,25 +42,33 @@ const OrderConfirmation = () => {
   useEffect(() => {
     if (initResponse && initResponse.length > 0) {
       const payLoad = getPayloadForConfirm(initResponse)
-      confirm(payLoad)
+      confirm(payLoad).then(() => {
+        dispatch(cartActions.clearCart())
+      })
     }
   }, [])
 
   useEffect(() => {
     if (confirmResponse && confirmResponse.length > 0) {
-      setOrderId(confirmResponse[0].message.orderId.slice(0, 8))
+      const orderIds: string[] = []
+      confirmResponse.forEach(response => {
+        orderIds.push(utilGenerateEllipsedText(response.message.orderId))
+      })
+      setOrderId(orderIds.join(', '))
     }
   }, [confirmResponse])
 
   useEffect(() => {
     if (confirmResponse && confirmResponse.length > 0) {
-      const ordersPayload = getPayloadForOrderHistoryPost(confirmResponse, ORDER_CATEGORY_ID)
-      axios
-        .post(`${strapiUrl}/orders`, ordersPayload, axiosConfig)
-        .then(res => {
-          return res
-        })
-        .catch(err => console.error(err))
+      confirmResponse.forEach(async response => {
+        const ordersPayload = getPayloadForOrderHistoryPost(response, ORDER_CATEGORY_ID)
+        await axios
+          .post(`${strapiUrl}/orders`, ordersPayload, axiosConfig)
+          .then(res => {
+            return res
+          })
+          .catch(err => console.error(err))
+      })
     }
   }, [confirmResponse])
 
@@ -88,7 +94,7 @@ const OrderConfirmation = () => {
           iconSrc: orderConfirmmark,
           successOrderMessage: t.orderSuccessfull,
           gratefulMessage: t.thankYouForOrder,
-          orderIdMessage: orderId ? `${t.orderNumber}: ${orderId}...` : '',
+          orderIdMessage: orderId ? `${t.orderNumber}: ${orderId}` : '',
           trackOrderMessage: t.youCanTrack,
 
           buttons: [

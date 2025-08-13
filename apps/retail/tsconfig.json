@@ -18,6 +18,6 @@
       "@shared/*": ["../../shared/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "functions/index.js"],
   "exclude": ["node_modules"]
 }

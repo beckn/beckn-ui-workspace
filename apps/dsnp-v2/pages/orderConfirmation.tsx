@@ -11,6 +11,7 @@ import { utilGenerateEllipsedText } from '@beckn-ui/molecules'
 import axios from '@services/axios'
 import { useConfirmMutation } from '@beckn-ui/common/src/services/confirm'
 import {
+  cartActions,
   checkoutActions,
   CheckoutRootState,
   getPayloadForConfirm,
@@ -22,7 +23,7 @@ import { ORDER_CATEGORY_ID } from '../lib/config'
 const OrderConfirmation = () => {
   const { t } = useLanguage()
   const router = useRouter()
-  const [confirm, { isLoading, data }] = useConfirmMutation()
+  const [confirm, { isLoading }] = useConfirmMutation()
   const [orderId, setOrderId] = useState<string>()
   const dispatch = useDispatch()
 
@@ -41,25 +42,33 @@ const OrderConfirmation = () => {
   useEffect(() => {
     if (initResponse && initResponse.length > 0) {
       const payLoad = getPayloadForConfirm(initResponse)
-      confirm(payLoad)
+      confirm(payLoad).then(() => {
+        dispatch(cartActions.clearCart())
+      })
     }
   }, [])
 
   useEffect(() => {
     if (confirmResponse && confirmResponse.length > 0) {
-      setOrderId(confirmResponse[0].message.orderId)
+      const orderIds: string[] = []
+      confirmResponse.forEach(response => {
+        orderIds.push(utilGenerateEllipsedText(response.message.orderId))
+      })
+      setOrderId(orderIds.join(', '))
     }
   }, [confirmResponse])
 
   useEffect(() => {
     if (confirmResponse && confirmResponse.length > 0) {
-      const ordersPayload = getPayloadForOrderHistoryPost(confirmResponse, ORDER_CATEGORY_ID)
-      axios
-        .post(`${strapiUrl}/orders`, ordersPayload, axiosConfig)
-        .then(res => {
-          return res
-        })
-        .catch(err => console.error(err))
+      confirmResponse.forEach(async response => {
+        const ordersPayload = getPayloadForOrderHistoryPost(response, ORDER_CATEGORY_ID)
+        await axios
+          .post(`${strapiUrl}/orders`, ordersPayload, axiosConfig)
+          .then(res => {
+            return res
+          })
+          .catch(err => console.error(err))
+      })
     }
   }, [confirmResponse])
 
@@ -85,7 +94,7 @@ const OrderConfirmation = () => {
           iconSrc: orderConfirmmark,
           successOrderMessage: 'ORDER SUCCESFULL',
           gratefulMessage: 'Thank you for your order!',
-          orderIdMessage: orderId ? `Order number is: ${utilGenerateEllipsedText(orderId)}` : '',
+          orderIdMessage: orderId ? `Order number is: ${orderId}` : '',
           trackOrderMessage: `You can track your order in "My Order" section`,
 
           buttons: [

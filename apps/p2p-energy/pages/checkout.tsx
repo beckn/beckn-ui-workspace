@@ -3,15 +3,13 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Box, useToast, useTheme } from '@chakra-ui/react'
 import { DOMAIN } from '@lib/config'
 import { useLanguage } from '../hooks/useLanguage'
-import { areShippingAndBillingDetailsSame, getSubTotalAndDeliveryCharges } from '@beckn-ui/common/src/utils'
+import { createPaymentBreakdownMap, getTotalPriceWithCurrency } from '@beckn-ui/common/src/utils'
 import { useRouter } from 'next/router'
 import { ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
-import { isEmpty } from '@beckn-ui/common/src/utils'
 import { FormField } from '@beckn-ui/molecules'
-import { checkoutActions, CheckoutRootState } from '@beckn-ui/common/src/store/checkout-slice'
+import { CheckoutRootState } from '@beckn-ui/common/src/store/checkout-slice'
 import { useInitMutation } from '@beckn-ui/common/src/services/init'
-import { DiscoveryRootState, ICartRootState, PaymentBreakDownModel } from '@beckn-ui/common'
-import { cartActions } from '@beckn-ui/common/src/store/cart-slice'
+import { DiscoveryRootState, ICartRootState } from '@beckn-ui/common'
 import { testIds } from '@shared/dataTestIds'
 import { getInitPayload } from '../utils/payload'
 import Checkout from '@components/checkout'
@@ -149,35 +147,35 @@ const CheckoutPage = () => {
     return !!initResponse && initResponse.length > 0
   }
 
-  const createPaymentBreakdownMap = () => {
-    const paymentBreakdownMap: PaymentBreakDownModel = {}
-    let totalPayment: number = 0
-    if (isInitResultPresent()) {
-      const perUnitCost = parseFloat(initResponse[0]?.message?.order?.quote?.price?.value)
-      const units = cartItems?.[0]?.quantity
-      // Calculate the base cost
-      const baseCost = perUnitCost * units
-      initResponse[0]?.message?.order?.quote?.breakup?.forEach(breakupItem => {
-        let price = parseFloat(breakupItem.price.value)
-        console.log(breakupItem)
-        if (breakupItem.title === 'P2P Energy Cost') {
-          price = baseCost
-        } else if (['CGST', 'SGST'].some(ele => breakupItem.title.startsWith(ele))) {
-          price = baseCost * 0.05
-        } else if (['Wheeling'].some(ele => breakupItem.title.startsWith(ele))) {
-          price = units * 0.5
-        }
+  // const createPaymentBreakdownMap = () => {
+  //   const paymentBreakdownMap: PaymentBreakDownModel = {}
+  //   let totalPayment: number = 0
+  //   if (isInitResultPresent()) {
+  //     const perUnitCost = parseFloat(initResponse[0]?.message?.order?.quote?.price?.value)
+  //     const units = cartItems?.[0]?.quantity
+  //     // Calculate the base cost
+  //     const baseCost = perUnitCost * units
+  //     initResponse[0]?.message?.order?.quote?.breakup?.forEach(breakupItem => {
+  //       let price = parseFloat(breakupItem.price.value)
+  //       console.log(breakupItem)
+  //       if (breakupItem.title === 'P2P Energy Cost') {
+  //         price = baseCost
+  //       } else if (['CGST', 'SGST'].some(ele => breakupItem.title.startsWith(ele))) {
+  //         price = baseCost * 0.05
+  //       } else if (['Wheeling'].some(ele => breakupItem.title.startsWith(ele))) {
+  //         price = units * 0.5
+  //       }
 
-        paymentBreakdownMap[breakupItem.title] = {
-          value: price.toString(),
-          currency: breakupItem.price.currency
-        }
-        totalPayment += price
-      })
-    }
+  //       paymentBreakdownMap[breakupItem.title] = {
+  //         value: price.toString(),
+  //         currency: breakupItem.price.currency
+  //       }
+  //       totalPayment += price
+  //     })
+  //   }
 
-    return { paymentBreakdownMap, totalPayment }
-  }
+  //   return { paymentBreakdownMap, totalPayment }
+  // }
 
   return (
     <Box
@@ -226,12 +224,9 @@ const CheckoutPage = () => {
             title: t.payment,
             paymentDetails: {
               hasBoxShadow: false,
-              paymentBreakDown: createPaymentBreakdownMap().paymentBreakdownMap,
+              paymentBreakDown: createPaymentBreakdownMap(initResponse),
               totalText: t.total,
-              totalValueWithCurrency: {
-                value: createPaymentBreakdownMap().totalPayment.toString(),
-                currency: getSubTotalAndDeliveryCharges(initResponse).currencySymbol!
-              }
+              totalValueWithCurrency: getTotalPriceWithCurrency(initResponse)
             }
           },
           loader: {

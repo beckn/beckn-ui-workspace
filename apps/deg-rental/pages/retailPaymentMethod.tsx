@@ -1,30 +1,24 @@
-import React, { useEffect, useState } from 'react'
-import Router, { useRouter } from 'next/router'
+import React, { useState } from 'react'
+import { useRouter } from 'next/router'
 import { useLanguage } from '../hooks/useLanguage'
-import { CheckoutRootState, discoveryActions, ICartRootState, PaymentMethodSelectionProps } from '@beckn-ui/common'
+import { PaymentMethodSelectionProps } from '@beckn-ui/common'
 import { testIds } from '@shared/dataTestIds'
 import Visa from '@public/images/visa.svg'
 import masterCard from '@public/images/masterCard.svg'
 import { Box } from '@chakra-ui/react'
-import phonePay from '@public/images/phonePayPayment.svg'
-import gPay from '@public/images/gpay.svg'
 import PaymentDetailsCard from '@beckn-ui/common/src/components/paymentDetailsCard'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import { RootState } from '@store/index'
-import applyPay from '@public/images/visaNew.svg'
-import stripePay from '@public/images/masterNew.svg'
 
 const retailPaymentMethod = (props: PaymentMethodSelectionProps) => {
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<string>('')
-  const initResponse = useSelector((state: CheckoutRootState) => state.checkout.initResponse)
   const type = useSelector((state: RootState) => state.navigation.type)
   const [checkedState, setCheckedState] = useState<string | null>(null)
   const [checkedPayment, setCheckedPayment] = useState<string | null>(null)
 
   const { t } = useLanguage()
   const router = useRouter()
-  const dispatch = useDispatch()
 
   const {
     handleOrderConfirmation,
@@ -89,7 +83,7 @@ const retailPaymentMethod = (props: PaymentMethodSelectionProps) => {
       >
         <BecknButton
           dataTest={testIds.paymentpage_confirmButton}
-          children={t.confirmOrder}
+          text={t.confirmOrder}
           handleClick={() => {
             if (type === 'RENT_AND_HIRE') {
               if (selectedPaymentMethod.includes('UPI')) {

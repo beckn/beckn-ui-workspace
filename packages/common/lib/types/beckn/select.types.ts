@@ -1,10 +1,8 @@
-import { Price, Tag, Fulfillment, Provider, Context, Item } from '../common'
+import { Price, Tag, Fulfillment, Provider, Context, Item, Quote } from '../common'
 
 interface Order {
   type: string
-  quote: {
-    price: Price
-  }
+  quote: Quote
   provider: Provider
   items: Item[]
   fulfillments: Fulfillment[]

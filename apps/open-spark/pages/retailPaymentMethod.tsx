@@ -88,7 +88,7 @@ const retailPaymentMethod = (props: PaymentMethodSelectionProps) => {
       >
         <BecknButton
           dataTest={testIds.paymentpage_confirmButton}
-          children={t.confirmOrder}
+          text={t.confirmOrder}
           handleClick={() => {
             if (type === 'RENT_AND_HIRE') {
               if (selectedPaymentMethod.includes('UPI')) {

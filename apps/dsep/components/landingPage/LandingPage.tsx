@@ -72,7 +72,12 @@ const LandingPage: React.FC = () => {
           searchPlaceholder: `Search for ${activeCard}`,
           setSearchTerm: setSearchTerm,
           onSearchIconClick: searchIconClickHandler,
-          onSearchInputEnterPress: navigateToSearchResults
+          onSearchInputEnterPress:
+            activeCard === 'course'
+              ? navigateToSearchResults
+              : activeCard === 'jobs'
+                ? navigateToJob
+                : navigateToScholarship
         }}
         CardSelector={{
           imageCardList: cardTypes.map(card => ({

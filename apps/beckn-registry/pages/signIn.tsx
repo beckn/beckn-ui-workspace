@@ -139,7 +139,7 @@ const SignIn: React.FC = () => {
         </div>
         <button
           type="submit"
-          className={styles.button}
+          className={`${styles.button} ${isLoading ? styles.loading : ''}`}
           disabled={isLoading}
         >
           {isLoading ? 'Signing in...' : en.signIn.loginButton}

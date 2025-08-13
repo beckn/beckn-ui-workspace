@@ -235,7 +235,6 @@ const SignUp = () => {
       mt={'30px'}
       className="hideScroll"
       maxH="calc(100vh - 90px)"
-      overflowY={'scroll'}
     >
       <BecknAuth
         schema={{

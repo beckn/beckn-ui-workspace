@@ -1,0 +1,18 @@
+[debug] [2025-08-06T06:16:03.519Z] ----------------------------------------------------------------------
+[debug] [2025-08-06T06:16:03.526Z] Command:       /opt/homebrew/Cellar/node/24.1.0/bin/node /opt/homebrew/bin/firebase login
+[debug] [2025-08-06T06:16:03.526Z] CLI Version:   14.11.2
+[debug] [2025-08-06T06:16:03.526Z] Platform:      darwin
+[debug] [2025-08-06T06:16:03.526Z] Node Version:  v24.1.0
+[debug] [2025-08-06T06:16:03.526Z] Time:          Wed Aug 06 2025 11:46:03 GMT+0530 (India Standard Time)
+[debug] [2025-08-06T06:16:03.526Z] ----------------------------------------------------------------------
+[debug] 
+[info] i  The Firebase CLI’s MCP server feature can optionally make use of Gemini in Firebase. Learn more about Gemini in Firebase and how it uses your data: https://firebase.google.com/docs/gemini-in-firebase#how-gemini-in-firebase-uses-your-data 
+[info] 
+[info] i  Firebase optionally collects CLI and Emulator Suite usage and error reporting information to help improve our products. Data is collected in accordance with Google's privacy policy (https://policies.google.com/privacy) and is not used to identify you. 
+[info] 
+[info] i  To change your preferences at any time, run `firebase logout` and `firebase login` again. 
+[info] 
+[info] Visit this URL on this device to log in:
+[info] https://accounts.google.com/o/oauth2/auth?client_id=563584335869-fgrhgmd47bqnekij5i8b5pr03ho849e6.apps.googleusercontent.com&scope=email%20openid%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcloudplatformprojects.readonly%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Ffirebase%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcloud-platform&response_type=code&state=628292532&redirect_uri=http%3A%2F%2Flocalhost%3A9005
+[info] 
+[info] Waiting for authentication...

@@ -3,7 +3,6 @@ import axios from 'axios'
 import Router, { useRouter } from 'next/router'
 import {
   Box,
-  Card,
   CardBody,
   Divider,
   Flex,
@@ -35,12 +34,13 @@ import BottomModalScan from '@components/BottomModal/BottomModalScan'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import {
   ConfirmResponseModel,
+  createPaymentBreakdownMap,
   DataState,
   DiscoveryRootState,
   feedbackActions,
   formatTimestamp,
   getPayloadForOrderStatus,
-  getPaymentBreakDown,
+  getTotalPriceWithCurrency,
   isEmpty,
   OrdersRootState,
   ProcessState,
@@ -672,7 +672,6 @@ const OrderDetails = () => {
     <Box
       className="hideScroll"
       maxH="calc(100vh - 100px)"
-      overflowY="scroll"
     >
       {/* <Box
         maxW={{ base: '100%', md: '50%' }}
@@ -953,9 +952,9 @@ const OrderDetails = () => {
               <PaymentDetails
                 title="Payment"
                 hasBoxShadow={true}
-                paymentBreakDown={getPaymentBreakDown(data.statusData).breakUpMap}
+                paymentBreakDown={createPaymentBreakdownMap(data.statusData)}
                 totalText="Total"
-                totalValueWithCurrency={getPaymentBreakDown(data.statusData).totalPricewithCurrent}
+                totalValueWithCurrency={getTotalPriceWithCurrency(data.statusData)}
                 dataTest={testIds.orderDetailspage_paymentDetails}
               />
             </Box>
@@ -970,9 +969,9 @@ const OrderDetails = () => {
                 pt={'6px'}
               >
                 <PaymentDetails
-                  paymentBreakDown={getPaymentBreakDown(data.statusData).breakUpMap}
+                  paymentBreakDown={createPaymentBreakdownMap(data.statusData)}
                   totalText={t.totalText}
-                  totalValueWithCurrency={getPaymentBreakDown(data.statusData).totalPricewithCurrent}
+                  totalValueWithCurrency={getTotalPriceWithCurrency(data.statusData)}
                   dataTest={testIds.orderDetailspage_paymentDetails}
                 />
               </Box>

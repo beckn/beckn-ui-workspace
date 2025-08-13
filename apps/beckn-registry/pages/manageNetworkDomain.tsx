@@ -53,8 +53,8 @@ const ManageNetworkDomain: React.FC = () => {
         schemaUrl: domainData.schema_url || '',
         updaterUser: domainData.updater_user || '',
         creatorUser: domainData.creator_user || '',
-        updatedAt: domainData.updated_at || '',
-        createdAt: domainData.created_at || ''
+        updatedAt: domainData.updatedAt ? new Date(domainData.updatedAt).toISOString().split('T')[0] : '',
+        createdAt: domainData.createdAt ? new Date(domainData.createdAt).toISOString().split('T')[0] : ''
       })
     }
   }, [domainData])
@@ -276,7 +276,7 @@ const ManageNetworkDomain: React.FC = () => {
               </div>
             </div>
           </div>
-          <div className={styles.row}>
+          {/* <div className={styles.row}>
             {mode !== 'add' && (
               <>
                 <label>{en.networkDomains.updaterUser}</label>
@@ -291,23 +291,9 @@ const ManageNetworkDomain: React.FC = () => {
                 </div>
               </>
             )}
-          </div>
-        </div>
-        {mode !== 'add' && (
-          <>
-            <div className={styles.row}>
-              <div className={styles.row}>
-                <label>{en.networkDomains.creatorUser}</label>
-                <div className={styles.inputContainer}>
-                  <input
-                    type="text"
-                    name="creatorUser"
-                    value={formData.creatorUser}
-                    disabled
-                  />
-                  <div className={styles.errorContainer}></div>
-                </div>
-              </div>
+          </div> */}
+          {mode !== 'add' && (
+            <>
               <div className={styles.row}>
                 <label>{en.networkDomains.updatedAt}</label>
                 <div className={styles.inputContainer}>
@@ -320,6 +306,24 @@ const ManageNetworkDomain: React.FC = () => {
                   <div className={styles.errorContainer}></div>
                 </div>
               </div>
+            </>
+          )}
+        </div>
+        {mode !== 'add' && (
+          <>
+            <div className={styles.row}>
+              {/* <div className={styles.row}>
+                <label>{en.networkDomains.creatorUser}</label>
+                <div className={styles.inputContainer}>
+                  <input
+                    type="text"
+                    name="creatorUser"
+                    value={formData.creatorUser}
+                    disabled
+                  />
+                  <div className={styles.errorContainer}></div>
+                </div>
+              </div> */}
             </div>
             <div className={styles.row}>
               <div className={styles.row}>

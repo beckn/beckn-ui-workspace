@@ -1,0 +1,19 @@
+{
+  "hosting": [
+    {
+      "target": "retail",
+      "public": "apps/retail/out",
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+      "rewrites": [
+        {
+          "source": "**",
+          "function": "retailApp"
+        }
+      ]
+    }
+  ],
+  "functions": {
+    "source": "apps/retail/functions",
+    "predeploy": ["npm --prefix \"$RESOURCE_DIR\" run build"]
+  }
+}

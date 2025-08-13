@@ -5,7 +5,8 @@ import {
   SelectOrder,
   ParsedItemModel,
   ConfirmResponseModel,
-  InitResponseModel
+  InitResponseModel,
+  SelectResponseModel
 } from '../../lib/types'
 import { ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
 import { geocodeFromPincode } from './checkout-utils'
@@ -94,11 +95,11 @@ export const getInitPayload = async (
   cartItems: CartItemForRequest[],
   transaction_id: string,
   domain: string = 'retail:1.1.0',
-  fulfillments: { id: string; type: string } = { id: '3', type: 'Standard-shipping' },
+  selectResponse: SelectResponseModel[] = [],
   location?: any
 ) => {
   const cityData = await geocodeFromPincode(deliveryAddress.pinCode!)
-  console.log(cityData)
+
   const bppGroups = cartItems.reduce((acc: { [key: string]: CartItemForRequest[] }, item) => {
     if (!acc[item.bpp_id]) {
       acc[item.bpp_id] = []
@@ -117,12 +118,12 @@ export const getInitPayload = async (
         ...(location && { location })
       },
       message: {
-        orders: transformOrdersByProvider(items, fulfillments)
+        orders: transformOrdersByProvider(items, selectResponse)
       }
     }
   })
 
-  function transformOrdersByProvider(items: CartItemForRequest[], fullf: { id: string; type: string }) {
+  function transformOrdersByProvider(items: CartItemForRequest[], selectResponse: SelectResponseModel[]) {
     const providerGroups = items.reduce((acc: { [key: string]: CartItemForRequest[] }, item) => {
       const providerKey = `${item.bpp_id}_${item.providerId}`
       if (!acc[providerKey]) {
@@ -145,8 +146,10 @@ export const getInitPayload = async (
 
       const fulfillments = [
         {
-          id: fullf.id,
-          type: fullf.type,
+          id: selectResponse?.filter(response => response.message.order.provider.id === providerId)?.[0]?.message?.order
+            ?.fulfillments?.[0]?.id,
+          type: selectResponse?.filter(response => response.message.order.provider.id === providerId)?.[0]?.message
+            ?.order?.fulfillments?.[0]?.type,
           customer: {
             person: {
               name: deliveryAddress.name
@@ -211,22 +214,22 @@ export const getInitPayload = async (
 }
 
 export const getPayloadForConfirm = (initResponse: InitResponseModel[], location?: any) => {
-  const {
-    context,
-    message: {
-      order: { billing, fulfillments, items, payments, provider, quote, type }
-    }
-  } = initResponse[0]
-  const { transaction_id, bpp_id, bpp_uri, domain } = context
-
   const payload = {
-    data: [
-      {
+    data: initResponse.map(response => {
+      const {
+        context,
+        message: {
+          order: { billing, fulfillments, items, payments, provider, quote }
+        }
+      } = response
+      const { transaction_id, bpp_id, bpp_uri, domain } = context
+
+      return {
         context: {
-          transaction_id: transaction_id,
-          bpp_id: bpp_id,
-          bpp_uri: bpp_uri,
-          domain: domain,
+          transaction_id,
+          bpp_id,
+          bpp_uri,
+          domain,
           ...(location && location)
         },
         message: {
@@ -235,25 +238,24 @@ export const getPayloadForConfirm = (initResponse: InitResponseModel[], location
               provider: {
                 id: provider.id
               },
-              items: items,
-              fulfillments: fulfillments,
-              billing: billing,
-              payments: [
-                {
-                  id: payments?.[0]?.id,
+              items,
+              fulfillments,
+              billing,
+              payments:
+                payments?.map(payment => ({
+                  id: payment.id,
                   params: {
                     amount: quote?.price?.value,
                     currency: quote?.price?.currency
                   },
                   status: 'PAID',
                   type: 'ON-FULFILLMENT'
-                }
-              ]
+                })) || []
             }
           ]
         }
       }
-    ]
+    })
   }
 
   return payload
@@ -284,9 +286,9 @@ export const getPayloadForOrderStatus = (confirmResponse: ConfirmResponseModel[]
   return payLoad
 }
 
-export const getPayloadForOrderHistoryPost = (confirmData: ConfirmResponseModel[], categoryId: number) => {
+export const getPayloadForOrderHistoryPost = (confirmData: ConfirmResponseModel, categoryId: number) => {
   console.log(categoryId)
-  const { bpp_id, bpp_uri, transaction_id } = confirmData[0].context
+  const { bpp_id, bpp_uri, transaction_id } = confirmData.context
   const {
     orderId,
     provider: { id, name, short_desc },
@@ -294,7 +296,7 @@ export const getPayloadForOrderHistoryPost = (confirmData: ConfirmResponseModel[
     quote,
     payments,
     fulfillments
-  } = confirmData[0].message
+  } = confirmData.message
 
   const ordersPayload = {
     context: {

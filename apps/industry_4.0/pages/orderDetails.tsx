@@ -142,13 +142,13 @@ const OrderDetails = () => {
       image: '/images/trackOrder.svg',
       text: 'Track Order',
       onClick: () => {
-        // if (trackingUrl) window.open(trackingUrl, '_blank')
-        // else
-        dispatch(
-          feedbackActions.setToastData({
-            toastData: { message: 'Warning', display: true, type: 'warning', description: t.unabletoTrack }
-          })
-        )
+        if (trackingUrl) window.open(trackingUrl, '_blank')
+        else
+          dispatch(
+            feedbackActions.setToastData({
+              toastData: { message: 'Warning', display: true, type: 'warning', description: t.unabletoTrack }
+            })
+          )
       }
     },
     {
@@ -537,7 +537,6 @@ const OrderDetails = () => {
     data.statusData?.[0]?.message?.order?.fulfillments?.[0]?.state?.descriptor?.code === 'ORDER_COMPLETE'
   const isCancelled = data.statusData?.[0]?.message?.order?.status === 'CANCELLED'
 
-  console.log(isCompleted)
   return (
     <Box
       className="hideScroll"
@@ -804,7 +803,7 @@ const OrderDetails = () => {
             <Box m="20px">
               <BecknButton
                 disabled={uiState.isProceedDisabled}
-                children="Proceed"
+                text="Proceed"
                 className="checkout_btn"
                 handleClick={() => {
                   handleCancelButton(

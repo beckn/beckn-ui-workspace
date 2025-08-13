@@ -20,8 +20,7 @@ const CartItem: React.FC<CartItemProps> = ({
   handleDecrement,
   handleIncrement,
   className,
-  alignment = 'column',
-  totalAmountText
+  alignment = 'column'
 }) => {
   const [counter, setCounter] = useState(quantity)
 
@@ -151,7 +150,7 @@ const CartItem: React.FC<CartItemProps> = ({
           >
             {/* <p>{totalAmountText}</p> */}
             <ProductPrice
-              price={price * counter}
+              price={price}
               currencyType={symbol}
             />
             {/* <BecknProductPrice price={parseFloat(product.price.value) * counter!} /> */}

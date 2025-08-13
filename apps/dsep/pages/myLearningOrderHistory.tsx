@@ -51,7 +51,6 @@ const myLearningOrderHistory = () => {
     <Box
       className="hideScroll"
       maxH={'calc(100vh - 100px)'}
-      overflowY="scroll"
     >
       {coursesOrders.map((courseOrder, index) => {
         console.log('courseOrder', courseOrder)

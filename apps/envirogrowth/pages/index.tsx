@@ -65,11 +65,7 @@ const HomePage = () => {
   }
 
   return (
-    <Box
-      className="hideScroll"
-      maxH="calc(100vh - 24px)"
-      overflowY={'scroll'}
-    >
+    <>
       <TopSheet
         currentLocationFetchError={currentLocationFetchError}
         loadingForCurrentAddress={loadingForCurrentAddress}
@@ -105,7 +101,7 @@ const HomePage = () => {
           </>
         }
       />
-    </Box>
+    </>
   )
 }
 

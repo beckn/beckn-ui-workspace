@@ -18,7 +18,7 @@ import {
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['cart', 'discovery', 'checkout', 'orders', 'status', 'search']
+  whitelist: ['auth', 'cart', 'discovery', 'checkout', 'orders', 'status']
 }
 
 const appReducer = combineReducers({

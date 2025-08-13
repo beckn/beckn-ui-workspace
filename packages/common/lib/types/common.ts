@@ -115,6 +115,9 @@ export interface Item {
   locations?: Location[] | Coordinate
   productInfo?: Record<string, any> | string
   infoGuideIcon?: string
+  xinput?: {
+    html: string
+  }
 }
 
 export interface Tag {

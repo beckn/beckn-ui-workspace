@@ -1,20 +1,20 @@
 import React, { useEffect } from 'react'
-import { Provider, useDispatch, useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import Head from 'next/head'
-import { ThemeProvider } from 'next-themes'
 import { useRouter } from 'next/router'
 import Header from '../header'
-import store from '../../store/index'
 import { ToastContainer } from 'react-toastify'
 import { useLanguage } from '../../hooks/useLanguage'
 import NextNProgress from 'nextjs-progressbar'
 import styles from './Layout.module.css'
-import { Box, Text, useToast } from '@chakra-ui/react'
+import { Box, useToast } from '@chakra-ui/react'
 import { Toast } from '@beckn-ui/molecules/src/components'
 import { IGeoLocationSearchPageRootState } from '@beckn-ui/common/lib/types'
 import { feedbackActions, FeedbackRootState, ToastType } from '@beckn-ui/common/src/store/ui-feedback-slice'
 import { testIds } from '@shared/dataTestIds'
-import { GeoLocationInputList } from '@beckn-ui/common'
+import { checkTokenExpiry, GeoLocationInputList, logout } from '@beckn-ui/common'
+import Cookies from 'js-cookie'
+import { RootState } from '@store/index'
 
 const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const { locale } = useLanguage()
@@ -34,6 +34,29 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const {
     toast: { display, message, type, description }
   } = useSelector((state: FeedbackRootState) => state.feedback)
+  const { user } = useSelector((state: RootState) => state.auth)
+
+  useEffect(() => {
+    if (!['/signIn', '/signUp', '/OTPVerification'].includes(router.pathname)) {
+      const token = Cookies.get('authToken')
+      let message = ''
+
+      try {
+        const isExpired: any = checkTokenExpiry(token)
+        if (isExpired || !user) message = 'Token expired, please log in again!'
+      } catch (error) {
+        console.error('Token decoding error:', error)
+        message = 'Token decode failed, please log in again!'
+      } finally {
+        if (message) {
+          alert(message)
+          // if (userConfirmed) {
+          dispatch(logout())
+          // }
+        }
+      }
+    }
+  }, [router])
 
   useEffect(() => {
     if (display) {

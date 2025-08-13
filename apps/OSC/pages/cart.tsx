@@ -1,36 +1,58 @@
 import { useRouter } from 'next/router'
 
-import React from 'react'
+import React, { useState } from 'react'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useLanguage } from '@hooks/useLanguage'
-import { Cart as BecknCart } from '@beckn-ui/becknified-components'
-
+import { Cart as BecknCart, CurrencyType } from '@beckn-ui/becknified-components'
 import { Box } from '@chakra-ui/react'
-
 import { DOMAIN } from '@lib/config'
-
-import { ICartRootState, DiscoveryRootState, getSelectPayload, cartActions } from '@beckn-ui/common'
-import LoaderWithMessage from '@components/loader/LoaderWithMessage'
+import {
+  ICartRootState,
+  DiscoveryRootState,
+  getSelectPayload,
+  cartActions,
+  CheckoutRootState,
+  Quote
+} from '@beckn-ui/common'
 import { useSelectMutation } from '@beckn-ui/common/src/services/select'
 import { testIds } from '@shared/dataTestIds'
+import { CartItemProps } from '@beckn-ui/becknified-components/src/components/cart/cart.types'
 
 const Cart = () => {
-  const [fetchQuotes, { isLoading, data, isError }] = useSelectMutation()
+  const [quote, setQuote] = useState<Quote | null>(null)
+  const [fetchQuotes, { isLoading }] = useSelectMutation()
   const dispatch = useDispatch()
 
   const router = useRouter()
   const { t } = useLanguage()
 
   const { items, totalQuantity } = useSelector((state: ICartRootState) => state.cart)
-  const totalAmount = useSelector((state: ICartRootState) => state.cart.totalAmount)
   const { transactionId, productList } = useSelector((state: DiscoveryRootState) => state.discovery)
+  const { selectResponse } = useSelector((state: CheckoutRootState) => state.checkout)
 
   useEffect(() => {
     if (items.length > 0) {
       fetchQuotes(getSelectPayload(items, transactionId, DOMAIN))
     }
   }, [totalQuantity])
+
+  useEffect(() => {
+    if (selectResponse && selectResponse.length > 0) {
+      const finalQuote = { value: 0, currency: 'INR' }
+      selectResponse.forEach(response => {
+        const qoute = response.message.order.quote
+        if (Number(qoute.price.value)) {
+          finalQuote.value = finalQuote.value + Number(qoute.price.value)
+          finalQuote.currency = qoute.price.currency
+        }
+      })
+      setQuote({
+        price: { value: finalQuote.value.toString(), currency: finalQuote.currency as CurrencyType },
+        breakup: []
+      })
+    }
+  }, [selectResponse])
 
   const handleShopButton = () => {
     router.push('/')
@@ -54,9 +76,9 @@ const Cart = () => {
             id: singleItem.id,
             quantity: singleItem.quantity,
             name: singleItem.name,
-            image: singleItem.images[0].url,
-            price: Number(singleItem.price.value),
-            symbol: singleItem.price.currency,
+            image: singleItem.images?.[0].url,
+            price: Number(singleItem?.price.value),
+            symbol: singleItem?.price.currency,
             totalAmountText: t.totalAmount,
             handleIncrement: id => {
               const selectedItem = productList.find(singleItem => singleItem.item.id === id)
@@ -65,14 +87,21 @@ const Cart = () => {
               }
             },
             handleDecrement: id => {
-              dispatch(cartActions.removeItemFromCart(id))
+              const selectedItem = productList.find(singleItem => singleItem.item.id === id)
+              if (selectedItem) {
+                dispatch(cartActions.removeItemFromCart(id))
+              }
             }
-          })),
-          loader: { text: t.quoteRequestLoader, dataTest: testIds.loadingIndicator },
+          })) as CartItemProps[],
+          loader: {
+            loadingText: t.pleaseWait,
+            loadingSubText: t.quoteRequestLoader,
+            dataTest: testIds.loadingIndicator
+          },
           orderSummary: {
             totalAmount: {
-              price: totalAmount,
-              currencyType: items[0]?.price.currency
+              price: Number(quote?.price.value),
+              currencyType: quote?.price.currency
             },
             totalQuantity: {
               text: totalQuantity.toString(),
