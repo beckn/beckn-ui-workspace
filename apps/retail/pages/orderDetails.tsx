@@ -80,6 +80,7 @@ const ORDER_CANCEL_REASONS = [
   { id: 4, reason: 'Other' }
 ]
 
+// order statuses
 type ParentStatus = 'ORDER_RECEIVED' | 'COMPLETE' | 'USER CANCELLED' | 'ORDER_DISPATCHED'
 
 const parentStatusMap: Record<
