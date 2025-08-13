@@ -5,7 +5,7 @@ import { useRouter } from 'next/router'
 import { parsedSearchlist } from '@utils/search-results.utils'
 import { ProductCard } from '@beckn-ui/becknified-components'
 import ProductCardRenderer from '@components/productCard/product-card-renderer'
-import SearchBar from '../components/header/SearchBar'
+import SearchBar from '@beckn-ui/common/src/components/searchBar/searchBar'
 import { useLanguage } from '../hooks/useLanguage'
 import { ParsedItemModel } from '../types/search.types'
 import TopSheet from '@components/topSheet/TopSheet'
@@ -44,7 +44,7 @@ const Search = () => {
         setItems(parsedSearchItems)
         setIsLoading(false)
       })
-      .catch(e => {
+      .catch(() => {
         setIsLoading(false)
       })
   }
@@ -56,7 +56,6 @@ const Search = () => {
       window.dispatchEvent(new Event('storage-optiontags'))
       fetchDataForSearch()
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchKeyword])
 
   useEffect(() => {
