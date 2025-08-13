@@ -63,7 +63,6 @@ import successIcon from '@public/images/order_complete.svg'
 import DetailsCard from '@beckn-ui/becknified-components/src/components/checkout/details-card'
 import ItemDetails from '@beckn-ui/becknified-components/src/components/checkout/checkout-item-details'
 
-const DELIVERED = 'Delivered'
 const CANCELLED = 'CANCELLED'
 
 interface MenuItem {
@@ -180,14 +179,57 @@ const OrderDetails = () => {
           }
 
           return {
-            label: statusKey ? statusMap[statusKey as StatusKey] : '',
+            label: statusKey,
             statusTime: order?.fulfillments?.[0]?.state?.updated_at || status?.context?.timestamp
           }
         })
         .filter(status => status.label)
 
-      const labelSet = new Set(orderStatusMap.map(status => status.label))
-      setOrderStatusMap(prevState => [...prevState, ...newData.filter(status => !labelSet.has(status.label))])
+      // Get the current status from newData
+      const currentStatus = newData[newData.length - 1]?.label
+
+      // Map API statuses to display statuses and define what to show for each
+      let statusesToShow: string[] = []
+
+      if (currentStatus === 'ORDER_RECEIVED') {
+        statusesToShow = ['ORDER_RECEIVED']
+      } else if (currentStatus === 'ORDER_DISPATCHED') {
+        statusesToShow = ['ORDER_RECEIVED', 'ORDER_DISPATCHED']
+      } else if (currentStatus === 'COMPLETE') {
+        statusesToShow = ['ORDER_RECEIVED', 'ORDER_DISPATCHED', 'COMPLETE']
+      } else if (currentStatus === 'USER CANCELLED') {
+        statusesToShow = ['USER CANCELLED']
+      } else {
+        // Fallback to show just the current status
+        statusesToShow = [currentStatus || '']
+      }
+      // Create the complete sequence with the statuses to show
+      const completeSequence = statusesToShow.map((status: string, index: number) => {
+        // Find if this status already exists in orderStatusMap
+        const existingStatus = statusMap[status as StatusKey]
+        if (existingStatus) {
+          return {
+            label: existingStatus,
+            lastElement: status === 'COMPLETE' || status === 'USER CANCELLED',
+            statusTime: newData[newData.length - 1]?.statusTime
+          }
+        } else {
+          // For new statuses, use the current status time or generate a time
+          const statusTime =
+            index === statusesToShow.length - 1
+              ? newData[newData.length - 1]?.statusTime
+              : new Date(Date.now() - (statusesToShow.length - 1 - index) * 60000).toISOString() // Approximate time
+
+          return {
+            label: status,
+            lastElement: status === 'COMPLETE' || status === 'USER CANCELLED',
+            statusTime: statusTime
+          }
+        }
+      })
+
+      // Update the orderStatusMap with the complete sequence
+      setOrderStatusMap(completeSequence as OrderStatus[])
     }
   }, [data.statusData])
 
@@ -265,7 +307,8 @@ const OrderDetails = () => {
   }, [apiUrl, data.confirmData])
 
   // Status checks
-  const isDelivered = data.statusData?.[0]?.message?.order?.fulfillments?.[0]?.state?.descriptor?.code === DELIVERED
+  const isDelivered =
+    data.statusData?.[0]?.message?.order?.fulfillments?.[0]?.state?.descriptor?.code === statusMap.COMPLETE
   const isCancelled = data.statusData?.[0]?.message?.order?.status === CANCELLED
 
   useEffect(() => {
@@ -866,8 +909,8 @@ const OrderDetails = () => {
                     key={index}
                     label={status.label}
                     statusTime={status.statusTime && formatTimestamp(status.statusTime)}
-                    noLine={isDelivered || isCancelled}
-                    lastElement={orderStatusMap.length - 1 === index}
+                    noLine={status.lastElement || isCancelled}
+                    lastElement={status.lastElement}
                   />
                 ))}
               </Box>
