@@ -1,3 +1,6 @@
+/* eslint-env node */
+/* eslint-disable @typescript-eslint/no-var-requires */
+const path = require('path')
 /** @type {import('next').NextConfig} */
 
 const nextConfig = {
@@ -41,6 +44,11 @@ const nextConfig = {
         }
       }
     })
+    config.resolve = config.resolve || {}
+    config.resolve.alias = {
+      ...(config.resolve.alias || {}),
+      '@public': path.resolve(__dirname, 'public')
+    }
     return config
   }
 }
