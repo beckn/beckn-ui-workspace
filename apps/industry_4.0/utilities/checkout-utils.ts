@@ -2,7 +2,7 @@ import { ParsedItemModel } from '../types/search.types'
 import { InitResponseModel } from '../types/init.types'
 import { StatusResponseModel } from '../types/status.types'
 
-export const getPayloadForSelectRequest = (selectedProduct: ParsedItemModel) => {
+export const getPayloadForSelectRequest = (selectedProduct: ParsedItemModel, quantity: number) => {
   const {
     bppId,
     bppUri,
@@ -29,7 +29,10 @@ export const getPayloadForSelectRequest = (selectedProduct: ParsedItemModel) => 
               },
               items: [
                 {
-                  id
+                  id,
+                  quantity: {
+                    selected: { count: quantity }
+                  }
                 }
               ],
               fulfillments,
@@ -83,7 +86,12 @@ const geocodeFromPincode = async (pincode: any) => {
   }
 }
 
-export const getPayloadForInitRequest = async (selectData: ParsedItemModel, shippingDetails: any, billingData: any) => {
+export const getPayloadForInitRequest = async (
+  selectData: ParsedItemModel,
+  shippingDetails: any,
+  billingData: any,
+  quantity: number
+) => {
   try {
     const { providerId, bppId, bppUri, domain, transactionId, item } = selectData
     const { fulfillments } = item
@@ -115,7 +123,7 @@ export const getPayloadForInitRequest = async (selectData: ParsedItemModel, ship
                 provider: {
                   id: providerId
                 },
-                items: [item],
+                items: [{ ...item, quantity: { ...item.quantity, selected: { count: quantity } } }],
                 fulfillments: [
                   {
                     id: fulfillments[0].id,

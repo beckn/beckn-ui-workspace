@@ -18,7 +18,15 @@ const assemblyDetails = () => {
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
-  const fetchSelectData = (selectPayload: any) => {
+  const updateCatalogue = async (quantity: number, callback: () => void) => {
+    // fetchSelectData
+    console.log('selectPayload', selectedProduct)
+    console.log('quantity', quantity)
+    const selectPayload = getPayloadForSelectRequest(selectedProduct as ParsedItemModel, quantity)
+    await fetchSelectData(selectPayload, callback)
+  }
+
+  const fetchSelectData = (selectPayload: any, callback?: () => void) => {
     setIsLoadingForSelect(true)
 
     axios
@@ -28,6 +36,7 @@ const assemblyDetails = () => {
         localStorage.setItem('selectResponse', JSON.stringify(selectData))
         setSelectData(res.data.data)
         setIsLoadingForSelect(false)
+        callback?.()
       })
       .catch(e => {
         setError(e.message)
@@ -47,7 +56,7 @@ const assemblyDetails = () => {
 
   useEffect(() => {
     if (selectedProduct) {
-      const selectPayload = getPayloadForSelectRequest(selectedProduct)
+      const selectPayload = getPayloadForSelectRequest(selectedProduct, 1)
       fetchSelectData(selectPayload)
     }
   }, [selectedProduct])
@@ -82,7 +91,10 @@ const assemblyDetails = () => {
       mr={'-20px'}
       ml={'-20px'}
     >
-      <AssemblyDetails xInputHtml={xInputHtml} />
+      <AssemblyDetails
+        xInputHtml={xInputHtml}
+        updateCatalogue={updateCatalogue}
+      />
     </Box>
   )
 }
