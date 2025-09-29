@@ -177,7 +177,12 @@ const CheckoutPage = () => {
             onSubmit: async shippingData => {
               try {
                 setIsLoadingForInit(true)
-                const initPayload = await getPayloadForInitRequest(selectedProduct!, shippingData, billingFormData)
+                const initPayload = await getPayloadForInitRequest(
+                  selectedProduct!,
+                  shippingData,
+                  billingFormData,
+                  assemblyDetails?.quantity || 1
+                )
                 axios
                   .post(`${apiUrl}/init`, initPayload)
                   .then(res => {

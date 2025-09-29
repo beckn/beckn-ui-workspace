@@ -36,6 +36,16 @@ interface Image {
   size_type: string
 }
 
+export interface Quantity {
+  available: {
+    count: number
+    measure: {
+      unit: string
+      value: string
+    }
+  }
+}
+
 interface Item {
   long_desc: string
   short_desc: string
@@ -43,6 +53,7 @@ interface Item {
   name: string
   price: Price
   locations: Location[]
+  quantity: Quantity
   fulfillments: Fulfillment[]
   images: Image[]
   tags: Tag[]

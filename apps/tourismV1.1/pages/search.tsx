@@ -66,7 +66,7 @@ const Search = () => {
         setOriginalItems(parsedSearchItems)
         setIsLoading(false)
       })
-      .catch(e => {
+      .catch(() => {
         setIsLoading(false)
       })
   }
@@ -102,7 +102,8 @@ const Search = () => {
     setItems(originalItems)
   }
 
-  const handleApplyFilter = (sortBy: string) => {
+  const handleApplyFilter = (filters: Record<string, string>) => {
+    const sortBy = filters.sortBy || ''
     const sortedItemsCopy = [...originalItems]
 
     if (sortBy === 'LowtoHigh') {
@@ -156,7 +157,7 @@ const Search = () => {
       catalogProps={{
         viewDetailsClickHandler: handleViewDetailsClickHandler
       }}
-      noProduct={key => t.noProduct}
+      noProduct={() => t.noProduct}
     />
   )
 }
