@@ -62,7 +62,28 @@ const SignUp = () => {
           const token = data.jwt
 
           Cookies.set('authToken', token)
-          Router.push('/signin')
+
+          const myHeaders = new Headers()
+          myHeaders.append('Authorization', `Bearer ${token}`)
+
+          const currentFormData = new FormData()
+          const profileData = {
+            name: formData.name
+          }
+
+          currentFormData.append('data', JSON.stringify(profileData))
+
+          const requestOptions: RequestInit = {
+            method: 'POST',
+            headers: myHeaders,
+            redirect: 'follow',
+            body: currentFormData
+          }
+
+          fetch(`${baseUrl}/profiles`, requestOptions).then(response => {
+            Router.push('/')
+            return response.json()
+          })
         } else {
           const errorData = await response.json()
           toast({
