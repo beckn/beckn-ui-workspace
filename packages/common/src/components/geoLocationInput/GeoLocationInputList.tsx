@@ -3,8 +3,7 @@ import React from 'react'
 import Styles from './GeoLocationInput.module.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { useState } from 'react'
-import backArrow from '@public/images/Back.svg'
-import locationMarker from '@public/images/SearchLocationMarker.svg'
+import backArrow from '../../../public/images/Back.svg'
 import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete'
 import { IoClose } from 'react-icons/io5'
 import {
@@ -122,7 +121,7 @@ const GeoLocationInputList = (props: { backIcon?: string }) => {
                         >
                           <Box className={Styles.location_pointer_wrapper}>
                             <Image
-                              src={locationMarker}
+                              src={'/images/SearchLocationMarker.svg'}
                               alt="locationMarker"
                             />
                           </Box>

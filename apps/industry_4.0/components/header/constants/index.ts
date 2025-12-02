@@ -52,6 +52,7 @@ const headerBlackList = [
 
 const cartIconBlackList: string[] = [
   '/orderConfirmation',
+  '/orderCancellation',
   '/orderDetails',
   '/trackOrder',
   '/feedback',

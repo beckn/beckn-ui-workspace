@@ -46,7 +46,7 @@ export const currencyMap = {
 
 const CheckoutPage = () => {
   const cartItems = useSelector((state: ICartRootState) => state.cart.items)
-  const tourismName = cartItems[0]?.categories[0]?.name
+  const tourismName = cartItems?.[0]?.categories?.[0]?.name // fallback to cart item name if no category is present
 
   const toast = useToast()
 

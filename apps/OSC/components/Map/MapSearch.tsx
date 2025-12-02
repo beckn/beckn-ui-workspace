@@ -7,6 +7,8 @@ import { useLanguage } from '../../hooks/useLanguage'
 import useDebounce from '../../hooks/useDebounce'
 import { Location } from '../../lib/types/search'
 import { testIds } from '@shared/dataTestIds'
+import SearchLocationMarker from '@public/images/SearchLocationMarker.svg'
+
 interface LocalNameFormat {
   primaryName: string
   secondaryName: string
@@ -39,7 +41,6 @@ export interface SearchBarProp {
 const SearchBar: React.FC<SearchBarProp> = ({
   setQuery,
   locations,
-  query,
   handleLocationClick,
   fetchResults,
   setShowSuggestions
@@ -109,7 +110,7 @@ const SearchBar: React.FC<SearchBarProp> = ({
               >
                 <Image
                   className="mt-1"
-                  src="/images/searchlocationmarker.svg"
+                  src={SearchLocationMarker}
                   alt="Location point"
                 />
                 <div>

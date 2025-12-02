@@ -19,7 +19,11 @@ import PaymentDetails from '@beckn-ui/becknified-components/src/components/check
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import axios from '../services/axios'
 import { testIds } from '@shared/dataTestIds'
-import { createPaymentBreakdownMap, getTotalPriceWithCurrency, InitResponseModel } from '@beckn-ui/common'
+import {
+  createPaymentBreakdownMap,
+  getTotalPriceWithCurrency,
+  InitResponseModel as CommonInitResponseModel
+} from '@beckn-ui/common'
 
 export type ShippingFormData = {
   name: string
@@ -28,6 +32,8 @@ export type ShippingFormData = {
   address: string
   pinCode: string
 }
+
+type InitEnvelope = { data: CommonInitResponseModel[] }
 
 const CheckoutPage = () => {
   const [formData, setFormData] = useState<ShippingFormData>({
@@ -40,7 +46,7 @@ const CheckoutPage = () => {
   // TODO :- check for refactoring and some issue fix in this component
   const [isLoadingForInit, setIsLoadingForInit] = useState(false)
   const [isError, setIsError] = useState(false)
-  const [initData, setInitData] = useState<InitResponseModel[] | null>(null)
+  const [initData, setInitData] = useState<InitEnvelope | null>(null)
   const [selectResponse, setSelectResponse] = useState<SelectResponseModel | null>(null)
 
   const router = useRouter()
@@ -66,7 +72,7 @@ const CheckoutPage = () => {
 
   useEffect(() => {
     if (localStorage && localStorage.getItem('initResult')) {
-      setInitData(JSON.parse(localStorage.getItem('initResult') as string))
+      setInitData(JSON.parse(localStorage.getItem('initResult') as string) as InitEnvelope)
     }
   }, [])
 
@@ -246,7 +252,7 @@ const CheckoutPage = () => {
         </Box>
       )}
       {/* start payment details */}
-      {!!initData && (
+      {!!(initData && initData.data && initData.data.length) && (
         <Box>
           <Flex
             pb={'10px'}
@@ -260,9 +266,9 @@ const CheckoutPage = () => {
             {/* {initData.data.map((data, idx) => {
               return ( */}
             <PaymentDetails
-              paymentBreakDown={createPaymentBreakdownMap(initData)}
+              paymentBreakDown={createPaymentBreakdownMap(initData.data)}
               totalText={t.total}
-              totalValueWithCurrency={getTotalPriceWithCurrency(initData)}
+              totalValueWithCurrency={getTotalPriceWithCurrency(initData.data)}
             />
             {/* )
             })} */}
@@ -272,7 +278,7 @@ const CheckoutPage = () => {
       <Box m={'20px 0px'}>
         <BecknButton
           dataTest={testIds.checkoutpage_proceedToCheckout}
-          disabled={!!!initData}
+          disabled={!initData}
           text={t.confirm}
           className="checkout_btn "
           handleClick={() => {

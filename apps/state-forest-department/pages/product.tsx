@@ -77,6 +77,8 @@ const Product = () => {
     <Box
       className="hideScroll"
       maxH="calc(100vh - 100px)"
+      overflowY="auto"
+      style={{ WebkitOverflowScrolling: 'touch' }}
     >
       <ProductDetailPage
         schema={{

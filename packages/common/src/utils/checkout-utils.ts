@@ -222,7 +222,7 @@ export const createPaymentBreakdownMap = (initResponse: InitResponseModel[] | St
 
 export const getTotalPriceWithCurrency = (initResponse: InitResponseModel[] | StatusResponseModel[]) => {
   let totalPriceWithCurrency: { value: number; currency: CurrencyType } = { value: 0, currency: 'INR' }
-  initResponse.forEach(response => {
+  initResponse?.forEach(response => {
     totalPriceWithCurrency = {
       value: totalPriceWithCurrency.value + Number(response?.message?.order?.quote?.price?.value) || 0,
       currency: response?.message?.order?.quote?.price?.currency || 'INR'

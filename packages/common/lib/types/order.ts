@@ -4,7 +4,9 @@ export const statusMap = {
   Cancelled: 'Order Cancelled!',
   Shipped: 'Order Shipped',
   Delivered: 'Order Delivered',
-  ORDER_RECEIVED: 'Processing your order'
+  ORDER_RECEIVED: 'Processing your order',
+  ORDER_DISPATCHED: 'Order Dispatched',
+  COMPLETE: 'Order Delivered'
 }
 
 export type StatusMap = typeof statusMap

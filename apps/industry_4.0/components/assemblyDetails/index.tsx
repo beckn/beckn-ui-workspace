@@ -6,9 +6,10 @@ import styles from './assembly-details.module.css'
 
 export interface AssemblyDetailsPropsModel {
   xInputHtml: string
+  updateCatalogue?: (quantity: number, callback: () => void) => void
 }
 
-const AssemblyDetails: FC<AssemblyDetailsPropsModel> = ({ xInputHtml }) => {
+const AssemblyDetails: FC<AssemblyDetailsPropsModel> = ({ xInputHtml, updateCatalogue }) => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
   const router = useRouter()
 
@@ -106,7 +107,9 @@ const AssemblyDetails: FC<AssemblyDetailsPropsModel> = ({ xInputHtml }) => {
         if (res.status === 200 && res.data) {
           const formDataToStore = res.data.form_data
           localStorage.setItem('assemblyDetails', JSON.stringify(formDataToStore))
-          router.push('/checkoutPage')
+          updateCatalogue?.(Number(quantity), () => {
+            router.push('/checkoutPage')
+          })
         }
       })
       .catch(e => {

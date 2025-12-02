@@ -14,6 +14,7 @@ import {
 const invoiceDetails = () => {
   const [statusData, setStatusData] = useState<StatusResponseModel[]>([])
 
+  // useEffect to get the status data from the local storage
   useEffect(() => {
     if (localStorage && localStorage.getItem('statusResponse')) {
       const parsedStatusResponse = JSON.parse(localStorage.getItem('statusResponse') as string)
