@@ -93,28 +93,28 @@ const OrderConfirmation = () => {
           successOrderMessage: 'Order Placed!',
           gratefulMessage: 'The order has been placed successfully.',
           buttons: [
-            {
-              text: 'View Order Details',
-              handleClick: () => {
-                const orderId = confirmResponse[0].message.orderId
-                const bppId = confirmResponse[0].context.bpp_id
-                const bppUri = confirmResponse[0].context.bpp_uri
+            // {
+            //   text: 'View Order Details',
+            //   handleClick: () => {
+            //     const orderId = confirmResponse[0].message.orderId
+            //     const bppId = confirmResponse[0].context.bpp_id
+            //     const bppUri = confirmResponse[0].context.bpp_uri
 
-                dispatch(orderActions.addSelectedOrder({ orderDetails: { orderId, bppId, bppUri } }))
-                const orderObjectForStatusCall = {
-                  bppId: bppId,
-                  bppUri: bppUri,
-                  orderId: orderId
-                }
-                localStorage.setItem('selectedOrder', JSON.stringify(orderObjectForStatusCall))
-                dispatch(checkoutActions.clearState())
-                router.push('/orderDetails')
-              },
-              disabled: false,
-              variant: 'solid',
-              colorScheme: 'primary',
-              dataTest: testIds.orderConfirmation_viewOrderButton
-            },
+            //     dispatch(orderActions.addSelectedOrder({ orderDetails: { orderId, bppId, bppUri } }))
+            //     const orderObjectForStatusCall = {
+            //       bppId: bppId,
+            //       bppUri: bppUri,
+            //       orderId: orderId
+            //     }
+            //     localStorage.setItem('selectedOrder', JSON.stringify(orderObjectForStatusCall))
+            //     dispatch(checkoutActions.clearState())
+            //     router.push('/orderDetails')
+            //   },
+            //   disabled: false,
+            //   variant: 'solid',
+            //   colorScheme: 'primary',
+            //   dataTest: testIds.orderConfirmation_viewOrderButton
+            // },
             {
               text: 'Go Back Home',
               handleClick: () => {
