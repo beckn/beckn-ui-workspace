@@ -57,15 +57,15 @@ const OrderConfirmation = () => {
 
   useEffect(() => {
     if (confirmResponse && confirmResponse.length > 0) {
-      confirmResponse.forEach(async response => {
-        const ordersPayload = getPayloadForOrderHistoryPost(response, ORDER_CATEGORY_ID)
-        await axios
-          .post(`${strapiUrl}/orders`, ordersPayload, axiosConfig)
-          .then(res => {
-            return res
-          })
-          .catch(err => console.error(err))
-      })
+      // confirmResponse.forEach(async response => {
+      //   const ordersPayload = getPayloadForOrderHistoryPost(response, ORDER_CATEGORY_ID)
+      //   await axios
+      //     .post(`${strapiUrl}/orders`, ordersPayload, axiosConfig)
+      //     .then(res => {
+      //       return res
+      //     })
+      //     .catch(err => console.error(err))
+      // })
     }
   }, [confirmResponse])
 
