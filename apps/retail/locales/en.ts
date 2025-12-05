@@ -82,7 +82,7 @@ const en: { [key: string]: string } = {
   viewJSON: 'View JSON',
   payment: 'Payment',
   pleaseWait: 'Please wait!',
-  searchLoaderSubText: ' Finding the best results for sunglasses.',
+  searchLoaderSubText: ' Finding the best results for',
   total: 'Total',
   checkoutLoaderSubText: 'while we setup a form to understand your requirements',
   confirmLoaderSubtext: 'while we confirm your order',

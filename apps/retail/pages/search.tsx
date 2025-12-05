@@ -317,7 +317,7 @@ const Search = () => {
       loaderProps={{
         isLoading,
         loadingText: t.pleaseWait,
-        loadingSubText: t.searchLoaderSubText,
+        loadingSubText: t.searchLoaderSubText + ' ' + (searchTerm as SearchTermModel).searchKeyword + '.',
         dataTest: testIds.loadingIndicator
       }}
       catalogProps={{
