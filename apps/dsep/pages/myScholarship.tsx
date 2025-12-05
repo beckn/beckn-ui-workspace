@@ -36,7 +36,7 @@ const myScholarship = () => {
       redirect: 'follow'
     } as RequestInit
 
-    fetch(`${apiUrl}/orders?filters[category]=2`, requestOptions)
+    fetch(`${apiUrl}/orders?filters[category]=2&sort[0]=updatedAt:desc`, requestOptions)
       .then(response => response.json())
       .then(result => {
         setScholarshipOrders(result.data)
@@ -91,7 +91,6 @@ const myScholarship = () => {
     <Box
       className="hideScroll"
       maxH={'calc(100vh - 100px)'}
-      overflowY="scroll"
     >
       {scholarshipOrders.map((scholarshipOrder, index) => {
         const {

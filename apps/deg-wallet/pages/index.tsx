@@ -86,7 +86,7 @@ const Dashboard = () => {
           <NavigationItem
             icon={IdentityIcon}
             label={'Identities'}
-            handleClick={() => {}}
+            handleClick={() => router.push('/myIdentities')}
             dataTest={'identity'}
             renderType="card"
           />

@@ -180,7 +180,7 @@ const Search = () => {
       <SearchAndDiscover
         items={items}
         searchProps={{
-          showSearchField: type === 'RENT_AND_HIRE' ? false : true,
+          showSearchField: false,
           searchKeyword: searchKeyword as string,
           placeholder:
             type === 'RENT_AND_HIRE'
@@ -190,7 +190,7 @@ const Search = () => {
           fetchDataOnSearch: fetchDataForSearch
         }}
         filterProps={{
-          showFilterField: type === 'RENT_AND_HIRE' ? false : true,
+          showFilterField: false,
           isFilterOpen: isFilterOpen,
           handleFilterOpen,
           handleFilterClose,

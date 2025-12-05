@@ -233,7 +233,6 @@ const UpdateShippingDetails = () => {
     <Box
       className="hideScroll"
       maxH={'calc(100vh - 100px)'}
-      overflowY="scroll"
       data-test={testIds.orderDetailspage_updateShippingDetails}
     >
       <ShippingForm

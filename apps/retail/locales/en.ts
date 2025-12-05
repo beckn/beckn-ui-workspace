@@ -51,6 +51,8 @@ const en: { [key: string]: string } = {
   orderPlaced: ' Order Placed',
   currencySymbol: '€',
   orderOverview: 'Order Overview',
+  itemDetails: 'Item Details',
+  fullfillmentDetails: 'Fulfillment Details',
   assembly: 'Assembly',
   shipping: 'Shipping',
   billing: 'Billing',
@@ -72,7 +74,7 @@ const en: { [key: string]: string } = {
   invoiceDetails: 'Invoice Details',
   cardNumber: '**** **** **** 1234',
   procced: 'Proceed',
-  clicktheShopbuttontobuyitemsforthistrip: 'Click ‘Proceed’ to continue',
+  clicktheShopbuttontobuyitemsforthistrip: 'Click "Proceed" to continue',
   toImportthisorderanotherapp: 'to Import this order another app',
   scanthisQR: 'Scan this QR ',
   scanQR: 'Scan QR',
@@ -80,7 +82,7 @@ const en: { [key: string]: string } = {
   viewJSON: 'View JSON',
   payment: 'Payment',
   pleaseWait: 'Please wait!',
-  searchLoaderSubText: ' Finding the best results for sunglasses.',
+  searchLoaderSubText: ' Finding the best results for',
   total: 'Total',
   checkoutLoaderSubText: 'while we setup a form to understand your requirements',
   confirmLoaderSubtext: 'while we confirm your order',
@@ -114,7 +116,6 @@ const en: { [key: string]: string } = {
   enterPincode: ' Pincode',
   enterState: ' State / Province',
   enterCountry: ' Country',
-  // New Translations
   orderHistoryIcon: 'My Orders',
   profileIcon: 'My Profile',
   logoutIcon: 'Logout',
@@ -141,15 +142,14 @@ const en: { [key: string]: string } = {
   selectdelivery: 'Select delivery',
   selectdeliveryText: 'Where would you like the order to be delivered? ',
   searchForanything: 'Search for anything',
-  quoteRequestLoader: 'we’re retrieving your cart.',
+  quoteRequestLoader: "we're retrieving your cart.",
   initializingOrderLoader: 'Saving your information, just a moment.',
   errorZipcode: 'Zip Code is required',
   errorZipcode2: 'Invalid Zip Code',
   emptyCardHeading: 'The Cart is Empty',
-  emptyCardSubHeading: 'Looks like you haven’t made your choice yet',
+  emptyCardSubHeading: "Looks like you haven't made your choice yet",
   shop: 'Shop',
   orderId: 'Order id',
-
   forAll: 'for All',
   subText:
     "A global marketplace powered by the Beckn network, where you can discover anything you need. Simply type what you're looking for, and we'll take care of the rest.",
@@ -160,7 +160,6 @@ const en: { [key: string]: string } = {
   searchProducts: 'Search for Products',
   addToCart: 'Add to Cart',
   addedToCart: 'Product added to cart',
-
   order: 'Proceed to Checkout',
   items: 'Items',
   saveShippingDetails: 'Save Shipping Details',
@@ -177,7 +176,7 @@ const en: { [key: string]: string } = {
   errorText: 'Something went wrong',
   profileUpdateSuccess: 'Profile updated successfully!',
   fixError: 'Please fix the errors in the form before submitting.',
-  unabletoTrack: 'Unable to get the track url',
+  unabletoTrack: 'Tracking details are unavailable. Please try again later or contact support.',
   errorCountry: 'Country is Required',
   errorState: 'State is Required',
   errorCity: 'City is Required',
@@ -188,6 +187,7 @@ const en: { [key: string]: string } = {
   errorDescription: 'Server cannot process your request due to invalid syntax.',
   backtoHomepage: 'Back to Homepage',
   contactSupport: 'Contact support',
-  noProduct: 'There are no products in this category yet! New products will be added soon.'
+  noProduct: 'There are no products in this category yet! New products will be added soon.',
+  success: 'Success'
 }
 export default en

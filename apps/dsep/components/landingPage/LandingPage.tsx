@@ -32,6 +32,14 @@ const LandingPage: React.FC = () => {
     localStorage.setItem('optionTags', JSON.stringify({ name: searchTerm }))
     Router.push(`/search?searchTerm=${searchTerm}`)
   }
+  const navigateToScholarship = () => {
+    localStorage.setItem('optionTags', JSON.stringify({ name: searchTerm }))
+    Router.push(`/scholarshipSearchPage?searchTerm=${searchTerm}`)
+  }
+  const navigateToJob = () => {
+    localStorage.setItem('optionTags', JSON.stringify({ name: searchTerm }))
+    Router.push(`/jobSearch?searchTerm=${searchTerm}`)
+  }
 
   const handleClick = (type: string) => {
     setActiveCard(type)
@@ -39,7 +47,11 @@ const LandingPage: React.FC = () => {
 
   const searchIconClickHandler = (e: any) => {
     if (searchTerm) {
-      navigateToSearchResults()
+      activeCard === 'course'
+        ? navigateToSearchResults()
+        : activeCard === 'jobs'
+          ? navigateToJob()
+          : navigateToScholarship()
     }
     e.preventDefault()
   }
@@ -60,7 +72,12 @@ const LandingPage: React.FC = () => {
           searchPlaceholder: `Search for ${activeCard}`,
           setSearchTerm: setSearchTerm,
           onSearchIconClick: searchIconClickHandler,
-          onSearchInputEnterPress: navigateToSearchResults
+          onSearchInputEnterPress:
+            activeCard === 'course'
+              ? navigateToSearchResults
+              : activeCard === 'jobs'
+                ? navigateToJob
+                : navigateToScholarship
         }}
         CardSelector={{
           imageCardList: cardTypes.map(card => ({

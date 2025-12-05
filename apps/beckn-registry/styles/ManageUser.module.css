@@ -56,6 +56,7 @@
 .row input[type='checkbox'] {
   width: 2rem;
   margin: 0px;
+  margin-top: -1rem;
 }
 .submitButtonContainer {
   padding: 2rem 1rem 1rem 1rem;
@@ -64,7 +65,7 @@
 
 .submitButton {
   padding: 10px 20px;
-  background-color: #3056d3;
+  background-color: #3b82f6;
   color: white;
   border: none;
   border-radius: 4px;
@@ -74,7 +75,7 @@
 }
 .doneButton {
   padding: 10px 20px;
-  background-color: #3056d3;
+  background-color: #3b82f6;
   color: white;
   border: none;
   border-radius: 4px;
@@ -137,7 +138,7 @@
   width: 40px;
   height: 40px;
   border: 4px solid #f3f3f3;
-  border-top: 4px solid #3056d3;
+  border-top: 4px solid #3b82f6;
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -156,14 +157,13 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 40px;
   gap: 20px;
   color: #dc3545;
 }
 
 .retryButton {
   padding: 8px 16px;
-  background-color: #3056d3;
+  background-color: #3b82f6;
   color: white;
   border: none;
   border-radius: 4px;
@@ -173,4 +173,26 @@
 
 .retryButton:hover {
   background-color: #1e3a8a;
+}
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: calc(100vh - 20rem);
+}
+
+.spinner {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-left-color: #3b82f6;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }

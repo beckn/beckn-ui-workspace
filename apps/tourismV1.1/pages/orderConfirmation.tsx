@@ -11,7 +11,7 @@ import { orderObjectUrlActions } from '@store/orderObjectUrl-slice'
 import { utilGenerateEllipsedText } from '@beckn-ui/molecules'
 import axios from '@services/axios'
 import { useConfirmMutation } from '@beckn-ui/common/src/services/confirm'
-import { checkoutActions, CheckoutRootState, orderActions } from '@beckn-ui/common'
+import { cartActions, checkoutActions, CheckoutRootState, orderActions } from '@beckn-ui/common'
 import { getPayloadForConfirm, getPayloadForOrder } from '@utils/confirm-utils'
 import { testIds } from '@shared/dataTestIds'
 
@@ -34,14 +34,20 @@ const OrderConfirmation = () => {
 
   useEffect(() => {
     if (confirmResponse && confirmResponse.length > 0) {
-      setOrderId(confirmResponse[0].message.orderId)
+      const orderIds: string[] = []
+      confirmResponse.forEach(response => {
+        orderIds.push(utilGenerateEllipsedText(response.message.orderId))
+      })
+      setOrderId(orderIds.join(', '))
     }
   }, [confirmResponse])
 
   useEffect(() => {
     if (initResponse && initResponse.length > 0) {
       const payLoad = getPayloadForConfirm(initResponse)
-      confirm(payLoad)
+      confirm(payLoad).then(() => {
+        dispatch(cartActions.clearCart())
+      })
     }
   }, [])
 
@@ -89,7 +95,7 @@ const OrderConfirmation = () => {
           iconSrc: orderConfirmmark,
           successOrderMessage: `${t.orderPlaced}`,
           gratefulMessage: `${t.confirmMessage}`,
-          orderIdMessage: orderId ? `${t.orderNumber} ${utilGenerateEllipsedText(orderId)}` : '',
+          orderIdMessage: orderId ? `${t.orderNumber} ${orderId}` : '',
           trackOrderMessage: `${t.trackOrderMessage}`,
 
           buttons: [

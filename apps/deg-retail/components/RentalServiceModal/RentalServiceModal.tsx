@@ -111,7 +111,7 @@ const RentalServiceModal: React.FC<RentalServiceModalProps> = ({ isOpen, onClose
           return {
             id: index.toString(),
             name: item.type,
-            source: item.source,
+            source: item.source.toLowerCase() === 'spark' ? 'Retail' : item.source,
             invoice: item.attachment!,
             isVerified: true,
             timestamp:

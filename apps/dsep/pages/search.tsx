@@ -4,12 +4,10 @@ import { Box } from '@chakra-ui/react'
 import { LoaderWithMessage } from '@beckn-ui/molecules'
 import SearchBar from '../components/header/SearchBar'
 import ProductList from '../components/productList/ProductList'
-import { responseDataActions } from '../store/responseData-slice'
 import { useLanguage } from '../hooks/useLanguage'
 import { useRouter } from 'next/router'
 import { getParsedSearchlist } from '../utilities/search-utils'
 import { ParsedItemModel, SearchResponseModel } from '../types/search.types'
-import { toast } from 'react-toastify'
 import axios from '../services/axios'
 import { testIds } from '@shared/dataTestIds'
 
@@ -53,7 +51,6 @@ const Search = () => {
       }
     }
     fetchInitialData()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -70,7 +67,6 @@ const Search = () => {
     if (searchKeyword !== router.query?.searchTerm) {
       fetchDataForSearch()
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchKeyword])
 
   return (

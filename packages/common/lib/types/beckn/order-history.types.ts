@@ -1,4 +1,4 @@
-import { Descriptor, Item, Price, QuoteBreakup, Quote } from '../common'
+import { Descriptor, Item, Quote } from '../common'
 
 interface Attributes {
   order_id: string
@@ -16,7 +16,7 @@ interface Attributes {
   transaction_id: string
   message_id: null
   payments: null
-  items: Item
+  items: Item[]
   createdAt: string
   updatedAt: string
   publishedAt: string

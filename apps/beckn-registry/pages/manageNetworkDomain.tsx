@@ -9,6 +9,8 @@ import {
   useUpdateNetworkDomainMutation
 } from '@services/networkDomainServices'
 import { showToast } from '@components/Toast'
+import UnauthorizedAccess from '@components/UnauthorizedAccess'
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query'
 
 interface FormErrors {
   name?: string
@@ -19,11 +21,16 @@ interface FormErrors {
 const ManageNetworkDomain: React.FC = () => {
   const router = useRouter()
   const { mode: queryMode, documentId } = router.query
-  const { data: domainData, isLoading } = useGetNetworkDomainByIdQuery(documentId as string, {
+  const {
+    data: domainData,
+    isLoading,
+    error: queryError,
+    refetch
+  } = useGetNetworkDomainByIdQuery(documentId as string, {
     skip: !documentId || queryMode === 'add'
   })
   const [createNetworkDomain] = useCreateNetworkDomainMutation()
-  const [updateNetworkDomain] = useUpdateNetworkDomainMutation()
+  const [updateNetworkDomain, { error: updateError }] = useUpdateNetworkDomainMutation()
 
   const [formData, setFormData] = useState({
     name: '',
@@ -46,8 +53,8 @@ const ManageNetworkDomain: React.FC = () => {
         schemaUrl: domainData.schema_url || '',
         updaterUser: domainData.updater_user || '',
         creatorUser: domainData.creator_user || '',
-        updatedAt: domainData.updated_at || '',
-        createdAt: domainData.created_at || ''
+        updatedAt: domainData.updatedAt ? new Date(domainData.updatedAt).toISOString().split('T')[0] : '',
+        createdAt: domainData.createdAt ? new Date(domainData.createdAt).toISOString().split('T')[0] : ''
       })
     }
   }, [domainData])
@@ -190,8 +197,15 @@ const ManageNetworkDomain: React.FC = () => {
   }
 
   if (isLoading && mode !== 'add') {
-    return <div>Loading...</div>
+    return (
+      <div className={styles.manageNetworkDomainContainer + ' ' + styles.loadingContainer}>
+        <div className={styles.spinner}></div>
+        <p>Loading...</p>
+      </div>
+    )
   }
+
+  const error = (queryError as FetchBaseQueryError) || (updateError as FetchBaseQueryError)
 
   return (
     <div className={styles.manageNetworkDomainContainer}>
@@ -262,7 +276,7 @@ const ManageNetworkDomain: React.FC = () => {
               </div>
             </div>
           </div>
-          <div className={styles.row}>
+          {/* <div className={styles.row}>
             {mode !== 'add' && (
               <>
                 <label>{en.networkDomains.updaterUser}</label>
@@ -277,23 +291,9 @@ const ManageNetworkDomain: React.FC = () => {
                 </div>
               </>
             )}
-          </div>
-        </div>
-        {mode !== 'add' && (
-          <>
-            <div className={styles.row}>
-              <div className={styles.row}>
-                <label>{en.networkDomains.creatorUser}</label>
-                <div className={styles.inputContainer}>
-                  <input
-                    type="text"
-                    name="creatorUser"
-                    value={formData.creatorUser}
-                    disabled
-                  />
-                  <div className={styles.errorContainer}></div>
-                </div>
-              </div>
+          </div> */}
+          {mode !== 'add' && (
+            <>
               <div className={styles.row}>
                 <label>{en.networkDomains.updatedAt}</label>
                 <div className={styles.inputContainer}>
@@ -306,6 +306,24 @@ const ManageNetworkDomain: React.FC = () => {
                   <div className={styles.errorContainer}></div>
                 </div>
               </div>
+            </>
+          )}
+        </div>
+        {mode !== 'add' && (
+          <>
+            <div className={styles.row}>
+              {/* <div className={styles.row}>
+                <label>{en.networkDomains.creatorUser}</label>
+                <div className={styles.inputContainer}>
+                  <input
+                    type="text"
+                    name="creatorUser"
+                    value={formData.creatorUser}
+                    disabled
+                  />
+                  <div className={styles.errorContainer}></div>
+                </div>
+              </div> */}
             </div>
             <div className={styles.row}>
               <div className={styles.row}>
@@ -335,7 +353,6 @@ const ManageNetworkDomain: React.FC = () => {
             <button
               type="submit"
               className={styles.doneButton}
-              onClick={handleAdd}
             >
               Done
             </button>
@@ -345,7 +362,6 @@ const ManageNetworkDomain: React.FC = () => {
           <button
             type="submit"
             className={styles.doneButton}
-            onClick={handleEdit}
           >
             Done
           </button>
@@ -360,6 +376,12 @@ const ManageNetworkDomain: React.FC = () => {
           </button>
         )}
       </form>
+      {error?.status === 401 && (
+        <UnauthorizedAccess
+          onRetry={() => refetch()}
+          closeButton={true}
+        />
+      )}
     </div>
   )
 }

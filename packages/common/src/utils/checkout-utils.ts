@@ -1,6 +1,13 @@
 import { areObjectPropertiesEqual } from './general'
 import { CurrencyType, ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
-import { CartRetailItem, InitResponseModel, StatusResponseModel } from '../../lib/types'
+import {
+  CartRetailItem,
+  InitResponseModel,
+  ItemWisePaymentBreakDownModel,
+  PaymentBreakDownModel,
+  SelectResponseModel,
+  StatusResponseModel
+} from '../../lib/types'
 
 export const extractAddressComponents = (result: google.maps.GeocoderResult) => {
   let country = 'IN',
@@ -170,4 +177,56 @@ export const getOrderDetailsPaymentBreakDown = (statusData: StatusResponseModel[
   })
 
   return { breakUpMap, totalPricewithCurrent }
+}
+
+export const getItemWiseBreakUp = (
+  selectResponse: SelectResponseModel[] | StatusResponseModel[],
+  selectedItemId: string
+) => {
+  const paymentBreakdownMap: ItemWisePaymentBreakDownModel = {}
+  const totalPricewithCurrent: { value: number; currency: CurrencyType } = {
+    value: 0,
+    currency: 'INR'
+  }
+  if (selectResponse && selectResponse.length > 0) {
+    selectResponse.forEach(response => {
+      response?.message?.order?.quote?.breakup?.forEach(breakup => {
+        if (breakup.item?.id === selectedItemId) {
+          if (!paymentBreakdownMap[breakup.item?.id]) {
+            paymentBreakdownMap[breakup.item?.id] = {}
+          }
+          paymentBreakdownMap[breakup.item?.id][breakup?.title] = {
+            value: breakup.price.value,
+            currency: breakup.price.currency || ('INR' as CurrencyType)
+          }
+          totalPricewithCurrent.value += Number(breakup.price.value)
+        }
+      })
+    })
+  }
+  return { paymentBreakdownMap, totalPricewithCurrent }
+}
+
+export const createPaymentBreakdownMap = (initResponse: InitResponseModel[] | StatusResponseModel[]) => {
+  const paymentBreakdownMap: PaymentBreakDownModel = {}
+  if (initResponse && initResponse.length > 0) {
+    initResponse?.[0]?.message?.order?.quote?.breakup?.forEach(breakup => {
+      paymentBreakdownMap[breakup.title] = {
+        value: breakup.price.value,
+        currency: breakup.price.currency
+      }
+    })
+  }
+  return paymentBreakdownMap
+}
+
+export const getTotalPriceWithCurrency = (initResponse: InitResponseModel[] | StatusResponseModel[]) => {
+  let totalPriceWithCurrency: { value: number; currency: CurrencyType } = { value: 0, currency: 'INR' }
+  initResponse?.forEach(response => {
+    totalPriceWithCurrency = {
+      value: totalPriceWithCurrency.value + Number(response?.message?.order?.quote?.price?.value) || 0,
+      currency: response?.message?.order?.quote?.price?.currency || 'INR'
+    }
+  })
+  return totalPriceWithCurrency
 }

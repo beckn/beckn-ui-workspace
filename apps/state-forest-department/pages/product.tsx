@@ -1,7 +1,7 @@
 import React, { useCallback, useRef, useState } from 'react'
 import { ProductDetailPage } from '@beckn-ui/becknified-components'
 import { useDispatch, useSelector } from 'react-redux'
-import { Box, Flex, Link, Text, useTheme } from '@chakra-ui/react'
+import { Box, Flex, Link, useTheme } from '@chakra-ui/react'
 import { useLanguage } from '@hooks/useLanguage'
 import { DiscoveryRootState, ParsedItemModel } from '@beckn-ui/common/lib/types'
 import { cartActions } from '@beckn-ui/common/src/store/cart-slice'
@@ -9,7 +9,6 @@ import { feedbackActions } from '@beckn-ui/common/src/store/ui-feedback-slice'
 import { testIds } from '@shared/dataTestIds'
 import { OptionsGroup } from '@beckn-ui/common'
 import { Button, Typography } from '@beckn-ui/molecules'
-import { mockData1, mockData2 } from '../mock/mockOptionGroupData'
 import { DataPoint } from '@beckn-ui/common/src/components/OptionsGroup'
 import { useRouter } from 'next/router'
 import { convertProductTagsIntoFormat, getSelectedProductDetails } from '../utils/product-utils'
@@ -46,11 +45,11 @@ const Product = () => {
   }, [])
 
   const handleOnProceed = () => {
-    let dataObjectsArray: any = getSelectedProductDetails(selectedItems)
+    const dataObjectsArray: any = getSelectedProductDetails(selectedItems)
     dispatch(
       cartActions.addItemToCart({
         product: { ...selectedProduct, item: { ...selectedProduct.item, tags: dataObjectsArray } },
-        quantity: 0
+        quantity: 1
       })
     )
     dispatch(
@@ -78,7 +77,8 @@ const Product = () => {
     <Box
       className="hideScroll"
       maxH="calc(100vh - 100px)"
-      overflowY={'scroll'}
+      overflowY="auto"
+      style={{ WebkitOverflowScrolling: 'touch' }}
     >
       <ProductDetailPage
         schema={{

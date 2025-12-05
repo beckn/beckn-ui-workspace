@@ -34,14 +34,13 @@ const OrderHistory = () => {
       headers: myHeaders,
       redirect: 'follow'
     }
-    fetch(`${strapiUrl}/orders?filters[category]=8`, requestOptions)
+    fetch(`${strapiUrl}/orders?filters[category]=8&sort[0]=updatedAt:desc`, requestOptions)
       .then(response => response.json())
       .then(result => {
-        console.log('resluttt', result)
         if (result.error) {
           return setError(result.error.message)
         }
-        setOrderHistoryList(result.data.reverse())
+        setOrderHistoryList(result.data)
         setIsLoading(false)
       })
       .catch(error => {
@@ -79,8 +78,6 @@ const OrderHistory = () => {
       </Box>
     )
   }
-
-  console.log('orderHistory:List', orderHistoryList)
 
   return (
     <Box

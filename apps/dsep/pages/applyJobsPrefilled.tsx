@@ -72,7 +72,6 @@ const applyJobsPrefilled = () => {
     <Box
       className="hideScroll"
       maxH={'calc(100vh - 104px)'}
-      overflowY="scroll"
     >
       <Box>
         <Text

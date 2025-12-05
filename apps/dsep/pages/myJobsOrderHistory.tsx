@@ -26,7 +26,7 @@ const myJobsOrderHistory = () => {
       redirect: 'follow'
     } as RequestInit
 
-    fetch(`${apiUrl}/orders?filters[category]=3`, requestOptions)
+    fetch(`${apiUrl}/orders?filters[category]=3&sort[0]=updatedAt:desc`, requestOptions)
       .then(response => response.json())
       .then(result => {
         setJobsOrders(result.data)
@@ -51,7 +51,6 @@ const myJobsOrderHistory = () => {
     <Box
       className="hideScroll"
       maxH={'calc(100vh - 100px)'}
-      overflowY="scroll"
     >
       {jobsOrders.map((jobOrder, index) => {
         const {

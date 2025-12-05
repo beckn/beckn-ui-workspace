@@ -1,21 +1,111 @@
 .searchContainer {
   display: flex;
   align-items: center;
+  gap: 12px;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  padding: 16px 20px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  margin: 20px 0;
+  transition: all 0.3s ease;
+}
+
+.searchContainer:focus-within {
+  box-shadow: 0 4px 16px rgba(79, 124, 255, 0.15);
+  border-color: #4f7cff;
+  transform: translateY(-1px);
+}
+
+.inputWrapper {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 12px;
+  color: #a0aec0;
+  font-size: 14px;
+  z-index: 1;
+  transition: color 0.3s ease;
+}
+
+.searchContainer:focus-within .searchIcon {
+  color: #4f7cff;
 }
 
 .searchInput {
-  padding: 6px;
-  margin-right: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  width: 300px;
+  width: 100%;
+  padding: 12px 16px 12px 40px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #2d3748;
+  background: white;
+  transition: all 0.3s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: #4f7cff;
+  box-shadow: 0 0 0 3px rgba(79, 124, 255, 0.1);
+  background: white;
+}
+
+.searchInput::placeholder {
+  color: #a0aec0;
+  font-style: italic;
 }
 
 .searchButton {
-  padding: 10px 20px;
-  background-color: #3056d3;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #4f7cff 0%, #6b8eff 100%);
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(79, 124, 255, 0.3);
+  min-width: 120px;
+  position: relative;
+  overflow: hidden;
+}
+
+.searchButton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.searchButton:hover::before {
+  left: 100%;
+}
+
+.searchButton:hover {
+  background: linear-gradient(135deg, #3d6bff 0%, #5a7dff 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(79, 124, 255, 0.4);
+}
+
+.searchButton:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(79, 124, 255, 0.3);
+}
+
+.buttonIcon {
+  font-size: 12px;
 }

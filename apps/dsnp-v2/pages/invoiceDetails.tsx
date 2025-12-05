@@ -4,11 +4,17 @@ import { DetailCard } from '@beckn-ui/becknified-components'
 import Typography from '@beckn-ui/molecules/src/components/typography/typography'
 import { Box, Flex } from '@chakra-ui/react'
 import { useLanguage } from '@hooks/useLanguage'
-import { formatTimestamp, getPaymentBreakDown, StatusResponseModel } from '@beckn-ui/common'
+import {
+  createPaymentBreakdownMap,
+  formatTimestamp,
+  getTotalPriceWithCurrency,
+  StatusResponseModel
+} from '@beckn-ui/common'
 
 const invoiceDetails = () => {
   const [statusData, setStatusData] = useState<StatusResponseModel[]>([])
 
+  // useEffect to get the status data from the local storage
   useEffect(() => {
     if (localStorage && localStorage.getItem('statusResponse')) {
       const parsedStatusResponse = JSON.parse(localStorage.getItem('statusResponse') as string)
@@ -32,8 +38,13 @@ const invoiceDetails = () => {
     <Box
       className="hideScroll"
       maxH={'calc(100vh - 100px)'}
-      overflowY="scroll"
     >
+      <Box pb={'15px'}>
+        <Typography
+          variant="titleSemibold"
+          text={t.orderOverview}
+        />
+      </Box>
       <DetailCard>
         <Flex
           pt={'unset'}
@@ -65,17 +76,17 @@ const invoiceDetails = () => {
           </Flex>
         </Box>
       </DetailCard>
+      <Box pb={'15px'}>
+        <Typography
+          variant="titleSemibold"
+          text={t.payment}
+        />
+      </Box>
       <DetailCard>
-        <Box pb={'15px'}>
-          <Typography
-            variant="titleSemibold"
-            text={t.payment}
-          />
-        </Box>
         <PaymentDetails
-          paymentBreakDown={getPaymentBreakDown(statusData).breakUpMap}
+          paymentBreakDown={createPaymentBreakdownMap(statusData)}
           totalText="Total"
-          totalValueWithCurrency={getPaymentBreakDown(statusData).totalPricewithCurrent}
+          totalValueWithCurrency={getTotalPriceWithCurrency(statusData)}
         />
       </DetailCard>
     </Box>

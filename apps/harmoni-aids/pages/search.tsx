@@ -86,7 +86,8 @@ const Search = () => {
     setItems(originalItems)
   }
 
-  const handleApplyFilter = (sortBy: string) => {
+  const handleApplyFilter = (filters: Record<string, string>) => {
+    const sortBy = filters.sortBy || ''
     const sortedItemsCopy = [...originalItems]
 
     if (sortBy === 'LowtoHigh') {

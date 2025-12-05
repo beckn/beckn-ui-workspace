@@ -200,8 +200,7 @@ const LockDemand = () => {
         backgroundColor={'#fff'}
         boxShadow=" 0 4px 20px 0 rgba(0, 0, 0, .07)"
         zIndex={'1'}
-        pl="20px"
-        pr="20px"
+        p="20px"
         // height={'60px'}
         alignItems={'center'}
         justifyContent="space-between"
@@ -220,7 +219,7 @@ const LockDemand = () => {
       </Flex>
       <Box
         maxWidth={{ base: '100vw', md: '30rem', lg: '40rem' }}
-        margin="calc(0rem + 60px) auto auto auto"
+        margin="calc(0rem + 96px) auto auto auto"
         backgroundColor="white"
         // height={'calc(100vh - 330px)'}
       >
@@ -398,8 +397,8 @@ const LockDemand = () => {
                               overflow: 'hidden',
                               textOverflow: 'ellipsis',
                               whiteSpace: 'normal',
-                              textAlign: 'center',
-                              width: '70px'
+                              textAlign: 'center'
+                              // width: '70px'
                             }}
                           />
                         </Td>

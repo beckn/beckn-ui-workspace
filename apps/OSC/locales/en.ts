@@ -171,7 +171,8 @@ const en: { [key: string]: string } = {
   merchantTakingTo: 'Merchant is taking too long',
   orderMistake: 'Ordered by mistake',
   iHaveChange: 'I’ve changed my mind',
-  unabletoTrack: 'Unable to get the track url',
+  unabletoTrack: 'Tracking details are unavailable. Please try again later or contact support.',
+
   cancelOrder: 'Cancel Order',
   callCustomer: 'Call Customer Service',
   emailCustomer: 'Email Customer Service',
@@ -218,6 +219,8 @@ const en: { [key: string]: string } = {
   errorCity1: 'City can only contain letters and spaces',
   invalidPincode: 'Invalid Pincode',
   noProduct: 'There are no products in this category yet! New products will be added soon.',
-  quoteRequestLoader: 'Your order is getting processed'
+  quoteRequestLoader: 'Your order is getting processed',
+  itemDetails: 'Item Details',
+  fullfillmentDetails: 'Fulfillment Details'
 }
 export default en

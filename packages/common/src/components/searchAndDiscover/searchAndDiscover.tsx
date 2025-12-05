@@ -19,17 +19,9 @@ const SearchAndDiscover: React.FC<SearchAndDiscoverProps> = ({
   noProduct,
   t
 }) => {
-  const {
-    searchKeyword,
-    setSearchKeyword,
-    fetchDataOnSearch,
-    selectedInput,
-    placeholder,
-    showSearchField = true
-  } = searchProps
+  const { searchKeyword, setSearchKeyword, selectedInput, placeholder, showSearchField = true } = searchProps
   const {
     isFilterOpen,
-    sortByRating,
     handleApplyFilter,
     handleResetFilter,
     handleFilterOpen,
@@ -49,7 +41,7 @@ const SearchAndDiscover: React.FC<SearchAndDiscoverProps> = ({
       const { item, providerName } = catalogItem
       const product: Product = {
         id: item.id,
-        images: item.images?.map(image => image?.url)!,
+        images: item.images?.map(image => image?.url || '') as string[],
         name: item.name,
         shortDesc: item.short_desc,
         price: item.price.value,
@@ -89,7 +81,7 @@ const SearchAndDiscover: React.FC<SearchAndDiscoverProps> = ({
       <Box display="flex">
         {filterProps && !isSmallScreen && !isMediumScreen && (
           <Filter
-            sortByRating={sortByRating}
+            fields={filterProps.fields}
             handleApplyFilter={handleApplyFilter!}
             handleResetFilter={handleResetFilter!}
             handleCancelFilter={handleFilterClose}
@@ -113,7 +105,7 @@ const SearchAndDiscover: React.FC<SearchAndDiscoverProps> = ({
                   localStorage.removeItem('optionTags')
                   setLocalStorage('optionTags', { name: text })
                   window.dispatchEvent(new Event('storage-optiontags'))
-                  fetchDataOnSearch()
+                  // fetchDataOnSearch()
                 }}
               />
             )}
@@ -134,7 +126,7 @@ const SearchAndDiscover: React.FC<SearchAndDiscoverProps> = ({
               onClose={handleFilterClose!}
             >
               <Filter
-                sortByRating={sortByRating}
+                fields={filterProps.fields}
                 handleApplyFilter={handleApplyFilter!}
                 handleResetFilter={handleResetFilter!}
                 handleCancelFilter={handleFilterClose}
@@ -149,7 +141,7 @@ const SearchAndDiscover: React.FC<SearchAndDiscoverProps> = ({
               left="28%"
             >
               <Filter
-                sortByRating={sortByRating}
+                fields={filterProps.fields}
                 handleApplyFilter={handleApplyFilter!}
                 handleResetFilter={handleResetFilter!}
               />

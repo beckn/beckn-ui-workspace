@@ -4,7 +4,12 @@ import { DetailCard } from '@beckn-ui/becknified-components'
 import Typography from '@beckn-ui/molecules/src/components/typography/typography'
 import { Box, Flex } from '@chakra-ui/react'
 import { useLanguage } from '@hooks/useLanguage'
-import { formatTimestamp, getPaymentBreakDown, StatusResponseModel } from '@beckn-ui/common'
+import {
+  createPaymentBreakdownMap,
+  formatTimestamp,
+  getTotalPriceWithCurrency,
+  StatusResponseModel
+} from '@beckn-ui/common'
 import { testIds } from '@shared/dataTestIds'
 
 const invoiceDetails = () => {
@@ -76,10 +81,10 @@ const invoiceDetails = () => {
           />
         </Box>
         <PaymentDetails
-          paymentBreakDown={getPaymentBreakDown(statusData).breakUpMap}
+          paymentBreakDown={createPaymentBreakdownMap(statusData)}
           totalText={t.total}
           dataTest={testIds.orderDetailspage_paymentDetails}
-          totalValueWithCurrency={getPaymentBreakDown(statusData).totalPricewithCurrent}
+          totalValueWithCurrency={getTotalPriceWithCurrency(statusData)}
         />
       </DetailCard>
     </Box>

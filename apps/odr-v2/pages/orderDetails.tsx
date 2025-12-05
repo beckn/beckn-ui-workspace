@@ -11,12 +11,10 @@ import {
   Radio,
   RadioGroup,
   Stack,
-  StackDivider,
   Text,
   Textarea,
   useDisclosure,
-  useTheme,
-  useToast
+  useTheme
 } from '@chakra-ui/react'
 import { Accordion, BottomModal, Typography, utilGenerateEllipsedText } from '@beckn-ui/molecules'
 import { MdAlternateEmail } from 'react-icons/md'
@@ -24,18 +22,15 @@ import { toast } from 'react-toastify'
 import { v4 as uuidv4 } from 'uuid'
 import { useDispatch, useSelector } from 'react-redux'
 import ViewMoreOrderModal from '@components/orderDetailComponents/ViewMoreOrder'
-import { DiscoveryRootState, statusActions, OrdersRootState, feedbackActions } from '@beckn-ui/common/src/store'
+import { statusActions, OrdersRootState, feedbackActions } from '@beckn-ui/common/src/store'
 import { DetailCard, OrderStatusProgress, OrderStatusProgressProps } from '@beckn-ui/becknified-components'
-import { StatusResponseModel, SupportModel } from '../types/status.types'
 import useResponsive from '@beckn-ui/becknified-components/src/hooks/useResponsive'
 import { isEmpty } from '@utils/common-utils'
 import { useLanguage } from '@hooks/useLanguage'
-import { formatTimestamp, getPayloadForOrderStatus } from '@utils/confirm-utils'
+import { formatTimestamp } from '@utils/confirm-utils'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import BottomModalScan from '@components/BottomModal/BottomModalScan'
-import { ConfirmResponseModel } from '../types/confirm.types'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
-import { UIState, DataState, ProcessState } from '../types/order-details.types'
 import CallphoneIcon from '../public/images/CallphoneIcon.svg'
 import locationIcon from '../public/images/locationIcon.svg'
 import nameIcon from '../public/images/nameIcon.svg'
@@ -43,11 +38,15 @@ import { AttachmentIcon } from '@chakra-ui/icons'
 import ShippingBlock from '@components/orderDetailComponents/Shipping'
 import { DOMAIN } from '@lib/config'
 import { testIds } from '@shared/dataTestIds'
-
-const statusMap = {
-  PAYMENT_RECEIVED: 'Payment Received',
-  'USER CANCELLED': 'CASE FORFEITED'
-}
+import {
+  ConfirmResponseModel,
+  DataState,
+  getPayloadForOrderStatus,
+  ProcessState,
+  StatusResponseModel,
+  SupportModel,
+  UIState
+} from '@beckn-ui/common'
 
 const DELIVERED = 'CLOSED'
 const CANCELLED = 'USER CANCELLED'
@@ -83,7 +82,7 @@ const OrderDetails = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [orderStatusMap, setOrderStatusMap] = useState<any[]>([])
   const { isDesktop } = useResponsive()
-  const { transactionId } = useSelector((state: DiscoveryRootState) => state.discovery)
+
   const orderMetaData = useSelector((state: OrdersRootState) => state.orders.selectedOrderDetails)
   const dispatch = useDispatch()
   const [currentStatusLabel, setCurrentStatusLabel] = useState('')
@@ -216,7 +215,7 @@ const OrderDetails = () => {
         else
           dispatch(
             feedbackActions.setToastData({
-              toastData: { message: 'Error', display: true, type: 'error', description: t.unabletoTrack }
+              toastData: { message: 'Warning', display: true, type: 'warning', description: t.unabletoTrack }
             })
           )
       }
@@ -258,102 +257,67 @@ const OrderDetails = () => {
     }
   ]
 
-  // Fetch data on component
+  // Fetch data
   useEffect(() => {
-    const fetchData = () => {
-      if (localStorage && localStorage.getItem('selectedOrder')) {
-        const selectedOrderData = JSON.parse(localStorage.getItem('selectedOrder') as string)
-        const { bppId, bppUri, orderId } = selectedOrderData
-        const statusPayload = {
-          data: [
-            {
-              context: {
-                transaction_id: uuidv4(),
-                bpp_id: bppId,
-                bpp_uri: bppUri,
-                domain: DOMAIN
-              },
-              message: {
-                order_id: orderId
+    localStorage.removeItem('statusResponse')
+    const fetchData = async () => {
+      try {
+        setUiState(prevState => ({ ...prevState, isLoading: true }))
+
+        let statusPayload
+        if (localStorage.getItem('selectedOrder')) {
+          const selectedOrderData = JSON.parse(localStorage.getItem('selectedOrder') as string)
+          const { bppId, bppUri, orderId } = selectedOrderData
+          statusPayload = {
+            data: [
+              {
+                context: {
+                  transaction_id: uuidv4(),
+                  bpp_id: bppId,
+                  bpp_uri: bppUri,
+                  domain: DOMAIN
+                },
+                message: {
+                  order_id: orderId,
+                  orderId: orderId
+                }
               }
-            }
-          ]
+            ]
+          }
+        } else if (data.confirmData?.length) {
+          statusPayload = getPayloadForOrderStatus(data.confirmData)
+        } else {
+          return
         }
-        setUiState(prevState => ({
+
+        const response = await axios.post(`${apiUrl}/status`, statusPayload)
+
+        if (
+          JSON.stringify(response.data) === '{}' ||
+          response.data?.data?.length === 0 ||
+          !response.data?.data?.[0]?.message
+        ) {
+          setIsError(true)
+          router.back()
+          return
+        }
+
+        const resData = response.data.data
+        setData(prevState => ({
           ...prevState,
-          isLoading: true
+          statusData: resData
         }))
-
-        return axios
-          .post(`${apiUrl}/status`, statusPayload)
-          .then(res => {
-            if (JSON.stringify(res.data) === '{}') {
-              return setIsError(true)
-            }
-            const resData = res.data.data
-            setData(prevState => ({
-              ...prevState,
-              statusData: resData
-            }))
-            localStorage.setItem('statusResponse', JSON.stringify(resData))
-          })
-          .catch(err => {
-            console.error('Error fetching order status:', err)
-          })
-          .finally(() => {
-            setUiState(prevState => ({
-              ...prevState,
-              isLoading: false
-            }))
-
-            setProcessState(prevState => ({
-              ...prevState,
-              apiCalled: true
-            }))
-          })
-      }
-      if (data.confirmData && data.confirmData.length > 0) {
-        const parsedConfirmData: ConfirmResponseModel[] = JSON.parse(localStorage.getItem('confirmResponse') as string)
-        const statusPayload = getPayloadForOrderStatus(parsedConfirmData)
-        setUiState(prevState => ({
-          ...prevState,
-          isLoading: true
-        }))
-
-        return axios
-          .post(`${apiUrl}/status`, statusPayload)
-          .then(res => {
-            if (JSON.stringify(res.data) === '{}') {
-              return setIsError(true)
-            }
-            const resData = res.data.data
-            setData(prevState => ({
-              ...prevState,
-              statusData: resData
-            }))
-
-            localStorage.setItem('statusResponse', JSON.stringify(resData))
-          })
-          .catch(err => {
-            console.error('Error fetching order status:', err)
-          })
-          .finally(() => {
-            setUiState(prevState => ({
-              ...prevState,
-              isLoading: false
-            }))
-            setProcessState(prevState => ({
-              ...prevState,
-              apiCalled: true
-            }))
-          })
+        localStorage.setItem('statusResponse', JSON.stringify(resData))
+      } catch (error) {
+        console.error('Error fetching order status:', error)
+      } finally {
+        setUiState(prevState => ({ ...prevState, isLoading: false }))
+        setProcessState(prevState => ({ ...prevState, apiCalled: true }))
       }
     }
 
     fetchData()
-
     const intervalId = setInterval(fetchData, 30000)
-
     return () => clearInterval(intervalId)
   }, [apiUrl, data.confirmData])
 
@@ -392,7 +356,7 @@ const OrderDetails = () => {
       }))
 
       if (data.confirmData && data.confirmData.length > 0) {
-        const { domain, bpp_id, bpp_uri, transaction_id } = data.confirmData[0].context
+        const { domain, bpp_id, bpp_uri } = data.confirmData[0].context
         const orderId = data.confirmData[0].message.orderId
         const trackPayload = {
           data: [
@@ -455,7 +419,7 @@ const OrderDetails = () => {
         const selectedOrderData = JSON.parse(localStorage.getItem('selectedOrder') as string)
         const { bppId, bppUri, orderId } = selectedOrderData
         const statusResponseData = JSON.parse(localStorage.getItem('statusResponse') as string)
-        const { domain, transaction_id } = statusResponseData[0].context
+        const { domain } = statusResponseData[0].context
         const trackPayload = {
           data: [
             {
@@ -544,9 +508,17 @@ const OrderDetails = () => {
   }
 
   if (isError) {
-    return toast.error('Something went wrong', {
-      position: 'top-center'
-    })
+    dispatch(
+      feedbackActions.setToastData({
+        toastData: {
+          message: 'Error',
+          display: true,
+          type: 'error',
+          description: t.errorText
+        }
+      })
+    )
+    return <></>
   }
 
   if (!data.confirmData?.length && !localStorage.getItem('selectedOrder')) {
@@ -565,7 +537,7 @@ const OrderDetails = () => {
       }))
 
       if (confirmData && confirmData.length > 0) {
-        const { transaction_id, bpp_id, bpp_uri, domain } = confirmData[0].context
+        const { bpp_id, bpp_uri, domain } = confirmData[0].context
         const orderId = confirmData[0].message.orderId
         const cancelPayload = {
           data: [
@@ -629,6 +601,32 @@ const OrderDetails = () => {
         isLoadingForCancel: false
       }))
     }
+  }
+
+  // Display loading state if data is still being fetched
+  if (uiState.isLoading && !processState.apiCalled) {
+    return (
+      <Box
+        display="grid"
+        height="calc(100vh - 300px)"
+        alignContent="center"
+      >
+        <LoaderWithMessage
+          loadingText={t.pleaseWait}
+          loadingSubText={t.statusLoaderSubText}
+        />
+      </Box>
+    )
+  }
+
+  if (isError) {
+    return toast.error('Something went wrong', {
+      position: 'top-center'
+    })
+  }
+
+  if (!data.confirmData?.length && !localStorage.getItem('selectedOrder')) {
+    return <></>
   }
 
   const ordersLength = data.statusData.length
@@ -899,18 +897,18 @@ const OrderDetails = () => {
           {isDesktop && (
             <ShippingBlock
               title={t.claimantDetails}
-              name={{ text: updatedShippingName || shippingName, icon: nameIcon }}
-              address={{ text: shippingEmail, icon: locationIcon, iconComponent: MdAlternateEmail }}
-              mobile={{ text: updateShippingPhone || shippingPhone, icon: CallphoneIcon }}
+              name={{ text: updatedShippingName || shippingName || '', icon: nameIcon }}
+              address={{ text: shippingEmail || '', icon: locationIcon, iconComponent: MdAlternateEmail }}
+              mobile={{ text: updateShippingPhone || shippingPhone || '', icon: CallphoneIcon }}
               dataTest={testIds.orderDetailspage_shippingDetails}
             />
           )}
           {!isDesktop && (
             <Accordion accordionHeader={t.claimantDetails}>
               <ShippingBlock
-                name={{ text: updatedShippingName || shippingName, icon: nameIcon }}
-                address={{ text: shippingEmail, icon: locationIcon, iconComponent: MdAlternateEmail }}
-                mobile={{ text: updateShippingPhone || shippingPhone, icon: CallphoneIcon }}
+                name={{ text: updatedShippingName || shippingName || '', icon: nameIcon }}
+                address={{ text: shippingEmail || '', icon: locationIcon, iconComponent: MdAlternateEmail }}
+                mobile={{ text: updateShippingPhone || shippingPhone || '', icon: CallphoneIcon }}
                 dataTest={testIds.orderDetailspage_shippingDetails}
               />
             </Accordion>
@@ -919,9 +917,9 @@ const OrderDetails = () => {
           {isDesktop && (
             <ShippingBlock
               title={t.respondentDetails}
-              name={{ text: name, icon: nameIcon }}
-              address={{ text: address, icon: locationIcon }}
-              mobile={{ text: phone, icon: CallphoneIcon }}
+              name={{ text: name || '', icon: nameIcon }}
+              address={{ text: address || '', icon: locationIcon }}
+              mobile={{ text: phone || '', icon: CallphoneIcon }}
               dataTest={testIds.orderDetailspage_billingDetails}
             />
           )}
@@ -1080,7 +1078,7 @@ const OrderDetails = () => {
                 <Box m="20px">
                   <BecknButton
                     disabled={uiState.isProceedDisabled}
-                    children="Proceed"
+                    text="Proceed"
                     className="checkout_btn"
                     handleClick={() => {
                       handleCancelButton(

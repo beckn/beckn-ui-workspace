@@ -11,13 +11,14 @@ import {
   feedbackReducer,
   geoMapLocationSearchReducer,
   settingBoxReducer,
-  api
+  api,
+  searchReducer
 } from '@beckn-ui/common'
 
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['cart', 'discovery', 'checkout', 'orders', 'status']
+  whitelist: ['auth', 'cart', 'discovery', 'checkout', 'orders', 'status']
 }
 
 const appReducer = combineReducers({
@@ -30,10 +31,11 @@ const appReducer = combineReducers({
   orders: OrderReducer,
   feedback: feedbackReducer,
   settingBox: settingBoxReducer,
-  geoLocationSearchPageUI: geoMapLocationSearchReducer
+  geoLocationSearchPageUI: geoMapLocationSearchReducer,
+  search: searchReducer
 })
 
-const rootReducer = (state: any, action: any) => {
+const rootReducer = (state: ReturnType<typeof appReducer> | undefined, action: { type: string }) => {
   if (action.type === 'auth/logout') {
     if (localStorage) {
       localStorage.removeItem('persist:root')

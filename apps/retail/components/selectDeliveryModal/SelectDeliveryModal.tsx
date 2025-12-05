@@ -7,6 +7,8 @@ import BottomModalScan from '@components/BottomModal/BottomModalScan'
 import Typography from '@beckn-ui/molecules/src/components/typography/typography'
 import { ImportOrderModel } from '@beckn-ui/common/lib/types'
 import { testIds } from '@shared/dataTestIds'
+import { setSearchTerm } from '@beckn-ui/common'
+import { useDispatch } from 'react-redux'
 
 interface SelectDeliveryModalProps {
   backOnImportedOrder: (newValue: boolean) => void
@@ -29,10 +31,12 @@ const convertTourismCategoryToRetail = (category: string) => {
 
 const SelectDeliveryModal: React.FC<SelectDeliveryModalProps> = props => {
   const router = useRouter()
+  const dispatch = useDispatch()
   const { isOpen, onOpen, onClose } = useDisclosure({ defaultIsOpen: true })
   const { t } = useLanguage()
 
   const travelerAddress = props.importedOrderObject.billing.address
+  const areaCode = props.importedOrderObject.fulfillments?.[0]?.stops?.[0]?.location?.area_code
 
   const { category = 'Tourism' } = props
 
@@ -66,7 +70,7 @@ const SelectDeliveryModal: React.FC<SelectDeliveryModalProps> = props => {
               size="md"
               value="1"
             >
-              <span style={{ fontSize: '16px' }}>{props.addressOfTheEndLocation}</span>
+              <span style={{ fontSize: '16px', fontWeight: '400' }}>{props.addressOfTheEndLocation}</span>
             </Radio>
             <Radio
               _checked={{
@@ -79,7 +83,7 @@ const SelectDeliveryModal: React.FC<SelectDeliveryModalProps> = props => {
               <Box style={{ fontSize: '15px' }}>
                 <Typography
                   variant="subTitleRegular"
-                  text={travelerAddress}
+                  text={`${travelerAddress} ${areaCode}`}
                 />
               </Box>
             </Radio>
@@ -88,8 +92,11 @@ const SelectDeliveryModal: React.FC<SelectDeliveryModalProps> = props => {
         <BecknButton
           children={t.searchItems}
           handleClick={() => {
-            const selectedItems = props.selectedValues.join(',').replace(',', ' ')
-            router.push(`/search?searchTerm=${selectedItems}&category=${convertTourismCategoryToRetail(category)}`)
+            const selectedItems = props.selectedValues.join(',')
+            dispatch(
+              setSearchTerm({ searchKeyword: selectedItems, category: convertTourismCategoryToRetail(category) })
+            )
+            router.push(`/search`)
           }}
           disabled={false}
           data-test={testIds.chat_gpt_address_button}

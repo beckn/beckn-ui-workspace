@@ -39,8 +39,8 @@ const OrderHistory = () => {
         if (result.error) {
           return setError(result.error.message)
         }
-        console.log(result.data.reverse())
-        setOrderHistoryList(result.data.reverse())
+        console.log(result.data)
+        setOrderHistoryList(result.data)
         setIsLoading(false)
       })
       .catch(error => {

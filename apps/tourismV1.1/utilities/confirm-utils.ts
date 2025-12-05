@@ -1,5 +1,4 @@
-import { ConfirmResponseModel } from '../types/confirm.types'
-import { InitResponseModel } from '../types/init.types'
+import { ConfirmResponseModel, InitResponseModel } from '@beckn-ui/common'
 
 export const getPayloadForTrackRequest = (
   confirmOrderMetaDataPerBpp: any,
@@ -42,7 +41,7 @@ export const getPayloadForConfirm = (initResponse: InitResponseModel[]) => {
   const {
     context,
     message: {
-      order: { billing, fulfillments, items, payments, provider, quote, type }
+      order: { billing, fulfillments, items, payments, provider, quote }
     }
   } = initResponse[0]
   const { transaction_id, bpp_id, bpp_uri, domain } = context
@@ -65,17 +64,16 @@ export const getPayloadForConfirm = (initResponse: InitResponseModel[]) => {
               items: items,
               fulfillments: fulfillments,
               billing: billing,
-              payments: [
-                {
-                  id: payments[0].id,
+              payments:
+                payments?.map(payment => ({
+                  id: payment.id,
                   params: {
-                    amount: quote.price.value,
-                    currency: quote.price.currency
+                    amount: quote?.price?.value,
+                    currency: quote?.price?.currency
                   },
                   status: 'PAID',
                   type: 'ON-FULFILLMENT'
-                }
-              ]
+                })) || []
             }
           ]
         }
@@ -179,7 +177,7 @@ export function convertTimestampToDdMmYyyyHhMmPM(timestamp: string) {
 
   let hour = date.getHours()
   const minute = date.getMinutes()
-  const second = date.getSeconds()
+  // const second = date.getSeconds()
 
   const ampm = hour >= 12 ? 'pm' : 'am'
   hour = hour % 12

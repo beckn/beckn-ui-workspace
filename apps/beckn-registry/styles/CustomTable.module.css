@@ -1,26 +1,38 @@
 .tableContainer {
   overflow-x: auto;
-  height: calc(100vh - 250px);
+  max-height: calc(100vh - 350px);
+  margin-top: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 .table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 20px;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 .table th,
 .table td {
-  border: 1px solid #ddd;
-  padding: 8px;
+  border: 1px solid #e2e8f0;
+  padding: 12px 16px;
   text-align: left;
-  color: #000;
+  color: #2d3748;
   white-space: nowrap;
   font-size: 14px;
+  transition: background-color 0.2s ease;
 }
 
 .table th {
-  background-color: #f2f2f2;
-  font-weight: bold;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  font-weight: 600;
+  color: #4a5568;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.table tr:hover {
+  background-color: #f7fafc;
 }
 
 .iconButton {
@@ -28,29 +40,44 @@
   background: none;
   border: none;
   cursor: pointer;
-  margin-right: 5px;
+  margin-right: 8px;
   font-size: 16px;
+  padding: 6px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.iconButton:hover {
+  background-color: #f1f5f9;
+  transform: scale(1.1);
 }
 
 .iconButton:hover::after {
   content: attr(title);
   position: absolute;
-  top: 30px;
+  top: 35px;
   left: 50%;
   transform: translateX(-50%);
-  background-color: #333;
+  background: linear-gradient(135deg, #4f7cff 0%, #6b8eff 100%);
   color: #fff;
-  padding: 5px 10px;
-  border-radius: 4px;
+  padding: 6px 12px;
+  border-radius: 6px;
   white-space: nowrap;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 12px rgba(79, 124, 255, 0.3);
   z-index: 1;
-  font-size: 10px;
+  font-size: 11px;
+  font-weight: 500;
 }
 
 .arrow {
   margin-left: 5px;
   cursor: pointer;
+  color: #4f7cff;
+  transition: color 0.2s ease;
+}
+
+.arrow:hover {
+  color: #3d6bff;
 }
 
 .arrowContainer {
@@ -63,4 +90,63 @@
 .headerContainer {
   display: flex;
   align-items: center;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 20px;
+  padding: 16px;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.pagination button {
+  padding: 8px 16px;
+  background: linear-gradient(135deg, #4f7cff 0%, #6b8eff 100%);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(79, 124, 255, 0.3);
+}
+
+.pagination button:hover:not(:disabled) {
+  background: linear-gradient(135deg, #3d6bff 0%, #5a7dff 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(79, 124, 255, 0.4);
+}
+
+.pagination button:disabled {
+  background: linear-gradient(135deg, #cbd5e0 0%, #a0aec0 100%);
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+.pagination select {
+  padding: 8px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  background-color: white;
+  color: #2d3748;
+  font-size: 14px;
+  transition: border-color 0.2s ease;
+}
+
+.pagination select:focus {
+  outline: none;
+  border-color: #4f7cff;
+  box-shadow: 0 0 0 3px rgba(79, 124, 255, 0.1);
+}
+
+.pagination span {
+  color: #4a5568;
+  font-size: 14px;
+  font-weight: 500;
 }

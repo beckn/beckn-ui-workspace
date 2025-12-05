@@ -16,7 +16,7 @@ import {
 import { parseDIDData } from '@utils/did'
 import { extractAuthAndHeader, filterByKeyword, generateRandomCode, toBase64, toSnakeCase } from '@utils/general'
 import { generateAuthHeader, generateAuthHeaderForDelete } from '@services/cryptoUtilService'
-import { ConfirmResponseModel, feedbackActions, formatDate } from '@beckn-ui/common'
+import { ConfirmResponseModel, feedbackActions } from '@beckn-ui/common'
 import { useRouter } from 'next/router'
 import { ItemMetaData } from '@components/credLayoutRenderer/ItemRenderer'
 import axios from '@services/axios'
@@ -76,6 +76,7 @@ const PhysicalAssets = () => {
           return {
             id: index,
             title: item.type,
+            source: item.source.toLowerCase() === 'spark' ? 'Retail' : item.source,
             isVerified: true,
             image: DocIcon,
             datetime:

@@ -6,7 +6,7 @@
   padding-right: 0.5rem;
   /* border-bottom: 2px solid #e3e8ef; */
   margin-bottom: 30px;
-  box-shadow: 0px 8px 10px 0px #0000001a;
+  box-shadow: 0px 8px 30px 0px #0000001a;
   border-radius: 12px;
   background: #fff;
 
@@ -85,7 +85,7 @@
   align-items: center;
   flex-grow: 1;
   margin-bottom: 16px;
-  gap: 15px;
+  gap: 20px;
 
   @media (min-width: 768px) {
     align-items: center;

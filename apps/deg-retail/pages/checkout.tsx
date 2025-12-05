@@ -151,8 +151,8 @@ const CheckoutPage = () => {
       name: '',
       mobileNumber: '',
       email: '',
-      address: '5890 W Vernor Hwy, Detroit, Michigan',
-      pinCode: '48209'
+      address: '', // 5890 W Vernor Hwy, Detroit, Michigan
+      pinCode: ''
     }
 
     if (user?.agent) {
@@ -162,18 +162,18 @@ const CheckoutPage = () => {
         name: user.agent.first_name.trim(),
         mobileNumber: `${user.agent.agent_profile.phone_number}`,
         email: user.email || '',
-        address: '5890 W Vernor Hwy, Detroit, Michigan',
+        address: user.agent.agent_profile.address || '',
         pinCode: '48209'
       }
     } else {
       // If no user.agent, use default data
       formData = {
-        ...formData,
-        name: 'Lisa',
-        mobileNumber: '9811259151',
-        email: 'lisa.k@gmail.com',
-        address: '5890 W Vernor Hwy, Detroit, Michigan',
-        pinCode: '48209'
+        ...formData
+        // name: 'Lisa',
+        // mobileNumber: '9811259151',
+        // email: 'lisa.k@gmail.com',
+        // address: '5890 W Vernor Hwy, Detroit, Michigan',
+        // pinCode: '48209'
       }
     }
 
@@ -223,21 +223,12 @@ const CheckoutPage = () => {
   // },[])
   const formSubmitHandler = (data: any) => {
     if (data) {
-      const { id, type } = selectResponse[0]?.message?.order?.fulfillments[0] || {}
       const payloadPromise =
         type === 'RENT_AND_HIRE'
           ? generateRentalInitPayload(selectRentalResponse, shippingFormData, domain)
-          : getInitPayload(
-              shippingFormData,
-              billingFormData,
-              cartItems,
-              transactionId,
-              domain,
-              { id, type },
-              {
-                location: getCountryCode()
-              }
-            )
+          : getInitPayload(shippingFormData, billingFormData, cartItems, transactionId, domain, selectResponse, {
+              location: getCountryCode()
+            })
       payloadPromise.then(res => {
         return initialize(res)
       })

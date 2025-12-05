@@ -42,10 +42,8 @@ const cartSlice = createSlice({
           locations: newItem.providerCoordinates
         } as CartItemForRequest)
       } else {
-        const totalPrice =
-          parseFloat(existingItem.price.value) + parseFloat(existingItem.price.value) * action.payload.quantity
-
         existingItem.quantity += action.payload.quantity
+        const totalPrice = parseFloat(existingItem.price.value) * existingItem.quantity
         existingItem.totalPrice = totalPrice
       }
     },

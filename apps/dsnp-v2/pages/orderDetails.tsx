@@ -11,7 +11,6 @@ import {
   Radio,
   RadioGroup,
   Stack,
-  StackDivider,
   Text,
   Textarea,
   useDisclosure,
@@ -53,16 +52,20 @@ import {
   SupportModel,
   UIState,
   formatTimestamp,
-  getPaymentBreakDown
+  createPaymentBreakdownMap,
+  getTotalPriceWithCurrency,
+  StatusKey,
+  statusMap,
+  QuantityDetails
 } from '@beckn-ui/common'
 
-const statusMap = {
-  ArrangingPayment: 'Processing your order',
-  PaymentSettled: 'Ready to ship',
-  Cancelled: 'Order Cancelled!',
-  Shipped: 'Order Shipped',
-  Delivered: 'Order Delivered'
-}
+// const statusMap = {
+//   ArrangingPayment: 'Processing your order',
+//   PaymentSettled: 'Ready to ship',
+//   Cancelled: 'Order Cancelled!',
+//   Shipped: 'Order Shipped',
+//   Delivered: 'Order Delivered'
+// }
 
 const DELIVERED = 'Delivered'
 const CANCELLED = 'CANCELLED'
@@ -92,6 +95,7 @@ const OrderDetails = () => {
     radioValue: '',
     orderCancelled: false
   })
+  const [isError, setIsError] = useState(false)
   const router = useRouter()
   const { t } = useLanguage()
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
@@ -119,12 +123,24 @@ const OrderDetails = () => {
     if (data.statusData.length > 0) {
       const newData = data.statusData
         .map((status: any) => {
-          const { tags } = status?.message?.order
+          const order = status?.message?.order
+          const tags = order?.tags
+          const fulfillmentState = order?.fulfillments?.[0]?.state?.descriptor?.code
+
+          // Try to get status from tags first, then fallback to fulfillment state
+          let statusKey: string | undefined
+          if (tags && tags.length > 0) {
+            const lastTag = tags[tags.length - 1]
+            if (lastTag?.list?.[0]?.value) {
+              statusKey = lastTag.list[0].value
+            }
+          } else if (fulfillmentState) {
+            statusKey = fulfillmentState
+          }
 
           return {
-            label: statusMap[tags[tags.length - 1].list[0].value],
-            // statusTime: status?.message?.order?.fulfillments[0]?.state?.updated_at
-            statusTime: status?.message?.order?.fulfillments[0]?.state?.updated_at || status?.context?.timestamp
+            label: statusKey ? statusMap[statusKey as StatusKey] : undefined,
+            statusTime: order?.fulfillments?.[0]?.state?.updated_at || status?.context?.timestamp
           }
         })
         .filter((status: any) => status.label)
@@ -208,7 +224,12 @@ const OrderDetails = () => {
         else
           dispatch(
             feedbackActions.setToastData({
-              toastData: { message: 'Error!', display: true, type: 'error', description: 'Unable to get the track url' }
+              toastData: {
+                message: 'Warning',
+                display: true,
+                type: 'warning',
+                description: 'Tracking details are unavailable. Please try again later or contact support.'
+              }
             })
           )
       }
@@ -250,106 +271,73 @@ const OrderDetails = () => {
     }
   ]
 
-  // Fetch data on component
+  // Fetch data
   useEffect(() => {
-    const fetchData = () => {
-      if (localStorage && localStorage.getItem('selectedOrder')) {
-        const selectedOrderData = JSON.parse(localStorage.getItem('selectedOrder') as string)
-        const { bppId, bppUri, orderId } = selectedOrderData
-        const statusPayload = {
-          data: [
-            {
-              context: {
-                transaction_id: uuidv4(),
-                bpp_id: bppId,
-                bpp_uri: bppUri,
-                domain: DOMAIN
-              },
-              message: {
-                order_id: orderId
+    localStorage.removeItem('statusResponse')
+    const fetchData = async () => {
+      try {
+        setUiState(prevState => ({ ...prevState, isLoading: true }))
+
+        let statusPayload
+        if (localStorage.getItem('selectedOrder')) {
+          const selectedOrderData = JSON.parse(localStorage.getItem('selectedOrder') as string)
+          const { bppId, bppUri, orderId } = selectedOrderData
+          statusPayload = {
+            data: [
+              {
+                context: {
+                  transaction_id: uuidv4(),
+                  bpp_id: bppId,
+                  bpp_uri: bppUri,
+                  domain: DOMAIN
+                },
+                message: {
+                  order_id: orderId,
+                  orderId: orderId
+                }
               }
-            }
-          ]
+            ]
+          }
+        } else if (data.confirmData?.length) {
+          statusPayload = getPayloadForOrderStatus(data.confirmData)
+        } else {
+          return
         }
-        setLocalStorage(LocalStorage.STATUSPAYLOAD, statusPayload)
 
-        setUiState(prevState => ({
+        const response = await axios.post(`${apiUrl}/status`, statusPayload)
+
+        if (
+          JSON.stringify(response.data) === '{}' ||
+          response.data?.data?.length === 0 ||
+          !response.data?.data?.[0]?.message
+        ) {
+          setIsError(true)
+          router.back()
+          return
+        }
+
+        const resData = response.data.data
+        setData(prevState => ({
           ...prevState,
-          isLoading: true
+          statusData: resData
         }))
-
-        return axios
-          .post(`${apiUrl}/status`, statusPayload)
-          .then(res => {
-            const resData = res.data.data
-            setData(prevState => ({
-              ...prevState,
-              statusData: resData
-            }))
-            localStorage.setItem('statusResponse', JSON.stringify(resData))
-          })
-          .catch(err => {
-            console.error('Error fetching order status:', err)
-          })
-          .finally(() => {
-            setUiState(prevState => ({
-              ...prevState,
-              isLoading: false
-            }))
-
-            setProcessState(prevState => ({
-              ...prevState,
-              apiCalled: true
-            }))
-          })
-      }
-      if (data.confirmData && data.confirmData.length > 0) {
-        const parsedConfirmData: ConfirmResponseModel[] = JSON.parse(localStorage.getItem('confirmResponse') as string)
-        const statusPayload = getPayloadForOrderStatus(parsedConfirmData)
-        setUiState(prevState => ({
-          ...prevState,
-          isLoading: true
-        }))
-
-        return axios
-          .post(`${apiUrl}/status`, statusPayload)
-          .then(res => {
-            const resData = res.data.data
-            setData(prevState => ({
-              ...prevState,
-              statusData: resData
-            }))
-
-            localStorage.setItem('statusResponse', JSON.stringify(resData))
-          })
-          .catch(err => {
-            console.error('Error fetching order status:', err)
-          })
-          .finally(() => {
-            setUiState(prevState => ({
-              ...prevState,
-              isLoading: false
-            }))
-            setProcessState(prevState => ({
-              ...prevState,
-              apiCalled: true
-            }))
-          })
+        localStorage.setItem('statusResponse', JSON.stringify(resData))
+      } catch (error) {
+        console.error('Error fetching order status:', error)
+      } finally {
+        setUiState(prevState => ({ ...prevState, isLoading: false }))
+        setProcessState(prevState => ({ ...prevState, apiCalled: true }))
       }
     }
 
     fetchData()
-
     const intervalId = setInterval(fetchData, 30000)
-
     return () => clearInterval(intervalId)
   }, [apiUrl, data.confirmData])
 
   // Check if the order is delivered  come her
   const isDelivered = data.statusData?.[0]?.message?.order?.fulfillments?.[0]?.state?.descriptor?.code === DELIVERED
   const isCancelled = data.statusData?.[0]?.message?.order?.status === CANCELLED
-
-  console.log('Dank cancel', isCancelled)
 
   useEffect(() => {
     if (isDelivered) {
@@ -382,7 +370,7 @@ const OrderDetails = () => {
       }))
 
       if (data.confirmData && data.confirmData.length > 0) {
-        const { domain, bpp_id, bpp_uri, transaction_id } = data.confirmData[0].context
+        const { domain, bpp_id, bpp_uri } = data.confirmData[0].context
         const orderId = data.confirmData[0].message.orderId
         const trackPayload = {
           data: [
@@ -445,7 +433,7 @@ const OrderDetails = () => {
         const selectedOrderData = JSON.parse(localStorage.getItem('selectedOrder') as string)
         const { bppId, bppUri, orderId } = selectedOrderData
         const statusResponseData = JSON.parse(localStorage.getItem('statusResponse') as string)
-        const { domain, transaction_id } = statusResponseData[0].context
+        const { domain } = statusResponseData[0].context
         const trackPayload = {
           data: [
             {
@@ -489,7 +477,6 @@ const OrderDetails = () => {
         ])
 
         if (!isEmpty(trackResponse.data) && !isEmpty(supportResponse.data)) {
-          console.log('Dank support', supportResponse.data)
           setData(prevState => ({
             ...prevState,
             trackUrl: trackResponse.data.data[0].message && trackResponse.data.data[0].message.tracking.url,
@@ -534,6 +521,20 @@ const OrderDetails = () => {
     )
   }
 
+  if (isError) {
+    dispatch(
+      feedbackActions.setToastData({
+        toastData: {
+          message: 'Error',
+          display: true,
+          type: 'error',
+          description: t.errorText
+        }
+      })
+    )
+    return <></>
+  }
+
   if (!data.confirmData?.length && !localStorage.getItem('selectedOrder')) {
     return <></>
   }
@@ -549,9 +550,8 @@ const OrderDetails = () => {
         isLoadingForCancel: true
       }))
 
-      // console.log(confirmData)
       if (confirmData && confirmData.length > 0) {
-        const { transaction_id, bpp_id, bpp_uri, domain } = confirmData[0].context
+        const { bpp_id, bpp_uri, domain } = confirmData[0].context
         const orderId = confirmData[0].message.orderId
         const cancelPayload = {
           data: [
@@ -581,7 +581,7 @@ const OrderDetails = () => {
       } else if (statusData && statusData.length > 0 && localStorage.getItem('selectedOrder')) {
         const selectedOrderData = JSON.parse(localStorage.getItem('selectedOrder') as string)
         const { orderId } = selectedOrderData
-        const { transaction_id, bpp_id, bpp_uri, domain } = statusData[0].context
+        const { bpp_id, bpp_uri, domain } = statusData[0].context
         const cancelPayload = {
           data: [
             {
@@ -617,6 +617,11 @@ const OrderDetails = () => {
     }
   }
 
+  if (!data.statusData?.[0]?.message) {
+    localStorage.removeItem('statusResponse')
+    return <></>
+  }
+
   const ordersLength = data.statusData.length
   const { created_at } = data.statusData[0].message.order
   const { order } = data.statusData[0].message
@@ -643,69 +648,77 @@ const OrderDetails = () => {
     state && res.message.order.fulfillments[0].state.descriptor.short_desc === 'Delivered'
   })
 
+  const totalQuantityOfOrder = (data: DataState) => {
+    let count = 0
+    data.statusData[0].message.order.items.forEach((item: Item) => {
+      count += (item.quantity as QuantityDetails)?.selected?.count
+    })
+    return count
+  }
+
   return (
     <Box
       className="hideScroll"
       maxH="calc(100vh - 100px)"
-      overflowY="scroll"
     >
-      <Box
-        maxW={{ base: '100%', md: '50%' }}
-        margin="0 auto"
-      >
-        <Card
-          mt="20px"
-          border={`1px solid ${theme.colors.primary[100]}`}
-          className="border_radius_all"
-          boxShadow={'0px 8px 10px -6px rgb(0 0 0 / 10%), 0px 20px 25px -5px rgb(0 0 0 / 10%)'}
+      {processState.allOrderDelivered && (
+        <Box
+          maxW={{ base: '100%', md: '50%' }}
+          margin="0 auto"
         >
-          <CardBody padding="15px 20px">
-            <Flex
-              alignItems="center"
-              pb="3px"
-            >
-              <Image
-                width="20px"
-                height="20px"
-                src="/images/TrackIcon.svg"
-              />
-              <Text
-                as={Typography}
-                text={t.allRequestFullfilled}
-                pl="8px"
-                fontSize="17px"
-                fontWeight="600"
-              />
-            </Flex>
-            <Flex
-              alignItems="center"
-              fontSize="15px"
-              pl="20px"
-            >
-              <Text
-                pl="8px"
-                as={Typography}
-                text={t.howTodo}
-              />
-              <Text
-                onClick={() => {
-                  dispatch(statusActions.addStatusResponse({ statusResponse: data.statusData }))
-                  router.push('/feedback')
-                }}
-                pl="10px"
-                color="#0560FA"
-                as={Typography}
-                text={t.rateUs}
-                cursor="pointer"
-              />
-            </Flex>
-          </CardBody>
-        </Card>
-      </Box>
+          <Card
+            mt="20px"
+            border={`1px solid ${theme.colors.primary[100]}`}
+            className="border_radius_all"
+            boxShadow={'0px 8px 10px -6px rgb(0 0 0 / 10%), 0px 20px 25px -5px rgb(0 0 0 / 10%)'}
+          >
+            <CardBody padding="15px 20px">
+              <Flex
+                alignItems="center"
+                pb="3px"
+              >
+                <Image
+                  width="20px"
+                  height="20px"
+                  src="/images/TrackIcon.svg"
+                />
+                <Text
+                  as={Typography}
+                  text={t.allRequestFullfilled}
+                  pl="8px"
+                  fontSize="17px"
+                  fontWeight="600"
+                />
+              </Flex>
+              <Flex
+                alignItems="center"
+                fontSize="15px"
+                pl="20px"
+              >
+                <Text
+                  pl="8px"
+                  as={Typography}
+                  text={t.howTodo}
+                />
+                <Text
+                  onClick={() => {
+                    dispatch(statusActions.addStatusResponse({ statusResponse: data.statusData }))
+                    router.push('/feedback')
+                  }}
+                  pl="10px"
+                  color="#0560FA"
+                  as={Typography}
+                  text={t.rateUs}
+                  cursor="pointer"
+                />
+              </Flex>
+            </CardBody>
+          </Card>
+        </Box>
+      )}
       <Box
         display={{ base: 'block', lg: 'flex' }}
         justifyContent="space-between"
-        marginTop="2rem"
         gap="3rem"
       >
         <Box width={{ base: '100%', lg: '80%' }}>
@@ -728,6 +741,7 @@ const OrderDetails = () => {
                 w={['40px', '80px', '80px', '80px']}
                 src={data?.statusData?.[0]?.message?.order?.items[0]?.images?.[0].url}
                 alt="product image"
+                alignSelf={'center'}
               />
               <Box w={'100%'}>
                 <Box
@@ -806,15 +820,17 @@ const OrderDetails = () => {
                     >
                       {data.statusData[0]?.message?.order?.items[0]?.name}
                     </Text>
-                    <Text
-                      pl={'5px'}
-                      color={'rgba(var(--color-primary))'}
-                      fontSize={'12px'}
-                      fontWeight={'600'}
-                      onClick={onOpen}
-                    >
-                      +{data.statusData[0].message.order.items.length - 1}
-                    </Text>
+                    {data.statusData[0].message.order.items.length > 1 && (
+                      <Text
+                        pl={'5px'}
+                        color={'rgba(var(--color-primary))'}
+                        fontSize={'12px'}
+                        fontWeight={'600'}
+                        onClick={onOpen}
+                      >
+                        +{data.statusData[0].message.order.items.length - 1}
+                      </Text>
+                    )}
                   </Flex>
 
                   <Text
@@ -861,7 +877,6 @@ const OrderDetails = () => {
         <Box
           display="flex"
           flexDir={{ base: 'column', lg: 'column' }}
-          gap="1rem"
         >
           {isDesktop && (
             <ShippingBlock
@@ -906,9 +921,9 @@ const OrderDetails = () => {
               <PaymentDetails
                 title="Payment"
                 hasBoxShadow={true}
-                paymentBreakDown={getPaymentBreakDown(data.statusData).breakUpMap}
+                paymentBreakDown={createPaymentBreakdownMap(data.statusData)}
                 totalText="Total"
-                totalValueWithCurrency={getPaymentBreakDown(data.statusData).totalPricewithCurrent}
+                totalValueWithCurrency={getTotalPriceWithCurrency(data.statusData)}
               />
             </Box>
           )}
@@ -922,9 +937,9 @@ const OrderDetails = () => {
                 pt={'6px'}
               >
                 <PaymentDetails
-                  paymentBreakDown={getPaymentBreakDown(data.statusData).breakUpMap}
+                  paymentBreakDown={createPaymentBreakdownMap(data.statusData)}
                   totalText="Total"
-                  totalValueWithCurrency={getPaymentBreakDown(data.statusData).totalPricewithCurrent}
+                  totalValueWithCurrency={getTotalPriceWithCurrency(data.statusData)}
                 />
               </Box>
             </Accordion>

@@ -33,6 +33,7 @@ import Cookies from 'js-cookie'
 import axios from '@services/axios'
 import { ROLE, ROUTE_TYPE } from '@lib/config'
 import DeleteAlertModal from '@components/modal/DeleteAlertModal'
+import { RootState } from '@store/index'
 
 const documentPatterns: Record<string, { regex: RegExp; image: string }> = {
   aadhar: { regex: /\baadhar\s?(card)?\b/i, image: AadharCard },
@@ -93,6 +94,7 @@ const Connections = () => {
   const { t } = useLanguage()
   const dispatch = useDispatch()
   const { user, privateKey, publicKey } = useSelector((state: AuthRootState) => state.auth)
+  const { profileDetails } = useSelector((state: RootState) => state.user)
   const [addDocument] = useAddDocumentMutation()
   const [getVerificationMethods] = useGetVerificationMethodsMutation()
   const [getDocuments] = useGetDocumentsMutation()
@@ -544,23 +546,27 @@ const Connections = () => {
             handleVerifyOtp={handleOnSubmit}
           />
           {fetchBpId && showBpId ? (
-            <Flex
-              flexDir={'column'}
-              gap="0.5rem"
-            >
-              <Typography
-                text="Connection Number"
-                fontSize="16px"
-                fontWeight="400"
-              />
-              <Divider />
-              <Typography
-                text={'This Connection belongs to Detroit Public School'}
-                fontSize="12px"
-                fontWeight="400"
-                color="#80807F"
-              />
-            </Flex>
+            profileDetails?.agent?.first_name ? (
+              <Flex
+                flexDir={'column'}
+                gap="0.5rem"
+              >
+                <Typography
+                  text="Connection Number"
+                  fontSize="16px"
+                  fontWeight="400"
+                />
+                <Divider />
+                <Typography
+                  text={`This Connection belongs to ${profileDetails?.agent?.first_name}`}
+                  fontSize="12px"
+                  fontWeight="400"
+                  color="#80807F"
+                />
+              </Flex>
+            ) : (
+              <></>
+            )
           ) : (
             <Box
               display={'grid'}

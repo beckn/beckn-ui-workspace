@@ -9,24 +9,24 @@ import useRequest from '../hooks/useRequest'
 
 import { Checkout } from '@beckn-ui/becknified-components'
 
-import { Router, useRouter } from 'next/router'
-import { ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
+import { useRouter } from 'next/router'
+import { ShippingFormInitialValuesType, ItemDetailProps } from '@beckn-ui/becknified-components'
 import LoaderWithMessage from '@components/loader/LoaderWithMessage'
 import { FormField } from '@beckn-ui/molecules'
 import { useInitMutation } from '@beckn-ui/common/src/services/init'
 import { useSelectMutation } from '@beckn-ui/common/src/services/select'
 import {
   areShippingAndBillingDetailsSame,
-  cartActions,
   checkoutActions,
   CheckoutRootState,
+  createPaymentBreakdownMap,
   DiscoveryRootState,
   getInitPayload,
+  getItemWiseBreakUp,
   getSelectPayload,
-  getSubTotalAndDeliveryCharges,
+  getTotalPriceWithCurrency,
   ICartRootState,
-  isEmpty,
-  PaymentBreakDownModel
+  isEmpty
 } from '@beckn-ui/common'
 import { testIds } from '@shared/dataTestIds'
 
@@ -46,7 +46,7 @@ export const currencyMap = {
 
 const CheckoutPage = () => {
   const cartItems = useSelector((state: ICartRootState) => state.cart.items)
-  const tourismName = cartItems[0]?.categories[0]?.name
+  const tourismName = cartItems?.[0]?.categories?.[0]?.name // fallback to cart item name if no category is present
 
   const toast = useToast()
 
@@ -216,9 +216,8 @@ const CheckoutPage = () => {
   // },[])
 
   const formSubmitHandler = (data: any) => {
-    if (data) {
-      const { id, type } = selectResponse[0].message.order.fulfillments[0]
-      getInitPayload(shippingFormData, billingFormData, cartItems, transactionId, DOMAIN, { id, type }).then(res => {
+    if (data && selectResponse.length > 0) {
+      getInitPayload(shippingFormData, billingFormData, cartItems, transactionId, DOMAIN, selectResponse).then(res => {
         return initialize(res)
       })
       // TODO :_ To check this again
@@ -244,19 +243,6 @@ const CheckoutPage = () => {
     return !!initResponse && initResponse.length > 0
   }
 
-  const createPaymentBreakdownMap = () => {
-    const paymentBreakdownMap: PaymentBreakDownModel = {}
-    if (isInitResultPresent()) {
-      initResponse[0].message.order.quote.breakup.forEach(breakup => {
-        paymentBreakdownMap[breakup.title] = {
-          value: breakup.price.value,
-          currency: breakup.price.currency
-        }
-      })
-    }
-    return paymentBreakdownMap
-  }
-
   if (isSelectLoading || isLoading) {
     return (
       <Box
@@ -277,7 +263,6 @@ const CheckoutPage = () => {
     <Box
       className="hideScroll"
       maxH="calc(100vh - 100px)"
-      overflowY={'scroll'}
     >
       {/* start Item Details */}
       <Checkout
@@ -289,10 +274,11 @@ const CheckoutPage = () => {
               description: singleItem.short_desc,
               quantity: singleItem.quantity,
               // priceWithSymbol: `${currencyMap[singleItem.price.currency]}${singleItem.totalPrice}`,
-              price: singleItem.totalPrice,
+              price: Number(getItemWiseBreakUp(selectResponse, singleItem.id).totalPricewithCurrent.value),
               currency: singleItem.price.currency,
-              image: singleItem.images?.[0].url
-            }))
+              image: singleItem.images?.[0].url,
+              breakUp: getItemWiseBreakUp(selectResponse, singleItem.id).paymentBreakdownMap
+            })) as ItemDetailProps[]
           },
           shipping: {
             showDetails: isInitResultPresent(),
@@ -347,12 +333,9 @@ const CheckoutPage = () => {
             title: `${t.paymentText}`,
             paymentDetails: {
               hasBoxShadow: false,
-              paymentBreakDown: createPaymentBreakdownMap(),
+              paymentBreakDown: createPaymentBreakdownMap(initResponse),
               totalText: `${t.total}`,
-              totalValueWithCurrency: {
-                value: getSubTotalAndDeliveryCharges(initResponse).subTotal.toString(),
-                currency: getSubTotalAndDeliveryCharges(initResponse).currencySymbol!
-              }
+              totalValueWithCurrency: getTotalPriceWithCurrency(initResponse)
             }
           },
           loader: {
@@ -362,7 +345,6 @@ const CheckoutPage = () => {
             text: `${t.checkout}`,
             dataTest: testIds.checkoutpage_proceedToCheckout,
             handleClick: () => {
-              dispatch(cartActions.clearCart())
               router.push('/paymentMode')
             }
           }

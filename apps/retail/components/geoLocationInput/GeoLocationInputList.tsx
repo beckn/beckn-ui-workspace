@@ -4,7 +4,7 @@ import Styles from './GeoLocationInput.module.css'
 import { useDispatch } from 'react-redux'
 import { useState } from 'react'
 import backArrow from '/public/images/Back.svg'
-import locationMarker from '../../public/images/searchlocationmarker.svg'
+import locationMarker from '../../public/images/SearchLocationMarker.svg'
 import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete'
 import { IoClose } from 'react-icons/io5'
 import {

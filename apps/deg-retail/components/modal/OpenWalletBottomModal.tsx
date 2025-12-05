@@ -228,7 +228,7 @@ const OpenWalletBottomModal: React.FC<OpenWalletBottomModalProps> = ({ modalType
                 onClose={() => setModalType(null)}
               >
                 <Typography
-                  text={`Enter the one time password we have just sent to your ${getMaskedMobileNumber(user?.agent?.agent_profile?.phone_number?.toString() || '')}.`}
+                  text={`Enter the one-time password we have just sent to your mobile number ${getMaskedMobileNumber(user?.agent?.agent_profile?.phone_number?.toString() || '')}.`}
                   fontSize="12px"
                   fontWeight="400"
                   color="#80807F"
@@ -238,6 +238,7 @@ const OpenWalletBottomModal: React.FC<OpenWalletBottomModalProps> = ({ modalType
                     <input
                       key={index}
                       value={digit}
+                      type="number"
                       maxLength={1}
                       inputMode="numeric"
                       pattern="[0-9]"
@@ -295,7 +296,7 @@ const OpenWalletBottomModal: React.FC<OpenWalletBottomModalProps> = ({ modalType
                   mb="20px"
                 >
                   <Typography
-                    text="retail and leasing app would like to fetch the following information from your wallet:"
+                    text="Retail and leasing app would like to fetch the following information from your wallet:"
                     fontSize="12px"
                     fontWeight="400"
                   />

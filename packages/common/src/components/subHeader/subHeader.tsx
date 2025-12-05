@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { Box, Divider, Flex, HStack, Image, Text } from '@chakra-ui/react'
-import { BottomModal } from '@beckn-ui/molecules'
+import { Box, Divider, Flex, HStack, Image, Text, useTheme } from '@chakra-ui/react'
+import { BottomModal, Typography } from '@beckn-ui/molecules'
 import Styles from './subHeader.module.css'
 import { useRouter } from 'next/router'
 import backIcon from '@public/images/Back.svg'
@@ -76,8 +76,10 @@ const SubHeader = (props: SubHeaderProps) => {
   const [isInvoiceModalOpen, setInvoiceModalOpen] = useState(false)
 
   const router = useRouter()
+  const theme = useTheme()
   const cartItems = useSelector((state: ICartRootState) => state?.cart?.items)
   const storedHeaderText: any = getLocalStorage('selectCardHeaderText')
+  const secondaryColor = theme.colors.secondary['100']
 
   const handleInvoiceModalClose = () => {
     setInvoiceModalOpen(false)
@@ -96,7 +98,15 @@ const SubHeader = (props: SubHeaderProps) => {
           <Box className={Styles.bottom_header_backIcon}>
             {!backIconList.includes(router.pathname) && (
               <Box
-                onClick={() => router.back()}
+                onClick={() => {
+                  if (router.pathname === '/orderDetails') {
+                    router.push('/orderHistory')
+                  } else if (router.pathname === '/orderHistory') {
+                    router.push('/')
+                  } else {
+                    router.back()
+                  }
+                }}
                 cursor="pointer"
               >
                 <Image
@@ -133,13 +143,21 @@ const SubHeader = (props: SubHeaderProps) => {
             />
           )}
           {orderIconList?.includes(router.pathname) && (
-            <Image
-              cursor="pointer"
+            // <Image
+            //   cursor="pointer"
+            //   onClick={() => setOrderModalOpen(true)}
+            //   data-test={testIds.downloadInvoiceIcon}
+            //   src="/images/downloadInvoice.svg"
+            //   alt="order icon"
+            //   mr={'20px'}
+            // />
+            <Typography
+              text={'Invoice'}
+              fontSize="14px"
+              fontWeight="500"
+              sx={{ cursor: 'pointer' }}
+              color={secondaryColor}
               onClick={() => setOrderModalOpen(true)}
-              data-test={testIds.downloadInvoiceIcon}
-              src="/images/downloadInvoice.svg"
-              alt="order icon"
-              mr={'20px'}
             />
           )}
           {invoiceDownloadIconList?.includes(router.pathname) && (

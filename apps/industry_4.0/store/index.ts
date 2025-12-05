@@ -14,7 +14,7 @@ import responseDataReducer from './responseData-slice'
 import geoMapLocationSearchReducer from './geoMapLocationSearch-slice'
 import feedbackReducer from './ui-feedback-slice'
 import authReducer from '@beckn-ui/common/src/store/auth-slice'
-
+import { persistStore } from 'redux-persist'
 const store = configureStore({
   reducer: {
     specialOfferProductsList: specialOfferProductsReducer,
@@ -41,5 +41,9 @@ const store = configureStore({
       serializableCheck: false
     })
 })
+
+export const persistor = persistStore(store)
+
+export type RootState = ReturnType<typeof store.getState>
 
 export default store

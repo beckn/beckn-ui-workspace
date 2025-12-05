@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "trusty-relic-370809"
+  },
+  "targets": {
+    "trusty-relic-370809": {
+      "hosting": {
+        "retail": [
+          "retail"
+        ]
+      }
+    }
+  }
+}

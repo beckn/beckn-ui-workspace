@@ -9,6 +9,7 @@ import { MdOutlineKeyboardArrowRight } from 'react-icons/md'
 import ShadowCardButton from '@components/buttonCard/ShadowCardButton'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@store/index'
+import { clearCache } from '@utils/indexedDB'
 
 const MyStore = () => {
   const router = useRouter()
@@ -46,6 +47,11 @@ const MyStore = () => {
     e.preventDefault()
   }
   const homeButtonName = type === 'RENT_AND_HIRE' ? 'Go Back' : 'Go Back Home'
+
+  useEffect(() => {
+    clearCache().catch(console.error)
+  }, [])
+
   return (
     <Box
       className="myStore-homepage"

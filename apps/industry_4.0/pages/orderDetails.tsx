@@ -146,7 +146,7 @@ const OrderDetails = () => {
         else
           dispatch(
             feedbackActions.setToastData({
-              toastData: { message: t.error, display: true, type: 'error', description: t.unabletoTrack }
+              toastData: { message: 'Warning', display: true, type: 'warning', description: t.unabletoTrack }
             })
           )
       }
@@ -537,7 +537,6 @@ const OrderDetails = () => {
     data.statusData?.[0]?.message?.order?.fulfillments?.[0]?.state?.descriptor?.code === 'ORDER_COMPLETE'
   const isCancelled = data.statusData?.[0]?.message?.order?.status === 'CANCELLED'
 
-  console.log(isCompleted)
   return (
     <Box
       className="hideScroll"
@@ -804,7 +803,7 @@ const OrderDetails = () => {
             <Box m="20px">
               <BecknButton
                 disabled={uiState.isProceedDisabled}
-                children="Proceed"
+                text="Proceed"
                 className="checkout_btn"
                 handleClick={() => {
                   handleCancelButton(

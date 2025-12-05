@@ -1,22 +1,22 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Box, useToast, useTheme } from '@chakra-ui/react'
+import { Box, useTheme } from '@chakra-ui/react'
 import { DOMAIN } from '@lib/config'
 import { useLanguage } from '../hooks/useLanguage'
 import {
-  areShippingAndBillingDetailsSame,
+  createPaymentBreakdownMap,
   getInitPayload,
-  getSubTotalAndDeliveryCharges
+  getItemWiseBreakUp,
+  getTotalPriceWithCurrency
 } from '@beckn-ui/common/src/utils'
-import { Checkout } from '@beckn-ui/becknified-components'
+import { Checkout, ItemDetailProps } from '@beckn-ui/becknified-components'
 import { useRouter } from 'next/router'
 import { ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
 import { isEmpty } from '@beckn-ui/common/src/utils'
-import { FormField } from '@beckn-ui/molecules'
+import { FormData, FormField } from '@beckn-ui/molecules'
 import { checkoutActions, CheckoutRootState } from '@beckn-ui/common/src/store/checkout-slice'
 import { useInitMutation } from '@beckn-ui/common/src/services/init'
-import { DiscoveryRootState, ICartRootState, PaymentBreakDownModel } from '@beckn-ui/common'
-import { cartActions } from '@beckn-ui/common/src/store/cart-slice'
+import { DiscoveryRootState, ICartRootState } from '@beckn-ui/common'
 import { testIds } from '@shared/dataTestIds'
 
 export type ShippingFormData = {
@@ -29,11 +29,10 @@ export type ShippingFormData = {
 
 const CheckoutPage = () => {
   const cartItems = useSelector((state: ICartRootState) => state.cart.items)
-  const retailName = cartItems[0]?.categories[0]?.name
+  const retailName = cartItems?.[0]?.categories?.[0]?.name || cartItems?.[0]?.name
 
   const theme = useTheme()
   const bgColorOfSecondary = theme.colors.secondary['100']
-  const toast = useToast()
 
   const [shippingFormData, setShippingFormData] = useState<ShippingFormInitialValuesType>(
     retailName === 'Retail'
@@ -52,8 +51,6 @@ const CheckoutPage = () => {
           pinCode: '75020'
         }
   )
-
-  const [isBillingAddressSameAsShippingAddress, setIsBillingAddressSameAsShippingAddress] = useState(true)
 
   const [billingFormData, setBillingFormData] = useState<ShippingFormInitialValuesType>(
     retailName === 'Retail'
@@ -75,12 +72,12 @@ const CheckoutPage = () => {
 
   const router = useRouter()
   const dispatch = useDispatch()
-  const [initialize, { isLoading, isError }] = useInitMutation()
-  const { t, locale } = useLanguage()
+  const [initialize, { isLoading }] = useInitMutation()
+  const { t } = useLanguage()
   const initResponse = useSelector((state: CheckoutRootState) => state.checkout.initResponse)
   const selectResponse = useSelector((state: CheckoutRootState) => state.checkout.selectResponse)
   const isBillingSameRedux = useSelector((state: CheckoutRootState) => state.checkout.isBillingSame)
-  const { transactionId, productList } = useSelector((state: DiscoveryRootState) => state.discovery)
+  const { transactionId } = useSelector((state: DiscoveryRootState) => state.discovery)
 
   //////////  For field Data ///////////
   const formFieldConfig: FormField[] = [
@@ -147,7 +144,6 @@ const CheckoutPage = () => {
         setBillingFormData(copiedBillingFormData)
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -180,22 +176,23 @@ const CheckoutPage = () => {
     if (isBillingAddressComplete && typeof window !== 'undefined') {
       localStorage.setItem('billingAddress', JSON.stringify(billingFormData))
     }
-    setIsBillingAddressSameAsShippingAddress(
-      areShippingAndBillingDetailsSame(isBillingAddressComplete, shippingFormData, billingFormData)
-    )
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [billingFormData])
 
   // useEffect(()=>{
   //   setIsBillingSame(isBillingSameRedux)
   // },[])
 
-  const formSubmitHandler = (data: any) => {
-    if (data) {
-      const { id, type } = selectResponse[0].message.order.fulfillments[0]
-      getInitPayload(shippingFormData, billingFormData, cartItems, transactionId, DOMAIN, { id, type }).then(res => {
+  const initCall = () => {
+    if (selectResponse.length > 0) {
+      getInitPayload(shippingFormData, billingFormData, cartItems, transactionId, DOMAIN, selectResponse).then(res => {
         return initialize(res)
       })
+    }
+  }
+
+  const formSubmitHandler = (data: ShippingFormInitialValuesType | FormData<FormField[]>) => {
+    if (data) {
+      initCall()
     }
   }
 
@@ -203,39 +200,26 @@ const CheckoutPage = () => {
     return !!initResponse && initResponse.length > 0
   }
 
-  const createPaymentBreakdownMap = () => {
-    const paymentBreakdownMap: PaymentBreakDownModel = {}
-    if (isInitResultPresent()) {
-      initResponse[0].message.order.quote.breakup.forEach(breakup => {
-        paymentBreakdownMap[breakup.title] = {
-          value: breakup.price.value,
-          currency: breakup.price.currency
-        }
-      })
-    }
-    return paymentBreakdownMap
-  }
-
   return (
     <Box
       className="hideScroll"
       maxH="calc(100vh - 100px)"
-      overflowY={'scroll'}
     >
       {/* start Item Details */}
       <Checkout
         schema={{
           items: {
-            title: t.items,
+            title: t.orderOverview,
             data: cartItems.map(singleItem => ({
               title: singleItem.name,
               description: singleItem.short_desc,
               quantity: singleItem.quantity,
               // priceWithSymbol: `${currencyMap[singleItem.price.currency]}${singleItem.totalPrice}`,
-              price: singleItem.totalPrice,
-              currency: singleItem.price.currency,
-              image: singleItem.images?.[0].url
-            }))
+              price: Number(getItemWiseBreakUp(selectResponse, singleItem.id).totalPricewithCurrent.value),
+              currency: singleItem.price.currency || 'INR',
+              image: singleItem.images?.[0].url,
+              breakUp: getItemWiseBreakUp(selectResponse, singleItem.id).paymentBreakdownMap
+            })) as ItemDetailProps[]
           },
           shipping: {
             triggerFormTitle: t.change,
@@ -291,12 +275,9 @@ const CheckoutPage = () => {
             title: t.payment,
             paymentDetails: {
               hasBoxShadow: false,
-              paymentBreakDown: createPaymentBreakdownMap(),
+              paymentBreakDown: createPaymentBreakdownMap(initResponse),
               totalText: t.total,
-              totalValueWithCurrency: {
-                value: getSubTotalAndDeliveryCharges(initResponse).subTotal.toString(),
-                currency: getSubTotalAndDeliveryCharges(initResponse).currencySymbol!
-              }
+              totalValueWithCurrency: getTotalPriceWithCurrency(initResponse)
             }
           },
           loader: {
@@ -306,7 +287,6 @@ const CheckoutPage = () => {
             text: t.proceedToCheckout,
             dataTest: testIds.checkoutpage_proceedToCheckout,
             handleClick: () => {
-              dispatch(cartActions.clearCart())
               router.push('/paymentMode')
             }
           }
