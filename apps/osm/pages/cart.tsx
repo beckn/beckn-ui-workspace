@@ -33,7 +33,7 @@ const Cart = () => {
   const payLoadForQuoteRequest = getPayloadForQuoteRequest(cartItemsPerBppPerProvider, transactionId)
 
   useEffect(() => {
-    if ((localStorage && !localStorage.getItem('quoteResponse')) || localStorage.getItem('quoteResponse')) {
+    if (localStorage && !localStorage.getItem('quoteResponse')) {
       quoteRequest.fetchData(`${apiUrl}/client/v2/get_quote`, 'POST', payLoadForQuoteRequest)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
