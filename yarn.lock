@@ -1561,7 +1561,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@beckn-ui/becknified-components@workspace:packages/becknified-components":
+"@beckn-ui/becknified-components@workspace:^, @beckn-ui/becknified-components@workspace:packages/becknified-components":
   version: 0.0.0-use.local
   resolution: "@beckn-ui/becknified-components@workspace:packages/becknified-components"
   dependencies:
@@ -1627,7 +1627,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@beckn-ui/common@workspace:packages/common":
+"@beckn-ui/common@workspace:^, @beckn-ui/common@workspace:packages/common":
   version: 0.0.0-use.local
   resolution: "@beckn-ui/common@workspace:packages/common"
   dependencies:
@@ -2810,7 +2810,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@beckn-ui/molecules@workspace:packages/molecules":
+"@beckn-ui/molecules@workspace:^, @beckn-ui/molecules@workspace:packages/molecules":
   version: 0.0.0-use.local
   resolution: "@beckn-ui/molecules@workspace:packages/molecules"
   dependencies:
@@ -3447,6 +3447,45 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@beckn-ui/restaurant-bap@workspace:apps/restaurant-bap":
+  version: 0.0.0-use.local
+  resolution: "@beckn-ui/restaurant-bap@workspace:apps/restaurant-bap"
+  dependencies:
+    "@beckn-ui/becknified-components": "workspace:^"
+    "@beckn-ui/common": "workspace:^"
+    "@beckn-ui/molecules": "workspace:^"
+    "@beckn-ui/prettier-config": "workspace:^"
+    "@chakra-ui/icons": ^2.0.19
+    "@chakra-ui/react": ^2.7.0
+    "@emotion/react": ^11.11.1
+    "@emotion/styled": ^11.11.0
+    "@reduxjs/toolkit": ^1.8.2
+    "@types/node": 17.0.31
+    "@types/react": 18.0.8
+    "@types/react-dom": 18.0.3
+    autoprefixer: ^10.4.7
+    axios: ^0.27.2
+    eslint: 8.14.0
+    eslint-config-next: latest
+    framer-motion: ^10.12.16
+    js-cookie: ^3.0.1
+    next: ^13.4.19
+    next-sitemap: ^3.1.17
+    postcss: ^8.4.14
+    prettier: ^3.0.3
+    react: ^18.2.0
+    react-dom: ^18.2.0
+    react-hot-toast: ^2.2.0
+    react-icons: ^4.3.1
+    react-redux: ^8.0.2
+    react-toastify: ^9.0.7
+    redux-persist: ^6.0.0
+    slick-carousel: ^1.8.1
+    tailwindcss: ^3.1.4
+    typescript: 4.6.4
+  languageName: unknown
+  linkType: soft
+
 "@beckn-ui/retail@workspace:^, @beckn-ui/retail@workspace:apps/retail":
   version: 0.0.0-use.local
   resolution: "@beckn-ui/retail@workspace:apps/retail"
@@ -3760,6 +3799,27 @@ __metadata:
     sass: ^1.71.1
     typescript: ^5
     yup: ^1.3.3
+  languageName: unknown
+  linkType: soft
+
+"@beckn-ui/test-app@workspace:apps/test-app":
+  version: 0.0.0-use.local
+  resolution: "@beckn-ui/test-app@workspace:apps/test-app"
+  dependencies:
+    "@beckn-ui/prettier-config": "workspace:^"
+    "@types/handlebars": ^4.1.0
+    "@types/node": 17.0.31
+    "@types/react": 18.0.8
+    "@types/react-dom": 18.0.3
+    eslint: 8.14.0
+    eslint-config-next: latest
+    handlebars: ^4.7.8
+    next: ^13.4.19
+    next-sitemap: ^3.1.17
+    prettier: ^3.0.3
+    react: ^18.2.0
+    react-dom: ^18.2.0
+    typescript: 4.6.4
   languageName: unknown
   linkType: soft
 
@@ -6967,6 +7027,15 @@ __metadata:
   dependencies:
     "@types/node": "*"
   checksum: 79d746a8f053954bba36bd3d94a90c78de995d126289d656fb3271dd9f1229d33f678da04d10bce6be440494a5a73438e2e363e92802d16b8315b051036c5256
+  languageName: node
+  linkType: hard
+
+"@types/handlebars@npm:^4.1.0":
+  version: 4.1.0
+  resolution: "@types/handlebars@npm:4.1.0"
+  dependencies:
+    handlebars: "*"
+  checksum: 536d9f690c93f5d13fcc4a37ae7dd11f41eb73c47416d56f51623aedc3b573ad9775d6618ede75d7bf9148ac75694e50f8e6ba5773de7d9f040811368c73739f
   languageName: node
   linkType: hard
 
@@ -12744,6 +12813,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"handlebars@npm:*, handlebars@npm:^4.7.8":
+  version: 4.7.8
+  resolution: "handlebars@npm:4.7.8"
+  dependencies:
+    minimist: ^1.2.5
+    neo-async: ^2.6.2
+    source-map: ^0.6.1
+    uglify-js: ^3.1.4
+    wordwrap: ^1.0.0
+  dependenciesMeta:
+    uglify-js:
+      optional: true
+  bin:
+    handlebars: bin/handlebars
+  checksum: 00e68bb5c183fd7b8b63322e6234b5ac8fbb960d712cb3f25587d559c2951d9642df83c04a1172c918c41bcfc81bfbd7a7718bbce93b893e0135fc99edea93ff
+  languageName: node
+  linkType: hard
+
 "hard-rejection@npm:^2.1.0":
   version: 2.1.0
   resolution: "hard-rejection@npm:2.1.0"
@@ -15575,7 +15662,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"minimist@npm:^1.2.0, minimist@npm:^1.2.6, minimist@npm:^1.2.7, minimist@npm:^1.2.8":
+"minimist@npm:^1.2.0, minimist@npm:^1.2.5, minimist@npm:^1.2.6, minimist@npm:^1.2.7, minimist@npm:^1.2.8":
   version: 1.2.8
   resolution: "minimist@npm:1.2.8"
   checksum: 75a6d645fb122dad29c06a7597bddea977258957ed88d7a6df59b5cd3fe4a527e253e9bbf2e783e4b73657f9098b96a5fe96ab8a113655d4109108577ecf85b0
@@ -15866,6 +15953,13 @@ __metadata:
   version: 1.0.0
   resolution: "negotiator@npm:1.0.0"
   checksum: 20ebfe79b2d2e7cf9cbc8239a72662b584f71164096e6e8896c8325055497c96f6b80cd22c258e8a2f2aa382a787795ec3ee8b37b422a302c7d4381b0d5ecfbb
+  languageName: node
+  linkType: hard
+
+"neo-async@npm:^2.6.2":
+  version: 2.6.2
+  resolution: "neo-async@npm:2.6.2"
+  checksum: deac9f8d00eda7b2e5cd1b2549e26e10a0faa70adaa6fdadca701cc55f49ee9018e427f424bac0c790b7c7e2d3068db97f3093f1093975f2acb8f8818b936ed9
   languageName: node
   linkType: hard
 
@@ -20769,11 +20863,20 @@ __metadata:
 
 "typescript@patch:typescript@^4.6.4 || ^5.2.2#~builtin<compat/typescript>, typescript@patch:typescript@^5#~builtin<compat/typescript>":
   version: 5.7.3
-  resolution: "typescript@patch:typescript@npm%3A5.7.3#~builtin<compat/typescript>::version=5.7.3&hash=f3b441"
+  resolution: "typescript@patch:typescript@npm%3A5.7.3#~builtin<compat/typescript>::version=5.7.3&hash=29ae49"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
   checksum: 633cd749d6cd7bc842c6b6245847173bba99742a60776fae3c0fbcc0d1733cd51a733995e5f4dadd8afb0e64e57d3c7dbbeae953a072ee303940eca69e22f311
+  languageName: node
+  linkType: hard
+
+"uglify-js@npm:^3.1.4":
+  version: 3.19.3
+  resolution: "uglify-js@npm:3.19.3"
+  bin:
+    uglifyjs: bin/uglifyjs
+  checksum: 7ed6272fba562eb6a3149cfd13cda662f115847865c03099e3995a0e7a910eba37b82d4fccf9e88271bb2bcbe505bb374967450f433c17fa27aa36d94a8d0553
   languageName: node
   linkType: hard
 
@@ -21415,6 +21518,13 @@ __metadata:
   version: 1.2.5
   resolution: "word-wrap@npm:1.2.5"
   checksum: f93ba3586fc181f94afdaff3a6fef27920b4b6d9eaefed0f428f8e07adea2a7f54a5f2830ce59406c8416f033f86902b91eb824072354645eea687dff3691ccb
+  languageName: node
+  linkType: hard
+
+"wordwrap@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "wordwrap@npm:1.0.0"
+  checksum: 2a44b2788165d0a3de71fd517d4880a8e20ea3a82c080ce46e294f0b68b69a2e49cff5f99c600e275c698a90d12c5ea32aff06c311f0db2eb3f1201f3e7b2a04
   languageName: node
   linkType: hard
 

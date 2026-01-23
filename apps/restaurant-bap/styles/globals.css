@@ -1,0 +1,49 @@
+@layer base {
+  :root {
+    --color-primary: 255, 107, 53; /* #FF6B35 - Food delivery orange */
+    --color-secondary: 74, 76, 90; /* #4a4c5a*/
+    --color-bg: 250, 250, 250; /* #FAFAFA */
+    --color-bg-side: 255, 255, 255; /* #FFFFFF */
+    --color-text-base: 33, 37, 41; /* #212529 */
+    --color-text-muted: 108, 117, 125; /* #6C757D */
+    --font-family: 'Poppins', 'Roboto', 'sans-serif';
+  }
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-family);
+  background-color: rgb(var(--color-bg));
+  color: rgb(var(--color-text-base));
+}
+
+.hideScroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* Food delivery specific styles */
+.food-delivery-card {
+  transition: all 0.3s ease;
+}
+
+.food-delivery-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.restaurant-card-image {
+  border-radius: 12px 12px 0 0;
+  overflow: hidden;
+}
+
+.food-item-card {
+  border-left: 3px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.food-item-card:hover {
+  border-left-color: #FF6B35;
+  box-shadow: 0 2px 8px rgba(255, 107, 53, 0.15);
+}

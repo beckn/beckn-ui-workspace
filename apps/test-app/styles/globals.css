@@ -1,0 +1,98 @@
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+:root {
+  --color-primary: #A71B4A;
+  --color-primary-rgb: 167, 27, 74;
+  --color-secondary: #4a4c5a;
+  --color-secondary-rgb: 74, 76, 90;
+  --color-bg: #f3f4f5;
+  --color-bg-rgb: 243, 244, 245;
+  --color-bg-side: #fcfdff;
+  --color-text-base: #424750;
+  --color-text-muted: #6b7280;
+  --color-white: #ffffff;
+  --color-border: #e5e7eb;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  font-family: 'Poppins', 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-text-base);
+  line-height: 1.6;
+}
+
+body {
+  font-family: inherit;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Responsive utilities */
+@media (max-width: 768px) {
+  html {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  html {
+    font-size: 13px;
+  }
+}
+
+/* Styles for rendered product cards */
+[data-item-id] {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+[data-item-id]:hover {
+  transform: translateY(-4px);
+}
+
+@media (max-width: 768px) {
+  [data-item-id] {
+    transform: none;
+  }
+
+  [data-item-id]:hover {
+    transform: none;
+  }
+}
+
+/* Ensure images in cards are responsive */
+.grocery-item-image,
+img[class*="item-image"],
+img[class*="product-image"] {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* Responsive typography for rendered content */
+.grocery-item-name,
+h3[class*="item-name"],
+h4[class*="item-name"] {
+  font-size: clamp(1rem, 2.5vw, 1.25rem);
+  line-height: 1.4;
+}
+
+.grocery-item-short-desc,
+p[class*="short-desc"] {
+  font-size: clamp(0.875rem, 2vw, 1rem);
+  line-height: 1.6;
+}
+
