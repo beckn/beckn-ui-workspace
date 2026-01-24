@@ -11,6 +11,7 @@ interface RestaurantCardProps {
   distance?: string
   isPromoted?: boolean
   offer?: string
+  onClick?: () => void
 }
 
 const RestaurantCard: React.FC<RestaurantCardProps> = ({
@@ -21,7 +22,8 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({
   cuisine = 'Fast Food',
   distance,
   isPromoted = false,
-  offer
+  offer,
+  onClick
 }) => {
   return (
     <Box
@@ -34,6 +36,11 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({
       cursor="pointer"
       transition="all 0.3s"
       className="food-delivery-card"
+      onClick={onClick}
+      _hover={{
+        transform: 'translateY(-4px)',
+        boxShadow: '0 8px 24px rgba(0,0,0,0.15)'
+      }}
     >
       {isPromoted && (
         <Badge

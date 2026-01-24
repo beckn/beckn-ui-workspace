@@ -1,11 +1,15 @@
 import React from 'react'
 import { Box, Flex, Text, Image, Button } from '@chakra-ui/react'
 import { AddIcon } from '@chakra-ui/icons'
+import { formatCurrency } from '@beckn-ui/becknified-components/src/components/product-price/product-price'
+import { CurrencyType } from '@beckn-ui/becknified-components/src/components/product-price/ProductPrice.types'
 
 interface FoodItemCardProps {
   id: string
   name: string
   description?: string
+  longDesc?: string
+  soldBy?: string
   price: string
   currency?: string
   image?: string
@@ -17,6 +21,8 @@ const FoodItemCard: React.FC<FoodItemCardProps> = ({
   id,
   name,
   description,
+  longDesc,
+  soldBy,
   price,
   currency = '₹',
   image,
@@ -65,12 +71,22 @@ const FoodItemCard: React.FC<FoodItemCardProps> = ({
             fontSize="17px"
             fontWeight="700"
             color="gray.800"
-            mb="6px"
+            mb="4px"
             noOfLines={1}
           >
             {name}
           </Text>
-          {description && (
+          {soldBy && (
+            <Text
+              fontSize="12px"
+              color="gray.500"
+              mb="6px"
+              noOfLines={1}
+            >
+              Sold by: {soldBy}
+            </Text>
+          )}
+          {(longDesc || description) && (
             <Text
               fontSize="13px"
               color="gray.600"
@@ -78,7 +94,7 @@ const FoodItemCard: React.FC<FoodItemCardProps> = ({
               noOfLines={2}
               lineHeight="1.4"
             >
-              {description}
+              {longDesc || description}
             </Text>
           )}
         </Box>
@@ -87,11 +103,15 @@ const FoodItemCard: React.FC<FoodItemCardProps> = ({
           justifyContent="space-between"
         >
           <Text
-            fontSize="18px"
-            fontWeight="800"
+            fontSize="14px"
+            fontWeight="500"
             color="gray.800"
           >
-            {currency} {price}
+            {(() => {
+              const currencyType = (currency === '₹' || currency === 'INR' ? 'INR' : currency) as CurrencyType
+              const priceNum = parseFloat(price)
+              return formatCurrency(priceNum, currencyType)
+            })()}
           </Text>
           <Button
             size="sm"

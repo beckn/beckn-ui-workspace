@@ -15,10 +15,14 @@ import '../styles/globals.css'
 
 import store, { persistor } from '@store/index'
 import Layout from '@components/layout/Layout'
+import SplashWrapper from '@components/splash/SplashWrapper'
 
 function MyApp({ Component, pageProps }: AppProps) {
   const { t } = useLanguage()
   const router = useRouter()
+
+  const translations = t as unknown as Record<string, string>
+  const translate = (key: string) => translations[key] ?? key
 
   return (
     <BecknProvider
@@ -41,13 +45,19 @@ function MyApp({ Component, pageProps }: AppProps) {
               <FallbackUI
                 handleBackToHomeClick={() => router.push('/')}
                 handleContactSupport={() => {}}
-                t={key => t[key]}
+                t={translate}
               />
             )}
           >
-            <Layout>
-              <Component {...pageProps} />
-            </Layout>
+            <SplashWrapper>
+              {router.pathname === '/signIn' || router.pathname === '/signUp' ? (
+                <Component {...pageProps} />
+              ) : (
+                <Layout>
+                  <Component {...pageProps} />
+                </Layout>
+              )}
+            </SplashWrapper>
           </ErrorBoundary>
         </PersistGate>
       </Provider>

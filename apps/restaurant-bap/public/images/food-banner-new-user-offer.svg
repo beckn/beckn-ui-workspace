@@ -1,0 +1,51 @@
+<svg width="390" height="200" viewBox="0 0 390 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg3" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fff7e6"/>
+      <stop offset="100%" stop-color="#ffe0b2"/>
+    </linearGradient>
+
+    <linearGradient id="offerBtn" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#ff1744"/>
+      <stop offset="100%" stop-color="#ff9100"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Card -->
+  <rect width="390" height="200" rx="24" fill="url(#bg3)"/>
+
+  <!-- Headline -->
+  <text x="24" y="52" font-size="22" font-weight="700" fill="#2b2b2b"
+        font-family="Inter, Arial, sans-serif">
+    New User Special
+  </text>
+  <text x="24" y="84" font-size="30" font-weight="900" fill="#ff1744"
+        font-family="Inter, Arial, sans-serif">
+    ₹150 OFF
+  </text>
+  <text x="24" y="112" font-size="14" fill="#555"
+        font-family="Inter, Arial, sans-serif">
+    On your first food order
+  </text>
+
+  <!-- CTA -->
+  <rect x="24" y="132" width="170" height="38" rx="19" fill="url(#offerBtn)"/>
+  <text x="48" y="157" font-size="14" fill="#ffffff" font-weight="600"
+        font-family="Inter, Arial, sans-serif">
+    Claim Offer Now
+  </text>
+
+  <!-- Coupon Illustration -->
+  <g transform="translate(235 40)">
+    <rect x="0" y="0" width="120" height="80" rx="12" fill="#ffffff" />
+    <rect x="0" y="0" width="120" height="80" rx="12" fill="none" stroke="#ff1744" stroke-dasharray="6 6"/>
+
+    <text x="20" y="48" font-size="28" font-weight="800" fill="#ff1744"
+          font-family="Inter, Arial, sans-serif">
+      ₹150
+    </text>
+
+    <circle cx="0" cy="40" r="8" fill="#ffe0b2"/>
+    <circle cx="120" cy="40" r="8" fill="#ffe0b2"/>
+  </g>
+</svg>

@@ -1,0 +1,43 @@
+<svg width="360" height="160" viewBox="0 0 360 160" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGradient2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#6a11cb"/>
+      <stop offset="100%" stop-color="#2575fc"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="360" height="160" rx="16" fill="url(#bgGradient2)" />
+
+  <!-- Decorative shapes -->
+  <circle cx="40" cy="130" r="45" fill="rgba(255,255,255,0.12)" />
+  <circle cx="330" cy="20" r="35" fill="rgba(255,255,255,0.12)" />
+
+  <!-- Main Offer Text -->
+  <text x="20" y="55" font-size="22" fill="#ffffff" font-family="Arial, sans-serif" font-weight="700">
+    Flat 50% OFF
+  </text>
+  <text x="20" y="82" font-size="15" fill="#e6ecff" font-family="Arial, sans-serif">
+    On your first order
+  </text>
+  <text x="20" y="105" font-size="12" fill="#d0dbff" font-family="Arial, sans-serif">
+    Delicious meals at half price
+  </text>
+
+  <!-- CTA -->
+  <rect x="20" y="118" width="120" height="28" rx="14" fill="#ffffff"/>
+  <text x="38" y="137" font-size="12" fill="#2575fc" font-family="Arial, sans-serif" font-weight="600">
+    Grab Offer
+  </text>
+
+  <!-- Discount badge -->
+  <g transform="translate(250 55)">
+    <circle cx="30" cy="30" r="30" fill="#ffffff"/>
+    <text x="15" y="28" font-size="16" fill="#2575fc" font-family="Arial, sans-serif" font-weight="700">
+      50%
+    </text>
+    <text x="13" y="45" font-size="10" fill="#2575fc" font-family="Arial, sans-serif">
+      OFF
+    </text>
+  </g>
+</svg>
