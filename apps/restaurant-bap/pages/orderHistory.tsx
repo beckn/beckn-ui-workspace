@@ -12,13 +12,67 @@ import { FiArrowLeft, FiPackage, FiShoppingBag } from 'react-icons/fi'
 import { ORDER_CATEGORY_ID } from '../lib/config'
 
 const orderStatusMap: Record<string, { label: string; color: string; bg: string }> = {
+  // Pending/Processing statuses
   'In Review': { label: 'Pending', color: '#B8860B', bg: '#FFF9CC' },
   ORDER_RECEIVED: { label: 'Received', color: '#B8860B', bg: '#FFF9CC' },
+  ArrangingPayment: { label: 'Processing Payment', color: '#B8860B', bg: '#FFF9CC' },
+  PaymentSettled: { label: 'Payment Settled', color: '#3182CE', bg: '#BEE3F8' },
+  IN_PROGRESS: { label: 'In Progress', color: '#B8860B', bg: '#FFF9CC' },
+
+  // Active/Shipping statuses
   ORDER_DISPATCHED: { label: 'Dispatched', color: '#3182CE', bg: '#BEE3F8' },
+  Shipped: { label: 'Shipped', color: '#3182CE', bg: '#BEE3F8' },
+
+  // Completed statuses
   ORDER_DELIVERED: { label: 'Delivered', color: '#38A169', bg: '#C6F6D5' },
+  Delivered: { label: 'Delivered', color: '#38A169', bg: '#C6F6D5' },
   COMPLETE: { label: 'Completed', color: '#38A169', bg: '#C6F6D5' },
+
+  // Cancelled statuses
   ORDER_CANCELLED: { label: 'Cancelled', color: '#E53E3E', bg: '#FED7D7' },
-  'USER CANCELLED': { label: 'Cancelled', color: '#E53E3E', bg: '#FED7D7' }
+  'USER CANCELLED': { label: 'Cancelled', color: '#E53E3E', bg: '#FED7D7' },
+  Cancelled: { label: 'Cancelled', color: '#E53E3E', bg: '#FED7D7' },
+
+  // Default fallback for unknown statuses
+  DEFAULT: { label: 'Processing', color: '#718096', bg: '#EDF2F7' }
+}
+
+// Helper function to get status info with fallback
+const getStatusInfo = (status: string | null | undefined) => {
+  if (!status) return orderStatusMap.DEFAULT
+
+  const normalizedStatus = status.trim()
+
+  // Try exact match first
+  if (orderStatusMap[normalizedStatus]) {
+    return orderStatusMap[normalizedStatus]
+  }
+
+  // Try uppercase match
+  const upperStatus = normalizedStatus.toUpperCase()
+  if (orderStatusMap[upperStatus]) {
+    return orderStatusMap[upperStatus]
+  }
+
+  // Try to find partial matches for common patterns
+  if (normalizedStatus.includes('CANCELLED') || normalizedStatus.includes('CANCEL')) {
+    return orderStatusMap.ORDER_CANCELLED
+  }
+  if (normalizedStatus.includes('DELIVERED') || normalizedStatus.includes('DELIVER')) {
+    return orderStatusMap.ORDER_DELIVERED
+  }
+  if (normalizedStatus.includes('DISPATCHED') || normalizedStatus.includes('DISPATCH')) {
+    return orderStatusMap.ORDER_DISPATCHED
+  }
+  if (normalizedStatus.includes('COMPLETE') || normalizedStatus.includes('COMPLETED')) {
+    return orderStatusMap.COMPLETE
+  }
+  if (normalizedStatus.includes('RECEIVED') || normalizedStatus.includes('RECEIVE')) {
+    return orderStatusMap.ORDER_RECEIVED
+  }
+
+  // Default fallback
+  return orderStatusMap.DEFAULT
 }
 
 const OrderHistory = () => {
@@ -49,8 +103,11 @@ const OrderHistory = () => {
         setOrderHistoryList(result.data || [])
         setIsLoading(false)
       })
-      .catch(() => {
+      .catch(error => {
+        console.error('Error fetching order history:', error)
         setIsLoading(false)
+        const errorMessage = error?.message || 'Failed to load order history. Please try again later.'
+        setError(errorMessage)
       })
       .finally(() => setIsLoading(false))
   }, [bearerToken, strapiUrl])
@@ -111,23 +168,26 @@ const OrderHistory = () => {
         px={{ base: '16px', md: '24px' }}
       >
         {/* Header */}
-        <Flex
-          align="center"
-          mb={{ base: '20px', md: '32px' }}
-        >
+        <Flex align="center">
           <IconButton
             aria-label="Go Back"
-            icon={<FiArrowLeft />}
+            icon={<FiArrowLeft size="24px" />}
             variant="ghost"
-            mr="12px"
             onClick={() => router.back()}
+            size="lg"
+            w="56px"
+            h="56px"
+            minW="56px"
+            fontSize="24px"
           />
           <Text
-            fontSize={{ base: '24px', md: '32px' }}
+            fontSize={{ base: '20px', md: '24px' }}
             fontWeight="700"
             color="gray.800"
+            lineHeight="1.2"
+            mb={'10px'}
           >
-            {t.orderHistory || 'My Orders'}
+            My Orders
           </Text>
         </Flex>
 
@@ -175,8 +235,8 @@ const OrderHistory = () => {
             align="stretch"
           >
             {orderHistoryList.map((order, idx) => {
-              const status = order.attributes.delivery_status || 'ORDER_RECEIVED'
-              const statusInfo = orderStatusMap[status] || orderStatusMap['ORDER_RECEIVED']
+              const status = order.attributes.delivery_status
+              const statusInfo = getStatusInfo(status)
 
               return (
                 <Box

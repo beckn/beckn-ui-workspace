@@ -12,19 +12,22 @@ interface RestaurantCardProps {
   isPromoted?: boolean
   offer?: string
   onClick?: () => void
+  description?: string
 }
 
 const RestaurantCard: React.FC<RestaurantCardProps> = ({
   name,
   image,
-  rating = '4.0',
+  rating = '',
   deliveryTime = '30-40 min',
   cuisine = 'Fast Food',
   distance,
   isPromoted = false,
   offer,
-  onClick
+  onClick,
+  description
 }) => {
+  console.log('description', description, image)
   return (
     <Box
       bg="white"
@@ -103,6 +106,17 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({
         >
           {name}
         </Text>
+        {description && (
+          <Text
+            fontSize="13px"
+            color="gray.600"
+            fontWeight="400"
+            mt="8px"
+            noOfLines={2}
+          >
+            {description}
+          </Text>
+        )}
         <Flex
           alignItems="center"
           gap="16px"

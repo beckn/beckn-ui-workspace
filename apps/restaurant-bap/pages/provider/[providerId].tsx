@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Box, Container, Text, VStack, Flex, IconButton, Image, SimpleGrid } from '@chakra-ui/react'
 import { FiArrowLeft } from 'react-icons/fi'
 import { ParsedItemModel } from '@beckn-ui/common/lib/types'
 import { cartActions } from '@beckn-ui/common/src/store/cart-slice'
 import { feedbackActions } from '@beckn-ui/common/src/store/ui-feedback-slice'
+import { DiscoveryRootState } from '@beckn-ui/common/lib/types'
 import { useLanguage } from '@hooks/useLanguage'
 import FoodItemCard from '@components/foodItemCard/FoodItemCard'
 import { LoaderWithMessage } from '@beckn-ui/molecules'
@@ -15,32 +16,97 @@ const ProviderItemsPage = () => {
   const dispatch = useDispatch()
   const { t } = useLanguage()
   const { providerId } = router.query
+  const { productList } = useSelector((state: DiscoveryRootState) => state.discovery)
   const [providerData, setProviderData] = useState<{
     name: string
     image?: string
     items: ParsedItemModel[]
   } | null>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     if (providerId && typeof window !== 'undefined') {
-      // Get provider data from localStorage
+      // Step 1: Try to get provider data from localStorage
       const storedProviderData = localStorage.getItem(`provider_${providerId}`)
       if (storedProviderData) {
         try {
           const parsed = JSON.parse(storedProviderData)
           setProviderData(parsed)
+          setIsLoading(false)
+          return
         } catch (error) {
-          console.error('Error parsing provider data:', error)
-          router.push('/search')
+          console.error('Error parsing provider data from localStorage:', error)
+          // Clear corrupted data
+          localStorage.removeItem(`provider_${providerId}`)
         }
-      } else {
-        // If no data found, redirect back to search
-        router.push('/search')
       }
+
+      // Step 2: If not in localStorage, try to find in Redux store
+      if (productList && productList.length > 0) {
+        // Try to match by providerId first
+        let matchedItems = productList.filter(item => item.providerId === providerId)
+
+        // If no match by providerId, try matching by providerName (slugified)
+        if (matchedItems.length === 0 && providerId) {
+          const providerNameFromId = (providerId as string).replace(/-/g, ' ').toLowerCase()
+          matchedItems = productList.filter(item => {
+            if (!item.providerName) return false
+            const itemProviderName = item.providerName.toLowerCase()
+            return (
+              itemProviderName === providerNameFromId ||
+              itemProviderName.includes(providerNameFromId) ||
+              providerNameFromId.includes(itemProviderName)
+            )
+          })
+        }
+
+        if (matchedItems.length > 0) {
+          // Reconstruct provider data from matched items
+          const firstItem = matchedItems[0]
+          const providerName = firstItem.providerName || 'Restaurant'
+          const providerImage =
+            firstItem.providerImg?.[0]?.url || firstItem.item.images?.[0]?.url || '/images/restaurant-placeholder.svg'
+
+          const reconstructedData = {
+            name: providerName,
+            image: providerImage,
+            items: matchedItems
+          }
+
+          // Save to localStorage for future use
+          try {
+            localStorage.setItem(`provider_${providerId}`, JSON.stringify(reconstructedData))
+          } catch (storageError) {
+            console.warn('Failed to save provider data to localStorage:', storageError)
+          }
+
+          setProviderData(reconstructedData)
+          setIsLoading(false)
+          return
+        }
+      }
+
+      // Step 3: If still not found, show error and redirect
+      setError('Provider data not found. Please search again.')
+      dispatch(
+        feedbackActions.setToastData({
+          toastData: {
+            message: 'Provider Not Found',
+            display: true,
+            type: 'error',
+            description: 'The restaurant you are looking for is not available. Redirecting to search...'
+          }
+        })
+      )
+
+      // Redirect to search after showing error
+      setTimeout(() => {
+        router.push('/search')
+      }, 2000)
       setIsLoading(false)
     }
-  }, [providerId, router])
+  }, [providerId, router, productList, dispatch])
 
   const handleAddToCart = (item: ParsedItemModel) => {
     dispatch(cartActions.addItemToCart({ product: item, quantity: 1 }))
@@ -72,6 +138,37 @@ const ProviderItemsPage = () => {
           loadingText={t.pleaseWait || 'Please wait'}
           loadingSubText="Loading items..."
         />
+      </Box>
+    )
+  }
+
+  if (error) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        minH="calc(100vh - 100px)"
+        px="24px"
+      >
+        <Box
+          textAlign="center"
+          maxW="400px"
+        >
+          <Text
+            fontSize="18px"
+            color="gray.600"
+            mb="12px"
+          >
+            {error}
+          </Text>
+          <Text
+            fontSize="14px"
+            color="gray.500"
+          >
+            Redirecting to search...
+          </Text>
+        </Box>
       </Box>
     )
   }
