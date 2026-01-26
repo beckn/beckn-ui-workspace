@@ -237,10 +237,11 @@ const Profile = () => {
         >
           <IconButton
             aria-label="Go Back"
-            icon={<FiArrowLeft />}
+            icon={<FiArrowLeft size="28px" />}
             variant="ghost"
             mr="12px"
             onClick={() => router.back()}
+            size="lg"
           />
           <Text
             fontSize={{ base: '24px', md: '32px' }}

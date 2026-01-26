@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { useDispatch, useSelector } from 'react-redux'
-import { Box, Container, Text, VStack, Flex, IconButton, Image, SimpleGrid } from '@chakra-ui/react'
+import { Box, Container, Text, Flex, IconButton, Image, SimpleGrid } from '@chakra-ui/react'
 import { FiArrowLeft } from 'react-icons/fi'
 import { ParsedItemModel } from '@beckn-ui/common/lib/types'
 import { cartActions } from '@beckn-ui/common/src/store/cart-slice'
 import { feedbackActions } from '@beckn-ui/common/src/store/ui-feedback-slice'
-import { DiscoveryRootState } from '@beckn-ui/common/lib/types'
+import { DiscoveryRootState, ICartRootState } from '@beckn-ui/common/lib/types'
 import { useLanguage } from '@hooks/useLanguage'
 import FoodItemCard from '@components/foodItemCard/FoodItemCard'
 import { LoaderWithMessage } from '@beckn-ui/molecules'
@@ -17,6 +17,7 @@ const ProviderItemsPage = () => {
   const { t } = useLanguage()
   const { providerId } = router.query
   const { productList } = useSelector((state: DiscoveryRootState) => state.discovery)
+  const { items: cartItems } = useSelector((state: ICartRootState) => state.cart)
   const [providerData, setProviderData] = useState<{
     name: string
     image?: string
@@ -66,7 +67,9 @@ const ProviderItemsPage = () => {
           const firstItem = matchedItems[0]
           const providerName = firstItem.providerName || 'Restaurant'
           const providerImage =
-            firstItem.providerImg?.[0]?.url || firstItem.item.images?.[0]?.url || '/images/restaurant-placeholder.svg'
+            (firstItem.providerImg && Array.isArray(firstItem.providerImg) && firstItem.providerImg[0]?.url) ||
+            (firstItem.item.images?.[0] as any)?.url ||
+            '/images/restaurant-placeholder.svg'
 
           const reconstructedData = {
             name: providerName,
@@ -116,10 +119,23 @@ const ProviderItemsPage = () => {
           message: t.addedToCart || 'Added to cart',
           display: true,
           type: 'success',
-          description: t.addedToCart || 'Item added to cart successfully'
+          description: `${item.item.name} added to cart`
         }
       })
     )
+  }
+
+  const handleIncreaseQuantity = (item: ParsedItemModel) => {
+    dispatch(cartActions.addItemToCart({ product: item, quantity: 1 }))
+  }
+
+  const handleDecreaseQuantity = (itemId: string) => {
+    dispatch(cartActions.removeItemFromCart(itemId))
+  }
+
+  const getCartQuantity = (itemId: string): number => {
+    const cartItem = cartItems.find(item => item.id === itemId)
+    return cartItem?.quantity || 0
   }
 
   const handleItemClick = (item: ParsedItemModel) => {
@@ -196,10 +212,11 @@ const ProviderItemsPage = () => {
         >
           <IconButton
             aria-label="Go Back"
-            icon={<FiArrowLeft />}
+            icon={<FiArrowLeft size="28px" />}
             variant="ghost"
             mr="12px"
             onClick={() => router.back()}
+            size="lg"
           />
           <Flex
             align="center"
@@ -258,6 +275,7 @@ const ProviderItemsPage = () => {
             {providerData.items.map(item => {
               const currency = item.item.price.currency || 'INR'
               const price = item.item.price.value
+              const cartQuantity = getCartQuantity(item.id)
 
               return (
                 <FoodItemCard
@@ -271,7 +289,10 @@ const ProviderItemsPage = () => {
                   currency={currency === 'INR' ? '₹' : currency}
                   image={item.item.images?.[0]?.url}
                   onAddClick={() => handleAddToCart(item)}
-                  onItemClick={() => handleItemClick(item)}
+                  onItemClick={() => {}}
+                  cartQuantity={cartQuantity}
+                  onIncreaseQuantity={() => handleIncreaseQuantity(item)}
+                  onDecreaseQuantity={() => handleDecreaseQuantity(item.id)}
                 />
               )
             })}

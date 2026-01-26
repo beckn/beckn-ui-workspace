@@ -130,11 +130,11 @@ const Product = () => {
         {/* Back Button */}
         <IconButton
           aria-label="Go Back"
-          icon={<FiArrowLeft />}
+          icon={<FiArrowLeft size="28px" />}
           variant="ghost"
           mb="16px"
           onClick={() => router.back()}
-          size="md"
+          size="lg"
         />
 
         <Flex

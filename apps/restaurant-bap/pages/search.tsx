@@ -412,19 +412,6 @@ const Search = () => {
                 searchString={(searchTerm as SearchTermModel).searchKeyword || ''}
                 handleChange={(value: string) => {
                   dispatch(setSearchTerm({ searchKeyword: value }))
-
-                  // Clear previous timeout to prevent race conditions
-                  if (searchDebounceTimeoutRef.current) {
-                    clearTimeout(searchDebounceTimeoutRef.current)
-                  }
-
-                  // Set new timeout for debounced search
-                  searchDebounceTimeoutRef.current = setTimeout(() => {
-                    if (value) {
-                      fetchDataForSearch()
-                    }
-                    searchDebounceTimeoutRef.current = null
-                  }, 300)
                 }}
                 placeholder={t.searchPlaceholder || 'Search for food, restaurants...'}
               />

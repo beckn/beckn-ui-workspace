@@ -146,7 +146,7 @@ const Cart = () => {
         <Flex align="center">
           <IconButton
             aria-label="Go Back"
-            icon={<FiArrowLeft size="24px" />}
+            icon={<FiArrowLeft size="28px" />}
             variant="ghost"
             onClick={() => router.back()}
             size="lg"
@@ -260,36 +260,88 @@ const Cart = () => {
                         />
                       </Box>
 
-                      {/* Item Details */}
-                      <VStack
-                        align="start"
-                        spacing="4px"
-                        flex="1"
-                        minW="0"
-                      >
-                        <Text
-                          fontSize="15px"
-                          fontWeight="700"
-                          color="gray.800"
-                          noOfLines={1}
-                          lineHeight="1.3"
-                        >
-                          {item.name}
-                        </Text>
-                        {item.providerName && (
-                          <Text
-                            fontSize="12px"
-                            color="gray.500"
-                            noOfLines={1}
+                      <VStack>
+                        <HStack>
+                          {/* Item Details */}
+                          <VStack
+                            align="start"
+                            spacing="4px"
+                            flex="1"
+                            minW="0"
                           >
-                            {item.providerName}
-                          </Text>
-                        )}
+                            <Text
+                              fontSize="15px"
+                              fontWeight="700"
+                              color="gray.800"
+                              noOfLines={1}
+                              lineHeight="1.3"
+                            >
+                              {item.name}
+                            </Text>
+                            {item.providerName && (
+                              <Text
+                                fontSize="12px"
+                                color="gray.500"
+                                noOfLines={1}
+                              >
+                                {item.providerName}
+                              </Text>
+                            )}
+                          </VStack>
+
+                          {/* Quantity Controls */}
+                          <HStack
+                            spacing="6px"
+                            border="1.5px solid"
+                            borderColor="gray.200"
+                            borderRadius="8px"
+                            p="2px"
+                            align="center"
+                            flexShrink={0}
+                          >
+                            <IconButton
+                              aria-label="Decrease"
+                              icon={<FiMinus />}
+                              size="xs"
+                              onClick={() => handleDecrement(item.id)}
+                              bg="white"
+                              color="gray.700"
+                              _hover={{ bg: 'gray.50' }}
+                              h="24px"
+                              w="24px"
+                              minW="24px"
+                              mb="0"
+                            />
+                            <Text
+                              fontSize="14px"
+                              fontWeight="700"
+                              color="gray.800"
+                              minW="20px"
+                              textAlign="center"
+                            >
+                              {item.quantity}
+                            </Text>
+                            <IconButton
+                              aria-label="Increase"
+                              icon={<FiPlus />}
+                              size="xs"
+                              onClick={() => handleIncrement(item.id)}
+                              bg="white"
+                              color="gray.700"
+                              _hover={{ bg: 'gray.50' }}
+                              h="24px"
+                              w="24px"
+                              minW="24px"
+                              mb="0"
+                            />
+                          </HStack>
+                        </HStack>
                         <Text
                           fontSize="14px"
                           fontWeight="700"
                           color="#FF6B35"
                           lineHeight="1.2"
+                          alignSelf="flex-start"
                         >
                           {item.price.currency === 'INR' ? '₹' : item.price.currency}
                           {item.price.value} × {item.quantity} ={' '}
@@ -297,51 +349,6 @@ const Cart = () => {
                           {(Number(item.price.value) * item.quantity).toFixed(2)}
                         </Text>
                       </VStack>
-
-                      {/* Quantity Controls */}
-                      <HStack
-                        spacing="6px"
-                        border="1.5px solid"
-                        borderColor="gray.200"
-                        borderRadius="8px"
-                        p="2px"
-                        align="center"
-                        flexShrink={0}
-                      >
-                        <IconButton
-                          aria-label="Decrease"
-                          icon={<FiMinus />}
-                          size="xs"
-                          onClick={() => handleDecrement(item.id)}
-                          bg="white"
-                          color="gray.700"
-                          _hover={{ bg: 'gray.50' }}
-                          h="24px"
-                          w="24px"
-                          minW="24px"
-                        />
-                        <Text
-                          fontSize="14px"
-                          fontWeight="700"
-                          color="gray.800"
-                          minW="20px"
-                          textAlign="center"
-                        >
-                          {item.quantity}
-                        </Text>
-                        <IconButton
-                          aria-label="Increase"
-                          icon={<FiPlus />}
-                          size="xs"
-                          onClick={() => handleIncrement(item.id)}
-                          bg="white"
-                          color="gray.700"
-                          _hover={{ bg: 'gray.50' }}
-                          h="24px"
-                          w="24px"
-                          minW="24px"
-                        />
-                      </HStack>
                     </Flex>
                     {idx < items.length - 1 && <Divider mt="12px" />}
                   </Box>

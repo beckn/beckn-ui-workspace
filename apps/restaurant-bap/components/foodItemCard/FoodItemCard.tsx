@@ -1,6 +1,7 @@
-import React from 'react'
-import { Box, Flex, Text, Image, Button } from '@chakra-ui/react'
-import { AddIcon } from '@chakra-ui/icons'
+import React, { useState } from 'react'
+import { Box, Flex, Text, Image, Button, IconButton, Spinner } from '@chakra-ui/react'
+import { AddIcon, MinusIcon } from '@chakra-ui/icons'
+import { FiCheck } from 'react-icons/fi'
 import { formatCurrency } from '@beckn-ui/becknified-components/src/components/product-price/product-price'
 import { CurrencyType } from '@beckn-ui/becknified-components/src/components/product-price/ProductPrice.types'
 
@@ -15,6 +16,9 @@ interface FoodItemCardProps {
   image?: string
   onAddClick: (id: string) => void
   onItemClick?: (id: string) => void
+  cartQuantity?: number
+  onIncreaseQuantity?: (id: string) => void
+  onDecreaseQuantity?: (id: string) => void
 }
 
 const FoodItemCard: React.FC<FoodItemCardProps> = ({
@@ -27,8 +31,40 @@ const FoodItemCard: React.FC<FoodItemCardProps> = ({
   currency = '₹',
   image,
   onAddClick,
-  onItemClick
+  onItemClick,
+  cartQuantity = 0,
+  onIncreaseQuantity,
+  onDecreaseQuantity
 }) => {
+  const [isAdding, setIsAdding] = useState(false)
+  const [showSuccess, setShowSuccess] = useState(false)
+
+  const handleAddClick = async (e: React.MouseEvent) => {
+    e.stopPropagation()
+    if (isAdding) return
+
+    setIsAdding(true)
+    onAddClick(id)
+
+    // Show success feedback
+    setShowSuccess(true)
+    setTimeout(() => {
+      setIsAdding(false)
+      setShowSuccess(false)
+    }, 1000)
+  }
+
+  const handleIncrease = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    onIncreaseQuantity?.(id)
+  }
+
+  const handleDecrease = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    onDecreaseQuantity?.(id)
+  }
+
+  const isInCart = cartQuantity > 0
   return (
     <Box
       bg="white"
@@ -113,29 +149,96 @@ const FoodItemCard: React.FC<FoodItemCardProps> = ({
               return formatCurrency(priceNum, currencyType)
             })()}
           </Text>
-          <Button
-            size="sm"
-            bg="#FF6B35"
-            color="white"
-            borderRadius="24px"
-            px="20px"
-            py="8px"
-            fontSize="13px"
-            fontWeight="700"
-            _hover={{
-              bg: '#E55A2B'
-            }}
-            _active={{
-              bg: '#CC4F24'
-            }}
-            onClick={e => {
-              e.stopPropagation()
-              onAddClick(id)
-            }}
-            leftIcon={<AddIcon boxSize="14px" />}
-          >
-            ADD
-          </Button>
+
+          {isInCart ? (
+            <Flex
+              alignItems="center"
+              gap="4px"
+              bg="white"
+              border="1px solid #FF6B35"
+              borderRadius="20px"
+              px="4px"
+              py="2px"
+            >
+              <IconButton
+                aria-label="Decrease quantity"
+                icon={<MinusIcon />}
+                size="xs"
+                bg="transparent"
+                color="#FF6B35"
+                _hover={{ bg: 'rgba(255,255,255,0.2)' }}
+                _active={{ bg: 'rgba(255,255,255,0.3)' }}
+                onClick={handleDecrease}
+                minW="20px"
+                h="20px"
+                borderRadius="full"
+                margin="0"
+              />
+              <Text
+                fontSize="12px"
+                fontWeight="700"
+                color="#FF6B35"
+                minW="20px"
+                textAlign="center"
+              >
+                {cartQuantity}
+              </Text>
+              <IconButton
+                aria-label="Increase quantity"
+                icon={<AddIcon />}
+                size="xs"
+                bg="transparent"
+                color="#FF6B35"
+                _hover={{ bg: 'rgba(255,255,255,0.2)' }}
+                _active={{ bg: 'rgba(255,255,255,0.3)' }}
+                onClick={handleIncrease}
+                minW="20px"
+                h="20px"
+                borderRadius="full"
+                margin="0"
+              />
+            </Flex>
+          ) : (
+            <Button
+              size="xs"
+              bg={showSuccess ? '#4CAF50' : '#FF6B35'}
+              color="white"
+              borderRadius="20px"
+              px="12px"
+              py="4px"
+              fontSize="11px"
+              fontWeight="700"
+              minW="60px"
+              h="28px"
+              margin="0"
+              _hover={{
+                bg: showSuccess ? '#45A049' : '#E55A2B'
+              }}
+              _active={{
+                bg: showSuccess ? '#3D8B40' : '#CC4F24'
+              }}
+              onClick={handleAddClick}
+              leftIcon={
+                isAdding ? (
+                  <Spinner
+                    size="xs"
+                    color="white"
+                    w="10px"
+                    h="10px"
+                  />
+                ) : showSuccess ? (
+                  <FiCheck size="10px" />
+                ) : (
+                  <AddIcon boxSize="10px" />
+                )
+              }
+              disabled={isAdding}
+              transition="all 0.3s ease"
+              transform={showSuccess ? 'scale(1.05)' : 'scale(1)'}
+            >
+              {showSuccess ? 'ADDED' : isAdding ? 'ADDING...' : 'ADD'}
+            </Button>
+          )}
         </Flex>
       </Flex>
     </Box>

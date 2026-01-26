@@ -83,7 +83,7 @@ const PaymentMode = () => {
         <Flex align="center">
           <IconButton
             aria-label="Go Back"
-            icon={<FiArrowLeft size="24px" />}
+            icon={<FiArrowLeft size="28px" />}
             variant="ghost"
             onClick={() => router.back()}
             size="lg"

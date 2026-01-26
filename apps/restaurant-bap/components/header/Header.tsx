@@ -5,7 +5,6 @@ import { useSelector } from 'react-redux'
 import { FiShoppingCart, FiUser, FiLogOut, FiPackage } from 'react-icons/fi'
 import { useLanguage } from '@hooks/useLanguage'
 import { RootState } from '@store/index'
-import { cartActions } from '@beckn-ui/common/src/store/cart-slice'
 import { useDispatch } from 'react-redux'
 import { logout } from '@beckn-ui/common/src/store/auth-slice'
 import Cookies from 'js-cookie'
@@ -107,6 +106,7 @@ const Header: React.FC = () => {
               w="48px"
               h="48px"
               fontSize="24px"
+              mb="0"
             />
             {totalQuantity > 0 && (
               <Badge
@@ -134,6 +134,7 @@ const Header: React.FC = () => {
               <MenuButton
                 as={IconButton}
                 aria-label="Profile Menu"
+                mb="0"
                 icon={
                   <Avatar
                     size="sm"

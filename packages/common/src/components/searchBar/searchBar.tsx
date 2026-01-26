@@ -29,6 +29,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
   const handleSubmit = () => {
     const [newCategory, ...newSearchTextParts] = inputValue.split(' ; ')
     const newSearchText = newSearchTextParts.join(' ; ')
+    console.log('sada', newCategory && newSearchTextParts.length > 0 ? `${newCategory} ; ${newSearchText}` : inputValue)
     handleChange(newCategory && newSearchTextParts.length > 0 ? `${newCategory} ; ${newSearchText}` : inputValue)
   }
 
