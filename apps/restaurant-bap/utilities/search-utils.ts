@@ -158,7 +158,10 @@ export const parseRestaurantSearchResponse = (data: RestaurantSearchResponse[]):
             providerName: provider.name,
             rating: item.rating !== 'null' ? item.rating : undefined,
             providerCoordinates,
-            providerImg: provider.images ? ([{ images: provider.images }] as any) : undefined,
+            providerImg: provider.images ? provider.images : undefined,
+            // Store provider description for use in restaurant cards
+            providerShortDesc: provider.short_desc,
+            providerLongDesc: provider.long_desc,
             item: {
               id: item.id,
               name: item.name,
@@ -227,6 +230,21 @@ export const parseRestaurantSearchResponse = (data: RestaurantSearchResponse[]):
           }
 
           itemsArray.push(parsedItem)
+
+          // Debug: Verify description and image are being stored
+          if (provider.short_desc || provider.long_desc) {
+            console.log(
+              '✅ Stored provider description for',
+              provider.name,
+              ':',
+              provider.short_desc || provider.long_desc
+            )
+          }
+          if (provider.images && provider.images.length > 0) {
+            console.log('✅ Stored provider image for', provider.name, ':', provider.images[0].url)
+          } else {
+            console.log('❌ No provider image in API for', provider.name)
+          }
         })
       } catch (err) {
         console.error('Error parsing provider:', provider.id, err)

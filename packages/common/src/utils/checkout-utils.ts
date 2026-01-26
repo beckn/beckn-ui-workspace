@@ -211,8 +211,13 @@ export const createPaymentBreakdownMap = (initResponse: InitResponseModel[] | St
   const paymentBreakdownMap: PaymentBreakDownModel = {}
   if (initResponse && initResponse.length > 0) {
     initResponse?.[0]?.message?.order?.quote?.breakup?.forEach(breakup => {
-      paymentBreakdownMap[breakup.title] = {
-        value: breakup.price.value,
+      const title = breakup.title
+      const existingValue = paymentBreakdownMap[title]
+      const newValue = Number(breakup.price.value || '0')
+
+      // Aggregate values for the same title instead of overwriting
+      paymentBreakdownMap[title] = {
+        value: existingValue ? (Number(existingValue.value || '0') + newValue).toString() : breakup.price.value,
         currency: breakup.price.currency
       }
     })

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, Fragment } from 'react'
+import React, { useEffect, useState, Fragment, useRef } from 'react'
 import axios from '@services/axios'
 import { useRouter } from 'next/router'
 import {
@@ -29,6 +29,8 @@ import { OrdersRootState } from '@beckn-ui/common/src/store/order-slice'
 import { feedbackActions } from '@beckn-ui/common/src/store/ui-feedback-slice'
 import { DOMAIN } from '@lib/config'
 import { FiArrowLeft, FiChevronDown, FiChevronUp, FiMapPin, FiPhone, FiUser, FiCheckCircle } from 'react-icons/fi'
+import { CurrencyType } from '@beckn-ui/becknified-components'
+import { formatCurrency } from '@beckn-ui/becknified-components/src/components/product-price/product-price'
 import ItemDetails from '@components/checkout/ItemDetails'
 import DetailsCard from '@beckn-ui/becknified-components/src/components/checkout/details-card'
 import OrderStatusProgress from '@components/orderStatusProgress/OrderStatusProgress'
@@ -61,38 +63,65 @@ const OrderDetails = () => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
   const orderMetaData = useSelector((state: OrdersRootState) => state.orders.selectedOrderDetails)
   const dispatch = useDispatch()
+  const isMountedRef = useRef(true)
+  const abortControllerRef = useRef<AbortController | null>(null)
 
   useEffect(() => {
     if (localStorage && localStorage.getItem('confirmResponse')) {
-      const parsedConfirmData: ConfirmResponseModel[] = JSON.parse(localStorage.getItem('confirmResponse') as string)
-      setConfirmData(parsedConfirmData)
+      try {
+        const parsedConfirmData: ConfirmResponseModel[] = JSON.parse(localStorage.getItem('confirmResponse') as string)
+        setConfirmData(parsedConfirmData)
+      } catch (error) {
+        console.error('Error parsing confirm response:', error)
+        // Clear invalid data from localStorage
+        localStorage.removeItem('confirmResponse')
+      }
     }
   }, [])
 
   useEffect(() => {
+    // Set mounted flag
+    isMountedRef.current = true
+
     const fetchData = async () => {
+      // Check if component is still mounted before proceeding
+      if (!isMountedRef.current) return
+
       try {
-        setIsLoading(true)
+        if (isMountedRef.current) {
+          setIsLoading(true)
+        }
 
         let statusPayload
         if (localStorage.getItem('selectedOrder')) {
-          const selectedOrderData = JSON.parse(localStorage.getItem('selectedOrder') as string)
-          const { bppId, bppUri, orderId } = selectedOrderData
-          statusPayload = {
-            data: [
-              {
-                context: {
-                  transaction_id: uuidv4(),
-                  bpp_id: bppId,
-                  bpp_uri: bppUri,
-                  domain: DOMAIN
-                },
-                message: {
-                  order_id: orderId,
-                  orderId: orderId
+          try {
+            const selectedOrderData = JSON.parse(localStorage.getItem('selectedOrder') as string)
+            const { bppId, bppUri, orderId } = selectedOrderData
+            statusPayload = {
+              data: [
+                {
+                  context: {
+                    transaction_id: uuidv4(),
+                    bpp_id: bppId,
+                    bpp_uri: bppUri,
+                    domain: DOMAIN
+                  },
+                  message: {
+                    order_id: orderId,
+                    orderId: orderId
+                  }
                 }
-              }
-            ]
+              ]
+            }
+          } catch (error) {
+            console.error('Error parsing selected order data:', error)
+            // Clear invalid data from localStorage
+            localStorage.removeItem('selectedOrder')
+            if (isMountedRef.current) {
+              setIsError(true)
+              setIsLoading(false)
+            }
+            return
           }
         } else if (confirmData?.length) {
           const { bpp_id, bpp_uri, domain } = confirmData[0].context
@@ -114,10 +143,19 @@ const OrderDetails = () => {
             ]
           }
         } else {
+          if (isMountedRef.current) {
+            setIsLoading(false)
+          }
           return
         }
 
+        // Check again before making API call
+        if (!isMountedRef.current) return
+
         const response = await axios.post(`${apiUrl}/status`, statusPayload)
+
+        // Check if component is still mounted before updating state
+        if (!isMountedRef.current) return
 
         if (
           JSON.stringify(response.data) === '{}' ||
@@ -125,22 +163,42 @@ const OrderDetails = () => {
           !response.data?.data?.[0]?.message
         ) {
           setIsError(true)
+          setIsLoading(false)
           return
         }
 
         setStatusData(response.data.data)
         localStorage.setItem('statusResponse', JSON.stringify(response.data.data))
       } catch (error) {
-        console.error('Error fetching order status:', error)
-        setIsError(true)
+        // Only update state if component is still mounted
+        if (isMountedRef.current) {
+          console.error('Error fetching order status:', error)
+          setIsError(true)
+          setIsLoading(false)
+        }
       } finally {
-        setIsLoading(false)
+        if (isMountedRef.current) {
+          setIsLoading(false)
+        }
       }
     }
 
     fetchData()
-    const intervalId = setInterval(fetchData, 30000)
-    return () => clearInterval(intervalId)
+    const intervalId = setInterval(() => {
+      if (isMountedRef.current) {
+        fetchData()
+      }
+    }, 30000)
+
+    // Cleanup function
+    return () => {
+      isMountedRef.current = false
+      clearInterval(intervalId)
+      // Cancel any ongoing requests if AbortController is available
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort()
+      }
+    }
   }, [apiUrl, confirmData])
 
   // Build order status map for fulfillment details - following retail app logic
@@ -282,16 +340,26 @@ const OrderDetails = () => {
   const paymentBreakdownMap = createPaymentBreakdownMap(statusData)
   // Convert the payment breakdown object to an array format
   // Fallback to direct breakup array from API if paymentBreakdownMap is empty
+  // Aggregate values by title in fallback to handle multiple items
   const paymentBreakdown =
     paymentBreakdownMap && Object.keys(paymentBreakdownMap).length > 0
       ? Object.entries(paymentBreakdownMap).map(([title, price]) => ({
           title,
           value: parseFloat(price.value || '0').toFixed(2)
         }))
-      : order?.quote?.breakup?.map(item => ({
-          title: item.title || '',
-          value: parseFloat(item.price?.value || '0').toFixed(2)
-        })) || []
+      : (() => {
+          // Aggregate breakup items by title
+          const aggregatedMap: Record<string, number> = {}
+          order?.quote?.breakup?.forEach(item => {
+            const title = item.title || ''
+            const value = parseFloat(item.price?.value || '0')
+            aggregatedMap[title] = (aggregatedMap[title] || 0) + value
+          })
+          return Object.entries(aggregatedMap).map(([title, value]) => ({
+            title,
+            value: value.toFixed(2)
+          }))
+        })() || []
   const totalPrice = getTotalPriceWithCurrency(statusData)
 
   return (
@@ -304,22 +372,24 @@ const OrderDetails = () => {
         maxW="800px"
         px={{ base: '16px', md: '24px' }}
       >
-        {/* Header */}
-        <Flex
-          align="center"
-          mb={{ base: '20px', md: '32px' }}
-        >
+        <Flex align="center">
           <IconButton
             aria-label="Go Back"
-            icon={<FiArrowLeft />}
+            icon={<FiArrowLeft size="24px" />}
             variant="ghost"
-            mr="12px"
-            onClick={() => router.push('/orderHistory')}
+            onClick={() => router.back()}
+            size="lg"
+            w="56px"
+            h="56px"
+            minW="56px"
+            fontSize="24px"
           />
           <Text
-            fontSize={{ base: '24px', md: '32px' }}
+            fontSize={{ base: '20px', md: '24px' }}
             fontWeight="700"
             color="gray.800"
+            lineHeight="1.2"
+            mb={'10px'}
           >
             Order Details
           </Text>
@@ -634,7 +704,14 @@ const OrderDetails = () => {
                       justify="space-between"
                     >
                       <Text color="gray.600">{item.title}</Text>
-                      <Text fontWeight="500">₹{item.value}</Text>
+                      <Text fontWeight="500">
+                        {formatCurrency(
+                          Number(item.value),
+                          (typeof totalPrice === 'object' && totalPrice.currency
+                            ? (totalPrice.currency as CurrencyType)
+                            : 'INR') || 'INR'
+                        )}
+                      </Text>
                     </Flex>
                   ))}
                   <Divider />
@@ -650,7 +727,12 @@ const OrderDetails = () => {
                       fontWeight="800"
                       color="#FF6B35"
                     >
-                      ₹{typeof totalPrice === 'object' ? totalPrice.value?.toFixed(2) : totalPrice}
+                      {formatCurrency(
+                        typeof totalPrice === 'object' ? Number(totalPrice.value) : Number(totalPrice),
+                        (typeof totalPrice === 'object' && totalPrice.currency
+                          ? (totalPrice.currency as CurrencyType)
+                          : 'INR') || 'INR'
+                      )}
                     </Text>
                   </Flex>
                 </VStack>

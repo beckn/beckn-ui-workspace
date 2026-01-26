@@ -12,6 +12,7 @@ import { getPayloadForConfirm, getPayloadForOrderHistoryPost } from '@beckn-ui/c
 import { useConfirmMutation } from '@beckn-ui/common/src/services/confirm'
 import { ORDER_CATEGORY_ID } from '../lib/config'
 import { cartActions } from '@beckn-ui/common/src/store/cart-slice'
+import { feedbackActions } from '@beckn-ui/common/src/store/ui-feedback-slice'
 import { FiCheckCircle, FiPackage, FiHome } from 'react-icons/fi'
 
 const OrderConfirmation = () => {
@@ -46,11 +47,35 @@ const OrderConfirmation = () => {
   useEffect(() => {
     if (initResponse && initResponse.length > 0) {
       const payLoad = getPayloadForConfirm(initResponse)
-      confirm(payLoad).then(() => {
-        dispatch(cartActions.clearCart())
-      })
+      confirm(payLoad)
+        .then(() => {
+          dispatch(cartActions.clearCart())
+        })
+        .catch((error: unknown) => {
+          console.error('Order confirmation error:', error)
+          const errorMessage =
+            (error as { data?: { error?: { message?: string } } })?.data?.error?.message ||
+            (error as { message?: string })?.message ||
+            'Failed to confirm order. Please try again.'
+
+          dispatch(
+            feedbackActions.setToastData({
+              toastData: {
+                message: 'Order Confirmation Failed',
+                display: true,
+                type: 'error',
+                description: errorMessage
+              }
+            })
+          )
+
+          // Redirect back to checkout on error
+          setTimeout(() => {
+            router.push('/checkout')
+          }, 2000)
+        })
     }
-  }, [])
+  }, [initResponse, confirm, dispatch, router])
 
   useEffect(() => {
     if (confirmResponse && confirmResponse.length > 0) {
@@ -96,7 +121,7 @@ const OrderConfirmation = () => {
       >
         <LoaderWithMessage
           loadingText={t.pleaseWait || 'Please wait'}
-          loadingSubText={t.confirmLoaderSubtext || 'Confirming your order...'}
+          loadingSubText="Confirming your order..."
         />
       </Box>
     )

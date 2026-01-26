@@ -38,6 +38,8 @@ export interface ParsedItemModel {
   providerId: string
   providerName?: string
   providerImg?: Message[]
+  providerShortDesc?: string
+  providerLongDesc?: string
   item: Item
   rating?: string
   providerCoordinates: Coordinate

@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState, useMemo } from 'react'
 import axios from '@services/axios'
 import { useDispatch, useSelector } from 'react-redux'
 import { useRouter } from 'next/router'
-import { Box, Container, Text, SimpleGrid, useBreakpoint } from '@chakra-ui/react'
+import { Box, Container, Text, SimpleGrid, useBreakpoint, Button } from '@chakra-ui/react'
 import { setLocalStorage } from '@beckn-ui/common'
 import { useLanguage } from '@hooks/useLanguage'
 import { ParsedItemModel } from '@beckn-ui/common/lib/types'
@@ -11,7 +11,8 @@ import { DOMAIN } from '@lib/config'
 import { RootState } from '@store/index'
 import { SearchTermModel, setItems, setOriginalItems, setSearchTerm } from '@beckn-ui/common/src/store/search-slice'
 import SearchBar from '@beckn-ui/common/src/components/searchBar'
-import { LoaderWithMessage, BottomModal } from '@beckn-ui/molecules'
+import { LoaderWithMessage } from '@beckn-ui/molecules'
+import BottomModal from '@components/bottomModal/BottomModal'
 import Filter from '@beckn-ui/common/src/components/filter'
 import CustomFilterIconComponent from '@beckn-ui/common/src/components/cutomFilterIcon'
 import RestaurantCard from '@components/restaurantCard/RestaurantCard'
@@ -30,13 +31,16 @@ const Search = () => {
   const isSmallScreen = mobileBreakpoints.includes(breakpoint)
   const [isLoading, setIsLoading] = useState(false)
   const [isFilterOpen, setIsFilterOpen] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
   const previousSearchTermRef = useRef((searchTerm as SearchTermModel).searchKeyword)
+  const searchDebounceTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   const fetchDataForSearch = () => {
     if (!(searchTerm as SearchTermModel).searchKeyword) return
 
     setIsLoading(true)
+    setError(null) // Clear any previous errors
     if (
       previousSearchTermRef.current === (searchTerm as SearchTermModel).searchKeyword &&
       originalItems &&
@@ -64,27 +68,64 @@ const Search = () => {
 
     Promise.all(searchPromises)
       .then(responses => {
-        const allResults = responses
-          .filter(res => res?.data?.data?.[0]?.message?.providers)
-          .map(res => res.data.data[0])
+        try {
+          const allResults = responses
+            .filter(res => res?.data?.data?.[0]?.message?.providers)
+            .map(res => res.data.data[0])
 
-        const firstValidResponse = responses.find(res => res?.data?.data?.[0]?.context?.transaction_id)
-        if (firstValidResponse) {
+          const firstValidResponse = responses.find(res => res?.data?.data?.[0]?.context?.transaction_id)
+          if (firstValidResponse) {
+            dispatch(
+              discoveryActions.addTransactionId({
+                transactionId: firstValidResponse.data.data[0].context.transaction_id
+              })
+            )
+          }
+
+          const parsedSearchItems = parseRestaurantSearchResponse(allResults)
+          dispatch(discoveryActions.addProducts({ products: parsedSearchItems }))
+          dispatch(setItems(parsedSearchItems))
+          dispatch(setOriginalItems(parsedSearchItems))
+          setIsLoading(false)
+          setError(null) // Clear error on success
+        } catch (processingError) {
+          // Handle errors during response processing
+          console.error('Error processing search response:', processingError)
+          setIsLoading(false)
+          const errorMessage =
+            (processingError as Error)?.message || 'Failed to process search results. Please try again.'
+          setError(errorMessage)
           dispatch(
-            discoveryActions.addTransactionId({
-              transactionId: firstValidResponse.data.data[0].context.transaction_id
+            feedbackActions.setToastData({
+              toastData: {
+                message: 'Search Failed',
+                display: true,
+                type: 'error',
+                description: errorMessage
+              }
             })
           )
         }
-
-        const parsedSearchItems = parseRestaurantSearchResponse(allResults)
-        dispatch(discoveryActions.addProducts({ products: parsedSearchItems }))
-        dispatch(setItems(parsedSearchItems))
-        dispatch(setOriginalItems(parsedSearchItems))
-        setIsLoading(false)
       })
-      .catch(() => {
+      .catch(error => {
+        console.error('Search API error:', error)
         setIsLoading(false)
+        const errorMessage =
+          error?.response?.data?.error?.message ||
+          error?.response?.data?.message ||
+          error?.message ||
+          'Failed to search. Please try again.'
+        setError(errorMessage)
+        dispatch(
+          feedbackActions.setToastData({
+            toastData: {
+              message: 'Search Failed',
+              display: true,
+              type: 'error',
+              description: errorMessage
+            }
+          })
+        )
       })
       .finally(() => {
         previousSearchTermRef.current = (searchTerm as SearchTermModel).searchKeyword
@@ -100,6 +141,15 @@ const Search = () => {
     }
   }, [searchTerm])
 
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (searchDebounceTimeoutRef.current) {
+        clearTimeout(searchDebounceTimeoutRef.current)
+      }
+    }
+  }, [])
+
   const handleFilterOpen = () => {
     setIsFilterOpen(!isFilterOpen)
   }
@@ -109,7 +159,12 @@ const Search = () => {
   }
 
   const handleResetFilter = () => {
+    // Reset items to original unfiltered list
     dispatch(setItems(originalItems))
+    // Clear filter form data from localStorage to ensure complete reset
+    if (typeof window !== 'undefined' && localStorage) {
+      localStorage.removeItem('formData')
+    }
   }
 
   const handleApplyFilter = (filters: Record<string, string>) => {
@@ -210,19 +265,50 @@ const Search = () => {
       const discountTag = firstItem.item.tags?.find(t => t.code === 'discount' || t.name === 'discount')
 
       // Get provider image from providerImg array
-      const providerImgData = firstItem.providerImg as { images?: { url: string }[] }[] | undefined
-      const providerImage = providerImgData?.[0]?.images?.[0]?.url
+      // API structure: provider.images = [{ url: "https://..." }]
+      // We store it as: providerImg = [{ url: "https://..." }]
+      // So we access: providerImg[0].url
+      const providerImgData = firstItem.providerImg as { url: string }[] | undefined
+      const providerImage = providerImgData && providerImgData.length > 0 ? providerImgData[0].url : undefined
       const DEFAULT_RESTAURANT_IMAGE = '/images/restaurant-placeholder.svg'
+
+      // Debug: Log image extraction
+      if (providerImage) {
+        console.log('✅ Provider image found for', firstItem.providerName, ':', providerImage)
+      } else {
+        console.log('❌ No provider image for', firstItem.providerName, {
+          hasProviderImg: !!firstItem.providerImg,
+          providerImgType: typeof firstItem.providerImg,
+          providerImgValue: firstItem.providerImg,
+          fallbackImage: firstItem.item.images?.[0]?.url
+        })
+      }
+
+      // Get provider description from the first item
+      // Use short_desc if available, otherwise fallback to long_desc
+      const providerDescription = firstItem.providerShortDesc || firstItem.providerLongDesc
+
+      // Debug: Log description extraction
+      if (providerDescription) {
+        console.log('✅ Found description:', providerDescription, 'for', firstItem.providerName)
+      } else {
+        console.log('❌ No description found for', firstItem.providerName)
+      }
+
+      // Final image to use
+      const finalImage = providerImage || firstItem.item.images?.[0]?.url || DEFAULT_RESTAURANT_IMAGE
+      console.log('🖼️ Final image for', firstItem.providerName, ':', finalImage)
 
       return {
         restaurant: {
           id: restaurantId,
           name: firstItem.providerName || 'Restaurant',
-          image: providerImage || firstItem.item.images?.[0]?.url || DEFAULT_RESTAURANT_IMAGE,
+          image: finalImage,
           rating: firstItem.rating || firstItem.item.rating || '4.0',
           deliveryTime: deliveryTimeTag?.list?.[0]?.value || '30-40 min',
           cuisine: cuisineTag?.list?.[0]?.value || 'Indian',
-          offer: discountTag?.list?.[0]?.value ? `${discountTag.list[0].value}% OFF` : undefined
+          offer: discountTag?.list?.[0]?.value ? `${discountTag.list[0].value}% OFF` : undefined,
+          description: providerDescription
         },
         items: restaurantItems
       }
@@ -326,8 +412,18 @@ const Search = () => {
                 searchString={(searchTerm as SearchTermModel).searchKeyword || ''}
                 handleChange={(value: string) => {
                   dispatch(setSearchTerm({ searchKeyword: value }))
-                  setTimeout(() => {
-                    if (value) fetchDataForSearch()
+
+                  // Clear previous timeout to prevent race conditions
+                  if (searchDebounceTimeoutRef.current) {
+                    clearTimeout(searchDebounceTimeoutRef.current)
+                  }
+
+                  // Set new timeout for debounced search
+                  searchDebounceTimeoutRef.current = setTimeout(() => {
+                    if (value) {
+                      fetchDataForSearch()
+                    }
+                    searchDebounceTimeoutRef.current = null
                   }, 300)
                 }}
                 placeholder={t.searchPlaceholder || 'Search for food, restaurants...'}
@@ -343,7 +439,39 @@ const Search = () => {
               )}
             </Box>
 
-            {groupedByRestaurant.length === 0 ? (
+            {error ? (
+              <Box
+                textAlign="center"
+                py="60px"
+              >
+                <Text
+                  fontSize="18px"
+                  color="red.600"
+                  fontWeight="600"
+                  mb="8px"
+                >
+                  {'Search Failed'}
+                </Text>
+                <Text
+                  fontSize="14px"
+                  color="gray.600"
+                  mb="16px"
+                >
+                  {error}
+                </Text>
+                <Button
+                  colorScheme="orange"
+                  onClick={() => {
+                    setError(null)
+                    if ((searchTerm as SearchTermModel).searchKeyword) {
+                      fetchDataForSearch()
+                    }
+                  }}
+                >
+                  {'Try Again'}
+                </Button>
+              </Box>
+            ) : groupedByRestaurant.length === 0 ? (
               <Box
                 textAlign="center"
                 py="60px"
@@ -364,6 +492,14 @@ const Search = () => {
                   const DEFAULT_RESTAURANT_IMAGE = '/images/restaurant-placeholder.svg'
                   const restaurantImage = section.restaurant.image || DEFAULT_RESTAURANT_IMAGE
 
+                  // Debug: Log image being passed to RestaurantCard
+                  console.log(
+                    '🖼️ Rendering RestaurantCard for',
+                    section.restaurant.name,
+                    'with image:',
+                    restaurantImage
+                  )
+
                   return (
                     <RestaurantCard
                       key={section.restaurant.id || idx}
@@ -373,6 +509,7 @@ const Search = () => {
                       deliveryTime={section.restaurant.deliveryTime}
                       cuisine={section.restaurant.cuisine}
                       offer={section.restaurant.offer}
+                      description={section.restaurant.description}
                       onClick={() => {
                         // Store provider data in localStorage and navigate to provider page
                         const providerData = {
@@ -402,18 +539,18 @@ const Search = () => {
         >
           <Filter
             fields={[
-              {
-                name: 'searchBy',
-                label: 'Search by',
-                type: 'dropdown',
-                defaultValue: 'relevance',
-                options: [
-                  { value: 'relevance', label: 'Relevance' },
-                  { value: 'priceHighToLow', label: 'Price: High to Low' },
-                  { value: 'priceLowToHigh', label: 'Price: Low to High' },
-                  { value: 'newest', label: 'Newest First' }
-                ]
-              },
+              // {
+              //   name: 'searchBy',
+              //   label: 'Search by',
+              //   type: 'dropdown',
+              //   defaultValue: 'relevance',
+              //   options: [
+              //     { value: 'relevance', label: 'Relevance' },
+              //     { value: 'priceHighToLow', label: 'Price: High to Low' },
+              //     { value: 'priceLowToHigh', label: 'Price: Low to High' },
+              //     { value: 'newest', label: 'Newest First' }
+              //   ]
+              // },
               {
                 name: 'dietType',
                 label: 'Diet Type',
