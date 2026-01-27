@@ -430,7 +430,7 @@ const Cart = () => {
                       color="#FF6B35"
                     >
                       {quote?.price.currency === 'INR' ? '₹' : quote?.price.currency || '₹'}
-                      {quote?.price.value ||
+                      {Number(quote?.price.value).toFixed(2) ||
                         items.reduce((sum, item) => sum + Number(item.price.value) * item.quantity, 0).toFixed(2)}
                     </Text>
                   )}

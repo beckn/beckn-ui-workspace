@@ -433,30 +433,12 @@ const Search = () => {
               >
                 <Text
                   fontSize="18px"
-                  color="red.600"
+                  color="gray.600"
                   fontWeight="600"
                   mb="8px"
                 >
-                  {'Search Failed'}
+                  {'No Restaurants Found'}
                 </Text>
-                <Text
-                  fontSize="14px"
-                  color="gray.600"
-                  mb="16px"
-                >
-                  {error}
-                </Text>
-                <Button
-                  colorScheme="orange"
-                  onClick={() => {
-                    setError(null)
-                    if ((searchTerm as SearchTermModel).searchKeyword) {
-                      fetchDataForSearch()
-                    }
-                  }}
-                >
-                  {'Try Again'}
-                </Button>
               </Box>
             ) : groupedByRestaurant.length === 0 ? (
               <Box

@@ -53,6 +53,23 @@ const CheckoutPage = () => {
   const { transactionId } = useSelector((state: DiscoveryRootState) => state.discovery)
 
   const [shippingFormData, setShippingFormData] = useState<ShippingFormInitialValuesType>({
+    name: '',
+    mobileNumber: '',
+    email: '',
+    address: '',
+    pinCode: ''
+  })
+
+  const [billingFormData, setBillingFormData] = useState<ShippingFormInitialValuesType>({
+    name: '',
+    mobileNumber: '',
+    email: '',
+    address: '',
+    pinCode: ''
+  })
+
+  // Draft values used inside the modals (pre-filled defaults)
+  const [shippingFormDraft, setShippingFormDraft] = useState<ShippingFormInitialValuesType>({
     name: 'Santosh Kumar',
     mobileNumber: '9876543210',
     email: 'santosh.k@gmail.com',
@@ -60,7 +77,7 @@ const CheckoutPage = () => {
     pinCode: '560076'
   })
 
-  const [billingFormData, setBillingFormData] = useState<ShippingFormInitialValuesType>({
+  const [billingFormDraft, setBillingFormDraft] = useState<ShippingFormInitialValuesType>({
     name: 'Santosh Kumar',
     mobileNumber: '9876543210',
     email: 'santosh.k@gmail.com',
@@ -73,20 +90,26 @@ const CheckoutPage = () => {
   const { isOpen: isShippingOpen, onOpen: onShippingOpen, onClose: onShippingClose } = useDisclosure()
   const { isOpen: isBillingOpen, onOpen: onBillingOpen, onClose: onBillingClose } = useDisclosure()
 
+  // Load any stored values from localStorage and keep drafts in sync
   useEffect(() => {
-    if (localStorage) {
-      if (localStorage.getItem('userPhone')) {
-        const phone = localStorage.getItem('userPhone') as string
-        setShippingFormData(prev => ({ ...prev, mobileNumber: phone }))
-        setBillingFormData(prev => ({ ...prev, mobileNumber: phone }))
-      }
-      if (localStorage.getItem('shippingAdress')) {
-        setShippingFormData(JSON.parse(localStorage.getItem('shippingAdress') as string))
-      }
-      if (localStorage.getItem('billingAddress')) {
-        setBillingFormData(JSON.parse(localStorage.getItem('billingAddress') as string))
-      }
-    }
+    // if (typeof window === 'undefined') return
+    // if (localStorage.getItem('userPhone')) {
+    //   const phone = localStorage.getItem('userPhone') as string
+    //   setShippingFormData(prev => ({ ...prev, mobileNumber: phone }))
+    //   setBillingFormData(prev => ({ ...prev, mobileNumber: phone }))
+    //   setShippingFormDraft(prev => ({ ...prev, mobileNumber: phone }))
+    //   setBillingFormDraft(prev => ({ ...prev, mobileNumber: phone }))
+    // }
+    // if (localStorage.getItem('shippingAdress')) {
+    //   const storedShipping = JSON.parse(localStorage.getItem('shippingAdress') as string)
+    //   setShippingFormData(storedShipping)
+    //   setShippingFormDraft(storedShipping)
+    // }
+    // if (localStorage.getItem('billingAddress')) {
+    //   const storedBilling = JSON.parse(localStorage.getItem('billingAddress') as string)
+    //   setBillingFormData(storedBilling)
+    //   setBillingFormDraft(storedBilling)
+    // }
   }, [])
 
   useEffect(() => {
@@ -109,42 +132,35 @@ const CheckoutPage = () => {
     }
   }, [billingFormData])
 
-  const validateShipping = (): boolean => {
+  const validateShipping = (data: ShippingFormInitialValuesType): boolean => {
     const errors: Record<string, string> = {}
-    if (!shippingFormData.name?.trim()) errors.name = 'Name is required'
-    if (!shippingFormData.mobileNumber?.trim()) errors.mobileNumber = 'Phone is required'
-    if (!shippingFormData.email?.trim()) errors.email = 'Email is required'
-    if (!shippingFormData.address?.trim()) errors.address = 'Address is required'
-    if (!shippingFormData.pinCode?.trim()) errors.pinCode = 'PIN code is required'
+    if (!data.name?.trim()) errors.name = 'Name is required'
+    if (!data.mobileNumber?.trim()) errors.mobileNumber = 'Phone is required'
+    if (!data.email?.trim()) errors.email = 'Email is required'
+    if (!data.address?.trim()) errors.address = 'Address is required'
+    if (!data.pinCode?.trim()) errors.pinCode = 'PIN code is required'
     setShippingErrors(errors)
     return Object.keys(errors).length === 0
   }
 
-  const validateBilling = (): boolean => {
+  const validateBilling = (data: ShippingFormInitialValuesType): boolean => {
     const errors: Record<string, string> = {}
-    if (!billingFormData.name?.trim()) errors.name = 'Name is required'
-    if (!billingFormData.mobileNumber?.trim()) errors.mobileNumber = 'Phone is required'
-    if (!billingFormData.email?.trim()) errors.email = 'Email is required'
-    if (!billingFormData.address?.trim()) errors.address = 'Address is required'
-    if (!billingFormData.pinCode?.trim()) errors.pinCode = 'PIN code is required'
+    if (!data.name?.trim()) errors.name = 'Name is required'
+    if (!data.mobileNumber?.trim()) errors.mobileNumber = 'Phone is required'
+    if (!data.email?.trim()) errors.email = 'Email is required'
+    if (!data.address?.trim()) errors.address = 'Address is required'
+    if (!data.pinCode?.trim()) errors.pinCode = 'PIN code is required'
     setBillingErrors(errors)
     return Object.keys(errors).length === 0
   }
 
-  const initCall = async () => {
+  const initCall = async (shipping: ShippingFormInitialValuesType, billing: ShippingFormInitialValuesType) => {
     if (!selectResponse || selectResponse.length === 0) {
       console.error('Select response is not available. Please go back to cart and try again.')
       return
     }
     try {
-      const payload = await getInitPayload(
-        shippingFormData,
-        billingFormData,
-        cartItems,
-        transactionId,
-        DOMAIN,
-        selectResponse
-      )
+      const payload = await getInitPayload(shipping, billing, cartItems, transactionId, DOMAIN, selectResponse)
       console.log('payload', payload)
       await initialize(payload)
     } catch (error) {
@@ -153,16 +169,18 @@ const CheckoutPage = () => {
   }
 
   const handleSaveShipping = async () => {
-    if (validateShipping()) {
+    if (validateShipping(shippingFormDraft)) {
+      setShippingFormData(shippingFormDraft)
       onShippingClose()
-      await initCall()
+      await initCall(shippingFormDraft, billingFormData)
     }
   }
 
   const handleSaveBilling = async () => {
-    if (validateBilling()) {
+    if (validateBilling(billingFormDraft)) {
+      setBillingFormData(billingFormDraft)
       onBillingClose()
-      await initCall()
+      await initCall(shippingFormData, billingFormDraft)
     }
   }
 
@@ -552,8 +570,8 @@ const CheckoutPage = () => {
               <FormControl isInvalid={!!shippingErrors.name}>
                 <FormLabel>Full Name</FormLabel>
                 <Input
-                  value={shippingFormData.name}
-                  onChange={e => setShippingFormData(prev => ({ ...prev, name: e.target.value }))}
+                  value={shippingFormDraft.name}
+                  onChange={e => setShippingFormDraft(prev => ({ ...prev, name: e.target.value }))}
                   placeholder="Enter your name"
                   borderRadius="12px"
                   size="lg"
@@ -563,8 +581,8 @@ const CheckoutPage = () => {
               <FormControl isInvalid={!!shippingErrors.mobileNumber}>
                 <FormLabel>Phone Number</FormLabel>
                 <Input
-                  value={shippingFormData.mobileNumber}
-                  onChange={e => setShippingFormData(prev => ({ ...prev, mobileNumber: e.target.value }))}
+                  value={shippingFormDraft.mobileNumber}
+                  onChange={e => setShippingFormDraft(prev => ({ ...prev, mobileNumber: e.target.value }))}
                   placeholder="Enter phone number"
                   type="tel"
                   borderRadius="12px"
@@ -575,8 +593,8 @@ const CheckoutPage = () => {
               <FormControl isInvalid={!!shippingErrors.email}>
                 <FormLabel>Email</FormLabel>
                 <Input
-                  value={shippingFormData.email}
-                  onChange={e => setShippingFormData(prev => ({ ...prev, email: e.target.value }))}
+                  value={shippingFormDraft.email}
+                  onChange={e => setShippingFormDraft(prev => ({ ...prev, email: e.target.value }))}
                   placeholder="Enter email"
                   type="email"
                   borderRadius="12px"
@@ -587,8 +605,8 @@ const CheckoutPage = () => {
               <FormControl isInvalid={!!shippingErrors.address}>
                 <FormLabel>Address</FormLabel>
                 <Input
-                  value={shippingFormData.address}
-                  onChange={e => setShippingFormData(prev => ({ ...prev, address: e.target.value }))}
+                  value={shippingFormDraft.address}
+                  onChange={e => setShippingFormDraft(prev => ({ ...prev, address: e.target.value }))}
                   placeholder="Enter full address"
                   borderRadius="12px"
                   size="lg"
@@ -598,8 +616,8 @@ const CheckoutPage = () => {
               <FormControl isInvalid={!!shippingErrors.pinCode}>
                 <FormLabel>PIN Code</FormLabel>
                 <Input
-                  value={shippingFormData.pinCode}
-                  onChange={e => setShippingFormData(prev => ({ ...prev, pinCode: e.target.value }))}
+                  value={shippingFormDraft.pinCode}
+                  onChange={e => setShippingFormDraft(prev => ({ ...prev, pinCode: e.target.value }))}
                   placeholder="Enter PIN code"
                   borderRadius="12px"
                   size="lg"
@@ -640,8 +658,8 @@ const CheckoutPage = () => {
               <FormControl isInvalid={!!billingErrors.name}>
                 <FormLabel>Full Name</FormLabel>
                 <Input
-                  value={billingFormData.name}
-                  onChange={e => setBillingFormData(prev => ({ ...prev, name: e.target.value }))}
+                  value={billingFormDraft.name}
+                  onChange={e => setBillingFormDraft(prev => ({ ...prev, name: e.target.value }))}
                   placeholder="Enter your name"
                   borderRadius="12px"
                   size="lg"
@@ -651,8 +669,8 @@ const CheckoutPage = () => {
               <FormControl isInvalid={!!billingErrors.mobileNumber}>
                 <FormLabel>Phone Number</FormLabel>
                 <Input
-                  value={billingFormData.mobileNumber}
-                  onChange={e => setBillingFormData(prev => ({ ...prev, mobileNumber: e.target.value }))}
+                  value={billingFormDraft.mobileNumber}
+                  onChange={e => setBillingFormDraft(prev => ({ ...prev, mobileNumber: e.target.value }))}
                   placeholder="Enter phone number"
                   type="tel"
                   borderRadius="12px"
@@ -663,8 +681,8 @@ const CheckoutPage = () => {
               <FormControl isInvalid={!!billingErrors.email}>
                 <FormLabel>Email</FormLabel>
                 <Input
-                  value={billingFormData.email}
-                  onChange={e => setBillingFormData(prev => ({ ...prev, email: e.target.value }))}
+                  value={billingFormDraft.email}
+                  onChange={e => setBillingFormDraft(prev => ({ ...prev, email: e.target.value }))}
                   placeholder="Enter email"
                   type="email"
                   borderRadius="12px"
@@ -675,8 +693,8 @@ const CheckoutPage = () => {
               <FormControl isInvalid={!!billingErrors.address}>
                 <FormLabel>Address</FormLabel>
                 <Input
-                  value={billingFormData.address}
-                  onChange={e => setBillingFormData(prev => ({ ...prev, address: e.target.value }))}
+                  value={billingFormDraft.address}
+                  onChange={e => setBillingFormDraft(prev => ({ ...prev, address: e.target.value }))}
                   placeholder="Enter full address"
                   borderRadius="12px"
                   size="lg"
@@ -686,8 +704,8 @@ const CheckoutPage = () => {
               <FormControl isInvalid={!!billingErrors.pinCode}>
                 <FormLabel>PIN Code</FormLabel>
                 <Input
-                  value={billingFormData.pinCode}
-                  onChange={e => setBillingFormData(prev => ({ ...prev, pinCode: e.target.value }))}
+                  value={billingFormDraft.pinCode}
+                  onChange={e => setBillingFormDraft(prev => ({ ...prev, pinCode: e.target.value }))}
                   placeholder="Enter PIN code"
                   borderRadius="12px"
                   size="lg"
