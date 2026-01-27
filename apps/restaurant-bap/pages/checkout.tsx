@@ -53,19 +53,19 @@ const CheckoutPage = () => {
   const { transactionId } = useSelector((state: DiscoveryRootState) => state.discovery)
 
   const [shippingFormData, setShippingFormData] = useState<ShippingFormInitialValuesType>({
-    name: '',
-    mobileNumber: '',
-    email: '',
-    address: '',
-    pinCode: ''
+    name: 'Santosh Kumar',
+    mobileNumber: '9876543210',
+    email: 'santosh.k@gmail.com',
+    address: '1394, Sunshine Colony, Bengaluru, Karnataka',
+    pinCode: '560076'
   })
 
   const [billingFormData, setBillingFormData] = useState<ShippingFormInitialValuesType>({
-    name: '',
-    mobileNumber: '',
-    email: '',
-    address: '',
-    pinCode: ''
+    name: 'Santosh Kumar',
+    mobileNumber: '9876543210',
+    email: 'santosh.k@gmail.com',
+    address: '1394, Sunshine Colony, Bengaluru, Karnataka',
+    pinCode: '560076'
   })
 
   const [shippingErrors, setShippingErrors] = useState<Record<string, string>>({})
