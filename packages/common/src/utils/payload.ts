@@ -98,7 +98,7 @@ export const getInitPayload = async (
   selectResponse: SelectResponseModel[] = [],
   location?: any
 ) => {
-  const cityData = await geocodeFromPincode(deliveryAddress.pinCode!)
+  const cityData = { country: '', state: '', city: '' } //await geocodeFromPincode(deliveryAddress.pinCode!)
 
   const bppGroups = cartItems.reduce((acc: { [key: string]: CartItemForRequest[] }, item) => {
     if (!acc[item.bpp_id]) {

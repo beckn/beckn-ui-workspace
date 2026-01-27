@@ -145,7 +145,8 @@ const CheckoutPage = () => {
         DOMAIN,
         selectResponse
       )
-      await initialize(payload).unwrap()
+      console.log('payload', payload)
+      await initialize(payload)
     } catch (error) {
       console.error('Init API call failed:', error)
     }
@@ -296,7 +297,7 @@ const CheckoutPage = () => {
               <Flex
                 justify="space-between"
                 align="center"
-                mb="16px"
+                mb="4px"
               >
                 <Text
                   fontSize={{ base: '18px', md: '20px' }}
@@ -310,6 +311,7 @@ const CheckoutPage = () => {
                     size="sm"
                     variant="ghost"
                     colorScheme="orange"
+                    mb="0px"
                     leftIcon={<FiEdit2 />}
                     onClick={onShippingOpen}
                   >
@@ -354,7 +356,9 @@ const CheckoutPage = () => {
                   w="100%"
                   bg="linear-gradient(135deg, #FF6B35 0%, #F7931E 100%)"
                   color="white"
-                  size="lg"
+                  size="md"
+                  padding="10px 20px"
+                  fontSize="14px"
                   borderRadius="12px"
                   leftIcon={<FiPlus />}
                   onClick={onShippingOpen}
@@ -388,6 +392,7 @@ const CheckoutPage = () => {
                   <Button
                     size="sm"
                     variant="ghost"
+                    mb="0px"
                     colorScheme="orange"
                     leftIcon={<FiEdit2 />}
                     onClick={onBillingOpen}
@@ -402,6 +407,7 @@ const CheckoutPage = () => {
                 onChange={() => dispatch(checkoutActions.setIsBillingSame({ isBillingSame: !isBillingSameRedux }))}
                 colorScheme="orange"
                 mb="16px"
+                fontSize="14px"
               >
                 Same as delivery address
               </Checkbox>

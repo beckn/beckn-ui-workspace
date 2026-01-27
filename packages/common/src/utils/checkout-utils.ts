@@ -27,8 +27,12 @@ export const extractAddressComponents = (result: google.maps.GeocoderResult) => 
 }
 
 export const geocodeFromPincode = async (pincode: string) => {
-  const geocoder = new window.google.maps.Geocoder()
+  if (!window.google || !window.google.maps) {
+    console.error('Google Maps SDK unavailable (auth or load failure)')
+    return { country: '', state: '', city: '' }
+  }
   try {
+    const geocoder = new window.google.maps.Geocoder()
     const response = await geocoder.geocode({ address: pincode })
     console.log('respnse from the map', response)
     if (response.results.length > 0) {

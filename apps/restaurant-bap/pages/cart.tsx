@@ -227,8 +227,9 @@ const Cart = () => {
                   <Box key={item.id}>
                     <Flex
                       direction="row"
-                      gap="12px"
+                      gap="10px"
                       align="center"
+                      justifyContent="flex-start"
                     >
                       {/* Item Image */}
                       <Box
@@ -260,14 +261,15 @@ const Cart = () => {
                         />
                       </Box>
 
-                      <VStack>
-                        <HStack>
+                      <VStack w="100%">
+                        <HStack w="100%">
                           {/* Item Details */}
                           <VStack
                             align="start"
                             spacing="4px"
                             flex="1"
                             minW="0"
+                            w="100%"
                           >
                             <Text
                               fontSize="15px"
@@ -292,8 +294,7 @@ const Cart = () => {
                           {/* Quantity Controls */}
                           <HStack
                             spacing="6px"
-                            border="1.5px solid"
-                            borderColor="gray.200"
+                            border="1px solid #FF6B35"
                             borderRadius="8px"
                             p="2px"
                             align="center"
@@ -305,7 +306,7 @@ const Cart = () => {
                               size="xs"
                               onClick={() => handleDecrement(item.id)}
                               bg="white"
-                              color="gray.700"
+                              color="#FF6B35"
                               _hover={{ bg: 'gray.50' }}
                               h="24px"
                               w="24px"
@@ -315,7 +316,7 @@ const Cart = () => {
                             <Text
                               fontSize="14px"
                               fontWeight="700"
-                              color="gray.800"
+                              color="#FF6B35"
                               minW="20px"
                               textAlign="center"
                             >
@@ -327,7 +328,7 @@ const Cart = () => {
                               size="xs"
                               onClick={() => handleIncrement(item.id)}
                               bg="white"
-                              color="gray.700"
+                              color="#FF6B35"
                               _hover={{ bg: 'gray.50' }}
                               h="24px"
                               w="24px"
@@ -342,6 +343,7 @@ const Cart = () => {
                           color="#FF6B35"
                           lineHeight="1.2"
                           alignSelf="flex-start"
+                          w="100%"
                         >
                           {item.price.currency === 'INR' ? '₹' : item.price.currency}
                           {item.price.value} × {item.quantity} ={' '}
