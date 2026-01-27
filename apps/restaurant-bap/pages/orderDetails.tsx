@@ -16,7 +16,7 @@ import {
 } from '@chakra-ui/react'
 import { LoaderWithMessage } from '@beckn-ui/molecules'
 import { v4 as uuidv4 } from 'uuid'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import {
   createPaymentBreakdownMap,
   getItemWiseBreakUp,
@@ -25,7 +25,6 @@ import {
 } from '@beckn-ui/common/src/utils'
 import { useLanguage } from '@hooks/useLanguage'
 import { ConfirmResponseModel, StatusResponseModel, StatusKey, statusMap, Item } from '@beckn-ui/common/lib/types'
-import { OrdersRootState } from '@beckn-ui/common/src/store/order-slice'
 import { feedbackActions } from '@beckn-ui/common/src/store/ui-feedback-slice'
 import { DOMAIN } from '@lib/config'
 import { FiArrowLeft, FiChevronDown, FiChevronUp, FiMapPin, FiPhone, FiUser, FiCheckCircle } from 'react-icons/fi'
@@ -61,7 +60,6 @@ const OrderDetails = () => {
   const router = useRouter()
   const { t } = useLanguage()
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
-  const orderMetaData = useSelector((state: OrdersRootState) => state.orders.selectedOrderDetails)
   const dispatch = useDispatch()
   const isMountedRef = useRef(true)
   const abortControllerRef = useRef<AbortController | null>(null)
@@ -276,20 +274,20 @@ const OrderDetails = () => {
     }
   }, [statusData])
 
-  if (isLoading) {
-    return (
-      <Box
-        display="grid"
-        height="calc(100vh - 300px)"
-        alignContent="center"
-      >
-        <LoaderWithMessage
-          loadingText={t.pleaseWait || 'Please wait'}
-          loadingSubText={'Fetching order details...'}
-        />
-      </Box>
-    )
-  }
+  // if (isLoading) {
+  //   return (
+  //     <Box
+  //       display="grid"
+  //       height="calc(100vh - 300px)"
+  //       alignContent="center"
+  //     >
+  //       <LoaderWithMessage
+  //         loadingText={t.pleaseWait || 'Please wait'}
+  //         loadingSubText={'Fetching order details...'}
+  //       />
+  //     </Box>
+  //   )
+  // }
 
   if (isError || !statusData?.[0]?.message) {
     dispatch(
@@ -440,7 +438,7 @@ const OrderDetails = () => {
                   maxW="200px"
                   isTruncated
                 >
-                  {orderMetaData?.orderIds?.[0] || order?.id}
+                  {order?.id}
                 </Text>
               </Flex>
               <Flex justify="space-between">

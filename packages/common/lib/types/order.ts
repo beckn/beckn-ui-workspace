@@ -6,7 +6,12 @@ export const statusMap = {
   Delivered: 'Order Delivered',
   ORDER_RECEIVED: 'Processing your order',
   ORDER_DISPATCHED: 'Order Dispatched',
-  COMPLETE: 'Order Delivered'
+  COMPLETE: 'Order Delivered',
+  ORDER_PREPARING: 'Preparing your order',
+  ORDER_READY: 'Ready to ship',
+  ORDER_PICKED_UP: 'Order Picked Up',
+  ORDER_DELIVERED: 'Order Delivered',
+  ORDER_CANCELLED: 'Order Cancelled!'
 }
 
 export type StatusMap = typeof statusMap
