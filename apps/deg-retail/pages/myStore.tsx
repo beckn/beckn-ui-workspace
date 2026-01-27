@@ -130,6 +130,7 @@ const MyStore = () => {
         position={'absolute'}
         bottom="calc(0px + 10px)"
         w={'calc(100% - 40px)'}
+        maxW="40rem"
       >
         <BecknButton
           text={homeButtonName}
