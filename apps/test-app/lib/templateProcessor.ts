@@ -8,6 +8,14 @@ interface TemplateConfig {
 }
 
 interface StylingHints {
+  /** Badge styles using template HTML class names: .item-badge.item-badge-{key} */
+  itemBadge?: {
+    [key: string]: {
+      backgroundColor?: string
+      color?: string
+      text?: string
+    }
+  }
   dietaryBadge?: {
     [key: string]: {
       backgroundColor?: string
@@ -271,15 +279,16 @@ const applyStylingHints = (html: string, stylingHints?: StylingHints): string =>
     return match.replace(/>$/, ` onerror="this.src='${DEFAULT_IMAGE}';this.onerror=null;">`)
   })
 
-  // Apply dietary badge styles
-  if (stylingHints?.dietaryBadge) {
+  // Apply badge styles using template HTML class names (.item-badge.item-badge-{key}) or legacy (.dietary-badge.dietary-{key})
+  const badgeConfig = stylingHints?.itemBadge ?? stylingHints?.dietaryBadge
+  const useItemBadgeClasses = Boolean(stylingHints?.itemBadge)
+  if (badgeConfig) {
     const badgeStyles: string[] = []
-    Object.entries(stylingHints.dietaryBadge).forEach(([key, style]) => {
+    Object.entries(badgeConfig).forEach(([key, style]) => {
       if (style.backgroundColor || style.color) {
+        const selector = useItemBadgeClasses ? `.item-badge.item-badge-${key}` : `.dietary-badge.dietary-${key}`
         badgeStyles.push(
-          `.dietary-badge.dietary-${key} { ${
-            style.backgroundColor ? `background-color: ${style.backgroundColor};` : ''
-          } ${
+          `${selector} { ${style.backgroundColor ? `background-color: ${style.backgroundColor};` : ''} ${
             style.color ? `color: ${style.color};` : ''
           } padding: 4px 8px; border-radius: 4px; display: inline-block; font-size: 12px; font-weight: 500; }`
         )
