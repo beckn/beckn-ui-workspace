@@ -1,10 +1,11 @@
 import { retry } from '@reduxjs/toolkit/query/react'
 import Api from '../becknApi'
+import type { ConfirmRequest, ConfirmResponse } from '@beckn-ui/common/lib/types/beckn-2.0/confirm'
 
-const becknConfirmApi = Api.injectEndpoints({
+const confirmApi = Api.injectEndpoints({
   endpoints: build => ({
-    becknConfirm: build.mutation<any, any>({
-      query: payload => ({
+    confirm: build.mutation<ConfirmResponse, ConfirmRequest>({
+      query: (payload: ConfirmRequest) => ({
         url: '/confirm',
         method: 'POST',
         body: payload
@@ -18,10 +19,10 @@ const becknConfirmApi = Api.injectEndpoints({
   })
 })
 
-export const { useBecknConfirmMutation } = becknConfirmApi
+export const { useConfirmMutation } = confirmApi
 
 export const {
-  endpoints: { becknConfirm }
-} = becknConfirmApi
+  endpoints: { confirm }
+} = confirmApi
 
-export default becknConfirmApi
+export default confirmApi

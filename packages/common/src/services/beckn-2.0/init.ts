@@ -1,10 +1,11 @@
 import { retry } from '@reduxjs/toolkit/query/react'
 import Api from '../becknApi'
+import type { InitRequest, InitResponse } from '@beckn-ui/common/lib/types/beckn-2.0/init'
 
-const becknInitApi = Api.injectEndpoints({
+const initApi = Api.injectEndpoints({
   endpoints: build => ({
-    becknInit: build.mutation<any, any>({
-      query: payload => ({
+    init: build.mutation<InitResponse, InitRequest>({
+      query: (payload: InitRequest) => ({
         url: '/init',
         method: 'POST',
         body: payload
@@ -18,10 +19,10 @@ const becknInitApi = Api.injectEndpoints({
   })
 })
 
-export const { useBecknInitMutation } = becknInitApi
+export const { useInitMutation } = initApi
 
 export const {
-  endpoints: { becknInit }
-} = becknInitApi
+  endpoints: { init }
+} = initApi
 
-export default becknInitApi
+export default initApi
