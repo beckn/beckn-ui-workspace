@@ -1,368 +1,195 @@
-import React, { useCallback, useState, memo, useMemo, useEffect } from 'react'
-import dynamic from 'next/dynamic'
-import {
-  checkoutActions,
-  clearSource,
-  Coordinate,
-  DegWalletDetails,
-  discoveryActions,
-  IGeoLocationSearchPageRootState,
-  Item,
-  Location,
-  ParsedItemModel,
-  toggleLocationSearchPageVisibility,
-  useGeolocation
-} from '@beckn-ui/common'
-import OpenWalletBottomModal from '@components/Modal/OpenWalletBottomModal'
-import { useConnectWallet } from '@hooks/useConnectWallet'
-import { AuthRootState } from '@store/auth-slice'
-import { useDispatch, useSelector } from 'react-redux'
-import ChargerBottomModal from '@components/Modal/ChargerBottomModal'
-import { EVCharger } from '@components/Map/Map'
-import CCS_Icon from '@public/images/ccs1_icon.svg'
-import CCS2_Icon from '@public/images/ccs2_icon.svg'
-import Chademo_Icon from '@public/images/chademo_icon.svg'
-import gbt_Icon from '@public/images/gbt_icon.svg'
-import { DOMAIN } from '@lib/config'
-import { getCountryCode } from '@utils/general'
-import axios from '@services/axios'
-import { parseSearchlist } from '@utils/search-utils'
+import React, { useState } from 'react'
+import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { ChargerPort, chargerSelectActions, SelectedCharger } from '@store/chargerSelect-slice'
-import { Loader } from '@beckn-ui/molecules'
-import { setCurrentLocation, UserRootState } from '@store/user-slice'
-import { cartActions } from '@store/cart-slice'
 
-const MapWithNoSSR = dynamic(() => import('@components/Map'), { ssr: false })
-
-const PortIconMap = {
-  CCS: CCS_Icon,
-  CHAdeMO: Chademo_Icon,
-  Type2: CCS2_Icon,
-  GBT: gbt_Icon,
-  'GB/T': gbt_Icon
-}
-
-// Transform API response to EVCharger format
-const transformToEVCharger = (parsedItem: ParsedItemModel): EVCharger => {
-  return {
-    id: parsedItem.id,
-    latitude: Number((parsedItem.item?.locations as Location[])?.[0]?.gps?.split(',')[0]) || 0,
-    longitude: Number((parsedItem.item?.locations as Location[])?.[0]?.gps?.split(',')[1]) || 0,
-    name: parsedItem.item.name || '',
-    status: '(4/4) Available',
-    address:
-      `${(parsedItem?.item?.locations as Location[])?.[0].address}, ${(parsedItem?.item?.locations as Location[])?.[0].city}, ${(parsedItem?.item?.locations as Location[])?.[0].state}, ${(parsedItem?.item?.locations as Location[])?.[0].country}` ||
-      '',
-    rate: Number(parsedItem.item.price?.value) || 0,
-    ports:
-      parsedItem?.item?.tags?.[0]?.list?.map(portData => {
-        return {
-          id: portData.name,
-          type: portData.name,
-          icon: PortIconMap[portData.name as keyof typeof PortIconMap]
-        }
-      }) || [],
-    data: { providerDetails: parsedItem, itemDetails: parsedItem.item }
-  }
-}
-
-const MemoizedMap = memo(
-  ({
-    origin,
-    destination,
-    startNavigation,
-    showMyLocation,
-    handleOnConnectWallet,
-    onChargerSelect,
-    isWalletConnected,
-    evChargers,
-    handleOnSearch,
-    searchQuery,
-    returnToCurrentLocation
-  }: {
-    origin: Coordinate
-    destination: Coordinate
-    startNavigation: boolean
-    showMyLocation: boolean
-    handleOnConnectWallet: () => void
-    onChargerSelect: (charger: EVCharger) => void
-    isWalletConnected: boolean
-    evChargers: EVCharger[]
-    handleOnSearch: (query: string) => void
-    searchQuery: string
-    returnToCurrentLocation: (
-      location: {
-        latitude: number
-        longitude: number
-        address?: string
-      } | null
-    ) => void
-  }) => {
-    return (
-      <MapWithNoSSR
-        origin={origin}
-        destination={destination}
-        startNav={startNavigation}
-        enableMyLocation={showMyLocation}
-        showConnectWallet={!isWalletConnected}
-        setCurrentOrigin={returnToCurrentLocation}
-        handleOnConnectWallet={handleOnConnectWallet}
-        evChargers={evChargers}
-        onChargerSelect={onChargerSelect}
-        handleOnSearch={handleOnSearch}
-        searchQuery={searchQuery}
-      />
-    )
-  },
-  (prevProps, nextProps) => {
-    return (
-      prevProps.origin === nextProps.origin &&
-      prevProps.destination === nextProps.destination &&
-      prevProps.startNavigation === nextProps.startNavigation &&
-      prevProps.showMyLocation === nextProps.showMyLocation &&
-      prevProps.isWalletConnected === nextProps.isWalletConnected &&
-      prevProps.evChargers === nextProps.evChargers &&
-      prevProps.searchQuery === nextProps.searchQuery
-    )
-  }
-)
-
-MemoizedMap.displayName = 'MemoizedMap'
-
-const Homepage = () => {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL
-
-  const [startNavigation] = useState<boolean>(false)
-  const [showMyLocation] = useState<boolean>(true)
-  const [selectedCharger, setSelectedCharger] = useState<EVCharger | null>(null)
-  const [evChargers, setEvChargers] = useState<EVCharger[]>([])
-  const [searchQuery, setSearchQuery] = useState('')
-  const [destination, setDestination] = useState<Coordinate>()
-  const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [walletDetails, setWalletDetails] = useState<DegWalletDetails>()
-
-  const { modalType, handleModalOpen, handleModalClose } = useConnectWallet()
-
-  const apiKeyForGoogle = process.env.NEXT_PUBLIC_GOOGLE_API_KEY
-  const { coordinates } = useGeolocation(apiKeyForGoogle as string)
-  const dispatch = useDispatch()
-  const { user } = useSelector((state: AuthRootState) => state.auth)
+const HomePage = () => {
   const router = useRouter()
-  const { currentLocation, shouldShowInitialAlert } = useSelector((state: UserRootState) => state.user)
-  const { geoLatLong, geoAddress } = useSelector(
-    (state: IGeoLocationSearchPageRootState) => state.geoLocationSearchPageUI
-  )
+  const [searchKeyword, setSearchKeyword] = useState('')
 
-  const returnToCurrentLocation = useCallback(
-    (
-      location?: {
-        latitude: number
-        longitude: number
-        address?: string
-      } | null
-    ) => {
-      if (coordinates || location) {
-        dispatch(
-          setCurrentLocation({
-            latitude: Number(coordinates?.latitude || location?.latitude),
-            longitude: Number(coordinates?.longitude || location?.longitude)
-          })
-        )
-        if (location) {
-          setSearchQuery('')
-          dispatch(clearSource())
-        }
-      }
-    },
-    [coordinates, dispatch]
-  )
-
-  useEffect(() => {
-    if (geoLatLong) {
-      dispatch(
-        setCurrentLocation({ latitude: Number(geoLatLong.split(',')[0]), longitude: Number(geoLatLong.split(',')[1]) })
-      )
-      setSearchQuery(geoAddress)
-    } else if (coordinates) {
-      returnToCurrentLocation()
+  const handleSearch = () => {
+    if (searchKeyword.trim()) {
+      router.push({
+        pathname: '/discovery',
+        query: { search: searchKeyword.trim() }
+      })
     }
-  }, [coordinates, geoLatLong])
-
-  useEffect(() => {
-    if (user && user?.deg_wallet) {
-      setWalletDetails(user.deg_wallet)
-    }
-    console.log(shouldShowInitialAlert)
-    if (
-      shouldShowInitialAlert &&
-      user?.deg_wallet &&
-      (!user?.deg_wallet.energy_assets_consent ||
-        !user?.deg_wallet.energy_identities_consent ||
-        !user?.deg_wallet.energy_transactions_consent)
-    ) {
-      handleModalOpen('alert')
-    }
-  }, [user, shouldShowInitialAlert])
-
-  const fetchEvChargers = useCallback(async () => {
-    try {
-      const searchPayload = {
-        context: {
-          domain: DOMAIN,
-          location: getCountryCode()
-        },
-        searchString: 'ev charger',
-        fulfillment: {
-          stops: [
-            {
-              location: `${currentLocation?.latitude},${currentLocation?.longitude}`
-            }
-          ]
-        }
-      }
-      setIsLoading(true)
-      setDestination(undefined)
-
-      const res = await axios.post(`${apiUrl}/search`, searchPayload)
-      if (res.data.data.length > 0) {
-        dispatch(
-          discoveryActions.addTransactionId({
-            transactionId: res.data.data[0].context.transaction_id
-          })
-        )
-
-        const parsedSearchItems = parseSearchlist(res.data.data)
-        const transformedChargers = parsedSearchItems.map((item: ParsedItemModel) => transformToEVCharger(item))
-        setEvChargers(transformedChargers)
-      } else {
-        setEvChargers([])
-      }
-    } catch (error) {
-      console.error('Error fetching EV chargers:', error)
-    } finally {
-      setIsLoading(false)
-    }
-  }, [apiUrl, dispatch, currentLocation])
-
-  useEffect(() => {
-    let timeoutId: NodeJS.Timeout
-
-    if (geoLatLong) {
-      // Debounce the fetch call to prevent multiple rapid calls
-      timeoutId = setTimeout(() => {
-        fetchEvChargers()
-      }, 500)
-    }
-
-    return () => {
-      if (timeoutId) {
-        clearTimeout(timeoutId)
-      }
-    }
-  }, [geoLatLong, fetchEvChargers])
-
-  const handleConnectWallet = useCallback(() => {
-    handleModalOpen('link')
-  }, [handleModalOpen])
-
-  const handleChargerSelect = useCallback((charger: EVCharger) => {
-    setSelectedCharger(charger)
-    setDestination(undefined)
-  }, [])
-
-  const handleNavigate = useCallback(() => {
-    console.log('Navigating to charger:', selectedCharger)
-    setDestination({
-      latitude: selectedCharger?.latitude || 0,
-      longitude: selectedCharger?.longitude || 0
-    })
-  }, [selectedCharger])
-
-  const handleSelect = useCallback(
-    (vehicleType: string, port: ChargerPort) => {
-      console.log('Selected charger:', selectedCharger)
-      if (selectedCharger) {
-        dispatch(cartActions.clearCart())
-        dispatch(checkoutActions.clearState())
-        dispatch(
-          chargerSelectActions.setSelectedCharger({
-            ...(selectedCharger as SelectedCharger),
-            selectedPort: port,
-            selectedVehicleType: vehicleType
-          })
-        )
-        dispatch(
-          cartActions.addItemToCart({
-            product: {
-              ...selectedCharger?.data?.providerDetails,
-              item: selectedCharger?.data?.itemDetails as Item
-            } as ParsedItemModel,
-            quantity: 1
-          })
-        )
-        router.push(`/checkout`)
-      }
-    },
-    [selectedCharger]
-  )
-
-  const handleCloseChargerModal = useCallback(() => {
-    setSelectedCharger(null)
-  }, [])
-
-  const handleWhenSearchLocation = () => {
-    dispatch(toggleLocationSearchPageVisibility({ visible: true, addressType: '' }))
   }
 
-  const handleSearch = useCallback((query: string) => {
-    setSearchQuery(query)
-    if (query) {
-      handleWhenSearchLocation()
-    } else if (!query) {
-      dispatch(clearSource())
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && searchKeyword.trim()) {
+      handleSearch()
     }
-  }, [])
-
-  const isWalletConnected = useMemo(() => Boolean(user?.deg_wallet?.deg_wallet_id), [user?.deg_wallet?.deg_wallet_id])
+  }
 
   return (
     <>
-      <div className="relative overflow-hidden max-h-[100vh]">
-        <MemoizedMap
-          origin={currentLocation!}
-          destination={destination!}
-          startNavigation={startNavigation}
-          showMyLocation={showMyLocation}
-          handleOnConnectWallet={handleConnectWallet}
-          onChargerSelect={handleChargerSelect}
-          isWalletConnected={isWalletConnected}
-          evChargers={evChargers}
-          handleOnSearch={handleSearch}
-          searchQuery={searchQuery}
-          returnToCurrentLocation={returnToCurrentLocation}
+      <Head>
+        <title>EV Charging - Find Charging Stations</title>
+        <meta
+          name="description"
+          content="Search and discover EV charging stations near you"
         />
-        {isLoading && (
-          <div className="absolute inset-0 bg-black bg-opacity-30 flex justify-center items-center z-50 h-[100vh]">
-            <Loader />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1"
+        />
+      </Head>
+      <div
+        style={{
+          minHeight: '100vh',
+          background: 'linear-gradient(135deg, #2563eb 0%, #1e40af 100%)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '20px'
+        }}
+      >
+        <div
+          style={{
+            width: '100%',
+            maxWidth: '700px',
+            textAlign: 'center'
+          }}
+        >
+          {/* Main Heading */}
+          <div style={{ marginBottom: '40px' }}>
+            <div
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '80px',
+                height: '80px',
+                backgroundColor: 'white',
+                borderRadius: '20px',
+                marginBottom: '24px',
+                boxShadow: '0 8px 24px rgba(0,0,0,0.2)'
+              }}
+            >
+              <svg
+                width="48"
+                height="48"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M18.92 2.01C18.72 1.42 18.16 1 17.5 1H6.5C5.84 1 5.28 1.42 5.08 2.01L3 8V16C3 16.55 3.45 17 4 17H5C5.55 17 6 16.55 6 16V15H18V16C18 16.55 18.45 17 19 17H20C20.55 17 21 16.55 21 16V8L18.92 2.01ZM6.5 12C5.67 12 5 11.33 5 10.5S5.67 9 6.5 9 8 9.67 8 10.5 7.33 12 6.5 12ZM17.5 12C16.67 12 16 11.33 16 10.5S16.67 9 17.5 9 19 9.67 19 10.5 18.33 12 17.5 12ZM5 7L6.5 3H17.5L19 7H5Z"
+                  fill="#2563eb"
+                />
+                <path
+                  d="M7 13H17V11H7V13Z"
+                  fill="#2563eb"
+                />
+                <path
+                  d="M12 5L10 9H14L12 5Z"
+                  fill="#2563eb"
+                />
+              </svg>
+            </div>
+            <h1
+              style={{
+                fontSize: 'clamp(32px, 6vw, 56px)',
+                fontWeight: '800',
+                color: 'white',
+                marginBottom: '16px',
+                textShadow: '0 2px 8px rgba(0,0,0,0.2)'
+              }}
+            >
+              EV Charging
+            </h1>
+            <p
+              style={{
+                fontSize: 'clamp(16px, 2.5vw, 20px)',
+                color: 'white',
+                opacity: 0.95,
+                margin: 0
+              }}
+            >
+              Discover charging stations near you
+            </p>
           </div>
-        )}
+
+          {/* Search Bar */}
+          <div
+            style={{
+              display: 'flex',
+              backgroundColor: 'white',
+              borderRadius: '50px',
+              boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
+              overflow: 'hidden',
+              height: '60px',
+              alignItems: 'center',
+              paddingLeft: '24px',
+              paddingRight: '6px'
+            }}
+          >
+            <input
+              type="text"
+              placeholder="Search for charging stations..."
+              value={searchKeyword}
+              onChange={e => setSearchKeyword(e.target.value)}
+              onKeyPress={handleKeyPress}
+              style={{
+                flex: 1,
+                border: 'none',
+                outline: 'none',
+                fontSize: '16px',
+                height: '100%',
+                padding: 0
+              }}
+            />
+            <button
+              onClick={handleSearch}
+              disabled={!searchKeyword.trim()}
+              style={{
+                minWidth: '48px',
+                height: '48px',
+                borderRadius: '50%',
+                border: 'none',
+                backgroundColor: searchKeyword.trim() ? '#2563eb' : '#E2E8F0',
+                color: searchKeyword.trim() ? 'white' : '#9CA3AF',
+                cursor: searchKeyword.trim() ? 'pointer' : 'not-allowed',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                transition: 'all 0.2s',
+                opacity: searchKeyword.trim() ? 1 : 0.6
+              }}
+              onMouseEnter={e => {
+                if (searchKeyword.trim()) {
+                  e.currentTarget.style.backgroundColor = '#1e40af'
+                }
+              }}
+              onMouseLeave={e => {
+                if (searchKeyword.trim()) {
+                  e.currentTarget.style.backgroundColor = '#2563eb'
+                }
+              }}
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <circle
+                  cx="11"
+                  cy="11"
+                  r="8"
+                />
+                <path d="m21 21-4.35-4.35" />
+              </svg>
+            </button>
+          </div>
+        </div>
       </div>
-      <OpenWalletBottomModal
-        modalType={modalType}
-        setModalType={handleModalOpen}
-        onClose={handleModalClose}
-      />
-      {selectedCharger && (
-        <ChargerBottomModal
-          charger={selectedCharger}
-          onNavigate={handleNavigate}
-          onSelect={handleSelect}
-          onClose={handleCloseChargerModal}
-        />
-      )}
     </>
   )
 }
 
-export default Homepage
+export default HomePage

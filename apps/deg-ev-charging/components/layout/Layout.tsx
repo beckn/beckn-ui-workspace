@@ -52,7 +52,8 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const [showSplash, setShowSplash] = useState(true)
 
   useEffect(() => {
-    if (!['/signIn', '/signUp', '/OTPVerification'].includes(router.pathname)) {
+    // Exclude home page, discovery page, detailView page and auth pages from token check
+    if (!['/', '/signIn', '/signUp', '/OTPVerification', '/discovery', '/detailView'].includes(router.pathname)) {
       const token = Cookies.get('authToken')
       let message = ''
 
@@ -64,12 +65,12 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
         message = 'Token decode failed, please log in again!'
       } finally {
         if (message) {
-          alert(message)
-          // if (userConfirmed) {
+          // Don't show alert or redirect for discovery page - just clear state silently
           dispatch(clearSource())
           dispatch(checkoutActions.clearState())
-          dispatch(logout())
-          // }
+          // Don't call logout() as it redirects - just clear cookies
+          Cookies.remove('authToken')
+          Cookies.remove('isVerified')
         }
       }
     }
@@ -106,6 +107,22 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   // Show splash screen for first 2 seconds
   if (showSplash) {
     return <Splash />
+  }
+
+  // For home page, render without Layout wrapper
+  if (isHomepage) {
+    return (
+      <div>
+        <NextNProgress height={7} />
+        {children}
+        <ToastContainer
+          autoClose={2000}
+          hideProgressBar={true}
+          rtl={locale === 'en' ? false : true}
+          position={locale === 'en' ? 'top-right' : 'top-left'}
+        />
+      </div>
+    )
   }
 
   return (

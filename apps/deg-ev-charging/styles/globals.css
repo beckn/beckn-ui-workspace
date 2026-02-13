@@ -4,11 +4,15 @@
 
 @layer base {
   :root {
-    --color-primary: 167, 27, 74; /* #A71B4A*/
-    --color-secondary: 74, 76, 90; /* #4a4c5a*/
+    --color-primary: 167, 27, 74;
+    /* #A71B4A*/
+    --color-secondary: 74, 76, 90;
+    /* #4a4c5a*/
 
-    --color-bg: 243, 244, 245; /* #f3f4f5*/
-    --color-bg-side: 252, 251, 255; /* #fcfdff*/
+    --color-bg: 243, 244, 245;
+    /* #f3f4f5*/
+    --color-bg-side: 252, 251, 255;
+    /* #fcfdff*/
     --color-bg-black: 0, 0, 0;
     --digital-category-bgc: #ade8f4;
     --fashion-category-bgc: #ffddd2;
@@ -17,20 +21,29 @@
     --house-category-bgc: #ccd5ae;
     --toy-category-bgc: #cce3de;
     --stationery-category-bgc: #fbb13c;
-    --disabled-btn-color: 234, 207, 219; /*"#EACFDB"*/
+    --disabled-btn-color: 234, 207, 219;
+    /*"#EACFDB"*/
 
-    --color-text-base: 66, 71, 80; /* #424750*/
-    --color-text-muted: 107, 114, 128; /*#6b7280*/
-    --color-text-side: 255, 231, 231; /*#fff*/
-    --text-color: 255, 255, 255; /* #fff  added for white color  */
-    --pending-status-color: 189, 148, 43, 1; /*#BD942B*/
-    --delivered-status-color: 80, 201, 23, 1; /*#50C917*/
+    --color-text-base: 66, 71, 80;
+    /* #424750*/
+    --color-text-muted: 107, 114, 128;
+    /*#6b7280*/
+    --color-text-side: 255, 231, 231;
+    /*#fff*/
+    --text-color: 255, 255, 255;
+    /* #fff  added for white color  */
+    --pending-status-color: 189, 148, 43, 1;
+    /*#BD942B*/
+    --delivered-status-color: 80, 201, 23, 1;
+    /*#50C917*/
     --font-family: iranyekan, 'IRANSans', 'Tahoma';
   }
 
   .dark {
-    --color-bg: 15, 23, 42; /* #0f172a*/
-    --color-bg-side: 30, 41, 59; /* #1e293b*/
+    --color-bg: 15, 23, 42;
+    /* #0f172a*/
+    --color-bg-side: 30, 41, 59;
+    /* #1e293b*/
     --digital-category-bgc: #0d4c76;
     --fashion-category-bgc: #892a19;
     --beauty-category-bgc: #6d305f;
@@ -39,9 +52,12 @@
     --toy-category-bgc: #6d3d4b;
     --stationery-category-bgc: #6a4202;
 
-    --color-text-base: 226, 232, 240; /*#e2e8f0*/
-    --color-text-muted: 140, 154, 175; /*#8c9aaf*/
-    --color-text-side: 255, 231, 231; /*#fff*/
+    --color-text-base: 226, 232, 240;
+    /*#e2e8f0*/
+    --color-text-muted: 140, 154, 175;
+    /*#8c9aaf*/
+    --color-text-side: 255, 231, 231;
+    /*#fff*/
   }
 
   html[dir='ltr'] {
@@ -77,7 +93,8 @@ a {
   font-weight: bold;
   src:
     url('/fonts/woff/iranyekanwebbold.woff') format('woff'),
-    /* FF3.6+, IE9, Chrome6+, Saf5.1+*/ url('/fonts/ttf/iranyekanwebbold.ttf') format('truetype');
+    /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+    url('/fonts/ttf/iranyekanwebbold.ttf') format('truetype');
   font-display: swap;
 }
 
@@ -87,7 +104,8 @@ a {
   font-weight: 100;
   src:
     url('/fonts/woff/iranyekanwebthin.woff') format('woff'),
-    /* FF3.6+, IE9, Chrome6+, Saf5.1+*/ url('/fonts/ttf/iranyekanwebthin.ttf') format('truetype');
+    /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+    url('/fonts/ttf/iranyekanwebthin.ttf') format('truetype');
   font-display: swap;
 }
 
@@ -97,7 +115,8 @@ a {
   font-weight: 300;
   src:
     url('/fonts/woff/iranyekanweblight.woff') format('woff'),
-    /* FF3.6+, IE9, Chrome6+, Saf5.1+*/ url('/fonts/ttf/iranyekanweblight.ttf') format('truetype');
+    /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+    url('/fonts/ttf/iranyekanweblight.ttf') format('truetype');
   font-display: swap;
 }
 
@@ -107,7 +126,8 @@ a {
   font-weight: normal;
   src:
     url('/fonts/woff/iranyekanwebregular.woff') format('woff'),
-    /* FF3.6+, IE9, Chrome6+, Saf5.1+*/ url('/fonts/ttf/iranyekanwebregular.ttf') format('truetype');
+    /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+    url('/fonts/ttf/iranyekanwebregular.ttf') format('truetype');
   font-display: swap;
 }
 
@@ -117,7 +137,8 @@ a {
   font-weight: 500;
   src:
     url('/fonts/woff/iranyekanwebmedium.woff') format('woff'),
-    /* FF3.6+, IE9, Chrome6+, Saf5.1+*/ url('/fonts/ttf/iranyekanwebmedium.ttf') format('truetype');
+    /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+    url('/fonts/ttf/iranyekanwebmedium.ttf') format('truetype');
   font-display: swap;
 }
 
@@ -127,7 +148,8 @@ a {
   font-weight: 800;
   src:
     url('/fonts/woff/iranyekanwebextrabold.woff') format('woff'),
-    /* FF3.6+, IE9, Chrome6+, Saf5.1+*/ url('/fonts/ttf/iranyekanwebextrabold.ttf') format('truetype');
+    /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+    url('/fonts/ttf/iranyekanwebextrabold.ttf') format('truetype');
   font-display: swap;
 }
 
@@ -137,7 +159,8 @@ a {
   font-weight: 850;
   src:
     url('/fonts/woff/iranyekanwebblack.woff') format('woff'),
-    /* FF3.6+, IE9, Chrome6+, Saf5.1+*/ url('/fonts/ttf/iranyekanwebblack.ttf') format('truetype');
+    /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+    url('/fonts/ttf/iranyekanwebblack.ttf') format('truetype');
   font-display: swap;
 }
 
@@ -147,14 +170,16 @@ a {
   font-weight: 900;
   src:
     url('/fonts/woff/iranyekanwebextrablack.woff') format('woff'),
-    /* FF3.6+, IE9, Chrome6+, Saf5.1+*/ url('/fonts/ttf/iranyekanwebextrablack.ttf') format('truetype');
+    /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+    url('/fonts/ttf/iranyekanwebextrablack.ttf') format('truetype');
   font-display: swap;
 }
 
 .slick-dots li button::before {
   font-size: 12px !important;
 }
-.image_section > span {
+
+.image_section>span {
   width: 220px !important;
   height: 240px !important;
 }
@@ -174,6 +199,7 @@ a {
   .slick-dots li button:before {
     font-size: 12px;
   }
+
   .slick-dots {
     padding-bottom: 40px !important;
   }
@@ -225,6 +251,7 @@ select:-webkit-autofill:focus {
   color: #b9b9b9;
   font-size: 14px;
 }
+
 /* .chakra-accordion__icon {
     height: 24px !important;
     width: 24px !important;
@@ -243,25 +270,31 @@ select:-webkit-autofill:focus {
   padding: 6px 20px;
   box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.1) !important;
 }
+
 .border_radius_all {
   border-radius: 12px !important;
 }
+
 .css-690el4[aria-checked='true'],
 .css-690el4[data-checked] {
   background-color: #a71b4a !important;
   border-color: #a71b4a !important;
 }
+
 .css-690el4 {
   border: 1px solid !important;
   border-color: #a71b4a !important;
 }
+
 .product_description_text p {
   font-size: 15px;
 }
+
 .product_description_text p:first-child {
   padding-bottom: 10px;
   padding-top: 10px;
 }
+
 .product_description_text ul li {
   padding-bottom: 5px;
 
@@ -269,9 +302,11 @@ select:-webkit-autofill:focus {
 
   margin-left: 16px;
 }
+
 .hideScroll::-webkit-scrollbar {
   display: none;
 }
+
 .subHeader_bottom_header__NOUrY {
   background-color: #4461f2 !important;
   color: #fff !important;
@@ -280,15 +315,74 @@ select:-webkit-autofill:focus {
 .subHeader_bottom_header__NOUrY p {
   color: #fff !important;
 }
+
 .book_charger_form .auth_signin_container__zWlCc {
   padding-top: 0px !important;
 }
+
 /* .input_input_container__h_7Wp.input_rounded__oI6QF {
   margin-bottom: 26px !important;
 } */
 .book_charger_form .amount-to-pay-input {
   margin-bottom: 26px !important;
 }
+
 .book_charger_form .kwh-to-charge-input {
   margin-bottom: 26px !important;
+}
+
+
+
+/* Styles for rendered product cards */
+[data-item-id] {
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+[data-item-id]:hover {
+  transform: translateY(-4px);
+}
+
+@media (max-width: 768px) {
+  [data-item-id] {
+    transform: none;
+  }
+
+  [data-item-id]:hover {
+    transform: none;
+  }
+}
+
+/* item-card */
+.item-card {
+  background-color: white;
+  border-radius: 16px;
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  box-shadow: rgba(0, 0, 0, 0.08) 0px 4px 12px;
+  border: 1px solid var(--color-border);
+}
+
+/* Ensure images in cards are responsive - template class: item-image */
+.item-image,
+img[class*='item-image'],
+img[class*='product-image'] {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* Responsive typography for rendered content - template classes: item-name, item-short-desc */
+.item-name,
+h3[class*='item-name'],
+h4[class*='item-name'] {
+  font-size: clamp(1rem, 2.5vw, 1.25rem);
+  line-height: 1.4;
+}
+
+.item-short-desc,
+p[class*='short-desc'] {
+  font-size: clamp(0.875rem, 2vw, 1rem);
+  line-height: 1.6;
 }

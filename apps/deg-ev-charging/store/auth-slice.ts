@@ -27,7 +27,7 @@ const slice = createSlice({
     logout: () => {
       Cookies.remove('authToken')
       Cookies.remove('isVerified')
-      Router.push('/signIn')
+      Router.push('/discovery')
       return initialState
     },
     setCredentials: (state, { payload: { user, jwt } }: PayloadAction<{ user: User; jwt: string }>) => {
