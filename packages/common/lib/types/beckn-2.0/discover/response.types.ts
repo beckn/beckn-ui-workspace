@@ -96,3 +96,6 @@ export interface DiscoverResponse {
   context: BecknContext
   message: DiscoverResponseMessage
 }
+
+/** Catalog shape as stored in Redux (allows both strict and flexible API responses) */
+export type DiscoverCatalogStored = DiscoverCatalogItem & Record<string, unknown>

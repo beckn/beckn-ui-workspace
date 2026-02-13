@@ -23,7 +23,12 @@
 }
 
 .main.withMargin {
-  margin-top: 100px;
+  margin-top: 56px;
+}
+@media (min-width: 768px) {
+  .main.withMargin {
+    margin-top: 100px;
+  }
 }
 .main.withMarginSignUp {
   margin-top: 60px;

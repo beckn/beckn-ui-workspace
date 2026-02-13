@@ -25,8 +25,20 @@ import Splash from '../splash/splash'
 import Cookies from 'js-cookie'
 import { AuthRootState, logout } from '@store/auth-slice'
 import BottomNavigator from '@components/BottomNavigator/BottomNavigator'
+import TopHeader from '@components/TopHeader/TopHeader'
 
-const bottomNavigatorWhiteList = ['/', '/orderHistory', '/profile']
+const bottomNavigatorWhiteList = ['/', '/discovery', '/cart', '/orderHistory', '/profile']
+
+const evLayoutRoutes = ['/', '/discovery', '/detailView', '/cart', '/orderHistory', '/profile']
+
+const headerTitleByRoute: Record<string, string> = {
+  '/': 'EV Charging',
+  '/discovery': 'EV Charging',
+  '/detailView': 'EV Charging',
+  '/cart': 'Cart',
+  '/orderHistory': 'Chargers',
+  '/profile': 'Profile'
+}
 
 const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const { locale } = useLanguage()
@@ -109,12 +121,38 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
     return <Splash />
   }
 
-  // For home page, render without Layout wrapper
-  if (isHomepage) {
+  // For EV app routes: common TopHeader + content + BottomNavigator from Layout
+  if (evLayoutRoutes.includes(router.pathname)) {
+    const showBottomNav = bottomNavigatorWhiteList.includes(router.pathname)
+    const title = headerTitleByRoute[router.pathname] ?? 'EV Charging'
+    const showBack = router.pathname !== '/'
     return (
-      <div>
+      <div
+        className={`ev-app ${showBottomNav ? 'ev-with-bottom-nav' : ''}`}
+        style={
+          showBottomNav ? { height: '100dvh', overflow: 'hidden', display: 'flex', flexDirection: 'column' } : undefined
+        }
+      >
         <NextNProgress height={7} />
-        {children}
+        <TopHeader
+          title={title}
+          showBack={showBack}
+        />
+        <div
+          style={
+            showBottomNav
+              ? {
+                  flex: 1,
+                  minHeight: 0,
+                  overflow: 'auto',
+                  paddingBottom: 'calc(var(--ev-bottom-nav-h) + var(--ev-safe-bottom) + 16px)'
+                }
+              : undefined
+          }
+        >
+          {children}
+        </div>
+        {showBottomNav && <BottomNavigator />}
         <ToastContainer
           autoClose={2000}
           hideProgressBar={true}
@@ -125,10 +163,16 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
     )
   }
 
+  const showBottomNav = bottomNavigatorWhiteList.includes(router.pathname)
+
   return (
-    <div>
+    <div className={`ev-app ${showBottomNav ? 'ev-with-bottom-nav' : ''}`}>
       <Head>
         <title>DEG EV Charging</title>
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, viewport-fit=cover"
+        />
       </Head>
       <div className={`${styles.container} ${styles.minHeight}`}>
         <NextNProgress height={7} />
@@ -144,9 +188,14 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
                ${isSignUp ? styles.withMarginSignUp : ''} 
               ${isSearchPage ? styles.searchPageMargin : ''}
               `}
+            style={
+              showBottomNav
+                ? { paddingBottom: 'calc(var(--ev-bottom-nav-h) + var(--ev-safe-bottom) + 16px)' }
+                : undefined
+            }
           >
             {children}
-            {bottomNavigatorWhiteList.includes(router.pathname) && <BottomNavigator />}
+            {showBottomNav && <BottomNavigator />}
           </Box>
         ) : (
           <GeoLocationInputList backIcon={backArrow} />

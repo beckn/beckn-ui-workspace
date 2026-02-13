@@ -16,6 +16,9 @@ export * from './ui-feedback-slice'
 export { default as DiscoveryReducer } from './discovery-slice'
 export * from './discovery-slice'
 
+export { default as discoverReducer } from './discover-slice'
+export * from './discover-slice'
+
 export { default as OrderReducer } from './order-slice'
 export * from './order-slice'
 

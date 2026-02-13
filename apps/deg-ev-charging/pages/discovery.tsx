@@ -1,506 +1,181 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { getTemplate, getStylingHints, renderTemplate } from '../lib/templateProcessor'
+import { useDispatch } from 'react-redux'
+import { getTemplate, getStylingHints } from '@lib/templateProcessor'
+import { useDiscoverMutation } from '@beckn-ui/common/src/services/beckn-2.0/discover'
+import { discoverActions } from '@beckn-ui/common'
+import type { DiscoverCatalogStored } from '@beckn-ui/common/lib/types/beckn-2.0/discover'
+import {
+  getCatalogsFromResponse,
+  filterCatalogsByIdSubstring,
+  buildDiscoverRequest,
+  getTransactionIdFromResponse
+} from '@utils/discoverHelpers'
+import { fetchRendererConfigFromDiscoverCatalogs } from '@utils/rendererFromDiscover'
+import { renderDiscoveryItems } from '@utils/renderDiscoveryItems'
+import { wrapTemplatePriceInBold } from '@utils/templateUtils'
+import { MOCK_DISCOVER_RESPONSE } from '../mock/discoverResponse'
 
-interface DiscoverResponse {
-  context: {
-    schema_context?: string[]
-    [key: string]: unknown
-  }
-  message: {
-    catalogs?: Array<{
-      '@context'?: string
-      'beckn:items'?: unknown[]
-      'beckn:offers'?: unknown[]
-      [key: string]: unknown
-    }>
-    [key: string]: unknown
-  }
-  [key: string]: unknown
-}
+const FALLBACK_RENDERER_URL = 'https://raw.githubusercontent.com/beckn/beckn-ui-workspace/refs/heads/main/renderer.json'
 
 const Discovery = () => {
   const router = useRouter()
+  const { search } = router.query
+  const searchTerm = typeof search === 'string' ? search : ''
+  const dispatch = useDispatch()
+  const [discover] = useDiscoverMutation()
   const [renderedHtml, setRenderedHtml] = useState<string>('')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const fetchAndRender = async () => {
+    let cancelled = false
+
+    const run = async () => {
+      setLoading(true)
+      setError(null)
+      setRenderedHtml('')
       try {
-        // Use the provided mock response data directly (no API call to avoid CORS)
-        const data: DiscoverResponse = {
-          context: {
-            message_id: '42bbc400-c3cd-47ee-b2bb-d811ebf0932f',
-            bap_id: 'ev-charging.sandbox1.com',
-            transaction_id: 'ef4d941e-f27d-4d27-999b-1b2a8e37223e',
-            timestamp: '2026-02-12T09:57:25.35Z',
-            action: 'on_discover',
-            version: '2.0.0',
-            ttl: 'PT30S',
-            bap_uri: 'http://onix-adapter:8081/bap/receiver',
-            schema_context: [
-              'https://raw.githubusercontent.com/beckn/protocol-specifications-new/refs/heads/main/schema/EvChargingService/v1/context.jsonld'
-            ]
-          },
-          message: {
-            catalogs: [
-              {
-                '@context':
-                  'https://raw.githubusercontent.com/beckn/protocol-specifications-new/refs/heads/main/schema/core/v2/context.jsonld',
-                '@type': 'beckn:Catalog',
-                'beckn:id': 'catalog-ev-charging-001',
-                'beckn:descriptor': {
-                  '@type': 'beckn:Descriptor',
-                  'schema:name': 'EV Charging Services Network'
-                },
-                'beckn:providerId': 'ecopower-charging',
-                'beckn:bppId': 'ev-charging.sandbox2.com',
-                'beckn:bppUri': 'https://hayes-directories-particle-elizabeth.trycloudflare.com/bpp/receiver',
-                'beckn:items': [
-                  {
-                    '@context':
-                      'https://raw.githubusercontent.com/beckn/protocol-specifications-new/refs/heads/main/schema/core/v2/context.jsonld',
-                    '@type': 'beckn:Item',
-                    'beckn:id': 'ev-charger-ccs2-001',
-                    'beckn:descriptor': {
-                      '@type': 'beckn:Descriptor',
-                      'schema:name': 'DC Fast Charger - CCS2 (60kW)',
-                      'beckn:shortDesc': 'High-speed DC charging station with CCS2 connector',
-                      'beckn:longDesc':
-                        'Ultra-fast DC charging station supporting CCS2 connector type with 60kW maximum power output. Features advanced thermal management and smart charging capabilities.'
-                    },
-                    'beckn:category': {
-                      '@type': 'schema:CategoryCode',
-                      'schema:codeValue': 'ev-charging',
-                      'schema:name': 'EV Charging'
-                    },
-                    'beckn:availableAt': [
-                      {
-                        '@type': 'beckn:Location',
-                        geo: {
-                          type: 'Point',
-                          coordinates: [77.5946, 12.9716]
-                        },
-                        address: {
-                          streetAddress: 'EcoPower BTM Hub, 100 Ft Rd',
-                          addressLocality: 'Bengaluru',
-                          addressRegion: 'Karnataka',
-                          postalCode: '560076',
-                          addressCountry: 'IN'
-                        }
-                      }
-                    ],
-                    'beckn:availabilityWindow': [
-                      {
-                        '@type': 'beckn:TimePeriod',
-                        'schema:startTime': '22:00:00Z',
-                        'schema:endTime': '22:00:00Z'
-                      }
-                    ],
-                    'beckn:rateable': true,
-                    'beckn:rating': {
-                      '@type': 'beckn:Rating',
-                      'beckn:ratingValue': 4.5,
-                      'beckn:ratingCount': 128
-                    },
-                    'beckn:isActive': true,
-                    'beckn:networkId': ['bap.net/ev-charging'],
-                    'beckn:provider': {
-                      'beckn:id': 'ecopower-charging',
-                      'beckn:descriptor': {
-                        '@type': 'beckn:Descriptor',
-                        'schema:name': 'EcoPower Charging Pvt Ltd'
-                      }
-                    },
-                    'beckn:itemAttributes': {
-                      '@context':
-                        'https://raw.githubusercontent.com/beckn/protocol-specifications-new/refs/heads/main/schema/EvChargingService/v1/context.jsonld',
-                      '@type': 'beckn:Item',
-                      evseId: 'IN*ECO*BTM*01*CCS2*A',
-                      connectorType: 'CCS2',
-                      reservationSupported: 'true',
-                      parkingType: 'Mall',
-                      connectorFormat: 'CABLE',
-                      maxPowerKW: 60,
-                      amenityFeature: ['RESTAURANT', 'RESTROOM', 'WI-FI'],
-                      name: 'surabhi',
-                      roamingNetwork: 'GreenRoam',
-                      chargingSpeed: 'FAST',
-                      minPowerKW: 5,
-                      powerType: 'DC'
-                    }
-                  }
-                ]
-              },
-              {
-                '@context':
-                  'https://raw.githubusercontent.com/beckn/protocol-specifications-new/refs/heads/main/schema/core/v2/context.jsonld',
-                '@type': 'beckn:Catalog',
-                'beckn:id': 'strapi-catalog-ev-charging-001',
-                'beckn:descriptor': {
-                  '@type': 'beckn:Descriptor',
-                  'schema:name': 'EV Charging Services Network',
-                  'beckn:shortDesc': 'Comprehensive network of fast charging stations across Bengaluru'
-                },
-                'beckn:providerId': 'ukhy2rkj4ye66a0lv6lu18if',
-                'beckn:bppId': 'bpp.example.com',
-                'beckn:bppUri': 'https://bpp.example.com',
-                'beckn:validity': {
-                  '@type': 'beckn:TimePeriod',
-                  'schema:startDate': '2026-01-01T00:00:00Z',
-                  'schema:endDate': '2030-12-31T23:59:59Z'
-                },
-                'beckn:items': [
-                  {
-                    '@context':
-                      'https://raw.githubusercontent.com/beckn/protocol-specifications-new/refs/heads/main/schema/core/v2/context.jsonld',
-                    '@type': 'beckn:Item',
-                    'beckn:id': 'cujq03g0kq2etsflckrrc0w0',
-                    'beckn:descriptor': {
-                      '@type': 'beckn:Descriptor',
-                      'schema:name': 'DC Fast Charger - CCS2 (60kW)',
-                      'beckn:shortDesc': 'High-speed DC charging station with CCS2 connector',
-                      'beckn:longDesc':
-                        'Ultra-fast DC charging station supporting CCS2 connector type with 60kW maximum power output. Features advanced thermal management and smart charging capabilities.'
-                    },
-                    'beckn:category': {
-                      '@type': 'schema:CategoryCode',
-                      'schema:codeValue': 'ev-charging',
-                      'schema:name': 'EV Charging'
-                    },
-                    'beckn:availableAt': [
-                      {
-                        '@type': 'beckn:Location',
-                        geo: {
-                          type: 'Point',
-                          coordinates: [77.5946, 12.9716]
-                        },
-                        address: {
-                          streetAddress: 'EcoPower BTM Hub, 100 Ft Rd',
-                          addressLocality: 'Bengaluru',
-                          addressRegion: 'Karnataka',
-                          postalCode: '560076',
-                          addressCountry: 'IN'
-                        }
-                      }
-                    ],
-                    'beckn:availabilityWindow': [
-                      {
-                        '@type': 'beckn:TimePeriod',
-                        'schema:startTime': '06:00:00Z',
-                        'schema:endTime': '22:00:00Z'
-                      }
-                    ],
-                    'beckn:rateable': true,
-                    'beckn:rating': {
-                      '@type': 'beckn:Rating',
-                      'beckn:ratingValue': 4.5,
-                      'beckn:ratingCount': 130
-                    },
-                    'beckn:isActive': true,
-                    'beckn:provider': {
-                      'beckn:id': 'ukhy2rkj4ye66a0lv6lu18if',
-                      'beckn:descriptor': {
-                        '@type': 'beckn:Descriptor',
-                        'schema:name': 'EcoPower Charging Pvt Ltd'
-                      }
-                    },
-                    'beckn:itemAttributes': {
-                      '@context':
-                        'https://raw.githubusercontent.com/beckn/protocol-specifications-new/refs/heads/main/schema/EvChargingService/v1/context.jsonld',
-                      '@type': 'ChargingService',
-                      connectorType: 'CCS2',
-                      reservationSupported: true,
-                      maxPowerKW: 60,
-                      socketCount: 2,
-                      minPowerKW: 5
-                    }
-                  }
-                ],
-                'beckn:offers': []
-              }
-            ]
-          }
+        const payload = buildDiscoverRequest(searchTerm)
+        let res: unknown
+        try {
+          res = await discover(payload).unwrap()
+        } catch (apiErr) {
+          res = MOCK_DISCOVER_RESPONSE
         }
 
-        // Use the specific renderer.json URL provided
-        const rendererUrl = 'https://raw.githubusercontent.com/beckn/beckn-ui-workspace/refs/heads/main/renderer.json'
-
-        // Fetch renderer config directly from the provided URL
-        const response = await fetch(rendererUrl)
-        if (!response.ok) {
-          throw new Error(`Failed to fetch renderer config: ${response.statusText}`)
+        if (cancelled) return
+        const allCatalogs = getCatalogsFromResponse(res)
+        const catalogs = filterCatalogsByIdSubstring(allCatalogs) // filter catalogs by id substring
+        const transactionId = getTransactionIdFromResponse(res)
+        if (transactionId) {
+          dispatch(discoverActions.setTransactionId({ transactionId }))
         }
-        const config = await response.json()
+        if (!catalogs.length) {
+          setLoading(false)
+          return
+        }
 
-        // Get discoveryCard template
+        dispatch(discoverActions.setDiscoverCatalogs({ catalogs: catalogs as DiscoverCatalogStored[] }))
+
+        let config: Awaited<ReturnType<typeof fetchRendererConfigFromDiscoverCatalogs>>
+        try {
+          config = await fetchRendererConfigFromDiscoverCatalogs(catalogs)
+        } catch {
+          const r = await fetch(FALLBACK_RENDERER_URL)
+          if (!r.ok) throw new Error('Failed to fetch renderer config')
+          config = await r.json()
+        }
+
+        if (cancelled) return
         const templateConfig = getTemplate(config, 'discoveryCard')
-        if (!templateConfig || !templateConfig.html) {
-          throw new Error('discoveryCard template not found in renderer.json')
+        if (!templateConfig?.html) {
+          setError('discoveryCard template not found in renderer.json')
+          setLoading(false)
+          return
         }
 
-        // Get styling hints
         const stylingHints = getStylingHints(config)
-
-        // Find the catalog with id "strapi-catalog-ev-charging-001" only
-        const catalogs = data.message?.catalogs || []
-        const targetCatalog = catalogs.find(
-          (catalog: unknown) => (catalog as Record<string, unknown>)['beckn:id'] === 'strapi-catalog-ev-charging-001'
-        )
-
-        if (!targetCatalog) {
-          throw new Error('Catalog with id "strapi-catalog-ev-charging-001" not found')
-        }
-
-        // Get items and offers from the target catalog
-        const items = ((targetCatalog as Record<string, unknown>)['beckn:items'] as unknown[]) || []
-        const offers = ((targetCatalog as Record<string, unknown>)['beckn:offers'] as unknown[]) || []
-
-        // Process each item with the template and ensure data-item-id attribute is present
-        const renderedItems = items
-          .map((item: unknown) => {
-            const itemId = (item as Record<string, unknown>)['beckn:id'] as string
-            const rendered = renderTemplate(templateConfig.html!, item, offers, stylingHints)
-            // Ensure the rendered HTML has data-item-id attribute for click handling
-            // If the template doesn't include it, wrap it in a div with the attribute
-            if (rendered && !rendered.includes('data-item-id')) {
-              return `<div data-item-id="${itemId}">${rendered}</div>`
-            }
-            return rendered
-          })
-          .join('')
-
-        setRenderedHtml(renderedItems)
-        setLoading(false)
+        const templateHtml = wrapTemplatePriceInBold(templateConfig.html)
+        const html = renderDiscoveryItems(catalogs, templateHtml, stylingHints)
+        if (cancelled) return
+        setRenderedHtml(html)
       } catch (err) {
-        console.error('Error fetching/rendering template:', err)
-        setError(err instanceof Error ? err.message : 'Unknown error')
-        setLoading(false)
+        if (!cancelled) {
+          setError(err instanceof Error ? err.message : 'Something went wrong')
+        }
+      } finally {
+        if (!cancelled) setLoading(false)
       }
     }
 
-    fetchAndRender()
-  }, [])
-
-  const handleItemClick = (itemId: string) => {
-    router.push(`/detailView?itemId=${itemId}`)
-  }
+    run()
+    return () => {
+      cancelled = true
+    }
+  }, [searchTerm, dispatch, discover])
 
   useEffect(() => {
-    // Use event delegation on the parent container for more reliable click handling
-    if (renderedHtml) {
-      let clickHandler: ((e: Event) => void) | null = null
-      let container: Element | null = null
-      let timeoutId: NodeJS.Timeout
-
-      // Wait for next tick to ensure DOM is updated
-      timeoutId = setTimeout(() => {
-        container = document.querySelector('[data-discovery-container]')
-        if (!container) return
-
-        // Add event listener to container (event delegation)
-        clickHandler = (e: Event) => {
-          const target = e.target as HTMLElement
-          // Find the closest element with data-item-id
-          const card = target.closest('[data-item-id]')
-          if (card) {
-            const itemId = card.getAttribute('data-item-id')
-            if (itemId) {
-              e.preventDefault()
-              e.stopPropagation()
-              handleItemClick(itemId)
-            }
-          }
-        }
-
-        container.addEventListener('click', clickHandler)
-
-        // Set cursor pointer on all cards
-        const cards = container.querySelectorAll('[data-item-id]')
-        cards.forEach(card => {
-          if (card instanceof HTMLElement) {
-            card.style.cursor = 'pointer'
-          }
-        })
-      }, 100)
-
-      return () => {
-        clearTimeout(timeoutId)
-        // Cleanup event listener
-        if (clickHandler && container) {
-          container.removeEventListener('click', clickHandler)
-        }
+    if (!renderedHtml || !containerRef.current) return
+    const container = containerRef.current
+    const handler = (e: Event) => {
+      const card = (e.target as HTMLElement).closest('[data-item-id]')
+      if (card) {
+        const id = card.getAttribute('data-item-id')
+        if (id) router.push(`/detailView?itemId=${encodeURIComponent(id)}`)
       }
     }
+    container.addEventListener('click', handler)
+    const cards = container.querySelectorAll('[data-item-id]')
+    cards.forEach(el => {
+      if (el instanceof HTMLElement) el.style.cursor = 'pointer'
+    })
+    return () => container.removeEventListener('click', handler)
   }, [renderedHtml, router])
 
   return (
     <>
       <Head>
-        <title>EV Charging Discovery - Beckn</title>
+        <title>Charging stations – EV Charging</title>
         <meta
           name="description"
-          content="Browse EV charging stations using Beckn protocol"
+          content="Browse EV charging stations"
         />
         <meta
           name="viewport"
-          content="width=device-width, initial-scale=1"
+          content="width=device-width, initial-scale=1, viewport-fit=cover"
         />
       </Head>
-      <div
-        style={{
-          minHeight: '100vh',
-          backgroundColor: '#f5f5f5'
-        }}
-      >
-        {/* Header */}
-        <header
-          style={{
-            background: 'white',
-            borderBottom: '1px solid #e5e7eb',
-            padding: '1rem 0',
-            position: 'sticky',
-            top: 0,
-            zIndex: 100,
-            boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)'
-          }}
-        >
-          <div
-            style={{
-              maxWidth: '1200px',
-              margin: '0 auto',
-              padding: '0 20px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              flexWrap: 'wrap',
-              gap: '1rem'
-            }}
-          >
-            <Link
-              href="/"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.75rem',
-                textDecoration: 'none',
-                color: 'inherit'
-              }}
-            >
-              <div
-                style={{
-                  width: '40px',
-                  height: '40px',
-                  background: 'linear-gradient(135deg, #2563eb 0%, #3b82f6 100%)',
-                  borderRadius: '10px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: 'white',
-                  fontSize: '1.25rem',
-                  fontWeight: 'bold'
-                }}
-              >
-                EV
-              </div>
-              <span style={{ fontSize: '1.25rem', fontWeight: '700', color: '#424750' }}>EV Charging</span>
-            </Link>
-            <h1
-              style={{
-                fontSize: 'clamp(1.25rem, 3vw, 1.5rem)',
-                fontWeight: '600',
-                color: '#424750',
-                margin: 0
-              }}
-            >
-              Charging Station Discovery
-            </h1>
-          </div>
-        </header>
-
-        {/* Main Content */}
+      <div className="ev-app min-h-full bg-[var(--ev-bg)]">
         <main
-          style={{
-            maxWidth: '1200px',
-            margin: '0 auto',
-            padding: '2rem 20px'
-          }}
+          data-ev-main
+          className="max-w-6xl mx-auto w-full px-4 sm:px-6 py-4 sm:py-8 pb-[calc(var(--ev-bottom-nav-h)+var(--ev-safe-bottom)+1rem)]"
         >
+          {searchTerm && (
+            <p className="text-[var(--ev-text-muted)] text-sm sm:text-base mb-4 sm:mb-6">
+              Results for <strong className="text-[var(--ev-text)]">&quot;{searchTerm}&quot;</strong>
+            </p>
+          )}
+
           {loading && (
-            <div
-              style={{
-                textAlign: 'center',
-                padding: '4rem 2rem',
-                color: '#6b7280'
-              }}
-            >
-              <div
-                style={{
-                  display: 'inline-block',
-                  width: '40px',
-                  height: '40px',
-                  border: '4px solid #e5e7eb',
-                  borderTopColor: '#2563eb',
-                  borderRadius: '50%',
-                  animation: 'spin 0.8s linear infinite',
-                  marginBottom: '1rem'
-                }}
-              />
-              <p style={{ fontSize: '1rem', fontWeight: '500' }}>Loading charging stations...</p>
+            <div className="flex flex-col items-center justify-center py-12 sm:py-16 text-[var(--ev-text-muted)]">
+              <div className="w-10 h-10 border-4 border-[var(--ev-border)] border-t-[var(--ev-primary)] rounded-full animate-spin mb-4" />
+              <p className="font-medium text-sm sm:text-base">Loading charging stations…</p>
             </div>
           )}
 
-          {error && (
-            <div
-              style={{
-                backgroundColor: '#fee2e2',
-                border: '1px solid #fca5a5',
-                borderRadius: '12px',
-                padding: '1.5rem',
-                marginBottom: '2rem',
-                color: '#991b1b'
-              }}
-            >
-              <div style={{ fontWeight: '600', marginBottom: '0.5rem' }}>Error</div>
-              <div>{error}</div>
+          {error && !loading && (
+            <div className="rounded-xl border border-[var(--ev-error)]/50 bg-[var(--ev-error)]/10 p-4 text-[var(--ev-text)] mb-4 sm:mb-6 text-sm sm:text-base">
+              <p className="font-semibold text-[var(--ev-error)]">Error</p>
+              <p className="text-[var(--ev-text-muted)]">{error}</p>
             </div>
           )}
 
           {!loading && !error && renderedHtml && (
             <div
+              ref={containerRef}
               data-discovery-container
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 280px), 1fr))',
-                gap: '1.5rem'
-              }}
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6"
               dangerouslySetInnerHTML={{ __html: renderedHtml }}
             />
           )}
 
           {!loading && !error && !renderedHtml && (
-            <div
-              style={{
-                textAlign: 'center',
-                padding: '4rem 2rem',
-                color: '#6b7280'
-              }}
-            >
-              <p style={{ fontSize: '1rem' }}>No charging stations found</p>
+            <div className="text-center py-12 sm:py-16 text-[var(--ev-text-muted)] text-sm sm:text-base">
+              <p>No charging stations found. Try another search.</p>
+              <Link
+                href="/"
+                className="inline-block mt-4 min-h-[var(--ev-touch-min)] flex items-center justify-center text-[var(--ev-primary)] font-medium hover:underline"
+              >
+                Back to search
+              </Link>
             </div>
           )}
         </main>
       </div>
-      <style>{`
-        @keyframes spin {
-          to {
-            transform: rotate(360deg);
-          }
-        }
-      `}</style>
     </>
   )
 }

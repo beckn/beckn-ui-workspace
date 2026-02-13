@@ -83,6 +83,15 @@ a {
   text-decoration: none;
 }
 
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -333,6 +342,60 @@ select:-webkit-autofill:focus {
 
 
 
+/* EV Charging app theme – light with green accent (noina-style) */
+.ev-app {
+  --ev-bg: #ffffff;
+  --ev-bg-card: #f8faf8;
+  --ev-bg-elevated: #ffffff;
+  --ev-surface: #ffffff;
+  --ev-text: #333333;
+  --ev-text-muted: #888888;
+  --ev-border: #e5e7eb;
+  --ev-primary: #54b86a;
+  --ev-primary-hover: #48a35d;
+  --ev-primary-light: rgba(84, 184, 106, 0.12);
+  --ev-accent-teal: #5eb8c9;
+  --ev-success: #22c55e;
+  --ev-error: #ef4444;
+  --ev-warning: #eab308;
+  /* Mobile-first: touch targets, safe areas */
+  --ev-touch-min: 44px;
+  --ev-header-h: 56px;
+  --ev-bottom-nav-h: 64px;
+  --ev-safe-top: env(safe-area-inset-top, 0px);
+  --ev-safe-bottom: env(safe-area-inset-bottom, 0px);
+  --ev-safe-left: env(safe-area-inset-left, 0px);
+  --ev-safe-right: env(safe-area-inset-right, 0px);
+}
+
+/* Mobile-first base: prevent zoom on input focus (iOS); theme text */
+.ev-app input[type="text"],
+.ev-app input[type="search"],
+.ev-app input[type="number"],
+.ev-app input[type="email"],
+.ev-app input[type="tel"] {
+  font-size: 16px;
+  color: var(--ev-text);
+}
+.ev-app input::placeholder {
+  color: var(--ev-text-muted);
+}
+
+/* Touch-friendly tap targets */
+.ev-app .ev-tap-target {
+  min-height: var(--ev-touch-min);
+  min-width: var(--ev-touch-min);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Content area above bottom nav: add padding so content isn’t hidden */
+.ev-app.ev-with-bottom-nav main,
+.ev-app.ev-with-bottom-nav [data-ev-main] {
+  padding-bottom: calc(var(--ev-bottom-nav-h) + var(--ev-safe-bottom) + 16px);
+}
+
 /* Styles for rendered product cards */
 [data-item-id] {
   transition:
@@ -354,16 +417,104 @@ select:-webkit-autofill:focus {
   }
 }
 
-/* item-card */
+/* ----- Discovery & detail template content (renderer.json output) ----- */
+
+/* item-card – discovery list card */
 .item-card {
-  background-color: white;
-  border-radius: 16px;
-  padding: clamp(1.5rem, 4vw, 2.5rem);
-  box-shadow: rgba(0, 0, 0, 0.08) 0px 4px 12px;
-  border: 1px solid var(--color-border);
+  background-color: var(--ev-surface);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--ev-border);
+  min-height: var(--ev-touch-min);
+  color: var(--ev-text);
+  font-size: clamp(0.875rem, 2vw, 0.9375rem);
+  line-height: 1.5;
+  word-break: break-word;
+}
+.item-card .item-name,
+.item-card h3,
+.item-card h4 {
+  color: var(--ev-text);
+  font-size: clamp(1rem, 2.5vw, 1.125rem);
+  font-weight: 600;
+  line-height: 1.35;
+  margin: 0 0 0.25rem 0;
+}
+.item-card .item-short-desc,
+.item-card p {
+  color: var(--ev-text-muted);
+  font-size: inherit;
+  line-height: 1.5;
+  margin: 0 0 0.5rem 0;
+}
+@media (min-width: 640px) {
+  .item-card {
+    border-radius: 16px;
+    padding: clamp(1.25rem, 3vw, 1.5rem);
+    font-size: 0.9375rem;
+  }
 }
 
-/* Ensure images in cards are responsive - template class: item-image */
+/* item-with-provider: wrapper with provider name above each card */
+.item-with-provider {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.item-with-provider .provider-name {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--ev-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  line-height: 1.2;
+}
+
+.ev-price {
+  font-weight: 700;
+}
+
+/* Detail view – product/station details from template (compact spacing) */
+.detail-view-content {
+  font-size: clamp(0.875rem, 2vw, 0.9375rem);
+  line-height: 1.45;
+  color: var(--ev-text);
+  word-break: break-word;
+}
+.detail-view-content p,
+.detail-view-content div {
+  margin: 0 0 0.35rem 0;
+  color: var(--ev-text);
+}
+.detail-view-content p:last-child,
+.detail-view-content div:last-child {
+  margin-bottom: 0;
+}
+.detail-view-content strong,
+.detail-view-content b {
+  font-weight: 600;
+  color: var(--ev-text);
+}
+.detail-view-content [class*='section'],
+.detail-view-content [class*='heading'] {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  margin-top: 0.75rem;
+  margin-bottom: 0.25rem;
+  color: var(--ev-text);
+}
+@media (min-width: 640px) {
+  .detail-view-content {
+    font-size: 0.9375rem;
+  }
+  .detail-view-content p,
+  .detail-view-content div {
+    margin-bottom: 0.4rem;
+  }
+}
+
+/* Ensure images in cards are responsive */
 .item-image,
 img[class*='item-image'],
 img[class*='product-image'] {
@@ -373,16 +524,18 @@ img[class*='product-image'] {
   border-radius: 8px;
 }
 
-/* Responsive typography for rendered content - template classes: item-name, item-short-desc */
+/* Typography for template classes when used */
 .item-name,
 h3[class*='item-name'],
 h4[class*='item-name'] {
   font-size: clamp(1rem, 2.5vw, 1.25rem);
   line-height: 1.4;
+  font-weight: 600;
 }
 
 .item-short-desc,
 p[class*='short-desc'] {
   font-size: clamp(0.875rem, 2vw, 1rem);
   line-height: 1.6;
+  color: var(--ev-text-muted);
 }

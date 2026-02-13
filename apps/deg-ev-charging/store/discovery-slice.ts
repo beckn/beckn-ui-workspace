@@ -10,7 +10,6 @@ export interface RideDetailsModel {
 }
 
 export interface Discovery {
-  transactionId: string
   selectedRide: RideDetailsModel
 }
 
@@ -19,7 +18,6 @@ export interface DiscoveryRootState {
 }
 
 const initialState: Discovery = {
-  transactionId: '',
   selectedRide: {} as RideDetailsModel
 }
 
@@ -27,9 +25,6 @@ const discoverySlice = createSlice({
   name: 'discovery',
   initialState,
   reducers: {
-    addTransactionId(state, action: PayloadAction<{ transactionId: string }>) {
-      state.transactionId = action.payload.transactionId
-    },
     addRide(
       state,
       action: PayloadAction<{

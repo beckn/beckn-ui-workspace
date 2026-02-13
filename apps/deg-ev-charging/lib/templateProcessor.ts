@@ -45,6 +45,36 @@ interface RendererConfig {
 const DEFAULT_IMAGE =
   'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2U1ZTdlYiIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIGZpbGw9IiM5Y2EzYWYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5ObyBJbWFnZTwvdGV4dD48L3N2Zz4='
 
+/**
+ * Normalize item so address/location resolves for renderer templates.
+ * Template expects beckn:itemAttributes.chargingStation.serviceLocation (with address).
+ * Data may have: beckn:availableAt[0].address, or beckn:itemAttributes.serviceLocation.address.
+ */
+function normalizeItemForTemplate(item: unknown): Record<string, unknown> {
+  const rec = (item && typeof item === 'object' ? { ...(item as Record<string, unknown>) } : {}) as Record<
+    string,
+    unknown
+  >
+  const itemAttributes = (rec['beckn:itemAttributes'] ?? rec['itemAttributes']) as Record<string, unknown> | undefined
+  if (!itemAttributes || typeof itemAttributes !== 'object') return rec
+  const attrs = { ...itemAttributes }
+  const existing = (attrs['chargingStation'] as Record<string, unknown> | undefined)?.serviceLocation
+  if (existing) return rec
+  const availableAt = (rec['beckn:availableAt'] ?? rec['availableAt']) as unknown[] | undefined
+  const firstLocation =
+    Array.isArray(availableAt) && availableAt[0] && typeof availableAt[0] === 'object'
+      ? (availableAt[0] as Record<string, unknown>)
+      : null
+  const directServiceLocation = attrs['serviceLocation']
+  const serviceLocation =
+    directServiceLocation && typeof directServiceLocation === 'object' ? directServiceLocation : firstLocation
+  if (serviceLocation) {
+    attrs['chargingStation'] = { serviceLocation }
+    rec['beckn:itemAttributes'] = attrs
+  }
+  return rec
+}
+
 // Helper function to get nested value from object using dot notation path
 const getNestedValue = (obj: unknown, path: string): unknown => {
   const keys = path.split('.')
@@ -317,9 +347,10 @@ export const renderTemplate = (
     return offerItems?.includes(itemId)
   })
 
-  // Create context object for Handlebars - keep original structure with colon keys
+  // Normalize so address resolves: template expects itemAttributes.chargingStation.serviceLocation
+  const normalizedItem = normalizeItemForTemplate(item)
   const context: Record<string, unknown> = {
-    ...(item as Record<string, unknown>),
+    ...normalizedItem,
     'beckn:offers': matchingOffer ? [matchingOffer] : []
   }
 

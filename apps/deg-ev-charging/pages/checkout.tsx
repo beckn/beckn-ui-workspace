@@ -5,7 +5,7 @@ import { InputProps, Loader } from '@beckn-ui/molecules'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import {
   CheckoutRootState,
-  DiscoveryRootState,
+  DiscoverRootState,
   ICartRootState,
   CartItemForRequest,
   Item,
@@ -83,7 +83,7 @@ const ChargerDetails = () => {
   const selectResponse = useSelector((state: CheckoutRootState) => state.checkout?.selectResponse)
   const { items, totalQuantity, totalAmount } = useSelector((state: ICartRootState) => state.cart)
   const { selectedCharger } = useSelector((state: ChargerSelectRootState) => state?.selectCharger)
-  const { transactionId } = useSelector((state: DiscoveryRootState) => state.discovery)
+  const { transactionId } = useSelector((state: DiscoverRootState) => state.discover)
   const [fetchQuotes, { isLoading: selectLoading, error: selectError }] = useSelectMutation()
   const [initialize, { isLoading: initializeLoading, error: initializeError }] = useInitMutation()
   const { user } = useSelector((state: AuthRootState) => state.auth)

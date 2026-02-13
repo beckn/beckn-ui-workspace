@@ -1,0 +1,16 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Green rounded background -->
+  <rect width="64" height="64" rx="14" fill="#54b86a"/>
+  <!-- Letter E -->
+  <path d="M10 12L14 12L14 30L10 30ZM10 12L22 12L22 16L10 16ZM10 22L18 22L18 26L10 26ZM10 26L22 26L22 30L10 30Z" fill="white"/>
+  <!-- Letter V -->
+  <path d="M26 12L30 12L32 30L30 30L28 12ZM36 12L40 12L30 30L32 30L38 12Z" fill="white"/>
+  <!-- WiFi-style signal arcs (concentric semicircles, like link/signal) -->
+  <path d="M26 44A6 6 0 0 1 38 44" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M20 44A12 12 0 0 1 44 44" stroke="white" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.9"/>
+  <path d="M14 44A18 18 0 0 1 50 44" stroke="white" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.75"/>
+  <!-- Central dot (charging / signal source) -->
+  <circle cx="32" cy="44" r="3" fill="white"/>
+  <!-- Small bolt accent -->
+  <path d="M32 41.5L30 44h2l-1 2.5 3-2.5h-2L32 41.5z" fill="#54b86a"/>
+</svg>

@@ -229,6 +229,25 @@ const OrderConfirmation = () => {
 
           buttons: [
             {
+              text: 'View order details',
+              handleClick: () => {
+                if (confirmResponse && confirmResponse.length > 0) {
+                  const first = confirmResponse[0]
+                  const orderDetails = {
+                    orderId: first.message.orderId,
+                    bppId: first.context.bpp_id,
+                    bppUri: first.context.bpp_uri
+                  }
+                  dispatch(orderActions.addSelectedOrder({ orderDetails }))
+                  localStorage.setItem('selectedOrder', JSON.stringify(orderDetails))
+                }
+                router.push('/orderDetails')
+              },
+              variant: 'outline',
+              colorScheme: 'primary',
+              dataTest: testIds.orderConfirmation_viewOrderButton
+            },
+            {
               text: 'Unlock Chargering Port',
               handleClick: () => {
                 if (confirmResponse && confirmResponse.length > 0) {

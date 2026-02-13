@@ -8,25 +8,29 @@ import SelectChargerReducer from './chargerSelect-slice'
 import cabServiceReducer from './cabService-slice'
 import policyReducer from './policy-slice'
 import cartSliceReducer from './cart-slice'
-import { checkoutReducer, feedbackReducer, geoMapLocationSearchReducer } from '@beckn-ui/common'
+import { checkoutReducer, discoverReducer, feedbackReducer, geoMapLocationSearchReducer } from '@beckn-ui/common'
+import becknApi from '@beckn-ui/common/src/services/becknApi'
+import '@beckn-ui/common/src/services/beckn-2.0/discover'
 import api from '@services/api'
 import didApi from '@services/didApi'
 
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['auth', 'user', 'cart', 'selectCharger', 'checkout', 'discovery']
+  whitelist: ['auth', 'user', 'cart', 'selectCharger', 'checkout', 'discovery', 'discover']
 }
 
 const appReducer = combineReducers({
   auth: authReducer,
   [api.reducerPath]: api.reducer,
   [didApi.reducerPath]: didApi.reducer,
+  [becknApi.reducerPath]: becknApi.reducer,
   user: userReducer,
   cart: cartSliceReducer,
   checkout: checkoutReducer,
   geoLocationSearchPageUI: geoMapLocationSearchReducer,
   discovery: DiscoveryReducer,
+  discover: discoverReducer,
   selectCharger: SelectChargerReducer,
   feedback: feedbackReducer,
   cabService: cabServiceReducer,
@@ -54,7 +58,7 @@ const store = configureStore({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
       }
-    }).concat(api.middleware, didApi.middleware)
+    }).concat(api.middleware, didApi.middleware, becknApi.middleware)
 })
 
 export const persistor = persistStore(store)

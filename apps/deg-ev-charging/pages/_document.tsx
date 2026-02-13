@@ -23,7 +23,7 @@ export default function Document() {
         />
         <link
           rel="shortcut icon"
-          href="./images/ev_app_logo.svg"
+          href="./images/ev_charging_logo.svg"
         />
       </Head>
       <body>
