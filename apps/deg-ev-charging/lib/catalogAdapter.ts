@@ -127,8 +127,9 @@ export function catalogItemToSelectedCharger(
     type: connectorType || 'CCS2',
     icon: ''
   }
-  const address = loc.address
-    ? [address['streetAddress'], address['addressLocality'], address['addressRegion'], address['addressCountry']]
+  const addr = loc.address
+  const address = addr
+    ? [addr['streetAddress'], addr['addressLocality'], addr['addressRegion'], addr['addressCountry']]
         .filter(Boolean)
         .join(', ')
     : ''

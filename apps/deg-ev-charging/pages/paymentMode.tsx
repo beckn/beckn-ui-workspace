@@ -1,7 +1,13 @@
 import React, { useState } from 'react'
 import { useRouter } from 'next/router'
+import { useSelector, useDispatch } from 'react-redux'
 import { useLanguage } from '../hooks/useLanguage'
 import { PaymentMethodSelectionProps } from '@beckn-ui/common'
+import { CheckoutRootState } from '@beckn-ui/common/src/store/checkout-slice'
+import { useConfirmMutation } from '@beckn-ui/common/src/services/beckn-2.0/confirm'
+import { checkoutActions } from '@beckn-ui/common/src/store/checkout-slice'
+import { buildConfirmRequest20, normalizeConfirmResponse20ToLegacy } from '@utils/payload-2.0'
+import type { InitResponse } from '@beckn-ui/common/lib/types/beckn-2.0/init'
 import { testIds } from '@shared/dataTestIds'
 import Visa from '@public/images/visa.svg'
 import masterCard from '@public/images/masterCard.svg'
@@ -18,6 +24,9 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
 
   const { t } = useLanguage()
   const router = useRouter()
+  const dispatch = useDispatch()
+  const initResponseRaw20 = useSelector((state: CheckoutRootState) => state.checkout?.initResponseRaw20)
+  const [confirm, { isLoading: isConfirmLoading }] = useConfirmMutation()
 
   const {
     disableButton = false,
@@ -64,13 +73,23 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
           marginTop: '2rem'
         }}
         text={t.confirmOrder}
-        handleClick={() => {
+        handleClick={async () => {
+          if (!checkedPayment || !initResponseRaw20?.length) return
           setOpenModal(true)
-          if (checkedPayment) {
-            router.push('/secureCheckout')
+          try {
+            const initResp = initResponseRaw20[0] as InitResponse
+            const payload = buildConfirmRequest20(initResp)
+            const confirmResp = await confirm(payload).unwrap()
+            dispatch(
+              checkoutActions.setConfirmResponse({ data: [normalizeConfirmResponse20ToLegacy(confirmResp) as any] })
+            )
+            router.push('/orderConfirmation')
+          } catch (err) {
+            setOpenModal(false)
           }
         }}
-        disabled={!checkedPayment || disableButton}
+        disabled={!checkedPayment || disableButton || isConfirmLoading || !initResponseRaw20?.length}
+        isLoading={isConfirmLoading}
       />
     </Box>
   )

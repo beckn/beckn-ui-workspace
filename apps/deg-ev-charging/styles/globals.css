@@ -325,6 +325,15 @@ select:-webkit-autofill:focus {
   color: #fff !important;
 }
 
+.ev-app .subHeader_bottom_header__NOUrY {
+  background-color: var(--ev-primary) !important;
+  color: #fff !important;
+}
+
+.ev-app .subHeader_bottom_header__NOUrY p {
+  color: #fff !important;
+}
+
 .book_charger_form .auth_signin_container__zWlCc {
   padding-top: 0px !important;
 }

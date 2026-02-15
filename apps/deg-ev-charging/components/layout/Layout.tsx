@@ -29,13 +29,26 @@ import TopHeader from '@components/TopHeader/TopHeader'
 
 const bottomNavigatorWhiteList = ['/', '/discovery', '/cart', '/orderHistory', '/profile']
 
-const evLayoutRoutes = ['/', '/discovery', '/detailView', '/cart', '/orderHistory', '/profile']
+const evLayoutRoutes = [
+  '/',
+  '/discovery',
+  '/detailView',
+  '/cart',
+  '/checkout',
+  '/paymentMode',
+  '/orderConfirmation',
+  '/orderHistory',
+  '/profile'
+]
 
 const headerTitleByRoute: Record<string, string> = {
   '/': 'EV Charging',
   '/discovery': 'EV Charging',
   '/detailView': 'EV Charging',
   '/cart': 'Cart',
+  '/checkout': 'Book Charger',
+  '/paymentMode': 'Payment',
+  '/orderConfirmation': 'Order Confirmation',
   '/orderHistory': 'Chargers',
   '/profile': 'Profile'
 }

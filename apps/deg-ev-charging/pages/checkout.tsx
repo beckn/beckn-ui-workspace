@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { Box, Card, CardBody, Container, Divider, Flex, Heading, Stack, Text, useTheme, VStack } from '@chakra-ui/react'
+import { Box, Container, Flex, Stack, Text, VStack } from '@chakra-ui/react'
 import { BecknAuth, ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
-import { InputProps, Loader } from '@beckn-ui/molecules'
+import { InputProps } from '@beckn-ui/molecules'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import {
   CheckoutRootState,
@@ -11,18 +11,22 @@ import {
   Item,
   ParsedItemModel
 } from '@beckn-ui/common'
+import type { DiscoverCatalogStored } from '@beckn-ui/common/lib/types/beckn-2.0/discover'
 import { useDispatch, useSelector } from 'react-redux'
 import { getCountryCode } from '@utils/general'
-import { useInitMutation } from '@beckn-ui/common/src/services/init'
-import { getInitPayload, getSelectPayload } from '@utils/payload'
+import { useInitMutation } from '@beckn-ui/common/src/services/beckn-2.0/init'
 import { AuthRootState } from '@store/auth-slice'
 import { currencyMap, DOMAIN } from '@lib/config'
-import { useSelectMutation } from '@beckn-ui/common/src/services/select'
+import { useSelectMutation } from '@beckn-ui/common/src/services/beckn-2.0/select'
 import { useLanguage } from '@hooks/useLanguage'
 import { ChargerSelectRootState } from '@store/chargerSelect-slice'
 import { useRouter } from 'next/router'
 import { cartActions } from '@store/cart-slice'
 import { getPaymentBreakDown } from '@utils/checkout-utils'
+import { checkoutActions } from '@beckn-ui/common/src/store/checkout-slice'
+import { buildSelectRequest20, buildInitRequest20, normalizeInitResponse20ToLegacy } from '@utils/payload-2.0'
+import type { SelectResponse } from '@beckn-ui/common/lib/types/beckn-2.0/select'
+import type { InitResponseModel, SelectResponseModel } from '@beckn-ui/common'
 
 interface FormData {
   amountToPay: string
@@ -38,16 +42,12 @@ const validateForm = (formData: FormData) => {
   const errors: FormErrors = { amountToPay: '', kwhToCharge: '' }
   const numberRegex = /^\d*\.?\d*$/
 
-  if (!formData.amountToPay) {
-    errors.amountToPay = 'Amount to Pay is required'
-  } else if (!numberRegex.test(formData.amountToPay.toString())) {
-    errors.amountToPay = 'Please enter a valid number'
-  }
-
   if (!formData.kwhToCharge) {
-    errors.kwhToCharge = 'kWh to Charge is required'
+    errors.kwhToCharge = 'Quantity (kWh) is required'
   } else if (!numberRegex.test(formData.kwhToCharge.toString())) {
     errors.kwhToCharge = 'Please enter a valid number'
+  } else if (Number(formData.kwhToCharge) <= 0) {
+    errors.kwhToCharge = 'Quantity must be greater than 0'
   }
 
   return errors
@@ -81,17 +81,18 @@ const ChargerDetails = () => {
 
   const initResponse = useSelector((state: CheckoutRootState) => state.checkout?.initResponse)
   const selectResponse = useSelector((state: CheckoutRootState) => state.checkout?.selectResponse)
-  const { items, totalQuantity, totalAmount } = useSelector((state: ICartRootState) => state.cart)
+  const { items } = useSelector((state: ICartRootState) => state.cart)
   const { selectedCharger } = useSelector((state: ChargerSelectRootState) => state?.selectCharger)
   const { transactionId } = useSelector((state: DiscoverRootState) => state.discover)
-  const [fetchQuotes, { isLoading: selectLoading, error: selectError }] = useSelectMutation()
-  const [initialize, { isLoading: initializeLoading, error: initializeError }] = useInitMutation()
+  const discoverCatalogs = useSelector(
+    (state: DiscoverRootState) => state.discover?.catalogs ?? []
+  ) as DiscoverCatalogStored[]
+  const [fetchQuotes, { error: selectError }] = useSelectMutation()
+  const [initialize, { error: initializeError }] = useInitMutation()
   const { user } = useSelector((state: AuthRootState) => state.auth)
   const { t } = useLanguage()
   const router = useRouter()
   const dispatch = useDispatch()
-  const theme = useTheme()
-  const primaryColor = theme.colors.primary[100]
 
   const [shippingFormData, setShippingFormData] = useState<ShippingFormInitialValuesType>({
     name: '',
@@ -101,21 +102,11 @@ const ChargerDetails = () => {
     pinCode: ''
   })
 
-  const [billingFormData, setBillingFormData] = useState<ShippingFormInitialValuesType>({
-    name: '',
-    mobileNumber: '',
-    email: '',
-    address: '',
-    pinCode: ''
-  })
-
   useEffect(() => {
     if (items && items.length > 0) {
-      setIsLoading(prev => ({ ...prev, select: true }))
-      console.log(selectedCharger)
       const firstItem = items[0] as CartItemForRequest
       const initialAmount = parseFloat(selectedCharger?.rate?.toString() || '0') || 0
-      const initialKwh = parseFloat(firstItem.quantity.toString()) || 0
+      const initialQtyNum = parseFloat(firstItem.quantity.toString()) || 0
 
       setChargerDetails({
         stationName: firstItem.providerName || '',
@@ -128,29 +119,13 @@ const ChargerDetails = () => {
         portId: selectedCharger?.selectedPort?.type || ''
       })
 
+      const initialAmt = Number((initialQtyNum * initialAmount).toFixed(2))
       setFormData({
-        amountToPay: totalAmount.toString(),
-        kwhToCharge: totalQuantity.toString()
+        amountToPay: initialAmt.toString(),
+        kwhToCharge: initialQtyNum.toString()
       })
-
-      fetchQuotes(
-        getSelectPayload(
-          items,
-          transactionId,
-          DOMAIN,
-          {
-            location: getCountryCode()
-          },
-          selectedCharger || undefined
-        )
-      )
-        .unwrap()
-        .then(() => {})
-        .catch(() => {
-          setIsLoading(prev => ({ ...prev, select: false }))
-        })
     }
-  }, [items, transactionId, selectedCharger, totalQuantity])
+  }, [items, selectedCharger])
 
   useEffect(() => {
     console.log('Dank user', user)
@@ -187,63 +162,26 @@ const ChargerDetails = () => {
 
     console.log('Dank formData', formData)
     setShippingFormData(formData)
-    setBillingFormData(formData)
   }, [user])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
-    console.log('Dank value', Number(value))
     const numericValue = value
+    if (name !== 'kwhToCharge' || Number(numericValue) < 0) return
 
-    if (Number(numericValue) < 0) return
-
-    let updatedFormData = { ...formData }
-
-    if (name === 'kwhToCharge') {
-      const calculatedAmount = Number((parseFloat(numericValue) * chargerDetails.rate).toFixed(2))
-
-      updatedFormData = {
-        ...formData,
-        kwhToCharge: numericValue,
-        amountToPay: calculatedAmount.toString()
-      }
-    } else if (name === 'amountToPay') {
-      const calculatedKwh = Number((parseFloat(numericValue) / chargerDetails.rate).toFixed(2))
-      updatedFormData = {
-        ...formData,
-        amountToPay: numericValue,
-        kwhToCharge: calculatedKwh.toString()
-      }
+    const calculatedAmount = Number((parseFloat(numericValue) * chargerDetails.rate).toFixed(2))
+    const updatedFormData = {
+      ...formData,
+      kwhToCharge: numericValue,
+      amountToPay: calculatedAmount.toString()
     }
-
     setFormData(updatedFormData)
-
     const errors = validateForm(updatedFormData)
-    setFormErrors(prevErrors => ({
-      ...prevErrors,
-      ['kwhToCharge']: errors['kwhToCharge'] || '',
-      ['amountToPay']: errors['amountToPay'] || ''
-    }))
+    setFormErrors(prev => ({ ...prev, kwhToCharge: errors.kwhToCharge || '' }))
   }
 
   const getInputs = () => {
     const inputs: InputProps[] = [
-      {
-        type: 'number',
-        name: 'amountToPay',
-        variant: 'rounded',
-        className: 'amount-to-pay-input',
-        value: formData.amountToPay.toString(),
-        handleChange: handleInputChange,
-        label: 'Amount to Pay',
-        error: formErrors.amountToPay,
-        dataTest: '',
-        disabled: true,
-        step: '0.01',
-        leftElement: () => (
-          <Text fontSize={'14px'}>{currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}</Text>
-        )
-      },
       {
         type: 'number',
         name: 'kwhToCharge',
@@ -251,7 +189,7 @@ const ChargerDetails = () => {
         className: 'kwh-to-charge-input',
         value: formData.kwhToCharge.toString(),
         handleChange: handleInputChange,
-        label: 'kWh to Charge',
+        label: 'Quantity (kWh)',
         error: formErrors.kwhToCharge,
         dataTest: '',
         disabled: initResponse.length > 0,
@@ -261,75 +199,73 @@ const ChargerDetails = () => {
     return inputs
   }
 
+  const calculatedAmount = Number((parseFloat(formData.kwhToCharge || '0') * chargerDetails.rate).toFixed(2))
+  const currencySymbol = currencyMap[getCountryCode().country.code as keyof typeof currencyMap] || '₹'
+
   const handleInitCall = useCallback(async () => {
     if (selectResponse.length === 0) return
-    const { id, type } = selectResponse[0]?.message?.order?.fulfillments[0] || {}
-    console.log(items.map(item => ({ ...item, tags: selectResponse[0]?.message?.order?.items[0]?.tags })))
-    const payloadPromise = getInitPayload(
+    const selectResp = selectResponse[0] as unknown as SelectResponse
+    const initPayload = buildInitRequest20(selectResp, {
       shippingFormData,
-      billingFormData,
-      {
-        cartItems: items.map(item => ({ ...item, tags: selectResponse[0]?.message?.order?.items[0]?.tags })),
-        updatedQuantity: formData.kwhToCharge
-      },
-      transactionId,
-      domain,
-      { id, type },
-      {
-        location: getCountryCode()
-      }
-    )
-    payloadPromise
-      .then(async res => {
-        await initialize(res)
-        setShowPayment(true)
-      })
-      .finally(() => {
-        setIsLoading(prev => ({ ...prev, updateCart: false }))
-      })
-  }, [shippingFormData, billingFormData, items, transactionId, domain, selectResponse, formData])
-
-  const handleInitialize = useCallback(async () => {
-    setIsLoading(prev => ({ ...prev, updateCart: true }))
-
-    await new Promise<void>(resolve => {
+      quantity: formData.kwhToCharge
+    })
+    try {
+      const initResp = await initialize(initPayload).unwrap()
       dispatch(
-        cartActions.addItemToCart({
-          product: {
-            ...selectedCharger?.data?.providerDetails,
-            item: selectedCharger?.data?.itemDetails as Item
-          } as ParsedItemModel,
-          amountToPay: parseFloat(formData.amountToPay),
-          quantity: parseFloat(formData.kwhToCharge)
+        checkoutActions.addInitResponse({
+          initResponse: [normalizeInitResponse20ToLegacy(initResp) as InitResponseModel]
         })
       )
-      setTimeout(() => {
-        resolve()
-      }, 2000)
-    })
+      dispatch(checkoutActions.setInitResponseRaw20({ data: [initResp] }))
+      setShowPayment(true)
+    } finally {
+      setIsLoading(prev => ({ ...prev, updateCart: false }))
+    }
+  }, [shippingFormData, formData.kwhToCharge, selectResponse, dispatch, initialize])
 
-    await handleInitCall()
-  }, [formData, selectedCharger, dispatch])
+  const handleInitialize = useCallback(async () => {
+    if (!items?.length) return
+    setIsLoading(prev => ({ ...prev, updateCart: true }))
+
+    dispatch(
+      cartActions.addItemToCart({
+        product: {
+          ...selectedCharger?.data?.providerDetails,
+          item: selectedCharger?.data?.itemDetails as Item
+        } as ParsedItemModel,
+        amountToPay: parseFloat(formData.amountToPay),
+        quantity: parseFloat(formData.kwhToCharge)
+      })
+    )
+
+    const updatedQuantity = formData.kwhToCharge
+    const updatedItems = items.map((item: CartItemForRequest) => ({
+      ...item,
+      quantity: parseFloat(updatedQuantity) || item.quantity
+    })) as CartItemForRequest[]
+
+    try {
+      const selectPayload = buildSelectRequest20(
+        updatedItems,
+        transactionId,
+        selectedCharger ?? undefined,
+        discoverCatalogs?.[0],
+        domain
+      )
+      const selectResp = await fetchQuotes(selectPayload).unwrap()
+      dispatch(checkoutActions.setSelectResponse({ data: [selectResp as unknown as SelectResponseModel] }))
+      await handleInitCall()
+    } catch (err) {
+      // select or init failed
+    } finally {
+      setIsLoading(prev => ({ ...prev, updateCart: false }))
+    }
+  }, [formData, selectedCharger, dispatch, items, transactionId, discoverCatalogs, domain, fetchQuotes, handleInitCall])
 
   const isFormFilled = useMemo(() => {
-    return (
-      Object.values(formData).every(value => value !== '' && value > 0) &&
-      Object.values(formErrors).every(value => value === '')
-    )
-  }, [formData, formErrors])
-
-  if (isLoading.select && !isLoading.updateCart) {
-    return (
-      <Box
-        display={'grid'}
-        height={'calc(100vh - 300px)'}
-        alignContent={'center'}
-        justifyContent={'center'}
-      >
-        <Loader text={t.quoteRequestLoader} />
-      </Box>
-    )
-  }
+    const qty = parseFloat(formData.kwhToCharge || '0')
+    return qty > 0 && !formErrors.kwhToCharge
+  }, [formData.kwhToCharge, formErrors.kwhToCharge])
 
   if (selectError || initializeError) {
     return (
@@ -347,151 +283,267 @@ const ChargerDetails = () => {
   return (
     <Container
       maxW="md"
-      padding={'20px 0px'}
-      className="hideScroll"
-      overflowY="scroll"
-      height={'calc(100vh - 100px)'}
+      px={4}
+      py={5}
+      className="hideScroll ev-app checkout-page"
+      overflowY="auto"
+      minH="calc(100vh - var(--ev-header-h) - 20px)"
+      bg="var(--ev-bg)"
     >
       <VStack
         spacing={6}
         align="stretch"
       >
-        {/* Charger Details Card */}
-        <Card
-          borderRadius="lg"
-          boxShadow="md"
+        {/* Provider Details */}
+        <Box
+          bg="var(--ev-surface)"
+          borderRadius="2xl"
+          borderWidth="1px"
+          borderColor="var(--ev-border)"
           overflow="hidden"
+          boxShadow="0 1px 3px rgba(0,0,0,0.04)"
         >
-          <CardBody p={'10px'}>
-            <Heading
-              size="md"
-              mb={4}
-              fontSize={'16px'}
-              fontWeight="400"
+          <Box
+            px={4}
+            pt={4}
+            pb={1}
+          >
+            <Text
+              fontSize="xs"
+              fontWeight="600"
+              color="var(--ev-primary)"
+              letterSpacing="wider"
+              textTransform="uppercase"
             >
-              Charger Details
-            </Heading>
-
-            <Stack spacing={1}>
-              <Flex justify="space-between">
+              Provider Details
+            </Text>
+          </Box>
+          <Box
+            pt={2}
+            pb={4}
+            px={4}
+          >
+            <Stack spacing={4}>
+              <Flex
+                flexDir="column"
+                gap={1}
+              >
                 <Text
-                  color="#595959"
-                  fontWeight={'500'}
+                  fontSize="xs"
+                  fontWeight="500"
+                  color="var(--ev-text-muted)"
                 >
-                  Station Name
+                  Provider / Station
                 </Text>
                 <Text
-                  color={'#797979'}
-                  fontWeight={'500'}
+                  fontSize="sm"
+                  fontWeight="500"
+                  color="var(--ev-text)"
                 >
                   {chargerDetails.stationName}
                 </Text>
               </Flex>
-              <Flex justify="space-between">
+              <Flex
+                flexDir="column"
+                gap={1}
+              >
                 <Text
-                  color="#595959"
-                  fontWeight={'500'}
+                  fontSize="xs"
+                  fontWeight="500"
+                  color="var(--ev-text-muted)"
+                >
+                  Address
+                </Text>
+                <Text
+                  fontSize="sm"
+                  fontWeight="500"
+                  color="var(--ev-text)"
+                  lineHeight="tall"
+                  wordBreak="break-word"
+                >
+                  {selectedCharger?.address || '—'}
+                </Text>
+              </Flex>
+            </Stack>
+          </Box>
+        </Box>
+
+        {/* Charger Details */}
+        <Box
+          bg="var(--ev-surface)"
+          borderRadius="2xl"
+          borderWidth="1px"
+          borderColor="var(--ev-border)"
+          overflow="hidden"
+          boxShadow="0 1px 3px rgba(0,0,0,0.04)"
+        >
+          <Box
+            px={4}
+            pt={4}
+            pb={1}
+          >
+            <Text
+              fontSize="xs"
+              fontWeight="600"
+              color="var(--ev-primary)"
+              letterSpacing="wider"
+              textTransform="uppercase"
+            >
+              Charger Details
+            </Text>
+          </Box>
+          <Box
+            pt={2}
+            pb={4}
+            px={4}
+          >
+            <Stack spacing={4}>
+              <Flex
+                flexDir="column"
+                gap={1}
+              >
+                <Text
+                  fontSize="xs"
+                  fontWeight="500"
+                  color="var(--ev-text-muted)"
+                >
+                  Station Name
+                </Text>
+                <Text
+                  fontSize="sm"
+                  fontWeight="500"
+                  color="var(--ev-text)"
+                >
+                  {chargerDetails.stationName}
+                </Text>
+              </Flex>
+              <Flex
+                flexDir="column"
+                gap={1}
+              >
+                <Text
+                  fontSize="xs"
+                  fontWeight="500"
+                  color="var(--ev-text-muted)"
                 >
                   Charger Name
                 </Text>
                 <Text
-                  color={'#797979'}
-                  fontWeight={'500'}
+                  fontSize="sm"
+                  fontWeight="500"
+                  color="var(--ev-text)"
                 >
                   {chargerDetails.chargerName}
                 </Text>
               </Flex>
-
-              <Flex justify="space-between">
+              <Flex
+                flexDir="column"
+                gap={1}
+              >
                 <Text
-                  color="#595959"
-                  fontWeight={'500'}
+                  fontSize="xs"
+                  fontWeight="500"
+                  color="var(--ev-text-muted)"
                 >
                   Rate
                 </Text>
                 <Text
-                  color={'#4461F2'}
-                  fontWeight={'500'}
+                  fontSize="sm"
+                  fontWeight="600"
+                  color="var(--ev-primary)"
                 >
-                  {currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}
-                  {chargerDetails.rate} / kwh
+                  {currencySymbol} {chargerDetails.rate} / kWh
                 </Text>
               </Flex>
-
-              <Box
+              <Flex
+                gap={3}
                 mt={2}
-                bg="#F0F0F0"
-                borderRadius="md"
-                p={'10px'}
+                flexWrap="wrap"
               >
-                <Flex justify="space-between">
-                  <Flex
-                    textAlign="center"
-                    flex={1}
-                    flexDirection={'column'}
-                    gap={'10px'}
+                <Box
+                  flex="1"
+                  minW="120px"
+                  p={3}
+                  bg="var(--ev-bg-card)"
+                  borderRadius="xl"
+                  borderWidth="1px"
+                  borderColor="var(--ev-border)"
+                >
+                  <Text
+                    fontSize="xs"
+                    color="var(--ev-text-muted)"
+                    mb={1}
                   >
-                    <Text
-                      color={'#595959'}
-                      fontWeight={'500'}
-                    >
-                      {chargerDetails.chargerId}
-                    </Text>
-                    <Text
-                      color="#797979"
-                      fontSize="12px"
-                    >
-                      Charger ID
-                    </Text>
-                  </Flex>
-
-                  <Divider
-                    orientation="vertical"
-                    borderColor="#BFBFBF"
-                    height="50px"
-                    margin="0 10px"
-                  />
-
-                  <Flex
-                    textAlign="center"
-                    flex={1}
-                    flexDirection={'column'}
-                    gap={'10px'}
+                    Charger ID
+                  </Text>
+                  <Text
+                    fontSize="sm"
+                    fontWeight="600"
+                    color="var(--ev-text)"
+                    noOfLines={1}
+                    title={chargerDetails.chargerId}
                   >
-                    <Text
-                      color={'#595959'}
-                      fontWeight={'500'}
-                    >
-                      {chargerDetails.portType}
-                    </Text>
-                    <Text
-                      color="#797979"
-                      fontSize="12px"
-                    >
-                      Port Type
-                    </Text>
-                  </Flex>
-                </Flex>
-              </Box>
+                    {chargerDetails.chargerId}
+                  </Text>
+                </Box>
+                <Box
+                  flex="1"
+                  minW="80px"
+                  p={3}
+                  bg="var(--ev-bg-card)"
+                  borderRadius="xl"
+                  borderWidth="1px"
+                  borderColor="var(--ev-border)"
+                >
+                  <Text
+                    fontSize="xs"
+                    color="var(--ev-text-muted)"
+                    mb={1}
+                  >
+                    Port Type
+                  </Text>
+                  <Text
+                    fontSize="sm"
+                    fontWeight="600"
+                    color="var(--ev-text)"
+                  >
+                    {chargerDetails.portType}
+                  </Text>
+                </Box>
+              </Flex>
             </Stack>
-          </CardBody>
-        </Card>
+          </Box>
+        </Box>
 
-        {/* Connector Tariffs Card */}
-        <Card
-          borderRadius="lg"
-          boxShadow="md"
+        {/* Connector Tariff */}
+        <Box
+          bg="var(--ev-surface)"
+          borderRadius="2xl"
+          borderWidth="1px"
+          borderColor="var(--ev-border)"
           overflow="hidden"
+          boxShadow="0 1px 3px rgba(0,0,0,0.04)"
         >
-          <CardBody p={'10px'}>
-            <Heading
-              size="md"
-              fontSize={'16px'}
-              fontWeight="400"
+          <Box
+            px={4}
+            pt={4}
+            pb={1}
+          >
+            <Text
+              fontSize="xs"
+              fontWeight="600"
+              color="var(--ev-primary)"
+              letterSpacing="wider"
+              textTransform="uppercase"
             >
-              Connector Tariffs
-            </Heading>
-
+              Connector Tariff
+            </Text>
+          </Box>
+          <Box
+            pt={2}
+            pb={4}
+            px={4}
+          >
             <Box className="book_charger_form">
               <BecknAuth
                 schema={{
@@ -509,101 +561,151 @@ const ChargerDetails = () => {
                 }}
                 isLoading={false}
               />
+              <Box
+                mt={4}
+                p={4}
+                bg="var(--ev-primary-light)"
+                borderRadius="xl"
+                borderWidth="1px"
+                borderColor="var(--ev-primary)"
+              >
+                <Flex
+                  justify="space-between"
+                  align="flex-start"
+                  gap={3}
+                  flexWrap="wrap"
+                >
+                  <Box>
+                    <Text
+                      fontSize="xs"
+                      fontWeight="500"
+                      color="var(--ev-text-muted)"
+                      mb={0.5}
+                    >
+                      Amount
+                    </Text>
+                    <Text
+                      fontSize="xs"
+                      color="var(--ev-text-muted)"
+                    >
+                      (Quantity × Rate: {formData.kwhToCharge || '0'} kWh × {chargerDetails.rate} / kWh)
+                    </Text>
+                  </Box>
+                  <Text
+                    fontSize="xl"
+                    fontWeight="700"
+                    color="var(--ev-primary)"
+                  >
+                    {currencySymbol} {calculatedAmount.toFixed(2)}
+                  </Text>
+                </Flex>
+              </Box>
             </Box>
-          </CardBody>
-        </Card>
+          </Box>
+        </Box>
 
-        {/* Payment Section - Only shown after confirmation */}
+        {/* Payment - only after confirm */}
         {showPayment && initResponse.length > 0 && (
           <>
-            <Card
-              borderRadius="lg"
-              boxShadow="md"
+            <Box
+              bg="var(--ev-surface)"
+              borderRadius="2xl"
+              borderWidth="1px"
+              borderColor="var(--ev-border)"
               overflow="hidden"
+              boxShadow="0 1px 3px rgba(0,0,0,0.04)"
             >
-              <CardBody p={2}>
-                <Heading
-                  size="md"
-                  mb={4}
-                  fontSize={'16px'}
-                  fontWeight="400"
+              <Box
+                px={4}
+                pt={4}
+                pb={1}
+              >
+                <Text
+                  fontSize="xs"
+                  fontWeight="600"
+                  color="var(--ev-primary)"
+                  letterSpacing="wider"
+                  textTransform="uppercase"
                 >
                   Payment
-                </Heading>
-
+                </Text>
+              </Box>
+              <Box
+                pt={2}
+                pb={4}
+                px={4}
+              >
                 <Stack spacing={3}>
                   {Object.entries(getPaymentBreakDown(initResponse, parseFloat(formData.kwhToCharge)).breakUpMap).map(
                     ([label, amount]) => (
                       <Flex
                         key={label}
                         justify="space-between"
+                        align="center"
                       >
                         <Text
-                          color="#000000"
-                          fontSize={'12px'}
-                          fontWeight={'500'}
+                          fontSize="sm"
+                          fontWeight="500"
+                          color="var(--ev-text)"
                         >
                           {label}
                         </Text>
                         <Text
-                          color="#797979"
-                          fontSize={'12px'}
-                          fontWeight={'500'}
+                          fontSize="sm"
+                          fontWeight="500"
+                          color="var(--ev-text-muted)"
                         >
-                          {currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}
+                          {currencySymbol}
                           {amount.value}
                         </Text>
                       </Flex>
                     )
                   )}
                 </Stack>
-              </CardBody>
-            </Card>
+              </Box>
+            </Box>
 
-            {/* Total Amount Section */}
-            <Card
-              borderRadius="lg"
-              boxShadow="md"
-              overflow="hidden"
+            <Box
+              bg="var(--ev-surface)"
+              borderRadius="2xl"
+              borderWidth="2px"
+              borderColor="var(--ev-primary)"
+              p={4}
+              boxShadow="0 1px 3px rgba(0,0,0,0.04)"
             >
-              <CardBody p={2}>
+              <Flex
+                justify="space-between"
+                align="center"
+                gap={4}
+                flexDir={{ base: 'column', sm: 'row' }}
+              >
                 <Flex
-                  justify="space-between"
-                  align="center"
+                  flexDir="column"
+                  gap={0}
                 >
-                  <Flex
-                    flexDir={'column'}
-                    gap={'2px'}
+                  <Text
+                    fontSize="xs"
+                    fontWeight="500"
+                    color="var(--ev-text-muted)"
                   >
-                    <Text
-                      color="#000000"
-                      fontSize={'12px'}
-                      fontWeight="500"
-                      whiteSpace={'nowrap'}
-                    >
-                      Total Amount
-                    </Text>
-                    <Text
-                      color={primaryColor}
-                      fontSize="15px"
-                      fontWeight="700"
-                    >
-                      {currencyMap[getCountryCode().country.code as keyof typeof currencyMap]}
-                      {getPaymentBreakDown(initResponse, parseFloat(formData.kwhToCharge)).totalPricewithCurrent.value}
-                    </Text>
-                  </Flex>
-                  <Box>
-                    <BecknButton
-                      text="Proceed to pay"
-                      sx={{
-                        marginBottom: '0px'
-                      }}
-                      handleClick={() => router.push('/paymentMode')}
-                    />
-                  </Box>
+                    Total Amount
+                  </Text>
+                  <Text
+                    fontSize="2xl"
+                    fontWeight="700"
+                    color="var(--ev-primary)"
+                  >
+                    {currencySymbol}
+                    {getPaymentBreakDown(initResponse, parseFloat(formData.kwhToCharge)).totalPricewithCurrent.value}
+                  </Text>
                 </Flex>
-              </CardBody>
-            </Card>
+                <BecknButton
+                  text="Proceed to pay"
+                  sx={{ marginBottom: 0, width: { base: '100%', sm: 'auto' } }}
+                  handleClick={() => router.push('/paymentMode')}
+                />
+              </Flex>
+            </Box>
           </>
         )}
       </VStack>

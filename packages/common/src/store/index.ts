@@ -16,8 +16,8 @@ export * from './ui-feedback-slice'
 export { default as DiscoveryReducer } from './discovery-slice'
 export * from './discovery-slice'
 
-export { default as discoverReducer } from './discover-slice'
-export * from './discover-slice'
+export { default as discoverReducer, discoverActions } from './beckn-2.0'
+export type { DiscoverBeckn20State, DiscoverBeckn20RootState, DiscoverState, DiscoverRootState } from './beckn-2.0'
 
 export { default as OrderReducer } from './order-slice'
 export * from './order-slice'
@@ -30,3 +30,5 @@ export * from './settingBox-slice'
 
 export { default as searchReducer } from './search-slice'
 export * from './search-slice'
+
+export * from './beckn-2.0'

@@ -10,11 +10,13 @@ import Cookies from 'js-cookie'
 import { checkoutActions, CheckoutRootState } from '@beckn-ui/common/src/store/checkout-slice'
 import { orderActions } from '@beckn-ui/common/src/store/order-slice'
 // import { getPayloadForOrderHistoryPost } from '@beckn-ui/common/src/utils'
-import { useConfirmMutation } from '@beckn-ui/common/src/services/confirm'
+import { useConfirmMutation } from '@beckn-ui/common/src/services/beckn-2.0/confirm'
 import { testIds } from '@shared/dataTestIds'
 import { ORDER_CATEGORY_ID, ROLE, ROUTE_TYPE } from '../lib/config'
-import { getPayloadForConfirm, getPayloadForOrderHistoryPost } from '@utils/payload'
-import { extractAuthAndHeader, getCountryCode, toBase64 } from '@utils/general'
+import { getPayloadForOrderHistoryPost } from '@utils/payload'
+import { buildConfirmRequest20, normalizeConfirmResponse20ToLegacy } from '@utils/payload-2.0'
+import type { InitResponse } from '@beckn-ui/common/lib/types/beckn-2.0/init'
+import { extractAuthAndHeader, toBase64 } from '@utils/general'
 import { cartActions } from '@store/cart-slice'
 import { clearSource, ConfirmResponseModel, feedbackActions, QuantityDetails } from '@beckn-ui/common'
 import { AuthRootState } from '@store/auth-slice'
@@ -34,7 +36,7 @@ const OrderConfirmation = () => {
   const [getVerificationMethods, { isLoading: verificationMethodsLoading }] = useGetVerificationMethodsMutation()
 
   const { user } = useSelector((state: AuthRootState) => state.auth)
-  const initResponse = useSelector((state: CheckoutRootState) => state.checkout?.initResponse)
+  const initResponseRaw20 = useSelector((state: CheckoutRootState) => state.checkout?.initResponseRaw20)
   const confirmResponse = useSelector((state: CheckoutRootState) => state.checkout?.confirmResponse)
 
   const bearerToken = Cookies.get('authToken')
@@ -85,11 +87,21 @@ const OrderConfirmation = () => {
   }
 
   useEffect(() => {
-    if (initResponse && initResponse.length > 0) {
-      const payload = getPayloadForConfirm(initResponse, { location: getCountryCode() })
+    if (initResponseRaw20 && initResponseRaw20.length > 0 && (!confirmResponse || confirmResponse.length === 0)) {
+      const initResp = initResponseRaw20[0] as InitResponse
+      const payload = buildConfirmRequest20(initResp)
       confirm(payload)
+        .unwrap()
+        .then(confirmResp => {
+          dispatch(
+            checkoutActions.setConfirmResponse({
+              data: [normalizeConfirmResponse20ToLegacy(confirmResp) as any]
+            })
+          )
+        })
+        .catch(() => {})
     }
-  }, [initResponse])
+  }, [initResponseRaw20, confirmResponse, dispatch, confirm])
 
   const handleOnAddToWallet = async () => {
     if (!confirmResponse) return
