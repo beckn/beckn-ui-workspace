@@ -12,8 +12,8 @@ const numberOfDigits = 6
 
 const OTPVerification = () => {
   const [OTP, setOTP] = useState(new Array(numberOfDigits).fill(''))
-  const [OTPError, setOTPError] = useState<string | null>(null)
-  const otpBoxReference = useRef<any>([])
+  const [, setOTPError] = useState<string | null>(null)
+  const otpBoxReference = useRef<(HTMLInputElement | null)[]>([])
 
   const dispatch = useDispatch()
   const { t } = useLanguage()
@@ -22,9 +22,9 @@ const OTPVerification = () => {
 
   useEffect(() => {}, [])
 
-  const handleChange = (value: any, index: any) => {
+  const handleChange = (value: string, index: number) => {
     if (!/^[0-9]?$/.test(value)) return
-    let newArr = [...OTP]
+    const newArr = [...OTP]
     newArr[index] = value
     setOTP(newArr)
 
@@ -33,7 +33,7 @@ const OTPVerification = () => {
     }
   }
 
-  const handleBackspaceAndEnter = (e: any, index: any) => {
+  const handleBackspaceAndEnter = (e: React.KeyboardEvent<HTMLInputElement>, index: number) => {
     if (e.key === 'Backspace' && !e.target.value && index > 0) {
       otpBoxReference.current[index - 1].focus()
     }

@@ -1,4 +1,4 @@
-import { Contact, PickUpDropOffModel } from '@beckn-ui/common'
+import { Contact } from '@beckn-ui/common'
 
 interface BillingAddress {
   name: string

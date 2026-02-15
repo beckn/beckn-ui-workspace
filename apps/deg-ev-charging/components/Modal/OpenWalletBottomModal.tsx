@@ -27,17 +27,17 @@ const numberOfDigits = 6
 
 const OpenWalletBottomModal: React.FC<OpenWalletBottomModalProps> = ({ modalType, setModalType }) => {
   const [OTP, setOTP] = useState(new Array(numberOfDigits).fill(''))
-  const otpBoxReference = useRef<any>([])
-  const [checkboxes, setCheckboxes] = useState<any>(
-    checkboxLabels.reduce((acc, label) => ({ ...acc, [label.toLowerCase()]: false }), {})
+  const otpBoxReference = useRef<(HTMLInputElement | null)[]>([])
+  const [checkboxes, setCheckboxes] = useState<Record<string, boolean>>(
+    checkboxLabels.reduce((acc, label) => ({ ...acc, [label.toLowerCase()]: false }), {} as Record<string, boolean>)
   )
   const bearerToken = Cookies.get('authToken')
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
-  const [isLoading, setIsLoading] = useState(false)
+  const [, setIsLoading] = useState(false)
 
   const dispatch = useDispatch()
   const { user } = useSelector((state: AuthRootState) => state.auth)
-  const [verifyOtp] = useVerifyOtpMutation()
+  useVerifyOtpMutation()
   const [getUser] = useGetUserMutation()
 
   const [inputValue, setInputValue] = useState(`users/phone/${user?.agent?.agent_profile?.phone_number || ''}`)
@@ -51,7 +51,7 @@ const OpenWalletBottomModal: React.FC<OpenWalletBottomModalProps> = ({ modalType
   }, [user])
 
   const handleCheckboxChange = (name: string) => {
-    setCheckboxes((prev: any) => ({
+    setCheckboxes((prev: Record<string, boolean>) => ({
       ...prev,
       [name.toLowerCase()]: !prev[name.toLowerCase()]
     }))
@@ -65,7 +65,7 @@ const OpenWalletBottomModal: React.FC<OpenWalletBottomModalProps> = ({ modalType
   const handleChange = (value: string, index: number) => {
     if (!/^[0-9]?$/.test(value)) return
 
-    let newArr = [...OTP]
+    const newArr = [...OTP]
     newArr[index] = value
     setOTP(newArr)
 
@@ -74,7 +74,7 @@ const OpenWalletBottomModal: React.FC<OpenWalletBottomModalProps> = ({ modalType
     }
   }
 
-  const handleBackspaceAndEnter = (e: any, index: any) => {
+  const handleBackspaceAndEnter = (e: React.KeyboardEvent<HTMLInputElement>, index: number) => {
     if (e.key === 'Backspace' && !e.target.value && index > 0) {
       otpBoxReference.current[index - 1].focus()
     }
@@ -84,8 +84,6 @@ const OpenWalletBottomModal: React.FC<OpenWalletBottomModalProps> = ({ modalType
   }
 
   const handleVerifyOtp = async () => {
-    const data = { otp: Number(OTP.join('')) }
-
     try {
       // await verifyOtp(data).unwrap()
       await handleLinkWallet({
@@ -107,11 +105,10 @@ const OpenWalletBottomModal: React.FC<OpenWalletBottomModalProps> = ({ modalType
 
   const handleValidateWalletProfileId = async () => {
     try {
-      const response: any = await getUser(inputValue)
-      const result = response.data
+      const response = await getUser(inputValue)
+      const result = 'data' in response ? response.data : undefined
 
       if (result && Array.isArray(result) && result.length > 0) {
-        const walletData = result[0]
         dispatch(setShowInitialAlert(false))
         setModalType('otp')
       } else {
@@ -217,10 +214,11 @@ const OpenWalletBottomModal: React.FC<OpenWalletBottomModalProps> = ({ modalType
                     name={'profileId'}
                   />
                   <BecknButton
-                    children="Link"
                     sx={{ bgColor: '#09BD71', color: 'white', mt: '20px' }}
                     handleClick={handleValidateWalletProfileId}
-                  />
+                  >
+                    Link
+                  </BecknButton>
                 </Box>
               </BottomModal>
             )

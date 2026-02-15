@@ -1,5 +1,4 @@
 import React from 'react'
-import { IconType } from 'react-icons'
 import cs from 'classnames'
 import { useLanguage } from '../../hooks/useLanguage'
 import { toast } from 'react-toastify'
@@ -32,7 +31,7 @@ const OptionCard: React.FC<OptionCardProps> = ({
   return (
     <div
       className="text-center"
-      onClick={e => {
+      onClick={() => {
         if (tagValue !== 'Books' && tagValue !== 'restaurant') {
           toast.info(`${t.comingSoon}`, {
             theme: 'light',
@@ -59,7 +58,6 @@ const OptionCard: React.FC<OptionCardProps> = ({
           }
         )}
       >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={isSelected ? iconUrlLight : iconUrl}
           alt=""

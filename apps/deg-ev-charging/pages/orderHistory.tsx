@@ -4,7 +4,6 @@ import ChargingSessionCard from '../components/card/ChargingSessionCard'
 import { ChargingHistoryResponse } from '@lib/types/orderHistory'
 import { Loader } from '@beckn-ui/molecules'
 import Cookies from 'js-cookie'
-import { useRouter } from 'next/router'
 import { ORDER_CATEGORY_ID } from '@lib/config'
 import { formatDate } from '@beckn-ui/common'
 import EmptyScreenTemplate from '@components/EmptyTemplates/EmptyScreenTemplate'
@@ -16,7 +15,6 @@ const OrderHistory = () => {
   const [isLoading, setIsLoading] = useState(true)
 
   const bearerToken = Cookies.get('authToken')
-  const router = useRouter()
   const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
 
   useEffect(() => {
@@ -32,36 +30,46 @@ const OrderHistory = () => {
       .then(response => response.json())
       .then(result => {
         const parsedData: ChargingHistoryResponse = { activeSession: [], history: [] }
-        result.forEach((item: any) => {
-          if (item.items.length > 0) {
-            const details = item.items[0]
-            if (item.delivery_status === '100') {
-              parsedData.history.push({
-                bppId: item.bpp_id,
-                bppUri: item.bpp_uri,
-                id: item.order_id,
-                name: details.name,
-                type: details.type || '',
-                duration: `${details.duration ? details.duration + ' min' : ''}`,
-                cost: Number(details.price.value) * Number(details?.quantity?.selected?.measure?.value || 0),
-                date: formatDate(item.publishedAt, 'dd/MM/yyyy; hh:mm a'),
-                status: 'Completed'
-              })
-            } else {
-              parsedData.activeSession.push({
-                bppId: item.bpp_id,
-                bppUri: item.bpp_uri,
-                id: item.order_id,
-                name: details.name,
-                type: details.type || '',
-                duration: `${details.duration ? details.duration + ' min' : ''}`,
-                cost: Number(details.price.value || 0) * Number(details?.quantity?.selected?.measure?.value || 0),
-                date: formatDate(item.publishedAt, 'dd/MM/yyyy; hh:mm a'),
-                status: 'In Progress'
-              })
+        result.forEach(
+          (
+            item: Record<string, unknown> & {
+              items: Array<Record<string, unknown>>
+              delivery_status?: string
+              bpp_id?: string
+              bpp_uri?: string
+              order_id?: string
+            }
+          ) => {
+            if (item.items.length > 0) {
+              const details = item.items[0]
+              if (item.delivery_status === '100') {
+                parsedData.history.push({
+                  bppId: item.bpp_id,
+                  bppUri: item.bpp_uri,
+                  id: item.order_id,
+                  name: details.name,
+                  type: details.type || '',
+                  duration: `${details.duration ? details.duration + ' min' : ''}`,
+                  cost: Number(details.price.value) * Number(details?.quantity?.selected?.measure?.value || 0),
+                  date: formatDate(item.publishedAt, 'dd/MM/yyyy; hh:mm a'),
+                  status: 'Completed'
+                })
+              } else {
+                parsedData.activeSession.push({
+                  bppId: item.bpp_id,
+                  bppUri: item.bpp_uri,
+                  id: item.order_id,
+                  name: details.name,
+                  type: details.type || '',
+                  duration: `${details.duration ? details.duration + ' min' : ''}`,
+                  cost: Number(details.price.value || 0) * Number(details?.quantity?.selected?.measure?.value || 0),
+                  date: formatDate(item.publishedAt, 'dd/MM/yyyy; hh:mm a'),
+                  status: 'In Progress'
+                })
+              }
             }
           }
-        })
+        )
         console.log('parsedData', parsedData)
         setData(parsedData)
 

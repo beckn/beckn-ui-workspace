@@ -3,6 +3,7 @@ import Api from '../becknApi'
 import type { InitRequest, InitResponse } from '@beckn-ui/common/lib/types/beckn-2.0/init'
 
 const initApi = Api.injectEndpoints({
+  overrideExisting: true,
   endpoints: build => ({
     init: build.mutation<InitResponse, InitRequest>({
       query: (payload: InitRequest) => ({

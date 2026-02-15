@@ -18,9 +18,9 @@ export function renderDiscoveryItems(
       const cardHtml = renderTemplate(templateHtml, item, offers, stylingHints)
       const withId =
         cardHtml && !cardHtml.includes('data-item-id')
-          ? `<div data-item-id="${itemId}" class="item-card">${cardHtml}</div>`
+          ? `<div data-item-id="${escapeHtml(itemId)}" class="item-card">${cardHtml}</div>`
           : cardHtml
-      html += `<div class="item-with-provider"><span class="provider-name">${escapeHtml(providerName)}</span>${withId}</div>`
+      html += `<div class="item-with-provider" data-item-id="${escapeHtml(itemId)}"><span class="provider-name">${escapeHtml(providerName)}</span>${withId}</div>`
     }
   }
   return html

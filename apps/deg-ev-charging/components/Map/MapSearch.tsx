@@ -26,9 +26,17 @@ function formatLocationName(name: string): LocalNameFormat {
   }
 }
 
+export interface LocationSuggestion {
+  display_name?: string
+  place_id?: string
+  lat?: number
+  lon?: number
+  [key: string]: unknown
+}
+
 export interface SearchBarProp {
   setQuery: React.Dispatch<React.SetStateAction<string>>
-  locations: any[]
+  locations: LocationSuggestion[]
   query: string
   handleLocationClick: (lat: number, long: number) => void
   fetchResults: (query: string) => void
@@ -38,7 +46,6 @@ export interface SearchBarProp {
 const SearchBar: React.FC<SearchBarProp> = ({
   setQuery,
   locations,
-  query,
   handleLocationClick,
   fetchResults,
   setShowSuggestions
@@ -54,8 +61,7 @@ const SearchBar: React.FC<SearchBarProp> = ({
 
   useEffect(() => {
     setShowSuggestions(!isEmpty(value) && locations && !isEmpty(locations))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locations, value])
+  }, [locations, value, setShowSuggestions])
 
   useEffect(() => {
     setLoading(true)
@@ -65,10 +71,8 @@ const SearchBar: React.FC<SearchBarProp> = ({
   }, [debouncedValue])
 
   useEffect(() => {
-    // setQuery(debouncedValue);
     fetchResults(debouncedValue)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedValue])
+  }, [debouncedValue, fetchResults])
 
   return (
     <>
@@ -93,7 +97,7 @@ const SearchBar: React.FC<SearchBarProp> = ({
       </div>
       {!isEmpty(value) && locations && !isEmpty(locations) && (
         <div className="flex flex-col overflow-scroll max-h-[100vh]  bg-white  rounded-md h-[100vh] relative z-[9995] divide-y">
-          {locations.map((singleLocation, index) => {
+          {locations.map(singleLocation => {
             const { primaryName, secondaryName } = formatLocationName(singleLocation.display_name)
             return (
               <div

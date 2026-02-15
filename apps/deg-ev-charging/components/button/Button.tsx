@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from 'react'
+import React, { ReactElement } from 'react'
 import { Button as ButtonComp } from '@chakra-ui/react'
 
 export interface ButtonPropsModel {

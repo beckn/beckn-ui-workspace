@@ -8,7 +8,7 @@ import { catalogItemToParsedModel, catalogItemToSelectedCharger } from '@lib/cat
 import type { DiscoverRootState } from '@beckn-ui/common'
 import { cartActions } from '@store/cart-slice'
 import { chargerSelectActions } from '@store/chargerSelect-slice'
-import { checkoutActions } from '@beckn-ui/common'
+import { checkoutBeckn20Actions } from '@beckn-ui/common'
 import { DOMAIN } from '@lib/config'
 import { findItemInCatalogs, getCatalogItemsAndOffers } from '@utils/discoverHelpers'
 import { fetchRendererConfigFromDiscoverCatalogs } from '@utils/rendererFromDiscover'
@@ -31,8 +31,8 @@ const DetailView = () => {
   const router = useRouter()
   const { itemId } = router.query
   const dispatch = useDispatch()
-  const discoverCatalogs = useSelector((state: DiscoverRootState) => state.discover.catalogs)
-  const transactionId = useSelector((state: DiscoverRootState) => state.discover.transactionId)
+  const discoverCatalogs = useSelector((state: DiscoverRootState) => state.discover?.catalogs)
+  const transactionId = useSelector((state: DiscoverRootState) => state.discover?.transactionId)
   const [renderedHtml, setRenderedHtml] = useState<string>('')
   const [productImage, setProductImage] = useState<string>('')
   const [loading, setLoading] = useState(true)
@@ -104,7 +104,7 @@ const DetailView = () => {
     const parsed = catalogItemToParsedModel(catalog, item, txId, DOMAIN)
     const selected = catalogItemToSelectedCharger(catalog, item, parsed)
     dispatch(cartActions.clearCart())
-    dispatch(checkoutActions.clearState())
+    dispatch(checkoutBeckn20Actions.clearState())
     dispatch(chargerSelectActions.setSelectedCharger(selected))
     dispatch(
       cartActions.addItemToCart({

@@ -23,7 +23,7 @@ const SignIn = ({ initialFormData = { mobileNumber: '' } }) => {
   const { t } = useLanguage()
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let { name, value } = e.target
+    const { name, value } = e.target
 
     // if (!value.startsWith('+91 ')) {
     //   value = '+91 '

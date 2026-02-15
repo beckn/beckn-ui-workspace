@@ -3,6 +3,7 @@ import Api from '../becknApi'
 import type { SelectRequest, SelectResponse } from '@beckn-ui/common/lib/types/beckn-2.0/select'
 
 const selectApi = Api.injectEndpoints({
+  overrideExisting: true,
   endpoints: build => ({
     select: build.mutation<SelectResponse, SelectRequest>({
       query: (payload: SelectRequest) => ({

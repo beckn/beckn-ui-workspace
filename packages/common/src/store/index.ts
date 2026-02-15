@@ -13,10 +13,7 @@ export * from './status-slice'
 export { default as feedbackReducer } from './ui-feedback-slice'
 export * from './ui-feedback-slice'
 
-export { default as DiscoveryReducer } from './discovery-slice'
-export * from './discovery-slice'
-
-export { default as discoverReducer, discoverActions } from './beckn-2.0'
+export { discoverReducer, discoverActions } from './beckn-2.0'
 export type { DiscoverBeckn20State, DiscoverBeckn20RootState, DiscoverState, DiscoverRootState } from './beckn-2.0'
 
 export { default as OrderReducer } from './order-slice'

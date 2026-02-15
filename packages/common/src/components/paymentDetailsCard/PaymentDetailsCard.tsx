@@ -23,8 +23,10 @@ const PaymentDetailsCard: React.FC<PaymentDetailsCardProps> = ({ t, paymentMetho
         <React.Fragment key={category}>
           <Flex
             justifyContent={'space-between'}
+            alignItems={'center'}
             mt={'10px'}
             mb={'10px'}
+            gap={'8px'}
           >
             <Typography
               fontSize={'17px'}
@@ -38,6 +40,7 @@ const PaymentDetailsCard: React.FC<PaymentDetailsCardProps> = ({ t, paymentMetho
                 fontSize={'15px'}
                 fontWeight={'400'}
                 text={t('addCard')}
+                flexShrink={0}
               />
             )}
           </Flex>

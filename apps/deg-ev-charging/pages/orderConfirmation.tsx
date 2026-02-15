@@ -7,14 +7,16 @@ import { ConfirmationPage } from '@beckn-ui/becknified-components'
 import axios from '@services/axios'
 import { Box, Image } from '@chakra-ui/react'
 import Cookies from 'js-cookie'
-import { checkoutActions, CheckoutRootState } from '@beckn-ui/common/src/store/checkout-slice'
+import { CheckoutBeckn20RootState, checkoutBeckn20Actions } from '@beckn-ui/common'
 import { orderActions } from '@beckn-ui/common/src/store/order-slice'
-// import { getPayloadForOrderHistoryPost } from '@beckn-ui/common/src/utils'
 import { useConfirmMutation } from '@beckn-ui/common/src/services/beckn-2.0/confirm'
 import { testIds } from '@shared/dataTestIds'
 import { ORDER_CATEGORY_ID, ROLE, ROUTE_TYPE } from '../lib/config'
-import { getPayloadForOrderHistoryPost } from '@utils/payload'
-import { buildConfirmRequest20, normalizeConfirmResponse20ToLegacy } from '@utils/payload-2.0'
+import {
+  getPayloadForOrderHistoryPost,
+  buildConfirmRequest20,
+  normalizeConfirmResponse20ToLegacy
+} from '@lib/beckn-2.0'
 import type { InitResponse } from '@beckn-ui/common/lib/types/beckn-2.0/init'
 import { extractAuthAndHeader, toBase64 } from '@utils/general'
 import { cartActions } from '@store/cart-slice'
@@ -36,8 +38,8 @@ const OrderConfirmation = () => {
   const [getVerificationMethods, { isLoading: verificationMethodsLoading }] = useGetVerificationMethodsMutation()
 
   const { user } = useSelector((state: AuthRootState) => state.auth)
-  const initResponseRaw20 = useSelector((state: CheckoutRootState) => state.checkout?.initResponseRaw20)
-  const confirmResponse = useSelector((state: CheckoutRootState) => state.checkout?.confirmResponse)
+  const initResponseRaw = useSelector((state: CheckoutBeckn20RootState) => state.checkoutBeckn20?.initResponseRaw)
+  const confirmResponse = useSelector((state: CheckoutBeckn20RootState) => state.checkoutBeckn20?.confirmResponse)
 
   const bearerToken = Cookies.get('authToken')
   const axiosConfig = {
@@ -87,21 +89,21 @@ const OrderConfirmation = () => {
   }
 
   useEffect(() => {
-    if (initResponseRaw20 && initResponseRaw20.length > 0 && (!confirmResponse || confirmResponse.length === 0)) {
-      const initResp = initResponseRaw20[0] as InitResponse
+    if (initResponseRaw && initResponseRaw.length > 0 && (!confirmResponse || confirmResponse.length === 0)) {
+      const initResp = initResponseRaw[0] as InitResponse
       const payload = buildConfirmRequest20(initResp)
       confirm(payload)
         .unwrap()
         .then(confirmResp => {
           dispatch(
-            checkoutActions.setConfirmResponse({
+            checkoutBeckn20Actions.setConfirmResponse({
               data: [normalizeConfirmResponse20ToLegacy(confirmResp) as any]
             })
           )
         })
         .catch(() => {})
     }
-  }, [initResponseRaw20, confirmResponse, dispatch, confirm])
+  }, [initResponseRaw, confirmResponse, dispatch, confirm])
 
   const handleOnAddToWallet = async () => {
     if (!confirmResponse) return
@@ -278,7 +280,7 @@ const OrderConfirmation = () => {
                     // Save each order in localStorage
                     localStorage.setItem('selectedOrder', JSON.stringify(orderDetails))
                   })
-                  dispatch(checkoutActions.clearState())
+                  dispatch(checkoutBeckn20Actions.clearState())
                   dispatch(clearSource())
                 }
 

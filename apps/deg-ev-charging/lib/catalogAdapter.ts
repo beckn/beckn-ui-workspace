@@ -1,5 +1,5 @@
 import type { ParsedItemModel } from '@beckn-ui/common'
-import type { DiscoverCatalogStored } from '@store/discovery-slice'
+import type { DiscoverCatalogStored } from '@beckn-ui/common/lib/types/beckn-2.0/discover'
 import type { SelectedCharger, ChargerPort } from '@store/chargerSelect-slice'
 
 type BecknItem = Record<string, unknown>

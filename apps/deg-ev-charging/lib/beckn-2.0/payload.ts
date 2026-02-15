@@ -1,6 +1,6 @@
 /**
- * EV Charging adapter for Beckn 2.0 payload builders.
- * Uses generic builders from @beckn-ui/common and maps EV-specific types (CartItemForRequest, SelectedCharger) to generic options.
+ * Beckn 2.0 payload builders for EV Charging.
+ * Single source for select/init/confirm requests and normalizers.
  */
 import {
   buildSelectRequest20 as buildSelectRequest20Generic,
@@ -22,13 +22,26 @@ import type { ShippingFormInitialValuesType } from '@beckn-ui/becknified-compone
 const EV_CHARGING_SCHEMA =
   'https://raw.githubusercontent.com/beckn/protocol-specifications-new/refs/heads/main/schema/EvChargingService/v1/context.jsonld'
 
-/** Build Beckn 2.0 Select request for EV charging (uses common builder with EV schema and item mapping) */
+const CORE_V2_CONTEXT =
+  'https://raw.githubusercontent.com/beckn/protocol-specifications-new/refs/heads/main/schema/core/v2/context.jsonld'
+
+/** Domain for DEG EV Charging (beckn.one:deg:ev-charging:*) */
+export const EV_CHARGING_DOMAIN = 'beckn.one:deg:ev-charging:*'
+
+export interface SelectBuyerInput {
+  id?: string
+  displayName?: string
+  telephone?: string
+  email?: string
+}
+
 export function buildSelectRequest20(
   items: CartItemForRequest[],
   transactionId: string,
   selectedCharger: SelectedCharger | null | undefined,
   catalog?: DiscoverCatalogStored | null,
-  domain = 'ev-charging'
+  domain = EV_CHARGING_DOMAIN,
+  buyer?: SelectBuyerInput | null
 ): SelectRequest {
   if (!items.length) throw new Error('Cart is empty')
   const first = items[0]
@@ -41,6 +54,7 @@ export function buildSelectRequest20(
       quantity: Number(item.quantity) || 1,
       providerId: item.providerId,
       unitCode: 'KWH',
+      unitText: 'Kilowatt Hour',
       orderItemAttributes: {
         port_type: selectedCharger?.selectedPort?.type ?? ''
       }
@@ -50,11 +64,23 @@ export function buildSelectRequest20(
     bppUri,
     domain,
     schemaContext: EV_CHARGING_SCHEMA,
-    orderStatus: 'CONFIRMED'
+    orderStatus: 'CREATED',
+    orderContext: CORE_V2_CONTEXT,
+    orderType: 'beckn:Order',
+    buyerContext: CORE_V2_CONTEXT,
+    buyerType: 'beckn:Buyer',
+    buyerRole: 'BUYER',
+    buyer: buyer
+      ? {
+          id: buyer.id,
+          displayName: buyer.displayName,
+          telephone: buyer.telephone,
+          email: buyer.email
+        }
+      : undefined
   })
 }
 
-/** Build Beckn 2.0 Init request for EV charging (uses common builder with EV fulfillment mode) */
 export function buildInitRequest20(
   selectResponse: { context: BecknContext; message: { order: Order } },
   opts: {
@@ -75,21 +101,21 @@ export function buildInitRequest20(
     fulfillmentId: opts.fulfillmentId,
     fulfillmentType: opts.fulfillmentType,
     fulfillmentMode: 'EV_CHARGING',
-    schemaContext: EV_CHARGING_SCHEMA
+    schemaContext: EV_CHARGING_SCHEMA,
+    domain: EV_CHARGING_DOMAIN
   })
 }
 
-/** Build Beckn 2.0 Confirm request for EV charging (uses common builder) */
 export function buildConfirmRequest20(initResponse: {
   context: BecknContext
   message: { order: Order }
 }): ConfirmRequest {
   return buildConfirmRequest20Generic(initResponse, {
     schemaContext: EV_CHARGING_SCHEMA,
-    acceptedPaymentMethods: ['UPI', 'CREDIT_CARD', 'DEBIT_CARD', 'WALLET']
+    paymentStatus: 'INITIATED',
+    paymentContext: CORE_V2_CONTEXT
   })
 }
 
-/** Re-export normalizers from common (same signature) */
 export const normalizeInitResponse20ToLegacy = normalizeInitResponse20ToLegacyGeneric
 export const normalizeConfirmResponse20ToLegacy = normalizeConfirmResponse20ToLegacyGeneric

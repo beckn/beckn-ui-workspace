@@ -1,4 +1,4 @@
-import { useLanguage } from '@hooks/useLanguage'
+import React from 'react'
 import { Box, Flex, Image } from '@chakra-ui/react'
 import { BottomModal, Typography } from '@beckn-ui/molecules'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
@@ -20,7 +20,6 @@ const AlertModal: React.FC<AlertModalProps> = ({
   handleOpenPolicy,
   handleAlertSubmit
 }) => {
-  const { t } = useLanguage()
   return (
     <BottomModal
       dataTest={testIds.mobility_alert_modal}

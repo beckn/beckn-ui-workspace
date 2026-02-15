@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
 
 Date.prototype.addDays = function (days: number): Date {
-  var date = new Date(this.valueOf())
+  const date = new Date(this.valueOf())
   date.setDate(date.getDate() + days)
   return date
 }
 
-var date = new Date()
+const date = new Date()
 
 const getReturnValues = (countDown: number) => {
   // calculate time left
@@ -19,7 +19,7 @@ const getReturnValues = (countDown: number) => {
 }
 
 const useCountdown = (targetDate: number) => {
-  var expireDate = date.addDays(targetDate)
+  const expireDate = date.addDays(targetDate)
   const countDownDate = new Date(expireDate).getTime()
 
   const [countDown, setCountDown] = useState(countDownDate - new Date().getTime())

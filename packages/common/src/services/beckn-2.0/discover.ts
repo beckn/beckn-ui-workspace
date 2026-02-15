@@ -3,6 +3,7 @@ import Api from '../becknApi'
 import type { DiscoverRequest, DiscoverResponse } from '@beckn-ui/common/lib/types/beckn-2.0/discover'
 
 const discoverApi = Api.injectEndpoints({
+  overrideExisting: true,
   endpoints: build => ({
     discover: build.mutation<DiscoverResponse, DiscoverRequest>({
       query: (payload: DiscoverRequest) => ({

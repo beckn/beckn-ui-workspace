@@ -7,7 +7,6 @@ import CompletedIcon from '@public/images/completed_charging.svg'
 import { currencyMap } from '@lib/config'
 import { getCountryCode } from '@utils/general'
 import { useRouter } from 'next/router'
-import { orderActions } from '@beckn-ui/common'
 
 interface ChargingSessionCardProps {
   session: ChargingSession
@@ -15,10 +14,6 @@ interface ChargingSessionCardProps {
 
 const ChargingSessionCard = ({ session }: ChargingSessionCardProps) => {
   const router = useRouter()
-
-  function dispatch(arg0: any) {
-    throw new Error('Function not implemented.')
-  }
 
   return (
     <Box

@@ -59,7 +59,7 @@ const Map: React.FC<MapProps> = (props: MapProps) => {
 
   const [directions, setDirections] = useState<google.maps.DirectionsResult | null>(null)
   const [routePoints, setRoutePoints] = useState<google.maps.LatLngLiteral[]>([])
-  const [focusOnCar, setFocusOnCar] = useState<google.maps.LatLngLiteral | null>(null)
+  const [, setFocusOnCar] = useState<google.maps.LatLngLiteral | null>(null)
   const [map, setMap] = useState<google.maps.Map | null>(null)
   const [userLocation, setUserLocation] = useState<google.maps.LatLngLiteral | null>(null)
 
@@ -121,7 +121,7 @@ const Map: React.FC<MapProps> = (props: MapProps) => {
 
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY!,
-    libraries: libraries as any
+    libraries: libraries as 'places'[]
   })
 
   const fetchDirections = useCallback(() => {

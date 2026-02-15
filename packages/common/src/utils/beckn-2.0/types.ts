@@ -12,9 +12,11 @@ export interface SelectInputItem {
   orderItemAttributes?: Record<string, unknown>
   /** Optional unit code (e.g. KWH) */
   unitCode?: string
+  /** Optional unit text (e.g. Kilowatt Hour) – app can pass from app level */
+  unitText?: string
 }
 
-/** Options for building Select request */
+/** Options for building Select request. All optional fields can be passed from app level. */
 export interface BuildSelectRequestOptions {
   items: SelectInputItem[]
   transactionId: string
@@ -22,17 +24,27 @@ export interface BuildSelectRequestOptions {
   bppUri: string
   domain?: string
   location?: Record<string, unknown>
-  /** Default buyer; can be overridden per domain */
+  /** Buyer – pass from app level (id, displayName, telephone, email) */
   buyer?: {
     id?: string
     displayName?: string
     telephone?: string
     email?: string
   }
-  /** Schema context URL for @context and order type (e.g. EV Charging schema) */
+  /** Schema context URL for tag types / orderItemAttributes (e.g. EV Charging schema) */
   schemaContext: string
-  /** Order status to send (e.g. CONFIRMED) */
+  /** Order status – pass from app level (e.g. CREATED, CONFIRMED) */
   orderStatus?: string
+  /** Order @context URL – pass from app level if different from schemaContext */
+  orderContext?: string
+  /** Order @type – pass from app level (e.g. beckn:Order) */
+  orderType?: string
+  /** Buyer @context URL – pass from app level */
+  buyerContext?: string
+  /** Buyer @type – pass from app level (e.g. beckn:Buyer) */
+  buyerType?: string
+  /** Buyer beckn:role – pass from app level (e.g. BUYER) */
+  buyerRole?: string
 }
 
 /** Customer/fulfillment contact for Init */
@@ -43,7 +55,7 @@ export interface FulfillmentCustomer {
   address?: string
 }
 
-/** Options for building Init request */
+/** Options for building Init request. Pass from app level (domain, etc.) as needed. */
 export interface BuildInitRequestOptions {
   /** Customer / shipping details */
   customer: FulfillmentCustomer
@@ -55,14 +67,20 @@ export interface BuildInitRequestOptions {
   fulfillmentMode?: string
   /** Schema context URL */
   schemaContext: string
+  /** Override context.domain (e.g. beckn.one:deg:ev-charging:*) – pass from app level */
+  domain?: string
 }
 
 /** Options for building Confirm request */
 export interface BuildConfirmRequestOptions {
-  /** Schema context URL */
+  /** Schema context URL (for payment @context, use paymentContext if different) */
   schemaContext: string
-  /** Accepted payment methods (optional) */
+  /** Payment status: INITIATED or PAID */
+  paymentStatus?: string
+  /** Accepted payment methods (sent as beckn:acceptedPaymentMethods) */
   acceptedPaymentMethods?: string[]
+  /** Payment block @context (defaults to schemaContext); use core v2 for payment */
+  paymentContext?: string
 }
 
 /** Options for building context (shared across select/init/confirm) */

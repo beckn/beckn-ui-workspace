@@ -28,7 +28,7 @@ const contactSupport = ({ handleOnClose }: ContactSupportProps) => {
   const getSupportDetails = async () => {
     if (confirmResponse.length > 0 && confirmResponse[0].context && confirmResponse[0].message) {
       setIsLoading(true)
-      const { domain, bpp_id, bpp_uri, transaction_id } = confirmResponse[0].context
+      const { domain, bpp_id, bpp_uri } = confirmResponse[0].context
       const orderId = confirmResponse[0].message.orderId
 
       const supportPayload = {

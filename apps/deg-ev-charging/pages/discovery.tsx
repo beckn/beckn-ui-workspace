@@ -1,18 +1,14 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState } from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { getTemplate, getStylingHints } from '@lib/templateProcessor'
 import { useDiscoverMutation } from '@beckn-ui/common/src/services/beckn-2.0/discover'
 import { discoverActions } from '@beckn-ui/common'
+import type { DiscoverRootState } from '@beckn-ui/common'
 import type { DiscoverCatalogStored } from '@beckn-ui/common/lib/types/beckn-2.0/discover'
-import {
-  getCatalogsFromResponse,
-  filterCatalogsByIdSubstring,
-  buildDiscoverRequest,
-  getTransactionIdFromResponse
-} from '@utils/discoverHelpers'
+import { getCatalogsFromResponse, buildDiscoverRequest, getTransactionIdFromResponse } from '@utils/discoverHelpers'
 import { fetchRendererConfigFromDiscoverCatalogs } from '@utils/rendererFromDiscover'
 import { renderDiscoveryItems } from '@utils/renderDiscoveryItems'
 import { wrapTemplatePriceInBold } from '@utils/templateUtils'
@@ -26,18 +22,26 @@ const Discovery = () => {
   const searchTerm = typeof search === 'string' ? search : ''
   const dispatch = useDispatch()
   const [discover] = useDiscoverMutation()
+  const storedCatalogs = useSelector((state: DiscoverRootState) => state.discover?.catalogs ?? [])
   const [renderedHtml, setRenderedHtml] = useState<string>('')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const containerRef = useRef<HTMLDivElement>(null)
+
+  const handleCardClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    const card = (e.target as HTMLElement).closest('[data-item-id]')
+    if (card) {
+      e.preventDefault()
+      e.stopPropagation()
+      const id = card.getAttribute('data-item-id')
+      if (id) router.push(`/detailView?itemId=${encodeURIComponent(id)}`)
+    }
+  }
 
   useEffect(() => {
     let cancelled = false
-
     const run = async () => {
       setLoading(true)
       setError(null)
-      setRenderedHtml('')
       try {
         const payload = buildDiscoverRequest(searchTerm)
         let res: unknown
@@ -49,40 +53,11 @@ const Discovery = () => {
 
         if (cancelled) return
         const allCatalogs = getCatalogsFromResponse(res)
-        const catalogs = filterCatalogsByIdSubstring(allCatalogs) // filter catalogs by id substring
         const transactionId = getTransactionIdFromResponse(res)
         if (transactionId) {
           dispatch(discoverActions.setTransactionId({ transactionId }))
         }
-        if (!catalogs.length) {
-          setLoading(false)
-          return
-        }
-
-        dispatch(discoverActions.setDiscoverCatalogs({ catalogs: catalogs as DiscoverCatalogStored[] }))
-
-        let config: Awaited<ReturnType<typeof fetchRendererConfigFromDiscoverCatalogs>>
-        try {
-          config = await fetchRendererConfigFromDiscoverCatalogs(catalogs)
-        } catch {
-          const r = await fetch(FALLBACK_RENDERER_URL)
-          if (!r.ok) throw new Error('Failed to fetch renderer config')
-          config = await r.json()
-        }
-
-        if (cancelled) return
-        const templateConfig = getTemplate(config, 'discoveryCard')
-        if (!templateConfig?.html) {
-          setError('discoveryCard template not found in renderer.json')
-          setLoading(false)
-          return
-        }
-
-        const stylingHints = getStylingHints(config)
-        const templateHtml = wrapTemplatePriceInBold(templateConfig.html)
-        const html = renderDiscoveryItems(catalogs, templateHtml, stylingHints)
-        if (cancelled) return
-        setRenderedHtml(html)
+        dispatch(discoverActions.setDiscoverCatalogs({ catalogs: allCatalogs as DiscoverCatalogStored[] }))
       } catch (err) {
         if (!cancelled) {
           setError(err instanceof Error ? err.message : 'Something went wrong')
@@ -99,22 +74,42 @@ const Discovery = () => {
   }, [searchTerm, dispatch, discover])
 
   useEffect(() => {
-    if (!renderedHtml || !containerRef.current) return
-    const container = containerRef.current
-    const handler = (e: Event) => {
-      const card = (e.target as HTMLElement).closest('[data-item-id]')
-      if (card) {
-        const id = card.getAttribute('data-item-id')
-        if (id) router.push(`/detailView?itemId=${encodeURIComponent(id)}`)
+    if (!storedCatalogs?.length) {
+      setRenderedHtml('')
+      return
+    }
+    let cancelled = false
+    const run = async () => {
+      try {
+        let config: Awaited<ReturnType<typeof fetchRendererConfigFromDiscoverCatalogs>>
+        try {
+          config = await fetchRendererConfigFromDiscoverCatalogs(storedCatalogs)
+        } catch {
+          const r = await fetch(FALLBACK_RENDERER_URL)
+          if (!r.ok) throw new Error('Failed to fetch renderer config')
+          config = await r.json()
+        }
+
+        if (cancelled) return
+        const templateConfig = getTemplate(config, 'discoveryCard')
+        if (!templateConfig?.html) {
+          setError('discoveryCard template not found in renderer.json')
+          return
+        }
+
+        const stylingHints = getStylingHints(config)
+        const templateHtml = wrapTemplatePriceInBold(templateConfig.html)
+        const html = renderDiscoveryItems(storedCatalogs, templateHtml, stylingHints)
+        if (!cancelled) setRenderedHtml(html)
+      } catch (err) {
+        if (!cancelled) setError(err instanceof Error ? err.message : 'Something went wrong')
       }
     }
-    container.addEventListener('click', handler)
-    const cards = container.querySelectorAll('[data-item-id]')
-    cards.forEach(el => {
-      if (el instanceof HTMLElement) el.style.cursor = 'pointer'
-    })
-    return () => container.removeEventListener('click', handler)
-  }, [renderedHtml, router])
+    run()
+    return () => {
+      cancelled = true
+    }
+  }, [storedCatalogs])
 
   return (
     <>
@@ -156,10 +151,11 @@ const Discovery = () => {
 
           {!loading && !error && renderedHtml && (
             <div
-              ref={containerRef}
+              role="list"
               data-discovery-container
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6"
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 discovery-cards-container"
               dangerouslySetInnerHTML={{ __html: renderedHtml }}
+              onClick={handleCardClick}
             />
           )}
 

@@ -5,20 +5,21 @@ import { useDispatch, useSelector } from 'react-redux'
 import {
   toggleLocationSearchPageVisibility,
   setPickupAddress,
-  setDropoffAddress,
-  setGeoLatLong
+  setDropoffAddress
 } from '../../store/geoMapLocationSearch-slice'
 import backArrow from '/public/images/Back.svg'
 import locationMarker from '../../public/images/SearchLocationMarker.svg'
 import closeIcon from '../../public/images/Frame.svg'
 import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete'
-import { GeoLocationAddresModel } from 'lib/types/geoLocationSearchPage'
+interface GeoLocationState {
+  geoLocationSearchPageUI: { pickup: { address: string }; dropoff: { address: string } }
+}
 
 const GeoLocationInputList: React.FC = () => {
   const dispatch = useDispatch()
   const [address, setAddress] = useState<string>('')
-  const pickup = useSelector((state: any) => state.geoLocationSearchPageUI.pickup)
-  const dropoff = useSelector((state: any) => state.geoLocationSearchPageUI.dropoff)
+  const pickup = useSelector((state: GeoLocationState) => state.geoLocationSearchPageUI.pickup)
+  const dropoff = useSelector((state: GeoLocationState) => state.geoLocationSearchPageUI.dropoff)
 
   const handleSelect = async (data: string) => {
     const addressData = await geocodeByAddress(data)
@@ -51,7 +52,7 @@ const GeoLocationInputList: React.FC = () => {
         onChange={event => setAddress(event)}
         onSelect={data => handleSelect(data)}
       >
-        {({ getInputProps, suggestions, getSuggestionItemProps }): any => (
+        {({ getInputProps, suggestions, getSuggestionItemProps }): React.ReactNode => (
           <Flex flexDirection="column">
             <Flex
               flexDirection="row"

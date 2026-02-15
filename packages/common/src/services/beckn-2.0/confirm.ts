@@ -3,6 +3,7 @@ import Api from '../becknApi'
 import type { ConfirmRequest, ConfirmResponse } from '@beckn-ui/common/lib/types/beckn-2.0/confirm'
 
 const confirmApi = Api.injectEndpoints({
+  overrideExisting: true,
   endpoints: build => ({
     confirm: build.mutation<ConfirmResponse, ConfirmRequest>({
       query: (payload: ConfirmRequest) => ({

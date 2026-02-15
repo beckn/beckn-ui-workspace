@@ -4,7 +4,8 @@ import { BecknAuth, ShippingFormInitialValuesType } from '@beckn-ui/becknified-c
 import { InputProps } from '@beckn-ui/molecules'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import {
-  CheckoutRootState,
+  CheckoutBeckn20RootState,
+  checkoutBeckn20Actions,
   DiscoverRootState,
   ICartRootState,
   CartItemForRequest,
@@ -16,15 +17,19 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getCountryCode } from '@utils/general'
 import { useInitMutation } from '@beckn-ui/common/src/services/beckn-2.0/init'
 import { AuthRootState } from '@store/auth-slice'
-import { currencyMap, DOMAIN } from '@lib/config'
+import { currencyMap } from '@lib/config'
 import { useSelectMutation } from '@beckn-ui/common/src/services/beckn-2.0/select'
 import { useLanguage } from '@hooks/useLanguage'
 import { ChargerSelectRootState } from '@store/chargerSelect-slice'
 import { useRouter } from 'next/router'
 import { cartActions } from '@store/cart-slice'
 import { getPaymentBreakDown } from '@utils/checkout-utils'
-import { checkoutActions } from '@beckn-ui/common/src/store/checkout-slice'
-import { buildSelectRequest20, buildInitRequest20, normalizeInitResponse20ToLegacy } from '@utils/payload-2.0'
+import {
+  EV_CHARGING_DOMAIN,
+  buildSelectRequest20,
+  buildInitRequest20,
+  normalizeInitResponse20ToLegacy
+} from '@lib/beckn-2.0'
 import type { SelectResponse } from '@beckn-ui/common/lib/types/beckn-2.0/select'
 import type { InitResponseModel, SelectResponseModel } from '@beckn-ui/common'
 
@@ -54,7 +59,7 @@ const validateForm = (formData: FormData) => {
 }
 
 const ChargerDetails = () => {
-  const domain = DOMAIN
+  const domain = EV_CHARGING_DOMAIN
 
   const [formData, setFormData] = useState<FormData>({ amountToPay: '', kwhToCharge: '' })
   const [formErrors, setFormErrors] = useState<FormErrors>({ amountToPay: '', kwhToCharge: '' })
@@ -79,8 +84,19 @@ const ChargerDetails = () => {
     initialize: false
   })
 
-  const initResponse = useSelector((state: CheckoutRootState) => state.checkout?.initResponse)
-  const selectResponse = useSelector((state: CheckoutRootState) => state.checkout?.selectResponse)
+  const initResponseRaw = useSelector((state: CheckoutBeckn20RootState) => state.checkoutBeckn20?.initResponseRaw) ?? []
+  const selectResponse = useSelector((state: CheckoutBeckn20RootState) => state.checkoutBeckn20?.selectResponse) ?? []
+  const initResponseLegacy = useMemo(
+    () =>
+      initResponseRaw?.length && initResponseRaw[0]
+        ? [
+            normalizeInitResponse20ToLegacy(
+              initResponseRaw[0] as { context: unknown; message: { order: unknown } }
+            ) as InitResponseModel
+          ]
+        : [],
+    [initResponseRaw]
+  )
   const { items } = useSelector((state: ICartRootState) => state.cart)
   const { selectedCharger } = useSelector((state: ChargerSelectRootState) => state?.selectCharger)
   const { transactionId } = useSelector((state: DiscoverRootState) => state.discover)
@@ -192,7 +208,7 @@ const ChargerDetails = () => {
         label: 'Quantity (kWh)',
         error: formErrors.kwhToCharge,
         dataTest: '',
-        disabled: initResponse.length > 0,
+        disabled: initResponseRaw.length > 0,
         step: '0.01'
       }
     ]
@@ -202,26 +218,24 @@ const ChargerDetails = () => {
   const calculatedAmount = Number((parseFloat(formData.kwhToCharge || '0') * chargerDetails.rate).toFixed(2))
   const currencySymbol = currencyMap[getCountryCode().country.code as keyof typeof currencyMap] || '₹'
 
-  const handleInitCall = useCallback(async () => {
-    if (selectResponse.length === 0) return
-    const selectResp = selectResponse[0] as unknown as SelectResponse
-    const initPayload = buildInitRequest20(selectResp, {
-      shippingFormData,
-      quantity: formData.kwhToCharge
-    })
-    try {
-      const initResp = await initialize(initPayload).unwrap()
-      dispatch(
-        checkoutActions.addInitResponse({
-          initResponse: [normalizeInitResponse20ToLegacy(initResp) as InitResponseModel]
-        })
-      )
-      dispatch(checkoutActions.setInitResponseRaw20({ data: [initResp] }))
-      setShowPayment(true)
-    } finally {
-      setIsLoading(prev => ({ ...prev, updateCart: false }))
-    }
-  }, [shippingFormData, formData.kwhToCharge, selectResponse, dispatch, initialize])
+  const handleInitCall = useCallback(
+    async (selectRespFromApi?: SelectResponse) => {
+      const selectResp = selectRespFromApi ?? (selectResponse[0] as SelectResponse)
+      if (!selectResp?.context || !selectResp?.message?.order) return
+      const initPayload = buildInitRequest20(selectResp, {
+        shippingFormData,
+        quantity: formData.kwhToCharge
+      })
+      try {
+        const initResp = await initialize(initPayload).unwrap()
+        dispatch(checkoutBeckn20Actions.setInitResponseRaw({ data: [initResp] }))
+        setShowPayment(true)
+      } finally {
+        setIsLoading(prev => ({ ...prev, updateCart: false }))
+      }
+    },
+    [shippingFormData, formData.kwhToCharge, selectResponse, dispatch, initialize]
+  )
 
   const handleInitialize = useCallback(async () => {
     if (!items?.length) return
@@ -245,22 +259,50 @@ const ChargerDetails = () => {
     })) as CartItemForRequest[]
 
     try {
+      const rawId = user?.agent?.id ?? user?.id
+      const buyer = {
+        id: rawId != null ? String(rawId) : undefined,
+        displayName: shippingFormData.name || undefined,
+        telephone: shippingFormData.mobileNumber || undefined,
+        email: shippingFormData.email || undefined
+      }
       const selectPayload = buildSelectRequest20(
         updatedItems,
         transactionId,
         selectedCharger ?? undefined,
         discoverCatalogs?.[0],
-        domain
+        domain,
+        buyer.displayName || buyer.telephone || buyer.email ? buyer : undefined
       )
-      const selectResp = await fetchQuotes(selectPayload).unwrap()
-      dispatch(checkoutActions.setSelectResponse({ data: [selectResp as unknown as SelectResponseModel] }))
-      await handleInitCall()
+      const rawSelectResp = (await fetchQuotes(selectPayload).unwrap()) as SelectResponse | { data: SelectResponse }
+      // Support both raw Beckn shape and gateway-wrapped { data: { context, message } }
+      const selectResp: SelectResponse =
+        rawSelectResp && 'data' in rawSelectResp && rawSelectResp.data?.context && rawSelectResp.data?.message
+          ? (rawSelectResp.data as SelectResponse)
+          : (rawSelectResp as SelectResponse)
+      dispatch(checkoutBeckn20Actions.setSelectResponse({ data: [selectResp as unknown as SelectResponseModel] }))
+      // Call init only after select returns 200 and we have the response
+      if (selectResp?.context && selectResp?.message?.order) {
+        await handleInitCall(selectResp)
+      }
     } catch (err) {
-      // select or init failed
+      console.error('Select or init failed:', err)
     } finally {
       setIsLoading(prev => ({ ...prev, updateCart: false }))
     }
-  }, [formData, selectedCharger, dispatch, items, transactionId, discoverCatalogs, domain, fetchQuotes, handleInitCall])
+  }, [
+    formData,
+    selectedCharger,
+    dispatch,
+    items,
+    transactionId,
+    discoverCatalogs,
+    domain,
+    fetchQuotes,
+    handleInitCall,
+    shippingFormData,
+    user
+  ])
 
   const isFormFilled = useMemo(() => {
     const qty = parseFloat(formData.kwhToCharge || '0')
@@ -554,7 +596,7 @@ const ChargerDetails = () => {
                       variant: 'solid',
                       colorScheme: 'primary',
                       isLoading: isLoading.updateCart,
-                      disabled: !isFormFilled || initResponse.length > 0
+                      disabled: !isFormFilled || initResponseRaw.length > 0
                     }
                   ],
                   inputs: getInputs()
@@ -605,7 +647,7 @@ const ChargerDetails = () => {
         </Box>
 
         {/* Payment - only after confirm */}
-        {showPayment && initResponse.length > 0 && (
+        {showPayment && initResponseRaw.length > 0 && (
           <>
             <Box
               bg="var(--ev-surface)"
@@ -636,31 +678,31 @@ const ChargerDetails = () => {
                 px={4}
               >
                 <Stack spacing={3}>
-                  {Object.entries(getPaymentBreakDown(initResponse, parseFloat(formData.kwhToCharge)).breakUpMap).map(
-                    ([label, amount]) => (
-                      <Flex
-                        key={label}
-                        justify="space-between"
-                        align="center"
+                  {Object.entries(
+                    getPaymentBreakDown(initResponseLegacy, parseFloat(formData.kwhToCharge)).breakUpMap
+                  ).map(([label, amount]) => (
+                    <Flex
+                      key={label}
+                      justify="space-between"
+                      align="center"
+                    >
+                      <Text
+                        fontSize="sm"
+                        fontWeight="500"
+                        color="var(--ev-text)"
                       >
-                        <Text
-                          fontSize="sm"
-                          fontWeight="500"
-                          color="var(--ev-text)"
-                        >
-                          {label}
-                        </Text>
-                        <Text
-                          fontSize="sm"
-                          fontWeight="500"
-                          color="var(--ev-text-muted)"
-                        >
-                          {currencySymbol}
-                          {amount.value}
-                        </Text>
-                      </Flex>
-                    )
-                  )}
+                        {label}
+                      </Text>
+                      <Text
+                        fontSize="sm"
+                        fontWeight="500"
+                        color="var(--ev-text-muted)"
+                      >
+                        {currencySymbol}
+                        {amount.value}
+                      </Text>
+                    </Flex>
+                  ))}
                 </Stack>
               </Box>
             </Box>
@@ -696,7 +738,10 @@ const ChargerDetails = () => {
                     color="var(--ev-primary)"
                   >
                     {currencySymbol}
-                    {getPaymentBreakDown(initResponse, parseFloat(formData.kwhToCharge)).totalPricewithCurrent.value}
+                    {
+                      getPaymentBreakDown(initResponseLegacy, parseFloat(formData.kwhToCharge)).totalPricewithCurrent
+                        .value
+                    }
                   </Text>
                 </Flex>
                 <BecknButton

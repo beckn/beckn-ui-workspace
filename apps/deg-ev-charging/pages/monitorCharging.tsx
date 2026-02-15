@@ -21,7 +21,7 @@ import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import { useRouter } from 'next/router'
 import axios from 'axios'
 import { useSelector } from 'react-redux'
-import { CheckoutRootState } from '@beckn-ui/common/src/store'
+import { CheckoutBeckn20RootState } from '@beckn-ui/common'
 import { v4 as uuidv4 } from 'uuid'
 
 interface ChargingDetails {
@@ -58,7 +58,7 @@ const MonitorCharging = () => {
   const theme = useTheme()
   const primaryColor = theme.colors.primary[100]
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
-  const confirmResponse = useSelector((state: CheckoutRootState) => state.checkout.confirmResponse)
+  const confirmResponse = useSelector((state: CheckoutBeckn20RootState) => state.checkoutBeckn20?.confirmResponse)
 
   useEffect(() => {
     if (localStorage && localStorage.getItem('confirmResponse')) {

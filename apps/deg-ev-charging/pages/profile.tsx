@@ -10,7 +10,7 @@ import axios from '@services/axios'
 import { testIds } from '@shared/dataTestIds'
 import LogoutIcon from '@public/images/logout_icon.svg'
 import { setProfileEditable, UserRootState } from '@store/user-slice'
-import { checkoutActions, clearSource, feedbackActions, logout } from '@beckn-ui/common'
+import { checkoutBeckn20Actions, clearSource, feedbackActions, logout } from '@beckn-ui/common'
 import { ROLE, ROUTE_TYPE } from '@lib/config'
 import { InputProps, Typography } from '@beckn-ui/molecules'
 import NavigationItem from '@components/NavigationItem'
@@ -35,7 +35,7 @@ const ProfilePage = () => {
     email: '',
     address: ''
   })
-  const [walletDetails, setWalletDetails] = useState<DegWalletDetails>()
+  const [, setWalletDetails] = useState<DegWalletDetails>()
 
   const { modalType, handleModalOpen, handleModalClose } = useConnectWallet()
 
@@ -275,7 +275,7 @@ const ProfilePage = () => {
           color="#4461F2"
           handleClick={() => {
             dispatch(clearSource())
-            dispatch(checkoutActions.clearState())
+            dispatch(checkoutBeckn20Actions.clearState())
             dispatch(logout())
           }}
           dataTest={'logout'}

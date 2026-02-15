@@ -11,7 +11,7 @@ import { IGeoLocationSearchPageRootState } from '@beckn-ui/common/lib/types'
 import { Box, useToast } from '@chakra-ui/react'
 import backArrow from '@public/images/location-back.svg'
 import {
-  checkoutActions,
+  checkoutBeckn20Actions,
   checkTokenExpiry,
   clearSource,
   feedbackActions,
@@ -23,7 +23,7 @@ import { Toast } from '@beckn-ui/molecules'
 import { testIds } from '@shared/dataTestIds'
 import Splash from '../splash/splash'
 import Cookies from 'js-cookie'
-import { AuthRootState, logout } from '@store/auth-slice'
+import { AuthRootState } from '@store/auth-slice'
 import BottomNavigator from '@components/BottomNavigator/BottomNavigator'
 import TopHeader from '@components/TopHeader/TopHeader'
 
@@ -56,8 +56,6 @@ const headerTitleByRoute: Record<string, string> = {
 const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const { locale } = useLanguage()
   const router = useRouter()
-  const isHome = router.pathname === '/'
-  const signIn = router.pathname === '/signIn'
   const isHomepage = router.pathname === '/'
   const isSearch = router.pathname === '/search'
   const isSignUp = router.pathname === '/signUp'
@@ -77,13 +75,24 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const [showSplash, setShowSplash] = useState(true)
 
   useEffect(() => {
-    // Exclude home page, discovery page, detailView page and auth pages from token check
-    if (!['/', '/signIn', '/signUp', '/OTPVerification', '/discovery', '/detailView'].includes(router.pathname)) {
+    // Exclude home, discovery, detailView, checkout, paymentMode and auth pages from token check (avoid clearing checkout state on payment flow)
+    if (
+      ![
+        '/',
+        '/signIn',
+        '/signUp',
+        '/OTPVerification',
+        '/discovery',
+        '/detailView',
+        '/checkout',
+        '/paymentMode'
+      ].includes(router.pathname)
+    ) {
       const token = Cookies.get('authToken')
       let message = ''
 
       try {
-        const isExpired: any = checkTokenExpiry(token)
+        const isExpired = checkTokenExpiry(token) as boolean
         if (isExpired || !user) message = 'Token expired, please log in again!'
       } catch (error) {
         console.error('Token decoding error:', error)
@@ -92,7 +101,7 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
         if (message) {
           // Don't show alert or redirect for discovery page - just clear state silently
           dispatch(clearSource())
-          dispatch(checkoutActions.clearState())
+          dispatch(checkoutBeckn20Actions.clearState())
           // Don't call logout() as it redirects - just clear cookies
           Cookies.remove('authToken')
           Cookies.remove('isVerified')

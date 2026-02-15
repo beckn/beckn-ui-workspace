@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import type { DiscoverCatalogStored } from '../../lib/types/beckn-2.0/discover'
+import type { DiscoverCatalogStored } from '../../../lib/types/beckn-2.0/discover'
 
 /**
  * Beckn 2.0 Discover state (transaction_id + catalogs from discover API).

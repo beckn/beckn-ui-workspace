@@ -3,12 +3,11 @@ import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, 
 import storage from 'redux-persist/lib/storage'
 import authReducer from './auth-slice'
 import userReducer from './user-slice'
-import DiscoveryReducer from './discovery-slice'
 import SelectChargerReducer from './chargerSelect-slice'
 import cabServiceReducer from './cabService-slice'
 import policyReducer from './policy-slice'
 import cartSliceReducer from './cart-slice'
-import { checkoutReducer, discoverReducer, feedbackReducer, geoMapLocationSearchReducer } from '@beckn-ui/common'
+import { checkoutBeckn20Reducer, discoverReducer, feedbackReducer, geoMapLocationSearchReducer } from '@beckn-ui/common'
 import becknApi from '@beckn-ui/common/src/services/becknApi'
 import '@beckn-ui/common/src/services/beckn-2.0/discover'
 import api from '@services/api'
@@ -17,7 +16,7 @@ import didApi from '@services/didApi'
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['auth', 'user', 'cart', 'selectCharger', 'checkout', 'discovery', 'discover']
+  whitelist: ['auth', 'user', 'cart', 'selectCharger', 'discover']
 }
 
 const appReducer = combineReducers({
@@ -27,9 +26,8 @@ const appReducer = combineReducers({
   [becknApi.reducerPath]: becknApi.reducer,
   user: userReducer,
   cart: cartSliceReducer,
-  checkout: checkoutReducer,
+  checkoutBeckn20: checkoutBeckn20Reducer,
   geoLocationSearchPageUI: geoMapLocationSearchReducer,
-  discovery: DiscoveryReducer,
   discover: discoverReducer,
   selectCharger: SelectChargerReducer,
   feedback: feedbackReducer,

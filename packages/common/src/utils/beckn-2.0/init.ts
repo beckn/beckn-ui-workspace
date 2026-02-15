@@ -36,13 +36,17 @@ export function buildInitRequest20(
     'beckn:fulfillment': fulfillment
   }
 
+  const initContext = {
+    ...context,
+    action: 'init',
+    message_id: `msg-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
+    timestamp: new Date().toISOString()
+  }
+  if (opts.domain != null) {
+    initContext.domain = opts.domain
+  }
   return {
-    context: {
-      ...context,
-      action: 'init',
-      message_id: `msg-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
-      timestamp: new Date().toISOString()
-    },
+    context: initContext,
     message: { order: initOrder }
   }
 }

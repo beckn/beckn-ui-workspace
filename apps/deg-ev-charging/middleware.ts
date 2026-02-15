@@ -3,12 +3,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 export default function middleware(req: NextRequest) {
-  const loggedin = req.cookies.get('authToken')
-  const isVerified = req.cookies.get('isVerified')?.value === 'true'
   const { pathname } = req.nextUrl
-
-  // Public pages that don't require authentication
-  const publicPages = ['/', '/discovery', '/detailView']
 
   // Allow home page without authentication - return early
   if (pathname === '/') {

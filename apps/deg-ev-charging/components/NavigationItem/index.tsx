@@ -1,9 +1,8 @@
 import { Typography } from '@beckn-ui/molecules'
-import { Box, Divider, Flex, Image, useTheme } from '@chakra-ui/react'
+import { Flex, Image, useTheme } from '@chakra-ui/react'
 import React from 'react'
 
 interface NavigationItemProps {
-  key?: string
   icon: string
   label: string
   color?: string
@@ -12,7 +11,7 @@ interface NavigationItemProps {
 }
 
 const NavigationItem = (props: NavigationItemProps) => {
-  const { key, icon, label, color, handleClick, dataTest } = props
+  const { icon, label, color, handleClick, dataTest } = props
 
   const theme = useTheme()
   const primaryColor = theme.colors.primary[100]

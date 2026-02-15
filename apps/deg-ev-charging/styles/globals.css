@@ -407,6 +407,7 @@ select:-webkit-autofill:focus {
 
 /* Styles for rendered product cards */
 [data-item-id] {
+  cursor: pointer;
   transition:
     transform 0.2s ease,
     box-shadow 0.2s ease;
