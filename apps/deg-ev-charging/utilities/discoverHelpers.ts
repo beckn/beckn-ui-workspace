@@ -5,6 +5,22 @@ import { v4 as uuidv4 } from 'uuid'
 const EV_CHARGING_SCHEMA_CONTEXT =
   'https://raw.githubusercontent.com/beckn/protocol-specifications-new/refs/heads/main/schema/EvChargingService/v1/context.jsonld'
 
+/**
+ * Check if discover response has a usable message with catalogs (so we can fetch renderer from catalog @context).
+ * Use this to avoid calling fetchRenderer when message is missing or catalogs empty.
+ */
+export function hasDiscoverMessageWithCatalogs(data: unknown): boolean {
+  if (!data || typeof data !== 'object') return false
+  const o = data as Record<string, unknown>
+  const body = (o.message ? o : (o.data as Record<string, unknown>)) as Record<string, unknown>
+  const msg = body?.message as Record<string, unknown> | undefined
+  if (!msg || typeof msg !== 'object') return false
+  const fromMessage = Array.isArray(msg.catalogs) ? msg.catalogs : []
+  const fromRoot = Array.isArray(body?.catalogs) ? body.catalogs : Array.isArray(o.catalogs) ? o.catalogs : []
+  const list = fromMessage.length ? fromMessage : fromRoot
+  return list.length > 0
+}
+
 /** Normalize discover API response to catalogs array (from message.catalogs or root catalogs; supports .data wrapper) */
 export function getCatalogsFromResponse(data: unknown): DiscoverCatalogStored[] {
   if (!data || typeof data !== 'object') return []

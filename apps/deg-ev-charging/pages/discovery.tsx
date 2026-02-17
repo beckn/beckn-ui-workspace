@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -7,7 +7,12 @@ import { getTemplate, getStylingHints } from '@lib/templateProcessor'
 import { useDiscoverMutation } from '@beckn-ui/common/src/services/beckn-2.0/discover'
 import { discoverActions } from '@beckn-ui/common'
 import type { DiscoverCatalogStored } from '@beckn-ui/common/lib/types/beckn-2.0/discover'
-import { getCatalogsFromResponse, buildDiscoverRequest, getTransactionIdFromResponse } from '@utils/discoverHelpers'
+import {
+  getCatalogsFromResponse,
+  hasDiscoverMessageWithCatalogs,
+  buildDiscoverRequest,
+  getTransactionIdFromResponse
+} from '@utils/discoverHelpers'
 import { fetchRendererConfigFromDiscoverCatalogs } from '@utils/rendererFromDiscover'
 import { renderDiscoveryItems } from '@utils/renderDiscoveryItems'
 import { wrapTemplatePriceInBold } from '@utils/templateUtils'
@@ -23,6 +28,11 @@ const Discovery = () => {
   const [renderedHtml, setRenderedHtml] = useState<string>('')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const runIdRef = useRef(0)
+  const discoverRef = useRef(discover)
+  const dispatchRef = useRef(dispatch)
+  discoverRef.current = discover
+  dispatchRef.current = dispatch
 
   const handleCardClick = (e: React.MouseEvent<HTMLDivElement>) => {
     const card = (e.target as HTMLElement).closest('[data-item-id]')
@@ -35,25 +45,29 @@ const Discovery = () => {
   }
 
   useEffect(() => {
-    let cancelled = false
+    runIdRef.current += 1
+    const thisRunId = runIdRef.current
+    const isCurrentRun = () => thisRunId === runIdRef.current
+
     const run = async () => {
+      if (!isCurrentRun()) return
       setLoading(true)
       setError(null)
       setRenderedHtml('')
       try {
         const payload = buildDiscoverRequest(searchTerm)
-        const res = await discover(payload).unwrap()
-        if (cancelled) return
+        const res = await discoverRef.current(payload).unwrap()
+        if (!isCurrentRun()) return
         const allCatalogs = getCatalogsFromResponse(res)
         const transactionId = getTransactionIdFromResponse(res)
 
         if (transactionId) {
-          dispatch(discoverActions.setTransactionId({ transactionId }))
+          dispatchRef.current(discoverActions.setTransactionId({ transactionId }))
         }
-        dispatch(discoverActions.setDiscoverCatalogs({ catalogs: allCatalogs as DiscoverCatalogStored[] }))
+        dispatchRef.current(discoverActions.setDiscoverCatalogs({ catalogs: allCatalogs as DiscoverCatalogStored[] }))
 
-        if (allCatalogs.length === 0) {
-          if (!cancelled) setRenderedHtml('')
+        if (!hasDiscoverMessageWithCatalogs(res) || allCatalogs.length === 0) {
+          if (isCurrentRun()) setRenderedHtml('')
           return
         }
 
@@ -65,33 +79,30 @@ const Discovery = () => {
           if (!r.ok) throw new Error('Failed to fetch renderer config')
           config = await r.json()
         }
-        if (cancelled) return
+        if (!isCurrentRun()) return
 
         const templateConfig = getTemplate(config, 'discoveryCard')
         if (!templateConfig?.html) {
-          setError('discoveryCard template not found in renderer.json')
+          if (isCurrentRun()) setError('discoveryCard template not found in renderer.json')
           return
         }
 
         const stylingHints = getStylingHints(config)
         const templateHtml = wrapTemplatePriceInBold(templateConfig.html)
         const html = renderDiscoveryItems(allCatalogs, templateHtml, stylingHints)
-        if (!cancelled) setRenderedHtml(html)
+        if (isCurrentRun()) setRenderedHtml(html)
       } catch (err) {
-        if (!cancelled) {
+        if (isCurrentRun()) {
           setError(err instanceof Error ? err.message : 'Something went wrong')
           setRenderedHtml('')
         }
       } finally {
-        if (!cancelled) setLoading(false)
+        if (isCurrentRun()) setLoading(false)
       }
     }
 
     run()
-    return () => {
-      cancelled = true
-    }
-  }, [searchTerm, dispatch, discover])
+  }, [searchTerm])
 
   return (
     <>
