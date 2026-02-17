@@ -47,32 +47,47 @@ const DEFAULT_IMAGE =
 
 /**
  * Normalize item so address/location resolves for renderer templates.
- * Template expects beckn:itemAttributes.chargingStation.serviceLocation (with address).
- * Data may have: beckn:availableAt[0].address, or beckn:itemAttributes.serviceLocation.address.
+ * Template expects itemAttributes.chargingStation.serviceLocation (with address).
+ * Data may have: availableAt[0].address, or itemAttributes.serviceLocation.address.
  */
 function normalizeItemForTemplate(item: unknown): Record<string, unknown> {
   const rec = (item && typeof item === 'object' ? { ...(item as Record<string, unknown>) } : {}) as Record<
     string,
     unknown
   >
-  const itemAttributes = (rec['beckn:itemAttributes'] ?? rec['itemAttributes']) as Record<string, unknown> | undefined
+  const itemAttributes = rec['itemAttributes'] as Record<string, unknown> | undefined
   if (!itemAttributes || typeof itemAttributes !== 'object') return rec
   const attrs = { ...itemAttributes }
   const existing = (attrs['chargingStation'] as Record<string, unknown> | undefined)?.serviceLocation
   if (existing) return rec
-  const availableAt = (rec['beckn:availableAt'] ?? rec['availableAt']) as unknown[] | undefined
+  const availableAt = rec['availableAt']
   const firstLocation =
-    Array.isArray(availableAt) && availableAt[0] && typeof availableAt[0] === 'object'
-      ? (availableAt[0] as Record<string, unknown>)
+    availableAt && typeof availableAt === 'object'
+      ? Array.isArray(availableAt) && availableAt[0] && typeof availableAt[0] === 'object'
+        ? (availableAt[0] as Record<string, unknown>)
+        : (availableAt as Record<string, unknown>)
       : null
   const directServiceLocation = attrs['serviceLocation']
   const serviceLocation =
     directServiceLocation && typeof directServiceLocation === 'object' ? directServiceLocation : firstLocation
   if (serviceLocation) {
     attrs['chargingStation'] = { serviceLocation }
-    rec['beckn:itemAttributes'] = attrs
+    rec['itemAttributes'] = attrs
   }
   return rec
+}
+
+/**
+ * Get property from object; templates use beckn:/schema: prefixed keys but API returns plain keys.
+ * Try the requested key first, then fall back to key without prefix so template paths still resolve.
+ */
+const getWithPrefixFallback = (obj: Record<string, unknown>, key: string): unknown => {
+  let val = obj[key]
+  if (val !== undefined && val !== null) return val
+  if (key.startsWith('beckn:')) val = obj[key.slice(6)]
+  if (val !== undefined && val !== null) return val
+  if (key.startsWith('schema:')) val = obj[key.slice(7)]
+  return val
 }
 
 // Helper function to get nested value from object using dot notation path
@@ -81,11 +96,9 @@ const getNestedValue = (obj: unknown, path: string): unknown => {
   let current: unknown = obj
 
   for (const key of keys) {
-    if (current && typeof current === 'object' && key in current) {
-      current = (current as Record<string, unknown>)[key]
-    } else {
-      return undefined
-    }
+    if (!current || typeof current !== 'object') return undefined
+    const rec = current as Record<string, unknown>
+    current = getWithPrefixFallback(rec, key)
   }
 
   return current
@@ -93,7 +106,7 @@ const getNestedValue = (obj: unknown, path: string): unknown => {
 
 // Helper function to get value from object using bracket notation (e.g., "array[0]")
 const getValueByPath = (obj: unknown, path: string): unknown => {
-  // Handle array access like "beckn:offers[0].beckn:price.value"
+  // Handle array access like "offers[0].price.value"
   const arrayMatch = path.match(/^(.+?)\[(\d+)\](.*)$/)
   if (arrayMatch) {
     const [, basePath, index, restPath] = arrayMatch
@@ -340,10 +353,10 @@ export const renderTemplate = (
   offers: unknown[],
   stylingHints?: StylingHints
 ): string => {
-  // Find matching offer for this item
-  const itemId = getNestedValue(item, 'beckn:id') as string
+  // Find matching offer for this item (API data uses plain keys only)
+  const itemId = getNestedValue(item, 'id') as string
   const matchingOffer = offers.find((offer: unknown) => {
-    const offerItems = getNestedValue(offer, 'beckn:items') as string[] | undefined
+    const offerItems = getNestedValue(offer, 'items') as string[] | undefined
     return offerItems?.includes(itemId)
   })
 
@@ -351,7 +364,7 @@ export const renderTemplate = (
   const normalizedItem = normalizeItemForTemplate(item)
   const context: Record<string, unknown> = {
     ...normalizedItem,
-    'beckn:offers': matchingOffer ? [matchingOffer] : []
+    offers: matchingOffer ? [matchingOffer] : []
   }
 
   // Preprocess template to handle colon-separated keys

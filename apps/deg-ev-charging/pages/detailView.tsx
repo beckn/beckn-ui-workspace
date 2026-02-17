@@ -58,8 +58,8 @@ const DetailView = () => {
     }
 
     const { catalog, item } = found
-    const descriptor = (item['beckn:descriptor'] ?? item['descriptor']) as Record<string, unknown> | undefined
-    const images = (descriptor?.['schema:image'] ?? descriptor?.['image']) as string[] | undefined
+    const descriptor = item['descriptor'] as Record<string, unknown> | undefined
+    const images = descriptor?.['image'] as string[] | undefined
     const imageUrl = images?.[0] || ''
     setProductImage(imageUrl || DEFAULT_IMAGE)
 

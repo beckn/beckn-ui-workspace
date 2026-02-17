@@ -13,7 +13,7 @@ export function renderDiscoveryItems(
     const { items, offers } = getCatalogItemsAndOffers(catalog)
     for (const item of items) {
       const rec = item as Record<string, unknown>
-      const itemId = (rec['beckn:id'] ?? rec['id']) as string
+      const itemId = rec['id'] as string
       const providerName = getProviderName(catalog, item)
       const cardHtml = renderTemplate(templateHtml, item, offers, stylingHints)
       const withId =

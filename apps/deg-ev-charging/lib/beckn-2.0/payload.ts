@@ -45,8 +45,9 @@ export function buildSelectRequest20(
 ): SelectRequest {
   if (!items.length) throw new Error('Cart is empty')
   const first = items[0]
-  const bppId = first.bpp_id || (catalog && (catalog['beckn:bppId'] as string)) || ''
-  const bppUri = first.bpp_uri || (catalog && (catalog['beckn:bppUri'] as string)) || ''
+  const catalogAny = catalog as Record<string, unknown> | undefined
+  const bppId = first.bpp_id || (catalogAny?.['bppId'] as string) || ''
+  const bppUri = first.bpp_uri || (catalogAny?.['bppUri'] as string) || ''
 
   return buildSelectRequest20Generic({
     items: items.map(item => ({

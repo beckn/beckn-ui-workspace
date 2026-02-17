@@ -1,20 +1,23 @@
 import type { DiscoverCatalogStored, DiscoverRequest } from '@beckn-ui/common/lib/types/beckn-2.0/discover'
+import { DOMAIN } from '@lib/config'
+import { v4 as uuidv4 } from 'uuid'
 
 const EV_CHARGING_SCHEMA_CONTEXT =
   'https://raw.githubusercontent.com/beckn/protocol-specifications-new/refs/heads/main/schema/EvChargingService/v1/context.jsonld'
 
-/** Normalize discover API response to catalogs array (from message.catalogs or root catalogs) */
+/** Normalize discover API response to catalogs array (from message.catalogs or root catalogs; supports .data wrapper) */
 export function getCatalogsFromResponse(data: unknown): DiscoverCatalogStored[] {
   if (!data || typeof data !== 'object') return []
   const o = data as Record<string, unknown>
-  const msg = o.message as Record<string, unknown> | undefined
+  const body = (o.message ? o : (o.data as Record<string, unknown>)) as Record<string, unknown>
+  const msg = body?.message as Record<string, unknown> | undefined
   const fromMessage = msg && Array.isArray(msg.catalogs) ? msg.catalogs : []
-  const fromRoot = Array.isArray(o.catalogs) ? o.catalogs : []
+  const fromRoot = Array.isArray(body?.catalogs) ? body.catalogs : Array.isArray(o.catalogs) ? o.catalogs : []
   const list = fromMessage.length ? fromMessage : fromRoot
   return list as DiscoverCatalogStored[]
 }
 
-/** Return only catalogs whose beckn:id (or id) contains the given substring (e.g. "strapi") */
+/** Return only catalogs whose id contains the given substring (e.g. "strapi") */
 export function filterCatalogsByIdSubstring(
   catalogs: DiscoverCatalogStored[],
   substring?: string
@@ -22,28 +25,35 @@ export function filterCatalogsByIdSubstring(
   if (!substring) return catalogs
   const lower = substring.toLowerCase()
   return catalogs.filter(c => {
-    const id = (c['beckn:id'] ?? c['id']) as string | undefined
+    const id = c['id'] as string | undefined
     return typeof id === 'string' && id.toLowerCase().includes(lower)
   })
 }
 
-/** Get items and offers from a catalog (beckn:items / beckn:offers) */
-export function getCatalogItemsAndOffers(catalog: DiscoverCatalogStored): { items: unknown[]; offers: unknown[] } {
-  const items = (catalog['beckn:items'] ?? catalog['items'] ?? []) as unknown[]
-  const offers = (catalog['beckn:offers'] ?? catalog['offers'] ?? []) as unknown[]
-  return { items, offers }
+/** Normalize to array: BE may return items as single object or array */
+function toArray<T>(val: T | T[] | undefined | null): T[] {
+  if (val == null) return []
+  return Array.isArray(val) ? val : [val]
 }
 
-/** Provider display name: item's beckn:provider.descriptor.schema:name, else catalog descriptor */
+/** Get items and offers from a catalog (API uses plain keys; items/offers may be single object or array) */
+export function getCatalogItemsAndOffers(catalog: DiscoverCatalogStored): { items: unknown[]; offers: unknown[] } {
+  const rawItems = catalog['items']
+  const rawOffers = catalog['offers']
+  return { items: toArray(rawItems), offers: toArray(rawOffers) }
+}
+
+/** Provider display name: item's provider.descriptor.name, else catalog descriptor.name (API uses plain keys only) */
 export function getProviderName(catalog: DiscoverCatalogStored, item: unknown): string {
   const rec = item as Record<string, unknown>
-  const itemProvider = rec['beckn:provider'] as Record<string, unknown> | undefined
-  const fromItem = itemProvider?.descriptor as Record<string, unknown> | undefined
-  const name = fromItem?.['schema:name']
-  if (typeof name === 'string' && name.length) return name
-  const catalogDesc = catalog['beckn:descriptor'] as unknown as Record<string, unknown> | undefined
-  const fromCatalog = catalogDesc?.['schema:name']
-  if (typeof fromCatalog === 'string' && fromCatalog.length) return fromCatalog
+  const itemProvider = rec['provider'] as Record<string, unknown> | undefined
+  const itemDesc = itemProvider?.descriptor as Record<string, unknown> | undefined
+  const name = typeof itemDesc?.['name'] === 'string' && itemDesc['name'].length ? itemDesc['name'] : null
+  if (name) return name
+  const catalogDesc = catalog['descriptor'] as unknown as Record<string, unknown> | undefined
+  const catalogName =
+    catalogDesc && typeof catalogDesc['name'] === 'string' && catalogDesc['name'].length ? catalogDesc['name'] : null
+  if (catalogName) return catalogName
   return 'Provider'
 }
 
@@ -59,34 +69,33 @@ export function escapeHtml(s: string): string {
 /** Build discover request using common types (BecknContext + DiscoverMessage) */
 export function buildDiscoverRequest(textSearch: string): DiscoverRequest {
   const now = new Date().toISOString()
-  const messageId = `msg-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`
-  const transactionId = `txn-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`
+  const messageId = uuidv4().toString()
+  const transactionId = uuidv4().toString()
   const bapId = process.env.NEXT_PUBLIC_BAP_ID || 'ev-charging.sandbox1.com'
   const bapUri = process.env.NEXT_PUBLIC_BAP_URI || 'http://onix-adapter:8081/bap/receiver'
   return {
     context: {
-      domain: 'ev-charging',
-      location: { id: 'default', gps: '', country: { name: 'India', code: 'IN' } },
+      domain: DOMAIN,
       version: '2.0.0',
       action: 'discover',
       bap_id: bapId,
       bap_uri: bapUri,
-      bpp_id: '',
-      bpp_uri: '',
       transaction_id: transactionId,
       message_id: messageId,
       timestamp: now,
       ttl: 'PT30S',
       schema_context: [EV_CHARGING_SCHEMA_CONTEXT]
     },
-    message: { text_search: textSearch || 'DC Fast Charger - CCS2 (60kW)' }
+    message: { text_search: textSearch || '' }
   }
 }
 
-/** Extract transaction_id from discover response context */
+/** Extract transaction_id from discover response context (supports .data wrapper) */
 export function getTransactionIdFromResponse(data: unknown): string | undefined {
   if (!data || typeof data !== 'object') return undefined
-  const ctx = (data as Record<string, unknown>).context as Record<string, unknown> | undefined
+  const o = data as Record<string, unknown>
+  const body = (o.context ? o : o.data) as Record<string, unknown> | undefined
+  const ctx = body?.context as Record<string, unknown> | undefined
   const id = ctx?.transaction_id
   return typeof id === 'string' ? id : undefined
 }
@@ -98,10 +107,7 @@ export function findItemInCatalogs(
 ): { catalog: DiscoverCatalogStored; item: Record<string, unknown> } | null {
   for (const catalog of catalogs) {
     const { items } = getCatalogItemsAndOffers(catalog)
-    const item = items.find(
-      (it: unknown) =>
-        String((it as Record<string, unknown>)['beckn:id'] ?? (it as Record<string, unknown>)['id']) === itemId
-    )
+    const item = items.find((it: unknown) => String((it as Record<string, unknown>)['id']) === itemId)
     if (item) return { catalog, item: item as Record<string, unknown> }
   }
   return null

@@ -24,21 +24,20 @@ function getNum(obj: unknown, path: string): number {
 
 /** Get descriptor sub-object from item */
 function getDescriptor(item: BecknItem): Record<string, unknown> {
-  const d = item['beckn:descriptor'] ?? item['descriptor']
+  const d = item['descriptor']
   return (d && typeof d === 'object' ? (d as Record<string, unknown>) : {}) as Record<string, unknown>
 }
 
 /** Get provider from item */
 function getProvider(item: BecknItem): Record<string, unknown> {
-  const p = item['beckn:provider'] ?? item['provider']
+  const p = item['provider']
   return (p && typeof p === 'object' ? (p as Record<string, unknown>) : {}) as Record<string, unknown>
 }
 
-/** Get first location/availableAt from item */
+/** Get first location/availableAt from item (BE may return single object or array) */
 function getFirstLocation(item: BecknItem): { gps?: string; address?: Record<string, unknown> } {
-  const at = item['beckn:availableAt'] ?? item['availableAt']
-  const arr = Array.isArray(at) ? at : []
-  const first = arr[0]
+  const at = item['availableAt']
+  const first = Array.isArray(at) ? at[0] : at && typeof at === 'object' ? at : undefined
   if (!first || typeof first !== 'object') return {}
   const loc = first as Record<string, unknown>
   const geo = loc['geo'] as Record<string, unknown> | undefined
@@ -56,21 +55,21 @@ export function catalogItemToParsedModel(
 ): ParsedItemModel {
   const descriptor = getDescriptor(item)
   const provider = getProvider(item)
-  const providerId = getStr(provider, 'beckn:id', 'id')
-  const providerName = getStr(provider['beckn:descriptor'] ?? provider['descriptor'], 'schema:name', 'name')
+  const providerId = getStr(provider, 'id')
+  const providerName = getStr(provider['descriptor'], 'name')
   const loc = getFirstLocation(item)
   const [latStr, lngStr] = (loc.gps || '0,0').split(',')
   const latitude = parseFloat(latStr) || 0
   const longitude = parseFloat(lngStr) || 0
 
-  const name = getStr(descriptor, 'schema:name', 'name')
-  const shortDesc = getStr(descriptor, 'beckn:shortDesc', 'shortDesc')
-  const itemId = getStr(item, 'beckn:id', 'id')
+  const name = getStr(descriptor, 'name')
+  const shortDesc = getStr(descriptor, 'shortDesc')
+  const itemId = getStr(item, 'id')
 
-  const bppId = getStr(catalog, 'beckn:bppId', 'bppId')
-  const bppUri = getStr(catalog, 'beckn:bppUri', 'bppUri')
+  const bppId = getStr(catalog, 'bppId')
+  const bppUri = getStr(catalog, 'bppUri')
 
-  const itemAttributes = (item['beckn:itemAttributes'] ?? item['itemAttributes']) as Record<string, unknown> | undefined
+  const itemAttributes = item['itemAttributes'] as Record<string, unknown> | undefined
   const connectorType = getStr(itemAttributes, 'connectorType', 'connector_type')
   const priceValue = getNum(itemAttributes, 'price') || getNum(item, 'price') || 0
   const price = { value: String(priceValue), currency: 'INR' }
@@ -92,7 +91,7 @@ export function catalogItemToParsedModel(
     name,
     price,
     short_desc: shortDesc,
-    long_desc: getStr(descriptor, 'beckn:longDesc', 'longDesc'),
+    long_desc: getStr(descriptor, 'longDesc'),
     tags,
     fulfillments: [],
     locations: loc.gps ? [{ gps: loc.gps, address: loc.address }] : undefined
@@ -120,7 +119,7 @@ export function catalogItemToSelectedCharger(
 ): SelectedCharger {
   const descriptor = getDescriptor(item)
   const loc = getFirstLocation(item)
-  const itemAttributes = (item['beckn:itemAttributes'] ?? item['itemAttributes']) as Record<string, unknown> | undefined
+  const itemAttributes = item['itemAttributes'] as Record<string, unknown> | undefined
   const connectorType = getStr(itemAttributes, 'connectorType', 'connector_type')
   const port: ChargerPort = {
     id: connectorType || 'default',
@@ -136,7 +135,7 @@ export function catalogItemToSelectedCharger(
 
   return {
     id: parsed.id,
-    name: getStr(descriptor, 'schema:name', 'name'),
+    name: getStr(descriptor, 'name'),
     address: address || 'Address not specified',
     status: 'Available',
     rate:

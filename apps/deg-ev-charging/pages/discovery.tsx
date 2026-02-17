@@ -2,17 +2,15 @@ import React, { useEffect, useState } from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { getTemplate, getStylingHints } from '@lib/templateProcessor'
 import { useDiscoverMutation } from '@beckn-ui/common/src/services/beckn-2.0/discover'
 import { discoverActions } from '@beckn-ui/common'
-import type { DiscoverRootState } from '@beckn-ui/common'
 import type { DiscoverCatalogStored } from '@beckn-ui/common/lib/types/beckn-2.0/discover'
 import { getCatalogsFromResponse, buildDiscoverRequest, getTransactionIdFromResponse } from '@utils/discoverHelpers'
 import { fetchRendererConfigFromDiscoverCatalogs } from '@utils/rendererFromDiscover'
 import { renderDiscoveryItems } from '@utils/renderDiscoveryItems'
 import { wrapTemplatePriceInBold } from '@utils/templateUtils'
-import { MOCK_DISCOVER_RESPONSE } from '../mock/discoverResponse'
 
 const FALLBACK_RENDERER_URL = 'https://raw.githubusercontent.com/beckn/beckn-ui-workspace/refs/heads/main/renderer.json'
 
@@ -22,7 +20,6 @@ const Discovery = () => {
   const searchTerm = typeof search === 'string' ? search : ''
   const dispatch = useDispatch()
   const [discover] = useDiscoverMutation()
-  const storedCatalogs = useSelector((state: DiscoverRootState) => state.discover?.catalogs ?? [])
   const [renderedHtml, setRenderedHtml] = useState<string>('')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -42,25 +39,48 @@ const Discovery = () => {
     const run = async () => {
       setLoading(true)
       setError(null)
+      setRenderedHtml('')
       try {
         const payload = buildDiscoverRequest(searchTerm)
-        let res: unknown
-        try {
-          res = await discover(payload).unwrap()
-        } catch (apiErr) {
-          res = MOCK_DISCOVER_RESPONSE
-        }
-
+        const res = await discover(payload).unwrap()
         if (cancelled) return
         const allCatalogs = getCatalogsFromResponse(res)
         const transactionId = getTransactionIdFromResponse(res)
+
         if (transactionId) {
           dispatch(discoverActions.setTransactionId({ transactionId }))
         }
         dispatch(discoverActions.setDiscoverCatalogs({ catalogs: allCatalogs as DiscoverCatalogStored[] }))
+
+        if (allCatalogs.length === 0) {
+          if (!cancelled) setRenderedHtml('')
+          return
+        }
+
+        let config: Awaited<ReturnType<typeof fetchRendererConfigFromDiscoverCatalogs>>
+        try {
+          config = await fetchRendererConfigFromDiscoverCatalogs(allCatalogs)
+        } catch {
+          const r = await fetch(FALLBACK_RENDERER_URL)
+          if (!r.ok) throw new Error('Failed to fetch renderer config')
+          config = await r.json()
+        }
+        if (cancelled) return
+
+        const templateConfig = getTemplate(config, 'discoveryCard')
+        if (!templateConfig?.html) {
+          setError('discoveryCard template not found in renderer.json')
+          return
+        }
+
+        const stylingHints = getStylingHints(config)
+        const templateHtml = wrapTemplatePriceInBold(templateConfig.html)
+        const html = renderDiscoveryItems(allCatalogs, templateHtml, stylingHints)
+        if (!cancelled) setRenderedHtml(html)
       } catch (err) {
         if (!cancelled) {
           setError(err instanceof Error ? err.message : 'Something went wrong')
+          setRenderedHtml('')
         }
       } finally {
         if (!cancelled) setLoading(false)
@@ -72,44 +92,6 @@ const Discovery = () => {
       cancelled = true
     }
   }, [searchTerm, dispatch, discover])
-
-  useEffect(() => {
-    if (!storedCatalogs?.length) {
-      setRenderedHtml('')
-      return
-    }
-    let cancelled = false
-    const run = async () => {
-      try {
-        let config: Awaited<ReturnType<typeof fetchRendererConfigFromDiscoverCatalogs>>
-        try {
-          config = await fetchRendererConfigFromDiscoverCatalogs(storedCatalogs)
-        } catch {
-          const r = await fetch(FALLBACK_RENDERER_URL)
-          if (!r.ok) throw new Error('Failed to fetch renderer config')
-          config = await r.json()
-        }
-
-        if (cancelled) return
-        const templateConfig = getTemplate(config, 'discoveryCard')
-        if (!templateConfig?.html) {
-          setError('discoveryCard template not found in renderer.json')
-          return
-        }
-
-        const stylingHints = getStylingHints(config)
-        const templateHtml = wrapTemplatePriceInBold(templateConfig.html)
-        const html = renderDiscoveryItems(storedCatalogs, templateHtml, stylingHints)
-        if (!cancelled) setRenderedHtml(html)
-      } catch (err) {
-        if (!cancelled) setError(err instanceof Error ? err.message : 'Something went wrong')
-      }
-    }
-    run()
-    return () => {
-      cancelled = true
-    }
-  }, [storedCatalogs])
 
   return (
     <>

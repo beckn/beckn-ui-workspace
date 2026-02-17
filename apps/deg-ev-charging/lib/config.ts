@@ -15,7 +15,7 @@ export const ROUTE_TYPE = {
   GENERAL: '/unified-beckn-energy'
 }
 
-export const DOMAIN = 'deg:ev'
+export const DOMAIN = 'beckn.one:deg:ev-charging:*'
 export const ORDER_CATEGORY_ID = 40
 
 export const DOMAIN_PATH = {

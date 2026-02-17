@@ -53,12 +53,12 @@ export interface BecknLocation {
 
 export interface BecknContext {
   domain: string
-  location: BecknLocation
+  location?: BecknLocation
   version: string
   bap_id: string
   bap_uri: string
-  bpp_id: string
-  bpp_uri: string
+  bpp_id?: string
+  bpp_uri?: string
   transaction_id: string
   message_id: string
   timestamp: string
