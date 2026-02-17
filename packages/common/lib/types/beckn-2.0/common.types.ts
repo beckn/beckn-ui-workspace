@@ -3,11 +3,11 @@
 export interface Buyer {
   '@context': string
   '@type': string
-  'beckn:id': string
-  'beckn:role'?: string
-  'beckn:displayName'?: string
-  'beckn:telephone'?: string
-  'beckn:email'?: string
+  id: string
+  role?: string
+  displayName?: string
+  telephone?: string
+  email?: string
 }
 
 export interface Quantity {
@@ -34,44 +34,44 @@ export interface OrderItemAttributes {
 export interface AcceptedOfferInItem {
   '@context': string
   '@type': string
-  'beckn:id': string
-  'beckn:descriptor': Record<string, unknown>
-  'beckn:provider': string
-  'beckn:items': string[]
-  'beckn:addOns'?: string[]
-  'beckn:add0nItems'?: string[]
-  'beckn:isActive'?: boolean
-  'beckn:validity'?: Record<string, unknown>
-  'beckn:price'?: Price
-  'beckn:eligibleRegion'?: Array<Record<string, unknown>>
-  'beckn:acceptedPaymentMethod'?: string[]
-  'beckn:offerAttributes'?: Record<string, unknown>
+  id: string
+  descriptor: Record<string, unknown>
+  provider: string
+  items: string[]
+  addOns?: string[]
+  add0nItems?: string[]
+  isActive?: boolean
+  validity?: Record<string, unknown>
+  price?: Price
+  eligibleRegion?: Array<Record<string, unknown>>
+  acceptedPaymentMethod?: string[]
+  offerAttributes?: Record<string, unknown>
 }
 
 export interface OrderItem {
-  'beckn:lineId'?: string
-  'beckn:orderedItem': string
-  'beckn:acceptedOffer'?: AcceptedOfferInItem
-  'beckn:quantity'?: Quantity
-  'beckn:price'?: Price
-  'beckn:orderItemAttributes'?: OrderItemAttributes
+  lineId?: string
+  orderedItem: string
+  acceptedOffer?: AcceptedOfferInItem
+  quantity?: Quantity
+  price?: Price
+  orderItemAttributes?: OrderItemAttributes
 }
 
 export interface AcceptedOffer {
   '@context': string
   '@type': string
-  'beckn:id': string
-  'beckn:descriptor': Record<string, unknown>
-  'beckn:provider': string
-  'beckn:items': string[]
-  'beckn:addOns'?: string[]
-  'beckn:add0nItems'?: string[]
-  'beckn:isActive'?: boolean
-  'beckn:validity'?: Record<string, unknown>
-  'beckn:price'?: Price
-  'beckn:eligibleRegion'?: Array<Record<string, unknown>>
-  'beckn:acceptedPaymentMethod'?: string[]
-  'beckn:offerAttributes'?: Record<string, unknown>
+  id: string
+  descriptor: Record<string, unknown>
+  provider: string
+  items: string[]
+  addOns?: string[]
+  add0nItems?: string[]
+  isActive?: boolean
+  validity?: Record<string, unknown>
+  price?: Price
+  eligibleRegion?: Array<Record<string, unknown>>
+  acceptedPaymentMethod?: string[]
+  offerAttributes?: Record<string, unknown>
 }
 
 export interface OrderValueComponent {
@@ -99,11 +99,11 @@ export interface PaymentAmount {
 export interface Payment {
   '@context': string
   '@type': string
-  'beckn:id'?: string
-  'beckn:paymentStatus'?: string
-  'beckn:amount'?: PaymentAmount
-  'beckn:paidAt'?: string
-  'beckn:acceptedPaymentMethod'?: PaymentMethod[]
+  id?: string
+  paymentStatus?: string
+  amount?: PaymentAmount
+  paidAt?: string
+  acceptedPaymentMethod?: PaymentMethod[]
 }
 
 export interface TrackingAction {
@@ -121,11 +121,11 @@ export interface DeliveryAttributes {
 export interface Fulfillment {
   '@context': string
   '@type': string
-  'beckn:id'?: string
-  'beckn:fulfillmentStatus'?: string
-  'beckn:mode': string
+  id?: string
+  fulfillmentStatus?: string
+  mode: string
   trackingAction?: TrackingAction
-  'beckn:deliveryAttributes'?: DeliveryAttributes
+  deliveryAttributes?: DeliveryAttributes
 }
 
 export interface OrderAttributes {
@@ -138,16 +138,16 @@ export interface OrderAttributes {
 export interface Order {
   '@context': string
   '@type': string
-  'beckn:id'?: string
-  'beckn:orderStatus': string
-  'beckn:orderNumber'?: string
-  'beckn:seller': string
-  'beckn:buyer': Buyer
-  'beckn:orderItems': OrderItem[]
-  'beckn:acceptedOffers'?: AcceptedOffer[]
-  'beckn:orderValue'?: OrderValue
-  'beckn:invoice'?: string
-  'beckn:payment'?: Payment
-  'beckn:fulfillment'?: Fulfillment
-  'beckn:orderAttributes'?: OrderAttributes
+  id?: string
+  orderStatus: string
+  orderNumber?: string
+  seller: string
+  buyer: Buyer
+  orderItems: OrderItem[]
+  acceptedOffers?: AcceptedOffer[]
+  orderValue?: OrderValue
+  invoice?: string
+  payment?: Payment
+  fulfillment?: Fulfillment
+  orderAttributes?: OrderAttributes
 }

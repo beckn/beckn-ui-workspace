@@ -2,9 +2,6 @@ import type { DiscoverCatalogStored, DiscoverRequest } from '@beckn-ui/common/li
 import { DOMAIN } from '@lib/config'
 import { v4 as uuidv4 } from 'uuid'
 
-const EV_CHARGING_SCHEMA_CONTEXT =
-  'https://raw.githubusercontent.com/beckn/protocol-specifications-new/refs/heads/main/schema/EvChargingService/v1/context.jsonld'
-
 /**
  * Check if discover response has a usable message with catalogs (so we can fetch renderer from catalog @context).
  * Use this to avoid calling fetchRenderer when message is missing or catalogs empty.
@@ -99,8 +96,7 @@ export function buildDiscoverRequest(textSearch: string): DiscoverRequest {
       transaction_id: transactionId,
       message_id: messageId,
       timestamp: now,
-      ttl: 'PT30S',
-      schema_context: [EV_CHARGING_SCHEMA_CONTEXT]
+      ttl: 'PT30S'
     },
     message: { text_search: textSearch || '' }
   }

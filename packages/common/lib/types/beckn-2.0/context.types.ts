@@ -52,7 +52,7 @@ export interface BecknLocation {
 }
 
 export interface BecknContext {
-  domain: string
+  domain?: string
   location?: BecknLocation
   version: string
   bap_id: string

@@ -2,12 +2,13 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import type { DiscoverCatalogStored } from '../../../lib/types/beckn-2.0/discover'
 
 /**
- * Beckn 2.0 Discover state (transaction_id + catalogs from discover API).
- * Generic: any app using Beckn 2.0 discover can use this slice.
+ * Beckn 2.0 Discover state (transaction_id, catalogs, and last response context for select/init/confirm chain).
  */
 export interface DiscoverBeckn20State {
   transactionId: string
   catalogs: DiscoverCatalogStored[]
+  /** Last discover API response context; use as previous context when building select request */
+  lastResponseContext: Record<string, unknown> | null
 }
 
 export interface DiscoverBeckn20RootState {
@@ -21,7 +22,8 @@ export type DiscoverRootState = DiscoverBeckn20RootState
 
 const initialState: DiscoverBeckn20State = {
   transactionId: '',
-  catalogs: []
+  catalogs: [],
+  lastResponseContext: null
 }
 
 const discoverSlice = createSlice({
@@ -34,9 +36,13 @@ const discoverSlice = createSlice({
     setDiscoverCatalogs(state, action: PayloadAction<{ catalogs: DiscoverCatalogStored[] }>) {
       state.catalogs = action.payload.catalogs
     },
+    setDiscoverResponseContext(state, action: PayloadAction<{ context: Record<string, unknown> }>) {
+      state.lastResponseContext = action.payload.context
+    },
     clearDiscover(state) {
       state.transactionId = ''
       state.catalogs = []
+      state.lastResponseContext = null
     }
   }
 })

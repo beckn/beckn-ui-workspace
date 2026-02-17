@@ -13,6 +13,7 @@ import {
   ParsedItemModel
 } from '@beckn-ui/common'
 import type { DiscoverCatalogStored } from '@beckn-ui/common/lib/types/beckn-2.0/discover'
+import type { BecknContext } from '@beckn-ui/common/lib/types/beckn-2.0/context.types'
 import { useDispatch, useSelector } from 'react-redux'
 import { getCountryCode } from '@utils/general'
 import { useInitMutation } from '@beckn-ui/common/src/services/beckn-2.0/init'
@@ -91,7 +92,7 @@ const ChargerDetails = () => {
       initResponseRaw?.length && initResponseRaw[0]
         ? [
             normalizeInitResponse20ToLegacy(
-              initResponseRaw[0] as { context: unknown; message: { order: unknown } }
+              initResponseRaw[0] as { context: BecknContext; message: { order: Record<string, unknown> } }
             ) as InitResponseModel
           ]
         : [],
@@ -99,7 +100,9 @@ const ChargerDetails = () => {
   )
   const { items } = useSelector((state: ICartRootState) => state.cart)
   const { selectedCharger } = useSelector((state: ChargerSelectRootState) => state?.selectCharger)
-  const { transactionId } = useSelector((state: DiscoverRootState) => state.discover)
+  const { transactionId, lastResponseContext: discoverContext } = useSelector(
+    (state: DiscoverRootState) => state.discover
+  )
   const discoverCatalogs = useSelector(
     (state: DiscoverRootState) => state.discover?.catalogs ?? []
   ) as DiscoverCatalogStored[]
@@ -272,7 +275,8 @@ const ChargerDetails = () => {
         selectedCharger ?? undefined,
         discoverCatalogs?.[0],
         domain,
-        buyer.displayName || buyer.telephone || buyer.email ? buyer : undefined
+        buyer.displayName || buyer.telephone || buyer.email ? buyer : undefined,
+        discoverContext ?? undefined
       )
       const rawSelectResp = (await fetchQuotes(selectPayload).unwrap()) as SelectResponse | { data: SelectResponse }
       // Support both raw Beckn shape and gateway-wrapped { data: { context, message } }
@@ -297,6 +301,7 @@ const ChargerDetails = () => {
     items,
     transactionId,
     discoverCatalogs,
+    discoverContext,
     domain,
     fetchQuotes,
     handleInitCall,

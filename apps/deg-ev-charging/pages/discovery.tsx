@@ -65,6 +65,10 @@ const Discovery = () => {
           dispatchRef.current(discoverActions.setTransactionId({ transactionId }))
         }
         dispatchRef.current(discoverActions.setDiscoverCatalogs({ catalogs: allCatalogs as DiscoverCatalogStored[] }))
+        const ctx = (res as unknown as Record<string, unknown>).context
+        if (ctx && typeof ctx === 'object') {
+          dispatchRef.current(discoverActions.setDiscoverResponseContext({ context: ctx as Record<string, unknown> }))
+        }
 
         if (!hasDiscoverMessageWithCatalogs(res) || allCatalogs.length === 0) {
           if (isCurrentRun()) setRenderedHtml('')
