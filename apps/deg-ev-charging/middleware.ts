@@ -2,41 +2,44 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 
+const publicPaths = [
+  '/signIn',
+  '/signUp',
+  '/OTPVerification',
+  '/discovery',
+  '/detailView',
+  '/cart',
+  '/checkout',
+  '/paymentMode',
+  '/orderConfirmation'
+]
+
 export default function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl
+  const authToken = req.cookies.get('authToken')?.value
 
-  // Allow home page without authentication - return early
-  if (pathname === '/') {
+  // Unauthenticated users opening home are sent to sign-in page
+  if (pathname === '/' && !authToken) {
+    return NextResponse.redirect(new URL('/signIn', req.url))
+  }
+
+  if (publicPaths.includes(pathname)) {
     return NextResponse.next()
   }
 
-  // Redirect all sign-in/sign-up pages to discovery (bypass auth completely)
-  // if (
-  //   pathname === '/signin' ||
-  //   pathname === '/signup' ||
-  //   pathname === '/signIn' ||
-  //   pathname === '/signUp' ||
-  //   pathname === '/OTPVerification'
-  // ) {
-  //   return NextResponse.redirect(new URL('/discovery', req.url))
-  // }
+  // Protected routes: require auth token
+  if (!authToken && pathname === '/profile') {
+    const signInUrl = new URL('/signIn', req.url)
+    signInUrl.searchParams.set('returnUrl', '/profile')
+    return NextResponse.redirect(signInUrl)
+  }
 
-  // // Allow public pages without authentication - return early
-  // if (publicPages.includes(pathname)) {
-  //   return NextResponse.next()
-  // }
+  if (!authToken && pathname === '/orderHistory') {
+    const signInUrl = new URL('/signIn', req.url)
+    signInUrl.searchParams.set('returnUrl', '/orderHistory')
+    return NextResponse.redirect(signInUrl)
+  }
 
-  // // For logged in but not verified users, redirect to discovery (not signIn)
-  // if (loggedin && !isVerified && !publicPages.includes(pathname)) {
-  //   return NextResponse.redirect(new URL('/discovery', req.url))
-  // }
-
-  // // For non-logged in users trying to access protected pages, redirect to discovery (not signIn)
-  // if (!loggedin && !publicPages.includes(pathname)) {
-  //   return NextResponse.redirect(new URL('/discovery', req.url))
-  // }
-
-  // Allow all other requests to continue
   return NextResponse.next()
 }
 

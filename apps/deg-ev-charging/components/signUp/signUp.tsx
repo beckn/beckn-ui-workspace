@@ -1,11 +1,10 @@
 import React, { useMemo, useState } from 'react'
 import { BecknAuth } from '@beckn-ui/becknified-components'
 import { Box } from '@chakra-ui/react'
-import { FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import Router from 'next/router'
 import { FormErrors, SignUpFormProps } from '@beckn-ui/common/lib/types'
-import { useTradeRegisterMutation } from '@services/UserService'
-import AppLogo from '@public/images/ev_charging_logo.svg'
+import { useTradeRegisterMutation, type RegisterRequest } from '@services/UserService'
+import AppLogo from '@public/images/deg-logo.svg'
 import { useLanguage } from '@hooks/useLanguage'
 import { CustomFormErrorProps, signUpValidateForm } from '@utils/form-utils'
 import Cookies from 'js-cookie'
@@ -60,37 +59,23 @@ const SignUp = () => {
   const handleSignUp = async () => {
     const errors = signUpValidateForm(formData)
     const isFormValid = Object.values(errors).every(error => error === '')
-    const signUpData = {
-      fullname: formData.name,
-      email: formData.email,
-      address: formData.address,
+    const signUpData: RegisterRequest = {
+      fullName: formData.name.trim(),
+      email: formData.email.trim(),
+      address: formData.address.trim(),
       password: formData.password,
-      phone_no: formData.mobileNumber,
+      phoneNumber: formData.mobileNumber.trim(),
       utility_name: ''
     }
 
     if (isFormValid) {
       try {
-        let registerResponse: any = null
-        let catalogueSuccess: any = null
-
-        registerResponse = await tradeRegister(signUpData)
-        // for PRODUCER to create default catalogue
-        catalogueSuccess = true // await createTradeCatalogue()
-
-        console.log(registerResponse)
-        if (!registerResponse || (registerResponse as { error: FetchBaseQueryError })?.error)
-          throw new Error('Could not register')
-        const jwtToken = registerResponse?.data?.data?.jwt
+        const registerResponse = await tradeRegister(signUpData).unwrap()
+        const jwtToken = registerResponse?.jwt
         if (jwtToken) {
           Cookies.set('authToken', jwtToken)
-          console.log('JWT Token saved:', jwtToken)
-        } else {
-          throw new Error('JWT token not found in the response')
         }
-        if (catalogueSuccess) {
-          Router.push('/')
-        }
+        Router.push('/')
       } catch (error) {
         console.error('An error occurred:', error)
       }
@@ -115,10 +100,15 @@ const SignUp = () => {
 
   return (
     <Box
-      mt={'30px'}
-      className="hideScroll"
+      className="ev-auth-page hideScroll"
+      w="100%"
+      maxW="28rem"
+      mx="auto"
+      px={{ base: 4, sm: 6 }}
+      py={{ base: 6, sm: 8 }}
       maxH="calc(100vh - 90px)"
-      overflowY={'scroll'}
+      overflowY="auto"
+      minH="0"
     >
       <BecknAuth
         schema={{

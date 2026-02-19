@@ -3,30 +3,84 @@ import { SignInResponse } from '@beckn-ui/common'
 import Cookies from 'js-cookie'
 
 export interface SignInRequest {
-  phone: string
+  email: string
+  password: string
 }
 
 export interface RegisterRequest {
-  fullname: string
+  fullName: string
   email: string
   address: string
-  phone_no: string
+  phoneNumber: string
   password: string
-  utility_name: string
+  utility_name?: string
+}
+
+export interface ProfileUser {
+  id: number
+  email: string
+  fullName: string
+  phoneNumber: string
+  username: string
+  createdAt: string
+  updatedAt: string
+}
+
+export interface ProfileResponse {
+  id: number
+  documentId?: string
+  name: string
+  phone: string
+  address: string | null
+  zip_code: string | null
+  createdAt?: string
+  updatedAt?: string
+  publishedAt?: string
+  locale?: string | null
+}
+
+export interface GetProfileResponse {
+  user: ProfileUser
+  profile: ProfileResponse
+}
+
+export interface UpdateProfileRequest {
+  name?: string
+  address?: string
+  phone?: string
+  zip_code?: string
 }
 
 const extendedAuthApi = Api.injectEndpoints({
   endpoints: build => ({
+    getProfile: build.query<GetProfileResponse, void>({
+      query: () => ({
+        url: '/profile',
+        method: 'GET'
+      }),
+      providesTags: ['Auth']
+    }),
+    updateProfile: build.mutation<GetProfileResponse, UpdateProfileRequest>({
+      query: body => ({
+        url: '/profile',
+        method: 'PUT',
+        body
+      }),
+      invalidatesTags: ['Auth']
+    }),
     tradeLogin: build.mutation<SignInResponse, SignInRequest>({
       query: credentials => ({
-        url: '/unified-beckn-energy/mobile-login',
+        url: '/login',
         method: 'POST',
-        body: credentials
+        body: {
+          identifier: credentials.email,
+          password: credentials.password
+        }
       })
     }),
     tradeRegister: build.mutation<SignInResponse, RegisterRequest>({
       query: credentials => ({
-        url: '/unified-beckn-energy/signup',
+        url: '/register',
         method: 'POST',
         body: credentials
       })
@@ -42,10 +96,16 @@ const extendedAuthApi = Api.injectEndpoints({
   })
 })
 
-export const { useTradeLoginMutation, useTradeRegisterMutation, useVerifyOtpMutation } = extendedAuthApi
+export const {
+  useTradeLoginMutation,
+  useTradeRegisterMutation,
+  useVerifyOtpMutation,
+  useGetProfileQuery,
+  useUpdateProfileMutation
+} = extendedAuthApi
 
 export const {
-  endpoints: { tradeLogin, tradeRegister }
+  endpoints: { tradeLogin, tradeRegister, getProfile, updateProfile }
 } = extendedAuthApi
 
 export default extendedAuthApi

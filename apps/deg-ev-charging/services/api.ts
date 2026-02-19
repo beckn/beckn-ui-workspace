@@ -1,13 +1,13 @@
 import { createApi, fetchBaseQuery, retry } from '@reduxjs/toolkit/query/react'
 import type { BaseQueryFn, FetchArgs, FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { feedbackActions } from '@beckn-ui/common'
+import Cookies from 'js-cookie'
 
 // Create our baseQuery instance
 const baseQuery = fetchBaseQuery({
   baseUrl: process.env.NEXT_PUBLIC_STRAPI_URL,
   prepareHeaders: (headers, { getState }) => {
-    // By default, if we have a token in the store, let's use that for authenticated requests
-    const token = (getState() as any).auth.jwt
+    const token = (getState() as any).auth?.jwt ?? Cookies.get('authToken')
     if (token) {
       headers.set('Authorization', `Bearer ${token}`)
     }

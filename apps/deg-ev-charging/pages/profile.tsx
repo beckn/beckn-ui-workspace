@@ -1,34 +1,31 @@
 import { BecknAuth } from '@beckn-ui/becknified-components'
-import { Box, Flex } from '@chakra-ui/react'
+import { Box, Flex, Spinner } from '@chakra-ui/react'
 import { useLanguage } from '@hooks/useLanguage'
 import { profileValidateForm } from '@beckn-ui/common/src/utils'
-import Cookies from 'js-cookie'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { DegWalletDetails, FormErrors, ProfileProps } from '@beckn-ui/common/lib/types'
-import axios from '@services/axios'
 import { testIds } from '@shared/dataTestIds'
 import LogoutIcon from '@public/images/logout_icon.svg'
 import { setProfileEditable, UserRootState } from '@store/user-slice'
-import { checkoutBeckn20Actions, clearSource, feedbackActions, logout } from '@beckn-ui/common'
-import { ROLE, ROUTE_TYPE } from '@lib/config'
+import { checkoutBeckn20Actions, clearSource, feedbackActions } from '@beckn-ui/common'
+import { logout } from '@store/auth-slice'
 import { InputProps, Typography } from '@beckn-ui/molecules'
 import NavigationItem from '@components/NavigationItem'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import OpenWalletBottomModal from '@components/Modal/OpenWalletBottomModal'
 import { AuthRootState } from '@store/auth-slice'
 import { useConnectWallet } from '@hooks/useConnectWallet'
+import { useGetProfileQuery, useUpdateProfileMutation } from '@services/UserService'
 
 const ProfilePage = () => {
   const dispatch = useDispatch()
   const { t } = useLanguage()
-  const bearerToken = Cookies.get('authToken')
-  const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
-  const [isLoading, setIsLoading] = useState(false)
   const [formData, setFormData] = useState<ProfileProps>({
     name: '',
     email: '',
-    address: ''
+    address: '',
+    mobileNumber: ''
   })
   const [formErrors, setFormErrors] = useState<FormErrors>({
     name: '',
@@ -41,6 +38,9 @@ const ProfilePage = () => {
 
   const { profileEditable, shouldShowInitialAlert } = useSelector((state: UserRootState) => state.user)
   const { user } = useSelector((state: AuthRootState) => state.auth)
+
+  const { data: profileData, isLoading } = useGetProfileQuery(undefined, { skip: !user })
+  const [updateProfileApi] = useUpdateProfileMutation()
 
   useEffect(() => {
     return () => {
@@ -85,32 +85,16 @@ const ProfilePage = () => {
   }
 
   useEffect(() => {
-    const requestOptions = {
-      method: 'GET',
-      headers: { Authorization: `Bearer ${bearerToken}` },
-      withCredentials: true
-    }
-
-    setIsLoading(true)
-
-    axios
-      .get(`${strapiUrl}${ROUTE_TYPE[ROLE.GENERAL]}/user-profile`, requestOptions)
-      .then(response => {
-        const result = response.data.agent
-
-        const { first_name, agent_profile } = result
-        setFormData({
-          ...formData,
-          name: `${first_name}`,
-          address: agent_profile.address,
-          email: response.data.email,
-          mobileNumber: agent_profile.phone_number
-        })
-      })
-      .finally(() => {
-        setIsLoading(false)
-      })
-  }, [])
+    if (!profileData) return
+    const { user: profileUser, profile } = profileData
+    setFormData(prev => ({
+      ...prev,
+      name: profile?.name ?? profileUser?.fullName ?? '',
+      email: profileUser?.email ?? '',
+      mobileNumber: profile?.phone ?? profileUser?.phoneNumber ?? '',
+      address: profile?.address ?? ''
+    }))
+  }, [profileData])
 
   const updateProfile = () => {
     if (formData.name === '' || formData.address === '') {
@@ -125,24 +109,12 @@ const ProfilePage = () => {
       }, {} as FormErrors)
     }))
 
-    const data = {
-      fullname: formData.name.trim(),
-      address: formData.address
-    }
-
-    axios
-      .put(`${strapiUrl}${ROUTE_TYPE[ROLE.GENERAL]}/user-profile`, data, {
-        headers: { Authorization: `Bearer ${bearerToken}` }
-      })
-      .then(() => {
-        // dispatch(
-        //   feedbackActions.setToastData({
-        //     toastData: { message: t.success, display: true, type: 'success', description: t.profileUpdateSuccess }
-        //   })
-        // )
-      })
-      .catch(error => {
-        console.log(error)
+    updateProfileApi({
+      name: formData.name.trim(),
+      address: formData.address ?? undefined
+    })
+      .unwrap()
+      .catch(() => {
         dispatch(
           feedbackActions.setToastData({
             toastData: { message: 'Error!', display: true, type: 'error', description: 'Unable to update' }
@@ -217,26 +189,48 @@ const ProfilePage = () => {
     return inputs
   }
 
+  if (isLoading && !profileData) {
+    return (
+      <Box
+        w="100%"
+        maxW="28rem"
+        mx="auto"
+        px={4}
+        py={8}
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        minH="200px"
+      >
+        <Spinner
+          size="lg"
+          color="var(--ev-primary)"
+        />
+      </Box>
+    )
+  }
+
   return (
     <Box
-      className="hideScroll"
-      maxH={'calc(100vh - 100px)'}
-      overflowY="scroll"
-      w={['100%', '100%', '70%', '62%']}
-      margin="0 auto"
+      className="hideScroll ev-profile-page"
+      w="100%"
+      maxW="28rem"
+      mx="auto"
+      px={{ base: 4, sm: 6 }}
+      py={{ base: 6, sm: 8 }}
+      maxH="calc(100vh - 100px)"
+      overflowY="auto"
     >
       <Flex
-        flexDir={'column'}
-        justifyContent={'space-between'}
-        height={'calc(100vh - 12rem)'}
+        flexDir="column"
+        gap={6}
       >
-        <Box position={'relative'}>
+        <Box>
           <Flex
-            pos={'absolute'}
-            width={'100%'}
-            justifyContent={'space-between'}
-            alignItems={'center'}
-            height={'38px'}
+            width="100%"
+            justifyContent="space-between"
+            alignItems="center"
+            mb={4}
           >
             <Typography
               text="Personal Information"
@@ -265,20 +259,20 @@ const ProfilePage = () => {
               buttons: [],
               inputs: getInputs()
             }}
-            isLoading={isLoading}
+            isLoading={false}
           />
         </Box>
 
         <NavigationItem
           icon={LogoutIcon}
-          label={'Logout'}
-          color="#4461F2"
+          label="Logout"
+          color="var(--ev-error)"
           handleClick={() => {
             dispatch(clearSource())
             dispatch(checkoutBeckn20Actions.clearState())
             dispatch(logout())
           }}
-          dataTest={'logout'}
+          dataTest="logout"
         />
       </Flex>
       <OpenWalletBottomModal

@@ -27,6 +27,10 @@ const slice = createSlice({
     logout: () => {
       Cookies.remove('authToken')
       Cookies.remove('isVerified')
+      if (typeof localStorage !== 'undefined') {
+        localStorage.removeItem('persist:root')
+        localStorage.clear()
+      }
       Router.push('/discovery')
       return initialState
     },
@@ -49,10 +53,9 @@ const slice = createSlice({
         state.jwt = action.payload.jwt
         state.isAuthenticated = true
         Cookies.set('authToken', state.jwt)
-        Cookies.set('isVerified', JSON.stringify(state.user?.isOtpVerified))
+        Cookies.set('isVerified', 'true')
 
-        Router.push('/OTPVerification')
-        Cookies.set('isVerified', 'false')
+        Router.push('/')
       })
       .addMatcher(extendedAuthApi.endpoints.tradeLogin.matchRejected, (state, action) => {
         console.log('rejected', action)
@@ -66,10 +69,22 @@ const slice = createSlice({
           state.user = action.payload.user
           state.jwt = action.payload.jwt
           Cookies.set('authToken', state.jwt)
-          Cookies.set('isVerified', JSON.stringify(state.user?.isOtpVerified))
+          Cookies.set('isVerified', 'true')
           state.isAuthenticated = true
 
-          Router.push('/OTPVerification')
+          let returnUrl = '/'
+          if (typeof window !== 'undefined') {
+            try {
+              const stored = sessionStorage.getItem('authReturnUrl')
+              if (stored && stored.startsWith('/')) {
+                returnUrl = stored
+                sessionStorage.removeItem('authReturnUrl')
+              }
+            } catch {
+              // ignore
+            }
+          }
+          Router.push(returnUrl)
         })
         .addMatcher(extendedAuthApi.endpoints.tradeRegister.matchRejected, (state, action) => {
           console.log('rejected', action)
@@ -85,7 +100,19 @@ const slice = createSlice({
           Cookies.set('isVerified', verified.toString())
 
           if (verified) {
-            Router.push('/')
+            let returnUrl = '/'
+            if (typeof window !== 'undefined') {
+              try {
+                const stored = sessionStorage.getItem('authReturnUrl')
+                if (stored && stored.startsWith('/')) {
+                  returnUrl = stored
+                  sessionStorage.removeItem('authReturnUrl')
+                }
+              } catch {
+                // ignore
+              }
+            }
+            Router.push(returnUrl)
           } else {
             Router.back()
           }

@@ -351,6 +351,21 @@ select:-webkit-autofill:focus {
 
 
 
+/* Splash screen: gentle entrance */
+@keyframes ev-splash-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.ev-splash-content {
+  animation: ev-splash-in 0.5s ease-out forwards;
+}
+
 /* EV Charging app theme – light with green accent (noina-style) */
 .ev-app {
   --ev-bg: #ffffff;
@@ -375,6 +390,47 @@ select:-webkit-autofill:focus {
   --ev-safe-bottom: env(safe-area-inset-bottom, 0px);
   --ev-safe-left: env(safe-area-inset-left, 0px);
   --ev-safe-right: env(safe-area-inset-right, 0px);
+}
+
+/* Auth pages (Sign In / Sign Up): align form and controls to container */
+.ev-auth-page {
+  box-sizing: border-box;
+}
+.ev-auth-page input,
+.ev-auth-page [data-chakra-input],
+.ev-auth-page button:not([aria-label="Show password"]):not([aria-label="Hide password"]) {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+.ev-auth-page button + button,
+.ev-auth-page a + a {
+  margin-top: 0.75rem;
+}
+
+/* Password visibility toggle (eye icon) – aligned to right edge of input */
+.ev-auth-page button[aria-label="Show password"],
+.ev-auth-page button[aria-label="Hide password"] {
+  position: absolute !important;
+  right: 0.5rem !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  min-width: 2.25rem !important;
+  width: auto !important;
+  max-width: none !important;
+  height: 2rem !important;
+  padding: 0 0.25rem !important;
+}
+.ev-auth-page div:has(> button[aria-label*="password"]) > input {
+  padding-right: 2.75rem;
+}
+
+/* Profile page: align form and spacing */
+.ev-profile-page input,
+.ev-profile-page [data-chakra-input] {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 /* Mobile-first base: prevent zoom on input focus (iOS); theme text */
