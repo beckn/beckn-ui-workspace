@@ -16,6 +16,7 @@ import {
 import { fetchRendererConfigFromDiscoverCatalogs } from '@utils/rendererFromDiscover'
 import { renderDiscoveryItems } from '@utils/renderDiscoveryItems'
 import { wrapTemplatePriceInBold } from '@utils/templateUtils'
+import { DISCOVER_RESPONSE } from '../constant/discover'
 
 const FALLBACK_RENDERER_URL = 'https://raw.githubusercontent.com/beckn/beckn-ui-workspace/refs/heads/main/renderer.json'
 
@@ -56,7 +57,8 @@ const Discovery = () => {
       setRenderedHtml('')
       try {
         const payload = buildDiscoverRequest(searchTerm)
-        const res = await discoverRef.current(payload).unwrap()
+        // const res = await discoverRef.current(payload).unwrap()
+        const res = DISCOVER_RESPONSE //we are using mockdata, discover response not getting
         if (!isCurrentRun()) return
         const allCatalogs = getCatalogsFromResponse(res)
         const transactionId = getTransactionIdFromResponse(res)

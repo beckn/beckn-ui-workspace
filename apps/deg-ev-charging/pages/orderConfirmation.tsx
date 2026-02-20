@@ -6,17 +6,12 @@ import { useLanguage } from '../hooks/useLanguage'
 import { ConfirmationPage } from '@beckn-ui/becknified-components'
 import axios from '@services/axios'
 import { Box, Image } from '@chakra-ui/react'
-import Cookies from 'js-cookie'
 import { CheckoutBeckn20RootState, checkoutBeckn20Actions } from '@beckn-ui/common'
 import { orderActions } from '@beckn-ui/common/src/store/order-slice'
 import { useConfirmMutation } from '@beckn-ui/common/src/services/beckn-2.0/confirm'
 import { testIds } from '@shared/dataTestIds'
-import { ORDER_CATEGORY_ID, ROLE, ROUTE_TYPE } from '../lib/config'
-import {
-  getPayloadForOrderHistoryPost,
-  buildConfirmRequest20,
-  normalizeConfirmResponse20ToLegacy
-} from '@lib/beckn-2.0'
+import { ROLE, ROUTE_TYPE } from '../lib/config'
+import { buildConfirmRequest20, normalizeConfirmResponse20ToLegacy } from '@lib/beckn-2.0'
 import type { InitResponse } from '@beckn-ui/common/lib/types/beckn-2.0/init'
 import { extractAuthAndHeader, toBase64 } from '@utils/general'
 import { cartActions } from '@store/cart-slice'
@@ -40,14 +35,6 @@ const OrderConfirmation = () => {
   const { user } = useSelector((state: AuthRootState) => state.auth)
   const initResponseRaw = useSelector((state: CheckoutBeckn20RootState) => state.checkoutBeckn20?.initResponseRaw)
   const confirmResponse = useSelector((state: CheckoutBeckn20RootState) => state.checkoutBeckn20?.confirmResponse)
-
-  const bearerToken = Cookies.get('authToken')
-  const axiosConfig = {
-    headers: {
-      Authorization: `Bearer ${bearerToken}`,
-      'Content-Type': 'application/json'
-    }
-  }
 
   const extractItemsWithProvider = (orders: ConfirmResponseModel[] | string): string => {
     if (!orders || (Array.isArray(orders) && orders.length === 0)) return ''
@@ -197,17 +184,8 @@ const OrderConfirmation = () => {
       }
 
       localStorage.setItem('confirmResponse', JSON.stringify(confirmResponse))
-      const ordersPayload = getPayloadForOrderHistoryPost(confirmResponse, ORDER_CATEGORY_ID)
-      ordersPayload.data.forEach(payload => {
-        axios
-          .post(`${strapiUrl}/unified-beckn-energy/order-history/create`, payload, axiosConfig)
-          .then(res => {
-            setIsOrderConfirmed(true)
-            dispatch(cartActions.clearCart())
-            return res
-          })
-          .catch(err => console.error(err))
-      })
+      setIsOrderConfirmed(true)
+      dispatch(cartActions.clearCart())
     }
   }, [confirmResponse])
 
@@ -226,13 +204,21 @@ const OrderConfirmation = () => {
   //   )
   // }
 
+  const orderId = confirmResponse && confirmResponse.length > 0 ? confirmResponse[0].message.orderId : ''
+
   return (
     <Box
       className="hideScroll"
+      minH={'calc(100vh - 100px)'}
       maxH={'calc(100vh - 100px)'}
       overflowY="scroll"
       w={['100%', '100%', '70%', '62%']}
       margin="0 auto"
+      px={4}
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      bg="white"
     >
       <ConfirmationPage
         className="order-confornation"
@@ -240,66 +226,63 @@ const OrderConfirmation = () => {
           iconSrc: orderConfirmmark,
           successOrderMessage: 'Congratulations! your booking is successful!',
           gratefulMessage: '',
+          orderIdMessage: orderId ? `Order ID: ${orderId}` : '',
 
           buttons: [
-            {
-              text: 'View order details',
-              handleClick: () => {
-                if (confirmResponse && confirmResponse.length > 0) {
-                  const first = confirmResponse[0]
-                  const orderDetails = {
-                    orderId: first.message.orderId,
-                    bppId: first.context.bpp_id,
-                    bppUri: first.context.bpp_uri
-                  }
-                  dispatch(orderActions.addSelectedOrder({ orderDetails }))
-                  localStorage.setItem('selectedOrder', JSON.stringify(orderDetails))
-                }
-                router.push('/orderDetails')
-              },
-              variant: 'outline',
-              colorScheme: 'primary',
-              dataTest: testIds.orderConfirmation_viewOrderButton
-            },
-            {
-              text: 'Unlock Chargering Port',
-              handleClick: () => {
-                if (confirmResponse && confirmResponse.length > 0) {
-                  const selectedOrders = confirmResponse.map(response => {
-                    const orderId = response.message.orderId
-                    const bppId = response.context.bpp_id
-                    const bppUri = response.context.bpp_uri
-
-                    return { orderId, bppId, bppUri }
-                  })
-
-                  // Dispatch each order separately
-                  selectedOrders.forEach(orderDetails => {
-                    dispatch(orderActions.addSelectedOrder({ orderDetails }))
-
-                    // Save each order in localStorage
-                    localStorage.setItem('selectedOrder', JSON.stringify(orderDetails))
-                  })
-                  dispatch(checkoutBeckn20Actions.clearState())
-                  dispatch(clearSource())
-                }
-
-                router.push('/monitorCharging')
-              },
-              rightIcon: (
-                <Image
-                  src="/images/unlock_icon.svg"
-                  alt="unlock_icon"
-                  width={'20px'}
-                  height={'20px'}
-                />
-              ),
-              isLoading: isLoading,
-              disabled: !isOrderConfirmed,
-              variant: 'solid',
-              colorScheme: 'primary',
-              dataTest: testIds.orderConfirmation_viewOrderButton
-            }
+            // {
+            //   text: 'View order details',
+            //   handleClick: () => {
+            //     if (confirmResponse && confirmResponse.length > 0) {
+            //       const first = confirmResponse[0]
+            //       const orderDetails = {
+            //         orderId: first.message.orderId,
+            //         bppId: first.context.bpp_id,
+            //         bppUri: first.context.bpp_uri
+            //       }
+            //       dispatch(orderActions.addSelectedOrder({ orderDetails }))
+            //       localStorage.setItem('selectedOrder', JSON.stringify(orderDetails))
+            //     }
+            //     router.push('/orderDetails')
+            //   },
+            //   variant: 'outline',
+            //   colorScheme: 'primary',
+            //   dataTest: testIds.orderConfirmation_viewOrderButton
+            // },
+            // {
+            //   text: 'Unlock Chargering Port',
+            //   handleClick: () => {
+            //     if (confirmResponse && confirmResponse.length > 0) {
+            //       const selectedOrders = confirmResponse.map(response => {
+            //         const orderId = response.message.orderId
+            //         const bppId = response.context.bpp_id
+            //         const bppUri = response.context.bpp_uri
+            //         return { orderId, bppId, bppUri }
+            //       })
+            //       // Dispatch each order separately
+            //       selectedOrders.forEach(orderDetails => {
+            //         dispatch(orderActions.addSelectedOrder({ orderDetails }))
+            //         // Save each order in localStorage
+            //         localStorage.setItem('selectedOrder', JSON.stringify(orderDetails))
+            //       })
+            //       dispatch(checkoutBeckn20Actions.clearState())
+            //       dispatch(clearSource())
+            //     }
+            //     router.push('/monitorCharging')
+            //   },
+            //   rightIcon: (
+            //     <Image
+            //       src="/images/unlock_icon.svg"
+            //       alt="unlock_icon"
+            //       width={'20px'}
+            //       height={'20px'}
+            //     />
+            //   ),
+            //   isLoading: isLoading,
+            //   disabled: !isOrderConfirmed,
+            //   variant: 'solid',
+            //   colorScheme: 'primary',
+            //   dataTest: testIds.orderConfirmation_viewOrderButton
+            // }
           ]
         }}
       />
