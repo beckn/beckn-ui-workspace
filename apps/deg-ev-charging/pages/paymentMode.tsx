@@ -84,9 +84,11 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
   return (
     <Box
       className="hideScroll"
+      minH="calc(100vh - 60px)"
       maxH="calc(100vh - 100px)"
       overflowY="scroll"
       px={4}
+      bg="white"
     >
       <PaymentDetailsCard
         checkedState={checkedPayment ?? ''}

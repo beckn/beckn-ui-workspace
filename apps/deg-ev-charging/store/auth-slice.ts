@@ -31,7 +31,7 @@ const slice = createSlice({
         localStorage.removeItem('persist:root')
         localStorage.clear()
       }
-      Router.push('/discovery')
+      Router.push('/signIn')
       return initialState
     },
     setCredentials: (state, { payload: { user, jwt } }: PayloadAction<{ user: User; jwt: string }>) => {

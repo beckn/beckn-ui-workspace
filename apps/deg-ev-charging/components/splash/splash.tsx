@@ -29,9 +29,9 @@ const Splash = () => {
         <Image
           src="/images/deg-logo.svg"
           alt=""
-          width={120}
-          height={80}
-          className="h-10 w-auto object-contain opacity-90"
+          width={280}
+          height={280}
+          className="h-16 w-auto object-contain opacity-90 sm:h-20"
         />
       </footer>
     </div>
