@@ -38,11 +38,13 @@ const evLayoutRoutes = [
   '/paymentMode',
   '/orderConfirmation',
   '/orderHistory',
-  '/profile'
+  '/profile',
+  '/signIn',
+  '/signUp'
 ]
 
 const headerTitleByRoute: Record<string, string> = {
-  '/': 'EV Charging',
+  '/': 'EV Hub',
   '/discovery': 'EV Charging',
   '/detailView': 'EV Charging',
   '/cart': 'Cart',
@@ -50,7 +52,9 @@ const headerTitleByRoute: Record<string, string> = {
   '/paymentMode': 'Payment',
   '/orderConfirmation': 'Order Confirmation',
   '/orderHistory': 'Chargers',
-  '/profile': 'Profile'
+  '/profile': 'Profile',
+  '/signIn': 'Sign In',
+  '/signUp': 'Sign Up'
 }
 
 const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
@@ -146,19 +150,25 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   // For EV app routes: common TopHeader + content + BottomNavigator from Layout
   if (evLayoutRoutes.includes(router.pathname)) {
     const showBottomNav = bottomNavigatorWhiteList.includes(router.pathname)
+    const isAuthPage = router.pathname === '/signIn' || router.pathname === '/signUp'
     const title = headerTitleByRoute[router.pathname] ?? 'EV Charging'
-    const showBack = router.pathname !== '/'
+    const showBack = router.pathname !== '/' && !isAuthPage
     return (
       <div
         className={`ev-app ${showBottomNav ? 'ev-with-bottom-nav' : ''}`}
         style={
-          showBottomNav ? { height: '100dvh', overflow: 'hidden', display: 'flex', flexDirection: 'column' } : undefined
+          showBottomNav
+            ? { height: '100dvh', overflow: 'hidden', display: 'flex', flexDirection: 'column' }
+            : isAuthPage
+              ? { minHeight: '100dvh', display: 'flex', flexDirection: 'column', background: 'var(--ev-bg)' }
+              : undefined
         }
       >
         <NextNProgress height={7} />
         <TopHeader
           title={title}
           showBack={showBack}
+          centerTitle={isAuthPage}
         />
         <div
           style={
@@ -169,7 +179,9 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
                   overflow: 'auto',
                   paddingBottom: 'calc(var(--ev-bottom-nav-h) + var(--ev-safe-bottom) + 16px)'
                 }
-              : undefined
+              : isAuthPage
+                ? { flex: 1, minHeight: 'calc(100dvh - var(--ev-header-h))', background: 'var(--ev-bg)' }
+                : undefined
           }
         >
           {children}

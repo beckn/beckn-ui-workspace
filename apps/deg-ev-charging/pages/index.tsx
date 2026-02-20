@@ -24,7 +24,7 @@ const HomePage = () => {
   return (
     <>
       <Head>
-        <title>EV Charging – Find charging stations</title>
+        <title>EV Hub – Find charging stations</title>
         <meta
           name="description"
           content="Search and discover EV charging stations near you"
@@ -51,16 +51,15 @@ const HomePage = () => {
               aria-hidden
             />
             <div className="relative z-10 w-full max-w-2xl px-4 pb-6 sm:pb-8 text-center">
-              <div className="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-white border border-[var(--ev-border)] shadow-lg mb-3 sm:mb-4 overflow-hidden">
+              <div className="inline-flex items-center justify-center mb-3 sm:mb-4 flex-shrink-0">
                 <img
-                  src="/images/ev_charging_logo.svg"
-                  alt=""
-                  className="w-10 h-10 sm:w-12 sm:h-12 object-contain"
+                  src="/images/deg-logo.svg"
+                  alt="EV Hub"
+                  width={270}
+                  height={180}
+                  className="max-w-full h-auto object-contain"
                 />
               </div>
-              <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[var(--ev-text)] mb-1 sm:mb-2 tracking-tight">
-                EV Charging
-              </h1>
               <p className="text-sm sm:text-base text-[var(--ev-text-muted)] px-1">Find charging stations near you</p>
             </div>
           </section>
@@ -112,7 +111,7 @@ const HomePage = () => {
           className="py-3 sm:py-4 text-center text-xs sm:text-sm text-[var(--ev-text-muted)] border-t border-[var(--ev-border)]"
           style={{ paddingBottom: 'calc(0.75rem + var(--ev-safe-bottom))' }}
         >
-          EV Charging · Beckn-powered discovery
+          <p className="mb-1">EV Hub · Beckn-powered</p>
         </footer>
       </div>
     </>

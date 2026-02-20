@@ -1,42 +1,28 @@
 import React, { useState, useMemo } from 'react'
 import { BecknAuth } from '@beckn-ui/becknified-components'
-import AppLogo from '@public/images/ev_charging_logo.svg'
+import AppLogo from '@public/images/deg-logo.svg'
 import { useLanguage } from '@hooks/useLanguage'
 import { Box } from '@chakra-ui/react'
 import Router from 'next/router'
 import { useTradeLoginMutation } from '@services/UserService'
-import { mobilePhoneValidate } from '@utils/form-utils'
+import { signInValidateForm } from '@utils/form-utils'
+import type { FormErrors } from '@beckn-ui/common/lib/types'
 
 export interface SignInFormProps {
-  mobileNumber: string
-}
-interface FormErrors {
-  mobileNumber: string
+  email: string
+  password: string
 }
 
 // eslint-disable-next-line react/prop-types
-const SignIn = ({ initialFormData = { mobileNumber: '' } }) => {
+const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
   const [formData, setFormData] = useState<SignInFormProps>(initialFormData)
-  const [formErrors, setFormErrors] = useState<FormErrors>({ mobileNumber: '' })
+  const [formErrors, setFormErrors] = useState<FormErrors>({ email: '', password: '' })
 
   const [tradeLogin, { isLoading }] = useTradeLoginMutation()
   const { t } = useLanguage()
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
-
-    // if (!value.startsWith('+91 ')) {
-    //   value = '+91 '
-    // }
-
-    // // Prevent clearing the field
-    // if (value.length < 4) {
-    //   value = '+91 '
-    // }
-    const numericPart = value //.replace(/\D/g, '').slice(2)
-
-    value = `${numericPart}`
-
     setFormData(prevFormData => ({
       ...prevFormData,
       [name]: value
@@ -47,7 +33,7 @@ const SignIn = ({ initialFormData = { mobileNumber: '' } }) => {
       [name]: value
     }
 
-    const errors = mobilePhoneValidate(updatedFormData, false)
+    const errors = signInValidateForm(updatedFormData)
     setFormErrors(prevErrors => ({
       ...prevErrors,
       [name]: t[`${errors[name as keyof FormErrors]}`] || ''
@@ -62,7 +48,8 @@ const SignIn = ({ initialFormData = { mobileNumber: '' } }) => {
 
   const handleSignIn = async () => {
     const signInData = {
-      phone: formData.mobileNumber //.replace('+91 ', '')
+      email: formData.email.trim(),
+      password: formData.password
     }
     try {
       await tradeLogin(signInData).unwrap()
@@ -74,7 +61,15 @@ const SignIn = ({ initialFormData = { mobileNumber: '' } }) => {
     Router.push('/signUp')
   }
   return (
-    <Box>
+    <Box
+      className="ev-auth-page"
+      w="100%"
+      maxW="28rem"
+      mx="auto"
+      px={{ base: 4, sm: 6 }}
+      py={{ base: 6, sm: 8 }}
+      minH="0"
+    >
       <BecknAuth
         schema={{
           logo: {
@@ -102,14 +97,24 @@ const SignIn = ({ initialFormData = { mobileNumber: '' } }) => {
           ],
           inputs: [
             {
-              type: 'text',
-              name: 'mobileNumber',
+              type: 'email',
+              name: 'email',
               variant: 'rounded',
-              label: t.enterMobileNumber,
-              value: formData.mobileNumber,
+              label: t.enterEmailID,
+              value: formData.email,
               handleChange: handleInputChange,
-              error: formErrors.mobileNumber,
-              dataTest: 'input-mobile-number'
+              error: formErrors.email,
+              dataTest: 'input-email'
+            },
+            {
+              type: 'password',
+              name: 'password',
+              variant: 'rounded',
+              label: t.enterPassword,
+              value: formData.password,
+              handleChange: handleInputChange,
+              error: formErrors.password,
+              dataTest: 'input-password'
             }
           ]
         }}
