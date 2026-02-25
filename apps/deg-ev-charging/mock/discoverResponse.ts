@@ -8,7 +8,7 @@ export const MOCK_DISCOVER_RESPONSE = {
     action: 'on_discover',
     version: '2.0.0',
     ttl: 'PT30S',
-    bap_uri: 'http://onix-adapter:8081/bap/receiver',
+    bap_uri: 'https://ref-apps-bap-onix.beckn.io',
     schema_context: [
       'https://raw.githubusercontent.com/beckn/protocol-specifications-new/refs/heads/main/schema/EvChargingService/v1/context.jsonld'
     ]
