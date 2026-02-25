@@ -1,2 +1,0 @@
- created for testing amplify build-3
-  
