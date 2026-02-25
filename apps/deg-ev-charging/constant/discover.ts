@@ -4,7 +4,7 @@ export const DISCOVER_RESPONSE = {
     action: 'on_discover',
     version: '2.0.0',
     bap_id: 'ev-charging.sandbox1.com',
-    bap_uri: 'http://localhost:8081/bap/receiver',
+    bap_uri: 'https://ref-apps-bap-onix.beckn.io',
     transaction_id: '44dc10b0-dabf-42fd-986a-ca3624b7ca8f',
     message_id: '96eab308-40a0-4a51-8169-10e0f9a6d7f0',
     timestamp: '2026-02-20T06:14:23.234Z',
