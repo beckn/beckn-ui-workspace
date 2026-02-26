@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  deg-ev-charging:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: fidedocker/deg-ev-charging:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/", "||", "exit", "1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

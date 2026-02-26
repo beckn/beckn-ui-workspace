@@ -27,8 +27,8 @@ const CORE_V2_CONTEXT =
 export const EV_CHARGING_DOMAIN = 'beckn.one:deg:ev-charging:*'
 
 /** Default BPP when not present in context */
-const DEFAULT_BPP_ID = 'ev-charging.sandbox1.com'
-const DEFAULT_BPP_URI = 'http://onix-adapter:8081/bpp/receiver'
+const DEFAULT_BPP_ID = process.env.NEXT_PUBLIC_BPP_ID || ''
+const DEFAULT_BPP_URI = process.env.NEXT_PUBLIC_BPP_URI || ''
 
 function ensureBppInContext(obj: { context?: Record<string, unknown> }): void {
   const ctx = obj.context

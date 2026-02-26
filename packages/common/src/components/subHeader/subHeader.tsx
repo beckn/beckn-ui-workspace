@@ -79,7 +79,9 @@ const SubHeader = (props: SubHeaderProps) => {
   const theme = useTheme()
   const cartItems = useSelector((state: ICartRootState) => state?.cart?.items)
   const storedHeaderText: any = getLocalStorage('selectCardHeaderText')
-  const secondaryColor = theme.colors.secondary['100']
+
+  // Safely access theme colors with fallback
+  const secondaryColor = theme?.colors?.secondary?.['100'] || '#48a35d'
 
   const handleInvoiceModalClose = () => {
     setInvoiceModalOpen(false)

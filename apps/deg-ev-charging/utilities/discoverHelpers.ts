@@ -84,8 +84,8 @@ export function buildDiscoverRequest(textSearch: string): DiscoverRequest {
   const now = new Date().toISOString()
   const messageId = uuidv4().toString()
   const transactionId = uuidv4().toString()
-  const bapId = process.env.NEXT_PUBLIC_BAP_ID || 'ev-charging.sandbox1.com'
-  const bapUri = process.env.NEXT_PUBLIC_BAP_URI || 'http://onix-adapter:8081/bap/receiver'
+  const bapId = process.env.NEXT_PUBLIC_BAP_ID || ''
+  const bapUri = process.env.NEXT_PUBLIC_BAP_URI || ''
   return {
     context: {
       domain: DOMAIN,
