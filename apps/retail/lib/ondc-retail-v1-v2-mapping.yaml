@@ -1,0 +1,578 @@
+mappings:
+  search:
+    forward: |
+      {
+        "context": {
+          "version": "2.0.0",
+          "action": "discover",
+          "domain": "beckn.one:deg:retail:*",
+          "bap_id": $.context.bap_id,
+          "bap_uri": $.context.bap_uri,
+          "transaction_id": $.context.transaction_id,
+          "message_id": $.context.message_id,
+          "timestamp": $.context.timestamp,
+          "ttl": $.context.ttl ? $.context.ttl : "PT30S"
+        },
+        "message": {
+          "spatial": $.message.intent.provider.locations ? [
+            {
+              "op": "s_dwithin",
+              "targets": "$['beckn:availableAt'][*]['geo']",
+              "geometry": {
+                "type": "Point",
+                "coordinates": [
+                  $number($trim($split($.message.intent.provider.locations[0].circle.gps, ",")[1])),
+                  $number($trim($split($.message.intent.provider.locations[0].circle.gps, ",")[0]))
+                ]
+              },
+              "distanceMeters": $number($.message.intent.provider.locations[0].circle.radius.value) * (
+                $.message.intent.provider.locations[0].circle.radius.unit = "miles" ? 1609.34 : 
+                $.message.intent.provider.locations[0].circle.radius.unit = "km" ? 1000 : 1
+              )
+            }
+          ] : [],
+          "filters": $.message.intent.category ? {
+            "type": "jsonpath",
+            "expression": "$[?(@.beckn:descriptor.schema:name like_regex '" & $.message.intent.item.descriptor.name & "')]"
+          } : null
+        }
+      }
+    reverse: |
+      {
+        "context": {
+          "domain": "",
+          "action": "search",
+          "version": "1.1.0",
+          "bap_id": $.context.bap_id,
+          "bap_uri": $.context.bap_uri,
+          "transaction_id": $.context.transaction_id,
+          "message_id": $.context.message_id,
+          "timestamp": $.context.timestamp,
+          "ttl": $.context.ttl
+        },
+        "message": {
+          "intent": {
+            "provider": $.message.spatial[0] ? {
+              "locations": [
+                {
+                  "circle": {
+                    "gps": $.message.spatial[0].geometry.coordinates[1] & ", " & $.message.spatial[0].geometry.coordinates[0],
+                    "radius": {
+                      "type": "CONSTANT",
+                      "value": $string($floor($.message.spatial[0].distanceMeters / 1609.34)),
+                      "unit": "miles"
+                    }
+                  }
+                }
+              ]
+            } : {},
+            "category": $.message.filters ? {
+              "descriptor": {
+                "code": $substringAfter($substringBefore($.message.filters.expression, "'"), "== '")
+              }
+            } : null
+          }
+        }
+      }
+  on_search:
+    reverse: |
+      {
+        "context": {
+          "version": "2.0.0",
+          "action": "on_discover",
+          "domain": "beckn.one:deg:retail:*",
+          "timestamp": $.context.timestamp,
+          "transaction_id": $.context.transaction_id,
+          "message_id": $.context.message_id,
+          "bap_id": $.context.bap_id,
+          "bap_uri": $.context.bap_uri,
+          "bpp_id": $.context.bpp_id,
+          "bpp_uri": $.context.bpp_uri,
+          "ttl": $.context.ttl ? $.context.ttl : "PT30S"
+        },
+        "message": {
+          "catalogs": [
+            {
+              "@context": "https://raw.githubusercontent.com/beckn/protocol-specifications-new/refs/heads/main/schema/core/v2/context.jsonld",
+              "@type": "beckn:Catalog",
+              "beckn:id": "catalog-" & $.context.transaction_id,
+              "beckn:descriptor": $.message.catalog.descriptor ? {
+                "@type": "beckn:Descriptor",
+                "schema:name": $.message.catalog.descriptor.name,
+                "beckn:shortDesc": $.message.catalog.descriptor.short_desc,
+                "beckn:longDesc": $.message.catalog.descriptor.long_desc
+              } : null,
+              "beckn:bppId": $.context.bpp_id,
+              "beckn:bppUri": $.context.bpp_uri,
+              "beckn:items": $.message.catalog.providers[].items[].{
+                "@context": "https://raw.githubusercontent.com/beckn/protocol-specifications-new/refs/heads/main/schema/core/v2/context.jsonld",
+                "@type": "beckn:Item",
+                "beckn:id": id,
+                "beckn:descriptor": descriptor ? {
+                  "@type": "beckn:Descriptor",
+                  "schema:name": descriptor.name,
+                  "beckn:shortDesc": descriptor.short_desc,
+                  "beckn:longDesc": descriptor.long_desc
+                } : null,
+                "beckn:provider": {
+                  "beckn:id": $.message.catalog.providers[0].id,
+                  "beckn:descriptor": $.message.catalog.providers[0].descriptor ? {
+                    "@type": "beckn:Descriptor",
+                    "schema:name": $.message.catalog.providers[0].descriptor.name
+                  } : null
+                },
+                "beckn:availableAt": $.message.catalog.providers[0].locations ? $.message.catalog.providers[0].locations[].{
+                  "geo": gps ? [
+                    $number($trim($split(gps, ",")[1])),
+                    $number($trim($split(gps, ",")[0]))
+                  ] : null
+                } : []
+              },
+              "beckn:offers": $.message.catalog.providers[].items[].{
+                "@context": "https://raw.githubusercontent.com/beckn/protocol-specifications-new/refs/heads/main/schema/core/v2/context.jsonld",
+                "@type": "beckn:Offer",
+                "beckn:id": "offer-" & id,
+                "beckn:descriptor": {
+                  "@type": "beckn:Descriptor",
+                  "schema:name": descriptor.name & " Offer"
+                },
+                "beckn:items": [id],
+                "beckn:price": price ? {
+                  "currency": price.currency,
+                  "value": $number($replace(price.value, /[^0-9.]/, "")),
+                  "applicableQuantity": {
+                    "unitText": "Unit",
+                    "unitCode": "C62",
+                    "unitQuantity": 1
+                  }
+                } : null,
+                "beckn:provider": $.message.catalog.providers[0].id
+              }
+            }
+          ]
+        }
+      }
+    forward: |
+      {
+        "context": {
+          "domain": "retail:1.1.0",
+          "version": "1.1.0",
+          "action": "on_search",
+          "bap_id": $.context.bap_id,
+          "bap_uri": $.context.bap_uri,
+          "transaction_id": $.context.transaction_id,
+          "message_id": $.context.message_id,
+          "ttl": $.context.ttl,
+          "timestamp": $.context.timestamp,
+          "bpp_id": $.context.bpp_id,
+          "bpp_uri": $.context.bpp_uri
+        },
+        "message": {
+          "catalog": {
+            "descriptor": $.message.catalogs[0]."beckn:descriptor" ? {
+              "name": $.message.catalogs[0]."beckn:descriptor"."schema:name",
+              "short_desc": $.message.catalogs[0]."beckn:descriptor"."beckn:shortDesc",
+              "long_desc": $.message.catalogs[0]."beckn:descriptor"."beckn:longDesc"
+            } : null,
+            "providers": [
+              {
+                "id": $.message.catalogs[0]."beckn:items"[0]."beckn:provider"."beckn:id",
+                "descriptor": $.message.catalogs[0]."beckn:items"[0]."beckn:provider"."beckn:descriptor" ? {
+                  "name": $.message.catalogs[0]."beckn:items"[0]."beckn:provider"."beckn:descriptor"."schema:name"
+                } : null,
+                "items": $.message.catalogs[0]."beckn:items"[].{
+                  "id": $."beckn:id",
+                  "descriptor": $."beckn:descriptor" ? {
+                    "name": $."beckn:descriptor"."schema:name",
+                    "short_desc": $."beckn:descriptor"."beckn:shortDesc",
+                    "long_desc": $."beckn:descriptor"."beckn:longDesc"
+                  } : null
+                },
+                "locations": $.message.catalogs[0]."beckn:items"[0]."beckn:availableAt" ? $.message.catalogs[0]."beckn:items"[0]."beckn:availableAt"[].{
+                  "gps": $."geo" ? $."geo"[1] & ", " & $."geo"[0] : null
+                } : [],
+                "fulfillments": []
+              }
+            ]
+          }
+        }
+      }
+  select:
+    forward: |
+      {
+        "context": {
+          "version": "2.0.0",
+          "action": "select",
+          "domain": "beckn.one:retail",
+          "timestamp": $.context.timestamp,
+          "message_id": $.context.message_id,
+          "transaction_id": $.context.transaction_id,
+          "bap_id": $.context.bap_id,
+          "bap_uri": $.context.bap_uri,
+          "bpp_id": $.context.bpp_id,
+          "bpp_uri": $.context.bpp_uri,
+          "ttl": $.context.ttl ? $.context.ttl : "PT30S"
+        },
+        "message": {
+          "order": {
+            "@context": "https://raw.githubusercontent.com/beckn/protocol-specifications-new/refs/heads/main/schema/core/v2/context.jsonld",
+            "@type": "beckn:Order",
+            "beckn:id": "order-" & $.context.transaction_id,
+            "beckn:orderStatus": "CREATED",
+            "beckn:seller": $.message.order.provider.id,
+            "beckn:buyer": {
+              "@context": "https://raw.githubusercontent.com/beckn/protocol-specifications-new/refs/heads/main/schema/core/v2/context.jsonld",
+              "@type": "beckn:Buyer",
+              "beckn:id": $.context.bap_id
+            },
+            "beckn:orderItems": $.message.order.items[].{
+              "beckn:lineId": "line-" & id,
+              "beckn:orderedItem": id,
+              "beckn:quantity": {
+                "unitText": "Unit",
+                "unitCode": "C62",
+                "unitQuantity": 1
+              }
+            },
+            "beckn:fulfillment": $.message.order.fulfillments[0] ? {
+              "@context": "https://raw.githubusercontent.com/beckn/protocol-specifications-new/refs/heads/main/schema/core/v2/context.jsonld",
+              "@type": "beckn:Fulfillment",
+              "beckn:id": $.message.order.fulfillments[0].id,
+              "beckn:mode": "DELIVERY"
+            } : null
+          }
+        }
+      }
+    reverse: |
+      {
+        "context": {
+          "domain": "retail:1.1.0",
+          "transaction_id": $.context.transaction_id,
+          "message_id": $.context.message_id,
+          "action": "select",
+          "timestamp": $.context.timestamp,
+          "version": "1.1.0",
+          "bap_uri": $.context.bap_uri,
+          "bap_id": $.context.bap_id ? $.context.bap_id : ($.message.order."beckn:buyer" ? $.message.order."beckn:buyer"."beckn:id" : null),
+          "ttl": $.context.ttl,
+          "bpp_id": $.context.bpp_id,
+          "bpp_uri": $.context.bpp_uri
+        },
+        "message": {
+          "order": {
+            "provider": {
+              "id": $.message.order."beckn:seller"
+            },
+            "items": $.message.order."beckn:orderItems"[].{
+              "id": $."beckn:orderedItem"
+            },
+            "fulfillments": $.message.order."beckn:fulfillment" ? [
+              {
+                "id": $.message.order."beckn:fulfillment"."beckn:id"
+              }
+            ] : [
+              {
+                "id": "f1"
+              }
+            ],
+            "tags": []
+          }
+        }
+      }
+  on_select:
+    reverse: |
+      {
+        "context": {
+          "version": "2.0.0",
+          "action": "on_select",
+          "domain": "beckn.one:deg:retail:*",
+          "timestamp": $.context.timestamp,
+          "message_id": $.context.message_id,
+          "transaction_id": $.context.transaction_id,
+          "bap_id": $.context.bap_id,
+          "bap_uri": $.context.bap_uri,
+          "ttl": $.context.ttl ? $.context.ttl : "PT30S",
+          "bpp_id": $.context.bpp_id,
+          "bpp_uri": $.context.bpp_uri
+        },
+        "message": $.message
+      }
+    forward: |
+      {
+        "context": {
+          "domain": "retail:1.1.0",
+          "action": "on_select",
+          "version": "1.1.0",
+          "bap_uri": $.context.bap_uri,
+          "bap_id": $.context.bap_id,
+          "bpp_id": $.context.bpp_id,
+          "bpp_uri": $.context.bpp_uri,
+          "transaction_id": $.context.transaction_id,
+          "message_id": $.context.message_id,
+          "timestamp": $.context.timestamp,
+          "ttl": $.context.ttl
+        },
+        "message": $.message
+      }
+  init:
+    forward: |
+      {
+        "context": {
+          "version": "2.0.0",
+          "action": "init",
+          "domain": "beckn.one:deg:retail:*",
+          "bap_id": $.context.bap_id,
+          "bap_uri": $.context.bap_uri,
+          "bpp_id": $.context.bpp_id,
+          "bpp_uri": $.context.bpp_uri,
+          "transaction_id": $.context.transaction_id,
+          "message_id": $.context.message_id,
+          "timestamp": $.context.timestamp,
+          "ttl": $.context.ttl ? $.context.ttl : "PT30S"
+        },
+        "message": {
+          "order": {
+            "@context": "https://raw.githubusercontent.com/beckn/protocol-specifications-new/refs/heads/main/schema/core/v2/context.jsonld",
+            "@type": "beckn:Order",
+            "beckn:id": "order-" & $.context.transaction_id,
+            "beckn:orderStatus": "PENDING",
+            "beckn:seller": $.message.order.provider.id,
+            "beckn:buyer": {
+              "@context": "https://raw.githubusercontent.com/beckn/protocol-specifications-new/refs/heads/main/schema/core/v2/context.jsonld",
+              "@type": "beckn:Buyer",
+              "beckn:id": $.context.bap_id
+            },
+            "beckn:orderItems": $.message.order.items[].{
+              "beckn:lineId": "line-" & id,
+              "beckn:orderedItem": id,
+              "beckn:quantity": {
+                "unitText": "Unit",
+                "unitCode": "C62",
+                "unitQuantity": 1
+              }
+            },
+            "beckn:payment": {
+              "@context": "https://raw.githubusercontent.com/beckn/protocol-specifications-new/refs/heads/main/schema/core/v2/context.jsonld",
+              "@type": "beckn:Payment",
+              "beckn:id": "payment-" & $.context.transaction_id,
+              "beckn:paymentStatus": "INITIATED"
+            },
+            "beckn:fulfillment": $.message.order.fulfillments[0] ? {
+              "@context": "https://raw.githubusercontent.com/beckn/protocol-specifications-new/refs/heads/main/schema/core/v2/context.jsonld",
+              "@type": "beckn:Fulfillment",
+              "beckn:id": $.message.order.fulfillments[0].id,
+              "beckn:mode": "DELIVERY"
+            } : null
+          }
+        }
+      }
+    reverse: |
+      {
+        "context": {
+          "domain": "retail:1.1.0",
+          "location": {
+            "country": {
+              "code": "DE"
+            }
+          },
+          "action": "init",
+          "version": "1.1.0",
+          "bap_uri": $.context.bap_uri,
+          "bap_id": $.context.bap_id ? $.context.bap_id : ($.message.order."beckn:buyer" ? $.message.order."beckn:buyer"."beckn:id" : null),
+          "bpp_id": $.context.bpp_id,
+          "bpp_uri": $.context.bpp_uri,
+          "transaction_id": $.context.transaction_id,
+          "message_id": $.context.message_id,
+          "timestamp": $.context.timestamp,
+          "ttl": $.context.ttl
+        },
+        "message": {
+          "order": {
+            "provider": {
+              "id": $.message.order."beckn:seller"
+            },
+            "items": $.message.order."beckn:orderItems"[].{
+              "id": $."beckn:orderedItem"
+            },
+            "fulfillments": $.message.order."beckn:fulfillment" ? [
+              {
+                "id": $.message.order."beckn:fulfillment"."beckn:id"
+              }
+            ] : [],
+            "billing": null
+          }
+        }
+      }
+  on_init:
+    reverse: |
+      {
+        "context": {
+          "version": "2.0.0",
+          "action": "on_init",
+          "domain": "beckn.one:deg:retail:*",
+          "bap_id": $.context.bap_id,
+          "bap_uri": $.context.bap_uri,
+          "transaction_id": $.context.transaction_id,
+          "message_id": $.context.message_id,
+          "timestamp": $.context.timestamp,
+          "ttl": $.context.ttl ? $.context.ttl : "PT30S",
+          "bpp_id": $.context.bpp_id,
+          "bpp_uri": $.context.bpp_uri
+        },
+        "message": $.message
+      }
+    forward: |
+      {
+        "context": {
+          "domain": "retail:1.1.0",
+          "location": {
+            "country": {
+              "code": "DE"
+            }
+          },
+          "action": "on_init",
+          "version": "1.1.0",
+          "bap_uri": $.context.bap_uri,
+          "bap_id": $.context.bap_id,
+          "bpp_id": $.context.bpp_id,
+          "bpp_uri": $.context.bpp_uri,
+          "transaction_id": $.context.transaction_id,
+          "message_id": $.context.message_id,
+          "timestamp": $.context.timestamp,
+          "ttl": $.context.ttl
+        },
+        "message": $.message
+      }
+  confirm:
+    forward: |
+      {
+        "context": {
+          "version": "2.0.0",
+          "action": "confirm",
+          "domain": "beckn.one:deg:retail:*",
+          "bpp_id": $.context.bpp_id,
+          "bpp_uri": $.context.bpp_uri,
+          "transaction_id": $.context.transaction_id,
+          "message_id": $.context.message_id,
+          "timestamp": $.context.timestamp,
+          "ttl": $.context.ttl ? $.context.ttl : "PT30S"
+        },
+        "message": {
+          "order": {
+            "@context": "https://raw.githubusercontent.com/beckn/protocol-specifications-new/refs/heads/main/schema/core/v2/context.jsonld",
+            "@type": "beckn:Order",
+            "beckn:id": "order-" & $.context.transaction_id,
+            "beckn:orderStatus": "PENDING",
+            "beckn:seller": $.message.order.provider.id,
+            "beckn:buyer": {
+              "@context": "https://raw.githubusercontent.com/beckn/protocol-specifications-new/refs/heads/main/schema/core/v2/context.jsonld",
+              "@type": "beckn:Buyer",
+              "beckn:id": $.context.bap_id
+            },
+            "beckn:orderItems": $.message.order.items[].{
+              "beckn:lineId": "line-" & id,
+              "beckn:orderedItem": id,
+              "beckn:quantity": {
+                "unitText": "Unit",
+                "unitCode": "C62",
+                "unitQuantity": 1
+              }
+            },
+            "beckn:payment": $.message.order.payments[0] ? {
+              "@context": "https://raw.githubusercontent.com/beckn/protocol-specifications-new/refs/heads/main/schema/core/v2/context.jsonld",
+              "@type": "beckn:Payment",
+              "beckn:id": "payment-" & $.context.transaction_id,
+              "beckn:paymentStatus": $.message.order.payments[0].status = "PAID" ? "COMPLETED" : "INITIATED"
+            } : null,
+            "beckn:fulfillment": $.message.order.fulfillments[0] ? {
+              "@context": "https://raw.githubusercontent.com/beckn/protocol-specifications-new/refs/heads/main/schema/core/v2/context.jsonld",
+              "@type": "beckn:Fulfillment",
+              "beckn:id": $.message.order.fulfillments[0].id,
+              "beckn:mode": "DELIVERY"
+            } : null
+          }
+        }
+      }
+    reverse: |
+      {
+        "context": {
+          "domain": "retail:1.1.0",
+          "location": {
+            "country": {
+              "code": "DE"
+            }
+          },
+          "action": "confirm",
+          "version": "1.1.0",
+          "bap_uri": $.context.bap_uri,
+          "bap_id": $.context.bap_id,
+          "bpp_id": $.context.bpp_id,
+          "bpp_uri": $.context.bpp_uri,
+          "transaction_id": $.context.transaction_id,
+          "message_id": $.context.message_id,
+          "timestamp": $.context.timestamp,
+          "ttl": $.context.ttl
+        },
+        "message": {
+          "order": {
+            "provider": {
+              "id": $.message.order."beckn:seller"
+            },
+            "items": $.message.order."beckn:orderItems"[].{
+              "id": $."beckn:orderedItem"
+            },
+            "fulfillments": $.message.order."beckn:fulfillment" ? [
+              {
+                "id": $.message.order."beckn:fulfillment"."beckn:id"
+              }
+            ] : [],
+            "billing": null,
+            "payments": $.message.order."beckn:payment" ? [
+              {
+                "status": $.message.order."beckn:payment"."beckn:paymentStatus" = "COMPLETED" ? "PAID" : "NOT-PAID",
+                "type": "PRE-ORDER"
+              }
+            ] : []
+          }
+        }
+      }
+  on_confirm:
+    reverse: |
+      {
+        "context": {
+          "version": "2.0.0",
+          "action": "on_confirm",
+          "domain": "beckn.one:deg:retail:*",
+          "bap_id": $.context.bap_id,
+          "bap_uri": $.context.bap_uri,
+          "transaction_id": $.context.transaction_id,
+          "message_id": $.context.message_id,
+          "timestamp": $.context.timestamp,
+          "ttl": $.context.ttl ? $.context.ttl : "PT30S",
+          "bpp_id": $.context.bpp_id,
+          "bpp_uri": $.context.bpp_uri
+        },
+        "message": $.message
+      }
+    forward: |
+      {
+        "context": {
+          "domain": "retail:1.1.0",
+          "location": {
+            "country": {
+              "code": "DE"
+            }
+          },
+          "action": "on_confirm",
+          "version": "1.1.0",
+          "bap_uri": $.context.bap_uri,
+          "bap_id": $.context.bap_id,
+          "bpp_id": $.context.bpp_id,
+          "bpp_uri": $.context.bpp_uri,
+          "transaction_id": $.context.transaction_id,
+          "message_id": $.context.message_id,
+          "timestamp": $.context.timestamp,
+          "ttl": $.context.ttl
+        },
+        "message": $.message
+      }
