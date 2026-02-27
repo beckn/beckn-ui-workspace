@@ -237,21 +237,6 @@ const ProfilePage = () => {
               fontWeight="600"
               fontSize="16px"
             />
-            {!user?.deg_wallet?.deg_wallet_id && (
-              <BecknButton
-                text="Connect Wallet"
-                handleClick={() => handleModalOpen('link')}
-                sx={{
-                  width: '113px',
-                  height: '38px',
-                  fontSize: '12px',
-                  fontWeight: '400',
-                  padding: '10px',
-                  borderRadius: '12px',
-                  mb: 'unset'
-                }}
-              />
-            )}
           </Flex>
           <BecknAuth
             dataTestForm={testIds.profile_form}

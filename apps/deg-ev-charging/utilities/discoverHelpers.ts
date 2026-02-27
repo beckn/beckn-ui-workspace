@@ -98,7 +98,22 @@ export function buildDiscoverRequest(textSearch: string): DiscoverRequest {
       timestamp: now,
       ttl: 'PT30S'
     },
-    message: { text_search: textSearch || '' }
+    message: {
+      spatial: [
+        {
+          op: 's_dwithin',
+          targets: '$.catalogs[*].beckn:items[*].beckn:availableAt[*].geo',
+          geometry: {
+            type: 'LineString',
+            coordinates: [
+              [77.64, 12.98],
+              [77.5, 12.9]
+            ]
+          },
+          distanceMeters: 10000
+        }
+      ]
+    }
   }
 }
 
