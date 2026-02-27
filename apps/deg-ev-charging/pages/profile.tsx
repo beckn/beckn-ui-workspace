@@ -1,26 +1,62 @@
-import { BecknAuth } from '@beckn-ui/becknified-components'
-import { Box, Flex, Spinner } from '@chakra-ui/react'
+import { Box, Flex, FormControl, FormLabel, Input, Spinner, Text, Image, useTheme } from '@chakra-ui/react'
 import { useLanguage } from '@hooks/useLanguage'
-import { profileValidateForm } from '@beckn-ui/common/src/utils'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { DegWalletDetails, FormErrors, ProfileProps } from '@beckn-ui/common/lib/types'
 import { testIds } from '@shared/dataTestIds'
 import LogoutIcon from '@public/images/logout_icon.svg'
 import { setProfileEditable, UserRootState } from '@store/user-slice'
-import { checkoutBeckn20Actions, clearSource, feedbackActions } from '@beckn-ui/common'
 import { logout } from '@store/auth-slice'
-import { InputProps, Typography } from '@beckn-ui/molecules'
-import NavigationItem from '@components/NavigationItem'
-import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 import OpenWalletBottomModal from '@components/Modal/OpenWalletBottomModal'
 import { AuthRootState } from '@store/auth-slice'
 import { useConnectWallet } from '@hooks/useConnectWallet'
 import { useGetProfileQuery, useUpdateProfileMutation } from '@services/UserService'
 
+interface ProfileProps {
+  name: string
+  email?: string
+  address?: string
+  mobileNumber?: string
+}
+
+interface FormErrors {
+  name?: string
+  email?: string
+  address?: string
+  mobileNumber?: string
+}
+
+interface DegWalletDetails {
+  deg_wallet_id?: string
+  energy_identities_consent?: boolean
+  energy_assets_consent?: boolean
+  energy_transactions_consent?: boolean
+}
+
+const profileValidateForm = (formData: ProfileProps): FormErrors => {
+  const errors: FormErrors = {}
+
+  if (formData.name.trim() === '') {
+    errors.name = 'errorName'
+  } else if (!/^[A-Za-z\s]*$/.test(formData.name)) {
+    errors.name = 'errorName2'
+  } else if (formData.name.length < 3) {
+    errors.name = 'errorName3'
+  }
+
+  if (formData?.mobileNumber?.trim() === '') {
+    errors.mobileNumber = 'errorNumber'
+  } else if (formData?.mobileNumber && !/^\d{10}$/.test(formData.mobileNumber)) {
+    errors.mobileNumber = 'errorNumber2'
+  }
+
+  return errors
+}
+
 const ProfilePage = () => {
   const dispatch = useDispatch()
   const { t } = useLanguage()
+  const theme = useTheme()
+  const primaryColor = theme.colors?.primary?.[100] ?? 'var(--ev-primary)'
   const [formData, setFormData] = useState<ProfileProps>({
     name: '',
     email: '',
@@ -52,7 +88,6 @@ const ProfilePage = () => {
     if (user && user?.deg_wallet) {
       setWalletDetails(user.deg_wallet)
     }
-    console.log(shouldShowInitialAlert)
     if (
       shouldShowInitialAlert &&
       user?.deg_wallet &&
@@ -115,78 +150,19 @@ const ProfilePage = () => {
     })
       .unwrap()
       .catch(() => {
-        dispatch(
-          feedbackActions.setToastData({
+        dispatch({
+          type: 'ui-feedback/setToastData',
+          payload: {
             toastData: { message: 'Error!', display: true, type: 'error', description: 'Unable to update' }
-          })
-        )
+          }
+        })
       })
   }
 
-  const getInputs = () => {
-    const inputs: InputProps[] = [
-      {
-        type: 'text',
-        name: 'name',
-        variant: 'rounded',
-        value: formData.name,
-        handleChange: handleInputChange,
-        label: t.name,
-        error: formErrors.name,
-        dataTest: testIds.profile_inputName,
-        disabled: !profileEditable,
-        customInputBlurHandler: updateProfile
-      },
-      {
-        type: 'text',
-        name: 'mobileNumber',
-        variant: 'rounded',
-        value: formData.mobileNumber!,
-        handleChange: handleInputChange,
-        label: t.formNumber,
-        error: formErrors.mobileNumber,
-        dataTest: '',
-        disabled: true,
-        customInputBlurHandler: updateProfile
-      },
-      {
-        type: 'text',
-        name: 'email',
-        variant: 'rounded',
-        value: formData.email!,
-        handleChange: handleInputChange,
-        label: t.enterEmailID,
-        error: formErrors.email,
-        dataTest: '',
-        disabled: true
-      },
-      {
-        type: 'text',
-        name: 'address',
-        variant: 'rounded',
-        value: formData.address!,
-        handleChange: handleInputChange,
-        label: t.formAddress,
-        error: formErrors.address,
-        dataTest: testIds.profile_address,
-        disabled: !profileEditable,
-        customInputBlurHandler: updateProfile
-      }
-    ]
-    const walletId = user?.deg_wallet?.deg_wallet_id?.slice(-4)
-    if (user?.deg_wallet?.deg_wallet_id) {
-      inputs.push({
-        type: 'text',
-        name: 'userDid',
-        variant: 'rounded',
-        value: `/subj****${walletId}`,
-        handleChange: handleInputChange,
-        label: 'Wallet ID',
-        disabled: true,
-        customInputBlurHandler: () => {}
-      })
-    }
-    return inputs
+  const handleLogout = () => {
+    dispatch({ type: 'geoLocationSearchPageUI/clearSource' })
+    dispatch({ type: 'checkoutBeckn20/clearState' })
+    dispatch(logout())
   }
 
   if (isLoading && !profileData) {
@@ -216,8 +192,8 @@ const ProfilePage = () => {
       w="100%"
       maxW="28rem"
       mx="auto"
-      px={{ base: 4, sm: 6 }}
-      py={{ base: 6, sm: 8 }}
+      px={{ base: 6, sm: 8 }}
+      py={{ base: 8, sm: 10 }}
       maxH="calc(100vh - 100px)"
       overflowY="auto"
     >
@@ -225,40 +201,197 @@ const ProfilePage = () => {
         flexDir="column"
         gap={6}
       >
-        <Box>
+        <Box data-test={testIds.profile_form}>
           <Flex
             width="100%"
             justifyContent="space-between"
             alignItems="center"
             mb={4}
           >
-            <Typography
-              text="Personal Information"
+            <Text
               fontWeight="600"
               fontSize="16px"
-            />
+            >
+              Personal Information
+            </Text>
           </Flex>
-          <BecknAuth
-            dataTestForm={testIds.profile_form}
-            schema={{
-              buttons: [],
-              inputs: getInputs()
-            }}
-            isLoading={false}
-          />
+          <Box mt="10px">
+            <FormControl mb="35px">
+              <FormLabel
+                fontSize="14px"
+                color="#a0aec0"
+                mb={1}
+              >
+                {t.name}
+              </FormLabel>
+              <Input
+                data-test={testIds.profile_inputName}
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleInputChange}
+                onBlur={updateProfile}
+                isDisabled={!profileEditable}
+                border="1px solid #989898"
+                borderRadius="8px"
+                padding="8px 16px"
+                fontSize="16px"
+                borderColor={formErrors.name ? '#a71b4a' : undefined}
+                _focus={{ borderColor: formErrors.name ? '#a71b4a' : primaryColor, outline: 'none' }}
+              />
+              {formErrors.name && (
+                <Text
+                  fontSize="12px"
+                  color="#a71b4a"
+                  mt={1}
+                >
+                  {formErrors.name}
+                </Text>
+              )}
+            </FormControl>
+            <FormControl mb="35px">
+              <FormLabel
+                fontSize="14px"
+                color="#a0aec0"
+                mb={1}
+              >
+                {t.formNumber}
+              </FormLabel>
+              <Input
+                type="text"
+                name="mobileNumber"
+                value={formData.mobileNumber ?? ''}
+                onChange={handleInputChange}
+                onBlur={updateProfile}
+                isDisabled
+                border="1px solid #989898"
+                borderRadius="8px"
+                padding="8px 16px"
+                fontSize="16px"
+              />
+              {formErrors.mobileNumber && (
+                <Text
+                  fontSize="12px"
+                  color="#a71b4a"
+                  mt={1}
+                >
+                  {formErrors.mobileNumber}
+                </Text>
+              )}
+            </FormControl>
+            <FormControl mb="35px">
+              <FormLabel
+                fontSize="14px"
+                color="#a0aec0"
+                mb={1}
+              >
+                {t.enterEmailID}
+              </FormLabel>
+              <Input
+                type="text"
+                name="email"
+                value={formData.email ?? ''}
+                onChange={handleInputChange}
+                isDisabled
+                border="1px solid #989898"
+                borderRadius="8px"
+                padding="8px 16px"
+                fontSize="16px"
+              />
+              {formErrors.email && (
+                <Text
+                  fontSize="12px"
+                  color="#a71b4a"
+                  mt={1}
+                >
+                  {formErrors.email}
+                </Text>
+              )}
+            </FormControl>
+            <FormControl mb="35px">
+              <FormLabel
+                fontSize="14px"
+                color="#a0aec0"
+                mb={1}
+              >
+                {t.formAddress}
+              </FormLabel>
+              <Input
+                data-test={testIds.profile_address}
+                type="text"
+                name="address"
+                value={formData.address ?? ''}
+                onChange={handleInputChange}
+                onBlur={updateProfile}
+                isDisabled={!profileEditable}
+                border="1px solid #989898"
+                borderRadius="8px"
+                padding="8px 16px"
+                fontSize="16px"
+                borderColor={formErrors.address ? '#a71b4a' : undefined}
+                _focus={{ borderColor: formErrors.address ? '#a71b4a' : primaryColor, outline: 'none' }}
+              />
+              {formErrors.address && (
+                <Text
+                  fontSize="12px"
+                  color="#a71b4a"
+                  mt={1}
+                >
+                  {formErrors.address}
+                </Text>
+              )}
+            </FormControl>
+            {user?.deg_wallet?.deg_wallet_id && (
+              <FormControl mb="35px">
+                <FormLabel
+                  fontSize="14px"
+                  color="#a0aec0"
+                  mb={1}
+                >
+                  Wallet ID
+                </FormLabel>
+                <Input
+                  type="text"
+                  value={`/subj****${user.deg_wallet.deg_wallet_id.slice(-4)}`}
+                  isDisabled
+                  border="1px solid #989898"
+                  borderRadius="8px"
+                  padding="8px 16px"
+                  fontSize="16px"
+                />
+              </FormControl>
+            )}
+          </Box>
         </Box>
 
-        <NavigationItem
-          icon={LogoutIcon}
-          label="Logout"
-          color="var(--ev-error)"
-          handleClick={() => {
-            dispatch(clearSource())
-            dispatch(checkoutBeckn20Actions.clearState())
-            dispatch(logout())
+        <Flex
+          justifyContent="space-between"
+          padding="0.5rem 1rem"
+          cursor="pointer"
+          onClick={handleLogout}
+          style={{
+            border: `1px solid ${primaryColor}`,
+            borderRadius: '8px'
           }}
-          dataTest="logout"
-        />
+          data-test="logout"
+        >
+          <Flex
+            gap="1rem"
+            alignItems="center"
+          >
+            <Image
+              src={LogoutIcon}
+              alt="nav_icon"
+            />
+            <Text
+              fontSize="16px"
+              sx={{ textWrap: 'noWrap' }}
+              color="var(--ev-error)"
+            >
+              Logout
+            </Text>
+          </Flex>
+        </Flex>
       </Flex>
       <OpenWalletBottomModal
         modalType={modalType}
