@@ -608,7 +608,7 @@ const ChargerDetails = () => {
                 }}
                 isLoading={false}
               />
-              <Box
+              {/* <Box
                 mt={4}
                 p={4}
                 bg="var(--ev-primary-light)"
@@ -621,8 +621,8 @@ const ChargerDetails = () => {
                   align="flex-start"
                   gap={3}
                   flexWrap="wrap"
-                >
-                  <Box>
+                > */}
+              {/* <Box>
                     <Text
                       fontSize="xs"
                       fontWeight="500"
@@ -637,16 +637,16 @@ const ChargerDetails = () => {
                     >
                       (Quantity × Rate: {formData.kwhToCharge || '0'} kWh × {chargerDetails.rate} / kWh)
                     </Text>
-                  </Box>
-                  <Text
+                  </Box> */}
+              {/* <Text
                     fontSize="xl"
                     fontWeight="700"
                     color="var(--ev-primary)"
                   >
                     {currencySymbol} {calculatedAmount.toFixed(2)}
-                  </Text>
-                </Flex>
-              </Box>
+                  </Text> */}
+              {/* </Flex>
+              </Box> */}
             </Box>
           </Box>
         </Box>

@@ -10,6 +10,7 @@ import NextNProgress from 'nextjs-progressbar'
 import { IGeoLocationSearchPageRootState } from '@beckn-ui/common/lib/types'
 import { Box, useToast } from '@chakra-ui/react'
 import backArrow from '@public/images/location-back.svg'
+import { HEADER_CONFIG } from '@lib/config'
 import {
   checkoutBeckn20Actions,
   checkTokenExpiry,
@@ -45,10 +46,10 @@ const evLayoutRoutes = [
 
 const headerTitleByRoute: Record<string, string> = {
   '/': 'EV Hub',
-  '/discovery': 'EV Charging',
-  '/detailView': 'EV Charging',
+  '/discovery': 'Discover Page',
+  '/detailView': 'Details View',
   '/cart': 'Cart',
-  '/checkout': 'Book Charger',
+  '/checkout': 'Checkout',
   '/paymentMode': 'Payment',
   '/orderConfirmation': 'Order Confirmation',
   '/orderHistory': 'Chargers',
@@ -169,6 +170,14 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
           title={title}
           showBack={showBack}
           centerTitle={isAuthPage}
+          appName={HEADER_CONFIG.appName}
+          showHomeButton={
+            ['/', '/paymentMode', '/checkout', '/orderConfirmation'].includes(router.pathname)
+              ? false
+              : HEADER_CONFIG.showHomeButton
+          }
+          useTwoRowHeader={HEADER_CONFIG.useTwoRowHeader && !isAuthPage}
+          showTitleRow={!(HEADER_CONFIG.hideTitleOnRoutes ?? []).includes(router.pathname)}
         />
         <div
           style={
@@ -176,12 +185,22 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
               ? {
                   flex: 1,
                   minHeight: 0,
+                  minWidth: 0,
+                  width: '100%',
                   overflow: 'auto',
-                  paddingBottom: 'calc(var(--ev-bottom-nav-h) + var(--ev-safe-bottom) + 16px)'
+                  overflowX: 'hidden',
+                  paddingBottom: 'calc(var(--ev-bottom-nav-h) + var(--ev-safe-bottom) + 16px)',
+                  background: 'var(--ev-bg)'
                 }
               : isAuthPage
-                ? { flex: 1, minHeight: 'calc(100dvh - var(--ev-header-h))', background: 'var(--ev-bg)' }
-                : undefined
+                ? {
+                    flex: 1,
+                    minHeight: 'calc(100dvh - var(--ev-header-h))',
+                    background: 'var(--ev-bg)',
+                    width: '100%',
+                    minWidth: 0
+                  }
+                : { width: '100%', minWidth: 0, background: 'var(--ev-bg)' }
           }
         >
           {children}

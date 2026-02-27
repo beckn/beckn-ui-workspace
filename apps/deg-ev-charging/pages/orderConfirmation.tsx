@@ -224,30 +224,20 @@ const OrderConfirmation = () => {
         className="order-confornation"
         schema={{
           iconSrc: orderConfirmmark,
-          successOrderMessage: 'Congratulations! your booking is successful!',
-          gratefulMessage: '',
+          successOrderMessage: 'Congratulations!',
+          gratefulMessage: 'your booking is successful!',
           orderIdMessage: orderId ? `Order ID: ${orderId}` : '',
 
           buttons: [
-            // {
-            //   text: 'View order details',
-            //   handleClick: () => {
-            //     if (confirmResponse && confirmResponse.length > 0) {
-            //       const first = confirmResponse[0]
-            //       const orderDetails = {
-            //         orderId: first.message.orderId,
-            //         bppId: first.context.bpp_id,
-            //         bppUri: first.context.bpp_uri
-            //       }
-            //       dispatch(orderActions.addSelectedOrder({ orderDetails }))
-            //       localStorage.setItem('selectedOrder', JSON.stringify(orderDetails))
-            //     }
-            //     router.push('/orderDetails')
-            //   },
-            //   variant: 'outline',
-            //   colorScheme: 'primary',
-            //   dataTest: testIds.orderConfirmation_viewOrderButton
-            // },
+            {
+              text: 'Go Back to Home',
+              handleClick: () => {
+                router.push('/')
+              },
+              variant: 'outline',
+              colorScheme: 'primary',
+              dataTest: testIds.orderConfirmation_viewOrderButton
+            }
             // {
             //   text: 'Unlock Chargering Port',
             //   handleClick: () => {

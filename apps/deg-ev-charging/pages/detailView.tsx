@@ -3,7 +3,6 @@ import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useDispatch, useSelector } from 'react-redux'
-import { getTemplate, getStylingHints, renderTemplate } from '@lib/templateProcessor'
 import { catalogItemToParsedModel, catalogItemToSelectedCharger } from '@lib/catalogAdapter'
 import type { DiscoverRootState } from '@beckn-ui/common'
 import { cartActions } from '@store/cart-slice'
@@ -11,15 +10,24 @@ import { chargerSelectActions } from '@store/chargerSelect-slice'
 import { checkoutBeckn20Actions } from '@beckn-ui/common'
 import { DOMAIN } from '@lib/config'
 import { findItemInCatalogs, getCatalogItemsAndOffers } from '@utils/discoverHelpers'
+import {
+  type FoundItem,
+  type ItemRecord,
+  getStr,
+  getNum,
+  getAddressLine,
+  getSpecsList,
+  getPills,
+  SpecIcon,
+  LocationIcon,
+  StarIcon
+} from '@utils/detailViewUtils'
+import { getTemplate, getStylingHints, renderTemplate } from '@lib/templateProcessor'
 import { fetchRendererConfigFromDiscoverCatalogs } from '@utils/rendererFromDiscover'
 import { wrapTemplatePriceInBold } from '@utils/templateUtils'
 
 const FALLBACK_RENDERER_URL = 'https://raw.githubusercontent.com/beckn/beckn-ui-workspace/refs/heads/main/renderer.json'
 
-const DEFAULT_IMAGE =
-  'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2U1ZTdlYiIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIGZpbGw9IiM5Y2EzYWYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5ObyBJbWFnZTwvdGV4dD48L3N2Zz4='
-
-/** Product details template: prefer detailView, then productDetails from renderer.json */
 function getProductDetailsTemplate(config: Awaited<ReturnType<typeof fetchRendererConfigFromDiscoverCatalogs>>) {
   const detailView = getTemplate(config, 'detailView')
   if (detailView?.html) return detailView
@@ -27,14 +35,19 @@ function getProductDetailsTemplate(config: Awaited<ReturnType<typeof fetchRender
   return templates?.productDetails ?? null
 }
 
+const DEFAULT_IMAGE =
+  'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2U1ZTdlYiIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIGZpbGw9IiM5Y2EzYWYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5ObyBJbWFnZTwvdGV4dD48L3N2Zz4='
+
 const DetailView = () => {
   const router = useRouter()
   const { itemId } = router.query
   const dispatch = useDispatch()
   const discoverCatalogs = useSelector((state: DiscoverRootState) => state.discover?.catalogs)
   const transactionId = useSelector((state: DiscoverRootState) => state.discover?.transactionId)
+  const [foundItem, setFoundItem] = useState<FoundItem | null>(null)
+  const [productImage, setProductImage] = useState<string>(DEFAULT_IMAGE)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- set by run(); available for template-based content if needed
   const [renderedHtml, setRenderedHtml] = useState<string>('')
-  const [productImage, setProductImage] = useState<string>('')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -52,7 +65,7 @@ const DetailView = () => {
 
     const found = findItemInCatalogs(discoverCatalogs, itemId)
     if (!found) {
-      setError(`Charging station "${itemId}" not found.`)
+      setError('Charging station not found.')
       setLoading(false)
       return
     }
@@ -60,8 +73,9 @@ const DetailView = () => {
     const { catalog, item } = found
     const descriptor = item['descriptor'] as Record<string, unknown> | undefined
     const images = descriptor?.['image'] as string[] | undefined
-    const imageUrl = images?.[0] || ''
+    const imageUrl = images?.[0]
     setProductImage(imageUrl || DEFAULT_IMAGE)
+    setFoundItem(found)
 
     const run = async () => {
       try {
@@ -92,6 +106,7 @@ const DetailView = () => {
         setLoading(false)
       }
     }
+
     run()
   }, [itemId, discoverCatalogs])
 
@@ -146,52 +161,144 @@ const DetailView = () => {
           )}
 
           {error && !loading && (
-            <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-red-800 mb-4 sm:mb-6 text-sm sm:text-base">
-              <p className="font-semibold">Error</p>
+            <div className="rounded-xl border border-[var(--ev-error)]/50 bg-[var(--ev-error)]/10 p-4 text-[var(--ev-text)] mb-4 sm:mb-6 text-sm sm:text-base">
+              <p className="font-semibold text-[var(--ev-error)]">Error</p>
               <p>{error}</p>
               <Link
                 href="/discovery"
-                className="inline-block mt-3 min-h-[var(--ev-touch-min)] flex items-center text-[var(--ev-primary)] font-medium hover:underline"
+                className="inline-flex mt-3 min-h-[var(--ev-touch-min)] items-center text-[var(--ev-primary)] font-medium hover:underline"
               >
                 Back to list
               </Link>
             </div>
           )}
 
-          {!loading && !error && renderedHtml && (
-            <>
-              <div className="bg-[var(--ev-surface)] rounded-xl sm:rounded-2xl border border-[var(--ev-border)] shadow-sm overflow-hidden mb-4 sm:mb-6">
-                {productImage && (
-                  <div className="aspect-video w-full bg-[var(--ev-bg)]">
-                    <img
-                      src={productImage}
-                      alt="Charging station"
-                      className="w-full h-full object-cover"
-                      onError={e => {
-                        if (e.currentTarget.src !== DEFAULT_IMAGE) e.currentTarget.src = DEFAULT_IMAGE
-                      }}
-                    />
-                  </div>
-                )}
-                <div className="px-4 py-3 sm:px-5 sm:py-4 detail-view-content">
-                  <div
-                    className="text-sm sm:text-base [&_*]:max-w-full"
-                    dangerouslySetInnerHTML={{ __html: renderedHtml }}
-                  />
-                </div>
-              </div>
+          {!loading &&
+            !error &&
+            foundItem &&
+            (() => {
+              const { item } = foundItem
+              const descriptor = item['descriptor'] as ItemRecord | undefined
+              const name = getStr(descriptor, 'name')
+              const longDesc = getStr(descriptor, 'longDesc')
+              const shortDesc = getStr(descriptor, 'shortDesc')
+              const description = longDesc || shortDesc
+              const rating = item['rating'] as ItemRecord | undefined
+              const ratingValue = rating ? getNum(rating, 'ratingValue') : 0
+              const ratingCount = rating ? Math.round(getNum(rating, 'ratingCount')) : 0
+              const specs = getSpecsList(item)
+              const pills = getPills(item)
+              const addressLine = getAddressLine(item)
 
-              <div className="flex flex-col sm:flex-row gap-3">
-                <button
-                  type="button"
-                  onClick={handleProceedToCheckout}
-                  className="flex-1 min-h-[var(--ev-touch-min)] py-3.5 px-6 rounded-xl font-medium bg-[var(--ev-primary)] text-white hover:bg-[var(--ev-primary-hover)] active:opacity-90 transition text-base"
-                >
-                  Proceed to checkout
-                </button>
-              </div>
-            </>
-          )}
+              return (
+                <>
+                  {/* Card 1: Product overview – always show image (item image or default) */}
+                  <div className="bg-[var(--ev-surface)] rounded-xl sm:rounded-2xl border border-[var(--ev-border)] shadow-sm overflow-hidden mb-4">
+                    <div className="aspect-video w-full bg-[var(--ev-bg-card)]">
+                      <img
+                        src={productImage}
+                        alt={name || 'Charging station'}
+                        className="w-full h-full object-cover"
+                        onError={e => {
+                          if (e.currentTarget.src !== DEFAULT_IMAGE) e.currentTarget.src = DEFAULT_IMAGE
+                        }}
+                      />
+                    </div>
+                    <div className="px-4 py-4 sm:px-5 sm:py-5">
+                      {name ? (
+                        <h1 className="text-lg sm:text-xl font-bold text-[var(--ev-text)] mb-2">{name}</h1>
+                      ) : null}
+                      {description ? (
+                        <p className="text-sm sm:text-base text-[var(--ev-text-muted)] leading-relaxed mb-3">
+                          {description}
+                        </p>
+                      ) : null}
+                      {pills.length > 0 && (
+                        <div className="flex flex-wrap gap-2">
+                          {pills.map(pill => (
+                            <span
+                              key={pill}
+                              className="inline-flex items-center rounded-lg bg-[var(--ev-border)]/50 px-3 py-1 text-xs sm:text-sm font-medium text-[var(--ev-text)]"
+                            >
+                              {pill}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Card 2: Specifications */}
+                  {specs.length > 0 && (
+                    <div className="bg-[var(--ev-surface)] rounded-xl sm:rounded-2xl border border-[var(--ev-border)] shadow-sm overflow-hidden mb-4">
+                      <div className="px-4 py-3 sm:px-5 sm:py-4 border-b border-[var(--ev-border)]">
+                        <h2 className="text-base font-semibold text-[var(--ev-text)]">Specifications</h2>
+                      </div>
+                      <ul className="px-4 py-3 sm:px-5 sm:py-4 space-y-2.5">
+                        {specs.map(({ label, value }) => (
+                          <li
+                            key={label}
+                            className="flex items-center gap-3 text-sm sm:text-base text-[var(--ev-text)]"
+                          >
+                            <SpecIcon />
+                            <span>
+                              <strong className="text-[var(--ev-text)]">{label}:</strong> {value}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {/* Card 3: Location and reviews */}
+                  <div className="bg-[var(--ev-surface)] rounded-xl sm:rounded-2xl border border-[var(--ev-border)] shadow-sm overflow-hidden mb-6">
+                    <div className="px-4 py-3 sm:px-5 sm:py-4">
+                      {addressLine ? (
+                        <div className="flex items-start gap-3 mb-3">
+                          <LocationIcon />
+                          <div>
+                            <p className="text-xs font-semibold uppercase tracking-wide text-[var(--ev-text-muted)] mb-0.5">
+                              Location
+                            </p>
+                            <p className="text-sm sm:text-base text-[var(--ev-text)]">{addressLine}</p>
+                          </div>
+                        </div>
+                      ) : null}
+                      {(ratingValue > 0 || ratingCount > 0) && (
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="font-semibold text-[var(--ev-text)]">{ratingValue.toFixed(1)}</span>
+                          <span
+                            className="flex items-center gap-0.5"
+                            aria-label={`${ratingValue} out of 5 stars`}
+                          >
+                            {[1, 2, 3, 4, 5].map(i => (
+                              <StarIcon
+                                key={i}
+                                filled={i <= Math.round(ratingValue)}
+                              />
+                            ))}
+                          </span>
+                          {ratingCount > 0 && (
+                            <span className="text-sm text-[var(--ev-text-muted)]">({ratingCount} reviews)</span>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* CTA */}
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <button
+                      type="button"
+                      onClick={handleProceedToCheckout}
+                      className="w-full min-h-[var(--ev-touch-min)] py-3.5 px-6 rounded-xl font-semibold bg-[var(--ev-primary)] text-white hover:bg-[var(--ev-primary-hover)] active:opacity-90 transition text-base"
+                    >
+                      Proceed to checkout
+                    </button>
+                  </div>
+                </>
+              )
+            })()}
         </main>
       </div>
     </>

@@ -107,11 +107,13 @@ const HomePage = () => {
           </div>
         </main>
 
-        <footer
-          className="py-3 sm:py-4 text-center text-xs sm:text-sm text-[var(--ev-text-muted)] border-t border-[var(--ev-border)]"
-          style={{ paddingBottom: 'calc(0.75rem + var(--ev-safe-bottom))' }}
-        >
-          <p className="mb-1">EV Hub · Beckn-powered</p>
+        <footer className="w-full border-t border-[var(--ev-border)] bg-[var(--ev-surface)]">
+          <div
+            className="max-w-2xl mx-auto px-4 sm:px-6 py-3 sm:py-4 text-center text-xs sm:text-sm text-[var(--ev-text-muted)]"
+            style={{ paddingBottom: 'calc(0.75rem + var(--ev-safe-bottom))' }}
+          >
+            <p className="mb-1">EV Hub · Beckn-powered</p>
+          </div>
         </footer>
       </div>
     </>
