@@ -3,6 +3,16 @@ import type { DiscoverCatalogStored } from '@beckn-ui/common/lib/types/beckn-2.0
 import { getCatalogItemsAndOffers, getProviderName, escapeHtml } from './discoverHelpers'
 
 /** Renders all items from all catalogs using discoveryCard template and data mapping */
+
+const trimBppId = (bppId?: string | null): string => {
+  if (!bppId) return ''
+  return bppId
+    .split(/\.com|\.|-/)
+    .map(str => str.toUpperCase())
+    .join(' ')
+    .trim()
+}
+
 export function renderDiscoveryItems(
   catalogs: DiscoverCatalogStored[],
   templateHtml: string,
@@ -20,7 +30,7 @@ export function renderDiscoveryItems(
         cardHtml && !cardHtml.includes('data-item-id')
           ? `<div data-item-id="${escapeHtml(itemId)}" class="item-card">${cardHtml}</div>`
           : cardHtml
-      html += `<div class="item-with-provider" data-item-id="${escapeHtml(itemId)}"><span class="provider-name">${escapeHtml(providerName)}</span>${withId}</div>`
+      html += `<div class="item-with-provider" data-item-id="${escapeHtml(itemId)}"><span class="provider-name">${escapeHtml(providerName)}<span class="provider-name-address"> (${trimBppId(catalog.bppId) || ''})</span></span>${withId}</div>`
     }
   }
   return html
