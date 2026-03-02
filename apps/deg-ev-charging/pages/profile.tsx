@@ -196,6 +196,7 @@ const ProfilePage = () => {
       py={{ base: 8, sm: 10 }}
       maxH="calc(100vh - 100px)"
       overflowY="auto"
+      padding={20}
     >
       <Flex
         flexDir="column"

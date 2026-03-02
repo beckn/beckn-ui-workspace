@@ -198,7 +198,10 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
                     minHeight: 'calc(100dvh - var(--ev-header-h))',
                     background: 'var(--ev-bg)',
                     width: '100%',
-                    minWidth: 0
+                    minWidth: 0,
+                    padding: '24px',
+                    paddingBottom: 'calc(24px + var(--ev-safe-bottom))',
+                    boxSizing: 'border-box'
                   }
                 : { width: '100%', minWidth: 0, background: 'var(--ev-bg)' }
           }

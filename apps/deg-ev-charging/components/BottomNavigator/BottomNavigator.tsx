@@ -85,8 +85,8 @@ const BottomNavigator = () => {
             minHeight="44px"
             minWidth="64px"
             flex={1}
-            paddingY={1}
-            paddingX={2}
+            paddingY={20}
+            paddingX={20}
             borderRadius="lg"
             _active={{ bg: 'var(--ev-bg)' }}
           >
@@ -95,6 +95,8 @@ const BottomNavigator = () => {
               alt={item.label}
               boxSize={7}
               mb={0.5}
+              height={30}
+              width={30}
             />
             <Text
               fontSize="xs"
