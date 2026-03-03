@@ -89,6 +89,7 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
       overflowY="scroll"
       px={4}
       bg="white"
+      p={'20px'}
     >
       <PaymentDetailsCard
         checkedState={checkedPayment ?? ''}
