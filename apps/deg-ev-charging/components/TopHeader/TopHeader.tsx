@@ -120,7 +120,7 @@ const TopHeader: React.FC<TopHeaderProps> = ({
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           {/* Row 1: Logo (left) + Home button (right) */}
           <div
-            className={`flex items-center justify-between gap-3 ${showTitleRow ? 'min-h-[2.5rem]' : 'min-h-[2.5rem] py-2 pb-3'}`}
+            className={`flex items-center justify-between gap-3 ${showTitleRow ? 'min-h-[2.5rem]' : 'min-h-[2.5rem]'}`}
           >
             <Link
               href="/"

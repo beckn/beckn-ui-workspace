@@ -208,74 +208,79 @@ const OrderConfirmation = () => {
 
   return (
     <Box
-      className="hideScroll"
-      minH={'calc(100vh - 100px)'}
-      maxH={'calc(100vh - 100px)'}
-      overflowY="scroll"
-      w={['100%', '100%', '70%', '62%']}
-      margin="0 auto"
-      px={4}
+      className="hideScroll ev-app"
+      w="100%"
+      minH="calc(100vh - var(--ev-header-h) - 2rem)"
+      overflowY="auto"
       display="flex"
       flexDirection="column"
       alignItems="center"
-      bg="white"
+      justifyContent="center"
+      p={'20px'}
     >
-      <ConfirmationPage
-        className="order-confornation"
-        schema={{
-          iconSrc: orderConfirmmark,
-          successOrderMessage: 'Congratulations!',
-          gratefulMessage: 'your booking is successful!',
-          orderIdMessage: orderId ? `Order ID: ${orderId}` : '',
+      <Box
+        w="100%"
+        boxShadow="0 1px 3px rgba(0,0,0,0.04)"
+        overflow="hidden"
+        p={{ base: 10, sm: 10 }}
+      >
+        <ConfirmationPage
+          className="order-confirmation"
+          schema={{
+            iconSrc: orderConfirmmark,
+            successOrderMessage: 'Congratulations!',
+            gratefulMessage: 'your booking is successful!',
+            orderIdMessage: orderId ? `Order ID: ${orderId}` : '',
 
-          buttons: [
-            {
-              text: 'Go Back to Home',
-              handleClick: () => {
-                router.push('/')
-              },
-              variant: 'outline',
-              colorScheme: 'primary',
-              dataTest: testIds.orderConfirmation_viewOrderButton
-            }
-            // {
-            //   text: 'Unlock Chargering Port',
-            //   handleClick: () => {
-            //     if (confirmResponse && confirmResponse.length > 0) {
-            //       const selectedOrders = confirmResponse.map(response => {
-            //         const orderId = response.message.orderId
-            //         const bppId = response.context.bpp_id
-            //         const bppUri = response.context.bpp_uri
-            //         return { orderId, bppId, bppUri }
-            //       })
-            //       // Dispatch each order separately
-            //       selectedOrders.forEach(orderDetails => {
-            //         dispatch(orderActions.addSelectedOrder({ orderDetails }))
-            //         // Save each order in localStorage
-            //         localStorage.setItem('selectedOrder', JSON.stringify(orderDetails))
-            //       })
-            //       dispatch(checkoutBeckn20Actions.clearState())
-            //       dispatch(clearSource())
-            //     }
-            //     router.push('/monitorCharging')
-            //   },
-            //   rightIcon: (
-            //     <Image
-            //       src="/images/unlock_icon.svg"
-            //       alt="unlock_icon"
-            //       width={'20px'}
-            //       height={'20px'}
-            //     />
-            //   ),
-            //   isLoading: isLoading,
-            //   disabled: !isOrderConfirmed,
-            //   variant: 'solid',
-            //   colorScheme: 'primary',
-            //   dataTest: testIds.orderConfirmation_viewOrderButton
-            // }
-          ]
-        }}
-      />
+            buttons: [
+              {
+                text: 'Go Back to Home',
+                handleClick: () => {
+                  router.push('/')
+                },
+                variant: 'outline',
+                colorScheme: 'primary',
+                dataTest: testIds.orderConfirmation_viewOrderButton
+              }
+              // {
+              //   text: 'Unlock Chargering Port',
+              //   handleClick: () => {
+              //     if (confirmResponse && confirmResponse.length > 0) {
+              //       const selectedOrders = confirmResponse.map(response => {
+              //         const orderId = response.message.orderId
+              //         const bppId = response.context.bpp_id
+              //         const bppUri = response.context.bpp_uri
+              //         return { orderId, bppId, bppUri }
+              //       })
+              //       // Dispatch each order separately
+              //       selectedOrders.forEach(orderDetails => {
+              //         dispatch(orderActions.addSelectedOrder({ orderDetails }))
+              //         // Save each order in localStorage
+              //         localStorage.setItem('selectedOrder', JSON.stringify(orderDetails))
+              //       })
+              //       dispatch(checkoutBeckn20Actions.clearState())
+              //       dispatch(clearSource())
+              //     }
+              //     router.push('/monitorCharging')
+              //   },
+              //   rightIcon: (
+              //     <Image
+              //       src="/images/unlock_icon.svg"
+              //       alt="unlock_icon"
+              //       width={'20px'}
+              //       height={'20px'}
+              //     />
+              //   ),
+              //   isLoading: isLoading,
+              //   disabled: !isOrderConfirmed,
+              //   variant: 'solid',
+              //   colorScheme: 'primary',
+              //   dataTest: testIds.orderConfirmation_viewOrderButton
+              // }
+            ]
+          }}
+        />
+      </Box>
     </Box>
   )
 }

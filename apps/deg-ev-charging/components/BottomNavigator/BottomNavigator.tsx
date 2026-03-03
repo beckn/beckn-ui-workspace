@@ -62,8 +62,6 @@ const BottomNavigator = () => {
       borderTop="1px solid"
       borderColor="var(--ev-border)"
       boxShadow="0 -2px 8px rgba(0,0,0,0.06)"
-      pt={3}
-      pb={3}
       pl="var(--ev-safe-left)"
       pr="var(--ev-safe-right)"
       zIndex={40}
@@ -72,7 +70,6 @@ const BottomNavigator = () => {
       <Flex
         justify="space-around"
         align="stretch"
-        gap={4}
       >
         {navItems.map(item => (
           <Flex
@@ -85,8 +82,8 @@ const BottomNavigator = () => {
             minHeight="44px"
             minWidth="64px"
             flex={1}
-            paddingY={20}
-            paddingX={20}
+            paddingY={10}
+            paddingX={10}
             borderRadius="lg"
             _active={{ bg: 'var(--ev-bg)' }}
           >
@@ -95,8 +92,8 @@ const BottomNavigator = () => {
               alt={item.label}
               boxSize={7}
               mb={0.5}
-              height={30}
-              width={30}
+              height={25}
+              width={25}
             />
             <Text
               fontSize="xs"

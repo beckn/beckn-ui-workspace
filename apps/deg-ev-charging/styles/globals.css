@@ -461,6 +461,34 @@ select:-webkit-autofill:focus {
   padding-bottom: calc(var(--ev-bottom-nav-h) + var(--ev-safe-bottom) + 16px);
 }
  
+/* Order Confirmation page: centered layout, consistent spacing, proper alignment */
+.ev-app .order-confirmation-confirm-page-container {
+  flex-direction: column !important;
+  align-items: center !important;
+  margin-top: 0 !important;
+  gap: 1rem !important;
+  width: 100%;
+}
+.ev-app .order-confirmation-confirm-page-container > div:last-child {
+  text-align: center !important;
+  width: 100%;
+  max-width: 100% !important;
+}
+.ev-app .order-confirmation-confirm-page-container [data-test='order-message'],
+.ev-app .order-confirmation-confirm-page-container [data-test='suceess-OrderMessage'],
+.ev-app .order-confirmation-confirm-page-container [data-test='grateful-message'] {
+  text-align: center !important;
+}
+.ev-app .order-confirmation-confirm-buttons-container {
+  margin-top: 1.5rem !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+}
+.ev-app .order-confirmation-confirm-buttons-container button {
+  width: 100% !important;
+}
+ 
 /* Styles for rendered product cards */
 [data-item-id] {
   cursor: pointer;

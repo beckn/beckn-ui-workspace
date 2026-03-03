@@ -321,40 +321,51 @@ const ChargerDetails = () => {
         height={'calc(100vh - 300px)'}
         alignContent={'center'}
         justifyContent={'center'}
+        px={4}
+        py={6}
       >
-        <Text fontSize={'16px'}>{t.errorText}</Text>
+        <Text
+          fontSize={'16px'}
+          textAlign="center"
+        >
+          {t.errorText}
+        </Text>
       </Box>
     )
   }
 
+  const cardProps = {
+    bg: 'var(--ev-surface)' as const,
+    borderRadius: '16px',
+    borderWidth: '1px',
+    borderColor: 'var(--ev-border)' as const,
+    overflow: 'hidden' as const,
+    boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+    padding: 10
+  }
+
+  const cardHeaderPadding = { px: 5, pt: 4, pb: 2 }
+  const cardBodyPadding = { px: 5, pt: 3, pb: 5 }
+
   return (
     <Container
       maxW="md"
-      px={4}
-      py={5}
+      px={{ base: 4, sm: 6 }}
+      py={{ base: 5, sm: 6 }}
+      pb="calc(1.25rem + var(--ev-safe-bottom, 0px))"
       className="hideScroll ev-app checkout-page"
       overflowY="auto"
       minH="calc(100vh - var(--ev-header-h) - 20px)"
       bg="var(--ev-bg)"
+      padding={'20px'}
     >
       <VStack
         spacing={6}
         align="stretch"
       >
         {/* Provider Details */}
-        <Box
-          bg="var(--ev-surface)"
-          borderRadius="2xl"
-          borderWidth="1px"
-          borderColor="var(--ev-border)"
-          overflow="hidden"
-          boxShadow="0 1px 3px rgba(0,0,0,0.04)"
-        >
-          <Box
-            px={4}
-            pt={4}
-            pb={1}
-          >
+        <Box {...cardProps}>
+          <Box {...cardHeaderPadding}>
             <Text
               fontSize="xs"
               fontWeight="600"
@@ -365,11 +376,7 @@ const ChargerDetails = () => {
               Provider Details
             </Text>
           </Box>
-          <Box
-            pt={2}
-            pb={4}
-            px={4}
-          >
+          <Box {...cardBodyPadding}>
             <Stack spacing={4}>
               <Flex
                 flexDir="column"
@@ -416,19 +423,8 @@ const ChargerDetails = () => {
         </Box>
 
         {/* Charger Details */}
-        <Box
-          bg="var(--ev-surface)"
-          borderRadius="2xl"
-          borderWidth="1px"
-          borderColor="var(--ev-border)"
-          overflow="hidden"
-          boxShadow="0 1px 3px rgba(0,0,0,0.04)"
-        >
-          <Box
-            px={4}
-            pt={4}
-            pb={1}
-          >
+        <Box {...cardProps}>
+          <Box {...cardHeaderPadding}>
             <Text
               fontSize="xs"
               fontWeight="600"
@@ -439,11 +435,7 @@ const ChargerDetails = () => {
               Charger Details
             </Text>
           </Box>
-          <Box
-            pt={2}
-            pb={4}
-            px={4}
-          >
+          <Box {...cardBodyPadding}>
             <Stack spacing={4}>
               <Flex
                 flexDir="column"
@@ -510,9 +502,9 @@ const ChargerDetails = () => {
                 <Box
                   flex="1"
                   minW="120px"
-                  p={3}
+                  p={4}
                   bg="var(--ev-bg-card)"
-                  borderRadius="xl"
+                  borderRadius="12px"
                   borderWidth="1px"
                   borderColor="var(--ev-border)"
                 >
@@ -536,9 +528,9 @@ const ChargerDetails = () => {
                 <Box
                   flex="1"
                   minW="80px"
-                  p={3}
+                  p={4}
                   bg="var(--ev-bg-card)"
-                  borderRadius="xl"
+                  borderRadius="12px"
                   borderWidth="1px"
                   borderColor="var(--ev-border)"
                 >
@@ -563,19 +555,8 @@ const ChargerDetails = () => {
         </Box>
 
         {/* Connector Tariff */}
-        <Box
-          bg="var(--ev-surface)"
-          borderRadius="2xl"
-          borderWidth="1px"
-          borderColor="var(--ev-border)"
-          overflow="hidden"
-          boxShadow="0 1px 3px rgba(0,0,0,0.04)"
-        >
-          <Box
-            px={4}
-            pt={4}
-            pb={1}
-          >
+        <Box {...cardProps}>
+          <Box {...cardHeaderPadding}>
             <Text
               fontSize="xs"
               fontWeight="600"
@@ -586,11 +567,7 @@ const ChargerDetails = () => {
               Connector Tariff
             </Text>
           </Box>
-          <Box
-            pt={2}
-            pb={4}
-            px={4}
-          >
+          <Box {...cardBodyPadding}>
             <Box className="book_charger_form">
               <BecknAuth
                 schema={{
@@ -654,19 +631,8 @@ const ChargerDetails = () => {
         {/* Payment - only after confirm */}
         {showPayment && initResponseRaw.length > 0 && (
           <>
-            <Box
-              bg="var(--ev-surface)"
-              borderRadius="2xl"
-              borderWidth="1px"
-              borderColor="var(--ev-border)"
-              overflow="hidden"
-              boxShadow="0 1px 3px rgba(0,0,0,0.04)"
-            >
-              <Box
-                px={4}
-                pt={4}
-                pb={1}
-              >
+            <Box {...cardProps}>
+              <Box {...cardHeaderPadding}>
                 <Text
                   fontSize="xs"
                   fontWeight="600"
@@ -677,11 +643,7 @@ const ChargerDetails = () => {
                   Payment
                 </Text>
               </Box>
-              <Box
-                pt={2}
-                pb={4}
-                px={4}
-              >
+              <Box {...cardBodyPadding}>
                 <Stack spacing={3}>
                   {Object.entries(
                     getPaymentBreakDown(initResponseLegacy, parseFloat(formData.kwhToCharge)).breakUpMap
@@ -714,21 +676,22 @@ const ChargerDetails = () => {
 
             <Box
               bg="var(--ev-surface)"
-              borderRadius="2xl"
+              borderRadius="16px"
               borderWidth="2px"
               borderColor="var(--ev-primary)"
-              p={4}
+              p={'10px'}
               boxShadow="0 1px 3px rgba(0,0,0,0.04)"
             >
               <Flex
-                justify="space-between"
-                align="center"
+                flexDir="column"
+                align="stretch"
                 gap={4}
-                flexDir={{ base: 'column', sm: 'row' }}
               >
                 <Flex
-                  flexDir="column"
-                  gap={0}
+                  flexDir="row"
+                  gap={10}
+                  justifyContent={'space-between'}
+                  p={'10px'}
                 >
                   <Text
                     fontSize="xs"
@@ -751,7 +714,7 @@ const ChargerDetails = () => {
                 </Flex>
                 <BecknButton
                   text="Proceed to pay"
-                  sx={{ marginBottom: 0, width: { base: '100%', sm: 'auto' } }}
+                  sx={{ marginBottom: 0, width: '100%' }}
                   handleClick={() => router.push('/paymentMode')}
                 />
               </Flex>
