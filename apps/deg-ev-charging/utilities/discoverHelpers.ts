@@ -104,12 +104,9 @@ export function buildDiscoverRequest(textSearch: string): DiscoverRequest {
           op: 's_dwithin',
           targets: '$.catalogs[*].beckn:items[*].beckn:availableAt[*].geo',
           geometry: {
-            type: 'LineString',
+            type: 'Point',
             // Backend expects GeoJSON LineString [ [lng,lat], [lng,lat] ]; type in common is number[]
-            coordinates: [
-              [77.64, 12.98],
-              [77.5, 12.9]
-            ] as unknown as number[]
+            coordinates: [12.931497116608497, 77.6237679675213] as unknown as number[]
           },
           distanceMeters: 10000
         }
