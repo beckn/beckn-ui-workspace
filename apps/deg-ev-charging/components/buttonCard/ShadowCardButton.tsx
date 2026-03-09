@@ -1,15 +1,22 @@
 import React from 'react'
-import { Button, ButtonProps, Flex, Text } from '@chakra-ui/react'
 
 type TextAlignType = 'start' | 'center' | 'end'
 
-interface BecknButtonProps extends ButtonProps {
+interface BecknButtonProps {
   text?: string
   prefixIcon?: React.ReactNode
   postIcon?: React.ReactNode
   textStyle?: TextAlignType
   handleClick?: () => void
   dataTest?: string
+  isLoading?: boolean
+  loadingText?: string
+  disabled?: boolean
+  colorScheme?: string
+  variant?: string
+  id?: string
+  className?: string
+  sx?: Record<string, unknown>
 }
 
 const ShadowCardButton: React.FC<BecknButtonProps> = ({
@@ -19,57 +26,41 @@ const ShadowCardButton: React.FC<BecknButtonProps> = ({
   textStyle = 'start',
   handleClick,
   isLoading = false,
-  loadingText = 'Loading',
   disabled = false,
-  colorScheme = 'primary',
-  variant = 'unstyled',
   id,
-  className,
+  className = '',
   dataTest,
-  ...props
+  sx
 }) => {
+  const justifyMap = { start: 'flex-start', center: 'center', end: 'flex-end' } as const
+
   return (
-    <Button
+    <button
       id={id}
+      type="button"
       onClick={handleClick}
-      className={`border_radius_all ${className}`}
-      isDisabled={disabled}
-      isLoading={isLoading}
-      loadingText={loadingText}
-      colorScheme={colorScheme}
-      variant={variant}
+      disabled={disabled}
       data-test={dataTest}
-      {...props}
+      className={`rounded-xl flex items-center w-full min-h-[var(--ev-touch-min)] px-4 py-3 border border-[var(--ev-border)] bg-[var(--ev-surface)] hover:bg-[var(--ev-bg-card)] active:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed ${className}`}
+      style={sx as React.CSSProperties}
     >
-      {prefixIcon && (
-        <Flex
-          mr={3}
-          fontSize="lg"
-        >
-          {prefixIcon}
-        </Flex>
+      {isLoading ? (
+        <span className="flex-1 flex justify-center">
+          <span className="w-5 h-5 border-2 border-[var(--ev-border)] border-t-[var(--ev-primary)] rounded-full animate-spin" />
+        </span>
+      ) : (
+        <>
+          {prefixIcon && <div className="mr-3 text-lg flex items-center">{prefixIcon}</div>}
+          <div
+            className="flex-1 flex font-medium text-base text-black"
+            style={{ justifyContent: justifyMap[textStyle] }}
+          >
+            {text}
+          </div>
+          {postIcon && <div className="ml-3 text-lg flex items-center">{postIcon}</div>}
+        </>
       )}
-      <Flex
-        flex="1"
-        justifyContent={textStyle}
-      >
-        <Text
-          fontSize="md"
-          fontWeight="medium"
-          color="black"
-        >
-          {text}
-        </Text>
-      </Flex>
-      {postIcon && (
-        <Flex
-          ml={3}
-          fontSize="lg"
-        >
-          {postIcon}
-        </Flex>
-      )}
-    </Button>
+    </button>
   )
 }
 

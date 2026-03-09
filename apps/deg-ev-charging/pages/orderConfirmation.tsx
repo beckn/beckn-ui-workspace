@@ -5,7 +5,6 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useLanguage } from '../hooks/useLanguage'
 import { ConfirmationPage } from '@beckn-ui/becknified-components'
 import axios from '@services/axios'
-import { Box, Image } from '@chakra-ui/react'
 import { CheckoutBeckn20RootState, checkoutBeckn20Actions } from '@beckn-ui/common'
 import { orderActions } from '@beckn-ui/common/src/store/order-slice'
 import { useConfirmMutation } from '@beckn-ui/common/src/services/beckn-2.0/confirm'
@@ -207,86 +206,69 @@ const OrderConfirmation = () => {
   const orderId = confirmResponse && confirmResponse.length > 0 ? confirmResponse[0].message.orderId : ''
 
   return (
-    <Box
-      className="hideScroll"
-      minH={'calc(100vh - 100px)'}
-      maxH={'calc(100vh - 100px)'}
-      overflowY="scroll"
-      w={['100%', '100%', '70%', '62%']}
-      margin="0 auto"
-      px={4}
-      display="flex"
-      flexDirection="column"
-      alignItems="center"
-      bg="white"
-    >
-      <ConfirmationPage
-        className="order-confornation"
-        schema={{
-          iconSrc: orderConfirmmark,
-          successOrderMessage: 'Congratulations! your booking is successful!',
-          gratefulMessage: '',
-          orderIdMessage: orderId ? `Order ID: ${orderId}` : '',
+    <div className="hideScroll ev-app w-full min-h-[calc(100vh-var(--ev-header-h)-2rem)] overflow-y-auto flex flex-col items-center justify-center p-5">
+      <div
+        className="w-full max-w-md overflow-hidden p-6 sm:p-6 bg-[var(--ev-surface)] border border-[var(--ev-border)] transition-shadow duration-200"
+        style={{ borderRadius: 'var(--ev-radius-xl)', boxShadow: 'var(--ev-shadow-md)' }}
+      >
+        <ConfirmationPage
+          className="order-confirmation"
+          schema={{
+            iconSrc: orderConfirmmark,
+            successOrderMessage: 'Congratulations!',
+            gratefulMessage: 'your booking is successful!',
+            orderIdMessage: orderId ? `Order ID: ${orderId}` : '',
 
-          buttons: [
-            // {
-            //   text: 'View order details',
-            //   handleClick: () => {
-            //     if (confirmResponse && confirmResponse.length > 0) {
-            //       const first = confirmResponse[0]
-            //       const orderDetails = {
-            //         orderId: first.message.orderId,
-            //         bppId: first.context.bpp_id,
-            //         bppUri: first.context.bpp_uri
-            //       }
-            //       dispatch(orderActions.addSelectedOrder({ orderDetails }))
-            //       localStorage.setItem('selectedOrder', JSON.stringify(orderDetails))
-            //     }
-            //     router.push('/orderDetails')
-            //   },
-            //   variant: 'outline',
-            //   colorScheme: 'primary',
-            //   dataTest: testIds.orderConfirmation_viewOrderButton
-            // },
-            // {
-            //   text: 'Unlock Chargering Port',
-            //   handleClick: () => {
-            //     if (confirmResponse && confirmResponse.length > 0) {
-            //       const selectedOrders = confirmResponse.map(response => {
-            //         const orderId = response.message.orderId
-            //         const bppId = response.context.bpp_id
-            //         const bppUri = response.context.bpp_uri
-            //         return { orderId, bppId, bppUri }
-            //       })
-            //       // Dispatch each order separately
-            //       selectedOrders.forEach(orderDetails => {
-            //         dispatch(orderActions.addSelectedOrder({ orderDetails }))
-            //         // Save each order in localStorage
-            //         localStorage.setItem('selectedOrder', JSON.stringify(orderDetails))
-            //       })
-            //       dispatch(checkoutBeckn20Actions.clearState())
-            //       dispatch(clearSource())
-            //     }
-            //     router.push('/monitorCharging')
-            //   },
-            //   rightIcon: (
-            //     <Image
-            //       src="/images/unlock_icon.svg"
-            //       alt="unlock_icon"
-            //       width={'20px'}
-            //       height={'20px'}
-            //     />
-            //   ),
-            //   isLoading: isLoading,
-            //   disabled: !isOrderConfirmed,
-            //   variant: 'solid',
-            //   colorScheme: 'primary',
-            //   dataTest: testIds.orderConfirmation_viewOrderButton
-            // }
-          ]
-        }}
-      />
-    </Box>
+            buttons: [
+              {
+                text: 'Go Back to Home',
+                handleClick: () => {
+                  router.push('/')
+                },
+                variant: 'outline',
+                colorScheme: 'primary',
+                dataTest: testIds.orderConfirmation_viewOrderButton
+              }
+              // {
+              //   text: 'Unlock Chargering Port',
+              //   handleClick: () => {
+              //     if (confirmResponse && confirmResponse.length > 0) {
+              //       const selectedOrders = confirmResponse.map(response => {
+              //         const orderId = response.message.orderId
+              //         const bppId = response.context.bpp_id
+              //         const bppUri = response.context.bpp_uri
+              //         return { orderId, bppId, bppUri }
+              //       })
+              //       // Dispatch each order separately
+              //       selectedOrders.forEach(orderDetails => {
+              //         dispatch(orderActions.addSelectedOrder({ orderDetails }))
+              //         // Save each order in localStorage
+              //         localStorage.setItem('selectedOrder', JSON.stringify(orderDetails))
+              //       })
+              //       dispatch(checkoutBeckn20Actions.clearState())
+              //       dispatch(clearSource())
+              //     }
+              //     router.push('/monitorCharging')
+              //   },
+              //   rightIcon: (
+              //     <Image
+              //       src="/images/unlock_icon.svg"
+              //       alt="unlock_icon"
+              //       width={'20px'}
+              //       height={'20px'}
+              //     />
+              //   ),
+              //   isLoading: isLoading,
+              //   disabled: !isOrderConfirmed,
+              //   variant: 'solid',
+              //   colorScheme: 'primary',
+              //   dataTest: testIds.orderConfirmation_viewOrderButton
+              // }
+            ]
+          }}
+        />
+      </div>
+    </div>
   )
 }
 

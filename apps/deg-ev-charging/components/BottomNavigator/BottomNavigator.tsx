@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Flex, Text, Image } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
+import Image from 'next/image'
 import HomeNavIcon from '@public/images/home_nav_icon.svg'
 import SelectHomeNavIcon from '@public/images/select_home_nav_icon.svg'
 import ChargerNavIcon from '@public/images/chargers_nav_icon.svg'
@@ -13,11 +13,9 @@ const BottomNavigator = () => {
   const [selectedRoute, setSelectedRoute] = useState('/')
 
   useEffect(() => {
-    // Get stored route from localStorage on component mount
     const storedRoute = localStorage.getItem('selectedRoute')
     if (storedRoute) {
       setSelectedRoute(storedRoute)
-      // Only navigate if current route is different from stored route
       if (router.pathname !== storedRoute) {
         router.push(storedRoute)
       }
@@ -52,61 +50,39 @@ const BottomNavigator = () => {
   ]
 
   return (
-    <Box
-      className="ev-app"
-      position="fixed"
-      bottom={0}
-      left={0}
-      right={0}
-      bg="var(--ev-surface)"
-      borderTop="1px solid"
-      borderColor="var(--ev-border)"
-      boxShadow="0 -2px 8px rgba(0,0,0,0.06)"
-      pt={3}
-      pb={3}
-      pl="var(--ev-safe-left)"
-      pr="var(--ev-safe-right)"
-      zIndex={40}
-      style={{ paddingBottom: 'calc(0.75rem + var(--ev-safe-bottom))' }}
+    <div
+      className="ev-app fixed bottom-0 left-0 right-0 z-40 bg-[var(--ev-surface)] border-t border-[var(--ev-border)] shadow-[0_-2px_8px_rgba(0,0,0,0.06)]"
+      style={{
+        paddingLeft: 'var(--ev-safe-left)',
+        paddingRight: 'var(--ev-safe-right)',
+        paddingBottom: 'calc(0.75rem + var(--ev-safe-bottom))'
+      }}
     >
-      <Flex
-        justify="space-around"
-        align="stretch"
-        gap={4}
-      >
+      <div className="flex justify-around items-stretch">
         {navItems.map(item => (
-          <Flex
+          <button
+            type="button"
             key={item.label}
-            direction="column"
-            align="center"
-            justify="center"
-            cursor="pointer"
             onClick={() => handleNavigation(item.path)}
-            minHeight="44px"
-            minWidth="64px"
-            flex={1}
-            paddingY={1}
-            paddingX={2}
-            borderRadius="lg"
-            _active={{ bg: 'var(--ev-bg)' }}
+            className="flex flex-col items-center justify-center cursor-pointer min-h-[44px] min-w-[64px] flex-1 py-2.5 px-2.5 rounded-lg active:bg-[var(--ev-bg)] transition-colors"
           >
             <Image
               src={item.icon}
               alt={item.label}
-              boxSize={7}
-              mb={0.5}
+              width={25}
+              height={25}
+              className="mb-0.5"
             />
-            <Text
-              fontSize="xs"
-              fontWeight="medium"
-              color={item.color ?? 'var(--ev-text-muted)'}
+            <span
+              className="text-xs font-medium"
+              style={{ color: item.color ?? 'var(--ev-text-muted)' }}
             >
               {item.label}
-            </Text>
-          </Flex>
+            </span>
+          </button>
         ))}
-      </Flex>
-    </Box>
+      </div>
+    </div>
   )
 }
 

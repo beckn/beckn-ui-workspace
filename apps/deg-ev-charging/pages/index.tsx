@@ -66,7 +66,13 @@ const HomePage = () => {
           <div className="w-full max-w-2xl mx-auto px-4 -mt-2 sm:mt-0 text-center">
             {/* Search – full width, touch-friendly on mobile */}
             <div className="relative w-full">
-              <div className="flex flex-row items-stretch bg-[var(--ev-surface)] rounded-2xl shadow-lg border border-[var(--ev-border)] overflow-hidden focus-within:ring-2 focus-within:ring-[var(--ev-primary)] focus-within:border-[var(--ev-primary)]">
+              <div
+                className="flex flex-row items-stretch bg-[var(--ev-surface)] border border-[var(--ev-border)] overflow-hidden transition-shadow duration-200 focus-within:ring-2 focus-within:ring-[var(--ev-primary)] focus-within:border-[var(--ev-primary)]"
+                style={{
+                  borderRadius: 'var(--ev-radius-xl)',
+                  boxShadow: 'var(--ev-shadow-md)'
+                }}
+              >
                 <input
                   type="search"
                   placeholder="e.g. CCS2, fast charger, Bengaluru..."
@@ -80,7 +86,8 @@ const HomePage = () => {
                   type="button"
                   onClick={handleSearch}
                   disabled={!searchKeyword.trim()}
-                  className="min-h-[var(--ev-touch-min)] min-w-[var(--ev-touch-min)] px-4 py-3.5 sm:py-4 rounded-none rounded-r-2xl font-medium text-white bg-[var(--ev-primary)] hover:bg-[var(--ev-primary-hover)] active:bg-[var(--ev-primary-hover)] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[var(--ev-primary)] transition-colors flex items-center justify-center shrink-0"
+                  className="min-h-[var(--ev-touch-min)] min-w-[var(--ev-touch-min)] px-4 py-3.5 sm:py-4 font-medium text-white bg-[var(--ev-primary)] hover:bg-[var(--ev-primary-hover)] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100 transition-transform duration-150 flex items-center justify-center shrink-0"
+                  style={{ borderRadius: '0 var(--ev-radius-xl) var(--ev-radius-xl) 0' }}
                   aria-label="Search"
                 >
                   <svg
@@ -107,11 +114,13 @@ const HomePage = () => {
           </div>
         </main>
 
-        <footer
-          className="py-3 sm:py-4 text-center text-xs sm:text-sm text-[var(--ev-text-muted)] border-t border-[var(--ev-border)]"
-          style={{ paddingBottom: 'calc(0.75rem + var(--ev-safe-bottom))' }}
-        >
-          <p className="mb-1">EV Hub · Beckn-powered</p>
+        <footer className="w-full border-t border-[var(--ev-border)] bg-[var(--ev-surface)]">
+          <div
+            className="max-w-2xl mx-auto px-4 sm:px-6 py-3 sm:py-4 text-center text-xs sm:text-sm text-[var(--ev-text-muted)]"
+            style={{ paddingBottom: 'calc(0.75rem + var(--ev-safe-bottom))' }}
+          >
+            <p className="mb-1">EV Hub · Beckn-powered</p>
+          </div>
         </footer>
       </div>
     </>

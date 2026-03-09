@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Text } from '@chakra-ui/react'
 import ChargingSessionCard from '../components/card/ChargingSessionCard'
 import { ChargingHistoryResponse } from '@lib/types/orderHistory'
 import { Loader } from '@beckn-ui/molecules'
@@ -70,16 +69,13 @@ const OrderHistory = () => {
             }
           }
         )
-        console.log('parsedData', parsedData)
         setData(parsedData)
-
         setIsLoading(false)
         if (result.error) {
           return setError(result.error.message)
         }
       })
-      .catch(error => {
-        console.log('error', error)
+      .catch(() => {
         setIsLoading(false)
       })
       .finally(() => setIsLoading(false))
@@ -87,13 +83,9 @@ const OrderHistory = () => {
 
   if (isLoading) {
     return (
-      <Box
-        display={'grid'}
-        height={'calc(100vh - 340px)'}
-        alignContent={'center'}
-      >
+      <div className="grid h-[calc(100vh-340px)] content-center">
         <Loader />
-      </Box>
+      </div>
     )
   }
 
@@ -108,24 +100,10 @@ const OrderHistory = () => {
   }
 
   return (
-    <Box
-      className="hideScroll"
-      maxH={'calc(100vh - 100px)'}
-      overflowY="scroll"
-      w={['100%', '100%', '70%', '62%']}
-      margin="0 auto"
-      p={'10px 10px'}
-      height={'calc(100vh - 12rem)'}
-    >
+    <div className="hideScroll max-h-[calc(100vh-100px)] overflow-y-auto w-full md:w-[70%] lg:w-[62%] mx-auto p-2.5 min-h-[calc(100vh-12rem)]">
       {data?.activeSession && data?.activeSession.length > 0 && (
         <>
-          <Text
-            fontSize="16px"
-            fontWeight="600"
-            mb={4}
-          >
-            Active Session
-          </Text>
+          <p className="text-base font-semibold mb-4">Active Session</p>
           {data.activeSession.map(session => (
             <ChargingSessionCard
               key={session.id}
@@ -137,14 +115,7 @@ const OrderHistory = () => {
 
       {data?.history && data.history.length > 0 && (
         <>
-          <Text
-            fontSize="16px"
-            fontWeight="600"
-            mt={8}
-            mb={4}
-          >
-            History
-          </Text>
+          <p className="text-base font-semibold mt-8 mb-4">History</p>
           {data.history.map(session => (
             <ChargingSessionCard
               key={session.id}
@@ -153,13 +124,7 @@ const OrderHistory = () => {
           ))}
         </>
       )}
-
-      {/* {(!data?.activeSession || data?.activeSession.length === 0) && (!data?.history || data.history.length === 0) && (
-        <Center h="calc(100vh - 200px)">
-          <Text color="gray.500">No charging sessions found</Text>
-        </Center>
-      )} */}
-    </Box>
+    </div>
   )
 }
 

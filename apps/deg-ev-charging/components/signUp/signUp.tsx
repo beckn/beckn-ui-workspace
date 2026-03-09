@@ -1,6 +1,5 @@
 import React, { useMemo, useState } from 'react'
 import { BecknAuth } from '@beckn-ui/becknified-components'
-import { Box } from '@chakra-ui/react'
 import Router from 'next/router'
 import { FormErrors, SignUpFormProps } from '@beckn-ui/common/lib/types'
 import { useTradeRegisterMutation, type RegisterRequest } from '@services/UserService'
@@ -99,81 +98,73 @@ const SignUp = () => {
   }
 
   return (
-    <Box
-      className="ev-auth-page hideScroll"
-      w="100%"
-      maxW="28rem"
-      mx="auto"
-      px={{ base: 4, sm: 6 }}
-      py={{ base: 6, sm: 8 }}
-      maxH="calc(100vh - 90px)"
-      overflowY="auto"
-      minH="0"
-    >
-      <BecknAuth
-        schema={{
-          logo: {
-            src: AppLogo,
-            alt: 'app-logo'
-          },
-          buttons: [
-            {
-              text: t.signUp,
-              handleClick: handleSignUp,
-              disabled: !isFormFilled,
-              variant: 'solid',
-              colorScheme: 'primary',
-              isLoading: isLoading
+    <div className="ev-auth-page hideScroll w-full max-w-[28rem] mx-auto px-4 sm:px-6 py-6 sm:py-8 max-h-[calc(100vh-90px)] overflow-y-auto min-h-0">
+      <div className="ev-auth-card rounded-[var(--ev-radius-xl)] border border-[var(--ev-border)] p-5 sm:p-6 shadow-[var(--ev-shadow-md)] bg-[var(--ev-surface)] transition-shadow duration-200">
+        <BecknAuth
+          schema={{
+            logo: {
+              src: AppLogo,
+              alt: 'app-logo'
             },
-            {
-              text: t.signIn,
-              handleClick: handleSignIn,
-              variant: 'outline',
-              colorScheme: 'primary',
-              disabled: isLoading
-            }
-          ],
-          inputs: [
-            {
-              type: 'text',
-              name: 'name',
-              variant: 'rounded',
-              value: formData.name,
-              handleChange: handleInputChange,
-              label: t.name,
-              error: formErrors.name
-            },
-            {
-              type: 'number',
-              name: 'mobileNumber',
-              variant: 'rounded',
-              value: formData.mobileNumber,
-              handleChange: handleInputChange,
-              label: t.enterMobileNumber,
-              error: formErrors.mobileNumber
-            },
-            {
-              type: 'text',
-              name: 'email',
-              variant: 'rounded',
-              value: formData.email,
-              handleChange: handleInputChange,
-              label: t.enterEmailID,
-              error: formErrors.email
-            },
-            {
-              type: 'text',
-              name: 'address',
-              variant: 'rounded',
-              value: formData.address,
-              handleChange: handleInputChange,
-              label: t.enterAddrees,
-              error: formErrors.address
-            }
-          ]
-        }}
-      />
-    </Box>
+            buttons: [
+              {
+                text: t.signUp,
+                handleClick: handleSignUp,
+                disabled: !isFormFilled,
+                variant: 'solid',
+                colorScheme: 'primary',
+                isLoading: isLoading
+              },
+              {
+                text: t.signIn,
+                handleClick: handleSignIn,
+                variant: 'outline',
+                colorScheme: 'primary',
+                disabled: isLoading
+              }
+            ],
+            inputs: [
+              {
+                type: 'text',
+                name: 'name',
+                variant: 'rounded',
+                value: formData.name,
+                handleChange: handleInputChange,
+                label: t.name,
+                error: formErrors.name
+              },
+              {
+                type: 'number',
+                name: 'mobileNumber',
+                variant: 'rounded',
+                value: formData.mobileNumber,
+                handleChange: handleInputChange,
+                label: t.enterMobileNumber,
+                error: formErrors.mobileNumber
+              },
+              {
+                type: 'text',
+                name: 'email',
+                variant: 'rounded',
+                value: formData.email,
+                handleChange: handleInputChange,
+                label: t.enterEmailID,
+                error: formErrors.email
+              },
+              {
+                type: 'text',
+                name: 'address',
+                variant: 'rounded',
+                value: formData.address,
+                handleChange: handleInputChange,
+                label: t.enterAddrees,
+                error: formErrors.address
+              }
+            ]
+          }}
+        />
+      </div>
+    </div>
   )
 }
 

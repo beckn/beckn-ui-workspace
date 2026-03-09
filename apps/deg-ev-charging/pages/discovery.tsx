@@ -57,8 +57,8 @@ const Discovery = () => {
       setRenderedHtml('')
       try {
         const payload = buildDiscoverRequest(searchTerm)
-        // const res = await discoverRef.current(payload).unwrap()
-        const res = DISCOVER_RESPONSE //we are using mockdata, discover response not getting
+        const res = await discoverRef.current(payload).unwrap()
+        // const res = DISCOVER_RESPONSE //we are using mockdata, discover response not getting
         if (!isCurrentRun()) return
         const allCatalogs = getCatalogsFromResponse(res)
         const transactionId = getTransactionIdFromResponse(res)

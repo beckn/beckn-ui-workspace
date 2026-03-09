@@ -1,14 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+ 
 @layer base {
   :root {
     --color-primary: 167, 27, 74;
     /* #A71B4A*/
     --color-secondary: 74, 76, 90;
     /* #4a4c5a*/
-
+ 
     --color-bg: 243, 244, 245;
     /* #f3f4f5*/
     --color-bg-side: 252, 251, 255;
@@ -23,7 +23,7 @@
     --stationery-category-bgc: #fbb13c;
     --disabled-btn-color: 234, 207, 219;
     /*"#EACFDB"*/
-
+ 
     --color-text-base: 66, 71, 80;
     /* #424750*/
     --color-text-muted: 107, 114, 128;
@@ -38,7 +38,7 @@
     /*#50C917*/
     --font-family: iranyekan, 'IRANSans', 'Tahoma';
   }
-
+ 
   .dark {
     --color-bg: 15, 23, 42;
     /* #0f172a*/
@@ -51,7 +51,7 @@
     --house-category-bgc: #164c4b;
     --toy-category-bgc: #6d3d4b;
     --stationery-category-bgc: #6a4202;
-
+ 
     --color-text-base: 226, 232, 240;
     /*#e2e8f0*/
     --color-text-muted: 140, 154, 175;
@@ -59,12 +59,12 @@
     --color-text-side: 255, 231, 231;
     /*#fff*/
   }
-
+ 
   html[dir='ltr'] {
     --font-family: 'Poppins', 'Roboto', 'sans-serif';
   }
 }
-
+ 
 html,
 body {
   margin: 0;
@@ -73,16 +73,16 @@ body {
   background-color: rgb(var(--color-bg));
   color: rgb(var(--color-text-base));
 }
-
+ 
 ul {
   list-style: unset !important;
 }
-
+ 
 a {
   color: inherit;
   text-decoration: none;
 }
-
+ 
 @keyframes spin {
   to {
     transform: rotate(360deg);
@@ -91,11 +91,11 @@ a {
 .animate-spin {
   animation: spin 1s linear infinite;
 }
-
+ 
 * {
   box-sizing: border-box;
 }
-
+ 
 @font-face {
   font-family: iranyekan;
   font-style: normal;
@@ -106,7 +106,7 @@ a {
     url('/fonts/ttf/iranyekanwebbold.ttf') format('truetype');
   font-display: swap;
 }
-
+ 
 @font-face {
   font-family: iranyekan;
   font-style: normal;
@@ -117,7 +117,7 @@ a {
     url('/fonts/ttf/iranyekanwebthin.ttf') format('truetype');
   font-display: swap;
 }
-
+ 
 @font-face {
   font-family: iranyekan;
   font-style: normal;
@@ -128,7 +128,7 @@ a {
     url('/fonts/ttf/iranyekanweblight.ttf') format('truetype');
   font-display: swap;
 }
-
+ 
 @font-face {
   font-family: iranyekan;
   font-style: normal;
@@ -139,7 +139,7 @@ a {
     url('/fonts/ttf/iranyekanwebregular.ttf') format('truetype');
   font-display: swap;
 }
-
+ 
 @font-face {
   font-family: iranyekan;
   font-style: normal;
@@ -150,7 +150,7 @@ a {
     url('/fonts/ttf/iranyekanwebmedium.ttf') format('truetype');
   font-display: swap;
 }
-
+ 
 @font-face {
   font-family: iranyekan;
   font-style: normal;
@@ -161,7 +161,7 @@ a {
     url('/fonts/ttf/iranyekanwebextrabold.ttf') format('truetype');
   font-display: swap;
 }
-
+ 
 @font-face {
   font-family: iranyekan;
   font-style: normal;
@@ -172,7 +172,7 @@ a {
     url('/fonts/ttf/iranyekanwebblack.ttf') format('truetype');
   font-display: swap;
 }
-
+ 
 @font-face {
   font-family: iranyekan;
   font-style: normal;
@@ -183,65 +183,65 @@ a {
     url('/fonts/ttf/iranyekanwebextrablack.ttf') format('truetype');
   font-display: swap;
 }
-
+ 
 .slick-dots li button::before {
   font-size: 12px !important;
 }
-
+ 
 .image_section>span {
   width: 220px !important;
   height: 240px !important;
 }
-
+ 
 .slick-prev.slick-disabled:before,
 .slick-next.slick-disabled:before {
   opacity: 0.45 !important;
 }
-
+ 
 .slick-prev:before,
 .slick-next:before {
   opacity: 9 !important;
   content: '' !important;
 }
-
+ 
 @media (min-width: 1024px) {
   .slick-dots li button:before {
     font-size: 12px;
   }
-
+ 
   .slick-dots {
     padding-bottom: 40px !important;
   }
 }
-
+ 
 ::-webkit-scrollbar {
   width: 0.5rem;
   height: 0.5rem;
 }
-
+ 
 ::-webkit-scrollbar-track {
   background-color: rgb(var(--color-bg));
 }
-
+ 
 ::-webkit-scrollbar-thumb {
   /* background-color: #a71b4a; */
   border-radius: 100vw;
 }
-
+ 
 /* input */
-
+ 
 input,
 select {
   font-family: inherit;
   color: inherit;
   font-size: inherit;
 }
-
+ 
 input:focus,
 select:focus {
   background-color: transparent;
 }
-
+ 
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
@@ -255,12 +255,12 @@ select:-webkit-autofill:focus {
   box-shadow: 0 0 0px 1000px transparent inset;
   transition: background-color 5000s ease-in-out 0s;
 }
-
+ 
 ::placeholder {
   color: #b9b9b9;
   font-size: 14px;
 }
-
+ 
 /* .chakra-accordion__icon {
     height: 24px !important;
     width: 24px !important;
@@ -268,89 +268,89 @@ select:-webkit-autofill:focus {
     right: 15px;
     top: 15px;
 } */
-
+ 
 .object-contain {
   object-fit: unset !important;
 }
-
+ 
 .app_header_b {
   /* margin-left: -20px; */
   /* margin-right: -20px; */
   padding: 6px 20px;
   box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.1) !important;
 }
-
+ 
 .border_radius_all {
   border-radius: 12px !important;
 }
-
+ 
 .css-690el4[aria-checked='true'],
 .css-690el4[data-checked] {
   background-color: #a71b4a !important;
   border-color: #a71b4a !important;
 }
-
+ 
 .css-690el4 {
   border: 1px solid !important;
   border-color: #a71b4a !important;
 }
-
+ 
 .product_description_text p {
   font-size: 15px;
 }
-
+ 
 .product_description_text p:first-child {
   padding-bottom: 10px;
   padding-top: 10px;
 }
-
+ 
 .product_description_text ul li {
   padding-bottom: 5px;
-
+ 
   /* list-style-position: inside; */
-
+ 
   margin-left: 16px;
 }
-
+ 
 .hideScroll::-webkit-scrollbar {
   display: none;
 }
-
+ 
 .subHeader_bottom_header__NOUrY {
   background-color: #4461f2 !important;
   color: #fff !important;
 }
-
+ 
 .subHeader_bottom_header__NOUrY p {
   color: #fff !important;
 }
-
+ 
 .ev-app .subHeader_bottom_header__NOUrY {
   background-color: var(--ev-primary) !important;
   color: #fff !important;
 }
-
+ 
 .ev-app .subHeader_bottom_header__NOUrY p {
   color: #fff !important;
 }
-
+ 
 .book_charger_form .auth_signin_container__zWlCc {
   padding-top: 0px !important;
 }
-
+ 
 /* .input_input_container__h_7Wp.input_rounded__oI6QF {
   margin-bottom: 26px !important;
 } */
 .book_charger_form .amount-to-pay-input {
   margin-bottom: 26px !important;
 }
-
+ 
 .book_charger_form .kwh-to-charge-input {
   margin-bottom: 26px !important;
 }
-
-
-
+ 
+ 
+ 
 /* Splash screen: gentle entrance */
 @keyframes ev-splash-in {
   from {
@@ -365,7 +365,7 @@ select:-webkit-autofill:focus {
 .ev-splash-content {
   animation: ev-splash-in 0.5s ease-out forwards;
 }
-
+ 
 /* EV Charging app theme – light with green accent (noina-style) */
 .ev-app {
   --ev-bg: #ffffff;
@@ -390,8 +390,18 @@ select:-webkit-autofill:focus {
   --ev-safe-bottom: env(safe-area-inset-bottom, 0px);
   --ev-safe-left: env(safe-area-inset-left, 0px);
   --ev-safe-right: env(safe-area-inset-right, 0px);
+  /* Modern UI: radius, shadow, transition (see UI_MODERNIZATION.md) */
+  --ev-radius-sm: 8px;
+  --ev-radius-md: 12px;
+  --ev-radius-lg: 16px;
+  --ev-radius-xl: 20px;
+  --ev-radius-2xl: 24px;
+  --ev-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --ev-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --ev-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.1);
+  --ev-transition: 0.2s ease;
 }
-
+ 
 /* Auth pages (Sign In / Sign Up): align form and controls to container */
 .ev-auth-page {
   box-sizing: border-box;
@@ -402,12 +412,29 @@ select:-webkit-autofill:focus {
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
+  border-radius: var(--ev-radius-md);
+  transition: box-shadow var(--ev-transition), border-color var(--ev-transition);
+}
+.ev-auth-page input:focus,
+.ev-auth-page [data-chakra-input]:focus-within {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--ev-primary);
+  border-color: var(--ev-primary);
 }
 .ev-auth-page button + button,
 .ev-auth-page a + a {
   margin-top: 0.75rem;
 }
-
+.ev-auth-page button[type="button"]:not([aria-label="Show password"]):not([aria-label="Hide password"]) {
+  transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+}
+.ev-auth-page button[type="button"]:not([aria-label="Show password"]):not([aria-label="Hide password"]):active:not(:disabled) {
+  transform: scale(0.98);
+}
+.ev-auth-card {
+  border-radius: var(--ev-radius-xl);
+}
+ 
 /* Password visibility toggle (eye icon) – aligned to right edge of input */
 .ev-auth-page button[aria-label="Show password"],
 .ev-auth-page button[aria-label="Hide password"] {
@@ -424,7 +451,7 @@ select:-webkit-autofill:focus {
 .ev-auth-page div:has(> button[aria-label*="password"]) > input {
   padding-right: 2.75rem;
 }
-
+ 
 /* Profile page: align form and spacing */
 .ev-profile-page input,
 .ev-profile-page [data-chakra-input] {
@@ -432,7 +459,7 @@ select:-webkit-autofill:focus {
   max-width: 100%;
   box-sizing: border-box;
 }
-
+ 
 /* Mobile-first base: prevent zoom on input focus (iOS); theme text */
 .ev-app input[type="text"],
 .ev-app input[type="search"],
@@ -445,7 +472,7 @@ select:-webkit-autofill:focus {
 .ev-app input::placeholder {
   color: var(--ev-text-muted);
 }
-
+ 
 /* Touch-friendly tap targets */
 .ev-app .ev-tap-target {
   min-height: var(--ev-touch-min);
@@ -454,13 +481,45 @@ select:-webkit-autofill:focus {
   align-items: center;
   justify-content: center;
 }
-
+ 
 /* Content area above bottom nav: add padding so content isn’t hidden */
 .ev-app.ev-with-bottom-nav main,
 .ev-app.ev-with-bottom-nav [data-ev-main] {
   padding-bottom: calc(var(--ev-bottom-nav-h) + var(--ev-safe-bottom) + 16px);
 }
-
+ 
+/* Order Confirmation page: centered layout, consistent spacing, proper alignment */
+.ev-app .order-confirmation-confirm-page-container {
+  flex-direction: column !important;
+  align-items: center !important;
+  margin-top: 0 !important;
+  gap: 1rem !important;
+  width: 100%;
+}
+.ev-app .order-confirmation-confirm-page-container > div:last-child {
+  text-align: center !important;
+  width: 100%;
+  max-width: 100% !important;
+}
+.ev-app .order-confirmation-confirm-page-container [data-test='order-message'],
+.ev-app .order-confirmation-confirm-page-container [data-test='suceess-OrderMessage'],
+.ev-app .order-confirmation-confirm-page-container [data-test='grateful-message'] {
+  text-align: center !important;
+}
+.ev-app .order-confirmation-confirm-buttons-container {
+  margin-top: 1.5rem !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+}
+.ev-app .order-confirmation-confirm-buttons-container button {
+  width: 100% !important;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.ev-app .order-confirmation-confirm-buttons-container button:active:not(:disabled) {
+  transform: scale(0.98);
+}
+ 
 /* Styles for rendered product cards */
 [data-item-id] {
   cursor: pointer;
@@ -468,23 +527,23 @@ select:-webkit-autofill:focus {
     transform 0.2s ease,
     box-shadow 0.2s ease;
 }
-
+ 
 [data-item-id]:hover {
   transform: translateY(-4px);
 }
-
+ 
 @media (max-width: 768px) {
   [data-item-id] {
     transform: none;
   }
-
+ 
   [data-item-id]:hover {
     transform: none;
   }
 }
-
+ 
 /* ----- Discovery & detail template content (renderer.json output) ----- */
-
+ 
 /* item-card – discovery list card */
 .item-card {
   background-color: var(--ev-surface);
@@ -521,7 +580,7 @@ select:-webkit-autofill:focus {
     font-size: 0.9375rem;
   }
 }
-
+ 
 /* item-with-provider: wrapper with provider name above each card */
 .item-with-provider {
   display: flex;
@@ -536,11 +595,11 @@ select:-webkit-autofill:focus {
   letter-spacing: 0.04em;
   line-height: 1.2;
 }
-
+ 
 .ev-price {
   font-weight: 700;
 }
-
+ 
 /* Detail view – product/station details from template (compact spacing) */
 .detail-view-content {
   font-size: clamp(0.875rem, 2vw, 0.9375rem);
@@ -579,7 +638,7 @@ select:-webkit-autofill:focus {
     margin-bottom: 0.4rem;
   }
 }
-
+ 
 /* Ensure images in cards are responsive */
 .item-image,
 img[class*='item-image'],
@@ -589,7 +648,7 @@ img[class*='product-image'] {
   object-fit: cover;
   border-radius: 8px;
 }
-
+ 
 /* Typography for template classes when used */
 .item-name,
 h3[class*='item-name'],
@@ -598,10 +657,11 @@ h4[class*='item-name'] {
   line-height: 1.4;
   font-weight: 600;
 }
-
+ 
 .item-short-desc,
 p[class*='short-desc'] {
   font-size: clamp(0.875rem, 2vw, 1rem);
   line-height: 1.6;
   color: var(--ev-text-muted);
 }
+ 

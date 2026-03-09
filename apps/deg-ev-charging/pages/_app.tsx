@@ -1,5 +1,6 @@
 import React from 'react'
 import type { AppProps } from 'next/app'
+import Head from 'next/head'
 import Layout from '../components/layout/Layout'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
@@ -18,39 +19,47 @@ function MyApp({ Component, pageProps }: AppProps) {
   const { t } = useLanguage()
   const router = useRouter()
   return (
-    <BecknProvider
-      theme={{
-        color: {
-          primary: '#54b86a',
-          secondary: '#48a35d',
-          textPrimary: '#333333',
-          textSecondary: '#888888'
-        }
-      }}
-    >
-      <Provider store={store}>
-        <PersistGate
-          loading={null}
-          persistor={persistor}
-        >
-          <ErrorBoundary
-            fallback={() => (
-              <FallbackUI
-                handleBackToHomeClick={() => {
-                  router.push('/')
-                }}
-                handleContactSupport={() => {}}
-                t={key => t[key]}
-              />
-            )}
+    <>
+      <Head>
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, viewport-fit=cover"
+        />
+      </Head>
+      <BecknProvider
+        theme={{
+          color: {
+            primary: '#54b86a',
+            secondary: '#48a35d',
+            textPrimary: '#333333',
+            textSecondary: '#888888'
+          }
+        }}
+      >
+        <Provider store={store}>
+          <PersistGate
+            loading={null}
+            persistor={persistor}
           >
-            <Layout>
-              <Component {...pageProps} />
-            </Layout>
-          </ErrorBoundary>
-        </PersistGate>
-      </Provider>
-    </BecknProvider>
+            <ErrorBoundary
+              fallback={() => (
+                <FallbackUI
+                  handleBackToHomeClick={() => {
+                    router.push('/')
+                  }}
+                  handleContactSupport={() => {}}
+                  t={key => t[key]}
+                />
+              )}
+            >
+              <Layout>
+                <Component {...pageProps} />
+              </Layout>
+            </ErrorBoundary>
+          </PersistGate>
+        </Provider>
+      </BecknProvider>
+    </>
   )
 }
 export default MyApp

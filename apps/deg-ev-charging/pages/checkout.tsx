@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { Box, Container, Flex, Stack, Text, VStack } from '@chakra-ui/react'
 import { BecknAuth, ShippingFormInitialValuesType } from '@beckn-ui/becknified-components'
 import { InputProps } from '@beckn-ui/molecules'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
@@ -316,282 +315,107 @@ const ChargerDetails = () => {
 
   if (selectError || initializeError) {
     return (
-      <Box
-        display={'grid'}
-        height={'calc(100vh - 300px)'}
-        alignContent={'center'}
-        justifyContent={'center'}
-      >
-        <Text fontSize={'16px'}>{t.errorText}</Text>
-      </Box>
+      <div className="grid h-[calc(100vh-300px)] content-center justify-center px-4 py-6">
+        <p className="text-base text-center text-[var(--ev-text)]">{t.errorText}</p>
+      </div>
     )
   }
 
+  const cardClassName =
+    'bg-[var(--ev-surface)] border border-[var(--ev-border)] overflow-hidden p-2.5 transition-shadow duration-200'
+  const cardStyle = { borderRadius: 'var(--ev-radius-xl)', boxShadow: 'var(--ev-shadow-md)' }
+  const cardHeaderClass = 'px-5 pt-4 pb-2'
+  const cardBodyClass = 'px-5 pt-3 pb-5'
+
   return (
-    <Container
-      maxW="md"
-      px={4}
-      py={5}
-      className="hideScroll ev-app checkout-page"
-      overflowY="auto"
-      minH="calc(100vh - var(--ev-header-h) - 20px)"
-      bg="var(--ev-bg)"
+    <div
+      className="hideScroll ev-app checkout-page max-w-md mx-auto px-4 sm:px-6 py-5 sm:py-6 overflow-y-auto min-h-[calc(100vh-var(--ev-header-h)-20px)] bg-[var(--ev-bg)] p-5"
+      style={{ paddingBottom: 'calc(1.25rem + var(--ev-safe-bottom, 0px))' }}
     >
-      <VStack
-        spacing={6}
-        align="stretch"
-      >
+      <div className="flex flex-col gap-6">
         {/* Provider Details */}
-        <Box
-          bg="var(--ev-surface)"
-          borderRadius="2xl"
-          borderWidth="1px"
-          borderColor="var(--ev-border)"
-          overflow="hidden"
-          boxShadow="0 1px 3px rgba(0,0,0,0.04)"
+        <div
+          className={cardClassName}
+          style={cardStyle}
         >
-          <Box
-            px={4}
-            pt={4}
-            pb={1}
-          >
-            <Text
-              fontSize="xs"
-              fontWeight="600"
-              color="var(--ev-primary)"
-              letterSpacing="wider"
-              textTransform="uppercase"
-            >
-              Provider Details
-            </Text>
-          </Box>
-          <Box
-            pt={2}
-            pb={4}
-            px={4}
-          >
-            <Stack spacing={4}>
-              <Flex
-                flexDir="column"
-                gap={1}
-              >
-                <Text
-                  fontSize="xs"
-                  fontWeight="500"
-                  color="var(--ev-text-muted)"
-                >
-                  Provider / Station
-                </Text>
-                <Text
-                  fontSize="sm"
-                  fontWeight="500"
-                  color="var(--ev-text)"
-                >
-                  {chargerDetails.stationName}
-                </Text>
-              </Flex>
-              <Flex
-                flexDir="column"
-                gap={1}
-              >
-                <Text
-                  fontSize="xs"
-                  fontWeight="500"
-                  color="var(--ev-text-muted)"
-                >
-                  Address
-                </Text>
-                <Text
-                  fontSize="sm"
-                  fontWeight="500"
-                  color="var(--ev-text)"
-                  lineHeight="tall"
-                  wordBreak="break-word"
-                >
+          <div className={cardHeaderClass}>
+            <p className="text-xs font-semibold text-[var(--ev-primary)] tracking-wider uppercase">Provider Details</p>
+          </div>
+          <div className={cardBodyClass}>
+            <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-0.5">
+                <p className="text-xs font-medium text-[var(--ev-text-muted)]">Provider / Station</p>
+                <p className="text-sm font-medium text-[var(--ev-text)]">{chargerDetails.stationName}</p>
+              </div>
+              <div className="flex flex-col gap-0.5">
+                <p className="text-xs font-medium text-[var(--ev-text-muted)]">Address</p>
+                <p className="text-sm font-medium text-[var(--ev-text)] leading-tight break-words">
                   {selectedCharger?.address || '—'}
-                </Text>
-              </Flex>
-            </Stack>
-          </Box>
-        </Box>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
 
         {/* Charger Details */}
-        <Box
-          bg="var(--ev-surface)"
-          borderRadius="2xl"
-          borderWidth="1px"
-          borderColor="var(--ev-border)"
-          overflow="hidden"
-          boxShadow="0 1px 3px rgba(0,0,0,0.04)"
+        <div
+          className={cardClassName}
+          style={cardStyle}
         >
-          <Box
-            px={4}
-            pt={4}
-            pb={1}
-          >
-            <Text
-              fontSize="xs"
-              fontWeight="600"
-              color="var(--ev-primary)"
-              letterSpacing="wider"
-              textTransform="uppercase"
-            >
-              Charger Details
-            </Text>
-          </Box>
-          <Box
-            pt={2}
-            pb={4}
-            px={4}
-          >
-            <Stack spacing={4}>
-              <Flex
-                flexDir="column"
-                gap={1}
-              >
-                <Text
-                  fontSize="xs"
-                  fontWeight="500"
-                  color="var(--ev-text-muted)"
-                >
-                  Station Name
-                </Text>
-                <Text
-                  fontSize="sm"
-                  fontWeight="500"
-                  color="var(--ev-text)"
-                >
-                  {chargerDetails.stationName}
-                </Text>
-              </Flex>
-              <Flex
-                flexDir="column"
-                gap={1}
-              >
-                <Text
-                  fontSize="xs"
-                  fontWeight="500"
-                  color="var(--ev-text-muted)"
-                >
-                  Charger Name
-                </Text>
-                <Text
-                  fontSize="sm"
-                  fontWeight="500"
-                  color="var(--ev-text)"
-                >
-                  {chargerDetails.chargerName}
-                </Text>
-              </Flex>
-              <Flex
-                flexDir="column"
-                gap={1}
-              >
-                <Text
-                  fontSize="xs"
-                  fontWeight="500"
-                  color="var(--ev-text-muted)"
-                >
-                  Rate
-                </Text>
-                <Text
-                  fontSize="sm"
-                  fontWeight="600"
-                  color="var(--ev-primary)"
-                >
+          <div className={cardHeaderClass}>
+            <p className="text-xs font-semibold text-[var(--ev-primary)] tracking-wider uppercase">Charger Details</p>
+          </div>
+          <div className={cardBodyClass}>
+            <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-0.5">
+                <p className="text-xs font-medium text-[var(--ev-text-muted)]">Station Name</p>
+                <p className="text-sm font-medium text-[var(--ev-text)]">{chargerDetails.stationName}</p>
+              </div>
+              <div className="flex flex-col gap-0.5">
+                <p className="text-xs font-medium text-[var(--ev-text-muted)]">Charger Name</p>
+                <p className="text-sm font-medium text-[var(--ev-text)]">{chargerDetails.chargerName}</p>
+              </div>
+              <div className="flex flex-col gap-0.5">
+                <p className="text-xs font-medium text-[var(--ev-text-muted)]">Rate</p>
+                <p className="text-sm font-semibold text-[var(--ev-primary)]">
                   {currencySymbol} {chargerDetails.rate} / kWh
-                </Text>
-              </Flex>
-              <Flex
-                gap={3}
-                mt={2}
-                flexWrap="wrap"
-              >
-                <Box
-                  flex="1"
-                  minW="120px"
-                  p={3}
-                  bg="var(--ev-bg-card)"
-                  borderRadius="xl"
-                  borderWidth="1px"
-                  borderColor="var(--ev-border)"
+                </p>
+              </div>
+              <div className="flex gap-3 mt-2 flex-wrap">
+                <div
+                  className="flex-1 min-w-[120px] p-4 bg-[var(--ev-bg-card)] border border-[var(--ev-border)]"
+                  style={{ borderRadius: 'var(--ev-radius-md)' }}
                 >
-                  <Text
-                    fontSize="xs"
-                    color="var(--ev-text-muted)"
-                    mb={1}
-                  >
-                    Charger ID
-                  </Text>
-                  <Text
-                    fontSize="sm"
-                    fontWeight="600"
-                    color="var(--ev-text)"
-                    noOfLines={1}
+                  <p className="text-xs text-[var(--ev-text-muted)] mb-1">Charger ID</p>
+                  <p
+                    className="text-sm font-semibold text-[var(--ev-text)] truncate"
                     title={chargerDetails.chargerId}
                   >
                     {chargerDetails.chargerId}
-                  </Text>
-                </Box>
-                <Box
-                  flex="1"
-                  minW="80px"
-                  p={3}
-                  bg="var(--ev-bg-card)"
-                  borderRadius="xl"
-                  borderWidth="1px"
-                  borderColor="var(--ev-border)"
+                  </p>
+                </div>
+                <div
+                  className="flex-1 min-w-[80px] p-4 bg-[var(--ev-bg-card)] border border-[var(--ev-border)]"
+                  style={{ borderRadius: 'var(--ev-radius-md)' }}
                 >
-                  <Text
-                    fontSize="xs"
-                    color="var(--ev-text-muted)"
-                    mb={1}
-                  >
-                    Port Type
-                  </Text>
-                  <Text
-                    fontSize="sm"
-                    fontWeight="600"
-                    color="var(--ev-text)"
-                  >
-                    {chargerDetails.portType}
-                  </Text>
-                </Box>
-              </Flex>
-            </Stack>
-          </Box>
-        </Box>
+                  <p className="text-xs text-[var(--ev-text-muted)] mb-1">Port Type</p>
+                  <p className="text-sm font-semibold text-[var(--ev-text)]">{chargerDetails.portType}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
         {/* Connector Tariff */}
-        <Box
-          bg="var(--ev-surface)"
-          borderRadius="2xl"
-          borderWidth="1px"
-          borderColor="var(--ev-border)"
-          overflow="hidden"
-          boxShadow="0 1px 3px rgba(0,0,0,0.04)"
+        <div
+          className={cardClassName}
+          style={cardStyle}
         >
-          <Box
-            px={4}
-            pt={4}
-            pb={1}
-          >
-            <Text
-              fontSize="xs"
-              fontWeight="600"
-              color="var(--ev-primary)"
-              letterSpacing="wider"
-              textTransform="uppercase"
-            >
-              Connector Tariff
-            </Text>
-          </Box>
-          <Box
-            pt={2}
-            pb={4}
-            px={4}
-          >
-            <Box className="book_charger_form">
+          <div className={cardHeaderClass}>
+            <p className="text-xs font-semibold text-[var(--ev-primary)] tracking-wider uppercase">Connector Tariff</p>
+          </div>
+          <div className={cardBodyClass}>
+            <div className="book_charger_form">
               <BecknAuth
                 schema={{
                   buttons: [
@@ -608,7 +432,7 @@ const ChargerDetails = () => {
                 }}
                 isLoading={false}
               />
-              <Box
+              {/* <Box
                 mt={4}
                 p={4}
                 bg="var(--ev-primary-light)"
@@ -621,8 +445,8 @@ const ChargerDetails = () => {
                   align="flex-start"
                   gap={3}
                   flexWrap="wrap"
-                >
-                  <Box>
+                > */}
+              {/* <Box>
                     <Text
                       fontSize="xs"
                       fontWeight="500"
@@ -637,129 +461,76 @@ const ChargerDetails = () => {
                     >
                       (Quantity × Rate: {formData.kwhToCharge || '0'} kWh × {chargerDetails.rate} / kWh)
                     </Text>
-                  </Box>
-                  <Text
+                  </Box> */}
+              {/* <Text
                     fontSize="xl"
                     fontWeight="700"
                     color="var(--ev-primary)"
                   >
                     {currencySymbol} {calculatedAmount.toFixed(2)}
-                  </Text>
-                </Flex>
-              </Box>
-            </Box>
-          </Box>
-        </Box>
+                  </Text> */}
+              {/* </Flex>
+              </Box> */}
+            </div>
+          </div>
+        </div>
 
         {/* Payment - only after confirm */}
         {showPayment && initResponseRaw.length > 0 && (
           <>
-            <Box
-              bg="var(--ev-surface)"
-              borderRadius="2xl"
-              borderWidth="1px"
-              borderColor="var(--ev-border)"
-              overflow="hidden"
-              boxShadow="0 1px 3px rgba(0,0,0,0.04)"
+            <div
+              className={cardClassName}
+              style={cardStyle}
             >
-              <Box
-                px={4}
-                pt={4}
-                pb={1}
-              >
-                <Text
-                  fontSize="xs"
-                  fontWeight="600"
-                  color="var(--ev-primary)"
-                  letterSpacing="wider"
-                  textTransform="uppercase"
-                >
-                  Payment
-                </Text>
-              </Box>
-              <Box
-                pt={2}
-                pb={4}
-                px={4}
-              >
-                <Stack spacing={3}>
+              <div className={cardHeaderClass}>
+                <p className="text-xs font-semibold text-[var(--ev-primary)] tracking-wider uppercase">Payment</p>
+              </div>
+              <div className={cardBodyClass}>
+                <div className="flex flex-col gap-3">
                   {Object.entries(
                     getPaymentBreakDown(initResponseLegacy, parseFloat(formData.kwhToCharge)).breakUpMap
                   ).map(([label, amount]) => (
-                    <Flex
+                    <div
                       key={label}
-                      justify="space-between"
-                      align="center"
+                      className="flex justify-between items-center"
                     >
-                      <Text
-                        fontSize="sm"
-                        fontWeight="500"
-                        color="var(--ev-text)"
-                      >
-                        {label}
-                      </Text>
-                      <Text
-                        fontSize="sm"
-                        fontWeight="500"
-                        color="var(--ev-text-muted)"
-                      >
+                      <p className="text-sm font-medium text-[var(--ev-text)]">{label}</p>
+                      <p className="text-sm font-medium text-[var(--ev-text-muted)]">
                         {currencySymbol}
                         {amount.value}
-                      </Text>
-                    </Flex>
+                      </p>
+                    </div>
                   ))}
-                </Stack>
-              </Box>
-            </Box>
+                </div>
+              </div>
+            </div>
 
-            <Box
-              bg="var(--ev-surface)"
-              borderRadius="2xl"
-              borderWidth="2px"
-              borderColor="var(--ev-primary)"
-              p={4}
-              boxShadow="0 1px 3px rgba(0,0,0,0.04)"
+            <div
+              className="bg-[var(--ev-surface)] border-2 border-[var(--ev-primary)] p-2.5 transition-shadow duration-200"
+              style={{ borderRadius: 'var(--ev-radius-xl)', boxShadow: 'var(--ev-shadow-md)' }}
             >
-              <Flex
-                justify="space-between"
-                align="center"
-                gap={4}
-                flexDir={{ base: 'column', sm: 'row' }}
-              >
-                <Flex
-                  flexDir="column"
-                  gap={0}
-                >
-                  <Text
-                    fontSize="xs"
-                    fontWeight="500"
-                    color="var(--ev-text-muted)"
-                  >
-                    Total Amount
-                  </Text>
-                  <Text
-                    fontSize="2xl"
-                    fontWeight="700"
-                    color="var(--ev-primary)"
-                  >
+              <div className="flex flex-col gap-4">
+                <div className="flex flex-row gap-10 justify-between p-2.5">
+                  <p className="text-xs font-medium text-[var(--ev-text-muted)]">Total Amount</p>
+                  <p className="text-2xl font-bold text-[var(--ev-primary)]">
                     {currencySymbol}
                     {
                       getPaymentBreakDown(initResponseLegacy, parseFloat(formData.kwhToCharge)).totalPricewithCurrent
                         .value
                     }
-                  </Text>
-                </Flex>
+                  </p>
+                </div>
                 <BecknButton
                   text="Proceed to pay"
-                  sx={{ marginBottom: 0, width: { base: '100%', sm: 'auto' } }}
+                  sx={{ marginBottom: 0, width: '100%' }}
                   handleClick={() => router.push('/paymentMode')}
                 />
-              </Flex>
-            </Box>
+              </div>
+            </div>
           </>
         )}
-      </VStack>
-    </Container>
+      </div>
+    </div>
   )
 }
 

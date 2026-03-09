@@ -84,8 +84,8 @@ export function buildDiscoverRequest(textSearch: string): DiscoverRequest {
   const now = new Date().toISOString()
   const messageId = uuidv4().toString()
   const transactionId = uuidv4().toString()
-  const bapId = process.env.NEXT_PUBLIC_BAP_ID || 'ev-charging.sandbox1.com'
-  const bapUri = process.env.NEXT_PUBLIC_BAP_URI || 'http://onix-adapter:8081/bap/receiver'
+  const bapId = process.env.NEXT_PUBLIC_BAP_ID || ''
+  const bapUri = process.env.NEXT_PUBLIC_BAP_URI || ''
   return {
     context: {
       domain: DOMAIN,
@@ -98,7 +98,20 @@ export function buildDiscoverRequest(textSearch: string): DiscoverRequest {
       timestamp: now,
       ttl: 'PT30S'
     },
-    message: { text_search: textSearch || '' }
+    message: {
+      spatial: [
+        {
+          op: 's_dwithin',
+          targets: '$.catalogs[*].beckn:items[*].beckn:availableAt[*].geo',
+          geometry: {
+            type: 'Point',
+            // Backend expects GeoJSON LineString [ [lng,lat], [lng,lat] ]; type in common is number[]
+            coordinates: [12.931497116608497, 77.6237679675213] as unknown as number[]
+          },
+          distanceMeters: 10000
+        }
+      ]
+    }
   }
 }
 

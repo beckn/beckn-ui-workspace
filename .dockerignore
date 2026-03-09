@@ -1,0 +1,53 @@
+# Dependencies
+node_modules
+npm-debug.log
+yarn-error.log
+.yarn/cache
+
+# Next.js
+.next
+out
+dist
+build
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Version control
+.git
+.gitignore
+.github
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Documentation
+README.md
+CHANGELOG.md
+LICENSE
+
+# Testing
+cypress
+__tests__
+.jest
+coverage
+
+# CI/CD
+.github
+.circleci
+Jenkinsfile
+
+# Development
+.husky
+.lint-staged
+
+# OS
+.DS_Store
+Thumbs.db
