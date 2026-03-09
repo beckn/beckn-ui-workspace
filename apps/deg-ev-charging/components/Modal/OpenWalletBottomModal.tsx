@@ -1,4 +1,4 @@
-import { Box, VStack, Image, Flex, Checkbox } from '@chakra-ui/react'
+import Image from 'next/image'
 import ShadowCardButton from '@components/buttonCard/ShadowCardButton'
 import React, { useEffect, useRef, useState } from 'react'
 import metaMaskWallet from '@public/images/mm-logo 1.svg'
@@ -159,7 +159,7 @@ const OpenWalletBottomModal: React.FC<OpenWalletBottomModalProps> = ({ modalType
   ]
 
   return (
-    <Box>
+    <div>
       {(() => {
         switch (modalType) {
           case 'wallet':
@@ -169,7 +169,7 @@ const OpenWalletBottomModal: React.FC<OpenWalletBottomModalProps> = ({ modalType
                 isOpen={true}
                 onClose={() => setModalType(null)}
               >
-                <VStack>
+                <div className="flex flex-col gap-2">
                   {walletOptions.map((wallet, idx) => (
                     <ShadowCardButton
                       key={idx}
@@ -179,7 +179,8 @@ const OpenWalletBottomModal: React.FC<OpenWalletBottomModalProps> = ({ modalType
                         <Image
                           src={wallet.image}
                           alt={wallet.text}
-                          boxSize="24px"
+                          width={24}
+                          height={24}
                         />
                       }
                       handleClick={wallet.handleClick}
@@ -193,7 +194,7 @@ const OpenWalletBottomModal: React.FC<OpenWalletBottomModalProps> = ({ modalType
                     sx={{ m: '10px', cursor: 'pointer' }}
                     onClick={() => setModalType(null)}
                   />
-                </VStack>
+                </div>
               </BottomModal>
             )
 
@@ -204,7 +205,7 @@ const OpenWalletBottomModal: React.FC<OpenWalletBottomModalProps> = ({ modalType
                 isOpen={true}
                 onClose={() => setModalType(null)}
               >
-                <Box mt="10px">
+                <div className="mt-2.5">
                   <Input
                     label="Profile ID"
                     handleChange={e => setInputValue(e.target.value)}
@@ -219,7 +220,7 @@ const OpenWalletBottomModal: React.FC<OpenWalletBottomModalProps> = ({ modalType
                   >
                     Link
                   </BecknButton>
-                </Box>
+                </div>
               </BottomModal>
             )
 
@@ -236,7 +237,7 @@ const OpenWalletBottomModal: React.FC<OpenWalletBottomModalProps> = ({ modalType
                   fontWeight="400"
                   color="#80807F"
                 />
-                <Box mt="25px">
+                <div className="mt-6 flex flex-wrap gap-1">
                   {OTP.map((digit, index) => (
                     <input
                       key={index}
@@ -244,29 +245,15 @@ const OpenWalletBottomModal: React.FC<OpenWalletBottomModalProps> = ({ modalType
                       type="number"
                       maxLength={1}
                       inputMode="numeric"
-                      pattern="[0-9]"
+                      pattern="[0-9]*"
                       onChange={e => handleChange(e.target.value, index)}
                       onKeyUp={e => handleBackspaceAndEnter(e, index)}
                       ref={el => (otpBoxReference.current[index] = el)}
-                      style={{
-                        width: '42px',
-                        height: '46px',
-                        margin: '0 6px',
-                        border: '1px solid #0000001A',
-                        backgroundColor: '#D9D9D933',
-                        borderRadius: '8px',
-                        textAlign: 'center',
-                        fontSize: 'xl',
-                        outline: 'none'
-                      }}
+                      className="w-[42px] h-[46px] mx-1.5 border border-[#0000001A] bg-[#D9D9D933] rounded-lg text-center text-xl outline-none"
                     />
                   ))}
-                </Box>
-                <Flex
-                  justifyContent="end"
-                  mt="1rem"
-                  mr="10px"
-                >
+                </div>
+                <div className="flex justify-end mt-4 mr-2.5">
                   <Typography
                     text="Didn’t receive OTP?"
                     color="#80807F"
@@ -274,9 +261,9 @@ const OpenWalletBottomModal: React.FC<OpenWalletBottomModalProps> = ({ modalType
                   <Typography
                     text="Resend OTP"
                     color="#09BD71"
-                    sx={{ ml: '5px', cursor: 'pointer', _hover: { textDecoration: 'underline' } }}
+                    sx={{ ml: '5px', cursor: 'pointer' }}
                   />
-                </Flex>
+                </div>
                 <BecknButton
                   text="Verify"
                   handleClick={handleVerifyOtp}
@@ -292,11 +279,7 @@ const OpenWalletBottomModal: React.FC<OpenWalletBottomModalProps> = ({ modalType
                 isOpen={true}
                 onClose={() => setModalType(null)}
               >
-                <Flex
-                  flexDir="column"
-                  gap="10px"
-                  mb="20px"
-                >
+                <div className="flex flex-col gap-2.5 mb-5">
                   <Typography
                     text="Spark would like to fetch the following information from your wallet:"
                     fontSize="12px"
@@ -308,43 +291,25 @@ const OpenWalletBottomModal: React.FC<OpenWalletBottomModalProps> = ({ modalType
                     fontWeight="400"
                     color="#B4ABAB"
                   />
-                </Flex>
-                <VStack
-                  spacing={0}
-                  width="100%"
-                  align="stretch"
-                  mt={5}
-                  mb={'40px'}
-                >
+                </div>
+                <div className="w-full flex flex-col mt-5 mb-10">
                   {checkboxLabels.map((label, index) => (
-                    <Box
+                    <label
                       key={label}
-                      borderBottom={index !== checkboxLabels.length - 1 ? '1px solid' : 'none'}
-                      borderColor="gray.200"
-                      py={3}
+                      className={`flex items-center gap-3 py-3 cursor-pointer ${
+                        index !== checkboxLabels.length - 1 ? 'border-b border-gray-200' : ''
+                      }`}
                     >
-                      <Checkbox
-                        isChecked={checkboxes?.[label.toLowerCase()]}
+                      <input
+                        type="checkbox"
+                        checked={!!checkboxes?.[label.toLowerCase()]}
                         onChange={() => handleCheckboxChange(label)}
-                        width="100%"
-                        spacing={3}
-                        sx={{
-                          '.chakra-checkbox__control': {
-                            width: '24px',
-                            height: '24px',
-                            borderRadius: '3px',
-                            _checked: {
-                              bg: '#4398E8',
-                              borderColor: '#4398E8'
-                            }
-                          }
-                        }}
-                      >
-                        {label}
-                      </Checkbox>
-                    </Box>
+                        className="w-6 h-6 rounded border-gray-300 text-[#4398E8] focus:ring-[#4398E8]"
+                      />
+                      <span className="text-sm text-[var(--ev-text)]">{label}</span>
+                    </label>
                   ))}
-                </VStack>
+                </div>
                 <BecknButton
                   text="Confirm"
                   disabled={!Object.values(checkboxes).some(Boolean)}
@@ -378,7 +343,7 @@ const OpenWalletBottomModal: React.FC<OpenWalletBottomModalProps> = ({ modalType
             return null
         }
       })()}
-    </Box>
+    </div>
   )
 }
 

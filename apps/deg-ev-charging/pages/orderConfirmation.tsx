@@ -5,7 +5,6 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useLanguage } from '../hooks/useLanguage'
 import { ConfirmationPage } from '@beckn-ui/becknified-components'
 import axios from '@services/axios'
-import { Box, Image } from '@chakra-ui/react'
 import { CheckoutBeckn20RootState, checkoutBeckn20Actions } from '@beckn-ui/common'
 import { orderActions } from '@beckn-ui/common/src/store/order-slice'
 import { useConfirmMutation } from '@beckn-ui/common/src/services/beckn-2.0/confirm'
@@ -207,22 +206,10 @@ const OrderConfirmation = () => {
   const orderId = confirmResponse && confirmResponse.length > 0 ? confirmResponse[0].message.orderId : ''
 
   return (
-    <Box
-      className="hideScroll ev-app"
-      w="100%"
-      minH="calc(100vh - var(--ev-header-h) - 2rem)"
-      overflowY="auto"
-      display="flex"
-      flexDirection="column"
-      alignItems="center"
-      justifyContent="center"
-      p={'20px'}
-    >
-      <Box
-        w="100%"
-        boxShadow="0 1px 3px rgba(0,0,0,0.04)"
-        overflow="hidden"
-        p={{ base: 10, sm: 10 }}
+    <div className="hideScroll ev-app w-full min-h-[calc(100vh-var(--ev-header-h)-2rem)] overflow-y-auto flex flex-col items-center justify-center p-5">
+      <div
+        className="w-full max-w-md overflow-hidden p-6 sm:p-6 bg-[var(--ev-surface)] border border-[var(--ev-border)] transition-shadow duration-200"
+        style={{ borderRadius: 'var(--ev-radius-xl)', boxShadow: 'var(--ev-shadow-md)' }}
       >
         <ConfirmationPage
           className="order-confirmation"
@@ -280,8 +267,8 @@ const OrderConfirmation = () => {
             ]
           }}
         />
-      </Box>
-    </Box>
+      </div>
+    </div>
   )
 }
 

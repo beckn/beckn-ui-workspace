@@ -8,7 +8,6 @@ import { useLanguage } from '../../hooks/useLanguage'
 import styles from './Layout.module.css'
 import NextNProgress from 'nextjs-progressbar'
 import { IGeoLocationSearchPageRootState } from '@beckn-ui/common/lib/types'
-import { Box, useToast } from '@chakra-ui/react'
 import backArrow from '@public/images/location-back.svg'
 import { HEADER_CONFIG } from '@lib/config'
 import {
@@ -69,7 +68,6 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
     return state.geoLocationSearchPageUI.geoLocationSearchPageVisible
   })
 
-  const toast = useToast()
   const dispatch = useDispatch()
 
   const { user } = useSelector((state: AuthRootState) => state.auth)
@@ -115,25 +113,9 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
     }
   }, [router])
 
-  useEffect(() => {
-    if (display) {
-      toast({
-        position: 'top',
-        duration: 5000,
-        isClosable: true,
-        render: ({ onClose }) => (
-          <Toast
-            status={type as ToastType}
-            title={message}
-            description={description}
-            onClose={onClose}
-            dataTest={testIds.feedback}
-          />
-        )
-      })
-      dispatch(feedbackActions.toggleToast({ display: false }))
-    }
-  }, [display])
+  const handleCloseFeedbackToast = () => {
+    dispatch(feedbackActions.toggleToast({ display: false }))
+  }
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -155,67 +137,80 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
     const title = headerTitleByRoute[router.pathname] ?? 'EV Charging'
     const showBack = router.pathname !== '/' && !isAuthPage
     return (
-      <div
-        className={`ev-app ${showBottomNav ? 'ev-with-bottom-nav' : ''}`}
-        style={
-          showBottomNav
-            ? { height: '100dvh', overflow: 'hidden', display: 'flex', flexDirection: 'column' }
-            : isAuthPage
-              ? { minHeight: '100dvh', display: 'flex', flexDirection: 'column', background: 'var(--ev-bg)' }
-              : undefined
-        }
-      >
-        <NextNProgress height={7} />
-        <TopHeader
-          title={title}
-          showBack={showBack}
-          centerTitle={isAuthPage}
-          appName={HEADER_CONFIG.appName}
-          showHomeButton={
-            ['/', '/paymentMode', '/checkout', '/orderConfirmation'].includes(router.pathname)
-              ? false
-              : HEADER_CONFIG.showHomeButton
-          }
-          useTwoRowHeader={HEADER_CONFIG.useTwoRowHeader && !isAuthPage}
-          showTitleRow={!(HEADER_CONFIG.hideTitleOnRoutes ?? []).includes(router.pathname)}
-        />
+      <>
+        {display && (
+          <div className="fixed top-4 right-4 left-4 xs:left-auto xs:right-4 z-[100] max-w-sm ml-auto ev-toast-container">
+            <Toast
+              status={type as ToastType}
+              title={message}
+              description={description}
+              onClose={handleCloseFeedbackToast}
+              dataTest={testIds.feedback}
+            />
+          </div>
+        )}
         <div
+          className={`ev-app ${showBottomNav ? 'ev-with-bottom-nav' : ''}`}
           style={
             showBottomNav
-              ? {
-                  flex: 1,
-                  minHeight: 0,
-                  minWidth: 0,
-                  width: '100%',
-                  overflow: 'auto',
-                  overflowX: 'hidden',
-                  paddingBottom: 'calc(var(--ev-bottom-nav-h) + var(--ev-safe-bottom) + 16px)',
-                  background: 'var(--ev-bg)'
-                }
+              ? { height: '100dvh', overflow: 'hidden', display: 'flex', flexDirection: 'column' }
               : isAuthPage
-                ? {
-                    flex: 1,
-                    minHeight: 'calc(100dvh - var(--ev-header-h))',
-                    background: 'var(--ev-bg)',
-                    width: '100%',
-                    minWidth: 0,
-                    padding: '24px',
-                    paddingBottom: 'calc(24px + var(--ev-safe-bottom))',
-                    boxSizing: 'border-box'
-                  }
-                : { width: '100%', minWidth: 0, background: 'var(--ev-bg)' }
+                ? { minHeight: '100dvh', display: 'flex', flexDirection: 'column', background: 'var(--ev-bg)' }
+                : undefined
           }
         >
-          {children}
+          <NextNProgress height={7} />
+          <TopHeader
+            title={title}
+            showBack={showBack}
+            centerTitle={isAuthPage}
+            appName={HEADER_CONFIG.appName}
+            showHomeButton={
+              ['/', '/paymentMode', '/checkout', '/orderConfirmation'].includes(router.pathname)
+                ? false
+                : HEADER_CONFIG.showHomeButton
+            }
+            useTwoRowHeader={HEADER_CONFIG.useTwoRowHeader && !isAuthPage}
+            showTitleRow={!(HEADER_CONFIG.hideTitleOnRoutes ?? []).includes(router.pathname)}
+          />
+          <div
+            style={
+              showBottomNav
+                ? {
+                    flex: 1,
+                    minHeight: 0,
+                    minWidth: 0,
+                    width: '100%',
+                    overflow: 'auto',
+                    overflowX: 'hidden',
+                    paddingBottom: 'calc(var(--ev-bottom-nav-h) + var(--ev-safe-bottom) + 16px)',
+                    background: 'var(--ev-bg)'
+                  }
+                : isAuthPage
+                  ? {
+                      flex: 1,
+                      minHeight: 'calc(100dvh - var(--ev-header-h))',
+                      background: 'var(--ev-bg)',
+                      width: '100%',
+                      minWidth: 0,
+                      padding: '24px',
+                      paddingBottom: 'calc(24px + var(--ev-safe-bottom))',
+                      boxSizing: 'border-box'
+                    }
+                  : { width: '100%', minWidth: 0, background: 'var(--ev-bg)' }
+            }
+          >
+            {children}
+          </div>
+          {showBottomNav && <BottomNavigator />}
+          <ToastContainer
+            autoClose={2000}
+            hideProgressBar={true}
+            rtl={locale === 'en' ? false : true}
+            position={locale === 'en' ? 'top-right' : 'top-left'}
+          />
         </div>
-        {showBottomNav && <BottomNavigator />}
-        <ToastContainer
-          autoClose={2000}
-          hideProgressBar={true}
-          rtl={locale === 'en' ? false : true}
-          position={locale === 'en' ? 'top-right' : 'top-left'}
-        />
-      </div>
+      </>
     )
   }
 
@@ -234,16 +229,12 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
         <NextNProgress height={7} />
         <Header />
         {!geoLocationSearchPageVisible ? (
-          <Box
-            maxW={['unset', 'unset', 'unset', '70rem']}
-            w="100%"
-            margin="0 auto"
-            className={`${styles.main} ${!isHomepage ? styles.withPadding : ''} ${
+          <div
+            className={`w-full max-w-none md:max-w-[70rem] mx-auto ${styles.main} ${!isHomepage ? styles.withPadding : ''} ${
               !isHomepage && !isSearch ? styles.withMargin : ''
-            } ${isSearch ? styles.searchMargin : ''} 
-               ${isSignUp ? styles.withMarginSignUp : ''} 
-              ${isSearchPage ? styles.searchPageMargin : ''}
-              `}
+            } ${isSearch ? styles.searchMargin : ''} ${
+              isSignUp ? styles.withMarginSignUp : ''
+            } ${isSearchPage ? styles.searchPageMargin : ''}`}
             style={
               showBottomNav
                 ? { paddingBottom: 'calc(var(--ev-bottom-nav-h) + var(--ev-safe-bottom) + 16px)' }
@@ -252,7 +243,7 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
           >
             {children}
             {showBottomNav && <BottomNavigator />}
-          </Box>
+          </div>
         ) : (
           <GeoLocationInputList backIcon={backArrow} />
         )}

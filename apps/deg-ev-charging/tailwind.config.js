@@ -11,10 +11,32 @@ function withOpacity(variableName) {
 module.exports = {
   darkMode: 'class',
   mode: 'jit',
-  content: ['./pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'],
+  content: ['./pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}', './utilities/**/*.{js,ts,jsx,tsx}'],
   theme: {
+    screens: {
+      xs: '375px',
+      sm: '640px',
+      md: '768px',
+      lg: '1024px',
+      xl: '1280px',
+      '2xl': '1536px'
+    },
     extend: {
       colors: {
+        ev: {
+          primary: 'var(--ev-primary)',
+          'primary-hover': 'var(--ev-primary-hover)',
+          'primary-light': 'var(--ev-primary-light)',
+          surface: 'var(--ev-surface)',
+          bg: 'var(--ev-bg)',
+          'bg-card': 'var(--ev-bg-card)',
+          text: 'var(--ev-text)',
+          'text-muted': 'var(--ev-text-muted)',
+          border: 'var(--ev-border)',
+          error: 'var(--ev-error)',
+          success: 'var(--ev-success)',
+          warning: 'var(--ev-warning)'
+        },
         palette: {
           primary: withOpacity('--color-primary'),
           secondary: withOpacity('--color-secondary')

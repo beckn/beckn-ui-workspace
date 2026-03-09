@@ -2,7 +2,6 @@ import React, { useState, useMemo } from 'react'
 import { BecknAuth } from '@beckn-ui/becknified-components'
 import AppLogo from '@public/images/deg-logo.svg'
 import { useLanguage } from '@hooks/useLanguage'
-import { Box } from '@chakra-ui/react'
 import Router from 'next/router'
 import { useTradeLoginMutation } from '@services/UserService'
 import { signInValidateForm } from '@utils/form-utils'
@@ -61,65 +60,59 @@ const SignIn = ({ initialFormData = { email: '', password: '' } }) => {
     Router.push('/signUp')
   }
   return (
-    <Box
-      className="ev-auth-page"
-      w="100%"
-      maxW="28rem"
-      mx="auto"
-      px={{ base: 4, sm: 6 }}
-      py={{ base: 6, sm: 8 }}
-      minH="0"
-    >
-      <BecknAuth
-        schema={{
-          logo: {
-            src: AppLogo,
-            alt: 'app-logo'
-          },
-          buttons: [
-            {
-              text: t.signIn,
-              handleClick: handleSignIn,
-              disabled: !isFormFilled,
-              variant: 'solid',
-              colorScheme: 'primary',
-              isLoading: isLoading,
-              dataTest: 'login-button'
+    <div className="ev-auth-page w-full max-w-[28rem] mx-auto px-4 sm:px-6 py-6 sm:py-8 min-h-0">
+      <div className="ev-auth-card rounded-[var(--ev-radius-xl)] border border-[var(--ev-border)] p-5 sm:p-6 shadow-[var(--ev-shadow-md)] bg-[var(--ev-surface)] transition-shadow duration-200">
+        <BecknAuth
+          schema={{
+            logo: {
+              src: AppLogo,
+              alt: 'app-logo'
             },
-            {
-              text: t.signUp,
-              handleClick: handleSignUp,
-              variant: 'outline',
-              colorScheme: 'primary',
-              disabled: isLoading,
-              dataTest: 'register-button'
-            }
-          ],
-          inputs: [
-            {
-              type: 'email',
-              name: 'email',
-              variant: 'rounded',
-              label: t.enterEmailID,
-              value: formData.email,
-              handleChange: handleInputChange,
-              error: formErrors.email,
-              dataTest: 'input-email'
-            },
-            {
-              type: 'password',
-              name: 'password',
-              variant: 'rounded',
-              label: t.enterPassword,
-              value: formData.password,
-              handleChange: handleInputChange,
-              error: formErrors.password,
-              dataTest: 'input-password'
-            }
-          ]
-        }}
-      />
-    </Box>
+            buttons: [
+              {
+                text: t.signIn,
+                handleClick: handleSignIn,
+                disabled: !isFormFilled,
+                variant: 'solid',
+                colorScheme: 'primary',
+                isLoading: isLoading,
+                dataTest: 'login-button'
+              },
+              {
+                text: t.signUp,
+                handleClick: handleSignUp,
+                variant: 'outline',
+                colorScheme: 'primary',
+                disabled: isLoading,
+                dataTest: 'register-button'
+              }
+            ],
+            inputs: [
+              {
+                type: 'email',
+                name: 'email',
+                variant: 'rounded',
+                label: t.enterEmailID,
+                value: formData.email,
+                handleChange: handleInputChange,
+                error: formErrors.email,
+                dataTest: 'input-email'
+              },
+              {
+                type: 'password',
+                name: 'password',
+                variant: 'rounded',
+                label: t.enterPassword,
+                value: formData.password,
+                handleChange: handleInputChange,
+                error: formErrors.password,
+                dataTest: 'input-password'
+              }
+            ]
+          }}
+        />
+      </div>
+    </div>
   )
 }
 
