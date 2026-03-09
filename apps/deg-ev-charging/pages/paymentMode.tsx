@@ -11,8 +11,6 @@ import type { ConfirmResponseModel } from '@beckn-ui/common'
 import { testIds } from '@shared/dataTestIds'
 import Visa from '@public/images/visa.svg'
 import masterCard from '@public/images/masterCard.svg'
-import { Box } from '@chakra-ui/react'
-
 import PaymentDetailsCard from '@beckn-ui/common/src/components/paymentDetailsCard'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
 
@@ -82,34 +80,31 @@ const PaymentMode = (props: PaymentMethodSelectionProps) => {
   const isPayDisabled = !checkedPayment || disableButton || isConfirmLoading
 
   return (
-    <Box
-      className="hideScroll"
-      minH="calc(100vh - 60px)"
-      maxH="calc(100vh - 100px)"
-      overflowY="scroll"
-      px={4}
-      bg="white"
-      p={'20px'}
-    >
-      <PaymentDetailsCard
-        checkedState={checkedPayment ?? ''}
-        handleChange={handleChange}
-        paymentMethods={paymentMethods}
-        t={key => t[key]}
-      />
-      <BecknButton
-        dataTest={testIds.paymentpage_confirmButton}
-        type="button"
-        sx={{
-          marginTop: '2rem',
-          cursor: isPayDisabled ? 'not-allowed' : 'pointer'
-        }}
-        text={t.confirmOrder}
-        handleClick={handlePay}
-        disabled={isPayDisabled}
-        isLoading={isConfirmLoading}
-      />
-    </Box>
+    <div className="hideScroll ev-app min-h-[calc(100vh-60px)] max-h-[calc(100vh-100px)] overflow-y-auto px-4 sm:px-6 p-5 sm:p-6 bg-[var(--ev-bg)]">
+      <div
+        className="max-w-md mx-auto bg-[var(--ev-surface)] border border-[var(--ev-border)] p-5 sm:p-6 transition-shadow duration-200"
+        style={{ borderRadius: 'var(--ev-radius-xl)', boxShadow: 'var(--ev-shadow-md)' }}
+      >
+        <PaymentDetailsCard
+          checkedState={checkedPayment ?? ''}
+          handleChange={handleChange}
+          paymentMethods={paymentMethods}
+          t={key => t[key]}
+        />
+        <BecknButton
+          dataTest={testIds.paymentpage_confirmButton}
+          type="button"
+          sx={{
+            marginTop: '2rem',
+            cursor: isPayDisabled ? 'not-allowed' : 'pointer'
+          }}
+          text={t.confirmOrder}
+          handleClick={handlePay}
+          disabled={isPayDisabled}
+          isLoading={isConfirmLoading}
+        />
+      </div>
+    </div>
   )
 }
 

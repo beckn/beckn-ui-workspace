@@ -193,8 +193,17 @@ const DetailView = () => {
               return (
                 <>
                   {/* Card 1: Product overview – always show image (item image or default) */}
-                  <div className="bg-[var(--ev-surface)] rounded-xl sm:rounded-2xl border border-[var(--ev-border)] shadow-sm overflow-hidden mb-4">
-                    <div className="aspect-video w-full bg-[var(--ev-bg-card)]">
+                  <div
+                    className="bg-[var(--ev-surface)] border border-[var(--ev-border)] overflow-hidden mb-4 transition-shadow duration-200"
+                    style={{ borderRadius: 'var(--ev-radius-xl)', boxShadow: 'var(--ev-shadow-md)' }}
+                  >
+                    <div
+                      className="aspect-video w-full bg-[var(--ev-bg-card)] overflow-hidden"
+                      style={{
+                        borderTopLeftRadius: 'var(--ev-radius-xl)',
+                        borderTopRightRadius: 'var(--ev-radius-xl)'
+                      }}
+                    >
                       <img
                         src={productImage}
                         alt={name || 'Charging station'}
@@ -230,7 +239,10 @@ const DetailView = () => {
 
                   {/* Card 2: Specifications */}
                   {specs.length > 0 && (
-                    <div className="bg-[var(--ev-surface)] rounded-xl sm:rounded-2xl border border-[var(--ev-border)] shadow-sm overflow-hidden mb-4">
+                    <div
+                      className="bg-[var(--ev-surface)] border border-[var(--ev-border)] overflow-hidden mb-4 transition-shadow duration-200"
+                      style={{ borderRadius: 'var(--ev-radius-xl)', boxShadow: 'var(--ev-shadow-md)' }}
+                    >
                       <div className="px-4 py-3 sm:px-5 sm:py-4 border-b border-[var(--ev-border)]">
                         <h2 className="text-base font-semibold text-[var(--ev-text)]">Specifications</h2>
                       </div>
@@ -251,7 +263,10 @@ const DetailView = () => {
                   )}
 
                   {/* Card 3: Location and reviews */}
-                  <div className="bg-[var(--ev-surface)] rounded-xl sm:rounded-2xl border border-[var(--ev-border)] shadow-sm overflow-hidden mb-6">
+                  <div
+                    className="bg-[var(--ev-surface)] border border-[var(--ev-border)] overflow-hidden mb-6 transition-shadow duration-200"
+                    style={{ borderRadius: 'var(--ev-radius-xl)', boxShadow: 'var(--ev-shadow-md)' }}
+                  >
                     <div className="px-4 py-3 sm:px-5 sm:py-4">
                       {addressLine ? (
                         <div className="flex items-start gap-3 mb-3">
@@ -291,7 +306,11 @@ const DetailView = () => {
                     <button
                       type="button"
                       onClick={handleProceedToCheckout}
-                      className="w-full min-h-[var(--ev-touch-min)] py-3.5 px-6 rounded-xl font-semibold bg-[var(--ev-primary)] text-white hover:bg-[var(--ev-primary-hover)] active:opacity-90 transition text-base"
+                      className="w-full min-h-[var(--ev-touch-min)] py-3.5 px-6 font-semibold text-white bg-[var(--ev-primary)] hover:bg-[var(--ev-primary-hover)] active:scale-[0.98] disabled:active:scale-100 transition-transform duration-150 text-base"
+                      style={{
+                        borderRadius: 'var(--ev-radius-lg)',
+                        boxShadow: '0 2px 8px rgba(84,184,106,0.35)'
+                      }}
                     >
                       Proceed to checkout
                     </button>

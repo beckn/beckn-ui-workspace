@@ -1,19 +1,17 @@
 import { Typography } from '@beckn-ui/molecules'
-import { Flex, Image } from '@chakra-ui/react'
 import React from 'react'
+import Image from 'next/image'
 
 const EmptyScreenTemplate = ({ text, description, src }: { text: string; description?: string; src: string }) => {
   return (
-    <Flex
-      flexDir={'column'}
-      rowGap={'15px'}
-      p={'2rem 0'}
-      justifySelf="center"
-    >
+    <div className="flex flex-col gap-4 py-8 justify-self-center">
       <Image
         src={src}
-        data-test="empty-img"
-        alignSelf="center"
+        alt=""
+        width={120}
+        height={120}
+        className="self-center"
+        data-testid="empty-img"
       />
       <Typography
         fontSize="12px"
@@ -30,7 +28,7 @@ const EmptyScreenTemplate = ({ text, description, src }: { text: string; descrip
         text={description}
         dataTest="emptyTextDesc"
       />
-    </Flex>
+    </div>
   )
 }
 

@@ -67,12 +67,12 @@ const TopHeader: React.FC<TopHeaderProps> = ({
   const headerStyle = { paddingTop: 'var(--ev-safe-top)', boxShadow: headerShadow }
 
   const logoAndTitle = (
-    <div className="flex items-center ">
+    <div className="flex items-center gap-2 ">
       <div className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center shadow-sm shrink-0 overflow-hidden">
         <img
           src="/images/deg_icon_logo.svg"
           alt="header_logo"
-          className="w-full h-full object-contain rounded-[100px]"
+          className="w-full h-full object-cover rounded-[100px]"
         />
       </div>
       <span className="font-semibold text-base sm:text-lg text-[var(--ev-text)] truncate align-middle">{title}</span>

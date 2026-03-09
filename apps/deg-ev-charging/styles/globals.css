@@ -390,6 +390,16 @@ select:-webkit-autofill:focus {
   --ev-safe-bottom: env(safe-area-inset-bottom, 0px);
   --ev-safe-left: env(safe-area-inset-left, 0px);
   --ev-safe-right: env(safe-area-inset-right, 0px);
+  /* Modern UI: radius, shadow, transition (see UI_MODERNIZATION.md) */
+  --ev-radius-sm: 8px;
+  --ev-radius-md: 12px;
+  --ev-radius-lg: 16px;
+  --ev-radius-xl: 20px;
+  --ev-radius-2xl: 24px;
+  --ev-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --ev-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --ev-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.1);
+  --ev-transition: 0.2s ease;
 }
  
 /* Auth pages (Sign In / Sign Up): align form and controls to container */
@@ -402,10 +412,27 @@ select:-webkit-autofill:focus {
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
+  border-radius: var(--ev-radius-md);
+  transition: box-shadow var(--ev-transition), border-color var(--ev-transition);
+}
+.ev-auth-page input:focus,
+.ev-auth-page [data-chakra-input]:focus-within {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--ev-primary);
+  border-color: var(--ev-primary);
 }
 .ev-auth-page button + button,
 .ev-auth-page a + a {
   margin-top: 0.75rem;
+}
+.ev-auth-page button[type="button"]:not([aria-label="Show password"]):not([aria-label="Hide password"]) {
+  transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+}
+.ev-auth-page button[type="button"]:not([aria-label="Show password"]):not([aria-label="Hide password"]):active:not(:disabled) {
+  transform: scale(0.98);
+}
+.ev-auth-card {
+  border-radius: var(--ev-radius-xl);
 }
  
 /* Password visibility toggle (eye icon) – aligned to right edge of input */
@@ -487,6 +514,10 @@ select:-webkit-autofill:focus {
 }
 .ev-app .order-confirmation-confirm-buttons-container button {
   width: 100% !important;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.ev-app .order-confirmation-confirm-buttons-container button:active:not(:disabled) {
+  transform: scale(0.98);
 }
  
 /* Styles for rendered product cards */

@@ -1,7 +1,6 @@
 import { feedbackActions } from '@beckn-ui/common'
 import { Typography } from '@beckn-ui/molecules'
 import BecknButton from '@beckn-ui/molecules/src/components/button/Button'
-import { Box, Flex, Input } from '@chakra-ui/react'
 import { useLanguage } from '@hooks/useLanguage'
 import { useVerifyOtpMutation } from '@services/UserService'
 import React, { useEffect, useRef, useState } from 'react'
@@ -34,21 +33,13 @@ const OTPVerification = () => {
   }
 
   const handleBackspaceAndEnter = (e: React.KeyboardEvent<HTMLInputElement>, index: number) => {
-    if (e.key === 'Backspace' && !e.target.value && index > 0) {
+    if (e.key === 'Backspace' && !(e.target as HTMLInputElement).value && index > 0) {
       otpBoxReference.current[index - 1].focus()
     }
-    if (e.key === 'Enter' && e.target.value && index < numberOfDigits - 1) {
+    if (e.key === 'Enter' && (e.target as HTMLInputElement).value && index < numberOfDigits - 1) {
       otpBoxReference.current[index + 1].focus()
     }
   }
-
-  // useEffect(() => {
-  //   if (OTP.join('') !== '' && OTP.join('') !== correctOTP) {
-  //     setOTPError('❌ Wrong OTP Please Check Again')
-  //   } else {
-  //     setOTPError(null)
-  //   }
-  // }, [OTP])
 
   const handleVerifyOtp = async () => {
     const data = {
@@ -74,13 +65,7 @@ const OTPVerification = () => {
   }
 
   return (
-    <Box
-      margin={'0 auto'}
-      maxW={['100%', '100%', '40rem', '40rem']}
-      justifyItems={'center'}
-      textAlign="center"
-      marginTop={{ base: '10px', md: '60px', lg: '20px' }}
-    >
+    <div className="mx-auto max-w-full md:max-w-[40rem] text-center mt-2.5 md:mt-[60px] lg:mt-5">
       <Typography
         text={t.otpDescription}
         fontSize="12px"
@@ -90,43 +75,28 @@ const OTPVerification = () => {
           marginTop: '16px'
         }}
       />
-      <Flex
-        flexDirection={'column'}
-        justifyContent={'space-between'}
-        height={'calc(100vh - 650px)'}
-        gap={'20px'}
-      >
-        <Box mt={'25px'}>
-          <Flex gap={'1rem'}>
+      <div className="flex flex-col justify-between gap-5 min-h-[calc(100vh-650px)]">
+        <div className="mt-6">
+          <div className="flex gap-4">
             {OTP.map((digit, index) => (
-              <Input
+              <input
                 key={index}
                 value={digit}
                 maxLength={1}
                 inputMode="numeric"
-                pattern="[0-9]"
+                pattern="[0-9]*"
                 onChange={e => handleChange(e.target.value, index)}
                 onKeyUp={e => handleBackspaceAndEnter(e, index)}
-                ref={el => (otpBoxReference.current[index] = el)}
-                w="42px"
-                h="46px"
-                p="3"
-                // margin={'0 6px'}
-                background={'#D9D9D933 !important'}
-                border="2px solid #0000001A"
-                borderRadius="md"
-                textAlign="center"
-                fontSize="xl"
-                _focus={{ borderColor: 'blue.400', borderWidth: '2px', outline: 'none' }}
+                ref={el => {
+                  otpBoxReference.current[index] = el
+                }}
+                className="w-[42px] h-[46px] p-3 bg-[#D9D9D933] border-2 border-[#0000001A] rounded-md text-center text-xl text-[var(--ev-text)] focus:border-blue-400 focus:outline-none focus:ring-0"
               />
             ))}
-          </Flex>
-          <Flex
-            justifyContent={'end'}
-            marginTop={'1rem'}
-          >
+          </div>
+          <div className="flex justify-end mt-4">
             <Typography
-              text={'Didn’t receive OTP?'}
+              text={"Didn't receive OTP?"}
               color={'#80807F'}
             />
             <Typography
@@ -134,20 +104,18 @@ const OTPVerification = () => {
               color={'#4498E8'}
               sx={{
                 marginLeft: '5px',
-                cursor: 'pointer',
-                _hover: { textDecoration: 'underline' }
+                cursor: 'pointer'
               }}
             />
-          </Flex>
-        </Box>
+          </div>
+        </div>
         <BecknButton
           text="Verify OTP"
           handleClick={handleVerifyOtp}
-          // sx={{ marginTop: '60px' }}
           dataTest="otp_number"
         />
-      </Flex>
-    </Box>
+      </div>
+    </div>
   )
 }
 
