@@ -473,6 +473,12 @@ select:-webkit-autofill:focus {
   color: var(--ev-text-muted);
 }
  
+/* Search-by-location map: ensure station markers are clickable */
+.ev-station-marker.leaflet-marker-icon {
+  pointer-events: auto !important;
+  cursor: pointer;
+}
+
 /* Touch-friendly tap targets */
 .ev-app .ev-tap-target {
   min-height: var(--ev-touch-min);

@@ -45,7 +45,7 @@ function MyApp({ Component, pageProps }: AppProps) {
               fallback={() => (
                 <FallbackUI
                   handleBackToHomeClick={() => {
-                    router.push('/')
+                    router.push('/searchByLocation')
                   }}
                   handleContactSupport={() => {}}
                   t={key => t[key]}

@@ -43,7 +43,7 @@ const slice = createSlice({
     }
   },
   extraReducers: builder => {
-    builder
+    ;(builder
       .addMatcher(extendedAuthApi.endpoints.tradeLogin.matchPending, (state, action) => {
         console.log('pending', action)
       })
@@ -55,7 +55,19 @@ const slice = createSlice({
         Cookies.set('authToken', state.jwt)
         Cookies.set('isVerified', 'true')
 
-        Router.push('/')
+        let returnUrl = '/searchByLocation'
+        if (typeof window !== 'undefined') {
+          try {
+            const stored = sessionStorage.getItem('authReturnUrl')
+            if (stored && stored.startsWith('/')) {
+              returnUrl = stored
+              sessionStorage.removeItem('authReturnUrl')
+            }
+          } catch {
+            // ignore
+          }
+        }
+        Router.push(returnUrl)
       })
       .addMatcher(extendedAuthApi.endpoints.tradeLogin.matchRejected, (state, action) => {
         console.log('rejected', action)
@@ -72,7 +84,7 @@ const slice = createSlice({
           Cookies.set('isVerified', 'true')
           state.isAuthenticated = true
 
-          let returnUrl = '/'
+          let returnUrl = '/searchByLocation'
           if (typeof window !== 'undefined') {
             try {
               const stored = sessionStorage.getItem('authReturnUrl')
@@ -100,7 +112,7 @@ const slice = createSlice({
           Cookies.set('isVerified', verified.toString())
 
           if (verified) {
-            let returnUrl = '/'
+            let returnUrl = '/searchByLocation'
             if (typeof window !== 'undefined') {
               try {
                 const stored = sessionStorage.getItem('authReturnUrl')
@@ -119,7 +131,7 @@ const slice = createSlice({
         })
         .addMatcher(extendedAuthApi.endpoints.verifyOtp.matchRejected, (state, action) => {
           console.log('rejected', action)
-        })
+        }))
   }
 })
 

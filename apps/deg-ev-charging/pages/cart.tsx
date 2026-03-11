@@ -24,7 +24,7 @@ const Cart = () => {
         <div className="ev-app min-h-full bg-[var(--ev-bg)] flex flex-col items-center justify-center px-4 py-8">
           <p className="text-[var(--ev-text-muted)] text-sm sm:text-base mb-6">Your cart is empty.</p>
           <Link
-            href="/"
+            href="/searchByLocation"
             className="min-h-[var(--ev-touch-min)] flex items-center justify-center py-3 px-6 rounded-xl font-medium bg-[var(--ev-primary)] text-white hover:opacity-90 active:opacity-90 text-base"
           >
             Find charging stations

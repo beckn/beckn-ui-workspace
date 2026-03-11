@@ -415,8 +415,8 @@ const MonitorCharging = () => {
             text="Go Home"
             variant="outline"
             handleClick={() => {
-              localStorage.setItem('selectedRoute', '/')
-              router.push('/')
+              localStorage.setItem('selectedRoute', '/searchByLocation')
+              router.push('/searchByLocation')
             }}
           />
         )}

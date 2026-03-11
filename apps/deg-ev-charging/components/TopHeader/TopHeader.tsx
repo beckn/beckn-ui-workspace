@@ -123,7 +123,7 @@ const TopHeader: React.FC<TopHeaderProps> = ({
             className={`flex items-center justify-between gap-3 ${showTitleRow ? 'min-h-[2.5rem]' : 'min-h-[2.5rem]'}`}
           >
             <Link
-              href="/"
+              href="/searchByLocation"
               className="flex items-center min-h-[var(--ev-touch-min)] shrink-0 no-underline"
               aria-label={appName ?? 'Home'}
             >
@@ -135,15 +135,15 @@ const TopHeader: React.FC<TopHeaderProps> = ({
                 />
               </div>
             </Link>
-            {showHomeButton && (
+            {showHomeButton ? (
               <Link
-                href="/"
+                href="/searchByLocation"
                 className="min-h-11 min-w-11 flex items-center justify-center text-[var(--ev-text-muted)] hover:text-[var(--ev-primary)] active:opacity-80 transition shrink-0"
                 aria-label="Home"
               >
                 <HomeIcon />
               </Link>
-            )}
+            ) : null}
           </div>
         </div>
         {showTitleRow && (
@@ -187,7 +187,7 @@ const TopHeader: React.FC<TopHeaderProps> = ({
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-2.5 sm:py-3 flex items-center justify-between gap-3 min-h-[2.75rem]">
         <Link
-          href="/"
+          href="/searchByLocation"
           className="flex items-center gap-2 no-underline text-[var(--ev-text)] min-h-[var(--ev-touch-min)]"
         >
           {logoAndTitle}

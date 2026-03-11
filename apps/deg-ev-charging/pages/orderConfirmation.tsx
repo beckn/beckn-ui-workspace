@@ -203,10 +203,19 @@ const OrderConfirmation = () => {
   //   )
   // }
 
-  const orderId = confirmResponse && confirmResponse.length > 0 ? confirmResponse[0].message.orderId : ''
+  // Support both normalized (message.orderNumber) and raw API (message.order.orderNumber) shapes
+  const firstConfirm = confirmResponse?.[0]
+  const firstMessage = firstConfirm?.message as Record<string, unknown> | undefined
+  const rawOrder = firstMessage?.order as { orderNumber?: string; id?: string } | undefined
+  const orderDisplay =
+    (firstMessage?.orderNumber as string | undefined) ??
+    rawOrder?.orderNumber ??
+    (firstMessage?.orderId as string | undefined) ??
+    rawOrder?.id ??
+    ''
 
   return (
-    <div className="hideScroll ev-app w-full min-h-[calc(100vh-var(--ev-header-h)-2rem)] overflow-y-auto flex flex-col items-center justify-center p-5">
+    <div className="hideScroll ev-app w-full min-h-[calc(100vh-var(--ev-header-h)-2rem)] overflow-y-auto flex flex-col items-center p-5">
       <div
         className="w-full max-w-md overflow-hidden p-6 sm:p-6 bg-[var(--ev-surface)] border border-[var(--ev-border)] transition-shadow duration-200"
         style={{ borderRadius: 'var(--ev-radius-xl)', boxShadow: 'var(--ev-shadow-md)' }}
@@ -217,13 +226,13 @@ const OrderConfirmation = () => {
             iconSrc: orderConfirmmark,
             successOrderMessage: 'Congratulations!',
             gratefulMessage: 'your booking is successful!',
-            orderIdMessage: orderId ? `Order ID: ${orderId}` : '',
+            orderIdMessage: orderDisplay ? `Order number: ${orderDisplay}` : '',
 
             buttons: [
               {
                 text: 'Go Back to Home',
                 handleClick: () => {
-                  router.push('/')
+                  router.push('/searchByLocation')
                 },
                 variant: 'outline',
                 colorScheme: 'primary',

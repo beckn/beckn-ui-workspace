@@ -162,7 +162,7 @@ const Discovery = () => {
             <div className="text-center py-12 sm:py-16 text-[var(--ev-text-muted)] text-sm sm:text-base">
               <p>No charging stations found. Try another search.</p>
               <Link
-                href="/"
+                href="/searchByLocation"
                 className="inline-block mt-4 min-h-[var(--ev-touch-min)] flex items-center justify-center text-[var(--ev-primary)] font-medium hover:underline"
               >
                 Back to search
