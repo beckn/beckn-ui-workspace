@@ -266,6 +266,7 @@ export function normalizeConfirmResponse20ToLegacy(confirmResponse: {
     context: confirmResponse.context,
     message: {
       orderId: order.id ?? order.orderNumber ?? '',
+      orderNumber: order.orderNumber ?? order.id ?? '',
       provider: { id: order.seller, name: '' },
       items,
       quote: { price: { value: String(value), currency } },

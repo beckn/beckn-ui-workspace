@@ -80,7 +80,12 @@ export function escapeHtml(s: string): string {
 }
 
 /** Build discover request using common types (BecknContext + DiscoverMessage) */
-export function buildDiscoverRequest(textSearch: string): DiscoverRequest {
+export function buildDiscoverRequest(_textSearch: string): DiscoverRequest {
+  return buildDiscoverRequestByLocation(12.931497116608497, 77.6237679675213)
+}
+
+/** Build discover request with spatial filter around lat/lng (GeoJSON coordinates are [lng, lat]) */
+export function buildDiscoverRequestByLocation(lat: number, lng: number): DiscoverRequest {
   const now = new Date().toISOString()
   const messageId = uuidv4().toString()
   const transactionId = uuidv4().toString()
@@ -105,8 +110,7 @@ export function buildDiscoverRequest(textSearch: string): DiscoverRequest {
           targets: '$.catalogs[*].beckn:items[*].beckn:availableAt[*].geo',
           geometry: {
             type: 'Point',
-            // Backend expects GeoJSON LineString [ [lng,lat], [lng,lat] ]; type in common is number[]
-            coordinates: [12.931497116608497, 77.6237679675213] as unknown as number[]
+            coordinates: [lat, lng] as unknown as number[]
           },
           distanceMeters: 10000
         }
@@ -123,6 +127,50 @@ export function getTransactionIdFromResponse(data: unknown): string | undefined 
   const ctx = body?.context as Record<string, unknown> | undefined
   const id = ctx?.transaction_id
   return typeof id === 'string' ? id : undefined
+}
+
+/** Get lat/lng from item's availableAt[0].geo.coordinates. API returns [lat, lng] (e.g. [12.93, 77.62]); returns null if missing */
+export function getItemCoordinates(item: Record<string, unknown>): { lat: number; lng: number } | null {
+  const at = item['availableAt']
+  const first = Array.isArray(at) ? at[0] : at && typeof at === 'object' ? at : undefined
+  if (!first || typeof first !== 'object') return null
+  const loc = first as Record<string, unknown>
+  const geo = loc['geo'] as Record<string, unknown> | undefined
+  const coords = geo && Array.isArray(geo['coordinates']) ? (geo['coordinates'] as number[]) : []
+  if (coords.length < 2) return null
+  return { lat: coords[0], lng: coords[1] }
+}
+
+/** One entry per availableAt: { lat, lng, address } (GeoJSON coordinates [lng, lat]) */
+function formatAddressFromLoc(addr: Record<string, unknown> | undefined): string {
+  if (!addr || typeof addr !== 'object') return ''
+  const parts = [
+    addr.streetAddress,
+    addr.addressLocality,
+    addr.addressRegion,
+    addr.postalCode,
+    addr.addressCountry
+  ].filter(Boolean) as string[]
+  return parts.join(', ')
+}
+
+/** Return all location entries for an item (one per availableAt); used for one-marker-per-location map. API returns geo.coordinates as [lat, lng]. */
+export function getItemLocationEntries(
+  item: Record<string, unknown>
+): Array<{ lat: number; lng: number; address: string }> {
+  const at = item['availableAt']
+  const arr = Array.isArray(at) ? at : at && typeof at === 'object' ? [at] : []
+  const out: Array<{ lat: number; lng: number; address: string }> = []
+  for (const loc of arr) {
+    if (!loc || typeof loc !== 'object') continue
+    const rec = loc as Record<string, unknown>
+    const geo = rec['geo'] as Record<string, unknown> | undefined
+    const coords = geo && Array.isArray(geo['coordinates']) ? (geo['coordinates'] as number[]) : []
+    if (coords.length < 2) continue
+    const address = formatAddressFromLoc(rec['address'] as Record<string, unknown> | undefined)
+    out.push({ lat: coords[0], lng: coords[1], address })
+  }
+  return out
 }
 
 /** Find item by id across all catalogs; returns catalog and item or null */

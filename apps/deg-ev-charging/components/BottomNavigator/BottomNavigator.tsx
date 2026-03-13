@@ -10,17 +10,26 @@ import SelectProfileNavIcon from '@public/images/select_profile_nav_icon.svg'
 
 const BottomNavigator = () => {
   const router = useRouter()
-  const [selectedRoute, setSelectedRoute] = useState('/')
+  const HOME_PATH = '/searchByLocation'
+  const [selectedRoute, setSelectedRoute] = useState(HOME_PATH)
 
   useEffect(() => {
     const storedRoute = localStorage.getItem('selectedRoute')
-    if (storedRoute) {
-      setSelectedRoute(storedRoute)
-      if (router.pathname !== storedRoute) {
-        router.push(storedRoute)
-      }
+    const route = storedRoute === '/' ? HOME_PATH : storedRoute || HOME_PATH
+    setSelectedRoute(route)
+    if (storedRoute === '/' && router.pathname !== HOME_PATH) {
+      router.push(HOME_PATH)
+    } else if (storedRoute && storedRoute !== '/' && router.pathname !== storedRoute) {
+      router.push(storedRoute)
     }
   }, [])
+
+  useEffect(() => {
+    const path = router.pathname === '/' ? HOME_PATH : router.pathname
+    if (path === HOME_PATH || path === '/orderHistory' || path === '/profile') {
+      setSelectedRoute(path)
+    }
+  }, [router.pathname])
 
   const handleNavigation = (path: string) => {
     setSelectedRoute(path)
@@ -31,9 +40,9 @@ const BottomNavigator = () => {
   const navItems = [
     {
       label: 'Home',
-      icon: selectedRoute === '/' ? SelectHomeNavIcon : HomeNavIcon,
-      path: '/',
-      color: selectedRoute === '/' ? 'var(--ev-primary)' : undefined
+      icon: selectedRoute === HOME_PATH ? SelectHomeNavIcon : HomeNavIcon,
+      path: HOME_PATH,
+      color: selectedRoute === HOME_PATH ? 'var(--ev-primary)' : undefined
     },
     {
       label: 'Chargers',

@@ -74,7 +74,7 @@ const SignUp = () => {
         if (jwtToken) {
           Cookies.set('authToken', jwtToken)
         }
-        Router.push('/')
+        Router.push('/searchByLocation')
       } catch (error) {
         console.error('An error occurred:', error)
       }

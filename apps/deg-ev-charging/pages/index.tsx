@@ -1,130 +1,13 @@
-import React, { useState } from 'react'
-import Head from 'next/head'
+import React, { useEffect } from 'react'
 import { useRouter } from 'next/router'
 
-const HomePage = () => {
+/** Homepage removed: redirect to Search by location (middleware also redirects / to /searchByLocation or /signIn) */
+const HomeRedirect = () => {
   const router = useRouter()
-  const [searchKeyword, setSearchKeyword] = useState('')
-  const [error, setError] = useState('')
-
-  const handleSearch = () => {
-    const q = searchKeyword.trim()
-    setError('')
-    if (!q) {
-      setError('Please enter a search term')
-      return
-    }
-    router.push({ pathname: '/discovery', query: { search: q } })
-  }
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') handleSearch()
-  }
-
-  return (
-    <>
-      <Head>
-        <title>EV Hub – Find charging stations</title>
-        <meta
-          name="description"
-          content="Search and discover EV charging stations near you"
-        />
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1, viewport-fit=cover"
-        />
-      </Head>
-      <div className="ev-app bg-[var(--ev-bg)] flex flex-col min-h-full">
-        {/* Hero + Search – mobile-first, EV imagery */}
-        <main className="flex-1 flex flex-col w-full relative pb-[calc(1.5rem+var(--ev-safe-bottom))]">
-          <section className="relative w-full min-h-[280px] sm:min-h-[320px] flex items-end justify-center overflow-hidden bg-[var(--ev-bg-card)]">
-            <img
-              src="https://images.unsplash.com/photo-1593941707882-a5bba14938c7?w=1200&q=80"
-              alt="EV charging station"
-              className="absolute inset-0 w-full h-full object-cover object-center"
-              onError={e => {
-                e.currentTarget.style.display = 'none'
-              }}
-            />
-            <div
-              className="absolute inset-0 pointer-events-none bg-gradient-to-t from-white via-white/50 to-transparent"
-              aria-hidden
-            />
-            <div className="relative z-10 w-full max-w-2xl px-4 pb-6 sm:pb-8 text-center">
-              <div className="inline-flex items-center justify-center mb-3 sm:mb-4 flex-shrink-0">
-                <img
-                  src="/images/deg-logo.svg"
-                  alt="EV Hub"
-                  width={270}
-                  height={180}
-                  className="max-w-full h-auto object-contain"
-                />
-              </div>
-              <p className="text-sm sm:text-base text-[var(--ev-text-muted)] px-1">Find charging stations near you</p>
-            </div>
-          </section>
-          <div className="w-full max-w-2xl mx-auto px-4 -mt-2 sm:mt-0 text-center">
-            {/* Search – full width, touch-friendly on mobile */}
-            <div className="relative w-full">
-              <div
-                className="flex flex-row items-stretch bg-[var(--ev-surface)] border border-[var(--ev-border)] overflow-hidden transition-shadow duration-200 focus-within:ring-2 focus-within:ring-[var(--ev-primary)] focus-within:border-[var(--ev-primary)]"
-                style={{
-                  borderRadius: 'var(--ev-radius-xl)',
-                  boxShadow: 'var(--ev-shadow-md)'
-                }}
-              >
-                <input
-                  type="search"
-                  placeholder="e.g. CCS2, fast charger, Bengaluru..."
-                  value={searchKeyword}
-                  onChange={e => setSearchKeyword(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  className="flex-1 min-w-0 px-4 sm:px-5 py-3.5 sm:py-4 text-base text-[var(--ev-text)] border-0 bg-transparent outline-none placeholder:text-[var(--ev-text-muted)] min-h-[var(--ev-touch-min)]"
-                  aria-label="Search for charging stations"
-                />
-                <button
-                  type="button"
-                  onClick={handleSearch}
-                  disabled={!searchKeyword.trim()}
-                  className="min-h-[var(--ev-touch-min)] min-w-[var(--ev-touch-min)] px-4 py-3.5 sm:py-4 font-medium text-white bg-[var(--ev-primary)] hover:bg-[var(--ev-primary-hover)] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100 transition-transform duration-150 flex items-center justify-center shrink-0"
-                  style={{ borderRadius: '0 var(--ev-radius-xl) var(--ev-radius-xl) 0' }}
-                  aria-label="Search"
-                >
-                  <svg
-                    className="w-5 h-5 shrink-0"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                    />
-                  </svg>
-                </button>
-              </div>
-              {error && <p className="mt-2 text-sm text-[var(--ev-error)]">{error}</p>}
-            </div>
-
-            <p className="mt-4 sm:mt-6 text-sm text-[var(--ev-text-muted)] px-2">
-              Results are powered by the Beckn network.
-            </p>
-          </div>
-        </main>
-
-        <footer className="w-full border-t border-[var(--ev-border)] bg-[var(--ev-surface)]">
-          <div
-            className="max-w-2xl mx-auto px-4 sm:px-6 py-3 sm:py-4 text-center text-xs sm:text-sm text-[var(--ev-text-muted)]"
-            style={{ paddingBottom: 'calc(0.75rem + var(--ev-safe-bottom))' }}
-          >
-            <p className="mb-1">EV Hub · Beckn-powered</p>
-          </div>
-        </footer>
-      </div>
-    </>
-  )
+  useEffect(() => {
+    router.replace('/searchByLocation')
+  }, [router])
+  return null
 }
 
-export default HomePage
+export default HomeRedirect

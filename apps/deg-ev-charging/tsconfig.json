@@ -4,6 +4,7 @@
     "jsx": "preserve",
     "paths": {
       "@components/*": ["./components/*"],
+      "@contexts/*": ["./contexts/*"],
       "@hooks/*": ["./hooks/*"],
       "@services/*": ["./services/*"],
       "@lib/*": ["./lib/*"],

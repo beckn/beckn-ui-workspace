@@ -3,6 +3,7 @@ import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, 
 import storage from 'redux-persist/lib/storage'
 import authReducer from './auth-slice'
 import userReducer from './user-slice'
+import searchByLocationReducer from './searchByLocation-slice'
 import SelectChargerReducer from './chargerSelect-slice'
 import cabServiceReducer from './cabService-slice'
 import policyReducer from './policy-slice'
@@ -16,7 +17,7 @@ import didApi from '@services/didApi'
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['auth', 'user', 'cart', 'selectCharger', 'discover']
+  whitelist: ['auth', 'user', 'cart', 'selectCharger', 'discover', 'searchByLocation']
 }
 
 const appReducer = combineReducers({
@@ -30,6 +31,7 @@ const appReducer = combineReducers({
   geoLocationSearchPageUI: geoMapLocationSearchReducer,
   discover: discoverReducer,
   selectCharger: SelectChargerReducer,
+  searchByLocation: searchByLocationReducer,
   feedback: feedbackReducer,
   cabService: cabServiceReducer,
   policy: policyReducer

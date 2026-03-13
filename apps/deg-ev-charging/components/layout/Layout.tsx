@@ -26,13 +26,15 @@ import Cookies from 'js-cookie'
 import { AuthRootState } from '@store/auth-slice'
 import BottomNavigator from '@components/BottomNavigator/BottomNavigator'
 import TopHeader from '@components/TopHeader/TopHeader'
+import { SearchPageHeaderProvider } from '@contexts/SearchPageHeaderContext'
 
-const bottomNavigatorWhiteList = ['/', '/discovery', '/cart', '/orderHistory', '/profile']
+const bottomNavigatorWhiteList = ['/searchByLocation', '/discovery', '/cart', '/orderHistory', '/profile']
 
 const evLayoutRoutes = [
-  '/',
+  '/searchByLocation',
   '/discovery',
   '/detailView',
+  '/searchByLocation',
   '/cart',
   '/checkout',
   '/paymentMode',
@@ -44,7 +46,7 @@ const evLayoutRoutes = [
 ]
 
 const headerTitleByRoute: Record<string, string> = {
-  '/': 'EV Hub',
+  '/searchByLocation': 'Search by location',
   '/discovery': 'Discover Page',
   '/detailView': 'Details View',
   '/cart': 'Cart',
@@ -60,7 +62,7 @@ const headerTitleByRoute: Record<string, string> = {
 const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const { locale } = useLanguage()
   const router = useRouter()
-  const isHomepage = router.pathname === '/'
+  const isHomepage = router.pathname === '/searchByLocation'
   const isSearch = router.pathname === '/search'
   const isSignUp = router.pathname === '/signUp'
   const isSearchPage = router.pathname === '/search'
@@ -81,7 +83,7 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
     // Exclude home, discovery, detailView, checkout, paymentMode and auth pages from token check (avoid clearing checkout state on payment flow)
     if (
       ![
-        '/',
+        '/searchByLocation',
         '/signIn',
         '/signUp',
         '/OTPVerification',
@@ -134,8 +136,10 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   if (evLayoutRoutes.includes(router.pathname)) {
     const showBottomNav = bottomNavigatorWhiteList.includes(router.pathname)
     const isAuthPage = router.pathname === '/signIn' || router.pathname === '/signUp'
+    const isSearchByLocationPage = router.pathname === '/searchByLocation'
     const title = headerTitleByRoute[router.pathname] ?? 'EV Charging'
-    const showBack = router.pathname !== '/' && !isAuthPage
+    const showBack = router.pathname !== '/searchByLocation' && !isAuthPage
+    const useFullHeightContent = showBottomNav || isSearchByLocationPage
     return (
       <>
         {display && (
@@ -152,63 +156,77 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
         <div
           className={`ev-app ${showBottomNav ? 'ev-with-bottom-nav' : ''}`}
           style={
-            showBottomNav
+            useFullHeightContent
               ? { height: '100dvh', overflow: 'hidden', display: 'flex', flexDirection: 'column' }
               : isAuthPage
                 ? { minHeight: '100dvh', display: 'flex', flexDirection: 'column', background: 'var(--ev-bg)' }
                 : undefined
           }
         >
-          <NextNProgress height={7} />
-          <TopHeader
-            title={title}
-            showBack={showBack}
-            centerTitle={isAuthPage}
-            appName={HEADER_CONFIG.appName}
-            showHomeButton={
-              ['/', '/paymentMode', '/checkout', '/orderConfirmation'].includes(router.pathname)
-                ? false
-                : HEADER_CONFIG.showHomeButton
-            }
-            useTwoRowHeader={HEADER_CONFIG.useTwoRowHeader && !isAuthPage}
-            showTitleRow={!(HEADER_CONFIG.hideTitleOnRoutes ?? []).includes(router.pathname)}
-          />
-          <div
-            style={
-              showBottomNav
-                ? {
-                    flex: 1,
-                    minHeight: 0,
-                    minWidth: 0,
-                    width: '100%',
-                    overflow: 'auto',
-                    overflowX: 'hidden',
-                    paddingBottom: 'calc(var(--ev-bottom-nav-h) + var(--ev-safe-bottom) + 16px)',
-                    background: 'var(--ev-bg)'
-                  }
-                : isAuthPage
+          <SearchPageHeaderProvider>
+            <NextNProgress height={7} />
+            <TopHeader
+              title={title}
+              showBack={showBack}
+              centerTitle={isAuthPage}
+              appName={HEADER_CONFIG.appName}
+              showHomeButton={
+                ['/searchByLocation', '/paymentMode', '/checkout', '/orderConfirmation'].includes(router.pathname)
+                  ? false
+                  : HEADER_CONFIG.showHomeButton
+              }
+              useTwoRowHeader={HEADER_CONFIG.useTwoRowHeader && !isAuthPage}
+              showTitleRow={!(HEADER_CONFIG.hideTitleOnRoutes ?? []).includes(router.pathname)}
+            />
+            <div
+              style={
+                isSearchByLocationPage
                   ? {
                       flex: 1,
-                      minHeight: 'calc(100dvh - var(--ev-header-h))',
-                      background: 'var(--ev-bg)',
-                      width: '100%',
+                      minHeight: 0,
                       minWidth: 0,
-                      padding: '24px',
-                      paddingBottom: 'calc(24px + var(--ev-safe-bottom))',
-                      boxSizing: 'border-box'
+                      width: '100%',
+                      overflow: 'hidden',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      paddingBottom: 'calc(var(--ev-bottom-nav-h) + var(--ev-safe-bottom) + 16px)',
+                      background: 'var(--ev-bg)'
                     }
-                  : { width: '100%', minWidth: 0, background: 'var(--ev-bg)' }
-            }
-          >
-            {children}
-          </div>
-          {showBottomNav && <BottomNavigator />}
-          <ToastContainer
-            autoClose={2000}
-            hideProgressBar={true}
-            rtl={locale === 'en' ? false : true}
-            position={locale === 'en' ? 'top-right' : 'top-left'}
-          />
+                  : showBottomNav
+                    ? {
+                        flex: 1,
+                        minHeight: 0,
+                        minWidth: 0,
+                        width: '100%',
+                        overflow: 'auto',
+                        overflowX: 'hidden',
+                        paddingBottom: 'calc(var(--ev-bottom-nav-h) + var(--ev-safe-bottom) + 16px)',
+                        background: 'var(--ev-bg)'
+                      }
+                    : isAuthPage
+                      ? {
+                          flex: 1,
+                          minHeight: 'calc(100dvh - var(--ev-header-h))',
+                          background: 'var(--ev-bg)',
+                          width: '100%',
+                          minWidth: 0,
+                          padding: '24px',
+                          paddingBottom: 'calc(24px + var(--ev-safe-bottom))',
+                          boxSizing: 'border-box'
+                        }
+                      : { width: '100%', minWidth: 0, background: 'var(--ev-bg)' }
+              }
+            >
+              {children}
+            </div>
+            {showBottomNav && <BottomNavigator />}
+            <ToastContainer
+              autoClose={2000}
+              hideProgressBar={true}
+              rtl={locale === 'en' ? false : true}
+              position={locale === 'en' ? 'top-right' : 'top-left'}
+            />
+          </SearchPageHeaderProvider>
         </div>
       </>
     )

@@ -8,6 +8,7 @@ const publicPaths = [
   '/OTPVerification',
   '/discovery',
   '/detailView',
+  '/searchByLocation',
   '/cart',
   '/checkout',
   '/paymentMode',
@@ -18,9 +19,14 @@ export default function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl
   const authToken = req.cookies.get('authToken')?.value
 
-  // Unauthenticated users opening home are sent to sign-in page
-  if (pathname === '/' && !authToken) {
-    return NextResponse.redirect(new URL('/signIn', req.url))
+  // Home removed: redirect / to searchByLocation (or signIn with returnUrl if not authenticated)
+  if (pathname === '/') {
+    if (!authToken) {
+      const signInUrl = new URL('/signIn', req.url)
+      signInUrl.searchParams.set('returnUrl', '/searchByLocation')
+      return NextResponse.redirect(signInUrl)
+    }
+    return NextResponse.redirect(new URL('/searchByLocation', req.url))
   }
 
   if (publicPaths.includes(pathname)) {
