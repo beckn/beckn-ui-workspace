@@ -25,6 +25,7 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const isSearch = router.pathname === '/search'
   const isSignUp = router.pathname === '/signUp'
   const isSearchPage = router.pathname === '/search'
+  const isMyStore = router.pathname === '/myStore'
   const geoLocationSearchPageVisible = useSelector((state: IGeoLocationSearchPageRootState) => {
     return state.geoLocationSearchPageUI.geoLocationSearchPageVisible
   })
@@ -113,6 +114,7 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
                ${isSignUp ? styles.withMarginSignUp : ''} 
               ${isSearchPage ? styles.searchPageMargin : ''}
               ${isHome ? styles.homepageMargin : ''}
+              ${isMyStore ? styles.myStore : ''}
               `}
           >
             {children}
