@@ -15,6 +15,7 @@ import {
   getCatalogsFromResponse,
   getCatalogItemsAndOffers,
   getItemLocationEntries,
+  getItemPriceFromCatalog,
   getTransactionIdFromResponse,
   hasDiscoverMessageWithCatalogs
 } from '@utils/discoverHelpers'
@@ -24,6 +25,9 @@ import type { LocationSuggestion } from '@components/Map/MapSearch'
 import type { StationMarker } from '@components/Map/LocationMap'
 
 const LocationMap = dynamic(() => import('@components/Map/LocationMap'), { ssr: false })
+
+/** Default map + discover center (Koramangala, Bengaluru) when the page loads; user can search or use device location. */
+const DEFAULT_SEARCH_LOCATION = { lat: 12.9309648, lng: 77.6182323 }
 
 function formatAddress(addr: Record<string, unknown> | undefined): string {
   if (!addr || typeof addr !== 'object') return ''
@@ -35,7 +39,15 @@ function formatAddress(addr: Record<string, unknown> | undefined): string {
 
 type StationDetailsRecord = Record<
   string,
-  { name: string; shortDesc?: string; longDesc?: string; address: string; itemAttributes?: Record<string, unknown> }
+  {
+    name: string
+    shortDesc?: string
+    longDesc?: string
+    address: string
+    itemAttributes?: Record<string, unknown>
+    /** Price from first offer that applies to this item (beckn:items contains item id) */
+    price?: { value: number; currency: string }
+  }
 >
 
 function buildStationsAndDetailsFromCatalogs(catalogs: DiscoverCatalogStored[]): {
@@ -54,6 +66,7 @@ function buildStationsAndDetailsFromCatalogs(catalogs: DiscoverCatalogStored[]):
       const shortDesc = descriptor['shortDesc'] != null ? String(descriptor['shortDesc']) : undefined
       const longDesc = descriptor['longDesc'] != null ? String(descriptor['longDesc']) : undefined
       const itemAttrs = rec['itemAttributes'] as Record<string, unknown> | undefined
+      const price = getItemPriceFromCatalog(catalog, id) ?? undefined
       const entries = getItemLocationEntries(rec)
       for (const entry of entries) {
         const markerKey = `${id}_${entry.lat}_${entry.lng}`
@@ -64,7 +77,8 @@ function buildStationsAndDetailsFromCatalogs(catalogs: DiscoverCatalogStored[]):
           longDesc,
           address: entry.address,
           itemAttributes:
-            itemAttrs && typeof itemAttrs === 'object' && !Array.isArray(itemAttrs) ? itemAttrs : undefined
+            itemAttrs && typeof itemAttrs === 'object' && !Array.isArray(itemAttrs) ? itemAttrs : undefined,
+          price
         }
       }
     }
@@ -80,17 +94,12 @@ export default function SearchByLocationPage() {
   const [discover] = useDiscoverMutation()
   const discoverRef = useRef(discover)
 
-  const [coords, setCoords] = useState({ lat: 0, lng: 0 })
-  const [locationName, setLocationName] = useState('')
+  const [coords, setCoords] = useState(DEFAULT_SEARCH_LOCATION)
+  const [locationName, setLocationName] = useState('Koramangala')
   const [nominatimLocations, setNominatimLocations] = useState<LocationSuggestion[]>([])
   const [showSuggestions, setShowSuggestions] = useState(false)
   const [stations, setStations] = useState<StationMarker[]>([])
-  const [stationDetails, setStationDetails] = useState<
-    Record<
-      string,
-      { name: string; shortDesc?: string; longDesc?: string; address: string; itemAttributes?: Record<string, unknown> }
-    >
-  >({})
+  const [stationDetails, setStationDetails] = useState<StationDetailsRecord>({})
   const [selectedStation, setSelectedStation] = useState<StationMarker | null>(null)
   const [loadingStations, setLoadingStations] = useState(false)
   const [discoverError, setDiscoverError] = useState<string | null>(null)
@@ -98,21 +107,6 @@ export default function SearchByLocationPage() {
 
   const { isOpen: isDetailOpen, onOpen: onDetailOpen, onClose: onDetailClose } = useDisclosure()
   discoverRef.current = discover
-
-  // Initial
-  // : always use device location so discover uses user's actual lat/lng, not cached.
-  useEffect(() => {
-    getUserLocation()
-      .then(position => {
-        setCoords({
-          lat: position.coords.latitude,
-          lng: position.coords.longitude
-        })
-      })
-      .catch(() => {
-        setCoords({ lat: 12.9716, lng: 77.5946 })
-      })
-  }, [])
 
   // When coords are set: use cached stations if coords match last discover, else call discover API.
   useEffect(() => {
@@ -376,6 +370,11 @@ export default function SearchByLocationPage() {
                     const shortDesc = detail?.shortDesc ?? ''
                     const attrs = detail?.itemAttributes
                     const entries: Array<{ key: string; label: string; value: string }> = []
+                    if (detail?.price != null) {
+                      const { value, currency } = detail.price
+                      const curr = currency === 'INR' ? '₹' : `${currency} `
+                      entries.push({ key: 'price', label: 'Price', value: `${curr}${value} per kWh` })
+                    }
                     if (shortDesc) entries.push({ key: 'shortDesc', label: 'Description', value: shortDesc })
                     if (attrs && typeof attrs === 'object' && !Array.isArray(attrs)) {
                       const skipKeys = ['@context', '@type', 'serviceLocation', 'service_location', 'amenityFeature']

@@ -222,6 +222,22 @@ export function normalizeInitResponse20ToLegacy(initResponse: {
     price: { currency: c.currency ?? currency, value: String(c.value ?? 0) },
     item: { id: firstItemId }
   }))
+  if (breakup.length === 0 && orderItems.length > 0) {
+    for (const oi of orderItems) {
+      const qty = Number((oi.quantity as { unitQuantity?: number })?.unitQuantity ?? 0)
+      const priceObj = oi.price as { value?: number; currency?: string } | undefined
+      const unitRate = Number(priceObj?.value ?? 0)
+      const curr = priceObj?.currency ?? currency
+      const itemId = (oi.orderedItem ?? oi.orderedItemId) as string | undefined
+      if (qty > 0 && Number.isFinite(unitRate)) {
+        breakup.push({
+          title: `Charging (${qty} kWh × ${curr} ${unitRate}/kWh)`,
+          price: { currency: curr, value: String(unitRate) },
+          item: { id: itemId }
+        })
+      }
+    }
+  }
   const items = orderItems.map((oi: OrderPlain) => ({
     id: oi.orderedItem,
     quantity: {

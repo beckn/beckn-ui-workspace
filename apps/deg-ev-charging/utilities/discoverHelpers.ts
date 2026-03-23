@@ -56,6 +56,29 @@ export function getCatalogItemsAndOffers(catalog: DiscoverCatalogStored): { item
   return { items: toArray(rawItems), offers: toArray(rawOffers) }
 }
 
+/** Get price for an item from catalog offers. Match by offer's beckn:items or items containing itemId; return first matching offer price. */
+export function getItemPriceFromCatalog(
+  catalog: DiscoverCatalogStored,
+  itemId: string
+): { value: number; currency: string } | null {
+  const { offers } = getCatalogItemsAndOffers(catalog)
+  const id = String(itemId).trim()
+  if (!id) return null
+  for (const offer of offers) {
+    const o = offer as Record<string, unknown>
+    const itemIds = (o['beckn:items'] ?? o['items']) as string[] | unknown[] | undefined
+    const arr = Array.isArray(itemIds) ? itemIds.map(x => String(x)) : []
+    if (!arr.includes(id)) continue
+    const price = (o['beckn:price'] ?? o['price']) as Record<string, unknown> | undefined
+    if (!price || typeof price !== 'object') continue
+    const value = Number(price['value'])
+    const currency = typeof price['currency'] === 'string' ? price['currency'] : 'INR'
+    if (!Number.isFinite(value)) continue
+    return { value, currency }
+  }
+  return null
+}
+
 /** Provider display name: item's provider.descriptor.name, else catalog descriptor.name (API uses plain keys only) */
 export function getProviderName(catalog: DiscoverCatalogStored, item: unknown): string {
   const rec = item as Record<string, unknown>
