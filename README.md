@@ -78,6 +78,102 @@ Happy coding!
 
 ### 🐛 Bug Fixes
 - Fixed responsive design issues
+
+## CI/CD Workflows
+
+This repository uses GitHub Actions to trigger AWS Amplify deployments instead of building Docker images.
+
+Current workflows:
+
+* `develop-1.1.0-aws-amplify-deploy.yml`
+* `staging-1.1.0-aws-amplify-deploy.yml`
+* `main-1.1.0-aws-amplify-deploy.yml`
+
+## Overview
+
+On each push to the matching release branch, the workflow:
+
+* checks which app folders changed in the last commit
+* maps those changed folders to the correct Amplify webhook secret
+* triggers only the affected AWS Amplify deployments
+
+This keeps deployments app-specific instead of rebuilding the whole monorepo.
+
+## Branch Triggers
+
+```yaml
+develop-1.1.0
+staging-1.1.0
+main-1.1.0
+```
+
+Each workflow listens only to its corresponding branch.
+
+## Deployment Flow
+
+### 1. Checkout Code
+
+The workflow checks out the last two commits using `fetch-depth: 2`.
+
+### 2. Detect Changed Apps
+
+Each workflow runs:
+
+```bash
+git diff --name-only HEAD~1 HEAD
+```
+
+and checks whether files changed under configured app directories such as:
+
+* `apps/retail/`
+* `apps/mobility-bap/`
+* `apps/policy-admin/`
+* `apps/tourismV1.1/`
+* `apps/dsep/`
+* `apps/industry_4.0/`
+* `apps/odr-v2/`
+* `apps/dsnp-v2/`
+* `apps/OSC/`
+* `apps/dragon-foods/`
+* `apps/harmoni-aids/`
+* `apps/sky-analytics/`
+* `apps/state-forest-department/`
+* `apps/envirogrowth/`
+* `apps/earth-support-initiative/`
+
+The develop workflow also includes additional app paths such as:
+
+* `apps/open-spark/`
+* `apps/deg-ec/`
+* `apps/open-spark-admin/`
+* `apps/open-spark-p2p/`
+* `apps/deg-retail/`
+* `apps/deg-rental/`
+* `apps/deg-wallet/`
+* `apps/deg-finance/`
+* `apps/p2p-energy/`
+
+### 3. Trigger Amplify Webhooks
+
+If an app changed, the workflow calls the corresponding AWS Amplify webhook URL with `curl`.
+
+## Required Secrets
+
+Each app/environment pair requires its own webhook secret.
+
+Examples:
+
+* `RETAIL_DEVELOP_AMPLIFY_WEBHOOK_URL`
+* `RETAIL_STAGING_AMPLIFY_WEBHOOK_URL`
+* `RETAIL_MAIN_AMPLIFY_WEBHOOK_URL`
+* `MOBILITY_BAP_DEVELOP_AMPLIFY_WEBHOOK_URL`
+* `POLICY_ADMIN_MAIN_AMPLIFY_WEBHOOK_URL`
+
+## Output
+
+* Only changed apps are deployed
+* Each deployment is environment-specific
+* AWS Amplify handles the actual build and hosting after the webhook is triggered
 - Resolved header and footer layout issues
 - Fixed image loading problems
 
@@ -109,7 +205,6 @@ Happy coding!
 - Core functionality implementation
 - Initial app structure
 - Basic authentication
-
 
 
 
